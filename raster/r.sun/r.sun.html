@@ -77,8 +77,9 @@ Besides clear-sky radiations, the user can compute a real-sky radiation (beam,
 diffuse) using <i>coefbh</i> and <i>coefdh </i>input raster maps defining
 the fraction of the respective clear-sky radiations reduced by atmospheric
 factors (e.g. cloudiness). The value is between 0-1. Usually these
-coefficients can be obtained from a long-terms meteorological measurements.</p>
-<p>
+coefficients can be obtained from a long-terms meteorological measurements
+provided as raster maps with spatial distribution of these coefficients separately
+for beam and diffuse radiation (see Suri and Hofierka, 2004, section 3.2).<p>
 The solar irradiation or irradiance raster maps <i>beam_rad</i>, <i>diff_rad</i>,
 <i>refl_rad</i> are computed for a given day <i>day,</i> latitude <i>latin</i>,
 elevation <i>elevin</i>, slope <i>slopein</i> and aspect <i>aspin</i> raster maps.
@@ -178,14 +179,17 @@ Open Source GIS: A GRASS GIS Approach (published in Kluwer Academic Publishers
 in 2002). </p>
 <p>
 Average monthly values of the Linke turbidity coefficient for a mild climate
-in the northern hemisphere (see reference literature for your study area): </p>
-<pre>
-Month&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Jan&nbsp; Feb&nbsp; Mar&nbsp; Apr&nbsp; May&nbsp; Jun&nbsp; Jul&nbsp; Aug&nbsp; Sep&nbsp; Oct&nbsp; Nov&nbsp; Dec&nbsp; annual<br>
-mountains&nbsp; 1.5&nbsp; 1.6&nbsp; 1.8&nbsp; 1.9&nbsp; 2.0&nbsp; 2.3&nbsp; 2.3&nbsp; 2.3&nbsp; 2.1&nbsp; 1.8&nbsp; 1.6&nbsp; 1.5&nbsp; 1.90&nbsp;&nbsp;<br>
-rural&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2.1&nbsp; 2.2&nbsp; 2.5&nbsp; 2.9&nbsp; 3.2&nbsp; 3.4&nbsp; 3.5&nbsp; 3.3&nbsp; 2.9&nbsp; 2.6&nbsp; 2.3&nbsp; 2.2&nbsp; 2.75&nbsp;&nbsp;<br>
-city&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3.1&nbsp; 3.2&nbsp; 3.5&nbsp; 4.0&nbsp; 4.2&nbsp; 4.3&nbsp; 4.4&nbsp; 4.3&nbsp; 4.0&nbsp; 3.6&nbsp; 3.3&nbsp; 3.1&nbsp; 3.75&nbsp;&nbsp;<br>
-industrial 4.1&nbsp; 4.3&nbsp; 4.7&nbsp; 5.3&nbsp; 5.5&nbsp; 5.7&nbsp; 5.8&nbsp; 5.7&nbsp; 5.3&nbsp; 4.9&nbsp; 4.5&nbsp; 4.2&nbsp; 5.00
-</pre>
+in the northern hemisphere (see reference literature for your study area):
+
+<table border="1">
+<tr><th>Month</th><th>Jan</th><th>Feb</th><th>Mar</th><th>Apr</th><th>May</th><th>Jun</th><th>Jul</th><th>Aug</th><th>Sep</th><th>Oct</th><th>Nov</th><th>Dec</th><th>annual</th></tr>
+<tr><td>mountains</td><td>1.5</td><td>1.6</td><td>1.8</td><td>1.9</td><td>2.0</td><td>2.3</td><td>2.3</td><td>2.3</td><td>2.1</td><td>1.8</td><td>1.6</td><td>1.5</td><td>1.90</td></tr>
+<tr><td>rural</td><td>2.1</td><td>2.2</td><td>2.5</td><td>2.9</td><td>3.2</td><td>3.4</td><td>3.5</td><td>3.3</td><td>2.9</td><td>2.6</td><td>2.3</td><td>2.2</td><td>2.75</td></tr>
+<tr><td>city</td><td>3.1</td><td>3.2</td><td>3.5</td><td>4.0</td><td>4.2</td><td>4.3</td><td>4.4</td><td>4.3</td><td>4.0</td><td>3.6</td><td>3.3</td><td>3.1</td><td>3.75</td></tr>
+<tr><td>industrial</td><td>4.1</td><td>4.3</td><td>4.7</td><td>5.3</td><td>5.5</td><td>5.7</td><td>5.8</td><td>5.7</td><td>5.3</td><td>4.9</td><td>4.5</td><td>4.2</td><td>5.00</td></tr>
+</table>
+
+</p>
 <P>
 Planned improvements include the use of the SOLPOS algorithm for solar 
 geometry calculations and internal computation of aspect and slope.
@@ -296,6 +300,9 @@ Solar energy, 68, 33-48. </p>
 Scharmer, K., Greif, J., eds., (2000). The European solar radiation atlas,
 Vol. 2: Database and exploitation software. Paris (Les Presses de l'École
 des Mines). </p>
+<p>
+Suri, M., Hofierka, J. (2004): A new GIS-based solar radiation model and its
+application to photovoltaic assessments. Transactions in GIS 8, pp. 175-190.</p>
 
 <p>Joint Research Centre: <a href="http://re.jrc.ec.europa.eu/pvgis/">GIS solar radiation database for Europe</a> and
 <a href="http://re.jrc.ec.europa.eu/pvgis/solres/solmod3.htm">Solar radiation and GIS</a>
