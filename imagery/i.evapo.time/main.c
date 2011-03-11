@@ -146,28 +146,15 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("The DOY for start_period can not be smaller than eto_doy_min"));
 	ok = 0;
     }
-    if (G_legal_filename(result) < 0) {
-	G_fatal_error(_("<%s> is an illegal name"), result);
-	ok = 0;
-    }
     for (; *ptr != NULL; ptr++) {
 	if (nfiles > MAXFILES)
 	    G_fatal_error(_("Too many ETa files. Only %d allowed."),
 			  MAXFILES);
 	name = *ptr;
-	/* find map in mapset */
-	mapset = (char *) G_find_raster2(name, "");
-	if (mapset == NULL) {
-	    G_fatal_error(_("Raster map <%s> not found"), name);
-	    ok = 0;
-	}
-	if (!ok)
-	    continue;
 	/* Allocate input buffer */
-	in_data_type[nfiles] = Rast_map_type(name, mapset);
-	infd[nfiles] = Rast_open_old(name, mapset);
-	Rast_get_cellhd(name, mapset, &cellhd);
-	inrast[nfiles] = Rast_allocate_buf(in_data_type[nfiles]);
+	infd[nfiles] = Rast_open_old(name, "");
+	Rast_get_cellhd(name, "", &cellhd);
+	inrast[nfiles] = Rast_allocate_d_buf();
 	nfiles++;
     }
     nfiles--;
@@ -175,25 +162,15 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("The min specified input map is two"));
 	
 	/****************************************/
-    ok = 1;
     for (; *ptr1 != NULL; ptr1++) {
 	if (nfiles1 > MAXFILES)
-	    G_fatal_error(_("Too many ETa files. Only %d allowed."),
+	    G_fatal_error(_("Too many ETa_doy files. Only %d allowed."),
 			  MAXFILES);
 	name1 = *ptr1;
-	/* find map in mapset */
-	mapset = (char *) G_find_raster2(name1, "");
-	if (mapset == NULL) {
-	    G_fatal_error(_("Raster map <%s> not found"), name1);
-	    ok = 0;
-	}
-	if (!ok)
-	    continue;
 	/* Allocate input buffer */
-	in_data_type1[nfiles1] = Rast_map_type(name1, mapset);
-	infd1[nfiles1] = Rast_open_old(name1, mapset);
-	Rast_get_cellhd(name1, mapset, &cellhd);
-	inrast1[nfiles1] = Rast_allocate_buf(in_data_type1[nfiles1]);
+	infd1[nfiles1] = Rast_open_old(name1, "");
+	Rast_get_cellhd(name1, "", &cellhd);
+	inrast1[nfiles1] = Rast_allocate_d_buf();
 	nfiles1++;
     }
     nfiles1--;
@@ -207,24 +184,14 @@ int main(int argc, char *argv[])
 
 	/****************************************/
 
-    ok = 1;
     for (; *ptr2 != NULL; ptr2++) {
 	if (nfiles > MAXFILES)
-	    G_fatal_error(_("Too many ETa files. Only %d allowed."),
+	    G_fatal_error(_("Too many ETo files. Only %d allowed."),
 			  MAXFILES);
 	name2 = *ptr2;
-	/* find map in mapset */
-	mapset = (char *) G_find_raster2(name2, "");
-	if (mapset == NULL) {
-	    G_fatal_error(_("Raster map <%s> not found"), name2);
-	    ok = 0;
-	}
-	if (!ok)
-	    continue;
 	/* Allocate input buffer */
-	in_data_type2[nfiles2] = Rast_map_type(name2, mapset);
-	infd2[nfiles2] = Rast_open_old(name2, mapset);
-	Rast_get_cellhd(name2, mapset, &cellhd);
+	infd2[nfiles2] = Rast_open_old(name2, "");
+	Rast_get_cellhd(name2, "", &cellhd);
 	inrast2[nfiles2] = Rast_allocate_d_buf();
 	nfiles2++;
     }
@@ -235,9 +202,8 @@ int main(int argc, char *argv[])
     /* Allocate output buffer, use input map data_type */
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
-    outrast = Rast_allocate_buf(out_data_type);
+    outrast = Rast_allocate_d_buf();
 
-   
     /* Create New raster files */
     outfd = Rast_open_new(result, 1);
 
@@ -275,7 +241,7 @@ int main(int argc, char *argv[])
 		    if (Rast_is_d_null_value(&((DCELL *) inrast[i])[col]))
 		    	d_null=1;
 		    else
-	                d[i] = (double)((DCELL *) inrast[i])[col];
+	                d[i] = ((DCELL *) inrast[i])[col];
 	    }
 	    for (i = 1; i <= nfiles1; i++) 
             {
@@ -390,8 +356,12 @@ int main(int argc, char *argv[])
     for (i = 1; i <= nfiles; i++) {
 	G_free(inrast[i]);
 	Rast_close(infd[i]);
+    }
+    for (i = 1; i <= nfiles1; i++) {
 	G_free(inrast1[i]);
 	Rast_close(infd1[i]);
+    }
+    for (i = 1; i <= nfiles2; i++) {
 	G_free(inrast2[i]);
 	Rast_close(infd2[i]);
     }
