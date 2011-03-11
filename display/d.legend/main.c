@@ -858,10 +858,21 @@ int main(int argc, char **argv)
 		    sprintf(buff + strlen(buff), " %s", cstr);
 	    }
 	    else {		/* is fp */
-		if (!flip)
-		    sprintf(buff, DispFormat, catlist[i]);
-		else
-		    sprintf(buff, DispFormat, catlist[catlistCount - i - 1]);
+		if (!flip) {
+		    if(use_catlist)
+			/* pass through format exactly as given by the user in
+			   the use= command line parameter (helps with log scale) */
+			sprintf(buff, "%s", opt8->answers[i]);
+		    else 
+			/* automatically generated/tuned decimal precision format */
+			sprintf(buff, DispFormat, catlist[i]);
+		}
+		else {
+		    if(use_catlist)
+			sprintf(buff, "%s", opt8->answers[catlistCount - i - 1]);
+		    else
+			sprintf(buff, DispFormat, catlist[catlistCount - i - 1]);
+		}
 	    }
 
 	    D_pos_abs((l + 3 + dots_per_line), (cur_dot_row) - 3);
