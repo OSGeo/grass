@@ -189,9 +189,15 @@ def run_command(*args, **kwargs):
     """
     if get_raise_on_error():
         kwargs['stderr'] = PIPE
+        env = os.getenv('GRASS_MESSAGE_FORMAT')
+        os.environ['GRASS_MESSAGE_FORMAT'] = 'plain'
+
     ps = start_command(*args, **kwargs)
+    
     if get_raise_on_error():
         err = ps.communicate()[1]
+        if env:
+            os.environ['GRASS_MESSAGE_FORMAT'] = env
         if ps.returncode != 0:
             raise ScriptError(_("Error in %s(%s): %s") % ('run_command', args[0], _get_error(err)))
         return ps.returncode
@@ -246,9 +252,15 @@ def read_command(*args, **kwargs):
     """
     if get_raise_on_error():
         kwargs['stderr'] = PIPE
+        env = os.getenv('GRASS_MESSAGE_FORMAT')
+        os.environ['GRASS_MESSAGE_FORMAT'] = 'plain'
+    
     ps = pipe_command(*args, **kwargs)
+    
     if get_raise_on_error():
         out, err = ps.communicate()
+        if env:
+            os.environ['GRASS_MESSAGE_FORMAT'] = env
         if ps.returncode != 0:
             raise ScriptError(_("Error in %s(%s): %s") % ('read_command', args[0], _get_error(err)))
         return _decode(out)
@@ -298,10 +310,16 @@ def write_command(*args, **kwargs):
     stdin = kwargs['stdin']
     if get_raise_on_error():
         kwargs['stderr'] = PIPE
+        env = os.getenv('GRASS_MESSAGE_FORMAT')
+        os.environ['GRASS_MESSAGE_FORMAT'] = 'plain'
+    
     p = feed_command(*args, **kwargs)
     p.stdin.write(stdin)
+    
     if get_raise_on_error():
         err = p.communicate()[1]
+        if env:
+            os.environ['GRASS_MESSAGE_FORMAT'] = env
         p.stdin.close()
         if p.returncode != 0:
             raise ScriptError(_("Error in %s(%s): %s") % ('write_command', args[0], _get_error(err)))
@@ -309,7 +327,7 @@ def write_command(*args, **kwargs):
     else:
         p.stdin.close()
         return p.wait()
-
+    
 def exec_command(prog, flags = "", overwrite = False, quiet = False, verbose = False, env = None, **kwargs):
     """!Interface to os.execvpe(), but with the make_command() interface.
 
@@ -415,11 +433,6 @@ def set_raise_on_error(raise_exp = True):
     global raise_on_error
     tmp_raise = raise_on_error
     raise_on_error = raise_exp
-    
-    if raise_on_error:
-        os.environ['GRASS_MESSAGE_FORMAT'] = 'plain'
-    else:
-        os.environ['GRASS_MESSAGE_FORMAT'] = 'standard'
     
     return tmp_raise
 
