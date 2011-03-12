@@ -9,7 +9,7 @@ Classes:
  - GMFrame
  - GMApp
 
-(C) 2006-2010 by the GRASS Development Team
+(C) 2006-2011 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -928,18 +928,28 @@ class GMFrame(wx.Frame):
         """
         Debug.msg(4, "GMFrame.OnWorkspaceClose(): file=%s" % self.workspaceFile)
         
+        self.OnDisplayCloseAll()
+        self.workspaceFile = None
+        self.workspaceChanged = False
+        self.SetTitle(self.baseTitle)
+        self.disp_idx = 0
+        self.curr_page = None
+        
+    def OnDisplayClose(self, event = None):
+        """!Close current map display window
+        """
+        if self.curr_page and self.curr_page.maptree.mapdisplay:
+            self.curr_page.maptree.mapdisplay.OnCloseWindow(event)
+        
+    def OnDisplayCloseAll(self, event = None):
+        """!Close all open map display windows
+        """
         displays = list()
         for page in range(0, self.gm_cb.GetPageCount()):
             displays.append(self.gm_cb.GetPage(page).maptree.mapdisplay)
         
         for display in displays:
             display.OnCloseWindow(event)
-        
-        self.workspaceFile = None
-        self.workspaceChanged = False
-        self.SetTitle(self.baseTitle)
-        self.disp_idx = 0
-        self.curr_page = None
         
     def RulesCmd(self, event):
         """!Launches dialog for commands that need rules input and
@@ -1442,10 +1452,9 @@ class GMFrame(wx.Frame):
         # don't ask any more...
         UserSettings.Set(group = 'manager', key = 'askOnQuit', subkey = 'enabled',
                          value = False)
-
-        for page in range(self.gm_cb.GetPageCount()):
-            self.gm_cb.GetPage(0).maptree.mapdisplay.OnCloseWindow(event)
-
+        
+        self.OnDisplayCloseAll()
+        
         self.gm_cb.DeleteAllPages()
         
         self._auimgr.UnInit()
