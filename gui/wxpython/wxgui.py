@@ -1484,7 +1484,6 @@ class GMApp(wx.App):
         introBmp       = introImage.ConvertToBitmap()
         if SC:
             splash = SC.AdvancedSplash(bitmap = introBmp, 
-                                       extrastyle = SC.AS_TIMEOUT | SC.AS_CENTER_ON_SCREEN,
                                        timeout = 2000, parent = None, id = wx.ID_ANY)
             splash.SetText(_('Starting GRASS GUI...'))
             splash.SetTextColour(wx.Colour(45, 52, 27))
