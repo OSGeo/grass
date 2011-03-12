@@ -74,7 +74,11 @@ int stroke_chain(SYMBPART * part, int ch, double s, double rotation)
 	    }
 	    break;
 	case S_ARC:
-	    da = 10 * PI / 180;	/* later calc from size and tolerance */
+	    if (s >= 50)
+		da = 1 * PI / 180;  /* later calc from size and tolerance */
+	    else
+		da = 10 * PI / 180;
+
 	    r = elem->coor.arc.r;
 	    G_debug(5, "    ARC da = %f r = %f", da, r);
 
