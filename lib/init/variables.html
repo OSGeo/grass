@@ -169,22 +169,6 @@ text
     &nbsp; The signature is the &lt;string&gt; following the &lt;key&gt;,
     without the bracketing &lt;string&gt; tags.</dd>
 
-  <dt>G_INFO_FORMAT_STANDARD</dt>
-  <dd>[init.sh, wxgui]<br>
-    sets percentage output and message formatting style to standard formatting.</dd>
-
-  <dt>G_INFO_FORMAT_GUI</dt>
-  <dd>[init.sh, wxgui]<br>
-    sets percentage output and message formatting style to GUI formatting.</dd>
-
-  <dt>G_INFO_FORMAT_SILENT</dt>
-  <dd>[init.sh, wxgui]<br>
-    disables percentage output and error messages.</dd>
-
-  <dt>G_INFO_FORMAT_PLAIN</dt>
-  <dd>[init.sh, wxgui]<br>
-    sets percentage output and message formatting style to ASCII output without rewinding control characters.</dd>
-
   <dt>GRASS_INT_ZLIB</dt>
   <dd>[libgis]<br>
     if the environment variable GRASS_INT_ZLIB exists, new compressed
@@ -196,9 +180,19 @@ text
     raster's <tt>compressed</tt> value, not the environment variable.</dd>
   
   <dt>GRASS_MESSAGE_FORMAT</dt>
-  <dd>[various modules]<br>
-    maybe set to either <tt>standard</tt> or <tt>gui</tt> (normally
-    GRASS takes care).</dd>
+  <dd>[various modules, wxGUI]<br>
+    maybe set to either
+    <ul>
+      <li><tt>standard</tt> - sets percentage output and message
+	formatting style to standard formatting,</li>
+      <li><tt>gui</tt> - sets percentage output and message formatting
+	style to GUI formatting,</li>
+      <li><tt>silent</tt> - disables percentage output and error
+	messages,</li>
+      <li><tt>plain</tt> - sets percentage output and message
+	formatting style to ASCII output without rewinding control
+	characters.</li>
+  </ul></dd>
   
   <dt>GRASS_MOUSE_BUTTON</dt>
   <dd>[various modules]<br>
