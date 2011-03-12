@@ -3,7 +3,7 @@
  * 
  * \brief GIS Library - Error messages functions
  *
- * (C) 1999-2009 by the GRASS Development Team
+ * (C) 1999-2009, 2011 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public
  * License (>=v2). Read the file COPYING that comes with GRASS
@@ -270,22 +270,29 @@ static void print_error(const char *msg, const int type)
 	ext_error(msg, fatal);
     }
     else {
-	char *w;
-	int len, lead;
-
 	G_init_logging();
 	format = G_info_format();
-
+	if (format == G_INFO_FORMAT_SILENT)
+	    return;
+	
 	if (format != G_INFO_FORMAT_GUI) {
 	    if (type == WARN || type == ERR) {
 		log_error(msg, fatal);
 	    }
 
-	    fprintf(stderr, "%s", prefix_std[type]);
-	    len = lead = strlen(prefix_std[type]);
-	    w = (char *)msg;
-
-	    while (print_word(stderr, &w, &len, lead)) ;
+	    if (format != G_INFO_FORMAT_PLAIN) {
+		char *w;
+		int len, lead;
+		
+		fprintf(stderr, "%s", prefix_std[type]);
+		len = lead = strlen(prefix_std[type]);
+		w = (char *)msg;
+		
+		while (print_word(stderr, &w, &len, lead)) ;
+	    }
+	    else {
+		fprintf(stderr, "%s\n", msg);
+	    }
 
 	    if ((type != MSG) && isatty(fileno(stderr))
 		&& (G_info_format() == G_INFO_FORMAT_STANDARD)) {	/* Bell */
