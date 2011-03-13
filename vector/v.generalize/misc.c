@@ -17,6 +17,7 @@
  *
  ****************************************************************/
 
+#include <stdlib.h>
 #include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/dbmi.h>

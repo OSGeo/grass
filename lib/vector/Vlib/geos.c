@@ -13,6 +13,7 @@
   \author Martin Landa <landa.martin gmail.com>
  */
 
+#include <stdlib.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
 

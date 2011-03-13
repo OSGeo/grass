@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <grass/glocale.h>
 
 #include "hull.h"

@@ -19,6 +19,7 @@
 
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
 
 #include <grass/gis.h>
 #include <grass/vector.h>
