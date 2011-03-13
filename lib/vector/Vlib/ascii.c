@@ -13,6 +13,7 @@
   \author Original author CERL
   \author Updated for GRASS 7 (SF support) by Martin Landa <landa.martin gmail.com>
 */
+#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
