@@ -265,6 +265,22 @@ class GMFrame(wx.Frame):
         
         win.Show()
         
+    def OnPsMap(self, event):
+        """!Launch Hardcopy Map Output Utility
+        """
+        try:
+            import psmap
+        except:
+            gcmd.GError(parent = self.parent,
+                        message = _("Hardcopy Map Output Utility is not available. You can install it by "
+                                    "'g.extension -s svnurl=https://svn.osgeo.org/grass/grass-addons extension=psmap'"))
+            return
+        
+        win = psmap.PsMapFrame(parent = self)
+        win.CentreOnScreen()
+        
+        win.Show()
+        
     def OnDone(self, returncode):
         """Command execution finised"""
         if hasattr(self, "model"):

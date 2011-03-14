@@ -534,7 +534,7 @@
 	    <menuitem>
 	      <label>Link external vector data</label>
 	      <help>Creates a new pseudo-vector map as a link to an OGR-supported layer.</help>
-	      <keywords>vector,external,ogr</keywords>
+	      <keywords>vector,external,ogr,postgis</keywords>
               <handler>OnLinkOgrLayers</handler>
 	      <command>v.external</command>
 	    </menuitem>
@@ -561,8 +561,8 @@
 	  <items>
 	    <menuitem>
 	      <label>Copy</label>
-	      <help>Copies available data files in the user's current mapset search path and location to the appropriate element directories under the user's current mapset.</help>
-	      <keywords>general,map management</keywords>
+	      <help>Copies available data files in the current mapset search path to the user's current mapset.</help>
+	      <keywords>general,map management,copy</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>g.copy</command>
 	    </menuitem>
@@ -570,14 +570,14 @@
 	    <menuitem>
 	      <label>List</label>
 	      <help>Lists available GIS elements of the user-specified data type.</help>
-	      <keywords>general,map management</keywords>
+	      <keywords>general,map management,list</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>g.list</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>List filtered</label>
 	      <help>Lists available GRASS data base files of the user-specified data type to standard output.</help>
-	      <keywords>general,map management</keywords>
+	      <keywords>general,map management,list</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>g.mlist</command>
 	    </menuitem>
@@ -585,7 +585,7 @@
 	    <menuitem>
 	      <label>Rename</label>
 	      <help>Renames data base element files in the user's current mapset.</help>
-	      <keywords>general,map management</keywords>
+	      <keywords>general,map management,rename</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>g.rename</command>
 	    </menuitem>
@@ -593,14 +593,14 @@
 	    <menuitem>
 	      <label>Delete</label>
 	      <help>Removes data base element files from the user's current mapset.</help>
-	      <keywords>general,map management</keywords>
+	      <keywords>general,map management,remove</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>g.remove</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Delete filtered</label>
 	      <help>Removes data base element files from the user's current mapset.</help>
-	      <keywords>general,map management</keywords>
+	      <keywords>general,map management,remove,multi</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>g.mremove</command>
 	    </menuitem>
@@ -711,8 +711,15 @@
 	</menuitem>
 	<separator />
 	<menuitem>
+	  <label>Hardcopy Map Output Utility</label>
+	  <help>Launch Hardcopy Map Output Utility</help>
+	  <keywords>postscript,map,printing</keywords>
+	  <handler>OnPsMap</handler>
+	  <command>ps.map</command>
+	</menuitem>
+	<menuitem>
 	  <label>Postscript plot</label>
-	  <help>Hardcopy PostScript map output utility.</help>
+	  <help>Produces hardcopy PostScript map output.</help>
 	  <keywords>postscript,map,printing</keywords>
 	  <handler>OnMenuCmd</handler>
 	  <command>ps.map</command>
@@ -793,14 +800,14 @@
 	    <menuitem>
 	      <label>Show settings</label>
 	      <help>Outputs and modifies the user's current GRASS variable settings.</help>
-	      <keywords>general</keywords>
+	      <keywords>general,settings</keywords>
               <handler>RunMenuCmd</handler>
 	      <command>g.gisenv -n</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Change settings</label>
 	      <help>Outputs and modifies the user's current GRASS variable settings.</help>
-	      <keywords>general</keywords>
+	      <keywords>general,settings</keywords>
               <handler>OnMenuCmd</handler>
 	      <command>g.gisenv</command>
 	    </menuitem>
@@ -808,7 +815,7 @@
 	    <menuitem>
 	      <label>Version</label>
 	      <help>Displays version and copyright information.</help>
-	      <keywords>general</keywords>
+	      <keywords>general,version</keywords>
               <handler>RunMenuCmd</handler>
 	      <command>g.version -c</command>
 	    </menuitem>
@@ -965,7 +972,7 @@
 	    <separator />
 	    <menuitem>
 	      <label>Reproject raster map</label>
-	      <help>Re-projects a raster map from one location to the current location.</help>
+	      <help>Re-projects a raster map from given location to the current location.</help>
 	      <keywords>raster,projection,transformation</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.proj</command>
@@ -1644,7 +1651,7 @@
 	    <separator />
 	    <menuitem>
 	      <label>Gaussian kernel density surface</label>
-	      <help>Generates a raster density map from vector points data using a moving 2D isotropic Gaussian kernel or optionally generates a vector density map on vector network with a 1D kernel.</help>
+	      <help>Generates a raster density map from vector point data using a moving kernel or optionally generates a vector density map on a vector network.</help>
 	      <keywords>vector,kernel density</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.kernel</command>
@@ -2429,7 +2436,7 @@
 	    <menuitem>
 	      <label>Basic vector metadata</label>
 	      <help>Outputs basic information about a vector map.</help>
-	      <keywords>vector,metadata,history</keywords>
+	      <keywords>vector,metadata,history,attribute columns</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.info</command>
 	    </menuitem>
@@ -2695,7 +2702,7 @@
 	    <menuitem>
 	      <label>Modis quality control</label>
 	      <help>Extract quality control parameters from Modis QC layers</help>
-	      <keywords>QC,Quality Control,surface reflectance,Modis</keywords>
+	      <keywords>QC,Quality Control,Surface Reflectance,Land Surface Temperature,Vegetation,Modis</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>i.modis.qc</command>
 	    </menuitem>
@@ -2737,7 +2744,7 @@
 	    <menuitem>
 	      <label>Tasseled cap vegetation index</label>
 	      <help>Tasseled Cap (Kauth Thomas) transformation for LANDSAT-TM data</help>
-	      <keywords>raster,imagery,Landsat</keywords>
+	      <keywords>raster,imagery</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>i.tasscap</command>
 	    </menuitem>
@@ -2771,8 +2778,8 @@
 	  <items>
 	    <menuitem>
 	      <label>Instantaneaous Net Radiation</label>
-	      <help>Instantaneous Net Radiation approximation (Bastiaanssen, 1995)</help>
-	      <keywords>imagery,Instantaneous Net Radiation,energy balance,SEBAL</keywords>
+	      <help>net radiation approximation (Bastiaanssen, 1995)</help>
+	      <keywords>net radiation,energy balance,SEBAL,energy balance,SEBAL</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>i.eb.netrad</command>
 	    </menuitem>
@@ -2807,30 +2814,30 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Temporal integration of ETa</label>
-	      <help>Computes temporal integration of satellite ET actual (ETa) following the daily ET reference (ETo) from meteorological station(s)</help>
-	      <keywords>imagery,evapotranspiration,temporal,integration</keywords>
+	      <help>Computes temporal integration of satellite ET actual (ETa) following the daily ET reference (ETo) from meteorological station(s).</help>
+	      <keywords>imagery,evapotranspiration</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>i.evapo.time</command>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
 	      <label>Hargreaves methods Evapotranspiration</label>
-	      <help>reference evapotranspiration (Hargreaves, modified-H, H and Samani)</help>
-	      <keywords>imagery,reference evapotranspiration,Hargreaves,Samani</keywords>
+	      <help>Computes evapotranspiration calculation modified or original Hargreaves formulation, 2001.</help>
+	      <keywords>imagery,evapotranspiration</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>i.evapo.mh</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Penman-Monteith Evapotranspiration</label>
-	      <help>reference evapotranspiration (FAO 56 and Penman, 1972)</help>
-	      <keywords>imagery,reference evapotranspiration,FAO56,Penman-Monteith,HydroFOSS</keywords>
+	      <help>Computes potontial evapotranspiration calculation with hourly Penman-Monteith.</help>
+	      <keywords>imagery,evapotranspiration</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>i.evapo.pm</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Priestley-Taylor Evapotranspiration</label>
-	      <help>reference evapotranspiration (Priestley and Taylor, 1972)</help>
-	      <keywords>imagery,reference evapotranspiration,Priestley-Taylor</keywords>
+	      <help>Computes evapotranspiration calculation Prestley and Taylor formulation, 1972.</help>
+	      <keywords>imagery,evapotranspiration</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>i.evapo.pt</command>
 	    </menuitem>
