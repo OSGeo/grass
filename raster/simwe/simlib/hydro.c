@@ -26,29 +26,16 @@
 
 #include <grass/waterglobs.h>
 
-struct options parm;
-struct flags flag;
-
 /*
  * Soeren 8. Mar 2011 TODO:
  * Put all these global variables into several meaningful structures and 
  * document use and purpose.
  * 
- * Example:
- * Put all file descriptors into a input_files struct and rename the variables:
- * input_files.elev 
- * input_files.dx 
- * input_files.dy 
- * input_files.drain
- * ... 
- * 
  */
 
-FILE *fdelevin, *fddxin, *fddyin, *fdrain, *fdinfil, *fdtraps,
-    *fdmanin, *fddepth, *fddisch, *fderr;
-FILE *fdwdepth, *fddetin, *fdtranin, *fdtauin, *fdtc, *fdet, *fdconc,
-    *fdflux, *fderdep;
-FILE *fdsfile, *fw;
+struct options parm;
+struct flags flag;
+struct _points points;
 
 char *elevin;
 char *dxin;
@@ -57,7 +44,7 @@ char *rain;
 char *infil;
 char *traps;
 char *manin;
-/* char *sfile; */
+/* char *observation; */
 char *depth;
 char *disch;
 char *err;
@@ -161,6 +148,9 @@ void main_loop(void)
 	nblock = mitfac + 1;
 	maxwa = maxwa / nblock;
     }
+    
+    /* Create the observation points */
+    create_observation_points();
 
     G_debug(2, " maxwa, nblock %d %d", maxwa, nblock);
 
@@ -395,8 +385,8 @@ void main_loop(void)
 
                         nstack++;
                     }
-                }
-            } /* lw loop */
+                } /* lw loop */
+            } 
 
 	    if (i == iter1 && ts == 1) {
             /* call output for iteration output */
@@ -409,42 +399,34 @@ void main_loop(void)
                 if (ii != 1)
                     G_fatal_error(_("Unable to write raster maps"));
 	    }
-
-            /* Soeren 8. Mar 2011 TODO:
-             *  This hould be replaced by vector functionality and sql database storage */
-/* ascii data site file output for gamma  - hydrograph or sediment*/
-/* cchez incl. sqrt(sinsl) */
-/* sediment */
-/*defined area */
-/*
-	    if (sfile != NULL) {	
-
-		for (p = 0; p < npoints; p++) {
-
-		    l = (int)((points[p].east - mixx + stxm) / stepx) - mx -
-			1;
-		    k = (int)((points[p].north - miyy + stym) / stepy) - my -
-			1;
-
+            
+            /* Write the water depth each time step at an observation point */
+            if(points.is_open)
+            {
+                double value = 0.0;
+                int p;
+                fprintf(points.output, "%.6d ", i);
+                /* Write for each point */
+                for(p = 0; p < points.npoints; p++)
+                {
+                    l = (int)((points.x[p] - mixx + stxm) / stepx) - mx - 1;
+		    k = (int)((points.y[p] - miyy + stym) / stepy) - my - 1;
+                    
 		    if (zz[k][l] != UNDEF) {
 
-			if (wdepth == NULL) {
-			    points[p].z1 = step * gama[k][l] * cchez[k][l];	
-			}
+			if (wdepth == NULL) 
+			    value = step * gama[k][l] * cchez[k][l];
 			else
-			    points[p].z1 = gama[k][l] * slope[k][l];	
+			    value = gama[k][l] * slope[k][l];	
 
-			G_debug(2, " k,l,z1 %d %d %f", k, l, points[p].z1);
-
-			fprintf(fw, "%f %f %f\n", points[p].east / conv,
-				points[p].north / conv, points[p].z1);
-		    }		
-
-		}
-
-	    }
-*/
-
+			fprintf(points.output, "%2.4f ", value);
+		    } else {
+                        /* Point is invalid, so a negative value is written */
+			fprintf(points.output, "%2.4f ", -1.0);
+                    }		
+                }
+                fprintf(points.output, "\n");
+            }
 	}			/* miter */
 
       L_800:
@@ -475,5 +457,11 @@ void main_loop(void)
 	    erod(gama);
     }
     /*                       ........ end of iblock loop */
+    
+    /* Close the observation logfile */
+    if(points.is_open)
+        fclose(points.output);
+    
+    points.is_open = 0;
 
 }

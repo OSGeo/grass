@@ -91,15 +91,6 @@
 
 #include <grass/waterglobs.h>
 
-char fncdsm[32];
-char filnam[10];
-
-/*struct BM *bitmask; */
-/*struct Cell_head cellhd; */
-struct GModule *module;
-struct Map_info Map;
-
-char msg[1024];
 
 /****************************************/
 /* MAIN                                 */
@@ -112,6 +103,7 @@ int main(int argc, char *argv[])
     double x_orig, y_orig;
     static int rand1 = 12345;
     static int rand2 = 67891;
+    struct GModule *module;
 
     G_gisinit(argv[0]);
 
@@ -185,14 +177,19 @@ int main(int argc, char *argv[])
 	_("Name of flow controls raster map (permeability ratio 0-1)");
     parm.traps->guisection = _("Input");
 
-/*
-    parm.sfile = G_define_standard_option(G_OPT_V_INPUTy);
-    parm.sfile->key = "vector";
-    parm.sfile->required = NO;
-    parm.sfile->description =
+    parm.observation = G_define_standard_option(G_OPT_V_INPUT);
+    parm.observation->key = "observation";
+    parm.observation->required = NO;
+    parm.observation->description =
 	_("Name of the sampling locations vector points map");
-    parm.sfile->guisection = _("Input_options");
-*/
+    parm.observation->guisection = _("Input_options");
+
+    parm.logfile = G_define_standard_option(G_OPT_F_OUTPUT);
+    parm.logfile->key = "logfile";
+    parm.logfile->required = NO;
+    parm.logfile->description =
+	_("Name of the sampling points output text file. For each observation vector point the time series of water depth is stored.");
+    parm.logfile->guisection = _("Output");
 
     parm.depth = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.depth->key = "depth";
@@ -333,11 +330,9 @@ int main(int argc, char *argv[])
     disch = parm.disch->answer;
     err = parm.err->answer;
     outwalk = parm.outwalk->answer; 
-/*    sfile = parm.sfile->answer; */
 
     sscanf(parm.niter->answer, "%d", &timesec);
     sscanf(parm.outiter->answer, "%d", &iterout);
-/*    sscanf(parm.density->answer, "%d", &ldemo); */
     sscanf(parm.diffc->answer, "%lf", &frac);
     sscanf(parm.hmax->answer, "%lf", &hhmax);
     sscanf(parm.halpha->answer, "%lf", &halpha);
@@ -454,19 +449,6 @@ int main(int argc, char *argv[])
 	G_message(_("Using metric conversion factor %f, step=%f"), conv,
 		  step);
 
-    /*
-     * G_set_embedded_null_value_mode(1);
-     */
-
-/* replaced with condition that skips outwalk */
-/*    if ((depth == NULL) && (disch == NULL) && (err == NULL) &&
-	(outwalk == NULL))
-	G_warning(_("You are not outputting any raster or vector points maps"));
-    ret_val = input_data();
-    if (ret_val != 1)
-	G_fatal_error(_("Input failed"));
-*/
-
  if ((depth == NULL) && (disch == NULL) && (err == NULL))
         G_warning(_("You are not outputting any raster maps"));
     ret_val = input_data();
@@ -482,10 +464,6 @@ int main(int argc, char *argv[])
 	gammas = G_alloc_matrix(my, mx);
     dif = G_alloc_fmatrix(my, mx);
 
-    /*  if (maskmap != NULL)
-       bitmask = BM_create (cols, rows);
-       IL_create_bitmask (&params, bitmask);
-     */
     G_debug(2, "seeding randoms");
     seeds(rand1, rand2);
     grad_check();
@@ -497,13 +475,6 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Cannot write raster maps"));
     }
 
-/*
-    if (fdwalkers != NULL)
-	fclose(fdwalkers);
-
-    if (sfile != NULL)
-	fclose(fw);
-*/
     /* Exit with Success */
     exit(EXIT_SUCCESS);
 }

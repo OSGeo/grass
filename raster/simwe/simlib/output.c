@@ -15,9 +15,9 @@
 
 static void output_walker_as_vector(int tt, int ndigit);
 
-
-/* This function was added by Soeren 8. Mar 2011 
- * It replaces the site walker output implementation */
+/* This function was added by Soeren 8. Mar 2011     */
+/* It replaces the site walker output implementation */
+/* Only the 3d coordinates of the walker are stored. */
 void output_walker_as_vector(int tt, int ndigit)
 {
     char buf[256];
@@ -32,7 +32,7 @@ void output_walker_as_vector(int tt, int ndigit)
 
 	/* In case of time series we extent the output name with the time value */
 	if (ts == 1) {
-	    sprintf(buf, "%s_%.*d", outwalk, ndigit, tt);
+	    G_snprintf(buf, 256, "%s_%.*d", outwalk, ndigit, tt);
 	    outwalk_time = G_store(buf);
 	    Vect_open_new(&Out, outwalk_time, WITH_Z);
 	    G_message("Writing %i walker into vector file %s", nstack, outwalk_time);
@@ -104,10 +104,18 @@ int output_data(int tt, double ft)
     output_walker_as_vector(tt, ndigit);
 
     Rast_set_window(&cellhd);
+
+    if (my != Rast_window_rows())
+	G_fatal_error("OOPS: rows changed from %d to %d\n", mx,
+		      Rast_window_rows());
+    if (mx != Rast_window_cols())
+	G_fatal_error("OOPS: cols changed from %d to %d\n", my,
+		      Rast_window_cols());
+
     if (depth) {
 	depth_cell = Rast_allocate_f_buf();
 	if (ts == 1) {
-	    sprintf(buf, "%s.%.*d", depth, ndigit, tt);
+	    G_snprintf(buf, 256,"%s.%.*d", depth, ndigit, tt);
 	    depth0 = G_store(buf);
 	    depth_fd = Rast_open_fp_new(depth0);
 	}
@@ -118,7 +126,7 @@ int output_data(int tt, double ft)
     if (disch) {
 	disch_cell = Rast_allocate_f_buf();
 	if (ts == 1) {
-	    sprintf(buf, "%s.%.*d", disch, ndigit, tt);
+	    G_snprintf(buf, 256,"%s.%.*d", disch, ndigit, tt);
 	    disch0 = G_store(buf);
 	    disch_fd = Rast_open_fp_new(disch0);
 	}
@@ -129,7 +137,7 @@ int output_data(int tt, double ft)
     if (err) {
 	err_cell = Rast_allocate_f_buf();
 	if (ts == 1) {
-	    sprintf(buf, "%s.%.*d", err, ndigit, tt);
+	    G_snprintf(buf, 256,"%s.%.*d", err, ndigit, tt);
 	    err0 = G_store(buf);
 	    err_fd = Rast_open_fp_new(err0);
 	}
@@ -140,7 +148,7 @@ int output_data(int tt, double ft)
     if (conc) {
 	conc_cell = Rast_allocate_f_buf();
 	if (ts == 1) {
-	    sprintf(buf, "%s.%.*d", conc, ndigit, tt);
+	    G_snprintf(buf, 256,"%s.%.*d", conc, ndigit, tt);
 	    conc0 = G_store(buf);
 	    conc_fd = Rast_open_fp_new(conc0);
 	}
@@ -151,7 +159,7 @@ int output_data(int tt, double ft)
     if (flux) {
 	flux_cell = Rast_allocate_f_buf();
 	if (ts == 1) {
-	    sprintf(buf, "%s.%.*d", flux, ndigit, tt);
+	    G_snprintf(buf, 256,"%s.%.*d", flux, ndigit, tt);
 	    flux0 = G_store(buf);
 	    flux_fd = Rast_open_fp_new(flux0);
 	}
@@ -162,20 +170,13 @@ int output_data(int tt, double ft)
     if (erdep) {
 	erdep_cell = Rast_allocate_f_buf();
 	if (ts == 1) {
-	    sprintf(buf, "%s.%.*d", erdep, ndigit, tt);
+	    G_snprintf(buf, 256,"%s.%.*d", erdep, ndigit, tt);
 	    erdep0 = G_store(buf);
 	    erdep_fd = Rast_open_fp_new(erdep0);
 	}
 	else
 	    erdep_fd = Rast_open_fp_new(erdep);
     }
-
-    if (my != Rast_window_rows())
-	G_fatal_error("OOPS: rows changed from %d to %d\n", mx,
-		      Rast_window_rows());
-    if (mx != Rast_window_cols())
-	G_fatal_error("OOPS: cols changed from %d to %d\n", my,
-		      Rast_window_cols());
 
     for (iarc = 0; iarc < my; iarc++) {
 	i = my - iarc - 1;

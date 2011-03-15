@@ -7,16 +7,6 @@
 
 #include <grass/raster.h>
 
-/*
-extern FILE *fdelevin, *fddxin, *fddyin, *fdrain, *fdinfil, *fdtraps,
-    *fdmanin, *fddepth, *fddisch, *fderr, *fdoutwalk, *fdwalkers;
-*/
-extern FILE *fdelevin, *fddxin, *fddyin, *fdrain, *fdinfil, *fdtraps,
-    *fdmanin, *fddepth, *fddisch, *fderr;
-extern FILE *fdwdepth, *fddetin, *fdtranin, *fdtauin, *fdtc, *fdet, *fdconc,
-    *fdflux, *fderdep;
-extern FILE *fdsfile, *fw;
-
 extern char *elevin;
 extern char *dxin;
 extern char *dyin;
@@ -24,7 +14,7 @@ extern char *rain;
 extern char *infil;
 extern char *traps;
 extern char *manin;
-/* extern char *sfile; */
+/* extern char *observation; */
 extern char *depth;
 extern char *disch;
 extern char *err;
@@ -50,10 +40,10 @@ extern char *infilval;
 struct options
 {
     struct Option *elevin, *dxin, *dyin, *rain, *infil, *traps, *manin,
-	*sfile, *depth, *disch, *err, *outwalk, *nwalk, *niter, *outiter,
+	*observation, *depth, *disch, *err, *outwalk, *nwalk, *niter, *outiter,
 	*density, *diffc, *hmax, *halpha, *hbeta, *wdepth, *detin, *tranin,
 	*tauin, *tc, *et, *conc, *flux, *erdep, *rainval, *maninval,
-	*infilval;
+	*infilval, *logfile;
 };
 
 extern struct options parm;
@@ -75,18 +65,18 @@ extern struct seed seed;
 
 extern struct Cell_head cellhd;
 
-struct Point
+struct _points
 {
-    double north, east;
-    double z1;
+    double *x; /* x coor for each point */
+    double *y; /* y coor for each point*/
+    int *cats; /* Category for each point */
+    int npoints; /* Number of observation points */
+    int npoints_alloc; /* Number of allocated points */
+    FILE *output; /* Output file descriptor */
+    int is_open; /* Set to 1 if open, 0 if closed */
 };
 
-/*
-extern struct Point *points;
-extern int npoints;
-extern int npoints_alloc;
-*/
-
+extern struct _points points;
 extern int input_data(void);
 extern int seeds(long int, long int);
 extern int seedg(long int, long int);
@@ -101,6 +91,7 @@ extern double amax1(double, double);
 extern double amin1(double, double);
 extern int min(int, int);
 extern int max(int, int);
+extern void create_observation_points();
 
 extern double xmin, ymin, xmax, ymax;
 extern double mayy, miyy, maxx, mixx;
