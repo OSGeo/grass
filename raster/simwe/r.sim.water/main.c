@@ -394,7 +394,7 @@ int main(int argc, char *argv[])
 	}
     }
     /* Report the final value of manin_val */
-    G_debug(3, "manin_val is set to: %f\n", manin_val);
+    G_debug(1, "manin_val is set to: %f\n", manin_val);
 
     /* if no infiltration map, then: */
     if (parm.infil->answer == NULL) {
@@ -423,7 +423,7 @@ int main(int argc, char *argv[])
 	}
     }
     /* Report the final value of infil_val */
-    G_debug(3, "infil_val is set to: %f\n", infil_val);
+    G_debug(1, "infil_val is set to: %f\n", infil_val);
 
     /* Recompute timesec from user input in minutes
      * to real timesec in seconds */
@@ -457,14 +457,14 @@ int main(int argc, char *argv[])
 
 
     /* memory allocation for output grids */
-    G_debug(2, "beginning memory allocation for output grids");
+    G_debug(1, "beginning memory allocation for output grids");
 
     gama = G_alloc_matrix(my, mx);
     if (err != NULL)
 	gammas = G_alloc_matrix(my, mx);
     dif = G_alloc_fmatrix(my, mx);
 
-    G_debug(2, "seeding randoms");
+    G_debug(1, "seeding randoms");
     seeds(rand1, rand2);
     grad_check();
     main_loop();
