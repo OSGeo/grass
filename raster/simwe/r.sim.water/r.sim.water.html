@@ -53,18 +53,23 @@ raster map <i>disch</i> in [m3/s]. Error of the numerical solution can be analyz
 the <i>err</i> raster map (the resulting water depth is an average, and err is its RMSE).
 The output vector points map <i>outwalk</i> can be used to analyze and visualize 
 spatial distribution of walkers at different simulation times (note that 
-the resulting water depth is based on the density of these walkers). Number 
-of the output walkers is controled by the <i>density</i> parameter, which controls
-how many walkers used in simulation should be written into the output. 
+the resulting water depth is based on the density of these walkers). 
+<!--Number of the output walkers is controled by the <i>density</i> parameter, which controls
+how many walkers used in simulation should be written into the output. -->
 <!--(<font color="#ff0000"> toto treba upresnit/zmenit, lebo nwalk ide prec</font>). -->
 Duration of simulation is controled by the <i>niter</i> parameter. The default value 
 is 10 minutes, reaching the steady-state may require much longer time, 
 depending on the time step, complexity of terrain, land cover and size of the area. 
-Output water depth and discharge maps can be saved during simulation using 
+Output walker, water depth and discharge maps can be saved during simulation using 
 the time series flag <i>-t</i> and <i>outiter</i> parameter 
 defining the time step in minutes for writing output files. 
 Files are saved with a suffix representing time since the start of simulation in seconds 
 (e.g. wdepth.500, wdepth.1000).
+Monitoring of water depth at specific points is supported. A vector map with observation points and
+a path to a logfile must be provided. For each point in the vector map which is located in
+the computational region the water depth is logged each time step in the logfile. The logfile is
+organized as a table. A single header identifies the category number of the logged vector points.
+In case of invalid water depth data the value -1 is used.
 
 <P>
 Overland flow is routed based on partial derivatives of elevation

@@ -168,14 +168,19 @@ int main(int argc, char *argv[])
 	_("Base name of the output walkers vector points map");
     parm.outwalk->guisection = _("Output_options");
     
-    /* needs to be updated to GRASS 6 vector format !! 
-    parm.sfile = G_define_standard_option(G_OPT_V_INPUT);
-    parm.sfile->key = "vector";
-    parm.sfile->required = NO;
-    parm.sfile->description =
+    parm.observation = G_define_standard_option(G_OPT_V_INPUT);
+    parm.observation->key = "observation";
+    parm.observation->required = NO;
+    parm.observation->description =
 	_("Name of the sampling locations vector points map");
-    parm.sfile->guisection = _("Input_options");
-*/
+    parm.observation->guisection = _("Input_options");
+
+    parm.logfile = G_define_standard_option(G_OPT_F_OUTPUT);
+    parm.logfile->key = "logfile";
+    parm.logfile->required = NO;
+    parm.logfile->description =
+	_("Name of the sampling points output text file. For each observation vector point the time series of sediment transport is stored.");
+    parm.logfile->guisection = _("Output");
 
     parm.tc = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.tc->key = "tc";
@@ -306,7 +311,6 @@ int main(int argc, char *argv[])
     wdepth = parm.wdepth->answer;
     dxin = parm.dxin->answer;
     dyin = parm.dyin->answer;
-    /*  maskmap = parm.maskmap->answer; */
     detin = parm.detin->answer;
     tranin = parm.tranin->answer;
     tauin = parm.tauin->answer;
@@ -348,9 +352,6 @@ int main(int argc, char *argv[])
 	G_message(_("Using metric conversion factor %f, step=%f"), conv,
 		  step);
 
-    /*
-     * G_set_embedded_null_value_mode(1);
-     */
 
     if ((tc == NULL) && (et == NULL) && (conc == NULL) && (flux == NULL) &&
 	(erdep == NULL))
@@ -370,10 +371,6 @@ int main(int argc, char *argv[])
     if (erdep != NULL || et != NULL)
 	er = G_alloc_fmatrix(my, mx);
 
-    /*  if (maskmap != NULL)
-       bitmask = BM_create (cols, rows);
-       IL_create_bitmask (&params, bitmask);
-     */
     seeds(rand1, rand2);
     grad_check();
 
@@ -388,13 +385,6 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Cannot write raster maps"));
     }
 
-/*
-    if (fdwalkers != NULL)
-	fclose(fdwalkers);
-
-    if (sfile != NULL)
-	G_sites_close(fw);
-*/
     /* Exit with Success */
     exit(EXIT_SUCCESS);
 }
