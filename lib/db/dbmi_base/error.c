@@ -33,7 +33,7 @@ void db_on_error(void (*f) (const char *))
 void db_set_error_who(const char *me)
 {
     if (who)
-	db_free_string(who);
+	db_free(who);
     who = db_store(me);
 }
 
@@ -59,7 +59,7 @@ void db_error(const char *s)
     if (s == NULL)
 	s = "<NULL error message>";
     if (err_msg)
-	db_free_string(err_msg);
+	db_free(err_msg);
     err_msg = db_store(s);
     err_flag = 1;
     if (auto_print_errors)
