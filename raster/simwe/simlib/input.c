@@ -38,6 +38,7 @@ int input_data(void)
     int if_rain = 0;
 
     G_debug(1, "Running MAR 2011 version, started modifications on 20080211");
+    G_debug(1, "Reading input data");
     
     /* Elevation and gradients are mandatory */
     zz = read_float_raster_map(rows, cols, elevin, 1.0);
@@ -52,7 +53,7 @@ int input_data(void)
     if(manin != NULL) {
     	cchez = read_float_raster_map(rows, cols, manin, 1.0);
      } else if(manin_val >= 0.0) { /* If no value set its set to -999.99 */
-	cchez = create_float_matrix(rows, cols, manin_val * unitconv);
+	cchez = create_float_matrix(rows, cols, manin_val);
     }else{
         G_fatal_error(_("Raster map <%s> not found, and manin_val undefined, choose one to be allowed to process"), manin);
     }
@@ -374,6 +375,8 @@ float ** create_float_matrix(int rows, int cols, float fill_value)
     int col = 0, row = 0;
     float **matrix = NULL;
 
+    G_verbose_message("Creating float matrix with value %g", fill_value);
+
     /* Allocate the float marix */
     matrix = G_alloc_fmatrix(rows, cols);
 
@@ -392,6 +395,8 @@ double ** create_double_matrix(int rows, int cols, double fill_value)
 {
     int col = 0, row = 0;
     double **matrix = NULL;
+
+    G_verbose_message("Creating double matrix with value %g", fill_value);
 
     /* Allocate the float marix */
     matrix = G_alloc_matrix(rows, cols);
@@ -414,7 +419,7 @@ float ** read_float_raster_map(int rows, int cols, char *name, float unitconv)
     int col = 0, row = 0, row_rev = 0;
     float **matrix = NULL;
 
-    G_message("Reading float map %s into memory", name);
+    G_verbose_message("Reading float map %s into memory", name);
 
     /* Open raster map */
     fd = Rast_open_old(name, "");
@@ -457,7 +462,7 @@ double ** read_double_raster_map(int rows, int cols, char *name, double unitconv
     int col = 0, row = 0, row_rev;
     double **matrix = NULL;
 
-    G_message("Reading double map %s into memory", name);
+    G_verbose_message("Reading double map %s into memory", name);
 
     /* Open raster map */
     fd = Rast_open_old(name, "");
