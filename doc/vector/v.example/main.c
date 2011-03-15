@@ -104,8 +104,9 @@ int main(int argc, char *argv[])
 	Vect_close(&In);
 	G_fatal_error(_("Database connection not defined for layer %d"), 1);
     }
-    /* Output information usefull for debuging 
-       incluse/vect/dig_structs.h
+
+    /* Output information useful for debuging 
+       include/vect/dig_structs.h
      */
     G_debug(1,
 	    "Field number:%d; Name:<%s>; Driver:<%s>; Database:<%s>; Table:<%s>; Key:<%s>;\n",
@@ -118,7 +119,7 @@ int main(int argc, char *argv[])
     db_init_string(&table_name);
     db_init_handle(&handle);
 
-    /* Prepearing database for use */
+    /* Prepare database for use */
     driver = db_start_driver(Fi->driver);
     if (driver == NULL) {
 	Vect_close(&In);
