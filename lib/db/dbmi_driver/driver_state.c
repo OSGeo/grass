@@ -66,8 +66,8 @@ void db__mark_database_open(const char *dbname, const char *dbschema)
 */
 void db__mark_database_closed(void)
 {
-    db_free_string(state.dbname);
-    db_free_string(state.dbschema);
+    db_free(state.dbname);
+    db_free(state.dbschema);
     state.open = 0;
 }
 
