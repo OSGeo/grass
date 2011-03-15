@@ -52,7 +52,7 @@
 #% key: prefix
 #% type: string
 #% key_desc: path
-#% description: Prefix where to install extension
+#% description: Prefix where to install extension (ignored when flag -s is given)
 #% answer: $GRASS_ADDON_PATH
 #% required: yes
 #%end
@@ -71,6 +71,10 @@
 #% key: g
 #% description: List available modules in the GRASS Addons SVN repository (shell script style)
 #% guisection: Print
+#%end
+#%flag
+#% key: s
+#% description: Install system-wide (may need system administrator rights)
 #%end
 #%flag
 #% key: d
@@ -97,23 +101,23 @@ grass.try_remove(tmpdir)
 os.mkdir(tmpdir)
 
 def check():
-    # check if we have the svn client
-    if not grass.find_program('svn', ['help']):
-        grass.fatal(_('svn client required. Please install subversion first.'))
-    # probably test here if we have "make" and "install" programs as well. how about gcc?
-
+    for prog in ('svn', 'make', 'install', 'gcc'):
+        if not grass.find_program(prog, ['--help']):
+            grass.fatal(_("%s required. Please install '%s' first.") % (prog, prog))
+    
 def expand_module_class_name(c):
-    name = { 'd'  : 'display',
-             'db' : 'database',
-             'g'  : 'general',
-             'i'  : 'imagery',
-             'm'  : 'misc',
-             'ps' : 'postscript',
-             'p'  : 'paint',
-             'r'  : 'raster',
-             'r3' : 'raster3D',
-             's'  : 'sites',
-             'v'  : 'vector' }
+    name = { 'd'   : 'display',
+             'db'  : 'database',
+             'g'   : 'general',
+             'i'   : 'imagery',
+             'm'   : 'misc',
+             'ps'  : 'postscript',
+             'p'   : 'paint',
+             'r'   : 'raster',
+             'r3'  : 'raster3D',
+             's'   : 'sites',
+             'v'   : 'vector',
+             'gui' : 'gui/wxpython' }
     
     if name.has_key(c):
         return name[c]
@@ -121,11 +125,12 @@ def expand_module_class_name(c):
     return c
 
 def list_available_modules(svnurl, full = False, shell = False):
+    mlist = list()
     grass.message(_('Fetching list of modules from GRASS-Addons SVN (be patient)...'))
     pattern = re.compile(r'(<li><a href=".+">)(.+)(</a></li>)', re.IGNORECASE)
     i = 0
-    prefix = ['d', 'db', 'g', 'i', 'ps',
-              'p', 'r', 'r3', 'v']
+    prefix = ['d', 'db', 'g', 'i', 'm', 'ps',
+              'p', 'r', 'r3', 's', 'v']
     nprefix = len(prefix)
     for d in prefix:
         if shell:
@@ -133,7 +138,10 @@ def list_available_modules(svnurl, full = False, shell = False):
             i += 1
         
         modclass = expand_module_class_name(d)
-        url = svnurl + '/' + modclass
+        grass.verbose(_("Checking for '%s' modules...") % modclass)
+        
+        url = '%s/%s' % (svnurl, modclass)
+        grass.debug("url = %s" % url, debug = 2)
         f = urllib.urlopen(url)
         if not f:
             grass.warning(_("Unable to fetch '%s'") % url)
@@ -142,13 +150,46 @@ def list_available_modules(svnurl, full = False, shell = False):
         for line in f.readlines():
             # list modules
             sline = pattern.search(line)
-            if sline and sline.group(2).split('.', 1)[0] == d:
-                name = sline.group(2).rstrip('/')
+            if not sline:
+                continue
+            name = sline.group(2).rstrip('/')
+            if name.split('.', 1)[0] == d:
                 print_module_desc(name, url, full, shell)
+                mlist.append(name)
+    
+    mlist += list_wxgui_extensions(svnurl, full, shell)
     
     if shell:
         grass.percent(1, 1, 1)
     
+    return mlist
+
+def list_wxgui_extensions(svnurl, full = False, shell = False, print_module = True):
+    mlist = list()
+    grass.debug('Fetching list of wxGUI extensions from GRASS-Addons SVN (be patient)...')
+    pattern = re.compile(r'(<li><a href=".+">)(.+)(</a></li>)', re.IGNORECASE)
+    grass.verbose(_("Checking for '%s' modules...") % 'gui/wxpython')
+    
+    url = '%s/%s' % (svnurl, 'gui/wxpython')
+    grass.debug("url = %s" % url, debug = 2)
+    f = urllib.urlopen(url)
+    if not f:
+        grass.warning(_("Unable to fetch '%s'") % url)
+        return
+        
+    for line in f.readlines():
+        # list modules
+        sline = pattern.search(line)
+        if not sline:
+            continue
+        name = sline.group(2).rstrip('/')
+        if name not in ('..', 'Makefile'):
+            if print_module:
+                print_module_desc(name, url, full, shell)
+            mlist.append(name)
+    
+    return mlist
+
 def print_module_desc(name, url, full = False, shell = False):
     if not full and not shell:
         print name
@@ -258,10 +299,17 @@ def install_extension(svnurl, prefix, module, no_install):
     if grass.find_program(module):
         grass.warning(_("Extension '%s' already installed. Will be updated...") % module)
     
-    classchar = module.split('.', 1)[0]
-    moduleclass = expand_module_class_name(classchar)
-    url = svnurl + '/' + moduleclass + '/' + module
-        
+    gui_list = list_wxgui_extensions(svnurl, print_module = False)
+
+    if module not in gui_list:
+        classchar = module.split('.', 1)[0]
+        moduleclass = expand_module_class_name(classchar)
+        url = svnurl + '/' + moduleclass + '/' + module
+    else:
+        url = svnurl + '/gui/wxpython/' + module
+        if not flags['s']:
+            grass.fatal(_("Installation of wxGUI extension requires -%s flag") % 's') 
+    
     grass.message(_("Fetching '%s' from GRASS-Addons SVN (be patient)...") % module)
     global tmpdir
     os.chdir(tmpdir)
@@ -273,7 +321,7 @@ def install_extension(svnurl, prefix, module, no_install):
     if grass.call(['svn', 'checkout',
                    url], stdout = outdev) != 0:
         grass.fatal(_("GRASS Addons '%s' not found in repository") % module)
-
+    
     os.chdir(os.path.join(tmpdir, module))
     
     grass.message(_("Compiling '%s'...") % module)
@@ -282,29 +330,28 @@ def install_extension(svnurl, prefix, module, no_install):
                    stdout = outdev) != 0:
         grass.fatal(_('Compilation failed, sorry. Please check above error messages.'))
     
-    if no_install:
+    if no_install or module in gui_list:
         return
     
     grass.message(_("Installing '%s'...") % module)
-    # can we write ?
-    try:
-        # replace with something better
-        file = os.path.join(prefix, 'test')
-        f = open(file, "w")
-        f.close()
-        os.remove(file)
-        
+    # replace with something better
+    file = os.path.join(prefix, 'test')
+    f = open(file, "w")
+    f.close()
+    os.remove(file)
+ 
+    if not flags['s']:
         ret = grass.call(['make',
                           'MODULE_TOPDIR=%s' % gisbase,
                           'INST_DIR=%s' % prefix,
                           'install'],
-                          stdout = outdev)
-    except IOError:
+                         stdout = outdev)
+    else:
         ret = grass.call(['sudo', 'make',
                           'MODULE_TOPDIR=%s' % gisbase,
                           'INST_DIR=%s' % prefix,
                           'install'],
-                          stdout = outdev)
+                         stdout = outdev)
     
     if ret != 0:
         grass.warning(_('Installation failed, sorry. Please check above error messages.'))
@@ -353,6 +400,8 @@ def main():
             grass.fatal(_('You need to define an extension name or use -l'))
     
     # define path
+    if flags['s']:
+        options['prefix'] = os.environ['GISBASE']
     if options['prefix'] == '$GRASS_ADDON_PATH':
         if not os.environ.has_key('GRASS_ADDON_PATH') or \
                 not os.environ['GRASS_ADDON_PATH']:
