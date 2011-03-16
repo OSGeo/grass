@@ -200,7 +200,7 @@ int main(int argc, char **argv)
 
     /* mark and count the sinks in each internally drained basin */
     nbasins = dopolys(fd, fm, nrows, ncols);
-    if (flag1->answer == '0') {
+    if (flag1->answer) {
 	/* determine the watershed for each sink */
 	wtrshed(fm, fd, nrows, ncols, 4);
 
