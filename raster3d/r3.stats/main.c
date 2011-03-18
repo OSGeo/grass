@@ -52,16 +52,16 @@ typedef struct
 } equal_val_array;
 
 /*prototypes */
-equal_val_array *alloc_equal_val_array(int count);
-void free_equal_val_array(equal_val_array * vals);
-equal_val_array *add_equal_val_to_array(equal_val_array * array, double val);
-int check_equal_value(equal_val_array * array, double val);
-stat_table *create_stat_table(int nsteps, equal_val_array * values,
+static equal_val_array *alloc_equal_val_array(int count);
+static void free_equal_val_array(equal_val_array * vals);
+static equal_val_array *add_equal_val_to_array(equal_val_array * array, double val);
+static int check_equal_value(equal_val_array * array, double val);
+static stat_table *create_stat_table(int nsteps, equal_val_array * values,
 			      double min, double max);
-void free_stat_table(stat_table * stats);
-void print_stat_table(stat_table * stats);
-void update_stat_table(stat_table * stats, G3D_Region * region);
-void heapsort_eqvals(equal_val_array * data, int n);
+static void free_stat_table(stat_table * stats);
+static void print_stat_table(stat_table * stats);
+static void update_stat_table(stat_table * stats, G3D_Region * region);
+static void heapsort_eqvals(equal_val_array * data, int n);
 static void downheap_eqvals(equal_val_array * data, int n, int k);
 static void check_range_value(stat_table * stats, double value);
 static void tree_search_range(stat_table * stats, int left, int right,
@@ -546,14 +546,14 @@ int main(int argc, char *argv[])
 
     float val_f;		/* for misc use */
     double val_d;		/* for misc use */
-    stat_table *stats;
+    stat_table *stats = NULL;
     double min, max;
-    equal_val_array *eqvals;
+    equal_val_array *eqvals = NULL;
 
     unsigned int n = 0, nsteps;
     int map_type;
-    char *infile;
-    void *map;
+    char *infile = NULL;
+    void *map = NULL;
     G3D_Region region;
     unsigned int rows, cols, depths;
     unsigned int x, y, z;
@@ -661,18 +661,18 @@ int main(int argc, char *argv[])
 	    }
 	}
 
-	/* sort the equal values array */
-	G_message(_("Sort non-null values"));
-	heapsort_eqvals(eqvals, eqvals->count);
+	if (eqvals) {
+            /* sort the equal values array */
+            G_message(_("Sort non-null values"));
+            heapsort_eqvals(eqvals, eqvals->count);
 
-	/* create the statistic table with equal values */
-	stats = create_stat_table(eqvals->count, eqvals, 0, 0);
-	/* compute the number of null values */
-	stats->null->count = rows * cols * depths - n;
+            /* create the statistic table with equal values */
+            stats = create_stat_table(eqvals->count, eqvals, 0, 0);
+            /* compute the number of null values */
+            stats->null->count = rows * cols * depths - n;
 
-	if (eqvals)
-	    free_equal_val_array(eqvals);
-
+            free_equal_val_array(eqvals);
+        }
     }
     else {
 
@@ -710,11 +710,14 @@ int main(int argc, char *argv[])
 	stats->null->count = rows * cols * depths - n;
     }
 
-    /* Compute the volume and percentage */
-    update_stat_table(stats, &region);
-    /* Print the statistics to stdout */
-    print_stat_table(stats);
+    if(stats) {
+        /* Compute the volume and percentage */
+        update_stat_table(stats, &region);
+        /* Print the statistics to stdout */
+        print_stat_table(stats);
 
-    free_stat_table(stats);
+        free_stat_table(stats);
+    }
+    
     exit(EXIT_SUCCESS);
 }
