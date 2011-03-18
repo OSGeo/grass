@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
 	"Write areas and isles as closed polygons instead of topo check";
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE));
+	exit(EXIT_FAILURE);
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
 
     if (!poly_f->answer) {	/* do check */
 	Vect_copy_map_lines(&In, &Out);
-	Vect_build(&Out, NULL);
+	Vect_build(&Out);
 
 	Vect_close(&In);
 	Vect_close(&Out);
@@ -159,7 +159,7 @@ int main(int argc, char *argv[])
 	}
 	fprintf(stderr, "%d area polygons written.\n", n);
 
-	Vect_build(&Out, stderr);
+	Vect_build(&Out);
 	Vect_close(&Out);
     }
 
