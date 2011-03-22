@@ -121,7 +121,7 @@ def gfile(*args):
 
 help_text = r"""
 %s:
-  $CMD_NAME [-h | -help | --help] [-v | --version] [-c]
+  $CMD_NAME [-h | -help | --help] [-v | --version] [-c | -c geofile | -c EPSG:code]
 	  [-text | -gui]
 	  [[[<GISDBASE>/]<LOCATION_NAME>/]<MAPSET>]
 
