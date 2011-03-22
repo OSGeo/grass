@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: grasslibs_it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-01-03 16:17+0100\n"
-"PO-Revision-Date: 2011-02-10 12:46+0100\n"
+"PO-Revision-Date: 2011-03-22 00:52+0100\n"
 "Last-Translator: Luca Delucchi <lucadeluge@gmail.com>\n"
 "Language-Team: Italian <grass-translations@lists.osgeo.org>\n"
 "MIME-Version: 1.0\n"
@@ -1018,11 +1018,11 @@ msgstr "Impossibile inizializzare pj a causa: %s"
 
 #: ../lib/proj/get_proj.c:401
 msgid "Input Projection Parameters"
-msgstr ""
+msgstr "Parametri della proiezione di input"
 
 #: ../lib/proj/get_proj.c:404
 msgid "Input Unit Factor"
-msgstr ""
+msgstr "Fattori dell'unità di input"
 
 #: ../lib/proj/get_proj.c:414
 msgid "Output Projection Parameters"
@@ -3126,7 +3126,7 @@ msgstr "Centroidi allegati..."
 #: ../lib/vector/Vlib/merge_lines.c:192
 #, c-format
 msgid "%d boundaries merged"
-msgstr ""
+msgstr "%d perimetri uniti"
 
 #: ../lib/vector/Vlib/merge_lines.c:193
 #, c-format
@@ -3156,7 +3156,7 @@ msgstr "Vect_get_point_in_poly() fallito"
 
 #: ../lib/vector/Vlib/map.c:73
 msgid "input vector map is not open"
-msgstr ""
+msgstr "il vettoriale di input non è aperto"
 
 #: ../lib/vector/Vlib/map.c:86 ../lib/vector/Vlib/map.c:140
 #: ../lib/ogsf/Gp3.c:92
@@ -3316,7 +3316,7 @@ msgstr "Colonna <%s> non trovata nella tabella <%s>"
 #: ../lib/vector/Vlib/net.c:363
 #, c-format
 msgid "Data type of column <%s> not supported (must be numeric)"
-msgstr ""
+msgstr "il tipo della colonna <%s> non supportato (dev'essere numerico)"
 
 #: ../lib/vector/Vlib/net.c:223
 msgid "Registering arcs..."
@@ -3674,9 +3674,9 @@ msgstr "Tipo di interpolazione sconosciuta"
 
 #: ../lib/vector/Vlib/ascii.c:320 ../lib/db/dbmi_client/copy_tab.c:100
 #: ../lib/db/dbmi_client/copy_tab.c:120 ../lib/db/dbmi_client/db.c:41
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to start driver <%s>"
-msgstr "Impossibile aprire il file %s in %s"
+msgstr "Impossibile avviare il driver <%s>"
 
 #: ../lib/vector/Vlib/ascii.c:426
 #, fuzzy, c-format
@@ -3809,9 +3809,9 @@ msgid "Unable to select attributes for category %d"
 msgstr "impossibile cambiare la directory %s"
 
 #: ../lib/vector/Vlib/write_ogr.c:388 ../lib/db/dbmi_client/copy_tab.c:295
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to fetch data from table <%s>"
-msgstr "Impossibile aprire il file %s in %s"
+msgstr ""
 
 #: ../lib/vector/Vlib/write_ogr.c:393
 #, c-format
@@ -4586,11 +4586,11 @@ msgstr "Colonna <%s> non trovata"
 #: ../lib/rst/interp_float/vinput2d.c:110
 #, c-format
 msgid "Data type of column <%s> must be numeric"
-msgstr ""
+msgstr "La tipologia della colonna <%s> dev'essere numerico"
 
 #: ../lib/rst/interp_float/vinput2d.c:121
 msgid "Reading features from vector map ..."
-msgstr ""
+msgstr "Leggendo le features dal vettoriale"
 
 #: ../lib/rst/interp_float/vinput2d.c:153
 #: ../lib/rst/interp_float/vinput2d.c:270
@@ -4628,7 +4628,7 @@ msgstr ""
 
 #: ../lib/rst/interp_float/vinput2d.c:340
 msgid "Zero points in the given region"
-msgstr ""
+msgstr "Nessun punto nella region settata"
 
 #: ../lib/rst/interp_float/vinput2d.c:345
 #, c-format
@@ -4657,7 +4657,7 @@ msgstr "Numero di punti che stanno per essere usati %d"
 
 #: ../lib/rst/interp_float/vinput2d.c:391
 msgid "Some points outside of region (ignored)"
-msgstr ""
+msgstr "Alcuni ppunti fuori dalla region (ignorati)"
 
 #: ../lib/rst/interp_float/vinput2d.c:397
 msgid "Unable to allocate memory"
@@ -4808,12 +4808,12 @@ msgstr ""
 #: ../lib/arraystats/class.c:23
 #, c-format
 msgid "%s: Unknown algorithm"
-msgstr ""
+msgstr "%s: Algoritmo sconosciuto"
 
 #: ../lib/arraystats/class.c:26
 #, c-format
 msgid "%s: Error in classification algorithm"
-msgstr ""
+msgstr "%s: Errore nell'algoritmo di classificazionr"
 
 #: ../lib/arraystats/class.c:221
 #, c-format
@@ -4875,7 +4875,7 @@ msgstr ""
 
 #: ../lib/ogsf/gvl_file.c:104
 msgid "Maximum number of datafiles exceeded"
-msgstr ""
+msgstr "Superato il numero massimo del datafiles"
 
 #: ../lib/ogsf/gvl_file.c:437
 #, c-format
@@ -4939,7 +4939,7 @@ msgstr ""
 
 #: ../lib/ogsf/gsds.c:109
 msgid "Maximum number of datasets exceeded"
-msgstr ""
+msgstr "Superato il numero massimo del dataset"
 
 #: ../lib/ogsf/Gv3.c:259
 #, c-format
@@ -4958,12 +4958,12 @@ msgstr ""
 #: ../lib/ogsf/GS2.c:1198
 #, c-format
 msgid "no category info"
-msgstr ""
+msgstr "nessuna informazione sulla categoria"
 
 #: ../lib/ogsf/GS2.c:1217
 #, c-format
 msgid "no data"
-msgstr ""
+msgstr "no data"
 
 #: ../lib/ogsf/GS2.c:1640
 #, c-format
@@ -5000,74 +5000,65 @@ msgstr "Vettoriale <%s> caricato (%d punti)"
 
 #: ../lib/ogsf/gk.c:322
 msgid "Need at least 3 keyframes for spline"
-msgstr ""
+msgstr "Necessita di almeno 3 chiavi per spline"
 
 #: ../lib/ogsf/gk.c:624
 msgid "Need at least 2 keyframes for interpolation"
-msgstr ""
+msgstr "Necessita di almeno 2 chiavi per interpolazione"
 
 #: ../lib/ogsf/gsd_img_mpeg.c:63
-#, fuzzy
 msgid "Unable to allocate stream"
-msgstr "Impossibile allocare memoria\n"
+msgstr "Impossibile allocare il flusso"
 
 #: ../lib/ogsf/gsd_img_mpeg.c:156
-#, fuzzy
 msgid "Video codec not found"
-msgstr "Non riesco a trovare il vettore '%s' di input"
+msgstr "Codec video non trovato"
 
 #: ../lib/ogsf/gsd_img_mpeg.c:162
-#, fuzzy
 msgid "Unable to open codec"
-msgstr "Impossibile aprire %s"
+msgstr "Impossibile aprire il codec"
 
 #: ../lib/ogsf/gsd_img_mpeg.c:181
-#, fuzzy
 msgid "Unable to allocate picture"
-msgstr "Impossibile allocare memoria\n"
+msgstr ""
 
 #: ../lib/ogsf/gsd_img_mpeg.c:192
-#, fuzzy
 msgid "Unable to allocate temporary picture"
-msgstr "Impossibile allocare memoria\n"
+msgstr ""
 
 #: ../lib/ogsf/gsd_img_mpeg.c:252
-#, fuzzy
 msgid "Error while writing video frame"
-msgstr "Errore nella scrittura del file di topologia.\n"
+msgstr "Errore nella scrittura del frame del video"
 
 #: ../lib/ogsf/gsd_img_mpeg.c:298
 #, c-format
 msgid "Opening MPEG stream <%s>..."
-msgstr ""
+msgstr "Apertura flusso MPEG <%s>"
 
 #: ../lib/ogsf/gsd_img_mpeg.c:306
 msgid "Unable to deduce output format from file extension: using MPEG"
-msgstr ""
+msgstr "Impossibile ricavare il formato di output dall'estensione del file: si userà MPEG"
 
 #: ../lib/ogsf/gsd_img_mpeg.c:310
-#, fuzzy
 msgid "Unable to find suitable output format"
-msgstr "Non riesco ad aprire lo storico per il vettoriale '%s'"
+msgstr ""
 
 #: ../lib/ogsf/gsd_img_mpeg.c:337
-#, fuzzy
 msgid "Invalid output format parameters"
-msgstr "impossibile cambiare la directory %s"
+msgstr "Parametro del formato di output non valido"
 
 #: ../lib/ogsf/gsd_img_mpeg.c:351
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open <%s>"
-msgstr "Impossibile aprire %s"
+msgstr "Impossibile aprire <%s>"
 
 #: ../lib/ogsf/gsd_img_mpeg.c:361
 msgid "NVIZ has not been built with MPEG output support"
-msgstr ""
+msgstr "NVIZ non è stato compilato con il supporto di output MPEG"
 
 #: ../lib/ogsf/gsdrape.c:207
-#, fuzzy
 msgid "Unable to process vector map - out of memory"
-msgstr "impossibile cambiare la directory %s"
+msgstr "Impossibile processare il vettoriale - fuori memoria"
 
 #: ../lib/python/vector.py:91
 #, fuzzy, python-format
@@ -5103,9 +5094,9 @@ msgid "An error occurred while running r.mapcalc"
 msgstr ""
 
 #: ../lib/python/db.py:52 ../lib/db/dbmi_client/column.c:110
-#, fuzzy, c-format, python-format
+#, c-format, python-format
 msgid "Unable to describe table <%s>"
-msgstr "Impossibile aprire il file %s in %s"
+msgstr "Impossibile descrivere la tabella <%s>"
 
 #: ../lib/python/db.py:110
 #, fuzzy, python-format
@@ -5113,14 +5104,14 @@ msgid "Fetching data from table <%s> failed"
 msgstr "Impossibile aprire il file %s in %s"
 
 #: ../lib/db/dbmi_base/legal_dbname.c:25
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal table map name <%s>. May not contain '.' or 'NULL'.\n"
-msgstr "Nome non valido per una mappa vettoriale <%s>. Non deve contenere '.' oppure 'NULL'.\n"
+msgstr "Nome della tabella della mappa <%s> non valido. Non deve contenere '.' o 'NULL'.\n"
 
 #: ../lib/db/dbmi_base/legal_dbname.c:33
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal table map name <%s>. Must start with a letter.\n"
-msgstr "Nome non valido per una mappa vettoriale <%s>. Deve cominciare con una lettera.\n"
+msgstr "Nome della tabella della mappa <%s> non valido. Deve iniziare con una lettera.\n"
 
 #: ../lib/db/dbmi_base/legal_dbname.c:43
 #, c-format
@@ -5187,47 +5178,47 @@ msgstr "Tipo di interpolazione sconosciuta"
 
 #: ../lib/db/dbmi_base/login.c:111
 msgid "Login file corrupted"
-msgstr ""
+msgstr "File del login corrotto"
 
 #: ../lib/db/dbmi_base/default_name.c:127
 msgid "Programmer error"
 msgstr ""
 
 #: ../lib/db/dbmi_client/table.c:46
-#, fuzzy, c-format
+#, c-format
 msgid "Unable open database <%s> by driver <%s>"
-msgstr "Non posso scrivere i collegamenti del database"
+msgstr "Impossibile aprire il database <%s> del driver <%s>"
 
 #: ../lib/db/dbmi_client/table.c:110 ../lib/db/dbmi_client/copy_tab.c:199
 #: ../lib/db/dbmi_client/copy_tab.c:276 ../lib/sites/sites.c:329
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open select cursor: '%s'"
-msgstr "impossibile cambiare la directory %s"
+msgstr ""
 
 #: ../lib/db/dbmi_client/copy_tab.c:144
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to get list tables in database <%s>"
-msgstr "impossibile aprire il file con la tabella dell'ellissoide: %s"
+msgstr "Impossibile ottenere la lista delle tabelle nel database <%s>"
 
 #: ../lib/db/dbmi_client/copy_tab.c:157
-#, fuzzy, c-format
+#, c-format
 msgid "Table <%s> already exists in database <%s>"
-msgstr "impossibile aprire il file con la tabella dell'ellissoide: %s"
+msgstr "La tabella <%s> esiste già nel database <%s>"
 
 #: ../lib/db/dbmi_client/copy_tab.c:231
-#, fuzzy, c-format
+#, c-format
 msgid "Column <%s> is not integer"
-msgstr "Non posso scrivere i collegamenti del database"
+msgstr "Colonna <%s> non è inters"
 
 #: ../lib/db/dbmi_client/copy_tab.c:251
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create table <%s>"
-msgstr "Impossibile aprire il file %s in %s"
+msgstr "Impossibile creare la tabella <%s>"
 
 #: ../lib/db/dbmi_client/copy_tab.c:351
 #, c-format
 msgid "Unknown column type (column <%s>)"
-msgstr ""
+msgstr "Tipo della colonna sconosciuto (colonna <%s>"
 
 #: ../lib/db/dbmi_client/select.c:119 ../lib/db/dbmi_client/select.c:220
 #: ../lib/db/dbmi_client/select.c:286
@@ -5239,9 +5230,9 @@ msgid "Missing key column name"
 msgstr ""
 
 #: ../lib/db/dbmi_client/select.c:307
-#, fuzzy, c-format
+#, c-format
 msgid "Unable select records from table <%s>"
-msgstr "Impossibile creare il file di intestazione per [%s in %s]"
+msgstr "Impossibile selezionare recod dalla tabella <%s>"
 
 #: ../lib/db/dbmi_client/select.c:323
 #, fuzzy
@@ -5249,23 +5240,23 @@ msgid "Key column type is not integer"
 msgstr "Non posso scrivere i collegamenti del database"
 
 #: ../lib/db/dbmi_client/delete_tab.c:44
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open driver <%s>"
-msgstr "Impossibile aprire il file %s in %s"
+msgstr "Impossibile aprire il driver <%s>"
 
 #: ../lib/db/dbmi_client/delete_tab.c:62
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to drop table: '%s'"
-msgstr "Impossibile aprire il file %s in %s"
+msgstr "Impossibile eliminare la tabella: '%s'"
 
 #: ../lib/sites/sites.c:97
 #, c-format
 msgid "Attributes for category %d not found"
-msgstr ""
+msgstr "Attributi per la categoria %d non trovato"
 
 #: ../lib/sites/sites.c:136
 msgid "Category must be integer"
-msgstr ""
+msgstr "Categoria dev'essere intero"
 
 #: ../lib/sites/sites.c:210
 msgid "Memory error in writing timestamp"
@@ -5273,7 +5264,7 @@ msgstr ""
 
 #: ../lib/sites/sites.c:212
 msgid "Illegal TimeStamp string"
-msgstr ""
+msgstr "Stringa del timestamp non valida"
 
 #: ../lib/sites/sites.c:241
 msgid "Memory error in allocating timestamp"
@@ -5284,23 +5275,21 @@ msgid "Dev note: Adapted sites library used for vector points. (module should be
 msgstr ""
 
 #: ../lib/sites/sites.c:345
-#, fuzzy
 msgid "Cannot fetch row"
-msgstr "Non posso cancellare la linea"
+msgstr ""
 
 #: ../lib/sites/sites.c:527
 msgid "G_oldsite_new_struct: invalid # dims or fields"
 msgstr ""
 
 #: ../lib/sites/sites.c:1197
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot open database %s by driver %s"
-msgstr "Non posso scrivere i collegamenti del database"
+msgstr "Non è possibile aprire il database %s del driver %s"
 
 #: ../lib/sites/sites.c:1205
-#, fuzzy
 msgid "Cannot select attributes"
-msgstr "Non posso cancellare la linea"
+msgstr "Non è possibile selezionare attributi"
 
 #: ../lib/cluster/c_exec.c:42
 #, c-format
@@ -5537,9 +5526,8 @@ msgid "Matrix is not initialised fully."
 msgstr ""
 
 #: ../lib/gmath/la.c:158
-#, fuzzy
 msgid "Unable to allocate space for matrix copy"
-msgstr "Impossibile allocare memoria\n"
+msgstr "Impossibile allocare spazio per la copia della matrice"
 
 #: ../lib/gmath/la.c:247
 msgid "First scalar multiplier must be non-zero"
@@ -5554,14 +5542,12 @@ msgid "Matrix order does not match"
 msgstr "L'ordine delle matrici non corrisponde"
 
 #: ../lib/gmath/la.c:272
-#, fuzzy
 msgid "Unable to allocate space for matrix sum"
-msgstr "Impossibile allocare memoria\n"
+msgstr "Impossibile allocare spazio per la somme della matrice"
 
 #: ../lib/gmath/la.c:336
-#, fuzzy
 msgid "Unable to allocate space for matrix product"
-msgstr "Impossibile allocare memoria\n"
+msgstr "Impossibile allocare spazio per il prodotto della matrice"
 
 #: ../lib/gmath/la.c:448
 msgid "Input: one or both data matrices uninitialised"
@@ -5593,16 +5579,15 @@ msgstr ""
 
 #: ../lib/gmath/la.c:542
 msgid "Procedure not yet available for selected matrix type"
-msgstr ""
+msgstr "Procedura non ancora disponibile per la tipologia della matrice selezionata"
 
 #: ../lib/gmath/la.c:576
 msgid "Matrix is not square. Cannot determine inverse"
-msgstr ""
+msgstr "Matrice non è quadrato. Non si può determinare l'inverso"
 
 #: ../lib/gmath/la.c:581
-#, fuzzy
 msgid "Unable to allocate space for matrix"
-msgstr "Impossibile allocare memoria\n"
+msgstr "Impossibile allocare memoria per la matrice"
 
 #: ../lib/gmath/la.c:598
 msgid "Matrix is singular"
@@ -5646,13 +5631,12 @@ msgid "Specified column index is outside range"
 msgstr "L'indice della colonna specificata è fuori dal range"
 
 #: ../lib/gmath/la.c:856
-#, fuzzy
 msgid "Unknown vector type."
-msgstr "Tipo di interpolazione sconosciuta"
+msgstr "Tipologia di vettoria sconosciuto"
 
 #: ../lib/gmath/la.c:981
 msgid "Output vector is uninitialized"
-msgstr ""
+msgstr "Vettoriale di output non è inizializzato"
 
 #: ../lib/gmath/la.c:986
 msgid "Vectors are not of the same type"
@@ -5684,7 +5668,7 @@ msgstr "Riga/colonna fuori dal range"
 
 #: ../lib/gmath/la.c:1274
 msgid "Vector structure is not initialised"
-msgstr ""
+msgstr "La struttura del vettoriale non è inizializzato"
 
 #: ../lib/gmath/la.c:1395 ../lib/gmath/la.c:1403 ../lib/gmath/la.c:1408
 msgid "Input format error"
@@ -5723,44 +5707,44 @@ msgid "Starting cholesky decomposition solver"
 msgstr ""
 
 #: ../lib/imagery/points.c:124
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open control point file for group [%s in %s]"
-msgstr "Impossibile aprire il file %s in %s"
+msgstr "Impossibile aprire il file dei punti di controllo per il gruppo [%s in %s]"
 
 #: ../lib/imagery/points.c:132
-#, fuzzy, c-format
+#, c-format
 msgid "Bad format in control point file for group [%s in %s]"
-msgstr "Impossibile aprire il file %s in %s"
+msgstr "Formato non supportato nel file dei punti di controllo per il gruppo [%s in %s]"
 
 #: ../lib/imagery/points.c:159
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create control point file for group [%s in %s]"
-msgstr "Impossibile creare il file di intestazione per [%s in %s]"
+msgstr "Impossibile creare il file dei punti di controllo per il gruppo [%s in %s]"
 
 #: ../lib/imagery/fopen.c:23
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create file [%s] of group [%s in %s]"
-msgstr "Impossibile creare il file di intestazione per [%s in %s]"
+msgstr "Impossibile creare il file [%s] del gruppo [%s in %s]"
 
 #: ../lib/imagery/fopen.c:36 ../lib/imagery/fopen.c:57
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open file [%s] of group [%s in %s]"
-msgstr "Impossibile aprire il file %s in %s"
+msgstr "Impossibile aprire il file [%s] del gruppo [%s in %s]"
 
 #: ../lib/imagery/fopen.c:49
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find file [%s] of group [%s in %s]"
-msgstr "impossibile trovare [%s] in [%s]"
+msgstr "impossibile trovare il file [%s] del gruppo [%s in %s]"
 
 #: ../lib/imagery/fopen.c:79
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create file [%s] for subgroup [%s] of group [%s in %s]"
-msgstr "Impossibile creare il file di intestazione per [%s in %s]"
+msgstr "Impossibile creare il file [%s] per il sottogruppo [%s] del gruppo [%s in %s]"
 
 #: ../lib/imagery/fopen.c:101 ../lib/imagery/fopen.c:127
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open file [%s] for subgroup [%s] of group [%s in %s]"
-msgstr "Impossibile aprire il file %s in %s"
+msgstr "Impossibile aprire il file [%s] per il sottogruppo [%s] del gruppo [%s in %s]"
 
 #: ../lib/imagery/fopen.c:116
 #, c-format
@@ -5775,12 +5759,12 @@ msgstr "group <%s> è vuoto\n"
 #: ../lib/imagery/list_gp.c:44
 #, c-format
 msgid "group <%s> references the following raster maps\n"
-msgstr ""
+msgstr "gruppo <%s> fa riferimento ai seguenti raster\n"
 
 #: ../lib/imagery/target.c:38
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read target file for group [%s]"
-msgstr "Impossibile creare il file di intestazione per [%s]"
+msgstr "Impossibile leggere il file target per il gruppo [%s]"
 
 #: ../lib/imagery/list_subgp.c:36
 #, c-format
@@ -5790,7 +5774,7 @@ msgstr "subgrou <%s> del group <%s> è vuoto\n"
 #: ../lib/imagery/list_subgp.c:48
 #, c-format
 msgid "subgroup <%s> of group <%s> references the following raster maps\n"
-msgstr ""
+msgstr "subgroup <%s> del gruppo <%s> fa riferimento ai seguenti raster\n"
 
 #, fuzzy
 msgid "Name of input file"
