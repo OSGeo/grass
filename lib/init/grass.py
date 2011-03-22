@@ -48,7 +48,7 @@ gisbase = os.path.normpath(gisbase)
 
 # i18N
 import gettext
-gettext.install('grasslibs', os.path.join(gisbase, 'locale'), unicode=True)
+gettext.install('grasslibs', os.path.join(gisbase, 'locale'), unicode = True)
 
 tmpdir = None
 lockfile = None
@@ -152,7 +152,7 @@ help_text = r"""
        _("Flags"),
        _("print this help message"),
        _("show version information and exit"),
-       _("create given mapset if it doesn't exist"),
+       _("create given location/mapset if it doesn't exist"),
        _("use text based interface"),
        _("and set as default"),
        _("use $DEFAULT_GUI graphical user interface"),
@@ -428,7 +428,7 @@ def check_gui():
 	kv['GRASS_GUI'] = grass_gui
 	write_gisrc(kv)
 
-def non_interactive(arg):
+def non_interactive(arg, geofile = None):
     global gisdbase, location_name, mapset, location
     # Try non-interactive startup
     l = None
@@ -460,9 +460,20 @@ def non_interactive(arg):
 	    else:
 		# the user wants to create mapset on the fly
 		if create_new:
-		    if not os.access(os.path.join(os.path.join(gisdbase, location_name, "PERMANENT", "DEFAULT_WIND")), os.F_OK):
-			fatal(_("The location <%s> does not exist. Please create it first.") % location_name)
+		    if not os.access(os.path.join(os.path.join(gisdbase, location_name,
+                                                               "PERMANENT", "DEFAULT_WIND")), os.F_OK):
+                        # create new location
+                        gisdbase = os.path.join(gisdbase, location_name)
+                        location_name = mapset
+                        mapset = "PERMANENT"
+                        if os.access(os.path.join(os.path.join(gisdbase, location_name,
+                                                               "PERMANENT", "DEFAULT_WIND")), os.F_OK):
+                            fatal(_("Failed to create new location. The location <%s> already exists." % location_name))
+                        sys.path.append(gfile('etc', 'python'))
+                        from grass.script import core as grass
+                        grass.create_location(gisdbase, location_name, filename = geofile)
 		    else:
+                        # create new mapset
 			os.mkdir(location)
 			# copy PERMANENT/DEFAULT_WIND to <mapset>/WIND
 			s = readfile(os.path.join(gisdbase, location_name, "PERMANENT", "DEFAULT_WIND"))
@@ -826,11 +837,11 @@ def parse_cmdline():
     args = []
     for i in sys.argv[1:]:
 	# Check if the user asked for the version
-	if i in ["-v","--version"]:
+	if i in ["-v", "--version"]:
 	    message('\n' + readfile(gfile("etc", "license")))
 	    sys.exit()
 	# Check if the user asked for help
-	elif i in ["help","-h","-help","--help"]:
+	elif i in ["help", "-h", "-help", "--help"]:
 	    help_message()
 	    sys.exit()
 	# Check if the -text flag was given
@@ -840,7 +851,7 @@ def parse_cmdline():
 	elif i == "-gui":
 	    grass_gui = default_gui
 	# Check if the -wxpython flag was given
-	elif i in ["-wxpython","-wx"]:
+	elif i in ["-wxpython", "-wx"]:
 	    grass_gui = 'wxpython'
 	# Check if the user wants to create a new mapset
 	elif i == "-c":
@@ -954,7 +965,11 @@ if not args:
     # Try interactive startup
     location = None
 else:
-    non_interactive(args[0])
+    if create_new:
+        if len(args) > 1:
+            non_interactive(args[1], args[0])
+        else:
+            non_interactive(args[0])
 
 # User selects LOCATION and MAPSET if not set
 set_data()
