@@ -471,7 +471,14 @@ def non_interactive(arg, geofile = None):
                             fatal(_("Failed to create new location. The location <%s> already exists." % location_name))
                         sys.path.append(gfile('etc', 'python'))
                         from grass.script import core as grass
-                        grass.create_location(gisdbase, location_name, filename = geofile)
+                        try:
+                            if geofile and geofile.find('EPSG:') > -1:
+                                epsg = geofile.split(':', 1)[1]
+                                grass.create_location(gisdbase, location_name, epsg = epsg)
+                            else:
+                                grass.create_location(gisdbase, location_name, filename = geofile)
+                        except grass.ScriptError, e:
+                            fatal(e.value.strip('"').strip("'").replace('\\n', os.linesep))
 		    else:
                         # create new mapset
 			os.mkdir(location)
