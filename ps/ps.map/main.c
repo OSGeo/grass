@@ -12,7 +12,7 @@
  *               Alessandro Frigeri <afrigeri unipg.it>
  *               Martin Landa <landa.martin gmail.com>
  * PURPOSE:      Hardcopy PostScript map output utility (based on p.map program)
- * COPYRIGHT:    (C) 2003-2008, 2011 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003-2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
     pflag->description =
 	_("List paper formats (name width height left right top bottom(margin))");
     pflag->suppress_required = YES;
-    pflag->guisection = _("Print");
+    pflag->guisection = _("Utility");
 
     eflag = G_define_flag();
     eflag->key = 'e';
@@ -116,9 +116,9 @@ int main(int argc, char *argv[])
     bflag = G_define_flag();
     bflag->key = 'b';
     bflag->description =
-	_("Print map-box's position on the page and exit (inches from top-left of paper)");
+	_("Describe map-box's position on the page and exit (inches from top-left of paper)");
     bflag->suppress_required = YES;
-    bflag->guisection = _("Print");
+    bflag->guisection = _("Utility");
     
     input_file = G_define_standard_option(G_OPT_F_INPUT);
     input_file->label = _("File containing mapping instructions");
@@ -140,7 +140,7 @@ int main(int argc, char *argv[])
     
     G_zero(&PS, sizeof(struct PS_data));
     
-    /* Print papers */
+    /* Print paper sizes to stdout */
     if (pflag->answer) {
 	print_papers();
 	exit(EXIT_SUCCESS);
