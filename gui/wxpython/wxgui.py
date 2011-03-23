@@ -1504,7 +1504,7 @@ class GMApp(wx.App):
         wx.InitAllImageHandlers()
 
         # create splash screen
-        introImagePath = os.path.join(globalvar.ETCIMGDIR, "grass_splash.png")
+        introImagePath = os.path.join(globalvar.ETCIMGDIR, "silesia_splash.png")
         introImage     = wx.Image(introImagePath, wx.BITMAP_TYPE_PNG)
         introBmp       = introImage.ConvertToBitmap()
         if SC:
