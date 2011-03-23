@@ -152,7 +152,7 @@ help_text = r"""
        _("Flags"),
        _("print this help message"),
        _("show version information and exit"),
-       _("create given location/mapset if it doesn't exist"),
+       _("create given database, location or mapset if it doesn't exist"),
        _("use text based interface"),
        _("and set as default"),
        _("use $DEFAULT_GUI graphical user interface"),
