@@ -1997,7 +1997,7 @@ their corresponding UNIX routine, but with different side effects.
 \subsection Running_in_the_Background Running in the Background
 
 
-The standard UNIX fork() routine creates a child process which is a
+The standard UNIX <em>fork()</em> routine creates a child process which is a
 copy of the parent process. The fork() routine is useful for placing a
 module into the background. For example, a module that gathers input
 from the user interactively, but knows that the processing will take a
@@ -2011,11 +2011,11 @@ protect child processes from keyboard interrupts even if the parent is no longer
 running. Keyboard interrupts will also kill background processes that do not
 protect themselves.
 
-Note: Programmers who use /bin/sh know that programs run in the
+<i>Note:</i> Programmers who use Bash know that programs run in the
 background (using & on the command line) are not automatically
 protected from keyboard interrupts. To protect a command that is run
-in the background, /bin/sh users must do nohup command &. Programmers
-who use the /bin/csh (or other variants) do not know, or forget that
+in the background, Bash users must do nohup command &. Programmers
+who use the C Shell (or other variants) do not know, or forget that
 the C-shell automatically protects background processes from keyboard
 interrupts.
 
@@ -2024,32 +2024,27 @@ the user interrupts another module which is running at the keyboard.
 
 \subsection Partially_Interruptible_System_Call Partially Interruptible System Call
 
-
-The UNIX system() call allows one program, the parent, to execute
-another UNIX command or module as a child process, wait for that
-process to complete, and then continue. The problem addressed here
-concerns interrupts. During the standard system() call, the child
+The UNIX <em>system()</em> call allows one program, the parent, to
+execute another UNIX command or module as a child process, wait for
+that process to complete, and then continue. The problem addressed
+here concerns interrupts. During the standard system() call, the child
 process inherits its responses to interrupts from the parent. This
 means that if the parent is ignoring interrupts, the child will ignore
 them as well. If the parent is terminated by an interrupt, the child
 will be also.
 
-However, in some cases, this may not be the desired effect. In a menu
-environment where the parent activates menu choices by running
-commands using the system() call, it would be nice if the user could
-interrupt the command, but not terminate the menu module itself. The
-G_system() call allows this.
-
- - G_system()
-
-The shell level <em>command</em> is executed. Interrupt signals for
-the parent module are ignored during the call. Interrupt signals for
-the command are enabled. The interrupt signals for the parent are
-restored to their previous settings upon return.
-
-G_system() returns the same value as system(), which is essentially
-the exit status of the <B>command.</B> See UNIX manual system(1) for
-details.
+Note that code which uses system() or popen() tends to be error-prone,
+particularly on Windows. We strongly discourage anyone from using
+either system() or popen() in the GRASS code. If you don't need to
+communicate with the child process via a pipe, you can use G_spawn()
+or G_spawn_ex(). These provide similar functionality to system() but
+without the shell getting in the way (using the shell creates problems
+if filenames or other arguments contain spaces or other characters
+which are significant to the shell). If you need to communicate via a
+pipe, you can either use G_spawn_ex() and manage the pipe yourself, or
+use popen(). See also G_popen_read() and G_popen_write() which do most of
+the work for you. Alternatively, you can use a temporary file rather
+than a pipe for communicating with the child process.
 
 \subsection ENDIAN_test ENDIAN test
 
