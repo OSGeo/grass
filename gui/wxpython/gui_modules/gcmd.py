@@ -59,7 +59,7 @@ import utils
 from debug import Debug as Debug
 
 class GError:
-    def __init__(self, message, parent = None, caption = None):
+    def __init__(self, message, parent = None, caption = None, showTraceback = True):
         if not caption:
             caption = _('Error')
         style = wx.OK | wx.ICON_ERROR | wx.CENTRE
@@ -71,7 +71,7 @@ class GError:
         if Debug.GetLevel() > 0 and exc_traceback:
             sys.stderr.write(exception)
         
-        if exc_traceback:
+        if showTraceback and exc_traceback:
             wx.MessageBox(parent = parent,
                           message = message + '\n\n%s: %s\n\n%s' % \
                               (_('Reason'),
