@@ -69,10 +69,8 @@ move %PACKAGE_DIR%\extralib\libgrass_*.dll %PACKAGE_DIR%\lib
 
 mkdir %PACKAGE_DIR%\extrabin
 mkdir %PACKAGE_DIR%\extrabin\gdalplugins
-mkdir %PACKAGE_DIR%\extrabin\gdalplugins\1.8
 
 copy %OSGEO4W_DIR%\bin\*.exe %PACKAGE_DIR%\extrabin
-xcopy %OSGEO4W_DIR%\bin\gdalplugins\1.8 %PACKAGE_DIR%\extrabin\gdalplugins\1.8 /S/V/F/I
 
 @echo.
 @echo -----------------------------------------------------------------------------------------------------------------------
