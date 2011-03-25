@@ -1,22 +1,19 @@
-wxPython GRASS Graphical User Interface (wxGUI)
-===============================================
+GRASS GIS - wxPython Graphical User Interface (wxGUI)
+=====================================================
 
 $Date$
 
 1 - REQUIREMENTS
 
- GRASS GIS >= 6.3
- Python >= 2.4 (Python 3 not supported)
- 	Python ElementTree (only for Python <= 2.4)
- wxPython >= 2.8.1.1 (wxPython <= 2.8.9.2 requires swig <= 1.3.36)
- swig >= 1.3.31 (required only for vector digitizer)
- NumPy >= 1.0.4
+ GRASS GIS >= 6.4
+ Python    >= 2.4 (Python 3 not supported)
+ 	Python ElementTree (only for Python 2.4)
+ wxPython  >= 2.8.1.1
+ NumPy     >= 1.0.4
  
  Get wxPython 2.8.x packages from:
  * Source: http://www.wxpython.org/download.php
  * Debian GNU/Linux: http://wiki.wxpython.org/InstallingOnUbuntuOrDebian
-		     [ deb http://apt.wxwidgets.org/ etch-wx main ]
-	             http://www.bitpim.org/developer.html -> "Install wxPython"
  * Fedora: http://www.wxpython.org/download.php
  * Mandriva: included in main distribution
  * OpenSuSe: http://download.opensuse.org/repositories/Application:/Geo/
@@ -55,18 +52,10 @@ $Date$
 
 2 - STARTUP WITH GRASS INITIALIZATION
 
-If you want to launch wxPython GUI automatically when you start
-GRASS, edit your .grass7/rc file to replace
+If you want to launch wxPython GUI automatically, start GRASS with
+`-gui` parameter
 
-GRASS_GUI: tcltk (or whatever you have here)
-
-with
-
-GRASS_GUI: wxpython
-
-or easier start new GRASS session with -wxpython switch.
-
-$ grass70 -wxpython
+$ grass70 -gui
 
 
 3 - STARTUP FROM GRASS TERMINAL
@@ -82,7 +71,15 @@ You can also specify workspace file to load on startup.
 $ g.gui gui=wxpython workspace=myworkspace.gxw
 
 
-4 - CLI Display scripts
+4 - DEBUGGING
+
+To enable GUI debug messages on given level set WX_DEBUG environment
+variable, e.g.
+
+$ g.gisenv set="WX_DEBUG=3"
+
+
+5 - CLI Display scripts
 
 Note: This section is out-dated!
 
@@ -128,22 +125,3 @@ GRASS> p.cmd "d.rast map=elevation.dem@PERMANENT catlist=1300-1400 -i"
 You should be able to zoom && pan through the map, once the layers are
 displayed. You should be also able to store the display content as well as
 clear the display and start from scratch.
-
-
-5 - DEBUGGING
-
-To enable GUI debug messages on given level set WX_DEBUG environment
-variable, e.g.
-
-$ g.gisenv set="WX_DEBUG=3"
-
-
-6 - VECTOR DIGITIZER
-
-To enable digitizer you need to compile 'vdigit' component. Note that
-you must configure GRASS with C++ (--with-cxx), Python (--with-python)
-and wxWidgets (--with-wxwidgets) support.
-
-$ cd gui/wxpython/vdigit
-$ make
-$ make install
