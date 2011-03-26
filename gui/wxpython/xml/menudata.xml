@@ -850,7 +850,7 @@
 	</menu>
 	<separator />
 	    <menuitem>
-	      <label>Install new extension from add-ons</label>
+	      <label>Install extension from add-ons</label>
 	      <help>Install new extension from GRASS AddOns SVN repository.</help>
 	      <handler>OnInstallExtension</handler>
 	    </menuitem>
