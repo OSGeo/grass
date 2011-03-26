@@ -250,7 +250,7 @@ int read_cube(Cube_data * Cube, file_info * headfax)
 #ifdef NEWCODE
 int my_fread(char *buf, int size, int cnt, FILE * fp)
 {
-    static char in_buf[10000];
+    static char in_buf[10240];
     static char *start, *end;
     char *outp;
     int ret;
