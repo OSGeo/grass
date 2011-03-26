@@ -56,7 +56,6 @@ import locale
 import types
 from threading import Thread
 import Queue
-import shlex
 import tempfile
 
 ### i18N
@@ -2414,7 +2413,7 @@ if __name__ ==  "__main__":
         sys.exit(_("usage: %s <grass command>") % sys.argv[0])
     if sys.argv[1] !=  'test':
         q = wx.LogNull()
-        cmd = shlex.split(sys.argv[1])
+        cmd = utils.split(sys.argv[1])
         task = grassTask(cmd[0])
         task.set_options(cmd[1:])
         app = GrassGUIApp(task)

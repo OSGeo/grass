@@ -21,7 +21,6 @@ for details.
 
 import os
 import sys
-import shlex
 import copy
 import difflib
 import codecs
@@ -214,7 +213,7 @@ class TextCtrlAutoComplete(wx.ComboBox, listmix.ColumnSorterMixin):
              col = self._colSearch
          itemtext = self.dropdownlistbox.GetItem(sel, col).GetText()
          
-         cmd = shlex.split(str(self.GetValue()))
+         cmd = utils.split(str(self.GetValue()))
          if len(cmd) > 0 and cmd[0] in self._choicesCmd:
              # -> append text (skip last item)
              if self._choiceType == 'param':
@@ -339,7 +338,7 @@ class TextCtrlAutoComplete(wx.ComboBox, listmix.ColumnSorterMixin):
             return
         
         try:
-            cmd = shlex.split(str(text))
+            cmd = utils.split(str(text))
         except ValueError, e:
             self.statusbar.SetStatusText(str(e))
             cmd = text.split(' ')
