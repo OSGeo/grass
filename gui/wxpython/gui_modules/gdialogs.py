@@ -956,7 +956,7 @@ class ImportDialog(wx.Dialog):
         self.list.LoadData()
 
         self.optionBox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
-                                      label=_(" Options "))
+                                      label="%s" % _("Options"))
         
         cmd = self._getCommand()
         task = menuform.GUI().ParseInterface(cmd = [cmd])

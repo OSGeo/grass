@@ -308,7 +308,9 @@ def install_extension(svnurl, prefix, module, no_install):
     else:
         url = svnurl + '/gui/wxpython/' + module
         if not flags['s']:
-            grass.fatal(_("Installation of wxGUI extension requires -%s flag") % 's') 
+            grass.warning(_("Installation of wxGUI extension requires -%s flag. "
+                            "Trying to use system administrator rights.") % 's') 
+            flags['s'] = True
     
     grass.message(_("Fetching '%s' from GRASS-Addons SVN (be patient)...") % module)
     global tmpdir
