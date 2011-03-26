@@ -2169,7 +2169,7 @@ def getInterfaceDescription(cmd):
                                      stderr = grass.PIPE).communicate()
     except OSError, e:
         raise gcmd.GException, _("Unable to fetch interface description for command '%s'. "
-                                 "Details: %s") % (cmd, e.value)
+                                 "Details: %s") % (cmd, e)
     if cmderr and cmderr[:7] != 'WARNING':
         raise gcmd.GException, _("Unable to fetch interface description for command '%s'. "
                                  "Details: %s") % (cmd, cmderr)
