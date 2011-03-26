@@ -13,11 +13,10 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
-import shlex
-
 import wx
 
 import globalvar
+import utils
 
 class Menu(wx.MenuBar):
     def __init__(self, parent, data):
@@ -69,9 +68,9 @@ class Menu(wx.MenuBar):
         
         if gcmd: 
             try: 
-                cmd = shlex.split(str(gcmd)) 
+                cmd = utils.split(str(gcmd)) 
             except UnicodeError: 
-                cmd = shlex.split(utils.EncodeString((gcmd))) 
+                cmd = utils.split(utils.EncodeString((gcmd))) 
             if cmd and cmd[0] not in globalvar.grassCmd['all']: 
                 menuItem.Enable(False)
         

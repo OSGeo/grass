@@ -41,7 +41,6 @@ This program is free software under the GNU General Public License
 
 import os
 import sys
-import shlex
 import time
 import traceback
 import getpass
@@ -2390,9 +2389,9 @@ class ModelSearchDialog(wx.Dialog):
             list()
         
         try:
-            cmd = shlex.split(str(line))
+            cmd = utils.split(str(line))
         except UnicodeError:
-            cmd = shlex.split(utils.EncodeString((line)))
+            cmd = utils.split(utils.EncodeString((line)))
             
         return cmd
     

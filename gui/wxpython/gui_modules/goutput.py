@@ -433,7 +433,7 @@ class GMConsole(wx.SplitterWindow):
         display widget that currently has the focus (as indicted by
         mdidx).
         
-        @param command command given as a list (produced e.g. by shlex.split())
+        @param command command given as a list (produced e.g. by utils.split())
         @param compReg True use computation region
         @param switchPage switch to output page
         @param onDone function to be called when command is finished
