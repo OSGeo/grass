@@ -150,8 +150,8 @@ int PS_vlegend(void)
 	/*      } */
 
 	/* draw the border, if set */
-	if (vector.border != -1) {
-	    set_rgb_color(vector.border);
+	if (! color_none(&vector.border)) {
+	    set_ps_color(&vector.border);
 
 	    fprintf(PS.fp, "%.1f %.1f w %.1f B\n",
 		    x - margin, y - lc * dy - margin, y);

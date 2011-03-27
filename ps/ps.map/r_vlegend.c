@@ -5,6 +5,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <grass/glocale.h>
 #include "vector.h"
 #include "local_proto.h"
 
@@ -25,14 +26,16 @@ int read_vlegend(void)
 {
     char buf[1024];
     char *key, *data;
-    int fontsize, cols, border;
+    int fontsize, cols;
     double x, y, width, cseparation;
+    int r, g, b, ret;
+    PSCOLOR border;
 
     fontsize = 0;
     x = y = 0.0;
     width = -1;
     cols = 1;
-    border = -1;
+    unset_color(&border);
     cseparation = -1;
 
     while (input(2, buf, help)) {
@@ -42,7 +45,7 @@ int read_vlegend(void)
 	if (KEY("where")) {
 	    if (sscanf(data, "%lf %lf", &x, &y) != 2) {
 		x = y = 0.0;
-		error(key, data, "illegal where request");
+		error(key, data, _("illegal where request"));
 	    }
 	    else
 		continue;
@@ -73,12 +76,14 @@ int read_vlegend(void)
 	}
 
 	if (KEY("border")) {
-	    border = get_color_number(data);
-	    if (border < 0) {
-		if (border != -999)	/* here -999 is "none" */
-		    error(key, data, "illegal border request");
-		border = -1;
-	    }
+	    ret = G_str_to_color(data, &r, &g, &b);
+	    if (ret == 1)
+		set_color(&border, r, g, b);
+	    else if (ret == 2)  /* i.e. "none" */
+		unset_color(&border);
+	    else
+		error(key, data, _("illegal border color request"));
+
 	    continue;
 	}
 
@@ -88,7 +93,7 @@ int read_vlegend(void)
 	    continue;
 	}
 
-	error(key, data, "illegal vlegend sub-request");
+	error(key, data, _("illegal vlegend sub-request"));
     }
     vector.x = x;
     vector.y = y;
