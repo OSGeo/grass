@@ -106,9 +106,8 @@ int GPJ__get_ellipsoid_params(struct Key_Value *,
 void GPJ_free_ellps(struct gpj_ellps *);
 
 
-#ifdef __MINGW32__
 /* PROJ.4's private datastructures copied from projects.h as removed
-   from osgeo4w; pending better solution. see:
+   from upstream; pending better solution. see:
    http://trac.osgeo.org/proj/ticket/98 */
 
 typedef struct { double u, v; } LP;
@@ -130,6 +129,5 @@ struct FACTORS {
 
 int pj_factors(LP, void *, double, struct FACTORS *);
 /* end of copy */
-#endif
 
 #endif
