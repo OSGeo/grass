@@ -811,7 +811,7 @@ class InstallExtensionWindow(wx.Frame):
         
         self.optionBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
                                       label = " %s " % _("Options"))
-        task = menuform.GUI().ParseInterface(cmd = ['g.extension.py'])
+        task = menuform.GUI().ParseInterface(cmd = ['g.extension'])
         for f in task.get_options()['flags']:
             name = f.get('name', '')
             desc = f.get('label', '')
