@@ -103,7 +103,7 @@ struct vector
     char *font;			/* legend font */
     double width;		/* width of legend symbols */
     int cols;			/* number of colums  */
-    int border;			/* border color number or -1 for none */
+    PSCOLOR border;		/* border color */
     double span;		/* column separation in inches */
     LAYER *layer;
 };
