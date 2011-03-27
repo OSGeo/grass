@@ -5,7 +5,9 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <grass/glocale.h>
 #include "map_info.h"
+#include "clr.h"
 #include "local_proto.h"
 
 #define KEY(x) (strcmp(key,x)==0)
@@ -24,13 +26,15 @@ int read_info(void)
 {
     char buf[1024];
     char *key, *data;
-    int color, bgcolor, border, fontsize;
+    int fontsize;
     double x, y;
+    int r, g, b, ret;
+    PSCOLOR color, bgcolor, border;
 
     fontsize = 0;
-    color = BLACK;
-    bgcolor = WHITE;
-    border = -1;
+    set_color(&color, 0, 0, 0);
+    set_color(&bgcolor, 255, 255, 255);
+    unset_color(&border);
     x = y = 0.0;
 
     while (input(2, buf, help)) {
@@ -40,7 +44,7 @@ int read_info(void)
 	if (KEY("where")) {
 	    if (sscanf(data, "%lf %lf", &x, &y) != 2) {
 		x = y = 0.0;
-		error(key, data, "illegal where request");
+		error(key, data, _("illegal where request"));
 	    }
 	    else
 		continue;
@@ -54,30 +58,39 @@ int read_info(void)
 	}
 
 	if (KEY("color")) {
-	    color = get_color_number(data);
-	    if (color < 0) {
-		color = BLACK;
-		error(key, data, "illegal color request");
-	    }
+	    ret = G_str_to_color(data, &r, &g, &b);
+	    if (ret == 1)
+		set_color(&color, r, g, b);
+	    else if (ret == 2)  /* i.e. "none" */
+		/* unset_color(&color); */
+		error(key, data, _("Unsupported color request"));
+	    else
+		error(key, data, _("illegal color request"));
+
 	    continue;
 	}
 
 	if (KEY("background")) {
-	    bgcolor = get_color_number(data);
-	    if ((bgcolor != -999) && (bgcolor < 0)) {	/* -999 is "none" */
-		bgcolor = WHITE;
-		error(key, data, "illegal color request");
-	    }
+	    ret = G_str_to_color(data, &r, &g, &b);
+	    if (ret == 1)
+		set_color(&bgcolor, r, g, b);
+	    else if (ret == 2)  /* i.e. "none" */
+		unset_color(&bgcolor);
+	    else
+		error(key, data, _("illegal bgcolor request"));
+
 	    continue;
 	}
 
 	if (KEY("border")) {
-	    border = get_color_number(data);
-	    if (border < 0) {
-		if (border != -999)	/* here -999 is "none" */
-		    error(key, data, "illegal border request");
-		border = -1;
-	    }
+	    ret = G_str_to_color(data, &r, &g, &b);
+	    if (ret == 1)
+		set_color(&border, r, g, b);
+	    else if (ret == 2)  /* i.e. "none" */
+		unset_color(&border);
+	    else
+		error(key, data, _("illegal border color request"));
+
 	    continue;
 	}
 
@@ -86,7 +99,7 @@ int read_info(void)
 	    m_info.font = G_store(data);
 	    continue;
 	}
-	error(key, data, "illegal mapinfo sub-request");
+	error(key, data, _("illegal mapinfo sub-request"));
     }
     m_info.x = x;
     m_info.y = y;
