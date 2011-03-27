@@ -32,6 +32,8 @@ try:
 except ImportError:
     import wx.lib.flatnotebook as FN
 
+import grass.script as grass
+
 import globalvar
 import gselect
 import gcmd
@@ -2602,33 +2604,22 @@ class NvizToolWindow(FN.FlatNotebook):
         @return num of points/features (expect of points)
         @return None
         """
-        vInfo = gcmd.RunCommand('v.info',
-                                parent = self,
-                                read = True,
-                                flags = 't',
-                                map = layer.GetName())
+        vInfo = grass.vector_info_topo(layer.GetName())
         
         if not vInfo:
             return None
-            
-        npoints = nlines = nprimitives = 0
-        for line in vInfo.splitlines():
-            key, value = line.split('=')
-            if key == 'map3d':
-                mapIs3D = int(value)
-            elif key == 'points':
-                npoints = int(value)
-                nprimitives += npoints
-            elif key == 'lines':
-                nlines = int(value)
-                nprimitives += nlines
-            elif key in ('boundaries',
-                         'centroids',
-                         'faces',
-                         'kernels'):
-                nprimitives += int(value)
         
-        return (npoints, nlines, nprimitives, mapIs3D)
+        nprimitives = 0
+        for key, value in vInfo.iteritems():
+            if key in ('points',
+                       'lines',
+                       'boundaries',
+                       'centroids',
+                       'faces',
+                       'kernels'):
+                nprimitives += value
+        
+        return (vInfo['points'], vInfo['lines'], nprimitives, vInfo['map3d'])
         
     def UpdateVectorPage(self, layer, data, updateName = True):
         """!Update vector page"""
