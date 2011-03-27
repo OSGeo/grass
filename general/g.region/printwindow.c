@@ -1,10 +1,5 @@
 #include <string.h>
 #include <stdlib.h>
-
-#ifndef __MINGW32__
-#include <projects.h>
-#endif
-
 #include <grass/gis.h>
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
