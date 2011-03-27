@@ -10,22 +10,8 @@ extern "C" {
 #pragma warning(disable:4305)	/* disable warning about initialization of a float by a double */
 #endif
 
-/* Adding new band filters (see also Iwave.h):
- *
- * Note: the spectral range ranges 250 to 4000 nm (see Iwave.h) which is 
- *   4000-250=3750nm, and (4000-250)/1500=2.5. Hence, the resulting step 
- *   size is 2.5 nm in the ffu.s array.
- *
- * o bands are defined by their discrete filter function
- * o to compute a band position in the 1500 slots of ffu.s array, start
- *   with 250nm using 2.5nm increments. The result is the starting index
- *   for the spectral band.
- * o 1500 is the number of wavelength spectral description slots.
- *   - a 'for' loop fills up the slots with 0
- *   - then the ffu.s array is filled with each of the spectral bands data one after the other.
- *     Example Lsat TM: (435-250) / 2.5 = 74
- * o add iwave value, also in Iwave.h
- * o add to GeomCond.cpp and GeomCond.h
+/* Adding new band filters:
+ * see README
  */
 
 
