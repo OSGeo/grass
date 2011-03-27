@@ -60,14 +60,14 @@ int map_info(void)
 	fprintf(PS.fp, "/t1 t1 sx mg add add def\n");
 
 	/* draw the background box */
-	if (m_info.bgcolor != -999) {	/* skip if "none" */
-	    set_rgb_color(m_info.bgcolor);
+	if (! color_none(&m_info.bgcolor)) {
+	    set_ps_color(&m_info.bgcolor);
 	    fprintf(PS.fp, "%.1f %.1f t1 %.1f B fill \n",
 		    x - margin, y - k * dy - margin, y);
 	}
 	/* draw the border, if set */
-	if (m_info.border != -1) {
-	    set_rgb_color(m_info.border);
+	if (! color_none(&m_info.border)) {
+	    set_ps_color(&m_info.border);
 	    fprintf(PS.fp, "%.1f %.1f t1 %.1f B\n",
 		    x - margin, y - k * dy - margin, y);
 	    fprintf(PS.fp, "D\n");
@@ -75,7 +75,7 @@ int map_info(void)
     }
 
     /* set text color */
-    set_rgb_color(m_info.color);
+    set_ps_color(&m_info.color);
 
     /* show map scale */
     show_text(x, y - dy, "SCALE:");
