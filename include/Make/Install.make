@@ -132,9 +132,14 @@ define fix_gisbase
 sed -e 's#$(GISBASE)#$(INST_DIR)#g' $< > $@
 endef
 
+define fix_grass_home
+sed -e 's#^\(GRASS_HOME.[^=]*\).*#\1= $(INST_DIR)#g' \
+    -e 's#$(GISBASE)#$(INST_DIR)#g' $< > $@
+endef
+
 define fix_grass_arch
-sed -e 's#^ARCH_DISTDIR.*#ARCH_DISTDIR	= $(INST_DIR)#g' \
-    -e 's#^ARCH_BINDIR.*#ARCH_BINDIR	= $(UNIX_BIN)#g' $< > $@
+sed -e 's#^\(ARCH_DISTDIR.[^=]*\).*#\1= $(INST_DIR)#g' \
+    -e 's#^\(ARCH_BINDIR.[^=]*\).*#\1= $(UNIX_BIN)#g' $< > $@
 endef
 
 $(INST_DIR)/$(FONTCAP): $(GISBASE)/$(FONTCAP)
@@ -144,7 +149,7 @@ $(INST_DIR)/$(TMPGISRC): $(GISBASE)/$(TMPGISRC)
 	$(call fix_gisbase)
 
 $(INST_DIR)/$(PLATMAKE): $(GISBASE)/$(PLATMAKE)
-	$(call fix_gisbase)
+	$(call fix_grass_home)
 
 $(INST_DIR)/$(GRASSMAKE): $(GISBASE)/$(GRASSMAKE)
 	$(call fix_grass_arch)

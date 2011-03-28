@@ -306,10 +306,8 @@ def install_extension(svnurl, prefix, module, no_install):
     else:
         url = svnurl + '/gui/wxpython/' + module
         if not flags['s']:
-            grass.warning(_("Installation of wxGUI extension requires -%s flag. "
-                            "Trying to use system administrator rights.") % 's') 
-            flags['s'] = True
-    
+            grass.fatal(_("Installation of wxGUI extension requires -%s flag.") % 's')
+        
     grass.message(_("Fetching '%s' from GRASS-Addons SVN (be patient)...") % module)
     global tmpdir
     os.chdir(tmpdir)
@@ -323,22 +321,29 @@ def install_extension(svnurl, prefix, module, no_install):
         grass.fatal(_("GRASS Addons '%s' not found in repository") % module)
     
     os.chdir(os.path.join(tmpdir, module))
+
+    grass.message(_("Compiling '%s'...") % module)    
+    if module not in gui_list:
+        bin_dir  = os.path.join(tmpdir, module, 'bin')
+        docs_dir = os.path.join(tmpdir, module, 'docs')
+        html_dir = os.path.join(docs_dir, 'html')
+        man_dir  = os.path.join(tmpdir, module, 'man')
+        man1_dir = os.path.join(man_dir, 'man1')
+        for d in (bin_dir, docs_dir, html_dir, man_dir, man1_dir):
+            os.mkdir(d)
     
-    bin_dir  = os.path.join(tmpdir, module, 'bin')
-    docs_dir = os.path.join(tmpdir, module, 'docs')
-    html_dir = os.path.join(docs_dir, 'html')
-    man_dir  = os.path.join(tmpdir, module, 'man')
-    man1_dir = os.path.join(man_dir, 'man1')
-    for d in (bin_dir, docs_dir, html_dir, man_dir, man1_dir):
-        os.mkdir(d)
+        ret = grass.call(['make',
+                          'MODULE_TOPDIR=%s' % gisbase.replace(' ', '\ '),
+                          'BIN=%s' % bin_dir,
+                          'HTMLDIR=%s' % html_dir,
+                          'MANDIR=%s' % man1_dir],
+                         stdout = outdev)
+    else:
+        ret = grass.call(['make',
+                          'MODULE_TOPDIR=%s' % gisbase.replace(' ', '\ ')],
+                         stdout = outdev)
     
-    grass.message(_("Compiling '%s'...") % module)
-    if grass.call(['make',
-                   'MODULE_TOPDIR=%s' % gisbase.replace(' ', '\ '),
-                   'BIN=%s' % bin_dir,
-                   'HTMLDIR=%s' % html_dir,
-                   'MANDIR=%s' % man1_dir],
-                   stdout = outdev) != 0:
+    if ret != 0:
         grass.fatal(_('Compilation failed, sorry. Please check above error messages.'))
     
     if no_install or module in gui_list:
