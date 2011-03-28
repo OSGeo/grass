@@ -91,6 +91,7 @@ endif
 FONTCAP = etc/fontcap
 TMPGISRC = demolocation/.grassrc$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR)
 PLATMAKE = include/Make/Platform.make
+GRASSMAKE = include/Make/Grass.make
 
 real-install: | $(INST_DIR) $(UNIX_BIN)
 	$(MAKE) $(STARTUP)
@@ -105,6 +106,9 @@ real-install: | $(INST_DIR) $(UNIX_BIN)
 
 	-rm $(INST_DIR)/$(PLATMAKE)
 	$(MAKE) $(INST_DIR)/$(PLATMAKE)
+
+	-rm $(INST_DIR)/$(GRASSMAKE)
+	$(MAKE) $(INST_DIR)/$(GRASSMAKE)
 
 	-$(INSTALL) config.status $(INST_DIR)/config.status
 	-$(CHMOD) -R a+rX $(INST_DIR) 2>/dev/null
@@ -128,6 +132,11 @@ define fix_gisbase
 sed -e 's#$(GISBASE)#$(INST_DIR)#g' $< > $@
 endef
 
+define fix_grass_arch
+sed -e 's#^ARCH_DISTDIR.*#ARCH_DISTDIR	= $(INST_DIR)#g' \
+    -e 's#^ARCH_BINDIR.*#ARCH_BINDIR	= $(UNIX_BIN)#g' $< > $@
+endef
+
 $(INST_DIR)/$(FONTCAP): $(GISBASE)/$(FONTCAP)
 	$(call fix_gisbase)
 
@@ -136,6 +145,9 @@ $(INST_DIR)/$(TMPGISRC): $(GISBASE)/$(TMPGISRC)
 
 $(INST_DIR)/$(PLATMAKE): $(GISBASE)/$(PLATMAKE)
 	$(call fix_gisbase)
+
+$(INST_DIR)/$(GRASSMAKE): $(GISBASE)/$(GRASSMAKE)
+	$(call fix_grass_arch)
 
 install-macosx:
 	$(MAKE) -C macosx install-macosx

@@ -96,9 +96,7 @@ from grass.script import core as grass
 
 # temp dir
 remove_tmpdir = True
-tmpdir = grass.tempfile()
-grass.try_remove(tmpdir)
-os.mkdir(tmpdir)
+tmpdir = grass.tempdir()
 
 def check():
     for prog in ('svn', 'make', 'install', 'gcc'):
@@ -326,9 +324,20 @@ def install_extension(svnurl, prefix, module, no_install):
     
     os.chdir(os.path.join(tmpdir, module))
     
+    bin_dir  = os.path.join(tmpdir, module, 'bin')
+    docs_dir = os.path.join(tmpdir, module, 'docs')
+    html_dir = os.path.join(docs_dir, 'html')
+    man_dir  = os.path.join(tmpdir, module, 'man')
+    man1_dir = os.path.join(man_dir, 'man1')
+    for d in (bin_dir, docs_dir, html_dir, man_dir, man1_dir):
+        os.mkdir(d)
+    
     grass.message(_("Compiling '%s'...") % module)
     if grass.call(['make',
-                   'MODULE_TOPDIR=%s' % gisbase.replace(' ', '\ ')],
+                   'MODULE_TOPDIR=%s' % gisbase.replace(' ', '\ '),
+                   'BIN=%s' % bin_dir,
+                   'HTMLDIR=%s' % html_dir,
+                   'MANDIR=%s' % man1_dir],
                    stdout = outdev) != 0:
         grass.fatal(_('Compilation failed, sorry. Please check above error messages.'))
     
@@ -336,24 +345,13 @@ def install_extension(svnurl, prefix, module, no_install):
         return
     
     grass.message(_("Installing '%s'...") % module)
-    # replace with something better
-    file = os.path.join(prefix, 'test')
-    f = open(file, "w")
-    f.close()
-    os.remove(file)
- 
-    if not flags['s']:
-        ret = grass.call(['make',
-                          'MODULE_TOPDIR=%s' % gisbase,
-                          'INST_DIR=%s' % prefix,
-                          'install'],
-                         stdout = outdev)
-    else:
-        ret = grass.call(['sudo', 'make',
-                          'MODULE_TOPDIR=%s' % gisbase,
-                          'INST_DIR=%s' % prefix,
-                          'install'],
-                         stdout = outdev)
+    
+    ret = grass.call(['make',
+                      'MODULE_TOPDIR=%s' % gisbase,
+                      'ARCH_DISTDIR=%s' % os.path.join(tmpdir, module),
+                      'INST_DIR=%s' % prefix,
+                      'install'],
+                     stdout = outdev)
     
     if ret != 0:
         grass.warning(_('Installation failed, sorry. Please check above error messages.'))
