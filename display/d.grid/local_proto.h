@@ -17,8 +17,10 @@ int plot_border(double, double, double);
 #define MARK_GRID     0
 #define MARK_CROSS    1
 #define MARK_FIDUCIAL 2
+#define MARK_DOT      3
 
 /* fiducial.c */
 void plot_cross(double, double, int, double);
 void plot_fiducial(double, double, int, double);
-void plot_symbol(double, double, int, double, char *);
+void plot_symbol(double, double, int, double, char *, int);
+void plot_dot(double, double, int);
