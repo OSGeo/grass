@@ -211,7 +211,10 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
 
 	    if (line_width)
 		D_line_width(line_width);
-	    D_line_abs(e1, n1, e2, n2);
+
+	    if (mark_type == MARK_GRID)
+		D_line_abs(e1, n1, e2, n2);
+
 	    D_line_width(0);
 	}
 
@@ -267,7 +270,10 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
 
 	    if (line_width)
 		D_line_width(line_width);
-	    D_line_abs(e1, n1, e2, n2);
+
+	    if (mark_type == MARK_GRID)
+		D_line_abs(e1, n1, e2, n2);
+
 	    D_line_width(0);
 	}
 	if (do_text) {
@@ -284,6 +290,31 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
     }
 
     D_text_rotation(0.0);	/* reset */
+
+    /* draw marks not grid lines */
+    if (mark_type != MARK_GRID) {
+	G_warning("Geogrid marks not yet implemented");
+#ifdef TODO
+	e1 = combine above;
+	n1 = combine above;
+
+	/* plot marks */
+	while (e1 <= window.east) {
+	    n1 = y0;		/* reset */
+	    while (n1 <= window.north) {
+		if (mark_type == MARK_CROSS)
+		    plot_cross(e1, n1, gcolor, 0.0);
+		else if (mark_type == MARK_FIDUCIAL)
+		    plot_fiducial(e1, n1, gcolor, 0.0);
+		else if (mark_type == MARK_DOT)
+		    plot_dot(e1, n1, gcolor);
+		n1 += grid_size;
+	    }
+	    e1 += grid_size;
+	}
+#endif
+    /* also TODO: rotate cross and fiducial marks by the converge angle; see g.region -n */
+    }
 
     return 0;
 
