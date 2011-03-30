@@ -129,8 +129,10 @@ int plot_grid(double grid_size, double east, double north, int do_text,
 	    while (y <= window.north) {
 		if (mark_type == MARK_CROSS)
 		    plot_cross(x, y, gcolor, 0.0);
-		if (mark_type == MARK_FIDUCIAL)
+		else if (mark_type == MARK_FIDUCIAL)
 		    plot_fiducial(x, y, gcolor, 0.0);
+		else if (mark_type == MARK_DOT)
+		    plot_dot(x, y, gcolor);
 		y += grid_size;
 	    }
 	    x += grid_size;
