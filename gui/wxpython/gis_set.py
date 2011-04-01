@@ -394,7 +394,7 @@ class GRASSStartup(wx.Frame):
                     grassrc[key.strip()] = utils.DecodeString(val.strip())
             finally:
                 rc.close()
-
+        
         return grassrc
 
     def GetRCValue(self, value):
@@ -609,11 +609,11 @@ class GRASSStartup(wx.Frame):
                 self.listOfMapsetsSelectable += line.split(' ')
         except:
             gcmd.RunCommand("g.gisenv",
-                            set =  "GISDBASE = %s" % self.gisdbase)
+                            set = "GISDBASE=%s" % self.gisdbase)
             gcmd.RunCommand("g.gisenv",
-                            set = "LOCATION_NAME = %s" % locationName)
+                            set = "LOCATION_NAME=%s" % locationName)
             gcmd.RunCommand("g.gisenv",
-                            set = "MAPSET = PERMANENT")
+                            set = "MAPSET=PERMANENT")
             # first run only
             self.listOfMapsetsSelectable = copy.copy(self.listOfMapsets)
         
@@ -737,13 +737,13 @@ class GRASSStartup(wx.Frame):
     def OnStart(self, event):
         """'Start GRASS' button clicked"""
         gcmd.RunCommand("g.gisenv",
-                        set = "GISDBASE = %s" % \
+                        set = "GISDBASE=%s" % \
                             self.tgisdbase.GetValue())
         gcmd.RunCommand("g.gisenv",
-                        set = "LOCATION_NAME = %s" % \
+                        set = "LOCATION_NAME=%s" % \
                             self.listOfLocations[self.lblocations.GetSelection()])
         gcmd.RunCommand("g.gisenv",
-                        set = "MAPSET = %s" % \
+                        set = "MAPSET=%s" % \
                             self.listOfMapsets[self.lbmapsets.GetSelection()])
         
         self.Destroy()
