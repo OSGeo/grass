@@ -362,7 +362,7 @@ class Command:
 
         if verbose_orig:
             os.environ["GRASS_VERBOSE"] = verbose_orig
-        elif os.environ.has_key("GRASS_VERBOSE"):
+        elif "GRASS_VERBOSE" in os.environ:
             del os.environ["GRASS_VERBOSE"]
             
     def __ReadOutput(self, stream):

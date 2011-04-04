@@ -394,7 +394,7 @@ class IVDigit:
         
         offset = Vect_get_line_offset(self.poMapInfo, line)
         
-        if not self.changesets.has_key(changeset):
+        if changeset not in self.changesets:
             self.changesets[changeset] = list()
             self.changesetCurrent = changeset
         
@@ -1277,7 +1277,7 @@ class IVDigit:
                 id = c_int()
                 Vect_cidx_get_cat_by_index(self.poMapInfo, i, j,
                                            byref(cat), byref(type), byref(id))
-                if self.cats.has_key(field):
+                if field in self.cats:
                     if cat > self.cats[field]:
                         self.cats[field] = cat.value
                 else:

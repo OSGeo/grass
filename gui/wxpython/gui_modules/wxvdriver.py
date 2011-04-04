@@ -951,7 +951,7 @@ class DisplayDriver:
                 Vect_read_line(self.poMapInfo, BPoints, None, line2)
 	    
                 if Vect_line_check_duplicate(APoints, BPoints, WITHOUT_Z):
-                    if not ids.has_key(i):
+                    if i not in ids:
                         ids[i] = list()
                         ids[i].append((line1, self._getCatString(line1)))
                         self.selected['idsDupl'].append(line1)
@@ -971,7 +971,7 @@ class DisplayDriver:
         catsDict = dict()
         for i in range(cats.n_cats):
             layer = cats.field[i]
-            if not catsDict.has_key(layer):
+            if layer not in catsDict:
                 catsDict[layer] = list()
             catsDict[layer].append(cats.cat[i])
         

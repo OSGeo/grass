@@ -250,7 +250,7 @@ class ProcessWorkspaceFile:
         # init nviz layer properties
         vdigit = dict()
         for node in node_vdigit.findall('geometryAttribute'):
-            if not vdigit.has_key('geomAttr'):
+            if 'geomAttr' not in vdigit:
                 vdigit['geomAttr'] = dict()
             type = node.get('type')
             vdigit['geomAttr'][type] = dict()
@@ -277,7 +277,7 @@ class ProcessWorkspaceFile:
             for sec in ('lines', 'points'):
                 nviz['vector'][sec] = {}
         
-        if nviz.has_key('surface'):
+        if 'surface' in nviz:
             node_surface = node_nviz.find('surface')
             # attributes
             for attrb in node_surface.findall('attribute'):
@@ -315,7 +315,7 @@ class ProcessWorkspaceFile:
                 # resolution
                 for node_res in node_draw.findall('resolution'):
                     resType = str(node_res.get('type', ''))
-                    if not nviz['surface']['draw'].has_key('resolution'):
+                    if 'resolution' not in nviz['surface']['draw']:
                         nviz['surface']['draw']['resolution'] = {}
                     value = int(self.__getNodeText(node_res, 'value'))
                     nviz['surface']['draw']['resolution'][resType] = value
@@ -338,7 +338,7 @@ class ProcessWorkspaceFile:
                     value = int(self.__getNodeText(node, 'value'))
                     dc[coor] = value
             
-        elif nviz.has_key('vector'):
+        elif 'vector' in nviz:
             # vpoints
             node_vpoints = node_nviz.find('vpoints')
             if node_vpoints is not None:
@@ -444,9 +444,9 @@ class Nviz:
         data['draw']['all'] = False # apply only for current surface
         for control, value in UserSettings.Get(group='nviz', key='surface', subkey='draw').iteritems():
             if control[:3] == 'res':
-                if not data['draw'].has_key('resolution'):
+                if 'resolution' not in data['draw']:
                     data['draw']['resolution'] = {}
-                if not data['draw']['resolution'].has_key('update'):
+                if 'update' not in data['draw']['resolution']:
                     data['draw']['resolution']['update'] = None
                 data['draw']['resolution'][control[4:]] = value
                 continue
@@ -454,7 +454,7 @@ class Nviz:
             if control == 'wire-color':
                 value = str(value[0]) + ':' + str(value[1]) + ':' + str(value[2])
             elif control in ('mode', 'style', 'shading'):
-                if not data['draw'].has_key('mode'):
+                if 'mode' not in data['draw']:
                     data['draw']['mode'] = {}
                 continue
 
@@ -502,7 +502,7 @@ class Nviz:
             else:
                 data['draw'][control] = { 'value' : value }
 
-            if not data['draw'][control].has_key('update'):
+            if 'update' not in data['draw'][control]:
                 data['draw'][control]['update'] = None
         
         #
@@ -558,7 +558,7 @@ class Nviz:
         data['height'] = { 'value' : UserSettings.Get(group='nviz', key='vector',
                                                       subkey=['lines', 'height']) }
 
-        if data.has_key('object'):
+        if 'object' in data:
             for attrb in ('color', 'width', 'mode', 'height'):
                 data[attrb]['update'] = None
         
@@ -590,7 +590,7 @@ class Nviz:
         data['height'] = { 'value' : UserSettings.Get(group='nviz', key='vector',
                                                       subkey=['points', 'height']) }
 
-        if data.has_key('object'):
+        if 'object' in data:
             for attrb in ('size', 'width', 'marker',
                           'color', 'surface', 'height'):
                 data[attrb]['update'] = None
@@ -809,7 +809,7 @@ class WriteWorkspaceFile(object):
                 vdigit = mapTree.GetPyData(item)[0]['vdigit']
                 if vdigit:
                     self.file.write('%s<vdigit>\n' % (' ' * self.indent))
-                    if vdigit.has_key('geomAttr'):
+                    if 'geomAttr' in vdigit:
                         self.indent += 4
                         for type, val in vdigit['geomAttr'].iteritems():
                             units = ''
@@ -838,7 +838,7 @@ class WriteWorkspaceFile(object):
 
         @param data Nviz layer properties
         """
-        if not data.has_key('object'): # skip disabled
+        if 'object' not in data: # skip disabled
             return
 
         self.indent += 4
@@ -864,12 +864,12 @@ class WriteWorkspaceFile(object):
             # draw mode
             if attrb == 'draw':
                 self.file.write('%s<%s' %(' ' * self.indent, attrb))
-                if data[attrb].has_key('mode'):
+                if 'mode' in data[attrb]:
                     for tag, value in data[attrb]['mode']['desc'].iteritems():
                         self.file.write(' %s="%s"' % (tag, value))
                 self.file.write('>\n') # <draw ...>
 
-                if data[attrb].has_key('resolution'):
+                if 'resolution' in data[attrb]:
                     self.indent += 4
                     for type in ('coarse', 'fine'):
                         self.file.write('%s<resolution type="%s">\n' % (' ' * self.indent, type))
@@ -879,7 +879,7 @@ class WriteWorkspaceFile(object):
                         self.indent -= 4
                         self.file.write('%s</resolution>\n' % (' ' * self.indent))
 
-                if data[attrb].has_key('wire-color'):
+                if 'wire-color' in data[attrb]:
                     self.file.write('%s<wire_color>\n' % (' ' * self.indent))
                     self.indent += 4
                     self.file.write('%s<value>%s</value>\n' % (' ' * self.indent,
@@ -917,7 +917,7 @@ class WriteWorkspaceFile(object):
             if len(data[attrb]) < 1: # skip empty attributes
                 continue
 
-            if not data[attrb].has_key('object'): # skip disabled
+            if 'object' not in data[attrb]: # skip disabled
                 continue
             if attrb == 'lines':
                 self.file.write('%s<v%s>\n' % (' ' * self.indent, attrb))

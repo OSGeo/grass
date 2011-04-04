@@ -31,7 +31,7 @@ def unicodeValue(value):
     enc = UserSettings.Get(group = 'atm', key = 'encoding', subkey = 'value')
     if enc:
         value = unicode(value, enc)
-    elif os.environ.has_key('GRASS_DB_ENCODING'):
+    elif 'GRASS_DB_ENCODING' in os.environ:
         value = unicode(value, os.environ['GRASS_DB_ENCODING'])
     else:
         try:

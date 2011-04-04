@@ -378,7 +378,7 @@ class BufferedWindow(MapWindow, wx.Window):
         elif pdctype == 'text': # draw text on top of map
             if not img['active']:
                 return # only draw active text
-            if img.has_key('rotation'):
+            if 'rotation' in img:
                 rotation = float(img['rotation'])
             else:
                 rotation = 0.0
@@ -404,7 +404,7 @@ class BufferedWindow(MapWindow, wx.Window):
         @param textinfo text metadata (text, font, color, rotation)
         @param coords reference point
         """
-        if textinfo.has_key('rotation'):
+        if 'rotation' in textinfo:
             rotation = float(textinfo['rotation'])
         else:
             rotation = 0.0
@@ -1236,9 +1236,9 @@ class BufferedWindow(MapWindow, wx.Window):
                 self.dragid >= 0):
             # end drag of overlay decoration
             
-            if self.dragid < 99 and self.overlays.has_key(self.dragid):
+            if self.dragid < 99 and self.dragid in self.overlays:
                 self.overlays[self.dragid]['coords'] = self.pdc.GetIdBounds(self.dragid)
-            elif self.dragid > 100 and self.textdict.has_key(self.dragid):
+            elif self.dragid > 100 and self.dragid in self.textdict:
                 self.textdict[self.dragid]['coords'] = self.pdc.GetIdBounds(self.dragid)
             else:
                 pass

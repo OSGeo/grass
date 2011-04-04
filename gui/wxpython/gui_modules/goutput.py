@@ -87,7 +87,7 @@ class CmdThread(threading.Thread):
         while True:
             requestId, args, kwds = self.requestQ.get()
             for key in ('callable', 'onDone', 'userData'):
-                if kwds.has_key(key):
+                if key in kwds:
                     vars()[key] = kwds[key]
                     del kwds[key]
                 else:
@@ -523,7 +523,7 @@ class GMConsole(wx.SplitterWindow):
                 # for all non-display commands.
                 if compReg:
                     tmpreg = os.getenv("GRASS_REGION")
-                    if os.environ.has_key("GRASS_REGION"):
+                    if "GRASS_REGION" in os.environ:
                         del os.environ["GRASS_REGION"]
                 
                 if len(command) == 1:
@@ -1074,7 +1074,7 @@ class GMStc(wx.stc.StyledTextCtrl):
                 enc = UserSettings.Get(group='atm', key='encoding', subkey='value')
                 if enc:
                     txt = unicode(txt, enc)
-                elif os.environ.has_key('GRASS_DB_ENCODING'):
+                elif 'GRASS_DB_ENCODING' in os.environ:
                     txt = unicode(txt, os.environ['GRASS_DB_ENCODING'])
                 else:
                     txt = utils.EncodeString(txt)

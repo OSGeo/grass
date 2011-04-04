@@ -194,8 +194,7 @@ class UpdateThread(Thread):
                 return
         
         p = self.task.get_param(self.eventId, element = 'wxId', raiseError = False)
-        if not p or \
-                not p.has_key('wxId-bind'):
+        if not p or 'wxId-bind' not in p:
             return
         
         # get widget prompt
@@ -273,7 +272,7 @@ class UpdateThread(Thread):
                         table = pTable.get('value', '')
                 
             if name == 'LayerSelect':
-                if cparams.has_key(map) and not cparams[map]['layers']:
+                if map in cparams and not cparams[map]['layers']:
                     win.InsertLayers(vector = map)
                     cparams[map]['layers'] = win.GetItems()
             
@@ -298,7 +297,7 @@ class UpdateThread(Thread):
                 
             elif name == 'ColumnSelect':
                 if map:
-                    if cparams.has_key(map):
+                    if map in cparams:
                         if not cparams[map]['dbInfo']:
                             cparams[map]['dbInfo'] = gselect.VectorDBInfo(map)
                         self.data[win.InsertColumns] = { 'vector' : map, 'layer' : layer,
@@ -640,7 +639,7 @@ class processTask:
                 required = False
 
             if not _ignoreBlackList and \
-                    _blackList.has_key(self.task.name) and \
+                    self.task.name in _blackList and \
                     p.get('name') in _blackList[self.task.name]['params']:
                 hidden = True
             else:
@@ -672,7 +671,7 @@ class processTask:
         global _ignoreBlackList
         for p in self.root.findall('flag'):
             if not _ignoreBlackList and \
-                    _blackList.has_key(self.task.name) and \
+                    self.task.name in _blackList and \
                     p.get('name') in _blackList[self.task.name]['flags']:
                 hidden = True
             else:
@@ -1126,7 +1125,7 @@ class cmdPanel(wx.Panel):
             if task.get('guisection','') ==  '':
                 # Undefined guisections end up into Options
                 task['guisection'] = _('Optional')
-            if not is_section.has_key(task['guisection']):
+            if task['guisection'] not in is_section:
                 # We do it like this to keep the original order, except for Main which goes first
                 is_section[task['guisection']] = 1
                 sections.append(task['guisection'])
@@ -1219,7 +1218,7 @@ class cmdPanel(wx.Panel):
                                      label = _("Parameterized in model"))
                 parChk.SetName('ModelParam')
                 parChk.SetValue(f.get('parameterized', False))
-                if f.has_key('wxId'):
+                if 'wxId' in f:
                     f['wxId'].append(parChk.GetId())
                 else:
                     f['wxId'] = [ parChk.GetId() ]
@@ -1233,7 +1232,7 @@ class cmdPanel(wx.Panel):
                 if f['name'] ==  vq:
                     chk.SetValue(True)
                     f['value'] = True
-            elif f['name'] ==  'overwrite' and not f.has_key('value'):
+            elif f['name'] ==  'overwrite' and 'value' not in f:
                 chk.SetValue(UserSettings.Get(group = 'cmd', key = 'overwrite', subkey = 'enabled'))
                 f['value'] = UserSettings.Get(group = 'cmd', key = 'overwrite', subkey = 'enabled')
                 
@@ -1327,7 +1326,7 @@ class cmdPanel(wx.Panel):
                         chkbox = wx.CheckBox(parent = which_panel,
                                              label = text_beautify(label))
                         p[ 'wxId' ].append(chkbox.GetId())
-                        if isEnabled.has_key(val):
+                        if val in isEnabled:
                             chkbox.SetValue(True)
                         hSizer.Add(item = chkbox, proportion = 0,
                                     flag = wx.ADJUST_MINSIZE | wx.ALL, border = 1)
@@ -1643,7 +1642,7 @@ class cmdPanel(wx.Panel):
                             win.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
                             p['wxId'] = [ win.GetChildren()[1].GetId() ]
                             
-                    if not p.has_key('wxId'):
+                    if 'wxId' not in p:
                         try:
                             p['wxId'] = [ win.GetId(), ]
                         except AttributeError:
@@ -1730,7 +1729,7 @@ class cmdPanel(wx.Panel):
                                      label = _("Parameterized in model"))
                 parChk.SetName('ModelParam')
                 parChk.SetValue(p.get('parameterized', False))
-                if p.has_key('wxId'):
+                if 'wxId' in p:
                     p['wxId'].append(parChk.GetId())
                 else:
                     p['wxId'] = [ parChk.GetId() ]
@@ -1753,7 +1752,7 @@ class cmdPanel(wx.Panel):
                     title_txt.SetToolTipString(tooltip)
 
             if p ==  first_param:
-                if p.has_key('wxId') and len(p['wxId']) > 0:
+                if 'wxId' in p and len(p['wxId']) > 0:
                     win = self.FindWindowById(p['wxId'][0])
                     win.SetFocus()
         
@@ -1783,7 +1782,7 @@ class cmdPanel(wx.Panel):
                 for opt in options:
                     pOpt = self.task.get_param(opt, element = 'name', raiseError = False)
                     if id:
-                        if not p.has_key('wxId-bind'):
+                        if 'wxId-bind' not in p:
                             p['wxId-bind'] = list()
                         p['wxId-bind'] +=  pOpt['wxId']
                 continue
@@ -2058,7 +2057,7 @@ class cmdPanel(wx.Panel):
         # Keep the original order, so that some defaults may be recovered
         currentValueList = [] 
         for v in theParam['values']:
-            if currentValues.has_key(v):
+            if v in currentValues:
                 currentValueList.append(v)
 
         # Pack it back
@@ -2079,7 +2078,7 @@ class cmdPanel(wx.Panel):
 
         found = False
         for porf in self.task.params + self.task.flags:
-            if not porf.has_key('wxId'):
+            if 'wxId' not in porf:
                 continue
             if myId in porf['wxId']:
                 found = True

@@ -496,14 +496,14 @@ class Model(object):
             params = action.GetParams()
             for f in params['flags']:
                 if f.get('parameterized', False):
-                    if not result.has_key(name):
+                    if name not in result:
                         result[name] = { 'flags' : list(),
                                          'params': list(),
                                          'idx'   : idx }
                     result[name]['flags'].append(f)
             for p in params['params']:
                 if p.get('parameterized', False):
-                    if not result.has_key(name):
+                    if name not in result:
                         result[name] = { 'flags' : list(),
                                          'params': list(),
                                          'idx'   : idx }
@@ -979,7 +979,7 @@ class ModelFrame(wx.Frame):
     def _runAction(self, item, params):
         """!Run given action"""
         name = item.GetName()
-        if params.has_key(name):
+        if name in params:
             paramsOrig = item.GetParams(dcopy = True)
             item.MergeParams(params[name])
             
@@ -987,7 +987,7 @@ class ModelFrame(wx.Frame):
         self.goutput.RunCmd(command = item.GetLog(string = False),
                             onDone = self.OnDone)
             
-        if params.has_key(name):
+        if name in params:
             item.SetParams(paramsOrig)
         
     def OnDone(self, cmd, returncode):
@@ -1804,11 +1804,11 @@ class ModelAction(ModelObject, ogl.RectangleShape):
         
     def MergeParams(self, params):
         """!Merge dictionary of parameters"""
-        if params.has_key('flags'):
+        if 'flags' in params:
             for f in params['flags']:
                 self.task.set_flag(f['name'],
                                    f.get('value', False))
-        if params.has_key('params'):
+        if 'params' in params:
             for p in params['params']:
                 self.task.set_param(p['name'],
                                     p.get('value', ''))
@@ -2836,7 +2836,7 @@ class WriteModelFile:
         if self.properties['author']:
             self.fd.write('%s<author>%s</author>\n' % (' ' * self.indent, self.properties['author']))
         
-        if self.properties.has_key('overwrite') and \
+        if 'overwrite' in self.properties and \
                 self.properties['overwrite']:
             self.fd.write('%s<flag name="overwrite" />\n' % (' ' * self.indent))
         self.indent -= 4
@@ -2852,10 +2852,10 @@ class WriteModelFile:
             self.fd.write('%s<variable name="%s" type="%s">\n' % \
                               (' ' * self.indent, name, values['type']))
             self.indent += 4
-            if values.has_key('value'):
+            if 'value' in values:
                 self.fd.write('%s<value>%s</value>\n' % \
                                   (' ' * self.indent, values['value']))
-            if values.has_key('description'):
+            if 'description' in values:
                 self.fd.write('%s<description>%s</description>\n' % \
                                   (' ' * self.indent, values['description']))
             self.indent -= 4
@@ -3393,7 +3393,7 @@ class PropertiesDialog(wx.Dialog):
         self.name.SetValue(prop['name'])
         self.desc.SetValue(prop['description'])
         self.author.SetValue(prop['author'])
-        if prop.has_key('overwrite'):
+        if 'overwrite' in prop:
             self.overwrite.SetValue(prop['overwrite'])
 
 class ModelParamDialog(wx.Dialog):

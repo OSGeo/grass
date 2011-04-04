@@ -184,7 +184,7 @@ class Layer(object):
             self.maskfile = None
         
         # stop monitor
-        if os.environ.has_key("GRASS_PNGFILE"):
+        if "GRASS_PNGFILE" in os.environ:
             del os.environ["GRASS_PNGFILE"]
         
         self.force_render = False
@@ -1019,22 +1019,22 @@ class Map(object):
         """
         Debug.msg (3, "Map.ChangeLayer(): layer=%s" % layer.name)
         
-        if kargs.has_key('type'):
+        if 'type' in kargs:
             layer.SetType(kargs['type']) # check type
         
-        if kargs.has_key('command'):
+        if 'command' in kargs:
             layer.SetCmd(kargs['command'])
         
-        if kargs.has_key('name'):
+        if 'name' in kargs:
             layer.SetName(kargs['name'])
         
-        if kargs.has_key('active'):
+        if 'active' in kargs:
             layer.SetActive(kargs['active'])
         
-        if kargs.has_key('hidden'):
+        if 'hidden' in kargs:
             layer.SetHidden(kargs['hidden'])
         
-        if kargs.has_key('opacity'):
+        if 'opacity' in kargs:
             layer.SetOpacity(kargs['opacity'])
         
         if render and not layer.Render():
@@ -1170,19 +1170,19 @@ class Map(object):
         if  overlay is None:
             overlay = Overlay(id, type = None, cmd = None)
         
-        if kargs.has_key('type'):
+        if 'type' in kargs:
             overlay.SetName(kargs['type']) # type -> overlay
         
-        if kargs.has_key('command'):
+        if 'command' in kargs:
             overlay.SetCmd(kargs['command'])
         
-        if kargs.has_key('active'):
+        if 'active' in kargs:
             overlay.SetActive(kargs['active'])
         
-        if kargs.has_key('hidden'):
+        if 'hidden' in kargs:
             overlay.SetHidden(kargs['hidden'])
         
-        if kargs.has_key('opacity'):
+        if 'opacity' in kargs:
             overlay.SetOpacity(kargs['opacity'])
         
         if render and command != [] and not overlay.Render():

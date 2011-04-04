@@ -305,7 +305,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                               data['persp']['value'],
                               data['twist']['value'])
         
-        if event and event.zExag and data['z-exag'].has_key('value'):
+        if event and event.zExag and 'value' in data['z-exag']:
             self._display.SetZExag(data['z-exag']['value'])
         
         if event:
@@ -379,11 +379,11 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             return 0
         
         if layer.type ==  'raster':
-            if not data['surface'].has_key('object'):
+            if 'object' not in data['surface']:
                 return 0
         elif layer.type ==  'vector':
-            if not data['vlines'].has_key('object') and \
-                    not data['points'].has_key('object'):
+            if 'object' not in data['vlines'] and \
+                    'object' not in data['points']:
                 return 0
         
         return 1
@@ -434,7 +434,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 elif type ==  'vector':
                     # data = self.tree.GetPyData(item)[0]['nviz']
                     # vecType = []
-                    # if data and data.has_key('vector'):
+                    # if data and 'vector' in data:
                     #     for v in ('lines', 'points'):
                     #         if data['vector'][v]:
                     #             vecType.append(v)
@@ -475,7 +475,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                     elif ltype ==  'vector':
                         data = self.tree.GetPyData(layer)[0]['nviz']
                         vecType = []
-                        if data and data.has_key('vector'):
+                        if data and 'vector' in data:
                             for v in ('lines', 'points'):
                                 if data['vector'][v]:
                                     vecType.append(v)
@@ -770,7 +770,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             vecTypes = ('lines', )
         
         for vecType in vecTypes:
-            if not data[vecType].has_key('object'):
+            if 'object' not in data[vecType]:
                 continue
             
             id = data[vecType]['object']['id']
@@ -846,21 +846,21 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         """!Generic method to update data layer properties"""
         data = event.data
         
-        if data.has_key('surface'):
+        if 'surface' in data:
             id = data['surface']['object']['id']
             self.UpdateSurfaceProperties(id, data['surface'])
             # -> initialized
             data['surface']['object']['init'] = True
             
-        elif data.has_key('volume'):
+        elif 'volume' in data:
             id = data['volume']['object']['id']
             self.UpdateVolumeProperties(id, data['volume'])
             # -> initialized
             data['volume']['object']['init'] = True
             
-        elif data.has_key('vector'):
+        elif 'vector' in data:
             for type in ('lines', 'points'):
-                if data['vector'][type].has_key('object'):
+                if 'object' in data['vector'][type]:
                     id = data['vector'][type]['object']['id']
                     self.UpdateVectorProperties(id, data['vector'], type)
                     # -> initialized
@@ -871,8 +871,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         # surface attributes
         for attrb in ('topo', 'color', 'mask',
                      'transp', 'shine', 'emit'):
-            if not data['attribute'].has_key(attrb) or \
-                    not data['attribute'][attrb].has_key('update'):
+            if attrb not in data['attribute'] or \
+                    'update' not in data['attribute'][attrb]:
                 continue
             
             map = data['attribute'][attrb]['map']
@@ -909,7 +909,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             data['attribute'][attrb].pop('update')
         
         # draw res
-        if data['draw']['resolution'].has_key('update'):
+        if 'update' in data['draw']['resolution']:
             coarse = data['draw']['resolution']['coarse']
             fine   = data['draw']['resolution']['fine']
             
@@ -920,7 +920,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             data['draw']['resolution'].pop('update')
         
         # draw style
-        if data['draw']['mode'].has_key('update'):
+        if 'update' in data['draw']['mode']:
             if data['draw']['mode']['value'] < 0: # need to calculate
                 data['draw']['mode']['value'] = \
                     self.nvizDefault.GetDrawMode(mode = data['draw']['mode']['desc']['mode'],
@@ -935,7 +935,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             data['draw']['mode'].pop('update')
         
         # wire color
-        if data['draw']['wire-color'].has_key('update'):
+        if 'update' in data['draw']['wire-color']:
             color = data['draw']['wire-color']['value']
             if data['draw']['all']:
                 self._display.SetWireColor(-1, str(color))
@@ -944,7 +944,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             data['draw']['wire-color'].pop('update')
         
         # position
-        if data['position'].has_key('update'):
+        if 'update' in data['position']:
             x = data['position']['x']
             y = data['position']['y']
             z = data['position']['z']
@@ -953,11 +953,11 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
     def UpdateVolumeProperties(self, id, data, isosurfId = None):
         """!Update volume (isosurface/slice) map object properties"""
-        if data['draw']['resolution'].has_key('update'):
+        if 'update' in data['draw']['resolution']:
             self._display.SetIsosurfaceRes(id, data['draw']['resolution']['value'])
             data['draw']['resolution'].pop('update')
         
-        if data['draw']['shading'].has_key('update'):
+        if 'update' in data['draw']['shading']:
             if data['draw']['shading']['value'] < 0: # need to calculate
                 data['draw']['shading']['value'] = \
                     self.nvizDefault.GetDrawMode(shade = data['draw']['shading'],
@@ -971,8 +971,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         for isosurf in data['isosurface']:
             for attrb in ('color', 'mask',
                           'transp', 'shine', 'emit'):
-                if not isosurf.has_key(attrb) or \
-                    not isosurf[attrb].has_key('update'):
+                if attrb not in isosurf or \
+                        'update' not in isosurf[attrb]:
                     continue
                 map = isosurf[attrb]['map']
                 value = isosurf[attrb]['value']
@@ -1021,14 +1021,14 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
     def UpdateVectorLinesProperties(self, id, data):
         """!Update vector line map object properties"""
         # mode
-        if data['color'].has_key('update') or \
-                data['width'].has_key('update') or \
-                data['mode'].has_key('update'):
+        if 'update' in data['color'] or \
+                'update' in data['width'] or \
+                'update' in data['mode']:
             width = data['width']['value']
             color = data['color']['value']
             if data['mode']['type'] ==  'flat':
                 flat = True
-                if data.has_key('surface'):
+                if 'surface' in data:
                     data.pop('surface')
             else:
                 flat = False
@@ -1036,21 +1036,21 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self._display.SetVectorLineMode(id, color,
                                             width, flat)
             
-            if data['color'].has_key('update'):
+            if 'update' in data['color']:
                 data['color'].pop('update')
-            if data['width'].has_key('update'):
+            if 'update' in data['width']:
                 data['width'].pop('update')
-            if data['mode'].has_key('update'):
+            if 'update' in data['mode']:
                 data['mode'].pop('update')
         
         # height
-        if data['height'].has_key('update'):
+        if 'update' in data['height']:
             self._display.SetVectorLineHeight(id,
                                               data['height']['value'])
             data['height'].pop('update')
         
         # surface
-        if data['mode'].has_key('update'):
+        if 'update' in data['mode']:
             sid = self.GetLayerId(type = 'raster', name = data['mode']['surface'])
             if sid > -1:
                 self._display.SetVectorLineSurface(id, sid)
@@ -1059,10 +1059,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
     def UpdateVectorPointsProperties(self, id, data):
         """!Update vector point map object properties"""
-        if data['size'].has_key('update') or \
-                data['width'].has_key('update') or \
-                data['marker'].has_key('update') or \
-                data['color'].has_key('update'):
+        if 'update' in data['size'] or \
+                'update' in data['width'] or \
+                'update' in data['marker'] or \
+                'update' in data['color']:
             ret = self._display.SetVectorPointMode(id, data['color']['value'],
                                                    data['width']['value'], float(data['size']['value']),
                                                    data['marker']['value'] + 1)
@@ -1077,17 +1077,17 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 raise gcmd.GException(_("Setting data layer properties failed.\n\n%s") % error)
             
             for prop in ('size', 'width', 'marker', 'color'):
-                if data[prop].has_key('update'):
+                if 'update' in data[prop]:
                     data[prop].pop('update')
         
         # height
-        if data['height'].has_key('update'):
+        if 'update' in data['height']:
             self._display.SetVectorPointHeight(id,
                                                data['height']['value'])
             data['height'].pop('update')
         
         # surface
-        if data['mode'].has_key('update'):
+        if 'update' in data['mode']:
             sid = self.GetLayerId(type = 'raster', name = data['mode']['surface'])
             if sid > -1:
                 self._display.SetVectorPointSurface(id, sid)

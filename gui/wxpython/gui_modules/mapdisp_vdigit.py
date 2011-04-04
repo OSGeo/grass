@@ -118,7 +118,7 @@ class VDigitWindow(BufferedWindow):
         # translate tmp objects (pointer position)
         if self.toolbar.GetAction() == 'moveLine' and \
                 hasattr(self, "moveInfo"):
-            if self.moveInfo.has_key('beginDiff'):
+            if 'beginDiff' in self.moveInfo:
                 # move line
                 for id in self.moveInfo['id']:
                     self.pdcTmp.TranslateId(id,
@@ -191,8 +191,8 @@ class VDigitWindow(BufferedWindow):
         item = self.tree.FindItemByData('maplayer', mapLayer)
         vdigit = self.tree.GetPyData(item)[0]['vdigit']
         if not vdigit or \
-                not vdigit.has_key('geomAttr') or \
-                not vdigit['geomAttr'].has_key(attrb):
+                'geomAttr' not in vdigit or \
+                attrb not in vdigit['geomAttr']:
             return
         
         val = -1
@@ -223,7 +223,7 @@ class VDigitWindow(BufferedWindow):
         item = self.tree.FindItemByData('maplayer', mapLayer)
         vdigit = self.tree.GetPyData(item)[0]['vdigit']
         
-        if vdigit is None or not vdigit.has_key('geomAttr'):
+        if vdigit is None or 'geomAttr' not in vdigit:
             return
         
         dbInfo = gselect.VectorDBInfo(vectorName)

@@ -346,7 +346,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
             # determine format
             if layer and layer.GetType() == 'vector':
-                if not self.GetPyData(self.layer_selected)[0].has_key('info'):
+                if 'info' not in self.GetPyData(self.layer_selected)[0]:
                     info = grass.parse_command('v.info',
                                                map = layer.GetName(),
                                                shell = 'basic')
@@ -912,7 +912,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
     def PropertiesDialog (self, layer, show = True):
         """!Launch the properties dialog"""
-        if self.GetPyData(layer)[0].has_key('propwin') and \
+        if 'propwin' in self.GetPyData(layer)[0] and \
                 self.GetPyData(layer)[0]['propwin'] is not None:
             # recycle GUI dialogs
             win = self.GetPyData(layer)[0]['propwin']

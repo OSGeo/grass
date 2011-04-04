@@ -826,7 +826,7 @@ class AttributeManager(wx.Frame):
             if onlyLayer > 0 and layer != onlyLayer:
                 continue
             
-            if not self.layerPage.has_key(layer):
+            if not layer in self.layerPage:
                 continue
             
             panel = wx.Panel(parent=self.manageTablePage, id=wx.ID_ANY)
@@ -1887,8 +1887,7 @@ class AttributeManager(wx.Frame):
             sqlFile = tempfile.NamedTemporaryFile(mode="wt")
             for sql in self.listOfSQLStatements:
                 enc = UserSettings.Get(group='atm', key='encoding', subkey='value')
-                if not enc and \
-                        os.environ.has_key('GRASS_DB_ENCODING'):
+                if not enc and 'GRASS_DB_ENCODING' in os.environ:
                     enc = os.environ['GRASS_DB_ENCODING']
                 if enc:
                     sqlFile.file.write(sql.encode(enc) + ';')
