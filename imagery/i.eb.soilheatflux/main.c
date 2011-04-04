@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       i.eb.soilheatflux
@@ -7,7 +6,7 @@
  *               as seen in Bastiaanssen (1995) using time of
  *               satellite overpass.
  *
- * COPYRIGHT:    (C) 2006-2009 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2006-2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *   	    	 License (>=v2). Read the file COPYING that comes with GRASS
@@ -51,7 +50,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("soil heat flux"));
     G_add_keyword(_("energy balance"));
     G_add_keyword(_("SEBAL"));
-    module->description = _("Soil heat flux approximation (Bastiaanssen, 1995)");
+    module->description = _("Soil heat flux approximation (Bastiaanssen, 1995).");
     
     /* Define the different options */ 
     input1 = G_define_standard_option(G_OPT_R_INPUT);
@@ -65,7 +64,7 @@ int main(int argc, char *argv[])
     input3 = G_define_standard_option(G_OPT_R_INPUT);
     input3->key = "temperature";
     input3->description =
-	_("Name of Surface temperature raster map [degree Kelvin]");
+	_("Name of Surface temperature raster map [K]");
 
     input4 = G_define_standard_option(G_OPT_R_INPUT);
     input4->key = "netradiation";
@@ -74,7 +73,7 @@ int main(int argc, char *argv[])
     input5 = G_define_standard_option(G_OPT_R_INPUT);
     input5->key = "localutctime";
     input5->description =
-	_("Name of time of satellite overpass raster map [local UTC]");
+	_("Name of time of satellite overpass raster map [local time in UTC]"); 
 
     output1 = G_define_standard_option(G_OPT_R_OUTPUT);
 

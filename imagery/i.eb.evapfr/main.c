@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       i.eb.evapfr
@@ -6,7 +5,7 @@
  * PURPOSE:      Calculates the evaporative fraction
  *               as seen in Bastiaanssen (1995) 
  *
- * COPYRIGHT:    (C) 2002-2009 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *   	    	 License (>=v2). Read the file COPYING that comes with GRASS
@@ -53,7 +52,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("SEBAL"));
     module->description =
 	_("Computes evaporative fraction (Bastiaanssen, 1995) and "
-	  "root zone soil moisture (Makin, Molden and Bastiaanssen, 2001)");
+	  "root zone soil moisture (Makin, Molden and Bastiaanssen, 2001).");
     
     /* Define the different options */ 
     input1 = G_define_standard_option(G_OPT_R_INPUT);

@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       i.eb.netrad
@@ -7,7 +6,7 @@
  *               as seen in Bastiaanssen (1995) using time of
  *               satellite overpass.
  *
- * COPYRIGHT:    (C) 2006-2010 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2006-2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *   	    	 License (>=v2). Read the file COPYING that comes with GRASS
@@ -22,6 +21,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
+
 double r_net(double bbalb, double ndvi, double tempk, double dtair,
 	      double e0, double tsw, double doy, double utc,
 	      double sunzangle);
@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("energy balance"));
     G_add_keyword(_("SEBAL"));
     module->description =
-	_("net radiation approximation (Bastiaanssen, 1995)");
+	_("Net radiation approximation (Bastiaanssen, 1995).");
     
 	/* Define the different options */ 
     input1 = G_define_standard_option(G_OPT_R_INPUT);
