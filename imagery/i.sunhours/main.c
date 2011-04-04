@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("sunshine"));
     G_add_keyword(_("hours"));
     G_add_keyword(_("daytime"));
-    module->description = _("creates a sunshine hours map");
+    module->description = _("Creates a sunshine hours map.");
     
     /* Define the different options */ 
     input1 = G_define_standard_option(G_OPT_R_INPUT);
