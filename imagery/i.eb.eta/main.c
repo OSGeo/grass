@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       i.eb.eta
@@ -6,7 +5,7 @@
  * PURPOSE:      Calculates the actual evapotranspiration for diurnal period
  *               as seen in Bastiaanssen (1995) 
  *
- * COPYRIGHT:    (C) 2002-2009 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *   	    	 License (>=v2). Read the file COPYING that comes with GRASS
@@ -21,6 +20,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
+
 double et_a(double r_net_day, double evap_fr, double tempk);
 
 int main(int argc, char *argv[]) 
@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("energy balance"));
     G_add_keyword(_("SEBAL"));
     module->description =
-	_("actual evapotranspiration for diurnal period (Bastiaanssen, 1995)");
+	_("Actual evapotranspiration for diurnal period (Bastiaanssen, 1995).");
     
     /* Define the different options */ 
     input1 = G_define_standard_option(G_OPT_R_INPUT);
@@ -134,5 +134,4 @@ int main(int argc, char *argv[])
     Rast_write_history(result1, &history);
     exit(EXIT_SUCCESS);
 }
-
 
