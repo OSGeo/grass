@@ -1115,9 +1115,11 @@ class GdalSelect(wx.Panel):
         
         # dsn widgets
         if not ogr:
-            filemask = 'GeoTIFF (%s)|%s' % (self._getExtPattern('tif'), self._getExtPattern('tif'))
+            filemask = 'GeoTIFF (%s)|%s|%s (*.*)|*.*' % \
+                (self._getExtPattern('tif'), self._getExtPattern('tif'), _('All files'))
         else:
-            filemask = 'ESRI Shapefile (%s)|%s' % (self._getExtPattern('shp'), self._getExtPattern('shp'))
+            filemask = 'ESRI Shapefile (%s)|%s|%s (*.*)|*.*' % \
+                (self._getExtPattern('shp'), self._getExtPattern('shp'), _('All files'))
         
         dsnFile = filebrowse.FileBrowseButton(parent=self, id=wx.ID_ANY, 
                                               size=globalvar.DIALOG_GSELECT_SIZE, labelText = '',
@@ -1347,9 +1349,10 @@ class GdalSelect(wx.Panel):
                 ext = self.format.GetExtension(format)
                 if not ext:
                     raise KeyError
-                format += ' (%s)|%s' % (self._getExtPattern(ext), self._getExtPattern(ext))
+                format += ' (%s)|%s|%s (*.*)|*.*' % \
+                    (self._getExtPattern(ext), self._getExtPattern(ext), _('All files'))
             except KeyError:
-                format += ' (*.*)|*.*'
+                format += '%s (*.*)|*.*' % _('All files')
             
             win = filebrowse.FileBrowseButton(parent=self, id=wx.ID_ANY, 
                                               size=globalvar.DIALOG_GSELECT_SIZE, labelText='',
@@ -1381,9 +1384,9 @@ class GdalSelect(wx.Panel):
             win.Show()
             
             if not self.ogr:
-                self.format.SetStringSelection('GeoTIFF')
+                self.OnSetFormat(event = None, format = 'GeoTIFF')
             else:
-                self.format.SetStringSelection('ESRI Shapefile')
+                self.OnSetFormat(event = None, format = 'ESRI Shapefile')
         elif sel == self.sourceMap['pro']:
             win = self.input[self.dsnType][1]
             self.dsnSizer.Add(item=self.input[self.dsnType][1],
@@ -1471,7 +1474,7 @@ class GdalSelect(wx.Panel):
         
     def OnSetFormat(self, event, format = None):
         """!Format changed"""
-        if self.dsnType not in ['file', 'db']:
+        if self.dsnType not in ['file', 'dir', 'db']:
             return
         
         win = self.input[self.dsnType][1]
@@ -1492,9 +1495,10 @@ class GdalSelect(wx.Panel):
                 ext = self.format.GetExtension(format)
                 if not ext:
                     raise KeyError
-                format += ' (%s)|%s' % (self._getExtPattern(ext), self._getExtPattern(ext))
+                format += ' (%s)|%s|%s (*.*)|*.*' % \
+                    (self._getExtPattern(ext), self._getExtPattern(ext), _('All files'))
             except KeyError:
-                format += ' (*.*)|*.*'
+                format += '%s (*.*)|*.*' % _('All files')
             
             win = filebrowse.FileBrowseButton(parent=self, id=wx.ID_ANY, 
                                               size=globalvar.DIALOG_GSELECT_SIZE, labelText='',
@@ -1503,6 +1507,8 @@ class GdalSelect(wx.Panel):
                                               startDirectory=os.getcwd(),
                                               changeCallback=self.OnSetDsn,
                                               fileMask = format)
+        elif self.dsnType == 'dir':
+            pass
         else: # database
             if format == 'SQLite' or format == 'Rasterlite':
                 win = self.input['db-win']['file']
