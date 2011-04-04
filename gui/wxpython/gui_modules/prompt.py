@@ -56,7 +56,7 @@ class TextCtrlAutoComplete(wx.ComboBox, listmix.ColumnSorterMixin):
         """
         self.statusbar = statusbar
         
-        if kwargs.has_key('style'):
+        if 'style' in kwargs:
             kwargs['style'] = wx.TE_PROCESS_ENTER | kwargs['style']
         else:
             kwargs['style'] = wx.TE_PROCESS_ENTER
@@ -523,7 +523,7 @@ class GPrompt(object):
 
     def GetCommandDesc(self, cmd):
         """!Get description for given command"""
-        if self.moduleDesc.has_key(cmd):
+        if cmd in self.moduleDesc:
             return self.moduleDesc[cmd]['desc']
         
         return ''
@@ -561,7 +561,7 @@ class GPrompt(object):
             except ValueError:
                 continue # TODO
             
-            if not result.has_key(group):
+            if group not in result:
                 result[group] = list()
             result[group].append(name)
             
@@ -570,7 +570,7 @@ class GPrompt(object):
             for i in range(len(name.split('.'))-1):
                 group = '.'.join([group,name.split('.',1)[0]])
                 name = name.split('.',1)[1]
-                if not result.has_key(group):
+                if group not in result:
                     result[group] = list()
                 result[group].append(name)
       

@@ -76,14 +76,14 @@ def updateData(data, modules):
         for child in node.getchildren():
             item[child.tag] = child.text
         
-        if not item.has_key('command'):
+        if 'command' not in item:
             continue
         
         if item['command'] in ignore:
             continue
         
         module = item['command'].split(' ')[0]
-        if not modules.has_key(module):
+        if module not in modules:
             grass.warning("'%s' not found in modules" % item['command'])
             continue
         
@@ -94,7 +94,7 @@ def updateData(data, modules):
         if node.find('handler').text == 'OnMenuCmd':
             node.find('help').text = desc
         
-        if not modules[module].has_key('keywords'):
+        if 'keywords' not in modules[module]:
             grass.warning('%s: keywords missing' % module)
         else:
             if node.find('keywords') is None:

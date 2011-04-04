@@ -883,15 +883,15 @@ class Settings:
         @param subkey subkey (value or list)
         @param value value
         """
-        if not dict.has_key(group):
+        if group not in dict:
             dict[group] = {}
 
-        if not dict[group].has_key(key):
+        if key not in dict[group]:
             dict[group][key] = {}
 
         if type(subkey) == types.ListType:
             # TODO: len(subkey) > 2
-            if not dict[group][key].has_key(subkey[0]):
+            if subkey[0] not in dict[group][key]:
                 dict[group][key][subkey[0]] = {}
             try:
                 dict[group][key][subkey[0]][subkey[1]] = value
@@ -1871,7 +1871,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         except ValueError:
             code = -1
         win = self.FindWindowById(self.winId['projection:statusbar:proj4'])
-        if self.epsgCodeDict.has_key(code):
+        if code in self.epsgCodeDict:
             win.SetValue(self.epsgCodeDict[code][1])
         else:
             list.SetSelection(0)

@@ -282,8 +282,7 @@ class DisplayAttributesDialog(wx.Dialog):
         """!Submit records"""
         for sql in self.GetSQLString(updateValues=True):
             enc = UserSettings.Get(group='atm', key='encoding', subkey='value')
-            if not enc and \
-                    os.environ.has_key('GRASS_DB_ENCODING'):
+            if not enc and 'GRASS_DB_ENCODING' in os.environ:
                 enc = os.environ['GRASS_DB_ENCODING']
             if enc:
                 sql = sql.encode(enc)
@@ -336,17 +335,17 @@ class DisplayAttributesDialog(wx.Dialog):
             data = self.mapDBInfo.SelectByPoint(query[0],
                                                 query[1])
             self.cats = {}
-            if data and data.has_key('Layer'):
+            if data and 'Layer' in data:
                 idx = 0
                 for layer in data['Layer']:
                     layer = int(layer)
-                    if data.has_key('Id'):
+                    if 'Id' in data:
                         tfid = int(data['Id'][idx])
                     else:
                         tfid = 0 # Area / Volume
-                    if not self.cats.has_key(tfid):
+                    if not tfid in self.cats:
                         self.cats[tfid] = {}
-                    if not self.cats[tfid].has_key(layer):
+                    if not layer in self.cats[tfid]:
                         self.cats[tfid][layer] = []
                     cat = int(data['Category'][idx])
                     self.cats[tfid][layer].append(cat)
@@ -382,7 +381,7 @@ class DisplayAttributesDialog(wx.Dialog):
 
         for layer in layers: # for each layer
             if not query: # select by layer/cat
-                if self.fid > 0 and self.cats[self.fid].has_key(layer): 
+                if self.fid > 0 and layer in self.cats[self.fid]:
                     for cat in self.cats[self.fid][layer]:
                         nselected = self.mapDBInfo.SelectFromTable(layer,
                                                                    where="%s=%d" % \
@@ -396,7 +395,7 @@ class DisplayAttributesDialog(wx.Dialog):
 
             if self.action == "add":
                 if nselected <= 0:
-                    if self.cats[self.fid].has_key(layer):
+                    if layer in self.cats[self.fid]:
                         table = self.mapDBInfo.layers[layer]["table"]
                         key = self.mapDBInfo.layers[layer]["key"]
                         columns = self.mapDBInfo.tables[table]

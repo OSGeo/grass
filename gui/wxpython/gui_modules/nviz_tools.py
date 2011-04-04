@@ -2531,7 +2531,7 @@ class NvizToolWindow(FN.FlatNotebook):
             self.SetMapObjUseMap(nvizType = 'surface',
                                  attrb = attr, map = True) # -> map
         
-        if data['attribute'].has_key('color'):
+        if 'color' in data['attribute']:
             value = data['attribute']['color']['value']
             if data['attribute']['color']['map']:
                 self.FindWindowById(self.win['surface']['color']['map']).SetValue(value)
@@ -2647,7 +2647,7 @@ class NvizToolWindow(FN.FlatNotebook):
         # lines
         #
         showLines = self.FindWindowById(self.win['vector']['lines']['show'])
-        if data['lines'].has_key('object'):
+        if 'object' in data['lines']:
             showLines.SetValue(True)
         else:
             showLines.SetValue(False)
@@ -2692,7 +2692,7 @@ class NvizToolWindow(FN.FlatNotebook):
         #
         showPoints = self.FindWindowById(self.win['vector']['points']['show'])
         
-        if data['points'].has_key('object'):
+        if 'object' in data['points']:
             showPoints.SetValue(True)
         else:
             showPoints.SetValue(False)
@@ -2771,7 +2771,7 @@ class NvizToolWindow(FN.FlatNotebook):
                 continue
             
             # skip empty attributes
-            if not data.has_key(attrb):
+            if attrb not in data:
                 continue
             
             value = data[attrb]['value']

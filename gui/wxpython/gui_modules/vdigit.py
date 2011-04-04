@@ -481,8 +481,8 @@ class VDigitSettingsDialog(wx.Dialog):
             # default values
             check.SetValue(False)
             if item and tree.GetPyData(item)[0]['vdigit'] and \
-                    tree.GetPyData(item)[0]['vdigit'].has_key('geomAttr') and \
-                    tree.GetPyData(item)[0]['vdigit']['geomAttr'].has_key(attrb):
+                    'geomAttr' in tree.GetPyData(item)[0]['vdigit'] and \
+                    attrb in tree.GetPyData(item)[0]['vdigit']['geomAttr']:
                 check.SetValue(True)
                 column.SetStringSelection(tree.GetPyData(item)[0]['vdigit']['geomAttr'][attrb]['column'])
                 if attrb == 'area':
@@ -765,7 +765,7 @@ class VDigitSettingsDialog(wx.Dialog):
                                                                        'units' : unitsKey }
             else:
                 if item and tree.GetPyData(item)[0]['vdigit'] and \
-                        tree.GetPyData(item)[0]['vdigit']['geomAttr'].has_key(key):
+                        key in tree.GetPyData(item)[0]['vdigit']['geomAttr']:
                     del tree.GetPyData(item)[0]['vdigit']['geomAttr'][key]
         
         # query tool

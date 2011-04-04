@@ -101,7 +101,7 @@ class MapFrame(wx.Frame):
         self.layerbook  = notebook  # Layer Manager layer tree notebook
         self.parent     = parent
         
-        if not kwargs.has_key('name'):
+        if 'name' not in kwargs:
             kwargs['name'] = 'MapWindow'
         wx.Frame.__init__(self, parent, id, title, style = style, **kwargs)
         
@@ -1375,9 +1375,9 @@ class MapFrame(wx.Frame):
         if hasattr(self, "tmpreg"):
             if self.tmpreg:
                 os.environ["GRASS_REGION"] = self.tmpreg
-            elif os.environ.has_key('GRASS_REGION'):
+            elif 'GRASS_REGION' in os.environ:
                 del os.environ["GRASS_REGION"]
-        elif os.environ.has_key('GRASS_REGION'):
+        elif 'GRASS_REGION' in os.environ:
             del os.environ["GRASS_REGION"]
         
         if hasattr(self, "tmpreg"):

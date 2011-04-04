@@ -194,7 +194,7 @@ class WMSDialog(wx.Dialog):
             elif key == 'title':
                 layers[lastLayer][key] = value
             elif key == 'style':
-                if not layers[lastLayer].has_key('style'):
+                if 'style' not in layers[lastLayer]:
                     layers[lastLayer]['style'] = {}
                 layers[lastLayer]['style'][value] = ''
                 lastStyle = value
@@ -260,7 +260,7 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
             title = data[layer]['title']
             lchild = self.AppendItem(self.root, layer)
             self.SetItemText(lchild, title, 1)
-            if data[layer].has_key('style'):
+            if 'style' in data[layer]:
                 styles = data[layer]['style'].keys()
                 if not styles:
                     continue

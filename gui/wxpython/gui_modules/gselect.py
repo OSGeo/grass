@@ -318,21 +318,21 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         else:
             filesdict = grass.list_grouped(elementdict[element])
         
-        first_dir = None
-        for dir in mapsets:
-            dir_node = self.AddItem('Mapset: ' + dir)
-            if not first_dir:
-                first_dir = dir_node
+        first_mapset = None
+        for mapset in mapsets:
+            mapset_node = self.AddItem('Mapset: ' + mapset)
+            if not first_mapset:
+                first_mapset = mapset_node
             
-            self.seltree.SetItemTextColour(dir_node, wx.Colour(50, 50, 200))
-            if not filesdict.has_key(dir):
+            self.seltree.SetItemTextColour(mapset_node, wx.Colour(50, 50, 200))
+            if mapset not in filesdict:
                 continue
             try:
-                elem_list = filesdict[dir]
+                elem_list = filesdict[mapset]
                 elem_list.sort(key = unicode.lower)
                 for elem in elem_list:
                     if elem != '':
-                        fullqElem = elem + '@' + dir
+                        fullqElem = elem + '@' + mapset
                         if elements:
                             if (exclude and fullqElem in elements) or \
                                     (not exclude and fullqElem not in elements):
@@ -340,26 +340,26 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                         
                         if self.filterElements:
                             if self.filterElements(fullqElem):
-                                self.AddItem(elem, parent=dir_node)
+                                self.AddItem(elem, parent=mapset_node)
                         else:
-                            self.AddItem(elem, parent=dir_node)
+                            self.AddItem(elem, parent=mapset_node)
             except StandardError, e:
                 sys.stderr.write(_("GSelect: invalid item: %s") % e)
                 continue
             
-            if self.seltree.ItemHasChildren(dir_node):
+            if self.seltree.ItemHasChildren(mapset_node):
                 sel = UserSettings.Get(group='general', key='elementListExpand',
                                        subkey='selection')
                 collapse = True
 
                 if sel == 0: # collapse all except PERMANENT and current
-                    if dir in ('PERMANENT', curr_mapset):
+                    if mapset in ('PERMANENT', curr_mapset):
                         collapse = False
                 elif sel == 1: # collapse all except PERMANENT
-                    if dir == 'PERMANENT':
+                    if mapset == 'PERMANENT':
                         collapse = False
                 elif sel == 2: # collapse all except current
-                    if dir == curr_mapset:
+                    if mapset == curr_mapset:
                         collapse = False
                 elif sel == 3: # collapse all
                     pass
@@ -367,13 +367,13 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                     collapse = False
                 
                 if collapse:
-                    self.seltree.Collapse(dir_node)
+                    self.seltree.Collapse(mapset_node)
                 else:
-                    self.seltree.Expand(dir_node)
+                    self.seltree.Expand(mapset_node)
         
-        if first_dir:
+        if first_mapset:
             # select first mapset (MSW hack)
-            self.seltree.SelectItem(first_dir)
+            self.seltree.SelectItem(first_mapset)
     
     # helpers
     def FindItem(self, parentItem, text, startLetters = False):
@@ -497,15 +497,15 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
 
     def SetData(self, **kargs):
         """!Set object properties"""
-        if kargs.has_key('type'):
+        if 'type' in kargs:
             self.type = kargs['type']
-        if kargs.has_key('mapsets'):
+        if 'mapsets' in kargs:
             self.mapsets = kargs['mapsets']
-        if kargs.has_key('multiple'):
+        if 'multiple' in kargs:
             self.multiple = kargs['multiple']
-        if kargs.has_key('updateOnPopup'):
+        if 'updateOnPopup' in kargs:
             self.updateOnPopup = kargs['updateOnPopup']
-        if kargs.has_key('onPopup'):
+        if 'onPopup' in kargs:
             self.onPopup = kargs['onPopup']
         
 class VectorDBInfo:
@@ -1267,7 +1267,7 @@ class GdalSelect(wx.Panel):
     def OnSettingsLoad(self, event):
         """!Load named settings"""
         name = event.GetString()
-        if not self._settings.has_key(name):
+        if name not in self._settings:
             gcmd.GError(parent = self,
                         message = _("Settings named '%s' not found") % name)
             return

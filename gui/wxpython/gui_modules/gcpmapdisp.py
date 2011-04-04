@@ -93,7 +93,7 @@ class MapFrame(wx.Frame):
         self.layerbook  = notebook  # Layer Manager layer tree notebook
         self.parent     = parent
         
-        if not kwargs.has_key('name'):
+        if 'name' not in kwargs:
             kwargs['name'] = 'GCPMapWindow'
         wx.Frame.__init__(self, parent, id, title, style = style, **kwargs)
         

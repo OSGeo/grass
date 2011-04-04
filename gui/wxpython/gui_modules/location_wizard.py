@@ -709,7 +709,7 @@ class ProjParamsPage(TitledPage):
         id  = event.GetId()
         val = event.GetString()
         
-        if not self.pparam.has_key(id):
+        if id not in self.pparam:
             event.Skip()
             return
 

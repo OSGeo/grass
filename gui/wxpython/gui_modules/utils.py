@@ -454,11 +454,11 @@ def GetCmdString(cmd):
     
     scmd = cmd[0]
     
-    if cmd[1].has_key('flags'):
+    if 'flags' in cmd[1]:
         for flag in cmd[1]['flags']:
             scmd += ' -' + flag
     for flag in ('verbose', 'quiet', 'overwrite'):
-        if cmd[1].has_key(flag) and cmd[1][flag] is True:
+        if flag in cmd[1] and cmd[1][flag] is True:
             scmd += ' --' + flag
     
     for k, v in cmd[1].iteritems():
@@ -483,7 +483,7 @@ def CmdToTuple(cmd):
             if flag in ('verbose', 'quiet', 'overwrite'):
                 dcmd[str(flag)] = True
         else: # -> flags
-            if not dcmd.has_key('flags'):
+            if 'flags' not in dcmd:
                 dcmd['flags'] = ''
             dcmd['flags'] += item.replace('-', '')
                 

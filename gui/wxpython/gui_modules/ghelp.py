@@ -171,7 +171,7 @@ class SearchModuleWindow(wx.Panel):
                 except ValueError:
                     continue # TODO
                 
-                if not modules.has_key(group):
+                if group not in modules:
                     modules[group] = list()
                 modules[group].append(name)
                 
@@ -305,7 +305,7 @@ class MenuTreeWindow(wx.Panel):
             return
         
         data = self.tree.GetPyData(item)
-        if not data or not data.has_key('command'):
+        if not data or 'command' not in data:
             return
         
         self.tree.itemSelected = item
@@ -319,7 +319,7 @@ class MenuTreeWindow(wx.Panel):
             return
         
         data = self.tree.GetPyData(item)
-        if not data or not data.has_key('command'):
+        if not data or 'command' not in data:
             return
         
         if data['command']:
@@ -388,7 +388,7 @@ class ItemTree(CT.CustomTreeCtrl):
                 self._processItem(subItem, element, value, listOfItems)
             data = self.GetPyData(item)
             
-            if data and data.has_key(element) and \
+            if data and element in data and \
                     value.lower() in data[element].lower():
                 listOfItems.append(item)
             
@@ -728,7 +728,7 @@ class AboutWindow(wx.Frame):
                     errLines.append(line)
                     continue
                 for language in languages.split(' '):
-                    if not translators.has_key(language):
+                    if language not in translators:
                         translators[language] = list()
                     translators[language].append((name, email))
             translatorsFile.close()
@@ -937,7 +937,7 @@ class InstallExtensionWindow(wx.Frame):
     def OnItemActivated(self, event):
         item = event.GetItem()
         data = self.tree.GetPyData(item)
-        if data and data.has_key('command'):
+        if data and 'command' in data:
             self._install(data['command'])
             
     def OnInstall(self, event):
@@ -1003,7 +1003,7 @@ class ExtensionTree(ItemTree):
                  'v'  : 'vector',
                  'wx' : 'wxGUI' }
         
-        if name.has_key(c):
+        if c in name:
             return name[c]
         
         return c
@@ -1041,7 +1041,7 @@ class ExtensionTree(ItemTree):
                 key, value = line.split('=', 1)
                 if key == 'name':
                     prefix, name = value.split('.', 1)
-                    if not mdict.has_key(prefix):
+                    if prefix not in mdict:
                         mdict[prefix] = dict()
                     mdict[prefix][name] = dict()
                 else:
@@ -1056,7 +1056,7 @@ class ExtensionTree(ItemTree):
                 if self._expandPrefix(prefix) == prefix:
                     prefix = 'unknown'
                     
-                if not mdict.has_key(prefix):
+                if prefix not in mdict:
                     mdict[prefix] = dict()
                     
                 mdict[prefix][name] = { 'command' : prefix + '.' + name }

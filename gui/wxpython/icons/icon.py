@@ -48,7 +48,7 @@ try:
         raise OSError
     
     for key, img in iconSet.iteritems():
-        if not iconSet.has_key(key) or \
+        if key not in iconSet or \
                 iconSet[key] is None: # add key
             iconSet[key] = img
         
