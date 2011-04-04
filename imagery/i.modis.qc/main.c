@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("Vegetation"));
     G_add_keyword(_("Modis"));
     module->description =
-	_("Extract quality control parameters from Modis QC layers");
+	_("Extract quality control parameters from Modis QC layers.");
 
     /* Define the different options */ 
     input = G_define_option();
