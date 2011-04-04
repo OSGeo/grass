@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("latitude"));
     G_add_keyword(_("longitude"));
     G_add_keyword(_("projection"));
-    module->description = _("creates a latitude/longitude map");
+    module->description = _("Creates a latitude/longitude map.");
     
     /* Define the different options */ 
     input1 = G_define_standard_option(G_OPT_R_INPUT);

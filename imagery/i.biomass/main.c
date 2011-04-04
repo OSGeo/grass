@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("fpar"));
     G_add_keyword(_("yield"));
     module->description =
-	_("Computes biomass growth, precursor of crop yield calculation");
+	_("Computes biomass growth, precursor of crop yield calculation.");
     
     /* Define the different options */ 
     input1 = G_define_standard_option(G_OPT_R_INPUT);
