@@ -80,12 +80,12 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->description = _("Computes sensible heat flux iteration SEBAL 01.");
     G_add_keyword(_("imagery"));
     G_add_keyword(_("evaporative fraction"));
     G_add_keyword(_("soil moisture"));
     G_add_keyword(_("energy balance"));
     G_add_keyword(_("SEBAL"));
+    module->description = _("Computes sensible heat flux iteration SEBAL 01.");
 
     /* Define different options */
     input_Rn = G_define_standard_option(G_OPT_R_INPUT);

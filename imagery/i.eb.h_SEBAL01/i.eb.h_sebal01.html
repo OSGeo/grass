@@ -1,12 +1,6 @@
-<html>
-<head>
-<title>GRASS GIS manual: i.eb.h_SEBAL01</title>
-</head>
-<body>
-<H2>NAME</H2> <B><I>i.eb.h_SEBAL01 </I></B>- computation of <i>sensible heat flux</i> [W/m2] after Bastiaanssen, 1995 in [1], used in this form in 2001 by [2]. Implemented in this code in [3].
 <H2>DESCRIPTION</H2>
 
-<p><EM>i.eb.h_SEBAL01</EM> will calculate the sensible heat flux map (h0), given both maps of Net Radiation and soil Heat flux (Rn, g0) at instantaneous time, the surface roughness (z0m), a map of the altitude corrected temperature (t0dem), a point data of the frictional velocity (u*), a value of actual vapour pressure (ea[KPa]) and the (x,y) pairs for wet and dry pixels.
+<p><EM>i.eb.h_sebal01</EM> will calculate the sensible heat flux map (h0), given both maps of Net Radiation and soil Heat flux (Rn, g0) at instantaneous time, the surface roughness (z0m), a map of the altitude corrected temperature (t0dem), a point data of the frictional velocity (u*), a value of actual vapour pressure (ea[KPa]) and the (x,y) pairs for wet and dry pixels.
 
 Full process will need those:
 <ul>
@@ -18,20 +12,20 @@ Full process will need those:
 
 (for time integration: i.evapo.time_integration)
 
-<p>For more details on the algorithms see [1][2][3].
+<p><EM>i.eb.h_sebal01</EM> performs the computation of <i>sensible heat flux</i> [W/m2] 
+after Bastiaanssen, 1995 in [1], used in this form in 2001 by [2]. Implemented in this code in [3].
 
 <H2>OPTIONS</H2>
 
 <H2>NOTES</H2>
-- z0m can be alculated by i.eb.z0m or i.eb.z0m0 (grass-addons).
-
-- ea can be calculated with standard meteorological data. 
-	eoTmin=0.6108*EXP(17.27*Tmin/(Tmin+237.3))
-	eoTmax=0.6108*EXP(17.27*Tmax/(Tmax+237.3))
+<ul>
+<li> z0m can be alculated by i.eb.z0m or i.eb.z0m0 (grass-addons).
+<li> ea can be calculated with standard meteorological data.<br>
+	eoTmin=0.6108*EXP(17.27*Tmin/(Tmin+237.3))<br>
+	eoTmax=0.6108*EXP(17.27*Tmax/(Tmax+237.3))<br>
 	ea=(RH/100)/((eoTmin+eoTmax)/2)
-
-- t0dem = surface temperature + (altitude * 0.627 / 100)
-
+<li> t0dem = surface temperature + (altitude * 0.627 / 100)
+</ul>
 
 
 <H2>SEE ALSO</H2>
@@ -60,7 +54,4 @@ Full process will need those:
   <p>Contact: <a href="mailto:yann.chemin@gmail.com"> Yann chemin</a>
 
 
-
 <p><i>Last changed: $Date$</i>
-</body>
-</html>
