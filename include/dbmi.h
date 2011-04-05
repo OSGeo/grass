@@ -1,3 +1,14 @@
+/*!
+  \file include/dbmi.h
+
+  \brief Main header of \ref dbmilib
+
+  (C) 1999-2009, 2011 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+*/
+
 #ifndef GRASS_DBMI_H
 #define GRASS_DBMI_H
 

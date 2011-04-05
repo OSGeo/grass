@@ -23,7 +23,7 @@ PROJECT_NAME           = "GRASS Programmer's Manual"
 # This could be handy for archiving the generated documentation or 
 # if some version control system is used.
 
-PROJECT_NUMBER         = @GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@.@GRASS_VERSION_RELEASE@ (@GRASS_VERSION_DATE@)
+PROJECT_NUMBER         = @GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@.@GRASS_VERSION_RELEASE@ (@GRASS_VERSION_DATE@) - r@GRASS_VERSION_SVN@
 
 # The OUTPUT_DIRECTORY tag is used to specify the (relative or absolute) 
 # base path where the generated documentation will be put. 
