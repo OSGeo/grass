@@ -18,9 +18,9 @@
 #include <grass/dbmi.h>
 
 /*!
-   \brief Initialize dbString 
-
-   \param[in,out] x pointer to dbString
+  \brief Initialize dbString 
+  
+  \param[out] x pointer to dbString
  */
 void db_init_string(dbString * x)
 {

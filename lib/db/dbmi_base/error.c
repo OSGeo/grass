@@ -1,8 +1,23 @@
+/*!
+  \file lib/db/dbmi_base/error.c
+  
+  \brief DBMI Library (base) - error management
+  
+  (C) 1999-2011 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Joel Jones (CERL/UIUC)
+  \author Upgraded to GRASS 5.7 by Radim Blazek
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (2011)
+*/
+
 #include <string.h>
 #include <stdlib.h>
-#include <grass/dbmi.h>
-
 #include <errno.h>
+#include <grass/dbmi.h>
+#include <grass/glocale.h>
 
 static int err_flag = 0;
 static int err_code = DB_OK;
@@ -14,22 +29,20 @@ static void (*user_print_function) (const char *);
 static char *who = NULL;
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
- */
+  \brief User defined error procedure
+
+  \param f pointer to user-defined function
+*/
 void db_on_error(void (*f) (const char *))
 {
     user_print_function = f;
 }
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
- */
+  \brief Set 'who' for error messages
+
+  \param me my name
+*/
 void db_set_error_who(const char *me)
 {
     if (who)
@@ -38,26 +51,25 @@ void db_set_error_who(const char *me)
 }
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
- */
+  brief Get 'who' string
+
+  \return pointer to string buffer
+  \return empty buffer if 'who' is not defined
+*/
 const char *db_get_error_who(void)
 {
     return who ? who : "";
 }
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
- */
+  \brief Report error message
+  
+  \param s error message (can be NULL)
+*/
 void db_error(const char *s)
 {
     if (s == NULL)
-	s = "<NULL error message>";
+	s = _("<NULL error message>");
     if (err_msg)
 	db_free(err_msg);
     err_msg = db_store(s);
@@ -68,28 +80,24 @@ void db_error(const char *s)
 }
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
- */
+  \brief Report protocol error
+*/
 void db_protocol_error(void)
 {
     int flag;
 
     flag = auto_print_errors;
     auto_print_errors = auto_print_protocol_errors;
-    db_error("dbmi: Protocol error");
+    db_error(_("dbmi: Protocol error"));
     auto_print_errors = flag;
     err_code = DB_PROTOCOL_ERR;
 }
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
- */
+  \brief Report system error
+  
+  \param s error message
+*/
 void db_syserror(const char *s)
 {
     char lead[1024];
@@ -111,10 +119,9 @@ void db_syserror(const char *s)
 }
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
+  \brief Get error code
+  
+  \return DB_OK if not defined
  */
 int db_get_error_code(void)
 {
@@ -122,53 +129,45 @@ int db_get_error_code(void)
 }
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
- */
+  \brief  Report memory error
+*/
 void db_memory_error(void)
 {
-    db_error("dbmi: Out of Memory");
+    db_error(_("dbmi: Out of Memory"));
     err_code = DB_MEMORY_ERR;
 }
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
- */
+  \brief Report 'not implemented' error
+
+  \param name name of functionality
+*/
 void db_procedure_not_implemented(const char *name)
 {
     char msg[128];
 
-    sprintf(msg, "dbmi: %s() not implemented", name);
+    sprintf(msg, _("dbmi: %s() not implemented"), name);
     db_error(msg);
     err_code = DB_NOPROC;
 }
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
- */
+  \brief Report no procedure error
+
+  \param procnum procedure number
+*/
 void db_noproc_error(procnum)
 {
     char msg[128];
 
-    sprintf(msg, "dbmi: Invalid procedure %d", procnum);
+    sprintf(msg, _("dbmi: Invalid procedure %d"), procnum);
     db_error(msg);
     err_code = DB_NOPROC;
 }
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
- */
+  \brief Clear error status
+*/
 void db_clear_error(void)
 {
     err_flag = 0;
@@ -177,11 +176,10 @@ void db_clear_error(void)
 }
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
- */
+  \brief Print error
+
+  If not defined, the error message is printed to stderr.
+*/
 void db_print_error(void)
 {
     char lead[1024];
@@ -207,33 +205,26 @@ void db_print_error(void)
 static int debug_on = 0;
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
- */
+  \brief Turn on debuging
+*/
 void db_debug_on(void)
 {
     debug_on = 1;
 }
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
- */
+  \brief Turn off debuging
+*/
 void db_debug_off(void)
 {
     debug_on = 0;
 }
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
- */
+  \brief Print debug message
+
+  \param s debug message
+*/
 void db_debug(const char *s)
 {
     if (debug_on)
@@ -241,22 +232,20 @@ void db_debug(const char *s)
 }
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
- */
+  \brief Get error message
+
+  \return pointer to error message string
+*/
 const char *db_get_error_msg(void)
 {
     return err_flag ? err_msg : (const char *)NULL;
 }
 
 /*!
-   \fn void db_auto_print_errors (flag)
-   \brief toggles printing of DBMI error messages
-   \return void
-   \param flag
- */
+  \brief Toggles printing of DBMI error messages
+
+  \param flag ?
+*/
 void db_auto_print_errors(int flag)
 {
     auto_print_errors = flag;
@@ -264,10 +253,9 @@ void db_auto_print_errors(int flag)
 }
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
+  \brief Set auto print protocol error
+
+  \param flag ?
  */
 void db_auto_print_protocol_errors(int flag)
 {

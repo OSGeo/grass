@@ -1,3 +1,17 @@
+/*!
+  \file lib/db/dbmi_base/datetime.c
+  
+  \brief DBMI Library (base) - datetime conversions
+  
+  (C) 1999-2009, 2011 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Joel Jones (CERL/UIUC), Radim Blazek
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (2011)
+*/
+
 #include <stdio.h>
 #include <string.h>
 #include <grass/dbmi.h>
@@ -6,13 +20,16 @@ static char ds = '-';
 static char ts = ':';
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
+  \brief Convert datetime value into string
+
+  \param value pointer to dbValue
+  \param sqltype SQL data type
+  \param[out] string pointer to dbString
+
+  \return DB_OK on success
  */
-int db_convert_value_datetime_into_string(dbValue * value, int sqltype,
-					  dbString * string)
+int db_convert_value_datetime_into_string(dbValue *value, int sqltype,
+					  dbString *string)
 {
     int to, from;
     int year, month, day, hour, minute;
@@ -158,29 +175,27 @@ int db_convert_value_datetime_into_string(dbValue * value, int sqltype,
 }
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
- */
-/* NAME: db_convert_Cstring_to_value_datetime
- * INPUT: buf, a C string formated as indicated by sqltype, value, a dbValue
- *  to put the converted value into
- * OUTPUT: the converted datetime value in value
- * PROCESSING: the format of buf must be as follows
- *  buf == "CURRENT" in a case-insignificant fashion
- *   value is marked as current
- *  sqltype == DB_SQL_TYPE_DATE
- *   "year*month*day"
- *  sqltype == DB_SQL_TYPE_TIME
- *   "hour*minute*second"
- *  sqltype == DB_SQL_TYPE_TIMESTAMP
- *   "year*month*day hour*minute*second"
- *  otherwise the to and from markings in sqltype are used.
- *  where "*" represents any non-whitespace character
- */
+  \brief Convert datetime string to value
+
+  The format of <em>buf</em> must be as follows
+   - buf == "CURRENT" in a case-insignificant fashion value is marked as current
+   - sqltype == DB_SQL_TYPE_DATE
+    "year*month*day"
+   - sqltype == DB_SQL_TYPE_TIME
+    "hour*minute*second"
+   - sqltype == DB_SQL_TYPE_TIMESTAMP
+    "year*month*day hour*minute*second"
+   - otherwise the to and from markings in sqltype are used, 
+     where "*" represents any non-whitespace character
+  
+  \param buf input string buffer
+  \param sqltype SQL data type
+  \param[out] value pointer to dbValue to be set
+
+  \return DB_OK
+*/
 int db_convert_Cstring_to_value_datetime(const char *buf, int sqltype,
-					 dbValue * value)
+					 dbValue *value)
 {
     int from, to;
     int year, month, day, hour, minute;

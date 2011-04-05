@@ -1,5 +1,5 @@
 /*!
-  \file db/dbmi_base/login.c
+  \file lib/db/dbmi_base/login.c
   
   \brief DBMI Library (base) - login settings
   
@@ -160,15 +160,15 @@ static int write_file(LOGIN * login)
 }
 
 /*!
-   \brief Set user/password for driver/database
-   
-   \param driver driver name
-   \param database database name
-   \param user user name
-   \param password password string
-   
-   \return DB_OK
-   \return DB_FAILED
+  \brief Set user/password for driver/database
+  
+  \param driver driver name
+  \param database database name
+  \param user user name
+  \param password password string
+  
+  \return DB_OK
+  \return DB_FAILED
  */
 int db_set_login(const char *driver, const char *database, const char *user,
 		 const char *password)
@@ -212,17 +212,18 @@ int db_set_login(const char *driver, const char *database, const char *user,
     return DB_OK;
 }
 
-/*!
-   \brief Get user/password for driver/database if driver/database is not found, user/password are set to NULL
-
-   \param driver driver name
-   \param database database name
-   \param[out] user name
-   \param[out] password string
-   
-   \return DB_OK
-   \return DB_FAILED
- */
+/*!  
+  \brief Get user/password for driver/database if driver/database
+  is not found, user/password are set to NULL
+  
+  \param driver driver name
+  \param database database name
+  \param[out] user name
+  \param[out] password string
+  
+  \return DB_OK
+  \return DB_FAILED
+*/
 int db_get_login(const char *driver, const char *database, const char **user,
 		 const char **password)
 {

@@ -1,22 +1,21 @@
 /*!
-  \file db/dbmi_base/column.c
+  \file lib/db/dbmi_base/column.c
   
   \brief DBMI Library (base) - columns management
   
-  (C) 1999-2009 by the GRASS Development Team
+  (C) 1999-2009, 2011 by the GRASS Development Team
   
-  This program is free software under the GNU General Public
-  License (>=v2). Read the file COPYING that comes with GRASS
-  for details.
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
   
   \author Joel Jones (CERL/UIUC), Radim Blazek
- */
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (2011)
+*/
 
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/dbmi.h>
-
 
 /*!
   \brief Returns column value for given column structure
@@ -25,7 +24,7 @@
 
   \return pointer to dbValue
 */
-dbValue *db_get_column_value(dbColumn * column)
+dbValue *db_get_column_value(dbColumn *column)
 {
     return &column->value;
 }
@@ -43,10 +42,11 @@ dbValue *db_get_column_default_value(dbColumn * column)
 }
 
 /*!
-  \brief Define column sqltype for column (the function db_sqltype_name() 
-  returns sqltype description)
+  \brief Define column sqltype for column
 
-  \verbatim
+  The function db_sqltype_name() returns sqltype description.
+
+  \code
   #define DB_SQL_TYPE_UNKNOWN          0
   
   #define DB_SQL_TYPE_CHARACTER        1
@@ -63,12 +63,12 @@ dbValue *db_get_column_default_value(dbColumn * column)
   #define DB_SQL_TYPE_TEXT            13
   
   #define DB_SQL_TYPE_SERIAL          21
-  \endverbatim
+  \endcode
 
   \param column pointer to dbColumn
   \param sqltype SQL data type (see list)
 */
-void db_set_column_sqltype(dbColumn * column, int sqltype)
+void db_set_column_sqltype(dbColumn *column, int sqltype)
 {
     column->sqlDataType = sqltype;
 }
@@ -131,14 +131,15 @@ void db_set_column_precision(dbColumn * column, int precision)
 }
 
 /*!
-  \brief Returns column sqltype for column (the function
-  db_sqltype_name() returns sqltype description) \return \param
+  \brief Returns column sqltype for column
+
+  The function db_sqltype_name() returns sqltype description.
   
   \param column pointer to dbColumn
   
   \return sql data type (see include/dbmi.h)
 */
-int db_get_column_sqltype(dbColumn * column)
+int db_get_column_sqltype(dbColumn *column)
 {
     return column->sqlDataType;
 }
@@ -167,6 +168,8 @@ void db_set_column_has_defined_default_value(dbColumn * column)
 
 /*!
   \brief Unset default value identificator
+
+  \todo Replace by db_unset_column_has_default_value() ?
 
   \param column pointer to dbColumn
 */
@@ -459,12 +462,14 @@ void db_free_column(dbColumn * column)
 
 
 /*!
- * \brief Copy a db column from source to destination
- *
- * \param src The column to copy from
- * \param dest An allocated column to copy to which will be initialized. In case dest is NULL a new column will be allocated and returned
- * \return The pointer of copied/allocated column
- */
+  \brief Copy a db column from source to destination
+  
+  \param src The column to copy from
+  \param dest An allocated column to copy to which will be
+  initialized. In case dest is NULL a new column will be allocated
+  and returned
+  \return The pointer of copied/allocated column
+*/
 dbColumn *db_copy_column(dbColumn *dest, dbColumn *src)
 {
     dbColumn *new = dest;

@@ -1,16 +1,34 @@
+/*!
+  \file lib/db/dbmi_base/valuefmt.c
+  
+  \brief DBMI Library (base) - value formating
+  
+  (C) 1999-2009, 2011 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Joel Jones (CERL/UIUC), Radim Blazek
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (2011)
+*/
+
 #include <stdio.h>
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/dbmi.h>
+#include <grass/glocale.h>
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
+  \brief Convert string to value
+
+  \param Cstring string buffer
+  \param sqltype SQL data type
+  \param[out] value pointer to dbValue
+
+  \return DB_OK on success
+  \return DB_FAILED on error
  */
-int
-db_convert_Cstring_to_value(const char *Cstring, int sqltype, dbValue * value)
+int db_convert_Cstring_to_value(const char *Cstring, int sqltype, dbValue * value)
 {
     int i;
     double d;
@@ -31,20 +49,22 @@ db_convert_Cstring_to_value(const char *Cstring, int sqltype, dbValue * value)
     case DB_C_TYPE_DATETIME:
 	return db_convert_Cstring_to_value_datetime(Cstring, sqltype, value);
     default:
-	db_error("db_convert_Cstring_to_value(): unrecognized sqltype");
+	db_error(_("db_convert_Cstring_to_value(): unrecognized sqltype"));
 	return DB_FAILED;
     }
     return DB_OK;
 }
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
- */
-int
-db_convert_value_to_string(dbValue * value, int sqltype, dbString * string)
+  \brief Convert value to string
+  
+  \param value pointer to dbValue
+  \param sqltype SQL data type
+  \param[out] string pointer to dbString
+
+  \return DB_OK on success
+*/
+int db_convert_value_to_string(dbValue * value, int sqltype, dbString * string)
 {
     char buf[64];
     const char *bp = buf;
@@ -68,8 +88,7 @@ db_convert_value_to_string(dbValue * value, int sqltype, dbString * string)
 	    return db_convert_value_datetime_into_string(value, sqltype,
 							 string);
 	default:
-	    db_error
-		("db_convert_value_into_string(): unrecongized sqltype-type");
+	    db_error(_("db_convert_value_into_string(): unrecongized sqltype-type"));
 	    return DB_FAILED;
 	}
     }

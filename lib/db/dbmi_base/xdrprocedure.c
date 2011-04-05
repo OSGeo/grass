@@ -1,8 +1,27 @@
+/*!
+  \file lib/db/dbmi_base/xdrprocedure.c
+  
+  \brief DBMI Library (base) - external data representation (procedure)
+  
+  (C) 1999-2009, 2011 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Joel Jones (CERL/UIUC), Radim Blazek, Brad Douglas, Markus Neteler
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (2011)
+*/
+
 #include "xdr.h"
 #include "macros.h"
 
+/*!
+  \brief ? (client only)
 
-/******** client only ***************/
+  \param procnum
+
+  \return
+*/
 int db__start_procedure_call(int procnum)
 {
     int reply;
@@ -22,12 +41,14 @@ int db__start_procedure_call(int procnum)
     return DB_OK;
 }
 
-/***** driver only *******************/
+/*!
+  \brief ? (driver only)
 
-/* return codes:
- * DB_OK  ok
- * DB_EOF eof from client
- */
+  \param n
+
+  \return DB_OK  ok
+  \returnDB_EOF eof from client
+*/
 int db__recv_procnum(int *n)
 {
     int stat = DB_OK;
@@ -38,11 +59,25 @@ int db__recv_procnum(int *n)
     return stat;
 }
 
+/*!
+  \brief ?
+
+  \param n
+
+  \return
+*/
 int db__send_procedure_ok(int n)
 {
     return db__send_int(n);
 }
 
+/*!
+  \brief ?
+
+  \param n
+
+  \return
+*/
 int db__send_procedure_not_implemented(int n)
 {
     return db__send_int(n ? 0 : -1);

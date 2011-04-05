@@ -116,12 +116,15 @@
 /* Privileges */
 #define DB_PRIV_SELECT       0x01
 
-#define DB_GROUP         0x01
-#define DB_PUBLIC        0x02
+#define DB_GROUP             0x01
+#define DB_PUBLIC            0x02
 
 /* default value modes */
 #define DB_DEFINED	1
 #define DB_UNDEFINED	2
+
+/* static buffer for SQL statements */
+#define DB_SQL_MAX      4096
 
 typedef void *dbAddress;
 typedef int dbToken;
@@ -297,6 +300,6 @@ typedef struct
     char **label;		/* array of new category labels */
 } dbRclsRule;
 
-#include <grass/proto_dbmi.h>
+#include <grass/dbmidefs.h>
 
 #endif

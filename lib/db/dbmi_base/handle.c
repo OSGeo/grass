@@ -1,5 +1,5 @@
 /*!
-  \file db/dbmi_base/handle.c
+  \file lib/db/dbmi_base/handle.c
   
   \brief DBMI Library (base) - handle management
   

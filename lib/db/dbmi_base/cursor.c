@@ -1,5 +1,5 @@
 /*!
-  \file db/dbmi_base/cursor.c
+  \file lib/db/dbmi_base/cursor.c
   
   \brief DBMI Library (base) - cursors management
   
@@ -18,7 +18,7 @@
 /*!
   \brief Initialize cursor
   
-  \param cursor pointer to dbCursor
+  \param cursor pointer to dbCursor to be initialized
 */
 void db_init_cursor(dbCursor *cursor)
 {

@@ -4,27 +4,29 @@ by GRASS Development Team
 
 http://grass.osgeo.org
 
-\section intro Introduction
+\section dbmiIntro Introduction
 
 The attribute management was completely changed in GRASS 6 to achieve
-multi-attribute capabilities managed within external databases.  The former
-dig_cats/ files are not used any more and all vector attributes are stored
-in external database. Connection with database is done through <b>DBMI library</b>
-(DataBase Management Interface) with its integrated drivers. At time of this
-writing following DBMI drivers for attribute storage are available:
+multi-attribute capabilities managed within external databases. The
+former <tt>dig_cats/</tt> files (GRASS 5) are not used any more and
+all vector attributes are stored in external database. Connection with
+database is done through <b>DBMI library</b> (DataBase Management
+Interface) with its integrated drivers. At time of this writing
+following DBMI drivers for attribute storage are available:
 
-<ul>
-<li> DBF: xBase files (default)
-<li> ODBC: to interface from http://www.unixodbc.org
-<li> PostgreSQL driver (note that PostgreSQL can also be accessed through
-     ODBC): http://www.postgresql.org
-<li> mySQL: http://mysql.com/
-<li> SQLite: http://www.sqlite.org/
-</ul>
+ - DBF: xBase files (default)
+ - ODBC: to interface from http://www.unixodbc.org
+ - PostgreSQL driver (note that PostgreSQL can also be accessed through ODBC): http://www.postgresql.org
+ - mySQL: http://mysql.com/
+ - SQLite: http://www.sqlite.org
 
-These drivers are compiled depending on present DB related libraries and
-'configure' settings. Only the DBF driver is always compiled.
-The default DBMI driver is defined in include/dbmi.h (#define DB_DEFAULT_DRIVER "dbf").
+These drivers are compiled depending on present DB related libraries
+and 'configure' settings. Only the DBF driver is always compiled. The
+default DBMI driver is defined in include/dbmi.h
+
+\code
+#define DB_DEFAULT_DRIVER "sqlite"
+\endcode
 
 In general records in table are linked to vector entities by field number
 and category number.  The field number identifies a database table and the
@@ -46,24 +48,512 @@ implementation.
 
 For DBMI architecture details please read Blazek et al. 2002 (see below).
 
-\section dbmifunc DBMI library functions
+\section dbmiFunc DBMI library functions
 
 The db_*() functions are the programmer's API for GRASS DBMI
 programming. There are three groups:
 
-<ul>
- <li> dbmi_base:   contains functions for modules, drivers (../../db/drivers/) </li>
- <li> dbmi_client: contains functions for modules </li>
- <li> dbmi_driver: contains functions for drivers (../../db/drivers/) </li>
-</ul>
+ - dbmi_base:   contains functions for modules, drivers (../../db/drivers/)
+ - dbmi_client: contains functions for modules
+ - dbmi_driver: contains functions for drivers (../../db/drivers/)
 
-See details here:<br>
+\section dbmiBase DBMI BASE functions
 
-\section dbmi_base DBMI BASE functions
+Allocation:
 
-[ to be moved here from below list ]
+ - db_store()
+ 
+ - db_malloc()
 
-\section dbmi_client DBMI CLIENT functions
+ - db_calloc()
+
+ - db_realloc()
+
+ - db_free()
+
+String manipulation:
+
+ - db_char_to_lowercase()
+
+ - db_char_to_uppercase()
+
+ - db_Cstring_to_lowercase()
+
+ - db_Cstring_to_uppercase()
+
+ - db_nocase_compare()
+
+Column properties:
+
+ - db_get_column_value()
+
+ - db_get_column_default_value()
+
+ - db_set_column_sqltype()
+
+ - db_set_column_host_type()
+
+ - db_get_column_scale()
+
+ - db_set_column_scale()
+
+ - db_get_column_precision()
+
+ - db_set_column_precision()
+
+ - db_get_column_sqltype()
+
+ - db_get_column_host_type()
+
+ - db_set_column_has_defined_default_value()
+
+ - db_set_column_has_undefined_default_value()
+
+ - db_unset_column_has_default_value()
+
+ - db_test_column_has_default_value()
+
+ - db_test_column_has_defined_default_value()
+
+ - db_test_column_has_undefined_default_value()
+
+ - db_set_column_use_default_value()
+
+ - db_unset_column_use_default_value()
+
+ - db_test_column_use_default_value()
+
+ - db_set_column_null_allowed()
+
+ - db_unset_column_null_allowed()
+
+ - db_test_column_null_allowed()
+
+ - db_get_column_length()
+
+ - db_set_column_length()
+
+ - db_set_column_select_priv_granted()
+
+ - db_set_column_select_priv_not_granted()
+
+ - db_get_column_select_priv()
+
+ - db_set_column_update_priv_granted()
+
+ - db_set_column_update_priv_not_granted()
+
+ - db_get_column_update_priv()
+
+ - db_init_column()
+
+ - db_set_column_name()
+
+ - db_get_column_name()
+
+ - db_set_column_description()
+
+ - db_get_column_description()
+
+ - db_free_column()
+
+ - db_copy_column()
+
+ - db_convert_Cstring_to_column_value()
+ 
+ - db_convert_Cstring_to_column_default_value()
+
+ - db_convert_column_value_to_string()
+
+ - db_convert_column_default_value_to_string()
+
+Connection settings:
+
+ - db_set_connection()
+
+ - db_get_connection()
+
+Cursor management:
+
+ - db_init_cursor()
+
+ - db_alloc_cursor_table()
+
+ - db_free_cursor()
+
+ - db_get_cursor_table()
+
+ - db_set_cursor_table()
+
+ - db_get_cursor_token()
+
+ - db_set_cursor_token()
+ 
+ - db_set_cursor_type_readonly()
+
+ - db_set_cursor_type_update()
+
+ - db_set_cursor_type_insert()
+
+ - db_test_cursor_type_fetch()
+
+ - db_test_cursor_type_update()
+
+ - db_test_cursor_type_insert()
+
+ - db_set_cursor_mode()
+
+ - db_set_cursor_mode_scroll()
+
+ - db_unset_cursor_mode_scroll()
+
+ - db_unset_cursor_mode()
+
+ - db_set_cursor_mode_insensitive()
+
+ - db_unset_cursor_mode_insensitive()
+
+ - db_test_cursor_mode_scroll()
+
+ - db_test_cursor_mode_insensitive()
+
+ - db_alloc_cursor_column_flags()
+
+ - db_free_cursor_column_flags()
+
+ - db_set_cursor_column_for_update()
+
+ - db_unset_cursor_column_for_update()
+
+ - db_test_cursor_column_for_update()
+
+ - db_test_cursor_any_column_for_update()
+
+ - db_set_cursor_column_flag()
+
+ - db_unset_cursor_column_flag()
+
+ - db_test_cursor_column_flag()
+
+ - db_get_cursor_number_of_columns()
+
+ - db_test_cursor_any_column_flag()
+
+DateTime conversion:
+
+ - db_convert_value_datetime_into_string()
+
+ - db_convert_Cstring_to_value_datetime()
+
+DBmscap management:
+
+ - db_dbmscap_filename()
+
+ - db_has_dbms()
+
+ - db_copy_dbmscap_entry()
+
+ - db_read_dbmscap()
+
+ - db_free_dbmscap()
+
+Default settings:
+
+ - db_get_default_driver_name()
+
+ - db_get_default_database_name()
+
+ - db_get_default_schema_name()
+
+ - db_get_default_group_name()
+
+ - db_set_default_connection()
+
+Dirent (directory entities) array:
+
+ - db_dirent()
+
+ - db_free_dirent_array()
+
+ - db_alloc_dirent_array()
+
+Report errors:
+
+ - db_on_error()
+
+ - db_set_error_who()
+
+ - db_get_error_who()
+
+ - db_error()
+
+ - db_protocol_error()
+
+ - db_syserror()
+
+ - db_get_error_code()
+
+ - db_memory_error()
+
+ - db_procedure_not_implemented()
+
+ - db_noproc_error()
+
+ - db_clear_error()
+
+ - db_print_error()
+
+ - db_debug_on()
+
+ - db_debug_off()
+
+ - db_debug()
+
+ - db_get_error_msg()
+
+ - db_auto_print_errors()
+
+ - db_auto_print_protocol_errors()
+
+Handle management:
+
+ - db_init_handle()
+
+ - db_set_handle()
+
+ - db_get_handle_dbname()
+
+ - db_get_handle_dbschema()
+
+ - db_free_handle()
+
+ - db_free_handle_array()
+
+ - db_alloc_handle_array()
+
+Index management:
+
+ - db_init_index()
+
+ - db_free_index()
+
+ - db_alloc_index_columns()
+
+ - db_alloc_index_array()
+
+ - db_free_index_array()
+
+ - db_set_index_name()
+ 
+ - db_get_index_name()
+
+ - db_set_index_table_name()
+
+ - db_get_index_table_name()
+
+ - db_get_index_number_of_columns()
+
+ - db_set_index_column_name()
+
+ - db_get_index_column_name()
+
+ - db_set_index_type_unique()
+
+ - db_set_index_type_non_unique()
+
+ - db_test_index_type_unique()
+
+ - db_print_index()
+
+Range functions:
+
+ - db_interval_range()
+
+Login functions:
+
+ - db_set_login()
+
+ - db_get_login()
+
+Return codes (internal use only):
+
+ - db__send_success()
+
+ - db__send_failure()
+
+ - db__recv_return_code()
+
+Data type conversion:
+
+ - db_sqltype_to_Ctype()
+
+ - db_sqltype_name()
+
+String manipulation:
+
+ - db_init_string()
+
+ - db_set_string()
+ 
+ - db_set_string_no_copy()
+
+ - db_sizeof_string()
+
+ - db_zero_string()
+
+ - db_enlarge_string()
+
+ - db_get_string()
+
+ - db_free_string()
+
+ - db_free_string_array()
+
+ - db_alloc_string_array()
+
+ - db_append_string()
+
+ - db_copy_string()
+
+ - db_double_quote_string()
+
+Table/privileges management:
+
+ - db_alloc_table()
+
+ - db_init_table()
+
+ - db_free_table()
+
+ - db_set_table_name()
+
+ - db_get_table_name()
+
+ - db_set_table_description()
+
+ - db_get_table_description()
+
+ - db_get_table_number_of_columns()
+
+ - db_set_table_select_priv_granted()
+
+ - db_set_table_select_priv_not_granted()
+
+ - db_get_table_select_priv()
+
+ - db_set_table_update_priv_granted()
+
+ - db_set_table_update_priv_not_granted()
+
+ - db_get_table_update_priv()
+
+ - db_set_table_insert_priv_granted()
+
+ - db_set_table_insert_priv_not_granted()
+
+ - db_get_table_insert_priv()
+
+ - db_set_table_delete_priv_granted()
+
+ - db_set_table_delete_priv_not_granted()
+
+ - db_get_table_delete_priv()
+
+ - db_get_table_column()
+
+ - db_get_table_column_by_name()
+
+ - db_set_table_column()
+
+ - db_append_table_column()
+
+ - db_clone_table()
+
+ - db_table_to_sql()
+
+Token management:
+
+ - db_find_token()
+
+ - db_drop_token()
+
+ - db_new_token()
+
+Value management:
+
+ - db_test_value_isnull()
+
+ - db_get_value_int()
+
+ - db_get_value_double()
+
+ - db_get_value_as_double()
+
+ - db_get_value_string()
+
+ - db_get_value_year()
+
+ - db_get_value_month()
+
+ - db_get_value_day()
+
+ - db_get_value_hour()
+
+ - db_get_value_minute()
+
+ - db_get_value_seconds()
+
+ - db_set_value_null()
+
+ - db_set_value_not_null()
+
+ - db_set_value_int()
+
+ - db_set_value_double()
+
+ - db_set_value_string()
+
+ - db_set_value_year()
+
+ - db_set_value_month()
+
+ - db_set_value_day()
+
+ - db_set_value_hour()
+
+ - db_set_value_minute()
+
+ - db_set_value_seconds()
+
+ - db_test_value_datetime_current()
+
+ - db_set_value_datetime_current()
+
+ - db_set_value_datetime_not_current()
+
+ - db_copy_value()
+
+ - db_CatValArray_init()
+
+ - db_CatValArray_free()
+
+ - db_CatValArray_alloc()
+
+ - db_CatValArray_realloc()
+
+ - db_convert_Cstring_to_value()
+
+ - db_convert_value_to_string()
+
+Misc:?
+
+ - db_isdir()
+
+ - db_legal_tablename()
+
+ - db_whoami
+
+\section dbmiClient DBMI CLIENT functions
 
  - db_add_column()
 
@@ -175,9 +665,8 @@ See details here:<br>
 
  - db_update()
 
- - db__copy_table()
 
-\section dbmi_driver DBMI DRIVER functions
+\section dbmiDriver DBMI DRIVER functions
 
  - db_driver()
 
@@ -245,561 +734,19 @@ See details here:<br>
 
  - db_d_update()
  
- - db__add_cursor_to_driver_state()
-
- - db__close_all_cursors()
-
- - db__drop_cursor_from_driver_state()
-  
- - db__init_driver_state()
-
- - db__mark_database_closed()
-
- - db__mark_database_open()
-
- - db__test_database_open()
-
-\section dbmi_functions DBMI functions list (incomplete)
-
-\subsection DB_alloc_routines DB alloc routines
-
-char *#db_store (char *s)
-
-void #db_calloc (int n, int m)
-
-void #db_malloc (int n)
-
-void #db_realloc (void *s, int n)
-
-void #db_free (void *s, int n)
-
-
-\subsection DB_case_routines DB case routines
-
-int #db_nocase_compare (char *a, char *b)
-
-void #db_char_to_lowercase (char *s)
-
-void #db_char_to_uppercase (char *s)
-
-void #db_Cstring_to_lowercase (char *s)
-
-void #db_Cstring_to_uppercase (char *s)
-
-
-\subsection DB_column_routines DB column routines
-
-
-\subsection DB_columnfmt_routines DB columnfmt routines
-
-
-\subsection DB_connect_routines DB connect routines
-
-int #db_get_connection (dbConnection *connection )
-
-int #db_set_connection (dbConnection *connection )
-
-
-\subsection DB_cursor_routines DB *cursor routines
-
-dbTable *#db_get_cursor_table (dbCursor *cursor)
-
-dbToken #db_get_cursor_token (dbCursor *cursor)
-
-int #db_alloc_cursor_column_flags (dbCursor *cursor)
-
-int #db_alloc_cursor_table (dbCursor *cursor, int ncols)
-
-int #db_get_cursor_number_of_columns (dbCursor *cursor)
-
-int #db_test_cursor_any_column_flag (dbCursor *cursor)
-
-int #db_test_cursor_any_column_for_update (dbCursor *cursor)
-
-int #db_test_cursor_column_flag (dbCursor *cursor, int col)
-
-
-\subsection DB_datetime_routines DB datetime routines
-
-int #db_test_cursor_column_for_update (dbCursor *cursor, int col)
-
-int #db_test_cursor_mode_insensitive (dbCursor *cursor)
-
-int #db_test_cursor_mode_scroll (dbCursor *cursor)
-
-int #db_test_cursor_type_fetch (dbCursor *cursor)
-
-int #db_test_cursor_type_insert (dbCursor *cursor)
-
-int #db_test_cursor_type_update (dbCursor *cursor)
-
-void #db_free_cursor_column_flags (dbCursor *cursor)
-
-void #db_free_cursor (dbCursor *cursor)
-
-void #db_init_cursor (dbCursor *cursor)
-
-void #db_set_cursor_column_flag (dbCursor *cursor, int col)
-
-void #db_set_cursor_column_for_update (dbCursor *cursor, int col)
-
-void #db_set_cursor_mode (dbCursor *cursor, int mode)
-
-void #db_set_cursor_mode_insensitive (dbCursor *cursor)
-
-void #db_set_cursor_mode_scroll (dbCursor *cursor)
-
-void #db_set_cursor_table (dbCursor *cursor, dbTable *table)
-
-void #db_set_cursor_token (dbCursor *cursor, dbToken token)
-
-void #db_set_cursor_type_insert (dbCursor *cursor)
-
-void #db_set_cursor_type_readonly (dbCursor *cursor)
-
-void #db_set_cursor_type_update (dbCursor *cursor)
-
-void #db_unset_cursor_column_flag (dbCursor *cursor, int col)
-
-void #db_unset_cursor_column_for_update (dbCursor *cursor, int col)
-
-void #db_unset_cursor_mode (dbCursor *cursor)
-
-void #db_unset_cursor_mode_insensitive (dbCursor *cursor)
-
-void #db_unset_cursor_mode_scroll (dbCursor *cursor)
-
-
-\subsection DB_datetime_routines DB datetime routines
-
-
-\subsection DB_zero_routines DB zero routines
-
-
-\subsection DB_dbmscap_routines DB dbmscap routines
-
-
-\subsection DB_default_name_routines DB default_name routines
-
-
-\subsection DB_default_name_routines DB default_name routines
-
-char *#db_get_default_database ( void )
-
-char *#db_get_default_driver ( void )
-
-char *#db_get_default_group_name ( void )
-
-char *#db_get_default_schema_name ( void )
-
-
-\subsection DB_dirent_routines DB dirent routines
-
-
-\subsection DB_error_routines DB error routines
-
-
-\subsection DB_handle_routines DB handle routines
-
-
-\subsection DB_index_routines DB index routines
-
-
-\subsection DB_interval_routines DB interval routines
-
-
-\subsection DB_isdir_routines DB isdir routines
-
-
-\subsection DB_login_routines DB login routines
-
-
-\subsection DB_ret_codes_routines DB ret_codes routines
-
-
-\subsection DB_sqlCtype_routines DB sqlCtype routines
-
-
-\subsection DB_sqlCtype_routines DB sqlCtype routines
-
-
-\subsection DB_sqltype_routines DB sqltype routines
-
-
-\subsection DB_string_routines DB string routines
-
-
-\subsection DB_strip_routines DB strip routines
-
-
-\subsection DB_table_routines DB table routines
-
-
-\subsection DB_token_routines DB token routines
-
-
-\subsection DB_value_routines DB value routines
-
-
-\subsection DB_valuefmt_routines DB valuefmt routines
-
-
-\subsection DB_whoami_routines DB whoami routines
-
-
-\subsection DB_xdr_routines DB xdr routines
-
-
-\subsection DB_xdrchar_routines DB xdrchar *routines
-
-
-\subsection DB_xdrchar_routines DB xdrchar *routines
-
-
-\subsection DB_xdrcolumn_routines DB xdrcolumn routines
-
-
-\subsection DB_xdrdatetime_routines DB xdrdatetime routines
-
-
-\subsection DB_xdrdouble_routines DB xdrdouble routines
-
-
-\subsection DB_xdrfloat_routines DB xdrfloat routines
-
-
-\subsection DB_xdrhandle_routines DB xdrhandle routines
-
-
-\subsection DB_xdrindex_routines DB xdrindex routines
-
-
-\subsection DB_xdrint_routines DB xdrint routines
-
-
-\subsection DB_xdrprocedure_routines DB xdrprocedure routines
-
-
-\subsection DB_xdrshort_routines DB xdrshort routines
-
-
-\subsection DB_xdrstring_routines DB xdrstring routines
-
-
-\subsection DB_xdrstring_routines DB xdrstring routines
-
-
-\subsection DB_xdrtable_routines DB xdrtable routines
-
-
-\subsection DB_xdrtoken_routines DB xdrtoken routines
-
-
-\subsection DB_xdrvalue_routines DB xdrvalue routines
-
-
-\subsection DB_c_add_col_routines DB c_add_col routines
-
-int #db_add_column (dbDriver driver, dbString *tableName, dbColumn column)
-
-
-\subsection DB_c_bindupdate_routines DB c_bindupdate routines
-
-int #db_bind_update (dbCursor *cursor)
-
-
-\subsection DB_c_close_cur_routines DB c_close_cur routines
-
-int #db_close_cursor (dbCursor *cursor)
-
-
-\subsection DB_c_closedb_routines DB c_closedb routines
-
-int #db_close_database (dbDriver driver)
-
-
-\subsection DB_c_create_idx_routines DB c_create_idx routines
-
-int #db_create_index (dbDriver driver, dbIndex index)
-
-
-\subsection DB_c_create_tab_routines DB c_create_tab routines
-
-int #db_create_table (dbDriver driver, dbTable *table)
-
-
-\subsection DB_c_createdb_routines DB c_createdb routines
-
-
-\subsection DB_c_createdb_routines DB c_createdb routines
-
-int #db_create_database (dbDriver driver, dbHandle *handle)
-
-
-\subsection DB_c_delete_routines DB c_delete routines
-
-int #db_delete (dbCursor *cursor)
-
-
-\subsection DB_c_deletedb_routines DB c_deletedb routines
-
-int #db_delete_database (dbDriver driver, dbHandle *handle)
-
-
-\subsection DB_c_desc_table_routines DB c_desc_table routines
-
-int #db_describe_table (dbDriver driver, dbString *name, dbTable *table)
-
-
-\subsection DB_c_drop_col_routines DB c_drop_col routines
-
-int #db_drop_column (dbDriver driver, dbString *tableName, dbString *columnName)
-
-
-\subsection DB_c_drop_index_routines DB c_drop_index routines
-
-int #db_drop_index (dbDriver driver, dbString *name)
-
-
-\subsection DB_c_drop_tab_routines DB c_drop_tab routines
-
-int #db_drop_table (dbDriver driver, dbString *name)
-
-
-\subsection DB_c_execute_routines DB c_execute routines
-
-int #db_begin_transaction (dbDriver driver)
-
-int #db_commit_transaction (dbDriver driver)
-
-int #db_execute_immediate (dbDriver driver, dbString *SQLstatement)
-
-
-\subsection DB_c_fetch_routines DB c_fetch routines
-
-int #db_fetch (dbCursor *cursor, int position, int more)
-
-\subsection DB_c_find#db_routines DB c_finddb routines
-
-
-\subsection DB_c_find#db_routines DB c_finddb routines
-
-int #db_find_database (dbDriver driver, dbHandle *handle, int found)
-
-
-\subsection DB_c_insert_routines DB c_insert routines
-int #db_insert (dbCursor *cursor)
-
-
-\subsection DB_c_list_drivers_routines DB c_list_drivers routines
-
-char *#db_list_drivers (void)
-
-
-\subsection DB_c_list_idx_routines DB c_list_idx routines
-
-int #db_list_indexes (dbDriver driver, dbString *table_name, dbIndex list, int count)
-
-
-\subsection DB_c_list_tabs_routines DB c_list_tabs routines
-
-int #db_list_tables (dbDriver driver, dbString *names, int count, int system)
-
-
-\subsection DB_c_listdb_routines DB c_listdb routines
-
-int #db_list_databases (dbDriver driver, dbString *path, int npaths, dbHandle *handles, int count)
-
-
-\subsection DB_c_opendb_routines DB c_opendb routines
-
-
-\subsection DB_c_openinsert_routines DB c_openinsert routines
-
-
-\subsection DB_c_openselect_routines DB c_openselect routines
-
-
-\subsection DB_c_openupdate_routines DB c_openupdate routines
-
-
-\subsection DB_c_priv_routines DB c_priv routines
-
-
-\subsection DB_c_priv_routines DB c_priv routines
-
-
-\subsection DB_c_rows_routines DB c_rows routines
-
-int #db_get_num_rows ( dbCursor *cursor )
-
-
-\subsection DB_c_update_routines DB c_update routines
-
-
-\subsection DB_c_version_routines DB c_version routines
-
-
-\subsection DB_copy_tab_routines DB copy_tab routines
-
-int #db_copy_table ()
-
-int #db_copy_table_by_ints ()
-
-int #db_copy_table_select ()
-
-int #db_copy_table_where ()
-
-
-\subsection DB_db_routines DB db routines
-
-int #db_close_database_shutdown_driver ()
-
-int #db_start_driver_open_database ()
-
-
-\subsection DB_delete_tab_routines DB delete_tab routines
-
-int #db_delete_table ()
-
-
-\subsection DB_printtab_routines DB printtab routines
-
-
-\subsection DB_select_routines DB select routines
-
-
-\subsection DB_shutdown_routines DB shutdown routines
-
-
-\subsection DB_shutdown_routines DB shutdown routines
-
-
-\subsection DB_start_routines DB start routines
-
-
-\subsection DB_d_add_col_routines DB d_add_col routines
-
-
-\subsection DB_d_bindupdate_routines DB d_bindupdate routines
-
-
-\subsection DB_d_close_cur_routines DB d_close_cur routines
-
-
-\subsection DB_d_closedb_routines DB d_closedb routines
-
-
-\subsection DB_d_create_idx_routines DB d_create_idx routines
-
-
-\subsection DB_d_create_tab_routines DB d_create_tab routines
-
-
-\subsection DB_d_createdb_routines DB d_createdb routines
-
-
-\subsection DB_d_delete_routines DB d_delete routines
-
-
-\subsection DB_d_deletedb_routines DB d_deletedb routines
-
-
-\subsection DB_d_deletedb_routines DB d_deletedb routines
-
-
-\subsection DB_d_desc_table_routines DB d_desc_table routines
-
-
-\subsection DB_d_drop_col_routines DB d_drop_col routines
-
-
-\subsection DB_d_drop_index_routines DB d_drop_index routines
-
-
-\subsection DB_d_drop_tab_routines DB d_drop_tab routines
-
-
-\subsection DB_d_execute_routines DB d_execute routines
-
-
-\subsection DB_d_fetch_routines DB d_fetch routines
-
-
-\subsection DB_d_finddb_routines DB d_finddb routines
-
-
-\subsection DB_d_insert_routines DB d_insert routines
-
-
-\subsection DB_d_list_idx_routines DB d_list_idx routines
-
-
-\subsection DB_d_list_tabs_routines DB d_list_tabs routines
-
-
-\subsection DB_d_list_tabs_routines DB d_list_tabs routines
-
-
-\subsection DB_d_listdb_routines DB d_listdb routines
-
-int #db_d_list_databases (void)
-
-
-\subsection DB_d_mkdir_routines DB d_mkdir routines
-
-
-\subsection DB_d_opendb_routines DB d_opendb routines
-
-
-\subsection DB_d_openinsert_routines DB d_openinsert routines
-
-
-\subsection DB_d_openselect_routines DB d_openselect routines
-
-
-\subsection DB_d_openupdate_routines DB d_openupdate routines
-
-
-\subsection DB_d_priv_routines DB d_priv routines
-
-
-\subsection DB_d_rows_routines DB d_rows routines
-
-
-\subsection DB_d_update_routines DB d_update routines
-
-
-\subsection DB_d_version_routines DB d_version routines
-
-
-\subsection DB_d_version_routines DB d_version routines
-
-
-\subsection DB_driver_routines DB driver routines
-
-int #db_driver ()
-
-
-\subsection DB_driver_state_routines DB driver_state routines
-
-
-
-\section contacts Contacts
+\section dbmiContacts Contacts
 
  GRASS Development Team: http://grass.osgeo.org (preferably developers mailing list)
 
-
-\section references References
+\section dbmiReferences References
 
 Text based on: R. Blazek, M. Neteler, and R. Micarelli. The new GRASS 5.1
  vector architecture. In Open source GIS - GRASS users conference 2002,
  Trento, Italy, 11-13 September 2002. University of Trento, Italy, 2002.
  http://www.ing.unitn.it/~grass/proceedings/proceedings/pdfs/Blazek_Radim.pdf
 
-\section seealso See Also
+\section dbmiSeeAlso See Also
  
-GRASS 6 Vector Architecture: \ref vectorlib
+GRASS Vector Architecture: \ref vectorlib
 
-Last change: $Date$
 */

@@ -1,5 +1,5 @@
 /*!
-  \file db/dbmi_base/dbmscap.c
+  \file lib/db/dbmi_base/dbmscap.c
   
   \brief DBMI Library (base) - DBmscap management
   
@@ -203,8 +203,7 @@ dbDbmscap *db_read_dbmscap(void)
     return list;
 }
 
-static void
-add_entry(dbDbmscap ** list, char *name, char *startup, char *comment)
+static void add_entry(dbDbmscap ** list, char *name, char *startup, char *comment)
 {
     dbDbmscap *head, *cur, *tail;
 
