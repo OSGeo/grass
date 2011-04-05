@@ -1,4 +1,4 @@
-/*! \page dbmilib GRASS DBMI DataBase Management Interface
+/*! \page dbmilib GRASS DataBase Management Interface
 
 by GRASS Development Team
 
@@ -22,7 +22,7 @@ following DBMI drivers for attribute storage are available:
 
 These drivers are compiled depending on present DB related libraries
 and 'configure' settings. Only the DBF driver is always compiled. The
-default DBMI driver is defined in include/dbmi.h
+default DBMI driver is defined in dbmi.h
 
 \code
 #define DB_DEFAULT_DRIVER "sqlite"
@@ -50,12 +50,12 @@ For DBMI architecture details please read Blazek et al. 2002 (see below).
 
 \section dbmiFunc DBMI library functions
 
-The db_*() functions are the programmer's API for GRASS DBMI
+The <tt>db_*()</tt> functions are the programmer's API for GRASS DBMI
 programming. There are three groups:
 
- - dbmi_base:   contains functions for modules, drivers (../../db/drivers/)
- - dbmi_client: contains functions for modules
- - dbmi_driver: contains functions for drivers (../../db/drivers/)
+ - <b>dbmi_base</b>:   contains functions for modules, drivers (<tt>../../db/drivers/</tt>)
+ - <b>dbmi_client</b>: contains functions for modules
+ - <b>dbmi_driver</b>: contains functions for drivers (<tt>../../db/drivers/</tt>)
 
 \section dbmiBase DBMI BASE functions
 
@@ -545,7 +545,7 @@ Value management:
 
  - db_convert_value_to_string()
 
-Misc:?
+Misc:
 
  - db_isdir()
 
@@ -729,15 +729,10 @@ Misc:?
  - db_d_open_select_cursor()
 
  - db_d_open_update_cursor()
-
  - db_d_update()
 
  - db_d_update()
  
-\section dbmiContacts Contacts
-
- GRASS Development Team: http://grass.osgeo.org (preferably developers mailing list)
-
 \section dbmiReferences References
 
 Text based on: R. Blazek, M. Neteler, and R. Micarelli. The new GRASS 5.1
@@ -749,4 +744,8 @@ Text based on: R. Blazek, M. Neteler, and R. Micarelli. The new GRASS 5.1
  
 GRASS Vector Architecture: \ref vectorlib
 
+\section dbmiAuthors Authors
+
+ - Joel Jones (CERL/UIUC)
+ - Radim Blazek
 */
