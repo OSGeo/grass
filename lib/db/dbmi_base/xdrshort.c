@@ -1,7 +1,27 @@
+/*!
+  \file lib/db/dbmi_base/xdrshort.c
+  
+  \brief DBMI Library (base) - external data representation (short)
+  
+  (C) 1999-2009, 2011 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Joel Jones (CERL/UIUC), Radim Blazek, Brad Douglas, Markus Neteler
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (2011)
+*/
+
 #include <stdlib.h>
 #include "xdr.h"
 
+/*!
+  \brief Send short
 
+  \param n
+
+  \return
+*/
 int db__send_short(int n)
 {
     int stat = DB_OK;
@@ -16,6 +36,13 @@ int db__send_short(int n)
     return stat;
 }
 
+/*!
+  \brief Receive short
+
+  \param n
+
+  \return
+*/
 int db__recv_short(short *n)
 {
     int stat = DB_OK;
@@ -29,6 +56,14 @@ int db__recv_short(short *n)
     return stat;
 }
 
+/*!
+  \brief Send short array
+
+  \param x
+  \param n
+
+  \return
+*/
 int db__send_short_array(const short *x, int n)
 {
     int stat = DB_OK;
@@ -45,8 +80,17 @@ int db__send_short_array(const short *x, int n)
     return stat;
 }
 
-/* returns an allocated array of ints */
-/* caller is responsible for free() */
+/*!
+  \brief Receive short array
+
+  Returns an allocated array of ints
+  Caller is responsible for free()
+
+  \param x
+  \param n
+
+  \return
+*/
 int db__recv_short_array(short **x, int *n)
 {
     int stat = DB_OK;

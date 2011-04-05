@@ -1,13 +1,27 @@
+/*!
+  \file lib/db/dbmi_base/index.c
+  
+  \brief DBMI Library (base) - index management
+  
+  (C) 1999-2009, 2011 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Joel Jones (CERL/UIUC), Radim Blazek
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (2011)
+*/
+
 #include <string.h>
 #include <stdlib.h>
 #include <grass/dbmi.h>
+#include <grass/glocale.h>
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
- */
+  \brief Initialize dbIndex
+
+  \param index pointer to dbIndex to be initialized
+*/
 void db_init_index(dbIndex * index)
 {
     db_init_string(&index->indexName);
@@ -18,11 +32,10 @@ void db_init_index(dbIndex * index)
 }
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
- */
+  \brief Free allocated dbIndex
+
+  \param index pointer to dbIndex to be freed
+*/
 void db_free_index(dbIndex * index)
 {
     db_free_string(&index->indexName);
@@ -33,11 +46,13 @@ void db_free_index(dbIndex * index)
 }
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
- */
+  \brief Allocate index columns
+
+  \param index pointer to dbIndex
+  \param ncols number of columns to be allocated
+
+  \return DB_OK
+*/
 int db_alloc_index_columns(dbIndex * index, int ncols)
 {
     index->columnNames = db_alloc_string_array(ncols);
@@ -49,11 +64,12 @@ int db_alloc_index_columns(dbIndex * index, int ncols)
 }
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
- */
+  \brief Allocate index array
+
+  \param count number of items
+
+  \return pointer to allocated dbIndex array
+*/
 dbIndex *db_alloc_index_array(int count)
 {
     dbIndex *list;
@@ -68,11 +84,11 @@ dbIndex *db_alloc_index_array(int count)
 }
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
- */
+  \brief Free index array
+
+  \param list dbIndex array
+  \param count number of items in the array
+*/
 void db_free_index_array(dbIndex * list, int count)
 {
     int i;
@@ -85,32 +101,39 @@ void db_free_index_array(dbIndex * list, int count)
 }
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
- */
+  \brief Set index name
+
+  \param index pointer to dbIndex
+  \param name name to be set
+
+  \return DB_OK on success
+  \return DB_FAILED on error
+*/
 int db_set_index_name(dbIndex * index, const char *name)
 {
     return db_set_string(&index->indexName, name);
 }
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
- */
+  \brief Get index name
+
+  \param index pointer to dbIndex
+  
+  \return string buffer with name
+*/
 const char *db_get_index_name(dbIndex * index)
 {
     return db_get_string(&index->indexName);
 }
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
+  \brief Set table name
+
+  \param index pointer to dbIndex
+  \param name name to be set
+
+  \return DB_OK on success
+  \return DB_FAILED on error
  */
 int db_set_index_table_name(dbIndex * index, const char *name)
 {
@@ -118,64 +141,74 @@ int db_set_index_table_name(dbIndex * index, const char *name)
 }
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
- */
+  \brief Get table name
+
+  \param index pointer to dbIndex
+  
+  \return string buffer with name
+*/
 const char *db_get_index_table_name(dbIndex * index)
 {
     return db_get_string(&index->tableName);
 }
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
- */
+  \brief Get number of columns
+
+  \param index pointer to dbIndex
+
+  \return number of columns
+*/
 int db_get_index_number_of_columns(dbIndex * index)
 {
     return index->numColumns;
 }
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
- */
-int
-db_set_index_column_name(dbIndex * index, int column_num, const char *name)
+  \brief Set column name
+
+  \param index pointer to dbIndex
+  \param column_num column number
+  \param name name to be set
+
+  \return DB_OK on success
+  \return DB_FAILED on error
+*/
+int db_set_index_column_name(dbIndex * index, int column_num, const char *name)
 {
     if (column_num < 0 || column_num >= index->numColumns) {
-	db_error("db_set_index_column_name(): invalid column number");
+	db_error(_("db_set_index_column_name(): invalid column number"));
 	return db_get_error_code();
     }
     return db_set_string(&index->columnNames[column_num], name);
 }
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
+  \brief Get column number
+
+  \param index pointer to dbIndex
+  \param column_num column number
+
+  \return string buffer with name
  */
 const char *db_get_index_column_name(dbIndex * index, int column_num)
 {
     if (column_num < 0 || column_num >= index->numColumns) {
-	db_error("db_get_index_column_name(): invalid column number");
+	db_error(_("db_get_index_column_name(): invalid column number"));
 	return ((const char *)NULL);
     }
     return db_get_string(&index->columnNames[column_num]);
 }
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
- */
+  \brief Set index type to unique
+
+  \todo return type void?
+
+  \param index pointer to dbIndex
+
+  \return 0
+*/
 int db_set_index_type_unique(dbIndex * index)
 {
     index->unique = 1;
@@ -184,11 +217,14 @@ int db_set_index_type_unique(dbIndex * index)
 }
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
- */
+  \brief Set index type to non-unique
+  
+  \void return type void?
+
+  \param index pointer to dbIndex
+
+  \return 0
+*/
 int db_set_index_type_non_unique(dbIndex * index)
 {
     index->unique = 0;
@@ -197,10 +233,12 @@ int db_set_index_type_non_unique(dbIndex * index)
 }
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
+  \brief Test if type is unique
+
+  \param index pointer to dbIndex
+
+  \return non-zero if True
+  \return zero if False
  */
 int db_test_index_type_unique(dbIndex * index)
 {
@@ -208,11 +246,11 @@ int db_test_index_type_unique(dbIndex * index)
 }
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
- */
+  \brief Report index 
+
+  \param fd file where to print index info
+  \param index pointer to dbIndex
+*/
 void db_print_index(FILE * fd, dbIndex * index)
 {
     int i, nCols;

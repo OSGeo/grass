@@ -1,19 +1,17 @@
+/*!
+  \file lib/db/dbmi_base/xdr.c
+  
+  \brief DBMI Library (base) - external data representation
+  
+  (C) 1999-2009, 2011 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Joel Jones (CERL/UIUC), Radim Blazek, Brad Douglas, Markus Neteler
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (2011)
+*/
 
-/****************************************************************************
- *
- * MODULE:       dbmi_base
- * AUTHOR(S):    CERL (Joel Jones + possible other original contributors)
- *               Radim Blazek <radim.blazek gmail.com>,
- *               Brad Douglas <rez touchofmadness.com>, 
- *               Markus Neteler <neteler itc.it>
- * PURPOSE:      database management functions for modules and drivers
- * COPYRIGHT:    (C) 2003-2006 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
- *
- *****************************************************************************/
 #include "xdr.h"
 
 #ifdef __MINGW32__
@@ -68,12 +66,26 @@ static ssize_t writen(int fd, const void *buf, size_t count)
 
 #endif
 
+/*!
+  \brief ?
+  
+  \param send
+  \param recv
+*/
 void db__set_protocol_fds(FILE * send, FILE * recv)
 {
     _send = send;
     _recv = recv;
 }
 
+/*!
+  \brief ?
+
+  \param buf
+  \param size
+
+  \return
+*/
 int db__send(const void *buf, size_t size)
 {
 #if USE_STDIO

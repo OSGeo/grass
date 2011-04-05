@@ -1,5 +1,5 @@
 /*!
- * \file db/dbmi_client/c_bindupdate.c
+ * \file lib/db/dbmi_client/c_bindupdate.c
  * 
  * \brief DBMI Library (client) - bind update
  *
@@ -16,13 +16,13 @@
 #include "macros.h"
 
 /*!
-  \brief ADD
-
+  \brief ?
+  
   \param cursor db cursor
-
+  
   \return DB_OK on success
   \return DB_FAILED on failure
- */
+*/
 int db_bind_update(dbCursor * cursor)
 {
     int ret_code;

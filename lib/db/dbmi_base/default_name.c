@@ -1,5 +1,5 @@
 /*!
-  \file db/dbmi_base/default_name.c
+  \file lib/db/dbmi_base/default_name.c
   
   \brief DBMI Library (base) - default settings
   

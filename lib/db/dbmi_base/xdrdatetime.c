@@ -1,7 +1,27 @@
+/*!
+  \file lib/db/dbmi_base/xdrdatetime.c
+  
+  \brief DBMI Library (base) - external data representation (datatime)
+  
+  (C) 1999-2009, 2011 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Joel Jones (CERL/UIUC), Radim Blazek, Brad Douglas, Markus Neteler
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (2011)
+*/
+
 #include <grass/dbmi.h>
 #include "macros.h"
 
+/*!
+  \brief Send datetime
 
+  \param t pointer to dbDateTime
+
+  \return DB_OK
+*/
 int db__send_datetime(dbDateTime * t)
 {
     DB_SEND_CHAR(t->current);
@@ -17,6 +37,13 @@ int db__send_datetime(dbDateTime * t)
     return DB_OK;
 }
 
+/*!
+  \brief Receive datetime
+
+  \param t pointer to dbDateTime
+
+  \return DB_OK
+*/
 int db__recv_datetime(dbDateTime * t)
 {
     DB_RECV_CHAR(&t->current);

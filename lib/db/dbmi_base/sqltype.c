@@ -1,11 +1,27 @@
+/*!
+  \file lib/db/dbmi_base/sqltype.c
+  
+  \brief DBMI Library (base) - SQL data type
+
+  (C) 1999-2009, 2011 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Joel Jones (CERL/UIUC), Radim Blazek
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (2011)
+*/
+
 #include <string.h>
 #include <grass/dbmi.h>
 
 /*!
-   \brief returns sqltype description
-   \return 
-   \param 
- */
+  \brief Get SQL data type description
+
+  \param sqltype SQL data type
+
+  \return string buffer with description
+*/
 const char *db_sqltype_name(int sqltype)
 {
     static char buf[256];
