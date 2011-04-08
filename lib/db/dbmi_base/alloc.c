@@ -108,7 +108,7 @@ void *db_realloc(void *s, int n)
   
   \param s pointer to memory to be freed
 */
-void *db_free(void *s)
+void db_free(void *s)
 {
     free(s);
 }
