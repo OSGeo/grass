@@ -12,7 +12,6 @@
  * \date 2005-2009
  */
 
-#include <grass/config.h>
 #include <stdio.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -48,9 +47,7 @@ int segment_seek_fast(const SEGMENT * SEG, int n, int index)
 
 int segment_seek_slow(const SEGMENT * SEG, int n, int index)
 {
-    off_t offset;
-
-    offset = (off_t) n * SEG->size + index + SEG->offset;
+    off_t offset = (off_t) n * SEG->size + index + SEG->offset;
 
     if (lseek(SEG->fd, offset, SEEK_SET) == (off_t) - 1) {
 	G_warning("segment_seek: %s", strerror(errno));

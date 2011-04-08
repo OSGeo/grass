@@ -21,6 +21,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <errno.h>
+#include <grass/gis.h>
 #include <grass/segment.h>
 
 

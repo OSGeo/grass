@@ -16,8 +16,8 @@
 #include <string.h>
 #include <errno.h>
 #include <unistd.h>
-#include <grass/segment.h>
 #include <grass/gis.h>
+#include <grass/segment.h>
 
 
 /*      buf is CELL *   WRAT code       */
