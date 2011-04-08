@@ -132,7 +132,7 @@ int db_commit_transaction(dbDriver *);
 int db_fetch(dbCursor *, int, int *);
 int db_find_database(dbDriver *, dbHandle *, int *);
 dbAddress db_find_token(dbToken);
-void *db_free(void *);
+void db_free(void *);
 void db_free_column(dbColumn *);
 void db_free_cursor(dbCursor *);
 void db_free_cursor_column_flags(dbCursor *);
