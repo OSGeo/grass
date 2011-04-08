@@ -76,19 +76,32 @@ struct buf_contours
     struct line_pnts **iPoints;
 };
 
-int point_in_buffer(struct buf_contours *arr_bc, int buffers_count,
+int point_in_buffer(struct buf_contours *arr_bc, struct spatial_index *si,
 		    double x, double y)
 {
     int i, j, ret, flag;
+    struct bound_box bbox;
+    static struct ilist *List = NULL;
 
-    for (i = 0; i < buffers_count; i++) {
-	ret = Vect_point_in_poly(x, y, arr_bc[i].oPoints);
+    if (List == NULL)
+	List = Vect_new_list();
+
+    /* select outer contours overlapping with centroid (x, y) */
+    bbox.W = bbox.E = x;
+    bbox.N = bbox.S = y;
+    bbox.T = PORT_DOUBLE_MAX;
+    bbox.B = -PORT_DOUBLE_MAX;
+
+    Vect_spatial_index_select(si, &bbox, List);
+
+    for (i = 0; i < List->n_values; i++) {
+	ret = Vect_point_in_poly(x, y, arr_bc[List->value[i]].oPoints);
 	if (ret == 0)
 	    continue;
 
 	flag = 1;
-	for (j = 0; j < arr_bc[i].inner_count; j++) {
-	    ret = Vect_point_in_poly(x, y, arr_bc[i].iPoints[j]);
+	for (j = 0; j < arr_bc[List->value[i]].inner_count; j++) {
+	    ret = Vect_point_in_poly(x, y, arr_bc[List->value[i]].iPoints[j]);
 	    if (ret != 0) {	/* inside inner contour */
 		flag = 0;
 		break;
@@ -102,6 +115,47 @@ int point_in_buffer(struct buf_contours *arr_bc, int buffers_count,
     }
 
     return 0;
+}
+
+int get_line_box(const struct line_pnts *Points, struct bound_box *Box)
+{
+    int i;
+
+    if (Points->n_points <= 0) {
+	Box->N = 0;
+	Box->S = 0;
+	Box->E = 0;
+	Box->W = 0;
+	Box->T = 0;
+	Box->B = 0;
+	return 0;
+    }
+
+    Box->E = Points->x[0];
+    Box->W = Points->x[0];
+    Box->N = Points->y[0];
+    Box->S = Points->y[0];
+    Box->T = Points->z[0];
+    Box->B = Points->z[0];
+
+    for (i = 1; i < Points->n_points; i++) {
+	if (Points->x[i] > Box->E)
+	    Box->E = Points->x[i];
+	else if (Points->x[i] < Box->W)
+	    Box->W = Points->x[i];
+
+	if (Points->y[i] > Box->N)
+	    Box->N = Points->y[i];
+	else if (Points->y[i] < Box->S)
+	    Box->S = Points->y[i];
+
+	if (Points->z[i] > Box->T)
+	    Box->T = Points->z[i];
+	else if (Points->z[i] < Box->B)
+	    Box->B = Points->z[i];
+    }
+
+    return 1;
 }
 
 int main(int argc, char *argv[])
@@ -123,6 +177,8 @@ int main(int argc, char *argv[])
     int field;
     struct buf_contours *arr_bc;
     int buffers_count;
+    struct spatial_index si;
+    struct bound_box bbox;
 
     /* Attributes if sizecol is used */
     int nrec, ctype;
@@ -328,18 +384,29 @@ int main(int argc, char *argv[])
 
 
     /* Create buffers' boundaries */
-    nlines = Vect_get_num_lines(&In);
-    nareas = Vect_get_num_areas(&In);
-    /* TODO: don't allocate so much space */
-    buffers_count = 0;
-    arr_bc = G_malloc((nlines + nareas) * sizeof(struct buf_contours));
+    nlines = nareas = 0;
+    if ((type & GV_POINTS) || (type & GV_LINES))
+	nlines += Vect_get_num_primitives(&In, type);
+    if (type & GV_AREA)
+	nareas = Vect_get_num_areas(&In);
+    
+    if (nlines + nareas == 0) {
+	G_warning(_("No features available for buffering. "
+	            "Check type option and features available in the input vector."));
+	exit(EXIT_SUCCESS);
+    }
+
+    buffers_count = 1;
+    arr_bc = G_malloc((nlines + nareas + 1) * sizeof(struct buf_contours));
+
+    Vect_spatial_index_init(&si, 0);
 
     /* Lines (and Points) */
     if ((type & GV_POINTS) || (type & GV_LINES)) {
 	int ltype;
 
 	if (nlines > 0)
-	    G_message(_("Buffering features..."));
+	    G_message(_("Buffering lines..."));
 	for (line = 1; line <= nlines; line++) {
 	    int cat;
 
@@ -382,7 +449,8 @@ int main(int argc, char *argv[])
 		G_debug(2, _("The tolerance in map units: %g"),
 			unit_tolerance);
 	    }
-
+	    
+	    Vect_line_prune(Points);
 	    if (ltype & GV_POINTS || Points->n_points == 1) {
 		Vect_point_buffer2(Points->x[0], Points->y[0], da, db, dalpha,
 				   !(straight_flag->answer), unit_tolerance,
@@ -465,9 +533,13 @@ int main(int argc, char *argv[])
 
     /* write all buffer contours */
     G_message(_("Writting buffers..."));
-    for (i = 0; i < buffers_count; i++) {
+    for (i = 1; i < buffers_count; i++) {
 	G_percent(i, buffers_count, 2);
 	Vect_write_line(&Out, GV_BOUNDARY, arr_bc[i].oPoints, BCats);
+
+	get_line_box(arr_bc[i].oPoints, &bbox);
+	Vect_spatial_index_add_item(&si, i, &bbox);
+	
 	for (j = 0; j < arr_bc[i].inner_count; j++)
 	    Vect_write_line(&Out, GV_BOUNDARY, arr_bc[i].iPoints[j], BCats);
     }
@@ -490,20 +562,27 @@ int main(int argc, char *argv[])
     G_message(_("Removing duplicates..."));
     Vect_remove_duplicates(&Out, GV_BOUNDARY, NULL);
 
-    G_message(_("Breaking boundaries..."));
-    Vect_break_lines(&Out, GV_BOUNDARY, NULL);
+    do {
+	G_message(_("Breaking boundaries..."));
+	Vect_break_lines(&Out, GV_BOUNDARY, NULL);
 
-    G_message(_("Removing duplicates..."));
-    Vect_remove_duplicates(&Out, GV_BOUNDARY, NULL);
+	G_message(_("Removing duplicates..."));
+	Vect_remove_duplicates(&Out, GV_BOUNDARY, NULL);
+
+	G_message(_("Cleaning boundaries at nodes"));
+
+    } while (Vect_clean_small_angles_at_nodes(&Out, GV_BOUNDARY, NULL) > 0);
 
     /* Dangles and bridges don't seem to be necessary if snapping is small enough. */
-    /*
-       G_message (  "Removing dangles..." );
-       Vect_remove_dangles ( &Out, GV_BOUNDARY, -1, NULL, stderr );
+    /* Still needed for larger buffer distances ? */
 
-       G_message (  "Removing bridges..." );
-       Vect_remove_bridges ( &Out, NULL, stderr );
-     */
+    /*
+    G_message(_("Removing dangles..."));
+    Vect_remove_dangles(&Out, GV_BOUNDARY, -1, NULL);
+
+    G_message (_("Removing bridges..."));
+    Vect_remove_bridges(&Out, NULL);
+    */
 
     G_message(_("Attaching islands..."));
     Vect_build_partial(&Out, GV_BUILD_ATTACH_ISLES);
@@ -529,7 +608,7 @@ int main(int argc, char *argv[])
 	    continue;
 	}
 
-	ret = point_in_buffer(arr_bc, buffers_count, x, y);
+	ret = point_in_buffer(arr_bc, &si, x, y);
 
 	if (ret) {
 	    G_debug(3, "  -> in buffer");
@@ -578,9 +657,22 @@ int main(int argc, char *argv[])
     G_message(_("Deleting boundaries..."));
     for (line = 1; line <= nlines; line++) {
 	G_percent(line, nlines, 2);
+	
+	if (!Vect_line_alive(&Out, line))
+	    continue;
+
 	if (Lines[line]) {
 	    G_debug(3, " delete line %d", line);
 	    Vect_delete_line(&Out, line);
+	}
+	else {
+	    /* delete incorrect boundaries */
+	    int side[2];
+
+	    Vect_get_line_areas(&Out, line, &side[0], &side[1]);
+	    
+	    if (!side[0] && !side[1])
+		Vect_delete_line(&Out, line);
 	}
     }
 
@@ -608,7 +700,7 @@ int main(int argc, char *argv[])
 	    continue;
 	}
 
-	ret = point_in_buffer(arr_bc, buffers_count, x, y);
+	ret = point_in_buffer(arr_bc, &si, x, y);
 
 	if (ret) {
 	    Vect_reset_line(Points);
@@ -626,6 +718,7 @@ int main(int argc, char *argv[])
        G_free(arr_bc[i].iPoints);
        } */
 
+    Vect_spatial_index_destroy(&si);
     G_set_verbose(verbose);
 
     Vect_close(&In);
