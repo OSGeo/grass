@@ -46,9 +46,9 @@ void output_walker_as_vector(int tt, int ndigit)
 	Cats = Vect_new_cats_struct();
 
 	for (i = 0; i < nstack; i++) {
-	    x = (float)stack[i][1];
-	    y = (float)stack[i][2];
-	    z = (float)stack[i][3];
+	    x = stack[i][0];
+	    y = stack[i][1];
+	    z = stack[i][2];
 
 	    Vect_reset_line(Points);
 	    Vect_reset_cats(Cats);

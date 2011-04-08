@@ -89,6 +89,8 @@ double **gama, **gammas, **si, **inf, **sigma;
 float **dc, **tau, **er, **ct, **trap;
 float **dif;
 
+/* suspected BUG below: fist array subscripts go from 1 to MAXW
+ * correct: from 0 to MAXW - 1, e.g for (lw = 0; lw < MAXW; lw++) */
 double vavg[MAXW][2], stack[MAXW][3], w[MAXW][3]; 
 int iflag[MAXW];
 
@@ -199,26 +201,25 @@ void main_loop(void)
 		    /*G_debug(2, " gen,gen2,wei,wei2,mgen3,nmult: %f %f %f %f %d %d",gen,gen2,wei,wei2,mgen3,nmult);
 		     */
 		    for (iw = 1; iw <= mgen + 1; iw++) {	/* assign walkers */
-			++lw;
 
-			if (lw > MAXW)
+			if (lw >= MAXW)  /* max valid value is MAXW - 1, not MAXW */
 			    G_fatal_error(_("nwalk (%d) > maxw (%d)!"), lw, MAXW);
 
-			w[lw][1] = x + stepx * (ulec() - 0.5);
-			w[lw][2] = y + stepy * (ulec() - 0.5);
-			w[lw][3] = wei;
+			w[lw][0] = x + stepx * (ulec() - 0.5);
+			w[lw][1] = y + stepy * (ulec() - 0.5);
+			w[lw][2] = wei;
 
-			walkwe += w[lw][3];
-			vavg[lw][1] = v1[k][l];
-			vavg[lw][2] = v2[k][l];
-			if (w[lw][1] >= xmin && w[lw][2] >= ymin &&
-			    w[lw][1] <= xmax && w[lw][2] <= ymax) {
+			walkwe += w[lw][2];
+			vavg[lw][0] = v1[k][l];
+			vavg[lw][1] = v2[k][l];
+			if (w[lw][0] >= xmin && w[lw][1] >= ymin &&
+			    w[lw][0] <= xmax && w[lw][1] <= ymax) {
 			    iflag[lw] = 0;
 			}
 			else {
 			    iflag[lw] = 1;
 			}
-
+			lw++;
 		    }
 		}		/*DEFined area */
 	    }
@@ -270,11 +271,11 @@ void main_loop(void)
 	    nwalka = 0;
 	    nstack = 0;
 
-	    for (lw = 1; lw <= nwalk; lw++) {
-		if (w[lw][3] > EPS) {	/* check the walker weight */
+	    for (lw = 0; lw < nwalk; lw++) {
+		if (w[lw][2] > EPS) {	/* check the walker weight */
 		    ++nwalka;
-		    l = (int)((w[lw][1] + stxm) / stepx) - mx - 1;
-		    k = (int)((w[lw][2] + stym) / stepy) - my - 1;
+		    l = (int)((w[lw][0] + stxm) / stepx) - mx - 1;
+		    k = (int)((w[lw][1] + stym) / stepy) - my - 1;
 
 		    if (l > mx - 1 || k > my - 1 || k < 0 || l < 0) {
 
@@ -291,28 +292,28 @@ void main_loop(void)
 			if (infil != NULL) {	/* infiltration part */
 			    if (inf[k][l] - si[k][l] > 0.) {
 
-				decr = pow(addac * w[lw][3], 3. / 5.);	/* decreasing factor in m */
+				decr = pow(addac * w[lw][2], 3. / 5.);	/* decreasing factor in m */
 				if (inf[k][l] > decr) {
 				    inf[k][l] -= decr;	/* decrease infilt. in cell and eliminate the walker */
-				    w[lw][3] = 0.;
+				    w[lw][2] = 0.;
 				}
 				else {
-				    w[lw][3] -= pow(inf[k][l], 5. / 3.) / addac;	/* use just proportional part of the walker weight */
+				    w[lw][2] -= pow(inf[k][l], 5. / 3.) / addac;	/* use just proportional part of the walker weight */
 				    inf[k][l] = 0.;
 
 				}
 			    }
 			}
 
-			gama[k][l] += (addac * w[lw][3]);	/* add walker weigh to water depth or conc. */
+			gama[k][l] += (addac * w[lw][2]);	/* add walker weigh to water depth or conc. */
 
 			d1 = gama[k][l] * conn;
 			hhc = pow(d1, 3. / 5.);
 
 			if (hhc > hhmax && wdepth == NULL) {	/* increased diffusion if w.depth > hhmax */
 			    dif[k][l] = (halpha + 1) * deldif;
-			    velx = vavg[lw][1];
-			    vely = vavg[lw][2];
+			    velx = vavg[lw][0];
+			    vely = vavg[lw][1];
 			}
 			else {
 			    dif[k][l] = deldif;
@@ -334,29 +335,29 @@ void main_loop(void)
 			gaux = gasdev();
 			gauy = gasdev();
 
-			w[lw][1] += (velx + dif[k][l] * gaux);	/* move the walker */
-			w[lw][2] += (vely + dif[k][l] * gauy);
+			w[lw][0] += (velx + dif[k][l] * gaux);	/* move the walker */
+			w[lw][1] += (vely + dif[k][l] * gauy);
 
 			if (hhc > hhmax && wdepth == NULL) {
-			    vavg[lw][1] = hbeta * (vavg[lw][1] + v1[k][l]);
-			    vavg[lw][2] = hbeta * (vavg[lw][2] + v2[k][l]);
+			    vavg[lw][0] = hbeta * (vavg[lw][0] + v1[k][l]);
+			    vavg[lw][1] = hbeta * (vavg[lw][1] + v2[k][l]);
 			}
 
-			if (w[lw][1] <= xmin || w[lw][2] <= ymin || w[lw][1]
-			    >= xmax || w[lw][2] >= ymax) {
-			    w[lw][3] = 1e-10;	/* eliminate walker if it is out of area */
+			if (w[lw][0] <= xmin || w[lw][1] <= ymin || w[lw][0]
+			    >= xmax || w[lw][1] >= ymax) {
+			    w[lw][2] = 1e-10;	/* eliminate walker if it is out of area */
 			}
 			else {
 			    if (wdepth != NULL) {
-				l = (int)((w[lw][1] + stxm) / stepx) - mx - 1;
-				k = (int)((w[lw][2] + stym) / stepy) - my - 1;
-				w[lw][3] *= sigma[k][l];
+				l = (int)((w[lw][0] + stxm) / stepx) - mx - 1;
+				k = (int)((w[lw][1] + stym) / stepy) - my - 1;
+				w[lw][2] *= sigma[k][l];
 			    }
 
 			}	/* else */
 		    }		/*DEFined area */
 		    else {
-			w[lw][3] = 1e-10;	/* eliminate walker if it is out of area */
+			w[lw][2] = 1e-10;	/* eliminate walker if it is out of area */
 		    }
 		}
             } /* lw loop */
@@ -367,21 +368,21 @@ void main_loop(void)
             if ((i == miter || i == iter1)) {	
                 nstack = 0;
                 
-                for (lw = 1; lw <= nwalk; lw++) {
+                for (lw = 0; lw < nwalk; lw++) {
                     /* Compute the  elevation raster map index */
-                    l = (int)((w[lw][1] + stxm) / stepx) - mx - 1;
-                    k = (int)((w[lw][2] + stym) / stepy) - my - 1;
+                    l = (int)((w[lw][0] + stxm) / stepx) - mx - 1;
+                    k = (int)((w[lw][1] + stym) / stepy) - my - 1;
                     
 		    /* Check for correct elevation raster map index */
 		    if(l < 0 || l >= mx || k < 0 || k >= my)
 			 continue;
 
-                    if (w[lw][3] > EPS && zz[k][l] != UNDEF) {
+                    if (w[lw][2] > EPS && zz[k][l] != UNDEF) {
 
                         /* Save the 3d position of the walker */
-                        stack[nstack][1] = mixx / conv + w[lw][1] / conv;
-                        stack[nstack][2] = miyy / conv + w[lw][2] / conv;
-                        stack[nstack][3] = zz[k][l];
+                        stack[nstack][0] = mixx / conv + w[lw][0] / conv;
+                        stack[nstack][1] = miyy / conv + w[lw][1] / conv;
+                        stack[nstack][2] = zz[k][l];
 
                         nstack++;
                     }
