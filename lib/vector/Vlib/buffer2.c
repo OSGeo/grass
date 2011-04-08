@@ -481,7 +481,7 @@ static void convolution_line(struct line_pnts *Points, double da, double db,
 
     /* close the output line */
     Vect_append_point(nPoints, nPoints->x[0], nPoints->y[0], nPoints->z[0]);
-    /*    Vect_line_prune ( nPoints ); */
+    Vect_line_prune ( nPoints );
 }
 
 /*
@@ -586,7 +586,7 @@ static void extract_contour(struct planar_graph *pg, struct pg_edge *first,
 	    break;
 	if (opt_side == 1) {
 	    if (vert->edges[opt_j]->visited_right) {
-		G_warning(_("Next edge was visited but it is not the first one !!! breaking loop"));
+		G_warning(_("Next edge was visited (right) but it is not the first one !!! breaking loop"));
 		G_debug(4,
 			"ec: v0=%d, v=%d, eside=%d, edge->v1=%d, edge->v2=%d",
 			v, (edge->v1 == v) ? (edge->v2) : (edge->v1),
@@ -597,7 +597,7 @@ static void extract_contour(struct planar_graph *pg, struct pg_edge *first,
 	}
 	else {
 	    if (vert->edges[opt_j]->visited_left) {
-		G_warning(_("Next edge was visited but it is not the first one !!! breaking loop"));
+		G_warning(_("Next edge was visited (left) but it is not the first one !!! breaking loop"));
 		G_debug(4,
 			"ec: v0=%d, v=%d, eside=%d, edge->v1=%d, edge->v2=%d",
 			v, (edge->v1 == v) ? (edge->v2) : (edge->v1),
@@ -616,6 +616,7 @@ static void extract_contour(struct planar_graph *pg, struct pg_edge *first,
 	eangle = vert0->angles[opt_j];
     }
     Vect_append_point(nPoints, vert->x, vert->y, 0);
+    Vect_line_prune(nPoints);
     G_debug(4, "ec: append point x=%.18f y=%.18f", vert->x, vert->y);
 
     return;
@@ -881,13 +882,31 @@ static void buffer_lines(struct line_pnts *area_outer, struct line_pnts **area_i
     res = extract_inner_contour(pg2, &winding, cPoints);
     while (res != 0) {
 	if (winding == 0) {
-	    if (!Vect_point_in_poly(cPoints->x[0], cPoints->y[0], area_outer)) {
-		if (Vect_get_point_in_poly(cPoints, &px, &py) != 0)
-		    G_fatal_error(_("Vect_get_point_in_poly() failed"));
-		if (!point_in_buf(area_outer, px, py, da, db, dalpha)) {
-		    add_line_to_array(cPoints, &arrPoints, &count, &allocated,
-				      more);
-		    cPoints = Vect_new_line_struct();
+	    int check_poly = 1;
+	    double area_size;
+
+	    dig_find_area_poly(cPoints, &area_size);
+	    if (area_size == 0) {
+		G_warning(_("zero area size"));
+		check_poly = 0;
+	    }
+	    if (cPoints->x[0] != cPoints->x[cPoints->n_points - 1] ||
+		cPoints->y[0] != cPoints->y[cPoints->n_points - 1]) {
+
+		G_warning(_("Line was not closed"));
+		check_poly = 0;
+	    }
+
+	    if (check_poly && !Vect_point_in_poly(cPoints->x[0], cPoints->y[0], area_outer)) {
+		if (Vect_get_point_in_poly(cPoints, &px, &py) == 0) {
+		    if (!point_in_buf(area_outer, px, py, da, db, dalpha)) {
+			add_line_to_array(cPoints, &arrPoints, &count, &allocated,
+					  more);
+			cPoints = Vect_new_line_struct();
+		    }
+		}
+		else {
+		    G_warning(_("Vect_get_point_in_poly() failed"));
 		}
 	    }
 	}
@@ -910,17 +929,35 @@ static void buffer_lines(struct line_pnts *area_outer, struct line_pnts **area_i
 	res = extract_inner_contour(pg2, &winding, cPoints);
 	while (res != 0) {
 	    if (winding == -1) {
+		int check_poly = 1;
+		double area_size;
+
+		dig_find_area_poly(cPoints, &area_size);
+		if (area_size == 0) {
+		    G_warning(_("zero area size"));
+		    check_poly = 0;
+		}
+		if (cPoints->x[0] != cPoints->x[cPoints->n_points - 1] ||
+		    cPoints->y[0] != cPoints->y[cPoints->n_points - 1]) {
+
+		    G_warning(_("Line was not closed"));
+		    check_poly = 0;
+		}
+
 		/* we need to check if the area is in the buffer.
 		   I've simplfied convolution_line(), so that it runs faster,
 		   however that leads to ocasional problems */
-		if (Vect_point_in_poly
+		if (check_poly && Vect_point_in_poly
 		    (cPoints->x[0], cPoints->y[0], area_isles[i])) {
-		    if (Vect_get_point_in_poly(cPoints, &px, &py) != 0)
-			G_fatal_error(_("Vect_get_point_in_poly() failed"));
-		    if (!point_in_buf(area_isles[i], px, py, da, db, dalpha)) {
-			add_line_to_array(cPoints, &arrPoints, &count,
-					  &allocated, more);
-			cPoints = Vect_new_line_struct();
+		    if (Vect_get_point_in_poly(cPoints, &px, &py) == 0) {
+			if (!point_in_buf(area_isles[i], px, py, da, db, dalpha)) {
+			    add_line_to_array(cPoints, &arrPoints, &count,
+					      &allocated, more);
+			    cPoints = Vect_new_line_struct();
+			}
+		    }
+		    else {
+			G_warning(_("Vect_get_point_in_poly() failed"));
 		    }
 		}
 	    }
@@ -972,7 +1009,7 @@ void Vect_line_buffer2(const struct line_pnts *Points, double da, double db,
     int isles_allocated = 0;
 
     G_debug(2, "Vect_line_buffer()");
-    
+
     Vect_line_prune((struct line_pnts *)Points);
 
     if (Points->n_points == 1)

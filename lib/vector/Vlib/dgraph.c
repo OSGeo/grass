@@ -228,9 +228,7 @@ struct seg_intersections *find_all_intersections(const struct line_pnts *Points)
     /*int res2
        double x1_, y1_, x2_, y2_, z1_, z2_; */
     struct seg_intersections *si;
-
     struct seg_intersection_list *il;
-
     struct intersection_point **sorted;
 
     G_debug(3, "find_all_intersections()");
@@ -342,6 +340,7 @@ struct seg_intersections *find_all_intersections(const struct line_pnts *Points)
 		    si->ip[si->il[i].a[j].ip].x, si->ip[si->il[i].a[j].ip].y);
 	}
     }
+    G_free(sorted);
 
     return si;
 }

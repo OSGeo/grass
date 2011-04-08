@@ -18,16 +18,16 @@
 #include <grass/gis.h>
 #include "e_intersect.h"
 
-#define SWAP(a,b) {t = a; a = b; b = t;}
+#define SWAP(a,b) {double t = a; a = b; b = t;}
 #ifndef MIN
 #define MIN(X,Y) ((X<Y)?X:Y)
 #endif
 #ifndef MAX
 #define MAX(X,Y) ((X>Y)?X:Y)
 #endif
-#define D (ax2-ax1)*(by1-by2) - (ay2-ay1)*(bx1-bx2)
-#define DA (bx1-ax1)*(by1-by2) - (by1-ay1)*(bx1-bx2)
-#define DB (ax2-ax1)*(by1-ay1) - (ay2-ay1)*(bx1-ax1)
+#define D ((ax2-ax1)*(by1-by2) - (ay2-ay1)*(bx1-bx2))
+#define DA ((bx1-ax1)*(by1-by2) - (by1-ay1)*(bx1-bx2))
+#define DB ((ax2-ax1)*(by1-ay1) - (ay2-ay1)*(bx1-ax1))
 
 
 #ifdef ASDASDASFDSAFFDAS
