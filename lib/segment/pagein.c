@@ -16,8 +16,8 @@
 #include <unistd.h>
 #include <string.h>
 #include <errno.h>
+#include <grass/gis.h>
 #include <grass/segment.h>
-#include <grass/rbtree.h>
 
 
 /**
@@ -38,18 +38,15 @@ int segment_pagein(SEGMENT * SEG, int n)
 {
     int cur;
     int read_result;
-    SEGID *seg_found, seg_search;
 
     /* is n the current segment? */
     if (n == SEG->scb[SEG->cur].n)
 	return SEG->cur;
 
-    /* search the in memory segments */
-    seg_search.i = 0;
-    seg_search.n = n;
-    seg_found = rbtree_find(SEG->loaded, &seg_search);
-    if (seg_found) {
-	cur = seg_found->i;
+    /* segment n is in memory ? */
+
+    if (SEG->load_idx[n] >= 0) {
+	cur = SEG->load_idx[n];
 
 	if (SEG->scb[cur].age != SEG->youngest) {
 	    /* splice out */
@@ -74,12 +71,9 @@ int segment_pagein(SEGMENT * SEG, int n)
 	cur = SEG->oldest->cur;
 	SEG->oldest->cur = -1;
 
-	/* unload segment (remove from search tree) */
+	/* unload segment */
 	if (SEG->scb[cur].n >= 0) {
-	    seg_search.n = SEG->scb[cur].n;
-	    if (rbtree_remove(SEG->loaded, &seg_search) == 0)
-		G_fatal_error("could not remove segment");
-	    seg_search.n = n;
+	    SEG->load_idx[SEG->scb[cur].n] = -1;
 
 	    /* write it out if dirty */
 	    if (SEG->scb[cur].dirty) {
@@ -115,10 +109,8 @@ int segment_pagein(SEGMENT * SEG, int n)
 	return -1;
     }
 
-    /* remember loaded segment */
-    seg_search.i = cur;
-    if (rbtree_insert(SEG->loaded, &seg_search) == 0)
-	G_fatal_error("could not insert segment");
+    /* add loaded segment to index */
+    SEG->load_idx[n] = cur;
 
     /* make it youngest segment */
     SEG->youngest = SEG->youngest->younger;

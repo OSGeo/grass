@@ -13,8 +13,8 @@
  */
 
 #include <stdlib.h>
+#include <grass/gis.h>
 #include <grass/segment.h>
-#include <grass/rbtree.h>
 
 
 /**
@@ -30,7 +30,7 @@
  *
  * \param[in,out] seg
  * \return 1 if successful
- * \return -1 if segment is not available (not open)
+ * \return -1 if SEGMENT is not available (not open)
  */
 
 int segment_release(SEGMENT * SEG)
@@ -41,12 +41,12 @@ int segment_release(SEGMENT * SEG)
 	return -1;
 
     for (i = 0; i < SEG->nseg; i++)
-	free(SEG->scb[i].buf);
-    free(SEG->scb);
+	G_free(SEG->scb[i].buf);
+    G_free(SEG->scb);
 
-    free(SEG->freeslot);
-    free(SEG->agequeue);
-    rbtree_destroy(SEG->loaded);
+    G_free(SEG->freeslot);
+    G_free(SEG->agequeue);
+    G_free(SEG->load_idx);
 
     SEG->open = 0;
 

@@ -17,7 +17,6 @@
 #include <math.h>
 #include <grass/gis.h>
 #include <grass/segment.h>
-#include <grass/rbtree.h>
 
 
 /**
@@ -37,7 +36,7 @@
 int segment_setup(SEGMENT * SEG)
 {
     int i;
-    int seg_exp;
+    int seg_exp, n_total_segs;
 
     SEG->open = 0;
 
@@ -90,11 +89,11 @@ int segment_setup(SEGMENT * SEG)
     }
 
     /* adjust number of open segments if larger than number of total segments */
-    if (SEG->nseg > SEG->spr * ((SEG->nrows + SEG->srows - 1) / SEG->srows)) {
+    n_total_segs = SEG->spr * ((SEG->nrows + SEG->srows - 1) / SEG->srows);
+    if (SEG->nseg > n_total_segs) {
 	G_debug(1, "segment: reducing number of open segments from %d to %d",
-		  SEG->nseg,
-		  SEG->spr * ((SEG->nrows + SEG->srows - 1) / SEG->srows));
-	SEG->nseg = SEG->spr * ((SEG->nrows + SEG->srows - 1) / SEG->srows);
+		  SEG->nseg, n_total_segs);
+	SEG->nseg = n_total_segs;
     }
 
     if ((SEG->scb =
@@ -140,25 +139,15 @@ int segment_setup(SEGMENT * SEG)
     SEG->cur = 0;
     SEG->open = 1;
 
-    SEG->loaded = rbtree_create(segment_compare, sizeof(SEGID));
+    /* SEG->loaded = rbtree_create(segment_compare, sizeof(SEGID)); */
+    /* SEG->loaded = NULL; */
+    
+    /* index for each segment, same like cache of r.proj  */
+    SEG->load_idx = G_malloc(n_total_segs * sizeof(int));
+
+    for (i = 0; i < n_total_segs; i++)
+	SEG->load_idx[i] = -1;
+    
 
     return 1;
-}
-
-int segment_compare(const void *sega, const void *segb)
-{
-    SEGID *a = (SEGID *) sega;
-    SEGID *b = (SEGID *) segb;
-
-    return a->n < b->n ? -1 : (a->n > b->n);
-
-    /* short version of
-
-    if (a->n > b->n)
-	return 1;
-    else if (a->n < b->n)
-	return -1;
-
-    return 0;
-    */
 }

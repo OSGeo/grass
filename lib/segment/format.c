@@ -12,12 +12,12 @@
  * \date 2005-2009
  */
 
-#include <grass/config.h>
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
 #include <unistd.h>
 #include <limits.h>
+#include <grass/gis.h>
 #include <grass/segment.h>
 
 
@@ -169,7 +169,7 @@ static int write_int(int fd, int n)
 static int zero_fill(int fd, off_t nbytes)
 {
 #ifndef USE_LSEEK
-    char buf[10240];
+    char buf[16384];
     register char *b;
     register int n;
 
