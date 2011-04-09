@@ -428,8 +428,10 @@ class Map(object):
         
         for line in ret.splitlines():
             if ':' in line:
-                key, val = line.split(':')
-                projinfo[key.strip()] = val.strip()
+                key, val = map(lambda x: x.strip(), line.split(':'))
+                if key in ['units']:
+                    val = val.lower()
+                projinfo[key] = val
             elif "XY location (unprojected)" in line:
                 projinfo['proj'] = 'xy'
                 projinfo['units'] = ''

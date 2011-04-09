@@ -1743,7 +1743,7 @@ class BufferedWindow(MapWindow, wx.Window):
         if tmpreg:
             os.environ["GRASS_REGION"] = tmpreg
         
-    def Distance(self, beginpt, endpt, screen=True):
+    def Distance(self, beginpt, endpt, screen = True):
         """!Calculete distance
         
         LL-locations not supported
@@ -1754,13 +1754,14 @@ class BufferedWindow(MapWindow, wx.Window):
         @param endpt second point
         @param screen True for screen coordinates otherwise EN
         """
-        x1, y1 = beginpt
-        x2, y2 = endpt
         if screen:
-            dEast  = (x2 - x1) * self.Map.region["ewres"]
-            dNorth = (y2 - y1) * self.Map.region["nsres"]
+            e1, n1 = self.Pixel2Cell(beginpt)
+            e2, n2 = self.Pixel2Cell(endpt)
         else:
-            dEast  = (x2 - x1)
-            dNorth = (y2 - y1)
+            e1, n1 = beginpt
+            e2, n2 = endpt
+            
+        dEast  = (e2 - e1)
+        dNorth = (n2 - n1)
         
-        return (math.sqrt(math.pow((dEast),2) + math.pow((dNorth),2)), (dEast, dNorth))
+        return (math.sqrt(math.pow((dEast), 2) + math.pow((dNorth), 2)), (dEast, dNorth))
