@@ -116,7 +116,7 @@ def main():
 		if points != []:
 		    outf.write("L %d\n" % len(points))
 		    for point in points:
-			outf.write(" %.8f %.8f %.8f\n" % tuple(map(float,point)))
+			outf.write(" %.15g %.15g %.15g\n" % tuple(map(float,point)))
 		points = []
 	    else:
 		if len(f) == 2:
@@ -127,7 +127,7 @@ def main():
 	    outf.write("L %d\n" % len(points))
 	    for point in points:
                 try:
-                    outf.write(" %.8f %.8f %.8f\n" % tuple(map(float, point)))
+                    outf.write(" %.15g %.15g %.15g\n" % tuple(map(float, point)))
                 except ValueError:
                     grass.fatal(_("An error occured on line '%s', exiting.") % line.strip())
     else:
@@ -138,7 +138,7 @@ def main():
 		if points != []:
 		    outf.write("L %d\n" % len(points))
 		    for point in points:
-			outf.write(" %.8f %.8f\n" % tuple(map(float,point)))
+			outf.write(" %.15g %.15g\n" % tuple(map(float,point)))
 		points = []
 	    else:
 		points.append(line.rstrip('\r\n').split('\t'))
@@ -146,7 +146,7 @@ def main():
 	if points != []:
 	    outf.write("L %d\n" % len(points))
 	    for point in points:
-		outf.write(" %.8f %.8f\n" % tuple(map(float,point)))
+		outf.write(" %.15g %.15g\n" % tuple(map(float,point)))
 
     outf.close()
     inf.close()
