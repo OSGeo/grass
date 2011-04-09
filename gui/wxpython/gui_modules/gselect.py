@@ -329,7 +329,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                 continue
             try:
                 elem_list = filesdict[mapset]
-                elem_list.sort(key = unicode.lower)
+                elem_list.sort()
                 for elem in elem_list:
                     if elem != '':
                         fullqElem = elem + '@' + mapset
