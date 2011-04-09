@@ -1,114 +1,186 @@
-$Date$
-
 NOTE: Please improve this list!
 
-Dear (new) GRASS Developer,
+Dear (new) GRASS developer,
 
-When submitting Python code to GRASS SVN repository, please take
+when submitting Python code to GRASS SVN repository, please take
 care of following rules:
 
-[ see SUBMITTING for C hints ]
-[ see SUBMITTING_SCRIPTS for shell script hints ]
-[ see SUBMITTING_TCLTK for tcl and tk hints ]
+[ see SUBMITTING      for C hints ]
 [ see SUBMITTING_DOCS for documentation ]
 
 
-1.  Indentation
+0.  Indentation
 
-    As Python determines nesting based upon indentation, it
-    isn't just a stylistic issue.
+    As Python determines nesting based upon indentation, it isn't just
+    a stylistic issue.
 
     Please use 4-space indentation (GNU Emacs python-mode default).
 
     See also "Python Style Guide" by Guido van Rossum
     http://www.python.org/doc/essays/styleguide.html
 
+1.  Instructions for the GRASS script parser can be found in the g.parser 
+    module's help page.
+    http://grass.osgeo.org/grass70/manuals/html70_user/g.parser.html
 
-2.  Add a header section to the script you submit and make sure you
+2.  Use the directory structure to place your script appropriately into
+    the source tree
+    	- scripts go into scripts/
+
+    Also add a Makefile and a <module>.html file into this directory.
+    See existing Python scripts for examples.
+
+3.  Add a header section to the script you submit and make sure you
     include the copyright. The purpose section is meant to contain a
     general over view of the code in the file to assist other
     programmers that will need to make changes to your code. For this
     purpose use Python Docstring, see
     http://epydoc.sourceforge.net/docstrings.html
 
-    Example (fictitious header for a script called r.myscript):
+    Example (fictitious header for a script called g.myscript):
 
 """
-MODULE:    r.myscript
+MODULE:    g.myscript
 
-AUTHOR(S): Me <email AT some domain>
+AUTHOR(S): John Doe <email AT some domain>
 
-PURPOSE:   Calculates univariate statistics from a GRASS raster map
+PURPOSE:   Describe your script here...
 
-COPYRIGHT: (C) 2007 by the GRASS Development Team
+COPYRIGHT: (C) 2007 John Doe, and by the GRASS Development Team
 
            This program is free software under the GNU General Public
            License (>=v2). Read the file COPYING that comes with GRASS
            for details.
 """
 
-   The copyright protects your rights according to GNU General Public
-   License (www.gnu.org).
+    The copyright protects your rights according to GNU General Public
+    License (www.gnu.org).
 
+    You can easily autogenerate the header and parameters from an existing
+    module using the --script flag. Example:
 
-3.  - deleted.
-    We don't want the $ ID $ in source code any more as it causes problems
+     d.rast --script
+
+    Just select an existing module which is close to your application to save
+    efforts.
+
+4.  We don't want the $ ID $ in source code any more as it causes problems
     for the branches.
 
+5.  Create and use secure temporary files and directories. Use the
+    grass.tempfile() or grass.tempdir() functions to do this. e.g.
 
-4. PLEASE take the time to add comments throughout your code explaining what
+	# setup temporary file
+	TMP = grass.tempfile()
+	if TMP is None:
+	    grass.fatal("Unable to create temporary files")
+	    
+6.  Use grass.findfile() when there is a need to test if a map exists.
+
+	# test for input raster map
+	result = grass.find_file(name = map_name, element = 'cell', quiet = True)
+	if not result['file']
+	  grass.fatal("Raster map <%s> not found" % map_name)
+
+	# test for input vector map
+	result = grass.find_file(name = map_name, element = 'vector', quiet = True)
+	if not result['file']
+	  grass.fatal("Vector map <%s> not found" % map_name)
+
+     ... and so forth. See 'g.manual g.findfile' for details.
+
+7.  For any informational output, use the grass.message()
+    function. For error messages should be used grass.fatal_error() or
+    grass.error() and for warnings grass.warning(). For debugging
+    purposes grass.debug().
+
+	#normal message:
+	grass.message("Done")
+
+	# warning:
+        grass.warning("No input values found, using default values")
+
+	# error:
+        grass.error("No map found")
+
+	# fatal error:
+	grass.fatal_error("No map found, exiting")
+
+	# debug output (use g.gisenv to enable/disable)
+        grass.debug("Our calculated value is: %d" % value)
+
+    Try to omit any usage of the 'print' command for informational output.
+
+8.  PLEASE take the time to add comments throughout your code explaining what
     the code is doing. It will save a HUGE amount of time and frustration for
     other programmers that may have to change your code in the future.
 
 
-5. Make sure a new line is at the end of each file.
+9.  Make sure a new line is at the end of each file.
 
 
-6. For consistency, use README rather than README.txt for any README files.
+10. For consistency, use README rather than README.txt for any README files.
 
 
-7. Be sure to develop on top of the LATEST GRASS code (which is in SVN repository).
-   You can re-check before submission with 'svn diff':
+11. Be sure to develop on top of the LATEST GRASS code (which is in SVN repository).
+    You can re-check before submission with 'svn diff':
 
-   Be sure to create unified ("diff -u") format. "Plain" diffs (the default
-   format) are risky, because they will apply without warning to code which
-   has been substantially changed; they are also harder to read than unified.
+    Be sure to create unified ("diff -u") format. "Plain" diffs (the default
+    format) are risky, because they will apply without warning to code which
+    has been substantially changed; they are also harder to read than unified.
 
-   Such diffs should be made from the top-level directory, e.g.
-   "svn diff gui/wxpython/wxgui.py"; that way, the diff will
-   include the pathname rather than just "wxgui.py".
+    Such diffs should be made from the top-level directory, e.g.
+    "svn diff gui/wxpython/wxgui.py"; that way, the diff will
+    include the pathname rather than just "wxgui.py".
 
 
-8. When submitting new files to the repository set SVN properties,
-   usually for directory
+12. When submitting new files to the repository set SVN properties,
+    usually for directory
 
       svn:ignore : *.pyc
 
-   or e.g. for Python file
+    or e.g. for Python file
     
       svn:mime-type : text/python
       svn:keywords : Author Date Id
       svn:eol-style : native
 
-   See
-   http://svnbook.red-bean.com/en/1.4/svn.advanced.props.html
+    See
+    http://svnbook.red-bean.com/en/1.4/svn.advanced.props.html
 
 
-9. wxGUI (gui/wxpython)
+13. wxGUI (gui/wxpython)
 
-   See http://wiki.wxpython.org/wxPython_Style_Guide
+    See http://wiki.wxpython.org/wxPython_Style_Guide
 
+    Major rules:
 
-10. Tell the other developers about the new code using the following e-mail:
-   grass-dev@lists.osgeo.org
+    - use named parameters in functions, e.g. 
+
+    dlg = wx.FileDialog(parent = self, message = _("Choose file to save current workspace"),
+                        wildcard = _("GRASS Workspace File (*.gxw)|*.gxw"), style = wx.FD_SAVE)
+
+    instead of
+
+    dlg = wx.FileDialog(self, _("Choose file to save current workspace"),
+                        _("GRASS Workspace File (*.gxw)|*.gxw"), wx.FD_SAVE)
+
+    - use wx.ID_ANY instead of `-1`
+
+    - use gcmd.GError(), gcmd.GWarning and gcmd.GMessage instead of wx.MessageBox()
+
+    - use gcmd.RunCommand() instead of grass.run_command() or grass.read_command() 
+
+14. Tell the other developers about the new code using the following e-mail:
+    grass-dev@lists.osgeo.org
  
-   To subscribe to this mailing list, see
-   http://lists.osgeo.org/mailman/listinfo/grass-dev
+    To subscribe to this mailing list, see
+    http://lists.osgeo.org/mailman/listinfo/grass-dev
 
 
-11. In case of questions feel free to contact the developers at the above
-   mailing list.
-   http://www.grass-gis.org/devel/index.php#submission
+15. In case of questions feel free to contact the developers at the above
+    mailing list.
+    http://grass.osgeo.org/devel/index.php#submission
 
 ...
 [please add further hints if required]
