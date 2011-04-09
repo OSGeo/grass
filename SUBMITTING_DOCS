@@ -1,15 +1,11 @@
-$Date$
-
 NOTE: Please improve this list!
 
-Dear (new) GRASS Developer,
+Dear (new) GRASS developer,
 
-When submitting documentation to GRASS SVN repository, please take
+when submitting documentation to GRASS SVN repository, please take
 care of following rules:
 
-[ see SUBMITTING for C hints ]
-[ see SUBMITTING_SCRIPTS for shell script hints ]
-[ see SUBMITTING_TCLTK for tcl and tk hints ]
+[ see SUBMITTING        for C hints ]
 [ see SUBMITTING_PYTHON for Python code hints ]
 
 
@@ -17,7 +13,7 @@ care of following rules:
 
    There are two types of documentation
    - Libraries programmers docs: we use doxygen and document the functions 
-      directly in the source code. See lib/*/*.c and lib/*/*.dox for examples
+      directly in the source code. See lib/gis/*.c and lib/gis/gislib.dox for examples
 
    - User manual: we write it in simple HTML, storing the manual in a 
       file '<module>.html' within the subdirectory of the module.
@@ -75,7 +71,7 @@ care of following rules:
    Examples (please add some) should be coded like this:
 
    <div class="code"><pre>
-   v.to.db map=soils type=area option=area col=area_size unit=h
+   v.to.db map=soils type=area option=area column=area_size unit=h
    </pre></div>
  
    The online WWW man pages is updated every Saturday (from SVN
@@ -85,9 +81,9 @@ care of following rules:
 3. Usage of limited HTML tags
    Since the MAN conversion of g.html2man is limited, please use
    no other HTML tags than:
-   <A> <B> <BLINK> <BODY> <BR> <CODE> <DD> <DL> <DT> <EM> 
-   <H2> <H3> <H4>  <HEAD> <HEADER> <HR> <I> <IMG> <LI> <OL> <P>
-   <PRE> <SUP> <TABLE> <TD> <TH> <TITLE> <TR> <UL>
+   <a> <b> <blink> <body> <br> <code> <dd> <dl> <dt> <em> 
+   <h2> <h3> <h4> <head> <header> <hr> <i> <img> <li> <ol> <p>
+   <pre> <sup> <table> <td> <th> <title> <tr> <ul>
 
 
 4. Suggested HTML markup protocol:

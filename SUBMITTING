@@ -1,19 +1,14 @@
-$Date$
-
 NOTE: Please improve this list!
 
-Dear (new) GRASS Developer,
+Dear (new) GRASS developer,
 
-When submitting C code to GRASS SVN repository, please take care of
+when submitting C code to GRASS SVN repository, please take care of
 following rules:
 
-[ see SUBMITTING_SCRIPTS for shell script hints ]
-[ see SUBMITTING_TCLTK for tcl and tk hints ]
-[ see SUBMITTING_DOCS for documentation ]
-[ see SUBMITTING_PYTHON for Python code hints ]
+[ see also SUBMITTING_PYTHON for Python code hints ]
+[ see alse SUBMITTING_DOCS   for documentation ]
 
-
-1.  Get and read the GRASS 6 Programmer's Manual here:
+1.  Get and read the GRASS Programmer's Manual here:
     http://grass.osgeo.org/programming7/
 
     or generate it from this source code (the programmer's manual is
@@ -25,39 +20,32 @@ following rules:
 2.  Use the directory structure to place your module appropriately into
     the source tree
     	- libes go into lib/
-    	- raster goes into raster/
-    	- vector goes into vector/
+    	- raster modules go into raster/
+    	- vector modules go into vector/
     	- ...
 
     Consider to take a look at "GNU Coding Standards"
     http://www.gnu.org/prep/standards.html
 
-    In future, there will be a centralized contribution directory.
 
-
-3.  Add a header section to each file you submit and make sure you include
-    the copyright. The purpose section is meant to contain a general
-    overview of the code in the file to assist other programmers that will
-    need to make changes to your code. If you are modifying an existing
-    file you may under no circumstances remove prior copyright or licensing
-    text that is not your own, even for a major rewrite. If any original
-    code or code that is in part derived from another's original work
-    remains, it must be properly cited.
+3.  Add a header section to each file you submit and make sure you
+    include the copyright. The purpose section is meant to contain a
+    general overview of the code in the file to assist other
+    programmers that will need to make changes to your code. If you
+    are modifying an existing file you may under no circumstances
+    remove prior copyright or licensing text that is not your own,
+    even for a major rewrite. If any original code or code that is in
+    part derived from another's original work remains, it must be
+    properly cited.
 
     Example (ficticious header for a file called color.c) :
 
 /****************************************************************************
  *
- * MODULE:       d.rast (or new higher level module name (eg GRASS core))
- * AUTHOR(S):    Original author unknown - probably CERL
- *               John Doe <jdoe at somewhere org>
- * PURPOSE:      To provide storage and manipulation of colors used for 
- *               rendering the raster. The colors are stored in a doubly linked
- *               list which must be initialized with InitColors() before it can
- *               be used. Note that most linked list functionality (add,
- *               remove, get) is supported, but there is no sorting
- *               functionality.
- * COPYRIGHT:    (C) 2010 by the GRASS Development Team
+ * MODULE:       g.foo
+ * AUTHOR(S):    John Doe <jdoe at somewhere org>
+ * PURPOSE:      Provide short description of module here...
+ * COPYRIGHT:    (C) 2010 by John Doe, and the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the COPYING file that comes with GRASS
@@ -69,8 +57,7 @@ following rules:
     License (www.gnu.org).
 
 
-4.  - deleted.
-    We don't want the $ID$ in source code any more as it causes problems
+4.  We don't want the $ID$ in source code any more as it causes problems
     for the SVN branches.
 
 
@@ -113,6 +100,8 @@ following rules:
     void G_something(void)
     {
     	/* Snipped out code */
+	
+	return;
     }
     
     int G_something_else(int x, int y)
@@ -123,7 +112,8 @@ following rules:
     }
 
 
-8.  Module exit status is defined as EXIT_SUCCESS or EXIT_FAILURE, e.g.
+8.  Module exit status is defined as EXIT_SUCCESS or EXIT_FAILURE
+    (declared in stdlib.h), e.g.
 
     {
       ...
@@ -135,13 +125,13 @@ following rules:
     }
 
 
-9.  Use fprintf instead of printf. But:
+9.  Use fprintf() instead of printf()
     
     For errors and warnings please use the G_fatal_error() and
     G_warning() functions. General messages for the user should use
     G_message() while debug messages should use G_debug() whenever
     possible. There are two variants to G_message(): G_verbose_message()
-    which will only display the message if in verbose mode, and
+    which will only display the message if in --verbose mode, and
     G_important_message() which will always show the message unless
     the module is running in --quiet mode. G_fatal_error() and
     G_warning() will always be displayed regardless of verbosity setting.
@@ -194,7 +184,6 @@ following rules:
 	G_setenv() instead of setenv()
 	G_unsetenv() instead of unsetenv()
 	G_sleep() instead of sleep()
-	G_system() instead of system()
 
 	Could somebody please add others (please verify that they are
 	useful and safe first)
@@ -289,7 +278,7 @@ following rules:
 
     Examples: see below examples or others
               raster/r.info/Makefile
-              vector/v.digit/Makefile
+              vector/v.edit/Makefile
 
     If you are unsure, please ask on the GRASS Developers list.
 
@@ -311,7 +300,6 @@ following rules:
 
 
 23. Add/update, if required the related GUI menus:
-     gui/tcltk/gis.m/gmmenu.tcl
      gui/wxpython/xml/menudata.xml
 
 
@@ -374,7 +362,7 @@ following rules:
     Consider to subscribe to the GRASS Quality Assessment System to
     get immediate notification about the code quality:
 
-    http://www.grass-gis.org/mailman/listinfo/grass-qa
+    http://lists.osgeo.org/mailman/listinfo/grass-qa
 
 
 29. When submitting new files to the repository set SVN properties,
@@ -428,6 +416,8 @@ following rules:
       
       (please update the list...)
 
+    For your convenience use the tools/module_svn_propset.sh script.
+
 30. Use doxygen style for source code documentation. It is required
     for GRASS libraries, but also recommended for GRASS modules.
 
@@ -438,26 +428,23 @@ following rules:
 
     For files
 
-    /**
+    /*!
        \file snap.c
    
        \brief Vector library - Clean vector map (snap lines)
 
        (C) 2001-2008 by the GRASS Development Team
    
-       This program is free software under the 
-       GNU General Public License (>=v2). 
-       Read the file COPYING that comes with GRASS
+       This program is free software under the GNU General Public
+       License (>=v2).  Read the file COPYING that comes with GRASS
        for details.
    
        \author Radim Blazek
-   
-       \date 2001-2008
     */
 
     For functions
 
-    /**
+    /*!
        \brief Snap lines in vector map to existing vertex in threshold
 
        For details see Vect_snap_lines_list()
@@ -481,7 +468,7 @@ following rules:
 
 32. In case of questions feel free to contact the developers at the above
     mailing list.
-    http://www.grass-gis.org/devel/index.php#submission
+    http://grass.osgeo.org/devel/index.php#submission
 
 ...
 [please add further hints if required]
