@@ -18,7 +18,7 @@ cols=5`
 import os
 import sys
 
-from grass.lib.grass  import *
+from grass.lib.gis    import *
 from grass.lib.raster import *
 
 # check if GRASS is running or not

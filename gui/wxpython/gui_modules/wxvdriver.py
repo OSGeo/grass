@@ -24,7 +24,7 @@ import wx
 from debug import Debug
 from preferences import globalSettings as UserSettings
 
-from grass.lib.grass  import *
+from grass.lib.gis    import *
 from grass.lib.vector import *
 from grass.lib.vedit  import *
 

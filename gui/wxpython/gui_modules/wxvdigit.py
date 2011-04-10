@@ -24,7 +24,7 @@ from preferences import globalSettings as UserSettings
 
 from wxvdriver   import DisplayDriver
 
-from grass.lib.grass  import *
+from grass.lib.gis    import *
 from grass.lib.vector import *
 from grass.lib.vedit  import *
 from grass.lib.dbmi   import *

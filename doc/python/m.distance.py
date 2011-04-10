@@ -63,7 +63,7 @@ def main():
     #   check with "import sys; sys.path"
     # or:
     sys.path.append("/usr/local/grass-7.0.svn/etc/python")
-    from grass.lib import grass as g7lib
+    from grass.lib import gis as g7lib
  
     # for passing pointers
     import Numeric

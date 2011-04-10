@@ -7,7 +7,7 @@ interface
 
 import os, sys
 
-from grass.lib.grass  import *
+from grass.lib.gis    import *
 from grass.lib.vector import *
 
 if not os.environ.has_key("GISBASE"):
