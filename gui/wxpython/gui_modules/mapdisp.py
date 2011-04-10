@@ -74,6 +74,8 @@ from mapdisp_window import BufferedWindow
 # for standalone app
 cmdfilename = None
 
+haveCtypes = False
+
 class MapFrame(wx.Frame):
     """!Main frame for map display window. Drawing takes place in
     child double buffered drawing window.
@@ -1613,20 +1615,20 @@ class MapFrame(wx.Frame):
         along transect drawn on map display
         """
         self.totaldist = 0.0 # total measured distance
-
-        # switch GIS Manager to output console to show measure results
+        
+        # switch Layer Manager to output console to show measure results
         self._layerManager.notebook.SetSelection(1)
-
+        
         # change mouse to draw line for measurement
         self.MapWindow.mouse['use'] = "measure"
         self.MapWindow.mouse['box'] = "line"
         self.MapWindow.zoomtype = 0
         self.MapWindow.pen     = wx.Pen(colour = 'red', width = 2, style = wx.SHORT_DASH)
         self.MapWindow.polypen = wx.Pen(colour = 'green', width = 2, style = wx.SHORT_DASH)
-
+        
         # change the cursor
         self.MapWindow.SetCursor(self.cursors["pencil"])
-
+        
         # initiating output
         style = self._layerManager.goutput.cmd_output.StyleWarning
         self._layerManager.goutput.WriteLog(_('Click and drag with left mouse button '
@@ -1635,14 +1637,23 @@ class MapFrame(wx.Frame):
                                                 (os.linesep), style)
         if self.Map.projinfo['proj'] != 'xy':
             units = self.Map.projinfo['units']
-            style = self._layerManager.goutput.cmd_output.StyleCommand
-            self._layerManager.goutput.WriteLog(_('Measuring distance') + ' ('
-                                                + units + '):',
-                                                style)
+            self._layerManager.goutput.WriteCmdLog(_('Measuring distance') + ' ('
+                                                   + units + '):')
         else:
-            self._layerManager.goutput.WriteLog(_('Measuring distance:'),
-                                                style)
+            self._layerManager.goutput.WriteCmdLog(_('Measuring distance:'))
+        
+        if self.Map.projinfo['proj'] == 'll':
+            try:
+                import grass.lib.gis as gislib
+                global haveCtypes
+                haveCtypes = True
 
+                gislib.G_begin_distance_calculations()
+            except ImportError, e:
+                self._layerManager.goutput.WriteWarning(_('Geodesic distance is not yet '
+                                                          'supported by this tool.\n'
+                                                          'Reason: %s' % e))
+        
     def MeasureDist(self, beginpt, endpt):
         """!Calculate map distance from screen distance
         and print to output window
@@ -1665,7 +1676,7 @@ class MapFrame(wx.Frame):
             angle = int(math.degrees(math.atan2(north,east)) + 0.5)
             angle = 180 - angle
             if angle < 0:
-                angle = 360+angle
+                angle = 360 + angle
             
             mstring = '%s = %s %s\n%s = %s %s\n%s = %d %s\n%s' \
                 % (_('segment'), strdist, dunits,
@@ -1726,12 +1737,15 @@ class MapFrame(wx.Frame):
                 divisor = 5280.0
             else:
                 outunits = 'ft'
-        elif 'degree' in mapunits:
+        elif 'degree' in mapunits and \
+                not haveCtypes:
             if dist < 1:
                 outunits = 'min'
                 divisor = (1/60.0)
             else:
                 outunits = 'deg'
+        else:
+            outunits = 'meters'
         
         # format numbers in a nice way
         if (dist/divisor) >= 2500.0:

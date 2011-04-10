@@ -38,6 +38,12 @@ from debug import Debug
 from preferences import globalSettings as UserSettings
 from units import ConvertValue as UnitsConvertValue
 
+try:
+    import grass.lib.gis as gislib
+    haveCtypes = True
+except ImportError:
+    haveCtypes = False
+
 class MapWindow(object):
     """!Abstract map display window class
     
@@ -1746,9 +1752,7 @@ class BufferedWindow(MapWindow, wx.Window):
     def Distance(self, beginpt, endpt, screen = True):
         """!Calculete distance
         
-        LL-locations not supported
-        
-        @todo Use m.distance
+        Ctypes required for LL-locations
         
         @param beginpt first point
         @param endpt second point
@@ -1764,4 +1768,9 @@ class BufferedWindow(MapWindow, wx.Window):
         dEast  = (e2 - e1)
         dNorth = (n2 - n1)
         
-        return (math.sqrt(math.pow((dEast), 2) + math.pow((dNorth), 2)), (dEast, dNorth))
+        if self.parent.Map.projinfo['proj'] == 'll' and haveCtypes:
+            dist = gislib.G_distance(e1, n1, e2, n2)
+        else:
+            dist = math.sqrt(math.pow((dEast), 2) + math.pow((dNorth), 2))
+        
+        return (dist, (dEast, dNorth))
