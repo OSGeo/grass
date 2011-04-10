@@ -7364,7 +7364,7 @@ msgstr "Ausgabe:"
 
 #: ../raster/r.proj/main.c:493
 msgid "Projecting..."
-msgstr "Projeziere... "
+msgstr "Projiziere... "
 
 #: ../raster/r.proj/bordwalk.c:183
 msgid "Input raster map is outside current region"
