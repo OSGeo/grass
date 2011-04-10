@@ -22,7 +22,7 @@ import sys
 from threading import Thread
 
 from ctypes import *
-from grass.lib.grass import *
+from grass.lib.gis   import *
 from grass.lib.g3d   import *
 from grass.lib.ogsf  import *
 from grass.lib.nviz  import *
