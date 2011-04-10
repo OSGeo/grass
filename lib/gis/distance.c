@@ -1,19 +1,19 @@
 /*!
- * \file gis/distance.c
- *
- * \brief GIS Library - Distance calculation functions.
- *
- * WARNING: this code is preliminary and may be changed,
- * including calling sequences to any of the functions
- * defined here.
- *
- * (C) 2001-2009 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
- *
- * \author Original author CERL
- */
+  \file lib/gis/distance.c
+  
+  \brief GIS Library - Distance calculation functions.
+  
+  WARNING: this code is preliminary and may be changed,
+  including calling sequences to any of the functions
+  defined here.
+  
+  (C) 2001-2009, 2011 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Original author CERL
+*/
 
 #include <math.h>
 #include <grass/gis.h>
@@ -30,16 +30,15 @@ static struct state {
 static struct state *st = &state;
 
 /*!
- * \brief Begin distance calculations.
- *
- * Initializes the distance calculations. It is used both for the
- * planimetric and latitude-longitude projections.
- *
- * \return 0 if projection has no metrix (ie. imagery)
- * \return 1 if projection is planimetric
- * \return 2 if projection is latitude-longitude
- */
-
+  \brief Begin distance calculations.
+  
+  Initializes the distance calculations. It is used both for the
+  planimetric and latitude-longitude projections.
+  
+  \return 0 if projection has no metrix (ie. imagery)
+  \return 1 if projection is planimetric
+  \return 2 if projection is latitude-longitude
+*/
 int G_begin_distance_calculations(void)
 {
     double a, e2;
@@ -60,20 +59,19 @@ int G_begin_distance_calculations(void)
     }
 }
 
-
 /*!
- * \brief Returns distance in meters.
- *
- * This routine computes the distance, in meters, from
- * <i>x1</i>,<i>y1</i> to <i>x2</i>,<i>y2</i>. If the projection is
- * latitude-longitude, this distance is measured along the
- * geodesic. Two routines perform geodesic distance calculations.
- *
- * \param e1,n1 east-north coordinates of first point
- * \param e2,n2 east-north coordinates of second point
- 
- * \return distance
- */
+  \brief Returns distance in meters.
+  
+  This routine computes the distance, in meters, from
+  <i>x1</i>,<i>y1</i> to <i>x2</i>,<i>y2</i>. If the projection is
+  latitude-longitude, this distance is measured along the
+  geodesic. Two routines perform geodesic distance calculations.
+  
+  \param e1,n1 east-north coordinates of first point
+  \param e2,n2 east-north coordinates of second point
+  
+  \return distance
+*/
 double G_distance(double e1, double n1, double e2, double n2)
 {
     if (st->projection == PROJECTION_LL)
@@ -83,13 +81,13 @@ double G_distance(double e1, double n1, double e2, double n2)
 }
 
 /*!
- * \brief Returns distance between two line segments in meters.
- *
- * \param ax1,ay2,ax2,ay2 first segment
- * \param bx1,by2,bx2,by2 second segment
- *
- * \return distance value
- */
+  \brief Returns distance between two line segments in meters.
+  
+  \param ax1,ay2,ax2,ay2 first segment
+  \param bx1,by2,bx2,by2 second segment
+  
+  \return distance value
+*/
 double G_distance_between_line_segments(double ax1, double ay1,
 					double ax2, double ay2,
 					double bx1, double by1,
@@ -111,14 +109,14 @@ double G_distance_between_line_segments(double ax1, double ay1,
 }
 
 /*!
- * \brief Returns distance between a point and line segment in meters.
- *
- * \param xp,yp point coordinates
- * \param x1,x1 segment point coordinates
- * \param x2,y2 segment point coordinates
- *
- * \return distance
- */
+  \brief Returns distance between a point and line segment in meters.
+  
+  \param xp,yp point coordinates
+  \param x1,x1 segment point coordinates
+  \param x2,y2 segment point coordinates
+  
+  \return distance
+*/
 double G_distance_point_to_line_segment(double xp, double yp,
 					double x1, double y1, double x2,
 					double y2)
@@ -145,17 +143,17 @@ double G_distance_point_to_line_segment(double xp, double yp,
     }
 
     /* find the intersection of the perpendicular with the segment */
-    switch (t =
-	    G_intersect_line_segments(xp, yp, xq, yq, x1, y1, x2, y2, &ra,
-				      &rb, &x, &y)) {
+    t = G_intersect_line_segments(xp, yp, xq, yq, x1, y1, x2, y2, &ra,
+				  &rb, &x, &y);
+    switch (t) {
     case 0:
     case 1:
 	break;
     default:
 	/* parallel/colinear cases shouldn't occur with perpendicular lines */
-	G_warning(_("G_distance_point_to_line_segment: shouldn't happen: "
+	G_warning(_("%s: shouldn't happen: "
 		    "code=%d P=(%f,%f) S=(%f,%f)(%f,%f)"),
-		  t, xp, yp, x1, y1, x2, y2);
+		  "G_distance_point_to_line_segment", t, xp, yp, x1, y1, x2, y2);
 	return -1.0;
     }
 
