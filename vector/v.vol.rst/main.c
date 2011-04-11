@@ -210,7 +210,7 @@ int main(int argc, char *argv[])
     int per, npmin;
     int ii, i, n_rows, n_cols, n_levs;
     double x_orig, y_orig, z_orig;
-    char dminchar[10];
+    char dminchar[64];
     struct octdata *data;
     struct octfunc *functions;
     struct octtree *tree;
