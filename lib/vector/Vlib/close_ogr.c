@@ -43,8 +43,6 @@ int V1_close_ogr(struct Map_info *Map)
     if (Map->fInfo.ogr.feature_cache)
 	OGR_F_Destroy(Map->fInfo.ogr.feature_cache);
 
-    if (Map->fInfo.ogr.driver)
-	OGR_DS_Destroy(Map->fInfo.ogr.driver);
     OGR_DS_Destroy(Map->fInfo.ogr.ds);
     
     for (i = 0; i < Map->fInfo.ogr.lines_alloc; i++) {

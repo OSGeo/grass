@@ -138,9 +138,8 @@ static int (*Vect_restore_line_array[][3]) () = {
    \return new feature id (level 2)
    \return offset into file where the feature starts (level 1)
  */
-off_t
-Vect_write_line(struct Map_info *Map, int type,
-		const struct line_pnts *points, const struct line_cats *cats)
+off_t Vect_write_line(struct Map_info *Map, int type,
+		      const struct line_pnts *points, const struct line_cats *cats)
 {
     off_t offset;
 
