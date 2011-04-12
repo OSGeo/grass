@@ -361,6 +361,9 @@ int Vect_build_ogr(struct Map_info *Map, int build)
     Map->fInfo.ogr.offset = NULL;
     Map->fInfo.ogr.offset_num = 0;
     Map->fInfo.ogr.offset_alloc = 0;
+    
+    if (OGR_L_TestCapability(Map->fInfo.ogr.layer, OLCTransactions))
+	OGR_L_CommitTransaction(Map->fInfo.ogr.layer);
 
     /* test layer capabilities */
     if (!OGR_L_TestCapability(Map->fInfo.ogr.layer, OLCRandomRead)) {

@@ -95,6 +95,8 @@ int V1_open_old_ogr(struct Map_info *Map, int update)
     G_debug(2, "OGR layer %d opened", layer);
 
     Map->fInfo.ogr.layer = Ogr_layer;
+    if (update && OGR_L_TestCapability(Map->fInfo.ogr.layer, OLCTransactions))
+	OGR_L_StartTransaction(Map->fInfo.ogr.layer);
     
     Map->fInfo.ogr.lines = NULL;
     Map->fInfo.ogr.lines_types = NULL;
@@ -338,6 +340,9 @@ int V2_open_new_ogr(struct Map_info *Map, int type)
 	return -1;
     }
     Map->fInfo.ogr.layer = Ogr_layer;
+
+    if (OGR_L_TestCapability(Map->fInfo.ogr.layer, OLCTransactions))
+	OGR_L_StartTransaction(Map->fInfo.ogr.layer);
 
     return 0;
 }
