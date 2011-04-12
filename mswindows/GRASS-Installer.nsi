@@ -569,7 +569,7 @@ Section "GRASS" SecGRASS
 	FileWrite $0 'set PATH=%FREETYPEBASE%;%PATH%$\r$\n'
 	FileWrite $0 '$\r$\n'
 	FileWrite $0 'rem run g.mkfontcap outside a grass session$\r$\n'
-	FileWrite $0 '"%GISBASE%\bin\g.mkfontcap.exe"$\r$\n'
+	FileWrite $0 '"%GISBASE%\bin\g.mkfontcap.exe" -o$\r$\n'
 	FileWrite $0 'exit$\r$\n'
 	FileClose $0
 	done_create_run_gmkfontcap.bat:
