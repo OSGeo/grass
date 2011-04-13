@@ -850,8 +850,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             toComplete['entity'] = 'command'
             toComplete['cmd'] = cmd
             return toComplete
-                
-            
+    
     def GetWordLeft(self, withDelimiter = False, ignoredDelimiter = None):
         """!Get word left from current cursor position. The beginning
         of the word is given by space or chars: .,-= 
@@ -866,11 +865,13 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             ignoredDelimiter = ''
         
         for char in set(' .,-=') - set(ignoredDelimiter):
-            delimiter = '' if not withDelimiter else char
+            if not withDelimiter:
+                delimiter = ''
+            else:
+                delimiter = char
             parts.append(delimiter + textLeft.rpartition(char)[2])
         return min(parts, key=lambda x: len(x))
-        
-        
+         
     def ShowList(self):
         """!Show sorted auto-completion list if it is not empty"""
         if len(self.autoCompList) > 0:
