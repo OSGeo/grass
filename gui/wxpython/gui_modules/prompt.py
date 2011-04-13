@@ -862,7 +862,9 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         textLeft = self.GetTextLeft()
         
         parts = list()
-        ignoredDelimiter = ignoredDelimiter if ignoredDelimiter is not None else ''
+        if ignoredDelimiter is None:
+            ignoredDelimiter = ''
+        
         for char in set(' .,-=') - set(ignoredDelimiter):
             delimiter = '' if not withDelimiter else char
             parts.append(delimiter + textLeft.rpartition(char)[2])
