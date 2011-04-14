@@ -70,8 +70,7 @@ SUBDIRS = \
 #	d.out.gpsdrive \
 #	r.mapcalculator \
 #	r3.mapcalculator \
-#	v.in.garmin \
-#	v.in.gpsbabel \
+#	v.in.gps \
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 
