@@ -566,8 +566,7 @@ class MapCalcFrame(wx.Frame):
             expr += '='
         expr += mctxt
         
-        menuform.GUI().ParseCommand(cmd = [self.cmd, 'expression=' + expr],
-                                    parentframe = self)
+        menuform.GUI(parent = self).ParseCommand(cmd = [self.cmd, 'expression=' + expr])
         
 if __name__ == "__main__":
     app = wx.App(0)
