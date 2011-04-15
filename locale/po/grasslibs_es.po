@@ -9,7 +9,7 @@
 # Roberto Antolin <tolanss@yahoo.es>, 2007.
 # Carlos Davila <carluti@users.sourceforge.net>, 2007, 2008
 # Javier García Prieto <fjgarciaprieto@hotmail.com>, 2009, 2010.
-# Joana Palahí <joana@sigte.udg.edu>, 2011.
+# Joana Palahí/SIGTE-UdG <joana@sigte.udg.edu>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_es\n"
