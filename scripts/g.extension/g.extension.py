@@ -78,7 +78,7 @@
 #%end
 #%flag
 #% key: d
-#% description: Don't delete downloaded source code when installing new extension
+#% description: Download source code and exit
 #%end
 #%flag
 #% key: i
@@ -122,7 +122,7 @@ def expand_module_class_name(c):
     
     return c
 
-def list_available_modules(svnurl, full = False, shell = False):
+def list_available_modules():
     mlist = list()
     grass.message(_('Fetching list of modules from GRASS-Addons SVN (be patient)...'))
     pattern = re.compile(r'(<li><a href=".+">)(.+)(</a></li>)', re.IGNORECASE)
@@ -131,14 +131,14 @@ def list_available_modules(svnurl, full = False, shell = False):
               'p', 'r', 'r3', 's', 'v']
     nprefix = len(prefix)
     for d in prefix:
-        if shell:
+        if flags['g']:
             grass.percent(i, nprefix, 1)
             i += 1
         
         modclass = expand_module_class_name(d)
         grass.verbose(_("Checking for '%s' modules...") % modclass)
         
-        url = '%s/%s' % (svnurl, modclass)
+        url = '%s/%s' % (options['svnurl'], modclass)
         grass.debug("url = %s" % url, debug = 2)
         f = urllib.urlopen(url)
         if not f:
@@ -152,23 +152,23 @@ def list_available_modules(svnurl, full = False, shell = False):
                 continue
             name = sline.group(2).rstrip('/')
             if name.split('.', 1)[0] == d:
-                print_module_desc(name, url, full, shell)
+                print_module_desc(name, url)
                 mlist.append(name)
     
-    mlist += list_wxgui_extensions(svnurl, full, shell)
+    mlist += list_wxgui_extensions()
     
-    if shell:
+    if flags['g']:
         grass.percent(1, 1, 1)
     
     return mlist
 
-def list_wxgui_extensions(svnurl, full = False, shell = False, print_module = True):
+def list_wxgui_extensions(print_module = True):
     mlist = list()
     grass.debug('Fetching list of wxGUI extensions from GRASS-Addons SVN (be patient)...')
     pattern = re.compile(r'(<li><a href=".+">)(.+)(</a></li>)', re.IGNORECASE)
     grass.verbose(_("Checking for '%s' modules...") % 'gui/wxpython')
     
-    url = '%s/%s' % (svnurl, 'gui/wxpython')
+    url = '%s/%s' % (options['svnurl'], 'gui/wxpython')
     grass.debug("url = %s" % url, debug = 2)
     f = urllib.urlopen(url)
     if not f:
@@ -183,17 +183,17 @@ def list_wxgui_extensions(svnurl, full = False, shell = False, print_module = Tr
         name = sline.group(2).rstrip('/')
         if name not in ('..', 'Makefile'):
             if print_module:
-                print_module_desc(name, url, full, shell)
+                print_module_desc(name, url)
             mlist.append(name)
     
     return mlist
 
-def print_module_desc(name, url, full = False, shell = False):
-    if not full and not shell:
+def print_module_desc(name, url):
+    if not flags['f'] and not flags['g']:
         print name
         return
     
-    if shell:
+    if flags['g']:
         print 'name=' + name
     
     # check main.c first
@@ -201,11 +201,11 @@ def print_module_desc(name, url, full = False, shell = False):
     if not desc:
         desc = get_module_desc(url + '/' + name + '/main.c', script = False)
     if not desc:
-        if not shell:
+        if not flags['g']:
             print name + '-'
             return
     
-    if shell:
+    if flags['g']:
         print 'description=' + desc.get('description', '')
         print 'keywords=' + ','.join(desc.get('keywords', list()))
     else:
@@ -289,26 +289,26 @@ def cleanup():
     else:
         grass.info(_("Path to the source code: '%s'") % tmpdir)
                         
-def install_extension(svnurl, prefix, module, no_install):
+def install_extension():
     gisbase = os.getenv('GISBASE')
     if not gisbase:
         grass.fatal(_('$GISBASE not defined'))
     
-    if grass.find_program(module):
-        grass.warning(_("Extension '%s' already installed. Will be updated...") % module)
+    if grass.find_program(options['extension']):
+        grass.warning(_("Extension '%s' already installed. Will be updated...") % options['extension'])
     
-    gui_list = list_wxgui_extensions(svnurl, print_module = False)
+    gui_list = list_wxgui_extensions(print_module = False)
 
-    if module not in gui_list:
-        classchar = module.split('.', 1)[0]
+    if options['extension'] not in gui_list:
+        classchar = options['extension'].split('.', 1)[0]
         moduleclass = expand_module_class_name(classchar)
-        url = svnurl + '/' + moduleclass + '/' + module
+        url = options['svnurl'] + '/' + moduleclass + '/' + options['extension']
     else:
-        url = svnurl + '/gui/wxpython/' + module
+        url = options['svnurl'] + '/gui/wxpython/' + options['extension']
         if not flags['s']:
             grass.fatal(_("Installation of wxGUI extension requires -%s flag.") % 's')
         
-    grass.message(_("Fetching '%s' from GRASS-Addons SVN (be patient)...") % module)
+    grass.message(_("Fetching '%s' from GRASS-Addons SVN (be patient)...") % options['extension'])
     global tmpdir
     os.chdir(tmpdir)
     if grass.verbosity() == 0:
@@ -318,16 +318,19 @@ def install_extension(svnurl, prefix, module, no_install):
     
     if grass.call(['svn', 'checkout',
                    url], stdout = outdev) != 0:
-        grass.fatal(_("GRASS Addons '%s' not found in repository") % module)
-    
-    os.chdir(os.path.join(tmpdir, module))
+        grass.fatal(_("GRASS Addons '%s' not found in repository") % options['extension'])
 
-    grass.message(_("Compiling '%s'...") % module)    
-    if module not in gui_list:
-        bin_dir  = os.path.join(tmpdir, module, 'bin')
-        docs_dir = os.path.join(tmpdir, module, 'docs')
+    if flags['d']:
+        return
+    
+    os.chdir(os.path.join(tmpdir, options['extension']))
+
+    grass.message(_("Compiling '%s'...") % options['extension'])    
+    if options['extension'] not in gui_list:
+        bin_dir  = os.path.join(tmpdir, options['extension'], 'bin')
+        docs_dir = os.path.join(tmpdir, options['extension'], 'docs')
         html_dir = os.path.join(docs_dir, 'html')
-        man_dir  = os.path.join(tmpdir, module, 'man')
+        man_dir  = os.path.join(tmpdir, options['extension'], 'man')
         man1_dir = os.path.join(man_dir, 'man1')
         for d in (bin_dir, docs_dir, html_dir, man_dir, man1_dir):
             os.mkdir(d)
@@ -346,35 +349,35 @@ def install_extension(svnurl, prefix, module, no_install):
     if ret != 0:
         grass.fatal(_('Compilation failed, sorry. Please check above error messages.'))
     
-    if no_install or module in gui_list:
+    if flags['i'] or options['extension'] in gui_list:
         return
     
-    grass.message(_("Installing '%s'...") % module)
+    grass.message(_("Installing '%s'...") % options['extension'])
     
     ret = grass.call(['make',
                       'MODULE_TOPDIR=%s' % gisbase,
-                      'ARCH_DISTDIR=%s' % os.path.join(tmpdir, module),
-                      'INST_DIR=%s' % prefix,
+                      'ARCH_DISTDIR=%s' % os.path.join(tmpdir, options['extension']),
+                      'INST_DIR=%s' % options['prefix'],
                       'install'],
                      stdout = outdev)
     
     if ret != 0:
         grass.warning(_('Installation failed, sorry. Please check above error messages.'))
     else:
-        grass.message(_("Installation of '%s' successfully finished.") % module)
+        grass.message(_("Installation of '%s' successfully finished.") % options['extension'])
 
-def remove_extension(prefix, module):
+def remove_extension():
     # is module available?
-    if not os.path.exists(os.path.join(prefix, 'bin', module)):
-        grass.fatal(_("Module '%s' not found") % module)
+    if not os.path.exists(os.path.join(options['prefix'], 'bin', options['extension'])):
+        grass.fatal(_("Module '%s' not found") % options['extension'])
     
-    for file in [os.path.join(prefix, 'bin', module),
-                 os.path.join(prefix, 'scripts', module),
-                 os.path.join(prefix, 'docs', 'html', module + '.html')]:
+    for file in [os.path.join(options['prefix'], 'bin', options['extension']),
+                 os.path.join(options['prefix'], 'scripts', options['extension']),
+                 os.path.join(options['prefix'], 'docs', 'html', options['extension'] + '.html')]:
         if os.path.isfile(file):
             os.remove(file)
                     
-    grass.message(_("'%s' successfully uninstalled.") % module)
+    grass.message(_("'%s' successfully uninstalled.") % options['extension'])
 
 def create_dir(path):
     if os.path.isdir(path):
@@ -398,7 +401,7 @@ def main():
     
     # list available modules
     if flags['l'] or flags['f'] or flags['g']:
-        list_available_modules(options['svnurl'], full = flags['f'], shell = flags['g'])
+        list_available_modules()
         return 0
     else:
         if not options['extension']:
@@ -424,9 +427,9 @@ def main():
             remove_tmpdir = False
     
     if options['operation'] == 'add':
-        install_extension(options['svnurl'], options['prefix'], options['extension'], flags['i'])
+        install_extension()
     else: # remove
-        remove_extension(options['prefix'], options['extension'])
+        remove_extension()
     
     return 0
 
