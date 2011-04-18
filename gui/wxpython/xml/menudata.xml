@@ -1196,7 +1196,7 @@
 	    <menuitem>
 	      <label>Shaded relief</label>
 	      <help>Creates shaded relief map from an elevation map (DEM).</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,elevation</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.shaded.relief</command>
 	    </menuitem>
@@ -1279,7 +1279,7 @@
 	  <items>
 	    <menuitem>
 	      <label>Carve stream channels</label>
-	      <help>Generates stream channels</help>
+	      <help>Generates stream channels.</help>
 	      <keywords>raster,hydrology</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.carve</command>
@@ -1317,14 +1317,14 @@
 	    <menuitem>
 	      <label>SIMWE Overland flow modeling</label>
 	      <help>Overland flow hydrologic simulation using path sampling method (SIMWE).</help>
-	      <keywords>raster,hydrology</keywords>
+	      <keywords>raster,flow,hydrology</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.sim.water</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>SIMWE Sediment flux modeling</label>
 	      <help>Sediment transport and erosion/deposition simulation using path sampling method (SIMWE).</help>
-	      <keywords>raster,hydrology,sediment flow,erosion,deposition</keywords>
+	      <keywords>raster,flow,hydrology,erosion,deposition</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.sim.sediment</command>
 	    </menuitem>
@@ -1747,7 +1747,7 @@
 	      <label>Ordinary or block kriging</label>
 	      <help>Performs ordinary or block kriging.</help>
 	      <keywords>vector,interpolation,kriging</keywords>
-              <handler>RunMenuCmd</handler>
+	      <handler>RunMenuCmd</handler>
 	      <command>v.krige</command>
 	    </menuitem>
 	    <separator />
@@ -3016,7 +3016,7 @@
 	    <menuitem>
 	      <label>Login</label>
 	      <help>Sets user/password for driver/database.</help>
-	      <keywords>database,connection</keywords>
+	      <keywords>database,connection settings</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>db.login</command>
 	    </menuitem>
