@@ -90,9 +90,12 @@ int init_6S(char* icnd_name)
 	c directional reflectances                                             c
 	c**********************************************************************/
 
+    /* NOTE: wlmoy is not affected by a height and/or vis change */
     float wlmoy;
     if(iwave.iwave != -1) wlmoy = iwave.equivwl();
     else wlmoy = iwave.wl;
+
+    iwave.wlmoy = wlmoy;
 
     discom(geom, atms, aero, aerocon, alt, iwave);
     float tamoy, tamoyp, pizmoy, pizmoyp;
@@ -112,9 +115,7 @@ void pre_compute_hv(const float height, const float vis)
     alt.set_height(height);
     alt.init(atms, aerocon);
    
-    float wlmoy;
-    if(iwave.iwave != -1) wlmoy = iwave.equivwl();
-    else wlmoy = iwave.wl;
+    float wlmoy = iwave.wlmoy;
 
     discom(geom, atms, aero, aerocon, alt, iwave);
     float tamoy, tamoyp, pizmoy, pizmoyp;
@@ -128,9 +129,7 @@ void pre_compute_v(const float vis)
     aerocon.set_visibility(vis, atms);
     alt.init(atms, aerocon);
 
-    float wlmoy;
-    if(iwave.iwave != -1) wlmoy = iwave.equivwl();
-    else wlmoy = iwave.wl;
+    float wlmoy = iwave.wlmoy;
 
     discom(geom, atms, aero, aerocon, alt, iwave);
     float tamoy, tamoyp, pizmoy, pizmoyp;
@@ -144,9 +143,7 @@ void pre_compute_h(const float height)
     alt.set_height(height);
     alt.init(atms, aerocon);
 
-    float wlmoy;
-    if(iwave.iwave != -1) wlmoy = iwave.equivwl();
-    else wlmoy = iwave.wl;
+    float wlmoy = iwave.wlmoy;
 
     discom(geom, atms, aero, aerocon, alt, iwave);
     float tamoy, tamoyp, pizmoy, pizmoyp;

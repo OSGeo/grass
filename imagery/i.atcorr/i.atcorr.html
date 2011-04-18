@@ -16,12 +16,11 @@ to cover the input raster map before the atmospheric correction is
 performed. The previous settings are restored afterwards.
 
 <p>
-Because using a continuous <b>elevation</b> or <b>visibility</b>
+Because using a <b>elevation</b> and/or <b>visibility</b>
 raster map makes execution time much longer, it is advised to use
-categorized raster maps instead, in conjuction with flag <b>-o</b>.
-This flag tells <em>i.atcorr</em> to try and speedup
-calculations. However, this option under certain conditions can make
-execution time longer.
+the optimization flag <b>-o</b>.
+This flag tells <em>i.atcorr</em> to try and speedup calculations. 
+However, this option will increase memory requirements.
 
 <p>
 If flag <b>-r</b> is used, the input raster data are treated as
@@ -164,8 +163,8 @@ the ascendant node at equator</td>
 <blockquote>
 * <em>NOTE</em>: for HRV, TM, ETM+, LISS and ASTER experiments,
 longitude and latitude are the coordinates of the scene
-center. Latitude must be &gt;0 for northern hemisphere and &lt;0 for
-southern. Longitude must be &gt;0 for eastern hemisphere and &lt;0 for
+center. Latitude must be &gt; 0 for northern hemisphere and &lt; 0 for
+southern. Longitude must be &gt; 0 for eastern hemisphere and &lt; 0 for
 western.
 </blockquote>
 
@@ -357,7 +356,7 @@ and 'aer' for aerosol).
 <h3>E. Target altitude (xps), sensor platform (xpp)</h3>
 
 Target altitude (xps, in negative [km]):
-<blockquote>xps &lt;= 0 means the target is at the sea level.
+<blockquote>xps &gt;= 0 means the target is at the sea level.
 <br>otherwise xps expresses the altitude of the target (e.g., mean elevation)
 in [km], given as negative value
 </blockquote>
@@ -583,20 +582,20 @@ If the overpass time is unknown, use the <a href="http://www-air.larc.nasa.gov/t
 Convert DN (digital number = pixel values) to Radiance at top-of-atmosphere (TOA), using the
 formula
 <div class="code"><pre>
-   L&#955; = ((LMAX&#955; - LMIN&#955;)/(QCALMAX-QCALMIN)) * (QCAL-QCALMIN) + LMIN&#955;
+   L&lambda; = ((LMAX&lambda; - LMIN&lambda;)/(QCALMAX-QCALMIN)) * (QCAL-QCALMIN) + LMIN&lambda;
 </pre></div>
 Where:
 <ul>
-<li> L&#955; = Spectral Radiance at the sensor's aperture in Watt/(meter squared * ster * &#956;m), the
+<li> L&lambda; = Spectral Radiance at the sensor's aperture in Watt/(meter squared * ster * &micro;m), the
       apparent radiance as seen by the satellite sensor;</li>
 <li> QCAL = the quantized calibrated pixel value in DN;</li>
-<li> LMIN&#955; = the spectral radiance that is scaled to QCALMIN in watts/(meter squared * ster * &#956;m);</li>
-<li> LMAX&#955; = the spectral radiance that is scaled to QCALMAX in watts/(meter squared * ster * &#956;m);</li>
-<li> QCALMIN = the minimum quantized calibrated pixel value (corresponding to LMIN&#955;) in DN;</li>
-<li> QCALMAX = the maximum quantized calibrated pixel value (corresponding to LMAX&#955;) in DN=255.</li>
+<li> LMIN&lambda; = the spectral radiance that is scaled to QCALMIN in watts/(meter squared * ster * &micro;m);</li>
+<li> LMAX&lambda; = the spectral radiance that is scaled to QCALMAX in watts/(meter squared * ster * &micro;m);</li>
+<li> QCALMIN = the minimum quantized calibrated pixel value (corresponding to LMIN&lambda;) in DN;</li>
+<li> QCALMAX = the maximum quantized calibrated pixel value (corresponding to LMAX&lambda;) in DN=255.</li>
 </ul>
 
-LMIN&#955; and LMAX&#955; are the radiances related to the minimal and maximal DN value, and are reported
+LMIN&lambda; and LMAX&lambda; are the radiances related to the minimal and maximal DN value, and are reported
 in the metadata file for each image, or in the table 1. High gain or low gain is also reported
 in the metadata file of each Landsat image. The minimal DN value (QCALMIN) is 1 for Landsat ETM+
 images (see
@@ -623,11 +622,8 @@ r.mapcalc "lsat7_2002_40_rad=((241.1 - (-5.1)) / (255.0 - 1.0)) * (lsat7_2002_40
 
 
 <div class="code"><pre>
-# using an integer DEM greatly accelerates the i.atcorr computations
-r.mapcalc "elev_int = round(elevation)"
-
 # find mean elevation (target above sea level, used as initialization value in control file)
-r.univar elev_int
+r.univar elevation
 </pre></div>
 
 Create a control file 'icnd.txt' for channel 4 (NIR), based on metadata. For the overpass time,
@@ -650,21 +646,21 @@ we need to define decimal hours:<br>
 Finally, run the atmospheric correction (-r for reflectance input map; -a for date &gt;July 2000;
 -o to use cache acceleration):
 <div class="code"><pre>
-i.atcorr -r -a -o lsat7_2002_40_rad ialt=elev_int icnd=icnd_lsat4.txt oimg=lsat7_2002_40_atcorr
+i.atcorr -r -a -o lsat7_2002_40_rad elev=elevation parameters=icnd_lsat4.txt output=lsat7_2002_40_atcorr
 </pre></div>
 
 Note that the altitude value from 'icnd_lsat4.txt' file is read at the beginning
 to compute the initial transform. It is necessary to give a value which could
-the the mean value of the elevation model. For the atmospheric correction then
+be the mean value of the elevation model. For the atmospheric correction then
 the raster elevation values are used from the map.
 <p>
 Note that the process is computationally intensive.<br>
 Note also, that <em>i.atcorr</em> reports solar elevation angle above horizon rather than solar zenith angle.
 
 <h2><font color="red">REMAINING DOCUMENTATION ISSUES</font></h2>
-1. It should be explained under what circumstances the use of categorized maps
-in conjuction with flag <em>-o</em> can slow down the calculations instead of
-speeding them up.
+1. The influence and importance of the visibility value or map should be 
+explained, also how to obtain an estimate for either visibility or aerosol 
+optical depth at 550nm.
 
 <h2>SEE ALSO</h2>
 
@@ -714,7 +710,7 @@ Not Found
 <br>Daniel Victoria, Anne Ghisla
 
 <p><em>RapidEye sensors addition 11/2010:</em>
-<br>Peter Löwe, Anne Ghisla
+<br>Peter L&ouml;we, Anne Ghisla
 
 <p>
 <i>Last changed: $Date$</i>

@@ -71,6 +71,9 @@ private:
      and used in subsequent calls to init to set xps and xpp */
     float original_xps;
     float original_xpp;
+    float original_taer55p;
+    float original_puw;
+    float original_puo3;
 
 	void pressure(AtmosModel& atms, float& uw, float& uo3);
 
@@ -84,8 +87,10 @@ public:
 
     /* Set the height to be used the next time init is called */
     void set_height(const float height) { original_xps = height; }
-    /* call init when ever xps changes */
+    /* call init only once: init parses input file */
     void init(AtmosModel& atms, const AerosolConcentration &aerocon);
+    /* call update_hv whenever xps changes */
+    void update_hv(AtmosModel& atms, const AerosolConcentration &aerocon);
     
 	static Altitude Parse();
 };

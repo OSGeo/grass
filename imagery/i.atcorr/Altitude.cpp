@@ -211,7 +211,7 @@ void Altitude::init(AtmosModel &atms, const AerosolConcentration &aerocon)
 	palt = 0;
 	pps = atms.p[0];
 	idatmp = 0;
-	taer55p = 0;
+	original_taer55p = taer55p = 0;
 	puw = 0;
     }
     else if(xpp >= 100)
@@ -219,7 +219,7 @@ void Altitude::init(AtmosModel &atms, const AerosolConcentration &aerocon)
 	/* satellite case of equivalent */
 	palt = 1000;
 	pps = 0;
-	taer55p = aerocon.taer55;
+	original_taer55p = taer55p = aerocon.taer55;
 	puw = 0;
 	ftray = 1;
 	idatmp = 4;
@@ -227,9 +227,12 @@ void Altitude::init(AtmosModel &atms, const AerosolConcentration &aerocon)
     else
     {
 	/* "real" plane case */
-	cin >> puw;
-	cin >> puo3;
-	cin.ignore(numeric_limits<int>::max(),'\n');	/* ignore comments */
+	cin >> original_puw;
+	cin >> original_puo3;
+	cin.ignore(numeric_limits < int >::max(), '\n');	/* ignore comments */
+
+	puw = original_puw;
+	puo3 = original_puo3;
 	if ( puw < 0 )
 	{
 	    presplane(atms);
@@ -252,7 +255,8 @@ void Altitude::init(AtmosModel &atms, const AerosolConcentration &aerocon)
 
 	palt = plane_sim.zpl[33] - atms.z[0];
 	pps = plane_sim.ppl[33];
-	cin >> taer55p;
+	cin >> original_taer55p;
+	taer55p = original_taer55p;
 
 	if ((taer55p > 0) || ((aerocon.taer55 - taer55p) < 1e-03))
 	{
@@ -269,6 +273,87 @@ void Altitude::init(AtmosModel &atms, const AerosolConcentration &aerocon)
 	    else {
 		sha = -palt/log(sha);
 		taer55p = (float)(aerocon.taer55 * (1 - exp(-palt/sha)));
+	    }
+	}
+    }
+}
+
+void Altitude::update_hv(AtmosModel & atms, const AerosolConcentration & aerocon)
+{
+    xps = original_xps;
+    xpp = original_xpp;
+
+    float uwus;
+    float uo3us;
+
+    if (xps <= 0) {
+	xps = 0;
+	uwus = 1.424f;
+	uo3us = 0.344f;
+    }
+    else if (atms.idatm != 8)
+	pressure(atms, atms.uw, atms.uo3);
+    else
+	pressure(atms, uwus, uo3us);
+
+    if (xpp <= 0) {
+	/* ground measurement option */
+	palt = 0;
+	pps = atms.p[0];
+	idatmp = 0;
+	taer55p = 0;
+	puw = 0;
+    }
+    else if (xpp >= 100) {
+	/* satellite case of equivalent */
+	palt = 1000;
+	pps = 0;
+	taer55p = aerocon.taer55;
+	puw = 0;
+	ftray = 1;
+	idatmp = 4;
+    }
+    else {
+	/* "real" plane case */
+
+	puw = original_puw;
+	puo3 = original_puo3;
+
+	if (puw < 0) {
+	    presplane(atms);
+	    idatmp = 2;
+
+	    if (atms.idatm == 8) {
+		puwus = puw;
+		puo3us = puo3;
+		puw *= atms.uw / uwus;
+		puo3 *= atms.uo3 / uo3us;
+		idatmp = 8;
+	    }
+	}
+	else {
+	    presplane(atms);
+	    idatmp = 8;
+	}
+
+	palt = plane_sim.zpl[33] - atms.z[0];
+	pps = plane_sim.ppl[33];
+	taer55p = original_taer55p;
+
+	if ((taer55p > 0) || ((aerocon.taer55 - taer55p) < 1e-03)) {
+	    /* a scale heigh of 2km is assumed in case no value is given for taer55p */
+	    taer55p = (float)(aerocon.taer55 * (1 - exp(-palt / 2)));
+	}
+	else {
+	    /* compute effective scale heigh */
+	    double sham = exp(-palt / 4);
+	    double sha = 1 - (taer55p / aerocon.taer55);
+
+	    if (sha >= sham)
+		taer55p = (float)(aerocon.taer55 * (1 - exp(-palt / 4)));
+	    else {
+		sha = -palt / log(sha);
+		taer55p = (float)(aerocon.taer55 * (1 - exp(-palt / sha)));
 	    }
 	}
     }
