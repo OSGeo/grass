@@ -21,8 +21,6 @@ import sys
 import time
 
 import globalvar
-if not os.getenv("GRASS_WXBUNDLED"):
-    globalvar.CheckForWx()
 import wx
 
 import grass.script as grass
