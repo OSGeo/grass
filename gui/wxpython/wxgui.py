@@ -28,7 +28,7 @@ import platform
 import signal
 import tempfile
 
-### XML 
+### XML
 try:
     import xml.etree.ElementTree as etree
 except ImportError:
@@ -38,13 +38,7 @@ except ImportError:
 import gettext
 gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
 
-import gui_modules
-sys.path.append(gui_modules.__path__[0])
-
-import gui_modules.globalvar as globalvar
-if not os.getenv("GRASS_WXBUNDLED"):
-    globalvar.CheckForWx()
-
+from gui_modules import globalvar
 import wx
 import wx.aui
 import wx.combo
@@ -65,33 +59,31 @@ except ImportError:
 sys.path.append(os.path.join(globalvar.ETCDIR, "python"))
 from grass.script import core as grass
 
-import gui_modules.utils as utils
-import gui_modules.preferences as preferences
-import gui_modules.layertree as layertree
-import gui_modules.mapdisp as mapdisp
-import gui_modules.menudata as menudata
-import gui_modules.menuform as menuform
-import gui_modules.histogram as histogram
-import gui_modules.profile as profile
-import gui_modules.mcalc_builder as mapcalculator
-import gui_modules.gcmd as gcmd
-import gui_modules.dbm as dbm
-import gui_modules.workspace as workspace
-import gui_modules.goutput as goutput
-import gui_modules.gdialogs as gdialogs
-import gui_modules.colorrules as colorrules
-import gui_modules.ogc_services as ogc_services
-import gui_modules.prompt as prompt
-import gui_modules.menu as menu
-import gui_modules.gmodeler as gmodeler
-import gui_modules.vclean as vclean
-import gui_modules.nviz_tools as nviz_tools
-from   gui_modules.debug import Debug
-from   gui_modules.ghelp import MenuTreeWindow
-from   gui_modules.ghelp import AboutWindow
-from   gui_modules.ghelp import InstallExtensionWindow
-from   gui_modules.toolbars import LayerManagerToolbar
-from   icons.icon import Icons
+from gui_modules import utils
+from gui_modules import preferences
+from gui_modules import layertree
+from gui_modules import mapdisp
+from gui_modules import menudata
+from gui_modules import menuform
+from gui_modules import histogram
+from gui_modules import profile
+from gui_modules import mcalc_builder as mapcalculator
+from gui_modules import gcmd
+from gui_modules import dbm
+from gui_modules import workspace
+from gui_modules import goutput
+from gui_modules import gdialogs
+from gui_modules import colorrules
+from gui_modules import ogc_services
+from gui_modules import prompt
+from gui_modules import menu
+from gui_modules import gmodeler
+from gui_modules import vclean
+from gui_modules import nviz_tools
+from gui_modules.debug import Debug
+from gui_modules.ghelp import MenuTreeWindow, AboutWindow, InstallExtensionWindow
+from gui_modules.toolbars import LayerManagerToolbar
+from icons.icon import Icons
 
 UserSettings = preferences.globalSettings
 

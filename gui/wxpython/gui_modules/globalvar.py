@@ -49,16 +49,17 @@ def CheckForWx():
     global check
     if not check:
         return
-    
     minVersion = [2, 8, 1, 1]
     try:
         try:
             import wxversion
         except ImportError, e:
             raise ImportError(e)
-        wxversion.select(str(minVersion[0]) + '.' + str(minVersion[1]))
+        # wxversion.select(str(minVersion[0]) + '.' + str(minVersion[1]))
+        wxversion.ensureMinimal(str(minVersion[0]) + '.' + str(minVersion[1]))
         import wx
         version = wx.version().split(' ')[0]
+        
         if map(int, version.split('.')) < minVersion:
             raise ValueError('Your wxPython version is %s.%s.%s.%s' % tuple(version.split('.')))
 

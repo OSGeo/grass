@@ -37,8 +37,6 @@ GUIModulesPath = os.path.join(os.getenv("GISBASE"), "etc", "gui", "wxpython", "g
 sys.path.append(GUIModulesPath)
 
 import globalvar
-if not os.getenv("GRASS_WXBUNDLED"):
-    globalvar.CheckForWx()
 import gselect
 import goutput
 import menuform

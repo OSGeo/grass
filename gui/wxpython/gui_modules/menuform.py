@@ -63,9 +63,6 @@ import gettext
 gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
 
 import globalvar
-if not os.getenv("GRASS_WXBUNDLED"):
-    globalvar.CheckForWx()
-
 import wx
 import wx.html
 try:

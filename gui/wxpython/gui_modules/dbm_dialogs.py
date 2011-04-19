@@ -19,9 +19,6 @@ for details.
 import os
 
 import globalvar
-if not os.getenv("GRASS_WXBUNDLED"):
-    globalvar.CheckForWx()
-
 import wx
 import wx.lib.scrolledpanel as scrolled
 
