@@ -33,19 +33,16 @@ import gettext
 gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
 
 from gui_modules import globalvar
-if not os.getenv("GRASS_WXBUNDLED"):
-    globalvar.CheckForWx()
-
-from gui_modules import goutput
-from gui_modules.ghelp import HelpFrame
-from gui_modules.gcmd  import GMessage
-
 import wx
 import wx.html
 import wx.lib.rcsizer as rcs
 import wx.lib.filebrowsebutton as filebrowse
 import wx.lib.mixins.listctrl as listmix
 import wx.lib.scrolledpanel as scrolled
+
+from gui_modules import goutput
+from gui_modules.ghelp import HelpFrame
+from gui_modules.gcmd  import GMessage
 
 sys.stderr = codecs.getwriter('utf8')(sys.stderr)
 
