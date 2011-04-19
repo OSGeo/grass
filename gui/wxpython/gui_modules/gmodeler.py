@@ -56,8 +56,6 @@ except ImportError:
     import elementtree.ElementTree as etree # Python <= 2.4
 
 import globalvar
-if not os.getenv("GRASS_WXBUNDLED"):
-    globalvar.CheckForWx()
 import wx
 import wx.lib.ogl             as ogl
 import wx.lib.flatnotebook    as FN

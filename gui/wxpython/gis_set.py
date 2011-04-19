@@ -36,7 +36,7 @@ from gui_modules import globalvar
 if not os.getenv("GRASS_WXBUNDLED"):
     globalvar.CheckForWx()
 
-import gui_modules.goutput
+from gui_modules import goutput
 from gui_modules.ghelp import HelpFrame
 from gui_modules.gcmd  import GMessage
 
