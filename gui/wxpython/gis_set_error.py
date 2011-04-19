@@ -15,8 +15,6 @@ import os
 import sys
 
 import gui_modules.globalvar as globalvar
-if not os.getenv("GRASS_WXBUNDLED"):
-    globalvar.CheckForWx()
 import wx
 
 def main():
