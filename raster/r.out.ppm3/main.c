@@ -54,6 +54,7 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("export"));
     module->description = _("Converts 3 GRASS raster layers (R,G,B) to a PPM image file.");
 
     for (i = 0; i < 3; i++) {

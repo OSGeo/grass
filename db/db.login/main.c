@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("database"));
-    G_add_keyword(_("connection"));
+    G_add_keyword(_("connection settings"));
     module->description = _("Sets user/password for driver/database.");
 
     driver = G_define_standard_option(G_OPT_DB_DRIVER);

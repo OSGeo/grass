@@ -518,6 +518,8 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
+    G_add_keyword(_("raster"));
+    G_add_keyword(_("import"));
     module->description = "Import non-georeferenced PNG format image.";
 
     inopt = G_define_standard_option(G_OPT_F_INPUT);

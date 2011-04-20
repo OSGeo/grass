@@ -89,6 +89,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("import"));
     module->description =
 	_("Imports a binary MAT-File(v4) to a GRASS raster.");
 
