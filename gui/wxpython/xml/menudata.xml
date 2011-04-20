@@ -267,7 +267,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Matlab array or Mapgen format import</label>
-	      <help>Imports Mapgen or Matlab vector maps into GRASS.</help>
+	      <help>Imports Mapgen or Matlab-ASCII vector maps into GRASS.</help>
 	      <keywords>vector,import</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.in.mapgen</command>
@@ -1077,7 +1077,7 @@
 	</menuitem>
 	<menuitem>
 	  <label>Mask</label>
-	  <help>Creates a mask for limiting raster operation.</help>
+	  <help>Creates a MASK for limiting raster operation.</help>
 	  <keywords>raster,mask</keywords>
 	  <handler>OnMenuCmd</handler>
 	  <command>r.mask</command>

@@ -16,7 +16,7 @@
 #############################################################################
 
 #%module
-#% description: Creates a mask for limiting raster operation.
+#% description: Creates a MASK for limiting raster operation.
 #% keywords: raster
 #% keywords: mask
 #%end
