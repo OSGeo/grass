@@ -238,6 +238,9 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("vector"));
+    G_add_keyword(_("surface"));
+    G_add_keyword(_("interpolation"));
+    G_add_keyword(_("RST"));
     module->description =
 	_("Interpolates point data to a G3D grid volume using "
 	  "regularized spline with tension (RST) algorithm.");

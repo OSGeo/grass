@@ -58,6 +58,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("import"));
     module->description =
 	_("Converts an ESRI ARC/INFO ascii raster file (GRID) into a GRASS raster map.");
     

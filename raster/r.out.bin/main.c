@@ -277,6 +277,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("export"));
     module->description = _("Exports a GRASS raster to a binary array.");
 
     /* Define the different options */
