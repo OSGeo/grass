@@ -85,9 +85,9 @@ int main(int argc, char **argv)
     G_add_keyword(_("raster"));
     G_add_keyword(_("hydrology"));
     module->description =
-	_("Filters and generates a depressionless elevation map and a flow "
-	  "direction map from a given elevation raster map.");
-
+	_("Filters and generates a depressionless elevation map and a "
+	  "flow direction map from a given elevation raster map.");
+    
     opt1 = G_define_standard_option(G_OPT_R_ELEV);
     
     opt2 = G_define_standard_option(G_OPT_R_OUTPUT);

@@ -7,7 +7,7 @@
  *               Glynn Clements <glynn gclements.plus.com>, Hamish Bowman <hamish_b yahoo.com>,
  *               Jan-Oliver Wagner <jan intevation.de>, Paul Kelly <paul-grass stjohnspoint.co.uk>
  * PURPOSE:      combines a series of GRASS raster maps into a single MPEG-1
- * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2006, 2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -54,7 +54,7 @@
 
 
 /* global variables */
-int nrows, ncols, numviews, quality, quiet = FALSE;
+int nrows, ncols, numviews, quality;
 char *vfiles[MAXVIEWS][MAXIMAGES];
 char outfile[GPATH_MAX];
 const char *encoder;
@@ -92,7 +92,7 @@ int main(int argc, char **argv)
 {
     struct GModule *module;
     struct Option *viewopts[MAXVIEWS], *out, *qual;
-    struct Flag *qt, *conv;
+    struct Flag *conv;
     int i;
     int *sdimp, longdim, r_out;
 
@@ -104,29 +104,22 @@ int main(int argc, char **argv)
     G_add_keyword(_("animation"));
 
     module->description =
-	_("Raster map series to MPEG movie conversion.");
+	_("Converts raster map series to MPEG movie.");
 
     for (i = 0; i < MAXVIEWS; i++) {
-	char buf[BUFSIZ];
-	viewopts[i] = G_define_option();
-	sprintf(buf, "view%d", i + 1);
+	char *buf = NULL;
+	viewopts[i] = G_define_standard_option(G_OPT_R_INPUTS);
+	G_asprintf(&buf, "view%d", i + 1);
 	viewopts[i]->key = G_store(buf);
-	viewopts[i]->type = TYPE_STRING;
 	viewopts[i]->required = (i ? NO : YES);
-	viewopts[i]->multiple = YES;
-	viewopts[i]->gisprompt = "old,cell,Raster";
-	sprintf(buf, _("Raster file(s) for View%d"), i + 1);
+	G_asprintf(&buf, _("Name of input raster map(s) for view no.%d"), i + 1);
 	viewopts[i]->description = G_store(buf);
+	G_free(buf);
     }
 
-    out = G_define_option();
-    out->key = "output";
-    out->type = TYPE_STRING;
-    out->required = NO;
-    out->multiple = NO;
-    out->answer = "gmovie.mpg";
+    out = G_define_standard_option(G_OPT_R_OUTPUT);
     out->description = _("Name for output file");
-
+    
     qual = G_define_option();
     qual->key = "qual";
     qual->type = TYPE_INTEGER;
@@ -140,16 +133,12 @@ int main(int argc, char **argv)
     conv = G_define_flag();
     conv->key = 'c';
     conv->label = _("Convert on the fly, uses less disk space");
-    conv->description =	_("(requires r.out.ppm with stdout option)");
+    conv->description =	_("Requires r.out.ppm with stdout option");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-
     parse_command(viewopts, vfiles, &numviews, &frames);
-
-    if (G_verbose() <= G_verbose_min())
-	quiet = TRUE;
 
     r_out = 0;
     if (conv->answer)
@@ -160,11 +149,6 @@ int main(int argc, char **argv)
 	sscanf(qual->answer, "%d", &quality);
     if (quality > 5 || quality < 1)
 	quality = 3;
-
-    if (out->answer)
-	strcpy(outfile, out->answer);
-    else
-	strcpy(outfile, "gmovie.mpg");
 
     /* find a working encoder */
     if (check_encoder("ppmtompeg"))
@@ -298,7 +282,7 @@ static int load_files(void)
 
 	    name = vfiles[vnum][cnt];
 
-	    G_message(_("Reading file <%s> ..."), name);
+	    G_message(_("Reading raster map <%s>..."), name);
 
 	    fd = Rast_open_old(name, "");
 
@@ -344,7 +328,7 @@ static int load_files(void)
     mpfilename = G_tempfile();
     write_params(mpfilename, yfiles, outfile, cnt, quality, y_rows, y_cols, 0);
 
-    if (quiet)
+    if (G_verbose() <= G_verbose_min())
 	ret = G_spawn(encoder, encoder, mpfilename,
 		      SF_REDIRECT_FILE, SF_STDOUT, SF_MODE_OUT, G_DEV_NULL,
 		      SF_REDIRECT_FILE, SF_STDERR, SF_MODE_OUT, G_DEV_NULL,
@@ -377,7 +361,7 @@ static int use_r_out(void)
     mpfilename = G_tempfile();
     write_params(mpfilename, vfiles[0], outfile, frames, quality, 0, 0, 1);
 
-    if (quiet)
+    if (G_verbose() <= G_verbose_min())
 	ret = G_spawn(encoder, encoder, mpfilename,
 		      SF_REDIRECT_FILE, SF_STDOUT, SF_MODE_OUT, G_DEV_NULL,
 		      SF_REDIRECT_FILE, SF_STDERR, SF_MODE_OUT, G_DEV_NULL,
@@ -461,7 +445,7 @@ static char **gee_wildfiles(const char *wildarg, const char *element, int *num)
     char **files;
 
     tfile = G_tempfile();
-
+    
     mlist(element, wildarg, tfile);
     files = parse(tfile, num);
 
