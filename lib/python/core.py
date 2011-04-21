@@ -13,14 +13,14 @@ grass.parser()
 ...
 @endcode
 
-(C) 2008-2011 by the GRASS Development Team
+(C) 2008-2010 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 @author Glynn Clements
 @author Martin Landa <landa.martin gmail.com>
-@author Michael Barton <michael.barton asu.edu>
+@author Michael Barton <michael.barton@asu.edu>
 """
 
 import os
@@ -40,15 +40,15 @@ gettext.install('grasslibs', os.path.join(os.getenv("GISBASE"), 'locale'), unico
 # subprocess wrapper that uses shell on Windows
 
 class Popen(subprocess.Popen):
-    def __init__(self, args, bufsize = 0, executable = None,
-                 stdin = None, stdout = None, stderr = None,
-                 preexec_fn = None, close_fds = False, shell = None,
-                 cwd = None, env = None, universal_newlines = False,
-                 startupinfo = None, creationflags = 0):
-        
+    def __init__(self, args, bufsize=0, executable=None,
+                 stdin=None, stdout=None, stderr=None,
+                 preexec_fn=None, close_fds=False, shell=None,
+                 cwd=None, env=None, universal_newlines=False,
+                 startupinfo=None, creationflags=0):
+
 	if shell == None:
 	    shell = (sys.platform == "win32")
-        
+
 	subprocess.Popen.__init__(self, args, bufsize, executable,
                                   stdin, stdout, stderr,
                                   preexec_fn, close_fds, shell,
@@ -58,7 +58,7 @@ class Popen(subprocess.Popen):
 PIPE = subprocess.PIPE
 STDOUT = subprocess.STDOUT
 
-class ScriptError(Exception):
+class ScriptException(Exception):
     def __init__(self, msg):
         self.value = msg
     
@@ -93,12 +93,6 @@ def _make_val(val):
     if isinstance(val, types.TupleType):
 	return _make_val(list(val))
     return str(val)
-
-def _get_error(string):
-    try:
-        return string.split('\n')[-2]
-    except:
-        return ''
 
 def make_command(prog, flags = "", overwrite = False, quiet = False, verbose = False, **options):
     """!Return a list of strings suitable for use as the args parameter to
@@ -187,23 +181,9 @@ def run_command(*args, **kwargs):
 
     @return exit code (0 for success)
     """
-    if get_raise_on_error():
-        kwargs['stderr'] = PIPE
-        env = os.getenv('GRASS_MESSAGE_FORMAT')
-        os.environ['GRASS_MESSAGE_FORMAT'] = 'plain'
-
     ps = start_command(*args, **kwargs)
-    
-    if get_raise_on_error():
-        err = ps.communicate()[1]
-        if env:
-            os.environ['GRASS_MESSAGE_FORMAT'] = env
-        if ps.returncode != 0:
-            raise ScriptError(_("Error in %s(%s): %s") % ('run_command', args[0], _get_error(err)))
-        return ps.returncode
-    else:
-        return ps.wait()
-    
+    return ps.wait()
+
 def pipe_command(*args, **kwargs):
     """!Passes all arguments to start_command(), but also adds
     "stdout = PIPE". Returns the Popen object.
@@ -250,22 +230,8 @@ def read_command(*args, **kwargs):
     
     @return stdout
     """
-    if get_raise_on_error():
-        kwargs['stderr'] = PIPE
-        env = os.getenv('GRASS_MESSAGE_FORMAT')
-        os.environ['GRASS_MESSAGE_FORMAT'] = 'plain'
-    
     ps = pipe_command(*args, **kwargs)
-    
-    if get_raise_on_error():
-        out, err = ps.communicate()
-        if env:
-            os.environ['GRASS_MESSAGE_FORMAT'] = env
-        if ps.returncode != 0:
-            raise ScriptError(_("Error in %s(%s): %s") % ('read_command', args[0], _get_error(err)))
-        return _decode(out)
-    else:
-        return _decode(ps.communicate()[0])
+    return _decode(ps.communicate()[0])
 
 def parse_command(*args, **kwargs):
     """!Passes all arguments to read_command, then parses the output by
@@ -308,26 +274,11 @@ def write_command(*args, **kwargs):
     @return return code
     """
     stdin = kwargs['stdin']
-    if get_raise_on_error():
-        kwargs['stderr'] = PIPE
-        env = os.getenv('GRASS_MESSAGE_FORMAT')
-        os.environ['GRASS_MESSAGE_FORMAT'] = 'plain'
-    
     p = feed_command(*args, **kwargs)
     p.stdin.write(stdin)
-    
-    if get_raise_on_error():
-        err = p.communicate()[1]
-        if env:
-            os.environ['GRASS_MESSAGE_FORMAT'] = env
-        p.stdin.close()
-        if p.returncode != 0:
-            raise ScriptError(_("Error in %s(%s): %s") % ('write_command', args[0], _get_error(err)))
-        return p.returncode
-    else:
-        p.stdin.close()
-        return p.wait()
-    
+    p.stdin.close()
+    return p.wait()
+
 def exec_command(prog, flags = "", overwrite = False, quiet = False, verbose = False, env = None, **kwargs):
     """!Interface to os.execvpe(), but with the make_command() interface.
 
@@ -410,7 +361,7 @@ def error(msg):
     """
     global raise_on_error
     if raise_on_error:
-        raise ScriptError(msg)
+        raise ScriptException(msg)
     else:
         message(msg, flag = 'e')
 
@@ -425,7 +376,7 @@ def fatal(msg):
 def set_raise_on_error(raise_exp = True):
     """!Define behaviour on error (error() called)
 
-    @param raise_exp True to raise ScriptError instead of calling
+    @param raise_exp True to raise ScriptException instead of calling
     error()
     
     @return current status
@@ -433,16 +384,6 @@ def set_raise_on_error(raise_exp = True):
     global raise_on_error
     tmp_raise = raise_on_error
     raise_on_error = raise_exp
-    
-    return tmp_raise
-
-def get_raise_on_error():
-    """!Get raise_on_error status
-
-    @return True to raise exception
-    """
-    global raise_on_error
-    return raise_on_error
 
 # interface to g.parser
 
@@ -1012,7 +953,7 @@ def create_location(dbase, location,
                     datum = None, desc = None):
     """!Create new location
 
-    Raise ScriptError on error.
+    Raise ScriptException on error.
     
     @param dbase path to GRASS database
     @param location location name to create
@@ -1074,7 +1015,7 @@ def create_location(dbase, location,
                     set = 'GISDBASE=%s' % gisdbase)
         
         if ps.returncode != 0 and error:
-            raise ScriptError(repr(error))
+            raise ScriptException(repr(error))
 
     try:
         fd = codecs.open(os.path.join(dbase, location,
@@ -1086,12 +1027,12 @@ def create_location(dbase, location,
             fd.write(os.linesep)
         fd.close()
     except OSError, e:
-        raise ScriptError(repr(e))
+        raise ScriptException(repr(e))
         
 def _create_location_xy(database, location):
     """!Create unprojected location
 
-    Raise ScriptError on error.
+    Raise ScriptException on error.
     
     @param database GRASS database where to create new location
     @param location location name
@@ -1133,7 +1074,7 @@ def _create_location_xy(database, location):
         
         os.chdir(cur_dir)
     except OSError, e:
-        raise ScriptError(repr(e))
+        raise ScriptException(repr(e))
 
 # interface to g.version
 
