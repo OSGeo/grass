@@ -33,6 +33,7 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("display"));
+    G_add_keyword(_("setup"));
     module->description =
 	"Output a list of all available display colors with a configurable "
 	"separator (default is comma).";

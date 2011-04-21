@@ -46,9 +46,9 @@ int main(int argc, char *argv[])
     
     module = G_define_module();
     G_add_keyword(_("vector"));
-    G_add_keyword(_("external"));
-    G_add_keyword(_("ogr"));
-    
+    G_add_keyword(_("import"));
+    G_add_keyword(_("input"));
+    G_add_keyword(_("external")); 
     module->description = _("Creates a new pseudo-vector map as a link to an OGR-supported layer.");
     
     parse_args(argc, argv,

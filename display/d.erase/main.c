@@ -27,6 +27,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("display"));
+    G_add_keyword(_("setup"));
     module->description =
 	_("Erase the contents of the active display frame with user defined color");
 

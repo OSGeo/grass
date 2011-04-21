@@ -49,6 +49,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("statistics"));
     module->description =
 	_("Outputs a covariance/correlation matrix "
 	  "for user-specified raster map layer(s).");

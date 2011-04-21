@@ -60,6 +60,9 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("display"));
+    G_add_keyword(_("color transformation"));
+    G_add_keyword(_("RGB"));
+    G_add_keyword(_("HIS"));
     module->description =
 	_("Displays the result obtained by combining "
 	  "hue, intensity, and saturation (his) values "

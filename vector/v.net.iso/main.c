@@ -70,7 +70,8 @@ int main(int argc, char **argv)
     module = G_define_module();
     module->label = _("Splits net by cost isolines.");
     G_add_keyword(_("vector"));
-    G_add_keyword(_("networking"));
+    G_add_keyword(_("network"));
+    G_add_keyword(_("isolines"));
     module->description =
 	_("Splits net to bands between cost isolines (direction from centre). "
 	 "Centre node must be opened (costs >= 0). "

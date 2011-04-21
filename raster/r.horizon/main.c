@@ -176,8 +176,8 @@ int main(int argc, char *argv[])
 
     G_gisinit(argv[0]);
     module = G_define_module();
-
     G_add_keyword(_("raster"));
+    G_add_keyword(_("sun position"));
     module->label =
 	_("Horizon angle computation from a digital elevation model.");
     module->description =

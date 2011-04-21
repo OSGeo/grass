@@ -228,6 +228,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("sun energy"));
     module->label = _("Solar irradiance and irradiation model.");
     module->description =
 	_("Computes direct (beam), diffuse and reflected solar irradiation raster "

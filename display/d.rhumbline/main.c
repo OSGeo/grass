@@ -41,6 +41,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("display"));
+    G_add_keyword(_("distance"));
     module->description =
 	_("Displays the rhumbline joining two longitude/latitude coordinates.");
 

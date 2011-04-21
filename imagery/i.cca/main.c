@@ -82,6 +82,8 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("imagery"));
+    G_add_keyword(_("statistics"));
+    G_add_keyword(_("CCA"));
     module->description =
 	_("Canonical components analysis (cca) "
 	  "program for image processing.");
@@ -96,7 +98,8 @@ int main(int argc, char *argv[])
     sig_opt->key = "signature";
     sig_opt->type = TYPE_STRING;
     sig_opt->required = YES;
-    sig_opt->description = _("Ascii file containing spectral signatures");
+    sig_opt->key_desc = "name";
+    sig_opt->description = _("File containing spectral signatures");
 
     out_opt = G_define_standard_option(G_OPT_R_OUTPUT);
     out_opt->description = _("Output raster map prefix name");

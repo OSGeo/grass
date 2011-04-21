@@ -8,7 +8,7 @@
  *               Glynn Clements <glynn gclements.plus.com>,
  *               Jan-Oliver Wagner <jan intevation.de>
  *               Martin landa <landa.martin gmail.com>
- * PURPOSE:      
+ * PURPOSE:      Searches for GRASS data base files
  * COPYRIGHT:    (C) 1999-2008, 2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
@@ -36,6 +36,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("general"));
+    G_add_keyword(_("map management"));
     G_add_keyword(_("data base files"));
     module->description =
 	_("Searches for GRASS data base files "

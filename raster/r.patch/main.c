@@ -50,6 +50,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("geometry"));
     module->description =
 	_("Creates a composite raster map layer by using "
 	  "known category values from one (or more) map layer(s) "

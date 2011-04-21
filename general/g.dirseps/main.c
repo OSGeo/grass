@@ -32,6 +32,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("general"));
+    G_add_keyword(_("map management"));
     module->label =
 	_("Internal GRASS utility for converting directory separator characters.");
     module->description =

@@ -94,6 +94,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("imagery"));
+    G_add_keyword(_("geometry"));
     module->description =
 	_("Mark ground control points on image to be rectified.");
 

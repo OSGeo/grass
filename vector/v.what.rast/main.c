@@ -79,6 +79,8 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("raster"));
+    G_add_keyword(_("position"));
+    G_add_keyword(_("querying"));
     G_add_keyword(_("attribute table"));
     module->description =
 	_("Uploads raster values at positions of vector points to the table.");

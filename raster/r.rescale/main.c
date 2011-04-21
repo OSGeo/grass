@@ -46,6 +46,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("rescale"));
     module->description =
 	_("Rescales the range of category values " "in a raster map layer.");
 

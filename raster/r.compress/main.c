@@ -60,6 +60,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("map management"));
     module->description = _("Compresses and decompresses raster maps.");
 
     map = G_define_option();

@@ -227,6 +227,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("hydrology"));
     G_add_keyword(_("solute transport"));
     module->description =
 	_("Numerical calculation program for transient, confined and unconfined "

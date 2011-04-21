@@ -3,7 +3,7 @@
  *
  * MODULE:       g.findetc
  * AUTHOR(S):    William Kyngesburye
- * PURPOSE:      
+ * PURPOSE:      Searches for GRASS support files
  * COPYRIGHT:    (C) 2007 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -26,6 +26,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("general"));
+    G_add_keyword(_("map management"));
     module->description = "Searches for GRASS support files.";
 
     G_gisinit(argv[0]);

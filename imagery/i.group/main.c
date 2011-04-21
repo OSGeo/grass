@@ -50,6 +50,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("imagery"));
+    G_add_keyword(_("map management"));
     module->description =
 	_("Creates, edits, and lists groups and subgroups of imagery files.");
 

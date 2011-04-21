@@ -69,6 +69,7 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("display"));
+    G_add_keyword(_("raster"));
     module->description =
 	_("Overlays cell category values on a raster map layer "
 	  "displayed to the graphics monitor.");
