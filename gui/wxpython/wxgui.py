@@ -247,7 +247,7 @@ class GMFrame(wx.Frame):
     def OnGCPManager(self, event):
         """!Launch georectifier module
         """
-        import gui_modules.gcpmanager as gcpmanager
+        from gui_modules import gcpmanager
         gcpmanager.GCPWizard(self)
 
     def OnGModeler(self, event):
@@ -261,7 +261,7 @@ class GMFrame(wx.Frame):
         """!Launch Hardcopy Map Output Utility
         """
         try:
-            import psmap
+            from gui_modules import psmap
         except:
             gcmd.GError(parent = self.parent,
                         message = _("Hardcopy Map Output Utility is not available. You can install it by %s") % \
