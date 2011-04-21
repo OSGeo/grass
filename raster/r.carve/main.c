@@ -73,7 +73,7 @@ int main(int argc, char **argv)
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("hydrology"));
-    module->label = _("Generates stream channels");
+    module->label = _("Generates stream channels.");
     module->description = _("Takes vector stream data, transforms it "
 			    "to raster and subtracts depth from the output DEM.");
 
