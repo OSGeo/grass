@@ -8,7 +8,7 @@
  *               Glynn Clements <glynn gclements.plus.com>,
  *               Hamish Bowman <hamish_b yahoo.com>,
  *               Jan-Oliver Wagner <jan intevation.de>
- * PURPOSE:      
+ * PURPOSE:      Prints GRASS data base file names
  * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -37,6 +37,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("general"));
+    G_add_keyword(_("map management"));
     module->description = _("Prints GRASS data base file names.");
 
     /* Define the different options */

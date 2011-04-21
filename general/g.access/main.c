@@ -7,7 +7,7 @@
  *               Bernhard Reiter <bernhard intevation.de>,
  *               Glynn Clements <glynn gclements.plus.com>,
  *               Hamish Bowman <hamish_b yahoo.com>, Radim Blazek <radim.blazek gmail.com>
- * PURPOSE:      
+ * PURPOSE:      Controls access to the current mapset for other users on the system
  * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -35,6 +35,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("general"));
+    G_add_keyword(_("map management"));
     module->description =
 	_("Controls access to the current mapset for other users on the system.");
 

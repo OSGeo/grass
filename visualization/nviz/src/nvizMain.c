@@ -68,9 +68,11 @@ int main(int argc, char **argv)
     }
 
     module = G_define_module();
-    G_add_keyword(_("raster"));
-    G_add_keyword(_("vector"));
     G_add_keyword(_("visualization"));
+    G_add_keyword(_("raster"));
+    G_add_keyword(_("raster3d"));
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("display"));
     module->description =
 	_("nviz - Visualization and animation tool for GRASS data.");
 

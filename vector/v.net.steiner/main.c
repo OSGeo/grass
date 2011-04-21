@@ -342,7 +342,8 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("vector"));
-    G_add_keyword(_("networking"));
+    G_add_keyword(_("network"));
+    G_add_keyword(_("steiner tree"));
     module->label =
 	_("Create Steiner tree for the network and given terminals");
     module->description =

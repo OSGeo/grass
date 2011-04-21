@@ -1,7 +1,7 @@
 
 /****************************************************************
  *
- * MODULE:       d.vect.extract
+ * MODULE:       d.extract
  * 
  * AUTHOR(S):    Radim Blazek, Markus Neteler
  *               
@@ -47,6 +47,7 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("display"));
+    G_add_keyword(_("vector"));
     module->description =
 	_("Selects and extracts vectors with mouse into new vector map.");
 

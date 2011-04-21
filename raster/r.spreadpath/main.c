@@ -87,6 +87,8 @@ int main(int argc, char **argv)
     /* Set description */
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("fire"));
+    G_add_keyword(_("cumulative costs"));
     module->description =
 	_("Recursively traces the least cost path backwards to "
 	  "cells from which the cumulative cost was determined.");

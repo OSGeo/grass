@@ -93,6 +93,7 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("display"));
+    G_add_keyword(_("raster"));
     module->description =
 	_("Draws arrows representing cell aspect direction "
 	  "for a raster map containing aspect data.");

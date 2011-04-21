@@ -52,6 +52,7 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("vector"));
+    G_add_keyword(_("position"));
     G_add_keyword(_("querying"));
     module->description = _("Queries a vector map at given locations.");
 

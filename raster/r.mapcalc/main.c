@@ -88,7 +88,7 @@ static expr_list *parse_file(const char *filename)
 
     fp = fopen(filename, "r");
     if (!fp)
-	G_fatal_error(_("unable to open input file <%s>"), filename);
+	G_fatal_error(_("Unable to open input file <%s>"), filename);
 
     res = parse_stream(fp);
 

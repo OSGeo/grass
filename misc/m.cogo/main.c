@@ -223,6 +223,7 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("miscellaneous"));
+    G_add_keyword(_("distance"));
     module->label = _("A simple utility for converting bearing and "
 		      "distance measurements to coordinates and vice versa.");
     module->description = _("It assumes a cartesian coordinate system");

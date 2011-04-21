@@ -74,6 +74,7 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("display"));
+    G_add_keyword(_("cartography"));
     module->description =
 	_("Displays a thematic vector area map in the active "
 	  "frame on the graphics monitor.");

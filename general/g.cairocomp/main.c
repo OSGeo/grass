@@ -191,6 +191,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("general"));
+    G_add_keyword(_("gui"));
     module->description = _("Overlays multiple X Pixmaps");
 
     opt.in = G_define_option();

@@ -288,6 +288,9 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("display"));
+    G_add_keyword(_("raster"));
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("visualization"));
     module->description = _("View BMP images from the PNG driver.");
 
     opt.image = G_define_option();

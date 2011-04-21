@@ -44,6 +44,7 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("display"));
+    G_add_keyword(_("geometry"));
     module->description =
 	_("Measures the lengths and areas of features drawn "
 	  "by the user in the active display frame on the "

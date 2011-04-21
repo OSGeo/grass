@@ -209,7 +209,7 @@ int main(int argc, char *argv[])
     /* Set description */
     module = G_define_module();
     G_add_keyword(_("raster"));
-    G_add_keyword(_("rate of spread"));
+    G_add_keyword(_("fire"));
     module->label = _("Generates rate of spread raster map layers.");
     module->description =
 	_("Generates three, or four raster map layers showing 1) the base "

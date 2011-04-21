@@ -106,6 +106,7 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("hydrology"));
     module->description =
 	_("Traces a flow through an elevation model on a raster map.");
 

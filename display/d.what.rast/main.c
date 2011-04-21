@@ -46,6 +46,9 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("display"));
+    G_add_keyword(_("raster"));
+    G_add_keyword(_("position"));
+    G_add_keyword(_("querying"));
     module->description =
 	_("Allows the user to interactively query the category contents "
 	  "of multiple raster map layers at user specified locations "

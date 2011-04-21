@@ -41,6 +41,8 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("display"));
+    G_add_keyword(_("position"));
+    G_add_keyword(_("querying"));
     module->description =
 	_("Identifies the geographic coordinates associated with "
 	  "point locations given in display coordinates.");

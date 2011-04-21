@@ -29,6 +29,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("display"));
+    G_add_keyword(_("metadata"));
     module->description =
 	_("Display information about the active display monitor");
 

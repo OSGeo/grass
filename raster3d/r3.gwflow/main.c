@@ -158,6 +158,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster3d"));
     G_add_keyword(_("voxel"));
+    G_add_keyword(_("hydrology"));
     G_add_keyword(_("groundwater"));
     G_add_keyword(_("numeric"));
     G_add_keyword(_("simulation"));

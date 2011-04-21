@@ -47,6 +47,7 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("display"));
+    G_add_keyword(_("cartography"));
     module->description =
 	_("Create a TITLE for a raster map in a form suitable "
 	  "for display with d.text.");

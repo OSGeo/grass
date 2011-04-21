@@ -44,6 +44,7 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("display"));
+    G_add_keyword(_("setup"));
     module->description =
 	_("Selects the font in which text will be displayed "
 	  "on the user's graphics monitor.");

@@ -50,6 +50,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("imagery"));
+    G_add_keyword(_("edges"));
     module->description =
 	_("Zero-crossing \"edge detection\" raster "
 	  "function for image processing.");

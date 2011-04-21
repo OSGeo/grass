@@ -1,23 +1,24 @@
-/*
- * Copyright (C) 2000 by the GRASS Development Team
- * Author: Bob Covill <bcovill@tekmap.ns.ca>
- * 
- * This Program is free software under the GPL (>=v2)
- * Read the file COPYING coming with GRASS for details
- *
- *
- */
 
-/* d.nviv -- interactively create fly-through
- * script for NVIZ
- * Functions ********************************
- * main --      parse parameters and get key frame coorinates
- * do_profile --calculate camera and eye coordinates from
- *              raster map
- * move --      part of screen coords
- * cont --      part of screen coords 
- * read_rast -- return camera and eye coordinates
- ***********************************/
+/****************************************************************************
+ *
+ * MODULE:       d.nviz
+ * AUTHOR(S):    Bob Covill <bcovill@tekmap.ns.ca>
+ * PURPOSE:      interactively create fly-through script for NVIZ
+ * Functions:
+ *   main --      parse parameters and get key frame coorinates
+ *   do_profile-- calculate camera and eye coordinates from
+ *                raster map
+ *   move --      part of screen coords
+ *   cont --      part of screen coords 
+ *   read_rast -- return camera and eye coordinates
+ *
+ * COPYRIGHT:    (C) 2000 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -66,6 +67,10 @@ int main(int argc, char *argv[])
     /* Set description */
     module = G_define_module();
     G_add_keyword(_("display"));
+    G_add_keyword(_("raster"));
+    G_add_keyword(_("raster3d"));
+    G_add_keyword(_("vector"));
+    G_add_keyword(_("visualization"));
     module->description = _("Creates fly-through script to run in NVIZ.");
 
     parm.opt1 = G_define_standard_option(G_OPT_R_INPUT);

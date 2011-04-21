@@ -92,6 +92,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("imagery"));
+    G_add_keyword(_("geometry"));
     module->description =
 	_("Set registration points for an imagery group from a vector map "
 	  "or keyboard entry.");

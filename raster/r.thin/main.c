@@ -54,6 +54,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("geometry"));
     module->description =
 	_("Thins non-zero cells that denote linear "
 	  "features in a raster map layer.");

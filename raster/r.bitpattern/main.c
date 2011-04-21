@@ -61,6 +61,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("algebra"));
     module->description = _("Compares bit patterns with a raster map.");
 
     /* Define the different options */

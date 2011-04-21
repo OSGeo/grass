@@ -86,6 +86,8 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("querying"));
+    G_add_keyword(_("color table"));
     module->description = _("Queries colors for a raster map layer.");
 
     opt.input = G_define_option();

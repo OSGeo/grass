@@ -89,6 +89,8 @@ int main(int argc, char *argv[])
     /* Set description */
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("position"));
+    G_add_keyword(_("querying"));
     module->description =
 	_("Queries raster map layers on their category values and category labels.");
 

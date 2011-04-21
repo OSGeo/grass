@@ -56,6 +56,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("volume"));
     module->description =
 	_("Calculates the volume of data \"clumps\", "
 	  "and (optionally) produces a GRASS vector points map "

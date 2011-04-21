@@ -137,6 +137,7 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("display"));
+    G_add_keyword(_("cartography"));
     module->description =
 	_("Draws text in the active display frame on the graphics monitor using the current font.");
 

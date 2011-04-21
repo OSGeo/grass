@@ -49,6 +49,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("raster"));
+    G_add_keyword(_("metadata"));
     module->description =
 	_("Sets the boundary definitions for a raster map.");
 
