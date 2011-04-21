@@ -41,6 +41,7 @@ nad83	"nadgrids=WO"           "Washington - Oregon" "Transforms 'Old NAD83' to '
 osgb36  "towgs84=446.448,-125.157,542.060,0.1502,0.2470,0.8421,-20.4894" "Great Britain" "Accuracy 5m"
 # http://crs.ifag.de/
 # http://crs.bkg.bund.de/crs-eu
+# http://www.crs-geo.eu
 hermannskogel "towgs84=577.326,90.129,463.919,5.1366,1.4742,5.2970,2.4232" "Austria" "Accuracy approx. 1.5m"
 # http://grass.fsv.cvut.cz/wiki/index.php/S-JTSK#GRASS_lokace_v_S-JTSK
 hermannskogel "towgs84=570.8,85.7,462.8,4.998,1.587,5.261,3.56" "Czech Republic" " "
@@ -59,7 +60,7 @@ S-42    "towgs84=15,-130,-84" "Kazakhstan" " "
 S-42    "towgs84=24,-124,-82" "Latvia" " "
 S-42    "towgs84=28,-121,-77" "Romania" " "
 S-42    "towgs84=26,-121,-78" "Czech Republic, Slovak Republic" " "
-# http://crs.ifag.de/
+# http://crs.bkg.bund.de/crs-eu
 rome40  "towgs84=-104.1,-49.1,-9.9,0.971,-2.917,0.714,-11.68" "Italy (Peninsular Part)" "Accuracy 3-4m"
 rome40  "towgs84=-168.6,-34.0,38.6,-0.374,-0.679,-1.379,-9.48" "Italy (Sardinia)" "Accuracy 3-4m"
 rome40  "towgs84=-50.2,-50.4,84.8,-0.690,-2.012,0.459,-28.08" "Italy (Sicily)" "Accuracy 3-4m"
