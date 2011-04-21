@@ -127,21 +127,21 @@
 	    <menuitem>
 	      <label>ESRI ASCII grid import</label>
 	      <help>Converts an ESRI ARC/INFO ascii raster file (GRID) into a GRASS raster map.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,import</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.in.arc</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>GRIDATB.FOR import</label>
 	      <help>Imports GRIDATB.FOR map file (TOPMODEL) into GRASS raster map</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,import</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.in.gridatb</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Matlab 2D array import</label>
 	      <help>Imports a binary MAT-File(v4) to a GRASS raster.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,import</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.in.mat</command>
 	    </menuitem>
@@ -335,14 +335,14 @@
 	    <menuitem>
 	      <label>ESRI ASCII grid export</label>
 	      <help>Converts a raster map layer into an ESRI ARCGRID file.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,export</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.out.arc</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>GRIDATB.FOR export</label>
 	      <help>Exports GRASS raster map to GRIDATB.FOR map file (TOPMODEL).</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,export</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.out.gridatb</command>
 	    </menuitem>
@@ -357,15 +357,15 @@
 	    <menuitem>
 	      <label>Raw binary array export</label>
 	      <help>Exports a GRASS raster to a binary array.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,export</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.out.bin</command>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
 	      <label>MPEG-1 export</label>
-	      <help>Raster map series to MPEG movie conversion.</help>
-	      <keywords>raster,animation</keywords>
+	      <help>Converts raster map series to MPEG movie.</help>
+	      <keywords>raster,export,animation</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.out.mpeg</command>
 	    </menuitem>
@@ -386,14 +386,14 @@
 	    <menuitem>
 	      <label>PPM from RGB export</label>
 	      <help>Converts 3 GRASS raster layers (R,G,B) to a PPM image file.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,export</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.out.ppm3</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>POV-Ray export</label>
 	      <help>Converts a raster map layer into a height-field file for POV-Ray.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,export</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.out.pov</command>
 	    </menuitem>
@@ -495,14 +495,14 @@
 	    <menuitem>
 	      <label>Vis5D export</label>
 	      <help>Converts a 3D raster map into a 3-dimensional Vis5D file.</help>
-	      <keywords>raster3d,export,voxel</keywords>
+	      <keywords>raster3d,voxel,export</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r3.out.v5d</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>VTK export</label>
 	      <help>Converts 3D raster maps into the VTK-ASCII format.</help>
-	      <keywords>raster3d,export,voxel</keywords>
+	      <keywords>raster3d,voxel,export</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r3.out.vtk</command>
 	    </menuitem>
@@ -527,14 +527,14 @@
 	    <menuitem>
 	      <label>Link external raster data</label>
 	      <help>Link GDAL supported raster data as a pseudo GRASS raster map layer.</help>
-	      <keywords>raster,import,external</keywords>
+	      <keywords>raster,import,input,external</keywords>
               <handler>OnLinkGdalLayers</handler>
 	      <command>r.external</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Link external vector data</label>
 	      <help>Creates a new pseudo-vector map as a link to an OGR-supported layer.</help>
-	      <keywords>vector,external,ogr,postgis</keywords>
+	      <keywords>vector,import,input,external</keywords>
               <handler>OnLinkOgrLayers</handler>
 	      <command>v.external</command>
 	    </menuitem>
@@ -542,14 +542,14 @@
 	    <menuitem>
 	      <label>Output format for raster data</label>
 	      <help>Defines raster output format utilizing GDAL library.</help>
-	      <keywords>raster,export,external</keywords>
+	      <keywords>raster,export,output,external</keywords>
               <handler>OnMenuCmd</handler>
 	      <command>r.external.out</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Output format for vector data</label>
 	      <help>Defines vector output format utilizing OGR library.</help>
-	      <keywords>vector,output,external</keywords>
+	      <keywords>vector,export,output,external</keywords>
               <handler>OnMenuCmd</handler>
 	      <command>v.external.out</command>
 	    </menuitem>
@@ -612,7 +612,7 @@
 	    <menuitem>
 	      <label>Raster to vector</label>
 	      <help>Converts a raster map into a vector map.</help>
-	      <keywords>raster,conversion,vectorization</keywords>
+	      <keywords>raster,conversion,geometry,vectorization</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.to.vect</command>
 	    </menuitem>
@@ -690,7 +690,7 @@
 	<menuitem>
 	  <label>NVIZ (requires Tcl/Tk)</label>
 	  <help>nviz - Visualization and animation tool for GRASS data.</help>
-	  <keywords>raster,vector,visualization</keywords>
+	  <keywords>visualization,raster,raster3d,vector,display</keywords>
 	  <handler>OnMenuCmd</handler>
 	  <command>nviz</command>
 	</menuitem>
@@ -705,7 +705,7 @@
 	<menuitem>
 	  <label>Bearing/distance to coordinates</label>
 	  <help>A simple utility for converting bearing and distance measurements to coordinates and vice versa.</help>
-	  <keywords>miscellaneous</keywords>
+	  <keywords>miscellaneous,distance</keywords>
 	  <handler>OnMenuCmd</handler>
 	  <command>m.cogo</command>
 	</menuitem>
@@ -748,14 +748,14 @@
 	    <menuitem>
 	      <label>Display region</label>
 	      <help>Manages the boundary definitions for the geographic region.</help>
-	      <keywords>general</keywords>
+	      <keywords>general,settings</keywords>
 	      <handler>RunMenuCmd</handler>
 	      <command>g.region -p</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Set region</label>
 	      <help>Manages the boundary definitions for the geographic region.</help>
-	      <keywords>general</keywords>
+	      <keywords>general,settings</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>g.region</command>
 	    </menuitem>
@@ -774,7 +774,7 @@
 	    <menuitem>
 	      <label>User access</label>
 	      <help>Controls access to the current mapset for other users on the system.</help>
-	      <keywords>general</keywords>
+	      <keywords>general,map management</keywords>
               <handler>OnMenuCmd</handler>
 	      <command>g.access</command>
 	    </menuitem>
@@ -878,7 +878,7 @@
 	    <menuitem>
 	      <label>Compress/decompress</label>
 	      <help>Compresses and decompresses raster maps.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,map management</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.compress</command>
 	    </menuitem>
@@ -886,7 +886,7 @@
 	    <menuitem>
 	      <label>Region boundaries</label>
 	      <help>Sets the boundary definitions for a raster map.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,metadata</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.region</command>
 	    </menuitem>
@@ -900,7 +900,7 @@
 	    <menuitem>
 	      <label>Quantization</label>
 	      <help>Produces the quantization file for a floating-point map.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,quantization,statistics</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.quant</command>
 	    </menuitem>
@@ -929,21 +929,21 @@
 	    <menuitem>
 	      <label>Resample using nearest neighbor</label>
 	      <help>GRASS raster map layer data resampling capability.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,resample</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.resample</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Resample using spline tension</label>
 	      <help>Reinterpolates and optionally computes topographic analysis from input raster map to a new raster map (possibly with different resolution) using regularized spline with tension and smoothing.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,resample</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.resamp.rst</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Resample using bspline</label>
 	      <help>Bicubic or bilinear spline interpolation with Tykhonov regularization.</help>
-	      <keywords>raster,surface,resampling</keywords>
+	      <keywords>raster,surface,resample,interpolation</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.resamp.bspline</command>
 	    </menuitem>
@@ -1035,7 +1035,7 @@
 	    <menuitem>
 	      <label>RGB to HIS</label>
 	      <help>Generates red, green and blue raster map layers combining hue, intensity and saturation (HIS) values from user-specified input raster map layers.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,color transformation,RGB,HIS</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.his</command>
 	    </menuitem>
@@ -1047,14 +1047,14 @@
         <menuitem>
           <label>Query values by coordinates</label>
           <help>Queries raster map layers on their category values and category labels.</help>
-          <keywords>raster</keywords>
+          <keywords>raster,position,querying</keywords>
           <handler>OnMenuCmd</handler>
           <command>r.what</command>
         </menuitem>
         <menuitem>
           <label>Query colors by value</label>
           <help>Queries colors for a raster map layer.</help>
-          <keywords>raster</keywords>
+          <keywords>raster,querying,color table</keywords>
           <handler>OnMenuCmd</handler>
           <command>r.what.color</command>
         </menuitem>
@@ -1071,7 +1071,7 @@
 	<menuitem>
 	  <label>Closest points</label>
 	  <help>Locates the closest points between objects in two raster maps.</help>
-	  <keywords>raster</keywords>
+	  <keywords>raster,distance</keywords>
 	  <handler>OnMenuCmd</handler>
 	  <command>r.distance</command>
 	</menuitem>
@@ -1095,7 +1095,7 @@
 	    <menuitem>
 	      <label>Moving window</label>
 	      <help>Makes each cell category value a function of the category values assigned to the cells around it, and stores new cell values in an output raster map layer.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,algebra,statistics</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.neighbors</command>
 	    </menuitem>
@@ -1114,7 +1114,7 @@
 	    <menuitem>
 	      <label>Cross product</label>
 	      <help>Creates a cross product of the category values from multiple raster map layers.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,statistics</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.cross</command>
 	    </menuitem>
@@ -1128,7 +1128,7 @@
 	    <menuitem>
 	      <label>Patch raster maps</label>
 	      <help>Creates a composite raster map layer by using known category values from one (or more) map layer(s) to fill in areas of "no data" in another map layer.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,geometry</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.patch</command>
 	    </menuitem>
@@ -1155,7 +1155,7 @@
 	    <menuitem>
 	      <label>Solar irradiance and irradiation</label>
 	      <help>Solar irradiance and irradiation model.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,sun energy</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.sun</command>
 	    </menuitem>
@@ -1188,7 +1188,7 @@
 	    <menuitem>
 	      <label>Least cost route or flow</label>
 	      <help>Traces a flow through an elevation model on a raster map.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,hydrology</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.drain</command>
 	    </menuitem>
@@ -1196,7 +1196,7 @@
 	    <menuitem>
 	      <label>Shaded relief</label>
 	      <help>Creates shaded relief map from an elevation map (DEM).</help>
-	      <keywords>raster,elevation</keywords>
+	      <keywords>raster</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.shaded.relief</command>
 	    </menuitem>
@@ -1218,7 +1218,7 @@
 	    <menuitem>
 	      <label>Textural features</label>
 	      <help>Generate images with textural features from a raster map.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,algebra,statistics</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.texture</command>
 	    </menuitem>
@@ -1226,7 +1226,7 @@
 	    <menuitem>
 	      <label>Visibility</label>
 	      <help>Line-of-sight raster analysis program.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,viewshed</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.los</command>
 	    </menuitem>
@@ -1241,7 +1241,7 @@
 	    <menuitem>
 	      <label>Horizon angle</label>
 	      <help>Horizon angle computation from a digital elevation model.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,sun position</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.horizon</command>
 	    </menuitem>
@@ -1267,7 +1267,7 @@
 	    <menuitem>
 	      <label>Thin</label>
 	      <help>Thins non-zero cells that denote linear features in a raster map layer.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,geometry</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.thin</command>
 	    </menuitem>
@@ -1279,7 +1279,7 @@
 	  <items>
 	    <menuitem>
 	      <label>Carve stream channels</label>
-	      <help>Generates stream channels.</help>
+	      <help>Generates stream channels</help>
 	      <keywords>raster,hydrology</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.carve</command>
@@ -1317,14 +1317,14 @@
 	    <menuitem>
 	      <label>SIMWE Overland flow modeling</label>
 	      <help>Overland flow hydrologic simulation using path sampling method (SIMWE).</help>
-	      <keywords>raster,flow,hydrology</keywords>
+	      <keywords>raster,hydrology</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.sim.water</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>SIMWE Sediment flux modeling</label>
 	      <help>Sediment transport and erosion/deposition simulation using path sampling method (SIMWE).</help>
-	      <keywords>raster,flow,hydrology,erosion,deposition</keywords>
+	      <keywords>raster,hydrology,sediment flow,erosion,deposition</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.sim.sediment</command>
 	    </menuitem>
@@ -1394,7 +1394,7 @@
         <menuitem>
           <label>Groundwater solute transport</label>
           <help>Numerical calculation program for transient, confined and unconfined solute transport in two dimensions</help>
-          <keywords>raster,solute transport</keywords>
+          <keywords>raster,hydrology,solute transport</keywords>
           <handler>OnMenuCmd</handler>
           <command>r.solute.transport</command>
         </menuitem>
@@ -1540,21 +1540,21 @@
 	    <menuitem>
 	      <label>Rate of spread</label>
 	      <help>Generates rate of spread raster map layers.</help>
-	      <keywords>raster,rate of spread</keywords>
+	      <keywords>raster,fire</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.ros</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Least-cost spread paths</label>
 	      <help>Recursively traces the least cost path backwards to cells from which the cumulative cost was determined.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,fire,cumulative costs</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.spreadpath</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Anisotropic spread simulation</label>
 	      <help>Simulates elliptically anisotropic spread on a graphics window and generates a raster map of the cumulative time of spread, given raster maps containing the rates of spread (ROS), the ROS directions and the spread origins.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,fire</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.spread</command>
 	    </menuitem>
@@ -1598,14 +1598,14 @@
 	    <menuitem>
 	      <label>Rescale</label>
 	      <help>Rescales the range of category values in a raster map layer.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,rescale</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.rescale</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Rescale with histogram</label>
 	      <help>Rescales histogram equalized the range of category values in a raster map layer.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,rescale</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.rescale.eq</command>
 	    </menuitem>
@@ -1615,7 +1615,7 @@
 	<menuitem>
 	  <label>Concentric circles</label>
 	  <help>Creates a raster map containing concentric rings around a given point.</help>
-	  <keywords>raster</keywords>
+	  <keywords>raster,geometry</keywords>
 	  <handler>OnMenuCmd</handler>
 	  <command>r.circle</command>
 	</menuitem>
@@ -1632,7 +1632,7 @@
 	    <menuitem>
 	      <label>Random cells and vector points</label>
 	      <help>Creates a raster map layer and vector point map containing randomly located points.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,random,vector</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.random</command>
 	    </menuitem>
@@ -1774,7 +1774,7 @@
 	    <menuitem>
 	      <label>Manage category information</label>
 	      <help>Manages category values and labels associated with user-specified raster map layers.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,category</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.category</command>
 	    </menuitem>
@@ -1789,14 +1789,14 @@
 	    <menuitem>
 	      <label>Quantiles for large data sets</label>
 	      <help>Compute quantiles using two passes.</help>
-	      <keywords>raster,statistics</keywords>
+	      <keywords>raster,algebra,statistics</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.quantile</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Range of category values</label>
 	      <help>Prints terse list of category values found in a raster map layer.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,metadata</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.describe</command>
 	    </menuitem>
@@ -1817,14 +1817,14 @@
 	    <menuitem>
 	      <label>Statistics for clumped cells</label>
 	      <help>Calculates the volume of data "clumps", and (optionally) produces a GRASS vector points map containing the calculated centroids of these clumps.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,volume</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.volume</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Total corrected area</label>
 	      <help>Surface area estimation for rasters.</help>
-	      <keywords>raster,surface,interpolation</keywords>
+	      <keywords>raster,surface,statistics</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.surf.area</command>
 	    </menuitem>
@@ -1839,14 +1839,14 @@
 	    <menuitem>
 	      <label>Sample transects</label>
 	      <help>Outputs the raster map layer values lying on user-defined line(s).</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,profile</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.profile</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Sample transects (bearing/distance)</label>
 	      <help>Outputs raster map layer values lying along user defined transect line(s).</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,transect</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.transect</command>
 	    </menuitem>
@@ -1854,7 +1854,7 @@
 	    <menuitem>
 	      <label>Covariance/correlation</label>
 	      <help>Outputs a covariance/correlation matrix for user-specified raster map layer(s).</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,statistics</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.covar</command>
 	    </menuitem>
@@ -1868,7 +1868,7 @@
 	    <menuitem>
 	      <label>Mutual category occurrences</label>
 	      <help>Tabulates the mutual occurrence (coincidence) of categories for two raster map layers.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,statistics</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.coin</command>
 	    </menuitem>
@@ -1898,7 +1898,7 @@
 	    <menuitem>
 	      <label>Create or rebuild topology</label>
 	      <help>Creates topology for vector map.</help>
-	      <keywords>vector,topology</keywords>
+	      <keywords>vector,geometry,topology</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.build</command>
 	    </menuitem>
@@ -2061,7 +2061,7 @@
 	<menuitem>
 	  <label>Query with coordinate(s)</label>
 	  <help>Queries a vector map at given locations.</help>
-	  <keywords>vector,querying</keywords>
+	  <keywords>vector,position,querying</keywords>
 	  <handler>OnMenuCmd</handler>
 	  <command>v.what</command>
 	</menuitem>
@@ -2152,7 +2152,7 @@
 	    <menuitem>
 	      <label>Network maintenance</label>
 	      <help>Performs network maintenance.</help>
-	      <keywords>vector,networking</keywords>
+	      <keywords>vector,network,maintenance</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.net</command>
 	    </menuitem>
@@ -2160,14 +2160,14 @@
 	    <menuitem>
 	      <label>Allocate subnets</label>
 	      <help>Allocate subnets for nearest centres (direction from centre).</help>
-	      <keywords>vector,networking</keywords>
+	      <keywords>vector,network,allocation</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.net.alloc</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Split net</label>
 	      <help>Splits net by cost isolines.</help>
-	      <keywords>vector,networking</keywords>
+	      <keywords>vector,network,isolines</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.net.iso</command>
 	    </menuitem>
@@ -2175,7 +2175,7 @@
 	    <menuitem>
 	      <label>Shortest path</label>
 	      <help>Finds shortest path on vector network.</help>
-	      <keywords>vector,networking</keywords>
+	      <keywords>vector,network,shortest path</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.net.path</command>
 	    </menuitem>
@@ -2247,7 +2247,7 @@
 	    <menuitem>
 	      <label>Steiner tree</label>
 	      <help>Create Steiner tree for the network and given terminals</help>
-	      <keywords>vector,networking</keywords>
+	      <keywords>vector,network,steiner tree</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.net.steiner</command>
 	    </menuitem>
@@ -2261,7 +2261,7 @@
 	    <menuitem>
 	      <label>Traveling salesman analysis</label>
 	      <help>Creates a cycle connecting given nodes (Traveling salesman problem).</help>
-	      <keywords>vector,networking</keywords>
+	      <keywords>vector,network,salesman</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.net.salesman</command>
 	    </menuitem>
@@ -2310,7 +2310,7 @@
 	<menuitem>
 	  <label>Generate area for current region</label>
 	  <help>Create a new vector from the current region.</help>
-	  <keywords>vector</keywords>
+	  <keywords>vector,geometry</keywords>
 	  <handler>OnMenuCmd</handler>
 	  <command>v.in.region</command>
 	</menuitem>
@@ -2334,7 +2334,7 @@
 	    <menuitem>
 	      <label>Voronoi diagram/Thiessen polygons</label>
 	      <help>Creates a Voronoi diagram from an input vector map containing points or centroids.</help>
-	      <keywords>vector</keywords>
+	      <keywords>vector,geometry,triangulation</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.voronoi</command>
 	    </menuitem>
@@ -2374,7 +2374,7 @@
 	    <menuitem>
 	      <label>Perturb points</label>
 	      <help>Random location perturbations of vector points.</help>
-	      <keywords>vector,statistics</keywords>
+	      <keywords>vector,geometry,statistics</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.perturb</command>
 	    </menuitem>
@@ -2416,7 +2416,7 @@
 	    <menuitem>
 	      <label>Sample raster maps at point locations</label>
 	      <help>Uploads raster values at positions of vector points to the table.</help>
-	      <keywords>vector,raster,attribute table</keywords>
+	      <keywords>vector,raster,position,querying,attribute table</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.what.rast</command>
 	    </menuitem>
@@ -2505,14 +2505,14 @@
 	    <menuitem>
 	      <label>Create/edit group</label>
 	      <help>Creates, edits, and lists groups and subgroups of imagery files.</help>
-	      <keywords>imagery</keywords>
+	      <keywords>imagery,map management</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>i.group</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Target group</label>
 	      <help>Targets an imagery group to a GRASS location and mapset.</help>
-	      <keywords>imagery</keywords>
+	      <keywords>imagery,map management</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>i.target</command>
 	    </menuitem>
@@ -2627,14 +2627,14 @@
 	    <menuitem>
 	      <label>Edge detection</label>
 	      <help>Zero-crossing "edge detection" raster function for image processing.</help>
-	      <keywords>imagery</keywords>
+	      <keywords>imagery,edges</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>i.zc</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Matrix/convolving filter</label>
 	      <help>Performs raster map matrix filter.</help>
-	      <keywords>raster,map algebra</keywords>
+	      <keywords>raster,algebra,statistics</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.mfilter</command>
 	    </menuitem>
@@ -2646,7 +2646,7 @@
 	    <menuitem>
 	      <label>Canonical correlation</label>
 	      <help>Canonical components analysis (cca) program for image processing.</help>
-	      <keywords>imagery</keywords>
+	      <keywords>imagery,statistics,CCA</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>i.cca</command>
 	    </menuitem>
@@ -2701,7 +2701,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Modis quality control</label>
-	      <help>Extract quality control parameters from Modis QC layers</help>
+	      <help>Extract quality control parameters from Modis QC layers.</help>
 	      <keywords>QC,Quality Control,Surface Reflectance,Land Surface Temperature,Vegetation,Modis</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>i.modis.qc</command>
@@ -2717,14 +2717,14 @@
 	    <separator />
 	    <menuitem>
 	      <label>LatLong map</label>
-	      <help>creates a latitude/longitude map</help>
+	      <help>Creates a latitude/longitude map.</help>
 	      <keywords>imagery,latitude,longitude,projection</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>i.latlong</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Sunshine hours</label>
-	      <help>creates a sunshine hours map</help>
+	      <help>Creates a sunshine hours map.</help>
 	      <keywords>sunshine,hours,daytime</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>i.sunhours</command>
@@ -2766,7 +2766,7 @@
 	    <separator />
 	    <menuitem>
 	      <label>Biomass growth</label>
-	      <help>Computes biomass growth, precursor of crop yield calculation</help>
+	      <help>Computes biomass growth, precursor of crop yield calculation.</help>
 	      <keywords>imagery,biomass,fpar,yield</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>i.biomass</command>
@@ -2778,14 +2778,14 @@
 	  <items>
 	    <menuitem>
 	      <label>Instantaneaous Net Radiation</label>
-	      <help>net radiation approximation (Bastiaanssen, 1995)</help>
+	      <help>Net radiation approximation (Bastiaanssen, 1995).</help>
 	      <keywords>net radiation,energy balance,SEBAL,energy balance,SEBAL</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>i.eb.netrad</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Soil heat flux</label>
-	      <help>Soil heat flux approximation (Bastiaanssen, 1995)</help>
+	      <help>Soil heat flux approximation (Bastiaanssen, 1995).</help>
 	      <keywords>imagery,soil heat flux,energy balance,SEBAL</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>i.eb.soilheatflux</command>
@@ -2800,14 +2800,14 @@
 	    <separator />
 	    <menuitem>
 	      <label>Evaporative fraction</label>
-	      <help>Computes evaporative fraction (Bastiaanssen, 1995) and root zone soil moisture (Makin, Molden and Bastiaanssen, 2001)</help>
+	      <help>Computes evaporative fraction (Bastiaanssen, 1995) and root zone soil moisture (Makin, Molden and Bastiaanssen, 2001).</help>
 	      <keywords>imagery,evaporative fraction,soil moisture,energy balance,SEBAL</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>i.eb.evapfr</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Actual Evapotranspiration</label>
-	      <help>actual evapotranspiration for diurnal period (Bastiaanssen, 1995)</help>
+	      <help>Actual evapotranspiration for diurnal period (Bastiaanssen, 1995).</help>
 	      <keywords>imagery,actual evapotranspiration,energy balance,SEBAL</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>i.eb.eta</command>
@@ -2850,14 +2850,14 @@
 	    <menuitem>
 	      <label>Bit pattern comparison </label>
 	      <help>Compares bit patterns with a raster map.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,algebra</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.bitpattern</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Kappa analysis</label>
 	      <help>Calculate error matrix and kappa parameter for accuracy assessment of classification result.</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,statistics</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.kappa</command>
 	    </menuitem>
@@ -2912,21 +2912,21 @@
 	<menuitem>
 	  <label>Cross section</label>
 	  <help>Creates cross section 2D raster map from 3d raster map based on 2D elevation map</help>
-	  <keywords>raster3d,voxel</keywords>
+	  <keywords>raster3d,raster,voxel</keywords>
 	  <handler>OnMenuCmd</handler>
 	  <command>r3.cross.rast</command>
 	</menuitem>
     <menuitem>
       <label>Groundwater modeling</label>
       <help>Numerical calculation program for transient, confined groundwater flow in three dimensions</help>
-      <keywords>raster3d,voxel,groundwater,numeric,simulation</keywords>
+      <keywords>raster3d,voxel,hydrology,groundwater,numeric,simulation</keywords>
       <handler>OnMenuCmd</handler>
       <command>r3.gwflow</command>
     </menuitem>
    	<menuitem>
 	  <label>Interpolate volume from points</label>
 	  <help>Interpolates point data to a G3D grid volume using regularized spline with tension (RST) algorithm.</help>
-	  <keywords>vector</keywords>
+	  <keywords>vector,surface,interpolation,RST</keywords>
 	  <handler>OnMenuCmd</handler>
 	  <command>v.vol.rst</command>
 	</menuitem>
