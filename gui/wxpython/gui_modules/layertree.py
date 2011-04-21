@@ -30,6 +30,10 @@ except ImportError:
 import wx.combo
 import wx.lib.newevent
 import wx.lib.buttons  as  buttons
+try:
+    import treemixin 
+except ImportError:
+    from wx.lib.mixins import treemixin
 
 import globalvar
 
@@ -48,15 +52,6 @@ from icon import Icons as Icons
 from preferences import globalSettings as UserSettings
 from vdigit import haveVDigit
 from gcmd import GWarning
-try:
-    import subprocess
-except:
-    from compat import subprocess
-    
-try:
-    import treemixin 
-except ImportError:
-    from wx.lib.mixins import treemixin
 
 TREE_ITEM_HEIGHT = 25
 
