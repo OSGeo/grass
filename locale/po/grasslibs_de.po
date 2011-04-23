@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-03 16:17+0100\n"
+"POT-Creation-Date: 2011-04-23 15:35+0200\n"
 "PO-Revision-Date: 2011-02-09 21:17+0100\n"
 "Last-Translator: Helmut Kudrnovsky <hellik@web.de>\n"
 "Language-Team: Deutsch <grass-translations@lists.osgeo.org>\n"
@@ -320,30 +320,30 @@ msgstr ""
 msgid "Unable to create <%s> file for map <%s>"
 msgstr "Kann die Rasterkarte <%s> nicht erstellen"
 
-#: ../lib/raster/reclass.c:166
+#: ../lib/raster/reclass.c:168
 #, fuzzy, c-format
 msgid "Too many reclass categories for <%s@%s>"
 msgstr "Zu viele reklassifizierte Kategorien für [%s in %s]."
 
-#: ../lib/raster/reclass.c:169
+#: ../lib/raster/reclass.c:171
 #, fuzzy, c-format
 msgid "Illegal reclass format in header file for <%s@%s>"
 msgstr "Ungültiges Reklassifizierungs-Format in der Header-Datei für Karte [%s in %s]."
 
-#: ../lib/raster/reclass.c:270
+#: ../lib/raster/reclass.c:273
 msgid "Illegal reclass request"
 msgstr "Ungültige Reklassifizierungsanfrage."
 
-#: ../lib/raster/reclass.c:275
+#: ../lib/raster/reclass.c:278
 msgid "Illegal reclass type"
 msgstr "Ungültiger Reklassifizierungs-Typ."
 
-#: ../lib/raster/reclass.c:281
+#: ../lib/raster/reclass.c:284
 #, fuzzy, c-format
 msgid "Unable to create header file for <%s@%s>"
 msgstr "Kann Header-Datei für [%s] nicht erstellen."
 
-#: ../lib/raster/reclass.c:329
+#: ../lib/raster/reclass.c:332
 #, fuzzy, c-format
 msgid "Unable to create dependency file in <%s@%s>"
 msgstr "Kann Abhängigkeitsdatei in [%s in %s] nicht erstellen."
@@ -471,8 +471,8 @@ msgid "unable to write f_format file for CELL maps"
 msgstr "Kann f_format Datei nicht schreiben."
 
 #: ../lib/raster/open.c:170 ../lib/raster/open.c:742 ../lib/raster/open.c:779
-#: ../lib/raster/open.c:831 ../lib/manage/do_rename.c:53
-#: ../lib/manage/do_remove.c:53 ../lib/gis/legal_name.c:91
+#: ../lib/raster/open.c:831 ../lib/manage/do_rename.c:71
+#: ../lib/manage/do_remove.c:73 ../lib/gis/legal_name.c:91
 #: ../lib/gis/legal_name.c:94 ../lib/rst/interp_float/output2d.c:236
 #: ../lib/rst/interp_float/output2d.c:317
 #: ../lib/rst/interp_float/output2d.c:386
@@ -740,102 +740,136 @@ msgstr ""
 msgid "Unable to access table <%s>"
 msgstr "Kann die Tabelle <%s> nicht anlegen."
 
-#: ../lib/lidar/zones.c:501 ../lib/lidar/zones.c:538
+#: ../lib/lidar/zones.c:502 ../lib/lidar/zones.c:539
 #, fuzzy, c-format
 msgid "<%s> created in database."
 msgstr "Tabelle <%s> existiert bereits in der Datenbank <%s>."
 
-#: ../lib/lidar/zones.c:505 ../lib/lidar/zones.c:542
+#: ../lib/lidar/zones.c:506 ../lib/lidar/zones.c:543
 #, c-format
 msgid "<%s> has not been created in database."
 msgstr ""
 
-#: ../lib/manage/do_copy.c:20
+#: ../lib/manage/do_copy.c:43
 #, fuzzy, c-format
 msgid "Copy %s <%s> to current mapset as <%s>"
 msgstr "Keine %s Dateien im aktuellen Mapset vorhanden\n"
 
-#: ../lib/manage/do_copy.c:41 ../lib/manage/do_rename.c:70
-#: ../lib/manage/do_rename.c:92 ../lib/manage/do_remove.c:70
-#: ../lib/manage/do_remove.c:92
+#: ../lib/manage/do_copy.c:52
 #, fuzzy, c-format
-msgid "%s: missing"
+msgid "Unable to copy <%s> to current mapset as <%s>"
+msgstr "Keine %s Dateien im aktuellen Mapset vorhanden\n"
+
+#: ../lib/manage/do_copy.c:63 ../lib/manage/do_rename.c:87
+#: ../lib/manage/do_rename.c:107 ../lib/manage/do_remove.c:89
+#: ../lib/manage/do_remove.c:109
+#, fuzzy, c-format
+msgid "%s is missing"
 msgstr "welche fehlt"
 
-#: ../lib/manage/do_copy.c:51
+#: ../lib/manage/do_copy.c:72
 #, c-format
-msgid "%s: copied"
+msgid "%s copied"
 msgstr ""
 
-#: ../lib/manage/read_list.c:108
+#: ../lib/manage/read_list.c:73
+#, fuzzy, c-format
+msgid "Unable to open data base element list '%s'"
+msgstr "Kann Datei '%s' mit Definition der Vektor Datenbank nicht öffnen."
+
+#: ../lib/manage/read_list.c:134
 #, c-format
-msgid ""
-"Format error: <%s>\n"
-"Line: %d\n"
-"%s"
+msgid "Format error: file ('%s') line (%d) - %s"
 msgstr ""
 
-#: ../lib/manage/do_rename.c:25
-#, c-format
-msgid "Rename %s <%s> to <%s>\n"
-msgstr ""
+#: ../lib/manage/do_rename.c:42
+#, fuzzy, c-format
+msgid "Rename %s <%s> to <%s>"
+msgstr "Kann Datenbank '%s' nicht öffnen."
 
-#: ../lib/manage/do_rename.c:37 ../lib/manage/do_remove.c:37
-#: ../lib/vector/Vlib/legal_vname.c:115 ../lib/vector/Vlib/legal_vname.c:118
-#: ../lib/vector/Vlib/map.c:403 ../lib/vector/Vlib/open.c:218
+#: ../lib/manage/do_rename.c:54 ../lib/manage/do_remove.c:57
+#: ../lib/vector/Vlib/legal_vname.c:113 ../lib/vector/Vlib/legal_vname.c:116
+#: ../lib/vector/Vlib/map.c:401 ../lib/vector/Vlib/open.c:217
 #: ../lib/ogsf/Gv3.c:58 ../lib/ogsf/Gp3.c:58
 #, c-format
 msgid "Vector map <%s> not found"
 msgstr "Vektorkarte <%s> nicht gefunden."
 
-#: ../lib/manage/do_rename.c:45
+#: ../lib/manage/do_rename.c:62
 #, fuzzy, c-format
-msgid "Cannot rename <%s> to <%s>"
-msgstr "Kann Datenbank '%s' nicht öffnen."
+msgid "Unable to rename vector map <%s> to <%s>"
+msgstr "Kann die Vektorkarte <%s> nicht nach <%s> kopieren."
 
-#: ../lib/manage/do_rename.c:58 ../lib/manage/do_remove.c:58
+#: ../lib/manage/do_rename.c:76 ../lib/manage/do_remove.c:78
 #: ../lib/ogsf/gvl_file.c:428 ../lib/ogsf/Gvl3.c:40
 #, c-format
 msgid "3D raster map <%s> not found"
 msgstr "3D-Rasterkarte <%s> nicht gefunden."
 
-#: ../lib/manage/do_rename.c:65 ../lib/manage/do_remove.c:65
+#: ../lib/manage/do_rename.c:83 ../lib/manage/do_rename.c:103
+#, fuzzy, c-format
+msgid "Unable to rename %s"
+msgstr "Kann <%s> nicht öffnen."
+
+#: ../lib/manage/do_rename.c:90 ../lib/manage/do_rename.c:110
 #, c-format
-msgid "%s: couldn't be removed"
+msgid "%s renamed"
 msgstr ""
 
-#: ../lib/manage/do_rename.c:74 ../lib/manage/do_rename.c:96
-#, c-format
-msgid "%s: renamed"
-msgstr ""
-
-#: ../lib/manage/do_rename.c:87
-#, c-format
-msgid "%s: couldn't be renamed"
-msgstr ""
-
-#: ../lib/manage/do_rename.c:105
+#: ../lib/manage/do_rename.c:119
 #, c-format
 msgid "<%s> nothing renamed"
 msgstr ""
 
-#: ../lib/manage/do_remove.c:22
+#: ../lib/manage/do_remove.c:42
 #, fuzzy, c-format
 msgid "Removing %s <%s>"
 msgstr "Kann [%s] nicht finden."
 
-#: ../lib/manage/do_remove.c:45 ../lib/manage/do_remove.c:87
-msgid "couldn't be removed"
-msgstr ""
+#: ../lib/manage/do_remove.c:65
+#, fuzzy
+msgid "Unable to delete vector map"
+msgstr "Kann Vektorkarte <%s> nicht löschen."
 
-#: ../lib/manage/do_remove.c:74 ../lib/manage/do_remove.c:96
+#: ../lib/manage/do_remove.c:85
+#, fuzzy, c-format
+msgid "Unable to remove %s element"
+msgstr "Kann das Verzeichnis '%s' nicht löschen."
+
+#: ../lib/manage/do_remove.c:92 ../lib/manage/do_remove.c:112
 #, c-format
-msgid "%s: removed"
+msgid "%s removed"
 msgstr ""
 
 #: ../lib/manage/do_remove.c:105
+#, fuzzy, c-format
+msgid "Unable to remove %s"
+msgstr "Kann <%s> nicht öffnen."
+
+#: ../lib/manage/do_remove.c:121
 #, c-format
 msgid "<%s> nothing removed"
+msgstr ""
+
+#: ../lib/manage/option.c:47
+#, fuzzy, c-format
+msgid "%s to be %s"
+msgstr "%s komplett. %s"
+
+#: ../lib/manage/option.c:51
+msgid "Raster"
+msgstr ""
+
+#: ../lib/manage/option.c:54
+msgid "Vector"
+msgstr ""
+
+#: ../lib/manage/option.c:56
+msgid "Region"
+msgstr ""
+
+#: ../lib/manage/option.c:58
+msgid "Group"
 msgstr ""
 
 #: ../lib/symbol/read.c:211
@@ -1262,118 +1296,101 @@ msgstr "Detaillierter Ausgabemodus"
 msgid "Quiet module output"
 msgstr "Schweigsamer Ausgabemodus"
 
-#: ../lib/gis/parser.c:388
+#: ../lib/gis/parser.c:390
 #, c-format
 msgid "BUG in descriptions, option '%s' in <%s> does not exist"
 msgstr "BUG in Beschreibungen, Option '%s' in <%s> existiert nicht."
 
-#: ../lib/gis/parser.c:496
+#: ../lib/gis/parser.c:498
 msgid "Use either --quiet or --verbose flag, not both. Assuming --verbose."
 msgstr "Verwenden Sie entweder --quiet oder --verbose, aber nicht beide. Verwende --verbose."
 
-#: ../lib/gis/parser.c:510
+#: ../lib/gis/parser.c:512
 msgid "Use either --quiet or --verbose flag, not both. Assuming --quiet."
 msgstr "Verwenden Sie entweder --quiet oder --verbose, aber nicht beide. Verwende --quiet."
 
-#: ../lib/gis/parser.c:540
-#, c-format
-msgid "Sorry <%s> is not a valid option\n"
+#: ../lib/gis/parser.c:542
+#, fuzzy, c-format
+msgid "Sorry <%s> is not a valid option"
 msgstr "Tut mir leid, <%s> ist keine gültige Option\n"
 
-#: ../lib/gis/parser.c:795
+#: ../lib/gis/parser.c:574
+#, fuzzy
+msgid "ERROR"
+msgstr "FEHLER: "
+
+#: ../lib/gis/parser.c:801
 msgid "Unable to determine program name"
 msgstr "Kann den Namen des Programms nicht herausfinden."
 
-#: ../lib/gis/parser.c:809 ../lib/gis/parser.c:826
-#, c-format
-msgid "Sorry, <%c> is not a valid flag\n"
+#: ../lib/gis/parser.c:817 ../lib/gis/parser.c:834
+#, fuzzy, c-format
+msgid "Sorry, <%c> is not a valid flag"
 msgstr "Tut mir leid, <%c> ist keine gültiges Flag.\n"
 
-#: ../lib/gis/parser.c:923
-#, c-format
-msgid "Sorry, <%s=> is ambiguous\n"
+#: ../lib/gis/parser.c:933
+#, fuzzy, c-format
+msgid "Sorry, <%s=> is ambiguous"
 msgstr "Tut mir leid, <%s=> ist nicht eindeutig.\n"
 
-#: ../lib/gis/parser.c:929
-#, c-format
-msgid "Sorry, <%s> is not a valid parameter\n"
+#: ../lib/gis/parser.c:940
+#, fuzzy, c-format
+msgid "Sorry, <%s> is not a valid parameter"
 msgstr "Tut mir leid, <%s> ist kein gültiger Parameter.\n"
 
-#: ../lib/gis/parser.c:1006
-#, c-format
+#: ../lib/gis/parser.c:1015
+#, fuzzy, c-format
 msgid ""
-"\n"
-"ERROR: illegal range syntax for parameter <%s>\n"
+"Illegal range syntax for parameter <%s>\n"
+"\tPresented as: %s"
 msgstr ""
 "\n"
 "Fehler: Ungültige Syntax für Wertebereich des Parameters <%s>.\n"
 
-#: ../lib/gis/parser.c:1007
-#, c-format
-msgid "       Presented as: %s\n"
-msgstr "       Präsentiert als: %s\n"
-
-#: ../lib/gis/parser.c:1011
-#, c-format
+#: ../lib/gis/parser.c:1021
+#, fuzzy, c-format
 msgid ""
-"\n"
-"ERROR: value <%s> out of range for parameter <%s>\n"
+"Value <%s> out of range for parameter <%s>\n"
+"\tLegal range: %s"
 msgstr ""
 "\n"
 "FEHLER: Wert <%s> ist außerhalb des Wertebereichs des Parameters <%s>.\n"
 
-#: ../lib/gis/parser.c:1013
-#, c-format
-msgid "       Legal range: %s\n"
-msgstr "       Erlaubter Wertebereich: %s\n"
-
-#: ../lib/gis/parser.c:1016
-#, c-format
-msgid ""
-"\n"
-"ERROR: Missing value for parameter <%s>\n"
+#: ../lib/gis/parser.c:1027
+#, fuzzy, c-format
+msgid "Missing value for parameter <%s>"
 msgstr ""
 "\n"
 "FEHLER: Fehlender Wert für Parameter <%s>.\n"
 
-#: ../lib/gis/parser.c:1020
+#: ../lib/gis/parser.c:1033
 #, fuzzy, c-format
 msgid ""
-"\n"
-"ERROR: value <%s> ambiguous for parameter <%s>\n"
+"Value <%s> ambiguous for parameter <%s>\n"
+"\tValid options: %s"
 msgstr ""
 "\n"
 "FEHLER: Wert <%s> ist außerhalb der Spanne von Parameter <%s>\n"
 
-#: ../lib/gis/parser.c:1022
+#: ../lib/gis/parser.c:1169
 #, fuzzy, c-format
-msgid "       valid options: %s\n"
-msgstr " Optionen: %s\n"
-
-#: ../lib/gis/parser.c:1159
-#, c-format
 msgid ""
-"ERROR: Required parameter <%s> not set:\n"
-"\t(%s)\n"
+"Required parameter <%s> not set:\n"
+"\t(%s)"
 msgstr ""
 "FEHLER: Benötigter Parameter <%s> wurde nicht angegeben:\n"
 "\t(%s)\n"
 
-#: ../lib/gis/parser.c:1251
-#, c-format
+#: ../lib/gis/parser.c:1260
+#, fuzzy, c-format
 msgid ""
-"\n"
-"ERROR: option <%s> must be provided in multiples of %d\n"
+"Option <%s> must be provided in multiples of %d\n"
+"\tYou provided %d item(s): %s"
 msgstr ""
 "\n"
 "FEHLER: Option <%s> muss als Vielfaches von %d angegeben werden.\n"
 
-#: ../lib/gis/parser.c:1253
-#, c-format
-msgid "       You provided %d items:\n"
-msgstr "       Sie haben %d Punkte angegeben:\n"
-
-#: ../lib/gis/parser.c:1326
+#: ../lib/gis/parser.c:1334
 #, c-format
 msgid "ERROR: option <%s>: <%s> exists.\n"
 msgstr "FEHLER: Option <%s>: <%s> existiert bereits.\n"
@@ -1507,207 +1524,237 @@ msgstr "Kann nicht zum Verzeichnis %s wechseln."
 msgid "Unable to open element file <%s> for <%s@%s>"
 msgstr "Kann die History-Datei für die Vektorkarte <%s> nicht öffnen."
 
-#: ../lib/gis/parser_standard_options.c:106
+#: ../lib/gis/parser_standard_options.c:108
 msgid "WHERE conditions of SQL statement without 'where' keyword"
 msgstr "WHERE Bedingungen des SQL-Ausdrucks ohne das Schlüsselwort 'where'."
 
-#: ../lib/gis/parser_standard_options.c:107
+#: ../lib/gis/parser_standard_options.c:109
 msgid "Example: income < 1000 and inhab >= 10000"
 msgstr "Beispiel: Einkommen < 1000 and Einwohner >= 10000"
 
-#: ../lib/gis/parser_standard_options.c:115
+#: ../lib/gis/parser_standard_options.c:117
 msgid "Table name"
 msgstr "Tabellenname"
 
-#: ../lib/gis/parser_standard_options.c:124
+#: ../lib/gis/parser_standard_options.c:126
 msgid "Driver name"
 msgstr "Treibername"
 
-#: ../lib/gis/parser_standard_options.c:133
+#: ../lib/gis/parser_standard_options.c:135
 msgid "Database name"
 msgstr "Datenbankname"
 
-#: ../lib/gis/parser_standard_options.c:142
+#: ../lib/gis/parser_standard_options.c:144
 #, fuzzy
 msgid "Database schema"
 msgstr "Datenbank"
 
-#: ../lib/gis/parser_standard_options.c:143
+#: ../lib/gis/parser_standard_options.c:145
 msgid "Do not use this option if schemas are not supported by driver/database server"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:152
+#: ../lib/gis/parser_standard_options.c:154
 msgid "Name of attribute column"
 msgstr "Name der Attributspalte"
 
-#: ../lib/gis/parser_standard_options.c:161
+#: ../lib/gis/parser_standard_options.c:163
 msgid "Name of attribute column(s)"
 msgstr "Name der Attributspalte(n)"
 
-#: ../lib/gis/parser_standard_options.c:172
+#: ../lib/gis/parser_standard_options.c:174
 msgid "Name of input imagery group"
 msgstr "Name der Eingabe-Bildgruppe"
 
-#: ../lib/gis/parser_standard_options.c:180
+#: ../lib/gis/parser_standard_options.c:182
 msgid "Name of input imagery subgroup"
 msgstr "Name der Eingabe-Bild-Untergruppe"
 
-#: ../lib/gis/parser_standard_options.c:190
+#: ../lib/gis/parser_standard_options.c:192
 msgid "Name of input raster map"
 msgstr "Name der Eingabe-Rasterkarte"
 
-#: ../lib/gis/parser_standard_options.c:199
+#: ../lib/gis/parser_standard_options.c:201
 msgid "Name of input raster map(s)"
 msgstr "Name der Eingaberasterkarte(n)"
 
-#: ../lib/gis/parser_standard_options.c:207
+#: ../lib/gis/parser_standard_options.c:209
 msgid "Name for output raster map"
 msgstr "Name der Ausgabe-Rasterkarte"
 
-#: ../lib/gis/parser_standard_options.c:215
+#: ../lib/gis/parser_standard_options.c:217
 #, fuzzy
 msgid "Name of raster map"
 msgstr "Name der Basis-Rasterkarte"
 
-#: ../lib/gis/parser_standard_options.c:224
+#: ../lib/gis/parser_standard_options.c:226
 #, fuzzy
 msgid "Name of raster map(s)"
 msgstr "Name der Eingaberasterkarte(n)"
 
-#: ../lib/gis/parser_standard_options.c:232
+#: ../lib/gis/parser_standard_options.c:234
 msgid "Name of base raster map"
 msgstr "Name der Basis-Rasterkarte"
 
-#: ../lib/gis/parser_standard_options.c:240
+#: ../lib/gis/parser_standard_options.c:242
 msgid "Name of cover raster map"
 msgstr "Name der Bedeckungs-Rasterkarte"
 
-#: ../lib/gis/parser_standard_options.c:248
+#: ../lib/gis/parser_standard_options.c:250
 #, fuzzy
 msgid "Name of input elevation raster map"
 msgstr "Name der Höhenkarte"
 
-#: ../lib/gis/parser_standard_options.c:257
+#: ../lib/gis/parser_standard_options.c:259
 #, fuzzy
 msgid "Name of input elevation raster map(s)"
 msgstr "Name der Höhenrasterkarte(n)"
 
-#: ../lib/gis/parser_standard_options.c:267
-#: ../lib/gis/parser_standard_options.c:292
+#: ../lib/gis/parser_standard_options.c:269
 #, fuzzy
 msgid "Name of input 3D raster map"
 msgstr "Name der Eingaberasterkarte."
 
-#: ../lib/gis/parser_standard_options.c:276
-#: ../lib/gis/parser_standard_options.c:301
+#: ../lib/gis/parser_standard_options.c:278
 #, fuzzy
 msgid "Name of input 3D raster map(s)"
 msgstr "Name der Eingaberasterkarte(n)."
 
-#: ../lib/gis/parser_standard_options.c:284
+#: ../lib/gis/parser_standard_options.c:286
 #, fuzzy
 msgid "Name for output 3D raster map"
 msgstr "Name der Ausgaberasterkarte."
 
-#: ../lib/gis/parser_standard_options.c:311
-#: ../lib/gis/parser_standard_options.c:338
+#: ../lib/gis/parser_standard_options.c:294
+#, fuzzy
+msgid "Name of 3D raster map"
+msgstr "Name der Basis-Rasterkarte"
+
+#: ../lib/gis/parser_standard_options.c:303
+#, fuzzy
+msgid "Name of 3D raster map(s)"
+msgstr "Name der Eingaberasterkarte(n)"
+
+#: ../lib/gis/parser_standard_options.c:313
 msgid "Name of input vector map"
 msgstr "Name der Eingabe-Vektorkarte"
 
-#: ../lib/gis/parser_standard_options.c:312
-#: ../lib/gis/parser_standard_options.c:339
-msgid "Data source for OGR access"
+#: ../lib/gis/parser_standard_options.c:314
+#: ../lib/gis/parser_standard_options.c:341
+msgid "Data source for direct OGR access"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:321
-#: ../lib/gis/parser_standard_options.c:348
+#: ../lib/gis/parser_standard_options.c:323
 msgid "Name of input vector map(s)"
 msgstr "Name der Eingabe-Vektorkarte(n)"
 
-#: ../lib/gis/parser_standard_options.c:322
-msgid "Data source(s) for OGR access"
+#: ../lib/gis/parser_standard_options.c:324
+msgid "Data source(s) for direct OGR access"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:330
+#: ../lib/gis/parser_standard_options.c:332
 msgid "Name for output vector map"
 msgstr "Name für die Ausgabe-Vektorkarte"
 
-#: ../lib/gis/parser_standard_options.c:357
-#: ../lib/gis/parser_standard_options.c:366
+#: ../lib/gis/parser_standard_options.c:340
+#, fuzzy
+msgid "Name of vector map"
+msgstr "Name der Eingabe-Vektorkarte"
+
+#: ../lib/gis/parser_standard_options.c:350
+#, fuzzy
+msgid "Name of vector map(s)"
+msgstr "Name der Eingabe-Vektorkarte(n)"
+
+#: ../lib/gis/parser_standard_options.c:359
+#: ../lib/gis/parser_standard_options.c:368
 msgid "Feature type"
 msgstr "Art des Objekts"
 
-#: ../lib/gis/parser_standard_options.c:373
+#: ../lib/gis/parser_standard_options.c:375
 #, fuzzy
 msgid "Layer number or name"
 msgstr "Layer-Nummer"
 
-#: ../lib/gis/parser_standard_options.c:375
-#: ../lib/gis/parser_standard_options.c:387
+#: ../lib/gis/parser_standard_options.c:377
+#: ../lib/gis/parser_standard_options.c:389
 #, fuzzy
-msgid "A single vector map can be connected to multiple database tables. This number determines which table to use. Layer name for OGR access."
+msgid "A single vector map can be connected to multiple database tables. This number determines which table to use. Layer name for direct OGR access."
 msgstr "Eine Vektorkarte kann mit mehreren Attributdatenquellen verbunden werden.Diese Zahl gibt Auskunft über die zu benutzende Tabelle."
 
-#: ../lib/gis/parser_standard_options.c:385
+#: ../lib/gis/parser_standard_options.c:387
 #, fuzzy
 msgid "Layer number or name ('-1' for all layers)"
 msgstr "Ebene"
 
-#: ../lib/gis/parser_standard_options.c:396
+#: ../lib/gis/parser_standard_options.c:398
 msgid "Category value"
 msgstr "Kategoriewert"
 
-#: ../lib/gis/parser_standard_options.c:403
+#: ../lib/gis/parser_standard_options.c:405
 msgid "Category values"
 msgstr "Kategoriewerte"
 
-#: ../lib/gis/parser_standard_options.c:404
-#: ../lib/gis/parser_standard_options.c:418
+#: ../lib/gis/parser_standard_options.c:406
+#: ../lib/gis/parser_standard_options.c:420
 msgid "Example: 1,3,7-9,13"
 msgstr "Beispiel: 1,3,7-9,13"
 
-#: ../lib/gis/parser_standard_options.c:410
+#: ../lib/gis/parser_standard_options.c:412
 msgid "Feature id"
 msgstr "Objekt ID"
 
-#: ../lib/gis/parser_standard_options.c:417
+#: ../lib/gis/parser_standard_options.c:419
 msgid "Feature ids"
 msgstr "Objekt IDs"
 
-#: ../lib/gis/parser_standard_options.c:428
-msgid "Path to input file"
+#: ../lib/gis/parser_standard_options.c:430
+#, fuzzy
+msgid "Name to input file"
 msgstr "Pfad zur Eingabedatei"
 
-#: ../lib/gis/parser_standard_options.c:436
-msgid "Path for output file"
+#: ../lib/gis/parser_standard_options.c:438
+#, fuzzy
+msgid "Name for output file"
 msgstr "Pfad zur Ausgabedatei"
 
-#: ../lib/gis/parser_standard_options.c:444
+#: ../lib/gis/parser_standard_options.c:446
 msgid "Field separator"
 msgstr "Feld-Trennzeichen"
 
-#: ../lib/gis/parser_standard_options.c:445
+#: ../lib/gis/parser_standard_options.c:447
 msgid "Special characters: newline, space, comma, tab"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:456
+#: ../lib/gis/parser_standard_options.c:458
 msgid "Color"
 msgstr "Farben"
 
-#: ../lib/gis/parser_standard_options.c:457
+#: ../lib/gis/parser_standard_options.c:459
 msgid "Either a standard color name or R:G:B triplet"
 msgstr "Entweder ein Standardfarbname oder ein R:G:B Tripel."
 
-#: ../lib/gis/parser_standard_options.c:466
+#: ../lib/gis/parser_standard_options.c:468
 msgid "Background color"
 msgstr "Hintergrundfarbe"
 
-#: ../lib/gis/parser_standard_options.c:468
+#: ../lib/gis/parser_standard_options.c:470
 msgid "Either a standard GRASS color, R:G:B triplet, or \"none\""
 msgstr "Entweder eine Standard GRASS-Farbe, ein R:G:B-Tripel oder \"none\"."
 
-#: ../lib/gis/parser_standard_options.c:479
+#: ../lib/gis/parser_standard_options.c:481
 msgid "Units"
+msgstr ""
+
+#: ../lib/gis/parser_standard_options.c:490
+msgid "Data type(s)"
+msgstr ""
+
+#: ../lib/gis/parser_standard_options.c:500
+msgid "Name of mapset (default: current search path)"
+msgstr ""
+
+#: ../lib/gis/parser_standard_options.c:501
+msgid "'.' for current mapset"
 msgstr ""
 
 #: ../lib/gis/list.c:83
@@ -1741,7 +1788,7 @@ msgstr "SCHLÜSSELWÖRTER"
 msgid "SYNOPSIS"
 msgstr "SYNOPSIS"
 
-#: ../lib/gis/parser_html.c:126 ../lib/init/grass.py:150
+#: ../lib/gis/parser_html.c:126 ../lib/init/grass.py:152
 msgid "Flags"
 msgstr "Flags"
 
@@ -1795,11 +1842,11 @@ msgstr "%s nicht gesetzt"
 msgid "MAPSET is not set"
 msgstr "MAPSET ist nicht definiert."
 
-#: ../lib/gis/error.c:335
+#: ../lib/gis/error.c:342
 msgid "WARNING: "
 msgstr "WARNUNG: "
 
-#: ../lib/gis/error.c:336
+#: ../lib/gis/error.c:343
 msgid "ERROR: "
 msgstr "FEHLER: "
 
@@ -1828,20 +1875,20 @@ msgstr "Fehler Karte"
 msgid "Error closing input file <%s>"
 msgstr "Fhler beim Schließen der g3d-Datei."
 
-#: ../lib/gis/distance.c:156
-#, c-format
-msgid "G_distance_point_to_line_segment: shouldn't happen: code=%d P=(%f,%f) S=(%f,%f)(%f,%f)"
+#: ../lib/gis/distance.c:154
+#, fuzzy, c-format
+msgid "%s: shouldn't happen: code=%d P=(%f,%f) S=(%f,%f)(%f,%f)"
 msgstr "G_distance_point_to_line_segment: sollte nicht vorkommen: Code=%d P=(%f,%f) S=(%f,%f)(%f,%f)"
 
 #: ../lib/gis/seek.c:52 ../lib/gis/seek.c:58
 #, fuzzy
 msgid "Unable to seek"
-msgstr "Kann %s nicht öffnen."
+msgstr "Kann Focus nicht setzten."
 
 #: ../lib/gis/seek.c:56
 #, fuzzy
 msgid "Seek offset out of range"
-msgstr "Ebene"
+msgstr "Layerindex außerhalb des Wertebereichs."
 
 #: ../lib/gis/parser_help.c:78
 #, fuzzy
@@ -2061,7 +2108,7 @@ msgstr "Ungültig es: Feld '%s' in Datei %s in <%s>."
 msgid "No ellipsoid info given in file %s in <%s>"
 msgstr "Keine Ellipsoid-Info in Datei %s in <%s>."
 
-#: ../lib/gis/proj3.c:92 ../lib/vector/Vlib/header.c:656
+#: ../lib/gis/proj3.c:92 ../lib/vector/Vlib/header.c:654
 msgid "Unknown projection"
 msgstr "Unbekannte Projektion."
 
@@ -2243,7 +2290,7 @@ msgid "System not initialized. Programmer forgot to call G_gisinit()."
 msgstr "System ist nicht initialisiert. Der Programmierer hat vergessen G_gisinit() aufzurufen."
 
 #: ../lib/rowio/setup.c:61 ../lib/rowio/setup.c:67
-#: ../lib/vector/Vlib/ascii.c:200 ../lib/vector/Vlib/line.c:50
+#: ../lib/vector/Vlib/ascii.c:201 ../lib/vector/Vlib/line.c:48
 #: ../lib/vector/neta/articulation_point.c:60
 #: ../lib/vector/neta/centrality.c:63 ../lib/vector/neta/centrality.c:145
 #: ../lib/vector/neta/components.c:46 ../lib/vector/neta/components.c:113
@@ -2277,321 +2324,328 @@ msgstr "%s: Keine Font Definitionsdatei."
 msgid "[%s]: No such color"
 msgstr "[%s]: Diese Farbe gibt es nicht."
 
-#: ../lib/vector/diglib/test.c:59
+#: ../lib/vector/diglib/test.c:58
 #, fuzzy
 msgid "Unable to open test.tmp file"
 msgstr "Kann temporäre Datei nicht öffnen."
 
-#: ../lib/vector/diglib/test.c:76
+#: ../lib/vector/diglib/test.c:75
 #, c-format
 msgid "Error in read/write portable double, byte_order = %d Written: %.16e3E Read: %.16e3E"
 msgstr ""
 
-#: ../lib/vector/diglib/test.c:90
+#: ../lib/vector/diglib/test.c:89
 #, c-format
 msgid "Error in read/write portable float, byte_order = %d Written: %.8e3E Read: %.8e3E"
 msgstr ""
 
-#: ../lib/vector/diglib/test.c:105
+#: ../lib/vector/diglib/test.c:104
 #, c-format
 msgid "Error in read/write portable off_t, byte_order = %d Written: %lu Read: %lu"
 msgstr ""
 
-#: ../lib/vector/diglib/test.c:120
+#: ../lib/vector/diglib/test.c:119
 #, c-format
 msgid "Error in read/write portable long, byte_order = %d Written: %lu Read: %lu"
 msgstr ""
 
-#: ../lib/vector/diglib/test.c:135
+#: ../lib/vector/diglib/test.c:134
 #, c-format
 msgid "Error in read/write portable int, byte_order = %d Written: %d Read: %d"
 msgstr ""
 
-#: ../lib/vector/diglib/test.c:151
+#: ../lib/vector/diglib/test.c:150
 #, c-format
 msgid "Error in read/write portable short, byte_order = %d Written: %d Read: %d"
 msgstr ""
 
-#: ../lib/vector/diglib/test.c:166
+#: ../lib/vector/diglib/test.c:165
 #, c-format
 msgid "Error in read/write portable char, byte_order = %d Written: %d Read: %d"
 msgstr ""
 
-#: ../lib/vector/diglib/plus_node.c:218
+#: ../lib/vector/diglib/plus_node.c:217
 #, c-format
 msgid "Attempt to read line angle for the line which is not connected to the node: node %d, line %d"
 msgstr "Versuche den Winkel der Linie, die nicht an den Knoten angebunden ist, zu lesen: Knoten %d, Linie %d"
 
-#: ../lib/vector/diglib/plus.c:277
+#: ../lib/vector/diglib/plus.c:275
 msgid "Unable read topology for nodes"
 msgstr "Kann Topologie der Knoten nicht lesen."
 
-#: ../lib/vector/diglib/plus.c:282
+#: ../lib/vector/diglib/plus.c:280
 #, c-format
 msgid "Unable to read topology for node %d"
 msgstr "Kann Topologie des Knotens %d nicht lesen."
 
-#: ../lib/vector/diglib/plus.c:287
+#: ../lib/vector/diglib/plus.c:285
 msgid "Unable read topology for lines"
 msgstr "Kann Topologie der Linien nicht lesen."
 
-#: ../lib/vector/diglib/plus.c:292
+#: ../lib/vector/diglib/plus.c:290
 #, c-format
 msgid "Unable to read topology for line %d"
 msgstr "Kann Topologie der Linie %d nicht lesen."
 
-#: ../lib/vector/diglib/plus.c:297
+#: ../lib/vector/diglib/plus.c:295
 msgid "Unable to read topo for areas"
 msgstr "Kann Topologie der Flächen nicht lesen."
 
-#: ../lib/vector/diglib/plus.c:302
+#: ../lib/vector/diglib/plus.c:300
 #, c-format
 msgid "Unable read topology for area %d"
 msgstr "Kann Topologie der Fläche %d nicht lesen."
 
-#: ../lib/vector/diglib/plus.c:307
+#: ../lib/vector/diglib/plus.c:305
 msgid "Unable to read topology for isles"
 msgstr "Kann Topologie der Inseln nicht lesen."
 
-#: ../lib/vector/diglib/plus.c:312
+#: ../lib/vector/diglib/plus.c:310
 #, c-format
 msgid "Unable to read topology for isle %d"
 msgstr "Kann Topologie der Insel %d nicht lesen."
 
-#: ../lib/vector/diglib/plus.c:334 ../lib/vector/diglib/plus.c:360
+#: ../lib/vector/diglib/plus.c:332 ../lib/vector/diglib/plus.c:358
 msgid "Unable to write head to plus file"
 msgstr "Kann head nicht in die 'plus' Datei schreiben."
 
-#: ../lib/vector/diglib/plus.c:339
+#: ../lib/vector/diglib/plus.c:337
 msgid "Unable to write nodes to plus file"
 msgstr "Kann Knoten nicht in die 'plus' Datei schreiben."
 
-#: ../lib/vector/diglib/plus.c:344
+#: ../lib/vector/diglib/plus.c:342
 msgid "Unable to write lines to plus file"
 msgstr "Kann Linien nicht in die 'plus' Datei schreiben."
 
-#: ../lib/vector/diglib/plus.c:349
+#: ../lib/vector/diglib/plus.c:347
 msgid "Unable to write areas to plus file"
 msgstr "Kann Flächen nicht in die 'plus' Datei schreiben."
 
-#: ../lib/vector/diglib/plus.c:354
+#: ../lib/vector/diglib/plus.c:352
 msgid "Unable to write isles to plus file"
 msgstr "Kann Inseln nicht in die 'plus' Datei schreiben."
 
-#: ../lib/vector/diglib/plus_area.c:208 ../lib/vector/diglib/plus_area.c:677
-#: ../lib/vector/diglib/plus_area.c:685
+#: ../lib/vector/diglib/plus_area.c:209 ../lib/vector/diglib/plus_area.c:678
+#: ../lib/vector/diglib/plus_area.c:686
 #, c-format
 msgid "Line %d already has area/isle %d to left"
 msgstr "Linie %d hat bereits Fläche/Insel %d zu ihrer Linken."
 
-#: ../lib/vector/diglib/plus_area.c:218
+#: ../lib/vector/diglib/plus_area.c:219
 #, c-format
 msgid "Line %d already has area/isle %d to right"
 msgstr "Linie %d hat bereits Fläche/Insel %d zu ihrer Rechten."
 
-#: ../lib/vector/diglib/plus_area.c:300
+#: ../lib/vector/diglib/plus_area.c:301
 msgid "Attempt to delete isle from dead area"
 msgstr "Versuche Insel von einer toten Fläche zu löschen"
 
-#: ../lib/vector/diglib/plus_area.c:317
+#: ../lib/vector/diglib/plus_area.c:318
 #, c-format
 msgid "Attempt to delete not registered isle %d from area %d"
 msgstr "Versuche nicht registrierte Insel %d der Fläche %d zu löschen"
 
-#: ../lib/vector/diglib/plus_area.c:355
+#: ../lib/vector/diglib/plus_area.c:356
 msgid "Attempt to delete dead area"
 msgstr "Versuche tote Fläche zu löschen"
 
-#: ../lib/vector/diglib/plus_area.c:395
+#: ../lib/vector/diglib/plus_area.c:396
 #, c-format
 msgid "Dead centroid %d registered for area (bug in the vector library)"
 msgstr "Toter Zentroid %d für Fläche registriert (Bug in der Vektorbibliothek)."
 
-#: ../lib/vector/diglib/plus_area.c:419
+#: ../lib/vector/diglib/plus_area.c:420
 #, c-format
 msgid "Attempt to delete area %d info from dead isle %d"
 msgstr "Versuche Fläche %d von toter Insel %d zu löschen"
 
-#: ../lib/vector/diglib/plus_area.c:775
+#: ../lib/vector/diglib/plus_area.c:776
 #, c-format
 msgid "Attempt to delete isle %d info from dead area %d"
 msgstr "Versuche Insel %d von toter Fläche %d zu löschen"
 
-#: ../lib/vector/diglib/file.c:161
+#: ../lib/vector/diglib/file.c:159
 msgid "Writing to file loaded to memory not supported"
 msgstr "Schreiben in eine in den Speicher geladene Datei wird nicht unterstützt. "
 
-#: ../lib/vector/diglib/file.c:205
+#: ../lib/vector/diglib/file.c:203
 msgid "Unable to load file to memory, file not open"
 msgstr "Kann Datei nicht in den Speicher laden, Datei ist nicht offen."
 
-#: ../lib/vector/diglib/file.c:220
+#: ../lib/vector/diglib/file.c:218
 msgid "Vector memory mode not supported, using 'AUTO'"
 msgstr "Vector memory mode wird nicht unterstützt, verwende 'AUTO'."
 
-#: ../lib/vector/diglib/spindex_rw.c:294
+#: ../lib/vector/diglib/spindex_rw.c:277
 #, fuzzy, c-format
 msgid "Spatial index format version %d.%d is not supported by this release. Try to rebuild topology or upgrade GRASS."
 msgstr "Vektor."
 
-#: ../lib/vector/diglib/spindex_rw.c:301
+#: ../lib/vector/diglib/spindex_rw.c:284
 #, fuzzy, c-format
 msgid "Your GRASS version does not fully support spatial index format %d.%d of the vector. Consider to rebuild topology or upgrade GRASS."
 msgstr "Vektor."
 
-#: ../lib/vector/diglib/spindex_rw.c:310
+#: ../lib/vector/diglib/spindex_rw.c:293
 #, c-format
 msgid "Spatial index format version %d.%d is not supported by this release. Please rebuild topology."
 msgstr ""
 
-#: ../lib/vector/diglib/portable.c:212 ../lib/vector/diglib/portable.c:245
-#: ../lib/vector/diglib/portable.c:692
+#: ../lib/vector/diglib/spindex_rw.c:824
+msgid "Writing sidx: wrong node position in file"
+msgstr ""
+
+#: ../lib/vector/diglib/portable.c:210 ../lib/vector/diglib/portable.c:243
+#: ../lib/vector/diglib/portable.c:690
 msgid "Vector exceeds supported file size limit"
 msgstr ""
 
-#: ../lib/vector/diglib/port_init.c:159
+#: ../lib/vector/diglib/port_init.c:158
 #, fuzzy, c-format
 msgid "Unable to find '%x' in %s"
 msgstr "Kann [%s] nicht finden."
 
-#: ../lib/vector/diglib/spindex.c:285
+#: ../lib/vector/diglib/spindex.c:381
 #, c-format
 msgid "Unable to delete node %d from spatial index"
 msgstr "Kann den Knoten %d nicht aus dem räumlichen Index löschen."
 
-#: ../lib/vector/diglib/spindex.c:325
+#: ../lib/vector/diglib/spindex.c:421
 #, c-format
 msgid "Unable to delete line %d from spatial index"
 msgstr "Kann die Linie %d nicht aus dem räumlichen Index löschen."
 
-#: ../lib/vector/diglib/spindex.c:351
+#: ../lib/vector/diglib/spindex.c:447
 msgid "Attempt to delete sidx for dead area"
 msgstr "Versuche sidx einer toten Fläche zu löschen"
 
-#: ../lib/vector/diglib/spindex.c:364
+#: ../lib/vector/diglib/spindex.c:460
 #, c-format
 msgid "Unable to delete area %d from spatial index"
 msgstr "Kann die Fläche %d nicht aus dem räumlichen Index löschen."
 
-#: ../lib/vector/diglib/spindex.c:399
+#: ../lib/vector/diglib/spindex.c:495
 #, c-format
 msgid "Unable to delete isle %d from spatial index"
 msgstr "Kann Insel %d nicht aus dem räumlichen Index löschen."
 
-#: ../lib/vector/Vlib/write_nat.c:54 ../lib/vector/Vlib/write_nat.c:88
+#: ../lib/vector/Vlib/write_nat.c:52 ../lib/vector/Vlib/write_nat.c:86
 #, c-format
 msgid "%s: Area %d does not exist"
 msgstr "%s: Fläche %d existiert nicht."
 
-#: ../lib/vector/Vlib/write_nat.c:670 ../lib/vector/Vlib/write_ogr.c:303
+#: ../lib/vector/Vlib/write_nat.c:668 ../lib/vector/Vlib/write_ogr.c:302
 msgid "Attempt to delete dead feature"
 msgstr "Versuche ein totes Objekt zu löschen"
 
-#: ../lib/vector/Vlib/write_nat.c:910
+#: ../lib/vector/Vlib/write_nat.c:908
 msgid "Attempt to restore alive feature"
 msgstr "Versuche lebendes Objekt wiederherzustellen"
 
-#: ../lib/vector/Vlib/legal_vname.c:45
+#: ../lib/vector/Vlib/legal_vname.c:43
 #, c-format
 msgid "Illegal vector map name <%s>. May not contain '.' or 'NULL'."
 msgstr "Ungültiger Name der Vektorkarte <%s>. Darf nicht '.' oder 'NULL' enthalten."
 
-#: ../lib/vector/Vlib/legal_vname.c:52
+#: ../lib/vector/Vlib/legal_vname.c:50
 #, c-format
 msgid "Illegal vector map name <%s>. Must start with a letter."
 msgstr "Ungültiger Name der Vektorkarte <%s>. Muss mit einem Buchstaben beginnen."
 
-#: ../lib/vector/Vlib/legal_vname.c:60
+#: ../lib/vector/Vlib/legal_vname.c:58
 #, c-format
 msgid "Illegal vector map name <%s>. Character '%c' not allowed."
 msgstr "Ungültiger Name der Vektorkarte <%s>. Zeichen '%c' nicht erlaubt."
 
-#: ../lib/vector/Vlib/legal_vname.c:67
+#: ../lib/vector/Vlib/legal_vname.c:65
 #, c-format
 msgid "Illegal vector map name <%s>. SQL keyword cannot be used as vector map name."
 msgstr "Ungültiger Name der Vektorkarte <%s>. SQL-Schlüsselwort darf nicht als Vektorkartenname benutzt werden."
 
-#: ../lib/vector/Vlib/legal_vname.c:98 ../lib/vector/Vlib/legal_vname.c:102
+#: ../lib/vector/Vlib/legal_vname.c:96 ../lib/vector/Vlib/legal_vname.c:100
 #, c-format
 msgid "Output vector map name <%s> is not valid map name"
 msgstr "Name der Ausgabe-Vektorkarte <%s> ist keine gültiger Kartenname."
 
-#: ../lib/vector/Vlib/legal_vname.c:139 ../lib/vector/Vlib/legal_vname.c:143
+#: ../lib/vector/Vlib/legal_vname.c:137 ../lib/vector/Vlib/legal_vname.c:141
 #, c-format
 msgid "Output vector map <%s> is used as input"
 msgstr "Ausgabe-Vektorkarte <%s> als Eingabe verwendet"
 
-#: ../lib/vector/Vlib/read_ogr.c:117 ../lib/vector/Vlib/read_ogr.c:307
-#: ../lib/vector/Vlib/read_ogr.c:365 ../lib/vector/Vlib/build_ogr.c:324
+#: ../lib/vector/Vlib/read_ogr.c:115 ../lib/vector/Vlib/read_ogr.c:305
+#: ../lib/vector/Vlib/read_ogr.c:363 ../lib/vector/Vlib/build_ogr.c:322
 #, c-format
 msgid "OGR feature type %d not supported"
 msgstr "OGR Objekttyp %d wird nicht unterstützt."
 
-#: ../lib/vector/Vlib/read_ogr.c:174
+#: ../lib/vector/Vlib/read_ogr.c:172
 msgid "OGR feature without ID"
 msgstr "OGR Objekt ohne ID"
 
-#: ../lib/vector/Vlib/read_ogr.c:416 ../lib/vector/Vlib/read_ogr.c:424
+#: ../lib/vector/Vlib/read_ogr.c:414 ../lib/vector/Vlib/read_ogr.c:422
 #, c-format
 msgid "Unable to get feature geometry, FID %ld"
 msgstr "Kann Objektgeometrie (FID %ld) nicht holen."
 
-#: ../lib/vector/Vlib/read_ogr.c:464 ../lib/vector/Vlib/geos.c:66
-#: ../lib/vector/Vlib/geos.c:256 ../lib/vector/Vlib/read_nat.c:134
+#: ../lib/vector/Vlib/read_ogr.c:462 ../lib/vector/Vlib/geos.c:65
+#: ../lib/vector/Vlib/geos.c:255 ../lib/vector/Vlib/read_nat.c:132
 msgid "Attempt to read dead line"
 msgstr "Versuche tote Linie zu lesen."
 
-#: ../lib/vector/Vlib/cats.c:44
+#: ../lib/vector/Vlib/cats.c:42
 msgid "Vect_new_cats_struct(): Out of memory"
 msgstr "Vect_new_cats_struct():  Nicht genügend Arbeitsspeicher."
 
-#: ../lib/vector/Vlib/cats.c:126
+#: ../lib/vector/Vlib/cats.c:124
 #, c-format
 msgid "Too many categories (%d), unable to set cat %d (layer %d)"
 msgstr "Zuviele Kategorien (%d), kann cat %d (Layer %d) nicht setzen."
 
-#: ../lib/vector/Vlib/cats.c:402
+#: ../lib/vector/Vlib/cats.c:400
 #, c-format
 msgid "Unable to convert category string '%s' (from '%s') to category range"
 msgstr "Kann die Kategorie-Zeichenkette '%s' (von '%s') nicht in eine Kategoriespanne konvertieren."
 
-#: ../lib/vector/Vlib/break_polygons.c:82
+#: ../lib/vector/Vlib/break_polygons.c:102
 msgid "Break polygons: Bug in binary tree!"
 msgstr ""
 
-#: ../lib/vector/Vlib/break_polygons.c:137
+#: ../lib/vector/Vlib/break_polygons.c:152
+#: ../lib/vector/Vlib/break_polygons.c:433
 msgid "Break polygons Pass 1: select break points"
 msgstr ""
 
-#: ../lib/vector/Vlib/break_polygons.c:254
+#: ../lib/vector/Vlib/break_polygons.c:282
+#: ../lib/vector/Vlib/break_polygons.c:550
 msgid "Break polygons Pass 2: break at selected points"
 msgstr ""
 
-#: ../lib/vector/Vlib/break_polygons.c:294
-msgid "Point not in search tree!"
-msgstr ""
-
-#: ../lib/vector/Vlib/break_polygons.c:352
+#: ../lib/vector/Vlib/break_polygons.c:394
+#: ../lib/vector/Vlib/break_polygons.c:648
 #, c-format
 msgid "Breaks: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/intersect.c:127
+#: ../lib/vector/Vlib/break_polygons.c:590
+msgid "Point not in search tree!"
+msgstr ""
+
+#: ../lib/vector/Vlib/intersect.c:125
 msgid "3D not supported by Vect_segment_intersection()"
 msgstr "3D wird von Vect_segment_intersection() nicht unterstützt."
 
-#: ../lib/vector/Vlib/intersect.c:322
+#: ../lib/vector/Vlib/intersect.c:320
 msgid "Vect_segment_intersection() ERROR (collinear vertical segments)"
 msgstr "Fehler in Vect_segment_intersection() (kollineare vertikale Segmente)."
 
-#: ../lib/vector/Vlib/intersect.c:448
+#: ../lib/vector/Vlib/intersect.c:446
 msgid "Vect_segment_intersection() ERROR (collinear non vertical segments)"
 msgstr "Fehler in Vect_segment_intersection() (kollineare nicht vertikale Segmente)."
 
-#: ../lib/vector/Vlib/intersect.c:1099 ../lib/vector/Vlib/intersect.c:1105
-#: ../lib/vector/Vlib/intersect.c:1107 ../lib/vector/Vlib/intersect.c:1155
-#: ../lib/vector/Vlib/intersect.c:1164 ../lib/vector/Vlib/intersect.c:1185
-#: ../lib/vector/Vlib/intersect.c:1202
+#: ../lib/vector/Vlib/intersect.c:1097 ../lib/vector/Vlib/intersect.c:1103
+#: ../lib/vector/Vlib/intersect.c:1105 ../lib/vector/Vlib/intersect.c:1153
+#: ../lib/vector/Vlib/intersect.c:1162 ../lib/vector/Vlib/intersect.c:1183
+#: ../lib/vector/Vlib/intersect.c:1200
 msgid "Error while adding point to array. Out of memory"
 msgstr "Fehler beim Hinzufügen eines Punktes zum Array. Nicht genügend Arbeitsspeicher."
 
@@ -2603,33 +2657,33 @@ msgstr "Kartenstruktur wurde nie initialisiert."
 msgid "Map structure has been closed"
 msgstr "Kartenstruktur wurde geschlossen."
 
-#: ../lib/vector/Vlib/array.c:98
+#: ../lib/vector/Vlib/array.c:96
 #, c-format
 msgid "%d errors in category string"
 msgstr ""
 
-#: ../lib/vector/Vlib/array.c:144 ../lib/vector/Vlib/array.c:269
+#: ../lib/vector/Vlib/array.c:142 ../lib/vector/Vlib/array.c:267
 msgid "Mixed area and other type requested for vector array"
 msgstr "Vermischt Flächen und andere Typen für Vektor-Array angefordert."
 
-#: ../lib/vector/Vlib/array.c:154 ../lib/vector/Vlib/array.c:177
-#: ../lib/vector/Vlib/array.c:306 ../lib/vector/Vlib/array.c:339
+#: ../lib/vector/Vlib/array.c:152 ../lib/vector/Vlib/array.c:175
+#: ../lib/vector/Vlib/array.c:304 ../lib/vector/Vlib/array.c:337
 msgid "Not enough space in vector array"
 msgstr "Nicht genung Platz im Vektor-Array."
 
-#: ../lib/vector/Vlib/array.c:278 ../lib/vector/Vlib/map.c:312
-#: ../lib/vector/Vlib/map.c:439 ../lib/vector/Vlib/map.c:551
-#: ../lib/vector/Vlib/map.c:669 ../lib/vector/Vlib/map.c:767
-#: ../lib/vector/Vlib/net.c:176 ../lib/vector/Vlib/net.c:347
-#: ../lib/vector/Vlib/ascii.c:314 ../lib/rst/interp_float/vinput2d.c:79
+#: ../lib/vector/Vlib/array.c:276 ../lib/vector/Vlib/map.c:310
+#: ../lib/vector/Vlib/map.c:437 ../lib/vector/Vlib/map.c:549
+#: ../lib/vector/Vlib/map.c:667 ../lib/vector/Vlib/map.c:765
+#: ../lib/vector/Vlib/net.c:174 ../lib/vector/Vlib/net.c:345
+#: ../lib/vector/Vlib/ascii.c:316 ../lib/rst/interp_float/vinput2d.c:79
 #, c-format
 msgid "Database connection not defined for layer %d"
 msgstr "Die Datenbankverbindung für den Layer <%d> nicht definiert."
 
-#: ../lib/vector/Vlib/array.c:284 ../lib/vector/Vlib/map.c:341
-#: ../lib/vector/Vlib/map.c:480 ../lib/vector/Vlib/map.c:702
-#: ../lib/vector/Vlib/net.c:182 ../lib/vector/Vlib/net.c:352
-#: ../lib/vector/Vlib/ascii.c:326 ../lib/vector/Vlib/write_ogr.c:380
+#: ../lib/vector/Vlib/array.c:282 ../lib/vector/Vlib/map.c:339
+#: ../lib/vector/Vlib/map.c:478 ../lib/vector/Vlib/map.c:700
+#: ../lib/vector/Vlib/net.c:180 ../lib/vector/Vlib/net.c:350
+#: ../lib/vector/Vlib/ascii.c:328 ../lib/vector/Vlib/write_ogr.c:379
 #: ../lib/vector/neta/utils.c:116 ../lib/vector/neta/timetables.c:133
 #: ../lib/rst/interp_float/vinput2d.c:88 ../lib/db/dbmi_client/copy_tab.c:105
 #: ../lib/db/dbmi_client/copy_tab.c:126 ../lib/db/dbmi_client/db.c:46
@@ -2638,72 +2692,72 @@ msgstr "Die Datenbankverbindung für den Layer <%d> nicht definiert."
 msgid "Unable to open database <%s> by driver <%s>"
 msgstr "Kann die Datenbank <%s> mit dem Treiber <%s> nicht öffnen."
 
-#: ../lib/vector/Vlib/array.c:294
+#: ../lib/vector/Vlib/array.c:292
 #, c-format
 msgid "Unable to select record from table <%s> (key %s, where %s)"
 msgstr "Kann den Datensatz in der Tabelle <%s> nicht selektieren (key %s, where %s)."
 
-#: ../lib/vector/Vlib/geos.c:53 ../lib/vector/Vlib/read.c:105
+#: ../lib/vector/Vlib/geos.c:52 ../lib/vector/Vlib/read.c:104
 msgid "vector map is not opened"
 msgstr "Vektorkarte ist nicht geöffnet."
 
-#: ../lib/vector/Vlib/geos.c:56
+#: ../lib/vector/Vlib/geos.c:55
 #, c-format
 msgid "Vect_read_line_geos(): feature id %d is not reasonable (max features in vector map <%s>: %d)"
 msgstr "Vect_read_line_geos(): Objekt ID %d ist nicht sinnvoll (Max. Objekte in Vektorkarte <%s>: %d)."
 
-#: ../lib/vector/Vlib/geos.c:61
+#: ../lib/vector/Vlib/geos.c:60
 msgid "only native format supported"
 msgstr "nur das native Format unterstützt"
 
-#: ../lib/vector/Vlib/geos.c:91
+#: ../lib/vector/Vlib/geos.c:90
 #, c-format
 msgid "Vect_read_area_geos(): unable to read area id %d"
 msgstr "Vect_read_area_geos(): Fläche mit ID %d kann nicht gelesen werden."
 
-#: ../lib/vector/Vlib/geos.c:105
+#: ../lib/vector/Vlib/geos.c:104
 #, c-format
 msgid "Vect_read_area_geos(): unable to read isle id %d of area id %d"
 msgstr "Vect_read_area_geos(): Insel mit ID %d der Fläche mit ID %d kann nicht gelesen werden."
 
-#: ../lib/vector/Vlib/geos.c:203
+#: ../lib/vector/Vlib/geos.c:202
 #, c-format
 msgid "Unable to read line offset %ld"
 msgstr "Kann Linien-Offset %ld nicht lesen"
 
-#: ../lib/vector/Vlib/geos.c:410
+#: ../lib/vector/Vlib/geos.c:409
 #, c-format
 msgid "Attempt to read points of nonexistent area id %d"
 msgstr "Versuche Punkte nicht existenter Fläche id %d zu lesen."
 
-#: ../lib/vector/Vlib/geos.c:470
+#: ../lib/vector/Vlib/geos.c:469
 #, c-format
 msgid "Unable to read feature id %d"
 msgstr "Kann Objekt %d nicht lesen."
 
-#: ../lib/vector/Vlib/snap.c:150
+#: ../lib/vector/Vlib/snap.c:133
 msgid "Snap vertices Pass 1: select points"
 msgstr ""
 
-#: ../lib/vector/Vlib/snap.c:193
+#: ../lib/vector/Vlib/snap.c:187
 msgid "Snap vertices Pass 2: assign anchor vertices"
 msgstr ""
 
-#: ../lib/vector/Vlib/snap.c:274
+#: ../lib/vector/Vlib/snap.c:256
 msgid "Snap vertices Pass 3: snap to assigned points"
 msgstr ""
 
-#: ../lib/vector/Vlib/snap.c:426
+#: ../lib/vector/Vlib/snap.c:438
 #, c-format
 msgid "Snapped vertices: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/snap.c:427
+#: ../lib/vector/Vlib/snap.c:439
 #, fuzzy, c-format
 msgid "New vertices: %d"
 msgstr "Anzahl von Primitives :   %d\n"
 
-#: ../lib/vector/Vlib/close_ogr.c:94
+#: ../lib/vector/Vlib/close_ogr.c:91
 #, fuzzy, c-format
 msgid "Unable to open fidx file for write <%s>"
 msgstr "Kann Topologiedatei nicht zum Schreiben von <%s> öffnen"
@@ -2713,182 +2767,182 @@ msgstr "Kann Topologiedatei nicht zum Schreiben von <%s> öffnen"
 msgid "Unknown Simple Features type (%d)"
 msgstr "Unbekannte Interpolationsmethode."
 
-#: ../lib/vector/Vlib/rewind.c:32 ../lib/vector/Vlib/build.c:29
-#: ../lib/vector/Vlib/read.c:30 ../lib/vector/Vlib/write.c:52
-#: ../lib/vector/Vlib/write.c:58 ../lib/vector/Vlib/close.c:35
-#: ../lib/vector/Vlib/open.c:48
+#: ../lib/vector/Vlib/rewind.c:32 ../lib/vector/Vlib/build.c:27
+#: ../lib/vector/Vlib/read.c:29 ../lib/vector/Vlib/write.c:50
+#: ../lib/vector/Vlib/write.c:56 ../lib/vector/Vlib/close.c:34
+#: ../lib/vector/Vlib/open.c:46
 msgid "Requested format is not compiled in this version"
 msgstr "Das angeforderte Format ist in diese Version nicht einkompiliert."
 
-#: ../lib/vector/Vlib/graph.c:107 ../lib/vector/Vlib/net.c:429
+#: ../lib/vector/Vlib/graph.c:105 ../lib/vector/Vlib/net.c:427
 #: ../lib/vector/neta/flow.c:309
 msgid "GngFlatten error"
 msgstr "GngFlatten Fehler"
 
-#: ../lib/vector/Vlib/graph.c:140
+#: ../lib/vector/Vlib/graph.c:138
 msgid "Unable to add network arc"
 msgstr "Kann Netzwerkverbindung 'network arc' nicht hinzufügen."
 
-#: ../lib/vector/Vlib/graph.c:228 ../lib/vector/Vlib/net.c:518
+#: ../lib/vector/Vlib/graph.c:226 ../lib/vector/Vlib/net.c:516
 #, c-format
 msgid "dglShortestPath error: %s"
 msgstr "dglShortestPath Fehler: %s"
 
-#: ../lib/vector/Vlib/build.c:127
+#: ../lib/vector/Vlib/build.c:125
 #, c-format
 msgid "Building topology for vector map <%s>..."
 msgstr "Erstelle Topologie für die Vektorkarte <%s>..."
 
-#: ../lib/vector/Vlib/build.c:145
+#: ../lib/vector/Vlib/build.c:143
 msgid "Topology was built"
 msgstr "Die Topologie wurde erstellt"
 
-#: ../lib/vector/Vlib/build.c:157
+#: ../lib/vector/Vlib/build.c:155
 #, c-format
 msgid "Number of nodes: %d"
 msgstr "Anzahl der Knoten: %d"
 
-#: ../lib/vector/Vlib/build.c:158
+#: ../lib/vector/Vlib/build.c:156
 #, c-format
 msgid "Number of primitives: %d"
 msgstr "Anzahl der Primitive: %d"
 
-#: ../lib/vector/Vlib/build.c:159
+#: ../lib/vector/Vlib/build.c:157
 #, c-format
 msgid "Number of points: %d"
 msgstr "Anzahl der Punkte: %d"
 
-#: ../lib/vector/Vlib/build.c:160
+#: ../lib/vector/Vlib/build.c:158
 #, c-format
 msgid "Number of lines: %d"
 msgstr "Anzahl der Linien: %d"
 
-#: ../lib/vector/Vlib/build.c:161
+#: ../lib/vector/Vlib/build.c:159
 #, c-format
 msgid "Number of boundaries: %d"
 msgstr "Anzahl der Grenzen: %d"
 
-#: ../lib/vector/Vlib/build.c:162
+#: ../lib/vector/Vlib/build.c:160
 #, c-format
 msgid "Number of centroids: %d"
 msgstr "Anzahl der Zentroide: %d"
 
-#: ../lib/vector/Vlib/build.c:165
+#: ../lib/vector/Vlib/build.c:163
 #, c-format
 msgid "Number of faces: %d"
 msgstr "Anzahl der Faces: %d"
 
-#: ../lib/vector/Vlib/build.c:168
+#: ../lib/vector/Vlib/build.c:166
 #, c-format
 msgid "Number of kernels: %d"
 msgstr "Anzahl der Kernel: %d"
 
-#: ../lib/vector/Vlib/build.c:209
+#: ../lib/vector/Vlib/build.c:207
 #, c-format
 msgid "Number of areas: %d"
 msgstr "Anzahl der Flächen: %d"
 
-#: ../lib/vector/Vlib/build.c:210
+#: ../lib/vector/Vlib/build.c:208
 #, c-format
 msgid "Number of isles: %d"
 msgstr "Anzahl der Inseln: %d"
 
-#: ../lib/vector/Vlib/build.c:213
+#: ../lib/vector/Vlib/build.c:211
 #, c-format
 msgid "Number of incorrect boundaries: %d"
 msgstr "Anzahl inkorrekter Grenzen: %d"
 
-#: ../lib/vector/Vlib/build.c:217
+#: ../lib/vector/Vlib/build.c:215
 #, c-format
 msgid "Number of centroids outside area: %d"
 msgstr "Anzahl der Zentroide außerhalb von Flächen: %d"
 
-#: ../lib/vector/Vlib/build.c:221
+#: ../lib/vector/Vlib/build.c:219
 #, c-format
 msgid "Number of duplicate centroids: %d"
 msgstr "Anzahl mehrfacher Zentroide: %d"
 
-#: ../lib/vector/Vlib/build.c:224
+#: ../lib/vector/Vlib/build.c:222
 #, c-format
 msgid "Number of areas without centroid: %d"
 msgstr "Anzahl der Flächen ohne Zentroid: %d"
 
-#: ../lib/vector/Vlib/build.c:228
+#: ../lib/vector/Vlib/build.c:226
 msgid "Number of areas: -"
 msgstr "Anzahl der Flächen: -"
 
-#: ../lib/vector/Vlib/build.c:229
+#: ../lib/vector/Vlib/build.c:227
 msgid "Number of isles: -"
 msgstr "Anzahl der Inseln: -"
 
-#: ../lib/vector/Vlib/build.c:259
+#: ../lib/vector/Vlib/build.c:257
 #, c-format
 msgid "Unable to open topo file for write <%s>"
 msgstr "Kann Topologiedatei nicht zum Schreiben von <%s> öffnen."
 
-#: ../lib/vector/Vlib/build.c:267
+#: ../lib/vector/Vlib/build.c:265
 msgid "Error writing out topo file"
 msgstr "Fehler beim Schreiben der Topologiedatei"
 
-#: ../lib/vector/Vlib/build.c:399
+#: ../lib/vector/Vlib/build.c:397
 #, fuzzy
 msgid "Unable to build spatial index from topology, vector map is not opened at topology level 2"
 msgstr "Vektor Karte"
 
-#: ../lib/vector/Vlib/build.c:440
+#: ../lib/vector/Vlib/build.c:438
 msgid "BUG (Vect_build_sidx_from_topo): node does not exist"
 msgstr "BUG (Vect_build_sidx_from_topo): Knoten existiert nicht."
 
-#: ../lib/vector/Vlib/build.c:452
+#: ../lib/vector/Vlib/build.c:450
 msgid "BUG (Vect_build_sidx_from_topo): line does not exist"
 msgstr "BUG (Vect_build_sidx_from_topo): Linie exitiert nicht."
 
-#: ../lib/vector/Vlib/build.c:471
+#: ../lib/vector/Vlib/build.c:469
 msgid "BUG (Vect_build_sidx_from_topo): area does not exist"
 msgstr "BUG (Vect_build_sidx_from_topo): Fläche existiert nicht."
 
-#: ../lib/vector/Vlib/build.c:490
+#: ../lib/vector/Vlib/build.c:488
 msgid "BUG (Vect_build_sidx_from_topo): isle does not exist"
 msgstr "BUG (Vect_build_sidx_from_topo): Insel existiert nicht."
 
-#: ../lib/vector/Vlib/build.c:541
+#: ../lib/vector/Vlib/build.c:539
 #, c-format
 msgid "Unable open spatial index file for write <%s>"
 msgstr "Kann datei des räumlichen Index nicht zum Schreiben von <%s> öffnen"
 
-#: ../lib/vector/Vlib/build.c:550
+#: ../lib/vector/Vlib/build.c:548
 msgid "Error writing out spatial index file"
 msgstr "Fehler beim Schreiben des räumlichen Index aufgetreten "
 
-#: ../lib/vector/Vlib/field.c:89
+#: ../lib/vector/Vlib/field.c:87
 msgid "Layer number must be 1 or greater"
 msgstr "Die Layernummer muss >= 1 sein."
 
-#: ../lib/vector/Vlib/field.c:94
+#: ../lib/vector/Vlib/field.c:92
 #, fuzzy
 msgid "Unable to add attribute link, vector map is not opened in WRITE mode"
 msgstr "Karte"
 
-#: ../lib/vector/Vlib/field.c:101
+#: ../lib/vector/Vlib/field.c:99
 #, fuzzy
 msgid "Unable to add attribute link"
 msgstr "Kann keine Datenbankverknüpfung erstellen."
 
-#: ../lib/vector/Vlib/field.c:107
+#: ../lib/vector/Vlib/field.c:105
 #, fuzzy
 msgid "Unable to write attribute links"
 msgstr "Kann die Datenbankverknüpfung nicht schreiben."
 
-#: ../lib/vector/Vlib/field.c:152
+#: ../lib/vector/Vlib/field.c:150
 msgid "Unable to write database links"
 msgstr "Kann Datenbankverknüpfungen nicht schreiben."
 
-#: ../lib/vector/Vlib/field.c:228
+#: ../lib/vector/Vlib/field.c:226
 #, c-format
 msgid "Layer number %d or name <%s> already exists"
 msgstr "Layernummer %d oder Name <%s> existiert bereits."
 
-#: ../lib/vector/Vlib/field.c:308
+#: ../lib/vector/Vlib/field.c:306
 #, c-format
 msgid ""
 "Default driver / database set to:\n"
@@ -2899,454 +2953,469 @@ msgstr ""
 "Treiber: %s\n"
 "Datenbank: %s"
 
-#: ../lib/vector/Vlib/field.c:315
+#: ../lib/vector/Vlib/field.c:313
 msgid "Default driver is not set"
 msgstr "Standard-Treiber wurde nicht angegeben."
 
-#: ../lib/vector/Vlib/field.c:318
+#: ../lib/vector/Vlib/field.c:316
 msgid "Default database is not set"
 msgstr "Standard-Datenbank ist nicht angegeben."
 
-#: ../lib/vector/Vlib/field.c:377
+#: ../lib/vector/Vlib/field.c:375
 #, c-format
 msgid "Requested dblink %d, maximum link number %d"
 msgstr "Angeforderte Datenbankverknüpfung %d, maximale Verknüpfungsanzahl %d"
 
-#: ../lib/vector/Vlib/field.c:543
+#: ../lib/vector/Vlib/field.c:541
 #, fuzzy
 msgid "The support for OGR vector maps wasn't compiled in"
 msgstr "Kategorie Unterstützung für die Vektordatei [%s] in Mapset [%s] %s"
 
-#: ../lib/vector/Vlib/field.c:559 ../lib/vector/Vlib/open_ogr.c:74
+#: ../lib/vector/Vlib/field.c:557 ../lib/vector/Vlib/open_ogr.c:72
 #, c-format
 msgid "Unable to open OGR data source '%s'"
 msgstr "Kann die OGR-Datenquelle '%s' nicht öffnen."
 
-#: ../lib/vector/Vlib/field.c:575
+#: ../lib/vector/Vlib/field.c:573
 #, fuzzy, c-format
 msgid "Unable to open OGR layer <%s>"
 msgstr "Kann Datei %s nicht öffnen."
 
-#: ../lib/vector/Vlib/field.c:601
+#: ../lib/vector/Vlib/field.c:599
 msgid "Unable to open OGR DBMI driver"
 msgstr "Kann den OGR DBMI-Treiber nicht öffnen."
 
-#: ../lib/vector/Vlib/field.c:640
+#: ../lib/vector/Vlib/field.c:638
 msgid "All FID tests failed. Neither 'FID' nor 'ogc_fid' nor 'ogr_fid' nor 'gid' available in OGR DB table"
 msgstr "Alle FID Tests fehlgeschlagen. Weder 'FID' noch 'ogc_fid', 'ogr_fid', 'gid' sind in der OGR DB Tabelle vorhanden."
 
-#: ../lib/vector/Vlib/field.c:696
+#: ../lib/vector/Vlib/field.c:694
 #, c-format
 msgid "Don't know how to read links for format %d"
 msgstr "Ich weiß nicht, wie ich Verknüpfungen des Formats %d lesen soll."
 
-#: ../lib/vector/Vlib/field.c:730 ../lib/vector/Vlib/field.c:738
+#: ../lib/vector/Vlib/field.c:728 ../lib/vector/Vlib/field.c:736
 #, fuzzy, c-format
 msgid "Error in rule on row %d in <%s>"
 msgstr "Fehler in Regel in Zeile %d in %s."
 
-#: ../lib/vector/Vlib/field.c:809
+#: ../lib/vector/Vlib/field.c:807
 #, c-format
 msgid "Unable to open vector database definition file '%s'"
 msgstr "Kann Datei '%s' mit Definition der Vektor Datenbank nicht öffnen."
 
-#: ../lib/vector/Vlib/field.c:895
+#: ../lib/vector/Vlib/field.c:900
 msgid "Bug: attempt to update map which is not in current mapset"
 msgstr "Bug: Versuch eine Karte zu aktualisieren, die nicht im aktuellen Mapset ist."
 
-#: ../lib/vector/Vlib/area.c:52
+#: ../lib/vector/Vlib/area.c:50
 msgid "Attempt to read points of nonexistent area"
 msgstr "Versuche Punkte nicht existenter Fläche zu lesen."
 
-#: ../lib/vector/Vlib/area.c:125
+#: ../lib/vector/Vlib/area.c:123
 #, c-format
 msgid "Unable to read line %d"
 msgstr "Kann Linie %d nicht lesen"
 
-#: ../lib/vector/Vlib/area.c:164 ../lib/vector/Vlib/area.c:193
-#: ../lib/vector/Vlib/area.c:257 ../lib/vector/Vlib/area.c:286
+#: ../lib/vector/Vlib/area.c:162 ../lib/vector/Vlib/area.c:191
+#: ../lib/vector/Vlib/area.c:255 ../lib/vector/Vlib/area.c:284
 #, c-format
 msgid "Attempt to read topo for dead area (%d)"
 msgstr "Versuche topo einer toten Fläche (%d) zu lesen."
 
-#: ../lib/vector/Vlib/area.c:227 ../lib/vector/Vlib/area.c:313
+#: ../lib/vector/Vlib/area.c:225 ../lib/vector/Vlib/area.c:311
 #, c-format
 msgid "Attempt to read topo for dead isle (%d)"
 msgstr "Versuche topo einer toten Insel (%d) zu lesen."
 
-#: ../lib/vector/Vlib/header.c:89 ../lib/vector/Vlib/header.c:137
+#: ../lib/vector/Vlib/header.c:87 ../lib/vector/Vlib/header.c:135
 #, c-format
 msgid "Unable to open header file of vector <%s>"
 msgstr "Kann header Datei der Vektorkarte <%s> nicht öffnen."
 
-#: ../lib/vector/Vlib/header.c:145
+#: ../lib/vector/Vlib/header.c:143
 #, c-format
 msgid "Corrupted row in head: %s"
 msgstr "Kaputte Zeile im header: %s"
 
-#: ../lib/vector/Vlib/header.c:181
+#: ../lib/vector/Vlib/header.c:179
 #, fuzzy, c-format
 msgid "Unknown keyword '%s' in vector head"
 msgstr "Unbekanntes Schlüsselwort %s in Vektor header."
 
-#: ../lib/vector/Vlib/header.c:317
+#: ../lib/vector/Vlib/header.c:315
 msgid "Point"
 msgstr ""
 
-#: ../lib/vector/Vlib/header.c:319
+#: ../lib/vector/Vlib/header.c:317
 msgid "MultiPoint"
 msgstr ""
 
-#: ../lib/vector/Vlib/header.c:321
+#: ../lib/vector/Vlib/header.c:319
 msgid "LineString"
 msgstr ""
 
-#: ../lib/vector/Vlib/header.c:323
+#: ../lib/vector/Vlib/header.c:321
 msgid "MultiLineString"
 msgstr ""
 
-#: ../lib/vector/Vlib/header.c:325
+#: ../lib/vector/Vlib/header.c:323
 msgid "Polygon"
 msgstr ""
 
-#: ../lib/vector/Vlib/header.c:327
+#: ../lib/vector/Vlib/header.c:325
 msgid "MultiPolygon"
 msgstr ""
 
-#: ../lib/vector/Vlib/header.c:329
+#: ../lib/vector/Vlib/header.c:327
 msgid "GeometryCollection"
 msgstr ""
 
-#: ../lib/vector/Vlib/header.c:331
+#: ../lib/vector/Vlib/header.c:329
 #, fuzzy
 msgid "None"
 msgstr "nichts"
 
-#: ../lib/vector/Vlib/header.c:333
+#: ../lib/vector/Vlib/header.c:331
 msgid "LinearRing"
 msgstr ""
 
-#: ../lib/vector/Vlib/header.c:335
+#: ../lib/vector/Vlib/header.c:333
 msgid "3D Point"
 msgstr ""
 
-#: ../lib/vector/Vlib/header.c:337
+#: ../lib/vector/Vlib/header.c:335
 msgid "3D MultiPoint"
 msgstr ""
 
-#: ../lib/vector/Vlib/header.c:339
+#: ../lib/vector/Vlib/header.c:337
 msgid "3D LineString"
 msgstr ""
 
-#: ../lib/vector/Vlib/header.c:341
+#: ../lib/vector/Vlib/header.c:339
 msgid "3D MultiLineString"
 msgstr ""
 
-#: ../lib/vector/Vlib/header.c:343
+#: ../lib/vector/Vlib/header.c:341
 msgid "3D Polygon"
 msgstr ""
 
-#: ../lib/vector/Vlib/header.c:345
+#: ../lib/vector/Vlib/header.c:343
 msgid "3D MultiPolygon"
 msgstr ""
 
-#: ../lib/vector/Vlib/header.c:347
+#: ../lib/vector/Vlib/header.c:345
 msgid "3D GeometryCollection"
 msgstr ""
 
-#: ../lib/vector/Vlib/header.c:349
+#: ../lib/vector/Vlib/header.c:347
 #, fuzzy
 msgid "Unknown"
 msgstr "nicht bekannt"
 
-#: ../lib/vector/Vlib/read.c:108
+#: ../lib/vector/Vlib/read.c:107
 #, c-format
 msgid "Vect_read_line(): feature id %d is not reasonable (max features in vector map <%s>: %d)"
 msgstr "Vect_read_line(): Objekt ID %d ist nicht sinnvoll (Max. Objekte in Vektorkarte <%s>: %d)."
 
-#: ../lib/vector/Vlib/build_nat.c:100
+#: ../lib/vector/Vlib/build_nat.c:98
 msgid "Unable to add area (map closed, topo saved)"
 msgstr "Kann Fläche nicht hinzufügen (Karte geschlossen, topo gespeichert)."
 
-#: ../lib/vector/Vlib/build_nat.c:109
+#: ../lib/vector/Vlib/build_nat.c:107
 msgid "Unable to add isle (map closed, topo saved)"
 msgstr "Kann Insel nicht hinzufügen (Karte geschlossen, topo gespeichert)."
 
-#: ../lib/vector/Vlib/build_nat.c:119
+#: ../lib/vector/Vlib/build_nat.c:117
 msgid "Area of size = 0.0 ignored"
 msgstr "Flächen mit der Größe 0.0 ignoriert."
 
-#: ../lib/vector/Vlib/build_nat.c:155
+#: ../lib/vector/Vlib/build_nat.c:153
 msgid "Request to find area outside nonexistent isle"
 msgstr "Finde Fläche außerhalb nicht existierender Insel"
 
-#: ../lib/vector/Vlib/build_nat.c:525
+#: ../lib/vector/Vlib/build_nat.c:523
 msgid "Registering primitives..."
 msgstr "Registriere Primitive..."
 
-#: ../lib/vector/Vlib/build_nat.c:534
+#: ../lib/vector/Vlib/build_nat.c:532
 msgid "Unable to read vector map"
 msgstr "Kann Vektorkarte nicht lesen."
 
-#: ../lib/vector/Vlib/build_nat.c:578
+#: ../lib/vector/Vlib/build_nat.c:576
 #, c-format
 msgid "%d primitives registered"
 msgstr "%d Primitive registriert"
 
-#: ../lib/vector/Vlib/build_nat.c:579
+#: ../lib/vector/Vlib/build_nat.c:577
 #, c-format
 msgid "%d vertices registered"
 msgstr "%d Vertices registriert "
 
-#: ../lib/vector/Vlib/build_nat.c:590
+#: ../lib/vector/Vlib/build_nat.c:588
 msgid "Building areas..."
 msgstr "Erzeuge Flächen..."
 
-#: ../lib/vector/Vlib/build_nat.c:613
+#: ../lib/vector/Vlib/build_nat.c:611
 #, c-format
 msgid "%d areas built"
 msgstr "%d Flächen angelegt"
 
-#: ../lib/vector/Vlib/build_nat.c:614
+#: ../lib/vector/Vlib/build_nat.c:612
 #, c-format
 msgid "%d isles built"
 msgstr "%d Inseln angelegt"
 
-#: ../lib/vector/Vlib/build_nat.c:623
+#: ../lib/vector/Vlib/build_nat.c:621
 msgid "Attaching islands..."
 msgstr "Füge Inseln hinzu..."
 
-#: ../lib/vector/Vlib/build_nat.c:638
+#: ../lib/vector/Vlib/build_nat.c:636
 msgid "Attaching centroids..."
 msgstr "Füge Zentroide hinzu..."
 
-#: ../lib/vector/Vlib/merge_lines.c:192
+#: ../lib/vector/Vlib/merge_lines.c:190
 #, c-format
 msgid "%d boundaries merged"
 msgstr "%d Flächengrenzen zusammengefasst"
 
-#: ../lib/vector/Vlib/merge_lines.c:193
+#: ../lib/vector/Vlib/merge_lines.c:191
 #, c-format
 msgid "%d new boundaries"
 msgstr "%d neue Flächengrenzen"
 
-#: ../lib/vector/Vlib/buffer2.c:360
+#: ../lib/vector/Vlib/buffer2.c:361
 msgid "Line is not looped"
 msgstr "Linie ist nicht gelooped."
 
-#: ../lib/vector/Vlib/buffer2.c:442
+#: ../lib/vector/Vlib/buffer2.c:443
 #, c-format
 msgid "Unexpected result of line_intersection() res = %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/buffer2.c:586 ../lib/vector/Vlib/buffer2.c:597
-msgid "Next edge was visited but it is not the first one !!! breaking loop"
+#: ../lib/vector/Vlib/buffer2.c:589
+#, fuzzy
+msgid "Next edge was visited (right) but it is not the first one !!! breaking loop"
 msgstr "Nächste Kante besucht, aber sie ist nicht die Erste !!! Beende Schleife."
 
-#: ../lib/vector/Vlib/buffer2.c:649
+#: ../lib/vector/Vlib/buffer2.c:600
+#, fuzzy
+msgid "Next edge was visited (left) but it is not the first one !!! breaking loop"
+msgstr "Nächste Kante besucht, aber sie ist nicht die Erste !!! Beende Schleife."
+
+#: ../lib/vector/Vlib/buffer2.c:648
 msgid "side != 0 feature not implemented"
 msgstr "side != 0 Feature nicht implementiert"
 
-#: ../lib/vector/Vlib/buffer2.c:886 ../lib/vector/Vlib/buffer2.c:919
+#: ../lib/vector/Vlib/buffer2.c:890 ../lib/vector/Vlib/buffer2.c:937
+msgid "zero area size"
+msgstr ""
+
+#: ../lib/vector/Vlib/buffer2.c:896 ../lib/vector/Vlib/buffer2.c:943
+#, fuzzy
+msgid "Line was not closed"
+msgstr "Linie ist nicht gelooped."
+
+#: ../lib/vector/Vlib/buffer2.c:909 ../lib/vector/Vlib/buffer2.c:960
 msgid "Vect_get_point_in_poly() failed"
 msgstr "Vect_get_point_in_poly() fehlgeschlagen."
 
-#: ../lib/vector/Vlib/map.c:73
+#: ../lib/vector/Vlib/map.c:71
 msgid "input vector map is not open"
 msgstr "Eingabe-Vektorkarte ist nicht offen."
 
-#: ../lib/vector/Vlib/map.c:86 ../lib/vector/Vlib/map.c:140
+#: ../lib/vector/Vlib/map.c:84 ../lib/vector/Vlib/map.c:138
 #: ../lib/ogsf/Gp3.c:92
 #, c-format
 msgid "Unable to read vector map <%s>"
 msgstr "Kann die Vektorkarte <%s> nicht lesen."
 
-#: ../lib/vector/Vlib/map.c:241 ../lib/vector/Vlib/map.c:385
+#: ../lib/vector/Vlib/map.c:239 ../lib/vector/Vlib/map.c:383
 #: ../lib/vector/Vlib/open.c:714
 #, c-format
 msgid "Vector map name is not SQL compliant"
 msgstr "Name der Vektorkarte ist nicht SQL kompatibel."
 
-#: ../lib/vector/Vlib/map.c:245
+#: ../lib/vector/Vlib/map.c:243
 #, c-format
 msgid "Unable to find vector map <%s> in <%s>"
 msgstr "Kann die Vektorkarte <%s> in <%s> nicht finden."
 
-#: ../lib/vector/Vlib/map.c:257 ../lib/vector/Vlib/map.c:389
+#: ../lib/vector/Vlib/map.c:255 ../lib/vector/Vlib/map.c:387
 #: ../lib/vector/Vlib/open.c:751
 #, c-format
 msgid "Vector map <%s> already exists and will be overwritten"
 msgstr "Vektorkarte <%s> existiert bereits und wird überschrieben."
 
-#: ../lib/vector/Vlib/map.c:261 ../lib/vector/Vlib/open.c:756
+#: ../lib/vector/Vlib/map.c:259 ../lib/vector/Vlib/open.c:756
 #, c-format
 msgid "Unable to delete vector map <%s>"
 msgstr "Kann Vektorkarte <%s> nicht löschen."
 
-#: ../lib/vector/Vlib/map.c:281 ../lib/vector/Vlib/map.c:407
+#: ../lib/vector/Vlib/map.c:279 ../lib/vector/Vlib/map.c:405
 #, c-format
 msgid "Unable to copy vector map <%s> to <%s>"
 msgstr "Kann die Vektorkarte <%s> nicht nach <%s> kopieren."
 
-#: ../lib/vector/Vlib/map.c:330 ../lib/vector/Vlib/map.c:456
-#: ../lib/vector/Vlib/map.c:694 ../lib/vector/Vlib/map.c:801
+#: ../lib/vector/Vlib/map.c:328 ../lib/vector/Vlib/map.c:454
+#: ../lib/vector/Vlib/map.c:692 ../lib/vector/Vlib/map.c:799
 #, c-format
 msgid "Unable to copy table <%s>"
 msgstr "Kann die Tabelle <%s> nicht kopieren."
 
-#: ../lib/vector/Vlib/map.c:346 ../lib/vector/Vlib/map.c:485
-#: ../lib/vector/Vlib/map.c:707
+#: ../lib/vector/Vlib/map.c:344 ../lib/vector/Vlib/map.c:483
+#: ../lib/vector/Vlib/map.c:705
 #, c-format
 msgid "Unable to create index for table <%s>, key <%s>"
 msgstr "Kann keinen Index für die Tabelle <%s>, Schlüssel <%s> erzeugen."
 
-#: ../lib/vector/Vlib/map.c:470 ../lib/vector/Vlib/map.c:571
+#: ../lib/vector/Vlib/map.c:468 ../lib/vector/Vlib/map.c:569
 #, c-format
 msgid "Unable to delete table <%s>"
 msgstr "Kann Tabelle <%s> nicht löschen."
 
-#: ../lib/vector/Vlib/map.c:525
+#: ../lib/vector/Vlib/map.c:523
 #, c-format
 msgid "Invalid vector map name <%s>"
 msgstr "Ungültiger Name für Vektorkarte <%s>."
 
-#: ../lib/vector/Vlib/map.c:539
+#: ../lib/vector/Vlib/map.c:537
 #, c-format
 msgid "Unable to open header file for vector map <%s>"
 msgstr "Kann header Datei der Vektorkarte <%s> nicht öffnen."
 
-#: ../lib/vector/Vlib/map.c:561
+#: ../lib/vector/Vlib/map.c:559
 #, c-format
 msgid "Unable to find table <%s> linked to vector map <%s>"
 msgstr "Kann die Tabelle <%s> verknüpft mit Vektorkarte <%s> nicht finden."
 
-#: ../lib/vector/Vlib/map.c:578
+#: ../lib/vector/Vlib/map.c:576
 #, c-format
 msgid "Table <%s> linked to vector map <%s> does not exist"
 msgstr "Tabelle <%s> verknüpft mit Vektorkarte <%s> existiert nicht."
 
-#: ../lib/vector/Vlib/map.c:591
+#: ../lib/vector/Vlib/map.c:589
 #, c-format
 msgid "Unable to open directory '%s'"
 msgstr "Kann das Verzeichnis '%s' nicht öffnen."
 
-#: ../lib/vector/Vlib/map.c:605
+#: ../lib/vector/Vlib/map.c:603
 #, c-format
 msgid "Unable to delete file '%s'"
 msgstr "Kann Datei '%s' nicht löschen."
 
-#: ../lib/vector/Vlib/map.c:622
+#: ../lib/vector/Vlib/map.c:620
 #, c-format
 msgid "Unable to rename directory '%s' to '%s'"
 msgstr "Kann das Verzeichnis '%s' nicht in '%s' umbenennen."
 
-#: ../lib/vector/Vlib/map.c:630
+#: ../lib/vector/Vlib/map.c:628
 #, c-format
 msgid "Unable to remove directory '%s'"
 msgstr "Kann das Verzeichnis '%s' nicht löschen."
 
-#: ../lib/vector/Vlib/map.c:685 ../lib/vector/Vlib/map.c:786
+#: ../lib/vector/Vlib/map.c:683 ../lib/vector/Vlib/map.c:784
 #, c-format
 msgid "Unable to add database link for vector map <%s>"
 msgstr "Kann Datenbankverknüpfung für Vektorkarte <%s> nicht hinzufügen."
 
-#: ../lib/vector/Vlib/open_nat.c:57
+#: ../lib/vector/Vlib/open_nat.c:55
 #, fuzzy, c-format
 msgid "Unable to open coor file for vector map <%s>"
 msgstr "Vektor Karte"
 
-#: ../lib/vector/Vlib/open_nat.c:154
+#: ../lib/vector/Vlib/open_nat.c:152
 #, fuzzy, c-format
 msgid "Coor file of vector map <%s@%s> is larger than it should be (%ld bytes excess)"
 msgstr "Coor-Datei der Vektorkarte <%s@%s> ist größer als sie sein sollte (%ld Byte Überschuss)."
 
-#: ../lib/vector/Vlib/open_nat.c:158
+#: ../lib/vector/Vlib/open_nat.c:156
 #, fuzzy, c-format
 msgid "Coor file of vector <%s@%s> is shorter than it should be (%ld bytes missing)."
 msgstr "Coor-Datei der Vektorkarte <%s@%s> ist kleiner als sie sein sollte (%ld Byte Fehlend)."
 
-#: ../lib/vector/Vlib/dangles.c:150
+#: ../lib/vector/Vlib/dangles.c:148
 msgid "Changed"
 msgstr ""
 
-#: ../lib/vector/Vlib/dangles.c:153
+#: ../lib/vector/Vlib/dangles.c:151
 msgid "Removed"
 msgstr ""
 
-#: ../lib/vector/Vlib/dangles.c:156
+#: ../lib/vector/Vlib/dangles.c:154
 msgid "Selected"
 msgstr ""
 
-#: ../lib/vector/Vlib/dangles.c:264
+#: ../lib/vector/Vlib/dangles.c:262
 #, fuzzy, c-format
 msgid "%s lines: %d"
 msgstr "Anzahl der Linien: %d"
 
-#: ../lib/vector/Vlib/dangles.c:265
+#: ../lib/vector/Vlib/dangles.c:263
 #, c-format
 msgid "%s dangles: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/net.c:118
+#: ../lib/vector/Vlib/net.c:116
 msgid "Building graph..."
 msgstr "Erzeuge Graphen..."
 
-#: ../lib/vector/Vlib/net.c:160
+#: ../lib/vector/Vlib/net.c:158
 msgid "Unable to build network graph"
 msgstr "Kann den Netzwerk-Graphen nicht erzeugen."
 
-#: ../lib/vector/Vlib/net.c:166
+#: ../lib/vector/Vlib/net.c:164
 msgid "Forward costs column not specified"
 msgstr "Spalte der Vorwärtskosten nicht angegeben."
 
-#: ../lib/vector/Vlib/net.c:173
+#: ../lib/vector/Vlib/net.c:171
 msgid "Arc field < 1"
 msgstr "Arc Feld < 1"
 
-#: ../lib/vector/Vlib/net.c:187 ../lib/vector/Vlib/net.c:204
-#: ../lib/vector/Vlib/net.c:357 ../lib/vector/Vlib/ascii.c:501
+#: ../lib/vector/Vlib/net.c:185 ../lib/vector/Vlib/net.c:202
+#: ../lib/vector/Vlib/net.c:355 ../lib/vector/Vlib/ascii.c:528
 #, c-format
 msgid "Column <%s> not found in table <%s>"
 msgstr "Spalte <%s> in Tabelle <%s> nicht gefunden."
 
-#: ../lib/vector/Vlib/net.c:193 ../lib/vector/Vlib/net.c:210
-#: ../lib/vector/Vlib/net.c:363
+#: ../lib/vector/Vlib/net.c:191 ../lib/vector/Vlib/net.c:208
+#: ../lib/vector/Vlib/net.c:361
 #, c-format
 msgid "Data type of column <%s> not supported (must be numeric)"
 msgstr "Spaltentype der Spalte <%s> wird nicht unterstützt (muss numerisch sein)."
 
-#: ../lib/vector/Vlib/net.c:223
+#: ../lib/vector/Vlib/net.c:221
 msgid "Registering arcs..."
 msgstr "Registriere arcs..."
 
-#: ../lib/vector/Vlib/net.c:251
+#: ../lib/vector/Vlib/net.c:249
 #, c-format
 msgid "Database record for line %d (cat = %d, forward/both direction(s)) not found (forward/both direction(s) of line skipped)"
 msgstr "Datenbankeintrag für Linie %d (cat = %d, vorwärts/beide Richtung(en)) nicht gefunden (vorwärts/beide Richtung(en) der Linie übersprungen)."
 
-#: ../lib/vector/Vlib/net.c:270
+#: ../lib/vector/Vlib/net.c:268
 #, c-format
 msgid "Database record for line %d (cat = %d, backword direction) not found(direction of line skipped)"
 msgstr "Datenbankeintrag für Linie %d (cat = %d, rückwärts Richtung) nicht gefunden (rückwärts Richtung der Linie übersprungen)."
 
-#: ../lib/vector/Vlib/net.c:319
+#: ../lib/vector/Vlib/net.c:317
 msgid "Cannot add network arc"
 msgstr "Kann Netzwerk arc nicht hinzufügen."
 
-#: ../lib/vector/Vlib/net.c:343
+#: ../lib/vector/Vlib/net.c:341
 msgid "Setting node costs..."
 msgstr "Setze Kosten der Knoten..."
 
-#: ../lib/vector/Vlib/net.c:399
+#: ../lib/vector/Vlib/net.c:397
 #, c-format
 msgid "Database record for node %d (cat = %d) not found (cost set to 0)"
 msgstr "Datenbankeintrag für Knoten %d (cat = %d) nicht gefunden (Kosten auf 0 gesetzt)."
 
-#: ../lib/vector/Vlib/net.c:426
+#: ../lib/vector/Vlib/net.c:424
 msgid "Flattening the graph..."
 msgstr "Mache den Graph flach..."
 
-#: ../lib/vector/Vlib/net.c:435
+#: ../lib/vector/Vlib/net.c:433
 msgid "Graph was built"
 msgstr "Graph wurde erstellt"
 
@@ -3354,123 +3423,123 @@ msgstr "Graph wurde erstellt"
 msgid "Wrong line direction in Vect_net_get_line_cost()"
 msgstr "Falsche Linienrichtung in Vect_net_get_line_cost()"
 
-#: ../lib/vector/Vlib/overlay.c:71
+#: ../lib/vector/Vlib/overlay.c:70
 msgid "unknown operator"
 msgstr "unbekannter Operator"
 
-#: ../lib/vector/Vlib/overlay.c:121
+#: ../lib/vector/Vlib/overlay.c:120
 msgid "Overlay: line/boundary types not supported by AND operator"
 msgstr "Overlay: Typ Linie/Grenze wird nicht von dem Operator AND unterstützt."
 
-#: ../lib/vector/Vlib/overlay.c:124
+#: ../lib/vector/Vlib/overlay.c:123
 msgid "Overlay: area x area types not supported by AND operator"
 msgstr "Overlay: Typ Fläche x Fläche wird nicht vom Operator AND unterstützt."
 
-#: ../lib/vector/Vlib/poly.c:227
+#: ../lib/vector/Vlib/poly.c:225
 msgid "Unable to find point in polygon"
 msgstr "Kann Punkt in Polygon nicht finden."
 
-#: ../lib/vector/Vlib/poly.c:647
+#: ../lib/vector/Vlib/poly.c:644
 msgid "conditions failed"
 msgstr "Bedingungen fehlgeschlagen"
 
-#: ../lib/vector/Vlib/break_lines.c:373
+#: ../lib/vector/Vlib/break_lines.c:371
 #, fuzzy, c-format
 msgid "Intersections: %d"
 msgstr "Andere Projektion"
 
-#: ../lib/vector/Vlib/remove_areas.c:91
+#: ../lib/vector/Vlib/remove_areas.c:89
 msgid "Area is composed of dead boundary"
 msgstr "Fläche besteht aus toten Grenzen."
 
-#: ../lib/vector/Vlib/remove_areas.c:178
+#: ../lib/vector/Vlib/remove_areas.c:176
 #, c-format
 msgid "%d areas of total size %g removed"
 msgstr ""
 
-#: ../lib/vector/Vlib/write.c:26 ../lib/vector/Vlib/write.c:32
-#: ../lib/vector/Vlib/write.c:38 ../lib/vector/Vlib/write.c:45
+#: ../lib/vector/Vlib/write.c:24 ../lib/vector/Vlib/write.c:30
+#: ../lib/vector/Vlib/write.c:36 ../lib/vector/Vlib/write.c:43
 msgid "for this format/level not supported"
 msgstr "für dieses Format/Level nicht unterstützt."
 
-#: ../lib/vector/Vlib/write.c:153
+#: ../lib/vector/Vlib/write.c:150
 msgid "Unable to write feature, vector map is not opened"
 msgstr "Kann Objekt nicht schreiben. Vektorkarte ist nicht geöffnet."
 
-#: ../lib/vector/Vlib/write.c:166
+#: ../lib/vector/Vlib/write.c:163
 msgid "Unable to write feature (negative offset)"
 msgstr "Kann Objekt nicht schreiben (negativer Offset)."
 
-#: ../lib/vector/Vlib/write.c:200
+#: ../lib/vector/Vlib/write.c:196
 msgid "Unable to rewrite feature, vector map is not opened"
 msgstr "Kann Objekt nicht schreiben. Vektorkarte ist nicht geöffnet."
 
-#: ../lib/vector/Vlib/write.c:214
+#: ../lib/vector/Vlib/write.c:211
 #, c-format
 msgid "Unable to rewrite feature %d"
 msgstr "Kann Objekt %d nicht schreiben."
 
-#: ../lib/vector/Vlib/write.c:239
+#: ../lib/vector/Vlib/write.c:236
 #, c-format
 msgid "Unable to delete feature %d, vector map <%s> is not opened on topology level"
 msgstr "Kann Objekt %d nicht löschen. Vektorkarte <%s> ist nicht auf topologischem Level geöffnet."
 
-#: ../lib/vector/Vlib/write.c:245
+#: ../lib/vector/Vlib/write.c:242
 #, c-format
 msgid "Unable to delete feature %d, vector map <%s> is not opened in 'write' mode"
 msgstr "Kann Objekt %d nicht löschen. Vektorkarte <%s> ist nicht im Schreibmodus geöffnet."
 
-#: ../lib/vector/Vlib/write.c:259
+#: ../lib/vector/Vlib/write.c:256
 #, fuzzy, c-format
 msgid "Unable to delete feature id %d from vector map <%s>"
 msgstr "Vektor Karte"
 
-#: ../lib/vector/Vlib/write.c:285
+#: ../lib/vector/Vlib/write.c:282
 #, c-format
 msgid "Unable to restore feature %d, vector map <%s> is not opened on topology level"
 msgstr "Kann Objekt %d nicht wiederherstellen. Vektorkarte <%s> ist nicht auf topologischem Level geöffnet."
 
-#: ../lib/vector/Vlib/write.c:291
+#: ../lib/vector/Vlib/write.c:288
 #, c-format
 msgid "Unable to restore feature %d, vector map <%s> is not opened in 'write' mode"
 msgstr "Kann Objekt %d nicht wiederherstellen. Vektorkarte <%s> ist nicht im Schreibmodus geöffnet."
 
-#: ../lib/vector/Vlib/write.c:305
+#: ../lib/vector/Vlib/write.c:302
 #, c-format
 msgid "Unable to restore feature %d from vector map <%s>"
 msgstr "Kann Objekt %d der Vektorkarte <%s> nicht wiederherstellen."
 
-#: ../lib/vector/Vlib/close.c:139
+#: ../lib/vector/Vlib/close.c:138
 #, c-format
 msgid "Unable to close vector <%s>"
 msgstr "Kann die Vektorkarte <%s> nicht schliessen."
 
-#: ../lib/vector/Vlib/select.c:107
+#: ../lib/vector/Vlib/select.c:104
 #, c-format
 msgid "Unable to delete item %d from spatial index"
 msgstr "Kann Eintrag %d nicht aus dem räumlichen Index löschen."
 
-#: ../lib/vector/Vlib/open.c:127
+#: ../lib/vector/Vlib/open.c:125
 #, fuzzy, c-format
 msgid "Programmer requested unknown access level %d"
 msgstr "Programmierer fordert unbekanntes open_level %d an"
 
-#: ../lib/vector/Vlib/open.c:230
+#: ../lib/vector/Vlib/open.c:229
 msgid "Vector map which is not in the current mapset cannot be opened for update"
 msgstr "Eine Karte, die sich nicht im aktuellen Mapset befindet, kann nicht zum Aktualisierung geöffnet werden."
 
-#: ../lib/vector/Vlib/open.c:257 ../lib/ogsf/Gv3.c:64 ../lib/ogsf/Gp3.c:64
+#: ../lib/vector/Vlib/open.c:256 ../lib/ogsf/Gv3.c:64 ../lib/ogsf/Gp3.c:64
 #, c-format
 msgid "Unable to open vector map <%s>"
 msgstr "Kann die Vektorkarte <%s> nicht öffnen."
 
-#: ../lib/vector/Vlib/open.c:273 ../lib/vector/Vlib/open.c:360
+#: ../lib/vector/Vlib/open.c:272 ../lib/vector/Vlib/open.c:360
 #: ../lib/vector/Vlib/open.c:381
 #, c-format
 msgid "Unable to open vector map <%s> on level %d. Try to rebuild vector topology by v.build."
 msgstr "Kann die Vektorkarte <%s> nicht auf Level %d öffnen. Versuchen Sie die Topologie mit v.build neu anzulegen."
 
-#: ../lib/vector/Vlib/open.c:276
+#: ../lib/vector/Vlib/open.c:275
 #, fuzzy, c-format
 msgid "Unable to read header file of vector map <%s>"
 msgstr "Vektor Karte"
@@ -3485,7 +3554,7 @@ msgstr "Kann die Topologiedatei der Vektorkarte <%s> nicht öffnen."
 msgid "Unable to open spatial index file for vector map <%s>"
 msgstr "Vektor Karte"
 
-#: ../lib/vector/Vlib/open.c:341 ../lib/vector/Vlib/cindex.c:510
+#: ../lib/vector/Vlib/open.c:341 ../lib/vector/Vlib/cindex.c:508
 #, c-format
 msgid "Unable to open category index file for vector map <%s>"
 msgstr "Kann die Kategorieindexdatei der Vektorkarte <%s> nicht öffnen."
@@ -3525,40 +3594,40 @@ msgstr "Kann die Vektorkarte <%s> nicht anlegen."
 msgid "Unable to open history file of vector map <%s>"
 msgstr "Vektor Karte"
 
-#: ../lib/vector/Vlib/open.c:836
+#: ../lib/vector/Vlib/open.c:837
 #, c-format
 msgid "Unable to stat file <%s>"
 msgstr "Unable to stat file <%s>"
 
-#: ../lib/vector/Vlib/open.c:895
+#: ../lib/vector/Vlib/open.c:896
 #, c-format
 msgid "unknown %d (update Vect_maptype_info)"
 msgstr ""
 
-#: ../lib/vector/Vlib/open.c:971
+#: ../lib/vector/Vlib/open.c:972
 msgid "Size of 'coor' file differs from value saved in topology file"
 msgstr "Größe der 'coor' Datei unterscheidet sich von dem in der Topologiedatei gespeicherten Wert."
 
-#: ../lib/vector/Vlib/open.c:982 ../lib/vector/Vlib/open.c:1076
+#: ../lib/vector/Vlib/open.c:983 ../lib/vector/Vlib/open.c:1077
 #, c-format
 msgid "Please rebuild topology for vector map <%s@%s>"
 msgstr "Bitte erneuern Sie die Topologie der Vektorkarte <%s@%s>."
 
-#: ../lib/vector/Vlib/open.c:1065
+#: ../lib/vector/Vlib/open.c:1066
 #, fuzzy
 msgid "Size of 'coor' file differs from value saved in sidx file"
 msgstr "Größe"
 
-#: ../lib/vector/Vlib/open_ogr.c:57
+#: ../lib/vector/Vlib/open_ogr.c:55
 #, fuzzy
 msgid "OGR datasource not defined"
 msgstr "OGR feature ohne ID ignoriert."
 
-#: ../lib/vector/Vlib/open_ogr.c:62 ../lib/vector/Vlib/write_ogr.c:264
+#: ../lib/vector/Vlib/open_ogr.c:60 ../lib/vector/Vlib/write_ogr.c:263
 msgid "OGR layer not defined"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_ogr.c:94
+#: ../lib/vector/Vlib/open_ogr.c:92
 #, fuzzy, c-format
 msgid "OGR layer <%s> not found"
 msgstr "Rasterkarte <%s> nicht gefunden"
@@ -3613,233 +3682,233 @@ msgstr "Eigenschaften"
 msgid "Unable to create OGR layer <%s> in '%s'"
 msgstr "Kann Datei %s nicht öffnen."
 
-#: ../lib/vector/Vlib/level_two.c:250 ../lib/vector/Vlib/level_two.c:275
-#: ../lib/vector/Vlib/level_two.c:299 ../lib/vector/Vlib/level_two.c:318
-#: ../lib/vector/Vlib/level_two.c:336 ../lib/vector/Vlib/level_two.c:355
+#: ../lib/vector/Vlib/level_two.c:248 ../lib/vector/Vlib/level_two.c:273
+#: ../lib/vector/Vlib/level_two.c:297 ../lib/vector/Vlib/level_two.c:316
+#: ../lib/vector/Vlib/level_two.c:334 ../lib/vector/Vlib/level_two.c:353
 #, c-format
 msgid "Vector map <%s> is not open on level >= 2"
 msgstr "Vektorkarte <%s> ist nicht auf einem Level >= 2 geöffnet."
 
-#: ../lib/vector/Vlib/ascii.c:80
+#: ../lib/vector/Vlib/ascii.c:81
 #, fuzzy, c-format
 msgid "Error reading ASCII file: (bad type) [%s]"
 msgstr "Kann range Datei für [%s in %s] nicht lesen."
 
-#: ../lib/vector/Vlib/ascii.c:118
+#: ../lib/vector/Vlib/ascii.c:119
 #, fuzzy, c-format
 msgid "Error reading ASCII file: (unknown type) [%s]"
 msgstr "Kann range Datei für [%s in %s] nicht lesen."
 
-#: ../lib/vector/Vlib/ascii.c:131
+#: ../lib/vector/Vlib/ascii.c:132
 msgid "End of ASCII file reached before end of coordinates"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:142
+#: ../lib/vector/Vlib/ascii.c:143
 #, fuzzy, c-format
 msgid "Error reading ASCII file: (bad point) [%s]"
 msgstr "Kann range Datei für [%s in %s] nicht lesen."
 
-#: ../lib/vector/Vlib/ascii.c:146
+#: ../lib/vector/Vlib/ascii.c:147
 #, fuzzy, c-format
 msgid "Unparsable longitude value: [%s]"
 msgstr "Kann pj nicht initialisieren, wegen: %s"
 
-#: ../lib/vector/Vlib/ascii.c:149
+#: ../lib/vector/Vlib/ascii.c:150
 #, c-format
 msgid "Unparsable latitude value: [%s]"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:182
+#: ../lib/vector/Vlib/ascii.c:183
 msgid "End of ASCII file reached before end of categories"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:192
+#: ../lib/vector/Vlib/ascii.c:193
 #, fuzzy, c-format
 msgid "Error reading categories: [%s]"
 msgstr "Kann range Datei für [%s in %s] nicht lesen."
 
-#: ../lib/vector/Vlib/ascii.c:235
+#: ../lib/vector/Vlib/ascii.c:236
 #, c-format
 msgid ""
 "Unexpected data in vector head:\n"
 "[%s]"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:269
+#: ../lib/vector/Vlib/ascii.c:270
 #, fuzzy, c-format
 msgid "Unknown keyword <%s> in vector head"
 msgstr "unbekannt Vektor"
 
-#: ../lib/vector/Vlib/ascii.c:320 ../lib/db/dbmi_client/copy_tab.c:100
+#: ../lib/vector/Vlib/ascii.c:322 ../lib/db/dbmi_client/copy_tab.c:100
 #: ../lib/db/dbmi_client/copy_tab.c:120 ../lib/db/dbmi_client/db.c:41
 #, c-format
 msgid "Unable to start driver <%s>"
 msgstr "Kann den Treiber <%s> nicht starten."
 
-#: ../lib/vector/Vlib/ascii.c:426
+#: ../lib/vector/Vlib/ascii.c:428
 #, fuzzy, c-format
-msgid "Uknown feature type %d"
+msgid "Unknown feature type %d"
 msgstr "Unbekannter Vektortyp."
 
-#: ../lib/vector/Vlib/ascii.c:466
-#, c-format
-msgid "Feature has more categories. Only first category (%d) is exported."
-msgstr ""
-
-#: ../lib/vector/Vlib/ascii.c:476
+#: ../lib/vector/Vlib/ascii.c:463 ../lib/vector/Vlib/ascii.c:503
 #, fuzzy, c-format
 msgid "Unable to select record from table <%s> (key %s, column %s)"
 msgstr "Kann Header-Datei für [%s in %s] nicht erstellen."
 
-#: ../lib/vector/Vlib/ascii.c:503
+#: ../lib/vector/Vlib/ascii.c:493
+#, c-format
+msgid "Feature has more categories. Only first category (%d) is exported."
+msgstr ""
+
+#: ../lib/vector/Vlib/ascii.c:530
 #, fuzzy, c-format
 msgid "Column <%s>: unsupported data type"
 msgstr "Karte"
 
-#: ../lib/vector/Vlib/ascii.c:583
+#: ../lib/vector/Vlib/ascii.c:610
 #, fuzzy
 msgid "Unknown format"
 msgstr "unbekannt"
 
-#: ../lib/vector/Vlib/ascii.c:592
+#: ../lib/vector/Vlib/ascii.c:619
 msgid "Topology not available, unable to process areas"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:605
+#: ../lib/vector/Vlib/ascii.c:632
 #, fuzzy, c-format
 msgid "Unable to get boundary of area id %d"
 msgstr "Kann Datei head nicht lesen"
 
-#: ../lib/vector/Vlib/ascii.c:617
+#: ../lib/vector/Vlib/ascii.c:644
 #, fuzzy, c-format
 msgid "Unable to get boundary of isle id %d (area id %d)"
 msgstr "Kann Datei head nicht lesen"
 
-#: ../lib/vector/Vlib/cindex.c:31
+#: ../lib/vector/Vlib/cindex.c:29
 msgid "Category index is not up to date"
 msgstr "Kategorieindex ist nicht mehr aktuell."
 
-#: ../lib/vector/Vlib/cindex.c:61 ../lib/vector/Vlib/cindex.c:125
-#: ../lib/vector/Vlib/cindex.c:143 ../lib/vector/Vlib/cindex.c:166
+#: ../lib/vector/Vlib/cindex.c:59 ../lib/vector/Vlib/cindex.c:123
+#: ../lib/vector/Vlib/cindex.c:141 ../lib/vector/Vlib/cindex.c:164
 msgid "Invalid layer index (index >= number of layers)"
 msgstr "Ungültiger Layerindex (Index >= Anzahl der Layer)."
 
-#: ../lib/vector/Vlib/cindex.c:107
+#: ../lib/vector/Vlib/cindex.c:105
 msgid "Invalid layer index (index < 0 or index >= number of layers)"
 msgstr "Ungültiger Layerindex (Index < 0 oder Index >= Anzahl der Layer)."
 
-#: ../lib/vector/Vlib/cindex.c:232
+#: ../lib/vector/Vlib/cindex.c:230
 msgid "Layer or category index out of range"
 msgstr "Layer- oder Kategorieindex außerhalb des Wertebereichs."
 
-#: ../lib/vector/Vlib/cindex.c:283
+#: ../lib/vector/Vlib/cindex.c:281
 msgid "Layer index out of range"
 msgstr "Layerindex außerhalb des Wertebereichs."
 
-#: ../lib/vector/Vlib/cindex.c:460
+#: ../lib/vector/Vlib/cindex.c:458
 #, c-format
 msgid "Unable to open cidx file <%s> for write"
 msgstr "Kann cidx datei <%s> nicht zum Schreiben öffnen."
 
-#: ../lib/vector/Vlib/cindex.c:468
+#: ../lib/vector/Vlib/cindex.c:466
 #, c-format
 msgid "Error writing out category index file <%s>"
 msgstr "Fehler beim Schreiben der Kategorie-Indexdatei <%s>."
 
-#: ../lib/vector/Vlib/build_ogr.c:287
+#: ../lib/vector/Vlib/build_ogr.c:285
 #, c-format
 msgid "Unable to calculate centroid for area %d"
 msgstr "Kann keinen Zentroid für die Fläche %d berechnen."
 
-#: ../lib/vector/Vlib/build_ogr.c:353
+#: ../lib/vector/Vlib/build_ogr.c:351
 msgid "Partial build for OGR is not supported"
 msgstr "Teilbauten werden für OGR nicht unterstützt."
 
-#: ../lib/vector/Vlib/build_ogr.c:369
+#: ../lib/vector/Vlib/build_ogr.c:370
 msgid "Random read is not supported by OGR for this layer, unable to build topology"
 msgstr ""
 
-#: ../lib/vector/Vlib/build_ogr.c:374
+#: ../lib/vector/Vlib/build_ogr.c:375
 #, c-format
 msgid "Using external data format '%s' (feature type '%s')"
 msgstr ""
 
-#: ../lib/vector/Vlib/build_ogr.c:405
+#: ../lib/vector/Vlib/build_ogr.c:406
 #, c-format
 msgid "Feature %d without geometry ignored"
 msgstr "Objekt %d ohne Geometrie ignoriert."
 
-#: ../lib/vector/Vlib/build_ogr.c:412
+#: ../lib/vector/Vlib/build_ogr.c:413
 #, fuzzy, c-format
 msgid "OGR feature %d without ID ignored"
 msgstr "OGR feature ohne ID ignoriert."
 
-#: ../lib/vector/Vlib/write_ogr.c:85
+#: ../lib/vector/Vlib/write_ogr.c:84
 msgid "Feature is not a point. Skipping."
 msgstr ""
 
-#: ../lib/vector/Vlib/write_ogr.c:93
+#: ../lib/vector/Vlib/write_ogr.c:92
 msgid "Feature is not a line Skipping."
 msgstr ""
 
-#: ../lib/vector/Vlib/write_ogr.c:100
+#: ../lib/vector/Vlib/write_ogr.c:99
 msgid "Feature is not a face. Skipping."
 msgstr ""
 
-#: ../lib/vector/Vlib/write_ogr.c:106
+#: ../lib/vector/Vlib/write_ogr.c:105
 #, fuzzy, c-format
 msgid "Unsupported feature type (%d)"
 msgstr "Eigenschaften"
 
-#: ../lib/vector/Vlib/write_ogr.c:128
+#: ../lib/vector/Vlib/write_ogr.c:127
 #, c-format
 msgid "Feature has more categories, using category %d (from layer %d)"
 msgstr ""
 
-#: ../lib/vector/Vlib/write_ogr.c:220
+#: ../lib/vector/Vlib/write_ogr.c:219
 #, fuzzy
 msgid "Unable to rewrite feature (incompatible feature types)"
 msgstr "Kann die Linie nicht schreiben (negativer Offset)."
 
-#: ../lib/vector/Vlib/write_ogr.c:383
+#: ../lib/vector/Vlib/write_ogr.c:382
 #, fuzzy, c-format
 msgid "Unable to select attributes for category %d"
 msgstr "Kann nicht zum Verzeichnis %s wechseln."
 
-#: ../lib/vector/Vlib/write_ogr.c:388 ../lib/db/dbmi_client/copy_tab.c:295
+#: ../lib/vector/Vlib/write_ogr.c:387 ../lib/db/dbmi_client/copy_tab.c:295
 #, c-format
 msgid "Unable to fetch data from table <%s>"
 msgstr "Kann keine Daten aus der Tabelle <%s> holen."
 
-#: ../lib/vector/Vlib/write_ogr.c:393
+#: ../lib/vector/Vlib/write_ogr.c:392
 #, fuzzy, c-format
 msgid "No database record for category %d - export of 'cat' disabled"
 msgstr "Datenbank-Eintrag für die Kategorie (cat) %d  nicht gefunden."
 
-#: ../lib/vector/Vlib/write_ogr.c:420
+#: ../lib/vector/Vlib/write_ogr.c:419
 #, fuzzy, c-format
 msgid "Uknown column <%s>"
 msgstr "Unbekannter Spaltentyp (Spalte <%s>)"
 
-#: ../lib/vector/Vlib/dgraph.c:433
+#: ../lib/vector/Vlib/dgraph.c:430
 msgid "Trying to add more edges to the planar_graph than the initial allocation size allows"
 msgstr ""
 
-#: ../lib/vector/Vlib/line.c:180 ../lib/vector/Vlib/line.c:213
-#: ../lib/vector/Vlib/line.c:246
+#: ../lib/vector/Vlib/line.c:178 ../lib/vector/Vlib/line.c:211
+#: ../lib/vector/Vlib/line.c:244
 msgid "Index out of range in"
 msgstr "Index liegt außerhalb des Wertebereichs in"
 
-#: ../lib/vector/Vlib/line.c:546
+#: ../lib/vector/Vlib/line.c:544
 msgid "Segment outside line, no segment created"
 msgstr "Segment außerhalb der Linie. Kein Segment erzeugt."
 
-#: ../lib/vector/vedit/cats.c:67
+#: ../lib/vector/vedit/cats.c:63
 #, c-format
 msgid "Unable to set category %d for (feature id %d)"
 msgstr "Kann Kategorie %d für (Objekt ID %d) nicht setzen"
 
-#: ../lib/vector/vedit/select.c:234
+#: ../lib/vector/vedit/select.c:231
 msgid "Unknown query tool"
 msgstr "Unbekanntes Abfragewerkzeug"
 
@@ -4280,12 +4349,12 @@ msgstr ""
 msgid "The total sum of the water budget is significant larger then 0: %g\n"
 msgstr ""
 
-#: ../lib/init/grass.py:56
+#: ../lib/init/grass.py:60
 #, fuzzy
 msgid "WARNING"
 msgstr "WARNUNG: "
 
-#: ../lib/init/grass.py:149
+#: ../lib/init/grass.py:151
 #, fuzzy
 msgid "Usage"
 msgstr ""
@@ -4293,33 +4362,29 @@ msgstr ""
 "Benutzung:\n"
 " "
 
-#: ../lib/init/grass.py:151
+#: ../lib/init/grass.py:153
 msgid "print this help message"
 msgstr ""
 
-#: ../lib/init/grass.py:152
+#: ../lib/init/grass.py:154
 msgid "show version information and exit"
 msgstr ""
 
-#: ../lib/init/grass.py:153
-msgid "create given mapset if it doesn't exist"
+#: ../lib/init/grass.py:155
+msgid "create given database, location or mapset if it doesn't exist"
 msgstr ""
 
-#: ../lib/init/grass.py:154
+#: ../lib/init/grass.py:156
 msgid "use text based interface"
 msgstr ""
 
-#: ../lib/init/grass.py:155 ../lib/init/grass.py:157 ../lib/init/grass.py:159
+#: ../lib/init/grass.py:157 ../lib/init/grass.py:159
 #, fuzzy
 msgid "and set as default"
 msgstr "Zum Akzeptieren der Standardeinstellung"
 
-#: ../lib/init/grass.py:156
-msgid "use graphical user interface ($DEFAULT_GUI by default)"
-msgstr ""
-
 #: ../lib/init/grass.py:158
-msgid "use wxPython based graphical user interface"
+msgid "use $DEFAULT_GUI graphical user interface"
 msgstr ""
 
 #: ../lib/init/grass.py:161
@@ -4346,7 +4411,7 @@ msgid "Environment variables relevant for startup"
 msgstr ""
 
 #: ../lib/init/grass.py:166
-msgid "select GUI (text, gui, wxpython)"
+msgid "select GUI (text, gui)"
 msgstr ""
 
 #: ../lib/init/grass.py:167
@@ -4374,16 +4439,16 @@ msgstr ""
 msgid "Unable to create temporary directory! Exiting."
 msgstr "Kann keinen Speicher für temporäres Bild belegen."
 
-#: ../lib/init/grass.py:359
+#: ../lib/init/grass.py:357
 msgid "Searched for a web browser, but none found"
 msgstr ""
 
-#: ../lib/init/grass.py:378
+#: ../lib/init/grass.py:376
 #, fuzzy
 msgid "Hit RETURN to continue"
 msgstr "RETURN zum Weitermachen drücken -->"
 
-#: ../lib/init/grass.py:407
+#: ../lib/init/grass.py:405
 msgid ""
 "The python command does not work as expected!\n"
 "Please check your GRASS_PYTHON environment variable.\n"
@@ -4393,7 +4458,7 @@ msgid ""
 "Hit RETURN to continue.\n"
 msgstr ""
 
-#: ../lib/init/grass.py:419
+#: ../lib/init/grass.py:417
 msgid ""
 "It appears that the X Windows system is not active.\n"
 "A graphical based user interface is not supported.\n"
@@ -4402,34 +4467,34 @@ msgid ""
 "Hit RETURN to continue"
 msgstr ""
 
-#: ../lib/init/grass.py:461 ../lib/init/grass.py:474
+#: ../lib/init/grass.py:459 ../lib/init/grass.py:490
 #, fuzzy, python-format
 msgid "<%s> is not a valid GRASS location"
 msgstr "Tut mir leid, <%s> ist keine gültige Option\n"
 
-#: ../lib/init/grass.py:466
+#: ../lib/init/grass.py:471
 #, python-format
-msgid "The location <%s> does not exist. Please create it first."
+msgid "Failed to create new location. The location <%s> already exists."
 msgstr ""
 
-#: ../lib/init/grass.py:472
+#: ../lib/init/grass.py:488
 msgid "Missing WIND file fixed"
 msgstr ""
 
-#: ../lib/init/grass.py:486
+#: ../lib/init/grass.py:502
 msgid ""
 "GISDBASE, LOCATION_NAME and MAPSET variables not set properly.\n"
 "Interactive startup needed."
 msgstr ""
 
-#: ../lib/init/grass.py:500
+#: ../lib/init/grass.py:516
 #, python-format
 msgid ""
 "Invalid user interface specified - <%s>.\n"
 "Use the --help option to see valid interface names."
 msgstr ""
 
-#: ../lib/init/grass.py:513
+#: ../lib/init/grass.py:529
 msgid ""
 "Error in GUI startup. If necessary, please report this error to the GRASS developers.\n"
 "Switching to text mode now.\n"
@@ -4437,20 +4502,20 @@ msgid ""
 "Hit RETURN to continue..."
 msgstr ""
 
-#: ../lib/init/grass.py:523
+#: ../lib/init/grass.py:539
 msgid ""
 "Received EXIT message from GUI.\n"
 "GRASS is not started. Bye."
 msgstr ""
 
-#: ../lib/init/grass.py:526
+#: ../lib/init/grass.py:542
 #, fuzzy
 msgid ""
 "Invalid return code from GUI startup script.\n"
 "Please advise GRASS developers of this error."
 msgstr "Bitte unterrichten Sie die GRASS-Entwickler über diesen Fehler.\n"
 
-#: ../lib/init/grass.py:536
+#: ../lib/init/grass.py:552
 msgid ""
 "Error reading data path information from g.gisenv.\n"
 "GISDBASE=%(gisbase)s\n"
@@ -4460,29 +4525,29 @@ msgid ""
 "Check the <%s(file)> file."
 msgstr ""
 
-#: ../lib/init/grass.py:557
+#: ../lib/init/grass.py:573
 #, python-format
 msgid "%(user)s is currently running GRASS in selected mapset (file %(file)s found). Concurrent use not allowed."
 msgstr ""
 
-#: ../lib/init/grass.py:561
+#: ../lib/init/grass.py:577
 #, python-format
 msgid ""
 "Unable to properly access \"%s\"\n"
 "Please notify system personel."
 msgstr ""
 
-#: ../lib/init/grass.py:572
+#: ../lib/init/grass.py:588
 #, fuzzy
 msgid "Building user fontcap..."
 msgstr "Erzeuge Graphen..."
 
-#: ../lib/init/grass.py:601
+#: ../lib/init/grass.py:617
 #, fuzzy
 msgid "The SHELL variable is not set"
 msgstr "GISRC - Variable nicht gesetzt."
 
-#: ../lib/init/grass.py:611
+#: ../lib/init/grass.py:627
 #, python-format
 msgid ""
 "Job file '%s' has been defined in the 'GRASS_BATCH_JOB' variable but not found. Exiting.\n"
@@ -4490,81 +4555,95 @@ msgid ""
 "Use 'unset GRASS_BATCH_JOB' to disable batch job processing."
 msgstr ""
 
-#: ../lib/init/grass.py:616
+#: ../lib/init/grass.py:632
 #, python-format
 msgid "Change file permission to 'executable' for '%s'"
 msgstr ""
 
-#: ../lib/init/grass.py:618
+#: ../lib/init/grass.py:634
 #, python-format
 msgid "Executing '%s' ..."
 msgstr ""
 
-#: ../lib/init/grass.py:623
+#: ../lib/init/grass.py:639
 #, python-format
 msgid "Execution of '%s' finished."
 msgstr ""
 
-#: ../lib/init/grass.py:628
+#: ../lib/init/grass.py:644
 #, python-format
 msgid "GRASS GUI should be '%s'"
 msgstr ""
 
-#: ../lib/init/grass.py:672
+#: ../lib/init/grass.py:688
 msgid "GRASS homepage:"
 msgstr ""
 
-#: ../lib/init/grass.py:673
+#: ../lib/init/grass.py:689
 msgid "This version running through:"
 msgstr ""
 
-#: ../lib/init/grass.py:675
+#: ../lib/init/grass.py:691
 #, fuzzy
 msgid "Help is available with the command:"
 msgstr "Leider keine Hilfe für den Befehl [%s] verfügbar.\n"
 
-#: ../lib/init/grass.py:676
+#: ../lib/init/grass.py:692
 msgid "See the licence terms with:"
 msgstr ""
 
-#: ../lib/init/grass.py:679
+#: ../lib/init/grass.py:695
 msgid "If required, restart the GUI with:"
 msgstr ""
 
-#: ../lib/init/grass.py:681
+#: ../lib/init/grass.py:697
 msgid "Start the GUI with:"
 msgstr ""
 
-#: ../lib/init/grass.py:683
+#: ../lib/init/grass.py:699
 msgid "When ready to quit enter:"
 msgstr ""
 
-#: ../lib/init/grass.py:786
+#: ../lib/init/grass.py:802
 #, fuzzy, python-format
 msgid "Failed to start shell '%s'"
 msgstr "Kann den Treiber <%s> nicht starten."
 
-#: ../lib/init/grass.py:790
+#: ../lib/init/grass.py:806
 #, python-format
 msgid "Batch job '%s' (defined in GRASS_BATCH_JOB variable) was executed."
 msgstr ""
 
-#: ../lib/init/grass.py:791 ../lib/init/grass.py:796
+#: ../lib/init/grass.py:807 ../lib/init/grass.py:812
 msgid "Goodbye from GRASS GIS"
 msgstr ""
 
-#: ../lib/init/grass.py:794
+#: ../lib/init/grass.py:810
 #, fuzzy
 msgid "Done."
 msgstr "nichts"
 
-#: ../lib/init/grass.py:800
+#: ../lib/init/grass.py:816
 #, fuzzy
 msgid "Cleaning up temporary files..."
 msgstr "Kann temporäre Datei nicht öffnen."
 
-#: ../lib/init/grass.py:943
+#: ../lib/init/grass.py:956
+#, python-format
+msgid ""
+"Unable to start GRASS. You can:\n"
+" - Launch GRASS with '-gui' switch (`grass70 -gui`)\n"
+" - Create manually GISRC file (%s)\n"
+" - Launch GRASS with path to the location/mapset as an argument (`grass70 /path/to/location/mapset`)"
+msgstr ""
+
+#: ../lib/init/grass.py:965
 msgid "Starting GRASS GIS..."
+msgstr ""
+
+#: ../lib/init/grass.py:1020
+#, python-format
+msgid "Launching '%s' GUI in the background, please wait..."
 msgstr ""
 
 #: ../lib/rst/interp_float/output2d.c:106
@@ -5115,21 +5194,21 @@ msgstr "Kann Vektorkarte nicht verarbeiten - nicht genügend Arbeitsspeicher."
 msgid "Database connection not defined for layer %s"
 msgstr "Die Datenbankverbindung für den Layer <%d> nicht definiert."
 
-#: ../lib/python/vector.py:188
+#: ../lib/python/vector.py:192
 #, fuzzy, python-format
 msgid "Missing layer %(layer)d in vector map <%(map)s>"
 msgstr "Fehler beim Laden der Vektorkarte <%s>."
 
-#: ../lib/python/vector.py:204
+#: ../lib/python/vector.py:208
 msgid "vector_select() failed"
 msgstr ""
 
-#: ../lib/python/core.py:701
+#: ../lib/python/core.py:710
 #, python-format
 msgid "Invalid element '%s'"
 msgstr ""
 
-#: ../lib/python/core.py:936
+#: ../lib/python/core.py:945
 #, fuzzy
 msgid "Unable to list mapsets"
 msgstr "Kann die Eingabekarte nicht schließen."
@@ -5153,20 +5232,61 @@ msgstr "Kann Tabelle <%s> nicht beschreiben."
 msgid "Fetching data from table <%s> failed"
 msgstr "Kann keine Daten aus der Tabelle <%s> holen."
 
-#: ../lib/db/dbmi_base/legal_dbname.c:25
-#, c-format
-msgid "Illegal table map name <%s>. May not contain '.' or 'NULL'.\n"
+#: ../lib/db/dbmi_base/xdrvalue.c:82
+msgid "send data: invalid C-type"
+msgstr ""
+
+#: ../lib/db/dbmi_base/index.c:180
+msgid "db_set_index_column_name(): invalid column number"
+msgstr ""
+
+#: ../lib/db/dbmi_base/index.c:197
+msgid "db_get_index_column_name(): invalid column number"
+msgstr ""
+
+#: ../lib/db/dbmi_base/legal_dbname.c:38
+#, fuzzy, c-format
+msgid "Illegal table map name <%s>. May not contain '.' or 'NULL'."
 msgstr "Ungültiger Tabellenname <%s>. Er darf '.' oder 'NULL' nicht enthalten.\n"
 
-#: ../lib/db/dbmi_base/legal_dbname.c:33
-#, c-format
-msgid "Illegal table map name <%s>. Must start with a letter.\n"
+#: ../lib/db/dbmi_base/legal_dbname.c:45
+#, fuzzy, c-format
+msgid "Illegal table map name <%s>. Must start with a letter."
 msgstr "Ungültiger Tabellenname <%s>. Er muss mit einem Buchstaben beginnen.\n"
 
-#: ../lib/db/dbmi_base/legal_dbname.c:43
-#, c-format
-msgid "Illegal table map name <%s>. Character <%c> not allowed.\n"
+#: ../lib/db/dbmi_base/legal_dbname.c:54
+#, fuzzy, c-format
+msgid "Illegal table map name <%s>. Character <%c> not allowed."
 msgstr "Ungültiger Name für Vektorkarte <%s>. Zeichen <%c> ist nicht erlaubt.\n"
+
+#: ../lib/db/dbmi_base/error.c:72
+#, fuzzy
+msgid "<NULL error message>"
+msgstr "Die Fehlermeldung: %s"
+
+#: ../lib/db/dbmi_base/error.c:91
+msgid "dbmi: Protocol error"
+msgstr ""
+
+#: ../lib/db/dbmi_base/error.c:136
+#, fuzzy
+msgid "dbmi: Out of Memory"
+msgstr "Nicht genügend Arbeitsspeicher."
+
+#: ../lib/db/dbmi_base/error.c:149
+#, fuzzy, c-format
+msgid "dbmi: %s() not implemented"
+msgstr "nicht implementiert"
+
+#: ../lib/db/dbmi_base/error.c:163
+#, c-format
+msgid "dbmi: Invalid procedure %d"
+msgstr ""
+
+#: ../lib/db/dbmi_base/xdrtable.c:109
+#, fuzzy
+msgid "fetch: table has wrong number of columns"
+msgstr "Tabelle hat keine Spalten"
 
 #: ../lib/db/dbmi_base/test/test_main.c:83 ../lib/gmath/test/test_main.c:106
 #, fuzzy
@@ -5242,6 +5362,14 @@ msgstr ""
 #: ../lib/db/dbmi_base/login.c:111
 msgid "Login file corrupted"
 msgstr "Logindatei fehlerhaft"
+
+#: ../lib/db/dbmi_base/valuefmt.c:52
+msgid "db_convert_Cstring_to_value(): unrecognized sqltype"
+msgstr ""
+
+#: ../lib/db/dbmi_base/valuefmt.c:91
+msgid "db_convert_value_into_string(): unrecongized sqltype-type"
+msgstr ""
 
 #: ../lib/db/dbmi_base/default_name.c:127
 msgid "Programmer error"
@@ -5891,6 +6019,10 @@ msgid "subgroup <%s> of group <%s> references the following raster maps\n"
 msgstr "Untergruppe <%s> der Gruppe <%s> referenziert die folgenden Rasterkarten\n"
 
 #, fuzzy
+msgid "       valid options: %s\n"
+msgstr " Optionen: %s\n"
+
+#, fuzzy
 msgid "Not enough room in history file to record command line"
 msgstr "Nicht genügend Platz in der History-Datei um die Kommandozeile zu speichern."
 
@@ -6167,6 +6299,15 @@ msgstr "Ignoriere %d Punkte -- sie liegen zu dicht beieinander."
 
 msgid "some points outside of region -- will ignore..."
 msgstr "einige Punkte sind außerhalb der Region -- ignoriere dies..."
+
+#~ msgid "       Presented as: %s\n"
+#~ msgstr "       Präsentiert als: %s\n"
+
+#~ msgid "       Legal range: %s\n"
+#~ msgstr "       Erlaubter Wertebereich: %s\n"
+
+#~ msgid "       You provided %d items:\n"
+#~ msgstr "       Sie haben %d Punkte angegeben:\n"
 
 #~ msgid "Invalid view position coordinates, using %f,%f"
 #~ msgstr "Ungültige Koordinaten für den Betrachtungspunkt, verwende %f,%f"
@@ -6826,17 +6967,11 @@ msgstr "einige Punkte sind außerhalb der Region -- ignoriere dies..."
 #~ msgid "Run quietly"
 #~ msgstr "Arbeite schweigsam"
 
-#~ msgid "Table has no columns"
-#~ msgstr "Tabelle hat keine Spalten"
-
 #~ msgid "Allow overwrite"
 #~ msgstr "Erlaube das Überschreiben"
 
 #~ msgid "Run with minimal output messages"
 #~ msgstr "Mit minimalen Rückmeldungen ausführen"
-
-#~ msgid "not implemented"
-#~ msgstr "nicht implementiert"
 
 #~ msgid "OGR format cannot be updated"
 #~ msgstr "OGR Format kann nicht aktualisiert werden."
@@ -6954,3 +7089,75 @@ msgstr "einige Punkte sind außerhalb der Region -- ignoriere dies..."
 
 #~ msgid "Cairo_draw_bitmap: Failed to create source"
 #~ msgstr "Cairo_draw_bitmap: Erzeugen der Quelle fehlgeschlagen"
+
+#~ msgid "Sorry <%s> is not a valid option\n"
+#~ msgstr "Tut mir leid, <%s> ist keine gültige Option\n"
+
+#~ msgid "Sorry, <%c> is not a valid flag\n"
+#~ msgstr "Tut mir leid, <%c> ist keine gültiges Flag.\n"
+
+#~ msgid "Sorry, <%s=> is ambiguous\n"
+#~ msgstr "Tut mir leid, <%s=> ist nicht eindeutig.\n"
+
+#~ msgid "Sorry, <%s> is not a valid parameter\n"
+#~ msgstr "Tut mir leid, <%s> ist kein gültiger Parameter.\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "ERROR: illegal range syntax for parameter <%s>\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Fehler: Ungültige Syntax für Wertebereich des Parameters <%s>.\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "ERROR: value <%s> out of range for parameter <%s>\n"
+#~ msgstr ""
+#~ "\n"
+#~ "FEHLER: Wert <%s> ist außerhalb des Wertebereichs des Parameters <%s>.\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "ERROR: Missing value for parameter <%s>\n"
+#~ msgstr ""
+#~ "\n"
+#~ "FEHLER: Fehlender Wert für Parameter <%s>.\n"
+
+#~ msgid ""
+#~ "ERROR: Required parameter <%s> not set:\n"
+#~ "\t(%s)\n"
+#~ msgstr ""
+#~ "FEHLER: Benötigter Parameter <%s> wurde nicht angegeben:\n"
+#~ "\t(%s)\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "ERROR: option <%s> must be provided in multiples of %d\n"
+#~ msgstr ""
+#~ "\n"
+#~ "FEHLER: Option <%s> muss als Vielfaches von %d angegeben werden.\n"
+
+#~ msgid "G_distance_point_to_line_segment: shouldn't happen: code=%d P=(%f,%f) S=(%f,%f)(%f,%f)"
+#~ msgstr "G_distance_point_to_line_segment: sollte nicht vorkommen: Code=%d P=(%f,%f) S=(%f,%f)(%f,%f)"
+
+#~ msgid "not implemented"
+#~ msgstr "nicht implementiert"
+
+#~ msgid "Next edge was visited but it is not the first one !!! breaking loop"
+#~ msgstr "Nächste Kante besucht, aber sie ist nicht die Erste !!! Beende Schleife."
+
+#, fuzzy
+#~ msgid "Unable to delete feature %d from vector map <%s>"
+#~ msgstr "Kann Objekt %d der Vektorkarte <%s> nicht wiederherstellen."
+
+#~ msgid "Illegal table map name <%s>. May not contain '.' or 'NULL'.\n"
+#~ msgstr "Ungültiger Tabellenname <%s>. Er darf '.' oder 'NULL' nicht enthalten.\n"
+
+#~ msgid "Illegal table map name <%s>. Must start with a letter.\n"
+#~ msgstr "Ungültiger Tabellenname <%s>. Er muss mit einem Buchstaben beginnen.\n"
+
+#~ msgid "Illegal table map name <%s>. Character <%c> not allowed.\n"
+#~ msgstr "Ungültiger Name für Vektorkarte <%s>. Zeichen <%c> ist nicht erlaubt.\n"
+
+#~ msgid "Table has no columns"
+#~ msgstr "Tabelle hat keine Spalten"
