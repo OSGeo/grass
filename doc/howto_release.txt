@@ -24,6 +24,7 @@ Contents
    - make distclean
 
    - cleanup rubbish:
+       rm -f locale/templates/*.pot
        find . -name '*~'     | xargs rm
        find . -name '*.bak'  | xargs rm
        find . -name '.#*'    | xargs rm
