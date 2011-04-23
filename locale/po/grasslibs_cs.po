@@ -14,13 +14,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-03 16:17+0100\n"
+"POT-Creation-Date: 2011-04-23 15:35+0200\n"
 "PO-Revision-Date: 2010-03-07 15:47+0100\n"
 "Last-Translator: \n"
 "Language-Team:  <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "X-Generator: KBabel 1.11.4\n"
 
 #: ../lib/pngdriver/Graph_set.c:83
@@ -72,12 +73,8 @@ msgstr ""
 
 #: ../lib/raster/set_window.c:123
 #, fuzzy
-msgid ""
-"Rast_set_read_window(): projection/zone differs from that of currently open "
-"raster maps"
-msgstr ""
-"G_set_window(): mapová projekce/zóna se li¹í od aktuálnì otevøených "
-"rastrových souborù"
+msgid "Rast_set_read_window(): projection/zone differs from that of currently open raster maps"
+msgstr "G_set_window(): mapová projekce/zóna se li¹í od aktuálnì otevøených rastrových souborù"
 
 #: ../lib/raster/set_window.c:150
 msgid "Input window changed while maps are open for read"
@@ -325,50 +322,44 @@ msgstr "G__open(read): mapset <%s> neodpovídá xmapset <%s>"
 msgid "Unable to create <%s> file for map <%s>"
 msgstr "Nelze vytvoøit rastrovou mapu <%s>"
 
-#: ../lib/raster/reclass.c:166
+#: ../lib/raster/reclass.c:168
 #, fuzzy, c-format
 msgid "Too many reclass categories for <%s@%s>"
 msgstr "Pøíli¹ mnoho reklasifikovaných kategorií z [%s v %s]"
 
-#: ../lib/raster/reclass.c:169
+#: ../lib/raster/reclass.c:171
 #, fuzzy, c-format
 msgid "Illegal reclass format in header file for <%s@%s>"
 msgstr "Neplatný formát reklasifikace v hlavièkovém souboru z [%s v %s]"
 
-#: ../lib/raster/reclass.c:270
+#: ../lib/raster/reclass.c:273
 msgid "Illegal reclass request"
 msgstr "Neplatný po¾adavek pro reklasifikaci"
 
-#: ../lib/raster/reclass.c:275
+#: ../lib/raster/reclass.c:278
 msgid "Illegal reclass type"
 msgstr "Neplatný typ reklasifikace"
 
-#: ../lib/raster/reclass.c:281
+#: ../lib/raster/reclass.c:284
 #, fuzzy, c-format
 msgid "Unable to create header file for <%s@%s>"
 msgstr "Nelze vytvoøit hlavièkový soubor pro [%s]"
 
-#: ../lib/raster/reclass.c:329
+#: ../lib/raster/reclass.c:332
 #, fuzzy, c-format
 msgid "Unable to create dependency file in <%s@%s>"
 msgstr "Nelze vytvoøit soubor závislostí v [%s v %s]"
 
 #: ../lib/raster/window.c:18
-msgid ""
-"Internal error: Rast_get_window() called with split window.Use "
-"Rast_get_input_window() or Rast_get_output_window() instead."
+msgid "Internal error: Rast_get_window() called with split window.Use Rast_get_input_window() or Rast_get_output_window() instead."
 msgstr ""
 
 #: ../lib/raster/window.c:77
-msgid ""
-"Internal error: Rast_window_rows() called with split window.Use "
-"Rast_input_window_rows() or Rast_output_window_rows() instead."
+msgid "Internal error: Rast_window_rows() called with split window.Use Rast_input_window_rows() or Rast_output_window_rows() instead."
 msgstr ""
 
 #: ../lib/raster/window.c:112
-msgid ""
-"Internal error: Rast_window_cols() called with split window.Use "
-"Rast_input_window_cols() or Rast_output_window_cols() instead."
+msgid "Internal error: Rast_window_cols() called with split window.Use Rast_input_window_cols() or Rast_output_window_cols() instead."
 msgstr ""
 
 #: ../lib/raster/gdal.c:88
@@ -402,9 +393,7 @@ msgstr "Nelze vytvoøit tabulku <%s>"
 
 #: ../lib/raster/gdal.c:489
 #, c-format
-msgid ""
-"Driver <%s> does not support direct writing. Using MEM driver for "
-"intermediate dataset."
+msgid "Driver <%s> does not support direct writing. Using MEM driver for intermediate dataset."
 msgstr ""
 
 #: ../lib/raster/gdal.c:495
@@ -484,8 +473,8 @@ msgid "unable to write f_format file for CELL maps"
 msgstr "neschopen zapsat soubor f_format pro mapy CELL "
 
 #: ../lib/raster/open.c:170 ../lib/raster/open.c:742 ../lib/raster/open.c:779
-#: ../lib/raster/open.c:831 ../lib/manage/do_rename.c:53
-#: ../lib/manage/do_remove.c:53 ../lib/gis/legal_name.c:91
+#: ../lib/raster/open.c:831 ../lib/manage/do_rename.c:71
+#: ../lib/manage/do_remove.c:73 ../lib/gis/legal_name.c:91
 #: ../lib/gis/legal_name.c:94 ../lib/rst/interp_float/output2d.c:236
 #: ../lib/rst/interp_float/output2d.c:317
 #: ../lib/rst/interp_float/output2d.c:386
@@ -511,12 +500,8 @@ msgstr "Rastrová mapa <%s> nebyla nalezena"
 
 #: ../lib/raster/open.c:185
 #, c-format
-msgid ""
-"Unable to open raster map <%s@%s> since it is a reclass of raster map <%s@%"
-"s> which does not exist"
-msgstr ""
-"Nelze otevøít rastrovou mapu <%s@%s>, jeliko¾ se jedná o reklasifikaci mapy<%"
-"s@%s>, která neexistuje"
+msgid "Unable to open raster map <%s@%s> since it is a reclass of raster map <%s@%s> which does not exist"
+msgstr "Nelze otevøít rastrovou mapu <%s@%s>, jeliko¾ se jedná o reklasifikaci mapy<%s@%s>, která neexistuje"
 
 #: ../lib/raster/open.c:190
 #, fuzzy, c-format
@@ -535,12 +520,8 @@ msgstr "Rastrová mapa <%s@%s>:formát polo¾ky v hlavièkovém souboru je neplatný"
 
 #: ../lib/raster/open.c:214
 #, fuzzy, c-format
-msgid ""
-"Raster map <%s> is in different projection than current region. Found <%s>, "
-"should be <%s>."
-msgstr ""
-"Rastrová mapa<%s@%s> je v jiné projekci ne¾ souèasnýregion. Nalezena mapa <%"
-"s@%s>, mìla by být <%s>"
+msgid "Raster map <%s> is in different projection than current region. Found <%s>, should be <%s>."
+msgstr "Rastrová mapa<%s@%s> je v jiné projekci ne¾ souèasnýregion. Nalezena mapa <%s@%s>, mìla by být <%s>"
 
 #: ../lib/raster/open.c:221
 #, fuzzy, c-format
@@ -554,11 +535,8 @@ msgstr "Rastrová mapa<%s@%s>: pøíli¹ mnoho bytù na buòku (%d)"
 
 #: ../lib/raster/open.c:252
 #, fuzzy, c-format
-msgid ""
-"Raster map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"
-msgstr ""
-"map <%s@%s> je souèásti knihovny GDAL, ale va¹e kompilace GRASSu knihovnu "
-"GDAL nepodporuje."
+msgid "Raster map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"
+msgstr "map <%s@%s> je souèásti knihovny GDAL, ale va¹e kompilace GRASSu knihovnu GDAL nepodporuje."
 
 #: ../lib/raster/open.c:261
 #, fuzzy, c-format
@@ -603,8 +581,7 @@ msgstr "G__open_raster_new(): nejsou k dispozici ¾ádné doèasné soubory"
 #: ../lib/raster/open.c:718
 #, fuzzy
 msgid "Rast_set_fp_type(): can only be called with FCELL_TYPE or DCELL_TYPE"
-msgstr ""
-"G_set_fp_type(): Mù¾e být zavoláno pouze s typy FCELL_TYPE nebo DCELL_TYPE"
+msgstr "G_set_fp_type(): Mù¾e být zavoláno pouze s typy FCELL_TYPE nebo DCELL_TYPE"
 
 #: ../lib/raster/open.c:776
 #, c-format
@@ -633,11 +610,8 @@ msgstr "Rastrová mapa <%s> není xdr:posloupnost_bytù: %s"
 
 #: ../lib/raster/open.c:927
 #, fuzzy
-msgid ""
-"Rast_set_quant_rules() can be called only for raster maps opened for reading"
-msgstr ""
-"G_set_quant_rules() mù¾e být zavolán pouze pro rastrové mapy  s právy jenom "
-"ke ètení"
+msgid "Rast_set_quant_rules() can be called only for raster maps opened for reading"
+msgstr "G_set_quant_rules() mù¾e být zavolán pouze pro rastrové mapy  s právy jenom ke ètení"
 
 #: ../lib/raster/put_title.c:28
 #, c-format
@@ -730,12 +704,8 @@ msgstr "Nelze naèíst pravidla barev <%s>"
 
 #: ../lib/raster/get_cellhd.c:66
 #, fuzzy, c-format
-msgid ""
-"Unable to read header file for raster map <%s@%s>.It is a reclass of raster "
-"map <%s@%s> %s"
-msgstr ""
-"Nelze otevøít rastrovou mapu <%s@%s>, jeliko¾ se jedná o reklasifikaci mapy<%"
-"s@%s>, která neexistuje"
+msgid "Unable to read header file for raster map <%s@%s>.It is a reclass of raster map <%s@%s> %s"
+msgstr "Nelze otevøít rastrovou mapu <%s@%s>, jeliko¾ se jedná o reklasifikaci mapy<%s@%s>, která neexistuje"
 
 #: ../lib/raster/get_cellhd.c:70
 msgid "which is missing."
@@ -773,102 +743,136 @@ msgstr ""
 msgid "Unable to access table <%s>"
 msgstr "Nelze vytvoøit tabulku <%s>"
 
-#: ../lib/lidar/zones.c:501 ../lib/lidar/zones.c:538
+#: ../lib/lidar/zones.c:502 ../lib/lidar/zones.c:539
 #, fuzzy, c-format
 msgid "<%s> created in database."
 msgstr "Tabulka <%s> ji¾ existuje v databázi <%s>"
 
-#: ../lib/lidar/zones.c:505 ../lib/lidar/zones.c:542
+#: ../lib/lidar/zones.c:506 ../lib/lidar/zones.c:543
 #, c-format
 msgid "<%s> has not been created in database."
 msgstr ""
 
-#: ../lib/manage/do_copy.c:20
+#: ../lib/manage/do_copy.c:43
 #, fuzzy, c-format
 msgid "Copy %s <%s> to current mapset as <%s>"
 msgstr "%s nenalezeno v souèasném mapsetu (%s)"
 
-#: ../lib/manage/do_copy.c:41 ../lib/manage/do_rename.c:70
-#: ../lib/manage/do_rename.c:92 ../lib/manage/do_remove.c:70
-#: ../lib/manage/do_remove.c:92
+#: ../lib/manage/do_copy.c:52
 #, fuzzy, c-format
-msgid "%s: missing"
+msgid "Unable to copy <%s> to current mapset as <%s>"
+msgstr "%s nenalezeno v souèasném mapsetu (%s)"
+
+#: ../lib/manage/do_copy.c:63 ../lib/manage/do_rename.c:87
+#: ../lib/manage/do_rename.c:107 ../lib/manage/do_remove.c:89
+#: ../lib/manage/do_remove.c:109
+#, fuzzy, c-format
+msgid "%s is missing"
 msgstr "jen¾ chybí."
 
-#: ../lib/manage/do_copy.c:51
+#: ../lib/manage/do_copy.c:72
 #, c-format
-msgid "%s: copied"
+msgid "%s copied"
 msgstr ""
 
-#: ../lib/manage/read_list.c:108
+#: ../lib/manage/read_list.c:73
+#, fuzzy, c-format
+msgid "Unable to open data base element list '%s'"
+msgstr "Nelze otevøít soubor s definicí vektorové databáze '%s'"
+
+#: ../lib/manage/read_list.c:134
 #, c-format
-msgid ""
-"Format error: <%s>\n"
-"Line: %d\n"
-"%s"
+msgid "Format error: file ('%s') line (%d) - %s"
 msgstr ""
 
-#: ../lib/manage/do_rename.c:25
+#: ../lib/manage/do_rename.c:42
 #, c-format
-msgid "Rename %s <%s> to <%s>\n"
+msgid "Rename %s <%s> to <%s>"
 msgstr ""
 
-#: ../lib/manage/do_rename.c:37 ../lib/manage/do_remove.c:37
-#: ../lib/vector/Vlib/legal_vname.c:115 ../lib/vector/Vlib/legal_vname.c:118
-#: ../lib/vector/Vlib/map.c:403 ../lib/vector/Vlib/open.c:218
+#: ../lib/manage/do_rename.c:54 ../lib/manage/do_remove.c:57
+#: ../lib/vector/Vlib/legal_vname.c:113 ../lib/vector/Vlib/legal_vname.c:116
+#: ../lib/vector/Vlib/map.c:401 ../lib/vector/Vlib/open.c:217
 #: ../lib/ogsf/Gv3.c:58 ../lib/ogsf/Gp3.c:58
 #, c-format
 msgid "Vector map <%s> not found"
 msgstr "Vektorová mapa <%s> nebyla nalezena"
 
-#: ../lib/manage/do_rename.c:45
-#, c-format
-msgid "Cannot rename <%s> to <%s>"
-msgstr ""
+#: ../lib/manage/do_rename.c:62
+#, fuzzy, c-format
+msgid "Unable to rename vector map <%s> to <%s>"
+msgstr "Nelze kopírovat vektorovou mapu <%s> do <%s>"
 
-#: ../lib/manage/do_rename.c:58 ../lib/manage/do_remove.c:58
+#: ../lib/manage/do_rename.c:76 ../lib/manage/do_remove.c:78
 #: ../lib/ogsf/gvl_file.c:428 ../lib/ogsf/Gvl3.c:40
 #, c-format
 msgid "3D raster map <%s> not found"
 msgstr "3D rastrová mapa <%s> nebyla nalezena"
 
-#: ../lib/manage/do_rename.c:65 ../lib/manage/do_remove.c:65
+#: ../lib/manage/do_rename.c:83 ../lib/manage/do_rename.c:103
+#, fuzzy, c-format
+msgid "Unable to rename %s"
+msgstr "Nelze otevøít <%s>"
+
+#: ../lib/manage/do_rename.c:90 ../lib/manage/do_rename.c:110
 #, c-format
-msgid "%s: couldn't be removed"
+msgid "%s renamed"
 msgstr ""
 
-#: ../lib/manage/do_rename.c:74 ../lib/manage/do_rename.c:96
-#, c-format
-msgid "%s: renamed"
-msgstr ""
-
-#: ../lib/manage/do_rename.c:87
-#, c-format
-msgid "%s: couldn't be renamed"
-msgstr ""
-
-#: ../lib/manage/do_rename.c:105
+#: ../lib/manage/do_rename.c:119
 #, c-format
 msgid "<%s> nothing renamed"
 msgstr ""
 
-#: ../lib/manage/do_remove.c:22
+#: ../lib/manage/do_remove.c:42
 #, fuzzy, c-format
 msgid "Removing %s <%s>"
 msgstr "øádek %d: <%s>"
 
-#: ../lib/manage/do_remove.c:45 ../lib/manage/do_remove.c:87
-msgid "couldn't be removed"
-msgstr ""
+#: ../lib/manage/do_remove.c:65
+#, fuzzy
+msgid "Unable to delete vector map"
+msgstr "Nelze smazat vektorovou mapu <%s>"
 
-#: ../lib/manage/do_remove.c:74 ../lib/manage/do_remove.c:96
+#: ../lib/manage/do_remove.c:85
+#, fuzzy, c-format
+msgid "Unable to remove %s element"
+msgstr "Nelze smazat adresáø '%s'"
+
+#: ../lib/manage/do_remove.c:92 ../lib/manage/do_remove.c:112
 #, c-format
-msgid "%s: removed"
+msgid "%s removed"
 msgstr ""
 
 #: ../lib/manage/do_remove.c:105
+#, fuzzy, c-format
+msgid "Unable to remove %s"
+msgstr "Nelze otevøít <%s>"
+
+#: ../lib/manage/do_remove.c:121
 #, c-format
 msgid "<%s> nothing removed"
+msgstr ""
+
+#: ../lib/manage/option.c:47
+#, fuzzy, c-format
+msgid "%s to be %s"
+msgstr "%s hotovo. %s"
+
+#: ../lib/manage/option.c:51
+msgid "Raster"
+msgstr ""
+
+#: ../lib/manage/option.c:54
+msgid "Vector"
+msgstr ""
+
+#: ../lib/manage/option.c:56
+msgid "Region"
+msgstr ""
+
+#: ../lib/manage/option.c:58
+msgid "Group"
 msgstr ""
 
 #: ../lib/symbol/read.c:211
@@ -878,11 +882,8 @@ msgstr "Nemohu pøeèíst souøadnice symbolu: %s"
 
 #: ../lib/symbol/read.c:260
 #, c-format
-msgid ""
-"Incorrect symbol name: '%s' (should be: group/name or group/name@mapset)"
-msgstr ""
-"Nesprávné jméno symbolu: '%s' (mìlo by být: skupina/jméno nebo skupina/"
-"jméno@mapset)"
+msgid "Incorrect symbol name: '%s' (should be: group/name or group/name@mapset)"
+msgstr "Nesprávné jméno symbolu: '%s' (mìlo by být: skupina/jméno nebo skupina/jméno@mapset)"
 
 #: ../lib/symbol/read.c:284
 #, c-format
@@ -1024,8 +1025,7 @@ msgstr ""
 
 #: ../lib/cairodriver/read_ppm.c:56
 #, c-format
-msgid ""
-"Cairo: input mask file has incorrect dimensions: expected: %dx%d got: %dx%d"
+msgid "Cairo: input mask file has incorrect dimensions: expected: %dx%d got: %dx%d"
 msgstr ""
 
 #: ../lib/proj/get_proj.c:148
@@ -1124,11 +1124,8 @@ msgstr "Nelze získat parametr ve stylu PROJ.4"
 
 #: ../lib/proj/convert.c:130
 #, c-format
-msgid ""
-"OGR can't parse PROJ.4-style parameter string: %s (OGR Error code was %d)"
-msgstr ""
-"OGR se nepodaøilo parsovat parametr ve stylu PROJ.4. Parametr:%s (kód chyby "
-"OGR je %d)"
+msgid "OGR can't parse PROJ.4-style parameter string: %s (OGR Error code was %d)"
+msgstr "OGR se nepodaøilo parsovat parametr ve stylu PROJ.4. Parametr:%s (kód chyby OGR je %d)"
 
 #: ../lib/proj/convert.c:137
 #, c-format
@@ -1137,34 +1134,22 @@ msgstr "OGR se nepodaøilo získat parametr ve stylu WKT (kód chyby OGR je %d)"
 
 #: ../lib/proj/convert.c:397
 msgid "No projection name! Projection parameters likely to be meaningless."
-msgstr ""
-"Nebyl definován název kartografické projekce! Parametry projekce nemají "
-"význam."
+msgstr "Nebyl definován název kartografické projekce! Parametry projekce nemají význam."
 
 #: ../lib/proj/convert.c:433
 #, c-format
 msgid "Datum <%s> not recognised by GRASS and no parameters found"
-msgstr ""
-"Geodetické datum <%s> nebylo GRASS rozpoznáno a nebyly nalezeny ¾ádné "
-"parametry."
+msgstr "Geodetické datum <%s> nebylo GRASS rozpoznáno a nebyly nalezeny ¾ádné parametry."
 
 #: ../lib/proj/convert.c:449
 #, c-format
-msgid ""
-"Datum <%s> apparently recognised by GRASS but no parameters found. You may "
-"want to look into this."
-msgstr ""
-"Geodetické datum <%s> bylo zjevnì GRASSem rozpoznáno, nicménì nebyly "
-"nalezeny parametry. Zkontrolujte nastavení."
+msgid "Datum <%s> apparently recognised by GRASS but no parameters found. You may want to look into this."
+msgstr "Geodetické datum <%s> bylo zjevnì GRASSem rozpoznáno, nicménì nebyly nalezeny parametry. Zkontrolujte nastavení."
 
 #: ../lib/proj/convert.c:453
 #, c-format
-msgid ""
-"Invalid transformation number %d; valid range is 1 to %d. Leaving datum "
-"transform parameters unspecified."
-msgstr ""
-"Neplatný identifikátor transformace %d; platný rozsah je od 1 do %d. "
-"Geodetické datum zùstane nespecifikováno."
+msgid "Invalid transformation number %d; valid range is 1 to %d. Leaving datum transform parameters unspecified."
+msgstr "Neplatný identifikátor transformace %d; platný rozsah je od 1 do %d. Geodetické datum zùstane nespecifikováno."
 
 #: ../lib/gis/find_file.c:80
 #, c-format
@@ -1198,8 +1183,7 @@ msgstr " Okno ulo¾eno v \"%s\" je zcela mimo aktuální okno GRASSu."
 
 #: ../lib/gis/view.c:549
 #, c-format
-msgid ""
-" Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
+msgid " Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
 msgstr " Pouze %d%% z okna ulo¾eného v \"%s\" pokrývá aktuální okno GRASSu."
 
 #: ../lib/gis/mapset_msc.c:61
@@ -1240,8 +1224,7 @@ msgstr "Neplatná zem. ¹íøka pro sever"
 #: ../lib/gis/adj_cellhd.c:87 ../lib/gis/adj_cellhd.c:251
 #, c-format
 msgid "Fixing subtle input data rounding error of south boundary (%g>%g)"
-msgstr ""
-"O¹etøuji pøíli¹ podrobná vstupní data zaokrouhlením ji¾ní hranice (%g>%g)"
+msgstr "O¹etøuji pøíli¹ podrobná vstupní data zaokrouhlením ji¾ní hranice (%g>%g)"
 
 #: ../lib/gis/adj_cellhd.c:92 ../lib/gis/adj_cellhd.c:256
 msgid "Illegal latitude for South"
@@ -1250,14 +1233,12 @@ msgstr "Neplatná zem. ¹íøka pro jih"
 #: ../lib/gis/adj_cellhd.c:104 ../lib/gis/adj_cellhd.c:268
 #, c-format
 msgid "Fixing subtle input data rounding error of west boundary (%g>%g)"
-msgstr ""
-"O¹etøuji pøíli¹ podrobná vstupní data zaokrouhlením západní hranice (%g>%g)"
+msgstr "O¹etøuji pøíli¹ podrobná vstupní data zaokrouhlením západní hranice (%g>%g)"
 
 #: ../lib/gis/adj_cellhd.c:115 ../lib/gis/adj_cellhd.c:279
 #, c-format
 msgid "Fixing subtle input data rounding error of east boundary (%g>%g)"
-msgstr ""
-"O¹etøuji pøíli¹ podrobná vstupní data zaokrouhlením východní hranice (%g>%g)"
+msgstr "O¹etøuji pøíli¹ podrobná vstupní data zaokrouhlením východní hranice (%g>%g)"
 
 #: ../lib/gis/adj_cellhd.c:128 ../lib/gis/adj_cellhd.c:292
 msgid "North must be north of South"
@@ -1318,120 +1299,102 @@ msgstr "Roz¹íøený výpis"
 msgid "Quiet module output"
 msgstr "Redukovaný výpis"
 
-#: ../lib/gis/parser.c:388
+#: ../lib/gis/parser.c:390
 #, c-format
 msgid "BUG in descriptions, option '%s' in <%s> does not exist"
 msgstr "BUG v popisu, volba %s v <%s> neexistuje"
 
-#: ../lib/gis/parser.c:496
+#: ../lib/gis/parser.c:498
 msgid "Use either --quiet or --verbose flag, not both. Assuming --verbose."
-msgstr ""
-"Pou¾ijte buï --quiet nebo --verbose indikátor ne oba. Pou¾iji --verbose."
+msgstr "Pou¾ijte buï --quiet nebo --verbose indikátor ne oba. Pou¾iji --verbose."
 
-#: ../lib/gis/parser.c:510
+#: ../lib/gis/parser.c:512
 msgid "Use either --quiet or --verbose flag, not both. Assuming --quiet."
 msgstr "Pou¾ijte buï --quiet nebo --verbose indikátor ne oba. Pou¾iji --quiet."
 
-#: ../lib/gis/parser.c:540
-#, c-format
-msgid "Sorry <%s> is not a valid option\n"
+#: ../lib/gis/parser.c:542
+#, fuzzy, c-format
+msgid "Sorry <%s> is not a valid option"
 msgstr "Promiòte, ale <%s> není platná volba\n"
 
-#: ../lib/gis/parser.c:795
+#: ../lib/gis/parser.c:574
+#, fuzzy
+msgid "ERROR"
+msgstr "CHYBA: "
+
+#: ../lib/gis/parser.c:801
 msgid "Unable to determine program name"
 msgstr "nelze urèit jméno programu"
 
-#: ../lib/gis/parser.c:809 ../lib/gis/parser.c:826
-#, c-format
-msgid "Sorry, <%c> is not a valid flag\n"
+#: ../lib/gis/parser.c:817 ../lib/gis/parser.c:834
+#, fuzzy, c-format
+msgid "Sorry, <%c> is not a valid flag"
 msgstr "Promiòte, ale <%c> není platný pøepínaè\n"
 
-#: ../lib/gis/parser.c:923
-#, c-format
-msgid "Sorry, <%s=> is ambiguous\n"
+#: ../lib/gis/parser.c:933
+#, fuzzy, c-format
+msgid "Sorry, <%s=> is ambiguous"
 msgstr "Promiòte, ale <%s=> je dvojznaèný\n"
 
-#: ../lib/gis/parser.c:929
-#, c-format
-msgid "Sorry, <%s> is not a valid parameter\n"
+#: ../lib/gis/parser.c:940
+#, fuzzy, c-format
+msgid "Sorry, <%s> is not a valid parameter"
 msgstr "Promiòte, ale <%s> není platný parametr\n"
 
-#: ../lib/gis/parser.c:1006
-#, c-format
+#: ../lib/gis/parser.c:1015
+#, fuzzy, c-format
 msgid ""
-"\n"
-"ERROR: illegal range syntax for parameter <%s>\n"
+"Illegal range syntax for parameter <%s>\n"
+"\tPresented as: %s"
 msgstr ""
 "\n"
 "CHYBA: neplatná syntaxe rozsahu pro parametr <%s>\n"
 
-#: ../lib/gis/parser.c:1007
-#, c-format
-msgid "       Presented as: %s\n"
-msgstr "       Zadáno: %s\n"
-
-#: ../lib/gis/parser.c:1011
-#, c-format
+#: ../lib/gis/parser.c:1021
+#, fuzzy, c-format
 msgid ""
-"\n"
-"ERROR: value <%s> out of range for parameter <%s>\n"
+"Value <%s> out of range for parameter <%s>\n"
+"\tLegal range: %s"
 msgstr ""
 "\n"
 "CHYBA: hodnota <%s> mimo rozsah parametru <%s>\n"
 
-#: ../lib/gis/parser.c:1013
-#, c-format
-msgid "       Legal range: %s\n"
-msgstr "       Povolený rozsah: %s\n"
-
-#: ../lib/gis/parser.c:1016
-#, c-format
-msgid ""
-"\n"
-"ERROR: Missing value for parameter <%s>\n"
+#: ../lib/gis/parser.c:1027
+#, fuzzy, c-format
+msgid "Missing value for parameter <%s>"
 msgstr ""
 "\n"
 "CHYBA: Chybí hodnota pro parametr <%s>\n"
 
-#: ../lib/gis/parser.c:1020
+#: ../lib/gis/parser.c:1033
 #, fuzzy, c-format
 msgid ""
-"\n"
-"ERROR: value <%s> ambiguous for parameter <%s>\n"
+"Value <%s> ambiguous for parameter <%s>\n"
+"\tValid options: %s"
 msgstr ""
 "\n"
 "CHYBA: hodnota <%s> mimo rozsah parametru <%s>\n"
 
-#: ../lib/gis/parser.c:1022
-#, fuzzy, c-format
-msgid "       valid options: %s\n"
-msgstr " volby: %s\n"
-
-#: ../lib/gis/parser.c:1159
+#: ../lib/gis/parser.c:1169
 #, fuzzy, c-format
 msgid ""
-"ERROR: Required parameter <%s> not set:\n"
-"\t(%s)\n"
+"Required parameter <%s> not set:\n"
+"\t(%s)"
 msgstr ""
 "\n"
 "CHYBA: Povinný parametr <%s> nebyl zadán:\n"
 "    (%s).\n"
 
-#: ../lib/gis/parser.c:1251
-#, c-format
+#: ../lib/gis/parser.c:1260
+#, fuzzy, c-format
 msgid ""
-"\n"
-"ERROR: option <%s> must be provided in multiples of %d\n"
+"Option <%s> must be provided in multiples of %d\n"
+"\tYou provided %d item(s): %s"
 msgstr ""
 "\n"
 "CHYBA: volba <%s> musí být zadána jako násobek %d\n"
 
-#: ../lib/gis/parser.c:1253
-#, c-format
-msgid "       You provided %d items:\n"
-msgstr "       Bylo zadáno %d polo¾ek:\n"
-
-#: ../lib/gis/parser.c:1326
+#: ../lib/gis/parser.c:1334
 #, c-format
 msgid "ERROR: option <%s>: <%s> exists.\n"
 msgstr "CHYBA: volba <%s>: <%s> existuje.\n"
@@ -1565,214 +1528,237 @@ msgstr "Nelze smazat adresáø '%s'"
 msgid "Unable to open element file <%s> for <%s@%s>"
 msgstr "Nelze otevøít hlavièkový soubor vektorové mapy <%s>"
 
-#: ../lib/gis/parser_standard_options.c:106
+#: ../lib/gis/parser_standard_options.c:108
 msgid "WHERE conditions of SQL statement without 'where' keyword"
 msgstr "Podmínka WHERE pøíkazu SQL bez klíèového slova 'where'"
 
-#: ../lib/gis/parser_standard_options.c:107
+#: ../lib/gis/parser_standard_options.c:109
 msgid "Example: income < 1000 and inhab >= 10000"
 msgstr "Pøíklad: pøíjem < 1000 AND obyvatelé >= 10000"
 
-#: ../lib/gis/parser_standard_options.c:115
+#: ../lib/gis/parser_standard_options.c:117
 msgid "Table name"
 msgstr "Jméno tabulky"
 
-#: ../lib/gis/parser_standard_options.c:124
+#: ../lib/gis/parser_standard_options.c:126
 msgid "Driver name"
 msgstr "Jméno ovladaèe"
 
-#: ../lib/gis/parser_standard_options.c:133
+#: ../lib/gis/parser_standard_options.c:135
 msgid "Database name"
 msgstr "Jméno databáze"
 
-#: ../lib/gis/parser_standard_options.c:142
+#: ../lib/gis/parser_standard_options.c:144
 #, fuzzy
 msgid "Database schema"
 msgstr "Jméno databáze"
 
-#: ../lib/gis/parser_standard_options.c:143
-msgid ""
-"Do not use this option if schemas are not supported by driver/database server"
+#: ../lib/gis/parser_standard_options.c:145
+msgid "Do not use this option if schemas are not supported by driver/database server"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:152
+#: ../lib/gis/parser_standard_options.c:154
 msgid "Name of attribute column"
 msgstr "Název sloupce atributové tabulky"
 
-#: ../lib/gis/parser_standard_options.c:161
+#: ../lib/gis/parser_standard_options.c:163
 msgid "Name of attribute column(s)"
 msgstr "Název sloupce(ù) atributové tabulky"
 
-#: ../lib/gis/parser_standard_options.c:172
+#: ../lib/gis/parser_standard_options.c:174
 msgid "Name of input imagery group"
 msgstr "Název vstupní skupiny obrazových dat"
 
-#: ../lib/gis/parser_standard_options.c:180
+#: ../lib/gis/parser_standard_options.c:182
 msgid "Name of input imagery subgroup"
 msgstr "Název vstupní podskupiny obrazových dat"
 
-#: ../lib/gis/parser_standard_options.c:190
+#: ../lib/gis/parser_standard_options.c:192
 msgid "Name of input raster map"
 msgstr "Název vstupní rastrové mapy"
 
-#: ../lib/gis/parser_standard_options.c:199
+#: ../lib/gis/parser_standard_options.c:201
 msgid "Name of input raster map(s)"
 msgstr "Název vstupní rastrové mapy"
 
-#: ../lib/gis/parser_standard_options.c:207
+#: ../lib/gis/parser_standard_options.c:209
 msgid "Name for output raster map"
 msgstr "Název výstupní rastrové mapy"
 
-#: ../lib/gis/parser_standard_options.c:215
+#: ../lib/gis/parser_standard_options.c:217
 #, fuzzy
 msgid "Name of raster map"
 msgstr "Název pùvodní rastrové mapy"
 
-#: ../lib/gis/parser_standard_options.c:224
+#: ../lib/gis/parser_standard_options.c:226
 #, fuzzy
 msgid "Name of raster map(s)"
 msgstr "Název vstupní rastrové mapy"
 
-#: ../lib/gis/parser_standard_options.c:232
+#: ../lib/gis/parser_standard_options.c:234
 msgid "Name of base raster map"
 msgstr "Název pùvodní rastrové mapy"
 
-#: ../lib/gis/parser_standard_options.c:240
+#: ../lib/gis/parser_standard_options.c:242
 msgid "Name of cover raster map"
 msgstr "Název pøekrývající rastrové mapy"
 
-#: ../lib/gis/parser_standard_options.c:248
+#: ../lib/gis/parser_standard_options.c:250
 #, fuzzy
 msgid "Name of input elevation raster map"
 msgstr "Název rastrové vrstvy vý¹kového modelu"
 
-#: ../lib/gis/parser_standard_options.c:257
+#: ../lib/gis/parser_standard_options.c:259
 #, fuzzy
 msgid "Name of input elevation raster map(s)"
 msgstr "Název rastrové vrstvy/vrstev vý¹kového modelu"
 
-#: ../lib/gis/parser_standard_options.c:267
-#: ../lib/gis/parser_standard_options.c:292
+#: ../lib/gis/parser_standard_options.c:269
 #, fuzzy
 msgid "Name of input 3D raster map"
 msgstr "Název vstupní rastrové mapy"
 
-#: ../lib/gis/parser_standard_options.c:276
-#: ../lib/gis/parser_standard_options.c:301
+#: ../lib/gis/parser_standard_options.c:278
 #, fuzzy
 msgid "Name of input 3D raster map(s)"
 msgstr "Název vstupní rastrové mapy"
 
-#: ../lib/gis/parser_standard_options.c:284
+#: ../lib/gis/parser_standard_options.c:286
 #, fuzzy
 msgid "Name for output 3D raster map"
 msgstr "Název výstupní rastrové mapy"
 
-#: ../lib/gis/parser_standard_options.c:311
-#: ../lib/gis/parser_standard_options.c:338
+#: ../lib/gis/parser_standard_options.c:294
+#, fuzzy
+msgid "Name of 3D raster map"
+msgstr "Název pùvodní rastrové mapy"
+
+#: ../lib/gis/parser_standard_options.c:303
+#, fuzzy
+msgid "Name of 3D raster map(s)"
+msgstr "Název vstupní rastrové mapy"
+
+#: ../lib/gis/parser_standard_options.c:313
 msgid "Name of input vector map"
 msgstr "Název vstupní vektorové mapy"
 
-#: ../lib/gis/parser_standard_options.c:312
-#: ../lib/gis/parser_standard_options.c:339
-msgid "Data source for OGR access"
+#: ../lib/gis/parser_standard_options.c:314
+#: ../lib/gis/parser_standard_options.c:341
+msgid "Data source for direct OGR access"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:321
-#: ../lib/gis/parser_standard_options.c:348
+#: ../lib/gis/parser_standard_options.c:323
 msgid "Name of input vector map(s)"
 msgstr "Název vstupní vektorové mapy"
 
-#: ../lib/gis/parser_standard_options.c:322
-msgid "Data source(s) for OGR access"
+#: ../lib/gis/parser_standard_options.c:324
+msgid "Data source(s) for direct OGR access"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:330
+#: ../lib/gis/parser_standard_options.c:332
 msgid "Name for output vector map"
 msgstr "Název výstupní vektorové mapy"
 
-#: ../lib/gis/parser_standard_options.c:357
-#: ../lib/gis/parser_standard_options.c:366
+#: ../lib/gis/parser_standard_options.c:340
+#, fuzzy
+msgid "Name of vector map"
+msgstr "Název vstupní vektorové mapy"
+
+#: ../lib/gis/parser_standard_options.c:350
+#, fuzzy
+msgid "Name of vector map(s)"
+msgstr "Název vstupní vektorové mapy"
+
+#: ../lib/gis/parser_standard_options.c:359
+#: ../lib/gis/parser_standard_options.c:368
 msgid "Feature type"
 msgstr "Typy vektorových prvkù"
 
-#: ../lib/gis/parser_standard_options.c:373
+#: ../lib/gis/parser_standard_options.c:375
 #, fuzzy
 msgid "Layer number or name"
 msgstr "Èíslo vrstvy"
 
-#: ../lib/gis/parser_standard_options.c:375
-#: ../lib/gis/parser_standard_options.c:387
+#: ../lib/gis/parser_standard_options.c:377
+#: ../lib/gis/parser_standard_options.c:389
 #, fuzzy
-msgid ""
-"A single vector map can be connected to multiple database tables. This "
-"number determines which table to use. Layer name for OGR access."
-msgstr ""
-"K vektorové mapì mù¾e být pøipojeno i nìkolik databázových tabulek. Tato "
-"hodnota urèuje, která tabulka má být pou¾ita"
+msgid "A single vector map can be connected to multiple database tables. This number determines which table to use. Layer name for direct OGR access."
+msgstr "K vektorové mapì mù¾e být pøipojeno i nìkolik databázových tabulek. Tato hodnota urèuje, která tabulka má být pou¾ita"
 
-#: ../lib/gis/parser_standard_options.c:385
+#: ../lib/gis/parser_standard_options.c:387
 #, fuzzy
 msgid "Layer number or name ('-1' for all layers)"
 msgstr "Vrstva èíslo <%d> nebo jménem <%s> ji¾ existuje."
 
-#: ../lib/gis/parser_standard_options.c:396
+#: ../lib/gis/parser_standard_options.c:398
 msgid "Category value"
 msgstr "Kategorie"
 
-#: ../lib/gis/parser_standard_options.c:403
+#: ../lib/gis/parser_standard_options.c:405
 msgid "Category values"
 msgstr "Hodnoty kategorie"
 
-#: ../lib/gis/parser_standard_options.c:404
-#: ../lib/gis/parser_standard_options.c:418
+#: ../lib/gis/parser_standard_options.c:406
+#: ../lib/gis/parser_standard_options.c:420
 msgid "Example: 1,3,7-9,13"
 msgstr "Napø.: 1,3,7-9,13"
 
-#: ../lib/gis/parser_standard_options.c:410
+#: ../lib/gis/parser_standard_options.c:412
 msgid "Feature id"
 msgstr "Id prvku"
 
-#: ../lib/gis/parser_standard_options.c:417
+#: ../lib/gis/parser_standard_options.c:419
 msgid "Feature ids"
 msgstr "Id prvkù"
 
-#: ../lib/gis/parser_standard_options.c:428
+#: ../lib/gis/parser_standard_options.c:430
 #, fuzzy
-msgid "Path to input file"
+msgid "Name to input file"
 msgstr "Název vstupního souboru %s"
 
-#: ../lib/gis/parser_standard_options.c:436
+#: ../lib/gis/parser_standard_options.c:438
 #, fuzzy
-msgid "Path for output file"
+msgid "Name for output file"
 msgstr "Název výstupního souboru"
 
-#: ../lib/gis/parser_standard_options.c:444
+#: ../lib/gis/parser_standard_options.c:446
 msgid "Field separator"
 msgstr "Oddìlovaè"
 
-#: ../lib/gis/parser_standard_options.c:445
+#: ../lib/gis/parser_standard_options.c:447
 msgid "Special characters: newline, space, comma, tab"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:456
+#: ../lib/gis/parser_standard_options.c:458
 msgid "Color"
 msgstr "Barva"
 
-#: ../lib/gis/parser_standard_options.c:457
+#: ../lib/gis/parser_standard_options.c:459
 msgid "Either a standard color name or R:G:B triplet"
 msgstr "Buï název standardní barvy nebo R:G:B triplet"
 
-#: ../lib/gis/parser_standard_options.c:466
+#: ../lib/gis/parser_standard_options.c:468
 msgid "Background color"
 msgstr "Barva pozadí"
 
-#: ../lib/gis/parser_standard_options.c:468
+#: ../lib/gis/parser_standard_options.c:470
 msgid "Either a standard GRASS color, R:G:B triplet, or \"none\""
 msgstr "Buï standardní GRASS barva, R:G:B triplet nebo \"none\""
 
-#: ../lib/gis/parser_standard_options.c:479
+#: ../lib/gis/parser_standard_options.c:481
 msgid "Units"
+msgstr ""
+
+#: ../lib/gis/parser_standard_options.c:490
+msgid "Data type(s)"
+msgstr ""
+
+#: ../lib/gis/parser_standard_options.c:500
+msgid "Name of mapset (default: current search path)"
+msgstr ""
+
+#: ../lib/gis/parser_standard_options.c:501
+msgid "'.' for current mapset"
 msgstr ""
 
 #: ../lib/gis/list.c:83
@@ -1806,7 +1792,7 @@ msgstr "Klíèová slova"
 msgid "SYNOPSIS"
 msgstr "Synopse"
 
-#: ../lib/gis/parser_html.c:126 ../lib/init/grass.py:150
+#: ../lib/gis/parser_html.c:126 ../lib/init/grass.py:152
 msgid "Flags"
 msgstr "Pøepínaèe"
 
@@ -1860,11 +1846,11 @@ msgstr "%s není nastaveno"
 msgid "MAPSET is not set"
 msgstr "MAPSET není nastaven"
 
-#: ../lib/gis/error.c:335
+#: ../lib/gis/error.c:342
 msgid "WARNING: "
 msgstr "UPOZORNÌNÍ: "
 
-#: ../lib/gis/error.c:336
+#: ../lib/gis/error.c:343
 msgid "ERROR: "
 msgstr "CHYBA: "
 
@@ -1893,14 +1879,10 @@ msgstr "nelze èíst soubor s rozsahem hodnot z [%s v %s]"
 msgid "Error closing input file <%s>"
 msgstr "Chyba pøi zavírání g3d souboru"
 
-#: ../lib/gis/distance.c:156
-#, c-format
-msgid ""
-"G_distance_point_to_line_segment: shouldn't happen: code=%d P=(%f,%f) S=(%f,%"
-"f)(%f,%f)"
-msgstr ""
-"G_distance_point_to_line_segment: Nemìlo se stát: code=%d P=(%f,%f) S=(%f,%f)"
-"(%f,%f)"
+#: ../lib/gis/distance.c:154
+#, fuzzy, c-format
+msgid "%s: shouldn't happen: code=%d P=(%f,%f) S=(%f,%f)(%f,%f)"
+msgstr "G_distance_point_to_line_segment: Nemìlo se stát: code=%d P=(%f,%f) S=(%f,%f)(%f,%f)"
 
 #: ../lib/gis/seek.c:52 ../lib/gis/seek.c:58
 #, fuzzy
@@ -2130,7 +2112,7 @@ msgstr "Neplatné es: polo¾ka '%s' v souboru %s v <%s>"
 msgid "No ellipsoid info given in file %s in <%s>"
 msgstr "V souboru %s v <%s> chybí informace o ref. elipsoidu"
 
-#: ../lib/gis/proj3.c:92 ../lib/vector/Vlib/header.c:656
+#: ../lib/gis/proj3.c:92 ../lib/vector/Vlib/header.c:654
 msgid "Unknown projection"
 msgstr "Neznámá mapová projekce"
 
@@ -2294,12 +2276,8 @@ msgid "%s complete. %s"
 msgstr "%s hotovo. %s"
 
 #: ../lib/gis/gisinit.c:56 ../lib/gis/gisinit.c:91
-msgid ""
-"Incompatible library version for module. You need to rebuild GRASS or "
-"untangle multiple installations."
-msgstr ""
-"Neompatibilní verze knihovny pro modul. Je potøeba znovu zkompilovat GRASS "
-"nebo vyøe¹it problém více instalací."
+msgid "Incompatible library version for module. You need to rebuild GRASS or untangle multiple installations."
+msgstr "Neompatibilní verze knihovny pro modul. Je potøeba znovu zkompilovat GRASS nebo vyøe¹it problém více instalací."
 
 #: ../lib/gis/gisinit.c:66
 #, c-format
@@ -2316,7 +2294,7 @@ msgid "System not initialized. Programmer forgot to call G_gisinit()."
 msgstr "Systém není inicializován. Programátor zapomnìl zavolat G_gisinit()."
 
 #: ../lib/rowio/setup.c:61 ../lib/rowio/setup.c:67
-#: ../lib/vector/Vlib/ascii.c:200 ../lib/vector/Vlib/line.c:50
+#: ../lib/vector/Vlib/ascii.c:201 ../lib/vector/Vlib/line.c:48
 #: ../lib/vector/neta/articulation_point.c:60
 #: ../lib/vector/neta/centrality.c:63 ../lib/vector/neta/centrality.c:145
 #: ../lib/vector/neta/components.c:46 ../lib/vector/neta/components.c:113
@@ -2350,349 +2328,330 @@ msgstr "%s: Není dostupný ¾ádný soubor s definicí písma"
 msgid "[%s]: No such color"
 msgstr "[%s]: Neznámá barva"
 
-#: ../lib/vector/diglib/test.c:59
+#: ../lib/vector/diglib/test.c:58
 #, fuzzy
 msgid "Unable to open test.tmp file"
 msgstr "Nelze otevøít doèasný soubor"
 
-#: ../lib/vector/diglib/test.c:76
+#: ../lib/vector/diglib/test.c:75
 #, c-format
-msgid ""
-"Error in read/write portable double, byte_order = %d Written: %.16e3E Read: "
-"%.16e3E"
+msgid "Error in read/write portable double, byte_order = %d Written: %.16e3E Read: %.16e3E"
 msgstr ""
 
-#: ../lib/vector/diglib/test.c:90
+#: ../lib/vector/diglib/test.c:89
 #, c-format
-msgid ""
-"Error in read/write portable float, byte_order = %d Written: %.8e3E Read: "
-"%.8e3E"
+msgid "Error in read/write portable float, byte_order = %d Written: %.8e3E Read: %.8e3E"
 msgstr ""
 
-#: ../lib/vector/diglib/test.c:105
+#: ../lib/vector/diglib/test.c:104
 #, c-format
-msgid ""
-"Error in read/write portable off_t, byte_order = %d Written: %lu Read: %lu"
+msgid "Error in read/write portable off_t, byte_order = %d Written: %lu Read: %lu"
 msgstr ""
 
-#: ../lib/vector/diglib/test.c:120
+#: ../lib/vector/diglib/test.c:119
 #, c-format
-msgid ""
-"Error in read/write portable long, byte_order = %d Written: %lu Read: %lu"
+msgid "Error in read/write portable long, byte_order = %d Written: %lu Read: %lu"
 msgstr ""
 
-#: ../lib/vector/diglib/test.c:135
+#: ../lib/vector/diglib/test.c:134
 #, c-format
 msgid "Error in read/write portable int, byte_order = %d Written: %d Read: %d"
 msgstr ""
 
-#: ../lib/vector/diglib/test.c:151
+#: ../lib/vector/diglib/test.c:150
 #, c-format
-msgid ""
-"Error in read/write portable short, byte_order = %d Written: %d Read: %d"
+msgid "Error in read/write portable short, byte_order = %d Written: %d Read: %d"
 msgstr ""
 
-#: ../lib/vector/diglib/test.c:166
+#: ../lib/vector/diglib/test.c:165
 #, c-format
 msgid "Error in read/write portable char, byte_order = %d Written: %d Read: %d"
 msgstr ""
 
-#: ../lib/vector/diglib/plus_node.c:218
+#: ../lib/vector/diglib/plus_node.c:217
 #, c-format
-msgid ""
-"Attempt to read line angle for the line which is not connected to the node: "
-"node %d, line %d"
+msgid "Attempt to read line angle for the line which is not connected to the node: node %d, line %d"
 msgstr ""
 "Pokus o naètení úhlu linie pro linii, která není pøipojena k uzlu: \n"
 "uzel %d, linie %d"
 
-#: ../lib/vector/diglib/plus.c:277
+#: ../lib/vector/diglib/plus.c:275
 msgid "Unable read topology for nodes"
 msgstr "Nelze èíst topologii pro uzly"
 
-#: ../lib/vector/diglib/plus.c:282
+#: ../lib/vector/diglib/plus.c:280
 #, c-format
 msgid "Unable to read topology for node %d"
 msgstr "Nelze naèíst topologii pro uzel %d"
 
-#: ../lib/vector/diglib/plus.c:287
+#: ../lib/vector/diglib/plus.c:285
 msgid "Unable read topology for lines"
 msgstr "Nelze èíst topologii pro linie"
 
-#: ../lib/vector/diglib/plus.c:292
+#: ../lib/vector/diglib/plus.c:290
 #, c-format
 msgid "Unable to read topology for line %d"
 msgstr "Nelze naèíst topologii pro linii %d"
 
-#: ../lib/vector/diglib/plus.c:297
+#: ../lib/vector/diglib/plus.c:295
 msgid "Unable to read topo for areas"
 msgstr "Nelze èíst topologii pro plochy"
 
-#: ../lib/vector/diglib/plus.c:302
+#: ../lib/vector/diglib/plus.c:300
 #, c-format
 msgid "Unable read topology for area %d"
 msgstr "Nelze naèíst topologii pro plochu %d"
 
-#: ../lib/vector/diglib/plus.c:307
+#: ../lib/vector/diglib/plus.c:305
 msgid "Unable to read topology for isles"
 msgstr "Nelze èíst topologii pro ostrovy"
 
-#: ../lib/vector/diglib/plus.c:312
+#: ../lib/vector/diglib/plus.c:310
 #, c-format
 msgid "Unable to read topology for isle %d"
 msgstr "Nelze naèíst topologii pro ostrov %d"
 
-#: ../lib/vector/diglib/plus.c:334 ../lib/vector/diglib/plus.c:360
+#: ../lib/vector/diglib/plus.c:332 ../lib/vector/diglib/plus.c:358
 msgid "Unable to write head to plus file"
 msgstr "Nelze zapsat hlavièku do pøídavného souboru"
 
-#: ../lib/vector/diglib/plus.c:339
+#: ../lib/vector/diglib/plus.c:337
 msgid "Unable to write nodes to plus file"
 msgstr "Nelze zapsat uzly do pøídavného souboru"
 
-#: ../lib/vector/diglib/plus.c:344
+#: ../lib/vector/diglib/plus.c:342
 msgid "Unable to write lines to plus file"
 msgstr "Nelze zapsat linie do pøídavného souboru"
 
-#: ../lib/vector/diglib/plus.c:349
+#: ../lib/vector/diglib/plus.c:347
 msgid "Unable to write areas to plus file"
 msgstr "Nelze zapsat plochy do pøídavného souboru"
 
-#: ../lib/vector/diglib/plus.c:354
+#: ../lib/vector/diglib/plus.c:352
 msgid "Unable to write isles to plus file"
 msgstr "Nelze zapsat ostrovy do pøídavného souboru"
 
-#: ../lib/vector/diglib/plus_area.c:208 ../lib/vector/diglib/plus_area.c:677
-#: ../lib/vector/diglib/plus_area.c:685
+#: ../lib/vector/diglib/plus_area.c:209 ../lib/vector/diglib/plus_area.c:678
+#: ../lib/vector/diglib/plus_area.c:686
 #, c-format
 msgid "Line %d already has area/isle %d to left"
 msgstr "Linie %d má ji¾ na levé stranì plochu/ostrov %d"
 
-#: ../lib/vector/diglib/plus_area.c:218
+#: ../lib/vector/diglib/plus_area.c:219
 #, c-format
 msgid "Line %d already has area/isle %d to right"
 msgstr "Linie %d má ji¾ na pravé stranì plochu/ostrov %d"
 
-#: ../lib/vector/diglib/plus_area.c:300
+#: ../lib/vector/diglib/plus_area.c:301
 msgid "Attempt to delete isle from dead area"
 msgstr "Pokus o odstranìné ostrova z mrtvé plochy"
 
-#: ../lib/vector/diglib/plus_area.c:317
+#: ../lib/vector/diglib/plus_area.c:318
 #, c-format
 msgid "Attempt to delete not registered isle %d from area %d"
 msgstr "Pokus o odstranìní neregistrovaného ostrova %d z plochy %d"
 
-#: ../lib/vector/diglib/plus_area.c:355
+#: ../lib/vector/diglib/plus_area.c:356
 msgid "Attempt to delete dead area"
 msgstr "Pokus o odstranìní mrtvé plochy"
 
-#: ../lib/vector/diglib/plus_area.c:395
+#: ../lib/vector/diglib/plus_area.c:396
 #, c-format
 msgid "Dead centroid %d registered for area (bug in the vector library)"
 msgstr "Mrtvý centroid %d registrován k plo¹e (chyba ve vektorové knihovnì)."
 
-#: ../lib/vector/diglib/plus_area.c:419
+#: ../lib/vector/diglib/plus_area.c:420
 #, c-format
 msgid "Attempt to delete area %d info from dead isle %d"
 msgstr "Pokus o odstranìní informace o plo¹e %d z mrtvého ostrova %d"
 
-#: ../lib/vector/diglib/plus_area.c:775
+#: ../lib/vector/diglib/plus_area.c:776
 #, c-format
 msgid "Attempt to delete isle %d info from dead area %d"
 msgstr "Pokus o odstranìní informace o ostrovì %d z mrtvé plochy %d"
 
-#: ../lib/vector/diglib/file.c:161
+#: ../lib/vector/diglib/file.c:159
 msgid "Writing to file loaded to memory not supported"
 msgstr "Zapisování do souboru naèteného do pamìti není podporováno"
 
-#: ../lib/vector/diglib/file.c:205
+#: ../lib/vector/diglib/file.c:203
 msgid "Unable to load file to memory, file not open"
 msgstr "nelze naèíst soubor do pamìti, sobor není otevøen"
 
-#: ../lib/vector/diglib/file.c:220
+#: ../lib/vector/diglib/file.c:218
 msgid "Vector memory mode not supported, using 'AUTO'"
 msgstr "Vemód vektorové pamìti není podporován, pou¾iji 'AUTO'"
 
-#: ../lib/vector/diglib/spindex_rw.c:294
+#: ../lib/vector/diglib/spindex_rw.c:277
 #, fuzzy, c-format
-msgid ""
-"Spatial index format version %d.%d is not supported by this release. Try to "
-"rebuild topology or upgrade GRASS."
-msgstr ""
-"Formát indexování prvkù verze %d.%d není tímto vydáním podporována. Zkuste "
-"pøestavit topologii nebo aktualizovat GRASS."
+msgid "Spatial index format version %d.%d is not supported by this release. Try to rebuild topology or upgrade GRASS."
+msgstr "Formát indexování prvkù verze %d.%d není tímto vydáním podporována. Zkuste pøestavit topologii nebo aktualizovat GRASS."
 
-#: ../lib/vector/diglib/spindex_rw.c:301
+#: ../lib/vector/diglib/spindex_rw.c:284
 #, fuzzy, c-format
-msgid ""
-"Your GRASS version does not fully support spatial index format %d.%d of the "
-"vector. Consider to rebuild topology or upgrade GRASS."
-msgstr ""
-"Va¹e verze GRASS plnì nepodporuje formát indexování prvkù %d. %d vektorové "
-"mapy. Zva¾te pøebudování topologie nebo upgrade GRASS."
+msgid "Your GRASS version does not fully support spatial index format %d.%d of the vector. Consider to rebuild topology or upgrade GRASS."
+msgstr "Va¹e verze GRASS plnì nepodporuje formát indexování prvkù %d. %d vektorové mapy. Zva¾te pøebudování topologie nebo upgrade GRASS."
 
-#: ../lib/vector/diglib/spindex_rw.c:310
+#: ../lib/vector/diglib/spindex_rw.c:293
 #, fuzzy, c-format
-msgid ""
-"Spatial index format version %d.%d is not supported by this release. Please "
-"rebuild topology."
-msgstr ""
-"Formát indexování prvkù verze %d.%d není tímto vydáním podporována. Zkuste "
-"pøestavit topologii nebo aktualizovat GRASS."
+msgid "Spatial index format version %d.%d is not supported by this release. Please rebuild topology."
+msgstr "Formát indexování prvkù verze %d.%d není tímto vydáním podporována. Zkuste pøestavit topologii nebo aktualizovat GRASS."
 
-#: ../lib/vector/diglib/portable.c:212 ../lib/vector/diglib/portable.c:245
-#: ../lib/vector/diglib/portable.c:692
+#: ../lib/vector/diglib/spindex_rw.c:824
+msgid "Writing sidx: wrong node position in file"
+msgstr ""
+
+#: ../lib/vector/diglib/portable.c:210 ../lib/vector/diglib/portable.c:243
+#: ../lib/vector/diglib/portable.c:690
 msgid "Vector exceeds supported file size limit"
 msgstr ""
 
-#: ../lib/vector/diglib/port_init.c:159
+#: ../lib/vector/diglib/port_init.c:158
 #, fuzzy, c-format
 msgid "Unable to find '%x' in %s"
 msgstr "Nelze nalézt '%s' v '%s'"
 
-#: ../lib/vector/diglib/spindex.c:285
+#: ../lib/vector/diglib/spindex.c:381
 #, c-format
 msgid "Unable to delete node %d from spatial index"
 msgstr "Nelze smazat uzel %d z prostorového indexu"
 
-#: ../lib/vector/diglib/spindex.c:325
+#: ../lib/vector/diglib/spindex.c:421
 #, c-format
 msgid "Unable to delete line %d from spatial index"
 msgstr "Nelze smazat linii %d z prostorového indexu"
 
-#: ../lib/vector/diglib/spindex.c:351
+#: ../lib/vector/diglib/spindex.c:447
 msgid "Attempt to delete sidx for dead area"
 msgstr "Pokus o odstranìní sidx mrtvé plochy"
 
-#: ../lib/vector/diglib/spindex.c:364
+#: ../lib/vector/diglib/spindex.c:460
 #, c-format
 msgid "Unable to delete area %d from spatial index"
 msgstr "Nelze smazat plochu %d z prostorového indexu"
 
-#: ../lib/vector/diglib/spindex.c:399
+#: ../lib/vector/diglib/spindex.c:495
 #, c-format
 msgid "Unable to delete isle %d from spatial index"
 msgstr "Nelze smazat ostrov %d z prostorového indexu"
 
-#: ../lib/vector/Vlib/write_nat.c:54 ../lib/vector/Vlib/write_nat.c:88
+#: ../lib/vector/Vlib/write_nat.c:52 ../lib/vector/Vlib/write_nat.c:86
 #, c-format
 msgid "%s: Area %d does not exist"
 msgstr "%s:Plocha %d neexistuje"
 
-#: ../lib/vector/Vlib/write_nat.c:670 ../lib/vector/Vlib/write_ogr.c:303
+#: ../lib/vector/Vlib/write_nat.c:668 ../lib/vector/Vlib/write_ogr.c:302
 msgid "Attempt to delete dead feature"
 msgstr "Pokus o odstranìní mrtvé plochy"
 
-#: ../lib/vector/Vlib/write_nat.c:910
+#: ../lib/vector/Vlib/write_nat.c:908
 msgid "Attempt to restore alive feature"
 msgstr "Pokus o o¾ivení prvku"
 
-#: ../lib/vector/Vlib/legal_vname.c:45
+#: ../lib/vector/Vlib/legal_vname.c:43
 #, c-format
 msgid "Illegal vector map name <%s>. May not contain '.' or 'NULL'."
 msgstr "Neplatný název vektorové mapy <%s>. Nesmí obsahovat '.' nebo 'NIC'."
 
-#: ../lib/vector/Vlib/legal_vname.c:52
+#: ../lib/vector/Vlib/legal_vname.c:50
 #, c-format
 msgid "Illegal vector map name <%s>. Must start with a letter."
 msgstr "Neplatný název vektorové mapy <%s>. Musí zaèínat písmenem."
 
-#: ../lib/vector/Vlib/legal_vname.c:60
+#: ../lib/vector/Vlib/legal_vname.c:58
 #, c-format
 msgid "Illegal vector map name <%s>. Character '%c' not allowed."
 msgstr "Neplatné název vektorové mapy <%s>. Znak <%c> není povolen."
 
-#: ../lib/vector/Vlib/legal_vname.c:67
+#: ../lib/vector/Vlib/legal_vname.c:65
 #, c-format
-msgid ""
-"Illegal vector map name <%s>. SQL keyword cannot be used as vector map name."
-msgstr ""
-"Neplatné název vektorové mapy <%s>. SQL klíèové slovo nelze pou¾ít jako "
-"název vektorové mapy."
+msgid "Illegal vector map name <%s>. SQL keyword cannot be used as vector map name."
+msgstr "Neplatné název vektorové mapy <%s>. SQL klíèové slovo nelze pou¾ít jako název vektorové mapy."
 
-#: ../lib/vector/Vlib/legal_vname.c:98 ../lib/vector/Vlib/legal_vname.c:102
+#: ../lib/vector/Vlib/legal_vname.c:96 ../lib/vector/Vlib/legal_vname.c:100
 #, c-format
 msgid "Output vector map name <%s> is not valid map name"
 msgstr "Název výstupu <%s> není platným názvem rastrové mapy."
 
-#: ../lib/vector/Vlib/legal_vname.c:139 ../lib/vector/Vlib/legal_vname.c:143
+#: ../lib/vector/Vlib/legal_vname.c:137 ../lib/vector/Vlib/legal_vname.c:141
 #, c-format
 msgid "Output vector map <%s> is used as input"
 msgstr "Výstupní mapa <%s> je pou¾ita jako vstup."
 
-#: ../lib/vector/Vlib/read_ogr.c:117 ../lib/vector/Vlib/read_ogr.c:307
-#: ../lib/vector/Vlib/read_ogr.c:365 ../lib/vector/Vlib/build_ogr.c:324
+#: ../lib/vector/Vlib/read_ogr.c:115 ../lib/vector/Vlib/read_ogr.c:305
+#: ../lib/vector/Vlib/read_ogr.c:363 ../lib/vector/Vlib/build_ogr.c:322
 #, c-format
 msgid "OGR feature type %d not supported"
 msgstr "Typ prvku OGR %d není podporován"
 
-#: ../lib/vector/Vlib/read_ogr.c:174
+#: ../lib/vector/Vlib/read_ogr.c:172
 msgid "OGR feature without ID"
 msgstr "Prvek OGR bez ID."
 
-#: ../lib/vector/Vlib/read_ogr.c:416 ../lib/vector/Vlib/read_ogr.c:424
+#: ../lib/vector/Vlib/read_ogr.c:414 ../lib/vector/Vlib/read_ogr.c:422
 #, c-format
 msgid "Unable to get feature geometry, FID %ld"
 msgstr "Nelze zjistit prvky geometrie, FID %ld"
 
-#: ../lib/vector/Vlib/read_ogr.c:464 ../lib/vector/Vlib/geos.c:66
-#: ../lib/vector/Vlib/geos.c:256 ../lib/vector/Vlib/read_nat.c:134
+#: ../lib/vector/Vlib/read_ogr.c:462 ../lib/vector/Vlib/geos.c:65
+#: ../lib/vector/Vlib/geos.c:255 ../lib/vector/Vlib/read_nat.c:132
 msgid "Attempt to read dead line"
 msgstr "Pokus èíst mrtvou linii "
 
-#: ../lib/vector/Vlib/cats.c:44
+#: ../lib/vector/Vlib/cats.c:42
 msgid "Vect_new_cats_struct(): Out of memory"
 msgstr "Vect_new_cats_struct(): do¹la pamì»"
 
-#: ../lib/vector/Vlib/cats.c:126
+#: ../lib/vector/Vlib/cats.c:124
 #, c-format
 msgid "Too many categories (%d), unable to set cat %d (layer %d)"
-msgstr ""
-"Pøíli¹ mnoho kategorií (%d), není mo¾né nastavit kategorii %d (vrstva %d)"
+msgstr "Pøíli¹ mnoho kategorií (%d), není mo¾né nastavit kategorii %d (vrstva %d)"
 
-#: ../lib/vector/Vlib/cats.c:402
+#: ../lib/vector/Vlib/cats.c:400
 #, c-format
 msgid "Unable to convert category string '%s' (from '%s') to category range"
-msgstr ""
-"Nejsem schopen pøevézt název kategorie '%s' (z '%s') na rozsah kategorií"
+msgstr "Nejsem schopen pøevézt název kategorie '%s' (z '%s') na rozsah kategorií"
 
-#: ../lib/vector/Vlib/break_polygons.c:82
+#: ../lib/vector/Vlib/break_polygons.c:102
 msgid "Break polygons: Bug in binary tree!"
 msgstr ""
 
-#: ../lib/vector/Vlib/break_polygons.c:137
+#: ../lib/vector/Vlib/break_polygons.c:152
+#: ../lib/vector/Vlib/break_polygons.c:433
 msgid "Break polygons Pass 1: select break points"
 msgstr ""
 
-#: ../lib/vector/Vlib/break_polygons.c:254
+#: ../lib/vector/Vlib/break_polygons.c:282
+#: ../lib/vector/Vlib/break_polygons.c:550
 msgid "Break polygons Pass 2: break at selected points"
 msgstr ""
 
-#: ../lib/vector/Vlib/break_polygons.c:294
-msgid "Point not in search tree!"
-msgstr ""
-
-#: ../lib/vector/Vlib/break_polygons.c:352
+#: ../lib/vector/Vlib/break_polygons.c:394
+#: ../lib/vector/Vlib/break_polygons.c:648
 #, c-format
 msgid "Breaks: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/intersect.c:127
+#: ../lib/vector/Vlib/break_polygons.c:590
+msgid "Point not in search tree!"
+msgstr ""
+
+#: ../lib/vector/Vlib/intersect.c:125
 msgid "3D not supported by Vect_segment_intersection()"
 msgstr "3D není podporováno Vect_segment_intersection()"
 
-#: ../lib/vector/Vlib/intersect.c:322
+#: ../lib/vector/Vlib/intersect.c:320
 msgid "Vect_segment_intersection() ERROR (collinear vertical segments)"
 msgstr "Vect_segment_intersection() CHYBA (kolineární vertikální segmenty)"
 
-#: ../lib/vector/Vlib/intersect.c:448
+#: ../lib/vector/Vlib/intersect.c:446
 msgid "Vect_segment_intersection() ERROR (collinear non vertical segments)"
 msgstr "Vect_segment_intersection() CHYBA (kolineární nevertikální segmenty)"
 
-#: ../lib/vector/Vlib/intersect.c:1099 ../lib/vector/Vlib/intersect.c:1105
-#: ../lib/vector/Vlib/intersect.c:1107 ../lib/vector/Vlib/intersect.c:1155
-#: ../lib/vector/Vlib/intersect.c:1164 ../lib/vector/Vlib/intersect.c:1185
-#: ../lib/vector/Vlib/intersect.c:1202
+#: ../lib/vector/Vlib/intersect.c:1097 ../lib/vector/Vlib/intersect.c:1103
+#: ../lib/vector/Vlib/intersect.c:1105 ../lib/vector/Vlib/intersect.c:1153
+#: ../lib/vector/Vlib/intersect.c:1162 ../lib/vector/Vlib/intersect.c:1183
+#: ../lib/vector/Vlib/intersect.c:1200
 msgid "Error while adding point to array. Out of memory"
 msgstr "Chyba pøi vkládání bodu do pole. Nedostatek pamìti "
 
@@ -2704,33 +2663,33 @@ msgstr "Vektorová struktura nebyla nikdy inicializována"
 msgid "Map structure has been closed"
 msgstr "Struktura mapy byla uzavøena"
 
-#: ../lib/vector/Vlib/array.c:98
+#: ../lib/vector/Vlib/array.c:96
 #, fuzzy, c-format
 msgid "%d errors in category string"
 msgstr "%d chyb v "
 
-#: ../lib/vector/Vlib/array.c:144 ../lib/vector/Vlib/array.c:269
+#: ../lib/vector/Vlib/array.c:142 ../lib/vector/Vlib/array.c:267
 msgid "Mixed area and other type requested for vector array"
 msgstr "Pro vektorové pole jsou po¾adovány plochy a jiné typy dat"
 
-#: ../lib/vector/Vlib/array.c:154 ../lib/vector/Vlib/array.c:177
-#: ../lib/vector/Vlib/array.c:306 ../lib/vector/Vlib/array.c:339
+#: ../lib/vector/Vlib/array.c:152 ../lib/vector/Vlib/array.c:175
+#: ../lib/vector/Vlib/array.c:304 ../lib/vector/Vlib/array.c:337
 msgid "Not enough space in vector array"
 msgstr "Nedostatek místa ve vektorovém poli"
 
-#: ../lib/vector/Vlib/array.c:278 ../lib/vector/Vlib/map.c:312
-#: ../lib/vector/Vlib/map.c:439 ../lib/vector/Vlib/map.c:551
-#: ../lib/vector/Vlib/map.c:669 ../lib/vector/Vlib/map.c:767
-#: ../lib/vector/Vlib/net.c:176 ../lib/vector/Vlib/net.c:347
-#: ../lib/vector/Vlib/ascii.c:314 ../lib/rst/interp_float/vinput2d.c:79
+#: ../lib/vector/Vlib/array.c:276 ../lib/vector/Vlib/map.c:310
+#: ../lib/vector/Vlib/map.c:437 ../lib/vector/Vlib/map.c:549
+#: ../lib/vector/Vlib/map.c:667 ../lib/vector/Vlib/map.c:765
+#: ../lib/vector/Vlib/net.c:174 ../lib/vector/Vlib/net.c:345
+#: ../lib/vector/Vlib/ascii.c:316 ../lib/rst/interp_float/vinput2d.c:79
 #, c-format
 msgid "Database connection not defined for layer %d"
 msgstr "Pro vrstvu %d nebylo definováno databázové pøipojení"
 
-#: ../lib/vector/Vlib/array.c:284 ../lib/vector/Vlib/map.c:341
-#: ../lib/vector/Vlib/map.c:480 ../lib/vector/Vlib/map.c:702
-#: ../lib/vector/Vlib/net.c:182 ../lib/vector/Vlib/net.c:352
-#: ../lib/vector/Vlib/ascii.c:326 ../lib/vector/Vlib/write_ogr.c:380
+#: ../lib/vector/Vlib/array.c:282 ../lib/vector/Vlib/map.c:339
+#: ../lib/vector/Vlib/map.c:478 ../lib/vector/Vlib/map.c:700
+#: ../lib/vector/Vlib/net.c:180 ../lib/vector/Vlib/net.c:350
+#: ../lib/vector/Vlib/ascii.c:328 ../lib/vector/Vlib/write_ogr.c:379
 #: ../lib/vector/neta/utils.c:116 ../lib/vector/neta/timetables.c:133
 #: ../lib/rst/interp_float/vinput2d.c:88 ../lib/db/dbmi_client/copy_tab.c:105
 #: ../lib/db/dbmi_client/copy_tab.c:126 ../lib/db/dbmi_client/db.c:46
@@ -2739,77 +2698,73 @@ msgstr "Pro vrstvu %d nebylo definováno databázové pøipojení"
 msgid "Unable to open database <%s> by driver <%s>"
 msgstr "Nelze otevøít databázi <%s> pomocí ovladaèe <%s>"
 
-#: ../lib/vector/Vlib/array.c:294
+#: ../lib/vector/Vlib/array.c:292
 #, c-format
 msgid "Unable to select record from table <%s> (key %s, where %s)"
 msgstr "Nelze vybrat záznam z tabulky <%s> (klíè %s, where %s)"
 
-#: ../lib/vector/Vlib/geos.c:53 ../lib/vector/Vlib/read.c:105
+#: ../lib/vector/Vlib/geos.c:52 ../lib/vector/Vlib/read.c:104
 msgid "vector map is not opened"
 msgstr "Vektorová mapa není otevøena"
 
-#: ../lib/vector/Vlib/geos.c:56
+#: ../lib/vector/Vlib/geos.c:55
 #, fuzzy, c-format
-msgid ""
-"Vect_read_line_geos(): feature id %d is not reasonable (max features in "
-"vector map <%s>: %d)"
-msgstr ""
-"Vect_red_line(): Prvek id %d není pøijatelný (maximální poèet prvkù ve "
-"vektorové mapì <%s>: %d)"
+msgid "Vect_read_line_geos(): feature id %d is not reasonable (max features in vector map <%s>: %d)"
+msgstr "Vect_red_line(): Prvek id %d není pøijatelný (maximální poèet prvkù ve vektorové mapì <%s>: %d)"
 
-#: ../lib/vector/Vlib/geos.c:61
+#: ../lib/vector/Vlib/geos.c:60
 #, fuzzy
 msgid "only native format supported"
 msgstr "pro tento formát/úroveò není podpora"
 
-#: ../lib/vector/Vlib/geos.c:91
+#: ../lib/vector/Vlib/geos.c:90
 #, c-format
 msgid "Vect_read_area_geos(): unable to read area id %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/geos.c:105
+#: ../lib/vector/Vlib/geos.c:104
 #, c-format
 msgid "Vect_read_area_geos(): unable to read isle id %d of area id %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/geos.c:203
+#: ../lib/vector/Vlib/geos.c:202
 #, fuzzy, c-format
 msgid "Unable to read line offset %ld"
 msgstr "Nelze èíst linii %d"
 
-#: ../lib/vector/Vlib/geos.c:410
+#: ../lib/vector/Vlib/geos.c:409
 #, fuzzy, c-format
 msgid "Attempt to read points of nonexistent area id %d"
 msgstr "Pokus o ètení bodù z neexistující plochy"
 
-#: ../lib/vector/Vlib/geos.c:470
+#: ../lib/vector/Vlib/geos.c:469
 #, fuzzy, c-format
 msgid "Unable to read feature id %d"
 msgstr "Nelze pøepsat prvek %d"
 
-#: ../lib/vector/Vlib/snap.c:150
+#: ../lib/vector/Vlib/snap.c:133
 msgid "Snap vertices Pass 1: select points"
 msgstr ""
 
-#: ../lib/vector/Vlib/snap.c:193
+#: ../lib/vector/Vlib/snap.c:187
 msgid "Snap vertices Pass 2: assign anchor vertices"
 msgstr ""
 
-#: ../lib/vector/Vlib/snap.c:274
+#: ../lib/vector/Vlib/snap.c:256
 msgid "Snap vertices Pass 3: snap to assigned points"
 msgstr ""
 
-#: ../lib/vector/Vlib/snap.c:426
+#: ../lib/vector/Vlib/snap.c:438
 #, c-format
 msgid "Snapped vertices: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/snap.c:427
+#: ../lib/vector/Vlib/snap.c:439
 #, fuzzy, c-format
 msgid "New vertices: %d"
 msgstr "Poèet primitiv: %d"
 
-#: ../lib/vector/Vlib/close_ogr.c:94
+#: ../lib/vector/Vlib/close_ogr.c:91
 #, fuzzy, c-format
 msgid "Unable to open fidx file for write <%s>"
 msgstr "Nelze otevøít soubor s topologií pro zápis <%s>"
@@ -2819,186 +2774,182 @@ msgstr "Nelze otevøít soubor s topologií pro zápis <%s>"
 msgid "Unknown Simple Features type (%d)"
 msgstr "Neznámý zpùsob interpolace"
 
-#: ../lib/vector/Vlib/rewind.c:32 ../lib/vector/Vlib/build.c:29
-#: ../lib/vector/Vlib/read.c:30 ../lib/vector/Vlib/write.c:52
-#: ../lib/vector/Vlib/write.c:58 ../lib/vector/Vlib/close.c:35
-#: ../lib/vector/Vlib/open.c:48
+#: ../lib/vector/Vlib/rewind.c:32 ../lib/vector/Vlib/build.c:27
+#: ../lib/vector/Vlib/read.c:29 ../lib/vector/Vlib/write.c:50
+#: ../lib/vector/Vlib/write.c:56 ../lib/vector/Vlib/close.c:34
+#: ../lib/vector/Vlib/open.c:46
 msgid "Requested format is not compiled in this version"
 msgstr "Po¾adovaný formát není zkompilován v této verzi"
 
-#: ../lib/vector/Vlib/graph.c:107 ../lib/vector/Vlib/net.c:429
+#: ../lib/vector/Vlib/graph.c:105 ../lib/vector/Vlib/net.c:427
 #: ../lib/vector/neta/flow.c:309
 msgid "GngFlatten error"
 msgstr "Chyba GngFlatten"
 
-#: ../lib/vector/Vlib/graph.c:140
+#: ../lib/vector/Vlib/graph.c:138
 msgid "Unable to add network arc"
 msgstr "Nelze pøidat arc  do sítì"
 
-#: ../lib/vector/Vlib/graph.c:228 ../lib/vector/Vlib/net.c:518
+#: ../lib/vector/Vlib/graph.c:226 ../lib/vector/Vlib/net.c:516
 #, c-format
 msgid "dglShortestPath error: %s"
 msgstr "chyba dglShortestPath: %s"
 
-#: ../lib/vector/Vlib/build.c:127
+#: ../lib/vector/Vlib/build.c:125
 #, c-format
 msgid "Building topology for vector map <%s>..."
 msgstr "Vytváøím topologii pro vektorovou vrstvu <%s>..."
 
-#: ../lib/vector/Vlib/build.c:145
+#: ../lib/vector/Vlib/build.c:143
 msgid "Topology was built"
 msgstr "Topologie byla vytvoøena"
 
-#: ../lib/vector/Vlib/build.c:157
+#: ../lib/vector/Vlib/build.c:155
 #, c-format
 msgid "Number of nodes: %d"
 msgstr "Poèet uzlù: %d"
 
-#: ../lib/vector/Vlib/build.c:158
+#: ../lib/vector/Vlib/build.c:156
 #, c-format
 msgid "Number of primitives: %d"
 msgstr "Poèet primitiv: %d"
 
-#: ../lib/vector/Vlib/build.c:159
+#: ../lib/vector/Vlib/build.c:157
 #, c-format
 msgid "Number of points: %d"
 msgstr "Poèet bodù: %d"
 
-#: ../lib/vector/Vlib/build.c:160
+#: ../lib/vector/Vlib/build.c:158
 #, c-format
 msgid "Number of lines: %d"
 msgstr "Poèet linií: %d"
 
-#: ../lib/vector/Vlib/build.c:161
+#: ../lib/vector/Vlib/build.c:159
 #, c-format
 msgid "Number of boundaries: %d"
 msgstr "Poèet hranic: %d"
 
-#: ../lib/vector/Vlib/build.c:162
+#: ../lib/vector/Vlib/build.c:160
 #, c-format
 msgid "Number of centroids: %d"
 msgstr "Poèet centroidù: %d"
 
-#: ../lib/vector/Vlib/build.c:165
+#: ../lib/vector/Vlib/build.c:163
 #, c-format
 msgid "Number of faces: %d"
 msgstr "Poèet stìn: %d"
 
-#: ../lib/vector/Vlib/build.c:168
+#: ../lib/vector/Vlib/build.c:166
 #, c-format
 msgid "Number of kernels: %d"
 msgstr "Poèet kernelù: %d"
 
-#: ../lib/vector/Vlib/build.c:209
+#: ../lib/vector/Vlib/build.c:207
 #, c-format
 msgid "Number of areas: %d"
 msgstr "Poèet ploch: %d"
 
-#: ../lib/vector/Vlib/build.c:210
+#: ../lib/vector/Vlib/build.c:208
 #, c-format
 msgid "Number of isles: %d"
 msgstr "Poèet ostrovù: %d"
 
-#: ../lib/vector/Vlib/build.c:213
+#: ../lib/vector/Vlib/build.c:211
 #, c-format
 msgid "Number of incorrect boundaries: %d"
 msgstr "Poèet chybných hranic: %d"
 
-#: ../lib/vector/Vlib/build.c:217
+#: ../lib/vector/Vlib/build.c:215
 #, c-format
 msgid "Number of centroids outside area: %d"
 msgstr "Poèet centroidù mimo plochu: %d"
 
-#: ../lib/vector/Vlib/build.c:221
+#: ../lib/vector/Vlib/build.c:219
 #, c-format
 msgid "Number of duplicate centroids: %d"
 msgstr "Poèet duplicitních centroidù: %d"
 
-#: ../lib/vector/Vlib/build.c:224
+#: ../lib/vector/Vlib/build.c:222
 #, c-format
 msgid "Number of areas without centroid: %d"
 msgstr "Poèet ploch bez centroidu: %d"
 
-#: ../lib/vector/Vlib/build.c:228
+#: ../lib/vector/Vlib/build.c:226
 msgid "Number of areas: -"
 msgstr "Poèet ploch: -"
 
-#: ../lib/vector/Vlib/build.c:229
+#: ../lib/vector/Vlib/build.c:227
 msgid "Number of isles: -"
 msgstr "Poèet ostrovù: -"
 
-#: ../lib/vector/Vlib/build.c:259
+#: ../lib/vector/Vlib/build.c:257
 #, c-format
 msgid "Unable to open topo file for write <%s>"
 msgstr "Nelze otevøít soubor s topologií pro zápis <%s>"
 
-#: ../lib/vector/Vlib/build.c:267
+#: ../lib/vector/Vlib/build.c:265
 msgid "Error writing out topo file"
 msgstr "Chyba pøi sestavení souboru s topologií"
 
-#: ../lib/vector/Vlib/build.c:399
+#: ../lib/vector/Vlib/build.c:397
 #, fuzzy
-msgid ""
-"Unable to build spatial index from topology, vector map is not opened at "
-"topology level 2"
-msgstr ""
-"Nelze vytvoøit prostorový index z topologie, vektorová mapa není otevøena na "
-"úrovni 2"
+msgid "Unable to build spatial index from topology, vector map is not opened at topology level 2"
+msgstr "Nelze vytvoøit prostorový index z topologie, vektorová mapa není otevøena na úrovni 2"
 
-#: ../lib/vector/Vlib/build.c:440
+#: ../lib/vector/Vlib/build.c:438
 msgid "BUG (Vect_build_sidx_from_topo): node does not exist"
 msgstr "BUG (Vect_build_sidx_from_topo): bod neexistuje"
 
-#: ../lib/vector/Vlib/build.c:452
+#: ../lib/vector/Vlib/build.c:450
 msgid "BUG (Vect_build_sidx_from_topo): line does not exist"
 msgstr "BUG (Vect_build_sidx_from_topo): Linie neexistuje"
 
-#: ../lib/vector/Vlib/build.c:471
+#: ../lib/vector/Vlib/build.c:469
 msgid "BUG (Vect_build_sidx_from_topo): area does not exist"
 msgstr "BUG (Vect_build_sidx_from_topo): Plocha neexistuje"
 
-#: ../lib/vector/Vlib/build.c:490
+#: ../lib/vector/Vlib/build.c:488
 msgid "BUG (Vect_build_sidx_from_topo): isle does not exist"
 msgstr "BUG (Vect_build_sidx_from_topo): Ostrov neexistuje"
 
-#: ../lib/vector/Vlib/build.c:541
+#: ../lib/vector/Vlib/build.c:539
 #, c-format
 msgid "Unable open spatial index file for write <%s>"
 msgstr "Nelze otevøít soubor s prostorovým indexem pro zápis <%s>"
 
-#: ../lib/vector/Vlib/build.c:550
+#: ../lib/vector/Vlib/build.c:548
 msgid "Error writing out spatial index file"
 msgstr "Chyba pøi zapisování souboru s prostorovým indexem."
 
-#: ../lib/vector/Vlib/field.c:89
+#: ../lib/vector/Vlib/field.c:87
 msgid "Layer number must be 1 or greater"
 msgstr "Èíslo vrstvy musí být vìt¹í nebo rovno 1"
 
-#: ../lib/vector/Vlib/field.c:94
+#: ../lib/vector/Vlib/field.c:92
 #, fuzzy
 msgid "Unable to add attribute link, vector map is not opened in WRITE mode"
 msgstr "Nelze pøidat spojení s databází, mapa není otevøena v módu pro ZÁPIS."
 
-#: ../lib/vector/Vlib/field.c:101
+#: ../lib/vector/Vlib/field.c:99
 #, fuzzy
 msgid "Unable to add attribute link"
 msgstr "Nelze pøidat spojení s databází."
 
-#: ../lib/vector/Vlib/field.c:107
+#: ../lib/vector/Vlib/field.c:105
 #, fuzzy
 msgid "Unable to write attribute links"
 msgstr "Nelze zapsat spojení s databází."
 
-#: ../lib/vector/Vlib/field.c:152
+#: ../lib/vector/Vlib/field.c:150
 msgid "Unable to write database links"
 msgstr "Nelze zapsat spojení s databází."
 
-#: ../lib/vector/Vlib/field.c:228
+#: ../lib/vector/Vlib/field.c:226
 #, c-format
 msgid "Layer number %d or name <%s> already exists"
 msgstr "Vrstva èíslo <%d> nebo jménem <%s> ji¾ existuje."
 
-#: ../lib/vector/Vlib/field.c:308
+#: ../lib/vector/Vlib/field.c:306
 #, c-format
 msgid ""
 "Default driver / database set to:\n"
@@ -3009,479 +2960,469 @@ msgstr ""
 "ovladaè: %s\n"
 "databáze: %s"
 
-#: ../lib/vector/Vlib/field.c:315
+#: ../lib/vector/Vlib/field.c:313
 msgid "Default driver is not set"
 msgstr "Výchozí ovladaè není nastaven"
 
-#: ../lib/vector/Vlib/field.c:318
+#: ../lib/vector/Vlib/field.c:316
 msgid "Default database is not set"
 msgstr "Výchozí databáze není nastavena"
 
-#: ../lib/vector/Vlib/field.c:377
+#: ../lib/vector/Vlib/field.c:375
 #, c-format
 msgid "Requested dblink %d, maximum link number %d"
 msgstr "Po¾adovaný dblink %d, maximální poèet spojení %d"
 
-#: ../lib/vector/Vlib/field.c:543
+#: ../lib/vector/Vlib/field.c:541
 #, fuzzy
 msgid "The support for OGR vector maps wasn't compiled in"
 msgstr "podpora kategorií pro vektorový soubor [%s] v mapsetu [%s] %s"
 
-#: ../lib/vector/Vlib/field.c:559 ../lib/vector/Vlib/open_ogr.c:74
+#: ../lib/vector/Vlib/field.c:557 ../lib/vector/Vlib/open_ogr.c:72
 #, c-format
 msgid "Unable to open OGR data source '%s'"
 msgstr "Nelze otevøít zdroj dat OGR '%s'"
 
-#: ../lib/vector/Vlib/field.c:575
+#: ../lib/vector/Vlib/field.c:573
 #, fuzzy, c-format
 msgid "Unable to open OGR layer <%s>"
 msgstr "Nelze otevøít vrstvu <%s>"
 
-#: ../lib/vector/Vlib/field.c:601
+#: ../lib/vector/Vlib/field.c:599
 msgid "Unable to open OGR DBMI driver"
 msgstr "Nelze otevøít ovladaè pro OGR DBMI"
 
-#: ../lib/vector/Vlib/field.c:640
-msgid ""
-"All FID tests failed. Neither 'FID' nor 'ogc_fid' nor 'ogr_fid' nor 'gid' "
-"available in OGR DB table"
-msgstr ""
-"V¹echny FID testy selhaly. Ani 'FID' ani 'ogc_fid' nebo 'ogr_fid' nebo gid' "
-"nejsou pou¾itelné v OGR DB tabulce"
+#: ../lib/vector/Vlib/field.c:638
+msgid "All FID tests failed. Neither 'FID' nor 'ogc_fid' nor 'ogr_fid' nor 'gid' available in OGR DB table"
+msgstr "V¹echny FID testy selhaly. Ani 'FID' ani 'ogc_fid' nebo 'ogr_fid' nebo gid' nejsou pou¾itelné v OGR DB tabulce"
 
-#: ../lib/vector/Vlib/field.c:696
+#: ../lib/vector/Vlib/field.c:694
 #, c-format
 msgid "Don't know how to read links for format %d"
 msgstr "Neznámo jak pøeèíst linky pro formát %d"
 
-#: ../lib/vector/Vlib/field.c:730 ../lib/vector/Vlib/field.c:738
+#: ../lib/vector/Vlib/field.c:728 ../lib/vector/Vlib/field.c:736
 #, fuzzy, c-format
 msgid "Error in rule on row %d in <%s>"
 msgstr "Chyba v pravidlu na øádku %d v %s"
 
-#: ../lib/vector/Vlib/field.c:809
+#: ../lib/vector/Vlib/field.c:807
 #, c-format
 msgid "Unable to open vector database definition file '%s'"
 msgstr "Nelze otevøít soubor s definicí vektorové databáze '%s'"
 
-#: ../lib/vector/Vlib/field.c:895
+#: ../lib/vector/Vlib/field.c:900
 msgid "Bug: attempt to update map which is not in current mapset"
 msgstr "Bug: pokus o aktualizaci mapy, která není v aktuálním mapsetu."
 
-#: ../lib/vector/Vlib/area.c:52
+#: ../lib/vector/Vlib/area.c:50
 msgid "Attempt to read points of nonexistent area"
 msgstr "Pokus o ètení bodù z neexistující plochy"
 
-#: ../lib/vector/Vlib/area.c:125
+#: ../lib/vector/Vlib/area.c:123
 #, c-format
 msgid "Unable to read line %d"
 msgstr "Nelze èíst linii %d"
 
-#: ../lib/vector/Vlib/area.c:164 ../lib/vector/Vlib/area.c:193
-#: ../lib/vector/Vlib/area.c:257 ../lib/vector/Vlib/area.c:286
+#: ../lib/vector/Vlib/area.c:162 ../lib/vector/Vlib/area.c:191
+#: ../lib/vector/Vlib/area.c:255 ../lib/vector/Vlib/area.c:284
 #, c-format
 msgid "Attempt to read topo for dead area (%d)"
 msgstr "Pokus èíst topologii pro mrtvou plochu (%d)"
 
-#: ../lib/vector/Vlib/area.c:227 ../lib/vector/Vlib/area.c:313
+#: ../lib/vector/Vlib/area.c:225 ../lib/vector/Vlib/area.c:311
 #, c-format
 msgid "Attempt to read topo for dead isle (%d)"
 msgstr "Pokus naèíst topografii pro mrtvý ostrov (%d)"
 
-#: ../lib/vector/Vlib/header.c:89 ../lib/vector/Vlib/header.c:137
+#: ../lib/vector/Vlib/header.c:87 ../lib/vector/Vlib/header.c:135
 #, c-format
 msgid "Unable to open header file of vector <%s>"
 msgstr "Nelze otevøít hlavièkový soubor vektorové mapy <%s>"
 
-#: ../lib/vector/Vlib/header.c:145
+#: ../lib/vector/Vlib/header.c:143
 #, c-format
 msgid "Corrupted row in head: %s"
 msgstr "Poru¹ený øádek v hlavièce: %s"
 
-#: ../lib/vector/Vlib/header.c:181
+#: ../lib/vector/Vlib/header.c:179
 #, fuzzy, c-format
 msgid "Unknown keyword '%s' in vector head"
 msgstr "Neznámé klíèové slovo %s v hlavièce vektorové mapy"
 
-#: ../lib/vector/Vlib/header.c:317
+#: ../lib/vector/Vlib/header.c:315
 msgid "Point"
 msgstr ""
 
-#: ../lib/vector/Vlib/header.c:319
+#: ../lib/vector/Vlib/header.c:317
 msgid "MultiPoint"
 msgstr ""
 
-#: ../lib/vector/Vlib/header.c:321
+#: ../lib/vector/Vlib/header.c:319
 msgid "LineString"
 msgstr ""
 
-#: ../lib/vector/Vlib/header.c:323
+#: ../lib/vector/Vlib/header.c:321
 msgid "MultiLineString"
 msgstr ""
 
-#: ../lib/vector/Vlib/header.c:325
+#: ../lib/vector/Vlib/header.c:323
 msgid "Polygon"
 msgstr ""
 
-#: ../lib/vector/Vlib/header.c:327
+#: ../lib/vector/Vlib/header.c:325
 msgid "MultiPolygon"
 msgstr ""
 
-#: ../lib/vector/Vlib/header.c:329
+#: ../lib/vector/Vlib/header.c:327
 msgid "GeometryCollection"
 msgstr ""
 
-#: ../lib/vector/Vlib/header.c:331
+#: ../lib/vector/Vlib/header.c:329
 #, fuzzy
 msgid "None"
 msgstr "nic"
 
-#: ../lib/vector/Vlib/header.c:333
+#: ../lib/vector/Vlib/header.c:331
 msgid "LinearRing"
 msgstr ""
 
-#: ../lib/vector/Vlib/header.c:335
+#: ../lib/vector/Vlib/header.c:333
 msgid "3D Point"
 msgstr ""
 
-#: ../lib/vector/Vlib/header.c:337
+#: ../lib/vector/Vlib/header.c:335
 msgid "3D MultiPoint"
 msgstr ""
 
-#: ../lib/vector/Vlib/header.c:339
+#: ../lib/vector/Vlib/header.c:337
 msgid "3D LineString"
 msgstr ""
 
-#: ../lib/vector/Vlib/header.c:341
+#: ../lib/vector/Vlib/header.c:339
 msgid "3D MultiLineString"
 msgstr ""
 
-#: ../lib/vector/Vlib/header.c:343
+#: ../lib/vector/Vlib/header.c:341
 msgid "3D Polygon"
 msgstr ""
 
-#: ../lib/vector/Vlib/header.c:345
+#: ../lib/vector/Vlib/header.c:343
 msgid "3D MultiPolygon"
 msgstr ""
 
-#: ../lib/vector/Vlib/header.c:347
+#: ../lib/vector/Vlib/header.c:345
 msgid "3D GeometryCollection"
 msgstr ""
 
-#: ../lib/vector/Vlib/header.c:349
+#: ../lib/vector/Vlib/header.c:347
 #, fuzzy
 msgid "Unknown"
 msgstr "neznámý"
 
-#: ../lib/vector/Vlib/read.c:108
+#: ../lib/vector/Vlib/read.c:107
 #, c-format
-msgid ""
-"Vect_read_line(): feature id %d is not reasonable (max features in vector "
-"map <%s>: %d)"
-msgstr ""
-"Vect_red_line(): Prvek id %d není pøijatelný (maximální poèet prvkù ve "
-"vektorové mapì <%s>: %d)"
+msgid "Vect_read_line(): feature id %d is not reasonable (max features in vector map <%s>: %d)"
+msgstr "Vect_red_line(): Prvek id %d není pøijatelný (maximální poèet prvkù ve vektorové mapì <%s>: %d)"
 
-#: ../lib/vector/Vlib/build_nat.c:100
+#: ../lib/vector/Vlib/build_nat.c:98
 msgid "Unable to add area (map closed, topo saved)"
 msgstr "Nelze pøidat plochu (mapa uzavøena, topologie ulo¾ena)"
 
-#: ../lib/vector/Vlib/build_nat.c:109
+#: ../lib/vector/Vlib/build_nat.c:107
 msgid "Unable to add isle (map closed, topo saved)"
 msgstr "Nelze pøidat ostrov (mapa uzavøena, topologie ulo¾ena)"
 
-#: ../lib/vector/Vlib/build_nat.c:119
+#: ../lib/vector/Vlib/build_nat.c:117
 msgid "Area of size = 0.0 ignored"
 msgstr "Plocha o velikosti = 0.0 ignorována"
 
-#: ../lib/vector/Vlib/build_nat.c:155
+#: ../lib/vector/Vlib/build_nat.c:153
 msgid "Request to find area outside nonexistent isle"
 msgstr "Po¾adavek najít plochy mimo neexistující ostrov"
 
-#: ../lib/vector/Vlib/build_nat.c:525
+#: ../lib/vector/Vlib/build_nat.c:523
 msgid "Registering primitives..."
 msgstr "Registrace primitiv..."
 
-#: ../lib/vector/Vlib/build_nat.c:534
+#: ../lib/vector/Vlib/build_nat.c:532
 msgid "Unable to read vector map"
 msgstr "Nelze èíst vektorovou vrstvu"
 
-#: ../lib/vector/Vlib/build_nat.c:578
+#: ../lib/vector/Vlib/build_nat.c:576
 #, c-format
 msgid "%d primitives registered"
 msgstr "%d primitiv zaregistrováno"
 
-#: ../lib/vector/Vlib/build_nat.c:579
+#: ../lib/vector/Vlib/build_nat.c:577
 #, c-format
 msgid "%d vertices registered"
 msgstr "%d opìrných bodù zaregistrováno"
 
-#: ../lib/vector/Vlib/build_nat.c:590
+#: ../lib/vector/Vlib/build_nat.c:588
 msgid "Building areas..."
 msgstr "Vytváøení ploch..."
 
-#: ../lib/vector/Vlib/build_nat.c:613
+#: ../lib/vector/Vlib/build_nat.c:611
 #, c-format
 msgid "%d areas built"
 msgstr "%d ploch vytvoøeno"
 
-#: ../lib/vector/Vlib/build_nat.c:614
+#: ../lib/vector/Vlib/build_nat.c:612
 #, c-format
 msgid "%d isles built"
 msgstr "%d ostrovù vytvoøeno"
 
-#: ../lib/vector/Vlib/build_nat.c:623
+#: ../lib/vector/Vlib/build_nat.c:621
 msgid "Attaching islands..."
 msgstr "Pøidávání ostrovù..."
 
-#: ../lib/vector/Vlib/build_nat.c:638
+#: ../lib/vector/Vlib/build_nat.c:636
 msgid "Attaching centroids..."
 msgstr "Pøipojování centroidù..."
 
-#: ../lib/vector/Vlib/merge_lines.c:192
+#: ../lib/vector/Vlib/merge_lines.c:190
 #, c-format
 msgid "%d boundaries merged"
 msgstr ""
 
-#: ../lib/vector/Vlib/merge_lines.c:193
+#: ../lib/vector/Vlib/merge_lines.c:191
 #, c-format
 msgid "%d new boundaries"
 msgstr ""
 
-#: ../lib/vector/Vlib/buffer2.c:360
+#: ../lib/vector/Vlib/buffer2.c:361
 msgid "Line is not looped"
 msgstr "Linie není ukonèena smyèkou"
 
-#: ../lib/vector/Vlib/buffer2.c:442
+#: ../lib/vector/Vlib/buffer2.c:443
 #, c-format
 msgid "Unexpected result of line_intersection() res = %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/buffer2.c:586 ../lib/vector/Vlib/buffer2.c:597
-msgid "Next edge was visited but it is not the first one !!! breaking loop"
-msgstr ""
-"Dal¹í hrana byla zpracována, ale nejedná se o první hranu. Pøeru¹ení cyklu."
+#: ../lib/vector/Vlib/buffer2.c:589
+#, fuzzy
+msgid "Next edge was visited (right) but it is not the first one !!! breaking loop"
+msgstr "Dal¹í hrana byla zpracována, ale nejedná se o první hranu. Pøeru¹ení cyklu."
 
-#: ../lib/vector/Vlib/buffer2.c:649
+#: ../lib/vector/Vlib/buffer2.c:600
+#, fuzzy
+msgid "Next edge was visited (left) but it is not the first one !!! breaking loop"
+msgstr "Dal¹í hrana byla zpracována, ale nejedná se o první hranu. Pøeru¹ení cyklu."
+
+#: ../lib/vector/Vlib/buffer2.c:648
 msgid "side != 0 feature not implemented"
 msgstr "prvek strana !=0 není implementován"
 
-#: ../lib/vector/Vlib/buffer2.c:886 ../lib/vector/Vlib/buffer2.c:919
+#: ../lib/vector/Vlib/buffer2.c:890 ../lib/vector/Vlib/buffer2.c:937
+msgid "zero area size"
+msgstr ""
+
+#: ../lib/vector/Vlib/buffer2.c:896 ../lib/vector/Vlib/buffer2.c:943
+#, fuzzy
+msgid "Line was not closed"
+msgstr "Linie není ukonèena smyèkou"
+
+#: ../lib/vector/Vlib/buffer2.c:909 ../lib/vector/Vlib/buffer2.c:960
 msgid "Vect_get_point_in_poly() failed"
 msgstr "Vect_get_point_in_poly() selhal"
 
-#: ../lib/vector/Vlib/map.c:73
+#: ../lib/vector/Vlib/map.c:71
 msgid "input vector map is not open"
 msgstr "vstupní vektorová mapa není otevøena"
 
-#: ../lib/vector/Vlib/map.c:86 ../lib/vector/Vlib/map.c:140
+#: ../lib/vector/Vlib/map.c:84 ../lib/vector/Vlib/map.c:138
 #: ../lib/ogsf/Gp3.c:92
 #, c-format
 msgid "Unable to read vector map <%s>"
 msgstr "Nelze èíst vektorovou mapu <%s>"
 
-#: ../lib/vector/Vlib/map.c:241 ../lib/vector/Vlib/map.c:385
+#: ../lib/vector/Vlib/map.c:239 ../lib/vector/Vlib/map.c:383
 #: ../lib/vector/Vlib/open.c:714
 #, c-format
 msgid "Vector map name is not SQL compliant"
 msgstr "Název mapy nevyhovuje podmínkám SQL"
 
-#: ../lib/vector/Vlib/map.c:245
+#: ../lib/vector/Vlib/map.c:243
 #, c-format
 msgid "Unable to find vector map <%s> in <%s>"
 msgstr "Nelze najít vektorovou mapu <%s> v <%s>"
 
-#: ../lib/vector/Vlib/map.c:257 ../lib/vector/Vlib/map.c:389
+#: ../lib/vector/Vlib/map.c:255 ../lib/vector/Vlib/map.c:387
 #: ../lib/vector/Vlib/open.c:751
 #, c-format
 msgid "Vector map <%s> already exists and will be overwritten"
 msgstr "Vektorová mapa <%s> ji¾ existuje a bude pøepsána."
 
-#: ../lib/vector/Vlib/map.c:261 ../lib/vector/Vlib/open.c:756
+#: ../lib/vector/Vlib/map.c:259 ../lib/vector/Vlib/open.c:756
 #, c-format
 msgid "Unable to delete vector map <%s>"
 msgstr "Nelze smazat vektorovou mapu <%s>"
 
-#: ../lib/vector/Vlib/map.c:281 ../lib/vector/Vlib/map.c:407
+#: ../lib/vector/Vlib/map.c:279 ../lib/vector/Vlib/map.c:405
 #, c-format
 msgid "Unable to copy vector map <%s> to <%s>"
 msgstr "Nelze kopírovat vektorovou mapu <%s> do <%s>"
 
-#: ../lib/vector/Vlib/map.c:330 ../lib/vector/Vlib/map.c:456
-#: ../lib/vector/Vlib/map.c:694 ../lib/vector/Vlib/map.c:801
+#: ../lib/vector/Vlib/map.c:328 ../lib/vector/Vlib/map.c:454
+#: ../lib/vector/Vlib/map.c:692 ../lib/vector/Vlib/map.c:799
 #, c-format
 msgid "Unable to copy table <%s>"
 msgstr "Nelze kopírovat tabulku <%s>"
 
-#: ../lib/vector/Vlib/map.c:346 ../lib/vector/Vlib/map.c:485
-#: ../lib/vector/Vlib/map.c:707
+#: ../lib/vector/Vlib/map.c:344 ../lib/vector/Vlib/map.c:483
+#: ../lib/vector/Vlib/map.c:705
 #, c-format
 msgid "Unable to create index for table <%s>, key <%s>"
 msgstr "Nelze vytvoøit index pro tabulku <%s>, klíè <%s>"
 
-#: ../lib/vector/Vlib/map.c:470 ../lib/vector/Vlib/map.c:571
+#: ../lib/vector/Vlib/map.c:468 ../lib/vector/Vlib/map.c:569
 #, c-format
 msgid "Unable to delete table <%s>"
 msgstr "Nelze smazat tabulku <%s>"
 
-#: ../lib/vector/Vlib/map.c:525
+#: ../lib/vector/Vlib/map.c:523
 #, c-format
 msgid "Invalid vector map name <%s>"
 msgstr "Nesprávné jméno vektorové mapy <%s>"
 
-#: ../lib/vector/Vlib/map.c:539
+#: ../lib/vector/Vlib/map.c:537
 #, c-format
 msgid "Unable to open header file for vector map <%s>"
 msgstr "Nelze otevøít hlavièkový soubor pro vektorovou mapu <%s>"
 
-#: ../lib/vector/Vlib/map.c:561
+#: ../lib/vector/Vlib/map.c:559
 #, c-format
 msgid "Unable to find table <%s> linked to vector map <%s>"
 msgstr "Nelze nelézt tabulku <%s> pøipojenou k vektorové mapì <%s>"
 
-#: ../lib/vector/Vlib/map.c:578
+#: ../lib/vector/Vlib/map.c:576
 #, c-format
 msgid "Table <%s> linked to vector map <%s> does not exist"
 msgstr "Tabulka <%s> pøipojená k vektorové mapì <%s> neexistuje"
 
-#: ../lib/vector/Vlib/map.c:591
+#: ../lib/vector/Vlib/map.c:589
 #, c-format
 msgid "Unable to open directory '%s'"
 msgstr "Nelze otevøít adresáø <%s>"
 
-#: ../lib/vector/Vlib/map.c:605
+#: ../lib/vector/Vlib/map.c:603
 #, c-format
 msgid "Unable to delete file '%s'"
 msgstr "Nelze smazat soubor <%s>"
 
-#: ../lib/vector/Vlib/map.c:622
+#: ../lib/vector/Vlib/map.c:620
 #, c-format
 msgid "Unable to rename directory '%s' to '%s'"
 msgstr "Nelze pøejmenovat adresáø '%s' na '%s'"
 
-#: ../lib/vector/Vlib/map.c:630
+#: ../lib/vector/Vlib/map.c:628
 #, c-format
 msgid "Unable to remove directory '%s'"
 msgstr "Nelze smazat adresáø '%s'"
 
-#: ../lib/vector/Vlib/map.c:685 ../lib/vector/Vlib/map.c:786
+#: ../lib/vector/Vlib/map.c:683 ../lib/vector/Vlib/map.c:784
 #, c-format
 msgid "Unable to add database link for vector map <%s>"
 msgstr "Nelze pøipojit databázi k vektorové mapì <%s>"
 
-#: ../lib/vector/Vlib/open_nat.c:57
+#: ../lib/vector/Vlib/open_nat.c:55
 #, fuzzy, c-format
 msgid "Unable to open coor file for vector map <%s>"
 msgstr "Nelze otevøít soubor s historií pro vektorovou mapu <%s>"
 
-#: ../lib/vector/Vlib/open_nat.c:154
+#: ../lib/vector/Vlib/open_nat.c:152
 #, fuzzy, c-format
-msgid ""
-"Coor file of vector map <%s@%s> is larger than it should be (%ld bytes "
-"excess)"
-msgstr ""
-"Soubor se souøadnicemi (Coor) vektorové mapy <%s@%s> je vìt¹í ne¾ by mìl být "
-"(%ld bytù pøebývá)"
+msgid "Coor file of vector map <%s@%s> is larger than it should be (%ld bytes excess)"
+msgstr "Soubor se souøadnicemi (Coor) vektorové mapy <%s@%s> je vìt¹í ne¾ by mìl být (%ld bytù pøebývá)"
 
-#: ../lib/vector/Vlib/open_nat.c:158
+#: ../lib/vector/Vlib/open_nat.c:156
 #, fuzzy, c-format
-msgid ""
-"Coor file of vector <%s@%s> is shorter than it should be (%ld bytes missing)."
-msgstr ""
-"Soubor se souøadnicemi (Coor) vektorové mapy <%s@%s> je men¹í ne¾ by mìl být "
-"(%ld bytù chybí)"
+msgid "Coor file of vector <%s@%s> is shorter than it should be (%ld bytes missing)."
+msgstr "Soubor se souøadnicemi (Coor) vektorové mapy <%s@%s> je men¹í ne¾ by mìl být (%ld bytù chybí)"
 
-#: ../lib/vector/Vlib/dangles.c:150
+#: ../lib/vector/Vlib/dangles.c:148
 msgid "Changed"
 msgstr ""
 
-#: ../lib/vector/Vlib/dangles.c:153
+#: ../lib/vector/Vlib/dangles.c:151
 msgid "Removed"
 msgstr ""
 
-#: ../lib/vector/Vlib/dangles.c:156
+#: ../lib/vector/Vlib/dangles.c:154
 msgid "Selected"
 msgstr ""
 
-#: ../lib/vector/Vlib/dangles.c:264
+#: ../lib/vector/Vlib/dangles.c:262
 #, fuzzy, c-format
 msgid "%s lines: %d"
 msgstr "Poèet linií: %d"
 
-#: ../lib/vector/Vlib/dangles.c:265
+#: ../lib/vector/Vlib/dangles.c:263
 #, c-format
 msgid "%s dangles: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/net.c:118
+#: ../lib/vector/Vlib/net.c:116
 msgid "Building graph..."
 msgstr "Vytváøení grafu ..."
 
-#: ../lib/vector/Vlib/net.c:160
+#: ../lib/vector/Vlib/net.c:158
 msgid "Unable to build network graph"
 msgstr "Nelze sestavit sí»ový grafu"
 
-#: ../lib/vector/Vlib/net.c:166
+#: ../lib/vector/Vlib/net.c:164
 msgid "Forward costs column not specified"
 msgstr "Sloupec pro váhu smìr dopøedu není specifikován"
 
-#: ../lib/vector/Vlib/net.c:173
+#: ../lib/vector/Vlib/net.c:171
 msgid "Arc field < 1"
 msgstr "Arc vrstva < 1"
 
-#: ../lib/vector/Vlib/net.c:187 ../lib/vector/Vlib/net.c:204
-#: ../lib/vector/Vlib/net.c:357 ../lib/vector/Vlib/ascii.c:501
+#: ../lib/vector/Vlib/net.c:185 ../lib/vector/Vlib/net.c:202
+#: ../lib/vector/Vlib/net.c:355 ../lib/vector/Vlib/ascii.c:528
 #, c-format
 msgid "Column <%s> not found in table <%s>"
 msgstr "Sloupec <%s> nebyl nalezen v tabulce <%s>"
 
-#: ../lib/vector/Vlib/net.c:193 ../lib/vector/Vlib/net.c:210
-#: ../lib/vector/Vlib/net.c:363
+#: ../lib/vector/Vlib/net.c:191 ../lib/vector/Vlib/net.c:208
+#: ../lib/vector/Vlib/net.c:361
 #, c-format
 msgid "Data type of column <%s> not supported (must be numeric)"
 msgstr "Datový typ sloupce <%s> není podporován (musí být integer nebo double)"
 
-#: ../lib/vector/Vlib/net.c:223
+#: ../lib/vector/Vlib/net.c:221
 msgid "Registering arcs..."
 msgstr "Registrování arcs ..."
 
-#: ../lib/vector/Vlib/net.c:251
+#: ../lib/vector/Vlib/net.c:249
 #, c-format
-msgid ""
-"Database record for line %d (cat = %d, forward/both direction(s)) not found "
-"(forward/both direction(s) of line skipped)"
-msgstr ""
-"Datová polo¾ka pro linii %d (cat = %d, dopøedu/oba smìry nebyla nalezena"
-"(dopøedu/oba smìry linie pøeskoèeny)"
+msgid "Database record for line %d (cat = %d, forward/both direction(s)) not found (forward/both direction(s) of line skipped)"
+msgstr "Datová polo¾ka pro linii %d (cat = %d, dopøedu/oba smìry nebyla nalezena(dopøedu/oba smìry linie pøeskoèeny)"
 
-#: ../lib/vector/Vlib/net.c:270
+#: ../lib/vector/Vlib/net.c:268
 #, c-format
-msgid ""
-"Database record for line %d (cat = %d, backword direction) not found"
-"(direction of line skipped)"
-msgstr ""
-"Datová polo¾ka pro linii %d (cat = %d, smìr dozadu) nebyla nalezena(smìr "
-"linie pøeskoèen)"
+msgid "Database record for line %d (cat = %d, backword direction) not found(direction of line skipped)"
+msgstr "Datová polo¾ka pro linii %d (cat = %d, smìr dozadu) nebyla nalezena(smìr linie pøeskoèen)"
 
-#: ../lib/vector/Vlib/net.c:319
+#: ../lib/vector/Vlib/net.c:317
 msgid "Cannot add network arc"
 msgstr "Nelze pøidat arc sítì"
 
-#: ../lib/vector/Vlib/net.c:343
+#: ../lib/vector/Vlib/net.c:341
 msgid "Setting node costs..."
 msgstr "Nastavení váhy uzlù ..."
 
-#: ../lib/vector/Vlib/net.c:399
+#: ../lib/vector/Vlib/net.c:397
 #, c-format
 msgid "Database record for node %d (cat = %d) not found (cost set to 0)"
-msgstr ""
-"Datový záznam pro uzel %d (cat = %d) nebyl nalezen (váha nastavena na 0)"
+msgstr "Datový záznam pro uzel %d (cat = %d) nebyl nalezen (váha nastavena na 0)"
 
-#: ../lib/vector/Vlib/net.c:426
+#: ../lib/vector/Vlib/net.c:424
 msgid "Flattening the graph..."
 msgstr "Zpracování grafu ..."
 
-#: ../lib/vector/Vlib/net.c:435
+#: ../lib/vector/Vlib/net.c:433
 msgid "Graph was built"
 msgstr "Struktura grafu sestavena"
 
@@ -3489,139 +3430,123 @@ msgstr "Struktura grafu sestavena"
 msgid "Wrong line direction in Vect_net_get_line_cost()"
 msgstr "Chybný smìr linie ve Vect_net_get_line_cost()"
 
-#: ../lib/vector/Vlib/overlay.c:71
+#: ../lib/vector/Vlib/overlay.c:70
 msgid "unknown operator"
 msgstr "neznámý operátor"
 
-#: ../lib/vector/Vlib/overlay.c:121
+#: ../lib/vector/Vlib/overlay.c:120
 msgid "Overlay: line/boundary types not supported by AND operator"
 msgstr "Pøekrytí: typy hranice x linie nejsou podporovány operátorem AND"
 
-#: ../lib/vector/Vlib/overlay.c:124
+#: ../lib/vector/Vlib/overlay.c:123
 msgid "Overlay: area x area types not supported by AND operator"
 msgstr "Pøekrytí: typy plocha x plocha nejsou podporovány operátorem AND"
 
-#: ../lib/vector/Vlib/poly.c:227
+#: ../lib/vector/Vlib/poly.c:225
 msgid "Unable to find point in polygon"
 msgstr "Nelze nalézt bod v polygonu"
 
-#: ../lib/vector/Vlib/poly.c:647
+#: ../lib/vector/Vlib/poly.c:644
 msgid "conditions failed"
 msgstr "Podmínka selhala"
 
-#: ../lib/vector/Vlib/break_lines.c:373
+#: ../lib/vector/Vlib/break_lines.c:371
 #, fuzzy, c-format
 msgid "Intersections: %d"
 msgstr "Prùseèíky:%5d"
 
-#: ../lib/vector/Vlib/remove_areas.c:91
+#: ../lib/vector/Vlib/remove_areas.c:89
 msgid "Area is composed of dead boundary"
 msgstr "Plocha je poskládána z mrtvých hranic"
 
-#: ../lib/vector/Vlib/remove_areas.c:178
+#: ../lib/vector/Vlib/remove_areas.c:176
 #, c-format
 msgid "%d areas of total size %g removed"
 msgstr ""
 
-#: ../lib/vector/Vlib/write.c:26 ../lib/vector/Vlib/write.c:32
-#: ../lib/vector/Vlib/write.c:38 ../lib/vector/Vlib/write.c:45
+#: ../lib/vector/Vlib/write.c:24 ../lib/vector/Vlib/write.c:30
+#: ../lib/vector/Vlib/write.c:36 ../lib/vector/Vlib/write.c:43
 msgid "for this format/level not supported"
 msgstr "pro tento formát/úroveò není podpora"
 
-#: ../lib/vector/Vlib/write.c:153
+#: ../lib/vector/Vlib/write.c:150
 msgid "Unable to write feature, vector map is not opened"
 msgstr "Nelze zapsat prvek, vektorová mapa není otevøena"
 
-#: ../lib/vector/Vlib/write.c:166
+#: ../lib/vector/Vlib/write.c:163
 msgid "Unable to write feature (negative offset)"
 msgstr "Nelze zapsat prvek (záporný offset)"
 
-#: ../lib/vector/Vlib/write.c:200
+#: ../lib/vector/Vlib/write.c:196
 msgid "Unable to rewrite feature, vector map is not opened"
 msgstr "Nelze pøepsat prvek, vektorová mapa není otevøena"
 
-#: ../lib/vector/Vlib/write.c:214
+#: ../lib/vector/Vlib/write.c:211
 #, c-format
 msgid "Unable to rewrite feature %d"
 msgstr "Nelze pøepsat prvek %d"
 
-#: ../lib/vector/Vlib/write.c:239
+#: ../lib/vector/Vlib/write.c:236
 #, c-format
-msgid ""
-"Unable to delete feature %d, vector map <%s> is not opened on topology level"
-msgstr ""
-"Nelze odstranit prvek %d, vektorová mapa <%s> není otevøena na úrovni "
-"topologie"
+msgid "Unable to delete feature %d, vector map <%s> is not opened on topology level"
+msgstr "Nelze odstranit prvek %d, vektorová mapa <%s> není otevøena na úrovni topologie"
 
-#: ../lib/vector/Vlib/write.c:245
+#: ../lib/vector/Vlib/write.c:242
 #, c-format
-msgid ""
-"Unable to delete feature %d, vector map <%s> is not opened in 'write' mode"
-msgstr ""
-"Nelze odstranit prvek %d, vektorová mapa <%s> není otevøena v módu pro "
-"'zápis'"
+msgid "Unable to delete feature %d, vector map <%s> is not opened in 'write' mode"
+msgstr "Nelze odstranit prvek %d, vektorová mapa <%s> není otevøena v módu pro 'zápis'"
 
-#: ../lib/vector/Vlib/write.c:259
+#: ../lib/vector/Vlib/write.c:256
 #, fuzzy, c-format
 msgid "Unable to delete feature id %d from vector map <%s>"
 msgstr "Nelze obnovit prvek %d z vektorové vrstvy <%s>"
 
-#: ../lib/vector/Vlib/write.c:285
+#: ../lib/vector/Vlib/write.c:282
 #, c-format
-msgid ""
-"Unable to restore feature %d, vector map <%s> is not opened on topology level"
-msgstr ""
-"Nelze obnovit prvek %d, vektorová mapa <%s> není otevøena na úrovni topologie"
+msgid "Unable to restore feature %d, vector map <%s> is not opened on topology level"
+msgstr "Nelze obnovit prvek %d, vektorová mapa <%s> není otevøena na úrovni topologie"
 
-#: ../lib/vector/Vlib/write.c:291
+#: ../lib/vector/Vlib/write.c:288
 #, c-format
-msgid ""
-"Unable to restore feature %d, vector map <%s> is not opened in 'write' mode"
-msgstr ""
-"Nelze oobnovit prvek %d, vektorová mapa <%s> není otevøena v módu pro 'zápis'"
+msgid "Unable to restore feature %d, vector map <%s> is not opened in 'write' mode"
+msgstr "Nelze oobnovit prvek %d, vektorová mapa <%s> není otevøena v módu pro 'zápis'"
 
-#: ../lib/vector/Vlib/write.c:305
+#: ../lib/vector/Vlib/write.c:302
 #, c-format
 msgid "Unable to restore feature %d from vector map <%s>"
 msgstr "Nelze obnovit prvek %d z vektorové vrstvy <%s>"
 
-#: ../lib/vector/Vlib/close.c:139
+#: ../lib/vector/Vlib/close.c:138
 #, c-format
 msgid "Unable to close vector <%s>"
 msgstr "Nelze zavøít vektorovou vrstvu <%s>"
 
-#: ../lib/vector/Vlib/select.c:107
+#: ../lib/vector/Vlib/select.c:104
 #, c-format
 msgid "Unable to delete item %d from spatial index"
 msgstr "Nelze smazat prvek %d z prostorového indexu"
 
-#: ../lib/vector/Vlib/open.c:127
+#: ../lib/vector/Vlib/open.c:125
 #, fuzzy, c-format
 msgid "Programmer requested unknown access level %d"
 msgstr "Programátor po¾adoval neznámé otevøení na úrovni %d"
 
-#: ../lib/vector/Vlib/open.c:230
-msgid ""
-"Vector map which is not in the current mapset cannot be opened for update"
-msgstr ""
-"Mapa, která není obsa¾ena v aktuálním mapsetu, nemù¾e být otevøena pro zápis"
+#: ../lib/vector/Vlib/open.c:229
+msgid "Vector map which is not in the current mapset cannot be opened for update"
+msgstr "Mapa, která není obsa¾ena v aktuálním mapsetu, nemù¾e být otevøena pro zápis"
 
-#: ../lib/vector/Vlib/open.c:257 ../lib/ogsf/Gv3.c:64 ../lib/ogsf/Gp3.c:64
+#: ../lib/vector/Vlib/open.c:256 ../lib/ogsf/Gv3.c:64 ../lib/ogsf/Gp3.c:64
 #, c-format
 msgid "Unable to open vector map <%s>"
 msgstr "Nelze otevøít vektorovou mapu <%s>"
 
-#: ../lib/vector/Vlib/open.c:273 ../lib/vector/Vlib/open.c:360
+#: ../lib/vector/Vlib/open.c:272 ../lib/vector/Vlib/open.c:360
 #: ../lib/vector/Vlib/open.c:381
 #, c-format
-msgid ""
-"Unable to open vector map <%s> on level %d. Try to rebuild vector topology "
-"by v.build."
-msgstr ""
-"Nelze otevøít existující vektorovou mapu <%s> na úrovni %d. Zkuste "
-"pøebudovat topologii pomocí v.build."
+msgid "Unable to open vector map <%s> on level %d. Try to rebuild vector topology by v.build."
+msgstr "Nelze otevøít existující vektorovou mapu <%s> na úrovni %d. Zkuste pøebudovat topologii pomocí v.build."
 
-#: ../lib/vector/Vlib/open.c:276
+#: ../lib/vector/Vlib/open.c:275
 #, fuzzy, c-format
 msgid "Unable to read header file of vector map <%s>"
 msgstr "Nelze otevøít hlavièkový soubor pro vektorovou mapu <%s>"
@@ -3636,7 +3561,7 @@ msgstr "Nelze otevøít soubor s topologií pro vektorovou mapu <%s>"
 msgid "Unable to open spatial index file for vector map <%s>"
 msgstr "Nelze otevøít soubor s historií pro vektorovou mapu <%s>"
 
-#: ../lib/vector/Vlib/open.c:341 ../lib/vector/Vlib/cindex.c:510
+#: ../lib/vector/Vlib/open.c:341 ../lib/vector/Vlib/cindex.c:508
 #, c-format
 msgid "Unable to open category index file for vector map <%s>"
 msgstr "Nelze otevøít soubor s historií pro vektorovou mapu <%s>"
@@ -3676,42 +3601,40 @@ msgstr "Nelze vytvoøit vektorovou mapu <%s>"
 msgid "Unable to open history file of vector map <%s>"
 msgstr "Nelze otevøít soubor s historií pro vektorovou mapu <%s>"
 
-#: ../lib/vector/Vlib/open.c:836
+#: ../lib/vector/Vlib/open.c:837
 #, c-format
 msgid "Unable to stat file <%s>"
 msgstr "Nelze otevøít soubor <%s>"
 
-#: ../lib/vector/Vlib/open.c:895
+#: ../lib/vector/Vlib/open.c:896
 #, c-format
 msgid "unknown %d (update Vect_maptype_info)"
 msgstr ""
 
-#: ../lib/vector/Vlib/open.c:971
+#: ../lib/vector/Vlib/open.c:972
 msgid "Size of 'coor' file differs from value saved in topology file"
-msgstr ""
-"Velikost souboru 'coor' se li¹í od hodnot ulo¾ených v souboru s topologií"
+msgstr "Velikost souboru 'coor' se li¹í od hodnot ulo¾ených v souboru s topologií"
 
-#: ../lib/vector/Vlib/open.c:982 ../lib/vector/Vlib/open.c:1076
+#: ../lib/vector/Vlib/open.c:983 ../lib/vector/Vlib/open.c:1077
 #, c-format
 msgid "Please rebuild topology for vector map <%s@%s>"
 msgstr "Vytvoøte prosím znovu topologii pro vektorovou mapu <%s@%s>"
 
-#: ../lib/vector/Vlib/open.c:1065
+#: ../lib/vector/Vlib/open.c:1066
 #, fuzzy
 msgid "Size of 'coor' file differs from value saved in sidx file"
-msgstr ""
-"Velikost souboru 'coor' se li¹í od hodnot ulo¾ených v souboru s topologií"
+msgstr "Velikost souboru 'coor' se li¹í od hodnot ulo¾ených v souboru s topologií"
 
-#: ../lib/vector/Vlib/open_ogr.c:57
+#: ../lib/vector/Vlib/open_ogr.c:55
 #, fuzzy
 msgid "OGR datasource not defined"
 msgstr "Prvek OGR bez ID je ignorován"
 
-#: ../lib/vector/Vlib/open_ogr.c:62 ../lib/vector/Vlib/write_ogr.c:264
+#: ../lib/vector/Vlib/open_ogr.c:60 ../lib/vector/Vlib/write_ogr.c:263
 msgid "OGR layer not defined"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_ogr.c:94
+#: ../lib/vector/Vlib/open_ogr.c:92
 #, fuzzy, c-format
 msgid "OGR layer <%s> not found"
 msgstr "Rastrová mapa <%s> nebyla nalezena"
@@ -3723,21 +3646,13 @@ msgstr "Nelze otevøít soubor fidx pro vektorovou mapu <%s@%s>"
 
 #: ../lib/vector/Vlib/open_ogr.c:164
 #, c-format
-msgid ""
-"Feature index format version %d.%d is not supported by this release. Try to "
-"rebuild topology or upgrade GRASS."
-msgstr ""
-"Formát indexování prvkù verze %d.%d není tímto vydáním podporována. Zkuste "
-"pøestavit topologii nebo aktualizovat GRASS."
+msgid "Feature index format version %d.%d is not supported by this release. Try to rebuild topology or upgrade GRASS."
+msgstr "Formát indexování prvkù verze %d.%d není tímto vydáním podporována. Zkuste pøestavit topologii nebo aktualizovat GRASS."
 
 #: ../lib/vector/Vlib/open_ogr.c:169
 #, c-format
-msgid ""
-"Your GRASS version does not fully support feature index format %d.%d of the "
-"vector. Consider to rebuild topology or upgrade GRASS."
-msgstr ""
-"Va¹e verze GRASS plnì nepodporuje formát indexování prvkù %d. %d vektorové "
-"mapy. Zva¾te pøebudování topologie nebo upgrade GRASS."
+msgid "Your GRASS version does not fully support feature index format %d.%d of the vector. Consider to rebuild topology or upgrade GRASS."
+msgstr "Va¹e verze GRASS plnì nepodporuje formát indexování prvkù %d. %d vektorové mapy. Zva¾te pøebudování topologie nebo upgrade GRASS."
 
 #: ../lib/vector/Vlib/open_ogr.c:236
 #, fuzzy, c-format
@@ -3774,238 +3689,234 @@ msgstr "Typy vektorových prvkù"
 msgid "Unable to create OGR layer <%s> in '%s'"
 msgstr "Nelze otevøít vrstvu <%s>"
 
-#: ../lib/vector/Vlib/level_two.c:250 ../lib/vector/Vlib/level_two.c:275
-#: ../lib/vector/Vlib/level_two.c:299 ../lib/vector/Vlib/level_two.c:318
-#: ../lib/vector/Vlib/level_two.c:336 ../lib/vector/Vlib/level_two.c:355
+#: ../lib/vector/Vlib/level_two.c:248 ../lib/vector/Vlib/level_two.c:273
+#: ../lib/vector/Vlib/level_two.c:297 ../lib/vector/Vlib/level_two.c:316
+#: ../lib/vector/Vlib/level_two.c:334 ../lib/vector/Vlib/level_two.c:353
 #, c-format
 msgid "Vector map <%s> is not open on level >= 2"
 msgstr "Vektorová mapa <%s> není otevøena na úrovni >= 2"
 
-#: ../lib/vector/Vlib/ascii.c:80
+#: ../lib/vector/Vlib/ascii.c:81
 #, fuzzy, c-format
 msgid "Error reading ASCII file: (bad type) [%s]"
 msgstr "nelze èíst soubor s rozsahem hodnot z [%s v %s]"
 
-#: ../lib/vector/Vlib/ascii.c:118
+#: ../lib/vector/Vlib/ascii.c:119
 #, fuzzy, c-format
 msgid "Error reading ASCII file: (unknown type) [%s]"
 msgstr "nelze èíst soubor s rozsahem hodnot z [%s v %s]"
 
-#: ../lib/vector/Vlib/ascii.c:131
+#: ../lib/vector/Vlib/ascii.c:132
 msgid "End of ASCII file reached before end of coordinates"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:142
+#: ../lib/vector/Vlib/ascii.c:143
 #, fuzzy, c-format
 msgid "Error reading ASCII file: (bad point) [%s]"
 msgstr "nelze èíst soubor s rozsahem hodnot z [%s v %s]"
 
-#: ../lib/vector/Vlib/ascii.c:146
+#: ../lib/vector/Vlib/ascii.c:147
 #, fuzzy, c-format
 msgid "Unparsable longitude value: [%s]"
 msgstr "Nelze inicializovat pj: %s"
 
-#: ../lib/vector/Vlib/ascii.c:149
+#: ../lib/vector/Vlib/ascii.c:150
 #, c-format
 msgid "Unparsable latitude value: [%s]"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:182
+#: ../lib/vector/Vlib/ascii.c:183
 msgid "End of ASCII file reached before end of categories"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:192
+#: ../lib/vector/Vlib/ascii.c:193
 #, fuzzy, c-format
 msgid "Error reading categories: [%s]"
 msgstr "nelze èíst soubor s rozsahem hodnot z [%s v %s]"
 
-#: ../lib/vector/Vlib/ascii.c:235
+#: ../lib/vector/Vlib/ascii.c:236
 #, c-format
 msgid ""
 "Unexpected data in vector head:\n"
 "[%s]"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:269
+#: ../lib/vector/Vlib/ascii.c:270
 #, fuzzy, c-format
 msgid "Unknown keyword <%s> in vector head"
 msgstr "Neznámé klíèové slovo %s v hlavièce vektorové mapy"
 
-#: ../lib/vector/Vlib/ascii.c:320 ../lib/db/dbmi_client/copy_tab.c:100
+#: ../lib/vector/Vlib/ascii.c:322 ../lib/db/dbmi_client/copy_tab.c:100
 #: ../lib/db/dbmi_client/copy_tab.c:120 ../lib/db/dbmi_client/db.c:41
 #, c-format
 msgid "Unable to start driver <%s>"
 msgstr "Nelze spustit ovladaè <%s>"
 
-#: ../lib/vector/Vlib/ascii.c:426
+#: ../lib/vector/Vlib/ascii.c:428
 #, fuzzy, c-format
-msgid "Uknown feature type %d"
+msgid "Unknown feature type %d"
 msgstr "Neznámý vektorový typ"
 
-#: ../lib/vector/Vlib/ascii.c:466
-#, c-format
-msgid "Feature has more categories. Only first category (%d) is exported."
-msgstr ""
-
-#: ../lib/vector/Vlib/ascii.c:476
+#: ../lib/vector/Vlib/ascii.c:463 ../lib/vector/Vlib/ascii.c:503
 #, fuzzy, c-format
 msgid "Unable to select record from table <%s> (key %s, column %s)"
 msgstr "Nelze vybrat záznam z tabulky <%s> (klíè %s, where %s)"
 
-#: ../lib/vector/Vlib/ascii.c:503
+#: ../lib/vector/Vlib/ascii.c:493
+#, c-format
+msgid "Feature has more categories. Only first category (%d) is exported."
+msgstr ""
+
+#: ../lib/vector/Vlib/ascii.c:530
 #, fuzzy, c-format
 msgid "Column <%s>: unsupported data type"
 msgstr "Nviz_new_map_obj(): Nepodporovaný datový typ"
 
-#: ../lib/vector/Vlib/ascii.c:583
+#: ../lib/vector/Vlib/ascii.c:610
 #, fuzzy
 msgid "Unknown format"
 msgstr "Neznámá Location"
 
-#: ../lib/vector/Vlib/ascii.c:592
+#: ../lib/vector/Vlib/ascii.c:619
 msgid "Topology not available, unable to process areas"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:605
+#: ../lib/vector/Vlib/ascii.c:632
 #, fuzzy, c-format
 msgid "Unable to get boundary of area id %d"
 msgstr "Nelze nastavit kategorii %d pro (prvek id %d)"
 
-#: ../lib/vector/Vlib/ascii.c:617
+#: ../lib/vector/Vlib/ascii.c:644
 #, fuzzy, c-format
 msgid "Unable to get boundary of isle id %d (area id %d)"
 msgstr "Nelze nastavit kategorii %d pro (prvek id %d)"
 
-#: ../lib/vector/Vlib/cindex.c:31
+#: ../lib/vector/Vlib/cindex.c:29
 msgid "Category index is not up to date"
 msgstr "Index kategorií není aktuální"
 
-#: ../lib/vector/Vlib/cindex.c:61 ../lib/vector/Vlib/cindex.c:125
-#: ../lib/vector/Vlib/cindex.c:143 ../lib/vector/Vlib/cindex.c:166
+#: ../lib/vector/Vlib/cindex.c:59 ../lib/vector/Vlib/cindex.c:123
+#: ../lib/vector/Vlib/cindex.c:141 ../lib/vector/Vlib/cindex.c:164
 msgid "Invalid layer index (index >= number of layers)"
 msgstr "©patný index vrstvy (index >= poèet vrstev)"
 
-#: ../lib/vector/Vlib/cindex.c:107
+#: ../lib/vector/Vlib/cindex.c:105
 msgid "Invalid layer index (index < 0 or index >= number of layers)"
 msgstr "©patný index vrstvy (index < 0 nebo index >= poèet vrstev)"
 
-#: ../lib/vector/Vlib/cindex.c:232
+#: ../lib/vector/Vlib/cindex.c:230
 msgid "Layer or category index out of range"
 msgstr "Index vrstev nebo kategorií mimo rozsah"
 
-#: ../lib/vector/Vlib/cindex.c:283
+#: ../lib/vector/Vlib/cindex.c:281
 msgid "Layer index out of range"
 msgstr "Index vrstev je mimo rozsah"
 
-#: ../lib/vector/Vlib/cindex.c:460
+#: ../lib/vector/Vlib/cindex.c:458
 #, c-format
 msgid "Unable to open cidx file <%s> for write"
 msgstr "Nelze otevøít soubor s indexem kategorií <%s> pro zápis"
 
-#: ../lib/vector/Vlib/cindex.c:468
+#: ../lib/vector/Vlib/cindex.c:466
 #, c-format
 msgid "Error writing out category index file <%s>"
 msgstr "Chyba pøi zápisu souboru s indexem kategorií <%s>"
 
-#: ../lib/vector/Vlib/build_ogr.c:287
+#: ../lib/vector/Vlib/build_ogr.c:285
 #, c-format
 msgid "Unable to calculate centroid for area %d"
 msgstr "Nemohu urèit centroid pro plochu %d"
 
-#: ../lib/vector/Vlib/build_ogr.c:353
+#: ../lib/vector/Vlib/build_ogr.c:351
 msgid "Partial build for OGR is not supported"
 msgstr "Èásteèné vytvoøení pro OGR není podporováno"
 
-#: ../lib/vector/Vlib/build_ogr.c:369
+#: ../lib/vector/Vlib/build_ogr.c:370
 #, fuzzy
-msgid ""
-"Random read is not supported by OGR for this layer, unable to build topology"
-msgstr ""
-"Náhodné ètení není podporováno OGR pro tuto vrstvu, nelze vytvoøit podporu"
+msgid "Random read is not supported by OGR for this layer, unable to build topology"
+msgstr "Náhodné ètení není podporováno OGR pro tuto vrstvu, nelze vytvoøit podporu"
 
-#: ../lib/vector/Vlib/build_ogr.c:374
+#: ../lib/vector/Vlib/build_ogr.c:375
 #, c-format
 msgid "Using external data format '%s' (feature type '%s')"
 msgstr ""
 
-#: ../lib/vector/Vlib/build_ogr.c:405
+#: ../lib/vector/Vlib/build_ogr.c:406
 #, c-format
 msgid "Feature %d without geometry ignored"
 msgstr "Prvek %d bez geometrie je ignorován"
 
-#: ../lib/vector/Vlib/build_ogr.c:412
+#: ../lib/vector/Vlib/build_ogr.c:413
 #, fuzzy, c-format
 msgid "OGR feature %d without ID ignored"
 msgstr "Prvek OGR bez ID je ignorován"
 
-#: ../lib/vector/Vlib/write_ogr.c:85
+#: ../lib/vector/Vlib/write_ogr.c:84
 msgid "Feature is not a point. Skipping."
 msgstr ""
 
-#: ../lib/vector/Vlib/write_ogr.c:93
+#: ../lib/vector/Vlib/write_ogr.c:92
 msgid "Feature is not a line Skipping."
 msgstr ""
 
-#: ../lib/vector/Vlib/write_ogr.c:100
+#: ../lib/vector/Vlib/write_ogr.c:99
 msgid "Feature is not a face. Skipping."
 msgstr ""
 
-#: ../lib/vector/Vlib/write_ogr.c:106
+#: ../lib/vector/Vlib/write_ogr.c:105
 #, fuzzy, c-format
 msgid "Unsupported feature type (%d)"
 msgstr "Typy vektorových prvkù"
 
-#: ../lib/vector/Vlib/write_ogr.c:128
+#: ../lib/vector/Vlib/write_ogr.c:127
 #, c-format
 msgid "Feature has more categories, using category %d (from layer %d)"
 msgstr ""
 
-#: ../lib/vector/Vlib/write_ogr.c:220
+#: ../lib/vector/Vlib/write_ogr.c:219
 #, fuzzy
 msgid "Unable to rewrite feature (incompatible feature types)"
 msgstr "Nelze zapsat prvek (záporný offset)"
 
-#: ../lib/vector/Vlib/write_ogr.c:383
+#: ../lib/vector/Vlib/write_ogr.c:382
 #, fuzzy, c-format
 msgid "Unable to select attributes for category %d"
 msgstr "Nemohu urèit centroid pro plochu %d"
 
-#: ../lib/vector/Vlib/write_ogr.c:388 ../lib/db/dbmi_client/copy_tab.c:295
+#: ../lib/vector/Vlib/write_ogr.c:387 ../lib/db/dbmi_client/copy_tab.c:295
 #, c-format
 msgid "Unable to fetch data from table <%s>"
 msgstr "Nelze vybrat data z tabulky <%s>"
 
-#: ../lib/vector/Vlib/write_ogr.c:393
+#: ../lib/vector/Vlib/write_ogr.c:392
 #, fuzzy, c-format
 msgid "No database record for category %d - export of 'cat' disabled"
 msgstr "Datový záznam pro cat %d nebyla nalezena"
 
-#: ../lib/vector/Vlib/write_ogr.c:420
+#: ../lib/vector/Vlib/write_ogr.c:419
 #, fuzzy, c-format
 msgid "Uknown column <%s>"
 msgstr "Neznámý typ sloupce (sloupec <%s>)"
 
-#: ../lib/vector/Vlib/dgraph.c:433
-msgid ""
-"Trying to add more edges to the planar_graph than the initial allocation "
-"size allows"
+#: ../lib/vector/Vlib/dgraph.c:430
+msgid "Trying to add more edges to the planar_graph than the initial allocation size allows"
 msgstr ""
 
-#: ../lib/vector/Vlib/line.c:180 ../lib/vector/Vlib/line.c:213
-#: ../lib/vector/Vlib/line.c:246
+#: ../lib/vector/Vlib/line.c:178 ../lib/vector/Vlib/line.c:211
+#: ../lib/vector/Vlib/line.c:244
 msgid "Index out of range in"
 msgstr "Index je mimo rozsah"
 
-#: ../lib/vector/Vlib/line.c:546
+#: ../lib/vector/Vlib/line.c:544
 msgid "Segment outside line, no segment created"
 msgstr "Segment je mimo linii, ¾ádný segment nebude vytvoøen"
 
-#: ../lib/vector/vedit/cats.c:67
+#: ../lib/vector/vedit/cats.c:63
 #, c-format
 msgid "Unable to set category %d for (feature id %d)"
 msgstr "Nelze nastavit kategorii %d pro (prvek id %d)"
 
-#: ../lib/vector/vedit/select.c:234
+#: ../lib/vector/vedit/select.c:231
 msgid "Unknown query tool"
 msgstr "Neznámý dotazovací nástroj"
 
@@ -4446,12 +4357,12 @@ msgstr ""
 msgid "The total sum of the water budget is significant larger then 0: %g\n"
 msgstr ""
 
-#: ../lib/init/grass.py:56
+#: ../lib/init/grass.py:60
 #, fuzzy
 msgid "WARNING"
 msgstr "UPOZORNÌNÍ: "
 
-#: ../lib/init/grass.py:149
+#: ../lib/init/grass.py:151
 #, fuzzy
 msgid "Usage"
 msgstr ""
@@ -4459,33 +4370,29 @@ msgstr ""
 "Pou¾ití:\n"
 " "
 
-#: ../lib/init/grass.py:151
+#: ../lib/init/grass.py:153
 msgid "print this help message"
 msgstr ""
 
-#: ../lib/init/grass.py:152
+#: ../lib/init/grass.py:154
 msgid "show version information and exit"
 msgstr ""
 
-#: ../lib/init/grass.py:153
-msgid "create given mapset if it doesn't exist"
+#: ../lib/init/grass.py:155
+msgid "create given database, location or mapset if it doesn't exist"
 msgstr ""
 
-#: ../lib/init/grass.py:154
+#: ../lib/init/grass.py:156
 msgid "use text based interface"
 msgstr ""
 
-#: ../lib/init/grass.py:155 ../lib/init/grass.py:157 ../lib/init/grass.py:159
+#: ../lib/init/grass.py:157 ../lib/init/grass.py:159
 #, fuzzy
 msgid "and set as default"
 msgstr "pou¾ít výchozí"
 
-#: ../lib/init/grass.py:156
-msgid "use graphical user interface ($DEFAULT_GUI by default)"
-msgstr ""
-
 #: ../lib/init/grass.py:158
-msgid "use wxPython based graphical user interface"
+msgid "use $DEFAULT_GUI graphical user interface"
 msgstr ""
 
 #: ../lib/init/grass.py:161
@@ -4512,7 +4419,7 @@ msgid "Environment variables relevant for startup"
 msgstr ""
 
 #: ../lib/init/grass.py:166
-msgid "select GUI (text, gui, wxpython)"
+msgid "select GUI (text, gui)"
 msgstr ""
 
 #: ../lib/init/grass.py:167
@@ -4540,16 +4447,16 @@ msgstr ""
 msgid "Unable to create temporary directory! Exiting."
 msgstr "Nelze alokovat pamì»"
 
-#: ../lib/init/grass.py:359
+#: ../lib/init/grass.py:357
 msgid "Searched for a web browser, but none found"
 msgstr ""
 
-#: ../lib/init/grass.py:378
+#: ../lib/init/grass.py:376
 #, fuzzy
 msgid "Hit RETURN to continue"
 msgstr "stisknìte RETURN pro pokraèování -->"
 
-#: ../lib/init/grass.py:407
+#: ../lib/init/grass.py:405
 msgid ""
 "The python command does not work as expected!\n"
 "Please check your GRASS_PYTHON environment variable.\n"
@@ -4559,7 +4466,7 @@ msgid ""
 "Hit RETURN to continue.\n"
 msgstr ""
 
-#: ../lib/init/grass.py:419
+#: ../lib/init/grass.py:417
 msgid ""
 "It appears that the X Windows system is not active.\n"
 "A graphical based user interface is not supported.\n"
@@ -4568,56 +4475,55 @@ msgid ""
 "Hit RETURN to continue"
 msgstr ""
 
-#: ../lib/init/grass.py:461 ../lib/init/grass.py:474
+#: ../lib/init/grass.py:459 ../lib/init/grass.py:490
 #, fuzzy, python-format
 msgid "<%s> is not a valid GRASS location"
 msgstr "Promiòte, ale <%s> není platná volba\n"
 
-#: ../lib/init/grass.py:466
+#: ../lib/init/grass.py:471
 #, python-format
-msgid "The location <%s> does not exist. Please create it first."
+msgid "Failed to create new location. The location <%s> already exists."
 msgstr ""
 
-#: ../lib/init/grass.py:472
+#: ../lib/init/grass.py:488
 msgid "Missing WIND file fixed"
 msgstr ""
 
-#: ../lib/init/grass.py:486
+#: ../lib/init/grass.py:502
 msgid ""
 "GISDBASE, LOCATION_NAME and MAPSET variables not set properly.\n"
 "Interactive startup needed."
 msgstr ""
 
-#: ../lib/init/grass.py:500
+#: ../lib/init/grass.py:516
 #, python-format
 msgid ""
 "Invalid user interface specified - <%s>.\n"
 "Use the --help option to see valid interface names."
 msgstr ""
 
-#: ../lib/init/grass.py:513
+#: ../lib/init/grass.py:529
 msgid ""
-"Error in GUI startup. If necessary, please report this error to the GRASS "
-"developers.\n"
+"Error in GUI startup. If necessary, please report this error to the GRASS developers.\n"
 "Switching to text mode now.\n"
 "\n"
 "Hit RETURN to continue..."
 msgstr ""
 
-#: ../lib/init/grass.py:523
+#: ../lib/init/grass.py:539
 msgid ""
 "Received EXIT message from GUI.\n"
 "GRASS is not started. Bye."
 msgstr ""
 
-#: ../lib/init/grass.py:526
+#: ../lib/init/grass.py:542
 #, fuzzy
 msgid ""
 "Invalid return code from GUI startup script.\n"
 "Please advise GRASS developers of this error."
 msgstr "Prosím, oznamte tuto chybu vývojáøùm GRASSu.\n"
 
-#: ../lib/init/grass.py:536
+#: ../lib/init/grass.py:552
 msgid ""
 "Error reading data path information from g.gisenv.\n"
 "GISDBASE=%(gisbase)s\n"
@@ -4627,114 +4533,125 @@ msgid ""
 "Check the <%s(file)> file."
 msgstr ""
 
-#: ../lib/init/grass.py:557
+#: ../lib/init/grass.py:573
 #, python-format
-msgid ""
-"%(user)s is currently running GRASS in selected mapset (file %(file)s "
-"found). Concurrent use not allowed."
+msgid "%(user)s is currently running GRASS in selected mapset (file %(file)s found). Concurrent use not allowed."
 msgstr ""
 
-#: ../lib/init/grass.py:561
+#: ../lib/init/grass.py:577
 #, python-format
 msgid ""
 "Unable to properly access \"%s\"\n"
 "Please notify system personel."
 msgstr ""
 
-#: ../lib/init/grass.py:572
+#: ../lib/init/grass.py:588
 #, fuzzy
 msgid "Building user fontcap..."
 msgstr "Vytváøení grafu ..."
 
-#: ../lib/init/grass.py:601
+#: ../lib/init/grass.py:617
 #, fuzzy
 msgid "The SHELL variable is not set"
 msgstr "GISRC - promìnná není nastavena"
 
-#: ../lib/init/grass.py:611
+#: ../lib/init/grass.py:627
 #, python-format
 msgid ""
-"Job file '%s' has been defined in the 'GRASS_BATCH_JOB' variable but not "
-"found. Exiting.\n"
+"Job file '%s' has been defined in the 'GRASS_BATCH_JOB' variable but not found. Exiting.\n"
 "\n"
 "Use 'unset GRASS_BATCH_JOB' to disable batch job processing."
 msgstr ""
 
-#: ../lib/init/grass.py:616
+#: ../lib/init/grass.py:632
 #, python-format
 msgid "Change file permission to 'executable' for '%s'"
 msgstr ""
 
-#: ../lib/init/grass.py:618
+#: ../lib/init/grass.py:634
 #, python-format
 msgid "Executing '%s' ..."
 msgstr ""
 
-#: ../lib/init/grass.py:623
+#: ../lib/init/grass.py:639
 #, python-format
 msgid "Execution of '%s' finished."
 msgstr ""
 
-#: ../lib/init/grass.py:628
+#: ../lib/init/grass.py:644
 #, python-format
 msgid "GRASS GUI should be '%s'"
 msgstr ""
 
-#: ../lib/init/grass.py:672
+#: ../lib/init/grass.py:688
 msgid "GRASS homepage:"
 msgstr ""
 
-#: ../lib/init/grass.py:673
+#: ../lib/init/grass.py:689
 msgid "This version running through:"
 msgstr ""
 
-#: ../lib/init/grass.py:675
+#: ../lib/init/grass.py:691
 #, fuzzy
 msgid "Help is available with the command:"
 msgstr "Nápovìda pro pøíkaz [%s] není dostupná\n"
 
-#: ../lib/init/grass.py:676
+#: ../lib/init/grass.py:692
 msgid "See the licence terms with:"
 msgstr ""
 
-#: ../lib/init/grass.py:679
+#: ../lib/init/grass.py:695
 msgid "If required, restart the GUI with:"
 msgstr ""
 
-#: ../lib/init/grass.py:681
+#: ../lib/init/grass.py:697
 msgid "Start the GUI with:"
 msgstr ""
 
-#: ../lib/init/grass.py:683
+#: ../lib/init/grass.py:699
 msgid "When ready to quit enter:"
 msgstr ""
 
-#: ../lib/init/grass.py:786
+#: ../lib/init/grass.py:802
 #, fuzzy, python-format
 msgid "Failed to start shell '%s'"
 msgstr "Nelze spustit ovladaè <%s>"
 
-#: ../lib/init/grass.py:790
+#: ../lib/init/grass.py:806
 #, python-format
 msgid "Batch job '%s' (defined in GRASS_BATCH_JOB variable) was executed."
 msgstr ""
 
-#: ../lib/init/grass.py:791 ../lib/init/grass.py:796
+#: ../lib/init/grass.py:807 ../lib/init/grass.py:812
 msgid "Goodbye from GRASS GIS"
 msgstr ""
 
-#: ../lib/init/grass.py:794
+#: ../lib/init/grass.py:810
 #, fuzzy
 msgid "Done."
 msgstr "nic"
 
-#: ../lib/init/grass.py:800
+#: ../lib/init/grass.py:816
 #, fuzzy
 msgid "Cleaning up temporary files..."
 msgstr "Nelze otevøít doèasný soubor"
 
-#: ../lib/init/grass.py:943
+#: ../lib/init/grass.py:956
+#, python-format
+msgid ""
+"Unable to start GRASS. You can:\n"
+" - Launch GRASS with '-gui' switch (`grass70 -gui`)\n"
+" - Create manually GISRC file (%s)\n"
+" - Launch GRASS with path to the location/mapset as an argument (`grass70 /path/to/location/mapset`)"
+msgstr ""
+
+#: ../lib/init/grass.py:965
 msgid "Starting GRASS GIS..."
+msgstr ""
+
+#: ../lib/init/grass.py:1020
+#, python-format
+msgid "Launching '%s' GUI in the background, please wait..."
 msgstr ""
 
 #: ../lib/rst/interp_float/output2d.c:106
@@ -4749,18 +4666,12 @@ msgstr ""
 
 #: ../lib/rst/interp_float/segmen2d.c:111
 #, fuzzy
-msgid ""
-"Taking too long to find points for interpolation - please change the region "
-"to area where your points are. Continuing calculations..."
-msgstr ""
-"hledání bodù pro interpolaci trvá pøíli¹ dlouho -- prosím, zmìòte region na "
-"území, které je tìmito body pokryto. Pokraèuji ve výpoètu..."
+msgid "Taking too long to find points for interpolation - please change the region to area where your points are. Continuing calculations..."
+msgstr "hledání bodù pro interpolaci trvá pøíli¹ dlouho -- prosím, zmìòte region na území, které je tìmito body pokryto. Pokraèuji ve výpoètu..."
 
 #: ../lib/rst/interp_float/interp2d.c:214
 #, c-format
-msgid ""
-"Overshoot - increase in tension suggested. Overshoot occures at (%d,%d) "
-"cell. Z-value %f, zmin %f, zmax %f."
+msgid "Overshoot - increase in tension suggested. Overshoot occures at (%d,%d) cell. Z-value %f, zmin %f, zmax %f."
 msgstr ""
 
 #: ../lib/rst/interp_float/resout2d.c:77
@@ -4853,9 +4764,7 @@ msgstr "ignoruji %d bodù -- pøíli¹ husté pole"
 
 #: ../lib/rst/interp_float/vinput2d.c:335
 #, c-format
-msgid ""
-"%d points given for interpolation (after thinning) is less than given NPMIN=%"
-"d"
+msgid "%d points given for interpolation (after thinning) is less than given NPMIN=%d"
 msgstr "%d bodù urèeno pro interpolaci (po zøedìní) je ménì ne¾ daný NPMIN=%d"
 
 #: ../lib/rst/interp_float/vinput2d.c:340
@@ -4864,19 +4773,13 @@ msgstr ""
 
 #: ../lib/rst/interp_float/vinput2d.c:345
 #, c-format
-msgid ""
-"Segmentation parameters set to invalid values: npmin= %d, segmax= %d for "
-"smooth connection of segments, npmin > segmax (see manual)"
+msgid "Segmentation parameters set to invalid values: npmin= %d, segmax= %d for smooth connection of segments, npmin > segmax (see manual)"
 msgstr ""
 
 #: ../lib/rst/interp_float/vinput2d.c:351
 #, c-format
-msgid ""
-"There are less than %d points for interpolation. No segmentation is "
-"necessary, to run the program faster set segmax=%d (see manual)"
-msgstr ""
-"Ménì ne¾ %d bodù pro interpolaci. Není potøeba ¾ádná segmentace, pro "
-"rychlej¹í výpoèet spus»te program s segmax=%d (viz manuál)"
+msgid "There are less than %d points for interpolation. No segmentation is necessary, to run the program faster set segmax=%d (see manual)"
+msgstr "Ménì ne¾ %d bodù pro interpolaci. Není potøeba ¾ádná segmentace, pro rychlej¹í výpoèet spus»te program s segmax=%d (viz manuál)"
 
 #: ../lib/rst/interp_float/vinput2d.c:355
 #, fuzzy, c-format
@@ -4921,8 +4824,7 @@ msgstr "Datový typ pou¾itý ve výstupním souboru"
 
 #: ../lib/g3d/g3dparam.c:61
 msgid "Precision used in the output file (default, max, or 0 to 52)"
-msgstr ""
-"Pøesnost pou¾itá ve výstupním souboru (výchozí, maximální nebo 0 a¾ 52)"
+msgstr "Pøesnost pou¾itá ve výstupním souboru (výchozí, maximální nebo 0 a¾ 52)"
 
 #: ../lib/g3d/g3dparam.c:71
 msgid "The compression method used in the output file"
@@ -5058,12 +4960,8 @@ msgstr "%s: Chyba v algoritmu klasifikace"
 
 #: ../lib/arraystats/class.c:221
 #, c-format
-msgid ""
-"There are classbreaks outside the range min-max. Number of classes reduced "
-"to %i, but using probabilities for %i classes."
-msgstr ""
-"hranice intervalù jsou mimo rozmezí dané min max hodnotou. Poèet intervalù "
-"je sní¾en na %i, ale je pou¾ita pravdìpodobnost pro %i intervalù"
+msgid "There are classbreaks outside the range min-max. Number of classes reduced to %i, but using probabilities for %i classes."
+msgstr "hranice intervalù jsou mimo rozmezí dané min max hodnotou. Poèet intervalù je sní¾en na %i, ale je pou¾ita pravdìpodobnost pro %i intervalù"
 
 #: ../lib/ogsf/GVL2.c:248
 #, c-format
@@ -5104,8 +5002,7 @@ msgstr "Chyba po¾adavku pro rozmezí hodnot pro legendu"
 
 #: ../lib/ogsf/gsd_legend.c:385
 msgid "Unable to show discrete FP range (use list"
-msgstr ""
-"Nelze ukázat samostatné rozmezí hodnot s desetinnou èárkou (pou¾ijte seznam"
+msgstr "Nelze ukázat samostatné rozmezí hodnot s desetinnou èárkou (pou¾ijte seznam"
 
 #: ../lib/ogsf/gsd_legend.c:501
 msgid "Too many categories to show as discrete!"
@@ -5145,12 +5042,8 @@ msgstr "Barva materiálu:%d"
 
 #: ../lib/ogsf/gsd_prim.c:630
 #, c-format
-msgid ""
-"gsd_rot(): %c is an invalid axis specification. Rotation ignored. Please "
-"advise GRASS developers of this error"
-msgstr ""
-"gsd_rot(): %c  je neplatná specifikace osy. Ignoruji otoèení. Prosím "
-"informujte vývojáøe GRASSu o této chybì"
+msgid "gsd_rot(): %c is an invalid axis specification. Rotation ignored. Please advise GRASS developers of this error"
+msgstr "gsd_rot(): %c  je neplatná specifikace osy. Ignoruji otoèení. Prosím informujte vývojáøe GRASSu o této chybì"
 
 #: ../lib/ogsf/gsd_img_tif.c:64 ../lib/ogsf/gsd_img_ppm.c:53
 #: ../lib/ogsf/gsd_img_ppm.c:96 ../lib/ogsf/GK2.c:219
@@ -5315,32 +5208,29 @@ msgstr "nelze pracovat s vektorovou mapou - nelze alokovat pamì»"
 msgid "Database connection not defined for layer %s"
 msgstr "Pro vrstvu %d nebylo definováno databázové pøipojení"
 
-#: ../lib/python/vector.py:188
+#: ../lib/python/vector.py:192
 #, fuzzy, python-format
 msgid "Missing layer %(layer)d in vector map <%(map)s>"
 msgstr "Chyba pøi naèítání vektorové mapy <%s>"
 
-#: ../lib/python/vector.py:204
+#: ../lib/python/vector.py:208
 msgid "vector_select() failed"
 msgstr ""
 
-#: ../lib/python/core.py:701
+#: ../lib/python/core.py:710
 #, python-format
 msgid "Invalid element '%s'"
 msgstr ""
 
-#: ../lib/python/core.py:936
+#: ../lib/python/core.py:945
 #, fuzzy
 msgid "Unable to list mapsets"
 msgstr "Nelze zavøít vstupní mapu"
 
 #: ../lib/python/raster.py:50
 #, fuzzy, python-format
-msgid ""
-"Unable to write history for <%(map)s>. Raster map <%(map)s> not found in "
-"current mapset."
-msgstr ""
-"Nelze oobnovit prvek %d, vektorová mapa <%s> není otevøena v módu pro 'zápis'"
+msgid "Unable to write history for <%(map)s>. Raster map <%(map)s> not found in current mapset."
+msgstr "Nelze oobnovit prvek %d, vektorová mapa <%s> není otevøena v módu pro 'zápis'"
 
 #: ../lib/python/raster.py:105
 msgid "An error occurred while running r.mapcalc"
@@ -5356,20 +5246,60 @@ msgstr "Nelze popsat tabulku <%s>"
 msgid "Fetching data from table <%s> failed"
 msgstr "Nelze vybrat data z tabulky <%s>"
 
-#: ../lib/db/dbmi_base/legal_dbname.c:25
-#, c-format
-msgid "Illegal table map name <%s>. May not contain '.' or 'NULL'.\n"
+#: ../lib/db/dbmi_base/xdrvalue.c:82
+msgid "send data: invalid C-type"
+msgstr ""
+
+#: ../lib/db/dbmi_base/index.c:180
+msgid "db_set_index_column_name(): invalid column number"
+msgstr ""
+
+#: ../lib/db/dbmi_base/index.c:197
+msgid "db_get_index_column_name(): invalid column number"
+msgstr ""
+
+#: ../lib/db/dbmi_base/legal_dbname.c:38
+#, fuzzy, c-format
+msgid "Illegal table map name <%s>. May not contain '.' or 'NULL'."
 msgstr "Neplatný název vektorové mapy <%s>. Nesmí obsahovat '.' nebo 'NULL'.\n"
 
-#: ../lib/db/dbmi_base/legal_dbname.c:33
-#, c-format
-msgid "Illegal table map name <%s>. Must start with a letter.\n"
+#: ../lib/db/dbmi_base/legal_dbname.c:45
+#, fuzzy, c-format
+msgid "Illegal table map name <%s>. Must start with a letter."
 msgstr "Neplatný název atributové tabulky <%s>. Musí zaèínat písmenem.\n"
 
-#: ../lib/db/dbmi_base/legal_dbname.c:43
-#, c-format
-msgid "Illegal table map name <%s>. Character <%c> not allowed.\n"
+#: ../lib/db/dbmi_base/legal_dbname.c:54
+#, fuzzy, c-format
+msgid "Illegal table map name <%s>. Character <%c> not allowed."
 msgstr "Neplatné název tabulky vektorové mapy <%s>. Znak <%c> není povolen.\n"
+
+#: ../lib/db/dbmi_base/error.c:72
+#, fuzzy
+msgid "<NULL error message>"
+msgstr "Chybová zpráva: %s"
+
+#: ../lib/db/dbmi_base/error.c:91
+msgid "dbmi: Protocol error"
+msgstr ""
+
+#: ../lib/db/dbmi_base/error.c:136
+#, fuzzy
+msgid "dbmi: Out of Memory"
+msgstr "Nedostatek pamìti"
+
+#: ../lib/db/dbmi_base/error.c:149
+#, fuzzy, c-format
+msgid "dbmi: %s() not implemented"
+msgstr "není implementováno"
+
+#: ../lib/db/dbmi_base/error.c:163
+#, c-format
+msgid "dbmi: Invalid procedure %d"
+msgstr ""
+
+#: ../lib/db/dbmi_base/xdrtable.c:109
+msgid "fetch: table has wrong number of columns"
+msgstr ""
 
 #: ../lib/db/dbmi_base/test/test_main.c:83 ../lib/gmath/test/test_main.c:106
 #, fuzzy
@@ -5445,6 +5375,14 @@ msgstr ""
 #: ../lib/db/dbmi_base/login.c:111
 msgid "Login file corrupted"
 msgstr "POru¹en soubor pro pøihlá¹ení"
+
+#: ../lib/db/dbmi_base/valuefmt.c:52
+msgid "db_convert_Cstring_to_value(): unrecognized sqltype"
+msgstr ""
+
+#: ../lib/db/dbmi_base/valuefmt.c:91
+msgid "db_convert_value_into_string(): unrecongized sqltype-type"
+msgstr ""
 
 #: ../lib/db/dbmi_base/default_name.c:127
 #, fuzzy
@@ -5538,12 +5476,8 @@ msgid "Memory error in allocating timestamp"
 msgstr "Chyba pamìti pøi pødìlování èasové znaèky"
 
 #: ../lib/sites/sites.c:296 ../lib/sites/sites.c:426
-msgid ""
-"Dev note: Adapted sites library used for vector points. (module should be "
-"updated to GRASS 6 vector library)"
-msgstr ""
-"Poznámka vývojáøù: Bude pou¾ita upravená knihovna pro vektorové body (module "
-"by mìl být aktualizován na vektorovou knihovnu GRASS 6)"
+msgid "Dev note: Adapted sites library used for vector points. (module should be updated to GRASS 6 vector library)"
+msgstr "Poznámka vývojáøù: Bude pou¾ita upravená knihovna pro vektorové body (module by mìl být aktualizován na vektorovou knihovnu GRASS 6)"
 
 #: ../lib/sites/sites.c:345
 msgid "Cannot fetch row"
@@ -6099,73 +6033,101 @@ msgid "subgroup <%s> of group <%s> references the following raster maps\n"
 msgstr "Podskupina <%s>skupiny <%s> okazuja na následující rastrové mapy\n"
 
 #, fuzzy
-#~ msgid "Not enough room in history file to record command line"
-#~ msgstr ""
-#~ "V souboru s historií není dostatek místa, aby pøíkazová øádka mohla být "
-#~ "zaznamenána"
+msgid "       valid options: %s\n"
+msgstr " volby: %s\n"
 
 #, fuzzy
-#~ msgid "Not enough room in history file for command line (truncated)"
-#~ msgstr ""
-#~ "V souboru s historií není dostatek místa pro pøíkazovou øádku (zkráceno)"
-
-#~ msgid "Unknown Location"
-#~ msgstr "Neznámá Location"
+msgid "Not enough room in history file to record command line"
+msgstr "V souboru s historií není dostatek místa, aby pøíkazová øádka mohla být zaznamenána"
 
 #, fuzzy
-#~ msgid "test, gmath"
-#~ msgstr "test, gpde"
+msgid "Not enough room in history file for command line (truncated)"
+msgstr "V souboru s historií není dostatek místa pro pøíkazovou øádku (zkráceno)"
+
+msgid "Unknown Location"
+msgstr "Neznámá Location"
 
 #, fuzzy
-#~ msgid "Raster map <%s> - unable to write row %d"
-#~ msgstr "mapa [%s] - nelze pøeèíst øádek %d"
+msgid "test, gmath"
+msgstr "test, gpde"
 
 #, fuzzy
-#~ msgid "Error writing floating point format file for map <%s>"
-#~ msgstr ""
-#~ "Chyba pøi zapisování souboru s èísly s plovoucí desetinnou èárkou pro "
-#~ "mapu %s"
+msgid "Raster map <%s> - unable to write row %d"
+msgstr "mapa [%s] - nelze pøeèíst øádek %d"
 
 #, fuzzy
-#~ msgid "OGR layer cannot be opened for update"
-#~ msgstr "Formát OGR nelze aktualizovat"
+msgid "Error writing floating point format file for map <%s>"
+msgstr "Chyba pøi zapisování souboru s èísly s plovoucí desetinnou èárkou pro mapu %s"
 
 #, fuzzy
-#~ msgid "Unable to write feature, OGR layer not defined"
-#~ msgstr "Nelze zapsat prvek, vektorová mapa není otevøena"
+msgid "OGR layer cannot be opened for update"
+msgstr "Formát OGR nelze aktualizovat"
 
 #, fuzzy
-#~ msgid "Unable to create a new process!"
-#~ msgstr "Nelze vytvoøit nový proces"
-
-#~ msgid "Too many arguments"
-#~ msgstr "Pøíli¹ mnoho argumentù"
+msgid "Unable to write feature, OGR layer not defined"
+msgstr "Nelze zapsat prvek, vektorová mapa není otevøena"
 
 #, fuzzy
-#~ msgid ""
-#~ "Region for current mapset %s. Run \"g.region\" to fix the current region."
-#~ msgstr ""
-#~ "region pro aktuální mapset %s\n"
-#~ "spus»te \"g.region\""
+msgid "Unable to create a new process!"
+msgstr "Nelze vytvoøit nový proces"
+
+msgid "Too many arguments"
+msgstr "Pøíli¹ mnoho argumentù"
 
 #, fuzzy
-#~ msgid "Default region %s"
-#~ msgstr "výchozí region (zájmové území) %s"
+msgid "Region for current mapset %s. Run \"g.region\" to fix the current region."
+msgstr ""
+"region pro aktuální mapset %s\n"
+"spus»te \"g.region\""
 
 #, fuzzy
-#~ msgid "Unable to set region"
-#~ msgstr "Nelze nastavit zaostøení"
+msgid "Default region %s"
+msgstr "výchozí region (zájmové území) %s"
 
 #, fuzzy
-#~ msgid "Failed writing raster map"
-#~ msgstr "Potí¾e pøi ètení rastrové mapy"
+msgid "Unable to set region"
+msgstr "Nelze nastavit zaostøení"
 
 #, fuzzy
-#~ msgid "Unable to write color file of raster map <%s>"
-#~ msgstr "Nelze èíst soubor s barevnou ¹kálou pro rastrovou mapu <%s>"
+msgid "Failed writing raster map"
+msgstr "Potí¾e pøi ètení rastrové mapy"
 
-#~ msgid "Incompatible library version for module"
-#~ msgstr "Nekompatibilní verze knihovny pro modul"
+#, fuzzy
+msgid "Unable to write color file of raster map <%s>"
+msgstr "Nelze èíst soubor s barevnou ¹kálou pro rastrovou mapu <%s>"
+
+msgid "Incompatible library version for module"
+msgstr "Nekompatibilní verze knihovny pro modul"
+
+msgid "taking too long to find points for interpolation--please change the region to area where your points are. Continuing calculations..."
+msgstr "hledání bodù pro interpolaci trvá pøíli¹ dlouho -- prosím, zmìòte region na území, které je tìmito body pokryto. Pokraèuji ve výpoètu..."
+
+msgid "Reading lines from vector map ... "
+msgstr "Naèítání linií z vektorové mapy ..."
+
+msgid "Reading nodes from vector map ... "
+msgstr "Naèítání uzlù z vektorové mapy ... "
+
+msgid "strip exists with insufficient data"
+msgstr "pás existuje s nedostaèujícími daty"
+
+msgid "there are points outside specified 2D/3D region--ignored %d points"
+msgstr "nìkteré body le¾í mimo specifikovaný region -- %d bodù ignorováno"
+
+msgid "ignoring %d points -- too dense"
+msgstr "ignoruji %d bodù -- pøíli¹ husté pole"
+
+msgid "some points outside of region -- will ignore..."
+msgstr "nìkteré body mimo region -- budou ignorovány..."
+
+#~ msgid "       Presented as: %s\n"
+#~ msgstr "       Zadáno: %s\n"
+
+#~ msgid "       Legal range: %s\n"
+#~ msgstr "       Povolený rozsah: %s\n"
+
+#~ msgid "       You provided %d items:\n"
+#~ msgstr "       Bylo zadáno %d polo¾ek:\n"
 
 #~ msgid "Invalid view position coordinates, using %f,%f"
 #~ msgstr "Neplatné souøadnice bodu rozhledu, pou¾iji %f,%f"
@@ -6209,9 +6171,7 @@ msgstr "Podskupina <%s>skupiny <%s> okazuja na následující rastrové mapy\n"
 #~ msgstr "nemohu zapsat soubor quant!"
 
 #~ msgid "Error writing floating point format file for map %s"
-#~ msgstr ""
-#~ "Chyba pøi zapisování souboru s èísly s plovoucí desetinnou èárkou pro "
-#~ "mapu %s"
+#~ msgstr "Chyba pøi zapisování souboru s èísly s plovoucí desetinnou èárkou pro mapu %s"
 
 #~ msgid "Unable to read header file for raster map <%s@%s>."
 #~ msgstr "Nelze èíst hlavièkový soubor pro rastrovou mapu <%s@%s>"
@@ -6263,9 +6223,7 @@ msgstr "Podskupina <%s>skupiny <%s> okazuja na následující rastrové mapy\n"
 #~ msgstr "Vektorová mapa není 3D"
 
 #~ msgid "Cannot find z column <%s> (please verify name, e.g. with v.info)"
-#~ msgstr ""
-#~ "Nelze nalézt sloupec 'z' <%s> (prosím, ovìøte jeho název, napø. pomocí v."
-#~ "info)"
+#~ msgstr "Nelze nalézt sloupec 'z' <%s> (prosím, ovìøte jeho název, napø. pomocí v.info)"
 
 #~ msgid "Column type of z column is not supported (must be integer or double)"
 #~ msgstr "Datový typ sloupce z není podporován (musí být integer nebo double)"
@@ -6280,8 +6238,7 @@ msgstr "Podskupina <%s>skupiny <%s> okazuja na následující rastrové mapy\n"
 #~ msgstr "Datový typ sloupce s není podporován (musí být integer nebo double)"
 
 #~ msgid "G_put_map_row: %s is not integer! Use G_put_[f/d]_raster_row()!"
-#~ msgstr ""
-#~ "G_put_map_row: %s není celé èíslo! Pou¾ijte G_put_[f/d]_raster_row()!"
+#~ msgstr "G_put_map_row: %s není celé èíslo! Pou¾ijte G_put_[f/d]_raster_row()!"
 
 #~ msgid "can't read f_range file for [%s in %s]"
 #~ msgstr "nelze pøeèíst f_range soubor z [%s v %s]"
@@ -6327,28 +6284,20 @@ msgstr "Podskupina <%s>skupiny <%s> okazuja na následující rastrové mapy\n"
 #~ msgid "Cannot write quant rules for map %s"
 #~ msgstr "Nelze zapsat kvantizaèní pravidla pro mapu %s"
 
-#~ msgid ""
-#~ "The type of solver which should solve the symmetric linear equation system"
+#~ msgid "The type of solver which should solve the symmetric linear equation system"
 #~ msgstr "Typ solveru který by mìl øe¹it symetrickou lineární soustavu rovnic"
 
 #~ msgid "The type of solver which should solve the linear equation system"
 #~ msgstr "Typ solveru, který by mìl øe¹it lineární soustavu rovnic"
 
-#~ msgid ""
-#~ "Maximum number of iteration used to solver the linear equation system"
+#~ msgid "Maximum number of iteration used to solver the linear equation system"
 #~ msgstr "Maximální poèet iterací pou¾itá pro solver lineární soustavy rovnic"
 
-#~ msgid ""
-#~ "Error break criteria for iterative solvers (jacobi, sor, cg or bicgstab)"
-#~ msgstr ""
-#~ "Chyba kritéria pro iterativní solver (jacobi, sor, cg nebo bicgstab)"
+#~ msgid "Error break criteria for iterative solvers (jacobi, sor, cg or bicgstab)"
+#~ msgstr "Chyba kritéria pro iterativní solver (jacobi, sor, cg nebo bicgstab)"
 
-#~ msgid ""
-#~ "The relaxation parameter used by the jacobi and sor solver for speedup or "
-#~ "stabilizing"
-#~ msgstr ""
-#~ "Regeneraèní parametr pou¾itý pro jacobi a sor solver pro zrychlení nebo "
-#~ "stabilizaci"
+#~ msgid "The relaxation parameter used by the jacobi and sor solver for speedup or stabilizing"
+#~ msgstr "Regeneraèní parametr pou¾itý pro jacobi a sor solver pro zrychlení nebo stabilizaci"
 
 #~ msgid "The linear equation system is not quadratic"
 #~ msgstr "Lineární systém rovnic není kvadratický"
@@ -6366,11 +6315,7 @@ msgstr "Podskupina <%s>skupiny <%s> okazuja na následující rastrové mapy\n"
 #~ msgstr "Cholesky metodu nelze pou¾ít pro øídké matice"
 
 #~ msgid "Unable to open category index file for vector map <%s@%s>"
-#~ msgstr ""
-#~ "Nelze otevøít soubor s indexem kategorií pro vektorovou mapu <%s@%s>"
-
-#~ msgid "not implemented"
-#~ msgstr "není implementováno"
+#~ msgstr "Nelze otevøít soubor s indexem kategorií pro vektorovou mapu <%s@%s>"
 
 #~ msgid "Unable to read head file"
 #~ msgstr "Nelze èíst hlavièkový soubor"
@@ -6468,8 +6413,7 @@ msgstr "Podskupina <%s>skupiny <%s> okazuja na následující rastrové mapy\n"
 #~ msgstr "%s: mapa [%s] nebyla otevøena pro náhodný zápis - ¾ádost ignorována"
 
 #~ msgid "%s: map [%s] not open for sequential write - request ignored"
-#~ msgstr ""
-#~ "%s: mapa [%s] nebyla otevøena pro sekvenèní zápis - ¾ádost ignorována"
+#~ msgstr "%s: mapa [%s] nebyla otevøena pro sekvenèní zápis - ¾ádost ignorována"
 
 #~ msgid ""
 #~ "\n"
@@ -6525,9 +6469,7 @@ msgstr "Podskupina <%s>skupiny <%s> okazuja na následující rastrové mapy\n"
 #~ msgstr "Nelze získat hodnotu promìnné prostøedí GIS_LOCK"
 
 #~ msgid " It is a reclass of raster map <%s@%s> whose header file is invalid."
-#~ msgstr ""
-#~ "Jde o reklasifikaci rastrové mapy <%s@%s> její¾ hlavièkový soubor je "
-#~ "neplatný"
+#~ msgstr "Jde o reklasifikaci rastrové mapy <%s@%s> její¾ hlavièkový soubor je neplatný"
 
 #~ msgid " Invalid format."
 #~ msgstr "Neplatný formát."
@@ -6538,10 +6480,8 @@ msgstr "Podskupina <%s>skupiny <%s> okazuja na následující rastrové mapy\n"
 #~ msgid "<%s>: bad mapset"
 #~ msgstr "<%s>: neplatný mapset"
 
-#~ msgid ""
-#~ "Unable to write embedded null values for raster map open for random access"
-#~ msgstr ""
-#~ "Nelze zapsat vlo¾ené nulové hodnoty pro mapu otevøenou z náhodného výbìru"
+#~ msgid "Unable to write embedded null values for raster map open for random access"
+#~ msgstr "Nelze zapsat vlo¾ené nulové hodnoty pro mapu otevøenou z náhodného výbìru"
 
 #~ msgid "Null values have not been initialized. "
 #~ msgstr "Nebyly inicializovány nulové hodnoty. "
@@ -6724,17 +6664,11 @@ msgstr "Podskupina <%s>skupiny <%s> okazuja na následující rastrové mapy\n"
 #~ msgid "Intersections: %5d"
 #~ msgstr "Prùseèíky:%5d"
 
-#~ msgid ""
-#~ "Unable to build spatial index from topology, vector map is not opened at "
-#~ "topo level 2"
-#~ msgstr ""
-#~ "Nelze vytvoøit prostorový index z topologie, vektorová mapa není otevøena "
-#~ "na úrovni 2"
+#~ msgid "Unable to build spatial index from topology, vector map is not opened at topo level 2"
+#~ msgstr "Nelze vytvoøit prostorový index z topologie, vektorová mapa není otevøena na úrovni 2"
 
-#~ msgid ""
-#~ "Random read is not supported by OGR for this layer, cannot build support"
-#~ msgstr ""
-#~ "Náhodné ètení není podporováno OGR pro tuto vrstvu, nelze vytvoøit podporu"
+#~ msgid "Random read is not supported by OGR for this layer, cannot build support"
+#~ msgstr "Náhodné ètení není podporováno OGR pro tuto vrstvu, nelze vytvoøit podporu"
 
 #~ msgid "OGR feature without ID ignored"
 #~ msgstr "Prvek OGR bez ID je ignorován"
@@ -6746,8 +6680,7 @@ msgstr "Podskupina <%s>skupiny <%s> okazuja na následující rastrové mapy\n"
 #~ msgstr "Nelze otevøít vrstvu <%s>"
 
 #~ msgid "Unable to add database link, map is not opened in WRITE mode"
-#~ msgstr ""
-#~ "Nelze pøidat spojení s databází, mapa není otevøena v módu pro ZÁPIS."
+#~ msgstr "Nelze pøidat spojení s databází, mapa není otevøena v módu pro ZÁPIS."
 
 #~ msgid "Error in rule on row %d in %s"
 #~ msgstr "Chyba v pravidlu na øádku %d v %s"
@@ -6762,47 +6695,34 @@ msgstr "Podskupina <%s>skupiny <%s> okazuja na následující rastrové mapy\n"
 #~ msgstr "Nelze vytvoøit hlavièkový soubor pro [%s]"
 
 #~ msgid "Illegal filename.  Cannot be '.' or 'NULL'\n"
-#~ msgstr ""
-#~ "Nedovolený název souboru. Soubor se nemù¾e jmenovat '.' nebo 'NIC'\n"
+#~ msgstr "Nedovolený název souboru. Soubor se nemù¾e jmenovat '.' nebo 'NIC'\n"
 
 #~ msgid "Illegal filename. Character <%c> not allowed.\n"
 #~ msgstr "Nedovolený název souboru. Znak <%c> není povolen.\n"
 
-#~ msgid ""
-#~ "Raster map <%s@%s> is in different projection than current region. Found "
-#~ "raster map <%s@%s>, should be <%s>."
-#~ msgstr ""
-#~ "Rastrová mapa<%s@%s> je v jiné projekci ne¾ souèasnýregion. Nalezena mapa "
-#~ "<%s@%s>, mìla by být <%s>"
+#~ msgid "Raster map <%s@%s> is in different projection than current region. Found raster map <%s@%s>, should be <%s>."
+#~ msgstr "Rastrová mapa<%s@%s> je v jiné projekci ne¾ souèasnýregion. Nalezena mapa <%s@%s>, mìla by být <%s>"
 
-#~ msgid ""
-#~ "Raster map <%s@%s> is in different zone (%d) than current region (%d)"
+#~ msgid "Raster map <%s@%s> is in different zone (%d) than current region (%d)"
 #~ msgstr "Rastrová mapa <%s@%s> je v jiné zónì (%d) ne¾ souèasný region (%d)"
 
 #~ msgid "Raster map <%s@%s>: bytes per cell (%d) too large"
 #~ msgstr "Rastrová mapa<%s@%s>: pøíli¹ mnoho bytù na buòku (%d)"
 
-#~ msgid ""
-#~ "map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"
-#~ msgstr ""
-#~ "map <%s@%s> je souèásti knihovny GDAL, ale va¹e kompilace GRASSu knihovnu "
-#~ "GDAL nepodporuje."
+#~ msgid "map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"
+#~ msgstr "map <%s@%s> je souèásti knihovny GDAL, ale va¹e kompilace GRASSu knihovnu GDAL nepodporuje."
 
 #~ msgid "G__open_raster_new(): no temp files available"
 #~ msgstr "G__open_raster_new(): nejsou k dispozici ¾ádné doèasné soubory"
 
 #~ msgid "G_set_fp_type(): can only be called with FCELL_TYPE or DCELL_TYPE"
-#~ msgstr ""
-#~ "G_set_fp_type(): Mù¾e být zavoláno pouze s typy FCELL_TYPE nebo DCELL_TYPE"
+#~ msgstr "G_set_fp_type(): Mù¾e být zavoláno pouze s typy FCELL_TYPE nebo DCELL_TYPE"
 
 #~ msgid "Unable to find '%s' in '%s'"
 #~ msgstr "Nelze nalézt '%s' v '%s'"
 
-#~ msgid ""
-#~ "G_set_quant_rules() can be called only for raster maps opened for reading"
-#~ msgstr ""
-#~ "G_set_quant_rules() mù¾e být zavolán pouze pro rastrové mapy  s právy "
-#~ "jenom ke ètení"
+#~ msgid "G_set_quant_rules() can be called only for raster maps opened for reading"
+#~ msgstr "G_set_quant_rules() mù¾e být zavolán pouze pro rastrové mapy  s právy jenom ke ètení"
 
 #~ msgid "The floating data range for %s@%s is empty"
 #~ msgstr "Rozsah dat s plovoucí desetinnou èárkou pro %s@%s je prázdný"
@@ -6819,12 +6739,8 @@ msgstr "Podskupina <%s>skupiny <%s> okazuja na následující rastrové mapy\n"
 #~ msgid "Error reading map <%s@%s>, row %d"
 #~ msgstr "chyba pøi ètení mapy <%s@%s>, øádek %d"
 
-#~ msgid ""
-#~ "G_set_window(): projection/zone differs from that of currently open "
-#~ "raster maps"
-#~ msgstr ""
-#~ "G_set_window(): mapová projekce/zóna se li¹í od aktuálnì otevøených "
-#~ "rastrových souborù"
+#~ msgid "G_set_window(): projection/zone differs from that of currently open raster maps"
+#~ msgstr "G_set_window(): mapová projekce/zóna se li¹í od aktuálnì otevøených rastrových souborù"
 
 #~ msgid "%s: map [%s] not open for write - request ignored"
 #~ msgstr "%s: mapa [%s] není pro zápis otevøena - ¾ádost ignorována"
@@ -6845,13 +6761,10 @@ msgstr "Podskupina <%s>skupiny <%s> okazuja na následující rastrové mapy\n"
 #~ msgstr "nelze zapsat informace o historii pro [%s]"
 
 #~ msgid "Not enough room in history file to record command line."
-#~ msgstr ""
-#~ "V souboru s historií není dostatek místa, aby pøíkazová øádka mohla být "
-#~ "zaznamenána"
+#~ msgstr "V souboru s historií není dostatek místa, aby pøíkazová øádka mohla být zaznamenána"
 
 #~ msgid "Not enough room in history file for command line (truncated)."
-#~ msgstr ""
-#~ "V souboru s historií není dostatek místa pro pøíkazovou øádku (zkráceno)"
+#~ msgstr "V souboru s historií není dostatek místa pro pøíkazovou øádku (zkráceno)"
 
 #~ msgid "unable to determine user's home directory"
 #~ msgstr "nelze urèit domovský adresáø u¾ivatele"
@@ -6871,12 +6784,8 @@ msgstr "Podskupina <%s>skupiny <%s> okazuja na následující rastrové mapy\n"
 #~ msgid "Layer number"
 #~ msgstr "Èíslo vrstvy"
 
-#~ msgid ""
-#~ "A single vector map can be connected to multiple database tables. This "
-#~ "number determines which table to use."
-#~ msgstr ""
-#~ "K vektorové mapì mù¾e být pøipojeno i nìkolik databázových tabulek. Tato "
-#~ "hodnota urèuje, která tabulka má být pou¾ita"
+#~ msgid "A single vector map can be connected to multiple database tables. This number determines which table to use."
+#~ msgstr "K vektorové mapì mù¾e být pøipojeno i nìkolik databázových tabulek. Tato hodnota urèuje, která tabulka má být pou¾ita"
 
 #~ msgid ""
 #~ "\n"
@@ -6944,31 +6853,6 @@ msgstr "Podskupina <%s>skupiny <%s> okazuja na následující rastrové mapy\n"
 #~ msgid "G_realloc: unable to allocate %lu bytes at %s:%d"
 #~ msgstr "G_realloc: Nelze alokovat %lu bytù v %s:%d"
 
-#~ msgid ""
-#~ "taking too long to find points for interpolation--please change the "
-#~ "region to area where your points are. Continuing calculations..."
-#~ msgstr ""
-#~ "hledání bodù pro interpolaci trvá pøíli¹ dlouho -- prosím, zmìòte region "
-#~ "na území, které je tìmito body pokryto. Pokraèuji ve výpoètu..."
-
-#~ msgid "Reading lines from vector map ... "
-#~ msgstr "Naèítání linií z vektorové mapy ..."
-
-#~ msgid "Reading nodes from vector map ... "
-#~ msgstr "Naèítání uzlù z vektorové mapy ... "
-
-#~ msgid "strip exists with insufficient data"
-#~ msgstr "pás existuje s nedostaèujícími daty"
-
-#~ msgid "there are points outside specified 2D/3D region--ignored %d points"
-#~ msgstr "nìkteré body le¾í mimo specifikovaný region -- %d bodù ignorováno"
-
-#~ msgid "ignoring %d points -- too dense"
-#~ msgstr "ignoruji %d bodù -- pøíli¹ husté pole"
-
-#~ msgid "some points outside of region -- will ignore..."
-#~ msgstr "nìkteré body mimo region -- budou ignorovány..."
-
 #~ msgid "Probably program error."
 #~ msgstr "Pravdìpodobnì chyba programu."
 
@@ -7006,16 +6890,85 @@ msgstr "Podskupina <%s>skupiny <%s> okazuja na následující rastrové mapy\n"
 #~ msgid "Unable to add database link"
 #~ msgstr "Nelze pøidat spojení s databází."
 
-#~ msgid ""
-#~ "Coor files of vector map <%s@%s> is larger than it should be (%ld bytes "
-#~ "excess)"
-#~ msgstr ""
-#~ "Soubor se souøadnicemi (Coor) vektorové mapy <%s@%s> je vìt¹í ne¾ by mìl "
-#~ "být (%ld bytù pøebývá)"
+#~ msgid "Coor files of vector map <%s@%s> is larger than it should be (%ld bytes excess)"
+#~ msgstr "Soubor se souøadnicemi (Coor) vektorové mapy <%s@%s> je vìt¹í ne¾ by mìl být (%ld bytù pøebývá)"
+
+#~ msgid "Coor files of vector <%s@%s> is shorter than it should be (%ld bytes missing)."
+#~ msgstr "Soubor se souøadnicemi (Coor) vektorové mapy <%s@%s> je men¹í ne¾ by mìl být (%ld bytù chybí)"
+
+#~ msgid "Sorry <%s> is not a valid option\n"
+#~ msgstr "Promiòte, ale <%s> není platná volba\n"
+
+#~ msgid "Sorry, <%c> is not a valid flag\n"
+#~ msgstr "Promiòte, ale <%c> není platný pøepínaè\n"
+
+#~ msgid "Sorry, <%s=> is ambiguous\n"
+#~ msgstr "Promiòte, ale <%s=> je dvojznaèný\n"
+
+#~ msgid "Sorry, <%s> is not a valid parameter\n"
+#~ msgstr "Promiòte, ale <%s> není platný parametr\n"
 
 #~ msgid ""
-#~ "Coor files of vector <%s@%s> is shorter than it should be (%ld bytes "
-#~ "missing)."
+#~ "\n"
+#~ "ERROR: illegal range syntax for parameter <%s>\n"
 #~ msgstr ""
-#~ "Soubor se souøadnicemi (Coor) vektorové mapy <%s@%s> je men¹í ne¾ by mìl "
-#~ "být (%ld bytù chybí)"
+#~ "\n"
+#~ "CHYBA: neplatná syntaxe rozsahu pro parametr <%s>\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "ERROR: value <%s> out of range for parameter <%s>\n"
+#~ msgstr ""
+#~ "\n"
+#~ "CHYBA: hodnota <%s> mimo rozsah parametru <%s>\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "ERROR: Missing value for parameter <%s>\n"
+#~ msgstr ""
+#~ "\n"
+#~ "CHYBA: Chybí hodnota pro parametr <%s>\n"
+
+#, fuzzy
+#~ msgid ""
+#~ "ERROR: Required parameter <%s> not set:\n"
+#~ "\t(%s)\n"
+#~ msgstr ""
+#~ "\n"
+#~ "CHYBA: Povinný parametr <%s> nebyl zadán:\n"
+#~ "    (%s).\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "ERROR: option <%s> must be provided in multiples of %d\n"
+#~ msgstr ""
+#~ "\n"
+#~ "CHYBA: volba <%s> musí být zadána jako násobek %d\n"
+
+#~ msgid "G_distance_point_to_line_segment: shouldn't happen: code=%d P=(%f,%f) S=(%f,%f)(%f,%f)"
+#~ msgstr "G_distance_point_to_line_segment: Nemìlo se stát: code=%d P=(%f,%f) S=(%f,%f)(%f,%f)"
+
+#~ msgid "not implemented"
+#~ msgstr "není implementováno"
+
+#~ msgid "Unknown keyword %s in vector head"
+#~ msgstr "Neznámé klíèové slovo %s v hlavièce vektorové mapy"
+
+#~ msgid "Next edge was visited but it is not the first one !!! breaking loop"
+#~ msgstr "Dal¹í hrana byla zpracována, ale nejedná se o první hranu. Pøeru¹ení cyklu."
+
+#, fuzzy
+#~ msgid "Unable to delete feature %d from vector map <%s>"
+#~ msgstr "Nelze obnovit prvek %d z vektorové vrstvy <%s>"
+
+#~ msgid "Unable to close input map"
+#~ msgstr "Nelze zavøít vstupní mapu"
+
+#~ msgid "Illegal table map name <%s>. May not contain '.' or 'NULL'.\n"
+#~ msgstr "Neplatný název vektorové mapy <%s>. Nesmí obsahovat '.' nebo 'NULL'.\n"
+
+#~ msgid "Illegal table map name <%s>. Must start with a letter.\n"
+#~ msgstr "Neplatný název atributové tabulky <%s>. Musí zaèínat písmenem.\n"
+
+#~ msgid "Illegal table map name <%s>. Character <%c> not allowed.\n"
+#~ msgstr "Neplatné název tabulky vektorové mapy <%s>. Znak <%c> není povolen.\n"
