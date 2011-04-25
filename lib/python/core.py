@@ -13,14 +13,14 @@ grass.parser()
 ...
 @endcode
 
-(C) 2008-2010 by the GRASS Development Team
+(C) 2008-2011 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 @author Glynn Clements
 @author Martin Landa <landa.martin gmail.com>
-@author Michael Barton <michael.barton@asu.edu>
+@author Michael Barton <michael.barton asu.edu>
 """
 
 import os
@@ -40,11 +40,11 @@ gettext.install('grasslibs', os.path.join(os.getenv("GISBASE"), 'locale'), unico
 # subprocess wrapper that uses shell on Windows
 
 class Popen(subprocess.Popen):
-    def __init__(self, args, bufsize=0, executable=None,
-                 stdin=None, stdout=None, stderr=None,
-                 preexec_fn=None, close_fds=False, shell=None,
-                 cwd=None, env=None, universal_newlines=False,
-                 startupinfo=None, creationflags=0):
+    def __init__(self, args, bufsize = 0, executable = None,
+                 stdin = None, stdout = None, stderr = None,
+                 preexec_fn = None, close_fds = False, shell = None,
+                 cwd = None, env = None, universal_newlines = False,
+                 startupinfo = None, creationflags = 0):
 
 	if shell == None:
 	    shell = (sys.platform == "win32")
@@ -58,7 +58,7 @@ class Popen(subprocess.Popen):
 PIPE = subprocess.PIPE
 STDOUT = subprocess.STDOUT
 
-class ScriptException(Exception):
+class ScriptError(Exception):
     def __init__(self, msg):
         self.value = msg
     
@@ -361,7 +361,7 @@ def error(msg):
     """
     global raise_on_error
     if raise_on_error:
-        raise ScriptException(msg)
+        raise ScriptError(msg)
     else:
         message(msg, flag = 'e')
 
@@ -376,7 +376,7 @@ def fatal(msg):
 def set_raise_on_error(raise_exp = True):
     """!Define behaviour on error (error() called)
 
-    @param raise_exp True to raise ScriptException instead of calling
+    @param raise_exp True to raise ScriptError instead of calling
     error()
     
     @return current status
@@ -953,7 +953,7 @@ def create_location(dbase, location,
                     datum = None, desc = None):
     """!Create new location
 
-    Raise ScriptException on error.
+    Raise ScriptError on error.
     
     @param dbase path to GRASS database
     @param location location name to create
@@ -1015,7 +1015,7 @@ def create_location(dbase, location,
                     set = 'GISDBASE=%s' % gisdbase)
         
         if ps.returncode != 0 and error:
-            raise ScriptException(repr(error))
+            raise ScriptError(repr(error))
 
     try:
         fd = codecs.open(os.path.join(dbase, location,
@@ -1027,12 +1027,12 @@ def create_location(dbase, location,
             fd.write(os.linesep)
         fd.close()
     except OSError, e:
-        raise ScriptException(repr(e))
+        raise ScriptError(repr(e))
         
 def _create_location_xy(database, location):
     """!Create unprojected location
 
-    Raise ScriptException on error.
+    Raise ScriptError on error.
     
     @param database GRASS database where to create new location
     @param location location name
@@ -1074,7 +1074,7 @@ def _create_location_xy(database, location):
         
         os.chdir(cur_dir)
     except OSError, e:
-        raise ScriptException(repr(e))
+        raise ScriptError(repr(e))
 
 # interface to g.version
 
