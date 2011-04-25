@@ -39,7 +39,10 @@ static void wps_print_mimetype_raster_netCDF(void);
 static void wps_print_mimetype_raster_netCDF_other(void);
 static void wps_print_mimetype_raster_grass_binary(void);
 static void wps_print_mimetype_raster_grass_ascii(void);
+static void wps_print_mimetype_vector_gml311(void);
+static void wps_print_mimetype_vector_gml311_appl(void);
 static void wps_print_mimetype_vector_gml212(void);
+static void wps_print_mimetype_vector_gml212_appl(void);
 static void wps_print_mimetype_vector_kml22(void);
 static void wps_print_mimetype_vector_dgn(void);
 static void wps_print_mimetype_vector_shape(void);
@@ -559,7 +562,7 @@ static void wps_print_comlpex_input_output(int inout_type, int min, int max, con
     }
     else if(type == TYPE_VECTOR)
     {
-            wps_print_mimetype_vector_gml212();
+            wps_print_mimetype_vector_gml311();
     }
     else if(type == TYPE_PLAIN_TEXT)
     {
@@ -590,13 +593,19 @@ static void wps_print_comlpex_input_output(int inout_type, int min, int max, con
     else if(type == TYPE_VECTOR)
     {
             if(inout_type == WPS_INPUT) {
-            	wps_print_mimetype_vector_gml212();
+            	wps_print_mimetype_vector_gml311();
+                wps_print_mimetype_vector_gml311_appl();
+                wps_print_mimetype_vector_gml212();
+                wps_print_mimetype_vector_gml212_appl();
             	wps_print_mimetype_vector_kml22();
             	wps_print_mimetype_vector_dgn();
             	wps_print_mimetype_vector_shape();
             	wps_print_mimetype_vector_zipped_shape();
 	    } else {
-            	wps_print_mimetype_vector_gml212();
+            	wps_print_mimetype_vector_gml311();
+                wps_print_mimetype_vector_gml311_appl();
+                wps_print_mimetype_vector_gml212();
+                wps_print_mimetype_vector_gml212_appl();
             	wps_print_mimetype_vector_kml22();
 	    }
     }
@@ -777,6 +786,40 @@ static void wps_print_mimetype_raster_grass_ascii(void)
 {
     fprintf(stdout,"\t\t\t\t\t\t<Format>\n");
     fprintf(stdout,"\t\t\t\t\t\t\t<MimeType>application/grass-raster-ascii</MimeType>\n");
+    fprintf(stdout,"\t\t\t\t\t\t</Format>\n");
+}
+
+/* ************************************************************************** */
+
+static void wps_print_mimetype_vector_gml311_appl(void)
+{
+    fprintf(stdout,"\t\t\t\t\t\t<Format>\n");
+    fprintf(stdout,"\t\t\t\t\t\t\t<MimeType>application/xml</MimeType>\n");
+    fprintf(stdout,"\t\t\t\t\t\t\t<Encoding>UTF-8</Encoding>\n");
+    fprintf(stdout,"\t\t\t\t\t\t\t<Schema>http://schemas.opengis.net/gml/3.1.1/base/gml.xsd</Schema>\n");
+    fprintf(stdout,"\t\t\t\t\t\t</Format>\n");
+}
+
+/* ************************************************************************** */
+
+static void wps_print_mimetype_vector_gml212_appl(void)
+{
+    fprintf(stdout,"\t\t\t\t\t\t<Format>\n");
+    fprintf(stdout,"\t\t\t\t\t\t\t<MimeType>application/xml</MimeType>\n");
+    fprintf(stdout,"\t\t\t\t\t\t\t<Encoding>UTF-8</Encoding>\n");
+    fprintf(stdout,"\t\t\t\t\t\t\t<Schema>http://schemas.opengis.net/gml/2.1.2/feature.xsd</Schema>\n");
+    fprintf(stdout,"\t\t\t\t\t\t</Format>\n");
+}
+
+
+/* ************************************************************************** */
+
+static void wps_print_mimetype_vector_gml311(void)
+{
+    fprintf(stdout,"\t\t\t\t\t\t<Format>\n");
+    fprintf(stdout,"\t\t\t\t\t\t\t<MimeType>text/xml</MimeType>\n");
+    fprintf(stdout,"\t\t\t\t\t\t\t<Encoding>UTF-8</Encoding>\n");
+    fprintf(stdout,"\t\t\t\t\t\t\t<Schema>http://schemas.opengis.net/gml/3.1.1/base/gml.xsd</Schema>\n");
     fprintf(stdout,"\t\t\t\t\t\t</Format>\n");
 }
 
