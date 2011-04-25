@@ -275,7 +275,7 @@ int main(int argc, char *argv[])
 
     opt15 = G_define_option();
     opt15->key = "walk_coeff";
-    opt15->type = TYPE_DOUBLE;
+    opt15->type = TYPE_STRING;
     opt15->key_desc = "a,b,c,d";
     opt15->required = NO;
     opt15->multiple = NO;
