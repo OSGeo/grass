@@ -33,9 +33,6 @@ ETCIMGDIR = os.path.join(ETCDIR, "gui", "images")
 sys.path.append(os.path.join(ETCDIR, "python"))
 import grass.script as grass
 
-# wxversion.select() called once at the beginning
-check = True
-
 def CheckWxVersion(version = [2, 8, 11, 0]):
     """!Check wx version"""
     ver = wx.version().split(' ')[0]
@@ -46,9 +43,9 @@ def CheckWxVersion(version = [2, 8, 11, 0]):
 
 def CheckForWx():
     """!Try to import wx module and check its version"""
-    global check
-    if not check:
+    if 'wx' in sys.modules.keys():
         return
+    
     minVersion = [2, 8, 1, 1]
     try:
         try:
@@ -73,9 +70,7 @@ def CheckForWx():
     except locale.Error, e:
         print >> sys.stderr, "Unable to set locale:", e
         os.environ['LC_ALL'] = ''
-
-    check = False
-
+    
 if not os.getenv("GRASS_WXBUNDLED"):
     CheckForWx()
 import wx
