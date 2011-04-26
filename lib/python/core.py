@@ -120,6 +120,8 @@ def make_command(prog, flags = "", overwrite = False, quiet = False, verbose = F
     if verbose:
 	args.append("--v")
     if flags:
+        if '-' in flags:
+            raise ScriptError("'-' is not a valid flag")
 	args.append("-%s" % flags)
     for opt, val in options.iteritems():
 	if val != None:
