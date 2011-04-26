@@ -82,7 +82,7 @@ DOUBLE PRECISION|SHAPE_len
 <h3>Basic info in shell script style</h3>
 
 <div class="code"><pre>
-v.info map=geology shell=basic,region,topo
+v.info -get map=geology 
 
 name=geology
 mapset=PERMANENT
@@ -117,7 +117,7 @@ primitives=5481
 </pre></div>
 
 <div class="code"><pre>
-v.info map=geology shell=region
+v.info -e map=geology
 
 north=318117.43741634
 south=10875.82723209

@@ -1,9 +1,9 @@
 #include <grass/vector.h>
 
-#define NO_INFO     0x00
-#define BASIC_INFO  0x02
-#define REGION_INFO 0x04
-#define TOPO_INFO   0x08
+#define SHELL_NO     0x00
+#define SHELL_BASIC  0x02
+#define SHELL_REGION 0x04
+#define SHELL_TOPO   0x08
 
 /* level1.c */
 int level_one_info(struct Map_info *);

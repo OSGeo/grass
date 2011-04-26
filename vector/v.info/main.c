@@ -36,6 +36,8 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("metadata"));
+    G_add_keyword(_("topology"));
+    G_add_keyword(_("extent"));
     G_add_keyword(_("history"));
     G_add_keyword(_("attribute columns"));
     
@@ -79,13 +81,13 @@ int main(int argc, char *argv[])
 	return (EXIT_SUCCESS);
     }
     
-    if (shell_flag & BASIC_INFO) {
+    if (shell_flag & SHELL_BASIC) {
 	print_shell(&Map);
     }
-    if (shell_flag & REGION_INFO) {
+    if (shell_flag & SHELL_REGION) {
 	print_region(&Map);
     }
-    if (shell_flag & TOPO_INFO) {
+    if (shell_flag & SHELL_TOPO) {
 	print_topo(&Map);
     }
     if (shell_flag == 0) {
