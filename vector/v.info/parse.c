@@ -12,23 +12,12 @@ void parse_args(int argc, char** argv,
     int i;
     const char *answer;
     
-    struct Option *input_opt, *field_opt, *print_opt;
-    struct Flag *hist_flag, *col_flag;
+    struct Option *input_opt, *field_opt;
+    struct Flag *hist_flag, *col_flag, *shell_flag, *region_flag, *topo_flag;
     
     input_opt = G_define_standard_option(G_OPT_V_MAP);
 
     field_opt = G_define_standard_option(G_OPT_V_FIELD);
-
-    print_opt = G_define_option();
-    print_opt->key = "shell";
-    print_opt->multiple = YES;
-    print_opt->options = "basic,region,topo";
-    print_opt->label = _("Print info in shell script style");
-    print_opt->description = _("Ignored if -h or -c flags are given");
-    print_opt->descriptions = _("basic;basic info only;"
-				"region;map region;"
-				"topo;topology information");
-    print_opt->guisection = _("Print");
     
     hist_flag = G_define_flag();
     hist_flag->key = 'h';
@@ -41,6 +30,21 @@ void parse_args(int argc, char** argv,
 	_("Print types/names of table columns for specified layer instead of info and exit");
     col_flag->guisection = _("Print");
 
+    shell_flag = G_define_flag();
+    shell_flag->key = 'g';
+    shell_flag->description = _("Print basic info in shell script style");
+    shell_flag->guisection = _("Print");
+
+    region_flag = G_define_flag();
+    region_flag->key = 'e';
+    region_flag->description = _("Print also region info in shell script style");
+    region_flag->guisection = _("Print");
+
+    topo_flag = G_define_flag();
+    topo_flag->key = 't';
+    topo_flag->description = _("Print also topology info in shell script style");
+    topo_flag->guisection = _("Print");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -49,16 +53,11 @@ void parse_args(int argc, char** argv,
     *history = hist_flag->answer ? TRUE : FALSE;
     *columns = col_flag->answer  ? TRUE : FALSE;
     i = 0;
-    *shell = NO_INFO;
-    if (print_opt->answer) {
-	while(print_opt->answers[i]) {
-	    answer = print_opt->answers[i++];
-	    if (strcmp(answer, "basic") == 0)
-		*shell |= BASIC_INFO;
-	    else if (strcmp(answer, "region") == 0)
-		*shell |= REGION_INFO;
-	    else if (strcmp(answer, "topo") == 0)
-		*shell |= TOPO_INFO;
-	}
-    }
+    *shell = SHELL_NO;
+    if (shell_flag->answer)
+	*shell |= SHELL_BASIC;
+    if (region_flag->answer)
+	*shell |= SHELL_REGION;
+    if (topo_flag->answer)
+	*shell |= SHELL_TOPO;
 }

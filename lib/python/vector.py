@@ -143,7 +143,7 @@ def vector_history(map):
     """
     run_command('v.support', map = map, cmdhist = os.environ['CMDLINE'])
 
-# run "v.info shell=topo" and parse output
+# run "v.info -t" and parse output
 
 def vector_info_topo(map):
     """!Return information about a vector map (interface to `v.info
@@ -160,7 +160,7 @@ def vector_info_topo(map):
 
     @return parsed output
     """
-    s = read_command('v.info', map = map, shell = 'topo')
+    s = read_command('v.info', flags = 't', map = map)
     ret = parse_key_val(s, val_type = int)
     if ret.has_key('map3d'):
         ret['map3d'] = bool(ret['map3d'])
