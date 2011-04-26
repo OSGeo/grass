@@ -172,16 +172,12 @@ class GCPWizard(object):
         if self.wizard.RunWizard(self.startpage):
             success = self.OnWizFinished()
             if success == False:
-                wx.MessageBox(parent=self.parent,
-                              message=_("Georectifying setup canceled."),
-                              caption=_("Georectify"),
-                              style=wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
+                gcmd.GMessage(parent = self.parent,
+                              message = _("Georectifying setup canceled."))
                 self.Cleanup()
         else:
-            wx.MessageBox(parent=self.parent,
-                          message=_("Georectifying setup canceled."),
-                          caption=_("Georectify"),
-                          style=wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
+            gcmd.GMessage(parent = self.parent,
+                          message = _("Georectifying setup canceled."))
             self.Cleanup()
 
         #
@@ -398,7 +394,9 @@ class LocationPage(TitledPage):
     def OnMapset(self, event):
         """!Sets source mapset for map(s) to georectify"""
         if self.xylocation == '':
-            wx.MessageBox(_('You must select a valid location before selecting a mapset'))
+            gcmd.GMessage(_('You must select a valid location '
+                            'before selecting a mapset'),
+                          parent = self)
             return
 
         self.xymapset = event.GetString()
@@ -409,7 +407,9 @@ class LocationPage(TitledPage):
     def OnPageChanging(self, event=None):
         if event.GetDirection() and \
                (self.xylocation == '' or self.xymapset == ''):
-            wx.MessageBox(_('You must select a valid location and mapset in order to continue'))
+            gcmd.GMessage(_('You must select a valid location '
+                            'and mapset in order to continue'),
+                          parent = self)
             event.Veto()
             return
         
@@ -531,12 +531,16 @@ class GroupPage(TitledPage):
 
     def OnPageChanging(self, event=None):
         if event.GetDirection() and self.xygroup == '':
-            wx.MessageBox(_('You must select a valid image/map group in order to continue'))
+            gcmd.GMessage(_('You must select a valid image/map '
+                            'group in order to continue'),
+                          parent = self)
             event.Veto()
             return
 
         if event.GetDirection() and self.extension == '':
-            wx.MessageBox(_('You must enter an map name extension in order to continue'))
+            gcmd.GMessage(_('You must enter an map name '
+                            'extension in order to continue'),
+                          parent = self)
             event.Veto()
             return
 
@@ -673,7 +677,9 @@ class DispMapPage(TitledPage):
         global tgt_map
 
         if event.GetDirection() and (src_map == ''):
-            wx.MessageBox(_('You must select a source map in order to continue'))
+            gcmd.GMessage(_('You must select a source map '
+                            'in order to continue'),
+                          parent = self)
             event.Veto()
             return
 
@@ -694,12 +700,10 @@ class DispMapPage(TitledPage):
         if ret:
             self.parent.src_maps = ret.splitlines()
         else:
-            wx.MessageBox(parent=self,
-                              caption=_("Select maps to display"),
-                              message=_('No maps in selected group <%s>. \n'
-                                        'Please edit group or select another group.') %
-                                        self.parent.grouppage.xygroup,
-                              style=wx.ICON_ERROR | wx.ID_OK | wx.CENTRE)
+            gcmd.GError(parent = self,
+                        message = _('No maps in selected group <%s>.\n'
+                                    'Please edit group or select another group.') %
+                        self.parent.grouppage.xygroup)
             return
 
         # filter out all maps not in group
@@ -944,8 +948,8 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
         minNumOfItems = self.OnGROrder(None)
 
         if self.list.GetItemCount() <= minNumOfItems:
-            wx.MessageBox(parent=self, message=_("At least %d GCPs required. Operation cancelled.") % minNumOfItems,
-                          caption=_("Delete GCP"), style=wx.OK | wx.ICON_INFORMATION)
+            gcmd.GMessage(parent = self,
+                          message=_("At least %d GCPs required. Operation cancelled.") % minNumOfItems)
             return
 
         key = self.list.DeleteGCPItem()
@@ -1032,10 +1036,9 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
             n_idx = 4
 
         if not mapWin:
-            wx.MessageBox(parent=self,
-                  message="%s%s." % (_("mapwin not defined for "),
-                                 str(idx)),
-                  caption=_("Error"), style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
+            gcmd.GError(parent = self,
+                        message="%s%s." % (_("mapwin not defined for "),
+                                           str(idx)))
             return
 
         #for gcp in self.mapcoordlist:
@@ -1172,10 +1175,9 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
                 f.write(coord0 + ' ' + coord1 + '     ' + coord2 + ' ' + coord3 + '     ' + check + '\n')
 
         except IOError, err:
-            wx.MessageBox(parent=self,
-                          message="%s <%s>. %s%s" % (_("Writing POINTS file failed"),
-                                                     self.file['points'], os.linesep, err),
-                          caption=_("Error"), style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
+            gcmd.GError(parent = self,
+                        message="%s <%s>. %s%s" % (_("Writing POINTS file failed"),
+                                                   self.file['points'], os.linesep, err))
             return
 
         f.close()
@@ -1198,17 +1200,15 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
         #targetMapWin = self.parent.curr_page.maptree.mapdisplay.MapWindow
 
         if not sourceMapWin:
-            wx.MessageBox(parent=self,
-                          message="%s. %s%s" % (_("source mapwin not defined"),
-                                                     os.linesep, err),
-                          caption=_("Error"), style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
-            
+            gcmd.GError(parent = self,
+                        message = "%s. %s%s" % (_("source mapwin not defined"),
+                                                os.linesep, err))
+        
         if not targetMapWin:
-            wx.MessageBox(parent=self,
-                          message="%s. %s%s" % (_("target mapwin not defined"),
-                                                     os.linesep, err),
-                          caption=_("Error"), style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
-
+            gcmd.GError(parent = self,
+                        message="%s. %s%s" % (_("target mapwin not defined"),
+                                              os.linesep, err))
+        
         try:
             f = open(self.file['points'], 'r')
             GCPcnt = 0
@@ -1233,10 +1233,9 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
                 GCPcnt += 1
 
         except IOError, err:
-            wx.MessageBox(parent=self,
-                          message="%s <%s>. %s%s" % (_("Reading POINTS file failed"),
-                                                     self.file['points'], os.linesep, err),
-                          caption=_("Error"), style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
+            gcmd.GError(parent = self,
+                        message = "%s <%s>. %s%s" % (_("Reading POINTS file failed"),
+                                                     self.file['points'], os.linesep, err))
             return
 
         f.close()
@@ -1305,14 +1304,12 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
             (self.GCPcount < 6 and self.gr_order == 2) or \
             (self.GCPcount < 10 and self.gr_order == 3):
             if msg:
-                wx.MessageBox(parent=self,
-                              caption=_("RMS Error"),
+                gcmd.GWarning(parent = self,
                               message=_('Insufficient points defined and active (checked) '
                                         'for selected rectification method.\n'
                                         '3+ points needed for 1st order,\n'
                                         '6+ points for 2nd order, and\n'
-                                        '10+ points for 3rd order.'),
-                              style=wx.ICON_INFORMATION | wx.ID_OK | wx.CENTRE)
+                                        '10+ points for 3rd order.'))
                 return False
         else:
             return True
@@ -1390,14 +1387,14 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
                 self.parent.goutput.WriteLog(text = _('Transforming <%s>...') % vect,
                                              switchPage = True)
                 msg = err = ''
-
+                
                 ret, out, err = gcmd.RunCommand('v.transform',
-                                                flags = 'o',
+                                                overwrite = True,
                                                 input = vect,
                                                 output = self.outname,
                                                 pointsfile = self.file['points'],
                                                 getErrorMsg = True, read = True) 
-                                    
+                
                 if ret == 0:
                     self.VectGRList.append(self.outname)
                     # note: WriteLog doesn't handle GRASS_INFO_PERCENT well, so using a print here
@@ -1407,7 +1404,7 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
                     self.parent.goutput.WriteError(_('Georectification of vector map <%s> failed') %
                                                    self.outname)
                     self.parent.goutput.WriteError(err)
-                    
+                
                 # FIXME
                 # Copying database information not working. 
                 # Does not copy from xy location to current location
@@ -1456,10 +1453,11 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
 
                 # TODO: connect vectors to copied tables with v.db.connect
                                                    
-            wx.MessageBox('For all vector maps georectified successfully, ' + '\n' +
-                          'you will need to copy any attribute tables' + '\n' +
-                          'and reconnect them to the georectified vectors')
-            
+            gcmd.GMessage(_('For all vector maps georectified successfully,') + '\n' +
+                          _('you will need to copy any attribute tables') + '\n' +
+                          _('and reconnect them to the georectified vectors'),
+                          parent = self)
+        
         self.grwiz.SwitchEnv('target')
 
     def OnGeorectDone(self, **kargs):
@@ -1524,7 +1522,6 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
 
     def OnQuit(self, event):
         """!Quit georectifier"""
-
         ret = wx.MessageBox(parent=self,
                       caption=_("Quit GCP Manager"),
                       message=_('Save ground control points?'),
@@ -1605,11 +1602,9 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
         if ret:
             errlist = ret.splitlines()
         else:
-            wx.MessageBox(parent=self,
-                              caption=_("RMS Error"),
-                              message=_('Could not calculate RMS Error. \n'
-                                        'Possible error with g.transform.'),
-                              style=wx.ICON_ERROR | wx.ID_OK | wx.CENTRE)
+            gcmd.GError(parent = self,
+                        message=_('Could not calculate RMS Error.\n'
+                                  'Possible error with g.transform.'))
             return
         
         # insert error values into GCP list for checked items
@@ -1732,11 +1727,9 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
         if ret:
             errlist = ret.splitlines()
         else:
-            wx.MessageBox(parent=self,
-                              caption=_("Adjust GCP Displays "),
-                              message=_('Could not calculate new extends. \n'
-                                        'Possible error with g.transform.'),
-                              style=wx.ICON_ERROR | wx.ID_OK | wx.CENTRE)
+            gcmd.GError(parent = self,
+                        message=_('Could not calculate new extends.\n'
+                                  'Possible error with g.transform.'))
             return
 
         # fist corner
@@ -2080,10 +2073,8 @@ class GCPList(wx.ListCtrl,
             values = dlg.GetValues() # string
             
             if len(values) == 0:
-                wx.MessageBox(parent=self,
-                              caption=_("Edit GCP"),
-                              message=_("Invalid coordinate value. Operation cancelled."),
-                              style=wx.CENTRE | wx.ICON_ERROR | wx.ID_OK)
+                gcmd.GError(parent = self,
+                            message=_("Invalid coordinate value. Operation cancelled."))
             else:
                 for i in range(len(values)):
                     if values[i] != coords[i]:
@@ -2657,17 +2648,13 @@ class GrSettingsDialog(wx.Dialog):
         self.sdfactor = float(event.GetString())
 
         if self.sdfactor <= 0:
-            wx.MessageBox(parent=self,
-                  caption=_("Update settings"),
-                  message=_('RMS threshold factor must be > 0'),
-                  style=wx.ICON_ERROR | wx.ID_OK | wx.CENTRE)
+            gcmd.GError(parent = self,
+                        message=_('RMS threshold factor must be > 0'))
         elif self.sdfactor < 1:
-            wx.MessageBox(parent=self,
-                  caption=_("Update settings"),
-                  message=_('RMS threshold factor is < 1\n'
-                            'Too many points might be highlighted'),
-                  style=wx.ICON_EXCLAMATION | wx.ID_OK | wx.CENTRE)
-
+            gcmd.GError(parent = self,
+                        message=_('RMS threshold factor is < 1\n'
+                                  'Too many points might be highlighted'))
+        
     def OnSrcSelection(self,event):
         """!Source map to display selected"""
         global src_map
