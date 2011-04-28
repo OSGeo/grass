@@ -56,6 +56,9 @@ extern "C"
 /* TICache: create 1 km bins for visibility */
 #define BIN_VIS 1.
 
+/* uncomment to disable cache usage */
+/* #define _NO_OPTIMIZE_ */
+
 /* Input options and flags */
 struct Options
 {
@@ -71,11 +74,10 @@ struct Options
     struct Option *oscl;	/* scale the output data (reflectance values) to this range */
 
     /* flags */
-    struct Flag *oflt;		/* output data as floating point and do not round */
+    struct Flag *oint;		/* output data as integer */
     struct Flag *irad;		/* treat input values as reflectance instead of radiance values */
     struct Flag *etmafter;	/* treat input data as a satelite image of type etm+ taken after July 1, 2000 */
     struct Flag *etmbefore;	/* treat input data as a satelite image of type etm+ taken before July 1, 2000 */
-    struct Flag *optimize;
 };
 
 struct ScaleRange
@@ -96,7 +98,7 @@ static void adjust_region(const char *);
 static CELL round_c(FCELL);
 static void write_fp_to_cell(int, FCELL *);
 static void process_raster(int, InputMask, ScaleRange, int, int, int, bool,
-			   ScaleRange, bool);
+			   ScaleRange);
 static void copy_colors(const char *, char *);
 static void define_module(void);
 static struct Options define_options(void);
@@ -240,8 +242,8 @@ class TICache
    oscale: output file's range (default is min = 0, max = 255)
  */
 static void process_raster(int ifd, InputMask imask, ScaleRange iscale,
-			   int ialt_fd, int ivis_fd, int ofd, bool oflt,
-			   ScaleRange oscale, bool optimize)
+			   int ialt_fd, int ivis_fd, int ofd, bool oint,
+			   ScaleRange oscale)
 {
     FCELL *buf;			/* buffer for the input values */
     FCELL *alt = NULL;		/* buffer for the elevation values */
@@ -249,6 +251,11 @@ static void process_raster(int ifd, InputMask imask, ScaleRange iscale,
     FCELL prev_alt = -1.f;
     FCELL prev_vis = -1.f;
     int row, col, nrows, ncols;
+    bool optimize = (ialt_fd >= 0 || ivis_fd >= 0);
+    
+#ifdef _NO_OPTIMZE_
+    optimize = false;
+#endif
 
     /* do initial computation with global elevation and visibility values */
     TransformInput ti;
@@ -381,15 +388,15 @@ static void process_raster(int ifd, InputMask imask, ScaleRange iscale,
 		buf[col] * ((float)oscale.max - (float)oscale.min) +
 		oscale.min;
 
-	    if (~oflt && (buf[col] > (float)oscale.max))
+	    if (oint && (buf[col] > (float)oscale.max))
 		G_warning(_("The output data will overflow. Reflectance > 100%%"));
 	}
 
 	/* write output */
-	if (oflt)
-	    Rast_put_row(ofd, buf, FCELL_TYPE);
-	else
+	if (oint)
 	    write_fp_to_cell(ofd, buf);
+	else
+	    Rast_put_row(ofd, buf, FCELL_TYPE);
     }
     G_percent(1, 1, 1);
 
@@ -488,10 +495,10 @@ static struct Options define_options(void)
     opts.oscl->description = _("Rescale output raster map");
     opts.oscl->guisection = _("Output");
 
-    opts.oflt = G_define_flag();
-    opts.oflt->key = 'f';
-    opts.oflt->description = _("Output raster map as floating point");
-    opts.oflt->guisection = _("Output");
+    opts.oint = G_define_flag();
+    opts.oint->key = 'i';
+    opts.oint->description = _("Output raster map as integer");
+    opts.oint->guisection = _("Output");
 
     opts.irad = G_define_flag();
     opts.irad->key = 'r';
@@ -510,11 +517,6 @@ static struct Options define_options(void)
     opts.etmbefore->description =
 	_("Input from ETM+ image taken before July 1, 2000");
     opts.etmbefore->guisection = _("Input");
-
-    opts.optimize = G_define_flag();
-    opts.optimize->key = 'o';
-    opts.optimize->description =
-	_("Try to increase computation speed when altitude and/or visibility map is used");
 
     return opts;
 }
@@ -592,13 +594,13 @@ int main(int argc, char *argv[])
     }
 
     /* open a floating point raster or not? */
-    if (opts.oflt->answer) {
-	if ((oimg_fd = Rast_open_fp_new(opts.oimg->answer)) < 0)
+    if (opts.oint->answer) {
+	if ((oimg_fd = Rast_open_new(opts.oimg->answer, CELL_TYPE)) < 0)
 	    G_fatal_error(_("Unable to create raster map <%s>"),
 			  opts.oimg->answer);
     }
     else {
-	if ((oimg_fd = Rast_open_new(opts.oimg->answer, CELL_TYPE)) < 0)
+	if ((oimg_fd = Rast_open_fp_new(opts.oimg->answer)) < 0)
 	    G_fatal_error(_("Unable to create raster map <%s>"),
 			  opts.oimg->answer);
     }
@@ -620,17 +622,12 @@ int main(int argc, char *argv[])
     if (opts.etmafter->answer)
 	imask = (InputMask) (imask | ETM_AFTER);
 
-    if ((ialt_fd >= 0 || ivis_fd >= 0) && !opts.optimize->answer) {
-	G_message(_("An elevation and/or visibility map is given, but the optimization flag is not set."));
-	G_message(_("This can take some time."));
-    }
-
     /* switch on optimization automatically if elevation and/or visibility map is given? */
 
     /* process the input raster and produce our atmospheric corrected output raster. */
     G_message(_("Atmospheric correction..."));
     process_raster(iimg_fd, imask, iscale, ialt_fd, ivis_fd,
-		   oimg_fd, opts.oflt->answer, oscale, opts.optimize->answer);
+		   oimg_fd, opts.oint->answer, oscale);
 
 
     /* Close the input and output file descriptors */
