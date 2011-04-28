@@ -38,7 +38,8 @@ int main(int argc, char *argv[])
     struct Flags flags;
 
     char buf[SQL_BUFFER_SIZE];
-    char key1[SQL_BUFFER_SIZE], key2[SQL_BUFFER_SIZE];    struct Key_Value *projinfo, *projunits;
+    char key1[SQL_BUFFER_SIZE], key2[SQL_BUFFER_SIZE];
+    struct Key_Value *projinfo, *projunits;
     struct Cell_head cellhd;
     char **tokens;
 
@@ -55,7 +56,6 @@ int main(int argc, char *argv[])
     dbTable *Table;
     dbString dbstring;
     dbColumn *Column;
-    dbCursor cursor;
 
     int fout, fskip;		/* features written/ skip */
     int nocat, noatt, nocatskip;	/* number of features without cats/atts written/skip */
@@ -627,6 +627,9 @@ int main(int argc, char *argv[])
 		    OGR_Fld_Create(db_get_column_name(Column),
 				   ogr_ftype);
 		OGR_L_CreateField(Ogr_layer, Ogr_field, 0);
+		
+		G_debug(0, "OGR field: %s, column %s", OGR_Fld_GetNameRef(Ogr_field), db_get_column_name(Column));
+		
 		OGR_Fld_Destroy(Ogr_field);
 	    }
 	    if (keycol == -1)
@@ -638,18 +641,6 @@ int main(int argc, char *argv[])
 
     fout = fskip = nocat = noatt = nocatskip = 0;
 
-    /* Fetch all attribute records */
-    if (doatt) {
-    	sprintf(buf, "SELECT * FROM %s", Fi->table);
-    	G_debug(2, "SQL: %s", buf);
-    	db_set_string(&dbstring, buf);
-    	if (db_open_select_cursor
-    			(Driver, &dbstring, &cursor, DB_SEQUENTIAL) != DB_OK) {
-    		G_fatal_error(_("Cannot select attributes for cat = %d"),
-    	      cat);
-    	}
-    }
-    
     if (OGR_L_TestCapability(Ogr_layer, OLCTransactions))
 	OGR_L_StartTransaction(Ogr_layer);
     
@@ -726,7 +717,7 @@ int main(int argc, char *argv[])
 		}
 
 		mk_att(cat, Fi, Driver, ncol, doatt, flags.nocat->answer,
-		       Ogr_feature, &noatt, &fout, cursor);
+		       Ogr_feature, &noatt, &fout);
 		OGR_L_CreateFeature(Ogr_layer, Ogr_feature);
 	    }
 	    OGR_G_DestroyGeometry(Ogr_geometry);
@@ -801,7 +792,7 @@ int main(int argc, char *argv[])
 		}
 
 		mk_att(cat, Fi, Driver, ncol, doatt, flags.nocat->answer,
-		       Ogr_feature, &noatt, &fout, cursor);
+		       Ogr_feature, &noatt, &fout);
 		OGR_L_CreateFeature(Ogr_layer, Ogr_feature);
 	    }
 	    OGR_G_DestroyGeometry(Ogr_geometry);
@@ -861,7 +852,7 @@ int main(int argc, char *argv[])
 		    }
 
 		    mk_att(cat, Fi, Driver, ncol, doatt, flags.nocat->answer,
-			   Ogr_feature, &noatt, &fout, cursor);
+			   Ogr_feature, &noatt, &fout);
 		    OGR_L_CreateFeature(Ogr_layer, Ogr_feature);
 		}
 
@@ -916,7 +907,7 @@ int main(int argc, char *argv[])
 		    }
 
 		    mk_att(cat, Fi, Driver, ncol, doatt, flags.nocat->answer,
-			   Ogr_feature, &noatt, &fout, cursor);
+			   Ogr_feature, &noatt, &fout);
 		    OGR_L_CreateFeature(Ogr_layer, Ogr_feature);
 		}
 		OGR_G_DestroyGeometry(Ogr_geometry);
@@ -944,7 +935,6 @@ int main(int argc, char *argv[])
     Vect_close(&In);
 
     if (doatt) {
-    db_close_cursor(&cursor);
 	db_close_database(Driver);
 	db_shutdown_driver(Driver);
     }
