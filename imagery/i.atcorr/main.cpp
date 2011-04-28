@@ -251,9 +251,10 @@ static void process_raster(int ifd, InputMask imask, ScaleRange iscale,
     FCELL prev_alt = -1.f;
     FCELL prev_vis = -1.f;
     int row, col, nrows, ncols;
+    /* switch on optimization automatically if elevation and/or visibility map is given */
     bool optimize = (ialt_fd >= 0 || ivis_fd >= 0);
     
-#ifdef _NO_OPTIMZE_
+#ifdef _NO_OPTIMIZE_
     optimize = false;
 #endif
 
@@ -621,8 +622,6 @@ int main(int argc, char *argv[])
 	imask = (InputMask) (imask | ETM_BEFORE);
     if (opts.etmafter->answer)
 	imask = (InputMask) (imask | ETM_AFTER);
-
-    /* switch on optimization automatically if elevation and/or visibility map is given? */
 
     /* process the input raster and produce our atmospheric corrected output raster. */
     G_message(_("Atmospheric correction..."));
