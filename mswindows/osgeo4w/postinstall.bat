@@ -1,8 +1,6 @@
 set ICON=%OSGEO4W_ROOT%\apps\grass\grass-@VERSION@\etc\gui\icons\grass.ico
 set BATCH=%OSGEO4W_ROOT%\bin\grass@POSTFIX@.bat
-
-textreplace -std -t "%OSGEO4W_ROOT%"\bin\grass@POSTFIX@-env.bat 
-textreplace -std -t "%OSGEO4W_ROOT%"\bin\grass@POSTFIX@.bat 
+textreplace -std -t "%OSGEO4W_ROOT%"\bin\grass@POSTFIX@.bat
 textreplace -std -t "%OSGEO4W_ROOT%"\bin\grass@POSTFIX@ 
 textreplace -std -t "%OSGEO4W_ROOT%"\apps\grass\grass-@VERSION@\etc\fontcap 
 
