@@ -134,9 +134,7 @@ mv $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/include/grass/config.h \
     $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/include/grass/config.h.mingw
 cp mswindows/osgeo4w/config.h.switch $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/include/grass/config.h
 cp mswindows/osgeo4w/config.h.vc $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/include/grass
-sed -e "s#@OSGEO4W_ROOT_MSYS@#$OSGEO4W_ROOT_MSYS#g" -e "s#@VERSION@#$VERSION#g" -e "s#@POSTFIX@#$MAJOR$MINOR#g" \
-    mswindows/osgeo4w/grass.tmpl >$OSGEO4W_ROOT_MSYS/bin/grass$MAJOR$MINOR
-sed -e "s#@VERSION@#$VERSION#g" -e "s#@POSTFIX@#$MAJOR$MINOR#g" -e "s#@OSGEO4W_ROOT@#$OSGEO4W_ROOT#g" \
+sed -e "s#@VERSION@#$VERSION#g" -e "s#@osgeo4w@#$OSGEO4W_ROOT#g" \
     mswindows/osgeo4w/grass.bat.tmpl >$OSGEO4W_ROOT_MSYS/bin/grass$MAJOR$MINOR.bat
 sed -e "s#@VERSION@#$VERSION#g" -e "s#@OSGEO4W_ROOT_MSYS@#$OSGEO4W_ROOT#g" \
     mswindows/osgeo4w/env.bat.tmpl >$OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/etc/env.bat
@@ -158,9 +156,11 @@ fi
 # rm "$OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/etc/fontcap"
 
 if [ -n "$1" ]; then
+    PACKAGE="$1"
     log building vc libraries 
-    sh mswindows/osgeo4w/mklibs.sh $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/bin/*.$VERSION.dll 
-    mv mswindows/osgeo4w/vc/grass*.lib $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/lib 
+    sh mswindows/osgeo4w/mklibs.sh $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/lib/*.$VERSION.dll 
+    mv mswindows/osgeo4w/vc/grass*.lib $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/lib
+    # rm $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/lib/*.dll
     
     # log BUILDING GDAL GRASS plugins 
     # $COMSPEC /c "mswindows\\osgeo4w\\gdalplugins.cmd $VERSION" 
@@ -169,14 +169,26 @@ if [ -n "$1" ]; then
     mkdir -p package/grass$MAJOR$MINOR 
     
     PDIR=$PWD/package
+    SRC=$PWD
     cd $OSGEO4W_ROOT_MSYS 
+    
+    sed -e "s#GISBASE_VALUE#@osgeo4w@\\\apps\\\grass\\\grass-$VERSION#g" \
+	$SRC/lib/init/grass.src >$OSGEO4W_ROOT_MSYS/bin/grass$MAJOR$MINOR.tmpl
+    sed -e "s#@VERSION@#$VERSION#g" \
+	$SRC/mswindows/osgeo4w/grass.bat.tmpl >$OSGEO4W_ROOT_MSYS/bin/grass$MAJOR$MINOR.bat.tmpl
     
     tar -cjf $PDIR/grass$MAJOR$MINOR/grass-$VERSION-$PACKAGE.tar.bz2 \
     apps/grass/grass-$VERSION \
-    bin/grass$MAJOR$MINOR.bat \
-    bin/grass$MAJOR$MINOR \
+    bin/grass$MAJOR$MINOR.bat.tmpl \
+    bin/grass$MAJOR$MINOR.tmpl \
+    bin/libintl3.dll \
+    bin/libiconv2.dll \
+    bin/regex2.dll \
     etc/postinstall/grass$MAJOR$MINOR.bat \
     etc/preremove/grass$MAJOR$MINOR.bat
+    
+    rm bin/grass$MAJOR$MINOR.tmpl
+    rm bin/grass$MAJOR$MINOR.bat.tmpl
     
     cd $PDIR/.. 
     svn diff >/tmp/grass-$VERSION.diff
