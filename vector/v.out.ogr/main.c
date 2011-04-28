@@ -627,9 +627,7 @@ int main(int argc, char *argv[])
 		    OGR_Fld_Create(db_get_column_name(Column),
 				   ogr_ftype);
 		OGR_L_CreateField(Ogr_layer, Ogr_field, 0);
-		
-		G_debug(0, "OGR field: %s, column %s", OGR_Fld_GetNameRef(Ogr_field), db_get_column_name(Column));
-		
+
 		OGR_Fld_Destroy(Ogr_field);
 	    }
 	    if (keycol == -1)
