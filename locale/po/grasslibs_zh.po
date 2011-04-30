@@ -5839,7 +5839,7 @@ msgstr "不能计算线性方程式系统"
 #: ../lib/gmath/solvers_krylov.c:262
 #, c-format
 msgid "Sparse PCG -- iteration %i error  %g\n"
-msgstr "grass不能识别基准系<%s>或找不到参数\n"
+msgstr ""
 
 #: ../lib/gmath/solvers_krylov.c:264
 #, c-format

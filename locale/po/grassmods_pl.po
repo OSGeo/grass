@@ -12503,7 +12503,7 @@ msgstr "Nazwa nowej lokacji, która ma być utworzona"
 #: ../general/g.proj/main.c:193
 #, c-format
 msgid "Only one of '%s', '%s', '%s' or '%s' options may be specified"
-msgstr "Tylko jedna z opcji '%s', '%s' lub '%s' może być określona"
+msgstr "Tylko jedna z opcji '%s', '%s', '%s' lub '%s' może być określona"
 
 #: ../general/g.proj/main.c:222
 msgid "Projection files missing"
@@ -21723,7 +21723,7 @@ msgstr "Dołączanie wysp ..."
 #: ../vector/v.overlay/area_area.c:78
 #, c-format
 msgid "Querying vector map <%s>..."
-msgstr "Odpytywanie mapy wektorowej ..."
+msgstr "Odpytywanie mapy wektorowej <%s>..."
 
 #: ../vector/v.overlay/area_area.c:114
 msgid "Writing centroids..."

@@ -4626,7 +4626,7 @@ msgstr ""
 #: ../lib/rst/interp_float/output2d.c:113
 #, c-format
 msgid "First change your cols number to nsizc %d %d"
-msgstr "Najpierw ustaw liczbę kolumn zgodnie z 'nsizc'"
+msgstr "Najpierw ustaw liczbę kolumn zgodnie z 'nsizc' %d %d"
 
 #: ../lib/rst/interp_float/segmen2d.c:111
 msgid "Taking too long to find points for interpolation - please change the region to area where your points are. Continuing calculations..."

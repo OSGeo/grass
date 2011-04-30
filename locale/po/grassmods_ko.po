@@ -3,7 +3,6 @@
 # Copyright (C) 2005, GRASS Development Team
 # Huidae Cho <grass4u@gmail.com>, 2005
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_ko\n"

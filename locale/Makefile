@@ -71,8 +71,8 @@ update-po:
 
 verify:
 	@cd ./po/ ; for po in `ls *_*.po 2>/dev/null` ; do \
+		echo "----- $$po:" ; \
 		msgfmt -c $$po; \
-		echo ""; \
 	done
 
 define dom_rule
