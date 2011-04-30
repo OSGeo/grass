@@ -18,6 +18,7 @@ all:
 	@echo '   make pot        create grass.pot (containing original messages)'
 	@echo '   make update-po  merge new messages into existing *.po files'
 	@echo '   make mo         create the *.mo files'
+	@echo '   make verify     verify the *.po files'
 
 # Directory for installing tcl .msg files:
 PO_DIR = po
