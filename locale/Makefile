@@ -69,6 +69,12 @@ update-po:
 		done
 	@echo "Be careful with SVN commits as .po file updates must be syncronized with the individual translators."
 
+verify:
+	@cd ./po/ ; for po in `ls *_*.po 2>/dev/null` ; do \
+		msgfmt -c $$po; \
+		echo ""; \
+	done
+
 define dom_rule
 $(1)_FILES := $$(patsubst po/grass$(1)_%.po,$$(MO_DIR)/%/LC_MESSAGES/grass$(1).mo,$$(wildcard po/grass$(1)_*.po))
 $$(MO_DIR)/%/LC_MESSAGES/grass$(1).mo: po/grass$(1)_%.po
