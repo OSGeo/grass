@@ -7309,7 +7309,7 @@ msgstr ""
 #: ../raster/r.proj/main.c:446 ../raster/r.proj/main.c:457
 #, c-format
 msgid "Cols: %d (%d)"
-msgstr "ù"
+msgstr ""
 
 #: ../raster/r.proj/main.c:447 ../raster/r.proj/main.c:458
 #, c-format

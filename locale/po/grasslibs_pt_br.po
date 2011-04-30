@@ -2295,7 +2295,7 @@ msgstr "Impossível mudar de diretório para %s"
 #: ../lib/gis/done_msg.c:38
 #, c-format
 msgid "%s complete. %s"
-msgstr "%s completo. %"
+msgstr "%s completo. %s"
 
 #: ../lib/gis/gisinit.c:56 ../lib/gis/gisinit.c:91
 msgid "Incompatible library version for module. You need to rebuild GRASS or untangle multiple installations."

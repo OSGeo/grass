@@ -118,7 +118,7 @@ msgstr ""
 #: ../gui/wxpython/wxgui.py:520
 #, python-format
 msgid "Unable to switch to location <%(loc)s> mapset <%(mapset)s>."
-msgstr "Nie można przełączyć do  lokacji <%(loc)s> mapsetu <%<mapset)y>."
+msgstr "Nie można przełączyć do lokacji <%(loc)s> mapsetu <%(mapset)s>."
 
 #: ../gui/wxpython/wxgui.py:522 ../gui/wxpython/wxgui.py:543
 #: ../gui/wxpython/scripts/r.li.setup.py:337
@@ -6316,7 +6316,7 @@ msgid ""
 "\n"
 "Details: %(err)s"
 msgstr ""
-"Nie można utworzyć nowej lokacji. Lokacja <%loc)s> nie została utworzona.\n"
+"Nie można utworzyć nowej lokacji. Lokacja <%(loc)s> nie została utworzona.\n"
 "\n"
 "Szczegóły: %(err)s"
 
@@ -8242,7 +8242,7 @@ msgstr " wiersz: %d"
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:74
 #, python-format
 msgid "GRASS SQL Builder (%(type)s): vector map <%(map)s>"
-msgstr "GRASS SQL Builder (%(typ)ów): map wektorowych <%(map)>"
+msgstr "GRASS SQL Builder (%(typ)ów): map wektorowych <%(map)s>"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:81
 msgid "SQL statement not verified"

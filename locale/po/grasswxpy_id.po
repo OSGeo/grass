@@ -7078,7 +7078,7 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/location_wizard.py:1837
 #, python-format
 msgid "Location <%s> created"
-msgstr "Location <%> telah dibuat"
+msgstr "Location <%s> telah dibuat"
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1850
 #, fuzzy, python-format
@@ -8224,7 +8224,7 @@ msgstr "Snap juga ke vertex"
 #: ../gui/wxpython/gui_modules/vdigit.py:651
 #, python-format
 msgid "Snapping threshold is %(value).1f %(units)s"
-msgstr "Batasan snapping adalah %(value).1f%(units)"
+msgstr "Batasan snapping adalah %(value).1f %(units)s"
 
 #: ../gui/wxpython/gui_modules/vdigit.py:220
 msgid "Select vector features"
@@ -8471,7 +8471,7 @@ msgid ""
 "Layer and category number must be integer.\n"
 "Layer number must be greater then zero."
 msgstr ""
-"Tidak mampu menambahkan layer/kategori baru <%(layer)/%(category)>.\n"
+"Tidak mampu menambahkan layer/kategori baru <%(layer)s/%(category)s>.\n"
 "Layer dan kategori harus integer.\n"
 "Nomor layer harus lebih besar dari nol."
 
@@ -9865,8 +9865,8 @@ msgid ""
 "Unable to rename column <%(column)s> to <%(columnTo)s>. Column already "
 "exists in the table <%(table)s>."
 msgstr ""
-"Tidak mampu merubah nama kolom <%(column)> ke <%(columnTo). Kolom sudah ada "
-"dalam tabel <%(table)>."
+"Tidak mampu merubah nama kolom <%(column)s> ke <%(columnTo)s>. Kolom sudah ada "
+"dalam tabel <%(table)s>."
 
 #: ../gui/wxpython/gui_modules/dbm.py:1626
 #, python-format
@@ -9874,8 +9874,8 @@ msgid ""
 "Unable to rename column. Column <%(column)s> doesn't exist in the table <%"
 "(table)s>."
 msgstr ""
-"Tidak mampu merubah nama kolom. Kolom <%(column)> tidak ada di dalam tabel <%"
-"(table)>."
+"Tidak mampu merubah nama kolom. Kolom <%(column)s> tidak ada di dalam tabel <%"
+"(table)s>."
 
 #: ../gui/wxpython/gui_modules/dbm.py:1654
 msgid "Drop selected column"
@@ -9919,7 +9919,7 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/dbm.py:1769
 #, python-format
 msgid "Column <%(column)s> already exists in table <%(table)s>."
-msgstr "Kolom <%(column)> sudah ada di dalam tabel <%(table)>."
+msgstr "Kolom <%(column)s> sudah ada di dalam tabel <%(table)s>."
 
 #: ../gui/wxpython/gui_modules/dbm.py:1928
 #: ../gui/wxpython/gui_modules/dbm.py:1952

@@ -20181,7 +20181,7 @@ msgstr "Việc tính toán bao đòi hỏi ít nhất ba điểm"
 #: ../vector/v.hull/main.c:93
 #, c-format
 msgid "%d points read from vector map <%s>"
-msgstr "Đọc %d điểm từ bản đồ vec-tơ <%>"
+msgstr "Đọc %d điểm từ bản đồ vec-tơ <%s>"
 
 #: ../vector/v.hull/hull.c:107
 msgid "Simple planar hulls not implemented yet"
