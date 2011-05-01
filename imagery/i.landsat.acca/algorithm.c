@@ -134,8 +134,11 @@ void acca_algorithm(Gfile * out, Gfile band[],
     /* WARNING: re-use of the variable 'value' with new meaning */
 
     /* step 14 */
+
+    /* To correct Irish2006: idesert has to be bigger than 0.5 to start pass 2 processing (see Irish2000)
+       because then we have no desert condition (thanks to Matthias Eder, Germany) */
     if (cloud_signature ||
-	(idesert <= .5 && signa[COVER] > 0.004 && signa[KMEAN] < 295.)) {
+	(idesert > .5 && signa[COVER] > 0.004 && signa[KMEAN] < 295.)) {
 	G_message(_("Histogram cloud signature:"));
 
 	value[MEAN] = quantile(0.5, hist_cold) + K_BASE;
@@ -166,7 +169,12 @@ void acca_algorithm(Gfile * out, Gfile band[],
 	    shift *= value[DSTD];
 
 	    if ((value[KUPPER] + shift) > max) {
-		value[KLOWER] += (max - value[KUPPER]);
+                if ((value[KLOWER] + shift) > max) {
+                    value[KLOWER] += (max - value[KUPPER]);
+                }
+                else {
+                    value[KLOWER] += shift;
+                }
 		value[KUPPER] = max;
 	    }
 	    else {
@@ -177,7 +185,7 @@ void acca_algorithm(Gfile * out, Gfile band[],
 
 	G_message(_("Maximum temperature:"));
 	G_message(_("* Cold cloud: %.2lf K"), value[KUPPER]);
-	G_message(_("* Warn cloud: %.2lf K"), value[KLOWER]);
+	G_message(_("* Warm cloud: %.2lf K"), value[KLOWER]);
     }
     else {
 	if (signa[KMEAN] < 295.) {
