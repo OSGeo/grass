@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
     metfn = G_define_standard_option(G_OPT_F_INPUT);
     metfn->key = "metfile";
     metfn->required = NO;
-    metfn->description = _("Name of Landsat ETM+ or TM5 header file (.met/.mtl)");
+    metfn->description = _("Name of Landsat ETM+ or TM5 header file (.met/MTL.txt)");
     metfn->guisection = _("Metadata");
 
     sensor = G_define_option();
@@ -194,7 +194,7 @@ int main(int argc, char *argv[])
 
     l5_mtl = G_define_flag();
     l5_mtl->key = 't';
-    l5_mtl->description = _("Landsat TM5 has a .mtl file instead of .met");
+    l5_mtl->description = _("Landsat ETM+/TM5 has a MTL.txt file instead of .met");
     l5_mtl->guisection = _("Metadata");
 
     /* options and afters parser */
