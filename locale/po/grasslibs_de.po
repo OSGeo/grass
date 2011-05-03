@@ -1310,23 +1310,20 @@ msgid "Use either --quiet or --verbose flag, not both. Assuming --quiet."
 msgstr "Verwenden Sie entweder --quiet oder --verbose, aber nicht beide. Verwende --quiet."
 
 #: ../lib/gis/parser.c:542
-#, fuzzy, c-format
 msgid "Sorry <%s> is not a valid option"
-msgstr "Tut mir leid, <%s> ist keine gültige Option\n"
+msgstr "Tut mir leid, <%s> ist keine gültige Option"
 
 #: ../lib/gis/parser.c:574
-#, fuzzy
 msgid "ERROR"
-msgstr "FEHLER: "
+msgstr "FEHLER"
 
 #: ../lib/gis/parser.c:801
 msgid "Unable to determine program name"
 msgstr "Kann den Namen des Programms nicht herausfinden."
 
 #: ../lib/gis/parser.c:817 ../lib/gis/parser.c:834
-#, fuzzy, c-format
 msgid "Sorry, <%c> is not a valid flag"
-msgstr "Tut mir leid, <%c> ist keine gültiges Flag.\n"
+msgstr "Tut mir leid, <%c> ist kein gültiges Flag"
 
 #: ../lib/gis/parser.c:933
 #, fuzzy, c-format
@@ -1817,7 +1814,7 @@ msgstr "Ungültiger Dateiname. Das Zeichen <%c> ist nicht erlaubt.\n"
 #: ../lib/gis/legal_name.c:74 ../lib/gis/legal_name.c:78
 #, c-format
 msgid "Output raster map name <%s> is not valid map name"
-msgstr "Name der Ausgabe-Rasterkarte <%s> ist keine gültiger Kartenname."
+msgstr "Name der Ausgabe-Rasterkarte <%s> ist kein gültiger Kartenname."
 
 #: ../lib/gis/legal_name.c:115 ../lib/gis/legal_name.c:119
 #, c-format
@@ -2565,7 +2562,7 @@ msgstr "Ungültiger Name der Vektorkarte <%s>. SQL-Schlüsselwort darf nicht als V
 #: ../lib/vector/Vlib/legal_vname.c:96 ../lib/vector/Vlib/legal_vname.c:100
 #, c-format
 msgid "Output vector map name <%s> is not valid map name"
-msgstr "Name der Ausgabe-Vektorkarte <%s> ist keine gültiger Kartenname."
+msgstr "Name der Ausgabe-Vektorkarte <%s> ist kein gültiger Kartenname."
 
 #: ../lib/vector/Vlib/legal_vname.c:137 ../lib/vector/Vlib/legal_vname.c:141
 #, c-format

@@ -4251,14 +4251,12 @@ msgid "quant rules do not cover the whole range map"
 msgstr "Konnte 3D-Rasterkarte nicht schließen."
 
 #: ../raster/r.quant/read_rules.c:158 ../raster/r.recode/read_rules.c:131
-#, fuzzy, c-format
 msgid "%s is not a valid rule"
-msgstr "'%s' ist keine gültige Regel."
+msgstr "'%s' ist keine gültige Regel"
 
 #: ../raster/r.slope.aspect/main.c:153
-#, fuzzy
 msgid "terrain"
-msgstr "Interpolationsmethode."
+msgstr "Gelände"
 
 #: ../raster/r.slope.aspect/main.c:154
 msgid "Generates raster maps of slope, aspect, curvatures and partial derivatives from a elevation raster map."
@@ -23837,7 +23835,7 @@ msgstr "Anisotropie-Winkel (in Grad gegen den Uhrzeigersinn von Osten)."
 #: ../vector/v.surf.rst/main.c:401 ../vector/v.surf.rst/main.c:406
 #, c-format
 msgid "Output vector map name <%s> is not valid map name"
-msgstr "Name der Ausgabe-Vektorkarte <%s> ist keine gültiger Kartenname."
+msgstr "Name der Ausgabe-Vektorkarte <%s> ist kein gültiger Kartenname."
 
 #: ../vector/v.surf.rst/main.c:419
 msgid "You are not outputting any raster or vector maps"
