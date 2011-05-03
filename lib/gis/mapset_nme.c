@@ -53,24 +53,27 @@ const char *G__mapset_name(int n)
 void G_get_list_of_mapsets(void)
 {
     FILE *fp;
+    const char *cur;
 
     if (G_is_initialized(&st->initialized))
 	return;
 
+    cur = G_mapset();
+    new_mapset(cur);
+
     fp = G_fopen_old("", "SEARCH_PATH", G_mapset());
     if (fp) {
 	char name[GNAME_MAX];
-	while (fscanf(fp, "%s", name) == 1)
+	while (fscanf(fp, "%s", name) == 1) {
+	    if (strcmp(name, cur) == 0)
+		continue;
 	    if (G__mapset_permissions(name) >= 0)
 		new_mapset(name);
+	}
 	fclose(fp);
     }
-
-    if (!st->path.count) {
+    else {
 	static const char perm[] = "PERMANENT";
-	const char *cur = G_mapset();
-
-	new_mapset(cur);
 	if (strcmp(perm, cur) != 0 && G__mapset_permissions(perm) >= 0)
 	    new_mapset(perm);
     }
