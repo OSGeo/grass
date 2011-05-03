@@ -1,6 +1,7 @@
 #include <string.h>
 #include <grass/colors.h>
 #include <grass/raster.h>
+#include <grass/glocale.h>
 #include "local_proto.h"
 
 #define KEY(x)(strcmp(key,x)==0)
@@ -155,7 +156,7 @@ int read_eps(double e, double n)
 
 	    /* test if file is accessible */
 	    if ((fp = fopen(eps, "r")) == NULL)
-		error(key, data, "Can't open eps file");
+		error(key, data, _("Can't open eps file"));
 
 	    have_eps = 1;
 	    fclose(fp);

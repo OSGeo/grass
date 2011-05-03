@@ -152,7 +152,7 @@ int do_plt(int after_masking)
 	    break;
 
 	case 'E':		/* EPS file */
-	    if (sscanf(buf, "E %d %lf %lf %lf %lf %s",
+	    if (sscanf(buf, "E %d %lf %lf %lf %lf %[^\n]s",
 		       &masked, &e1, &n1, &scale, &rotate, name) == 6) {
 		if (masked && after_masking)
 		    continue;

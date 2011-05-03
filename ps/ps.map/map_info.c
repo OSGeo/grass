@@ -25,6 +25,7 @@ int map_info(void)
 
     /* get text location */
     dy = fontsize;
+
     if (m_info.x > 0.0)
 	x = 72.0 * m_info.x;
     else
@@ -33,7 +34,9 @@ int map_info(void)
 	y = 72.0 * (PS.page_height - m_info.y);
     else
 	y = PS.min_y;
+
     margin = 0.2 * fontsize;
+
     if (x < PS.map_left + margin)
 	x = PS.map_left + margin;
 
