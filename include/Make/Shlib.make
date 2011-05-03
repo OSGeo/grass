@@ -8,6 +8,8 @@ LDFLAGS += $(SHLIB_LDFLAGS)
 
 $(SHLIB): $(SHLIB_OBJS)
 	$(SHLIB_LD) -o $@ $(LDFLAGS) $^ $(LIBES) $(EXTRA_LIBS) $(MATHLIB)
+ifndef MINGW
+	(cd $(ARCH_LIBDIR); ln -f -s $(notdir $@) $(patsubst %.$(GRASS_VERSION_NUMBER)$(SHLIB_SUFFIX),%$(SHLIB_SUFFIX),$@))
+endif
 
 shlib: $(SHLIB)
-
