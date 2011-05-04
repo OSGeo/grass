@@ -65,12 +65,13 @@ class VDigitSettingsDialog(wx.Dialog):
         """
         wx.Dialog.__init__(self, parent = parent, id = wx.ID_ANY, title = title, style = style)
 
-        self.parent = parent # mapdisplay.BufferedWindow class instance
-
+        self.parent = parent # mapdisplay.MapFrame class instance
+        self.digit = self.parent.MapWindow.digit
+        
         # notebook
         notebook = wx.Notebook(parent = self, id = wx.ID_ANY, style = wx.BK_DEFAULT)
         self._createSymbologyPage(notebook)
-        self.parent.digit.SetCategory()
+        self.digit.SetCategory()
         self._createGeneralPage(notebook)
         self._createAttributesPage(notebook)
         self._createQueryPage(notebook)
@@ -205,7 +206,7 @@ class VDigitSettingsDialog(wx.Dialog):
         self.mapUnits = self.parent.MapWindow.Map.GetProjInfo()['units']
         self.snappingInfo = wx.StaticText(parent = panel, id = wx.ID_ANY,
                                           label = _("Snapping threshold is %(value).1f %(units)s") % \
-                                              {'value' : self.parent.digit.GetDisplay().GetThreshold(),
+                                              {'value' : self.digit.GetDisplay().GetThreshold(),
                                                'units' : self.mapUnits})
         vertexSizer.Add(item = self.snappingInfo, proportion = 0,
                         flag = wx.ALL | wx.EXPAND, border = 1)
@@ -588,7 +589,7 @@ class VDigitSettingsDialog(wx.Dialog):
         if mode == 2 and self.addRecord.IsChecked(): # no category
             self.addRecord.SetValue(False)
         
-        self.parent.digit.SetCategory()
+        self.digit.SetCategory()
         self.category.SetValue(UserSettings.Get(group = 'vdigit', key = 'category', subkey = 'value'))
 
     def OnChangeLayer(self, event):
@@ -597,7 +598,7 @@ class VDigitSettingsDialog(wx.Dialog):
         layer = event.GetInt()
         if layer > 0:
             UserSettings.Set(group = 'vdigit', key = 'layer', subkey = 'value', value = layer)
-            self.parent.digit.SetCategory()
+            self.digit.SetCategory()
             self.category.SetValue(UserSettings.Get(group = 'vdigit', key = 'category', subkey = 'value'))
             
         event.Skip()
@@ -605,7 +606,7 @@ class VDigitSettingsDialog(wx.Dialog):
     def OnChangeAddRecord(self, event):
         """!Checkbox 'Add new record' status changed
         """
-        self.category.SetValue(self.parent.digit.SetCategory())
+        self.category.SetValue(self.digit.SetCategory())
             
     def OnChangeSnappingValue(self, event):
         """!Change snapping value - update static text
@@ -615,12 +616,12 @@ class VDigitSettingsDialog(wx.Dialog):
         if value < 0:
             region = self.parent.MapWindow.Map.GetRegion()
             res = (region['nsres'] + region['ewres']) / 2.
-            threshold = self.parent.digit.GetDisplay().GetThreshold(value = res)
+            threshold = self.digit.GetDisplay().GetThreshold(value = res)
         else:
             if self.snappingUnit.GetStringSelection() == "map units":
                 threshold = value
             else:
-                threshold = self.parent.digit.GetDisplay().GetThreshold(value = value)
+                threshold = self.digit.GetDisplay().GetThreshold(value = value)
             
         if value == 0:
             self.snappingInfo.SetLabel(_("Snapping disabled"))
@@ -641,7 +642,7 @@ class VDigitSettingsDialog(wx.Dialog):
         """
         value = self.snappingValue.GetValue()
         units = self.snappingUnit.GetStringSelection()
-        threshold = self.parent.digit.GetDisplay().GetThreshold(value = value, units = units)
+        threshold = self.digit.GetDisplay().GetThreshold(value = value, units = units)
 
         if units == "map units":
             self.snappingInfo.SetLabel(_("Snapping threshold is %(value).1f %(units)s") % 
@@ -807,7 +808,7 @@ class VDigitSettingsDialog(wx.Dialog):
         UserSettings.Set(group = 'vdigit', key = "breakLines", subkey = 'enabled',
                          value = self.intersect.IsChecked())
         
-        self.parent.digit.UpdateSettings()
+        self.digit.UpdateSettings()
         
         # redraw map if auto-rendering is enabled
         if self.parent.statusbarWin['render'].GetValue(): 
