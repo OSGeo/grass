@@ -680,8 +680,9 @@ class AboutWindow(wx.Frame):
             
             if errLines:
                 gcmd.GError(parent = self,
-                            message = _("Error when reading file '%s'.\n\nLines: %s") % \
-                                (translatorsfile, os.linesep.join(map (utils.UnicodeString, errLines))))
+                            message = _("Error when reading file '%s'.") % translatorsfile + \
+                                "\n\n" + _("Lines:") + " %s" % \
+                                os.linesep.join(map(utils.UnicodeString, errLines)))
         else:
             contribs = None
         
@@ -735,8 +736,9 @@ class AboutWindow(wx.Frame):
             
             if errLines:
                 gcmd.GError(parent = self,
-                            message = _("Error when reading file '%s'.\n\nLines: %s") % \
-                                (translatorsfile, os.linesep.join(map (utils.UnicodeString, errLines))))
+                            message = _("Error when reading file '%s'.") % translatorsfile + \
+                                "\n\n" + _("Lines:") + " %s" % \
+                                os.linesep.join(map(utils.UnicodeString, errLines)))
         else:
             translators = None
         

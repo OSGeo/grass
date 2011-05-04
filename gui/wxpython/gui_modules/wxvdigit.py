@@ -83,8 +83,8 @@ class VDigitError:
     def Database(self, driver, database):
         """!Opening database failed
         """
-        GError(message = _('Unable to open database <%s> by driver <%s>. '
-                           'Operation cancelled.') % (database, driver),
+        GError(message = _('Unable to open database <%(db)s> by driver <%(driver)s>. '
+                           'Operation cancelled.') % { 'db' : database, 'driver' : driver},
                parent  = self.parent,
                caption = self.caption)
 
