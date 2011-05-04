@@ -113,10 +113,9 @@ struct Point *P_Read_Vector_Region_Map(struct Map_info *, /**/
 				       int *, /**/ int, /**/ int /**/);
 
 struct Point *P_Read_Raster_Region_Map(double **, /**/
-				       char **, /**/
 				       struct Cell_head *, /**/
 				       struct Cell_head *, /**/
-				       int *, /**/ int *, /**/ int /**/);
+				       int *, /**/ int /**/);
 
 double P_Mean_Calc(struct Cell_head *, /**/ struct Point *, /**/ int /**/);
 

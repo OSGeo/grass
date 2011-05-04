@@ -118,7 +118,8 @@ P_set_regions(struct Cell_head *Elaboration, struct bound_box * General,
 /*----------------------------------------------------------------------------------------*/
 int P_set_dim(struct Reg_dimens *dim, double pe, double pn, int *nsplx, int *nsply)
 {
-    int total_splines, edge_splines, n_windows, minsplines;
+    int total_splines, edge_splines, n_windows;
+    int lastsplines, lastsplines_min, lastsplines_max;
     double E_extension, N_extension, edgeE, edgeN;
     struct Cell_head orig;
     int ret = 0;
@@ -137,28 +138,21 @@ int P_set_dim(struct Reg_dimens *dim, double pe, double pn, int *nsplx, int *nsp
     /* remaining steps must be larger than edge_v + overlap + half of overlap window */
     total_splines = ceil(E_extension / pe);
     edge_splines = edgeE / pe;
-    n_windows = floor(E_extension / edgeE); /* without last one */
+    n_windows = E_extension / edgeE; /* without last one */
     if (n_windows > 0) {
-	minsplines = ceil((double)(dim->ew_size / 2.0 - dim->edge_v - dim->overlap) / pe);
-	while (total_splines - edge_splines * n_windows < minsplines) {
+	/* min size of the last overlap window = half of current overlap window */
+	/* max size of the last overlap window = elaboration - 3 * edge - overlap */
+	lastsplines_min = ceil((dim->ew_size / 2.0 - 2 * (dim->edge_v + dim->overlap)) / pe);
+	lastsplines_max = ceil((dim->ew_size - 3 * dim->edge_v - dim->overlap) / pe);
+	lastsplines = total_splines - edge_splines * n_windows;
+	while (lastsplines > lastsplines_max || lastsplines < lastsplines_min) {
 	    *nsplx -= 1;
 	    dim->ew_size = *nsplx * pe;
 	    edgeE = dim->ew_size - dim->overlap - 2 * dim->edge_v;
 
 	    edge_splines = edgeE / pe;
-	    n_windows = floor(E_extension / edgeE); /* without last one */
-	    minsplines = ceil((double)(dim->ew_size / 2.0 - dim->edge_v - dim->overlap) / pe);
-	    if (ret == 0)
-		ret = 1;
-	}
-	while (total_splines - edge_splines * n_windows < minsplines * 2 && minsplines > 30) {
-	    *nsplx -= 1;
-	    dim->ew_size = *nsplx * pe;
-	    edgeE = dim->ew_size - dim->overlap - 2 * dim->edge_v;
-
-	    edge_splines = edgeE / pe;
-	    n_windows = floor(E_extension / edgeE); /* without last one */
-	    minsplines = ceil((double)(dim->ew_size / 2.0 - dim->edge_v - dim->overlap) / pe);
+	    n_windows = E_extension / edgeE; /* without last one */
+	    lastsplines = total_splines - edge_splines * n_windows;
 	    if (ret == 0)
 		ret = 1;
 	}
@@ -166,33 +160,27 @@ int P_set_dim(struct Reg_dimens *dim, double pe, double pn, int *nsplx, int *nsp
 
     total_splines = ceil(N_extension / pn);
     edge_splines = edgeN / pn;
-    n_windows = floor(N_extension / edgeN); /* without last one */
+    n_windows = N_extension / edgeN; /* without last one */
     if (n_windows > 0) {
-	minsplines = ceil((double)(dim->sn_size / 2.0 - dim->edge_h - dim->overlap) / pn);
-	while (total_splines - edge_splines * n_windows < minsplines) {
+	/* min size of the last overlap window = half of current overlap window */
+	/* max size of the last overlap window = elaboration - 3 * edge - overlap */
+	lastsplines_min = ceil((dim->sn_size / 2.0 - 2 * (dim->edge_h - dim->overlap)) / pn);
+	lastsplines_max = ceil((dim->sn_size - 3 * dim->edge_h - dim->overlap) / pn);
+	lastsplines = total_splines - edge_splines * n_windows;
+	while (lastsplines > lastsplines_max || lastsplines < lastsplines_min) {
 	    *nsply -= 1;
 	    dim->sn_size = *nsply * pn;
 	    edgeN = dim->sn_size - dim->overlap - 2 * dim->edge_h;
 
 	    edge_splines = edgeN / pn;
-	    n_windows = floor(N_extension / edgeN); /* without last one */
-	    minsplines = ceil((double)(dim->sn_size / 2.0 - dim->edge_h - dim->overlap) / pn);
-	    if (ret < 2)
-		ret += 2;
-	}
-	while (total_splines - edge_splines * n_windows < minsplines * 2 && minsplines > 30) {
-	    *nsply -= 1;
-	    dim->sn_size = *nsply * pn;
-	    edgeN = dim->sn_size - dim->overlap - 2 * dim->edge_h;
-
-	    edge_splines = edgeN / pn;
-	    n_windows = floor(N_extension / edgeN); /* without last one */
-	    minsplines = ceil((double)(dim->sn_size / 2.0 - dim->edge_h - dim->overlap) / pn);
+	    n_windows = N_extension / edgeN; /* without last one */
+	    lastsplines = total_splines - edge_splines * n_windows;
 	    if (ret < 2)
 		ret += 2;
 	}
     }
-    return 0;
+
+    return ret;
 }
 
 /*----------------------------------------------------------------------------------------*/
@@ -385,13 +373,13 @@ struct Point *P_Read_Vector_Region_Map(struct Map_info *Map,
     return obs;
 }
 
-struct Point *P_Read_Raster_Region_Map(double **matrix, char **mask_matrix,
+struct Point *P_Read_Raster_Region_Map(double **matrix,
 				       struct Cell_head *Elaboration,
 				       struct Cell_head *Original,
-				       int *num_points, int *num_nulls, int dim_vect)
+				       int *num_points, int dim_vect)
 {
     int col, row, startcol, endcol, startrow, endrow, nrows, ncols;
-    int pippo, npoints, nnulls, all_masked = 0;
+    int pippo, npoints;
     double x, y, z;
     struct Point *obs;
     struct bound_box elaboration_box;
@@ -402,13 +390,10 @@ struct Point *P_Read_Raster_Region_Map(double **matrix, char **mask_matrix,
     /* Reading points inside elaboration zone */
     Vect_region_box(Elaboration, &elaboration_box);
 
-    npoints = nnulls = 0;
+    npoints = 0;
     nrows = Original->rows;
     ncols = Original->cols;
     
-    if (mask_matrix)
-	all_masked = 1;
-
     if (Original->north > Elaboration->north)
 	startrow = (Original->north - Elaboration->north) / Original->ns_res - 1;
     else
@@ -439,11 +424,6 @@ struct Point *P_Read_Raster_Region_Map(double **matrix, char **mask_matrix,
 
 	    if (!Rast_is_d_null_value(&z)) {
 
-		if (mask_matrix && all_masked) {
-		    if (mask_matrix[row][col])
-			all_masked = 0;
-		}
-
 		x = Rast_col_to_easting((double)(col) + 0.5, Original);
 		y = Rast_row_to_northing((double)(row) + 0.5, Original);
 
@@ -463,18 +443,9 @@ struct Point *P_Read_Raster_Region_Map(double **matrix, char **mask_matrix,
 		    obs[npoints - 1].coordZ = z;
 		}
 	    }
-	    else {
-		/* if point in output region */
-	        nnulls++;
-	    }
 	}
     }
 
-    /* num_nulls indicates how many points to interpolate */
-    if (all_masked)
-	*num_nulls = 0;
-    else
-	*num_nulls = nnulls;
     *num_points = npoints;
     return obs;
 }
