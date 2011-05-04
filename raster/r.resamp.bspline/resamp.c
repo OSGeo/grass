@@ -22,7 +22,7 @@
 #include <math.h>
 #include "bspline.h"
 
-struct Point *P_Read_Raster_Region_Nulls(double **matrix, char **mask_matrix,
+struct Point *P_Read_Raster_Region_masked(char **mask_matrix,
 				       struct Cell_head *Original,
 				       struct bound_box output_box,
 				       struct bound_box General,
@@ -31,20 +31,20 @@ struct Point *P_Read_Raster_Region_Nulls(double **matrix, char **mask_matrix,
 {
     int col, row, startcol, endcol, startrow, endrow, nrows, ncols;
     int pippo, npoints;
-    double X, Y, Z;
+    double X, Y;
     struct Point *obs;
 
     pippo = dim_vect;
     obs = (struct Point *)G_calloc(pippo, sizeof(struct Point));
 
-    /* Reading points inside input box and inside General box */
+    /* Reading points inside output box and inside General box */
 
     npoints = 0;
     nrows = Original->rows;
     ncols = Original->cols;
 
-    /* original region = input raster has been adjusted to output region plus buffer
-     * -> General box is somewhere inside input raster box */
+    /* original region = output region
+     * -> General box is somewhere inside output region */
     if (Original->north > General.N) {
 	startrow = (double)((Original->north - General.N) / Original->ns_res - 1);
 	if (startrow < 0)
@@ -77,35 +77,27 @@ struct Point *P_Read_Raster_Region_Nulls(double **matrix, char **mask_matrix,
     for (row = startrow; row < endrow; row++) {
 	for (col = startcol; col < endcol; col++) {
 
-	    if (mask_matrix) {
-		if (!mask_matrix[row][col])
-		    continue;
-	    }
-	    
-	    Z = matrix[row][col];
+	    if (!mask_matrix[row][col])
+		continue;
 
-	    if (Rast_is_d_null_value(&Z)) {
-		
-		X = Rast_col_to_easting((double)(col) + 0.5, Original);
-		Y = Rast_row_to_northing((double)(row) + 0.5, Original);
+	    X = Rast_col_to_easting((double)(col) + 0.5, Original);
+	    Y = Rast_row_to_northing((double)(row) + 0.5, Original);
 
-		/* Here, mean is just for asking if obs point is in box */
-		if (Vect_point_in_box(X, Y, mean, &General)) { /* General */
-		    npoints++;
-		    if (npoints >= pippo) {
-			pippo += dim_vect;
-			obs =
-			    (struct Point *)G_realloc((void *)obs,
-						      (signed int)pippo *
-						      sizeof(struct Point));
-		    }
-
-		    /* Storing observation vector */
-		    obs[npoints - 1].coordX = X;
-		    obs[npoints - 1].coordY = Y;
-		    obs[npoints - 1].coordZ = 0;
-
+	    /* Here, mean is just for asking if obs point is in box */
+	    if (Vect_point_in_box(X, Y, mean, &General)) { /* General */
+		if (npoints >= pippo) {
+		    pippo += dim_vect;
+		    obs =
+			(struct Point *)G_realloc((void *)obs,
+						  (signed int)pippo *
+						  sizeof(struct Point));
 		}
+
+		/* Storing observation vector */
+		obs[npoints].coordX = X;
+		obs[npoints].coordY = Y;
+		obs[npoints].coordZ = 0;
+		npoints++;
 	    }
 	}
     }

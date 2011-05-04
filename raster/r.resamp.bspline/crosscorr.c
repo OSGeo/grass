@@ -129,7 +129,7 @@ int cross_correlation(double **matrix, struct Cell_head *src_reg, double passWE,
      */
 {
     int bilin = TRUE;		/*booleans */
-    int nsplx, nsply, nparam_spl, ndata, nnulls;
+    int nsplx, nsply, nparam_spl, ndata;
     double *mean, *rms, *stdev;
 
 #ifdef nodef
@@ -164,7 +164,7 @@ int cross_correlation(double **matrix, struct Cell_head *src_reg, double passWE,
     /*Cats = Vect_new_cats_struct (); */
 
     /* Current region is read and points recorded into observ */
-    observ = P_Read_Raster_Region_Map(matrix, NULL, &region, src_reg, &ndata, &nnulls, 1024);
+    observ = P_Read_Raster_Region_Map(matrix, &region, src_reg, &ndata, 1024);
     G_debug(5, "CrossCorrelation: %d points read in region. ", ndata);
     G_verbose_message(_("%d points read in region"),
 		      ndata);
@@ -196,8 +196,8 @@ int cross_correlation(double **matrix, struct Cell_head *src_reg, double passWE,
 
 	BW = P_get_BandWidth(bilin, nsply);
 	/**/
-	    /*Least Squares system */
-	    N = G_alloc_matrix(nparam_spl, BW);	/* Normal matrix */
+	/*Least Squares system */
+	N = G_alloc_matrix(nparam_spl, BW);	/* Normal matrix */
 	TN = G_alloc_vector(nparam_spl);	/* vector */
 	parVect = G_alloc_vector(nparam_spl);	/* Parameters vector */
 	obsVect = G_alloc_matrix(ndata, 3);	/* Observation vector */

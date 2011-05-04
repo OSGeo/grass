@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
     struct bound_box last_overlap_box, last_general_box;
 
     struct Point *observ;
-    struct Point *observ_null;
+    struct Point *observ_masked;
 
     /*----------------------------------------------------------------*/
     /* Options declarations */
@@ -194,10 +194,8 @@ int main(int argc, char *argv[])
 
     nsplx_adj = NSPLX_MAX;
     nsply_adj = NSPLY_MAX;
-    if (stepN > stepE)
-	dims.overlap = OVERLAP_SIZE * stepN;
-    else
-	dims.overlap = OVERLAP_SIZE * stepE;
+
+    dims.overlap = OVERLAP_SIZE * (stepN > stepE ? stepN : stepE);
     P_get_edge(interp_method, &dims, stepE, stepN);
     P_set_dim(&dims, stepE, stepN, &nsplx_adj, &nsply_adj);
 
@@ -255,8 +253,8 @@ int main(int argc, char *argv[])
     }
 
     /* switch to buffered input raster window */
-    /* G_set_window(&src_reg); */
-    Rast_set_window(&src_reg);
+    G_set_window(&src_reg);
+    /* Rast_set_window(&src_reg); */
 
     G_debug(1, "new source north %f", src_reg.north);
     G_debug(1, "new source south %f", src_reg.south);
@@ -286,7 +284,7 @@ int main(int argc, char *argv[])
 	    
 	    G_percent(row, nrows, 2);
 
-	    Rast_get_d_row(inrastfd, drastbuf, row);
+	    Rast_get_d_row_nomask(inrastfd, drastbuf, row);
 
 	    for (col = 0; col < ncols; col++) {
 		inrast_matrix[row][col] = drastbuf[col];
@@ -304,8 +302,8 @@ int main(int argc, char *argv[])
     Rast_close(inrastfd);
 
     /* switch back to destination = current window */
-    /* G_set_window(&dest_reg); */
-    Rast_set_window(&dest_reg);
+    G_set_window(&dest_reg);
+    /* Rast_set_window(&dest_reg); */
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
 
@@ -332,49 +330,93 @@ int main(int argc, char *argv[])
 	}
     }
 
-    /* Alloc raster matrix */
-    if (!(outrast_matrix = G_alloc_matrix(nrows, ncols)))
-	G_fatal_error(_("Cannot allocate memory for auxiliar matrix."
-			"Consider changing region (resolution)"));
-			
     /* Alloc and load masking matrix */
-    if (mask_opt->answer) {
+    /* encoding: 0 = do not interpolate, 1 = interpolate */
+    if (mask_opt->answer || null_flag->answer) {
 	int maskfd;
+	int null_count = 0;
 	DCELL dval;
+	CELL cval;
+	CELL *maskbuf;
 	
-	G_message(_("Load masking map"));
-	
+	G_message(_("Mark cells for interpolation"));
+
+	/* use destination window */
+
 	mask_matrix = (char **)G_calloc(nrows, sizeof(char *));
 	mask_matrix[0] = (char *)G_calloc(nrows * ncols, sizeof(char));
 	for (row = 1; row < nrows; row++)
 	    mask_matrix[row] = mask_matrix[row - 1] + ncols;
 
+	if (mask_opt->answer) {
+	    maskfd = Rast_open_old(mask_opt->answer, "");
+	    maskbuf = Rast_allocate_buf(CELL_TYPE);
+	}
+	else {
+	    maskfd = -1;
+	    maskbuf = NULL;
+	}
 
-	maskfd = Rast_open_old(mask_opt->answer, "");
-	drastbuf = Rast_allocate_buf(DCELL_TYPE);
+	if (null_flag->answer) {
+	    inrastfd = Rast_open_old(in_opt->answer, "");
+	    drastbuf = Rast_allocate_buf(DCELL_TYPE);
+	}
+	else {
+	    inrastfd = -1;
+	    drastbuf = NULL;
+	}
 
 	for (row = 0; row < nrows; row++) {
 	    G_percent(row, nrows, 2);
-	    Rast_get_d_row(maskfd, drastbuf, row);
+	    
+	    if (mask_opt->answer)
+		Rast_get_c_row(maskfd, maskbuf, row);
+
+	    if (null_flag->answer)
+		Rast_get_d_row(inrastfd, drastbuf, row);
+
 	    for (col = 0; col < ncols; col++) {
-		dval = drastbuf[col];
-		if (Rast_is_d_null_value(&dval) || dval == 0)
-		    mask_matrix[row][col] = 0;
-		else
-		    mask_matrix[row][col] = 1;
+		mask_matrix[row][col] = 1;
+
+		if (mask_opt->answer) {
+		    cval = maskbuf[col];
+		    if (Rast_is_c_null_value(&cval) || cval == 0)
+			mask_matrix[row][col] = 0;
+		}
+
+		if (null_flag->answer && mask_matrix[row][col] == 1) {
+		    dval = drastbuf[col];
+		    if (!Rast_is_d_null_value(&dval))
+			mask_matrix[row][col] = 0;
+		    else
+			null_count++;
+		}
 	    }
 	}
 
 	G_percent(row, nrows, 2);
-	G_free(drastbuf);
-	Rast_close(maskfd);
+	if (null_flag->answer) {
+	    G_free(drastbuf);
+	    Rast_close(inrastfd);
+	}
+	if (mask_opt->answer) {
+	    G_free(maskbuf);
+	    Rast_close(maskfd);
+	}
+	if (null_flag->answer && null_count == 0 && !mask_opt->answer) {
+	    G_fatal_error(_("No NULL cells found in input raster."));
+	}
     }
     else
 	mask_matrix = NULL;
 			
+    /* Alloc raster matrix */
+    if (!(outrast_matrix = G_alloc_matrix(nrows, ncols)))
+	G_fatal_error(_("Cannot allocate memory for auxiliar matrix."
+			"Consider changing region (resolution)"));
 
     /* initialize output */
-    G_message("initializing output");
+    G_message(_("Initializing output..."));
     {
 	DCELL dval;
 
@@ -445,7 +487,8 @@ int main(int argc, char *argv[])
 	general_box.E = dest_box.W;
 
 	while (last_column == FALSE) {	/* For each subregion column */
-	    int npoints = 0, npoints_null = 0, n_nulls = 0;
+	    int npoints = 0;
+	    int npoints_marked = 1;   /* default: all points in output */
 
 	    subregion_col++;
 	    subregion++;
@@ -505,11 +548,10 @@ int main(int argc, char *argv[])
 	    dim_vect = nsplx * nsply;
 
 	    observ =
-		P_Read_Raster_Region_Map(inrast_matrix, mask_matrix, &elaboration_reg,
-		                         &src_reg, &npoints, &n_nulls,
-					 dim_vect);
+		P_Read_Raster_Region_Map(inrast_matrix, &elaboration_reg,
+		                         &src_reg, &npoints, dim_vect);
 
-	    G_debug(1, "%d points, %d NULL cells", npoints, n_nulls);
+	    G_debug(1, "%d valid points", npoints);
 
 	    G_debug(1,
 		    "Interpolation: (%d,%d): Number of points in <elaboration_box> is %d",
@@ -523,30 +565,27 @@ int main(int argc, char *argv[])
 	    G_debug(1, "Interpolation: (%d,%d): mean=%lf",
 		    subregion_row, subregion_col, mean);
 
-	    observ_null = NULL;
-	    if (null_flag->answer && n_nulls) {
-		/* read input NULL cells */
+	    observ_masked = NULL;
+	    
+	    if (mask_matrix) {
+		/* collect unmasked output cells */
 
-		G_debug(1, "read input NULL cells");
+		G_debug(1, "collect unmasked output cells");
 
-		observ_null =
-		    P_Read_Raster_Region_Nulls(inrast_matrix, mask_matrix, &src_reg,
+		observ_masked =
+		    P_Read_Raster_Region_masked(mask_matrix, &dest_reg,
 					     dest_box, general_box,
-					     &npoints_null, dim_vect, mean);
+					     &npoints_marked, dim_vect, mean);
 
-		G_debug(1, "%d nulls in elaboration, %d nulls in general", n_nulls, npoints_null);
-		if (npoints_null == 0) {
-		    G_free(observ_null);
-		    n_nulls = 0;
+		G_debug(1, "%d cells marked in general", npoints_marked);
+		if (npoints_marked == 0) {
+		    G_free(observ_masked);
+		    observ_masked = NULL;
+		    npoints = 1; /* disable warning below */
 		}
 	    }
-	    else if (npoints == 0 && n_nulls == 0)
-		/* nothing to interpolate, disable warning below */
-		npoints = 1;
-	    else
-		n_nulls = 1;
 
-	    if (npoints > 0 && n_nulls > 0) {	/*  */
+	    if (npoints > 0 && npoints_marked > 0) {	/*  */
 		int i;
 
 		nparameters = nsplx * nsply;
@@ -597,33 +636,30 @@ int main(int argc, char *argv[])
 		G_free_vector(TN);
 		G_free_vector(Q);
 
-		if (!null_flag->answer) {	/* interpolate full output raster */
+		if (!observ_masked) {	/* interpolate full output raster */
 		    G_debug(1, "Interpolation: (%d,%d): Regular_Points...",
 			    subregion_row, subregion_col);
 		    outrast_matrix =
 			P_Regular_Points(&elaboration_reg, &dest_reg, general_box,
-					 overlap_box, outrast_matrix, mask_matrix,
+					 overlap_box, outrast_matrix, NULL,
 					 parVect, stepN, stepE, dims.overlap, mean,
 					 nsplx, nsply, nrows, ncols, interp_method);
 		}
-		else {		/* only interpolate NULL cells */
+		else {		/* only interpolate selected cells */
 
-		    if (observ_null == NULL)
-			G_fatal_error("no NULL cells loaded");
-
-		    G_debug(1, "Interpolation of %d NULL cells...",
-			    npoints_null);
+		    G_debug(1, "Interpolation of %d selected cells...",
+			    npoints_marked);
 
 		    outrast_matrix =
 			P_Sparse_Raster_Points(outrast_matrix,
 			                &elaboration_reg, &dest_reg,
 					general_box, overlap_box,
-					observ_null, parVect,
+					observ_masked, parVect,
 					stepE, stepN,
 					dims.overlap, nsplx, nsply,
-					npoints_null, interp_method, mean);
+					npoints_marked, interp_method, mean);
 
-		    G_free(observ_null);
+		    G_free(observ_masked);
 		}		/* end NULL cells */
 		G_free_vector(parVect);
 		G_free_matrix(obsVect);
