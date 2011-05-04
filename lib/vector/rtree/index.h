@@ -20,6 +20,7 @@
 
 #include <stdio.h>
 #include <sys/types.h>
+#include <grass/config.h>
 
 /* PGSIZE is normally the natural page size of the machine */
 #define PGSIZE	512
