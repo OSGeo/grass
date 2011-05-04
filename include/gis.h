@@ -64,6 +64,7 @@ static const char *GRASS_copyright __attribute__ ((unused))
 /*!
   \brief List of units
 */
+#define U_UNDEFINED    -1
 #define U_UNKNOWN       0
 #define U_ACRES		1
 #define U_HECTARES	2
