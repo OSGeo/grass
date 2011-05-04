@@ -4,6 +4,7 @@
 
 #include <string.h>
 #include <math.h>
+#include <grass/glocale.h>
 #include "local_proto.h"
 #include "distance.h"
 
@@ -192,15 +193,15 @@ int do_scalebar(void)
     if (sb.units == SB_UNITS_AUTO)
 	strcpy(num, G_database_unit_name(TRUE));
     else if(sb.units == SB_UNITS_METERS)
-	strcpy(num, "meters");
+	strcpy(num, _("meters"));
     else if(sb.units == SB_UNITS_KM)
-	strcpy(num, "kilometers");
+	strcpy(num, _("kilometers"));
     else if(sb.units == SB_UNITS_FEET)
-	strcpy(num, "feet");
+	strcpy(num, _("feet"));
     else if(sb.units == SB_UNITS_MILES)
-	strcpy(num, "miles");
+	strcpy(num, _("miles"));
     else if(sb.units == SB_UNITS_NMILES)
-	strcpy(num, "nautical miles");
+	strcpy(num, _("nautical miles"));
     
     text_box_path(72.0 * (x + length/2), 72.0 * (PS.page_height - (sb.y + 0.075)),
 	CENTER, UPPER, num, sb.fontsize, 0);
