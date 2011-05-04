@@ -1,9 +1,9 @@
 /*!
-  \file gis/proj2.c
+  \file lib/gis/proj2.c
 
   \brief GIS Library - Projection support (internal subroutines)
   
-  (C) 2001-2010 by the GRASS Development Team
+  (C) 2001-2011 by the GRASS Development Team
   
   This program is free software under the GNU General Public License
   (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -15,12 +15,18 @@
 #include <grass/glocale.h>
 
 /*!
-  \brief Get projection units code
+  \brief Get projection units code (for internal use only)
 
   \param n projection code
 
-  \return units code
-  \return -1 if not defined
+  Supported units (see gis.h):
+   - U_UNKNOWN (XY)
+   - U_METERS  (UTM)
+   - U_FEET    (SP)
+   - U_DEGREES (LL)
+   
+  \return units code (see gis.h)
+  \return U_UNDEFINED if not defined
 */
 int G__projection_units(int n)
 {
@@ -34,8 +40,9 @@ int G__projection_units(int n)
     case PROJECTION_LL:
 	return U_DEGREES;
     default:
-	return -1;
+	return U_UNDEFINED;
     }
+    return U_UNDEFINED;
 }
 
 /*!

@@ -35,34 +35,47 @@ static void init(void)
 }
 
 /*!
-  \brief Get database units name
+  \brief Get database units (localized) name
   
   Returns a string describing the database grid units. It returns a
-  plural form (eg. 'feet') if <i>plural</i> is true. Otherwise it
+  plural form (eg. 'feet') if <i>plural</i> is non-zero. Otherwise it
   returns a singular form (eg. 'foot').
   
-  \param plural plural form if true
+  \param plural plural form if non-zero
   
-  \return units name
+  \return localized units name
 */
 const char *G_database_unit_name(int plural)
 {
-    int n;
+    int units;
     const char *name;
-
-    switch (n = G_projection()) {
-    case PROJECTION_XY:
-    case PROJECTION_UTM:
-    case PROJECTION_LL:
-    case PROJECTION_SP:
-	return G_get_units_name(G__projection_units(n), plural, 0);
+    
+    units = G__projection_units(G_projection());
+    
+    if (units == U_UNDEFINED) {
+	name = lookup_units(plural ? "units" : "unit");
+	if (!name)
+	    return plural ? _("units") : _("unit");
+	
+	if (strcasecmp(name, "meter") == 0 || strcasecmp(name, "meters") == 0)
+	    units = U_METERS;
+	else if (strcasecmp(name, "kilometer") == 0 || strcasecmp(name, "kilometers") == 0)
+	    units = U_KILOMETERS;
+	else if (strcasecmp(name, "acre") == 0 || strcasecmp(name, "acres") == 0)
+	    units = U_ACRES;
+	else if (strcasecmp(name, "hectare") == 0 || strcasecmp(name, "hectares") == 0)
+	    units = U_HECTARES;
+	else if (strcasecmp(name, "mile") == 0 || strcasecmp(name, "miles") == 0)
+	    units = U_MILES;
+	else if (strcasecmp(name, "foot") == 0 || strcasecmp(name, "feet") == 0)
+	    units = U_FEET;
+	else if (strcasecmp(name, "degree") == 0 || strcasecmp(name, "degrees") == 0)
+	    units = U_DEGREES;
+	else
+	    units = U_UNDEFINED;
     }
-
-    name = lookup_units(plural ? "units" : "unit");
-    if (!name)
-	return plural ? "units" : "unit";
-
-    return name;
+    
+    return G_get_units_name(units, plural, FALSE);
 }
 
 /*!
