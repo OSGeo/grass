@@ -2163,11 +2163,11 @@ def getInterfaceDescription(cmd):
         cmdout, cmderr = grass.Popen([cmd, '--interface-description'], stdout = grass.PIPE,
                                      stderr = grass.PIPE).communicate()
     except OSError, e:
-        raise gcmd.GException, _("Unable to fetch interface description for command '%s'. "
-                                 "Details: %s") % (cmd, e)
+        raise gcmd.GException, _("Unable to fetch interface description for command '%s'.") % cmd + \
+            _("Details:") +  "%s" % e
     if cmderr and cmderr[:7] != 'WARNING':
-        raise gcmd.GException, _("Unable to fetch interface description for command '%s'. "
-                                 "Details: %s") % (cmd, cmderr)
+        raise gcmd.GException, _("Unable to fetch interface description for command '%s'.") % cmd + \
+            _("Details:") + " %s" % cmderr
     
     return cmdout.replace('grass-interface.dtd', os.path.join(globalvar.ETCDIR, 'grass-interface.dtd'))
     

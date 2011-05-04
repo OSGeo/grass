@@ -623,9 +623,11 @@ class Map(object):
         
         if ret != 0:
             if rast:
-                message = _("Unable to zoom to raster map <%s>.\n\nDetails: %s") % (rast[0], msg)
+                message = _("Unable to zoom to raster map <%s>.") % rast[0] + \
+                    "\n\n" + _("Details:") + " %s" % msg
             elif vect:
-                message = _("Unable to zoom to vector map <%s>.\n\nDetails: %s") % (vect[0], msg)
+                message = _("Unable to zoom to vector map <%s>.") % vect[0] + \
+                    "\n\n" + _("Details:") + " %s" % msg
             else:
                 message = _("Unable to get current geographic extent. "
                             "Force quiting wxGUI. Please run manually g.region to "
