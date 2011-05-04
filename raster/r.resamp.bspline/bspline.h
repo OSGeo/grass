@@ -40,12 +40,11 @@ struct RasterPoint
 };
 
 /* resamp.c */
-struct Point *P_Read_Raster_Region_Nulls(double **, /**/
-				       char **, /**/
-				       struct Cell_head *, /**/
-				       struct bound_box, /**/
-				       struct bound_box, /**/
-				       int *, /**/ int, /**/ double);
+struct Point *P_Read_Raster_Region_masked(char **, /**/
+				          struct Cell_head *, /**/
+				          struct bound_box, /**/
+				          struct bound_box, /**/
+				          int *, /**/ int, /**/ double);
 double **P_Sparse_Raster_Points(double **, /**/
 			struct Cell_head *, /**/
 			struct Cell_head *, /**/
