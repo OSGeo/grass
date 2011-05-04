@@ -87,12 +87,20 @@ int db__copy_table(const char *from_drvname, const char *from_dbname,
     db_init_string(&sql);
     db_init_string(&value_string);
 
-    /* Make a copy of input values and sort it */
-    if (ivals) {
-	ivalues = (int *)G_malloc(nvals * sizeof(int));
-	memcpy(ivalues, ivals, nvals * sizeof(int));
-	qsort((void *)ivalues, nvals, sizeof(int), cmp);
+    if (selcol) {
+	if (!ivals || (ivals && nvals == 0)) {
+	    G_warning(_("Array of values to select from column <%s> is empty"), selcol);
+	    return DB_FAILED;
+	}
+	/* Make a copy of input values and sort it */
+	if (ivals) {
+	    ivalues = (int *)G_malloc(nvals * sizeof(int));
+	    memcpy(ivalues, ivals, nvals * sizeof(int));
+	    qsort((void *)ivalues, nvals, sizeof(int), cmp);
+	}
     }
+    else
+	ivalues = NULL;
 
     /* Open input driver and database */
     from_driver = db_start_driver(from_drvname);
@@ -103,7 +111,7 @@ int db__copy_table(const char *from_drvname, const char *from_dbname,
     db_set_handle(&from_handle, from_dbname, NULL);
     if (db_open_database(from_driver, &from_handle) != DB_OK) {
 	G_warning(_("Unable to open database <%s> by driver <%s>"),
-		  from_drvname, from_dbname);
+		  from_dbname, from_drvname);
 	db_close_database_shutdown_driver(from_driver);
 	return DB_FAILED;
     }
@@ -124,7 +132,7 @@ int db__copy_table(const char *from_drvname, const char *from_dbname,
 	db_set_handle(&to_handle, to_dbname, NULL);
 	if (db_open_database(to_driver, &to_handle) != DB_OK) {
 	    G_warning(_("Unable to open database <%s> by driver <%s>"),
-		      to_drvname, to_dbname);
+		      to_dbname, to_drvname);
 	    db_close_database_shutdown_driver(to_driver);
 	    if (from_driver != to_driver) {
 		db_close_database_shutdown_driver(from_driver);
