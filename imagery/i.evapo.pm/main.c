@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("imagery"));
     G_add_keyword(_("evapotranspiration"));
     module->description =
-	_("Computes potontial evapotranspiration calculation with hourly Penman-Monteith.");
+	_("Computes potential evapotranspiration calculation with hourly Penman-Monteith.");
 
     /* Define different options */
     input_DEM = G_define_standard_option(G_OPT_R_ELEV);
@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
 
     zero = G_define_flag();
     zero->key = 'z';
-    zero->description = _("Set negative evapo to zero");
+    zero->description = _("Set negative evapotranspiration to zero");
 
     day = G_define_flag();
     day->key = 'n';
