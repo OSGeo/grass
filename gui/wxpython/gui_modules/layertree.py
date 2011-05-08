@@ -231,7 +231,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if self.rerender:
             if self.mapdisplay.statusbarWin['render'].GetValue():
                 self.mapdisplay.MapWindow.UpdateMap(render = True)
-
+            self.rerender = False
+        
         event.Skip()
         
     def OnKeyUp(self, event):
@@ -1108,11 +1109,13 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 elif mapLayer.type == '3d-raster':
                     self.mapdisplay.MapWindow.LoadRaster3d(item)
                 elif mapLayer.type == 'vector':
-                    self.mapdisplay.MapWindow.LoadVector(item)
+                    npoints, nlines, nfeatures, mapIs3D = self.lmgr.nviz.VectorInfo(mapLayer)
+                    if npoints > 0:
+                        self.mapdisplay.MapWindow.LoadVector(item, points = True)
+                    if nlines > 0:
+                        self.mapdisplay.MapWindow.LoadVector(item, points = False)
 
             else: # disable
-                data = self.GetPyData(item)[0]['nviz']
-
                 if mapLayer.type == 'raster':
                     self.mapdisplay.MapWindow.UnloadRaster(item)
                 elif mapLayer.type == '3d-raster':

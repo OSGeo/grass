@@ -399,6 +399,8 @@ class MapFrame(wx.Frame):
             self.MapWindow = self.MapWindow3D
             # add Nviz notebookpage
             self._layerManager.AddNviz()
+            self._layerManager.nviz.UpdatePage('view')
+            self._layerManager.nviz.UpdatePage('light')
         
         # switch from MapWindow to MapWindowGL
         # add nviz toolbar
