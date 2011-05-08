@@ -1192,6 +1192,7 @@ class NvizToolWindow(FN.FlatNotebook):
                                   colour = UserSettings.Get(group = 'nviz', key = 'light',
                                                             subkey = 'color'),
                                   size = globalvar.DIALOG_COLOR_SIZE)
+        self.win['light']['color'] = color.GetId()
         color.Bind(csel.EVT_COLOURSELECT, self.OnLightColor)
         gridSizer.Add(item = color, pos = (0, 2))
 
@@ -1461,7 +1462,7 @@ class NvizToolWindow(FN.FlatNotebook):
             return
         
         val = event.GetInt()
-        self.mapWindow.light['position']['z'] = val / 100.
+        self.mapWindow.light['position']['z'] = val
         for win in self.win['light'][winName].itervalues():
             self.FindWindowById(win).SetValue(val)
         
@@ -1492,6 +1493,7 @@ class NvizToolWindow(FN.FlatNotebook):
     def OnBgColor(self, event):
         """!Background color changed"""
         color = event.GetValue()
+        self.mapWindow.view['background']['color'] = event.GetValue()
         color = str(color[0]) + ':' + str(color[1]) + ':' + str(color[2])
         
         self._display.SetBgColor(str(color))
@@ -1799,7 +1801,7 @@ class NvizToolWindow(FN.FlatNotebook):
         """!Draw resolution changed"""
         self.SetSurfaceResolution()
         
-        if apply and self.mapDisplay.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
         
     def SetSurfaceResolution(self):
@@ -1817,10 +1819,7 @@ class NvizToolWindow(FN.FlatNotebook):
         wx.PostEvent(self.mapWindow, event)
         
     def SetSurfaceMode(self):
-        """!Set draw mode
-
-        @param apply allow auto-rendering
-        """
+        """!Set draw mode"""
         mode = self.FindWindowById(self.win['surface']['draw']['mode']).GetSelection()
         if mode == 0: # coarse
             self.FindWindowById(self.win['surface']['draw']['res-coarse']).Enable(True)
@@ -1853,7 +1852,7 @@ class NvizToolWindow(FN.FlatNotebook):
         event = wxUpdateProperties(data = data)
         wx.PostEvent(self.mapWindow, event)
         
-        if apply and self.mapDisplay.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
 
     def OnSurfaceModeAll(self, event):
@@ -1865,10 +1864,12 @@ class NvizToolWindow(FN.FlatNotebook):
         cvalue = self._getColorString(color)
         
         for name in self.mapWindow.GetLayerNames(type = 'raster'):
-            data = self.GetLayerData('surface')
+            
+            data = self.mapWindow.GetLayerByName(name, mapType = 'raster', dataType = 'nviz')
             if not data:
                 continue # shouldy no happen
             
+            data['surface']['draw']['all'] = True
             data['surface']['draw']['mode'] = { 'value' : value,
                                                 'desc' : desc,
                                                 'update' : None }
@@ -1882,7 +1883,7 @@ class NvizToolWindow(FN.FlatNotebook):
             event = wxUpdateProperties(data = data)
             wx.PostEvent(self.mapWindow, event)
             
-        if apply and self.mapDisplay.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
         
     def _getColorString(self, color):
@@ -2480,6 +2481,9 @@ class NvizToolWindow(FN.FlatNotebook):
                                                                                   zmax)
                 self.FindWindowById(self.win['view']['z-exag'][control]).SetValue(zval)                                      
         
+            self.FindWindowById(self.win['view']['bgcolor']).SetColour(\
+                            self.mapWindow.view['background']['color'])
+            
         elif pageId in ('surface', 'vector', 'volume'):
             name = self.FindWindowById(self.win[pageId]['map']).GetValue()
             data = self.GetLayerData(pageId)
@@ -2501,6 +2505,7 @@ class NvizToolWindow(FN.FlatNotebook):
                 self.FindWindowById(self.win['light']['z'][control]).SetValue(zval)
                 self.FindWindowById(self.win['light']['bright'][control]).SetValue(bval)
                 self.FindWindowById(self.win['light']['ambient'][control]).SetValue(aval)
+            self.FindWindowById(self.win['light']['color']).SetColour(self.mapWindow.light['color'])
         elif pageId == 'fringe':
             win = self.FindWindowById(self.win['fringe']['map'])
             win.SetValue(self.FindWindowById(self.win['surface']['map']).GetValue())
@@ -2593,8 +2598,7 @@ class NvizToolWindow(FN.FlatNotebook):
             else:
                 win.SetValue(value)
         # enable/disable res widget + set draw mode
-        self.SetSurfaceMode()
-        color = self.FindWindowById(self.win['surface']['draw']['wire-color'])
+        self.OnSurfaceMode(event = None)
 
     def VectorInfo(self, layer):
         """!Get number of points/lines
