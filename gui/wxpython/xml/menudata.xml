@@ -2795,7 +2795,7 @@
 	      <help>Computes sensible heat flux iteration SEBAL 01.</help>
 	      <keywords>imagery,evaporative fraction,soil moisture,energy balance,SEBAL</keywords>
 	      <handler>OnMenuCmd</handler>
-	      <command>i.eb.h_SEBAL01</command>
+	      <command>i.eb.h_sebal01</command>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
