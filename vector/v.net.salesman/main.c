@@ -3,11 +3,11 @@
  * 
  *  MODULE:       v.net.salesman
  *  
- *  AUTHOR(S):    Radim Blazek
+ *  AUTHOR(S):    Radim Blazek, Markus Metz
  *                
  *  PURPOSE:      Create a cycle connecting given nodes.
  *                
- *  COPYRIGHT:    (C) 2001 by the GRASS Development Team
+ *  COPYRIGHT:    (C) 2001-2011 by the GRASS Development Team
  * 
  *                This program is free software under the 
  *                GNU General Public License (>=v2). 
