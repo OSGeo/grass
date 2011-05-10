@@ -35,9 +35,11 @@ int ncities;			/* number of cities */
 int nnodes;			/* number of nodes */
 int *cities;			/* array of cities */
 int *cused;			/* city is in cycle */
-COST **costs;			/* pointer to array of pointers to arrays of sorted costs */
+COST **costs;			/* pointer to array of pointers to arrays of sorted forward costs */
+COST **bcosts;			/* pointer to array of pointers to arrays of sorted backward costs */
 int *cycle;			/* path */
 int ncyc = 0;			/* number of cities in cycle */
+int debug_level;
 
 int cmp(const void *, const void *);
 
@@ -54,6 +56,7 @@ void add_city(int city, int after)
 	cycle[0] = city;
     }
     else {
+	/* for a large number of cities this will become slow */
 	for (j = ncyc - 1; j > after; j--)
 	    cycle[j + 1] = cycle[j];
 
@@ -62,9 +65,11 @@ void add_city(int city, int after)
     cused[city] = 1;
     ncyc++;
 
-    G_debug(2, "Cycle:\n");
-    for (i = 0; i < ncyc; i++) {
-	G_debug(2, "%d: %d: %d\n", i, cycle[i], cities[cycle[i]]);
+    if (debug_level >= 2) {
+	G_debug(2, "Cycle:");
+	for (i = 0; i < ncyc; i++) {
+	    G_debug(2, "%d: %d: %d", i, cycle[i], cities[cycle[i]]);
+	}
     }
 
 }
@@ -75,8 +80,8 @@ int main(int argc, char **argv)
     int i, j, k, ret, city, city1;
     int nlines, type, ltype, afield, tfield, geo, cat;
     int node, node1, node2, line;
-    struct Option *map, *output, *afield_opt, *tfield_opt, *afcol, *type_opt,
-	*term_opt;
+    struct Option *map, *output, *afield_opt, *tfield_opt, *afcol, *abcol,
+	*type_opt, *term_opt;
     struct Flag *geo_f;
     struct GModule *module;
     struct Map_info Map, Out;
@@ -88,6 +93,7 @@ int main(int argc, char **argv)
     struct cat_list *Clist;
     struct line_cats *Cats;
     struct line_pnts *Points;
+    const char *dstr;
 
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
@@ -120,10 +126,17 @@ int main(int argc, char **argv)
     tfield_opt->description = _("Node layer (used for cities)");
 
     afcol = G_define_option();
-    afcol->key = "acolumn";
+    afcol->key = "afcolumn";
     afcol->type = TYPE_STRING;
     afcol->required = NO;
-    afcol->description = _("Arcs' cost column (for both directions)");
+    afcol->description =
+	_("Arc forward/both direction(s) cost column (number)");
+
+    abcol = G_define_option();
+    abcol->key = "abcolumn";
+    abcol->type = TYPE_STRING;
+    abcol->required = NO;
+    abcol->description = _("EXPERIMENTAL: Arc backward direction cost column (number)");
 
     term_opt = G_define_standard_option(G_OPT_V_CATS);
     term_opt->key = "ccats";
@@ -153,10 +166,19 @@ int main(int argc, char **argv)
     Clist = Vect_new_cat_list();
     tfield = atoi(tfield_opt->answer);
     Vect_str_to_cat_list(term_opt->answer, Clist);
+    
+    dstr = G__getenv("DEBUG");
 
-    G_debug(1, "Imput categories:\n");
-    for (i = 0; i < Clist->n_ranges; i++) {
-	G_debug(1, "%d - %d\n", Clist->min[i], Clist->max[i]);
+    if (dstr != NULL)
+	debug_level = atoi(dstr);
+    else
+	debug_level = 0;
+
+    if (debug_level >= 1) {
+	G_debug(1, "Input categories:");
+	for (i = 0; i < Clist->n_ranges; i++) {
+	    G_debug(1, "%d - %d", Clist->min[i], Clist->max[i]);
+	}
     }
 
     if (geo_f->answer)
@@ -194,24 +216,32 @@ int main(int argc, char **argv)
     cities = (int *)G_malloc(ncities * sizeof(int));
     cused = (int *)G_malloc(ncities * sizeof(int));
     for (i = 0; i < ncities; i++) {
-	G_debug(1, "%d\n", TList->value[i]);
+	G_debug(1, "%d", TList->value[i]);
 	cities[i] = TList->value[i];
 	cused[i] = 0;		/* not in cycle */
     }
 
     costs = (COST **) G_malloc(ncities * sizeof(COST *));
-    costs = (COST **) G_malloc((ncities - 1) * sizeof(COST *));
     for (i = 0; i < ncities; i++) {
 	costs[i] = (COST *) G_malloc(ncities * sizeof(COST));
     }
+    if (abcol->answer) {
+	bcosts = (COST **) G_malloc(ncities * sizeof(COST *));
+	for (i = 0; i < ncities; i++) {
+	    bcosts[i] = (COST *) G_malloc(ncities * sizeof(COST));
+	}
+    }
+    else
+	bcosts = NULL;
 
     cycle = (int *)G_malloc((ncities + 1) * sizeof(int));	/* + 1 is for output cycle */
 
     /* Build graph */
-    Vect_net_build_graph(&Map, type, afield, 0, afcol->answer, NULL, NULL,
+    Vect_net_build_graph(&Map, type, afield, 0, afcol->answer, abcol->answer, NULL,
 			 geo, 0);
 
     /* Create sorted lists of costs */
+    /* for a large number of cities this will become very slow, can not be fixed */
     for (i = 0; i < ncities; i++) {
 	k = 0;
 	for (j = 0; j < ncities; j++) {
@@ -220,27 +250,58 @@ int main(int argc, char **argv)
 	    ret =
 		Vect_net_shortest_path(&Map, cities[i], cities[j], NULL,
 				       &cost);
+
 	    if (ret == -1)
 		G_fatal_error(_("Destination node [%d] is unreachable "
 				"from node [%d]"), cities[i], cities[j]);
 
+	    /* TODO: add to directional cost cache: from, to, cost */
 	    costs[i][k].city = j;
 	    costs[i][k].cost = cost;
+
 	    k++;
 	}
 	qsort((void *)costs[i], k, sizeof(COST), cmp);
     }
-    /* debug: print sorted */
-    for (i = 0; i < ncities; i++) {
-	for (j = 0; j < ncities - 1; j++) {
-	    city = costs[i][j].city;
-	    G_debug(2, "%d -> %d = %f\n", cities[i], cities[city],
-		    costs[i][j].cost);
+    
+    if (bcosts) {
+	for (i = 0; i < ncities; i++) {
+	    k = 0;
+	    for (j = 0; j < ncities; j++) {
+		if (i == j)
+		    continue;
+		    
+		/* TODO: get cost from directional cost cache */
+		/* from = cities[j], to = cities[i] */
+		ret =
+		    Vect_net_shortest_path(&Map, cities[j], cities[i], NULL,
+					   &cost);
+		if (ret == -1)
+		    G_fatal_error(_("Destination node [%d] is unreachable "
+				    "from node [%d]"), cities[j], cities[i]);
+		
+		if (bcosts[i][k].cost > cost) {
+		    bcosts[i][k].cost = cost;
+		}
+		    k++;
+	    }
+	    qsort((void *)bcosts[i], k, sizeof(COST), cmp);
+	}
+    }
+    
+    if (debug_level >= 2) {
+	/* debug: print sorted */
+	for (i = 0; i < ncities; i++) {
+	    for (j = 0; j < ncities - 1; j++) {
+		city = costs[i][j].city;
+		G_debug(2, "%d -> %d = %f", cities[i], cities[city],
+			costs[i][j].cost);
+	    }
 	}
     }
 
     /* find 2 cities with largest distance */
-    cost = -1;
+    cost = city = -1;
     for (i = 0; i < ncities; i++) {
 	tmpcost = costs[i][ncities - 2].cost;
 	if (tmpcost > cost) {
@@ -248,57 +309,84 @@ int main(int argc, char **argv)
 	    city = i;
 	}
     }
-    G_debug(2, "biggest costs %d - %d\n", city,
+    G_debug(2, "biggest costs %d - %d", city,
 	    costs[city][ncities - 2].city);
 
-    /* add this 2 cities to array */
+    /* add these 2 cities to array */
     add_city(city, -1);
     add_city(costs[city][ncities - 2].city, 0);
 
     /* In each step, find not used city, with biggest cost to any used city, and insert 
      *  into cycle between 2 nearest nodes */
+    /* for a large number of cities this will become very slow, can be fixed */
     for (i = 0; i < ncities - 2; i++) {
 	cost = -1;
-	G_debug(2, "---- %d ----\n", i);
+	G_debug(2, "---- city %d ----", i);
 	for (j = 0; j < ncities; j++) {
 	    if (cused[j] == 1)
 		continue;
 	    tmpcost = 0;
 	    for (k = 0; k < ncities - 1; k++) {
-		G_debug(2, "? %d (%d) - %d (%d) \n", j, cnode(j),
+		G_debug(2, "? %d (%d) - %d (%d)", j, cnode(j),
 			costs[j][k].city, cnode(costs[j][k].city));
 		if (!cused[costs[j][k].city])
 		    continue;	/* only used */
+		/* directional costs j -> k */
 		tmpcost += costs[j][k].cost;
 		break;		/* first nearest */
 	    }
-	    G_debug(2, "    cost = %f x %f\n", tmpcost, cost);
+	    /* forward/backward: tmpcost = min(fcost) + min(bcost) */
+	    if (bcosts) {
+		for (k = 0; k < ncities - 1; k++) {
+		    G_debug(2, "? %d (%d) - %d (%d)", j, cnode(j),
+			    bcosts[j][k].city, cnode(bcosts[j][k].city));
+		    if (!cused[bcosts[j][k].city])
+			continue;	/* only used */
+		    /* directional costs j -> k */
+		    tmpcost += bcosts[j][k].cost;
+		    break;		/* first nearest */
+		}
+	    }
+
+	    G_debug(2, "    cost = %f x %f", tmpcost, cost);
 	    if (tmpcost > cost) {
 		cost = tmpcost;
 		city = j;
 	    }
 	}
-	G_debug(2, "add %d\n", city);
+	G_debug(2, "add city %d", city);
 
-	/* add to cycle on lovest costs */
-	cycle[ncyc] = cycle[0];	/* tmp for cycle */
+	/* add to cycle on lowest costs */
+	cycle[ncyc] = cycle[0];	/* temporarily close the cycle */
 	cost = PORT_DOUBLE_MAX;
+	city1 = 0;
 	for (j = 0; j < ncyc; j++) {
+	    /* cost from j to j + 1 (directional) */
 	    node1 = cities[cycle[j]];
 	    node2 = cities[cycle[j + 1]];
+	    /* TODO: get cost from directional cost cache */
+	    /* from = cities[cycle[j]], to = cities[cycle[j + 1]] */
 	    ret = Vect_net_shortest_path(&Map, node1, node2, NULL, &tcost);
 	    tmpcost = -tcost;
+	    /* check insertion of city between j and j + 1 */
+	    /* cost from j to city (directional) */
 	    node1 = cities[cycle[j]];
 	    node2 = cities[city];
+	    /* TODO: get cost from directional cost cache */
 	    ret = Vect_net_shortest_path(&Map, node1, node2, NULL, &tcost);
 	    tmpcost += tcost;
-	    node1 = cities[cycle[j + 1]];
-	    node2 = cities[city];
+	    /* cost from city to j + 1 (directional) */
+	    node1 = cities[city];
+	    node2 = cities[cycle[j + 1]];
+	    /* TODO: get cost from directional cost cache */
 	    ret = Vect_net_shortest_path(&Map, node1, node2, NULL, &tcost);
 	    tmpcost += tcost;
+	    
+	    /* tmpcost must always be > 0 */
 
-	    G_debug(2, "? %d - %d cost = %f x %f\n", node1, node2, tmpcost,
+	    G_debug(2, "? %d - %d cost = %f x %f", node1, node2, tmpcost,
 		    cost);
+	    /* always true for j = 0 */
 	    if (tmpcost < cost) {
 		city1 = j;
 		cost = tmpcost;
@@ -309,18 +397,20 @@ int main(int argc, char **argv)
 
     }
 
-    /* Print */
-    G_debug(2, "Cycle:\n");
-    for (i = 0; i < ncities; i++) {
-	G_debug(2, "%d: %d: %d\n", i, cycle[i], cities[cycle[i]]);
+    if (debug_level >= 2) {
+	/* debug print */
+	G_debug(2, "Cycle:");
+	for (i = 0; i < ncities; i++) {
+	    G_debug(2, "%d: %d: %d", i, cycle[i], cities[cycle[i]]);
+	}
     }
 
     /* Create list of arcs */
-    cycle[ncities] = cycle[0];
+    cycle[ncities] = cycle[0];  /* close the cycle */
     for (i = 0; i < ncities; i++) {
 	node1 = cities[cycle[i]];
 	node2 = cities[cycle[i + 1]];
-	G_debug(2, " %d -> %d\n", node1, node2);
+	G_debug(2, " %d -> %d", node1, node2);
 	ret = Vect_net_shortest_path(&Map, node1, node2, List, NULL);
 	for (j = 0; j < List->n_values; j++) {
 	    line = abs(List->value[j]);
