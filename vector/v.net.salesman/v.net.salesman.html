@@ -1,7 +1,11 @@
 <h2>DESCRIPTION</h2>
 
 <em>v.net.salesman</em> calculates the optimal route to visit nodes on a
-vector network.
+vector network. If no cost column is given, the length of a line (road segment)
+is used to estimate travelling costs. If a cost column is given, the cost
+values must indicate the costs to traverse a given line, e.g. if the speed
+limit is 100 km / h, the cost to traverse a 10 km long road segment is 
+calculated as length / speed = 10 km / (100 km/h) = 0.1 h.
 
 <h2>EXAMPLE</h2>
 
@@ -9,13 +13,14 @@ Traveling salesman for 6 digitized nodes (Spearfish):
 
 <div class="code"><pre>
 g.copy vect=roads,myroads
-v.db.addcolumn myroads col="cost double precision"
+v.db.addcolumn myroads col="cost double precision, length double precision"
 
-# define traveling costs as inverse of speed limit:
-v.db.update myroads col=cost val=1/50
-v.db.update myroads col=cost val=1/75 where="label='interstate'"
-v.db.update myroads col=cost val=1/5 where="label='unimproved road'"
-v.db.update myroads col=cost val=1/25 where="label='light-duty road, improved surface'"
+# define traveling costs as length in miles divided by speed limit in miles per hour:
+v.to.db map=myroads layer=1 type=line qlayer=1 option=length col=length unit=miles
+v.db.update myroads col=cost val="length / 50"
+v.db.update myroads col=cost val="length / 75" where="label='interstate'"
+v.db.update myroads col=cost val="length / 5" where="label='unimproved road'"
+v.db.update myroads col=cost val="length / 25" where="label='light-duty road, improved surface'"
 v.db.select myroads
 
 # we have 6 locations to visit on our trip
@@ -53,12 +58,13 @@ d.vect -c centers icon=basic/triangle
 d.font verdana
 d.vect centers col=red disp=attr attrcol=label lsize=12
 
-# due to the costs (?, TODO), the result looks like a Steiner tree:
-# v.net.salesman myroads_net acol=cost ccats=1-6 out=mysalesman
+# run with traveling costs = length / speed
+v.net.salesman myroads_net acol=cost ccats=1-6 out=mysalesman_speed
+d.vect mysalesman_speed col=green width=2
 
-# run without traveling costs
-v.net.salesman myroads_net ccats=1-6 out=mysalesman
-d.vect mysalesman col=green width=2
+# run without traveling costs using line length
+v.net.salesman myroads_net ccats=1-6 out=mysalesman_length
+d.vect mysalesman_length col=green width=2
 d.vect centers col=red disp=attr attrcol=label lsize=12
 </pre></div>
 
@@ -78,6 +84,7 @@ d.vect centers col=red disp=attr attrcol=label lsize=12
 <h2>AUTHOR</h2>
 
 Radim Blazek, ITC-Irst, Trento, Italy<br>
+Markus Metz<br>
 Documentation: Markus Neteler
 
 
