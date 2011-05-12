@@ -230,9 +230,11 @@ Icons = {
         'settings'   : MetaIcon(img = iconSet.get('settings', wx.ART_ERROR),
                                 label = _('Show GUI settings')),
         'modeler'    : MetaIcon(img = iconSet.get('modeler-main', wx.ART_ERROR),
-                                label = _('Start Graphical Modeler')),
-        "layerOptions"  : MetaIcon(img = iconSet.get('options', wx.ART_ERROR),
+                                label = _('Graphical Modeler')),
+        'layerOptions'  : MetaIcon(img = iconSet.get('options', wx.ART_ERROR),
                                    label = _('Set options')),
+        'mapOutput' : MetaIcon(img = iconSet.get('print-compose', wx.ART_ERROR),
+                               label = _('Hardcopy Map Ouput Utility')),
         },
     'vdigit' : {
         'addPoint'        : MetaIcon(img = iconSet.get('point-create', wx.ART_ERROR),

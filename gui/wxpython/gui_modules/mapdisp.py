@@ -127,7 +127,6 @@ class MapFrame(wx.Frame):
         #
         # Fancy gui
         #
-        # self._mgr = auimgr
         self._mgr = wx.aui.AuiManager(self)
 
         #
@@ -341,7 +340,7 @@ class MapFrame(wx.Frame):
                           Layer(0))
         self._mgr.AddPane(self.toolbars['vdigit'],
                           wx.aui.AuiPaneInfo().
-                          Name("vdigittoolbar").Caption(_("Vector digitizer toolbar")).
+                          Name("vdigittoolbar").Caption(_("Vector Digitizer Toolbar")).
                           ToolbarPane().Top().Row(1).
                           LeftDockable(False).RightDockable(False).
                           BottomDockable(False).TopDockable(True).
@@ -412,7 +411,7 @@ class MapFrame(wx.Frame):
                           Layer(0))
         self._mgr.AddPane(self.toolbars['nviz'],
                               wx.aui.AuiPaneInfo().
-                          Name("nviztoolbar").Caption(_("3D view toolbar")).
+                          Name("nviztoolbar").Caption(_("3D View Toolbar")).
                           ToolbarPane().Top().Row(1).
                           LeftDockable(False).RightDockable(False).
                           BottomDockable(False).TopDockable(True).
@@ -436,7 +435,7 @@ class MapFrame(wx.Frame):
             
             self._mgr.AddPane(self.toolbars['map'],
                               wx.aui.AuiPaneInfo().
-                              Name("maptoolbar").Caption(_("Map toolbar")).
+                              Name("maptoolbar").Caption(_("Map Toolbar")).
                               ToolbarPane().Top().
                               LeftDockable(False).RightDockable(False).
                               BottomDockable(False).TopDockable(True).
@@ -453,7 +452,7 @@ class MapFrame(wx.Frame):
             
             self._mgr.AddPane(self.toolbars['georect'],
                               wx.aui.AuiPaneInfo().
-                              Name("georecttoolbar").Caption(_("Georectification toolbar")).
+                              Name("georecttoolbar").Caption(_("Georectification Toolbar")).
                               ToolbarPane().Top().
                               LeftDockable(False).RightDockable(False).
                               BottomDockable(False).TopDockable(True).
