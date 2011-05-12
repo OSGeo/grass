@@ -254,7 +254,7 @@ int main(int argc, char *argv[])
 
     /* switch to buffered input raster window */
     G_set_window(&src_reg);
-    /* Rast_set_window(&src_reg); */
+    Rast_set_window(&src_reg);
 
     G_debug(1, "new source north %f", src_reg.north);
     G_debug(1, "new source south %f", src_reg.south);
@@ -303,7 +303,7 @@ int main(int argc, char *argv[])
 
     /* switch back to destination = current window */
     G_set_window(&dest_reg);
-    /* Rast_set_window(&dest_reg); */
+    Rast_set_window(&dest_reg);
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
 
