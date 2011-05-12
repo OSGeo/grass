@@ -184,4 +184,5 @@ done
 
 # add Help Viewer link in user docs folder
 
+mkdir -p $HOME/Library/Documentation/Help/
 ln -sfh ../../GRASS/$GRASS_MMVER/Modules/docs/html $HOME/Library/Documentation/Help/GRASS-$GRASS_MMVER
