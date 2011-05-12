@@ -14,6 +14,7 @@ Classes:
  - ModelToolbar
  - HistogramToolbar
  - LayerManagerToolbar
+ - ToolsToolbar
 
 (C) 2007-2011 by the GRASS Development Team
 This program is free software under the GNU General Public License
@@ -1579,28 +1580,68 @@ class LayerManagerToolbar(AbstractToolbar):
         self.addovl = wx.NewId()
         self.delcmd = wx.NewId()
         self.attribute = wx.NewId()
-        self.vdigit = wx.NewId()
         self.preferences = wx.NewId()
-        self.modeler = wx.NewId() 
         
         icons = Icons['layerManager']
-        return self._getToolbarData(((self.newdisplay, 'newdisplay', icons["newdisplay"], self.parent.OnNewMenu),
+        return self._getToolbarData(((self.newdisplay, 'newdisplay', icons["newdisplay"],
+                                      self.parent.OnNewMenu),
                                      (None, ),
-                                     (self.workspaceLoad, 'workspaceLoad', icons["workspaceLoad"], self.parent.OnLoadMenu),
-                                     (self.workspaceOpen, 'workspaceOpen', icons["workspaceOpen"], self.parent.OnWorkspaceOpen),
-                                     (self.workspaceSave, 'workspaceSave', icons["workspaceSave"], self.parent.OnWorkspaceSave),
+                                     (self.workspaceLoad, 'workspaceLoad', icons["workspaceLoad"],
+                                      self.parent.OnLoadMenu),
+                                     (self.workspaceOpen, 'workspaceOpen', icons["workspaceOpen"],
+                                      self.parent.OnWorkspaceOpen),
+                                     (self.workspaceSave, 'workspaceSave', icons["workspaceSave"],
+                                      self.parent.OnWorkspaceSave),
                                      (None, ),
-                                     (self.addrast, 'addRast', icons["addRast"], self.parent.OnAddRaster),
-                                     (self.rastmisc, 'rastMisc', icons["rastMisc"], self.parent.OnAddRasterMisc),
-                                     (self.addvect, 'addVect', icons["addVect"], self.parent.OnAddVector),
-                                     (self.vectmisc, 'vectMisc', icons["vectMisc"], self.parent.OnAddVectorMisc),
-                                     (self.addgrp, 'addGroup',  icons["addGroup"], self.parent.OnAddGroup),
-                                     (self.addovl, 'addOverlay',  icons["addOverlay"], self.parent.OnAddOverlay),
-                                     (self.delcmd, 'delCmd',  icons["delCmd"], self.parent.OnDeleteLayer),
+                                     (self.addrast, 'addRast', icons["addRast"],
+                                      self.parent.OnAddRaster),
+                                     (self.rastmisc, 'rastMisc', icons["rastMisc"],
+                                      self.parent.OnAddRasterMisc),
+                                     (self.addvect, 'addVect', icons["addVect"],
+                                      self.parent.OnAddVector),
+                                     (self.vectmisc, 'vectMisc', icons["vectMisc"],
+                                      self.parent.OnAddVectorMisc),
+                                     (self.addgrp, 'addGroup',  icons["addGroup"],
+                                      self.parent.OnAddGroup),
+                                     (self.addovl, 'addOverlay',  icons["addOverlay"],
+                                      self.parent.OnAddOverlay),
+                                     (self.delcmd, 'delCmd',  icons["delCmd"],
+                                      self.parent.OnDeleteLayer),
                                      (None, ),
-                                     (self.vdigit, 'vdigit', icons["vdigit"], self.parent.OnVDigit),
-                                     (self.attribute, 'attrTable', icons["attrTable"], self.parent.OnShowAttributeTable),
+                                     (self.attribute, 'attrTable', icons["attrTable"],
+                                      self.parent.OnShowAttributeTable),
                                      (None, ),
-                                     (self.modeler, 'modeler', icons["modeler"], self.parent.OnGModeler),
-                                     (self.preferences, 'preferences', icons["settings"], self.parent.OnPreferences))
-                                    )
+                                     (self.preferences, 'preferences', icons["settings"],
+                                      self.parent.OnPreferences)
+                                     ))
+
+class ToolsToolbar(AbstractToolbar):
+    """!Layer Manager Tools toolbar (see wxgui.py)
+    """
+    def __init__(self, parent):
+        AbstractToolbar.__init__(self, parent)
+        
+        self.InitToolbar(self._toolbarData())
+        
+        # realize the toolbar
+        self.Realize()
+
+    def _toolbarData(self):
+        """!Toolbar data
+        """
+        self.georect = wx.NewId()
+        self.modeler = wx.NewId() 
+        self.vdigit = wx.NewId()
+        self.mapOutput = wx.NewId()
+        
+        icons = Icons['layerManager']
+        return self._getToolbarData(((self.vdigit, 'vdigit', icons["vdigit"],
+                                      self.parent.OnVDigit),
+                                     (self.georect, 'georectify', Icons["georectify"]["georectify"],
+                                      self.parent.OnGCPManager),
+                                     (self.modeler, 'modeler', icons["modeler"],
+                                      self.parent.OnGModeler),
+                                     (self.mapOutput, 'mapOutput', icons['mapOutput'],
+                                      self.parent.OnPsMap)
+                                     ))
+    

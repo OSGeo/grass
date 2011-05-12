@@ -82,7 +82,7 @@ from gui_modules import vclean
 from gui_modules import nviz_tools
 from gui_modules.debug import Debug
 from gui_modules.ghelp import MenuTreeWindow, AboutWindow, InstallExtensionWindow
-from gui_modules.toolbars import LayerManagerToolbar
+from gui_modules.toolbars import LayerManagerToolbar, ToolsToolbar
 from icons.icon import Icons
 
 UserSettings = preferences.globalSettings
@@ -128,8 +128,26 @@ class GMFrame(wx.Frame):
         self.menucmd = self.menubar.GetCmd()
         self.statusbar = self.CreateStatusBar(number=1)
         self.notebook  = self.__createNoteBook()
-        self.toolbar = LayerManagerToolbar(parent = self)
-        self.SetToolBar(self.toolbar)
+        self.toolbars = { 'main'  : LayerManagerToolbar(parent = self),
+                          'tools' : ToolsToolbar(parent = self) }
+        
+        # self.SetToolBar(self.toolbar)
+        self._auimgr.AddPane(self.toolbars['main'],
+                             wx.aui.AuiPaneInfo().
+                             Name("toolbar").Caption(_("Main Toolbar")).
+                             ToolbarPane().Top().
+                             LeftDockable(False).RightDockable(False).
+                             BottomDockable(False).TopDockable(True).
+                             CloseButton(False).Layer(3).
+                             BestSize((self.toolbars['main'].GetSize())))
+        self._auimgr.AddPane(self.toolbars['tools'],
+                             wx.aui.AuiPaneInfo().
+                             Name("toolbar").Caption(_("Tools Toolbar")).
+                             ToolbarPane().Top().
+                             LeftDockable(False).RightDockable(False).
+                             BottomDockable(False).TopDockable(True).
+                             CloseButton(False).Layer(2).
+                             BestSize((self.toolbars['tools'].GetSize())))
         
         # bindings
         self.Bind(wx.EVT_CLOSE,    self.OnCloseWindow)
