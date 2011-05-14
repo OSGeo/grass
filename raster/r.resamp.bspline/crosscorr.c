@@ -117,7 +117,7 @@ struct Point *swap(struct Point *point, int a, int b)
 }
 
 /*-------------------------------------------------------------------------------------------*/
-int cross_correlation(double **matrix, struct Cell_head *src_reg, double passWE, double passNS)
+int cross_correlation(SEGMENT *in_seg, struct Cell_head *src_reg, double passWE, double passNS)
     /*
        matrix: matrix with raster values
        passWE: spline step in West-East direction
@@ -164,7 +164,7 @@ int cross_correlation(double **matrix, struct Cell_head *src_reg, double passWE,
     /*Cats = Vect_new_cats_struct (); */
 
     /* Current region is read and points recorded into observ */
-    observ = P_Read_Raster_Region_Map(matrix, &region, src_reg, &ndata, 1024);
+    observ = P_Read_Raster_Region_Map(in_seg, &region, src_reg, &ndata, 1024);
     G_debug(5, "CrossCorrelation: %d points read in region. ", ndata);
     G_verbose_message(_("%d points read in region"),
 		      ndata);
