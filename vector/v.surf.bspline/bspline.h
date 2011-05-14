@@ -62,3 +62,30 @@ int Create_tmp_table(dbDriver *, char *);
 int Point_to_db(struct Map_info *, dbDriver *);
 struct SubZone where_am_i(double, double);
 struct Point *swap(struct Point *, int, int);
+
+/* resamp.c */
+struct Point *P_Read_Raster_Region_masked(SEGMENT *, /**/
+				          struct Cell_head *, /**/
+				          struct bound_box, /**/
+				          struct bound_box, /**/
+				          int *, /**/ int, /**/ double);
+int P_Sparse_Raster_Points(SEGMENT *, /**/
+			struct Cell_head *, /**/
+			struct Cell_head *, /**/
+			struct bound_box, /**/
+			struct bound_box, /**/
+			struct Point *, /**/
+			double *, /**/
+			double, /**/
+			double, /**/
+			double, /**/
+			int, /**/
+			int, /**/
+			int, /**/
+			int, /**/
+			double /**/);
+int align_elaboration_box(struct Cell_head *, struct Cell_head *, int);
+int align_interp_boxes(struct bound_box *, struct bound_box *,
+                       struct Cell_head *, struct bound_box, struct bound_box, int);
+
+
