@@ -6012,3 +6012,863 @@ msgstr "Untergruppe <%s> der Gruppe <%s> ist leer\n"
 msgid "subgroup <%s> of group <%s> references the following raster maps\n"
 msgstr "Untergruppe <%s> der Gruppe <%s> referenziert die folgenden Rasterkarten\n"
 
+#~ msgid "ERROR %s from graphics driver.\n"
+#~ msgstr "FEHLER %s vom Grafiktreiber.\n"
+
+#~ msgid "Unable to allocate memory\n"
+#~ msgstr "Kann keinen Speicher belegen\n"
+
+#~ msgid "ERROR - eof from graphics monitor.\n"
+#~ msgstr "FEHLER - EOF vom Grafikfenster.\n"
+
+#~ msgid "Warning - no response from graphics monitor <%s>.\n"
+#~ msgstr "Warnung - keine Antwort vom Grafikfenster <%s>.\n"
+
+#~ msgid "Check to see if the mouse is still active.\n"
+#~ msgstr "Kontrollieren Sie bitte, ob die Maus noch aktiv ist.\n"
+
+#~ msgid "ERROR - no response from graphics monitor <%s>.\n"
+#~ msgstr "FEHLER - keine Antwort vom Grafikfenster <%s>.\n"
+
+#~ msgid "No graphics monitor has been selected for output."
+#~ msgstr "Kein Grafikfenster für die Ausgabe selektiert."
+
+#~ msgid "Please run \"d.mon\" to select a graphics monitor."
+#~ msgstr "Bitte verwenden Sie \"d.mon\", um ein Grafikfenster zu selektieren."
+
+#~ msgid "Failed to get socket name for monitor <%s>."
+#~ msgstr "Konnte für das Grafikfenster <%s> kein Socketnamen bekommen."
+
+#~ msgid "No socket to connect to for monitor <%s>."
+#~ msgstr "Keine Socket-Verbindung für Grafikfenster <%s> vorhanden."
+
+#~ msgid "Socket is already in use or not accepting connections."
+#~ msgstr "Socket wird bereits benutzt oder akzeptiert keine Verbindungen."
+
+#~ msgid "Use d.mon to select a monitor"
+#~ msgstr "Verwenden Sie d.mon, um ein Grafikfenster zu selektieren."
+
+#~ msgid "Trying to connect to something not a socket."
+#~ msgstr "Versuche eine Verbindung zu etwas herzustellen, was kein Socket ist."
+
+#~ msgid "Probably program error."
+#~ msgstr "Wahrscheinlich ein Programmfehler."
+
+#~ msgid "Connect attempt timed out."
+#~ msgstr "Verbindeversuche abgebrochen."
+
+#~ msgid "Probably an error with the server."
+#~ msgstr "Wahrscheinlich ein Fehler mit dem Server."
+
+#~ msgid "Connection failed."
+#~ msgstr "Verbindung fehlgeschlagen."
+
+#~ msgid "Unable to open file %s"
+#~ msgstr "Kann Datei %s nicht öffnen."
+
+#~ msgid "Cairo_draw_bitmap: Failed to create source"
+#~ msgstr "Cairo_draw_bitmap: Erzeugen der Quelle fehlgeschlagen"
+
+#~ msgid "Unable to open temporary file"
+#~ msgstr "Kann temporäre Datei nicht öffnen."
+
+#~ msgid "Hit RETURN to cancel request\n"
+#~ msgstr "Drücke RETURN um Anfrage abzubrechen\n"
+
+#~ msgid "Problem reading raster map"
+#~ msgstr "Probleme beim Lesen der Rasterkarte."
+
+#~ msgid " The raster map %s@%s is empty"
+#~ msgstr " Die Rasterkarte %s@%s ist leer."
+
+#~ msgid ""
+#~ "\n"
+#~ "\n"
+#~ "Color table needed for file [%s] in mapset [%s].\n"
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "Farbtabelle für Datei [%s] in Mapset [%s] benötigt.\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Please identify the type desired:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Bitte identifizieren Sie den entsprechenden Typ:\n"
+
+#~ msgid "    1:  Random colors\n"
+#~ msgstr "    1:  Zufällige Farben\n"
+
+#~ msgid "    2:  Red, green, and blue color ramps\n"
+#~ msgstr "    2:  Rote, grüne und blaue Farbrampen\n"
+
+#~ msgid "    3:  Color wave\n"
+#~ msgstr "    3:  Farbenwelle\n"
+
+#~ msgid "    4:  Gray scale\n"
+#~ msgstr "    4:  Graustufen\n"
+
+#~ msgid "    5:  Aspect\n"
+#~ msgstr "    5:  Farbe speziell für Hangneigungskarten\n"
+
+#~ msgid "    6:  Rainbow colors\n"
+#~ msgstr "    6:  Regenbogenfarben\n"
+
+#~ msgid "    7:  Red through yellow to green\n"
+#~ msgstr "    7:  Von rot über gelb zu grün\n"
+
+#~ msgid "    8:  Green through yellow to red\n"
+#~ msgstr "    8:  Von grün über gelb zu rot\n"
+
+#~ msgid "RETURN  quit\n"
+#~ msgstr "RETURN  um abzubrechen\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "%s invalid; Try again > "
+#~ msgstr ""
+#~ "\n"
+#~ "%s ist ungültig; Bitte nocheinmal probieren > "
+
+#~ msgid "Cannot write quant rules: map %s is integer"
+#~ msgstr "Kann quant-Regeln nicht schreiben: Karte %s ist eine Integerkarte."
+
+#~ msgid "Cannot write quant rules for map %s"
+#~ msgstr "Kann keine quant-Regeln für Karte %s schreiben."
+
+#~ msgid "G_set_window(): projection/zone differs from that of currently open raster maps"
+#~ msgstr "G_set_window(): Projektion/Zone unterscheidet sich von den gerade geöffneten Rasterdateien."
+
+#~ msgid "The floating data range for %s@%s is empty"
+#~ msgstr "Der Fließkomma-Wertebereich von %s@%s ist leer."
+
+#~ msgid "The integer data range for %s@%s is empty"
+#~ msgstr "Der Integer-Wertebereich von %s@%s ist leer."
+
+#~ msgid "quantization file [%s] in mapset [%s] %s"
+#~ msgstr "Quantisierungsdatei [%s] in Mapset [%s] %s"
+
+#~ msgid "G_put_map_row: %s is not integer! Use G_put_[f/d]_raster_row()!"
+#~ msgstr "G_put_map_row: %s ist keine Interger-Karte! Benutzen Sie G_put_[f/d]_raster_row()!"
+
+#~ msgid "%s: map [%s] not open for write - request ignored"
+#~ msgstr "%s: Karte [%s] ist nicht zum Schreiben geöffnet - Anfrage wird ignoriert."
+
+#~ msgid "%s: map [%s] not open for random write - request ignored"
+#~ msgstr "%s Karte [%s] ist nicht zum zufälligen Schreiben geöffnet - Anfrage wird ignoriert."
+
+#~ msgid "%s: map [%s] not open for sequential write - request ignored"
+#~ msgstr "%s: Karte [%s] ist nicht für sequentielles Schreiben geöffnet - Anfrage wird ignoriert."
+
+#~ msgid "%s: unopened file descriptor - request ignored"
+#~ msgstr "%s: Ungeöffneter Datei-Deskripor - Anfrage ignoriert."
+
+#~ msgid "map [%s] - unable to write row %d"
+#~ msgstr "Karte [%s] - Kann Zeile %d nicht schreiben. "
+
+#~ msgid "unable to find a temporary null file %s"
+#~ msgstr "Kann keine temporäre NULL-Datei %s finden."
+
+#~ msgid "error writing null row %d"
+#~ msgstr "Fehler beim Schreiben der Null-Zeile %d."
+
+#~ msgid "category support for [%s] in mapset [%s] %s"
+#~ msgstr "Kategorie Unterstützung für [%s] im Mapset [%s] %s"
+
+#~ msgid "category support for vector map [%s] in mapset [%s] %s"
+#~ msgstr "Kategorie Unterstützung für die Vektorkarte [%s] in Mapset [%s] %s"
+
+#~ msgid "%s not found"
+#~ msgstr "%s nicht gefunden"
+
+#~ msgid "ERROR in reading %s"
+#~ msgstr "FEHLER beim Lesen von %s"
+
+#~ msgid "Cannot open temp file"
+#~ msgstr "Kann temporäre Datei nicht öffnen."
+
+#~ msgid ""
+#~ "\n"
+#~ "\n"
+#~ "Please specify projection name\n"
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "Bitte geben Sie eine Projektion an\n"
+
+#~ msgid "Enter 'list' for the list of available projections\n"
+#~ msgstr "Geben Sie 'list' für eine Liste der verfügbaren Projektionen ein.\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "invalid projection\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Ungültige Projektion\n"
+
+#~ msgid "EmbedGivenNulls: wrong data type!"
+#~ msgstr "EmbedGivenNulls: Falscher Datentyp!"
+
+#~ msgid "Null values have not been initialized. "
+#~ msgstr "NULL-Werte wurden nicht initialisiert. "
+
+#~ msgid "G_gisinit() must be called first. "
+#~ msgstr "G_gisinit() muss zuerst aufgerufen werden. "
+
+#~ msgid "Please advise GRASS developers of this error.\n"
+#~ msgstr "Bitte unterrichten Sie die GRASS-Entwickler über diesen Fehler.\n"
+
+#~ msgid "G_set_null_value: wrong data type!"
+#~ msgstr "G_set_null_value: falscher Datentyp!"
+
+#~ msgid "Name of elevation raster map"
+#~ msgstr "Name der Höhenkarte"
+
+#~ msgid "Name of elevation raster map(s)"
+#~ msgstr "Name der Höhenrasterkarte(n)"
+
+#~ msgid "Name of input raster3d map"
+#~ msgstr "Name der 3D Eingabe-Rasterkarte"
+
+#~ msgid "Name of input raster3d map(s)"
+#~ msgstr "Name der 3D Eingabe-Rasterkarte(n)"
+
+#~ msgid "Name for output raster3d map"
+#~ msgstr "Name der 3D Ausgabe-Rasterkarte"
+
+#~ msgid "Layer number"
+#~ msgstr "Layer-Nummer"
+
+#~ msgid "A single vector map can be connected to multiple database tables. This number determines which table to use."
+#~ msgstr "Eine einzelne Vektorkarte kann mit mehreren Datenbanktabellen verbunden sein. Diese Zahl bestimmt welche Tabelle verwendet werden soll."
+
+#~ msgid "Sorry <%s> is not a valid option\n"
+#~ msgstr "Tut mir leid, <%s> ist keine gültige Option\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Description:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Beschreibung:\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Keywords:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Schlüsselwörter:\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Usage:\n"
+#~ " "
+#~ msgstr ""
+#~ "\n"
+#~ "Benutzung:\n"
+#~ " "
+
+#~ msgid ""
+#~ "\n"
+#~ "Flags:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Flags:\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Parameters:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Parameter:\n"
+
+#~ msgid "Allow overwrite"
+#~ msgstr "Erlaube das Überschreiben"
+
+#~ msgid "Run with minimal output messages"
+#~ msgstr "Mit minimalen Rückmeldungen ausführen"
+
+#~ msgid "Run quietly"
+#~ msgstr "Arbeite schweigsam"
+
+#~ msgid "Unable to spawn the 'wish' program"
+#~ msgstr "Kann das Programm 'wish' nicht starten."
+
+#~ msgid "Sorry, <%c> is not a valid flag\n"
+#~ msgstr "Tut mir leid, <%c> ist kein gültiges Flag.\n"
+
+#~ msgid "Sorry, <%s=> is ambiguous\n"
+#~ msgstr "Tut mir leid, <%s=> ist nicht eindeutig.\n"
+
+#~ msgid "Sorry, <%s> is not a valid parameter\n"
+#~ msgstr "Tut mir leid, <%s> ist kein gültiger Parameter.\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "ERROR: illegal range syntax for parameter <%s>\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Fehler: Ungültige Syntax für Wertebereich des Parameters <%s>.\n"
+
+#~ msgid "       Presented as: %s\n"
+#~ msgstr "       Präsentiert als: %s\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "ERROR: value <%s> out of range for parameter <%s>\n"
+#~ msgstr ""
+#~ "\n"
+#~ "FEHLER: Wert <%s> ist außerhalb des Wertebereichs des Parameters <%s>.\n"
+
+#~ msgid "       Legal range: %s\n"
+#~ msgstr "       Erlaubter Wertebereich: %s\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "ERROR: Missing value for parameter <%s>\n"
+#~ msgstr ""
+#~ "\n"
+#~ "FEHLER: Fehlender Wert für Parameter <%s>.\n"
+
+#~ msgid ""
+#~ "ERROR: Required parameter <%s> not set:\n"
+#~ "\t(%s)\n"
+#~ msgstr ""
+#~ "FEHLER: Benötigter Parameter <%s> wurde nicht angegeben:\n"
+#~ "\t(%s)\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "ERROR: option <%s> must be provided in multiples of %d\n"
+#~ msgstr ""
+#~ "\n"
+#~ "FEHLER: Option <%s> muss als Vielfaches von %d angegeben werden.\n"
+
+#~ msgid "       You provided %d items:\n"
+#~ msgstr "       Sie haben %d Punkte angegeben:\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "FLAG: Set the following flag?\n"
+#~ msgstr ""
+#~ "\n"
+#~ "FLAG: Soll das folgende Flag gesetzt werden?\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "OPTION:   %s\n"
+#~ msgstr ""
+#~ "\n"
+#~ "OPTION:   %s\n"
+
+#~ msgid "     key: %s\n"
+#~ msgstr "     Key: %s\n"
+
+#~ msgid "  format: %s\n"
+#~ msgstr "  Format: %s\n"
+
+#~ msgid " default: %s\n"
+#~ msgstr " Standard: %s\n"
+
+#~ msgid "required: %s\n"
+#~ msgstr "benötigt werden: %s\n"
+
+#~ msgid "multiple: %s\n"
+#~ msgstr "vielfach: %s\n"
+
+#~ msgid " options: %s\n"
+#~ msgstr " Optionen: %s\n"
+
+#~ msgid "enter option > "
+#~ msgstr "Geben Sie eine Option ein > "
+
+#~ msgid "   Try again? "
+#~ msgstr "   Nochmal versuchen? "
+
+#~ msgid "Sorry, %s is not accepted.\n"
+#~ msgstr "Tut mir leid, %s wird nicht akzeptiert.\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "You have chosen:\n"
+#~ "  %s\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Sie haben gewählt:\n"
+#~ "  %s\n"
+
+#~ msgid "Is this correct? "
+#~ msgstr "Ist das richtig?"
+
+#~ msgid "to accept the default"
+#~ msgstr "Zum Akzeptieren der Standardeinstellung"
+
+#~ msgid "color support for [%s] in mapset [%s] %s"
+#~ msgstr "Farbunterstützung für Datei [%s] in Mapset [%s] %s"
+
+#~ msgid "Can't create timestamp file for %s map %s in mapset %s"
+#~ msgstr "Kann keine Zeitstempel-Datei für %s Karte %s in Mapset %s erzeugen."
+
+#~ msgid "Invalid timestamp specified for %s map %s in mapset %s"
+#~ msgstr "Ungültiger Zeitstempel für %s Karte %s in Mapset %s angegeben."
+
+#~ msgid "Can't open timestamp file for %s map %s in mapset %s"
+#~ msgstr "Kann die Zeitstempel-Datei für %s Karte %s in Mapset %s nicht öffnen."
+
+#~ msgid "Invalid timestamp file for %s map %s in mapset %s"
+#~ msgstr "Ungültige Zeitstempel-Datei für %s Karte %s in Mapset %s."
+
+#~ msgid "Can not create a new process!"
+#~ msgstr "Kann keinen neuen Prozess erzeugen!"
+
+#~ msgid "Error reading compressed map <%s@%s>, row %d"
+#~ msgstr "Fehler beim Lesen der komprimierten Karte <%s@%s>, Zeile %d."
+
+#~ msgid "Error reading map <%s@%s>, row %d"
+#~ msgstr "Fehler beim Lesen der Karte <%s@%s>, Zeile %d."
+
+#~ msgid "Unable to realloc buffer"
+#~ msgstr "Kann Buffer nicht wieder belegen."
+
+#~ msgid "unable to determine user's home directory"
+#~ msgstr "Kann das Home-Verzeichnis des Benutzers nicht finden."
+
+#~ msgid "Unable to create header file for [%s]"
+#~ msgstr "Kann Header-Datei für [%s] nicht erstellen."
+
+#~ msgid "Can't read %s for [%s in %s]"
+#~ msgstr "Kann %s für [%s in %s] nicht lesen."
+
+#~ msgid "Can't create %s metadata file for [%s in %s]"
+#~ msgstr "Kann die %s Metadaten-Datei für [%s in %s] nicht anlegen."
+
+#~ msgid ""
+#~ "\n"
+#~ "Please specify ellipsoid name\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Bitte geben Sie ein Ellipsoid an\n"
+
+#~ msgid "Enter 'list' for the list of available ellipsoids\n"
+#~ msgstr "Geben Sie 'list' für eine Liste der verfügbaren Ellipsoiden ein.\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "invalid ellipsoid\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Ungültiger Ellipsoid\n"
+
+#~ msgid ""
+#~ "region for current mapset %s\n"
+#~ "run \"g.region\""
+#~ msgstr ""
+#~ "Region des aktuellen Mapsets %s\n"
+#~ "Führen Sie \"g.region\" aus."
+
+#~ msgid "default region %s"
+#~ msgstr "Standard-Region %s"
+
+#~ msgid "is not set"
+#~ msgstr "ist nicht gesetzt"
+
+#~ msgid ""
+#~ "is invalid\n"
+#~ "%s"
+#~ msgstr ""
+#~ "ist ungültig\n"
+#~ "%s"
+
+#~ msgid "hit RETURN to continue -->"
+#~ msgstr "RETURN zum Weitermachen drücken -->"
+
+#~ msgid "can't create histogram for [%s in %s]"
+#~ msgstr "Kann kein Histogramm für [%s in %s] erstellen."
+
+#~ msgid "to cancel request"
+#~ msgstr "um die Aktion abzubrechen"
+
+#~ msgid "Enter a new %s file name"
+#~ msgstr "Bitte geben Sie einen neuen %s Dateinamen ein."
+
+#~ msgid "Enter the name of an existing %s file"
+#~ msgstr "Geben Sie den Namen einer existierenden %s Datei ein."
+
+#~ msgid "Enter %s file name"
+#~ msgstr "Geben Sie %s Dateinamen ein."
+
+#~ msgid "Enter 'list' for a list of existing %s files\n"
+#~ msgstr "Geben Sie 'list' für eine Liste der bereits existierenden %s Dateien ein.\n"
+
+#~ msgid "Enter 'list -f' for "
+#~ msgstr "Geben Sie 'list -f' für "
+
+#~ msgid "a list %s"
+#~ msgstr "eine Liste %s ein."
+
+#~ msgid "an extended list"
+#~ msgstr "eine erweiterte Liste ein."
+
+#~ msgid "Hit RETURN %s\n"
+#~ msgstr "Drücken Sie RETURN %s\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "** %s - not found **\n"
+#~ msgstr ""
+#~ "\n"
+#~ "** %s - leider nicht gefunden **\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "** %s exists. ok to overwrite? "
+#~ msgstr ""
+#~ "\n"
+#~ "** %s existiert. Soll sie überschrieben werden? "
+
+#~ msgid ""
+#~ "\n"
+#~ "**<%s> illegal name **\n"
+#~ msgstr ""
+#~ "\n"
+#~ "**<%s> unerlaubter Name **\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "** %s - illegal request **\n"
+#~ msgstr ""
+#~ "\n"
+#~ "** %s - unerlaubte Anfrage **\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "** %s - exists, select another name **\n"
+#~ msgstr ""
+#~ "\n"
+#~ "** %s - existiert bereits, bitte wählen Sie einen anderen Namen **\n"
+
+#~ msgid "ask: can't happen"
+#~ msgstr "Frage: Das kann nicht passieren"
+
+#~ msgid "Illegal filename.  Cannot be '.' or 'NULL'\n"
+#~ msgstr "Ungültiger Dateiname.  Er darf nicht '.' oder 'NULL' sein.\n"
+
+#~ msgid "Illegal filename. Character <%c> not allowed.\n"
+#~ msgstr "Ungültiger Dateiname. Das Zeichen <%c> ist nicht erlaubt.\n"
+
+#~ msgid "Too many reclass categories for [%s in %s]"
+#~ msgstr "Zu viele reklassifizierte Kategorien für [%s in %s]."
+
+#~ msgid "Illegal reclass format in header file for [%s in %s]"
+#~ msgstr "Ungültiges Reklassifizierungs-Format in der Header-Datei von [%s in %s]."
+
+#~ msgid "Unable to create header file for [%s in %s]"
+#~ msgstr "Kann Header-Datei für [%s in %s] nicht anlegen."
+
+#~ msgid "Unable to create dependency file in [%s in %s]"
+#~ msgstr "Kann Abhängigkeitsdatei in [%s in %s] nicht anlegen."
+
+#~ msgid "ERROR in reading <%s> file for location <%s>"
+#~ msgstr "FEHLER beim Lesen der Datei <%s> für die Location <%s>."
+
+#~ msgid ""
+#~ "closecell: can't move %s\n"
+#~ "to null file %s"
+#~ msgstr ""
+#~ "closecell: Kann  %s\n"
+#~ "nicht in die NULLdatei %s bewegen."
+
+#~ msgid "Error writing floating point format file for map %s"
+#~ msgstr "Fehler beim Schreiben der Fließkomma-Karte %s."
+
+#~ msgid ""
+#~ "closecell: can't move %s\n"
+#~ "to cell file %s"
+#~ msgstr ""
+#~ "closecell: Kann %s\n"
+#~ "nicht in die Datei %s verschieben."
+
+#~ msgid "unable to write quant file!"
+#~ msgstr "Kann quant-Datei nicht schreiben!"
+
+#~ msgid "Unable to get GIS_LOCK enviroment variable value"
+#~ msgstr "Kann den Inhalt der Umgebungsvariable GIS_LOCK nicht erhalten."
+
+#~ msgid "G_distance_point_to_line_segment: shouldn't happen: code=%d P=(%f,%f) S=(%f,%f)(%f,%f)"
+#~ msgstr "G_distance_point_to_line_segment: sollte nicht vorkommen: Code=%d P=(%f,%f) S=(%f,%f)(%f,%f)"
+
+#~ msgid "G_malloc: unable to allocate %lu bytes at %s:%d"
+#~ msgstr "G_malloc: Kann nicht %lu Byte auf %s:%d belegen."
+
+#~ msgid "G_calloc: unable to allocate %lu * %lu bytes at %s:%d"
+#~ msgstr "G_calloc: Kann nicht %lu * %lu Byte auf %s:%d belegen."
+
+#~ msgid "G_realloc: unable to allocate %lu bytes at %s:%d"
+#~ msgstr "G_realloc: Kann nicht %lu Byte auf %s:%d belegen."
+
+#~ msgid "Unable to open raster map <%s@%s>"
+#~ msgstr "Kann die Rasterkarte <%s@%s> nicht öffnen."
+
+#~ msgid "Unable to find <%s@%s>"
+#~ msgstr "Kann <%s@%s> nicht finden."
+
+#~ msgid "Raster map <%s@%s> is in different projection than current region. Found raster map <%s@%s>, should be <%s>."
+#~ msgstr "Rasterkarte <%s@%s> ist in einer anderen Projektion als die aktuelle Region. Habe Rasterkarte <%s@%s> gefunden sollte <%s> sein."
+
+#~ msgid "Raster map <%s@%s> is in different zone (%d) than current region (%d)"
+#~ msgstr "Rasterkarte <%s@%s> ist in einer anderen Zone (%d) als die aktuelle Region (%d)."
+
+#~ msgid "Raster map <%s@%s>: bytes per cell (%d) too large"
+#~ msgstr "Rasterkarte <%s@%s>: Bytes pro Zelle (%d) zu groß."
+
+#~ msgid "map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"
+#~ msgstr "Karte <%s@%s> ist eine GDAL-Verknüpfung, aber GRASS wurde ohne GDAL-Unterstützung kompiliert."
+
+#~ msgid "<%s>: bad mapset"
+#~ msgstr "<%s>: schlechtes Mapset"
+
+#~ msgid "G__open_raster_new(): no temp files available"
+#~ msgstr "G__open_raster_new(): keine temp-Datei vorhanden"
+
+#~ msgid "Unable to write embedded null values for raster map open for random access"
+#~ msgstr "Kann eingebettete NULL-Werte nicht schreiben für Rasterkarten geöffnet für den direkten Zugriff."
+
+#~ msgid "G_set_fp_type(): can only be called with FCELL_TYPE or DCELL_TYPE"
+#~ msgstr "G_set_fp_type(): kann nur mit FCELL_TYPE oder DCELL_TYPE aufgerufen werden."
+
+#~ msgid "Unable to find '%s' in '%s'"
+#~ msgstr "Kann '%s' in '%s' nicht finden"
+
+#~ msgid "Unable to open '%s'"
+#~ msgstr "Kann '%s' nicht öffnen."
+
+#~ msgid "G_set_quant_rules() can be called only for raster maps opened for reading"
+#~ msgstr "G_set_quant_rules() kann nur für zum Lesen geöffnete Rasterkarten aufgerufen werden."
+
+#~ msgid ""
+#~ "\n"
+#~ "Please specify datum name\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Bitte geben Sie ein Datum an\n"
+
+#~ msgid "Enter 'list' for the list of available datums\n"
+#~ msgstr "Geben Sie 'list' für eine Liste der verfügbaren Datums ein\n"
+
+#~ msgid "or 'custom' if you wish to enter custom parameters\n"
+#~ msgstr "oder 'custom' wenn Sie eigene Parameter eigeben wollen\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "invalid datum\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Ungültiges Datum\n"
+
+#~ msgid "one moment...\n"
+#~ msgstr "einen Moment bitte...\n"
+
+#~ msgid "No help available for command [%s]\n"
+#~ msgstr "Leider keine Hilfe für den Befehl [%s] verfügbar.\n"
+
+#~ msgid "Unable to open file %s in <%s>"
+#~ msgstr "Kann Datei %s in <%s> nicht öffnen."
+
+#~ msgid "line %d: <%s>"
+#~ msgstr "Zeile %d: <%s>"
+
+#~ msgid "can't read f_range file for [%s in %s]"
+#~ msgstr "Kann f_range Datei für [%s in %s] nicht lesen."
+
+#~ msgid "can't read range file for [%s in %s]"
+#~ msgstr "Kann range Datei für [%s in %s] nicht lesen."
+
+#~ msgid "can't write range file for [%s in %s]"
+#~ msgstr "Kann range Datei für [%s in %s] nicht schreiben."
+
+#~ msgid "with titles"
+#~ msgstr "mit Titeln"
+
+#~ msgid "(no title)"
+#~ msgstr "(kein Titel)"
+
+#~ msgid "Unable to read header file for raster map <%s@%s>."
+#~ msgstr "Kann den Header der Rasterkarte <%s@%s> nicht lesen."
+
+#~ msgid " It is a reclass of raster map <%s@%s> "
+#~ msgstr " Es ist eine Reklassifikation der Rasterkarte <%s@%s> "
+
+#~ msgid " It is a reclass of raster map <%s@%s> whose header file is invalid."
+#~ msgstr " Es ist eine Reklassifikation der Rasterkarte <%s@%s>, deren header Datei ungültig ist."
+
+#~ msgid " Invalid format."
+#~ msgstr " Ungültiges Format."
+
+#~ msgid "can't write history information for [%s]"
+#~ msgstr "Kann die History-Informationen der Karte [%s] nicht schreiben."
+
+#~ msgid "Not enough room in history file to record command line."
+#~ msgstr "Nicht genügend Platz in der History-Datei um die Kommandozeile zu speichern."
+
+#~ msgid "Not enough room in history file for command line (truncated)."
+#~ msgstr "Nicht genügend Platz in der History-Datei für die Kommandozeile (gekürzt)."
+
+#~ msgid "Graphics driver [%s] started"
+#~ msgstr "Grafiktreiber [%s] gestartet"
+
+#~ msgid "Unknown command: %d last: %d"
+#~ msgstr "Unbekannter Befehl: %d zuletzt: %d"
+
+#~ msgid "Monitor: get_command: Premature EOF"
+#~ msgstr "Grafikfenster: get_command: Vorzeitiges EOF"
+
+#~ msgid "not implemented"
+#~ msgstr "nicht implementiert"
+
+#~ msgid "Unable to build spatial index from topology, vector map is not opened at topo level 2"
+#~ msgstr "Kann räumlichen Index nicht aus der Topologie erzeugen. Vektorkarte ist nicht auf dem topo level 2 geöffnet."
+
+#~ msgid "%d errors in category string."
+#~ msgstr "%d Fehler in Kategorie Zeichenkette."
+
+#~ msgid "Unable to add database link, map is not opened in WRITE mode"
+#~ msgstr "Kann Datenbankverknüpfung nicht hinzufügen. Die Karte ist nicht im Schreibmodus geöffnet."
+
+#~ msgid "Unable to add database link"
+#~ msgstr "Kann Datenbankverknüpfung nicht hinzufügen."
+
+#~ msgid "Error in rule on row %d in %s"
+#~ msgstr "Fehler in Regel in Zeile %d in %s."
+
+#~ msgid "Unknown keyword %s in vector head"
+#~ msgstr "Unbekanntes Schlüsselwort %s in Vektor header."
+
+#~ msgid "Next edge was visited but it is not the first one !!! breaking loop"
+#~ msgstr "Nächste Kante besucht, aber sie ist nicht die Erste !!! Beende Schleife."
+
+#~ msgid "Coor files of vector map <%s@%s> is larger than it should be (%ld bytes excess)"
+#~ msgstr "Coor-Datei der Vektorkarte <%s@%s> ist größer als sie sein sollte (%ld Byte Überschuss)."
+
+#~ msgid "Coor files of vector <%s@%s> is shorter than it should be (%ld bytes missing)."
+#~ msgstr "Coor-Datei der Vektorkarte <%s@%s> ist kleiner als sie sein sollte (%ld Byte Fehlend)."
+
+#~ msgid "Intersections: %5d"
+#~ msgstr "Überschneidungen: %5d"
+
+#~ msgid "Unable to delete feature %d from vector map <%s>"
+#~ msgstr "Kann Objekt %d der Vektorkarte <%s> nicht löschen"
+
+#~ msgid "Programmer requested unknown open level %d"
+#~ msgstr "Programmierer forderte unbekanntes open_level %d an"
+
+#~ msgid "Unable to read head file"
+#~ msgstr "Kann head Datei nicht lesen."
+
+#~ msgid "OGR format cannot be updated"
+#~ msgstr "OGR Format kann nicht aktualisiert werden."
+
+#~ msgid "Unable to open layer <%s>"
+#~ msgstr "Kann Layer <%s> nicht öffnen."
+
+#~ msgid "Unable to open category index file for vector map <%s@%s>"
+#~ msgstr "Kann die Kategorieindexdatei der Vektorkarte <%s@%s> nicht öffnen."
+
+#~ msgid "Random read is not supported by OGR for this layer, cannot build support"
+#~ msgstr "Direktes Lesen wird von OGR für diesen Layer nicht unterstützt, kann Support nicht erzeugen."
+
+#~ msgid "Feature: "
+#~ msgstr "Objekt: "
+
+#~ msgid "OGR feature without ID ignored"
+#~ msgstr "OGR Objekt ohne ID ignoriert."
+
+#~ msgid "Unable to open raster map <%s>"
+#~ msgstr "Kann die Rasterkarte <%s> nicht öffnen."
+
+#~ msgid "Could not get raster row"
+#~ msgstr "Kann die Rasterzeile nicht bekommen."
+
+#~ msgid "Unable to close input map"
+#~ msgstr "Kann die Eingabekarte nicht schließen."
+
+#~ msgid "Unable to create raster map <%s>"
+#~ msgstr "Kann die Rasterkarte <%s> nicht erzeugen."
+
+#~ msgid "Unable to write raster row %i"
+#~ msgstr "Kann die Rasterzeile %i nicht schreiben"
+
+#~ msgid "The gauss elimination solver does not work with sparse matrices"
+#~ msgstr "Der Gaußsche Eliminierungslöser kann keine dünnbesetzten Matrizen verarbeiten."
+
+#~ msgid "The linear equation system is not quadratic"
+#~ msgstr "Das lineare Gleichungssystem ist nicht quadratisch"
+
+#~ msgid "The lu solver does not work with sparse matrices"
+#~ msgstr "Der lu-Löser kann keine dünnbesetzten Matrizen verarbeiten"
+
+#~ msgid "The cholesky solver does not work with sparse matrices"
+#~ msgstr "Der Cholesky-Löser kann keine dünnbesetzten Matrizen verarbeiten"
+
+#~ msgid "Matrix is not symmetric!"
+#~ msgstr "Matrix ist nicht symmetrisch!"
+
+#~ msgid "The type of solver which should solve the symmetric linear equation system"
+#~ msgstr "Der Solver, der das symmetrische lineare Gleichungssystem lösen soll"
+
+#~ msgid "The type of solver which should solve the linear equation system"
+#~ msgstr "Der Solver, der das lineare Gleichungssysteme lösen soll"
+
+#~ msgid "Maximum number of iteration used to solver the linear equation system"
+#~ msgstr "Die maximale Anzahl an Iterationen, zum Lösen des linearen Gleichungssystems"
+
+#~ msgid "Error break criteria for iterative solvers (jacobi, sor, cg or bicgstab)"
+#~ msgstr "Fehlerabbruchkriterien für iterative Löser (jacobi, sor, cg or bicgstab)"
+
+#~ msgid "The relaxation parameter used by the jacobi and sor solver for speedup or stabilizing"
+#~ msgstr "Entspannungsparameter (relaxation parameter) zur Beschleunigung oder Stabilisierung der Jacobi und SOR Löser"
+
+#~ msgid "test, gpde"
+#~ msgstr "Test, gpde"
+
+#~ msgid "Illegal table map name <%s>. May not contain '.' or 'NULL'.\n"
+#~ msgstr "Ungültiger Tabellenname <%s>. Er darf '.' oder 'NULL' nicht enthalten.\n"
+
+#~ msgid "Illegal table map name <%s>. Must start with a letter.\n"
+#~ msgstr "Ungültiger Tabellenname <%s>. Er muss mit einem Buchstaben beginnen.\n"
+
+#~ msgid "Illegal table map name <%s>. Character <%c> not allowed.\n"
+#~ msgstr "Ungültiger Name für Vektorkarte <%s>. Zeichen <%c> ist nicht erlaubt.\n"
+
+#~ msgid "Unable to feature %d from vector map <%s>"
+#~ msgstr "Unable to feature %d from vector map <%s>"
+
+#~ msgid "Invalid view position coordinates, using %f,%f"
+#~ msgstr "Ungültige Koordinaten für den Betrachtungspunkt, verwende %f,%f"
+
+#~ msgid "Vector is not 3D"
+#~ msgstr "Vektor ist nicht 3D."
+
+#~ msgid "Cannot find z column <%s> (please verify name, e.g. with v.info)"
+#~ msgstr "Kann die Z-Spalte <%s> nicht finden (Bitte überprüfen Sie den Name, z.B. mit v.info)."
+
+#~ msgid "Column type of z column is not supported (must be integer or double)"
+#~ msgstr "Spaltentype der Spalte z wird nicht unterstützt (muss integer oder double sein)."
+
+#~ msgid "Cannot read column type of smooth column"
+#~ msgstr "Kann den Spaltentyp der Smooth-Spalte nicht lesen."
+
+#~ msgid "Column type of smooth column (datetime) is not supported"
+#~ msgstr "Spaltentyp der Smooth-Spalte (datetime) wird nicht unterstützt."
+
+#~ msgid "Column type of s column is not supported (must be integer or double)"
+#~ msgstr "Spaltentyp der s-Spalte wird nicht unterstützt (muss integer oder double sein)."
+
+#~ msgid "Unknown Location"
+#~ msgstr "Unbekannte Location"
+
+#~ msgid "Too many arguments"
+#~ msgstr "zu viele Argumente"
+
+#~ msgid "Table has no columns"
+#~ msgstr "Tabelle hat keine Spalten"
