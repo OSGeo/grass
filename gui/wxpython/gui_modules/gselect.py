@@ -664,7 +664,6 @@ class LayerSelect(wx.Choice):
             self.SetItems(layerchoices)
             self.SetStringSelection('1')
         elif len(layerchoices) == 1:
-            print layerchoices[0]
             self.SetItems(layerchoices)
             self.SetStringSelection(layerchoices[0])
         
