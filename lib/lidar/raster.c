@@ -187,16 +187,16 @@ P_Sparse_Points(struct Map_info *Out, struct Cell_head *Elaboration,
 
 
 /*------------------------------------------------------------------------------------------------*/
-double **P_Regular_Points(struct Cell_head *Elaboration, struct Cell_head *Original,
+int P_Regular_Points(struct Cell_head *Elaboration, struct Cell_head *Original,
                           struct bound_box General, struct bound_box Overlap,
-			  double **matrix, char **mask_matrix, double *param,
+			  SEGMENT *out_seg, double *param,
 			  double passoN, double passoE, double overlap,
 			  double mean, int nsplx, int nsply,
 			  int nrows, int ncols, int bilin)
 {
 
     int col, row, startcol, endcol, startrow, endrow;
-    double X, Y, interpolation, weight, csi, eta;
+    double X, Y, interpolation, weight, csi, eta, dval;
 
     /* G_get_window(&Original); */
     if (Original->north > General.N)
@@ -225,11 +225,6 @@ double **P_Regular_Points(struct Cell_head *Elaboration, struct Cell_head *Origi
     for (row = startrow; row < endrow; row++) {
 	for (col = startcol; col < endcol; col++) {
 
-	    if (mask_matrix) {
-		if (!mask_matrix[row][col])
-		    continue;
-	    }
-
 	    X = Rast_col_to_easting((double)(col) + 0.5, Original);
 	    Y = Rast_row_to_northing((double)(row) + 0.5, Original);
 
@@ -249,28 +244,29 @@ double **P_Regular_Points(struct Cell_head *Elaboration, struct Cell_head *Origi
 		interpolation += mean;
 
 		if (Vect_point_in_box(X, Y, interpolation, &Overlap)) {	/* (5) */
-		    matrix[row][col] = interpolation;
+		    dval = interpolation;
 		}
 		else {
+		    segment_get(out_seg, &dval, row, col);
 		    if ((X > Overlap.E) && (X < General.E)) {
 			if ((Y > Overlap.N) && (Y < General.N)) {	/* (3) */
 			    csi = (General.E - X) / overlap;
 			    eta = (General.N - Y) / overlap;
 			    weight = csi * eta;
 			    interpolation *= weight;
-			    matrix[row][col] += interpolation;
+			    dval += interpolation;
 			}
 			else if ((Y < Overlap.S) && (Y > General.S)) {	/* (1) */
 			    csi = (General.E - X) / overlap;
 			    eta = (Y - General.S) / overlap;
 			    weight = csi * eta;
 			    interpolation *= weight;
-			    matrix[row][col] = interpolation;
+			    dval = interpolation;
 			}
 			else if ((Y >= Overlap.S) && (Y <= Overlap.N)) {	/* (1) */
 			    weight = (General.E - X ) / overlap;
 			    interpolation *= weight;
-			    matrix[row][col] = interpolation;
+			    dval = interpolation;
 			}
 		    }
 		    else if ((X < Overlap.W) && (X > General.W)) {
@@ -279,36 +275,37 @@ double **P_Regular_Points(struct Cell_head *Elaboration, struct Cell_head *Origi
 			    eta = (General.N - Y) / overlap;
 			    weight = eta * csi;
 			    interpolation *= weight;
-			    matrix[row][col] += interpolation;
+			    dval += interpolation;
 			}
 			else if ((Y < Overlap.S) && (Y > General.S)) {	/* (2) */
 			    csi = (X - General.W) / overlap;
 			    eta = (Y - General.S) / overlap;
 			    weight = csi * eta;
 			    interpolation *= weight;
-			    matrix[row][col] += interpolation;
+			    dval += interpolation;
 			}
 			else if ((Y >= Overlap.S) && (Y <= Overlap.N)) {	/* (2) */
 			    weight = (X - General.W) / overlap;
 			    interpolation *= weight;
-			    matrix[row][col] += interpolation;
+			    dval += interpolation;
 			}
 		    }
 		    else if ((X >= Overlap.W) && (X <= Overlap.E)) {
 			if ((Y > Overlap.N) && (Y < General.N)) {	/* (3) */
 			    weight = (General.N - Y) / overlap;
 			    interpolation *= weight;
-			    matrix[row][col] += interpolation;
+			    dval += interpolation;
 			}
 			else if ((Y < Overlap.S) && (Y > General.S)) {	/* (1) */
 			    weight = (Y - General.S) / overlap;
 			    interpolation *= weight;
-			    matrix[row][col] = interpolation;
+			    dval = interpolation;
 			}
 		    }
 		}
+		segment_put(out_seg, &dval, row, col);
 	    }
 	}			/* END COL */
     }				/* END ROW */
-    return matrix;
+    return 1;
 }

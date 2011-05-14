@@ -373,7 +373,7 @@ struct Point *P_Read_Vector_Region_Map(struct Map_info *Map,
     return obs;
 }
 
-struct Point *P_Read_Raster_Region_Map(double **matrix,
+struct Point *P_Read_Raster_Region_Map(SEGMENT *in_seg,
 				       struct Cell_head *Elaboration,
 				       struct Cell_head *Original,
 				       int *num_points, int dim_vect)
@@ -420,7 +420,7 @@ struct Point *P_Read_Raster_Region_Map(double **matrix,
     for (row = startrow; row < endrow; row++) {
 	for (col = startcol; col < endcol; col++) {
 
-	    z = matrix[row][col];
+	    segment_get(in_seg, &z, row, col);
 
 	    if (!Rast_is_d_null_value(&z)) {
 
