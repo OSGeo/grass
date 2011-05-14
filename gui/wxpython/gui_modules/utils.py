@@ -294,6 +294,8 @@ def GetVectorNumberOfLayers(parent, vector):
         
     if not ret:
         return layers
+    else:
+        Debug.msg(1, "GetVectorNumberOfLayers(): ret %s" % ret)
     
     for line in ret.splitlines():
         try:
