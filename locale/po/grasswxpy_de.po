@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: grasswxpy_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-04-23 15:35+0200\n"
-"PO-Revision-Date: 2011-04-18 23:11+0100\n"
-"Last-Translator: Markus Neteler <neteler osgeo.org>\n"
+"PO-Revision-Date: 2011-05-14 23:51+0100\n"
+"Last-Translator: Helmut Kudrnovsky <hellik@web.de>\n"
 "Language-Team: Deutsch <grass-translations@lists.osgeo.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-15\n"
@@ -41,9 +41,9 @@ msgid "3D view"
 msgstr "3D Ansicht"
 
 #: ../gui/wxpython/wxgui.py:267
-#, python-format
+#, fuzzy, python-format
 msgid "Hardcopy Map Output Utility is not available. You can install it by %s"
-msgstr ""
+msgstr "Hardcopy Map Output Utility ist nicht verfügbar. Dies kann mit Hilfe von %s installiert werden"
 
 #: ../gui/wxpython/wxgui.py:286
 msgid "Choose model to run"
@@ -91,8 +91,9 @@ msgid "Close Map Display %d"
 msgstr "Schließe Kartenanzeige %d"
 
 #: ../gui/wxpython/wxgui.py:468 ../gui/wxpython/wxgui.py:1119
+#, fuzzy
 msgid "Selected map layer is not vector."
-msgstr ""
+msgstr "Ausgwählte Karte ist keine Vektorkarte."
 
 #: ../gui/wxpython/wxgui.py:473
 #, fuzzy
@@ -921,7 +922,6 @@ msgid "Select font"
 msgstr "Schrift auswählen"
 
 #: ../gui/wxpython/icons/icon.py:394
-#, fuzzy
 msgid "Show help page"
 msgstr "Zeige Hilfe an"
 
@@ -1203,8 +1203,9 @@ msgid "Import raster data into a GRASS map layer using GDAL."
 msgstr "Importiere Rasterdaten mittels GDAL"
 
 #: ../gui/wxpython/menustrings.py:32
+#, fuzzy
 msgid "ASCII x,y,z point import and gridding"
-msgstr ""
+msgstr "ASCII x,y,z Punkt-Import und Gridding"
 
 #: ../gui/wxpython/menustrings.py:33
 msgid "Create a raster map from an assemblage of many coordinates using univariate statistics."
@@ -2905,7 +2906,7 @@ msgstr "Gauß'sche Kerndichte Oberfläche"
 #: ../gui/wxpython/menustrings.py:452
 #, fuzzy
 msgid "Generates a raster density map from vector point data using a moving kernel or optionally generates a vector density map on a vector network."
-msgstr "Erzeugt eine Dichtekarte (Raster) aus Vektorpunkten durch einen 2D isotropischen Gauß'schen Kernel oder erzeugt eine Vektor-Dichte-Karte auf Basis eines Vektornetzwerks mit einem 1D-Kernel (optional)"
+msgstr "Erzeugt eine Dichte-Rasterkarte aus Vektorpunkten unter der Verwendung eines moving Kernels oder erzeugt optional eine Dichte-Vektorkarte auf einem Netzwerk."
 
 #: ../gui/wxpython/menustrings.py:453
 msgid "Gaussian deviates surface"
@@ -2997,8 +2998,9 @@ msgid "Spatial approximation and topographic analysis from given point or isolin
 msgstr "Räumliche Approximation und topographische Analyse auf Basis gegebener Punkte oder Isolinien im Vektorformat unter Verwendung regularisierten Splinefunktion mit Spannung. Das Ergebnis wird in eine Fließkomma-Rasterkarte geschrieben."
 
 #: ../gui/wxpython/menustrings.py:476
+#, fuzzy
 msgid "Ordinary or block kriging"
-msgstr ""
+msgstr "Ordinary oder Block Kriging"
 
 #: ../gui/wxpython/menustrings.py:477
 msgid "Performs ordinary or block kriging."
@@ -3459,7 +3461,7 @@ msgstr "Findet den kürzesten Weg in einem Vektor-Netzwerk."
 #: ../gui/wxpython/menustrings.py:593
 #, fuzzy
 msgid "Shortest path for sets of features"
-msgstr "Findet den kürzesten Weg in einem Vektor-Netzwerk."
+msgstr "Kürzester Pfad für eine Gruppen von Objekten"
 
 #: ../gui/wxpython/menustrings.py:594
 msgid "Computes shortest distance via the network between the given sets of features."
@@ -3468,17 +3470,17 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:595
 #, fuzzy
 msgid "Shortest path using timetables"
-msgstr "Kürzester Pfad"
+msgstr "Kürzester Pfad mittels Zeittabellen"
 
 #: ../gui/wxpython/menustrings.py:596
 #, fuzzy
 msgid "Finds shortest path using timetables."
-msgstr "Findet den kürzesten Weg in einem Vektor-Netzwerk."
+msgstr "Findet den kürzesten Weg mit Hilfe einer Zeittabellen."
 
 #: ../gui/wxpython/menustrings.py:597
 #, fuzzy
 msgid "Shortest path for all pairs"
-msgstr "Kürzester Pfad"
+msgstr "Kürzester Pfad für alle Paare"
 
 #: ../gui/wxpython/menustrings.py:598
 msgid "Computes the shortest path between all pairs of nodes in the network."
@@ -3493,16 +3495,18 @@ msgid "Visibility graph construction."
 msgstr "Konstruktion des Sichtbarkeits-Graphen."
 
 #: ../gui/wxpython/menustrings.py:601
+#, fuzzy
 msgid "Bridges and articulation points"
-msgstr ""
+msgstr "Brücken und Artikulationspunkte"
 
 #: ../gui/wxpython/menustrings.py:602
 msgid "Computes bridges and articulation points in the network."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:603
+#, fuzzy
 msgid "Maximum flow"
-msgstr ""
+msgstr "Maximum flow"
 
 #: ../gui/wxpython/menustrings.py:604
 msgid "Computes the maximum flow between two sets of nodes in the network."
@@ -3511,7 +3515,7 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:605
 #, fuzzy
 msgid "Vertex connectivity"
-msgstr "Vektor Datenbank Verbindungen"
+msgstr "Vertex-Verbindungen"
 
 #: ../gui/wxpython/menustrings.py:606
 msgid "Computes vertex connectivity between two sets of nodes in the network."
@@ -3542,8 +3546,9 @@ msgid "Create Steiner tree for the network and given terminals"
 msgstr "Erzeuge 'Steiner Tree' für das Netzwerk und die gegebenen Stationen."
 
 #: ../gui/wxpython/menustrings.py:613
+#, fuzzy
 msgid "Minimum spanning tree"
-msgstr ""
+msgstr "Minimum spanning tree"
 
 #: ../gui/wxpython/menustrings.py:614
 msgid "Computes minimum spanning tree for the network."
@@ -4754,7 +4759,7 @@ msgstr "Ungültiger Wert der Regel '%s'. Kann Farbtabelle nicht anwenden."
 #: ../gui/wxpython/gui_modules/colorrules.py:701
 #, fuzzy
 msgid "Color table already exists. Check out 'replace existing color table' to overwrite it."
-msgstr "Farbtabelle existiert bereits. Wähle 'replace existing color table' , um diese zu überschreiben."
+msgstr "Farbtabelle existiert bereits. Wähle 'replace existing color table', um diese zu überschreiben."
 
 #: ../gui/wxpython/gui_modules/histogram.py:176
 #: ../gui/wxpython/gui_modules/mapdisp_window.py:566
@@ -5634,7 +5639,7 @@ msgstr "Verwende definierte Projektion"
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:220
 #, fuzzy
 msgid "Reproject coordinates displayed in the statusbar. Projection can be defined in GUI preferences dialog (tab 'Display')"
-msgstr "Neu-Projektion der Koordinaten in der Statusleiste. Projektion kann im GUI Preferences Dialog (Tab 'Display') definiert werden."
+msgstr "Neu-Projektion der Koordinaten in der Statusleiste angezeigt. Projektion kann im GUI Preferences Dialog (Tab 'Display') definiert werden."
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:298
 #: ../gui/wxpython/gui_modules/layertree.py:568
@@ -5705,9 +5710,9 @@ msgstr "Werkzeugleiste Georektifizierung"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:516
 #: ../gui/wxpython/gui_modules/render.py:420
-#, python-format
+#, fuzzy, python-format
 msgid "GRASS module '%s' not found. Unable to start map display window."
-msgstr ""
+msgstr "GRASS Module '%s' nicht gefunden. Map Display-Fenster kann nicht gestartet werden."
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1126
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:890
@@ -5765,11 +5770,13 @@ msgid "Measuring distance:"
 msgstr "Messe Strecke:"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1651
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "Geodesic distance is not yet supported by this tool.\n"
 "Reason: %s"
 msgstr ""
+"Geodäsische Distanz wird von diesem Tool nicht unterstützt.\n"
+"Grund: %s"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1680
 #: ../gui/wxpython/gui_modules/mapdisp.py:1686
@@ -5780,16 +5787,17 @@ msgstr "Segment"
 #: ../gui/wxpython/gui_modules/mapdisp.py:1687
 #, fuzzy
 msgid "total distance"
-msgstr "Strecken messen"
+msgstr "gesamte Distanz"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1682
 #, fuzzy
 msgid "bearing"
-msgstr "Warnung"
+msgstr "Richtung"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1682
+#, fuzzy
 msgid "deg"
-msgstr ""
+msgstr "deg"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1818
 msgid "Scale and North arrow"
@@ -5840,83 +5848,82 @@ msgid "GRASS GIS Map Display: "
 msgstr "GRASS GIS Kartenfenster: "
 
 #: ../gui/wxpython/gui_modules/wxvdigit.py:39
-#, fuzzy
 msgid "Digitization Error"
-msgstr "Digitalisier-Einstellungen"
+msgstr "Digitalisierungsfehler"
 
 #: ../gui/wxpython/gui_modules/wxvdigit.py:44
 #, fuzzy, python-format
 msgid "Unable to open vector map <%s>."
-msgstr "Kann die Vektorkarte <%s> nicht erstellen."
+msgstr "Kann die Vektorkarte <%s> nicht öffnen."
 
 #: ../gui/wxpython/gui_modules/wxvdigit.py:46
 #, fuzzy
 msgid "No vector map open for editing."
-msgstr "Keine Vektorkarte zum bearbeiten ausgewählt."
+msgstr "Keine Vektorkarte für Bearbeitung geöffnet."
 
 #: ../gui/wxpython/gui_modules/wxvdigit.py:47
 #, fuzzy
 msgid "Operation cancelled."
-msgstr "Keine Kartenebene selektiert. Breche die Operation ab."
+msgstr "Operation abgebrochen."
 
 #: ../gui/wxpython/gui_modules/wxvdigit.py:54
 #, fuzzy
 msgid "Writing new feature failed. Operation cancelled."
-msgstr "Ungültige Koordinate. Operation abgebrochen."
+msgstr "Das Schreiben eines neuen Objektes fehlgeschlagen. Operation abgebrochen."
 
 #: ../gui/wxpython/gui_modules/wxvdigit.py:62
 #, fuzzy, python-format
 msgid "Reading feature id %d failed. Operation cancelled."
-msgstr "Ungültige Koordinate. Operation abgebrochen."
+msgstr "Objekt-ID %d kann nicht gelesen werden. Operation abgebrochen."
 
 #: ../gui/wxpython/gui_modules/wxvdigit.py:70
 #, fuzzy, python-format
 msgid "Database link %d not available. Operation cancelled."
-msgstr "Ungültige Koordinate. Operation abgebrochen."
+msgstr "Datenbankverbindung %d ist nicht vorhanden. Operation abgebrochen."
 
 #: ../gui/wxpython/gui_modules/wxvdigit.py:78
 #, fuzzy, python-format
 msgid "Unable to start database driver <%s>. Operation cancelled."
-msgstr "Ungültige Koordinate. Operation abgebrochen."
+msgstr "Datenbanktreiber <%s> kann nicht gestartet werden. Operation abgebrochen."
 
 #: ../gui/wxpython/gui_modules/wxvdigit.py:86
 #, fuzzy, python-format
 msgid "Unable to open database <%s> by driver <%s>. Operation cancelled."
-msgstr "Ungültige Koordinate. Operation abgebrochen."
+msgstr "Datenbank <%s> kann mit Treiber <%s> nicht geöffnet werden. Operation abgebrochen."
 
 #: ../gui/wxpython/gui_modules/wxvdigit.py:94
 #, fuzzy, python-format
 msgid "Unable to execute SQL query '%s'. Operation cancelled."
-msgstr "Ungültige Koordinate. Operation abgebrochen."
+msgstr "SQL Abfrage '%s' kann nicht ausgeführt werden. Operation abgebrochen."
 
 #: ../gui/wxpython/gui_modules/wxvdigit.py:102
 #, fuzzy, python-format
 msgid "Feature id %d is marked as dead. Operation cancelled."
-msgstr "Es werden mindestens %d GCPs benötigt. Operation abgebrochen."
+msgstr "Objekt-ID %d als tot markiert. Operation abgebrochen."
 
 #: ../gui/wxpython/gui_modules/wxvdigit.py:110
 #, fuzzy, python-format
 msgid "Unsupported feature type %d. Operation cancelled."
-msgstr "Ungültige Koordinate. Operation abgebrochen."
+msgstr "Nicht unterstützter Objekttyp %d. Operation abgebrochen."
 
 #: ../gui/wxpython/gui_modules/wxvdigit.py:455
-#, fuzzy, python-format
+#, python-format
 msgid "Unknown feature type '%s'"
-msgstr "Objekttyp: "
+msgstr "Unbekannter Objekttyp '%s'"
 
 #: ../gui/wxpython/gui_modules/wxvdigit.py:460
-#, fuzzy
 msgid "Not enough points for line"
-msgstr "Erzeuge Punkte entlang von Linien"
+msgstr "Nicht genügend Punkte für Linie"
 
 #: ../gui/wxpython/gui_modules/wxvdriver.py:835
-#, python-format
+#, fuzzy, python-format
 msgid "Topology for vector map <%s> is not available. Topology is required by digitizer. Do you want to rebuild topology (takes some time) and open the vector map for editing?"
-msgstr ""
+msgstr "Topologie for Vektorkarte <%s> ist nicht vorhanden. Topologie ist für den Digitizer erforderlich. Wollen sie die Topologie erneuern (benötigt einige Zeit) und die Vektorkarte für die Bearbeitung öffnen?"
 
 #: ../gui/wxpython/gui_modules/wxvdriver.py:839
+#, fuzzy
 msgid "Topology missing"
-msgstr ""
+msgstr "Topologie fehlt"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:71
 #: ../gui/wxpython/gui_modules/ghelp.py:79
@@ -6005,12 +6012,15 @@ msgstr "%s Datei fehlt"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:683
 #: ../gui/wxpython/gui_modules/ghelp.py:738
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "Error when reading file '%s'.\n"
 "\n"
 "Lines: %s"
 msgstr ""
+"Fehler beim Lesen der Datei '%s'.\n"
+"\n"
+"Linien: %s"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:701
 #: ../gui/wxpython/gui_modules/ghelp.py:759
@@ -6058,9 +6068,8 @@ msgstr "Abruf der gesamten Information inklusive Beschreibung und Schlüsselworte
 
 #: ../gui/wxpython/gui_modules/ghelp.py:813
 #: ../gui/wxpython/gui_modules/gdialogs.py:959
-#, fuzzy
 msgid "Options"
-msgstr "Optional"
+msgstr "Optionen"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:830
 #, fuzzy
@@ -6086,7 +6095,7 @@ msgstr "Rufe Liste vorhandener Erweiterungen bei Klick auf  'Fetch' button ab"
 #: ../gui/wxpython/gui_modules/ghelp.py:921
 #, fuzzy, python-format
 msgid "%d items match"
-msgstr "%d Objekte sind in Ordnung"
+msgstr "%d Objekte stimmen überein"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:933
 msgid "Fetching list of modules from GRASS-Addons SVN (be patient)..."
@@ -6591,9 +6600,8 @@ msgid "%s. cleaning tool removed, will be ignored"
 msgstr "%s. Cleaning Werkzeug entfernt, wird ignoriert"
 
 #: ../gui/wxpython/gui_modules/vclean.py:365
-#, fuzzy
 msgid "Please select a cleaning tool to remove"
-msgstr "Wählen sie ein Cleaning-Werkzeug zum Entfernen"
+msgstr "Wählen sie ein Cleaning-Werkzeug zum Entfernen aus"
 
 #: ../gui/wxpython/gui_modules/vclean.py:386
 #, python-format
@@ -6603,7 +6611,7 @@ msgstr "%s. Vektor-Cleaning-Tool nach oben gereiht"
 #: ../gui/wxpython/gui_modules/vclean.py:388
 #, fuzzy
 msgid "1. cleaning tool can not be moved up "
-msgstr "1. Cleaning kann nicht nach oben bewegt werden"
+msgstr "1. Cleaning Werkzeug kann nicht nach oben bewegt werden"
 
 #: ../gui/wxpython/gui_modules/vclean.py:390
 msgid "Please select a cleaning tool to move up"
@@ -6617,7 +6625,7 @@ msgstr "%s. Cleaning-Werkzeug abwärts bewegt"
 #: ../gui/wxpython/gui_modules/vclean.py:415
 #, fuzzy
 msgid "Last cleaning tool can not be moved down "
-msgstr "Letztes Cleaning-Werkzeug nach nicht nach unten verschoben werden"
+msgstr "Letztes Cleaning-Werkzeug kann nicht nach unten verschoben werden"
 
 #: ../gui/wxpython/gui_modules/vclean.py:417
 #, fuzzy
@@ -6661,7 +6669,7 @@ msgstr "Erscheinung"
 #: ../gui/wxpython/gui_modules/nviz_tools.py:112
 #, fuzzy
 msgid "Control View"
-msgstr "Kontrolle des View"
+msgstr "Kontrolle der Ansicht"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:120
 #: ../gui/wxpython/gui_modules/nviz_tools.py:1146
@@ -7156,9 +7164,9 @@ msgid "Not selectable element"
 msgstr "Nicht auswählbare Elemente"
 
 #: ../gui/wxpython/gui_modules/gselect.py:347
-#, python-format
+#, fuzzy, python-format
 msgid "GSelect: invalid item: %s"
-msgstr ""
+msgstr "GSelect: ungültiges Objekt: %s"
 
 #: ../gui/wxpython/gui_modules/gselect.py:866
 msgid "Choose GIS Data Directory"
@@ -7198,9 +7206,8 @@ msgstr "Typ der Quelle"
 #: ../gui/wxpython/gui_modules/gselect.py:1355
 #: ../gui/wxpython/gui_modules/gselect.py:1499
 #: ../gui/wxpython/gui_modules/gselect.py:1501
-#, fuzzy
 msgid "All files"
-msgstr "Zellenwerte"
+msgstr "Alle Dateien"
 
 #: ../gui/wxpython/gui_modules/gselect.py:1126
 #: ../gui/wxpython/gui_modules/gselect.py:1359
@@ -7689,7 +7696,7 @@ msgstr "Layer (Kategorien)"
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:71
 #, fuzzy
 msgid "GRASS GIS Manage Ground Control Points"
-msgstr "Verwalte Ground Control Points (GCPs)"
+msgstr "GRASS GIS Ground Control Points (GCPs) Verwaltung"
 
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:148
 #: ../gui/wxpython/gui_modules/globalvar.py:116
@@ -8542,9 +8549,9 @@ msgid "Please wait, closing and rebuilding topology of vector map <%s>..."
 msgstr "Bitte warten Sie, ich erneuere die Topologie schließe die Vektorkarte <%s>..."
 
 #: ../gui/wxpython/gui_modules/toolbars.py:1214
-#, fuzzy, python-format
+#, python-format
 msgid "Editing of vector map <%s> successfully finished"
-msgstr "Schließe Dialog, wenn Befehl erfolgreich ausgeführt"
+msgstr "Bearbeitung der Vektorkarte <%s> erfolgreich abgeschlossen"
 
 #: ../gui/wxpython/gui_modules/toolbars.py:1271
 #: ../gui/wxpython/gui_modules/toolbars.py:1276
@@ -8581,7 +8588,10 @@ msgid ""
 "Unable to zoom to raster map <%s>.\n"
 "\n"
 "Details: %s"
-msgstr "Kann nicht auf die Rasterkarte <%s> zoomen."
+msgstr ""
+"Kann nicht auf die Rasterkarte <%s> zoomen.\n"
+"\n"
+"Details: %s"
 
 #: ../gui/wxpython/gui_modules/render.py:628
 #, fuzzy, python-format
@@ -8589,7 +8599,10 @@ msgid ""
 "Unable to zoom to vector map <%s>.\n"
 "\n"
 "Details: %s"
-msgstr "Kann nicht auf die Vektorkarte <%s> zoomen."
+msgstr ""
+"Kann nicht auf die Vektorkarte <%s> zoomen.\n"
+"\n"
+"Details: %s"
 
 #: ../gui/wxpython/gui_modules/render.py:630
 msgid "Unable to get current geographic extent. Force quiting wxGUI. Please run manually g.region to fix the problem."
@@ -9520,9 +9533,8 @@ msgstr "Arbeitsbereich auf Grundlage selektierter Karte setzen"
 
 #: ../gui/wxpython/gui_modules/layertree.py:311
 #: ../gui/wxpython/gui_modules/layertree.py:392
-#, fuzzy
 msgid "Export"
-msgstr "MPEG-1 Export"
+msgstr "Export"
 
 #: ../gui/wxpython/gui_modules/layertree.py:317
 msgid "Show attribute data"
@@ -9539,7 +9551,7 @@ msgstr "Beende das Editieren"
 #: ../gui/wxpython/gui_modules/layertree.py:332
 #, fuzzy
 msgid "Use as background vector map for digitizer"
-msgstr "Als Hintergund-Vektorkarte verwenden"
+msgstr "Als Hintergund-Vektorkarte für Digitalisierung verwenden"
 
 #: ../gui/wxpython/gui_modules/layertree.py:339
 msgid "Rebuild topology"
@@ -10514,9 +10526,9 @@ msgid "Unable to delete location"
 msgstr "Kann Location niht löschen"
 
 #: ../gui/wxpython/gis_set.py:603
-#, python-format
+#, fuzzy, python-format
 msgid "No mapsets available in location <%s>"
-msgstr ""
+msgstr "Keine Mapsets in Location <%s> vorhanden"
 
 #: ../gui/wxpython/gis_set.py:695
 msgid "Choose GIS Data Directory:"
@@ -10827,7 +10839,7 @@ msgstr "Konvertieren aller alten GRASS < Ver5.7 Vektorkarten des aktuellen Mapse
 
 #, fuzzy
 #~ msgid "Watershed basin analysis program."
-#~ msgstr "Programm für Analyse von Wassereinzugsgebieten."
+#~ msgstr "Analyseprogramme von Wassereinzugsgebieten."
 
 #~ msgid "Watershed basin creation program."
 #~ msgstr "Programm zur Berechnung von Wassereinzugsgebieten."
