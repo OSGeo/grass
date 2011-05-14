@@ -22,7 +22,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include "bspline.h"
+
+#define SEGSIZE 64
 
 /* GLOBAL VARIABLES */
 int bspline_field;
@@ -45,10 +50,15 @@ int main(int argc, char *argv[])
 
     int dim_vect, nparameters, BW;
     int *lineVect;		/* Vector restoring primitive's ID */
-    double **raster_matrix;	/* Matrix to store the auxiliar raster values */
     double *TN, *Q, *parVect;	/* Interpolating and least-square vectors */
     double **N, **obsVect;	/* Interpolation and least-square matrix */
-    char **mask_matrix;   /* matrix for masking */
+
+    SEGMENT out_seg, mask_seg;
+    const char *out_file, *mask_file;
+    int out_fd, mask_fd;
+    double seg_size;
+    int seg_mb, segments_in_memory;
+    int have_mask;
 
     /* Structs declarations */
     int raster;
@@ -57,12 +67,13 @@ int main(int argc, char *argv[])
 
     struct GModule *module;
     struct Option *in_opt, *in_ext_opt, *out_opt, *out_map_opt, *stepE_opt,
-	*stepN_opt, *lambda_f_opt, *type_opt, *dfield_opt, *col_opt, *mask_opt;
+	*stepN_opt, *lambda_f_opt, *type_opt, *dfield_opt, *col_opt, *mask_opt,
+	*memory_opt;
     struct Flag *cross_corr_flag, *spline_step_flag, *withz_flag;
 
     struct Reg_dimens dims;
     struct Cell_head elaboration_reg, original_reg;
-    struct bound_box general_box, overlap_box;
+    struct bound_box general_box, overlap_box, original_box;
 
     struct Point *observ;
     struct line_pnts *points;
@@ -165,6 +176,13 @@ int main(int argc, char *argv[])
     col_opt->description =
 	_("Name of attribute column with values to approximate");
     col_opt->guisection = _("Settings");
+
+    memory_opt = G_define_option();
+    memory_opt->key = "memory";
+    memory_opt->type = TYPE_INTEGER;
+    memory_opt->required = NO;
+    memory_opt->answer = "300";
+    memory_opt->description = _("Maximum memory to be used for raster output (in MB)");
 
     /*----------------------------------------------------------------*/
     /* Parsing */
@@ -389,6 +407,7 @@ int main(int argc, char *argv[])
     G_debug(1, "Interpolation: Setting regions and boxes");
     G_get_window(&original_reg);
     G_get_window(&elaboration_reg);
+    Vect_region_box(&original_reg, &original_box);
     Vect_region_box(&elaboration_reg, &overlap_box);
     Vect_region_box(&elaboration_reg, &general_box);
 
@@ -396,22 +415,63 @@ int main(int argc, char *argv[])
     ncols = Rast_window_cols();
 
     /* Alloc raster matrix */
+    have_mask = 0;
+    out_file = mask_file = NULL;
+    out_fd = mask_fd = -1;
     if (grid == TRUE) {
-	if (!(raster_matrix = G_alloc_matrix(nrows, ncols)))
-	    G_fatal_error(_("Cannot allocate memory for auxiliar matrix."
-			    "Consider changing region resolution"));
-		  
+	int row;
+	DCELL *drastbuf;
+
+	seg_mb = atoi(memory_opt->answer);
+	if (seg_mb < 3)
+	    G_fatal_error(_("Memory in MB must be >= 3"));
+
+	if (mask_opt->answer ) {
+	    seg_size = sizeof(double) + sizeof(char);
+	}
+	else {
+	    seg_size = sizeof(double);
+	}
+	seg_size = (seg_size * SEGSIZE * SEGSIZE) / (1 << 20);
+	segments_in_memory = seg_mb / seg_size + 0.5;
+
+	out_file = G_tempfile();
+	out_fd = creat(out_file, 0666);
+	if (segment_format(out_fd, nrows, ncols, SEGSIZE, SEGSIZE, sizeof(double)) != 1)
+	    G_fatal_error(_("Can not create temporary file"));
+	close(out_fd);
+
+	out_fd = open(out_file, 2);
+	if (segment_init(&out_seg, out_fd, segments_in_memory) != 1)
+	    G_fatal_error(_("Can not initialize temporary file"));
+
+	/* initialize output */
+	G_message(_("Initializing output..."));
+
+	drastbuf = Rast_allocate_buf(DCELL_TYPE);
+	Rast_set_d_null_value(drastbuf, ncols);
+	for (row = 0; row < nrows; row++) {
+	    G_percent(row, nrows, 2);
+	    segment_put_row(&out_seg, drastbuf, row);
+	}
+	G_percent(row, nrows, 2);
+
 	if (mask_opt->answer) {
 	    int row, col, maskfd;
 	    DCELL dval, *drastbuf;
+	    char mask_val;
 	    
 	    G_message(_("Load masking map"));
-	    
-	    mask_matrix = (char **)G_calloc(nrows, sizeof(char *));
-	    mask_matrix[0] = (char *)G_calloc(nrows * ncols, sizeof(char));
-	    for (row = 1; row < nrows; row++)
-		mask_matrix[row] = mask_matrix[row - 1] + ncols;
 
+	    mask_file = G_tempfile();
+	    mask_fd = creat(mask_file, 0666);
+	    if (segment_format(mask_fd, nrows, ncols, SEGSIZE, SEGSIZE, sizeof(char)) != 1)
+		G_fatal_error(_("Can not create temporary file"));
+	    close(mask_fd);
+
+	    mask_fd = open(mask_file, 2);
+	    if (segment_init(&mask_seg, mask_fd, segments_in_memory) != 1)
+		G_fatal_error(_("Can not initialize temporary file"));
 
 	    maskfd = Rast_open_old(mask_opt->answer, "");
 	    drastbuf = Rast_allocate_buf(DCELL_TYPE);
@@ -422,21 +482,21 @@ int main(int argc, char *argv[])
 		for (col = 0; col < ncols; col++) {
 		    dval = drastbuf[col];
 		    if (Rast_is_d_null_value(&dval) || dval == 0)
-			mask_matrix[row][col] = 0;
+			mask_val = 0;
 		    else
-			mask_matrix[row][col] = 1;
+			mask_val = 1;
+			
+		    segment_put(&mask_seg, &mask_val, row, col);
 		}
 	    }
 
 	    G_percent(row, nrows, 2);
 	    G_free(drastbuf);
 	    Rast_close(maskfd);
+	    
+	    have_mask = 1;
 	}
-	else
-	    mask_matrix = NULL;
     }
-    else
-	mask_matrix = NULL;
 
     /*------------------------------------------------------------------
       | Subdividing and working with tiles: 									
@@ -563,6 +623,7 @@ int main(int argc, char *argv[])
 
 	    /* reading points in interpolation region */
 	    dim_vect = nsplx * nsply;
+	    observ_ext = NULL;
 	    if (grid == FALSE && ext == TRUE) {
 		observ_ext =
 		    P_Read_Vector_Region_Map(&In_ext,
@@ -572,6 +633,15 @@ int main(int argc, char *argv[])
 	    }
 	    else
 		npoints_ext = 1;
+		
+	    if (grid == TRUE && have_mask) {
+		/* any unmasked cells in general region ? */
+		mean = 0;
+		observ_ext =
+		    P_Read_Raster_Region_masked(&mask_seg, &original_reg,
+					     original_box, general_box,
+					     &npoints_ext, dim_vect, mean);
+	    }
 
 	    observ = NULL;
 	    if (npoints_ext > 0) {
@@ -580,7 +650,7 @@ int main(int argc, char *argv[])
 					     dim_vect, bspline_field);
 	    }
 	    else
-		npoints = 0;
+		npoints = 1;
 
 	    G_debug(1,
 		    "Interpolation: (%d,%d): Number of points in <elaboration_box> is %d",
@@ -686,11 +756,22 @@ int main(int argc, char *argv[])
 		if (grid == TRUE) {	/* GRID INTERPOLATION ==> INTERPOLATION INTO A RASTER */
 		    G_debug(1, "Interpolation: (%d,%d): Regular_Points...",
 			    subregion_row, subregion_col);
-		    raster_matrix =
+
+		    if (!have_mask) {
 			P_Regular_Points(&elaboration_reg, &original_reg, general_box,
-					 overlap_box, raster_matrix, mask_matrix, parVect,
-					 stepN, stepE, dims.overlap, mean,
-					 nsplx, nsply, nrows, ncols, bilin);
+				     overlap_box, &out_seg, parVect,
+				     stepN, stepE, dims.overlap, mean,
+				     nsplx, nsply, nrows, ncols, bilin);
+		    }
+		    else {
+			P_Sparse_Raster_Points(&out_seg,
+					&elaboration_reg, &original_reg,
+					general_box, overlap_box,
+					observ_ext, parVect,
+					stepE, stepN,
+					dims.overlap, nsplx, nsply,
+					npoints_ext, bilin, mean);
+		    }
 		}
 		else {		/* OBSERVATION POINTS INTERPOLATION */
 		    if (ext == FALSE) {
@@ -750,6 +831,8 @@ int main(int argc, char *argv[])
 	    else {
 		if (observ)
 		    G_free(observ);
+		if (observ_ext)
+		    G_free(observ_ext);
 		if (npoints == 0)
 		    G_warning(_("No data within this subregion. "
 				"Consider increasing spline step values."));
@@ -760,8 +843,39 @@ int main(int argc, char *argv[])
     G_verbose_message(_("Writing output..."));
     /* Writing the output raster map */
     if (grid == TRUE) {
-	P_Aux_to_Raster(raster_matrix, raster);
-	G_free_matrix(raster_matrix);
+	int row, col;
+	DCELL *drastbuf, dval;
+
+
+	if (have_mask) {
+	    segment_release(&mask_seg);	/* release memory  */
+	    close(mask_fd);
+	    unlink(mask_file);
+	}
+
+	drastbuf = Rast_allocate_buf(DCELL_TYPE);
+	for (row = 0; row < nrows; row++) {
+	    G_percent(row, nrows, 2);
+	    for (col = 0; col < ncols; col++) {
+		segment_get(&out_seg, &dval, row, col);
+		drastbuf[col] = dval;
+	    }
+	    Rast_put_d_row(raster, drastbuf);
+	}
+
+	Rast_close(raster);
+
+	segment_release(&out_seg);	/* release memory  */
+	close(out_fd);
+	unlink(out_file);
+	/* set map title */
+	sprintf(title, "%s interpolation with Tykhonov regularization",
+		type_opt->answer);
+	Rast_put_cell_title(out_map_opt->answer, title);
+	/* write map history */
+	Rast_short_history(out_map_opt->answer, "raster", &history);
+	Rast_command_history(&history);
+	Rast_write_history(out_map_opt->answer, &history);
     }
     /* Writing to the output vector map the points from the overlapping zones */
     else if (flag_auxiliar == TRUE) {
@@ -783,19 +897,6 @@ int main(int argc, char *argv[])
 	Vect_close(&In_ext);
     if (vector)
 	Vect_close(&Out);
-
-    if (map) {
-	Rast_close(raster);
-
-	/* set map title */
-	sprintf(title, "%s interpolation with Tykhonov regularization",
-		type_opt->answer);
-	Rast_put_cell_title(out_map_opt->answer, title);
-	/* write map history */
-	Rast_short_history(out_map_opt->answer, "raster", &history);
-	Rast_command_history(&history);
-	Rast_write_history(out_map_opt->answer, &history);
-    }
 
     G_done_msg(" ");
 
