@@ -160,9 +160,12 @@ int main(int argc, char **argv)
 
     if (print->answer || shell_print->answer || columns->answer) {
 	num_dblinks = Vect_get_num_dblinks(&Map);
-	if (num_dblinks <= 0)
-	    G_fatal_error(_("Database connection for map <%s> is not defined in DB file"),
+	if (num_dblinks <= 0) {
+	    /* it is ok if a vector map is not connected o an attribute table */
+	    G_message(_("Map <%s> is not connected to a database"),
 			  input);
+	    exit(EXIT_SUCCESS);
+	}
 	else {			/* num_dblinks > 0 */
 
 	    if (print->answer || shell_print->answer) {
