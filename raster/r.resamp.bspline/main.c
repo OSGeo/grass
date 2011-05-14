@@ -17,11 +17,15 @@
  **********************************************************************/
 
 /* INCLUDES */
-#include <grass/config.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include <math.h>
 #include "bspline.h"
+
+#define SEGSIZE 	64
 
 /*--------------------------------------------------------------------*/
 int main(int argc, char *argv[])
@@ -39,14 +43,18 @@ int main(int argc, char *argv[])
     char title[64];
 
     int dim_vect, nparameters, BW;
-    double **inrast_matrix, **outrast_matrix;	/* Matrix to store the auxiliar raster values */
     double *TN, *Q, *parVect;	/* Interpolating and least-square vectors */
     double **N, **obsVect;	/* Interpolation and least-square matrix */
-    char **mask_matrix;   /* matrix for masking */
 
-    /* Structs declarations */
+    SEGMENT in_seg, out_seg, mask_seg;
+    const char *in_file, *out_file, *mask_file;
+    int in_fd, out_fd, mask_fd;
+    double seg_size;
+    int seg_mb, segments_in_memory;
+    int have_mask;
+
     int inrastfd, outrastfd;
-    DCELL *drastbuf;
+    DCELL *drastbuf, dval;
     struct History history;
 
     struct Map_info Grid;
@@ -56,7 +64,7 @@ int main(int argc, char *argv[])
 
     struct GModule *module;
     struct Option *in_opt, *out_opt, *grid_opt, *stepE_opt, *stepN_opt,
-		  *lambda_f_opt, *method_opt, *mask_opt;
+		  *lambda_f_opt, *method_opt, *mask_opt, *memory_opt;
     struct Flag *null_flag, *cross_corr_flag;
 
     struct Reg_dimens dims;
@@ -65,7 +73,7 @@ int main(int argc, char *argv[])
     struct bound_box last_overlap_box, last_general_box;
 
     struct Point *observ;
-    struct Point *observ_masked;
+    struct Point *observ_marked;
 
     /*----------------------------------------------------------------*/
     /* Options declarations */
@@ -135,6 +143,13 @@ int main(int argc, char *argv[])
     cross_corr_flag->description =
 	_("Find the best Tykhonov regularizing parameter using a \"leave-one-out\" cross validation method");
 
+    memory_opt = G_define_option();
+    memory_opt->key = "memory";
+    memory_opt->type = TYPE_INTEGER;
+    memory_opt->required = NO;
+    memory_opt->answer = "300";
+    memory_opt->description = _("Maximum memory to be used (in MB)");
+
     /*----------------------------------------------------------------*/
     /* Parsing */
     G_gisinit(argv[0]);
@@ -194,6 +209,10 @@ int main(int argc, char *argv[])
 
     nsplx_adj = NSPLX_MAX;
     nsply_adj = NSPLY_MAX;
+    if (interp_method == P_BICUBIC) {
+	nsplx_adj = 100;
+	nsply_adj = 100;
+    }
 
     dims.overlap = OVERLAP_SIZE * (stepN > stepE ? stepN : stepE);
     P_get_edge(interp_method, &dims, stepE, stepN);
@@ -262,21 +281,41 @@ int main(int argc, char *argv[])
     G_debug(1, "new source east %f", src_reg.east);
     G_debug(1, "-------------------------------------");
 
-    /* read raster input */
-    inrastfd = Rast_open_old(in_opt->answer, "");
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
 
     G_debug(1, "%d new rows, %d new cols", nrows, ncols);
 
-    /* Alloc raster matrix */
-    if (!(inrast_matrix = G_alloc_matrix(nrows, ncols)))
-	G_fatal_error(_("Cannot allocate memory for auxiliar matrix."
-			"Consider changing region (resolution)"));
+    seg_mb = atoi(memory_opt->answer);
+    if (seg_mb < 3)
+	G_fatal_error(_("Memory in MB must be >= 3"));
 
+    if (mask_opt->answer || null_flag->answer) {
+	seg_size = sizeof(double) * 2 + sizeof(char);
+    }
+    else {
+	seg_size = sizeof(double) * 2;
+    }
+    seg_size = (seg_size * SEGSIZE * SEGSIZE) / (1 << 20);
+    segments_in_memory = seg_mb / seg_size + 0.5;
+    if (segments_in_memory < 1)
+	segments_in_memory = 1;
+
+    in_file = G_tempfile();
+    in_fd = creat(in_file, 0666);
+    if (segment_format(in_fd, nrows, ncols, SEGSIZE, SEGSIZE, sizeof(double)) != 1)
+	G_fatal_error(_("Can not create temporary file"));
+    close(in_fd);
+
+    in_fd = open(in_file, 2);
+    if (segment_init(&in_seg, in_fd, segments_in_memory) != 1)
+    	G_fatal_error(_("Can not initialize temporary file"));
+
+    /* read raster input */
+    inrastfd = Rast_open_old(in_opt->answer, "");
     drastbuf = Rast_allocate_buf(DCELL_TYPE);
 
-    G_message("loading input raster <%s>", in_opt->answer);
+    G_message(_("Loading input raster <%s>"), in_opt->answer);
     if (1) {
 	int got_one = 0;
 	for (row = 0; row < nrows; row++) {
@@ -287,15 +326,16 @@ int main(int argc, char *argv[])
 	    Rast_get_d_row_nomask(inrastfd, drastbuf, row);
 
 	    for (col = 0; col < ncols; col++) {
-		inrast_matrix[row][col] = drastbuf[col];
-		dval = inrast_matrix[row][col];
+		dval = drastbuf[col];
 		if (!Rast_is_d_null_value(&dval)) {
 		    got_one++;
 		}
 	    }
+	    segment_put_row(&in_seg, drastbuf, row);
+	    
 	}
 	if (!got_one)
-	    G_fatal_error("only NULL cells in input raster");
+	    G_fatal_error(_("Only NULL cells in input raster"));
     }
     G_percent(row, nrows, 2);
     G_free(drastbuf);
@@ -318,35 +358,44 @@ int main(int argc, char *argv[])
     if (cross_corr_flag->answer) {
 	G_debug(1, "CrossCorrelation()");
 
-	if (cross_correlation(inrast_matrix, &src_reg, stepE, stepN) != TRUE)
+	if (cross_correlation(&in_seg, &src_reg, stepE, stepN) != TRUE)
 	    G_fatal_error(_("Cross validation didn't finish correctly"));
 	else {
 	    G_debug(1, "Cross validation finished correctly");
 
-	    G_free(inrast_matrix);
-
 	    G_done_msg(_("Cross validation finished for se = %f and sn = %f"), stepE, stepN);
+
+	    segment_release(&in_seg);	/* release memory  */
+	    close(in_fd);
+	    unlink(in_file);
+
 	    exit(EXIT_SUCCESS);
 	}
     }
 
     /* Alloc and load masking matrix */
     /* encoding: 0 = do not interpolate, 1 = interpolate */
-    if (mask_opt->answer || null_flag->answer) {
+    have_mask = mask_opt->answer || null_flag->answer;
+    if (have_mask) {
 	int maskfd;
 	int null_count = 0;
-	DCELL dval;
 	CELL cval;
 	CELL *maskbuf;
+	char mask_val;
 	
 	G_message(_("Mark cells for interpolation"));
 
 	/* use destination window */
 
-	mask_matrix = (char **)G_calloc(nrows, sizeof(char *));
-	mask_matrix[0] = (char *)G_calloc(nrows * ncols, sizeof(char));
-	for (row = 1; row < nrows; row++)
-	    mask_matrix[row] = mask_matrix[row - 1] + ncols;
+	mask_file = G_tempfile();
+	mask_fd = creat(mask_file, 0666);
+	if (segment_format(mask_fd, nrows, ncols, SEGSIZE, SEGSIZE, sizeof(char)) != 1)
+	    G_fatal_error(_("Can not create temporary file"));
+	close(mask_fd);
+
+	mask_fd = open(mask_file, 2);
+	if (segment_init(&mask_seg, mask_fd, segments_in_memory) != 1)
+	    G_fatal_error(_("Can not initialize temporary file"));
 
 	if (mask_opt->answer) {
 	    maskfd = Rast_open_old(mask_opt->answer, "");
@@ -376,21 +425,22 @@ int main(int argc, char *argv[])
 		Rast_get_d_row(inrastfd, drastbuf, row);
 
 	    for (col = 0; col < ncols; col++) {
-		mask_matrix[row][col] = 1;
+		mask_val = 1;
 
 		if (mask_opt->answer) {
 		    cval = maskbuf[col];
 		    if (Rast_is_c_null_value(&cval) || cval == 0)
-			mask_matrix[row][col] = 0;
+			mask_val = 0;
 		}
 
-		if (null_flag->answer && mask_matrix[row][col] == 1) {
+		if (null_flag->answer && mask_val == 1) {
 		    dval = drastbuf[col];
 		    if (!Rast_is_d_null_value(&dval))
-			mask_matrix[row][col] = 0;
+			mask_val = 0;
 		    else
 			null_count++;
 		}
+		segment_put(&mask_seg, &mask_val, row, col);
 	    }
 	}
 
@@ -407,26 +457,25 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("No NULL cells found in input raster."));
 	}
     }
-    else
-	mask_matrix = NULL;
-			
-    /* Alloc raster matrix */
-    if (!(outrast_matrix = G_alloc_matrix(nrows, ncols)))
-	G_fatal_error(_("Cannot allocate memory for auxiliar matrix."
-			"Consider changing region (resolution)"));
+
+    out_file = G_tempfile();
+    out_fd = creat(out_file, 0666);
+    if (segment_format(out_fd, nrows, ncols, SEGSIZE, SEGSIZE, sizeof(double)) != 1)
+	G_fatal_error(_("Can not create temporary file"));
+    close(out_fd);
+
+    out_fd = open(out_file, 2);
+    if (segment_init(&out_seg, out_fd, segments_in_memory) != 1)
+    	G_fatal_error(_("Can not initialize temporary file"));
 
     /* initialize output */
     G_message(_("Initializing output..."));
-    {
-	DCELL dval;
 
-	Rast_set_d_null_value(&dval, 1);
-	for (row = 0; row < nrows; row++) {
-	    G_percent(row, nrows, 2);
-	    for (col = 0; col < ncols; col++) {
-		outrast_matrix[row][col] = dval;
-	    }
-	}
+    drastbuf = Rast_allocate_buf(DCELL_TYPE);
+    Rast_set_d_null_value(drastbuf, ncols);
+    for (row = 0; row < nrows; row++) {
+	G_percent(row, nrows, 2);
+	segment_put_row(&out_seg, drastbuf, row);
     }
     G_percent(row, nrows, 2);
 
@@ -548,7 +597,7 @@ int main(int argc, char *argv[])
 	    dim_vect = nsplx * nsply;
 
 	    observ =
-		P_Read_Raster_Region_Map(inrast_matrix, &elaboration_reg,
+		P_Read_Raster_Region_Map(&in_seg, &elaboration_reg,
 		                         &src_reg, &npoints, dim_vect);
 
 	    G_debug(1, "%d valid points", npoints);
@@ -565,22 +614,22 @@ int main(int argc, char *argv[])
 	    G_debug(1, "Interpolation: (%d,%d): mean=%lf",
 		    subregion_row, subregion_col, mean);
 
-	    observ_masked = NULL;
+	    observ_marked = NULL;
 	    
-	    if (mask_matrix) {
+	    if (have_mask) {
 		/* collect unmasked output cells */
 
 		G_debug(1, "collect unmasked output cells");
 
-		observ_masked =
-		    P_Read_Raster_Region_masked(mask_matrix, &dest_reg,
+		observ_marked =
+		    P_Read_Raster_Region_masked(&mask_seg, &dest_reg,
 					     dest_box, general_box,
 					     &npoints_marked, dim_vect, mean);
 
 		G_debug(1, "%d cells marked in general", npoints_marked);
 		if (npoints_marked == 0) {
-		    G_free(observ_masked);
-		    observ_masked = NULL;
+		    G_free(observ_marked);
+		    observ_marked = NULL;
 		    npoints = 1; /* disable warning below */
 		}
 	    }
@@ -636,30 +685,29 @@ int main(int argc, char *argv[])
 		G_free_vector(TN);
 		G_free_vector(Q);
 
-		if (!observ_masked) {	/* interpolate full output raster */
+		if (!observ_marked) {	/* interpolate full output raster */
 		    G_debug(1, "Interpolation: (%d,%d): Regular_Points...",
 			    subregion_row, subregion_col);
-		    outrast_matrix =
-			P_Regular_Points(&elaboration_reg, &dest_reg, general_box,
-					 overlap_box, outrast_matrix, NULL,
-					 parVect, stepN, stepE, dims.overlap, mean,
-					 nsplx, nsply, nrows, ncols, interp_method);
+
+		    P_Regular_Points(&elaboration_reg, &dest_reg, general_box,
+				     overlap_box, &out_seg,
+				     parVect, stepN, stepE, dims.overlap, mean,
+				     nsplx, nsply, nrows, ncols, interp_method);
 		}
 		else {		/* only interpolate selected cells */
 
 		    G_debug(1, "Interpolation of %d selected cells...",
 			    npoints_marked);
 
-		    outrast_matrix =
-			P_Sparse_Raster_Points(outrast_matrix,
-			                &elaboration_reg, &dest_reg,
-					general_box, overlap_box,
-					observ_masked, parVect,
-					stepE, stepN,
-					dims.overlap, nsplx, nsply,
-					npoints_marked, interp_method, mean);
+		    P_Sparse_Raster_Points(&out_seg,
+				    &elaboration_reg, &dest_reg,
+				    general_box, overlap_box,
+				    observ_marked, parVect,
+				    stepE, stepN,
+				    dims.overlap, nsplx, nsply,
+				    npoints_marked, interp_method, mean);
 
-		    G_free(observ_masked);
+		    G_free(observ_marked);
 		}		/* end NULL cells */
 		G_free_vector(parVect);
 		G_free_matrix(obsVect);
@@ -674,12 +722,17 @@ int main(int argc, char *argv[])
 	}			/*! END WHILE; last_column = TRUE */
     }				/*! END WHILE; last_row = TRUE */
 
-    G_verbose_message(_("Writing output..."));
-    G_free_matrix(inrast_matrix);
-    if (mask_opt->answer) {
-	G_free(mask_matrix[0]);
-	G_free(mask_matrix);
+    segment_release(&in_seg);	/* release memory  */
+    close(in_fd);
+    unlink(in_file);
+    
+    if (have_mask) {
+	segment_release(&mask_seg);	/* release memory  */
+	close(mask_fd);
+	unlink(mask_file);
     }
+
+    G_verbose_message(_("Writing output..."));
     /* Writing the output raster map */
     Rast_set_fp_type(DCELL_TYPE);
     outrastfd = Rast_open_fp_new(out_opt->answer);
@@ -687,20 +740,28 @@ int main(int argc, char *argv[])
     /* check */
     {
 	int nonulls = 0;
-	DCELL dval;
+
+	segment_flush(&out_seg);
+	drastbuf = Rast_allocate_d_buf();
 
 	for (row = 0; row < dest_reg.rows; row++) {
+	    G_percent(row, dest_reg.rows, 2);
+	    segment_get_row(&out_seg, drastbuf, row);
 	    for (col = 0; col < dest_reg.cols; col++) {
-		dval = outrast_matrix[row][col];
+		dval = drastbuf[col];
 		if (!Rast_is_d_null_value(&dval))
 		    nonulls++;
 	    }
+	    Rast_put_d_row(outrastfd, drastbuf);
 	}
+	G_percent(1, 1, 1);
 	if (!nonulls)
 	    G_warning("only NULL cells in output raster");
     }
-    P_Aux_to_Raster(outrast_matrix, outrastfd);
-    G_free_matrix(outrast_matrix);
+
+    segment_release(&out_seg);	/* release memory  */
+    close(out_fd);
+    unlink(out_file);
 
     Rast_close(outrastfd);
 

@@ -22,7 +22,7 @@
 #include <math.h>
 #include "bspline.h"
 
-struct Point *P_Read_Raster_Region_masked(char **mask_matrix,
+struct Point *P_Read_Raster_Region_masked(SEGMENT *mask_seg,
 				       struct Cell_head *Original,
 				       struct bound_box output_box,
 				       struct bound_box General,
@@ -33,6 +33,7 @@ struct Point *P_Read_Raster_Region_masked(char **mask_matrix,
     int pippo, npoints;
     double X, Y;
     struct Point *obs;
+    char mask_val;
 
     pippo = dim_vect;
     obs = (struct Point *)G_calloc(pippo, sizeof(struct Point));
@@ -77,7 +78,8 @@ struct Point *P_Read_Raster_Region_masked(char **mask_matrix,
     for (row = startrow; row < endrow; row++) {
 	for (col = startcol; col < endcol; col++) {
 
-	    if (!mask_matrix[row][col])
+	    segment_get(mask_seg, &mask_val, row, col);
+	    if (!mask_val)
 		continue;
 
 	    X = Rast_col_to_easting((double)(col) + 0.5, Original);
@@ -106,14 +108,14 @@ struct Point *P_Read_Raster_Region_masked(char **mask_matrix,
     return obs;
 }
 
-double **P_Sparse_Raster_Points(double **matrix, struct Cell_head *Elaboration,
+int P_Sparse_Raster_Points(SEGMENT *out_seg, struct Cell_head *Elaboration,
 		struct Cell_head *Original, struct bound_box General, struct bound_box Overlap,
 		struct Point *obs, double *param, double pe, double pn,
 		double overlap, int nsplx, int nsply, int num_points,
 		int bilin, double mean)
 {
     int i, row, col;
-    double X, Y, interpolation, csi, eta, weight;
+    double X, Y, interpolation, csi, eta, weight, dval;
     int points_in_box = 0;
 
     /* Reading points inside output region and inside general box */
@@ -125,105 +127,99 @@ double **P_Sparse_Raster_Points(double **matrix, struct Cell_head *Elaboration,
 	X = obs[i].coordX;
 	Y = obs[i].coordY;
 
-	/* Here mean is just for asking if obs point is in box */
-	if (Vect_point_in_box(X, Y, mean, &General)) { /* constraint_box */
+	/* X,Y are cell center cordinates, MUST be inside General box */
+	row = (int) (floor(Rast_northing_to_row(Y, Original)) + 0.1);
+	col = (int) (floor((X - Original->west) / Original->ew_res) + 0.1);
 
-	    /* X,Y are cell center cordinates, MUST be inside General box */
-	    /* do NOT use floor, weird rounding errors, just truncate */
-	    row = (int) (floor(Rast_northing_to_row(Y, Original)) + 0.1);
-	    /* col = (int) floor(Rast_easting_to_col(X, Original)); */
-	    col = (int) (floor((X - Original->west) / Original->ew_res) + 0.1);
+	if (row < 0 || row >= Original->rows) {
+	    G_fatal_error("row index out of range");
+	    continue;
+	}
 
-	    if (row < 0 || row >= Original->rows) {
-		G_fatal_error("row index out of range");
-		continue;
-	    }
+	if (col < 0 || col >= Original->cols) {
+	    G_fatal_error("col index out of range");
+	    continue;
+	}
+	points_in_box++;
 
-	    if (col < 0 || col >= Original->cols) {
-		G_fatal_error("col index out of range");
-		continue;
-	    }
-	    points_in_box++;
-
-	    G_debug(3, "P_Sparse_Raster_Points: interpolate point %d...", i);
-	    if (bilin)
-		interpolation =
-		    dataInterpolateBilin(X, Y, pe, pn, nsplx,
-					 nsply, Elaboration->west,
-					 Elaboration->south, param);
-	    else
-		interpolation =
-		    dataInterpolateBicubic(X, Y, pe, pn, nsplx,
-					   nsply, Elaboration->west,
-					   Elaboration->south, param);
-
-	    interpolation += mean;
-
-	    if (Vect_point_in_box(X, Y, interpolation, &Overlap)) {	/* (5) */
-		matrix[row][col] = interpolation;
-	    }
-	    else {
-		if ((X > Overlap.E) && (X < General.E)) {
-		    if ((Y > Overlap.N) && (Y < General.N)) {	/* (3) */
-			csi = (General.E - X) / overlap;
-			eta = (General.N - Y) / overlap;
-			weight = csi * eta;
-			interpolation *= weight;
-			matrix[row][col] += interpolation;
-		    }
-		    else if ((Y < Overlap.S) && (Y > General.S)) {	/* (1) */
-			csi = (General.E - X) / overlap;
-			eta = (Y - General.S) / overlap;
-			weight = csi * eta;
-			interpolation *= weight;
-			matrix[row][col] = interpolation;
-		    }
-		    else if ((Y >= Overlap.S) && (Y <= Overlap.N)) {	/* (1) */
-			weight = (General.E - X ) / overlap;
-			interpolation *= weight;
-			matrix[row][col] = interpolation;
-		    }
-		}
-		else if ((X < Overlap.W) && (X > General.W)) {
-		    if ((Y > Overlap.N) && (Y < General.N)) {	/* (4) */
-			csi = (X - General.W) / overlap;
-			eta = (General.N - Y) / overlap;
-			weight = eta * csi;
-			interpolation *= weight;
-			matrix[row][col] += interpolation;
-		    }
-		    else if ((Y < Overlap.S) && (Y > General.S)) {	/* (2) */
-			csi = (X - General.W) / overlap;
-			eta = (Y - General.S) / overlap;
-			weight = csi * eta;
-			interpolation *= weight;
-			matrix[row][col] += interpolation;
-		    }
-		    else if ((Y >= Overlap.S) && (Y <= Overlap.N)) {	/* (2) */
-			weight = (X - General.W) / overlap;
-			interpolation *= weight;
-			matrix[row][col] += interpolation;
-		    }
-		}
-		else if ((X >= Overlap.W) && (X <= Overlap.E)) {
-		    if ((Y > Overlap.N) && (Y < General.N)) {	/* (3) */
-			weight = (General.N - Y) / overlap;
-			interpolation *= weight;
-			matrix[row][col] += interpolation;
-		    }
-		    else if ((Y < Overlap.S) && (Y > General.S)) {	/* (1) */
-			weight = (Y - General.S) / overlap;
-			interpolation *= weight;
-			matrix[row][col] = interpolation;
-		    }
-		}
-	    } /* end not in overlap */
-	}  /* end if in box */
+	G_debug(3, "P_Sparse_Raster_Points: interpolate point %d...", i);
+	if (bilin)
+	    interpolation =
+		dataInterpolateBilin(X, Y, pe, pn, nsplx,
+				     nsply, Elaboration->west,
+				     Elaboration->south, param);
 	else
-	    G_debug(0, "point outside General box ???");
+	    interpolation =
+		dataInterpolateBicubic(X, Y, pe, pn, nsplx,
+				       nsply, Elaboration->west,
+				       Elaboration->south, param);
+
+	interpolation += mean;
+
+	if (Vect_point_in_box(X, Y, interpolation, &Overlap)) {	/* (5) */
+	    dval = interpolation;
+	}
+	else {
+	    segment_get(out_seg, &dval, row, col);
+	    if ((X > Overlap.E) && (X < General.E)) {
+		if ((Y > Overlap.N) && (Y < General.N)) {	/* (3) */
+		    csi = (General.E - X) / overlap;
+		    eta = (General.N - Y) / overlap;
+		    weight = csi * eta;
+		    interpolation *= weight;
+		    dval += interpolation;
+		}
+		else if ((Y < Overlap.S) && (Y > General.S)) {	/* (1) */
+		    csi = (General.E - X) / overlap;
+		    eta = (Y - General.S) / overlap;
+		    weight = csi * eta;
+		    interpolation *= weight;
+		    dval = interpolation;
+		}
+		else if ((Y >= Overlap.S) && (Y <= Overlap.N)) {	/* (1) */
+		    weight = (General.E - X ) / overlap;
+		    interpolation *= weight;
+		    dval = interpolation;
+		}
+	    }
+	    else if ((X < Overlap.W) && (X > General.W)) {
+		if ((Y > Overlap.N) && (Y < General.N)) {	/* (4) */
+		    csi = (X - General.W) / overlap;
+		    eta = (General.N - Y) / overlap;
+		    weight = eta * csi;
+		    interpolation *= weight;
+		    dval += interpolation;
+		}
+		else if ((Y < Overlap.S) && (Y > General.S)) {	/* (2) */
+		    csi = (X - General.W) / overlap;
+		    eta = (Y - General.S) / overlap;
+		    weight = csi * eta;
+		    interpolation *= weight;
+		    dval += interpolation;
+		}
+		else if ((Y >= Overlap.S) && (Y <= Overlap.N)) {	/* (2) */
+		    weight = (X - General.W) / overlap;
+		    interpolation *= weight;
+		    dval += interpolation;
+		}
+	    }
+	    else if ((X >= Overlap.W) && (X <= Overlap.E)) {
+		if ((Y > Overlap.N) && (Y < General.N)) {	/* (3) */
+		    weight = (General.N - Y) / overlap;
+		    interpolation *= weight;
+		    dval += interpolation;
+		}
+		else if ((Y < Overlap.S) && (Y > General.S)) {	/* (1) */
+		    weight = (Y - General.S) / overlap;
+		    interpolation *= weight;
+		    dval = interpolation;
+		}
+	    }
+	} /* end not in overlap */
+	segment_put(out_seg, &dval, row, col);
     }  /* for num_points */
 
-    return matrix;
+    return 1;
 }
 
 /* align elaboration box to source region

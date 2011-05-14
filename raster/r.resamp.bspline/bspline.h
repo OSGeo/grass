@@ -40,12 +40,12 @@ struct RasterPoint
 };
 
 /* resamp.c */
-struct Point *P_Read_Raster_Region_masked(char **, /**/
+struct Point *P_Read_Raster_Region_masked(SEGMENT *, /**/
 				          struct Cell_head *, /**/
 				          struct bound_box, /**/
 				          struct bound_box, /**/
 				          int *, /**/ int, /**/ double);
-double **P_Sparse_Raster_Points(double **, /**/
+int P_Sparse_Raster_Points(SEGMENT *, /**/
 			struct Cell_head *, /**/
 			struct Cell_head *, /**/
 			struct bound_box, /**/
@@ -66,4 +66,4 @@ int align_interp_boxes(struct bound_box *, struct bound_box *,
 
 				       
 /* crosscor.c */
-int cross_correlation(double **, struct Cell_head *, double, double);
+int cross_correlation(SEGMENT *, struct Cell_head *, double, double);
