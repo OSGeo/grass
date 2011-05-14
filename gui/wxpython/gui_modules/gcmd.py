@@ -584,8 +584,10 @@ def RunCommand(prog, flags = "", overwrite = False, quiet = False, verbose = Fal
     @return returncode, stdout, messages (read == True and getErrorMsg == True)
     @return stdout, stderr
     """
-    Debug.msg(1, "gcmd.RunCommand(): %s" % ' '.join(grass.make_command(prog, flags, overwrite,
-                                                                       quiet, verbose, **kwargs)))
+    cmdString = ' '.join(grass.make_command(prog, flags, overwrite,
+                                            quiet, verbose, **kwargs))
+    
+    Debug.msg(1, "gcmd.RunCommand(): %s" % cmdString)
     
     kwargs['stderr'] = subprocess.PIPE
     
@@ -597,24 +599,24 @@ def RunCommand(prog, flags = "", overwrite = False, quiet = False, verbose = Fal
     
     ps = grass.start_command(prog, flags, overwrite, quiet, verbose, **kwargs)
     
-    Debug.msg(1, "gcmd.RunCommand(): command started")
+    Debug.msg(2, "gcmd.RunCommand(): command started")
 
     if stdin:
         ps.stdin.write(stdin)
         ps.stdin.close()
         ps.stdin = None
     
-    Debug.msg(1, "gcmd.RunCommand(): decoding string")
+    Debug.msg(3, "gcmd.RunCommand(): decoding string")
     stdout, stderr = map(lambda x: utils.DecodeString(x) if type(x) is types.StringType else x, ps.communicate())
     
-    Debug.msg(1, "gcmd.RunCommand(): get return code")
     ret = ps.returncode
+    Debug.msg(1, "gcmd.RunCommand(): get return code %d" % ret)
         
-    Debug.msg(1, "gcmd.RunCommand(): print error")
+    Debug.msg(3, "gcmd.RunCommand(): print error")
     if ret != 0 and parent:
-        Debug.msg(1, "gcmd.RunCommand(): error %s" % stderr)
+        Debug.msg(2, "gcmd.RunCommand(): error %s" % stderr)
         if (stderr == None):
-            Debug.msg(1, "gcmd.RunCommand(): nothing to print ???")
+            Debug.msg(2, "gcmd.RunCommand(): nothing to print ???")
         else:
             GError(parent = parent,
                    message = stderr)
@@ -622,7 +624,7 @@ def RunCommand(prog, flags = "", overwrite = False, quiet = False, verbose = Fal
     if ret != 0:
         return None
     
-    Debug.msg(1, "gcmd.RunCommand(): print read error")
+    Debug.msg(3, "gcmd.RunCommand(): print read error")
     if not read:
         if not getErrorMsg:
             return ret
@@ -630,15 +632,15 @@ def RunCommand(prog, flags = "", overwrite = False, quiet = False, verbose = Fal
             return ret, _formatMsg(stderr)
 
     if stdout:
-        Debug.msg(1, "gcmd.RunCommand(): return stdout %s" % stdout)
+        Debug.msg(2, "gcmd.RunCommand(): return stdout\n'%s'" % stdout)
     else:
-        Debug.msg(1, "gcmd.RunCommand(): return stdout = None")
+        Debug.msg(2, "gcmd.RunCommand(): return stdout = None")
     if not getErrorMsg:
         return stdout
     
-    Debug.msg(1, "gcmd.RunCommand(): return ret, stdout")
+    Debug.msg(2, "gcmd.RunCommand(): return ret, stdout")
     if read and getErrorMsg:
         return ret, stdout, _formatMsg(stderr)
     
-    Debug.msg(1, "gcmd.RunCommand(): return result")
+    Debug.msg(2, "gcmd.RunCommand(): return result")
     return stdout, _formatMsg(stderr)
