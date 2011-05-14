@@ -656,7 +656,7 @@ class LayerSelect(wx.Choice):
         
     def InsertLayers(self, vector):
         """!Insert layers for a vector into the layer combobox"""
-        layerchoices = utils.GetVectorNumberOfLayers(vector)
+        layerchoices = utils.GetVectorNumberOfLayers(self, vector)
         
         if self.all:
             layerchoices.insert(0, '-1')
