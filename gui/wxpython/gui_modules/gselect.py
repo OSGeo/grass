@@ -658,14 +658,15 @@ class LayerSelect(wx.Choice):
         """!Insert layers for a vector into the layer combobox"""
         layerchoices = utils.GetVectorNumberOfLayers(self, vector)
         
-        if self.all:
+        if self.all or len(layerchoices) == 0:
             layerchoices.insert(0, '-1')
         if len(layerchoices) > 1:
             self.SetItems(layerchoices)
             self.SetStringSelection('1')
-        else:
-            self.SetItems(['1'])
-            self.SetStringSelection('1')
+        elif len(layerchoices) == 1:
+            print layerchoices[0]
+            self.SetItems(layerchoices)
+            self.SetStringSelection(layerchoices[0])
         
         if self.default:
             self.SetStringSelection(str(self.default))
