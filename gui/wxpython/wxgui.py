@@ -134,7 +134,7 @@ class GMFrame(wx.Frame):
         # self.SetToolBar(self.toolbar)
         self._auimgr.AddPane(self.toolbars['main'],
                              wx.aui.AuiPaneInfo().
-                             Name("toolbar").Caption(_("Main Toolbar")).
+                             Name("toolbarMain").Caption(_("Main Toolbar")).
                              ToolbarPane().Top().
                              LeftDockable(False).RightDockable(False).
                              BottomDockable(False).TopDockable(True).
@@ -142,7 +142,7 @@ class GMFrame(wx.Frame):
                              BestSize((self.toolbars['main'].GetSize())))
         self._auimgr.AddPane(self.toolbars['tools'],
                              wx.aui.AuiPaneInfo().
-                             Name("toolbar").Caption(_("Tools Toolbar")).
+                             Name("toolbarTools").Caption(_("Tools Toolbar")).
                              ToolbarPane().Top().
                              LeftDockable(False).RightDockable(False).
                              BottomDockable(False).TopDockable(True).
