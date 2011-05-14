@@ -509,7 +509,7 @@ class GPrompt(object):
                                                    env['LOCATION_NAME'],
                                                    env['MAPSET'],
                                                    '.bash_history'),
-                                      encoding = 'utf-8', mode = 'r')
+                                      encoding = 'utf-8', mode = 'r', errors='replace')
         except IOError:
             return hist
         
