@@ -25,6 +25,7 @@
 #include <grass/vector.h>
 #include <grass/dbmi.h>
 #include <grass/raster.h>
+#include <grass/segment.h>
 #include <grass/glocale.h>
 
 /*----------------------------------------------------------------------------------------------------------*/
@@ -112,7 +113,7 @@ struct Point *P_Read_Vector_Region_Map(struct Map_info *, /**/
 				       struct Cell_head *, /**/
 				       int *, /**/ int, /**/ int /**/);
 
-struct Point *P_Read_Raster_Region_Map(double **, /**/
+struct Point *P_Read_Raster_Region_Map(SEGMENT *, /**/
 				       struct Cell_head *, /**/
 				       struct Cell_head *, /**/
 				       int *, /**/ int /**/);
@@ -138,12 +139,11 @@ P_Sparse_Points(struct Map_info *, /**/
 		struct line_cats *, /**/
 		dbDriver *, /**/ double, /**/ char * /**/);
 
-double **P_Regular_Points(struct Cell_head *, /**/
+int P_Regular_Points(struct Cell_head *, /**/
                           struct Cell_head *, /**/
 			  struct bound_box, /**/
 			  struct bound_box, /**/
-			  double **, /**/
-			  char **, /**/
+			  SEGMENT *, /**/
 			  double *, /**/
 			  double, /**/
 			  double, /**/
