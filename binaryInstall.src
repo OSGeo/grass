@@ -344,6 +344,17 @@ GISBASE="$DESTDIR" GISRC=junk LD_LIBRARY_PATH_VAR="${DESTDIR}/lib:$LD_LIBRARY_PA
 
 echo""
 
+# fix include/Make/Platform.make file for g.extension
+mv ${DESTDIR}/include/Make/Platform.make ${DESTDIR}/include/Make/Platform.make.orig
+cat ${DESTDIR}/include/Make/Platform.make.orig | \
+        sed "s+prefix              = /usr/local+prefix              = $DESTDIR+g" | \
+        sed "s+INST_DIR            = $prefix/grass-$NAME_VER+INST_DIR            = $prefix+g" | \
+        sed "s+^.*GRASS_HOME.*$+GRASS_HOME          = $DESTDIR+"  | \
+        sed "s+^.*RUN_GISBASE.*$+RUN_GISBASE         = $DESTDIR+" | \
+        sed "s+^.*RUN_GISRC.*$+RUN_GISRC           = +" > ${DESTDIR}/include/Make/Platform.make
+
+# rm -f ${DESTDIR}/include/Make/Platform.make.orig
+
 # Print out some messages
 echo "Installation finished. Start GRASS $NAME_VER with"
 echo "    $BINDIR/$GRASSPRG"
