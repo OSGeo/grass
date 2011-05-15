@@ -154,53 +154,56 @@ Transform digital numbers of Landsat-7 ETM+ in band rasters 203_30.1,
 files 293_39.61_toar and 293_39.62_toar:
 
 <div class="code"><pre>
-i.landsat.toar input_prefix=203_30. output_prefix=_toar  sensor=tm7 met=p203r030_7x20010620.met
+i.landsat.toar input_prefix=203_30. output_prefix=_toar \
+  sensor=tm7 met=p203r030_7x20010620.met
 </pre></div>
 
 or
 
 <div class="code"><pre>
-i.landsat.toar input_prefix=203_30. output_prefix=_toar  sensor=tm7 product_date=2004-06-07 date=2001-06-20 \
+i.landsat.toar input_prefix=203_30. output_prefix=_toar \
+  sensor=tm7 product_date=2004-06-07 date=2001-06-20 \
   solar_elevation=64.3242970 gain="HHHLHLHHL"
 </pre></div>
 
 or
 
 <div class="code"><pre>
-i.landsat.toar input_prefix=L5121060_06020060714. output_prefix=L5121060_06020060714_toar sensor=tm5 \
+i.landsat.toar input_prefix=L5121060_06020060714. \
+  output_prefix=L5121060_06020060714_toar sensor=tm5 \
   metfile=L5121060_06020060714_MTL.txt -t
 </pre></div>
 
 <h2>REFERENCES</h2>
 
-<ol>
-  <li>Chander G., B.L. Markham and D.L. Helder: Remote Sensing of
-    Environment, vol. 113, 2009.</li>
+<ul>
+  <li>Chander G., B.L. Markham and D.L. Helder, 2009: Remote Sensing of
+    Environment, vol. 113</li>
   
-  <li>Chander G.H. and B. Markham: IEEE Transactions On Geoscience And
-    Remote Sensing, vol. 41, no. 11, November 2003.</li>
+  <li>Chander G.H. and B. Markham, 2003.: IEEE Transactions On Geoscience And
+    Remote Sensing, vol. 41, no. 11.</li>
   
   <li>Chavez P.S., jr. 1996. Image-based atmospheric corrections -
     Revisited and Improved. Photogrammetric Engineering and Remote
     Sensing 62(9): 1025-1036.</li>
   
-  <li>Huang et al: At-Satellite Reflectance: A First Order Normalization
-    Of Landsat 7 ETM+ Images. 2002.</li>
+  <li>Huang et al: At-Satellite Reflectance, 2002: A First Order Normalization
+    Of Landsat 7 ETM+ Images.</li>
   
-  <li>R. Irish: <a href="http://landsathandbook.gsfc.nasa.gov/handbook/handbook_htmls/chapter5/chapter5.html">Landsat
-      7. Science Data Users Handbook</a>. February 17, 2007.</li>
+  <li>R. Irish: <a href="http://landsathandbook.gsfc.nasa.gov/orbit_coverage/">Landsat
+      7. Science Data Users Handbook</a>. February 17, 2007; 15 May 2011.</li>
   
-  <li>Markham B.L. and J.L. Barker: Landsat MSS and TM Post-Calibration
+  <li>Markham B.L. and J.L. Barker, 1986: Landsat MSS and TM Post-Calibration
     Dynamic Ranges, Exoatmospheric Reflectances and At-Satellite
-    Temperatures. EOSAT Landsat Technical Notes, No. 1, 1986</li>
+    Temperatures. EOSAT Landsat Technical Notes, No. 1.</li>
   
-  <li>Moran M.S., R.D. Jackson, P.N. Slater and P.M. Teillet: Remote
-    Sensing of Environment, vol. 41. 1992.</li>
+  <li>Moran M.S., R.D. Jackson, P.N. Slater and P.M. Teillet, 1992: Remote
+    Sensing of Environment, vol. 41.</li>
   
   <li>Song et al : Classification and Change Detection Using Landsat TM
-    Data: When and How to Correct Atmospheric Effects?. Remote Sensing
-    of Environment, vol. 75. 2001. </li>
-</ol>
+    Data, 2001: When and How to Correct Atmospheric Effects? Remote Sensing
+    of Environment, vol. 75.</li>
+</ul>
 
 <h2>SEE ALSO</h2>
 
@@ -212,7 +215,8 @@ i.landsat.toar input_prefix=L5121060_06020060714. output_prefix=L5121060_0602006
 
 <h2>AUTHOR</h2>
 
-E. Jorge Tizado  (ej.tizado unileon es), Dept. Biodiversity and Environmental Management, University of León, Spain
+E. Jorge Tizado  (ej.tizado unileon es), Dept. Biodiversity and Environmental Management,
+University of Le&oacute;n, Spain
 
 <p>
 <i>Last changed: $Date: 2010-10-16 09:57:25 +1100 (Sat, 16 Oct 2010) $</i>
