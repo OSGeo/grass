@@ -1021,9 +1021,9 @@ static void embed_nulls(int fd, void *buf, int row, RASTER_MAP_TYPE map_type,
 }
 
 /*!
-   \brief Read or simmulate null value row
+   \brief Read or simulate null value row
 
-   Read or simmulate null value row and set the cells corresponding 
+   Read or simulate null value row and set the cells corresponding 
    to null value to 1. The masked out cells are set to null when the
    mask exists. (the MASK is taken care of by null values
    (if the null file doesn't exist for this map, then the null row
@@ -1038,5 +1038,18 @@ static void embed_nulls(int fd, void *buf, int row, RASTER_MAP_TYPE map_type,
  */
 void Rast_get_null_value_row(int fd, char *flags, int row)
 {
-    get_null_value_row(fd, flags, row, 1);
+    struct fileinfo *fcb = &R__.fileinfo[fd];
+
+    if (!fcb->reclass_flag)
+	get_null_value_row(fd, flags, row, 1);
+    else {
+	CELL *buf = G__alloca(R__.rd_window.cols * sizeof(CELL));
+	int i;
+
+	Rast_get_c_row(fd, buf, row);
+	for (i = 0; i < R__.rd_window.cols; i++)
+	    flags[i] = Rast_is_c_null_value(&buf[i]) ? 1 : 0;
+
+	G__freea(buf);
+    }
 }
