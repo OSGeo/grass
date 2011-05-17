@@ -1545,7 +1545,7 @@ CAIROLIB=
 
 if test -n "$USE_CAIRO"; then
 
-cairo="cairo cairo-ft"
+cairo="cairo cairo-ft cairo-fc"
 if test -n "$USE_X11"; then
 	cairo="$cairo cairo-xlib-xrender"
 fi
