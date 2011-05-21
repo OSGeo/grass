@@ -1545,10 +1545,16 @@ CAIROLIB=
 
 if test -n "$USE_CAIRO"; then
 
-cairo="cairo cairo-ft cairo-fc"
+cairo="cairo"
+pkgs="cairo-ft cairo-fc"
 if test -n "$USE_X11"; then
-	cairo="$cairo cairo-xlib-xrender"
+	pkgs="$pkgs cairo-xlib-xrender"
 fi
+for pkg in $pkgs ; do
+    if pkg-config --exists $pkg ; then
+        cairo="$cairo $pkg"
+    fi
+done
 
 # With Cairo includes directory
 #FIXME: somehow quote dirs with spaces in $cairo ?
