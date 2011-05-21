@@ -1,15 +1,15 @@
 # translation of grasswxpy_pl.po to Polski
-# This file is distributed under the same license as the GRASS package.
+# This file is distributed under the same license as the GRASS GIS package.
 # Copyright (C) 2008-2011 GRASS Development Team
-# Milena Nowotarska <do.milenki * gmail.com>, 2008-2011
-# Robert Szczepanek <robert@szczepanek.pl>, 2009, 2010.
+# Milena Nowotarska <do.milenki * gmail.com>, 2008-2011.
+# Robert Szczepanek <robert@szczepanek.pl>, 2009-2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_pl\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-04-23 15:35+0200\n"
-"PO-Revision-Date: 2011-04-12 09:15+0100\n"
-"Last-Translator: Milena Nowotarska <do.milenki * gmail.com>\n"
+"PO-Revision-Date: 2011-05-21 14:43+0100\n"
+"Last-Translator: Robert Szczepanek <robert szczepanek.pl>\n"
 "Language-Team: Polish <grass-translations@lists.osgeo.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -879,11 +879,11 @@ msgstr "Dodaj akcję (moduł GRASS) do modelu"
 
 #: ../gui/wxpython/icons/icon.py:372 ../gui/wxpython/menustrings.py:890
 msgid "Add data item to model"
-msgstr ""
+msgstr "Dodaj dane"
 
 #: ../gui/wxpython/icons/icon.py:374 ../gui/wxpython/menustrings.py:892
 msgid "Define relation between data and action items"
-msgstr ""
+msgstr "Zdefiniuj relację między danymi a akcjami"
 
 #: ../gui/wxpython/icons/icon.py:376 ../gui/wxpython/menustrings.py:190
 #: ../gui/wxpython/menustrings.py:903
@@ -892,11 +892,11 @@ msgstr "Uruchom model"
 
 #: ../gui/wxpython/icons/icon.py:378 ../gui/wxpython/menustrings.py:905
 msgid "Validate model"
-msgstr "Sprawdź nodel"
+msgstr "Sprawdź model"
 
 #: ../gui/wxpython/icons/icon.py:380
 msgid "Show modeler settings"
-msgstr "Pokaż ustawienia  modelu"
+msgstr "Pokaż ustawienia modelu"
 
 #: ../gui/wxpython/icons/icon.py:382
 msgid "Show model properties"
@@ -904,16 +904,16 @@ msgstr "Pokaż parametry modelu"
 
 #: ../gui/wxpython/icons/icon.py:384
 msgid "Manage model variables"
-msgstr "Zarzęzaj zmiennymi modelu"
+msgstr "Zarządzaj zmiennymi modelu"
 
 #: ../gui/wxpython/icons/icon.py:386
 msgid "Redraw model canvas"
-msgstr ""
+msgstr "Odśwież widok"
 
 #: ../gui/wxpython/icons/icon.py:388
 #: ../gui/wxpython/gui_modules/gmodeler.py:677
 msgid "Quit Graphical Modeler"
-msgstr "Wyjdź z graficznego modelera"
+msgstr "Wyjdź z modelera"
 
 #: ../gui/wxpython/icons/icon.py:392
 msgid "Select font"
@@ -1842,15 +1842,15 @@ msgstr "Zarządzaj Terenowymi Punktami Kontrolnymi (GCP)"
 
 #: ../gui/wxpython/menustrings.py:188
 msgid "Graphical modeler"
-msgstr "Graficzny modeler"
+msgstr "Modeler graficzny"
 
 #: ../gui/wxpython/menustrings.py:189
 msgid "Launch Graphical modeler"
-msgstr "Uruchom graficzny modeler"
+msgstr "Uruchom modeler graficzny"
 
 #: ../gui/wxpython/menustrings.py:191
 msgid "Run model prepared by Graphical modeler"
-msgstr "Uruchom model przygotowany w graficznym modelerze"
+msgstr "Uruchom model przygotowany w modelerze graficznym"
 
 #: ../gui/wxpython/menustrings.py:192
 msgid "NVIZ (requires Tcl/Tk)"
@@ -1862,7 +1862,7 @@ msgstr "NVIZ - narzędzie do wizualizacji i animacji danych GRASS-a."
 
 #: ../gui/wxpython/menustrings.py:194
 msgid "NVIZ (non-interactive)"
-msgstr "NVIZ (nie interaktywny)"
+msgstr "NVIZ (nieinteraktywny)"
 
 #: ../gui/wxpython/menustrings.py:195
 msgid "Allows rendering GIS data is a 3D space."
@@ -1941,7 +1941,7 @@ msgstr "Dostęp do mapsetów"
 
 #: ../gui/wxpython/menustrings.py:214
 msgid "Set/unset access to other mapsets in current location"
-msgstr "Ustawianie dostępów do mapsetów w bieżącej lokacji."
+msgstr "Ustawianie dostępu do mapsetów w bieżącej lokacji."
 
 #: ../gui/wxpython/menustrings.py:215
 msgid "User access"
@@ -1961,7 +1961,7 @@ msgstr "Zmienia bieżący mapset."
 
 #: ../gui/wxpython/menustrings.py:219
 msgid "Change location and mapset"
-msgstr "Zmień lokacjęcję i mapset"
+msgstr "Zmień lokację i mapset"
 
 #: ../gui/wxpython/menustrings.py:220
 msgid "Change current location and mapset."
@@ -1981,7 +1981,7 @@ msgstr "Pokaż ustawienia   (g.gisenv --v)"
 
 #: ../gui/wxpython/menustrings.py:224 ../gui/wxpython/menustrings.py:226
 msgid "Outputs and modifies the user's current GRASS variable settings."
-msgstr "Wypisuje i modyfikuje bieżące ustawienia użytkownka zmiennych środowiska GRASS."
+msgstr "Wyświetla i modyfikuje bieżące ustawienia użytkownka zmiennych środowiska GRASS."
 
 #: ../gui/wxpython/menustrings.py:225
 msgid "Change settings"
@@ -2172,7 +2172,7 @@ msgstr "Zmienia odwzorowanie mapy rastrowej kopiując go z innej lokacji do bie�
 
 #: ../gui/wxpython/menustrings.py:272
 msgid "Tiling"
-msgstr "Kafelki   (r.tileset)"
+msgstr "Kafle   (r.tileset)"
 
 #: ../gui/wxpython/menustrings.py:273
 msgid "Produces tilings of the source projection for use in the destination region and projection."
@@ -2505,7 +2505,7 @@ msgstr "Modelowanie hydrologiczne"
 
 #: ../gui/wxpython/menustrings.py:352
 msgid "Carve stream channels"
-msgstr "Wyznacz wysokości cieków"
+msgstr "Wyznacz wysokości cieków   (r.carve)"
 
 #: ../gui/wxpython/menustrings.py:353
 #, fuzzy
@@ -2868,23 +2868,23 @@ msgstr "Tworzy mapę rastrową zawierającą koncentryczne kręgi wokół zadany
 
 #: ../gui/wxpython/menustrings.py:443
 msgid "Generate random cells"
-msgstr "Utórz przypadkowo rozmieszczone komórki"
+msgstr "Losowe komórki rastra"
 
 #: ../gui/wxpython/menustrings.py:444
 msgid "Random cells"
-msgstr "Przypadkowo rozmieszczone komórki"
+msgstr "Losowe komórki rastra"
 
 #: ../gui/wxpython/menustrings.py:445
 msgid "Generates random cell values with spatial dependence."
-msgstr "Generuj przypadkowe wartości z zależnościami przestrzennymi."
+msgstr "Losowe komórki rastra z zależnościami przestrzennymi."
 
 #: ../gui/wxpython/menustrings.py:446
 msgid "Random cells and vector points"
-msgstr "Przypadkowo rozmieszczone komórki i punkty (wektorowe)"
+msgstr "Losowe komórki rastra i punkty wektorowe"
 
 #: ../gui/wxpython/menustrings.py:447
 msgid "Creates a raster map layer and vector point map containing randomly located points."
-msgstr "Tworzy mapę rastrową zawierającą koncentryczne kręgi wokół zadanych pubktów."
+msgstr "Tworzy mapę rastrową i wektorową zawierającą losowe punkty."
 
 #: ../gui/wxpython/menustrings.py:448
 msgid "Generate surfaces"
@@ -2924,7 +2924,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:457
 msgid "Random deviates surface"
-msgstr "Utwórz powierzchnie"
+msgstr "Utwórz losowe powierzchnie"
 
 #: ../gui/wxpython/menustrings.py:458
 msgid "Produces a raster map of uniform random deviates whose range can be expressed by the user."
@@ -2932,11 +2932,11 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:459
 msgid "Random surface with spatial dependence"
-msgstr "Przypadkowa powierzchnia z zależnościami przestrzennymi"
+msgstr "Losowa powierzchnia z zależnościami przestrzennymi"
 
 #: ../gui/wxpython/menustrings.py:460
 msgid "Generates random surface(s) with spatial dependence."
-msgstr "Generuj przypadkowe powierzchnie z zależnościami przestrzennymi."
+msgstr "Generuj losowe powierzchnie z zależnościami przestrzennymi."
 
 #: ../gui/wxpython/menustrings.py:461
 msgid "Generate contour lines"
@@ -3562,7 +3562,7 @@ msgstr "Przykrywa dwie mapy wektorowe."
 
 #: ../gui/wxpython/menustrings.py:620
 msgid "Patch vector maps"
-msgstr "Wyczyśc mapę wektorową"
+msgstr "Wyczyść mapę wektorową   (v.patch)"
 
 #: ../gui/wxpython/menustrings.py:621
 #, fuzzy
@@ -3652,12 +3652,12 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:643
 msgid "Generate random points"
-msgstr "przypadkowo rozmieszczone   (v.random)"
+msgstr "losowo rozmieszczone   (v.random)"
 
 #: ../gui/wxpython/menustrings.py:644
 #, fuzzy
 msgid "Generates randomly 2D/3D vector points map."
-msgstr "Przypadkowo rozmieszczone komórki i punkty (wektorowe)"
+msgstr "Losowo rozmieszczone punkty wektorowe 2D/3D."
 
 #: ../gui/wxpython/menustrings.py:645
 msgid "Perturb points"
@@ -3666,7 +3666,7 @@ msgstr "rozsuń punkty   (v.perturb)"
 #: ../gui/wxpython/menustrings.py:646
 #, fuzzy
 msgid "Random location perturbations of vector points."
-msgstr "Losowe rozrzucenie punktw wektorowych "
+msgstr "Losowe rozrzucenie punktów wektorowych "
 
 #: ../gui/wxpython/menustrings.py:647
 msgid "Remove outliers in point sets"
@@ -5876,7 +5876,7 @@ msgstr "Typ obiektu:"
 #: ../gui/wxpython/gui_modules/wxvdigit.py:460
 #, fuzzy
 msgid "Not enough points for line"
-msgstr "wzdłóż linii   (v.to.points)"
+msgstr "wzdłuż linii   (v.to.points)"
 
 #: ../gui/wxpython/gui_modules/wxvdriver.py:835
 #, python-format
@@ -8242,7 +8242,7 @@ msgstr " wiersz: %d"
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:74
 #, python-format
 msgid "GRASS SQL Builder (%(type)s): vector map <%(map)s>"
-msgstr "GRASS SQL Builder (%(typ)ów): map wektorowych <%(map)s>"
+msgstr "GRASS SQL Builder (%(type)s): map wektorowych <%(map)s>"
 
 #: ../gui/wxpython/gui_modules/sqlbuilder.py:81
 msgid "SQL statement not verified"
