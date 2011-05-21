@@ -233,7 +233,7 @@ def read_command(*args, **kwargs):
     @return stdout
     """
     ps = pipe_command(*args, **kwargs)
-    return _decode(ps.communicate()[0])
+    return ps.communicate()[0]
 
 def parse_command(*args, **kwargs):
     """!Passes all arguments to read_command, then parses the output by
