@@ -7,6 +7,7 @@ Classes:
  - MenuData
  - ManagerData
  - ModelerData
+ - PsMapData
 
 Usage:
 @code
@@ -27,6 +28,7 @@ This program is free software under the GNU General Public License
 @author Yann Chemin <yann.chemin gmail.com>
 @author Martin Landa <landa.martin gmail.com>
 @author Glynn Clements
+@author Anna Kratochvilova <anna.kratochvilova fsv.cvut.cz>
 """
 
 import os
@@ -234,6 +236,19 @@ class ModelerData(MenuData):
 	    filename = os.path.join(etcwxdir, 'xml', 'menudata_modeler.xml')
         
         MenuData.__init__(self, filename)
+
+class PsMapData(MenuData):
+    def __init__(self, path = None):
+        """!Menu for Hardcopy Map Output Utility (psmap.py)
+        
+        @path path to XML to be read (None for menudata_psmap.xml)
+        """
+        if not path:
+            gisbase = os.getenv('GISBASE')
+            global etcwxdir
+        path = os.path.join(etcwxdir, 'xml', 'menudata_psmap.xml')
+        
+        MenuData.__init__(self, path)
 
 if __name__ == "__main__":
     import sys

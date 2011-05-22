@@ -1,0 +1,117 @@
+<menudata>
+  <menubar>
+    <menu>
+      <label>&amp;File</label>
+      <items>
+      	<menuitem>
+	  <label>Page setup</label>
+	  <help>Specify paper size, margins and orientation</help>
+	  <handler>OnPageSetup</handler>
+	  <shortcut>Ctrl+P</shortcut>
+	</menuitem>
+	<separator/>
+	<menuitem>
+	  <label>Load instruction file</label>
+	  <help>Load text file with mapping instructions</help>
+	  <handler>OnLoadFile</handler>
+	  <shortcut>Ctrl+O</shortcut>
+	</menuitem>
+	<menuitem>
+	  <label>Export instruction file</label>
+	  <help>Generate text file with mapping instructions</help>
+	  <handler>OnInstructionFile</handler>
+	  <shortcut>Ctrl+Shift+E</shortcut>
+	</menuitem>
+	<menuitem>
+	  <label>Export to PostScript</label>
+	  <help>Generate PostScript output</help>
+	  <handler>OnPSFile</handler>
+	  <shortcut>Ctrl+E</shortcut>
+	</menuitem>
+	<menuitem>
+	  <label>Export to PDF</label>
+	  <help>Generate PDF output</help>
+	  <handler>OnPDFFile</handler>
+	  <shortcut>Ctrl+F</shortcut>
+	</menuitem>
+	<separator/>
+	<menuitem>
+	  <label>Quit</label>
+	  <help>Close Hardcopy Map Output Utility</help>
+	  <handler>OnCloseWindow</handler>
+	  <shortcut>Ctrl+W</shortcut>
+	</menuitem>
+      </items>
+    </menu>
+    <menu>
+      <label>&amp;Insert</label>
+      <items>
+	<menuitem>
+	  <label>Map frame</label>
+	  <help>Add or edit map frame</help>
+	  <handler>OnAddMap</handler>
+	  <shortcut>Ctrl+M</shortcut>
+	</menuitem>
+	<menuitem>
+	  <label>Raster map</label>
+	  <help>Add or edit raster map</help>
+	  <handler>OnAddRaster</handler>
+	  <shortcut>Ctrl+R</shortcut>
+	</menuitem>
+	<menuitem>
+	  <label>Vector map</label>
+	  <help>Add or edit vector map</help>
+	  <handler>OnAddVect</handler>
+	  <shortcut>Ctrl+V</shortcut>
+	</menuitem>
+	<menuitem>
+	  <label>Map legend</label>
+	  <help>Add or edit raster and vector legend</help>
+	  <handler>OnAddLegend</handler>
+	  <shortcut>Ctrl+L</shortcut>
+	</menuitem>
+	<menuitem>
+	  <label>Map info</label>
+	  <help>Add or edit map info</help>
+	  <handler>OnAddMapinfo</handler>
+	  <shortcut>Ctrl+I</shortcut>
+	</menuitem>
+	<menuitem>
+	  <label>Scale bar</label>
+	  <help>Add or edit scale bar</help>
+	  <handler>OnAddScalebar</handler>
+	  <shortcut>Ctrl+B</shortcut>
+	</menuitem>
+	<menuitem>
+	  <label>Text</label>
+	  <help>Add text</help>
+	  <handler>OnAddText</handler>
+	  <shortcut>Ctrl+T</shortcut>
+	</menuitem>
+	<separator/>
+	<menuitem>
+	  <label>Delete</label>
+	  <help>Delete selected object</help>
+	  <handler>OnDelete</handler>
+	  <shortcut>Delete</shortcut>
+	</menuitem>
+      </items>
+    </menu>
+    <menu>
+      <label>&amp;Help</label>
+      <items>
+	<menuitem>
+	  <label>Help</label>
+	  <help>Display the HTML man pages of Hardcopy Map Output Utility</help>
+	  <handler>OnHelp</handler>
+	</menuitem>
+	<separator />
+	<menuitem>
+	  <label>About Hardcopy Map Output Utility</label>
+	  <help>Display information about Hardcopy Map Output Utility</help>
+	  <handler>OnAbout</handler>
+	</menuitem>
+      </items>
+    </menu>
+  </menubar>
+</menudata>
