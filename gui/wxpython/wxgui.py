@@ -997,13 +997,19 @@ class GMFrame(wx.Frame):
         win.Show()
         
     def OnPreferences(self, event):
-        """!General GUI preferences/settings"""
+        """!General GUI preferences/settings
+        """
         if not self.dialogs['preferences']:
             dlg = preferences.PreferencesDialog(parent = self)
             self.dialogs['preferences'] = dlg
             self.dialogs['preferences'].CenterOnScreen()
 
         self.dialogs['preferences'].ShowModal()
+        
+    def OnHelp(self, event):
+        """!Show help
+        """
+        self.goutput.RunCmd(['g.manual','-i'])
         
     def DispHistogram(self, event):
         """

@@ -394,7 +394,7 @@ Icons = {
         'font' : MetaIcon(img = iconSet.get('font', wx.ART_ERROR),
                           label = _('Select font')),
         'help' : MetaIcon(img = iconSet.get('help', wx.ART_ERROR),
-                          label = _('Show help page')),
+                          label = _('Show manual')),
         'quit' : MetaIcon(img = iconSet.get('quit', wx.ART_ERROR),
                           label = _('Quit')),
         },
