@@ -117,7 +117,6 @@ int Gs_loadmap_as_float(struct Cell_head *wind, const char *map_name,
 {
     FILEDESC cellfile;
     const char *map_set;
-    char *nullflags;
     int offset, row, col;
 
     G_debug(3, "Gs_loadmap_as_float(): name=%s", map_name);
@@ -129,11 +128,6 @@ int Gs_loadmap_as_float(struct Cell_head *wind, const char *map_name,
     }
     *has_null = 0;
 
-    nullflags = Rast_allocate_null_buf();	/* G_fatal_error */
-    if (!nullflags) {
-	G_fatal_error(_("Unable to allocate memory for a null buffer"));
-    }
-
     cellfile = Rast_open_old(map_name, map_set);
 
     G_message(_("Loading raster map <%s>..."),
@@ -142,12 +136,11 @@ int Gs_loadmap_as_float(struct Cell_head *wind, const char *map_name,
     for (row = 0; row < wind->rows; row++) {
 	offset = row * wind->cols;
 	Rast_get_f_row(cellfile, &(buff[offset]), row);
-	Rast_get_null_value_row(cellfile, nullflags, row);
 
 	G_percent(row, wind->rows, 2);
 
 	for (col = 0; col < wind->cols; col++) {
-	    if (nullflags[col] || Rast_is_f_null_value(buff + offset + col)) {
+	    if (Rast_is_f_null_value(buff + offset + col)) {
 		*has_null = 1;
 		BM_set(nullmap, col, row, 1);
 	    }
@@ -159,8 +152,6 @@ int Gs_loadmap_as_float(struct Cell_head *wind, const char *map_name,
     G_debug(4, "  has_null=%d", *has_null);
 
     Rast_close(cellfile);
-
-    G_free(nullflags);
 
     return (1);
 }
@@ -190,7 +181,6 @@ int Gs_loadmap_as_int(struct Cell_head *wind, const char *map_name, int *buff,
 {
     FILEDESC cellfile;
     const char *map_set;
-    char *nullflags;
     int offset, row, col;
 
     G_debug(3, "Gs_loadmap_as_int");
@@ -202,11 +192,6 @@ int Gs_loadmap_as_int(struct Cell_head *wind, const char *map_name, int *buff,
     }
     *has_null = 0;
 
-    nullflags = Rast_allocate_null_buf();	/* G_fatal_error */
-    if (!nullflags) {
-	G_fatal_error(_("Unable to allocate memory for a null buffer"));
-    }
-
     cellfile = Rast_open_old(map_name, map_set);
 
     G_message(_("Loading raster map <%s>..."),
@@ -215,12 +200,11 @@ int Gs_loadmap_as_int(struct Cell_head *wind, const char *map_name, int *buff,
     for (row = 0; row < wind->rows; row++) {
 	offset = row * wind->cols;
 	Rast_get_c_row(cellfile, &(buff[offset]), row);
-	Rast_get_null_value_row(cellfile, nullflags, row);
 
 	G_percent(row, wind->rows, 2);
 
 	for (col = 0; col < wind->cols; col++) {
-	    if (nullflags[col]) {
+	    if (Rast_is_f_null_value(buff + offset + col)) {
 		*has_null = 1;
 		BM_set(nullmap, col, row, 1);
 	    }
@@ -231,8 +215,6 @@ int Gs_loadmap_as_int(struct Cell_head *wind, const char *map_name, int *buff,
     G_percent(1, 1, 1);
     
     Rast_close(cellfile);
-
-    G_free(nullflags);
 
     return (1);
 }
@@ -333,7 +315,6 @@ int Gs_loadmap_as_short(struct Cell_head *wind, const char *map_name,
 {
     FILEDESC cellfile;
     const char *map_set;
-    char *nullflags;
     int *ti, *tmp_buf;
     int offset, row, col, val, max_short, overflow, shortsize, bitplace;
     short *ts;
@@ -358,11 +339,6 @@ int Gs_loadmap_as_short(struct Cell_head *wind, const char *map_name,
     }
     *has_null = 0;
 
-    nullflags = Rast_allocate_null_buf();
-    if (!nullflags) {
-	G_fatal_error(_("Unable to allocate memory for a null buffer"));
-    }
-
     cellfile = Rast_open_old(map_name, map_set);
 
     tmp_buf = (int *)G_malloc(wind->cols * sizeof(int));	/* G_fatal_error */
@@ -376,7 +352,6 @@ int Gs_loadmap_as_short(struct Cell_head *wind, const char *map_name,
     for (row = 0; row < wind->rows; row++) {
 	offset = row * wind->cols;
 	Rast_get_c_row(cellfile, tmp_buf, row);
-	Rast_get_null_value_row(cellfile, nullflags, row);
 
 	G_percent(row, wind->rows, 2);
 
@@ -384,7 +359,7 @@ int Gs_loadmap_as_short(struct Cell_head *wind, const char *map_name,
 	ti = tmp_buf;
 
 	for (col = 0; col < wind->cols; col++) {
-	    if (nullflags[col]) {
+	    if (Rast_is_c_null_value(&tmp_buf[col])) {
 		*has_null = 1;
 		BM_set(nullmap, col, row, 1);
 	    }
@@ -410,7 +385,6 @@ int Gs_loadmap_as_short(struct Cell_head *wind, const char *map_name,
     Rast_close(cellfile);
 
     G_free(tmp_buf);
-    G_free(nullflags);
 
     return (overflow ? -2 : 1);
 }
@@ -446,7 +420,6 @@ int Gs_loadmap_as_char(struct Cell_head *wind, const char *map_name,
 {
     FILEDESC cellfile;
     const char *map_set;
-    char *nullflags;
     int *ti, *tmp_buf;
     int offset, row, col, val, max_char, overflow, charsize, bitplace;
     unsigned char *tc;
@@ -472,11 +445,6 @@ int Gs_loadmap_as_char(struct Cell_head *wind, const char *map_name,
     }
     *has_null = 0;
 
-    nullflags = Rast_allocate_null_buf();	/* G_fatal_error */
-    if (!nullflags) {
-	G_fatal_error(_("Unable to allocate memory for a null buffer"));
-    }
-
     cellfile = Rast_open_old(map_name, map_set);
 
     tmp_buf = (int *)G_malloc(wind->cols * sizeof(int));	/* G_fatal_error */
@@ -490,14 +458,13 @@ int Gs_loadmap_as_char(struct Cell_head *wind, const char *map_name,
     for (row = 0; row < wind->rows; row++) {
 	offset = row * wind->cols;
 	Rast_get_c_row(cellfile, tmp_buf, row);
-	Rast_get_null_value_row(cellfile, nullflags, row);
 	tc = (unsigned char *)&(buff[offset]);
 	ti = tmp_buf;
 
 	G_percent(row, wind->rows, 2);
 
 	for (col = 0; col < wind->cols; col++) {
-	    if (nullflags[col]) {
+	    if (Rast_is_c_null_value(&tmp_buf[col])) {
 		*has_null = 1;
 		BM_set(nullmap, col, row, 1);
 	    }
@@ -525,7 +492,6 @@ int Gs_loadmap_as_char(struct Cell_head *wind, const char *map_name,
     Rast_close(cellfile);
 
     G_free(tmp_buf);
-    G_free(nullflags);
 
     return (overflow ? -2 : 1);
 }
@@ -554,7 +520,6 @@ int Gs_loadmap_as_bitmap(struct Cell_head *wind, const char *map_name,
 {
     FILEDESC cellfile;
     const char *map_set;
-    char *nullflags;
     int *tmp_buf;
     int row, col;
 
@@ -573,19 +538,14 @@ int Gs_loadmap_as_bitmap(struct Cell_head *wind, const char *map_name,
 	return -1;
     }
 
-    nullflags = Rast_allocate_null_buf();
-    if (!nullflags) {
-	G_fatal_error(_("Unable to allocate memory for a null buffer"));
-    }
-
     G_message(_("Loading raster map <%s>..."),
 	      G_fully_qualified_name(map_name, map_set));
 
     for (row = 0; row < wind->rows; row++) {
-	Rast_get_null_value_row(cellfile, nullflags, row);
+	Rast_get_c_row(cellfile, tmp_buf, row);
 
 	for (col = 0; col < wind->cols; col++) {
-	    if (nullflags[col]) {
+	    if (Rast_is_c_null_value(&tmp_buf[col])) {
 		/* no data */
 		BM_set(buff, col, row, 1);
 	    }
@@ -598,7 +558,6 @@ int Gs_loadmap_as_bitmap(struct Cell_head *wind, const char *map_name,
     Rast_close(cellfile);
 
     G_free(tmp_buf);
-    G_free(nullflags);
 
     return (1);
 }
@@ -822,7 +781,7 @@ int Gs_get_cat_label(const char *filename, int drow, int dcol, char *catstr)
     CELL *buf;
     DCELL *dbuf;
     RASTER_MAP_TYPE map_type;
-    int fd;
+    int fd = -1;
 
     if ((mapset = G_find_raster2(filename, "")) == NULL) {
 	G_warning(_("Raster map <%s> not found"), filename);
@@ -868,12 +827,14 @@ int Gs_get_cat_label(const char *filename, int drow, int dcol, char *catstr)
     }
     else {
 	strcpy(catstr, "no category label");
+	return 0;
     }
 
     /* TODO: may want to keep these around for multiple queries */
     Rast_free_cats(&cats);
 
-    Rast_close(fd);
+    if (fd >= 0)
+	Rast_close(fd);
 
     return (1);
 }
