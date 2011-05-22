@@ -199,7 +199,7 @@ int main(int argc, char *argv[])
     parm.view->guisection = _("Existing");
 
     parm.north = G_define_option();
-    parm.north->key = "north";
+    parm.north->key = "n";
     parm.north->key_desc = "value";
     parm.north->required = NO;
     parm.north->multiple = NO;
@@ -208,7 +208,7 @@ int main(int argc, char *argv[])
     parm.north->guisection = _("Bounds");
 
     parm.south = G_define_option();
-    parm.south->key = "south";
+    parm.south->key = "s";
     parm.south->key_desc = "value";
     parm.south->required = NO;
     parm.south->multiple = NO;
@@ -217,7 +217,7 @@ int main(int argc, char *argv[])
     parm.south->guisection = _("Bounds");
 
     parm.east = G_define_option();
-    parm.east->key = "east";
+    parm.east->key = "e";
     parm.east->key_desc = "value";
     parm.east->required = NO;
     parm.east->multiple = NO;
@@ -226,7 +226,7 @@ int main(int argc, char *argv[])
     parm.east->guisection = _("Bounds");
 
     parm.west = G_define_option();
-    parm.west->key = "west";
+    parm.west->key = "w";
     parm.west->key_desc = "value";
     parm.west->required = NO;
     parm.west->multiple = NO;
@@ -235,7 +235,7 @@ int main(int argc, char *argv[])
     parm.west->guisection = _("Bounds");
 
     parm.top = G_define_option();
-    parm.top->key = "top";
+    parm.top->key = "t";
     parm.top->key_desc = "value";
     parm.top->required = NO;
     parm.top->multiple = NO;
@@ -244,7 +244,7 @@ int main(int argc, char *argv[])
     parm.top->guisection = _("Bounds");
 
     parm.bottom = G_define_option();
-    parm.bottom->key = "bottom";
+    parm.bottom->key = "b";
     parm.bottom->key_desc = "value";
     parm.bottom->required = NO;
     parm.bottom->multiple = NO;
