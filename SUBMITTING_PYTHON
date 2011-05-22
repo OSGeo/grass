@@ -171,6 +171,19 @@ COPYRIGHT: (C) 2007 John Doe, and by the GRASS Development Team
 
     - use gcmd.RunCommand() instead of grass.run_command() or grass.read_command() 
 
+    - use full strings, eg.
+
+      if ...:
+          win.SetLabel(_('Name for new 3D raster map to create'))
+      else:
+          win.SetLabel(_('Name for new raster map to create'))
+
+      instead of
+
+      _('Name for new %s to create') % maplabel
+
+      where `maplabel` can be 'raster map' or '3D raster map'
+
 14. Tell the other developers about the new code using the following e-mail:
     grass-dev@lists.osgeo.org
  
