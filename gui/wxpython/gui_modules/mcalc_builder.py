@@ -114,12 +114,10 @@ class MapCalcFrame(wx.Frame):
             self.funct_list.insert(indx, 'z()')
             indx = self.funct_list.index('nsres()') +1
             self.funct_list.insert(indx, 'tbres()')
-            maplabel = _('3D raster map')
             element = 'rast3d'
         else:
-            maplabel = _('raster map')
             element = 'cell'
-
+        
         self.operatorBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
                                         label=" %s " % _('Operators'))
         self.operandBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
@@ -207,11 +205,17 @@ class MapCalcFrame(wx.Frame):
         
         #
         # Map and function insertion text and ComboBoxes
-        self.newmaplabel = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
-                                         label= _('Name for new %s to create') % maplabel)
+        self.newmaplabel = wx.StaticText(parent = self.panel, id = wx.ID_ANY)
+        if self.rast3d:
+            self.newmaplabel.SetLabel(_('Name for new 3D raster map to create'))
+        else:
+            self.newmaplabel.SetLabel(_('Name for new raster map to create'))
         self.newmaptxt = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY, size=(250, -1))
-        self.mapsellabel = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
-                                         label = _('Insert existing %s') % maplabel)
+        self.mapsellabel = wx.StaticText(parent = self.panel, id = wx.ID_ANY)
+        if self.rast3d:
+            self.mapsellabel.SetLabel(_('Insert existing 3D raster map'))
+        else:
+            self.mapsellabel.SetLabel(_('Insert existing raster map'))
         self.mapselect = gselect.Select(parent = self.panel, id = wx.ID_ANY, size = (250, -1),
                                         type = element, multiple = False)
         self.functlabel = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
