@@ -16,6 +16,7 @@ License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 @author Martin Landa <landa.martin gmail.com>
+@author Anna Kratochvilova <anna.kratochvilova fsv.cvut.cz>
 """
 
 import os
@@ -396,6 +397,45 @@ Icons = {
                           label = _('Show help page')),
         'quit' : MetaIcon(img = iconSet.get('quit', wx.ART_ERROR),
                           label = _('Quit')),
+        },
+    'psMap' : {
+        'scriptSave' : MetaIcon(img = iconSet['script-save'],
+                                label = _('Generate text file with mapping instructions')),
+        'scriptLoad' : MetaIcon(img = iconSet['script-load'],
+                                label = _('Load text file with mapping instructions')),                           
+        'psExport'   : MetaIcon(img = iconSet['ps-export'],
+                                label = _('Generate PostScript output')),
+        'pdfExport'  : MetaIcon(img = iconSet['pdf-export'],
+                                label = _('Generate PDF output')),
+        'pageSetup'  : MetaIcon(img = iconSet['page-settings'],
+                                label = _('Page setup'),
+                                desc = _('Specify paper size, margins and orientation')),
+        'fullExtent' : MetaIcon(img = iconSet['zoom-extent'],
+                                label = _("Full extent"),
+                                desc = _("Zoom to full extent")),
+        'addMap'     : MetaIcon(img = iconSet['layer-add'],
+                                label = _("Map frame"),
+                                desc = _("Click and drag to place map frame")),
+        'addRast'    : MetaIcon(img = iconSet['layer-raster-add'],
+                                label = _("Raster map"),
+                                desc = _("Add raster map")),
+        'addVect'    : MetaIcon(img = iconSet['layer-vector-add'],
+                                label = _("Vector map"),
+                                desc = _("Add vector map")),
+        'deleteObj'  : MetaIcon(img = iconSet['layer-remove'],
+                                label = _("Delete selected object")),
+        'preview'    : MetaIcon(img = iconSet['execute'],
+                                label = _("Show preview")),
+        'quit'       : MetaIcon(img = iconSet['quit'],
+                                label = _('Quit Hardcopy Map Utility')),
+        'addText'    : MetaIcon(img = iconSet['text-add'],
+                                label = _('Add text')),
+        'addMapinfo' : MetaIcon(img = iconSet['map-info'],
+                                label = _('Add map info')),
+        'addLegend'  : MetaIcon(img = iconSet['legend-add'],
+                                label = _('Add legend')),
+        'addScalebar' : MetaIcon(img = iconSet['scalebar-add'],
+                                 label = _('Add scale bar')),
         }
     }
 

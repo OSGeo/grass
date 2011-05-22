@@ -15,6 +15,7 @@ Classes:
  - HistogramToolbar
  - LayerManagerToolbar
  - ToolsToolbar
+ - PsMapToolbar
 
 (C) 2007-2011 by the GRASS Development Team
 This program is free software under the GNU General Public License
@@ -23,6 +24,7 @@ This program is free software under the GNU General Public License
 @author Michael Barton
 @author Jachym Cepicky
 @author Martin Landa <landa.martin gmail.com>
+@author Anna Kratochvilova <anna.kratochvilova fsv.cvut.cz>
 """
 
 import os
@@ -1645,3 +1647,89 @@ class ToolsToolbar(AbstractToolbar):
                                       self.parent.OnPsMap)
                                      ))
     
+class PsMapToolbar(AbstractToolbar):
+    def __init__(self, parent):
+        """!Toolbar Hardcopy Map Output Utility (psmap.py)
+        
+        @param parent parent window
+        """
+        AbstractToolbar.__init__(self, parent)
+        
+        self.InitToolbar(self._toolbarData())
+        
+        self.Realize()
+        
+        self.action = { 'id' : self.pointer }
+        self.defaultAction = { 'id' : self.pointer,
+                               'bind' : self.parent.OnPointer }
+        self.OnTool(None)
+        
+        from psmap import haveImage
+        if not haveImage:
+            self.EnableTool(self.preview, False)
+        
+    def _toolbarData(self):
+        """!Toolbar data
+        """
+        self.quit = wx.NewId()
+        self.pagesetup = wx.NewId()
+        self.pointer = wx.NewId()
+        self.zoomIn = wx.NewId()
+        self.zoomOut = wx.NewId()
+        self.zoomAll = wx.NewId()
+        self.addMap = wx.NewId()
+        self.addRaster = wx.NewId()
+        self.addVector = wx.NewId()
+        self.dec = wx.NewId()
+        self.delete = wx.NewId()
+        self.preview = wx.NewId()
+        self.instructionFile = wx.NewId()
+        self.generatePS = wx.NewId()
+        self.generatePDF = wx.NewId()
+        self.loadFile = wx.NewId()
+        self.pan = wx.NewId()
+        self.help = wx.NewId()
+
+        icons = Icons['psMap']
+        return self._getToolbarData(((self.loadFile, 'loadFile', icons['scriptLoad'],
+                                      self.parent.OnLoadFile),                                    
+                                     (self.instructionFile, 'psScript', icons['scriptSave'],
+                                      self.parent.OnInstructionFile),
+                                     (None, ),
+                                     (self.pagesetup, 'page setup', icons['pageSetup'],
+                                      self.parent.OnPageSetup),
+                                     (None, ),
+                                     (self.pointer, "pointer", Icons["displayWindow"]["pointer"],
+                                      self.parent.OnPointer, wx.ITEM_CHECK),
+                                     (self.pan, 'pan', Icons["displayWindow"]['pan'],
+                                      self.parent.OnPan, wx.ITEM_CHECK),
+                                     (self.zoomIn, "zoomin", Icons["displayWindow"]["zoomIn"],
+                                      self.parent.OnZoomIn, wx.ITEM_CHECK),
+                                     (self.zoomOut, "zoomout", Icons["displayWindow"]["zoomOut"],
+                                      self.parent.OnZoomOut, wx.ITEM_CHECK),
+                                     (self.zoomAll, 'full extent', icons['fullExtent'],
+                                      self.parent.OnZoomAll),
+                                     (None, ),
+                                     (self.addMap, 'add map', icons['addMap'],
+                                      self.parent.OnAddMap, wx.ITEM_CHECK),
+                                     (self.addRaster, 'add raster', icons['addRast'],
+                                      self.parent.OnAddRaster),
+                                     (self.addVector, 'add vect', icons['addVect'],
+                                      self.parent.OnAddVect),
+                                     (self.dec, "overlay", Icons["displayWindow"]["overlay"],
+                                      self.parent.OnDecoration),
+                                     (self.delete, "delete", icons["deleteObj"],
+                                      self.parent.OnDelete),
+                                     (None, ),
+                                     (self.preview, "preview", icons["preview"],
+                                      self.parent.OnPreview),
+                                     (self.generatePS, 'generatePS', icons['psExport'],
+                                      self.parent.OnPSFile),
+                                    ( self.generatePDF, 'generatePDF', icons['pdfExport'],
+                                      self.parent.OnPDFFile),
+                                     (None, ),
+                                     (self.help, "help", Icons['misc']['help'],
+                                      self.parent.OnHelp),
+                                     (self.quit, 'quit', icons['quit'],
+                                      self.parent.OnCloseWindow))
+                                    )
