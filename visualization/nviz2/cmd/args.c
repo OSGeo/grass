@@ -277,18 +277,6 @@ void args_surface(struct GParams *params)
     params->wire_color->answer = "136:136:136";
     params->wire_color->guisection = _("Draw");
 
-    /* shading */
-    params->shade = G_define_option();
-    params->shade->key = "shading";
-    params->shade->key_desc = "string";
-    params->shade->type = TYPE_STRING;
-    params->shade->required = NO;
-    params->shade->multiple = YES;
-    params->shade->description = _("Shading");
-    params->shade->options = "flat,gouraud";
-    params->shade->answer = "gouraud";
-    params->shade->guisection = _("Draw");
-
     /* position */
     params->surface_pos = G_define_option();
     params->surface_pos->key = "surface_position";
@@ -296,7 +284,7 @@ void args_surface(struct GParams *params)
     params->surface_pos->type = TYPE_INTEGER;
     params->surface_pos->required = NO;
     params->surface_pos->multiple = YES;
-    params->surface_pos->description = _("Position");
+    params->surface_pos->description = _("Surface position");
     params->surface_pos->guisection = _("Draw");
     params->surface_pos->answer = "0,0,0";
     
@@ -364,7 +352,7 @@ void args_vline(struct GParams *params)
     params->vline_pos->type = TYPE_INTEGER;
     params->vline_pos->required = NO;
     params->vline_pos->multiple = YES;
-    params->vline_pos->description = _("Position");
+    params->vline_pos->description = _("Vector lines position");
     params->vline_pos->guisection = _("Vector lines");
     params->vline_pos->answer = "0,0,0";
 
@@ -433,7 +421,7 @@ void args_vpoint(struct GParams *params)
     params->vpoint_pos->type = TYPE_INTEGER;
     params->vpoint_pos->required = NO;
     params->vpoint_pos->multiple = YES;
-    params->vpoint_pos->description = _("Position");
+    params->vpoint_pos->description = _("Vector points position");
     params->vpoint_pos->guisection = _("Vector points");
     params->vpoint_pos->answer = "0,0,0";
     
