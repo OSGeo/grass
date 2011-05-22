@@ -92,7 +92,7 @@ r.mapcalc  --o expression="recharge = 0.0"
 r3.gwflow --o solver=cg phead=phead status=status hc_x=hydcond hc_y=hydcond  \
 hc_z=hydcond q=well s=syield r=recharge output=gwresult dt=8640000 vx=vx vy=vy vz=vz budget=budget
 
-# The data can be visulaized with paraview when exported with r3.out.vtk
+# The data can be visualized with paraview when exported with r3.out.vtk
 r3.out.vtk -p in=gwresult,status,budget vector=vx,vy,vz out=/tmp/gwdata3d.vtk
 
 #now load the data into paraview
@@ -100,7 +100,7 @@ paraview --data=/tmp/gwdata3d.vtk
 </pre></div>
 
 <H2>EXAMPLE 2</H2>
-This will create a nice 3d model with geolgical layer with different
+This will create a nice 3d model with geological layer with different
 hydraulic conductivities. Make sure you are not in a lat/lon projection.
 
 <div class="code"><pre>
@@ -121,7 +121,7 @@ r3.mapcalc --o expression="syield = 0.0001"
 r3.gwflow --o solver=cg phead=phead status=status hc_x=hydcond hc_y=hydcond  \
 hc_z=hydcond q=well s=syield output=gwresult dt=8640000 vx=vx vy=vy vz=vz budget=budget
 
-# The data can be visulaized with paraview when exported with r3.out.vtk
+# The data can be visualized with paraview when exported with r3.out.vtk
 r3.out.vtk -p in=gwresult,status,budget,hydcond,well vector=vx,vy,vz out=/tmp/gwdata3d.vtk
 
 #now load the data into paraview
