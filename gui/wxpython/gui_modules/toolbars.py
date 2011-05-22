@@ -1583,6 +1583,7 @@ class LayerManagerToolbar(AbstractToolbar):
         self.delcmd = wx.NewId()
         self.attribute = wx.NewId()
         self.preferences = wx.NewId()
+        self.help = wx.NewId()
         
         icons = Icons['layerManager']
         return self._getToolbarData(((self.newdisplay, 'newdisplay', icons["newdisplay"],
@@ -1614,7 +1615,9 @@ class LayerManagerToolbar(AbstractToolbar):
                                       self.parent.OnShowAttributeTable),
                                      (None, ),
                                      (self.preferences, 'preferences', icons["settings"],
-                                      self.parent.OnPreferences)
+                                      self.parent.OnPreferences),
+                                     (self.help, 'help', Icons["misc"]["help"],
+                                      self.parent.OnHelp),
                                      ))
 
 class ToolsToolbar(AbstractToolbar):
