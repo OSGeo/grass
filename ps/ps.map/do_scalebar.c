@@ -1,6 +1,4 @@
-/* Function to draw scalebar on page 
- * **
- */
+/* Function to draw scalebar on page */
 
 #include <string.h>
 #include <math.h>
