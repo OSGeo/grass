@@ -11,12 +11,18 @@ This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Martin Landa <landa.martin gmail.com>
+@author Pawel Netzel (menu customization)
+@author Milena Nowotarska (menu customization)
+@author Robert Szczepanek (menu customization)
+@author Vaclav Petras <wenzeslaus gmail.com> (menu customization)
 """
 
 import wx
 
 import globalvar
 import utils
+
+from preferences import globalSettings as UserSettings
 
 class Menu(wx.MenuBar):
     def __init__(self, parent, data):
@@ -25,6 +31,8 @@ class Menu(wx.MenuBar):
         self.parent   = parent
         self.menudata = data
         self.menucmd  = dict()
+        
+        self.menustyle = UserSettings.Get(group='appearance', key='menustyle', subkey='selection')
         
         for eachMenuData in self.menudata.GetMenu():
             for eachHeading in eachMenuData:
@@ -41,21 +49,28 @@ class Menu(wx.MenuBar):
                 subMenu = self._createMenu(eachItem[1])
                 menu.AppendMenu(wx.ID_ANY, label, subMenu)
             else:
-                self._createMenuItem(menu, *eachItem)
+                self._createMenuItem(menu, *eachItem, menustyle = self.menustyle)
         
         self.parent.Bind(wx.EVT_MENU_HIGHLIGHT_ALL, self.OnMenuHighlight)
         
         return menu
 
     def _createMenuItem(self, menu, label, help, handler, gcmd, keywords,
-                        shortcut = '', kind = wx.ITEM_NORMAL):
-        """!Creates menu items"""
+                        shortcut = '', kind = wx.ITEM_NORMAL, menustyle = 0):
+        """!Creates menu items
+        There are three menu styles (menu item text styles).
+        1 -- label only, 2 -- label and cmd name, 3 -- cmd name only
+        """
         if not label:
             menu.AppendSeparator()
             return
         
         if len(gcmd) > 0:
             helpString = gcmd + ' -- ' + help
+            if menustyle == 1:
+                label += '   [' + gcmd + ']'
+            elif menustyle == 2:
+                label = '      [' + gcmd + ']'
         else:
             helpString = help
         

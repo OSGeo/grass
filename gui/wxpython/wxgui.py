@@ -17,6 +17,7 @@ for details.
 @author Michael Barton (Arizona State University)
 @author Jachym Cepicky (Mendel University of Agriculture)
 @author Martin Landa <landa.martin gmail.com>
+@author Vaclav Petras <wenzeslaus gmail.com> (menu customization)
 """
 
 import sys
@@ -123,11 +124,9 @@ class GMFrame(wx.Frame):
         self.dialogs['atm'] = list()
         
         # creating widgets
-        self.menubar = menu.Menu(parent = self, data = menudata.ManagerData())
-        self.SetMenuBar(self.menubar)
-        self.menucmd = self.menubar.GetCmd()
+        self._createMenuBar()
         self.statusbar = self.CreateStatusBar(number=1)
-        self.notebook  = self.__createNoteBook()
+        self.notebook  = self._createNoteBook()
         self.toolbars = { 'main'  : LayerManagerToolbar(parent = self),
                           'tools' : ToolsToolbar(parent = self) }
         
@@ -209,7 +208,13 @@ class GMFrame(wx.Frame):
             self.curr_page.maptree.mapdisplay.Raise()
         wx.CallAfter(self.Raise)
         
-    def __createNoteBook(self):
+    def _createMenuBar(self):
+        """!Creates menu bar"""
+        self.menubar = menu.Menu(parent = self, data = menudata.ManagerData())
+        self.SetMenuBar(self.menubar)
+        self.menucmd = self.menubar.GetCmd()
+        
+    def _createNoteBook(self):
         """!Creates notebook widgets"""
         if globalvar.hasAgw:
             self.notebook = FN.FlatNotebook(parent = self, id = wx.ID_ANY, agwStyle = globalvar.FNPageDStyle)
@@ -261,6 +266,12 @@ class GMFrame(wx.Frame):
         
         if self.workspaceFile:
             self.SetTitle(self.baseTitle + " - " +  os.path.basename(self.workspaceFile) + '*')
+        
+    def OnSettingsChanged(self, event):
+        """!Here can be functions which have to be called after EVT_SETTINGS_CHANGED. 
+        Now recreates menu only.
+        """
+        self._createMenuBar()
         
     def OnGCPManager(self, event):
         """!Launch georectifier module
@@ -1003,7 +1014,9 @@ class GMFrame(wx.Frame):
             dlg = preferences.PreferencesDialog(parent = self)
             self.dialogs['preferences'] = dlg
             self.dialogs['preferences'].CenterOnScreen()
-
+            
+            dlg.Bind(preferences.EVT_SETTINGS_CHANGED, self.OnSettingsChanged)
+        
         self.dialogs['preferences'].ShowModal()
         
     def OnHelp(self, event):

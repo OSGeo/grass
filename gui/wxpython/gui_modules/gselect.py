@@ -27,6 +27,7 @@ COPYING that comes with GRASS for details.
 
 @author Michael Barton
 @author Martin Landa <landa.martin gmail.com>
+@author Vaclav Petras <wenzeslaus gmail.com> (menu customization)
 """
 
 import os
@@ -238,7 +239,10 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
             self.seltree.SelectItem(found)
 
     def GetAdjustedSize(self, minWidth, prefHeight, maxHeight):
-        return wx.Size(minWidth, min(200, maxHeight))
+        """!Reads UserSettings to get height (which was 200 in old implementation).
+        """
+        height = UserSettings.Get(group = 'appearance', key = 'gSelectPopupHeight', subkey = 'value')
+        return wx.Size(minWidth, min(height, maxHeight))
 
     def _getElementList(self, element, mapsets = None, elements = None, exclude = False):
         """!Get list of GIS elements in accessible mapsets and display as tree
