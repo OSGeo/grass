@@ -1039,8 +1039,11 @@ class GMFrame(wx.Frame):
         """!Init map calculator for interactive creation of mapcalc statements
         """
         if event:
-            cmd = self.GetMenuCmd(event)
-
+            try:
+                cmd = self.GetMenuCmd(event)
+            except KeyError:
+                cmd = ['r.mapcalc']
+        
         win = mapcalculator.MapCalcFrame(parent = self,
                                          cmd = cmd[0])
         win.CentreOnScreen()

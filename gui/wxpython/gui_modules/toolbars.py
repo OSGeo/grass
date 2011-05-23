@@ -1638,9 +1638,12 @@ class ToolsToolbar(AbstractToolbar):
         self.modeler = wx.NewId() 
         self.vdigit = wx.NewId()
         self.mapOutput = wx.NewId()
+        self.mapCalc = wx.NewId()
         
         icons = Icons['layerManager']
-        return self._getToolbarData(((self.vdigit, 'vdigit', icons["vdigit"],
+        return self._getToolbarData(((self.mapCalc, 'mapCalc', icons["mapcalc"],
+                                      self.parent.OnMapCalculator),
+                                     (self.vdigit, 'vdigit', icons["vdigit"],
                                       self.parent.OnVDigit),
                                      (self.georect, 'georectify', Icons["georectify"]["georectify"],
                                       self.parent.OnGCPManager),
