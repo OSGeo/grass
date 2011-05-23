@@ -235,7 +235,9 @@ int main(int argc, char *argv[])
 			  output_file->key, output_file->description);
 	}
     }
-    
+    else
+	PS.fp = NULL;
+
     /* get current mapset */
     PS.cell_mapset = G_mapset();
 
@@ -255,7 +257,6 @@ int main(int argc, char *argv[])
 		PS.page_height - (PS.map_bot / 72.0), PS.map_right / 72.0,
 		PS.page_height - (PS.map_top / 72.0));
 		/* +/- 0.5 ? see ps.map.c brd.* */
-	unlink(output_file->answer); /* fixme: don't open it in the first place */
 	exit(EXIT_SUCCESS);
     }
 

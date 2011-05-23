@@ -103,9 +103,13 @@ int map_setup(void)
        PS.map_bot, PS.map_left, PS.map_right);
      */
 
+    /* no need to go on if we're just here for a look-see. (-b flag) */
+    if (!PS.fp)
+	return 0;
+
+
     /* save original graphics state */
-    if (PS.fp)
-	fprintf(PS.fp, "gsave ");
+    fprintf(PS.fp, "gsave ");
     
     /* compute conversion factor from meters to PostScript window coordinates */
     /*
