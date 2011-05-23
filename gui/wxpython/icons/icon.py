@@ -234,8 +234,10 @@ Icons = {
                                 label = _('Graphical Modeler')),
         'layerOptions'  : MetaIcon(img = iconSet.get('options', wx.ART_ERROR),
                                    label = _('Set options')),
-        'mapOutput' : MetaIcon(img = iconSet.get('print-compose', wx.ART_ERROR),
-                               label = _('Hardcopy Map Ouput Utility')),
+        'mapOutput'  : MetaIcon(img = iconSet.get('print-compose', wx.ART_ERROR),
+                                label = _('Hardcopy Map Ouput Utility')),
+        'mapcalc'    : MetaIcon(img = iconSet.get('calculator', wx.ART_ERROR),
+                                label = _('Raster Map Calculator')),
         },
     'vdigit' : {
         'addPoint'        : MetaIcon(img = iconSet.get('point-create', wx.ART_ERROR),
