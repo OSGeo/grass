@@ -68,6 +68,16 @@ def main():
     if not grass.find_file(input)['file'] and not remove:
         grass.fatal(_("<%s> does not exist.") % input)
 
+    if not 'MASKCATS' in grass.gisenv() and not remove:
+        ## beware: next check is made with != , not with 'is', otherwise:
+        #>>> grass.raster_info("basin_50K")['datatype'] is "CELL"
+        #False
+        # even if:
+        #>>> "CELL" is "CELL"
+        #True 
+        if grass.raster_info(input)['datatype'] != "CELL":
+            grass.fatal(_("Raster map %s must be integer for maskcats parameter") % input)
+
     mapset = grass.gisenv()['MAPSET']
     exists = bool(grass.find_file('MASK', element = 'cell', mapset = mapset)['file'])
 
