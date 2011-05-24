@@ -262,7 +262,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             for key in ('remove', 'rename', 'opacity', 'nviz', 'zoom',
                         'region', 'export', 'attr', 'edit0', 'edit1',
                         'bgmap', 'topo', 'meta', 'null', 'zoom1', 'region1',
-                        'color', 'hist', 'prof', 'properties', 'sql'):
+                        'color', 'hist', 'univar', 'prof', 'properties', 'sql'):
                 self.popupID[key] = wx.NewId()
         
         self.popupMenu = wx.Menu()
@@ -400,6 +400,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.Bind (wx.EVT_MENU, self.OnColorTable, id = self.popupID['color'])
             self.popupMenu.Append(self.popupID['hist'], _("Histogram"))
             self.Bind (wx.EVT_MENU, self.OnHistogram, id = self.popupID['hist'])
+            self.popupMenu.Append(self.popupID['univar'], _("Univariate raster statistics"))
+            self.Bind (wx.EVT_MENU, self.OnUnivariateStats, id = self.popupID['univar'])
             self.popupMenu.Append(self.popupID['prof'], _("Profile"))
             self.Bind (wx.EVT_MENU, self.OnProfile, id = self.popupID['prof'])
             self.popupMenu.Append(self.popupID['meta'], _("Metadata"))
@@ -410,6 +412,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 self.popupMenu.Enable(self.popupID['region1'], False)
                 self.popupMenu.Enable(self.popupID['color'],   False)
                 self.popupMenu.Enable(self.popupID['hist'],    False)
+                self.popupMenu.Enable(self.popupID['univar'],  False)
                 self.popupMenu.Enable(self.popupID['prof'],    False)
                 self.popupMenu.Enable(self.popupID['meta'],    False)
                 self.popupMenu.Enable(self.popupID['nviz'],    False)
@@ -554,6 +557,12 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.histogramFrame.Update()
 
         return True
+
+    def OnUnivariateStats(self, event):
+        """!Univariate raster statistics"""
+        name = self.GetPyData(self.layer_selected)[0]['maplayer'].GetName()
+        menuform.GUI(parent = self).ParseCommand(['r.univar',
+                                                  'map=%s' % name])
 
     def OnStartEditing(self, event):
         """!Start editing vector map layer requested by the user
