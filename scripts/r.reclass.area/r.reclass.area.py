@@ -100,7 +100,7 @@ def main():
     recfile = outfile + '.recl'
 
     p1 = grass.pipe_command('r.stats', flags = 'aln', input = (clumpfile, infile), fs = '|')
-    p2 = grass.feed_command('r.reclass', input = clumpfile, output = recfile)
+    p2 = grass.feed_command('r.reclass', input = clumpfile, output = recfile, rules = '-')
     for line in p1.stdout:
 	f = line.rstrip('\r\n').split('|')
 	if len(f) < 5:
