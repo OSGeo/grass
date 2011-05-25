@@ -186,6 +186,12 @@ GDALCFLAGS          = @GDAL_CFLAGS@
 USE_GDAL            = @USE_GDAL@
 USE_OGR             = @USE_OGR@
 
+#LAS LiDAR through libLAS
+LASLIBS             = @LIBLAS_LIBS@
+LASCFLAGS           = @LIBLAS_CFLAGS@
+LASINC              = @LIBLAS_INC@
+USE_LIBLAS          = @USE_LIBLAS@
+
 #GEOS
 GEOSLIBS            = @GEOS_LIBS@
 GEOSCFLAGS          = @GEOS_CFLAGS@
