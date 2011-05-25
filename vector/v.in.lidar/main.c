@@ -699,7 +699,6 @@ int main(int argc, char *argv[])
 	}
 
 	cat++;
-	LASPoint_Destroy(LAS_point);
     }
     G_percent(n_features, n_features, 1);	/* finish it */
 
