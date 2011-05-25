@@ -91,6 +91,7 @@ SUBDIRS = \
 	v.in.ogr \
 	v.external \
 	v.in.dwg \
+	v.in.lidar \
 	v.external.out
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
