@@ -2,8 +2,8 @@
 Type=Application
 Encoding=UTF-8
 Name=GRASS GIS
-Comment=
-Categories=Application;Education;Geography;
+Comment=Geographic Information System
+Categories=Education;Science;Geoscience;Geography;
 Exec=grass7
 Icon=/usr/share/icons/grass-48x48.png
 Terminal=true
