@@ -221,6 +221,46 @@ the what the map's bounds and resolution should be beforehand.
 
 <h2>EXAMPLES</h2>
 
+<h3>ECAD Data</h3>
+
+The <a href="http://eca.knmi.nl/">European Climate Assessment and Dataset (ECAD) project</a> 
+provides climate data for europe ranging from 1950 - 2010. To import the different 
+chunks of data provided by the project as netCDF files, the offset parameter can be used to get 
+daily numbered raster maps from 1. Jan. 1950 on. Make sure you are in a LatLong location.
+
+<div class="code"><pre>
+# Import precipitation data
+r.in.gdal -o input=rr_0.25deg_reg_1950-1964_v4.0.nc output=precipitation offset=0
+r.in.gdal -o input=rr_0.25deg_reg_1965-1979_v4.0.nc output=precipitation offset=5479
+r.in.gdal -o input=rr_0.25deg_reg_1980-1994_v4.0.nc output=precipitation offset=10957
+r.in.gdal -o input=rr_0.25deg_reg_1995-2010_v4.0.nc output=precipitation offset=16436
+
+# Import air pressure data
+r.in.gdal -o input=pp_0.25deg_reg_1950-1964_v4.0.nc output=air_pressure offset=0
+r.in.gdal -o input=pp_0.25deg_reg_1965-1979_v4.0.nc output=air_pressure offset=5479
+r.in.gdal -o input=pp_0.25deg_reg_1980-1994_v4.0.nc output=air_pressure offset=10957
+r.in.gdal -o input=pp_0.25deg_reg_1995-2010_v4.0.nc output=air_pressure offset=16436
+
+# Import min temperature data
+r.in.gdal -o input=tn_0.25deg_reg_1950-1964_v4.0.nc output=temperatur_min offset=0
+r.in.gdal -o input=tn_0.25deg_reg_1965-1979_v4.0.nc output=temperatur_min offset=5479
+r.in.gdal -o input=tn_0.25deg_reg_1980-1994_v4.0.nc output=temperatur_min offset=10957
+r.in.gdal -o input=tn_0.25deg_reg_1995-2010_v4.0.nc output=temperatur_min offset=16436
+
+# Import max temperature data
+r.in.gdal -o input=tx_0.25deg_reg_1950-1964_v4.0.nc output=temperatur_max offset=0
+r.in.gdal -o input=tx_0.25deg_reg_1965-1979_v4.0.nc output=temperatur_max offset=5479
+r.in.gdal -o input=tx_0.25deg_reg_1980-1994_v4.0.nc output=temperatur_max offset=10957
+r.in.gdal -o input=tx_0.25deg_reg_1995-2010_v4.0.nc output=temperatur_max offset=16436
+
+# Import mean temperature data
+r.in.gdal -o input=tg_0.25deg_reg_1950-1964_v4.0.nc output=temperatur_mean offset=0
+r.in.gdal -o input=tg_0.25deg_reg_1965-1979_v4.0.nc output=temperatur_mean offset=5479
+r.in.gdal -o input=tg_0.25deg_reg_1980-1994_v4.0.nc output=temperatur_mean offset=10957
+r.in.gdal -o input=tg_0.25deg_reg_1995-2010_v4.0.nc output=temperatur_mean offset=16436
+</pre></div>
+
+
 <h3>GTOPO30 DEM</h3>
 
 To avoid that the GTOPO30 data are read incorrectly, you can add a new line

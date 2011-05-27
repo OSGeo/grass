@@ -63,11 +63,12 @@ int main(int argc, char *argv[])
     char error_msg[8096];
     int projcomp_error = 0;
     int overwrite;
+    int offset = 0;
 
     struct GModule *module;
     struct
     {
-	struct Option *input, *output, *target, *title, *outloc, *band, *memory;
+	struct Option *input, *output, *target, *title, *outloc, *band, *memory, *offset;
     } parm;
     struct Flag *flag_o, *flag_e, *flag_k, *flag_f, *flag_l, *flag_c;
 
@@ -118,6 +119,14 @@ int main(int argc, char *argv[])
     parm.title->description = _("Title for resultant raster map");
     parm.title->guisection = _("Metadata");
 
+    parm.offset = G_define_option();
+    parm.offset->key = "offset";
+    parm.offset->type = TYPE_INTEGER;
+    parm.offset->required = NO;
+    parm.offset->answer = "0";
+    parm.offset->description = _("The offset will be added to the band number while output raster map name creation");
+    parm.offset->guisection = _("Metadata");
+    
     parm.outloc = G_define_option();
     parm.outloc->key = "location";
     parm.outloc->type = TYPE_STRING;
@@ -167,6 +176,9 @@ int main(int argc, char *argv[])
     input = parm.input->answer;
 
     output = parm.output->answer;
+    
+    offset = atoi(parm.offset->answer);
+    
     if ((title = parm.title->answer))
 	G_strip(title);
 
@@ -502,21 +514,21 @@ int main(int argc, char *argv[])
 
 		/* check: two channels with identical name ? */
 		if (strcmp(colornamebuf, colornamebuf2) == 0)
-		    sprintf(colornamebuf, "%d", nBand);
+		    sprintf(colornamebuf, "%d", nBand + offset);
 		else
 		    strcpy(colornamebuf2, colornamebuf);
 
 		/* avoid bad color names; in case of 'Gray' often all channels are named 'Gray' */
 		if (strcmp(colornamebuf, "Undefined") == 0 ||
 		    strcmp(colornamebuf, "Gray") == 0)
-		    sprintf(szBandName, "%s.%d", output, nBand);
+		    sprintf(szBandName, "%s.%d", output, nBand + offset);
 		else {
 		    G_tolcase(colornamebuf);
 		    sprintf(szBandName, "%s.%s", output, colornamebuf);
 		}
 	    }
 	    else
-		sprintf(szBandName, "%s.%d", output, nBand);
+		sprintf(szBandName, "%s.%d", output, nBand + offset);
 
 	    ImportBand(hBand, szBandName, &ref);
 
