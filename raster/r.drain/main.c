@@ -643,7 +643,7 @@ struct point *drain_cost(int dir_fd, struct point *list, int nrow, int ncol)
      * read next. This is repeated via a while loop until a null direction is found.
      */
 
-    int neighbour, row, col, next_row, next_col, go = 1;
+    int neighbour, next_row, next_col, go = 1;
     DCELL direction;
     DCELL *dir_buf;
 
