@@ -405,7 +405,19 @@ int main(int argc, char *argv[])
 	sdisk += disk;
 
     G_message(_("Processing all selected output files will require"));
-    G_message(_("%d bytes of disk space for temp files."), sdisk);
+    if (sdisk > 1024) {
+	if (sdisk > 1024 * 1024) {
+	    if (sdisk > 1024 * 1024 * 1024) {
+		G_message(_("%.2f GB of disk space for temp files."), sdisk / (1024. * 1024. * 1024.));
+	    }
+	    else
+		G_message(_("%.2f MB of disk space for temp files."), sdisk / (1024. * 1024.));
+	}
+	else
+	    G_message(_("%.2f KB of disk space for temp files."), sdisk / 1024.);
+    }
+    else
+	G_message(_("%d bytes of disk space for temp files."), sdisk);
 
 
     fstar2 = fi * fi / 4.;
@@ -522,7 +534,7 @@ int main(int argc, char *argv[])
     if (smooth != NULL)
 	Rast_close(fdsmooth);
 
-    G_done_msg("");
+    G_done_msg(" ");
     exit(EXIT_SUCCESS);
 }
 
@@ -538,12 +550,12 @@ static FILE *create_temp_file(const char *name, char **tmpname)
     *tmpname = tmp = G_tempfile();
     fp = fopen(tmp, "w+");
     if (!fp)
-	G_fatal_error(_("Unable to open temporary file <%s>"), tmpname);
+	G_fatal_error(_("Unable to open temporary file <%s>"), *tmpname);
 
     for (i = 0; i < nsizr; i++) {
 	if (fwrite(zero_array_cell, sizeof(FCELL), nsizc, fp) != nsizc) {
 	    clean();
-	    G_fatal_error(_("Error writing temporary file <%s>"), tmpname);
+	    G_fatal_error(_("Error writing temporary file <%s>"), *tmpname);
 	}
     }
 
