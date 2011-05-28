@@ -33,7 +33,7 @@ import grass_icons
 iconSetDefault  = grass_icons.iconSet
 iconPathDefault = grass_icons.iconPath
 
-iconTheme = UserSettings.Get(group='advanced', key='iconTheme', subkey='type')
+iconTheme = UserSettings.Get(group = 'appearance', key = 'iconTheme', subkey = 'type')
 if iconTheme != 'grass':
     sys.stderr.write(_("Unknown iconset '%s', using default 'grass'...\n") % (iconTheme))
 
