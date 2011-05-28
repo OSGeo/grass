@@ -49,7 +49,7 @@ int execute(char *sql, cursor * c)
     ROW *dbrows;
     VALUE *dbval;
     int row, nrows;
-    int *cols, ncols, col;
+    int *cols = NULL, ncols, col;
     int *selset;
     int dtype, stype;
     int width, decimals;
@@ -311,6 +311,8 @@ int execute(char *sql, cursor * c)
     }
     if (st->command != SQLP_SELECT) {	/* because statement is released with cursor */
 	sqpFreeStmt(st);
+	if (cols)
+	    G_free(cols);
     }
 
     return DB_OK;
