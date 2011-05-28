@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
     char *in_name, *out_name, *bbox_name;
     struct GModule *module;
     struct Option *old, *new, *bbox;
-    struct Flag *append, *table_flag;
+    struct Flag *append, *table_flag, *no_topo;
     struct Map_info InMap, OutMap, BBoxMap;
     int n_files;
     int do_table;
@@ -90,6 +90,11 @@ int main(int argc, char *argv[])
     table_flag->label = _("Copy also attribute table");
     table_flag->description =
 	_("Only the table of layer 1 is currently supported");
+
+    no_topo = G_define_flag();
+    no_topo->key = 'b';
+    no_topo->description =
+	_("Do not build topology for output vector");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -241,6 +246,8 @@ int main(int argc, char *argv[])
     }
 
     if (append->answer) {
+	if (no_topo->answer)
+	    Vect_set_open_level(1);
 	Vect_open_update(&OutMap, out_name, G_mapset());
 	if (out_is_3d == WITH_Z && !Vect_is_3d(&OutMap)) {
 	    G_warning(_("The output map is not 3D"));
@@ -354,7 +361,8 @@ int main(int argc, char *argv[])
     Vect_set_map_name(&OutMap, "Output from v.patch");
     Vect_set_person(&OutMap, G_whoami());
 
-    Vect_build(&OutMap);
+    if (!no_topo->answer)
+	Vect_build(&OutMap);
     Vect_close(&OutMap);
 
     if (bbox_name) {
