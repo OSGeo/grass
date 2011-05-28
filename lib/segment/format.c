@@ -18,6 +18,7 @@
 #include <unistd.h>
 #include <limits.h>
 #include <grass/gis.h>
+#include <grass/glocale.h>
 #include <grass/segment.h>
 
 
@@ -117,6 +118,33 @@ static int _segment_format(int fd,
 	G_warning("segment_format(fd,%d,%d,%d,%d,%d): illegal value(s)",
 		  nrows, ncols, srows, scols, len);
 	return -3;
+    }
+
+    if (sizeof(off_t) == 4 && sizeof(double) >= 8) {
+	double d_size;
+	off_t o_size;
+
+	spr = ncols / scols;
+	if (ncols % scols)
+	    spr++;
+
+	/* calculate total number of segments */
+	d_size = (double) spr * ((nrows + srows - 1) / srows);
+	/* multiply with segment size */
+	d_size *= srows * scols * len;
+
+	/* add header */
+	d_size += 5 * sizeof(int);
+
+	o_size = (off_t) d_size;
+
+	/* this test assumes that all off_t values can be exactly 
+	 * represented as double if sizeof(off_t) = 4 and sizeof(double) >= 8 */
+	if ((double) o_size != d_size) {
+	    G_warning(_("Segment format: file size too large"));
+	    G_warning(_("Please recompile with Large File Support (LFS)"));
+	    return -1;
+	}
     }
 
     if (lseek(fd, 0L, SEEK_SET) == (off_t) -1) {
