@@ -191,7 +191,7 @@ class VDigitSettingsDialog(wx.Dialog):
         self.snappingValue.Bind(wx.EVT_SPINCTRL, self.OnChangeSnappingValue)
         self.snappingValue.Bind(wx.EVT_TEXT, self.OnChangeSnappingValue)
         self.snappingUnit = wx.Choice(parent = panel, id = wx.ID_ANY, size = (125, -1),
-                                      choices = ["screen pixels", "map units"])
+                                      choices = [_("screen pixels"), _("map units")])
         self.snappingUnit.SetStringSelection(UserSettings.Get(group = 'vdigit', key = "snapping", subkey = 'units'))
         self.snappingUnit.Bind(wx.EVT_CHOICE, self.OnChangeSnappingUnits)
         flexSizer.Add(text, proportion = 0, flag = wx.ALIGN_CENTER_VERTICAL)
