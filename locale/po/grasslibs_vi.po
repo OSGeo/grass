@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_vi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-23 15:35+0200\n"
+"POT-Creation-Date: 2011-05-29 11:35+0200\n"
 "PO-Revision-Date: 2010-08-27 11:18+0700\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -68,8 +68,11 @@ msgstr ""
 
 #: ../lib/raster/set_window.c:123
 #, fuzzy
-msgid "Rast_set_read_window(): projection/zone differs from that of currently open raster maps"
-msgstr "G_set_window(): phép chiếu/múi khác với của các bản đồ raster hiện đang mở"
+msgid ""
+"Rast_set_read_window(): projection/zone differs from that of currently open "
+"raster maps"
+msgstr ""
+"G_set_window(): phép chiếu/múi khác với của các bản đồ raster hiện đang mở"
 
 #: ../lib/raster/set_window.c:150
 msgid "Input window changed while maps are open for read"
@@ -325,7 +328,8 @@ msgstr "Quá nhiều phạm trù phân loại lại cho [%s trong %s]"
 #: ../lib/raster/reclass.c:171
 #, fuzzy, c-format
 msgid "Illegal reclass format in header file for <%s@%s>"
-msgstr "Định dạng phân loại lại không hợp lệ trong tập tin header của [%s trong %s] "
+msgstr ""
+"Định dạng phân loại lại không hợp lệ trong tập tin header của [%s trong %s] "
 
 #: ../lib/raster/reclass.c:273
 msgid "Illegal reclass request"
@@ -346,15 +350,21 @@ msgid "Unable to create dependency file in <%s@%s>"
 msgstr "Không thể tạo ra tập tin phụ thuộc cho [%s trong %s]"
 
 #: ../lib/raster/window.c:18
-msgid "Internal error: Rast_get_window() called with split window.Use Rast_get_input_window() or Rast_get_output_window() instead."
+msgid ""
+"Internal error: Rast_get_window() called with split window.Use "
+"Rast_get_input_window() or Rast_get_output_window() instead."
 msgstr ""
 
 #: ../lib/raster/window.c:77
-msgid "Internal error: Rast_window_rows() called with split window.Use Rast_input_window_rows() or Rast_output_window_rows() instead."
+msgid ""
+"Internal error: Rast_window_rows() called with split window.Use "
+"Rast_input_window_rows() or Rast_output_window_rows() instead."
 msgstr ""
 
 #: ../lib/raster/window.c:112
-msgid "Internal error: Rast_window_cols() called with split window.Use Rast_input_window_cols() or Rast_output_window_cols() instead."
+msgid ""
+"Internal error: Rast_window_cols() called with split window.Use "
+"Rast_input_window_cols() or Rast_output_window_cols() instead."
 msgstr ""
 
 #: ../lib/raster/gdal.c:88
@@ -388,7 +398,9 @@ msgstr "Không thể mở tập tin %s trong %s"
 
 #: ../lib/raster/gdal.c:489
 #, c-format
-msgid "Driver <%s> does not support direct writing. Using MEM driver for intermediate dataset."
+msgid ""
+"Driver <%s> does not support direct writing. Using MEM driver for "
+"intermediate dataset."
 msgstr ""
 
 #: ../lib/raster/gdal.c:495
@@ -485,18 +497,22 @@ msgstr "Không thể ghi tập tin f_format cho các bản đồ CELL"
 #: ../lib/rst/interp_float/resout2d.c:395
 #: ../lib/rst/interp_float/resout2d.c:410
 #: ../lib/rst/interp_float/resout2d.c:426 ../lib/ogsf/gsd_legend.c:239
-#: ../lib/ogsf/Gs3.c:127 ../lib/ogsf/Gs3.c:200 ../lib/ogsf/Gs3.c:283
-#: ../lib/ogsf/Gs3.c:356 ../lib/ogsf/Gs3.c:470 ../lib/ogsf/Gs3.c:565
-#: ../lib/ogsf/Gs3.c:630 ../lib/ogsf/Gs3.c:687 ../lib/ogsf/Gs3.c:758
-#: ../lib/ogsf/Gs3.c:828
+#: ../lib/ogsf/Gs3.c:126 ../lib/ogsf/Gs3.c:190 ../lib/ogsf/Gs3.c:265
+#: ../lib/ogsf/Gs3.c:337 ../lib/ogsf/Gs3.c:443 ../lib/ogsf/Gs3.c:530
+#: ../lib/ogsf/Gs3.c:589 ../lib/ogsf/Gs3.c:646 ../lib/ogsf/Gs3.c:717
+#: ../lib/ogsf/Gs3.c:787
 #, c-format
 msgid "Raster map <%s> not found"
 msgstr "Không tìm thấy bản đồ raster <%s>"
 
 #: ../lib/raster/open.c:185
 #, c-format
-msgid "Unable to open raster map <%s@%s> since it is a reclass of raster map <%s@%s> which does not exist"
-msgstr "Không thể mở bản đồ raster <%s@%s> vì nó là phân loại lại của bản đồ raster <%s@%s> không tồn tại"
+msgid ""
+"Unable to open raster map <%s@%s> since it is a reclass of raster map <%s@%"
+"s> which does not exist"
+msgstr ""
+"Không thể mở bản đồ raster <%s@%s> vì nó là phân loại lại của bản đồ raster <"
+"%s@%s> không tồn tại"
 
 #: ../lib/raster/open.c:190
 #, fuzzy, c-format
@@ -511,12 +527,17 @@ msgstr "Lỗi khi đang nạp bản đồ raster 3d <%s>"
 #: ../lib/raster/open.c:209
 #, c-format
 msgid "Raster map <%s@%s>: format field in header file invalid"
-msgstr "Bản đồ raster <%s@%s>: định dạng trường trong tập tin header không hợp lệ"
+msgstr ""
+"Bản đồ raster <%s@%s>: định dạng trường trong tập tin header không hợp lệ"
 
 #: ../lib/raster/open.c:214
 #, fuzzy, c-format
-msgid "Raster map <%s> is in different projection than current region. Found <%s>, should be <%s>."
-msgstr "Bản đồ raster <%s@%s> ở phép chiếu khác với vùng hiện hành. Tìm thấy bản đồ <%s@%s>, lẽ ra phải là <%s>."
+msgid ""
+"Raster map <%s> is in different projection than current region. Found <%s>, "
+"should be <%s>."
+msgstr ""
+"Bản đồ raster <%s@%s> ở phép chiếu khác với vùng hiện hành. Tìm thấy bản đồ <"
+"%s@%s>, lẽ ra phải là <%s>."
 
 #: ../lib/raster/open.c:221
 #, fuzzy, c-format
@@ -530,8 +551,11 @@ msgstr "Bản đồ raster <%s@%s>: số byte trên ô (%d) quá lớn"
 
 #: ../lib/raster/open.c:252
 #, fuzzy, c-format
-msgid "Raster map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"
-msgstr "bản đồ <%s@%s> là một liên kết GDAL nhưng GRASS được biên dịch không có hỗ trợ GDAL"
+msgid ""
+"Raster map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"
+msgstr ""
+"bản đồ <%s@%s> là một liên kết GDAL nhưng GRASS được biên dịch không có hỗ "
+"trợ GDAL"
 
 #: ../lib/raster/open.c:261
 #, fuzzy, c-format
@@ -605,8 +629,10 @@ msgstr "Bản đồ raster <%s> không phải là xdr: byte_order: %s"
 
 #: ../lib/raster/open.c:927
 #, fuzzy
-msgid "Rast_set_quant_rules() can be called only for raster maps opened for reading"
-msgstr "G_set_quant_rules() chỉ có thể được gọi cho các bản đồ raster đã mở để đọc"
+msgid ""
+"Rast_set_quant_rules() can be called only for raster maps opened for reading"
+msgstr ""
+"G_set_quant_rules() chỉ có thể được gọi cho các bản đồ raster đã mở để đọc"
 
 #: ../lib/raster/put_title.c:28
 #, c-format
@@ -699,8 +725,12 @@ msgstr "Không thể nạp các quy tắc màu <%s>"
 
 #: ../lib/raster/get_cellhd.c:66
 #, fuzzy, c-format
-msgid "Unable to read header file for raster map <%s@%s>.It is a reclass of raster map <%s@%s> %s"
-msgstr "Không thể mở bản đồ raster <%s@%s> vì nó là phân loại lại của bản đồ raster <%s@%s> không tồn tại"
+msgid ""
+"Unable to read header file for raster map <%s@%s>.It is a reclass of raster "
+"map <%s@%s> %s"
+msgstr ""
+"Không thể mở bản đồ raster <%s@%s> vì nó là phân loại lại của bản đồ raster <"
+"%s@%s> không tồn tại"
 
 #: ../lib/raster/get_cellhd.c:70
 msgid "which is missing."
@@ -738,12 +768,12 @@ msgstr ""
 msgid "Unable to access table <%s>"
 msgstr "Không thể tạo bảng <%s>"
 
-#: ../lib/lidar/zones.c:502 ../lib/lidar/zones.c:539
+#: ../lib/lidar/zones.c:473 ../lib/lidar/zones.c:510
 #, fuzzy, c-format
 msgid "<%s> created in database."
 msgstr "Bảng <%s> đã có trong csdl <%s>"
 
-#: ../lib/lidar/zones.c:506 ../lib/lidar/zones.c:543
+#: ../lib/lidar/zones.c:477 ../lib/lidar/zones.c:514
 #, c-format
 msgid "<%s> has not been created in database."
 msgstr ""
@@ -877,8 +907,10 @@ msgstr "Không thể đọc các tọa độ dòng của biểu tượng: %s"
 
 #: ../lib/symbol/read.c:260
 #, c-format
-msgid "Incorrect symbol name: '%s' (should be: group/name or group/name@mapset)"
-msgstr "Tên biểu tượng không đúng: '%s' (phải là: nhóm/tên hoặc nhóm/tên@bộ_bản_đồ)"
+msgid ""
+"Incorrect symbol name: '%s' (should be: group/name or group/name@mapset)"
+msgstr ""
+"Tên biểu tượng không đúng: '%s' (phải là: nhóm/tên hoặc nhóm/tên@bộ_bản_đồ)"
 
 #: ../lib/symbol/read.c:284
 #, c-format
@@ -1020,7 +1052,8 @@ msgstr "Không thể tìm thấy bản đồ đầu vào '%s'"
 
 #: ../lib/cairodriver/read_ppm.c:56
 #, c-format
-msgid "Cairo: input mask file has incorrect dimensions: expected: %dx%d got: %dx%d"
+msgid ""
+"Cairo: input mask file has incorrect dimensions: expected: %dx%d got: %dx%d"
 msgstr ""
 
 #: ../lib/proj/get_proj.c:148
@@ -1119,8 +1152,10 @@ msgstr "Không thể lấy chuỗi tham số kiểu PROJ.4"
 
 #: ../lib/proj/convert.c:130
 #, c-format
-msgid "OGR can't parse PROJ.4-style parameter string: %s (OGR Error code was %d)"
-msgstr "OGR không thể phân tách chuỗi tham số kiểu PROJ.4: %s (Mã lỗi OGR là %d)"
+msgid ""
+"OGR can't parse PROJ.4-style parameter string: %s (OGR Error code was %d)"
+msgstr ""
+"OGR không thể phân tách chuỗi tham số kiểu PROJ.4: %s (Mã lỗi OGR là %d)"
 
 #: ../lib/proj/convert.c:137
 #, c-format
@@ -1134,17 +1169,26 @@ msgstr "Không có tên phép chiếu! Các tham số phép chiếu có vẻ nh�
 #: ../lib/proj/convert.c:433
 #, c-format
 msgid "Datum <%s> not recognised by GRASS and no parameters found"
-msgstr "GRASS không nhận ra mốc tọa độ chuẩn <%s> và không tìm thấy tham số nào"
+msgstr ""
+"GRASS không nhận ra mốc tọa độ chuẩn <%s> và không tìm thấy tham số nào"
 
 #: ../lib/proj/convert.c:449
 #, c-format
-msgid "Datum <%s> apparently recognised by GRASS but no parameters found. You may want to look into this."
-msgstr "GRASS không nhận ra mốc tọa độ chuẩn <%s> và không tìm thấy tham số nào. Có thể bạn cần kiểm tra điều này."
+msgid ""
+"Datum <%s> apparently recognised by GRASS but no parameters found. You may "
+"want to look into this."
+msgstr ""
+"GRASS không nhận ra mốc tọa độ chuẩn <%s> và không tìm thấy tham số nào. Có "
+"thể bạn cần kiểm tra điều này."
 
 #: ../lib/proj/convert.c:453
 #, c-format
-msgid "Invalid transformation number %d; valid range is 1 to %d. Leaving datum transform parameters unspecified."
-msgstr "Số hiệu chuyển đổi không hợp lệ %d; miền hợp lệ là 1 đến %d. Để lại các tham số chuyển đổi mốc tọa độ chuẩn không được chỉ định."
+msgid ""
+"Invalid transformation number %d; valid range is 1 to %d. Leaving datum "
+"transform parameters unspecified."
+msgstr ""
+"Số hiệu chuyển đổi không hợp lệ %d; miền hợp lệ là 1 đến %d. Để lại các tham "
+"số chuyển đổi mốc tọa độ chuẩn không được chỉ định."
 
 #: ../lib/gis/find_file.c:80
 #, c-format
@@ -1178,8 +1222,11 @@ msgstr "Cửa sổ đã lưu trong \"%s\" hoàn toàn nằm ngoài cửa sổ GR
 
 #: ../lib/gis/view.c:549
 #, c-format
-msgid " Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
-msgstr "Chỉ có %d%% của cửa sổ được lưu trong \"%s\" trùng với cửa sổ GRASS hiện tại. "
+msgid ""
+" Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
+msgstr ""
+"Chỉ có %d%% của cửa sổ được lưu trong \"%s\" trùng với cửa sổ GRASS hiện "
+"tại. "
 
 #: ../lib/gis/mapset_msc.c:61
 #, c-format
@@ -1210,7 +1257,8 @@ msgstr "Giá trrị cột không hợp lệ"
 #: ../lib/gis/adj_cellhd.c:76 ../lib/gis/adj_cellhd.c:240
 #, c-format
 msgid "Fixing subtle input data rounding error of north boundary (%g>%g)"
-msgstr "Đang chỉnh sửa sai số làm tròn dữ liệu đầu vào của ranh giới bắc (%g>%g)"
+msgstr ""
+"Đang chỉnh sửa sai số làm tròn dữ liệu đầu vào của ranh giới bắc (%g>%g)"
 
 #: ../lib/gis/adj_cellhd.c:81 ../lib/gis/adj_cellhd.c:245
 msgid "Illegal latitude for North"
@@ -1219,7 +1267,8 @@ msgstr "Vĩ độ cho cận Bắc không hợp lệ"
 #: ../lib/gis/adj_cellhd.c:87 ../lib/gis/adj_cellhd.c:251
 #, c-format
 msgid "Fixing subtle input data rounding error of south boundary (%g>%g)"
-msgstr "Đang chỉnh sửa sai số làm tròn dữ liệu đầu vào của ranh giới nam (%g>%g)"
+msgstr ""
+"Đang chỉnh sửa sai số làm tròn dữ liệu đầu vào của ranh giới nam (%g>%g)"
 
 #: ../lib/gis/adj_cellhd.c:92 ../lib/gis/adj_cellhd.c:256
 msgid "Illegal latitude for South"
@@ -1228,12 +1277,14 @@ msgstr "Vĩ độ cho cận Nam không hợp lệ"
 #: ../lib/gis/adj_cellhd.c:104 ../lib/gis/adj_cellhd.c:268
 #, c-format
 msgid "Fixing subtle input data rounding error of west boundary (%g>%g)"
-msgstr "Đang chỉnh sửa sai số làm tròn dữ liệu đầu vào của ranh giới tây (%g>%g)"
+msgstr ""
+"Đang chỉnh sửa sai số làm tròn dữ liệu đầu vào của ranh giới tây (%g>%g)"
 
 #: ../lib/gis/adj_cellhd.c:115 ../lib/gis/adj_cellhd.c:279
 #, c-format
 msgid "Fixing subtle input data rounding error of east boundary (%g>%g)"
-msgstr "Đang chỉnh sửa sai số làm tròn dữ liệu đầu vào của ranh giới đông (%g>%g)"
+msgstr ""
+"Đang chỉnh sửa sai số làm tròn dữ liệu đầu vào của ranh giới đông (%g>%g)"
 
 #: ../lib/gis/adj_cellhd.c:128 ../lib/gis/adj_cellhd.c:292
 msgid "North must be north of South"
@@ -1301,11 +1352,15 @@ msgstr "'BỌ' trong các mô tả, tùy chọn '%s' trong <%s> không tồn t�
 
 #: ../lib/gis/parser.c:498
 msgid "Use either --quiet or --verbose flag, not both. Assuming --verbose."
-msgstr "Dùng cờ --quiet hoặc --verbose, không được dùng cả hai. Giả định dùng --verbose."
+msgstr ""
+"Dùng cờ --quiet hoặc --verbose, không được dùng cả hai. Giả định dùng --"
+"verbose."
 
 #: ../lib/gis/parser.c:512
 msgid "Use either --quiet or --verbose flag, not both. Assuming --quiet."
-msgstr "Dùng cờ --quiet hoặc --verbose, không được dùng cả hai. Giả định dùng --quiet."
+msgstr ""
+"Dùng cờ --quiet hoặc --verbose, không được dùng cả hai. Giả định dùng --"
+"quiet."
 
 #: ../lib/gis/parser.c:542
 #, fuzzy, c-format
@@ -1406,7 +1461,9 @@ msgstr "Không thể đọc tập tin header cho bản đồ raster <%s@%s>."
 #: ../lib/gis/timestamp.c:300
 #, fuzzy, c-format
 msgid "Invalid timestamp specified for %s map <%s@%s>"
-msgstr "Đánh dấu thời gian được chỉ định cho %s bản đồ %s trong bộ bản đồ %s không hợp lệ"
+msgstr ""
+"Đánh dấu thời gian được chỉ định cho %s bản đồ %s trong bộ bản đồ %s không "
+"hợp lệ"
 
 #: ../lib/gis/timestamp.c:330
 #, fuzzy, c-format
@@ -1416,7 +1473,8 @@ msgstr "Không thể mở tập tin header của bản đồ raster <%s@%s>"
 #: ../lib/gis/timestamp.c:339
 #, fuzzy, c-format
 msgid "Invalid timestamp file for %s map <%s@%s>"
-msgstr "Tập tin đánh dấu thời gian không hợp lệ cho %s bản đồ %s trong bộ bản đồ %s"
+msgstr ""
+"Tập tin đánh dấu thời gian không hợp lệ cho %s bản đồ %s trong bộ bản đồ %s"
 
 #: ../lib/gis/spawn.c:385
 #, c-format
@@ -1476,15 +1534,15 @@ msgstr "Không thể tạo một quá trình mới"
 msgid "Unable to change directory to %s"
 msgstr "Không thể đổi thư mục đến %s"
 
-#: ../lib/gis/proj2.c:57
+#: ../lib/gis/proj2.c:64
 msgid "State Plane"
 msgstr ""
 
-#: ../lib/gis/proj2.c:59
+#: ../lib/gis/proj2.c:66
 msgid "Latitude-Longitude"
 msgstr "Vĩ độ - Kinh độ"
 
-#: ../lib/gis/proj2.c:61
+#: ../lib/gis/proj2.c:68
 msgid "Other Projection"
 msgstr "Phép chiếu khác"
 
@@ -1501,7 +1559,8 @@ msgstr "lỗi trong tập tin bảng mốc tọa độ chuẩn, dòng %d"
 #: ../lib/gis/open_misc.c:45
 #, c-format
 msgid "G__open_misc(read): mapset <%s> doesn't match xmapset <%s>"
-msgstr "G__open_misc(read): bộ bản đồ <%s> không khớp với bộ bản đồ xmapset <%s>"
+msgstr ""
+"G__open_misc(read): bộ bản đồ <%s> không khớp với bộ bản đồ xmapset <%s>"
 
 #: ../lib/gis/open_misc.c:67
 #, c-format
@@ -1549,7 +1608,8 @@ msgid "Database schema"
 msgstr "Tên csdl"
 
 #: ../lib/gis/parser_standard_options.c:145
-msgid "Do not use this option if schemas are not supported by driver/database server"
+msgid ""
+"Do not use this option if schemas are not supported by driver/database server"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:154
@@ -1677,8 +1737,12 @@ msgstr "Lớp số"
 #: ../lib/gis/parser_standard_options.c:377
 #: ../lib/gis/parser_standard_options.c:389
 #, fuzzy
-msgid "A single vector map can be connected to multiple database tables. This number determines which table to use. Layer name for direct OGR access."
-msgstr "Một bản đồ vec-tơ duy nhất có thể được kết nối với nhiều bảng csdl. Con số này quyết định sử dụng bảng nào."
+msgid ""
+"A single vector map can be connected to multiple database tables. This "
+"number determines which table to use. Layer name for direct OGR access."
+msgstr ""
+"Một bản đồ vec-tơ duy nhất có thể được kết nối với nhiều bảng csdl. Con số "
+"này quyết định sử dụng bảng nào."
 
 #: ../lib/gis/parser_standard_options.c:387
 #, fuzzy
@@ -1877,7 +1941,9 @@ msgstr "Lỗi khi đang đóng tập tin g3d"
 #: ../lib/gis/distance.c:154
 #, fuzzy, c-format
 msgid "%s: shouldn't happen: code=%d P=(%f,%f) S=(%f,%f)(%f,%f)"
-msgstr "G_distance_point_to_line_segment: lẽ ra không nên xảy ra: code=%d P=(%f,%f) S=(%f,%f)(%f,%f)"
+msgstr ""
+"G_distance_point_to_line_segment: lẽ ra không nên xảy ra: code=%d P=(%f,%f) "
+"S=(%f,%f)(%f,%f)"
 
 #: ../lib/gis/seek.c:52 ../lib/gis/seek.c:58
 #, fuzzy
@@ -1978,11 +2044,11 @@ msgstr ""
 msgid "square unit"
 msgstr ""
 
-#: ../lib/gis/units.c:141
+#: ../lib/gis/units.c:141 ../lib/gis/proj3.c:58
 msgid "units"
 msgstr ""
 
-#: ../lib/gis/units.c:141
+#: ../lib/gis/units.c:141 ../lib/gis/proj3.c:58
 msgid "unit"
 msgstr ""
 
@@ -2107,7 +2173,7 @@ msgstr "Giá trị es không hợp lệ : trường '%s' trong tập tin %s tron
 msgid "No ellipsoid info given in file %s in <%s>"
 msgstr "Thông tin về ellipsoid không được cung cấp trong tập tin %s trong <%s>"
 
-#: ../lib/gis/proj3.c:92 ../lib/vector/Vlib/header.c:654
+#: ../lib/gis/proj3.c:105 ../lib/vector/Vlib/header.c:654
 msgid "Unknown projection"
 msgstr "Phép chiếu không biết"
 
@@ -2271,8 +2337,12 @@ msgid "%s complete. %s"
 msgstr "%s hoàn tất. %s"
 
 #: ../lib/gis/gisinit.c:56 ../lib/gis/gisinit.c:91
-msgid "Incompatible library version for module. You need to rebuild GRASS or untangle multiple installations."
-msgstr "Phiên bản thư viện cho mô-đun không tương thích. Bạn cần phải xây dựng lại GRASS hoặc gỡ rối việc cài đặt nhiều lần."
+msgid ""
+"Incompatible library version for module. You need to rebuild GRASS or "
+"untangle multiple installations."
+msgstr ""
+"Phiên bản thư viện cho mô-đun không tương thích. Bạn cần phải xây dựng lại "
+"GRASS hoặc gỡ rối việc cài đặt nhiều lần."
 
 #: ../lib/gis/gisinit.c:66
 #, c-format
@@ -2330,22 +2400,28 @@ msgstr "Không thể mở tập tin %s trong %s"
 
 #: ../lib/vector/diglib/test.c:75
 #, c-format
-msgid "Error in read/write portable double, byte_order = %d Written: %.16e3E Read: %.16e3E"
+msgid ""
+"Error in read/write portable double, byte_order = %d Written: %.16e3E Read: "
+"%.16e3E"
 msgstr ""
 
 #: ../lib/vector/diglib/test.c:89
 #, c-format
-msgid "Error in read/write portable float, byte_order = %d Written: %.8e3E Read: %.8e3E"
+msgid ""
+"Error in read/write portable float, byte_order = %d Written: %.8e3E Read: "
+"%.8e3E"
 msgstr ""
 
 #: ../lib/vector/diglib/test.c:104
 #, c-format
-msgid "Error in read/write portable off_t, byte_order = %d Written: %lu Read: %lu"
+msgid ""
+"Error in read/write portable off_t, byte_order = %d Written: %lu Read: %lu"
 msgstr ""
 
 #: ../lib/vector/diglib/test.c:119
 #, c-format
-msgid "Error in read/write portable long, byte_order = %d Written: %lu Read: %lu"
+msgid ""
+"Error in read/write portable long, byte_order = %d Written: %lu Read: %lu"
 msgstr ""
 
 #: ../lib/vector/diglib/test.c:134
@@ -2355,7 +2431,8 @@ msgstr ""
 
 #: ../lib/vector/diglib/test.c:150
 #, c-format
-msgid "Error in read/write portable short, byte_order = %d Written: %d Read: %d"
+msgid ""
+"Error in read/write portable short, byte_order = %d Written: %d Read: %d"
 msgstr ""
 
 #: ../lib/vector/diglib/test.c:165
@@ -2365,7 +2442,9 @@ msgstr ""
 
 #: ../lib/vector/diglib/plus_node.c:217
 #, c-format
-msgid "Attempt to read line angle for the line which is not connected to the node: node %d, line %d"
+msgid ""
+"Attempt to read line angle for the line which is not connected to the node: "
+"node %d, line %d"
 msgstr "Cố gắng đọc góc của một đường không được nối vào nốt: nốt %d, đường %d"
 
 #: ../lib/vector/diglib/plus.c:275
@@ -2477,18 +2556,31 @@ msgstr "Chế độ bộ nhớ cho véc-tơ không được hỗ trợ, dùng ch
 
 #: ../lib/vector/diglib/spindex_rw.c:277
 #, fuzzy, c-format
-msgid "Spatial index format version %d.%d is not supported by this release. Try to rebuild topology or upgrade GRASS."
-msgstr "Định dạng chỉ mục đối tượng phiên bản %d.%d không được hỗ trợ trong bản phát hành này. Hãy thử xây dựng lại tôpô hoặc cập nhật GRASS."
+msgid ""
+"Spatial index format version %d.%d is not supported by this release. Try to "
+"rebuild topology or upgrade GRASS."
+msgstr ""
+"Định dạng chỉ mục đối tượng phiên bản %d.%d không được hỗ trợ trong bản phát "
+"hành này. Hãy thử xây dựng lại tôpô hoặc cập nhật GRASS."
 
 #: ../lib/vector/diglib/spindex_rw.c:284
 #, fuzzy, c-format
-msgid "Your GRASS version does not fully support spatial index format %d.%d of the vector. Consider to rebuild topology or upgrade GRASS."
-msgstr "Phiên bản GRASS hiện tại của bạn không hỗ trợ đầy đủ định dạng chỉ mục đối tượng %d.%d của dữ liệu vec-tơ. Hãy cân nhắc việc xây dựng lại tôpô hoặc cập nhật GRASS."
+msgid ""
+"Your GRASS version does not fully support spatial index format %d.%d of the "
+"vector. Consider to rebuild topology or upgrade GRASS."
+msgstr ""
+"Phiên bản GRASS hiện tại của bạn không hỗ trợ đầy đủ định dạng chỉ mục đối "
+"tượng %d.%d của dữ liệu vec-tơ. Hãy cân nhắc việc xây dựng lại tôpô hoặc cập "
+"nhật GRASS."
 
 #: ../lib/vector/diglib/spindex_rw.c:293
 #, fuzzy, c-format
-msgid "Spatial index format version %d.%d is not supported by this release. Please rebuild topology."
-msgstr "Định dạng chỉ mục đối tượng phiên bản %d.%d không được hỗ trợ trong bản phát hành này. Hãy thử xây dựng lại tôpô hoặc cập nhật GRASS."
+msgid ""
+"Spatial index format version %d.%d is not supported by this release. Please "
+"rebuild topology."
+msgstr ""
+"Định dạng chỉ mục đối tượng phiên bản %d.%d không được hỗ trợ trong bản phát "
+"hành này. Hãy thử xây dựng lại tôpô hoặc cập nhật GRASS."
 
 #: ../lib/vector/diglib/spindex_rw.c:824
 msgid "Writing sidx: wrong node position in file"
@@ -2558,8 +2650,11 @@ msgstr "Tên bản đồ vector không hợp lệ <%s>. Ký tự <%c> không đ�
 
 #: ../lib/vector/Vlib/legal_vname.c:65
 #, c-format
-msgid "Illegal vector map name <%s>. SQL keyword cannot be used as vector map name."
-msgstr "Tên bản đồ vector không hợp lệ <%s>. Từ khoá SQL không thể được dùng làm tên bản đồ vec-tơ."
+msgid ""
+"Illegal vector map name <%s>. SQL keyword cannot be used as vector map name."
+msgstr ""
+"Tên bản đồ vector không hợp lệ <%s>. Từ khoá SQL không thể được dùng làm tên "
+"bản đồ vec-tơ."
 
 #: ../lib/vector/Vlib/legal_vname.c:96 ../lib/vector/Vlib/legal_vname.c:100
 #, c-format
@@ -2684,8 +2779,8 @@ msgstr "Kết nối CSDL không được định nghĩa cho lớp %d"
 #: ../lib/vector/Vlib/net.c:180 ../lib/vector/Vlib/net.c:350
 #: ../lib/vector/Vlib/ascii.c:328 ../lib/vector/Vlib/write_ogr.c:379
 #: ../lib/vector/neta/utils.c:116 ../lib/vector/neta/timetables.c:133
-#: ../lib/rst/interp_float/vinput2d.c:88 ../lib/db/dbmi_client/copy_tab.c:105
-#: ../lib/db/dbmi_client/copy_tab.c:126 ../lib/db/dbmi_client/db.c:46
+#: ../lib/rst/interp_float/vinput2d.c:88 ../lib/db/dbmi_client/copy_tab.c:113
+#: ../lib/db/dbmi_client/copy_tab.c:134 ../lib/db/dbmi_client/db.c:46
 #: ../lib/db/dbmi_client/delete_tab.c:49 ../lib/sites/sites.c:320
 #, c-format
 msgid "Unable to open database <%s> by driver <%s>"
@@ -2702,8 +2797,12 @@ msgstr "Bản đồ vec-tơ không được mở"
 
 #: ../lib/vector/Vlib/geos.c:55
 #, fuzzy, c-format
-msgid "Vect_read_line_geos(): feature id %d is not reasonable (max features in vector map <%s>: %d)"
-msgstr "Vect_read_line(): đối tượng có id %d không hợp lý (số đối tượng nhiều nhất trong bản đồ vec-tơ <%s>: %d)"
+msgid ""
+"Vect_read_line_geos(): feature id %d is not reasonable (max features in "
+"vector map <%s>: %d)"
+msgstr ""
+"Vect_read_line(): đối tượng có id %d không hợp lý (số đối tượng nhiều nhất "
+"trong bản đồ vec-tơ <%s>: %d)"
 
 #: ../lib/vector/Vlib/geos.c:60
 #, fuzzy
@@ -2886,8 +2985,12 @@ msgstr "Lỗi khi đang ghi vào tập tin tôpô"
 
 #: ../lib/vector/Vlib/build.c:397
 #, fuzzy
-msgid "Unable to build spatial index from topology, vector map is not opened at topology level 2"
-msgstr "Không thể xây dựng chỉ mục không gian từ tôpô, bản đồ vec-tơ không được mở ở tôpô cấp 2"
+msgid ""
+"Unable to build spatial index from topology, vector map is not opened at "
+"topology level 2"
+msgstr ""
+"Không thể xây dựng chỉ mục không gian từ tôpô, bản đồ vec-tơ không được mở ở "
+"tôpô cấp 2"
 
 #: ../lib/vector/Vlib/build.c:438
 msgid "BUG (Vect_build_sidx_from_topo): node does not exist"
@@ -2986,8 +3089,12 @@ msgid "Unable to open OGR DBMI driver"
 msgstr "Không thể mở trình đ.khiển OGR DBMI"
 
 #: ../lib/vector/Vlib/field.c:638
-msgid "All FID tests failed. Neither 'FID' nor 'ogc_fid' nor 'ogr_fid' nor 'gid' available in OGR DB table"
-msgstr "Tất cả các kiểm tra FID thất bại. 'FID', 'ogc_fid', 'ogr_fid' lẫn 'gid' đều không dùng được trong bảng OGR DB"
+msgid ""
+"All FID tests failed. Neither 'FID' nor 'ogc_fid' nor 'ogr_fid' nor 'gid' "
+"available in OGR DB table"
+msgstr ""
+"Tất cả các kiểm tra FID thất bại. 'FID', 'ogc_fid', 'ogr_fid' lẫn 'gid' đều "
+"không dùng được trong bảng OGR DB"
 
 #: ../lib/vector/Vlib/field.c:694
 #, c-format
@@ -3115,8 +3222,12 @@ msgstr "không biết"
 
 #: ../lib/vector/Vlib/read.c:107
 #, c-format
-msgid "Vect_read_line(): feature id %d is not reasonable (max features in vector map <%s>: %d)"
-msgstr "Vect_read_line(): đối tượng có id %d không hợp lý (số đối tượng nhiều nhất trong bản đồ vec-tơ <%s>: %d)"
+msgid ""
+"Vect_read_line(): feature id %d is not reasonable (max features in vector "
+"map <%s>: %d)"
+msgstr ""
+"Vect_read_line(): đối tượng có id %d không hợp lý (số đối tượng nhiều nhất "
+"trong bản đồ vec-tơ <%s>: %d)"
 
 #: ../lib/vector/Vlib/build_nat.c:98
 msgid "Unable to add area (map closed, topo saved)"
@@ -3195,13 +3306,19 @@ msgstr ""
 
 #: ../lib/vector/Vlib/buffer2.c:589
 #, fuzzy
-msgid "Next edge was visited (right) but it is not the first one !!! breaking loop"
-msgstr "Gờ tiếp theo đã được kiểm tra nhưng nó không phải là cái đầu tiên!!! Đang ngắt nút lặp"
+msgid ""
+"Next edge was visited (right) but it is not the first one !!! breaking loop"
+msgstr ""
+"Gờ tiếp theo đã được kiểm tra nhưng nó không phải là cái đầu tiên!!! Đang "
+"ngắt nút lặp"
 
 #: ../lib/vector/Vlib/buffer2.c:600
 #, fuzzy
-msgid "Next edge was visited (left) but it is not the first one !!! breaking loop"
-msgstr "Gờ tiếp theo đã được kiểm tra nhưng nó không phải là cái đầu tiên!!! Đang ngắt nút lặp"
+msgid ""
+"Next edge was visited (left) but it is not the first one !!! breaking loop"
+msgstr ""
+"Gờ tiếp theo đã được kiểm tra nhưng nó không phải là cái đầu tiên!!! Đang "
+"ngắt nút lặp"
 
 #: ../lib/vector/Vlib/buffer2.c:648
 msgid "side != 0 feature not implemented"
@@ -3326,13 +3443,20 @@ msgstr "Không thể mở tập tin lịch sử của bản đồ vec-tơ <%s>"
 
 #: ../lib/vector/Vlib/open_nat.c:152
 #, fuzzy, c-format
-msgid "Coor file of vector map <%s@%s> is larger than it should be (%ld bytes excess)"
-msgstr "Các tập tin coor của bản đồ vec-tơ <%s@%s> lớn hơn cỡ đúng của nó (quá %ld byte)"
+msgid ""
+"Coor file of vector map <%s@%s> is larger than it should be (%ld bytes "
+"excess)"
+msgstr ""
+"Các tập tin coor của bản đồ vec-tơ <%s@%s> lớn hơn cỡ đúng của nó (quá %ld "
+"byte)"
 
 #: ../lib/vector/Vlib/open_nat.c:156
 #, fuzzy, c-format
-msgid "Coor file of vector <%s@%s> is shorter than it should be (%ld bytes missing)."
-msgstr "Các tập tin coor của bản đồ vec-tơ <%s@%s> nhỏ hơn cỡ đúng của nó (thiếu %ld byte)."
+msgid ""
+"Coor file of vector <%s@%s> is shorter than it should be (%ld bytes missing)."
+msgstr ""
+"Các tập tin coor của bản đồ vec-tơ <%s@%s> nhỏ hơn cỡ đúng của nó (thiếu %ld "
+"byte)."
 
 #: ../lib/vector/Vlib/dangles.c:148
 msgid "Changed"
@@ -3391,12 +3515,17 @@ msgstr "Đang đăng ký các cung..."
 
 #: ../lib/vector/Vlib/net.c:249
 #, c-format
-msgid "Database record for line %d (cat = %d, forward/both direction(s)) not found (forward/both direction(s) of line skipped)"
-msgstr "Không tìm thấy bản ghi csdl cho đường %d (cat = %d, hướng tới/cả hai hướng)  (hướng tới/cả hai hướng của đường bị bỏ qua)"
+msgid ""
+"Database record for line %d (cat = %d, forward/both direction(s)) not found "
+"(forward/both direction(s) of line skipped)"
+msgstr ""
+"Không tìm thấy bản ghi csdl cho đường %d (cat = %d, hướng tới/cả hai hướng)  (hướng tới/cả hai hướng của đường bị bỏ qua)"
 
 #: ../lib/vector/Vlib/net.c:268
 #, c-format
-msgid "Database record for line %d (cat = %d, backword direction) not found(direction of line skipped)"
+msgid ""
+"Database record for line %d (cat = %d, backword direction) not found"
+"(direction of line skipped)"
 msgstr "Không tìm thấy bản ghi cho đường %d (cat = %d, hướng lui)  (hướng của đường bị bỏ qua)"
 
 #: ../lib/vector/Vlib/net.c:317
@@ -3410,7 +3539,8 @@ msgstr "Đang thiết lập các chi phí nốt..."
 #: ../lib/vector/Vlib/net.c:397
 #, c-format
 msgid "Database record for node %d (cat = %d) not found (cost set to 0)"
-msgstr "Không tìm thấy bản ghi csdl cho nốt %d (cat = %d) (chi phí thiết lập về 0)"
+msgstr ""
+"Không tìm thấy bản ghi csdl cho nốt %d (cat = %d) (chi phí thiết lập về 0)"
 
 #: ../lib/vector/Vlib/net.c:424
 msgid "Flattening the graph..."
@@ -3444,7 +3574,7 @@ msgstr "Không thể tìm thấy điểm trong vùng"
 msgid "conditions failed"
 msgstr "các điều kiện thất bại"
 
-#: ../lib/vector/Vlib/break_lines.c:371
+#: ../lib/vector/Vlib/break_lines.c:375
 #, fuzzy, c-format
 msgid "Intersections: %d"
 msgstr "Các giao điểm: %5d"
@@ -3482,13 +3612,18 @@ msgstr "Không thể ghi lại đối tượng %d"
 
 #: ../lib/vector/Vlib/write.c:236
 #, c-format
-msgid "Unable to delete feature %d, vector map <%s> is not opened on topology level"
-msgstr "Không thể xóa đối tượng %d, bản đồ vec-tơ <%s> chưa được mở ở cấp tôpô 2"
+msgid ""
+"Unable to delete feature %d, vector map <%s> is not opened on topology level"
+msgstr ""
+"Không thể xóa đối tượng %d, bản đồ vec-tơ <%s> chưa được mở ở cấp tôpô 2"
 
 #: ../lib/vector/Vlib/write.c:242
 #, c-format
-msgid "Unable to delete feature %d, vector map <%s> is not opened in 'write' mode"
-msgstr "Không thể xóa đối tượng %d, bản đồ vec-tơ <%s> không được mở ở chế độ 'write' (ghi)"
+msgid ""
+"Unable to delete feature %d, vector map <%s> is not opened in 'write' mode"
+msgstr ""
+"Không thể xóa đối tượng %d, bản đồ vec-tơ <%s> không được mở ở chế độ "
+"'write' (ghi)"
 
 #: ../lib/vector/Vlib/write.c:256
 #, fuzzy, c-format
@@ -3497,13 +3632,19 @@ msgstr "Không thể phục hồi lại đối tượng %d từ bản đồ vec-
 
 #: ../lib/vector/Vlib/write.c:282
 #, c-format
-msgid "Unable to restore feature %d, vector map <%s> is not opened on topology level"
-msgstr "Không thể phục hồi lại đối tượng %d, bản đồ vec-tơ <%s> không được mở ở cấp tôpô"
+msgid ""
+"Unable to restore feature %d, vector map <%s> is not opened on topology level"
+msgstr ""
+"Không thể phục hồi lại đối tượng %d, bản đồ vec-tơ <%s> không được mở ở cấp "
+"tôpô"
 
 #: ../lib/vector/Vlib/write.c:288
 #, c-format
-msgid "Unable to restore feature %d, vector map <%s> is not opened in 'write' mode"
-msgstr "Không thể phục hồi lại đối tượng %d, bản đồ vec-tơ <%s> không được mở ở chế độ 'write' (ghi)"
+msgid ""
+"Unable to restore feature %d, vector map <%s> is not opened in 'write' mode"
+msgstr ""
+"Không thể phục hồi lại đối tượng %d, bản đồ vec-tơ <%s> không được mở ở chế "
+"độ 'write' (ghi)"
 
 #: ../lib/vector/Vlib/write.c:302
 #, c-format
@@ -3526,8 +3667,11 @@ msgid "Programmer requested unknown access level %d"
 msgstr "Lập trình viên đã yêu cầu mở ở cấp %d không biết"
 
 #: ../lib/vector/Vlib/open.c:229
-msgid "Vector map which is not in the current mapset cannot be opened for update"
-msgstr "Bản đồ vec-tơ không ở trong bộ bản đồ hiện tại nên không thể mở để cập nhật được"
+msgid ""
+"Vector map which is not in the current mapset cannot be opened for update"
+msgstr ""
+"Bản đồ vec-tơ không ở trong bộ bản đồ hiện tại nên không thể mở để cập nhật "
+"được"
 
 #: ../lib/vector/Vlib/open.c:256 ../lib/ogsf/Gv3.c:64 ../lib/ogsf/Gp3.c:64
 #, c-format
@@ -3537,8 +3681,12 @@ msgstr "Không thể mở bản đồ vec-tơ <%s>"
 #: ../lib/vector/Vlib/open.c:272 ../lib/vector/Vlib/open.c:360
 #: ../lib/vector/Vlib/open.c:381
 #, c-format
-msgid "Unable to open vector map <%s> on level %d. Try to rebuild vector topology by v.build."
-msgstr "Không thể mở bản đồ vec-tơ <%s> ở cấp %d. Hãy thử xây dựng lại tôpô bằng v.build."
+msgid ""
+"Unable to open vector map <%s> on level %d. Try to rebuild vector topology "
+"by v.build."
+msgstr ""
+"Không thể mở bản đồ vec-tơ <%s> ở cấp %d. Hãy thử xây dựng lại tôpô bằng v."
+"build."
 
 #: ../lib/vector/Vlib/open.c:275
 #, fuzzy, c-format
@@ -3640,13 +3788,22 @@ msgstr "Không thể mở tập tin fidx của bản đồ vec-tơ <%s@%s>"
 
 #: ../lib/vector/Vlib/open_ogr.c:164
 #, c-format
-msgid "Feature index format version %d.%d is not supported by this release. Try to rebuild topology or upgrade GRASS."
-msgstr "Định dạng chỉ mục đối tượng phiên bản %d.%d không được hỗ trợ trong bản phát hành này. Hãy thử xây dựng lại tôpô hoặc cập nhật GRASS."
+msgid ""
+"Feature index format version %d.%d is not supported by this release. Try to "
+"rebuild topology or upgrade GRASS."
+msgstr ""
+"Định dạng chỉ mục đối tượng phiên bản %d.%d không được hỗ trợ trong bản phát "
+"hành này. Hãy thử xây dựng lại tôpô hoặc cập nhật GRASS."
 
 #: ../lib/vector/Vlib/open_ogr.c:169
 #, c-format
-msgid "Your GRASS version does not fully support feature index format %d.%d of the vector. Consider to rebuild topology or upgrade GRASS."
-msgstr "Phiên bản GRASS hiện tại của bạn không hỗ trợ đầy đủ định dạng chỉ mục đối tượng %d.%d của dữ liệu vec-tơ. Hãy cân nhắc việc xây dựng lại tôpô hoặc cập nhật GRASS."
+msgid ""
+"Your GRASS version does not fully support feature index format %d.%d of the "
+"vector. Consider to rebuild topology or upgrade GRASS."
+msgstr ""
+"Phiên bản GRASS hiện tại của bạn không hỗ trợ đầy đủ định dạng chỉ mục đối "
+"tượng %d.%d của dữ liệu vec-tơ. Hãy cân nhắc việc xây dựng lại tôpô hoặc cập "
+"nhật GRASS."
 
 #: ../lib/vector/Vlib/open_ogr.c:236
 #, fuzzy, c-format
@@ -3740,8 +3897,8 @@ msgstr ""
 msgid "Unknown keyword <%s> in vector head"
 msgstr "Không hiểu từ khoá %s trong tiêu đề vec-tơ"
 
-#: ../lib/vector/Vlib/ascii.c:322 ../lib/db/dbmi_client/copy_tab.c:100
-#: ../lib/db/dbmi_client/copy_tab.c:120 ../lib/db/dbmi_client/db.c:41
+#: ../lib/vector/Vlib/ascii.c:322 ../lib/db/dbmi_client/copy_tab.c:108
+#: ../lib/db/dbmi_client/copy_tab.c:128 ../lib/db/dbmi_client/db.c:41
 #, c-format
 msgid "Unable to start driver <%s>"
 msgstr "Không thể khởi động trình điều khiển <%s>"
@@ -3827,8 +3984,11 @@ msgstr "Việc xây dựng một phần đối với OGR không được hỗ tr
 
 #: ../lib/vector/Vlib/build_ogr.c:370
 #, fuzzy
-msgid "Random read is not supported by OGR for this layer, unable to build topology"
-msgstr "Việc đọc ngẫu nhiên không được OGR hỗ trợ đối với lớp này, không thể xây dựng hỗ trợ"
+msgid ""
+"Random read is not supported by OGR for this layer, unable to build topology"
+msgstr ""
+"Việc đọc ngẫu nhiên không được OGR hỗ trợ đối với lớp này, không thể xây "
+"dựng hỗ trợ"
 
 #: ../lib/vector/Vlib/build_ogr.c:375
 #, c-format
@@ -3877,7 +4037,7 @@ msgstr "Không thể ghi đối tượng (độ dịch âm)"
 msgid "Unable to select attributes for category %d"
 msgstr "không thể đổi thư mục đến %s"
 
-#: ../lib/vector/Vlib/write_ogr.c:387 ../lib/db/dbmi_client/copy_tab.c:295
+#: ../lib/vector/Vlib/write_ogr.c:387 ../lib/db/dbmi_client/copy_tab.c:303
 #, c-format
 msgid "Unable to fetch data from table <%s>"
 msgstr "Không thể lấy dữ liệu từ bảng <%s>"
@@ -3893,7 +4053,9 @@ msgid "Uknown column <%s>"
 msgstr "Kiểu cột không biết (cột <%s>)"
 
 #: ../lib/vector/Vlib/dgraph.c:430
-msgid "Trying to add more edges to the planar_graph than the initial allocation size allows"
+msgid ""
+"Trying to add more edges to the planar_graph than the initial allocation "
+"size allows"
 msgstr ""
 
 #: ../lib/vector/Vlib/line.c:178 ../lib/vector/Vlib/line.c:211
@@ -4351,6 +4513,14 @@ msgstr ""
 msgid "The total sum of the water budget is significant larger then 0: %g\n"
 msgstr ""
 
+#: ../lib/segment/format.c:144
+msgid "Segment format: file size too large"
+msgstr ""
+
+#: ../lib/segment/format.c:145
+msgid "Please recompile with Large File Support (LFS)"
+msgstr ""
+
 #: ../lib/init/grass.py:60
 #, fuzzy
 msgid "WARNING"
@@ -4498,7 +4668,8 @@ msgstr ""
 
 #: ../lib/init/grass.py:529
 msgid ""
-"Error in GUI startup. If necessary, please report this error to the GRASS developers.\n"
+"Error in GUI startup. If necessary, please report this error to the GRASS "
+"developers.\n"
 "Switching to text mode now.\n"
 "\n"
 "Hit RETURN to continue..."
@@ -4529,7 +4700,9 @@ msgstr ""
 
 #: ../lib/init/grass.py:573
 #, python-format
-msgid "%(user)s is currently running GRASS in selected mapset (file %(file)s found). Concurrent use not allowed."
+msgid ""
+"%(user)s is currently running GRASS in selected mapset (file %(file)s "
+"found). Concurrent use not allowed."
 msgstr ""
 
 #: ../lib/init/grass.py:577
@@ -4552,7 +4725,8 @@ msgstr "GISRC - biến không được thiết lập"
 #: ../lib/init/grass.py:627
 #, python-format
 msgid ""
-"Job file '%s' has been defined in the 'GRASS_BATCH_JOB' variable but not found. Exiting.\n"
+"Job file '%s' has been defined in the 'GRASS_BATCH_JOB' variable but not "
+"found. Exiting.\n"
 "\n"
 "Use 'unset GRASS_BATCH_JOB' to disable batch job processing."
 msgstr ""
@@ -4636,7 +4810,8 @@ msgid ""
 "Unable to start GRASS. You can:\n"
 " - Launch GRASS with '-gui' switch (`grass70 -gui`)\n"
 " - Create manually GISRC file (%s)\n"
-" - Launch GRASS with path to the location/mapset as an argument (`grass70 /path/to/location/mapset`)"
+" - Launch GRASS with path to the location/mapset as an argument (`grass70 /"
+"path/to/location/mapset`)"
 msgstr ""
 
 #: ../lib/init/grass.py:965
@@ -4660,12 +4835,18 @@ msgstr ""
 
 #: ../lib/rst/interp_float/segmen2d.c:111
 #, fuzzy
-msgid "Taking too long to find points for interpolation - please change the region to area where your points are. Continuing calculations..."
-msgstr "mất quá lâu để tìm các điểm dùng cho nội suy--vui lòng thay đổi vùng đến khu vực có các điểm của bạn. Tiếp tục tính toán..."
+msgid ""
+"Taking too long to find points for interpolation - please change the region "
+"to area where your points are. Continuing calculations..."
+msgstr ""
+"mất quá lâu để tìm các điểm dùng cho nội suy--vui lòng thay đổi vùng đến khu "
+"vực có các điểm của bạn. Tiếp tục tính toán..."
 
 #: ../lib/rst/interp_float/interp2d.c:214
 #, c-format
-msgid "Overshoot - increase in tension suggested. Overshoot occures at (%d,%d) cell. Z-value %f, zmin %f, zmax %f."
+msgid ""
+"Overshoot - increase in tension suggested. Overshoot occures at (%d,%d) "
+"cell. Z-value %f, zmin %f, zmax %f."
 msgstr ""
 
 #: ../lib/rst/interp_float/resout2d.c:77
@@ -4709,7 +4890,7 @@ msgid "Loading data from attribute table ..."
 msgstr "Đang nạp dữ liệu từ bảng thuộc tính..."
 
 #: ../lib/rst/interp_float/vinput2d.c:94
-#: ../lib/rst/interp_float/vinput2d.c:108 ../lib/db/dbmi_client/copy_tab.c:248
+#: ../lib/rst/interp_float/vinput2d.c:108 ../lib/db/dbmi_client/copy_tab.c:256
 #, c-format
 msgid "Column <%s> not found"
 msgstr "Không tìm thấy cột <%s>"
@@ -4758,8 +4939,12 @@ msgstr "bỏ qua %d điểm--quá dày"
 
 #: ../lib/rst/interp_float/vinput2d.c:335
 #, c-format
-msgid "%d points given for interpolation (after thinning) is less than given NPMIN=%d"
-msgstr "%d điểm được cung cấp để nội suy (sau khi làm mảnh) ít hơn NPMIN=%d được cung cấp"
+msgid ""
+"%d points given for interpolation (after thinning) is less than given NPMIN=%"
+"d"
+msgstr ""
+"%d điểm được cung cấp để nội suy (sau khi làm mảnh) ít hơn NPMIN=%d được "
+"cung cấp"
 
 #: ../lib/rst/interp_float/vinput2d.c:340
 msgid "Zero points in the given region"
@@ -4767,13 +4952,19 @@ msgstr ""
 
 #: ../lib/rst/interp_float/vinput2d.c:345
 #, c-format
-msgid "Segmentation parameters set to invalid values: npmin= %d, segmax= %d for smooth connection of segments, npmin > segmax (see manual)"
+msgid ""
+"Segmentation parameters set to invalid values: npmin= %d, segmax= %d for "
+"smooth connection of segments, npmin > segmax (see manual)"
 msgstr ""
 
 #: ../lib/rst/interp_float/vinput2d.c:351
 #, c-format
-msgid "There are less than %d points for interpolation. No segmentation is necessary, to run the program faster set segmax=%d (see manual)"
-msgstr "Có ít hơn %d điểm dùng cho nội suy. Sự phân đoạn không cần thiết, để chạy chương trình nhanh hơn, thiết lập segmax=%d (xem hướng dẫn sử dụng)"
+msgid ""
+"There are less than %d points for interpolation. No segmentation is "
+"necessary, to run the program faster set segmax=%d (see manual)"
+msgstr ""
+"Có ít hơn %d điểm dùng cho nội suy. Sự phân đoạn không cần thiết, để chạy "
+"chương trình nhanh hơn, thiết lập segmax=%d (xem hướng dẫn sử dụng)"
 
 #: ../lib/rst/interp_float/vinput2d.c:355
 #, fuzzy, c-format
@@ -4818,7 +5009,8 @@ msgstr "Kiểu dữ liệu được dùng trong tập tin đầu ra"
 
 #: ../lib/g3d/g3dparam.c:61
 msgid "Precision used in the output file (default, max, or 0 to 52)"
-msgstr "Độ chính xác được dùng trong tập tin đầu ra (mặc định, max, hoặc từ 0 đến 52)"
+msgstr ""
+"Độ chính xác được dùng trong tập tin đầu ra (mặc định, max, hoặc từ 0 đến 52)"
 
 #: ../lib/g3d/g3dparam.c:71
 msgid "The compression method used in the output file"
@@ -4954,8 +5146,12 @@ msgstr "%s: Lỗi trong thuật toán phân loại"
 
 #: ../lib/arraystats/class.c:221
 #, c-format
-msgid "There are classbreaks outside the range min-max. Number of classes reduced to %i, but using probabilities for %i classes."
-msgstr "Có các ngắt lớp nằm ngoài miền nhỏ nhất-lớn nhất. Số lượng nhóm bị giảm xuống còn %i, nhưng dùng các xác suất cho %i lớp."
+msgid ""
+"There are classbreaks outside the range min-max. Number of classes reduced "
+"to %i, but using probabilities for %i classes."
+msgstr ""
+"Có các ngắt lớp nằm ngoài miền nhỏ nhất-lớn nhất. Số lượng nhóm bị giảm "
+"xuống còn %i, nhưng dùng các xác suất cho %i lớp."
 
 #: ../lib/ogsf/GVL2.c:248
 #, c-format
@@ -5008,7 +5204,8 @@ msgstr "Hãy thử dùng phông nhỏ hơn!"
 
 #: ../lib/ogsf/gsd_surf.c:1742
 msgid "Cut-plane points mis-match between surfaces. Check resolution(s)."
-msgstr "Các điểm mặt cắt giữa các mặt không khớp nhau. Kiểm tra lại độ phân giải"
+msgstr ""
+"Các điểm mặt cắt giữa các mặt không khớp nhau. Kiểm tra lại độ phân giải"
 
 #: ../lib/ogsf/gvl_file.c:104
 msgid "Maximum number of datafiles exceeded"
@@ -5036,8 +5233,12 @@ msgstr "Vật liệu màu: %d"
 
 #: ../lib/ogsf/gsd_prim.c:630
 #, c-format
-msgid "gsd_rot(): %c is an invalid axis specification. Rotation ignored. Please advise GRASS developers of this error"
-msgstr "gsd_rot(): %c là chỉ định trục không hợp lệ. Lệnh xoay bị bỏ qua. Vui lòng báo cho các nhà phát triển GRASS lỗi này."
+msgid ""
+"gsd_rot(): %c is an invalid axis specification. Rotation ignored. Please "
+"advise GRASS developers of this error"
+msgstr ""
+"gsd_rot(): %c là chỉ định trục không hợp lệ. Lệnh xoay bị bỏ qua. Vui lòng "
+"báo cho các nhà phát triển GRASS lỗi này."
 
 #: ../lib/ogsf/gsd_img_tif.c:64 ../lib/ogsf/gsd_img_ppm.c:53
 #: ../lib/ogsf/gsd_img_ppm.c:96 ../lib/ogsf/GK2.c:219
@@ -5049,30 +5250,26 @@ msgstr "Không thể mở tập tin <%s> để ghi"
 msgid "Check no. of frames requested and keyframes marked"
 msgstr "Kiểm tra số khung ảnh cần thiết và số khung chính được đánh dấu"
 
-#: ../lib/ogsf/Gs3.c:134 ../lib/ogsf/Gs3.c:207 ../lib/ogsf/Gs3.c:363
-#: ../lib/ogsf/Gs3.c:477 ../lib/ogsf/Gs3.c:578
-msgid "Unable to allocate memory for a null buffer"
-msgstr "Không thể cấp phát bộ nhớ cho đệm null"
-
-#: ../lib/ogsf/Gs3.c:139 ../lib/ogsf/Gs3.c:212 ../lib/ogsf/Gs3.c:373
-#: ../lib/ogsf/Gs3.c:487 ../lib/ogsf/Gs3.c:581
+#: ../lib/ogsf/Gs3.c:133 ../lib/ogsf/Gs3.c:197 ../lib/ogsf/Gs3.c:349
+#: ../lib/ogsf/Gs3.c:455 ../lib/ogsf/Gs3.c:541
 #, c-format
 msgid "Loading raster map <%s>..."
 msgstr "Đang nạp bản đồ raster <%s>..."
 
-#: ../lib/ogsf/Gs3.c:638
+#: ../lib/ogsf/Gs3.c:597
 #, c-format
 msgid "Color table range doesn't match data (mincol=%d, maxcol=%d"
 msgstr "Miền bảng màu không khớp với dữ liệu (mincol=%d, maxcol=%d) "
 
-#: ../lib/ogsf/Gs3.c:700 ../lib/ogsf/Gs3.c:772
+#: ../lib/ogsf/Gs3.c:659 ../lib/ogsf/Gs3.c:731
 #, c-format
 msgid "Translating colors from raster map <%s>..."
 msgstr "Đang dịch các màu từ bản đồ raster <%s>..."
 
-#: ../lib/ogsf/Gs3.c:1007
+#: ../lib/ogsf/Gs3.c:968
 msgid "View not saved by this program,there may be some inconsistancies"
-msgstr "Vùng xem không được chương trình này lưu, có thể có một số sự không nhất quán"
+msgstr ""
+"Vùng xem không được chương trình này lưu, có thể có một số sự không nhất quán"
 
 #: ../lib/ogsf/gsds.c:109
 msgid "Maximum number of datasets exceeded"
@@ -5081,7 +5278,8 @@ msgstr "Đã vượt quá số lượng bộ dữ liệu lớn nhất"
 #: ../lib/ogsf/Gv3.c:259
 #, c-format
 msgid "No features from vector map <%s> fall within current region"
-msgstr "Không có đối tượng nào trong bản đồ vec-tơ <%s> nằm trong vùng hiện tại"
+msgstr ""
+"Không có đối tượng nào trong bản đồ vec-tơ <%s> nằm trong vùng hiện tại"
 
 #: ../lib/ogsf/Gv3.c:264
 #, c-format
@@ -5102,22 +5300,22 @@ msgstr ""
 msgid "no data"
 msgstr ""
 
-#: ../lib/ogsf/GS2.c:1640
+#: ../lib/ogsf/GS2.c:1641
 #, c-format
 msgid "Raster map <%s> is outside of current region. Load failed."
 msgstr "Bản đồ raster <%s> nằm ngoài vùng hiện tại. Việc nạp thất bại."
 
-#: ../lib/ogsf/GS2.c:1720 ../lib/ogsf/GS2.c:1726 ../lib/ogsf/GS2.c:1734
-#: ../lib/ogsf/GS2.c:1743 ../lib/ogsf/GS2.c:1751 ../lib/ogsf/GS2.c:1761
-#: ../lib/ogsf/GS2.c:1809
+#: ../lib/ogsf/GS2.c:1719 ../lib/ogsf/GS2.c:1725 ../lib/ogsf/GS2.c:1733
+#: ../lib/ogsf/GS2.c:1742 ../lib/ogsf/GS2.c:1750 ../lib/ogsf/GS2.c:1760
+#: ../lib/ogsf/GS2.c:1808
 msgid "GS_load_att_map(): Out of memory. Unable to load map"
 msgstr "GS_load_att_map(): Hết bộ nhớ. Không thể nạp bản đồ"
 
-#: ../lib/ogsf/GS2.c:1837
+#: ../lib/ogsf/GS2.c:1836
 msgid "Loading failed"
 msgstr "Việc nạp thất bại"
 
-#: ../lib/ogsf/GS2.c:1841
+#: ../lib/ogsf/GS2.c:1840
 msgid "Error finding range"
 msgstr "Lỗi khi đang tìm miền"
 
@@ -5211,20 +5409,24 @@ msgstr "Lỗi khi đang nạp bản đồ vec-tơ <%s>"
 msgid "vector_select() failed"
 msgstr ""
 
-#: ../lib/python/core.py:710
+#: ../lib/python/core.py:712
 #, python-format
 msgid "Invalid element '%s'"
 msgstr ""
 
-#: ../lib/python/core.py:945
+#: ../lib/python/core.py:947
 #, fuzzy
 msgid "Unable to list mapsets"
 msgstr "Không thể đóng bản đồ đầu vào"
 
 #: ../lib/python/raster.py:50
 #, fuzzy, python-format
-msgid "Unable to write history for <%(map)s>. Raster map <%(map)s> not found in current mapset."
-msgstr "Không thể phục hồi lại đối tượng %d, bản đồ vec-tơ <%s> không được mở ở chế độ 'write' (ghi)"
+msgid ""
+"Unable to write history for <%(map)s>. Raster map <%(map)s> not found in "
+"current mapset."
+msgstr ""
+"Không thể phục hồi lại đối tượng %d, bản đồ vec-tơ <%s> không được mở ở chế "
+"độ 'write' (ghi)"
 
 #: ../lib/python/raster.py:105
 msgid "An error occurred while running r.mapcalc"
@@ -5387,33 +5589,38 @@ msgstr "Lỗi của lập trình viên"
 msgid "Unable open database <%s> by driver <%s>"
 msgstr "Không thể mở csdl <%s> bằng trình điều khiển <%s>"
 
-#: ../lib/db/dbmi_client/table.c:110 ../lib/db/dbmi_client/copy_tab.c:199
-#: ../lib/db/dbmi_client/copy_tab.c:276 ../lib/sites/sites.c:329
+#: ../lib/db/dbmi_client/table.c:110 ../lib/db/dbmi_client/copy_tab.c:207
+#: ../lib/db/dbmi_client/copy_tab.c:284 ../lib/sites/sites.c:329
 #, c-format
 msgid "Unable to open select cursor: '%s'"
 msgstr "Không thể mở con trỏ chọn: '%s'"
 
-#: ../lib/db/dbmi_client/copy_tab.c:144
+#: ../lib/db/dbmi_client/copy_tab.c:92
+#, c-format
+msgid "Array of values to select from column <%s> is empty"
+msgstr ""
+
+#: ../lib/db/dbmi_client/copy_tab.c:152
 #, c-format
 msgid "Unable to get list tables in database <%s>"
 msgstr "không thể lấy các bảng danh sách trong csdl <%s>"
 
-#: ../lib/db/dbmi_client/copy_tab.c:157
+#: ../lib/db/dbmi_client/copy_tab.c:165
 #, c-format
 msgid "Table <%s> already exists in database <%s>"
 msgstr "Bảng <%s> đã có trong csdl <%s>"
 
-#: ../lib/db/dbmi_client/copy_tab.c:231
+#: ../lib/db/dbmi_client/copy_tab.c:239
 #, c-format
 msgid "Column <%s> is not integer"
 msgstr "Cột <%s> không phải kiểu số nguyên"
 
-#: ../lib/db/dbmi_client/copy_tab.c:251
+#: ../lib/db/dbmi_client/copy_tab.c:259
 #, c-format
 msgid "Unable to create table <%s>"
 msgstr "Không thể tạo bảng <%s>"
 
-#: ../lib/db/dbmi_client/copy_tab.c:351
+#: ../lib/db/dbmi_client/copy_tab.c:359
 #, c-format
 msgid "Unknown column type (column <%s>)"
 msgstr "Kiểu cột không biết (cột <%s>)"
@@ -5469,8 +5676,12 @@ msgid "Memory error in allocating timestamp"
 msgstr "Lỗi bộ nhớ trong việc cấp phát đánh dấu thời gian"
 
 #: ../lib/sites/sites.c:296 ../lib/sites/sites.c:426
-msgid "Dev note: Adapted sites library used for vector points. (module should be updated to GRASS 6 vector library)"
-msgstr "Ghi chú cho nhà phát triển: Thư viện sites thích nghi được dùng cho các điểm vec-tơ. (mô-đun phải được cập nhật vào thư viện vec-tơ của GRASS 6)"
+msgid ""
+"Dev note: Adapted sites library used for vector points. (module should be "
+"updated to GRASS 6 vector library)"
+msgstr ""
+"Ghi chú cho nhà phát triển: Thư viện sites thích nghi được dùng cho các điểm "
+"vec-tơ. (mô-đun phải được cập nhật vào thư viện vec-tơ của GRASS 6)"
 
 #: ../lib/sites/sites.c:345
 msgid "Cannot fetch row"
@@ -5820,7 +6031,8 @@ msgstr "Không thể cấp phát không gian cho ma trận đang chạy"
 
 #: ../lib/gmath/la.c:531
 msgid "Matrix (or submatrix is singular). Solution undetermined"
-msgstr "Ma trận (hoặc ma trận con) là loại suy biến. Phép giải không xác định được "
+msgstr ""
+"Ma trận (hoặc ma trận con) là loại suy biến. Phép giải không xác định được "
 
 #: ../lib/gmath/la.c:535
 msgid "Problem in LA routine."
@@ -5998,7 +6210,8 @@ msgstr "Không thể mở tập tin [%s] cho nhóm phụ [%s] của nhóm [%s tr
 #: ../lib/imagery/fopen.c:116
 #, c-format
 msgid "Unable to find file [%s] for subgroup [%s] of group [%s in %s]"
-msgstr "Không thể tìm thấy tập tin [%s] cho nhóm phụ [%s] trong nhóm [%s trong %s]"
+msgstr ""
+"Không thể tìm thấy tập tin [%s] cho nhóm phụ [%s] trong nhóm [%s trong %s]"
 
 #: ../lib/imagery/list_gp.c:34
 #, c-format
@@ -6025,96 +6238,105 @@ msgstr "nhóm phụ <%s> của nhóm <%s> rỗng\n"
 msgid "subgroup <%s> of group <%s> references the following raster maps\n"
 msgstr "nhóm phụ <%s> của nhóm <%s> tham chiếu các bản đồ raster sau\n"
 
-#, fuzzy
-msgid "       valid options: %s\n"
-msgstr " tùy_chọn: %s\n"
+#~ msgid "Unable to allocate memory for a null buffer"
+#~ msgstr "Không thể cấp phát bộ nhớ cho đệm null"
 
 #, fuzzy
-msgid "Not enough room in history file to record command line"
-msgstr "Không đủ không gian trong tập tin lịch sử để lưu dòng lệnh."
+#~ msgid "       valid options: %s\n"
+#~ msgstr " tùy_chọn: %s\n"
 
 #, fuzzy
-msgid "Not enough room in history file for command line (truncated)"
-msgstr "Không đủ không gian trong tập tin lịch sử để chứa dòng lệnh (bị cắt bớt)."
+#~ msgid "Not enough room in history file to record command line"
+#~ msgstr "Không đủ không gian trong tập tin lịch sử để lưu dòng lệnh."
 
 #, fuzzy
-msgid "test, gmath"
-msgstr "thử, gpde"
+#~ msgid "Not enough room in history file for command line (truncated)"
+#~ msgstr ""
+#~ "Không đủ không gian trong tập tin lịch sử để chứa dòng lệnh (bị cắt bớt)."
 
 #, fuzzy
-msgid "Raster map <%s> - unable to write row %d"
-msgstr "bản đồ [%s] - không thể ghi hàng %d"
+#~ msgid "test, gmath"
+#~ msgstr "thử, gpde"
 
 #, fuzzy
-msgid "Error writing floating point format file for map <%s>"
-msgstr "Lỗi khi đọc tập tin định dạng dấu chấm động cho bản đồ %s"
+#~ msgid "Raster map <%s> - unable to write row %d"
+#~ msgstr "bản đồ [%s] - không thể ghi hàng %d"
 
 #, fuzzy
-msgid "OGR layer cannot be opened for update"
-msgstr "Không thể cập nhật được định dạng OGR"
+#~ msgid "Error writing floating point format file for map <%s>"
+#~ msgstr "Lỗi khi đọc tập tin định dạng dấu chấm động cho bản đồ %s"
 
 #, fuzzy
-msgid "Unable to write feature, OGR layer not defined"
-msgstr "Không thể ghi đối tượng, bản đồ vec-tơ không được mở"
+#~ msgid "OGR layer cannot be opened for update"
+#~ msgstr "Không thể cập nhật được định dạng OGR"
 
 #, fuzzy
-msgid "Unable to create a new process!"
-msgstr "Không thể tạo một quá trình mới"
+#~ msgid "Unable to write feature, OGR layer not defined"
+#~ msgstr "Không thể ghi đối tượng, bản đồ vec-tơ không được mở"
 
 #, fuzzy
-msgid "Region for current mapset %s. Run \"g.region\" to fix the current region."
-msgstr ""
-"vùng cho bộ bản đồ hiện tại %s\n"
-"chạy \"g.region\""
+#~ msgid "Unable to create a new process!"
+#~ msgstr "Không thể tạo một quá trình mới"
 
 #, fuzzy
-msgid "Default region %s"
-msgstr "vùng mặc định %s"
+#~ msgid ""
+#~ "Region for current mapset %s. Run \"g.region\" to fix the current region."
+#~ msgstr ""
+#~ "vùng cho bộ bản đồ hiện tại %s\n"
+#~ "chạy \"g.region\""
 
 #, fuzzy
-msgid "Unable to set region"
-msgstr "không thể mở %s"
+#~ msgid "Default region %s"
+#~ msgstr "vùng mặc định %s"
 
 #, fuzzy
-msgid "Failed writing raster map"
-msgstr "Trục trặc khi đang đọc bản đồ raster"
+#~ msgid "Unable to set region"
+#~ msgstr "không thể mở %s"
 
 #, fuzzy
-msgid "Unable to write color file of raster map <%s>"
-msgstr "Không thể đọc tập tin màu của bản đồ raster <%s>"
+#~ msgid "Failed writing raster map"
+#~ msgstr "Trục trặc khi đang đọc bản đồ raster"
 
 #, fuzzy
-msgid "Unable to query drawable"
-msgstr "Không thể mở tập tin %s trong %s"
+#~ msgid "Unable to write color file of raster map <%s>"
+#~ msgstr "Không thể đọc tập tin màu của bản đồ raster <%s>"
 
 #, fuzzy
-msgid "Failed to initialize Xlib surface"
-msgstr "Không thể mở tập tin %s trong %s"
-
-msgid "taking too long to find points for interpolation--please change the region to area where your points are. Continuing calculations..."
-msgstr "mất quá lâu để tìm các điểm dùng cho nội suy--vui lòng thay đổi vùng đến khu vực có các điểm của bạn. Tiếp tục tính toán..."
-
-msgid "Reading lines from vector map ... "
-msgstr "Đang đọc các đường từ bản đồ vec-tơ..."
-
-msgid "Reading nodes from vector map ... "
-msgstr "Đang đọc các nốt từ bản đồ vec-tơ..."
-
-msgid "strip exists with insufficient data"
-msgstr "việc cắt bỏ xảy ra với dữ liệu không đầy đủ"
-
-msgid "there are points outside specified 2D/3D region--ignored %d points"
-msgstr "có các điểm nằm ngoài vùng 2D/3D đã chỉ định--bỏ qua %d điểm"
-
-msgid "ignoring %d points -- too dense"
-msgstr "bỏ qua %d điểm--quá dày"
-
-msgid "some points outside of region -- will ignore..."
-msgstr "một số điểm nằm ngoài vùng -- sẽ bỏ qua ..."
+#~ msgid "Unable to query drawable"
+#~ msgstr "Không thể mở tập tin %s trong %s"
 
 #, fuzzy
-msgid "Column type not supported"
-msgstr "Kiểu đối tượng OGR %d không được hỗ trợ"
+#~ msgid "Failed to initialize Xlib surface"
+#~ msgstr "Không thể mở tập tin %s trong %s"
+
+#~ msgid ""
+#~ "taking too long to find points for interpolation--please change the "
+#~ "region to area where your points are. Continuing calculations..."
+#~ msgstr ""
+#~ "mất quá lâu để tìm các điểm dùng cho nội suy--vui lòng thay đổi vùng đến "
+#~ "khu vực có các điểm của bạn. Tiếp tục tính toán..."
+
+#~ msgid "Reading lines from vector map ... "
+#~ msgstr "Đang đọc các đường từ bản đồ vec-tơ..."
+
+#~ msgid "Reading nodes from vector map ... "
+#~ msgstr "Đang đọc các nốt từ bản đồ vec-tơ..."
+
+#~ msgid "strip exists with insufficient data"
+#~ msgstr "việc cắt bỏ xảy ra với dữ liệu không đầy đủ"
+
+#~ msgid "there are points outside specified 2D/3D region--ignored %d points"
+#~ msgstr "có các điểm nằm ngoài vùng 2D/3D đã chỉ định--bỏ qua %d điểm"
+
+#~ msgid "ignoring %d points -- too dense"
+#~ msgstr "bỏ qua %d điểm--quá dày"
+
+#~ msgid "some points outside of region -- will ignore..."
+#~ msgstr "một số điểm nằm ngoài vùng -- sẽ bỏ qua ..."
+
+#, fuzzy
+#~ msgid "Column type not supported"
+#~ msgstr "Kiểu đối tượng OGR %d không được hỗ trợ"
 
 #~ msgid "       Presented as: %s\n"
 #~ msgstr "       Được biểu diễn thành: %s\n"
@@ -6225,7 +6447,9 @@ msgstr "Kiểu đối tượng OGR %d không được hỗ trợ"
 #~ msgstr "Vector không phải 3D"
 
 #~ msgid "Cannot find z column <%s> (please verify name, e.g. with v.info)"
-#~ msgstr "Không tìm thấy cột z <%s> (vui lòng kiểm tra lại tên, ví dụ như bằng v.info)"
+#~ msgstr ""
+#~ "Không tìm thấy cột z <%s> (vui lòng kiểm tra lại tên, ví dụ như bằng v."
+#~ "info)"
 
 #~ msgid "Column type of z column is not supported (must be integer or double)"
 #~ msgstr "Kiểu cột z không được hỗ trợ (phải là số nguyên hoặc double)"
@@ -6252,7 +6476,8 @@ msgstr "Kiểu đối tượng OGR %d không được hỗ trợ"
 #~ msgstr "Không thể tạo ra tập tin header cho [%s trong %s]"
 
 #~ msgid "G_put_map_row: %s is not integer! Use G_put_[f/d]_raster_row()!"
-#~ msgstr "G_put_map_row: %s không phải số nguyên! Dùng G_put_[f/d]_raster_row()!"
+#~ msgstr ""
+#~ "G_put_map_row: %s không phải số nguyên! Dùng G_put_[f/d]_raster_row()!"
 
 #~ msgid "can't read f_range file for [%s in %s]"
 #~ msgstr "không thể đọc tập tin f_range cho [%s trong %s]"
@@ -6284,10 +6509,14 @@ msgstr "Kiểu đối tượng OGR %d không được hỗ trợ"
 #~ msgstr "Không thể ghi các quy tắc lượng tử cho bản đồ %s"
 
 #~ msgid "Can't create timestamp file for %s map %s in mapset %s"
-#~ msgstr "Không thể tạo tập tin đánh dấu thời gian cho %s bản đồ %s trong bộ bản đồ %s"
+#~ msgstr ""
+#~ "Không thể tạo tập tin đánh dấu thời gian cho %s bản đồ %s trong bộ bản đồ "
+#~ "%s"
 
 #~ msgid "Can't open timestamp file for %s map %s in mapset %s"
-#~ msgstr "Không thể mở tập tin đánh dấu thời gian cho %s bản đồ %s trong bộ bản đồ %s"
+#~ msgstr ""
+#~ "Không thể mở tập tin đánh dấu thời gian cho %s bản đồ %s trong bộ bản đồ %"
+#~ "s"
 
 #~ msgid "Can't read %s for [%s in %s]"
 #~ msgstr "Không thể đọc %s cho [%s trong %s]"
@@ -6310,20 +6539,29 @@ msgstr "Kiểu đối tượng OGR %d không được hỗ trợ"
 #~ msgid "The cholesky solver does not work with sparse matrices"
 #~ msgstr "Bộ giải Cholesky không làm việc với các ma trận thưa"
 
-#~ msgid "The type of solver which should solve the symmetric linear equation system"
+#~ msgid ""
+#~ "The type of solver which should solve the symmetric linear equation system"
 #~ msgstr "Kiểu bộ giải có thể giải được hệ phương trình tuyến tính đối xứng"
 
 #~ msgid "The type of solver which should solve the linear equation system"
 #~ msgstr "Kiểu bộ giải có thể giải được hệ phương trình tuyến tính"
 
-#~ msgid "Maximum number of iteration used to solver the linear equation system"
+#~ msgid ""
+#~ "Maximum number of iteration used to solver the linear equation system"
 #~ msgstr "Số lần lặp lớn nhất được dùng để giải hệ phương trình tuyến tính"
 
-#~ msgid "Error break criteria for iterative solvers (jacobi, sor, cg or bicgstab)"
-#~ msgstr "Các tiêu chuẩn ngắt bị lỗi đối với các bộ giải lặp (jacobi, sor, cg hoặc bicgstab)"
+#~ msgid ""
+#~ "Error break criteria for iterative solvers (jacobi, sor, cg or bicgstab)"
+#~ msgstr ""
+#~ "Các tiêu chuẩn ngắt bị lỗi đối với các bộ giải lặp (jacobi, sor, cg hoặc "
+#~ "bicgstab)"
 
-#~ msgid "The relaxation parameter used by the jacobi and sor solver for speedup or stabilizing"
-#~ msgstr "Tham số lũy biến được bộ giải jacobi và sor dùng để tăng tốc hoặc ổn định hoá"
+#~ msgid ""
+#~ "The relaxation parameter used by the jacobi and sor solver for speedup or "
+#~ "stabilizing"
+#~ msgstr ""
+#~ "Tham số lũy biến được bộ giải jacobi và sor dùng để tăng tốc hoặc ổn định "
+#~ "hoá"
 
 #, fuzzy
 #~ msgid "Registering points"
@@ -6345,8 +6583,10 @@ msgstr "Kiểu đối tượng OGR %d không được hỗ trợ"
 #~ msgid "Duplicates"
 #~ msgstr "trường đông bị đúp"
 
-#~ msgid "Unable to write embedded null values for raster map open for random access"
-#~ msgstr "Không thể ghi các giá trị null nhúng để mở bản đồ cho truy cập ngẫu nhiên"
+#~ msgid ""
+#~ "Unable to write embedded null values for raster map open for random access"
+#~ msgstr ""
+#~ "Không thể ghi các giá trị null nhúng để mở bản đồ cho truy cập ngẫu nhiên"
 
 #~ msgid "%s: map [%s] not open for random write - request ignored"
 #~ msgstr "%s bản đồ [%s] không được mở để ghi ngẫu nhiên - yêu cầu bị bỏ qua "
@@ -6355,7 +6595,9 @@ msgstr "Kiểu đối tượng OGR %d không được hỗ trợ"
 #~ msgstr "%s: bản đồ [%s] không được mở để ghi tiếp tục - yêu cầu bị bỏ qua "
 
 #~ msgid " It is a reclass of raster map <%s@%s> whose header file is invalid."
-#~ msgstr "Đây là phân loại lại của bản đồ raster <%s@%s>, tập tin header của nó không hợp lệ."
+#~ msgstr ""
+#~ "Đây là phân loại lại của bản đồ raster <%s@%s>, tập tin header của nó "
+#~ "không hợp lệ."
 
 #~ msgid " Invalid format."
 #~ msgstr "Định dạng không hợp lệ."
@@ -6983,11 +7225,13 @@ msgstr "Kiểu đối tượng OGR %d không được hỗ trợ"
 #~ msgstr "Không thể mở tập tin tạm"
 
 #, fuzzy
-#~ msgid "Unable to delete line %d, vector map <%s> is not opened on topo level 2"
+#~ msgid ""
+#~ "Unable to delete line %d, vector map <%s> is not opened on topo level 2"
 #~ msgstr "Không thể xóa đường, bản đồ '%s' chưa được mở ở cấp 2"
 
 #, fuzzy
-#~ msgid "Unable to delete line %d, vector map <%s> is not opened in 'write' mode"
+#~ msgid ""
+#~ "Unable to delete line %d, vector map <%s> is not opened in 'write' mode"
 #~ msgstr "Không thể xóa đường, bản đồ '%s' không được mở ở chế độ ghi"
 
 #, fuzzy
@@ -7015,8 +7259,11 @@ msgstr "Kiểu đối tượng OGR %d không được hỗ trợ"
 #~ msgid "Cannot write quant rules: map %s is integer"
 #~ msgstr "Không thể ghi các quy tắc lượng tử: bản đồ %s kiểu integer"
 
-#~ msgid "G_set_window(): projection/zone differs from that of currently open raster maps"
-#~ msgstr "G_set_window(): phép chiếu/múi khác với của các bản đồ raster hiện đang mở"
+#~ msgid ""
+#~ "G_set_window(): projection/zone differs from that of currently open "
+#~ "raster maps"
+#~ msgstr ""
+#~ "G_set_window(): phép chiếu/múi khác với của các bản đồ raster hiện đang mở"
 
 #~ msgid "The floating data range for %s@%s is empty"
 #~ msgstr "Miền dữ liệu kiểu float cho %s@%s bị rỗng"
@@ -7073,8 +7320,12 @@ msgstr "Kiểu đối tượng OGR %d không được hỗ trợ"
 #~ msgid "Layer number"
 #~ msgstr "Lớp số"
 
-#~ msgid "A single vector map can be connected to multiple database tables. This number determines which table to use."
-#~ msgstr "Một bản đồ vec-tơ duy nhất có thể được kết nối với nhiều bảng csdl. Con số này quyết định sử dụng bảng nào."
+#~ msgid ""
+#~ "A single vector map can be connected to multiple database tables. This "
+#~ "number determines which table to use."
+#~ msgstr ""
+#~ "Một bản đồ vec-tơ duy nhất có thể được kết nối với nhiều bảng csdl. Con "
+#~ "số này quyết định sử dụng bảng nào."
 
 #~ msgid ""
 #~ "\n"
@@ -7106,10 +7357,14 @@ msgstr "Kiểu đối tượng OGR %d không được hỗ trợ"
 #~ msgstr "hỗ trợ màu cho [%s] trong bộ bản đồ [%s] %s"
 
 #~ msgid "Invalid timestamp specified for %s map %s in mapset %s"
-#~ msgstr "Đánh dấu thời gian được chỉ định cho %s bản đồ %s trong bộ bản đồ %s không hợp lệ"
+#~ msgstr ""
+#~ "Đánh dấu thời gian được chỉ định cho %s bản đồ %s trong bộ bản đồ %s "
+#~ "không hợp lệ"
 
 #~ msgid "Invalid timestamp file for %s map %s in mapset %s"
-#~ msgstr "Tập tin đánh dấu thời gian không hợp lệ cho %s bản đồ %s trong bộ bản đồ %s"
+#~ msgstr ""
+#~ "Tập tin đánh dấu thời gian không hợp lệ cho %s bản đồ %s trong bộ bản đồ %"
+#~ "s"
 
 #~ msgid "Error reading compressed map <%s@%s>, row %d"
 #~ msgstr "Lỗi khi đang đọc bản đồ nén <%s@%s>, hàng %d"
@@ -7146,7 +7401,9 @@ msgstr "Kiểu đối tượng OGR %d không được hỗ trợ"
 #~ msgstr "Quá nhiều phạm trù phân loại lại cho [%s trong %s]"
 
 #~ msgid "Illegal reclass format in header file for [%s in %s]"
-#~ msgstr "Định dạng phân loại lại không hợp lệ trong tập tin header của [%s trong %s] "
+#~ msgstr ""
+#~ "Định dạng phân loại lại không hợp lệ trong tập tin header của [%s trong %"
+#~ "s] "
 
 #~ msgid "Unable to create dependency file in [%s in %s]"
 #~ msgstr "Không thể tạo ra tập tin phụ thuộc cho [%s trong %s]"
@@ -7160,17 +7417,25 @@ msgstr "Kiểu đối tượng OGR %d không được hỗ trợ"
 #~ msgid "G_realloc: unable to allocate %lu bytes at %s:%d"
 #~ msgstr "G_realloc: không thể cấp phát %lu byte tại %s:%d"
 
-#~ msgid "Raster map <%s@%s> is in different projection than current region. Found raster map <%s@%s>, should be <%s>."
-#~ msgstr "Bản đồ raster <%s@%s> ở phép chiếu khác với vùng hiện hành. Tìm thấy bản đồ <%s@%s>, lẽ ra phải là <%s>."
+#~ msgid ""
+#~ "Raster map <%s@%s> is in different projection than current region. Found "
+#~ "raster map <%s@%s>, should be <%s>."
+#~ msgstr ""
+#~ "Bản đồ raster <%s@%s> ở phép chiếu khác với vùng hiện hành. Tìm thấy bản "
+#~ "đồ <%s@%s>, lẽ ra phải là <%s>."
 
-#~ msgid "Raster map <%s@%s> is in different zone (%d) than current region (%d)"
+#~ msgid ""
+#~ "Raster map <%s@%s> is in different zone (%d) than current region (%d)"
 #~ msgstr "Bản đồ raster <%s@%s> ở một múi (%d) khác với vùng hiện hành (%d)"
 
 #~ msgid "Raster map <%s@%s>: bytes per cell (%d) too large"
 #~ msgstr "Bản đồ raster <%s@%s>: số byte trên ô (%d) quá lớn"
 
-#~ msgid "map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"
-#~ msgstr "bản đồ <%s@%s> là một liên kết GDAL nhưng GRASS được biên dịch không có hỗ trợ GDAL"
+#~ msgid ""
+#~ "map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"
+#~ msgstr ""
+#~ "bản đồ <%s@%s> là một liên kết GDAL nhưng GRASS được biên dịch không có "
+#~ "hỗ trợ GDAL"
 
 #~ msgid "G__open_raster_new(): no temp files available"
 #~ msgstr "G__open_raster_new(): không có tập tin tạm nào dùng được"
@@ -7181,8 +7446,10 @@ msgstr "Kiểu đối tượng OGR %d không được hỗ trợ"
 #~ msgid "Unable to find '%s' in '%s'"
 #~ msgstr "Không thể tìm thấy '%s' trong '%s'"
 
-#~ msgid "G_set_quant_rules() can be called only for raster maps opened for reading"
-#~ msgstr "G_set_quant_rules() chỉ có thể được gọi cho các bản đồ raster đã mở để đọc"
+#~ msgid ""
+#~ "G_set_quant_rules() can be called only for raster maps opened for reading"
+#~ msgstr ""
+#~ "G_set_quant_rules() chỉ có thể được gọi cho các bản đồ raster đã mở để đọc"
 
 #~ msgid "No help available for command [%s]\n"
 #~ msgstr "Không có trợ giúp cho lệnh [%s]\n"
@@ -7194,10 +7461,15 @@ msgstr "Kiểu đối tượng OGR %d không được hỗ trợ"
 #~ msgstr "Không đủ không gian trong tập tin lịch sử để lưu dòng lệnh."
 
 #~ msgid "Not enough room in history file for command line (truncated)."
-#~ msgstr "Không đủ không gian trong tập tin lịch sử để chứa dòng lệnh (bị cắt bớt)."
+#~ msgstr ""
+#~ "Không đủ không gian trong tập tin lịch sử để chứa dòng lệnh (bị cắt bớt)."
 
-#~ msgid "Unable to build spatial index from topology, vector map is not opened at topo level 2"
-#~ msgstr "Không thể xây dựng chỉ mục không gian từ tôpô, bản đồ vec-tơ không được mở ở tôpô cấp 2"
+#~ msgid ""
+#~ "Unable to build spatial index from topology, vector map is not opened at "
+#~ "topo level 2"
+#~ msgstr ""
+#~ "Không thể xây dựng chỉ mục không gian từ tôpô, bản đồ vec-tơ không được "
+#~ "mở ở tôpô cấp 2"
 
 #~ msgid "%d errors in category string."
 #~ msgstr "%d lỗi trong chuỗi phạm trù."
@@ -7211,11 +7483,19 @@ msgstr "Kiểu đối tượng OGR %d không được hỗ trợ"
 #~ msgid "Error in rule on row %d in %s"
 #~ msgstr "Lỗi trong quy tắc tại dòng %d trong %s"
 
-#~ msgid "Coor files of vector map <%s@%s> is larger than it should be (%ld bytes excess)"
-#~ msgstr "Các tập tin coor của bản đồ vec-tơ <%s@%s> lớn hơn cỡ đúng của nó (quá %ld byte)"
+#~ msgid ""
+#~ "Coor files of vector map <%s@%s> is larger than it should be (%ld bytes "
+#~ "excess)"
+#~ msgstr ""
+#~ "Các tập tin coor của bản đồ vec-tơ <%s@%s> lớn hơn cỡ đúng của nó (quá %"
+#~ "ld byte)"
 
-#~ msgid "Coor files of vector <%s@%s> is shorter than it should be (%ld bytes missing)."
-#~ msgstr "Các tập tin coor của bản đồ vec-tơ <%s@%s> nhỏ hơn cỡ đúng của nó (thiếu %ld byte)."
+#~ msgid ""
+#~ "Coor files of vector <%s@%s> is shorter than it should be (%ld bytes "
+#~ "missing)."
+#~ msgstr ""
+#~ "Các tập tin coor của bản đồ vec-tơ <%s@%s> nhỏ hơn cỡ đúng của nó (thiếu %"
+#~ "ld byte)."
 
 #~ msgid "Intersections: %5d"
 #~ msgstr "Các giao điểm: %5d"
@@ -7229,8 +7509,11 @@ msgstr "Kiểu đối tượng OGR %d không được hỗ trợ"
 #~ msgid "Unable to open layer <%s>"
 #~ msgstr "Không thể mở lớp <%s>"
 
-#~ msgid "Random read is not supported by OGR for this layer, cannot build support"
-#~ msgstr "Việc đọc ngẫu nhiên không được OGR hỗ trợ đối với lớp này, không thể xây dựng hỗ trợ"
+#~ msgid ""
+#~ "Random read is not supported by OGR for this layer, cannot build support"
+#~ msgstr ""
+#~ "Việc đọc ngẫu nhiên không được OGR hỗ trợ đối với lớp này, không thể xây "
+#~ "dựng hỗ trợ"
 
 #~ msgid "OGR feature without ID ignored"
 #~ msgstr "Đối tượng OGR không có ID bị bỏ qua"
@@ -7301,8 +7584,12 @@ msgstr "Kiểu đối tượng OGR %d không được hỗ trợ"
 #~ "\n"
 #~ " LỖI: tùy chọn <%s> phải được cung cấp ở dạng bội số của %d\n"
 
-#~ msgid "G_distance_point_to_line_segment: shouldn't happen: code=%d P=(%f,%f) S=(%f,%f)(%f,%f)"
-#~ msgstr "G_distance_point_to_line_segment: lẽ ra không nên xảy ra: code=%d P=(%f,%f) S=(%f,%f)(%f,%f)"
+#~ msgid ""
+#~ "G_distance_point_to_line_segment: shouldn't happen: code=%d P=(%f,%f) S=(%"
+#~ "f,%f)(%f,%f)"
+#~ msgstr ""
+#~ "G_distance_point_to_line_segment: lẽ ra không nên xảy ra: code=%d P=(%f,%"
+#~ "f) S=(%f,%f)(%f,%f)"
 
 #~ msgid "not implemented"
 #~ msgstr "chưa được cài đặt"
@@ -7311,7 +7598,9 @@ msgstr "Kiểu đối tượng OGR %d không được hỗ trợ"
 #~ msgstr "Không hiểu từ khoá %s trong tiêu đề vec-tơ"
 
 #~ msgid "Next edge was visited but it is not the first one !!! breaking loop"
-#~ msgstr "Gờ tiếp theo đã được kiểm tra nhưng nó không phải là cái đầu tiên!!! Đang ngắt nút lặp"
+#~ msgstr ""
+#~ "Gờ tiếp theo đã được kiểm tra nhưng nó không phải là cái đầu tiên!!! Đang "
+#~ "ngắt nút lặp"
 
 #, fuzzy
 #~ msgid "Unable to delete feature %d from vector map <%s>"
