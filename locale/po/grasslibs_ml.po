@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-23 15:35+0200\n"
+"POT-Creation-Date: 2011-05-29 11:35+0200\n"
 "PO-Revision-Date: 2010-08-24 11:31+0530\n"
 "Last-Translator: Mohammed Rashad <rashadkm@gmail.com>\n"
 "Language-Team: GRASS Malayalam Translation Team <rashadkm@gmail.com>\n"
@@ -66,7 +66,9 @@ msgid "Rast_set_window() called while window split"
 msgstr ""
 
 #: ../lib/raster/set_window.c:123
-msgid "Rast_set_read_window(): projection/zone differs from that of currently open raster maps"
+msgid ""
+"Rast_set_read_window(): projection/zone differs from that of currently open "
+"raster maps"
 msgstr ""
 
 #: ../lib/raster/set_window.c:150
@@ -335,15 +337,21 @@ msgid "Unable to create dependency file in <%s@%s>"
 msgstr "ടേബിൾ ഉണ്ടാക്കാൻ പറ്റുന്നില്ല <%s>"
 
 #: ../lib/raster/window.c:18
-msgid "Internal error: Rast_get_window() called with split window.Use Rast_get_input_window() or Rast_get_output_window() instead."
+msgid ""
+"Internal error: Rast_get_window() called with split window.Use "
+"Rast_get_input_window() or Rast_get_output_window() instead."
 msgstr ""
 
 #: ../lib/raster/window.c:77
-msgid "Internal error: Rast_window_rows() called with split window.Use Rast_input_window_rows() or Rast_output_window_rows() instead."
+msgid ""
+"Internal error: Rast_window_rows() called with split window.Use "
+"Rast_input_window_rows() or Rast_output_window_rows() instead."
 msgstr ""
 
 #: ../lib/raster/window.c:112
-msgid "Internal error: Rast_window_cols() called with split window.Use Rast_input_window_cols() or Rast_output_window_cols() instead."
+msgid ""
+"Internal error: Rast_window_cols() called with split window.Use "
+"Rast_input_window_cols() or Rast_output_window_cols() instead."
 msgstr ""
 
 #: ../lib/raster/gdal.c:88
@@ -377,7 +385,9 @@ msgstr "ടേബിൾ ഉണ്ടാക്കാൻ പറ്റുന്ന�
 
 #: ../lib/raster/gdal.c:489
 #, c-format
-msgid "Driver <%s> does not support direct writing. Using MEM driver for intermediate dataset."
+msgid ""
+"Driver <%s> does not support direct writing. Using MEM driver for "
+"intermediate dataset."
 msgstr ""
 
 #: ../lib/raster/gdal.c:495
@@ -474,17 +484,19 @@ msgstr ""
 #: ../lib/rst/interp_float/resout2d.c:395
 #: ../lib/rst/interp_float/resout2d.c:410
 #: ../lib/rst/interp_float/resout2d.c:426 ../lib/ogsf/gsd_legend.c:239
-#: ../lib/ogsf/Gs3.c:127 ../lib/ogsf/Gs3.c:200 ../lib/ogsf/Gs3.c:283
-#: ../lib/ogsf/Gs3.c:356 ../lib/ogsf/Gs3.c:470 ../lib/ogsf/Gs3.c:565
-#: ../lib/ogsf/Gs3.c:630 ../lib/ogsf/Gs3.c:687 ../lib/ogsf/Gs3.c:758
-#: ../lib/ogsf/Gs3.c:828
+#: ../lib/ogsf/Gs3.c:126 ../lib/ogsf/Gs3.c:190 ../lib/ogsf/Gs3.c:265
+#: ../lib/ogsf/Gs3.c:337 ../lib/ogsf/Gs3.c:443 ../lib/ogsf/Gs3.c:530
+#: ../lib/ogsf/Gs3.c:589 ../lib/ogsf/Gs3.c:646 ../lib/ogsf/Gs3.c:717
+#: ../lib/ogsf/Gs3.c:787
 #, c-format
 msgid "Raster map <%s> not found"
 msgstr "റാസ്റ്റെർ മാപ്പ് <%s> കണ്മാനില്ല"
 
 #: ../lib/raster/open.c:185
 #, c-format
-msgid "Unable to open raster map <%s@%s> since it is a reclass of raster map <%s@%s> which does not exist"
+msgid ""
+"Unable to open raster map <%s@%s> since it is a reclass of raster map <%s@%"
+"s> which does not exist"
 msgstr ""
 
 #: ../lib/raster/open.c:190
@@ -504,7 +516,9 @@ msgstr ""
 
 #: ../lib/raster/open.c:214
 #, c-format
-msgid "Raster map <%s> is in different projection than current region. Found <%s>, should be <%s>."
+msgid ""
+"Raster map <%s> is in different projection than current region. Found <%s>, "
+"should be <%s>."
 msgstr ""
 
 #: ../lib/raster/open.c:221
@@ -519,7 +533,8 @@ msgstr ""
 
 #: ../lib/raster/open.c:252
 #, c-format
-msgid "Raster map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"
+msgid ""
+"Raster map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"
 msgstr ""
 
 #: ../lib/raster/open.c:261
@@ -590,7 +605,8 @@ msgid "Raster map <%s> is not xdr: byte_order: %s"
 msgstr ""
 
 #: ../lib/raster/open.c:927
-msgid "Rast_set_quant_rules() can be called only for raster maps opened for reading"
+msgid ""
+"Rast_set_quant_rules() can be called only for raster maps opened for reading"
 msgstr ""
 
 #: ../lib/raster/put_title.c:28
@@ -683,7 +699,9 @@ msgstr ""
 
 #: ../lib/raster/get_cellhd.c:66
 #, c-format
-msgid "Unable to read header file for raster map <%s@%s>.It is a reclass of raster map <%s@%s> %s"
+msgid ""
+"Unable to read header file for raster map <%s@%s>.It is a reclass of raster "
+"map <%s@%s> %s"
 msgstr ""
 
 #: ../lib/raster/get_cellhd.c:70
@@ -722,12 +740,12 @@ msgstr ""
 msgid "Unable to access table <%s>"
 msgstr "ടേബിൾ ഉണ്ടാക്കാൻ പറ്റുന്നില്ല <%s>"
 
-#: ../lib/lidar/zones.c:502 ../lib/lidar/zones.c:539
+#: ../lib/lidar/zones.c:473 ../lib/lidar/zones.c:510
 #, fuzzy, c-format
 msgid "<%s> created in database."
 msgstr "ഈ ടേബിൾ <%s> ഡേറ്റാബേയ്സിൽ ഉണ്ട് <%s>"
 
-#: ../lib/lidar/zones.c:506 ../lib/lidar/zones.c:543
+#: ../lib/lidar/zones.c:477 ../lib/lidar/zones.c:514
 #, c-format
 msgid "<%s> has not been created in database."
 msgstr ""
@@ -861,7 +879,8 @@ msgstr "സിംബെൽ ലൈൻ വിവരങ്ങൾ വായിക്
 
 #: ../lib/symbol/read.c:260
 #, c-format
-msgid "Incorrect symbol name: '%s' (should be: group/name or group/name@mapset)"
+msgid ""
+"Incorrect symbol name: '%s' (should be: group/name or group/name@mapset)"
 msgstr "തെറ്റായ ചിഹ്ന നാമം: %s'"
 
 #: ../lib/symbol/read.c:284
@@ -1002,7 +1021,8 @@ msgstr ""
 
 #: ../lib/cairodriver/read_ppm.c:56
 #, c-format
-msgid "Cairo: input mask file has incorrect dimensions: expected: %dx%d got: %dx%d"
+msgid ""
+"Cairo: input mask file has incorrect dimensions: expected: %dx%d got: %dx%d"
 msgstr ""
 
 #: ../lib/proj/get_proj.c:148
@@ -1101,7 +1121,8 @@ msgstr "PROJ.4- സ്റ്റയിൽ വിവരങ്ങൽ എടുക�
 
 #: ../lib/proj/convert.c:130
 #, c-format
-msgid "OGR can't parse PROJ.4-style parameter string: %s (OGR Error code was %d)"
+msgid ""
+"OGR can't parse PROJ.4-style parameter string: %s (OGR Error code was %d)"
 msgstr "സ്റ്റയിൽ വിവരങ്ങൽ വായിക്കാൻ OGR പറ്റുന്നില്ല %s (OGR തെറ്റ് സന്ധേശ അക്കം %d)"
 
 #: ../lib/proj/convert.c:137
@@ -1120,12 +1141,18 @@ msgstr "ഡേറ്റും <%s> ഗ്രാസ്സിൻ തിരിച�
 
 #: ../lib/proj/convert.c:449
 #, c-format
-msgid "Datum <%s> apparently recognised by GRASS but no parameters found. You may want to look into this."
-msgstr "ഡേറ്റും <%s> ഗ്രാസ്സിൻ കുറച്ച് തിരിച്ചരിയൻ സാധിച്ചു പക്ഷെ വിവരങ്ങൾ ഒന്നും തന്നയില്ല. നിങ്ങൽ ഇതിൽ നൊക്കണം"
+msgid ""
+"Datum <%s> apparently recognised by GRASS but no parameters found. You may "
+"want to look into this."
+msgstr ""
+"ഡേറ്റും <%s> ഗ്രാസ്സിൻ കുറച്ച് തിരിച്ചരിയൻ സാധിച്ചു പക്ഷെ വിവരങ്ങൾ ഒന്നും തന്നയില്ല. നിങ്ങൽ "
+"ഇതിൽ നൊക്കണം"
 
 #: ../lib/proj/convert.c:453
 #, c-format
-msgid "Invalid transformation number %d; valid range is 1 to %d. Leaving datum transform parameters unspecified."
+msgid ""
+"Invalid transformation number %d; valid range is 1 to %d. Leaving datum "
+"transform parameters unspecified."
 msgstr ""
 
 #: ../lib/gis/find_file.c:80
@@ -1160,7 +1187,8 @@ msgstr ""
 
 #: ../lib/gis/view.c:549
 #, c-format
-msgid " Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
+msgid ""
+" Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
 msgstr ""
 
 #: ../lib/gis/mapset_msc.c:61
@@ -1444,15 +1472,15 @@ msgstr ""
 msgid "Unable to change directory to %s"
 msgstr ""
 
-#: ../lib/gis/proj2.c:57
+#: ../lib/gis/proj2.c:64
 msgid "State Plane"
 msgstr ""
 
-#: ../lib/gis/proj2.c:59
+#: ../lib/gis/proj2.c:66
 msgid "Latitude-Longitude"
 msgstr ""
 
-#: ../lib/gis/proj2.c:61
+#: ../lib/gis/proj2.c:68
 msgid "Other Projection"
 msgstr ""
 
@@ -1515,7 +1543,8 @@ msgid "Database schema"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:145
-msgid "Do not use this option if schemas are not supported by driver/database server"
+msgid ""
+"Do not use this option if schemas are not supported by driver/database server"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:154
@@ -1638,7 +1667,9 @@ msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:377
 #: ../lib/gis/parser_standard_options.c:389
-msgid "A single vector map can be connected to multiple database tables. This number determines which table to use. Layer name for direct OGR access."
+msgid ""
+"A single vector map can be connected to multiple database tables. This "
+"number determines which table to use. Layer name for direct OGR access."
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:387
@@ -1924,11 +1955,11 @@ msgstr ""
 msgid "square unit"
 msgstr ""
 
-#: ../lib/gis/units.c:141
+#: ../lib/gis/units.c:141 ../lib/gis/proj3.c:58
 msgid "units"
 msgstr ""
 
-#: ../lib/gis/units.c:141
+#: ../lib/gis/units.c:141 ../lib/gis/proj3.c:58
 msgid "unit"
 msgstr ""
 
@@ -2048,7 +2079,7 @@ msgstr ""
 msgid "No ellipsoid info given in file %s in <%s>"
 msgstr ""
 
-#: ../lib/gis/proj3.c:92 ../lib/vector/Vlib/header.c:654
+#: ../lib/gis/proj3.c:105 ../lib/vector/Vlib/header.c:654
 msgid "Unknown projection"
 msgstr ""
 
@@ -2211,7 +2242,9 @@ msgid "%s complete. %s"
 msgstr "%s കഴിഞു. %s"
 
 #: ../lib/gis/gisinit.c:56 ../lib/gis/gisinit.c:91
-msgid "Incompatible library version for module. You need to rebuild GRASS or untangle multiple installations."
+msgid ""
+"Incompatible library version for module. You need to rebuild GRASS or "
+"untangle multiple installations."
 msgstr ""
 
 #: ../lib/gis/gisinit.c:66
@@ -2270,22 +2303,28 @@ msgstr "ഫയൽ തുറക്കൻ പറ്റുന്നില്ല %s"
 
 #: ../lib/vector/diglib/test.c:75
 #, c-format
-msgid "Error in read/write portable double, byte_order = %d Written: %.16e3E Read: %.16e3E"
+msgid ""
+"Error in read/write portable double, byte_order = %d Written: %.16e3E Read: "
+"%.16e3E"
 msgstr ""
 
 #: ../lib/vector/diglib/test.c:89
 #, c-format
-msgid "Error in read/write portable float, byte_order = %d Written: %.8e3E Read: %.8e3E"
+msgid ""
+"Error in read/write portable float, byte_order = %d Written: %.8e3E Read: "
+"%.8e3E"
 msgstr ""
 
 #: ../lib/vector/diglib/test.c:104
 #, c-format
-msgid "Error in read/write portable off_t, byte_order = %d Written: %lu Read: %lu"
+msgid ""
+"Error in read/write portable off_t, byte_order = %d Written: %lu Read: %lu"
 msgstr ""
 
 #: ../lib/vector/diglib/test.c:119
 #, c-format
-msgid "Error in read/write portable long, byte_order = %d Written: %lu Read: %lu"
+msgid ""
+"Error in read/write portable long, byte_order = %d Written: %lu Read: %lu"
 msgstr ""
 
 #: ../lib/vector/diglib/test.c:134
@@ -2295,7 +2334,8 @@ msgstr ""
 
 #: ../lib/vector/diglib/test.c:150
 #, c-format
-msgid "Error in read/write portable short, byte_order = %d Written: %d Read: %d"
+msgid ""
+"Error in read/write portable short, byte_order = %d Written: %d Read: %d"
 msgstr ""
 
 #: ../lib/vector/diglib/test.c:165
@@ -2305,7 +2345,9 @@ msgstr ""
 
 #: ../lib/vector/diglib/plus_node.c:217
 #, c-format
-msgid "Attempt to read line angle for the line which is not connected to the node: node %d, line %d"
+msgid ""
+"Attempt to read line angle for the line which is not connected to the node: "
+"node %d, line %d"
 msgstr ""
 
 #: ../lib/vector/diglib/plus.c:275
@@ -2417,17 +2459,23 @@ msgstr ""
 
 #: ../lib/vector/diglib/spindex_rw.c:277
 #, c-format
-msgid "Spatial index format version %d.%d is not supported by this release. Try to rebuild topology or upgrade GRASS."
+msgid ""
+"Spatial index format version %d.%d is not supported by this release. Try to "
+"rebuild topology or upgrade GRASS."
 msgstr ""
 
 #: ../lib/vector/diglib/spindex_rw.c:284
 #, c-format
-msgid "Your GRASS version does not fully support spatial index format %d.%d of the vector. Consider to rebuild topology or upgrade GRASS."
+msgid ""
+"Your GRASS version does not fully support spatial index format %d.%d of the "
+"vector. Consider to rebuild topology or upgrade GRASS."
 msgstr ""
 
 #: ../lib/vector/diglib/spindex_rw.c:293
 #, c-format
-msgid "Spatial index format version %d.%d is not supported by this release. Please rebuild topology."
+msgid ""
+"Spatial index format version %d.%d is not supported by this release. Please "
+"rebuild topology."
 msgstr ""
 
 #: ../lib/vector/diglib/spindex_rw.c:824
@@ -2498,7 +2546,8 @@ msgstr "അസാധുവായ വെക്റ്റർ മാപ്പിന�
 
 #: ../lib/vector/Vlib/legal_vname.c:65
 #, c-format
-msgid "Illegal vector map name <%s>. SQL keyword cannot be used as vector map name."
+msgid ""
+"Illegal vector map name <%s>. SQL keyword cannot be used as vector map name."
 msgstr ""
 
 #: ../lib/vector/Vlib/legal_vname.c:96 ../lib/vector/Vlib/legal_vname.c:100
@@ -2624,8 +2673,8 @@ msgstr ""
 #: ../lib/vector/Vlib/net.c:180 ../lib/vector/Vlib/net.c:350
 #: ../lib/vector/Vlib/ascii.c:328 ../lib/vector/Vlib/write_ogr.c:379
 #: ../lib/vector/neta/utils.c:116 ../lib/vector/neta/timetables.c:133
-#: ../lib/rst/interp_float/vinput2d.c:88 ../lib/db/dbmi_client/copy_tab.c:105
-#: ../lib/db/dbmi_client/copy_tab.c:126 ../lib/db/dbmi_client/db.c:46
+#: ../lib/rst/interp_float/vinput2d.c:88 ../lib/db/dbmi_client/copy_tab.c:113
+#: ../lib/db/dbmi_client/copy_tab.c:134 ../lib/db/dbmi_client/db.c:46
 #: ../lib/db/dbmi_client/delete_tab.c:49 ../lib/sites/sites.c:320
 #, c-format
 msgid "Unable to open database <%s> by driver <%s>"
@@ -2642,7 +2691,9 @@ msgstr "വെക്റ്റർ മാപ്പ് തുറന്നിട്�
 
 #: ../lib/vector/Vlib/geos.c:55
 #, c-format
-msgid "Vect_read_line_geos(): feature id %d is not reasonable (max features in vector map <%s>: %d)"
+msgid ""
+"Vect_read_line_geos(): feature id %d is not reasonable (max features in "
+"vector map <%s>: %d)"
 msgstr ""
 
 #: ../lib/vector/Vlib/geos.c:60
@@ -2824,7 +2875,9 @@ msgid "Error writing out topo file"
 msgstr ""
 
 #: ../lib/vector/Vlib/build.c:397
-msgid "Unable to build spatial index from topology, vector map is not opened at topology level 2"
+msgid ""
+"Unable to build spatial index from topology, vector map is not opened at "
+"topology level 2"
 msgstr ""
 
 #: ../lib/vector/Vlib/build.c:438
@@ -2919,7 +2972,9 @@ msgid "Unable to open OGR DBMI driver"
 msgstr ""
 
 #: ../lib/vector/Vlib/field.c:638
-msgid "All FID tests failed. Neither 'FID' nor 'ogc_fid' nor 'ogr_fid' nor 'gid' available in OGR DB table"
+msgid ""
+"All FID tests failed. Neither 'FID' nor 'ogc_fid' nor 'ogr_fid' nor 'gid' "
+"available in OGR DB table"
 msgstr ""
 
 #: ../lib/vector/Vlib/field.c:694
@@ -3046,7 +3101,9 @@ msgstr ""
 
 #: ../lib/vector/Vlib/read.c:107
 #, c-format
-msgid "Vect_read_line(): feature id %d is not reasonable (max features in vector map <%s>: %d)"
+msgid ""
+"Vect_read_line(): feature id %d is not reasonable (max features in vector "
+"map <%s>: %d)"
 msgstr ""
 
 #: ../lib/vector/Vlib/build_nat.c:98
@@ -3125,11 +3182,13 @@ msgid "Unexpected result of line_intersection() res = %d"
 msgstr ""
 
 #: ../lib/vector/Vlib/buffer2.c:589
-msgid "Next edge was visited (right) but it is not the first one !!! breaking loop"
+msgid ""
+"Next edge was visited (right) but it is not the first one !!! breaking loop"
 msgstr ""
 
 #: ../lib/vector/Vlib/buffer2.c:600
-msgid "Next edge was visited (left) but it is not the first one !!! breaking loop"
+msgid ""
+"Next edge was visited (left) but it is not the first one !!! breaking loop"
 msgstr ""
 
 #: ../lib/vector/Vlib/buffer2.c:648
@@ -3254,12 +3313,15 @@ msgstr "റാസ്റ്റെർ മാപ്പ് തുറക്കാൻ 
 
 #: ../lib/vector/Vlib/open_nat.c:152
 #, c-format
-msgid "Coor file of vector map <%s@%s> is larger than it should be (%ld bytes excess)"
+msgid ""
+"Coor file of vector map <%s@%s> is larger than it should be (%ld bytes "
+"excess)"
 msgstr ""
 
 #: ../lib/vector/Vlib/open_nat.c:156
 #, c-format
-msgid "Coor file of vector <%s@%s> is shorter than it should be (%ld bytes missing)."
+msgid ""
+"Coor file of vector <%s@%s> is shorter than it should be (%ld bytes missing)."
 msgstr ""
 
 #: ../lib/vector/Vlib/dangles.c:148
@@ -3318,12 +3380,16 @@ msgstr ""
 
 #: ../lib/vector/Vlib/net.c:249
 #, c-format
-msgid "Database record for line %d (cat = %d, forward/both direction(s)) not found (forward/both direction(s) of line skipped)"
+msgid ""
+"Database record for line %d (cat = %d, forward/both direction(s)) not found "
+"(forward/both direction(s) of line skipped)"
 msgstr ""
 
 #: ../lib/vector/Vlib/net.c:268
 #, c-format
-msgid "Database record for line %d (cat = %d, backword direction) not found(direction of line skipped)"
+msgid ""
+"Database record for line %d (cat = %d, backword direction) not found"
+"(direction of line skipped)"
 msgstr ""
 
 #: ../lib/vector/Vlib/net.c:317
@@ -3371,7 +3437,7 @@ msgstr "ബഹുഭുജക്ഷേത്രത്തിൽ ബിന്ദ�
 msgid "conditions failed"
 msgstr "നിബന്ദനകളിൽ പാളിച്ച"
 
-#: ../lib/vector/Vlib/break_lines.c:371
+#: ../lib/vector/Vlib/break_lines.c:375
 #, c-format
 msgid "Intersections: %d"
 msgstr ""
@@ -3409,12 +3475,14 @@ msgstr ""
 
 #: ../lib/vector/Vlib/write.c:236
 #, c-format
-msgid "Unable to delete feature %d, vector map <%s> is not opened on topology level"
+msgid ""
+"Unable to delete feature %d, vector map <%s> is not opened on topology level"
 msgstr ""
 
 #: ../lib/vector/Vlib/write.c:242
 #, c-format
-msgid "Unable to delete feature %d, vector map <%s> is not opened in 'write' mode"
+msgid ""
+"Unable to delete feature %d, vector map <%s> is not opened in 'write' mode"
 msgstr ""
 
 #: ../lib/vector/Vlib/write.c:256
@@ -3424,12 +3492,14 @@ msgstr "ടേബിൾ നിന്ന് ഡേറ്റ എടുക്കാ
 
 #: ../lib/vector/Vlib/write.c:282
 #, c-format
-msgid "Unable to restore feature %d, vector map <%s> is not opened on topology level"
+msgid ""
+"Unable to restore feature %d, vector map <%s> is not opened on topology level"
 msgstr ""
 
 #: ../lib/vector/Vlib/write.c:288
 #, c-format
-msgid "Unable to restore feature %d, vector map <%s> is not opened in 'write' mode"
+msgid ""
+"Unable to restore feature %d, vector map <%s> is not opened in 'write' mode"
 msgstr ""
 
 #: ../lib/vector/Vlib/write.c:302
@@ -3453,7 +3523,8 @@ msgid "Programmer requested unknown access level %d"
 msgstr ""
 
 #: ../lib/vector/Vlib/open.c:229
-msgid "Vector map which is not in the current mapset cannot be opened for update"
+msgid ""
+"Vector map which is not in the current mapset cannot be opened for update"
 msgstr ""
 
 #: ../lib/vector/Vlib/open.c:256 ../lib/ogsf/Gv3.c:64 ../lib/ogsf/Gp3.c:64
@@ -3464,7 +3535,9 @@ msgstr ""
 #: ../lib/vector/Vlib/open.c:272 ../lib/vector/Vlib/open.c:360
 #: ../lib/vector/Vlib/open.c:381
 #, c-format
-msgid "Unable to open vector map <%s> on level %d. Try to rebuild vector topology by v.build."
+msgid ""
+"Unable to open vector map <%s> on level %d. Try to rebuild vector topology "
+"by v.build."
 msgstr ""
 
 #: ../lib/vector/Vlib/open.c:275
@@ -3565,12 +3638,16 @@ msgstr ""
 
 #: ../lib/vector/Vlib/open_ogr.c:164
 #, c-format
-msgid "Feature index format version %d.%d is not supported by this release. Try to rebuild topology or upgrade GRASS."
+msgid ""
+"Feature index format version %d.%d is not supported by this release. Try to "
+"rebuild topology or upgrade GRASS."
 msgstr ""
 
 #: ../lib/vector/Vlib/open_ogr.c:169
 #, c-format
-msgid "Your GRASS version does not fully support feature index format %d.%d of the vector. Consider to rebuild topology or upgrade GRASS."
+msgid ""
+"Your GRASS version does not fully support feature index format %d.%d of the "
+"vector. Consider to rebuild topology or upgrade GRASS."
 msgstr ""
 
 #: ../lib/vector/Vlib/open_ogr.c:236
@@ -3665,8 +3742,8 @@ msgstr ""
 msgid "Unknown keyword <%s> in vector head"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:322 ../lib/db/dbmi_client/copy_tab.c:100
-#: ../lib/db/dbmi_client/copy_tab.c:120 ../lib/db/dbmi_client/db.c:41
+#: ../lib/vector/Vlib/ascii.c:322 ../lib/db/dbmi_client/copy_tab.c:108
+#: ../lib/db/dbmi_client/copy_tab.c:128 ../lib/db/dbmi_client/db.c:41
 #, c-format
 msgid "Unable to start driver <%s>"
 msgstr "ഡ്രയ്വ്വർ തുടങ്ങാൻ സാധിക്കുന്നില്ല <%s>"
@@ -3750,7 +3827,8 @@ msgid "Partial build for OGR is not supported"
 msgstr ""
 
 #: ../lib/vector/Vlib/build_ogr.c:370
-msgid "Random read is not supported by OGR for this layer, unable to build topology"
+msgid ""
+"Random read is not supported by OGR for this layer, unable to build topology"
 msgstr ""
 
 #: ../lib/vector/Vlib/build_ogr.c:375
@@ -3799,7 +3877,7 @@ msgstr ""
 msgid "Unable to select attributes for category %d"
 msgstr "തിരഞ്ഞെടുത്ത രേഖകൾ ടേബിളിൽ നിന്ന് എടുക്കാൻ സധികുനില്ല <%s>"
 
-#: ../lib/vector/Vlib/write_ogr.c:387 ../lib/db/dbmi_client/copy_tab.c:295
+#: ../lib/vector/Vlib/write_ogr.c:387 ../lib/db/dbmi_client/copy_tab.c:303
 #, c-format
 msgid "Unable to fetch data from table <%s>"
 msgstr "ടേബിൾ നിന്ന് ഡേറ്റ എടുക്കാൻ പറ്റുന്നില്ല <%s>"
@@ -3815,7 +3893,9 @@ msgid "Uknown column <%s>"
 msgstr "കളത്തിന്റെ തരത്തിൽ പിശക് (കളം <%s>)"
 
 #: ../lib/vector/Vlib/dgraph.c:430
-msgid "Trying to add more edges to the planar_graph than the initial allocation size allows"
+msgid ""
+"Trying to add more edges to the planar_graph than the initial allocation "
+"size allows"
 msgstr ""
 
 #: ../lib/vector/Vlib/line.c:178 ../lib/vector/Vlib/line.c:211
@@ -4219,6 +4299,14 @@ msgstr ""
 msgid "The total sum of the water budget is significant larger then 0: %g\n"
 msgstr ""
 
+#: ../lib/segment/format.c:144
+msgid "Segment format: file size too large"
+msgstr ""
+
+#: ../lib/segment/format.c:145
+msgid "Please recompile with Large File Support (LFS)"
+msgstr ""
+
 #: ../lib/init/grass.py:60
 msgid "WARNING"
 msgstr ""
@@ -4355,7 +4443,8 @@ msgstr ""
 
 #: ../lib/init/grass.py:529
 msgid ""
-"Error in GUI startup. If necessary, please report this error to the GRASS developers.\n"
+"Error in GUI startup. If necessary, please report this error to the GRASS "
+"developers.\n"
 "Switching to text mode now.\n"
 "\n"
 "Hit RETURN to continue..."
@@ -4385,7 +4474,9 @@ msgstr ""
 
 #: ../lib/init/grass.py:573
 #, python-format
-msgid "%(user)s is currently running GRASS in selected mapset (file %(file)s found). Concurrent use not allowed."
+msgid ""
+"%(user)s is currently running GRASS in selected mapset (file %(file)s "
+"found). Concurrent use not allowed."
 msgstr ""
 
 #: ../lib/init/grass.py:577
@@ -4407,7 +4498,8 @@ msgstr ""
 #: ../lib/init/grass.py:627
 #, python-format
 msgid ""
-"Job file '%s' has been defined in the 'GRASS_BATCH_JOB' variable but not found. Exiting.\n"
+"Job file '%s' has been defined in the 'GRASS_BATCH_JOB' variable but not "
+"found. Exiting.\n"
 "\n"
 "Use 'unset GRASS_BATCH_JOB' to disable batch job processing."
 msgstr ""
@@ -4488,7 +4580,8 @@ msgid ""
 "Unable to start GRASS. You can:\n"
 " - Launch GRASS with '-gui' switch (`grass70 -gui`)\n"
 " - Create manually GISRC file (%s)\n"
-" - Launch GRASS with path to the location/mapset as an argument (`grass70 /path/to/location/mapset`)"
+" - Launch GRASS with path to the location/mapset as an argument (`grass70 /"
+"path/to/location/mapset`)"
 msgstr ""
 
 #: ../lib/init/grass.py:965
@@ -4511,12 +4604,16 @@ msgid "First change your cols number to nsizc %d %d"
 msgstr ""
 
 #: ../lib/rst/interp_float/segmen2d.c:111
-msgid "Taking too long to find points for interpolation - please change the region to area where your points are. Continuing calculations..."
+msgid ""
+"Taking too long to find points for interpolation - please change the region "
+"to area where your points are. Continuing calculations..."
 msgstr ""
 
 #: ../lib/rst/interp_float/interp2d.c:214
 #, c-format
-msgid "Overshoot - increase in tension suggested. Overshoot occures at (%d,%d) cell. Z-value %f, zmin %f, zmax %f."
+msgid ""
+"Overshoot - increase in tension suggested. Overshoot occures at (%d,%d) "
+"cell. Z-value %f, zmin %f, zmax %f."
 msgstr ""
 
 #: ../lib/rst/interp_float/resout2d.c:77
@@ -4560,7 +4657,7 @@ msgid "Loading data from attribute table ..."
 msgstr ""
 
 #: ../lib/rst/interp_float/vinput2d.c:94
-#: ../lib/rst/interp_float/vinput2d.c:108 ../lib/db/dbmi_client/copy_tab.c:248
+#: ../lib/rst/interp_float/vinput2d.c:108 ../lib/db/dbmi_client/copy_tab.c:256
 #, c-format
 msgid "Column <%s> not found"
 msgstr "കളം കണ്മനില്ല <%s>"
@@ -4608,7 +4705,9 @@ msgstr ""
 
 #: ../lib/rst/interp_float/vinput2d.c:335
 #, c-format
-msgid "%d points given for interpolation (after thinning) is less than given NPMIN=%d"
+msgid ""
+"%d points given for interpolation (after thinning) is less than given NPMIN=%"
+"d"
 msgstr ""
 
 #: ../lib/rst/interp_float/vinput2d.c:340
@@ -4617,12 +4716,16 @@ msgstr ""
 
 #: ../lib/rst/interp_float/vinput2d.c:345
 #, c-format
-msgid "Segmentation parameters set to invalid values: npmin= %d, segmax= %d for smooth connection of segments, npmin > segmax (see manual)"
+msgid ""
+"Segmentation parameters set to invalid values: npmin= %d, segmax= %d for "
+"smooth connection of segments, npmin > segmax (see manual)"
 msgstr ""
 
 #: ../lib/rst/interp_float/vinput2d.c:351
 #, c-format
-msgid "There are less than %d points for interpolation. No segmentation is necessary, to run the program faster set segmax=%d (see manual)"
+msgid ""
+"There are less than %d points for interpolation. No segmentation is "
+"necessary, to run the program faster set segmax=%d (see manual)"
 msgstr ""
 
 #: ../lib/rst/interp_float/vinput2d.c:355
@@ -4803,7 +4906,9 @@ msgstr ""
 
 #: ../lib/arraystats/class.c:221
 #, c-format
-msgid "There are classbreaks outside the range min-max. Number of classes reduced to %i, but using probabilities for %i classes."
+msgid ""
+"There are classbreaks outside the range min-max. Number of classes reduced "
+"to %i, but using probabilities for %i classes."
 msgstr ""
 
 #: ../lib/ogsf/GVL2.c:248
@@ -4885,7 +4990,9 @@ msgstr ""
 
 #: ../lib/ogsf/gsd_prim.c:630
 #, c-format
-msgid "gsd_rot(): %c is an invalid axis specification. Rotation ignored. Please advise GRASS developers of this error"
+msgid ""
+"gsd_rot(): %c is an invalid axis specification. Rotation ignored. Please "
+"advise GRASS developers of this error"
 msgstr ""
 
 #: ../lib/ogsf/gsd_img_tif.c:64 ../lib/ogsf/gsd_img_ppm.c:53
@@ -4898,28 +5005,23 @@ msgstr ""
 msgid "Check no. of frames requested and keyframes marked"
 msgstr ""
 
-#: ../lib/ogsf/Gs3.c:134 ../lib/ogsf/Gs3.c:207 ../lib/ogsf/Gs3.c:363
-#: ../lib/ogsf/Gs3.c:477 ../lib/ogsf/Gs3.c:578
-msgid "Unable to allocate memory for a null buffer"
-msgstr ""
-
-#: ../lib/ogsf/Gs3.c:139 ../lib/ogsf/Gs3.c:212 ../lib/ogsf/Gs3.c:373
-#: ../lib/ogsf/Gs3.c:487 ../lib/ogsf/Gs3.c:581
+#: ../lib/ogsf/Gs3.c:133 ../lib/ogsf/Gs3.c:197 ../lib/ogsf/Gs3.c:349
+#: ../lib/ogsf/Gs3.c:455 ../lib/ogsf/Gs3.c:541
 #, c-format
 msgid "Loading raster map <%s>..."
 msgstr ""
 
-#: ../lib/ogsf/Gs3.c:638
+#: ../lib/ogsf/Gs3.c:597
 #, c-format
 msgid "Color table range doesn't match data (mincol=%d, maxcol=%d"
 msgstr ""
 
-#: ../lib/ogsf/Gs3.c:700 ../lib/ogsf/Gs3.c:772
+#: ../lib/ogsf/Gs3.c:659 ../lib/ogsf/Gs3.c:731
 #, c-format
 msgid "Translating colors from raster map <%s>..."
 msgstr ""
 
-#: ../lib/ogsf/Gs3.c:1007
+#: ../lib/ogsf/Gs3.c:968
 msgid "View not saved by this program,there may be some inconsistancies"
 msgstr ""
 
@@ -4951,22 +5053,22 @@ msgstr ""
 msgid "no data"
 msgstr ""
 
-#: ../lib/ogsf/GS2.c:1640
+#: ../lib/ogsf/GS2.c:1641
 #, c-format
 msgid "Raster map <%s> is outside of current region. Load failed."
 msgstr ""
 
-#: ../lib/ogsf/GS2.c:1720 ../lib/ogsf/GS2.c:1726 ../lib/ogsf/GS2.c:1734
-#: ../lib/ogsf/GS2.c:1743 ../lib/ogsf/GS2.c:1751 ../lib/ogsf/GS2.c:1761
-#: ../lib/ogsf/GS2.c:1809
+#: ../lib/ogsf/GS2.c:1719 ../lib/ogsf/GS2.c:1725 ../lib/ogsf/GS2.c:1733
+#: ../lib/ogsf/GS2.c:1742 ../lib/ogsf/GS2.c:1750 ../lib/ogsf/GS2.c:1760
+#: ../lib/ogsf/GS2.c:1808
 msgid "GS_load_att_map(): Out of memory. Unable to load map"
 msgstr ""
 
-#: ../lib/ogsf/GS2.c:1837
+#: ../lib/ogsf/GS2.c:1836
 msgid "Loading failed"
 msgstr ""
 
-#: ../lib/ogsf/GS2.c:1841
+#: ../lib/ogsf/GS2.c:1840
 msgid "Error finding range"
 msgstr ""
 
@@ -5060,19 +5162,21 @@ msgstr ""
 msgid "vector_select() failed"
 msgstr ""
 
-#: ../lib/python/core.py:710
+#: ../lib/python/core.py:712
 #, python-format
 msgid "Invalid element '%s'"
 msgstr ""
 
-#: ../lib/python/core.py:945
+#: ../lib/python/core.py:947
 #, fuzzy
 msgid "Unable to list mapsets"
 msgstr "വെക്റ്റർ അടയ്ക്കാൻ പറ്റുന്നില്ല <%s>"
 
 #: ../lib/python/raster.py:50
 #, python-format
-msgid "Unable to write history for <%(map)s>. Raster map <%(map)s> not found in current mapset."
+msgid ""
+"Unable to write history for <%(map)s>. Raster map <%(map)s> not found in "
+"current mapset."
 msgstr ""
 
 #: ../lib/python/raster.py:105
@@ -5216,33 +5320,38 @@ msgstr "പ്രൊഗ്രാമിൽ പിശക്"
 msgid "Unable open database <%s> by driver <%s>"
 msgstr "ഡേറ്റാബേയ്സ് <%s> തുറക്കൻ പറ്റുന്നില്ല <%s>"
 
-#: ../lib/db/dbmi_client/table.c:110 ../lib/db/dbmi_client/copy_tab.c:199
-#: ../lib/db/dbmi_client/copy_tab.c:276 ../lib/sites/sites.c:329
+#: ../lib/db/dbmi_client/table.c:110 ../lib/db/dbmi_client/copy_tab.c:207
+#: ../lib/db/dbmi_client/copy_tab.c:284 ../lib/sites/sites.c:329
 #, c-format
 msgid "Unable to open select cursor: '%s'"
 msgstr ""
 
-#: ../lib/db/dbmi_client/copy_tab.c:144
+#: ../lib/db/dbmi_client/copy_tab.c:92
+#, c-format
+msgid "Array of values to select from column <%s> is empty"
+msgstr ""
+
+#: ../lib/db/dbmi_client/copy_tab.c:152
 #, c-format
 msgid "Unable to get list tables in database <%s>"
 msgstr "ടേബിലിന്റെ പട്ടിക ഡേറ്റാബേയ്സിൽ നിന്ന് വായിക്കാൻ പട്ടുന്നില്ല <%s>"
 
-#: ../lib/db/dbmi_client/copy_tab.c:157
+#: ../lib/db/dbmi_client/copy_tab.c:165
 #, c-format
 msgid "Table <%s> already exists in database <%s>"
 msgstr "ഈ ടേബിൾ <%s> ഡേറ്റാബേയ്സിൽ ഉണ്ട് <%s>"
 
-#: ../lib/db/dbmi_client/copy_tab.c:231
+#: ../lib/db/dbmi_client/copy_tab.c:239
 #, c-format
 msgid "Column <%s> is not integer"
 msgstr "കളം <%s> അക്കമല്ല"
 
-#: ../lib/db/dbmi_client/copy_tab.c:251
+#: ../lib/db/dbmi_client/copy_tab.c:259
 #, c-format
 msgid "Unable to create table <%s>"
 msgstr "ടേബിൾ ഉണ്ടാക്കാൻ പറ്റുന്നില്ല <%s>"
 
-#: ../lib/db/dbmi_client/copy_tab.c:351
+#: ../lib/db/dbmi_client/copy_tab.c:359
 #, c-format
 msgid "Unknown column type (column <%s>)"
 msgstr "കളത്തിന്റെ തരത്തിൽ പിശക് (കളം <%s>)"
@@ -5298,7 +5407,9 @@ msgid "Memory error in allocating timestamp"
 msgstr ""
 
 #: ../lib/sites/sites.c:296 ../lib/sites/sites.c:426
-msgid "Dev note: Adapted sites library used for vector points. (module should be updated to GRASS 6 vector library)"
+msgid ""
+"Dev note: Adapted sites library used for vector points. (module should be "
+"updated to GRASS 6 vector library)"
 msgstr ""
 
 #: ../lib/sites/sites.c:345
