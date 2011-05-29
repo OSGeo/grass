@@ -216,6 +216,8 @@ Vect_break_lines_list(struct Map_info *Map, struct ilist *List_break,
 
 	    btype = Vect_read_line(Map, BPoints, BCats, bline);
 
+	    AXLines = NULL;
+	    BXLines = NULL;
 	    Vect_line_intersection(APoints, BPoints, &AXLines, &BXLines,
 				   &naxlines, &nbxlines, 0);
 	    G_debug(3, "  naxlines = %d nbxlines = %d", naxlines, nbxlines);
@@ -292,9 +294,10 @@ Vect_break_lines_list(struct Map_info *Map, struct ilist *List_break,
 		    }
 		    Vect_destroy_line_struct(AXLines[k]);
 		}
-		G_free(AXLines);
 		nbreaks += naxlines - 1;
 	    }
+	    if (AXLines)
+		G_free(AXLines);
 
 	    if (nbxlines > 0) {
 		if (aline != bline) {	/* Self intersection, do not write twice, TODO: is it OK? */
@@ -341,8 +344,9 @@ Vect_break_lines_list(struct Map_info *Map, struct ilist *List_break,
 		    for (k = 0; k < nbxlines; k++)
 			Vect_destroy_line_struct(BXLines[k]);
 		}
-		G_free(BXLines);
 	    }
+	    if (BXLines)
+		G_free(BXLines);
 	    if (Err) {
 		for (l = 0; l < nx; l++) {	/* Write out errors */
 		    Vect_reset_line(Points);
