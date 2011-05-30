@@ -2207,8 +2207,11 @@ class GUI:
         self.cmd = list()
         
         global _ignoreBlackList
-        _ignoreBlackList = False if self.parent else True
-        
+        if self.parent:
+                _ignoreBlackList = False
+        else:
+                _ignoreBlackList = True
+
     def GetCmd(self):
         """!Get validated command"""
         return self.cmd
