@@ -1012,6 +1012,11 @@ int main(int argc, char *argv[])
 		Vect_clean_small_angles_at_nodes(&Tmp, GV_BOUNDARY, NULL);
 	} while (nmodif > 0);
 
+	/* merge boundaries */
+	G_message("%s", separator);
+	G_message(_("Merge boundaries:"));
+	Vect_merge_lines(&Tmp, GV_BOUNDARY, NULL, NULL);
+
 	G_message("%s", separator);
 	if (type & GV_BOUNDARY) {	/* that means lines were converted boundaries */
 	    G_message(_("Change boundary dangles to lines:"));
@@ -1031,11 +1036,6 @@ int main(int argc, char *argv[])
 	    G_message(_("Remove bridges:"));
 	    Vect_remove_bridges(&Tmp, NULL);
 	}
-
-	/* merge boundaries */
-	G_message("%s", separator);
-	G_message(_("Merge boundaries:"));
-	Vect_merge_lines(&Tmp, GV_BOUNDARY, NULL, NULL);
 
 	/* Boundaries are hopefully clean, build areas */
 	G_message("%s", separator);
