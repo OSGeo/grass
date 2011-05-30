@@ -142,6 +142,8 @@ remove_bridges(struct Map_info *Map, int chtype, struct Map_info *Err)
 				    GV_BOUNDARY);
 
 	    /* Add this line to the list */
+	    /* TODO: Vect_val_in_list() and Vect_list_append() behave O(n)
+	     * change to O(log n) */
 	    if (Vect_val_in_list(CycleList, abs(next_line)))	/* other side -> bridge chain */
 		Vect_list_append(BridgeList, abs(next_line));
 	    else
