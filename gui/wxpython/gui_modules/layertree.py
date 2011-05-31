@@ -717,7 +717,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         
         self.first = True
         params = {} # no initial options parameters
-
+        
         # deselect active item
         if self.layer_selected:
             self.SelectItem(self.layer_selected, select = False)
@@ -770,19 +770,15 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                             text = '', ct_type = 1, wnd = ctrl)
         else: # add first layer to the layer tree (first child of root)
             layer = self.PrependItem(parent = self.root, text = '', ct_type = 1, wnd = ctrl)
-
+        
         # layer is initially unchecked as inactive (beside 'command')
         # use predefined value if given
         if lchecked is not None:
             checked = lchecked
         else:
             checked = True
-
+        
         self.CheckItem(layer, checked = checked)
-
-        # select new item
-        self.SelectItem(layer, select = True)
-        self.layer_selected = layer
         
         # add text and icons for each layer ltype
         label =  _('(double click to set properties)') + ' ' * 35
@@ -833,9 +829,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         elif ltype == 'group':
             self.SetItemImage(layer, self.folder)
             self.SetItemText(layer, grouptext)
-
+        
         self.first = False
-
+        
         if ltype != 'group':
             if lcmd and len(lcmd) > 1:
                 cmd = lcmd
@@ -886,7 +882,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                          l_active = checked, l_hidden = False,
                                          l_opacity = lopacity, l_render = render)
             self.GetPyData(layer)[0]['maplayer'] = maplayer
-
+            
             # run properties dialog if no properties given
             if len(cmd) == 0:
                 self.PropertiesDialog(layer, show = True)
@@ -899,7 +895,11 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                     'maplayer' : None,
                                     'propwin'  : None}, 
                                    None))
-
+        
+        # select new item
+        self.SelectItem(layer, select = True)
+        self.layer_selected = layer
+        
         # use predefined layer name if given
         if lname:
             if ltype == 'group':
@@ -1170,7 +1170,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             bgmap = UserSettings.Get(group = 'vdigit', key = 'bgmap', subkey = 'value',
                                      internal = True)
             
-        if digitToolbar:
             if digitToolbar.GetLayer() == mapLayer:
                 self._setGradient('vdigit')
             elif bgmap == mapLayer.GetName():

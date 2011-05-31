@@ -1072,8 +1072,7 @@ class VDigitToolbar(AbstractToolbar):
         self.parent.MapWindow.mouse['box'] = 'box'
 
     def OnSelectMap (self, event):
-        """
-        Select vector map layer for editing
+        """!Select vector map layer for editing
 
         If there is a vector map layer already edited, this action is
         firstly terminated. The map layer is closed. After this the
