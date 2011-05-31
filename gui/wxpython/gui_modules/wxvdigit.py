@@ -403,8 +403,8 @@ class IVDigit:
                                             'line'   : line,
                                             'offset' : offset })
         
-        Debug.msg(3, "IVDigit._addActionToChangeset(): changeset=%d, type=%d, line=%d, offset=%d",
-                  changeset, type, line, offset)
+        Debug.msg(3, "IVDigit._addActionToChangeset(): changeset=%d, add=%d, line=%d, offset=%d",
+                  changeset, add, line, offset)
         
     def _removeActionFromChangeset(self, changeset, line, add):
         """!Remove action from changeset
