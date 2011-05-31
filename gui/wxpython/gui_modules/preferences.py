@@ -60,6 +60,9 @@ wxSettingsChanged, EVT_SETTINGS_CHANGED = NewEvent()
 class Settings:
     """!Generic class where to store settings"""
     def __init__(self):
+        # settings file
+        self.filePath = os.path.join(os.path.expanduser("~"), '.grass7', 'wx')
+        
         # key/value separator
         self.sep = ';'
         
@@ -670,16 +673,8 @@ class Settings:
         """!Reads settings file (mapset, location, gisdbase)"""
         if settings is None:
             settings = self.userSettings
-
-        # look for settings file
-        gisenv = grass.gisenv()
-        gisdbase = gisenv['GISDBASE']
-        location_name = gisenv['LOCATION_NAME']
-        mapset_name = gisenv['MAPSET']
         
-        filePath = os.path.join(os.path.expanduser("~"), '.grass7', 'wx') # MS Windows fix ?
-        
-        self._readFile(filePath, settings)
+        self._readFile(self.filePath, settings)
         
         # set environment variables
         os.environ["GRASS_FONT"] = self.Get(group = 'display',
@@ -749,11 +744,9 @@ class Settings:
             except:
                 wx.MessageBox(_('Cannot create directory for settings [home]/.grass7'),
                               _('Error saving preferences'))
-
-        filePath = os.path.join(home, '.grass7', 'wx')
         
         try:
-            file = open(filePath, "w")
+            file = open(self.filePath, "w")
             for group in settings.keys():
                 for key in settings[group].keys():
                     subkeys = settings[group][key].keys()
@@ -785,13 +778,11 @@ class Settings:
             raise gcmd.GException(e)
         except StandardError, e:
             raise gcmd.GException(_('Writing settings to file <%(file)s> failed.'
-                                    '\n\nDetails: %(detail)s') % { 'file' : filePath,
+                                    '\n\nDetails: %(detail)s') % { 'file' : self.filePath,
                                                                    'detail' : e })
         
         file.close()
         
-        return filePath
-
     def _parseValue(self, value, read = False):
         """!Parse value to be store in settings file"""
         if read: # -> read settings (cast values)
@@ -1035,8 +1026,8 @@ class PreferencesBaseDialog(wx.Dialog):
         Posts event EVT_SETTINGS_CHANGED.
         """
         if self._updateSettings():
-            file = self.settings.SaveToFile()
-            self.parent.goutput.WriteLog(_('Settings saved to file \'%s\'.') % file)
+            self.settings.SaveToFile()
+            self.parent.goutput.WriteLog(_('Settings saved to file \'%s\'.') % self.settings.filePath)
             event = wxSettingsChanged()
             wx.PostEvent(self, event)
             self.Close()
