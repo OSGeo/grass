@@ -179,12 +179,14 @@ Contents
    info@harzer.de
    info@j-geoinfo.net
    pr@geocomm.com
+   editor-geo@geoconnexion.com
 
  Web:
    http://slashgeo.org/submit.pl
    http://freshmeat.net/projects/grass/?highlight=GRASS (update, MN)
    http://linuxtoday.com/contribute.php3
    https://www.osor.eu/projects/grassgis (update, MN)
+   https://forge.osor.eu/news/submit.php?group_id=44 (submit news, MN)
    http://www.macnn.com/contact/newstips/1
    http://www10.giscafe.com/submit_material/submit_options.php#Press (MN)
    http://www.freegis.org   (update, MN)
