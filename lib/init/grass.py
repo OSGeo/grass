@@ -977,6 +977,8 @@ else:
             non_interactive(args[1], args[0])
         else:
             non_interactive(args[0])
+    else:
+	non_interactive(args[0])
 
 # User selects LOCATION and MAPSET if not set
 set_data()
