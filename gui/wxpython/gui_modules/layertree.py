@@ -609,7 +609,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         
         self.mapdisplay.toolbars['vdigit'].OnExit()
         if self.lmgr:
-            self.lmgr.toolbar.Enable('vdigit', enable = True)
+            self.lmgr.toolbars['tools'].Enable('vdigit', enable = True)
         
         self._setGradient()
         self.RefreshLine(self.layer_selected)

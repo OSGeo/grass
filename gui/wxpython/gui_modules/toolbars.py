@@ -490,8 +490,8 @@ class VDigitToolbar(AbstractToolbar):
         self.layerTree     = layerTree  # reference to layer tree associated to map display
         self.log           = log        # log area
         AbstractToolbar.__init__(self, parent)
-        self.digit         = self.parent.MapWindow.digit
-
+        self.digit         = None
+        
         # currently selected map layer for editing (reference to MapLayer instance)
         self.mapLayer = None
         # list of vector layers from Layer Manager (only in the current mapset)
@@ -640,7 +640,7 @@ class VDigitToolbar(AbstractToolbar):
         # clear tmp canvas
         if self.action['id'] != id:
             self.parent.MapWindow.ClearLines(pdc = self.parent.MapWindow.pdcTmp)
-            if self.parent.MapWindow.digit and \
+            if self.digit and \
                     len(self.parent.MapWindow.digit.GetDisplay().GetSelected()) > 0:
                 # cancel action
                 self.parent.MapWindow.OnMiddleDown(None)
@@ -709,7 +709,7 @@ class VDigitToolbar(AbstractToolbar):
         
         # disable the toolbar
         self.parent.RemoveToolbar("vdigit")
-                
+        
     def OnMoveVertex(self, event):
         """!Move line vertex"""
         Debug.msg(2, "Digittoolbar.OnMoveVertex():")
@@ -1162,7 +1162,7 @@ class VDigitToolbar(AbstractToolbar):
         self.parent.toolbars['map'].combo.SetValue (_('Digitize'))
         lmgr = self.parent.GetLayerManager()
         if lmgr:
-            lmgr.toolbar.Enable('vdigit', enable = False)
+            lmgr.toolbars['tools'].Enable('vdigit', enable = False)
         
         Debug.msg (4, "VDigitToolbar.StartEditing(): layer=%s" % mapLayer.GetName())
         
@@ -1209,7 +1209,7 @@ class VDigitToolbar(AbstractToolbar):
                                                 0)
             lmgr = self.parent.GetLayerManager()
             if lmgr:
-                lmgr.toolbar.Enable('vdigit', enable = True)
+                lmgr.toolbars['tools'].Enable('vdigit', enable = True)
                 lmgr.notebook.SetSelection(1)
             self.digit.CloseMap()
             if lmgr:
@@ -1231,8 +1231,8 @@ class VDigitToolbar(AbstractToolbar):
                 self.parent.dialogs[dialog].Close()
                 self.parent.dialogs[dialog] = None
         
-        self.digit.__del__() # FIXME: destructor is not called here (del)
-        self.digit = self.parent.MapWindow.digit = None
+        del self.digit
+        del self.parent.MapWindow.digit
         
         self.mapLayer = None
         
