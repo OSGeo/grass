@@ -165,6 +165,7 @@ class IVDigit:
             self.InitCats()
         
     def __del__(self):
+        Debug.msg(1, "IVDigit.__del__()")
         Vect_destroy_line_struct(self.poPoints)
         self.poPoints = None
         Vect_destroy_cats_struct(self.poCats)
