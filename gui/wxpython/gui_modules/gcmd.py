@@ -588,7 +588,6 @@ def RunCommand(prog, flags = "", overwrite = False, quiet = False, verbose = Fal
                                             quiet, verbose, **kwargs))
     
     Debug.msg(1, "gcmd.RunCommand(): %s" % cmdString)
-    print "gcmd.RunCommand(): %s" % cmdString
     
     kwargs['stderr'] = subprocess.PIPE
     
