@@ -6,6 +6,9 @@
 Classes:
  - PyShellWindow
 
+@todo run pyshell and evaluate code in a separate instance of python
+& design the widget communicate back and forth with it
+
 (C) 2011 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
