@@ -81,10 +81,11 @@ from gui_modules import menu
 from gui_modules import gmodeler
 from gui_modules import vclean
 from gui_modules import nviz_tools
-from gui_modules.debug import Debug
-from gui_modules.ghelp import MenuTreeWindow, AboutWindow, InstallExtensionWindow
+from gui_modules.debug    import Debug
+from gui_modules.ghelp    import MenuTreeWindow, AboutWindow, InstallExtensionWindow
 from gui_modules.toolbars import LayerManagerToolbar, ToolsToolbar
-from icons.icon import Icons
+from gui_modules.gpyshell import PyShellWindow
+from icons.icon           import Icons
 
 UserSettings = preferences.globalSettings
 
@@ -220,7 +221,7 @@ class GMFrame(wx.Frame):
             self.notebook = FN.FlatNotebook(parent = self, id = wx.ID_ANY, agwStyle = globalvar.FNPageDStyle)
         else:
             self.notebook = FN.FlatNotebook(parent = self, id = wx.ID_ANY, style = globalvar.FNPageDStyle)
-
+        
         # create displays notebook widget and add it to main notebook page
         cbStyle = globalvar.FNPageStyle
         if globalvar.hasAgw:
@@ -230,7 +231,7 @@ class GMFrame(wx.Frame):
         self.gm_cb.SetTabAreaColour(globalvar.FNPageColor)
         self.notebook.AddPage(self.gm_cb, text = _("Map layers"))
         
-        # create command output text area and add it to main notebook page
+        # create 'command output' text area
         self.goutput = goutput.GMConsole(self, pageid = 1)
         self.notebook.AddPage(self.goutput, text = _("Command console"))
         
@@ -238,10 +239,14 @@ class GMFrame(wx.Frame):
         self.search = MenuTreeWindow(parent = self)
         self.notebook.AddPage(self.search, text = _("Search module"))
         
+        # create 'python shell' notebook page
+        self.pyshell = PyShellWindow(parent = self)
+        self.notebook.AddPage(self.pyshell, text = _("Python shell"))
+        
         # bindings
-        self.gm_cb.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnCBPageChanged)
+        self.gm_cb.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED,    self.OnCBPageChanged)
         self.notebook.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
-        self.gm_cb.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING, self.OnCBPageClosed)
+        self.gm_cb.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING,    self.OnCBPageClosed)
         
         return self.notebook
 
