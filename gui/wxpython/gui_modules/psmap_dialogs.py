@@ -1,7 +1,7 @@
 """!
-@package psmap_dialogs
+@package psmap_dialogs.py
 
-@brief map feature objects and dialogs for ps.map
+@brief Map feature objects and dialogs for ps.map
 
 Classes:
  - UnitConversion
@@ -127,7 +127,7 @@ class TCValidator(wx.PyValidator):
         return TCValidator(self.flag)
 
     def Validate(self, win):
-       
+        
         tc = self.GetWindow()
         val = tc.GetValue()
 
@@ -183,16 +183,16 @@ class PenStyleComboBox(wx.combo.OwnerDrawnComboBox):
         dc.SetPen(pen)
 
         # for painting the items in the popup
-        dc.DrawText(self.GetString( item ),
+        dc.DrawText(self.GetString(item ),
                     r.x + 3,
-                    (r.y + 0) + ( (r.height/2) - dc.GetCharHeight() )/2
+                    (r.y + 0) + ((r.height/2) - dc.GetCharHeight() )/2
                     )
-        dc.DrawLine( r.x+5, r.y+((r.height/4)*3)+1, r.x+r.width - 5, r.y+((r.height/4)*3)+1 )
+        dc.DrawLine(r.x+5, r.y+((r.height/4)*3)+1, r.x+r.width - 5, r.y+((r.height/4)*3)+1 )
 
-           
+        
     def OnDrawBackground(self, dc, rect, item, flags):
         """!Overridden from OwnerDrawnComboBox, called for drawing the
-            background area of each item."""
+        background area of each item."""
         # If the item is selected, or its item # iseven, or we are painting the
         # combo control itself, then use the default rendering.
         if (item & 1 == 0 or flags & (wx.combo.ODCB_PAINTING_CONTROL |
@@ -208,12 +208,12 @@ class PenStyleComboBox(wx.combo.OwnerDrawnComboBox):
 
     def OnMeasureItem(self, item):
         """!Overridden from OwnerDrawnComboBox, should return the height
-            needed to display an item in the popup, or -1 for default"""
+        needed to display an item in the popup, or -1 for default"""
         return 30
 
     def OnMeasureItemWidth(self, item):
         """!Overridden from OwnerDrawnComboBox.  Callback for item width, or
-            -1 for default/undetermined"""
+        -1 for default/undetermined"""
         return -1; # default - will be measured from text width  
     
     
@@ -221,7 +221,7 @@ class CheckListCtrl(wx.ListCtrl, CheckListCtrlMixin, ListCtrlAutoWidthMixin):
     """!List control for managing order and labels of vector maps in legend"""
     def __init__(self, parent):
         wx.ListCtrl.__init__(self, parent, id = wx.ID_ANY, 
-                style = wx.LC_REPORT|wx.LC_SINGLE_SEL|wx.BORDER_SUNKEN|wx.LC_VRULES|wx.LC_HRULES)
+                             style = wx.LC_REPORT|wx.LC_SINGLE_SEL|wx.BORDER_SUNKEN|wx.LC_VRULES|wx.LC_HRULES)
         CheckListCtrlMixin.__init__(self) 
         ListCtrlAutoWidthMixin.__init__(self)
         
@@ -258,7 +258,7 @@ class Instruction:
             if each.id == id:
                 return True
         return False
-        
+    
     def __delitem__(self, id):
         """!Delete instruction"""
         for each in self.instruction:
@@ -301,7 +301,7 @@ class Instruction:
         if len(inst) == 1 and not list:
             return inst[0]
         return inst
-        
+    
     def Read(self, filename):
         """!Reads instruction file and creates instruction objects"""
         self.filename = filename
@@ -468,17 +468,17 @@ class Instruction:
             
             #estimate size
             height = rasterLegend.EstimateHeight(raster = rasterLegend['raster'], discrete = rasterLegend['discrete'], 
-                                        fontsize = rasterLegend['fontsize'],
-                                        cols = rasterLegend['cols'], 
-                                        height = rasterLegend['height'])
+                                                 fontsize = rasterLegend['fontsize'],
+                                                 cols = rasterLegend['cols'], 
+                                                 height = rasterLegend['height'])
             width = rasterLegend.EstimateWidth(raster = rasterLegend['raster'], discrete = rasterLegend['discrete'], 
-                                        fontsize = rasterLegend['fontsize'],
-                                        cols = rasterLegend['cols'] , 
-                                        width = rasterLegend['width'],
-                                        paperInstr = page)
+                                               fontsize = rasterLegend['fontsize'],
+                                               cols = rasterLegend['cols'] , 
+                                               width = rasterLegend['width'],
+                                               paperInstr = page)
             rasterLegend['rect'] = wx.Rect2D(x = float(rasterLegend['where'][0]), y = float(rasterLegend['where'][1]),
-                                                w = width, h = height)
-                
+                                             w = width, h = height)
+            
         # vectors, vlegend        
         
         if vector:
@@ -490,9 +490,9 @@ class Instruction:
                         vector['list'][i][3] = vmap['lpos']
             if vectorLegend:
                 size = vectorLegend.EstimateSize(vectorInstr = vector, fontsize = vectorLegend['fontsize'],
-                                            width = vectorLegend['width'], cols = vectorLegend['cols'])                            
+                                                 width = vectorLegend['width'], cols = vectorLegend['cols'])                            
                 vectorLegend['rect'] = wx.Rect2D(x = float(vectorLegend['where'][0]), y = float(vectorLegend['where'][1]),
-                                                    w = size[0], h = size[1])
+                                                 w = size[0], h = size[1])
         
         
         page = self.FindInstructionByType('page')
@@ -503,36 +503,36 @@ class Instruction:
 
         #
         return True
-        
+    
     def SendToRead(self, instruction, text, **kwargs):
         #print 'send to read', instruction, text
-        psmapInstrDict = dict(  paper = ['page'],
-                                maploc = ['map'],
-                                scale = ['map'],
-                                border = ['map'],
-                                raster = ['raster'],
-                                mapinfo = ['mapinfo'],
-                                scalebar = ['scalebar'],
-                                text = ['text'],
-                                vpoints = ['vector', 'vProperties'],
-                                vlines = ['vector', 'vProperties'],
-                                vareas = ['vector', 'vProperties'],
-                                colortable = ['rasterLegend'],
-                                vlegend = ['vectorLegend']
-                            )
+        psmapInstrDict = dict(paper = ['page'],
+                              maploc = ['map'],
+                              scale = ['map'],
+                              border = ['map'],
+                              raster = ['raster'],
+                              mapinfo = ['mapinfo'],
+                              scalebar = ['scalebar'],
+                              text = ['text'],
+                              vpoints = ['vector', 'vProperties'],
+                              vlines = ['vector', 'vProperties'],
+                              vareas = ['vector', 'vProperties'],
+                              colortable = ['rasterLegend'],
+                              vlegend = ['vectorLegend']
+                              )
         
-        myInstrDict = dict( page = PageSetup,
-                            map = MapFrame,
-                            raster = Raster,
-                            mapinfo = Mapinfo,
-                            scalebar = Scalebar,
-                            text = Text,
-                            rasterLegend = RasterLegend,
-                            vectorLegend = VectorLegend,
-                            vector = Vector,
-                            vProperties = VProperties
-                        )
-         
+        myInstrDict = dict(page = PageSetup,
+                           map = MapFrame,
+                           raster = Raster,
+                           mapinfo = Mapinfo,
+                           scalebar = Scalebar,
+                           text = Text,
+                           rasterLegend = RasterLegend,
+                           vectorLegend = VectorLegend,
+                           vector = Vector,
+                           vProperties = VProperties
+                           )
+        
         myInstruction = psmapInstrDict[instruction]
         
         for i in myInstruction:
@@ -557,7 +557,7 @@ class Instruction:
                 if not ok:
                     return False
         return True
-          
+    
     def SetRegion(self, regionInstruction):
         """!Sets region from file comment or sets current region in case of no comment"""
         map = MapFrame(wx.NewId())
@@ -595,7 +595,7 @@ class Instruction:
         except grass.ScriptError, e:
             GError(_("Region cannot be set\n%s") % e)
             return False
-          
+        
 
 class InstructionObject:
     """!Abtract class representing single instruction"""
@@ -612,13 +612,13 @@ class InstructionObject:
     def __str__(self):
         """!Returns particular part of text instruction"""
         return ''
-        
+    
     def __getitem__(self, key):
         for each in self.instruction.keys():
             if each == key:
                 return self.instruction[key]
         return None
-               
+    
     def __setitem__(self, key, value):
         self.instruction[key] = value
     
@@ -633,7 +633,7 @@ class InstructionObject:
     def Read(self, instruction, text, **kwargs):
         """!Read instruction and save them"""
         pass
-        
+    
 class InitMap(InstructionObject):
     """!Class representing virtual map"""
     def __init__(self, id):
@@ -644,7 +644,7 @@ class InitMap(InstructionObject):
         self.defaultInstruction = dict(rect = None, scale =  None)
         # current values
         self.instruction = dict(self.defaultInstruction)
-            
+        
     
 class MapFrame(InstructionObject):
     """!Class representing map (instructions maploc, scale, border)"""
@@ -652,9 +652,9 @@ class MapFrame(InstructionObject):
         InstructionObject.__init__(self, id = id)
         self.type = 'map'
         # default values
-        self.defaultInstruction = dict( map = None, mapType = None, drawMap = True, region = None,
-                                        rect = wx.Rect2D(), scaleType = 0, scale = None, center = None,
-                                        resolution = 300, border = 'y', width = 1, color = '0:0:0') 
+        self.defaultInstruction = dict(map = None, mapType = None, drawMap = True, region = None,
+                                       rect = wx.Rect2D(), scaleType = 0, scale = None, center = None,
+                                       resolution = 300, border = 'y', width = 1, color = '0:0:0') 
         # current values
         self.instruction = dict(self.defaultInstruction)
         
@@ -702,13 +702,13 @@ class MapFrame(InstructionObject):
         instr += '\n'
 
         return instr  
-     
+    
     def Read(self, instruction, text, **kwargs):
         """!Read instruction and save information"""
         if 'isRegionComment' in kwargs:
             isRegionComment = kwargs['isRegionComment']
         instr = {}
-            
+        
         if instruction == 'border':
             for line in text:
                 if line.startswith('end'):
@@ -726,7 +726,7 @@ class MapFrame(InstructionObject):
                 except IndexError:
                     GError(_("Failed to read instruction %s") % instruction)
                     return False
-                    
+                
         elif instruction == 'scale':
             try:
                 scaleText = text.strip('scale ').split(':')[1]
@@ -747,16 +747,16 @@ class MapFrame(InstructionObject):
             maploc = text.strip('maploc ').split()
             if len(maploc) >= 2:
                 if  abs(self.instruction['rect'].Get()[0] - float(maploc[0])) > 0.5 or \
-                    abs(self.instruction['rect'].Get()[1] - float(maploc[1])) > 0.5:
+                        abs(self.instruction['rect'].Get()[1] - float(maploc[1])) > 0.5:
                     GWarning(_("Map frame position changed, old value: %s %s\nnew value: %s %s") % \
-                        (maploc[0], maploc[1], self.instruction['rect'].Get()[0], self.instruction['rect'].Get()[1]))
+                                 (maploc[0], maploc[1], self.instruction['rect'].Get()[0], self.instruction['rect'].Get()[1]))
                     
                 #instr['rect'] = wx.Rect2D(float(maploc[0]), float(maploc[1]), self.instruction['rect'][2], self.instruction['rect'][3])
             if len(maploc) == 4:
                 if  abs(self.instruction['rect'].Get()[2] - float(maploc[2])) > 0.5 or \
-                    abs(self.instruction['rect'].Get()[3] - float(maploc[3])) > 0.5:
+                        abs(self.instruction['rect'].Get()[3] - float(maploc[3])) > 0.5:
                     GWarning(_("Map frame size changed, old value: %s %s\nnew value: %s %s") %(
-                                            maploc[2], maploc[3], self.instruction['rect'].Get()[2], self.instruction['rect'].Get()[3]))
+                            maploc[2], maploc[3], self.instruction['rect'].Get()[2], self.instruction['rect'].Get()[3]))
                 #instr['rect'] = wx.Rect2D(*map(float, maploc))
         self.instruction.update(instr)   
         return True 
@@ -768,7 +768,7 @@ class PageSetup(InstructionObject):
         self.type = 'page'
         # default values
         self.defaultInstruction = dict(Units = 'inch', Format = 'a4', Orientation = 'Portrait',
-                                        Width = 8.268, Height = 11.693, Left = 0.5, Right = 0.5, Top = 1, Bottom = 1)
+                                       Width = 8.268, Height = 11.693, Left = 0.5, Right = 0.5, Top = 1, Bottom = 1)
         # current values
         self.instruction = dict(self.defaultInstruction)
         
@@ -826,7 +826,7 @@ class PageSetup(InstructionObject):
         for line in paperStr.strip().split('\n'):
             d = dict(zip(self.cats, line.split()[1:]))
             sizeDict[line.split()[0]] = d
-       
+            
         return sizeDict    
     
 class Mapinfo(InstructionObject):
@@ -835,10 +835,10 @@ class Mapinfo(InstructionObject):
         InstructionObject.__init__(self, id = id)
         self.type = 'mapinfo'
         # default values
-        self.defaultInstruction = dict( unit = 'inch', where = (0, 0),
-                                            font = 'Helvetica', fontsize = 10, color = 'black', background = 'none', 
-                                            #font = 'Sans', fontsize = 10, color = '0:0:0', background = 'none', 
-                                            border = 'none', rect = None)
+        self.defaultInstruction = dict(unit = 'inch', where = (0, 0),
+                                       font = 'Helvetica', fontsize = 10, color = 'black', background = 'none', 
+                                       #font = 'Sans', fontsize = 10, color = '0:0:0', background = 'none', 
+                                       border = 'none', rect = None)
         # current values
         self.instruction = dict(self.defaultInstruction)
         
@@ -882,7 +882,7 @@ class Mapinfo(InstructionObject):
         width = self.unitConv.convert(value = w, fromUnit = 'point', toUnit = 'inch')
         height = self.unitConv.convert(value = h, fromUnit = 'point', toUnit = 'inch')
         return wx.Rect2D(x = float(mapinfoDict['where'][0]), y = float(mapinfoDict['where'][1]), w = width, h = height)
-        
+    
 class Text(InstructionObject):
     """!Class representing text instruction"""
     def __init__(self, id):
@@ -890,9 +890,9 @@ class Text(InstructionObject):
         self.type = 'text'
         # default values
         self.defaultInstruction = dict(text = "", font = "Helvetica", fontsize = 10, color = 'black', background = 'none',
-                                        hcolor = 'none', hwidth = 1, border = 'none', width = '1', XY = True,
-                                        where = (0,0), unit = 'inch', rotate = None, 
-                                        ref = "center center", xoffset = 0, yoffset = 0, east = None, north = None)
+                                       hcolor = 'none', hwidth = 1, border = 'none', width = '1', XY = True,
+                                       where = (0,0), unit = 'inch', rotate = None, 
+                                       ref = "center center", xoffset = 0, yoffset = 0, east = None, north = None)
         # current values
         self.instruction = dict(self.defaultInstruction)
         
@@ -962,7 +962,7 @@ class Text(InstructionObject):
                 elif sub == 'opaque':
                     if line.split(None, 1)[1].lower() in ('n', 'none'):
                         instr['background'] = 'none'
-         
+                        
             except(IndexError, ValueError):
                 GError(_("Failed to read instruction %s") % instruction)
                 return False
@@ -985,11 +985,11 @@ class Scalebar(InstructionObject):
         InstructionObject.__init__(self, id = id)
         self.type = 'scalebar'
         # default values
-        self.defaultInstruction = dict( unit = 'inch', where = (1,1),
-                                            unitsLength = 'auto', unitsHeight = 'inch',
-                                            length = None, height = 0.1, rect = None,
-                                            fontsize = 10, background = 'y',
-                                            scalebar = 'f', segment = 4, numbers = 1)
+        self.defaultInstruction = dict(unit = 'inch', where = (1,1),
+                                       unitsLength = 'auto', unitsHeight = 'inch',
+                                       length = None, height = 0.1, rect = None,
+                                       fontsize = 10, background = 'y',
+                                       scalebar = 'f', segment = 4, numbers = 1)
         # current values
         self.instruction = dict(self.defaultInstruction)
         
@@ -1037,7 +1037,7 @@ class Scalebar(InstructionObject):
             except(IndexError, ValueError):
                 GError(_("Failed to read instruction %s") % instruction)
                 return False
-                
+            
         self.instruction.update(instr)
         w, h = self.EstimateSize(scalebarDict = self.instruction, scale = scale)
         x = self.instruction['where'][0] - w / 2 
@@ -1067,12 +1067,12 @@ class RasterLegend(InstructionObject):
         self.type = 'rasterLegend'
         # default values
         self.defaultInstruction = dict(rLegend = False, unit = 'inch', rasterDefault = True, raster = None,
-                                                discrete = None, type = None,
-                                                where = (0, 0),
-                                                width = None, height = None, cols = 1, font = "Helvetica", fontsize = 10,
-                                                #color = '0:0:0', tickbar = False, range = False, min = 0, max = 0,
-                                                color = 'black', tickbar = 'n', range = False, min = 0, max = 0,
-                                                nodata = 'n')
+                                       discrete = None, type = None,
+                                       where = (0, 0),
+                                       width = None, height = None, cols = 1, font = "Helvetica", fontsize = 10,
+                                       #color = '0:0:0', tickbar = False, range = False, min = 0, max = 0,
+                                       color = 'black', tickbar = 'n', range = False, min = 0, max = 0,
+                                       nodata = 'n')
         # current values
         self.instruction = dict(self.defaultInstruction)
         
@@ -1093,7 +1093,7 @@ class RasterLegend(InstructionObject):
             instr += string.Template("    cols $cols\n").substitute(self.instruction)
             instr += string.Template("    nodata $nodata\n").substitute(self.instruction)
         instr += string.Template("    font $font\n    fontsize $fontsize\n    color $color\n")\
-                                .substitute(self.instruction)
+            .substitute(self.instruction)
         instr += "    end"
         return instr    
     
@@ -1179,11 +1179,11 @@ class RasterLegend(InstructionObject):
             rinfo = grass.raster_info(raster)
             if rinfo['datatype'] in ('DCELL', 'FCELL'):
                 minim, maxim = rinfo['min'], rinfo['max']
-                rows = ceil( maxim / cols )
+                rows = ceil(maxim / cols )
             else:
                 cat = grass.read_command('r.category', map = raster,
                                     fs = ':').strip().split('\n')
-                rows = ceil( float(len(cat)) / cols )
+                rows = ceil(float(len(cat)) / cols )
                             
                 
             height = self.unitConv.convert(value =  1.5 * rows * fontsize, fromUnit = 'point', toUnit = 'inch')
@@ -2421,8 +2421,8 @@ class MapFramePanel(wx.Panel):
                 RunCommand('g.region', n = region['north'], s = region['south'],
                             e = region['east'], w = region['west'], rast = self.instruction[rasterId]['raster'])
             else:
-                RunCommand('g.region',  n = region['north'], s = region['south'],
-                                        e = region['east'], w = region['west'])
+                RunCommand('g.region', n = region['north'], s = region['south'],
+                           e = region['east'], w = region['west'])
             
         elif scaleType == 3:
             mapFrameDict['drawMap'] = False
@@ -3806,7 +3806,7 @@ class LegendDialog(PsmapDialog):
 
         self.rasterCurrent = wx.StaticText(panel, id = wx.ID_ANY,
                                 label = _("%s: type %s" % (self.currRaster, rasterType)))
-        self.rasterSelect = Select( panel, id = wx.ID_ANY, size = globalvar.DIALOG_GSELECT_SIZE,
+        self.rasterSelect = Select(panel, id = wx.ID_ANY, size = globalvar.DIALOG_GSELECT_SIZE,
                                     type = 'raster', multiple = False,
                                     updateOnPopup = True, onPopup = None)
         if not self.rLegendDict['rasterDefault']:
@@ -4437,11 +4437,11 @@ class LegendDialog(PsmapDialog):
 ##                self.vLegendDict['fontsize'] = font.GetPointSize()
                 dc = wx.PaintDC(self)
                 font = dc.GetFont()
-                dc.SetFont(wx.Font(   pointSize = self.vLegendDict['fontsize'], family = font.GetFamily(),
-                                                style = font.GetStyle(), weight = wx.FONTWEIGHT_NORMAL))
+                dc.SetFont(wx.Font(pointSize = self.vLegendDict['fontsize'], family = font.GetFamily(),
+                                   style = font.GetStyle(), weight = wx.FONTWEIGHT_NORMAL))
                 #size
                 width = self.unitConv.convert(value = float(self.panelVector.widthCtrl.GetValue()),
-                                                        fromUnit = currUnit, toUnit = 'inch')
+                                              fromUnit = currUnit, toUnit = 'inch')
                 self.vLegendDict['width'] = width
                 self.vLegendDict['cols'] = self.panelVector.colsCtrl.GetValue()
                 if self.panelVector.spanRadio.GetValue() and self.panelVector.spanTextCtrl.GetValue():
@@ -4513,7 +4513,7 @@ class LegendDialog(PsmapDialog):
             currRaster = None
 
         rasterType = getRasterType(map = currRaster)
-        self.rasterCurrent.SetLabel( _("%s: type %s") % (currRaster, str(rasterType)))
+        self.rasterCurrent.SetLabel(_("%s: type %s") % (currRaster, str(rasterType)))
         
         # vector legend
         
@@ -4998,7 +4998,7 @@ class ScalebarDialog(PsmapDialog):
             map = self.instruction.FindInstructionByType('initMap')
         mapId = map.id
          
-        rectSize = self.scalebar.EstimateSize( scalebarDict = self.scalebarDict,
+        rectSize = self.scalebar.EstimateSize(scalebarDict = self.scalebarDict,
                                                                 scale = self.instruction[mapId]['scale'])
         self.scalebarDict['rect'] = wx.Rect2D(x = x, y = y, w = rectSize[0], h = rectSize[1])
         self.scalebarDict['where'] = self.scalebarDict['rect'].GetCentre() 
@@ -5420,7 +5420,7 @@ class TextDialog(PsmapDialog):
             x = self.unitConv.convert(value = float(x), fromUnit = currUnit, toUnit = 'inch')
             y = self.unitConv.convert(value = float(y), fromUnit = currUnit, toUnit = 'inch')
             self.textDict['where'] = x, y
-            self.textDict['east'], self.textDict['north'] = PaperMapCoordinates( self.instruction[self.mapId], x, y, paperToMap = True)
+            self.textDict['east'], self.textDict['north'] = PaperMapCoordinates(self.instruction[self.mapId], x, y, paperToMap = True)
         else:
             self.textDict['XY'] = False
             if self.eastingCtrl.GetValue():
@@ -5579,7 +5579,7 @@ def AutoAdjust(self, scaleType,  rect, map = None, mapType = None, region = None
             currRegionDict = grass.region()
         regionDict = grass.parse_key_val(windFile, sep = ':', val_type = float)
         region = grass.read_command("g.region", flags = 'gu', n = regionDict['north'], s = regionDict['south'],
-                                                                e = regionDict['east'], w = regionDict['west'])
+                                    e = regionDict['east'], w = regionDict['west'])
         currRegionDict = grass.parse_key_val(region, val_type = float)
                                                                 
     else:
@@ -5644,9 +5644,9 @@ def ComputeSetRegion(self, mapDict):
         fromM = 1
         if projInfo()['proj'] != 'xy':
             fromM = float(projInfo()['meters'])
-        rectHalfInch = ( mapDict['rect'].width/2, mapDict['rect'].height/2)
-        rectHalfMeter = ( self.unitConv.convert(value = rectHalfInch[0], fromUnit = 'inch', toUnit = 'meter')/ fromM /scale,
-                                self.unitConv.convert(value = rectHalfInch[1], fromUnit = 'inch', toUnit = 'meter')/ fromM /scale) 
+        rectHalfInch = (mapDict['rect'].width/2, mapDict['rect'].height/2)
+        rectHalfMeter = (self.unitConv.convert(value = rectHalfInch[0], fromUnit = 'inch', toUnit = 'meter')/ fromM /scale,
+                         self.unitConv.convert(value = rectHalfInch[1], fromUnit = 'inch', toUnit = 'meter')/ fromM /scale) 
         
         centerE = mapDict['center'][0]
         centerN = mapDict['center'][1]
@@ -5660,15 +5660,15 @@ def ComputeSetRegion(self, mapDict):
 
         if rasterId:
             RunCommand('g.region', n = ceil(centerN + rectHalfMeter[1]),
-                           s = floor(centerN - rectHalfMeter[1]),
-                           e = ceil(centerE + rectHalfMeter[0]),
-                           w = floor(centerE - rectHalfMeter[0]),
-                           rast = self.instruction[rasterId]['raster'])
+                       s = floor(centerN - rectHalfMeter[1]),
+                       e = ceil(centerE + rectHalfMeter[0]),
+                       w = floor(centerE - rectHalfMeter[0]),
+                       rast = self.instruction[rasterId]['raster'])
         else:
             RunCommand('g.region', n = ceil(centerN + rectHalfMeter[1]),
-                           s = floor(centerN - rectHalfMeter[1]),
-                           e = ceil(centerE + rectHalfMeter[0]),
-                           w = floor(centerE - rectHalfMeter[0]))
+                       s = floor(centerN - rectHalfMeter[1]),
+                       e = ceil(centerE + rectHalfMeter[0]),
+                       w = floor(centerE - rectHalfMeter[0]))
                     
 def projInfo():
     """!Return region projection and map units information,
