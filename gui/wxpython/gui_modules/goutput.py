@@ -602,10 +602,9 @@ class GMConsole(wx.SplitterWindow):
             self.history += '\n'
 
         wildcard = "Text file (*.txt)|*.txt"
-        dlg = wx.FileDialog(
-            self, message=_("Save file as..."), defaultDir=os.getcwd(),
-            defaultFile="grass_cmd_history.txt", wildcard=wildcard,
-            style=wx.SAVE|wx.FD_OVERWRITE_PROMPT)
+        dlg = wx.FileDialog(self, message = _("Save file as..."), defaultDir = os.getcwd(),
+            defaultFile = "grass_cmd_history.txt", wildcard = wildcard,
+            style = wx.SAVE | wx.FD_OVERWRITE_PROMPT)
 
         # Show the dialog and retrieve the user response. If it is the OK response,
         # process the data.
