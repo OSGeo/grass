@@ -11,7 +11,7 @@ int init_vars(int argc, char *argv[])
 {
     int r, c;
     CELL *buf, alt_value, asp_value, block_value;
-    DCELL dvalue, wat_value;
+    DCELL dvalue, wat_value, *dbuf;
     void *elebuf, *ptr;
     int fd, ele_map_type;
     size_t ele_size;
@@ -217,28 +217,30 @@ int init_vars(int argc, char *argv[])
 	MASK_flag = 1;
 
     /* read flow accumulation from input map flow: amount of overland flow per cell */
-    buf = Rast_allocate_c_buf();
     if (run_flag) {
+	dbuf = Rast_allocate_d_buf();
 	fd = Rast_open_old(run_name, "");
 	for (r = 0; r < nrows; r++) {
-	    Rast_get_c_row(fd, buf, r);
+	    Rast_get_d_row(fd, dbuf, r);
 	    for (c = 0; c < ncols; c++) {
 		if (MASK_flag) {
 		    block_value = FLAG_GET(worked, r, c);
 		    if (!block_value)
-			wat[SEG_INDEX(wat_seg, r, c)] = buf[c];
+			wat[SEG_INDEX(wat_seg, r, c)] = dbuf[c];
 		    else
 			wat[SEG_INDEX(wat_seg, r, c)] = 0.0;
 		}
 		else
-		    wat[SEG_INDEX(wat_seg, r, c)] = buf[c];
+		    wat[SEG_INDEX(wat_seg, r, c)] = dbuf[c];
 	    }
 	}
 	Rast_close(fd);
+	G_free(dbuf);
     }
 
     /* depression: drainage direction will be set to zero later */
     if (pit_flag) {
+	buf = Rast_allocate_c_buf();
 	fd = Rast_open_old(pit_name, "");
 	for (r = 0; r < nrows; r++) {
 	    Rast_get_c_row(fd, buf, r);
@@ -249,10 +251,12 @@ int init_vars(int argc, char *argv[])
 	    }
 	}
 	Rast_close(fd);
+	G_free(buf);
     }
 
     /* this is also creating streams... */
     if (ob_flag) {
+	buf = Rast_allocate_c_buf();
 	fd = Rast_open_old(ob_name, "");
 	for (r = 0; r < nrows; r++) {
 	    Rast_get_c_row(fd, buf, r);
@@ -263,8 +267,8 @@ int init_vars(int argc, char *argv[])
 	    }
 	}
 	Rast_close(fd);
+	G_free(buf);
     }
-    G_free(buf);
 
     if (ril_flag)
 	ril_fd = Rast_open_old(ril_name, "");
