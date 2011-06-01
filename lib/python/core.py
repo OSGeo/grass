@@ -552,7 +552,7 @@ def use_temp_region():
     handler to delete the temporary region upon termination.
     """
     name = "tmp.%s.%d" % (os.path.basename(sys.argv[0]), os.getpid())
-    run_command("g.region", save = name)
+    run_command("g.region", save = name, overwrite = True)
     os.environ['WIND_OVERRIDE'] = name
     atexit.register(del_temp_region)
 
