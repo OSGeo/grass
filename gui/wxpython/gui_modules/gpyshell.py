@@ -30,7 +30,8 @@ class PyShellWindow(wx.Panel):
         
         wx.Panel.__init__(self, parent = parent, id = id, **kwargs)
         
-        self.intro = _("Welcome to wxGUI Python Shell %s") % VERSION
+        self.intro = _("Welcome to wxGUI Interactive Python Shell %s") % VERSION + "\n\n" + \
+            _("Type %s for more GRASS scripting related information.") % "\"help(grass)\"" + "\n\n"
         self.shell = PyShell(parent = self, id = wx.ID_ANY,
                              introText = self.intro, locals = {'grass' : grass})
         
