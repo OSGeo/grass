@@ -39,16 +39,16 @@ int Nviz_set_light_position(nv_data * data, int num,
 		x, y, xpos, 1.0 - ypos);
     }
     */
-    num--;
-    data->light[num].id = num + 1;
+
+    data->light[num].id = num;
     data->light[num].x = x;
     data->light[num].y = y;
     data->light[num].z = z;
     data->light[num].w = w;
 
     G_debug(1, "Nviz_set_light_position(): num = %d x = %f y = %f z = %f w = %f",
-	    num + 1, x, y, z, w);
-    GS_setlight_position(num + 1, x, y, z, w);
+	    num, x, y, z, w);
+    GS_setlight_position(num, x, y, z, w);
 
     return 1;
 }
@@ -64,7 +64,6 @@ int Nviz_set_light_bright(nv_data * data, int num, double value)
 {
     double r, g, b;
 
-    num--;
     data->light[num].brt = value;
 
     r = data->light[num].r * data->light[num].brt;
@@ -72,8 +71,8 @@ int Nviz_set_light_bright(nv_data * data, int num, double value)
     b = data->light[num].b * data->light[num].brt;
 
     G_debug(1, "Nviz_set_light_bright(): num = %d value = %f r = %f g = %f b = %f",
-	    num + 1, value, r, g, b);
-    GS_setlight_color(num + 1, r, g, b);
+	    num, value, r, g, b);
+    GS_setlight_color(num, r, g, b);
 
     return 1;
 }
@@ -90,7 +89,6 @@ int Nviz_set_light_color(nv_data * data, int num,
 {
     double r, g, b;
 
-    num--;
     data->light[num].r = red / 255.;
     data->light[num].g = green / 255.;
     data->light[num].b = blue / 255.;
@@ -100,8 +98,8 @@ int Nviz_set_light_color(nv_data * data, int num,
     b = data->light[num].b * data->light[num].brt;
 
     G_debug(1, "Nviz_set_light_color(): num = %d r = %d/%f g = %d/%f b = %d/%f",
-	    num + 1, red, r, green, g, blue, b);
-    GS_setlight_color(num + 1, r, g, b);
+	    num, red, r, green, g, blue, b);
+    GS_setlight_color(num, r, g, b);
 
     return 1;
 }
@@ -115,14 +113,13 @@ int Nviz_set_light_color(nv_data * data, int num,
  */
 int Nviz_set_light_ambient(nv_data * data, int num, double value)
 {
-    num--;
     data->light[num].ar = value;
     data->light[num].ag = value;
     data->light[num].ab = value;
 
     G_debug(1, "Nviz_set_light_ambient(): num = %d value = %f",
-	    num + 1, value);
-    GS_setlight_ambient(num + 1, value, value, value);
+	    num, value);
+    GS_setlight_ambient(num, value, value, value);
     
     return 1;
 }
@@ -135,8 +132,8 @@ int Nviz_set_light_ambient(nv_data * data, int num, double value)
  */
 int Nviz_init_light(nv_data * data, int num)
 {
-    num--;
-    if (num >= MAX_LIGHTS) {
+	G_debug(1, "Nviz_init_light(): num = %d", num);
+    if (num > MAX_LIGHTS) {
 	return 0;
     }
 

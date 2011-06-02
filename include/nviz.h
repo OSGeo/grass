@@ -133,6 +133,7 @@ int Nviz_set_viewpoint_height(double);
 int Nviz_set_viewpoint_persp(int);
 int Nviz_set_viewpoint_twist(int);
 int Nviz_change_exag(nv_data *, double);
+int Nviz_look_here(double, double);
 
 /* cplanes_obj.c */
 int Nviz_new_cplane(nv_data *, int);

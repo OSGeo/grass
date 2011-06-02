@@ -253,7 +253,7 @@ class GMFrame(wx.Frame):
     def AddNviz(self):
         """!Add nviz notebook page"""
         self.nviz = nviz_tools.NvizToolWindow(parent = self,
-                                              display = self.curr_page.maptree.GetMapDisplay()) 
+                                              display = self.curr_page.maptree.GetMapDisplay())
         self.notebook.AddPage(self.nviz, text = _("3D view"))
         self.notebook.SetSelection(self.notebook.GetPageCount() - 1)
         

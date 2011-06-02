@@ -138,7 +138,15 @@ class Nviz(object):
         
         Debug.msg(3, "Nviz::SetView(): x=%f, y=%f, height=%f, persp=%f, twist=%f",
                   x, y, height, persp, twist)
+                
+    def LookHere(self, x, y):
+        """!Look here feature 
+        @param x,y screen coordinates
+        """
         
+        Nviz_look_here(x, y)
+        Debug.msg(3, "Nviz::LookHere(): x=%f, y=%f", x, y)
+            
     def SetZExag(self, z_exag):
         """!Set z-exag value
         
@@ -186,7 +194,7 @@ class Nviz(object):
         # set background color
         Nviz_set_bgcolor(self.data, Nviz_color_from_str("white"))
         
-        GS_clear(Nviz_get_bgcolor(self.data))
+        GS_clear(Nviz_get_bgcolor(self.data))        
         # initialize view, lights
         Nviz_init_view(self.data)
         
@@ -262,7 +270,19 @@ class Nviz(object):
         Debug.msg(1, "Nviz::LoadRaster(): name=%s -> id=%d", name, id)
         
         return id
-
+    
+    def AddConstant(self, value, color):
+        """!Add new constant surface"""
+        id = Nviz_new_map_obj(MAP_OBJ_SURF, None, value, self.data)
+        
+        Nviz_set_attr(id, MAP_OBJ_SURF, ATT_COLOR, CONST_ATT,
+                        None, Nviz_color_from_str(color),
+                        self.data)
+        Nviz_set_focus_map(MAP_OBJ_UNDEFINED, -1)
+        
+        Debug.msg(1, "Nviz::AddConstant(): id=%d", id)
+        return id
+        
     def UnloadSurface(self, id):
         """!Unload surface
         
@@ -420,7 +440,7 @@ class Nviz(object):
         
         @param id surface id
         @param map if true use map otherwise constant
-        @param value map name of value
+        @param value map name or value
         
         @return 1 on success
         @return -1 surface not found
@@ -1174,7 +1194,6 @@ class Nviz(object):
         @param nw,ne,sw,se fringe edges (turn on/off)
         """
         scolor = str(color[0]) + ':' + str(color[1]) + ':' + str(color[2])
-
         Nviz_set_fringe(self.data,
                         sid, Nviz_color_from_str(scolor),
                         elev, int(nw), int(ne), int(sw), int(se))

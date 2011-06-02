@@ -541,7 +541,7 @@ class Settings:
                 'light' : {
                     'position' : {
                         'x' : 0.68,
-                        'y' : 0.68,
+                        'y' : -0.68,
                         'z' : 80,
                         },
                     'bright'  : 80,
