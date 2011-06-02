@@ -99,7 +99,10 @@ class PyShellWindow(wx.Panel):
                                             lname = fname,
                                             lchecked = True,
                                             lcmd = [lcmd, 'map=%s' % fname])
-        return _('%s map <%s> added') % (ltype.title(), fname)
+        if ltype == 'raster':
+            return _('Raster map <%s> added')
+        
+        return _('Vector map <%s> added')
     
     def OnClear(self, event):
         """!Delete all text from the shell
