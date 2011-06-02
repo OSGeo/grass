@@ -78,19 +78,20 @@ class PyShellWindow(wx.Panel):
         @param name name of raster/vector map to be added
         @param type map type ('raster', 'vector', 'auto' for autodetection)
         """
+        fname = None
         if ltype == 'raster' or ltype != 'vector':
+            # check for raster
             fname = grass.find_file(name, element = 'cell')['fullname']
             if fname:
                 ltype = 'raster'
                 lcmd = 'd.rast'
-        elif ltype == 'vector' or ltype != 'raster':
+        
+        if not fname and (ltype == 'vector' or ltype != 'raster'):
+            # if not found check for vector
             fname = grass.find_file(name, element = 'vector')['fullname']
             if fname:
                 ltype = 'vector'
                 lcmd = 'd.vect'
-        else:
-            sys.stderr.write(_("Unsupported map type '%s'") % ltype)
-            return
         
         if not fname:
             return _("Raster or vector map <%s> not found") % (name)
@@ -100,9 +101,9 @@ class PyShellWindow(wx.Panel):
                                             lchecked = True,
                                             lcmd = [lcmd, 'map=%s' % fname])
         if ltype == 'raster':
-            return _('Raster map <%s> added')
+            return _('Raster map <%s> added') % fname
         
-        return _('Vector map <%s> added')
+        return _('Vector map <%s> added') % fname
     
     def OnClear(self, event):
         """!Delete all text from the shell
