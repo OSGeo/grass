@@ -29,14 +29,16 @@ import grass.script as grass
 class PyShellWindow(wx.Panel):
     """!Python Shell Window"""
     def __init__(self, parent, id = wx.ID_ANY, **kwargs):
-        self.parent = parent
+        self.parent = parent # GMFrame
         
         wx.Panel.__init__(self, parent = parent, id = id, **kwargs)
         
         self.intro = _("Welcome to wxGUI Interactive Python Shell %s") % VERSION + "\n\n" + \
-            _("Type %s for more GRASS scripting related information.") % "\"help(grass)\"" + "\n\n"
+            _("Type %s for more GRASS scripting related information.") % "\"help(grass)\"" + "\n" + \
+            _("Type %s to add raster or vector to the layer tree.") % "\"AddLayer()\"" + "\n\n"
         self.shell = PyShell(parent = self, id = wx.ID_ANY,
-                             introText = self.intro, locals = {'grass' : grass})
+                             introText = self.intro, locals = {'grass' : grass,
+                                                               'AddLayer' : self.AddLayer})
         
         sys.displayhook = self._displayhook
         
@@ -70,6 +72,35 @@ class PyShellWindow(wx.Panel):
         self.SetAutoLayout(True)        
         self.Layout()
 
+    def AddLayer(self, name, ltype = 'auto'):
+        """!Add selected map to the layer tree
+
+        @param name name of raster/vector map to be added
+        @param type map type ('raster', 'vector', 'auto' for autodetection)
+        """
+        if ltype == 'raster' or ltype != 'vector':
+            fname = grass.find_file(name, element = 'cell')['fullname']
+            if fname:
+                ltype = 'raster'
+                lcmd = 'd.rast'
+        elif ltype == 'vector' or ltype != 'raster':
+            fname = grass.find_file(name, element = 'vector')['fullname']
+            if fname:
+                ltype = 'vector'
+                lcmd = 'd.vect'
+        else:
+            sys.stderr.write(_("Unsupported map type '%s'") % ltype)
+            return
+        
+        if not fname:
+            return _("Raster or vector map <%s> not found") % (name)
+        
+        self.parent.GetLayerTree().AddLayer(ltype = ltype,
+                                            lname = fname,
+                                            lchecked = True,
+                                            lcmd = [lcmd, 'map=%s' % fname])
+        return _('%s map <%s> added') % (ltype.title(), fname)
+    
     def OnClear(self, event):
         """!Delete all text from the shell
         """
