@@ -602,10 +602,16 @@ int main(int argc, char *argv[])
 	Vect_reset_line(Points);
 	Vect_reset_cats(Cats);
 	
+#if 0
 	x = LASPoint_GetX(LAS_point) * scale_x + offset_x;
 	y = LASPoint_GetY(LAS_point) * scale_y + offset_y;
 	z = LASPoint_GetZ(LAS_point) * scale_z + offset_z;
-	
+#endif
+
+	x = LASPoint_GetX(LAS_point);
+	y = LASPoint_GetY(LAS_point);
+	z = LASPoint_GetZ(LAS_point);
+
 	if (spat_opt->answer || region_flag->answer) {
 	    if (x < xmin || x > xmax || y < ymin || y > ymax) {
 		n_outside++;
