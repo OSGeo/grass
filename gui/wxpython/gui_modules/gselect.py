@@ -337,7 +337,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                 for elem in elem_list:
                     if elem != '':
                         fullqElem = elem + '@' + mapset
-                        if elements:
+                        if elements is not None:
                             if (exclude and fullqElem in elements) or \
                                     (not exclude and fullqElem not in elements):
                                 continue
