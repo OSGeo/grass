@@ -1209,7 +1209,7 @@ class VDigitToolbar(AbstractToolbar):
             lmgr = self.parent.GetLayerManager()
             if lmgr:
                 lmgr.toolbars['tools'].Enable('vdigit', enable = True)
-                lmgr.notebook.SetSelection(1)
+                lmgr.SetNBPage('console')
             self.digit.CloseMap()
             if lmgr:
                 lmgr.GetLogWindow().GetProgressBar().SetValue(0)
@@ -1401,7 +1401,7 @@ class NvizToolbar(AbstractToolbar):
             event.Skip()
             return
         
-        self.lmgr.notebook.SetSelection(3)
+        self.lmgr.SetNBPage('nviz')
         eId = event.GetId()
         if eId == self.view:
             self.lmgr.nviz.SetPage('view')
@@ -1444,7 +1444,7 @@ class NvizToolbar(AbstractToolbar):
         self.parent.MapWindow.polycoords = []
         
         # return to map layer page (gets rid of ugly exit bug)
-        self.lmgr.notebook.SetSelection(0)
+        self.lmgr.SetNBPage('layers')
 
         # disable the toolbar
         self.parent.RemoveToolbar("nviz")
