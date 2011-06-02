@@ -119,6 +119,7 @@ class GMFrame(wx.Frame):
         self.workspaceChanged = False     # track changes in workspace
         self.georectifying = None         # reference to GCP class or None
         self.gcpmanagement = None         # reference to GCP class or None
+        self.existNviz = False
         # list of open dialogs
         self.dialogs        = dict()
         self.dialogs['preferences'] = None
@@ -269,6 +270,7 @@ class GMFrame(wx.Frame):
         self.notebook.AddPage(self.nviz, text = _("3D view"))
         self.notebookPages['nviz'] = self.nviz
         self.SetNBPage('nviz')
+        self.existNviz = True
         
     def RemoveNviz(self):
         """!Remove nviz notebook page"""

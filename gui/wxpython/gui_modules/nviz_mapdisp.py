@@ -451,6 +451,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             type = self.tree.GetPyData(item)[0]['type']
             if item in self.layers:
                 continue
+            # "raster (double click to set properties)" - tries to load this 
+            # layer - no idea how to fix it
+            if ' ' in self.tree.GetPyData(item)[0]['maplayer'].name:
+                return
             try:
                 if type ==  'raster':
                     self.LoadRaster(item)
