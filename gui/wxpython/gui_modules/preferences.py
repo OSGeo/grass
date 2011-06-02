@@ -765,9 +765,10 @@ class Settings:
                                                        svalue))
                                 if sidx < len(kvalues) - 1:
                                     file.write('%s' % self.sep)
-#                            if len(subkeys) > 4 and idx < len(subkeys) - 1:
-#                                file.write('%s%s%s%s%s' % (os.linesep, group, self.sep, key, self.sep))
                         else:
+                            if idx > 0 and \
+                                    type(settings[group][key][subkeys[idx - 1]]) == types.DictType:
+                                file.write('%s%s%s%s%s' % (os.linesep, group, self.sep, key, self.sep))
                             value = self._parseValue(settings[group][key][subkeys[idx]])
                             file.write('%s%s%s' % (subkeys[idx], self.sep, value))
                             if idx < len(subkeys) - 1 and \
