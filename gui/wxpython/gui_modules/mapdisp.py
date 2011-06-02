@@ -370,6 +370,11 @@ class MapFrame(wx.Frame):
         
         # add Nviz toolbar and disable 2D display mode tools
         self.toolbars['nviz'] = toolbars.NvizToolbar(self, self.Map)
+        # disable 3D mode for other displays
+        for page in range(0, self._layerManager.gm_cb.GetPageCount()):
+            if self._layerManager.gm_cb.GetPage(page) != self._layerManager.curr_page:
+                if '3D' in self._layerManager.gm_cb.GetPage(page).maptree.mapdisplay.toolbars['map'].combo.GetString(1):
+                    self._layerManager.gm_cb.GetPage(page).maptree.mapdisplay.toolbars['map'].combo.Delete(1)
         self.toolbars['map'].Enable2D(False)
         
         # update status bar
@@ -548,6 +553,8 @@ class MapFrame(wx.Frame):
                 pgnum = self.layerbook.GetPageIndex(self.page)
                 if pgnum > -1:
                     self.layerbook.SetSelection(pgnum)
+                    self._layerManager.curr_page = self.layerbook.GetCurrentPage()
+                    self.layerbook
         
         event.Skip()
         
