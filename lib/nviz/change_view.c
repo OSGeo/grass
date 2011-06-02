@@ -221,3 +221,18 @@ int Nviz_change_exag(nv_data * data, double exag)
 
     return 1;
 }
+/*!
+  \brief Change focused point
+  
+  \param sx,sy screen coordinates
+  
+  \return 1
+*/
+int Nviz_look_here(double sx, double sy)
+{
+     G_debug(1, "Nviz_look_here(): screen coordinates = %f %f", sx, sy); 
+     GS_look_here(sx, sy);
+     return 1;
+}
+
+

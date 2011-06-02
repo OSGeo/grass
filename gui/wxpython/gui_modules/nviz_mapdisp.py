@@ -83,9 +83,17 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                         # do not render vector lines in quick mode
                         'vlines' : False,
                         'vpoints' : False }
-        
+        self.mouse = {
+            'use': 'default'
+            }
+        self.cursors = {
+            'default' : wx.StockCursor(wx.CURSOR_ARROW),
+            'cross'   : wx.StockCursor(wx.CURSOR_CROSS),
+            }
         # list of loaded map layers (layer tree items)
         self.layers  = list()
+        # list of constant surfaces
+        self.constants = list()
         # list of query points
         self.qpoints = list()
         
@@ -235,6 +243,17 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 # update statusbar
                 ### self.parent.StatusbarUpdate()
         
+        if event.LeftDown():
+            if self.mouse['use'] == "lookHere":
+                pos = event.GetPosition()
+                size = self.GetClientSize()
+                self._display.LookHere(pos[0], size[1] - pos[1])
+                self.DoPaint()
+                comboId = self.lmgr.nviz.win['view']['lookAt']
+                self.lmgr.nviz.FindWindowById(comboId).SetSelection(0)
+                self.mouse['use'] = 'default'
+                self.SetCursor(self.cursors['default'])
+                
         event.Skip()
 
     def Pixel2Cell(self, (x, y)):
@@ -323,6 +342,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                                bright = data['bright'] / 100.,
                                ambient = data['ambient'] / 100.)
         self._display.DrawLightingModel()
+        if hasattr(event, 'refresh'):
+            self.Refresh(False)
         
     def UpdateMap(self, render = True):
         """!Updates the canvas anytime there is a change to the
@@ -867,7 +888,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
     def UpdateSurfaceProperties(self, id, data):
         """!Update surface map object properties"""
         # surface attributes
-        for attrb in ('topo', 'color', 'mask',
+        for attrb in ('color', 'mask',
                      'transp', 'shine', 'emit'):
             if attrb not in data['attribute'] or \
                     'update' not in data['attribute'][attrb]:
@@ -890,9 +911,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 if type(value) ==  type('') and \
                         len(value) <=  0: # ignore empty values (TODO: warning)
                     continue
-                if attrb ==  'topo':
-                    self._display.SetSurfaceTopo(id, map, str(value)) 
-                elif attrb ==  'color':
+                if attrb ==  'color':
                     self._display.SetSurfaceColor(id, map, str(value))
                 elif attrb ==  'mask':
                     # TODO: invert mask
@@ -1086,12 +1105,11 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             data['height'].pop('update')
         
         # surface
-        if 'update' in data['mode']:
-            sid = self.GetLayerId(type = 'raster', name = data['mode']['surface'])
+        if 'update' in data['mode']['surface']:
+            sid = self.GetLayerId(type = 'raster', name = data['mode']['surface']['value'])
             if sid > -1:
-                self._display.SetVectorPointSurface(id, sid)
-            
-            data['mode'].pop('update')
+                ret = self._display.SetVectorPointSurface(id, sid)
+            data['mode']['surface'].pop('update')
             
     def GetLayerNames(self, type):
         """!Return list of map layer names of given type"""

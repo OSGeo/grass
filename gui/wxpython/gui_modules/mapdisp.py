@@ -359,7 +359,7 @@ class MapFrame(wx.Frame):
         
         # check for GLCanvas and OpenGL
         if not nviz.haveNviz:
-            self.toolbars['map'].combo.SetValue (_("2D view"))
+            self.toolbars['map'].combo.SetValue(_("2D view"))
             wx.MessageBox(parent = self,
                           message = _("Unable to switch to 3D display mode.\nThe Nviz python extension "
                                       "was not found or loaded properly.\n"
@@ -398,8 +398,9 @@ class MapFrame(wx.Frame):
             self.MapWindow = self.MapWindow3D
             # add Nviz notebookpage
             self._layerManager.AddNviz()
-            self._layerManager.nviz.UpdatePage('view')
-            self._layerManager.nviz.UpdatePage('light')
+            for page in ('view', 'light', 'fringe', 'constant'):
+                self._layerManager.nviz.UpdatePage(page)
+
         
         # switch from MapWindow to MapWindowGL
         # add nviz toolbar

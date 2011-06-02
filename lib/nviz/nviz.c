@@ -39,7 +39,7 @@ void Nviz_init_data(nv_data * data)
     }
 
     /* lights */
-    for (i = 0; i < MAX_LIGHTS; i++) {
+    for (i = 0; i < MAX_LIGHTS - 1; i++) {
 	Nviz_new_light(data);
     }
 
