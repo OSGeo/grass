@@ -169,9 +169,9 @@ class CmdThread(threading.Thread):
 class GMConsole(wx.SplitterWindow):
     """!Create and manage output console for commands run by GUI.
     """
-    def __init__(self, parent, id=wx.ID_ANY, margin=False, pageid=0,
+    def __init__(self, parent, id = wx.ID_ANY, margin = False,
                  notebook = None,
-                 style=wx.TAB_TRAVERSAL | wx.FULL_REPAINT_ON_RESIZE,
+                 style = wx.TAB_TRAVERSAL | wx.FULL_REPAINT_ON_RESIZE,
                  **kwargs):
         wx.SplitterWindow.__init__(self, parent, id, style = style, *kwargs)
         self.SetName("GMConsole")
@@ -186,8 +186,7 @@ class GMConsole(wx.SplitterWindow):
         else:
             self._notebook = self.parent.notebook
         self.lineWidth       = 80
-        self.pageid          = pageid
-                        
+        
         # remember position of line begining (used for '\r')
         self.linePos         = -1
         
@@ -384,8 +383,8 @@ class GMConsole(wx.SplitterWindow):
         self.cmd_output.SetStyle()
 
         if switchPage and \
-                self._notebook.GetSelection() != self.parent.goutput.pageid:
-            self._notebook.SetSelection(self.parent.goutput.pageid)
+                self._notebook.GetSelection() != self._notebook.GetPageIndexByName('console'):
+            self._notebook.SetSelectionByName('console')
         
         if not style:
             style = self.cmd_output.StyleDefault
@@ -513,8 +512,8 @@ class GMConsole(wx.SplitterWindow):
                 # other GRASS commands (r|v|g|...)
                 # switch to 'Command output' if required
                 if switchPage:
-                    if self._notebook.GetSelection() != self.parent.goutput.pageid:
-                        self._notebook.SetSelection(self.parent.goutput.pageid)
+                    if self._notebook.GetSelection() != self._notebook.GetPageIndexByName('console'):
+                        self._notebook.SetSelectionByName('console')
                     
                     self.parent.SetFocus()
                     self.parent.Raise()
@@ -635,12 +634,12 @@ class GMConsole(wx.SplitterWindow):
         """!Print command output"""
         message = event.text
         type  = event.type
-        if self._notebook.GetSelection() != self.parent.goutput.pageid:
-            textP = self._notebook.GetPageText(self.parent.goutput.pageid)
+        if self._notebook.GetSelection() != self._notebook.GetPageIndexByName('console'):
+            page = self._notebook.GetPageIndexByName('console')
+            textP = self._notebook.GetPageText(page)
             if textP[-1] != ')':
                 textP += ' (...)'
-            self._notebook.SetPageText(self.parent.goutput.pageid,
-                                       textP)
+            self._notebook.SetPageText(page, textP)
         
         # message prefix
         if type == 'warning':

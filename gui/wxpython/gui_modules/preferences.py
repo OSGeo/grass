@@ -112,6 +112,11 @@ class Settings:
                 'askOnQuit' : {
                     'enabled' : True
                     },
+                # hide tabs
+                'hideTabs' : {
+                    'search' : False,
+                    'pyshell' : False,
+                    },
                 },
             #
             # appearance
@@ -1126,6 +1131,26 @@ class PreferencesDialog(PreferencesBaseDialog):
         self.winId['manager:askOnQuit:enabled'] = askOnQuit.GetId()
         
         gridSizer.Add(item = askOnQuit,
+                      pos = (row, 0), span = (1, 2))
+
+        row += 1
+        hideSearch = wx.CheckBox(parent = panel, id = wx.ID_ANY,
+                                 label = _("Hide '%s' tab (requires GUI restart)") % _("Search module"),
+                                 name = 'IsChecked')
+        hideSearch.SetValue(self.settings.Get(group = 'manager', key = 'hideTabs', subkey = 'search'))
+        self.winId['manager:hideTabs:search'] = hideSearch.GetId()
+        
+        gridSizer.Add(item = hideSearch,
+                      pos = (row, 0), span = (1, 2))
+        
+        row += 1
+        hidePyShell = wx.CheckBox(parent = panel, id = wx.ID_ANY,
+                                  label = _("Hide '%s' tab (requires GUI restart)") % _("Python shell"),
+                                  name = 'IsChecked')
+        hidePyShell.SetValue(self.settings.Get(group = 'manager', key = 'hideTabs', subkey = 'pyshell'))
+        self.winId['manager:hideTabs:pyshell'] = hidePyShell.GetId()
+        
+        gridSizer.Add(item = hidePyShell,
                       pos = (row, 0), span = (1, 2))
         
         sizer.Add(item = gridSizer, proportion = 1, flag = wx.ALL | wx.EXPAND, border = 5)
