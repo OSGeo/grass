@@ -668,7 +668,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         @todo vector/volume
         """
-        self.lmgr.SetNBPage('nviz')
+        self.lmgr.notebook.SetSelectionByName('nviz')
         ltype = self.GetPyData(self.layer_selected)[0]['type']
         if ltype == 'raster':
             self.lmgr.nviz.SetPage('surface')
