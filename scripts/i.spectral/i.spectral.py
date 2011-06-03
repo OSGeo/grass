@@ -110,7 +110,7 @@ def draw_gnuplot(what, xlabels, output, label):
 	"set noclabel",
 	"set xlabel 'Bands'",
 	"set ylabel 'DN Value'",
-	"set data style lines"
+	"set style data lines"
 	]
 
 
