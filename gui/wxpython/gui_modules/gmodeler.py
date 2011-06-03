@@ -547,14 +547,9 @@ class ModelFrame(wx.Frame):
         
         self.statusbar = self.CreateStatusBar(number = 1)
         
-        if globalvar.hasAgw:
-            self.notebook = FN.FlatNotebook(parent = self, id = wx.ID_ANY,
-                                            agwStyle = FN.FNB_FANCY_TABS | FN.FNB_BOTTOM |
-                                            FN.FNB_NO_NAV_BUTTONS | FN.FNB_NO_X_BUTTON)
-        else:
-            self.notebook = FN.FlatNotebook(parent = self, id = wx.ID_ANY,
-                                            style = FN.FNB_FANCY_TABS | FN.FNB_BOTTOM |
-                                            FN.FNB_NO_NAV_BUTTONS | FN.FNB_NO_X_BUTTON)
+        self.notebook = menuform.GNotebook(parent = self,
+                                           style = FN.FNB_FANCY_TABS | FN.FNB_BOTTOM |
+                                           FN.FNB_NO_NAV_BUTTONS | FN.FNB_NO_X_BUTTON)
         
         self.canvas = ModelCanvas(self)
         self.canvas.SetBackgroundColour(wx.WHITE)
@@ -566,13 +561,12 @@ class ModelFrame(wx.Frame):
         
         self.itemPanel = ItemPanel(parent = self)
         
-        self.goutput = goutput.GMConsole(parent = self, pageid = 3,
-                                         notebook = self.notebook)
+        self.goutput = goutput.GMConsole(parent = self, notebook = self.notebook)
         
-        self.notebook.AddPage(self.canvas, text=_('Model'))
-        self.notebook.AddPage(self.itemPanel, text=_('Items'))
-        self.notebook.AddPage(self.variablePanel, text=_('Variables'))
-        self.notebook.AddPage(self.goutput, text=_('Command output'))
+        self.notebook.AddPage(page = self.canvas, text=_('Model'), name = 'model')
+        self.notebook.AddPage(page = self.itemPanel, text=_('Items'), name = 'items')
+        self.notebook.AddPage(page = self.variablePanel, text=_('Variables'), name = 'variables')
+        self.notebook.AddPage(page = self.goutput, text=_('Command output'), name = 'output')
         wx.CallAfter(self.notebook.SetSelection, 0)
         wx.CallAfter(self.ModelChanged, False)
 

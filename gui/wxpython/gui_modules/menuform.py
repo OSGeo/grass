@@ -12,6 +12,7 @@ Classes:
  - GrassGUIApp
  - GUI
  - FloatValidator
+ - GNotebook
 
 This program is just a coarse approach to automatically build a GUI
 from a xml-based GRASS user interface description.
@@ -845,9 +846,9 @@ class mainFrame(wx.Frame):
         self.btn_help = wx.Button(parent = self.panel, id = wx.ID_HELP)
         self.btn_help.SetToolTipString(_("Show manual page of the command (Ctrl+H)"))
         self.btn_help.Bind(wx.EVT_BUTTON, self.OnHelp)
-        if not hasattr(self.notebookpanel, "manual_tab_id"):
+        if self.notebookpanel.notebook.GetPageIndexByName('manual') < 0:
             self.btn_help.Hide()
-
+        
         # add help button
         btnsizer.Add(item = self.btn_help, proportion = 0, flag = wx.ALL | wx.ALIGN_CENTER, border = 10)
         
@@ -1020,8 +1021,8 @@ class mainFrame(wx.Frame):
         if self.standalone or cmd[0][0:2] !=  "d.":
             # Send any non-display command to parent window (probably wxgui.py)
             # put to parents switch to 'Command output'
-            if self.notebookpanel.notebook.GetSelection() !=  self.notebookpanel.goutputId:
-                self.notebookpanel.notebook.SetSelection(self.notebookpanel.goutputId)
+            if self.notebookpanel.notebook.GetSelection() !=  self.notebookpanel.notebook.GetPageIndexByName('output'):
+                self.notebookpanel.notebook.SetSelectionByName('output')
             
             try:
                 if self.task.path:
@@ -1082,8 +1083,8 @@ class mainFrame(wx.Frame):
 
     def OnHelp(self, event):
         """!Show manual page (switch to the 'Manual' notebook page)"""
-        if hasattr(self.notebookpanel, "manual_tab_id"):
-            self.notebookpanel.notebook.SetSelection(self.notebookpanel.manual_tab_id)
+        if self.notebookpanel.notebook.GetPageIndexByName('manual') > -1:
+            self.notebookpanel.notebook.SetSelectionByName('manual')
             self.notebookpanel.OnPageChange(None)
         
         if event:    
@@ -1140,11 +1141,7 @@ class cmdPanel(wx.Panel):
         panelsizer = wx.BoxSizer(orient = wx.VERTICAL)
 
         # Build notebook
-        nbStyle = globalvar.FNPageStyle
-        if globalvar.hasAgw:
-            self.notebook = FN.FlatNotebook(self, id = wx.ID_ANY, agwStyle = nbStyle)
-        else:
-            self.notebook = FN.FlatNotebook(self, id = wx.ID_ANY, style = nbStyle)
+        self.notebook = GNotebook(self, style = globalvar.FNPageStyle)
         self.notebook.SetTabAreaColour(globalvar.FNPageColor)
         self.notebook.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChange)
 
@@ -1154,25 +1151,21 @@ class cmdPanel(wx.Panel):
             tab[section] = scrolled.ScrolledPanel(parent = self.notebook)
             tab[section].SetScrollRate(10, 10)
             tabsizer[section] = wx.BoxSizer(orient = wx.VERTICAL)
-            self.notebook.AddPage(tab[section], text = section)
+            self.notebook.AddPage(page = tab[section], text = section)
 
         # are we running from command line?
         ### add 'command output' tab regardless standalone dialog
         if self.parent.GetName() ==  "MainFrame" and self.parent.get_dcmd is None:
-            self.goutput = goutput.GMConsole(parent = self, margin = False,
-                                             pageid = self.notebook.GetPageCount())
-            self.goutputId = self.notebook.GetPageCount()
-            self.outpage = self.notebook.AddPage(self.goutput, text = _("Command output"))
+            self.goutput = goutput.GMConsole(parent = self, margin = False)
+            self.outpage = self.notebook.AddPage(page = self.goutput, text = _("Command output"), name = 'output')
         else:
             self.goutput = None
-            self.goutputId = -1
         
         self.manual_tab = HelpPanel(parent = self, grass_command = self.task.name)
         if not self.manual_tab.IsFile():
             self.manual_tab.Hide()
         else:
-            self.notebook.AddPage(self.manual_tab, text = _("Manual"))
-            self.manual_tab_id = self.notebook.GetPageCount() - 1
+            self.notebook.AddPage(page = self.manual_tab, text = _("Manual"), name = 'manual')
         
         self.notebook.SetSelection(0)
 
@@ -1989,9 +1982,9 @@ class cmdPanel(wx.Panel):
             sel = self.notebook.GetSelection()
         else:
             sel = event.GetSelection()
-
-        if hasattr(self, "manual_tab_id") and \
-                sel ==  self.manual_tab_id:
+        
+        idx = self.notebook.GetPageIndexByName('manual')
+        if idx > -1 and sel ==  idx:
             # calling LoadPage() is strangely time-consuming (only first call)
             # FIXME: move to helpPage.__init__()
             if not self.manual_tab.IsLoaded():
@@ -2405,7 +2398,43 @@ class FloatValidator(wx.PyValidator):
     
     def TransferFromWindow(self):
         return True # Prevent wxDialog from complaining.
-     
+
+class GNotebook(FN.FlatNotebook):
+    """!Generic notebook widget
+    """
+    def __init__(self, parent, style, **kwargs):
+        if globalvar.hasAgw:
+            FN.FlatNotebook.__init__(self, parent, id = wx.ID_ANY, agwStyle = style, **kwargs)
+        else:
+            FN.FlatNotebook.__init__(self, parent, id = wx.ID_ANY, style = style, **kwargs)
+        
+        self.notebookPages = {}
+            
+    def AddPage(self, **kwargs):
+        """!Add a page
+        """
+        if 'name' in kwargs:
+            self.notebookPages[kwargs['name']] = kwargs['page']
+            del kwargs['name']
+        super(GNotebook, self).AddPage(**kwargs)
+
+    def SetSelectionByName(self, page):
+        """!Set notebook
+        
+        @param page names, eg. 'layers', 'console', 'search', 'pyshell', 'nviz'
+        """
+        self.SetSelection(self.GetPageIndexByName(page))
+        
+    def GetPageIndexByName(self, page):
+        """!Get notebook page index
+        
+        @param page name
+        """
+        if page not in self.notebookPages:
+            return -1
+        
+        return self.GetPageIndex(self.notebookPages[page])
+    
 if __name__ ==  "__main__":
 
     if len(sys.argv) ==  1:
