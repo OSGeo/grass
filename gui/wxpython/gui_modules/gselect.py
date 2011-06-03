@@ -352,7 +352,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                 continue
             
             if self.seltree.ItemHasChildren(mapset_node):
-                sel = UserSettings.Get(group='general', key='elementListExpand',
+                sel = UserSettings.Get(group='appearance', key='elementListExpand',
                                        subkey='selection')
                 collapse = True
 

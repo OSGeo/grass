@@ -89,10 +89,6 @@ class Settings:
                          globalvar.MAP_WINDOW_SIZE[0],
                          globalvar.MAP_WINDOW_SIZE[1])
                     },
-                # expand/collapse element list
-                'elementListExpand' : {
-                    'selection' : 0 
-                    },
                 # workspace
                 'workspace' : {
                     'posDisplay' : {
@@ -124,6 +120,10 @@ class Settings:
                 'outputfont' : {
                     'type' : 'Courier New',
                     'size': '10',
+                    },
+                # expand/collapse element list
+                'elementListExpand' : {
+                    'selection' : 0 
                     },
                 'menustyle' : {
                     'selection' : 1
@@ -620,7 +620,7 @@ class Settings:
                 self.internalSettings[group][key] = {}
 
         # self.internalSettings['general']["mapsetPath"]['value'] = self.GetMapsetPath()
-        self.internalSettings['general']['elementListExpand']['choices'] = \
+        self.internalSettings['appearance']['elementListExpand']['choices'] = \
             (_("Collapse all except PERMANENT and current"),
              _("Collapse all except PERMANENT"),
              _("Collapse all except current"),
@@ -1096,52 +1096,6 @@ class PreferencesDialog(PreferencesBaseDialog):
         notebook.AddPage(page = panel, text = _("General"))
         
         border = wx.BoxSizer(wx.VERTICAL)
-        box   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = " %s " % _("General settings"))
-        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
-        
-        gridSizer = wx.GridBagSizer (hgap = 3, vgap = 3)
-        gridSizer.AddGrowableCol(0)
-        
-        #
-        # expand element list
-        #
-        row = 0
-        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                           label = _("Element list:")),
-                      flag = wx.ALIGN_LEFT |
-                      wx.ALIGN_CENTER_VERTICAL,
-                      pos = (row, 0))
-        elementList = wx.Choice(parent = panel, id = wx.ID_ANY, 
-                                choices = self.settings.Get(group = 'general', key = 'elementListExpand',
-                                                            subkey = 'choices', internal = True),
-                                name = "GetSelection")
-        elementList.SetSelection(self.settings.Get(group = 'general', key = 'elementListExpand',
-                                                   subkey = 'selection'))
-        self.winId['general:elementListExpand:selection'] = elementList.GetId()
-
-        gridSizer.Add(item = elementList,
-                      flag = wx.ALIGN_RIGHT |
-                      wx.ALIGN_CENTER_VERTICAL,
-                      pos = (row, 1))
-
-        #
-        # default window layout
-        #
-        row += 1
-        defaultPos = wx.CheckBox(parent = panel, id = wx.ID_ANY,
-                                 label = _("Save current window layout as default"),
-                                 name = 'IsChecked')
-        defaultPos.SetValue(self.settings.Get(group = 'general', key = 'defWindowPos', subkey = 'enabled'))
-        defaultPos.SetToolTip(wx.ToolTip (_("Save current position and size of Layer Manager window and opened "
-                                            "Map Display window(s) and use as default for next sessions.")))
-        self.winId['general:defWindowPos:enabled'] = defaultPos.GetId()
-
-        gridSizer.Add(item = defaultPos,
-                      pos = (row, 0), span = (1, 2))
-        
-        sizer.Add(item = gridSizer, proportion = 1, flag = wx.ALL | wx.EXPAND, border = 5)
-        border.Add(item = sizer, proportion = 0, flag = wx.ALL | wx.EXPAND, border = 3)
-
         #
         # Layer Manager settings
         #
@@ -1175,7 +1129,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                       pos = (row, 0), span = (1, 2))
         
         sizer.Add(item = gridSizer, proportion = 1, flag = wx.ALL | wx.EXPAND, border = 5)
-        border.Add(item = sizer, proportion = 0, flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 3)
+        border.Add(item = sizer, proportion = 0, flag = wx.ALL | wx.EXPAND, border = 3)
         
         #
         # workspace
@@ -1197,7 +1151,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         gridSizer.Add(item = posDisplay,
                       pos = (row, 0), span = (1, 2))
         
-        row +=1 
+        row += 1 
         
         posManager = wx.CheckBox(parent = panel, id = wx.ID_ANY,
                                  label = _("Suppress positioning Layer Manager window"),
@@ -1207,6 +1161,18 @@ class PreferencesDialog(PreferencesBaseDialog):
         self.winId['general:workspace:posManager:enabled'] = posManager.GetId()
         
         gridSizer.Add(item = posManager,
+                      pos = (row, 0), span = (1, 2))
+        
+        row += 1
+        defaultPos = wx.CheckBox(parent = panel, id = wx.ID_ANY,
+                                 label = _("Save current window layout as default"),
+                                 name = 'IsChecked')
+        defaultPos.SetValue(self.settings.Get(group = 'general', key = 'defWindowPos', subkey = 'enabled'))
+        defaultPos.SetToolTip(wx.ToolTip (_("Save current position and size of Layer Manager window and opened "
+                                            "Map Display window(s) and use as default for next sessions.")))
+        self.winId['general:defWindowPos:enabled'] = defaultPos.GetId()
+        
+        gridSizer.Add(item = defaultPos,
                       pos = (row, 0), span = (1, 2))
         
         sizer.Add(item = gridSizer, proportion = 1, flag = wx.ALL | wx.EXPAND, border = 5)
@@ -1267,7 +1233,25 @@ class PreferencesDialog(PreferencesBaseDialog):
         # menu style
         #
         row = 0
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                           label = _("Element list:")),
+                      flag = wx.ALIGN_LEFT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos = (row, 0))
+        elementList = wx.Choice(parent = panel, id = wx.ID_ANY, size = (325, -1),
+                                choices = self.settings.Get(group = 'appearance', key = 'elementListExpand',
+                                                            subkey = 'choices', internal = True),
+                                name = "GetSelection")
+        elementList.SetSelection(self.settings.Get(group = 'appearance', key = 'elementListExpand',
+                                                   subkey = 'selection'))
+        self.winId['appearance:elementListExpand:selection'] = elementList.GetId()
+
+        gridSizer.Add(item = elementList,
+                      flag = wx.ALIGN_RIGHT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos = (row, 1))
         
+        row += 1
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
                                          label = _("Menu style:")),
                       flag = wx.ALIGN_LEFT |
@@ -1276,7 +1260,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         listOfStyles = self.settings.Get(group = 'appearance', key = 'menustyle',
                                          subkey = 'choices', internal = True)
         
-        menuItemText = wx.Choice(parent = panel, id = wx.ID_ANY, size = (300, -1),
+        menuItemText = wx.Choice(parent = panel, id = wx.ID_ANY, size = (325, -1),
                                  choices = listOfStyles,
                                  name = "GetSelection")
         menuItemText.SetSelection(self.settings.Get(group = 'appearance', key = 'menustyle', subkey = 'selection'))
