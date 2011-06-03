@@ -567,7 +567,7 @@ class ModelFrame(wx.Frame):
         self.notebook.AddPage(page = self.itemPanel, text=_('Items'), name = 'items')
         self.notebook.AddPage(page = self.variablePanel, text=_('Variables'), name = 'variables')
         self.notebook.AddPage(page = self.goutput, text=_('Command output'), name = 'output')
-        wx.CallAfter(self.notebook.SetSelection, 0)
+        wx.CallAfter(self.notebook.SetSelectionByName, 'model')
         wx.CallAfter(self.ModelChanged, False)
 
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
@@ -624,7 +624,7 @@ class ModelFrame(wx.Frame):
         
     def OnVariables(self, event):
         """!Switch to variables page"""
-        self.notebook.SetSelection(2)
+        self.notebook.SetSelectionByName('variables')
         
     def OnRemoveItem(self, event):
         """!Remove shape
