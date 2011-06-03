@@ -2,11 +2,11 @@
 
 <em>v.net.path</em> can find shortest path(s) on the vector network.
 Costs may be either line lengths, or attributes saved in a database 
-table. These attributes values are taken as costs of whole segments. If read 
+table. These attributes values are taken as costs of whole segments, not 
+as costs to traverse a lnegth unit (e.g. meter) of the segment. If read 
 from the table, arcs' costs may be different in both directions.
-Shortest paths are written to output vector map and attached attribute table.
+Shortest paths are written to output vector map with an attached attribute table.
 <P>
-
 Nodes can be piped into the program from file or from stdin. The
 syntax is as follows:
 <div class="code"><pre>
@@ -20,12 +20,14 @@ id start_point_x start_point_y end_point_x end_point_y
 </pre></div>
 
 <p>
-Points specified by category must be exactly on network nodes,
-while, when specifying coordinates, the next node to a given
-coordinate pair is used.
-</p>
+Points specified by category must be exactly on network nodes, and the 
+input vector map needs to be prepared with <em>v.net operation=connect</em>.
 <p>
-Attribute table will contain following attributes:
+When specifying coordinates, the next network node to a given coordinate 
+pair is used.
+
+<p>
+The attribute table will contain the following attributes:
 </p>
 <ul>
     <li>cat  - path unique category assigned by module</li>
@@ -43,7 +45,7 @@ Attribute table will contain following attributes:
     <li>tdist - the distance from the network to second point</li>
 </ul>
 
-<h2>NOTE</h2>
+<h2>NOTES</h2>
 
 If the columns 'afcol', 'abcol' and 'ncol' costs are not
 specified, the length of network segments is measured and 
