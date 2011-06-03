@@ -801,6 +801,28 @@ class Nviz(object):
         
         return 1
 
+    def UnsetVectorLineSurface(self, id, surf_id):
+        """!Unset reference surface of vector set (lines)
+        
+        @param id vector set id
+        @param surf_id surface id
+        
+        @return 1 on success
+        @return -1 vector set not found
+        @return -2 surface not found
+        @return -3 on failure
+        """
+        if not GV_vect_exists(id):
+            return -1
+        
+        if not GS_surf_exists(surf_id):
+            return -2
+        
+        if GV_unselect_surf(id, surf_id) < 0:
+            return -3
+        
+        return 1
+        
     def SetVectorPointMode(self, id, color_str, width, size, marker):
         """!Set mode of vector point overlay
         
@@ -866,6 +888,28 @@ class Nviz(object):
         
         return 1
 
+    def UnsetVectorPointSurface(self, id, surf_id):
+        """!Unset reference surface of vector set (points)
+        
+        @param id vector set id
+        @param surf_id surface id
+        
+        @return 1 on success
+        @return -1 vector set not found
+        @return -2 surface not found
+        @return -3 on failure
+        """
+        if not GP_site_exists(id):
+            return -1
+        
+        if not GS_surf_exists(surf_id):
+            return -2
+        
+        if GP_unselect_surf(id, surf_id) < 0:
+            return -3
+        
+        return 1
+        
     def AddIsosurface(self, id, level):
         """!Add new isosurface
         

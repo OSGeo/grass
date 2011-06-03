@@ -543,17 +543,14 @@ class Nviz:
         if UserSettings.Get(group='nviz', key='vector',
                             subkey=['lines', 'flat']):
             type = 'flat'
-            map  = None
+            
         else:
-            type = 'flat'
-            map = None
-
+            type = 'surface'
+            
         data['mode'] = {}
         data['mode']['type'] = type
         data['mode']['update'] = None
-        if map:
-            data['mode']['surface'] = map
-
+    
         # height
         data['height'] = { 'value' : UserSettings.Get(group='nviz', key='vector',
                                                       subkey=['lines', 'height']) }
