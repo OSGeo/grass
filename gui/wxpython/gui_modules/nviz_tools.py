@@ -35,8 +35,11 @@ except ImportError:
 try:
     from agw import foldpanelbar as fpb
 except ImportError: # if it's not there locally, try the wxPython lib.
-    import wx.lib.agw.foldpanelbar as fpb
-
+    try:
+        import wx.lib.agw.foldpanelbar as fpb
+    except:
+        import wx.lib.foldpanelbar as fpb # versions <=2.5.5.1
+        
 import grass.script as grass
 
 import globalvar
