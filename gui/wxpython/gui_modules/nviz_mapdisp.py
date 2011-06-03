@@ -9,13 +9,14 @@ List of classes:
  - NvizThread
  - GLWindow
 
-(C) 2008-2010 by the GRASS Development Team
+(C) 2008-2011 by the GRASS Development Team
 
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 @author Martin Landa <landa.martin gmail.com> (Google SoC 2008/2010)
+@author Anna Kratochvilova <KratochAnna seznam.cz> (Google SoC 2011)
 """
 
 import os
