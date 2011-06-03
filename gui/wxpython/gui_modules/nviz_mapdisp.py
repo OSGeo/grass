@@ -1051,7 +1051,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             color = data['color']['value']
             if data['mode']['type'] ==  'flat':
                 flat = True
-                if 'surface' in data:
+                if 'surface' in data['mode']:
                     data.pop('surface')
             else:
                 flat = False
@@ -1073,12 +1073,17 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             data['height'].pop('update')
         
         # surface
-        if 'update' in data['mode']:
-            sid = self.GetLayerId(type = 'raster', name = data['mode']['surface'])
-            if sid > -1:
-                self._display.SetVectorLineSurface(id, sid)
-            
-            data['mode'].pop('update')
+        if 'surface' in data['mode']:
+            if 'update' in data['mode']['surface']:
+                for item in range(len(data['mode']['surface']['value'])):
+                    sid = self.GetLayerId(type = 'raster', name = data['mode']['surface']['value'][item])
+                    if sid > -1:
+                        if data['mode']['surface']['show'][item]:
+                            self._display.SetVectorLineSurface(id, sid)
+                        else:
+                            self._display.UnsetVectorLineSurface(id, sid)                        
+                
+                data['mode']['surface'].pop('update')
         
     def UpdateVectorPointsProperties(self, id, data):
         """!Update vector point map object properties"""
@@ -1110,12 +1115,17 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             data['height'].pop('update')
         
         # surface
-        if 'update' in data['mode']['surface']:
-            sid = self.GetLayerId(type = 'raster', name = data['mode']['surface']['value'])
-            if sid > -1:
-                ret = self._display.SetVectorPointSurface(id, sid)
-            data['mode']['surface'].pop('update')
-            
+        if 'surface' in data['mode']:
+            if 'update' in data['mode']['surface']:
+                for item in range(len(data['mode']['surface']['value'])):
+                    sid = self.GetLayerId(type = 'raster', name = data['mode']['surface']['value'][item])
+                    if sid > -1:
+                        if data['mode']['surface']['show'][item]:
+                            self._display.SetVectorPointSurface(id, sid)
+                        else:
+                            self._display.UnsetVectorPointSurface(id, sid)   
+                data['mode']['surface'].pop('update')
+   
     def GetLayerNames(self, type):
         """!Return list of map layer names of given type"""
         layerName = []
