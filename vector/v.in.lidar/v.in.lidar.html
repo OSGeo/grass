@@ -2,12 +2,15 @@
 
 <em>v.in.lidar</em> converts LiDAR point clouds in LAS format to a GRASS 
 vector, using the <a href="http://www.liblas.org">libLAS</a> library. 
-The typical file extensions for the LAS format are .las and .laz (compressed).
 The created vector is true 3D with x, y, z coordinates.
+<p>
+The typical file extensions for the LAS format are .las and .laz (compressed). 
+The compressed LAS format can be imported only if libLAS has been compiled 
+with laszip support. It is also recommended to compile libLAS with GDAL, 
+needed to text for matching projections.
 <P>
 For larger datasets, it is recommended to not build topology (-b flag).
 Also, creating a table with attributes can take some time for larger datasets.
-<P>
 
 <P>
 The optional <b>spatial</b> parameter defines spatial query extents.
