@@ -1,10 +1,14 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.net.iso</em> splits net to bands between cost isolines (direction from
-centre). Centre node must be opened (costs >= 0). Costs of centre node are 
-used in calculation. Supported are cost assignments for both arcs and nodes, 
-and also different in both directions of a vector line. For areas cost will 
-be calculated along boundary lines.
+<em>v.net.iso</em> splits a network into bands between cost isolines 
+(distance from centre). Centre nodes must be opened (costs >= 0). The 
+costs of centre nodes are used in the calculation. Supported are cost 
+assignments for both arcs and nodes, and also different in both 
+directions of a vector line. For areas, costs will be calculated along 
+boundary lines.
+<p>
+The input vector needs to be prepared with <em>v.net operation=connect</em> 
+in order to connect points representing centre nodes to the network.
 
 <h2>NOTES</h2>
 
@@ -17,9 +21,8 @@ using cost = -1.
 
 Subdivision of a network into areas:<br>
 
-The map must contain at least one center
-(point) on the vector network which can be patched into with
-<a HREF="v.patch.html">v.patch</a>.
+The map must contain at least one center (point) on the vector network 
+which can be patched into with <a HREF="v.net.html">v.net</a>.
 
 <div class="code"><pre>
 # Spearfish
