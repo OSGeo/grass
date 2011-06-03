@@ -219,6 +219,12 @@ int main(int argc, char *argv[])
     /* Open LAS file*/
     LAS_reader = LASReader_Create(in_opt->answer);
     LAS_header = LASReader_GetHeader(LAS_reader);
+
+    if  (LAS_header == NULL) {
+	G_fatal_error(_("Input file <%s> is not a LAS LiDAR point cloud"),
+	                in_opt->answer);
+    }
+
     LAS_srs = LASHeader_GetSRS(LAS_header);
 
     scale_x = LASHeader_GetScaleX(LAS_header);
