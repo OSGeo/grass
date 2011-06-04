@@ -44,12 +44,6 @@ int mk_att(int cat, struct field_info *Fi, dbDriver *Driver, int ncol,
 
 	    if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK)
 		G_fatal_error(_("Unable to fetch data from table"));
-	    if (!more) {
-		/* start from the beginning in case multiple grass vector features
-		 * share the same category */
-		if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK)
-		    G_fatal_error(_("Unable to fetch data from table"));
-	    }
 
 	    if (!more) {
 		/* G_warning ("No database record for cat = %d", cat); */
@@ -86,7 +80,7 @@ int mk_att(int cat, struct field_info *Fi, dbDriver *Driver, int ncol,
 						      (Column));
 		    G_debug(2, "  column = %s -> fieldnum = %d",
 			    db_get_column_name(Column), ogrfieldnum);
-			    
+
 		    if (ogrfieldnum < 0) {
 			G_debug(4, "Could not get OGR field number for column %s",
 				                         db_get_column_name(Column));
