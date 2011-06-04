@@ -33,6 +33,11 @@
 #  define MAX(a,b)      ((a>b) ? a : b)
 #endif
 
+#define LAS_ALL 0
+#define LAS_FIRST 1
+#define LAS_LAST 2
+#define LAS_MID 3
+
 /*
  * ASPRS Standard LIDAR Point Classes
  * Classification Value (bits 0:4) : Meaning
@@ -105,7 +110,7 @@ int main(int argc, char *argv[])
     int i;
     float xmin = 0., ymin = 0., xmax = 0., ymax = 0.;
     struct GModule *module;
-    struct Option *in_opt, *out_opt, *spat_opt;
+    struct Option *in_opt, *out_opt, *spat_opt, *filter_opt;
     struct Option *outloc_opt;
     struct Flag *print_flag, *notab_flag, *region_flag, *notopo_flag;
     struct Flag *over_flag, *extend_flag, *no_import_flag;
@@ -133,12 +138,13 @@ int main(int argc, char *argv[])
     double scale_x, scale_y, scale_z, offset_x, offset_y, offset_z;
     int las_point_format;
     int have_time, have_color;
+    int return_filter;
     unsigned int not_valid;	
 
     struct line_pnts *Points;
     struct line_cats *Cats;
 
-    unsigned int n_features, feature_count, n_outside;
+    unsigned int n_features, feature_count, n_outside, n_filtered;
     int overwrite;
 
     G_gisinit(argv[0]);
@@ -172,6 +178,14 @@ int main(int argc, char *argv[])
     outloc_opt->description = _("Name for new location to create");
     outloc_opt->key_desc = "name";
     
+    filter_opt = G_define_option();
+    filter_opt->key = "filter";
+    filter_opt->type = TYPE_STRING;
+    filter_opt->required = NO;
+    filter_opt->label = _("Only import points of selected return type");
+    filter_opt->description = _("If not specified, all points are imported");
+    filter_opt->options = "first,last,mid";
+
     print_flag = G_define_flag();
     print_flag->key = 'p';
     print_flag->description =
@@ -263,6 +277,17 @@ int main(int argc, char *argv[])
 	}
     }
 
+    return_filter = LAS_ALL;
+    if (filter_opt->answer) {
+	if (strcmp(filter_opt->answer, "first") == 0)
+	    return_filter = LAS_FIRST;
+	else if (strcmp(filter_opt->answer, "last") == 0)
+	    return_filter = LAS_LAST;
+	else if (strcmp(filter_opt->answer, "mid") == 0)
+	    return_filter = LAS_MID;
+	else
+	    G_fatal_error(_("Unknown filter option <%s>"), filter_opt->answer);
+    }
 
     if (region_flag->answer) {
 	if (spat_opt->answer)
@@ -590,6 +615,7 @@ int main(int argc, char *argv[])
     not_valid = 0;
     feature_count = 0;
     n_outside = 0;
+    n_filtered = 0;
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
@@ -615,6 +641,33 @@ int main(int argc, char *argv[])
 	if (spat_opt->answer || region_flag->answer) {
 	    if (x < xmin || x > xmax || y < ymin || y > ymax) {
 		n_outside++;
+		continue;
+	    }
+	}
+	if (return_filter != LAS_ALL) {
+	    int return_no = LASPoint_GetReturnNumber(LAS_point);
+	    int n_returns = LASPoint_GetNumberOfReturns(LAS_point);
+	    int skipme = 1;
+
+	    if (n_returns > 1) {
+
+		switch (return_filter) {
+		case LAS_FIRST:
+		    if (return_no == 1)
+			skipme = 0;
+		    break;
+		case LAS_LAST:
+		    if (return_no == n_returns)
+			skipme = 0;
+		    break;
+		case LAS_MID:
+		    if (return_no > 1 && return_no < n_returns)
+			skipme = 0;
+		    break;
+		}
+	    }
+	    if (skipme) {
+		n_filtered++;
 		continue;
 	    }
 	}
@@ -722,11 +775,13 @@ int main(int argc, char *argv[])
 	Vect_build(&Map);
     Vect_close(&Map);
     
-    G_message(_("%d points imported"), n_features - not_valid - n_outside);
+    G_message(_("%d points imported"), n_features - not_valid - n_outside - n_filtered);
     if (not_valid)
 	G_message(_("%d input points were not valid"), not_valid);
     if (n_outside)
 	G_message(_("%d input points were outside of the selected area"), n_outside);
+    if (n_filtered)
+	G_message(_("%d input points were filtered by return number"), n_filtered);
 
     /* -------------------------------------------------------------------- */
     /*      Extend current window based on dataset.                         */
