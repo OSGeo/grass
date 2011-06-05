@@ -33,6 +33,7 @@ SUBDIRS = \
 	r.in.bin \
 	r.in.gdal \
 	r.in.gridatb \
+	r.in.lidar \
 	r.in.mat \
 	r.in.png \
 	r.in.poly \
