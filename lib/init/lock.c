@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
 #define file argv[1]
 
 #ifdef __MINGW32__
-    G_warning("Concurrent mapset locking is not supported on Windows");
+    G_warning(_("Concurrent mapset locking is not supported on Windows"));
     exit(0);
 #else
     locked = 0;
