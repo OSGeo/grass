@@ -146,7 +146,12 @@ class Nviz(object):
         
         Nviz_look_here(x, y)
         Debug.msg(3, "Nviz::LookHere(): x=%f, y=%f", x, y)
-            
+    
+    def LookAtCenter(self):
+        """!Center view at center of displayed surface"""
+        Nviz_set_focus_map(MAP_OBJ_UNDEFINED, -1)
+        Debug.msg(3, "Nviz::LookAtCenter()")
+        
     def SetZExag(self, z_exag):
         """!Set z-exag value
         
@@ -359,6 +364,19 @@ class Nviz(object):
         
         return 1
 
+    def VectorSurfaceSelected(self, vid, sid):
+        """!Check if surface is selected
+        
+        @param vid vector id
+        @param sid surface id
+        
+        @return True if selected
+        @return False if not selected
+        """
+        selected = GV_surf_is_selected(vid, sid)
+        Debug.msg(1, "Nviz::VectorSurfaceSelected(): vid=%s, sid=%d -> selected=%d", vid, sid, selected)
+        return selected
+    
     def LoadVolume(self, name, color_name, color_value):
         """!Load 3d raster map (volume)
         
@@ -492,7 +510,7 @@ class Nviz(object):
         return self.SetSurfaceAttr(id, ATT_SHINE, map, value)
     
     def SetSurfaceEmit(self, id, map, value):
-        """!Set surface emission
+        """!Set surface emission (currently unused)
         
         @param id surface id
         @param map if true use map otherwise constant
@@ -563,7 +581,7 @@ class Nviz(object):
         return self.UnsetSurfaceAttr(id, ATT_TRANSP)
     
     def UnsetSurfaceEmit(self, id):
-        """!Unset surface emission
+        """!Unset surface emission (currently unused)
         
         @param id surface id
         
