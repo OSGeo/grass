@@ -1575,13 +1575,16 @@ class LMWorkspaceToolbar(AbstractToolbar):
         """!Toolbar data
         """
         self.newdisplay = wx.NewId()
+        self.workspaceNew = wx.NewId()
         self.workspaceOpen = wx.NewId()
         self.workspaceSave = wx.NewId()
         
         icons = Icons['layerManager']
         return self._getToolbarData(((self.newdisplay, 'newdisplay', icons["newdisplay"],
-                                      self.parent.OnNewMenu),
+                                      self.parent.OnNewDisplay),
                                      (None, ),
+                                     (self.workspaceNew, 'workspaceNew', icons["workspaceNew"],
+                                      self.parent.OnWorkspaceNew),
                                      (self.workspaceOpen, 'workspaceOpen', icons["workspaceOpen"],
                                       self.parent.OnWorkspaceOpen),
                                      (self.workspaceSave, 'workspaceSave', icons["workspaceSave"],
