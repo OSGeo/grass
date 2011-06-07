@@ -73,15 +73,16 @@ class AbstractToolbar(wx.ToolBar):
         """!Toolbar data (virtual)"""
         return None
     
-    def CreateTool(self, tool, label, bitmap, kind,
+    def CreateTool(self, label, bitmap, kind,
                    shortHelp, longHelp, handler):
         """!Add tool to the toolbar
         
         @return id of tool
         """
         bmpDisabled = wx.NullBitmap
-        
+        tool = -1
         if label:
+            tool = vars(self)[label] = wx.NewId()
             Debug.msg(3, "CreateTool(): tool=%d, label=%s bitmap=%s" % \
                           (tool, label, bitmap))
             toolWin = self.AddLabelTool(tool, label, bitmap,
@@ -103,9 +104,9 @@ class AbstractToolbar(wx.ToolBar):
                 continue
             
             if enable:
-                self.SetToolLongHelp(tool[0], tool[5])
+                self.SetToolLongHelp(vars(self)[tool[0]], tool[4])
             else:
-                self.SetToolLongHelp(tool[0], "")
+                self.SetToolLongHelp(vars(self)[tool[0]], "")
         
     def OnTool(self, event):
         """!Tool selected
@@ -176,14 +177,14 @@ class AbstractToolbar(wx.ToolBar):
         
         return retData
 
-    def _defineTool(self, key, name = None, icon = None, handler = None, item = wx.ITEM_NORMAL):
+    def _defineTool(self, name = None, icon = None, handler = None, item = wx.ITEM_NORMAL):
         """!Define tool
         """
-        if key:
-            return (key, name, icon.GetBitmap(),
+        if name:
+            return (name, icon.GetBitmap(),
                     item, icon.GetLabel(), icon.GetDesc(),
                     handler)
-        return ("", "", "", "", "", "", "") # separator
+        return ("", "", "", "", "", "") # separator
     
 class MapToolbar(AbstractToolbar):
     """!Map Display toolbar
@@ -266,61 +267,45 @@ class MapToolbar(AbstractToolbar):
         
     def _toolbarData(self):
         """!Toolbar data"""
-        self.displaymap = wx.NewId()
-        self.rendermap = wx.NewId()
-        self.erase = wx.NewId()
-        self.pointer = wx.NewId()
-        self.query = wx.NewId()
-        self.pan = wx.NewId()
-        self.zoomin = wx.NewId()
-        self.zoomout = wx.NewId()
-        self.zoomback = wx.NewId()
-        self.zoommenu = wx.NewId()
-        self.zoomextent = wx.NewId()
-        self.analyze = wx.NewId()
-        self.dec = wx.NewId()
-        self.savefile = wx.NewId()
-        self.printmap = wx.NewId()
-        
         icons = Icons['displayWindow']
-        return self._getToolbarData(((self.displaymap, 'display', icons['display'],
+        return self._getToolbarData((('displaymap', icons['display'],
                                       self.parent.OnDraw),
-                                     (self.rendermap, 'render', icons['render'],
+                                     ('rendermap', icons['render'],
                                       self.parent.OnRender),
-                                     (self.erase, 'erase', icons['erase'],
+                                     ('erase', icons['erase'],
                                       self.parent.OnErase),
                                      (None, ),
-                                     (self.pointer, 'pointer', icons['pointer'],
+                                     ('pointer', icons['pointer'],
                                       self.parent.OnPointer,
                                       wx.ITEM_CHECK),
-                                     (self.query, 'query', icons['query'],
+                                     ('query', icons['query'],
                                       self.parent.OnQuery,
                                       wx.ITEM_CHECK),
-                                     (self.pan, 'pan', icons['pan'],
+                                     ('pan', icons['pan'],
                                       self.parent.OnPan,
                                       wx.ITEM_CHECK),
-                                     (self.zoomin, 'zoomIn', icons['zoomIn'],
+                                     ('zoomin', icons['zoomIn'],
                                       self.parent.OnZoomIn,
                                       wx.ITEM_CHECK),
-                                     (self.zoomout, 'zoomOut', icons['zoomOut'],
+                                     ('zoomout', icons['zoomOut'],
                                       self.parent.OnZoomOut,
                                       wx.ITEM_CHECK),
-                                     (self.zoomextent, 'zoomExtent', icons['zoomExtent'],
+                                     ('zoomextent', icons['zoomExtent'],
                                       self.parent.OnZoomToMap),
-                                     (self.zoomback, 'zoomBack', icons['zoomBack'],
+                                     ('zoomback', icons['zoomBack'],
                                       self.parent.OnZoomBack),
-                                     (self.zoommenu, 'zoomMenu', icons['zoomMenu'],
+                                     ('zoommenu', icons['zoomMenu'],
                                       self.parent.OnZoomMenu),
                                      (None, ),
-                                     (self.analyze, 'analyze', icons['analyze'],
+                                     ('analyze', icons['analyze'],
                                       self.parent.OnAnalyze),
                                      (None, ),
-                                     (self.dec, 'overlay', icons['overlay'],
+                                     ('dec', icons['overlay'],
                                       self.parent.OnDecoration),
                                      (None, ),
-                                     (self.savefile, 'saveFile', icons['saveFile'],
+                                     ('savefile', icons['saveFile'],
                                       self.parent.SaveToFile),
-                                     (self.printmap, 'print', icons['print'],
+                                     ('printmap', icons['print'],
                                       self.parent.PrintMenu),
                                      (None, ))
                                     )
@@ -378,30 +363,22 @@ class GCPManToolbar(AbstractToolbar):
         self.Realize()
 
     def _toolbarData(self):
-        self.gcpSave = wx.NewId()
-        self.gcpReload = wx.NewId()
-        self.gcpAdd = wx.NewId()
-        self.gcpDelete = wx.NewId()
-        self.gcpClear = wx.NewId()
-        self.rms = wx.NewId()
-        self.georect = wx.NewId()
-
         icons = Icons['georectify']
-        return self._getToolbarData(((self.gcpSave, 'gcpSave', icons["gcpSave"],
+        return self._getToolbarData((('gcpSave', icons["gcpSave"],
                                       self.parent.SaveGCPs),
-                                     (self.gcpReload, 'gcpReload', icons["gcpReload"],
+                                     ('gcpReload', icons["gcpReload"],
                                       self.parent.ReloadGCPs),
                                      (None, ),
-                                     (self.gcpAdd, 'gcpAdd', icons["gcpAdd"],
+                                     ('gcpAdd', icons["gcpAdd"],
                                       self.parent.AddGCP),
-                                     (self.gcpDelete, 'gcpDelete', icons["gcpDelete"],
+                                     ('gcpDelete', icons["gcpDelete"],
                                       self.parent.DeleteGCP),
-                                     (self.gcpClear, 'gcpClear', icons["gcpClear"],
+                                     ('gcpClear', icons["gcpClear"],
                                       self.parent.ClearGCP),
                                      (None, ),
-                                     (self.rms, 'gcpRms', icons["gcpRms"],
+                                     ('rms', icons["gcpRms"],
                                       self.parent.OnRMS),
-                                     (self.georect, 'georectify', icons["georectify"],
+                                     ('georect', icons["georectify"],
                                       self.parent.OnGeorect))
                                     )
     
@@ -440,50 +417,36 @@ class GCPDisplayToolbar(AbstractToolbar):
         
     def _toolbarData(self):
         """!Toolbar data"""
-        self.displaymap = wx.NewId()
-        self.rendermap = wx.NewId()
-        self.erase = wx.NewId()
-        self.gcpset = wx.NewId()
-        self.pan = wx.NewId()
-        self.zoomin = wx.NewId()
-        self.zoomout = wx.NewId()
-        self.zoomback = wx.NewId()
-        self.zoomtomap = wx.NewId()
-        self.zoommenu = wx.NewId()
-        self.settings = wx.NewId()
-        self.helpid = wx.NewId()
-        self.quit = wx.NewId()
-
         icons = Icons['displayWindow']
-        return self._getToolbarData(((self.displaymap, "display", icons["display"],
+        return self._getToolbarData((("displaymap", icons["display"],
                                       self.parent.OnDraw),
-                                     (self.rendermap, "render", icons["render"],
+                                     ("rendermap", icons["render"],
                                       self.parent.OnRender),
-                                     (self.erase, "erase", icons["erase"],
+                                     ("erase", icons["erase"],
                                       self.parent.OnErase),
                                      (None, ),
-                                     (self.gcpset, "gcpSet", Icons["georectify"]["gcpSet"],
+                                     ("gcpset", Icons["georectify"]["gcpSet"],
                                       self.parent.OnPointer),
-                                     (self.pan, "pan", icons["pan"],
+                                     ("pan", icons["pan"],
                                       self.parent.OnPan),
-                                     (self.zoomin, "zoomIn", icons["zoomIn"],
+                                     ("zoomin", icons["zoomIn"],
                                       self.parent.OnZoomIn),
-                                     (self.zoomout, "zoomOut", icons["zoomOut"],
+                                     ("zoomout", icons["zoomOut"],
                                       self.parent.OnZoomOut),
-                                     (self.zoommenu, "zoomMenu", icons["zoomMenu"],
+                                     ("zoommenu", icons["zoomMenu"],
                                       self.parent.OnZoomMenuGCP),
                                      (None, ),
-                                     (self.zoomback, "zoomBack", icons["zoomBack"],
+                                     ("zoomback", icons["zoomBack"],
                                       self.parent.OnZoomBack),
-                                     (self.zoomtomap, "zoomtomap", icons["zoomExtent"],
+                                     ("zoomtomap", icons["zoomExtent"],
                                       self.parent.OnZoomToMap),
                                      (None, ),
-                                     (self.settings, 'settings', Icons["georectify"]["settings"],
+                                     ('settings', Icons["georectify"]["settings"],
                                       self.parent.OnSettings),
-                                     (self.helpid, 'help', Icons["misc"]["help"],
+                                     ('help', Icons["misc"]["help"],
                                       self.parent.OnHelp),
                                      (None, ),
-                                     (self.quit, 'gcpQuit', Icons["georectify"]["quit"],
+                                     ('quit', Icons["georectify"]["quit"],
                                       self.parent.OnQuit))
                                     )
     
@@ -537,82 +500,61 @@ class VDigitToolbar(AbstractToolbar):
         """!Toolbar data
         """
         data = []
-        
-        self.addPoint = wx.NewId()
-        self.addLine = wx.NewId()
-        self.addBoundary = wx.NewId()
-        self.addCentroid = wx.NewId()
-        self.addArea = wx.NewId()
-        self.moveVertex = wx.NewId()
-        self.addVertex = wx.NewId()
-        self.removeVertex = wx.NewId()
-        self.splitLine = wx.NewId()
-        self.editLine = wx.NewId()
-        self.moveLine = wx.NewId()
-        self.deleteLine = wx.NewId()
-        self.additionalTools = wx.NewId()
-        self.displayCats = wx.NewId()
-        self.displayAttr = wx.NewId()
-        self.copyCats = wx.NewId()
-        self.undo = wx.NewId()
-        self.settings = wx.NewId()
-        self.exit = wx.NewId()
-        
         icons = Icons['vdigit']
         return self._getToolbarData(((None, ),
-                                     (self.addPoint, "addPoint", icons["addPoint"],
+                                     ("addPoint", icons["addPoint"],
                                       self.OnAddPoint),
-                                     (self.addLine, "addLine", icons["addLine"],
+                                     ("addLine", icons["addLine"],
                                       self.OnAddLine,
                                       wx.ITEM_CHECK),
-                                     (self.addBoundary, "addBoundary", icons["addBoundary"],
+                                     ("addBoundary", icons["addBoundary"],
                                       self.OnAddBoundary,
                                       wx.ITEM_CHECK),
-                                     (self.addCentroid, "addCentroid", icons["addCentroid"],
+                                     ("addCentroid", icons["addCentroid"],
                                       self.OnAddCentroid,
                                       wx.ITEM_CHECK),
-                                     (self.addArea, "addArea", icons["addArea"],
+                                     ("addArea", icons["addArea"],
                                       self.OnAddArea,
                                       wx.ITEM_CHECK),
-                                     (self.moveVertex, "moveVertex", icons["moveVertex"],
+                                     ("moveVertex", icons["moveVertex"],
                                       self.OnMoveVertex,
                                       wx.ITEM_CHECK),
-                                     (self.addVertex, "addVertex", icons["addVertex"],
+                                     ("addVertex", icons["addVertex"],
                                       self.OnAddVertex,
                                       wx.ITEM_CHECK),
-                                     (self.removeVertex, "removeVertex", icons["removeVertex"],
+                                     ("removeVertex", icons["removeVertex"],
                                       self.OnRemoveVertex,
                                       wx.ITEM_CHECK),
-                                     (self.splitLine, "splitLine", icons["splitLine"],
+                                     ("splitLine", icons["splitLine"],
                                       self.OnSplitLine,
                                       wx.ITEM_CHECK),
-                                     (self.editLine, "editLine", icons["editLine"],
+                                     ("editLine", icons["editLine"],
                                       self.OnEditLine,
                                       wx.ITEM_CHECK),
-                                     (self.moveLine, "moveLine", icons["moveLine"],
+                                     ("moveLine", icons["moveLine"],
                                       self.OnMoveLine,
                                       wx.ITEM_CHECK),
-                                     (self.deleteLine, "deleteLine", icons["deleteLine"],
+                                     ("deleteLine", icons["deleteLine"],
                                       self.OnDeleteLine,
                                       wx.ITEM_CHECK),
-                                     (self.displayCats, "displayCats", icons["displayCats"],
+                                     ("displayCats", icons["displayCats"],
                                       self.OnDisplayCats,
                                       wx.ITEM_CHECK),
-                                     (self.copyCats, "copyCats", icons["copyCats"],
+                                     ("copyCats", icons["copyCats"],
                                       self.OnCopyCA,
                                       wx.ITEM_CHECK),
-                                     (self.displayAttr, "displayAttr", icons["displayAttr"],
+                                     ("displayAttr", icons["displayAttr"],
                                       self.OnDisplayAttr,
                                       wx.ITEM_CHECK),
-                                     (self.additionalTools, "additionalTools", icons["additionalTools"],
+                                     ("additionalTools", icons["additionalTools"],
                                       self.OnAdditionalToolMenu,
                                       wx.ITEM_CHECK),                                      
                                      (None, ),
-                                     (self.undo, "undo", icons["undo"],
+                                     ("undo", icons["undo"],
                                       self.OnUndo),
-                                     (self.settings, "settings", icons["settings"],
+                                     ("settings", icons["settings"],
                                       self.OnSettings),
-                                     (self.exit, "quit", icons["quit"],
+                                     ("quit", icons["quit"],
                                       self.OnExit))
                                     )
     
@@ -1303,46 +1245,33 @@ class ProfileToolbar(AbstractToolbar):
         
     def _toolbarData(self):
         """!Toolbar data"""
-        self.transect = wx.NewId()
-        self.addraster = wx.NewId()
-        self.draw = wx.NewId()
-        self.options = wx.NewId()
-        self.drag = wx.NewId()
-        self.zoom = wx.NewId()
-        self.unzoom = wx.NewId()
-        self.erase = wx.NewId()
-        self.save = wx.NewId()
-        self.datasave = wx.NewId()
-        self.printer = wx.NewId()
-        self.quit = wx.NewId()
-                
         icons = Icons['profile']
-        return self._getToolbarData(((self.addraster, 'raster', Icons['layerManager']["addRast"],
+        return self._getToolbarData((('addraster', Icons['layerManager']["addRast"],
                                       self.parent.OnSelectRaster),
-                                     (self.transect, 'transect', icons["transect"],
+                                     ('transect', icons["transect"],
                                       self.parent.OnDrawTransect),
                                      (None, ),
-                                     (self.draw, 'draw', icons["draw"],
+                                     ('draw', icons["draw"],
                                       self.parent.OnCreateProfile),
-                                     (self.erase, 'erase', Icons['displayWindow']["erase"],
+                                     ('erase', Icons['displayWindow']["erase"],
                                       self.parent.OnErase),
-                                     (self.drag, 'drag', Icons['displayWindow']['pan'],
+                                     ('drag', Icons['displayWindow']['pan'],
                                       self.parent.OnDrag),
-                                     (self.zoom, 'zoom', Icons['displayWindow']['zoomIn'],
+                                     ('zoom', Icons['displayWindow']['zoomIn'],
                                       self.parent.OnZoom),
-                                     (self.unzoom, 'unzoom', Icons['displayWindow']['zoomBack'],
+                                     ('unzoom', Icons['displayWindow']['zoomBack'],
                                       self.parent.OnRedraw),
                                      (None, ),
-                                     (self.datasave, 'save', icons["save"],
+                                     ('datasave', icons["save"],
                                       self.parent.SaveProfileToFile),
-                                     (self.save, 'image', Icons['displayWindow']["saveFile"],
+                                     ('image', Icons['displayWindow']["saveFile"],
                                       self.parent.SaveToFile),
-                                     (self.printer, 'print', Icons['displayWindow']["print"],
+                                     ('print', Icons['displayWindow']["print"],
                                       self.parent.PrintMenu),
                                      (None, ),
-                                     (self.options, 'options', icons["options"],
+                                     ('settings', icons["options"],
                                       self.parent.ProfileOptionsMenu),
-                                     (self.quit, 'quit', icons["quit"],
+                                     ('quit', icons["quit"],
                                       self.parent.OnQuit),
                                      ))
     
@@ -1365,38 +1294,28 @@ class NvizToolbar(AbstractToolbar):
         
     def _toolbarData(self):
         """!Toolbar data"""
-        self.view = wx.NewId()
-        self.surface = wx.NewId()
-        self.vector = wx.NewId()
-        self.volume = wx.NewId()
-        self.light = wx.NewId()
-        self.fringe = wx.NewId()
-        self.settings = wx.NewId()
-        self.help = wx.NewId()
-        self.quit = wx.NewId()
-        
         icons = Icons['nviz']
-        return self._getToolbarData(((self.view, "view", icons["view"],
+        return self._getToolbarData((("view", icons["view"],
                                       self.OnShowPage),
                                      (None, ),
-                                     (self.surface, "surface", icons["surface"],
+                                     ("surface", icons["surface"],
                                       self.OnShowPage),
-                                     (self.vector, "vector", icons["vector"],
+                                     ("vector", icons["vector"],
                                       self.OnShowPage),
-                                     (self.volume, "volume", icons["volume"],
-                                      self.OnShowPage),
-                                     (None, ),
-                                     (self.light, "light", icons["light"],
-                                      self.OnShowPage),
-                                     (self.fringe, "fringe", icons["fringe"],
+                                     ("volume", icons["volume"],
                                       self.OnShowPage),
                                      (None, ),
-                                     (self.settings, "settings", icons["settings"],
+                                     ("light", icons["light"],
+                                      self.OnShowPage),
+                                     ("fringe", icons["fringe"],
+                                      self.OnShowPage),
+                                     (None, ),
+                                     ("settings", icons["settings"],
                                       self.OnSettings),
-                                     (self.help, "help", Icons['misc']["help"],
+                                     ("help", Icons['misc']["help"],
                                       self.OnHelp),
                                      (None, ),
-                                     (self.quit, 'quit', icons["quit"],
+                                     ('quit', icons["quit"],
                                       self.OnExit))
                                     )
     
@@ -1467,56 +1386,40 @@ class ModelToolbar(AbstractToolbar):
         
     def _toolbarData(self):
         """!Toolbar data"""
-        self.new = wx.NewId()
-        self.open = wx.NewId()
-        self.save = wx.NewId()
-        self.image = wx.NewId()
-        self.python = wx.NewId()
-        self.action = wx.NewId()
-        self.data = wx.NewId()
-        self.relation = wx.NewId()
-        self.run = wx.NewId()
-        self.validate = wx.NewId()
-        self.settings = wx.NewId()
-        self.variables = wx.NewId()
-        self.quit = wx.NewId()
-        self.redraw = wx.NewId()
-        self.help = wx.NewId()
-        
         icons = Icons['modeler']
-        return self._getToolbarData(((self.new, 'new', icons['new'],
+        return self._getToolbarData((('new', icons['new'],
                                       self.parent.OnModelNew),
-                                     (self.open, 'open', icons['open'],
+                                     ('open', icons['open'],
                                       self.parent.OnModelOpen),
-                                     (self.save, 'save', icons['save'],
+                                     ('save', icons['save'],
                                       self.parent.OnModelSave),
-                                     (self.image, 'image', icons['toImage'],
+                                     ('image', icons['toImage'],
                                       self.parent.OnExportImage),
-                                     (self.python, 'python', icons['toPython'],
+                                     ('python', icons['toPython'],
                                       self.parent.OnExportPython),
                                      (None, ),
-                                     (self.action, 'action', icons['actionAdd'],
+                                     ('action', icons['actionAdd'],
                                       self.parent.OnAddAction),
-                                     (self.data, 'data', icons['dataAdd'],
+                                     ('data', icons['dataAdd'],
                                       self.parent.OnAddData),
-                                     (self.relation, 'relation', icons['relation'],
+                                     ('relation', icons['relation'],
                                       self.parent.OnDefineRelation),
                                      (None, ),
-                                     (self.redraw, 'redraw', icons['redraw'],
+                                     ('redraw', icons['redraw'],
                                       self.parent.OnCanvasRefresh),
-                                     (self.validate, 'validate', icons['validate'],
+                                     ('validate', icons['validate'],
                                       self.parent.OnValidateModel),
-                                     (self.run, 'run', icons['run'],
+                                     ('run', icons['run'],
                                       self.parent.OnRunModel),
                                      (None, ),
-                                     (self.variables, "variables", icons['variables'],
+                                     ("variables", icons['variables'],
                                       self.parent.OnVariables),
-                                     (self.settings, "settings", icons['settings'],
+                                     ("settings", icons['settings'],
                                       self.parent.OnPreferences),
-                                     (self.help, "help", Icons['misc']['help'],
+                                     ("help", Icons['misc']['help'],
                                       self.parent.OnHelp),
                                      (None, ),
-                                     (self.quit, 'quit', icons['quit'],
+                                     ('quit', icons['quit'],
                                       self.parent.OnCloseWindow))
                                     )
     
@@ -1533,30 +1436,22 @@ class HistogramToolbar(AbstractToolbar):
         
     def _toolbarData(self):
         """!Toolbar data"""
-        self.histogram = wx.NewId()
-        self.rendermap = wx.NewId()
-        self.erase = wx.NewId()
-        self.font = wx.NewId()
-        self.save = wx.NewId()
-        self.hprint = wx.NewId()
-        self.quit = wx.NewId()
-        
         icons = Icons['displayWindow']
-        return self._getToolbarData(((self.histogram, 'histogram', icons["histogram"],
+        return self._getToolbarData((('histogram', icons["histogram"],
                                       self.parent.OnOptions),
-                                     (self.rendermap, 'render', icons["display"],
+                                     ('rendermao', icons["display"],
                                       self.parent.OnRender),
-                                     (self.erase, 'erase', icons["erase"],
+                                     ('erase', icons["erase"],
                                       self.parent.OnErase),
-                                     (self.font, 'font', Icons['misc']["font"],
+                                     ('font', Icons['misc']["font"],
                                       self.parent.SetHistFont),
                                      (None, ),
-                                     (self.save, 'save', icons["saveFile"],
+                                     ('save', icons["saveFile"],
                                       self.parent.SaveToFile),
-                                     (self.hprint, 'print', icons["print"],
+                                     ('hprint', icons["print"],
                                       self.parent.PrintMenu),
                                      (None, ),
-                                     (self.quit, 'quit', Icons['misc']["quit"],
+                                     ('quit', Icons['misc']["quit"],
                                       self.parent.OnQuit))
                                     )
 
@@ -1574,20 +1469,15 @@ class LMWorkspaceToolbar(AbstractToolbar):
     def _toolbarData(self):
         """!Toolbar data
         """
-        self.newdisplay = wx.NewId()
-        self.workspaceNew = wx.NewId()
-        self.workspaceOpen = wx.NewId()
-        self.workspaceSave = wx.NewId()
-        
         icons = Icons['layerManager']
-        return self._getToolbarData(((self.newdisplay, 'newdisplay', icons["newdisplay"],
+        return self._getToolbarData((('newdisplay', icons["newdisplay"],
                                       self.parent.OnNewDisplay),
                                      (None, ),
-                                     (self.workspaceNew, 'workspaceNew', icons["workspaceNew"],
+                                     ('workspaceNew', icons["workspaceNew"],
                                       self.parent.OnWorkspaceNew),
-                                     (self.workspaceOpen, 'workspaceOpen', icons["workspaceOpen"],
+                                     ('workspaceOpen', icons["workspaceOpen"],
                                       self.parent.OnWorkspaceOpen),
-                                     (self.workspaceSave, 'workspaceSave', icons["workspaceSave"],
+                                     ('workspaceSave', icons["workspaceSave"],
                                       self.parent.OnWorkspaceSave),
                                      ))
 
@@ -1605,42 +1495,30 @@ class LMDataToolbar(AbstractToolbar):
     def _toolbarData(self):
         """!Toolbar data
         """
-        self.importMap = wx.NewId()
-        self.addMulti = wx.NewId()
-        self.addrast = wx.NewId()
-        self.rastmisc = wx.NewId()
-        self.addvect = wx.NewId()
-        self.vectmisc = wx.NewId()
-        self.addgrp = wx.NewId()
-        self.addovl = wx.NewId()
-        self.delcmd = wx.NewId()
-        self.vdigit = wx.NewId()
-        self.attribute = wx.NewId()
-        
         icons = Icons['layerManager']
-        return self._getToolbarData(((self.addMulti, 'addMulti', icons["addMulti"],
+        return self._getToolbarData((('addMulti', icons["addMulti"],
                                       self.parent.OnAddMaps),
-                                     (self.addrast, 'addRast', icons["addRast"],
+                                     ('addrast', icons["addRast"],
                                       self.parent.OnAddRaster),
-                                     (self.rastmisc, 'rastMisc', icons["rastMisc"],
+                                     ('rastmisc', icons["rastMisc"],
                                       self.parent.OnAddRasterMisc),
-                                     (self.addvect, 'addVect', icons["addVect"],
+                                     ('addvect', icons["addVect"],
                                       self.parent.OnAddVector),
-                                     (self.vectmisc, 'vectMisc', icons["vectMisc"],
+                                     ('vectmisc', icons["vectMisc"],
                                       self.parent.OnAddVectorMisc),
-                                     (self.addgrp, 'addGroup',  icons["addGroup"],
+                                     ('addgrp',  icons["addGroup"],
                                       self.parent.OnAddGroup),
-                                     (self.addovl, 'addOverlay',  icons["addOverlay"],
+                                     ('addovl',  icons["addOverlay"],
                                       self.parent.OnAddOverlay),
-                                     (self.delcmd, 'delCmd',  icons["delCmd"],
+                                     ('delcmd',  icons["delCmd"],
                                       self.parent.OnDeleteLayer),
                                      (None, ),
-                                     (self.importMap, 'import', icons["import"],
+                                     ('importMap', icons["import"],
                                       self.parent.OnImportMenu),
                                      (None, ),
-                                     (self.vdigit, 'vdigit', icons["vdigit"],
+                                     ('vdigit', icons["vdigit"],
                                       self.parent.OnVDigit),
-                                     (self.attribute, 'attrTable', icons["attrTable"],
+                                     ('attribute', icons["attrTable"],
                                       self.parent.OnShowAttributeTable),
                                      ))
 
@@ -1658,19 +1536,14 @@ class LMToolsToolbar(AbstractToolbar):
     def _toolbarData(self):
         """!Toolbar data
         """
-        self.georect = wx.NewId()
-        self.modeler = wx.NewId() 
-        self.mapOutput = wx.NewId()
-        self.mapCalc = wx.NewId()
-        
         icons = Icons['layerManager']
-        return self._getToolbarData(((self.mapCalc, 'mapCalc', icons["mapcalc"],
+        return self._getToolbarData((('mapCalc', icons["mapcalc"],
                                       self.parent.OnMapCalculator),
-                                     (self.georect, 'georectify', Icons["georectify"]["georectify"],
+                                     ('georect', Icons["georectify"]["georectify"],
                                       self.parent.OnGCPManager),
-                                     (self.modeler, 'modeler', icons["modeler"],
+                                     ('modeler', icons["modeler"],
                                       self.parent.OnGModeler),
-                                     (self.mapOutput, 'mapOutput', icons['mapOutput'],
+                                     ('mapOutput', icons['mapOutput'],
                                       self.parent.OnPsMap)
                                      ))
 
@@ -1688,13 +1561,10 @@ class LMMiscToolbar(AbstractToolbar):
     def _toolbarData(self):
         """!Toolbar data
         """
-        self.preferences = wx.NewId()
-        self.help = wx.NewId()
-        
         icons = Icons['layerManager']
-        return self._getToolbarData(((self.preferences, 'preferences', icons["settings"],
+        return self._getToolbarData((('settings', icons["settings"],
                                       self.parent.OnPreferences),
-                                     (self.help, 'help', Icons["misc"]["help"],
+                                     ('help', Icons["misc"]["help"],
                                       self.parent.OnHelp),
                                      ))
     
@@ -1722,65 +1592,46 @@ class PsMapToolbar(AbstractToolbar):
     def _toolbarData(self):
         """!Toolbar data
         """
-        self.quit = wx.NewId()
-        self.pagesetup = wx.NewId()
-        self.pointer = wx.NewId()
-        self.zoomIn = wx.NewId()
-        self.zoomOut = wx.NewId()
-        self.zoomAll = wx.NewId()
-        self.addMap = wx.NewId()
-        self.addRaster = wx.NewId()
-        self.addVector = wx.NewId()
-        self.dec = wx.NewId()
-        self.delete = wx.NewId()
-        self.preview = wx.NewId()
-        self.instructionFile = wx.NewId()
-        self.generatePS = wx.NewId()
-        self.generatePDF = wx.NewId()
-        self.loadFile = wx.NewId()
-        self.pan = wx.NewId()
-        self.help = wx.NewId()
-
         icons = Icons['psMap']
-        return self._getToolbarData(((self.loadFile, 'loadFile', icons['scriptLoad'],
+        return self._getToolbarData((('loadFile', icons['scriptLoad'],
                                       self.parent.OnLoadFile),                                    
-                                     (self.instructionFile, 'psScript', icons['scriptSave'],
+                                     ('instructionFile', icons['scriptSave'],
                                       self.parent.OnInstructionFile),
                                      (None, ),
-                                     (self.pagesetup, 'page setup', icons['pageSetup'],
+                                     ('pagesetup', icons['pageSetup'],
                                       self.parent.OnPageSetup),
                                      (None, ),
-                                     (self.pointer, "pointer", Icons["displayWindow"]["pointer"],
+                                     ("pointer", Icons["displayWindow"]["pointer"],
                                       self.parent.OnPointer, wx.ITEM_CHECK),
-                                     (self.pan, 'pan', Icons["displayWindow"]['pan'],
+                                     ('pan', Icons["displayWindow"]['pan'],
                                       self.parent.OnPan, wx.ITEM_CHECK),
-                                     (self.zoomIn, "zoomin", Icons["displayWindow"]["zoomIn"],
+                                     ("zoomin", Icons["displayWindow"]["zoomIn"],
                                       self.parent.OnZoomIn, wx.ITEM_CHECK),
-                                     (self.zoomOut, "zoomout", Icons["displayWindow"]["zoomOut"],
+                                     ("zoomout", Icons["displayWindow"]["zoomOut"],
                                       self.parent.OnZoomOut, wx.ITEM_CHECK),
-                                     (self.zoomAll, 'full extent', icons['fullExtent'],
+                                     ('zoomAll', icons['fullExtent'],
                                       self.parent.OnZoomAll),
                                      (None, ),
-                                     (self.addMap, 'add map', icons['addMap'],
+                                     ('addMap', icons['addMap'],
                                       self.parent.OnAddMap, wx.ITEM_CHECK),
-                                     (self.addRaster, 'add raster', icons['addRast'],
+                                     ('addRaster', icons['addRast'],
                                       self.parent.OnAddRaster),
-                                     (self.addVector, 'add vect', icons['addVect'],
+                                     ('addVector', icons['addVect'],
                                       self.parent.OnAddVect),
-                                     (self.dec, "overlay", Icons["displayWindow"]["overlay"],
+                                     ("dec", Icons["displayWindow"]["overlay"],
                                       self.parent.OnDecoration),
-                                     (self.delete, "delete", icons["deleteObj"],
+                                     ("delete", icons["deleteObj"],
                                       self.parent.OnDelete),
                                      (None, ),
-                                     (self.preview, "preview", icons["preview"],
+                                     ("preview", icons["preview"],
                                       self.parent.OnPreview),
-                                     (self.generatePS, 'generatePS', icons['psExport'],
+                                     ('generatePS', icons['psExport'],
                                       self.parent.OnPSFile),
-                                    ( self.generatePDF, 'generatePDF', icons['pdfExport'],
+                                     ('generatePDF', icons['pdfExport'],
                                       self.parent.OnPDFFile),
                                      (None, ),
-                                     (self.help, "help", Icons['misc']['help'],
+                                     ("help", Icons['misc']['help'],
                                       self.parent.OnHelp),
-                                     (self.quit, 'quit', icons['quit'],
+                                     ('quit', icons['quit'],
                                       self.parent.OnCloseWindow))
                                     )
