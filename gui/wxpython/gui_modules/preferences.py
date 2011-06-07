@@ -697,20 +697,22 @@ class Settings:
 
         @param filename settings file path
         @param settings dict where to store settings (None for self.userSettings)
-        
-        @return True on success
-        @return False on failure
         """
         if settings is None:
             settings = self.userSettings
-
+        
         if not os.path.exists(filename):
-            return False
+            return
         
         try:
-            file = open(filename, "r")
+            fd = open(filename, "r")
+        except IOError:
+            sys.stderr.write(_("Unable to read settings file <%s>\n") % filename)
+            return
+        
+        try:
             line = ''
-            for line in file.readlines():
+            for line in fd.readlines():
                 line = line.rstrip('%s' % os.linesep)
                 group, key = line.split(self.sep)[0:2]
                 kv = line.split(self.sep)[2:]
@@ -730,16 +732,14 @@ class Settings:
                     idx += 2
         except ValueError, e:
             print >> sys.stderr, _("Error: Reading settings from file <%(file)s> failed.\n"
-                                   "       Details: %(detail)s\n"
-                                   "       Line: '%(line)s'") % { 'file' : filename,
-                                                                  'detail' : e,
-                                                                  'line' : line }
-            file.close()
-            return False
+                                   "\t\tDetails: %(detail)s\n"
+                                   "\t\tLine: '%(line)s'\n") % { 'file' : filename,
+                                                               'detail' : e,
+                                                               'line' : line }
+            fd.close()
         
-        file.close()
-        return True
-
+        fd.close()
+        
     def SaveToFile(self, settings = None):
         """!Save settings to the file"""
         if settings is None:
