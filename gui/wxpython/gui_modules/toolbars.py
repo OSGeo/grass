@@ -13,8 +13,10 @@ Classes:
  - NvizToolbar
  - ModelToolbar
  - HistogramToolbar
- - LayerManagerToolbar
- - ToolsToolbar
+ - LMWorkspaceToolbar
+ - LMDataToolbar
+ - LMToolsToolbar
+ - LMMiscToolbar
  - PsMapToolbar
 
 (C) 2007-2011 by the GRASS Development Team
@@ -1558,8 +1560,8 @@ class HistogramToolbar(AbstractToolbar):
                                       self.parent.OnQuit))
                                     )
 
-class LayerManagerToolbar(AbstractToolbar):
-    """!Layer Manager toolbar (see wxgui.py)
+class LMWorkspaceToolbar(AbstractToolbar):
+    """!Layer Manager `workspace` toolbar
     """
     def __init__(self, parent):
         AbstractToolbar.__init__(self, parent)
@@ -1573,9 +1575,35 @@ class LayerManagerToolbar(AbstractToolbar):
         """!Toolbar data
         """
         self.newdisplay = wx.NewId()
-        self.workspaceLoad = wx.NewId()
         self.workspaceOpen = wx.NewId()
         self.workspaceSave = wx.NewId()
+        
+        icons = Icons['layerManager']
+        return self._getToolbarData(((self.newdisplay, 'newdisplay', icons["newdisplay"],
+                                      self.parent.OnNewMenu),
+                                     (None, ),
+                                     (self.workspaceOpen, 'workspaceOpen', icons["workspaceOpen"],
+                                      self.parent.OnWorkspaceOpen),
+                                     (self.workspaceSave, 'workspaceSave', icons["workspaceSave"],
+                                      self.parent.OnWorkspaceSave),
+                                     ))
+
+class LMDataToolbar(AbstractToolbar):
+    """!Layer Manager `data` toolbar
+    """
+    def __init__(self, parent):
+        AbstractToolbar.__init__(self, parent)
+        
+        self.InitToolbar(self._toolbarData())
+        
+        # realize the toolbar
+        self.Realize()
+
+    def _toolbarData(self):
+        """!Toolbar data
+        """
+        self.importMap = wx.NewId()
+        self.addMulti = wx.NewId()
         self.addrast = wx.NewId()
         self.rastmisc = wx.NewId()
         self.addvect = wx.NewId()
@@ -1583,21 +1611,12 @@ class LayerManagerToolbar(AbstractToolbar):
         self.addgrp = wx.NewId()
         self.addovl = wx.NewId()
         self.delcmd = wx.NewId()
+        self.vdigit = wx.NewId()
         self.attribute = wx.NewId()
-        self.preferences = wx.NewId()
-        self.help = wx.NewId()
         
         icons = Icons['layerManager']
-        return self._getToolbarData(((self.newdisplay, 'newdisplay', icons["newdisplay"],
-                                      self.parent.OnNewMenu),
-                                     (None, ),
-                                     (self.workspaceLoad, 'workspaceLoad', icons["workspaceLoad"],
-                                      self.parent.OnLoadMenu),
-                                     (self.workspaceOpen, 'workspaceOpen', icons["workspaceOpen"],
-                                      self.parent.OnWorkspaceOpen),
-                                     (self.workspaceSave, 'workspaceSave', icons["workspaceSave"],
-                                      self.parent.OnWorkspaceSave),
-                                     (None, ),
+        return self._getToolbarData(((self.addMulti, 'addMulti', icons["addMulti"],
+                                      self.parent.OnAddMaps),
                                      (self.addrast, 'addRast', icons["addRast"],
                                       self.parent.OnAddRaster),
                                      (self.rastmisc, 'rastMisc', icons["rastMisc"],
@@ -1613,17 +1632,17 @@ class LayerManagerToolbar(AbstractToolbar):
                                      (self.delcmd, 'delCmd',  icons["delCmd"],
                                       self.parent.OnDeleteLayer),
                                      (None, ),
+                                     (self.importMap, 'import', icons["import"],
+                                      self.parent.OnImportMenu),
+                                     (None, ),
+                                     (self.vdigit, 'vdigit', icons["vdigit"],
+                                      self.parent.OnVDigit),
                                      (self.attribute, 'attrTable', icons["attrTable"],
                                       self.parent.OnShowAttributeTable),
-                                     (None, ),
-                                     (self.preferences, 'preferences', icons["settings"],
-                                      self.parent.OnPreferences),
-                                     (self.help, 'help', Icons["misc"]["help"],
-                                      self.parent.OnHelp),
                                      ))
 
-class ToolsToolbar(AbstractToolbar):
-    """!Layer Manager Tools toolbar (see wxgui.py)
+class LMToolsToolbar(AbstractToolbar):
+    """!Layer Manager `tools` toolbar
     """
     def __init__(self, parent):
         AbstractToolbar.__init__(self, parent)
@@ -1638,21 +1657,42 @@ class ToolsToolbar(AbstractToolbar):
         """
         self.georect = wx.NewId()
         self.modeler = wx.NewId() 
-        self.vdigit = wx.NewId()
         self.mapOutput = wx.NewId()
         self.mapCalc = wx.NewId()
         
         icons = Icons['layerManager']
         return self._getToolbarData(((self.mapCalc, 'mapCalc', icons["mapcalc"],
                                       self.parent.OnMapCalculator),
-                                     (self.vdigit, 'vdigit', icons["vdigit"],
-                                      self.parent.OnVDigit),
                                      (self.georect, 'georectify', Icons["georectify"]["georectify"],
                                       self.parent.OnGCPManager),
                                      (self.modeler, 'modeler', icons["modeler"],
                                       self.parent.OnGModeler),
                                      (self.mapOutput, 'mapOutput', icons['mapOutput'],
                                       self.parent.OnPsMap)
+                                     ))
+
+class LMMiscToolbar(AbstractToolbar):
+    """!Layer Manager `misc` toolbar
+    """
+    def __init__(self, parent):
+        AbstractToolbar.__init__(self, parent)
+        
+        self.InitToolbar(self._toolbarData())
+        
+        # realize the toolbar
+        self.Realize()
+
+    def _toolbarData(self):
+        """!Toolbar data
+        """
+        self.preferences = wx.NewId()
+        self.help = wx.NewId()
+        
+        icons = Icons['layerManager']
+        return self._getToolbarData(((self.preferences, 'preferences', icons["settings"],
+                                      self.parent.OnPreferences),
+                                     (self.help, 'help', Icons["misc"]["help"],
+                                      self.parent.OnHelp),
                                      ))
     
 class PsMapToolbar(AbstractToolbar):

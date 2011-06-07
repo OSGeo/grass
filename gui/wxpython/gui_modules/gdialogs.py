@@ -11,7 +11,7 @@ List of classes:
  - SavedRegion
  - DecorationDialog
  - TextLayerDialog 
- - LoadMapLayersDialog
+ - AddMapLayersDialog
  - ImportDialog
  - GdalImportDialog
  - DxfImportDialog
@@ -717,8 +717,8 @@ class TextLayerDialog(wx.Dialog):
                  'coords' : self.currCoords,
                  'active' : self.chkbox.IsChecked() }
 
-class LoadMapLayersDialog(wx.Dialog):
-    """!Load selected map layers (raster, vector) into layer tree"""
+class AddMapLayersDialog(wx.Dialog):
+    """!Add selected map layers (raster, vector) into layer tree"""
     def __init__(self, parent, title, style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
         wx.Dialog.__init__(self, parent=parent, id=wx.ID_ANY, title=title, style=style)
 
@@ -735,10 +735,11 @@ class LoadMapLayersDialog(wx.Dialog):
         #
         # buttons
         #
-        btnCancel = wx.Button(self, wx.ID_CANCEL)
-        btnOk = wx.Button(self, wx.ID_OK, _("&Load") )
+        btnCancel = wx.Button(parent = self, id = wx.ID_CANCEL)
+        btnOk = wx.Button(parent = self, id = wx.ID_OK, label = _("&Add"))
         btnOk.SetDefault()
-        
+        btnOk.SetToolTipString(_("Add selected map layers to current display"))
+
         #
         # sizers & do layout
         #
