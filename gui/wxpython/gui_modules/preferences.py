@@ -511,6 +511,11 @@ class Settings:
                         'z' : 0,
                         },
                     },
+                'constant' : {
+                    'color' : (100, 100, 100, 255),
+                    'value' : 0.0,
+                    'resolution': 6
+                },
                 'vector' : {
                     'lines' : {
                         'show' : False,

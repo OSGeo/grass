@@ -58,7 +58,7 @@ from debug import Debug
 class ScrolledPanel(SP.ScrolledPanel):
     """!Custom ScrolledPanel to avoid strange behaviour concerning focus"""
     def __init__(self, parent):
-        SP.ScrolledPanel.__init__(self, parent = parent, id=wx.ID_ANY)
+        SP.ScrolledPanel.__init__(self, parent = parent, id = wx.ID_ANY)
     def OnChildFocus(self, event):
         pass
         
@@ -215,25 +215,42 @@ class NvizToolWindow(FN.FlatNotebook):
         box = wx.StaticBox (parent = panel, id = wx.ID_ANY,
                             label = " %s " % (_("Control View")))
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
-        gridSizer = wx.GridBagSizer(vgap = 3, hgap = 3)
+        gridSizer = wx.GridBagSizer(vgap = 5, hgap = 10)
         
         self.win['view'] = {}
         
         # position
         posSizer = wx.GridBagSizer(vgap = 3, hgap = 3)
-        posSizer.Add(item = wx.StaticText(panel, id = wx.ID_ANY, label = _("W")),
-                     pos = (1, 0), flag = wx.ALIGN_CENTER)
-        posSizer.Add(item = wx.StaticText(panel, id = wx.ID_ANY, label = _("N")),
-                     pos = (0, 1), flag = wx.ALIGN_CENTER | wx.ALIGN_BOTTOM)
+        
+        self.win['view']['lookFrom'] = {}
+        w = wx.Button(panel, id = wx.ID_ANY, label = _("W"))
+        n = wx.Button(panel, id = wx.ID_ANY, label = _("N"))
+        s = wx.Button(panel, id = wx.ID_ANY, label = _("S"))
+        e = wx.Button(panel, id = wx.ID_ANY, label = _("E"))
+        nw = wx.Button(panel, id = wx.ID_ANY, label = _("NW"))
+        ne = wx.Button(panel, id = wx.ID_ANY, label = _("NE"))
+        se = wx.Button(panel, id = wx.ID_ANY, label = _("SE"))
+        sw = wx.Button(panel, id = wx.ID_ANY, label = _("SW"))
+        minWidth = sw.GetTextExtent(sw.GetLabel())[0] + 15
+        for win, name in zip((w, n, s, e, nw, ne, se, sw),
+                        ('w', 'n', 's', 'e', 'nw', 'ne', 'se', 'sw')):
+            win.SetMinSize((minWidth, -1))
+            win.Bind(wx.EVT_BUTTON, self.OnLookFrom)
+            win.SetName(name)
+        posSizer.Add(item = nw, pos = (0, 0), flag = wx.ALIGN_CENTER)
+        posSizer.Add(item = n, pos = (0, 1), flag = wx.ALIGN_CENTER)
+        posSizer.Add(item = ne, pos = (0, 2), flag = wx.ALIGN_CENTER)
+        posSizer.Add(item = e, pos = (1, 2), flag = wx.ALIGN_CENTER)
+        posSizer.Add(item = se, pos = (2, 2), flag = wx.ALIGN_CENTER)
+        posSizer.Add(item = s, pos = (2, 1), flag = wx.ALIGN_CENTER)
+        posSizer.Add(item = sw, pos = (2, 0), flag = wx.ALIGN_CENTER)
+        posSizer.Add(item = w, pos = (1, 0), flag = wx.ALIGN_CENTER)
+        
         view = ViewPositionWindow(panel, size = (175, 175),
                                   mapwindow = self.mapWindow)
         self.win['view']['position'] = view.GetId()
         posSizer.Add(item = view,
                      pos = (1, 1), flag = wx.ALIGN_CENTER | wx.ALIGN_CENTER_VERTICAL)
-        posSizer.Add(item = wx.StaticText(panel, id = wx.ID_ANY, label = _("S")),
-                     pos = (2, 1), flag = wx.ALIGN_CENTER | wx.ALIGN_TOP)
-        posSizer.Add(item = wx.StaticText(panel, id = wx.ID_ANY, label = _("E")),
-                     pos = (1, 2), flag = wx.ALIGN_CENTER)
         gridSizer.Add(item = posSizer, pos = (0, 0))
                   
         # perspective
@@ -244,7 +261,8 @@ class NvizToolWindow(FN.FlatNotebook):
         
         gridSizer.Add(item = wx.StaticText(panel, id = wx.ID_ANY, label = _("Perspective:")),
                       pos = (1, 0), flag = wx.ALIGN_CENTER)
-        gridSizer.Add(item = self.FindWindowById(self.win['view']['persp']['slider']), pos = (2, 0))
+        gridSizer.Add(item = self.FindWindowById(self.win['view']['persp']['slider']), pos = (2, 0),
+                      flag = wx.ALIGN_CENTER)
         gridSizer.Add(item = self.FindWindowById(self.win['view']['persp']['text']), pos = (3, 0),
                       flag = wx.ALIGN_CENTER)        
         
@@ -270,62 +288,54 @@ class NvizToolWindow(FN.FlatNotebook):
         
         heightSizer = wx.GridBagSizer(vgap = 3, hgap = 3)
         heightSizer.Add(item = wx.StaticText(panel, id = wx.ID_ANY, label = _("Height:")),
-                      pos = (0, 0), flag = wx.ALIGN_LEFT, span = (1, 2))
+                      pos = (0, 0), flag = wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL, span = (1, 2))
         heightSizer.Add(item = self.FindWindowById(self.win['view']['height']['slider']),
                         flag = wx.ALIGN_RIGHT, pos = (1, 0))
         heightSizer.Add(item = self.FindWindowById(self.win['view']['height']['text']),
-                        flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT | wx.TOP |
-                        wx.BOTTOM | wx.RIGHT, pos = (1, 1))
+                        flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT, pos = (1, 1))
         heightSizer.Add(item = wx.StaticText(panel, id = wx.ID_ANY, label = _("Z-exag:")),
-                      pos = (0, 2), flag = wx.ALIGN_LEFT, span = (1, 2))
+                      pos = (0, 2), flag = wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL, span = (1, 2))
         heightSizer.Add(item = self.FindWindowById(self.win['view']['z-exag']['slider']),
                         flag = wx.ALIGN_RIGHT, pos = (1, 2))
         heightSizer.Add(item = self.FindWindowById(self.win['view']['z-exag']['text']),
                         flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT | wx.TOP |
                         wx.BOTTOM | wx.RIGHT, pos = (1, 3))
         
-        gridSizer.Add(item = heightSizer, pos = (0, 1), flag = wx.ALIGN_RIGHT)
+        gridSizer.Add(item = heightSizer, pos = (0, 1), flag = wx.ALIGN_CENTER)
         
         # view setup + reset
         viewSizer = wx.BoxSizer(wx.HORIZONTAL)
-        
         viewSizer.Add(item = wx.StaticText(panel, id = wx.ID_ANY,
-                                           label = _("Look at:")),
+                                           label = _("Look:")),
                       flag = wx.ALL | wx.ALIGN_CENTER_VERTICAL,
                       border = 5)
-        
-        viewType = wx.Choice (parent = panel, id = wx.ID_ANY, size = (125, -1),
-                              choices = [_(""),
-                                         _("here"),         
-                                         _("top"),
-                                         _("north"),
-                                         _("south"),
-                                         _("east"),
-                                         _("west"),
-                                         _("north-west"),
-                                         _("north-east"),
-                                         _("south-east"),
-                                         _("south-west")])
-        viewType.SetSelection(0)
-        viewType.Bind(wx.EVT_CHOICE, self.OnLookAt)
-        self.win['view']['lookAt'] = viewType.GetId()
-        viewSizer.Add(item = viewType,
-                      flag = wx.ALL | wx.ALIGN_CENTER_VERTICAL,
+        here = wx.ToggleButton(panel, id = wx.ID_ANY, label = _("here"))
+        here.Bind(wx.EVT_TOGGLEBUTTON, self.OnLookAt)
+        here.SetName('here')
+        viewSizer.Add(item = here, flag = wx.TOP|wx.BOTTOM|wx.LEFT|wx.ALIGN_CENTER_VERTICAL,
                       border = 5)
-        
-        reset = wx.Button(panel, id = wx.ID_ANY, label = _("Reset"))
+                    
+        center = wx.Button(panel, id = wx.ID_ANY, label = _("center"))
+        center.Bind(wx.EVT_BUTTON, self.OnLookAt)
+        center.SetName('center')
+        viewSizer.Add(item = center, flag = wx.TOP|wx.BOTTOM | wx.ALIGN_CENTER_VERTICAL,
+                      border = 5)
+                    
+        top = wx.Button(panel, id = wx.ID_ANY, label = _("top"))
+        top.Bind(wx.EVT_BUTTON, self.OnLookAt)
+        top.SetName('top')
+        viewSizer.Add(item = top, flag = wx.TOP|wx.BOTTOM | wx.ALIGN_CENTER_VERTICAL,
+                      border = 5)
+                    
+        reset = wx.Button(panel, id = wx.ID_ANY, label = _("reset"))
         reset.SetToolTipString(_("Reset to default view"))
-        # self.win['reset'] = reset.GetId()
         reset.Bind(wx.EVT_BUTTON, self.OnResetView)
-        
-        viewSizer.Add(item = wx.Size(-1, -1), proportion = 1,
-                      flag = wx.EXPAND)
         viewSizer.Add(item = reset, proportion = 0,
-                      flag = wx.ALL | wx.ALIGN_RIGHT,
+                      flag = wx.TOP|wx.BOTTOM|wx.RIGHT| wx.ALIGN_RIGHT,
                       border = 5)
         
         gridSizer.AddGrowableCol(2)
-        gridSizer.Add(item = viewSizer, pos = (4, 0), span = (1, 2),
+        gridSizer.Add(item = viewSizer, pos = (4, 0), span = (1, 3),
                       flag = wx.EXPAND)
         
         # body
@@ -512,7 +522,7 @@ class NvizToolWindow(FN.FlatNotebook):
         all.SetToolTipString(_("Use draw settings for all loaded surfaces"))
         all.Bind(wx.EVT_BUTTON, self.OnSurfaceModeAll)
         gridSizer.Add(item = all, flag = wx.ALL | wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-                      pos = (4, 4))
+                      pos = (3, 4))
         
         # resolution coarse
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
@@ -544,16 +554,14 @@ class NvizToolWindow(FN.FlatNotebook):
                       pos = (3, 2))
         
         # color
-        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                         label = _("wire color:")),
-                      pos = (4, 1), flag = wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_LEFT)
         color = csel.ColourSelect(panel, id = wx.ID_ANY,
                                   size = globalvar.DIALOG_COLOR_SIZE)
         color.SetName("colour")
         color.Bind(csel.EVT_COLOURSELECT, self.OnSurfaceWireColor)
+        color.SetToolTipString(_("Change wire color"))
         self.win['surface']['draw']['wire-color'] = color.GetId()
-        gridSizer.Add(item = color, flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT,
-                      pos = (4, 2))
+        gridSizer.Add(item = color, flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT,
+                      pos = (3, 3))
         
         # resolution fine
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
@@ -593,8 +601,7 @@ class NvizToolWindow(FN.FlatNotebook):
         for code, attrb in (('color', _("Color")),
                            ('mask', _("Mask")),
                            ('transp', _("Transparency")),
-                           ('shine', _("Shininess")),
-                           ('emit', _("Emission"))):
+                           ('shine', _("Shininess"))):
             self.win['surface'][code] = {} 
             gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
                                              label = attrb + ':'),
@@ -633,7 +640,7 @@ class NvizToolWindow(FN.FlatNotebook):
             else:
                 value = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (65, -1),
                                     initial = 0)
-                if code in ('shine', 'transp', 'emit'):
+                if code in ('shine', 'transp'):
                     value.SetRange(minVal = 0, maxVal = 255)
                 else:
                     value.SetRange(minVal = 0, maxVal = 100)
@@ -749,7 +756,6 @@ class NvizToolWindow(FN.FlatNotebook):
         box = wx.StaticBox (parent = panel, id = wx.ID_ANY,
                             label = " %s " % (_("Constant surface")))
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
-
         horsizer = wx.BoxSizer(wx.HORIZONTAL)
         
         surface = wx.ComboBox(parent = panel, id = wx.ID_ANY, 
@@ -773,35 +779,42 @@ class NvizToolWindow(FN.FlatNotebook):
         boxSizer.Add(item = horsizer, proportion = 0, flag = wx.ALL|wx.EXPAND,
                       border = 5)
         
+        gridSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
+        # fine resolution
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("Fine resolution:")),
+                      pos = (0, 0), flag = wx.ALIGN_CENTER_VERTICAL)
+        resF = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (65, -1),
+                           initial = 3,
+                           min = 1,
+                           max = 100)
+        resF.SetName("value")
+        self.win['constant']['resolution'] = resF.GetId()
+        resF.Bind(wx.EVT_SPINCTRL, self.OnSetConstantProp)
+        gridSizer.Add(item = resF, pos = (0, 1), flag = wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_RIGHT)
         # value 
-        horsizer = wx.BoxSizer(wx.HORIZONTAL)
-        horsizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                         label = _("Value:")), 
-                                         flag = wx.ALIGN_CENTER_VERTICAL|wx.RIGHT,
-                                         border = 15)
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("Value:")), pos = (1, 0),
+                                         flag = wx.ALIGN_CENTER_VERTICAL)
         
         value = wx.SpinCtrl(panel, id = wx.ID_ANY,
                                   min = -1e9, max = 1e9,
                                   size = (65, -1))
         self.win['constant']['value'] = value.GetId()
-        value.Bind(wx.EVT_SPINCTRL, self.OnConstantValue)
-        horsizer.Add(item = value, flag = wx.RIGHT, border = 5)
-        boxSizer.Add(item = horsizer, proportion = 0, flag = wx.ALL,
-                      border = 5)
+        value.Bind(wx.EVT_SPINCTRL, self.OnSetConstantProp)
+        gridSizer.Add(item = value, pos = (1, 1))
         
         # color
-        horsizer = wx.BoxSizer(wx.HORIZONTAL)
-        horsizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                         label = _("Color:")),
-                                         flag = wx.ALIGN_CENTER_VERTICAL|wx.RIGHT,
-                                         border = 15)
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("Color:")), pos = (2, 0),
+                                         flag = wx.ALIGN_CENTER_VERTICAL)
         color = csel.ColourSelect(panel, id = wx.ID_ANY,
                                   colour = (0,0,0),
                                   size = globalvar.DIALOG_COLOR_SIZE)
         self.win['constant']['color'] = color.GetId()
-        color.Bind(csel.EVT_COLOURSELECT, self.OnConstantColor)
-        horsizer.Add(item = color, flag = wx.RIGHT, border = 5)
-        boxSizer.Add(item = horsizer, proportion = 0, flag = wx.ALL,
+        color.Bind(csel.EVT_COLOURSELECT, self.OnSetConstantProp)
+        gridSizer.Add(item = color, pos = (2, 1))
+        boxSizer.Add(item = gridSizer, proportion = 0, flag = wx.ALL,
                       border = 5)
         pageSizer.Add(item = boxSizer, proportion = 0,
                       flag = wx.EXPAND | wx.ALL,
@@ -1545,31 +1558,31 @@ class NvizToolWindow(FN.FlatNotebook):
     def OnNewConstant(self, event):
         """!Create new surface with constant value"""
         #TODO settings
-        value = 0
-        color = "0:0:0"
-        id = self._display.AddConstant(value = value, color = color)
-        if id > 1:
-            self.constantIndex +=  1
-            idx = len(self.mapWindow.constants) + 1
-            layer = {'id' : id, 'name' : _("constant#") + str(self.constantIndex),
-                                'value' : value, 'color' : color}
-            self.mapWindow.constants.append(layer)
-            win = self.FindWindowById(self.win['constant']['surface'])
-            win.Append(layer['name'])
-            win.SetStringSelection(layer['name'])
-            self.EnablePage(name = 'constant', enabled = True)
-            self.OnConstantSelection(None)   
-                     
-            self.mapWindow.Refresh(eraseBackground = False)
+        index, name = self.mapWindow.AddConstant()
+        win = self.FindWindowById(self.win['constant']['surface'])
+        name = _("constant#") + str(name)
+        win.Append(name)
+        win.SetStringSelection(name)
+        self.OnConstantSelection(None)
+        self.EnablePage(name = 'constant', enabled = True)
         
+        self.mapWindow.Refresh(eraseBackground = False)
+        
+        # need to update list of surfaces in vector page
+        for vtype in ('points', 'lines'):
+            checklist = self.FindWindowById(self.win['vector'][vtype]['surface'])
+            checklist.Append(name)
+        win = self.FindWindowById(self.win['vector']['map'])
+        win.SetValue(win.GetValue())
+                
+
     def OnDeleteConstant(self, event):
         """!Delete selected constant surface"""
         layerIdx = self.FindWindowById(self.win['constant']['surface']).GetSelection()
         if layerIdx == wx.NOT_FOUND:
             return
-        id = self.mapWindow.constants[layerIdx]['id']
-        self._display.UnloadSurface(id)
-        del self.mapWindow.constants[layerIdx]
+        name = self.FindWindowById(self.win['constant']['surface']).GetStringSelection()
+        self.mapWindow.DeleteConstant(layerIdx)
         win = self.FindWindowById(self.win['constant']['surface'])
         win.Delete(layerIdx)
         if win.IsEmpty():
@@ -1578,43 +1591,45 @@ class NvizToolWindow(FN.FlatNotebook):
         else:
             win.SetSelection(0)
             self.OnConstantSelection(None)
-
-        self.mapWindow.Refresh(False)
+            
+        # need to update list of surfaces in vector page
+        for vtype in ('points', 'lines'):
+            checklist = self.FindWindowById(self.win['vector'][vtype]['surface'])
+            checklist.Delete(checklist.FindString(name))
+            
+        if self.mapDisplay.statusbarWin['render'].IsChecked():
+            self.mapWindow.Refresh(False)
     
     def OnConstantSelection(self, event):
         """!Constant selected"""
         layerIdx = self.FindWindowById(self.win['constant']['surface']).GetSelection()
         if layerIdx == wx.NOT_FOUND:
             return
-        color = self._getColorFromString(self.mapWindow.constants[layerIdx]['color'])
-        value = self.mapWindow.constants[layerIdx]['value']
+        name = _("constant#") + str(layerIdx + 1)
+        data = self.mapWindow.constants[layerIdx]
+        for attr, value in data['constant'].iteritems():
+            if attr == 'color':
+                value = self._getColorFromString(value)
+            if attr in ('color', 'value', 'resolution'):
+                self.FindWindowById(self.win['constant'][attr]).SetValue(value)
         
-        self.FindWindowById(self.win['constant']['color']).SetValue(color)
-        self.FindWindowById(self.win['constant']['value']).SetValue(value)
-        
-    def OnConstantColor(self, event):
-        """!Change color of currently selected constant surface"""
-        color = self._getColorString(event.GetValue())
+    def OnSetConstantProp(self, event):
+        """!Change properties (color, value, resolution)
+            of currently selected constant surface"""
         layerIdx = self.FindWindowById(self.win['constant']['surface']).GetSelection()
         if layerIdx == wx.NOT_FOUND:
             return
-        id = self.mapWindow.constants[layerIdx]['id']
-        self.mapWindow.constants[layerIdx]['color'] = color
-        self._display.SetSurfaceColor(id = id, map = False, value = color)
-        
-        self.mapWindow.Refresh(False)
-    
-    def OnConstantValue(self, event):
-        """!Change value of currently selected constant surface"""
-        value = event.GetInt()
-        layerIdx = self.FindWindowById(self.win['constant']['surface']).GetSelection()
-        if layerIdx == wx.NOT_FOUND:
-            return
-        id = self.mapWindow.constants[layerIdx]['id']
-        self.mapWindow.constants[layerIdx]['value'] = value
-        self._display.SetSurfaceTopo(id = id, map = False, value = value)
-        
-        self.mapWindow.Refresh(False)
+        data = self.mapWindow.constants[layerIdx]
+        for attr in ('resolution', 'value'):
+            data['constant'][attr] = self.FindWindowById(self.win['constant'][attr]).GetValue()
+        data['constant']['color'] = self._getColorString(
+                self.FindWindowById(self.win['constant']['color']).GetValue())
+                
+       # update properties
+        event = wxUpdateProperties(data = data)
+        wx.PostEvent(self.mapWindow, event) 
+        if self.mapDisplay.statusbarWin['render'].IsChecked():
+            self.mapWindow.Refresh(False)
         
     def OnFringe(self, event):
         """!Show/hide fringe"""
@@ -1882,7 +1897,27 @@ class NvizToolWindow(FN.FlatNotebook):
         self.Update()
         
         event.Skip()
-        
+    
+    def OnLookAt(self, event):
+        """!Look here/center"""
+        name = self.FindWindowById(event.GetId()).GetName()
+        if name == 'center':
+            self._display.LookAtCenter()
+            self.mapWindow.Refresh(False)
+        elif name == 'top':
+            self.mapWindow.view['position']['x'] = 0.5
+            self.mapWindow.view['position']['y'] = 0.5
+            self.PostViewEvent(zExag = True)
+            self.UpdateSettings()
+            self.mapWindow.Refresh(False)
+        else: # here
+            if self.FindWindowById(event.GetId()).GetValue():
+                self.mapWindow.mouse['use'] = 'lookHere'
+                self.mapWindow.SetCursor(self.mapWindow.cursors["cross"])
+            else:
+                self.mapWindow.mouse['use'] = 'default'
+                self.mapWindow.SetCursor(self.mapWindow.cursors['default'])
+          
     def OnResetView(self, event):
         """!Reset to default view (view page)"""
         self.mapWindow.ResetView()
@@ -1910,49 +1945,39 @@ class NvizToolWindow(FN.FlatNotebook):
         if self.mapDisplay.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
             
-    def OnLookAt(self, event):
-        """!Look at (view page)"""
-        sel = event.GetSelection()
-        if sel == 0: # nothing
-            pass
-        elif sel == 1:
-            self.mapWindow.mouse['use'] = 'lookHere'
-            self.mapWindow.SetCursor(self.mapWindow.cursors["cross"])
-        elif sel == 2: # top
-            self.mapWindow.view['position']['x'] = 0.5
-            self.mapWindow.view['position']['y'] = 0.5
-        elif sel == 3: # north
+    def OnLookFrom(self, event):
+        """!Look from (view page)"""
+        buttonName = self.FindWindowById(event.GetId()).GetName()
+        if buttonName == 'n': # north
             self.mapWindow.view['position']['x'] = 0.5
             self.mapWindow.view['position']['y'] = 0.0
-        elif sel == 4: # south
+        elif buttonName == 's': # south
             self.mapWindow.view['position']['x'] = 0.5
             self.mapWindow.view['position']['y'] = 1.0
-        elif sel == 5: # east
+        elif buttonName == 'e': # east
             self.mapWindow.view['position']['x'] = 1.0
             self.mapWindow.view['position']['y'] = 0.5
-        elif sel == 6: # west
+        elif buttonName =='w': # west
             self.mapWindow.view['position']['x'] = 0.0
             self.mapWindow.view['position']['y'] = 0.5
-        elif sel == 7: # north-west
+        elif buttonName == 'nw': # north-west
             self.mapWindow.view['position']['x'] = 0.0
             self.mapWindow.view['position']['y'] = 0.0
-        elif sel == 8: # north-east
+        elif buttonName == 'ne': # north-east
             self.mapWindow.view['position']['x'] = 1.0
             self.mapWindow.view['position']['y'] = 0.0
-        elif sel == 9: # south-east
+        elif buttonName == 'se': # south-east
             self.mapWindow.view['position']['x'] = 1.0
             self.mapWindow.view['position']['y'] = 1.0
-        elif sel == 10: # south-west
+        elif buttonName == 'sw': # south-west
             self.mapWindow.view['position']['x'] = 0.0
             self.mapWindow.view['position']['y'] = 1.0
-        if sel >= 2:
-            self.PostViewEvent(zExag = True)
             
-            self.UpdateSettings()
-            self.mapWindow.render['quick'] = False
-            self.mapWindow.Refresh(False)
+        self.PostViewEvent(zExag = True)
         
-            self.FindWindowById(event.GetId()).SetSelection(0)
+        self.UpdateSettings()
+        self.mapWindow.render['quick'] = False
+        self.mapWindow.Refresh(False)
 
         
     def OnMapObjUse(self, event):
@@ -2115,7 +2140,8 @@ class NvizToolWindow(FN.FlatNotebook):
         
         if self.mapDisplay.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
-        
+    
+
     def SetSurfaceResolution(self):
         """!Set draw resolution"""
         coarse = self.FindWindowById(self.win['surface']['draw']['res-coarse']).GetValue()
@@ -2136,15 +2162,8 @@ class NvizToolWindow(FN.FlatNotebook):
         style = self.FindWindowById(self.win['surface']['draw']['style']).GetSelection()
         if style == 0: # wire
             self.FindWindowById(self.win['surface']['draw']['wire-color']).Enable(True)
-##            self.FindWindowById(self.win['surface']['draw']['res-fine']).Enable(False)
         elif style == 1: # surface
             self.FindWindowById(self.win['surface']['draw']['wire-color']).Enable(False)
-##            self.FindWindowById(self.win['surface']['draw']['res-fine']).Enable(True)
-##        else: # both
-##            self.FindWindowById(self.win['surface']['draw']['res-coarse']).Enable(True)
-##            self.FindWindowById(self.win['surface']['draw']['res-fine']).Enable(True)
-##        
-##        style = self.FindWindowById(self.win['surface']['draw']['style']).GetSelection()
         
         shade = self.FindWindowById(self.win['surface']['draw']['shading']).GetSelection()
         
@@ -2401,7 +2420,7 @@ class NvizToolWindow(FN.FlatNotebook):
         for attrb in ('width', 'mode'):
             data['vector']['lines'][attrb]['update'] = None
         data['vector']['lines']['width']['value'] = width
-        data['vector']['lines']['mode']['value'] = mode
+        data['vector']['lines']['mode'] = mode
         
         color = self.FindWindowById(self.win['vector']['lines']['color']).GetColour()
         
@@ -2476,12 +2495,15 @@ class NvizToolWindow(FN.FlatNotebook):
         else:
             vtype = 'points'
         checkList = self.FindWindowById(self.win['vector'][vtype]['surface'])
-        checked = checkList.IsChecked(event.GetInt())
-        surface = checkList.GetString(event.GetInt())
+        checked = []
+        surfaces = []
+        for items in range(checkList.GetCount()):
+            checked.append(checkList.IsChecked(items))
+            surfaces.append(checkList.GetString(items))
         
         data = self.GetLayerData('vector')
-        data['vector'][vtype]['mode']['surface'] = { 'value' : (surface,),
-                                                     'show'  : (checked,),
+        data['vector'][vtype]['mode']['surface'] = { 'value' : surfaces,
+                                                     'show'  : checked,
                                                      'update': None }
         # update properties
         event = wxUpdateProperties(data = data)
@@ -3026,15 +3048,32 @@ class NvizToolWindow(FN.FlatNotebook):
                 else:
                     display.SetSelection(0)
             if data[vtype]['mode']['type'] == 'surface':
+                if npoints:
+                    vsubtyp = 'vpoint'
+                else:
+                    vsubtyp = 'vline'                    
+                vid = self.mapWindow.GetLayerId(type = 'vector', vsubtyp = vsubtyp, name = layer.name)
                 rasters = self.mapWindow.GetLayerNames('raster')
-                surface = self.FindWindowById(self.win['vector'][vtype]['surface'])
-                surface.SetItems(rasters)
-                if len(rasters) > 0:
-                    for item in range(len(rasters)):
-                        try:
-                            surface.Check(item, data[vtype]['mode']['surface']['show'][item])
+                constants = self.mapWindow.GetLayerNames('constant')
+                surfaces = rasters + constants
+                surfaceWin = self.FindWindowById(self.win['vector'][vtype]['surface'])
+                surfaceWin.SetItems(surfaces)
+                for idx, surface in enumerate(surfaces):
+                    if vtype == 'lines':
+                        sid = self.mapWindow.GetLayerId(type = 'raster', name = surface)
+                        if sid == -1:
+                            sid = self.mapWindow.GetLayerId(type = 'constant', name = surface)
+                        if vid > -1 and sid > -1: 
+                            selected = self._display.VectorSurfaceSelected(vid, sid)
+                        else:
+                            selected = False
+                    else: # points
+                        try:# TODO fix this mess
+                            selected = data[vtype]['mode']['surface']['show'][idx]
                         except (TypeError, IndexError, KeyError):
-                            surface.Check(item, True)
+                            selected = False
+                    surfaceWin.Check(idx, selected)
+
         for type in ('slider', 'text'):
             win = self.FindWindowById(self.win['vector']['lines']['height'][type])
             win.SetValue(data['lines']['height']['value'])

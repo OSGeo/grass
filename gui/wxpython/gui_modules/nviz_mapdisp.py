@@ -250,8 +250,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 size = self.GetClientSize()
                 self._display.LookHere(pos[0], size[1] - pos[1])
                 self.DoPaint()
-                comboId = self.lmgr.nviz.win['view']['lookAt']
-                self.lmgr.nviz.FindWindowById(comboId).SetSelection(0)
+                toggle = self.lmgr.nviz.FindWindowByName('here')
+                toggle.SetValue(False)
                 self.mouse['use'] = 'default'
                 self.SetCursor(self.cursors['default'])
                 
@@ -545,14 +545,19 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         @param id nviz layer id (or -1)
         @param nvizType nviz data type (surface, points, vector)
         """
-        type = self.tree.GetPyData(item)[0]['maplayer'].type
-        # reference to original layer properties (can be None)
-        data = self.tree.GetPyData(item)[0]['nviz']
-        
+        if nvizType != 'constant':
+            type = self.tree.GetPyData(item)[0]['maplayer'].type
+            # reference to original layer properties (can be None)
+            data = self.tree.GetPyData(item)[0]['nviz']
+        else:
+            type = nvizType
+            data = self.constants[item]
+            
         if not data:
             # init data structure
-            self.tree.GetPyData(item)[0]['nviz'] = {}
-            data = self.tree.GetPyData(item)[0]['nviz']
+            if nvizType != 'constant':
+                self.tree.GetPyData(item)[0]['nviz'] = {}
+                data = self.tree.GetPyData(item)[0]['nviz']
             
             if type ==  'raster':
                 # reset to default properties
@@ -566,6 +571,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             elif type ==  '3d-raster':
                 # reset to default properties 
                 data[nvizType] = self.nvizDefault.SetVolumeDefaultProp()
+                
+            elif type == 'constant':
+                data['constant'] = self.nvizDefault.SetConstantDefaultProp()
         
         else:
             # complete data (use default values)
@@ -595,6 +603,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             elif type ==  'vector':
                 data['vector'][nvizType]['object'] = { 'id' : id,
                                                        'init' : False }
+            elif type ==  'constant':
+                data[nvizType]['object'] = { 'id' : id,
+                                             'init' : False }
         
         return data
 
@@ -662,6 +673,30 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         return id
     
+    def AddConstant(self):
+        """!Add new constant"""
+        index = len(self.constants)
+        try:
+            name = self.constants[-1]['constant']['object']['name'] + 1
+        except IndexError:
+            name = 1
+        data = dict()
+        self.constants.append(data)
+        data = self.SetMapObjProperties(item = index, id = -1, nvizType = 'constant')
+        id = self._display.AddConstant(value = data['constant']['value'], color = data['constant']['color'])
+        self._display.SetSurfaceRes(id, data['constant']['resolution'], data['constant']['resolution'])
+        data['constant']['object'] = { 'id' : id,
+                                       'name': name,
+                                       'init' : False }
+            
+        return index, name
+    
+    def DeleteConstant(self, index):
+        """!Delete constant layer"""
+        id = self.constants[index]['constant']['object']['id']
+        self._display.UnloadSurface(id)
+        del self.constants[index]
+        
     def UnloadRaster(self, item):
         """!Unload 2d raster map
         
@@ -862,6 +897,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         self.view['twist']['value'] = UserSettings.Get(group = 'nviz', key = 'view',
                                                        subkey = ('twist', 'value'))
+                                                    
+        self._display.LookAtCenter()
         
         event = wxUpdateView(zExag = False)
         wx.PostEvent(self, event)
@@ -876,6 +913,12 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             # -> initialized
             data['surface']['object']['init'] = True
             
+        elif 'constant' in data:
+            id = data['constant']['object']['id']
+            self.UpdateConstantProperties(id, data['constant'])
+            # -> initialized
+            data['constant']['object']['init'] = True  
+              
         elif 'volume' in data:
             id = data['volume']['object']['id']
             self.UpdateVolumeProperties(id, data['volume'])
@@ -889,12 +932,18 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                     self.UpdateVectorProperties(id, data['vector'], type)
                     # -> initialized
                     data['vector'][type]['object']['init'] = True
-        
+    
+    def UpdateConstantProperties(self, id, data):
+        """!Update surface map object properties"""
+        self._display.SetSurfaceColor(id = id, map = False, value = data['color'])
+        self._display.SetSurfaceTopo(id = id, map = False, value = data['value'])
+        self._display.SetSurfaceRes(id, data['resolution'], data['resolution'])
+            
     def UpdateSurfaceProperties(self, id, data):
         """!Update surface map object properties"""
         # surface attributes
         for attrb in ('color', 'mask',
-                     'transp', 'shine', 'emit'):
+                     'transp', 'shine'):
             if attrb not in data['attribute'] or \
                     'update' not in data['attribute'][attrb]:
                 continue
@@ -909,9 +958,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                     # TODO: broken in NVIZ
                     self._display.UnsetSurfaceMask(id)
                 elif attrb ==  'transp':
-                    self._display.UnsetSurfaceTransp(id)
-                elif attrb ==  'emit':
-                    self._display.UnsetSurfaceEmit(id) 
+                    self._display.UnsetSurfaceTransp(id) 
             else:
                 if type(value) ==  type('') and \
                         len(value) <=  0: # ignore empty values (TODO: warning)
@@ -926,8 +973,6 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                     self._display.SetSurfaceTransp(id, map, str(value)) 
                 elif attrb ==  'shine':
                     self._display.SetSurfaceShine(id, map, str(value)) 
-                elif attrb ==  'emit':
-                    self._display.SetSurfaceEmit(id, map, str(value)) 
             data['attribute'][attrb].pop('update')
         
         # draw res
@@ -1076,12 +1121,15 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         if 'surface' in data['mode']:
             if 'update' in data['mode']['surface']:
                 for item in range(len(data['mode']['surface']['value'])):
-                    sid = self.GetLayerId(type = 'raster', name = data['mode']['surface']['value'][item])
-                    if sid > -1:
-                        if data['mode']['surface']['show'][item]:
-                            self._display.SetVectorLineSurface(id, sid)
-                        else:
-                            self._display.UnsetVectorLineSurface(id, sid)                        
+                    for type in ('raster', 'constant'):
+                        sid = self.GetLayerId(type = type,
+                                              name = data['mode']['surface']['value'][item])
+                        if sid > -1:
+                            if data['mode']['surface']['show'][item]:
+                                self._display.SetVectorLineSurface(id, sid)
+                            else:
+                                self._display.UnsetVectorLineSurface(id, sid)
+                            break
                 
                 data['mode']['surface'].pop('update')
         
@@ -1118,31 +1166,45 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         if 'surface' in data['mode']:
             if 'update' in data['mode']['surface']:
                 for item in range(len(data['mode']['surface']['value'])):
-                    sid = self.GetLayerId(type = 'raster', name = data['mode']['surface']['value'][item])
-                    if sid > -1:
-                        if data['mode']['surface']['show'][item]:
-                            self._display.SetVectorPointSurface(id, sid)
-                        else:
-                            self._display.UnsetVectorPointSurface(id, sid)   
+                    for type in ('raster', 'constant'):
+                        sid = self.GetLayerId(type = type,
+                                              name = data['mode']['surface']['value'][item])
+                        if sid > -1:
+                            if data['mode']['surface']['show'][item]:
+                                self._display.SetVectorPointSurface(id, sid)
+                            else:
+                                self._display.UnsetVectorPointSurface(id, sid)   
+                            break
                 data['mode']['surface'].pop('update')
    
     def GetLayerNames(self, type):
         """!Return list of map layer names of given type"""
         layerName = []
         
-        for item in self.layers:
-            mapLayer = self.tree.GetPyData(item)[0]['maplayer']
-            if type !=  mapLayer.GetType():
-                continue
-            
-            layerName.append(mapLayer.GetName())
+        if type == 'constant':
+            for item in self.constants:
+                layerName.append(_("constant#") + str(item['constant']['object']['name']))
+        else:    
+            for item in self.layers:
+                mapLayer = self.tree.GetPyData(item)[0]['maplayer']
+                if type !=  mapLayer.GetType():
+                    continue
+                
+                layerName.append(mapLayer.GetName())
         
         return layerName
     
-    def GetLayerId(self, type, name):
+    def GetLayerId(self, type, name, vsubtyp = None):
         """!Get layer object id or -1"""
         if len(name) < 1:
             return -1
+        
+        if type == 'constant':
+            for item in self.constants:
+                if _("constant#") + str(item['constant']['object']['name']) == name:
+                    return item['constant']['object']['id']
+                
+            return self.constants
         
         for item in self.layers:
             mapLayer = self.tree.GetPyData(item)[0]['maplayer']
@@ -1154,13 +1216,13 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             
             if type ==  'raster':
                 return data['surface']['object']['id']
-            elif type ==  'vpoint':
-                return data['vector']['points']['object']['id']
-            elif type ==  'vline':
-                return data['vector']['lines']['object']['id']
+            elif type ==  'vector':
+                if vsubtyp == 'vpoint':
+                    return data['vector']['points']['object']['id']
+                elif vsubtyp ==  'vline':
+                    return data['vector']['lines']['object']['id']
             elif type ==  '3d-raster':
                 return data['volume']['object']['id']
-        
         return -1
     
     def SaveToFile(self, FileName, FileType, width, height):

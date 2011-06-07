@@ -421,6 +421,16 @@ class Nviz:
     def __init__(self):
         """Default 3D settings"""
         pass
+        
+    def SetConstantDefaultProp(self):
+        """Set default constant data properties"""
+        data = dict()
+        for key, value in UserSettings.Get(group='nviz', key='constant').iteritems():
+            data[key] = value
+        color = str(data['color'][0]) + ':' + str(data['color'][1]) + ':' + str(data['color'][2])
+        data['color'] = color
+
+        return data
     
     def SetSurfaceDefaultProp(self):
         """Set default surface data properties"""
@@ -433,7 +443,7 @@ class Nviz:
         #
         for attrb in ('shine', ):
             data['attribute'][attrb] = {}
-            for key, value in UserSettings.Get(group='nviz', key='volume',
+            for key, value in UserSettings.Get(group='nviz', key='surface',
                                                subkey=attrb).iteritems():
                 data['attribute'][attrb][key] = value
             data['attribute'][attrb]['update'] = None
@@ -486,7 +496,7 @@ class Nviz:
             if control == 'mode':
                 continue
             if control == 'shading':
-                sel = UserSettings.Get(group='nviz', key='surface', subkey=['draw', 'shading'])
+                sel = UserSettings.Get(group='nviz', key='volume', subkey=['draw', 'shading'])
                 value, desc = self.GetDrawMode(shade=sel, string=False)
 
                 data['draw']['shading'] = { 'value' : value,
