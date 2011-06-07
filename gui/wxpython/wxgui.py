@@ -83,7 +83,7 @@ from gui_modules import vclean
 from gui_modules import nviz_tools
 from gui_modules.debug    import Debug
 from gui_modules.ghelp    import MenuTreeWindow, AboutWindow, InstallExtensionWindow
-from gui_modules.toolbars import LayerManagerToolbar, ToolsToolbar
+from gui_modules.toolbars import LMWorkspaceToolbar, LMDataToolbar, LMToolsToolbar, LMMiscToolbar
 from gui_modules.gpyshell import PyShellWindow
 from icons.icon           import Icons
 
@@ -129,18 +129,35 @@ class GMFrame(wx.Frame):
         self._createMenuBar()
         self.statusbar = self.CreateStatusBar(number = 1)
         self.notebook  = self._createNoteBook()
-        self.toolbars  = { 'main'  : LayerManagerToolbar(parent = self),
-                           'tools' : ToolsToolbar(parent = self) }
+        self.toolbars  = { 'workspace' : LMWorkspaceToolbar(parent = self),
+                           'data'      : LMDataToolbar(parent = self),
+                           'tools'     : LMToolsToolbar(parent = self),
+                           'misc'      : LMMiscToolbar(parent = self) }
         
-        # self.SetToolBar(self.toolbar)
-        self._auimgr.AddPane(self.toolbars['main'],
+        self._auimgr.AddPane(self.toolbars['data'],
                              wx.aui.AuiPaneInfo().
-                             Name("toolbarMain").Caption(_("Main Toolbar")).
+                             Name("toolbarData").Caption(_("Data Toolbar")).
                              ToolbarPane().Top().
                              LeftDockable(False).RightDockable(False).
                              BottomDockable(False).TopDockable(True).
                              CloseButton(False).Layer(3).
-                             BestSize((self.toolbars['main'].GetSize())))
+                             BestSize((self.toolbars['data'].GetSize())))
+        self._auimgr.AddPane(self.toolbars['workspace'],
+                             wx.aui.AuiPaneInfo().
+                             Name("toolbarWorkspace").Caption(_("Workspace Toolbar")).
+                             ToolbarPane().Top().
+                             LeftDockable(False).RightDockable(False).
+                             BottomDockable(False).TopDockable(True).
+                             CloseButton(False).Layer(3).
+                             BestSize((self.toolbars['workspace'].GetSize())))
+        self._auimgr.AddPane(self.toolbars['misc'],
+                             wx.aui.AuiPaneInfo().
+                             Name("toolbarMisc").Caption(_("Misc Toolbar")).
+                             ToolbarPane().Top().
+                             LeftDockable(False).RightDockable(False).
+                             BottomDockable(False).TopDockable(True).
+                             CloseButton(False).Layer(2).
+                             BestSize((self.toolbars['misc'].GetSize())))
         self._auimgr.AddPane(self.toolbars['tools'],
                              wx.aui.AuiPaneInfo().
                              Name("toolbarTools").Caption(_("Tools Toolbar")).
@@ -630,12 +647,10 @@ class GMFrame(wx.Frame):
         self._popupMenu((('newdisplay', self.OnNewDisplay),
                          ('workspaceNew',  self.OnWorkspaceNew)))
 
-    def OnLoadMenu(self, event):
-        """!Load maps menu (new, load, import, link)
+    def OnImportMenu(self, event):
+        """!Import maps menu (import, link)
         """
-        self._popupMenu((('workspaceLoad', self.OnWorkspaceLoad),
-                         (None, None),
-                         ('rastImport',    self.OnImportGdalLayers),
+        self._popupMenu((('rastImport',    self.OnImportGdalLayers),
                          ('rastLink',      self.OnLinkGdalLayers),
                          (None, None),
                          ('vectImport',    self.OnImportOgrLayers),
@@ -825,35 +840,7 @@ class GMFrame(wx.Frame):
             mdisp.MapWindow2D.UpdateMap()
 
         return True
-
-    def OnWorkspaceLoad(self, event = None):
-        """!Load given map layers into layer tree"""
-        dialog = gdialogs.LoadMapLayersDialog(parent = self, title = _("Load map layers into layer tree"))
-
-        if dialog.ShowModal() == wx.ID_OK:
-            # start new map display if no display is available
-            if not self.curr_page:
-                self.NewDisplay()
-
-            maptree = self.curr_page.maptree
-            busy = wx.BusyInfo(message = _("Please wait, loading workspace..."),
-                               parent = self)
-            wx.Yield()
-            
-            for layerName in dialog.GetMapLayers():
-                if dialog.GetLayerType() == 'raster':
-                    cmd = ['d.rast', 'map=%s' % layerName]
-                elif dialog.GetLayerType() == 'vector':
-                    cmd = ['d.vect', 'map=%s' % layerName]
-                newItem = maptree.AddLayer(ltype = dialog.GetLayerType(),
-                                           lname = layerName,
-                                           lchecked = False,
-                                           lopacity = 1.0,
-                                           lcmd = cmd,
-                                           lgroup = None)
-
-            busy.Destroy()
-
+    
     def OnWorkspaceLoadGrcFile(self, event):
         """!Load map layers from GRC file (Tcl/Tk GUI) into map layer tree"""
         dlg = wx.FileDialog(parent = self, message = _("Choose GRC file to load"),
@@ -1240,7 +1227,35 @@ class GMFrame(wx.Frame):
         self.disp_idx += 1
         
         return self.curr_page.maptree.mapdisplay
+    
+    def OnAddMaps(self, event = None):
+        """!Add selected map layers into layer tree"""
+        dialog = gdialogs.AddMapLayersDialog(parent = self, title = _("Add selected map layers into layer tree"))
 
+        if dialog.ShowModal() == wx.ID_OK:
+            # start new map display if no display is available
+            if not self.curr_page:
+                self.NewDisplay()
+
+            maptree = self.curr_page.maptree
+            busy = wx.BusyInfo(message = _("Please wait, loading workspace..."),
+                               parent = self)
+            wx.Yield()
+            
+            for layerName in dialog.GetMapLayers():
+                if dialog.GetLayerType() == 'raster':
+                    cmd = ['d.rast', 'map=%s' % layerName]
+                elif dialog.GetLayerType() == 'vector':
+                    cmd = ['d.vect', 'map=%s' % layerName]
+                newItem = maptree.AddLayer(ltype = dialog.GetLayerType(),
+                                           lname = layerName,
+                                           lchecked = False,
+                                           lopacity = 1.0,
+                                           lcmd = cmd,
+                                           lgroup = None)
+
+            busy.Destroy()
+    
     def OnAddRaster(self, event):
         """!Add raster map layer"""
         # start new map display if no display is available

@@ -36,13 +36,6 @@
 	    </menuitem>
 	    <separator />
 	    <menuitem>
-	      <label>Load map layers</label>
-	      <help>Load map layers into layer tree</help>
-	      <handler>OnWorkspaceLoad</handler>
-	      <shortcut>Ctrl+L</shortcut>
-	    </menuitem>
-	    <separator />
-	    <menuitem>
 	      <label>Load GRC file (Tcl/Tk GUI)</label>
 	      <help>Load map layers from GRC file to layer tree</help>
 	      <handler>OnWorkspaceLoadGrcFile</handler>
@@ -69,6 +62,12 @@
 	      <handler>OnDisplayCloseAll</handler>
 	    </menuitem>
 	    <separator />
+	    <menuitem>
+	      <label>Add multiple rasters or vectors</label>
+	      <help>Add multiple raster or vector map layers to current display</help>
+	      <handler>OnAddMaps</handler>
+	      <shortcut>Ctrl+L</shortcut>
+	    </menuitem>
 	    <menuitem>
 	      <label>Add raster</label>
 	      <help>Add raster map layer to current display</help>
