@@ -3,6 +3,9 @@ MODULE_TOPDIR = ../..
 include $(MODULE_TOPDIR)/include/Make/Other.make
 include $(MODULE_TOPDIR)/include/Make/Compile.make
 
+#for i18N support
+PACKAGE ="grasslibs"
+
 START_UP=grass$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR)
 
 EXTRA_CFLAGS = \
