@@ -10,13 +10,14 @@ Classes:
  - GPromptPopUp
  - GPromptSTC
 
-(C) 2009-2010 by the GRASS Development Team
+(C) 2009-2011 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 @author Martin Landa <landa.martin gmail.com>
 @author Michael Barton <michael.barton@asu.edu>
+@author Vaclav Petras <wenzeslaus gmail.com> (copy&paste customization)
 """
 
 import os
@@ -705,6 +706,13 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyPressed)
         self.Bind(wx.stc.EVT_STC_AUTOCOMP_SELECTION, self.OnItemSelected)
         self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemChanged)
+        
+    def OnTextSelectionChanged(self, event):
+        """!Copy selected text to clipboard and skip event.
+        The same function is in GMStc class (goutput.py).
+        """
+        self.Copy()
+        event.Skip()
         
     def OnItemChanged(self, event):
         """!Change text in statusbar 

@@ -9,13 +9,14 @@ Classes:
  - GMStdout
  - GMStderr
 
-(C) 2007-2010 by the GRASS Development Team
+(C) 2007-2011 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 @author Michael Barton (Arizona State University)
 @author Martin Landa <landa.martin gmail.com>
+@author Vaclav Petras <wenzeslaus gmail.com> (copy&paste customization)
 """
 
 import os
@@ -620,6 +621,19 @@ class GMConsole(wx.SplitterWindow):
         """!Get running command or None"""
         return self.requestQ.get()
     
+    def SetCopyingOfSelectedText(self, copy):
+        """!Enable or disable copying of selected text in to clipboard.
+        Effects prompt and output.
+        
+        @param copy True for enable, False for disable
+        """
+        if copy:
+            self.cmd_prompt.Bind(wx.stc.EVT_STC_PAINTED, self.cmd_prompt.OnTextSelectionChanged)
+            self.cmd_output.Bind(wx.stc.EVT_STC_PAINTED, self.cmd_output.OnTextSelectionChanged)
+        else:
+            self.cmd_prompt.Unbind(wx.stc.EVT_STC_PAINTED)
+            self.cmd_output.Unbind(wx.stc.EVT_STC_PAINTED)
+        
     def OnUpdateStatusBar(self, event):
         """!Update statusbar text"""
         if event.GetString():
@@ -991,6 +1005,13 @@ class GMStc(wx.stc.StyledTextCtrl):
         # bindings
         #
         self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy)
+        
+    def OnTextSelectionChanged(self, event):
+        """!Copy selected text to clipboard and skip event.
+        The same function is in TextCtrlAutoComplete class (prompt.py).
+        """
+        self.Copy()
+        event.Skip()
         
     def SetStyle(self):
         """!Set styles for styled text output windows with type face 

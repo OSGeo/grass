@@ -117,6 +117,9 @@ class Settings:
                     'search' : False,
                     'pyshell' : False,
                     },
+                'copySelectedTextToClipboard' : {
+                    'enabled' : False
+                    },
                 },
             #
             # appearance
@@ -1156,6 +1159,19 @@ class PreferencesDialog(PreferencesBaseDialog):
         self.winId['manager:hideTabs:pyshell'] = hidePyShell.GetId()
         
         gridSizer.Add(item = hidePyShell,
+                      pos = (row, 0), span = (1, 2))
+        
+        #
+        # Selected text is copied to clipboard
+        #
+        row += 1
+        copySelectedTextToClipboard = wx.CheckBox(parent = panel, id = wx.ID_ANY,
+                                                  label = _("Automatically copy selected text to clipboard (in Command console)"),
+                                                  name = 'IsChecked')
+        copySelectedTextToClipboard.SetValue(self.settings.Get(group = 'manager', key = 'copySelectedTextToClipboard', subkey = 'enabled'))
+        self.winId['manager:copySelectedTextToClipboard:enabled'] = copySelectedTextToClipboard.GetId()
+        
+        gridSizer.Add(item = copySelectedTextToClipboard,
                       pos = (row, 0), span = (1, 2))
         
         sizer.Add(item = gridSizer, proportion = 1, flag = wx.ALL | wx.EXPAND, border = 5)
