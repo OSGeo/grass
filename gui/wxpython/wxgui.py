@@ -233,6 +233,10 @@ class GMFrame(wx.Frame):
         self.SetMenuBar(self.menubar)
         self.menucmd = self.menubar.GetCmd()
         
+    def _setCopyingOfSelectedText(self):
+        copy = UserSettings.Get(group = 'manager', key = 'copySelectedTextToClipboard', subkey = 'enabled')
+        self.goutput.SetCopyingOfSelectedText(copy)
+        
     def _createNoteBook(self):
         """!Creates notebook widgets"""
         self.notebook = menuform.GNotebook(parent = self, style = globalvar.FNPageDStyle)
@@ -248,6 +252,7 @@ class GMFrame(wx.Frame):
         # create 'command output' text area
         self.goutput = goutput.GMConsole(self)
         self.notebook.AddPage(page = self.goutput, text = _("Command console"), name = 'console')
+        self._setCopyingOfSelectedText()
         
         # create 'search module' notebook page
         if not UserSettings.Get(group = 'manager', key = 'hideTabs', subkey = 'search'):
@@ -295,9 +300,10 @@ class GMFrame(wx.Frame):
         
     def OnSettingsChanged(self, event):
         """!Here can be functions which have to be called after EVT_SETTINGS_CHANGED. 
-        Now recreates menu only.
+        Now recreates menu and set copying of selected text to clipboard (in goutput).
         """
         self._createMenuBar()
+        self._setCopyingOfSelectedText()
         
     def OnGCPManager(self, event):
         """!Launch georectifier module
