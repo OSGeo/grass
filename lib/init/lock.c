@@ -7,6 +7,7 @@
 #include <signal.h>
 #include "local_proto.h"
 #include <grass/gis.h>
+#include <grass/glocale.h>
 
 /******************************************************************
 *lock file pid
@@ -34,7 +35,7 @@ int main(int argc, char *argv[])
     int locked;
 
     if (argc != 3 || sscanf(argv[2], "%d", &lockpid) != 1)
-	G_fatal_error("usage: %s file pid", argv[0]);
+	G_fatal_error(_("Usage: %s file pid"), argv[0]);
 #define file argv[1]
 
 #ifdef __MINGW32__
@@ -56,8 +57,8 @@ int main(int argc, char *argv[])
 	G_fatal_error("%s: ", argv[0]);
     }
     if (write(lock, &lockpid, sizeof lockpid) != sizeof lockpid)
-	G_fatal_error("%s: can't write lockfile %s (disk full? Permissions?)",
-		      argv[0], file);
+	G_fatal_error(_("Unable to write lockfile %s (disk full? Permissions?)"),
+		      file);
     close(lock);
     exit(0);
 #endif
