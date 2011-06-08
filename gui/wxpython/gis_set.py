@@ -599,7 +599,7 @@ class GRASSStartup(wx.Frame):
                                   location = locationName,
                                   gisdbase = self.gisdbase)
             
-            if not ret:
+            if ret == '':
                 raise gcmd.GError(_("No mapsets available in location <%s>") % locationName)
             
             for line in ret.splitlines():
