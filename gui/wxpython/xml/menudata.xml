@@ -66,19 +66,19 @@
 	      <label>Add multiple rasters or vectors</label>
 	      <help>Add multiple raster or vector map layers to current display</help>
 	      <handler>OnAddMaps</handler>
-	      <shortcut>Ctrl+L</shortcut>
+	      <shortcut>Ctrl+Shift+L</shortcut>
 	    </menuitem>
 	    <menuitem>
 	      <label>Add raster</label>
 	      <help>Add raster map layer to current display</help>
 	      <handler>OnAddRaster</handler>
-	      <shortcut>Ctrl+R</shortcut>
+	      <shortcut>Ctrl+Shift+R</shortcut>
 	    </menuitem>
 	    <menuitem>
 	      <label>Add vector</label>
 	      <help>Add vector map layer to current display</help>
 	      <handler>OnAddVector</handler>
-	      <shortcut>Ctrl+V</shortcut>
+	      <shortcut>Ctrl+Shift+V</shortcut>
 	    </menuitem>
 	  </items>
 	</menu>
