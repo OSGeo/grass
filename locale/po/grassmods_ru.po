@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-29 11:35+0200\n"
+"POT-Creation-Date: 2011-06-09 19:50+0200\n"
 "PO-Revision-Date: 2009-05-15 00:23-0600\n"
 "Last-Translator: Maxim Dubinin <sim@gis-lab.info>\n"
 "Language-Team: Russian <grass-translations@lists.osgeo.org>\n"
@@ -254,13 +254,14 @@ msgstr ""
 #: ../raster3d/r3.in.ascii/main.c:242 ../raster/r.in.poly/main.c:30
 #: ../raster/r.in.gdal/main.c:82 ../raster/r.in.bin/main.c:236
 #: ../raster/r.in.gridatb/main.c:46 ../raster/r.in.png/main.c:522
-#: ../raster/r.in.xyz/main.c:161 ../raster/r.external/main.c:524
-#: ../raster/r.in.ascii/main.c:70 ../raster/r.in.mat/main.c:92
-#: ../raster/r.in.arc/main.c:61 ../vector/v.in.ogr/main.c:106
-#: ../vector/v.in.db/main.c:53 ../vector/v.in.sites/main.c:58
-#: ../vector/v.in.dxf/main.c:65 ../vector/v.in.dwg/main.c:83
-#: ../vector/v.convert/main.c:37 ../vector/v.in.lidar/main.c:148
-#: ../vector/v.in.ascii/main.c:49 ../vector/v.external/main.c:49
+#: ../raster/r.in.lidar/main.c:162 ../raster/r.in.xyz/main.c:161
+#: ../raster/r.external/main.c:524 ../raster/r.in.ascii/main.c:70
+#: ../raster/r.in.mat/main.c:92 ../raster/r.in.arc/main.c:61
+#: ../vector/v.in.ogr/main.c:106 ../vector/v.in.db/main.c:53
+#: ../vector/v.in.sites/main.c:58 ../vector/v.in.dxf/main.c:65
+#: ../vector/v.in.dwg/main.c:83 ../vector/v.convert/main.c:37
+#: ../vector/v.in.lidar/main.c:154 ../vector/v.in.ascii/main.c:49
+#: ../vector/v.external/main.c:49
 #: ../locale/scriptstrings/v.convert.all_to_translate.c:3
 #: ../locale/scriptstrings/v.in.e00_to_translate.c:3
 #: ../locale/scriptstrings/r.in.srtm_to_translate.c:3
@@ -360,18 +361,18 @@ msgstr "Использование маски g3d (если существует
 #: ../raster/r.info/main.c:70 ../raster/r.surf.area/main.c:88
 #: ../raster/r.surf.fractal/main.c:38 ../raster/r.covar/main.c:51
 #: ../raster/r.statistics3/main.c:389 ../raster/r.rescale/main.c:48
-#: ../raster/r.solute.transport/main.c:229 ../raster/r.proj/main.c:146
-#: ../raster/r.out.mpeg/main.c:102 ../raster/r.fill.dir/main.c:85
-#: ../raster/r.resamp.interp/main.c:76 ../raster/r.univar/r.univar_main.c:96
-#: ../raster/r.cross/main.c:73 ../raster/r.resamp.rst/main.c:148
-#: ../raster/r.category/main.c:52 ../raster/r.clump/main.c:46
-#: ../raster/r.out.tiff/main.c:91 ../raster/r.in.xyz/main.c:160
-#: ../raster/r.texture/main.c:75 ../raster/r.surf.random/main.c:36
-#: ../raster/r.out.arc/main.c:60 ../raster/r.surf.contour/main.c:60
-#: ../raster/r.colors/main.c:168 ../raster/r.statistics/main.c:55
-#: ../raster/r.li/r.li.padcv/padcv.c:39 ../raster/r.li/r.li.mpa/mpa.c:41
-#: ../raster/r.li/r.li.patchnum/main.c:36 ../raster/r.li/r.li.mps/mps.c:42
-#: ../raster/r.li/r.li.pielou/pielou.c:58
+#: ../raster/r.solute.transport/main.c:229 ../raster/r.in.lidar/main.c:161
+#: ../raster/r.proj/main.c:146 ../raster/r.out.mpeg/main.c:102
+#: ../raster/r.fill.dir/main.c:85 ../raster/r.resamp.interp/main.c:76
+#: ../raster/r.univar/r.univar_main.c:96 ../raster/r.cross/main.c:73
+#: ../raster/r.resamp.rst/main.c:148 ../raster/r.category/main.c:52
+#: ../raster/r.clump/main.c:46 ../raster/r.out.tiff/main.c:91
+#: ../raster/r.in.xyz/main.c:160 ../raster/r.texture/main.c:75
+#: ../raster/r.surf.random/main.c:36 ../raster/r.out.arc/main.c:60
+#: ../raster/r.surf.contour/main.c:60 ../raster/r.colors/main.c:168
+#: ../raster/r.statistics/main.c:55 ../raster/r.li/r.li.padcv/padcv.c:39
+#: ../raster/r.li/r.li.mpa/mpa.c:41 ../raster/r.li/r.li.patchnum/main.c:36
+#: ../raster/r.li/r.li.mps/mps.c:42 ../raster/r.li/r.li.pielou/pielou.c:58
 #: ../raster/r.li/r.li.edgedensity/edgedensity.c:40
 #: ../raster/r.li/r.li.cwed/cwed.c:48 ../raster/r.li/r.li.padsd/padsd.c:39
 #: ../raster/r.li/r.li.richness/richness.c:41
@@ -426,6 +427,7 @@ msgstr "Использование маски g3d (если существует
 #: ../locale/scriptstrings/r.in.aster_to_translate.c:2
 #: ../locale/scriptstrings/r.grow_to_translate.c:2
 #: ../locale/scriptstrings/v.rast.stats_to_translate.c:3
+#: ../locale/scriptstrings/r.modis.download_to_translate.c:2
 #: ../locale/scriptstrings/r.out.xyz_to_translate.c:2
 #: ../locale/scriptstrings/i.landsat.rgb_to_translate.c:2
 #: ../locale/scriptstrings/r.in.wms_to_translate.c:2
@@ -1677,7 +1679,8 @@ msgstr "Неверная северная координата <%s>"
 msgid "Illegal east coordinate <%s>, skipping."
 msgstr "Неверная восточная координата <%s>"
 
-#: ../raster/r.in.poly/poly2rast.c:55 ../raster/r.in.xyz/main.c:531
+#: ../raster/r.in.poly/poly2rast.c:55 ../raster/r.in.lidar/main.c:591
+#: ../raster/r.in.xyz/main.c:531
 #, c-format
 msgid "Pass #%d (of %d) ..."
 msgstr "Проход #%d (из %d) ..."
@@ -1731,7 +1734,7 @@ msgstr "Контраст"
 #: ../vector/v.what/main.c:54 ../vector/v.transform/main.c:82
 #: ../vector/v.overlay/main.c:58 ../vector/v.class/main.c:44
 #: ../vector/v.build.polylines/main.c:113 ../vector/v.convert/main.c:36
-#: ../vector/v.in.lidar/main.c:147 ../vector/v.net.flow/main.c:58
+#: ../vector/v.in.lidar/main.c:153 ../vector/v.net.flow/main.c:58
 #: ../vector/v.segment/main.c:54 ../vector/v.normal/main.c:74
 #: ../vector/v.net.path/main.c:40 ../vector/v.univar/main.c:63
 #: ../vector/v.label/main.c:59 ../vector/v.to.rast/main.c:40
@@ -1855,7 +1858,7 @@ msgstr "Невозможно открыть БД <%s> с помощью драй
 #: ../vector/v.net.distance/main.c:210 ../vector/v.distance/main.c:981
 #: ../vector/v.net.allpairs/main.c:151 ../vector/v.in.dwg/main.c:237
 #: ../vector/v.net.timetable/main.c:103 ../vector/v.overlay/main.c:462
-#: ../vector/v.convert/att.c:81 ../vector/v.in.lidar/main.c:565
+#: ../vector/v.convert/att.c:81 ../vector/v.in.lidar/main.c:596
 #: ../vector/v.net.flow/main.c:170 ../vector/v.net.path/path.c:109
 #: ../vector/v.to.points/main.c:293 ../vector/v.surf.rst/main.c:579
 #: ../vector/v.net.centrality/main.c:242 ../vector/v.net.components/main.c:149
@@ -1866,7 +1869,7 @@ msgstr "Невозможно создать таблицу: '%s'"
 #: ../raster/r.contour/main.c:177 ../vector/v.in.ogr/main.c:796
 #: ../vector/v.in.sites/main.c:176 ../vector/v.in.dxf/write_vect.c:240
 #: ../vector/v.reclass/main.c:227 ../vector/v.in.dwg/main.c:241
-#: ../vector/v.convert/att.c:86 ../vector/v.in.lidar/main.c:570
+#: ../vector/v.convert/att.c:86 ../vector/v.in.lidar/main.c:601
 #: ../vector/v.to.points/main.c:298 ../vector/v.in.ascii/main.c:504
 #, c-format
 msgid "Unable to create index for table <%s>, key <%s>"
@@ -1878,7 +1881,7 @@ msgstr "Невозможно создать индекс для таблицы <
 #: ../vector/v.random/main.c:199 ../vector/v.in.dxf/write_vect.c:237
 #: ../vector/v.mkgrid/main.c:251 ../vector/v.reclass/main.c:232
 #: ../vector/v.in.dwg/main.c:246 ../vector/v.overlay/main.c:472
-#: ../vector/v.convert/att.c:91 ../vector/v.in.lidar/main.c:576
+#: ../vector/v.convert/att.c:91 ../vector/v.in.lidar/main.c:607
 #: ../vector/v.to.points/main.c:304 ../vector/v.in.ascii/main.c:394
 #, c-format
 msgid "Unable to grant privileges on table <%s>"
@@ -2364,7 +2367,7 @@ msgstr ""
 "Стоимость назначенная null-ячейкам. По умолчанию, null-ячейки исключаются"
 
 #: ../raster/r.walk/main.c:274 ../raster/r.cost/main.c:229
-#: ../raster/r.in.xyz/main.c:238
+#: ../raster/r.in.lidar/main.c:211 ../raster/r.in.xyz/main.c:238
 msgid "Percent of map to keep in memory"
 msgstr "Процент карты сохраняемый в памяти"
 
@@ -2601,7 +2604,7 @@ msgid ""
 msgstr ""
 
 #: ../raster/r.in.gdal/main.c:134 ../vector/v.in.ogr/main.c:181
-#: ../vector/v.in.lidar/main.c:172
+#: ../vector/v.in.lidar/main.c:178
 msgid "Name for new location to create"
 msgstr "Название для создаваемой области"
 
@@ -2610,7 +2613,7 @@ msgid "Override projection (use location's projection)"
 msgstr "Игнорировать проекцию (использовать проекцию области)"
 
 #: ../raster/r.in.gdal/main.c:144 ../raster/r.external/main.c:562
-#: ../vector/v.in.ogr/main.c:232 ../vector/v.in.lidar/main.c:199
+#: ../vector/v.in.ogr/main.c:232 ../vector/v.in.lidar/main.c:213
 msgid "Extend location extents based on new dataset"
 msgstr "Расширить охват области на основе нового набора данных"
 
@@ -2685,7 +2688,7 @@ msgid ""
 msgstr ""
 
 #: ../raster/r.in.gdal/main.c:335 ../vector/v.in.ogr/main.c:480
-#: ../vector/v.in.lidar/main.c:320
+#: ../vector/v.in.lidar/main.c:351
 msgid ""
 "Unable to convert input map projection to GRASS format; cannot create new "
 "location."
@@ -2694,7 +2697,7 @@ msgstr ""
 "создать новую область."
 
 #: ../raster/r.in.gdal/main.c:341 ../vector/v.in.ogr/main.c:486
-#: ../vector/v.in.lidar/main.c:326
+#: ../vector/v.in.lidar/main.c:357
 #, c-format
 msgid "Location <%s> created"
 msgstr "Область <%s> создана"
@@ -2707,13 +2710,15 @@ msgstr ""
 "Невозможно конвертировать информацию о проекции исходного растрового слоя в "
 "формат GRASS для проверки"
 
-#: ../raster/r.in.gdal/main.c:370 ../raster/r.external/main.c:105
-#: ../vector/v.in.ogr/main.c:516 ../vector/v.in.lidar/main.c:359
+#: ../raster/r.in.gdal/main.c:370 ../raster/r.in.lidar/main.c:296
+#: ../raster/r.external/main.c:105 ../vector/v.in.ogr/main.c:516
+#: ../vector/v.in.lidar/main.c:390
 msgid "Over-riding projection check"
 msgstr "Игнорирование проверки проекции"
 
-#: ../raster/r.in.gdal/main.c:381 ../raster/r.external/main.c:113
-#: ../vector/v.in.ogr/main.c:525 ../vector/v.in.lidar/main.c:368
+#: ../raster/r.in.gdal/main.c:381 ../raster/r.in.lidar/main.c:305
+#: ../raster/r.external/main.c:113 ../vector/v.in.ogr/main.c:525
+#: ../vector/v.in.lidar/main.c:399
 msgid ""
 "Projection of dataset does not appear to match current location.\n"
 "\n"
@@ -2729,9 +2734,10 @@ msgstr "Размещение PROJ_INFO:\n"
 msgid "Dataset PROJ_INFO is:\n"
 msgstr "Набор данных PROJ_INFO:\n"
 
-#: ../raster/r.in.gdal/main.c:424 ../raster/r.external/main.c:156
+#: ../raster/r.in.gdal/main.c:424 ../raster/r.in.lidar/main.c:321
+#: ../raster/r.in.lidar/main.c:328 ../raster/r.external/main.c:156
 #: ../vector/v.in.ogr/main.c:541 ../vector/v.in.ogr/main.c:548
-#: ../vector/v.in.lidar/main.c:384 ../vector/v.in.lidar/main.c:391
+#: ../vector/v.in.lidar/main.c:415 ../vector/v.in.lidar/main.c:422
 msgid "Import dataset PROJ_INFO is:\n"
 msgstr "Импорт набора данных PROJ_INFO:\n"
 
@@ -2753,8 +2759,9 @@ msgstr ""
 "Учитывать параметр 'location' при генерации новой области из исходного "
 "набора данных.\n"
 
-#: ../raster/r.in.gdal/main.c:454 ../raster/r.external/main.c:186
-#: ../vector/v.in.ogr/main.c:599 ../vector/v.in.lidar/main.c:442
+#: ../raster/r.in.gdal/main.c:454 ../raster/r.in.lidar/main.c:379
+#: ../raster/r.external/main.c:186 ../vector/v.in.ogr/main.c:599
+#: ../vector/v.in.lidar/main.c:473
 msgid "Projection of input dataset and current location appear to match"
 msgstr "Проекция исходного набора данных и текущей области совпадают"
 
@@ -6908,7 +6915,7 @@ msgstr ""
 msgid "SECTION 1a (of %1d): Initiating Memory."
 msgstr "СЕКЦИЯ 1a (из %1d): Инициализация памяти."
 
-#: ../raster/r.watershed/ram/init_vars.c:296
+#: ../raster/r.watershed/ram/init_vars.c:300
 #, c-format
 msgid "SECTION 1b (of %1d): Determining Offmap Flow."
 msgstr "СЕКЦИЯ 1b (из %1d): Определение потока вне слоя."
@@ -7945,6 +7952,157 @@ msgstr ""
 msgid "Could not create and solve the linear equation system"
 msgstr "Невозможно создать и решить систему линейных уравнений"
 
+#: ../raster/r.in.lidar/main.c:163 ../raster/r.in.xyz/main.c:162
+#: ../vector/v.surf.bspline/main.c:93
+#: ../vector/v.lidar.edgedetection/main.c:73
+#: ../vector/v.lidar.growing/main.c:76 ../vector/v.lidar.correction/main.c:69
+msgid "LIDAR"
+msgstr ""
+
+#: ../raster/r.in.lidar/main.c:165
+#, fuzzy
+msgid "Create a raster map from LAS LiDAR points using univariate statistics."
+msgstr ""
+"Создать растровый слой из набор координат используя одномерную статистику."
+
+#: ../raster/r.in.lidar/main.c:169
+#, fuzzy
+msgid "LiDAR LAS input file"
+msgstr "Ввод прерван"
+
+#: ../raster/r.in.lidar/main.c:177 ../raster/r.in.xyz/main.c:176
+msgid "Statistic to use for raster values"
+msgstr "Статистика используемая для растровых значений"
+
+#: ../raster/r.in.lidar/main.c:181 ../raster/r.in.lidar/main.c:221
+#: ../raster/r.in.lidar/main.c:230 ../raster/r.in.xyz/main.c:180
+#: ../raster/r.in.xyz/main.c:248 ../raster/r.in.xyz/main.c:257
+msgid "Statistic"
+msgstr "Статистика"
+
+#: ../raster/r.in.lidar/main.c:189 ../raster/r.in.xyz/main.c:188
+#: ../raster/r.in.arc/main.c:81
+msgid "Storage type for resultant raster map"
+msgstr "Тип данных для выходного растрового слоя"
+
+#: ../raster/r.in.lidar/main.c:196 ../raster/r.in.xyz/main.c:223
+msgid "Filter range for z data (min,max)"
+msgstr "Диапазон фильтра для данных z (минимум,максимум)"
+
+#: ../raster/r.in.lidar/main.c:203 ../raster/r.in.xyz/main.c:230
+msgid "Scale to apply to z data"
+msgstr "Масштаб применяемый для данных z"
+
+#: ../raster/r.in.lidar/main.c:220 ../raster/r.in.xyz/main.c:247
+msgid "pth percentile of the values"
+msgstr "p-тый перцентиль значений"
+
+#: ../raster/r.in.lidar/main.c:229 ../raster/r.in.xyz/main.c:256
+msgid ""
+"Discard <trim> percent of the smallest and <trim> percent of the largest "
+"observations"
+msgstr ""
+"Удалить <trim> процент наименьших и <trim> процент наибольших наблюдений"
+
+#: ../raster/r.in.lidar/main.c:235 ../vector/v.in.ogr/main.c:222
+#: ../vector/v.in.lidar/main.c:203
+msgid "Override dataset projection (use location's projection)"
+msgstr ""
+"Использовать другую проекцию для набора данных (использовать проекцию "
+"области)"
+
+#: ../raster/r.in.lidar/main.c:239 ../raster/r.in.xyz/main.c:261
+msgid "Scan data file for extent then exit"
+msgstr "Сканировать файл данных для определения охвата и выйти"
+
+#: ../raster/r.in.lidar/main.c:244 ../raster/r.in.xyz/main.c:266
+msgid "In scan mode, print using shell script style"
+msgstr "В режиме сканирования, выводить используя стиль скриптовой оболочки"
+
+#: ../raster/r.in.lidar/main.c:263 ../vector/v.in.lidar/main.c:238
+#, c-format
+msgid "Input file <%s> is not a LAS LiDAR point cloud"
+msgstr ""
+
+#: ../raster/r.in.lidar/main.c:281 ../vector/v.in.ogr/main.c:501
+#: ../vector/v.in.lidar/main.c:372
+msgid ""
+"Unable to convert input map projection information to GRASS format for "
+"checking"
+msgstr ""
+"Невозможно конвертировать информацию о проекции исходного слоя в формат "
+"GRASS для проверки"
+
+#: ../raster/r.in.lidar/main.c:311 ../vector/v.in.ogr/main.c:531
+#: ../vector/v.in.lidar/main.c:405
+msgid "GRASS LOCATION PROJ_INFO is:\n"
+msgstr "GRASS LOCATION PROJ_INFO:\n"
+
+#: ../raster/r.in.lidar/main.c:371 ../vector/v.in.ogr/main.c:591
+#: ../vector/v.in.lidar/main.c:465
+#, c-format
+msgid ""
+"\n"
+"You can use the -o flag to %s to override this projection check.\n"
+msgstr ""
+"\n"
+"Вы можете использовать параметр -o для %s, чтобы отменить использование "
+"проверки проекции.\n"
+
+#: ../raster/r.in.lidar/main.c:374 ../vector/v.in.ogr/main.c:594
+#: ../vector/v.in.lidar/main.c:468
+msgid ""
+"Consider generating a new location with 'location' parameter from input data "
+"set.\n"
+msgstr ""
+"Рассмотреть создание новой области с параметром 'location' из исходного "
+"набора данных.\n"
+
+#: ../raster/r.in.lidar/main.c:391 ../raster/r.in.xyz/main.c:307
+#, fuzzy
+msgid "Invalid zrange"
+msgstr "неверное значение смещения на восток"
+
+#: ../raster/r.in.lidar/main.c:485 ../raster/r.in.xyz/main.c:394
+msgid "Unable to calculate percentile without the pth option specified!"
+msgstr "Невозможно вычислить персентиль без заданной опции pth!"
+
+#: ../raster/r.in.lidar/main.c:497 ../raster/r.in.xyz/main.c:406
+msgid "Unable to calculate trimmed mean without the trim option specified!"
+msgstr "Невозможно вычислить укороченное среднее без заданной опции trim!"
+
+#: ../raster/r.in.lidar/main.c:560 ../raster/r.in.xyz/main.c:488
+msgid "zrange will not be taken into account during scan"
+msgstr "zrange при сканировании учитываться не будет"
+
+#: ../raster/r.in.lidar/main.c:579 ../raster/r.in.xyz/main.c:524
+#, fuzzy
+msgid "Reading data ..."
+msgstr "Чтение данных..."
+
+#: ../raster/r.in.lidar/main.c:596
+#, fuzzy
+msgid "Could not rewind input file"
+msgstr "Невозможно открыть выходной файл <%s>"
+
+#: ../raster/r.in.lidar/main.c:757 ../raster/r.in.xyz/main.c:721
+msgid "Writing to map ..."
+msgstr "Запись слоя ..."
+
+#: ../raster/r.in.lidar/main.c:1103 ../raster/r.in.xyz/main.c:1059
+#, c-format
+msgid "%lu points found in region."
+msgstr "%lu точек найдено в регионе."
+
+#: ../raster/r.in.lidar/main.c:1127 ../raster/r.in.xyz/main.c:1086
+msgid "Scanning data ..."
+msgstr "Сканирование данных ..."
+
+#: ../raster/r.in.lidar/main.c:1178 ../raster/r.in.xyz/main.c:1174
+#, c-format
+msgid "Range:     min         max\n"
+msgstr "Диапазон:     минимум         максимум\n"
+
 #: ../raster/r.proj/main.c:147 ../general/g.proj/main.c:61
 #: ../general/g.setproj/main.c:79 ../vector/v.proj/main.c:64
 #: ../locale/scriptstrings/m.proj_to_translate.c:3
@@ -8806,12 +8964,6 @@ msgstr "Запись world файла TIFF "
 msgid "Unable to open TIFF world file for writing"
 msgstr "Невозможно открыть для записи world файл TIFF"
 
-#: ../raster/r.in.xyz/main.c:162 ../vector/v.surf.bspline/main.c:93
-#: ../vector/v.lidar.edgedetection/main.c:73
-#: ../vector/v.lidar.growing/main.c:76 ../vector/v.lidar.correction/main.c:69
-msgid "LIDAR"
-msgstr ""
-
 #: ../raster/r.in.xyz/main.c:164
 msgid ""
 "Create a raster map from an assemblage of many coordinates using univariate "
@@ -8822,19 +8974,6 @@ msgstr ""
 #: ../raster/r.in.xyz/main.c:168
 msgid "ASCII file containing input data (or \"-\" to read from stdin)"
 msgstr "ASCII файл содержащий исходные данные (или \"-\" для чтения из stdin)"
-
-#: ../raster/r.in.xyz/main.c:176
-msgid "Statistic to use for raster values"
-msgstr "Статистика используемая для растровых значений"
-
-#: ../raster/r.in.xyz/main.c:180 ../raster/r.in.xyz/main.c:248
-#: ../raster/r.in.xyz/main.c:257
-msgid "Statistic"
-msgstr "Статистика"
-
-#: ../raster/r.in.xyz/main.c:188 ../raster/r.in.arc/main.c:81
-msgid "Storage type for resultant raster map"
-msgstr "Тип данных для выходного растрового слоя"
 
 #: ../raster/r.in.xyz/main.c:199
 msgid "Column number of x coordinates in input file (first column is 1)"
@@ -8848,33 +8987,6 @@ msgstr "Номер столбца содержащего координату y 
 msgid "Column number of data values in input file"
 msgstr "Номер столбца содержащего данные в исходном файле"
 
-#: ../raster/r.in.xyz/main.c:223
-msgid "Filter range for z data (min,max)"
-msgstr "Диапазон фильтра для данных z (минимум,максимум)"
-
-#: ../raster/r.in.xyz/main.c:230
-msgid "Scale to apply to z data"
-msgstr "Масштаб применяемый для данных z"
-
-#: ../raster/r.in.xyz/main.c:247
-msgid "pth percentile of the values"
-msgstr "p-тый перцентиль значений"
-
-#: ../raster/r.in.xyz/main.c:256
-msgid ""
-"Discard <trim> percent of the smallest and <trim> percent of the largest "
-"observations"
-msgstr ""
-"Удалить <trim> процент наименьших и <trim> процент наибольших наблюдений"
-
-#: ../raster/r.in.xyz/main.c:261
-msgid "Scan data file for extent then exit"
-msgstr "Сканировать файл данных для определения охвата и выйти"
-
-#: ../raster/r.in.xyz/main.c:266
-msgid "In scan mode, print using shell script style"
-msgstr "В режиме сканирования, выводить используя стиль скриптовой оболочки"
-
 #: ../raster/r.in.xyz/main.c:270
 msgid "Ignore broken lines"
 msgstr "Игнорировать неправильные линии"
@@ -8883,32 +8995,10 @@ msgstr "Игнорировать неправильные линии"
 msgid "Please specify a reasonable column number."
 msgstr "Укажите правильный номер столбца."
 
-#: ../raster/r.in.xyz/main.c:307
-#, fuzzy
-msgid "Invalid zrange"
-msgstr "неверное значение смещения на восток"
-
-#: ../raster/r.in.xyz/main.c:394
-msgid "Unable to calculate percentile without the pth option specified!"
-msgstr "Невозможно вычислить персентиль без заданной опции pth!"
-
-#: ../raster/r.in.xyz/main.c:406
-msgid "Unable to calculate trimmed mean without the trim option specified!"
-msgstr "Невозможно вычислить укороченное среднее без заданной опции trim!"
-
 #: ../raster/r.in.xyz/main.c:482
 msgid ""
 "If input is not from a file it is only possible to perform a single pass."
 msgstr "Если исходные данные не из файла, возможен только один проход."
-
-#: ../raster/r.in.xyz/main.c:488
-msgid "zrange will not be taken into account during scan"
-msgstr "zrange при сканировании учитываться не будет"
-
-#: ../raster/r.in.xyz/main.c:524
-#, fuzzy
-msgid "Reading data ..."
-msgstr "Чтение данных..."
 
 #: ../raster/r.in.xyz/main.c:602 ../raster/r.in.xyz/main.c:610
 #: ../raster/r.in.xyz/main.c:1101 ../raster/r.in.xyz/main.c:1109
@@ -8940,24 +9030,6 @@ msgstr "Неправильная строка %lu координаты x сто�
 #, c-format
 msgid "Bad z-coordinate line %lu column %d. <%s>"
 msgstr "Неправильная строка %lu координаты z столбца %d. <%s>"
-
-#: ../raster/r.in.xyz/main.c:721
-msgid "Writing to map ..."
-msgstr "Запись слоя ..."
-
-#: ../raster/r.in.xyz/main.c:1059
-#, c-format
-msgid "%lu points found in region."
-msgstr "%lu точек найдено в регионе."
-
-#: ../raster/r.in.xyz/main.c:1086
-msgid "Scanning data ..."
-msgstr "Сканирование данных ..."
-
-#: ../raster/r.in.xyz/main.c:1174
-#, c-format
-msgid "Range:     min         max\n"
-msgstr "Диапазон:     минимум         максимум\n"
 
 #: ../raster/r.texture/main.c:79
 msgid "Generate images with textural features from a raster map."
@@ -11109,7 +11181,7 @@ msgstr ""
 
 #: ../raster/r.to.vect/main.c:97 ../raster/r.to.vect/main.c:104
 #: ../vector/v.in.ogr/main.c:192 ../vector/v.in.ogr/main.c:217
-#: ../vector/v.in.ogr/main.c:238 ../vector/v.in.lidar/main.c:184
+#: ../vector/v.in.ogr/main.c:238 ../vector/v.in.lidar/main.c:198
 #: ../vector/v.to.rast/main.c:74 ../vector/v.to.rast/main.c:80
 #: ../vector/v.to.rast/main.c:86
 msgid "Attributes"
@@ -11162,7 +11234,7 @@ msgstr "Невозможно вставить в таблицу: %s"
 
 #: ../raster/r.to.vect/util.c:157 ../raster/r.to.vect/areas_io.c:370
 #: ../vector/v.in.ogr/main.c:927 ../vector/v.random/main.c:294
-#: ../vector/v.in.lidar/main.c:696
+#: ../vector/v.in.lidar/main.c:755
 #, c-format
 msgid "Cannot insert new row: %s"
 msgstr "Невозможно вставить новый ряд: %s"
@@ -18011,8 +18083,7 @@ msgid "Cannot select attributes for cat=%d"
 msgstr "Невозможно выбрать атрибуты для cat=%d"
 
 #: ../vector/v.out.svg/main.c:370 ../vector/v.lrs/v.lrs.label/main.c:348
-#: ../vector/v.out.ogr/attrb.c:46 ../vector/v.out.ogr/attrb.c:51
-#: ../vector/v.overlay/main.c:363
+#: ../vector/v.out.ogr/attrb.c:46 ../vector/v.overlay/main.c:363
 msgid "Unable to fetch data from table"
 msgstr "Невозможно выбрать данные из таблицы"
 
@@ -18517,16 +18588,16 @@ msgstr ""
 "\t\tshape-файл ESRI: имя shape-файла\n"
 "\t\tФайл MapInfo: имя файла MapInfo"
 
-#: ../vector/v.in.ogr/main.c:138 ../vector/v.in.lidar/main.c:163
+#: ../vector/v.in.ogr/main.c:138 ../vector/v.in.lidar/main.c:169
 msgid "Import subregion only"
 msgstr "Импортировать только субрегион"
 
 #: ../vector/v.in.ogr/main.c:139 ../vector/v.in.ogr/main.c:226
-#: ../vector/v.in.lidar/main.c:164 ../vector/v.in.lidar/main.c:193
+#: ../vector/v.in.lidar/main.c:170 ../vector/v.in.lidar/main.c:207
 msgid "Subregion"
 msgstr "Субрегион"
 
-#: ../vector/v.in.ogr/main.c:141 ../vector/v.in.lidar/main.c:166
+#: ../vector/v.in.ogr/main.c:141 ../vector/v.in.lidar/main.c:172
 msgid "Format: xmin,ymin,xmax,ymax - usually W,S,E,N"
 msgstr "Формат: xmin,ymin,xmax,ymax - обычно З,Ю,В,С"
 
@@ -18587,17 +18658,11 @@ msgstr "Создать выходной 3D слой"
 
 #: ../vector/v.in.ogr/main.c:216 ../vector/v.select/args.c:79
 #: ../vector/v.voronoi/main.c:138 ../vector/v.overlay/main.c:123
-#: ../vector/v.in.lidar/main.c:183 ../vector/v.to.points/main.c:215
+#: ../vector/v.in.lidar/main.c:197 ../vector/v.to.points/main.c:215
 msgid "Do not create attribute table"
 msgstr "Не создавать атрибутивную таблицу"
 
-#: ../vector/v.in.ogr/main.c:222 ../vector/v.in.lidar/main.c:189
-msgid "Override dataset projection (use location's projection)"
-msgstr ""
-"Использовать другую проекцию для набора данных (использовать проекцию "
-"области)"
-
-#: ../vector/v.in.ogr/main.c:227 ../vector/v.in.lidar/main.c:194
+#: ../vector/v.in.ogr/main.c:227 ../vector/v.in.lidar/main.c:208
 msgid "Limit import to the current region"
 msgstr "Ограничить импорт текущим регионом"
 
@@ -18605,7 +18670,7 @@ msgstr "Ограничить импорт текущим регионом"
 msgid "Change column names to lowercase characters"
 msgstr "Написать имена полей строчными буквами"
 
-#: ../vector/v.in.ogr/main.c:243 ../vector/v.in.lidar/main.c:204
+#: ../vector/v.in.ogr/main.c:243 ../vector/v.in.lidar/main.c:218
 msgid ""
 "Create the location specified by the \"location\" parameter and exit. Do not "
 "import the vector file."
@@ -18625,12 +18690,12 @@ msgstr "Невозможно открыть источник данных <%s>"
 msgid "Data source contains %d layers:"
 msgstr "Источник данных содержит %d слоев:"
 
-#: ../vector/v.in.ogr/main.c:331 ../vector/v.in.lidar/main.c:252
+#: ../vector/v.in.ogr/main.c:331 ../vector/v.in.lidar/main.c:272
 #, c-format
 msgid "Vector map <%s> already exists and will be overwritten"
 msgstr "Векторный слой <%s> уже существует и будет перезаписан"
 
-#: ../vector/v.in.ogr/main.c:334 ../vector/v.in.lidar/main.c:255
+#: ../vector/v.in.ogr/main.c:334 ../vector/v.in.lidar/main.c:275
 #: ../vector/v.edit/main.c:88
 #, c-format
 msgid "Vector map <%s> already exists"
@@ -18641,45 +18706,15 @@ msgstr "Векторный слой <%s> уже существует"
 msgid "Layer <%s> not available"
 msgstr "Слой < %s > недоступен"
 
-#: ../vector/v.in.ogr/main.c:375 ../vector/v.in.lidar/main.c:263
+#: ../vector/v.in.ogr/main.c:375 ../vector/v.in.lidar/main.c:294
 msgid "Select either the current region flag or the spatial option, not both"
 msgstr ""
 "Выбрать или параметр для текущего региона или пространственную опцию, но не "
 "оба одновременно"
 
-#: ../vector/v.in.ogr/main.c:403 ../vector/v.in.lidar/main.c:291
+#: ../vector/v.in.ogr/main.c:403 ../vector/v.in.lidar/main.c:322
 msgid "4 parameters required for 'spatial' parameter"
 msgstr "4 параметра, требуемые для параметра 'spatial'"
-
-#: ../vector/v.in.ogr/main.c:501 ../vector/v.in.lidar/main.c:341
-msgid ""
-"Unable to convert input map projection information to GRASS format for "
-"checking"
-msgstr ""
-"Невозможно конвертировать информацию о проекции исходного слоя в формат "
-"GRASS для проверки"
-
-#: ../vector/v.in.ogr/main.c:531 ../vector/v.in.lidar/main.c:374
-msgid "GRASS LOCATION PROJ_INFO is:\n"
-msgstr "GRASS LOCATION PROJ_INFO:\n"
-
-#: ../vector/v.in.ogr/main.c:591 ../vector/v.in.lidar/main.c:434
-#, c-format
-msgid ""
-"\n"
-"You can use the -o flag to %s to override this projection check.\n"
-msgstr ""
-"\n"
-"Вы можете использовать параметр -o для %s, чтобы отменить использование "
-"проверки проекции.\n"
-
-#: ../vector/v.in.ogr/main.c:594 ../vector/v.in.lidar/main.c:437
-msgid ""
-"Consider generating a new location with 'location' parameter from input data "
-"set.\n"
-msgstr ""
-"Рассмотреть создание новой области с параметром 'location' из исходного "
-"набора данных.\n"
 
 #: ../vector/v.in.ogr/main.c:617
 #, fuzzy, c-format
@@ -18722,7 +18757,7 @@ msgstr ""
 msgid "Column type not supported (%s)"
 msgstr "Тип поля не поддерживается (%s)"
 
-#: ../vector/v.in.ogr/main.c:784 ../vector/v.in.lidar/main.c:558
+#: ../vector/v.in.ogr/main.c:784 ../vector/v.in.lidar/main.c:589
 #, c-format
 msgid "Unable open database <%s> by driver <%s>"
 msgstr "Невозможно открыть БД <%s> с помощью драйвера <%s>"
@@ -18773,26 +18808,26 @@ msgid "Clean boundaries at nodes:"
 msgstr "Очистить границы в узлах:"
 
 #: ../vector/v.in.ogr/main.c:1017
+#, fuzzy
+msgid "Merge boundaries:"
+msgstr "Разрыв границ:"
+
+#: ../vector/v.in.ogr/main.c:1022
 msgid "Change boundary dangles to lines:"
 msgstr "Преобразовать висячие границы в линии:"
 
-#: ../vector/v.in.ogr/main.c:1021
+#: ../vector/v.in.ogr/main.c:1026
 #, fuzzy
 msgid "Remove dangles:"
 msgstr "Удалить висящие узлы"
 
-#: ../vector/v.in.ogr/main.c:1027
+#: ../vector/v.in.ogr/main.c:1032
 msgid "Change boundary bridges to lines:"
 msgstr "Преобразовать мосты границ в линии:"
 
-#: ../vector/v.in.ogr/main.c:1031
+#: ../vector/v.in.ogr/main.c:1036
 msgid "Remove bridges:"
 msgstr "Удалить мосты:"
-
-#: ../vector/v.in.ogr/main.c:1037
-#, fuzzy
-msgid "Merge boundaries:"
-msgstr "Разрыв границ:"
 
 #: ../vector/v.in.ogr/main.c:1055 ../vector/v.overlay/area_area.c:68
 #: ../vector/v.buffer/main.c:607 ../vector/v.buffer/main.c:699
@@ -19716,7 +19751,7 @@ msgid "Use drand48() function instead of rand()"
 msgstr "Используется функция drand48() вместо rand()"
 
 #: ../vector/v.random/main.c:142 ../vector/v.in.dxf/main.c:80
-#: ../vector/v.in.lidar/main.c:209 ../vector/v.external/args.c:53
+#: ../vector/v.in.lidar/main.c:223 ../vector/v.external/args.c:53
 #: ../vector/v.edit/args.c:216
 msgid "Do not build topology"
 msgstr "Не создавать топологию"
@@ -21594,7 +21629,7 @@ msgstr "Создать пустой векторный слой и выйти. �
 msgid "Cannot select attributes for cat = %d"
 msgstr "Невозможно выбрать атрибуты для cat=%d"
 
-#: ../vector/v.out.ogr/attrb.c:64
+#: ../vector/v.out.ogr/attrb.c:58
 #, fuzzy, c-format
 msgid "No database record for cat = %d and export of 'cat' disabled"
 msgstr " "
@@ -23619,43 +23654,62 @@ msgstr "пропущено [%d] категорий неизвестного ти
 msgid "[%d] categories read into memory"
 msgstr "в память прочитано [%d] категорий "
 
-#: ../vector/v.in.lidar/main.c:149
+#: ../vector/v.in.lidar/main.c:155
 #, fuzzy
 msgid "Converts LAS LiDAR point clouds to a GRASS vector map with libLAS."
 msgstr "Конвертировать векторные слои OGR в векторные слои GRASS."
 
-#: ../vector/v.in.lidar/main.c:152
+#: ../vector/v.in.lidar/main.c:158
 #, fuzzy
 msgid "LAS input file"
 msgstr "Ввод прерван"
 
-#: ../vector/v.in.lidar/main.c:153
+#: ../vector/v.in.lidar/main.c:159
 msgid "LiDAR input files in LAS format (*.las or *.laz)"
 msgstr ""
 
-#: ../vector/v.in.lidar/main.c:178
+#: ../vector/v.in.lidar/main.c:185
+msgid "Only import points of selected return type"
+msgstr ""
+
+#: ../vector/v.in.lidar/main.c:186
+#, fuzzy
+msgid "If not specified, all points are imported"
+msgstr "Импортированы целочисленные значения"
+
+#: ../vector/v.in.lidar/main.c:192
 #, fuzzy
 msgid "Print LAS file info and exit"
 msgstr "Вывести историю растра вместо информации"
 
-#: ../vector/v.in.lidar/main.c:591
+#: ../vector/v.in.lidar/main.c:289
+#, fuzzy, c-format
+msgid "Unknown filter option <%s>"
+msgstr "Неизвестная опция правила: '%s'"
+
+#: ../vector/v.in.lidar/main.c:623
 #, fuzzy, c-format
 msgid "Importing %d points..."
 msgstr "Импорт точек... "
 
-#: ../vector/v.in.lidar/main.c:719
+#: ../vector/v.in.lidar/main.c:778
 #, fuzzy, c-format
 msgid "%d points imported"
 msgstr "Загружено %d точек"
 
-#: ../vector/v.in.lidar/main.c:721
+#: ../vector/v.in.lidar/main.c:780
 #, c-format
 msgid "%d input points were not valid"
 msgstr ""
 
-#: ../vector/v.in.lidar/main.c:723
+#: ../vector/v.in.lidar/main.c:782
 #, fuzzy, c-format
 msgid "%d input points were outside of the selected area"
+msgstr "%d точек вне порога"
+
+#: ../vector/v.in.lidar/main.c:784
+#, fuzzy, c-format
+msgid "%d input points were filtered by return number"
 msgstr "%d точек вне порога"
 
 #: ../vector/v.net.flow/main.c:60
@@ -29598,6 +29652,46 @@ msgstr "Импорт файлов стран geonames.org в точечный в
 #: ../locale/scriptstrings/v.in.geonames_to_translate.c:5
 msgid "Uncompressed geonames file from (with .txt extension)"
 msgstr "Несжатый файл geonames из (с расширением .txt)"
+
+#: ../locale/scriptstrings/r.modis.download_to_translate.c:1
+msgid "Download several tiles of MODIS products using pyModis"
+msgstr ""
+
+#: ../locale/scriptstrings/r.modis.download_to_translate.c:3
+#, fuzzy
+msgid "Name of MODIS product"
+msgstr "Имя исходного слоя"
+
+#: ../locale/scriptstrings/r.modis.download_to_translate.c:4
+msgid "Name of user to NASA ftp access, it's better use SETTING.py"
+msgstr ""
+
+#: ../locale/scriptstrings/r.modis.download_to_translate.c:5
+msgid "Password of user to NASA ftp access, it's better use SETTING.py"
+msgstr ""
+
+#: ../locale/scriptstrings/r.modis.download_to_translate.c:6
+msgid "Folder where saves the data, full path"
+msgstr ""
+
+#: ../locale/scriptstrings/r.modis.download_to_translate.c:7
+#, fuzzy
+msgid "The names of tile/s to download"
+msgstr "Количество расставляемых точек"
+
+#: ../locale/scriptstrings/r.modis.download_to_translate.c:8
+msgid "The day from start download. If not set the download starts from today"
+msgstr ""
+
+#: ../locale/scriptstrings/r.modis.download_to_translate.c:9
+msgid ""
+"The day to stop download. If not set the download stops 10 day before the "
+"start day"
+msgstr ""
+
+#: ../locale/scriptstrings/r.modis.download_to_translate.c:10
+msgid "For debug mode, it will write more info in the log file"
+msgstr ""
 
 #: ../locale/scriptstrings/r.out.xyz_to_translate.c:1
 msgid ""
