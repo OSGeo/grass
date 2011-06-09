@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-29 11:35+0200\n"
+"POT-Creation-Date: 2011-06-09 19:50+0200\n"
 "PO-Revision-Date: 2010-08-24 11:31+0530\n"
 "Last-Translator: Mohammed Rashad <rashadkm@gmail.com>\n"
 "Language-Team: GRASS Malayalam Translation Team <rashadkm@gmail.com>\n"
@@ -359,73 +359,73 @@ msgstr ""
 msgid "Unable to locate symbol <%s>"
 msgstr ""
 
-#: ../lib/raster/gdal.c:132
+#: ../lib/raster/gdal.c:134
 msgid "Unable to load GDAL library"
 msgstr ""
 
-#: ../lib/raster/gdal.c:362
+#: ../lib/raster/gdal.c:364
 #, fuzzy
 msgid "Unable to open GDAL file"
 msgstr "ഫയൽ തുറക്കൻ പറ്റുന്നില്ല %s"
 
-#: ../lib/raster/gdal.c:466 ../lib/raster/open.c:570
+#: ../lib/raster/gdal.c:468 ../lib/raster/open.c:570
 #, c-format
 msgid "Invalid map type <%d>"
 msgstr ""
 
-#: ../lib/raster/gdal.c:472
+#: ../lib/raster/gdal.c:474
 #, fuzzy, c-format
 msgid "Unable to get <%s> driver"
 msgstr "ഡേറ്റാബേയ്സ് <%s> തുറക്കൻ പറ്റുന്നില്ല <%s>"
 
-#: ../lib/raster/gdal.c:481
+#: ../lib/raster/gdal.c:483
 #, fuzzy, c-format
 msgid "Unable to create <%s> dataset using <%s> driver"
 msgstr "ടേബിൾ ഉണ്ടാക്കാൻ പറ്റുന്നില്ല <%s>"
 
-#: ../lib/raster/gdal.c:489
+#: ../lib/raster/gdal.c:491
 #, c-format
 msgid ""
 "Driver <%s> does not support direct writing. Using MEM driver for "
 "intermediate dataset."
 msgstr ""
 
-#: ../lib/raster/gdal.c:495
+#: ../lib/raster/gdal.c:497
 #, fuzzy
 msgid "Unable to get in-memory raster driver"
 msgstr "ഡ്രയ്വ്വർ തുടങ്ങാൻ സാധിക്കുന്നില്ല <%s>"
 
-#: ../lib/raster/gdal.c:502
+#: ../lib/raster/gdal.c:504
 #, fuzzy, c-format
 msgid "Unable to create <%s> dataset using memory driver"
 msgstr "ഡേറ്റാബേയ്സ് <%s> തുറക്കൻ പറ്റുന്നില്ല <%s>"
 
-#: ../lib/raster/gdal.c:506
+#: ../lib/raster/gdal.c:508
 #, c-format
 msgid "Driver <%s> does not support creating rasters"
 msgstr ""
 
-#: ../lib/raster/gdal.c:522
+#: ../lib/raster/gdal.c:524
 #, fuzzy
 msgid "Unable to set geo transform"
 msgstr "വെക്റ്റർ മാപ്പ് വായിക്കാൻ പട്ടുന്നില്ല"
 
-#: ../lib/raster/gdal.c:526
+#: ../lib/raster/gdal.c:528
 #, fuzzy
 msgid "Unable to set projection"
 msgstr "വെക്റ്റർ അടയ്ക്കാൻ പറ്റുന്നില്ല <%s>"
 
-#: ../lib/raster/gdal.c:530
+#: ../lib/raster/gdal.c:532
 #, fuzzy, c-format
 msgid "Unable to create cell_misc/%s/gdal file"
 msgstr "ടേബിൾ ഉണ്ടാക്കാൻ പറ്റുന്നില്ല <%s>"
 
-#: ../lib/raster/gdal.c:546
+#: ../lib/raster/gdal.c:548
 #, c-format
 msgid "Error writing cell_misc/%s/gdal file"
 msgstr ""
 
-#: ../lib/raster/gdal.c:594
+#: ../lib/raster/gdal.c:596
 #, fuzzy, c-format
 msgid "Unable to create output file <%s> using driver <%s>"
 msgstr "ഡേറ്റാബേയ്സ് <%s> തുറക്കൻ പറ്റുന്നില്ല <%s>"
@@ -3957,7 +3957,7 @@ msgstr ""
 msgid "Unable to create rendering context"
 msgstr ""
 
-#: ../lib/nviz/lights.c:174
+#: ../lib/nviz/lights.c:171
 msgid "Unable to define new light"
 msgstr ""
 
@@ -4307,6 +4307,20 @@ msgstr ""
 msgid "Please recompile with Large File Support (LFS)"
 msgstr ""
 
+#: ../lib/init/lock.c:38
+#, c-format
+msgid "Usage: %s file pid"
+msgstr ""
+
+#: ../lib/init/lock.c:42
+msgid "Concurrent mapset locking is not supported on Windows"
+msgstr ""
+
+#: ../lib/init/lock.c:60
+#, c-format
+msgid "Unable to write lockfile %s (disk full? Permissions?)"
+msgstr ""
+
 #: ../lib/init/grass.py:60
 msgid "WARNING"
 msgstr ""
@@ -4588,7 +4602,7 @@ msgstr ""
 msgid "Starting GRASS GIS..."
 msgstr ""
 
-#: ../lib/init/grass.py:1020
+#: ../lib/init/grass.py:1022
 #, python-format
 msgid "Launching '%s' GUI in the background, please wait..."
 msgstr ""
