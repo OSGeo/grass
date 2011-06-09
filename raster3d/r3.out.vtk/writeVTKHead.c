@@ -41,7 +41,7 @@ void write_vtk_structured_point_header(FILE * fp, char *vtkFile,
     /*Simple vtk ASCII header */
 
     fprintf(fp, "# vtk DataFile Version 3.0\n");
-    fprintf(fp, "GRASS 6 Export\n");
+    fprintf(fp, "GRASS GIS 7 Export\n");
     fprintf(fp, "ASCII\n");
     fprintf(fp, "DATASET STRUCTURED_POINTS\n");	/*We are using the structured point dataset. */
 
@@ -94,7 +94,7 @@ void write_vtk_structured_grid_header(FILE * fp, char *vtkFile,
     G_debug(3,
 	    _("write_vtk_structured_grid_header: Writing VTKStructuredGrid-Header"));
     fprintf(fp, "# vtk DataFile Version 3.0\n");
-    fprintf(fp, "GRASS 6 Export\n");
+    fprintf(fp, "GRASS GIS 7 Export\n");
     fprintf(fp, "ASCII\n");
     fprintf(fp, "DATASET STRUCTURED_GRID\n");	/*We are using the structured grid dataset. */
     fprintf(fp, "DIMENSIONS %i %i %i\n", region.cols, region.rows,
@@ -115,7 +115,7 @@ void write_vtk_unstructured_grid_header(FILE * fp, char *vtkFile,
     G_debug(3,
 	    _("write_vtk_unstructured_grid_header: Writing VTKUnstructuredGrid-Header"));
     fprintf(fp, "# vtk DataFile Version 3.0\n");
-    fprintf(fp, "GRASS 6 Export\n");
+    fprintf(fp, "GRASS GIS 7 Export\n");
     fprintf(fp, "ASCII\n");
     fprintf(fp, "DATASET UNSTRUCTURED_GRID\n");	/*We are using the unstructured grid dataset. */
     /*Only cell data is available, because we creating a hexaeder/vtk-voxel for every voxel */
