@@ -21,6 +21,7 @@ gyr: green through yellow to red
 haxby: relative colors for bathymetry or topography
 ndvi: Normalized Difference Vegetation Index colors
 population: color table covering human population classification breaks
+population_dens: color table covering human population density classification breaks
 precipitation: precipitation color table (0..2000mm)
 precipitation_monthly: precipitation color table (0..1000mm)
 rainbow: rainbow color table
