@@ -111,6 +111,8 @@ static void load_library(void)
 	"libgdal.so",
 # endif
 # ifdef _WIN32
+	"gdal19.dll",
+	"gdal18.dll",
 	"gdal17.dll",
 	"gdal16.dll",
 	"gdal15.dll",
