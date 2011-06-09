@@ -237,7 +237,7 @@ Icons = {
         'layerOptions'  : MetaIcon(img = iconSet.get('options', wx.ART_ERROR),
                                    label = _('Set options')),
         'mapOutput'  : MetaIcon(img = iconSet.get('print-compose', wx.ART_ERROR),
-                                label = _('Hardcopy Map Ouput Utility')),
+                                label = _('Hardcopy Map Output Utility')),
         'mapcalc'    : MetaIcon(img = iconSet.get('calculator', wx.ART_ERROR),
                                 label = _('Raster Map Calculator')),
         },
