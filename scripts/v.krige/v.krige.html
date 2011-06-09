@@ -28,10 +28,17 @@ exhaustive and clear even if a bit outdated.
 <dt><b>rpy2</b></dt>
 <dd>Python binding to R. Note! <tt>rpy</tt> version 1 is not supported.</dd>
 
-<dt><b>R packages automap and gstat. </b></dt>
+<dt><b>R packages automap, gstat, spgrass6 and rgeos. </b></dt>
 <dd>automap is optional (provides automatic variogram fit).</dd>
 </dl>
 
+Install the packages via R command line (or your preferred GUI):
+<div class="code"><pre>
+  install.packages("rgeos", dep=T)
+  install.packages("gstat", dep=T)
+  install.packages("spgrass6", dep=T)
+  install.packages("automap", dep=T)
+</pre></div>
 
 <h4>Notes for Debian GNU/Linux</h4>
 
@@ -42,14 +49,8 @@ SUITABLE.</b>:
   aptitude install R python-rpy2
 </pre></div>
 
-To install R packages, use either R's function (as root):
-
-<div class="code"><pre>
-  install.packages("gstat", dep=T)
-  install.packages("spgrass6", dep=T)
-</pre></div>
-
-either the brand new Debian packages [5], add to repositories' list
+To install R packages, use either R's functions listed above (as root or as user),
+either the Debian packages [5], add to repositories' list
 for 32bit or 64bit (pick up the suitable line):
 
 <div class="code"><pre>
