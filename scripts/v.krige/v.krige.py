@@ -406,7 +406,7 @@ def importR():
         
     # R packages check. Will create one error message after check of all packages.
     missingPackagesList = []
-    for each in ["gstat", "spgrass6", "maptools"]:
+    for each in ["rgeos", "gstat", "spgrass6", "maptools"]:
         if not robjects.r.require(each, quietly = True)[0]:
             missingPackagesList.append(each)
     if missingPackagesList:
