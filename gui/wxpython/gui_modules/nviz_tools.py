@@ -3009,11 +3009,16 @@ class NvizToolWindow(FN.FlatNotebook):
         data = self.mapWindow.cplanes[planeIndex][action]
         self.OnScroll(event, self.win['cplane'][action], data)
         
+        self.mapWindow.render['quick'] = True
         event = wxUpdateCPlane(update = (action,), current = planeIndex)
         wx.PostEvent(self.mapWindow, event)
+        
+        if self.mapDisplay.statusbarWin['render'].IsChecked():
+            self.mapWindow.Refresh(False)
 
     def OnCPlaneChangeDone(self, event):
         """!Cutting plane change done"""
+        self.mapWindow.render['quick'] = False
         if self.mapDisplay.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
             
