@@ -50,7 +50,7 @@ wxUpdateCPlane,     EVT_UPDATE_CPLANE = NewEvent()
 class NvizThread(Thread):
     def __init__(self, log, progressbar, window):
         Thread.__init__(self)
-        
+        Debug.msg(5, "NvizThread.__init__():")
         self.log = log
         self.progressbar = progressbar
         self.window = window
@@ -71,7 +71,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
     def __init__(self, parent, id = wx.ID_ANY,
                  Map = None, tree = None, lmgr = None):
         self.parent = parent # MapFrame
-        
+        Debug.msg(5, "GLCanvas.__init__(): begin")
         glcanvas.GLCanvas.__init__(self, parent, id)
         MapWindow.__init__(self, parent, id, 
                            Map, tree, lmgr)
@@ -155,6 +155,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         self.Bind(wx.EVT_CLOSE, self.OnClose)
         
+        Debug.msg(5, "GLCanvas.__init__(): end")
         #cplanes cannot be initialized now
         wx.CallAfter(self.InitCPlanes)
         

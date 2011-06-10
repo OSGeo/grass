@@ -277,11 +277,13 @@ class GMFrame(wx.Frame):
             
     def AddNviz(self):
         """!Add nviz notebook page"""
+        Debug.msg(5, "GMFrame.AddNviz(): begin")
         self.nviz = nviz_tools.NvizToolWindow(parent = self,
                                               display = self.curr_page.maptree.GetMapDisplay())
         self.notebook.AddPage(page = self.nviz, text = _("3D view"), name = 'nviz')
         self.notebook.SetSelectionByName('nviz')
         self.existNviz = True
+        Debug.msg(5, "GMFrame.AddNviz(): end")
         
     def RemoveNviz(self):
         """!Remove nviz notebook page"""
