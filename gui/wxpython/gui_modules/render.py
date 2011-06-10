@@ -630,7 +630,7 @@ class Map(object):
                     "\n\n" + _("Details:") + " %s" % msg
             else:
                 message = _("Unable to get current geographic extent. "
-                            "Force quiting wxGUI. Please run manually g.region to "
+                            "Force quiting wxGUI. Please manually run g.region to "
                             "fix the problem.")
             gcmd.GError(message)
             return self.region
