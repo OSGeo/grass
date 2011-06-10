@@ -48,7 +48,8 @@ import gselect
 import gcmd
 from preferences import globalSettings as UserSettings
 try:
-    from nviz_mapdisp import wxUpdateView, wxUpdateLight, wxUpdateProperties
+    from nviz_mapdisp import wxUpdateView, wxUpdateLight, wxUpdateProperties,\
+                            wxUpdateCPlane
     import wxnviz
 except ImportError:
     pass
@@ -142,6 +143,10 @@ class NvizToolWindow(FN.FlatNotebook):
         # appearance page
         self.AddPage(page = self._createAppearancePage(),
                      text = " %s " % _("Appearance"))
+                    
+        # analysis page
+        self.AddPage(page = self._createAnalysisPage(),
+                     text = " %s " % _("Analysis"))
         
         self.UpdateSettings()
         self.pageChanging = False
@@ -157,7 +162,8 @@ class NvizToolWindow(FN.FlatNotebook):
         
         self.Update()
         wx.CallAfter(self.SetPage, 'view')
-        wx.CallAfter(self.UpdateScrolling, (self.foldpanelData, self.foldpanelAppear))       
+        wx.CallAfter(self.UpdateScrolling, (self.foldpanelData, self.foldpanelAppear,
+                                            self.foldpanelAnalysis))       
         wx.CallAfter(self.SetInitialMaps)
         
     def SetInitialMaps(self):
@@ -187,7 +193,8 @@ class NvizToolWindow(FN.FlatNotebook):
     def OnSize(self, event):
         """!After window is resized, update scrolling"""
         # workaround to resize captionbars of foldpanelbar
-        wx.CallAfter(self.UpdateScrolling, (self.foldpanelData, self.foldpanelAppear)) 
+        wx.CallAfter(self.UpdateScrolling, (self.foldpanelData, self.foldpanelAppear,
+                                            self.foldpanelAnalysis)) 
         event.Skip()
            
     def OnPressCaption(self, event):
@@ -451,6 +458,25 @@ class NvizToolWindow(FN.FlatNotebook):
         self.mainPanelAppear.Fit()
         return self.mainPanelAppear
     
+    def _createAnalysisPage(self):
+        """!Create data analysis (cutting planes, ...) page"""
+        self.mainPanelAnalysis = ScrolledPanel(parent = self)
+        self.mainPanelAnalysis.SetupScrolling(scroll_x = False)
+        self.foldpanelAnalysis = fpb.FoldPanelBar(parent = self.mainPanelAnalysis, id = wx.ID_ANY,
+                                style = fpb.FPB_DEFAULT_STYLE, extraStyle = fpb.FPB_SINGLE_FOLD)
+        self.foldpanelAnalysis.Bind(fpb.EVT_CAPTIONBAR, self.OnPressCaption)
+        # cutting planes page
+        cplanePanel = self.foldpanelAnalysis.AddFoldPanel(_("Cutting planes"), collapsed = False)
+        self.foldpanelAnalysis.AddFoldPanelWindow(cplanePanel, 
+            window = self._createCPlanePage(parent = cplanePanel), flags = fpb.FPB_ALIGN_WIDTH)
+        
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(self.foldpanelAnalysis, proportion = 1, flag = wx.EXPAND)
+        self.mainPanelAnalysis.SetSizer(sizer)
+        self.mainPanelAnalysis.Layout()
+        self.mainPanelAnalysis.Fit()
+        return self.mainPanelAnalysis
+        
     def _createSurfacePage(self, parent):
         """!Create view settings page"""
         panel = wx.Panel(parent = parent, id = wx.ID_ANY)
@@ -743,7 +769,138 @@ class NvizToolWindow(FN.FlatNotebook):
         panel.Fit()
         
         return panel
-    
+    def _createCPlanePage(self, parent):
+        """!Create cutting planes page"""  
+        panel = wx.Panel(parent = parent, id = wx.ID_ANY)
+        self.page['cplane'] = { 'id' : 4, 
+                                'notebook' : self.foldpanelData.GetId() }
+        self.win['cplane'] = {}
+        
+        pageSizer = wx.BoxSizer(wx.VERTICAL)
+        box = wx.StaticBox (parent = panel, id = wx.ID_ANY,
+                            label = " %s " % (_("Cutting planes")))
+        boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        horSizer = wx.BoxSizer(wx.HORIZONTAL)
+        
+        # planes
+        horSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("Active cutting plane:")),
+                     flag = wx.ALIGN_CENTER_VERTICAL|wx.ALL, border = 5)
+        choice = wx.Choice(parent = panel, id = wx.ID_ANY, choices = [])
+        self.win['cplane']['planes'] = choice.GetId()
+        choice.Bind(wx.EVT_CHOICE, self.OnCPlaneSelection)
+        horSizer.Add(item = choice, flag = wx.ALL, border = 5)
+        
+        # shading
+        horSizer.Add(item = wx.Size(-1, -1), proportion = 1)
+        horSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("Shading:")),
+                     flag = wx.ALIGN_CENTER_VERTICAL|wx.ALL, border = 5)
+        choices = [_("clear"),
+                   _("top color"),
+                   _("bottom color"),
+                   _("blend"),
+                   _("shaded")]
+        choice = wx.Choice(parent = panel, id = wx.ID_ANY, choices = choices)
+        self.win['cplane']['shading'] = choice.GetId()
+        choice.Bind(wx.EVT_CHOICE, self.OnCPlaneShading)
+        horSizer.Add(item = choice, flag = wx.ALL, border = 5)
+        boxSizer.Add(item = horSizer, flag = wx.EXPAND)
+        
+        gridSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
+        # XYZ position
+        self.win['cplane']['position'] = {}
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("X:")),
+                      pos = (0, 0), flag = wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("Y:")),
+                      pos = (1, 0), flag = wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("Height:")),
+                      pos = (2, 0), flag = wx.ALIGN_CENTER_VERTICAL)
+        self._createControl(panel, data = self.win['cplane']['position'], name = 'x', size = 250,
+                            range = (-1000, 1000), sliderHor = True,
+                            bind = (self.OnCPlaneChanging, self.OnCPlaneChangeDone, self.OnCPlaneChangeText))
+        self.FindWindowById(self.win['cplane']['position']['x']['slider']).SetValue(0)
+        self.FindWindowById(self.win['cplane']['position']['x']['text']).SetValue(0)
+        gridSizer.Add(item = self.FindWindowById(self.win['cplane']['position']['x']['slider']),
+                      pos = (0, 1),  flag = wx.EXPAND|wx.ALIGN_RIGHT)
+        gridSizer.Add(item = self.FindWindowById(self.win['cplane']['position']['x']['text']),
+                      pos = (0, 2),
+                      flag = wx.ALIGN_CENTER)
+                    
+        self._createControl(panel, data = self.win['cplane']['position'], name = 'y', size = 250,
+                            range = (-1000, 1000), sliderHor = True,
+                            bind = (self.OnCPlaneChanging, self.OnCPlaneChangeDone, self.OnCPlaneChangeText))
+        self.FindWindowById(self.win['cplane']['position']['y']['slider']).SetValue(0)
+        self.FindWindowById(self.win['cplane']['position']['y']['text']).SetValue(0)
+        gridSizer.Add(item = self.FindWindowById(self.win['cplane']['position']['y']['slider']),
+                      pos = (1, 1),  flag = wx.EXPAND|wx.ALIGN_RIGHT)
+        gridSizer.Add(item = self.FindWindowById(self.win['cplane']['position']['y']['text']),
+                      pos = (1, 2),
+                      flag = wx.ALIGN_CENTER)
+                    
+        self._createControl(panel, data = self.win['cplane']['position'], name = 'z', size = 250,
+                            range = (-1000, 1000), sliderHor = True,
+                            bind = (self.OnCPlaneChanging, self.OnCPlaneChangeDone, self.OnCPlaneChangeText))
+        self.FindWindowById(self.win['cplane']['position']['z']['slider']).SetValue(0)
+        self.FindWindowById(self.win['cplane']['position']['z']['text']).SetValue(0)
+        gridSizer.Add(item = self.FindWindowById(self.win['cplane']['position']['z']['slider']),
+                      pos = (2, 1),  flag = wx.EXPAND|wx.ALIGN_RIGHT)
+        gridSizer.Add(item = self.FindWindowById(self.win['cplane']['position']['z']['text']),
+                      pos = (2, 2),
+                      flag = wx.ALIGN_CENTER)
+        
+        # rotation
+        self.win['cplane']['rotation'] = {}
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("Rotation:")),
+                      pos = (3, 0), flag = wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("Tilt:")),
+                      pos = (4, 0), flag = wx.ALIGN_CENTER_VERTICAL)
+        self._createControl(panel, data = self.win['cplane']['rotation'], name = 'rot', size = 250,
+                            range = (0, 360), sliderHor = True,
+                            bind = (self.OnCPlaneChanging, self.OnCPlaneChangeDone, self.OnCPlaneChangeText))
+        self.FindWindowById(self.win['cplane']['rotation']['rot']['slider']).SetValue(0)
+        self.FindWindowById(self.win['cplane']['rotation']['rot']['text']).SetValue(0)
+        gridSizer.Add(item = self.FindWindowById(self.win['cplane']['rotation']['rot']['slider']),
+                      pos = (3, 1),  flag = wx.EXPAND|wx.ALIGN_RIGHT)
+        gridSizer.Add(item = self.FindWindowById(self.win['cplane']['rotation']['rot']['text']),
+                      pos = (3, 2),
+                      flag = wx.ALIGN_CENTER)
+                    
+        self._createControl(panel, data = self.win['cplane']['rotation'], name = 'tilt', size = 250,
+                            range = (0, 360), sliderHor = True,
+                            bind = (self.OnCPlaneChanging, self.OnCPlaneChangeDone, self.OnCPlaneChangeText))
+        self.FindWindowById(self.win['cplane']['rotation']['tilt']['slider']).SetValue(0)
+        self.FindWindowById(self.win['cplane']['rotation']['tilt']['text']).SetValue(0)
+        gridSizer.Add(item = self.FindWindowById(self.win['cplane']['rotation']['tilt']['slider']),
+                      pos = (4, 1),  flag = wx.EXPAND|wx.ALIGN_RIGHT)
+        gridSizer.Add(item = self.FindWindowById(self.win['cplane']['rotation']['tilt']['text']),
+                      pos = (4, 2),
+                      flag = wx.ALIGN_CENTER)
+        boxSizer.Add(gridSizer, proportion = 0, flag = wx.EXPAND|wx.ALL, border = 5)
+                    
+        horSizer = wx.BoxSizer(wx.HORIZONTAL)
+        horSizer.Add(item = wx.Size(-1, -1), proportion = 1, flag = wx.ALL, border = 5)            
+
+        # reset
+        reset = wx.Button(parent = panel, id = wx.ID_ANY, label = _("Reset"))
+        self.win['cplane']['reset'] = reset.GetId()
+        reset.Bind(wx.EVT_BUTTON, self.OnCPlaneReset)
+        horSizer.Add(item = reset, flag = wx.ALL, border = 5)
+        boxSizer.Add(horSizer, proportion = 0, flag = wx.EXPAND)            
+        
+        
+        pageSizer.Add(boxSizer, proportion = 0, flag = wx.EXPAND)
+        
+        panel.SetSizer(pageSizer)
+        panel.Fit()    
+        
+        return panel
+        
     def _createConstantPage(self, parent):
         """!Create constant page"""
         panel = wx.Panel(parent = parent, id = wx.ID_ANY)
@@ -2039,12 +2196,17 @@ class NvizToolWindow(FN.FlatNotebook):
     def EnablePage(self, name, enabled = True):
         """!Enable/disable all widgets on page"""
         for key, item in self.win[name].iteritems():
-            if key in ('map', 'surface', 'new'):
+            if key in ('map', 'surface', 'new','planes'):
                 continue
             if type(item) == types.DictType:
-                for sitem in self.win[name][key].itervalues():
-                    if type(sitem) == types.IntType:
-                        self.FindWindowById(sitem).Enable(enabled)
+                for skey, sitem in self.win[name][key].iteritems():
+                    if type(sitem) == types.DictType:
+                        for ssitem in self.win[name][key][skey].itervalues():
+                            if type(ssitem) == types.IntType:
+                                self.FindWindowById(ssitem).Enable(enabled)
+                    else:
+                        if type(sitem) == types.IntType:
+                            self.FindWindowById(sitem).Enable(enabled)
             else:
                 if type(item) == types.IntType:
                     self.FindWindowById(item).Enable(enabled)
@@ -2816,6 +2978,84 @@ class NvizToolWindow(FN.FlatNotebook):
             self.mapWindow.Refresh(False)
         
         event.Skip()
+    
+    def OnCPlaneSelection(self, event):
+        """!Cutting plane selected"""
+        plane = self.FindWindowById(self.win['cplane']['planes']).GetStringSelection()
+        try:
+            planeIndex = int(plane.split()[1])
+            self.EnablePage("cplane", enabled = True)
+        except:
+            planeIndex = -1
+            self.EnablePage("cplane", enabled = False)
+        self.mapWindow.SelectCPlane(planeIndex)
+        if self.mapDisplay.statusbarWin['render'].IsChecked():
+            self.mapWindow.Refresh(False)
+        self.UpdateCPlanePage(planeIndex)
+        
+    def OnCPlaneChanging(self, event):
+        """!Cutting plane is changing"""
+        plane = self.FindWindowById(self.win['cplane']['planes']).GetStringSelection()
+        try:
+            planeIndex = int(plane.split()[1])
+        except:#TODO disabled page
+            planeIndex = -1
+    
+        if event.GetId() in (self.win['cplane']['rotation']['rot'].values() +
+                            self.win['cplane']['rotation']['tilt'].values()):
+            action = 'rotation'
+        else:
+            action = 'position'
+        data = self.mapWindow.cplanes[planeIndex][action]
+        self.OnScroll(event, self.win['cplane'][action], data)
+        
+        event = wxUpdateCPlane(update = (action,), current = planeIndex)
+        wx.PostEvent(self.mapWindow, event)
+
+    def OnCPlaneChangeDone(self, event):
+        """!Cutting plane change done"""
+        if self.mapDisplay.statusbarWin['render'].IsChecked():
+            self.mapWindow.Refresh(False)
+            
+    def OnCPlaneChangeText(self, event):
+        """!Cutting plane changed by textctrl"""
+        for axis in ('x', 'y', 'z'):
+            if event.GetId() == self.win['cplane']['position'][axis]['text']:
+                value = self.FindWindowById(event.GetId()).GetValue()
+                slider = self.FindWindowById(self.win['cplane']['position'][axis]['slider'])
+                self.AdjustSliderRange(slider = slider, value = value)
+        self.OnCPlaneChanging(event = event)
+        self.OnCPlaneChangeDone(None)   
+        
+    def OnCPlaneShading(self, event):
+        """!Cutting plane shading changed"""
+        shading = self.FindWindowById(self.win['cplane']['shading']).GetSelection()
+        plane = self.FindWindowById(self.win['cplane']['planes']).GetStringSelection()
+        try:
+            planeIndex = int(plane.split()[1])
+        except:#TODO disabled page
+            planeIndex = -1
+            
+        self.mapWindow.cplanes[planeIndex]['shading'] = shading
+        
+        event = wxUpdateCPlane(update = ('shading',), current = planeIndex)
+        wx.PostEvent(self.mapWindow, event)
+        
+        self.OnCPlaneChangeDone(None)
+        
+    def OnCPlaneReset(self, event):
+        """!Reset current cutting plane"""
+        plane = self.FindWindowById(self.win['cplane']['planes']).GetStringSelection()
+        try:
+            planeIndex = int(plane.split()[1])
+        except:#TODO disabled page
+            planeIndex = -1
+        self.mapWindow.cplanes[planeIndex] = copy.deepcopy(UserSettings.Get(group = 'nviz',
+                                                                            key = 'cplane'))
+        event = wxUpdateCPlane(update = ('position','rotation','shading'), current = planeIndex)
+        wx.PostEvent(self.mapWindow, event)
+        self.OnCPlaneChangeDone(None)
+        self.UpdateCPlanePage(planeIndex)
         
     def UpdatePage(self, pageId):
         """!Update dialog (selected page)"""
@@ -2872,16 +3112,44 @@ class NvizToolWindow(FN.FlatNotebook):
             if self.mapWindow.constants:
                 surface = self.FindWindowById(self.win['constant']['surface'])
                 for item in self.mapWindow.constants:
-                    surface.Append(item['name'])
+                    surface.Append(_("constant") + str(item['constant']['object']['name']))
                 surface.SetSelection(0)
                 self.OnConstantSelection(None)
                 self.EnablePage('constant', True)
-                
-                
+        elif pageId == 'cplane':
+            count = self._display.GetCPlanesCount()
+            choices = [_("None"),]
+            for plane in range(count):
+                choices.append("%s %i" % (_("Plane"), plane))
+            self.FindWindowById(self.win['cplane']['planes']).SetItems(choices)
+            self.FindWindowById(self.win['cplane']['planes']).SetSelection(0)
+            
+            xyRange, zRange = self._display.GetXYRange(), self._display.GetZRange()
+            if xyRange > 0: # GTK warning
+                self.FindWindowById(self.win['cplane']['position']['x']['slider']).SetRange(-xyRange/2., xyRange/2.)
+                self.FindWindowById(self.win['cplane']['position']['y']['slider']).SetRange(-xyRange/2., xyRange/2.)
+            if zRange[0] - zRange[1] > 0:
+                self.FindWindowById(self.win['cplane']['position']['z']['slider']).SetRange(zRange[0], zRange[1])
+            self.FindWindowById(self.win['cplane']['position']['z']['slider']).SetValue(zRange[0])
+            self.FindWindowById(self.win['cplane']['position']['z']['text']).SetValue(zRange[0])
+            self.OnCPlaneSelection(None)
+            
             
         self.Update()
         self.pageChanging = False
-        
+    
+    def UpdateCPlanePage(self, index):
+        """!Update widgets according to selected clip plane"""
+        if index == -1:   
+            return
+        data = self.mapWindow.cplanes[index]
+        for widget in ('text', 'slider'):
+            for axes in ('x', 'y', 'z'):
+                self.FindWindowById(self.win['cplane']['position'][axes][widget]).SetValue(data['position'][axes])
+            for each in ('tilt', 'rot'):
+                self.FindWindowById(self.win['cplane']['rotation'][each][widget]).SetValue(data['rotation'][each])
+        self.FindWindowById(self.win['cplane']['shading']).SetSelection(data['shading'])
+                
     def UpdateSurfacePage(self, layer, data, updateName = True):
         """!Update surface page"""
         ret = gcmd.RunCommand('r.info',

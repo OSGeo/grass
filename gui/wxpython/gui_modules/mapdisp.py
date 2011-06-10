@@ -403,7 +403,7 @@ class MapFrame(wx.Frame):
             self.MapWindow = self.MapWindow3D
             # add Nviz notebookpage
             self._layerManager.AddNviz()
-            for page in ('view', 'light', 'fringe', 'constant'):
+            for page in ('view', 'light', 'fringe', 'constant', 'cplane'):
                 self._layerManager.nviz.UpdatePage(page)
 
         

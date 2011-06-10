@@ -45,6 +45,7 @@ import wxnviz
 wxUpdateProperties, EVT_UPDATE_PROP  = NewEvent()
 wxUpdateView,       EVT_UPDATE_VIEW  = NewEvent()
 wxUpdateLight,      EVT_UPDATE_LIGHT = NewEvent()
+wxUpdateCPlane,     EVT_UPDATE_CPLANE = NewEvent()
 
 class NvizThread(Thread):
     def __init__(self, log, progressbar, window):
@@ -95,6 +96,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.layers  = list()
         # list of constant surfaces
         self.constants = list()
+        # list of cutting planes
+        self.cplanes = list()
         # list of query points
         self.qpoints = list()
         
@@ -148,9 +151,19 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.Bind(EVT_UPDATE_PROP,  self.UpdateMapObjProperties)
         self.Bind(EVT_UPDATE_VIEW,  self.UpdateView)
         self.Bind(EVT_UPDATE_LIGHT, self.UpdateLight)
+        self.Bind(EVT_UPDATE_CPLANE, self.UpdateCPlane)
         
         self.Bind(wx.EVT_CLOSE, self.OnClose)
         
+        #cplanes cannot be initialized now
+        wx.CallAfter(self.InitCPlanes)
+        
+    def InitCPlanes(self):
+        """!Initialize cutting planes list"""
+        for i in range(self._display.GetCPlanesCount()):
+            cplane = copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'cplane'))
+            self.cplanes.append(cplane)
+            
     def OnClose(self, event):
         # cleanup when window actually closes (on quit) and not just is hidden
         self.Reset()
@@ -192,6 +205,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             if hasattr(self.lmgr, "nviz"):
                 self.lmgr.nviz.UpdatePage('view')
                 self.lmgr.nviz.UpdatePage('light')
+                self.lmgr.nviz.UpdatePage('cplane')
                 layer = self.GetSelectedLayer()
                 if layer:
                     if layer.type ==  'raster':
@@ -696,7 +710,29 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         id = self.constants[index]['constant']['object']['id']
         self._display.UnloadSurface(id)
         del self.constants[index]
-        
+    
+    def SelectCPlane(self, index):
+        """!Select cutting plane"""
+        for plane in range (self._display.GetCPlanesCount()):
+            if plane == index:
+                self._display.SelectCPlane(plane)
+            else:
+                self._display.UnselectCPlane(plane)
+    
+    def UpdateCPlane(self, event):
+        """!Change cutting plane settings"""
+        current = event.current
+        for each in event.update:
+            if each == 'rotation':
+                self._display.SetCPlaneRotation(0, self.cplanes[current]['rotation']['tilt'],
+                                                   self.cplanes[current]['rotation']['rot'])
+            if each == 'position':
+                self._display.SetCPlaneTranslation(self.cplanes[current]['position']['x'],
+                                                   self.cplanes[current]['position']['y'],
+                                                   self.cplanes[current]['position']['z'])
+            if each == 'shading':
+                self._display.SetFenceColor(self.cplanes[current]['shading'])
+            
     def UnloadRaster(self, item):
         """!Unload 2d raster map
         
