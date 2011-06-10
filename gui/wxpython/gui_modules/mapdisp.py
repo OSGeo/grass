@@ -356,7 +356,7 @@ class MapFrame(wx.Frame):
         """!Add 3D view mode toolbar
         """
         import nviz
-        
+        Debug.msg(5, "MapFrame._addToolbarNviz(): begin")
         # check for GLCanvas and OpenGL
         if not nviz.haveNviz:
             self.toolbars['map'].combo.SetValue(_("2D view"))
@@ -388,6 +388,7 @@ class MapFrame(wx.Frame):
         
         # create GL window & NVIZ toolbar
         if not self.MapWindow3D:
+            Debug.msg(5, "MapFrame._addToolbarNviz(): GLWindow will be created")
             self.MapWindow3D = nviz.GLWindow(self, id = wx.ID_ANY,
                                              Map = self.Map, tree = self.tree, lmgr = self._layerManager)
             self.MapWindow = self.MapWindow3D
@@ -424,6 +425,7 @@ class MapFrame(wx.Frame):
                           CloseButton(False).Layer(2))
         
         self.SetStatusText("", 0)
+        Debug.msg(5, "MapFrame._addToolbarNviz(): end")
         
     def AddToolbar(self, name):
         """!Add defined toolbar to the window

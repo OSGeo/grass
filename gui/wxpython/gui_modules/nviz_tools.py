@@ -116,6 +116,7 @@ class NvizToolWindow(FN.FlatNotebook):
     def __init__(self, parent, display, id = wx.ID_ANY,
                  style = globalvar.FNPageStyle|FN.FNB_NO_X_BUTTON|FN.FNB_NO_NAV_BUTTONS,
                  **kwargs):
+        Debug.msg(5, "NvizToolWindow.__init__()")
         self.parent     = parent # GMFrame
         self.mapDisplay = display
         self.mapWindow  = display.GetWindow()
