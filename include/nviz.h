@@ -137,8 +137,17 @@ int Nviz_look_here(double, double);
 
 /* cplanes_obj.c */
 int Nviz_new_cplane(nv_data *, int);
+int Nviz_on_cplane(nv_data *, int);
 int Nviz_off_cplane(nv_data *, int);
 int Nviz_draw_cplane(nv_data *, int, int);
+int Nviz_num_cplanes(nv_data *);
+int Nviz_get_current_cplane(nv_data *);
+int Nviz_set_cplane_rotation(nv_data *, int, float, float, float);
+int Nviz_get_cplane_rotation(nv_data *, int, float *, float *, float *);
+int Nviz_set_cplane_translation(nv_data *, int, float, float, float);
+int Nviz_get_cplane_translation(nv_data *, int, float *, float *, float *);
+int Nviz_set_fence_color(nv_data *, int);
+
 
 /* draw.c */
 int Nviz_draw_all_surf(nv_data *);
@@ -183,6 +192,8 @@ struct fringe_data *Nviz_set_fringe(nv_data *, int, unsigned long,
 void Nviz_init_view(nv_data *);
 int Nviz_set_focus_state(int);
 int Nviz_set_focus_map(int, int);
+float Nviz_get_xyrange(nv_data *);
+int Nviz_get_zrange(nv_data *, float *, float *);
 
 /* render.c */
 struct render_window *Nviz_new_render_window();

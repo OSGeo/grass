@@ -1221,6 +1221,80 @@ class Nviz(object):
         
         return 1
 
+    def GetCPlanesCount(self):
+        """!Returns number of cutting planes"""
+        return Nviz_num_cplanes(self.data) 
+    
+    def GetCPlaneRotation(self):
+        """!Returns rotation parameters of current cutting plane"""
+        x, y, z = c_float(), c_float(), c_float()
+        
+        current = Nviz_get_current_cplane(self.data)
+        Nviz_get_cplane_rotation(self.data, current, byref(x), byref(y), byref(z))
+        
+        return x.value, y.value, z.value
+    
+    def GetCPlaneTranslation(self):
+        """!Returns translation parameters of current cutting plane"""
+        x, y, z = c_float(), c_float(), c_float()
+        
+        current = Nviz_get_current_cplane(self.data)
+        Nviz_get_cplane_translation(self.data, current, byref(x), byref(y), byref(z))
+        
+        return x.value, y.value, z.value
+    
+    def SetCPlaneRotation(self, x, y, z):
+        """!Set current clip plane rotation
+        
+        @param x,y,z rotation parameters
+        """
+        current = Nviz_get_current_cplane(self.data)
+        Nviz_set_cplane_rotation(self.data, current, x, y, z)
+        Nviz_draw_cplane(self.data, -1, -1)
+    
+    def SetCPlaneTranslation(self, x, y, z):
+        """!Set current clip plane translation
+        
+        @param x,y,z translation parameters
+        """
+        current = Nviz_get_current_cplane(self.data)
+        Nviz_set_cplane_translation(self.data, current, x, y, z)
+        Nviz_draw_cplane(self.data, -1, -1) 
+        Debug.msg(3, "Nviz::SetCPlaneTranslation(): id=%d, x=%f, y=%f, z=%f",
+                  current, x, y, z)
+           
+    def SelectCPlane(self, index):
+        """!Select cutting plane
+        
+        @param index index of cutting plane
+        """
+        Nviz_on_cplane(self.data, index)
+    
+    def UnselectCPlane(self, index):
+        """!Unselect cutting plane
+        
+        @param index index of cutting plane
+        """
+        Nviz_off_cplane(self.data, index)
+        
+    def SetFenceColor(self, index):
+        """!Select current cutting plane
+        
+        @param index type of fence - from 0 (off) to 4
+        """    
+        
+        Nviz_set_fence_color(self.data, index)
+            
+    def GetXYRange(self):
+        """!Get xy range"""
+        return Nviz_get_xyrange(self.data)
+    
+    def GetZRange(self):
+        """!Get z range"""
+        min, max = c_float(), c_float()
+        Nviz_get_zrange(self.data, byref(min), byref(max))
+        return min.value, max.value
+    
     def SaveToFile(self, filename, width = 20, height = 20, itype = 'ppm'):
         """!Save current GL screen to ppm/tif file
 
@@ -1269,7 +1343,7 @@ class Nviz(object):
         x   = c_float()
         y   = c_float()
         z   = c_float()
-        Debug.msg(5, "GLWindow.GetPointOnSurface(): sx=%d sy=%d" % (sx, sy))
+        Debug.msg(5, "Nviz::GetPointOnSurface(): sx=%d sy=%d" % (sx, sy))
         num = GS_get_selected_point_on_surface(sx, sy, byref(sid), byref(x), byref(y), byref(z))
         if num == 0:
             return (None, None, None, None)

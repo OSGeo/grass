@@ -109,3 +109,23 @@ int Nviz_set_focus_map(int type, int id)
 
     return id;
 }
+/*!
+   \brief Get xy range
+
+   \param data nviz data
+ */
+float Nviz_get_xyrange(nv_data * data)
+{
+   return data->xyrange;
+}
+/*!
+   \brief Get z range
+
+   \param data nviz data
+   \param min,max z range
+ */
+int Nviz_get_zrange(nv_data * data, float *min, float *max)
+{
+	GS_get_zrange_nz(min, max);
+	return 1;
+}

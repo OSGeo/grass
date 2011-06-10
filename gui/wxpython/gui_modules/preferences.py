@@ -551,6 +551,18 @@ class Settings:
                         'value' : 60,
                         },
                     },
+                'cplane' : {
+                    'shading': 0,
+                    'rotation':{
+                        'rot': 0, 
+                        'tilt': 0
+                        }, 
+                    'position':{
+                        'x' : 0,
+                        'y' : 0,
+                        'z' : 0
+                    }   
+                },
                 'light' : {
                     'position' : {
                         'x' : 0.68,
