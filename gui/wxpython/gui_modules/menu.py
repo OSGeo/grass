@@ -49,14 +49,14 @@ class Menu(wx.MenuBar):
                 subMenu = self._createMenu(eachItem[1])
                 menu.AppendMenu(wx.ID_ANY, label, subMenu)
             else:
-                self._createMenuItem(menu, *eachItem, menustyle = self.menustyle)
+                self._createMenuItem(menu, self.menustyle, *eachItem)
         
         self.parent.Bind(wx.EVT_MENU_HIGHLIGHT_ALL, self.OnMenuHighlight)
         
         return menu
 
-    def _createMenuItem(self, menu, label, help, handler, gcmd, keywords,
-                        shortcut = '', kind = wx.ITEM_NORMAL, menustyle = 0):
+    def _createMenuItem(self, menu, menustyle, label, help, handler, gcmd, keywords,
+                        shortcut = '', kind = wx.ITEM_NORMAL):
         """!Creates menu items
         There are three menu styles (menu item text styles).
         1 -- label only, 2 -- label and cmd name, 3 -- cmd name only
