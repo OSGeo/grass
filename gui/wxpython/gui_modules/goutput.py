@@ -383,9 +383,8 @@ class GMConsole(wx.SplitterWindow):
 
         self.cmd_output.SetStyle()
 
-        if switchPage and \
-                self._notebook.GetSelection() != self._notebook.GetPageIndexByName('console'):
-            self._notebook.SetSelectionByName('console')
+        if switchPage:
+            self._notebook.SetSelectionByName('output')
         
         if not style:
             style = self.cmd_output.StyleDefault
@@ -513,8 +512,7 @@ class GMConsole(wx.SplitterWindow):
                 # other GRASS commands (r|v|g|...)
                 # switch to 'Command output' if required
                 if switchPage:
-                    if self._notebook.GetSelection() != self._notebook.GetPageIndexByName('console'):
-                        self._notebook.SetSelectionByName('console')
+                    self._notebook.SetSelectionByName('output')
                     
                     self.parent.SetFocus()
                     self.parent.Raise()
@@ -648,8 +646,8 @@ class GMConsole(wx.SplitterWindow):
         """!Print command output"""
         message = event.text
         type  = event.type
-        if self._notebook.GetSelection() != self._notebook.GetPageIndexByName('console'):
-            page = self._notebook.GetPageIndexByName('console')
+        if self._notebook.GetSelection() != self._notebook.GetPageIndexByName('output'):
+            page = self._notebook.GetPageIndexByName('output')
             textP = self._notebook.GetPageText(page)
             if textP[-1] != ')':
                 textP += ' (...)'

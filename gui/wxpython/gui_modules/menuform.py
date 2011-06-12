@@ -1021,8 +1021,7 @@ class mainFrame(wx.Frame):
         if self.standalone or cmd[0][0:2] !=  "d.":
             # Send any non-display command to parent window (probably wxgui.py)
             # put to parents switch to 'Command output'
-            if self.notebookpanel.notebook.GetSelection() !=  self.notebookpanel.notebook.GetPageIndexByName('output'):
-                self.notebookpanel.notebook.SetSelectionByName('output')
+            self.notebookpanel.notebook.SetSelectionByName('output')
             
             try:
                 if self.task.path:
@@ -2421,9 +2420,10 @@ class GNotebook(FN.FlatNotebook):
     def SetSelectionByName(self, page):
         """!Set notebook
         
-        @param page names, eg. 'layers', 'console', 'search', 'pyshell', 'nviz'
+        @param page names, eg. 'layers', 'output', 'search', 'pyshell', 'nviz'
         """
-        self.SetSelection(self.GetPageIndexByName(page))
+        if self.GetSelection() != self.GetPageIndexByName('output'):
+            self.SetSelection(self.GetPageIndexByName(page))
         
     def GetPageIndexByName(self, page):
         """!Get notebook page index

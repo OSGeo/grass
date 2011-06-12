@@ -1231,7 +1231,7 @@ class MapFrame(wx.Frame):
         """!Internal method used by OnQuery*() methods"""
         if self.toolbars['map'].GetAction() == 'displayAttrb':
             # switch to output console to show query results
-            self._layerManager.notebook.SetSelectionByName('console')
+            self._layerManager.notebook.SetSelectionByName('output')
         
         self.MapWindow.mouse['box'] = "point"
         self.MapWindow.zoomtype = 0
@@ -1626,7 +1626,7 @@ class MapFrame(wx.Frame):
         self.totaldist = 0.0 # total measured distance
         
         # switch Layer Manager to output console to show measure results
-        self._layerManager.notebook.SetSelectionByName('console')
+        self._layerManager.notebook.SetSelectionByName('output')
         
         # change mouse to draw line for measurement
         self.MapWindow.mouse['use'] = "measure"
@@ -1667,9 +1667,7 @@ class MapFrame(wx.Frame):
         """!Calculate map distance from screen distance
         and print to output window
         """
-        if self._layerManager.notebook.GetSelection() != \
-                self._layerManager.notebook.GetPageIndexByName('console'):
-            self._layerManager.notebook.SetSelectionByName('console')
+        self._layerManager.notebook.SetSelectionByName('output')
         
         dist, (north, east) = self.MapWindow.Distance(beginpt, endpt)
         
