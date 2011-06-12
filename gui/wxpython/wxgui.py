@@ -302,9 +302,9 @@ class GMFrame(wx.Frame):
         
     def OnSettingsChanged(self, event):
         """!Here can be functions which have to be called after EVT_SETTINGS_CHANGED. 
-        Now recreates menu and set copying of selected text to clipboard (in goutput).
+        Now only set copying of selected text to clipboard (in goutput).
         """
-        self._createMenuBar()
+        ### self._createMenuBar() # bug when menu is re-created on the fly
         self._setCopyingOfSelectedText()
         
     def OnGCPManager(self, event):

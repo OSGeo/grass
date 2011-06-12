@@ -1288,7 +1288,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         gridSizer.AddGrowableCol(0)
 
         #
-        # menu style
+        # element list
         #
         row = 0
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
@@ -1309,9 +1309,12 @@ class PreferencesDialog(PreferencesBaseDialog):
                       wx.ALIGN_CENTER_VERTICAL,
                       pos = (row, 1))
         
+        #
+        # menu style
+        #
         row += 1
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                         label = _("Menu style:")),
+                                           label = _("Menu style (requires GUI restart):")),
                       flag = wx.ALIGN_LEFT |
                       wx.ALIGN_CENTER_VERTICAL,
                       pos = (row, 0))
@@ -1359,10 +1362,10 @@ class PreferencesDialog(PreferencesBaseDialog):
         #
         row += 1
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                         label = _("Icon theme:")),
-                       flag = wx.ALIGN_LEFT |
-                       wx.ALIGN_CENTER_VERTICAL,
-                       pos = (row, 0))
+                                           label = _("Icon theme (requires GUI restart):")),
+                      flag = wx.ALIGN_LEFT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos = (row, 0))
         iconTheme = wx.Choice(parent = panel, id = wx.ID_ANY, size = (100, -1),
                               choices = self.settings.Get(group = 'appearance', key = 'iconTheme',
                                                         subkey = 'choices', internal = True),
@@ -1375,14 +1378,6 @@ class PreferencesDialog(PreferencesBaseDialog):
                       wx.ALIGN_CENTER_VERTICAL,
                       pos = (row, 1))
         
-        row += 1
-        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                         label = _("Note: For changing the icon theme, "
-                                                 "you must save the settings and restart this GUI.")),
-                      flag = wx.ALIGN_CENTER_VERTICAL,
-                      pos = (row, 0), span = (1, 2))
-                              
-
         sizer.Add(item = gridSizer, proportion = 1, flag = wx.ALL | wx.EXPAND, border = 5)
         border.Add(item = sizer, proportion = 0, flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 3)
         
@@ -1392,9 +1387,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         outfontButton.Bind(wx.EVT_BUTTON, self.OnSetOutputFont)
         
         return panel
-
-
-
+    
     def _createDisplayPage(self, notebook):
         """!Create notebook page for display settings"""
    
