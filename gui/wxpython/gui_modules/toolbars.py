@@ -1156,7 +1156,7 @@ class VDigitToolbar(AbstractToolbar):
             lmgr = self.parent.GetLayerManager()
             if lmgr:
                 lmgr.toolbars['tools'].Enable('vdigit', enable = True)
-                lmgr.notebook.SetSelectionByName('console')
+                lmgr.notebook.SetSelectionByName('output')
             self.digit.CloseMap()
             if lmgr:
                 lmgr.GetLogWindow().GetProgressBar().SetValue(0)
