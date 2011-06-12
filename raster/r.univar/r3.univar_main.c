@@ -77,10 +77,8 @@ void set_params()
 int main(int argc, char *argv[])
 {
 
-    float val_f;		/* for misc use */
-    double val_d;		/* for misc use */
-    int first = TRUE;		/* min/max init flag */
-
+    FCELL val_f;		/* for misc use */
+    DCELL val_d;		/* for misc use */
     int map_type, zmap_type;
     univar_stat *stats;
 
@@ -204,8 +202,14 @@ int main(int argc, char *argv[])
     i = 0;
     while (param.percentile->answers[i])
 	i++;
+ 
+    int n_zones = zone_info.n_zones;
+
+    if (n_zones == 0)
+        n_zones = 1;
+
     stats = create_univar_stat_struct(map_type, i);
-    for (i = 0; i < zone_info.n_zones; i++) {
+    for (i = 0; i < n_zones; i++) {
 	unsigned int j;
 	for (j = 0; j < stats[i].n_perc; j++) {
 	    sscanf(param.percentile->answers[j], "%lf", &(stats[i].perc[j]));
@@ -218,8 +222,10 @@ int main(int argc, char *argv[])
 	for (y = 0; y < rows; y++) {
 	    for (x = 0; x < cols; x++) {
 		zone = 0;
-		if (zone_info.n_zones)
-		    G3d_getValue(zmap, x, y, z, &zone, CELL_TYPE);
+		if (zone_info.n_zones) {
+		    G3d_getValue(zmap, x, y, z, &val_d, DCELL_TYPE);
+                    zone = (int)val_d;
+                }
 		if (map_type == FCELL_TYPE) {
 		    G3d_getValue(map, x, y, z, &val_f, map_type);
 		    if (!G3d_isNullValueNum(&val_f, map_type)) {
@@ -252,6 +258,7 @@ int main(int argc, char *argv[])
 			}
 			stats[zone].n++;
 		    }
+		    stats[zone].size++;
 		}
 		else if (map_type == DCELL_TYPE) {
 		    G3d_getValue(map, x, y, z, &val_d, map_type);
@@ -272,7 +279,7 @@ int main(int argc, char *argv[])
 			stats[zone].sumsq += val_d * val_d;
 			stats[zone].sum_abs += fabs(val_d);
 
-			if (first) {
+			if (stats[zone].first) {
 			    stats[zone].max = val_d;
 			    stats[zone].min = val_d;
 			    stats[zone].first = FALSE;
@@ -285,6 +292,7 @@ int main(int argc, char *argv[])
 			}
 			stats[zone].n++;
 		    }
+		    stats[zone].size++;
 		}
 	    }
 	}
