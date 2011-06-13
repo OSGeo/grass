@@ -27,7 +27,7 @@
 /*- params and global variables -----------------------------------------*/
 typedef struct
 {
-    struct Option *input, *elev, *output, *upper, *lower;
+    struct Option *input, *elev, *output, *upper, *lower, *tilesize;
     struct Flag *fillup, *filllow, *mask;
 } paramType;
 
@@ -166,6 +166,14 @@ void set_params()
     param.lower->required = NO;
     param.lower->description =
 	_("The value to fill the lower cells, default is null");
+
+    param.tilesize = G_define_option();
+    param.tilesize->description = _("The maximum tile size in kilo bytes. Default is 32KB.");
+    param.tilesize->key = "tilesize";
+    param.tilesize->answer = "32";
+    param.tilesize->type = TYPE_INTEGER;
+    param.tilesize->required = NO;
+    param.tilesize->multiple = NO;
 
     param.fillup = G_define_flag();
     param.fillup->key = 'u';
@@ -331,6 +339,7 @@ int main(int argc, char *argv[])
     int cols, rows, i;
     char *name = NULL;
     int changemask = 0;
+    double maxSize;
     Database db;
 
     /*Initiate the database structure */
@@ -360,6 +369,9 @@ int main(int argc, char *argv[])
 
     /*Check if maps exist */
     check_input_maps(&db);
+
+    /* Get the tile size */
+    maxSize = atoi(param.tilesize->answer);
 
     /*Do not use values */
     db.useUpperVal = 0;
@@ -422,9 +434,8 @@ int main(int argc, char *argv[])
 
     /*open G3D output map */
     db.map = NULL;
-    db.map =
-	G3d_openCellNew(param.output->answer, DCELL_TYPE,
-			G3D_USE_CACHE_DEFAULT, &region);
+    db.map = G3d_openNewOptTileSize(param.output->answer, G3D_USE_CACHE_XY, &region, DCELL_TYPE, maxSize);
+
     if (db.map == NULL)
 	fatal_error(db, _("Error opening 3d raster map"));
 
@@ -482,6 +493,9 @@ int main(int argc, char *argv[])
 
     G_debug(2, "Close 3d raster map");
 
+    /* Flush all tile */
+    if (!G3d_flushAllTiles(db.map))
+	G3d_fatalError("Error flushing tiles with G3d_flushAllTiles");
     if (!G3d_closeCell(db.map))
 	G3d_fatalError(_("Error closing 3d raster map"));
 

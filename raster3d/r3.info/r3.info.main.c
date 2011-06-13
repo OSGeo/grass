@@ -214,8 +214,8 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Cannot allocate memory for string"));
 
 	if (G_asprintf(&line, "  Data Type:    %s",
-		       (data_type == FCELL_TYPE ? "float" :
-			(data_type == DCELL_TYPE ? "double" : "??"))) > 0)
+		       (data_type == FCELL_TYPE ? "FCELL" :
+			(data_type == DCELL_TYPE ? "DCELL" : "??"))) > 0)
 	    printline(line);
 	else
 	    G_fatal_error(_("Cannot allocate memory for string"));
@@ -243,6 +243,60 @@ int main(int argc, char *argv[])
 		printline(line);
 	    else
 		G_fatal_error(_("Cannot allocate memory for string"));
+
+            double totalSize = 0;
+            for(i = 0; i < ((G3D_Map* )g3map)->nTiles; i++)
+                totalSize += ((G3D_Map* )g3map)->tileLength[i];
+
+	    if (G_asprintf(&line, "  Total size:           %ld Bytes",
+                (long)(totalSize)) > 0)
+		printline(line);
+	    else
+		G_fatal_error(_("Cannot allocate memory for string"));
+
+	    if (G_asprintf(&line, "  Number of tiles:      %ld",
+                ((G3D_Map* )g3map)->nTiles) > 0)
+		printline(line);
+	    else
+		G_fatal_error(_("Cannot allocate memory for string"));
+
+	    if (G_asprintf(&line, "  Mean tile size:       %ld Bytes",
+                (long)(totalSize/((G3D_Map* )g3map)->nTiles)) > 0)
+		printline(line);
+	    else
+		G_fatal_error(_("Cannot allocate memory for string"));
+
+            int tileSize = 0;
+
+            if(data_type == FCELL_TYPE)
+                tileSize = sizeof(FCELL) * ((G3D_Map* )g3map)->tileX * ((G3D_Map* )g3map)->tileY *
+                        ((G3D_Map* )g3map)->tileZ;
+
+            if(data_type == DCELL_TYPE)
+                tileSize = sizeof(DCELL) * ((G3D_Map* )g3map)->tileX * ((G3D_Map* )g3map)->tileY *
+                        ((G3D_Map* )g3map)->tileZ;
+
+	    if (G_asprintf(&line, "  Tile size in memory:  %ld Bytes",
+                (long)(tileSize)) > 0)
+		printline(line);
+	    else
+		G_fatal_error(_("Cannot allocate memory for string"));
+
+	    if (G_asprintf(&line, "  Number of tiles in x, y and  z:   %d, %d, %d",
+                                  ((G3D_Map* )g3map)->nx, ((G3D_Map* )g3map)->ny,
+                                  ((G3D_Map* )g3map)->nz) > 0)
+		printline(line);
+	    else
+		G_fatal_error(_("Cannot allocate memory for string"));
+
+	    if (G_asprintf(&line, "  Dimension of a tile in x, y, z:   %d, %d, %d",
+                                  ((G3D_Map* )g3map)->tileX, ((G3D_Map* )g3map)->tileY,
+                                  ((G3D_Map* )g3map)->tileZ) > 0)
+		printline(line);
+	    else
+		G_fatal_error(_("Cannot allocate memory for string"));
+
+            printline("");
 
 	    if (G_asprintf
 		(&line, "       Projection: %s (zone %d)",
@@ -379,8 +433,8 @@ int main(int argc, char *argv[])
 	}			/*Datatype */
 	else if (tflag->answer) {
 	    fprintf(out, "datatype=\"%s\"\n",
-		    data_type == FCELL_TYPE ? "float" :
-		    data_type == DCELL_TYPE ? "double" :
+		    data_type == FCELL_TYPE ? "FCELL" :
+		    data_type == DCELL_TYPE ? "DCELL" :
 		    "??");
 
 	}			/*History output */

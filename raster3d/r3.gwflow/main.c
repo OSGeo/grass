@@ -364,7 +364,7 @@ write_result(N_array_3d * status, N_array_3d * phead_start,
     depths = region->depths;
 
     /*Open the new map */
-    map = G3d_openCellNew(name, DCELL_TYPE, G3D_USE_CACHE_DEFAULT, region);
+    map = G3d_openNewOptTileSize(name, G3D_USE_CACHE_XY, region, DCELL_TYPE, 32);
 
     if (map == NULL)
 	G3d_fatalError(_("Error opening g3d map <%s>"), name);
@@ -412,6 +412,9 @@ write_result(N_array_3d * status, N_array_3d * phead_start,
 		G3d_maskOff(map);
     }
 
+    /* Flush all tile */
+    if (!G3d_flushAllTiles(map))
+	G3d_fatalError("Error flushing tiles with G3d_flushAllTiles");
     if (!G3d_closeCell(map))
 	G3d_fatalError(map, NULL, 0, _("Error closing g3d file"));
 

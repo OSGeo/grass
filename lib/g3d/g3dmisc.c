@@ -83,9 +83,9 @@ int G3d_length(int t)
 	G3d_fatalError("G3d_length: invalid type");
 
     if (t == FCELL_TYPE)
-	return sizeof(float);
+	return sizeof(FCELL);
     if (t == DCELL_TYPE)
-	return sizeof(double);
+	return sizeof(DCELL);
     return 0;
 }
 
