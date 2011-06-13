@@ -76,8 +76,6 @@ void set_params()
 /* *************************************************************** */
 int main(int argc, char *argv[])
 {
-
-    CELL val_c;			/* for misc use */
     FCELL val_f;		/* for misc use */
     DCELL val_d;		/* for misc use */
     int map_type, zmap_type;
@@ -92,7 +90,6 @@ int main(int argc, char *argv[])
     double dmin, dmax;
     int zone, n_zones, use_zone = 0;
     char *mapset, *name;
-    struct FPRange zone_range;
 
     struct GModule *module;
 
@@ -158,14 +155,13 @@ int main(int argc, char *argv[])
 
 	zmap_type = G3d_tileTypeMap(zmap);
 	
-	if (zmap_type != CELL_TYPE)
-	    G_fatal_error("Zoning raster must be of type CELL");
-
-	if (G3d_readRange(zonemap, mapset, &zone_range) == -1)
-	    G_fatal_error("Can not read range for zoning raster");
-	G3d_range_min_max(zmap, &dmin, &dmax);
 	if (G3d_readCats(zonemap, mapset, &(zone_info.cats)))
 	    G_warning("no category support for zoning raster");
+	    
+	G3d_range_init(zmap);
+	if (!G3d_range_load(zmap))
+	    G_fatal_error(_("Unable it load G3d range"));
+	G3d_range_min_max(zmap, &dmin, &dmax);
 
 	/* properly round dmin and dmax */
 	if (dmin < 0)
@@ -176,7 +172,8 @@ int main(int argc, char *argv[])
 	    zone_info.max = dmax - 0.5;
 	else
 	    zone_info.max = dmax + 0.5;
-	    
+
+	G_debug(0, "min: %d, max: %d", zone_info.min, zone_info.max);
 	zone_info.n_zones = zone_info.max - zone_info.min + 1;
 
 	use_zone = 1;
@@ -202,6 +199,7 @@ int main(int argc, char *argv[])
 	i++;
  
     n_zones = zone_info.n_zones;
+    G_debug(0, "%d zones", n_zones);
 
     if (n_zones == 0)
         n_zones = 1;
@@ -221,46 +219,16 @@ int main(int argc, char *argv[])
 	    for (x = 0; x < cols; x++) {
 		zone = 0;
 		if (zone_info.n_zones) {
-		    G3d_getValue(zmap, x, y, z, &zone, CELL_TYPE);
-		    if (G3d_isNullValueNum(&zone, CELL_TYPE))
+		    G3d_getValue(zmap, x, y, z, &val_d, DCELL_TYPE);
+		    if (G3d_isNullValueNum(&val_d, DCELL_TYPE))
 			continue;
+		    if (val_d < 0)
+			zone = val_d - 0.5;
+		    else
+			zone = val_d + 0.5;
                     zone -= zone_info.min;
                 }
-		if (map_type == CELL_TYPE) {
-		    G3d_getValue(map, x, y, z, &val_c, map_type);
-		    if (!G3d_isNullValueNum(&val_c, map_type)) {
-			if (param.extended->answer) {
-			    if (stats[zone].n >= stats[zone].n_alloc) {
-				size_t msize;
-				stats[zone].n_alloc += 1000;
-				msize = stats[zone].n_alloc * sizeof(CELL);
-				stats[zone].cell_array =
-				    (CELL *)G_realloc((void *)stats[zone].cell_array, msize);
-			    }
-
-			    stats[zone].cell_array[stats[zone].n] = val_c;
-			}
-
-			stats[zone].sum += val_c;
-			stats[zone].sumsq += (val_c * val_c);
-			stats[zone].sum_abs += fabs(val_c);
-
-			if (stats[zone].first) {
-			    stats[zone].max = val_c;
-			    stats[zone].min = val_c;
-			    stats[zone].first = FALSE;
-			}
-			else {
-			    if (val_c > stats[zone].max)
-				stats[zone].max = val_c;
-			    if (val_c < stats[zone].min)
-				stats[zone].min = val_c;
-			}
-			stats[zone].n++;
-		    }
-		    stats[zone].size++;
-		}
-		else if (map_type == FCELL_TYPE) {
+		if (map_type == FCELL_TYPE) {
 		    G3d_getValue(map, x, y, z, &val_f, map_type);
 		    if (!G3d_isNullValueNum(&val_f, map_type)) {
 			if (param.extended->answer) {
