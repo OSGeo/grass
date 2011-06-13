@@ -77,6 +77,7 @@ void set_params()
 int main(int argc, char *argv[])
 {
 
+    CELL val_c;			/* for misc use */
     FCELL val_f;		/* for misc use */
     DCELL val_d;		/* for misc use */
     int map_type, zmap_type;
@@ -89,7 +90,7 @@ int main(int argc, char *argv[])
     unsigned int rows, cols, depths;
     unsigned int x, y, z;
     double dmin, dmax;
-    int zone, use_zone = 0;
+    int zone, n_zones, use_zone = 0;
     char *mapset, *name;
     struct FPRange zone_range;
 
@@ -155,9 +156,6 @@ int main(int argc, char *argv[])
 	if (zmap == NULL)
 	    G3d_fatalError(_("Error opening g3d map <%s>"), zonemap);
 
-	if (G3d_tileTypeMap(zmap) != CELL_TYPE)
-	    G_fatal_error("Zoning raster must be of type CELL");
-
 	zmap_type = G3d_tileTypeMap(zmap);
 	
 	if (zmap_type != CELL_TYPE)
@@ -203,7 +201,7 @@ int main(int argc, char *argv[])
     while (param.percentile->answers[i])
 	i++;
  
-    int n_zones = zone_info.n_zones;
+    n_zones = zone_info.n_zones;
 
     if (n_zones == 0)
         n_zones = 1;
@@ -223,10 +221,46 @@ int main(int argc, char *argv[])
 	    for (x = 0; x < cols; x++) {
 		zone = 0;
 		if (zone_info.n_zones) {
-		    G3d_getValue(zmap, x, y, z, &val_d, DCELL_TYPE);
-                    zone = (int)val_d;
+		    G3d_getValue(zmap, x, y, z, &zone, CELL_TYPE);
+		    if (G3d_isNullValueNum(&zone, CELL_TYPE))
+			continue;
+                    zone -= zone_info.min;
                 }
-		if (map_type == FCELL_TYPE) {
+		if (map_type == CELL_TYPE) {
+		    G3d_getValue(map, x, y, z, &val_c, map_type);
+		    if (!G3d_isNullValueNum(&val_c, map_type)) {
+			if (param.extended->answer) {
+			    if (stats[zone].n >= stats[zone].n_alloc) {
+				size_t msize;
+				stats[zone].n_alloc += 1000;
+				msize = stats[zone].n_alloc * sizeof(CELL);
+				stats[zone].cell_array =
+				    (CELL *)G_realloc((void *)stats[zone].cell_array, msize);
+			    }
+
+			    stats[zone].cell_array[stats[zone].n] = val_c;
+			}
+
+			stats[zone].sum += val_c;
+			stats[zone].sumsq += (val_c * val_c);
+			stats[zone].sum_abs += fabs(val_c);
+
+			if (stats[zone].first) {
+			    stats[zone].max = val_c;
+			    stats[zone].min = val_c;
+			    stats[zone].first = FALSE;
+			}
+			else {
+			    if (val_c > stats[zone].max)
+				stats[zone].max = val_c;
+			    if (val_c < stats[zone].min)
+				stats[zone].min = val_c;
+			}
+			stats[zone].n++;
+		    }
+		    stats[zone].size++;
+		}
+		else if (map_type == FCELL_TYPE) {
 		    G3d_getValue(map, x, y, z, &val_f, map_type);
 		    if (!G3d_isNullValueNum(&val_f, map_type)) {
 			if (param.extended->answer) {
