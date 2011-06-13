@@ -278,6 +278,9 @@ def set_paths():
     addon_path = os.getenv('GRASS_ADDON_PATH')
     if addon_path:
 	path_prepend(addon_path, 'PATH')
+        path_prepend(os.path.join(addon_path, 'scripts'), 'PATH')
+        path_prepend(os.path.join(addon_path, 'bin'), 'PATH')
+    
     path_prepend(gfile('scripts'), 'PATH')
     path_prepend(gfile('bin'), 'PATH')
     
