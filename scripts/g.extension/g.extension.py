@@ -332,14 +332,16 @@ def install_extension():
         html_dir = os.path.join(docs_dir, 'html')
         man_dir  = os.path.join(tmpdir, options['extension'], 'man')
         man1_dir = os.path.join(man_dir, 'man1')
-        for d in (bin_dir, docs_dir, html_dir, man_dir, man1_dir):
+        script_dir = os.path.join(tmpdir, options['extension'], 'scripts')
+        for d in (bin_dir, docs_dir, html_dir, man_dir, man1_dir, script_dir):
             os.mkdir(d)
-    
+        
         ret = grass.call(['make',
                           'MODULE_TOPDIR=%s' % gisbase.replace(' ', '\ '),
                           'BIN=%s' % bin_dir,
                           'HTMLDIR=%s' % html_dir,
-                          'MANDIR=%s' % man1_dir],
+                          'MANDIR=%s' % man1_dir,
+                          'SCRIPTDIR=%s' % script_dir],
                          stdout = outdev)
     else:
         ret = grass.call(['make',
@@ -394,6 +396,7 @@ def check_dirs():
     create_dir(os.path.join(options['prefix'], 'bin'))
     create_dir(os.path.join(options['prefix'], 'docs', 'html'))
     create_dir(os.path.join(options['prefix'], 'man', 'man1'))
+    create_dir(os.path.join(options['prefix'], 'scripts'))
 
 def main():
     # check dependecies
@@ -415,6 +418,8 @@ def main():
                 not os.environ['GRASS_ADDON_PATH']:
             grass.warning(_("GRASS_ADDON_PATH is not defined, installing to ~/.grass7/addons/"))
             options['prefix'] = os.path.join(os.environ['HOME'], '.grass7', 'addons')
+        else:
+            options['prefix'] = os.environ['GRASS_ADDON_PATH']
     
     # check dirs
     check_dirs()
