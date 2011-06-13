@@ -368,3 +368,93 @@ G3d_location2coord(G3D_Map * map, double north, double east, double top,
 				       map->region.bottom) *
 	(map->region.depths - 1);
 }
+
+/*---------------------------------------------------------------------------*/
+
+
+/*!
+ * \brief Compute the optimal tile size.
+ *
+ * This function computes tile sizes with an optimal ratio between tile dimensions and
+ * minimized border tile overlapping.
+ * Large dimensions will be reduced mor often than small dimensions to
+ * fit the maxSize criteria.
+ *
+ *  \param region The region of the map
+ *  \param type The type of the map (FCELL_TYPE or DCELL_TYPE)
+ *  \param tileX Pointer of the tile size in x direction for result storage
+ *  \param tileY Pointer of the tile size in y direction for result storage
+ *  \param tileZ Pointer of the tile size in z direction for result storage
+ *  \param maxSize The max size of the tile in kilo bytes
+ *  \return void
+ */
+
+void
+G3d_computeOptimalTileDimension(G3D_Region *region, int type, int *tileX, int *tileY, int *tileZ, int maxSize)
+{
+   int size = 0;
+   int x, y, z;
+   int i = 0;
+   int tileSize;
+   int divx = 2;
+   int divy = 2;
+   int divz = 2;
+
+   if(type == FCELL_TYPE)
+      size = sizeof(FCELL);
+
+   if(type == DCELL_TYPE)
+      size = sizeof(DCELL);
+   
+   x = region->cols;
+   y = region->rows;
+   z = region->depths;
+
+   while(1) {
+       tileSize = size * x * y * z;
+
+       /*
+       printf("Tilesize %i x %i y %i z %i\n", tileSize, x, y, z);
+       */
+
+       if(tileSize <= maxSize * 1024)
+          break;
+
+       /* Compute weighted tile sizes. Take care that the tile size is computed based on
+          the dimension ratio and reduce the border tile overlapping. 
+          In case one dimension is much larger than the other, reduce 
+          the large dimension by a factor till the maxSize is reached or the 
+          the other dimensions are only factor 2 smaller.*/
+       if((y / x) <= 2 && (z / x) <= 2) {
+           if(region->cols % divx != 0)
+               x = region->cols / divx + 1;
+           else
+               x = region->cols / divx;
+           divx += 1;
+       }
+       if((x / y) <= 2 && (z / y) <= 2) {
+           if(region->rows % divy != 0)
+               y = region->rows / divy + 1;
+           else
+               y = region->rows / divy;
+           divy += 1;
+       }
+       if((x / z) <= 2 && (y / z) <= 2) {
+           if(region->depths % divz != 0)
+               z = region->depths / divz + 1;
+           else
+               z = region->depths / divz;
+           divz += 1;
+       }
+
+       i++;
+       if(i > 10000)
+         break;
+   }
+
+   *tileX = x;
+   *tileY = y;
+   *tileZ = z;
+}
+
+

@@ -580,9 +580,7 @@ int open_output_map(const char *name, int res_type)
 
     G3d_setFileType(res_type == FCELL_TYPE ? FCELL_TYPE : DCELL_TYPE);
 
-    handle = G3d_openCellNew((char *)name,
-			     res_type == FCELL_TYPE ? FCELL_TYPE : DCELL_TYPE,
-			     G3D_USE_CACHE_DEFAULT, &current_region3);
+    handle = G3d_openNewOptTileSize((char *)name, G3D_USE_CACHE_XYZ, &current_region3, res_type == FCELL_TYPE ? FCELL_TYPE : DCELL_TYPE, 32);
 
     if (!handle)
 	G_fatal_error(_("Unable to create raster map <%s>"), name);

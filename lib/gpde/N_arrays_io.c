@@ -394,7 +394,6 @@ void N_write_array_3d_to_rast3d(N_array_3d * array, char *name, int mask)
     /*get the current region */
     G3d_getWindow(&region);
 
-
     cols = region.cols;
     rows = region.rows;
     depths = region.depths;
@@ -413,11 +412,9 @@ void N_write_array_3d_to_rast3d(N_array_3d * array, char *name, int mask)
 
     /*Open the new map */
     if (type == DCELL_TYPE)
-	map =
-	    G3d_openCellNew(name, DCELL_TYPE, G3D_USE_CACHE_DEFAULT, &region);
+        map = G3d_openNewOptTileSize(name, G3D_USE_CACHE_XY, &region, DCELL_TYPE, 32);
     else if (type == FCELL_TYPE)
-	map =
-	    G3d_openCellNew(name, FCELL_TYPE, G3D_USE_CACHE_DEFAULT, &region);
+        map = G3d_openNewOptTileSize(name, G3D_USE_CACHE_XY, &region, FCELL_TYPE, 32);
 
     if (map == NULL)
 	G3d_fatalError(_("Error opening g3d map <%s>"), name);
@@ -459,6 +456,9 @@ void N_write_array_3d_to_rast3d(N_array_3d * array, char *name, int mask)
 		G3d_maskOff(map);
     }
 
+    /* Flush all tile */
+    if (!G3d_flushAllTiles(map))
+	G3d_fatalError("Error flushing tiles with G3d_flushAllTiles");
     /* Close files and exit */
     if (!G3d_closeCell(map))
 	G3d_fatalError(map, NULL, 0, _("Error closing g3d file"));

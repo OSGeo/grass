@@ -420,6 +420,7 @@ void *G3d_openNewParam(const char *, int , int, G3D_Region *, int, int, int, int
 void *G3d_openCellOldNoHeader(const char *, const char *);
 void *G3d_openCellOld(const char *, const char *, G3D_Region *, int, int);
 void *G3d_openCellNew(const char *, int, int, G3D_Region *);
+void *G3d_openNewOptTileSize(const char *, int , G3D_Region * , int , int );
 
 /* grass/src/libes/g3d/g3dparam.c */
 void G3d_setStandard3dInputParams(void);
@@ -539,6 +540,7 @@ double G3d_getDoubleRegion(G3D_Map *, int, int, int);
 void G3d_getValueRegion(G3D_Map *, int, int, int, void *, int);
 
 /* grass/src/libes/g3d/tilemath.c */
+void G3d_computeOptimalTileDimension(G3D_Region *, int, int *, int *, int *, int);
 void G3d_tileIndex2tile(G3D_Map *, int, int *, int *, int *);
 int G3d_tile2tileIndex(G3D_Map *, int, int, int);
 void G3d_tileCoordOrigin(G3D_Map *, int, int, int, int *, int *, int *);

@@ -27,7 +27,7 @@
 /*- params and global variables -----------------------------------------*/
 typedef struct
 {
-    struct Option *input, *output;
+    struct Option *input, *output, *tilesize;
     struct Flag *mask;
 } paramType;
 
@@ -78,6 +78,14 @@ void set_params()
     param.input->description = _("2d raster maps which represent the slices");
 
     param.output = G_define_standard_option(G_OPT_R3_OUTPUT);
+
+    param.tilesize = G_define_option();
+    param.tilesize->description = _("The maximum tile size in kilo bytes. Default is 32KB.");
+    param.tilesize->key = "tilesize";
+    param.tilesize->answer = "32";
+    param.tilesize->type = TYPE_INTEGER;
+    param.tilesize->required = NO;
+    param.tilesize->multiple = NO;
 
     param.mask = G_define_flag();
     param.mask->key = 'm';
@@ -185,6 +193,7 @@ int main(int argc, char *argv[])
     char *name;
     int changemask = 0;
     int maptype_tmp, nofile = 0;
+    int maxSize;
 
     /* Initialize GRASS */
     G_gisinit(argv[0]);
@@ -207,6 +216,9 @@ int main(int argc, char *argv[])
     /*Check for output */
     if (param.output->answer == NULL)
 	G3d_fatalError(_("No output map"));
+
+    /* Get the tile size */
+    maxSize = atoi(param.tilesize->answer);
 
     /* Figure out the region from the map */
     G3d_initDefaults();
@@ -272,25 +284,13 @@ int main(int argc, char *argv[])
     G_message(_("Creating 3D raster map"));
     map = NULL;
 
-
-    if (globalRastMapType == CELL_TYPE) {
-	map =
-	    G3d_openCellNew(param.output->answer, DCELL_TYPE,
-			    G3D_USE_CACHE_DEFAULT, &region);
+    /* Set the map type depending from the arster maps type */
+    if (globalRastMapType == CELL_TYPE) 
 	globalG3dMapType = DCELL_TYPE;
-    }
-    else if (globalRastMapType == FCELL_TYPE) {
-	map =
-	    G3d_openCellNew(param.output->answer, FCELL_TYPE,
-			    G3D_USE_CACHE_DEFAULT, &region);
+    else 
 	globalG3dMapType = FCELL_TYPE;
-    }
-    else if (globalRastMapType == DCELL_TYPE) {
-	map =
-	    G3d_openCellNew(param.output->answer, DCELL_TYPE,
-			    G3D_USE_CACHE_DEFAULT, &region);
-	globalG3dMapType = DCELL_TYPE;
-    }
+
+    map = G3d_openNewOptTileSize(param.output->answer, G3D_USE_CACHE_XY, &region, globalG3dMapType, maxSize);
 
     if (map == NULL)
 	fatal_error(map, fd, opencells, _("Error opening 3d raster map"));
@@ -323,6 +323,9 @@ int main(int argc, char *argv[])
     if (fd)
 	G_free(fd);
 
+    /* Flush all tile */
+    if (!G3d_flushAllTiles(map))
+	G3d_fatalError("Error flushing tiles with G3d_flushAllTiles");
     /* Close files and exit */
     if (!G3d_closeCell(map))
 	G3d_fatalError(_("Error closing 3d raster map"));
