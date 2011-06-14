@@ -9,7 +9,7 @@
  * PURPOSE:      Lists available GRASS data base files of the
  *               user-specified data type to standard output
  *
- * COPYRIGHT:    (C) 1999-2010 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("list"));
     module->description =
 	_("Lists available GRASS data base files "
-	  "of the user-specified data type to standard output.");
+	  "of the user-specified data type optionally using the search pattern.");
 
     M_read_list(FALSE, &nlist);
 
@@ -79,6 +79,7 @@ int main(int argc, char *argv[])
     opt.pattern->required = NO;
     opt.pattern->multiple = NO;
     opt.pattern->description = _("Map name search pattern (default: all)");
+    opt.pattern->guisection = _("Pattern");
 
     opt.exclude = G_define_option();
     opt.exclude->key = "exclude";
@@ -86,6 +87,7 @@ int main(int argc, char *argv[])
     opt.exclude->required = NO;
     opt.exclude->multiple = NO;
     opt.exclude->description = _("Map name exclusion pattern (default: none)");
+    opt.exclude->guisection = _("Pattern");
 
     opt.mapset = G_define_standard_option(G_OPT_M_MAPSET);
     opt.mapset->label =
@@ -98,27 +100,33 @@ int main(int argc, char *argv[])
     flag.regex->key = 'r';
     flag.regex->description =
 	_("Use basic regular expressions instead of wildcards");
+    flag.regex->guisection = _("Pattern");
 
     flag.extended = G_define_flag();
     flag.extended->key = 'e';
     flag.extended->description =
 	_("Use extended regular expressions instead of wildcards");
+    flag.extended->guisection = _("Pattern");
 
     flag.type = G_define_flag();
     flag.type->key = 't';
     flag.type->description = _("Print data types");
-
+    flag.type->guisection = _("Print");
+    
     flag.mapset = G_define_flag();
     flag.mapset->key = 'm';
-    flag.mapset->description = _("Print mapset names");
+    flag.mapset->description = _("Print fully-qualified map names (including mapsets)");
+    flag.mapset->guisection = _("Print");
 
     flag.pretty = G_define_flag();
     flag.pretty->key = 'p';
     flag.pretty->description = _("Pretty printing in human readable format");
+    flag.pretty->guisection = _("Print");
 
     flag.full = G_define_flag();
     flag.full->key = 'f';
     flag.full->description = _("Verbose listing (also list map titles)");
+    flag.full->guisection = _("Print");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
