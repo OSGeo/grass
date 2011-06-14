@@ -1579,17 +1579,26 @@ class GMApp(wx.App):
         
         wx.Yield()
         
+        ### TODO: adjust initial window layout if necessary
         w, h = wx.GetDisplaySize()
-        if globalvar.MAP_WINDOW_SIZE[0] + globalvar.GM_WINDOW_SIZE[0] > w:
-            gmX = w - globalvar.GM_WINDOW_SIZE[0]
-            dim = '%d,0,%d,%d,0,0,%d,%d' % \
-                (gmX,
-                 globalvar.GM_WINDOW_SIZE[0],
-                 globalvar.GM_WINDOW_SIZE[1],
-                 globalvar.MAP_WINDOW_SIZE[0],
-                 globalvar.MAP_WINDOW_SIZE[1])
-            UserSettings.Set(group = 'general', key = 'defWindowPos',
-                             subkey = 'dim', value = dim)
+        # only neccessary if one of the windows is falling out of
+        # the current display size
+        
+        # check if settings file exists
+        # if settings file exists, check if we should use the stored settings
+        #     if we should use stored settings, use stored settings
+        #     else use default settings
+        # else if settings file does not exist, use default settings
+        # check if any of the windows is falling out of the current display
+        # if yes, pull it in
+        #   falling out to the right
+        #   x pos = display width - window width
+        #   falling out to the bottom
+        #   y pos = 0
+        # update settings
+        # if settings file exists, update settings but keep settings for
+        # additional map display windows, or update them too
+        # do not erase settings for additional map display windows !
         
         # create and show main frame
         mainframe = GMFrame(parent = None, id = wx.ID_ANY,
