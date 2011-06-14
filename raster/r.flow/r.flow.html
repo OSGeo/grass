@@ -3,12 +3,12 @@
 This program generates flowlines using a combined raster-vector
 approach (see <a href="http://skagit.meas.ncsu.edu/~helena/gmslab/papers/hmg.rev1.ps">Mitasova and
 Hofierka 1993</a> and <a href="http://skagit.meas.ncsu.edu/~helena/gmslab/papers/ijgis.html">Mitasova et
-al. 1995</a>) from an input elevation raster map <b>elevin</b>
+al. 1995</a>) from an input elevation raster map <b>elevation</b>
 (integer or floating point), and optionally an input aspect raster map
-<b>aspin</b> and/or an input barrier raster map <b>barin</b>. There are
+<b>aspect</b> and/or an input barrier raster map <b>barrier</b>. There are
 three possible output maps which can be produced in any combination
-simultaneously: a vector map <b>flout</b> of flowlines, a raster map
-<b>lgout</b> of flowpath lengths, and a raster map <b>dsout</b> of flowline
+simultaneously: a vector map <b>flowline</b> of flowlines, a raster map
+<b>flowlength</b> of flowpath lengths, and a raster map <b>flowaccumulation</b> of flowline
 densities (which are equal upslope contributed areas per unit width, when
 multiplied by resolution).
 <p>
@@ -18,7 +18,7 @@ in other GRASS programs (see <a href="v.surf.rst.html">v.surf.rst</a>
 or <a href="r.slope.aspect.html">r.slope.aspect</a>).
 <p>
 
-Flowline output is given in a vector map <b>flout</b>, (flowlines generated
+Flowline output is given in a vector map <b>flowline</b>, (flowlines generated
 downhill). The line segments of flowline vectors have endpoints on edges
 of a grid formed by drawing imaginary lines through the centers of the
 cells in the elevation map. Flowlines are generated from each cell downhill
@@ -26,19 +26,19 @@ by default; they can be generated uphill using the flag <b>-u</b>. A flowline
 stops if its next segment would reverse the direction of flow (from up
 to down or vice-versa), cross a barrier, or arrive at a cell with undefined
 elevation or aspect. Another option, <b>skip</b>=val, indicates that only
-the flowlines from every val-th cell are to be included in <b>flout</b>.
-The default <b>skip</b> is max(1,&nbsp;&lt;rows in elevin&gt;/50,&nbsp;&lt;cols in elevin&gt;/50).
+the flowlines from every val-th cell are to be included in <b>flowline</b>.
+The default <b>skip</b> is max(1,&nbsp;&lt;rows in elevation&gt;/50,&nbsp;&lt;cols in elevation&gt;/50).
 A high <b>skip</b> usually speeds up processing time and often improves
-the readability of a visualization of <b>flout</b>.
+the readability of a visualization of <b>flowline</b>.
 <p>
 
-Flowpath length output is given in a raster map <b>lgout</b>. The value
+Flowpath length output is given in a raster map <b>flowlength</b>. The value
 in each grid cell is the sum of the planar lengths of all segments of the
 flowline generated from that cell. If the flag <b>-3</b> is given, elevation
 is taken into account in calculating the length of each segment.
 
 <p>Flowline density downhill or uphill output is given in a raster map
-<b>dsout.</b> The value in each grid cell is the number of flowlines which
+<b>flowaccumulation.</b> The value in each grid cell is the number of flowlines which
 pass through that grid cell, that means the number of flowlines from the
 entire map which have segment endpoints within that cell.
 
@@ -54,7 +54,7 @@ is the only way to handle arbitrarily-large data files. If this flag is
 given, the <b>-m</b> flag will be ignored.
 -->
 
-The <b>barin</b> parameter is a raster map name with non-zero
+The <b>barrier</b> parameter is a raster map name with non-zero
 values representing barriers as input.
 
 
@@ -98,7 +98,7 @@ unless a DEM without pits or flat areas is available
 
 <h3>Algorithm background</h3> 
 
-<p>1. Construction of flow-lines (slope-lines): <em>r.flow</em> uses an original
+<p>1. Construction of flowlines (slopelines): <em>r.flow</em> uses an original
 vector-grid algorithm which uses an infinite number of directions between
 0.0000... and 360.0000...  and traces the flow as a line (vector) in the
 direction of gradient (rather than from cell to cell in one of the 8
