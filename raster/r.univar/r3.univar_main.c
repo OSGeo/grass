@@ -173,7 +173,7 @@ int main(int argc, char *argv[])
 	else
 	    zone_info.max = dmax + 0.5;
 
-	G_debug(0, "min: %d, max: %d", zone_info.min, zone_info.max);
+	G_debug(1, "min: %d, max: %d", zone_info.min, zone_info.max);
 	zone_info.n_zones = zone_info.max - zone_info.min + 1;
 
 	use_zone = 1;
@@ -199,7 +199,6 @@ int main(int argc, char *argv[])
 	i++;
  
     n_zones = zone_info.n_zones;
-    G_debug(0, "%d zones", n_zones);
 
     if (n_zones == 0)
         n_zones = 1;
@@ -219,13 +218,24 @@ int main(int argc, char *argv[])
 	    for (x = 0; x < cols; x++) {
 		zone = 0;
 		if (zone_info.n_zones) {
-		    G3d_getValue(zmap, x, y, z, &val_d, DCELL_TYPE);
-		    if (G3d_isNullValueNum(&val_d, DCELL_TYPE))
-			continue;
-		    if (val_d < 0)
-			zone = val_d - 0.5;
-		    else
-			zone = val_d + 0.5;
+		    if (zmap_type == FCELL_TYPE) {
+			G3d_getValue(zmap, x, y, z, &val_f, FCELL_TYPE);
+			if (G3d_isNullValueNum(&val_f, FCELL_TYPE))
+			    continue;
+			if (val_f < 0)
+			    zone = val_f - 0.5;
+			else
+			    zone = val_f + 0.5;
+		    }
+		    else if (zmap_type == DCELL_TYPE) {
+			G3d_getValue(zmap, x, y, z, &val_d, DCELL_TYPE);
+			if (G3d_isNullValueNum(&val_d, DCELL_TYPE))
+			    continue;
+			if (val_d < 0)
+			    zone = val_d - 0.5;
+			else
+			    zone = val_d + 0.5;
+		    }
                     zone -= zone_info.min;
                 }
 		if (map_type == FCELL_TYPE) {
