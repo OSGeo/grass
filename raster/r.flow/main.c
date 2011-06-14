@@ -54,7 +54,7 @@ struct Map_info fl;		/* output vector file header            */
 struct BM *bitbar;		/* space-efficient barrier matrix       */
 int lgfd;			/* output length file descriptor        */
 char string[1024];		/* space for strings                    */
-layer el, as, ds;		/* elevation, aspect, density           */
+layer el, as, ds;		/* elevation, aspect, density (accumulation) */
 double *ew_dist;		/* east-west distances for rows         */
 double *epsilon[2];		/* quantization errors for rows         */
 
@@ -420,10 +420,10 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("hydrology"));
-    module->label = _("Constructs flow lines.");
+    module->label = _("Constructs flowlines.");
     module->description =
-	_("Construction of slope curves (flowlines), flowpath lengths, "
-	  "and flowline densities (upslope areas) from a elevation raster "
+	_("Computes flowlines, flowpath lengths, "
+	  "and flowaccumulation (contributing areas) from a elevation raster "
 	  "map.");
 
     pelevin = G_define_standard_option(G_OPT_R_ELEV);
@@ -456,14 +456,14 @@ int main(int argc, char *argv[])
     pflout->description = _("Name for output flowline vector map");
 
     plgout = G_define_standard_option(G_OPT_R_OUTPUT);
-    plgout->key = "flowpath";
+    plgout->key = "flowlength";
     plgout->required = NO;
     plgout->description = _("Name for output flowpath length raster map");
 
     pdsout = G_define_standard_option(G_OPT_R_OUTPUT);
-    pdsout->key = "density";
+    pdsout->key = "flowaccumulation";
     pdsout->required = NO;
-    pdsout->description = _("Name for output flowline density raster map");
+    pdsout->description = _("Name for output flowaccumulation raster map");
 
     fup = G_define_flag();
     fup->key = 'u';
