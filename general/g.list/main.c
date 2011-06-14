@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("map management"));
     G_add_keyword(_("list"));
     module->description =
-	_("Lists available GIS elements "
+	_("Lists available GRASS data base files "
 	  "of the user-specified data type.");
 
     element = G_define_standard_option(G_OPT_M_DATATYPE);
