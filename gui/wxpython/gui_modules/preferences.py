@@ -82,10 +82,10 @@ class Settings:
                 # use default window layout (layer manager, displays, ...)
                 'defWindowPos' : {
                     'enabled' : True,
-                    'dim' : '%d,0,%d,%d,0,0,%d,%d' % \
-                        (globalvar.MAP_WINDOW_SIZE[0] + 5,
-                         globalvar.GM_WINDOW_SIZE[0],
+                    'dim' : '0,0,%d,%d,%d,0,%d,%d' % \
+                        (globalvar.GM_WINDOW_SIZE[0],
                          globalvar.GM_WINDOW_SIZE[1],
+                         globalvar.GM_WINDOW_SIZE[0],
                          globalvar.MAP_WINDOW_SIZE[0],
                          globalvar.MAP_WINDOW_SIZE[1])
                     },
@@ -1094,6 +1094,26 @@ class PreferencesBaseDialog(wx.Dialog):
             else:
                 self.settings.Set(group, value, key, subkey)
         
+        #
+        # update default window dimension
+        #
+        if self.settings.Get(group = 'general', key = 'defWindowPos', subkey = 'enabled') is True:
+            dim = ''
+            # layer manager
+            pos = self.parent.GetPosition()
+            size = self.parent.GetSize()
+            dim = '%d,%d,%d,%d' % (pos[0], pos[1], size[0], size[1])
+            # opened displays
+            for page in range(0, self.parent.gm_cb.GetPageCount()):
+                pos = self.parent.gm_cb.GetPage(page).maptree.mapdisplay.GetPosition()
+                size = self.parent.gm_cb.GetPage(page).maptree.mapdisplay.GetSize()
+
+                dim += ',%d,%d,%d,%d' % (pos[0], pos[1], size[0], size[1])
+
+            self.settings.Set(group = 'general', key = 'defWindowPos', subkey = 'dim', value = dim)
+        else:
+            self.settings.Set(group = 'general', key = 'defWindowPos', subkey = 'dim', value = '')
+
         return True
 
 class PreferencesDialog(PreferencesBaseDialog):
@@ -2090,32 +2110,6 @@ class PreferencesDialog(PreferencesBaseDialog):
         dlg.Destroy()
 
         event.Skip()
-        
-    def _updateSettings(self):
-        """!Update user settings"""
-        PreferencesBaseDialog._updateSettings(self)
-        
-        #
-        # update default window dimension
-        #
-        if self.settings.Get(group = 'general', key = 'defWindowPos', subkey = 'enabled') is True:
-            dim = ''
-            # layer manager
-            pos = self.parent.GetPosition()
-            size = self.parent.GetSize()
-            dim = '%d,%d,%d,%d' % (pos[0], pos[1], size[0], size[1])
-            # opened displays
-            for page in range(0, self.parent.gm_cb.GetPageCount()):
-                pos = self.parent.gm_cb.GetPage(page).maptree.mapdisplay.GetPosition()
-                size = self.parent.gm_cb.GetPage(page).maptree.mapdisplay.GetSize()
-
-                dim += ',%d,%d,%d,%d' % (pos[0], pos[1], size[0], size[1])
-
-            self.settings.Set(group = 'general', key = 'defWindowPos', subkey = 'dim', value = dim)
-        else:
-            self.settings.Set(group = 'general', key = 'defWindowPos', subkey = 'dim', value = '')
-
-        return True
 
 class DefaultFontDialog(wx.Dialog):
     """
