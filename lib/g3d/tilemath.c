@@ -312,67 +312,6 @@ G3d_computeClippedTileDimensions(G3D_Map * map, int tileIndex, int *rows,
 
 
 /*!
- * \brief 
- *
- *  Returns 1 if region-coordinates <em>(north, west, bottom)</em> are
- * inside the region of <em>map</em>. Returns 0 otherwise.
- *
- *  \param map
- *  \param north
- *  \param west
- *  \param bottom
- *  \return int
- */
-
-int G3d_isValidLocation(G3D_Map * map, double north, double east, double top)
-{
-    return ((north >= map->region.south) && (north <= map->region.north) &&
-	    (east >= map->region.west) && (east <= map->region.east) &&
-	    (((top >= map->region.bottom) && (top <= map->region.top)) ||
-	     ((top <= map->region.bottom) && (top >= map->region.top))));
-}
-
-/*---------------------------------------------------------------------------*/
-
-
-/*!
- * \brief 
- *
- *  Converts region-coordinates <em>(north, west,
- * bottom)</em> into cell-coordinates <em>(x, y, z)</em>.
- *
- *  \param map
- *  \param north
- *  \param west
- *  \param bottom
- *  \param x
- *  \param y
- *  \param z
- *  \return void
- */
-
-void
-G3d_location2coord(G3D_Map * map, double north, double east, double top,
-		   int *x, int *y, int *z)
-{
-    if (!G3d_isValidLocation(map, north, east, top))
-	G3d_fatalError("location2coord: location not in region");
-
-    *y = (north - map->region.south) / (map->region.north -
-					map->region.south) *
-	(map->region.rows - 1);
-    *x = (east - map->region.west) / (map->region.east -
-				      map->region.west) * (map->region.cols -
-							   1);
-    *z = (top - map->region.bottom) / (map->region.top -
-				       map->region.bottom) *
-	(map->region.depths - 1);
-}
-
-/*---------------------------------------------------------------------------*/
-
-
-/*!
  * \brief Compute the optimal tile size.
  *
  * This function computes tile sizes with an optimal ratio between tile dimensions and

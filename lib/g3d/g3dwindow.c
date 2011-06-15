@@ -70,142 +70,95 @@ G3D_Region *G3d_windowPtr()
     return &g3d_window;
 }
 
+
 /*---------------------------------------------------------------------------*/
 
 
 /*!
  * \brief 
  *
- * Returns in <em>*value</em> the cell-value of the cell with
- * window-coordinate <em>(x, y, z)</em>.  The value returned is of <em>type</em>.
- * This function invokes a fatal error if an error occurs.
+ *  Returns 1 if window-coordinates <em>(north, west, bottom)</em> are
+ * inside the window of <em>map</em>. Returns 0 otherwise.
  *
  *  \param map
+ *  \param north
+ *  \param east
+ *  \param top
+ *  \return int
+ */
+
+int G3d_isValidLocationWindow(G3D_Map * map, double north, double east, double top)
+{
+    return ((north >= map->window.south) && (north <= map->window.north) &&
+	    (east >= map->window.west) && (east <= map->window.east) &&
+	    (((top >= map->window.bottom) && (top <= map->window.top)) ||
+	     ((top <= map->window.bottom) && (top >= map->window.top))));
+}
+
+/*---------------------------------------------------------------------------*/
+
+
+/*!
+ * \brief 
+ *
+ *  Converts window-coordinates <em>(north, east,
+ *  top)</em> into cell-coordinates <em>(x, y, z)</em>.
+ *
+ *  \param map
+ *  \param north
+ *  \param east
+ *  \param top
  *  \param x
  *  \param y
  *  \param z
- *  \param value
- *  \param type
  *  \return void
  */
 
-void G3d_getValue(G3D_Map * map, int x, int y, int z, void *value, int type)
+void
+G3d_location2WindowCoord(G3D_Map * map, double north, double east, double top,
+		   int *x, int *y, int *z)
 {
-    double north, east, top;
-
-     /*AV*/
-	/* BEGIN OF ORIGINAL CODE */
-	/*
-	   int row, col, depth;
-	 */
-	/* END OF ORIGINAL CODE */
-	 /*AV*/
-	/* BEGIN OF MY CODE */
-    double row, col, depth;
-
-    /* END OF MY CODE */
-
-    /* convert (x, y, z) into (north, east, top) */
-
-     /*AV*/
-	/* BEGIN OF ORIGINAL CODE */
-	/*
-	   north = ((double) map->window.rows - y - 0.5) / (double) map->window.rows *
-	   (map->window.north - map->window.south) + map->window.south;
-	 */
-	/* END OF ORIGINAL CODE */
-	 /*AV*/
-	/* BEGIN OF MY CODE */
-	north = ((double)y + 0.5) / (double)map->window.rows *
-	(map->window.north - map->window.south) + map->window.south;
-    /* END OF MY CODE */
-
-    east = ((double)x + 0.5) / (double)map->window.cols *
-	(map->window.east - map->window.west) + map->window.west;
-    top = ((double)z + 0.5) / (double)map->window.depths *
-	(map->window.top - map->window.bottom) + map->window.bottom;
-
-    /* convert (north, east, top) into (row, col, depth) */
-
-     /*AV*/
-	/* BEGIN OF ORIGINAL CODE */
-	/*
-	   row = map->region.rows -
-	   (north - map->region.south) / (map->region.north - map->region.south) *
-	   map->region.rows;
-	 */
-	/* END OF ORIGINAL CODE */
-	 /*AV*/
-	/* BEGIN OF MY CODE */
-	row =
-	(north - map->region.south) / (map->region.north -
-				       map->region.south) * map->region.rows;
-    /* END OF MY CODE */
-
-    col = (east - map->region.west) / (map->region.east - map->region.west) *
-	map->region.cols;
-    depth =
-	(top - map->region.bottom) / (map->region.top -
-				      map->region.bottom) *
-	map->region.depths;
-
-    /* if (row, col, depth) outside window return NULL value */
-    if ((row < 0) || (row >= map->region.rows) ||
-	(col < 0) || (col >= map->region.cols) ||
-	(depth < 0) || (depth >= map->region.depths)) {
-	G3d_setNullValue(value, 1, type);
-	return;
-    }
-
-    /* get value */
-    map->resampleFun(map, (int)row, (int)col, (int)depth, value, type);
-
+    double col, row, depth;
+    
+    col = (east - map->window.west) / (map->window.east -
+				      map->window.west) * (double)(map->window.cols);
+    row = (north - map->window.south) / (map->window.north -
+					map->window.south) * (double)(map->window.rows);
+    depth = (top - map->window.bottom) / (map->window.top -
+				       map->window.bottom) * (double)(map->window.depths);
+    /*
+    printf("G3d_location2WindowCoord col %g row %g depth %g\n", col, row, depth);
+    */
+    
+    *x = (int)col;
+    *y = (int)row;
+    *z = (int)depth;
+    
 }
-
-/*---------------------------------------------------------------------------*/
-
 
 /*!
  * \brief 
  *
- * Is equivalent to
- * <tt>G3d_getValue (map, x, y, z, &value, FCELL_TYPE);</tt> return value.
+ *  Converts window-coordinates <em>(north, east,
+ *  top)</em> into cell-coordinates <em>(x, y, z)</em>.
+ *  This function calls G3d_fatalError in case location is not in window.
  *
  *  \param map
+ *  \param north
+ *  \param east
+ *  \param top
  *  \param x
  *  \param y
  *  \param z
- *  \return float
+ *  \return void
  */
 
-float G3d_getFloat(G3D_Map * map, int x, int y, int z)
+void
+G3d_location2WindowCoord2(G3D_Map * map, double north, double east, double top,
+		   int *x, int *y, int *z)
 {
-    float value;
-
-    G3d_getValue(map, x, y, z, &value, FCELL_TYPE);
-    return value;
-}
-
-/*---------------------------------------------------------------------------*/
-
-
-/*!
- * \brief 
- *
- * Is equivalent
- * to <tt>G3d_getValue (map, x, y, z, &value, DCELL_TYPE);</tt> return value.
- *
- *  \param map
- *  \param x
- *  \param y
- *  \param z
- *  \return double
- */
-
-double G3d_getDouble(G3D_Map * map, int x, int y, int z)
-{
-    double value;
-
-    G3d_getValue(map, x, y, z, &value, DCELL_TYPE);
-    return value;
+    if (!G3d_isValidLocationWindow(map, north, east, top))
+	G3d_fatalError("G3d_location2WindowCoord2: location not in window");
+    
+    G3d_location2WindowCoord(map, north, east, top, x, y, z);
 }

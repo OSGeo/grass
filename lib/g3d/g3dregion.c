@@ -210,56 +210,6 @@ void G3d_regionCopy(G3D_Region * regionDest, G3D_Region * regionSrc)
     *regionDest = *regionSrc;
 }
 
-/*---------------------------------------------------------------------------*/
-
-
-/*!
- * \brief 
- *
- *  Returns in <em>value</em> the value of the <em>map</em> which corresponds to 
- * region coordinates <em>(north, east, top)</em>.  The
- * value is resampled using the resampling function specified for <em>map</em>. The
- * <em>value</em> is of <em>type</em>.
- *
- *  \param map
- *  \param north
- *  \param east
- *  \param top
- *  \param value
- *  \param type
- *  \return void
- */
-
-void
-G3d_getRegionValue(G3D_Map * map, double north, double east, double top,
-		   void *value, int type)
-{
-    int row, col, depth;
-
-    /* convert (north, east, top) into (row, col, depth) */
-
-    row = map->region.rows -
-	(north - map->region.south) / (map->region.north -
-				       map->region.south) * map->region.rows;
-    col =
-	(east - map->region.west) / (map->region.east -
-				     map->region.west) * map->region.cols;
-    depth =
-	(top - map->region.bottom) / (map->region.top -
-				      map->region.bottom) *
-	map->region.depths;
-
-    /* if (row, col, depth) outside window return NULL value */
-    if ((row < 0) || (row >= map->region.rows) ||
-	(col < 0) || (col >= map->region.cols) ||
-	(depth < 0) || (depth >= map->region.depths)) {
-	G3d_setNullValue(value, 1, type);
-	return;
-    }
-
-    /* get value */
-    map->resampleFun(map, row, col, depth, value, type);
-}
 
 /*---------------------------------------------------------------------------*/
 
@@ -277,4 +227,95 @@ G3d_readRegionMap(const char *name, const char *mapset, G3D_Region * region)
 	G3d_filename(fullName, G3D_HEADER_ELEMENT, name, mapset);
     }
     return G3d_readWindow(region, fullName);
+}
+
+/*---------------------------------------------------------------------------*/
+
+
+/*!
+ * \brief 
+ *
+ *  Returns 1 if region-coordinates <em>(north, west, bottom)</em> are
+ * inside the region of <em>map</em>. Returns 0 otherwise.
+ *
+ *  \param map
+ *  \param north
+ *  \param east
+ *  \param top
+ *  \return int
+ */
+
+int G3d_isValidLocation(G3D_Map * map, double north, double east, double top)
+{
+    return ((north >= map->region.south) && (north <= map->region.north) &&
+	    (east >= map->region.west) && (east <= map->region.east) &&
+	    (((top >= map->region.bottom) && (top <= map->region.top)) ||
+	     ((top <= map->region.bottom) && (top >= map->region.top))));
+}
+
+/*---------------------------------------------------------------------------*/
+
+/*!
+ * \brief 
+ *
+ *  Converts region-coordinates <em>(north, east,
+ *  top)</em> into cell-coordinates <em>(x, y, z)</em>.
+ *
+ *  \param map
+ *  \param north
+ *  \param east
+ *  \param top
+ *  \param x
+ *  \param y
+ *  \param z
+ *  \return void
+ */
+
+void
+G3d_location2coord(G3D_Map * map, double north, double east, double top,
+		   int *x, int *y, int *z)
+{
+    double col, row, depth;
+    
+    col = (east - map->region.west) / (map->region.east -
+				      map->region.west) * (double)(map->region.cols);
+    row = (north - map->region.south) / (map->region.north -
+					map->region.south) * (double)(map->region.rows);
+    depth = (top - map->region.bottom) / (map->region.top -
+				       map->region.bottom) * (double)(map->region.depths);
+    /*
+    printf("G3d_location2coord col %g row %g depth %g\n", col, row, depth);
+    */  
+    
+    *x = (int)col;
+    *y = (int)row;
+    *z = (int)depth;
+}
+
+
+/*!
+ * \brief 
+ *
+ *  Converts region-coordinates <em>(north, east,
+ *  top)</em> into cell-coordinates <em>(x, y, z)</em>.
+ *  This function calls G3d_fatalError in case location is not in window.
+ *
+ *  \param map
+ *  \param north
+ *  \param east
+ *  \param top
+ *  \param x
+ *  \param y
+ *  \param z
+ *  \return void
+ */
+
+void
+G3d_location2coord2(G3D_Map * map, double north, double east, double top,
+		   int *x, int *y, int *z)
+{
+    if (!G3d_isValidLocation(map, north, east, top))
+	G3d_fatalError("G3d_location2coord2: location not in region");
+
+    G3d_location2coord(map, north, east, top, x, y, z);
 }

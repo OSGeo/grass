@@ -5,7 +5,8 @@ a valid G3D map in the current mapset.  <I>output</I> is the name of
 an ascii file which will be written in the current working directory.
 If <I>output</I> is not specified then <B>stdout</B> is used.  The
 <I>-h</I> flag may be used to suppress header information. The module is
-sensitive to region settings (set with g.region).
+sensitive to region settings (set with g.region). The <em>-c</em> will create grass6
+r3.in.ascii compatible output.
 
 
 <H2>NOTES</H2>
@@ -17,6 +18,8 @@ G3D maps with <EM>r3.in.ascii</EM>.
 <P>
 The format for the ascii file is:
 <pre>
+version: <i>"grass7"</i>
+order:   <i>"nsbt" or "nstb" or "snbt" or "sntb"</i>
 north:   <i>floating point</i>
 south:   <i>floating point</i>
 east:    <i>floating point</i>
@@ -27,6 +30,26 @@ rows:    <i>integer</i>
 cols:    <i>integer</i>
 levels:  <i>integer</i>
 </pre>
+
+Ther <B>version</B> and <B>order</B> options are introduced in grass7 June 2011.
+The <B>order</B> option describes the order of rows and depths in the output. 
+It is possible to create output of different row order using the <em>-r</em> flag 
+and output of different depths order using the  <em>-d</em> flag. The default order is:
+<pre>
+west -> east for columns
+north -> south for rows
+bottom -> top for depths
+</pre>
+
+This order is compatible with the r.in.ascii row -> column ordering. The column 
+order can not be changed but the row and depth order. Supported orders are:
+
+<ul>
+    <li><b>nsbt</b>:   north -> south and bottom -> top ordering which is the default (no flags)</li>
+    <li><b>snbt</b>:   south -> north and bottom -> top ordering using <em>-r</em> flag</li>
+    <li><b>nstb</b>:   north -> south and top -> bottom ordering using <em>-d</em> flag</li>
+    <li><b>nstb</b>:   south -> north and top -> bottom ordering using <em>-rd</em> flag</li>
+</ul>
 
 The header is followed by cell values in <EM>floating point</EM> format.
 Cell values are output as a series of horizontal slices in row-major
@@ -42,8 +65,8 @@ order.  That is,
 
 
 <P>
-One level maps can be imported with r.in.ascii (Raster 2D) after removing
-the header lines "top", "bottom" and "levels".
+One level maps can be imported with r.in.ascii (Raster 2D) using the default <B>nsbt</B> order
+and removing the header lines "version", "order", "top", "bottom" and "levels".
 
 <H2>SEE ALSO</H2>
 <EM><A HREF="r3.in.ascii.html">r3.in.ascii</A></EM><br>

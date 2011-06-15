@@ -63,9 +63,10 @@ int main(int argc, char *argv[])
     
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+    
+    G3d_initDefaults();
 
     G3d_getWindow(&region);
-    G3d_readWindow(&region, NULL);
 
     Vect_set_open_level(2);
     Vect_open_old2(&Map, in_opt->answer, "", field_opt->answer);
@@ -96,8 +97,8 @@ int main(int argc, char *argv[])
 
     db_close_database_shutdown_driver(Driver);
 
-    map = G3d_openCellNew(out_opt->answer, FCELL_TYPE,
-			  G3D_USE_CACHE_DEFAULT, &region);
+    map = G3d_openNewOptTileSize(out_opt->answer,
+			  G3D_USE_CACHE_DEFAULT, &region, FCELL_TYPE, 32);
 
     if (map == NULL)
 	G_fatal_error(_("Unable to create output map"));
@@ -120,18 +121,12 @@ int main(int argc, char *argv[])
 	if (cat < 0) {
 	    continue;
 	}
-
-	if (Points->x[0] < region.west || Points->x[0] > region.east
-	    || Points->y[0] < region.south || Points->y[0] > region.north
-	    || Points->z[0] < region.bottom || Points->z[0] > region.top) {
+    /* Check if the coordinates are located in the cube */
+	if (!G3d_isValidLocation(map, Points->y[0], Points->x[0], Points->z[0])) {
 	    continue;
 	}
-
-	/*Because the g3d lib is row oriented and counts therefore from north to south,
-	 * we have to do the same here*/
-	row = (int)floor((region.north - Points->y[0]) / region.ns_res);
-	col = (int)floor((Points->x[0] - region.west) / region.ew_res);
-	depth = (int)floor((Points->z[0] - region.bottom) / region.tb_res);
+    /* Convert the north, east and top coorindate into row, col and depth*/
+    G3d_location2coord2(map, Points->y[0], Points->x[0], Points->z[0], &col, &row, &depth);
 
 	if (ctype == DB_C_TYPE_INT) {
 	    int ivalue;

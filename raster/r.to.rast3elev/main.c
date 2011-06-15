@@ -226,7 +226,11 @@ void elev_raster_to_g3d(Database db, G3D_Region region)
 	    "elev_raster_to_g3d: Writing 3D raster map with depths %i rows %i cols %i and count %i.",
 	    depths, rows, cols, db.count);
 
-    /*The mainloop */
+    /*The mainloop */        
+    /* Because we read raster rows from north to south, but the coordinate system
+     of the g3d cube read from south to north we need to adjust the
+     Cube coordinates row = rows - y - 1.
+     */
     for (y = 0; y < rows; y++) {
 	G_percent(y, rows - 1, 10);
 
@@ -278,7 +282,7 @@ void elev_raster_to_g3d(Database db, G3D_Region region)
 			value = null;
 
 		    /*Write the value to the 3D map */
-		    if (G3d_putDouble(db.map, x, y, z, value) < 0)
+		    if (G3d_putDouble(db.map, x, rows - y - 1, z, value) < 0)
 			fatal_error(db, _("Error writing G3D double data"));
 		}
 	    }
@@ -292,7 +296,7 @@ void elev_raster_to_g3d(Database db, G3D_Region region)
 			else if (db.useUpperVal == 2)
 			    value = db.upper;
 			else
-			    value = G3d_getDouble(db.map, x, y, z);
+			    value = G3d_getDouble(db.map, x, rows - y - 1, z);
 		    }
 		    /*lower cells */
 		    if (height > ((z + 1) * tbres + bottom)) {
@@ -301,7 +305,7 @@ void elev_raster_to_g3d(Database db, G3D_Region region)
 			else if (db.useLowerVal == 2)
 			    value = db.lower;
 			else
-			    value = G3d_getDouble(db.map, x, y, z);
+			    value = G3d_getDouble(db.map, x, rows - y - 1, z);
 		    }
 		    /*If exactly at the border, fill upper AND lower cell */
 		    if (height >= (z * tbres + bottom) &&
@@ -309,10 +313,10 @@ void elev_raster_to_g3d(Database db, G3D_Region region)
 			value = inval;
 		    /*If the elevation is null, set the G3D value null */
 		    if (G3d_isNullValueNum(&height, DCELL_TYPE))
-			value = G3d_getDouble(db.map, x, y, z);
+			value = G3d_getDouble(db.map, x, rows - y - 1, z);
 
 		    /*Write the value to the 3D map */
-		    if (G3d_putDouble(db.map, x, y, z, value) < 0)
+		    if (G3d_putDouble(db.map, x, rows - y - 1, z, value) < 0)
 			fatal_error(db, _("Error writing G3D double data"));
 
 		}
@@ -451,9 +455,7 @@ int main(int argc, char *argv[])
 	}
     }
 
-
     G_message(_("Creating 3D raster map"));
-
 
     /*For each elevation - input map couple */
     for (i = 0; i < db.mapnum; i++) {
