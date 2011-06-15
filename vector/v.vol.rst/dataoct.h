@@ -36,8 +36,8 @@ struct octdata
 /* defined in oct.h */
 struct octtree;
 
-struct quadruple *point_new();
-struct octdata *data_new();
+struct quadruple *point_new(double, double, double, double, double);
+struct octdata *data_new(double, double, double, int, int, int, int);
 int oct_compare();
 int oct_add_data();
 int oct_division_check();

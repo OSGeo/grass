@@ -133,9 +133,13 @@ void raster_to_g3d(void *map, G3D_Region region, int *fd)
 		    }
 		    else {
 			dvalue = *(CELL *) ptr;
-		    }
+		    }           
+            /* Because we read raster rows from north to south, but the coordinate system
+             of the g3d cube read from south to north we need to adjust the
+             Cube coordinates row = rows - y - 1.
+             */
 		    if (G3d_putValue
-			(map, x, y, z, (char *)&dvalue, DCELL_TYPE) < 0)
+			(map, x, rows - y - 1, z, (char *)&dvalue, DCELL_TYPE) < 0)
 			fatal_error(map, fd, depths,
 				    "Error writing double data");
 		}
@@ -146,11 +150,14 @@ void raster_to_g3d(void *map, G3D_Region region, int *fd)
 		    else {
 			fvalue = *(FCELL *) ptr;
 		    }
+            /* Because we read raster rows from north to south, but the coordinate system
+             of the g3d cube read from south to north we need to adjust the
+             Cube coordinates row = rows - y - 1.
+             */
 		    if (G3d_putValue
-			(map, x, y, z, (char *)&fvalue, FCELL_TYPE) < 0)
+			(map, x, rows - y - 1, z,(char *)&fvalue, FCELL_TYPE) < 0)
 			fatal_error(map, fd, depths,
 				    "Error writing float data");
-
 		}
 		else if (globalRastMapType == DCELL_TYPE) {
 		    if (Rast_is_null_value(ptr, globalRastMapType)) {
@@ -159,8 +166,12 @@ void raster_to_g3d(void *map, G3D_Region region, int *fd)
 		    else {
 			dvalue = *(DCELL *) ptr;
 		    }
+            /* Because we read raster rows from north to south, but the coordinate system
+             of the g3d cube read from south to north we need to adjust the
+             Cube coordinates row = rows - y - 1.
+             */
 		    if (G3d_putValue
-			(map, x, y, z, (char *)&dvalue, DCELL_TYPE) < 0)
+			(map, x, rows - y - 1, z,(char *)&dvalue, DCELL_TYPE) < 0)
 			fatal_error(map, fd, depths,
 				    "Error writing double data");
 

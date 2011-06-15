@@ -119,7 +119,7 @@ G3d_getVolumeA(void *map, double u[2][2][2][3], int nx, int ny, int nz,
 		v[1] = t * v0[1] + tp * v1[1];
 		v[2] = t * v0[2] + tp * v1[2];
 
-		G3d_location2coord(map, v[0], v[1], v[2], &x, &y, &z);
+		G3d_location2coord2(map, v[0], v[1], v[2], &x, &y, &z);
 		/* DEBUG
 		   printf ("(%d %d %d) (%lf %lf %lf) (%d %d %d) %lf\n", 
 		   (int) dx / 2, (int) dy / 2, (int) dz / 2,

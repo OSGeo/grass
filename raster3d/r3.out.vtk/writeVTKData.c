@@ -340,7 +340,7 @@ void write_vtk_data(FILE * fp, void *map, G3D_Region region, char *varname,
     status = 0;
 
     for (z = 0; z < depths; z++) {
-	if (param.structgrid->answer) {
+	if (!param.structgrid->answer) {
 	    for (y = 0; y < rows; y++) {
 		G_percent(status, (rows * depths - 1), 10);
 		status++;
@@ -403,7 +403,7 @@ void write_vtk_rgb_data(void *map_r, void *map_g, void *map_b,
     fprintf(fp, "COLOR_SCALARS %s 3\n", varname);
 
     for (z = 0; z < depths; z++) {	/*From the bottom to the top */
-	if (param.structgrid->answer) {
+	if (!param.structgrid->answer) {
 	    for (y = 0; y < rows; y++) {
 		G_percent(status, (rows * depths - 1), 10);
 		status++;
@@ -503,7 +503,7 @@ void write_vtk_vector_data(void *map_x, void *map_y, void *map_z,
     fprintf(fp, "VECTORS %s float\n", varname);
 
     for (z = 0; z < depths; z++) {	/*From the bottom to the top */
-	if (param.structgrid->answer) {
+	if (!param.structgrid->answer) {
 	    for (y = 0; y < rows; y++) {
 		G_percent(status, (rows * depths - 1), 10);
 		status++;

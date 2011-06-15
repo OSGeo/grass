@@ -115,7 +115,7 @@ int main(int argc, char *argv[])
     parm.zcol = G_define_standard_option(G_OPT_DB_COLUMN);
     parm.zcol->label = _("Name of column for z values");
     parm.zcol->description =
-	_("Writes z values to column instead of 3D vector");
+	_("Writes z values to column");
     parm.zcol->guisection = _("3D output");
 
     parm.ztype = G_define_option();
@@ -143,10 +143,6 @@ int main(int argc, char *argv[])
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
-
-    if (flag.z->answer && parm.zcol->answer) {
-	G_fatal_error(_("Unable to create 3D vector and attribute table at same time"));
-    }
 
     output = parm.output->answer;
     n = atoi(parm.nsites->answer);
@@ -266,17 +262,14 @@ int main(int argc, char *argv[])
 
 	x = rng() / max * (window.west - window.east) + window.east;
 	y = rng() / max * (window.north - window.south) + window.south;
-
-	if (flag.z->answer) {
-	    z = rng() / max * (zmax - zmin) + zmin;
+	z = rng() / max * (zmax - zmin) + zmin;
+        
+	if (flag.z->answer)
 	    Vect_append_point(Points, x, y, z);
-	}
 	else
 	    Vect_append_point(Points, x, y, 0.0);
 
 	if (parm.zcol->answer) {
-	    z = rng() / max * (zmax - zmin) + zmin;
-
 	    sprintf(buf, "insert into %s values ( %d, ", Fi->table, i + 1);
 	    db_set_string(&sql, buf);
 	    /* Round random value if column is integer type */

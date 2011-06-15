@@ -130,16 +130,20 @@ void g3d_to_raster(void *map, G3D_Region region, int *fd)
 	for (y = 0; y < rows; y++) {
 	    G_percent(y, rows - 1, 10);
 
-	    for (x = 0; x < cols; x++) {
+	    for (x = 0; x < cols; x++) {            
+        /* Because we write raster rows from north to south, but the coordinate system
+         of the g3d cube read from south to north we need to adjust the
+         Cube coordinates row = rows - y - 1.
+         */
 		if (typeIntern == FCELL_TYPE) {
-		    G3d_getValue(map, x, y, z, &f1, typeIntern);
+		    G3d_getValue(map, x, rows - y - 1, z, &f1, typeIntern);
 		    if (G3d_isNullValueNum(&f1, FCELL_TYPE))
 			Rast_set_null_value(&fcell[x], 1, FCELL_TYPE);
 		    else
 			fcell[x] = (FCELL) f1;
 		}
 		else {
-		    G3d_getValue(map, x, y, z, &d1, typeIntern);
+		    G3d_getValue(map, x, rows - y - 1, z, &d1, typeIntern);
 		    if (G3d_isNullValueNum(&d1, DCELL_TYPE))
 			Rast_set_null_value(&dcell[x], 1, DCELL_TYPE);
 		    else
@@ -199,6 +203,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("raster3d"));
+    G_add_keyword(_("raster"));
     G_add_keyword(_("voxel"));
     module->description = _("Converts 3D raster maps to 2D raster maps");
 
@@ -221,7 +226,7 @@ int main(int argc, char *argv[])
     /*Set the resolution of the output maps */
     if (param.res->answer) {
 
-	/*Open the map with default region */
+	/*Open the map with current region */
 	map = G3d_openCellOld(param.input->answer,
 			      G_find_grid3(param.input->answer, ""),
 			      G3D_DEFAULT_WINDOW, G3D_TILE_SAME_AS_FILE,

@@ -203,8 +203,8 @@ int main(int argc, char *argv[])
     int LINEQS();
     int CRSTG();
     double CRST();
-    double amax1();
-    double amin1();
+    double amax1(double, double);
+    double amin1(double, double);
     int max1();
     int min1();
     int per, npmin;

@@ -190,15 +190,19 @@ void rast3d_cross_section(void *map, G3D_Region region, int elevfd, int outfd)
 		for (z = 0; z < depths; z++) {	/*From the bottom to the top */
 		    if (elevation >= z * tbres + bottom && elevation <= (z + 1) * tbres + bottom) {	/*if at the border, choose the value from the top */
 			/*Read the value and put it in the output map row */
+            /* Because we read raster rows from north to south, but the coordinate system
+             of the g3d cube read from south to north we need to adjust the
+             Cube coordinates row = rows - y - 1.
+             */
 			if (typeIntern == FCELL_TYPE) {
-			    G3d_getValue(map, x, y, z, &f1, typeIntern);
+			    G3d_getValue(map, x, rows - y - 1, z, &f1, typeIntern);
 			    if (G3d_isNullValueNum(&f1, FCELL_TYPE))
 				Rast_set_null_value(&fcell[x], 1, FCELL_TYPE);
 			    else
 				fcell[x] = (FCELL) f1;
 			}
 			else {
-			    G3d_getValue(map, x, y, z, &d1, typeIntern);
+			    G3d_getValue(map, x, rows - y - 1, z, &d1, typeIntern);
 			    if (G3d_isNullValueNum(&d1, DCELL_TYPE))
 				Rast_set_null_value(&dcell[x], 1, DCELL_TYPE);
 			    else
