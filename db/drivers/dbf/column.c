@@ -32,6 +32,16 @@ int add_column(int tab, int type, char *name, int width, int decimals)
 	    "add_column(): tab = %d, type = %d, name = %s, width = %d, decimals = %d",
 	    tab, type, name, width, decimals);
 
+    /* truncate column name */
+    if (strlen(name) > DBF_COL_NAME - 1) {
+	char buf[2000];
+
+	sprintf(buf, "DBMI-DBF driver: column name '%s'", name);
+	name[DBF_COL_NAME - 1] = '\0';
+	sprintf(buf + strlen(buf), " truncated to '%s'", name);
+	G_warning(buf);
+    }
+
     /* Check if the column exists */
     for (c = 0; c < db.tables[tab].ncols; c++) {
 	if (G_strcasecmp(db.tables[tab].cols[c].name, name) == 0) {
