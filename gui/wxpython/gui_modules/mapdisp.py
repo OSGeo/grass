@@ -345,7 +345,7 @@ class MapFrame(wx.Frame):
                           LeftDockable(False).RightDockable(False).
                           BottomDockable(False).TopDockable(True).
                           CloseButton(False).Layer(2).
-                          BestSize((self.toolbars['vdigit'].GetSize())))
+                          BestSize((self.toolbars['vdigit'].GetBestSize())))
         # change mouse to draw digitized line
         self.MapWindow.mouse['box'] = "point"
         self.MapWindow.zoomtype     = 0
@@ -417,12 +417,13 @@ class MapFrame(wx.Frame):
                           CloseButton(False).DestroyOnClose(True).
                           Layer(0))
         self._mgr.AddPane(self.toolbars['nviz'],
-                              wx.aui.AuiPaneInfo().
+                          wx.aui.AuiPaneInfo().
                           Name("nviztoolbar").Caption(_("3D View Toolbar")).
                           ToolbarPane().Top().Row(1).
                           LeftDockable(False).RightDockable(False).
                           BottomDockable(False).TopDockable(True).
-                          CloseButton(False).Layer(2))
+                          CloseButton(False).Layer(2).
+                          BestSize((self.toolbars['nviz'].GetBestSize())))
         
         self.SetStatusText("", 0)
         Debug.msg(5, "MapFrame._addToolbarNviz(): end")
@@ -448,8 +449,8 @@ class MapFrame(wx.Frame):
                               LeftDockable(False).RightDockable(False).
                               BottomDockable(False).TopDockable(True).
                               CloseButton(False).Layer(2).
-                              BestSize((self.toolbars['map'].GetSize())))
-	
+                              BestSize((self.toolbars['map'].GetBestSize())))
+            
         # vector digitizer
         elif name == "vdigit":
             self._addToolbarVDigit()
@@ -464,7 +465,8 @@ class MapFrame(wx.Frame):
                               ToolbarPane().Top().
                               LeftDockable(False).RightDockable(False).
                               BottomDockable(False).TopDockable(True).
-                              CloseButton(False).Layer(2))
+                              CloseButton(False).Layer(2).
+                              BestSize((self.toolbars['georect'].GetBestSize())))
         
         # nviz
         elif name == "nviz":

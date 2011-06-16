@@ -133,40 +133,36 @@ class GMFrame(wx.Frame):
                            'data'      : LMDataToolbar(parent = self),
                            'tools'     : LMToolsToolbar(parent = self),
                            'misc'      : LMMiscToolbar(parent = self) }
-        
-        self._auimgr.AddPane(self.toolbars['data'],
-                             wx.aui.AuiPaneInfo().
-                             Name("toolbarData").Caption(_("Data Toolbar")).
-                             ToolbarPane().Top().
-                             LeftDockable(False).RightDockable(False).
-                             BottomDockable(False).TopDockable(True).
-                             CloseButton(False).Layer(3).
-                             BestSize((self.toolbars['data'].GetSize())))
-        self._auimgr.AddPane(self.toolbars['workspace'],
-                             wx.aui.AuiPaneInfo().
-                             Name("toolbarWorkspace").Caption(_("Workspace Toolbar")).
-                             ToolbarPane().Top().
-                             LeftDockable(False).RightDockable(False).
-                             BottomDockable(False).TopDockable(True).
-                             CloseButton(False).Layer(3).
-                             BestSize((self.toolbars['workspace'].GetSize())))
-        self._auimgr.AddPane(self.toolbars['misc'],
-                             wx.aui.AuiPaneInfo().
-                             Name("toolbarMisc").Caption(_("Misc Toolbar")).
-                             ToolbarPane().Top().
-                             LeftDockable(False).RightDockable(False).
-                             BottomDockable(False).TopDockable(True).
-                             CloseButton(False).Layer(2).
-                             BestSize((self.toolbars['misc'].GetSize())))
-        self._auimgr.AddPane(self.toolbars['tools'],
-                             wx.aui.AuiPaneInfo().
-                             Name("toolbarTools").Caption(_("Tools Toolbar")).
-                             ToolbarPane().Top().
-                             LeftDockable(False).RightDockable(False).
-                             BottomDockable(False).TopDockable(True).
-                             CloseButton(False).Layer(2).
-                             BestSize((self.toolbars['tools'].GetSize())))
-        
+        self._toolbarsData = { 'workspace' : ("toolbarWorkspace",     # name
+                                              _("Workspace Toolbar"), # caption
+                                              1),                     # row
+                               'data'      : ("toolbarData",
+                                              _("Data Toolbar"),
+                                              1),
+                               'misc'      : ("toolbarMisc",
+                                              _("Misc Toolbar"),
+                                              2),
+                               'tools'     : ("toolbarTools",
+                                              _("Tools Toolbar"),
+                                              2),
+                               }
+        if sys.platform == 'win32':
+            self._toolbarsList = ('workspace', 'data',
+                                  'tools', 'misc')
+        else:
+            self._toolbarsList = ('data', 'workspace',
+                                  'misc', 'tools')
+        for toolbar in self._toolbarsList:
+            name, caption, row = self._toolbarsData[toolbar]
+            self._auimgr.AddPane(self.toolbars[toolbar],
+                                 wx.aui.AuiPaneInfo().
+                                 Name(name).Caption(caption).
+                                 ToolbarPane().Top().Row(row).
+                                 LeftDockable(False).RightDockable(False).
+                                 BottomDockable(False).TopDockable(True).
+                                 CloseButton(False).Layer(2).
+                                 BestSize((self.toolbars[toolbar].GetBestSize())))
+            
         # bindings
         self.Bind(wx.EVT_CLOSE,    self.OnCloseWindow)
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
