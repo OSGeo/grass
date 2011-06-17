@@ -23,7 +23,7 @@ not support non-compressed files.
 
 <DT><B>nv</B>
 <DD>Specifies which value to convert to NULL-value.  If the specified value is 
-<em>none</em>, no conversion is performed.  Default is <em>none</em>.
+<em>none</em>, no conversion is performed.  Default is <em>*</em>.
 
 <DT><B>input</B>
 <DD>Path and name of ASCII file to be imported
@@ -33,37 +33,43 @@ not support non-compressed files.
 </DL>
 
 <H2>NOTES</H2>
-The format for the ASCII file:
-<PRE>
+The format for the ascii file is:
+<pre>
 version: <i>"grass7"</i>
 order:   <i>"nsbt" or "nstb" or "snbt" or "sntb"</i>
-north: <EM>floating point</EM>
-south: <EM>floating point</EM>
-east: <EM>floating point</EM>
-west: <EM>floating point</EM>
-top: <EM>floating point</EM>
-bottom: <EM>floating point</EM>
-rows: <EM>integer</EM>
-cols: <EM>integer</EM>
-levels: <EM>integer</EM>
-</PRE>
+north:   <i>floating point</i>
+south:   <i>floating point</i>
+east:    <i>floating point</i>
+west:    <i>floating point</i>
+top:     <i>floating point</i>
+bottom:  <i>floating point</i>
+rows:    <i>integer</i>
+cols:    <i>integer</i>
+levels:  <i>integer</i>
+</pre>
+
+The version and order option are introduced in grass7 June 2011. The version option 
+is self explaining. The order option specifies the row and depth order of the data in the input file.
+The supported row/depth ordering is documented in the <A HREF="r3.out.ascii.html">r3.out.ascii</A> 
+manpage. The order of the data in the input file does not specifiy the data order in the 
+generated output raster3d map which is in any case <em>south -> north, bottom -> top</em> ordering. 
+So dependent on the order information the data is automatically imported into the correct internal ordering.
+<P>
+The version and order options are not mandatory. In case no version and order option is specified, 
+the default grass6 ascii format is assumed.
+<P>
 This header is followed by the cell values in <EM>floating point</EM> format 
 organized in rows with constant <EM>col</EM> and <EM>level</EM> coordinate.
 The rows are organized by constant <EM>level</EM> coordinate. Individual cell
 values are separated by <EM>space</EM> or <EM>CR</EM>.
 <P>
-NOTE: Currently, after the file has been imported, the stored values are 
-compared with the original data. This feature is used to find bugs in the
-library at an early stage and will be turned off as soon as confidence has
-built up.
 
 <H2>EXAMPLES</H2>
 
-4x3x2 sample. Note lower-left (SW) corner of the bottom level comes first!
-This array format, where EW is preserved but NS is flipped, is sometimes
-known as "ij" coordinates.
-This is opposite to <em>r.in.ascii</em>'s format, which places the SW corner
-at the beginning of the last row of data.
+4x3x2 sample. Note in case no specific ordering is specified in the input file the
+upper-left (NW) corner of the bottom level comes first. The according order option is: nsbt for
+north -> south, bottom -> top ordering. This is compatible with <em>r.in.ascii</em>
+for single level data.
 
 <div class="code"><pre>
 north: 3.0
@@ -75,38 +81,20 @@ bottom: 0.0
 rows: 3
 cols: 4
 levels: 2
-x1,y1,z1  x2,y1,z1  x3,y1,z1  x4,y1,z1
-x1,y2,z1  x2,y2,z1  x3,y2,z1  x4,y2,z1
 x1,y3,z1  x2,y3,z1  x3,y3,z1  x4,y3,z1
-x1,y1,z2  x2,y1,z2  x3,y1,z2  x4,y1,z2
-x1,y2,z2  x2,y2,z2  x3,y2,z2  x4,y2,z2
+x1,y2,z1  x2,y2,z1  x3,y2,z1  x4,y2,z1
+x1,y1,z1  x2,y1,z1  x3,y1,z1  x4,y1,z1
 x1,y3,z2  x2,y3,z2  x3,y3,z2  x4,y3,z2
+x1,y2,z2  x2,y2,z2  x3,y2,z2  x4,y2,z2
+x1,y1,z2  x2,y1,z2  x3,y1,z2  x4,y1,z2
 </pre></div>
 
-<P>
-
-Sample ASCII voxel map with one layer and several rows and columns (Spearfish area):
-
-<div class="code"><pre>
-north: 4925010.000000
-south: 4924890.000000
-east: 596760.000000
-west: 596610.000000
-top: 1.000000
-bottom: 0.000000
-rows: 4
-cols: 5
-levels: 1
-1204.74 1204.48 1204.19 1203.81 1203.39
-1203.89 1203.67 1203.34 1202.98 1202.43
-1203.05 1202.80 1202.51 1202.11 1201.48
-1202.10 1201.92 1201.62 1201.27 1200.68
-</pre></div>
-
+Note that unit tests for r3.in.ascii are implemented in the <em>test.r3.out.ascii.sh</em> script located in 
+the r3.out.ascii directory.
 
 <H2>AUTHORS</H2>
 Roman Waupotitsch, Michael Shapiro, 
-Helena Mitasova, Bill Brown, Lubos Mitas, Jaro Hofierka
+Helena Mitasova, Bill Brown, Lubos Mitas, Jaro Hofierka, Soeren Gebbert
 
 <H2>SEE ALSO</H2>
 <EM>
