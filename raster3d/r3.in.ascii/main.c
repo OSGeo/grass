@@ -244,13 +244,13 @@ asciiToG3d(FILE * fp, G3D_Region * region, int convertNull, char *nullValue)
                 /* From west to east */
                 col = x;
                 /* The default is to read rows from north to south */
-                row = region->rows - y - 1;
+                row = y;
                 /* From bottom to the top */
                 depth = z;
 
                 /* Read rows as from south to north */
                 if (rowOrder == ROW_ORDER_SOUTH_TO_NORTH)
-                    row = y;
+                    row = region->rows - y - 1;
 
                 /* Read XY layer from top to bottom */
                 if (depthOrder == DEPTH_ORDER_TOP_TO_BOTTOM)

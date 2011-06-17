@@ -337,7 +337,7 @@ void open_write_vector_maps(input_maps * in, G3D_Region region, FILE * fp,
             if (!G3d_closeCell(mapvect)) {
                 fatal_error(_("Error closing g3d vector map."), in);
             }
-            /*Set the pointer to null so we noe later that these files are already closed */
+            /*Set the pointer to null so we know later that these files are already closed */
             if (i == 0)
                 in->map_x = NULL;
             if (i == 1)

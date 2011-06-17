@@ -89,7 +89,7 @@ static void makeMask(char *name, d_Mask * maskRules)
 	    G3d_unlockAll(mask);
 	}
     
-	for (y = 0; y < region.rows; y++)	/* We count from south to north in the cube coordinate system */
+	for (y = 0; y < region.rows; y++)	/* We count from north to south in the cube coordinate system */
 	    for (x = 0; x < region.cols; x++) {
 		value = G3d_getDoubleRegion(map, x, y, z);
 		if (mask_d_select((DCELL *) & value, maskRules))

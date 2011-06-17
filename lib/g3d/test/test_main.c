@@ -105,7 +105,7 @@ int main(int argc, char *argv[]) {
             i = 0;
             if (param.unit->answers)
                 while (param.unit->answers[i]) {
-                    if (strcmp(param.unit->answers[i], "coor") == 0)
+                    if (strcmp(param.unit->answers[i], "coord") == 0)
                         returnstat += unit_test_coordinate_transform();
                     if (strcmp(param.unit->answers[i], "putget") == 0)
                         returnstat += unit_test_put_get_value();

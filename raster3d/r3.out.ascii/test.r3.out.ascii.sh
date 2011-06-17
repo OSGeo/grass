@@ -1,6 +1,6 @@
 # Tests for r3.out.ascii and r3.in.ascii
 # This script tests the export of voxel data using r3.out.ascii
-# as well as the inport of the generated data with r3.in.ascii 
+# as well as the import of the generated data with r3.in.ascii 
 # using different row and depth ordering options.
 
 # We set up a specific region in the
@@ -9,8 +9,7 @@
 # should work for UTM and LL test locations
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 # Now create several (float, double, null value) voxel map 
-# with value = col + row + depth. Beware the 
-# raster3d module count from south to north.
+# with value = col + row + depth. 
 r3.mapcalc --o expr="volume_float = float(col() + row() + depth())"
 r3.mapcalc --o expr="volume_double = double(col() + row() + depth())"
 # Add null value information
@@ -56,15 +55,15 @@ r3.out.ascii --o -crd input=volume_double_null output=test_double_nsbt_null_gras
 # The created @raster maps should be identical to the map "volume_double_null"
 # The export of the created g3d map should use as @precision=0 for data validation
 # The same raster name is used for all the imported data and so for the validation reference file
-r3.in.ascii --o output=test_double_nsbt_null input=test_double_nsbt_null.ref nv=*
-r3.in.ascii --o output=test_double_nsbt_null input=test_double_snbt_null.ref nv=*
-r3.in.ascii --o output=test_double_nsbt_null input=test_double_nstb_null.ref nv=*
-r3.in.ascii --o output=test_double_nsbt_null input=test_double_sntb_null.ref nv=*
+r3.in.ascii --o output=test_double_nsbt_null input=test_double_nsbt_null.txt nv=*
+r3.in.ascii --o output=test_double_nsbt_null input=test_double_snbt_null.txt nv=*
+r3.in.ascii --o output=test_double_nsbt_null input=test_double_nstb_null.txt nv=*
+r3.in.ascii --o output=test_double_nsbt_null input=test_double_sntb_null.txt nv=*
 # Different precision and null values than default
-r3.in.ascii --o output=test_double_nsbt_null input=test_double_nsbt_null_prec5.ref nv=-1000
-r3.in.ascii --o output=test_double_nsbt_null input=test_double_sntb_null_prec8.ref nv=-2000
+r3.in.ascii --o output=test_double_nsbt_null input=test_double_nsbt_null_prec5.txt nv=-1000
+r3.in.ascii --o output=test_double_nsbt_null input=test_double_sntb_null_prec8.txt nv=-2000
 # Any row or depth order should be ignored in case grass6 compatibility is enabled
-r3.in.ascii --o output=test_double_nsbt_null input=test_double_nsbt_null_grass6_comp_1.ref
+r3.in.ascii --o output=test_double_nsbt_null input=test_double_nsbt_null_grass6_comp_1.txt
 
 # In this @preprocess step for the last test we create a large region and 
 # generate large input data to test the handling of large files

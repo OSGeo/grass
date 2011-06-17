@@ -7,8 +7,7 @@
 # voxel data with r3.mapcalc. The region setting 
 # should work for UTM and LL test locations
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
-# Now create a voxel map with value = col + row + depth. Beware the 
-# raster3d module count from south to north.
+# Now create a voxel map with value = col + row + depth. 
 r3.mapcalc --o expr="volume = col() + row() + depth()"
 # Add null value information
 r3.mapcalc --o expr="volume_null = if(row() == 1 || row() == 5, null(), volume)"
