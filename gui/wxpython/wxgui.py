@@ -276,7 +276,8 @@ class GMFrame(wx.Frame):
         Debug.msg(5, "GMFrame.AddNviz(): begin")
         self.nviz = nviz_tools.NvizToolWindow(parent = self,
                                               display = self.curr_page.maptree.GetMapDisplay())
-        self.notebook.AddPage(page = self.nviz, text = _("3D view"), name = 'nviz')
+        idx = self.notebook.GetPageIndexByName('layers')
+        self.notebook.InsertPage(indx = idx + 1, page = self.nviz, text = _("3D view"), name = 'nviz')
         self.notebook.SetSelectionByName('nviz')
         self.existNviz = True
         Debug.msg(5, "GMFrame.AddNviz(): end")
