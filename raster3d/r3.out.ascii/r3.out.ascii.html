@@ -5,7 +5,7 @@ a valid G3D map in the current mapset.  <I>output</I> is the name of
 an ascii file which will be written in the current working directory.
 If <I>output</I> is not specified then <B>stdout</B> is used.  The
 <I>-h</I> flag may be used to suppress header information. The module is
-sensitive to region settings (set with g.region). The <em>-c</em> will create grass6
+sensitive to region settings (set with g.region). The <em>-c</em> flag will create grass6
 r3.in.ascii compatible output.
 
 
@@ -48,21 +48,27 @@ order can not be changed but the row and depth order. Supported orders are:
     <li><b>nsbt</b>:   north -> south and bottom -> top ordering which is the default (no flags)</li>
     <li><b>snbt</b>:   south -> north and bottom -> top ordering using <em>-r</em> flag</li>
     <li><b>nstb</b>:   north -> south and top -> bottom ordering using <em>-d</em> flag</li>
-    <li><b>nstb</b>:   south -> north and top -> bottom ordering using <em>-rd</em> flag</li>
+    <li><b>sntb</b>:   south -> north and top -> bottom ordering using <em>-rd</em> flag</li>
 </ul>
 
 The header is followed by cell values in <EM>floating point</EM> format.
 Cell values are output as a series of horizontal slices in row-major
-order.  That is, 
+order. That is in case of the default north -> south and bottom -> top (nsbt) ordering:
 
 <pre>
-  (x, y, z)       (x + 1, y, z)     ...     (x + cols, y, z)
+(x, y + rows, z) (x + 1, y + rows, z) ... (x + cols, y + rows, z)
+      .                 .                           .
+      .                 .                           .
+      .                 .                           .
 (x, y + 1, z)   (x + 1, y + 1, z)   ...   (x + cols, y + 1, z)
+  (x, y, z)       (x + 1, y, z)     ...     (x + cols, y, z)
+
+(x, y + rows, z + 1)   (x + 1, y + rows, z + 1) ... (x + cols, y + rows, z + 1)
 
   and so on
 
 </pre>
-
+The data starts with the upper left corner (NW) at the bottom of the data set. 
 
 <P>
 One level maps can be imported with r.in.ascii (Raster 2D) using the default <B>nsbt</B> order
@@ -74,6 +80,6 @@ and removing the header lines "version", "order", "top", "bottom" and "levels".
 
 <H2>AUTHORS</H2>
 Roman Waupotitsch, Michael Shapiro, 
-Helena Mitasova, Bill Brown, Lubos Mitas, Jaro Hofierka
+Helena Mitasova, Bill Brown, Lubos Mitas, Jaro Hofierka, Soeren Gebbert
 
 <p><i>Last changed: $Date$</i>

@@ -128,28 +128,13 @@ modifyNull(char *name, d_Mask * maskRules, int changeNull, double newNullVal)
     G3d_autolockOn(mapOut);
     G3d_unlockAll(mapOut);
 
-     /*AV*/
-	/* BEGIN OF ORIGINAL CODE */
-	/*
-	 * for (z = 0; z < region.depths; z++) {
-	 * if ((z % tileZ) == 0) {
-	 * G3d_unlockAll (map);
-	 * G3d_unlockAll (mapOut);
-	 * }
-	 * for (y = 0; y < region.cols; y++)
-	 * for (x = 0; x < region.rows; x++) {
-	 */
-	/* END OF ORIGINAL CODE */
-	 /*AV*/
-	/* BEGIN OF MY CODE */
 	for (z = 0; z < region.depths; z++) {
 	if ((z % tileZ) == 0) {
 	    G3d_unlockAll(map);
 	    G3d_unlockAll(mapOut);
 	}
-	for (y = region.rows - 1; y >= 0; y--)
+	for (y = 0; y < region.rows; y++)
 	    for (x = 0; x < region.cols; x++) {
-		/* END OF MY CODE */
 
 		value = G3d_getDoubleRegion(map, x, y, z);
 
@@ -171,7 +156,6 @@ modifyNull(char *name, d_Mask * maskRules, int changeNull, double newNullVal)
 		G3d_fatalError(_("modifyNull: error flushing tiles in cube"));
 	}
     }
-
 
     if (!G3d_flushAllTiles(mapOut))
 	G3d_fatalError(_("modifyNull: error flushing all tiles"));

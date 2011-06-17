@@ -4,7 +4,7 @@
  * MODULE:       r3.out.ascii 
  *   	    	
  * AUTHOR(S):    Original author 
- *		Mark Astley, Bill Brown
+ *		Mark Astley, Bill Brown, Soeren Gebbert
  * 		USA CERL started 4/4/96
  *
  * PURPOSE:      Converts a 3D raster map layer into an ASCII text file  
@@ -144,7 +144,7 @@ void writeHeaderString(FILE * fp, char *valueString, double value)
 {
     static char format[100];
 
-    sprintf(format, "%s %%lf\n", valueString);
+    G_snprintf(format, 100, "%s %%lf\n", valueString);
     if (fprintf(fp, format, value) < 0)
         fatalError("writeHeaderString: header value invalid");
 }
@@ -154,7 +154,7 @@ void writeHeaderString2(FILE * fp, char *valueString, int value)
 {
     static char format[100];
 
-    sprintf(format, "%s %%d\n", valueString);
+    G_snprintf(format, 100, "%s %%d\n", valueString);
     if (fprintf(fp, format, value) < 0)
         fatalError("writeHeaderString: header value invalid");
 }
@@ -164,7 +164,7 @@ void writeHeaderString3(FILE * fp, char *valueString, const char* value)
 {
     static char format[100];
 
-    sprintf(format, "%s %%s\n", valueString);
+    G_snprintf(format, 100, "%s %%s\n", valueString);
     if (fprintf(fp, format, value) < 0)
         fatalError("writeHeaderString: header value invalid");
 }
@@ -190,10 +190,12 @@ FILE *openAscii(char *asciiFile, G3D_Region region)
         fp = stdout;
 
     if (!param.header->answer) {
+        
         /* Do not print the new header in grass compatibility mode */
         if (!param.grass6->answer) {
+            /* Write the version information */
             writeHeaderString3(fp, "version:", "grass7");
-
+            /* Write the row and depth order information */
             if (!param.depth->answer && !param.row->answer)
                 writeHeaderString3(fp, "order:", "nsbt");
             else if (param.depth->answer && !param.row->answer)
@@ -225,9 +227,8 @@ FILE *openAscii(char *asciiFile, G3D_Region region)
 
 void G3dToascii(FILE * fp, G3D_Region region, int decim)
 {
-    double d1 = 0;
-    double *d1p;
-    float *f1p;
+    DCELL dvalue;
+    FCELL fvalue;
     int x, y, z;
     int rows, cols, depths, typeIntern;
     int col, row, depth;
@@ -238,11 +239,9 @@ void G3dToascii(FILE * fp, G3D_Region region, int decim)
 
     typeIntern = G3d_tileTypeMap(map);
 
-    d1p = &d1;
-    f1p = (float *) &d1;
-
-    for (z = 0; z < depths; z++)
-        for (y = 0; y < rows; y++) { /* rows count from south to north */
+    for (z = 0; z < depths; z++) {
+        G_percent(z, depths, 1);
+        for (y = 0; y < rows; y++) { /* g3d rows count from south to north */
             for (x = 0; x < cols; x++) {
 
                 /* From west to east */
@@ -263,22 +262,30 @@ void G3dToascii(FILE * fp, G3D_Region region, int decim)
                     depth = depths - z - 1;
 
                 /* Get the data and resample if nessessary */
-                G3d_getValue(map, col, row, depth, d1p, typeIntern);
 
                 if (typeIntern == FCELL_TYPE) {
-                    if (G3d_isNullValueNum(f1p, FCELL_TYPE))
+                    
+                    G3d_getValue(map, col, row, depth, &fvalue, FCELL_TYPE);
+                    
+                    if (G3d_isNullValueNum(&fvalue, FCELL_TYPE))
                         fprintf(fp, "%s ", param.null_val->answer);
                     else
-                        fprintf(fp, "%.*f ", decim, *f1p);
+                        fprintf(fp, "%.*f ", decim, fvalue);
                 } else {
-                    if (G3d_isNullValueNum(&d1, DCELL_TYPE))
+                    
+                    G3d_getValue(map, col, row, depth, &dvalue, DCELL_TYPE);
+                    
+                    if (G3d_isNullValueNum(&dvalue, DCELL_TYPE))
                         fprintf(fp, "%s ", param.null_val->answer);
                     else
-                        fprintf(fp, "%.*lf ", decim, d1);
+                        fprintf(fp, "%.*lf ", decim, dvalue);
                 }
             }
             fprintf(fp, "\n");
         }
+    }
+    G_percent(1, 1, 1);
+    G_percent_reset();
 }
 
 /*---------------------------------------------------------------------------*/
@@ -330,7 +337,7 @@ int main(int argc, char *argv[])
 
     /* Open the map and use XY cache mode */
     map = G3d_openCellOld(input, G_find_grid3(input, ""), &region,
-                          G3D_TILE_SAME_AS_FILE, G3D_USE_CACHE_XY);
+                          G3D_TILE_SAME_AS_FILE, G3D_USE_CACHE_DEFAULT);
 
     if (map == NULL)
         G3d_fatalError(_("Error opening 3d raster map"));

@@ -14,7 +14,7 @@ g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 r.mapcalc --o expr="elev_bottom = row()"
 r.mapcalc --o expr="elev_top = row() + 50"
 # Now create a voxel map with value = col + row + depth. Beware the 
-# raaster3d module count from south to north.
+# raster3d module count from south to north.
 r3.mapcalc --o expr="volume = col() + row() + depth()"
 # Add null value information
 r3.mapcalc --o expr="volume_null = if(row() == 2 || row() == 7, null(), volume)"
@@ -23,7 +23,7 @@ r3.mapcalc --o expr="volume_rgb = volume_null * 5"
 
 # The first @test just exports the volume map as cell and point data
 # using alow precision and replaces the default null value with 0
-# the created @files should be compared with the reference data 
+# the created @files should be compared with the reference data.
 r3.out.vtk --o input=volume_null output=test_volume_null_1_cells.vtk dp=3 null=0
 r3.out.vtk -p --o input=volume_null output=test_volume_null_1_points.vtk dp=3 null=0
 
