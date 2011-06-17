@@ -40,6 +40,7 @@ int unit_test_put_get_value(void)
     sum += test_put_get_value_fcell();
     sum += test_put_get_value_resampling();
 
+
     if (sum > 0)
 	G_warning(_("\n-- g3d put/get value unit tests failure --"));
     else
@@ -89,7 +90,7 @@ int test_put_get_value_dcell(void)
      ROWS
   1000 1500 2000 2500 3000 3500 4000 4500 5000 5500 6500 7000 7500 8000 8500 9000 north
     |....|....|....|....|....|....|....|....|....|....|....|....|....|....|....|                         
-    0    1    2    3    4    5    6    7    8    9   10   11   12   13   14   15 region
+   15   14   13   12   11   10    9    8    7    6    5    4    3    2    1    0 region
           
     COLS
   5000 5500 6000 6500 7000 7500 8000 8500 9000 9500 10000 east
@@ -103,7 +104,7 @@ int test_put_get_value_dcell(void)
     */
     
     for(z = 0; z < region.depths; z++) {
-        for(y = 0; y < region.rows; y++) {
+        for(y = 0; y < region.rows; y++) { /* From the north to the south */
             for(x = 0; x < region.cols; x++) {
                 /* Add cols, rows and depths and put this in the map */
                 value = x + y + z;
@@ -116,23 +117,21 @@ int test_put_get_value_dcell(void)
     
     /* Reread the map and compare the expected results */
     
-    G_message("Get the value of the lower left corner -> 0");
+    G_message("Get the value of the upper left corner -> 0");
     
-    north = region.south;
-    east = region.west;
-    top = region.bottom;
     
     col = row = depth = 0;
-    north = region.south + region.ns_res * row;
+    north = region.north - 0.1; /* north would be out of bounds therefor -0.1 */
     east = region.west + region.ew_res * col;
     top = region.bottom + region.tb_res * depth;
     
     sum += test_resampling_dcell(map, north, east, top, col, row, depth, 1);
     
+    
     G_message("Get the value of x == y == z == 1 -> x + y + z == 3");
     
     col = row = depth = 1;
-    north = region.south + region.ns_res * row;
+    north = region.north - region.ns_res * (row + 1);
     east = region.west + region.ew_res * col;
     top = region.bottom + region.tb_res * depth;
     
@@ -143,7 +142,7 @@ int test_put_get_value_dcell(void)
     col = 4;
     row = 3;
     depth = 2;
-    north = region.south + region.ns_res * row;
+    north = region.north - region.ns_res * (row + 1);
     east = region.west + region.ew_res * col;
     top = region.bottom + region.tb_res * depth;
     
@@ -154,7 +153,7 @@ int test_put_get_value_dcell(void)
     col = 9;
     row = 14;
     depth = 4;
-    north = region.south + region.ns_res * row;
+    north = region.north - region.ns_res * (row + 1);
     east = region.west + region.ew_res * col;
     top = region.bottom + region.tb_res * depth;
     
@@ -165,9 +164,9 @@ int test_put_get_value_dcell(void)
     col = 10;
     row = 15;
     depth = 5;
-    north = region.south + region.ns_res * 15;
-    east = region.west + region.ew_res * 10;
-    top = region.bottom + region.tb_res * 5;
+    north = region.north - region.ns_res * (row + 1);
+    east = region.west + region.ew_res * col;
+    top = region.bottom + region.tb_res * depth;
     
     G3d_getRegionValue(map, north, east, top, &value, DCELL_TYPE);
     G3d_getValue(map, col, row, depth, &value_ref, DCELL_TYPE);
@@ -244,12 +243,8 @@ int test_put_get_value_fcell(void)
     
     G_message("Get the value of the lower left corner -> 0");
     
-    north = region.south;
-    east = region.west;
-    top = region.bottom;
-    
     col = row = depth = 0;
-    north = region.south + region.ns_res * row;
+    north = region.north - region.ns_res * (row + 1);
     east = region.west + region.ew_res * col;
     top = region.bottom + region.tb_res * depth;
     
@@ -258,7 +253,7 @@ int test_put_get_value_fcell(void)
     G_message("Get the value of x == y == z == 1 -> x + y + z == 3");
     
     col = row = depth = 1;
-    north = region.south + region.ns_res * row;
+    north = region.north - region.ns_res * (row + 1);
     east = region.west + region.ew_res * col;
     top = region.bottom + region.tb_res * depth;
     
@@ -269,7 +264,7 @@ int test_put_get_value_fcell(void)
     col = 4;
     row = 3;
     depth = 2;
-    north = region.south + region.ns_res * row;
+    north = region.north - region.ns_res * (row + 1);
     east = region.west + region.ew_res * col;
     top = region.bottom + region.tb_res * depth;
     
@@ -280,7 +275,7 @@ int test_put_get_value_fcell(void)
     col = 9;
     row = 14;
     depth = 4;
-    north = region.south + region.ns_res * row;
+    north = region.north - region.ns_res * (row + 1);
     east = region.west + region.ew_res * col;
     top = region.bottom + region.tb_res * depth;
     
@@ -288,9 +283,12 @@ int test_put_get_value_fcell(void)
         
     G_message("Get the value of x == 10 y == 15 z == 5 -> x + y + z = NAN");
     
-    north = region.south + region.ns_res * 15;
-    east = region.west + region.ew_res * 10;
-    top = region.bottom + region.tb_res * 5;
+    col = 10;
+    row = 15;
+    depth = 5;
+    north = region.north - region.ns_res * (row + 1);
+    east = region.west + region.ew_res * col;
+    top = region.bottom + region.tb_res * depth;
     
     G3d_getRegionValue(map, north, east, top, &value, FCELL_TYPE);
     G3d_getValue(map, 10, 15, 5, &value_ref, FCELL_TYPE);
@@ -364,9 +362,9 @@ int test_put_get_value_resampling(void)
      ROWS
   1000 1500 2000 2500 3000 3500 4000 4500 5000 5500 6500 7000 7500 8000 8500 9000 north
     |....|....|....|....|....|....|....|....|....|....|....|....|....|....|....|                         
-    0    1    2    3    4    5    6    7    8    9   10   11   12   13   14   15 region
+   15   14   13   12   11   10    9    8    7    6    5    4    3    2    1    0 region
     |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
-    0    2    4    6    8   10   12   14   16   18   20   22   24   26   28   30 window
+   30   28   26   24   22   20   18   16   14   12   10    8    6    4    2    0 window
           
     COLS
   5000 5500 6000 6500 7000 7500 8000 8500 9000 9500 10000 east
@@ -383,7 +381,7 @@ int test_put_get_value_resampling(void)
     */
     
     for(z = 0; z < region.depths; z++) {
-        for(y = 0; y < region.rows; y++) {
+        for(y = 0; y < region.rows; y++) {  /* North to south */
             for(x = 0; x < region.cols; x++) {
                 /* Add cols, rows and depths and put this in the map */
                 value = x + y + z;
@@ -396,13 +394,12 @@ int test_put_get_value_resampling(void)
     
     /* Reread the map and compare the expected results */
     
-    G_message("Get the value of the lower left corner -> 0");
-    
-    north = region.south;
-    east = region.west;
-    top = region.bottom;
+    G_message("Get the value of the upper left corner -> 0");
     
     col = row = depth = 0;
+    north = region.north - region.ns_res * (row + 1);
+    east = region.west + region.ew_res * col;
+    top = region.bottom + region.tb_res * depth;
     
     sum += test_resampling_dcell(map, north, east, top, col, row, depth, 2);
     
@@ -410,7 +407,7 @@ int test_put_get_value_resampling(void)
     
     
     col = row = depth = 1;
-    north = region.south + region.ns_res * row;
+    north = region.north - region.ns_res * (row + 1);
     east = region.west + region.ew_res * col;
     top = region.bottom + region.tb_res * depth;
     
@@ -421,8 +418,7 @@ int test_put_get_value_resampling(void)
     col = 7;
     row = 9;
     depth = 3;
-    
-    north = region.south + region.ns_res * row;
+    north = region.north - region.ns_res * (row + 1);
     east = region.west + region.ew_res * col;
     top = region.bottom + region.tb_res * depth;
     
@@ -433,8 +429,7 @@ int test_put_get_value_resampling(void)
     col = 9;
     row = 14;
     depth = 4;
-    
-    north = region.south + region.ns_res * row;
+    north = region.north - region.ns_res * (row + 1);
     east = region.west + region.ew_res * col;
     top = region.bottom + region.tb_res * depth;
     

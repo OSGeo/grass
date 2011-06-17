@@ -423,8 +423,8 @@ int OUTGR()
   /*** Write elevation results ***/
     if (outz != NULL) {
 
-	cf1 = G3d_openNewOptTileSize(outz, 
-			      G3D_USE_CACHE_DEFAULT, &current_region, FCELL_TYPE, 32);
+	cf1 = G3d_openCellNew(outz, FCELL_TYPE,
+			      G3D_USE_CACHE_DEFAULT, &current_region);
 	if (cf1 == NULL) {
 	    sprintf(buff, "Can't open %s for writing ", outz);
 	    clean_fatal_error(buff);
@@ -442,7 +442,7 @@ int OUTGR()
 	cnt = 0;
 	for (iarc = 0; iarc < nsizl; iarc++) {
 
-	    for (y = 0; y < nsizr; y++) {	
+	    for (y = nsizr - 1; y >= 0; y--) {	/* changed by AV */
 		for (x = 0; x < nsizc; x++) {
 		    if (maskmap != NULL)
 			bmask = BM_get(bitmask, x, y);
@@ -474,8 +474,8 @@ int OUTGR()
   /*** Write out the gradient results ***/
     if (gradient != NULL) {
 
-	cf2 = G3d_openNewOptTileSize(gradient, 
-			      G3D_USE_CACHE_DEFAULT, &current_region, FCELL_TYPE, 32);
+	cf2 = G3d_openCellNew(gradient, FCELL_TYPE,
+			      G3D_USE_CACHE_DEFAULT, &current_region);
 	if (cf2 == NULL) {
 	    sprintf(buff, "Can't open %s for writing ", gradient);
 	    clean_fatal_error(buff);
@@ -493,7 +493,7 @@ int OUTGR()
 	cnt = 0;
 	for (iarc = 0; iarc < nsizl; iarc++) {
 
-	    for (y = 0; y < nsizr; y++) {	
+	    for (y = nsizr - 1; y >= 0; y--) {	/* changed by AV */
 		for (x = 0; x < nsizc; x++) {
 		    if (maskmap != NULL)
 			bmask = BM_get(bitmask, x, y);
@@ -525,8 +525,8 @@ int OUTGR()
   /*** Write out aspect1 results ***/
     if (aspect1 != NULL) {
 
-	cf3 = G3d_openNewOptTileSize(aspect1, 
-			      G3D_USE_CACHE_DEFAULT, &current_region, FCELL_TYPE, 32);
+	cf3 = G3d_openCellNew(aspect1, FCELL_TYPE,
+			      G3D_USE_CACHE_DEFAULT, &current_region);
 	if (cf3 == NULL) {
 	    sprintf(buff, "Can't open %s for writing ", aspect1);
 	    clean_fatal_error(buff);
@@ -544,7 +544,7 @@ int OUTGR()
 	cnt = 0;
 	for (iarc = 0; iarc < nsizl; iarc++) {
 
-	    for (y = 0; y < nsizr; y++) {	
+	    for (y = nsizr - 1; y >= 0; y--) {	/* changed by AV */
 		for (x = 0; x < nsizc; x++) {
 		    if (maskmap != NULL)
 			bmask = BM_get(bitmask, x, y);
@@ -576,8 +576,8 @@ int OUTGR()
   /*** Write out aspect2 results ***/
     if (aspect2 != NULL) {
 
-	cf4 = G3d_openNewOptTileSize(aspect2, 
-			      G3D_USE_CACHE_DEFAULT, &current_region, FCELL_TYPE, 32);
+	cf4 = G3d_openCellNew(aspect2, FCELL_TYPE,
+			      G3D_USE_CACHE_DEFAULT, &current_region);
 	if (cf4 == NULL) {
 	    sprintf(buff, "Can't open %s for writing ", aspect2);
 	    clean_fatal_error(buff);
@@ -595,7 +595,7 @@ int OUTGR()
 	cnt = 0;
 	for (iarc = 0; iarc < nsizl; iarc++) {
 
-	    for (y = 0; y < nsizr; y++) {	
+	    for (y = nsizr - 1; y >= 0; y--) {	/* changed by AV */
 		for (x = 0; x < nsizc; x++) {
 		    if (maskmap != NULL)
 			bmask = BM_get(bitmask, x, y);
@@ -627,8 +627,8 @@ int OUTGR()
   /*** Write out ncurv results ***/
     if (ncurv != NULL) {
 
-	cf5 = G3d_openNewOptTileSize(ncurv, 
-			      G3D_USE_CACHE_DEFAULT, &current_region, FCELL_TYPE, 32);
+	cf5 = G3d_openCellNew(ncurv, FCELL_TYPE,
+			      G3D_USE_CACHE_DEFAULT, &current_region);
 	if (cf5 == NULL) {
 	    sprintf(buff, "Can't open %s for writing ", ncurv);
 	    clean_fatal_error(buff);
@@ -646,7 +646,7 @@ int OUTGR()
 	cnt = 0;
 	for (iarc = 0; iarc < nsizl; iarc++) {
 
-	    for (y = 0; y < nsizr; y++) {	
+	    for (y = nsizr - 1; y >= 0; y--) {	/* changed by AV */
 		for (x = 0; x < nsizc; x++) {
 		    if (maskmap != NULL)
 			bmask = BM_get(bitmask, x, y);
@@ -678,8 +678,8 @@ int OUTGR()
   /*** Write out gcurv results ***/
     if (gcurv != NULL) {
 
-	cf6 = G3d_openNewOptTileSize(gcurv, 
-			      G3D_USE_CACHE_DEFAULT, &current_region, FCELL_TYPE, 32);
+	cf6 = G3d_openCellNew(gcurv, FCELL_TYPE,
+			      G3D_USE_CACHE_DEFAULT, &current_region);
 	if (cf6 == NULL) {
 	    sprintf(buff, "Can't open %s for writing ", gcurv);
 	    clean_fatal_error(buff);
@@ -697,7 +697,7 @@ int OUTGR()
 	cnt = 0;
 	for (iarc = 0; iarc < nsizl; iarc++) {
 
-	    for (y = 0; y < nsizr; y++) {	
+	    for (y = nsizr - 1; y >= 0; y--) {	/* changed by AV */
 		for (x = 0; x < nsizc; x++) {
 		    if (maskmap != NULL)
 			bmask = BM_get(bitmask, x, y);
@@ -729,8 +729,8 @@ int OUTGR()
   /*** Write mcurv results ***/
     if (mcurv != NULL) {
 
-	cf7 = G3d_openNewOptTileSize(mcurv,
-			      G3D_USE_CACHE_DEFAULT, &current_region, FCELL_TYPE, 32);
+	cf7 = G3d_openCellNew(mcurv, FCELL_TYPE,
+			      G3D_USE_CACHE_DEFAULT, &current_region);
 	if (cf7 == NULL) {
 	    sprintf(buff, "Can't open %s for writing ", mcurv);
 	    clean_fatal_error(buff);
@@ -748,7 +748,7 @@ int OUTGR()
 	cnt = 0;
 	for (iarc = 0; iarc < nsizl; iarc++) {
 
-	    for (y = 0; y < nsizr; y++) {	
+	    for (y = nsizr - 1; y >= 0; y--) {	/* changed by AV */
 		for (x = 0; x < nsizc; x++) {
 		    if (maskmap != NULL)
 			bmask = BM_get(bitmask, x, y);

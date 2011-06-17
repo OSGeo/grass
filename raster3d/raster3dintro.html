@@ -13,6 +13,21 @@
 <!-- meta page description: 3D Raster data (voxel) introduction -->
 <h2>3D Raster data (voxel) in GRASS GIS</h2>
 
+The 3d raster data implementation in GRASS GIS uses the same coordinate system as
+raster data (row count from north to south) with an additional z dimension (depth)
+coutning from bottom to top.
+
+<pre>
+      Top (z)
+       |
+       |     North
+ West  | _ _ _ _ _ _ East (x)
+      / Bottom
+     /
+    /
+ South (y)
+</pre>
+
 <h3>3D Raster (voxel) import</h3>
 
 The module <a href="r3.in.ascii.html">r3.in.ascii</a> supports

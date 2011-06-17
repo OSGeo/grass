@@ -448,10 +448,10 @@ void G3d_adjustRegionRes(G3D_Region *);
 void G3d_extract2dRegion(G3D_Region *, struct Cell_head *);
 void G3d_regionToCellHead(G3D_Region *, struct Cell_head *);
 int G3d_readRegionMap(const char *, const char *, G3D_Region *);
-int G3d_isValidLocation(G3D_Map *, double, double, double);
-void G3d_location2coord(G3D_Map *, double, double, double, int *, int *, int *);
-void G3d_location2coord2(G3D_Map *, double, double, double, int *, int *, int *);
-
+int G3d_isValidLocation(G3D_Region *, double, double, double);
+void G3d_location2coord(G3D_Region *, double, double, double, int *, int *, int *);
+void G3d_location2coord2(G3D_Region *, double, double, double, int *, int *, int *);
+void G3d_coord2location(G3D_Region *, double, double, double, double *, double *, double *);
 /* grass/src/libes/g3d/g3dresample.c */
 void G3d_nearestNeighbor(G3D_Map *, int, int, int, void *, int);
 void G3d_setResamplingFun(G3D_Map *, void (*)());
@@ -478,8 +478,6 @@ G3D_Region *G3d_windowPtr(void);
 void G3d_setWindow(G3D_Region *);
 void G3d_setWindowMap(G3D_Map *, G3D_Region *);
 void G3d_getWindow(G3D_Region *);
-void G3d_location2WindowCoord(G3D_Map *, double, double, double, int *, int *, int *);
-int G3d_isValidLocationWindow(G3D_Map *, double, double, double);
 
 /* grass/src/libes/g3d/g3dwindowio.c */
 void G3d_useWindowParams(void);

@@ -96,7 +96,7 @@ G3d_getWindowValue(G3D_Map * map, double north, double east, double top,
 {
     int col, row, depth;
 
-    G3d_location2WindowCoord(map, north, east, top, &col, &row, &depth);
+    G3d_location2coord(&(map->window), north, east, top, &col, &row, &depth);
 
     /* if (row, col, depth) outside window return NULL value */
     if ((row < 0) || (row >= map->window.rows) ||
@@ -133,7 +133,7 @@ G3d_getRegionValue(G3D_Map * map, double north, double east, double top,
 {
     int row, col, depth;
 
-    G3d_location2coord(map, north, east, top, &col, &row, &depth);
+    G3d_location2coord(&(map->region), north, east, top, &col, &row, &depth);
 
     /* if (row, col, depth) outside region return NULL value */
     if ((row < 0) || (row >= map->region.rows) ||

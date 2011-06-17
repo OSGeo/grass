@@ -61,13 +61,13 @@ int test_coordinate_transform(void)
     /* The window is the same as the map region ... of course */
     G3d_setWindowMap(map, &region);
     
-    G_message("Test the upper right corner, coordinates must be col = 9, row = 14, depth = 4");
+    G_message("Test the upper right corner, coordinates must be col = 9, row = 0, depth = 4");
     
     /*
      ROWS
   1000 1500 2000 2500 3000 3500 4000 4500 5000 5500 6500 7000 7500 8000 8500 9000
     |....|....|....|....|....|....|....|....|....|....|....|....|....|....|....|                         
-    0    1    2    3    4    5    6    7    8    9   10   11   12   13   14   15
+   15   14   13   12   11   10    9    8    7    6    5    4    3    2    1    0
           
     COLS
   5000 5500 6000 6500 7000 7500 8000 8500 9000 9500 10000
@@ -83,37 +83,23 @@ int test_coordinate_transform(void)
     east=  9999.9;
     top =  999.9;
         
-    G3d_location2coord(map, north, east, top, &col, &row, &depth);    
+    G3d_location2coord(&(map->region), north, east, top, &col, &row, &depth);    
     printf("G3d_location2coord col %i row %i depth %i\n", col, row, depth);
-    if(region.cols - 1 != col || region.rows - 1 != row || region.depths - 1 != depth) {
+    if(region.cols - 1 != col || 0 != row || region.depths - 1 != depth) {
         G_message("Error in G3d_location2coord");
         sum++;
     }
     
-    G3d_location2WindowCoord(map, north, east, top, &col, &row, &depth);
-    printf("G3d_location2WindowCoord col %i row %i depth %i\n", col, row, depth);
-    if(region.cols - 1 != col || region.rows - 1 != row || region.depths - 1 != depth) {
-        G_message("Error in G3d_location2WindowCoord");
-        sum++;
-    }
-    
-    G_message("Test the lower left corner, coordinates must be col = row = depth = 0");
+    G_message("Test the lower left corner, coordinates must be col = 0 row = 14 depth = 0");
     
     north = 1000.0;
     east= 5000.0;
     top = 0.0;
         
-    G3d_location2coord(map, north, east, top, &col, &row, &depth);    
+    G3d_location2coord(&(map->region), north, east, top, &col, &row, &depth);    
     printf("G3d_location2coord col %i row %i depth %i\n", col, row, depth);
-    if(0 != col || 0 != row || 0 != depth) {
+    if(0 != col || 14 != row || 0 != depth) {
         G_message("Error in G3d_location2coord");
-        sum++;
-    }
-    
-    G3d_location2WindowCoord(map, north, east, top, &col, &row, &depth);
-    printf("G3d_location2WindowCoord col %i row %i depth %i\n", col, row, depth);
-    if(0 != col || 0 != row || 0 != depth) {
-        G_message("Error in G3d_location2WindowCoord");
         sum++;
     }
     
@@ -124,57 +110,36 @@ int test_coordinate_transform(void)
     east= 7499.9;
     top = 500.0;
         
-    G3d_location2coord(map, north, east, top, &col, &row, &depth);    
+    G3d_location2coord(&(map->region), north, east, top, &col, &row, &depth);    
     printf("G3d_location2coord col %i row %i depth %i\n", col, row, depth);
     if((region.cols - 1)/2 != col || (region.rows - 1)/2 != row || (region.depths - 1)/2 != depth) {
         G_message("Error in G3d_location2coord");
         sum++;
     }
     
-    G3d_location2WindowCoord(map, north, east, top, &col, &row, &depth);
-    printf("G3d_location2WindowCoord col %i row %i depth %i\n", col, row, depth);
-    if((region.cols - 1)/2 != col || (region.rows - 1)/2 != row || (region.depths - 1)/2 != depth) {
-        G_message("Error in G3d_location2WindowCoord");
-        sum++;
-    }
-    
-    G_message("Test the n=3000.1, e=7000.1 and t=800.1, coordinates must be col = row = depth = 4");
+    G_message("Test the n=3000.1, e=7000.1 and t=800.1, coordinates must be col = 4 row = 10 depth = 4");
     
     north = 3000.1;
     east= 7000.1;
     top = 800.1;
         
-    G3d_location2coord(map, north, east, top, &col, &row, &depth);    
+    G3d_location2coord(&(map->region), north, east, top, &col, &row, &depth);    
     printf("G3d_location2coord col %i row %i depth %i\n", col, row, depth);
-    if(4 != col || 4 != row || 4 != depth) {
+    if(4 != col || map->region.rows - 5 != row || 4 != depth) {
         G_message("Error in G3d_location2coord");
         sum++;
     }
     
-    G3d_location2WindowCoord(map, north, east, top, &col, &row, &depth);
-    printf("G3d_location2WindowCoord col %i row %i depth %i\n", col, row, depth);
-    if(4 != col || 4 != row || 4 != depth) {
-        G_message("Error in G3d_location2WindowCoord");
-        sum++;
-    }
-    
-    G_message("Test the n=2999.9, e=6999.9 and t=799.9, coordinates must be col = row = depth = 3");
+    G_message("Test the n=2999.9, e=6999.9 and t=799.9, coordinates must be col = 3 row = 11 depth = 3");
     
     north = 2999.9;
     east= 6999.9;
     top = 799.9;
         
-    G3d_location2coord(map, north, east, top, &col, &row, &depth);    
+    G3d_location2coord(&(map->region), north, east, top, &col, &row, &depth);    
     printf("G3d_location2coord col %i row %i depth %i\n", col, row, depth);
-    if(3 != col || 3 != row || 3 != depth) {
+    if(3 != col || map->region.rows - 4 != row || 3 != depth) {
         G_message("Error in G3d_location2coord");
-        sum++;
-    }
-    
-    G3d_location2WindowCoord(map, north, east, top, &col, &row, &depth);
-    printf("G3d_location2WindowCoord col %i row %i depth %i\n", col, row, depth);
-    if(3 != col || 3 != row || 3 != depth) {
-        G_message("Error in G3d_location2WindowCoord");
         sum++;
     }
     

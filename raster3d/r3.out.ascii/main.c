@@ -249,13 +249,13 @@ void G3dToascii(FILE * fp, G3D_Region region, int decim)
                 /* The default is to write rows from north to south
                    to be r.in.ascii compatible 
                  */
-                row = rows - y - 1;
+                row = y;
                 /* From bottom to the top */
                 depth = z;
 
                 /* Write rows from south to north */
                 if (param.row->answer)
-                    row = y;
+                    row = rows - y - 1;
 
                 /* write XY layer from top to bottom */
                 if (param.depth->answer)

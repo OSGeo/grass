@@ -13,8 +13,7 @@ g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 # to south. So in the south the elevation must have a maximum.
 r.mapcalc --o expr="elev_bottom = row()"
 r.mapcalc --o expr="elev_top = row() + 50"
-# Now create a voxel map with value = col + row + depth. Beware the 
-# raster3d module count from south to north.
+# Now create a voxel map with value = col + row + depth. 
 r3.mapcalc --o expr="volume = col() + row() + depth()"
 # Add null value information
 r3.mapcalc --o expr="volume_null = if(row() == 2 || row() == 7, null(), volume)"

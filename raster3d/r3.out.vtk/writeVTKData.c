@@ -151,7 +151,7 @@ void write_vtk_points(input_maps * in, FILE * fp, G3D_Region region, int dp,
                     xcoor =
                         region.west + (region.ew_res / 2 +
                         region.ew_res * (x));
-                    /* Here the raster north->south coordinate system is used */
+                    /* Here the raster3d north->south coordinate system is used */
                     ycoor =
                         region.north - (region.ns_res / 2 +
                         region.ns_res * (y));
@@ -180,12 +180,12 @@ void write_vtk_points(input_maps * in, FILE * fp, G3D_Region region, int dp,
 
                      */
                     xcoor = region.west + (region.ew_res * (x)); /*0, 3, 4, 7 */
-                    /* Here the raster north->south coordinate system is used */
+                    /* Here the raster3d north->south coordinate system is used */
                     ycoor = region.north - (region.ns_res * (y)); /*2, 3, 6, 7 */
                     zcoor = (bottomval + z * (topval - bottomval) / (depths)) * scale; /*0, 1, 2, 3 */
 
                     xcoor1 = region.west + (region.ew_res + region.ew_res * (x)); /*1, 2, 5, 6 */
-                    /* Here the raster north->south coordinate system is used */
+                    /* Here the raster3d north->south coordinate system is used */
                     ycoor1 = region.north - (region.ns_res + region.ns_res * (y)); /*0, 1, 4, 5 */
                     zcoor1 = (bottomval + z * (topval - bottomval) / (depths) + (topval - bottomval) / (depths)) * scale; /*4, 5, ,6 ,7 */
 
@@ -343,10 +343,11 @@ void write_vtk_data(FILE * fp, void *map, G3D_Region region, char *varname,
     percentage = 0;
 
     for (z = 0; z < depths; z++) {
-        if (param.structgrid->answer) {
-            /* In case of structured grid data, the point/cell coordinates
-               are computed based on the north->south raster coordinate system 
-             */
+        /* In case of structured grid data, the point/cell coordinates
+           are computed based on the default north->south raster3d coordinate system.
+           We need to compute south -> north ordering for image data.
+         */
+        if (!param.structgrid->answer) {
             for (y = rows - 1; y >= 0; y--) {
                 G_percent(percentage, (rows * depths - 1), 10);
                 percentage++;
@@ -422,9 +423,10 @@ void write_vtk_rgb_data(void *map_r, void *map_g, void *map_b,
                         maprgb = map_b;
 
                     /* In case of structured grid data, the point/cell coordinates
-                       are computed based on the north->south raster coordinate system 
+                       are computed based on the default north->south raster3d coordinate system.
+                       We need to compute south -> north ordering for image data.
                      */
-                    if (param.structgrid->answer)
+                    if (!param.structgrid->answer)
                         value =
                         get_g3d_raster_value_as_double(maprgb, x, rows - y - 1, z,
                                                        typeIntern[k],
@@ -496,9 +498,10 @@ void write_vtk_vector_data(void *map_x, void *map_y, void *map_z,
                         mapvect = map_z;
 
                     /* In case of structured grid data, the point/cell coordinates
-                       are computed based on the north->south raster coordinate system 
+                       are computed based on the default north->south raster3d coordinate system.
+                       We need to compute south -> north ordering for image data.
                      */
-                    if (param.structgrid->answer)
+                    if (!param.structgrid->answer)
                         value =
                         get_g3d_raster_value_as_double(mapvect, x, rows - y - 1, z,
                                                        typeIntern[k],

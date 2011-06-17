@@ -25,22 +25,14 @@ void
 G3d_nearestNeighbor(G3D_Map * map, int x, int y, int z, void *value,
 		    int type)
 {
-
     double north, east, top;
     int row, col, depth;
 
-    /* convert (x, y, z) into (north, east, top) */
+    /* convert (x, y, z) window coordinates into (north, east, top) */
+    G3d_coord2location(&(map->window), (double)x + 0.5, (double)y + 0.5, (double)z + 0.5, &north, &east, &top);
 
-	north = ((double)y + 0.5) / (double)map->window.rows *
-	(map->window.north - map->window.south) + map->window.south;
-    east = ((double)x + 0.5) / (double)map->window.cols *
-	(map->window.east - map->window.west) + map->window.west;
-    top = ((double)z + 0.5) / (double)map->window.depths *
-	(map->window.top - map->window.bottom) + map->window.bottom;
-
-    /* convert (north, east, top) into (row, col, depth) */
-
-    G3d_location2coord(map, north, east, top, &col, &row, &depth);
+    /* convert (north, east, top) into map region coordinates (row, col, depth) */
+    G3d_location2coord(&(map->region), north, east, top, &col, &row, &depth);
 
     /* if (row, col, depth) outside map region return NULL value */
     if ((row < 0) || (row >= map->region.rows) ||

@@ -52,8 +52,8 @@ The version and order option are introduced in grass7 June 2011. The version opt
 is self explaining. The order option specifies the row and depth order of the data in the input file.
 The supported row/depth ordering is documented in the <A HREF="r3.out.ascii.html">r3.out.ascii</A> 
 manpage. The order of the data in the input file does not specifiy the data order in the 
-generated output raster3d map which is in any case <em>south -> north, bottom -> top</em> ordering. 
-So dependent on the order information the data is automatically imported into the correct internal ordering.
+generated output raster3d map which is in any case <em>north -> south, west -> east, bottom -> top</em> ordering. 
+So dependent on the order information the data is automatically imported into the correct internal coordinate system.
 <P>
 The version and order options are not mandatory. In case no version and order option is specified, 
 the default grass6 ascii format is assumed.
@@ -68,8 +68,8 @@ values are separated by <EM>space</EM> or <EM>CR</EM>.
 
 4x3x2 sample. Note in case no specific ordering is specified in the input file the
 upper-left (NW) corner of the bottom level comes first. The according order option is: nsbt for
-north -> south, bottom -> top ordering. This is compatible with <em>r.in.ascii</em>
-for single level data.
+north -> south, bottom -> top ordering. This is identical with <em>r.in.ascii</em>
+for single level data. So the y coordinate is 0 at the northern edge.
 
 <div class="code"><pre>
 north: 3.0
@@ -81,12 +81,12 @@ bottom: 0.0
 rows: 3
 cols: 4
 levels: 2
-x1,y3,z1  x2,y3,z1  x3,y3,z1  x4,y3,z1
-x1,y2,z1  x2,y2,z1  x3,y2,z1  x4,y2,z1
 x1,y1,z1  x2,y1,z1  x3,y1,z1  x4,y1,z1
-x1,y3,z2  x2,y3,z2  x3,y3,z2  x4,y3,z2
-x1,y2,z2  x2,y2,z2  x3,y2,z2  x4,y2,z2
+x1,y2,z1  x2,y2,z1  x3,y2,z1  x4,y2,z1
+x1,y3,z1  x2,y3,z1  x3,y3,z1  x4,y3,z1
 x1,y1,z2  x2,y1,z2  x3,y1,z2  x4,y1,z2
+x1,y2,z2  x2,y2,z2  x3,y2,z2  x4,y2,z2
+x1,y3,z2  x2,y3,z2  x3,y3,z2  x4,y3,z2
 </pre></div>
 
 Note that unit tests for r3.in.ascii are implemented in the <em>test.r3.out.ascii.sh</em> script located in 

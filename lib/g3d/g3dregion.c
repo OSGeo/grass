@@ -238,19 +238,19 @@ G3d_readRegionMap(const char *name, const char *mapset, G3D_Region * region)
  *  Returns 1 if region-coordinates <em>(north, west, bottom)</em> are
  * inside the region of <em>map</em>. Returns 0 otherwise.
  *
- *  \param map
+ *  \param REgion
  *  \param north
  *  \param east
  *  \param top
  *  \return int
  */
 
-int G3d_isValidLocation(G3D_Map * map, double north, double east, double top)
+int G3d_isValidLocation(G3D_Region *region, double north, double east, double top)
 {
-    return ((north >= map->region.south) && (north <= map->region.north) &&
-	    (east >= map->region.west) && (east <= map->region.east) &&
-	    (((top >= map->region.bottom) && (top <= map->region.top)) ||
-	     ((top <= map->region.bottom) && (top >= map->region.top))));
+    return ((north >= region->south) && (north <= region->north) &&
+	    (east >= region->west) && (east <= region->east) &&
+	    (((top >= region->bottom) && (top <= region->top)) ||
+	     ((top <= region->bottom) && (top >= region->top))));
 }
 
 /*---------------------------------------------------------------------------*/
@@ -272,24 +272,24 @@ int G3d_isValidLocation(G3D_Map * map, double north, double east, double top)
  */
 
 void
-G3d_location2coord(G3D_Map * map, double north, double east, double top,
+G3d_location2coord(G3D_Region *region, double north, double east, double top,
 		   int *x, int *y, int *z)
 {
     double col, row, depth;
     
-    col = (east - map->region.west) / (map->region.east -
-				      map->region.west) * (double)(map->region.cols);
-    row = (north - map->region.south) / (map->region.north -
-					map->region.south) * (double)(map->region.rows);
-    depth = (top - map->region.bottom) / (map->region.top -
-				       map->region.bottom) * (double)(map->region.depths);
-    /*
-    printf("G3d_location2coord col %g row %g depth %g\n", col, row, depth);
-    */  
+    col = (east - region->west) / (region->east -
+				      region->west) * (double)(region->cols);
+    row = (north - region->south) / (region->north -
+					region->south) * (double)(region->rows);
+    depth = (top - region->bottom) / (region->top -
+				       region->bottom) * (double)(region->depths);
     
     *x = (int)col;
-    *y = (int)row;
+    /* Adjust row to start at the northern edge*/
+    *y = region->rows - (int)row - 1;
     *z = (int)depth;
+        
+    G_debug(4, "G3d_location2coord x %i y %i z %i\n", *x, *y, *z);
 }
 
 
@@ -311,11 +311,54 @@ G3d_location2coord(G3D_Map * map, double north, double east, double top,
  */
 
 void
-G3d_location2coord2(G3D_Map * map, double north, double east, double top,
+G3d_location2coord2(G3D_Region *region, double north, double east, double top,
 		   int *x, int *y, int *z)
 {
-    if (!G3d_isValidLocation(map, north, east, top))
+    if (!G3d_isValidLocation(region, north, east, top))
 	G3d_fatalError("G3d_location2coord2: location not in region");
 
-    G3d_location2coord(map, north, east, top, x, y, z);
+    G3d_location2coord(region, north, east, top, x, y, z);
+}
+
+/*!
+ * \brief 
+ *
+ *  Converts cell-coordinates <em>(x, y, z)</em> into region-coordinates 
+ * <em>(north, east, top)</em>. 
+ *
+ *  * <b>Note:</b> x, y and z is a double:
+ *  - x+0.0 will return the easting for the western edge of the column.
+ *  - x+0.5 will return the easting for the center of the column.
+ *  - x+1.0 will return the easting for the eastern edge of the column.
+ * 
+ *  - y+0.0 will return the northing for the northern edge of the row.
+ *  - y+0.5 will return the northing for the center of the row.
+ *  - y+1.0 will return the northing for the southern edge of the row.
+ * 
+ *  - z+0.0 will return the top for the lower edge of the depth.
+ *  - z+0.5 will return the top for the center of the depth.
+ *  - z+1.0 will return the top for the upper edge of the column.
+ *
+ * <b>Note:</b> The result is a <i>double</i>. Casting it to an
+ * <i>int</i> will give the column, row and depth number.
+ * 
+ * 
+ *  \param map
+ *  \param x
+ *  \param y
+ *  \param z
+ *  \param north
+ *  \param east
+ *  \param top
+ *  \return void
+ */
+
+void
+G3d_coord2location(G3D_Region * region, double x, double y, double z, double *north, double *east, double *top)
+{
+    *north = region->north - y * region->ns_res;
+    *east = region->west + x * region->ew_res;
+    *top = region->bottom + z * region->tb_res; 
+        
+    G_debug(4, "G3d_coord2location north %g east %g top %g\n", *north, *east, *top);
 }

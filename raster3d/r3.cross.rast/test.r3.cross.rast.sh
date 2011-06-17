@@ -16,8 +16,7 @@ r.mapcalc --o expr="elev_4 = 35"
 r.mapcalc --o expr="elev_5 = 45"
 r.mapcalc --o expr="elev_NAN = 50"
 r.mapcalc --o expr="elev_cross = float(col()* 5)"
-# Now create a voxel map with value = col + row + depth. Beware the 
-# raster3d module count from south to north.
+# Now create a voxel map with value = col + row + depth. 
 r3.mapcalc --o expr="volume = col() + row() + depth()"
 # Add null value information
 r3.mapcalc --o expr="volume_null = if(row() == 1 || row() == 5, null(), volume)"
@@ -33,3 +32,6 @@ r3.cross.rast --o input=volume_null elevation=elev_4 output=test_cross_section_s
 r3.cross.rast --o input=volume_null elevation=elev_5 output=test_cross_section_slice_5
 r3.cross.rast --o input=volume_null elevation=elev_NAN output=test_cross_section_slice_NAN
 r3.cross.rast --o input=volume_null elevation=elev_cross output=test_cross_section_result
+
+# Export of the references
+for i in `g.mlist type=rast pattern=test_cross_section_*` ; do r.out.ascii input=$i output=${i}.ref; done

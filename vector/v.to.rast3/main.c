@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
     struct Map_info Map;
     struct line_pnts *Points;
     struct line_cats *Cats;
-    void *map = NULL;
+    G3D_Map *map = NULL;
 
     int nlines, line, nrec, ctype;
 
@@ -122,11 +122,11 @@ int main(int argc, char *argv[])
 	    continue;
 	}
     /* Check if the coordinates are located in the cube */
-	if (!G3d_isValidLocation(map, Points->y[0], Points->x[0], Points->z[0])) {
+	if (!G3d_isValidLocation(&(map->region), Points->y[0], Points->x[0], Points->z[0])) {
 	    continue;
 	}
     /* Convert the north, east and top coorindate into row, col and depth*/
-    G3d_location2coord2(map, Points->y[0], Points->x[0], Points->z[0], &col, &row, &depth);
+    G3d_location2coord2(&(map->region), Points->y[0], Points->x[0], Points->z[0], &col, &row, &depth);
 
 	if (ctype == DB_C_TYPE_INT) {
 	    int ivalue;
