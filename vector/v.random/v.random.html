@@ -12,10 +12,18 @@ data type. Use <b>INTEGER</b> column type for integers and
 <b>DOUBLE PRECISION</b> for floating point numbers. Integer values are
 calculated by rounding random floating point number.
 
+<p>
+To produce repeatable results a random seed can be set using the option <em>seed</em>>.
+    
 <h2>EXAMPLES</h2>
 Generate 20 random points with binary attribute (only 0 or 1):
 <div class="code"><pre>
 v.random output=binary_random n=20 zmin=0 zmax=1 column='binary INTEGER'
+</pre></div>
+
+Generate 20 random 3d points with height attribute [0:20] and specific random seed:
+<div class="code"><pre>
+v.random seed=501 output=height_random n=20 zmin=0 zmax=1 column=height
 </pre></div>
 
 Get 20 random samples from raster map:

@@ -280,7 +280,7 @@ int main(int argc, char *argv[])
     map = NULL;
 
     /* Set the map type depending from the arster maps type */
-    if (globalRastMapType == CELL_TYPE)
+    if (globalRastMapType == CELL_TYPE || globalRastMapType == DCELL_TYPE)
         globalG3dMapType = DCELL_TYPE;
     else
         globalG3dMapType = FCELL_TYPE;

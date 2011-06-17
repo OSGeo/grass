@@ -59,6 +59,7 @@ int main(int argc, char *argv[])
     char *output, buf[2000];
     double (*rng) ();
     double max, zmin, zmax;
+    int seed;
     int i, n, b, type, usefloat;
     struct Map_info Out;
     struct line_pnts *Points;
@@ -67,7 +68,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct
     {
-	struct Option *output, *nsites, *zmin, *zmax, *zcol, *ztype;
+	struct Option *output, *nsites, *zmin, *zmax, *zcol, *ztype, *seed;
     } parm;
     struct
     {
@@ -112,6 +113,13 @@ int main(int argc, char *argv[])
     parm.zmax->answer = "0.0";
     parm.zmax->guisection = _("3D output");
 
+    parm.seed = G_define_option();
+    parm.seed->key = "seed";
+    parm.seed->type = TYPE_INTEGER;
+    parm.seed->required = NO;
+    parm.seed->description =
+	_("The seed to initialize the random generator. If not set the process id is used.");
+
     parm.zcol = G_define_standard_option(G_OPT_DB_COLUMN);
     parm.zcol->label = _("Name of column for z values");
     parm.zcol->description =
@@ -147,6 +155,9 @@ int main(int argc, char *argv[])
     output = parm.output->answer;
     n = atoi(parm.nsites->answer);
     b = (flag.drand48->answer == '\0') ? 0 : 1;
+    
+    if(parm.seed->answer)
+        seed = atoi(parm.seed->answer);
 
     if (n <= 0) {
 	G_fatal_error(_("Number of points must be > 0 (%d given)"), n);
@@ -232,13 +243,21 @@ int main(int argc, char *argv[])
     if (b) {
 	rng = drand48;
 	max = 1.0;
-	srand48((long)getpid());
+    /* Init the random seed*/
+    if(parm.seed->answer)
+        srand48((long)seed);
+    else
+        srand48((long)getpid());
     }
     else {			/* default is rand() */
 
 	rng = myrand;
 	max = RAND_MAX;
-	srand(getpid());
+    /* Init the random seed*/
+    if(parm.seed->answer)
+        srand(seed);
+    else
+        srand(getpid());
     }
 
     G_get_window(&window);
