@@ -16,6 +16,7 @@
  *
  *****************************************************************************/
 #include <stdio.h>
+
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
@@ -46,8 +47,6 @@ static FILE *openAscii(char *asciiFile, G3D_Region * region); /*open the g3d asc
    it into an g3d-map */
 static void asciiToG3d(FILE * fp, G3D_Region * region, int convertNull,
                        char *nullValue);
-
-
 
 /*---------------------------------------------------------------------------*/
 
@@ -119,14 +118,15 @@ getParams(char **input, char **output, int *convertNull, char *nullValue)
 void readHeaderString(FILE * fp, char *valueString, double *value)
 {
     static char format[100];
+    char line_buff[1024];
 
     /* to avoid buffer overflows we use G_snprintf */
     G_snprintf(format, 100, "%s %%lf", valueString);
-    if (fscanf(fp, format, value) != 1) {
+    G_getl2(line_buff, 1024, fp);
+    if (sscanf(line_buff, format, value) != 1) {
         G_debug(0, "bad value for [%s]", valueString);
         fatalError("readHeaderString: header value invalid");
     }
-    while (fgetc(fp) != '\n');
 }
 
 /*---------------------------------------------------------------------------*/
@@ -136,6 +136,7 @@ FILE *openAscii(char *asciiFile, G3D_Region * region)
     FILE *fp;
     double tmp;
     char buff[1024];
+    char line_buff[1024];
 
     G_debug(3, "openAscii: opens the ascii file and reads the header");
 
@@ -150,16 +151,18 @@ FILE *openAscii(char *asciiFile, G3D_Region * region)
     rowOrder = ROW_ORDER_NORTH_TO_SOUTH;
     depthOrder = DEPTH_ORDER_BOTTOM_TO_TOP;
 
+    /* Read the first line and check for grass version */
+    G_getl2(line_buff, 1024, fp);
+
     /* First check for new ascii format*/
-    if (fscanf(fp, "version: %s", buff) == 1) {
-        while (fgetc(fp) != '\n');
+    if (sscanf(line_buff, "version: %s", buff) == 1) {
         G_message("Found version information: %s\n", buff);
         if (G_strcasecmp(buff, "grass7") == 0) {
 
             /* Parse the row and depth order */
-            if (fscanf(fp, "order:%s", buff) != 1)
+            G_getl2(line_buff, 1024, fp);
+            if (sscanf(line_buff, "order: %s", buff) != 1)
                 fatalError("Unable to parse the row and depth order");
-            while (fgetc(fp) != '\n');
 
             if (G_strcasecmp(buff, "nsbt") == 0) {
                 rowOrder = ROW_ORDER_NORTH_TO_SOUTH;
@@ -185,7 +188,7 @@ FILE *openAscii(char *asciiFile, G3D_Region * region)
             G_fatal_error(_("Unsupported grass version %s"), buff);
         }
     } else {
-        /* Rewind the stream */
+        /* Rewind the stream if no grass version info found */
         rewind(fp);
     }
 
@@ -298,7 +301,6 @@ asciiToG3d(FILE * fp, G3D_Region * region, int convertNull, char *nullValue)
     G3d_unlockAll(map);
 
     G_percent(1, 1, 1);
-
 }
 
 /*---------------------------------------------------------------------------*/
