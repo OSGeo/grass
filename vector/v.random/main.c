@@ -243,21 +243,20 @@ int main(int argc, char *argv[])
     if (b) {
 	rng = drand48;
 	max = 1.0;
-    /* Init the random seed*/
-    if(parm.seed->answer)
-        srand48((long)seed);
-    else
-        srand48((long)getpid());
+	/* Init the random seed*/
+	if(parm.seed->answer)
+	    srand48((long)seed);
+	else
+	    srand48((long)getpid());
     }
-    else {			/* default is rand() */
-
+    else {  	/* default is rand() */
 	rng = myrand;
 	max = RAND_MAX;
-    /* Init the random seed*/
-    if(parm.seed->answer)
-        srand(seed);
-    else
-        srand(getpid());
+	/* Init the random seed*/
+	if(parm.seed->answer)
+	    srand(seed);
+	else
+	    srand(getpid());
     }
 
     G_get_window(&window);
