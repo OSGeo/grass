@@ -1,7 +1,6 @@
 <H2>DESCRIPTION</H2>
 
-<EM>v.to.rast3</EM> converts a GRASS 3D vector point map to a GRASS 3dgrid raster3d
- (voxel) map.
+<EM>v.to.rast3</EM> converts a GRASS 3D vector point map to a GRASS raster3d map.
 
 <H2>NOTES</H2>
 
@@ -10,10 +9,21 @@ a vector point is converted into a single 3d cell
 representing the location of the vector point. As 3d cell value the database 
 attribute of the vector point is stored as float.
 
+
+<center>
+<img src=v.to.rast3.test.png border=0><BR>
+<table border=0 width=600>
+<tr><td><center>
+<i>This screenshot shows the result of the v.to.rast3 test. Visualized are the cube of the
+grass region, the vector points as black dots and the voxel cells as wireframe model. Only cells with
+non-null values are shown.</i>
+</center></td></tr>
+</table>
+</center>
+
 <H2>SEE ALSO</H2>
 
 <EM><A HREF="g.region.html">g.region</A></EM>
-
 
 <H2>AUTHOR</H2>
 

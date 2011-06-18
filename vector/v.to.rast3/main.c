@@ -121,12 +121,12 @@ int main(int argc, char *argv[])
 	if (cat < 0) {
 	    continue;
 	}
-    /* Check if the coordinates are located in the cube */
+        /* Check if the coordinates are located in the cube */
 	if (!G3d_isValidLocation(&(map->region), Points->y[0], Points->x[0], Points->z[0])) {
 	    continue;
 	}
-    /* Convert the north, east and top coorindate into row, col and depth*/
-    G3d_location2coord2(&(map->region), Points->y[0], Points->x[0], Points->z[0], &col, &row, &depth);
+        /* Convert the north, east and top coorindate into row, col and depth*/
+        G3d_location2coord2(&(map->region), Points->y[0], Points->x[0], Points->z[0], &col, &row, &depth);
 
 	if (ctype == DB_C_TYPE_INT) {
 	    int ivalue;
