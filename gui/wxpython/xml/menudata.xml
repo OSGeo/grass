@@ -165,6 +165,13 @@
 	      <handler>OnMenuCmd</handler>
 	      <command>r.in.aster</command>
 	    </menuitem>
+	    <menuitem>
+	      <label>LAS LiDAR points import</label>
+	      <help>Create a raster map from LAS LiDAR points using univariate statistics.</help>
+	      <keywords>raster,import,LIDAR</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>r.in.lidar</command>
+	    </menuitem>
 	    <separator />
 	    <menuitem>
 	      <label>WMS import</label>
@@ -270,6 +277,13 @@
 	      <keywords>vector,import</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.in.mapgen</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>LAS LiDAR points import</label>
+	      <help>Converts LAS LiDAR point clouds to a GRASS vector map with libLAS.</help>
+	      <keywords>vector,import</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>v.in.lidar</command>
 	    </menuitem>
 	  </items>
 	</menu>
@@ -568,14 +582,14 @@
 	    <separator />
 	    <menuitem>
 	      <label>List</label>
-	      <help>Lists available GIS elements of the user-specified data type.</help>
+	      <help>Lists available GRASS data base files of the user-specified data type.</help>
 	      <keywords>general,map management,list</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>g.list</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>List filtered</label>
-	      <help>Lists available GRASS data base files of the user-specified data type to standard output.</help>
+	      <help>Lists available GRASS data base files of the user-specified data type optionally using the search pattern.</help>
 	      <keywords>general,map management,list</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>g.mlist</command>
@@ -662,7 +676,7 @@
 	    <menuitem>
 	      <label>Volume to raster series</label>
 	      <help>Converts 3D raster maps to 2D raster maps</help>
-	      <keywords>raster3d,voxel</keywords>
+	      <keywords>raster3d,raster,voxel</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r3.to.rast</command>
 	    </menuitem>
@@ -1278,7 +1292,7 @@
 	  <items>
 	    <menuitem>
 	      <label>Carve stream channels</label>
-	      <help>Generates stream channels</help>
+	      <help>Generates stream channels.</help>
 	      <keywords>raster,hydrology</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.carve</command>
@@ -1307,7 +1321,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Flow lines</label>
-	      <help>Constructs flow lines.</help>
+	      <help>Constructs flowlines.</help>
 	      <keywords>raster,hydrology</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.flow</command>
@@ -2435,7 +2449,7 @@
 	    <menuitem>
 	      <label>Basic vector metadata</label>
 	      <help>Outputs basic information about a vector map.</help>
-	      <keywords>vector,metadata,history,attribute columns</keywords>
+	      <keywords>vector,metadata,topology,extent,history,attribute columns</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.info</command>
 	    </menuitem>
@@ -2828,7 +2842,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Penman-Monteith Evapotranspiration</label>
-	      <help>Computes potontial evapotranspiration calculation with hourly Penman-Monteith.</help>
+	      <help>Computes potential evapotranspiration calculation with hourly Penman-Monteith.</help>
 	      <keywords>imagery,evapotranspiration</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>i.evapo.pm</command>
