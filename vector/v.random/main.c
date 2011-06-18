@@ -243,7 +243,7 @@ int main(int argc, char *argv[])
     if (b) {
 	rng = drand48;
 	max = 1.0;
-	/* Init the random seed*/
+	/* Init the random seed */
 	if(parm.seed->answer)
 	    srand48((long)seed);
 	else
@@ -252,7 +252,7 @@ int main(int argc, char *argv[])
     else {  	/* default is rand() */
 	rng = myrand;
 	max = RAND_MAX;
-	/* Init the random seed*/
+	/* Init the random seed */
 	if(parm.seed->answer)
 	    srand(seed);
 	else
