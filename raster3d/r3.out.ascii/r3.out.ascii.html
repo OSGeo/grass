@@ -1,8 +1,8 @@
 <H2>DESCRIPTION</H2>
 
-Outputs <I>G3D</I> maps in <I>ascii</I> format.  <I>map</I> is
+Outputs <I>G3D</I> maps in <I>ASCII</I> format.  <I>map</I> is
 a valid G3D map in the current mapset.  <I>output</I> is the name of
-an ascii file which will be written in the current working directory.
+an ASCII file which will be written in the current working directory.
 If <I>output</I> is not specified then <B>stdout</B> is used.  The
 <I>-h</I> flag may be used to suppress header information. The module is
 sensitive to region settings (set with g.region). The <em>-c</em> flag will create grass6
@@ -10,13 +10,13 @@ r3.in.ascii compatible output.
 
 
 <H2>NOTES</H2>
-The default format for the ascii file is equivalent to that required
+The default format for the ASCII file is equivalent to that required
 by <EM>r3.in.ascii</EM>.  In particular, files output by
 <EM>r3.out.ascii</EM> with header information may be converted back to
 G3D maps with <EM>r3.in.ascii</EM>.
 
 <P>
-The format for the ascii file is:
+The format for the ASCII file is:
 <pre>
 version: <i>"grass7"</i>
 order:   <i>"nsbt" or "nstb" or "snbt" or "sntb"</i>
@@ -56,13 +56,19 @@ Cell values are output as a series of horizontal slices in row-major
 order. That is in case of the default north -> south and bottom -> top (nsbt) ordering:
 
 <pre>
-(x, y + rows, z) (x + 1, y + rows, z) ... (x + cols, y + rows, z)
-      .                 .                           .
-      .                 .                           .
-      .                 .                           .
-(x, y + 1, z)   (x + 1, y + 1, z)   ...   (x + cols, y + 1, z)
   (x, y, z)       (x + 1, y, z)     ...     (x + cols, y, z)
+(x, y + 1, z)   (x + 1, y + 1, z)   ...   (x + cols, y + 1, z)
+      .                 .                           .
+      .                 .                           .
+      .                 .                           .
+(x, y + rows, z) (x + 1, y + rows, z) ... (x + cols, y + rows, z)
 
+
+  (x, y, z + 1)       (x + 1, y, z + 1)     ...     (x + cols, y, z + 1)
+(x, y + 1, z + 1)   (x + 1, y + 1, z + 1)   ...   (x + cols, y + 1, z + 1)
+      .                 .                           .
+      .                 .                           .
+      .                 .                           .
 (x, y + rows, z + 1)   (x + 1, y + rows, z + 1) ... (x + cols, y + rows, z + 1)
 
   and so on
