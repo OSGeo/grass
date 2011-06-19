@@ -42,43 +42,13 @@ void G3d_setStandard3dInputParams()
 {
     param = G3d_malloc(sizeof(G3d_paramType));
 
-    param->type = G_define_option();
-    param->type->key = "type";
-    param->type->type = TYPE_STRING;
-    param->type->required = NO;
-    param->type->multiple = NO;
-    param->type->answer = "default";
-    param->type->options = "default,double,float";
-    param->type->description = _("Data type used in the output file");
+    param->type = G_define_standard_option(G_OPT_R3_TYPE);
 
-    param->precision = G_define_option();
-    param->precision->key = "precision";
-    param->precision->type = TYPE_STRING;
-    param->precision->required = NO;
-    param->precision->multiple = NO;
-    param->precision->answer = "default";
-    param->precision->description =
-	_("Precision used in the output file (default, max, or 0 to 52)");
+    param->precision = G_define_standard_option(G_OPT_R3_PRECISION);
 
-    param->compression = G_define_option();
-    param->compression->key = "compression";
-    param->compression->type = TYPE_STRING;
-    param->compression->required = NO;
-    param->compression->multiple = NO;
-    param->compression->answer = "default";
-    param->compression->options = "default,rle,none";
-    param->compression->description =
-	_("The compression method used in the output file");
+    param->compression = G_define_standard_option(G_OPT_R3_COMPRESSION);
 
-    param->dimension = G_define_option();
-    param->dimension->key = "tiledimension";
-    param->dimension->type = TYPE_STRING;
-    param->dimension->required = NO;
-    param->dimension->multiple = NO;
-    param->dimension->key_desc = "XxYxZ";
-    param->dimension->answer = "default";
-    param->dimension->description =
-	_("The dimensions of the tiles used in the output file");
+    param->dimension = G_define_standard_option(G_OPT_R3_TILE_DIMENSION);
 }
 
 /*----------------------------------------------------------------------------*/

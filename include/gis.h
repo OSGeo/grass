@@ -189,6 +189,10 @@ static const char *GRASS_copyright __attribute__ ((unused))
     G_OPT_R3_OUTPUT,		/* new output raster3d map */
     G_OPT_R3_MAP,		/* old input raster3d map */
     G_OPT_R3_MAPS,		/* old input raster3d maps */
+    G_OPT_R3_TYPE,              /* Type (FCELL or DCELL) of a new created raster3d map */
+    G_OPT_R3_PRECISION,         /* The precision of the new generated raster3d map */
+    G_OPT_R3_TILE_DIMENSION,    /* The tile dimension of a new generated raster3d map */
+    G_OPT_R3_COMPRESSION,       /* The kind of compression of a new created raster3d map */
 
     G_OPT_V_INPUT,		/* old input vector map */
     G_OPT_V_INPUTS,		/* old input vector maps */
