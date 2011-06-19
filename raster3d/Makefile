@@ -10,6 +10,7 @@ SUBDIRS = \
 	r3.out.ascii \
 	r3.out.v5d \
 	r3.out.vtk \
+	r3.retile \
 	r3.stats \
 	r3.timestamp \
 	r3.to.rast \

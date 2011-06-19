@@ -302,7 +302,45 @@ struct Option *G_define_standard_option(int opt)
 	Opt->gisprompt = "old,grid3,3d-raster";
 	Opt->description = _("Name of 3D raster map(s)");
 	break;
-
+    case G_OPT_R3_TYPE:
+        Opt->key = "type";
+        Opt->type = TYPE_STRING;
+        Opt->required = NO;
+        Opt->multiple = NO;
+        Opt->answer = "default";
+        Opt->options = "default,double,float";
+        Opt->description = _("Data type used in the output file");
+	break;
+    case G_OPT_R3_PRECISION:
+        Opt->key = "precision";
+        Opt->type = TYPE_STRING;
+        Opt->required = NO;
+        Opt->multiple = NO;
+        Opt->answer = "default";
+        Opt->description =
+            _("Precision used in the output file (default, max, or 0 to 52)");
+	break;
+    case G_OPT_R3_COMPRESSION:
+        Opt->key = "compression";
+        Opt->type = TYPE_STRING;
+        Opt->required = NO;
+        Opt->multiple = NO;
+        Opt->answer = "default";
+        Opt->options = "default,rle,none";
+        Opt->description =
+            _("The compression method used in the output file");
+	break;
+    case G_OPT_R3_TILE_DIMENSION:
+        Opt->key = "tiledimension";
+        Opt->type = TYPE_STRING;
+        Opt->required = NO;
+        Opt->multiple = NO;
+        Opt->key_desc = "XxYxZ";
+        Opt->answer = "default";
+        Opt->description =
+            _("The dimensions of the tiles used in the output file (XxYxZ)");
+	break;
+        
 	/*vector maps */
     case G_OPT_V_INPUT:
 	Opt->key = "input";

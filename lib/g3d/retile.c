@@ -37,10 +37,10 @@ retileNocache(void *map, const char *nameOut, int tileX, int tileY, int tileZ)
 
     G3d_getNofTilesMap(map2, &nx, &ny, &nz);
 
-    for (z = 0; z < nz; z++)
+    for (z = 0; z < nz; z++) {
+        G_percent(z, nz, 1);
 	for (y = 0; y < ny; y++)
 	    for (x = 0; x < nx; x++) {
-
 		G3d_getBlock(map, x * tileX, y * tileY, z * tileZ,
 			     tileX, tileY, tileZ, data, typeIntern);
 		if (!G3d_writeTile
@@ -49,7 +49,10 @@ retileNocache(void *map, const char *nameOut, int tileX, int tileY, int tileZ)
 		    G3d_fatalError
 			("G3d_retileNocache: error in G3d_writeTile");
 	    }
-
+    }
+    
+    G_percent(1, 1, 1);
+        
     G3d_freeTiles(data);
     G3d_closeCell(map2);
 }
@@ -116,6 +119,7 @@ G3d_retile(void *map, const char *nameOut, int tileX, int tileY, int tileZ)
     G3d_getCoordsMap(map, &rows, &cols, &depths);
 
     for (z = 0; z < depths; z++) {
+        G_percent(z, depths, 1);
 	G3d_coord2tileCoord(map2, x, y, z, &xTile, &yTile, &zTile,
 			    &xOffs, &yOffs, &zOffs);
 	if (zTile > prev) {
@@ -133,6 +137,7 @@ G3d_retile(void *map, const char *nameOut, int tileX, int tileY, int tileZ)
 	    }
     }
 
+    G_percent(1, 1, 1);
     if (!G3d_flushAllTiles(map2))
 	G3d_fatalError("G3d_retile: error in G3d_flushAllTiles");
     if (!G3d_closeCell(map2))

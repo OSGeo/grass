@@ -66,6 +66,7 @@ int main(int argc, char *argv[])
     struct Flag *tflag;
     struct Flag *timestampflag;
     struct Flag *gflag;
+    struct Flag *iflag;
     struct Flag *hflag;
     int data_type;
 
@@ -104,6 +105,10 @@ int main(int argc, char *argv[])
     gflag->key = 'g';
     gflag->description = _("Print 3D raster map region only");
 
+    iflag = G_define_flag();
+    iflag->key = 'i';
+    iflag->description = _("Print 3D raster tile number and size information nly");
+    
     hflag = G_define_flag();
     hflag->key = 'h';
     hflag->description = _("Print 3D raster history instead of info");
@@ -148,7 +153,7 @@ int main(int argc, char *argv[])
 
     /*Show the info if no flag is set */
     if (!rflag->answer && !sflag->answer && !tflag->answer && !gflag->answer
-	&& !timestampflag->answer && !hflag->answer) {
+	&& !timestampflag->answer && !hflag->answer && !iflag->answer) {
 	divider('+');
 
 	if (G_asprintf(&line, "Layer:    %-29.29s  Date: %s", name,
@@ -254,7 +259,7 @@ int main(int argc, char *argv[])
 	    else
 		G_fatal_error(_("Cannot allocate memory for string"));
 
-	    if (G_asprintf(&line, "  Number of tiles:      %ld",
+	    if (G_asprintf(&line, "  Number of tiles:      %d",
                 ((G3D_Map* )g3map)->nTiles) > 0)
 		printline(line);
 	    else
@@ -437,6 +442,14 @@ int main(int argc, char *argv[])
 		    data_type == DCELL_TYPE ? "DCELL" :
 		    "??");
 
+	}			/*Resolution */
+	else if (iflag->answer) {
+	    fprintf(out, "tilenumx=%d\n", ((G3D_Map* )g3map)->nx);
+	    fprintf(out, "tilenumy=%d\n", ((G3D_Map* )g3map)->ny);
+	    fprintf(out, "tilenumz=%d\n", ((G3D_Map* )g3map)->nz);
+	    fprintf(out, "tiledimx=%d\n", ((G3D_Map* )g3map)->tileX);
+	    fprintf(out, "tiledimy=%d\n", ((G3D_Map* )g3map)->tileY);
+	    fprintf(out, "tiledimz=%d\n", ((G3D_Map* )g3map)->tileZ);
 	}			/*History output */
 	else if (hflag->answer) {
 	    if (hist_ok) {
