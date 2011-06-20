@@ -11,25 +11,26 @@ which will minimize the amount of fibre optic cable needed to connect
 a series of satellite offices.
 
 <p>
+Costs may be either line lengths, or attributes saved in a database 
+table. These attribute values are taken as costs of whole segments, not 
+as costs to traverse a length unit (e.g. meter) of the segment. 
+For example, if the speed limit is 100 km / h, the cost to traverse a 
+10 km long road segment must be calculated as 
+length / speed = 10 km / (100 km/h) = 0.1 h.
+Supported are cost assignments for both arcs and nodes. 
+For areas, costs will be calculated along boundary lines.
+
+<p>
 Points representing nodes must be exactly on network nodes, and the 
 input vector map needs to be prepared with <em>v.net operation=connect</em>.
 
 
 <h2>EXAMPLE</h2>
 
-Steiner tree for for 6 digitized nodes (Spearfish):
+Steiner tree for 6 digitized nodes (Spearfish), using traveling time as 
+costs:
 
 <div class="code"><pre>
-g.copy vect=roads,myroads
-v.db.addcolumn myroads col="cost double precision"
-
-# define traveling costs as inverse of speed limit:
-v.db.update myroads col=cost val=1/50
-v.db.update myroads col=cost val=1/75 where="label='interstate'"
-v.db.update myroads col=cost val=1/5 where="label='unimproved road'"
-v.db.update myroads col=cost val=1/25 where="label='light-duty road, improved surface'"
-v.db.select myroads
-
 # we have 6 locations to allocate
 echo "1|601653.5|4922869.2|a
 2|608284|4923776.6|b
@@ -44,17 +45,46 @@ v.category centers op=report
 # type       count        min        max
 # point          6          1          6
 
+# create unique categories for each road in layer 2
+v.category in=roads out=myroads opt=add cat=1 layer=2
 
-#create lines map connecting points to network (on layer 2)
-v.net myroads points=centers out=myroads_net op=connect thresh=500
+# add new table for layer 2
+v.db.addtable myroads layer=2 col="cat integer,label varchar(43),length double precision,speed double precision,cost double precision"
+
+# copy road type to layer 2
+v.to.db myroads layer=2 qlayer=1 opt=query qcolumn=label columns=label
+
+
+# create lines map connecting points to network (take care of layers)
+v.net myroads points=centers out=myroads_net op=connect thresh=500 alayer=2 nlayer=1
 v.category myroads_net op=report
-# Layer / table: 1 / myroads_net
+# Layer/table: 2/myroads_net_myroads_l_2
 # type       count        min        max
+# point          6          1          6
 # line         837          1          5
 #
-# Layer: 2
+# Layer/table: 1/myroads_net_roads
 # type       count        min        max
-# point          6          1          5
+# point          0          0          0
+# line         837          1        825
+
+# set up costs
+
+# upload road length in miles
+v.to.db map=myroads_net layer=2 type=line option=length col=length unit=miles
+
+# set speed limits in miles / hour
+v.db.update myroads_net layer=2 col=speed val="5.0"
+v.db.update myroads_net layer=2 col=speed val="75.0" where="label='interstate'"
+v.db.update myroads_net layer=2 col=speed val="75.0" where="label='primary highway, hard surface'"
+v.db.update myroads_net layer=2 col=speed val="50.0" where="label='secondary highway, hard surface'"
+v.db.update myroads_net layer=2 col=speed val="25.0" where="label='light-duty road, improved surface'"
+v.db.update myroads_net layer=2 col=speed val="5.0" where="label='unimproved road'"
+
+# define traveling costs as traveling time in hours:
+
+# set costs as traveling time
+v.db.update myroads_net layer=2 col=cost val="length / speed"
 
 # The network is now prepared.
 g.region vect=myroads_net
@@ -64,7 +94,7 @@ d.vect -c centers icon=basic/triangle
 d.font verdana
 d.vect centers col=red disp=attr attrcol=label lsize=12
 
-v.net.steiner myroads_net acol=cost tcats=1-6 out=mysteiner
+v.net.steiner myroads_net alayer=2 nlayer=1 acol=cost tcats=1-6 out=mysteiner
 d.vect mysteiner col=blue width=2
 </pre></div>
 

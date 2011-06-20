@@ -1,11 +1,27 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.net.path</em> can find shortest path(s) on the vector network.
+<em>v.net.path</em> determines least costly, e.g. shortest or fastest 
+path(s) on a vector network.
+
+<p>
 Costs may be either line lengths, or attributes saved in a database 
-table. These attributes values are taken as costs of whole segments, not 
-as costs to traverse a lnegth unit (e.g. meter) of the segment. If read 
-from the table, arcs' costs may be different in both directions.
-Shortest paths are written to output vector map with an attached attribute table.
+table. These attribute values are taken as costs of whole segments, not 
+as costs to traverse a length unit (e.g. meter) of the segment. 
+For example, if the speed limit is 100 km / h, the cost to traverse a 
+10 km long road segment must be calculated as 
+length / speed = 10 km / (100 km/h) = 0.1 h.
+Supported are cost assignments for both arcs and nodes, 
+and also different costs for both directions of a vector line. 
+For areas, costs will be calculated along boundary lines.
+<p>
+The input vector needs to be prepared with <em>v.net operation=connect</em> 
+in order to connect points representing center nodes to the network.
+
+<p>
+Nodes and arcs can be closed using cost = -1. 
+<p>
+Least cost paths are written to the output vector map with an 
+attached attribute table.
 <P>
 Nodes can be piped into the program from file or from stdin. The
 syntax is as follows:
@@ -46,58 +62,73 @@ The attribute table will contain the following attributes:
 </ul>
 
 <h2>NOTES</h2>
-
-If the columns 'afcol', 'abcol' and 'ncol' costs are not
+Nodes and arcs can be closed using cost = -1. 
+<p>
+If the cost columns 'afcol', 'abcol' and 'ncol' are not
 specified, the length of network segments is measured and 
 zero costs are assumed for nodes.
 <P>
 When using attributes, the length of segments is not used. To get
-more precise results, length should be taken indirectly into account
-by attributes. For example, to get the <b>fastest path</b> the columns 
-'max_speed' and 'length' are required. The correct fastest path can then 
-be found by specifying <tt>afcol=length/max_speed</tt> (pg driver). If needed,
+accurate results, the line length must be taken into account when 
+assigning costs as attributes. For example, to get the <b>fastest path</b>, 
+the columns 'max_speed' and 'length' are required. The correct fastest 
+path can then be found by specifying <tt>afcol=length/max_speed</tt>. If needed,
 the line length can be calculated and written to the attributes table 
 by <em>v.to.db</em>.
 
 <h2>EXAMPLE</h2>
 
-Shortest path from two digitized nodes (Spearfish):
+Fastest path between two digitized nodes (Spearfish):
 
 <div class="code"><pre>
-g.copy vect=roads,myroads
-v.db.addcolumn myroads col="forward double precision, backward double precision"
-
-# define traveling costs as inverse of speed limit:
-v.db.update myroads col=forward val=1/50
-v.db.update myroads col=backward val=1/50
-v.db.update myroads col=forward val=1/75 where="label='interstate'"
-v.db.update myroads col=backward val=1/75 where="label='interstate'"
-v.db.update myroads col=forward val=1/5 where="label='unimproved road'"
-v.db.update myroads col=backward val=1/5 where="label='unimproved road'"
-v.db.update myroads col=forward val=1/25 where="label='light-duty road, improved surface'"
-v.db.update myroads col=backward val=1/25 where="label='light-duty road, improved surface'"
-v.db.select myroads
 echo "1|601653.5|4922869.2|start
 2|593330.8|4924096.6|end" | v.in.ascii cat=1 x=2 y=3 out=startend col="cat integer, \
                          east double precision, north double precision, label varchar(43)"
 
 v.db.select startend
 
-#create lines map connecting points to network (on layer 2)
-v.net myroads points=startend out=myroads_net op=connect thresh=200
+# create unique categories for each road in layer 2
+v.category in=roads out=myroads opt=add cat=1 layer=2
+
+# add new table for layer 2
+v.db.addtable myroads layer=2 col="cat integer,label varchar(43),length double precision,speed double precision,forward double precision,backward double precision"
+
+# copy road type to layer 2
+v.to.db myroads layer=2 qlayer=1 opt=query qcolumn=label columns=label
+
+# connect points to road network (take care of layers)
+v.net myroads points=startend out=myroads_net op=connect thresh=200 alayer=2 nlayer=1
+
+# upload road length in miles
+v.to.db map=myroads_net layer=2 type=line option=length col=length unit=miles
+
+# set speed limits in miles / hour
+v.db.update myroads_net layer=2 col=speed val="5.0"
+v.db.update myroads_net layer=2 col=speed val="75.0" where="label='interstate'"
+v.db.update myroads_net layer=2 col=speed val="75.0" where="label='primary highway, hard surface'"
+v.db.update myroads_net layer=2 col=speed val="50.0" where="label='secondary highway, hard surface'"
+v.db.update myroads_net layer=2 col=speed val="25.0" where="label='light-duty road, improved surface'"
+v.db.update myroads_net layer=2 col=speed val="5.0" where="label='unimproved road'"
+
+# define traveling costs as traveling time in hours:
+
+# set forward costs
+v.db.update myroads_net layer=2 col=forward val="length / speed"
+# set backward costs
+v.db.update myroads_net layer=2 col=backward val="length / speed"
+
 g.region vect=myroads_net
 d.mon x0
 d.vect myroads_net
 d.vect startend col=red
 
-v.db.select myroads_net
-
 d.vect myroads_net icon=basic/triangle fcol=green size=12 layer=2
 d.vect myroads_net disp=cat type=point lsize=14 layer=2
 # ... the 'start' and 'end' nodes have category number 1 and 2
 
-# ID as first number, then cat1 and cat2
+# Fastest path: ID as first number, then cat1 and cat2
 echo "1 1 2" | v.net.path myroads_net afcol=forward abcol=backward out=mypath
+
 d.vect mypath col=red width=2
 </pre></div>
 
