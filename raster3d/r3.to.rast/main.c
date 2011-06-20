@@ -103,7 +103,8 @@ void set_params()
 /* ************************************************************************* */
 void g3d_to_raster(void *map, G3D_Region region, int *fd)
 {
-    double d1 = 0, f1 = 0;
+    DCELL d1 = 0;
+    FCELL f1 = 0;
     int x, y, z;
     int rows, cols, depths, typeIntern, pos = 0;
     FCELL *fcell = NULL;
@@ -137,13 +138,13 @@ void g3d_to_raster(void *map, G3D_Region region, int *fd)
                     if (G3d_isNullValueNum(&f1, FCELL_TYPE))
                         Rast_set_null_value(&fcell[x], 1, FCELL_TYPE);
                     else
-                        fcell[x] = (FCELL) f1;
+                        fcell[x] = f1;
                 } else {
                     G3d_getValue(map, x, y, z, &d1, typeIntern);
                     if (G3d_isNullValueNum(&d1, DCELL_TYPE))
                         Rast_set_null_value(&dcell[x], 1, DCELL_TYPE);
                     else
-                        dcell[x] = (DCELL) d1;
+                        dcell[x] = d1;
                 }
             }
             if (typeIntern == FCELL_TYPE)
