@@ -8,13 +8,28 @@
 
 <P>
 Authors: Roman Waupotitsch and Michael Shapiro, Helena Mitasova, 
-         Bill Brown, Lubos Mitas, Jaro Hofierka
+         Bill Brown, Lubos Mitas, Jaro Hofierka, 
+         Minor modification, code cleanup and test suite by Soeren Gebbert
+         
 
 
 <b>Overview</b>
 
-The Grid3D raster volume Library is used for the r3.* and sites/vector
-volume tools.
+The Grid3D raster volume Library is used for the r3.* and vector
+volume tools. The G3D library uses a tile cache based approach to store floating point
+ values in abritrary order in a volume. The coordinate system of a volume is 
+column and row compatible to the raster library and counts from the bottom to the top
+of the cube.
+
+<center>
+<img src=g3d_volume_layout.png border=0><BR>
+<table border=0 width=700>
+<tr><td><center>
+<i>The volume coordinate system and tile layout of the G3D library</i>
+</center></td></tr>
+</table>
+</center>
+
 
 \section Directory_Structure Directory Structure
 
@@ -417,7 +432,7 @@ The limit is specified in bytes. It is a limit on the size of cell-data stored
 in the cache and does not include the support structure.
 
 <P>
-Default G3D_CACHE_SIZE_MAX_DEFAULT. This is currently set to 2meg and can
+Default G3D_CACHE_SIZE_MAX_DEFAULT. This is currently set to 16meg and can
 be changed at compilation time of the library.
 
 <P>
@@ -1682,7 +1697,7 @@ routines (reading, writing grid3d timestamps).
 These functions were implemented to test the library. They are not very
 efficient but can be used as starting point for other
 applications. Some of them might actually be useful. They are available from
-GRASS 5 source code in src/libes/g3d/.
+GRASS 7 source code in lib/g3d/.
 
 <P>
 void G3d_retile(void *map, char *nameOut, int tileX, int tileY, int tileZ)
