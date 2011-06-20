@@ -13,20 +13,22 @@
 <!-- meta page description: 3D Raster data (voxel) introduction -->
 <h2>3D Raster data (voxel) in GRASS GIS</h2>
 
-The 3d raster data implementation in GRASS GIS uses the same coordinate system as
-raster data (row count from north to south) with an additional z dimension (depth)
-coutning from bottom to top.
+GRASS GIS raster3d maps use the same coordinate system as
+2d raster maps (row count from north to south) with an additional z dimension (depth)
+coutning from bottom to top. The upper left corner (NW) is the origin of the volume. 
+Volumes are stored using a tile cache based approach. This allows abritrary read 
+and write operations in the created volume. The size of the tiles can be specified at import time
+with r3.in.ascii or the data can be retiles using r3.retile after import or creation.
 
-<pre>
-      Top (z)
-       |
-       |     North
- West  | _ _ _ _ _ _ East (x)
-      / Bottom
-     /
-    /
- South (y)
-</pre>
+
+<center>
+<img src="g3d_volume_layout.png" border=0><BR>
+<table border=0 width=700>
+<tr><td><center>
+<i>The volume coordinate system and tile layout of the G3D library</i>
+</center></td></tr>
+</table>
+</center>
 
 <h3>3D Raster (voxel) import</h3>
 

@@ -105,6 +105,7 @@ static void load_library(void)
     static const char *const candidates[] = {
 # ifdef __unix__
 	"libgdal.1.1.so",
+	"libgdal1.6.0.so",
 	"gdal.1.0.so",
 	"gdal.so.1.0",
 	"libgdal.so.1",

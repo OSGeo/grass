@@ -309,7 +309,7 @@ struct Option *G_define_standard_option(int opt)
         Opt->multiple = NO;
         Opt->answer = "default";
         Opt->options = "default,double,float";
-        Opt->description = _("Data type used in the output file");
+        Opt->description = _("Data type used in the output raster3d map");
 	break;
     case G_OPT_R3_PRECISION:
         Opt->key = "precision";
@@ -318,7 +318,7 @@ struct Option *G_define_standard_option(int opt)
         Opt->multiple = NO;
         Opt->answer = "default";
         Opt->description =
-            _("Precision used in the output file (default, max, or 0 to 52)");
+            _("Number of digits used as mantissa in the internal map storage, 0 -23 for float, 0 - 52 for double, max or default");
 	break;
     case G_OPT_R3_COMPRESSION:
         Opt->key = "compression";
@@ -328,7 +328,7 @@ struct Option *G_define_standard_option(int opt)
         Opt->answer = "default";
         Opt->options = "default,rle,none";
         Opt->description =
-            _("The compression method used in the output file");
+            _("The compression method used in the output raster3d map");
 	break;
     case G_OPT_R3_TILE_DIMENSION:
         Opt->key = "tiledimension";
@@ -338,7 +338,7 @@ struct Option *G_define_standard_option(int opt)
         Opt->key_desc = "XxYxZ";
         Opt->answer = "default";
         Opt->description =
-            _("The dimensions of the tiles used in the output file (XxYxZ)");
+            _("The dimensions of the tiles used in the output raster3d map (XxYxZ or default: 16x16x8)");
 	break;
         
 	/*vector maps */
