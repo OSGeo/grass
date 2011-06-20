@@ -1,30 +1,37 @@
 <h2>DESCRIPTION</h2>
 
 <em>v.net.salesman</em> calculates the optimal route to visit nodes on a
-vector network. If no cost column is given, the length of a line (road segment)
-is used to estimate travelling costs. If a cost column is given, the cost
-values must indicate the costs to traverse a given line, e.g. if the speed
-limit is 100 km / h, the cost to traverse a 10 km long road segment is 
-calculated as length / speed = 10 km / (100 km/h) = 0.1 h.
+vector network.
+
+<p>
+Costs may be either line lengths, or attributes saved in a database 
+table. These attribute values are taken as costs of whole segments, not 
+as costs to traverse a length unit (e.g. meter) of the segment. 
+For example, if the speed limit is 100 km / h, the cost to traverse a 
+10 km long road segment must be calculated as 
+length / speed = 10 km / (100 km/h) = 0.1 h.
+Supported are cost assignments for both arcs and nodes, 
+and also different costs for both directions of a vector line. 
+For areas, costs will be calculated along boundary lines.
+<p>
+The input vector needs to be prepared with <em>v.net operation=connect</em> 
+in order to connect points representing center nodes to the network.
+
 <p>
 Points specified by category must be exactly on network nodes, and the 
 input vector map needs to be prepared with <em>v.net operation=connect</em>.
 
+<h2>NOTES</h2>
+Nodes and arcs can be closed using cost = -1. 
+
 <h2>EXAMPLE</h2>
 
 Traveling salesman for 6 digitized nodes (Spearfish):
+<p>
+Searching for the shortest path:
 
 <div class="code"><pre>
 g.copy vect=roads,myroads
-v.db.addcolumn myroads col="cost double precision, length double precision"
-
-# define traveling costs as length in miles divided by speed limit in miles per hour:
-v.to.db map=myroads layer=1 type=line qlayer=1 option=length col=length unit=miles
-v.db.update myroads col=cost val="length / 50"
-v.db.update myroads col=cost val="length / 75" where="label='interstate'"
-v.db.update myroads col=cost val="length / 5" where="label='unimproved road'"
-v.db.update myroads col=cost val="length / 25" where="label='light-duty road, improved surface'"
-v.db.select myroads
 
 # we have 6 locations to visit on our trip
 echo "1|601653.5|4922869.2|a
@@ -61,16 +68,91 @@ d.vect -c centers icon=basic/triangle
 d.font verdana
 d.vect centers col=red disp=attr attrcol=label lsize=12
 
-# run with traveling costs = length / speed
-v.net.salesman myroads_net acol=cost ccats=1-6 out=mysalesman_speed
-d.vect mysalesman_speed col=green width=2
-
 # run without traveling costs using line length
-v.net.salesman myroads_net ccats=1-6 out=mysalesman_length
+v.net.salesman myroads_net ccats=1-6 out=mysalesman_shortest
 d.vect mysalesman_length col=green width=2
 d.vect centers col=red disp=attr attrcol=label lsize=12
 </pre></div>
 
+<p>
+Searching for the fastest path, using speed limits according to road type:
+
+<div class="code"><pre>
+# we have 6 locations to visit on our trip
+echo "1|601653.5|4922869.2|a
+2|608284|4923776.6|b
+3|601845|4914981.9|c
+4|596270|4917456.3|d
+5|593330.8|4924096.6|e
+6|598005.5|4921439.2|f" | v.in.ascii cat=1 x=2 y=3 out=centers col="cat integer, \
+                         east double precision, north double precision, label varchar(43)"
+
+# verify data preparation
+v.db.select centers
+v.category centers op=report
+# type       count        min        max
+# point          6          1          6
+
+# create unique categories for each road in layer 2
+v.category in=roads out=myroads opt=add cat=1 layer=2
+
+# add new table for layer 2
+v.db.addtable myroads layer=2 col="cat integer,label varchar(43),length double precision,speed double precision,cost double precision,bcost double precision"
+
+# copy road type to layer 2
+v.to.db myroads layer=2 qlayer=1 opt=query qcolumn=label columns=label
+
+# create lines map connecting points to network (take care of layers)
+v.net myroads points=centers out=myroads_net op=connect thresh=500 alayer=2 nlayer=1
+v.category myroads_net op=report
+# Layer/table: 2/myroads_net_myroads_l_2
+# type       count        min        max
+# point          6          1          6
+# line         837          1          5
+#
+# Layer/table: 1/myroads_net_roads
+# type       count        min        max
+# point          0          0          0
+# line         837          1        825
+
+# The network is now prepared. Visualize it
+g.region vect=myroads_net
+d.mon x0
+d.vect myroads_net
+d.vect -c centers icon=basic/triangle
+d.font verdana
+d.vect centers col=red disp=attr attrcol=label lsize=12
+
+# set up costs
+
+# upload road length in miles
+v.to.db map=myroads_net layer=2 type=line option=length col=length unit=miles
+
+# set speed limits in miles / hour
+v.db.update myroads_net layer=2 col=speed val="5.0"
+v.db.update myroads_net layer=2 col=speed val="75.0" where="label='interstate'"
+v.db.update myroads_net layer=2 col=speed val="75.0" where="label='primary highway, hard surface'"
+v.db.update myroads_net layer=2 col=speed val="50.0" where="label='secondary highway, hard surface'"
+v.db.update myroads_net layer=2 col=speed val="25.0" where="label='light-duty road, improved surface'"
+v.db.update myroads_net layer=2 col=speed val="5.0" where="label='unimproved road'"
+
+# define traveling costs as traveling time in hours:
+
+# set forward costs
+v.db.update myroads_net layer=2 col=cost val="length / speed"
+# set backward costs
+v.db.update myroads_net layer=2 col=bcost val="length / speed"
+
+# fastest path: traveling costs = length / speed = hours
+v.net.salesman myroads_net alayer=2 nlayer=1 acol=cost ccats=1-6 out=mysalesman_fastest
+
+# with different columns for forward and backward costs:
+# result is identical to fastest path
+v.net.salesman myroads_net afcol=cost abcol=bcost ccats=1-6 out=mysalesman_back
+
+d.vect mysalesman_fastest col=green width=2
+d.vect centers col=red disp=attr attrcol=label lsize=12
+</pre></div>
 
 <img src="vnetsalesman.png" alt="v.net.salesman example" border="1">
 
