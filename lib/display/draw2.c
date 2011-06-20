@@ -131,6 +131,8 @@ static void reduce_path(struct path *dst, const struct path *src, double eps)
 
 	path_append(dst, v1->x, v1->y, v1->mode);
     }
+    v = &src->vertices[src->count - 1];
+    path_append(dst, v->x, v->y, v->mode);
 }
 
 /******************************************************************************/
