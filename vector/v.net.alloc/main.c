@@ -5,7 +5,7 @@
  *  
  *  AUTHOR(S):    Radim Blazek
  *                
- *  PURPOSE:      Allocate subnets for nearest centres.
+ *  PURPOSE:      Allocate subnets for nearest centers.
  *                
  *  COPYRIGHT:    (C) 2001 by the GRASS Development Team
  * 
@@ -31,13 +31,13 @@ typedef struct
 
 typedef struct
 {
-    int centre;			/* neares centre, initially -1 */
-    double cost;		/* costs from this centre, initially not undefined */
+    int center;			/* neares center, initially -1 */
+    double cost;		/* costs from this center, initially not undefined */
 } NODE;
 
 int main(int argc, char **argv)
 {
-    int i, j, ret, centre, line, centre1, centre2;
+    int i, j, ret, center, line, center1, center2;
     int nlines, nnodes, type, ltype, afield, nfield, geo, cat;
     int node, node1, node2;
     double cost, e1cost, e2cost, n1cost, n2cost, s1cost, s2cost, l, l1, l2;
@@ -49,7 +49,7 @@ int main(int argc, char **argv)
     struct Map_info Map, Out;
     struct cat_list *catlist;
     CENTER *Centers = NULL;
-    int acentres = 0, ncentres = 0;
+    int acenters = 0, ncenters = 0;
     NODE *Nodes;
     struct line_cats *Cats;
     struct line_pnts *Points, *SPoints;
@@ -61,10 +61,10 @@ int main(int argc, char **argv)
     G_add_keyword(_("network"));
     G_add_keyword(_("allocation"));
     module->label =
-	_("Allocate subnets for nearest centres (direction from centre).");
+	_("Allocate subnets for nearest centers (direction from center).");
     module->description =
-	_("Centre node must be opened (costs >= 0). "
-	  "Costs of centre node are used in calculation");
+	_("center node must be opened (costs >= 0). "
+	  "Costs of center node are used in calculation");
 
 
     map = G_define_standard_option(G_OPT_V_INPUT);
@@ -108,7 +108,7 @@ int main(int argc, char **argv)
     term_opt->key = "ccats";
     term_opt->required = YES;
     term_opt->description =
-	_("Categories of centres (points on nodes) to which net "
+	_("Categories of centers (points on nodes) to which net "
 	  "will be allocated, "
 	  "layer for this categories is given by nlayer option");
 
@@ -147,7 +147,7 @@ int main(int argc, char **argv)
 
     nnodes = Vect_get_num_nodes(&Map);
 
-    /* Create list of centres based on list of categories */
+    /* Create list of centers based on list of categories */
     for (node = 1; node <= nnodes; node++) {
 	nlines = Vect_get_node_n_lines(&Map, node);
 	for (j = 0; j < nlines; j++) {
@@ -160,47 +160,47 @@ int main(int argc, char **argv)
 	    if (Vect_cat_in_cat_list(cat, catlist)) {
 		Vect_net_get_node_cost(&Map, node, &n1cost);
 		if (n1cost == -1) {	/* closed */
-		    G_warning("Centre at closed node (costs = -1) ignored");
+		    G_warning("center at closed node (costs = -1) ignored");
 		}
 		else {
-		    if (acentres == ncentres) {
-			acentres += 1;
+		    if (acenters == ncenters) {
+			acenters += 1;
 			Centers =
 			    (CENTER *) G_realloc(Centers,
-						 acentres * sizeof(CENTER));
+						 acenters * sizeof(CENTER));
 		    }
-		    Centers[ncentres].cat = cat;
-		    Centers[ncentres].node = node;
-		    G_debug(2, "centre = %d node = %d cat = %d", ncentres,
+		    Centers[ncenters].cat = cat;
+		    Centers[ncenters].node = node;
+		    G_debug(2, "center = %d node = %d cat = %d", ncenters,
 			    node, cat);
-		    ncentres++;
+		    ncenters++;
 		}
 	    }
 	}
     }
 
-    G_message(_("Number of centres: [%d] (nlayer: [%d])"), ncentres, nfield);
+    G_message(_("Number of centers: [%d] (nlayer: [%d])"), ncenters, nfield);
 
-    if (ncentres == 0)
-	G_warning(_("Not enough centres for selected nlayer. "
+    if (ncenters == 0)
+	G_warning(_("Not enough centers for selected nlayer. "
 		    "Nothing will be allocated."));
 
     /* alloc and reset space for all nodes */
     Nodes = (NODE *) G_calloc((nnodes + 1), sizeof(NODE));
     for (i = 1; i <= nnodes; i++) {
-	Nodes[i].centre = -1;
+	Nodes[i].center = -1;
     }
 
 
-    /* Fill Nodes by neares centre and costs from that centre */
-    G_message(_("Calculating costs from centres ..."));
+    /* Fill Nodes by nearest center and costs from that center */
+    G_message(_("Calculating costs from centers ..."));
 
-    for (centre = 0; centre < ncentres; centre++) {
-	G_percent(centre, ncentres, 1);
-	node1 = Centers[centre].node;
+    for (center = 0; center < ncenters; center++) {
+	G_percent(center, ncenters, 1);
+	node1 = Centers[center].node;
 	Vect_net_get_node_cost(&Map, node1, &n1cost);
-	G_debug(2, "centre = %d node = %d cat = %d", centre, node1,
-		Centers[centre].cat);
+	G_debug(2, "center = %d node = %d cat = %d", center, node1,
+		Centers[center].cat);
 	for (node2 = 1; node2 <= nnodes; node2++) {
 	    G_debug(5, "  node1 = %d node2 = %d", node1, node2);
 	    Vect_net_get_node_cost(&Map, node2, &n2cost);
@@ -213,18 +213,18 @@ int main(int argc, char **argv)
 		continue;
 	    }			/* node unreachable */
 
-	    /* We must add centre node costs (not calculated by Vect_net_shortest_path() ), but
-	     *  only if centre and node are not identical, because at the end node cost is add later */
+	    /* We must add center node costs (not calculated by Vect_net_shortest_path() ), but
+	     *  only if center and node are not identical, because at the end node cost is add later */
 	    if (node1 != node2)
 		cost += n1cost;
 
 	    G_debug(5,
 		    "Arc nodes: %d %d cost: %f (x old cent: %d old cost %f",
-		    node1, node2, cost, Nodes[node2].centre,
+		    node1, node2, cost, Nodes[node2].center,
 		    Nodes[node2].cost);
-	    if (Nodes[node2].centre == -1 || cost < Nodes[node2].cost) {
+	    if (Nodes[node2].center == -1 || cost < Nodes[node2].cost) {
 		Nodes[node2].cost = cost;
-		Nodes[node2].centre = centre;
+		Nodes[node2].center = center;
 	    }
 	}
     }
@@ -241,12 +241,12 @@ int main(int argc, char **argv)
 	    continue;
 	}
 	Vect_get_line_nodes(&Map, line, &node1, &node2);
-	centre1 = Nodes[node1].centre;
-	centre2 = Nodes[node2].centre;
+	center1 = Nodes[node1].center;
+	center2 = Nodes[node2].center;
 	s1cost = Nodes[node1].cost;
 	s2cost = Nodes[node2].cost;
 	G_debug(3, "Line %d:", line);
-	G_debug(3, "Arc centres: %d %d (nodes: %d %d)", centre1, centre2,
+	G_debug(3, "Arc centers: %d %d (nodes: %d %d)", center1, center2,
 		node1, node2);
 
 	Vect_net_get_node_cost(&Map, node1, &n1cost);
@@ -263,33 +263,33 @@ int main(int argc, char **argv)
 	Vect_reset_cats(Cats);
 
 	/* First check if arc is reachable from at least one side */
-	if ((centre1 != -1 && n1cost != -1 && e1cost != -1) ||
-	    (centre2 != -1 && n2cost != -1 && e2cost != -1)) {
+	if ((center1 != -1 && n1cost != -1 && e1cost != -1) ||
+	    (center2 != -1 && n2cost != -1 && e2cost != -1)) {
 	    /* Line is reachable at least from one side */
 	    G_debug(3, "  -> arc is reachable");
 
-	    if (centre1 == centre2) {	/* both nodes in one area -> whole arc in one area */
-		if (centre1 != -1)
-		    cat = Centers[centre1].cat;	/* line reachable */
+	    if (center1 == center2) {	/* both nodes in one area -> whole arc in one area */
+		if (center1 != -1)
+		    cat = Centers[center1].cat;	/* line reachable */
 		else
-		    cat = Centers[centre2].cat;
+		    cat = Centers[center2].cat;
 		Vect_cat_set(Cats, 1, cat);
 		Vect_write_line(&Out, ltype, Points, Cats);
 	    }
 	    else {		/* each node in different area */
 		/* Check if direction is reachable */
-		if (centre1 == -1 || n1cost == -1 || e1cost == -1) {	/* closed from first node */
+		if (center1 == -1 || n1cost == -1 || e1cost == -1) {	/* closed from first node */
 		    G_debug(3,
 			    "    -> arc is not reachable from 1. node -> alloc to 2. node");
-		    cat = Centers[centre2].cat;
+		    cat = Centers[center2].cat;
 		    Vect_cat_set(Cats, 1, cat);
 		    Vect_write_line(&Out, ltype, Points, Cats);
 		    continue;
 		}
-		else if (centre2 == -1 || n2cost == -1 || e2cost == -1) {	/* closed from second node */
+		else if (center2 == -1 || n2cost == -1 || e2cost == -1) {	/* closed from second node */
 		    G_debug(3,
 			    "    -> arc is not reachable from 2. node -> alloc to 1. node");
-		    cat = Centers[centre1].cat;
+		    cat = Centers[center1].cat;
 		    Vect_cat_set(Cats, 1, cat);
 		    Vect_write_line(&Out, ltype, Points, Cats);
 		    continue;
@@ -304,12 +304,12 @@ int main(int argc, char **argv)
 		/* Check if s1cost + e1cost <= s2cost or s2cost + e2cost <= s1cost !
 		 * Note this check also possibility of (e1cost + e2cost) = 0 */
 		if (s1cost + e1cost <= s2cost) {	/* whole arc reachable from node1 */
-		    cat = Centers[centre1].cat;
+		    cat = Centers[center1].cat;
 		    Vect_cat_set(Cats, 1, cat);
 		    Vect_write_line(&Out, ltype, Points, Cats);
 		}
 		else if (s2cost + e2cost <= s1cost) {	/* whole arc reachable from node2 */
-		    cat = Centers[centre2].cat;
+		    cat = Centers[center2].cat;
 		    Vect_cat_set(Cats, 1, cat);
 		    Vect_write_line(&Out, ltype, Points, Cats);
 		}
@@ -324,7 +324,7 @@ int main(int argc, char **argv)
 		    G_debug(3, "  -> s2cost = %f e2cost = %f", s2cost,
 			    e2cost);
 
-		    /* Costs from both centres to the splitting point must be equal:
+		    /* Costs from both centers to the splitting point must be equal:
 		     * s1cost + l1 * e1cost = s2cost + l2 * e2cost */
 		    l1 = (l * e2cost - s1cost + s2cost) / (e1cost + e2cost);
 		    l2 = l - l1;
@@ -336,7 +336,7 @@ int main(int argc, char **argv)
 			G_warning(_("Cannot get line segment, segment out of line"));
 		    }
 		    else {
-			cat = Centers[centre1].cat;
+			cat = Centers[center1].cat;
 			Vect_cat_set(Cats, 1, cat);
 			Vect_write_line(&Out, ltype, SPoints, Cats);
 		    }
@@ -348,7 +348,7 @@ int main(int argc, char **argv)
 		    }
 		    else {
 			Vect_reset_cats(Cats);
-			cat = Centers[centre2].cat;
+			cat = Centers[center2].cat;
 			Vect_cat_set(Cats, 1, cat);
 			Vect_write_line(&Out, ltype, SPoints, Cats);
 		    }
