@@ -23,6 +23,7 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
+#include <grass/G3d.h>
 
 static char **rules;
 static int nrules;
@@ -147,31 +148,48 @@ int main(int argc, char **argv)
     int have_stats = 0;
     struct FPRange range;
     DCELL min, max;
-    const char *name, *mapset;
-    const char *style, *cmap, *cmapset;
-    const char *rules;
+    const char *name = NULL, *mapset = NULL;
+    const char *style = NULL, *cmap = NULL, *cmapset = NULL;
+    const char *rules = NULL;
     int fp;
     struct GModule *module;
     struct
     {
-	struct Flag *r, *w, *l, *g, *a, *e, *n;
+	struct Flag *r, *w, *l, *g, *a,*n;
+#ifndef USE_RASTER3D
+    struct Flag *e;
+#endif
     } flag;
     struct
     {
-	struct Option *map, *colr, *rast, *rules;
+	struct Option *map, *colr, *rast, *volume, *rules;
     } opt;
-
-
+#ifdef USE_RASTER3D
+    const char *maptype = "raster3d";
+    const char *Maptype = "Raster3d";
+#else
+    const char *maptype = "raster";
+    const char *Maptype = "Raster";
+#endif
     G_gisinit(argv[0]);
 
     module = G_define_module();
+    G_add_keyword(_("raster3d"));
     G_add_keyword(_("raster"));
     G_add_keyword(_("color table"));
+#ifdef USE_RASTER3D
+    module->description =
+	_("Creates/modifies the color table associated with a raster3d map.");
+#else
     module->description =
 	_("Creates/modifies the color table associated with a raster map.");
-    
+#endif
+
+#ifdef USE_RASTER3D
+    opt.map = G_define_standard_option(G_OPT_R3_MAP);
+#else
     opt.map = G_define_standard_option(G_OPT_R_MAP);
-    
+#endif
     scan_rules();
 
     opt.colr = G_define_option();
@@ -190,6 +208,13 @@ int main(int argc, char **argv)
     opt.rast->description =
 	_("Raster map from which to copy color table");
     opt.rast->guisection = _("Define");
+    
+    opt.volume = G_define_standard_option(G_OPT_R3_INPUT);
+    opt.volume->key = "volume";
+    opt.volume->required = NO;
+    opt.volume->description =
+	_("Raster3d map from which to copy color table");
+    opt.volume->guisection = _("Define");
     
     opt.rules = G_define_standard_option(G_OPT_F_INPUT);
     opt.rules->key = "rules";
@@ -229,10 +254,12 @@ int main(int argc, char **argv)
     flag.a->description = _("Logarithmic-absolute scaling");
     flag.a->guisection = _("Define");
 
+#ifndef USE_RASTER3D
     flag.e = G_define_flag();
     flag.e->key = 'e';
     flag.e->description = _("Histogram equalization");
     flag.e->guisection = _("Define");
+#endif
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -246,12 +273,22 @@ int main(int argc, char **argv)
     remove = flag.r->answer;
     
     name = opt.map->answer;
+    
+    if (!name)
+	G_fatal_error(_("No %s map specified"), maptype);
+    
+    if(opt.rast->answer && opt.volume->answer)
+	G_fatal_error(_("\raster\" and \"volume\" options are mutually exclusive"));
+    
     style = opt.colr->answer;
-    cmap = opt.rast->answer;
+
+    if(opt.rast->answer)
+        cmap = opt.rast->answer;
+    if(opt.volume->answer)
+        cmap = opt.volume->answer;
+
     rules = opt.rules->answer;
 
-    if (!name)
-	G_fatal_error(_("No raster map specified"));
     
     if (!cmap && !style && !rules && !remove)
 	G_fatal_error(_("One of \"-r\" or options \"color\", \"raster\" or \"rules\" must be specified!"));
@@ -265,23 +302,33 @@ int main(int argc, char **argv)
     is_from_stdin = rules && strcmp(rules, "-") == 0;
     if (is_from_stdin)
 	rules = NULL;
-
+#ifdef USE_RASTER3D
+    mapset = G_find_grid3(name, "");
+#else
     mapset = G_find_raster2(name, "");
+#endif
     if (mapset == NULL)
-	G_fatal_error(_("Raster map <%s> not found"), name);
-
+	G_fatal_error(_("%s map <%s> not found"), Maptype, name);
+    
     if (remove) {
+#ifdef USE_RASTER3D
+	int stat = G3d_removeColor(name);
+#else
 	int stat = Rast_remove_colors(name, mapset);
-
+#endif
 	if (stat < 0)
-	    G_fatal_error(_("Unable to remove color table of raster map <%s>"), name);
+	    G_fatal_error(_("Unable to remove color table of %s map <%s>"), maptype, name);
 	if (stat == 0)
-	    G_warning(_("Color table of raster map <%s> not found"), name);
+	    G_warning(_("Color table of %s map <%s> not found"), maptype, name);
 	return EXIT_SUCCESS;
     }
 
     G_suppress_warnings(1);
+#ifdef USE_RASTER3D
+    have_colors = G3d_readColors(name, mapset, &colors);
+#else
     have_colors = Rast_read_colors(name, mapset, &colors);
+#endif
     /*
       if (have_colors >= 0)
       Rast_free_colors(&colors);
@@ -294,8 +341,13 @@ int main(int argc, char **argv)
 
     G_suppress_warnings(0);
 
+#ifdef USE_RASTER3D
+    fp = 1; /* g3d maps are always floating point */
+    G3d_readRange(name, mapset, &range);
+#else
     fp = Rast_map_is_fp(name, mapset);
     Rast_read_fp_range(name, mapset, &range);
+#endif
     Rast_get_fp_range_min_max(&range, &min, &max);
 
     if (is_from_stdin) {
@@ -308,19 +360,19 @@ int main(int argc, char **argv)
 	 */
 	if (strcmp(style, "random") == 0) {
 	    if (fp)
-		G_fatal_error(_("Color table 'random' is not supported for floating point raster map"));
+		G_fatal_error(_("Color table 'random' is not supported for floating point %s map"), maptype);
 	    Rast_make_random_colors(&colors, (CELL) min, (CELL) max);
 	}
 	else if (strcmp(style, "grey.eq") == 0) {
 	    if (fp)
-		G_fatal_error(_("Color table 'grey.eq' is not supported for floating point raster map"));
+		G_fatal_error(_("Color table 'grey.eq' is not supported for floating point %s map"), maptype);
 	    if (!have_stats)
 		have_stats = get_stats(name, mapset, &statf);
 	    Rast_make_histogram_eq_colors(&colors, &statf);
 	}
 	else if (strcmp(style, "grey.log") == 0) {
 	    if (fp)
-		G_fatal_error(_("Color table 'grey.log' is not supported for floating point raster map"));
+		G_fatal_error(_("Color table 'grey.log' is not supported for floating point %s map"), maptype);
 	    if (!have_stats)
 		have_stats = get_stats(name, mapset, &statf);
 	    Rast_make_histogram_log_colors(&colors, &statf, (CELL) min,
@@ -345,12 +397,21 @@ int main(int argc, char **argv)
     }
     else {
 	/* use color from another map (cmap) */
-	cmapset = G_find_raster2(cmap, "");
-	if (cmapset == NULL)
-	    G_fatal_error(_("Raster map <%s> not found"), cmap);
+        if(opt.rast->answer) {
+            cmapset = G_find_raster2(cmap, "");
+            if (cmapset == NULL)
+                G_fatal_error(_("Raster map <%s> not found"), cmap);
 
-	if (Rast_read_colors(cmap, cmapset, &colors) < 0)
-	    G_fatal_error(_("Unable to read color table for raster map <%s>"), cmap);
+            if (Rast_read_colors(cmap, cmapset, &colors) < 0)
+                G_fatal_error(_("Unable to read color table for raster map <%s>"), cmap);
+        } else {
+            cmapset = G_find_grid3(cmap, "");
+            if (cmapset == NULL)
+                G_fatal_error(_("Raster3d map <%s> not found"), cmap);
+
+            if (G3d_readColors(cmap, cmapset, &colors) < 0)
+                G_fatal_error(_("Unable to read color table for raster3d map <%s>"), cmap);
+        }
     }
 
     if (fp)
@@ -359,6 +420,8 @@ int main(int argc, char **argv)
     if (flag.n->answer)
 	Rast_invert_colors(&colors);
 
+    /* This is not avilable for raster3d maps yet */
+#ifndef USE_RASTER3D
     if (flag.e->answer) {
 	if (fp) {
 	    struct FP_stats fpstats;
@@ -372,7 +435,8 @@ int main(int argc, char **argv)
 	}
 	colors = colors_tmp;
     }
-
+#endif
+    
     if (flag.g->answer) {
 	Rast_log_colors(&colors_tmp, &colors, 100);
 	colors = colors_tmp;
@@ -385,9 +449,12 @@ int main(int argc, char **argv)
 
     if (fp)
 	Rast_mark_colors_as_fp(&colors);
-
+#ifdef USE_RASTER3D
+    G3d_writeColors(name, mapset, &colors);
+#else
     Rast_write_colors(name, mapset, &colors);
-    G_message(_("Color table for raster map <%s> set to '%s'"), name,
+#endif
+    G_message(_("Color table for %s map <%s> set to '%s'"), maptype, name,
 	      is_from_stdin ? "rules" : style ? style : rules ? rules :
 	      cmap);
 

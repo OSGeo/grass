@@ -20,6 +20,9 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
+#ifdef USE_RASTER3D
+#include <grass/G3d.h>
+#endif
 
 static FILE *fp;
 static int perc;
@@ -60,13 +63,28 @@ int main(int argc, char **argv)
     G_gisinit(argv[0]);
 
     module = G_define_module();
+#ifdef USE_RASTER3D
+    G_add_keyword(_("raster3d"));
+#else
     G_add_keyword(_("raster"));
+#endif
+    
     G_add_keyword(_("export"));
     G_add_keyword(_("color table"));
+    
+#ifdef USE_RASTER3D
+    module->description =
+	_("Exports the color table associated with a raster3d map layer.");
+#else
     module->description =
 	_("Exports the color table associated with a raster map layer.");
+#endif
 
+#ifdef USE_RASTER3D
+    opt.map = G_define_standard_option(G_OPT_R3_MAP);
+#else
     opt.map = G_define_standard_option(G_OPT_R_MAP);
+#endif
 
     opt.file = G_define_standard_option(G_OPT_F_OUTPUT);
     opt.file->key = "rules";
@@ -85,10 +103,16 @@ int main(int argc, char **argv)
     file = opt.file->answer;
     perc = flag.p->answer ? 1 : 0;
 
+#ifdef USE_RASTER3D
+    if (G3d_readColors(name, "", &colors) < 0)
+	G_fatal_error(_("Unable to read color table for raster3d map <%s>"), name);
+    G3d_readRange(name, "", &range);
+#else
     if (Rast_read_colors(name, "", &colors) < 0)
-	G_fatal_error(_("Unable to read color table for raster map <%s>"));
-
+	G_fatal_error(_("Unable to read color table for raster map <%s>"), name);
     Rast_read_fp_range(name, "", &range);
+#endif
+
     Rast_get_fp_range_min_max(&range, &min, &max);
 
     if (!file || strcmp(file, "-") == 0)
