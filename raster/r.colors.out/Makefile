@@ -1,11 +1,17 @@
 MODULE_TOPDIR = ../..
 
-PGM = r.colors.out
+LIBES2 = $(RASTERLIB) $(GISLIB)
+LIBES3 = $(G3DLIB) $(RASTERLIB) $(GISLIB)
+DEPENDENCIES = $(G3DDEP) $(GISDEP) $(RASTERDEP)
 
-LIBES = $(RASTERLIB) $(GISLIB)
-DEPENDENCIES = $(RASTERDEP) $(GISDEP)
+PROGRAMS = r.colors.out r3.colors.out
 
-include $(MODULE_TOPDIR)/include/Make/Module.make
+r_colors_out_OBJS = raster_main.o write_colors.o
+r3_colors_out_OBJS = raster3d_main.o write_colors.o
 
-default: cmd
+include $(MODULE_TOPDIR)/include/Make/Multi.make
 
+default: multi
+
+$(BIN)/r.colors.out$(EXE): LIBES = $(LIBES2)
+$(BIN)/r3.colors.out$(EXE):  LIBES = $(LIBES3)
