@@ -57,4 +57,4 @@ r3.colors    map=volume_double_null rules=example3 && r3.colors.out --o map=volu
 r3.colors -a map=volume_double_null rules=example3 && r3.colors.out --o map=volume_double_null rules=test_volume_double_example3_logabs.txt
 r3.colors    map=volume_double_null rules=example4 && r3.colors.out --o map=volume_double_null rules=test_volume_double_example4.txt
 r3.colors -n map=volume_double_null volume=volume_double_null && r3.colors.out --o map=volume_double_null rules=test_volume_double_example4_inv.txt
-r3.colors    map=volume_double_null raster=test_elev_double   && r3.colors.out --o map=volume_double_null rules=test_volume_double_example5.ref
+r3.colors    map=volume_double_null raster=test_elev_double   && r3.colors.out --o map=volume_double_null rules=test_volume_double_example5.txt
