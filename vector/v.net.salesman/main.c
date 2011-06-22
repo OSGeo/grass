@@ -80,6 +80,7 @@ int main(int argc, char **argv)
     int i, j, k, ret, city, city1;
     int nlines, type, ltype, afield, tfield, geo, cat;
     int node, node1, node2, line;
+    double **cost_cache;			/* pointer to array of pointers to arrays of cached costs */
     struct Option *map, *output, *afield_opt, *tfield_opt, *afcol, *abcol,
 	*type_opt, *term_opt;
     struct Flag *geo_f;
@@ -225,6 +226,10 @@ int main(int argc, char **argv)
     for (i = 0; i < ncities; i++) {
 	costs[i] = (COST *) G_malloc(ncities * sizeof(COST));
     }
+    cost_cache = (double **) G_malloc(ncities * sizeof(double *));
+    for (i = 0; i < ncities; i++) {
+	cost_cache[i] = (double *) G_malloc(ncities * sizeof(double));
+    }
     if (abcol->answer) {
 	bcosts = (COST **) G_malloc(ncities * sizeof(COST *));
 	for (i = 0; i < ncities; i++) {
@@ -258,6 +263,7 @@ int main(int argc, char **argv)
 	    /* TODO: add to directional cost cache: from, to, cost */
 	    costs[i][k].city = j;
 	    costs[i][k].cost = cost;
+	    cost_cache[i][j] = cost;
 
 	    k++;
 	}
@@ -271,19 +277,10 @@ int main(int argc, char **argv)
 		if (i == j)
 		    continue;
 		    
-		/* TODO: get cost from directional cost cache */
-		/* from = cities[j], to = cities[i] */
-		ret =
-		    Vect_net_shortest_path(&Map, cities[j], cities[i], NULL,
-					   &cost);
-		if (ret == -1)
-		    G_fatal_error(_("Destination node [%d] is unreachable "
-				    "from node [%d]"), cities[j], cities[i]);
-		
-		if (bcosts[i][k].cost > cost) {
-		    bcosts[i][k].cost = cost;
-		}
-		    k++;
+		bcosts[i][k].city = j;
+		bcosts[i][k].cost = cost_cache[j][i];
+
+		k++;
 	    }
 	    qsort((void *)bcosts[i], k, sizeof(COST), cmp);
 	}
@@ -327,7 +324,7 @@ int main(int argc, char **argv)
 		continue;
 	    tmpcost = 0;
 	    for (k = 0; k < ncities - 1; k++) {
-		G_debug(2, "? %d (%d) - %d (%d)", j, cnode(j),
+		G_debug(2, "forward? %d (%d) - %d (%d)", j, cnode(j),
 			costs[j][k].city, cnode(costs[j][k].city));
 		if (!cused[costs[j][k].city])
 		    continue;	/* only used */
@@ -338,11 +335,11 @@ int main(int argc, char **argv)
 	    /* forward/backward: tmpcost = min(fcost) + min(bcost) */
 	    if (bcosts) {
 		for (k = 0; k < ncities - 1; k++) {
-		    G_debug(2, "? %d (%d) - %d (%d)", j, cnode(j),
+		    G_debug(2, "backward? %d (%d) - %d (%d)", j, cnode(j),
 			    bcosts[j][k].city, cnode(bcosts[j][k].city));
 		    if (!cused[bcosts[j][k].city])
 			continue;	/* only used */
-		    /* directional costs j -> k */
+		    /* directional costs k -> j */
 		    tmpcost += bcosts[j][k].cost;
 		    break;		/* first nearest */
 		}
@@ -362,24 +359,19 @@ int main(int argc, char **argv)
 	city1 = 0;
 	for (j = 0; j < ncyc; j++) {
 	    /* cost from j to j + 1 (directional) */
-	    node1 = cities[cycle[j]];
-	    node2 = cities[cycle[j + 1]];
-	    /* TODO: get cost from directional cost cache */
-	    /* from = cities[cycle[j]], to = cities[cycle[j + 1]] */
-	    ret = Vect_net_shortest_path(&Map, node1, node2, NULL, &tcost);
+	    /* get cost from directional cost cache */
+	    tcost = cost_cache[cycle[j]][cycle[j + 1]];
 	    tmpcost = -tcost;
+
 	    /* check insertion of city between j and j + 1 */
+
 	    /* cost from j to city (directional) */
-	    node1 = cities[cycle[j]];
-	    node2 = cities[city];
-	    /* TODO: get cost from directional cost cache */
-	    ret = Vect_net_shortest_path(&Map, node1, node2, NULL, &tcost);
+	    /* get cost from directional cost cache */
+	    tcost = cost_cache[cycle[j]][city];
 	    tmpcost += tcost;
 	    /* cost from city to j + 1 (directional) */
-	    node1 = cities[city];
-	    node2 = cities[cycle[j + 1]];
-	    /* TODO: get cost from directional cost cache */
-	    ret = Vect_net_shortest_path(&Map, node1, node2, NULL, &tcost);
+	    /* get cost from directional cost cache */
+	    tcost = cost_cache[city][cycle[j + 1]];
 	    tmpcost += tcost;
 	    
 	    /* tmpcost must always be > 0 */
