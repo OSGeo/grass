@@ -144,11 +144,11 @@ v.db.update myroads_net layer=2 col=cost val="length / speed"
 v.db.update myroads_net layer=2 col=bcost val="length / speed"
 
 # fastest path: traveling costs = length / speed = hours
-v.net.salesman myroads_net alayer=2 nlayer=1 acol=cost ccats=1-6 out=mysalesman_fastest
+v.net.salesman myroads_net alayer=2 nlayer=1 afcol=cost ccats=1-6 out=mysalesman_fastest
 
 # with different columns for forward and backward costs:
 # result is identical to fastest path
-v.net.salesman myroads_net afcol=cost abcol=bcost ccats=1-6 out=mysalesman_back
+v.net.salesman myroads_net alayer=2 nlayer=1 afcol=cost abcol=bcost ccats=1-6 out=mysalesman_back
 
 d.vect mysalesman_fastest col=green width=2
 d.vect centers col=red disp=attr attrcol=label lsize=12
