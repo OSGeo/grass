@@ -771,7 +771,7 @@ class WriteWorkspaceFile(object):
             elif type == 'group':
                 name = mapTree.GetItemText(item)
                 self.file.write('%s<group name="%s" checked="%d">\n' % \
-                               (' ' * self.indent, name, checked));
+                               (' ' * self.indent, name.encode('utf8'), checked));
                 self.indent += 4
                 subItem = mapTree.GetFirstChild(item)[0]
                 self.__writeLayer(mapTree, subItem)
@@ -780,13 +780,13 @@ class WriteWorkspaceFile(object):
             else:
                 cmd = mapTree.GetPyData(item)[0]['maplayer'].GetCmd(string=False)
                 name = mapTree.GetItemText(item)
+                opacity = maplayer.GetOpacity(float = True)
                 # remove 'opacity' part
-                if '(opacity' in name:
+                if opacity < 1:
                     name = name.split('(', -1)[0].strip()
-                opacity = maplayer.GetOpacity(float=True)
                 self.file.write('%s<layer type="%s" name="%s" checked="%d" opacity="%f">\n' % \
-                               (' ' * self.indent, type, name, checked, opacity));
-
+                                    (' ' * self.indent, type, name.encode('utf8'), checked, opacity));
+                
                 self.indent += 4
                 # selected ?
                 if item in itemSelected:
