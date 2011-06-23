@@ -44,6 +44,15 @@ def init(gisbase, dbase = '', location = 'demolocation', mapset = 'PERMANENT'):
     
     os.environ['GIS_LOCK'] = str(os.getpid())
     
+    # Set PYTHONPATH to find GRASS Python modules
+    path = os.getenv('PYTHONPATH')
+    dir  = os.path.join(gisbase, 'etc', 'python')
+    if path:
+	path = dir + os.pathsep + path
+    else:
+	path = dir
+    os.environ['PYTHONPATH'] = path
+    
     if not dbase:
         dbase = gisbase
     
@@ -55,4 +64,3 @@ def init(gisbase, dbase = '', location = 'demolocation', mapset = 'PERMANENT'):
     os.close(fd)
     
     return gisrc
-
