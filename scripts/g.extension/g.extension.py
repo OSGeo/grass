@@ -368,6 +368,11 @@ def install_extension():
     else:
         grass.message(_("Installation of '%s' successfully finished.") % options['extension'])
 
+    if not os.environ.has_key('GRASS_ADDON_PATH') or \
+            not os.environ['GRASS_ADDON_PATH']:
+        grass.warning(_('This add-on module will not function until you set the '
+                        'GRASS_ADDON_PATH environment variable (see "g.manual variables")'))
+
 def remove_extension():
     # is module available?
     if not os.path.exists(os.path.join(options['prefix'], 'bin', options['extension'])):
