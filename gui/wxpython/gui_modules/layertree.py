@@ -907,7 +907,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             elif ltype == 'command':
                 ctrl.SetValue(lname)
             else:
-                self.SetItemText(layer, self._getLayerName(layer))
+                self.SetItemText(layer, self._getLayerName(layer, lname))
         
         # updated progress bar range (mapwindow statusbar)
         if checked is True:
@@ -1373,21 +1373,27 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         
         return newItem
 
-    def _getLayerName(self, item):
-        """!Get layer name string"""
+    def _getLayerName(self, item, lname = ''):
+        """!Get layer name string
+
+        @param lname optional layer name
+        """
         mapLayer = self.GetPyData(item)[0]['maplayer']
-        mapname  = self.GetPyData(item)[0]['label']
+        if not lname:
+            lname  = self.GetPyData(item)[0]['label']
         opacity  = int(mapLayer.GetOpacity(float = True) * 100)
-        if not mapname:
+        if not lname:
             dcmd    = self.GetPyData(item)[0]['cmd']
-            mapname, found = utils.GetLayerNameFromCmd(dcmd, layerType = mapLayer.GetType(),
+            lname, found = utils.GetLayerNameFromCmd(dcmd, layerType = mapLayer.GetType(),
                                                        fullyQualified = True)
-        if not found:
-            return None
+            if not found:
+                return None
         
-        return mapname + ' (%s %d' % (_('opacity:'), opacity) + '%)'
+        if opacity < 100:
+            return lname + ' (%s %d' % (_('opacity:'), opacity) + '%)'
         
-        
+        return lname
+                
     def GetOptData(self, dcmd, layer, params, propwin):
         """!Process layer data (when changes in properties dialog are applied)
         """
