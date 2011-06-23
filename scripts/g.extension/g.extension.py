@@ -416,10 +416,17 @@ def main():
     if options['prefix'] == '$GRASS_ADDON_PATH':
         if not os.environ.has_key('GRASS_ADDON_PATH') or \
                 not os.environ['GRASS_ADDON_PATH']:
-            grass.warning(_("GRASS_ADDON_PATH is not defined, installing to ~/.grass7/addons/"))
-            options['prefix'] = os.path.join(os.environ['HOME'], '.grass7', 'addons')
+            major_version = int(grass.version()['version'].split('.', 1)[0])
+            grass.warning(_("GRASS_ADDON_PATH is not defined, "
+                            "installing to ~/.grass%d/addons/") % major_version)
+            options['prefix'] = os.path.join(os.environ['HOME'], '.grass%d' % major_version, 'addons')
         else:
-            options['prefix'] = os.environ['GRASS_ADDON_PATH']
+            path_list = os.environ['GRASS_ADDON_PATH'].split(os.pathsep)
+            if len(path_list) < 1:
+                grass.fatal(_("Invalid GRASS_ADDON_PATH value - '%s'") % os.environ['GRASS_ADDON_PATH'])
+            if len(path_list) > 1:
+                grass.warning(_("GRASS_ADDON_PATH has more items, using first defined - '%s'") % path_list[0])
+            options['prefix'] = path_list[0]
     
     # check dirs
     check_dirs()
