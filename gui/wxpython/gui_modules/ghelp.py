@@ -800,8 +800,7 @@ class InstallExtensionWindow(wx.Frame):
         self.treeBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
                                     label = " %s " % _("List of extensions"))
         
-        self.repo = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY,
-                                value = 'https://svn.osgeo.org/grass/grass-addons')
+        self.repo = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY)
         self.fullDesc = wx.CheckBox(parent = self.panel, id = wx.ID_ANY,
                                     label = _("Fetch full info including description and keywords (takes time)"))
         self.fullDesc.SetValue(False)
@@ -825,6 +824,8 @@ class InstallExtensionWindow(wx.Frame):
                 continue
             self.options[name] = wx.CheckBox(parent = self.panel, id = wx.ID_ANY,
                                              label = desc)
+        self.repo.SetValue(task.get_param(value = 'svnurl').get('default',
+                                                                'https://svn.osgeo.org/grass/grass-addons'))
         
         self.statusbar = self.CreateStatusBar(0)
         
@@ -836,10 +837,14 @@ class InstallExtensionWindow(wx.Frame):
                                     label = _("&Install"))
         self.btnInstall.SetToolTipString(_("Install selected add-ons GRASS module"))
         self.btnInstall.Enable(False)
-        
+        self.btnCmd = wx.Button(parent = self.panel, id = wx.ID_ANY,
+                                label = _("Command dialog"))
+        self.btnCmd.SetToolTipString(_('Open %s dialog') % 'g.extension')
+
         self.btnClose.Bind(wx.EVT_BUTTON, self.OnCloseWindow)
         self.btnFetch.Bind(wx.EVT_BUTTON, self.OnFetch)
         self.btnInstall.Bind(wx.EVT_BUTTON, self.OnInstall)
+        self.btnCmd.Bind(wx.EVT_BUTTON, self.OnCmdDialog)
         self.tree.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.OnItemActivated)
         self.tree.Bind(wx.EVT_TREE_SEL_CHANGED,    self.OnItemSelected)
         self.search.Bind(wx.EVT_TEXT_ENTER,        self.OnShowItem)
@@ -873,6 +878,9 @@ class InstallExtensionWindow(wx.Frame):
             optionSizer.Add(item = self.options[key], proportion = 0)
         
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
+        btnSizer.Add(item = self.btnCmd, proportion = 0,
+                     flag = wx.RIGHT, border = 5)
+        btnSizer.AddSpacer(10)
         btnSizer.Add(item = self.btnClose, proportion = 0,
                      flag = wx.RIGHT, border = 5)
         btnSizer.Add(item = self.btnInstall, proportion = 0)
@@ -893,21 +901,24 @@ class InstallExtensionWindow(wx.Frame):
         
         self.Layout()
 
-    def _install(self, name):
+    def _getCmd(self):
+        item = self.tree.GetSelected()
+        if not item or not item.IsOk():
+            return ['g.extension']
+        
+        name = self.tree.GetItemText(item)
         if not name:
+            gcmd.GError(_("Extension not defined"), parent = self)
             return
-        log = self.parent.GetLogWindow()
         
         flags = list()
         for key in self.options.keys():
             if self.options[key].IsChecked():
                 flags.append('-%s' % key)
         
-        log.RunCmd(['g.extension'] + flags + ['extension=' + name,
-                                                 'svnurl=' + self.repo.GetValue().strip()])
-        
-        self.OnCloseWindow(None)
-        
+        return ['g.extension'] + flags + ['extension=' + name,
+                                          'svnurl=' + self.repo.GetValue().strip()]
+    
     def OnUpdateStatusBar(self, event):
         """!Update statusbar text"""
         element = self.search.GetSelection()
@@ -940,15 +951,15 @@ class InstallExtensionWindow(wx.Frame):
         item = event.GetItem()
         data = self.tree.GetPyData(item)
         if data and 'command' in data:
-            self._install(data['command'])
-            
+            self.OnInstall(event = None)
+        
     def OnInstall(self, event):
         """!Install selected extension"""
-        item = self.tree.GetSelected()
-        if not item.IsOk():
-            return
-        self._install(self.tree.GetItemText(item))
+        log = self.parent.GetLogWindow()
+        log.RunCmd(self._getCmd())
         
+        self.OnCloseWindow(None)
+                
     def OnItemSelected(self, event):
         """!Item selected"""
         item = event.GetItem()
@@ -968,6 +979,10 @@ class InstallExtensionWindow(wx.Frame):
             self.btnInstall.Enable()
         else:
             self.btnInstall.Enable(False)
+
+    def OnCmdDialog(self, event):
+        """!Shows command dialog"""
+        menuform.GUI(parent = self).ParseCommand(cmd = self._getCmd())
         
 class ExtensionTree(ItemTree):
     """!List of available extensions"""

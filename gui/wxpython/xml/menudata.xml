@@ -865,13 +865,8 @@
 	    <menuitem>
 	      <label>Install extension from add-ons</label>
 	      <help>Install new extension from GRASS AddOns SVN repository.</help>
-	      <handler>OnInstallExtension</handler>
-	    </menuitem>
-	    <menuitem>
-	      <label>Manage add-ons extensions</label>
-	      <help>Tool to maintain the extensions in local GRASS installation.</help>
 	      <keywords>general,installation,extensions</keywords>
-	      <handler>OnMenuCmd</handler>
+	      <handler>OnInstallExtension</handler>
 	      <command>g.extension</command>
 	    </menuitem>
 	<separator />
@@ -1005,7 +1000,7 @@
 	    <menuitem>
 	      <label>Color tables</label>
 	      <help>Creates/modifies the color table associated with a raster map.</help>
-	      <keywords>raster,color table</keywords>
+	      <keywords>raster3d,raster,color table</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.colors</command>
 	    </menuitem>
@@ -1019,14 +1014,14 @@
 	    <menuitem>
 	      <label>Color rules</label>
 	      <help>Interactive management of raster color tables.</help>
-	      <keywords>raster,color table</keywords>
+	      <keywords>raster3d,raster,color table</keywords>
 	      <handler>RulesCmd</handler>
 	      <command>r.colors</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Export color table</label>
 	      <help>Exports the color table associated with a raster map layer.</help>
-	      <keywords>raster,export,color table</keywords>
+	      <keywords>raster,color table,export</keywords>
               <handler>OnMenuCmd</handler>
 	      <command>r.colors.out</command>
 	    </menuitem>
@@ -2172,7 +2167,7 @@
 	    <separator />
 	    <menuitem>
 	      <label>Allocate subnets</label>
-	      <help>Allocate subnets for nearest centres (direction from centre).</help>
+	      <help>Allocate subnets for nearest centers (direction from center).</help>
 	      <keywords>vector,network,allocation</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.net.alloc</command>
