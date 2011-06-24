@@ -17,25 +17,10 @@
  *
  ***************************************************************************/
 
-#ifndef __LOCAL_PROTO_H__
-#define __LOCAL_PROTO_H__
+#include "local_proto.h"
 
-#include <grass/gis.h>
-#include <grass/raster.h>
-
-#define RASTER_TYPE   1
-#define RASTER3D_TYPE 2
-
-/* stats.c */
-int get_stats(const char *, const char *, struct Cell_stats *);
-void get_fp_stats(const char *name, const char *mapset,
-		  struct FP_stats *statf,
-		  DCELL min, DCELL max, int geometric, int geom_abs);
-
-/* edit_colors.c */
-int edit_colors(int, char **, int, const char *, const char*);
-
-/* rules.c */
-int read_color_rules(FILE *, struct Colors *, DCELL, DCELL, int);
-
-#endif /* __LOCAL_PROTO_H__ */
+/* This is the main function for r3.colors*/
+int main(int argc, char **argv)
+{
+    return edit_colors(argc, argv, RASTER_TYPE, "raster", "Raster");
+}
