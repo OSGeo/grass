@@ -151,6 +151,23 @@ class Nviz(object):
         """!Center view at center of displayed surface"""
         Nviz_set_focus_map(MAP_OBJ_UNDEFINED, -1)
         Debug.msg(3, "Nviz::LookAtCenter()")
+    
+    def GetFocus(self):
+        """!Get focus"""
+        Debug.msg(3, "Nviz::GetFocus()")
+        if Nviz_has_focus(self.data):
+            x = c_float()
+            y = c_float()
+            z = c_float()
+            Nviz_get_focus(self.data, byref(x), byref(y), byref(z))
+            return x.value, y.value, z.value
+        else:
+            return -1, -1, -1
+        
+    def SetFocus(self, x, y, z):
+        """!Set focus"""
+        Debug.msg(3, "Nviz::SetFocus()")
+        Nviz_set_focus(self.data, x, y, z)
         
     def SetZExag(self, z_exag):
         """!Set z-exag value
@@ -365,7 +382,7 @@ class Nviz(object):
         return 1
 
     def VectorSurfaceSelected(self, vid, sid):
-        """!Check if surface is selected
+        """!Check if surface is selected (currently unused)
         
         @param vid vector id
         @param sid surface id
