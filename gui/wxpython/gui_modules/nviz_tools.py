@@ -131,7 +131,6 @@ class NvizToolWindow(FN.FlatNotebook):
         
         self.win  = {} # window ids
         self.page = {} # page ids
-        self.constantIndex = len(self.mapWindow.constants) # index of constant surface
 
         # view page
         self.AddPage(page = self._createViewPage(),
@@ -181,7 +180,17 @@ class NvizToolWindow(FN.FlatNotebook):
             self.FindWindowById(self.win['vector']['map']).SetValue(selectedVector)
         except IndexError:
             pass
-        
+    
+    def UpdateState(self, **kwargs):
+        if 'view' in kwargs:
+            self.mapWindow.view = kwargs['view']
+            self.FindWindowById(self.win['view']['position']).data = kwargs['view']
+        if 'iview' in kwargs:
+            self.mapWindow.iview = kwargs['iview']
+        if 'light' in kwargs:
+            self.mapWindow.light = kwargs['light']  
+            self.FindWindowById(self.win['light']['position']).data = kwargs['light']  
+            
     def OnPageChanged(self, event):
         new = event.GetSelection()
         # self.ChangeSelection(new)
@@ -1716,7 +1725,7 @@ class NvizToolWindow(FN.FlatNotebook):
     def OnNewConstant(self, event):
         """!Create new surface with constant value"""
         #TODO settings
-        index, name = self.mapWindow.AddConstant()
+        name = self.mapWindow.NewConstant()
         win = self.FindWindowById(self.win['constant']['surface'])
         name = _("constant#") + str(name)
         win.Append(name)
@@ -1877,14 +1886,13 @@ class NvizToolWindow(FN.FlatNotebook):
                         'twist',
                         'z-exag'):
             for win in self.win['view'][control].itervalues():             
-                if control == 'height':
-                    value = UserSettings.Get(group = 'nviz', key = 'view',
-                                             subkey = ['height', 'value'], internal = True)
-                else:
-                    try:
+                try:
+                    if control == 'height':
+                        value = self.mapWindow.iview[control]['value']
+                    else:
                         value = self.mapWindow.view[control]['value']
-                    except KeyError:
-                        value = -1
+                except KeyError:
+                    value = -1
                         
                 self.FindWindowById(win).SetValue(value)
         
@@ -1894,6 +1902,8 @@ class NvizToolWindow(FN.FlatNotebook):
         viewWin.Draw(pos = (x, y), scale = True)
         viewWin.Refresh(False)
         
+        color = self._getColorString(self.mapWindow.view['background']['color'])
+        self._display.SetBgColor(str(color))
         
         self.Update()
         
@@ -1929,7 +1939,7 @@ class NvizToolWindow(FN.FlatNotebook):
         
     def OnLightColor(self, event):
         """!Color of the light changed"""
-        self.mapWindow.light['color'] = event.GetValue()
+        self.mapWindow.light['color'] = tuple(event.GetValue())
         
         event = wxUpdateLight(refresh = True)
         wx.PostEvent(self.mapWindow, event)
@@ -1948,7 +1958,7 @@ class NvizToolWindow(FN.FlatNotebook):
     def OnBgColor(self, event):
         """!Background color changed"""
         color = event.GetValue()
-        self.mapWindow.view['background']['color'] = color
+        self.mapWindow.view['background']['color'] = tuple(color)
         color = str(color[0]) + ':' + str(color[1]) + ':' + str(color[2])
         self._display.SetBgColor(str(color))
         
@@ -2576,7 +2586,6 @@ class NvizToolWindow(FN.FlatNotebook):
                     
             mode['surface']['value'] = value
             mode['surface']['show'] = checked
-            mode['surface']['update'] = None
         else:
             mode['type'] = 'flat'
         
@@ -2666,8 +2675,9 @@ class NvizToolWindow(FN.FlatNotebook):
         
         data = self.GetLayerData('vector')
         data['vector'][vtype]['mode']['surface'] = { 'value' : surfaces,
-                                                     'show'  : checked,
-                                                     'update': None }
+                                                     'show'  : checked}
+        data['vector'][vtype]['mode']['update'] = None 
+        
         # update properties
         event = wxUpdateProperties(data = data)
         wx.PostEvent(self.mapWindow, event)
@@ -3088,6 +3098,14 @@ class NvizToolWindow(FN.FlatNotebook):
         
             self.FindWindowById(self.win['view']['background']['color']).SetColour(\
                             self.mapWindow.view['background']['color'])
+                            
+            tval = self.mapWindow.view['twist']['value']
+            pval = self.mapWindow.view['persp']['value']
+            for control in ('slider','text'):
+                self.FindWindowById(self.win['view']['twist'][control]).SetValue(tval)                                      
+                
+                self.FindWindowById(self.win['view']['persp'][control]).SetValue(pval)
+            
             
         elif pageId in ('surface', 'vector', 'volume'):
             name = self.FindWindowById(self.win[pageId]['map']).GetValue()
@@ -3111,6 +3129,7 @@ class NvizToolWindow(FN.FlatNotebook):
                 self.FindWindowById(self.win['light']['bright'][control]).SetValue(bval)
                 self.FindWindowById(self.win['light']['ambient'][control]).SetValue(aval)
             self.FindWindowById(self.win['light']['color']).SetColour(self.mapWindow.light['color'])
+            self.FindWindowById(self.win['light']['position']).PostDraw()
         elif pageId == 'fringe':
             win = self.FindWindowById(self.win['fringe']['map'])
             win.SetValue(self.FindWindowById(self.win['surface']['map']).GetValue())
@@ -3118,7 +3137,7 @@ class NvizToolWindow(FN.FlatNotebook):
             if self.mapWindow.constants:
                 surface = self.FindWindowById(self.win['constant']['surface'])
                 for item in self.mapWindow.constants:
-                    surface.Append(_("constant") + str(item['constant']['object']['name']))
+                    surface.Append(_("constant#") + str(item['constant']['object']['name']))
                 surface.SetSelection(0)
                 self.OnConstantSelection(None)
                 self.EnablePage('constant', True)
@@ -3322,30 +3341,16 @@ class NvizToolWindow(FN.FlatNotebook):
                 else:
                     display.SetSelection(0)
             if data[vtype]['mode']['type'] == 'surface':
-                if npoints:
-                    vsubtyp = 'vpoint'
-                else:
-                    vsubtyp = 'vline'                    
-                vid = self.mapWindow.GetLayerId(type = 'vector', vsubtyp = vsubtyp, name = layer.name)
                 rasters = self.mapWindow.GetLayerNames('raster')
                 constants = self.mapWindow.GetLayerNames('constant')
                 surfaces = rasters + constants
                 surfaceWin = self.FindWindowById(self.win['vector'][vtype]['surface'])
                 surfaceWin.SetItems(surfaces)
                 for idx, surface in enumerate(surfaces):
-                    if vtype == 'lines':
-                        sid = self.mapWindow.GetLayerId(type = 'raster', name = surface)
-                        if sid == -1:
-                            sid = self.mapWindow.GetLayerId(type = 'constant', name = surface)
-                        if vid > -1 and sid > -1: 
-                            selected = self._display.VectorSurfaceSelected(vid, sid)
-                        else:
-                            selected = False
-                    else: # points
-                        try:# TODO fix this mess
-                            selected = data[vtype]['mode']['surface']['show'][idx]
-                        except (TypeError, IndexError, KeyError):
-                            selected = False
+                    try:# TODO fix this mess
+                        selected = data[vtype]['mode']['surface']['show'][idx]
+                    except (TypeError, IndexError, KeyError):
+                        selected = False
                     surfaceWin.Check(idx, selected)
 
         for type in ('slider', 'text'):
@@ -3567,7 +3572,7 @@ class ViewPositionWindow(PositionWindow):
     
     def TransformCoordinates(self, x, y, toLight = True):
         return x, y
-    
+        
     def OnMouse(self, event):
         PositionWindow.OnMouse(self, event)
         if event.LeftIsDown():

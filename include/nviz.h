@@ -192,6 +192,9 @@ struct fringe_data *Nviz_set_fringe(nv_data *, int, unsigned long,
 void Nviz_init_view(nv_data *);
 int Nviz_set_focus_state(int);
 int Nviz_set_focus_map(int, int);
+int Nviz_has_focus(nv_data *);
+int Nviz_set_focus(nv_data *, float, float, float);
+int Nviz_get_focus(nv_data *, float *, float *, float *);
 float Nviz_get_xyrange(nv_data *);
 int Nviz_get_zrange(nv_data *, float *, float *);
 

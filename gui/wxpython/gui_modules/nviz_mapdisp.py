@@ -165,6 +165,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             cplane = copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'cplane'))
             self.cplanes.append(cplane)
             
+            
     def OnClose(self, event):
         # cleanup when window actually closes (on quit) and not just is hidden
         self.Reset()
@@ -215,7 +216,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                     elif layer.type ==  'vector':
                         self.lmgr.nviz.UpdatePage('vector')
                 
-                ### self.lmgr.nviz.UpdateSettings()
+                self.lmgr.nviz.UpdateSettings()
                 
                 # update widgets
                 win = self.lmgr.nviz.FindWindowById( \
@@ -264,7 +265,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 pos = event.GetPosition()
                 size = self.GetClientSize()
                 self._display.LookHere(pos[0], size[1] - pos[1])
-                self.DoPaint()
+                self.Refresh(False)
+                focus = self._display.GetFocus()
+                for i, coord in enumerate(('x', 'y', 'z')):
+                    self.iview['focus'][coord] = focus[i]
                 toggle = self.lmgr.nviz.FindWindowByName('here')
                 toggle.SetValue(False)
                 self.mouse['use'] = 'default'
@@ -339,6 +343,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
     def UpdateView(self, event):
         """!Change view settings"""
         data = self.view
+        print self.view
         self._display.SetView(data['position']['x'], data['position']['y'],
                               self.iview['height']['value'],
                               data['persp']['value'],
@@ -346,6 +351,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         if event and event.zExag and 'value' in data['z-exag']:
             self._display.SetZExag(data['z-exag']['value'])
+        if self.iview['focus']['x'] != -1:
+            self._display.SetFocus(self.iview['focus']['x'], self.iview['focus']['y'],
+                                   self.iview['focus']['z'])
         
         if event:
             event.Skip()
@@ -531,7 +539,16 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         stop = time.time()
         
         Debug.msg(3, "GLWindow.UnloadDataLayers(): time = %f" % (stop-start))        
-
+        
+    def SetVectorSurface(self, data):
+        """!Set reference surfaces of vector"""
+        data['mode']['surface'] = {}
+        data['mode']['surface']['value'] = list()
+        data['mode']['surface']['show'] = list()
+        for name in self.GetLayerNames('raster'):
+            data['mode']['surface']['value'].append(name)
+            data['mode']['surface']['show'].append(True)
+        
     def SetVectorFromCmd(self, item, data):
         """!Set 3D view properties from cmd (d.vect)
 
@@ -582,6 +599,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 # reset to default properties (lines/points)
                 data['vector'] = self.nvizDefault.SetVectorDefaultProp()
                 self.SetVectorFromCmd(item, data['vector'])
+                self.SetVectorSurface(data['vector']['points'])
+                self.SetVectorSurface(data['vector']['lines'])
                 
             elif type ==  '3d-raster':
                 # reset to default properties 
@@ -688,8 +707,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         return id
     
-    def AddConstant(self):
-        """!Add new constant"""
+    def NewConstant(self):
+        """!Create new constant"""
         index = len(self.constants)
         try:
             name = self.constants[-1]['constant']['object']['name'] + 1
@@ -698,13 +717,16 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         data = dict()
         self.constants.append(data)
         data = self.SetMapObjProperties(item = index, id = -1, nvizType = 'constant')
+        self.AddConstant(data, name)
+        return name
+        
+    def AddConstant(self, data, name):
+        """!Add new constant"""
         id = self._display.AddConstant(value = data['constant']['value'], color = data['constant']['color'])
         self._display.SetSurfaceRes(id, data['constant']['resolution'], data['constant']['resolution'])
         data['constant']['object'] = { 'id' : id,
                                        'name': name,
                                        'init' : False }
-            
-        return index, name
     
     def DeleteConstant(self, index):
         """!Delete constant layer"""
@@ -1134,7 +1156,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             if data['mode']['type'] ==  'flat':
                 flat = True
                 if 'surface' in data['mode']:
-                    data.pop('surface')
+                    data['mode'].pop('surface')
             else:
                 flat = False
             
@@ -1145,8 +1167,6 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 data['color'].pop('update')
             if 'update' in data['width']:
                 data['width'].pop('update')
-            if 'update' in data['mode']:
-                data['mode'].pop('update')
         
         # height
         if 'update' in data['height']:
@@ -1155,20 +1175,20 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             data['height'].pop('update')
         
         # surface
-        if 'surface' in data['mode']:
-            if 'update' in data['mode']['surface']:
-                for item in range(len(data['mode']['surface']['value'])):
-                    for type in ('raster', 'constant'):
-                        sid = self.GetLayerId(type = type,
-                                              name = data['mode']['surface']['value'][item])
-                        if sid > -1:
-                            if data['mode']['surface']['show'][item]:
-                                self._display.SetVectorLineSurface(id, sid)
-                            else:
-                                self._display.UnsetVectorLineSurface(id, sid)
-                            break
+        if 'surface' in data['mode'] and 'update' in data['mode']:
+            for item in range(len(data['mode']['surface']['value'])):
+                for type in ('raster', 'constant'):
+                    sid = self.GetLayerId(type = type,
+                                          name = data['mode']['surface']['value'][item])
+                    if sid > -1:
+                        if data['mode']['surface']['show'][item]:
+                            self._display.SetVectorLineSurface(id, sid)
+                        else:
+                            self._display.UnsetVectorLineSurface(id, sid)
+                        break
                 
-                data['mode']['surface'].pop('update')
+        if 'update' in data['mode']:
+                data['mode'].pop('update')
         
     def UpdateVectorPointsProperties(self, id, data):
         """!Update vector point map object properties"""
@@ -1200,19 +1220,18 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             data['height'].pop('update')
         
         # surface
-        if 'surface' in data['mode']:
-            if 'update' in data['mode']['surface']:
-                for item in range(len(data['mode']['surface']['value'])):
-                    for type in ('raster', 'constant'):
-                        sid = self.GetLayerId(type = type,
-                                              name = data['mode']['surface']['value'][item])
-                        if sid > -1:
-                            if data['mode']['surface']['show'][item]:
-                                self._display.SetVectorPointSurface(id, sid)
-                            else:
-                                self._display.UnsetVectorPointSurface(id, sid)   
-                            break
-                data['mode']['surface'].pop('update')
+        if 'update' in data['mode']:
+            for item in range(len(data['mode']['surface']['value'])):
+                for type in ('raster', 'constant'):
+                    sid = self.GetLayerId(type = type,
+                                          name = data['mode']['surface']['value'][item])
+                    if sid > -1:
+                        if data['mode']['surface']['show'][item]:
+                            self._display.SetVectorPointSurface(id, sid)
+                        else:
+                            self._display.UnsetVectorPointSurface(id, sid)   
+                        break
+            data['mode'].pop('update')
    
     def GetLayerNames(self, type):
         """!Return list of map layer names of given type"""

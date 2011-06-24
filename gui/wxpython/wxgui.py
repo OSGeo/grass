@@ -712,7 +712,7 @@ class GMFrame(wx.Frame):
             return
 
         Debug.msg(4, "GMFrame.OnWorkspaceOpen(): filename=%s" % filename)
-
+        
         # delete current layer tree content
         self.OnWorkspaceClose()
         
@@ -835,8 +835,29 @@ class GMFrame(wx.Frame):
             # reverse list of map layers
             maptree.Map.ReverseListOfLayers()
             
-        for mdisp in mapdisplay:
+        for idx, mdisp in enumerate(mapdisplay):
             mdisp.MapWindow2D.UpdateMap()
+            #nviz
+            if gxwXml.displays[idx]['viewMode'] == '3d':
+                # check if nviz exist, if so, don't open workspace in 3D mode
+                # sofar only one nviz can exist
+                if self.existNviz:
+                    gcmd.GMessage(parent = self,
+                          message = _("3D view is not available. Please do not switch to 3D view "
+                                      "before opening workspace in 3D view mode."))
+                    continue
+                mdisp.AddToolbar(name = 'nviz')
+                self.nviz.UpdateState(view = gxwXml.nviz_state['view'],
+                                              iview = gxwXml.nviz_state['iview'],
+                                              light = gxwXml.nviz_state['light'])
+                mdisp.MapWindow3D.constants = gxwXml.nviz_state['constants']
+                for idx, constant in enumerate(mdisp.MapWindow3D.constants):
+                    mdisp.MapWindow3D.AddConstant(constant, idx + 1)
+                for page in ('view', 'light', 'fringe', 'constant', 'cplane'):
+                    self.nviz.UpdatePage(page)
+                self.nviz.UpdateSettings()
+                mapdisp.toolbars['map'].combo.SetSelection(1)
+
 
         return True
     
