@@ -1,5 +1,5 @@
 # This script tests r.colors and r.colors.out as well
-# as r3.colors and r3.colors.out
+# as r3.colors and r3.colors.out which have the same code base
 # Color rules are set with r/r3.colors and exported using r/r3.colors.out
 
 # We specific a small region in the
@@ -49,6 +49,7 @@ r.colors    map=test_elev_double rules=example3 && r.colors.out --o map=test_ele
 r.colors -a map=test_elev_double rules=example3 && r.colors.out --o map=test_elev_double rules=test_elev_double_example3_logabs.txt
 r.colors    map=test_elev_double rules=example4 && r.colors.out --o map=test_elev_double rules=test_elev_double_example4.txt
 r.colors -n map=test_elev_double rast=test_elev_double && r.colors.out --o map=test_elev_double rules=test_elev_double_example4_inv.txt
+
 # The volume maps using r3.colors and r3.colors.out
 r3.colors    map=volume_double_null rules=example1 && r3.colors.out --o map=volume_double_null rules=test_volume_double_example1.txt
 r3.colors    map=volume_double_null rules=example2 && r3.colors.out --o map=volume_double_null rules=test_volume_double_example2.txt
@@ -57,4 +58,10 @@ r3.colors    map=volume_double_null rules=example3 && r3.colors.out --o map=volu
 r3.colors -a map=volume_double_null rules=example3 && r3.colors.out --o map=volume_double_null rules=test_volume_double_example3_logabs.txt
 r3.colors    map=volume_double_null rules=example4 && r3.colors.out --o map=volume_double_null rules=test_volume_double_example4.txt
 r3.colors -n map=volume_double_null volume=volume_double_null && r3.colors.out --o map=volume_double_null rules=test_volume_double_example4_inv.txt
+# Apply a raster color table to the volume map
 r3.colors    map=volume_double_null raster=test_elev_double   && r3.colors.out --o map=volume_double_null rules=test_volume_double_example5.txt
+
+# Test the removement the raster3d color table, a default color table will be created
+r3.colors -r map=volume_double_null && r3.colors.out --o map=volume_double_null rules=test_volume_double_default.txt
+# Test the removement the raster color table, a default color table will be created
+r.colors -r map=test_elev_double && r.colors.out --o map=test_elev_double rules=test_elev_double_default.txt
