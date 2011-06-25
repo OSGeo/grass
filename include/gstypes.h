@@ -1,7 +1,17 @@
-/*  gstypes.h
-   Bill Brown, USACERL
-   January 1993
- */
+/*!
+  \file include/gstypes.c
+
+  \brief OGSF header file (structures)
+
+  This program is free software under the GNU General
+  Public License (>=v2). Read the file COPYING that
+  comes with GRASS for details.
+  
+  \author Original author Bill Brown, USACERL (January 1993)
+  \author Thematic mapping enabled by Martin Landa <landa.martin gmail.com) (06/2011)
+
+  (C) 2011 by the GRASS Development Team
+*/
 
 #ifndef _GSTYPES_H
 #define _GSTYPES_H
@@ -77,6 +87,10 @@
 #define OGSF_POINT 1
 #define OGSF_LINE  2
 #define OGSF_POLYGON 3
+
+#define RED_MASK 0x000000FF
+#define GRN_MASK 0x0000FF00
+#define BLU_MASK 0x00FF0000
 
 typedef float Point4[4];
 typedef float Point3[3];
@@ -166,16 +180,29 @@ typedef struct g_surf
 /* Struct for vector feature displaying attributes */
 typedef struct g_vect_style
 {
-    int color; 		/* Line color */
-    int symbol;		/* Point symbol/line type */
-    float size;		/* Symbol size. Unset for lines. */
-    int width;		/* Line width. Also used for lines forming symbols i.e. X */
+    int color; 		 /* Line color */
+    int symbol;		 /* Point symbol/line type */
+    float size;		 /* Symbol size. Unset for lines. */
+    int width;		 /* Line width. Also used for lines forming symbols i.e. X */
+    
     /*TODO:fill;	 Area fill pattern */
     /*TODO:falpha;	 Area fill transparency */
     /*TODO:lalpha;	 Line/boundary/point transparency */
     /*TODO:struct *orientation;  Symbol orientation */
-    struct g_vect_style *next; /* Point to next gvstyle struct if single point has multiple styles. In such case feature with next style should be shifted.  */
+    struct g_vect_style *next; /* Point to next gvstyle struct if single point has multiple styles.
+				  In such case feature with next style should be shifted. */
 } gvstyle;
+
+/* Struct for vector map (thematic mapping) */
+typedef struct g_vect_style_thematic
+{
+    int layer;
+    
+    char *color_column;  
+    char *symbol_column; 
+    char *size_column;
+    char *width_column;
+} gvstyle_thematic;
 
 /* Line instance */
 typedef struct g_line
@@ -193,7 +220,7 @@ typedef struct g_line
     struct g_line *next;
 } geoline;
 
-/* Vector line layer */
+/* Vector map (lines) */
 typedef struct g_vect
 {
     int gvect_id;
@@ -211,8 +238,8 @@ typedef struct g_vect
     void *clientdata;
 
     int thematic_layer;		/* Layer number to use for thematic mapping. <0 == no thematic mapping; 
-				    0 == thematic mapping is unset but initialized; 
-				    >0 use specified layer */
+				   0 == thematic mapping is unset but initialized; 
+				   >0 use specified layer */
     gvstyle *style;	/* Vector default look&feel */
     gvstyle *hstyle;	/* IMHO highlight should be per layer basis. */
 } geovect;
@@ -225,12 +252,12 @@ typedef struct g_point
     
     struct line_cats *cats;	/* Store information about all layers/cats for thematic display */
     gvstyle *style;
-    signed char highlighted; /* >0 Feature is highlighted */
+    signed char highlighted;    /* >0 Feature is highlighted */
 
     struct g_point *next;
 } geopoint;
 
-/* Point layer */
+/* Vector map (points) */
 typedef struct g_site
 {
     int gsite_id;
@@ -247,9 +274,9 @@ typedef struct g_site
     struct g_site *next;
     void *clientdata;
     
-    int thematic_layer; /* Layer number to use for thematic mapping. */
-    gvstyle *style; 	/* Vector default look&feel */
-    gvstyle *hstyle;	/* IMHO highlight should be per layer basis. */
+    gvstyle_thematic *tstyle;  /* thematic mapping */
+    gvstyle *style; 	       /* points default look&feel */
+    gvstyle *hstyle;	       /* IMHO highlight should be per layer basis */
 } geosite;
 
 typedef struct

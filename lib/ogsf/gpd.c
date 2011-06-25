@@ -1,20 +1,16 @@
 /*!
-   \file gpd.c
+  \file lib/ogsf/gpd.c
+  
+  \brief OGSF library - loading and manipulating point sets (lower level)
+  
+  (C) 1999-2008, 2011 by the GRASS Development Team
 
-   \brief OGSF library - loading and manipulating point sets
-
-   GRASS OpenGL gsurf OGSF Library 
-
-   (C) 1999-2008 by the GRASS Development Team
-
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
-
-   \author Bill Brown USACERL, GMSL/University of Illinois (December 1993)
-   \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
- */
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Bill Brown USACERL, GMSL/University of Illinois (December 1993)
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
+*/
 
 #include <stdlib.h>
 #include <math.h>
@@ -29,17 +25,17 @@
 #define v_border 50
 
 /*!
-   \brief Check if point is in region
-
-   Check for cancel every CHK_FREQ points
-
-   \param gs surface (geosurf)
-   \param pt point (array(X,Y,Z))
-   \param region region settings (array (top,bottom,left,right))
-
-   \return 0 point outside of region
-   \return 1 point inside region
- */
+  \brief Check if point is in region
+  
+  Check for cancel every CHK_FREQ points
+  
+  \param gs surface (geosurf)
+  \param pt point (array(X,Y,Z))
+  \param region region settings (array (top,bottom,left,right))
+  
+  \return 0 point outside of region
+  \return 1 point inside region
+*/
 int gs_point_in_region(geosurf * gs, float *pt, float *region)
 {
     float top, bottom, left, right;
@@ -62,15 +58,15 @@ int gs_point_in_region(geosurf * gs, float *pt, float *region)
 }
 
 /*!
-   \brief Draw point representing object
-
-   Do normal transforms before calling
-
-   Note gs: NULL if 3d obj or const elev surface
-
-   \param gs surface (geosurf)
-   \param style object displaying style (highlighted or not)
-   \param pt 3d point (Point3)
+  \brief Draw point representing object
+  
+  Do normal transforms before calling
+  
+  Note gs: NULL if 3d obj or const elev surface
+  
+  \param gs surface (geosurf)
+  \param style object displaying style (highlighted or not)
+  \param pt 3d point (Point3)
  */
 void gpd_obj(geosurf * gs, gvstyle * style, Point3 pt)
 {
@@ -200,23 +196,23 @@ void gpd_obj(geosurf * gs, gvstyle * style, Point3 pt)
 }
 
 /*!
-   \brief ADD
-
-   Need to think about translations - If user translates surface,
-   sites should automatically go with it, but translating sites should
-   translate it relative to surface on which it's displayed
-
-   Handling mask checking here
-
-   \todo prevent scaling by 0 
-
-   \param gp site (geosite)
-   \param gs surface (geosurf)
-   \param do_fast (unused)
-
-   \return 0
-   \return 1
- */
+  \brief Draw 2D point set
+  
+  Need to think about translations - If user translates surface,
+  sites should automatically go with it, but translating sites should
+  translate it relative to surface on which it's displayed
+  
+  Handling mask checking here
+  
+  \todo prevent scaling by 0 
+  
+  \param gp site (geosite)
+  \param gs surface (geosurf)
+  \param do_fast (unused)
+  
+  \return 0 on failure
+  \return 1 on success
+*/
 int gpd_2dsite(geosite * gp, geosurf * gs, int do_fast)
 {
     float site[3], konst;
@@ -227,9 +223,8 @@ int gpd_2dsite(geosite * gp, geosurf * gs, int do_fast)
     GLint viewport[4];
     GLint window[4];
 
-
     if (GS_check_cancel()) {
-	return (0);
+	return 0;
     }
 
     if (gs) {
@@ -263,7 +258,7 @@ int gpd_2dsite(geosite * gp, geosurf * gs, int do_fast)
 		    gsd_linewidth(1);
 		    gsd_popmatrix();
 
-		    return (0);
+		    return 0;
 		}
 	    }
 
@@ -279,54 +274,54 @@ int gpd_2dsite(geosite * gp, geosurf * gs, int do_fast)
 		    /* returns 0 if outside or masked */
 		    site[Z] += gp->z_trans;
 
-		    if (gsd_checkpoint
-			(site, window, viewport, modelMatrix, projMatrix))
+		    if (gsd_checkpoint(site, window,
+				       viewport, modelMatrix, projMatrix))
 			continue;
 		    else {
 			if (gpt->highlighted > 0)
 			    gpd_obj(gs, gp->hstyle, site);
-			else if (gp->thematic_layer > 0)
+			else if (gp->tstyle)
 			    gpd_obj(gs, gpt->style, site);
-		    else
+			else
 			    gpd_obj(gs, gp->style, site);
+		    }
 		}
-	    }
 	    }
 	    else if (src == CONST_ATT) {
 		if (gs_point_in_region(gs, site, NULL)) {
 		    site[Z] += gp->z_trans;
-		    if (gsd_checkpoint
-			(site, window, viewport, modelMatrix, projMatrix))
+		    if (gsd_checkpoint(site, window,
+				       viewport, modelMatrix, projMatrix))
 			continue;
 		    else {
 			if (gpt->highlighted > 0)
 			    gpd_obj(gs, gp->hstyle, site);
-			else if (gp->thematic_layer > 0)
+			else if (gp->tstyle)
 			    gpd_obj(gs, gpt->style, site);
-		    else
+			else
 			    gpd_obj(gs, gp->style, site);
+		    }
 		}
 	    }
-	}
 	}
 
 	gsd_linewidth(1);
 	gsd_popmatrix();
     }
 
-    return (1);
+    return 1;
 }
 
 /*!                                                            
-   \brief ADD
-
-   \param gp site (geosite)
-   \param xo,yo
-   \param do_fast (unused)
-
-   \return 0
-   \return 1
- */
+  \brief Draw 3D point set
+  
+  \param gp site (geosite)
+  \param xo,yo
+  \param do_fast (unused)
+  
+  \return 0 on success
+  \return 1 on failure
+*/
 int gpd_3dsite(geosite * gp, float xo, float yo, int do_fast)
 {
     float site[3], tz;
@@ -377,15 +372,15 @@ int gpd_3dsite(geosite * gp, float xo, float yo, int do_fast)
 	{
 	    if (gpt->highlighted > 0)
 		gpd_obj(NULL, gp->hstyle, site);
-	    else if (gp->thematic_layer > 0)
+	    else if (gp->tstyle)
 		gpd_obj(NULL, gpt->style, site);
 	    else
 		gpd_obj(NULL, gp->style, site);
-    }
+	}
     }
 
     gsd_linewidth(1);
     gsd_popmatrix();
 
-    return (1);
+    return 1;
 }
