@@ -173,7 +173,7 @@ def main():
     table = grass.vector_db(map)[int(layer)]['table']
     if rgb_column not in cols:
         # RGB Column not found, create it
-	grass.message(_("Creating column <%s> ...") % rgb_column)
+	grass.message(_("Creating column <%s>...") % rgb_column)
 	if 0 != grass.run_command('v.db.addcolumn', map = map, layer = layer, column = "%s varchar(11)" % rgb_column):
 	    grass.fatal(_("Creating color column"))
     else:
@@ -233,7 +233,7 @@ def main():
     tmp = grass.tempfile()
     
     # calculate colors and write SQL command file
-    grass.message(_("Looking up colors ..."))
+    grass.message(_("Looking up colors..."))
     
     f = open(tmp, 'w')
     p = grass.feed_command('r.what.color', flags = 'i', input = tmp_colr, stdout = f)
