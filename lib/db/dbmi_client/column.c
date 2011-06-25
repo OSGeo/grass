@@ -1,18 +1,18 @@
 /*!
- * \file db/dbmi_client/column.c
- * 
- * \brief DBMI Library (client) - column info
- *
- * (C) 1999-2008 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public
- * License (>=v2). Read the file COPYING that comes with GRASS
- * for details.
- *
- * \author Joel Jones (CERL/UIUC), Radim Blazek
- * \author Update by Glynn Clement <glynn gclements.plus.com>
- * and Martin Landa <landa.martin gmail.com>
- */
+  \file lib/db/dbmi_client/column.c
+  
+  \brief DBMI Library (client) - column info
+  
+  (C) 1999-2008, 2011 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public
+  License (>=v2). Read the file COPYING that comes with GRASS
+  for details.
+  
+  \author Joel Jones (CERL/UIUC), Radim Blazek
+  \author Update by Glynn Clement <glynn gclements.plus.com>
+  \author Martin Landa <landa.martin gmail.com>
+*/
 
 #include <stdlib.h>
 #include <string.h>
@@ -24,6 +24,22 @@
   \brief Get column sqltype
 
   See db_sqltype_name().
+
+  Supported types:
+   - DB_SQL_TYPE_UNKNOWN
+   - DB_SQL_TYPE_CHARACTER
+   - DB_SQL_TYPE_SMALLINT
+   - DB_SQL_TYPE_INTEGER
+   - DB_SQL_TYPE_REAL
+   - DB_SQL_TYPE_DOUBLE_PRECISION
+   - DB_SQL_TYPE_DECIMAL
+   - DB_SQL_TYPE_NUMERIC
+   - DB_SQL_TYPE_DATE
+   - DB_SQL_TYPE_TIME
+   - DB_SQL_TYPE_TIMESTAMP
+   - DB_SQL_TYPE_INTERVAL
+   - DB_SQL_TYPE_TEXT
+   - DB_SQL_TYPE_SERIAL
 
   \param driver DB driver
   \param tab table name
@@ -62,6 +78,12 @@ int db_column_sqltype(dbDriver * driver, const char *tab, const char *col)
   \brief Get column ctype
 
   See db_sqltype_to_Ctype().
+
+  Supported types:
+   - DB_C_TYPE_STRING
+   - DB_C_TYPE_INT
+   - DB_C_TYPE_DOUBLE
+   - DB_C_TYPE_DATETIME
 
   \param driver DB driver
   \param tab table name
