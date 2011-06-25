@@ -127,7 +127,8 @@ geosite *gp_get_new_site(void)
     if (!np) {
 	return (NULL);
     }
-
+    G_zero(np, sizeof(geosite));
+    
     lp = gp_get_last_site();
     if (lp) {
 	lp->next = np;
@@ -137,14 +138,14 @@ geosite *gp_get_new_site(void)
 	Site_top = np;
 	np->gsite_id = FIRST_SITE_ID;
     }
-
-    np->next = NULL;
     np->style = (gvstyle *) G_malloc(sizeof(gvstyle));
     if (!np->style)
 	return NULL;
+    G_zero(np->style, sizeof (gvstyle));
     np->hstyle = (gvstyle *) G_malloc(sizeof(gvstyle));
     if (!np->hstyle)
 	return NULL;
+    G_zero(np->hstyle, sizeof (gvstyle));
 
     return (np);
 }
@@ -188,38 +189,24 @@ void gp_update_drapesurfs(void)
  */
 int gp_set_defaults(geosite * gp)
 {
-    int i;
     float dim;
 
     G_debug(5, "gp_set_defaults");
 
     if (!gp) {
-	return (-1);
+	return -1;
     }
-
     GS_get_longdim(&dim);
 
-    gp->filename = NULL;
-    gp->n_sites = gp->use_z = gp->n_surfs = gp->use_mem = 0;
-    gp->x_trans = gp->y_trans = gp->z_trans = 0.0;
-    gp->points = NULL;
-    gp->has_z = 0;
-    gp->thematic_layer = -1;
     gp->style->color = 0xF0F0F0;
     gp->style->size = dim / 100.;
     gp->style->width = 1;
     gp->style->symbol = ST_X;
-    gp->style->next = NULL;
     gp->hstyle->color = 0xFF0000;
     gp->hstyle->size = dim / 150.;
     gp->hstyle->symbol = ST_X;
-    gp->hstyle->next = NULL;
-    gp->next = NULL;
-    for (i = 0; i < MAX_SURFS; i++) {
-	gp->drape_surf_id[i] = 0;
-    }
 
-    return (1);
+    return 1;
 }
 
 /*!
@@ -262,7 +249,7 @@ void gp_delete_site(int id)
 }
 
 /*!
-   \brief Free geosite struct
+   \brief Free allocated geosite struct
 
    \param fp pointer to geosite struct
 
@@ -274,7 +261,7 @@ int gp_free_site(geosite * fp)
     geosite *gp;
     int found = 0;
 
-    G_debug(5, "gp_free_site");
+    G_debug(5, "gp_free_site(id=%d)", fp->gsite_id);
 
     if (Site_top) {
 	if (fp == Site_top) {
@@ -321,34 +308,38 @@ int gp_free_site(geosite * fp)
 void gp_free_sitemem(geosite * fp)
 {
     geopoint *gpt, *tmp;
-    gvstyle *gvs, *tmpstyle;
-
+    
     G_free((void *)fp->filename);
     fp->filename = NULL;
-    if (fp->style)
+    if (fp->style) {
 	G_free(fp->style);
-    if (fp->hstyle)
+    }
+    if (fp->hstyle) {
 	G_free(fp->hstyle);
+    }
     if (fp->points) {
 	for (gpt = fp->points; gpt;) {
 	    G_free(gpt->cats);
-	    if (fp->thematic_layer > -1) {	/* Style also exists for features */
-		for (gvs = fp->style; gvs;) {
-		    tmpstyle = gvs;
-		    gvs = gvs->next;
-		    G_free(tmpstyle);
+	    if(gpt->style) {
+		G_free(gpt->style);
 	    }
-	    }
-
+	    
 	    tmp = gpt;
 	    gpt = gpt->next;
 	    G_free(tmp);
 	}
-
+	
 	fp->n_sites = 0;
 	fp->points = NULL;
     }
 
+    if(fp->tstyle) {
+	G_free(fp->tstyle->color_column);
+	G_free(fp->tstyle->symbol_column);
+	G_free(fp->tstyle->size_column);
+	G_free(fp->tstyle->width_column);
+    }
+    
     return;
 }
 

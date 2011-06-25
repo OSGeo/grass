@@ -7,7 +7,7 @@
  *               
  * PURPOSE:      Renders GIS data in 3D space.
  *               
- * COPYRIGHT:    (C) 2008,2010 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2008, 2010-2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
     /* load point vector maps */
     if (params->vpoints->answer) {
 	load_vpoints(params, &data);
-	/* set attributes for 2d lines */
+	/* set attributes for points */
 	vpoints_set_attrb(params);
     }
 

@@ -19,6 +19,7 @@ struct GParams
 	*vlines, *vline_width, *vline_color, *vline_mode, *vline_height, *vline_pos,
     /* vector points */
 	*vpoints, *vpoint_size, *vpoint_marker, *vpoint_color, *vpoint_width, *vpoint_pos,
+	*vpoint_layer, *vpoint_size_column, *vpoint_marker_column, *vpoint_color_column, *vpoint_width_column,
     /* volumes */
 	*volume, *volume_mode, *volume_shade, *volume_pos, *volume_res, *isosurf_level,
     /* misc */
@@ -48,6 +49,7 @@ int load_vlines(const struct GParams *, nv_data *);
 int load_vpoints(const struct GParams *, nv_data *);
 int vlines_set_attrb(const struct GParams *);
 int vpoints_set_attrb(const struct GParams *);
+int check_thematic(const struct GParams *, int);
 
 /* volume.c */
 int load_rasters3d(const struct GParams *, nv_data *);

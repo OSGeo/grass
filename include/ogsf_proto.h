@@ -33,7 +33,7 @@
 
 /*========================== Function Prototypes ===========================*/
 
-/* From GK2.c */
+/* GK2.c */
 int GK_set_interpmode(int);
 void GK_set_tension(float);
 void GK_showtension_start(void);
@@ -53,7 +53,7 @@ void GK_show_site(int);
 void GK_show_vol(int);
 void GK_show_list(int);
 
-/* From GP2.c */
+/* GP2.c */
 int GP_site_exists(int);
 int GP_new_site(void);
 int GP_num_sites(void);
@@ -63,6 +63,7 @@ int GP_load_site(int, const char *);
 int GP_get_sitename(int, char **);
 int GP_get_style(int, int *, int *, float *, int *);
 int GP_set_style(int, int, int, float, int);
+int GP_set_style_thematic(int, int, const char *, const char *, const char *, const char *);
 int GP_attmode_color(int, const char *);
 int GP_attmode_none(int);
 int GP_set_zmode(int, int);
@@ -77,7 +78,7 @@ void GP_alldraw_site(void);
 int GP_Set_ClientData(int, void *);
 void *GP_Get_ClientData(int);
 
-/* From GS2.c */
+/* GS2.c */
 void void_func(void);
 void GS_libinit(void);
 int GS_get_longdim(float *);
@@ -202,13 +203,13 @@ void GS_getlight_position(int, float *, float *, float *, int *);
 void GS_getlight_color(int, float *, float *, float *);
 void GS_getlight_ambient(int, float *, float *, float *);
 
-/* From GSX.c */
+/* GSX.c */
 int GS_check_cancel(void);
 void GS_set_cancel(int);
 void GS_set_cxl_func(void (*)(void));
 void GS_set_swap_func(void (*)(void));
 
-/* From GS_util.c */
+/* GS_util.c */
 double GS_geodistance(double *, double *, const char *);
 float GS_distance(float *, float *);
 float GS_P2distance(float *, float *);
@@ -226,7 +227,7 @@ void GS_v3cross(float *, float *, float *);
 void GS_v3mag(float *, float *);
 int GS_coordpair_repeats(float *, float *, int);
 
-/* From GV2.c */
+/* GV2.c */
 int GV_vect_exists(int);
 int GV_new_vector(void);
 int GV_num_vects(void);
@@ -248,7 +249,7 @@ void GV_draw_fastvect(int);
 int GV_Set_ClientData(int, void *);
 void *GV_Get_ClientData(int);
 
-/* From GVL2.c */
+/* GVL2.c */
 void GVL_libinit(void);
 int GVL_get_region(float *, float *, float *, float *, float *, float *);
 void *GVL_get_window();
@@ -304,11 +305,12 @@ int GVL_slice_get_pos(int, int, float *, float *, float *, float *, float *,
 int GVL_slice_set_pos(int, int, float, float, float, float, float, float,
 		      int);
 
-/* From Gp3.c */
+/* Gp3.c */
 int Gp_set_color(const char *, geopoint *);
 geopoint *Gp_load_sites(const char *, int *, int *);
+int Gp_load_sites_thematic(geosite *);
 
-/* From Gs3.c */
+/* Gs3.c */
 double Gs_distance(double *, double *);
 int Gs_loadmap_as_float(struct Cell_head *, const char *, float *,
 			struct BM *, int *);
@@ -330,11 +332,11 @@ int Gs_load_3dview(const char *, geoview *, geodisplay *, struct Cell_head *,
 		   geosurf *);
 int Gs_update_attrange(geosurf *, int);
 
-/* From Gv3.c */
+/* Gv3.c */
 geoline *Gv_load_vect(const char *, int *);
 void sub_Vectmem(int);
 
-/* From gk.c */
+/* gk.c */
 Keylist *gk_copy_key(Keylist *);
 unsigned long gk_get_mask_sofar(float, Keylist *);
 int gk_viable_keys_for_mask(unsigned long, Keylist *, Keylist **);
@@ -352,7 +354,7 @@ Viewnode *gk_make_linear_framesfromkeys(Keylist *, int, int, int);
 void correct_twist(Keylist *);
 int gk_draw_path(Viewnode *, int, Keylist *);
 
-/* From gp.c */
+/* gp.c */
 geosite *gp_get_site(int);
 geosite *gp_get_prev_site(int);
 int gp_num_sites(void);
@@ -367,13 +369,13 @@ int gp_free_site(geosite *);
 void gp_free_sitemem(geosite *);
 void gp_set_drapesurfs(geosite *, int *, int);
 
-/* From gpd.c */
+/* gpd.c */
 int gs_point_in_region(geosurf *, float *, float *);
 void gpd_obj(geosurf *, gvstyle *, Point3);
 int gpd_2dsite(geosite *, geosurf *, int);
 int gpd_3dsite(geosite *, float, float, int);
 
-/* From gs.c */
+/* gs.c */
 void gs_err(const char *);
 void gs_init(void);
 geosurf *gs_get_surf(int);
@@ -420,7 +422,7 @@ int gs_setall_norm_needupdate(void);
 int gs_point_is_masked(geosurf *, float *);
 int gs_distance_onsurf(geosurf *, float *, float *, float *, int);
 
-/* From gs_bm.c */
+/* gs_bm.c */
 struct BM *gsbm_make_mask(typbuff *, float, int, int);
 void gsbm_zero_mask(struct BM *);
 int gsbm_or_masks(struct BM *, struct BM *);
@@ -430,12 +432,12 @@ int gsbm_xor_masks(struct BM *, struct BM *);
 int gs_update_curmask(geosurf *);
 void print_bm(struct BM *);
 
-/* From gs_norms.c */
+/* gs_norms.c */
 void init_vars(geosurf *);
 int gs_calc_normals(geosurf *);
 int calc_norm(geosurf *, int, int, unsigned int);
 
-/* From gs_query.c */
+/* gs_query.c */
 int gs_los_intersect1(int, float (*)[3], float *);
 int gs_los_intersect(int, float **, float *);
 int RayCvxPolyhedronInt(Point3, Point3, double, Point4 *, int, double *,
@@ -443,7 +445,7 @@ int RayCvxPolyhedronInt(Point3, Point3, double, Point4 *, int, double *,
 void gs_get_databounds_planes(Point4 *);
 int gs_setlos_enterdata(Point3 *);
 
-/* From gsd_cplane.c */
+/* gsd_cplane.c */
 void gsd_def_cplane(int, float *, float *);
 void gsd_update_cplanes(void);
 void gsd_cplane_on(int);
@@ -456,7 +458,7 @@ void gsd_cplane_settrans(int, float, float, float);
 void gsd_draw_cplane_fence(geosurf *, geosurf *, int);
 void gsd_draw_cplane(int);
 
-/* From gsd_fonts.c */
+/* gsd_fonts.c */
 GLuint gsd_set_font(const char *);
 int gsd_get_txtwidth(const char *, int);
 int gsd_get_txtheight(int size);
@@ -464,22 +466,22 @@ void do_label_display(GLuint, float *, const char *);
 int get_txtdescender(void);
 int get_txtxoffset(void);
 
-/* From gsd_img_ppm.c */
+/* gsd_img_ppm.c */
 int GS_write_ppm(const char *);
 int gsd_init_mpeg(const char *);
 int gsd_write_mpegframe(void);
 int gsd_close_mpeg(void);
 
-/* From gsd_img_tif.c */
+/* gsd_img_tif.c */
 int GS_write_tif(const char *);
 
-/* From gsd_label.c */
+/* gsd_label.c */
 void gs_put_label(const char *, GLuint, int, unsigned long, int *);
 void gsd_remove_curr(void);
 void gsd_remove_all(void);
 void gsd_call_label(void);
 
-/* From gsd_objs.c */
+/* gsd_objs.c */
 void gsd_box(float *, int, float *);
 void gsd_plus(float *, int, float);
 void gsd_line_onsurf(geosurf *, float *, float *);
@@ -502,7 +504,7 @@ int gsd_scalebar(float *, float, GLuint, unsigned long, unsigned long);
 void primitive_cone(unsigned long);
 void primitive_cylinder(unsigned long, int);
 
-/* From gsd_prim.c */
+/* gsd_prim.c */
 void gsd_flush(void);
 void gsd_colormode(int);
 void show_colormode(void);
@@ -561,7 +563,7 @@ void gsd_calllists(int);
 void gsd_getwindow(int *, int *, double *, double *);
 int gsd_writeView(unsigned char **, unsigned int, unsigned int);
 
-/* From gsd_surf.c */
+/* gsd_surf.c */
 int gsd_surf(geosurf *);
 int gsd_surf_map(geosurf *);
 int gsd_surf_const(geosurf *, float);
@@ -574,7 +576,7 @@ int gsd_ortho_wall(int, int, geosurf **, Point3 **, float *);
 int gsd_wall(float *, float *, float *);
 int gsd_norm_arrows(geosurf *);
 
-/* From gsd_views.c */
+/* gsd_views.c */
 int gsd_get_los(float (*)[3], short, short);
 void gsd_set_view(geoview *, geodisplay *);
 void gsd_check_focus(geoview *);
@@ -587,7 +589,7 @@ void gsd_model2surf(geosurf *, Point3);
 void gsd_surf2real(geosurf *, Point3);
 void gsd_real2surf(geosurf *, Point3);
 
-/* From gsd_wire.c */
+/* gsd_wire.c */
 int gsd_wire_surf(geosurf *);
 int gsd_wire_surf_map(geosurf *);
 int gsd_coarse_surf_map(geosurf *);
@@ -595,14 +597,14 @@ int gsd_wire_surf_const(geosurf *, float);
 int gsd_wire_surf_func(geosurf *, int (*)());
 int gsd_wire_arrows(geosurf *);
 
-/* From gsdiff.c */
+/* gsdiff.c */
 void gsdiff_set_SDscale(float);
 float gsdiff_get_SDscale(void);
 void gsdiff_set_SDref(geosurf *);
 geosurf *gsdiff_get_SDref(void);
 float gsdiff_do_SD(float, int);
 
-/* From gsdrape.c */
+/* gsdrape.c */
 int gsdrape_set_surface(geosurf *);
 int seg_intersect_vregion(geosurf *, float *, float *);
 Point3 *gsdrape_get_segments(geosurf *, float *, float *, int *);
@@ -622,7 +624,7 @@ int XY_intersect_plane(float *, float *);
 int P3toPlane(Point3, Point3, Point3, float *);
 int V3Cross(Point3, Point3, Point3);
 
-/* From gsds.c */
+/* gsds.c */
 int gsds_findh(const char *, IFLAG *, IFLAG *, int);
 int gsds_newh(const char *);
 typbuff *gsds_get_typbuff(int, IFLAG);
@@ -635,10 +637,10 @@ int gsds_get_changed(int);
 int gsds_set_changed(int, IFLAG);
 int gsds_get_type(int);
 
-/* From gsget.c */
+/* gsget.c */
 int get_mapatt(typbuff *, int, float *);
 
-/* From gv.c */
+/* gv.c */
 geovect *gv_get_vect(int);
 geovect *gv_get_prev_vect(int);
 int gv_num_vects(void);
@@ -652,18 +654,18 @@ int gv_free_vect(geovect *);
 void gv_free_vectmem(geovect *);
 void gv_set_drapesurfs(geovect *, int *, int);
 
-/* From gv_quick.c */
+/* gv_quick.c */
 float gv_line_length(geoline *);
 int gln_num_points(geoline *);
 int gv_num_points(geovect *);
 int gv_decimate_lines(geovect *);
 
-/* From gvd.c */
+/* gvd.c */
 int gs_clip_segment(geosurf *, float *, float *, float *);
 int gvd_vect(geovect *, geosurf *, int);
 void gvd_draw_lineonsurf(geosurf *, float *, float *, int);
 
-/* From gvl.c */
+/* gvl.c */
 geovol *gvl_get_vol(int);
 geovol *gvl_get_prev_vol(int);
 int gvl_getall_vols(geovol **);
@@ -696,14 +698,14 @@ int gvl_slice_init(geovol_slice *);
 geovol_slice *gvl_slice_get_slice(int, int);
 int gvl_slice_freemem(geovol_slice *);
 
-/* From trans.c */
+/* trans.c */
 void P_scale(float, float, float);
 void P_transform(int, float (*)[4], float (*)[4]);
 int P_pushmatrix(void);
 int P_popmatrix(void);
 void P_rot(float, char);
 
-/* From gvl_file.c */
+/* gvl_file.c */
 geovol_file *gvl_file_get_volfile(int);
 char *gvl_file_get_name(int);
 int gvl_file_get_file_type(geovol_file *);
@@ -718,19 +720,19 @@ int gvl_file_set_mode(geovol_file *, IFLAG);
 int gvl_file_set_slices_param(geovol_file *, int, int);
 void gvl_file_get_min_max(geovol_file *, double *, double *);
 
-/* From Gvl3.c */
+/* Gvl3.c */
 int Gvl_load_colors_data(void **, const char *);
 int Gvl_unload_colors_data(void *);
 int Gvl_get_color_for_value(void *, float *);
 
-/* From gvl_calc.c */
+/* gvl_calc.c */
 int gvl_isosurf_calc(geovol *);
 int gvl_slices_calc(geovol *);
 void gvl_write_char(int, unsigned char **, unsigned char);
 unsigned char gvl_read_char(int, const unsigned char *);
 void gvl_align_data(int, unsigned char *);
 
-/* From gvld.c */
+/* gvld.c */
 int gvld_vol(geovol *);
 int gvld_wire_vol(geovol *);
 int gvld_isosurf(geovol *);

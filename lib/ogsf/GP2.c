@@ -3,14 +3,10 @@
 
    \brief OGSF library - loading and manipulating point sets (higher level functions)
 
-   GRASS OpenGL gsurf OGSF Library 
+   (C) 1999-2008, 2011 by the GRASS Development Team
 
-   (C) 1999-2008 by the GRASS Development Team
-
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
 
    \author Bill Brown USACERL (January 1994)
    \author Doxygenized by Martin landa <landa.martin gmail.com> (May 2008)
@@ -42,7 +38,7 @@ int GP_site_exists(int id)
     G_debug(4, "GP_site_exists(%d)", id);
 
     if (NULL == gp_get_site(id)) {
-	return (0);
+	return 0;
     }
 
     for (i = 0; i < Next_site && !found; i++) {
@@ -53,7 +49,7 @@ int GP_site_exists(int id)
 
     G_debug(3, "GP_site_exists(): found=%d", found);
 
-    return (found);
+    return found;
 }
 
 /*!
@@ -74,10 +70,10 @@ int GP_new_site(void)
 
 	G_debug(3, "GP_new_site() id=%d", np->gsite_id);
 
-	return (np->gsite_id);
+	return np->gsite_id;
     }
 
-    return (-1);
+    return -1;
 }
 
 /*!
@@ -87,7 +83,7 @@ int GP_new_site(void)
  */
 int GP_num_sites(void)
 {
-    return (gp_num_sites());
+    return gp_num_sites();
 }
 
 /*!
@@ -109,17 +105,17 @@ int *GP_get_site_list(int *numsites)
     if (Next_site) {
 	ret = (int *)G_malloc(Next_site * sizeof(int));	/* G_fatal_error */
 	if (!ret) {
-	    return (NULL);
+	    return NULL;
 	}
 
 	for (i = 0; i < Next_site; i++) {
 	    ret[i] = Site_ID[i];
 	}
 
-	return (ret);
+	return ret;
     }
 
-    return (NULL);
+    return NULL;
 }
 
 /*!
@@ -150,21 +146,20 @@ int GP_delete_site(int id)
 
 	if (found) {
 	    --Next_site;
-	    return (1);
+	    return 1;
 	}
     }
 
-    return (-1);
+    return -1;
 }
 
 /*!
    \brief Load point set from file
 
-   Check to see if handle already loaded, if so - free before loading new 
-   for now, always load to memory 
+   Check to see if handle already loaded, if so - free before loading
+   new for now, always load to memory.
 
-   \todo load file handle & ready for reading instead of using
-   memory
+   \todo load file handle & ready for reading instead of using memory
 
    \param id point set id
    \param filename point set filename
@@ -176,10 +171,10 @@ int GP_load_site(int id, const char *filename)
 {
     geosite *gp;
 
-    G_debug(3, "GP_load_site(%d, %s)", id, filename);
+    G_debug(3, "GP_load_site(id=%d, name=%s)", id, filename);
 
     if (NULL == (gp = gp_get_site(id))) {
-	return (-1);
+	return -1;
     }
 
     if (gp->points) {
@@ -189,12 +184,12 @@ int GP_load_site(int id, const char *filename)
     gp->filename = G_store(filename);
 
     gp->points = Gp_load_sites(filename, &(gp->n_sites), &(gp->has_z));
-
+    
     if (gp->points) {
-	return (1);
+	return 1;
     }
 
-    return (-1);
+    return -1;
 }
 
 /*!
@@ -215,12 +210,12 @@ int GP_get_sitename(int id, char **filename)
     G_debug(4, "GP_get_sitename(%d)", id);
 
     if (NULL == (gp = gp_get_site(id))) {
-	return (-1);
+	return -1;
     }
 
     *filename = G_store(gp->filename);
 
-    return (1);
+    return 1;
 }
 
 /*!
@@ -237,7 +232,7 @@ int GP_get_style(int id, int *color, int *width, float *size, int *symbol)
     G_debug(4, "GP_get_style(%d)", id);
 
     if (NULL == (gp = gp_get_site(id))) {
-	return (-1);
+	return -1;
     }
 
     *color = gp->style->color;
@@ -245,7 +240,7 @@ int GP_get_style(int id, int *color, int *width, float *size, int *symbol)
     *symbol = gp->style->symbol;
     *size = gp->style->size;
 
-    return (1);
+    return 1;
 }
 
 /*!
@@ -257,17 +252,18 @@ int GP_get_style(int id, int *color, int *width, float *size, int *symbol)
    \param size icon size
    \param symbol icon symbol
 
+   \return 1 on success
    \return -1 on error (point set not found)
  */
 int GP_set_style(int id, int color, int width, float size, int symbol)
 {
     geosite *gp;
 
-    G_debug(4, "GP_set_style(%d, %d, %d, %f, %d)", id, color, width, size,
+    G_debug(4, "GP_set_style(id=%d, color=%d, width=%d, size=%f, symbol=%d)", id, color, width, size,
 	    symbol);
 
     if (NULL == (gp = gp_get_site(id))) {
-	return (-1);
+	return -1;
     }
 
     gp->style->color = color;
@@ -275,7 +271,47 @@ int GP_set_style(int id, int color, int width, float size, int symbol)
     gp->style->size = size;
     gp->style->width = width;
 
-    return (1);
+    return 1;
+}
+
+/*!
+   \brief Set point set style for thematic mapping
+
+   Updates also style for each geopoint.
+   
+   \param id point set id
+   \param layer layer number for thematic mapping
+   \param color icon color
+   \param width icon line width
+   \param size icon size
+   \param symbol icon symbol
+
+   \return 1 on success
+   \return -1 on error (point set not found)
+ */
+int GP_set_style_thematic(int id, int layer, const char* color, const char* width, const char* size, const char* symbol)
+{
+    geosite *gp;
+    
+    G_debug(4, "GP_set_style_thematic(id=%d, layer=%d, color=%s, width=%s, size=%s, symbol=%s)", id, layer,
+	    color, width, size, symbol);
+
+    if (NULL == (gp = gp_get_site(id))) {
+	return -1;
+    }
+
+    if(!gp->tstyle)
+	gp->tstyle = (gvstyle_thematic *)G_malloc(sizeof(gvstyle_thematic));
+    
+    gp->tstyle->layer = layer;
+    gp->tstyle->color_column = G_store(color);
+    gp->tstyle->symbol_column = G_store(symbol);
+    gp->tstyle->size_column = G_store(size);
+    gp->tstyle->width_column = G_store(width);
+
+    Gp_load_sites_thematic(gp);
+
+    return 1;
 }
 
 /*!
@@ -296,20 +332,20 @@ int GP_set_zmode(int id, int use_z)
     G_debug(3, "GP_set_zmode(%d,%d)", id, use_z);
 
     if (NULL == (gp = gp_get_site(id))) {
-	return (-1);
+	return -1;
     }
 
     if (use_z) {
 	if (gp->has_z) {
 	    gp->use_z = 1;
-	    return (1);
+	    return 1;
 	}
 
-	return (0);
+	return 0;
     }
 
     gp->use_z = 0;
-    return (1);
+    return 1;
 }
 
 /*!
@@ -329,11 +365,11 @@ int GP_get_zmode(int id, int *use_z)
     G_debug(4, "GP_get_zmode(%d)", id);
 
     if (NULL == (gp = gp_get_site(id))) {
-	return (-1);
+	return -1;
     }
 
     *use_z = gp->use_z;
-    return (1);
+    return 1;
 }
 
 /*!
@@ -407,10 +443,10 @@ int GP_select_surf(int hp, int hs)
     if (gp && GS_surf_exists(hs)) {
 	gp->drape_surf_id[gp->n_surfs] = hs;
 	gp->n_surfs += 1;
-	return (1);
+	return 1;
     }
 
-    return (-1);
+    return -1;
 }
 
 /*!
@@ -430,7 +466,7 @@ int GP_unselect_surf(int hp, int hs)
     G_debug(3, "GP_unselect_surf(%d,%d)", hp, hs);
 
     if (!GP_surf_is_selected(hp, hs)) {
-	return (1);
+	return 1;
     }
 
     gp = gp_get_site(hp);
@@ -443,12 +479,12 @@ int GP_unselect_surf(int hp, int hs)
 		}
 
 		gp->n_surfs -= 1;
-		return (1);
+		return 1;
 	    }
 	}
     }
 
-    return (-1);
+    return -1;
 }
 
 /*!
@@ -472,12 +508,12 @@ int GP_surf_is_selected(int hp, int hs)
     if (gp) {
 	for (i = 0; i < gp->n_surfs; i++) {
 	    if (hs == gp->drape_surf_id[i]) {
-		return (1);
+		return 1;
 	    }
 	}
     }
 
-    return (0);
+    return 0;
 }
 
 /*!
@@ -547,10 +583,10 @@ int GP_Set_ClientData(int id, void *clientd)
 
     if (gp) {
 	gp->clientdata = clientd;
-	return (1);
+	return 1;
     }
 
-    return (-1);
+    return -1;
 }
 
 /*!
@@ -570,5 +606,5 @@ void *GP_Get_ClientData(int id)
 	return (gp->clientdata);
     }
 
-    return (NULL);
+    return NULL;
 }

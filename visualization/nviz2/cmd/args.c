@@ -3,7 +3,7 @@
   
   \brief Parse command
   
-  (C) 2008, 2010 by the GRASS Development Team
+  (C) 2008, 2010-2011 by the GRASS Development Team
   
   This program is free software under the GNU General Public
   License (>=v2). Read the file COPYING that comes with GRASS
@@ -368,6 +368,14 @@ void args_vpoint(struct GParams *params)
     params->vpoints->guisection = _("Vector points");
     params->vpoints->key = "vpoint";
 
+    params->vpoint_layer = G_define_standard_option(G_OPT_V_FIELD);
+    params->vpoint_layer->multiple = YES;
+    params->vpoint_layer->required = NO;
+    params->vpoint_layer->description = _("Layer number or name for thematic mapping");
+    params->vpoint_layer->guisection = _("Vector points");
+    params->vpoint_layer->key = "vpoint_layer";
+    params->vpoint_layer->answer = "1";
+
     /* point width */
     params->vpoint_size = G_define_option();
     params->vpoint_size->key = "vpoint_size";
@@ -379,6 +387,13 @@ void args_vpoint(struct GParams *params)
     params->vpoint_size->guisection = _("Vector points");
     params->vpoint_size->options = "1-1000";
     params->vpoint_size->answer = "100";
+
+    params->vpoint_size_column = G_define_standard_option(G_OPT_DB_COLUMN);
+    params->vpoint_size_column->multiple = YES;
+    params->vpoint_size_column->required = NO;
+    params->vpoint_size_column->label = _("Name of size definition column");
+    params->vpoint_size_column->key = "vpoint_size_column";
+    params->vpoint_size_column->guisection = _("Vector points");
 
     /* point width */
     params->vpoint_width = G_define_option();
@@ -392,6 +407,13 @@ void args_vpoint(struct GParams *params)
     params->vpoint_width->options = "1-1000";
     params->vpoint_width->answer = "2";
 
+    params->vpoint_width_column = G_define_standard_option(G_OPT_DB_COLUMN);
+    params->vpoint_width_column->multiple = YES;
+    params->vpoint_width_column->required = NO;
+    params->vpoint_width_column->label = _("Name of width definition column");
+    params->vpoint_width_column->key = "vpoint_width_column";
+    params->vpoint_width_column->guisection = _("Vector points");
+
     /* point color */
     params->vpoint_color = G_define_standard_option(G_OPT_C_FG);
     params->vpoint_color->multiple = YES;
@@ -400,6 +422,13 @@ void args_vpoint(struct GParams *params)
     params->vpoint_color->key = "vpoint_color";
     params->vpoint_color->answer = "blue";
     params->vpoint_color->guisection = _("Vector points");
+
+    params->vpoint_color_column = G_define_standard_option(G_OPT_DB_COLUMN);
+    params->vpoint_color_column->multiple = YES;
+    params->vpoint_color_column->required = NO;
+    params->vpoint_color_column->label = _("Name of color definition column");
+    params->vpoint_color_column->key = "vpoint_color_column";
+    params->vpoint_color_column->guisection = _("Vector points");
 
     /* point mode */
     params->vpoint_marker = G_define_option();
@@ -413,6 +442,13 @@ void args_vpoint(struct GParams *params)
 	"x,sphere,diamond,cube,box,gyro,aster,histogram";
     params->vpoint_marker->answer = "sphere";
     params->vpoint_marker->guisection = _("Vector points");
+
+    params->vpoint_marker_column = G_define_standard_option(G_OPT_DB_COLUMN);
+    params->vpoint_marker_column->multiple = YES;
+    params->vpoint_marker_column->required = NO;
+    params->vpoint_marker_column->label = _("Name of marker definition column");
+    params->vpoint_marker_column->key = "vpoint_marker_column";
+    params->vpoint_marker_column->guisection = _("Vector points");
 
     /* position */
     params->vpoint_pos = G_define_option();
@@ -656,7 +692,9 @@ void check_parameters(const struct GParams *params)
     int nelev_map, nelev_const, nelevs;
     int nmaps, nconsts;
 
-    int nvects;
+    int nvlines;
+
+    int nvpoints;
 
     /* topography */
     nelev_map = opt_get_num_answers(params->elev_map);
@@ -744,39 +782,46 @@ void check_parameters(const struct GParams *params)
     }
 
     /*
-     * vector
+     * vector lines
      */
-    nvects = opt_get_num_answers(params->vlines);
+    nvlines = opt_get_num_answers(params->vlines);
 
     /* width */
     nconsts = opt_get_num_answers(params->vline_width);
-    if (nvects > 0 && nconsts != nvects)
+    if (nvlines > 0 && nconsts != nvlines)
 	G_fatal_error(_("Inconsistent number of attributes (<%s> %d: <%s> %d)"),
-		      params->vlines->key, nvects, params->vline_width->key,
+		      params->vlines->key, nvlines, params->vline_width->key,
 		      nconsts);
 
     /* color */
     nconsts = opt_get_num_answers(params->vline_color);
-    if (nvects > 0 && nconsts != nvects)
+    if (nvlines > 0 && nconsts != nvlines)
 	G_fatal_error(_("Inconsistent number of attributes (<%s> %d: <%s> %d"),
-		      params->vlines->key, nvects, params->vline_color->key,
+		      params->vlines->key, nvlines, params->vline_color->key,
 		      nconsts);
 
     /* mode */
     nconsts = opt_get_num_answers(params->vline_mode);
-    if (nvects > 0 && nconsts != nvects)
+    if (nvlines > 0 && nconsts != nvlines)
 	G_fatal_error(_("Inconsistent number of attributes (<%s> %d: <%s> %d)"),
-		      params->vlines->key, nvects, params->vline_mode->key,
+		      params->vlines->key, nvlines, params->vline_mode->key,
 		      nconsts);
 
     /* height */
     nconsts = opt_get_num_answers(params->vline_height);
-    if (nvects > 0 && nconsts != nvects)
+    if (nvlines > 0 && nconsts != nvlines)
 	G_fatal_error(_("Inconsistent number of attributes (<%s> %d: <%s> %d)"),
-		      params->vlines->key, nvects, params->vline_height->key,
+		      params->vlines->key, nvlines, params->vline_height->key,
 		      nconsts);
 
     return;
+
+    /*
+     * vector points
+     */
+    nvpoints = opt_get_num_answers(params->vpoints);
+
+    /* TODO */
 }
 
 void print_error(int nmaps, int nconsts, int nelevs,

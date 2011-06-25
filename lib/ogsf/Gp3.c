@@ -19,9 +19,10 @@
 #include <stdlib.h>
 
 #include <grass/gis.h>
+#include <grass/colors.h>
 #include <grass/raster.h>
-#include <grass/site.h>
 #include <grass/vector.h>
+#include <grass/dbmi.h>
 #include <grass/glocale.h>
 #include <grass/gstypes.h>
 
@@ -30,14 +31,14 @@
 
    The other alternative may be to load to a tmp file.
 
-   \param grassname vector point map 
-   \param nsites
-   \param has_z 2D or 3D points?
+   \param name name of vector map to be loaded
+   \param[out] nsites number of loaded points
+   \param[out] has_z 2D or 3D points data loaded?
 
-   \return pointer to geopoint struct
+   \return pointer to geopoint struct (array)
    \return NULL on failure
  */
-geopoint *Gp_load_sites(const char *grassname, int *nsites, int *has_z)
+geopoint *Gp_load_sites(const char *name, int *nsites, int *has_z)
 {
     struct Map_info map;
     static struct line_pnts *Points = NULL;
@@ -45,44 +46,42 @@ geopoint *Gp_load_sites(const char *grassname, int *nsites, int *has_z)
     geopoint *top, *gpt, *prev;
     int np, ltype, eof;
     struct Cell_head wind;
-    RASTER_MAP_TYPE rtype;
     int ndim;
     const char *mapset;
 
     np = 0;
     eof = 0;
-    *has_z = 0;
-
-    mapset = G_find_vector2(grassname, "");
+    
+    mapset = G_find_vector2(name, "");
     if (!mapset) {
-	G_warning(_("Vector map <%s> not found"), grassname);
+	G_warning(_("Vector map <%s> not found"), name);
 	return NULL;
     }
-
-    Vect_set_open_level(2);
-    if (Vect_open_old(&map, grassname, "") == -1) {
+    
+    Vect_set_open_level(1);
+    if (Vect_open_old(&map, name, "") == -1) {
 	G_fatal_error(_("Unable to open vector map <%s>"),
-		      G_fully_qualified_name(grassname, mapset));
+		      G_fully_qualified_name(name, mapset));
     }
-
+    
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
-
+    
     top = gpt = (geopoint *) G_malloc(sizeof(geopoint));
+    G_zero(gpt, sizeof(geopoint));
     if (!top) {
-	return (NULL);
+	return NULL;
     }
 
     G_get_set_window(&wind);
 
     /* get ndim */
+    *has_z = 0;
     ndim = 2;
     if (Vect_is_3d(&map)) {
+	*has_z = 1;
 	ndim = 3;
     }
-
-    /* set rtype */
-    rtype = CELL_TYPE;
 
     while (eof == 0) {
 	ltype = Vect_read_next_line(&map, Points, Cats);
@@ -90,7 +89,7 @@ geopoint *Gp_load_sites(const char *grassname, int *nsites, int *has_z)
 	case -1:
 	    {
 		G_warning(_("Unable to read vector map <%s>"),
-			  G_fully_qualified_name(grassname, mapset));
+			  G_fully_qualified_name(name, mapset));
 		return (NULL);
 	    }
 	case -2:		/* EOF */
@@ -105,13 +104,11 @@ geopoint *Gp_load_sites(const char *grassname, int *nsites, int *has_z)
 	    gpt->p3[Y] = Points->y[0];
 
 	    if (ndim > 2) {
-		*has_z = 1;
 		gpt->dims = 3;
 		gpt->p3[Z] = Points->z[0];
 	    }
 	    else {
 		gpt->dims = 2;
-		*has_z = 0;
 	    }
 
 	    /* Store category info for thematic display */
@@ -120,18 +117,16 @@ geopoint *Gp_load_sites(const char *grassname, int *nsites, int *has_z)
 		Cats = Vect_new_cats_struct();
 	    }
 	    else {
-		gpt->cats = NULL;
 		Vect_reset_cats(Cats);
 	    }
-	    gpt->highlighted = 0;
-
-
-	    G_debug(3, "loading vector point %d %f %f -- %d",
+	    
+	    G_debug(5, "loading vector point %d x=%f y=%f ncats=%d",
 		    np, Points->x[0], Points->y[0], Cats->n_cats);
 
 	    gpt->next = (geopoint *) G_malloc(sizeof(geopoint));	/* G_fatal_error */
+	    G_zero(gpt->next, sizeof(geopoint));
 	    if (!gpt->next) {
-		return (NULL);
+		return NULL;
 	    }
 
 	    prev = gpt;
@@ -148,15 +143,102 @@ geopoint *Gp_load_sites(const char *grassname, int *nsites, int *has_z)
 
     if (!np) {
 	G_warning(_("No points from vector map <%s> fall within current region"),
-		  G_fully_qualified_name(grassname, mapset));
+		  G_fully_qualified_name(name, mapset));
 	return (NULL);
     }
     else {
 	G_message(_("Vector map <%s> loaded (%d points)"),
-		  G_fully_qualified_name(grassname, mapset), np);
+		  G_fully_qualified_name(name, mapset), np);
     }
 
     *nsites = np;
 
-    return (top);
+    return top;
+}
+
+/*!
+  \brief Load styles for geopoints based on thematic mapping
+
+  \todo Currently only supports color settings
+  
+  \param gp pointer to geosite structure
+
+  \return number of points defined by thematic mapping
+  \return -1 on error
+*/
+int Gp_load_sites_thematic(geosite *gp)
+{
+    geopoint *gpt;
+
+    struct Map_info Map;
+    struct field_info *Fi;
+    
+    int nvals, cat, npts;
+    int red, blu, grn;
+    const char *str;
+    const char *mapset;
+
+    dbDriver *driver;
+    dbValue value;
+    
+    if(!gp || !gp->tstyle || !gp->filename)
+	return -1;
+
+    mapset = G_find_vector2(gp->filename, "");
+    if (!mapset) {
+	G_fatal_error(_("Vector map <%s> not found"), gp->filename);
+    }
+    
+    Vect_set_open_level(1);
+    if (Vect_open_old(&Map, gp->filename, "") == -1) {
+	G_fatal_error(_("Unable to open vector map <%s>"),
+		      G_fully_qualified_name(gp->filename, mapset));
+    }
+    
+    Fi = Vect_get_field(&Map, gp->tstyle->layer);
+    if (!Fi)
+	G_fatal_error(_("Database connection not defined for layer %d"),
+		      gp->tstyle->layer);
+    
+    driver = db_start_driver_open_database(Fi->driver, Fi->database);
+    if (!driver)
+	G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+		      Fi->database, Fi->driver);
+    
+    gpt = gp->points;
+    npts = 0;
+    G_message(_("Loading thematic points layer <%s>..."),
+	      G_fully_qualified_name(gp->filename, mapset));
+    for(;gpt; gpt = gpt->next) {
+	gpt->style = (gvstyle *) G_malloc(sizeof(gvstyle));
+	G_zero(gpt->style, sizeof(gvstyle));
+	/* use default style */
+	gpt->style->color  = gp->style->color;
+	gpt->style->symbol = gp->style->symbol;
+	gpt->style->size   = gp->style->size;
+	gpt->style->width  = gp->style->width;
+	
+	Vect_cat_get(gpt->cats, gp->tstyle->layer, &cat);
+	if (cat < 0)
+	    continue;
+
+	/* color */
+	nvals = db_select_value(driver, Fi->table, Fi->key, cat, gp->tstyle->color_column, &value);
+	if (nvals < 1)
+	    continue;
+	str = db_get_value_string(&value);
+	if (G_str_to_color(str, &red, &grn, &blu) != 1) {
+	    G_warning(_("Invalid color definition (%s)"),
+		      str);
+	    gpt->style->color = gp->style->color;
+	}
+	else {
+	    gpt->style->color = (red & RED_MASK) + ((int)((grn) << 8) & GRN_MASK) +
+		((int)((blu) << 16) & BLU_MASK);
+	}
+
+	npts++;
+    }
+    
+    return npts;
 }
