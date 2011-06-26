@@ -3208,7 +3208,7 @@ class NvizToolWindow(FN.FlatNotebook):
                 color = map(int, value.split(':'))
                 self.FindWindowById(self.win['surface']['color']['const']).SetColour(color)
             self.SetMapObjUseMap(nvizType = 'surface',
-                                 attrb = attr, map = data['attribute']['color']['map'])
+                                 attrb = 'color', map = data['attribute']['color']['map'])
 
         self.SetMapObjUseMap(nvizType = 'surface',
                              attrb = 'shine', map = data['attribute']['shine']['map'])
@@ -3221,35 +3221,35 @@ class NvizToolWindow(FN.FlatNotebook):
         #
         # draw
         #
-        for control, data in data['draw'].iteritems():
+        for control, drawData in data['draw'].iteritems():
             if control == 'all': # skip 'all' property
                 continue
             if control == 'resolution':
-                self.FindWindowById(self.win['surface']['draw']['res-coarse']).SetValue(data['coarse'])
-                self.FindWindowById(self.win['surface']['draw']['res-fine']).SetValue(data['fine'])
+                self.FindWindowById(self.win['surface']['draw']['res-coarse']).SetValue(drawData['coarse'])
+                self.FindWindowById(self.win['surface']['draw']['res-fine']).SetValue(drawData['fine'])
                 continue
             
             if control == 'mode':
-                if data['desc']['mode'] == 'coarse':
+                if drawData['desc']['mode'] == 'coarse':
                     self.FindWindowById(self.win['surface']['draw']['mode']).SetSelection(0)
-                elif data['desc']['mode'] == 'fine':
+                elif drawData['desc']['mode'] == 'fine':
                     self.FindWindowById(self.win['surface']['draw']['mode']).SetSelection(1)
                 else: # both
                     self.FindWindowById(self.win['surface']['draw']['mode']).SetSelection(2)
                 
-                if data['desc']['style'] == 'wire':
+                if drawData['desc']['style'] == 'wire':
                     self.FindWindowById(self.win['surface']['draw']['style']).SetSelection(0)
                 else: # surface
                     self.FindWindowById(self.win['surface']['draw']['style']).SetSelection(1)
                 
-                if data['desc']['shading'] == 'flat':
+                if drawData['desc']['shading'] == 'flat':
                     self.FindWindowById(self.win['surface']['draw']['shading']).SetSelection(0)
                 else: # gouraud
                     self.FindWindowById(self.win['surface']['draw']['shading']).SetSelection(1)
                 
                 continue
             
-            value = data['value']
+            value = drawData['value']
             win = self.FindWindowById(self.win['surface']['draw'][control])
             
             name = win.GetName()
@@ -3261,6 +3261,14 @@ class NvizToolWindow(FN.FlatNotebook):
                 win.SetColour(color)
             else:
                 win.SetValue(value)
+        #
+        # position
+        #
+        if 'x' in data['position']:
+            xval = data['position']['x']
+            self.FindWindowById(self.win['surface']['position']['axis']).SetSelection(0)
+            for control in ('slider','text'):
+                    self.FindWindowById(self.win['surface']['position'][control]).SetValue(xval)
         # enable/disable res widget + set draw mode
         self.OnSurfaceMode(event = None)
 

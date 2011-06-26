@@ -337,12 +337,12 @@ class ProcessWorkspaceFile:
             # position
             node_pos = node_surface.find('position')
             if node_pos is not None:
-                dc = self.nviz['surface']['position'] = {}
+                dc = nviz['surface']['position'] = {}
                 for coor in ['x', 'y', 'z']:
                     node = node_pos.find(coor)
                     if node is None:
                         continue
-                    value = int(self.__getNodeText(node, 'value'))
+                    value = int(self.__getNodeText(node_pos, coor))
                     dc[coor] = value
             
         elif 'vector' in nviz:
@@ -450,45 +450,46 @@ class ProcessWorkspaceFile:
         view = {}
         iview = {}
         
-        node_position = node_view.find('position')
+        node_position = node_view.find('v_position')
         view['position'] = {}
-        view['position']['x'] = float(self.__getNodeText(node_position, 'x'))
-        view['position']['y'] = float(self.__getNodeText(node_position, 'y'))
+        view['position']['x'] = self.__processLayerNvizNode(node_position, 'x', float)
+        view['position']['y'] = self.__processLayerNvizNode(node_position, 'y', float)
         node_persp = node_view.find('persp')
         view['persp'] = {}
         iview['persp'] = {}
-        view['persp']['value'] = int(self.__getNodeText(node_persp, 'value'))
-        view['persp']['step'] = int(self.__getNodeText(node_persp, 'step'))
-        iview['persp']['min'] = int(self.__getNodeText(node_persp, 'min'))
-        iview['persp']['max'] = int(self.__getNodeText(node_persp, 'max'))
-        node_height = node_view.find('height')
+        view['persp']['value'] = self.__processLayerNvizNode(node_persp, 'value', int)
+        view['persp']['step'] = self.__processLayerNvizNode(node_persp, 'step', int)
+        iview['persp']['min'] = self.__processLayerNvizNode(node_persp, 'min', int)
+        iview['persp']['max'] = self.__processLayerNvizNode(node_persp, 'max', int)
+        node_height = node_view.find('v_height')
         view['height'] = {}
         iview['height'] = {}
-        iview['height']['value'] = int(self.__getNodeText(node_height, 'value'))
-        view['height']['step'] = int(self.__getNodeText(node_height, 'step'))
-        iview['height']['min'] = int(self.__getNodeText(node_height, 'min'))
-        iview['height']['max'] = int(self.__getNodeText(node_height, 'max'))
+        iview['height']['value'] = self.__processLayerNvizNode(node_height, 'value', int)
+        view['height']['step'] = self.__processLayerNvizNode(node_height, 'step', int)
+        iview['height']['min'] = self.__processLayerNvizNode(node_height, 'min', int)
+        iview['height']['max'] = self.__processLayerNvizNode(node_height, 'max', int)
         node_twist = node_view.find('twist')
         view['twist'] = {}
         iview['twist'] = {}
-        view['twist']['value'] = int(self.__getNodeText(node_twist, 'value'))
-        view['twist']['step'] = int(self.__getNodeText(node_twist, 'step'))
-        iview['twist']['min'] = int(self.__getNodeText(node_twist, 'min'))
-        iview['twist']['max'] = int(self.__getNodeText(node_twist, 'max'))
+        view['twist']['value'] = self.__processLayerNvizNode(node_twist, 'value', int)
+        view['twist']['step'] = self.__processLayerNvizNode(node_twist, 'step', int)
+        iview['twist']['min'] = self.__processLayerNvizNode(node_twist, 'min', int)
+        iview['twist']['max'] = self.__processLayerNvizNode(node_twist, 'max', int)
         node_zexag = node_view.find('z-exag')
         view['z-exag'] = {}
-        view['z-exag']['step'] = int(self.__getNodeText(node_zexag, 'step'))
-        view['z-exag']['value'] = int(self.__getNodeText(node_zexag, 'value'))
-        view['z-exag']['min'] = int(self.__getNodeText(node_zexag, 'min'))
-        view['z-exag']['max'] = int(self.__getNodeText(node_zexag, 'max'))
+        view['z-exag']['value'] = self.__processLayerNvizNode(node_zexag, 'value', int)
+        view['z-exag']['step'] = self.__processLayerNvizNode(node_zexag, 'step', int)
+        view['z-exag']['min'] = self.__processLayerNvizNode(node_zexag, 'min', int)
+        view['z-exag']['max'] = self.__processLayerNvizNode(node_zexag, 'max', int)
         node_focus = node_view.find('focus')
         iview['focus'] = {}
-        iview['focus']['x'] = int(self.__getNodeText(node_focus, 'x'))
-        iview['focus']['y'] = int(self.__getNodeText(node_focus, 'y'))
-        iview['focus']['z'] = int(self.__getNodeText(node_focus, 'z'))
-        node_background = node_view.find('background')
+        iview['focus']['x'] = self.__processLayerNvizNode(node_focus, 'x', int)
+        iview['focus']['y'] = self.__processLayerNvizNode(node_focus, 'y', int)
+        iview['focus']['z'] = self.__processLayerNvizNode(node_focus, 'z', int)
+        
         view['background'] = {}
-        view['background']['color'] = tuple(map(int,self.__getNodeText(node_background, 'color').split(':')))
+        color = self.__processLayerNvizNode(node_view, 'background_color', str)
+        view['background']['color'] = tuple(map(int, color.split(':')))
         
         self.nviz_state['view'] = view
         self.nviz_state['iview'] = iview
@@ -498,28 +499,29 @@ class ProcessWorkspaceFile:
         node_light = node_state.find('light')
         light = {}
         
-        node_position = node_light.find('position')
+        node_position = node_light.find('l_position')
         light['position'] = {}
-        light['position']['x'] = float(self.__getNodeText(node_position, 'x'))
-        light['position']['y'] = float(self.__getNodeText(node_position, 'y'))
-        light['position']['z'] = float(self.__getNodeText(node_position, 'z'))
+        light['position']['x'] = self.__processLayerNvizNode(node_position, 'x', float)
+        light['position']['y'] = self.__processLayerNvizNode(node_position, 'y', float)
+        light['position']['z'] = self.__processLayerNvizNode(node_position, 'z', int)
         
-        
-        light['bright'] = int(node_light.get('bright', '80'))
-        light['ambient'] = int(node_light.get('ambient', '20'))
-        light['color'] = tuple(map(int,(node_light.get('color', '255:255:255')).split(':')))
+        light['bright'] = self.__processLayerNvizNode(node_light, 'bright', int) 
+        light['ambient'] = self.__processLayerNvizNode(node_light, 'ambient', int)
+        color = self.__processLayerNvizNode(node_light, 'color', str)
+        light['color'] = tuple(map(int, color.split(':')))
         
         self.nviz_state['light'] = light
         
         node_constants = node_state.find('constant_planes')
         constants = []
-        for i, node_plane in enumerate(node_constants.findall('plane')):
-            plane = {}
-            plane['value'] = int(self.__getNodeText(node_plane, 'value'))
-            plane['resolution'] = int(self.__getNodeText(node_plane, 'resolution'))
-            plane['color'] = self.__getNodeText(node_plane, 'color')
-            plane['object'] = {}
-            constants.append({'constant': plane})
+        if node_constants:
+            for i, node_plane in enumerate(node_constants.findall('plane')):
+                plane = {}
+                plane['color'] = self.__processLayerNvizNode(node_plane, 'color', str)                
+                plane['resolution'] = self.__processLayerNvizNode(node_plane, 'fine_resolution', int)
+                plane['value'] = self.__processLayerNvizNode(node_plane, 'height', int)
+                plane['object'] = {}
+                constants.append({'constant': plane})
         self.nviz_state['constants'] = constants    
         
         
@@ -584,7 +586,11 @@ class Nviz:
         data['draw']['mode'] = { 'value' : value,
                                  'desc' : desc, 
                                  'update': None }
-        
+        # position
+        for coord in ('x', 'y', 'z'):
+            data['position'][coord] = UserSettings.Get(group='nviz', key='surface', subkey=['position', coord])
+        data['position']['update'] = None
+            
         return data
     
     def SetVolumeDefaultProp(self):
@@ -965,7 +971,6 @@ class WriteWorkspaceFile(object):
         """
         if 'object' not in data: # skip disabled
             return
-
         self.indent += 4
         self.file.write('%s<surface>\n' % (' ' * self.indent))
         self.indent += 4
@@ -1099,113 +1104,117 @@ class WriteWorkspaceFile(object):
         self.file.write('%s<view>\n' % (' ' * self.indent))
         self.indent += 4
         # position
-        self.file.write('%s<position>\n' % (' ' * self.indent))
+        self.file.write('%s<v_position>\n' % (' ' * self.indent))
         self.indent += 4
-        self.__writePairTag('x', view['position'], format = '.2f')
-        self.__writePairTag('y', view['position'], format = '.2f')
+        self.file.write('%s<x>%.2f</x>\n' % (' ' * self.indent, view['position']['x']))
+        self.file.write('%s<y>%.2f</y>\n' % (' ' * self.indent, view['position']['y']))
         self.indent -= 4
-        self.file.write('%s</position>\n' % (' ' * self.indent))
+        self.file.write('%s</v_position>\n' % (' ' * self.indent))
         # perspective
         self.file.write('%s<persp>\n' % (' ' * self.indent))
         self.indent += 4
-        self.__writePairTag('value', view['persp'])
-        self.__writePairTag('step', view['persp'])
-        self.__writePairTag('max', iview['persp'])
-        self.__writePairTag('min', iview['persp'])
+        self.file.write('%s<value>%d</value>\n' % (' ' * self.indent, view['persp']['value']))
+        self.file.write('%s<step>%d</step>\n' % (' ' * self.indent, view['persp']['step']))
+        self.file.write('%s<min>%d</min>\n' % (' ' * self.indent, iview['persp']['min']))
+        self.file.write('%s<max>%d</max>\n' % (' ' * self.indent, iview['persp']['max']))
         self.indent -= 4
         self.file.write('%s</persp>\n' % (' ' * self.indent))
         # height
-        self.file.write('%s<height>\n' % (' ' * self.indent))
+        self.file.write('%s<v_height>\n' % (' ' * self.indent))
         self.indent += 4
-        self.__writePairTag('value', iview['height'])
-        self.__writePairTag('step', view['height'])
-        self.__writePairTag('max', iview['height'])
-        self.__writePairTag('min', iview['height'])
+        self.file.write('%s<value>%d</value>\n' % (' ' * self.indent, iview['height']['value']))
+        self.file.write('%s<step>%d</step>\n' % (' ' * self.indent, view['height']['step']))
+        self.file.write('%s<min>%d</min>\n' % (' ' * self.indent, iview['height']['min']))
+        self.file.write('%s<max>%d</max>\n' % (' ' * self.indent, iview['height']['max']))
         self.indent -= 4
-        self.file.write('%s</height>\n' % (' ' * self.indent))
+        self.file.write('%s</v_height>\n' % (' ' * self.indent))
         # twist
         self.file.write('%s<twist>\n' % (' ' * self.indent))
         self.indent += 4
-        self.__writePairTag('step', view['twist'])
-        self.__writePairTag('value', view['twist'])
-        self.__writePairTag('max', iview['twist'])
-        self.__writePairTag('min', iview['twist'])
+        self.file.write('%s<value>%d</value>\n' % (' ' * self.indent, view['twist']['value']))
+        self.file.write('%s<step>%d</step>\n' % (' ' * self.indent, view['twist']['step']))
+        self.file.write('%s<min>%d</min>\n' % (' ' * self.indent, iview['twist']['min']))
+        self.file.write('%s<max>%d</max>\n' % (' ' * self.indent, iview['twist']['max']))
         self.indent -= 4
         self.file.write('%s</twist>\n' % (' ' * self.indent))
         # z-exag
         self.file.write('%s<z-exag>\n' % (' ' * self.indent))
         self.indent += 4
-        self.__writePairTag('step', view['z-exag'])
-        self.__writePairTag('value', view['z-exag'])
-        self.__writePairTag('max', view['z-exag'])
-        self.__writePairTag('min', view['z-exag'])
+        self.file.write('%s<value>%d</value>\n' % (' ' * self.indent, view['z-exag']['value']))
+        self.file.write('%s<step>%d</step>\n' % (' ' * self.indent, view['z-exag']['step']))
+        self.file.write('%s<min>%d</min>\n' % (' ' * self.indent, view['z-exag']['min']))
+        self.file.write('%s<max>%d</max>\n' % (' ' * self.indent, view['z-exag']['max']))
         self.indent -= 4
         self.file.write('%s</z-exag>\n' % (' ' * self.indent))
         # focus (look here)
         self.file.write('%s<focus>\n' % (' ' * self.indent))
         self.indent += 4
-        self.__writePairTag('x', iview['focus'])
-        self.__writePairTag('y', iview['focus'])
-        self.__writePairTag('z', iview['focus'])
+        self.file.write('%s<x>%d</x>\n' % (' ' * self.indent, iview['focus']['x']))
+        self.file.write('%s<y>%d</y>\n' % (' ' * self.indent, iview['focus']['y']))
+        self.file.write('%s<z>%d</z>\n' % (' ' * self.indent, iview['focus']['z']))
         self.indent -= 4
         self.file.write('%s</focus>\n' % (' ' * self.indent))
         # background
-        self.file.write('%s<background>\n' % (' ' * self.indent))
-        self.indent += 4
-        self.file.write('%s<color>' % (' ' * self.indent))
-        self.file.write('%d:%d:%d</color>\n' % (view['background']['color']))
-        self.indent -= 4
-        self.file.write('%s</background>\n' % (' ' * self.indent))
+        self.__writeTagWithValue('background_color', view['background']['color'], format = 'd:%d:%d')
         
         self.indent -= 4
         self.file.write('%s</view>\n' % (' ' * self.indent))
         #
         # light
         #
-        self.file.write('%s<light bright="%d" ambient="%d" ' 
-                        % (' ' * self.indent, light['bright'], light['ambient']))
-        self.file.write('color="%d:%d:%d">\n' % (light['color']))
+        self.file.write('%s<light>\n' % (' ' * self.indent))
         self.indent += 4
         # position
-        self.file.write('%s<position>\n' % (' ' * self.indent))
+        self.file.write('%s<l_position>\n' % (' ' * self.indent))
         self.indent += 4
-        self.__writePairTag('x', light['position'], format = '.2f')
-        self.__writePairTag('y', light['position'], format = '.2f')
-        self.__writePairTag('z', light['position'], format = '.2f')
+        self.file.write('%s<x>%.2f</x>\n' % (' ' * self.indent, light['position']['x']))
+        self.file.write('%s<y>%.2f</y>\n' % (' ' * self.indent, light['position']['y']))
+        self.file.write('%s<z>%d</z>\n' % (' ' * self.indent, light['position']['z']))
         self.indent -= 4
-        self.file.write('%s</position>\n' % (' ' * self.indent))
+        self.file.write('%s</l_position>\n' % (' ' * self.indent))
+        # bright
+        self.__writeTagWithValue('bright', light['bright'])
+        # ambient
+        self.__writeTagWithValue('ambient', light['ambient'])
+        # color
+        self.__writeTagWithValue('color', light['color'], format = 'd:%d:%d')
         
         self.indent -= 4
         self.file.write('%s</light>\n' % (' ' * self.indent))
         #
         # constant planes
         #
-        self.file.write('%s<constant_planes>\n' % (' ' * self.indent))
-        self.indent += 4
-        for idx, plane in enumerate(constants):
-            self.file.write('%s<plane>\n' % (' ' * self.indent))
+        if constants:
+            self.file.write('%s<constant_planes>\n' % (' ' * self.indent))
             self.indent += 4
-            self.__writePairTag('value', constants[idx]['constant'])
-            self.__writePairTag('resolution', constants[idx]['constant'])
-            self.__writePairTag('color', constants[idx]['constant'], format = 's')
+            for idx, plane in enumerate(constants):
+                self.file.write('%s<plane>\n' % (' ' * self.indent))
+                self.indent += 4
+                self.__writeTagWithValue('height', constants[idx]['constant']['value'])
+                self.__writeTagWithValue('fine_resolution', constants[idx]['constant']['resolution'])
+                self.__writeTagWithValue('color', constants[idx]['constant']['color'], format = 's')
+                self.indent -= 4
+                self.file.write('%s</plane>\n' % (' ' * self.indent))
             self.indent -= 4
-            self.file.write('%s</plane>\n' % (' ' * self.indent))
-        self.indent -= 4
-        self.file.write('%s</constant_planes>\n' % (' ' * self.indent))
+            self.file.write('%s</constant_planes>\n' % (' ' * self.indent))
         self.indent -= 4
         
         self.file.write('%s</nviz_state>\n' % (' ' * self.indent))
         self.indent -= 4
     
-    def __writePairTag(self, tag, data, format = 'd'):
+    def __writeTagWithValue(self, tag, data, format = 'd'):
         """!Helper function for writing pair tag
         
         @param tag written tag
         @param data written data
         @param format conversion type
         """
-        self.file.write(('%s<%s>%' + format + '</%s>\n') % \
-                        (' ' * self.indent, tag, data[tag], tag))
+        self.file.write('%s<%s>\n' % (' ' * self.indent, tag))
+        self.indent += 4
+        self.file.write('%s' % (' ' * self.indent))
+        self.file.write(('<value>%' + format + '</value>\n') % data)
+        self.indent -= 4
+        self.file.write('%s</%s>\n' % (' ' * self.indent, tag))
         
 class ProcessGrcFile(object):
     def __init__(self, filename):
