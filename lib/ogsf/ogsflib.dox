@@ -1,657 +1,685 @@
-/*! \page ogsflib GRASS openGL gsurf OGSF Library
+/*! \page ogsflib GRASS OGSF Library
 <!-- doxygenized from "GRASS 5 Programmer's Manual" 
      by M. Neteler 2/2004
+     Updated by Martin Landa <landa.martin gmail.com> in 6/2011
   -->
 
 by GRASS Development Team (http://grass.osgeo.org)
 
-\section ogsfintro OGSF Library for OpenGL programming (gsurf) 
-
-Author: Bill Brown GMSL/University of Illinois
+\section ogsfintro OGSF Library for OpenGL programming
 
 <b>Overview</b>
 
-The OGSF (gsurf)  library, consisting of approximately 27,000 lines of
+The OGSF (gsurf) library, consisting of approximately 27,000 lines of
 C code, contains some 250 public functions and about twice as many
 internal functions for run-time data storage, manipulation, querying,
-and visualization using OpenGL.  The library handles all drawing and
+and visualization using OpenGL. The library handles all drawing and
 lighting operations, including use of user-defined clipping planes and
 drawing various style "fences" on clipping planes when drawing
 multiple surfaces, and treats datasets as objects which can be used
 for various attributes of the rendering.  It allows data sharing
 (%e.g., same data for more than one attribute of same or different
 surfaces), separate masking for each surface, multiple surfaces,
-%vector sets, or %point sets, and will also allow multiple volumes.  The
-library provides all query features such as 3D "point on surface",
+%vector sets, or %point sets, and will also allow multiple volumes.
+The library provides all query features such as 3D "point on surface",
 keyframe animation routines, and full state saving functionality.
 Database-specific routines for interfacing with the \ref gislib are
 kept isolated for easier library reuse with other databases.  The
 gsurf library is not dependent upon any particular interface library,
-and has been used successfully with both Motif and Tcl/Tk. It is used
-for NVIZ visualization tool.
+and has been used successfully with both Motif, Tcl/Tk or wxPython. It
+is used for Nviz visualization tool.
 
 The library is designed to provide a unique "handle" or identifier
 number to the calling program for each new geographic object added to
 the model.  The object could be a surface, %vector set, or %point set,
-which could each be defined by one or more database files.  Once
+which could each be defined by one or more database files. Once
 created, the application only needs to keep track of the "handles" to
-the objects (which are returned by the creation routines) ; for
+the objects (which are returned by the creation routines); for
 example, to draw a surface the application would make the call:
 
-GS_draw_surf(id) 
-
-where <I>id</I> is the handle number.  To associate a %vector set with
-a surface and then draw all surfaces with the %vector set draped over
-the one selected, the application would use the calls:
-
-GV_select_surf(vid, sid) 
-
-GS_alldraw_surf()  
-
-GV_draw_vect(vid) 
-
-where <I>vid</I> and <I>sid</I> are the handles for the %vector set and
-surface.  Similarly, to query or change attributes of the object, the
-handle is used in conjunction with the new attribute, as in:
-
-GV_set_vectmode(id, mem, color, width)
-
-\subsection Naming_Conventions Naming Conventions
+\subsection ogsfNames Naming Conventions
 
 The following naming conventions for function prefixes are used:
 
-<UL>
-<LI><B>GS_</B>
-        Functions which have to do with loading &amp; manipulating
-        surfaces.  Also functions for library initialization,
-        setting global variables, viewer positioning, and lighting.
-</LI>
-<LI><B>GSU_</B>
-        Utility functions for distance calculations, common 2D &amp; 3D
-        unit %vector operations such as cross product or %vector arithmetic.
-</LI>
-<LI><B>GV_</B>
-        Functions which have to do with loading &amp; manipulating
-        %vector sets. 
-</LI>
-<LI><B>GP_</B>
-        Functions which have to do with loading &amp; manipulating
-        %point sets. 
-</LI>
-<LI><B>GVL_</B>
-        Functions which have to do with loading &amp; manipulating 3D
-        volumes.
-</LI>
-<LI><B>GK_</B>
-        Functions which have to do with setting &amp; manipulating 
-        keyframes for viewer position animation (fly-bys) .
-</LI>
-</UL>
+ - <b>GS_</b> - Functions which have to do with loading &amp;
+        manipulating surfaces.  Also functions for library
+        initialization, setting global variables, viewer positioning,
+        and lighting.
 
-<P>
+ - <b>GSU_</b> - Utility functions for distance calculations, common
+        2D &amp; 3D unit %vector operations such as cross product or
+        %vector arithmetic.
+
+ - <b>GV_</b> - Functions which have to do with loading &amp;
+   manipulating %vector sets.
+
+ - <b>GP_</b> - Functions which have to do with loading &amp;
+   manipulating %point sets.
+
+ - <b>GVL_</b> - Functions which have to do with loading &amp;
+   manipulating 3D volumes.
+
+ - <b>GK_</b> - Functions which have to do with setting &amp;
+        manipulating keyframes for viewer position animation (fly-bys).
+
 Programmers' documentation is currently incomplete, but see the
 following for more details of the library design and capabilities in
 the appendix (PLEASE ADD EXPLANATIONS!!):
 
-<P>
+ - public function prototypes
+ - public include file include/gsurf.h
+ - public include file include/keyframe.h
+ - public color packing utility macros rgbpack.h
+ - private types and defines include/gstypes.h
+ - private utilities gsget.h
 
-<UL>
-<LI>public function prototypes
-</LI>
-<LI>public include file include/gsurf.h
-</LI>
-<LI>public include file include/keyframe.h
-</LI>
-<LI>public color packing utility macros rgbpack.h
-</LI>
-<LI>private types and defines include/gstypes.h
-</LI>
-<LI>private utilities gsget.h
-</LI>
-</UL>
+\section ogsfPublic Public function prototypes
 
-\section Public_function_prototypes_for_gsurf_Library Public function prototypes
-
-\subsection gs_init Initialization and positioning (GS)
+\subsection ogsfGs Initialization and positioning surfaces (GS)
 
 Functions which have to do with loading &amp; manipulating surfaces.
 Also functions for library initialization, setting global variables,
 viewer positioning, and lighting.
 
-GS_alldraw_cplane_fences()
+- GS_alldraw_cplane_fences()
 
-GS_alldraw_surf()
+- GS_alldraw_surf()
 
-GS_alldraw_wire()
+- GS_alldraw_wire()
 
-GS_check_cancel()
+- GS_check_cancel()
 
-GS_clear()
+- GS_clear()
 
-GS_coordpair_repeats()
+- GS_coordpair_repeats()
 
-GS_delete_list()
+- GS_delete_list()
 
-GS_delete_surface()
+- GS_delete_surface()
 
-GS_distance()
+- GS_distance()
 
-GS_done_draw()
+- GS_done_draw()
 
-GS_draw_all_list()
+- GS_draw_all_list()
 
-GS_draw_cplane()
+- GS_draw_cplane()
 
-GS_draw_cplane_fence()
+- GS_draw_cplane_fence()
 
-GS_draw_flowline_at_xy()
+- GS_draw_flowline_at_xy()
 
-GS_draw_fringe()
+- GS_draw_fringe()
 
-GS_draw_legend()
+- GS_draw_legend()
 
-GS_draw_lighting_model()
+- GS_draw_lighting_model()
 
-GS_draw_lighting_model1()
+- GS_draw_lighting_model1()
 
-GS_draw_line_onsurf()
+- GS_draw_line_onsurf()
 
-GS_draw_list()
+- GS_draw_nline_onsurf()
 
-GS_draw_nline_onsurf()
+- GS_draw_surf()
 
-GS_draw_surf()
+- GS_draw_wire()
 
-GS_draw_wire()
+- GS_draw_X()
 
-GS_draw_X()
+- GS_dv3norm()
 
-GS_dv3norm()
+- GS_geodistance()
 
-GS_geodistance()
+- GS_get_aspect()
 
-GS_get_aspect()
+- GS_get_att()
 
-GS_get_att()
+- GS_get_cat_at_xy()
 
-GS_get_cat_at_xy()
+- GS_Get_ClientData()
 
-GS_get_dims()
+- GS_get_dims()
 
-GS_get_distance_alongsurf()
+- GS_get_distance_alongsurf()
 
-GS_get_drawmode()
+- GS_get_drawmode()
 
-GS_get_drawres()
+- GS_get_drawres()
 
-GS_get_exag_guess()
+- GS_get_exag_guess()
 
-GS_get_fencecolor()
+- GS_get_fencecolor()
 
-GS_get_focus()
+- GS_get_focus()
 
-GS_get_fov()
+- GS_get_fov()
 
-GS_get_from()
+- GS_get_from()
 
-GS_get_from_real()
+- GS_get_from_real()
 
-GS_getlight_ambient()
+- GS_getlight_ambient()
 
-GS_getlight_color()
+- GS_getlight_color()
 
-GS_getlight_position()
+- GS_getlight_position()
 
-GS_get_longdim()
+- GS_get_longdim()
 
-GS_get_maskmode()
+- GS_get_maskmode()
 
-GS_get_modelposition()
+- GS_get_modelposition()
 
-GS_get_modelposition1()
+- GS_get_modelposition1()
 
-GS_get_norm_at_xy()
+- GS_get_norm_at_xy()
 
-GS_get_nozero()
+- GS_get_nozero()
 
-GS_get_region()
+- GS_get_region()
 
-GS_get_scale()
+- GS_get_scale()
 
-GS_get_SDscale()
+- GS_get_SDscale()
 
-GS_get_SDsurf()
+- GS_get_SDsurf()
 
-GS_get_selected_point_on_surface()
+- GS_get_selected_point_on_surface()
 
-GS_get_to()
+- GS_get_surf_list()
 
-GS_get_to_real()
+- GS_get_to()
 
-GS_get_trans()
+- GS_get_to_real()
 
-GS_get_twist()
+- GS_get_trans()
 
-GS_get_val_at_xy()
+- GS_get_twist()
 
-GS_get_viewdir()
+- GS_get_val_at_xy()
 
-GS_get_wire_color()
+- GS_get_viewdir()
 
-GS_get_zextents()
+- GS_get_wire_color()
 
-GS_get_zrange()
+- GS_get_zextents()
 
-GS_get_zrange_nz()
+- GS_get_zrange()
 
-GS_global_exag()
+- GS_get_zrange_nz()
 
-GS_has_transparency()
+- GS_global_exag()
 
-GS_init_view()
+- GS_has_transparency()
 
-GS_is_masked()
+- GS_init_view()
 
-GS_libinit()
+- GS_is_masked()
 
-GS_lights_off()
+- GS_libinit()
 
-GS_lights_on()
+- GS_lights_off()
 
-GS_load_3dview()
+- GS_lights_on()
 
-GS_load_att_map()
+- GS_load_3dview()
 
-GS_look_here()
+- GS_load_att_map()
 
-GS_moveto()
+- GS_look_here()
 
-GS_moveto_real()
+- GS_moveto()
 
-GS_new_light()
+- GS_moveto_real()
 
-GS_new_surface()
+- GS_new_light()
 
-GS_num_surfs()
+- GS_new_surface()
 
-GS_P2distance()
+- GS_num_surfs()
 
-GS_ready_draw()
+- GS_P2distance()
 
-GS_save_3dview()
+- GS_ready_draw()
 
-GS_setall_drawmode()
+- GS_save_3dview()
 
-GS_setall_drawres()
+- GS_setall_drawmode()
 
-GS_set_att_const()
+- GS_setall_drawres()
 
-GS_set_att_defaults()
+- GS_set_att_const()
 
-GS_set_cancel()
+- GS_set_att_defaults()
 
-GS_Set_ClientData()
+- GS_set_cancel()
 
-GS_set_cplane()
+- GS_Set_ClientData()
 
-GS_set_cplane_rot()
+- GS_set_cplane()
 
-GS_set_cplane_trans()
+- GS_set_cplane_rot()
 
-GS_set_cxl_func()
+- GS_set_cplane_trans()
 
-GS_set_draw()
+- GS_set_cxl_func()
 
-GS_set_drawmode()
+- GS_set_draw()
 
-GS_set_drawres()
+- GS_set_drawmode()
 
-GS_set_exag()
+- GS_set_drawres()
 
-GS_set_fencecolor()
+- GS_set_exag()
 
-GS_set_focus()
+- GS_set_fencecolor()
 
-GS_set_focus_center_map()
+- GS_set_focus()
 
-GS_set_focus_real()
+- GS_set_focus_center_map()
 
-GS_set_fov()
+- GS_set_focus_real()
 
-GS_set_global_exag()
+- GS_set_fov()
 
-GS_set_infocus()
+- GS_set_global_exag()
 
-GS_setlight_ambient()
+- GS_set_infocus()
 
-GS_setlight_color()
+- GS_setlight_ambient()
 
-GS_setlight_position()
+- GS_setlight_color()
 
-GS_set_maskmode()
+- GS_setlight_position()
 
-GS_set_Narrow()
+- GS_set_maskmode()
 
-GS_set_nofocus()
+- GS_set_Narrow()
 
-GS_set_nozero()
+- GS_set_nofocus()
 
-GS_set_SDscale()
+- GS_set_nozero()
 
-GS_set_SDsurf()
+- GS_set_SDscale()
 
-GS_set_swap_func()
+- GS_set_SDsurf()
 
-GS_set_trans()
+- GS_set_swap_func()
 
-GS_set_twist()
+- GS_set_trans()
 
-GS_set_viewdir()
+- GS_set_twist()
 
-GS_set_viewport()
+- GS_set_viewdir()
 
-GS_set_wire_color()
+- GS_set_viewport()
 
-GS_surf_exists()
+- GS_set_wire_color()
 
-GS_switchlight()
+- GS_surf_exists()
 
-GS_transp_is_set()
+- GS_switchlight()
 
-GS_unset_att()
+- GS_transp_is_set()
 
-GS_unset_cplane()
+- GS_unset_att()
 
-GS_unset_SDsurf()
+- GS_unset_cplane()
 
-GS_update_curmask()
+- GS_unset_SDsurf()
 
-GS_update_normals()
+- GS_update_curmask()
 
-GS_v2dir()
+- GS_update_normals()
 
-GS_v2norm()
+- GS_util.c()
 
-GS_v3add()
+- GS_v2dir()
 
-GS_v3cross()
+- GS_v2norm()
 
-GS_v3dir()
+- GS_v3add()
 
-GS_v3eq()
+- GS_v3cross()
 
-GS_v3mag()
+- GS_v3dir()
 
-GS_v3mult()
+- GS_v3eq()
 
-GS_v3norm()
+- GS_v3mag()
 
-GS_v3normalize()
+- GS_v3mult()
 
-GS_v3sub()
+- GS_v3norm()
 
-GS_write_ppm()
+- GS_v3normalize()
 
-GS_write_tif()
+- GS_v3sub()
 
-GS_write_zoom()
+- GS_write_ppm()
 
-GS_zoom_setup()
+- GS_write_tif()
 
-\subsection gv_vect Loading and manipulation of vector maps (GV)
+- GS_write_zoom()
+
+- GS_zoom_setup()
+
+\subsection ogsfGv Loading and manipulation of vector maps (GV)
 
 Functions which have to do with loading &amp; manipulating %vector
 sets.
 
-GV_alldraw_vect()
+- GV_alldraw_fastvect()
 
-GV_alldraw_fastvect()
+- GV_alldraw_vect()
 
-GV_delete_vector()
+- GV_delete_vector()
 
-GV_draw_fastvect()
+- GV_draw_fastvect()
 
-GV_draw_vect()
+- GV_draw_vect()
 
-GV_get_trans()
+- GV_Get_ClientData()
 
-GV_get_vectmode()
+- GV_get_trans()
 
-GV_get_vectname()
+- GV_get_vect_list()
 
-GV_load_vector()
+- GV_get_vectmode()
 
-GV_new_vector()
+- GV_get_vectname()
 
-GV_num_vects()
+- GV_load_vector()
 
-GV_select_surf()
+- GV_new_vector()
 
-GV_Set_ClientData()
+- GV_num_vects()
 
-GV_set_trans()
+- GV_select_surf()
 
-GV_set_vectmode()
+- GV_Set_ClientData()
 
-GV_surf_is_selected()
+- GV_set_trans()
 
-GV_unselect_surf()
+- GV_set_vectmode()
 
-GV_vect_exists()
+- GV_surf_is_selected()
 
-\subsection gp_points Loading and manipulation of point maps (GP)
+- GV_unselect_surf()
 
-Functions which have to do with loading &amp; manipulating %point sets.
+- GV_vect_exists()
 
-GP_alldraw_site()
+\subsection ogsfGp Loading and manipulation of vector point maps (GP)
 
-GP_attmode_color()
+Functions which have to do with loading &amp; manipulating %point
+sets.
 
-GP_attmode_none()
+- GP_alldraw_site()
 
-GP_delete_site()
+- GP_attmode_color()
 
-GP_draw_site()
+- GP_attmode_none()
 
-GP_get_sitemode()
+- GP_delete_site()
 
-GP_get_sitename()
+- GP_draw_site()
 
-GP_get_trans()
+- GP_Get_ClientData()
 
-GP_get_zmode()
+- GP_get_site_list()
 
-GP_load_site()
+- GP_get_sitename()
 
-GP_new_site()
+- GP_get_style()
 
-GP_num_sites()
+- GP_get_trans()
 
-GP_select_surf()
+- GP_get_zmode()
 
-GP_Set_ClientData()
+- GP_load_site()
 
-GP_set_sitemode()
+- GP_new_site()
 
-GP_set_trans()
+- GP_num_sites()
 
-GP_set_zmode()
+- GP_select_surf()
 
-GP_site_exists()
+- GP_Set_ClientData()
 
-GP_surf_is_selected()
+- GP_set_style()
 
-GP_unselect_surf()
+- GP_set_style_thematic()
 
-\subsection gk_keyframes Keyframe animation
+- GP_set_trans()
+
+- GP_set_zmode()
+
+- GP_site_exists()
+
+- GP_str_to_marker()
+
+- GP_surf_is_selected()
+
+- GP_unselect_surf()
+
+\subsection ogsf ogsfGk Keyframe animation
 
 Functions which have to do with setting &amp; manipulating keyframes
 for viewer position animation (fly-bys).
 
-GK_add_key()
+- GK_add_key()
 
-GK_clear_keys()
+- GK_clear_keys()
 
-GK_delete_key()
+- GK_delete_key()
 
-GK_do_framestep()
+- GK_do_framestep()
 
-GK_move_key()
+- GK_move_key()
 
-GK_print_keys()
+- GK_print_keys()
 
-GK_set_interpmode()
+- GK_set_interpmode()
 
-GK_set_numsteps()
+- GK_set_numsteps()
 
-GK_set_tension()
+- GK_set_tension()
 
-GK_show_list()
+- GK_show_list()
 
-GK_show_path()
+- GK_show_path()
 
-GK_show_site()
+- GK_show_site()
 
-GK_showtension_start()
+- GK_showtension_start()
 
-GK_showtension_stop()
+- GK_showtension_stop()
 
-GK_show_vect()
+- GK_show_vect()
 
-GK_show_vol()
+- GK_show_vol()
 
-GK_update_frames()
+- GK_update_frames()
 
-GK_update_tension()
+- GK_update_tension()
 
-\subsection gvl_volume  Loading and manipulation of volume maps (GVL)
+
+\subsection ogsfGvl  Loading and manipulation of volume maps (GVL)
 
 Functions which have to do with loading &amp; manipulating 3D volumes.
 
-GVL_alldraw_vol()
+- GVL_alldraw_vol()
 
-GVL_alldraw_wire()
+- GVL_alldraw_wire()
 
-GVL_delete_vol()
+- GVL_delete_vol()
 
-GVL_draw_vol()
+- GVL_draw_vol()
 
-GVL_draw_wire()
+- GVL_draw_wire()
 
-GVL_get_dims()
+- GVL_Get_ClientData()
 
-GVL_get_region()
+- GVL_get_dims()
 
-GVL_get_trans()
+- GVL_get_region()
 
-GVL_get_volname()
+- GVL_get_trans()
 
-GVL_libinit()
+- GVL_get_vol_list()
 
-GVL_load_vol()
+- GVL_get_volname()
 
-GVL_new_vol()
+- GVL_get_window()
 
-GVL_num_vols()
+- GVL_isosurf_add()
 
-GVL_Set_ClientData()
+- GVL_isosurf_del()
 
-GVL_set_focus_center_map()
+- GVL_isosurf_get_att()
 
-GVL_set_trans()
+- GVL_isosurf_get_drawmode()
 
-GVL_vol_exists()
+- GVL_isosurf_get_drawres()
 
-\subsection gvl_volume_isosurf  Loading and manipulation of isosurfaces (GVL)
+- GVL_isosurf_get_flags()
 
-Functions which have to do with loading &amp; manipulating isosurfaces.
+- GVL_isosurf_get_maskmode()
 
-GVL_isosurf_add()
+- GVL_isosurf_move_down()
 
-GVL_isosurf_del()
+- GVL_isosurf_move_up()
 
-GVL_isosurf_get_att()
+- GVL_isosurf_num_isosurfs()
 
-GVL_isosurf_get_drawmode()
+- GVL_isosurf_set_att_const()
 
-GVL_isosurf_get_drawres()
+- GVL_isosurf_set_att_map()
 
-GVL_isosurf_get_flags()
+- GVL_isosurf_set_drawmode()
 
-GVL_isosurf_get_maskmode()
+- GVL_isosurf_set_drawres()
 
-GVL_isosurf_move_down()
+- GVL_isosurf_set_flags()
 
-GVL_isosurf_move_up()
+- GVL_isosurf_set_maskmode()
 
-GVL_isosurf_num_isosurfs()
+- GVL_isosurf_unset_att()
 
-GVL_isosurf_set_att_const()
+- GVL_libinit()
 
-GVL_isosurf_set_att_map()
+- GVL_load_vol()
 
-GVL_isosurf_set_drawmode()
+- GVL_new_vol()
 
-GVL_isosurf_set_drawres()
+- GVL_num_vols()
 
-GVL_isosurf_set_flags()
+- GVL_Set_ClientData()
 
-GVL_isosurf_set_maskmode()
+- GVL_set_focus_center_map()
 
-GVL_isosurf_unset_att()
+- GVL_set_trans()
 
-\subsection gvl_volume_slice  Loading and manipulation of slices (GVL)
+- GVL_slice_add()
+
+- GVL_slice_del()
+
+- GVL_slice_get_drawmode()
+
+- GVL_slice_get_drawres()
+
+- GVL_slice_get_pos()
+
+- GVL_slice_get_transp()
+
+- GVL_slice_move_down()
+
+- GVL_slice_move_up()
+
+- GVL_slice_num_slices()
+
+- GVL_slice_set_drawmode()
+
+- GVL_slice_set_drawres()
+
+- GVL_slice_set_pos()
+
+- GVL_slice_set_transp()
+
+- GVL_vol_exists()
+
+\subsection ogsfGvlIso Loading and manipulation of isosurfaces (GVL)
+
+Functions which have to do with loading &amp; manipulating
+isosurfaces.
+
+- GVL_isosurf_add()
+
+- GVL_isosurf_del()
+
+- GVL_isosurf_get_att()
+
+- GVL_isosurf_get_drawmode()
+
+- GVL_isosurf_get_drawres()
+
+- GVL_isosurf_get_flags()
+
+- GVL_isosurf_get_maskmode()
+
+- GVL_isosurf_move_down()
+
+- GVL_isosurf_move_up()
+
+- GVL_isosurf_num_isosurfs()
+
+- GVL_isosurf_set_att_const()
+
+- GVL_isosurf_set_att_map()
+
+- GVL_isosurf_set_drawmode()
+
+- GVL_isosurf_set_drawres()
+
+- GVL_isosurf_set_flags()
+
+- GVL_isosurf_set_maskmode()
+
+- GVL_isosurf_unset_att()
+
+\subsection ogsfGvlSlice  Loading and manipulation of slices (GVL)
 
 Functions which have to do with loading &amp; manipulating slices.
 
-GVL_slice_add()
+- GVL_slice_add()
 
-GVL_slice_del()
+- GVL_slice_del()
 
-GVL_slice_get_drawmode()
+- GVL_slice_get_drawmode()
 
-GVL_slice_get_drawres()
+- GVL_slice_get_drawres()
 
-GVL_slice_get_pos()
+- GVL_slice_get_pos()
 
-GVL_slice_get_transp()
+- GVL_slice_get_transp()
 
-GVL_slice_move_down()
+- GVL_slice_move_down()
 
-GVL_slice_move_up()
+- GVL_slice_move_up()
 
-GVL_slice_num_slices()
+- GVL_slice_num_slices()
 
-GVL_slice_set_drawmode()
+- GVL_slice_set_drawmode()
 
-GVL_slice_set_drawres()
+- GVL_slice_set_drawres()
 
-GVL_slice_set_pos()
+- GVL_slice_set_pos()
 
-GVL_slice_set_transp()
+- GVL_slice_set_transp()
 
-\subsection gsurf_h Public include file gsurf.h
+\section authors Authors
 
-See include/gsurf.h
-
-
-\subsection keyframe_h Public include file keyframe.h
-
-See include/keyframe.h
-
-
-\subsection rgbpack_h Public color packing utility macros rgbpack.h
-
-See lib/ogsf/rgbpack.h
-
-
-\subsection gstypes_h Private types and defines gstypes.h
-
-See include/gstypes.h
-
-
-\subsection gsget_h Private utilities gsget.h
-
-See lib/ogsf/gsget.h
+ Bill Brown GMSL/University of Illinois
 
 */
