@@ -22,6 +22,8 @@
 
 #include <grass/gis.h>
 #include <grass/raster.h>
+#include <grass/glocale.h>
+#include <grass/G3d.h>
 
 #define RASTER_TYPE   1
 #define RASTER3D_TYPE 2
@@ -30,7 +32,7 @@
 int get_stats(const char *, const char *, struct Cell_stats *);
 void get_fp_stats(const char *name, const char *mapset,
 		  struct FP_stats *statf,
-		  DCELL min, DCELL max, int geometric, int geom_abs);
+		  DCELL min, DCELL max, int geometric, int geom_abs, int);
 
 /* edit_colors.c */
 int edit_colors(int, char **, int, const char *, const char*);

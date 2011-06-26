@@ -19,9 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
-#include <grass/glocale.h>
 #include "local_proto.h"
-#include <grass/G3d.h>
 
 static char **rules;
 static int nrules;
@@ -38,7 +36,7 @@ static void scan_rules(void)
 {
     char path[GPATH_MAX];
 
-    sprintf(path, "%s/etc/colors", G_gisbase());
+    G_snprintf(path, GPATH_MAX, "%s/etc/colors", G_gisbase());
 
     rules = G__ls(path, &nrules);
 
@@ -86,7 +84,7 @@ static char *rules_descriptions(void)
     char *result = G_malloc(result_max);
     int i;
 
-    sprintf(path, "%s/etc/colors.desc", G_gisbase());
+    G_snprintf(path, GPATH_MAX, "%s/etc/colors.desc", G_gisbase());
     kv = G_read_key_value_file(path);
     if (!kv)
         return NULL;
@@ -153,7 +151,7 @@ int edit_colors(int argc, char **argv, int type, const char *maptype, const char
     struct GModule *module;
 
     struct {
-        struct Flag *r, *w, *l, *g, *a, *n, *e; /* Flag e is not available in r3.colors*/
+        struct Flag *r, *w, *l, *g, *a, *n, *e;
     } flag; 
 
     struct {
@@ -244,15 +242,10 @@ int edit_colors(int argc, char **argv, int type, const char *maptype, const char
     flag.a->description = _("Logarithmic-absolute scaling");
     flag.a->guisection = _("Define");
 
-    /* The histogram equalization is currently only available for 
-     *  raster map. Therefor no flag is defined for r3.colors.
-     */
-    if (type == RASTER_TYPE) {
-        flag.e = G_define_flag();
-        flag.e->key = 'e';
-        flag.e->description = _("Histogram equalization");
-        flag.e->guisection = _("Define");
-    }
+    flag.e = G_define_flag();
+    flag.e->key = 'e';
+    flag.e->description = _("Histogram equalization");
+    flag.e->guisection = _("Define");
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -405,21 +398,17 @@ int edit_colors(int argc, char **argv, int type, const char *maptype, const char
     if (flag.n->answer)
         Rast_invert_colors(&colors);
 
-    /* This is not avilable for raster3d maps yet */
-
-    if (type == RASTER_TYPE) {
-        if (flag.e->answer) {
-            if (fp) {
-                struct FP_stats fpstats;
-                get_fp_stats(name, mapset, &fpstats, min, max, flag.g->answer, flag.a->answer);
-                Rast_histogram_eq_fp_colors(&colors_tmp, &colors, &fpstats);
-            } else {
-                if (!have_stats)
-                    have_stats = get_stats(name, mapset, &statf);
-                Rast_histogram_eq_colors(&colors_tmp, &colors, &statf);
-            }
-            colors = colors_tmp;
+    if (flag.e->answer) {
+        if (fp) {
+            struct FP_stats fpstats;
+            get_fp_stats(name, mapset, &fpstats, min, max, flag.g->answer, flag.a->answer, type);
+            Rast_histogram_eq_fp_colors(&colors_tmp, &colors, &fpstats);
+        } else {
+            if (!have_stats)
+                have_stats = get_stats(name, mapset, &statf);
+            Rast_histogram_eq_colors(&colors_tmp, &colors, &statf);
         }
+        colors = colors_tmp;
     }
 
     if (flag.g->answer) {
