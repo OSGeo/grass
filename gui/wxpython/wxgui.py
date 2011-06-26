@@ -81,6 +81,7 @@ from gui_modules import menu
 from gui_modules import gmodeler
 from gui_modules import vclean
 from gui_modules import nviz_tools
+from gui_modules import psmap
 from gui_modules.debug    import Debug
 from gui_modules.ghelp    import MenuTreeWindow, AboutWindow, InstallExtensionWindow
 from gui_modules.toolbars import LMWorkspaceToolbar, LMDataToolbar, LMToolsToolbar, LMMiscToolbar
@@ -320,14 +321,6 @@ class GMFrame(wx.Frame):
     def OnPsMap(self, event):
         """!Launch Hardcopy Map Output Utility
         """
-        try:
-            from gui_modules import psmap
-        except:
-            gcmd.GError(parent = self.parent,
-                        message = _("Hardcopy Map Output Utility is not available. You can install it by %s") % \
-                            'g.extension -s svnurl=https://svn.osgeo.org/grass/grass-addons extension=wx.psmap')
-            return
-        
         win = psmap.PsMapFrame(parent = self)
         win.CentreOnScreen()
         
