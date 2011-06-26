@@ -30,7 +30,7 @@
 
         render, mode and showCompExtent (added 2004/08)
 -->
-<!ELEMENT display (projection?, (group|layer)*)>
+<!ELEMENT display (projection?, (group|layer)*, nviz_state?)>
 <!ATTLIST display  render	   (0 | 1) #IMPLIED>
 <!ATTLIST display  mode            (0 | 1 | 2 | 3 | 4 | 5 | 6) #IMPLIED>
 <!ATTLIST display  showCompExtent  (0 | 1) #IMPLIED>
@@ -38,6 +38,7 @@
 <!-- window dimenstion (x, y (ur), width, heigth -->
 <!ATTLIST display  dim             CDATA   #IMPLIED>
 <!ATTLIST display  extent          CDATA   #IMPLIED>
+<!ATTLIST display  viewMode        (2d | 3d) #IMPLIED>
 
 <!-- projection (statusbar coordinates)
 -->
@@ -121,6 +122,7 @@
 <!--    nviz surface draw resolution
 -->
 <!ELEMENT resolution    (value)>
+<!ATTLIST resolution	type		(fine | coarse) #IMPLIED>
 
 <!--    nviz surface wire color
 -->
@@ -150,6 +152,43 @@
 <!ELEMENT color     (value)>
 <!ELEMENT width     (value)>
 <!ELEMENT height    (value)>
-<!ELEMENT mode      (map?)>
+<!ELEMENT mode      (map*)>
+<!ELEMENT map       (name, checked)>
+<!ELEMENT name      (#PCDATA)>
+<!ELEMENT checked   (0 | 1)>
 <!ATTLIST mode	    type (flat | surface) #REQUIRED>
 <!ELEMENT size      (value)>
+
+
+<!--    nviz state properties
+-->
+<!ELEMENT nviz_state   (view, light, constant_planes?)>
+
+<!--    nviz view position
+-->
+<!ELEMENT view       (v_position, persp, v_height, twist, z-exag, focus, background_color)>
+<!ELEMENT v_position (x, y)>
+<!ELEMENT persp      (value, step, min, max)>
+<!ELEMENT v_height   (value, step, min, max)>
+<!ELEMENT twist      (value, step, min, max)>
+<!ELEMENT z-exag     (value, step, min, max)>
+<!ELEMENT focus      (x, y, z)>
+<!ELEMENT background_color (value)>
+
+<!ELEMENT step       (#PCDATA)>
+<!ELEMENT min        (#PCDATA)>
+<!ELEMENT max        (#PCDATA)>
+
+<!--    nviz light
+-->
+<!ELEMENT light      (l_position, bright, ambient, color)>
+<!ELEMENT l_position (x, y, z)>
+<!ELEMENT bright (value)>
+<!ELEMENT ambien (value)>
+<!ELEMENT color (value)>
+
+<!--    nviz constant planes
+-->
+<!ELEMENT constant_planes      (plane*)>
+<!ELEMENT plane                (height, fine_resolution, color)>
+<!ELEMENT fine_resolution      (#PCDATA)>

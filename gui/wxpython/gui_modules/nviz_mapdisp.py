@@ -343,7 +343,6 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
     def UpdateView(self, event):
         """!Change view settings"""
         data = self.view
-        print self.view
         self._display.SetView(data['position']['x'], data['position']['y'],
                               self.iview['height']['value'],
                               data['persp']['value'],
@@ -610,9 +609,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 data['constant'] = self.nvizDefault.SetConstantDefaultProp()
         
         else:
-            # complete data (use default values)
+            # complete data (use default values), not sure if this is necessary
             if type ==  'raster':
-                data['surface'] = self.nvizDefault.SetSurfaceDefaultProp()
+                if not data['surface']:
+                    data['surface'] = self.nvizDefault.SetSurfaceDefaultProp()
             if type ==  'vector':
                 if not data['vector']['lines']:
                     self.nvizDefault.SetVectorLinesDefaultProp(data['vector']['lines'])
@@ -622,10 +622,12 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             # set updates
             for sec in data.keys():
                 for sec1 in data[sec].keys():
+                    if sec1 == 'position':
+                        data[sec][sec1]['update'] = None
+                        continue
                     for sec2 in data[sec][sec1].keys():
                         if sec2 !=  'all':
                             data[sec][sec1][sec2]['update'] = None
-            
             event = wxUpdateProperties(data = data)
             wx.PostEvent(self, event)
         
