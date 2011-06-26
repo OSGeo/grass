@@ -240,28 +240,7 @@ class NvizToolWindow(FN.FlatNotebook):
         posSizer = wx.GridBagSizer(vgap = 3, hgap = 3)
         
         self.win['view']['lookFrom'] = {}
-        w = wx.Button(panel, id = wx.ID_ANY, label = _("W"))
-        n = wx.Button(panel, id = wx.ID_ANY, label = _("N"))
-        s = wx.Button(panel, id = wx.ID_ANY, label = _("S"))
-        e = wx.Button(panel, id = wx.ID_ANY, label = _("E"))
-        nw = wx.Button(panel, id = wx.ID_ANY, label = _("NW"))
-        ne = wx.Button(panel, id = wx.ID_ANY, label = _("NE"))
-        se = wx.Button(panel, id = wx.ID_ANY, label = _("SE"))
-        sw = wx.Button(panel, id = wx.ID_ANY, label = _("SW"))
-        minWidth = sw.GetTextExtent(sw.GetLabel())[0] + 15
-        for win, name in zip((w, n, s, e, nw, ne, se, sw),
-                        ('w', 'n', 's', 'e', 'nw', 'ne', 'se', 'sw')):
-            win.SetMinSize((minWidth, -1))
-            win.Bind(wx.EVT_BUTTON, self.OnLookFrom)
-            win.SetName(name)
-        posSizer.Add(item = nw, pos = (0, 0), flag = wx.ALIGN_CENTER)
-        posSizer.Add(item = n, pos = (0, 1), flag = wx.ALIGN_CENTER)
-        posSizer.Add(item = ne, pos = (0, 2), flag = wx.ALIGN_CENTER)
-        posSizer.Add(item = e, pos = (1, 2), flag = wx.ALIGN_CENTER)
-        posSizer.Add(item = se, pos = (2, 2), flag = wx.ALIGN_CENTER)
-        posSizer.Add(item = s, pos = (2, 1), flag = wx.ALIGN_CENTER)
-        posSizer.Add(item = sw, pos = (2, 0), flag = wx.ALIGN_CENTER)
-        posSizer.Add(item = w, pos = (1, 0), flag = wx.ALIGN_CENTER)
+        self._createCompass(panel = panel, sizer = posSizer, type = 'view')
         
         view = ViewPositionWindow(panel, size = (175, 175),
                                   mapwindow = self.mapWindow)
@@ -1524,19 +1503,15 @@ class NvizToolWindow(FN.FlatNotebook):
         
         gridSizer = wx.GridBagSizer(vgap = 3, hgap = 3)
         posSizer = wx.GridBagSizer(vgap = 3, hgap = 3)
-        posSizer.Add(item = wx.StaticText(panel, id = wx.ID_ANY, label = _("W")),
-                     pos = (1, 0), flag = wx.ALIGN_CENTER)
-        posSizer.Add(item = wx.StaticText(panel, id = wx.ID_ANY, label = _("N")),
-                     pos = (0, 1), flag = wx.ALIGN_CENTER | wx.ALIGN_BOTTOM)
+        
+        self.win['light']['lookFrom'] = {}
+        self._createCompass(panel = panel, sizer = posSizer, type = 'light')
+        
         pos = LightPositionWindow(panel, id = wx.ID_ANY, size = (175, 175),
                                   mapwindow = self.mapWindow)
         self.win['light']['position'] = pos.GetId()
         posSizer.Add(item = pos,
                      pos = (1, 1), flag = wx.ALIGN_CENTER | wx.ALIGN_CENTER_VERTICAL)
-        posSizer.Add(item = wx.StaticText(panel, id = wx.ID_ANY, label = _("S")),
-                     pos = (2, 1), flag = wx.ALIGN_CENTER | wx.ALIGN_TOP)
-        posSizer.Add(item = wx.StaticText(panel, id = wx.ID_ANY, label = _("E")),
-                     pos = (1, 2), flag = wx.ALIGN_CENTER)
         gridSizer.Add(item = posSizer, pos = (0, 0))
         
         # height
@@ -1553,7 +1528,7 @@ class NvizToolWindow(FN.FlatNotebook):
                         flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT | wx.TOP |
                         wx.BOTTOM | wx.RIGHT, pos = (1, 1))
         
-        gridSizer.Add(item = heightSizer, pos = (0, 1), flag = wx.ALIGN_RIGHT)
+        gridSizer.Add(item = heightSizer, pos = (0, 2), flag = wx.ALIGN_RIGHT)
         
         boxSizer.Add(item = gridSizer, proportion = 1,
                      flag = wx.ALL | wx.EXPAND, border = 2)
@@ -1866,6 +1841,31 @@ class NvizToolWindow(FN.FlatNotebook):
         
         data[name]['text'] = text.GetId()
         
+    def _createCompass(self, panel, sizer, type):
+        """!Create 'compass' widget for light and view page"""
+        w = wx.Button(panel, id = wx.ID_ANY, label = _("W"))
+        n = wx.Button(panel, id = wx.ID_ANY, label = _("N"))
+        s = wx.Button(panel, id = wx.ID_ANY, label = _("S"))
+        e = wx.Button(panel, id = wx.ID_ANY, label = _("E"))
+        nw = wx.Button(panel, id = wx.ID_ANY, label = _("NW"))
+        ne = wx.Button(panel, id = wx.ID_ANY, label = _("NE"))
+        se = wx.Button(panel, id = wx.ID_ANY, label = _("SE"))
+        sw = wx.Button(panel, id = wx.ID_ANY, label = _("SW"))
+        minWidth = sw.GetTextExtent(sw.GetLabel())[0] + 15
+        for win, name in zip((w, n, s, e, nw, ne, se, sw),
+                        ('w', 'n', 's', 'e', 'nw', 'ne', 'se', 'sw')):
+            win.SetMinSize((minWidth, -1))
+            win.Bind(wx.EVT_BUTTON, self.OnLookFrom)
+            win.SetName(type + '_' + name)
+        sizer.Add(item = nw, pos = (0, 0), flag = wx.ALIGN_CENTER)
+        sizer.Add(item = n, pos = (0, 1), flag = wx.ALIGN_CENTER)
+        sizer.Add(item = ne, pos = (0, 2), flag = wx.ALIGN_CENTER)
+        sizer.Add(item = e, pos = (1, 2), flag = wx.ALIGN_CENTER)
+        sizer.Add(item = se, pos = (2, 2), flag = wx.ALIGN_CENTER)
+        sizer.Add(item = s, pos = (2, 1), flag = wx.ALIGN_CENTER)
+        sizer.Add(item = sw, pos = (2, 0), flag = wx.ALIGN_CENTER)
+        sizer.Add(item = w, pos = (1, 0), flag = wx.ALIGN_CENTER)
+        
     def __GetWindowName(self, data, id):
         for name in data.iterkeys():
             if type(data[name]) is type({}):
@@ -2114,40 +2114,54 @@ class NvizToolWindow(FN.FlatNotebook):
             self.mapWindow.Refresh(False)
             
     def OnLookFrom(self, event):
-        """!Look from (view page)"""
-        buttonName = self.FindWindowById(event.GetId()).GetName()
+        """!Position of view/light changed by buttons"""
+        name = self.FindWindowById(event.GetId()).GetName()
+        buttonName = name.split('_')[1]
+        if name.split('_')[0] == 'view':
+            type = 'view'
+            data = self.mapWindow.view
+        else:
+            type = 'light'
+            data = self.mapWindow.light
         if buttonName == 'n': # north
-            self.mapWindow.view['position']['x'] = 0.5
-            self.mapWindow.view['position']['y'] = 0.0
+            data['position']['x'] = 0.5
+            data['position']['y'] = 0.0
         elif buttonName == 's': # south
-            self.mapWindow.view['position']['x'] = 0.5
-            self.mapWindow.view['position']['y'] = 1.0
+            data['position']['x'] = 0.5
+            data['position']['y'] = 1.0
         elif buttonName == 'e': # east
-            self.mapWindow.view['position']['x'] = 1.0
-            self.mapWindow.view['position']['y'] = 0.5
+            data['position']['x'] = 1.0
+            data['position']['y'] = 0.5
         elif buttonName =='w': # west
-            self.mapWindow.view['position']['x'] = 0.0
-            self.mapWindow.view['position']['y'] = 0.5
+            data['position']['x'] = 0.0
+            data['position']['y'] = 0.5
         elif buttonName == 'nw': # north-west
-            self.mapWindow.view['position']['x'] = 0.0
-            self.mapWindow.view['position']['y'] = 0.0
+            data['position']['x'] = 0.0
+            data['position']['y'] = 0.0
         elif buttonName == 'ne': # north-east
-            self.mapWindow.view['position']['x'] = 1.0
-            self.mapWindow.view['position']['y'] = 0.0
+            data['position']['x'] = 1.0
+            data['position']['y'] = 0.0
         elif buttonName == 'se': # south-east
-            self.mapWindow.view['position']['x'] = 1.0
-            self.mapWindow.view['position']['y'] = 1.0
+            data['position']['x'] = 1.0
+            data['position']['y'] = 1.0
         elif buttonName == 'sw': # south-west
-            self.mapWindow.view['position']['x'] = 0.0
-            self.mapWindow.view['position']['y'] = 1.0
+            data['position']['x'] = 0.0
+            data['position']['y'] = 1.0
+        if type == 'view':    
+            self.PostViewEvent(zExag = True)
             
-        self.PostViewEvent(zExag = True)
-        
-        self.UpdateSettings()
+            self.UpdateSettings()
+        else:
+            event = wxUpdateLight()
+            wx.PostEvent(self.mapWindow, event)
+            lightWin = self.FindWindowById(self.win['light']['position'])
+            x, y = lightWin.UpdatePos(self.mapWindow.light['position']['x'],
+                                     self.mapWindow.light['position']['y'])
+            lightWin.Draw(pos = (x, y), scale = True)
+            lightWin.Refresh(False)
         self.mapWindow.render['quick'] = False
         self.mapWindow.Refresh(False)
 
-        
     def OnMapObjUse(self, event):
         """!Set surface attribute -- use -- map/constant"""
         if not self.mapWindow.init:
