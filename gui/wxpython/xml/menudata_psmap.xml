@@ -36,6 +36,12 @@
 	</menuitem>
 	<separator/>
 	<menuitem>
+	  <label>Launch ps.map dialog</label>
+	  <help>Launch ps.map dialog</help>
+	  <handler>OnPsMapDialog</handler>
+	</menuitem>
+	<separator/>
+	<menuitem>
 	  <label>Quit</label>
 	  <help>Close Hardcopy Map Output Utility</help>
 	  <handler>OnCloseWindow</handler>
