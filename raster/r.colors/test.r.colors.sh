@@ -52,6 +52,7 @@ r.colors -n map=test_elev_double rast=test_elev_double && r.colors.out --o map=t
 
 # The volume maps using r3.colors and r3.colors.out
 r3.colors    map=volume_double_null rules=example1 && r3.colors.out --o map=volume_double_null rules=test_volume_double_example1.txt
+r3.colors -e map=volume_double_null rules=example1 && r3.colors.out --o map=volume_double_null rules=test_volume_double_example1_hist.txt
 r3.colors    map=volume_double_null rules=example2 && r3.colors.out --o map=volume_double_null rules=test_volume_double_example2.txt
 r3.colors -g map=volume_double_null rules=example2 && r3.colors.out --o map=volume_double_null rules=test_volume_double_example2_log.txt
 r3.colors    map=volume_double_null rules=example3 && r3.colors.out --o map=volume_double_null rules=test_volume_double_example3.txt

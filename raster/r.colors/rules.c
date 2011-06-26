@@ -21,9 +21,6 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
-#include <grass/gis.h>
-#include <grass/raster.h>
-#include <grass/glocale.h>
 #include "local_proto.h"
 
 /* color structure for default and null value */
