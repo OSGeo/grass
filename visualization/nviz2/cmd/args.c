@@ -439,7 +439,7 @@ void args_vpoint(struct GParams *params)
     params->vpoint_marker->multiple = YES;
     params->vpoint_marker->description = _("Icon marker");
     params->vpoint_marker->options =
-	"x,sphere,diamond,cube,box,gyro,aster,histogram";
+	"x,box,sphere,cube,diamond,dec_tree,con_tree,aster,gyro,histogram";
     params->vpoint_marker->answer = "sphere";
     params->vpoint_marker->guisection = _("Vector points");
 

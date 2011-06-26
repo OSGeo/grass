@@ -1,16 +1,12 @@
 /*!
-   \file gsurf.h
+   \file include/gsurf.h
 
    \brief OGSF library - main header
 
-   GRASS OpenGL gsurf OGSF Library 
+   (C) 1999-2008, 2011 by the GRASS Development Team
 
-   (C) 1999-2008 by the GRASS Development Team
-
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
 
    \author Bill Brown USACERL (January 1993)
  */

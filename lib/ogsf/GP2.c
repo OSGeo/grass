@@ -1,5 +1,5 @@
 /*!
-   \file GP2.c
+   \file lib/ogsf/GP2.c
 
    \brief OGSF library - loading and manipulating point sets (higher level functions)
 
@@ -9,7 +9,8 @@
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
    \author Bill Brown USACERL (January 1994)
-   \author Doxygenized by Martin landa <landa.martin gmail.com> (May 2008)
+   \author Updated by Martin landa <landa.martin gmail.com>
+   (doxygenized in May 2008, thematic mapping in June 2011)
  */
 
 #include <stdlib.h>
@@ -17,6 +18,7 @@
 
 #include <grass/gis.h>
 #include <grass/gstypes.h>
+#include <grass/glocale.h>
 
 #include "gsget.h"
 
@@ -198,7 +200,7 @@ int GP_load_site(int id, const char *filename)
    Note: char array is allocated by G_store()
 
    \param id point set id
-   \param[out] &filename point set filename
+   \param[out] filename point set filename
 
    \return -1 on error (point set not found)
    \return 1 on success
@@ -223,6 +225,7 @@ int GP_get_sitename(int id, char **filename)
 
    \param id point set id
 
+   \return 1 on success
    \return -1 on error (point set not found)
  */
 int GP_get_style(int id, int *color, int *width, float *size, int *symbol)
@@ -245,6 +248,18 @@ int GP_get_style(int id, int *color, int *width, float *size, int *symbol)
 
 /*!
    \brief Set point set style
+
+   Supported icon symbols (markers):
+    - ST_X
+    - ST_BOX
+    - ST_SPHERE
+    - ST_CUBE
+    - ST_DIAMOND
+    - ST_DEC_TREE
+    - ST_CON_TREE
+    - ST_ASTER
+    - ST_GYRO
+    - ST_HISTOGRAM
 
    \param id point set id
    \param color icon color
@@ -302,12 +317,17 @@ int GP_set_style_thematic(int id, int layer, const char* color, const char* widt
 
     if(!gp->tstyle)
 	gp->tstyle = (gvstyle_thematic *)G_malloc(sizeof(gvstyle_thematic));
+    G_zero(gp->tstyle, sizeof(gvstyle_thematic));
     
     gp->tstyle->layer = layer;
-    gp->tstyle->color_column = G_store(color);
-    gp->tstyle->symbol_column = G_store(symbol);
-    gp->tstyle->size_column = G_store(size);
-    gp->tstyle->width_column = G_store(width);
+    if (color)
+	gp->tstyle->color_column = G_store(color);
+    if (symbol)
+	gp->tstyle->symbol_column = G_store(symbol);
+    if (size)
+	gp->tstyle->size_column = G_store(size);
+    if (width)
+	gp->tstyle->width_column = G_store(width);
 
     Gp_load_sites_thematic(gp);
 
@@ -351,13 +371,14 @@ int GP_set_zmode(int id, int use_z)
 /*!
    \brief Get z-mode
 
+   \todo Who's using this?
+   
    \param id point set id
-   \param[out] use_z use z
+   \param[out] use_z non-zero code to use z
 
    \return -1 on error (invalid point set id)
    \return 1 on success
  */
-/* Who's using this? */
 int GP_get_zmode(int id, int *use_z)
 {
     geosite *gp;
@@ -373,10 +394,10 @@ int GP_get_zmode(int id, int *use_z)
 }
 
 /*!
-   \brief Set trans ?
+   \brief Set transformation params
 
    \param id point set id
-   \param xtrans,ytrans,ztrans x/y/z trans values
+   \param xtrans,ytrans,ztrans x/y/z values
  */
 void GP_set_trans(int id, float xtrans, float ytrans, float ztrans)
 {
@@ -396,10 +417,10 @@ void GP_set_trans(int id, float xtrans, float ytrans, float ztrans)
 }
 
 /*!
-   \brief Get trans
+   \brief Get transformation params
 
    \param id point set id
-   \param xtrans,ytrans,ztrans x/y/z trans values
+   \param[out] xtrans,ytrans,ztrans x/y/z values
  */
 void GP_get_trans(int id, float *xtrans, float *ytrans, float *ztrans)
 {
@@ -420,7 +441,7 @@ void GP_get_trans(int id, float *xtrans, float *ytrans, float *ztrans)
 }
 
 /*!
-   \brief Select surface
+   \brief Select surface for given point set
 
    \param hp point set id
    \param hs surface id
@@ -435,7 +456,7 @@ int GP_select_surf(int hp, int hs)
     G_debug(3, "GP_select_surf(%d,%d)", hp, hs);
 
     if (GP_surf_is_selected(hp, hs)) {
-	return (1);
+	return 1;
     }
 
     gp = gp_get_site(hp);
@@ -607,4 +628,55 @@ void *GP_Get_ClientData(int id)
     }
 
     return NULL;
+}
+
+/*!
+  \brief Determine point marker symbol for string
+
+  Supported markers:
+    - ST_X
+    - ST_BOX
+    - ST_SPHERE
+    - ST_CUBE
+    - ST_DIAMOND
+    - ST_DEC_TREE
+    - ST_CON_TREE
+    - ST_ASTER
+    - ST_GYRO
+    - ST_HISTOGRAM
+
+  \param str string buffer
+
+  \return marker code (default: ST_SPHERE)
+*/
+int GP_str_to_marker(const char *str)
+{
+    int marker;
+
+    if (strcmp(str, "x") == 0)
+	marker = ST_X;
+    else if (strcmp(str, "box") == 0)
+	marker = ST_BOX;
+    else if (strcmp(str, "sphere") == 0)
+	marker = ST_SPHERE;
+    else if (strcmp(str, "cube") == 0)
+	marker = ST_CUBE;
+    else if (strcmp(str, "diamond") == 0)
+	marker = ST_DIAMOND;
+    else if (strcmp(str, "dec_tree") == 0)
+	marker = ST_DEC_TREE;
+    else if (strcmp(str, "con_tree") == 0)
+	marker = ST_CON_TREE;
+    else if (strcmp(str, "aster") == 0)
+	marker = ST_ASTER;
+    else if (strcmp(str, "gyro") == 0)
+	marker = ST_GYRO;
+    else if (strcmp(str, "histogram") == 0)
+	marker = ST_HISTOGRAM;
+    else {
+	G_warning(_("Unknown icon marker, using \"sphere\""));
+	marker = ST_SPHERE;
+    }
+
+    return marker;
 }

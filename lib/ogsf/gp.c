@@ -1,16 +1,12 @@
 /*!
-   \file gp.c
+   \file lib/ogsf/gp.c
 
-   \brief OGSF library - loading and manipulating point sets
+   \brief OGSF library - loading and manipulating point sets (lower level functions)
 
-   GRASS OpenGL gsurf OGSF Library 
+   (C) 1999-2008, 2011 by the GRASS Development Team
 
-   (C) 1999-2008 by the GRASS Development Team
-
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
 
    \author Bill Brown USACERL, GMSL/University of Illinois (January 1994)
    \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
@@ -41,11 +37,11 @@ geosite *gp_get_site(int id)
 
     for (gp = Site_top; gp; gp = gp->next) {
 	if (gp->gsite_id == id) {
-	    return (gp);
+	    return gp;
 	}
     }
 
-    return (NULL);
+    return NULL;
 }
 
 /*!
@@ -68,7 +64,7 @@ geosite *gp_get_prev_site(int id)
 	}
     }
 
-    return (NULL);
+    return NULL;
 }
 
 /*!
@@ -85,7 +81,7 @@ int gp_num_sites(void)
 
     G_debug(5, "gp_num_sites(): n=%d", i);
 
-    return (i);
+    return i;
 }
 
 /*!
@@ -101,14 +97,14 @@ geosite *gp_get_last_site(void)
     G_debug(5, "gp_get_last_site");
 
     if (!Site_top) {
-	return (NULL);
+	return NULL;
     }
 
     for (lp = Site_top; lp->next; lp = lp->next) ;
 
     G_debug(5, " last site id: %d", lp->gsite_id);
 
-    return (lp);
+    return lp;
 }
 
 /*!
@@ -125,7 +121,7 @@ geosite *gp_get_new_site(void)
 
     np = (geosite *) G_malloc(sizeof(geosite));	/* G_fatal_error */
     if (!np) {
-	return (NULL);
+	return NULL;
     }
     G_zero(np, sizeof(geosite));
     
@@ -147,7 +143,7 @@ geosite *gp_get_new_site(void)
 	return NULL;
     G_zero(np->hstyle, sizeof (gvstyle));
 
-    return (np);
+    return np;
 }
 
 /*!
@@ -212,6 +208,8 @@ int gp_set_defaults(geosite * gp)
 /*!
    \brief Initialize geosite struct
 
+   \todo Currently does nothing
+
    \param gp pointer to geosite struct
 
    \return -1 on failure
@@ -222,10 +220,10 @@ int gp_init_site(geosite * gp)
     G_debug(5, "gp_init_site");
 
     if (!gp) {
-	return (-1);
+	return -1;
     }
 
-    return (0);
+    return 0;
 }
 
 /*!
@@ -297,11 +295,11 @@ int gp_free_site(geosite * fp)
 	return (1);
     }
 
-    return (-1);
+    return -1;
 }
 
 /*!
-   \brief Free geosite
+   \brief Free geosite (lower level)
 
    \param fp pointer to geosite struct
  */
