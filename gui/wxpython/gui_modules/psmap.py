@@ -40,6 +40,7 @@ from   menudata   import PsMapData
 from   toolbars   import PsMapToolbar
 from   icon       import Icons, MetaIcon, iconSet
 from   gcmd       import RunCommand, GError, GMessage
+from   menuform   import GUI
 from psmap_dialogs import *
 
 import wx
@@ -210,7 +211,11 @@ class PsMapFrame(wx.Frame):
         if filename:
             self.PSFile(filename)
     
-    
+    def OnPsMapDialog(self, event):
+        """!Launch ps.map dialog
+        """
+        GUI(parent = self).ParseCommand(cmd = ['ps.map'])
+
     def OnPDFFile(self, event):
         """!Generate PDF from PS with ps2pdf if available"""
         try:

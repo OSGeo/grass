@@ -730,13 +730,6 @@
 	  <handler>OnPsMap</handler>
 	  <command>ps.map</command>
 	</menuitem>
-	<menuitem>
-	  <label>Postscript plot</label>
-	  <help>Produces hardcopy PostScript map output.</help>
-	  <keywords>postscript,map,printing</keywords>
-	  <handler>OnMenuCmd</handler>
-	  <command>ps.map</command>
-	</menuitem>
 	<separator />
 	<menu>
 	  <label>GSoC testing</label>
