@@ -738,6 +738,18 @@
 	  <command>ps.map</command>
 	</menuitem>
 	<separator />
+	<menu>
+	  <label>GSoC testing</label>
+	  <items>
+	    <menuitem>
+	      <label>RStream</label>
+	      <help>GUI for hydrological modelling (r.stream.*)</help>
+	      <keywords>raster,hydrology</keywords>
+	      <handler>OnRStream</handler>
+	    </menuitem>
+	  </items>
+	</menu>
+	<separator />
 	<menuitem>
 	  <label>Launch script</label>
 	  <help>Launches script file.</help>
