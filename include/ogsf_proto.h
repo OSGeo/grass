@@ -77,6 +77,7 @@ void GP_draw_site(int);
 void GP_alldraw_site(void);
 int GP_Set_ClientData(int, void *);
 void *GP_Get_ClientData(int);
+int GP_str_to_marker(const char *);
 
 /* GS2.c */
 void void_func(void);

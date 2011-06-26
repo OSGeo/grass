@@ -169,26 +169,8 @@ int vpoints_set_attrb(const struct GParams *params)
 	marker_str = params->vpoint_marker->answers[i];
 	marker_column = params->vpoint_marker_column->answers ?
 	    params->vpoint_marker_column->answers[i] : NULL;
-
-	if (strcmp(marker_str, "x") == 0)
-	    marker = ST_X;
-	else if (strcmp(marker_str, "sphere") == 0)
-	    marker = ST_SPHERE;
-	else if (strcmp(marker_str, "diamond") == 0)
-	    marker = ST_DIAMOND;
-	else if (strcmp(marker_str, "cube") == 0)
-	    marker = ST_CUBE;
-	else if (strcmp(marker_str, "box") == 0)
-	    marker = ST_BOX;
-	else if (strcmp(marker_str, "gyro") == 0)
-	    marker = ST_GYRO;
-	else if (strcmp(marker_str, "aster") == 0)
-	    marker = ST_ASTER;
-	else if (strcmp(marker_str, "histogram") == 0)
-	    marker = ST_HISTOGRAM;
-	else
-	    G_fatal_error(_("Unknown icon marker"));
-
+	marker = GP_str_to_marker(marker_str);
+	
 	GP_set_style(site_list[i], color, width, size, marker);
 	if (color_column || width_column || size_column || marker_column) {
 	    GP_set_style_thematic(site_list[i], layer, color_column, width_column,
@@ -273,7 +255,7 @@ int check_thematic(const struct GParams *params, int vlines)
 		G_fatal_error(_("Column <%s> in table <%s> not found"),
 			      marker->answers[i], Fi->table);
 	  
-	  type = db_column_Ctype(driver, Fi->table, width->answers[i]);
+	  type = db_column_Ctype(driver, Fi->table, marker->answers[i]);
 	    if (db_column_Ctype(driver, Fi->table, marker->answers[i]) != DB_C_TYPE_STRING)
 		G_fatal_error(_("Data type of marker column must be character"));
 	}

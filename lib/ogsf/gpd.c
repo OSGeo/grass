@@ -332,7 +332,7 @@ int gpd_3dsite(geosite * gp, float xo, float yo, int do_fast)
     GLint window[4];
 
     if (GS_check_cancel()) {
-	return (0);
+	return 0;
     }
 
     gsd_getwindow(window, viewport, modelMatrix, projMatrix);

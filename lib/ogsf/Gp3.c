@@ -1,19 +1,18 @@
 /*!
-   \file Gp3.c
+   \file lib/ogsf/Gp3.c
 
    \brief OGSF library - loading point sets (lower level functions)
 
    GRASS OpenGL gsurf OGSF Library 
 
-   (C) 1999-2008 by the GRASS Development Team
+   (C) 1999-2008, 2011 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
 
    \author Bill Brown USACERL, GMSL/University of Illinois (January 1994)
-   \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
+   \author Updated by Martin Landa <landa.martin gmail.com>
+   (doxygenized in May 2008, thematic mapping in June 2011)
  */
 
 #include <stdlib.h>
@@ -90,7 +89,7 @@ geopoint *Gp_load_sites(const char *name, int *nsites, int *has_z)
 	    {
 		G_warning(_("Unable to read vector map <%s>"),
 			  G_fully_qualified_name(name, mapset));
-		return (NULL);
+		return NULL;
 	    }
 	case -2:		/* EOF */
 	    {
@@ -205,13 +204,13 @@ int Gp_load_sites_thematic(geosite *gp)
 	G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 		      Fi->database, Fi->driver);
     
-    gpt = gp->points;
-    npts = 0;
     G_message(_("Loading thematic points layer <%s>..."),
 	      G_fully_qualified_name(gp->filename, mapset));
-    for(;gpt; gpt = gpt->next) {
+    npts = 0;
+    for(gpt = gp->points; gpt; gpt = gpt->next) {
 	gpt->style = (gvstyle *) G_malloc(sizeof(gvstyle));
 	G_zero(gpt->style, sizeof(gvstyle));
+	
 	/* use default style */
 	gpt->style->color  = gp->style->color;
 	gpt->style->symbol = gp->style->symbol;
@@ -223,20 +222,47 @@ int Gp_load_sites_thematic(geosite *gp)
 	    continue;
 
 	/* color */
-	nvals = db_select_value(driver, Fi->table, Fi->key, cat, gp->tstyle->color_column, &value);
-	if (nvals < 1)
-	    continue;
-	str = db_get_value_string(&value);
-	if (G_str_to_color(str, &red, &grn, &blu) != 1) {
-	    G_warning(_("Invalid color definition (%s)"),
-		      str);
-	    gpt->style->color = gp->style->color;
-	}
-	else {
-	    gpt->style->color = (red & RED_MASK) + ((int)((grn) << 8) & GRN_MASK) +
-		((int)((blu) << 16) & BLU_MASK);
+	if (gp->tstyle->color_column) {
+	    nvals = db_select_value(driver, Fi->table, Fi->key, cat, gp->tstyle->color_column, &value);
+	    if (nvals < 1)
+		continue;
+	    str = db_get_value_string(&value);
+	    if (G_str_to_color(str, &red, &grn, &blu) != 1) {
+		G_warning(_("Invalid color definition (%s)"),
+			  str);
+		gpt->style->color = gp->style->color;
+	    }
+	    else {
+		gpt->style->color = (red & RED_MASK) + ((int)((grn) << 8) & GRN_MASK) +
+		    ((int)((blu) << 16) & BLU_MASK);
+	    }
 	}
 
+	/* size */
+	if (gp->tstyle->size_column) {
+	    nvals = db_select_value(driver, Fi->table, Fi->key, cat, gp->tstyle->size_column, &value);
+	    if (nvals < 1)
+		continue;
+	    gpt->style->size = db_get_value_int(&value);
+	}
+
+	/* width */
+	if (gp->tstyle->width_column) {
+	    nvals = db_select_value(driver, Fi->table, Fi->key, cat, gp->tstyle->width_column, &value);
+	    if (nvals < 1)
+		continue;
+	    gpt->style->width = db_get_value_int(&value);
+	}
+
+	/* symbol/marker */
+	if (gp->tstyle->symbol_column) {
+	    nvals = db_select_value(driver, Fi->table, Fi->key, cat, gp->tstyle->symbol_column, &value);
+	    if (nvals < 1)
+		continue;
+	    str = db_get_value_string(&value);
+	    gpt->style->symbol = GP_str_to_marker(str);
+	}
+	
 	npts++;
     }
     
