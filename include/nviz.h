@@ -184,6 +184,7 @@ struct fringe_data *Nviz_new_fringe(nv_data *, int, unsigned long,
 				    double, int, int, int, int);
 struct fringe_data *Nviz_set_fringe(nv_data *, int, unsigned long,
 				    double, int, int, int, int);
+void Nviz_draw_fringe(nv_data *data);
 
 /* position.c */
 void Nviz_init_view(nv_data *);

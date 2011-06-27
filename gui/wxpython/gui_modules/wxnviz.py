@@ -1338,6 +1338,10 @@ class Nviz(object):
         if self.showLight:
             Nviz_draw_model(self.data)
 
+    def DrawFringe(self):
+        """!Draw fringe"""
+        Nviz_draw_fringe(self.data)
+        
     def SetFringe(self, sid, color, elev, nw = False, ne = False, sw = False, se = False):
         """!Set fringe
 

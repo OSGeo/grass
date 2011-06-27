@@ -201,3 +201,17 @@ struct fringe_data *Nviz_set_fringe(nv_data *data,
     
     return f;
 }
+/*! Draw fringe
+
+   \param data nviz data
+ */
+void Nviz_draw_fringe(nv_data *data)
+{
+    int i;
+
+    for (i = 0; i < data->num_fringes; i++) {
+	struct fringe_data *f = data->fringe[i];
+
+	GS_draw_fringe(f->id, f->color, f->elev, f->where);
+    }
+}
