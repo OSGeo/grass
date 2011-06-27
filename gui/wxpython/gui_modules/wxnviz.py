@@ -1336,7 +1336,7 @@ class Nviz(object):
     def DrawLightingModel(self):
         """!Draw lighting model"""
         if self.showLight:
-            GS_draw_lighting_model()
+            Nviz_draw_model(self.data)
 
     def SetFringe(self, sid, color, elev, nw = False, ne = False, sw = False, se = False):
         """!Set fringe

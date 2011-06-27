@@ -164,6 +164,7 @@ int Nviz_set_light_color(nv_data *, int, int, int, int);
 int Nviz_set_light_ambient(nv_data *, int, double);
 int Nviz_init_light(nv_data *, int);
 int Nviz_new_light(nv_data *);
+int Nviz_draw_model(nv_data *);
 
 /* map_obj.c */
 int Nviz_new_map_obj(int, const char *, double, nv_data *);
