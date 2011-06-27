@@ -78,61 +78,80 @@ by <em>v.to.db</em>.
 
 <h2>EXAMPLE</h2>
 
-Fastest path between two digitized nodes (Spearfish):
+Shortest (red) and fastest (blue) path between two digitized nodes (Spearfish):
 
+<p>
+<img src="vnetpath.png" alt="v.net.path example" border="1">
+
+<p>
 <div class="code"><pre>
-echo "1|601653.5|4922869.2|start
-2|593330.8|4924096.6|end" | v.in.ascii cat=1 x=2 y=3 out=startend col="cat integer, \
-                         east double precision, north double precision, label varchar(43)"
+# Spearfish
+
+echo "1|601955.1|4916944.9|start
+2|594385.6|4921565.2|end" | v.in.ascii in=- cat=1 x=2 y=3 out=startend col="cat integer, \
+                         east double precision, north double precision, label varchar(6)"
 
 v.db.select startend
 
-# create unique categories for each road in layer 2
-v.category in=roads out=myroads opt=add cat=1 layer=2
+g.copy vect=roads,myroads
 
-# add new table for layer 2
-v.db.addtable myroads layer=2 col="cat integer,label varchar(43),length double precision,speed double precision,forward double precision,backward double precision"
+# create lines map connecting points to network
+v.net myroads points=startend out=myroads_net op=connect thresh=500 alayer=1 nlayer=2
 
-# copy road type to layer 2
-v.to.db myroads layer=2 qlayer=1 opt=query qcolumn=label columns=label
+# set up costs
 
-# connect points to road network (take care of layers)
-v.net myroads points=startend out=myroads_net op=connect thresh=200 alayer=2 nlayer=1
+# create unique categories for each road in layer 3
+v.category in=myroads_net out=myroads_net_time opt=add cat=1 layer=3 type=line
+
+# add new table for layer 3
+v.db.addtable myroads_net_time layer=3 col="cat integer,label varchar(43),length double precision,speed double precision,cost double precision,bcost double precision"
+
+# copy road type to layer 3
+v.to.db myroads_net_time layer=3 qlayer=1 opt=query qcolumn=label columns=label
 
 # upload road length in miles
-v.to.db map=myroads_net layer=2 type=line option=length col=length unit=miles
+v.to.db myroads_net_time layer=3 type=line option=length col=length unit=miles
 
 # set speed limits in miles / hour
-v.db.update myroads_net layer=2 col=speed val="5.0"
-v.db.update myroads_net layer=2 col=speed val="75.0" where="label='interstate'"
-v.db.update myroads_net layer=2 col=speed val="75.0" where="label='primary highway, hard surface'"
-v.db.update myroads_net layer=2 col=speed val="50.0" where="label='secondary highway, hard surface'"
-v.db.update myroads_net layer=2 col=speed val="25.0" where="label='light-duty road, improved surface'"
-v.db.update myroads_net layer=2 col=speed val="5.0" where="label='unimproved road'"
+v.db.update myroads_net_time layer=3 col=speed val="5.0"
+v.db.update myroads_net_time layer=3 col=speed val="75.0" where="label='interstate'"
+v.db.update myroads_net_time layer=3 col=speed val="75.0" where="label='primary highway, hard surface'"
+v.db.update myroads_net_time layer=3 col=speed val="50.0" where="label='secondary highway, hard surface'"
+v.db.update myroads_net_time layer=3 col=speed val="25.0" where="label='light-duty road, improved surface'"
+v.db.update myroads_net_time layer=3 col=speed val="5.0" where="label='unimproved road'"
 
-# define traveling costs as traveling time in hours:
+# define traveling costs as traveling time in minutes:
 
 # set forward costs
-v.db.update myroads_net layer=2 col=forward val="length / speed"
+v.db.update myroads_net_time layer=3 col=cost val="length / speed * 60"
 # set backward costs
-v.db.update myroads_net layer=2 col=backward val="length / speed"
+v.db.update myroads_net_time layer=3 col=bcost val="length / speed * 60"
 
+# ... the 'start' and 'end' nodes have category number 1 and 2
+
+# Shortest path: ID as first number, then cat1 and cat2
+echo "1 1 2" | v.net.path myroads_net_time alayer=3 nlayer=2 out=mypath
+
+# Fastest path: ID as first number, then cat1 and cat2
+echo "1 1 2" | v.net.path myroads_net_time alayer=3 nlayer=2 afcol=cost abcol=bcost out=mypath_time
+</pre></div>
+
+To display the result, run for example:
+
+<div class="code"><pre>
 g.region vect=myroads_net
 d.mon x0
 d.vect myroads_net
-d.vect startend col=red
-
-d.vect myroads_net icon=basic/triangle fcol=green size=12 layer=2
-d.vect myroads_net disp=cat type=point lsize=14 layer=2
-# ... the 'start' and 'end' nodes have category number 1 and 2
-
-# Fastest path: ID as first number, then cat1 and cat2
-echo "1 1 2" | v.net.path myroads_net afcol=forward abcol=backward out=mypath
-
+# show shortest path
 d.vect mypath col=red width=2
-</pre></div>
+# show fastest path
+d.vect mypath_time col=blue width=2
 
-<img src="vnetpath.png" alt="v.net.path example" border="1">
+# start and end point
+d.vect myroads_net icon=basic/triangle fcol=green size=12 layer=2
+d.font font=Vera
+d.vect startend disp=cat type=point lsize=14 layer=2
+</pre></div>
 
 
 <h2>SEE ALSO</h2>
@@ -148,6 +167,6 @@ d.vect mypath col=red width=2
 <h2>AUTHOR</h2>
 
 Radim Blazek, ITC-Irst, Trento, Italy<br>
-Documentation: Markus Neteler
+Documentation: Markus Neteler, Markus Metz
 
 <p><i>Last changed: $Date$</i>

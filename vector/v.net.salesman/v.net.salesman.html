@@ -27,10 +27,24 @@ Arcs can be closed using cost = -1.
 <h2>EXAMPLE</h2>
 
 Traveling salesman for 6 digitized nodes (Spearfish):
+
 <p>
-Searching for the shortest path:
+Shortest path, along unimproved roads:
+<p>
+<img src="vnetsalesman.png" alt="v.net.salesman example using distance" border="1">
+
+<p>
+Fastest path, along highways:
+<p>
+<img src="vnetsalesmantime.png" alt="v.net.salesman example using time" border="1">
+
+<p>
+Searching for the shortest path using distance and the fastest path using 
+traveling time according to the speed limits of different road types:
 
 <div class="code"><pre>
+# Spearfish
+
 g.copy vect=roads,myroads
 
 # we have 6 locations to visit on our trip
@@ -39,7 +53,7 @@ echo "1|601653.5|4922869.2|a
 3|601845|4914981.9|c
 4|596270|4917456.3|d
 5|593330.8|4924096.6|e
-6|598005.5|4921439.2|f" | v.in.ascii cat=1 x=2 y=3 out=centers col="cat integer, \
+6|598005.5|4921439.2|f" | v.in.ascii in=- cat=1 x=2 y=3 out=centers col="cat integer, \
                          east double precision, north double precision, label varchar(43)"
 
 # verify data preparation
@@ -60,101 +74,64 @@ v.category myroads_net op=report
 # type       count        min        max
 # point          6          1          5
 
-# The network is now prepared. Visualize it
-g.region vect=myroads_net
-d.mon x0
-d.vect myroads_net
-d.vect -c centers icon=basic/triangle
-d.font verdana
-d.vect centers col=red disp=attr attrcol=label lsize=12
+# find the shortest path
+v.net.salesman myroads_net ccats=1-6 out=mysalesman_distance
 
-# run without traveling costs using line length
-v.net.salesman myroads_net ccats=1-6 out=mysalesman_shortest
-d.vect mysalesman_length col=green width=2
-d.vect centers col=red disp=attr attrcol=label lsize=12
-</pre></div>
+# set up costs as traveling time
 
-<p>
-Searching for the fastest path, using speed limits according to road type:
+# create unique categories for each road in layer 3
+v.category in=myroads_net out=myroads_net_time opt=add cat=1 layer=3 type=line
 
-<div class="code"><pre>
-# we have 6 locations to visit on our trip
-echo "1|601653.5|4922869.2|a
-2|608284|4923776.6|b
-3|601845|4914981.9|c
-4|596270|4917456.3|d
-5|593330.8|4924096.6|e
-6|598005.5|4921439.2|f" | v.in.ascii in=- cat=1 x=2 y=3 out=centers col="cat integer, \
-                         east double precision, north double precision, label varchar(43)"
+# add new table for layer 3
+v.db.addtable myroads_net_time layer=3 col="cat integer,label varchar(43),length double precision,speed double precision,cost double precision,bcost double precision"
 
-# verify data preparation
-v.db.select centers
-v.category centers op=report
-# type       count        min        max
-# point          6          1          6
-
-# create unique categories for each road in layer 2
-v.category in=roads out=myroads opt=add cat=1 layer=2
-
-# add new table for layer 2
-v.db.addtable myroads layer=2 col="cat integer,label varchar(43),length double precision,speed double precision,cost double precision,bcost double precision"
-
-# copy road type to layer 2
-v.to.db myroads layer=2 qlayer=1 opt=query qcolumn=label columns=label
-
-# create lines map connecting points to network (take care of layers)
-v.net myroads points=centers out=myroads_net op=connect thresh=500 alayer=2 nlayer=1
-v.category myroads_net op=report
-# Layer/table: 2/myroads_net_myroads_l_2
-# type       count        min        max
-# point          6          1          6
-# line         837          1          5
-#
-# Layer/table: 1/myroads_net_roads
-# type       count        min        max
-# point          0          0          0
-# line         837          1        825
-
-# The network is now prepared. Visualize it
-g.region vect=myroads_net
-d.mon x0
-d.vect myroads_net
-d.vect -c centers icon=basic/triangle
-d.font verdana
-d.vect centers col=red disp=attr attrcol=label lsize=12
-
-# set up costs
+# copy road type to layer 3
+v.to.db myroads_net_time layer=3 qlayer=1 opt=query qcolumn=label columns=label
 
 # upload road length in miles
-v.to.db map=myroads_net layer=2 type=line option=length col=length unit=miles
+v.to.db myroads_net_time layer=3 type=line option=length col=length unit=miles
 
 # set speed limits in miles / hour
-v.db.update myroads_net layer=2 col=speed val="5.0"
-v.db.update myroads_net layer=2 col=speed val="75.0" where="label='interstate'"
-v.db.update myroads_net layer=2 col=speed val="75.0" where="label='primary highway, hard surface'"
-v.db.update myroads_net layer=2 col=speed val="50.0" where="label='secondary highway, hard surface'"
-v.db.update myroads_net layer=2 col=speed val="25.0" where="label='light-duty road, improved surface'"
-v.db.update myroads_net layer=2 col=speed val="5.0" where="label='unimproved road'"
+v.db.update myroads_net_time layer=3 col=speed val="5.0"
+v.db.update myroads_net_time layer=3 col=speed val="75.0" where="label='interstate'"
+v.db.update myroads_net_time layer=3 col=speed val="75.0" where="label='primary highway, hard surface'"
+v.db.update myroads_net_time layer=3 col=speed val="50.0" where="label='secondary highway, hard surface'"
+v.db.update myroads_net_time layer=3 col=speed val="25.0" where="label='light-duty road, improved surface'"
+v.db.update myroads_net_time layer=3 col=speed val="5.0" where="label='unimproved road'"
 
-# define traveling costs as traveling time in hours:
+# define traveling costs as traveling time in minutes:
 
 # set forward costs
-v.db.update myroads_net layer=2 col=cost val="length / speed"
+v.db.update myroads_net_time layer=3 col=cost val="length / speed * 60"
 # set backward costs
-v.db.update myroads_net layer=2 col=bcost val="length / speed"
+v.db.update myroads_net_time layer=3 col=bcost val="length / speed * 60"
 
-# fastest path: traveling costs = length / speed = hours
-v.net.salesman myroads_net alayer=2 nlayer=1 afcol=cost ccats=1-6 out=mysalesman_fastest
-
-# with different columns for forward and backward costs:
-# result is identical to fastest path
-v.net.salesman myroads_net alayer=2 nlayer=1 afcol=cost abcol=bcost ccats=1-6 out=mysalesman_back
-
-d.vect mysalesman_fastest col=green width=2
-d.vect centers col=red disp=attr attrcol=label lsize=12
+# find the fastest path
+v.net.salesman myroads_net_time alayer=3 nlayer=2 afcol=cost abcol=bcost ccats=1-6 out=mysalesman_time
 </pre></div>
 
-<img src="vnetsalesman.png" alt="v.net.salesman example" border="1">
+To display the result, run for example:
+
+<div class="code"><pre>
+# Display the results
+g.region vect=myroads_net
+
+# shortest path
+d.mon x0
+d.vect myroads_net
+d.vect centers -c icon=basic/triangle
+d.vect mysalesman_distance col=green width=2
+d.font Vera
+d.vect centers col=red disp=attr attrcol=label lsize=12
+
+# fastest path
+d.mon x1
+d.vect myroads_net
+d.vect centers -c icon=basic/triangle
+d.vect mysalesman_time col=green width=2
+d.font Vera
+d.vect centers col=red disp=attr attrcol=label lsize=12
+</pre></div>
 
 
 <h2>SEE ALSO</h2>
@@ -170,7 +147,7 @@ d.vect centers col=red disp=attr attrcol=label lsize=12
 
 Radim Blazek, ITC-Irst, Trento, Italy<br>
 Markus Metz<br>
-Documentation: Markus Neteler
+Documentation: Markus Neteler, Markus Metz
 
 
 <p><i>Last changed: $Date$</i>
