@@ -182,13 +182,11 @@ int Nviz_new_light(nv_data * data)
 
   \param data nviz data
 */
-int Nviz_draw_model(nv_data * data)
+void Nviz_draw_model(nv_data * data)
 {
     GS_set_draw(GSD_FRONT);
     GS_ready_draw();
     GS_draw_lighting_model();
     GS_done_draw();
     GS_set_draw(GSD_BACK);
-    
-    return 1;
 }
