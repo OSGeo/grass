@@ -27,17 +27,30 @@ input vector map needs to be prepared with <em>v.net operation=connect</em>.
 
 <h2>EXAMPLE</h2>
 
-Steiner tree for 6 digitized nodes (Spearfish), using traveling time as 
-costs:
+Steiner tree for 6 digitized nodes (Spearfish):
+<p>
+Shortest path, along unimproved roads:
+<p>
+<img src="vnetsteiner.png" alt="v.net.steiner example using distance" border="1">
+
+<p>
+Fastest path, along highways:
+<p>
+<img src="vnetsteinertime.png" alt="v.net.steiner example using time" border="1">
+
 
 <div class="code"><pre>
+# Spearfish
+
+g.copy vect=roads,myroads
+
 # we have 6 locations to allocate
 echo "1|601653.5|4922869.2|a
 2|608284|4923776.6|b
 3|601845|4914981.9|c
 4|596270|4917456.3|d
 5|593330.8|4924096.6|e
-6|598005.5|4921439.2|f" | v.in.ascii cat=1 x=2 y=3 out=centers col="cat integer, \
+6|598005.5|4921439.2|f" | v.in.ascii in=- cat=1 x=2 y=3 out=centers col="cat integer, \
                          east double precision, north double precision, label varchar(43)"
 
 v.db.select centers
@@ -45,60 +58,63 @@ v.category centers op=report
 # type       count        min        max
 # point          6          1          6
 
-# create unique categories for each road in layer 2
-v.category in=roads out=myroads opt=add cat=1 layer=2
+# create lines map connecting points to network (on layer 2)
+v.net myroads points=centers out=myroads_net op=connect thresh=500
 
-# add new table for layer 2
-v.db.addtable myroads layer=2 col="cat integer,label varchar(43),length double precision,speed double precision,cost double precision"
+# set up costs as traveling time
 
-# copy road type to layer 2
-v.to.db myroads layer=2 qlayer=1 opt=query qcolumn=label columns=label
+# create unique categories for each road in layer 3
+v.category in=myroads_net out=myroads_net_time opt=add cat=1 layer=3 type=line
 
+# add new table for layer 3
+v.db.addtable myroads_net_time layer=3 col="cat integer,label varchar(43),length double precision,speed double precision,cost double precision"
 
-# create lines map connecting points to network (take care of layers)
-v.net myroads points=centers out=myroads_net op=connect thresh=500 alayer=2 nlayer=1
-v.category myroads_net op=report
-# Layer/table: 2/myroads_net_myroads_l_2
-# type       count        min        max
-# point          6          1          6
-# line         837          1          5
-#
-# Layer/table: 1/myroads_net_roads
-# type       count        min        max
-# point          0          0          0
-# line         837          1        825
-
-# set up costs
+# copy road type to layer 3
+v.to.db myroads_net_time layer=3 qlayer=1 opt=query qcolumn=label columns=label
 
 # upload road length in miles
-v.to.db map=myroads_net layer=2 type=line option=length col=length unit=miles
+v.to.db myroads_net_time layer=3 type=line option=length col=length unit=miles
 
 # set speed limits in miles / hour
-v.db.update myroads_net layer=2 col=speed val="5.0"
-v.db.update myroads_net layer=2 col=speed val="75.0" where="label='interstate'"
-v.db.update myroads_net layer=2 col=speed val="75.0" where="label='primary highway, hard surface'"
-v.db.update myroads_net layer=2 col=speed val="50.0" where="label='secondary highway, hard surface'"
-v.db.update myroads_net layer=2 col=speed val="25.0" where="label='light-duty road, improved surface'"
-v.db.update myroads_net layer=2 col=speed val="5.0" where="label='unimproved road'"
+v.db.update myroads_net_time layer=3 col=speed val="5.0"
+v.db.update myroads_net_time layer=3 col=speed val="75.0" where="label='interstate'"
+v.db.update myroads_net_time layer=3 col=speed val="75.0" where="label='primary highway, hard surface'"
+v.db.update myroads_net_time layer=3 col=speed val="50.0" where="label='secondary highway, hard surface'"
+v.db.update myroads_net_time layer=3 col=speed val="25.0" where="label='light-duty road, improved surface'"
+v.db.update myroads_net_time layer=3 col=speed val="5.0" where="label='unimproved road'"
 
-# define traveling costs as traveling time in hours:
+# define traveling costs as traveling time in minutes:
+v.db.update myroads_net_time layer=3 col=cost val="length / speed * 60"
 
-# set costs as traveling time
-v.db.update myroads_net layer=2 col=cost val="length / speed"
+# shortest path
+v.net.steiner myroads_net_time alayer=3 nlayer=2 tcats=1-6 out=mysteiner_distance
 
-# The network is now prepared.
+# fastest path
+v.net.steiner myroads_net_time alayer=3 nlayer=2 acol=cost tcats=1-6 out=mysteiner_time
+</pre></div>
+
+To display the result, run for example:
+
+<div class="code"><pre>
+# display the results
 g.region vect=myroads_net
+
+# shortest path
 d.mon x0
 d.vect myroads_net
 d.vect -c centers icon=basic/triangle
-d.font verdana
+d.font Vera
 d.vect centers col=red disp=attr attrcol=label lsize=12
+d.vect mysteiner_distance col=blue width=2
 
-v.net.steiner myroads_net alayer=2 nlayer=1 acol=cost tcats=1-6 out=mysteiner
-d.vect mysteiner col=blue width=2
+# fastest path
+d.mon x1
+d.vect myroads_net
+d.vect -c centers icon=basic/triangle
+d.font Vera
+d.vect centers col=red disp=attr attrcol=label lsize=12
+d.vect mysteiner_time col=blue width=2
 </pre></div>
-
-<img src="vnetsteiner.png" alt="v.net.steiner example" border="1">
 
 
 <h2>SEE ALSO</h2>
@@ -113,7 +129,7 @@ d.vect mysteiner col=blue width=2
 <h2>AUTHOR</h2>
 
 Radim Blazek, ITC-Irst, Trento, Italy<br>
-Documentation: Markus Neteler
+Documentation: Markus Neteler, Markus Metz
 
 
 <p><i>Last changed: $Date$</i>
