@@ -396,8 +396,12 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self._display.Draw(True, mode)
         else: # None -> reuse last rendered image
             pass # TODO
-        
+            
         self.SwapBuffers()
+        # draw fringe after SwapBuffers, otherwise it don't have to be visible
+        # on some computers
+        if self.render['quick'] is False:
+            self._display.DrawFringe()
         
         stop = time.clock()
         
