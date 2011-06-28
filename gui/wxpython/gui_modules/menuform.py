@@ -223,8 +223,7 @@ class UpdateThread(Thread):
             
             map = layer = None
             driver = db = table = None
-            if name in ('LayerSelect', 'LayerNameSelect',
-                        'ColumnSelect'):
+            if name in ('LayerSelect', 'ColumnSelect'):
                 if p.get('element', '') == 'vector': # -> vector
                     # get map name
                     map = p.get('value', '')
@@ -268,13 +267,8 @@ class UpdateThread(Thread):
                     pTable = self.task.get_param('dbtable', element = 'element', raiseError = False)
                     if pTable:
                         table = pTable.get('value', '')
-                
+
             if name == 'LayerSelect':
-                if map in cparams and not cparams[map]['layers']:
-                    win.InsertLayers(vector = map)
-                    cparams[map]['layers'] = win.GetItems()
-            
-            elif name == 'LayerNameSelect':
                 # determine format
                 native = True
                 for id in pMap['wxId']:
@@ -283,11 +277,17 @@ class UpdateThread(Thread):
                             winVec.GetSelection() != 0:
                         native = False
                         break
-                if not native:
-                    if map:
-                        self.data[win.InsertLayers] = { 'dsn' : map.rstrip('@OGR') }
-                    else:
-                        self.data[win.InsertLayers] = { }
+                # TODO: update only if needed
+                #if native:
+                #    if map:
+                #        self.data[win.InsertLayers] = { 'vector' : map }
+                #    else:
+                #        self.data[win.InsertLayers] = { }
+                #else:
+                #    if map:
+                #        self.data[win.InsertLayers] = { 'dsn' : map.rstrip('@OGR') }
+                #    else:
+                #        self.data[win.InsertLayers] = { }
             
             elif name == 'TableSelect':
                 self.data[win.InsertTables] = { 'driver' : driver,
@@ -1563,28 +1563,21 @@ class cmdPanel(wx.Panel):
                                 all = True
                             else:
                                 all = False
-                            win = wx.BoxSizer(wx.HORIZONTAL)
                             if p.get('age', 'old') ==  'old':
-                                win1 = gselect.LayerSelect(parent = which_panel,
+                                win = gselect.LayerSelect(parent = which_panel,
                                                           all = all,
                                                           default = p['default'])
-                                win1.Bind(wx.EVT_CHOICE, self.OnUpdateSelection)
-                                win1.Bind(wx.EVT_CHOICE, self.OnSetValue)
+                                win.Bind(wx.EVT_COMBOBOX, self.OnUpdateSelection)
+                                win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
                             else:
-                                win1 = wx.SpinCtrl(parent = which_panel, id = wx.ID_ANY,
+                                win = wx.SpinCtrl(parent = which_panel, id = wx.ID_ANY,
                                                   min = 1, max = 100, initial = int(p['default']))
-                                win1.Bind(wx.EVT_SPINCTRL, self.OnSetValue)
-                            win2 = gselect.LayerNameSelect(parent = which_panel)
-                            if p.get('value','') !=  '':
-                                win2.SetItems([p['value']])
-                                win2.SetSelection(0)
+                                win.Bind(wx.EVT_SPINCTRL, self.OnSetValue)
+                            if p.get('value','') ==  '':
+                                win.SetItems([p['value']])
+                                win.SetSelection(0)
                             
-                            win2.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
-                            p['wxId'] = [ win1.GetId(), win2.GetId() ]
-                            win.Add(item = win1, proportion = 0)
-                            win.Add(item = win2, proportion = 0,
-                                    flag = wx.LEFT | wx.ALIGN_CENTER_VERTICAL,
-                                    border = 5)
+                            p['wxId'] = [ win.GetId() ]
 
                         elif p.get('prompt', '') ==  'dbdriver':
                             win = gselect.DriverSelect(parent = which_panel,
