@@ -74,9 +74,9 @@ int load_rasters(const struct GParams *params, nv_data * data)
 	}
 
 	/* set position */
-	x = atof(params->surface_pos->answers[i]);
-	y = atof(params->surface_pos->answers[i+1]);
-	z = atof(params->surface_pos->answers[i+2]);
+	x = atof(params->surface_pos->answers[i*3+0]);
+	y = atof(params->surface_pos->answers[i*3+1]);
+	z = atof(params->surface_pos->answers[i*3+2]);
 
 	GS_set_trans(id, x, y, z);
     }
@@ -229,7 +229,7 @@ void surface_set_draw_mode(const struct GParams *params)
 	}
 
 	/* style */
-	if (strcmp(params->style->answers[i], "wire") == 0) {
+	if (strcmp(style, "wire") == 0) {
 	    draw_mode |= DM_GRID_WIRE;
 	}
 	else {			/* surface */
@@ -237,7 +237,7 @@ void surface_set_draw_mode(const struct GParams *params)
 	}
 
 	/* shading */
-	if (strcmp(params->shade->answers[i], "flat") == 0) {
+	if (strcmp(shade, "flat") == 0) {
 	    draw_mode |= DM_FLAT;
 	}
 	else {			/* gouraud */
