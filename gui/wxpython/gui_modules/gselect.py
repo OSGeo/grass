@@ -663,10 +663,15 @@ class LayerSelect(wx.ComboBox):
                                   fs = '|',
                                   flags = 'g',
                                   map = vector)
-            for line in ret.splitlines():
-                layerinfo = line.split('|')
-                layername = layerinfo[0].split('/')
-                layers.append(layername[len(layername) - 1])
+            if ret:
+                for line in ret.splitlines():
+                    layerinfo = line.split('|')
+                    layername = layerinfo[0].split('/')
+                    # use this to get layer names
+                    # but only when all modules use Vect_get_field2()
+                    # which is not the case right now
+                    ### layers.append(layername[len(layername) - 1])
+                    layers.append(layername[0])
             
         elif dsn:
             ret = gcmd.RunCommand('v.in.ogr',
