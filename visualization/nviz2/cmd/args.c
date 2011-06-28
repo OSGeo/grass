@@ -31,6 +31,7 @@ static void args_viewpoint(struct GParams *);
 static void args_volume(struct GParams *);
 static void args_lighting(struct GParams *);
 static void args_fringe(struct GParams *);
+static void args_cplane(struct GParams *);
 
 /*!
   \brief Parse command
@@ -73,6 +74,9 @@ void parse_command(int argc, char *argv[], struct GParams *params)
 
     /*** fringe ***/
     args_fringe(params);
+
+    /*** cutting plane ***/
+    args_cplane(params);    
     
     /*** output image ***/
     /* output */
@@ -630,6 +634,64 @@ void args_lighting(struct GParams *params)
     params->light_ambient->options="0-100";
 }
 
+void args_cplane(struct GParams *params)
+{
+    params->cplane = G_define_option();
+    params->cplane->key = "cplane";
+    params->cplane->key_desc = "value";
+    params->cplane->type = TYPE_INTEGER;
+    params->cplane->required = NO;
+    params->cplane->multiple = YES;
+    params->cplane->description = _("Cutting plane index (0-5)");
+    params->cplane->guisection = _("Cutting planes");
+    
+    params->cplane_pos = G_define_option();
+    params->cplane_pos->key = "cplane_position";
+    params->cplane_pos->key_desc = "x,y,z";
+    params->cplane_pos->type = TYPE_DOUBLE;
+    params->cplane_pos->required = NO;
+    params->cplane_pos->multiple = YES;
+    params->cplane_pos->description = _("Cutting plane x,y coordinates");
+    params->cplane_pos->guisection = _("Cutting planes");
+    params->cplane_pos->answer = "0,0,0";
+    
+    params->cplane_rot = G_define_option();
+    params->cplane_rot->key = "cplane_rotation";
+    params->cplane_rot->key_desc = "value";
+    params->cplane_rot->type = TYPE_DOUBLE;
+    params->cplane_rot->multiple = YES;
+    params->cplane_rot->required = NO;
+    params->cplane_rot->label = _("Cutting plane rotation along the vertical axis");
+    params->cplane_rot->guisection = _("Cutting planes");
+    params->cplane_rot->description = _("Cutting plane rotation along the vertical axis");
+    params->cplane_rot->answer = "0";
+    params->cplane_rot->options="0-360";
+    
+    params->cplane_tilt = G_define_option();
+    params->cplane_tilt->key = "cplane_tilt";
+    params->cplane_tilt->key_desc = "value";
+    params->cplane_tilt->type = TYPE_DOUBLE;
+    params->cplane_tilt->multiple = YES;
+    params->cplane_tilt->required = NO;
+    params->cplane_tilt->label = _("Cutting plane tilt");
+    params->cplane_tilt->guisection = _("Cutting planes");
+    params->cplane_tilt->description = _("Cutting plane tilt");
+    params->cplane_tilt->answer = "0";
+    params->cplane_tilt->options="0-360";
+    
+    params->cplane_shading = G_define_option();
+    params->cplane_shading->key = "cplane_shading";
+    params->cplane_shading->key_desc = "string";
+    params->cplane_shading->type = TYPE_STRING;
+    params->cplane_shading->multiple = NO;
+    params->cplane_shading->required = NO;
+    params->cplane_shading->label = _("Cutting plane color (between two surfaces)");
+    params->cplane_shading->guisection = _("Cutting planes");
+    params->cplane_shading->description = _("Cutting plane color (between two surfaces)");
+    params->cplane_shading->answer = "clear";
+    params->cplane_shading->options= "clear,top,bottom,blend,shaded";
+}
+
 void args_fringe(struct GParams *params)
 {
     params->fringe = G_define_option();
@@ -690,7 +752,7 @@ int opt_get_num_answers(const struct Option *opt)
 void check_parameters(const struct GParams *params)
 {
     int nelev_map, nelev_const, nelevs;
-    int nmaps, nconsts, ncoords;
+    int nmaps, nconsts, ncoords, ncplanes;
 
     int nvlines;
 
@@ -779,15 +841,26 @@ void check_parameters(const struct GParams *params)
 	    G_fatal_error(_("Inconsistent number of attributes (<%s/%s> %d: <%s> %d)"),
 			  params->elev_map->key, params->elev_const->key,
 			  nelevs, params->wire_color->key, nconsts);
-                          
-        /* position */
-        ncoords = opt_get_num_answers(params->surface_pos);
-        if (ncoords > 0 && 3 * nelevs != ncoords)
-            G_fatal_error(_("Inconsistent number of attributes (<%s/%s> %d: <%s> %d)"),
-                              params->elev_map->key, params->elev_const->key, nelevs,
-                              params->surface_pos->key, ncoords);
     }
-
+    /* 
+     * Cutting planes
+     */
+    ncplanes = opt_get_num_answers(params->cplane);
+    ncoords = opt_get_num_answers(params->cplane_pos);
+	if (ncplanes > 0 && ncplanes * 3 != ncoords)
+	    G_fatal_error(_("Inconsistent number of attributes (<%s> %d: <%s> %d x 3)"),
+			  params->cplane->key, ncplanes, params->cplane_pos->key, ncoords/3);
+              
+    nconsts = opt_get_num_answers(params->cplane_rot);
+    if (ncplanes > 0 && ncplanes != nconsts)
+        G_fatal_error(_("Inconsistent number of attributes (<%s> %d: <%s> %d)"),
+          params->cplane->key, ncplanes, params->cplane_rot->key, nconsts);
+          
+    nconsts = opt_get_num_answers(params->cplane_tilt);
+    if (ncplanes > 0 && ncplanes != nconsts)
+        G_fatal_error(_("Inconsistent number of attributes (<%s> %d: <%s> %d)"),
+          params->cplane->key, ncplanes, params->cplane_tilt->key, nconsts);
+          
     /*
      * vector lines
      */

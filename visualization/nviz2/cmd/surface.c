@@ -74,9 +74,16 @@ int load_rasters(const struct GParams *params, nv_data * data)
 	}
 
 	/* set position */
-	x = atof(params->surface_pos->answers[i*3+0]);
-	y = atof(params->surface_pos->answers[i*3+1]);
-	z = atof(params->surface_pos->answers[i*3+2]);
+    if (opt_get_num_answers(params->surface_pos) != 3 * nelevs){
+        x = atof(params->surface_pos->answers[0]);
+        y = atof(params->surface_pos->answers[1]);
+        z = atof(params->surface_pos->answers[2]);
+    }
+    else{
+        x = atof(params->surface_pos->answers[i*3+0]);
+        y = atof(params->surface_pos->answers[i*3+1]);
+        z = atof(params->surface_pos->answers[i*3+2]);
+    }
 
 	GS_set_trans(id, x, y, z);
     }
