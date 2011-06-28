@@ -2163,9 +2163,9 @@
 	  <label>Network analysis</label>
 	  <items>`
 	    <menuitem>
-	      <label>Network maintenance</label>
-	      <help>Performs network maintenance.</help>
-	      <keywords>vector,network,maintenance</keywords>
+	      <label>Network preparation</label>
+	      <help>Prepares a network.</help>
+	      <keywords>vector,network,preparation</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.net</command>
 	    </menuitem>
