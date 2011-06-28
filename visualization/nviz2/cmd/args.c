@@ -690,7 +690,7 @@ int opt_get_num_answers(const struct Option *opt)
 void check_parameters(const struct GParams *params)
 {
     int nelev_map, nelev_const, nelevs;
-    int nmaps, nconsts;
+    int nmaps, nconsts, ncoords;
 
     int nvlines;
 
@@ -779,6 +779,13 @@ void check_parameters(const struct GParams *params)
 	    G_fatal_error(_("Inconsistent number of attributes (<%s/%s> %d: <%s> %d)"),
 			  params->elev_map->key, params->elev_const->key,
 			  nelevs, params->wire_color->key, nconsts);
+                          
+        /* position */
+        ncoords = opt_get_num_answers(params->surface_pos);
+        if (ncoords > 0 && 3 * nelevs != ncoords)
+            G_fatal_error(_("Inconsistent number of attributes (<%s/%s> %d: <%s> %d)"),
+                              params->elev_map->key, params->elev_const->key, nelevs,
+                              params->surface_pos->key, ncoords);
     }
 
     /*
