@@ -237,18 +237,18 @@ class UpdateThread(Thread):
                         if p.get('element', '') == 'layer':
                             layer = p.get('value', '')
                             if layer != '':
-                                layer = p.get('value', 1)
+                                layer = p.get('value', '')
                             else:
-                                layer = p.get('default', 1)
+                                layer = p.get('default', '')
                             break
                         
                 elif p.get('element', '') == 'layer': # -> layer
                     # get layer
                     layer = p.get('value', '')
                     if layer != '':
-                        layer = p.get('value', 1)
+                        layer = p.get('value', '')
                     else:
-                        layer = p.get('default', 1)
+                        layer = p.get('default', '')
                     
                     # get map name
                     pMap = self.task.get_param(p['wxId'][0], element = 'wxId-bind', raiseError = False)
@@ -278,16 +278,16 @@ class UpdateThread(Thread):
                         native = False
                         break
                 # TODO: update only if needed
-                #if native:
-                #    if map:
-                #        self.data[win.InsertLayers] = { 'vector' : map }
-                #    else:
-                #        self.data[win.InsertLayers] = { }
-                #else:
-                #    if map:
-                #        self.data[win.InsertLayers] = { 'dsn' : map.rstrip('@OGR') }
-                #    else:
-                #        self.data[win.InsertLayers] = { }
+                if native:
+                    if map:
+                        self.data[win.InsertLayers] = { 'vector' : map }
+                    else:
+                        self.data[win.InsertLayers] = { }
+                else:
+                    if map:
+                        self.data[win.InsertLayers] = { 'dsn' : map.rstrip('@OGR') }
+                    else:
+                        self.data[win.InsertLayers] = { }
             
             elif name == 'TableSelect':
                 self.data[win.InsertTables] = { 'driver' : driver,
@@ -1029,7 +1029,7 @@ class mainFrame(wx.Frame):
                 
                 self.goutput.RunCmd(cmd, onDone = self.OnDone)
             except AttributeError, e:
-                print >> sys.stderr, "%s: Propably not running in wxgui.py session?" % (e)
+                print >> sys.stderr, "%s: Probably not running in wxgui.py session?" % (e)
                 print >> sys.stderr, "parent window is: %s" % (str(self.parent))
         else:
             gcmd.Command(cmd)
@@ -1553,9 +1553,7 @@ class cmdPanel(wx.Panel):
                                           size = globalvar.DIALOG_TEXTCTRL_SIZE)
                         win.Bind(wx.EVT_TEXT, self.OnSetValue)
                     else:
-                        value = p.get('value', '')
-                        if not value:
-                            value = p.get('default', '')
+                        value = self._getValue(p)
                         
                         if p.get('prompt', '') in ('layer',
                                                    'layer_all'):
@@ -1567,15 +1565,14 @@ class cmdPanel(wx.Panel):
                                 win = gselect.LayerSelect(parent = which_panel,
                                                           all = all,
                                                           default = p['default'])
-                                win.Bind(wx.EVT_COMBOBOX, self.OnUpdateSelection)
-                                win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
+                                win.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
+                                win.Bind(wx.EVT_TEXT, self.OnSetValue)
                             else:
                                 win = wx.SpinCtrl(parent = which_panel, id = wx.ID_ANY,
                                                   min = 1, max = 100, initial = int(p['default']))
                                 win.Bind(wx.EVT_SPINCTRL, self.OnSetValue)
-                            if p.get('value','') ==  '':
-                                win.SetItems([p['value']])
-                                win.SetSelection(0)
+
+                            win.SetValue(str(value))
                             
                             p['wxId'] = [ win.GetId() ]
 
@@ -2069,13 +2066,15 @@ class cmdPanel(wx.Panel):
         if not found:
             return
         
-        if name in ('LayerSelect', 'DriverSelect', 'TableSelect',
+        if name in ('DriverSelect', 'TableSelect',
                     'LocationSelect', 'MapsetSelect', 'ProjSelect'):
             porf['value'] = me.GetStringSelection()
         elif name ==  'GdalSelect':
             porf['value'] = event.dsn
         elif name ==  'ModelParam':
             porf['parameterized'] = me.IsChecked()
+        elif name ==  'LayerSelect':
+            porf['value'] = me.GetValue()
         else:
             porf['value'] = me.GetValue()
         
