@@ -24,6 +24,8 @@ struct GParams
 	*volume, *volume_mode, *volume_shade, *volume_pos, *volume_res, *isosurf_level,
     /* misc */
 	*exag, *bgcolor,
+    /* cutting planes */
+    *cplane, *cplane_pos, *cplane_rot, *cplane_tilt, *cplane_shading,
     /* viewpoint */
 	*pos, *height, *persp, *twist,
     /* output */
@@ -54,6 +56,9 @@ int check_thematic(const struct GParams *, int);
 /* volume.c */
 int load_rasters3d(const struct GParams *, nv_data *);
 int add_isosurfs(const struct GParams *, nv_data *);
+
+/* cutting planes */
+void draw_cplane(const struct GParams *, nv_data *);
 
 /* write_img.c */
 int write_img(const char *, int);

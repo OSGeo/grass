@@ -189,8 +189,10 @@ int main(int argc, char *argv[])
     
     GS_clear(data.bgcolor);
 
+    /* cutting planes */
+    if(params->cplane->answer)
+        draw_cplane(params, &data);
     /* draw */
-    Nviz_draw_cplane(&data, -1, -1);
     Nviz_draw_all(&data);
 
     /* write to image */
