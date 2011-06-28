@@ -9,7 +9,6 @@ Classes:
  - TreeCrtlComboPopup
  - VectorDBInfo
  - LayerSelect
- - LayerNameSelect
  - DriverSelect
  - DatabaseSelect
  - ColumnSelect
@@ -599,7 +598,7 @@ class VectorDBInfo:
         
         @param layer vector layer number
         """
-        return self.layers[layer]['key']
+        return str(self.layers[layer]['key'])
     
     def GetTable(self, layer):
         """!Get table name of given layer
@@ -624,20 +623,16 @@ class VectorDBInfo:
         """
         return self.tables[table]
 
-class LayerSelect(wx.Choice):
-    def __init__(self, parent, id = wx.ID_ANY, 
-                 size=globalvar.DIALOG_LAYER_SIZE,
-                 vector = None, choices = [], all = False, default = None):
-        """!Creates widget for selecting vector map layer numbers
+class LayerSelect(wx.ComboBox):
+    def __init__(self, parent, id = wx.ID_ANY,
+                 size = globalvar.DIALOG_COMBOBOX_SIZE,
+                 vector = None, dsn = None, choices = [], all = False, default = None):
+        """!Creates combo box for selecting vector map layer names
 
-        @param vector  vector map name or None
-        @param choices list of predefined choices
-        @param all     adds layer '-1' (e.g., for d.vect)
-        @param default default layer number
+        @param vector vector map name (native or connected via v.external)
+        @param dsn    OGR data source name
         """
-
-        super(LayerSelect, self).__init__(parent, id, size = size,
-                                          choices = choices)
+        super(LayerSelect, self).__init__(parent, id, size = size, choices = choices)
 
         self.all = all
         
@@ -645,52 +640,8 @@ class LayerSelect(wx.Choice):
 
         # default value
         self.default = default
-            
-        if len(choices) > 1:
-            return
 
-        if vector:
-            self.InsertLayers(vector)
-        else:
-            if all:
-                self.SetItems(['-1', '1'])
-            else:
-                self.SetItems(['1'])
-            self.SetStringSelection('1')
-        
-    def InsertLayers(self, vector):
-        """!Insert layers for a vector into the layer combobox"""
-        layerchoices = utils.GetVectorNumberOfLayers(self, vector)
-        
-        if self.all or len(layerchoices) == 0:
-            layerchoices.insert(0, '-1')
-        if len(layerchoices) > 1:
-            self.SetItems(layerchoices)
-            self.SetStringSelection('1')
-        elif len(layerchoices) == 1:
-            self.SetItems(layerchoices)
-            self.SetStringSelection(layerchoices[0])
-        
-        if self.default:
-            self.SetStringSelection(str(self.default))
-
-class LayerNameSelect(wx.ComboBox):
-    def __init__(self, parent, id = wx.ID_ANY,
-                 size = globalvar.DIALOG_COMBOBOX_SIZE,
-                 vector = None, dsn = None):
-        """!Creates combo box for selecting vector map layer names
-
-        @param vector vector map name (native or connected via v.external)
-        @param dsn    OGR data source name
-        """
-        super(LayerNameSelect, self).__init__(parent, id, size = size)
-        self.SetName("LayerNameSelect")
-
-        if vector:
-            # -> native
-            self.InsertLayers(vector = vector)
-        elif dsn:
-            self.InsertLayers(dsn = dsn)
+        self.InsertLayers(vector = vector, dsn = dsn)
         
     def InsertLayers(self, vector = None, dsn = None):
         """!Insert layers for a vector into the layer combobox
@@ -701,9 +652,22 @@ class LayerNameSelect(wx.ComboBox):
         @param dsn    OGR data source name
         """
         layers = list()
+        if self.all:
+            layers.append('-1')
+
         if vector:
             # TODO
-            pass
+            ret = gcmd.RunCommand('v.db.connect',
+                                  read = True,
+                                  quiet = True,
+                                  fs = '|',
+                                  flags = 'g',
+                                  map = vector)
+            for line in ret.splitlines():
+                layerinfo = line.split('|')
+                layername = layerinfo[0].split('/')
+                layers.append(layername[len(layername) - 1])
+            
         elif dsn:
             ret = gcmd.RunCommand('v.in.ogr',
                                   read = True,
@@ -712,9 +676,14 @@ class LayerNameSelect(wx.ComboBox):
                                   dsn = dsn)
             if ret:
                 layers = ret.splitlines()
-        
+    
+        if len(layers) == 0:
+            if self.default == None:
+                layers.append('')
+            else:
+                layers.append(self.default)
         self.SetItems(layers)
-        self.SetSelection(0)
+        #self.SetSelection(0)
         
 class DriverSelect(wx.ComboBox):
     """!Creates combo box for selecting database driver.
@@ -804,7 +773,7 @@ class ColumnSelect(wx.ComboBox):
         
         if vector:
             self.InsertColumns(vector, layer)
-                
+    
     def InsertColumns(self, vector, layer, excludeKey = False, type = None, dbInfo = None):
         """!Insert columns for a vector attribute table into the columns combobox
 
