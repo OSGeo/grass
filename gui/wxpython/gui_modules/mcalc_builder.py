@@ -110,10 +110,8 @@ class MapCalcFrame(wx.Frame):
             }
         
         if self.rast3d:
-            indx = self.funct_list.index('y()') +1
-            self.funct_list.insert(indx, 'z()')
-            indx = self.funct_list.index('nsres()') +1
-            self.funct_list.insert(indx, 'tbres()')
+            self.funct_dict['z()'] = 'z()'
+            self.funct_dict['tbres()'] = 'tbres()'
             element = 'rast3d'
         else:
             element = 'cell'
@@ -221,7 +219,7 @@ class MapCalcFrame(wx.Frame):
         self.functlabel = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
                                         label = _('Insert mapcalc function'))
         self.function = wx.ComboBox(parent = self.panel, id = wx.ID_ANY, 
-                                    size = (250, -1), choices = self.funct_dict.keys(),
+                                    size = (250, -1), choices = sorted(self.funct_dict.keys()),
                                     style = wx.CB_DROPDOWN |
                                     wx.CB_READONLY | wx.TE_PROCESS_ENTER)
         
