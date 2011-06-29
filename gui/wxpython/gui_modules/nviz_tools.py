@@ -239,7 +239,6 @@ class NvizToolWindow(FN.FlatNotebook):
         # position
         posSizer = wx.GridBagSizer(vgap = 3, hgap = 3)
         
-        self.win['view']['lookFrom'] = {}
         self._createCompass(panel = panel, sizer = posSizer, type = 'view')
         
         view = ViewPositionWindow(panel, size = (175, 175),
@@ -1504,7 +1503,6 @@ class NvizToolWindow(FN.FlatNotebook):
         gridSizer = wx.GridBagSizer(vgap = 3, hgap = 3)
         posSizer = wx.GridBagSizer(vgap = 3, hgap = 3)
         
-        self.win['light']['lookFrom'] = {}
         self._createCompass(panel = panel, sizer = posSizer, type = 'light')
         
         pos = LightPositionWindow(panel, id = wx.ID_ANY, size = (175, 175),
@@ -2071,6 +2069,8 @@ class NvizToolWindow(FN.FlatNotebook):
         name = self.FindWindowById(event.GetId()).GetName()
         if name == 'center':
             self._display.LookAtCenter()
+            focus = self.mapWindow.iview['focus']
+            focus['x'], focus['y'], focus['z'] = self._display.GetFocus()
             self.mapWindow.Refresh(False)
         elif name == 'top':
             self.mapWindow.view['position']['x'] = 0.5

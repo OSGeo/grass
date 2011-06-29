@@ -964,6 +964,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                                                        subkey = ('twist', 'value'))
                                                     
         self._display.LookAtCenter()
+        focus = self.iview['focus']
+        focus['x'], focus['y'], focus['z'] = self._display.GetFocus()
         
         event = wxUpdateView(zExag = False)
         wx.PostEvent(self, event)
