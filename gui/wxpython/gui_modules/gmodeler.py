@@ -77,6 +77,7 @@ from preferences  import PreferencesBaseDialog, globalSettings as UserSettings
 from ghelp        import SearchModuleWindow
 
 from grass.script import core as grass
+from grass.script import task as gtask
 
 class Model(object):
     """!Class representing the model"""
@@ -3458,9 +3459,9 @@ class ModelParamDialog(wx.Dialog):
     def _createPage(self, name, params):
         """!Define notebook page"""
         if name in globalvar.grassCmd['all']:
-            task = menuform.grassTask(name)
+            task = gtask.grassTask(name)
         else:
-            task = menuform.grassTask()
+            task = gtask.grassTask()
         task.flags  = params['flags']
         task.params = params['params']
         
