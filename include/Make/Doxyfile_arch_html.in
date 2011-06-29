@@ -459,7 +459,6 @@ EXCLUDE                = bin.@ARCH@ \
 		         gui/wxpython/vdigit \
 			 gui/wxpython/nviz \
 			 imagery \
-			 include \
                          lib/python/ctypes \
 			 locale \
 			 macosx \
