@@ -1239,13 +1239,13 @@ class cmdPanel(wx.Panel):
                                                           default = p['default'])
                                 win.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
                                 win.Bind(wx.EVT_TEXT, self.OnSetValue)
+                                win.SetValue(str(value))    # default or previously set value
                             else:
                                 win = wx.SpinCtrl(parent = which_panel, id = wx.ID_ANY,
                                                   min = 1, max = 100, initial = int(p['default']))
                                 win.Bind(wx.EVT_SPINCTRL, self.OnSetValue)
+                                win.SetValue(int(value))    # default or previously set value
 
-                            win.SetValue(str(value))
-                            
                             p['wxId'] = [ win.GetId() ]
 
                         elif p.get('prompt', '') ==  'dbdriver':
