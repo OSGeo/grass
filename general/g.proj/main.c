@@ -3,14 +3,15 @@
  *
  * MODULE:       g.proj 
  * AUTHOR(S):    Paul Kelly - paul-grass@stjohnspoint.co.uk
+ *               Shell script style by Martin Landa <landa.martin gmail.com>
  * PURPOSE:      Provides a means of reporting the contents of GRASS
  *               projection information files and creating
  *               new projection information files.
- * COPYRIGHT:    (C) 2003-2007 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003-2007, 2011 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ *               This program is free software under the GNU General
+ *               Public License (>=v2). Read the file COPYING that
+ *               comes with GRASS for details.
  *
  *****************************************************************************/
 
@@ -28,27 +29,28 @@ struct Cell_head cellhd;
 int main(int argc, char *argv[])
 {
     struct Flag *printinfo,	/* Print contents of PROJ_INFO & PROJ_UNITS */
-     *printproj4,		/* Print projection in PROJ.4 format        */
-     *datuminfo,		/* Check if datum information is present    */
-     *create,			/* Create new projection files              */
+	*shellinfo,             /* Print in shell script style              */
+	*printproj4,		/* Print projection in PROJ.4 format        */
+	*datuminfo,		/* Check if datum information is present    */
+	*create,		/* Create new projection files              */
 #ifdef HAVE_OGR
-     *printwkt,			/* Print projection in WKT format           */
-     *esristyle,		/* Use ESRI-style WKT format                */
+	*printwkt,		/* Print projection in WKT format           */
+	*esristyle,		/* Use ESRI-style WKT format                */
 #endif
-     *dontprettify,		/* Print 'flat' output (no linebreaks)      */
-     *forcedatumtrans;		/* Force override of datumtrans parameters  */
-
+	*dontprettify,		/* Print 'flat' output (no linebreaks)      */
+	*forcedatumtrans;	/* Force override of datumtrans parameters  */
+    
     struct Option *location,	/* Name of new location to create           */
 #ifdef HAVE_OGR
-     *inepsg,			/* EPSG projection code                     */
-     *inwkt,			/* Input file with projection in WKT format */
-     *inproj4,			/* Projection in PROJ.4 format              */
-     *ingeo,			/* Input geo-referenced file readable by 
+	*inepsg,		/* EPSG projection code                     */
+	*inwkt,			/* Input file with projection in WKT format */
+	*inproj4,		/* Projection in PROJ.4 format              */
+	*ingeo,			/* Input geo-referenced file readable by 
 				 * GDAL or OGR                              */
 #endif
-     *dtrans;			/* index to datum transform option          */
+	*dtrans;		/* index to datum transform option          */
     struct GModule *module;
-
+    
     int formats;
 
     G_set_program_name(argv[0]);
@@ -74,7 +76,13 @@ int main(int argc, char *argv[])
     printinfo->key = 'p';
     printinfo->guisection = _("Print");
     printinfo->description =
-	_("Print projection information (in conventional GRASS format)");
+	_("Print projection information in conventional GRASS format");
+
+    shellinfo = G_define_flag();
+    shellinfo->key = 'g';
+    shellinfo->guisection = _("Print");
+    shellinfo->description =
+	_("Print projection information in shell script style");
 
     datuminfo = G_define_flag();
     datuminfo->key = 'd';
@@ -227,26 +235,27 @@ int main(int argc, char *argv[])
 
     /* Output */
     /* Only allow one output format at a time, to reduce confusion */
-    formats = ((printinfo->answer ? 1 : 0) + (datuminfo->answer ? 1 : 0) +
+    formats = ((printinfo->answer ? 1 : 0) + (shellinfo->answer ? 1 : 0) +
+	       (datuminfo->answer ? 1 : 0) +
 	       (printproj4->answer ? 1 : 0) +
 #ifdef HAVE_OGR
 	       (printwkt->answer ? 1 : 0) +
 #endif
 	       (create->answer ? 1 : 0));
     if (formats > 1)
-	G_fatal_error(_("Only one of -%c, -%c, -%c"
+	G_fatal_error(_("Only one of -%c, -%c, -%c, -%c"
 #ifdef HAVE_OGR
 			", -%c"
 #endif
 			" or -%c flags may be specified"),
-		      printinfo->key, datuminfo->key, printproj4->key,
+		      printinfo->key, shellinfo->key, datuminfo->key, printproj4->key,
 #ifdef HAVE_OGR
 		      printwkt->key,
 #endif
 		      create->key);
 
-    if (printinfo->answer)
-	print_projinfo();
+    if (printinfo->answer || shellinfo->answer)
+	print_projinfo(shellinfo->answer);
     else if (datuminfo->answer)
 	print_datuminfo();
     else if (printproj4->answer)

@@ -13,7 +13,7 @@ int input_georef(char *);
 #endif
 
 /* output.c */
-void print_projinfo(void);
+void print_projinfo(int);
 void print_datuminfo(void);
 void print_proj4(int);
 #ifdef HAVE_OGR
