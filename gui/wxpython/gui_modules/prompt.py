@@ -31,6 +31,7 @@ import wx.stc
 import wx.lib.mixins.listctrl as listmix
 
 from grass.script import core as grass
+from grass.script import task as gtask
 
 import globalvar
 import menudata
@@ -176,7 +177,7 @@ class TextCtrlAutoComplete(wx.ComboBox, listmix.ColumnSorterMixin):
         # get module's description
         if name in self._choicesCmd and not self._module:
             try:
-                self._module = menuform.GUI().ParseInterface(cmd = [name])
+                self._module = gtask.parse_interface(name)
             except IOError:
                 self._module = None
              
@@ -495,7 +496,7 @@ class GPrompt(object):
         self.autoCompList   = list()
         self.autoCompFilter = None
         
-        # command description (menuform.grassTask)
+        # command description (gtask.grassTask)
         self.cmdDesc = None
         self.cmdbuffer = self._readHistory()
         self.cmdindex = len(self.cmdbuffer)
@@ -783,7 +784,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
                 self.OnCmdErase(None)
             else:
                 try:
-                    self.cmdDesc = menuform.GUI().ParseInterface(cmd = [cmd])
+                    self.cmdDesc = gtask.parse_interface(cmd)
                 except IOError:
                     self.cmdDesc = None
         
@@ -1015,11 +1016,11 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             if cmd not in globalvar.grassCmd['all']:
                 return
             
-            usage, description = self.GetCommandUsage(cmd)
-                                        
+            info = gtask.command_info(cmd)
+            
             self.CallTipSetBackground("#f4f4d1")
             self.CallTipSetForeground("BLACK")
-            self.CallTipShow(pos, usage + '\n\n' + description)
+            self.CallTipShow(pos, info['usage'] + '\n\n' + info['description'])
             
             
         elif event.GetKeyCode() in [wx.WXK_UP, wx.WXK_DOWN] and \
@@ -1092,7 +1093,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
                         cmd != 'r.mapcalc' and \
                         (not self.cmdDesc or cmd != self.cmdDesc.get_name()):
                     try:
-                        self.cmdDesc = menuform.GUI().ParseInterface(cmd = [cmd])
+                        self.cmdDesc = gtask.parse_interface(cmd)
                     except IOError:
                         self.cmdDesc = None
             event.Skip()
@@ -1117,49 +1118,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         self.SetCurrentPos(pos)
         
         return entry
-
-    def GetCommandUsage(self, command):
-        """!Returns command syntax by running command help"""
-        usage = ''
-        description = ''
-
-        ret, out  = gcmd.RunCommand(command, 'help', getErrorMsg = True)
-               
-        if ret == 0:
-            cmdhelp = out.splitlines()
-            addline = False
-            helplist = []
-            description = ''
-            for line in cmdhelp:
-                if "Usage:" in line:
-                    addline = True
-                    continue
-                elif "Flags:" in line:
-                    addline = False
-                    break
-                elif addline == True:
-                    line = line.strip()
-                    helplist.append(line)
-
-            for line in cmdhelp:
-                if "Description:" in line:
-                    addline = True
-                    continue
-                elif "Keywords:" in line:
-                    addline = False
-                    break
-                elif addline == True:
-                    description += (line + ' ')
-                
-            description = description.strip()
-
-            for line in helplist:
-                usage += line + '\n'
-
-            return usage.strip(), description
-        else:
-            return ''   
-        
+    
     def OnDestroy(self, event):
         """!The clipboard contents can be preserved after
         the app has exited"""

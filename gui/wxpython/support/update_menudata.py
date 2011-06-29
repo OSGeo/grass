@@ -28,6 +28,7 @@ except ImportError:
     import elementtree.ElementTree as etree # Python <= 2.4
 
 from grass.script import core as grass
+from grass.script import task as gtask
 
 sys.path.append('gui_modules')
 import menudata
@@ -51,7 +52,7 @@ def parseModules():
         if module in ignore:
             continue
         try:
-            interface = menuform.GUI().ParseInterface(cmd = [module])
+            interface = gtask.parse_interface(module)
         except IOError, e:
             grass.error(e)
             continue

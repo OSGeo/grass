@@ -4,8 +4,6 @@
 description.
 
 Classes:
- - grassTask
- - processTask
  - helpPanel
  - mainFrame
  - cmdPanel
@@ -95,6 +93,7 @@ else:
 sys.path.append(wxbase)
 
 from grass.script import core as grass
+from grass.script import task as gtask
 
 import gselect
 import gcmd
@@ -131,8 +130,11 @@ for (s,r) in str2rgb.items():
     rgb2str[ r ] = s
 
 """!Hide some options in the GUI"""
-_blackList = { }
-_ignoreBlackList = True
+#_blackList = { 'enabled' : False,
+#               'items'   : { 'r.buffer' : {'params' : ['input', 'output'],
+#                                           'flags' : ['z', 'overwrite']}}}
+_blackList = { 'enabled' : False,
+               'items'   : {} }
 
 def color_resolve(color):
     if len(color) > 0 and color[0] in "0123456789":
@@ -372,337 +374,7 @@ class UpdateQThread(Thread):
             if self.request:
                 event = wxUpdateDialog(data = self.request.data)
                 wx.PostEvent(self.parent, event)
-        
-class grassTask:
-    """!This class holds the structures needed for both filling by the
-    parser and use by the interface constructor.
 
-    Use as either grassTask() for empty definition or
-    grassTask('grass.command') for parsed filling.
-    """
-    def __init__(self, grassModule = None):
-        self.path = grassModule
-        self.name = _('unknown')
-        self.params = list()
-        self.description = ''
-        self.label = ''
-        self.flags = list()
-        self.keywords = list()
-        self.errorMsg = ''
-        self.firstParam = None
-        
-        if grassModule is not None:
-            try:
-                processTask(tree = etree.fromstring(getInterfaceDescription(grassModule)),
-                            task = self)
-            except gcmd.GException, e:
-                self.errorMsg = e.value
-                
-            self.define_first()
-        
-    def define_first(self):
-        """!Define first parameter"""
-        if len(self.params) > 0:
-            self.firstParam = self.params[0]['name']
-        
-    def get_error_msg(self):
-        """!Get error message ('' for no error)"""
-        return self.errorMsg
-    
-    def get_name(self):
-        """!Get task name"""
-        return self.name
-    
-    def get_list_params(self, element = 'name'):
-        """!Get list of parameters"""
-        params = []
-        for p in self.params:
-            params.append(p['name'])
-        
-        return params
-
-    def get_list_flags(self, element = 'name'):
-        """!Get list of parameters"""
-        flags = []
-        for p in self.flags:
-            flags.append(p['name'])
-        
-        return flags
-    
-    def get_param(self, value, element = 'name', raiseError = True):
-        """!Find and return a param by name."""
-        try:
-            for p in self.params:
-                val = p[element]
-                if val is None:
-                    continue
-                if type(val) in (types.ListType, types.TupleType):
-                    if value in val:
-                        return p
-                elif type(val) ==  types.StringType:
-                    if p[element][:len(value)] ==  value:
-                        return p
-                else:
-                    if p[element] ==  value:
-                        return p
-        except KeyError:
-            pass
-        
-        if raiseError:
-            raise ValueError, _("Parameter element '%(element)s' not found: '%(value)s'") % \
-                { 'element' : element, 'value' : value }
-        else:
-            return None
-
-    def set_param(self, aParam, aValue, element = 'value'):
-        """!Set param value/values.
-        """
-        try:
-            param = self.get_param(aParam)
-        except ValueError:
-            return
-        
-        param[element] = aValue
-            
-    def get_flag(self, aFlag):
-        """!Find and return a flag by name.
-        """
-        for f in self.flags:
-            if f['name'] ==  aFlag:
-                return f
-        raise ValueError, _("Flag not found: %s") % aFlag
-
-    def set_flag(self, aFlag, aValue, element = 'value'):
-        """!Enable / disable flag.
-        """
-        try:
-            param = self.get_flag(aFlag)
-        except ValueError:
-            return
-        
-        param[element] = aValue
-        
-    def getCmdError(self):
-        """!Get error string produced by getCmd(ignoreErrors = False)
-        
-        @return list of errors
-        """
-        errorList = list()
-        # determine if suppress_required flag is given
-        for f in self.flags:
-            if f['value'] and f['suppress_required']:
-                return errorList
-        
-        for p in self.params:
-            if not p.get('value', '') and p.get('required', False):
-                if not p.get('default', ''):
-                    desc = p.get('label', '')
-                    if not desc:
-                        desc = p['description']
-                    errorList.append(_("Parameter '%(name)s' (%(desc)s) is missing.") % \
-                                         {'name' : p['name'], 'desc' : desc })
-        
-        return errorList
-    
-    def getCmd(self, ignoreErrors = False):
-        """!Produce an array of command name and arguments for feeding
-        into some execve-like command processor.
-
-        If ignoreErrors =  = True then it will return whatever has been
-        built so far, even though it would not be a correct command
-        for GRASS.
-        """
-        cmd = [self.name]
-        
-        suppress_required = False
-        for flag in self.flags:
-            if flag['value']:
-                if len(flag['name']) > 1: # e.g. overwrite
-                    cmd +=  [ '--' + flag['name'] ]
-                else:
-                    cmd +=  [ '-' + flag['name'] ]
-                if flag['suppress_required']:
-                    suppress_required = True
-        for p in self.params:
-            if p.get('value','') ==  '' and p.get('required', False):
-                if p.get('default', '') !=  '':
-                    cmd +=  [ '%s=%s' % (p['name'], p['default']) ]
-                elif ignoreErrors is True and not suppress_required:
-                    cmd +=  [ '%s=%s' % (p['name'], _('<required>')) ]
-            elif p.get('value','') !=  '' and p['value'] !=  p.get('default','') :
-                # Output only values that have been set, and different from defaults
-                cmd +=  [ '%s=%s' % (p['name'], p['value']) ]
-        
-        errList = self.getCmdError()
-        if ignoreErrors is False and errList:
-            raise ValueError, '\n'.join(errList)
-        
-        return cmd
-
-    def set_options(self, opts):
-        """!Set flags and parameters
-
-        @param opts list of flags and parameters"""
-        for opt in opts:
-            if opt[0] ==  '-': # flag
-                self.set_flag(opt.lstrip('-'), True)
-            else: # parameter
-                key, value = opt.split('=', 1)
-                self.set_param(key, value)
-        
-    def get_options(self):
-        """!Get options"""
-        return { 'flags'  : self.flags,
-                 'params' : self.params }
-    
-    def has_required(self):
-        """!Check if command has at least one required paramater"""
-        for p in self.params:
-            if p.get('required', False):
-                return True
-        
-        return False
-
-class processTask:
-    """!A ElementTree handler for the --interface-description output,
-    as defined in grass-interface.dtd. Extend or modify this and the
-    DTD if the XML output of GRASS' parser is extended or modified.
-
-    @param tree root tree node
-    @param task grassTask instance or None
-    @return grassTask instance
-    """
-    def __init__(self, tree, task = None):
-        if task:
-            self.task = task
-        else:
-            self.task = grassTask()
-        
-        self.root = tree
-        
-        self.__processModule()
-        self.__processParams()
-        self.__processFlags()
-        self.task.define_first()
-        
-    def __processModule(self):
-        """!Process module description"""
-        self.task.name = self.root.get('name', default = 'unknown')
-        
-        # keywords
-        for keyword in self._getNodeText(self.root, 'keywords').split(','):
-            self.task.keywords.append(keyword.strip())
-        
-        self.task.label       = self._getNodeText(self.root, 'label')
-        self.task.description = self._getNodeText(self.root, 'description')
-        
-    def __processParams(self):
-        """!Process parameters"""
-        for p in self.root.findall('parameter'):
-            # gisprompt
-            node_gisprompt = p.find('gisprompt')
-            gisprompt = False
-            age = element = prompt = None
-            if node_gisprompt is not None:
-                gisprompt = True
-                age     = node_gisprompt.get('age', '')
-                element = node_gisprompt.get('element', '')
-                prompt  = node_gisprompt.get('prompt', '')
-            
-            # value(s)
-            values = []
-            values_desc = []
-            node_values = p.find('values')
-            if node_values is not None:
-                for pv in node_values.findall('value'):
-                    values.append(self._getNodeText(pv, 'name'))
-                    desc = self._getNodeText(pv, 'description')
-                    if desc:
-                        values_desc.append(desc)
-            
-            # keydesc
-            key_desc = []
-            node_key_desc = p.find('keydesc')
-            if node_key_desc is not None:
-                for ki in node_key_desc.findall('item'):
-                    key_desc.append(ki.text)
-            
-            if p.get('multiple', 'no') ==  'yes':
-                multiple = True
-            else:
-                multiple = False
-            if p.get('required', 'no') ==  'yes':
-                required = True
-            else:
-                required = False
-
-            if not _ignoreBlackList and \
-                    self.task.name in _blackList and \
-                    p.get('name') in _blackList[self.task.name]['params']:
-                hidden = True
-            else:
-                hidden = False
-            
-            self.task.params.append( {
-                "name"           : p.get('name'),
-                "type"           : p.get('type'),
-                "required"       : required,
-                "multiple"       : multiple,
-                "label"          : self._getNodeText(p, 'label'),
-                "description"    : self._getNodeText(p, 'description'),
-                'gisprompt'      : gisprompt,
-                'age'            : age,
-                'element'        : element,
-                'prompt'         : prompt,
-                "guisection"     : self._getNodeText(p, 'guisection'),
-                "guidependency"  : self._getNodeText(p, 'guidependency'),
-                "default"        : self._getNodeText(p, 'default'),
-                "values"         : values,
-                "values_desc"    : values_desc,
-                "value"          : '',
-                "key_desc"       : key_desc,
-                "hidden"         : hidden
-                })
-            
-    def __processFlags(self):
-        """!Process flags"""
-        global _ignoreBlackList
-        for p in self.root.findall('flag'):
-            if not _ignoreBlackList and \
-                    self.task.name in _blackList and \
-                    p.get('name') in _blackList[self.task.name]['flags']:
-                hidden = True
-            else:
-                hidden = False
-            
-            if p.find('suppress_required') is not None:
-                suppress_required = True
-            else:
-                suppress_required = False
-            
-            self.task.flags.append( {
-                    "name"              : p.get('name'),
-                    "label"             : self._getNodeText(p, 'label'),
-                    "description"       : self._getNodeText(p, 'description'),
-                    "guisection"        : self._getNodeText(p, 'guisection'),
-                    "suppress_required" : suppress_required,
-                    "value"             : False,
-                    "hidden"            : hidden
-                    } )
-        
-    def _getNodeText(self, node, tag, default = ''):
-        """!Get node text"""
-        p = node.find(tag)
-        if p is not None:
-            return utils.normalize_whitespace(p.text)
-        
-        return default
-    
-    def GetTask(self):
-        """!Get grassTask instance"""
-        return self.task
-    
-    
 class mainFrame(wx.Frame):
     """!This is the Frame containing the dialog for options input.
 
@@ -2135,26 +1807,6 @@ class cmdPanel(wx.Panel):
             
         event.Skip()
         
-def getInterfaceDescription(cmd):
-    """!Returns the XML description for the GRASS cmd.
-
-    The DTD must be located in $GISBASE/etc/grass-interface.dtd,
-    otherwise the parser will not succeed.
-
-    @param cmd command (name of GRASS module)
-    """
-    try:
-        cmdout, cmderr = grass.Popen([cmd, '--interface-description'], stdout = grass.PIPE,
-                                     stderr = grass.PIPE).communicate()
-    except OSError, e:
-        raise gcmd.GException, _("Unable to fetch interface description for command '%s'.") % cmd + \
-            _("Details:") +  "%s" % e
-    if cmderr and cmderr[:7] != 'WARNING':
-        raise gcmd.GException, _("Unable to fetch interface description for command '%s'.") % cmd + \
-            _("Details:") + " %s" % cmderr
-    
-    return cmdout.replace('grass-interface.dtd', os.path.join(globalvar.ETCDIR, 'grass-interface.dtd'))
-    
 class GrassGUIApp(wx.App):
     """!Stand-alone GRASS command GUI
     """
@@ -2190,28 +1842,15 @@ class GUI:
         self.grass_task = None
         self.cmd = list()
         
-        global _ignoreBlackList
+        global _blackList
         if self.parent:
-                _ignoreBlackList = False
+            _blackList['enabled'] = True
         else:
-                _ignoreBlackList = True
-
+            _blackList['enabled'] = False
+        
     def GetCmd(self):
         """!Get validated command"""
         return self.cmd
-    
-    def ParseInterface(self, cmd, parser = processTask):
-        """!Parse interface
-
-        @param cmd command to be parsed (given as list)
-        """
-        # enc = locale.getdefaultlocale()[1]
-        # if enc and enc.lower() not in ("utf8", "utf-8"):
-        #     tree = etree.fromstring(getInterfaceDescription(cmd[0]).decode(enc).encode("utf-8"))
-        # else:
-        tree = etree.fromstring(getInterfaceDescription(cmd[0]))
-        
-        return processTask(tree).GetTask()
     
     def ParseCommand(self, cmd, gmpath = None, completed = None):
         """!Parse command
@@ -2235,7 +1874,13 @@ class GUI:
                 dcmd_params.update(completed[2])
         
         # parse the interface decription
-        self.grass_task = self.ParseInterface(cmd)
+        try:
+            global _blackList
+            self.grass_task = gtask.parse_interface(cmd[0],
+                                                    blackList = _blackList)
+        except ValueError, e: #grass.ScriptError, e:
+            gcmd.GError(e.value)
+            return
         
         # if layer parameters previously set, re-insert them into dialog
         if completed is not None:
@@ -2283,7 +1928,7 @@ class GUI:
                             curr_mapset = grass.gisenv()['MAPSET']
                             if mapset and mapset !=  curr_mapset:
                                 value = value + '@' + mapset
-                        
+                    
                     self.grass_task.set_param(key, value)
                     cmd_validated.append(key + '=' + value)
                     i += 1
@@ -2332,8 +1977,8 @@ class GUI:
         """
         # parse the interface decription
         if not self.grass_task:
-            tree = etree.fromstring(getInterfaceDescription(cmd))
-            self.grass_task = processTask(tree).GetTask()
+            tree = etree.fromstring(gtask.get_interface_description(cmd))
+            self.grass_task = gtask.processTask(tree).GetTask()
             
             for p in self.grass_task.params:
                 if p.get('name', '') in ('input', 'map'):
@@ -2442,14 +2087,14 @@ if __name__ ==  "__main__":
     if sys.argv[1] !=  'test':
         q = wx.LogNull()
         cmd = utils.split(sys.argv[1])
-        task = grassTask(cmd[0])
+        task = gtask.grassTask(cmd[0], blackList = _blackList)
         task.set_options(cmd[1:])
         app = GrassGUIApp(task)
         app.MainLoop()
     else: #Test
         # Test grassTask from within a GRASS session
         if os.getenv("GISBASE") is not None:
-            task = grassTask("d.vect")
+            task = gtask.grassTask("d.vect")
             task.get_param('map')['value'] = "map_name"
             task.get_flag('v')['value'] = True
             task.get_param('layer')['value'] = 1
@@ -2457,7 +2102,7 @@ if __name__ ==  "__main__":
             assert ' '.join(task.getCmd()) ==  "d.vect -v map = map_name layer = 1 bcolor = red"
         # Test interface building with handmade grassTask,
         # possibly outside of a GRASS session.
-        task = grassTask()
+        task = gtask.grassTask()
         task.name = "TestTask"
         task.description = "This is an artificial grassTask() object intended for testing purposes."
         task.keywords = ["grass","test","task"]

@@ -32,6 +32,7 @@ import wx.stc
 from wx.lib.newevent import NewEvent
 
 import grass.script as grass
+from   grass.script import task as gtask
 
 import globalvar
 import gcmd
@@ -526,7 +527,7 @@ class GMConsole(wx.SplitterWindow):
                 
                 if len(command) == 1:
                     import menuform
-                    task = menuform.GUI().ParseInterface(command)
+                    task = gtask.parse_interface(command[0])
                     # if not task.has_required():
                     # task = None # run command
                 else:
@@ -552,7 +553,7 @@ class GMConsole(wx.SplitterWindow):
             if len(command) == 1:
                 import menuform
                 try:
-                    task = menuform.GUI().ParseInterface(command)
+                    task = gtask.parse_interface(command[0])
                 except:
                     task = None
             else:

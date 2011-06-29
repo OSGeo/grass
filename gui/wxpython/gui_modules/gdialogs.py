@@ -39,6 +39,7 @@ import wx.lib.filebrowsebutton as filebrowse
 import wx.lib.mixins.listctrl as listmix
 
 from grass.script import core as grass
+from grass.script import task as gtask
 
 import gcmd
 import globalvar
@@ -960,7 +961,7 @@ class ImportDialog(wx.Dialog):
                                       label="%s" % _("Options"))
         
         cmd = self._getCommand()
-        task = menuform.GUI().ParseInterface(cmd = [cmd])
+        task = gtask.parse_interface(cmd)
         for f in task.get_options()['flags']:
             name = f.get('name', '')
             desc = f.get('label', '')
