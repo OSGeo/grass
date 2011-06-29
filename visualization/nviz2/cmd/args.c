@@ -525,6 +525,16 @@ void args_viewpoint(struct GParams *params)
     params->exag->multiple = NO;
     params->exag->description = _("Vertical exaggeration");
 
+    /* focus */
+    params->focus = G_define_option();
+    params->focus->key = "focus";
+    params->focus->key_desc = "x,y";
+    params->focus->type = TYPE_DOUBLE;
+    params->focus->required = NO;
+    params->focus->multiple = NO;
+    params->focus->description = _("Focus to point on surface (from SW corner in map units)");
+    params->focus->guisection = _("Viewpoint");
+    
     return;
 }
 
@@ -651,7 +661,7 @@ void args_cplane(struct GParams *params)
     params->cplane_pos->type = TYPE_DOUBLE;
     params->cplane_pos->required = NO;
     params->cplane_pos->multiple = YES;
-    params->cplane_pos->description = _("Cutting plane x,y coordinates");
+    params->cplane_pos->description = _("Cutting plane x,y,z coordinates");
     params->cplane_pos->guisection = _("Cutting planes");
     params->cplane_pos->answer = "0,0,0";
     

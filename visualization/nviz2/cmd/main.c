@@ -150,6 +150,10 @@ int main(int argc, char *argv[])
 				atof(params->pos->answers[1]));
     Nviz_set_viewpoint_twist(atoi(params->twist->answer));
     Nviz_set_viewpoint_persp(atoi(params->persp->answer));
+    if (params->focus->answer) {
+    Nviz_set_focus(&data, atof(params->focus->answers[0]),
+                          atof(params->focus->answers[1]), 0);
+    }
 
     /* set lights */
     Nviz_set_light_position(&data, 1,

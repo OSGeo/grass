@@ -27,7 +27,7 @@ struct GParams
     /* cutting planes */
     *cplane, *cplane_pos, *cplane_rot, *cplane_tilt, *cplane_shading,
     /* viewpoint */
-	*pos, *height, *persp, *twist,
+	*pos, *height, *persp, *twist, *focus,
     /* output */
 	*output, *format, *size,
     /* lighting */
