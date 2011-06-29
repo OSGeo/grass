@@ -646,8 +646,6 @@ class LayerSelect(wx.ComboBox):
     def InsertLayers(self, vector = None, dsn = None):
         """!Insert layers for a vector into the layer combobox
 
-        @todo Implement native format
-        
         @param vector vector map name (native or connected via v.external)
         @param dsn    OGR data source name
         """
@@ -656,7 +654,10 @@ class LayerSelect(wx.ComboBox):
             layers.append('-1')
 
         if vector:
-            # TODO
+            # TODO: use Vect_get_field2() in C modules where possible
+            # currently the following is identical to
+            # layers = utils.GetVectorNumberOfLayers(self, vector)
+
             ret = gcmd.RunCommand('v.db.connect',
                                   read = True,
                                   quiet = True,
@@ -672,7 +673,7 @@ class LayerSelect(wx.ComboBox):
                     # which is not the case right now
                     ### layers.append(layername[len(layername) - 1])
                     layers.append(layername[0])
-            
+
         elif dsn:
             ret = gcmd.RunCommand('v.in.ogr',
                                   read = True,
@@ -682,13 +683,14 @@ class LayerSelect(wx.ComboBox):
             if ret:
                 layers = ret.splitlines()
     
-        if len(layers) == 0:
-            if self.default == None:
-                layers.append('')
-            else:
+        if self.default:
+            if len(layers) == 0:
+                layers.insert(0, str(self.default))
+            elif self.default not in layers:
                 layers.append(self.default)
-        self.SetItems(layers)
-        #self.SetSelection(0)
+
+        if len(layers) > 0:
+            self.SetItems(layers)
         
 class DriverSelect(wx.ComboBox):
     """!Creates combo box for selecting database driver.
