@@ -152,7 +152,8 @@ int main(int argc, char *argv[])
     Nviz_set_viewpoint_persp(atoi(params->persp->answer));
     if (params->focus->answer) {
     Nviz_set_focus(&data, atof(params->focus->answers[0]),
-                          atof(params->focus->answers[1]), 0);
+                          atof(params->focus->answers[1]), 
+                          atof(params->focus->answers[2]));
     }
 
     /* set lights */

@@ -528,7 +528,7 @@ void args_viewpoint(struct GParams *params)
     /* focus */
     params->focus = G_define_option();
     params->focus->key = "focus";
-    params->focus->key_desc = "x,y";
+    params->focus->key_desc = "x,y,z";
     params->focus->type = TYPE_DOUBLE;
     params->focus->required = NO;
     params->focus->multiple = NO;
@@ -918,7 +918,7 @@ void print_error(int nmaps, int nconsts, int nelevs,
 		 const char *elev_map, const char *elev_const,
 		 const char *map_name, const char *const_name)
 {
-    if ((nmaps > 0 && nelevs != nmaps) || (nconsts > 0 && nelevs != nconsts))
+    if ((nmaps + nconsts > 0) && (nelevs != nmaps + nconsts))
 	G_fatal_error(_("Inconsistent number of attributes (<%s/%s> %d: <%s> %d, <%s> %d"),
 		      elev_map, elev_const, nelevs, map_name, nmaps,
 		      const_name, nconsts);
