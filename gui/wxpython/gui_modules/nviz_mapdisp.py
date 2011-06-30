@@ -1289,6 +1289,153 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 return data['volume']['object']['id']
         return -1
     
+    def Nviz_cmd_command(self):
+        """!Generate command for nviz_cmd according to current state"""
+        cmd = 'nviz_cmd '
+        
+        rasters = []
+        vectors = []
+        for item in self.layers:
+            if self.tree.GetPyData(item)[0]['type'] == 'raster':
+                rasters.append(item)
+            elif self.tree.GetPyData(item)[0]['type'] == 'vector':
+                vectors.append(item)
+        if not rasters and not self.constants:
+            return _("At least one raster map required")
+        # elevation_map/elevation_value
+        if self.constants:
+            subcmd = "elevation_value="
+            for constant in self.constants:
+                subcmd += "%d," % constant['constant']['value']
+            subcmd = subcmd.strip(', ') + ' '
+            cmd += subcmd
+        if rasters:
+            subcmd = "elevation_map="
+            for item in rasters:
+                subcmd += "%s," % self.tree.GetPyData(item)[0]['maplayer'].GetName()
+            subcmd = subcmd.strip(', ') + ' '
+            cmd += subcmd
+            #
+            # draw mode
+            #
+            cmdMode = "mode="
+            cmdFine = "resolution_fine="
+            cmdCoarse = "resolution_coarse="
+            cmdShading = "shading="
+            cmdStyle = "style="
+            cmdWire = "wire_color="
+            # test -a flag
+            flag_a = "-a "
+            nvizDataFirst = self.tree.GetPyData(rasters[0])[0]['nviz']['surface']['draw']
+            for item in rasters:
+                nvizData = self.tree.GetPyData(item)[0]['nviz']['surface']['draw']
+                if nvizDataFirst != nvizData:
+                    flag_a = ""
+            cmd += flag_a
+            for item in rasters:
+                nvizData = self.tree.GetPyData(item)[0]['nviz']['surface']['draw']
+                
+                cmdMode += "%s," % nvizData['mode']['desc']['mode']
+                cmdFine += "%s," % nvizData['resolution']['fine']
+                cmdCoarse += "%s," % nvizData['resolution']['coarse']
+                cmdShading += "%s," % nvizData['mode']['desc']['shading']
+                cmdStyle += "%s," % nvizData['mode']['desc']['style']
+                cmdWire += "%s," % nvizData['wire-color']['value']
+            for item in self.constants:
+                cmdMode += "fine,"
+                cmdFine += "%s," % item['constant']['resolution']
+                cmdCoarse += "%s," % item['constant']['resolution']
+                cmdShading += "gouraud,"
+                cmdStyle += "surface,"
+                cmdWire += "0:0:0,"
+            mode = []
+            for subcmd in (cmdMode, cmdFine, cmdCoarse, cmdShading, cmdStyle, cmdWire):
+                if flag_a:
+                    mode.append(subcmd.split(',')[0] + ' ')
+                else:
+                    subcmd = subcmd.strip(', ') + ' '
+                    cmd += subcmd
+            if flag_a:# write only meaningful possibilities
+                cmd += mode[0]
+                if 'fine' in mode[0]:
+                    cmd += mode[1]
+                elif 'coarse' in mode[0]:
+                    cmd += mode[2]            
+                elif 'both' in mode[0]:
+                    cmd += mode[2]
+                    cmd += mode[1]
+                if 'flat' in mode[3]:
+                    cmd += mode[3]
+                if 'wire' in mode[4]:
+                    cmd += mode[4]
+                if 'coarse' in mode[0] or 'both' in mode[0] and 'wire' in mode[3]:
+                    cmd += mode[5]
+            #
+            # attributes
+            #
+            cmdColorMap = "color_map="
+            cmdColorVal = "color="
+            for item in rasters:
+                nvizData = self.tree.GetPyData(item)[0]['nviz']['surface']['attribute']
+                if 'color' not in nvizData:
+                    cmdColorMap += "%s," % self.tree.GetPyData(item)[0]['maplayer'].GetName()
+                else:
+                    if nvizData['color']['map']:
+                        cmdColorMap += "%s," % nvizData['color']['value']
+                    else:
+                        cmdColorVal += "%s," % nvizData['color']['value']
+                        #TODO
+                        # transparency, shine, mask
+            for item in self.constants:
+                cmdColorVal += "%s," % item['constant']['color']
+            if cmdColorMap.split("=")[1]:
+                cmd += cmdColorMap.strip(', ') + ' '
+            if cmdColorVal.split("=")[1]:
+                cmd += cmdColorVal.strip(', ') + ' '
+        # 
+        # viewpoint
+        subcmd  = "position=%.2f,%.2f " % (self.view['position']['x'], self.view['position']['y'])
+        subcmd += "height=%d " % (self.iview['height']['value'])
+        subcmd += "perspective=%d " % (self.view['persp']['value'])
+        subcmd += "twist=%d " % (self.view['twist']['value'])
+        subcmd += "zexag=%d " % (self.view['z-exag']['value'])
+        subcmd += "focus=%d,%d,%d " % (self.iview['focus']['x'],self.iview['focus']['y'],self.iview['focus']['z'])
+        cmd += subcmd
+        
+        # background
+        subcmd  = "bgcolor=%d:%d:%d " % (self.view['background']['color'])
+        if self.view['background']['color'] != (255, 255, 255):
+            cmd += subcmd
+        # light
+        subcmd  = "light_position=%.2f,%.2f,%.2f " % (self.light['position']['x'],
+                                                      self.light['position']['y'],
+                                                      self.light['position']['z']/100.)
+        subcmd += "light_brightness=%d " % (self.light['bright'])
+        subcmd += "light_ambient=%d " % (self.light['ambient'])
+        subcmd += "light_color=%d:%d:%d " % (self.light['color'])
+        cmd += subcmd
+        
+        # fringe
+        toolWindow = self.lmgr.nviz
+        direction = ''
+        for dir in ('nw', 'ne', 'sw', 'se'):
+            if toolWindow.FindWindowById(toolWindow.win['fringe'][dir]).IsChecked():
+                direction += "%s," % dir
+        if direction:
+            subcmd = "fringe=%s " % (direction.strip(','))
+            color = toolWindow.FindWindowById(toolWindow.win['fringe']['color']).GetValue()
+            subcmd += "fringe_color=%d:%d:%d " % (color[0], color[1], color[2])
+            subcmd += "fringe_elevation=%d " % (toolWindow.FindWindowById(toolWindow.win['fringe']['elev']).GetValue())
+            cmd += subcmd
+            
+        # output
+        subcmd = 'output=nviz_output '
+        subcmd += 'format=ppm '
+        subcmd += 'size=%d,%d ' % self.GetClientSizeTuple()
+        cmd += subcmd
+        
+        return cmd
+
     def SaveToFile(self, FileName, FileType, width, height):
         """!This draws the DC to a buffer that can be saved to a file.
         

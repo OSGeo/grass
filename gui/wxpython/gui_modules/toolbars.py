@@ -1310,6 +1310,8 @@ class NvizToolbar(AbstractToolbar):
                                      ("fringe", icons["fringe"],
                                       self.OnShowPage),
                                      (None, ),
+                                     ("nviz_cmd", icons['nviz_cmd'],
+                                      self.OnNvizCmd),
                                      ("settings", icons["settings"],
                                       self.OnSettings),
                                      ("help", Icons['misc']["help"],
@@ -1343,7 +1345,12 @@ class NvizToolbar(AbstractToolbar):
             self.lmgr.nviz.SetPage('fringe')
         
         self.lmgr.Raise()
-
+        
+    def OnNvizCmd(self, event):
+        """!Show nviz_cmd command"""
+        cmd = self.parent.MapWindow.Nviz_cmd_command()
+        self.lmgr.GetLogWindow().WriteLog(text = cmd, switchPage = True)
+        
     def OnHelp(self, event):
         """!Show 3D view mode help"""
         if not self.lmgr:

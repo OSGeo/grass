@@ -496,7 +496,7 @@ class Nviz(object):
         @return -1 surface not found
         @return -2 setting attributes failed
         """
-        return self.SetSurfaceAttr(id, ATT_MASK, true, value)
+        return self.SetSurfaceAttr(id, ATT_MASK, True, value)
     
     def SetSurfaceTransp(self, id, map, value):
         """!Set surface mask
