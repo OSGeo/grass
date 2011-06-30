@@ -15,6 +15,12 @@ subdirs:
 	    $(MAKE) -C $$subdir || echo $(CURDIR)/$$subdir >> $(ERRORLOG) ; \
 	done
 
+installsubdirs:
+	@list='$(SUBDIRS)'; \
+	for subdir in $$list; do \
+	    $(MAKE) -C $$subdir install; \	
+	done
+
 %-recursive:
 	@list='$(SUBDIRS)'; \
 	for subdir in $$list; do \
@@ -33,4 +39,3 @@ parsubdirs: $(SUBDIRS)
 
 $(SUBDIRS):
 	$(MAKE) -C $@ || echo $(CURDIR)/$@ >> $(ERRORLOG)
-
