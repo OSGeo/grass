@@ -276,10 +276,13 @@ def path_append(dir, var):
 
 def set_paths():
     addon_path = os.getenv('GRASS_ADDON_PATH')
-    if addon_path:
-	path_prepend(addon_path, 'PATH')
-        path_prepend(os.path.join(addon_path, 'scripts'), 'PATH')
-        path_prepend(os.path.join(addon_path, 'bin'), 'PATH')
+    if not addon_path:
+        addon_path = os.path.join(os.getenv('HOME'), '.grass7', 'addons')
+        message(_("GRASS_ADDON_PATH undefined, using '%s'") % addon_path)
+    
+    path_prepend(addon_path, 'PATH')
+    path_prepend(os.path.join(addon_path, 'scripts'), 'PATH')
+    path_prepend(os.path.join(addon_path, 'bin'), 'PATH')
     
     path_prepend(gfile('scripts'), 'PATH')
     path_prepend(gfile('bin'), 'PATH')
