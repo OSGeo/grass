@@ -779,6 +779,216 @@ areas. GV_LINE cannot form an area.
 
 \subsection vlibTopoExamples Topology examples
 
+<b>Points</b>
+
+\verbatim
+One point (nodes: 1, lines: 1, areas: 0, isles: 0)
+
+    + N1/L1
+\endverbatim
+
+%Node N1 (see \ref P_Node)
+
+\verbatim
+node = 1, n_lines = 1, xyz = 631286.707172, 225105.223577, 0.000000
+  line =   1, type = 1, angle = -9.000000
+\endverbatim
+
+Line L1 (see \ref P_Line)
+
+\verbatim
+line = 1, type = 1, offset = 18 n1 = 1, n2 = 1, left/area = 0, right = 0
+N,S,E,W,T,B: 225105.223577, 225105.223577, 631286.707172, 631286.707172, 0.000000, 0.000000
+\endverbatim
+
+<b>Lines</b>
+
+\verbatim
+One line (nodes: 2, lines: 1, areas: 0, isles: 0)
+
+
+   +----L1----+
+   N1         N2
+\endverbatim
+
+%Node N1 (see \ref P_Node)
+
+\verbatim
+node = 1, n_lines = 1, xyz = 634624.746450, 223557.302231, 0.000000
+  line =   1, type = 2, angle = -0.436257
+\endverbatim
+
+%Node N2 (see \ref P_Node)
+
+\verbatim
+node = 2, n_lines = 1, xyz = 638677.484787, 221667.849899, 0.000000
+  line =  -1, type = 2, angle = 2.705335
+\endverbatim
+
+Line L1 (see \ref P_Line)
+
+\verbatim
+line = 1, type = 2, offset = 18 n1 = 1, n2 = 2, left/area = 0, right = 0
+N,S,E,W,T,B: 223557.302231, 221667.849899, 638677.484787, 634624.746450, 0.000000, 0.000000
+\endverbatim
+
+<b>Areas without holes</b>
+
+\verbatim
+One line (nodes: 2, lines: 2, areas: 1, isles: 1)
+
+          +N1
+         /   \
+        /     \
+       /       \
+      /  +N2/L2 \
+     /           \
+    -------L1------
+\endverbatim
+
+%Node N1 (see \ref P_Node)
+
+\verbatim
+node = 1, n_lines = 2, xyz = 635720.081136, 225063.387424, 0.000000
+  line =   1, type = 4, angle = -2.245537
+  line =  -1, type = 4, angle = -0.842926
+\endverbatim
+
+%Node N2 (see \ref P_Node)
+
+\verbatim
+node = 2, n_lines = 1, xyz = 635779.454021, 223100.127232, 0.000000
+  line =   2, type = 8, angle = -9.000000
+\endverbatim
+
+Line L1 (see \ref P_Line)
+
+\verbatim
+line = 1, type = 4, offset = 18 n1 = 1, n2 = 1, left/area = 1, right = -1
+N,S,E,W,T,B: 225063.387424, 222188.133874, 638184.584178, 633419.878296, 0.000000, 0.000000
+\endverbatim
+
+Line L2 (see \ref P_Line)
+
+\verbatim
+line = 2, type = 8, offset = 87 n1 = 2, n2 = 2, left/area = 1, right = 0
+N,S,E,W,T,B: 223100.127232, 223100.127232, 635779.454021, 635779.454021, 0.000000, 0.000000
+\endverbatim
+
+Area A1 (see \ref P_Area)
+
+\verbatim
+area = 1, n_lines = 1, n_isles = 0 centroid = 2
+N,S,E,W,T,B: 225063.387424, 222188.133874, 638184.584178, 633419.878296, 0.000000, 0.000000
+  line =  -1
+\endverbatim
+
+Isle I1 (see \ref P_Isle)
+
+\verbatim
+isle = 1, n_lines = 1 area = 0
+N,S,E,W,T,B: 225063.387424, 222188.133874, 638184.584178, 633419.878296, 0.000000, 0.000000
+  line =   1
+\endverbatim
+
+<b>Areas with holes</b>
+
+\verbatim
+One line (nodes: 3, lines: 3, areas: 2, isles: 2)
+
+             +N1
+            / \
+           /   \
+          /     \
+         /       \
+        /  +N2/L2 \
+       /           \
+      /   +N3       \
+     /   /\          \
+    /   /  \          \
+   /   /    \          \
+  /    ---L3--          \
+ /                       \
+------------L1-------------
+\endverbatim
+
+%Node N1 (see \ref P_Node)
+
+\verbatim
+node = 1, n_lines = 2, xyz = 635720.081136, 225063.387424, 0.000000
+  line =   1, type = 4, angle = -2.245537
+  line =  -1, type = 4, angle = -0.842926
+\endverbatim
+
+%Node N2 (see \ref P_Node)
+
+\verbatim
+node = 2, n_lines = 1, xyz = 635779.454021, 223100.127232, 0.000000
+  line =   2, type = 8, angle = -9.000000
+\endverbatim
+
+%Node N3 (see \ref P_Node)
+
+\verbatim
+node = 3, n_lines = 2, xyz = 636788.032454, 223173.935091, 0.000000
+  line =   3, type = 4, angle = -2.245537
+  line =  -3, type = 4, angle = -0.866302
+\endverbatim
+
+Line L1 (see \ref P_Line)
+
+\verbatim
+line = 1, type = 4, offset = 18 n1 = 1, n2 = 1, left/area = 1, right = -1
+N,S,E,W,T,B: 225063.387424, 222188.133874, 638184.584178, 633419.878296, 0.000000, 0.000000
+\endverbatim
+
+Line L2 (see \ref P_Line)
+
+\verbatim
+line = 2, type = 8, offset = 87 n1 = 2, n2 = 2, left/area = 1, right = 0
+N,S,E,W,T,B: 223100.127232, 223100.127232, 635779.454021, 635779.454021, 0.000000, 0.000000
+\endverbatim
+
+Line L3 (see \ref P_Line)
+
+\verbatim
+line = 3, type = 4, offset = 197 n1 = 3, n2 = 3, left/area = 2, right = -2
+N,S,E,W,T,B: 223173.935091, 222626.267748, 637253.549696, 636349.898580, 0.000000, 0.000000
+\endverbatim
+
+Area A1 (see \ref P_Area)
+
+\verbatim
+area = 1, n_lines = 1, n_isles = 1 centroid = 2
+N,S,E,W,T,B: 225063.387424, 222188.133874, 638184.584178, 633419.878296, 0.000000, 0.000000
+  line =  -1
+  isle =   2
+\endverbatim
+
+Area A2 (see \ref P_Area)
+
+\verbatim
+area = 2, n_lines = 1, n_isles = 0 centroid = 0
+N,S,E,W,T,B: 223173.935091, 222626.267748, 637253.549696, 636349.898580, 0.000000, 0.000000
+  line =  -3
+\endverbatim
+
+Isle I1 (see \ref P_Isle)
+
+\verbatim
+isle = 1, n_lines = 1 area = 0
+N,S,E,W,T,B: 225063.387424, 222188.133874, 638184.584178, 633419.878296, 0.000000, 0.000000
+  line =   1
+\endverbatim
+
+Isle I2 (see \ref P_Isle)
+
+\verbatim
+isle = 2, n_lines = 1 area = 1
+N,S,E,W,T,B: 223173.935091, 222626.267748, 637253.549696, 636349.898580, 0.000000, 0.000000
+  line =   3
+\endverbatim
+
 <b>Example 1</b>
 
 A polygon may be formed by many boundaries (more primitives but connected).
