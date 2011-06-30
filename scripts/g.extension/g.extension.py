@@ -287,7 +287,7 @@ def cleanup():
     if remove_tmpdir:
         grass.try_rmdir(tmpdir)
     else:
-        grass.info(_("Path to the source code: '%s'") % tmpdir)
+        grass.info(_("Path to the source code: '%s'") % os.path.join(tmpdir, options['extension']))
                         
 def install_extension():
     gisbase = os.getenv('GISBASE')
@@ -319,29 +319,45 @@ def install_extension():
     if grass.call(['svn', 'checkout',
                    url], stdout = outdev) != 0:
         grass.fatal(_("GRASS Addons '%s' not found in repository") % options['extension'])
-
+    
+    dirs = { 'bin' : os.path.join(tmpdir, options['extension'], 'bin'),
+             'docs' : os.path.join(tmpdir, options['extension'], 'docs'),
+             'html' : os.path.join(tmpdir, options['extension'], 'docs', 'html'),
+             'man' : os.path.join(tmpdir, options['extension'], 'man'),
+             'man1' : os.path.join(tmpdir, options['extension'], 'man', 'man1'),
+             'scripts' : os.path.join(tmpdir, options['extension'], 'scripts'),
+             'etc' : os.path.join(tmpdir, options['extension'], 'etc'),
+             }
+    
+    makeCmd = ['make',
+               'MODULE_TOPDIR=%s' % gisbase.replace(' ', '\ '),
+               'BIN=%s' % dirs['bin'],
+               'HTMLDIR=%s' % dirs['html'],
+               'MANDIR=%s' % dirs['man1'],
+               'SCRIPTDIR=%s' % dirs['scripts'],
+               'ETC=%s' % dirs['etc']
+               ]
+    
+    installCmd = ['make',
+                  'MODULE_TOPDIR=%s' % gisbase,
+                  'ARCH_DISTDIR=%s' % os.path.join(tmpdir, options['extension']),
+                  'INST_DIR=%s' % options['prefix'],
+                  'install'
+                  ]
+    
     if flags['d']:
+        sys.stderr.write(' '.join(makeCmd) + '\n')
+        sys.stderr.write(' '.join(installCmd) + '\n')
         return
     
     os.chdir(os.path.join(tmpdir, options['extension']))
-
+    
     grass.message(_("Compiling '%s'...") % options['extension'])    
     if options['extension'] not in gui_list:
-        bin_dir  = os.path.join(tmpdir, options['extension'], 'bin')
-        docs_dir = os.path.join(tmpdir, options['extension'], 'docs')
-        html_dir = os.path.join(docs_dir, 'html')
-        man_dir  = os.path.join(tmpdir, options['extension'], 'man')
-        man1_dir = os.path.join(man_dir, 'man1')
-        script_dir = os.path.join(tmpdir, options['extension'], 'scripts')
-        for d in (bin_dir, docs_dir, html_dir, man_dir, man1_dir, script_dir):
+        for d in dirs.itervalues():
             os.mkdir(d)
         
-        ret = grass.call(['make',
-                          'MODULE_TOPDIR=%s' % gisbase.replace(' ', '\ '),
-                          'BIN=%s' % bin_dir,
-                          'HTMLDIR=%s' % html_dir,
-                          'MANDIR=%s' % man1_dir,
-                          'SCRIPTDIR=%s' % script_dir],
+        ret = grass.call(makeCmd,
                          stdout = outdev)
     else:
         ret = grass.call(['make',
@@ -356,11 +372,7 @@ def install_extension():
     
     grass.message(_("Installing '%s'...") % options['extension'])
     
-    ret = grass.call(['make',
-                      'MODULE_TOPDIR=%s' % gisbase,
-                      'ARCH_DISTDIR=%s' % os.path.join(tmpdir, options['extension']),
-                      'INST_DIR=%s' % options['prefix'],
-                      'install'],
+    ret = grass.call(installCmd,
                      stdout = outdev)
     
     if ret != 0:
