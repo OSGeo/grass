@@ -300,7 +300,7 @@ int Vect_topo_dump(const struct Map_info *Map, FILE *out)
 	    box.E, box.W, box.T, box.B);
 
     /* nodes */
-    fprintf(out, "Nodes (%d nodes, alive + dead ):\n", plus->n_nodes);
+    fprintf(out, "Nodes (%d nodes, alive + dead):\n", plus->n_nodes);
     for (i = 1; i <= plus->n_nodes; i++) {
 	if (plus->Node[i] == NULL) {
 	    continue;
@@ -317,7 +317,7 @@ int Vect_topo_dump(const struct Map_info *Map, FILE *out)
     }
 
     /* lines */
-    fprintf(out, "Lines (%d lines, alive + dead ):\n", plus->n_lines);
+    fprintf(out, "Lines (%d lines, alive + dead):\n", plus->n_lines);
     for (i = 1; i <= plus->n_lines; i++) {
 	if (plus->Line[i] == NULL) {
 	    continue;
@@ -332,7 +332,7 @@ int Vect_topo_dump(const struct Map_info *Map, FILE *out)
     }
 
     /* areas */
-    fprintf(out, "Areas (%d areas, alive + dead ):\n", plus->n_areas);
+    fprintf(out, "Areas (%d areas, alive + dead):\n", plus->n_areas);
     for (i = 1; i <= plus->n_areas; i++) {
 	if (plus->Area[i] == NULL) {
 	    continue;
@@ -357,7 +357,7 @@ int Vect_topo_dump(const struct Map_info *Map, FILE *out)
     }
 
     /* isles */
-    fprintf(out, "Islands (%d islands, alive + dead ):\n", plus->n_isles);
+    fprintf(out, "Islands (%d islands, alive + dead):\n", plus->n_isles);
     for (i = 1; i <= plus->n_isles; i++) {
 	if (plus->Isle[i] == NULL) {
 	    continue;
