@@ -447,12 +447,9 @@ def parser():
     lines = s.splitlines()
     
     if not lines or lines[0].rstrip('\r\n') != "@ARGS_PARSED@":
-        if p.returncode == 0:
-            sys.exit(0)
-        else:
-            sys.stdout.write(s)
-            sys.exit(1)
-
+        sys.stdout.write(s)
+        sys.exit(p.returncode)
+    
     return _parse_opts(lines[1:])
 
 # interface to g.tempfile
