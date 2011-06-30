@@ -18,7 +18,7 @@ subdirs:
 installsubdirs:
 	@list='$(SUBDIRS)'; \
 	for subdir in $$list; do \
-	    $(MAKE) -C $$subdir install; \	
+	    $(MAKE) -C $$subdir install ; \
 	done
 
 %-recursive:
