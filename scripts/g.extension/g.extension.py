@@ -294,7 +294,7 @@ def install_extension():
     if not gisbase:
         grass.fatal(_('$GISBASE not defined'))
     
-    if grass.find_program(options['extension']):
+    if grass.find_program(options['extension'], ['--help']):
         grass.warning(_("Extension '%s' already installed. Will be updated...") % options['extension'])
     
     gui_list = list_wxgui_extensions(print_module = False)
