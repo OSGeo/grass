@@ -447,8 +447,11 @@ def parser():
     lines = s.splitlines()
     
     if not lines or lines[0].rstrip('\r\n') != "@ARGS_PARSED@":
-	sys.stdout.write(s)
-	sys.exit(1)
+        if p.returncode == 0:
+            sys.exit(0)
+        else:
+            sys.stdout.write(s)
+            sys.exit(1)
 
     return _parse_opts(lines[1:])
 
