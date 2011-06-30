@@ -273,7 +273,9 @@ struct recycle
 };
 
 /*!
-  \brief Vector map header
+  \brief Vector map header data
+
+  Holds header data of vector map (see \ref vlibMap_info)
 */
 struct dig_head
 {
@@ -565,7 +567,9 @@ struct Cat_index
 };
 
 /*!
-  \brief Plus header info
+  \brief Basic topology-related info
+
+  Holds basic topology-related information about vector map
 */
 struct Plus_head
 {
@@ -1026,6 +1030,9 @@ struct Plus_head
 
 /*! \brief
   Vector map info
+
+  Maintains all information about an individual open vector map. The
+structure must be passed to the mosy vector library routines.
 */
 struct Map_info
 {
