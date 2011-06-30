@@ -278,6 +278,7 @@ def set_paths():
     addon_path = os.getenv('GRASS_ADDON_PATH')
     if not addon_path:
         addon_path = os.path.join(os.getenv('HOME'), '.grass7', 'addons')
+        os.environ['GRASS_ADDON_PATH'] = addon_path
         message(_("GRASS_ADDON_PATH undefined, using '%s'") % addon_path)
     
     path_prepend(addon_path, 'PATH')
