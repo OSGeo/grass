@@ -355,7 +355,8 @@ def install_extension():
     grass.message(_("Compiling '%s'...") % options['extension'])    
     if options['extension'] not in gui_list:
         for d in dirs.itervalues():
-            os.mkdir(d)
+            if not os.path.exists(d):
+                os.makedirs(d)
         
         ret = grass.call(makeCmd,
                          stdout = outdev)
