@@ -764,15 +764,13 @@ class Settings:
         if settings is None:
             settings = self.userSettings
         
-        home = os.path.expanduser("~") # MS Windows fix ?
-        
         dirPath = utils.GetSettingsPath()
-        if os.path.exists(dirPath) == False:
+        if not os.path.exists(dirPath):
             try:
                 os.mkdir(dirPath)
             except:
-                wx.MessageBox(_('Cannot create directory for settings [home]/.grass7'),
-                              _('Error saving preferences'))
+                gcmd.GError(_('Unable to create settings directory'))
+                return
         
         try:
             file = open(self.filePath, "w")
