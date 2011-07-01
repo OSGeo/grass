@@ -17,6 +17,7 @@ Classes:
  - LMDataToolbar
  - LMToolsToolbar
  - LMMiscToolbar
+ - LMVectorToolbar
  - PsMapToolbar
 
 (C) 2007-2011 by the GRASS Development Team
@@ -1519,14 +1520,6 @@ class LMDataToolbar(AbstractToolbar):
                                       self.parent.OnAddOverlay),
                                      ('delcmd',  icons["delCmd"],
                                       self.parent.OnDeleteLayer),
-                                     (None, ),
-                                     ('importMap', icons["import"],
-                                      self.parent.OnImportMenu),
-                                     (None, ),
-                                     ('vdigit', icons["vdigit"],
-                                      self.parent.OnVDigit),
-                                     ('attribute', icons["attrTable"],
-                                      self.parent.OnShowAttributeTable),
                                      ))
 
 class LMToolsToolbar(AbstractToolbar):
@@ -1544,7 +1537,10 @@ class LMToolsToolbar(AbstractToolbar):
         """!Toolbar data
         """
         icons = Icons['layerManager']
-        return self._getToolbarData((('mapCalc', icons["mapcalc"],
+        return self._getToolbarData((('importMap', icons["import"],
+                                      self.parent.OnImportMenu),
+                                     (None, ),
+                                     ('mapCalc', icons["mapcalc"],
                                       self.parent.OnMapCalculator),
                                      ('georect', Icons["georectify"]["georectify"],
                                       self.parent.OnGCPManager),
@@ -1573,6 +1569,27 @@ class LMMiscToolbar(AbstractToolbar):
                                       self.parent.OnPreferences),
                                      ('help', Icons["misc"]["help"],
                                       self.parent.OnHelp),
+                                     ))
+
+class LMVectorToolbar(AbstractToolbar):
+    """!Layer Manager `vector` toolbar
+    """
+    def __init__(self, parent):
+        AbstractToolbar.__init__(self, parent)
+        
+        self.InitToolbar(self._toolbarData())
+        
+        # realize the toolbar
+        self.Realize()
+
+    def _toolbarData(self):
+        """!Toolbar data
+        """
+        icons = Icons['layerManager']
+        return self._getToolbarData((('vdigit', icons["vdigit"],
+                                      self.parent.OnVDigit),
+                                     ('attribute', icons["attrTable"],
+                                      self.parent.OnShowAttributeTable),
                                      ))
     
 class PsMapToolbar(AbstractToolbar):
