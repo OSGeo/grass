@@ -11,7 +11,7 @@ Classes:
  - GListBox
  - StartUp
 
-(C) 2006-2010 by the GRASS Development Team
+(C) 2006-2011 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -42,7 +42,7 @@ import wx.lib.scrolledpanel as scrolled
 
 from gui_modules import goutput
 from gui_modules.ghelp import HelpFrame
-from gui_modules.gcmd  import GMessage
+from gui_modules.gcmd  import GMessage, GError
 
 sys.stderr = codecs.getwriter('utf8')(sys.stderr)
 
@@ -588,10 +588,10 @@ class GRASSStartup(wx.Frame):
         self.listOfMapsets = utils.GetListOfMapsets(self.gisdbase, location)
         
         self.lbmapsets.Clear()
-
+        
         # disable mapset with denied permission
         locationName = os.path.basename(location)
-
+        
         try:
             ret = gcmd.RunCommand('g.mapset',
                                   read = True,
@@ -600,7 +600,7 @@ class GRASSStartup(wx.Frame):
                                   gisdbase = self.gisdbase)
             
             if ret == '':
-                raise gcmd.GError(_("No mapsets available in location <%s>") % locationName)
+                GError(_("No mapsets available in location <%s>") % locationName)
             
             for line in ret.splitlines():
                 self.listOfMapsetsSelectable += line.split(' ')
@@ -733,15 +733,24 @@ class GRASSStartup(wx.Frame):
 
     def OnStart(self, event):
         """'Start GRASS' button clicked"""
+        dbase    = self.tgisdbase.GetValue()
+        location = self.listOfLocations[self.lblocations.GetSelection()]
+        mapset   = self.listOfMapsets[self.lbmapsets.GetSelection()]
+        
+        lockfile = os.path.join(dbase, location, mapset, '.gislock')
+        if os.path.isfile(lockfile):
+            GError(_("GRASS is already running in selected mapset <%(mapset)s>\n"
+                     "(File %(lock)s found).\n\n"
+                     "Concurrent use not allowed.") % { 'mapset' : mapset, 'lock' : lockfile },
+                   parent = self)
+            return
+        
         gcmd.RunCommand("g.gisenv",
-                        set = "GISDBASE=%s" % \
-                            self.tgisdbase.GetValue())
+                        set = "GISDBASE=%s" % dbase)
         gcmd.RunCommand("g.gisenv",
-                        set = "LOCATION_NAME=%s" % \
-                            self.listOfLocations[self.lblocations.GetSelection()])
+                        set = "LOCATION_NAME=%s" % location)
         gcmd.RunCommand("g.gisenv",
-                        set = "MAPSET=%s" % \
-                            self.listOfMapsets[self.lbmapsets.GetSelection()])
+                        set = "MAPSET=%s" % mapset)
         
         self.Destroy()
         sys.exit(0)
