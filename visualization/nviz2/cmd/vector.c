@@ -87,9 +87,9 @@ int load_vectors(const struct Option *elev_map,
 			      0.0, data);
 
 	/* set position */
-	x = atof(position->answers[i]);
-	y = atof(position->answers[i+1]);
-	z = atof(position->answers[i+2]);
+	x = atof(position->answers[i*3+0]);
+	y = atof(position->answers[i*3+1]);
+	z = atof(position->answers[i*3+2]);
 
 	if (map_obj_type == MAP_OBJ_VECT)
 	    GV_set_trans(id, x, y, z);
@@ -208,12 +208,12 @@ int check_thematic(const struct GParams *params, int vlines)
 	marker = params->vpoint_marker_column;
     }
     for (i = 0; map->answers[i]; i++) {
-	if (1 > Vect_open_old(&Map, map->answer, ""))
-	    G_fatal_error(_("Unable to open vector map <%s>"), map->answer);
-	Fi = Vect_get_field2(&Map, layer->answer);
+	if (1 > Vect_open_old(&Map, map->answers[i], ""))
+	    G_fatal_error(_("Unable to open vector map <%s>"), map->answers[i]);
+	Fi = Vect_get_field2(&Map, layer->answers[i]);
 	if (!Fi)
 	    G_fatal_error(_("Database connection not defined for layer %s"),
-			  layer->answer);
+			  layer->answers[i]);
 
 	driver = db_start_driver_open_database(Fi->driver, Fi->database);
 	if (!driver)
