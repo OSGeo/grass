@@ -263,6 +263,8 @@ void RTreeDestroyNode(struct Node *n, int nodes)
 
     /* Free this node */
     RTreeFreeNode(n);
+    
+    return;
 }
 
 /****************************************************************
