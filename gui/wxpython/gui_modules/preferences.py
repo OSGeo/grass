@@ -61,7 +61,7 @@ class Settings:
     """!Generic class where to store settings"""
     def __init__(self):
         # settings file
-        self.filePath = os.path.join(os.path.expanduser("~"), '.grass7', 'wx')
+        self.filePath = os.path.join(utils.GetSettingsPath(), 'wx')
         
         # key/value separator
         self.sep = ';'
@@ -766,7 +766,7 @@ class Settings:
         
         home = os.path.expanduser("~") # MS Windows fix ?
         
-        dirPath = os.path.join(home, '.grass7')
+        dirPath = utils.GetSettingsPath()
         if os.path.exists(dirPath) == False:
             try:
                 os.mkdir(dirPath)

@@ -1075,9 +1075,9 @@ class GdalSelect(wx.Panel):
             self.sourceMap['pro'] = idx
         
         if self.ogr:
-            self.settingsFile = os.path.join(os.path.expanduser("~"), '.grass7', 'wxOGR')
+            self.settingsFile = os.path.join(utils.GetSettingsPath(), 'wxOGR')
         else:
-            self.settingsFile = os.path.join(os.path.expanduser("~"), '.grass7', 'wxGDAL')
+            self.settingsFile = os.path.join(utils.GetSettingsPath(), 'wxGDAL')
         
         self._settings = self._loadSettings()
         self.settingsChoice = wx.Choice(parent = self, id = wx.ID_ANY)
