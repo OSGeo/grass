@@ -447,7 +447,7 @@ int dig_spidx_del_area(struct Plus_head *Plus, int area)
 	G_fatal_error(_("Attempt to delete sidx for dead area"));
     }
 
-    Line = Plus->Line[Area->lines[0]];
+    Line = Plus->Line[abs(Area->lines[0])];
     topo = (struct P_topo_b *)Line->topo;
     Node = Plus->Node[topo->N1];
 
@@ -489,7 +489,7 @@ int dig_spidx_del_isle(struct Plus_head *Plus, int isle)
 
     Isle = Plus->Isle[isle];
 
-    Line = Plus->Line[Isle->lines[0]];
+    Line = Plus->Line[abs(Isle->lines[0])];
     topo = (struct P_topo_b *)Line->topo;
     Node = Plus->Node[topo->N1];
 
