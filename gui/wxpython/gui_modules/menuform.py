@@ -1978,7 +1978,7 @@ class GUI:
         # parse the interface decription
         if not self.grass_task:
             tree = etree.fromstring(gtask.get_interface_description(cmd))
-            self.grass_task = gtask.processTask(tree).GetTask()
+            self.grass_task = gtask.processTask(tree).get_task()
             
             for p in self.grass_task.params:
                 if p.get('name', '') in ('input', 'map'):
