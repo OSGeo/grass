@@ -281,7 +281,7 @@ struct recycle
 struct dig_head
 {
     /*!
-      \brief Orgranization name
+      \brief Organization name
     */
     char *organization;
     /*!
@@ -393,7 +393,7 @@ struct Coor_info
   \brief Non-native format info (OGR)
 
   \todo Structure size should not change depending on compilation I
-think, do it better
+        think, do it better
 */
 struct Format_info_ogr
 {
@@ -467,7 +467,7 @@ struct Format_info_ogr
       NULL if no feature is in cache
     */
 #ifdef HAVE_OGR
-    OGRFeatureH feature_cache;	
+    OGRFeatureH feature_cache;
 #else
     void *feature_cache;
 #endif
@@ -546,7 +546,7 @@ struct Cat_index
     /*!
       \brief Number of unique cats (not updated)
     */
-    int n_ucats;		
+    int n_ucats;
     /*!
       \brief Number of types in type
     */
@@ -566,7 +566,7 @@ struct Cat_index
     /*!
       \brief Offset of the beginning of this index in cidx file
     */
-    off_t offset;		
+    off_t offset;
 };
 
 /*!
@@ -595,7 +595,7 @@ struct Plus_head
     /*!
       \brief Version codes for spatial index (major)
     */
-    int spidx_Version_Major;	 
+    int spidx_Version_Major;
     /*!
       \brief Version codes for spatial index (minor)
     */
@@ -603,7 +603,7 @@ struct Plus_head
     /*!
       \brief Earliest version that can use this data format (major)
     */
-    int spidx_Back_Major;	 
+    int spidx_Back_Major;
      /*!
        \brief Earliest version that can use this data format (minor)
     */
@@ -612,7 +612,7 @@ struct Plus_head
     /*!
       \brief Version codes for category index (major)
     */
-    int cidx_Version_Major;	 
+    int cidx_Version_Major;
     /*!
       \brief Version codes for category index (minor)
     */
@@ -620,7 +620,7 @@ struct Plus_head
     /*!
       \brief Earliest version that can use this data format (major)
     */
-    int cidx_Back_Major;	 
+    int cidx_Back_Major;
     /*!
       \brief Earliest version that can use this data format (minor)
     */
@@ -654,28 +654,28 @@ struct Plus_head
     /*!
       \brief Topo header size 
     */
-    long head_size;		 
+    long head_size;
     /*!
       \brief Spatial index header size
     */
-    long spidx_head_size;	 
+    long spidx_head_size;
     /*!
       \brief Category index header size
     */
-    long cidx_head_size;	 
+    long cidx_head_size;
 
     /*!
       \brief Release memory occupied by support structures
       (topo, spatial, category)
     */
-    int release_support;	 
+    int release_support;
 
     /*** portability info */
 
     /*!
       \brief Portability information
     */
-    struct Port_info port;	 
+    struct Port_info port;
     /*!
       \brief Portability information for spatial index
     */
@@ -683,7 +683,7 @@ struct Plus_head
     /*!
       \brief Portability information for category index
     */
-    struct Port_info cidx_port;	 
+    struct Port_info cidx_port;
     /*!
       \brief Access mode
       
@@ -691,7 +691,7 @@ struct Plus_head
       - GV_MODE_WRITE
       - GV_MODE_RW
     */
-    int mode;			 
+    int mode;
 
     /*!
       \brief Highest level of topology currently available
@@ -703,21 +703,21 @@ struct Plus_head
       - GV_BUILD_CENTROIDS
       - GV_BUILD_ALL
     */
-    int built;	
+    int built;
     /*!
       \brief Bounding box of features
     */
-    struct bound_box box;	 
+    struct bound_box box;
 
     /*** topology ***/
    /*!
      \brief Array of nodes
    */
-    struct P_node **Node;	 
+    struct P_node **Node;
    /*!
      \brief Array of vector geometries
    */
-    struct P_line **Line;	 
+    struct P_line **Line;
    /*!
      \brief Array of areas
    */
@@ -730,40 +730,37 @@ struct Plus_head
     /* add here P_FACE, P_VOLUME, P_HOLE */
 
     /*!
-      \brief Current number of vector geometries
-    */
-    /*!
       \brief Current number of points
     */
-    plus_t n_plines;	
+    plus_t n_plines;
     /*!
       \brief Current number of lines
     */
-    plus_t n_llines;	
+    plus_t n_llines;
     /*!
       \brief Current number of boundaries
     */
-    plus_t n_blines;	
+    plus_t n_blines;
     /*!
       \brief Current number of centroids
     */
-    plus_t n_clines;	
+    plus_t n_clines;
     /*!
       \brief Current number of faces
     */
-    plus_t n_flines;	
+    plus_t n_flines;
     /*!
       \brief Current number of kernels
     */
-    plus_t n_klines;	
+    plus_t n_klines;
     /*!
       \brief Current number of volume faces
     */
-    plus_t n_vfaces;	
+    plus_t n_vfaces;
     /*!
       \brief Current number of hole faces
     */
-    plus_t n_hfaces;	
+    plus_t n_hfaces;
     
     /*!
       \brief Current number of topological features derived from vector
@@ -780,34 +777,34 @@ struct Plus_head
     /*!
       \brief Current number of lines
     */
-    plus_t n_lines;	
+    plus_t n_lines;
     /*!
       \brief Current number of areas
     */
-    plus_t n_areas;	
+    plus_t n_areas;
     /*!
       \brief Current number of isles
     */
-    plus_t n_isles;	
+    plus_t n_isles;
     /*!
       \brief Current number of faces
     */
-    plus_t n_faces;	
+    plus_t n_faces;
     /*!
       \brief Current number of volumes
     */
-    plus_t n_volumes;	
+    plus_t n_volumes;
     /*!
       \brief Current number of holes
     */
-    plus_t n_holes;	
+    plus_t n_holes;
 
    /*!
      \brief Number of allocated nodes
 
      i.e. array size - 1
    */
-    plus_t alloc_nodes;		 
+    plus_t alloc_nodes;
    /*!
      \brief Number of allocated edges
 
@@ -819,25 +816,25 @@ struct Plus_head
 
      i.e. array size - 1
    */
-    plus_t alloc_lines;	
+    plus_t alloc_lines;
    /*!
      \brief Number of allocated areas
 
      i.e. array size - 1
    */
-    plus_t alloc_areas;	
+    plus_t alloc_areas;
    /*!
      \brief Number of allocated isles
 
      i.e. array size - 1
    */
-    plus_t alloc_isles;	
+    plus_t alloc_isles;
    /*!
      \brief Number of allocated faces
 
      i.e. array size - 1
    */
-    plus_t alloc_faces;	
+    plus_t alloc_faces;
    /*!
      \brief Number of allocated volumes
 
@@ -849,12 +846,12 @@ struct Plus_head
 
      i.e. array size - 1
    */
-    plus_t alloc_holes;	
+    plus_t alloc_holes;
 
     /*!
       \brief Offset of array of nodes in topo file
     */
-    off_t Node_offset;		 
+    off_t Node_offset;
     /*!
       \brief Offset of array of edges in topo file
     */
@@ -886,7 +883,7 @@ struct Plus_head
 
       Set to 1 if spatial index is available
     */
-    int Spidx_built;		 
+    int Spidx_built;
     /*!
       \brief Build new spatial index
 
@@ -908,7 +905,7 @@ struct Plus_head
     /*!
       \brief Offset of nodes in sidx file
     */
-    off_t Node_spidx_offset;	 
+    off_t Node_spidx_offset;
     /*!
       \brief Offset of lines in sidx file
     */
@@ -978,18 +975,18 @@ struct Plus_head
     /*!
       \brief Allocated space for category indexes
     */
-    int a_cidx;			  
+    int a_cidx;
     /*!
       \brief Array of category indexes
     */
-    struct Cat_index *cidx;	  
+    struct Cat_index *cidx;
     /*!
       \brief Category index to be updated
 
       Set to 1 when cidx is created
       and reset to 0 whenever any line is changed
     */
-    int cidx_up_to_date;	  
+    int cidx_up_to_date;
 
     /*!
       \brief Size of coor file
@@ -998,13 +995,13 @@ struct Plus_head
     /*!
       \brief Time of last coor modification
     */
-    long coor_mtime;		  
+    long coor_mtime;
 
     /*** level 2 ***/
     /*!
       \brief Used internaly in diglib to know if list is maintained
     */
-    int do_uplist;		  
+    int do_uplist;
 
     /*!
       \brief Array of updated lines
@@ -1022,7 +1019,7 @@ struct Plus_head
     /*!
       \brief Number of updated lines (level 2)
     */
-    int n_uplines;		
+    int n_uplines;
     /*!
       \brief Array of updated nodes (level 2)
     */
@@ -1053,41 +1050,41 @@ struct Map_info
       - GV_FORMAT_OGR
       - GV_FORMAT_DIRECT
     */
-    int format;		
+    int format;
     /*!
       \brief Temporary file flag, not yet used
     */
-    int temporary;	
+    int temporary;
 
     /*!
       \brief DB links
     */
-    struct dblinks *dblnk;	
+    struct dblinks *dblnk;
 
     /*!
       \brief Topology info
     */
-    struct Plus_head plus;	
+    struct Plus_head plus;
 
     /* graph-related section */
     /*!
       \brief Graph-related section - line type used to build the graph
      */
-    int graph_line_type;	
+    int graph_line_type;
     /*!
       \brief Graph-related section - graph structure
     */
-    dglGraph_s graph;		
+    dglGraph_s graph;
     /*!
       \brief Graph-related section - shortest path cache
     */
-    dglSPCache_s spCache;	
+    dglSPCache_s spCache;
     /*!
       \brief Graph-related section - forward costs used for graph
 
       dglGetEdge() is not supported for _DGL_V1)
     */
-    double *edge_fcosts;	
+    double *edge_fcosts;
     /*!
       \brief Graph-related section - backward costs used for graph
     */
@@ -1095,11 +1092,11 @@ struct Map_info
     /*!
       \brief Graph-related section - node costs used for graph
     */
-    double *node_costs;		
+    double *node_costs;
     /*!
       \brief Graph-related section - edge and node costs multiplicator
     */
-    int cost_multip;		
+    int cost_multip;
 
     /*!
       \brief Open indicator
@@ -1109,7 +1106,7 @@ struct Map_info
       anything else implies that structure has
       never been initialized
     */
-    int open;			
+    int open;
     /* Open mode
        - read (GV_MODE_READ),
        - write (GV_MODE_WRITE),
@@ -1128,7 +1125,7 @@ struct Map_info
 
       Non-zero code to open only header of vector map
     */
-    int head_only;		
+    int head_only;
     /*!
       \brief Support files were updated
 
@@ -1138,7 +1135,7 @@ struct Map_info
     /*!
       \brief Sequential read (level 1)
     */
-    plus_t next_line;	
+    plus_t next_line;
 
     /*!
       \brief Map name (for 4.0)
@@ -1190,7 +1187,7 @@ struct Map_info
     /*!
       \brief GV file pointer (native format only)
     */
-    struct gvfile dig_fp;	
+    struct gvfile dig_fp;
     /*!
       \brief Coor file header info (native format only)
     */
@@ -1214,7 +1211,7 @@ struct Map_info
       
       \todo To be removed?
     */
-    struct site_att *site_att;	
+    struct site_att *site_att;
     /*!
       \brief Number of attributes in site_att array
 
@@ -1249,7 +1246,7 @@ struct P_node
     */
     double y;
     /*!
-      \brief Z coordinate (used only for 3D data
+      \brief Z coordinate (used only for 3D data)
     */
     double z;
     /*!
@@ -1423,7 +1420,7 @@ struct P_area
     /*!
       \brief 1st generation interior islands
     */
-    plus_t *isles;		
+    plus_t *isles;
 };
 
 /*!
@@ -1490,19 +1487,19 @@ struct line_cats
     /*!
       \brief Array of layers (fields)
     */
-    int *field;	
+    int *field;
     /*!
       \brief Array of categories
     */
-    int *cat;			
+    int *cat;
     /*!
       \brief Number of categories attached to element
     */
-    int n_cats;			
+    int n_cats;
     /*!
       \brief Allocated space for categories
     */
-    int alloc_cats;		
+    int alloc_cats;
 };
 
 /*! \brief Category list */
@@ -1511,23 +1508,23 @@ struct cat_list
     /*!
       \brief Category layer (field)
     */
-    int field;	
+    int field;
     /*!
       \brief Array of minimum values
     */
-    int *min;			
+    int *min;
     /*!
       \brief Array of maximum values
     */
-    int *max;			
+    int *max;
     /*!
       \brief Number of ranges
     */
-    int n_ranges;		
+    int n_ranges;
     /*!
       \brief Allocated space for ranges
     */
-    int alloc_ranges;		
+    int alloc_ranges;
 };
 
 /*!
@@ -1540,11 +1537,11 @@ struct ilist
     /*!
       \brief Array of values
     */
-    int *value;			
+    int *value;
     /*!
       \brief Number of values in the list
     */
-    int n_values;		
+    int n_values;
     /*!
       \brief Allocated space for values
     */
