@@ -39,7 +39,7 @@ void Vect__init_head(struct Map_info *Map)
     Vect_set_date(Map, "");
 
     /* user name */
-    Map->head.your_name = NULL;
+    Map->head.user_name = NULL;
     sprintf(buf, "%s", G_whoami());
     Vect_set_person(Map, buf);
 
@@ -53,7 +53,7 @@ void Vect__init_head(struct Map_info *Map)
     Vect_set_map_date(Map, buf);
 
     /* comments */
-    Map->head.line_3 = NULL;
+    Map->head.comment = NULL;
     Vect_set_comment(Map, "");
 
     /* scale, threshold */

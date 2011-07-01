@@ -434,8 +434,8 @@ const char *Vect_get_date(const struct Map_info *Map)
 */
 int Vect_set_person(struct Map_info *Map, const char *str)
 {
-    G_free(Map->head.your_name);
-    Map->head.your_name = G_store(str);
+    G_free(Map->head.user_name);
+    Map->head.user_name = G_store(str);
 
     return 0;
 }
@@ -449,7 +449,7 @@ int Vect_set_person(struct Map_info *Map, const char *str)
  */
 const char *Vect_get_person(const struct Map_info *Map)
 {
-    return Map->head.your_name;
+    return (Map->head.user_name);
 }
 
 /*!
@@ -545,8 +545,8 @@ int Vect_get_scale(const struct Map_info *Map)
  */
 int Vect_set_comment(struct Map_info *Map, const char *str)
 {
-    G_free(Map->head.line_3);
-    Map->head.line_3 = G_store(str);
+    G_free(Map->head.comment);
+    Map->head.comment = G_store(str);
     
     return 0;
 }
@@ -560,7 +560,7 @@ int Vect_set_comment(struct Map_info *Map, const char *str)
  */
 const char *Vect_get_comment(const struct Map_info *Map)
 {
-    return Map->head.line_3;
+    return (Map->head.comment);
 }
 
 /*!
@@ -606,7 +606,7 @@ int Vect_get_zone(const struct Map_info *Map)
  */
 int Vect_set_proj(struct Map_info *Map, int proj)
 {
-    Map->proj = proj;
+    Map->head.proj = proj;
     
     return 0;
 }
@@ -623,7 +623,7 @@ int Vect_set_proj(struct Map_info *Map, int proj)
 */
 int Vect_get_proj(const struct Map_info *Map)
 {
-    return Map->proj;
+    return (Map->head.proj);
 }
 
 /*!

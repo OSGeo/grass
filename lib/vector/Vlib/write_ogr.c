@@ -174,10 +174,9 @@ off_t V2_write_line_ogr(struct Map_info *Map, int type,
     plus = &(Map->plus);
     /* Add line */
     if (plus->built >= GV_BUILD_BASE) {
-	line = dig_add_line(plus, type, points, offset);
-	G_debug(3, "  line added to topo with id = %d", line);
 	dig_line_box(points, &box);
-	dig_line_set_box(plus, line, &box);
+	line = dig_add_line(plus, type, points, &box, offset);
+	G_debug(3, "  line added to topo with id = %d", line);
 	if (line == 1)
 	    Vect_box_copy(&(plus->box), &box);
 	else
@@ -288,6 +287,7 @@ int V2_delete_line_ogr(struct Map_info *Map, off_t line)
     struct P_line *Line;
     struct Plus_head *plus;
     static struct line_cats *Cats = NULL;
+    static struct line_pnts *Points = NULL;
 
     G_debug(3, "V2_delete_line_nat(), line = %d", (int) line);
 
@@ -306,10 +306,14 @@ int V2_delete_line_ogr(struct Map_info *Map, off_t line)
     if (!Cats) {
 	Cats = Vect_new_cats_struct();
     }
+    if (!Points) {
+	Points = Vect_new_line_struct();
+    }
+
+    type = V2_read_line_nat(Map, Points, Cats, line);
 
     /* Update category index */
     if (plus->update_cidx) {
-	type = V2_read_line_ogr(Map, NULL, Cats, line);
 
 	for (i = 0; i < Cats->n_cats; i++) {
 	    dig_cidx_del_cat(plus, Cats->field[i], Cats->cat[i], line, type);
@@ -335,7 +339,7 @@ int V2_delete_line_ogr(struct Map_info *Map, off_t line)
     }
 
     /* delete the line from topo */
-    dig_del_line(plus, line);
+    dig_del_line(plus, line, Points->x[0], Points->y[0], Points->z[0]);
 
     /* Rebuild areas/isles and attach centroids and isles */
     if (plus->built >= GV_BUILD_AREAS && type == GV_BOUNDARY) {

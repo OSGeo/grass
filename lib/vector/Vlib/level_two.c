@@ -23,9 +23,9 @@
 
    \return number of nodes
  */
-plus_t Vect_get_num_nodes(const struct Map_info *map)
+plus_t Vect_get_num_nodes(const struct Map_info *Map)
 {
-    return (map->plus.n_nodes);
+    return (Map->plus.n_nodes);
 }
 
 /*!
@@ -36,22 +36,22 @@ plus_t Vect_get_num_nodes(const struct Map_info *map)
 
    \return number of primitives
  */
-plus_t Vect_get_num_primitives(const struct Map_info *map, int type)
+plus_t Vect_get_num_primitives(const struct Map_info *Map, int type)
 {
     plus_t num = 0;
 
     if (type & GV_POINT)
-	num += map->plus.n_plines;
+	num += Map->plus.n_plines;
     if (type & GV_LINE)
-	num += map->plus.n_llines;
+	num += Map->plus.n_llines;
     if (type & GV_BOUNDARY)
-	num += map->plus.n_blines;
+	num += Map->plus.n_blines;
     if (type & GV_CENTROID)
-	num += map->plus.n_clines;
+	num += Map->plus.n_clines;
     if (type & GV_FACE)
-	num += map->plus.n_flines;
+	num += Map->plus.n_flines;
     if (type & GV_KERNEL)
-	num += map->plus.n_klines;
+	num += Map->plus.n_klines;
 
     return num;
 }
@@ -63,9 +63,9 @@ plus_t Vect_get_num_primitives(const struct Map_info *map, int type)
 
    \return number of features
  */
-plus_t Vect_get_num_lines(const struct Map_info *map)
+plus_t Vect_get_num_lines(const struct Map_info *Map)
 {
-    return (map->plus.n_lines);
+    return (Map->plus.n_lines);
 }
 
 /*!
@@ -75,9 +75,9 @@ plus_t Vect_get_num_lines(const struct Map_info *map)
 
    \return number of areas
  */
-plus_t Vect_get_num_areas(const struct Map_info *map)
+plus_t Vect_get_num_areas(const struct Map_info *Map)
 {
-    return (map->plus.n_areas);
+    return (Map->plus.n_areas);
 }
 
 /*!
@@ -87,9 +87,9 @@ plus_t Vect_get_num_areas(const struct Map_info *map)
 
    \return number of kernels
  */
-plus_t Vect_get_num_kernels(const struct Map_info *map)
+plus_t Vect_get_num_kernels(const struct Map_info *Map)
 {
-    return (map->plus.n_klines);
+    return (Map->plus.n_klines);
 }
 
 
@@ -100,9 +100,9 @@ plus_t Vect_get_num_kernels(const struct Map_info *map)
 
    \return number of faces
  */
-plus_t Vect_get_num_faces(const struct Map_info *map)
+plus_t Vect_get_num_faces(const struct Map_info *Map)
 {
-    return (map->plus.n_flines);
+    return (Map->plus.n_flines);
 }
 
 
@@ -113,9 +113,9 @@ plus_t Vect_get_num_faces(const struct Map_info *map)
 
    \return number of volumes
  */
-plus_t Vect_get_num_volumes(const struct Map_info *map)
+plus_t Vect_get_num_volumes(const struct Map_info *Map)
 {
-    return (map->plus.n_volumes);
+    return (Map->plus.n_volumes);
 }
 
 
@@ -126,9 +126,9 @@ plus_t Vect_get_num_volumes(const struct Map_info *map)
 
    \return number of islands
  */
-plus_t Vect_get_num_islands(const struct Map_info *map)
+plus_t Vect_get_num_islands(const struct Map_info *Map)
 {
-    return (map->plus.n_isles);
+    return (Map->plus.n_isles);
 }
 
 
@@ -139,9 +139,9 @@ plus_t Vect_get_num_islands(const struct Map_info *map)
 
    \return number of holes
  */
-plus_t Vect_get_num_holes(const struct Map_info *map)
+plus_t Vect_get_num_holes(const struct Map_info *Map)
 {
-    return (map->plus.n_holes);
+    return (Map->plus.n_holes);
 }
 
 
@@ -152,9 +152,10 @@ plus_t Vect_get_num_holes(const struct Map_info *map)
 
    \return number of dblinks
  */
-int Vect_get_num_dblinks(const struct Map_info *map)
+int Vect_get_num_dblinks(const struct Map_info *Map)
 {
-    return (map->dblnk->n_fields);
+    /* available on level 1 ? */
+    return (Map->dblnk->n_fields);
 }
 
 /*!
@@ -164,9 +165,9 @@ int Vect_get_num_dblinks(const struct Map_info *map)
 
    \return number of updated features
  */
-int Vect_get_num_updated_lines(const struct Map_info *map)
+int Vect_get_num_updated_lines(const struct Map_info *Map)
 {
-    return (map->plus.n_uplines);
+    return (Map->plus.n_uplines);
 }
 
 /*!
@@ -177,9 +178,9 @@ int Vect_get_num_updated_lines(const struct Map_info *map)
 
    \return updated line
  */
-int Vect_get_updated_line(const struct Map_info *map, int idx)
+int Vect_get_updated_line(const struct Map_info *Map, int idx)
 {
-    return (map->plus.uplines[idx]);
+    return (Map->plus.uplines[idx]);
 }
 
 /*!
@@ -189,9 +190,9 @@ int Vect_get_updated_line(const struct Map_info *map, int idx)
 
    \return number of updated nodes
  */
-int Vect_get_num_updated_nodes(const struct Map_info *map)
+int Vect_get_num_updated_nodes(const struct Map_info *Map)
 {
-    return (map->plus.n_upnodes);
+    return (Map->plus.n_upnodes);
 }
 
 /*!
@@ -202,9 +203,30 @@ int Vect_get_num_updated_nodes(const struct Map_info *map)
 
    \return updated node
  */
-int Vect_get_updated_node(const struct Map_info *map, int idx)
+int Vect_get_updated_node(const struct Map_info *Map, int idx)
 {
-    return (map->plus.upnodes[idx]);
+    return (Map->plus.upnodes[idx]);
+}
+
+/*!
+   \brief Get line type
+
+   \param map vector map
+   \param line line id
+
+   \return line type
+ */
+int
+Vect_get_line_type(const struct Map_info *Map, int line)
+{
+    if (Map->level < 2)
+	G_fatal_error(_("Vector map <%s> is not open on level >= 2"),
+		      Vect_get_full_name(Map));
+
+    if (!Vect_line_alive(Map, line))
+	return 0;
+	
+    return (Map->plus.Line[line]->type);
 }
 
 /*!
@@ -217,12 +239,12 @@ int Vect_get_updated_node(const struct Map_info *map, int idx)
    \return 0
  */
 int
-Vect_get_node_coor(const struct Map_info *map, int num, double *x, double *y,
+Vect_get_node_coor(const struct Map_info *Map, int num, double *x, double *y,
 		   double *z)
 {
     struct P_node *Node;
 
-    Node = map->plus.Node[num];
+    Node = Map->plus.Node[num];
     *x = Node->x;
     *y = Node->y;
 
@@ -243,16 +265,33 @@ Vect_get_node_coor(const struct Map_info *map, int num, double *x, double *y,
  */
 int Vect_get_line_nodes(const struct Map_info *Map, int line, int *n1, int *n2)
 {
+    char type;
 
     if (Map->level < 2)
 	G_fatal_error(_("Vector map <%s> is not open on level >= 2"),
 		      Vect_get_full_name(Map));
 
-    if (n1 != NULL)
-	*n1 = Map->plus.Line[line]->N1;
+    type = Vect_get_line_type(Map, line);
 
-    if (n2 != NULL)
-	*n2 = Map->plus.Line[line]->N2;
+    if (!(type & GV_LINES))
+	G_fatal_error(_("Nodes not available for line %d"), line);
+    
+    if (type == GV_LINE) {
+	struct P_topo_l *topo = (struct P_topo_l *)Map->plus.Line[line]->topo;
+
+	if (n1 != NULL)
+	    *n1 = topo->N1;
+	if (n2 != NULL)
+	    *n2 = topo->N2;
+    }
+    else if (type == GV_BOUNDARY) {
+	struct P_topo_b *topo = (struct P_topo_b *)Map->plus.Line[line]->topo;
+
+	if (n1 != NULL)
+	    *n1 = topo->N1;
+	if (n2 != NULL)
+	    *n2 = topo->N2;
+    }
 
     return 1;
 }
@@ -268,16 +307,24 @@ int Vect_get_line_nodes(const struct Map_info *Map, int line, int *n1, int *n2)
  */
 int Vect_get_line_areas(const struct Map_info *Map, int line, int *left, int *right)
 {
+    struct P_topo_b *topo;
 
     if (Map->level < 2)
 	G_fatal_error(_("Vector map <%s> is not open on level >= 2"),
 		      Vect_get_full_name(Map));
 
+    if (!Map->plus.Line[line]->topo)
+	G_fatal_error(_("Areas not available for line %d"), line);
+
+    if (Vect_get_line_type(Map, line) != GV_BOUNDARY)
+	G_fatal_error(_("Line %d is not a boundary"), line);
+
+    topo = (struct P_topo_b *)Map->plus.Line[line]->topo;
     if (left != NULL)
-	*left = Map->plus.Line[line]->left;
+	*left = topo->left;
 
     if (right != NULL)
-	*right = Map->plus.Line[line]->right;
+	*right = topo->right;
 
     return 1;
 }
@@ -349,9 +396,12 @@ float Vect_get_node_line_angle(const struct Map_info *Map, int node, int line)
  */
 int Vect_get_centroid_area(const struct Map_info *Map, int centroid)
 {
+    struct P_topo_c *topo;
+
     if (Map->level < 2)
 	G_fatal_error(_("Vector map <%s> is not open on level >= 2"),
 		      Vect_get_full_name(Map));
 
-    return (Map->plus.Line[centroid]->left);
+    topo = (struct P_topo_c *)Map->plus.Line[centroid]->topo;
+    return (topo->area);
 }

@@ -17,6 +17,7 @@
 
 #include <stdlib.h>
 #include <grass/vector.h>
+#include <grass/glocale.h>
 
 /*!
    \brief Tests for point in box
@@ -206,6 +207,8 @@ int Vect_get_line_box(const struct Map_info *Map, int line, struct bound_box * B
 {
     const struct Plus_head *Plus;
     struct P_line *Line;
+    static struct line_pnts *Points = NULL;
+    static struct boxlist *list = NULL;
 
     Plus = &(Map->plus);
     Line = Plus->Line[line];
@@ -220,12 +223,56 @@ int Vect_get_line_box(const struct Map_info *Map, int line, struct bound_box * B
 	return 0;
     }
     else {
-	Box->N = Line->N;
-	Box->S = Line->S;
-	Box->E = Line->E;
-	Box->W = Line->W;
-	Box->T = Line->T;
-	Box->B = Line->B;
+	int type = Line->type;
+	
+	/* GV_POINTS: read line */
+	if (type & GV_POINTS) {
+	    if (Points == NULL)
+		Points = Vect_new_line_struct();
+
+	    Vect_read_line(Map, Points, NULL, line);
+	    dig_line_box(Points, Box);
+	}
+	/* all other: retrieve box from spatial index */
+	else {
+	    int node = 0;
+	    struct bound_box bbox;
+
+	    if (type == GV_LINE) {
+		struct P_topo_l *topo = (struct P_topo_l *)Line->topo;
+
+		node = topo->N1;
+	    }
+	    else if (type == GV_BOUNDARY) {
+		struct P_topo_b *topo = (struct P_topo_b *)Line->topo;
+
+		node = topo->N1;
+	    }
+	    
+	    if (list == NULL) {
+		list = Vect_new_boxlist();
+	    }
+	    Vect_reset_boxlist(list);
+	    
+	    bbox.N = Plus->Node[node]->y;
+	    bbox.S = Plus->Node[node]->y;
+	    bbox.E = Plus->Node[node]->x;
+	    bbox.W = Plus->Node[node]->x;
+	    bbox.T = Plus->Node[node]->z;
+	    bbox.B = Plus->Node[node]->z;
+
+	    dig_boxlist_add(list, line, bbox);
+	    
+	    if (dig_find_line_box(Plus, list) == 0)
+		G_fatal_error(_("Could not find line box"));
+
+	    Box->N = list->box[0].N;
+	    Box->S = list->box[0].S;
+	    Box->E = list->box[0].E;
+	    Box->W = list->box[0].W;
+	    Box->T = list->box[0].T;
+	    Box->B = list->box[0].B;
+	}
     }
 
     return 1;
@@ -245,6 +292,11 @@ int Vect_get_area_box(const struct Map_info *Map, int area, struct bound_box * B
 {
     const struct Plus_head *Plus;
     struct P_area *Area;
+    struct P_line *Line;
+    struct P_node *Node;
+    static struct boxlist *list = NULL;
+    struct bound_box bbox;
+    struct P_topo_b *topo;
 
     Plus = &(Map->plus);
     Area = Plus->Area[area];
@@ -256,15 +308,38 @@ int Vect_get_area_box(const struct Map_info *Map, int area, struct bound_box * B
 	Box->W = 0;
 	Box->T = 0;
 	Box->B = 0;
+
 	return 0;
     }
     else {
-	Box->N = Area->N;
-	Box->S = Area->S;
-	Box->E = Area->E;
-	Box->W = Area->W;
-	Box->T = Area->T;
-	Box->B = Area->B;
+
+	Line = Plus->Line[abs(Area->lines[0])];
+	topo = (struct P_topo_b *)Line->topo;
+	Node = Plus->Node[topo->N1];
+
+	if (list == NULL) {
+	    list = Vect_new_boxlist();
+	}
+	Vect_reset_boxlist(list);
+	
+	bbox.N = Node->y;
+	bbox.S = Node->y;
+	bbox.E = Node->x;
+	bbox.W = Node->x;
+	bbox.T = Node->z;
+	bbox.B = Node->z;
+
+	dig_boxlist_add(list, area, bbox);
+	
+	if (dig_find_area_box(Plus, list) == 0)
+	    G_fatal_error(_("Could not find area box"));
+
+	Box->N = list->box[0].N;
+	Box->S = list->box[0].S;
+	Box->E = list->box[0].E;
+	Box->W = list->box[0].W;
+	Box->T = list->box[0].T;
+	Box->B = list->box[0].B;
     }
 
     return 1;
@@ -284,6 +359,11 @@ int Vect_get_isle_box(const struct Map_info *Map, int isle, struct bound_box * B
 {
     const struct Plus_head *Plus;
     struct P_isle *Isle;
+    struct P_line *Line;
+    struct P_node *Node;
+    static struct boxlist *list = NULL;
+    struct bound_box bbox;
+    struct P_topo_b *topo;
 
     Plus = &(Map->plus);
     Isle = Plus->Isle[isle];
@@ -298,12 +378,34 @@ int Vect_get_isle_box(const struct Map_info *Map, int isle, struct bound_box * B
 	return 0;
     }
     else {
-	Box->N = Isle->N;
-	Box->S = Isle->S;
-	Box->E = Isle->E;
-	Box->W = Isle->W;
-	Box->T = Isle->T;
-	Box->B = Isle->B;
+
+	Line = Plus->Line[abs(Isle->lines[0])];
+	topo = (struct P_topo_b *)Line->topo;
+	Node = Plus->Node[topo->N1];
+
+	if (list == NULL) {
+	    list = Vect_new_boxlist();
+	}
+	Vect_reset_boxlist(list);
+	
+	bbox.N = Node->y;
+	bbox.S = Node->y;
+	bbox.E = Node->x;
+	bbox.W = Node->x;
+	bbox.T = Node->z;
+	bbox.B = Node->z;
+
+	dig_boxlist_add(list, isle, bbox);
+	
+	if (dig_find_isle_box(Plus, list) == 0)
+	    G_fatal_error(_("Could not find area box"));
+
+	Box->N = list->box[0].N;
+	Box->S = list->box[0].S;
+	Box->E = list->box[0].E;
+	Box->W = list->box[0].W;
+	Box->T = list->box[0].T;
+	Box->B = list->box[0].B;
     }
 
     return 1;

@@ -462,15 +462,29 @@ int V2_read_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 		      _("Attempt to read dead line"), line);
 
     if (Line->type == GV_CENTROID) {
-	plus_t         node;
-	struct P_node *Node;
-	
 	G_debug(4, "Centroid");
-	node = Line->N1;
-	Node = Map->plus.Node[node];
-
+	
 	if (line_p != NULL) {
-	    Vect_append_point(line_p, Node->x, Node->y, 0.0);
+	    int i, found;
+	    struct bound_box box;
+	    struct boxlist list;
+	    struct P_topo_c *topo = (struct P_topo_c *)Line->topo;
+	    
+	    /* get area bbox */
+	    Vect_get_area_box(Map, topo->area, &box);
+	    /* search in spatial index for centroid with area bbox */
+	    dig_init_boxlist(&list);
+	    Vect_select_lines_by_box_with_box(Map, &box, Line->type, &list);
+	    
+	    found = 0;
+	    for (i = 0; i < list.n_values; i++) {
+		if (list.id[i] == line) {
+		    found = i;
+		    break;
+		}
+	    }
+
+	    Vect_append_point(line_p, list.box[found].E, list.box[found].N, 0.0);
 	}
 
 	if (line_c != NULL) {

@@ -40,8 +40,8 @@ typedef struct
     double along;
 } NEW;
 
-/* This function is called by RTreeSearch() to add selected node/line/area/isle to thelist */
-int add_item(int id, struct ilist *list)
+/* This function is called by RTreeSearch() to add selected node/line/area/isle to the list */
+int add_item(int id, struct Rect rect, struct ilist *list)
 {
     dig_list_add(list, id);
     return 1;

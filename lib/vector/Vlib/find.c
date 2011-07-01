@@ -267,14 +267,14 @@ int Vect_find_area(struct Map_info *Map, double x, double y)
     int i, ret, area;
     static int first = 1;
     struct bound_box box;
-    static struct ilist *List;
+    static struct boxlist *List;
     static BOX_SIZE *size_list;
     static int alloc_size_list = 0;
 
     G_debug(3, "Vect_find_area() x = %f y = %f", x, y);
 
     if (first) {
-	List = Vect_new_list();
+	List = Vect_new_boxlist();
 	first = 0;
 	alloc_size_list = 10;
 	size_list = G_malloc(alloc_size_list * sizeof(BOX_SIZE));
@@ -287,7 +287,7 @@ int Vect_find_area(struct Map_info *Map, double x, double y)
     box.S = y;
     box.T = PORT_DOUBLE_MAX;
     box.B = -PORT_DOUBLE_MAX;
-    Vect_select_areas_by_box(Map, &box, List);
+    Vect_select_areas_by_box_with_box(Map, &box, List);
     G_debug(3, "  %d areas selected by box", List->n_values);
 
     /* sort areas by size, the smallest is likely to be the nearest */
@@ -297,16 +297,16 @@ int Vect_find_area(struct Map_info *Map, double x, double y)
     }
 
     for (i = 0; i < List->n_values; i++) {
-	size_list[i].i = area = List->value[i];
-	Vect_get_area_box(Map, area, &box);
+	size_list[i].i = List->id[i];
+	box = List->box[i];
 	size_list[i].size = (box.N - box.S) * (box.E - box.W);
     }
     
     if (List->n_values == 2) {
 	/* simple swap */
 	if (size_list[1].size < size_list[0].size) {
-	    size_list[0].i = List->value[1];
-	    size_list[1].i = List->value[0];
+	    size_list[0].i = List->id[1];
+	    size_list[1].i = List->id[0];
 	}
     }
     else if (List->n_values > 2)
@@ -339,13 +339,13 @@ int Vect_find_island(struct Map_info *Map, double x, double y)
     int i, ret, island, current, current_size, size;
     static int first = 1;
     struct bound_box box;
-    static struct ilist *List;
+    static struct boxlist *List;
     static struct line_pnts *Points;
 
     G_debug(3, "Vect_find_island() x = %f y = %f", x, y);
 
     if (first) {
-	List = Vect_new_list();
+	List = Vect_new_boxlist();
 	Points = Vect_new_line_struct();
 	first = 0;
     }
@@ -357,14 +357,14 @@ int Vect_find_island(struct Map_info *Map, double x, double y)
     box.S = y;
     box.T = PORT_DOUBLE_MAX;
     box.B = -PORT_DOUBLE_MAX;
-    Vect_select_isles_by_box(Map, &box, List);
+    Vect_select_isles_by_box_with_box(Map, &box, List);
     G_debug(3, "  %d islands selected by box", List->n_values);
 
     current_size = -1;
     current = 0;
     for (i = 0; i < List->n_values; i++) {
-	island = List->value[i];
-	ret = Vect_point_in_island(x, y, Map, island);
+	island = List->id[i];
+	ret = Vect_point_in_island(x, y, Map, island, List->box[i]);
 
 	if (ret >= 1) {		/* inside */
 	    if (current > 0) {	/* not first */

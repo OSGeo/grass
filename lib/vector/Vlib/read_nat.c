@@ -150,7 +150,7 @@ int
 V2_read_next_line_nat(struct Map_info *Map,
 		      struct line_pnts *line_p, struct line_cats *line_c)
 {
-    register int line;
+    register int line, ret;
     register struct P_line *Line;
     struct bound_box lbox, mbox;
 
@@ -177,15 +177,15 @@ V2_read_next_line_nat(struct Map_info *Map,
 	    continue;
 	}
 
+	ret = V2_read_line_nat(Map, line_p, line_c, Map->next_line++);
 	if (Map->Constraint_region_flag) {
-	    Vect_get_line_box(Map, line, &lbox);
+	    Vect_line_box(line_p, &lbox);
 	    if (!Vect_box_overlap(&lbox, &mbox)) {
-		Map->next_line++;
 		continue;
 	    }
 	}
 
-	return V2_read_line_nat(Map, line_p, line_c, Map->next_line++);
+	return ret;
     }
 
     /* NOTREACHED */ }
@@ -208,7 +208,7 @@ int
 Vect__Read_line_nat(struct Map_info *Map,
 		    struct line_pnts *p, struct line_cats *c, off_t offset)
 {
-    int i, dead = 0;
+    register int i, dead = 0;
     int n_points;
     off_t size;
     int n_cats, do_cats;

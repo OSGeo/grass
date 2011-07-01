@@ -180,16 +180,21 @@ int Vect_build_partial(struct Map_info *Map, int build)
 	    Line = Plus->Line[line];
 	    if (!Line)
 		continue;
-	    if (Line->type == GV_BOUNDARY &&
-		(Line->left == 0 || Line->right == 0)) {
-		G_debug(3, "line = %d left = %d right = %d", line, Line->left,
-			Line->right);
-		err_boundaries++;
+	    if (Line->type == GV_BOUNDARY) {
+		struct P_topo_b *topo = (struct P_topo_b *)Line->topo;
+
+		if (topo->left == 0 || topo->right == 0) {
+		    G_debug(3, "line = %d left = %d right = %d", line, 
+			    topo->left, topo->right);
+		    err_boundaries++;
+		}
 	    }
 	    if (Line->type == GV_CENTROID) {
-		if (Line->left == 0)
+		struct P_topo_c *topo = (struct P_topo_c *)Line->topo;
+
+		if (topo->area == 0)
 		    err_centr_out++;
-		else if (Line->left < 0)
+		else if (topo->area < 0)
 		    err_centr_dupl++;
 	    }
 	}
@@ -323,12 +328,45 @@ int Vect_topo_dump(const struct Map_info *Map, FILE *out)
 	    continue;
 	}
 	Line = plus->Line[i];
-	fprintf(out, "line = %d, type = %d, offset = %lu n1 = %d, n2 = %d, "
-		"left/area = %d, right = %d\n",
-		i, Line->type, (unsigned long)Line->offset, Line->N1,
-		Line->N2, Line->left, Line->right);
-	fprintf(out, "N,S,E,W,T,B: %f, %f, %f, %f, %f, %f\n", Line->N,
-		Line->S, Line->E, Line->W, Line->T, Line->B);
+	if (Line->type == GV_POINT) {
+	    fprintf(out, "line = %d, type = %d, offset = %lu\n",
+		    i, Line->type, (unsigned long)Line->offset);
+	}
+	else if (Line->type == GV_CENTROID) {
+	    struct P_topo_c *topo = (struct P_topo_c *)Line->topo;
+
+	    fprintf(out, "line = %d, type = %d, offset = %lu, area = %d\n",
+		    i, Line->type, (unsigned long)Line->offset, topo->area);
+	}
+	else if (Line->type == GV_LINE) {
+	    struct P_topo_l *topo = (struct P_topo_l *)Line->topo;
+
+	    fprintf(out, "line = %d, type = %d, offset = %lu, n1 = %d, n2 = %d\n",
+		    i, Line->type, (unsigned long)Line->offset, topo->N1,
+		    topo->N2);
+	}
+	else if (Line->type == GV_BOUNDARY) {
+	    struct P_topo_b *topo = (struct P_topo_b *)Line->topo;
+
+	    fprintf(out, "line = %d, type = %d, offset = %lu, n1 = %d, n2 = %d, "
+		    "left = %d, right = %d\n",
+		    i, Line->type, (unsigned long)Line->offset, topo->N1,
+		    topo->N2, topo->left, topo->right);
+	}
+	else if (Line->type == GV_FACE) {
+	    struct P_topo_f *topo = (struct P_topo_f *)Line->topo;
+
+	    fprintf(out, "line = %d, type = %d, offset = %lu, e1 = %d, e2 = %d, "
+		    "e3 = %d, left = %d, right = %d\n",
+		    i, Line->type, (unsigned long)Line->offset, topo->E[0],
+		    topo->E[1], topo->E[2], topo->left, topo->right);
+	}
+	else if (Line->type == GV_KERNEL) {
+	    struct P_topo_k *topo = (struct P_topo_k *)Line->topo;
+
+	    fprintf(out, "line = %d, type = %d, offset = %lu, volume = %d",
+		    i, Line->type, (unsigned long)Line->offset, topo->volume);
+	}
     }
 
     /* areas */
@@ -341,9 +379,6 @@ int Vect_topo_dump(const struct Map_info *Map, FILE *out)
 
 	fprintf(out, "area = %d, n_lines = %d, n_isles = %d centroid = %d\n",
 		i, Area->n_lines, Area->n_isles, Area->centroid);
-
-	fprintf(out, "N,S,E,W,T,B: %f, %f, %f, %f, %f, %f\n", Area->N,
-		Area->S, Area->E, Area->W, Area->T, Area->B);
 
 	for (j = 0; j < Area->n_lines; j++) {
 	    line = Area->lines[j];
@@ -366,9 +401,6 @@ int Vect_topo_dump(const struct Map_info *Map, FILE *out)
 
 	fprintf(out, "isle = %d, n_lines = %d area = %d\n", i, Isle->n_lines,
 		Isle->area);
-
-	fprintf(out, "N,S,E,W,T,B: %f, %f, %f, %f, %f, %f\n", Isle->N,
-		Isle->S, Isle->E, Isle->W, Isle->T, Isle->B);
 
 	for (j = 0; j < Isle->n_lines; j++) {
 	    line = Isle->lines[j];
@@ -413,95 +445,12 @@ int Vect_build_sidx(struct Map_info *Map)
  */
 int Vect_build_sidx_from_topo(struct Map_info *Map)
 {
-    int i, total, done;
-    struct Plus_head *plus;
-    struct bound_box box;
-    struct P_line *Line;
-    struct P_node *Node;
-    struct P_area *Area;
-    struct P_isle *Isle;
 
     G_debug(3, "Vect_build_sidx_from_topo()");
 
-    plus = &(Map->plus);
+    G_warning(_("Vect_build_sidx_from_topo() is no longer supported"));
 
-    Vect_open_sidx(Map, 2);
-
-    total = plus->n_nodes + plus->n_lines + plus->n_areas + plus->n_isles;
-
-    /* Nodes */
-    for (i = 1; i <= plus->n_nodes; i++) {
-	G_percent(i, total, 3);
-
-	Node = plus->Node[i];
-	if (!Node)
-	    G_fatal_error(_("BUG (Vect_build_sidx_from_topo): node does not exist"));
-
-	dig_spidx_add_node(plus, i, Node->x, Node->y, Node->z);
-    }
-
-    /* Lines */
-    done = plus->n_nodes;
-    for (i = 1; i <= plus->n_lines; i++) {
-	G_percent(done + i, total, 3);
-
-	Line = plus->Line[i];
-	if (!Line)
-	    G_fatal_error(_("BUG (Vect_build_sidx_from_topo): line does not exist"));
-
-	box.N = Line->N;
-	box.S = Line->S;
-	box.E = Line->E;
-	box.W = Line->W;
-	box.T = Line->T;
-	box.B = Line->B;
-
-	dig_spidx_add_line(plus, i, &box);
-    }
-
-    /* Areas */
-    done += plus->n_lines;
-    for (i = 1; i <= plus->n_areas; i++) {
-	G_percent(done + i, total, 3);
-
-	Area = plus->Area[i];
-	if (!Area)
-	    G_fatal_error(_("BUG (Vect_build_sidx_from_topo): area does not exist"));
-
-	box.N = Area->N;
-	box.S = Area->S;
-	box.E = Area->E;
-	box.W = Area->W;
-	box.T = Area->T;
-	box.B = Area->B;
-
-	dig_spidx_add_area(plus, i, &box);
-    }
-
-    /* Isles */
-    done += plus->n_areas;
-    for (i = 1; i <= plus->n_isles; i++) {
-	G_percent(done + i, total, 3);
-
-	Isle = plus->Isle[i];
-	if (!Isle)
-	    G_fatal_error(_("BUG (Vect_build_sidx_from_topo): isle does not exist"));
-
-	box.N = Isle->N;
-	box.S = Isle->S;
-	box.E = Isle->E;
-	box.W = Isle->W;
-	box.T = Isle->T;
-	box.B = Isle->B;
-
-	dig_spidx_add_isle(plus, i, &box);
-    }
-
-    Map->plus.Spidx_built = 1;
-
-    G_debug(3, "Spatial index was built");
-
-    return 0;
+    return 1;
 }
 
 /*!

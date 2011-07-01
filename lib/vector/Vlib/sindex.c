@@ -5,12 +5,12 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2009 by the GRASS Development Team
+   (C) 2001-2011 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2).  Read the file COPYING that comes with GRASS for details.
 
-   \author Radim Blazek
+   \author Radim Blazek, Markus Metz
  */
 
 #include <stdlib.h>
@@ -72,6 +72,63 @@ Vect_select_lines_by_box(struct Map_info *Map, const struct bound_box * Box,
 }
 
 /*!
+   \brief Select lines with bounding boxes by box.
+
+   Select lines whose boxes overlap specified box!!!  It means that
+   selected line may or may not overlap the box.
+
+   \param Map vector map
+   \param Box bounding box
+   \param type line type
+   \param[out] list output list, must be initialized
+
+   \return number of lines
+ */
+int
+Vect_select_lines_by_box_with_box(struct Map_info *Map, const struct bound_box *Box,
+			 int type, struct boxlist *list)
+{
+    int i, line, nlines;
+    struct Plus_head *plus;
+    struct P_line *Line;
+    static struct boxlist *LocList = NULL;
+
+    G_debug(3, "Vect_select_lines_by_box()");
+    G_debug(3, "  Box(N,S,E,W,T,B): %e, %e, %e, %e, %e, %e", Box->N, Box->S,
+	    Box->E, Box->W, Box->T, Box->B);
+    plus = &(Map->plus);
+
+    if (!(plus->Spidx_built)) {
+	G_debug(3, "Building spatial index.");
+	Vect_build_sidx_from_topo(Map);
+    }
+
+    list->n_values = 0;
+    if (!LocList) {
+	LocList = (struct boxlist *)G_malloc(sizeof(struct boxlist));
+	dig_init_boxlist(LocList);
+    }
+
+    nlines = dig_select_lines_with_box(plus, Box, LocList);
+    G_debug(3, "  %d lines selected (all types)", nlines);
+
+    /* Remove lines of not requested types */
+    for (i = 0; i < nlines; i++) {
+	line = LocList->id[i];
+	if (plus->Line[line] == NULL)
+	    continue;		/* Should not happen */
+	Line = plus->Line[line];
+	if (!(Line->type & type))
+	    continue;
+	dig_boxlist_add(list, line, LocList->box[i]);
+    }
+
+    G_debug(3, "  %d lines of requested type", list->n_values);
+
+    return list->n_values;
+}
+
+/*!
    \brief Select areas by box.
 
    Select areas whose boxes overlap specified box!!!
@@ -124,6 +181,53 @@ Vect_select_areas_by_box(struct Map_info *Map, const struct bound_box * Box,
 
 
 /*!
+   \brief Select areas with bounding boxes by box.
+
+   Select areas whose boxes overlap specified box!!!
+   It means that selected area may or may not overlap the box.
+
+   \param Map vector map
+   \param Box bounding box
+   \param[out] output list, must be initialized
+
+   \return number of areas
+ */
+int
+Vect_select_areas_by_box_with_box(struct Map_info *Map, const struct bound_box * Box,
+			 struct boxlist *list)
+{
+    int i;
+    static int debug_level = -1;
+
+    if (debug_level == -1) {
+	const char *dstr = G__getenv("DEBUG");
+
+	if (dstr != NULL)
+	    debug_level = atoi(dstr);
+	else
+	    debug_level = 0;
+    }
+
+    G_debug(3, "Vect_select_areas_by_box()");
+    G_debug(3, "Box(N,S,E,W,T,B): %e, %e, %e, %e, %e, %e", Box->N, Box->S,
+	    Box->E, Box->W, Box->T, Box->B);
+
+    dig_select_areas_with_box(&(Map->plus), Box, list);
+    G_debug(3, "  %d areas selected", list->n_values);
+    /* avoid loop when not debugging */
+    if (debug_level > 2) {
+	for (i = 0; i < list->n_values; i++) {
+	    G_debug(3, "  area = %d pointer to area structure = %lx",
+		    list->id[i],
+		    (unsigned long)Map->plus.Area[list->id[i]]);
+	}
+    }
+
+    return list->n_values;
+}
+
+
+/*!
    \brief Select isles by box.
 
    Select isles whose boxes overlap specified box!!!
@@ -149,6 +253,32 @@ Vect_select_isles_by_box(struct Map_info *Map, const struct bound_box * Box,
     }
 
     dig_select_isles(&(Map->plus), Box, list);
+    G_debug(3, "  %d isles selected", list->n_values);
+
+    return list->n_values;
+}
+
+/*!
+   \brief Select isles with bounding boxes by box.
+
+   Select isles whose boxes overlap specified box!!!
+   It means that selected isle may or may not overlap the box.
+
+   \param Map vector map
+   \param Box bounding box
+   \param[out] list output list, must be initialized
+
+   \return number of isles
+ */
+int
+Vect_select_isles_by_box_with_box(struct Map_info *Map, const struct bound_box * Box,
+			 struct boxlist *list)
+{
+    G_debug(3, "Vect_select_isles_by_box_with_box()");
+    G_debug(3, "Box(N,S,E,W,T,B): %e, %e, %e, %e, %e, %e", Box->N, Box->S,
+	    Box->E, Box->W, Box->T, Box->B);
+
+    dig_select_isles_with_box(&(Map->plus), Box, list);
     G_debug(3, "  %d isles selected", list->n_values);
 
     return list->n_values;
