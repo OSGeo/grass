@@ -73,11 +73,14 @@ void NetA_add_point_on_node(struct Map_info *In, struct Map_info *Out,
 void NetA_points_to_nodes(struct Map_info *In, struct ilist *point_list)
 {
     int i, node;
+    struct line_pnts *Points = Vect_new_line_struct();
 
     for (i = 0; i < point_list->n_values; i++) {
-	Vect_get_line_nodes(In, point_list->value[i], &node, NULL);
+	/* Vect_get_line_nodes(In, point_list->value[i], &node, NULL); */
+	node = Vect_find_node(In, Points->x[0], Points->y[0], Points->z[0], 0, 0);
 	point_list->value[i] = node;
     }
+    Vect_destroy_line_struct(Points);
 }
 
 /*!
