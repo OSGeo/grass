@@ -838,7 +838,7 @@ int main(int argc, char *argv[])
 	    split_distance =
 		area_size / log(n_polygon_boundaries);
 	    /* divisor is the handle: increase divisor to decrease split_distance */
-	    split_distance = split_distance / 4.;
+	    split_distance = split_distance / 5.;
 	    G_debug(1, "root of area size: %f", area_size);
 	    G_verbose_message(_("Boundary splitting distance in map units: %G"),
 		      split_distance);
