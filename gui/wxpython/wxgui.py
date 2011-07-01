@@ -84,7 +84,7 @@ from gui_modules import nviz_tools
 from gui_modules import psmap
 from gui_modules.debug    import Debug
 from gui_modules.ghelp    import MenuTreeWindow, AboutWindow, InstallExtensionWindow
-from gui_modules.toolbars import LMWorkspaceToolbar, LMDataToolbar, LMToolsToolbar, LMMiscToolbar
+from gui_modules.toolbars import LMWorkspaceToolbar, LMDataToolbar, LMToolsToolbar, LMMiscToolbar, LMVectorToolbar
 from gui_modules.gpyshell import PyShellWindow
 from icons.icon           import Icons
 
@@ -133,7 +133,8 @@ class GMFrame(wx.Frame):
         self.toolbars  = { 'workspace' : LMWorkspaceToolbar(parent = self),
                            'data'      : LMDataToolbar(parent = self),
                            'tools'     : LMToolsToolbar(parent = self),
-                           'misc'      : LMMiscToolbar(parent = self) }
+                           'misc'      : LMMiscToolbar(parent = self),
+                           'vector'    : LMVectorToolbar(parent = self) }
         self._toolbarsData = { 'workspace' : ("toolbarWorkspace",     # name
                                               _("Workspace Toolbar"), # caption
                                               1),                     # row
@@ -146,13 +147,16 @@ class GMFrame(wx.Frame):
                                'tools'     : ("toolbarTools",
                                               _("Tools Toolbar"),
                                               2),
+                               'vector'    : ("toolbarVector",
+                                              _("Vector Toolbar"),
+                                              2),
                                }
         if sys.platform == 'win32':
             self._toolbarsList = ('workspace', 'data',
-                                  'tools', 'misc')
+                                  'vector', 'tools', 'misc')
         else:
             self._toolbarsList = ('data', 'workspace',
-                                  'misc', 'tools')
+                                  'misc', 'tools', 'vector')
         for toolbar in self._toolbarsList:
             name, caption, row = self._toolbarsData[toolbar]
             self._auimgr.AddPane(self.toolbars[toolbar],
