@@ -146,8 +146,46 @@ int main(int argc, char **argv)
 			 abcol->answer, ncol->answer, geo, 0);
 
     nnodes = Vect_get_num_nodes(&Map);
+    nlines = Vect_get_num_lines(&Map);
 
     /* Create list of centers based on list of categories */
+    for (i = 1; i <= nlines; i++) {
+	int node;
+	
+	ltype = Vect_get_line_type(&Map, i);
+	if (!(ltype & GV_POINT))
+	    continue;
+
+	Vect_read_line(&Map, Points, Cats, i);
+	node = Vect_find_node(&Map, Points->x[0], Points->y[0], Points->z[0], 0, 0);
+	if (!node) {
+	    G_warning(_("Point is not connected to the network"));
+	    continue;
+	}
+	if (!(Vect_cat_get(Cats, nfield, &cat)))
+	    continue;
+	if (Vect_cat_in_cat_list(cat, catlist)) {
+	    Vect_net_get_node_cost(&Map, node, &n1cost);
+	    if (n1cost == -1) {	/* closed */
+		G_warning("Centre at closed node (costs = -1) ignored");
+	    }
+	    else {
+		if (acenters == ncenters) {
+		    acenters += 1;
+		    Centers =
+			(CENTER *) G_realloc(Centers,
+					     acenters * sizeof(CENTER));
+		}
+		Centers[ncenters].cat = cat;
+		Centers[ncenters].node = node;
+		G_debug(2, "centre = %d node = %d cat = %d", ncenters,
+			node, cat);
+		ncenters++;
+	    }
+	}
+    }
+
+#if 0
     for (node = 1; node <= nnodes; node++) {
 	nlines = Vect_get_node_n_lines(&Map, node);
 	for (j = 0; j < nlines; j++) {
@@ -178,6 +216,7 @@ int main(int argc, char **argv)
 	    }
 	}
     }
+#endif
 
     G_message(_("Number of centers: [%d] (nlayer: [%d])"), ncenters, nfield);
 

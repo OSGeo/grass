@@ -332,6 +332,7 @@ int main(int argc, char **argv)
     struct ilist *TList;	/* list of terminal nodes */
     struct ilist *StArcs;	/* list of arcs on Steiner tree */
     struct ilist *StNodes;	/* list of nodes on Steiner tree */
+    struct ilist *pointlist;
     double cost, tmpcost;
     struct cat_list *Clist;
     struct line_cats *Cats;
@@ -426,8 +427,28 @@ int main(int argc, char **argv)
     Vect_set_open_level(2);
     Vect_open_old(&Map, map->answer, "");
     nnodes = Vect_get_num_nodes(&Map);
+    nlines = Vect_get_num_lines(&Map);
 
     /* Create list of terminals based on list of categories */
+    for (i = 1; i <= nlines; i++) {
+	ltype = Vect_get_line_type(&Map, i);
+	if (!(ltype & GV_POINT))
+	    continue;
+
+	Vect_read_line(&Map, Points, Cats, i);
+	node = Vect_find_node(&Map, Points->x[0], Points->y[0], Points->z[0], 0, 0);
+	if (!node) {
+	    G_warning(_("Point is not connected to the network"));
+	    continue;
+	}
+	    if (!(Vect_cat_get(Cats, tfield, &cat)))
+		continue;
+	    if (Vect_cat_in_cat_list(cat, Clist)) {
+		Vect_list_append(TList, i);
+	    }
+    }
+
+#if 0
     for (i = 1; i <= nnodes; i++) {
 	nlines = Vect_get_node_n_lines(&Map, i);
 	for (j = 0; j < nlines; j++) {
@@ -442,6 +463,7 @@ int main(int argc, char **argv)
 	    }
 	}
     }
+#endif
     nterms = TList->n_values;
     fprintf(stdout, "Number of terminals: %d\n", nterms);
 
@@ -611,11 +633,22 @@ int main(int argc, char **argv)
 	    StNodes->n_values);
 
     k = 0;
+    pointlist = Vect_new_list();
     for (i = 0; i < StNodes->n_values; i++) {
+	double x, y, z;
+	struct bound_box box;
+	
 	node = StNodes->value[i];
+	
+	Vect_get_node_coor(&Map, node, &x, &y, &z);
+	box.E = box.W = x;
+	box.N = box.S = y;
+	box.T = box.B = z;
+	Vect_select_lines_by_box(&Map, &box, GV_POINT, pointlist);
+	
 	nlines = Vect_get_node_n_lines(&Map, node);
-	for (j = 0; j < nlines; j++) {
-	    line = abs(Vect_get_node_line(&Map, node, j));
+	for (j = 0; j < pointlist->n_values; j++) {
+	    line = pointlist->value[j];
 	    ltype = Vect_read_line(&Map, Points, Cats, line);
 	    if (!(ltype & GV_POINT))
 		continue;
