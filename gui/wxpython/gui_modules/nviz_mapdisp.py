@@ -1395,7 +1395,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 cmd += cmdColorMap.strip(', ') + ' '
             if cmdColorVal.split("=")[1]:
                 cmd += cmdColorVal.strip(', ') + ' '
-                
+            cmd += "\\\n"
         #
         # vlines
         #
@@ -1438,11 +1438,11 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 cmd += "vpoint_marker=" + cmdPMarker.strip(',') + ' '
                 cmd += "vpoint_position=" + cmdPPos.strip(',') + ' '
                 cmd += "vpoint_layer=" + cmdPLayer.strip(',') + ' '
+            cmd += "\\\n"
         #
         # cutting planes
         #
         cplane = self.lmgr.nviz.FindWindowById(self.lmgr.nviz.win['cplane']['planes']).GetStringSelection()
-        print cplane
         try:
             planeIndex = int(cplane.split()[1])
         except IndexError:
@@ -1456,7 +1456,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                                            self.cplanes[planeIndex]['position']['y'],
                                            self.cplanes[planeIndex]['position']['z'])
             cmd += "cplane_shading=%s " % shading[self.cplanes[planeIndex]['shading']]
-                                                    
+            cmd += "\\\n"                                        
         # 
         # viewpoint
         #
@@ -1472,6 +1472,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         subcmd  = "bgcolor=%d:%d:%d " % (self.view['background']['color'])
         if self.view['background']['color'] != (255, 255, 255):
             cmd += subcmd
+        cmd += "\\\n"
         # light
         subcmd  = "light_position=%.2f,%.2f,%.2f " % (self.light['position']['x'],
                                                       self.light['position']['y'],
@@ -1480,7 +1481,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         subcmd += "light_ambient=%d " % (self.light['ambient'])
         subcmd += "light_color=%d:%d:%d " % (self.light['color'])
         cmd += subcmd
-        
+        cmd += "\\\n"
         # fringe
         toolWindow = self.lmgr.nviz
         direction = ''
@@ -1493,7 +1494,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             subcmd += "fringe_color=%d:%d:%d " % (color[0], color[1], color[2])
             subcmd += "fringe_elevation=%d " % (toolWindow.FindWindowById(toolWindow.win['fringe']['elev']).GetValue())
             cmd += subcmd
-            
+            cmd += "\\\n"
         # output
         subcmd = 'output=nviz_output '
         subcmd += 'format=ppm '
