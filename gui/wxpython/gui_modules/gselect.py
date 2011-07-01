@@ -1270,19 +1270,24 @@ class GdalSelect(wx.Panel):
             gcmd.GMessage(parent = self,
                           message = _("Name not given, settings is not saved."))
             return
-
-        data = self._loadSettings()
+        
+        name = dlg.GetValue()
         try:
-            fd = open(self.settingsFile, 'w')
-            fd.write(dlg.GetValue() + ';' + self.dsnType + ';' +
+            fd = open(self.settingsFile, 'a')
+            fd.write(name + ';' + self.dsnType + ';' +
                      self._getDsn() + ';' +
                      self.format.GetStringSelection())
             fd.write('\n')
         except IOError:
             gcmd.GError(parent = self,
-                        message = _("Unable to save settings."))
+                        message = _("Unable to save settings"))
             return
         fd.close()
+        
+        self._settings = self._loadSettings()
+        self.settingsChoice.Append(name)
+        self.settingsChoice.SetStringSelection(name)
+        
         dlg.Destroy()
                 
     def _loadSettings(self):
@@ -1493,7 +1498,7 @@ class GdalSelect(wx.Panel):
             if format == 'SQLite' or format == 'Rasterlite':
                 win = self.input['db-win']['file']
             elif format == 'PostgreSQL' or format == 'PostGIS WKT Raster driver':
-                if grass.find_program('psql'):
+                if grass.find_program('psql', ['--help']):
                     win = self.input['db-win']['choice']
                     if not win.GetItems():
                         p = grass.Popen(['psql', '-ltA'], stdout = grass.PIPE)
