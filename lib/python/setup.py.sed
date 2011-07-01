@@ -38,7 +38,7 @@ def init(gisbase, dbase = '', location = 'demolocation', mapset = 'PERMANENT'):
     """
     os.environ['PATH'] += os.pathsep + os.path.join(gisbase, 'bin') + \
         os.pathsep + os.path.join(gisbase, 'scripts')
-    if not os.environ.has_key('@LD_LIBRARY_PATH_VAR@'):
+    if '@LD_LIBRARY_PATH_VAR@' not in os.environ:
         os.environ['@LD_LIBRARY_PATH_VAR@'] = ''
     os.environ['@LD_LIBRARY_PATH_VAR@'] += os.path.join(gisbase, 'lib')
     
