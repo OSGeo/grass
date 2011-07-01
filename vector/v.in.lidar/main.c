@@ -249,10 +249,10 @@ int main(int argc, char *argv[])
     offset_y = LASHeader_GetOffsetY(LAS_header);
     offset_z = LASHeader_GetOffsetZ(LAS_header);
 
-    xmin = LASHeader_GetMinX(LAS_header) * scale_x + offset_x;
-    xmax = LASHeader_GetMaxX(LAS_header) * scale_x + offset_x;
-    ymin = LASHeader_GetMinY(LAS_header) * scale_y + offset_y;
-    ymax = LASHeader_GetMaxY(LAS_header) * scale_y + offset_y;
+    xmin = LASHeader_GetMinX(LAS_header);
+    xmax = LASHeader_GetMaxX(LAS_header);
+    ymin = LASHeader_GetMinY(LAS_header);
+    ymax = LASHeader_GetMaxY(LAS_header);
 
     /* Print LAS header */
     if (print_flag->answer) {
