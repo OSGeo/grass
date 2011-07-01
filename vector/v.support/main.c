@@ -160,11 +160,11 @@ int main(int argc, char *argv[])
     if (comment->answer) {	/* apparently only one line comments allowed, so we use space to delimit */
 	char *temp;
 
-	if (r_flag->answer || strlen(Map.head.line_3) == 0) {	/* check if new/replacing or adding */
+	if (r_flag->answer || strlen(Vect_get_comment(&Map)) == 0) {	/* check if new/replacing or adding */
 	    G_asprintf(&temp, "%s", comment->answer);
 	}
 	else {
-	    G_asprintf(&temp, "%s %s", Map.head.line_3, comment->answer);
+	    G_asprintf(&temp, "%s %s", Vect_get_comment(&Map), comment->answer);
 	}
 	Vect_set_comment(&Map, temp);
     }
