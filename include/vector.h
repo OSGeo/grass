@@ -128,6 +128,16 @@ int Vect_val_in_list(const struct ilist *, int);
 int Vect_reset_list(struct ilist *);
 void Vect_destroy_list(struct ilist *);
 
+/* List of bounding boxes with ids */
+struct boxlist *Vect_new_boxlist(void);
+int Vect_boxlist_append(struct boxlist *, int, struct bound_box);
+int Vect_boxlist_append_list(struct boxlist *, const struct boxlist *);
+int Vect_boxlist_delete(struct boxlist *, int);
+int Vect_boxlist_delete_boxlist(struct boxlist *, const struct boxlist *);
+int Vect_val_in_boxlist(const struct boxlist *, int);
+int Vect_reset_boxlist(struct boxlist *);
+void Vect_destroy_boxlist(struct boxlist *);
+
 /* Bounding box (MBR) */
 int Vect_point_in_box(double, double, double, const struct bound_box *);
 int Vect_box_overlap(const struct bound_box *, const struct bound_box *);
@@ -192,6 +202,7 @@ int Vect_get_constraint_box(const struct Map_info *, struct bound_box *);
 
 /* Get map level 2 informations */
 int Vect_level(const struct Map_info *);
+int Vect_get_line_type(const struct Map_info *, int);
 plus_t Vect_get_num_nodes(const struct Map_info *);
 plus_t Vect_get_num_primitives(const struct Map_info *, int);
 plus_t Vect_get_num_lines(const struct Map_info *);
@@ -295,8 +306,12 @@ char *Vect_hist_read(char *, int, const struct Map_info *);
 /* Selecting features */
 int Vect_select_lines_by_box(struct Map_info *, const struct bound_box *, int,
 			     struct ilist *);
+int Vect_select_lines_by_box_with_box(struct Map_info *, const struct bound_box *,
+			 int, struct boxlist *);
 int Vect_select_areas_by_box(struct Map_info *, const struct bound_box *, struct ilist *);
+int Vect_select_areas_by_box_with_box(struct Map_info *, const struct bound_box *, struct boxlist *);
 int Vect_select_isles_by_box(struct Map_info *, const struct bound_box *, struct ilist *);
+int Vect_select_isles_by_box_with_box(struct Map_info *, const struct bound_box *, struct boxlist *);
 int Vect_select_nodes_by_box(struct Map_info *, const struct bound_box *, struct ilist *);
 int Vect_find_node(struct Map_info *, double, double, double, double, int);
 int Vect_find_line(struct Map_info *, double, double, double, int, double,
@@ -324,8 +339,8 @@ int Vect__intersect_line_with_poly(const struct line_pnts *, double,
 				   struct line_pnts *);
 int Vect_get_point_in_poly(const struct line_pnts *, double *, double *);
 int Vect_point_in_poly(double, double, const struct line_pnts *);
-int Vect_point_in_area_outer_ring(double, double, const struct Map_info *, int);
-int Vect_point_in_island(double, double, const struct Map_info *, int);
+int Vect_point_in_area_outer_ring(double, double, const struct Map_info *, int, struct bound_box);
+int Vect_point_in_island(double, double, const struct Map_info *, int, struct bound_box);
 
 /* Cleaning */
 void Vect_break_lines(struct Map_info *, int, struct Map_info *);
