@@ -1395,8 +1395,71 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 cmd += cmdColorMap.strip(', ') + ' '
             if cmdColorVal.split("=")[1]:
                 cmd += cmdColorVal.strip(', ') + ' '
+                
+        #
+        # vlines
+        #
+        if vectors:
+            cmdLines = cmdLWidth = cmdLHeight = cmdLColor = cmdLMode = cmdLPos = \
+            cmdPoints = cmdPWidth = cmdPSize = cmdPColor = cmdPMarker = cmdPPos = cmdPLayer = ""
+            markers = ['x', 'box', 'sphere', 'cube', 'diamond',
+                       'dec_tree', 'con_tree', 'aster', 'gyro', 'histogram']
+            for vector in vectors:
+                npoints, nlines, nfeatures, mapIs3D = self.lmgr.nviz.VectorInfo(
+                                                      self.tree.GetPyData(vector)[0]['maplayer'])
+                nvizData = self.tree.GetPyData(vector)[0]['nviz']['vector']
+                if nlines > 0:
+                    cmdLines += "%s," % self.tree.GetPyData(vector)[0]['maplayer'].GetName()
+                    cmdLWidth += "%d," % nvizData['lines']['width']['value']
+                    cmdLHeight += "%d," % nvizData['lines']['height']['value']
+                    cmdLColor += "%s," % nvizData['lines']['color']['value']
+                    cmdLMode += "%s," % nvizData['lines']['mode']['type']
+                    cmdLPos += "0,0,%d," % nvizData['lines']['height']['value']
+                if npoints > 0:    
+                    cmdPoints += "%s," % self.tree.GetPyData(vector)[0]['maplayer'].GetName()
+                    cmdPWidth += "%d," % nvizData['points']['width']['value']
+                    cmdPSize += "%d," % nvizData['points']['size']['value']
+                    cmdPColor += "%s," % nvizData['points']['color']['value']
+                    cmdPMarker += "%s," % markers[nvizData['points']['marker']['value']]
+                    cmdPPos += "0,0,%d," % nvizData['points']['height']['value']
+                    cmdPLayer += "1,1,"
+            if cmdLines:
+                cmd += "vline=" + cmdLines.strip(',') + ' '
+                cmd += "vline_width=" + cmdLWidth.strip(',') + ' '
+                cmd += "vline_color=" + cmdLColor.strip(',') + ' '
+                cmd += "vline_height=" + cmdLHeight.strip(',') + ' '
+                cmd += "vline_mode=" + cmdLMode.strip(',') + ' '
+                cmd += "vline_position=" + cmdLPos.strip(',') + ' '
+            if cmdPoints:
+                cmd += "vpoint=" + cmdPoints.strip(',') + ' '
+                cmd += "vpoint_width=" + cmdPWidth.strip(',') + ' '
+                cmd += "vpoint_color=" + cmdPColor.strip(',') + ' '
+                cmd += "vpoint_size=" + cmdPSize.strip(',') + ' '
+                cmd += "vpoint_marker=" + cmdPMarker.strip(',') + ' '
+                cmd += "vpoint_position=" + cmdPPos.strip(',') + ' '
+                cmd += "vpoint_layer=" + cmdPLayer.strip(',') + ' '
+        #
+        # cutting planes
+        #
+        cplane = self.lmgr.nviz.FindWindowById(self.lmgr.nviz.win['cplane']['planes']).GetStringSelection()
+        print cplane
+        try:
+            planeIndex = int(cplane.split()[1])
+        except IndexError:
+            planeIndex = None
+        if planeIndex is not None:
+            shading = ['clear', 'top', 'bottom', 'blend', 'shaded']
+            cmd += "cplane=%d " % planeIndex
+            cmd += "cplane_rotation=%d " % self.cplanes[planeIndex]['rotation']['rot']
+            cmd += "cplane_tilt=%d " % self.cplanes[planeIndex]['rotation']['tilt']
+            cmd += "cplane_position=%d,%d,%d " % (self.cplanes[planeIndex]['position']['x'],
+                                           self.cplanes[planeIndex]['position']['y'],
+                                           self.cplanes[planeIndex]['position']['z'])
+            cmd += "cplane_shading=%s " % shading[self.cplanes[planeIndex]['shading']]
+                                                    
         # 
         # viewpoint
+        #
         subcmd  = "position=%.2f,%.2f " % (self.view['position']['x'], self.view['position']['y'])
         subcmd += "height=%d " % (self.iview['height']['value'])
         subcmd += "perspective=%d " % (self.view['persp']['value'])
