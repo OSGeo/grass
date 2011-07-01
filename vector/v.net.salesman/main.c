@@ -95,6 +95,7 @@ int main(int argc, char **argv)
     struct line_cats *Cats;
     struct line_pnts *Points;
     const char *dstr;
+    char buf[2000], buf2[2000];
 
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
@@ -192,8 +193,31 @@ int main(int argc, char **argv)
     Vect_set_open_level(2);
     Vect_open_old(&Map, map->answer, "");
     nnodes = Vect_get_num_nodes(&Map);
+    nlines = Vect_get_num_lines(&Map);
 
     /* Create list of terminals based on list of categories */
+    for (i = 1; i <= nlines; i++) {
+	
+	ltype = Vect_get_line_type(&Map, i);
+	if (!(ltype & GV_POINT))
+	    continue;
+
+	Vect_read_line(&Map, Points, Cats, i);
+	node = Vect_find_node(&Map, Points->x[0], Points->y[0], Points->z[0], 0, 0);
+	if (!node) {
+	    G_warning(_("Point is not connected to the network"));
+	    continue;
+	}
+	if (!(Vect_cat_get(Cats, tfield, &cat)))
+	    continue;
+	if (Vect_cat_in_cat_list(cat, Clist)) {
+	    Vect_list_append(TList, node);
+	}
+	
+    }
+
+
+#if 0
     for (i = 1; i <= nnodes; i++) {
 	nlines = Vect_get_node_n_lines(&Map, i);
 	for (j = 0; j < nlines; j++) {
@@ -208,6 +232,8 @@ int main(int argc, char **argv)
 	    }
 	}
     }
+#endif
+
     ncities = TList->n_values;
     G_message(_("Number of cities: [%d]"), ncities);
     if (ncities < 2)
@@ -419,41 +445,51 @@ int main(int argc, char **argv)
     Vect_open_new(&Out, output->answer, Vect_is_3d(&Map));
     Vect_hist_command(&Out);
 
-    fprintf(stdout, "\nCycle:\n");
-    fprintf(stdout, "Arcs' categories (layer %d, %d arcs):\n", afield,
+    G_verbose_message(_("Cycle:"));
+    G_verbose_message(_("Arcs' categories (layer %d, %d arcs):"), afield,
 	    StArcs->n_values);
     for (i = 0; i < StArcs->n_values; i++) {
 	line = StArcs->value[i];
 	ltype = Vect_read_line(&Map, Points, Cats, line);
 	Vect_write_line(&Out, ltype, Points, Cats);
 	Vect_cat_get(Cats, afield, &cat);
-	if (i > 0)
-	    printf(",");
-	fprintf(stdout, "%d", cat);
+	if (i > 0) {
+	    sprintf(buf2, ", %d", cat);
+	    strcat(buf, buf2);
+	}
+	else
+	    sprintf(buf, "%d", cat);
     }
-    fprintf(stdout, "\n\n");
+    G_verbose_message("%s\n\n", buf);
 
-    fprintf(stdout, "Nodes' categories (layer %d, %d nodes):\n", tfield,
+    G_verbose_message(_("Nodes' categories (layer %d, %d nodes):"), tfield,
 	    StNodes->n_values);
     k = 0;
-    for (i = 0; i < StNodes->n_values; i++) {
-	node = StNodes->value[i];
-	nlines = Vect_get_node_n_lines(&Map, node);
-	for (j = 0; j < nlines; j++) {
-	    line = abs(Vect_get_node_line(&Map, node, j));
-	    ltype = Vect_read_line(&Map, Points, Cats, line);
-	    if (!(ltype & GV_POINT))
-		continue;
-	    if (!(Vect_cat_get(Cats, tfield, &cat)))
-		continue;
-	    Vect_write_line(&Out, ltype, Points, Cats);
-	    if (k > 0)
-		fprintf(stdout, ",");
-	    fprintf(stdout, "%d", cat);
-	    k++;
+    for (i = 0; i < TList->n_values; i++) {
+	double coor_x, coor_y, coor_z;
+	
+	node = TList->value[i];
+	Vect_get_node_coor(&Map, node, &coor_x, &coor_y, &coor_z);
+	line = Vect_find_line(&Map, coor_x, coor_y, coor_z, GV_POINT, 0, 0, 0);
+	
+	if (!line)
+	    continue;
+
+	ltype = Vect_read_line(&Map, Points, Cats, line);
+	if (!(ltype & GV_POINT))
+	    continue;
+	if (!(Vect_cat_get(Cats, tfield, &cat)))
+	    continue;
+	Vect_write_line(&Out, ltype, Points, Cats);
+	if (k > 0) {
+	    sprintf(buf2, ", %d", cat);
+	    strcat(buf, buf2);
 	}
+	else
+	    sprintf(buf, "%d", cat);
+	k++;
     }
-    fprintf(stdout, "\n\n");
+    G_verbose_message("%s\n\n", buf);
 
     Vect_build(&Out);
 

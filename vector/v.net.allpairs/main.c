@@ -194,7 +194,8 @@ int main(int argc, char *argv[])
 	if (type == GV_POINT) {
 	    int node;
 
-	    Vect_get_line_nodes(&In, i, &node, NULL);
+	    /* Vect_get_line_nodes(&In, i, &node, NULL); */
+	    node = Vect_find_node(&In, Points->x[0], Points->y[0], Points->z[0], 0, 0);
 	    Vect_cat_get(Cats, layer, &cats[node]);
 	    if (cats[node] != -1) {
 		Vect_write_line(&Out, GV_POINT, Points, Cats);

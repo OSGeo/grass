@@ -322,7 +322,8 @@ int main(int argc, char *argv[])
 	    if (!Vect_cat_get(Cats, layer, &cat))
 		continue;
 	    Vect_write_line(&Out, type, Points, Cats);
-	    Vect_get_line_nodes(&In, i, &node, NULL);
+	    node = Vect_find_node(&In, Points->x[0], Points->y[0], Points->z[0], 0, 0);
+	    /* Vect_get_line_nodes(&In, i, &node, NULL); */
 	    process_node(node, cat);
 	    covered[node] = 1;
 	}

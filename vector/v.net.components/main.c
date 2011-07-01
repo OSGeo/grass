@@ -190,7 +190,8 @@ int main(int argc, char *argv[])
 	else if (type == GV_POINT) {
 	    int node;
 
-	    Vect_get_line_nodes(&In, i, &node, NULL);
+	    /* Vect_get_line_nodes(&In, i, &node, NULL); */
+	    node = Vect_find_node(&In, Points->x[0], Points->y[0], Points->z[0], 0, 0);
 	    comp = component[node];
 	    covered[node] = 1;
 	}

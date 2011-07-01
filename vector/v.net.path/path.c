@@ -118,7 +118,7 @@ int path(struct Map_info *In, struct Map_info *Out, char *filename,
 
     db_begin_transaction(driver);
 
-    /* Read stdin, find shortest path, and write connectin line and new database record */
+    /* Read stdin, find shortest path, and write connecting line and new database record */
     cat = 0;
     formaterr = nopoint = unreachable = 0;
     while (1) {
@@ -173,7 +173,9 @@ int path(struct Map_info *In, struct Map_info *Out, char *filename,
 	    }
 	    else {
 		fline = Citem->line;
-		Vect_get_line_nodes(In, fline, &fnode, NULL);
+		type = Vect_read_line(&In, Points, NULL, fline);
+		fnode = Vect_find_node(&In, Points->x[0], Points->y[0], Points->z[0], 0, 0);
+		/* Vect_get_line_nodes(In, fline, &fnode, NULL); */
 	    }
 	    G_debug(3, "from: cat = %5d point(line) = %5d node = %5d", fcat,
 		    fline, fnode);
@@ -191,7 +193,9 @@ int path(struct Map_info *In, struct Map_info *Out, char *filename,
 	    }
 	    else {
 		tline = Citem->line;
-		Vect_get_line_nodes(In, tline, &tnode, NULL);
+		type = Vect_read_line(&In, Points, NULL, tline);
+		tnode = Vect_find_node(&In, Points->x[0], Points->y[0], Points->z[0], 0, 0);
+		/* Vect_get_line_nodes(In, tline, &tnode, NULL); */
 	    }
 	    G_debug(3, "to  : cat = %5d point(line) = %5d node = %5d", tcat,
 		    tline, tnode);

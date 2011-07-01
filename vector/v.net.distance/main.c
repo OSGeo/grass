@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
 		      "the given sets of features.");
     module->description =
 	_("Finds the shortest paths from a feature 'to' to every feature 'from' "
-	 "and various information about this realtion are uploaded to the attribute table.");
+	 "and various information about this relation are uploaded to the attribute table.");
 
     /* Define the different options as defined in gis.h */
     map_in = G_define_standard_option(G_OPT_V_INPUT);
@@ -233,7 +233,15 @@ int main(int argc, char *argv[])
 
 	    if (!Vect_cat_get(Cats, flayer, &cat))
 		continue;
-	    Vect_get_line_nodes(&In, i, &node, NULL);
+		
+	    if (type & GV_POINTS) {
+		node = Vect_find_node(&In, Points->x[0], Points->y[0], Points->z[0], 0, 0);
+	    }
+	    else {
+		Vect_get_line_nodes(&In, i, &node, NULL);
+	    }
+	    if (node < 1)
+		continue;
 	    Vect_write_line(&Out, type, Points, Cats);
 	    cost = dst[node] / (double)In.cost_multip;
 	    vertex = dglGetNode(graph, node);
