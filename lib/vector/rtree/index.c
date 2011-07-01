@@ -132,6 +132,8 @@ void RTreeFreeIndex(struct RTree *t)
 	RTreeDestroyNode(t->root, t->root->level ? t->nodecard : t->leafcard);
 
     free(t);
+    
+    return;
 }
 
 /*

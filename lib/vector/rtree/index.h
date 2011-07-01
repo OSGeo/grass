@@ -46,10 +46,10 @@ typedef double RectReal;
  * this is LFS dependent, not good
  * on 32 bit without LFS this is 9.69
  * on 32 bit with LFS and on 64 bit this is 9 */
-#define MAXCARD 18
+#define MAXCARD 9
 
 /* R*-tree: number of branches to be force-reinserted when adding a branch */
-#define FORCECARD 2
+#define FORCECARD 3
 
 /* maximum no of levels = tree depth */
 #define MAXLEVEL 20        /* 8^MAXLEVEL items are guaranteed to fit into the tree */
@@ -90,7 +90,7 @@ struct Node             /* node for spatial index */
  * It can terminate the search early by returning 0 in which case
  * the search will return the number of hits found up to that point.
  */
-typedef int SearchHitCallback(int id, void *arg);
+typedef int SearchHitCallback(int id, struct Rect rect, void *arg);
 
 struct RTree;
 
