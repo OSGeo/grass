@@ -903,6 +903,13 @@ void check_parameters(const struct GParams *params)
 	G_fatal_error(_("Inconsistent number of attributes (<%s> %d: <%s> %d)"),
 		      params->vlines->key, nvlines, params->vline_height->key,
 		      nconsts);
+              
+    /* position */
+    nconsts = opt_get_num_answers(params->vline_pos);
+    if (nvlines > 0 && nconsts != 3 * nvlines)
+	G_fatal_error(_("Inconsistent number of attributes (<%s> %d: <%s> %d)"),
+		      params->vlines->key, nvlines, params->vline_pos->key,
+		      nconsts);
 
     return;
 
