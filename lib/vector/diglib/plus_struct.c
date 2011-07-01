@@ -147,10 +147,9 @@ int dig_Wr_P_node(struct Plus_head *Plus, int n, struct gvfile * fp)
 
 int dig_Rd_P_line(struct Plus_head *Plus, int n, struct gvfile * fp)
 {
-    int n_edges, vol;
+    int n_edges;
     char tp;
     struct P_line *ptr;
-    struct P_node *Node;
 
     G_debug(3, "dig_Rd_P_line()");
 
@@ -173,85 +172,73 @@ int dig_Rd_P_line(struct Plus_head *Plus, int n, struct gvfile * fp)
     if (0 >= dig__fread_port_O(&(ptr->offset), 1, fp, Plus->off_t_size))
 	return (-1);
 
-    /* first node */
-    if (ptr->type & (GV_POINTS | GV_LINES | GV_KERNEL))
-	if (0 >= dig__fread_port_P(&(ptr->N1), 1, fp))
-	    return -1;
+    if (ptr->type == GV_POINT) {
+	ptr->topo = NULL;
+    }
+    else {
+	ptr->topo = dig_alloc_topo(ptr->type);
+    }
 
-    /* second node, for points/centroids not needed */
-    if (ptr->type & (GV_LINE | GV_BOUNDARY)) {
-	if (0 >= dig__fread_port_P(&(ptr->N2), 1, fp))
+    /* centroids */
+    if (ptr->type & GV_CENTROID) {
+	struct P_topo_c *topo = (struct P_topo_c *)ptr->topo;
+
+	if (0 >= dig__fread_port_P(&(topo->area), 1, fp))
 	    return -1;
     }
-    else if (ptr->type & (GV_POINTS | GV_KERNEL))
-	ptr->N2 = ptr->N1;
+    /* lines */
+    else if (ptr->type & GV_LINE) {
+	struct P_topo_l *topo = (struct P_topo_l *)ptr->topo;
 
-    /* left area for boundary, area for centroid */
-    if (ptr->type & (GV_BOUNDARY | GV_CENTROID))
-	if (0 >= dig__fread_port_P(&(ptr->left), 1, fp))
+	if (0 >= dig__fread_port_P(&(topo->N1), 1, fp))
 	    return -1;
-
-    /* right area */
-    if (ptr->type & GV_BOUNDARY)
-	if (0 >= dig__fread_port_P(&(ptr->right), 1, fp))
+	if (0 >= dig__fread_port_P(&(topo->N2), 1, fp))
 	    return -1;
+    }
+    /* boundaries */
+    if (ptr->type & GV_BOUNDARY) {
+	struct P_topo_b *topo = (struct P_topo_b *)ptr->topo;
 
-    if ((ptr->type & GV_FACE) && Plus->with_z) {	/* reserved for face edges */
+	if (0 >= dig__fread_port_P(&(topo->N1), 1, fp))
+	    return -1;
+	if (0 >= dig__fread_port_P(&(topo->N2), 1, fp))
+	    return -1;
+	if (0 >= dig__fread_port_P(&(topo->left), 1, fp))
+	    return -1;
+	if (0 >= dig__fread_port_P(&(topo->right), 1, fp))
+	    return -1;
+    }
+    /* faces */
+    else if ((ptr->type & GV_FACE) && Plus->with_z) {	/* reserved for face edges */
+	struct P_topo_f *topo = (struct P_topo_f *)ptr->topo;
+
 	if (0 >= dig__fread_port_I(&n_edges, 1, fp))
 	    return -1;
 
 	/* here will be list of edges */
 
 	/* left / right volume */
-	if (0 >= dig__fread_port_P(&vol, 1, fp))
+	if (0 >= dig__fread_port_P(&(topo->left), 1, fp))
 	    return -1;
-	if (0 >= dig__fread_port_P(&vol, 1, fp))
+	if (0 >= dig__fread_port_P(&(topo->left), 1, fp))
 	    return -1;
     }
+    /* kernels */
+    else if ((ptr->type & GV_KERNEL) && Plus->with_z) {	/* reserved for kernel (volume number) */
+	struct P_topo_k *topo = (struct P_topo_k *)ptr->topo;
 
-    if ((ptr->type & GV_KERNEL) && Plus->with_z)	/* reserved for kernel (volume number) */
-	if (0 >= dig__fread_port_P(&vol, 1, fp))
+	if (0 >= dig__fread_port_P(&(topo->volume), 1, fp))
 	    return -1;
-
-    /* bounding box */
-    if (ptr->type & (GV_LINE | GV_BOUNDARY | GV_FACE)) {
-	if (0 >= dig__fread_port_D(&(ptr->N), 1, fp))
-	    return -1;
-	if (0 >= dig__fread_port_D(&(ptr->S), 1, fp))
-	    return -1;
-	if (0 >= dig__fread_port_D(&(ptr->E), 1, fp))
-	    return -1;
-	if (0 >= dig__fread_port_D(&(ptr->W), 1, fp))
-	    return -1;
-
-	if (Plus->with_z) {
-	    if (0 >= dig__fread_port_D(&(ptr->T), 1, fp))
-		return -1;
-	    if (0 >= dig__fread_port_D(&(ptr->B), 1, fp))
-		return -1;
-	}
-	else {
-	    ptr->T = 0.0;
-	    ptr->B = 0.0;
-	}
-    }
-    else {
-	Node = Plus->Node[ptr->N1];
-	ptr->N = Node->y;
-	ptr->S = Node->y;
-	ptr->E = Node->x;
-	ptr->W = Node->x;
-	ptr->T = Node->z;
-	ptr->B = Node->z;
     }
 
     Plus->Line[n] = ptr;
+
     return (0);
 }
 
 int dig_Wr_P_line(struct Plus_head *Plus, int n, struct gvfile * fp)
 {
-    int n_edges = 0, vol = 0;
+    int n_edges = 0;
     char ch;
     struct P_line *ptr;
 
@@ -277,61 +264,63 @@ int dig_Wr_P_line(struct Plus_head *Plus, int n, struct gvfile * fp)
     /* offset */
     if (0 >= dig__fwrite_port_O(&(ptr->offset), 1, fp, Plus->off_t_size))
 	return (-1);
+	
+    if (!ptr->topo)
+	return (0);
+	
+    /* nothing else for points */
 
-    /* first node */
-    if (ptr->type & (GV_POINTS | GV_LINES | GV_KERNEL))
-	if (0 >= dig__fwrite_port_P(&(ptr->N1), 1, fp))
+    /* centroids */
+    if (ptr->type & GV_CENTROID) {
+	struct P_topo_c *topo = (struct P_topo_c *)ptr->topo;
+	
+	if (0 >= dig__fwrite_port_P(&(topo->area), 1, fp))
 	    return (-1);
+    }
+    /* lines */
+    else if (ptr->type & GV_LINE) {
+	struct P_topo_l *topo = (struct P_topo_l *)ptr->topo;
 
-    /* second node, for points/centroids not needed */
-    if (ptr->type & (GV_LINE | GV_BOUNDARY))
-	if (0 >= dig__fwrite_port_P(&(ptr->N2), 1, fp))
+	if (0 >= dig__fwrite_port_P(&(topo->N1), 1, fp))
 	    return (-1);
-
-    /* left area for boundary, area for centroid */
-    if (ptr->type & (GV_BOUNDARY | GV_CENTROID))
-	if (0 >= dig__fwrite_port_P(&(ptr->left), 1, fp))
+	if (0 >= dig__fwrite_port_P(&(topo->N2), 1, fp))
 	    return (-1);
+    }
+    /* boundaries */
+    else if (ptr->type & GV_BOUNDARY) {
+	struct P_topo_b *topo = (struct P_topo_b *)ptr->topo;
 
-    /* right area */
-    if (ptr->type & GV_BOUNDARY)
-	if (0 >= dig__fwrite_port_P(&(ptr->right), 1, fp))
+	if (0 >= dig__fwrite_port_P(&(topo->N1), 1, fp))
 	    return (-1);
+	if (0 >= dig__fwrite_port_P(&(topo->N2), 1, fp))
+	    return (-1);
+	if (0 >= dig__fwrite_port_P(&(topo->left), 1, fp))
+	    return (-1);
+	if (0 >= dig__fwrite_port_P(&(topo->right), 1, fp))
+	    return (-1);
+    }
+    /* faces */
+    else if ((ptr->type & GV_FACE) && Plus->with_z) {	/* reserved for face */
+	struct P_topo_f *topo = (struct P_topo_f *)ptr->topo;
 
-    if ((ptr->type & GV_FACE) && Plus->with_z) {	/* reserved for face */
 	if (0 >= dig__fwrite_port_I(&n_edges, 1, fp))
 	    return (-1);
 
 	/* here will be list of edges */
 
-	/* left / right volume */
-	if (0 >= dig__fwrite_port_P(&vol, 1, fp))
+	/* left / right volume / hole */
+	if (0 >= dig__fwrite_port_P(&(topo->left), 1, fp))
 	    return (-1);
-	if (0 >= dig__fwrite_port_P(&vol, 1, fp))
+	if (0 >= dig__fwrite_port_P(&(topo->right), 1, fp))
 	    return (-1);
     }
+    /* kernels */
+    else if ((ptr->type & GV_KERNEL) && Plus->with_z) {	/* reserved for kernel (volume number) */
+	struct P_topo_k *topo = (struct P_topo_k *)ptr->topo;
 
-    if ((ptr->type & GV_KERNEL) && Plus->with_z)	/* reserved for kernel (volume number) */
-	if (0 >= dig__fwrite_port_P(&vol, 1, fp))
+	/* volume */
+	if (0 >= dig__fwrite_port_P(&(topo->volume), 1, fp))
 	    return (-1);
-
-    /* bounding box */
-    if (ptr->type & (GV_LINE | GV_BOUNDARY | GV_FACE)) {
-	if (0 >= dig__fwrite_port_D(&(ptr->N), 1, fp))
-	    return (-1);
-	if (0 >= dig__fwrite_port_D(&(ptr->S), 1, fp))
-	    return (-1);
-	if (0 >= dig__fwrite_port_D(&(ptr->E), 1, fp))
-	    return (-1);
-	if (0 >= dig__fwrite_port_D(&(ptr->W), 1, fp))
-	    return (-1);
-
-	if (Plus->with_z) {
-	    if (0 >= dig__fwrite_port_D(&(ptr->T), 1, fp))
-		return (-1);
-	    if (0 >= dig__fwrite_port_D(&(ptr->B), 1, fp))
-		return (-1);
-	}
     }
 
     return (0);
@@ -342,9 +331,7 @@ int dig_Rd_P_area(struct Plus_head *Plus, int n, struct gvfile * fp)
     int cnt;
     struct P_area *ptr;
 
-#ifdef GDEBUG
     G_debug(3, "dig_Rd_P_area(): n = %d", n);
-#endif
 
     if (0 >= dig__fread_port_P(&cnt, 1, fp))
 	return (-1);
@@ -356,7 +343,7 @@ int dig_Rd_P_area(struct Plus_head *Plus, int n, struct gvfile * fp)
 
     ptr = dig_alloc_area();
 
-    /* lines */
+    /* boundaries */
     ptr->n_lines = cnt;
 
     if (dig_area_alloc_line(ptr, ptr->n_lines) == -1)
@@ -381,27 +368,6 @@ int dig_Rd_P_area(struct Plus_head *Plus, int n, struct gvfile * fp)
     if (0 >= dig__fread_port_P(&(ptr->centroid), 1, fp))
 	return -1;
 
-    /* bounding box */
-    if (0 >= dig__fread_port_D(&(ptr->N), 1, fp))
-	return -1;
-    if (0 >= dig__fread_port_D(&(ptr->S), 1, fp))
-	return -1;
-    if (0 >= dig__fread_port_D(&(ptr->E), 1, fp))
-	return -1;
-    if (0 >= dig__fread_port_D(&(ptr->W), 1, fp))
-	return -1;
-
-    if (Plus->with_z) {
-	if (0 >= dig__fread_port_D(&(ptr->T), 1, fp))
-	    return -1;
-	if (0 >= dig__fread_port_D(&(ptr->B), 1, fp))
-	    return -1;
-    }
-    else {
-	ptr->T = 0.0;
-	ptr->B = 0.0;
-    }
-
     Plus->Area[n] = ptr;
 
     return (0);
@@ -422,7 +388,7 @@ int dig_Wr_P_area(struct Plus_head *Plus, int n, struct gvfile * fp)
 	return 0;
     }
 
-    /* lines */
+    /* boundaries */
     if (0 >= dig__fwrite_port_P(&(ptr->n_lines), 1, fp))
 	return (-1);
 
@@ -442,23 +408,6 @@ int dig_Wr_P_area(struct Plus_head *Plus, int n, struct gvfile * fp)
     if (0 >= dig__fwrite_port_P(&(ptr->centroid), 1, fp))
 	return (-1);
 
-    /* bounding box */
-    if (0 >= dig__fwrite_port_D(&(ptr->N), 1, fp))
-	return (-1);
-    if (0 >= dig__fwrite_port_D(&(ptr->S), 1, fp))
-	return (-1);
-    if (0 >= dig__fwrite_port_D(&(ptr->E), 1, fp))
-	return (-1);
-    if (0 >= dig__fwrite_port_D(&(ptr->W), 1, fp))
-	return (-1);
-
-    if (Plus->with_z) {
-	if (0 >= dig__fwrite_port_D(&(ptr->T), 1, fp))
-	    return (-1);
-	if (0 >= dig__fwrite_port_D(&(ptr->B), 1, fp))
-	    return (-1);
-    }
-
     return (0);
 }
 
@@ -467,9 +416,7 @@ int dig_Rd_P_isle(struct Plus_head *Plus, int n, struct gvfile * fp)
     int cnt;
     struct P_isle *ptr;
 
-#ifdef GDEBUG
     G_debug(3, "dig_Rd_P_isle()");
-#endif
 
     if (0 >= dig__fread_port_P(&cnt, 1, fp))
 	return (-1);
@@ -481,7 +428,7 @@ int dig_Rd_P_isle(struct Plus_head *Plus, int n, struct gvfile * fp)
 
     ptr = dig_alloc_isle();
 
-    /* lines */
+    /* boundaries */
     ptr->n_lines = cnt;
 
     if (dig_isle_alloc_line(ptr, ptr->n_lines) == -1)
@@ -494,27 +441,6 @@ int dig_Rd_P_isle(struct Plus_head *Plus, int n, struct gvfile * fp)
     /* area */
     if (0 >= dig__fread_port_P(&(ptr->area), 1, fp))
 	return -1;
-
-    /* bounding box */
-    if (0 >= dig__fread_port_D(&(ptr->N), 1, fp))
-	return -1;
-    if (0 >= dig__fread_port_D(&(ptr->S), 1, fp))
-	return -1;
-    if (0 >= dig__fread_port_D(&(ptr->E), 1, fp))
-	return -1;
-    if (0 >= dig__fread_port_D(&(ptr->W), 1, fp))
-	return -1;
-
-    if (Plus->with_z) {
-	if (0 >= dig__fread_port_D(&(ptr->T), 1, fp))
-	    return -1;
-	if (0 >= dig__fread_port_D(&(ptr->B), 1, fp))
-	    return -1;
-    }
-    else {
-	ptr->T = 0.0;
-	ptr->B = 0.0;
-    }
 
     Plus->Isle[n] = ptr;
 
@@ -547,23 +473,6 @@ int dig_Wr_P_isle(struct Plus_head *Plus, int n, struct gvfile * fp)
     /* area */
     if (0 >= dig__fwrite_port_P(&(ptr->area), 1, fp))
 	return (-1);
-
-    /* bounding box */
-    if (0 >= dig__fwrite_port_D(&(ptr->N), 1, fp))
-	return (-1);
-    if (0 >= dig__fwrite_port_D(&(ptr->S), 1, fp))
-	return (-1);
-    if (0 >= dig__fwrite_port_D(&(ptr->E), 1, fp))
-	return (-1);
-    if (0 >= dig__fwrite_port_D(&(ptr->W), 1, fp))
-	return (-1);
-
-    if (Plus->with_z) {
-	if (0 >= dig__fwrite_port_D(&(ptr->T), 1, fp))
-	    return (-1);
-	if (0 >= dig__fwrite_port_D(&(ptr->B), 1, fp))
-	    return (-1);
-    }
 
     return (0);
 }
