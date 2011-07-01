@@ -133,7 +133,7 @@ Vect_break_lines_list(struct Map_info *Map, struct ilist *List_break,
 	if (!(atype & type))
 	    continue;
 
-	Vect_get_line_box(Map, aline, &ABox);
+	Vect_line_box(APoints, &ABox);
 
 	/* Find which sides of the box are touched by intermediate (non-end) points of line */
 	if (!is3d) {
@@ -175,11 +175,13 @@ Vect_break_lines_list(struct Map_info *Map, struct ilist *List_break,
 	    }
 	    G_debug(3, "  j = %d bline = %d", j, bline);
 
+	    btype = Vect_read_line(Map, BPoints, BCats, bline);
+
 	    /* Check if thouch by end node only */
 	    if (!is3d) {
 		Vect_get_line_nodes(Map, aline, &anode1, &anode2);
 		Vect_get_line_nodes(Map, bline, &bnode1, &bnode2);
-		Vect_get_line_box(Map, bline, &BBox);
+		Vect_line_box(BPoints, &BBox);
 
 		if (anode1 == bnode1 || anode1 == bnode2)
 		    node = anode1;
@@ -190,22 +192,23 @@ Vect_break_lines_list(struct Map_info *Map, struct ilist *List_break,
 
 		if (node) {
 		    Vect_get_node_coor(Map, node, &nodex, &nodey, NULL);
-		    if ((node == anode1 && nodey == ABox.N && !touch1_n &&
-			 nodey == BBox.S) || (node == anode2 &&
-					      nodey == ABox.N && !touch2_n &&
-					      nodey == BBox.S) ||
-			(node == anode1 && nodey == ABox.S && !touch1_s &&
-			 nodey == BBox.N) || (node == anode2 &&
-					      nodey == ABox.S && !touch2_s &&
-					      nodey == BBox.N) ||
-			(node == anode1 && nodex == ABox.E && !touch1_e &&
-			 nodex == BBox.W) || (node == anode2 &&
-					      nodex == ABox.E && !touch2_e &&
-					      nodex == BBox.W) ||
-			(node == anode1 && nodex == ABox.W && !touch1_w &&
-			 nodex == BBox.E) || (node == anode2 &&
-					      nodex == ABox.W && !touch2_w &&
-					      nodex == BBox.E)) {
+		    if ((node == anode1 && nodey == ABox.N &&
+		         !touch1_n && nodey == BBox.S) ||
+		        (node == anode2 && nodey == ABox.N &&
+			 !touch2_n && nodey == BBox.S) ||
+			(node == anode1 && nodey == ABox.S &&
+			 !touch1_s && nodey == BBox.N) ||
+			(node == anode2 && nodey == ABox.S &&
+			 !touch2_s && nodey == BBox.N) ||
+			(node == anode1 && nodex == ABox.E &&
+			 !touch1_e && nodex == BBox.W) ||
+			(node == anode2 && nodex == ABox.E &&
+			 !touch2_e && nodex == BBox.W) ||
+			(node == anode1 && nodex == ABox.W &&
+			 !touch1_w && nodex == BBox.E) ||
+			(node == anode2 && nodex == ABox.W &&
+			 !touch2_w && nodex == BBox.E)) {
+
 			G_debug(3,
 				"lines %d and %d touching by end nodes only -> no intersection",
 				aline, bline);
@@ -213,8 +216,6 @@ Vect_break_lines_list(struct Map_info *Map, struct ilist *List_break,
 		    }
 		}
 	    }
-
-	    btype = Vect_read_line(Map, BPoints, BCats, bline);
 
 	    AXLines = NULL;
 	    BXLines = NULL;
@@ -374,6 +375,12 @@ Vect_break_lines_list(struct Map_info *Map, struct ilist *List_break,
 
     G_verbose_message(_("Intersections: %d"), nbreaks);
 
+    Vect_destroy_line_struct(APoints);
+    Vect_destroy_line_struct(BPoints);
+    Vect_destroy_line_struct(Points);
+    Vect_destroy_cats_struct(ACats);
+    Vect_destroy_cats_struct(BCats);
+    Vect_destroy_cats_struct(Cats);
     Vect_destroy_list(List);
 
     return nbreaks;

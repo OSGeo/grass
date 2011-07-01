@@ -136,11 +136,11 @@ static int add_line(struct Map_info *Map, int type, struct line_pnts *Points,
 	offset = FID;		/* because centroids are read from topology, not from layer */
     }
     G_debug(4, "Register line: FID = %d offset = %ld", FID, offset);
-    line = dig_add_line(plus, type, Points, offset);
+    dig_line_box(Points, &box);
+    line = dig_add_line(plus, type, Points, &box, offset);
     G_debug(4, "Line registered with line = %d", line);
 
     /* Set box */
-    dig_line_box(Points, &box);
     if (line == 1)
 	Vect_box_copy(&(plus->box), &box);
     else
@@ -254,14 +254,12 @@ static int add_geometry(struct Map_info *Map, OGRGeometryH hGeom, int FID,
 	    else
 		lines[0] = -line;
 
-	    area = dig_add_area(plus, 1, lines);
-	    dig_area_set_box(plus, area, &box);
+	    area = dig_add_area(plus, 1, lines, &box);
 
 	    /* Each area is also isle */
 	    lines[0] = -lines[0];	/* island is counter clockwise */
 
-	    isle = dig_add_isle(plus, 1, lines);
-	    dig_isle_set_box(plus, isle, &box);
+	    isle = dig_add_isle(plus, 1, lines, &box);
 
 	    if (iPart == 0) {	/* outer ring */
 		outer_area = area;
@@ -287,16 +285,16 @@ static int add_geometry(struct Map_info *Map, OGRGeometryH hGeom, int FID,
 	}
 	else {
 	    struct P_area *Area;
+	    struct P_topo_c *topo;
 
 	    G_debug(4, "  Centroid: %f, %f", x, y);
 	    Vect_reset_line(Points[0]);
 	    Vect_append_point(Points[0], x, y, 0.0);
 	    line = add_line(Map, GV_CENTROID, Points[0], FID, parts);
-	    dig_line_box(Points[0], &box);
-	    dig_line_set_box(plus, line, &box);
 
 	    Line = plus->Line[line];
-	    Line->left = outer_area;
+	    topo = (struct P_topo_c *)Line->topo;
+	    topo->area = outer_area;
 
 	    /* register centroid to area */
 	    Area = plus->Area[outer_area];

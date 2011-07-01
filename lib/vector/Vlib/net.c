@@ -223,10 +223,11 @@ Vect_net_build_graph(struct Map_info *Map,
     for (i = 1; i <= nlines; i++) {
 	G_percent(i, nlines, 1);	/* must be before any continue */
 	dofw = dobw = 1;
-	Vect_get_line_nodes(Map, i, &from, &to);
 	type = Vect_read_line(Map, Points, Cats, i);
 	if (!(type & ltype & (GV_LINE | GV_BOUNDARY)))
 	    continue;
+
+	Vect_get_line_nodes(Map, i, &from, &to);
 
 	if (afcol != NULL) {
 	    if (!(Vect_cat_get(Cats, afield, &cat))) {

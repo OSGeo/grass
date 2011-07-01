@@ -152,10 +152,13 @@ static void V2__add_line_to_topo_nat(struct Map_info *Map, int line,
 
     if (plus->built >= GV_BUILD_AREAS) {
 	if (type == GV_BOUNDARY) {
+
 	    /* Delete neighbour areas/isles */
 	    first = 1;
 	    for (s = 0; s < 2; s++) {	/* for each node */
-		node = (s == 0 ? Line->N1 : Line->N2);
+		struct P_topo_b *topo = (struct P_topo_b *)Line->topo;
+
+		node = (s == 0 ? topo->N1 : topo->N2);
 		G_debug(3,
 			"  delete neighbour areas/isles: %s node = %d",
 			(s == 0 ? "first" : "second"), node);
@@ -182,10 +185,11 @@ static void V2__add_line_to_topo_nat(struct Map_info *Map, int line,
 
 		    if (next_line != 0) {	/* there is a boundary to the right */
 			NLine = plus->Line[abs(next_line)];
+			topo = (struct P_topo_b *)NLine->topo;
 			if (next_line > 0)	/* the boundary is connected by 1. node */
-			    area = NLine->right;	/* we are interested just in this side (close to our line) */
+			    area = topo->right;	/* we are interested just in this side (close to our line) */
 			else if (next_line < 0)	/* the boundary is connected by 2. node */
-			    area = NLine->left;
+			    area = topo->left;
 
 			G_debug(3, "  next_line = %d area = %d", next_line,
 				area);
@@ -265,16 +269,19 @@ static void V2__add_line_to_topo_nat(struct Map_info *Map, int line,
 
     /* Attach centroid */
     if (plus->built >= GV_BUILD_CENTROIDS) {
+	struct P_topo_c *topo;
+
 	if (type == GV_CENTROID) {
 	    sel_area = Vect_find_area(Map, points->x[0], points->y[0]);
 	    G_debug(3, "  new centroid %d is in area %d", line, sel_area);
 	    if (sel_area > 0) {
 		Area = plus->Area[sel_area];
 		Line = plus->Line[line];
+		topo = (struct P_topo_c *)Line->topo;
 		if (Area->centroid == 0) {	/* first centroid */
 		    G_debug(3, "  first centroid -> attach to area");
 		    Area->centroid = line;
-		    Line->left = sel_area;
+		    topo->area = sel_area;
 		    if (plus->update_cidx) {
 			V2__add_area_cats_to_cidx_nat(Map, sel_area);
 		    }
@@ -282,7 +289,7 @@ static void V2__add_line_to_topo_nat(struct Map_info *Map, int line,
 		else {		/* duplicate centroid */
 		    G_debug(3,
 			    "  duplicate centroid -> do not attach to area");
-		    Line->left = -sel_area;
+		    topo->area = -sel_area;
 		}
 	    }
 	}
@@ -353,10 +360,9 @@ off_t V2_write_line_nat(struct Map_info *Map, int type,
     plus = &(Map->plus);
     /* Add line */
     if (plus->built >= GV_BUILD_BASE) {
-	line = dig_add_line(plus, type, points, offset);
-	G_debug(3, "  line added to topo with id = %d", line);
 	dig_line_box(points, &box);
-	dig_line_set_box(plus, line, &box);
+	line = dig_add_line(plus, type, points, &box, offset);
+	G_debug(3, "  line added to topo with id = %d", line);
 	if (line == 1)
 	    Vect_box_copy(&(plus->box), &box);
 	else
@@ -475,10 +481,9 @@ off_t V2_rewrite_line_nat(struct Map_info *Map, int line, int type, off_t old_of
     plus = &(Map->plus);
     /* Add line */
     if (plus->built >= GV_BUILD_BASE) {
-	line = dig_add_line(plus, type, points, offset);
-	G_debug(3, "  line added to topo with id = %d", line);
 	dig_line_box(points, &box);
-	dig_line_set_box(plus, line, &box);
+	line = dig_add_line(plus, type, points, &box, offset);
+	G_debug(3, "  line added to topo with id = %d", line);
 	if (line == 1)
 	    Vect_box_copy(&(plus->box), &box);
 	else
@@ -654,6 +659,7 @@ int V2_delete_line_nat(struct Map_info *Map, off_t line)
     struct bound_box box, abox;
     int adjacent[4], n_adjacent;
     static struct line_cats *Cats = NULL;
+    static struct line_pnts *Points = NULL;
 
     G_debug(3, "V2_delete_line_nat(), line = %lu", (unsigned long) line);
 
@@ -672,10 +678,14 @@ int V2_delete_line_nat(struct Map_info *Map, off_t line)
     if (!Cats) {
 	Cats = Vect_new_cats_struct();
     }
+    if (!Points) {
+	Points = Vect_new_line_struct();
+    }
+
+    type = V2_read_line_nat(Map, Points, Cats, line);
 
     /* Update category index */
     if (plus->update_cidx) {
-	type = V2_read_line_nat(Map, NULL, Cats, line);
 
 	for (i = 0; i < Cats->n_cats; i++) {
 	    dig_cidx_del_cat(plus, Cats->field[i], Cats->cat[i], line, type);
@@ -691,6 +701,8 @@ int V2_delete_line_nat(struct Map_info *Map, off_t line)
 
     /* Update topology */
     if (plus->built >= GV_BUILD_AREAS && type == GV_BOUNDARY) {
+	struct P_topo_b *topo = (struct P_topo_b *)Line->topo;
+
 	/* Store adjacent boundaries at nodes (will be used to rebuild area/isle) */
 	/* Adjacent are stored: > 0 - we want right side; < 0 - we want left side */
 	n_adjacent = 0;
@@ -722,8 +734,8 @@ int V2_delete_line_nat(struct Map_info *Map, off_t line)
 
 	/* Delete area(s) and islands this line forms */
 	first = 1;
-	if (Line->left > 0) {	/* delete area */
-	    Vect_get_area_box(Map, Line->left, &box);
+	if (topo->left > 0) {	/* delete area */
+	    Vect_get_area_box(Map, topo->left, &box);
 	    if (first) {
 		Vect_box_copy(&abox, &box);
 		first = 0;
@@ -732,15 +744,15 @@ int V2_delete_line_nat(struct Map_info *Map, off_t line)
 		Vect_box_extend(&abox, &box);
 
 	    if (plus->update_cidx) {
-		V2__delete_area_cats_from_cidx_nat(Map, Line->left);
+		V2__delete_area_cats_from_cidx_nat(Map, topo->left);
 	    }
-	    dig_del_area(plus, Line->left);
+	    dig_del_area(plus, topo->left);
 	}
-	else if (Line->left < 0) {	/* delete isle */
-	    dig_del_isle(plus, -Line->left);
+	else if (topo->left < 0) {	/* delete isle */
+	    dig_del_isle(plus, -topo->left);
 	}
-	if (Line->right > 0) {	/* delete area */
-	    Vect_get_area_box(Map, Line->right, &box);
+	if (topo->right > 0) {	/* delete area */
+	    Vect_get_area_box(Map, topo->right, &box);
 	    if (first) {
 		Vect_box_copy(&abox, &box);
 		first = 0;
@@ -749,29 +761,31 @@ int V2_delete_line_nat(struct Map_info *Map, off_t line)
 		Vect_box_extend(&abox, &box);
 
 	    if (plus->update_cidx) {
-		V2__delete_area_cats_from_cidx_nat(Map, Line->right);
+		V2__delete_area_cats_from_cidx_nat(Map, topo->right);
 	    }
-	    dig_del_area(plus, Line->right);
+	    dig_del_area(plus, topo->right);
 	}
-	else if (Line->right < 0) {	/* delete isle */
-	    dig_del_isle(plus, -Line->right);
+	else if (topo->right < 0) {	/* delete isle */
+	    dig_del_isle(plus, -topo->right);
 	}
     }
 
     /* Delete reference from area */
     if (plus->built >= GV_BUILD_CENTROIDS && type == GV_CENTROID) {
-	if (Line->left > 0) {
-	    G_debug(3, "Remove centroid %d from area %d", (int) line, Line->left);
+	struct P_topo_c *topo = (struct P_topo_c *)Line->topo;
+
+	if (topo->area > 0) {
+	    G_debug(3, "Remove centroid %d from area %d", (int) line, topo->area);
 	    if (plus->update_cidx) {
-		V2__delete_area_cats_from_cidx_nat(Map, Line->left);
+		V2__delete_area_cats_from_cidx_nat(Map, topo->area);
 	    }
-	    Area = Map->plus.Area[Line->left];
+	    Area = Map->plus.Area[topo->area];
 	    Area->centroid = 0;
 	}
     }
 
     /* delete the line from topo */
-    dig_del_line(plus, line);
+    dig_del_line(plus, line, Points->x[0], Points->y[0], Points->z[0]);
 
     /* Rebuild areas/isles and attach centroids and isles */
     if (plus->built >= GV_BUILD_AREAS && type == GV_BOUNDARY) {
@@ -938,10 +952,9 @@ int V2_restore_line_nat(struct Map_info *Map, int line, off_t offset)
     
     /* restore the line from topo */		   
     if (plus->built >= GV_BUILD_BASE) {
-	dig_restore_line(plus, line, type, points, offset);
-	G_debug(3, "  line restored in topo with id = %d", line);
 	dig_line_box(points, &box);
-	dig_line_set_box(plus, line, &box);
+	dig_restore_line(plus, line, type, points, &box, offset);
+	G_debug(3, "  line restored in topo with id = %d", line);
 	Vect_box_extend(&(plus->box), &box);
     }
     

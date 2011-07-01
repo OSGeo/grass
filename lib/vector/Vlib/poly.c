@@ -681,6 +681,7 @@ int Vect_point_in_poly(double X, double Y, const struct line_pnts *Points)
    \param X,Y point coordinates
    \param Map vector map
    \param area area id
+   \param box area bounding box
 
    \return 0 - outside
    \return 1 - inside 
@@ -688,7 +689,7 @@ int Vect_point_in_poly(double X, double Y, const struct line_pnts *Points)
  */
 int
 Vect_point_in_area_outer_ring(double X, double Y, const struct Map_info *Map,
-			      int area)
+			      int area, struct bound_box box)
 {
     static int first = 1;
     int n_intersects, inter;
@@ -710,7 +711,7 @@ Vect_point_in_area_outer_ring(double X, double Y, const struct Map_info *Map,
     Area = Plus->Area[area];
 
     /* First it must be in box */
-    if (X < Area->W || X > Area->E || Y > Area->N || Y < Area->S)
+    if (X < box.W || X > box.E || Y > box.N || Y < box.S)
 	return 0;
 
     n_intersects = 0;
@@ -719,9 +720,11 @@ Vect_point_in_area_outer_ring(double X, double Y, const struct Map_info *Map,
 	G_debug(3, "  line[%d] = %d", i, line);
 
 	Line = Plus->Line[line];
-
+	
+	Vect_get_line_box(Map, line, &box);
+	
 	/* dont check lines that obviously do not intersect with test ray */
-	if ((Line->N < Y) || (Line->S > Y) || (Line->E < X))
+	if ((box.N < Y) || (box.S > Y) || (box.E < X))
 	    continue;
 
 	Vect_read_line(Map, Points, NULL, line);
@@ -747,12 +750,14 @@ Vect_point_in_area_outer_ring(double X, double Y, const struct Map_info *Map,
    \param X,Y point coordinates
    \param Map vector map
    \param isle isle id
+   \param box isle bounding box
 
    \return 0 - outside
    \return 1 - inside 
    \return 2 - on the boundary (exactly may be said only for vertex of vertical/horizontal line)
  */
-int Vect_point_in_island(double X, double Y, const struct Map_info *Map, int isle)
+int Vect_point_in_island(double X, double Y, const struct Map_info *Map,
+                         int isle, struct bound_box box)
 {
     static int first = 1;
     int n_intersects, inter;
@@ -772,7 +777,7 @@ int Vect_point_in_island(double X, double Y, const struct Map_info *Map, int isl
     Plus = &(Map->plus);
     Isle = Plus->Isle[isle];
 
-    if (X < Isle->W || X > Isle->E || Y > Isle->N || Y < Isle->S)
+    if (X < box.W || X > box.E || Y > box.N || Y < box.S)
 	return 0;
 
     n_intersects = 0;
@@ -781,8 +786,10 @@ int Vect_point_in_island(double X, double Y, const struct Map_info *Map, int isl
 
 	Line = Plus->Line[line];
 
+	Vect_get_line_box(Map, line, &box);
+	
 	/* dont check lines that obviously do not intersect with test ray */
-	if ((Line->N < Y) || (Line->S > Y) || (Line->E < X))
+	if ((box.N < Y) || (box.S > Y) || (box.E < X))
 	    continue;
 
 	Vect_read_line(Map, Points, NULL, line);

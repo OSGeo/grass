@@ -23,6 +23,7 @@
    Remove duplicate lines of given types from vector map. Duplicate
    lines may be optionally written to error map. Input map must be
    opened on level 2 for update. Categories are merged.
+   GV_BUILD_BASE is sufficient.
 
    \param[in,out] Map vector map where duplicate lines will be deleted
    \param type type of line to be delete

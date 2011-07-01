@@ -90,6 +90,7 @@ int Vect_check_input_output_name(const char *input, const char *output,
 				 int error)
 {
     const char *mapset;
+    char nm[GNAME_MAX], ms[GMAPSET_MAX];
 
     if (Vect_legal_filename(output) == -1) {
 	if (error == GV_FATAL_EXIT) {
@@ -106,7 +107,14 @@ int Vect_check_input_output_name(const char *input, const char *output,
 	}
     }
 
-    mapset = G_find_vector2(input, "");
+    if (G_name_is_fully_qualified(input, nm, ms)) {
+	if (strcasecmp(ms, "ogr") != 0)
+	    mapset = G_find_vector2(input, "");
+	else
+	    mapset = ms;
+    }
+    else
+	mapset = G_find_vector2(input, "");
 
     if (mapset == NULL) {
 	if (error == GV_FATAL_EXIT) {
@@ -123,7 +131,6 @@ int Vect_check_input_output_name(const char *input, const char *output,
 
     if (strcmp(mapset, G_mapset()) == 0) {
 	const char *in;
-	char nm[GNAME_MAX], ms[GMAPSET_MAX];
 
 	if (G_name_is_fully_qualified(input, nm, ms)) {
 	    in = nm;

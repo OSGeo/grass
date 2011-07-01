@@ -55,13 +55,13 @@ Vect_set_constraint_region(struct Map_info *Map,
 	return -1;
 
     Map->Constraint_region_flag = 1;
-    Map->Constraint_N = n;
-    Map->Constraint_S = s;
-    Map->Constraint_E = e;
-    Map->Constraint_W = w;
-    Map->Constraint_T = t;
-    Map->Constraint_B = b;
-    Map->proj = G_projection();
+    Map->Constraint_box.N = n;
+    Map->Constraint_box.S = s;
+    Map->Constraint_box.E = e;
+    Map->Constraint_box.W = w;
+    Map->Constraint_box.T = t;
+    Map->Constraint_box.B = b;
+    Map->head.proj = G_projection();
 
     return 0;
 }
@@ -76,12 +76,12 @@ Vect_set_constraint_region(struct Map_info *Map,
  */
 int Vect_get_constraint_box(const struct Map_info *Map, struct bound_box * Box)
 {
-    Box->N = Map->Constraint_N;
-    Box->S = Map->Constraint_S;
-    Box->E = Map->Constraint_E;
-    Box->W = Map->Constraint_W;
-    Box->T = Map->Constraint_T;
-    Box->B = Map->Constraint_B;
+    Box->N = Map->Constraint_box.N;
+    Box->S = Map->Constraint_box.S;
+    Box->E = Map->Constraint_box.E;
+    Box->W = Map->Constraint_box.W;
+    Box->T = Map->Constraint_box.T;
+    Box->B = Map->Constraint_box.B;
 
     return 0;
 }

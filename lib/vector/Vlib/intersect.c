@@ -81,8 +81,8 @@ static double dist2(double x1, double y1, double x2, double y2);
 #if 0
 static int ident(double x1, double y1, double x2, double y2, double thresh);
 #endif
-static int cross_seg(int id, int *arg);
-static int find_cross(int id, int *arg);
+static int cross_seg(int id, struct Rect rect, int *arg);
+static int find_cross(int id, struct Rect rect, int *arg);
 
 #define D  ((ax2-ax1)*(by1-by2) - (ay2-ay1)*(bx1-bx2))
 #define D1 ((bx1-ax1)*(by1-by2) - (by1-ay1)*(bx1-bx2))
@@ -462,7 +462,7 @@ typedef struct
 
 /* Current line in arrays is for some functions like cmp() set by: */
 static int current;
-static int second;		/* line whic is not current */
+static int second;		/* line which is not current */
 
 static int a_cross = 0;
 static int n_cross;
@@ -540,7 +540,7 @@ static int ident(double x1, double y1, double x2, double y2, double thresh)
 static struct line_pnts *APnts, *BPnts;
 
 /* break segments (called by rtree search) */
-static int cross_seg(int id, int *arg)
+static int cross_seg(int id, struct Rect rect, int *arg)
 {
     double x1, y1, z1, x2, y2, z2;
     int i, j, ret;
@@ -1059,6 +1059,8 @@ Vect_line_intersection(struct line_pnts *APoints,
 	    *BLines = XLines;
 	}
     }
+    
+    /* clean up */
 
     return 1;
 }
@@ -1068,7 +1070,7 @@ static struct line_pnts *APnts, *BPnts, *IPnts;
 static int cross_found;		/* set by find_cross() */
 
 /* break segments (called by rtree search) */
-static int find_cross(int id, int *arg)
+static int find_cross(int id, struct Rect rect, int *arg)
 {
     double x1, y1, z1, x2, y2, z2;
     int i, j, ret;

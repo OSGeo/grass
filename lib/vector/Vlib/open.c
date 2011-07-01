@@ -275,6 +275,8 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
 	G_warning(_("Unable to read header file of vector map <%s>"),
 		  Vect_get_full_name(Map));
     }
+
+    /* projection is not written to head but zone ??? */
     
     /* zone not set */
     if (Vect_get_zone(Map) == -1)

@@ -345,20 +345,23 @@ int Vect_point_in_area(const struct Map_info *Map, int area, double x, double y)
     const struct Plus_head *Plus;
     struct P_area *Area;
     int poly;
+    struct bound_box box;
 
     Plus = &(Map->plus);
     Area = Plus->Area[area];
     if (Area == NULL)
 	return 0;
 
-    poly = Vect_point_in_area_outer_ring(x, y, Map, area);
+    Vect_get_area_box(Map, area, &box);
+    poly = Vect_point_in_area_outer_ring(x, y, Map, area, box);
     if (poly == 0)
 	return 0;		/* includes area boundary (poly == 2), OK? */
 
     /* check if in islands */
     for (i = 0; i < Area->n_isles; i++) {
 	isle = Area->isles[i];
-	poly = Vect_point_in_island(x, y, Map, isle);
+	Vect_get_isle_box(Map, isle, &box);
+	poly = Vect_point_in_island(x, y, Map, isle, box);
 	if (poly >= 1)
 	    return 0;		/* excludes island boundary (poly == 2), OK? */
     }
