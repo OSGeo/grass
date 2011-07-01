@@ -752,3 +752,12 @@ def GetFormats():
             }
     
     return formats
+
+def GetSettingsPath():
+    """!Get full path to the settings directory
+    """
+    version = int(grass.version()['version'].split('.', 1)[0])
+    if sys.platform == 'win32':
+        return os.path.join(os.getenv('APPDATA'), '.grass%d' % version)
+    
+    return os.path.join(os.getenv('HOME'), '.grass%d' % version)
