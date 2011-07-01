@@ -52,6 +52,7 @@ gettext.install('grasslibs', os.path.join(gisbase, 'locale'), unicode = True)
 
 tmpdir = None
 lockfile = None
+remove_lockfile = True
 location = None
 create_new = None
 grass_gui = None
@@ -82,10 +83,10 @@ def cleanup_dir(path):
             try_rmdir(os.path.join(root, name))
     
 def cleanup():
-    tmpdir, lockfile
+    tmpdir, lockfile, remove_lockfile
     # all exits after setting up $tmpdir should also tidy it up
     cleanup_dir(tmpdir)
-    if lockfile:
+    if lockfile and remove_lockfile:
 	try_remove(lockfile)
 
 def fatal(msg):
@@ -584,12 +585,15 @@ def check_lock():
                 "Concurrent use not allowed." % \
                     { 'user' : user, 'file' : lockfile })
     else:
-	msg = _("Unable to properly access \"%s\"\nPlease notify system personel.") % lockfile
+	msg = _("Unable to properly access '%s'.\n"
+                "Please notify system personel.") % lockfile
     
     if msg:
         if grass_gui == "wxpython":
             thetest = call([os.getenv('GRASS_PYTHON'), os.path.join(wxpython_base, "gis_set_error.py"), msg])
         else:
+            global remove_lockfile
+            remove_lockfile = False
             fatal(msg)
     
 def make_fontcap():
