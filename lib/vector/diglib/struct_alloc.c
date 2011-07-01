@@ -124,13 +124,45 @@ struct P_line *dig_alloc_line()
     Line = (struct P_line *) G_malloc(sizeof(struct P_line));
     if (Line == NULL)
         return NULL;
+	
+    Line->topo = NULL;
 
     return (Line);
+}
+
+/* allocate new topo structure */
+void *dig_alloc_topo(char type)
+{
+    void *Topo = NULL;
+
+    switch (type) {
+	case GV_LINE:
+	Topo = G_malloc(sizeof(struct P_topo_l));
+	break;
+    case GV_BOUNDARY:
+	Topo = G_malloc(sizeof(struct P_topo_b));
+	break;
+    case GV_CENTROID:
+	Topo = G_malloc(sizeof(struct P_topo_c));
+	break;
+    case GV_FACE:
+	Topo = G_malloc(sizeof(struct P_topo_f));
+	break;
+    case GV_KERNEL:
+	Topo = G_malloc(sizeof(struct P_topo_k));
+	break;
+    default:
+	return NULL;
+    }
+
+    return (Topo);
 }
 
 /* free line structure */
 void dig_free_line(struct P_line *Line)
 {
+    if (Line->topo)
+	G_free(Line->topo);
     G_free(Line);
 }
 

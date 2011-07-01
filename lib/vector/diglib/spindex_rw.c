@@ -1368,7 +1368,8 @@ int rtree_search(struct RTree *t, struct Rect *r, SearchHitCallback shcb,
 		    RTreeOverlap(r, &(s[top].sn.branch[i].rect), t)) {
 		    hitCount++;
 		    if (shcb) {	/* call the user-provided callback */
-			if (!shcb((int)s[top].sn.branch[i].child.id, cbarg)) {
+			if (!shcb((int)s[top].sn.branch[i].child.id,
+				  s[top].sn.branch[i].rect, cbarg)) {
 			    /* callback wants to terminate search early */
 			    return hitCount;
 			}

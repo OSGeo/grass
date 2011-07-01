@@ -27,22 +27,3 @@ dig_x_intersect(double beg_x,
     a = beg_x - b * beg_y;
     return (a + b * Y);
 }
-
-int dig_in_area_bbox(struct P_area * Area, double x, double y)
-{
-#ifdef GDEBUG
-    G_debug(3, "BBOX: (x,y) (%lf, %lf)\n", x, y);
-    G_debug(3, "NSEW:  %lf, %lf, %lf, %lf\n", Area->N, Area->S, Area->E,
-	    Area->W);
-#endif
-    if (x < Area->W)
-	return (0);
-    if (x > Area->E)
-	return (0);
-    if (y < Area->S)
-	return (0);
-    if (y > Area->N)
-	return (0);
-
-    return (1);
-}
