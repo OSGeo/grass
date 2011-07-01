@@ -382,7 +382,7 @@ class NvizToolWindow(FN.FlatNotebook):
 ##        style.SetCaptionStyle(fpb.CAPTIONBAR_FILLED_RECTANGLE)
 ##        style.SetFirstColour(wx.Color(250,250,250))
         self.foldpanelData = fpb.FoldPanelBar(parent = self.mainPanelData, id = wx.ID_ANY,
-                            style = fpb.FPB_DEFAULT_STYLE, extraStyle = fpb.FPB_SINGLE_FOLD)
+                                              extraStyle = fpb.FPB_SINGLE_FOLD)
                      
         self.foldpanelData.Bind(fpb.EVT_CAPTIONBAR, self.OnPressCaption)
 
@@ -427,7 +427,7 @@ class NvizToolWindow(FN.FlatNotebook):
         self.mainPanelAppear = ScrolledPanel(parent = self)
         self.mainPanelAppear.SetupScrolling(scroll_x = False)
         self.foldpanelAppear = fpb.FoldPanelBar(parent = self.mainPanelAppear, id = wx.ID_ANY,
-                                style = fpb.FPB_DEFAULT_STYLE, extraStyle = fpb.FPB_SINGLE_FOLD)
+                                                extraStyle = fpb.FPB_SINGLE_FOLD)
         self.foldpanelAppear.Bind(fpb.EVT_CAPTIONBAR, self.OnPressCaption)
         # light page
         lightPanel = self.foldpanelAppear.AddFoldPanel(_("Lighting"), collapsed = False)
@@ -454,7 +454,7 @@ class NvizToolWindow(FN.FlatNotebook):
         self.mainPanelAnalysis = ScrolledPanel(parent = self)
         self.mainPanelAnalysis.SetupScrolling(scroll_x = False)
         self.foldpanelAnalysis = fpb.FoldPanelBar(parent = self.mainPanelAnalysis, id = wx.ID_ANY,
-                                style = fpb.FPB_DEFAULT_STYLE, extraStyle = fpb.FPB_SINGLE_FOLD)
+                                                  extraStyle = fpb.FPB_SINGLE_FOLD)
         self.foldpanelAnalysis.Bind(fpb.EVT_CAPTIONBAR, self.OnPressCaption)
         # cutting planes page
         cplanePanel = self.foldpanelAnalysis.AddFoldPanel(_("Cutting planes"), collapsed = False)
