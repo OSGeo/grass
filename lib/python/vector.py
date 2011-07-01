@@ -40,15 +40,15 @@ def vector_db(map, **args):
     
     \code
     >>> grass.vector_db('lakes')
-    {1: {'layer': '1', 'name': '',
+    {1: {'layer': 1, 'name': '',
     'database': '/home/martin/grassdata/nc_spm_08/PERMANENT/dbf/',
     'driver': 'dbf', 'key': 'cat', 'table': 'lakes'}}
     \endcode
-
+    
     @param map vector map
-    @param args
-
-    @return dictionary { layer : { 'layer', 'table, 'database', 'driver', 'key' }
+    @param args other v.db.connect's arguments
+    
+    @return dictionary
     """
     s = read_command('v.db.connect', flags = 'g', map = map, fs = ';', **args)
     result = {}
@@ -67,7 +67,7 @@ def vector_db(map, **args):
             name = ''
             
 	result[int(layer)] = {
-            'layer'    : layer,
+            'layer'    : int(layer),
             'name'     : name,
             'table'    : f[1],
             'key'      : f[2],
