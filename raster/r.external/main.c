@@ -461,6 +461,7 @@ static void create_map(const char *input, int band, const char *output,
 		       const char *title, int flip)
 {
     struct History history;
+    struct Categories cats;
 
     Rast_put_cellhd(output, cellhd);
 
@@ -491,6 +492,8 @@ static void create_map(const char *input, int band, const char *output,
     Rast_write_history(output, &history);
 
     Rast_write_colors(output, G_mapset(), &info->colors);
+    Rast_init_cats(NULL, &cats);
+    Rast_write_cats((char *)output, &cats);
 
     if (title)
 	Rast_put_cell_title(output, title);
