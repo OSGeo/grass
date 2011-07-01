@@ -28,7 +28,7 @@ int main(int argc, char **argv)
 {
     struct GModule *module;
     struct opt opt;
-    struct Map_info *In, *Out, *Points;
+    struct Map_info *In = NULL, *Out = NULL, *Points = NULL;
 
     FILE *file_arcs;
 
