@@ -50,7 +50,7 @@ int get_stats(const char *name, const char *mapset, struct Cell_stats *statf) {
 void get_fp_stats(const char *name, const char *mapset,
         struct FP_stats *statf,
         DCELL min, DCELL max, int geometric, int geom_abs, int type) {
-    DCELL *dcell;
+    DCELL *dcell = NULL;
     int row, col, depth, nrows, ncols, ndepths = 1;
     int fd;
     G3D_Map *map3d = NULL;
@@ -147,10 +147,11 @@ void get_fp_stats(const char *name, const char *mapset,
 
     G_percent(row, nrows, 2);
 
-    if (type == RASTER_TYPE)
+    if (type == RASTER_TYPE) {
         Rast_close(fd);
-    else
+	if(dcell)
+    	    G_free(dcell);
+    } else {
         G3d_closeCell(map3d);
-
-    G_free(dcell);
+    }
 }
