@@ -172,6 +172,9 @@ int Vedit_connect_lines(struct Map_info *Map, struct ilist *List,
 	if (!Vect_line_alive(Map, line))
 	    continue;
 
+	if (Vect_get_line_type(Map, line) & GV_POINTS)
+	    continue;
+
 	node[0] = node[1] = -1;
 	Vect_get_line_nodes(Map, line, &(node[0]), &(node[1]));
 	if (node[0] < 0 || node[1] < 0)

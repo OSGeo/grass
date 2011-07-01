@@ -248,6 +248,9 @@ void draw_line_nodes(struct Map_info *Map, int line, int draw_flag,
     double east, north;
     struct robject *robj;
 
+    if (Vect_get_line_type(Map, line) & GV_POINTS)
+	return;
+
     Vect_get_line_nodes(Map, line, &(nodes[0]), &(nodes[1]));
     
     for (i = 0; i < sizeof(nodes) / sizeof(int); i++) {
