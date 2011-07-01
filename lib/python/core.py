@@ -236,14 +236,20 @@ def read_command(*args, **kwargs):
     return ps.communicate()[0]
 
 def parse_command(*args, **kwargs):
-    """!Passes all arguments to read_command, then parses the output by
-    parse_key_val().
+    """!Passes all arguments to read_command, then parses the output
+    by parse_key_val().
 
-    Parsing function can be optionally given by <b>parse</b> parameter
+    Parsing function can be optionally given by <em>parse</em> parameter
     including its arguments, e.g.
 
     @code
     parse_command(..., parse = (grass.parse_key_val, { 'sep' : ':' }))
+    @endcode
+
+    or you can simply define <em>delimiter</em>
+
+    @code
+    parse_command(..., delimiter = ':')
     @endcode
 
     @param args list of unnamed arguments (see start_command() for details)
@@ -252,15 +258,19 @@ def parse_command(*args, **kwargs):
     @return parsed module output
     """
     parse = None
-    if kwargs.has_key('parse'):
+    parse_args = {}
+    if 'parse' in kwargs:
         if type(kwargs['parse']) is types.TupleType:
             parse = kwargs['parse'][0]
             parse_args = kwargs['parse'][1]
         del kwargs['parse']
     
+    if 'delimiter' in kwargs:
+        parse_args = { 'sep' : kwargs['delimiter'] }
+        del kwargs['delimiter']
+    
     if not parse:
         parse = parse_key_val # use default fn
-        parse_args = {}
         
     res = read_command(*args, **kwargs)
 
@@ -712,7 +722,7 @@ def mlist_grouped(type, pattern = None):
             warning(_("Invalid element '%s'") % line)
             continue
         
-        if result.has_key(mapset_element):
+        if mapset_element in result:
             result[mapset_element].append(map)
         else:
 	    result[mapset_element] = [map, ]
