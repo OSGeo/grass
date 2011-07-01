@@ -168,18 +168,21 @@ class NvizToolWindow(FN.FlatNotebook):
         
     def SetInitialMaps(self):
         """!Set initial raster and vector map"""
-        try:
-            selectedRaster = self.mapWindow.Map.GetListOfLayers(l_type = 'raster')[0].GetName()
-            self.FindWindowById(self.win['surface']['map']).SetValue(selectedRaster)
-            self.FindWindowById(self.win['fringe']['map']).SetValue(selectedRaster)
-        except IndexError:
-            pass
-        
-        try:
-            selectedVector = self.mapWindow.Map.GetListOfLayers(l_type = 'vector')[0].GetName()
-            self.FindWindowById(self.win['vector']['map']).SetValue(selectedVector)
-        except IndexError:
-            pass
+        for l_type in ('raster', 'vector'):
+            selectedLayer = self.mapWindow.GetSelectedLayer()
+            layers = self.mapWindow.Map.GetListOfLayers(l_type = l_type, l_active = True)
+            if selectedLayer in layers:
+                selection = selectedLayer.GetName()
+            else:
+                try:
+                    selection = layers[0].GetName()
+                except:
+                    return
+            if l_type == 'raster':
+                self.FindWindowById(self.win['surface']['map']).SetValue(selection)
+                self.FindWindowById(self.win['fringe']['map']).SetValue(selection)
+            elif l_type == 'vector':
+                self.FindWindowById(self.win['vector']['map']).SetValue(selection)
     
     def UpdateState(self, **kwargs):
         if 'view' in kwargs:
@@ -1230,7 +1233,7 @@ class NvizToolWindow(FN.FlatNotebook):
     def GselectOnPopup(self, ltype, exclude = False):
         """Update gselect.Select() items"""
         maps = list()
-        for layer in self.mapWindow.Map.GetListOfLayers(l_type = ltype):
+        for layer in self.mapWindow.Map.GetListOfLayers(l_type = ltype, l_active = True):
             maps.append(layer.GetName())
         return maps, exclude
     
