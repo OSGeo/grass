@@ -1068,6 +1068,22 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # update progress bar range (mapwindow statusbar)
         self.mapdisplay.statusbarWin['progress'].SetRange(len(self.Map.GetListOfLayers(l_active = True)))
 
+        #
+        # nviz
+        #
+        if self.mapdisplay.toolbars['nviz'] and \
+                self.GetPyData(item) is not None:
+            # nviz - load/unload data layer
+            mapLayer = self.GetPyData(item)[0]['maplayer']
+            self.mapdisplay.SetStatusText(_("Please wait, updating data..."), 0)
+            if mapLayer.type == 'raster':
+                self.mapdisplay.MapWindow.UnloadRaster(item)
+            elif mapLayer.type == '3d-raster':
+                self.mapdisplay.MapWindow.UnloadRaster3d(item)
+            elif mapLayer.type == 'vector':
+                self.mapdisplay.MapWindow.UnloadVector(item)
+            self.mapdisplay.SetStatusText("", 0)
+            
         event.Skip()
 
     def OnLayerChecked(self, event):

@@ -975,7 +975,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         data = event.data
         
         if 'surface' in data:
-            id = data['surface']['object']['id']
+            try:
+                id = data['surface']['object']['id']
+            except KeyError:
+                pass
             self.UpdateSurfaceProperties(id, data['surface'])
             # -> initialized
             data['surface']['object']['init'] = True

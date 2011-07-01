@@ -168,7 +168,7 @@ class NvizToolWindow(FN.FlatNotebook):
         
     def SetInitialMaps(self):
         """!Set initial raster and vector map"""
-        for l_type in ('raster', 'vector'):
+        for l_type in ('raster', 'vector', '3d-raster'):
             selectedLayer = self.mapWindow.GetSelectedLayer()
             layers = self.mapWindow.Map.GetListOfLayers(l_type = l_type, l_active = True)
             if selectedLayer in layers:
@@ -177,13 +177,15 @@ class NvizToolWindow(FN.FlatNotebook):
                 try:
                     selection = layers[0].GetName()
                 except:
-                    return
+                    continue
             if l_type == 'raster':
                 self.FindWindowById(self.win['surface']['map']).SetValue(selection)
                 self.FindWindowById(self.win['fringe']['map']).SetValue(selection)
             elif l_type == 'vector':
                 self.FindWindowById(self.win['vector']['map']).SetValue(selection)
-    
+            elif l_type == '3d-raster':
+                self.FindWindowById(self.win['volume']['map']).SetValue(selection)
+                
     def UpdateState(self, **kwargs):
         if 'view' in kwargs:
             self.mapWindow.view = kwargs['view']
@@ -1250,7 +1252,7 @@ class NvizToolWindow(FN.FlatNotebook):
         box = wx.StaticBox (parent = panel, id = wx.ID_ANY,
                             label = " %s " % (_("3D raster map")))
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
-        rmaps = gselect.Select(parent = panel, type = 'raster3D',
+        rmaps = gselect.Select(parent = panel, type = '3d-raster',
                                onPopup = self.GselectOnPopup)
         rmaps.GetChildren()[0].Bind(wx.EVT_TEXT, self.OnSetRaster3D)
         self.win['volume']['map'] = rmaps.GetId()
