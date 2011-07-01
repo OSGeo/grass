@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <grass/gis.h>
 #include <grass/vector.h>
+#include <grass/glocale.h>
 #include "proto.h"
 
 /**
@@ -59,12 +60,15 @@ int connect_arcs(struct Map_info *In, struct Map_info *Pnts,
 				 WITHOUT_Z, &px, &py, &pz, &dist, &spdist,
 				 NULL);
 
+	if (seg == 0)
+	    G_fatal_error(_("Failed to find intersection segment"));
 	/* break the line */
 	Vect_reset_line(Pout);
 	for (i = 0; i < seg; i++) {
 	    Vect_append_point(Pout, Pline->x[i], Pline->y[i], Pline->z[i]);
 	}
 	Vect_append_point(Pout, px, py, pz);
+	Vect_line_prune(Pout);
 	Vect_rewrite_line(Out, line, ltype, Pout, Cline);
 
 	Vect_reset_line(Pout);
@@ -72,6 +76,7 @@ int connect_arcs(struct Map_info *In, struct Map_info *Pnts,
 	for (i = seg; i < Pline->n_points; i++) {
 	    Vect_append_point(Pout, Pline->x[i], Pline->y[i], Pline->z[i]);
 	}
+	Vect_line_prune(Pout);
 	Vect_write_line(Out, ltype, Pout, Cline);
 
 	if (dist > 0.0) {

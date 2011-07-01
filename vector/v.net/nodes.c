@@ -36,7 +36,7 @@ int nodes(struct Map_info *In, struct Map_info *Out, int add_cats, int nfield)
     }
     cat++;
 
-    /* Go thorough all nodes in old map and write a new point if missing */
+    /* Go through all nodes in old map and write a new point if missing */
     nnodes = Vect_get_num_nodes(In);
     count = 0;
     for (node = 1; node <= nnodes; node++) {
