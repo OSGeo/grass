@@ -218,7 +218,7 @@ int dig_Rd_spidx(struct gvfile *, struct Plus_head *);
 
 int dig_dump_spidx(FILE *, const struct Plus_head *);
 
-int rtree_search(struct RTree *, struct Rect *, SearchHitCallback ,
+int rtree_search(struct RTree *, struct RTree_Rect *, SearchHitCallback ,
 		void *, struct Plus_head *);
 
 /* struct_alloc.c */
