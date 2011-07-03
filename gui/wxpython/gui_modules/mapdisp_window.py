@@ -78,6 +78,7 @@ class MapWindow(object):
                 e, n = self.Pixel2Cell(event.GetPositionTuple())
             except (TypeError, ValueError):
                 self.parent.statusbar.SetStatusText("", 0)
+                event.Skip()
                 return
             
             updated = False

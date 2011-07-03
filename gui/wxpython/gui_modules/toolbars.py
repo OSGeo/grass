@@ -1349,8 +1349,7 @@ class NvizToolbar(AbstractToolbar):
         
     def OnNvizCmd(self, event):
         """!Show nviz_cmd command"""
-        cmd = self.parent.MapWindow.Nviz_cmd_command()
-        self.lmgr.GetLogWindow().WriteLog(text = cmd, switchPage = True)
+        self.parent.MapWindow.OnNvizCmd()
         
     def OnHelp(self, event):
         """!Show 3D view mode help"""

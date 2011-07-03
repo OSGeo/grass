@@ -1237,7 +1237,10 @@ class Nviz(object):
             return -2
         
         return 1
-
+    
+    def GetCPlaneCurrent(self):
+        return Nviz_get_current_cplane(self.data)
+    
     def GetCPlanesCount(self):
         """!Returns number of cutting planes"""
         return Nviz_num_cplanes(self.data) 
@@ -1279,7 +1282,18 @@ class Nviz(object):
         Nviz_draw_cplane(self.data, -1, -1) 
         Debug.msg(3, "Nviz::SetCPlaneTranslation(): id=%d, x=%f, y=%f, z=%f",
                   current, x, y, z)
-           
+                
+    def SetCPlaneInteractively(self, x, y):
+        current = Nviz_get_current_cplane(self.data)
+        ret = Nviz_set_cplane_here(self.data, current, x, y)
+        if ret:
+            Nviz_draw_cplane(self.data, -1, -1)
+            x, y, z = self.GetCPlaneTranslation()
+            return x, y, z
+        else:
+            return None, None, None
+        
+        
     def SelectCPlane(self, index):
         """!Select cutting plane
         

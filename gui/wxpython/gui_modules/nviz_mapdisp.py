@@ -228,54 +228,95 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.UpdateMap()
                 
     def OnMouseAction(self, event):
-        # change perspective with mouse wheel
-        wheel = event.GetWheelRotation()
-        
-        if wheel !=  0:
-            current  = event.GetPositionTuple()[:]
-            Debug.msg (5, "GLWindow.OnMouseMotion(): wheel = %d" % wheel)
-            prev_value = self.view['persp']['value']
-            if wheel > 0:
-                value = -1 * self.view['persp']['step']
-            else:
-                value = self.view['persp']['step']
-            self.view['persp']['value'] +=  value
-            if self.view['persp']['value'] < 1:
-                self.view['persp']['value'] = 1
-            elif self.view['persp']['value'] > 100:
-                self.view['persp']['value'] = 100
+        """!Handle mouse events"""
+        # zoom with mouse wheel
+        if event.GetWheelRotation() != 0:
+            self.OnMouseWheel(event)
             
-            if prev_value !=  self.view['persp']['value']:
-                if hasattr(self.lmgr, "nviz"):
-                    self.lmgr.nviz.UpdateSettings()
-                    
-                    self._display.SetView(self.view['position']['x'], self.view['position']['y'],
-                                          self.iview['height']['value'],
-                                          self.view['persp']['value'],
-                                          self.view['twist']['value'])
-                
-                # redraw map
-                self.DoPaint()
-                
-                # update statusbar
-                ### self.parent.StatusbarUpdate()
+        # left mouse button pressed
+        elif event.LeftDown():
+            self.OnLeftDown(event)
         
-        if event.LeftDown():
-            if self.mouse['use'] == "lookHere":
-                pos = event.GetPosition()
-                size = self.GetClientSize()
-                self._display.LookHere(pos[0], size[1] - pos[1])
-                self.Refresh(False)
-                focus = self._display.GetFocus()
-                for i, coord in enumerate(('x', 'y', 'z')):
-                    self.iview['focus'][coord] = focus[i]
-                toggle = self.lmgr.nviz.FindWindowByName('here')
-                toggle.SetValue(False)
-                self.mouse['use'] = 'default'
-                self.SetCursor(self.cursors['default'])
-                
+        # left mouse button released
+        elif event.LeftUp():
+            self.OnLeftUp(event)
+        
+        # dragging
+        elif event.Dragging():
+            self.OnDragging(event)
+        
         event.Skip()
 
+    def OnMouseWheel(self, event):
+        """!Change perspective"""
+        wheel = event.GetWheelRotation()
+        current  = event.GetPositionTuple()[:]
+        Debug.msg (5, "GLWindow.OnMouseMotion(): wheel = %d" % wheel)
+        prev_value = self.view['persp']['value']
+        if wheel > 0:
+            value = -1 * self.view['persp']['step']
+        else:
+            value = self.view['persp']['step']
+        self.view['persp']['value'] +=  value
+        if self.view['persp']['value'] < 1:
+            self.view['persp']['value'] = 1
+        elif self.view['persp']['value'] > 100:
+            self.view['persp']['value'] = 100
+        
+        if prev_value !=  self.view['persp']['value']:
+            if hasattr(self.lmgr, "nviz"):
+                self.lmgr.nviz.UpdateSettings()
+                
+                self._display.SetView(self.view['position']['x'], self.view['position']['y'],
+                                      self.iview['height']['value'],
+                                      self.view['persp']['value'],
+                                      self.view['twist']['value'])
+            
+            # redraw map
+            self.DoPaint()
+            
+            # update statusbar
+            ### self.parent.StatusbarUpdate()
+            
+    def OnLeftDown(self, event):
+        """!On left mouse down"""
+        if self.mouse['use'] == "lookHere":
+            pos = event.GetPosition()
+            size = self.GetClientSize()
+            self._display.LookHere(pos[0], size[1] - pos[1])
+            self.Refresh(False)
+            focus = self._display.GetFocus()
+            for i, coord in enumerate(('x', 'y', 'z')):
+                self.iview['focus'][coord] = focus[i]
+            toggle = self.lmgr.nviz.FindWindowByName('here')
+            toggle.SetValue(False)
+            self.mouse['use'] = 'default'
+            self.SetCursor(self.cursors['default'])
+            
+        if self.mouse['use'] == "cplane":   
+            pos = event.GetPosition()
+            size = self.GetClientSize()
+            x, y, z = self._display.SetCPlaneInteractively(pos[0], size[1] - pos[1])
+            if x is not None: 
+                idx = self._display.GetCPlaneCurrent()
+                self.cplanes[idx]['position']['x'] = x
+                self.cplanes[idx]['position']['y'] = y
+                self.render['quick'] = True
+            
+        event.Skip()    
+        
+    def OnDragging(self, event):
+        if self.mouse['use'] == "cplane":  
+            idx = self._display.GetCPlaneCurrent() 
+            pos = event.GetPosition()
+            size = self.GetClientSize()
+            x, y, z = self._display.SetCPlaneInteractively(pos[0], size[1] - pos[1])
+            if x is not None: 
+                self.cplanes[idx]['position']['x'] = x
+                self.cplanes[idx]['position']['y'] = y 
+                
+        event.Skip()
+            
     def Pixel2Cell(self, (x, y)):
         """!Convert image coordinates to real word coordinates
 
@@ -286,7 +327,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         """
         size = self.GetClientSize()
         # UL -> LL
-        sid, x, y, z = self._display.GetPointOnSurface(x, y)
+        sid, x, y, z = self._display.GetPointOnSurface(x, size[1] - y)
         
         if not sid:
             return None
@@ -299,6 +340,13 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self.OnQuerySurface(event)
         elif self.mouse["use"] == "nvizQueryVector":
             self.OnQueryVector(event)
+        elif self.mouse["use"] == 'cplane':
+            self.lmgr.nviz.OnCPlaneChangeDone(None)
+            idx = self._display.GetCPlaneCurrent() 
+            self.lmgr.nviz.UpdateCPlanePage(idx)
+            self.lmgr.nviz.FindWindowByName('cplaneHere').SetValue(False)
+            self.mouse['use'] = 'default'
+            self.SetCursor(self.cursors['default'])
     
     def OnQuerySurface(self, event):
         """!Query surface on given position"""
@@ -1292,7 +1340,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 return data['volume']['object']['id']
         return -1
     
-    def Nviz_cmd_command(self):
+    def NvizCmdCommand(self):
         """!Generate command for nviz_cmd according to current state"""
         cmd = 'nviz_cmd '
         
@@ -1502,7 +1550,11 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         cmd += subcmd
         
         return cmd
-
+    
+    def OnNvizCmd(self):
+        """!Generate and write command to command output"""
+        self.log.WriteLog(self.NvizCmdCommand(), switchPage = True)
+        
     def SaveToFile(self, FileName, FileType, width, height):
         """!This draws the DC to a buffer that can be saved to a file.
         

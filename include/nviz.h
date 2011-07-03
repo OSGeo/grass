@@ -143,6 +143,7 @@ int Nviz_get_cplane_rotation(nv_data *, int, float *, float *, float *);
 int Nviz_set_cplane_translation(nv_data *, int, float, float, float);
 int Nviz_get_cplane_translation(nv_data *, int, float *, float *, float *);
 int Nviz_set_fence_color(nv_data *, int);
+int Nviz_set_cplane_here(nv_data *, int, float, float);
 
 
 /* draw.c */
