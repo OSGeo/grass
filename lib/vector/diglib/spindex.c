@@ -253,7 +253,7 @@ int
 dig_spidx_add_node(struct Plus_head *Plus, int node,
 		   double x, double y, double z)
 {
-    struct Rect rect;
+    struct RTree_Rect rect;
 
     G_debug(3, "dig_spidx_add_node(): node = %d, x,y,z = %f, %f, %f", node, x,
 	    y, z);
@@ -280,7 +280,7 @@ dig_spidx_add_node(struct Plus_head *Plus, int node,
  */
 int dig_spidx_add_line(struct Plus_head *Plus, int line, struct bound_box * box)
 {
-    struct Rect rect;
+    struct RTree_Rect rect;
 
     G_debug(3, "dig_spidx_add_line(): line = %d", line);
 
@@ -306,7 +306,7 @@ int dig_spidx_add_line(struct Plus_head *Plus, int line, struct bound_box * box)
  */
 int dig_spidx_add_area(struct Plus_head *Plus, int area, struct bound_box * box)
 {
-    struct Rect rect;
+    struct RTree_Rect rect;
 
     G_debug(3, "dig_spidx_add_area(): area = %d", area);
 
@@ -333,7 +333,7 @@ int dig_spidx_add_area(struct Plus_head *Plus, int area, struct bound_box * box)
 
 int dig_spidx_add_isle(struct Plus_head *Plus, int isle, struct bound_box * box)
 {
-    struct Rect rect;
+    struct RTree_Rect rect;
 
     G_debug(3, "dig_spidx_add_isle(): isle = %d", isle);
 
@@ -362,7 +362,7 @@ int dig_spidx_del_node(struct Plus_head *Plus, int node)
 {
     int ret;
     struct P_node *Node;
-    struct Rect rect;
+    struct RTree_Rect rect;
 
     G_debug(3, "dig_spidx_del_node(): node = %d", node);
 
@@ -396,7 +396,7 @@ int dig_spidx_del_node(struct Plus_head *Plus, int node)
 int dig_spidx_del_line(struct Plus_head *Plus, int line, double x, double y, double z)
 {
     struct P_line *Line;
-    struct Rect rect;
+    struct RTree_Rect rect;
     int ret;
 
     G_debug(3, "dig_spidx_del_line(): line = %d", line);
@@ -434,10 +434,10 @@ int dig_spidx_del_area(struct Plus_head *Plus, int area)
 {
     int ret;
     struct P_area *Area;
-    struct Rect rect;
     struct P_line *Line;
     struct P_node *Node;
     struct P_topo_b *topo;
+    struct RTree_Rect rect;
 
     G_debug(3, "dig_spidx_del_area(): area = %d", area);
 
@@ -480,10 +480,10 @@ int dig_spidx_del_isle(struct Plus_head *Plus, int isle)
 {
     int ret;
     struct P_isle *Isle;
-    struct Rect rect;
     struct P_line *Line;
     struct P_node *Node;
     struct P_topo_b *topo;
+    struct RTree_Rect rect;
 
     G_debug(3, "dig_spidx_del_isle(): isle = %d", isle);
 
@@ -509,7 +509,7 @@ int dig_spidx_del_isle(struct Plus_head *Plus, int isle)
 }
 
 /* This function is called by RTreeSearch() to add selected node/line/area/isle to the list */
-static int _add_item(int id, struct Rect rect, struct ilist *list)
+static int _add_item(int id, struct RTree_Rect rect, struct ilist *list)
 {
     dig_list_add(list, id);
     return 1;
@@ -517,7 +517,7 @@ static int _add_item(int id, struct Rect rect, struct ilist *list)
 
 /* This function is called by RTreeSearch() to add 
  * selected node/line/area/isle to the box list */
-static int _add_item_with_box(int id, struct Rect rect, struct boxlist *list)
+static int _add_item_with_box(int id, struct RTree_Rect rect, struct boxlist *list)
 {
     struct bound_box box;
     
@@ -534,7 +534,7 @@ static int _add_item_with_box(int id, struct Rect rect, struct boxlist *list)
 
 /* This function is called by RTreeSearch() to add 
  * selected node/line/area/isle to the box list */
-static int _set_item_box(int id, struct Rect rect, struct boxlist *list)
+static int _set_item_box(int id, struct RTree_Rect rect, struct boxlist *list)
 {
     if (id == list->id[0]) {
 	
@@ -565,7 +565,7 @@ int
 dig_select_nodes(struct Plus_head *Plus, const struct bound_box * box,
 		 struct ilist *list)
 {
-    struct Rect rect;
+    struct RTree_Rect rect;
 
     G_debug(3, "dig_select_nodes()");
 
@@ -587,7 +587,7 @@ dig_select_nodes(struct Plus_head *Plus, const struct bound_box * box,
 }
 
 /* This function is called by RTreeSearch() for nodes to find the node id */
-static int _add_node(int id, struct Rect rect, int *node)
+static int _add_node(int id, struct RTree_Rect rect, int *node)
 {
     *node = id;
     return 0;
@@ -604,13 +604,10 @@ static int _add_node(int id, struct Rect rect, int *node)
  */
 int dig_find_node(struct Plus_head *Plus, double x, double y, double z)
 {
-    struct Rect rect;
-    struct ilist list;
+    struct RTree_Rect rect;
     int node;
 
     G_debug(3, "dig_find_node()");
-
-    dig_init_list(&list);
 
     rect.boundary[0] = x;
     rect.boundary[1] = y;
@@ -641,7 +638,7 @@ int
 dig_select_lines(struct Plus_head *Plus, const struct bound_box * box,
 		 struct ilist *list)
 {
-    struct Rect rect;
+    struct RTree_Rect rect;
 
     G_debug(3, "dig_select_lines()");
 
@@ -675,7 +672,7 @@ dig_select_lines(struct Plus_head *Plus, const struct bound_box * box,
 int dig_select_lines_with_box(struct Plus_head *Plus, const struct bound_box *box,
 		      struct boxlist *list)
 {
-    struct Rect rect;
+    struct RTree_Rect rect;
 
     G_debug(3, "dig_select_lines_with_box()");
 
@@ -707,7 +704,7 @@ int dig_select_lines_with_box(struct Plus_head *Plus, const struct bound_box *bo
  */
 int dig_find_line_box(const struct Plus_head *Plus, struct boxlist *list)
 {
-    struct Rect rect;
+    struct RTree_Rect rect;
     int ret;
 
     G_debug(3, "dig_find_line_box()");
@@ -743,7 +740,7 @@ int
 dig_select_areas(struct Plus_head *Plus, const struct bound_box * box,
 		 struct ilist *list)
 {
-    struct Rect rect;
+    struct RTree_Rect rect;
 
     G_debug(3, "dig_select_areas()");
 
@@ -777,7 +774,7 @@ int
 dig_select_areas_with_box(struct Plus_head *Plus, const struct bound_box * box,
 		 struct boxlist *list)
 {
-    struct Rect rect;
+    struct RTree_Rect rect;
 
     G_debug(3, "dig_select_areas_with_box()");
 
@@ -809,7 +806,7 @@ dig_select_areas_with_box(struct Plus_head *Plus, const struct bound_box * box,
  */
 int dig_find_area_box(const struct Plus_head *Plus, struct boxlist *list)
 {
-    struct Rect rect;
+    struct RTree_Rect rect;
     int ret;
 
     G_debug(3, "dig_find_line_box()");
@@ -845,7 +842,7 @@ int
 dig_select_isles(struct Plus_head *Plus, const struct bound_box * box,
 		 struct ilist *list)
 {
-    struct Rect rect;
+    struct RTree_Rect rect;
 
     G_debug(3, "dig_select_isles()");
 
@@ -879,7 +876,7 @@ int
 dig_select_isles_with_box(struct Plus_head *Plus, const struct bound_box * box,
 		 struct boxlist *list)
 {
-    struct Rect rect;
+    struct RTree_Rect rect;
 
     G_debug(3, "dig_select_areas_with_box()");
 
@@ -911,7 +908,7 @@ dig_select_isles_with_box(struct Plus_head *Plus, const struct bound_box * box,
  */
 int dig_find_isle_box(const struct Plus_head *Plus, struct boxlist *list)
 {
-    struct Rect rect;
+    struct RTree_Rect rect;
     int ret;
 
     G_debug(3, "dig_find_line_box()");

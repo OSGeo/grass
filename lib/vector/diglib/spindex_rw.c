@@ -477,7 +477,7 @@ int dig_Rd_spidx_head(struct gvfile * fp, struct Plus_head *ptr)
     return (0);
 }
 
-static int rtree_dump_node(FILE *, struct Node *n, int);
+static int rtree_dump_node(FILE *, struct RTree_Node *n, int);
 
 /*!
    \brief Dump R-tree branch to the file
@@ -489,10 +489,10 @@ static int rtree_dump_node(FILE *, struct Node *n, int);
 
    \return 0
  */
-static int rtree_dump_branch(FILE * fp, struct Branch *b, int with_z,
+static int rtree_dump_branch(FILE * fp, struct RTree_Branch *b, int with_z,
 			     int level)
 {
-    const struct Rect *r;
+    const struct RTree_Rect *r;
 
     r = &(b->rect);
 
@@ -517,7 +517,7 @@ static int rtree_dump_branch(FILE * fp, struct Branch *b, int with_z,
 
    \return 0
  */
-int rtree_dump_node(FILE * fp, struct Node *n, int with_z)
+int rtree_dump_node(FILE * fp, struct RTree_Node *n, int with_z)
 {
     int i;
 
@@ -558,10 +558,10 @@ static int rtree_dump_node_file(FILE *, off_t, int, struct RTree *);
 
    \return 0
  */
-static int rtree_dump_branch_file(FILE * fp, struct Branch *b, int with_z,
+static int rtree_dump_branch_file(FILE * fp, struct RTree_Branch *b, int with_z,
 			     int level, struct RTree *t)
 {
-    const struct Rect *r;
+    const struct RTree_Rect *r;
 
     r = &(b->rect);
 
@@ -590,7 +590,7 @@ static int rtree_dump_branch_file(FILE * fp, struct Branch *b, int with_z,
 int rtree_dump_node_file(FILE * fp, off_t pos, int with_z, struct RTree *t)
 {
     int i;
-    struct Node n;
+    struct RTree_Node n;
 
     /* recursive nearly-but-a-bit-messy depth-first pre-order traversal
      * potentially filling up memory */
@@ -658,12 +658,12 @@ static off_t rtree_write_from_memory(struct gvfile *fp, off_t startpos,
 {
     off_t nextfreepos = startpos;
     int sidx_nodesize, sidx_leafsize;
-    struct Node *n;
+    struct RTree_Node *n;
     int i, j, writeout, maxcard;
     struct spidxstack
     {
 	off_t pos[MAXCARD];	/* file position of child node, object ID on level 0 */
-	struct Node *sn;	/* stack node */
+	struct RTree_Node *sn;	/* stack node */
 	int branch_id;		/* branch no to follow down */
     } s[50];
     int top = 0;
@@ -763,12 +763,12 @@ static off_t rtree_write_from_file(struct gvfile *fp, off_t startpos,
 {
     off_t nextfreepos = startpos;
     int sidx_nodesize, sidx_leafsize;
-    struct Node *n;
+    struct RTree_Node *n;
     int i, j, writeout, maxcard;
     struct spidxstack
     {
 	off_t pos[MAXCARD];	/* file position of child node, object ID on level 0 */
-	struct Node sn;		/* stack node */
+	struct RTree_Node sn;	/* stack node */
 	int branch_id;		/* branch no to follow down */
     } s[MAXLEVEL];
     int top = 0;
@@ -877,12 +877,12 @@ static off_t rtree_write_to_sidx(struct gvfile *fp, off_t startpos,
 static void rtree_load_to_memory(struct gvfile *fp, off_t rootpos,
 				  struct RTree *t, int off_t_size)
 {
-    struct Node *newnode = NULL;
+    struct RTree_Node *newnode = NULL;
     int i, j, loadnode, maxcard;
     struct spidxstack
     {
 	off_t pos[MAXCARD];	/* file position of child node, object ID on level 0 */
-	struct Node sn;		/* stack node */
+	struct RTree_Node sn;	/* stack node */
 	int branch_id;		/* branch no to follow down */
     } s[50], *last;
     int top = 0;
@@ -1002,13 +1002,13 @@ static void rtree_load_to_memory(struct gvfile *fp, off_t rootpos,
 static void rtree_load_to_file(struct gvfile *fp, off_t rootpos,
 				  struct RTree *t, int off_t_size)
 {
-    struct Node newnode;
+    struct RTree_Node newnode;
     off_t newnode_pos = -1;
     int i, j, loadnode, maxcard;
     struct spidxstack
     {
 	off_t pos[MAXCARD];	/* file position of child node, object ID on level 0 */
-	struct Node sn;		/* stack node */
+	struct RTree_Node sn;	/* stack node */
 	int branch_id;		/* branch no to follow down */
     } s[MAXLEVEL], *last;
     int top = 0;
@@ -1279,7 +1279,7 @@ int dig_dump_spidx(FILE * fp, const struct Plus_head *Plus)
 
    \return number of qualifying rectangles
  */
-int rtree_search(struct RTree *t, struct Rect *r, SearchHitCallback shcb,
+int rtree_search(struct RTree *t, struct RTree_Rect *r, SearchHitCallback shcb,
 		 void *cbarg, struct Plus_head *Plus)
 {
     int hitCount = 0, found, maxcard;
@@ -1287,7 +1287,7 @@ int rtree_search(struct RTree *t, struct Rect *r, SearchHitCallback shcb,
     struct spidxstack
     {
 	off_t pos[MAXCARD];	/* file position of child node, object ID on level 0 */
-	struct Node sn;	        /* stack node */
+	struct RTree_Node sn;	        /* stack node */
 	int branch_id;		/* branch no to follow down */
     } s[50], *last;
     int top = 0;
