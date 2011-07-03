@@ -73,7 +73,7 @@ typedef struct
 static int fpoint;
 
 /* Function called from RTreeSearch for point found */
-void srch(int id, struct Rect rect, int *arg)
+void srch(int id, struct RTree_Rect rect, int *arg)
 {
     fpoint = id;
 }
@@ -114,7 +114,7 @@ Vect_break_polygons_file(struct Map_info *Map, int type, struct Map_info *Err)
     struct RTree *RTree;
     int apoints, npoints, nallpoints, nmarks;
     XPNT2 XPnt;
-    struct Rect rect;
+    struct RTree_Rect rect;
     double dx, dy, a1 = 0, a2 = 0;
     int closed, last_point;
     char cross;

@@ -41,7 +41,7 @@ typedef struct
 } NEW;
 
 /* This function is called by RTreeSearch() to add selected node/line/area/isle to the list */
-int add_item(int id, struct Rect rect, struct ilist *list)
+int add_item(int id, struct RTree_Rect rect, struct ilist *list)
 {
     dig_list_add(list, id);
     return 1;
@@ -95,6 +95,7 @@ Vect_snap_lines_list(struct Map_info *Map, const struct ilist *List_lines,
 
     struct RTree *RTree;
     int rtreefd = -1;
+    struct RTree_Rect rect;
     int point;			/* index in points array */
     int nanchors, ntosnap;	/* number of anchors and number of points to be snapped */
     int nsnapped, ncreated;	/* number of snapped verices, number of new vertices (on segments) */
@@ -102,7 +103,6 @@ Vect_snap_lines_list(struct Map_info *Map, const struct ilist *List_lines,
     XPNT *XPnts;		/* Array of points */
     NEW *New = NULL;		/* Array of new points */
     int anew = 0, nnew;		/* allocated new points , number of new points */
-    struct Rect rect;
     struct ilist *List;
     int *Index = NULL;		/* indexes of anchors for vertices */
     int aindex = 0;		/* allocated Index */
