@@ -833,7 +833,13 @@ class NvizToolWindow(FN.FlatNotebook):
         gridSizer.Add(item = self.FindWindowById(self.win['cplane']['position']['y']['text']),
                       pos = (1, 2),
                       flag = wx.ALIGN_CENTER)
-                    
+        posButton = wx.ToggleButton(parent = panel, id = wx.ID_ANY, label = _("On display"))
+        posButton.Bind(wx.EVT_TOGGLEBUTTON, self.OnCPlanePos)
+        posButton.SetName('cplaneHere')
+        self.win['cplane']['cplaneHere'] = posButton.GetId()
+        
+        gridSizer.Add(item = posButton, pos = (0, 3), span = (2, 1), flag = wx.EXPAND)
+                 
         self._createControl(panel, data = self.win['cplane']['position'], name = 'z', size = 250,
                             range = (-1000, 1000), sliderHor = True,
                             bind = (self.OnCPlaneChanging, self.OnCPlaneChangeDone, self.OnCPlaneChangeText))
@@ -3091,6 +3097,17 @@ class NvizToolWindow(FN.FlatNotebook):
         wx.PostEvent(self.mapWindow, event)
         self.OnCPlaneChangeDone(None)
         self.UpdateCPlanePage(planeIndex)
+        
+    def OnCPlanePos(self, event): 
+        plane = self.FindWindowById(self.win['cplane']['planes']).GetStringSelection()
+        try:
+            planeIndex = int(plane.split()[1])
+        except:#TODO disabled page
+            planeIndex = -1
+        self.mapWindow.mouse['use'] = 'cplane'
+        self.mapWindow.SetCursor(self.mapWindow.cursors["cross"])
+        self.parent.curr_page.maptree.mapdisplay.SetFocus()
+        self.parent.curr_page.maptree.mapdisplay.Raise()
         
     def UpdatePage(self, pageId):
         """!Update dialog (selected page)"""

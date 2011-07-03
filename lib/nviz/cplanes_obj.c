@@ -15,6 +15,7 @@
 #include <grass/nviz.h>
 
 static void cp_draw(nv_data *, int, int, int);
+static geoview Gv;
 
 /*!
    \brief Creates a clip plane object
@@ -241,4 +242,45 @@ int Nviz_set_fence_color(nv_data * data, int type)
 
     return 1;
 
+}
+int Nviz_set_cplane_here(nv_data *data, int cplane, float sx, float sy)
+{
+    float x, y, z, len, los[2][3];
+    float dx, dy, dz;
+    float n, s, w, e;
+    Point3 realto, dir;
+    int id;
+    geosurf *gs;
+
+    if (GS_get_selected_point_on_surface(sx, sy, &id, &x, &y, &z)) {
+	gs = gs_get_surf(id);
+	if (gs) {
+	    realto[X] = x - gs->ox + gs->x_trans;
+	    realto[Y] = y - gs->oy + gs->y_trans;
+	    realto[Z] = z + gs->z_trans;
+	}
+	else
+	    return 0;
+    }
+    else {
+	if (gsd_get_los(los, (short)sx, (short)sy)) {
+	    len = GS_distance(Gv.from_to[FROM], Gv.real_to);
+	    GS_v3dir(los[FROM], los[TO], dir);
+	    GS_v3mult(dir, len);
+	    realto[X] = Gv.from_to[FROM][X] + dir[X];
+	    realto[Y] = Gv.from_to[FROM][Y] + dir[Y];
+	    realto[Z] = Gv.from_to[FROM][Z] + dir[Z];
+	}
+	else
+	    return 0;
+    }  
+    Nviz_get_cplane_translation(data, cplane, &dx, &dy, &dz);
+
+    GS_get_region(&n, &s, &w, &e);
+    dx = realto[X] - (e - w) / 2.;
+    dy = realto[Y] - (n - s) / 2.;
+
+    Nviz_set_cplane_translation(data, cplane, dx, dy, dz);
+
+    return 1;
 }
