@@ -56,31 +56,31 @@ typedef double RectReal;
 
 #define NODETYPE(l, fd) ((l) == 0 ? 0 : ((fd) < 0 ? 1 : 2))
 
-struct Rect
+struct RTree_Rect
 {
     RectReal boundary[NUMSIDES];	/* xmin,ymin,...,xmax,ymax,... */
 };
 
-struct Node;               /* node for spatial index */
+struct RTree_Node;               /* node for spatial index */
 
-union Child
+union RTree_Child
 {
     int id;              /* child id */
-    struct Node *ptr;    /* pointer to child node */
+    struct RTree_Node *ptr;    /* pointer to child node */
     off_t pos;           /* position of child node in file */
 };
 
-struct Branch              /* branch for spatial index */
+struct RTree_Branch              /* branch for spatial index */
 {
-    struct Rect rect;
-    union Child child;
+    struct RTree_Rect rect;
+    union RTree_Child child;
 };
 
-struct Node             /* node for spatial index */
+struct RTree_Node             /* node for spatial index */
 {
     int count;          /* number of branches */
     int level;		/* 0 is leaf, others positive */
-    struct Branch branch[MAXCARD];
+    struct RTree_Branch branch[MAXCARD];
 };
 
 /*
@@ -90,15 +90,15 @@ struct Node             /* node for spatial index */
  * It can terminate the search early by returning 0 in which case
  * the search will return the number of hits found up to that point.
  */
-typedef int SearchHitCallback(int id, struct Rect rect, void *arg);
+typedef int SearchHitCallback(int id, struct RTree_Rect rect, void *arg);
 
 struct RTree;
 
-typedef int rt_search_fn(struct RTree *, struct Rect *,
+typedef int rt_search_fn(struct RTree *, struct RTree_Rect *,
                          SearchHitCallback *, void *);
-typedef int rt_insert_fn(struct Rect *, union Child, int, struct RTree *);
-typedef int rt_delete_fn(struct Rect *, union Child, struct RTree *);
-typedef int rt_valid_child_fn(union Child *);
+typedef int rt_insert_fn(struct RTree_Rect *, union RTree_Child, int, struct RTree *);
+typedef int rt_delete_fn(struct RTree_Rect *, union RTree_Child, struct RTree *);
+typedef int rt_valid_child_fn(union RTree_Child *);
 
 struct RTree
 {
@@ -134,7 +134,7 @@ struct RTree
      * more than three nodes per level would require too complex cache management */
     struct NodeBuffer
     {
-	struct Node n;	    /* buffered node */
+	struct RTree_Node n;	    /* buffered node */
 	off_t pos;	    /* file position of buffered node */
 	char dirty;         /* node in buffer was modified */
     } nb[MAXLEVEL][3];
@@ -150,90 +150,90 @@ struct RTree
     rt_search_fn *search_rect;
     rt_valid_child_fn *valid_child;
     
-    struct Node *root;     /* pointer to root node */
+    struct RTree_Node *root;     /* pointer to root node */
 
     off_t rootpos;         /* root node position in file */
 };
 
-struct ListNode
+struct RTree_ListNode
 {
-    struct ListNode *next;
-    struct Node *node;
+    struct RTree_ListNode *next;
+    struct RTree_Node *node;
 };
 
-struct ListFNode
+struct RTree_ListFNode
 {
-    struct ListFNode *next;
+    struct RTree_ListFNode *next;
     off_t node_pos;
 };
 
-struct ListBranch
+struct RTree_ListBranch
 {
-    struct ListBranch *next;
-    struct Branch b;
+    struct RTree_ListBranch *next;
+    struct RTree_Branch b;
     int level;
 };
 
 /* index.c */
-extern int RTreeSearch(struct RTree *, struct Rect *, SearchHitCallback *,
+extern int RTreeSearch(struct RTree *, struct RTree_Rect *, SearchHitCallback *,
 		       void *);
-extern int RTreeInsertRect(struct Rect *, int, struct RTree *);
-extern int RTreeDeleteRect(struct Rect *, int, struct RTree *);
+extern int RTreeInsertRect(struct RTree_Rect *, int, struct RTree *);
+extern int RTreeDeleteRect(struct RTree_Rect *, int, struct RTree *);
 extern struct RTree *RTreeNewIndex(int, off_t, int);
 extern void RTreeFreeIndex(struct RTree *);
-extern struct ListNode *RTreeNewListNode(void);
-extern void RTreeFreeListNode(struct ListNode *);
-extern void RTreeReInsertNode(struct Node *, struct ListNode **);
-extern void RTreeFreeListBranch(struct ListBranch *);
+extern struct RTree_ListNode *RTreeNewListNode(void);
+extern void RTreeFreeListNode(struct RTree_ListNode *);
+extern void RTreeReInsertNode(struct RTree_Node *, struct RTree_ListNode **);
+extern void RTreeFreeListBranch(struct RTree_ListBranch *);
 /* indexm.c */
-extern int RTreeSearchM(struct RTree *, struct Rect *, SearchHitCallback *,
+extern int RTreeSearchM(struct RTree *, struct RTree_Rect *, SearchHitCallback *,
 		       void *);
-extern int RTreeInsertRectM(struct Rect *, union Child, int, struct RTree *);
-extern int RTreeDeleteRectM(struct Rect *, union Child, struct RTree *);
-extern int RTreeValidChildM(union Child *child);
+extern int RTreeInsertRectM(struct RTree_Rect *, union RTree_Child, int, struct RTree *);
+extern int RTreeDeleteRectM(struct RTree_Rect *, union RTree_Child, struct RTree *);
+extern int RTreeValidChildM(union RTree_Child *child);
 /* indexf.c */
-extern int RTreeSearchF(struct RTree *, struct Rect *, SearchHitCallback *,
+extern int RTreeSearchF(struct RTree *, struct RTree_Rect *, SearchHitCallback *,
 		       void *);
-extern int RTreeInsertRectF(struct Rect *, union Child, int, struct RTree *);
-extern int RTreeDeleteRectF(struct Rect *, union Child, struct RTree *);
-extern int RTreeValidChildF(union Child *child);
+extern int RTreeInsertRectF(struct RTree_Rect *, union RTree_Child, int, struct RTree *);
+extern int RTreeDeleteRectF(struct RTree_Rect *, union RTree_Child, struct RTree *);
+extern int RTreeValidChildF(union RTree_Child *child);
 /* node.c */
-extern struct Node *RTreeNewNode(struct RTree *, int);
-extern void RTreeInitNode(struct Node *, int);
-extern void RTreeFreeNode(struct Node *);
-extern void RTreeDestroyNode(struct Node *, int);
-extern struct Rect RTreeNodeCover(struct Node *, struct RTree *);
-extern int RTreeAddBranch(struct Branch *, struct Node *, struct Node **, 
-            struct ListBranch **, struct Rect *, int *, struct RTree *);
-extern int RTreePickBranch(struct Rect *, struct Node *, struct RTree *);
-extern void RTreeDisconnectBranch(struct Node *, int, struct RTree *);
-extern void RTreePrintNode(struct Node *, int, struct RTree *);
+extern struct RTree_Node *RTreeNewNode(struct RTree *, int);
+extern void RTreeInitNode(struct RTree_Node *, int);
+extern void RTreeFreeNode(struct RTree_Node *);
+extern void RTreeDestroyNode(struct RTree_Node *, int);
+extern struct RTree_Rect RTreeNodeCover(struct RTree_Node *, struct RTree *);
+extern int RTreeAddBranch(struct RTree_Branch *, struct RTree_Node *, struct RTree_Node **, 
+            struct RTree_ListBranch **, struct RTree_Rect *, int *, struct RTree *);
+extern int RTreePickBranch(struct RTree_Rect *, struct RTree_Node *, struct RTree *);
+extern void RTreeDisconnectBranch(struct RTree_Node *, int, struct RTree *);
+extern void RTreePrintNode(struct RTree_Node *, int, struct RTree *);
 extern void RTreeTabIn(int);
 /* rect.c */
-extern void RTreeInitRect(struct Rect *);
-extern struct Rect RTreeNullRect(void);
-extern RectReal RTreeRectArea(struct Rect *, struct RTree *);
-extern RectReal RTreeRectSphericalVolume(struct Rect *, struct RTree *);
-extern RectReal RTreeRectVolume(struct Rect *, struct RTree *);
-extern RectReal RTreeRectMargin(struct Rect *, struct RTree *);
-extern struct Rect RTreeCombineRect(struct Rect *, struct Rect *, struct RTree *);
-extern int RTreeCompareRect(struct Rect *, struct Rect *, struct RTree *);
-extern int RTreeOverlap(struct Rect *, struct Rect *, struct RTree *);
-extern void RTreePrintRect(struct Rect *, int);
+extern void RTreeInitRect(struct RTree_Rect *);
+extern struct RTree_Rect RTreeNullRect(void);
+extern RectReal RTreeRectArea(struct RTree_Rect *, struct RTree *);
+extern RectReal RTreeRectSphericalVolume(struct RTree_Rect *, struct RTree *);
+extern RectReal RTreeRectVolume(struct RTree_Rect *, struct RTree *);
+extern RectReal RTreeRectMargin(struct RTree_Rect *, struct RTree *);
+extern struct RTree_Rect RTreeCombineRect(struct RTree_Rect *, struct RTree_Rect *, struct RTree *);
+extern int RTreeCompareRect(struct RTree_Rect *, struct RTree_Rect *, struct RTree *);
+extern int RTreeOverlap(struct RTree_Rect *, struct RTree_Rect *, struct RTree *);
+extern void RTreePrintRect(struct RTree_Rect *, int);
 /* split.c */
-extern void RTreeSplitNode(struct Node *, struct Branch *, struct Node *, struct RTree *);
+extern void RTreeSplitNode(struct RTree_Node *, struct RTree_Branch *, struct RTree_Node *, struct RTree *);
 /* card.c */
 extern int RTreeSetNodeMax(int, struct RTree *);
 extern int RTreeSetLeafMax(int, struct RTree *);
 extern int RTreeGetNodeMax(struct RTree *);
 extern int RTreeGetLeafMax(struct RTree *);
 /* fileio.c */
-extern void RTreeGetNode(struct Node *, off_t, int, struct RTree *);
-extern size_t RTreeReadNode(struct Node *, off_t, struct RTree *);
-extern void RTreePutNode(struct Node *, off_t, struct RTree *);
-extern size_t RTreeWriteNode(struct Node *, struct RTree *);
-extern size_t RTreeRewriteNode(struct Node *, off_t, struct RTree *);
-extern void RTreeUpdateRect(struct Rect *, struct Node *, off_t, int, struct RTree *);
+extern void RTreeGetNode(struct RTree_Node *, off_t, int, struct RTree *);
+extern size_t RTreeReadNode(struct RTree_Node *, off_t, struct RTree *);
+extern void RTreePutNode(struct RTree_Node *, off_t, struct RTree *);
+extern size_t RTreeWriteNode(struct RTree_Node *, struct RTree *);
+extern size_t RTreeRewriteNode(struct RTree_Node *, off_t, struct RTree *);
+extern void RTreeUpdateRect(struct RTree_Rect *, struct RTree_Node *, off_t, int, struct RTree *);
 extern void RTreeAddNodePos(off_t, int, struct RTree *);
 extern off_t RTreeGetNodePos(struct RTree *);
 extern void RTreeFlushBuffer(struct RTree *);

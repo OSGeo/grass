@@ -34,7 +34,7 @@
 struct RTree *RTreeNewIndex(int fd, off_t rootpos, int ndims)
 {
     struct RTree *new_rtree;
-    struct Node *n;
+    struct RTree_Node *n;
     int i;
     
     new_rtree = (struct RTree *)malloc(sizeof(struct RTree));
@@ -44,15 +44,15 @@ struct RTree *RTreeNewIndex(int fd, off_t rootpos, int ndims)
     new_rtree->ndims = ndims;
     new_rtree->nsides = 2 * ndims;
     
-    new_rtree->rectsize = sizeof(struct Rect);
+    new_rtree->rectsize = sizeof(struct RTree_Rect);
 
     /* init free nodes */
     new_rtree->free_nodes.avail = 0;
     new_rtree->free_nodes.alloc = 0;
     new_rtree->free_nodes.pos = NULL;
 
-    new_rtree->nodesize = sizeof(struct Node);
-    new_rtree->branchsize = sizeof(struct Branch);
+    new_rtree->nodesize = sizeof(struct RTree_Node);
+    new_rtree->branchsize = sizeof(struct RTree_Branch);
     
     /* create empty root node */
     n = RTreeNewNode(new_rtree, 0);
@@ -141,7 +141,7 @@ void RTreeFreeIndex(struct RTree *t)
  * overlap the argument rectangle.
  * Return the number of qualifying data rects.
  */
-int RTreeSearch(struct RTree *t, struct Rect *r, SearchHitCallback *shcb,
+int RTreeSearch(struct RTree *t, struct RTree_Rect *r, SearchHitCallback *shcb,
 		void *cbarg)
 {
     assert(r && t);
@@ -155,9 +155,9 @@ int RTreeSearch(struct RTree *t, struct Rect *r, SearchHitCallback *shcb,
  * tid data id stored with rectangle, must be > 0
  * t RTree where rectangle should be inserted
  */
-int RTreeInsertRect(struct Rect *r, int tid, struct RTree *t)
+int RTreeInsertRect(struct RTree_Rect *r, int tid, struct RTree *t)
 {
-    union Child newchild;
+    union RTree_Child newchild;
 
     assert(r && t && tid > 0);
     
@@ -179,9 +179,9 @@ int RTreeInsertRect(struct Rect *r, int tid, struct RTree *t)
  * compile warnings to rtree lib
  * this way it's easier to fix if necessary? 
  */
-int RTreeDeleteRect(struct Rect *r, int tid, struct RTree *t)
+int RTreeDeleteRect(struct RTree_Rect *r, int tid, struct RTree *t)
 {
-    union Child child;
+    union RTree_Child child;
     
     assert(r && t && tid > 0);
 
@@ -194,12 +194,12 @@ int RTreeDeleteRect(struct Rect *r, int tid, struct RTree *t)
  * Allocate space for a node in the list used in DeleteRect to
  * store Nodes that are too empty.
  */
-struct ListNode *RTreeNewListNode(void)
+struct RTree_ListNode *RTreeNewListNode(void)
 {
-    return (struct ListNode *)malloc(sizeof(struct ListNode));
+    return (struct RTree_ListNode *)malloc(sizeof(struct RTree_ListNode));
 }
 
-void RTreeFreeListNode(struct ListNode *p)
+void RTreeFreeListNode(struct RTree_ListNode *p)
 {
     free(p);
 }
@@ -208,9 +208,9 @@ void RTreeFreeListNode(struct ListNode *p)
  * Add a node to the reinsertion list.  All its branches will later
  * be reinserted into the index structure.
  */
-void RTreeReInsertNode(struct Node *n, struct ListNode **ee)
+void RTreeReInsertNode(struct RTree_Node *n, struct RTree_ListNode **ee)
 {
-    struct ListNode *l = RTreeNewListNode();
+    struct RTree_ListNode *l = RTreeNewListNode();
 
     l->node = n;
     l->next = *ee;
@@ -220,7 +220,7 @@ void RTreeReInsertNode(struct Node *n, struct ListNode **ee)
 /* 
  * Free ListBranch
  */
-void RTreeFreeListBranch(struct ListBranch *p)
+void RTreeFreeListBranch(struct RTree_ListBranch *p)
 {
     free(p);
 }

@@ -35,9 +35,9 @@
 /*-----------------------------------------------------------------------------
 | Initialize a rectangle to have all 0 coordinates.
 -----------------------------------------------------------------------------*/
-void RTreeInitRect(struct Rect *R)
+void RTreeInitRect(struct RTree_Rect *R)
 {
-    register struct Rect *r = R;
+    register struct RTree_Rect *r = R;
     register int i;
 
     for (i = 0; i < NUMSIDES; i++)
@@ -49,9 +49,9 @@ void RTreeInitRect(struct Rect *R)
 | Return a rect whose first low side is higher than its opposite side -
 | interpreted as an undefined rect.
 -----------------------------------------------------------------------------*/
-struct Rect RTreeNullRect(void)
+struct RTree_Rect RTreeNullRect(void)
 {
-    struct Rect r;
+    struct RTree_Rect r;
     register int i;
 
     r.boundary[0] = (RectReal) 1;
@@ -68,9 +68,9 @@ struct Rect RTreeNullRect(void)
 | Fills in random coordinates in a rectangle.
 | The low side is guaranteed to be less than the high side.
 -----------------------------------------------------------------------------*/
-void RTreeRandomRect(struct Rect *R)
+void RTreeRandomRect(struct RTree_Rect *R)
 {
-    register struct Rect *r = R;
+    register struct RTree_Rect *r = R;
     register int i;
     register RectReal width;
 
@@ -95,9 +95,9 @@ void RTreeRandomRect(struct Rect *R)
 | and has size from 0 to the size of the data area in each dimension,
 | i.e. search rect can stick out beyond data area.
 -----------------------------------------------------------------------------*/
-void RTreeSearchRect(struct Rect *Search, struct Rect *Data)
+void RTreeSearchRect(struct RTree_Rect *Search, struct RTree_Rect *Data)
 {
-    register struct Rect *search = Search, *data = Data;
+    register struct RTree_Rect *search = Search, *data = Data;
     register int i, j;
     register RectReal size, center;
 
@@ -127,9 +127,9 @@ void RTreeSearchRect(struct Rect *Search, struct Rect *Data)
 /*-----------------------------------------------------------------------------
 | Print out the data for a rectangle.
 -----------------------------------------------------------------------------*/
-void RTreePrintRect(struct Rect *R, int depth)
+void RTreePrintRect(struct RTree_Rect *R, int depth)
 {
-    register struct Rect *r = R;
+    register struct RTree_Rect *r = R;
     register int i;
 
     assert(r);
@@ -145,9 +145,9 @@ void RTreePrintRect(struct Rect *R, int depth)
 /*-----------------------------------------------------------------------------
 | Calculate the n-dimensional volume of a rectangle
 -----------------------------------------------------------------------------*/
-RectReal RTreeRectVolume(struct Rect *R, struct RTree *t)
+RectReal RTreeRectVolume(struct RTree_Rect *R, struct RTree *t)
 {
-    register struct Rect *r = R;
+    register struct RTree_Rect *r = R;
     register int i;
     register RectReal volume = (RectReal) 1;
 
@@ -229,9 +229,9 @@ const double UnitSphereVolumes[] = {
  * A fast approximation to the volume of the bounding sphere for the
  * given Rect. By Paul B.
  */
-RectReal RTreeRectSphericalVolume(struct Rect *R, struct RTree *t)
+RectReal RTreeRectSphericalVolume(struct RTree_Rect *R, struct RTree *t)
 {
-    register struct Rect *r = R;
+    register struct RTree_Rect *r = R;
     register int i;
     RectReal maxsize = (RectReal) 0, c_size;
 
@@ -251,7 +251,7 @@ RectReal RTreeRectSphericalVolume(struct Rect *R, struct RTree *t)
 /*
  * The exact volume of the bounding sphere for the given Rect.
  */
-RectReal RTreeRectSphericalVolume(struct Rect *r, struct RTree *t)
+RectReal RTreeRectSphericalVolume(struct RTree_Rect *r, struct RTree *t)
 {
     int i;
     double sum_of_squares = 0, radius, half_extent;
@@ -272,7 +272,7 @@ RectReal RTreeRectSphericalVolume(struct Rect *r, struct RTree *t)
 /*-----------------------------------------------------------------------------
 | Calculate the n-dimensional surface area of a rectangle
 -----------------------------------------------------------------------------*/
-RectReal RTreeRectSurfaceArea(struct Rect *r, struct RTree *t)
+RectReal RTreeRectSurfaceArea(struct RTree_Rect *r, struct RTree *t)
 {
     int i, j;
     RectReal j_extent, sum = (RectReal) 0;
@@ -301,7 +301,7 @@ RectReal RTreeRectSurfaceArea(struct Rect *r, struct RTree *t)
 | Calculate the n-dimensional margin of a rectangle
 | the margin is the sum of the lengths of the edges
 -----------------------------------------------------------------------------*/
-RectReal RTreeRectMargin(struct Rect *r, struct RTree *t)
+RectReal RTreeRectMargin(struct RTree_Rect *r, struct RTree *t)
 {
     int i;
     RectReal margin = 0.0;
@@ -319,10 +319,10 @@ RectReal RTreeRectMargin(struct Rect *r, struct RTree *t)
 /*-----------------------------------------------------------------------------
 | Combine two rectangles, make one that includes both.
 -----------------------------------------------------------------------------*/
-struct Rect RTreeCombineRect(struct Rect *r, struct Rect *rr, struct RTree *t)
+struct RTree_Rect RTreeCombineRect(struct RTree_Rect *r, struct RTree_Rect *rr, struct RTree *t)
 {
     int i, j;
-    struct Rect new_rect;
+    struct RTree_Rect new_rect;
 
     assert(r && rr);
 
@@ -352,7 +352,7 @@ struct Rect RTreeCombineRect(struct Rect *r, struct Rect *rr, struct RTree *t)
 /*-----------------------------------------------------------------------------
 | Decide whether two rectangles are identical.
 -----------------------------------------------------------------------------*/
-int RTreeCompareRect(struct Rect *r, struct Rect *s, struct RTree *t)
+int RTreeCompareRect(struct RTree_Rect *r, struct RTree_Rect *s, struct RTree *t)
 {
     register int i, j;
 
@@ -372,7 +372,7 @@ int RTreeCompareRect(struct Rect *r, struct Rect *s, struct RTree *t)
 /*-----------------------------------------------------------------------------
 | Decide whether two rectangles overlap.
 -----------------------------------------------------------------------------*/
-int RTreeOverlap(struct Rect *r, struct Rect *s, struct RTree *t)
+int RTreeOverlap(struct RTree_Rect *r, struct RTree_Rect *s, struct RTree *t)
 {
     register int i, j;
 
@@ -392,7 +392,7 @@ int RTreeOverlap(struct Rect *r, struct Rect *s, struct RTree *t)
 /*-----------------------------------------------------------------------------
 | Decide whether rectangle r is contained in rectangle s.
 -----------------------------------------------------------------------------*/
-int RTreeContained(struct Rect *r, struct Rect *s, struct RTree *t)
+int RTreeContained(struct RTree_Rect *r, struct RTree_Rect *s, struct RTree *t)
 {
     register int i, j, result;
 

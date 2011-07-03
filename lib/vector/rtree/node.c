@@ -31,21 +31,21 @@ struct dist
 };
 
 /* Initialize one branch cell in an internal node. */
-static void RTreeInitNodeBranchM(struct Branch *b)
+static void RTreeInitNodeBranchM(struct RTree_Branch *b)
 {
     RTreeInitRect(&(b->rect));
     b->child.ptr = NULL;
 }
 
 /* Initialize one branch cell in an internal node. */
-static void RTreeInitNodeBranchF(struct Branch *b)
+static void RTreeInitNodeBranchF(struct RTree_Branch *b)
 {
     RTreeInitRect(&(b->rect));
     b->child.pos = -1;
 }
 
 /* Initialize one branch cell in a leaf node. */
-static void RTreeInitLeafBranch(struct Branch *b)
+static void RTreeInitLeafBranch(struct RTree_Branch *b)
 {
     RTreeInitRect(&(b->rect));
     b->child.id = 0;
@@ -57,7 +57,7 @@ static void (*RTreeInitBranch[3]) () = {
 
 /* Initialize a Node structure. */
 /* type = 1: leaf, type = 2: internal, memory, type = 3: internal, file */
-void RTreeInitNode(struct Node *n, int type)
+void RTreeInitNode(struct RTree_Node *n, int type)
 {
     int i;
 
@@ -69,17 +69,17 @@ void RTreeInitNode(struct Node *n, int type)
 }
 
 /* Make a new node and initialize to have all branch cells empty. */
-struct Node *RTreeNewNode(struct RTree *t, int level)
+struct RTree_Node *RTreeNewNode(struct RTree *t, int level)
 {
-    struct Node *n;
+    struct RTree_Node *n;
 
-    n = (struct Node *)malloc((size_t) t->nodesize);
+    n = (struct RTree_Node *)malloc((size_t) t->nodesize);
     assert(n);
     RTreeInitNode(n, NODETYPE(level, t->fd));
     return n;
 }
 
-void RTreeFreeNode(struct Node *n)
+void RTreeFreeNode(struct RTree_Node *n)
 {
     assert(n);
     free(n);
@@ -89,10 +89,10 @@ void RTreeFreeNode(struct Node *n)
  * Find the smallest rectangle that includes all rectangles in
  * branches of a node.
  */
-struct Rect RTreeNodeCover(struct Node *n, struct RTree *t)
+struct RTree_Rect RTreeNodeCover(struct RTree_Node *n, struct RTree *t)
 {
     int i, first_time = 1;
-    struct Rect r;
+    struct RTree_Rect r;
 
     RTreeInitRect(&r);
     if ((n)->level > 0) { /* internal node */
@@ -134,13 +134,13 @@ struct Rect RTreeNodeCover(struct Node *n, struct RTree *t)
  * to get the best resolution when searching.
  */
 
-static int RTreePickLeafBranch(struct Rect *r, struct Node *n, struct RTree *t)
+static int RTreePickLeafBranch(struct RTree_Rect *r, struct RTree_Node *n, struct RTree *t)
 {
-    struct Rect *rr;
+    struct RTree_Rect *rr;
     int i, j;
     RectReal increase, bestIncr = -1, area, bestArea = 0;
     int best = 0, bestoverlap;
-    struct Rect tmp_rect;
+    struct RTree_Rect tmp_rect;
     int overlap;
 
     bestoverlap = t->nodecard + 1;
@@ -193,13 +193,13 @@ static int RTreePickLeafBranch(struct Rect *r, struct Node *n, struct RTree *t)
  * In case of a tie, pick the one which was smaller before, to get
  * the best resolution when searching.
  */
-int RTreePickBranch(struct Rect *r, struct Node *n, struct RTree *t)
+int RTreePickBranch(struct RTree_Rect *r, struct RTree_Node *n, struct RTree *t)
 {
-    struct Rect *rr;
+    struct RTree_Rect *rr;
     int i, first_time = 1;
     RectReal increase, bestIncr = (RectReal) -1, area, bestArea = 0;
     int best = 0;
-    struct Rect tmp_rect;
+    struct RTree_Rect tmp_rect;
 
     assert((n)->level > 0);	/* must not be called on leaf node */
 
@@ -228,7 +228,7 @@ int RTreePickBranch(struct Rect *r, struct Node *n, struct RTree *t)
 }
 
 /* Disconnect a dependent node. */
-void RTreeDisconnectBranch(struct Node *n, int i, struct RTree *t)
+void RTreeDisconnectBranch(struct RTree_Node *n, int i, struct RTree *t)
 {
     if ((n)->level > 0) {
 	assert(n && i >= 0 && i < t->nodecard);
@@ -249,7 +249,7 @@ void RTreeDisconnectBranch(struct Node *n, int i, struct RTree *t)
 
 /* Destroy (free) node recursively. */
 /* NOTE: only needed for memory based index */
-void RTreeDestroyNode(struct Node *n, int nodes)
+void RTreeDestroyNode(struct RTree_Node *n, int nodes)
 {
     int i;
 
@@ -398,19 +398,19 @@ static void RTreeQuicksortDist(struct dist *d, int n)
  * Allocate space for a branch in the list used in InsertRect to
  * store branches of nodes that are too full.
  */
-static struct ListBranch *RTreeNewListBranch(void)
+static struct RTree_ListBranch *RTreeNewListBranch(void)
 {
-    return (struct ListBranch *)malloc(sizeof(struct ListBranch));
+    return (struct RTree_ListBranch *)malloc(sizeof(struct RTree_ListBranch));
 }
 
 /* 
  * Add a branch to the reinsertion list.  It will later
  * be reinserted into the index structure.
  */
-static void RTreeReInsertBranch(struct Branch b, int level,
-				struct ListBranch **ee)
+static void RTreeReInsertBranch(struct RTree_Branch b, int level,
+				struct RTree_ListBranch **ee)
 {
-    register struct ListBranch *l;
+    register struct RTree_ListBranch *l;
 
     l = RTreeNewListBranch();
     l->b = b;
@@ -424,15 +424,15 @@ static void RTreeReInsertBranch(struct Branch b, int level,
  * center is farthest away from node cover center.
  * Old node updated.
  */
-static void RTreeRemoveBranches(struct Node *n, struct Branch *b,
-				struct ListBranch **ee, struct Rect *cover,
+static void RTreeRemoveBranches(struct RTree_Node *n, struct RTree_Branch *b,
+				struct RTree_ListBranch **ee, struct RTree_Rect *cover,
 				struct RTree *t)
 {
     int i, j, maxkids, type;
     RectReal center_n[NUMDIMS], center_r, delta;
-    struct Branch branchbuf[MAXCARD + 1];
+    struct RTree_Branch branchbuf[MAXCARD + 1];
     struct dist rdist[MAXCARD + 1];
-    struct Rect new_cover;
+    struct RTree_Rect new_cover;
 
     assert(cover);
 
@@ -497,9 +497,9 @@ static void RTreeRemoveBranches(struct Node *n, struct Branch *b,
  * Old node updated, becomes one of two.
  * Returns 2 if branches were removed for forced reinsertion
  */
-int RTreeAddBranch(struct Branch *b, struct Node *n,
-		   struct Node **newnode, struct ListBranch **ee,
-		   struct Rect *cover, int *overflow, struct RTree *t)
+int RTreeAddBranch(struct RTree_Branch *b, struct RTree_Node *n,
+		   struct RTree_Node **newnode, struct RTree_ListBranch **ee,
+		   struct RTree_Rect *cover, int *overflow, struct RTree *t)
 {
     int i, maxkids;
 
@@ -561,14 +561,14 @@ void RTreeTabIn(int depth)
 	putchar('\t');
 }
 
-static void RTreePrintBranch(struct Branch *b, int depth, struct RTree *t)
+static void RTreePrintBranch(struct RTree_Branch *b, int depth, struct RTree *t)
 {
     RTreePrintRect(&(b->rect), depth);
     RTreePrintNode(b->child.ptr, depth, t);
 }
 
 /* Print out the data in a node. */
-void RTreePrintNode(struct Node *n, int depth, struct RTree *t)
+void RTreePrintNode(struct RTree_Node *n, int depth, struct RTree *t)
 {
     int i, maxkids;
 

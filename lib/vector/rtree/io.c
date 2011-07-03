@@ -68,14 +68,14 @@ off_t RTreeGetNodePos(struct RTree *t)
 }
 
 /* read node from file */
-size_t RTreeReadNode(struct Node *n, off_t nodepos, struct RTree *t)
+size_t RTreeReadNode(struct RTree_Node *n, off_t nodepos, struct RTree *t)
 {
     lseek(t->fd, nodepos, SEEK_SET);
     return read(t->fd, n, t->nodesize);
 }
 
 /* get node from buffer or file */
-void RTreeGetNode(struct Node *n, off_t nodepos, int level, struct RTree *t)
+void RTreeGetNode(struct RTree_Node *n, off_t nodepos, int level, struct RTree *t)
 {
     int which = (nodepos == t->nb[level][2].pos ? 2 : nodepos == t->nb[level][1].pos);
 
@@ -104,21 +104,21 @@ void RTreeGetNode(struct Node *n, off_t nodepos, int level, struct RTree *t)
 }
 
 /* write new node to file */
-size_t RTreeWriteNode(struct Node *n, struct RTree *t)
+size_t RTreeWriteNode(struct RTree_Node *n, struct RTree *t)
 {
     /* file position must be set first with RTreeGetFNodePos() */
     return write(t->fd, n, t->nodesize);
 }
 
 /* rewrite updated node to file */
-size_t RTreeRewriteNode(struct Node *n, off_t nodepos, struct RTree *t)
+size_t RTreeRewriteNode(struct RTree_Node *n, off_t nodepos, struct RTree *t)
 {
     lseek(t->fd, nodepos, SEEK_SET);
     return write(t->fd, n, t->nodesize);
 }
 
 /* update node in buffer */
-void RTreePutNode(struct Node *n, off_t nodepos, struct RTree *t)
+void RTreePutNode(struct RTree_Node *n, off_t nodepos, struct RTree *t)
 {
     int which = (nodepos == t->nb[n->level][2].pos ? 2 : nodepos == t->nb[n->level][1].pos);
     
@@ -138,7 +138,7 @@ void RTreePutNode(struct Node *n, off_t nodepos, struct RTree *t)
 }
 
 /* update rectangle */
-void RTreeUpdateRect(struct Rect *r, struct Node *n, off_t nodepos, int b, struct RTree *t)
+void RTreeUpdateRect(struct RTree_Rect *r, struct RTree_Node *n, off_t nodepos, int b, struct RTree *t)
 {
     int which = (nodepos == t->nb[n->level][2].pos ? 2 : nodepos == t->nb[n->level][1].pos);
     
