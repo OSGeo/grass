@@ -169,7 +169,7 @@ centroid(OGRGeometryH hGeom, CENTR * Centr, struct spatial_index *Sindex,
 }
 
 /* count polygons and isles */
-int poly_count(OGRGeometryH hGeom)
+int poly_count(OGRGeometryH hGeom, int line2boundary)
 {
     int i, nr, ret;
     OGRwkbGeometryType eType;
@@ -188,12 +188,34 @@ int poly_count(OGRGeometryH hGeom)
 	for (i = 0; i < nr; i++) {
 	    hRing = OGR_G_GetGeometryRef(hGeom, i);
 
-	    ret = poly_count(hRing);
+	    ret = poly_count(hRing, line2boundary);
 	    if (ret == -1) {
 		G_warning(_("Cannot read part of geometry"));
 	    }
 	}
     }
+
+    if (!line2boundary)
+	return 0;
+
+    if (eType == wkbLineString) {
+	G_debug(3, "Polygon");
+	n_polygon_boundaries++;
+
+    }
+    else if (eType == wkbGeometryCollection || eType == wkbMultiLineString) {
+	G_debug(3, "GeometryCollection or MultiPolygon");
+	nr = OGR_G_GetGeometryCount(hGeom);
+	for (i = 0; i < nr; i++) {
+	    hRing = OGR_G_GetGeometryRef(hGeom, i);
+
+	    ret = poly_count(hRing, line2boundary);
+	    if (ret == -1) {
+		G_warning(_("Cannot read part of geometry"));
+	    }
+	}
+    }
+
     return 0;
 }
 
@@ -360,8 +382,8 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
 	if (mk_centr) {
 	    if (Points->n_points >= 4) {
 		ret =
-		    Vect_get_point_in_poly_isl(Points, IPoints, valid_isles,
-					       &x, &y);
+		    Vect_get_point_in_poly_isl(Points, (const struct line_pnts **)IPoints,
+					       valid_isles, &x, &y);
 		if (ret == -1) {
 		    G_warning(_("Cannot calculate centroid"));
 		}
