@@ -4,18 +4,17 @@
 boundaries in a vector map.
 
 <p>
-A line is a single straight line segment defined by one start node, one end 
-node and no other nodes. A polyline is also defined by one start node, one end 
-node and no other nodes, but is made of two or more consecutive straight line 
-segments. The connections between the constituent line segments of a polyline 
-do not appear as nodes in the vector map.
+A line is defined by one start node, one end node and any number of
+vertices between the start and end node. The shortest possible line
+consists of only two vertices where the coordinates of the start and end
+node are identical to those of the two vertices.
 
 <p>
 <em>v.build.polyline</em> picks a line and from its start node, walks
-back as long as exactly one other line is connected to this node. Line
-directions are reversed as required, i.e. it does not matter if the
-next line is connected to the current node by its start or end
-node. Once the start line of a polyline is identified, it walks
+back as long as exactly one other line of the same type is connected to
+this node. Line directions are reversed as required, i.e. it does not
+matter if the next line is connected to the current node by its start or
+end node. Once the start line of a polyline is identified, it walks
 forward and adds all vertices (in reverse order if needed) of
 connected lines to the start line, i.e. the start line and connecting
 lines are reversed as needed. That is, if a line is reversed depends
@@ -36,8 +35,8 @@ polylines.
 
 <h2>NOTES</h2>
 
-If the lines that make up a polyline are of different types, then 
-<em>v.build.polylines</em> will set the type from the first constituent line.  
+<em>v.build.polylines</em> combines only lines oif the same type to
+a new polyline, i.e. lines and boundaries are kept separate.
 
 <p>
 Category number(s) are assigned to a polyline based on <b>cats</b> parameter.
@@ -57,9 +56,8 @@ vector map.</li>
 
 <em>v.build.polylines</em> correctly handles <b>input</b> vector maps
 containing lines, boundaries, centroids and points. Lines and
-boundaries will be converted to polylines of the desired type.  Areas
-are only guaranteed to be preserved if the constituent lines of the
-polylines that define them are all boundaries in the input vector map.
+boundaries will be converted to polylines.  Areas
+are guaranteed to be preserved.
 
 <!-- Points will remain points provided that <b>type</b> has been set
 to `source'.  It is possible to convert lines and area edges to points
@@ -83,7 +81,8 @@ Leverhulme Special Research Fellowship at University College London.
 <h2>AUTHORS</h2>
 Mark Lake, Institute of Archaeology, University College London.<br> 
 Major rewrite by Radim Blazek, October 2002<br>
-Category mode added by Martin Landa, FBK-irst, Trento, Italy, October 2007
+Category mode added by Martin Landa, FBK-irst, Trento, Italy, October 2007<br>
+Support for different line types by Markus Metz
 
 <p>
 <i>Last changed: $Date$</i>

@@ -7,7 +7,7 @@
  *  return: next line (may be input line if it is loop)
  *          0 - num of lines <> 2
  */
-int find_next_line(struct Map_info *map, int line, int node)
+int find_next_line(struct Map_info *map, int line, int node, int ltype)
 {
     int n_lines, i, tmp_line, tmp_type, next_line;
 
@@ -18,7 +18,7 @@ int find_next_line(struct Map_info *map, int line, int node)
 	tmp_line = abs(Vect_get_node_line(map, node, i));
 	tmp_type = Vect_read_line(map, NULL, NULL, tmp_line);
 	/* The line may be a loop so we want some other line if exists or the same line if loop */
-	if (tmp_type & GV_LINES) {
+	if (tmp_type & ltype) {
 	    if (next_line == 0 || tmp_line != line)
 		next_line = tmp_line;
 	    n_lines++;
@@ -36,28 +36,21 @@ int find_next_line(struct Map_info *map, int line, int node)
    This line must not be a dead line (note that the arbitrary line
    cannot be a dead line because this has already been checked in
    main.c. */
-int walk_back(struct Map_info *map, int start_line)
+int walk_back(struct Map_info *map, int start_line, int type)
 {
     int start_node, n1, n2;
     int line;
     int next_line;
-    int type;
 
     G_debug(2, "walk_back() start = %d", start_line);
     line = start_line;
-
-    /* By definition a GV_POINT and GV_CENTROID does not form part of a longer polyline, so
-       this line must be the start */
-    type = Vect_read_line(map, NULL, NULL, line);
-    if (type == GV_POINT || type == GV_CENTROID)
-	return (line);
 
     /* Otherwise find the start (i.e. travel in the negative direction) */
     Vect_get_line_nodes(map, line, &start_node, NULL);
 
     while (1) {
 	/* Find next line at start node */
-	next_line = find_next_line(map, line, start_node);
+	next_line = find_next_line(map, line, start_node, type);
 	G_debug(2, "  next = %d", next_line);
 
 	/* Keep going so long as not returned to start_line, i.e. if not a closed set of lines */
@@ -84,7 +77,7 @@ int walk_back(struct Map_info *map, int start_line)
 /* Start from the first node on a polyline and walk to the other end,
    collecting the coordinates of each node en route.  */
 int walk_forward_and_pick_up_coords(struct Map_info *map,
-				    int start_line,
+				    int start_line, int ltype,
 				    struct line_pnts *points,
 				    int *lines_visited,
 				    struct line_cats *Cats, int write_cats)
@@ -115,14 +108,14 @@ int walk_forward_and_pick_up_coords(struct Map_info *map,
 	type = Vect_read_line(map, pnts, NULL, line);
 
     Vect_get_line_nodes(map, line, &n1, &n2);
-    next_line = find_next_line(map, line, n1);
+    next_line = find_next_line(map, line, n1, ltype);
     if (next_line > 0) {	/* continue at start node */
 	Vect_append_points(points, pnts, GV_BACKWARD);
 	next_node = n1;
     }
     else {
 	Vect_append_points(points, pnts, GV_FORWARD);
-	next_line = find_next_line(map, line, n2);	/* check end node */
+	next_line = find_next_line(map, line, n2, ltype);	/* check end node */
 	if (next_line > 0) {
 	    next_node = n2;	/* continue at end node */
 	}
@@ -130,10 +123,6 @@ int walk_forward_and_pick_up_coords(struct Map_info *map,
 	    return 1;		/* no other line */
 	}
     }
-
-    /* This line can only be part of a longer polyline if it is not a point.  */
-    if (type & GV_POINTS)
-	return 1;
 
     /* While next line exist append coordinates */
     line = next_line;
@@ -163,7 +152,7 @@ int walk_forward_and_pick_up_coords(struct Map_info *map,
 	lines_visited[line] = 1;
 
 	/* Find next one */
-	next_line = find_next_line(map, line, next_node);
+	next_line = find_next_line(map, line, next_node, ltype);
 
 	line = next_line;
 	node = next_node;
