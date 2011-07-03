@@ -23,8 +23,9 @@ int darea(struct Map_info *Map, struct cat_list *Clist,
 
     int num, area, isle, n_isles, n_points;
     double xl, yl;
-    struct line_pnts *Points, *IPoints;
+    struct line_pnts *Points, * APoints, **IPoints;
     struct line_cats *Cats;
+    int n_ipoints_alloc;
     int cat, centroid = 0;
     int red, grn, blu;
 
@@ -42,7 +43,12 @@ int darea(struct Map_info *Map, struct cat_list *Clist,
 
     G_debug(1, "display areas:");
     Points = Vect_new_line_struct();
-    IPoints = Vect_new_line_struct();
+    APoints = Vect_new_line_struct();
+    n_ipoints_alloc = 10;
+    IPoints = (struct line_pnts **)G_malloc(n_ipoints_alloc * sizeof(struct line_pnts *));
+    for (i = 0; i < n_ipoints_alloc; i++) {
+	IPoints[i] = Vect_new_line_struct();
+    }
     Cats = Vect_new_cats_struct();
 
     open_db = table_colors_flag || width_column;
@@ -189,7 +195,7 @@ int darea(struct Map_info *Map, struct cat_list *Clist,
 	    G_debug(3, "centroid = %d", centroid);
 	    if (centroid < 1)
 		continue;
-	    Vect_read_line(Map, Points, Cats, centroid);
+	    Vect_read_line(Map, NULL, Cats, centroid);
 
 	    for (i = 0; i < Cats->n_cats; i++) {
 		G_debug(3, "  centroid = %d, field = %d, cat = %d", centroid,
@@ -207,17 +213,26 @@ int darea(struct Map_info *Map, struct cat_list *Clist,
 	G_debug(3, "display area %d", area);
 
 	/* fill */
-	Vect_get_area_points(Map, area, Points);
-	G_debug(3, "n_points = %d", Points->n_points);
+	Vect_get_area_points(Map, area, APoints);
+	G_debug(3, "n_points = %d", APoints->n_points);
+	Vect_reset_line(Points);
+	Vect_append_points(Points, APoints, GV_FORWARD);
 
 	n_points = Points->n_points;
 	xl = Points->x[n_points - 1];
 	yl = Points->y[n_points - 1];
 	n_isles = Vect_get_area_num_isles(Map, area);
+	if (n_isles >= n_ipoints_alloc) {
+	    IPoints = (struct line_pnts **)G_realloc(IPoints, (n_isles + 10) * sizeof(struct line_pnts *));
+	    for (i = n_ipoints_alloc; i < n_isles + 10; i++) {
+		IPoints[i] = Vect_new_line_struct();
+	    }
+	    n_ipoints_alloc = n_isles + 10;
+	}
 	for (i = 0; i < n_isles; i++) {
 	    isle = Vect_get_area_isle(Map, area, i);
-	    Vect_get_isle_points(Map, isle, IPoints);
-	    Vect_append_points(Points, IPoints, GV_FORWARD);
+	    Vect_get_isle_points(Map, isle, IPoints[i]);
+	    Vect_append_points(Points, IPoints[i], GV_FORWARD);
 	    Vect_append_point(Points, xl, yl, 0.0);	/* ??? */
 	}
 
@@ -379,7 +394,6 @@ int darea(struct Map_info *Map, struct cat_list *Clist,
 	if (bcolor) {
 	    int i;
 
-	    Vect_get_area_points(Map, area, Points);
 	    if (rgb) {
 		D_RGB_color((unsigned char)red, (unsigned char)grn,
 			    (unsigned char)blu);
@@ -388,18 +402,20 @@ int darea(struct Map_info *Map, struct cat_list *Clist,
 		D_RGB_color(bcolor->r, bcolor->g, bcolor->b);
 	    }
 	    /*use different user defined render methods */
-	    D_polyline_abs(Points->x, Points->y, Points->n_points);
+	    D_polyline_abs(APoints->x, APoints->y, APoints->n_points);
 	    for (i = 0; i < n_isles; i++) {
-		isle = Vect_get_area_isle(Map, area, i);
-		Vect_get_isle_points(Map, isle, Points);
 		/*use different user defined render methods */
-		D_polyline_abs(Points->x, Points->y, Points->n_points);
+		D_polyline_abs(IPoints[i]->x, IPoints[i]->y, IPoints[i]->n_points);
 	    }
 	}
     }				/* end for */
 
     Vect_destroy_line_struct(Points);
-    Vect_destroy_line_struct(IPoints);
+    Vect_destroy_line_struct(APoints);
+    for (i = 0; i < n_ipoints_alloc; i++) {
+	Vect_destroy_line_struct(IPoints[i]);
+    }
+    G_free(IPoints);
     Vect_destroy_cats_struct(Cats);
 
     return 0;
