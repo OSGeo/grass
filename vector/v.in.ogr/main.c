@@ -44,7 +44,7 @@ int geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
 	 double min_area, int type, int mk_centr);
 int centroid(OGRGeometryH hGeom, CENTR * Centr, struct spatial_index * Sindex,
 	     int field, int cat, double min_area, int type);
-int poly_count(OGRGeometryH hGeom);
+int poly_count(OGRGeometryH hGeom, int line2boundary);
 
 int main(int argc, char *argv[])
 {
@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
     char error_msg[8192];
 
     /* Vector */
-    struct Map_info Map, Tmp;
+    struct Map_info Map, Tmp, *Out;
     int cat;
 
     /* Attributes */
@@ -98,6 +98,7 @@ int main(int argc, char *argv[])
     unsigned int n_features, feature_count;
     int overwrite;
     double area_size = 0.;
+    int use_tmp_vect = 0;
 
     G_gisinit(argv[0]);
 
@@ -605,18 +606,67 @@ int main(int argc, char *argv[])
     db_init_string(&strval);
 
     /* open output vector */
-    /* open temporary vector, do the work in the temporary vector
-     * at the end copy alive lines to output vector
-     * in case of polygons this reduces the coor file size by a factor of 2 to 5
-     * only needed for polygons, but the presence of polygons can be detected
-     * only during OGR feature import, not before */
     sprintf(buf, "%s", out_opt->answer);
     /* strip any @mapset from vector output name */
     G_find_vector(buf, G_mapset());
-    sprintf(tempvect, "%s_tmp", buf);
-    G_verbose_message(_("Using temporary vector <%s>"), tempvect);
     Vect_open_new(&Map, out_opt->answer, z_flag->answer != 0);
-    Vect_open_new(&Tmp, tempvect, z_flag->answer != 0);
+    Out = &Map;
+
+    n_polygon_boundaries = 0;
+    if (!no_clean_flag->answer) {
+	/* check if we need a tmp vector */
+
+	/* estimate distance for boundary splitting --> */
+	for (layer = 0; layer < nlayers; layer++) {
+	    G_message(_("Counting polygons for layer: %s"), layer_names[layer]);
+	    layer_id = layers[layer];
+
+	    Ogr_layer = OGR_DS_GetLayer(Ogr_ds, layer_id);
+	    Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
+
+	    n_features = feature_count = 0;
+
+	    n_features = OGR_L_GetFeatureCount(Ogr_layer, 1);
+	    OGR_L_ResetReading(Ogr_layer);
+
+	    /* count polygons and isles */
+	    G_message(_("Counting polygons for %d features..."), n_features);
+	    while ((Ogr_feature = OGR_L_GetNextFeature(Ogr_layer)) != NULL) {
+		G_percent(feature_count++, n_features, 1);	/* show something happens */
+		/* Geometry */
+		Ogr_geometry = OGR_F_GetGeometryRef(Ogr_feature);
+		if (Ogr_geometry != NULL) {
+		    poly_count(Ogr_geometry, (type & GV_BOUNDARY));
+		}
+		OGR_F_Destroy(Ogr_feature);
+	    }
+	}
+
+	G_debug(1, "n polygon boundaries: %d", n_polygon_boundaries);
+	if (n_polygon_boundaries > 50) {
+	    split_distance =
+		area_size / log(n_polygon_boundaries);
+	    /* divisor is the handle: increase divisor to decrease split_distance */
+	    split_distance = split_distance / 5.;
+	    G_debug(1, "root of area size: %f", area_size);
+	    G_verbose_message(_("Boundary splitting distance in map units: %G"),
+		      split_distance);
+	}
+	/* <-- estimate distance for boundary splitting */
+
+	use_tmp_vect = n_polygon_boundaries > 0;
+
+	if (use_tmp_vect) {
+	    /* open temporary vector, do the work in the temporary vector
+	     * at the end copy alive lines to output vector
+	     * in case of polygons this reduces the coor file size by a factor of 2 to 5
+	     * only needed when cleaning polygons */
+	    sprintf(tempvect, "%s_tmp", buf);
+	    G_verbose_message(_("Using temporary vector <%s>"), tempvect);
+	    Vect_open_new(&Tmp, tempvect, z_flag->answer != 0);
+	    Out = &Tmp;
+	}
+    }
 
     Vect_hist_command(&Map);
 
@@ -811,41 +861,9 @@ int main(int argc, char *argv[])
 	OGR_L_ResetReading(Ogr_layer);
 	n_features = feature_count = 0;
 
-	n_polygon_boundaries = 0;
 	n_features = OGR_L_GetFeatureCount(Ogr_layer, 1);
 
-	/* estimate distance for boundary splitting --> */
-
-	if (split_distance > -0.5) {
-	    /* count polygons and isles */
-	    G_message(_("Counting polygons for %d features..."), n_features);
-	    while ((Ogr_feature = OGR_L_GetNextFeature(Ogr_layer)) != NULL) {
-		G_percent(feature_count++, n_features, 1);	/* show something happens */
-		/* Geometry */
-		Ogr_geometry = OGR_F_GetGeometryRef(Ogr_feature);
-		if (Ogr_geometry != NULL) {
-		    poly_count(Ogr_geometry);
-		}
-		OGR_F_Destroy(Ogr_feature);
-	    }
-	    /* rewind layer */
-	    OGR_L_ResetReading(Ogr_layer);
-	    feature_count = 0;
-	}
-
-	G_debug(1, "n polygon boundaries: %d", n_polygon_boundaries);
-	if (split_distance > -0.5 && n_polygon_boundaries > 50) {
-	    split_distance =
-		area_size / log(n_polygon_boundaries);
-	    /* divisor is the handle: increase divisor to decrease split_distance */
-	    split_distance = split_distance / 5.;
-	    G_debug(1, "root of area size: %f", area_size);
-	    G_verbose_message(_("Boundary splitting distance in map units: %G"),
-		      split_distance);
-	}
-	/* <-- estimate distance for boundary splitting */
-	
-	G_important_message(_("Importing map %d features..."), n_features);
+	G_important_message(_("Importing %d features..."), n_features);
 	while ((Ogr_feature = OGR_L_GetNextFeature(Ogr_layer)) != NULL) {
 	    G_percent(feature_count++, n_features, 1);	/* show something happens */
 	    /* Geometry */
@@ -858,7 +876,7 @@ int main(int argc, char *argv[])
 		if (dim > 2)
 		    with_z = 1;
 
-		geom(Ogr_geometry, &Tmp, layer + 1, cat, min_area, type,
+		geom(Ogr_geometry, Out, layer + 1, cat, min_area, type,
 		     no_clean_flag->answer);
 	    }
 
@@ -948,12 +966,14 @@ int main(int argc, char *argv[])
     separator = "-----------------------------------------------------";
     G_message("%s", separator);
 
-    /* TODO: is it necessary to build here? probably not, consumes time */
-    /* GV_BUILD_BASE is sufficient to toggle boundary cleaning */
-    Vect_build_partial(&Tmp, GV_BUILD_BASE);
+    if (use_tmp_vect) {
+	/* TODO: is it necessary to build here? probably not, consumes time */
+	/* GV_BUILD_BASE is sufficient to toggle boundary cleaning */
+	Vect_build_partial(&Tmp, GV_BUILD_BASE);
+    }
 
-    if (!no_clean_flag->answer &&
-	Vect_get_num_primitives(&Tmp, GV_BOUNDARY) > 0) {
+    if (use_tmp_vect && !no_clean_flag->answer &&
+	Vect_get_num_primitives(Out, GV_BOUNDARY) > 0) {
 	int ret, centr, ncentr, otype, n_overlaps, n_nocat;
 	CENTR *Centr;
 	struct spatial_index si;
@@ -1018,7 +1038,7 @@ int main(int argc, char *argv[])
 	Vect_merge_lines(&Tmp, GV_BOUNDARY, NULL, NULL);
 
 	G_message("%s", separator);
-	if (type & GV_BOUNDARY) {	/* that means lines were converted boundaries */
+	if (type & GV_BOUNDARY) {	/* that means lines were converted to boundaries */
 	    G_message(_("Change boundary dangles to lines:"));
 	    Vect_chtype_dangles(&Tmp, -1.0, NULL);
 	}
@@ -1171,12 +1191,14 @@ int main(int argc, char *argv[])
      * OGR_DS_Destroy( Ogr_ds );
      */
 
-    /* Copy temporary vector to output vector */
-    Vect_copy_map_lines(&Tmp, &Map);
-    /* release memory occupied by topo, we may need that memory for main output */
-    Vect_set_release_support(&Tmp);
-    Vect_close(&Tmp);
-    Vect_delete(tempvect);
+    if (use_tmp_vect) {
+	/* Copy temporary vector to output vector */
+	Vect_copy_map_lines(&Tmp, &Map);
+	/* release memory occupied by topo, we may need that memory for main output */
+	Vect_set_release_support(&Tmp);
+	Vect_close(&Tmp);
+	Vect_delete(tempvect);
+    }
 
     Vect_build(&Map);
     Vect_close(&Map);
