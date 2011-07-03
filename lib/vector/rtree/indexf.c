@@ -29,12 +29,12 @@
 /* stack used for non-recursive insertion/deletion */
 struct fstack
 {
-    struct Node sn;	/* stack node */
+    struct RTree_Node sn;	/* stack node */
     int branch_id;	/* branch no to follow down */
     off_t pos;		/* file position of stack node */
 };
 
-int RTreeValidChildF(union Child *child)
+int RTreeValidChildF(union RTree_Child *child)
 {
     return (child->pos > -1);
 }
@@ -44,10 +44,10 @@ int RTreeValidChildF(union Child *child)
  * overlap the argument rectangle.
  * Return the number of qualifying data rects.
  */
-int RTreeSearchF(struct RTree *t, struct Rect *r,
+int RTreeSearchF(struct RTree *t, struct RTree_Rect *r,
 		 SearchHitCallback *shcb, void *cbarg)
 {
-    struct Node *n;
+    struct RTree_Node *n;
     int hitCount = 0, found, currlevel;
     int i;
     struct fstack s[MAXLEVEL];
@@ -115,15 +115,15 @@ int RTreeSearchF(struct RTree *t, struct Rect *r,
  * The level argument specifies the number of steps up from the leaf
  * level to insert; e.g. a data rectangle goes in at level = 0.
  */
-static int RTreeInsertRect2F(struct Rect *r, union Child child, int level, 
-			     struct Node *newnode, off_t *newnode_pos,
+static int RTreeInsertRect2F(struct RTree_Rect *r, union RTree_Child child, int level, 
+			     struct RTree_Node *newnode, off_t *newnode_pos,
 			     struct RTree *t,
-			     struct ListBranch **ee, int *overflow)
+			     struct RTree_ListBranch **ee, int *overflow)
 {
     int i, currlevel;
-    struct Branch b;
-    struct Rect nr, *cover;
-    struct Node *n, *n2, nn;
+    struct RTree_Branch b;
+    struct RTree_Rect nr, *cover;
+    struct RTree_Node *n, *n2, nn;
     struct fstack s[MAXLEVEL];
     int top = 0, down = 0;
     int result;
@@ -230,12 +230,12 @@ static int RTreeInsertRect2F(struct Rect *r, union Child child, int level,
  * level to insert; e.g. a data rectangle goes in at level = 0.
  * RTreeInsertRect2 does the actual insertion.
  */
-int RTreeInsertRectF(struct Rect *r, union Child child, int level,
+int RTreeInsertRectF(struct RTree_Rect *r, union RTree_Child child, int level,
                      struct RTree *t)
 {
-    struct Node oldroot, newroot, newnode;
-    struct Branch b;
-    struct ListBranch *e, *reInsertList = NULL;
+    struct RTree_Node oldroot, newroot, newnode;
+    struct RTree_Branch b;
+    struct RTree_ListBranch *e, *reInsertList = NULL;
     int result;
     int i, overflow[MAXLEVEL];
     off_t newnode_pos = -1;
@@ -312,12 +312,12 @@ int RTreeInsertRectF(struct Rect *r, union Child child, int level,
  * Returns 1 if record not found, 0 if success.
  */
 static int
-RTreeDeleteRect2F(struct Rect *r, union Child child, struct RTree *t,
-		 struct ListNode **ee)
+RTreeDeleteRect2F(struct RTree_Rect *r, union RTree_Child child, struct RTree *t,
+		 struct RTree_ListNode **ee)
 {
     int i, notfound = 1, currlevel;
-    struct Node *n;
-    struct Rect nr;
+    struct RTree_Node *n;
+    struct RTree_Rect nr;
     struct fstack s[MAXLEVEL];
     int top = 0, down = 0;
     int minfill;
@@ -414,11 +414,11 @@ RTreeDeleteRect2F(struct Rect *r, union Child child, struct RTree *t,
  * Returns 1 if record not found, 0 if success.
  * RTreeDeleteRect1 provides for eliminating the root.
  */
-int RTreeDeleteRectF(struct Rect *r, union Child child, struct RTree *t)
+int RTreeDeleteRectF(struct RTree_Rect *r, union RTree_Child child, struct RTree *t)
 {
     int i;
-    struct Node *n, rn;
-    struct ListNode *e, *reInsertList = NULL;
+    struct RTree_Node *n, rn;
+    struct RTree_ListNode *e, *reInsertList = NULL;
 
     if (!RTreeDeleteRect2F(r, child, t, &reInsertList)) {
 	/* found and deleted a data item */

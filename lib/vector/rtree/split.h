@@ -24,21 +24,21 @@
 /* METHOD 1: R*-Tree split */
 #define METHOD 1
 
-struct PartitionVars {
+struct RTree_PartitionVars {
     int partition[MAXCARD + 1];
     int total, minfill;
     int taken[MAXCARD + 1];
     int count[2];
-    struct Rect cover[2];
+    struct RTree_Rect cover[2];
     RectReal area[2];
 };
 
-extern struct Branch BranchBuf[MAXCARD + 1];
+extern struct RTree_Branch BranchBuf[MAXCARD + 1];
 extern int BranchCount;
-extern struct Rect CoverSplit;
+extern struct RTree_Rect CoverSplit;
 extern RectReal CoverSplitArea;
 
 /* variables for finding a partition */
-extern struct PartitionVars Partitions[1];
+extern struct RTree_PartitionVars Partitions[1];
 
-extern void RTreeInitPVars(struct PartitionVars *, int, int);
+extern void RTreeInitPVars(struct RTree_PartitionVars *, int, int);

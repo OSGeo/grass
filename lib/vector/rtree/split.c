@@ -28,18 +28,18 @@
 #define DBL_MAX 1.797693E308  /* DBL_MAX approximation */
 #endif
 
-struct Branch BranchBuf[MAXCARD + 1];
+struct RTree_Branch BranchBuf[MAXCARD + 1];
 int BranchCount;
-struct Rect CoverSplit;
+struct RTree_Rect CoverSplit;
 RectReal CoverSplitArea;
 
 /* variables for finding a partition */
-struct PartitionVars Partitions[1];
+struct RTree_PartitionVars Partitions[1];
 
 /*----------------------------------------------------------------------
 | Load branch buffer with branches from full node plus the extra branch.
 ----------------------------------------------------------------------*/
-static void RTreeGetBranches(struct Node *n, struct Branch *b,
+static void RTreeGetBranches(struct RTree_Node *n, struct RTree_Branch *b,
 			     struct RTree *t)
 {
     int i, maxkids = 0;
@@ -79,7 +79,7 @@ static void RTreeGetBranches(struct Node *n, struct Branch *b,
 /*----------------------------------------------------------------------
 | Put a branch in one of the groups.
 ----------------------------------------------------------------------*/
-static void RTreeClassify(int i, int group, struct PartitionVars *p,
+static void RTreeClassify(int i, int group, struct RTree_PartitionVars *p,
 			  struct RTree *t)
 {
     assert(!p->taken[i]);
@@ -109,7 +109,7 @@ static void RTreeClassify(int i, int group, struct PartitionVars *p,
 | Pick the two that waste the most area if covered by a single
 | rectangle.
 ----------------------------------------------------------------------*/
-static void RTreePickSeeds(struct PartitionVars *p, struct RTree *t)
+static void RTreePickSeeds(struct RTree_PartitionVars *p, struct RTree *t)
 {
     int i, j, seed0 = 0, seed1 = 0;
     RectReal worst, waste, area[MAXCARD + 1];
@@ -120,7 +120,7 @@ static void RTreePickSeeds(struct PartitionVars *p, struct RTree *t)
     worst = -CoverSplitArea - 1;
     for (i = 0; i < p->total - 1; i++) {
 	for (j = i + 1; j < p->total; j++) {
-	    struct Rect one_rect;
+	    struct RTree_Rect one_rect;
 
 	    one_rect = RTreeCombineRect(&BranchBuf[i].rect,
 					&BranchBuf[j].rect, t);
@@ -141,8 +141,8 @@ static void RTreePickSeeds(struct PartitionVars *p, struct RTree *t)
 | Copy branches from the buffer into two nodes according to the
 | partition.
 ----------------------------------------------------------------------*/
-static void RTreeLoadNodes(struct Node *n, struct Node *q,
-			   struct PartitionVars *p, struct RTree *t)
+static void RTreeLoadNodes(struct RTree_Node *n, struct RTree_Node *q,
+			   struct RTree_PartitionVars *p, struct RTree *t)
 {
     int i;
 
@@ -158,7 +158,7 @@ static void RTreeLoadNodes(struct Node *n, struct Node *q,
 /*----------------------------------------------------------------------
 | Initialize a PartitionVars structure.
 ----------------------------------------------------------------------*/
-void RTreeInitPVars(struct PartitionVars *p, int maxrects, int minfill)
+void RTreeInitPVars(struct RTree_PartitionVars *p, int maxrects, int minfill)
 {
     int i;
 
@@ -177,7 +177,7 @@ void RTreeInitPVars(struct PartitionVars *p, int maxrects, int minfill)
 | Print out data for a partition from PartitionVars struct.
 | Unused, for debugging only
 ----------------------------------------------------------------------*/
-static void RTreePrintPVars(struct PartitionVars *p)
+static void RTreePrintPVars(struct RTree_PartitionVars *p)
 {
     int i;
 
@@ -226,7 +226,7 @@ static void RTreePrintPVars(struct PartitionVars *p)
 | group to violate min fill requirement) then other group gets the rest.
 | These last are the ones that can go in either group most easily.
 ----------------------------------------------------------------------*/
-static void RTreeMethodZero(struct PartitionVars *p, int minfill,
+static void RTreeMethodZero(struct RTree_PartitionVars *p, int minfill,
 			    struct RTree *t)
 {
     int i;
@@ -242,7 +242,7 @@ static void RTreeMethodZero(struct PartitionVars *p, int minfill,
 	biggestDiff = (RectReal) - 1.;
 	for (i = 0; i < p->total; i++) {
 	    if (!p->taken[i]) {
-		struct Rect *r, rect_0, rect_1;
+		struct RTree_Rect *r, rect_0, rect_1;
 		RectReal growth0, growth1, diff;
 
 		r = &BranchBuf[i].rect;
@@ -298,9 +298,9 @@ static void RTreeMethodZero(struct PartitionVars *p, int minfill,
 /*----------------------------------------------------------------------
 | swap branches
 ----------------------------------------------------------------------*/
-static void RTreeSwapBranches(struct Branch *a, struct Branch *b)
+static void RTreeSwapBranches(struct RTree_Branch *a, struct RTree_Branch *b)
 {
-    struct Branch c;
+    struct RTree_Branch c;
 
     c = *a;
     *a = *b;
@@ -313,7 +313,7 @@ static void RTreeSwapBranches(struct Branch *a, struct Branch *b)
 | return 0 if a == b
 | return -1 if a < b
 ----------------------------------------------------------------------*/
-static int RTreeCompareBranches(struct Branch *a, struct Branch *b, int side)
+static int RTreeCompareBranches(struct RTree_Branch *a, struct RTree_Branch *b, int side)
 {
     if (a->rect.boundary[side] > b->rect.boundary[side])
 	return 1;
@@ -450,14 +450,14 @@ static void RTreeQuicksortBranchBuf(int side)
 | fill requirement) then other group gets the rest.
 | These last are the ones that can go in either group most easily.
 ----------------------------------------------------------------------*/
-static void RTreeMethodOne(struct PartitionVars *p, int minfill,
+static void RTreeMethodOne(struct RTree_PartitionVars *p, int minfill,
                            int maxkids, struct RTree *t)
 {
     int i, j, k, l, s;
     int axis = 0, best_axis = 0, side = 0, best_side[NUMDIMS];
     int best_cut[NUMDIMS];
     RectReal margin, smallest_margin = 0;
-    struct Rect *r1, *r2, testrect1, testrect2, upperrect, orect;
+    struct RTree_Rect *r1, *r2, testrect1, testrect2, upperrect, orect;
     int minfill1 = minfill - 1;
     RectReal overlap, vol, smallest_overlap = -1, smallest_vol = -1;
 
@@ -591,10 +591,10 @@ static void RTreeMethodOne(struct PartitionVars *p, int minfill,
 | Old node is one of the new ones, and one really new one is created.
 | May use quadratic split or R*-tree split.
 ----------------------------------------------------------------------*/
-void RTreeSplitNode(struct Node *n, struct Branch *b, struct Node *nn,
-		    struct RTree *t)
+void RTreeSplitNode(struct RTree_Node *n, struct RTree_Branch *b,
+                    struct RTree_Node *nn, struct RTree *t)
 {
-    struct PartitionVars *p;
+    struct RTree_PartitionVars *p;
     int level;
 
     /* load all the branches into a buffer, initialize old node */
