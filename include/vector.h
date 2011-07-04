@@ -129,7 +129,7 @@ int Vect_reset_list(struct ilist *);
 void Vect_destroy_list(struct ilist *);
 
 /* List of bounding boxes with ids */
-struct boxlist *Vect_new_boxlist(void);
+struct boxlist *Vect_new_boxlist(int);
 int Vect_boxlist_append(struct boxlist *, int, struct bound_box);
 int Vect_boxlist_append_list(struct boxlist *, const struct boxlist *);
 int Vect_boxlist_delete(struct boxlist *, int);
@@ -304,14 +304,10 @@ void Vect_hist_rewind(struct Map_info *);
 char *Vect_hist_read(char *, int, const struct Map_info *);
 
 /* Selecting features */
-int Vect_select_lines_by_box(struct Map_info *, const struct bound_box *, int,
-			     struct ilist *);
-int Vect_select_lines_by_box_with_box(struct Map_info *, const struct bound_box *,
+int Vect_select_lines_by_box(struct Map_info *, const struct bound_box *,
 			 int, struct boxlist *);
-int Vect_select_areas_by_box(struct Map_info *, const struct bound_box *, struct ilist *);
-int Vect_select_areas_by_box_with_box(struct Map_info *, const struct bound_box *, struct boxlist *);
-int Vect_select_isles_by_box(struct Map_info *, const struct bound_box *, struct ilist *);
-int Vect_select_isles_by_box_with_box(struct Map_info *, const struct bound_box *, struct boxlist *);
+int Vect_select_areas_by_box(struct Map_info *, const struct bound_box *, struct boxlist *);
+int Vect_select_isles_by_box(struct Map_info *, const struct bound_box *, struct boxlist *);
 int Vect_select_nodes_by_box(struct Map_info *, const struct bound_box *, struct ilist *);
 int Vect_find_node(struct Map_info *, double, double, double, double, int);
 int Vect_find_line(struct Map_info *, double, double, double, int, double,

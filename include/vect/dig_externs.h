@@ -85,7 +85,7 @@ int dig_set_distance_to_line_tolerance(double);
 /* list.c */
 int dig_init_list(struct ilist *);
 int dig_list_add(struct ilist *, int);
-int dig_init_boxlist(struct boxlist *);
+int dig_init_boxlist(struct boxlist *, int);
 int dig_boxlist_add(struct boxlist *, int, struct bound_box);
 
 /* plus.c */
@@ -199,12 +199,9 @@ int dig_spidx_del_area(struct Plus_head *, int);
 int dig_spidx_del_isle(struct Plus_head *, int);
 
 int dig_select_nodes(struct Plus_head *, const struct bound_box *, struct ilist *);
-int dig_select_lines(struct Plus_head *, const struct bound_box *, struct ilist *);
-int dig_select_lines_with_box(struct Plus_head *, const struct bound_box *, struct boxlist *);
-int dig_select_areas(struct Plus_head *, const struct bound_box *, struct ilist *);
-int dig_select_areas_with_box(struct Plus_head *, const struct bound_box *, struct boxlist *);
-int dig_select_isles(struct Plus_head *, const struct bound_box *, struct ilist *);
-int dig_select_isles_with_box(struct Plus_head *, const struct bound_box *, struct boxlist *);
+int dig_select_lines(struct Plus_head *, const struct bound_box *, struct boxlist *);
+int dig_select_areas(struct Plus_head *, const struct bound_box *, struct boxlist *);
+int dig_select_isles(struct Plus_head *, const struct bound_box *, struct boxlist *);
 int dig_find_node(struct Plus_head *, double, double, double);
 int dig_find_line_box(const struct Plus_head *, struct boxlist *);
 int dig_find_area_box(const struct Plus_head *, struct boxlist *);
