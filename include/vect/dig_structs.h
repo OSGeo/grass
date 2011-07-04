@@ -1562,9 +1562,13 @@ struct boxlist
     */
     struct bound_box *box;
     /*!
+      \brief flag to indicate whether bounding boxes should be added
+    */
+    int have_boxes;
+    /*!
       \brief Number of items in the list
     */
-    int n_values;		
+    int n_values;
     /*!
       \brief Allocated space for items
     */
