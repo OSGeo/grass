@@ -626,40 +626,6 @@ int dig_find_node(struct Plus_head *Plus, double x, double y, double z)
 }
 
 /*!
-   \brief Select lines by box 
-
-   \param Plus pointer to Plus_head structure
-   \param box bounding box
-   \param list list of selected lines
-
-   \return number of selected lines
- */
-int
-dig_select_lines(struct Plus_head *Plus, const struct bound_box * box,
-		 struct ilist *list)
-{
-    struct RTree_Rect rect;
-
-    G_debug(3, "dig_select_lines()");
-
-    list->n_values = 0;
-
-    rect.boundary[0] = box->W;
-    rect.boundary[1] = box->S;
-    rect.boundary[2] = box->B;
-    rect.boundary[3] = box->E;
-    rect.boundary[4] = box->N;
-    rect.boundary[5] = box->T;
-
-    if (Plus->Spidx_new)
-	RTreeSearch(Plus->Line_spidx, &rect, (void *)_add_item, list);
-    else
-	rtree_search(Plus->Line_spidx, &rect, (void *)_add_item, list, Plus);
-
-    return (list->n_values);
-}
-
-/*!
    \brief Select lines with boxes by box
 
    \param Plus pointer to Plus_head structure
@@ -669,7 +635,7 @@ dig_select_lines(struct Plus_head *Plus, const struct bound_box * box,
    \return number of selected lines
    \return 0 not found
  */
-int dig_select_lines_with_box(struct Plus_head *Plus, const struct bound_box *box,
+int dig_select_lines(struct Plus_head *Plus, const struct bound_box *box,
 		      struct boxlist *list)
 {
     struct RTree_Rect rect;
@@ -728,40 +694,6 @@ int dig_find_line_box(const struct Plus_head *Plus, struct boxlist *list)
 }
 
 /*! 
-   \brief Select areas by box 
-
-   \param Plus pointer to Plus_head structure
-   \param box bounding box
-   \param list list of selected lines
-
-   \return number of selected areas
- */
-int
-dig_select_areas(struct Plus_head *Plus, const struct bound_box * box,
-		 struct ilist *list)
-{
-    struct RTree_Rect rect;
-
-    G_debug(3, "dig_select_areas()");
-
-    list->n_values = 0;
-
-    rect.boundary[0] = box->W;
-    rect.boundary[1] = box->S;
-    rect.boundary[2] = box->B;
-    rect.boundary[3] = box->E;
-    rect.boundary[4] = box->N;
-    rect.boundary[5] = box->T;
-
-    if (Plus->Spidx_new)
-	RTreeSearch(Plus->Area_spidx, &rect, (void *)_add_item, list);
-    else
-	rtree_search(Plus->Area_spidx, &rect, (void *)_add_item, list, Plus);
-
-    return (list->n_values);
-}
-
-/*! 
    \brief Select areas with boxes by box 
 
    \param Plus pointer to Plus_head structure
@@ -771,7 +703,7 @@ dig_select_areas(struct Plus_head *Plus, const struct bound_box * box,
    \return number of selected areas
  */
 int
-dig_select_areas_with_box(struct Plus_head *Plus, const struct bound_box * box,
+dig_select_areas(struct Plus_head *Plus, const struct bound_box * box,
 		 struct boxlist *list)
 {
     struct RTree_Rect rect;
@@ -829,40 +761,6 @@ int dig_find_area_box(const struct Plus_head *Plus, struct boxlist *list)
     return (ret);
 }
 
-/*!
-   \brief Select isles by box 
-
-   \param Plus pointer to Plus_head structure
-   \param box bounding box
-   \param list list of selected lines
-
-   \return number of selected isles
- */
-int
-dig_select_isles(struct Plus_head *Plus, const struct bound_box * box,
-		 struct ilist *list)
-{
-    struct RTree_Rect rect;
-
-    G_debug(3, "dig_select_isles()");
-
-    list->n_values = 0;
-
-    rect.boundary[0] = box->W;
-    rect.boundary[1] = box->S;
-    rect.boundary[2] = box->B;
-    rect.boundary[3] = box->E;
-    rect.boundary[4] = box->N;
-    rect.boundary[5] = box->T;
-
-    if (Plus->Spidx_new)
-	RTreeSearch(Plus->Isle_spidx, &rect, (void *)_add_item, list);
-    else
-	rtree_search(Plus->Isle_spidx, &rect, (void *)_add_item, list, Plus);
-
-    return (list->n_values);
-}
-
 /*! 
    \brief Select isles with boxes by box 
 
@@ -873,7 +771,7 @@ dig_select_isles(struct Plus_head *Plus, const struct bound_box * box,
    \return number of selected isles
  */
 int
-dig_select_isles_with_box(struct Plus_head *Plus, const struct bound_box * box,
+dig_select_isles(struct Plus_head *Plus, const struct bound_box * box,
 		 struct boxlist *list)
 {
     struct RTree_Rect rect;
