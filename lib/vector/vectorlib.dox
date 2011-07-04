@@ -622,23 +622,25 @@ Topology general characteristics:
 - the format is topological (areas build from boundaries)
 - currently only 2D topology is supported
 
-Topology is written for native format while pseudo-topology (polygons
-constracted from boundaries) is written for OGR sources, see
+Topology is written for native format while pseudo-topology (boundaries
+constructed from polygons) is written for OGR sources, see
 <tt>v.external</tt> module.
 
 The following rules apply to the vector data:
 
-- Lines should not cross each other (i.e., lines which would cross must
-  be split at their intersection to form distict lines).
-- Linear primitives which share nodes at exactly same points (i.e.,
-  must be snapped together). This is particulary important since nodes
-  are not exactly represented in the coor file, but only implicitly as
-  endpoints of lines.
+- Boundaries should not cross each other (i.e., boundaries which would
+  cross must be split at their intersection to form distict boundaries).
+  Lines can cross each other, e.g. bridges over rivers.
+- Lines and boundaries share nodes only if their endpoints are identical.
+  Lines or boundaries canbe forced to share a common node by snapping
+  them together. This is particulary important since nodes
+  are not represented in the coor file, but only implicitly as
+  endpoints of lines and boundaries.
 - Common area boundaries should appear only once (i.e., should not be
   double digitized).
 - Areas must be explicitly closed. This means that it must be possible
   to complete each area by following one or more boundaries that are
-  connected by common nodes, and that such tracings result is closed
+  connected by common nodes, and that such tracings result in closed
   areas.
 - It is recommended that area features and linear features be placed
   in separate layers. However if area features and linear features
@@ -647,7 +649,7 @@ The following rules apply to the vector data:
   field boundary), should be digitized as a boundary to complete the
   area. The area feature should be labeled by a centroid as an
   area. Additionally, the common boundary itself (i.e., the boundary
-  which is also a line) should be labeled as a line by a distict
+  which is also a line) should be labeled as a line by a distinct
   category number.
 
 Vector map topology can be cleaned at user level by <tt>v.clean</tt>
@@ -659,7 +661,7 @@ Topo file is read by Vect_open_topo().
 
 \subsubsection vlibTopoFileHead Header
 
-<i>Note:</i> <tt>plus</tt> is instance of \ref Plus_head data structure.
+<i>Note:</i> <tt>plus</tt> is an instance of \ref Plus_head data structure.
 
 <table border="1" style="border-collapse: collapse" cellpadding="5">
 <tr><td><b>Name</b></td><td><b>Type</b></td><td><b>Number</b></td><td><b>Description</b></td></tr>
@@ -719,13 +721,11 @@ For each line (n_lines):
 <tr><td><b>Name</b></td><td><b>Type</b></td><td><b>Number</b></td><td><b>Description</b></td></tr>
 <tr><td>feature type</td><td>C</td><td>1</td><td>0 for dead</td></tr>
 <tr><td>offset</td><td>L</td><td>1</td><td>Line offset</td></tr>
-<tr><td>N1</td><td>I</td><td>1</td><td>First node id (only if feature type is GV_POINTS, GV_LINES or GV_KERNEL)</td></tr>
+<tr><td>N1</td><td>I</td><td>1</td><td>First node id (only if feature type is GV_LINE or GV_BOUNDARY)</td></tr>
 <tr><td>N2</td><td>I</td><td>1</td><td>Second node id (only if feature type is GV_LINE or GV_BOUNDARY)</td></tr>
 <tr><td>left</td><td>I</td><td>1</td><td>Left area id for feature type GV_BOUNDARY / Area id for feature type GV_CENTROID</td></tr>
 <tr><td>right</td><td>I</td><td>1</td><td>Right area id (for feature type GV_BOUNDARY)</td></tr>
 <tr><td>vol</td><td>I</td><td>1</td><td>Reserved for kernel (volume number, for feature type GV_KERNEL)</td></tr>
-<tr><td>N,S,E,W</td><td>D</td><td>4</td><td>Line bounding box (for feature type GV_LINE, GV_BOUNDARY or GV_FACE)</td></tr>
-<tr><td>T,B</td><td>D</td><td>2</td><td>Line bounding box for 3D (only if with_z=1)</td></tr>
 </table>
 
 See \ref P_line data structure.
@@ -741,8 +741,6 @@ For each area (n_areas):
 <tr><td>n_isles</td><td>I</td><td>1</td><td>Number of isles</td></tr>
 <tr><td>isles</td><td>I</td><td>n_isles</td><td>Isle ids</td></tr>
 <tr><td>centroid</td><td>I</td><td>1</td><td>Centroid id</td></tr>
-<tr><td>N,S,E,W</td><td>D</td><td>4</td><td>Area bounding box</td></tr>
-<tr><td>T,B</td><td>D</td><td>2</td><td>Area bounding box for 3D (only if with_z=1)</td></tr>
 </table>
 
 See \ref P_area data structure.
@@ -756,8 +754,6 @@ For each isle (n_isle):
 <tr><td>n_lines</td><td>I</td><td>1</td><td>number of boundaries</td></tr>
 <tr><td>lines</td><td>I</td><td>n_lines</td><td>Line ids</td></tr>
 <tr><td>area</td><td>I</td><td>1</td><td>Outer area id</td></tr>
-<tr><td>N,S,E,W</td><td>D</td><td>4</td><td>Isle bounding box</td></tr>
-<tr><td>T,B</td><td>D</td><td>2</td><td>Isle bounding box for 3D (only if with_z=1)</td></tr>
 </table>
 
 See \ref P_isle data structure.
@@ -774,8 +770,8 @@ of access 2):
 - GV_BUILD_CENTROIDS
 - GV_BUILD_ALL
 
-<i>Note:</i> GV_BOUNDARY contains geometry and it is used to build
-areas. GV_LINE cannot form an area.
+<i>Note:</i> Only the geometry type GV_BOUNDARY is used to build
+areas. The geometry type GV_LINE cannot form an area.
 
 \subsection vlibTopoExamples Topology examples
 
@@ -798,7 +794,6 @@ Line L1 (see \ref P_Line)
 
 \verbatim
 line = 1, type = 1, offset = 18 n1 = 1, n2 = 1, left/area = 0, right = 0
-N,S,E,W,T,B: 225105.223577, 225105.223577, 631286.707172, 631286.707172, 0.000000, 0.000000
 \endverbatim
 
 <b>Lines</b>
@@ -829,19 +824,18 @@ Line L1 (see \ref P_Line)
 
 \verbatim
 line = 1, type = 2, offset = 18 n1 = 1, n2 = 2, left/area = 0, right = 0
-N,S,E,W,T,B: 223557.302231, 221667.849899, 638677.484787, 634624.746450, 0.000000, 0.000000
 \endverbatim
 
 <b>Areas without holes</b>
 
 \verbatim
-One line (nodes: 2, lines: 2, areas: 1, isles: 1)
+Two lines (nodes: 1, lines: 2, areas: 1, isles: 1)
 
           +N1
          /   \
         /     \
        /       \
-      /  +N2/L2 \
+      /   +L2   \
      /           \
     -------L1------
 \endverbatim
@@ -854,32 +848,22 @@ node = 1, n_lines = 2, xyz = 635720.081136, 225063.387424, 0.000000
   line =  -1, type = 4, angle = -0.842926
 \endverbatim
 
-%Node N2 (see \ref P_Node)
-
-\verbatim
-node = 2, n_lines = 1, xyz = 635779.454021, 223100.127232, 0.000000
-  line =   2, type = 8, angle = -9.000000
-\endverbatim
-
 Line L1 (see \ref P_Line)
 
 \verbatim
 line = 1, type = 4, offset = 18 n1 = 1, n2 = 1, left/area = 1, right = -1
-N,S,E,W,T,B: 225063.387424, 222188.133874, 638184.584178, 633419.878296, 0.000000, 0.000000
 \endverbatim
 
 Line L2 (see \ref P_Line)
 
 \verbatim
 line = 2, type = 8, offset = 87 n1 = 2, n2 = 2, left/area = 1, right = 0
-N,S,E,W,T,B: 223100.127232, 223100.127232, 635779.454021, 635779.454021, 0.000000, 0.000000
 \endverbatim
 
 Area A1 (see \ref P_Area)
 
 \verbatim
 area = 1, n_lines = 1, n_isles = 0 centroid = 2
-N,S,E,W,T,B: 225063.387424, 222188.133874, 638184.584178, 633419.878296, 0.000000, 0.000000
   line =  -1
 \endverbatim
 
@@ -887,23 +871,22 @@ Isle I1 (see \ref P_Isle)
 
 \verbatim
 isle = 1, n_lines = 1 area = 0
-N,S,E,W,T,B: 225063.387424, 222188.133874, 638184.584178, 633419.878296, 0.000000, 0.000000
   line =   1
 \endverbatim
 
 <b>Areas with holes</b>
 
 \verbatim
-One line (nodes: 3, lines: 3, areas: 2, isles: 2)
+Three lines (nodes: 2, lines: 3, areas: 2, isles: 2)
 
              +N1
             / \
            /   \
           /     \
          /       \
-        /  +N2/L2 \
+        /    +L2  \
        /           \
-      /   +N3       \
+      /   +N2       \
      /   /\          \
     /   /  \          \
    /   /    \          \
@@ -923,13 +906,6 @@ node = 1, n_lines = 2, xyz = 635720.081136, 225063.387424, 0.000000
 %Node N2 (see \ref P_Node)
 
 \verbatim
-node = 2, n_lines = 1, xyz = 635779.454021, 223100.127232, 0.000000
-  line =   2, type = 8, angle = -9.000000
-\endverbatim
-
-%Node N3 (see \ref P_Node)
-
-\verbatim
 node = 3, n_lines = 2, xyz = 636788.032454, 223173.935091, 0.000000
   line =   3, type = 4, angle = -2.245537
   line =  -3, type = 4, angle = -0.866302
@@ -939,28 +915,24 @@ Line L1 (see \ref P_Line)
 
 \verbatim
 line = 1, type = 4, offset = 18 n1 = 1, n2 = 1, left/area = 1, right = -1
-N,S,E,W,T,B: 225063.387424, 222188.133874, 638184.584178, 633419.878296, 0.000000, 0.000000
 \endverbatim
 
 Line L2 (see \ref P_Line)
 
 \verbatim
 line = 2, type = 8, offset = 87 n1 = 2, n2 = 2, left/area = 1, right = 0
-N,S,E,W,T,B: 223100.127232, 223100.127232, 635779.454021, 635779.454021, 0.000000, 0.000000
 \endverbatim
 
 Line L3 (see \ref P_Line)
 
 \verbatim
 line = 3, type = 4, offset = 197 n1 = 3, n2 = 3, left/area = 2, right = -2
-N,S,E,W,T,B: 223173.935091, 222626.267748, 637253.549696, 636349.898580, 0.000000, 0.000000
 \endverbatim
 
 Area A1 (see \ref P_Area)
 
 \verbatim
 area = 1, n_lines = 1, n_isles = 1 centroid = 2
-N,S,E,W,T,B: 225063.387424, 222188.133874, 638184.584178, 633419.878296, 0.000000, 0.000000
   line =  -1
   isle =   2
 \endverbatim
@@ -969,7 +941,6 @@ Area A2 (see \ref P_Area)
 
 \verbatim
 area = 2, n_lines = 1, n_isles = 0 centroid = 0
-N,S,E,W,T,B: 223173.935091, 222626.267748, 637253.549696, 636349.898580, 0.000000, 0.000000
   line =  -3
 \endverbatim
 
@@ -977,7 +948,6 @@ Isle I1 (see \ref P_Isle)
 
 \verbatim
 isle = 1, n_lines = 1 area = 0
-N,S,E,W,T,B: 225063.387424, 222188.133874, 638184.584178, 633419.878296, 0.000000, 0.000000
   line =   1
 \endverbatim
 
@@ -985,13 +955,12 @@ Isle I2 (see \ref P_Isle)
 
 \verbatim
 isle = 2, n_lines = 1 area = 1
-N,S,E,W,T,B: 223173.935091, 222626.267748, 637253.549696, 636349.898580, 0.000000, 0.000000
   line =   3
 \endverbatim
 
 <b>Example 1</b>
 
-A polygon may be formed by many boundaries (more primitives but connected).
+A polygon may be formed by many boundaries (several connected primitives).
 One boundary is shared by adjacent areas.
 
 \verbatim
@@ -1098,12 +1067,14 @@ spatial index without topology.
 
 \section vlibSpidx Vector library spatial index management
 
-Spatial index (based on R-tree) is created with topology, see \ref
+Spatial index (based on R*-tree) is created with topology, see \ref
 RTree data structure.
 
 Spatial index occupies a lot of memory but it is necessary for 
-topology building. Also, it takes a long time to release the memory
-occupied by spatial index (see dig_spidx_free()). 
+topology building. Also, it takes some time to release the memory
+occupied by spatial index (see dig_spidx_free()). The spatial index can
+also be built in file to save memory by setting the environment variable
+GRASS_VECTOR_LOWMEM.
 
 The function building topology - Vect_build() - is usually called at
 the end of modules (before Vect_close()) so it is faster to call
@@ -1111,7 +1082,7 @@ the end of modules (before Vect_close()) so it is faster to call
 faster.  By default the memory is not released.
 
 It is possible to call Vect_set_release_support() before Vect_close()
-to enforce memory release, but it takes a long time on large files.
+to enforce memory release, but it takes some time on large files.
 
 The spatial index is stored in file and not loaded for old vectors that
 are not updated, saving a lot of memory. Spatial queries are done in 
@@ -1146,7 +1117,7 @@ int main
 }
 \endcode
 
-but it takes longer. 
+but it takes a bit longer. 
 
 It makes sense to release the spatial index if it is used only at the beginning
 of a module or in permanently running programs like QGIS. Note that this
@@ -1328,7 +1299,8 @@ i.e. smoothing, simplification, removing small areas etc. will not
 work properly for adjacent areas or areas within areas.
 
 Full topology is only available for native GRASS vectors or can only
-be built after all polygons are cleaned as done by <tt>v.in.ogr</tt>.
+be built after all polygons are converted to areas and cleaned as done
+by <tt>v.in.ogr</tt>.
 
 \subsection vlibFrmtFileFormat Frmt file format specification
 
@@ -1391,10 +1363,10 @@ software projects.
 The Directed Graph Library library provides functionality to assign
 costs to lines and/or nodes. That means that costs can be accumulated
 while traveling along polylines. The user can assign individual costs
-to all lines and/or nodes of a vector map and later calculate shortest
+to all lines and/or nodes of a vector map and later calculate least costly
 path connections based on the accumulated costs. Applications are
 transport analysis, connectivity and more. Implemented applications
-cover shortest path, traveling salesman (round trip), allocation of
+cover shortest/fastest path, traveling salesman (round trip), allocation of
 sources (creation of subnetworks), minimum Steiner trees (star-like
 connections), and iso-distances (from centers).
 
@@ -2096,6 +2068,22 @@ programming. The programmer should use only routines with this prefix.
 
  - Vect_val_in_list()
 
+ - Vect_destroy_boxlist()
+
+ - Vect_boxlist_append()
+
+ - Vect_boxlist_append_boxlist()
+
+ - Vect_boxlist_delete()
+
+ - Vect_boxlist_delete_boxlist()
+
+ - Vect_new_boxlist()
+
+ - Vect_reset_boxlist()
+
+ - Vect_val_in_boxlist()
+
 
 \section vlibMap Vector map functions
 
@@ -2112,6 +2100,11 @@ programming. The programmer should use only routines with this prefix.
  - Vect_delete()
 
  - Vect_rename()
+
+
+\section vlibMergeLines Vector merge line functions
+
+ - Vect_merge_lines()
 
 
 \section vlibNet Vector network functions
@@ -2326,7 +2319,7 @@ Note: The functions are available only if GRASS is compiled with
 
 Updates for GRASS 7:
 
-- Markus Metz (file-based spatial index)
+- Markus Metz (file-based spatial index, vector topology)
 
 - Martin Landa (GEOS support, direct OGR read access) <landa.martin gmail.com>
 
