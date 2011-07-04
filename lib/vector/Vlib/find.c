@@ -174,7 +174,7 @@ Vect_find_line_list(struct Map_info *map,
     static int first_time = 1;
     const struct Plus_head *Plus;
     struct bound_box box;
-    struct ilist *List;
+    struct boxlist *List;
 
     G_debug(3, "Vect_find_line_list() for %f %f %f type = %d maxdist = %f",
 	    ux, uy, uz, type, maxdist);
@@ -202,14 +202,14 @@ Vect_find_line_list(struct Map_info *map,
 	box.B = -PORT_DOUBLE_MAX;
     }
 
-    List = Vect_new_list();
+    List = Vect_new_boxlist(0);
 
     if (found)
 	Vect_reset_list(found);
 
     Vect_select_lines_by_box(map, &box, type, List);
     for (i = 0; i < List->n_values; i++) {
-	line = List->value[i];
+	line = List->id[i];
 	if (Vect_val_in_list(exclude, line)) {
 	    G_debug(3, " line = %d exclude", line);
 	    continue;
@@ -248,7 +248,7 @@ Vect_find_line_list(struct Map_info *map,
     if (cur_dist > maxdist)
 	choice = 0;
 
-    Vect_destroy_list(List);
+    Vect_destroy_boxlist(List);
 
     return (choice);
 }
@@ -274,7 +274,7 @@ int Vect_find_area(struct Map_info *Map, double x, double y)
     G_debug(3, "Vect_find_area() x = %f y = %f", x, y);
 
     if (first) {
-	List = Vect_new_boxlist();
+	List = Vect_new_boxlist(1);
 	first = 0;
 	alloc_size_list = 10;
 	size_list = G_malloc(alloc_size_list * sizeof(BOX_SIZE));
@@ -287,7 +287,7 @@ int Vect_find_area(struct Map_info *Map, double x, double y)
     box.S = y;
     box.T = PORT_DOUBLE_MAX;
     box.B = -PORT_DOUBLE_MAX;
-    Vect_select_areas_by_box_with_box(Map, &box, List);
+    Vect_select_areas_by_box(Map, &box, List);
     G_debug(3, "  %d areas selected by box", List->n_values);
 
     /* sort areas by size, the smallest is likely to be the nearest */
@@ -345,7 +345,7 @@ int Vect_find_island(struct Map_info *Map, double x, double y)
     G_debug(3, "Vect_find_island() x = %f y = %f", x, y);
 
     if (first) {
-	List = Vect_new_boxlist();
+	List = Vect_new_boxlist(1);
 	Points = Vect_new_line_struct();
 	first = 0;
     }
@@ -357,7 +357,7 @@ int Vect_find_island(struct Map_info *Map, double x, double y)
     box.S = y;
     box.T = PORT_DOUBLE_MAX;
     box.B = -PORT_DOUBLE_MAX;
-    Vect_select_isles_by_box_with_box(Map, &box, List);
+    Vect_select_isles_by_box(Map, &box, List);
     G_debug(3, "  %d islands selected by box", List->n_values);
 
     current_size = -1;

@@ -158,7 +158,7 @@ int Vect_isle_find_area(struct Map_info *Map, int isle)
     }
 
     if (first_call) {
-	List = Vect_new_boxlist();
+	List = Vect_new_boxlist(1);
 	APoints = Vect_new_line_struct();
 	first_call = 0;
     }
@@ -176,7 +176,7 @@ int Vect_isle_find_area(struct Map_info *Map, int isle)
     box.S = Node->y;
     box.T = PORT_DOUBLE_MAX;
     box.B = -PORT_DOUBLE_MAX;
-    Vect_select_areas_by_box_with_box(Map, &box, List);
+    Vect_select_areas_by_box(Map, &box, List);
     G_debug(3, "%d areas overlap island boundary point", List->n_values);
 
     sel_area = 0;
@@ -310,7 +310,7 @@ int Vect_attach_isles(struct Map_info *Map, const struct bound_box * box)
 {
     int i, isle;
     static int first = 1;
-    static struct ilist *List;
+    static struct boxlist *List;
     struct Plus_head *plus;
 
     G_debug(3, "Vect_attach_isles ()");
@@ -318,7 +318,7 @@ int Vect_attach_isles(struct Map_info *Map, const struct bound_box * box)
     plus = &(Map->plus);
 
     if (first) {
-	List = Vect_new_list();
+	List = Vect_new_boxlist(0);
 	first = 0;
     }
 
@@ -326,7 +326,7 @@ int Vect_attach_isles(struct Map_info *Map, const struct bound_box * box)
     G_debug(3, "  number of isles to attach = %d", List->n_values);
 
     for (i = 0; i < List->n_values; i++) {
-	isle = List->value[i];
+	isle = List->id[i];
 	/* only attach isles that are not yet attached, see Vect_attach_isle() */
 	if (plus->Isle[isle]->area == 0)
 	    Vect_attach_isle(Map, isle);
@@ -346,7 +346,7 @@ int Vect_attach_centroids(struct Map_info *Map, const struct bound_box * box)
 {
     int i, sel_area, centr;
     static int first = 1;
-    static struct ilist *List;
+    static struct boxlist *List;
     static struct line_pnts *Points;
     struct P_area *Area;
     struct P_line *Line;
@@ -358,7 +358,7 @@ int Vect_attach_centroids(struct Map_info *Map, const struct bound_box * box)
     plus = &(Map->plus);
 
     if (first) {
-	List = Vect_new_list();
+	List = Vect_new_boxlist(0);
 	Points = Vect_new_line_struct();
 	first = 0;
     }
@@ -394,7 +394,7 @@ int Vect_attach_centroids(struct Map_info *Map, const struct bound_box * box)
     for (i = 0; i < List->n_values; i++) {
 	int orig_area;
 
-	centr = List->value[i];
+	centr = List->id[i];
 	Line = plus->Line[centr];
 	topo = (struct P_topo_c *)Line->topo;
 

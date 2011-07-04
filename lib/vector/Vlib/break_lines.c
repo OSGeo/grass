@@ -70,7 +70,7 @@ Vect_break_lines_list(struct Map_info *Map, struct ilist *List_break,
     int naxlines, nbxlines, nx;
     double *xx = NULL, *yx = NULL, *zx = NULL;
     struct bound_box ABox, BBox;
-    struct ilist *List;
+    struct boxlist *List;
     int nbreaks;
     int touch1_n = 0, touch1_s = 0, touch1_e = 0, touch1_w = 0;	/* other vertices except node1 touching box */
     int touch2_n = 0, touch2_s = 0, touch2_e = 0, touch2_w = 0;	/* other vertices except node2 touching box */
@@ -84,7 +84,7 @@ Vect_break_lines_list(struct Map_info *Map, struct ilist *List_break,
     ACats = Vect_new_cats_struct();
     BCats = Vect_new_cats_struct();
     Cats = Vect_new_cats_struct();
-    List = Vect_new_list();
+    List = Vect_new_boxlist(1);
 
     is3d = Vect_is_3d(Map);
 
@@ -169,7 +169,7 @@ Vect_break_lines_list(struct Map_info *Map, struct ilist *List_break,
 	G_debug(3, "  %d lines selected by box", List->n_values);
 
 	for (j = 0; j < List->n_values; j++) {
-	    bline = List->value[j];
+	    bline = List->id[j];
 	    if (List_break && !Vect_val_in_list(List_break, bline)) {
 		continue;
 	    }
@@ -181,7 +181,7 @@ Vect_break_lines_list(struct Map_info *Map, struct ilist *List_break,
 	    if (!is3d) {
 		Vect_get_line_nodes(Map, aline, &anode1, &anode2);
 		Vect_get_line_nodes(Map, bline, &bnode1, &bnode2);
-		Vect_line_box(BPoints, &BBox);
+		BBox = List->box[j];
 
 		if (anode1 == bnode1 || anode1 == bnode2)
 		    node = anode1;
@@ -381,7 +381,7 @@ Vect_break_lines_list(struct Map_info *Map, struct ilist *List_break,
     Vect_destroy_cats_struct(ACats);
     Vect_destroy_cats_struct(BCats);
     Vect_destroy_cats_struct(Cats);
-    Vect_destroy_list(List);
+    Vect_destroy_boxlist(List);
 
     return nbreaks;
 }

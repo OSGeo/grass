@@ -473,8 +473,8 @@ int V2_read_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 	    /* get area bbox */
 	    Vect_get_area_box(Map, topo->area, &box);
 	    /* search in spatial index for centroid with area bbox */
-	    dig_init_boxlist(&list);
-	    Vect_select_lines_by_box_with_box(Map, &box, Line->type, &list);
+	    dig_init_boxlist(&list, 1);
+	    Vect_select_lines_by_box(Map, &box, Line->type, &list);
 	    
 	    found = 0;
 	    for (i = 0; i < list.n_values; i++) {
