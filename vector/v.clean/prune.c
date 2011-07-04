@@ -42,14 +42,14 @@ prune(struct Map_info *Out, int otype, double thresh, struct Map_info *Err)
     struct line_pnts *Points, *TPoints, *BPoints, *Points_orig;
     struct line_cats *Cats;
     struct bound_box box;
-    struct ilist *List;
+    struct boxlist *List;
 
     Points = Vect_new_line_struct();
     Points_orig = Vect_new_line_struct();
     TPoints = Vect_new_line_struct();
     BPoints = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
-    List = Vect_new_list();
+    List = Vect_new_boxlist(0);
 
     nlines = Vect_get_num_lines(Out);
 
@@ -122,7 +122,7 @@ prune(struct Map_info *Out, int otype, double thresh, struct Map_info *Err)
 		struct line_pnts **AXLines, **BXLines;
 		int naxlines, nbxlines;
 
-		bline = List->value[i];
+		bline = List->id[i];
 		if (bline == line)
 		    continue;
 
@@ -131,6 +131,7 @@ prune(struct Map_info *Out, int otype, double thresh, struct Map_info *Err)
 		/* Vect_line_intersection is quite slow, hopefully not so bad because only few 
 		 * intersections should be found if any */
 
+		AXLines = BXLines = NULL;
 		Vect_line_intersection(TPoints, BPoints, &AXLines, &BXLines,
 				       &naxlines, &nbxlines, 0);
 
@@ -143,14 +144,16 @@ prune(struct Map_info *Out, int otype, double thresh, struct Map_info *Err)
 		    for (j = 0; j < naxlines; j++) {
 			Vect_destroy_line_struct(AXLines[j]);
 		    }
-		    G_free(AXLines);
 		}
+		if (AXLines)
+		    G_free(AXLines);
 		if (nbxlines > 0) {
 		    for (j = 0; j < nbxlines; j++) {
 			Vect_destroy_line_struct(BXLines[j]);
 		    }
-		    G_free(BXLines);
 		}
+		if (BXLines)
+		    G_free(BXLines);
 
 		if (naxlines > 1 || nbxlines > 1) {
 		    intersect = 1;
@@ -221,7 +224,7 @@ prune(struct Map_info *Out, int otype, double thresh, struct Map_info *Err)
     Vect_destroy_line_struct(TPoints);
     Vect_destroy_line_struct(BPoints);
     Vect_destroy_cats_struct(Cats);
-    Vect_destroy_list(List);
+    Vect_destroy_boxlist(List);
 
     return 1;
 }

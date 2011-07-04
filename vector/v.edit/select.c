@@ -23,6 +23,7 @@
 
 static char first_selection = 1;
 static int merge_lists(struct ilist *, struct ilist *);
+static int merge_lists2(struct ilist *, struct boxlist *);
 
 /**
    \brief Select vector features
@@ -342,14 +343,14 @@ int sel_by_bbox(struct Map_info *Map,
 {
     struct bound_box bbox;
 
-    struct ilist *List_tmp;
+    struct boxlist *List_tmp;
 
     if (first_selection) {
 	List_tmp = List;
 	first_selection = 0;
     }
     else {
-	List_tmp = Vect_new_list();
+	List_tmp = Vect_new_boxlist();
     }
 
     /* bounding box */
@@ -367,7 +368,7 @@ int sel_by_bbox(struct Map_info *Map,
     /* merge lists (only duplicate items) */
     if (List_tmp != List) {
 	merge_lists(List, List_tmp);
-	Vect_destroy_list(List_tmp);
+	Vect_destroy_boxlist(List_tmp);
     }
 
     return List->n_values;
@@ -547,7 +548,7 @@ int sel_by_where(struct Map_info *Map,
 }
 
 /**
-   \brief merge two list, i.e. store only duplicate items
+   \brief merge two lists, i.e. store only duplicate items
 
    \param[in] alist,blist list to be merged
 
@@ -563,6 +564,33 @@ static int merge_lists(struct ilist *alist, struct ilist *blist)
 
     for (i = 0; i < alist->n_values; i++) {
 	if (!Vect_val_in_list(blist, alist->value[i]))
+	    Vect_list_append(list_del, alist->value[i]);
+    }
+
+    Vect_list_delete_list(alist, list_del);
+
+    Vect_destroy_list(list_del);
+
+    return alist->n_values;
+}
+
+/**
+   \brief merge two lists, i.e. store only duplicate items
+
+   \param[in] alist,blist list to be merged
+
+   \return result number of items
+*/
+static int merge_lists2(struct ilist *alist, struct boxlist *blist)
+{
+    int i;
+
+    struct ilist *list_del;
+
+    list_del = Vect_new_list();
+
+    for (i = 0; i < alist->n_values; i++) {
+	if (!Vect_val_in_boxlist(blist, alist->value[i]))
 	    Vect_list_append(list_del, alist->value[i]);
     }
 

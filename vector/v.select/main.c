@@ -40,7 +40,8 @@ int main(int argc, char *argv[])
     struct line_pnts *APoints, *BPoints;
     struct line_cats *ACats, *BCats;
     int *ALines;		/* List of lines: 0 do not output, 1 - write to output */
-    struct ilist *List, *TmpList, *BoundList;
+    struct ilist *BoundList, *LList;
+    struct boxlist *List, *TmpList;
 
     G_gisinit(argv[0]);
 
@@ -109,9 +110,10 @@ int main(int argc, char *argv[])
     BPoints = Vect_new_line_struct();
     ACats = Vect_new_cats_struct();
     BCats = Vect_new_cats_struct();
-    List = Vect_new_list();
-    TmpList = Vect_new_list();
+    List = Vect_new_boxlist(0);
+    TmpList = Vect_new_boxlist(0);
     BoundList = Vect_new_list();
+    LList = Vect_new_list();
 
     /* Open output */
     Vect_open_new(&Out, parm.output->answer, Vect_is_3d(&(In[0])));
@@ -184,7 +186,7 @@ int main(int argc, char *argv[])
 		for (i = 0; i < List->n_values; i++) {
 		    int bline;
 		    
-		    bline = List->value[i];
+		    bline = List->id[i];
 		    G_debug(3, "  bline = %d", bline);
 		    
 		    /* Check category */
@@ -227,7 +229,7 @@ int main(int argc, char *argv[])
 		for (i = 0; i < List->n_values; i++) {
 		    int barea;
 		    
-		    barea = List->value[i];
+		    barea = List->id[i];
 		    G_debug(3, "  barea = %d", barea);
 		    
 		    if (Vect_get_area_cat(&(In[1]), barea, ifield[1]) < 0) {
@@ -299,7 +301,7 @@ int main(int argc, char *argv[])
 		for (i = 0; i < List->n_values; i++) {
 		    int bline;
 
-		    bline = List->value[i];
+		    bline = List->id[i];
 
 		    if (!flag.cat->answer && Vect_get_line_cat(&(In[1]), bline, ifield[1]) < 0) {
 			nskipped++;
@@ -332,11 +334,11 @@ int main(int argc, char *argv[])
 		/* List of areas B */
 
 		/* Make a list of features forming area A */
-		Vect_reset_list(List);
+		Vect_reset_list(LList);
 
 		Vect_get_area_boundaries(&(In[0]), aarea, BoundList);
 		for (i = 0; i < BoundList->n_values; i++) {
-		    Vect_list_append(List, abs(BoundList->value[i]));
+		    Vect_list_append(LList, abs(BoundList->value[i]));
 		}
 
 		naisles = Vect_get_area_num_isles(&(In[0]), aarea);
@@ -348,21 +350,21 @@ int main(int argc, char *argv[])
 
 		    Vect_get_isle_boundaries(&(In[0]), aisle, BoundList);
 		    for (j = 0; j < BoundList->n_values; j++) {
-			Vect_list_append(List, BoundList->value[j]);
+			Vect_list_append(LList, BoundList->value[j]);
 		    }
 		}
 
 		Vect_select_areas_by_box(&(In[1]), &abox, TmpList);
 
-		for (i = 0; i < List->n_values; i++) {
+		for (i = 0; i < LList->n_values; i++) {
 		    int j, aline;
 
-		    aline = abs(List->value[i]);
+		    aline = abs(LList->value[i]);
 
 		    for (j = 0; j < TmpList->n_values; j++) {
 			int barea, bcentroid;
 
-			barea = TmpList->value[j];
+			barea = TmpList->id[j];
 			G_debug(3, "  barea = %d", barea);
 
 			if (Vect_get_area_cat(&(In[1]), barea, ifield[1]) < 0) {

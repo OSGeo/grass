@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
     char buf1[2000], buf2[2000];
     int update_ok, update_err, update_exist, update_notexist, update_dupl,
 	update_notfound;
-    struct ilist *List;
+    struct boxlist *List;
     struct bound_box box;
     dbCatValArray cvarr;
     dbColumn *column;
@@ -504,7 +504,7 @@ int main(int argc, char *argv[])
     TPoints = Vect_new_line_struct();
     FCats = Vect_new_cats_struct();
     TCats = Vect_new_cats_struct();
-    List = Vect_new_list();
+    List = Vect_new_boxlist(0);
 
     /* Allocate space ( may be more than needed (duplicate cats and elements without cats) ) */
     nfrom = Vect_get_num_lines(&From);
@@ -595,7 +595,7 @@ int main(int argc, char *argv[])
 		    /* the objective is to enlarge the search box
 		     * in the first iterations just a little bit
 		     * to keep the number of hits low */
-		    Vect_reset_list(List);
+		    Vect_reset_boxlist(List);
 		    while (curr_step < n_max_steps) {
 			box_edge = max_step[curr_step];
 
@@ -633,7 +633,7 @@ int main(int argc, char *argv[])
 		dist = PORT_DOUBLE_MAX;
 		for (i = 0; i < List->n_values; i++) {
 		    tmp_tcat = -1;
-		    Vect_read_line(&To, TPoints, TCats, List->value[i]);
+		    Vect_read_line(&To, TPoints, TCats, List->id[i]);
 
 		    tseg =
 			Vect_line_distance(TPoints, FPoints->x[0], FPoints->y[0],
@@ -692,7 +692,7 @@ int main(int argc, char *argv[])
 		    }
 		    else {
 			if (tline == 0 || (tmp_dist < dist)) {
-			    tline = List->value[i];
+			    tline = List->id[i];
 			    tcat = tmp_tcat;
 			    dist = tmp_dist;
 			    tx = tmp_tx;
@@ -777,7 +777,7 @@ int main(int argc, char *argv[])
 		    /* the objective is to enlarge the search box
 		     * in the first iterations just a little bit
 		     * to keep the number of hits low */
-		    Vect_reset_list(List);
+		    Vect_reset_boxlist(List);
 		    while (curr_step < n_max_steps) {
 			box_edge = max_step[curr_step];
 
@@ -817,7 +817,7 @@ int main(int argc, char *argv[])
 		for (i = 0; i < List->n_values; i++) {
 		    int tmp_tcat;
 
-		    area = List->value[i];
+		    area = List->id[i];
 		    G_debug(4, "%d: area %d", i, area);
 		    Vect_get_area_points(&To, area, TPoints);
 

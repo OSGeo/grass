@@ -332,7 +332,7 @@ int main(int argc, char **argv)
     struct ilist *TList;	/* list of terminal nodes */
     struct ilist *StArcs;	/* list of arcs on Steiner tree */
     struct ilist *StNodes;	/* list of nodes on Steiner tree */
-    struct ilist *pointlist;
+    struct boxlist *pointlist;
     double cost, tmpcost;
     struct cat_list *Clist;
     struct line_cats *Cats;
@@ -633,7 +633,7 @@ int main(int argc, char **argv)
 	    StNodes->n_values);
 
     k = 0;
-    pointlist = Vect_new_list();
+    pointlist = Vect_new_boxlist(0);
     for (i = 0; i < StNodes->n_values; i++) {
 	double x, y, z;
 	struct bound_box box;
@@ -648,7 +648,7 @@ int main(int argc, char **argv)
 	
 	nlines = Vect_get_node_n_lines(&Map, node);
 	for (j = 0; j < pointlist->n_values; j++) {
-	    line = pointlist->value[j];
+	    line = pointlist->id[j];
 	    ltype = Vect_read_line(&Map, Points, Cats, line);
 	    if (!(ltype & GV_POINT))
 		continue;

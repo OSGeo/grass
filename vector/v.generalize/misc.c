@@ -261,12 +261,12 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
 	left_new, right_new;
     struct bound_box box;
     static struct line_pnts *BPoints = NULL;
-    static struct ilist *List = NULL;
+    static struct boxlist *List = NULL;
 
     if (!BPoints)
 	BPoints = Vect_new_line_struct();
     if (!List)
-	List = Vect_new_list();
+	List = Vect_new_boxlist(0);
 
     /* Check intersection of the modified boundary with other boundaries */
     Vect_line_box(Points, &box);
@@ -278,7 +278,7 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
 	struct line_pnts **AXLines, **BXLines;
 	int naxlines, nbxlines;
 
-	bline = List->value[i];
+	bline = List->id[i];
 	if (bline == line)
 	    continue;
 
@@ -287,6 +287,7 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
 	/* Vect_line_intersection is quite slow, hopefully not so bad because only few 
 	 * intersections should be found if any */
 
+	AXLines = BXLines = NULL;
 	Vect_line_intersection(Points, BPoints, &AXLines, &BXLines,
 			       &naxlines, &nbxlines, 0);
 
@@ -299,14 +300,16 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
 	    for (j = 0; j < naxlines; j++) {
 		Vect_destroy_line_struct(AXLines[j]);
 	    }
-	    G_free(AXLines);
 	}
+	if (AXLines)
+	    G_free(AXLines);
 	if (nbxlines > 0) {
 	    for (j = 0; j < nbxlines; j++) {
 		Vect_destroy_line_struct(BXLines[j]);
 	    }
-	    G_free(BXLines);
 	}
+	if (BXLines)
+	    G_free(BXLines);
 
 	if (naxlines > 1 || nbxlines > 1) {
 	    intersect = 1;
