@@ -47,6 +47,8 @@ cursor *alloc_cursor()
 	return c;
     }
 
+    c->st = NULL;
+    c->cols = NULL;
     /* tokenize it */
     c->token = db_new_token(c);
     if (c->token < 0) {
@@ -62,5 +64,7 @@ void free_cursor(cursor * c)
 {
     db_drop_token(c->token);
     sqpFreeStmt(c->st);
+    if (c->cols)
+	G_free(c->cols);
     G_free(c);
 }
