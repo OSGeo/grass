@@ -91,7 +91,7 @@ class GRASSStartup(wx.Frame):
         versionFile = open(os.path.join(globalvar.ETCDIR, "VERSIONNUMBER"))
         grassVersion = versionFile.readline().split(' ')[0].rstrip('\n')
         versionFile.close()
-
+        
         self.select_box = wx.StaticBox (parent = self.panel, id = wx.ID_ANY,
                                         label = " %s " % _("Choose project location and mapset"))
 

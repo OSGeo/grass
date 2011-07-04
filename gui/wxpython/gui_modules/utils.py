@@ -756,7 +756,14 @@ def GetFormats():
 def GetSettingsPath():
     """!Get full path to the settings directory
     """
-    version = int(grass.version()['version'].split('.', 1)[0])
+    try:
+        verFd = open(os.path.join(globalvar.ETCDIR, "VERSIONNUMBER"))
+        version = int(verFd.readlines()[0].split(' ')[0].split('.')[0])
+    except (IOError, ValueError, TypeError, IndexError), e:
+        sys.exit(_("ERROR: Unable to determine GRASS version. Details: %s") % e)
+    
+    verFd.close()
+    
     if sys.platform == 'win32':
         return os.path.join(os.getenv('APPDATA'), '.grass%d' % version)
     
