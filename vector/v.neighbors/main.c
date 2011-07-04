@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
     struct Option *method_opt, *size_opt;
     struct Map_info In;
     double radius;
-    struct ilist *List;
+    struct boxlist *List;
     struct Cell_head region;
     struct bound_box box;
     struct line_pnts *Points;
@@ -91,7 +91,7 @@ int main(int argc, char *argv[])
     result = Rast_allocate_buf(CELL_TYPE);
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
-    List = Vect_new_list();
+    List = Vect_new_boxlist(0);
 
     /*open the new cellfile */
     out_fd = Rast_open_new(out_opt->answer, CELL_TYPE);
@@ -127,7 +127,7 @@ int main(int argc, char *argv[])
 	    count = 0;
 
 	    for (i = 0; i < List->n_values; i++) {
-		Vect_read_line(&In, Points, Cats, List->value[i]);
+		Vect_read_line(&In, Points, Cats, List->id[i]);
 
 		if (field != -1 && Vect_cat_get(Cats, field, NULL) == 0)
 		    continue;

@@ -605,11 +605,11 @@ double compute_all_net_distances(struct Map_info *In, struct Map_info *Net,
     double dist;
     struct line_pnts *APoints, *BPoints;
     struct bound_box box;
-    struct ilist *List;
+    struct boxlist *List;
 
     APoints = Vect_new_line_struct();
     BPoints = Vect_new_line_struct();
-    List = Vect_new_list();
+    List = Vect_new_boxlist(0);
 
     nn = Vect_get_num_primitives(In, GV_POINTS);
     nn = nn * (nn - 1);
@@ -639,7 +639,7 @@ double compute_all_net_distances(struct Map_info *In, struct Map_info *Net,
 	for (i = 0; i < List->n_values; i++) {
 	    int bline, ret;
 
-	    bline = List->value[i];
+	    bline = List->id[i];
 
 	    if (bline == aline)
 		continue;
@@ -701,14 +701,14 @@ void compute_net_distance(double x, double y, struct Map_info *In,
     static struct line_pnts *Points = NULL;
     static struct line_pnts *FPoints = NULL;
     struct bound_box box;
-    static struct ilist *PointsList = NULL;
+    static struct boxlist *PointsList = NULL;
     static struct ilist *NodesList = NULL;
 
     if (!Points)
 	Points = Vect_new_line_struct();
 
     if (!PointsList)
-	PointsList = Vect_new_list();
+	PointsList = Vect_new_boxlist(0);
 
     if (node_method == NODE_EQUAL_SPLIT) {
 	if (!NodesList)
@@ -736,7 +736,7 @@ void compute_net_distance(double x, double y, struct Map_info *In,
     for (i = 0; i < PointsList->n_values; i++) {
 	int line, ret;
 
-	line = PointsList->value[i];
+	line = PointsList->id[i];
 	Vect_read_line(In, Points, NULL, line);
 
 	G_debug(3, "  SP: %f %f -> %f %f", x, y, Points->x[0], Points->y[0]);
@@ -800,14 +800,15 @@ void compute_distance(double N, double E, struct Map_info *In,
 
     /* spatial index handling, borrowed from lib/vector/Vlib/find.c */
     struct bound_box box;
-    static struct ilist *NList = NULL;
+    static struct boxlist *NList = NULL;
     static struct line_pnts *Points = NULL;
 
     a[0] = E;
     a[1] = N;
 
-    if (!NList)
-	NList = Vect_new_list();
+    if (!NList) {
+	NList = Vect_new_boxlist(0);
+    }
     if (!Points)
 	Points = Vect_new_line_struct();
 
@@ -826,7 +827,7 @@ void compute_distance(double N, double E, struct Map_info *In,
 
     for (line = 0; line < nlines; line++) {
 
-	Vect_read_line(In, Points, NULL, NList->value[line]);
+	Vect_read_line(In, Points, NULL, NList->id[line]);
 
 	b[0] = Points->x[0];
 	b[1] = Points->y[0];
