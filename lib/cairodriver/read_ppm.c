@@ -1,9 +1,9 @@
 /*!
-  \file cairodriver/read_ppm.c
+  \file lib/cairodriver/read_ppm.c
 
   \brief GRASS cairo display driver - read PPM image (lower level functions)
 
-  (C) 2007-2008 by Lars Ahlzen and the GRASS Development Team
+  (C) 2007-2008, 2011 by Lars Ahlzen and the GRASS Development Team
   
   This program is free software under the GNU General Public License
   (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -41,16 +41,16 @@ void cairo_read_ppm(void)
 
     mask_name[strlen(mask_name) - 2] = 'g';
 
-    input = fopen(mask_name, "rb");
-    if (!input)
+    mask = fopen(mask_name, "rb");
+    if (!mask)
 	G_fatal_error(_("Cairo: unable to open input mask file <%s>"),
 		      mask_name);
 
-    if (fscanf(input, "P5 %d %d %d", &i_width, &i_height, &maxval) != 3)
+    if (fscanf(mask, "P5 %d %d %d", &i_width, &i_height, &maxval) != 3)
 	G_fatal_error(_("Cairo: invalid input mask file <%s>"),
 		      mask_name);
 
-    fgetc(input);
+    fgetc(mask);
 
     if (i_width != ca.width || i_height != ca.height)
 	G_fatal_error(_("Cairo: input mask file has incorrect dimensions: "

@@ -1,9 +1,9 @@
 /*!
-  \file cairodriver/Graph.c
+  \file lib/cairodriver/Graph.c
 
   \brief GRASS cairo display driver - driver settings
 
-  (C) 2007-2008 by Lars Ahlzen and the GRASS Development Team
+  (C) 2007-2008, 2011 by Lars Ahlzen and the GRASS Development Team
   
   This program is free software under the GNU General Public License
   (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -174,9 +174,9 @@ static void init_file(void)
     if (do_read && access(ca.file_name, 0) != 0)
 	do_read = 0;
 
-    G_verbose_message(_("cairo: collecting to file: %s"),
+    G_verbose_message(_("cairo: collecting to file '%s'"),
 		      ca.file_name);
-    G_verbose_message(_("GRASS_WIDTH=%d, GRASS_HEIGHT=%d"),
+    G_verbose_message(_("cairo: image size %dx%d"),
 		      ca.width, ca.height);
     
     if (do_read && do_map)
@@ -382,7 +382,7 @@ static void map_file(void)
 	cairo_surface_destroy(surface);
 	G_free(ca.grid);
     }
-    ca.grid = (char *)ptr + HEADER_SIZE;
+    ca.grid = (unsigned char *) ptr + HEADER_SIZE;
 
     close(fd);
 

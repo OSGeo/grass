@@ -1,9 +1,9 @@
 /*!
-  \file cairodriver/Driver.c
+  \file lib/cairodriver/Driver.c
 
   \brief GRASS cairo display driver - driver initialization
 
-  (C) 2007-2008 by Lars Ahlzen and the GRASS Development Team
+  (C) 2007-2008, 2011 by Lars Ahlzen and the GRASS Development Team
   
   This program is free software under the GNU General Public License
   (>=v2). Read the file COPYING that comes with GRASS for details.
