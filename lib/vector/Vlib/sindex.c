@@ -16,60 +16,6 @@
 #include <stdlib.h>
 #include <grass/vector.h>
 
-/*!
-   \brief Select lines by box.
-
-   Select lines whose boxes overlap specified box!!!  It means that
-   selected line may or may not overlap the box.
-
-   \param Map vector map
-   \param Box bounding box
-   \param type line type
-   \param[out] list output list, must be initialized
-
-   \return number of lines
- */
-int
-Vect_select_lines_by_box(struct Map_info *Map, const struct bound_box * Box,
-			 int type, struct ilist *list)
-{
-    int i, line, nlines;
-    struct Plus_head *plus;
-    struct P_line *Line;
-    static struct ilist *LocList = NULL;
-
-    G_debug(3, "Vect_select_lines_by_box()");
-    G_debug(3, "  Box(N,S,E,W,T,B): %e, %e, %e, %e, %e, %e", Box->N, Box->S,
-	    Box->E, Box->W, Box->T, Box->B);
-    plus = &(Map->plus);
-
-    if (!(plus->Spidx_built)) {
-	G_debug(3, "Building spatial index.");
-	Vect_build_sidx_from_topo(Map);
-    }
-
-    list->n_values = 0;
-    if (!LocList)
-	LocList = Vect_new_list();
-
-    nlines = dig_select_lines(plus, Box, LocList);
-    G_debug(3, "  %d lines selected (all types)", nlines);
-
-    /* Remove lines of not requested types */
-    for (i = 0; i < nlines; i++) {
-	line = LocList->value[i];
-	if (plus->Line[line] == NULL)
-	    continue;		/* Should not happen */
-	Line = plus->Line[line];
-	if (!(Line->type & type))
-	    continue;
-	dig_list_add(list, line);
-    }
-
-    G_debug(3, "  %d lines of requested type", list->n_values);
-
-    return list->n_values;
-}
 
 /*!
    \brief Select lines with bounding boxes by box.
@@ -85,7 +31,7 @@ Vect_select_lines_by_box(struct Map_info *Map, const struct bound_box * Box,
    \return number of lines
  */
 int
-Vect_select_lines_by_box_with_box(struct Map_info *Map, const struct bound_box *Box,
+Vect_select_lines_by_box(struct Map_info *Map, const struct bound_box *Box,
 			 int type, struct boxlist *list)
 {
     int i, line, nlines;
@@ -98,18 +44,13 @@ Vect_select_lines_by_box_with_box(struct Map_info *Map, const struct bound_box *
 	    Box->E, Box->W, Box->T, Box->B);
     plus = &(Map->plus);
 
-    if (!(plus->Spidx_built)) {
-	G_debug(3, "Building spatial index.");
-	Vect_build_sidx_from_topo(Map);
-    }
-
     list->n_values = 0;
     if (!LocList) {
 	LocList = (struct boxlist *)G_malloc(sizeof(struct boxlist));
-	dig_init_boxlist(LocList);
+	dig_init_boxlist(LocList, 1);
     }
 
-    nlines = dig_select_lines_with_box(plus, Box, LocList);
+    nlines = dig_select_lines(plus, Box, LocList);
     G_debug(3, "  %d lines selected (all types)", nlines);
 
     /* Remove lines of not requested types */
@@ -128,57 +69,6 @@ Vect_select_lines_by_box_with_box(struct Map_info *Map, const struct bound_box *
     return list->n_values;
 }
 
-/*!
-   \brief Select areas by box.
-
-   Select areas whose boxes overlap specified box!!!
-   It means that selected area may or may not overlap the box.
-
-   \param Map vector map
-   \param Box bounding box
-   \param[out] output list, must be initialized
-
-   \return number of areas
- */
-int
-Vect_select_areas_by_box(struct Map_info *Map, const struct bound_box * Box,
-			 struct ilist *list)
-{
-    int i;
-    static int debug_level = -1;
-
-    if (debug_level == -1) {
-	const char *dstr = G__getenv("DEBUG");
-
-	if (dstr != NULL)
-	    debug_level = atoi(dstr);
-	else
-	    debug_level = 0;
-    }
-
-    G_debug(3, "Vect_select_areas_by_box()");
-    G_debug(3, "Box(N,S,E,W,T,B): %e, %e, %e, %e, %e, %e", Box->N, Box->S,
-	    Box->E, Box->W, Box->T, Box->B);
-
-    if (!(Map->plus.Spidx_built)) {
-	G_debug(3, "Building spatial index.");
-	Vect_build_sidx_from_topo(Map);
-    }
-
-    dig_select_areas(&(Map->plus), Box, list);
-    G_debug(3, "  %d areas selected", list->n_values);
-    /* avoid loop when not debugging */
-    if (debug_level > 2) {
-	for (i = 0; i < list->n_values; i++) {
-	    G_debug(3, "  area = %d pointer to area structure = %lx",
-		    list->value[i],
-		    (unsigned long)Map->plus.Area[list->value[i]]);
-	}
-    }
-
-    return list->n_values;
-}
-
 
 /*!
    \brief Select areas with bounding boxes by box.
@@ -193,7 +83,7 @@ Vect_select_areas_by_box(struct Map_info *Map, const struct bound_box * Box,
    \return number of areas
  */
 int
-Vect_select_areas_by_box_with_box(struct Map_info *Map, const struct bound_box * Box,
+Vect_select_areas_by_box(struct Map_info *Map, const struct bound_box * Box,
 			 struct boxlist *list)
 {
     int i;
@@ -212,7 +102,7 @@ Vect_select_areas_by_box_with_box(struct Map_info *Map, const struct bound_box *
     G_debug(3, "Box(N,S,E,W,T,B): %e, %e, %e, %e, %e, %e", Box->N, Box->S,
 	    Box->E, Box->W, Box->T, Box->B);
 
-    dig_select_areas_with_box(&(Map->plus), Box, list);
+    dig_select_areas(&(Map->plus), Box, list);
     G_debug(3, "  %d areas selected", list->n_values);
     /* avoid loop when not debugging */
     if (debug_level > 2) {
@@ -228,37 +118,6 @@ Vect_select_areas_by_box_with_box(struct Map_info *Map, const struct bound_box *
 
 
 /*!
-   \brief Select isles by box.
-
-   Select isles whose boxes overlap specified box!!!
-   It means that selected isle may or may not overlap the box.
-
-   \param Map vector map
-   \param Box bounding box
-   \param[out] list output list, must be initialized
-
-   \return number of isles
- */
-int
-Vect_select_isles_by_box(struct Map_info *Map, const struct bound_box * Box,
-			 struct ilist *list)
-{
-    G_debug(3, "Vect_select_isles_by_box()");
-    G_debug(3, "Box(N,S,E,W,T,B): %e, %e, %e, %e, %e, %e", Box->N, Box->S,
-	    Box->E, Box->W, Box->T, Box->B);
-
-    if (!(Map->plus.Spidx_built)) {
-	G_debug(3, "Building spatial index.");
-	Vect_build_sidx_from_topo(Map);
-    }
-
-    dig_select_isles(&(Map->plus), Box, list);
-    G_debug(3, "  %d isles selected", list->n_values);
-
-    return list->n_values;
-}
-
-/*!
    \brief Select isles with bounding boxes by box.
 
    Select isles whose boxes overlap specified box!!!
@@ -271,14 +130,14 @@ Vect_select_isles_by_box(struct Map_info *Map, const struct bound_box * Box,
    \return number of isles
  */
 int
-Vect_select_isles_by_box_with_box(struct Map_info *Map, const struct bound_box * Box,
+Vect_select_isles_by_box(struct Map_info *Map, const struct bound_box * Box,
 			 struct boxlist *list)
 {
-    G_debug(3, "Vect_select_isles_by_box_with_box()");
+    G_debug(3, "Vect_select_isles_by_box()");
     G_debug(3, "Box(N,S,E,W,T,B): %e, %e, %e, %e, %e, %e", Box->N, Box->S,
 	    Box->E, Box->W, Box->T, Box->B);
 
-    dig_select_isles_with_box(&(Map->plus), Box, list);
+    dig_select_isles(&(Map->plus), Box, list);
     G_debug(3, "  %d isles selected", list->n_values);
 
     return list->n_values;
@@ -304,11 +163,6 @@ Vect_select_nodes_by_box(struct Map_info *Map, const struct bound_box * Box,
 	    Box->E, Box->W, Box->T, Box->B);
 
     plus = &(Map->plus);
-
-    if (!(plus->Spidx_built)) {
-	G_debug(3, "Building spatial index.");
-	Vect_build_sidx_from_topo(Map);
-    }
 
     list->n_values = 0;
 
@@ -340,7 +194,7 @@ Vect_select_lines_by_polygon(struct Map_info *Map, struct line_pnts *Polygon,
     int i;
     struct bound_box box;
     static struct line_pnts *LPoints = NULL;
-    static struct ilist *LocList = NULL;
+    static struct boxlist *LocList = NULL;
 
     /* TODO: this function was not tested with isles */
     G_debug(3, "Vect_select_lines_by_polygon() nisles = %d", nisles);
@@ -348,8 +202,9 @@ Vect_select_lines_by_polygon(struct Map_info *Map, struct line_pnts *Polygon,
     List->n_values = 0;
     if (!LPoints)
 	LPoints = Vect_new_line_struct();
-    if (!LocList)
-	LocList = Vect_new_list();
+    if (!LocList) {
+	LocList = Vect_new_boxlist(0);
+    }
 
     /* Select first all lines by box */
     dig_line_box(Polygon, &box);
@@ -362,7 +217,7 @@ Vect_select_lines_by_polygon(struct Map_info *Map, struct line_pnts *Polygon,
     for (i = 0; i < LocList->n_values; i++) {
 	int j, line, intersect = 0;
 
-	line = LocList->value[i];
+	line = LocList->id[i];
 	/* Read line points */
 	Vect_read_line(Map, LPoints, NULL, line);
 

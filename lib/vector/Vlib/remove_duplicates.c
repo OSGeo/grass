@@ -39,7 +39,7 @@ Vect_remove_duplicates(struct Map_info *Map, int type, struct Map_info *Err)
     int i, j, c, atype, btype, bline;
     int nlines, nbcats_orig;
     struct bound_box ABox;
-    struct ilist *List;
+    struct boxlist *List;
     int ndupl;
 
 
@@ -48,7 +48,7 @@ Vect_remove_duplicates(struct Map_info *Map, int type, struct Map_info *Err)
     ACats = Vect_new_cats_struct();
     BCats = Vect_new_cats_struct();
     Cats = Vect_new_cats_struct();
-    List = Vect_new_list();
+    List = Vect_new_boxlist(0);
 
     nlines = Vect_get_num_lines(Map);
 
@@ -74,7 +74,7 @@ Vect_remove_duplicates(struct Map_info *Map, int type, struct Map_info *Err)
 	G_debug(3, "  %d lines selected by box", List->n_values);
 
 	for (j = 0; j < List->n_values; j++) {
-	    bline = List->value[j];
+	    bline = List->id[j];
 	    G_debug(3, "  j = %d bline = %d", j, bline);
 	    if (i == bline)
 		continue;

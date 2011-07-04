@@ -250,7 +250,7 @@ int Vect_get_line_box(const struct Map_info *Map, int line, struct bound_box * B
 	    }
 	    
 	    if (list == NULL) {
-		list = Vect_new_boxlist();
+		list = Vect_new_boxlist(1);
 	    }
 	    Vect_reset_boxlist(list);
 	    
@@ -318,7 +318,7 @@ int Vect_get_area_box(const struct Map_info *Map, int area, struct bound_box * B
 	Node = Plus->Node[topo->N1];
 
 	if (list == NULL) {
-	    list = Vect_new_boxlist();
+	    list = Vect_new_boxlist(1);
 	}
 	Vect_reset_boxlist(list);
 	
@@ -384,7 +384,7 @@ int Vect_get_isle_box(const struct Map_info *Map, int isle, struct bound_box * B
 	Node = Plus->Node[topo->N1];
 
 	if (list == NULL) {
-	    list = Vect_new_boxlist();
+	    list = Vect_new_boxlist(1);
 	}
 	Vect_reset_boxlist(list);
 	

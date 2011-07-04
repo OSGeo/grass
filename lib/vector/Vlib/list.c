@@ -219,7 +219,7 @@ int Vect_val_in_list(const struct ilist *list, int val)
  * \return pointer to struct boxlist
  * \return NULL on error
  */
-struct boxlist *Vect_new_boxlist(void)
+struct boxlist *Vect_new_boxlist(int have_boxes)
 {
     struct boxlist *p;
 
@@ -228,6 +228,7 @@ struct boxlist *Vect_new_boxlist(void)
     if (p) {
 	p->id = NULL;
 	p->box = NULL;
+	p->have_boxes = have_boxes != 0;
 	p->n_values = 0;
 	p->alloc_values = 0;
     }
@@ -263,7 +264,8 @@ void Vect_destroy_boxlist(struct boxlist *list)
     if (list) {			/* probably a moot test */
 	if (list->alloc_values) {
 	    G_free((void *)list->id);
-	    G_free((void *)list->box);
+	    if (list->box)
+		G_free((void *)list->box);
 	}
 	G_free((void *)list);
     }
@@ -296,14 +298,17 @@ int Vect_boxlist_append(struct boxlist *list, int id, struct bound_box box)
 	size = (list->n_values + 1000) * sizeof(int);
 	list->id = (int *)G_realloc((void *)list->id, size);
 
-	size = (list->n_values + 1000) * sizeof(struct bound_box);
-	list->box = (struct bound_box *)G_realloc((void *)list->box, size);
+	if (list->have_boxes) {
+	    size = (list->n_values + 1000) * sizeof(struct bound_box);
+	    list->box = (struct bound_box *)G_realloc((void *)list->box, size);
+	}
 
 	list->alloc_values = list->n_values + 1000;
     }
 
     list->id[list->n_values] = id;
-    list->box[list->n_values] = box;
+    if (list->have_boxes)
+	list->box[list->n_values] = box;
     list->n_values++;
 
     return 0;
@@ -325,8 +330,17 @@ int Vect_boxlist_append_boxlist(struct boxlist *alist, const struct boxlist *bli
     if (alist == NULL || blist == NULL)
 	return 1;
 
-    for (i = 0; i < blist->n_values; i++)
-	Vect_boxlist_append(alist, blist->id[i], blist->box[i]);
+    if (blist->have_boxes) {
+	for (i = 0; i < blist->n_values; i++)
+	    Vect_boxlist_append(alist, blist->id[i], blist->box[i]);
+    }
+    else {
+	struct bound_box box;
+
+	box.E = box.N = box.N = box.S = box.T = box.B = 0;
+	for (i = 0; i < blist->n_values; i++)
+	    Vect_boxlist_append(alist, blist->id[i], box);
+    }
 
     return 0;
 }
@@ -351,7 +365,8 @@ int Vect_boxlist_delete(struct boxlist *list, int id)
 	if (id == list->id[i]) {
 	    for (j = i + 1; j < list->n_values; j++) {
 		list->id[j - 1] = list->id[j];
-		list->box[j - 1] = list->box[j];
+		if (list->have_boxes)
+		    list->box[j - 1] = list->box[j];
 	    }
 
 	    list->n_values--;
