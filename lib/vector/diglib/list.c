@@ -29,10 +29,11 @@ int dig_init_list(struct ilist *list)
 }
 
 /* Init box list */
-int dig_init_boxlist(struct boxlist *list)
+int dig_init_boxlist(struct boxlist *list, int have_boxes)
 {
     list->id = NULL;
     list->box = NULL;
+    list->have_boxes = have_boxes != 0;
     list->n_values = 0;
     list->alloc_values = 0;
 
@@ -69,18 +70,21 @@ int dig_boxlist_add(struct boxlist *list, int id, struct bound_box box)
 	    return 0;
 	list->id = (int *)p;
 
-	size = (list->n_values + 1000) * sizeof(struct bound_box);
-	p = G_realloc((void *)list->box, size);
+	if (list->have_boxes) {
+	    size = (list->n_values + 1000) * sizeof(struct bound_box);
+	    p = G_realloc((void *)list->box, size);
 
-	if (p == NULL)
-	    return 0;
-	list->box = (int *)p;
+	    if (p == NULL)
+		return 0;
+	    list->box = (int *)p;
+	}
 
 	list->alloc_values = list->n_values + 1000;
     }
 
     list->id[list->n_values] = id;
-    list->box[list->n_values] = box;
+    if (list->have_boxes)
+	list->box[list->n_values] = box;
     list->n_values++;
 
     return 1;
