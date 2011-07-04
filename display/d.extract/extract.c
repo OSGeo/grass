@@ -15,7 +15,7 @@
 #define M_DEL   3
 #define M_END   4
 
-int display(struct Map_info *Map, struct ilist *List,
+int display(struct Map_info *Map, struct boxlist *List,
 	    const struct color_rgb *color);
 
 int extract(struct Map_info *In, struct Map_info *Out, int type,
@@ -24,7 +24,7 @@ int extract(struct Map_info *In, struct Map_info *Out, int type,
     int i, button, mode, line;
     int screen_x, screen_y, cur_screen_x, cur_screen_y;
     double x1, y1, x2, y2;
-    struct ilist *List, *CList;
+    struct boxlist *List, *CList;
     struct bound_box box;
     struct line_pnts *Points;
     struct line_cats *Cats;
@@ -32,8 +32,8 @@ int extract(struct Map_info *In, struct Map_info *Out, int type,
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
-    List = Vect_new_list();
-    CList = Vect_new_list();
+    List = Vect_new_boxlist(0);
+    CList = Vect_new_boxlist(0);
 
     /* box.T = PORT_DOUBLE_MAX;
        box.B = -PORT_DOUBLE_MAX; */
@@ -88,7 +88,7 @@ int extract(struct Map_info *In, struct Map_info *Out, int type,
 	    }
 	    else if (mode == M_ADD) {
 		Vect_select_lines_by_box(In, &box, type, CList);
-		Vect_list_append_list(List, CList);
+		Vect_boxlist_append_boxlist(List, CList);
 		display(In, List, hcolor);
 		mode = M_START;
 	    }
@@ -99,7 +99,7 @@ int extract(struct Map_info *In, struct Map_info *Out, int type,
 	    }
 	    else if (mode == M_DEL) {
 		Vect_select_lines_by_box(In, &box, type, CList);
-		Vect_list_delete_list(List, CList);
+		Vect_boxlist_delete_boxlist(List, CList);
 		display(In, CList, color);
 		mode = M_START;
 	    }
@@ -117,14 +117,14 @@ int extract(struct Map_info *In, struct Map_info *Out, int type,
 	}
     };
 
-    Vect_destroy_list(List);
-    Vect_destroy_list(CList);
+    Vect_destroy_boxlist(List);
+    Vect_destroy_boxlist(CList);
 
     return 1;
 }
 
 int
-display(struct Map_info *Map, struct ilist *List,
+display(struct Map_info *Map, struct boxlist *List,
 	const struct color_rgb *color)
 {
     int i, j, line, type;
@@ -138,7 +138,7 @@ display(struct Map_info *Map, struct ilist *List,
     D_RGB_color(color->r, color->g, color->b);
 
     for (i = 0; i < List->n_values; i++) {
-	line = abs(List->value[i]);
+	line = abs(List->id[i]);
 	type = Vect_read_line(Map, Points, NULL, line);
 
 	if (type & GV_POINTS)
