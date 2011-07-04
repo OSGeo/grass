@@ -257,7 +257,7 @@ class IVDigit:
         else:
             points = pointsLine
         
-        listLine  = Vect_new_list()
+        listLine  = Vect_new_boxlist(0)
         listRef   = Vect_new_list()
         listBreak = Vect_new_list()
     
@@ -273,7 +273,7 @@ class IVDigit:
         Vect_list_append(listBreak, line)
         Vect_list_append(listRef, line)
         for i in range(listLine.contents.n_values):
-            lineBreak = listLine.contents.value[i]
+            lineBreak = listLine.contents.id[i]
             if lineBreak == line:
 		continue
             
@@ -303,7 +303,7 @@ class IVDigit:
         
         Vect_destroy_line_struct(pointsCheck)
 
-        Vect_destroy_list(listLine)
+        Vect_destroy_boxlist(listLine)
         Vect_destroy_list(listBreak)
         Vect_destroy_list(listRef)
         
