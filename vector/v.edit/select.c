@@ -350,7 +350,7 @@ int sel_by_bbox(struct Map_info *Map,
 	first_selection = 0;
     }
     else {
-	List_tmp = Vect_new_boxlist();
+	List_tmp = Vect_new_boxlist(0);
     }
 
     /* bounding box */
@@ -367,7 +367,7 @@ int sel_by_bbox(struct Map_info *Map,
 
     /* merge lists (only duplicate items) */
     if (List_tmp != List) {
-	merge_lists(List, List_tmp);
+	merge_lists2(List, List_tmp);
 	Vect_destroy_boxlist(List_tmp);
     }
 
