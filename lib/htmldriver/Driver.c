@@ -25,6 +25,7 @@ const struct driver *HTML_Driver(void)
     if (initialized)
 	return &drv;
 
+    drv.name = "html";
     drv.Box = HTML_Box;
     drv.Erase = NULL;
     drv.Graph_set = HTML_Graph_set;
