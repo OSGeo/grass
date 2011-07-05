@@ -27,7 +27,7 @@
 #% required: no
 #%end
 #%option
-#% key: conf
+#% key: config
 #% type: string
 #% description: name of configuration file where insert areas
 #% required: yes

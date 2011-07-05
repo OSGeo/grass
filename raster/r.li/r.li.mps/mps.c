@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
     raster = G_define_standard_option(G_OPT_R_INPUT);
 
     conf = G_define_option();
-    conf->key = "conf";
+    conf->key = "config";
     conf->description = _("Configuration file");
     conf->type = TYPE_STRING;
     conf->required = YES;

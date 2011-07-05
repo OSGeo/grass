@@ -1,4 +1,4 @@
-#! /bin/sh -x
+#!/bin/sh
 #%Module 
 #%description: Select a circular or polygonal area
 #%End
@@ -21,7 +21,7 @@
 #% required: no
 #%end
 #%option
-#% key: conf
+#% key: config
 #% type: string
 #% description: name of configuration file where insert areas
 #% required: yes
