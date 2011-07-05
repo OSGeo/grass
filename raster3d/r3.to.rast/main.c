@@ -197,6 +197,7 @@ int main(int argc, char *argv[])
     int i = 0, changemask = 0;
     int *fd = NULL, output_type, cols, rows;
     char *RasterFileName;
+    int overwrite = 0;
 
     /* Initialize GRASS */
     G_gisinit(argv[0]);
@@ -300,8 +301,10 @@ int main(int argc, char *argv[])
         G_asprintf(&RasterFileName, "%s_%05d", param.output->answer, i + 1);
         G_message(_("Raster map %i Filename: %s"), i + 1, RasterFileName);
 
-        if (G_find_raster2(RasterFileName, ""))
-            G_message(_("Raster map %d Filename: %s already exists. Will be overwritten!"),
+        overwrite = G_check_overwrite(argc, argv);
+        
+        if (G_find_raster2(RasterFileName, "") && !overwrite)
+            G_fatal_error(_("Raster map %d Filename: %s already exists. Use the flag --o to overwrite."),
                       i + 1, RasterFileName);
 
         if (output_type == FCELL_TYPE)
