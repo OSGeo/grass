@@ -196,8 +196,8 @@ int PS_Graph_set(void)
     p = getenv("GRASS_PS_TRAILER");
     ps.no_trailer = p && strcmp(p, "FALSE") == 0;
 
-    G_verbose_message(_("PS: GRASS_TRUECOLOR status: %s"),
-		      ps.true_color ? "TRUE" : "FALSE");
+    G_verbose_message(_("ps: truecolor status %s"),
+		      ps.true_color ? _("enabled") : _("disabled"));
 
     get_paper();
 
@@ -211,9 +211,9 @@ int PS_Graph_set(void)
 	write_setup();
     }
 
-    G_verbose_message(_("PS: collecting to file <%s>"), file_name);
-    G_verbose_message(_("GRASS_WIDTH=%.1f, GRASS_HEIGHT=%.1f"),
-		      file_name, width, height);
+    G_verbose_message(_("ps: collecting to file '%s'"), file_name);
+    G_verbose_message(_("ps: image size %dx%d"),
+		      screen_width, screen_height);
 
     fflush(ps.outfp);
 
