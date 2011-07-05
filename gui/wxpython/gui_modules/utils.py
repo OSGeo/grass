@@ -480,7 +480,7 @@ def CmdToTuple(cmd):
     for item in cmd[1:]:
         if '=' in item: # params
             key, value = item.split('=', 1)
-            dcmd[str(key)] = str(value)
+            dcmd[str(key)] = str(value).replace('"', '')
         elif item[:2] == '--': # long flags
             flag = item[2:]
             if flag in ('verbose', 'quiet', 'overwrite'):

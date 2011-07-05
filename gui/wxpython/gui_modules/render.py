@@ -24,13 +24,6 @@ import sys
 import glob
 import math
 import copy
-
-try:
-    import subprocess
-except:
-    compatPath = os.path.join(globalvar.ETCWXDIR, "compat")
-    sys.path.append(compatPath)
-    import subprocess
 import tempfile
 
 import wx
@@ -46,22 +39,19 @@ from preferences import globalSettings as UserSettings
 
 wxUpdateProgressBar, EVT_UPDATE_PRGBAR = NewEvent()
 
-#
-# use g.pnmcomp for creating image composition or
-# wxPython functionality
-#
 USE_GPNMCOMP = True
 
 class Layer(object):
     """!Virtual class which stores information about layers (map layers and
     overlays) of the map composition.
     
-    For map layer use MapLayer class.
-    For overlays use Overlay class.
+    - For map layer use MapLayer class.
+    - For overlays use Overlay class.
     """
     def __init__(self, type, cmd, name = None,
                  active = True, hidden = False, opacity = 1.0):
-        """!
+        """!Create new instance
+        
         @todo pass cmd as tuple instead of list
         
         @param type layer type ('raster', 'vector', 'overlay', 'command', etc.)
@@ -94,22 +84,26 @@ class Layer(object):
                         self.opacity, self.hidden))
         
         # generated file for each layer
-        self.gtemp = tempfile.mkstemp()[1]
-        self.maskfile = self.gtemp + ".pgm"
-        if self.type == 'overlay':
-            self.mapfile  = self.gtemp + ".png"
+        if USE_GPNMCOMP or self.type == 'overlay':
+            tmpfile = tempfile.mkstemp()[1]
+            self.maskfile = tmpfile + '.pgm'
+            if self.type == 'overlay':
+                self.mapfile  = tmpfile + '.png'
+            else:
+                self.mapfile  = tmpfile + '.ppm'
+            grass.try_remove(tmpfile)
         else:
-            self.mapfile  = self.gtemp + ".ppm"
+            self.mapfile = self.maskfile = None
         
     def __del__(self):
         Debug.msg (3, "Layer.__del__(): layer=%s, cmd='%s'" %
                    (self.name, self.GetCmd(string = True)))
-
+        
     def Render(self):
         """!Render layer to image
         
         @return rendered image filename
-        @return None on error
+        @return None on error or if cmdfile is defined
         """
         if not self.cmd:
             return None
@@ -135,7 +129,7 @@ class Layer(object):
         # start monitor
 	if self.mapfile:
 	    os.environ["GRASS_PNGFILE"] = self.mapfile
-                
+        
         # execute command
         try:
             if self.type == 'command':
@@ -154,37 +148,24 @@ class Layer(object):
             else:
                 ret, msg = gcmd.RunCommand(self.cmd[0],
                                            getErrorMsg = True,
-                                           quiet = True,
+                                           # quiet = True,
+                                           verbose = True,
                                            **self.cmd[1])
-            # if len(msg):
-            # sys.stderr.write(_("Running") + " '" + utils.GetCmdString(self.cmd) + "'")
-            # sys.stderr.write(msg)
             
             if ret != 0:
-                # clean up after problem
-                try:
-                    os.remove(self.mapfile)
-                    os.remove(self.maskfile)
-                    os.remove(self.gtemp)
-                except (OSError, TypeError):
-                    pass
-                self.mapfile = None
-                self.maskfile = None
-        
+                raise gcmd.GException(value = _("%s failed") % self.cmd[0])
+            
         except gcmd.GException, e:
             # sys.stderr.write(e.value)
             # clean up after problems
-            try:
-                os.remove(self.mapfile)
-                os.remove(self.maskfile)
-                os.remove(self.gtemp)
-            except (OSError, TypeError):
-                pass
-            self.mapfile = None
-            self.maskfile = None
+            for f in [self.mapfile, self.maskfile]:
+                if not f:
+                    continue
+                grass.try_remove(f)
+                f = None
         
         # stop monitor
-        if "GRASS_PNGFILE" in os.environ:
+        if self.mapfile and "GRASS_PNGFILE" in os.environ:
             del os.environ["GRASS_PNGFILE"]
         
         self.force_render = False
@@ -350,9 +331,15 @@ class Overlay(Layer):
         self.id = id
         
 class Map(object):
-    """!Map composition (stack of map layers and overlays)
-    """
-    def __init__(self, gisrc = None):
+    def __init__(self, gisrc = None, cmdfile = None, mapfile = None, envfile = None, monitor = None):
+        """!Map composition (stack of map layers and overlays)
+
+        @param gisrc alternative gisrc (used eg. by georectifier)
+        @param cmdline full path to the cmd file (defined by d.mon)
+        @param mapfile full path to the map file (defined by d.mon)
+        @param envfile full path to the env file (defined by d.mon)
+        @param monitor name of monitor (defined by d.mon)
+        """
         # region/extent settigns
         self.wind      = dict() # WIND settings (wind file)
         self.region    = dict() # region settings (g.region)
@@ -366,20 +353,37 @@ class Map(object):
         self.ovlookup  = dict()  # lookup dictionary for overlay items and overlays
         
         # environment settings
-        # environment variables, like MAPSET, LOCATION_NAME, etc.
         self.env   = dict()
         # path to external gisrc
         self.gisrc = gisrc
         
-        # generated file for g.pnmcomp output for rendering the map
-        self.mapfile = tempfile.mkstemp(suffix = '.ppm')[1]
+        self.cmdfile = cmdfile
+        self.envfile = envfile
+        self.monitor = monitor
+        
+        if mapfile:
+            self.mapfile = mapfile
+        else:
+            # generated file for g.pnmcomp output for rendering the map
+            self.mapfile = grass.tempfile(create = False) + '.ppm'
         
         # setting some initial env. variables
         self._initGisEnv() # g.gisenv
         self.GetWindow()
         # GRASS environment variable (for rendering)
-        os.environ["GRASS_TRANSPARENT"] = "TRUE"
-        os.environ["GRASS_BACKGROUNDCOLOR"] = "ffffff"
+        env = {"GRASS_TRANSPARENT"     : "TRUE",
+               "GRASS_BACKGROUNDCOLOR" : "FFFFFF",
+               # "GRASS_PNG_AUTO_WRITE"  : "TRUE",
+               "GRASS_COMPRESSION"     : "0",
+               "GRASS_TRUECOLOR"       : "TRUE" }
+        if self.cmdfile:
+            env["GRASS_PNG_READ"] = "TRUE"
+        else:
+            env["GRASS_PNG_READ"] = "FALSE"
+        
+        self._writeEnvFile(env)
+        for k, v in env.iteritems():
+            os.environ[k] = v
         
         # projection info
         self.projinfo = self._projInfo()
@@ -540,24 +544,47 @@ class Map(object):
             if self.region['s'] < -90.0:
                 self.region['s'] = -90.0
         
+    def _writeEnvFile(self, data):
+        """!Write display-related variable to the file (used for
+        standalone app)
+        """
+        if not self.envfile:
+            return
+        
+        try:
+            fd = open(self.envfile, "r")
+            for line in fd.readlines():
+                key, value = line.split('=')
+                if key not in data.keys():
+                    data[key] = value
+            fd.close()
+            
+            fd = open(self.envfile, "w")
+            for k, v in data.iteritems():
+                fd.write('%s=%s\n' % (k.strip(), str(v).strip()))
+        except IOError, e:
+            grass.warning(_("Unable to open file '%s' for writting. Details: %s") % \
+                              (self.envfile, e))
+            return
+        
+        fd.close()
+        
     def ChangeMapSize(self, (width, height)):
         """!Change size of rendered map.
         
         @param width,height map size
-
-        @return True on success
-        @return False on failure
         """
         try:
             self.width  = int(width)
             self.height = int(height)
-            Debug.msg(2, "Map.ChangeMapSize(): width=%d, height=%d" % \
-                          (self.width, self.height))
-            return True
         except:
             self.width  = 640
             self.height = 480
-            return False
+
+        Debug.msg(2, "Map.ChangeMapSize(): width=%d, height=%d" % \
+                      (self.width, self.height))
+        self._writeEnvFile({'GRASS_WIDTH' : self.width,
+                            'GRASS_HEIGHT' : self.height})
         
     def GetRegion(self, rast = [], zoom = False, vect = [], regionName = None,
                   n = None, s = None, e = None, w = None, default = False,
@@ -800,15 +827,12 @@ class Map(object):
         # render map layers
         ilayer = 1
         for layer in self.layers + self.overlays:
-            # skip dead or disabled map layers
-            if layer == None or layer.active == False:
+            # skip non-active map layers
+            if not layer or not layer.active:
                 continue
             
-            # render if there is no mapfile
-            if force or \
-               layer.force_render or \
-               layer.mapfile == None or \
-               (not os.path.isfile(layer.mapfile) or not os.path.getsize(layer.mapfile)):
+            # render
+            if force or layer.force_render:
                 if not layer.Render():
                     continue
             
@@ -823,10 +847,49 @@ class Map(object):
                 maps.append(layer.mapfile)
                 masks.append(layer.maskfile)
                 opacities.append(str(layer.opacity))
-                
-            Debug.msg (3, "Map.Render() type=%s, layer=%s " % (layer.type, layer.name))
+            
+            Debug.msg(3, "Map.Render() type=%s, layer=%s " % (layer.type, layer.name))
             ilayer += 1
         
+    def _parseCmdFile(self):
+        """!Parse cmd file for standalone application
+        """
+        try:
+            fd = open(self.cmdfile, 'r')
+            grass.try_remove(self.mapfile)
+            for cmd in fd.readlines():
+                cmdStr = cmd.strip().split(' ')
+                cmd = utils.CmdToTuple(cmdStr)
+                
+                gcmd.RunCommand(cmd[0], **cmd[1])
+        except IOError, e:
+            grass.warning(_("Unable to read cmdfile '%s'. Details: %s") % \
+                              (self.cmdfile, e))
+            return
+        
+        Debug.msg(1, "Map.__parseCmdFile(): cmdfile=%s" % self.cmdfile)
+        Debug.msg(1, "                      nlayers=%d" % len(self.layers))
+        
+        fd.close()
+        
+    def _renderCmdFile(self, force, windres):
+        if not force:
+            return self.mapfile
+        
+        os.environ["GRASS_REGION"] = self.SetRegion(windres)
+        currMon = grass.gisenv()['MONITOR']
+        if currMon != self.monitor:
+            gcmd.RunCommand('g.gisenv',
+                            set = 'MONITOR=%s' % self.monitor)
+                
+        self._parseCmdFile()
+        
+        if currMon != self.monitor:
+            gcmd.RunCommand('g.gisenv',
+                            set = 'MONITOR=%s' % currMon)
+            
+        return self.mapfile
+
     def Render(self, force = False, mapWindow = None, windres = False):
         """!Creates final image composite
         
@@ -839,9 +902,12 @@ class Map(object):
         
         @return name of file with rendered image or None
         """
-        maps = []
-        masks = []
-        opacities = []
+        if self.cmdfile:
+            return self._renderCmdFile(force, windres)
+        
+        maps      = list()
+        masks     = list()
+        opacities = list()
         
         # use external gisrc if defined
         gisrc_orig = os.getenv("GISRC")
@@ -852,9 +918,6 @@ class Map(object):
         os.environ["GRASS_REGION"] = self.SetRegion(windres)
         os.environ["GRASS_WIDTH"]  = str(self.width)
         os.environ["GRASS_HEIGHT"] = str(self.height)
-	os.environ["GRASS_PNG_AUTO_WRITE"] = "TRUE"
-	os.environ["GRASS_COMPRESSION"] = "0"
-	os.environ["GRASS_TRUECOLOR"] = "TRUE"
         driver = UserSettings.Get(group = 'display', key = 'driver', subkey = 'type')
         if driver == 'cairo':
             os.environ["GRASS_RENDER_IMMEDIATE"] = "cairo"
@@ -863,12 +926,10 @@ class Map(object):
         else:
             os.environ["GRASS_RENDER_IMMEDIATE"] = "TRUE"
         
-        os.environ["GRASS_PNG_READ"] = "FALSE"
-        
         self._renderLayers(force, mapWindow, maps, masks, opacities)
-        
+
         # ugly hack for MSYS
-        if not subprocess.mswindows:
+        if sys.platform != 'win32':
             mapstr = ",".join(maps)
             maskstr = ",".join(masks)
             mapoutstr = self.mapfile
@@ -882,33 +943,18 @@ class Map(object):
                 maskstr += item.replace('\\', '/')
             maskstr = maskstr.rstrip(',')
             mapoutstr = self.mapfile.replace('\\', '/')
-        
-        # compose command
+            
+        # run g.pngcomp to get composite image
         bgcolor = ':'.join(map(str, UserSettings.Get(group = 'display', key = 'bgcolor',
                                                      subkey = 'color')))
         
-        complist = ["g.pnmcomp",
-                    "in=%s" % ",".join(maps),
-                    "mask=%s" % ",".join(masks),
-                    "opacity=%s" % ",".join(opacities),
-                    "background=%s" % bgcolor,
-                    "width=%s" % str(self.width),
-                    "height=%s" % str(self.height),
-                    "output=%s" % self.mapfile]
-        
-        # render overlays
-        if tmp_region:
-            os.environ["GRASS_REGION"] = tmp_region
-        else:
-            del os.environ["GRASS_REGION"]
-        
         if maps:
-            # run g.pngcomp to get composite image
             ret = gcmd.RunCommand('g.pnmcomp',
+                                  overwrite = True,
                                   input = '%s' % ",".join(maps),
                                   mask = '%s' % ",".join(masks),
                                   opacity = '%s' % ",".join(opacities),
-                                  background = bgcolor,
+                                  bgcolor = bgcolor,
                                   width = self.width,
                                   height = self.height,
                                   output = self.mapfile)
@@ -916,8 +962,14 @@ class Map(object):
             if ret != 0:
                 print >> sys.stderr, _("ERROR: Rendering failed")
                 return None
-            
-            Debug.msg (3, "Map.Render() force=%s file=%s" % (force, self.mapfile))
+        
+        Debug.msg (3, "Map.Render() force=%s file=%s" % (force, self.mapfile))
+        
+        # back to original region
+        if tmp_region:
+            os.environ["GRASS_REGION"] = tmp_region
+        else:
+            del os.environ["GRASS_REGION"]
         
         # back to original gisrc
         if self.gisrc:
@@ -1228,43 +1280,23 @@ class Map(object):
         """
         return self.DeleteLayer(overlay, overlay = True)
 
+    def _clean(self, llist):
+        for layer in llist:
+            if layer.maskfile:
+                grass.try_remove(layer.maskfile)
+            if layer.mapfile:
+                grass.try_remove(layer.mapfile)
+            llist.remove(layer)
+        
     def Clean(self):
         """!Clean layer stack - go trough all layers and remove them
         from layer list.
 
-        Removes also l_mapfile and l_maskfile
-        
-        @return False on failure
-        @return True on success
+        Removes also mapfile and maskfile.
         """
-        try:
-            dir = os.path.dirname(self.mapfile)
-            base = os.path.basename(self.mapfile).split('.')[0]
-            removepath = os.path.join(dir,base)+r'*'
-            for f in glob.glob(removepath):
-                os.remove(f)
-            for layer in self.layers:
-                if layer.mapfile:
-                    dir = os.path.dirname(layer.mapfile)
-                    base = os.path.basename(layer.mapfile).split('.')[0]
-                    removepath = os.path.join(dir,base)+r'*'
-                    for f in glob.glob(removepath):
-                        os.remove(f)
-                self.layers.remove(layer)
-            
-            for overlay in self.overlays:
-                if overlay.mapfile:
-                    dir = os.path.dirname(overlay.mapfile)
-                    base = os.path.basename(overlay.mapfile).split('.')[0]
-                    removepath = os.path.join(dir,base)+r'*'
-                    for f in glob.glob(removepath):
-                        os.remove(f)
-                self.overlays.remove(overlay)
-        except:
-            return False
+        self._clean(self.layers)
+        self._clean(self.overlays)
         
-        return True
-    
     def ReverseListOfLayers(self):
         """!Reverse list of layers"""
         return self.layers.reverse()

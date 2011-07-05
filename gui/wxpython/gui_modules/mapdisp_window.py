@@ -444,7 +444,6 @@ class BufferedWindow(MapWindow, wx.Window):
         If self.redrawAll is False on self.pdcTmp content is re-drawn
         """
         Debug.msg(4, "BufferedWindow.OnPaint(): redrawAll=%s" % self.redrawAll)
-        
         dc = wx.BufferedPaintDC(self, self.buffer)
         dc.Clear()
         
@@ -632,7 +631,7 @@ class BufferedWindow(MapWindow, wx.Window):
         
         self.resize = False
         
-        if self.img is None:
+        if not self.Map.cmdfile and self.img is None:
             render = True
         
         #
@@ -663,10 +662,12 @@ class BufferedWindow(MapWindow, wx.Window):
                     windres = True
                 else:
                     windres = False
+                
                 self.mapfile = self.Map.Render(force = True, mapWindow = self.parent,
                                                windres = windres)
             else:
                 self.mapfile = self.Map.Render(force = False, mapWindow = self.parent)
+            
         except gcmd.GException, e:
             gcmd.GError(message = e.value)
             self.mapfile = None
@@ -771,6 +772,7 @@ class BufferedWindow(MapWindow, wx.Window):
             self.parent.statusbarWin['mask'].SetLabel(_('MASK'))
         else:
             self.parent.statusbarWin['mask'].SetLabel('')
+        
         
         Debug.msg (1, "BufferedWindow.UpdateMap(): render=%s, renderVector=%s -> time=%g" % \
                    (render, renderVector, (stop-start)))
@@ -1211,6 +1213,7 @@ class BufferedWindow(MapWindow, wx.Window):
             self.DrawLines(pdc = self.pdcTmp)
         
         elif self.mouse["use"] == "pointer" and \
+                not self.parent.IsStandalone() and \
                 self.parent.GetLayerManager().gcpmanagement:
             # -> GCP manager
             if self.parent.toolbars['gcpdisp']:
@@ -1224,6 +1227,7 @@ class BufferedWindow(MapWindow, wx.Window):
                 self.UpdateMap(render = False, renderVector = False)
         
         elif self.mouse["use"] == "pointer" and \
+                not self.parent.IsStandalone() and \
                 self.parent.GetLayerManager().georectifying:
             # -> georectifying
             coord = self.Pixel2Cell(self.mouse['end'])
@@ -1340,7 +1344,8 @@ class BufferedWindow(MapWindow, wx.Window):
     def OnMouseEnter(self, event):
         """!Mouse entered window and no mouse buttons were pressed
         """
-        if self.parent.GetLayerManager().gcpmanagement:
+        if not self.parent.IsStandalone() and \
+                self.parent.GetLayerManager().gcpmanagement:
             if self.parent.toolbars['gcpdisp']:
                 if not self.parent.MapWindow == self:
                     self.parent.MapWindow = self
@@ -1432,8 +1437,7 @@ class BufferedWindow(MapWindow, wx.Window):
         return (x, y)
     
     def Zoom(self, begin, end, zoomtype):
-        """!
-        Calculates new region while (un)zoom/pan-ing
+        """!Calculates new region while (un)zoom/pan-ing
         """
         x1, y1 = begin
         x2, y2 = end
