@@ -21,6 +21,8 @@ extern struct GFONT_CAP *ftcap;
 
 struct driver
 {
+    char *name;
+    
     void (*Box)(double, double, double, double);
     void (*Erase)(void);
     int (*Graph_set)(void);
