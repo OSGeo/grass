@@ -1,20 +1,33 @@
+/*!
+  \file lib/gis/putenv.c
+
+  \brief GIS library - environment routines
+  
+  (C) 2001-2009, 2011 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Original author CERL
+  \author Updated for GRASS7 by Glynn Clements
+*/
+
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <grass/config.h>
 #include <grass/gis.h>
 
-/*******************************************************************
- * G_putenv (name, value)
- *   const char *name, *value
- *
- * this routine sets the UNIX environment variable name to value
- ******************************************************************/
-
 #if !defined(HAVE_PUTENV) && !defined(HAVE_SETENV)
 extern char **environ;
 #endif
 
+/*!
+  \brief Sets the UNIX environment variable name to value
+  
+  \param name env name
+  \param value env value
+*/
 void G_putenv(const char *name, const char *value)
 {
     char buf[1024];
