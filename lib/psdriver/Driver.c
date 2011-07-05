@@ -27,6 +27,7 @@ const struct driver *PS_Driver(void)
     if (initialized)
 	return &drv;
 
+    drv.name = "ps";
     drv.Box = PS_Box;
     drv.Erase = PS_Erase;
     drv.Graph_set = PS_Graph_set;
