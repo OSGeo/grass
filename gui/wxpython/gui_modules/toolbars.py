@@ -208,7 +208,8 @@ class MapToolbar(AbstractToolbar):
             log = self.parent.GetLayerManager().GetLogWindow()
         
         if haveNviz:
-            if not self.parent.GetLayerManager().existNviz:
+            if self.parent.GetLayerManager() and \
+                    not self.parent.GetLayerManager().existNviz:
                 choices.append(_('3D view'))
                 self.toolId['3d'] = 1
             else:

@@ -1687,14 +1687,12 @@ def main(argv = None):
 
     workspaceFile = process_opt(opts, args)[0]
 
-    #
     # run application
-    #
     app = GMApp(workspaceFile)
     # suppress wxPython logs
     q = wx.LogNull()
 
     app.MainLoop()
-
+    
 if __name__ == "__main__":
     sys.exit(main())

@@ -1,20 +1,19 @@
 """!
 @package mapdisp.py
 
-@brief GIS map display canvas, with toolbar for various display
-management functions, and additional toolbars (vector digitizer, 3d
-view).
+@brief Map display with toolbar for various display management
+functions, and additional toolbars (vector digitizer, 3d view).
 
-Can be used either from Layer Manager or as p.mon backend.
+Can be used either from Layer Manager or as d.mon backend.
 
 Classes:
 - MapFrame
 - MapApp
 
 Usage:
-python mapdisp.py monitor-identifier /path/to/command/file
+python mapdisp.py monitor-identifier /path/to/map/file /path/to/command/file /path/to/env/file
 
-(C) 2006-2010 by the GRASS Development Team
+(C) 2006-2011 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -35,18 +34,8 @@ import globalvar
 import wx
 import wx.aui
 
-try:
-    import subprocess
-except:
-    CompatPath = os.path.join(globalvar.ETCWXDIR)
-    sys.path.append(CompatPath)
-    from compat import subprocess
-
-gmpath = os.path.join(globalvar.ETCWXDIR, "icons")
-sys.path.append(gmpath)
-
-grassPath = os.path.join(globalvar.ETCDIR, "python")
-sys.path.append(grassPath)
+sys.path.append(os.path.join(globalvar.ETCWXDIR, "icons"))
+sys.path.append(os.path.join(globalvar.ETCDIR,   "python"))
 
 import render
 import toolbars
@@ -61,16 +50,21 @@ import profile
 import globalvar
 import utils
 import gdialogs
-from grass.script import core as grass
-from debug import Debug
-from icon  import Icons
+from debug       import Debug
+from icon        import Icons
 from preferences import globalSettings as UserSettings
 
 from mapdisp_command import Command
-from mapdisp_window import BufferedWindow
+from mapdisp_window  import BufferedWindow
+
+from grass.script import core as grass
 
 # for standalone app
-cmdfilename = None
+monFile = { 'cmd' : None,
+            'map' : None,
+            'env' : None,
+            }
+monName = None
 
 haveCtypes = False
 
@@ -83,8 +77,8 @@ class MapFrame(wx.Frame):
                  tree = None, notebook = None, lmgr = None, page = None,
                  Map = None, auimgr = None, **kwargs):
         """!Main map display window with toolbars, statusbar and
-        DrawWindow
-
+        BufferedWindow (map canvas)
+        
         @param toolbars array of activated toolbars, e.g. ['map', 'digit']
         @param tree reference to layer tree
         @param notebook control book ID in Layer Manager
@@ -427,7 +421,7 @@ class MapFrame(wx.Frame):
         
         self.SetStatusText("", 0)
         Debug.msg(5, "MapFrame._addToolbarNviz(): end")
-        
+
     def AddToolbar(self, name):
         """!Add defined toolbar to the window
         
@@ -533,7 +527,7 @@ class MapFrame(wx.Frame):
         self.Map.ChangeMapSize(self.GetClientSize())
         self.Map.region = self.Map.GetRegion() # g.region -upgc
         # self.Map.SetRegion() # adjust region to match display window
-
+        
     def OnUpdateProgress(self, event):
         """!Update progress bar info
         """
@@ -627,8 +621,7 @@ class MapFrame(wx.Frame):
             self.MapWindow.SetCursor(self.cursors["default"])
 
     def OnZoomIn(self, event):
-        """
-        Zoom in the map.
+        """!Zoom in the map.
         Set mouse cursor, zoombox attributes, and zoom direction
         """
         if self.toolbars['map']:
@@ -644,8 +637,7 @@ class MapFrame(wx.Frame):
         self.MapWindow.SetCursor(self.cursors["cross"])
 
     def OnZoomOut(self, event):
-        """
-        Zoom out the map.
+        """!Zoom out the map.
         Set mouse cursor, zoombox attributes, and zoom direction
         """
         if self.toolbars['map']:
@@ -661,14 +653,12 @@ class MapFrame(wx.Frame):
         self.MapWindow.SetCursor(self.cursors["cross"])
 
     def OnZoomBack(self, event):
-        """
-        Zoom last (previously stored position)
+        """!Zoom last (previously stored position)
         """
         self.MapWindow.ZoomBack()
 
     def OnPan(self, event):
-        """
-        Panning, set mouse to drag
+        """!Panning, set mouse to drag
         """
         if self.toolbars['map']:
             self.toolbars['map'].OnTool(event)
@@ -682,14 +672,12 @@ class MapFrame(wx.Frame):
         self.MapWindow.SetCursor(self.cursors["hand"])
 
     def OnErase(self, event):
-        """
-        Erase the canvas
+        """!Erase the canvas
         """
         self.MapWindow.EraseMap()
 
     def OnZoomRegion(self, event):
-        """
-        Zoom to region
+        """!Zoom to region
         """
         self.Map.getRegion()
         self.Map.getResolution()
@@ -697,8 +685,7 @@ class MapFrame(wx.Frame):
         # event.Skip()
 
     def OnAlignRegion(self, event):
-        """
-        Align region
+        """!Align region
         """
         if not self.Map.alignRegion:
             self.Map.alignRegion = True
@@ -2025,73 +2012,90 @@ class MapFrame(wx.Frame):
         """
         return self._layerManager
     
-# end of class MapFrame
-
 class MapApp(wx.App):
     def OnInit(self):
         wx.InitAllImageHandlers()
         if __name__ == "__main__":
-            Map = render.Map() # instance of Map class to render GRASS display output to PPM file
+            self.cmdTimeStamp = os.path.getmtime(monFile['cmd'])
+            Map = render.Map(cmdfile = monFile['cmd'], mapfile = monFile['map'],
+                             envfile = monFile['env'], monitor = monName)
         else:
             Map = None
-
+        
         self.mapFrm = MapFrame(parent = None, id = wx.ID_ANY, Map = Map,
                                size = globalvar.MAP_WINDOW_SIZE)
-        #self.SetTopWindow(Map)
+        # self.SetTopWindow(Map)
         self.mapFrm.Show()
-
+        
         if __name__ == "__main__":
-            # redraw map, if new command appears
-            self.redraw = False
-            status = Command(self, Map, cmdfilename)
-            status.start()
+            #status = Command(self, Map, cmdfile)
+            # status.start()
             self.timer = wx.PyTimer(self.watcher)
-            # check each 0.1s
-            self.timer.Start(100)
-
-        return 1
-
+            #check each 0.5s
+            global mtime
+            mtime = 500
+            self.timer.Start(mtime)
+            
+        return True
+    
     def OnExit(self):
         if __name__ == "__main__":
             # stop the timer
-            self.timer.Stop()
-            # terminate thread (a bit ugly)
-            os.system("""!echo "quit" >> %s""" % (cmdfilename))
-
+            # self.timer.Stop()
+            # terminate thread
+            for f in monFile.itervalues():
+                grass.try_remove(f)
+            
     def watcher(self):
-        """!Redraw, if new layer appears"""
-        if self.redraw:
+        """!Redraw, if new layer appears (check's timestamp of
+        cmdfile)
+        """
+        # todo: events
+        if os.path.getmtime(monFile['cmd']) > self.cmdTimeStamp:
+            self.timer.Stop()
+            self.cmdTimeStamp = os.path.getmtime(monFile['cmd'])
             self.mapFrm.OnDraw(None)
-        self.redraw = False
-        return
-# end of class MapApp
-
+            self.timer.Start(mtime)
+        
 if __name__ == "__main__":
-
-    ###### SET command variable
-    if len(sys.argv) != 3:
+    # set command variable
+    if len(sys.argv) != 5:
         print __doc__
-        sys.exit()
-
-    title = sys.argv[1]
-    cmdfilename = sys.argv[2]
-
+        sys.exit(1)
+    
+    monName = sys.argv[1]
+    monFile = { 'map' : sys.argv[2],
+                'cmd' : sys.argv[3],
+                'env' : sys.argv[4],
+                }
+    
     import gettext
     gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
+    
+    grass.verbose(_("Starting map display <%s>...") % (monName))
 
-    print >> sys.stderr, "\nStarting monitor <%s>...\n" % (title)
-
+    gcmd.RunCommand('g.gisenv',
+                    set = 'MONITOR_%s_PID=%d' % (monName, os.getpid()))
+    
     gm_map = MapApp(0)
     # set title
     gm_map.mapFrm.SetTitle(_("GRASS GIS Map Display: " +
-                             title + 
+                             monName + 
                              " - Location: " + grass.gisenv()["LOCATION_NAME"]))
     
     gm_map.MainLoop()
     
-    os.remove(cmdfilename)
-    os.system("""!g.gisenv set="GRASS_PYCMDFILE" """)
+    grass.verbose(_("Stopping map display <%s>...") % (monName))
 
-    print >> sys.stderr, "\nStopping monitor <%s>...\n" % (title)
-
+    # clean up GRASS env variables
+    env = grass.gisenv()
+    env_name = 'MONITOR_%s' % monName
+    for key in env.keys():
+        if key.find(env_name) == 0:
+            gcmd.RunCommand('g.gisenv',
+                              set = '%s=' % key)
+        if key == 'MONITOR' and env[key] == monName:
+            gcmd.RunCommand('g.gisenv',
+                            set = '%s=' % key)
+    
     sys.exit(0)
