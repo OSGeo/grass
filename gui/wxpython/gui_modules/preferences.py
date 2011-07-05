@@ -577,6 +577,9 @@ class Settings:
                     'elev'   : 55,
                     'color'  : (128, 128, 128, 255), # grey
                     },
+                'arrow': {
+                    'color': (0, 0, 0)
+                    }
                 },
             'modeler' : {
                 'action' : {
@@ -683,6 +686,11 @@ class Settings:
         self.internalSettings['nviz']['view']['focus']['x'] = -1
         self.internalSettings['nviz']['view']['focus']['y'] = -1
         self.internalSettings['nviz']['view']['focus']['z'] = -1
+        self.internalSettings['nviz']['arrow'] = {}
+        self.internalSettings['nviz']['arrow']['position'] = {}
+        self.internalSettings['nviz']['arrow']['position']['x'] = 0
+        self.internalSettings['nviz']['arrow']['position']['y'] = 0
+        self.internalSettings['nviz']['arrow']['size'] = 100
         self.internalSettings['nviz']['vector'] = {}
         self.internalSettings['nviz']['vector']['points'] = {}
         self.internalSettings['nviz']['vector']['points']['marker'] = ("x",

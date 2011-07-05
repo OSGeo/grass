@@ -237,6 +237,12 @@ int Nviz_draw_all(nv_data * data)
 	struct fringe_data * f = data->fringe[i];
 	GS_draw_fringe(f->id, f->color, f->elev, f->where);
     }
+
+    /* North Arrow */
+    if (data->draw_arrow) {
+	gsd_north_arrow(data->arrow->where, data->arrow->size,
+			(GLuint)NULL, data->arrow->color, data->arrow->color);
+    }
     
     GS_done_draw();
     GS_set_draw(GSD_BACK);

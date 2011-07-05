@@ -780,6 +780,19 @@ class Nviz:
         
         return (value, desc)
     
+    def SetDecorDefaultProp(self):
+        data = {}
+
+        # arrow
+        data['arrow'] = UserSettings.Get(group = 'nviz', key = 'arrow')
+        data['arrow']['color'] = "%d:%d:%d" % (
+                UserSettings.Get(group = 'nviz', key = 'arrow', subkey = 'color')[:3])
+        data['arrow'].update(UserSettings.Get(group = 'nviz', key = 'arrow', internal = True))
+        data['arrow']['show'] = False
+        return data
+            
+        
+        
 class WriteWorkspaceFile(object):
     """!Generic class for writing workspace file"""
     def __init__(self, lmgr, file):

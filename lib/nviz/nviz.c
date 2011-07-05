@@ -46,6 +46,10 @@ void Nviz_init_data(nv_data * data)
     /* fringe */
     data->num_fringes = 0;
     data->fringe = NULL;
+
+    /* north arrow */
+    data->draw_arrow = 0;
+    data->arrow = NULL;
     
     return;
 }
@@ -63,6 +67,13 @@ void Nviz_destroy_data(nv_data *data)
     }
     data->num_fringes = 0;
     data->fringe = NULL;
+    
+    if (data->arrow) {
+	G_free(data->arrow);
+	data->arrow = NULL;
+	data->draw_arrow = 0;
+    }
+    
 }
 
 /*!
@@ -136,6 +147,7 @@ struct fringe_data *Nviz_new_fringe(nv_data *data,
 	if (num < 1)
 	    return NULL;
 	id = surf[0];
+	G_free(surf);
     }
      
 
@@ -179,6 +191,7 @@ struct fringe_data *Nviz_set_fringe(nv_data *data,
 	if (num < 1)
 	    return NULL;
 	id = surf[0];
+	G_free(surf);
     }
     
     for (i = 0; i < data->num_fringes; i++) {
@@ -214,4 +227,82 @@ void Nviz_draw_fringe(nv_data *data)
 
 	GS_draw_fringe(f->id, f->color, f->elev, f->where);
     }
+}
+/*!
+   \brief Sets the North Arrow position and return world coords
+
+   \param data nviz data
+   \param sx,sy screen coordinates
+   \param size arrow length
+   \param color arrow/text color
+ */
+int Nviz_set_arrow(nv_data *data,
+		   int sx, int sy, float size,
+		   unsigned int color)
+{
+    int id, pt[2];
+    int *surf_list, num_surfs;
+    float coords[3];
+    struct arrow_data *arw;
+
+    if (GS_num_surfs() > 0) {
+	surf_list = GS_get_surf_list(&num_surfs);
+	id = surf_list[0];
+	G_free(surf_list);
+
+	pt[0] = sx;
+	pt[1] = sy;
+
+	GS_set_Narrow(pt, id, coords);
+
+	if (data->arrow) {
+	    data->arrow->color = color;
+	    data->arrow->size  = size;
+	    data->arrow->where[0]  = coords[0];
+	    data->arrow->where[1]  = coords[1];
+	    data->arrow->where[2]  = coords[2];
+	}    
+	else {
+	    arw = (struct arrow_data *) G_malloc(sizeof(struct arrow_data));
+	    arw->color = color;
+	    arw->size  = size;
+	    arw->where[0]  = coords[0];
+	    arw->where[1]  = coords[1];
+	    arw->where[2]  = coords[2];
+
+	    data->arrow = arw;
+	}
+	return 1;
+    }
+    return 0;
+}
+
+
+/*!
+   \brief Draws the North Arrow
+
+   \param data nviz data
+ */
+int Nviz_draw_arrow(nv_data *data)
+{
+
+    struct arrow_data *arw = data->arrow;
+    GLuint FontBase = 0; /* don't know how to get fontbase*/
+
+    data->draw_arrow = 1;
+    gsd_north_arrow(arw->where, arw->size, FontBase, arw->color, arw->color);
+
+    return 1;
+}
+
+/*!
+   \brief Deletes the North Arrow
+
+   \param data nviz data
+ */
+void Nviz_delete_arrow(nv_data *data)
+{
+    data->draw_arrow = 0;
+
+    return;
 }

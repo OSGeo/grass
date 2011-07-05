@@ -189,3 +189,17 @@ int Nviz_get_zrange(nv_data * data, float *min, float *max)
     GS_get_zrange_nz(min, max);
     return 1;
 }
+
+/*!
+   \brief Get largest dimension
+
+   \param data nviz data
+ */
+float Nviz_get_longdim(nv_data * data)
+{
+    float dim;
+
+    GS_get_longdim(&dim);
+
+    return dim;
+}

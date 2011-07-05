@@ -442,8 +442,13 @@ class NvizToolWindow(FN.FlatNotebook):
             window = self._createFringePage(parent = fringePanel), flags = fpb.FPB_ALIGN_WIDTH)
         
         self.EnablePage('fringe', False)
-
-
+        
+        # decoration page
+        decorationPanel = self.foldpanelAppear.AddFoldPanel(_("Decorations"), collapsed = True)
+        self.foldpanelAppear.AddFoldPanelWindow(decorationPanel, 
+            window = self._createDecorationPage(parent = decorationPanel), flags = fpb.FPB_ALIGN_WIDTH)
+        
+        
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self.foldpanelAppear, proportion = 1, flag = wx.EXPAND)
         self.mainPanelAppear.SetSizer(sizer)
@@ -1692,7 +1697,64 @@ class NvizToolWindow(FN.FlatNotebook):
         panel.Fit()
 
         return panel
+    
+    def _createDecorationPage(self, parent):
+        """!Create decoration (north arrow, scalebar, legend) page"""
+        panel = wx.Panel(parent = parent, id = wx.ID_ANY)
+        
+        self.page['decoration'] = { 'id' : 2,
+                                    'notebook' : self.foldpanelAppear.GetId()}
+        self.win['decoration'] = {}
 
+        pageSizer = wx.BoxSizer(wx.VERTICAL)
+        #
+        # north arrow
+        #
+        self.win['decoration']['arrow'] = {}
+        nabox = wx.StaticBox (parent = panel, id = wx.ID_ANY,
+                             label = " %s " % (_("North Arrow")))
+        naboxSizer = wx.StaticBoxSizer(nabox, wx.VERTICAL)
+        gridSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
+        # size
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                           label = _("Arrow size (in map units):")),
+                      pos = (0,0), span = (1, 2), flag = wx.ALIGN_CENTER_VERTICAL)
+        sizeSpin = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (65, -1),
+                               min = 0, max = 1e6, initial = 1000)
+        gridSizer.Add(sizeSpin, pos = (0, 2))
+        self.win['decoration']['arrow']['size'] = sizeSpin.GetId()
+        sizeSpin.Bind(wx.EVT_SPINCTRL, self.OnArrowProp)
+        
+        # color
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                           label = _("Arrow color:")),
+                      pos = (1,0), span = (1, 2), flag = wx.ALIGN_CENTER_VERTICAL)
+        color = csel.ColourSelect(parent = panel, id = wx.ID_ANY,
+                                  size = globalvar.DIALOG_COLOR_SIZE)
+        gridSizer.Add(color, pos = (1, 2))
+        self.win['decoration']['arrow']['color'] = color.GetId()
+        color.Bind(csel.EVT_COLOURSELECT, self.OnArrowProp)
+        
+        # control
+        toggle = wx.ToggleButton(parent = panel, id = wx.ID_ANY, label = _("Place arrow"))
+        gridSizer.Add(item = toggle, pos = (2, 0))
+        toggle.Bind(wx.EVT_TOGGLEBUTTON, self.OnArrowPlacement)
+        toggle.SetName('placeArrow')
+
+        delete = wx.Button(parent = panel, id = wx.ID_ANY, label = _("Delete"))
+        gridSizer.Add(item = delete, pos = (2, 1))
+        delete.Bind(wx.EVT_BUTTON, self.OnArrowDelete)
+        naboxSizer.Add(item = gridSizer, proportion = 0, flag = wx.EXPAND, border = 3)
+        pageSizer.Add(item = naboxSizer, proportion = 0,
+                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
+                      border = 3)
+              
+        panel.SetSizer(pageSizer)
+        panel.Layout()
+        panel.Fit()
+
+        return panel
+    
     def GetLayerData(self, nvizType):
         """!Get nviz data"""
         name = self.FindWindowById(self.win[nvizType]['map']).GetValue()
@@ -3099,15 +3161,42 @@ class NvizToolWindow(FN.FlatNotebook):
         self.UpdateCPlanePage(planeIndex)
         
     def OnCPlanePos(self, event): 
-        plane = self.FindWindowById(self.win['cplane']['planes']).GetStringSelection()
-        try:
-            planeIndex = int(plane.split()[1])
-        except:#TODO disabled page
-            planeIndex = -1
+        """!Place cutting plane rotation center interactively"""
         self.mapWindow.mouse['use'] = 'cplane'
         self.mapWindow.SetCursor(self.mapWindow.cursors["cross"])
         self.parent.curr_page.maptree.mapdisplay.SetFocus()
         self.parent.curr_page.maptree.mapdisplay.Raise()
+    
+    def OnArrowPlacement(self, event):
+        """!Place an arrow by clicking on display"""
+        if event.GetInt():
+            self.mapWindow.mouse['use'] = 'arrow'
+            self.mapWindow.SetCursor(self.mapWindow.cursors["cross"])
+        else:
+            self.mapWindow.mouse['use'] = 'default'
+            self.mapWindow.SetCursor(self.mapWindow.cursors["default"])
+    
+    def OnArrowDelete(self, event):
+        """!Delete arrow"""
+        self._display.DeleteArrow()
+        self.mapWindow.decoration['arrow']['show'] = False
+        self.mapWindow.Refresh(False)
+        
+    def OnArrowProp(self, event):
+        """!Set arrow properties"""
+        color = self.FindWindowById(self.win['decoration']['arrow']['color']).GetValue()
+        self.mapWindow.decoration['arrow']['color'] = self._getColorString(color)
+        
+        size = self.FindWindowById(self.win['decoration']['arrow']['size']).GetValue()
+        self.mapWindow.decoration['arrow']['size'] = size
+        
+        if self.mapWindow.decoration['arrow']['show']:
+            self._display.SetArrow(self.mapWindow.decoration['arrow']['position']['x'],
+                                   self.mapWindow.decoration['arrow']['position']['y'],
+                                   self.mapWindow.decoration['arrow']['size'],
+                                   self.mapWindow.decoration['arrow']['color'])
+            self._display.DrawArrow()
+            self.mapWindow.Refresh(False)
         
     def UpdatePage(self, pageId):
         """!Update dialog (selected page)"""
@@ -3169,6 +3258,9 @@ class NvizToolWindow(FN.FlatNotebook):
         elif pageId == 'fringe':
             win = self.FindWindowById(self.win['fringe']['map'])
             win.SetValue(self.FindWindowById(self.win['surface']['map']).GetValue())
+        elif pageId == 'decoration':
+            win = self.FindWindowById(self.win['decoration']['arrow']['size'])
+            win.SetValue(self.mapWindow.decoration['arrow']['size'])
         elif pageId == 'constant':
             if self.mapWindow.constants:
                 surface = self.FindWindowById(self.win['constant']['surface'])
