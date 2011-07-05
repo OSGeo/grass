@@ -158,6 +158,7 @@ void D_erase(const char *);
 
 int D_open_driver(void);
 void D_close_driver(void);
+int D_save_command(const char *);
 
 void D_get_window(double *, double *, double *, double *);
 

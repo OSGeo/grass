@@ -1240,7 +1240,7 @@ struct P_node
     /*!
       \brief X coordinate
     */
-    double x;			/* X coordinate */
+    double x;
     /*!
       \brief Y coordinate
     */
