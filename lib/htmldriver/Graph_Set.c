@@ -15,6 +15,8 @@
 #include <stdlib.h>
 
 #include <grass/gis.h>
+#include <grass/glocale.h>
+
 #include "driverlib.h"
 #include "driver.h"
 #include "htmlmap.h"
@@ -92,8 +94,9 @@ int HTML_Graph_set(void)
     }
 
 
-    G_message("HTMLMAP: collecting to file: %s\n width = %d, height = %d, ",
-	      file_name, screen_width, screen_height);
+    G_verbose_message(_("html: collecting to file '%s'"), file_name);
+    G_verbose_message(_("html: image size %dx%d"),
+		      screen_width, screen_height);
 
     /*
      * check type of map wanted
@@ -102,27 +105,24 @@ int HTML_Graph_set(void)
     if (NULL == (p = getenv("GRASS_HTMLTYPE"))) {
 	p = "CLIENT";
     }
-
+    
     if (strcmp(p, "APACHE") == 0) {
 	html.type = APACHE;
-	fprintf(stdout, "type = APACHE\n");
-
+	G_verbose_message(_("html: type '%s'"), "apache");
     }
     else if (strcmp(p, "RAW") == 0) {
 	html.type = RAW;
-	fprintf(stdout, "type = RAW\n");
-
+	G_verbose_message(_("html: type '%s'"), "raw");
     }
     else {
 	html.type = CLIENT;
-	fprintf(stdout, "type = CLIENT\n");
+	G_verbose_message(_("html: type '%s'"), "client");
     }
-
 
     /*
      * initialize text memory and list pointers
      */
-
+    
     html.last_text = (char *)G_malloc(INITIAL_TEXT + 1);
     html.last_text[0] = '\0';
     html.last_text_len = INITIAL_TEXT;
