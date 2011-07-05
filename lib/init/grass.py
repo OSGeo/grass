@@ -72,6 +72,15 @@ def try_rmdir(path):
     except:
 	pass
 
+def clean_env():
+    env_curr = read_gisrc()
+    env_new  = {}
+    for k,v in env_curr.iteritems():
+        if 'MONITOR' not in k:
+            env_new[k] = v
+    
+    write_gisrc(env_new)
+
 def cleanup_dir(path):
     if not path:
 	return
@@ -1044,6 +1053,7 @@ else:
 
 clear_screen()
 
+clean_env()
 clean_temp()
 
 try_remove(lockfile)
