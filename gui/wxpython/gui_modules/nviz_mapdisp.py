@@ -1177,7 +1177,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         isosurfId = 0
         for isosurf in data['isosurface']:
             for attrb in ('color', 'mask',
-                          'transp', 'shine', 'emit'):
+                          'transp', 'shine'):
                 if attrb not in isosurf or \
                         'update' not in isosurf[attrb]:
                     continue
@@ -1191,9 +1191,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                         # TODO: broken in NVIZ
                         self._display.UnsetIsosurfaceMask(id, isosurfId)
                     elif attrb ==  'transp':
-                        self._display.UnsetIsosurfaceTransp(id, isosurfId)
-                    elif attrb ==  'emit':
-                        self._display.UnsetIsosurfaceEmit(id, isosurfId) 
+                        self._display.UnsetIsosurfaceTransp(id, isosurfId) 
                 else:
                     if type(value) ==  type('') and \
                             len(value) <=  0: # ignore empty values (TODO: warning)
@@ -1207,9 +1205,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                     elif attrb ==  'transp':
                         self._display.SetIsosurfaceTransp(id, isosurfId, map, str(value)) 
                     elif attrb ==  'shine':
-                        self._display.SetIsosurfaceShine(id, isosurfId, map, str(value)) 
-                    elif attrb ==  'emit':
-                        self._display.SetIsosurfaceEmit(id, isosurfId, map, str(value)) 
+                        self._display.SetIsosurfaceShine(id, isosurfId, map, str(value))  
                 isosurf[attrb].pop('update')
             isosurfId +=  1
         
