@@ -1,3 +1,32 @@
+/*!
+  \file lib/driver/raster.c
+
+  \brief Display Driver - draw raster data
+
+  (C) 2006-2011 by the GRASS Development Team
+
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+
+  \author Glynn Clements <glynn gclements.plus.com> (original contributor)
+  \author Huidae Cho <grass4u gmail.com>
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#include <grass/gis.h>
+#include <grass/raster.h>
+#include <grass/display.h>
+#include "driver.h"
+
+extern int D__overlay_mode;
+
+static int src[2][2];
+static double dst[2][2];
+
+static int draw_cell(int, const void *, struct Colors *, RASTER_MAP_TYPE);
+
 /* routines used by programs such as Dcell, display, combine, and weight
  * for generating raster images (for 1-byte, i.e. not super-cell, data)
  *
@@ -23,21 +52,16 @@
  *       first.
  */
 
-#include <stdio.h>
-#include <stdlib.h>
+/*!
+  \brief Draw raster row
+  
+  \param A_row row number
+  \param array
+  \param colors pointer to Colors structure
+  \param data_type raster type (CELL, FCELL, DCELL)
 
-#include <grass/gis.h>
-#include <grass/raster.h>
-#include <grass/display.h>
-#include "driver.h"
-
-extern int D__overlay_mode;
-
-static int src[2][2];
-static double dst[2][2];
-
-static int draw_cell(int, const void *, struct Colors *, RASTER_MAP_TYPE);
-
+  \return 
+*/
 int D_draw_raster(int A_row,
 		  const void *array,
 		  struct Colors *colors, RASTER_MAP_TYPE data_type)
@@ -45,16 +69,43 @@ int D_draw_raster(int A_row,
     return draw_cell(A_row, array, colors, data_type);
 }
 
+/*!
+  \brief Draw raster row (DCELL)
+  
+  \param A_row row number
+  \param darray
+  \param colors pointer to Colors structure
+
+  \return 
+*/
 int D_draw_d_raster(int A_row, const DCELL * darray, struct Colors *colors)
 {
     return draw_cell(A_row, darray, colors, DCELL_TYPE);
 }
 
+/*!
+  \brief Draw raster row (FCELL)
+  
+  \param A_row row number
+  \param farray
+  \param colors pointer to Colors structure
+
+  \return 
+*/
 int D_draw_f_raster(int A_row, const FCELL * farray, struct Colors *colors)
 {
     return draw_cell(A_row, farray, colors, FCELL_TYPE);
 }
 
+/*!
+  \brief Draw raster row (CELL)
+  
+  \param A_row row number
+  \param carray
+  \param colors pointer to Colors structure
+
+  \return 
+*/
 int D_draw_c_raster(int A_row, const CELL * carray, struct Colors *colors)
 {
     return draw_cell(A_row, carray, colors, CELL_TYPE);
@@ -62,21 +113,24 @@ int D_draw_c_raster(int A_row, const CELL * carray, struct Colors *colors)
 
 
 /*!
- * \brief render a raster row
- *
- * The <b>row</b> gives the map array row. The <b>raster</b>
- * array provides the categories for each raster value in that row. 
- * This routine is called consecutively with the information necessary to draw a
- * raster image from north to south. No rows can be skipped. All screen pixel
- * rows which represent the current map array row are rendered. The routine
- * returns the map array row which is needed to draw the next screen pixel row.
- *
- *  \param row
- *  \param raster
- *  \param colors
- *  \return int
- */
+  \brief Render a raster row
 
+  \todo Replace by D_draw_c_raster()
+  
+  The <b>row</b> gives the map array row. The <b>raster</b> array
+  provides the categories for each raster value in that row.  This
+  routine is called consecutively with the information necessary to
+  draw a raster image from north to south. No rows can be skipped. All
+  screen pixel rows which represent the current map array row are
+  rendered. The routine returns the map array row which is needed to
+  draw the next screen pixel row.
+ 
+  \param A_row row number
+  \param carray
+  \param colors pointer to Colors structure
+  
+  \return
+*/
 int D_draw_cell(int A_row, const CELL * carray, struct Colors *colors)
 {
     return draw_cell(A_row, carray, colors, CELL_TYPE);
@@ -117,19 +171,13 @@ static int draw_cell(int A_row,
 }
 
 /*!
- * \brief prepare for raster graphic
- *
- * The raster display subsystem establishes
- * conversion parameters based on the screen extent defined by <b>top,
- * bottom, left</b>, and <b>right</b>, all of which are obtainable from
- * <i>D_get_dst for the current frame.</i>
- *
- *  \param top
- *  \param bottom
- *  \param left
- *  \param right
- *  \return int
- */
+  \brief Prepare for raster graphic
+ 
+  The raster display subsystem establishes conversion parameters based
+  on the screen extent defined by <b>top, bottom, left</b>, and
+  <b>right</b>, all of which are obtainable from <i>D_get_dst for the
+  current frame.</i>
+*/
 
 void D_cell_draw_begin(void)
 {
@@ -139,6 +187,22 @@ void D_cell_draw_begin(void)
     COM_begin_raster(D__overlay_mode, src, dst);
 }
 
+/*!
+  \brief Draw raster row in RGB mode
+
+  \param A_row row number
+  \param r_raster red data buffer
+  \param g_raster green data buffer
+  \param b_raster blue data buffer
+  \param r_colors colors used for red channel
+  \param g_colors colors used for green channel
+  \param b_colors colors used for blue channel
+  \param r_type raster type used for red channel
+  \param g_type raster type used for red channel
+  \param b_type raster type used for red channel
+
+  \return
+*/
 int D_draw_raster_RGB(int A_row,
 		      const void *r_raster, const void *g_raster,
 		      const void *b_raster, struct Colors *r_colors,
@@ -190,6 +254,9 @@ int D_draw_raster_RGB(int A_row,
 	? A_row : -1;
 }
 
+/*!
+  \brief Finish rendering
+*/
 void D_cell_draw_end(void)
 {
     COM_end_raster();
