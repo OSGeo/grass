@@ -9,6 +9,7 @@
   (>=v2). Read the file COPYING that comes with GRASS for details.
 
   \author Original author CERL
+  \author Monitors support by Martin Landa <landa.martin gmail.com>
 */
 
 #include <grass/config.h>
@@ -151,7 +152,7 @@ int D_open_driver(void)
 
     init();
 
-    if (!m)
+    if (!getenv("GRASS_RENDER_IMMEDIATE") && !m)
 	return 1;
 
     return 0;
