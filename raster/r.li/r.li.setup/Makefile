@@ -8,7 +8,7 @@ include $(MODULE_TOPDIR)/include/Make/Script.make
 
 SCRIPT_SRC = \
 	area_query \
-	masked_area_selection \
+	masked_area_selection.sh \
 	r.li.setup.main \
 	r.li.setup.procedures.tcl \
 	r.li.windows.tcl \

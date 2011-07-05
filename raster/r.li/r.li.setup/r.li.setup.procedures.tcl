@@ -413,7 +413,7 @@ proc drawRegions { number } {
 		set ins [vectorInstruction]
 		tkwait window $ins
 		while { $i < $number } {
-		 	catch { exec $env(F_PATH)/masked_area_selection -f north=$env(SF_N) south=$env(SF_S) west=$env(SF_W) east=$env(SF_E) raster=$env(RASTER) vector=$env(VECTOR) site=$env(SITE) conf=$env(TMP).tmp }
+		 	catch { exec $env(F_PATH)/masked_area_selection.sh -f north=$env(SF_N) south=$env(SF_S) west=$env(SF_W) east=$env(SF_E) raster=$env(RASTER) vector=$env(VECTOR) site=$env(SITE) conf=$env(TMP).tmp }
 			set ok ""
 			catch {set ok [exec cat $env(TMP).tmp | grep "SAMPLEAREAMASKED" | cut -f1 -d\ ]}
 			if { $ok == "SAMPLEAREAMASKED" } then {
@@ -507,7 +507,7 @@ proc drawMouseUnits { num sel } {
 			set ins [circleInstruction]
 			tkwait window $ins
 			while { $i < $num } {
-		 		catch { exec $env(F_PATH)/masked_area_selection -f -c north=$env(SF_N) south=$env(SF_S) west=$env(SF_W) east=$env(SF_E) raster=$env(RASTER) vector=$env(VECTOR) site=$env(SITE) conf=$env(TMP).tmp }
+		 		catch { exec $env(F_PATH)/masked_area_selection.sh -f -c north=$env(SF_N) south=$env(SF_S) west=$env(SF_W) east=$env(SF_E) raster=$env(RASTER) vector=$env(VECTOR) site=$env(SITE) conf=$env(TMP).tmp }
 				set ok ""
 				catch {set ok [exec cat $env(TMP).tmp | grep "SAMPLEAREAMASKED" | cut -f1 -d\ ]}
 				if { $ok == "SAMPLEAREAMASKED" } then {
@@ -596,7 +596,7 @@ proc drawMouseWindow { sel } {
 			set ins [circleInstruction]
 			tkwait window $ins
 			while { $i == 0 } {
-		 		catch { exec $env(F_PATH)/masked_area_selection -f -c north=$env(SF_N) south=$env(SF_S) west=$env(SF_W) east=$env(SF_E) raster=$env(RASTER) vector=$env(VECTOR) site=$env(SITE) conf=$env(TMP).tmp }
+		 		catch { exec $env(F_PATH)/masked_area_selection.sh -f -c north=$env(SF_N) south=$env(SF_S) west=$env(SF_W) east=$env(SF_E) raster=$env(RASTER) vector=$env(VECTOR) site=$env(SITE) conf=$env(TMP).tmp }
 				set ok ""
 				catch {set ok [exec cat $env(TMP).tmp | grep "SAMPLEAREAMASKED" | cut -f1 -d\ ]}
 				if { $ok == "SAMPLEAREAMASKED" } then {
