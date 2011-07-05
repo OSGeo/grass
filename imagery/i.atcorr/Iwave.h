@@ -109,11 +109,19 @@ c        84  4th      "               ( 0.700-0.925 )                  c
 c        85  Green band of IKONOS     ( 0.350-1.035 )                  c
 c        86  Red      "               ( 0.350-1.035 )                  c
 c        87  NIR      "               ( 0.350-1.035 )                  c
-c        88  Blue band of RapidEye  ( 0.438-0.513 )                  c
-c        89  Green      "               ( 0.463-0.594 )                  c
+c        88  Blue band of RapidEye    ( 0.438-0.513 )                  c
+c        89  Green    "               ( 0.463-0.594 )                  c
 c        90  Red      "               ( 0.624-0.690 )                  c
-c        91  RedEdge      "               ( 0.500-0.737 )                  c
+c        91  RedEdge  "               ( 0.500-0.737 )                  c
 c        92  NIR      "               ( 0.520-0.862 )                  c
+c        93  B0 band of VGT1 (SPOT4)  ( 0.400-0.500 )                  c
+c        94  B2       "               ( 0.580-0.782 )                  c
+c        95  B3       "               ( 0.700-1.030 )                  c
+c        96  MIR      "               ( 1.450-1.800 )                  c
+c        97  B0 band of VGT2 (SPOT5)  ( 0.400-0.550 )                  c
+c        98  B2       "               ( 0.580-0.780 )                  c
+c        99  B3       "               ( 0.700-1.000 )                  c
+c        100 MIR      "               ( 1.450-1.800 )                  c
 c  note: wl has to be in micrometer                                    c
 c**********************************************************************/
 
@@ -153,6 +161,8 @@ private:
 	void avnir(int iwa);
 	void ikonos(int iwa);
 	void rapideye(int iwa);
+	void vgt1_spot4(int iwa);
+	void vgt2_spot5(int iwa);
 
 
 public:
