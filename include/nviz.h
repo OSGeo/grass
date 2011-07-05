@@ -80,6 +80,13 @@ struct fringe_data
     int           where[4];
 };
 
+struct arrow_data
+{
+    unsigned long color;
+    float	  size;
+    float	  where[3];
+};
+
 typedef struct
 {
     /* ranges */
@@ -97,6 +104,10 @@ typedef struct
     /* fringe */
     int num_fringes;
     struct fringe_data **fringe;
+
+    /* north arrow */
+    int draw_arrow;
+    struct arrow_data *arrow;
     
     /* background color */
     int bgcolor;
@@ -186,6 +197,9 @@ struct fringe_data *Nviz_new_fringe(nv_data *, int, unsigned long,
 struct fringe_data *Nviz_set_fringe(nv_data *, int, unsigned long,
 				    double, int, int, int, int);
 void Nviz_draw_fringe(nv_data *data);
+int Nviz_draw_arrow(nv_data *);
+int Nviz_set_arrow(nv_data *, int, int, float, unsigned int);
+void Nviz_delete_arrow(nv_data *);
 
 /* position.c */
 void Nviz_init_view(nv_data *);
@@ -196,6 +210,7 @@ int Nviz_set_focus(nv_data *, float, float, float);
 int Nviz_get_focus(nv_data *, float *, float *, float *);
 float Nviz_get_xyrange(nv_data *);
 int Nviz_get_zrange(nv_data *, float *, float *);
+float Nviz_get_longdim(nv_data *);
 
 /* render.c */
 struct render_window *Nviz_new_render_window();

@@ -104,6 +104,10 @@ class Nviz(object):
                   width, height)
         return Nviz_resize_window(width, height)
     
+    def GetLongDim(self):
+        """!Get longest dimension, used for initial size of north arrow"""
+        return Nviz_get_longdim(self.data)
+    
     def SetViewDefault(self):
         """!Set default view (based on loaded data)
         
@@ -1368,6 +1372,25 @@ class Nviz(object):
         Nviz_set_fringe(self.data,
                         sid, Nviz_color_from_str(scolor),
                         elev, int(nw), int(ne), int(sw), int(se))
+    
+    def DrawArrow(self):
+        """!Draw north arrow
+        """
+        return Nviz_draw_arrow(self.data)
+        
+    def SetArrow(self, sx, sy, size, color):
+        """!Set north arrow from canvas coordinates
+        
+        @param sx,sy canvas coordinates
+        @param size arrow length
+        @param color arrow color
+        """
+        return Nviz_set_arrow(self.data, sx, sy, size, Nviz_color_from_str(color))       
+        
+    def DeleteArrow(self):
+        """!Delete draw north arrow
+        """
+        Nviz_delete_arrow(self.data)
         
     def GetPointOnSurface(self, sx, sy):
         """!Get point on surface

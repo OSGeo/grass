@@ -140,6 +140,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         self.nvizDefault = NvizDefault()
         self.light = copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'light')) # copy
+        self.decoration = self.nvizDefault.SetDecorDefaultProp()
+        self.decoration['arrow']['size'] = round(self._display.GetLongDim() / 8., -2)
         
         self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
         self.Bind(wx.EVT_SIZE,             self.OnSize)
@@ -208,6 +210,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 self.lmgr.nviz.UpdatePage('view')
                 self.lmgr.nviz.UpdatePage('light')
                 self.lmgr.nviz.UpdatePage('cplane')
+                self.lmgr.nviz.UpdatePage('decoration')
                 layer = self.GetSelectedLayer()
                 if layer:
                     if layer.type ==  'raster':
@@ -302,7 +305,19 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 self.cplanes[idx]['position']['x'] = x
                 self.cplanes[idx]['position']['y'] = y
                 self.render['quick'] = True
-            
+                
+        if self.mouse['use'] == 'arrow':
+            pos = event.GetPosition()
+            size = self.GetClientSize()
+            if self._display.SetArrow(pos[0], size[1] - pos[1], 
+                                     self.decoration['arrow']['size'],
+                                     self.decoration['arrow']['color']):
+                self._display.DrawArrow()
+                # update
+                self.decoration['arrow']['show'] = True
+                self.decoration['arrow']['position']['x'] = pos[0]
+                self.decoration['arrow']['position']['y'] = size[1] - pos[1]
+                self.DoPaint()
         event.Skip()    
         
     def OnDragging(self, event):
@@ -345,6 +360,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             idx = self._display.GetCPlaneCurrent() 
             self.lmgr.nviz.UpdateCPlanePage(idx)
             self.lmgr.nviz.FindWindowByName('cplaneHere').SetValue(False)
+            self.mouse['use'] = 'default'
+            self.SetCursor(self.cursors['default'])
+        elif self.mouse["use"] == 'arrow':
+            self.lmgr.nviz.FindWindowByName('placeArrow').SetValue(False)
             self.mouse['use'] = 'default'
             self.SetCursor(self.cursors['default'])
     
