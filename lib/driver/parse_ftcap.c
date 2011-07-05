@@ -1,3 +1,17 @@
+/*!
+  \file lib/driver/parse_ftcap.c
+
+  \brief Display Driver - fontcaps
+
+  (C) 2006-2011 by the GRASS Development Team
+
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+
+  \author Glynn Clements <glynn gclements.plus.com> (original contributor)
+  \author Huidae Cho <grass4u gmail.com>
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -7,11 +21,23 @@
 #include <grass/fontcap.h>
 #include "driverlib.h"
 
+/*!
+  \brief Check if font exists
+*/
 int font_exists(const char *name)
 {
     return access(name, R_OK) >= 0;
 }
 
+/*!
+  \brief Parse fontcap entry
+
+  \param e pointer to GFONT_CAP struct
+  \param str ?
+
+  \return 1 on success
+  \return 0 on failure
+*/
 int parse_fontcap_entry(struct GFONT_CAP *e, const char *str)
 {
     char name[GNAME_MAX], longname[GNAME_MAX], path[GPATH_MAX], encoding[128];
@@ -39,6 +65,11 @@ int parse_fontcap_entry(struct GFONT_CAP *e, const char *str)
     return 1;
 }
 
+/*!
+  \brief Parse fontcaps
+
+  \return pointer to GFONT_CAP structure
+*/
 struct GFONT_CAP *parse_fontcap(void)
 {
     char *capfile, file[GPATH_MAX];
@@ -85,6 +116,11 @@ struct GFONT_CAP *parse_fontcap(void)
     return fonts;
 }
 
+/*!
+  \brief Free allocated GFONT_CAP structure
+
+  \param fpcap pointer to GFONT_CAP to be freed
+*/
 void free_fontcap(struct GFONT_CAP *ftcap)
 {
     int i;
@@ -101,4 +137,3 @@ void free_fontcap(struct GFONT_CAP *ftcap)
 
     G_free(ftcap);
 }
-

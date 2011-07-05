@@ -1,17 +1,17 @@
+/*!
+  \file lib/driver/init.c
 
-/****************************************************************************
- *
- * MODULE:       driver
- * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com> (original contributor)
- *               Huidae Cho <grass4u gmail.com>
- * PURPOSE:      
- * COPYRIGHT:    (C) 2006-2006 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
- *
- *****************************************************************************/
+  \brief Display Driver - initialization
+
+  (C) 2006-2011 by the GRASS Development Team
+
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+
+  \author Glynn Clements <glynn gclements.plus.com> (original contributor)
+  \author Huidae Cho <grass4u gmail.com>
+*/
+
 #include <grass/config.h>
 
 #include <stdio.h>
@@ -39,6 +39,11 @@ double text_sinrot;
 double text_cosrot;
 int matrix_valid;
 
+/*!
+  \brief Initialize display driver
+
+  \param pointer to driver structure
+*/
 void LIB_init(const struct driver *drv)
 {
     const char *p;
@@ -47,7 +52,6 @@ void LIB_init(const struct driver *drv)
     ftcap = parse_fontcap();
 
     /* initialize graphics */
-
     p = getenv("GRASS_WIDTH");
     screen_width = (p && atoi(p)) ? atoi(p) : DEF_WIDTH;
 
