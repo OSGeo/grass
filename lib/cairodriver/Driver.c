@@ -27,6 +27,7 @@ const struct driver *Cairo_Driver(void)
     if (initialized)
 	return &drv;
 
+    drv.name = "cairo";
     drv.Box = Cairo_Box;
     drv.Erase = Cairo_Erase;
     drv.Graph_set = Cairo_Graph_set;
