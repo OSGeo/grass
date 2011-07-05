@@ -55,6 +55,10 @@
 /*                                                                      c */
 /*         13      rapideye          * enter month,day,hh.ddd,long.,lat.c */
 /*                                                                      c */
+/*         14      vgt1_spot4        * enter month,day,hh.ddd,long.,lat.c */
+/*                                                                      c */
+/*         15      vgt2_spot5        * enter month,day,hh.ddd,long.,lat.c */
+/*                                                                      c */
 /*                                                                      c */
 /*     note:       for hrv and tm experiments long. and lat. are the    c */
 /*                 coordinates of the scene center.                     c */

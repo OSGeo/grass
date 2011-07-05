@@ -12,8 +12,14 @@ Adding new band filters (see also Iwave.h):
    - then the ffu.s array is filled with each of the spectral band data
      one after the other.
      Example Lsat TM: (435-250) / 2.5 = 74
- o add iwave values, also in Iwave.h
+ 
+ o add filter function to Iwave.cpp, before IWave::equivwl()
+ o add else-if in IWave::parse() in Iwave.cpp
+ o add print strings in Iwave.cpp
+ 
+ o add iwave values and signature in Iwave.h
  o add to GeomCond.cpp and GeomCond.h
+ o add to i.atcorr.html
 
 
 Preparation of the Iwave.cpp file code:

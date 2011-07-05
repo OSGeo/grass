@@ -367,6 +367,8 @@ void GeomCond::parse()
     case 11: /* avnir            * enter month,day,hh.ddd,long.,lat. */
     case 12: /* ikonos           * enter month,day,hh.ddd,long.,lat. */
     case 13: /* rapideye         * enter month,day,hh.ddd,long.,lat. */
+    case 14: /* vgt1_spot4       * enter month,day,hh.ddd,long.,lat. */
+    case 15: /* vgt2_spot5       * enter month,day,hh.ddd,long.,lat. */
     {
 	cin >> month;
 	cin >> jday;
@@ -412,7 +414,7 @@ void GeomCond::parse()
 /* ---- print geometrical conditions ---- */
 void GeomCond::print()
 {
-    static const string etiq1[14] = {
+    static const string etiq1[16] = {
 	string(" user defined conditions     "),
 	string(" meteosat observation        "),
 	string(" goes east observation       "),
@@ -426,7 +428,9 @@ void GeomCond::print()
 	string(" aster    observation        "),
 	string(" avnir    observation        "),
 	string(" ikonos   observation        "),
-	string(" rapideye observation        ")
+	string(" rapideye observation        "),
+	string(" vgt1_spot4 observation      "),
+	string(" vgt2_spot5 observation      ")
     };
 
     static const string head(" geometrical conditions identity  ");
