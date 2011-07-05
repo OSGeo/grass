@@ -464,14 +464,23 @@ def parser():
 
 # interface to g.tempfile
 
-def tempfile():
-    """!Returns the name of a temporary file, created with g.tempfile."""
-    return read_command("g.tempfile", pid = os.getpid()).strip()
+def tempfile(create = True):
+    """!Returns the name of a temporary file, created with
+    g.tempfile.
+    
+    @param create True to create a file
+    
+    @return path to a tmp file
+    """
+    flags = ''
+    if not create:
+        flags += 'd'
+    
+    return read_command("g.tempfile", flags = flags, pid = os.getpid()).strip()
 
 def tempdir():
     """!Returns the name of a temporary dir, created with g.tempfile."""
-    tmp = read_command("g.tempfile", pid = os.getpid()).strip()
-    try_remove(tmp)
+    tmp = tempfile(create = False)
     os.mkdir(tmp)
     
     return tmp
