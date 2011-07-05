@@ -469,6 +469,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         # on some computers
         if self.render['quick'] is False:
             self._display.DrawFringe()
+            if self.decoration['arrow']['show']:
+                self._display.DrawArrow()
         
         stop = time.clock()
         
