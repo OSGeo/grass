@@ -1176,7 +1176,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         #
         isosurfId = 0
         for isosurf in data['isosurface']:
-            for attrb in ('color', 'mask',
+            for attrb in ('topo', 'color', 'mask',
                           'transp', 'shine'):
                 if attrb not in isosurf or \
                         'update' not in isosurf[attrb]:
@@ -1186,7 +1186,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 
                 if map is None: # unset
                     # only optional attributes
-                    if attrb ==  'mask':
+                    if attrb == 'topo' :
+                         self._display.SetIsosurfaceTopo(id, isosurfId, map, str(value))
+                    elif attrb ==  'mask':
                         # TODO: invert mask
                         # TODO: broken in NVIZ
                         self._display.UnsetIsosurfaceMask(id, isosurfId)
