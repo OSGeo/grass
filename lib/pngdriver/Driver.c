@@ -27,6 +27,7 @@ const struct driver *PNG_Driver(void)
     if (initialized)
 	return &drv;
 
+    drv.name = "png";
     drv.Box = PNG_Box;
     drv.Erase = PNG_Erase;
     drv.Graph_set = PNG_Graph_set;
