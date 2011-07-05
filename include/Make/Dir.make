@@ -21,6 +21,13 @@ installsubdirs:
 	    $(MAKE) -C $$subdir install ; \
 	done
 
+cleansubdirs:
+	@list='$(SUBDIRS)'; \
+	for subdir in $$list; do \
+	    echo $$subdir ; \
+	    $(MAKE) -C $$subdir clean; \
+	done
+
 %-recursive:
 	@list='$(SUBDIRS)'; \
 	for subdir in $$list; do \
