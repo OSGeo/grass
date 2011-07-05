@@ -54,7 +54,6 @@ from debug       import Debug
 from icon        import Icons
 from preferences import globalSettings as UserSettings
 
-from mapdisp_command import Command
 from mapdisp_window  import BufferedWindow
 
 from grass.script import core as grass
@@ -2028,8 +2027,6 @@ class MapApp(wx.App):
         self.mapFrm.Show()
         
         if __name__ == "__main__":
-            #status = Command(self, Map, cmdfile)
-            # status.start()
             self.timer = wx.PyTimer(self.watcher)
             #check each 0.5s
             global mtime
