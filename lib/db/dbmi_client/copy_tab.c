@@ -31,7 +31,7 @@ static int cmp(const void *pa, const void *pb)
 }
 
 /*!
-  \brief Copy table, used by various db_copy_table*
+  \brief Copy table, used by various db_copy_table* (internal use only)
   
   Use either 'where' or 'select' or 'selcol'+'ivals'+'nvals' but
   never more than one.
@@ -160,15 +160,27 @@ int db__copy_table(const char *from_drvname, const char *from_dbname,
 
     for (i = 0; i < count; i++) {
 	const char *tblname = db_get_string(&tblnames[i]);
-
+	int ret;
+	
+	ret = DB_FAILED;
 	if (strcmp(to_tblname, tblname) == 0) {
-	    G_warning(_("Table <%s> already exists in database <%s>"),
-		      to_tblname, to_dbname);
-	    db_close_database_shutdown_driver(to_driver);
-	    if (from_driver != to_driver)
-		db_close_database_shutdown_driver(from_driver);
-
-	    return DB_FAILED;
+	    if (G_get_overwrite()) {
+		G_warning(_("Table <%s> already exists in database and will be overwritten"),
+			  to_tblname);
+		ret = db_drop_table(from_driver, &tblnames[i]);
+	    }
+	    else {
+		G_warning(_("Table <%s> already exists in database <%s>"),
+			  to_tblname, to_dbname);
+	    }
+	    
+	    if (ret != DB_OK) {
+		db_close_database_shutdown_driver(to_driver);
+		if (from_driver != to_driver)
+		    db_close_database_shutdown_driver(from_driver);
+		
+		return DB_FAILED;
+	    }
 	}
     }
 
