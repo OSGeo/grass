@@ -687,7 +687,7 @@ char *G_recreate_command(void)
 	opt = opt->next_opt;
     }
 
-    return (buff);
+    return buff;
 }
 
 /*!

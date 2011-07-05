@@ -1,9 +1,9 @@
 /*!
-  \file gis/env.c
+  \file lib/gis/env.c
 
   \brief GIS library - environment routines
   
-  (C) 2001-2009 by the GRASS Development Team
+  (C) 2001-2009, 2011 by the GRASS Development Team
   
   This program is free software under the GNU General Public License
   (>=v2).  Read the file COPYING that comes with GRASS for details.
@@ -377,10 +377,12 @@ void G_setenv(const char *name, const char *value)
   
   If value is NULL, becomes an G_unsetenv().
   Updates .gisrc
+
   
   \param name variable name
   \param value variable value
-  \param loc location id
+  \param loc location (G_VAR_GISRC, G_VAR_MAPSET)
+
 */
 void G_setenv2(const char *name, const char *value, int loc)
 {
