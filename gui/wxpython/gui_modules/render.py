@@ -25,6 +25,7 @@ import glob
 import math
 import copy
 import tempfile
+import stat
 
 import wx
 from wx.lib.newevent import NewEvent
@@ -855,9 +856,11 @@ class Map(object):
         """!Parse cmd file for standalone application
         """
         try:
+            cmdTimestamp = os.path.getmtime(self.cmdfile)
             fd = open(self.cmdfile, 'r')
             grass.try_remove(self.mapfile)
-            for cmd in fd.readlines():
+            cmdLines = fd.readlines()
+            for cmd in cmdLines:
                 cmdStr = cmd.strip().split(' ')
                 cmd = utils.CmdToTuple(cmdStr)
                 
@@ -867,10 +870,22 @@ class Map(object):
                               (self.cmdfile, e))
             return
         
-        Debug.msg(1, "Map.__parseCmdFile(): cmdfile=%s" % self.cmdfile)
-        Debug.msg(1, "                      nlayers=%d" % len(self.layers))
+        fd.close()
+        
+        # recover original cmdfile
+        try:
+            fd = open(self.cmdfile, 'w')
+            fd.writelines(cmdLines)
+            
+        except IOError, e:
+            grass.warning(_("Unable to recover cmdfile '%s'. Details: %s") % \
+                              (self.cmdfile, e))  
         
         fd.close()
+        os.utime(self.cmdfile, (os.stat(self.cmdfile)[stat.ST_ATIME], cmdTimestamp))
+
+        Debug.msg(1, "Map.__parseCmdFile(): cmdfile=%s" % self.cmdfile)
+        Debug.msg(1, "                      nlayers=%d" % len(self.layers))
         
     def _renderCmdFile(self, force, windres):
         if not force:
