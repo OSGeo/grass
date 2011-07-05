@@ -2,14 +2,14 @@
  * MODULE:       g.pnmcomp
  * AUTHOR(S):    Glynn Clements
  * PURPOSE:      g.pnmcomp isn't meant for end users. It's an internal tool for use by
- *               a Tcl/Tk GUI.
+ *               a wxGUI.
  *               In essence, g.pnmcomp generates a PPM image by overlaying a series of
  *               PPM/PGM pairs (PPM = RGB image, PGM = alpha channel).
- * COPYRIGHT:    (C) 2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2006, 2011 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ *               This program is free software under the GNU General
+ *               Public License (>=v2). Read the file COPYING that
+ *               comes with GRASS for details.
  *
  */
 
@@ -20,18 +20,18 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-static int width, height;
-static char *in_buf;
-static char *mask_buf;
-static char *out_buf;
-static char *out_mask_buf;
+static unsigned int width, height;
+static unsigned char *in_buf;
+static unsigned char *mask_buf;
+static unsigned char *out_buf;
+static unsigned char *out_mask_buf;
 
-static void erase(char *buf, const char *color)
+static void erase(unsigned char *buf, const char *color)
 {
     unsigned char *p = buf;
     int r, g, b;
     unsigned char bg[3];
-    int row, col, i;
+    unsigned int row, col, i;
 
     if (sscanf(color, "%d:%d:%d", &r, &g, &b) != 3)
 	G_fatal_error(_("Invalid color: %s"), color);
@@ -57,9 +57,9 @@ static int read_line(char *buf, int size, FILE * fp)
     }
 }
 
-static void read_header(FILE * fp, char *magic, int *maxval)
+static void read_header(FILE * fp, unsigned char *magic, int *maxval)
 {
-    int ncols, nrows;
+    unsigned int ncols, nrows;
     char buf[80];
 
     read_line(buf, sizeof(buf), fp);
@@ -82,12 +82,12 @@ static void read_header(FILE * fp, char *magic, int *maxval)
 	G_fatal_error(_("Invalid PPM file"));
 }
 
-static void read_pnm(const char *filename, char *buf, int components)
+static void read_pnm(const char *filename, unsigned char *buf, unsigned int components)
 {
     unsigned char magic;
     int maxval;
     unsigned char *p;
-    int row, col, i;
+    unsigned int row, col, i;
     FILE *fp;
 
     fp = fopen(filename, "rb");
@@ -168,7 +168,7 @@ static void overlay(void)
     const unsigned char *q = mask_buf;
     unsigned char *r = out_buf;
     unsigned char *s = out_mask_buf;
-    int row, col, i;
+    unsigned int row, col, i;
 
     for (row = 0; row < height; row++)
 	for (col = 0; col < width; col++) {
@@ -206,7 +206,7 @@ static void overlay_alpha(float alpha)
     const unsigned char *q = mask_buf;
     unsigned char *r = out_buf;
     unsigned char *s = out_mask_buf;
-    int row, col, i;
+    unsigned int row, col, i;
 
     for (row = 0; row < height; row++)
 	for (col = 0; col < width; col++) {
@@ -231,7 +231,7 @@ static void overlay_alpha(float alpha)
 	}
 }
 
-static void write_ppm(const char *filename, const char *buf)
+static void write_ppm(const char *filename, const unsigned char *buf)
 {
     const unsigned char *p = buf;
     FILE *fp;
@@ -248,7 +248,7 @@ static void write_ppm(const char *filename, const char *buf)
     fclose(fp);
 }
 
-static void write_pgm(const char *filename, const char *buf)
+static void write_pgm(const char *filename, const unsigned char *buf)
 {
     const unsigned char *p = buf;
     FILE *fp;
@@ -279,44 +279,31 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("general"));
+    G_add_keyword(_("support"));
     G_add_keyword(_("gui"));
-    module->description = "Overlays multiple PPM image files";
+    
+    module->description = _("Overlays multiple PPM image files,");
 
-    opt.in = G_define_option();
-    opt.in->key = "input";
-    opt.in->type = TYPE_STRING;
-    opt.in->required = YES;
-    opt.in->multiple = YES;
-    opt.in->description = _("Names of input files");
-    opt.in->gisprompt = "old,cell,raster";
+    opt.in = G_define_standard_option(G_OPT_R_INPUTS);
 
-    opt.mask = G_define_option();
+    opt.mask = G_define_standard_option(G_OPT_R_INPUTS);
     opt.mask->key = "mask";
-    opt.mask->type = TYPE_STRING;
-    opt.mask->multiple = YES;
-    opt.mask->description = _("Names of mask files");
-    opt.mask->gisprompt = "old,cell,raster";
-
+    opt.mask->required = NO;
+    opt.mask->description = _("Name of mask files");
+    
     opt.alpha = G_define_option();
     opt.alpha->key = "opacity";
     opt.alpha->type = TYPE_DOUBLE;
     opt.alpha->multiple = YES;
     opt.alpha->description = _("Layer opacities");
 
-    opt.out = G_define_option();
-    opt.out->key = "output";
-    opt.out->type = TYPE_STRING;
-    opt.out->required = YES;
-    opt.out->description = _("Name of output file");
-    opt.out->gisprompt = "new_file,file,output";
+    opt.out = G_define_standard_option(G_OPT_F_OUTPUT);
 
-    opt.outmask = G_define_option();
-    opt.outmask->key = "outmask";
-    opt.outmask->type = TYPE_STRING;
+    opt.outmask = G_define_standard_option(G_OPT_F_OUTPUT);
+    opt.outmask->key = "output_mask";
     opt.outmask->required = NO;
-    opt.outmask->description = _("Name of output mask file");
-    opt.outmask->gisprompt = "new_file,file,output";
-
+    opt.outmask->description = _("Name for output mask file");
+    
     opt.width = G_define_option();
     opt.width->key = "width";
     opt.width->type = TYPE_INTEGER;
@@ -329,11 +316,8 @@ int main(int argc, char *argv[])
     opt.height->required = YES;
     opt.height->description = _("Image height");
 
-    opt.bg = G_define_option();
-    opt.bg->key = "background";
-    opt.bg->type = TYPE_STRING;
-    opt.bg->description = _("Background color");
-
+    opt.bg = G_define_standard_option(G_OPT_C_BG);
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -382,5 +366,5 @@ int main(int argc, char *argv[])
     if (opt.outmask->answer)
 	write_pgm(opt.outmask->answer, out_mask_buf);
 
-    return 0;
+    exit(EXIT_SUCCESS);
 }
