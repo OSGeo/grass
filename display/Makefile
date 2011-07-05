@@ -17,6 +17,7 @@ SUBDIRS = \
 	d.labels \
 	d.legend \
 	d.linegraph \
+	d.mon \
 	d.nviz \
 	d.path \
 	d.profile \
