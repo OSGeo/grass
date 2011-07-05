@@ -372,8 +372,7 @@ class Map(object):
         self._initGisEnv() # g.gisenv
         self.GetWindow()
         # GRASS environment variable (for rendering)
-        env = {"GRASS_TRANSPARENT"     : "TRUE",
-               "GRASS_BACKGROUNDCOLOR" : "FFFFFF",
+        env = {"GRASS_BACKGROUNDCOLOR" : "FFFFFF",
                # "GRASS_PNG_AUTO_WRITE"  : "TRUE",
                "GRASS_COMPRESSION"     : "0",
                "GRASS_TRUECOLOR"       : "TRUE" }
@@ -381,6 +380,7 @@ class Map(object):
             env["GRASS_PNG_READ"] = "TRUE"
         else:
             env["GRASS_PNG_READ"] = "FALSE"
+            env["GRASS_TRANSPARENT"] = "TRUE"
         
         self._writeEnvFile(env)
         for k, v in env.iteritems():
