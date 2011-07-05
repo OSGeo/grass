@@ -176,7 +176,7 @@ static void init_file(void)
 
     G_verbose_message(_("cairo: collecting to file '%s'"),
 		      ca.file_name);
-    G_verbose_message(_("cairo: image size %dx%d"),
+    G_verbose_message(_("cairo: nimage size %dx%d"),
 		      ca.width, ca.height);
     
     if (do_read && do_map)
