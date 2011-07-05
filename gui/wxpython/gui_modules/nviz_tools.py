@@ -40,6 +40,10 @@ except ImportError: # if it's not there locally, try the wxPython lib.
         import wx.lib.agw.foldpanelbar as fpb
     except ImportError:
         import wx.lib.foldpanelbar as fpb # versions <=2.5.5.1
+try:
+    import wx.lib.agw.floatspin as fs
+except ImportError:
+    fs = None
         
 import grass.script as grass
 
@@ -1398,8 +1402,7 @@ class NvizToolWindow(FN.FlatNotebook):
                             ('color', _("Color")),
                             ('mask', _("Mask")),
                             ('transp', _("Transparency")),
-                            ('shine', _("Shininess")),
-                            ('emit', _("Emission"))):
+                            ('shine', _("Shininess"))):
             self.win['volume'][code] = {} 
             # label
             gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
@@ -1448,15 +1451,28 @@ class NvizToolWindow(FN.FlatNotebook):
                     size = (200, -1)
                 else:
                     size = (65, -1)
-                value = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = size,
-                                    initial = 0)
-                if code == 'topo':
-                    value.SetRange(minVal = -1e9, maxVal = 1e9)
-                elif code in ('shine', 'transp', 'emit'):
-                    value.SetRange(minVal = 0, maxVal = 255)
+                if fs:
+                    value = fs.FloatSpin(parent = panel, id = wx.ID_ANY,
+                                         size = size, increment = 0.5, value = 0)
+                    value.SetFormat("%f")
+                    value.SetDigits(1)
                 else:
-                    value.SetRange(minVal = 0, maxVal = 100)
-                value.Bind(wx.EVT_SPINCTRL, self.OnVolumeIsosurfMap)
+                    value = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = size,
+                                        initial = 0)
+                if code == 'topo':
+                    if fs:
+                        value.SetRange(min_val = -1e9, max_val = 1e9)
+                    else:
+                        value.SetRange(minVal = -1e9, maxVal = 1e9)
+                elif code in ('shine', 'transp'):
+                    if fs:
+                        value.SetRange(min_val = 0, max_val = 255)
+                    else:
+                        value.SetRange(minVal = 0, maxVal = 255)
+                if fs:
+                    value.Bind(fs.EVT_FLOATSPIN, self.OnVolumeIsosurfMap)
+                else:
+                    value.Bind(wx.EVT_SPINCTRL, self.OnVolumeIsosurfMap)
                 value.Bind(wx.EVT_TEXT, self.OnVolumeIsosurfMap)
             
             if value:
@@ -2280,9 +2296,10 @@ class NvizToolWindow(FN.FlatNotebook):
             data = self.mapWindow.GetLayerByName(name, mapType = '3d-raster', dataType = 'nviz')
             list = self.FindWindowById(self.win['volume']['isosurfs'])
             id = list.GetSelection()
-            data[nvizType]['isosurface'][id][attrb] = { 'map' : useMap,
-                                                        'value' : str(value),
-                                                        'update' : None }
+            if id != -1:
+                data[nvizType]['isosurface'][id][attrb] = { 'map' : useMap,
+                                                            'value' : str(value),
+                                                            'update' : None }
         
         # update properties
         event = wxUpdateProperties(data = data)
@@ -2941,7 +2958,7 @@ class NvizToolWindow(FN.FlatNotebook):
         # collect properties
         isosurfData = {}
         for attrb in ('topo', 'color', 'mask',
-                      'transp', 'shine', 'emit'):
+                      'transp', 'shine'):
             if attrb == 'topo':
                 isosurfData[attrb] = {}
                 win = self.FindWindowById(self.win['volume'][attrb]['const'])
@@ -3562,7 +3579,7 @@ class NvizToolWindow(FN.FlatNotebook):
         # isosurface attributes
         #
         for attrb in ('topo', 'color', 'mask',
-                     'transp', 'shine', 'emit'):
+                     'transp', 'shine'):
             # check required first
             if attrb == 'topo':
                 self.FindWindowById(self.win['volume'][attrb]['const']).SetValue(0)

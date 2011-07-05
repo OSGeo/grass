@@ -1084,7 +1084,7 @@ class Nviz(object):
         return self.SetIsosurfaceAttr(id, isosurf_id, ATT_SHINE, map, value)
     
     def SetIsosurfaceEmit(self, id, isosurf_id, map, value):
-        """!Set isosurface emission
+        """!Set isosurface emission (currently unused)
         
         @param id volume id
         @param isosurf_id isosurface id (0 - MAX_ISOSURFS)
@@ -1164,7 +1164,7 @@ class Nviz(object):
         return self.UnsetIsosurfaceAttr(id, isosurf_id, ATT_TRANSP)
     
     def UnsetIsosurfaceEmit(self, id, isosurf_id):
-        """!Unset isosurface emission
+        """!Unset isosurface emission (currently unused)
         
         @param id volume id
         @param isosurf_id isosurface id (0 - MAX_ISOSURFS)
