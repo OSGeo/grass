@@ -4,11 +4,11 @@
  * MODULE:       d.vect
  * AUTHOR(S):    CERL, Radim Blazek, others
  * PURPOSE:      Display the vector map in map display
- * COPYRIGHT:    (C) 2004-2009 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2004-2009, 2011 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ *               This program is free software under the GNU General
+ *               Public License (>=v2). Read the file COPYING that
+ *               comes with GRASS for details.
  *
  *****************************************************************************/
 
@@ -377,8 +377,9 @@ int main(int argc, char **argv)
     G_get_set_window(&window);
 
     if (D_open_driver() != 0)
-	G_fatal_error(_("No graphics device selected"));
-
+	G_fatal_error(_("No graphics device selected. "
+			"Use d.mon to select graphics device."));
+    
     /* Read map options */
 
     /* Check min/max region */
@@ -704,6 +705,7 @@ int main(int argc, char **argv)
 	}
     }
 
+    D_save_command(G_recreate_command());
     D_close_driver();
 
     G_done_msg(" ");

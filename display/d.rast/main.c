@@ -9,13 +9,14 @@
  *               Eric G. Miller <egm2 jps.net>, 
  *               Glynn Clements <glynn gclements.plus.com>, 
  *               Jan-Oliver Wagner <jan intevation.de>, 
- *               Radim Blazek <radim.blazek gmail.com>
+ *               Radim Blazek <radim.blazek gmail.com>,
+ *               Martin Landa <landa.martin gmail.com>
  * PURPOSE:      display raster maps in active graphics display
- * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2006, 2011 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ *               This program is free software under the GNU General
+ *               Public License (>=v2). Read the file COPYING that
+ *               comes with GRASS for details.
  *
  *****************************************************************************/
 #include <stdlib.h>
@@ -92,7 +93,8 @@ int main(int argc, char **argv)
     invert = flag_i->answer;
 
     if (D_open_driver() != 0)
-	G_fatal_error(_("No graphics device selected"));
+	G_fatal_error(_("No graphics device selected. "
+			"Use d.mon to select graphics device."));
 
     fp = Rast_map_is_fp(name, "");
     if (vallist->answer) {
@@ -108,9 +110,10 @@ int main(int argc, char **argv)
 	display(name, overlay, bg->answer, DCELL_TYPE, invert);
     else
 	display(name, overlay, bg->answer, CELL_TYPE, invert);
-
+    
+    D_save_command(G_recreate_command());
     D_close_driver();
-
+    
     exit(EXIT_SUCCESS);
 }
 
