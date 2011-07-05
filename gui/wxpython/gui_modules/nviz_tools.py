@@ -1453,7 +1453,7 @@ class NvizToolWindow(FN.FlatNotebook):
                     size = (65, -1)
                 if fs:
                     value = fs.FloatSpin(parent = panel, id = wx.ID_ANY,
-                                         size = size, increment = 0.5, value = 0)
+                                         size = size, increment = 1, value = 0)
                     value.SetFormat("%f")
                     value.SetDigits(1)
                 else:
@@ -2332,7 +2332,8 @@ class NvizToolWindow(FN.FlatNotebook):
             incSel = -1 # decrement selection (no 'unset')
         else:
             incSel = 0
-        
+        if nvizType == 'volume' and attrb == 'topo':
+            return
         if map is True: # map
             if attrb != 'topo': # changing map topography not allowed
                 # not sure why, but here must be disabled both ids, should be fixed!
@@ -2346,10 +2347,11 @@ class NvizToolWindow(FN.FlatNotebook):
                 self.FindWindowById(self.win[nvizType][attrb]['const']).Enable(True)
             self.FindWindowById(self.win[nvizType][attrb]['use']).SetSelection(2 + incSel)
         else: # unset
+            self.FindWindowById(self.win[nvizType][attrb]['use']).SetSelection(0)
             self.FindWindowById(self.win[nvizType][attrb]['map'] + 1).Enable(False)
             if self.win[nvizType][attrb]['const']:
                 self.FindWindowById(self.win[nvizType][attrb]['const']).Enable(False)
-            self.FindWindowById(self.win[nvizType][attrb]['use']).SetSelection(0)
+            
         
     def OnSurfaceMap(self, event):
         """!Set surface attribute"""
@@ -2363,31 +2365,33 @@ class NvizToolWindow(FN.FlatNotebook):
         if not self.mapWindow.init:
             return
         
-        attrb = self.__GetWindowName(self.win[nvizType], winId) 
+        attrb = self.__GetWindowName(self.win[nvizType], winId)
         if not attrb:
             return
         
-        if nvizType == 'volume' and attrb == 'topo':
-            return
-        
-        selection = self.FindWindowById(self.win[nvizType][attrb]['use']).GetSelection()
-        if self.win[nvizType][attrb]['required']:
-            selection += 1
+        if not (nvizType == 'volume' and attrb == 'topo'):
+            selection = self.FindWindowById(self.win[nvizType][attrb]['use']).GetSelection()
+            if self.win[nvizType][attrb]['required']:
+                selection += 1
 
-        if selection == 0: # unset
-            useMap = None
-            value = ''
-        elif selection == 1: # map
-            value = self.FindWindowById(self.win[nvizType][attrb]['map']).GetValue()
-            useMap = True
-        else: # constant
-            if attrb == 'color':
-                value = self.FindWindowById(self.win[nvizType][attrb]['const']).GetColour()
-                # tuple to string
-                value = self._getColorString(value)
-            else:
-                value = self.FindWindowById(self.win[nvizType][attrb]['const']).GetValue()
+            if selection == 0: # unset
+                useMap = None
+                value = ''
+            elif selection == 1: # map
+                value = self.FindWindowById(self.win[nvizType][attrb]['map']).GetValue()
+                useMap = True
+            else: # constant
+                if attrb == 'color':
+                    value = self.FindWindowById(self.win[nvizType][attrb]['const']).GetColour()
+                    # tuple to string
+                    value = self._getColorString(value)
+                else:
+                    value = self.FindWindowById(self.win[nvizType][attrb]['const']).GetValue()
+                    
             useMap = False
+        else:
+            useMap = None
+            value = self.FindWindowById(self.win[nvizType][attrb]['const']).GetValue()
         if not self.pageChanging:
             name = self.FindWindowById(self.win[nvizType]['map']).GetValue()
             if nvizType == 'surface':
@@ -2403,6 +2407,11 @@ class NvizToolWindow(FN.FlatNotebook):
                     data[nvizType]['isosurface'][id][attrb] = { 'map' : useMap,
                                                                 'value' : str(value),
                                                                 'update' : None }
+                    if attrb == 'topo':
+                        list = self.FindWindowById(self.win['volume']['isosurfs'])
+                        sel = list.GetSelection()
+                        list.SetString(sel, "%s %s" % (_("Level"), str(value)))
+                        list.Check(sel)
             
             # update properties
             event = wxUpdateProperties(data = data)
@@ -3362,7 +3371,15 @@ class NvizToolWindow(FN.FlatNotebook):
             self.FindWindowById(self.win['surface']['shine']['map']).SetValue(value)
         else:
             self.FindWindowById(self.win['surface']['shine']['const']).SetValue(value)
-
+        if 'transp' in data['attribute']:  
+            value = data['attribute']['transp']['value']  
+            if data['attribute']['transp']['map']:
+                self.FindWindowById(self.win['surface']['color']['map']).SetValue(value)
+            else:
+                self.FindWindowById(self.win['surface']['transp']['const']).SetValue(value)
+            self.SetMapObjUseMap(nvizType = 'surface', attrb = 'transp', map = data['attribute']['transp']['map'])
+        else:
+            self.SetMapObjUseMap(nvizType = 'surface', attrb = 'transp', map = None)
         #
         # draw
         #
@@ -3581,9 +3598,6 @@ class NvizToolWindow(FN.FlatNotebook):
         for attrb in ('topo', 'color', 'mask',
                      'transp', 'shine'):
             # check required first
-            if attrb == 'topo':
-                self.FindWindowById(self.win['volume'][attrb]['const']).SetValue(0)
-                continue
             if attrb == 'color':
                 if layer and layer.type == '3d-raster':
                     self.FindWindowById(self.win['volume'][attrb]['map']).SetValue(layer.name)
@@ -3595,6 +3609,8 @@ class NvizToolWindow(FN.FlatNotebook):
             
             # skip empty attributes
             if attrb not in data:
+                self.SetMapObjUseMap(nvizType = 'volume',
+                                     attrb = attrb, map = None)
                 continue
             
             value = data[attrb]['value']
@@ -3607,9 +3623,10 @@ class NvizToolWindow(FN.FlatNotebook):
             else:
                 if data[attrb]['map']:
                     win = self.FindWindowById(self.win['volume'][attrb]['map'])
+                    win.SetValue(value)
                 else:
                     win = self.FindWindowById(self.win['volume'][attrb]['const'])
-                win.SetValue(value)
+                    win.SetValue(float(value))
             
             self.SetMapObjUseMap(nvizType = 'volume',
                                  attrb = attrb, map = data[attrb]['map'])

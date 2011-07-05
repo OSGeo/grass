@@ -1021,6 +1021,21 @@ class Nviz(object):
 
         return 1
 
+    def SetIsosurfaceTopo(self, id, isosurf_id, map, value):
+        """!Set isosurface level
+        
+        @param id volume id
+        @param isosurf_id isosurface id (0 - MAX_ISOSURFS)
+        @param map if true use map otherwise constant
+        @param value map name of value
+        
+        @return 1 on success
+        @return -1 volume not found
+        @return -2 isosurface not found
+        @return -3 on failure
+        """
+        return self.SetIsosurfaceAttr(id, isosurf_id, ATT_TOPO, map, value)
+    
     def SetIsosurfaceColor(self, id, isosurf_id, map, value):
         """!Set isosurface color
         
@@ -1051,7 +1066,7 @@ class Nviz(object):
         @return -2 isosurface not found
         @return -3 on failure
         """
-        return self.SetIsosurfaceAttr(id, isosurf_id, ATT_MASK, true, value)
+        return self.SetIsosurfaceAttr(id, isosurf_id, ATT_MASK, True, value)
     
     def SetIsosurfaceTransp(self, id, isosurf_id, map, value):
         """!Set isosurface transparency
