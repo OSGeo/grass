@@ -2034,7 +2034,7 @@ class LocationWizard(wx.Object):
                 
                 grass.create_location(dbase = self.startpage.grassdatabase,
                                       location = self.startpage.location,
-                                      filename = self.wktpage.wktfile,
+                                      wkt = self.wktpage.wktfile,
                                       desc = self.startpage.locTitle)
         
         except grass.ScriptError, e:
