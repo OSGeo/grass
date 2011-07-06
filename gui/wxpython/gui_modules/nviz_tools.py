@@ -2388,7 +2388,7 @@ class NvizToolWindow(FN.FlatNotebook):
                 else:
                     value = self.FindWindowById(self.win[nvizType][attrb]['const']).GetValue()
                     
-            useMap = False
+                useMap = False
         else:
             useMap = None
             value = self.FindWindowById(self.win[nvizType][attrb]['const']).GetValue()
@@ -2410,7 +2410,7 @@ class NvizToolWindow(FN.FlatNotebook):
                     if attrb == 'topo':
                         list = self.FindWindowById(self.win['volume']['isosurfs'])
                         sel = list.GetSelection()
-                        list.SetString(sel, "%s %s" % (_("Level"), str(value)))
+                        list.SetString(sel, "%s %.1f" % (_("Level"), value))
                         list.Check(sel)
             
             # update properties
@@ -2896,6 +2896,9 @@ class NvizToolWindow(FN.FlatNotebook):
         
     def OnVolumeIsosurfMap(self, event):
         """!Set surface attribute"""
+        if self.vetoGSelectEvt:
+            self.vetoGSelectEvt = False
+            return
         self.SetMapObjAttrb(nvizType = 'volume', winId = event.GetId())
         
     def OnVolumeIsosurfCheck(self, event):
@@ -2909,7 +2912,17 @@ class NvizToolWindow(FN.FlatNotebook):
         isosurfId = event.GetSelection()
         
         if list.IsChecked(index):
-            self._display.SetIsosurfaceTransp(id, isosurfId, False, "0")
+            if 'transp' in data['isosurface'][isosurfId] and\
+                data['isosurface'][isosurfId]['transp']['map'] is not None:
+                if data['isosurface'][isosurfId]['transp']['map']:
+                    map = True
+                    value = data['isosurface'][isosurfId]['transp']['value']
+                elif data['isosurface'][isosurfId]['transp']['map'] is not None:
+                    map = False
+                    value = data['isosurface'][isosurfId]['transp']['value']
+                self._display.SetIsosurfaceTransp(id, isosurfId, map, value)
+            else:
+                self._display.SetIsosurfaceTransp(id, isosurfId, False, "0")
         else:
             # disable -> make transparent
             self._display.SetIsosurfaceTransp(id, isosurfId, False, "255")
@@ -2972,6 +2985,7 @@ class NvizToolWindow(FN.FlatNotebook):
                 isosurfData[attrb] = {}
                 win = self.FindWindowById(self.win['volume'][attrb]['const'])
                 isosurfData[attrb]['value'] = win.GetValue()
+                isosurfData[attrb]['map'] = None
             else:
                 uwin = self.FindWindowById(self.win['volume'][attrb]['use'])
                 sel = uwin.GetSelection()
@@ -3003,6 +3017,7 @@ class NvizToolWindow(FN.FlatNotebook):
         
         # update buttons
         self.UpdateIsosurfButtons(list)
+        self.UpdateVolumeIsosurfPage(layer, isosurfData)
         
         if self.mapDisplay.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
@@ -3600,13 +3615,14 @@ class NvizToolWindow(FN.FlatNotebook):
             # check required first
             if attrb == 'color':
                 if layer and layer.type == '3d-raster':
+                    self.vetoGSelectEvt = True
                     self.FindWindowById(self.win['volume'][attrb]['map']).SetValue(layer.name)
                 else:
                     self.FindWindowById(self.win['volume'][attrb]['map']).SetValue('')
                 self.SetMapObjUseMap(nvizType = 'volume',
                                      attrb = attrb, map = True) # -> map
-                continue
-            
+                #continue
+                
             # skip empty attributes
             if attrb not in data:
                 self.SetMapObjUseMap(nvizType = 'volume',
@@ -3622,14 +3638,27 @@ class NvizToolWindow(FN.FlatNotebook):
                     self.FindWindowById(self.win['volume'][attrb]['const']).SetColour(color)
             else:
                 if data[attrb]['map']:
+                    self.vetoGSelectEvt = True
                     win = self.FindWindowById(self.win['volume'][attrb]['map'])
                     win.SetValue(value)
                 else:
-                    win = self.FindWindowById(self.win['volume'][attrb]['const'])
-                    win.SetValue(float(value))
-            
+                    if value:
+                        win = self.FindWindowById(self.win['volume'][attrb]['const'])
+                        win.SetValue(float(value))
+                    
             self.SetMapObjUseMap(nvizType = 'volume',
                                  attrb = attrb, map = data[attrb]['map'])
+            
+            ret = gcmd.RunCommand('r3.info', read = True, flags = 'r', map = layer.name)
+            if ret:
+                range = []
+                for value in ret.strip('\n').split('\n'):
+                    range.append(value.split('=')[1])
+                topo = self.FindWindowById(self.win['volume']['topo']['const'])
+                if fs:
+                    topo.SetRange(min_val = float(range[0]), max_val = float(range[1]))
+                else:
+                    topo.SetRange(minVal = int(range[0]), maxVal = int(range[1]))
             
     def SetPage(self, name):
         """!Get named page"""
