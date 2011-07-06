@@ -14,6 +14,7 @@
  *
  * \author Original author CERL, probably Dave Gerdes or Mike Higgins.
  * \author Update to GRASS 5.7 Radim Blazek and David D. Gray
+ * \author Update to GRASS 7 Markus Metz
  */
 
 #include <stdlib.h>
@@ -216,6 +217,8 @@ int Vect_val_in_list(const struct ilist *list, int val)
  * This structure is used as container for bounding boxes with id. The
  * library routines handle all memory allocation.
  *
+ * \param have_boxes if set to 0, the list will hold only ids and no boxes
+ * 
  * \return pointer to struct boxlist
  * \return NULL on error
  */
