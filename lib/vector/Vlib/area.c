@@ -332,9 +332,10 @@ double Vect_area_perimeter(const struct line_pnts *Points)
 /*!
    \brief Check if point is in area
 
+   \param x,y point coordinates
    \param Map vector map
    \param area area id
-   \param x,y point coordinates
+   \param box area bounding box
 
    \return 1 if point is in area
    \return 0 if not 
