@@ -39,7 +39,7 @@ void add_aarea(struct Map_info *In, int aarea, int *ALines)
 /* Returns 1 if line1 from Map1 overlaps area2 from Map2,
  *         0 otherwise */
 int line_overlap_area(struct Map_info *LMap, int line, struct Map_info *AMap,
-		      int area)
+		      int area, struct bound_box box)
 {
     int i, nisles, isle;
     static struct line_pnts *LPoints = NULL;
@@ -57,7 +57,7 @@ int line_overlap_area(struct Map_info *LMap, int line, struct Map_info *AMap,
 
     /* Try if any of line vertices is within area */
     for (i = 0; i < LPoints->n_points; i++) {
-	if (Vect_point_in_area(AMap, area, LPoints->x[i], LPoints->y[i])) {
+	if (Vect_point_in_area(LPoints->x[i], LPoints->y[i], AMap, area, box)) {
 	    G_debug(4, "  -> line vertex inside area");
 	    return 1;
 	}

@@ -111,7 +111,7 @@ int main(int argc, char *argv[])
     ACats = Vect_new_cats_struct();
     BCats = Vect_new_cats_struct();
     List = Vect_new_boxlist(0);
-    TmpList = Vect_new_boxlist(0);
+    TmpList = Vect_new_boxlist(1);
     BoundList = Vect_new_list();
     LList = Vect_new_list();
 
@@ -247,7 +247,7 @@ int main(int argc, char *argv[])
 #endif
 		    }
 		    else {
-			if (line_overlap_area(&(In[0]), aline, &(In[1]), barea)) {
+			if (line_overlap_area(&(In[0]), aline, &(In[1]), barea, List->box[i])) {
 			    ALines[aline] = 1;
 			    break;
 			}
@@ -318,7 +318,7 @@ int main(int argc, char *argv[])
 #endif
 		    }
 		    else {
-			if (line_overlap_area(&(In[1]), bline, &(In[0]), aarea)) {
+			if (line_overlap_area(&(In[1]), bline, &(In[0]), aarea, abox)) {
 			    add_aarea(&(In[0]), aarea, ALines);
 			    continue;
 			}
@@ -387,15 +387,15 @@ int main(int argc, char *argv[])
 #endif
 			}
 			else {
-			    if (Vect_point_in_area(&(In[0]), aarea,
-						   BPoints->x[0], BPoints->y[0])) {
+			    if (Vect_point_in_area(BPoints->x[0], BPoints->y[0], &(In[0]),
+			                           aarea, abox)) {
 				found = 1;
 				break;
 			    }
 			    
 			    /* Check intersectin of lines from List with area B */
 			    if (line_overlap_area(&(In[0]), aline,
-						  &(In[1]), barea)) {
+						  &(In[1]), barea, List->box[j])) {
 				found = 1;
 				break;
 			    }

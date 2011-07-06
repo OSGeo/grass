@@ -33,6 +33,6 @@ int area_relate_geos(struct Map_info *, const GEOSGeometry *,
 
 /* overlap.c */
 void add_aarea(struct Map_info *, int, int *);
-int line_overlap_area(struct Map_info *, int, struct Map_info *, int);
+int line_overlap_area(struct Map_info *, int, struct Map_info *, int, struct bound_box);
 
 #endif /* PROTO_H */
