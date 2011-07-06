@@ -15,8 +15,6 @@
  *****************************************************************************/
 
 #include <stdio.h>
-#include <string.h>
-#include <errno.h>
 
 #include <proj_api.h>
 
@@ -163,68 +161,6 @@ void print_wkt(int esristyle, int dontprettify)
     return;
 }
 #endif
-
-void create_location(char *location)
-{
-    int ret;
-
-    if (location) {
-	ret = G__make_location(location, &cellhd, projinfo, projunits, NULL);
-	if (ret == 0)
-	    G_message(_("Location <%s> created"), location);
-	else if (ret == -1)
-	    G_fatal_error(_("Unable to create location <%s>: %s"),
-			  location, strerror(errno));
-	else if (ret == -2)
-			 G_fatal_error(_("Unable to create projection files: %s"),
-			  strerror(errno));
-	else
-	    /* Shouldn't happen */
-	    G_fatal_error(_("Unspecified error while creating new location"));
-    }
-    else {
-	/* Create flag given but no location specified; overwrite
-	 * projection files for current location */
-
-	const char *mapset = G_mapset();
-	struct Cell_head old_cellhd;
-
-	if (strcmp(mapset, "PERMANENT") != 0)
-	    G_fatal_error(_("You must select the PERMANENT mapset before updating the "
-			   "current location's projection. (Current mapset is %s)"),
-			  mapset);
-
-	/* Read projection information from current location first */
-	G_get_default_window(&old_cellhd);
-	
-	char path[GPATH_MAX];
-	
-	/* Write out the PROJ_INFO, and PROJ_UNITS if available. */
-	if (projinfo != NULL) {
-	    G_file_name(path, "", "PROJ_INFO", "PERMANENT");
-	    G_write_key_value_file(path, projinfo);
-	}
-	
-	if (projunits != NULL) {
-	    G_file_name(path, "", "PROJ_UNITS", "PERMANENT");
-	    G_write_key_value_file(path, projunits);
-	}
-	
-	if ((old_cellhd.zone != cellhd.zone) ||
-	    (old_cellhd.proj != cellhd.proj)) {
-	    /* Recreate the default, and current window files if projection
-	     * number or zone have changed */
-	    G__put_window(&cellhd, "", "DEFAULT_WIND");
-		G__put_window(&cellhd, "", "WIND");
-		G_message(_("N.B. The default region was updated to the new projection, but if you have "
-			    "multiple mapsets g.region -d should be run in each to update the region from "
-			    "the default."));
-	}
-	G_message(_("Projection information updated!"));
-    }
-
-    return;
-}
 
 static int check_xy(int shell)
 {

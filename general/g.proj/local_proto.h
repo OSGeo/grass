@@ -19,7 +19,10 @@ void print_proj4(int);
 #ifdef HAVE_OGR
 void print_wkt(int, int);
 #endif
-void create_location(char *);
 
 /* datumtrans.c */
 int set_datumtrans(int, int);
+
+/* create.c */
+void create_location(char *);
+void modify_projinfo();
