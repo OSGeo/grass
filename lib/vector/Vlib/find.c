@@ -28,6 +28,7 @@
 typedef struct {
     int i;
     double size;
+    struct bound_box box;
 } BOX_SIZE;
 
 static int sort_by_size(const void *a, const void *b)
@@ -299,6 +300,7 @@ int Vect_find_area(struct Map_info *Map, double x, double y)
     for (i = 0; i < List->n_values; i++) {
 	size_list[i].i = List->id[i];
 	box = List->box[i];
+	size_list[i].box = List->box[i];
 	size_list[i].size = (box.N - box.S) * (box.E - box.W);
     }
     
@@ -314,7 +316,7 @@ int Vect_find_area(struct Map_info *Map, double x, double y)
 
     for (i = 0; i < List->n_values; i++) {
 	area = size_list[i].i;
-	ret = Vect_point_in_area(Map, area, x, y);
+	ret = Vect_point_in_area(x, y, Map, area, size_list[i].box);
 
 	G_debug(3, "    area = %d Vect_point_in_area() = %d", area, ret);
 
