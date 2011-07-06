@@ -955,7 +955,7 @@ def create_location(dbase, location,
     elif wkt:
         ps = pipe_command('g.proj',
                           quiet = True,
-                          wkt = wktfile,
+                          wkt = wkt,
                           location = location,
                           stderr = PIPE)
     else:
