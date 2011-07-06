@@ -322,21 +322,21 @@ int Vect_select_areas_by_polygon(struct Map_info *, struct line_pnts *, int,
 				 struct line_pnts **, struct ilist *);
 
 /* Analysis */
-int Vect_point_in_area(const struct Map_info *, int, double, double);
 int Vect_tin_get_z(struct Map_info *, double, double, double *, double *,
 		   double *);
-int Vect_get_point_in_area(const struct Map_info *, int, double *, double *);
 
 /* int Vect_point_in_islands (struct Map_info *, int, double, double); */
 int Vect_find_poly_centroid(const struct line_pnts *, double *, double *);
-int Vect_get_point_in_poly_isl(const struct line_pnts *, const struct line_pnts **, int,
-			       double *, double *);
 int Vect__intersect_line_with_poly(const struct line_pnts *, double,
 				   struct line_pnts *);
+int Vect_get_point_in_area(const struct Map_info *, int, double *, double *);
 int Vect_get_point_in_poly(const struct line_pnts *, double *, double *);
-int Vect_point_in_poly(double, double, const struct line_pnts *);
+int Vect_get_point_in_poly_isl(const struct line_pnts *, const struct line_pnts **, int,
+			       double *, double *);
+int Vect_point_in_area(double, double, const struct Map_info *, int, struct bound_box);
 int Vect_point_in_area_outer_ring(double, double, const struct Map_info *, int, struct bound_box);
 int Vect_point_in_island(double, double, const struct Map_info *, int, struct bound_box);
+int Vect_point_in_poly(double, double, const struct line_pnts *);
 
 /* Cleaning */
 void Vect_break_lines(struct Map_info *, int, struct Map_info *);
