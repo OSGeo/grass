@@ -581,6 +581,9 @@ def load_gisrc():
 
 def check_lock():
     global lockfile
+    if not os.path.exists(location):
+        fatal(_("Path '%s' doesn't exist") % location)
+    
     # Check for concurrent use
     lockfile = os.path.join(location, ".gislock")
     ret = call([gfile("etc", "lock"),
