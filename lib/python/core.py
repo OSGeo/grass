@@ -935,7 +935,6 @@ def create_location(dbase, location,
     if epsg:
         ps = pipe_command('g.proj',
                           quiet = True,
-                          flags = 'c',
                           epsg = epsg,
                           location = location,
                           stderr = PIPE,
@@ -943,7 +942,6 @@ def create_location(dbase, location,
     elif proj4:
         ps = pipe_command('g.proj',
                           quiet = True,
-                          flags = 'c',
                           proj4 = proj4,
                           location = location,
                           stderr = PIPE,
@@ -951,14 +949,12 @@ def create_location(dbase, location,
     elif filename:
         ps = pipe_command('g.proj',
                           quiet = True,
-                          flags = 'c',
                           georef = filename,
                           location = location,
                           stderr = PIPE)
     elif wkt:
         ps = pipe_command('g.proj',
                           quiet = True,
-                          flags = 'c',
                           wkt = wktfile,
                           location = location,
                           stderr = PIPE)
