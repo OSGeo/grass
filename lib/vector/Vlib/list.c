@@ -340,7 +340,7 @@ int Vect_boxlist_append_boxlist(struct boxlist *alist, const struct boxlist *bli
     else {
 	struct bound_box box;
 
-	box.E = box.N = box.N = box.S = box.T = box.B = 0;
+	box.E = box.W = box.N = box.S = box.T = box.B = 0;
 	for (i = 0; i < blist->n_values; i++)
 	    Vect_boxlist_append(alist, blist->id[i], box);
     }
