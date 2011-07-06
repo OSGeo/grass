@@ -61,12 +61,13 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("general"));
     G_add_keyword(_("projection"));
+    G_add_keyword(_("create location"));
 #ifdef HAVE_OGR
     module->label =
-	_("Converts co-ordinate system descriptions (i.e. projection "
-	  "information) between various formats (including GRASS format).");
+	_("Prints and manipulates GRASS projection information files "
+	  "(in various co-ordinate system descriptions).");
     module->description =
-	_("Can also be used to create GRASS locations.");
+	_("Can also be used to create new GRASS locations.");
 #else
     module->description =
 	_("Prints and manipulates GRASS projection information files.");
@@ -123,8 +124,8 @@ int main(int argc, char *argv[])
     ingeo->type = TYPE_STRING;
     ingeo->key_desc = "file";
     ingeo->required = NO;
-    ingeo->guisection = _("Input");
-    ingeo->description = _("Georeferenced data file to read projection "
+    ingeo->guisection = _("Specification");
+    ingeo->description = _("Name of georeferenced data file to read projection "
 			   "information from");
 
     inwkt = G_define_option();
@@ -132,24 +133,26 @@ int main(int argc, char *argv[])
     inwkt->type = TYPE_STRING;
     inwkt->key_desc = "file";
     inwkt->required = NO;
-    inwkt->guisection = _("Input");
-    inwkt->description = _("ASCII file containing a WKT projection "
-			   "description (- for stdin)");
+    inwkt->guisection = _("Specification");
+    inwkt->label = _("Name of ASCII file containing a WKT projection "
+		     "description");
+    inwkt->description = _("'-' for standard input");
 
     inproj4 = G_define_option();
     inproj4->key = "proj4";
     inproj4->type = TYPE_STRING;
     inproj4->key_desc = "params";
     inproj4->required = NO;
-    inproj4->guisection = _("Input");
-    inproj4->description = _("PROJ.4 projection description (- for stdin)");
+    inproj4->guisection = _("Specification");
+    inproj4->label = _("PROJ.4 projection description");
+    inproj4->description = _("'-' for standard input");
 
     inepsg = G_define_option();
     inepsg->key = "epsg";
     inepsg->type = TYPE_INTEGER;
     inepsg->required = NO;
     inepsg->options = "1-1000000";
-    inepsg->guisection = _("Input");
+    inepsg->guisection = _("Specification");
     inepsg->description = _("EPSG projection code");
 #endif
 
@@ -172,16 +175,16 @@ int main(int argc, char *argv[])
 
     create = G_define_flag();
     create->key = 'c';
-    create->guisection = _("Create/Edit");
+    create->guisection = _("Modify");
     create->description = _("Create new projection files (modifies current "
-			    "location unless 'location' option specified)");
+			    "location)");
 
     location = G_define_option();
     location->key = "location";
     location->type = TYPE_STRING;
     location->key_desc = "name";
     location->required = NO;
-    location->guisection = _("Create/Edit");
+    location->guisection = _("Create");
     location->description = _("Name of new location to create");
 
     if (G_parser(argc, argv))
@@ -264,11 +267,15 @@ int main(int argc, char *argv[])
     else if (printwkt->answer)
 	print_wkt(esristyle->answer, dontprettify->answer);
 #endif
-    else if (create->answer)
+    else if (location->answer)
 	create_location(location->answer);
+    else if (create->answer)
+	modify_projinfo();
     else
-	G_warning(_("No output! Please specify an output option."));
-
+	G_fatal_error(_("No output format specified, define one "
+			"of flags -%c, -%c, -%c, or -%c"),
+		      printinfo->key, shellinfo->key, printproj4->key, printwkt->key);
+    
 
     /* Tidy Up */
 
