@@ -504,7 +504,7 @@ int main(int argc, char *argv[])
     TPoints = Vect_new_line_struct();
     FCats = Vect_new_cats_struct();
     TCats = Vect_new_cats_struct();
-    List = Vect_new_boxlist(0);
+    List = Vect_new_boxlist(1);
 
     /* Allocate space ( may be more than needed (duplicate cats and elements without cats) ) */
     nfrom = Vect_get_num_lines(&From);
@@ -822,7 +822,7 @@ int main(int argc, char *argv[])
 		    Vect_get_area_points(&To, area, TPoints);
 
 		    /* Find the distance to this area */
-		    if (Vect_point_in_area(&To, area, FPoints->x[0], FPoints->y[0])) {	/* in area */
+		    if (Vect_point_in_area(FPoints->x[0], FPoints->y[0], &To, area, List->box[i])) {	/* in area */
 			tmp_dist = 0;
 			tmp_tx = FPoints->x[0];
 			tmp_ty = FPoints->y[0];
