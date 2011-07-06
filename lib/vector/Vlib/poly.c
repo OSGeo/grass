@@ -695,6 +695,7 @@ Vect_point_in_area_outer_ring(double X, double Y, const struct Map_info *Map,
     int n_intersects, inter;
     int i, line;
     static struct line_pnts *Points;
+    struct bound_box lbox;
     const struct Plus_head *Plus;
     struct P_line *Line;
     struct P_area *Area;
@@ -715,16 +716,24 @@ Vect_point_in_area_outer_ring(double X, double Y, const struct Map_info *Map,
 	return 0;
 
     n_intersects = 0;
+
     for (i = 0; i < Area->n_lines; i++) {
 	line = abs(Area->lines[i]);
 	G_debug(3, "  line[%d] = %d", i, line);
 
 	Line = Plus->Line[line];
-	
-	Vect_get_line_box(Map, line, &box);
+
+	/* this is slow, but the fastest of all alternatives */
+	Vect_get_line_box(Map, line, &lbox);
+
+	/* slower as long as the spatial index is in memory: */
+	/*
+	Vect_read_line(Map, Points, NULL, line);
+	Vect_line_box(Points, &lbox);
+	*/
 	
 	/* dont check lines that obviously do not intersect with test ray */
-	if ((box.N < Y) || (box.S > Y) || (box.E < X))
+	if ((lbox.N < Y) || (lbox.S > Y) || (lbox.E < X))
 	    continue;
 
 	Vect_read_line(Map, Points, NULL, line);
@@ -763,6 +772,7 @@ int Vect_point_in_island(double X, double Y, const struct Map_info *Map,
     int n_intersects, inter;
     int i, line;
     static struct line_pnts *Points;
+    struct bound_box lbox;
     const struct Plus_head *Plus;
     struct P_line *Line;
     struct P_isle *Isle;
@@ -786,10 +796,17 @@ int Vect_point_in_island(double X, double Y, const struct Map_info *Map,
 
 	Line = Plus->Line[line];
 
-	Vect_get_line_box(Map, line, &box);
+	/* this is slow, but the fastest of all alternatives */
+	Vect_get_line_box(Map, line, &lbox);
+
+	/* slower as long as the spatial index is in memory: */
+	/*
+	Vect_read_line(Map, Points, NULL, line);
+	Vect_line_box(Points, &lbox);
+	*/
 	
 	/* dont check lines that obviously do not intersect with test ray */
-	if ((box.N < Y) || (box.S > Y) || (box.E < X))
+	if ((lbox.N < Y) || (lbox.S > Y) || (lbox.E < X))
 	    continue;
 
 	Vect_read_line(Map, Points, NULL, line);

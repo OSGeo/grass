@@ -339,20 +339,20 @@ double Vect_area_perimeter(const struct line_pnts *Points)
    \return 1 if point is in area
    \return 0 if not 
  */
-int Vect_point_in_area(const struct Map_info *Map, int area, double x, double y)
+int Vect_point_in_area(double x, double y, const struct Map_info *Map,
+                       int area, struct bound_box box)
 {
     int i, isle;
     const struct Plus_head *Plus;
     struct P_area *Area;
+    struct bound_box ibox;
     int poly;
-    struct bound_box box;
 
     Plus = &(Map->plus);
     Area = Plus->Area[area];
     if (Area == NULL)
 	return 0;
 
-    Vect_get_area_box(Map, area, &box);
     poly = Vect_point_in_area_outer_ring(x, y, Map, area, box);
     if (poly == 0)
 	return 0;		/* includes area boundary (poly == 2), OK? */
@@ -360,8 +360,8 @@ int Vect_point_in_area(const struct Map_info *Map, int area, double x, double y)
     /* check if in islands */
     for (i = 0; i < Area->n_isles; i++) {
 	isle = Area->isles[i];
-	Vect_get_isle_box(Map, isle, &box);
-	poly = Vect_point_in_island(x, y, Map, isle, box);
+	Vect_get_isle_box(Map, isle, &ibox);
+	poly = Vect_point_in_island(x, y, Map, isle, ibox);
 	if (poly >= 1)
 	    return 0;		/* excludes island boundary (poly == 2), OK? */
     }
