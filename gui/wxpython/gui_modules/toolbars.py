@@ -244,7 +244,7 @@ class MapToolbar(AbstractToolbar):
         
         self.combo = wx.ComboBox(parent = self, id = wx.ID_ANY,
                                  choices = choices,
-                                 style = wx.CB_READONLY, size = (90, -1))
+                                 style = wx.CB_READONLY, size = (110, -1))
         self.combo.SetSelection(0)
         
         self.comboid = self.AddControl(self.combo)
@@ -527,9 +527,6 @@ class VDigitToolbar(AbstractToolbar):
                                      ("removeVertex", icons["removeVertex"],
                                       self.OnRemoveVertex,
                                       wx.ITEM_CHECK),
-                                     ("splitLine", icons["splitLine"],
-                                      self.OnSplitLine,
-                                      wx.ITEM_CHECK),
                                      ("editLine", icons["editLine"],
                                       self.OnEditLine,
                                       wx.ITEM_CHECK),
@@ -541,9 +538,6 @@ class VDigitToolbar(AbstractToolbar):
                                       wx.ITEM_CHECK),
                                      ("displayCats", icons["displayCats"],
                                       self.OnDisplayCats,
-                                      wx.ITEM_CHECK),
-                                     ("copyCats", icons["copyCats"],
-                                      self.OnCopyCA,
                                       wx.ITEM_CHECK),
                                      ("displayAttr", icons["displayAttr"],
                                       self.OnDisplayAttr,
@@ -680,13 +674,6 @@ class VDigitToolbar(AbstractToolbar):
                         'id'   : self.removeVertex }
         self.parent.MapWindow.mouse['box'] = 'point'
 
-    def OnSplitLine(self, event):
-        """!Split line"""
-        Debug.msg(2, "Digittoolbar.OnSplitLine():")
-        self.action = { 'desc' : "splitLine",
-                        'id'   : self.splitLine }
-        self.parent.MapWindow.mouse['box'] = 'point'
-
     def OnEditLine(self, event):
         """!Edit line"""
         Debug.msg(2, "Digittoolbar.OnEditLine():")
@@ -720,60 +707,6 @@ class VDigitToolbar(AbstractToolbar):
         Debug.msg(2, "Digittoolbar.OnDisplayAttr():")
         self.action = { 'desc' : "displayAttrs",
                         'id'   : self.displayAttr }
-        self.parent.MapWindow.mouse['box'] = 'point'
-
-    def OnCopyCA(self, event):
-        """!Copy categories/attributes menu"""
-        point = wx.GetMousePosition()
-        toolMenu = wx.Menu()
-        # Add items to the menu
-        cats = wx.MenuItem(parentMenu = toolMenu, id = wx.ID_ANY,
-                           text = _('Copy categories'),
-                           kind = wx.ITEM_CHECK)
-        toolMenu.AppendItem(cats)
-        self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnCopyCats, cats)
-        if self.action['desc'] == "copyCats":
-            cats.Check(True)
-        
-        attrb = wx.MenuItem(parentMenu = toolMenu, id = wx.ID_ANY,
-                            text = _('Duplicate attributes'),
-                            kind = wx.ITEM_CHECK)
-        toolMenu.AppendItem(attrb)
-        self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnCopyAttrb, attrb)
-        if self.action['desc'] == "copyAttrs":
-            attrb.Check(True)
-        
-        # Popup the menu.  If an item is selected then its handler
-        # will be called before PopupMenu returns.
-        self.parent.MapWindow.PopupMenu(toolMenu)
-        toolMenu.Destroy()
-        
-        if self.action['desc'] == "addPoint":
-            self.ToggleTool(self.copyCats, False)
-        
-    def OnCopyCats(self, event):
-        """!Copy categories"""
-        if self.action['desc'] == 'copyCats': # select previous action
-            self.ToggleTool(self.addPoint, True)
-            self.ToggleTool(self.copyCats, False)
-            self.OnAddPoint(event)
-            return
-        
-        Debug.msg(2, "Digittoolbar.OnCopyCats():")
-        self.action = { 'desc' : "copyCats",
-                        'id'   : self.copyCats }
-        self.parent.MapWindow.mouse['box'] = 'point'
-
-    def OnCopyAttrb(self, event):
-        if self.action['desc'] == 'copyAttrs': # select previous action
-            self.ToggleTool(self.addPoint, True)
-            self.ToggleTool(self.copyCats, False)
-            self.OnAddPoint(event)
-            return
-        
-        Debug.msg(2, "Digittoolbar.OnCopyAttrb():")
-        self.action = { 'desc' : "copyAttrs",
-                        'id'   : self.copyCats }
         self.parent.MapWindow.mouse['box'] = 'point'
         
     def OnUndo(self, event):
@@ -811,78 +744,40 @@ class VDigitToolbar(AbstractToolbar):
         """!Menu for additional tools"""
         point = wx.GetMousePosition()
         toolMenu = wx.Menu()
-        # Add items to the menu
-        copy = wx.MenuItem(parentMenu = toolMenu, id = wx.ID_ANY,
-                           text = _('Copy features from (background) vector map'),
-                           kind = wx.ITEM_CHECK)
-        toolMenu.AppendItem(copy)
-        self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnCopy, copy)
-        if self.action['desc'] == "copyLine":
-            copy.Check(True)
         
-        flip = wx.MenuItem(parentMenu = toolMenu, id = wx.ID_ANY,
-                           text = _('Flip selected lines/boundaries'),
-                           kind = wx.ITEM_CHECK)
-        toolMenu.AppendItem(flip)
-        self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnFlip, flip)
-        if self.action['desc'] == "flipLine":
-            flip.Check(True)
-        
-        merge = wx.MenuItem(parentMenu = toolMenu, id = wx.ID_ANY,
-                            text = _('Merge selected lines/boundaries'),
-                            kind = wx.ITEM_CHECK)
-        toolMenu.AppendItem(merge)
-        self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnMerge, merge)
-        if self.action['desc'] == "mergeLine":
-            merge.Check(True)
-        
-        breakL = wx.MenuItem(parentMenu = toolMenu, id = wx.ID_ANY,
-                             text = _('Break selected lines/boundaries at intersection'),
-                             kind = wx.ITEM_CHECK)
-        toolMenu.AppendItem(breakL)
-        self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnBreak, breakL)
-        if self.action['desc'] == "breakLine":
-            breakL.Check(True)
-        
-        snap = wx.MenuItem(parentMenu = toolMenu, id = wx.ID_ANY,
-                           text = _('Snap selected lines/boundaries (only to nodes)'),
-                           kind = wx.ITEM_CHECK)
-        toolMenu.AppendItem(snap)
-        self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnSnap, snap)
-        if self.action['desc'] == "snapLine":
-            snap.Check(True)
-        
-        connect = wx.MenuItem(parentMenu = toolMenu, id = wx.ID_ANY,
-                              text = _('Connect selected lines/boundaries'),
-                              kind = wx.ITEM_CHECK)
-        toolMenu.AppendItem(connect)
-        self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnConnect, connect)
-        if self.action['desc'] == "connectLine":
-            connect.Check(True)
-        
-        query = wx.MenuItem(parentMenu = toolMenu, id = wx.ID_ANY,
-                            text = _('Query features'),
-                            kind = wx.ITEM_CHECK)
-        toolMenu.AppendItem(query)
-        self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnQuery, query)
-        if self.action['desc'] == "queryLine":
-            query.Check(True)
-        
-        zbulk = wx.MenuItem(parentMenu = toolMenu, id = wx.ID_ANY,
-                            text = _('Z bulk-labeling of 3D lines'),
-                            kind = wx.ITEM_CHECK)
-        toolMenu.AppendItem(zbulk)
-        self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnZBulk, zbulk)
-        if self.action['desc'] == "zbulkLine":
-            zbulk.Check(True)
-        
-        typeconv = wx.MenuItem(parentMenu = toolMenu, id = wx.ID_ANY,
-                               text = _('Feature type conversion'),
-                               kind = wx.ITEM_CHECK)
-        toolMenu.AppendItem(typeconv)
-        self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnTypeConversion, typeconv)
-        if self.action['desc'] == "typeConv":
-            typeconv.Check(True)
+        for label, itype, handler, desc in (
+            (_('Break selected lines/boundaries at intersection'),
+             wx.ITEM_CHECK, self.OnBreak, "breakLine"),
+            (_('Connect selected lines/boundaries'),
+             wx.ITEM_CHECK, self.OnConnect, "connectLine"),
+            (_('Copy categories'),
+             wx.ITEM_CHECK, self.OnCopyCats, "copyCats"),
+            (_('Copy features from (background) vector map'),
+             wx.ITEM_CHECK, self.OnCopy, "copyLine"),
+            (_('Duplicate attributes'),
+             wx.ITEM_CHECK, self.OnCopyAttrb, "copyAttrs"),
+            (_('Feature type conversion'),
+             wx.ITEM_CHECK, self.OnTypeConversion, "typeConv"),
+            (_('Flip selected lines/boundaries'),
+             wx.ITEM_CHECK, self.OnFlip, "flipLine"),
+            (_('Merge selected lines/boundaries'),
+             wx.ITEM_CHECK, self.OnMerge, "mergeLine"),
+            (_('Snap selected lines/boundaries (only to nodes)'),
+             wx.ITEM_CHECK, self.OnSnap, "snapLine"),
+            (_('Split line/boundary'),
+             wx.ITEM_CHECK, self.OnSplitLine, "splitLine"),
+            (_('Query features'),
+             wx.ITEM_CHECK, self.OnQuery, "queryLine"),
+            (_('Z bulk-labeling of 3D lines'),
+             wx.ITEM_CHECK, self.OnZBulk, "zbulkLine")):
+            # Add items to the menu
+            item = wx.MenuItem(parentMenu = toolMenu, id = wx.ID_ANY,
+                               text = label,
+                               kind = itype)
+            toolMenu.AppendItem(item)
+            self.parent.MapWindow.Bind(wx.EVT_MENU, handler, item)
+            if self.action['desc'] == desc:
+                item.Check(True)
         
         # Popup the menu.  If an item is selected then its handler
         # will be called before PopupMenu returns.
@@ -904,6 +799,47 @@ class VDigitToolbar(AbstractToolbar):
         self.action = { 'desc' : "copyLine",
                         'id'   : self.additionalTools }
         self.parent.MapWindow.mouse['box'] = 'box'
+
+    def OnSplitLine(self, event):
+        """!Split line"""
+        if self.action['desc'] == 'splitLine': # select previous action
+            self.ToggleTool(self.addPoint, True)
+            self.ToggleTool(self.additionalTools, False)
+            self.OnAddPoint(event)
+            return
+        
+        Debug.msg(2, "Digittoolbar.OnSplitLine():")
+        self.action = { 'desc' : "splitLine",
+                        'id'   : self.additionalTools }
+        self.parent.MapWindow.mouse['box'] = 'point'
+
+
+    def OnCopyCats(self, event):
+        """!Copy categories"""
+        if self.action['desc'] == 'copyCats': # select previous action
+            self.ToggleTool(self.addPoint, True)
+            self.ToggleTool(self.copyCats, False)
+            self.OnAddPoint(event)
+            return
+        
+        Debug.msg(2, "Digittoolbar.OnCopyCats():")
+        self.action = { 'desc' : "copyCats",
+                        'id'   : self.additionalTools }
+        self.parent.MapWindow.mouse['box'] = 'point'
+
+    def OnCopyAttrb(self, event):
+        """!Copy attributes"""
+        if self.action['desc'] == 'copyAttrs': # select previous action
+            self.ToggleTool(self.addPoint, True)
+            self.ToggleTool(self.copyCats, False)
+            self.OnAddPoint(event)
+            return
+        
+        Debug.msg(2, "Digittoolbar.OnCopyAttrb():")
+        self.action = { 'desc' : "copyAttrs",
+                        'id'   : self.additionalTools }
+        self.parent.MapWindow.mouse['box'] = 'point'
+        
 
     def OnFlip(self, event):
         """!Flip selected lines/boundaries"""
@@ -1219,7 +1155,7 @@ class VDigitToolbar(AbstractToolbar):
 
             if not self.comboid:
                 self.combo = wx.ComboBox(self, id = wx.ID_ANY, value = value,
-                                         choices = [_('New vector map'), ] + layerNameList, size = (115, -1),
+                                         choices = [_('New vector map'), ] + layerNameList, size = (80, -1),
                                          style = wx.CB_READONLY)
                 self.comboid = self.InsertControl(0, self.combo)
                 self.parent.Bind(wx.EVT_COMBOBOX, self.OnSelectMap, self.comboid)
