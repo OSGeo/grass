@@ -2037,8 +2037,8 @@ class LocationWizard(wx.Object):
                                       filename = self.wktpage.wktfile,
                                       desc = self.startpage.locTitle)
         
-        except grass.ScriptException, e:
-            return str(e)
+        except grass.ScriptError, e:
+            return e.value
         
         return None
     
