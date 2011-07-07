@@ -1444,6 +1444,7 @@ class NvizToolWindow(FN.FlatNotebook):
                                           colour = (0,0,0),
                                           size = globalvar.DIALOG_COLOR_SIZE)
                 value.Bind(csel.EVT_COLOURSELECT, self.OnVolumeIsosurfMap)
+                value.SetName('color')
             elif code == 'mask':
                 value = None
             else:
@@ -2935,7 +2936,9 @@ class NvizToolWindow(FN.FlatNotebook):
         winUp = self.FindWindowById(self.win['volume']['btnIsosurfMoveUp'])
         winDown = self.FindWindowById(self.win['volume']['btnIsosurfMoveDown'])
         selection = event.GetSelection()
-        if selection == 0:
+        if selection == -1:
+            return
+        elif selection == 0:
             winUp.Enable(False)
             if not winDown.IsEnabled():
                 winDown.Enable()
@@ -3578,7 +3581,6 @@ class NvizToolWindow(FN.FlatNotebook):
         """!Update volume page"""
         if updateName:
             self.FindWindowById(self.win['volume']['map']).SetValue(layer.name)
-        list = self.FindWindowById(self.win['volume']['isosurfs'])
         
         # draw
         for control, idata in data['draw'].iteritems():
@@ -3602,8 +3604,19 @@ class NvizToolWindow(FN.FlatNotebook):
         
         self.SetIsosurfaceMode(data['draw']['shading']['value'])
         self.SetIsosurfaceResolution(data['draw']['resolution']['value'])
-        
-        self.UpdateVolumeIsosurfPage(layer, data['attribute'])
+        isobox = self.FindWindowById(self.win['volume']['isosurfs'])
+        isosurfaces = []
+        for iso in data['isosurface']:
+            level = iso['topo']['value']
+            isosurfaces.append("%s %s" % (_("Level"), level))
+        isobox.Set(isosurfaces)
+        isobox.SetChecked(range(len(isosurfaces)))
+        if data['isosurface']:
+            isobox.SetSelection(0)
+            self.UpdateVolumeIsosurfPage(layer, data['isosurface'][0])
+        else:
+            self.UpdateVolumeIsosurfPage(layer, data['attribute'])
+            
         
     def UpdateVolumeIsosurfPage(self, layer, data):
         """!Update dialog -- isosurface attributes"""
