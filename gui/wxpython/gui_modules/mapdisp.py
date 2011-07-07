@@ -64,6 +64,7 @@ monFile = { 'cmd' : None,
             'env' : None,
             }
 monName = None
+monSize = list(globalvar.MAP_WINDOW_SIZE)
 
 haveCtypes = False
 
@@ -2022,7 +2023,7 @@ class MapApp(wx.App):
             Map = None
         
         self.mapFrm = MapFrame(parent = None, id = wx.ID_ANY, Map = Map,
-                               size = globalvar.MAP_WINDOW_SIZE)
+                               size = monSize)
         # self.SetTopWindow(Map)
         self.mapFrm.Show()
         
@@ -2056,7 +2057,7 @@ class MapApp(wx.App):
         
 if __name__ == "__main__":
     # set command variable
-    if len(sys.argv) != 5:
+    if len(sys.argv) < 5:
         print __doc__
         sys.exit(1)
     
@@ -2065,6 +2066,17 @@ if __name__ == "__main__":
                 'cmd' : sys.argv[3],
                 'env' : sys.argv[4],
                 }
+    if len(sys.argv) >= 6:
+        try:
+            monSize[0] = int(sys.argv[5])
+        except ValueError:
+            pass
+    
+    if len(sys.argv) == 7:
+        try:
+            monSize[1] = int(sys.argv[6])
+        except ValueError:
+            pass
     
     import gettext
     gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
