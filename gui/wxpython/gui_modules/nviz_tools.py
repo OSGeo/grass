@@ -1397,7 +1397,13 @@ class NvizToolWindow(FN.FlatNotebook):
         gridSizer = wx.GridBagSizer(vgap = 3, hgap = 3)
         
         self.win['volume']['attr'] = {}
-        row = 0
+        inout = wx.CheckBox(parent = panel, id = wx.ID_ANY, 
+                            label = _("toggle normal direction"))
+        gridSizer.Add(item = inout, pos = (0,0), span = (1,2), flag = wx.ALIGN_CENTER_VERTICAL)
+        inout.Bind(wx.EVT_CHECKBOX, self.OnInOutMode)
+        self.win['volume']['inout'] = inout.GetId()
+        
+        row = 1
         for code, attrb in (('topo', _("Topography level")),
                             ('color', _("Color")),
                             ('mask', _("Mask")),
@@ -2894,7 +2900,20 @@ class NvizToolWindow(FN.FlatNotebook):
         
         if self.mapDisplay.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
+    
+    def OnInOutMode(self, event):
+        """!Change isosurfaces mode inout"""
+        data = self.GetLayerData('volume')['volume']
+        id = data['object']['id']
+        isosurfId = self.FindWindowById(self.win['volume']['isosurfs']).GetSelection()
         
+        ret = self._display.SetIsosurfaceInOut(id, isosurfId, event.GetInt())
+        if ret == 1:
+            data['isosurface'][isosurfId]['inout'] = event.GetInt()
+            
+        if self.mapDisplay.statusbarWin['render'].IsChecked():
+            self.mapWindow.Refresh(False)
+            
     def OnVolumeIsosurfMap(self, event):
         """!Set surface attribute"""
         if self.vetoGSelectEvt:
@@ -3661,18 +3680,21 @@ class NvizToolWindow(FN.FlatNotebook):
                     
             self.SetMapObjUseMap(nvizType = 'volume',
                                  attrb = attrb, map = data[attrb]['map'])
-            
-            ret = gcmd.RunCommand('r3.info', read = True, flags = 'r', map = layer.name)
-            if ret:
-                range = []
-                for value in ret.strip('\n').split('\n'):
-                    range.append(value.split('=')[1])
-                topo = self.FindWindowById(self.win['volume']['topo']['const'])
-                if fs:
-                    topo.SetRange(min_val = float(range[0]), max_val = float(range[1]))
-                else:
-                    topo.SetRange(minVal = int(range[0]), maxVal = int(range[1]))
-            
+        # set topo range
+        ret = gcmd.RunCommand('r3.info', read = True, flags = 'r', map = layer.name)
+        if ret:
+            range = []
+            for value in ret.strip('\n').split('\n'):
+                range.append(value.split('=')[1])
+            topo = self.FindWindowById(self.win['volume']['topo']['const'])
+            if fs:
+                topo.SetRange(min_val = float(range[0]), max_val = float(range[1]))
+            else:
+                topo.SetRange(minVal = int(range[0]), maxVal = int(range[1]))
+        # set inout
+        if 'inout' in data:
+            self.FindWindowById(self.win['volume']['inout']).SetValue(data['inout'])
+                
     def SetPage(self, name):
         """!Get named page"""
         if name == 'view':

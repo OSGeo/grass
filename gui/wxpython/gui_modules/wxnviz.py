@@ -1257,6 +1257,29 @@ class Nviz(object):
         
         return 1
     
+    def SetIsosurfaceInOut(self, id, isosurf_id, inout):
+        """!Set inout mode
+        
+        @param inout mode true/false
+        
+        @return 1 on success
+        @return -1 volume set not found
+        @return -2 isosurface not found
+        @return -3 on failure
+        """
+        if not GVL_vol_exists(id):
+            return -1
+        
+        if isosurf_id > GVL_isosurf_num_isosurfs(id) - 1:
+            return -2
+        
+        ret = GVL_isosurf_set_flags(id, isosurf_id, inout)
+        
+        if ret < 0:
+            return -3
+        
+        return 1
+    
     def GetCPlaneCurrent(self):
         return Nviz_get_current_cplane(self.data)
     
