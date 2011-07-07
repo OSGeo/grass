@@ -23,6 +23,7 @@
 #endif
 
 #include <grass/gis.h>
+#include <grass/colors.h>
 #include <grass/glocale.h>
 #include "pngdriver.h"
 
@@ -55,7 +56,7 @@ static void map_file(void)
 
     if (png.grid)
 	G_free(png.grid);
-    png.grid = (int *)((char *)ptr + HEADER_SIZE);
+    png.grid = (unsigned int *)((char *) ptr + HEADER_SIZE);
 
     close(fd);
 
@@ -113,8 +114,11 @@ int PNG_Graph_set(void)
     png_init_color_table();
 
     p = getenv("GRASS_BACKGROUNDCOLOR");
-    if (p && *p && sscanf(p, "%02x%02x%02x", &red, &grn, &blu) == 3)
+    if (p && *p && 
+	(sscanf(p, "%02x%02x%02x", &red, &grn, &blu) == 3 ||
+	 G_str_to_color(p, (int *)&red, (int *)&grn, (int *)&blu) == 1)) {
 	png.background = png_get_color(red, grn, blu, png.has_alpha ? 255 : 0);
+    }
     else {
 	/* 0xffffff = white, 0x000000 = black */
 	if (strcmp(DEFAULT_FG_COLOR, "white") == 0)
@@ -124,7 +128,7 @@ int PNG_Graph_set(void)
 	    /* foreground: black, background: white */
 	    png.background = png_get_color(255, 255, 255, png.has_alpha ? 255 : 0);
     }
-
+    
     G_verbose_message(_("png: collecting to file '%s'"), png.file_name);
     G_verbose_message(_("png: image size %dx%d"),
 		      png.width, png.height);
