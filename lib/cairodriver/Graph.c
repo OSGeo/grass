@@ -30,6 +30,7 @@
 #include <sys/mman.h>
 #endif
 
+#include <grass/colors.h>
 #include <grass/glocale.h>
 
 struct cairo_state ca;
@@ -233,7 +234,8 @@ int Cairo_Graph_set(void)
     if (p && *p) {
 	unsigned int red, green, blue;
 
-	if (sscanf(p, "%02x%02x%02x", &red, &green, &blue) == 3) {
+	if (sscanf(p, "%02x%02x%02x", &red, &green, &blue) == 3 ||
+	    G_str_to_color(p, (int *)&red, (int *)&green, (int *)&blue) == 1) {
 	    ca.bgcolor_r = CAIROCOLOR(red);
 	    ca.bgcolor_g = CAIROCOLOR(green);
 	    ca.bgcolor_b = CAIROCOLOR(blue);
