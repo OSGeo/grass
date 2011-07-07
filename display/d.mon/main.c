@@ -3,8 +3,8 @@
  *
  * MODULE:       d.mon
  * AUTHOR(S):    Martin Landa <landa.martin gmail.com>
- * PURPOSE:      Controls map displays
- * COPYRIGHT:    (C) 2011 by the GRASS Development Team
+ * PURPOSE:      Controls graphics monitors for CLI
+ * COPYRIGHT:    (C) 2011 by Martin Landa, and the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -25,7 +25,8 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *start_opt, *select_opt, *stop_opt, *output_opt,
       *width_opt, *height_opt, *bgcolor_opt;
-    struct Flag *list_flag, *selected_flag, *select_flag, *release_flag;
+    struct Flag *list_flag, *selected_flag, *select_flag, *release_flag, 
+	*cmd_flag;
     
     int nopts, ret;
     const char *mon;
@@ -93,6 +94,11 @@ int main(int argc, char *argv[])
     selected_flag->description = _("Print name of currently selected monitor and exit");
     selected_flag->guisection = _("Print");
 
+    cmd_flag = G_define_flag();
+    cmd_flag->key = 'c';
+    cmd_flag->description = _("Print commands for currently selected monitor and exit");
+    cmd_flag->guisection = _("Print");
+
     select_flag = G_define_flag();
     select_flag->key = 's';
     select_flag->description = _("Do not automatically select when starting");
@@ -106,21 +112,25 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
     
-    if (selected_flag->answer || release_flag->answer) {
+    if (selected_flag->answer || release_flag->answer || cmd_flag->answer) {
 	if (list_flag->answer)
 	    G_warning(_("Flag -%c ignored"), list_flag->key);
 	mon = G__getenv("MONITOR");
-	if (selected_flag->answer) {
-	    if (mon) {
+	if (mon) {
+	    if (selected_flag->answer) {
 		G_message(_("Currently selected monitor:"));
 		fprintf(stdout, "%s\n", mon);
 	    }
+	    else if (cmd_flag->answer) {
+		G_message(_("List of commands for monitor <%s>:"), mon);
+		list_cmd(mon, stdout);
+	    }
+	    else if (mon) { /* release */
+		G_unsetenv("MONITOR");
+		G_verbose_message(_("Monitor <%s> released"), mon); 
+	    }
 	}
-	else if (mon) {
-	    G_unsetenv("MONITOR");
-	    G_verbose_message(_("Monitor <%s> released"), mon); 
-	}
-	if (!mon)
+	else
 	    G_important_message(_("No monitor selected"));
 	
 	exit(EXIT_SUCCESS);
