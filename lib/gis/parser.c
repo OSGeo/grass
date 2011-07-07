@@ -218,20 +218,7 @@ struct Option *G_define_option(void)
 
     opt->required = NO;
     opt->multiple = NO;
-    opt->answer = NULL;
-    opt->answers = NULL;
-    opt->def = NULL;
-    opt->checker = NULL;
-    opt->options = NULL;
-    opt->key_desc = NULL;
-    opt->gisprompt = NULL;
-    opt->label = NULL;
-    opt->opts = NULL;
-    opt->description = NULL;
-    opt->descriptions = NULL;
-    opt->guisection = NULL;
-    opt->guidependency = NULL;
-
+    
     st->current_option = opt;
     st->n_opts++;
 
@@ -245,7 +232,6 @@ struct Option *G_define_option(void)
     G_zero(item, sizeof(struct Item));
 
     item->option = opt;
-    item->flag = NULL;
 
     st->current_item = item;
     st->n_items++;
