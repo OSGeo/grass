@@ -233,6 +233,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         if not root:
             return
         found = self.FindItem(root, value)
+        
         if found:
             self.value.append(found)
             self.seltree.SelectItem(found)
