@@ -37,7 +37,7 @@ int dig_write_cidx_head(struct gvfile * fp, struct Plus_head *plus)
     buf[2] = GV_CIDX_EARLIEST_MAJOR;
     buf[3] = GV_CIDX_EARLIEST_MINOR;
     buf[4] = plus->cidx_port.byte_order;
-    if (0 >= dig__fwrite_port_C(buf, 5, fp))
+    if (0 >= dig__fwrite_port_C((const char *)buf, 5, fp))
 	return (-1);
 
     /* get required offset size */
@@ -125,7 +125,7 @@ int dig_read_cidx_head(struct gvfile * fp, struct Plus_head *plus)
     dig_rewind(fp);
 
     /* bytes 1 - 5 */
-    if (0 >= dig__fread_port_C(buf, 5, fp))
+    if (0 >= dig__fread_port_C((char *)buf, 5, fp))
 	return (-1);
     plus->cidx_Version_Major = buf[0];
     plus->cidx_Version_Minor = buf[1];

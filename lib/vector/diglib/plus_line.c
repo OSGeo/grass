@@ -208,7 +208,7 @@ dig_restore_line(struct Plus_head *plus, int lineid,
 int dig_del_line(struct Plus_head *plus, int line, double x, double y, double z)
 {
     int i, mv;
-    plus_t N1, N2;
+    plus_t N1 = 0, N2 = 0;
     struct P_line *Line;
     struct P_node *Node;
 

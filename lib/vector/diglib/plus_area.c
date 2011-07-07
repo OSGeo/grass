@@ -583,7 +583,7 @@ int dig_node_angle_check(struct Plus_head *plus, plus_t line, int type)
 {
     int next, prev;
     float angle1, angle2;
-    plus_t node;
+    plus_t node = 0;
     struct P_line *Line;
 
     G_debug(3, "dig_node_angle_check: line = %d, type = %d", line, type);

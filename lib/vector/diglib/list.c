@@ -76,7 +76,7 @@ int dig_boxlist_add(struct boxlist *list, int id, struct bound_box box)
 
 	    if (p == NULL)
 		return 0;
-	    list->box = (int *)p;
+	    list->box = (struct bound_box *)p;
 	}
 
 	list->alloc_values = list->n_values + 1000;
