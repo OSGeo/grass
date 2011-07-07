@@ -66,3 +66,26 @@ int check_mon(const char *name)
     
     return TRUE;
 }
+
+/* list related commands for given monitor */
+void list_cmd(const char *name, FILE *fd_out)
+{
+    char buf[1024];
+    char *cmd_name;
+    const char *cmd_value;
+    FILE *fd;
+
+    cmd_name = NULL;
+    G_asprintf(&cmd_name, "MONITOR_%s_CMDFILE", name);
+    cmd_value = G__getenv(cmd_name);
+    if (!cmd_value)
+	G_fatal_error(_("Command file not found"));
+    
+    fd = fopen(cmd_value, "r");
+    if (!fd)
+	G_fatal_error(_("Unable to read command file"));
+
+    while (G_getl2(buf, sizeof(buf) - 1, fd) != 0) {
+	fprintf(fd_out, "%s\n", buf);
+    }
+}
