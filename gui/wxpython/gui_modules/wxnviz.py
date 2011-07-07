@@ -949,7 +949,7 @@ class Nviz(object):
         
         return 1
         
-    def AddIsosurface(self, id, level):
+    def AddIsosurface(self, id, level, isosurf_id = None):
         """!Add new isosurface
         
         @param id volume id
@@ -961,6 +961,11 @@ class Nviz(object):
         if not GVL_vol_exists(id):
             return -1
         
+        if isosurf_id is not None:
+            num = GVL_isosurf_num_isosurfs(id)
+            if num < 0 or isosurf_id != num:
+                return -1
+                
         if GVL_isosurf_add(id) < 0:
             return -1
         
@@ -1277,6 +1282,45 @@ class Nviz(object):
         
         if ret < 0:
             return -3
+        
+        return 1
+    
+    def GetVolumePosition(self, id):
+        """!Get volume position
+        
+        @param id volume id
+        
+        @return x,y,z
+        @return zero-length vector on error
+        """
+        if not GVL_vol_exists(id):
+            return []
+        
+        x, y, z = c_float(), c_float(), c_float()
+        GVL_get_trans(id, byref(x), byref(y), byref(z))
+        
+        Debug.msg(3, "Nviz::GetVolumePosition(): id=%d, x=%f, y=%f, z=%f",
+                  id, x.value, y.value, z.value)
+        
+        return [x.value, y.value, z.value]
+    
+    def SetVolumePosition(self, id, x, y, z):
+        """!Set volume position
+        
+        @param id volume id
+        @param x,y,z translation values
+        
+        @return 1 on success
+        @return -1 volume not found
+        @return -2 setting position failed
+        """
+        if not GVL_vol_exists(id):
+            return -1
+        
+        Debug.msg(3, "Nviz::SetVolumePosition(): id=%d, x=%f, y=%f, z=%f",
+                  id, x, y, z)
+        
+        GVL_set_trans(id, x, y, z)
         
         return 1
     

@@ -551,6 +551,7 @@ class NvizToolWindow(FN.FlatNotebook):
         all.Bind(wx.EVT_BUTTON, self.OnSurfaceModeAll)
         gridSizer.Add(item = all, flag = wx.ALL | wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
                       pos = (3, 4))
+        self.win['surface']['all'] = all.GetId()
         
         # resolution coarse
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
@@ -704,7 +705,7 @@ class NvizToolWindow(FN.FlatNotebook):
         # position
         self._createControl(panel, data = self.win['surface'], name = 'position',
                             range = (-10000, 10000),
-                            bind = (self.OnSurfacePosition, self.OnSurfacePositionChanged, self.OnSurfacePosition))
+                            bind = (self.OnSurfacePosition, self.OnSurfacePositionChanged, self.OnSurfacePositionText))
         
         axis = wx.Choice (parent = panel, id = wx.ID_ANY, size = (75, -1),
                           choices = ["X",
@@ -714,6 +715,7 @@ class NvizToolWindow(FN.FlatNotebook):
         reset = wx.Button(panel, id = wx.ID_ANY, label = _("Reset"))
         reset.SetToolTipString(_("Reset to default position"))
         reset.Bind(wx.EVT_BUTTON, self.OnResetSurfacePosition)
+        self.win['surface']['position']['reset'] = reset.GetId()
         
         self.win['surface']['position']['axis'] = axis.GetId()
         axis.SetSelection(0)
@@ -1291,13 +1293,13 @@ class NvizToolWindow(FN.FlatNotebook):
                             label = " %s " % (_("Draw")))
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(vgap = 5, hgap = 5)
-        gridSizer.AddGrowableCol(4)
+##        gridSizer.AddGrowableCol(4)
         
         # mode
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
                                          label = _("Mode:")),
                       pos = (0, 0), flag = wx.ALIGN_CENTER_VERTICAL)
-        mode = wx.Choice (parent = panel, id = wx.ID_ANY, size = (150, -1),
+        mode = wx.Choice (parent = panel, id = wx.ID_ANY, size = (-1, -1),
                           choices = [_("isosurfaces"),
                                      _("slides")])
         mode.SetSelection(0)
@@ -1506,6 +1508,50 @@ class NvizToolWindow(FN.FlatNotebook):
                       flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
                       border = 3)
         
+        #
+        # position
+        #
+        self.win['volume']['position'] = {}
+        box = wx.StaticBox (parent = panel, id = wx.ID_ANY,
+                            label = " %s " % (_("Position")))
+        boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        gridSizer = wx.GridBagSizer(vgap = 3, hgap = 3)
+        gridSizer.AddGrowableCol(3)
+        
+        # position
+        self._createControl(panel, data = self.win['volume'], name = 'position',
+                            range = (-10000, 10000),
+                            bind = (self.OnVolumePosition, self.OnVolumePositionChanged, self.OnVolumePositionText))
+        
+        axis = wx.Choice (parent = panel, id = wx.ID_ANY, size = (75, -1),
+                          choices = ["X",
+                                     "Y",
+                                     "Z"])
+                                    
+        reset = wx.Button(panel, id = wx.ID_ANY, label = _("Reset"))
+        reset.SetToolTipString(_("Reset to default position"))
+        reset.Bind(wx.EVT_BUTTON, self.OnResetVolumePosition)
+        self.win['volume']['position']['reset'] = reset.GetId()
+        
+        self.win['volume']['position']['axis'] = axis.GetId()
+        axis.SetSelection(0)
+        axis.Bind(wx.EVT_CHOICE, self.OnVolumeAxis)
+        
+        pslide = self.FindWindowById(self.win['volume']['position']['slider'])
+        ptext = self.FindWindowById(self.win['volume']['position']['text'])
+        ptext.SetValue('0')
+        
+        gridSizer.Add(item = axis, flag = wx.ALIGN_CENTER_VERTICAL, pos = (0, 0))
+        gridSizer.Add(item = pslide, flag = wx.ALIGN_CENTER_VERTICAL, pos = (0, 1))
+        gridSizer.Add(item = ptext, flag = wx.ALIGN_CENTER_VERTICAL, pos = (0, 2))
+        gridSizer.Add(item = reset, flag = wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_RIGHT, pos = (0, 3))
+        
+        boxSizer.Add(item = gridSizer, proportion = 1,
+                  flag = wx.ALL | wx.EXPAND, border = 3)
+        
+        pageSizer.Add(item = boxSizer, proportion = 1,
+                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
+                      border = 3)
         panel.SetSizer(pageSizer)
         panel.Fit()
         
@@ -2194,6 +2240,8 @@ class NvizToolWindow(FN.FlatNotebook):
         for win in self.win['surface']['position'].itervalues():
             if win == self.win['surface']['position']['axis']:
                 self.FindWindowById(win).SetSelection(0)
+            elif win == self.win['surface']['position']['reset']:
+                continue
             else:
                 self.FindWindowById(win).SetValue(0)
                 
@@ -2566,7 +2614,8 @@ class NvizToolWindow(FN.FlatNotebook):
         self.AdjustSliderRange(slider = slider, value = value)
         
         for win in self.win['surface']['position'].itervalues():
-            if win == self.win['surface']['position']['axis']:
+            if win in (self.win['surface']['position']['axis'],
+                       self.win['surface']['position']['reset']):
                 continue
             else:
                 self.FindWindowById(win).SetValue(value)
@@ -2601,6 +2650,11 @@ class NvizToolWindow(FN.FlatNotebook):
         self.mapWindow.render['quick'] = False
         self.mapWindow.Refresh(False)
 
+    def OnSurfacePositionText(self, event):
+        """!Surface position changed by textctrl"""
+        self.OnSurfacePosition(event)
+        self.OnSurfacePositionChanged(None)
+        
     def UpdateVectorShow(self, vecType, enabled):
         """!Enable/disable lines/points widgets
         
@@ -3140,6 +3194,101 @@ class NvizToolWindow(FN.FlatNotebook):
         
         event.Skip()
     
+    def OnVolumePositionChanged(self, event):
+        """!Volume position changed"""
+        self.mapWindow.render['quick'] = False
+        self.mapWindow.Refresh(False)
+        
+    def OnVolumePosition(self, event):
+        """!Volume position"""
+        winName = self.__GetWindowName(self.win['volume'], event.GetId())
+        if not winName:
+            return
+        axis = self.FindWindowById(self.win['volume']['position']['axis']).GetSelection()
+        
+        value = self.FindWindowById(event.GetId()).GetValue()
+        slider = self.FindWindowById(self.win['volume'][winName]['slider'])
+        self.AdjustSliderRange(slider = slider, value = value)
+        
+        for win in self.win['volume']['position'].itervalues():
+            if win in (self.win['volume']['position']['axis'],
+                       self.win['volume']['position']['reset']):
+                continue
+            else:
+                self.FindWindowById(win).SetValue(value)
+        
+        data = self.GetLayerData('volume')
+        id = data['volume']['object']['id']
+        x, y, z = self._display.GetVolumePosition(id)
+        
+        if axis == 0: # x
+            x = value
+        elif axis == 1: # y
+            y = value
+        else: # z
+            z = value
+        
+        data['volume']['position']['x'] = x
+        data['volume']['position']['y'] = y
+        data['volume']['position']['z'] = z
+        data['volume']['position']['update'] = None
+        # update properties
+        
+        event = wxUpdateProperties(data = data)
+        wx.PostEvent(self.mapWindow, event)
+        
+        self.mapWindow.render['quick'] = True
+        if self.mapDisplay.statusbarWin['render'].IsChecked():
+            self.mapWindow.Refresh(False)
+        
+    def OnVolumeAxis(self, event):
+        """!Volume position, axis changed"""
+        data = self.GetLayerData('volume')
+        id = data['volume']['object']['id']
+        
+        axis = self.FindWindowById(self.win['volume']['position']['axis']).GetSelection()
+        slider = self.FindWindowById(self.win['volume']['position']['slider'])
+        text = self.FindWindowById(self.win['volume']['position']['text'])
+        
+        x, y, z = self._display.GetVolumePosition(id)
+        
+        if axis == 0: # x
+            slider.SetValue(x)
+            text.SetValue(x)
+        elif axis == 1: # y
+            slider.SetValue(y)
+            text.SetValue(y)
+        else: # z
+            slider.SetValue(z)
+            text.SetValue(z)
+            
+    def OnVolumePositionText(self, event):
+        """!Volume position changed by textctrl"""
+        self.OnVolumePosition(event)
+        self.OnVolumePositionChanged(None)
+        
+    def OnResetVolumePosition(self, event):
+        """!Reset position of volume"""
+        for win in self.win['volume']['position'].itervalues():
+            if win == self.win['volume']['position']['axis']:
+                self.FindWindowById(win).SetSelection(0)
+            elif win == self.win['volume']['position']['reset']:
+                continue
+            else:
+                self.FindWindowById(win).SetValue(0)
+                
+        data = self.GetLayerData('volume')
+        data['volume']['position']['x'] = 0
+        data['volume']['position']['y'] = 0
+        data['volume']['position']['z'] = 0
+        data['volume']['position']['update'] = None
+        # update properties
+        event = wxUpdateProperties(data = data)
+        wx.PostEvent(self.mapWindow, event)
+        
+        if self.mapDisplay.statusbarWin['render'].IsChecked():
+            self.mapWindow.Refresh(False)
+                    
     def OnCPlaneSelection(self, event):
         """!Cutting plane selected"""
         plane = self.FindWindowById(self.win['cplane']['planes']).GetStringSelection()
@@ -3307,7 +3456,7 @@ class NvizToolWindow(FN.FlatNotebook):
                     self.UpdateVectorPage(layer, data['vector'])
                 elif pageId == 'volume':
                     layer = self.mapWindow.GetLayerByName(name, mapType = '3d-raster')
-                    self.UpdateVectorPage(layer, data['vector'])
+                    self.UpdateVolumePage(layer, data['volume'])
         elif pageId == 'light':
             zval = self.mapWindow.light['position']['z']
             bval = self.mapWindow.light['bright']
@@ -3635,7 +3784,14 @@ class NvizToolWindow(FN.FlatNotebook):
             self.UpdateVolumeIsosurfPage(layer, data['isosurface'][0])
         else:
             self.UpdateVolumeIsosurfPage(layer, data['attribute'])
-            
+        #
+        # position
+        #
+        if 'x' in data['position']:
+            xval = data['position']['x']
+            self.FindWindowById(self.win['volume']['position']['axis']).SetSelection(0)
+            for control in ('slider','text'):
+                    self.FindWindowById(self.win['volume']['position'][control]).SetValue(xval)    
         
     def UpdateVolumeIsosurfPage(self, layer, data):
         """!Update dialog -- isosurface attributes"""

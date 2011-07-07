@@ -650,11 +650,11 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         @param nvizType nviz data type (surface, points, vector)
         """
         if nvizType != 'constant':
-            type = self.tree.GetPyData(item)[0]['maplayer'].type
+            mapType = self.tree.GetPyData(item)[0]['maplayer'].type
             # reference to original layer properties (can be None)
             data = self.tree.GetPyData(item)[0]['nviz']
         else:
-            type = nvizType
+            mapType = nvizType
             data = self.constants[item]
             
         if not data:
@@ -663,56 +663,60 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 self.tree.GetPyData(item)[0]['nviz'] = {}
                 data = self.tree.GetPyData(item)[0]['nviz']
             
-            if type ==  'raster':
+            if mapType ==  'raster':
                 # reset to default properties
                 data[nvizType] = self.nvizDefault.SetSurfaceDefaultProp()
                         
-            elif type ==  'vector':
+            elif mapType ==  'vector':
                 # reset to default properties (lines/points)
                 data['vector'] = self.nvizDefault.SetVectorDefaultProp()
                 self.SetVectorFromCmd(item, data['vector'])
                 self.SetVectorSurface(data['vector']['points'])
                 self.SetVectorSurface(data['vector']['lines'])
                 
-            elif type ==  '3d-raster':
+            elif mapType ==  '3d-raster':
                 # reset to default properties 
                 data[nvizType] = self.nvizDefault.SetVolumeDefaultProp()
                 
-            elif type == 'constant':
+            elif mapType == 'constant':
                 data['constant'] = self.nvizDefault.SetConstantDefaultProp()
         
         else:
             # complete data (use default values), not sure if this is necessary
-            if type ==  'raster':
+            if mapType ==  'raster':
                 if not data['surface']:
                     data['surface'] = self.nvizDefault.SetSurfaceDefaultProp()
-            if type ==  'vector':
+            if mapType ==  'vector':
                 if not data['vector']['lines']:
                     self.nvizDefault.SetVectorLinesDefaultProp(data['vector']['lines'])
                 if not data['vector']['points']:
-                    self.nvizDefault.SetVectorPointsDefaultProp(data['vector']['points'])
-                    
+                    self.nvizDefault.SetVectorPointsDefaultProp(data['vector']['points'])     
             # set updates
             for sec in data.keys():
                 for sec1 in data[sec].keys():
                     if sec1 == 'position':
                         data[sec][sec1]['update'] = None
                         continue
-                    for sec2 in data[sec][sec1].keys():
-                        if sec2 !=  'all':
-                            data[sec][sec1][sec2]['update'] = None
+                    if type(data[sec][sec1]) == type({}):
+                        for sec2 in data[sec][sec1].keys():
+                            if sec2 !=  'all':
+                                data[sec][sec1][sec2]['update'] = None
+                    elif type(data[sec][sec1]) == type([]):
+                        for i in range(len(data[sec][sec1])):
+                            for sec2 in data[sec][sec1][i].keys():
+                                data[sec][sec1][i][sec2]['update'] = None
             event = wxUpdateProperties(data = data)
             wx.PostEvent(self, event)
         
         # set id
         if id > 0:
-            if type in ('raster', '3d-raster'):
+            if mapType in ('raster', '3d-raster'):
                data[nvizType]['object'] = { 'id' : id,
                                             'init' : False }
-            elif type ==  'vector':
+            elif mapType ==  'vector':
                 data['vector'][nvizType]['object'] = { 'id' : id,
                                                        'init' : False }
-            elif type ==  'constant':
+            elif mapType ==  'constant':
                 data[nvizType]['object'] = { 'id' : id,
                                              'init' : False }
         
@@ -880,12 +884,19 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.layers.remove(item)
         
         # update tools window
-        if hasattr(self.lmgr, "nviz") and \
-                layer.type ==  'raster':
+        if hasattr(self.lmgr, "nviz"):
             toolWin = self.lmgr.nviz
-            win = toolWin.FindWindowById( \
-                toolWin.win['vector']['lines']['surface'])
-            win.SetItems(self.GetLayerNames(layer.type))
+            if layer.type ==  'raster':
+                win = toolWin.FindWindowById(toolWin.win['vector']['lines']['surface'])
+                win.SetItems(self.GetLayerNames(layer.type))
+                win = toolWin.FindWindowById(toolWin.win['surface']['map'])
+                win.SetValue('')
+            if layer.type ==  '3d-raster':
+                win = toolWin.FindWindowById(toolWin.win['volume']['map'])
+                win.SetValue('')
+            if layer.type ==  'vector':
+                win = toolWin.FindWindowById(toolWin.win['vector']['map'])
+                win.SetValue('')
             
     def LoadVector(self, item, points = None):
         """!Load 2D or 3D vector map overlay
@@ -1176,6 +1187,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         #
         isosurfId = 0
         for isosurf in data['isosurface']:
+            self._display.AddIsosurface(id, 0, isosurf_id = isosurfId)
             for attrb in ('topo', 'color', 'mask',
                           'transp', 'shine'):
                 if attrb not in isosurf or \
@@ -1187,7 +1199,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 if map is None: # unset
                     # only optional attributes
                     if attrb == 'topo' :
-                         self._display.SetIsosurfaceTopo(id, isosurfId, map, str(value))
+                        self._display.SetIsosurfaceTopo(id, isosurfId, map, str(value))
                     elif attrb ==  'mask':
                         # TODO: invert mask
                         # TODO: broken in NVIZ
@@ -1210,7 +1222,14 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                         self._display.SetIsosurfaceShine(id, isosurfId, map, str(value))  
                 isosurf[attrb].pop('update')
             isosurfId +=  1
-        
+        # position
+        if 'update' in data['position']:
+            x = data['position']['x']
+            y = data['position']['y']
+            z = data['position']['z']
+            self._display.SetVolumePosition(id, x, y, z)
+            data['position'].pop('update')
+            
     def UpdateVectorProperties(self, id, data, type):
         """!Update vector layer properties
         
