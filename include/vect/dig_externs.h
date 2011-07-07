@@ -203,9 +203,9 @@ int dig_select_lines(struct Plus_head *, const struct bound_box *, struct boxlis
 int dig_select_areas(struct Plus_head *, const struct bound_box *, struct boxlist *);
 int dig_select_isles(struct Plus_head *, const struct bound_box *, struct boxlist *);
 int dig_find_node(struct Plus_head *, double, double, double);
-int dig_find_line_box(const struct Plus_head *, struct boxlist *);
-int dig_find_area_box(const struct Plus_head *, struct boxlist *);
-int dig_find_isle_box(const struct Plus_head *, struct boxlist *);
+int dig_find_line_box(struct Plus_head *, struct boxlist *);
+int dig_find_area_box(struct Plus_head *, struct boxlist *);
+int dig_find_isle_box(struct Plus_head *, struct boxlist *);
 
 /* spindex_rw.c */
 int dig_Rd_spidx_head(struct gvfile  *, struct Plus_head *);
