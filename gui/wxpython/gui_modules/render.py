@@ -363,25 +363,26 @@ class Map(object):
         self.monitor = monitor
         
         if mapfile:
-            self.mapfile = mapfile
-        else:
-            # generated file for g.pnmcomp output for rendering the map
-            self.mapfile = grass.tempfile(create = False) + '.ppm'
+            self.mapfileCmd = mapfile
+            self.maskfileCmd = os.path.splitext(mapfile)[0] + '.pgm'
+        
+        # generated file for g.pnmcomp output for rendering the map
+        self.mapfile = grass.tempfile(create = False) + '.ppm'
         
         # setting some initial env. variables
         self._initGisEnv() # g.gisenv
         self.GetWindow()
         # GRASS environment variable (for rendering)
         env = {"GRASS_BACKGROUNDCOLOR" : "FFFFFF",
-               # "GRASS_PNG_AUTO_WRITE"  : "TRUE",
                "GRASS_COMPRESSION"     : "0",
-               "GRASS_TRUECOLOR"       : "TRUE" }
+               "GRASS_TRUECOLOR"       : "TRUE",
+               "GRASS_TRANSPARENT"     :  "TRUE"
+               }
         if self.cmdfile:
             env["GRASS_PNG_READ"] = "TRUE"
         else:
             env["GRASS_PNG_READ"] = "FALSE"
-            env["GRASS_TRANSPARENT"] = "TRUE"
-        
+
         self._writeEnvFile(env)
         for k, v in env.iteritems():
             os.environ[k] = v
@@ -824,7 +825,10 @@ class Map(object):
         
         return selected
 
-    def _renderLayers(self, force, mapWindow, maps, masks, opacities):
+    def _renderLayers(self, force, mapWindow):
+        maps = list()
+        masks = list()
+        opacities = list()
         # render map layers
         ilayer = 1
         for layer in self.layers + self.overlays:
@@ -852,59 +856,64 @@ class Map(object):
             Debug.msg(3, "Map.Render() type=%s, layer=%s " % (layer.type, layer.name))
             ilayer += 1
         
+        return maps, masks, opacities
+    
     def _parseCmdFile(self):
         """!Parse cmd file for standalone application
         """
+        nlayers = 0
         try:
-            cmdTimestamp = os.path.getmtime(self.cmdfile)
             fd = open(self.cmdfile, 'r')
             grass.try_remove(self.mapfile)
             cmdLines = fd.readlines()
+            gcmd.RunCommand('g.gisenv',
+                            set = 'MONITOR_%s_CMDFILE=' % self.monitor)
             for cmd in cmdLines:
                 cmdStr = cmd.strip().split(' ')
                 cmd = utils.CmdToTuple(cmdStr)
-                
+
                 gcmd.RunCommand(cmd[0], **cmd[1])
+                nlayers += 1
+
+            gcmd.RunCommand('g.gisenv',
+                            set = 'MONITOR_%s_CMDFILE=%s' % (self.monitor, self.cmdfile))
         except IOError, e:
             grass.warning(_("Unable to read cmdfile '%s'. Details: %s") % \
                               (self.cmdfile, e))
             return
         
         fd.close()
-        
-        # recover original cmdfile
-        try:
-            fd = open(self.cmdfile, 'w')
-            fd.writelines(cmdLines)
-            
-        except IOError, e:
-            grass.warning(_("Unable to recover cmdfile '%s'. Details: %s") % \
-                              (self.cmdfile, e))  
-        
-        fd.close()
-        os.utime(self.cmdfile, (os.stat(self.cmdfile)[stat.ST_ATIME], cmdTimestamp))
 
         Debug.msg(1, "Map.__parseCmdFile(): cmdfile=%s" % self.cmdfile)
-        Debug.msg(1, "                      nlayers=%d" % len(self.layers))
-        
+        Debug.msg(1, "                      nlayers=%d" % nlayers)
+
+        return nlayers
+
     def _renderCmdFile(self, force, windres):
         if not force:
-            return self.mapfile
+            return ([self.mapfileCmd],
+                    [self.maskfileCmd],
+                    ['1.0'])
         
         os.environ["GRASS_REGION"] = self.SetRegion(windres)
         currMon = grass.gisenv()['MONITOR']
         if currMon != self.monitor:
             gcmd.RunCommand('g.gisenv',
                             set = 'MONITOR=%s' % self.monitor)
-                
-        self._parseCmdFile()
+        
+        nlayers = self._parseCmdFile()
         
         if currMon != self.monitor:
             gcmd.RunCommand('g.gisenv',
                             set = 'MONITOR=%s' % currMon)
             
-        return self.mapfile
-
+        if nlayers > 0:
+            return ([self.mapfileCmd],
+                    [self.maskfileCmd],
+                    ['1.0'])
+        else:
+            return ([], [], [])
+    
     def Render(self, force = False, mapWindow = None, windres = False):
         """!Creates final image composite
         
@@ -917,13 +926,6 @@ class Map(object):
         
         @return name of file with rendered image or None
         """
-        if self.cmdfile:
-            return self._renderCmdFile(force, windres)
-        
-        maps      = list()
-        masks     = list()
-        opacities = list()
-        
         # use external gisrc if defined
         gisrc_orig = os.getenv("GISRC")
         if self.gisrc:
@@ -934,15 +936,16 @@ class Map(object):
         os.environ["GRASS_WIDTH"]  = str(self.width)
         os.environ["GRASS_HEIGHT"] = str(self.height)
         driver = UserSettings.Get(group = 'display', key = 'driver', subkey = 'type')
-        if driver == 'cairo':
-            os.environ["GRASS_RENDER_IMMEDIATE"] = "cairo"
-        elif driver == 'png':
+        if driver == 'png':
             os.environ["GRASS_RENDER_IMMEDIATE"] = "png"
         else:
-            os.environ["GRASS_RENDER_IMMEDIATE"] = "TRUE"
-        
-        self._renderLayers(force, mapWindow, maps, masks, opacities)
+            os.environ["GRASS_RENDER_IMMEDIATE"] = "cairo"
 
+        if self.cmdfile:
+            maps, masks, opacities = self._renderCmdFile(force, windres)
+        else:
+            maps, masks, opacities = self._renderLayers(force, mapWindow)
+        
         # ugly hack for MSYS
         if sys.platform != 'win32':
             mapstr = ",".join(maps)
