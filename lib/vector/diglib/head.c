@@ -36,7 +36,7 @@ int dig__write_head(struct Map_info *Map)
     buf[3] = Map->head.Back_Minor;
 
     buf[4] = Map->head.port.byte_order;
-    if (0 >= dig__fwrite_port_C(buf, 5, &(Map->dig_fp)))
+    if (0 >= dig__fwrite_port_C((char *)buf, 5, &(Map->dig_fp)))
 	return (0);
 
     /* increase header size for new vectors, already set in V1_open_new_nat() */
@@ -48,7 +48,7 @@ int dig__write_head(struct Map_info *Map)
 
     /* byte 10 : dimension 2D or 3D */
     buf[0] = Map->head.with_z;
-    if (0 >= dig__fwrite_port_C(buf, 1, &(Map->dig_fp)))
+    if (0 >= dig__fwrite_port_C((char *)buf, 1, &(Map->dig_fp)))
 	return (0);
 
     /* bytes 11 - 18 : size of coordinate file */
@@ -87,7 +87,7 @@ int dig__read_head(struct Map_info *Map)
     dig_fseek(&(Map->dig_fp), 0L, 0);
 
     /* bytes 1 - 5 */
-    if (0 >= dig__fread_port_C(buf, 5, &(Map->dig_fp)))
+    if (0 >= dig__fread_port_C((char *)buf, 5, &(Map->dig_fp)))
 	return (0);
     Map->head.Version_Major = buf[0];
     Map->head.Version_Minor = buf[1];
@@ -132,7 +132,7 @@ int dig__read_head(struct Map_info *Map)
     G_debug(2, "  header size %ld", Map->head.head_size);
 
     /* byte 10 : dimension 2D or 3D */
-    if (0 >= dig__fread_port_C(buf, 1, &(Map->dig_fp)))
+    if (0 >= dig__fread_port_C((char *)buf, 1, &(Map->dig_fp)))
 	return (0);
     Map->head.with_z = buf[0];
     G_debug(2, "  with_z %d", Map->head.with_z);

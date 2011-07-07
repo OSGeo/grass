@@ -668,7 +668,7 @@ int dig_select_lines(struct Plus_head *Plus, const struct bound_box *box,
    \return number of lines found
    \return 0 not found
  */
-int dig_find_line_box(const struct Plus_head *Plus, struct boxlist *list)
+int dig_find_line_box(struct Plus_head *Plus, struct boxlist *list)
 {
     struct RTree_Rect rect;
     int ret;
@@ -736,7 +736,7 @@ dig_select_areas(struct Plus_head *Plus, const struct bound_box * box,
    \return number of areas found
    \return 0 not found
  */
-int dig_find_area_box(const struct Plus_head *Plus, struct boxlist *list)
+int dig_find_area_box(struct Plus_head *Plus, struct boxlist *list)
 {
     struct RTree_Rect rect;
     int ret;
@@ -804,7 +804,7 @@ dig_select_isles(struct Plus_head *Plus, const struct bound_box * box,
    \return number of isles found
    \return 0 not found
  */
-int dig_find_isle_box(const struct Plus_head *Plus, struct boxlist *list)
+int dig_find_isle_box(struct Plus_head *Plus, struct boxlist *list)
 {
     struct RTree_Rect rect;
     int ret;

@@ -196,7 +196,7 @@ int dig_Rd_P_line(struct Plus_head *Plus, int n, struct gvfile * fp)
 	    return -1;
     }
     /* boundaries */
-    if (ptr->type & GV_BOUNDARY) {
+    else if (ptr->type & GV_BOUNDARY) {
 	struct P_topo_b *topo = (struct P_topo_b *)ptr->topo;
 
 	if (0 >= dig__fread_port_P(&(topo->N1), 1, fp))
@@ -494,7 +494,7 @@ int dig_Rd_Plus_head(struct gvfile * fp, struct Plus_head *ptr)
     dig_rewind(fp);
 
     /* bytes 1 - 5 */
-    if (0 >= dig__fread_port_C(buf, 5, fp))
+    if (0 >= dig__fread_port_C((char *)buf, 5, fp))
 	return (-1);
     ptr->Version_Major = buf[0];
     ptr->Version_Minor = buf[1];
@@ -555,7 +555,7 @@ int dig_Rd_Plus_head(struct gvfile * fp, struct Plus_head *ptr)
     G_debug(1, "topo off_t size = %d", ptr->off_t_size);
 
     /* byte 10 : dimension 2D or 3D */
-    if (0 >= dig__fread_port_C(buf, 1, fp))
+    if (0 >= dig__fread_port_C((char *)buf, 1, fp))
 	return (-1);
     ptr->with_z = buf[0];
     G_debug(2, "  with_z %d", ptr->with_z);
@@ -645,7 +645,7 @@ int dig_Wr_Plus_head(struct gvfile * fp, struct Plus_head *ptr)
     buf[2] = GV_TOPO_EARLIEST_MAJOR;
     buf[3] = GV_TOPO_EARLIEST_MINOR;
     buf[4] = ptr->port.byte_order;
-    if (0 >= dig__fwrite_port_C(buf, 5, fp))
+    if (0 >= dig__fwrite_port_C((char *)buf, 5, fp))
 	return (-1);
 
     /* determine required offset size from coor file size */
@@ -670,7 +670,7 @@ int dig_Wr_Plus_head(struct gvfile * fp, struct Plus_head *ptr)
 
     /* byte 10 : dimension 2D or 3D */
     buf[0] = ptr->with_z;
-    if (0 >= dig__fwrite_port_C(buf, 1, fp))
+    if (0 >= dig__fwrite_port_C((char *)buf, 1, fp))
 	return (0);
 
     /* bytes 11 - 58 : bound box */
