@@ -1,19 +1,20 @@
 /*!
- * \file gis/parser_help.c
- *
- * \brief GIS Library - Argument parsing functions (help)
- *
- * (C) 2001-2009 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
- *
- * \author Original author CERL
- * \author Soeren Gebbert added Dec. 2009 WPS process_description document
- */
+  \file lib/gis/parser_help.c
+ 
+  \brief GIS Library - Argument parsing functions (help)
+  
+  (C) 2001-2009, 2011 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Original author CERL
+  \author Soeren Gebbert added Dec. 2009 WPS process_description document
+*/
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -25,25 +26,25 @@ static void show_options(FILE *fp, int maxlen, const char *str);
 static int show(FILE *fp, const char *item, int len);
 
 /*!
- * \brief Command line help/usage message.
- *
- * Calls to G_usage() allow the programmer to print the usage
- * message at any time. This will explain the allowed and required
- * command line input to the user. This description is given according
- * to the programmer's definitions for options and flags. This function
- * becomes useful when the user enters options and/or flags on the
- * command line that are syntactically valid to the parser, but
- * functionally invalid for the command (e.g. an invalid file name.)
- *
- * For example, the parser logic doesn't directly support grouping
- * options. If two options be specified together or not at all, the
- * parser must be told that these options are not required and the
- * programmer must check that if one is specified the other must be as
- * well. If this additional check fails, then G_parser() will succeed,
- * but the programmer can then call G_usage() to print the standard
- * usage message and print additional information about how the two
- * options work together.
- */
+  \brief Command line help/usage message.
+  
+  Calls to G_usage() allow the programmer to print the usage
+  message at any time. This will explain the allowed and required
+  command line input to the user. This description is given according
+  to the programmer's definitions for options and flags. This function
+  becomes useful when the user enters options and/or flags on the
+  command line that are syntactically valid to the parser, but
+  functionally invalid for the command (e.g. an invalid file name.)
+  
+  For example, the parser logic doesn't directly support grouping
+  options. If two options be specified together or not at all, the
+  parser must be told that these options are not required and the
+  programmer must check that if one is specified the other must be as
+  well. If this additional check fails, then G_parser() will succeed,
+  but the programmer can then call G_usage() to print the standard
+  usage message and print additional information about how the two
+  options work together.
+*/
 void G_usage(void)
 {
     usage(stderr, 0);
@@ -122,6 +123,10 @@ static void usage(FILE *fp, int markers)
 	    else
 		key_desc = "value";
 
+	    if (!opt->key) {
+		fprintf(stderr, "\n%s\n", _("ERROR: Option key not defined"));
+		exit(EXIT_FAILURE);
+	    }
 	    n = strlen(opt->key);
 	    if (n > maxlen)
 		maxlen = n;
