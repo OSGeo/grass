@@ -3082,7 +3082,7 @@ class VPropertiesDialog(PsmapDialog):
         widthText = wx.StaticText(panel, id = wx.ID_ANY, label = _("Width (pts):"))
         if fs:
             self.widthSpin = fs.FloatSpin(panel, id = wx.ID_ANY, min_val = 0, max_val = 30,
-                                          increment = 0.5, value = 1, extrastyle = fs.FS_RIGHT)
+                                          increment = 0.5, value = 1, style = fs.FS_RIGHT)
             self.widthSpin.SetFormat("%f")
             self.widthSpin.SetDigits(2)
         else:
@@ -3187,7 +3187,7 @@ class VPropertiesDialog(PsmapDialog):
         widthText = wx.StaticText(panel, id = wx.ID_ANY, label = _("Width (pts):"))
         if fs:
             self.outWidthSpin = fs.FloatSpin(panel, id = wx.ID_ANY, min_val = 0, max_val = 30,
-                                             increment = 0.5, value = 1, extrastyle = fs.FS_RIGHT)
+                                             increment = 0.5, value = 1, style = fs.FS_RIGHT)
             self.outWidthSpin.SetFormat("%f")
             self.outWidthSpin.SetDigits(1)
         else:
@@ -3408,7 +3408,7 @@ class VPropertiesDialog(PsmapDialog):
         widthText = wx.StaticText(panel, id = wx.ID_ANY, label = _("Set width (pts):"))
         if fs:
             self.widthSpin = fs.FloatSpin(panel, id = wx.ID_ANY, min_val = 0, max_val = 30,
-                                        increment = 0.5, value = 1, extrastyle = fs.FS_RIGHT)
+                                        increment = 0.5, value = 1, style = fs.FS_RIGHT)
             self.widthSpin.SetFormat("%f")
             self.widthSpin.SetDigits(1)
         else:
