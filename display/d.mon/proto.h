@@ -1,5 +1,5 @@
 /* start */
-int start_mon(const char *, const char *, int);
+int start_mon(const char *, const char *, int, const char *, const char *, const char *);
 
 /* select.c */
 int select_mon(const char *);
