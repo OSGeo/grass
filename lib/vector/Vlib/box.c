@@ -192,7 +192,6 @@ Vect_box_clip(double *x, double *y, double *c_x, double *c_y, const struct bound
 }
 
 
-
 /*!
    \brief Get bounding box of given feature
 
@@ -205,12 +204,12 @@ Vect_box_clip(double *x, double *y, double *c_x, double *c_y, const struct bound
  */
 int Vect_get_line_box(const struct Map_info *Map, int line, struct bound_box * Box)
 {
-    const struct Plus_head *Plus;
+    struct Plus_head *Plus;
     struct P_line *Line;
     static struct line_pnts *Points = NULL;
     static struct boxlist *list = NULL;
 
-    Plus = &(Map->plus);
+    Plus = (struct Plus_head *)&(Map->plus);
     Line = Plus->Line[line];
 
     if (Line == NULL) {		/* dead */
@@ -278,6 +277,7 @@ int Vect_get_line_box(const struct Map_info *Map, int line, struct bound_box * B
     return 1;
 }
 
+
 /*!
    \brief Get bounding box of area
 
@@ -290,7 +290,7 @@ int Vect_get_line_box(const struct Map_info *Map, int line, struct bound_box * B
  */
 int Vect_get_area_box(const struct Map_info *Map, int area, struct bound_box * Box)
 {
-    const struct Plus_head *Plus;
+    struct Plus_head *Plus;
     struct P_area *Area;
     struct P_line *Line;
     struct P_node *Node;
@@ -298,7 +298,7 @@ int Vect_get_area_box(const struct Map_info *Map, int area, struct bound_box * B
     struct bound_box bbox;
     struct P_topo_b *topo;
 
-    Plus = &(Map->plus);
+    Plus = (struct Plus_head *)&(Map->plus);
     Area = Plus->Area[area];
 
     if (Area == NULL) {		/* dead */
@@ -357,7 +357,7 @@ int Vect_get_area_box(const struct Map_info *Map, int area, struct bound_box * B
  */
 int Vect_get_isle_box(const struct Map_info *Map, int isle, struct bound_box * Box)
 {
-    const struct Plus_head *Plus;
+    struct Plus_head *Plus;
     struct P_isle *Isle;
     struct P_line *Line;
     struct P_node *Node;
@@ -365,7 +365,7 @@ int Vect_get_isle_box(const struct Map_info *Map, int isle, struct bound_box * B
     struct bound_box bbox;
     struct P_topo_b *topo;
 
-    Plus = &(Map->plus);
+    Plus = (struct Plus_head *)&(Map->plus);
     Isle = Plus->Isle[isle];
 
     if (Isle == NULL) {		/* dead */
