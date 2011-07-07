@@ -163,8 +163,9 @@ def main():
     os.environ['GRASS_PNG_MAPPED'] = 'FALSE'
     os.environ['GRASS_TRANSPARENT'] = 'FALSE'
     os.environ['GRASS_BACKGROUNDCOLOR'] = 'ffffff'
+    os.environ['GRASS_RENDER_IMMEDIATE'] = 'cairo'
 
-    for var in ['GRASS_RENDER_IMMEDIATE','GRASS_LINE_WIDTH','GRASS_ANTIALIAS']:
+    for var in ['GRASS_LINE_WIDTH', 'GRASS_ANTIALIAS']:
 	if var in os.environ:
 	    del os.environ[var]
 
