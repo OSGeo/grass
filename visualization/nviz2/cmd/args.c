@@ -600,7 +600,61 @@ void args_volume(struct GParams *params)
     params->isosurf_level->multiple = YES;
     params->isosurf_level->description = _("Isosurface level");
     params->isosurf_level->guisection = _("Volumes");
+    
+    /* isosurface color map */
+    params->isosurf_color_map = G_define_standard_option(G_OPT_R3_MAPS);
+    params->isosurf_color_map->key = "isosurf_color_map";
+    params->isosurf_color_map->required = NO;
+    params->isosurf_color_map->multiple = YES;
+    params->isosurf_color_map->description = _("Name of volume for isosurface color");
+    params->isosurf_color_map->guisection = _("Volumes");
 
+    /* isosurface color value */
+    params->isosurf_color_const = G_define_standard_option(G_OPT_C_FG);
+    params->isosurf_color_const->key = "isosurf_color_value";
+    params->isosurf_color_const->required = NO;
+    params->isosurf_color_const->multiple = YES;
+    params->isosurf_color_const->label = _("Isosurface color");
+    params->isosurf_color_const->guisection = _("Volumes");
+    params->isosurf_color_const->answer = NULL;
+
+    /* isosurface transparency */
+    params->isosurf_transp_map = G_define_standard_option(G_OPT_R3_MAP);
+    params->isosurf_transp_map->multiple = YES;
+    params->isosurf_transp_map->required = NO;
+    params->isosurf_transp_map->description =
+	_("Name of 3D raster map(s) for transparency");
+    params->isosurf_transp_map->guisection = _("Volumes");
+    params->isosurf_transp_map->key = "isosurf_transparency_map";
+
+    params->isosurf_transp_const = G_define_option();
+    params->isosurf_transp_const->key = "isosurf_transparency_value";
+    params->isosurf_transp_const->key_desc = "value";
+    params->isosurf_transp_const->type = TYPE_INTEGER;
+    params->isosurf_transp_const->required = NO;
+    params->isosurf_transp_const->multiple = YES;
+    params->isosurf_transp_const->description = _("Transparency value(s)for isosurfaces");
+    params->isosurf_transp_const->guisection = _("Volumes");
+    params->isosurf_transp_const->options = "0-255";
+    
+    /* isosurface shininess */
+    params->isosurf_shine_map = G_define_standard_option(G_OPT_R3_MAP);
+    params->isosurf_shine_map->multiple = YES;
+    params->isosurf_shine_map->required = NO;
+    params->isosurf_shine_map->description = _("Name of 3D raster map(s) for shininess");
+    params->isosurf_shine_map->guisection = _("Volumes");
+    params->isosurf_shine_map->key = "isosurf_shininess_map";
+
+    params->isosurf_shine_const = G_define_option();
+    params->isosurf_shine_const->key = "isosurf_shininess_value";
+    params->isosurf_shine_const->key_desc = "value";
+    params->isosurf_shine_const->type = TYPE_INTEGER;
+    params->isosurf_shine_const->required = NO;
+    params->isosurf_shine_const->multiple = YES;
+    params->isosurf_shine_const->description = _("Shininess value(s) for isosurfaces");
+    params->isosurf_shine_const->guisection = _("Volumes");
+    params->isosurf_shine_const->options = "0-255";
+    
     return;
 }
 
@@ -671,7 +725,6 @@ void args_cplane(struct GParams *params)
     params->cplane_rot->type = TYPE_DOUBLE;
     params->cplane_rot->multiple = YES;
     params->cplane_rot->required = NO;
-    params->cplane_rot->label = _("Cutting plane rotation along the vertical axis");
     params->cplane_rot->guisection = _("Cutting planes");
     params->cplane_rot->description = _("Cutting plane rotation along the vertical axis");
     params->cplane_rot->answer = "0";
@@ -683,7 +736,6 @@ void args_cplane(struct GParams *params)
     params->cplane_tilt->type = TYPE_DOUBLE;
     params->cplane_tilt->multiple = YES;
     params->cplane_tilt->required = NO;
-    params->cplane_tilt->label = _("Cutting plane tilt");
     params->cplane_tilt->guisection = _("Cutting planes");
     params->cplane_tilt->description = _("Cutting plane tilt");
     params->cplane_tilt->answer = "0";
@@ -695,7 +747,6 @@ void args_cplane(struct GParams *params)
     params->cplane_shading->type = TYPE_STRING;
     params->cplane_shading->multiple = NO;
     params->cplane_shading->required = NO;
-    params->cplane_shading->label = _("Cutting plane color (between two surfaces)");
     params->cplane_shading->guisection = _("Cutting planes");
     params->cplane_shading->description = _("Cutting plane color (between two surfaces)");
     params->cplane_shading->answer = "clear";
@@ -767,6 +818,8 @@ void check_parameters(const struct GParams *params)
     int nvlines;
 
     int nvpoints;
+    
+    int nvolumes, nisosurf;
 
     /* topography */
     nelev_map = opt_get_num_answers(params->elev_map);
@@ -911,14 +964,38 @@ void check_parameters(const struct GParams *params)
 		      params->vlines->key, nvlines, params->vline_pos->key,
 		      nconsts);
 
-    return;
-
     /*
      * vector points
      */
     nvpoints = opt_get_num_answers(params->vpoints);
 
     /* TODO */
+    
+    /*
+     * volumes
+     */
+    nvolumes = opt_get_num_answers(params->volume);
+    nisosurf = opt_get_num_answers(params->isosurf_level);
+
+    /* transparency */
+    nmaps = opt_get_num_answers(params->isosurf_transp_map);
+    nconsts = opt_get_num_answers(params->isosurf_transp_const);
+
+    if ((nmaps + nconsts > 0) && (nisosurf != nmaps + nconsts))
+	G_fatal_error(_("Inconsistent number of attributes (<%s> %d: <%s> %d, <%s> %d"),
+		      params->isosurf_level->key, nisosurf, params->isosurf_transp_map->key, nmaps,
+		      params->isosurf_transp_const->key, nconsts);
+
+    /* shininess */
+    nmaps = opt_get_num_answers(params->isosurf_shine_map);
+    nconsts = opt_get_num_answers(params->isosurf_shine_const);
+
+    if ((nmaps + nconsts > 0) && (nisosurf != nmaps + nconsts))
+    G_fatal_error(_("Inconsistent number of attributes (<%s> %d: <%s> %d, <%s> %d"),
+		    params->isosurf_level->key, nisosurf, params->isosurf_shine_map->key, nmaps,
+		    params->isosurf_shine_const->key, nconsts);
+
+    return;
 }
 
 void print_error(int nmaps, int nconsts, int nelevs,
