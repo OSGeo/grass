@@ -790,7 +790,7 @@ void args_fringe(struct GParams *params)
 void args_arrow(struct GParams *params)
 {
     params->north_arrow = G_define_option();
-    params->north_arrow->key = "arow_position";
+    params->north_arrow->key = "arrow_position";
     params->north_arrow->key_desc = "x,y";
     params->north_arrow->type = TYPE_INTEGER;
     params->north_arrow->required = NO;
@@ -800,7 +800,7 @@ void args_arrow(struct GParams *params)
     params->north_arrow->guisection = _("Decoration");
     
     params->north_arrow_size = G_define_option();
-    params->north_arrow_size->key = "arow_size";
+    params->north_arrow_size->key = "arrow_size";
     params->north_arrow_size->key_desc = "value";
     params->north_arrow_size->type = TYPE_DOUBLE;
     params->north_arrow_size->required = NO;
@@ -809,7 +809,7 @@ void args_arrow(struct GParams *params)
     params->north_arrow_size->guisection = _("Decoration");
     
     params->north_arrow_color = G_define_standard_option(G_OPT_C_FG);
-    params->north_arrow_color->key = "arow_color";
+    params->north_arrow_color->key = "arrow_color";
     params->north_arrow_color->required = NO;
     params->north_arrow_color->multiple = NO;
     params->north_arrow_color->label = _("North arrow color");
