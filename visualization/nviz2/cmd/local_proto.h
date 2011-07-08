@@ -27,7 +27,7 @@ struct GParams
     /* misc */
 	*exag, *bgcolor,
     /* cutting planes */
-    *cplane, *cplane_pos, *cplane_rot, *cplane_tilt, *cplane_shading,
+       *cplane, *cplane_pos, *cplane_rot, *cplane_tilt, *cplane_shading,
     /* viewpoint */
 	*pos, *height, *persp, *twist, *focus,
     /* output */
@@ -35,7 +35,9 @@ struct GParams
     /* lighting */
 	*light_pos, *light_color, *light_bright, *light_ambient,
     /* fringe */
-	*fringe, *fringe_color, *fringe_elev;
+	*fringe, *fringe_color, *fringe_elev,
+    /* north arrow */
+	*north_arrow, *north_arrow_size, *north_arrow_color;
 };
 
 /* args.c */

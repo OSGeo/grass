@@ -32,6 +32,7 @@ static void args_volume(struct GParams *);
 static void args_lighting(struct GParams *);
 static void args_fringe(struct GParams *);
 static void args_cplane(struct GParams *);
+static void args_arrow(struct GParams *);
 
 /*!
   \brief Parse command
@@ -76,7 +77,10 @@ void parse_command(int argc, char *argv[], struct GParams *params)
     args_fringe(params);
 
     /*** cutting plane ***/
-    args_cplane(params);    
+    args_cplane(params);
+
+    /*** north arrow ***/
+    args_arrow(params);
     
     /*** output image ***/
     /* output */
@@ -783,6 +787,35 @@ void args_fringe(struct GParams *params)
     params->fringe_elev->answer = "55";
 }
 
+void args_arrow(struct GParams *params)
+{
+    params->north_arrow = G_define_option();
+    params->north_arrow->key = "arow_position";
+    params->north_arrow->key_desc = "x,y";
+    params->north_arrow->type = TYPE_INTEGER;
+    params->north_arrow->required = NO;
+    params->north_arrow->multiple = NO;
+    params->north_arrow->description = _("Place north arrow at given position \
+	(in screen coordinates from bottom left corner)");
+    params->north_arrow->guisection = _("Decoration");
+    
+    params->north_arrow_size = G_define_option();
+    params->north_arrow_size->key = "arow_size";
+    params->north_arrow_size->key_desc = "value";
+    params->north_arrow_size->type = TYPE_DOUBLE;
+    params->north_arrow_size->required = NO;
+    params->north_arrow_size->multiple = NO;
+    params->north_arrow_size->description = _("North arrow size (in map units)");
+    params->north_arrow_size->guisection = _("Decoration");
+    
+    params->north_arrow_color = G_define_standard_option(G_OPT_C_FG);
+    params->north_arrow_color->key = "arow_color";
+    params->north_arrow_color->required = NO;
+    params->north_arrow_color->multiple = NO;
+    params->north_arrow_color->label = _("North arrow color");
+    params->north_arrow_color->guisection = _("Decoration");
+    params->north_arrow_color->answer = "black";
+}
 /*!
    \brief Get number of answers of given option
 
