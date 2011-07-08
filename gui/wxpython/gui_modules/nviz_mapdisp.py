@@ -1384,9 +1384,12 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         rasters = []
         vectors = []
+        volumes = []
         for item in self.layers:
             if self.tree.GetPyData(item)[0]['type'] == 'raster':
                 rasters.append(item)
+            elif self.tree.GetPyData(item)[0]['type'] == '3d-raster':
+                volumes.append(item)
             elif self.tree.GetPyData(item)[0]['type'] == 'vector':
                 vectors.append(item)
         if not rasters and not self.constants:
@@ -1525,6 +1528,48 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 cmd += "vpoint_position=" + cmdPPos.strip(',') + ' '
                 cmd += "vpoint_layer=" + cmdPLayer.strip(',') + ' '
             cmd += "\\\n"
+            
+        #
+        # volumes
+        #
+        if volumes:
+            cmdName = cmdShade = cmdRes = cmdPos = cmdIso = ""
+            cmdIsoColorMap = cmdIsoColorVal = cmdIsoTrMap = cmdIsoTrVal = ""
+            for i, volume in enumerate(volumes):
+                nvizData = self.tree.GetPyData(volume)[0]['nviz']['volume']
+                cmdName += "%s," % self.tree.GetPyData(volume)[0]['maplayer'].GetName()
+                cmdShade += "%s," % nvizData['draw']['shading']['desc']
+                cmdRes += "%d," % nvizData['draw']['resolution']['value']
+                if nvizData['position']:
+                    cmdPos += "%d,%d,%d," % (nvizData['position']['x'], nvizData['position']['y'],
+                                            nvizData['position']['z'])
+                for iso in nvizData['isosurface']:
+                    level = iso['topo']['value']
+                    cmdIso += "%d:%s," % (i + 1, level)
+                    if iso['color']['map']:
+                        cmdIsoColorMap += "%s," % iso['color']['value']
+                    else:
+                        cmdIsoColorVal += "%s," % iso['color']['value']
+                    if 'transp' in iso:
+                        if iso['transp']['map']:
+                            cmdIsoTrMap += "%s," % iso['transp']['value']
+                        else:
+                            cmdIsoTrVal += "%s," % iso['transp']['value']                    
+                    
+            cmd += "volume=" + cmdName.strip(',') + ' '
+            cmd += "volume_shading=" + cmdShade.strip(',') + ' '
+            cmd += "volume_resolution=" + cmdRes.strip(',') + ' '
+            if nvizData['position']:
+                cmd += "volume_position=" + cmdPos.strip(',') + ' '
+            cmd += "isosurf_level=" + cmdIso.strip(',') + ' '
+            if cmdIsoColorMap:
+                cmd += "isosurf_color_map=" + cmdIsoColorMap.strip(',') + ' '
+            if cmdIsoColorVal:
+                cmd += "isosurf_color_value=" + cmdIsoColorVal.strip(',') + ' ' 
+            if cmdIsoTrMap:
+                cmd += "isosurf_transp_map=" + cmdIsoTrMap.strip(',') + ' '
+            if cmdIsoTrVal:
+                cmd += "isosurf_transp_value=" + cmdIsoTrVal.strip(',') + ' '    
         #
         # cutting planes
         #
@@ -1581,6 +1626,14 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             subcmd += "fringe_elevation=%d " % (toolWindow.FindWindowById(toolWindow.win['fringe']['elev']).GetValue())
             cmd += subcmd
             cmd += "\\\n"
+        # north arrow
+        if self.decoration['arrow']['show']:
+            subcmd = "arrow_position=%d,%d " % (self.decoration['arrow']['position']['x'],
+                                                self.decoration['arrow']['position']['y'])
+            subcmd += "arrow_color=%s " % self.decoration['arrow']['color']
+            subcmd += "arrow_size=%d " % self.decoration['arrow']['size']
+            cmd += subcmd
+            
         # output
         subcmd = 'output=nviz_output '
         subcmd += 'format=ppm '
