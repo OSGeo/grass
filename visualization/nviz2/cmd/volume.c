@@ -76,7 +76,8 @@ int load_rasters3d(const struct GParams *params, nv_data *data)
 int add_isosurfs(const struct GParams *params, nv_data *data)
 {
     int i;
-    int num, level, nvols, *vol_list, id, nisosurfs;
+    float level;
+    int num, nvols, *vol_list, id, nisosurfs;
     int ncolor_map, ncolor_const, ntransp_map, ntransp_const, nshine_map, nshine_const;
     int res, draw_mode;
     char **tokens;
@@ -90,7 +91,7 @@ int add_isosurfs(const struct GParams *params, nv_data *data)
 	    G_fatal_error(_("Error tokenize '%s'"), 
 			  params->isosurf_level->answers[i]);
 	num = atoi(tokens[0]);
-	level = atoi(tokens[1]);
+	level = atof(tokens[1]);
 	G_free_tokens(tokens);
 
 	if (num > nvols) {
@@ -112,31 +113,6 @@ int add_isosurfs(const struct GParams *params, nv_data *data)
 			  nisosurfs-1, ATT_TOPO, id);
 	}
 
-	/* set resolution */
-	if (opt_get_num_answers(params->volume_res) != nvols)
-	    res = atof(params->volume_res->answers[0]);
-	else
-	    res = atof(params->volume_res->answers[i]);
-
-	GVL_isosurf_set_drawres(id, res, res, res);
-
-	/* set shading */
-	if (opt_get_num_answers(params->volume_shade) != nvols)
-	    style = params->volume_shade->answers[0];
-	else
-	    style = params->volume_shade->answers[i];
-	    
-	draw_mode = 0;
-	
-	if (strcmp(style, "flat") == 0) {
-	    draw_mode |= DM_FLAT;
-	}
-	else {
-	    draw_mode |= DM_GOURAUD;
-	}
-	
-	GVL_isosurf_set_drawmode(id, draw_mode);
-	
 	/* color */
 	ncolor_map = opt_get_num_answers(params->isosurf_color_map);
 	ncolor_const = opt_get_num_answers(params->isosurf_color_const);
@@ -156,7 +132,7 @@ int add_isosurfs(const struct GParams *params, nv_data *data)
 	}
 	else if (i-ncolor_map < ncolor_const &&
 		 strcmp(params->isosurf_color_const->answers[i-ncolor_map], "")) {
-		     
+
 	    if (GVL_isosurf_set_att_const(id, nisosurfs-1, ATT_COLOR,
 			    Nviz_color_from_str(params->isosurf_color_const->answers[i-ncolor_map])) < 0)
 		G_fatal_error(_("Unable to set isosurface (%d) attribute (%d) of volume %d"),
@@ -203,6 +179,36 @@ int add_isosurfs(const struct GParams *params, nv_data *data)
 		G_fatal_error(_("Unable to set isosurface (%d) attribute (%d) of volume %d"),
 				nisosurfs-1, ATT_SHINE, id);
 	}
+    }
+
+    /* set draw resolution and shading after isosurfaces are added*/
+    for (i = 0; i < nvols; i++) {
+
+	id = vol_list[i];
+	/* set resolution */
+	if (opt_get_num_answers(params->volume_res) != nvols)
+	    res = atof(params->volume_res->answers[0]);
+	else
+	    res = atof(params->volume_res->answers[i]);
+
+	GVL_isosurf_set_drawres(id, res, res, res);
+
+	/* set shading */
+	if (opt_get_num_answers(params->volume_shade) != nvols)
+	    style = params->volume_shade->answers[0];
+	else
+	    style = params->volume_shade->answers[i];
+
+	draw_mode = 0;
+
+	if (strcmp(style, "flat") == 0) {
+	    draw_mode |= DM_FLAT;
+	}
+	else {
+	    draw_mode |= DM_GOURAUD;
+	}
+	
+	GVL_isosurf_set_drawmode(id, draw_mode);
     }
 
     return 1;
