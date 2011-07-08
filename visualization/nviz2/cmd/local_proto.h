@@ -22,6 +22,8 @@ struct GParams
 	*vpoint_layer, *vpoint_size_column, *vpoint_marker_column, *vpoint_color_column, *vpoint_width_column,
     /* volumes */
 	*volume, *volume_mode, *volume_shade, *volume_pos, *volume_res, *isosurf_level,
+	*isosurf_color_map, *isosurf_color_const, *isosurf_transp_map, *isosurf_transp_const,
+	*isosurf_shine_map, *isosurf_shine_const,
     /* misc */
 	*exag, *bgcolor,
     /* cutting planes */
