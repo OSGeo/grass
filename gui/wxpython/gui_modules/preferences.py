@@ -2081,42 +2081,33 @@ class PreferencesDialog(PreferencesBaseDialog):
     def OnSetOutputFont(self, event):
         """'Set output font' button pressed
         """
-        dlg = DefaultFontDialog(parent = self,
-                                title = _('Select output font'),
-                                style = wx.DEFAULT_DIALOG_STYLE,
-                                type = 'outputfont')
-        
-        if dlg.ShowModal() == wx.ID_OK:
-            # set output font and font size variables
-            if dlg.font:
-                self.settings.Set(group = 'appearance', value = dlg.font,
-                                  key = 'outputfont', subkey = 'type')
 
-                self.settings.Set(group = 'appearance', value = dlg.fontsize,
-                                  key = 'outputfont', subkey = 'size')
-
-# Standard font dialog broken for Mac in OS X 10.6
-#        type = self.settings.Get(group = 'display', key = 'outputfont', subkey = 'type')   
+        type = self.settings.Get(group = 'appearance', key = 'outputfont', subkey = 'type')   
                            
-#        size = self.settings.Get(group = 'display', key = 'outputfont', subkey = 'size')
-#        if size == None or size == 0: size = 10
-#        size = float(size)
+        size = self.settings.Get(group = 'appearance', key = 'outputfont', subkey = 'size')
+        if size == None or size == 0: size = 11
+        size = float(size)
+        if type == None or type == '': type = 'Courier'
         
-#        data = wx.FontData()
-#        data.EnableEffects(True)
-#        data.SetInitialFont(wx.Font(pointSize = size, family = wx.FONTFAMILY_MODERN, faceName = type, style = wx.NORMAL, weight = 0))
+        outfont = wx.Font(size, wx.FONTFAMILY_MODERN, wx.NORMAL, 0, faceName = type)
+        
+        fontdata = wx.FontData()
+        fontdata.EnableEffects(True)
+        fontdata.SetColour('black')
+        fontdata.SetInitialFont(outfont)
+        
+        dlg = wx.FontDialog(self, fontdata)
+        
+        'FIXME: native font dialog does not initialize with current font'
 
-#        dlg = wx.FontDialog(self, data)
+        if dlg.ShowModal() == wx.ID_OK:
+            outdata = dlg.GetFontData()
+            font = outdata.GetChosenFont()
 
-#        if dlg.ShowModal() == wx.ID_OK:
-#            data = dlg.GetFontData()
-#            font = data.GetChosenFont()
-
-#            self.settings.Set(group = 'display', value = font.GetFaceName(),
-#                                  key = 'outputfont', subkey = 'type')
-#            self.settings.Set(group = 'display', value = font.GetPointSize(),
-#                                  key = 'outputfont', subkey = 'size')
-                
+            self.settings.Set(group = 'appearance', value = font.GetFaceName(),
+                                  key = 'outputfont', subkey = 'type')
+            self.settings.Set(group = 'appearance', value = font.GetPointSize(),
+                                  key = 'outputfont', subkey = 'size')
         dlg.Destroy()
 
         event.Skip()
