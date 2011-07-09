@@ -376,14 +376,12 @@ class Map(object):
         env = {"GRASS_BACKGROUNDCOLOR" : "FFFFFF",
                "GRASS_COMPRESSION"     : "0",
                "GRASS_TRUECOLOR"       : "TRUE",
-               "GRASS_TRANSPARENT"     :  "TRUE"
+               "GRASS_TRANSPARENT"     : "TRUE",
+               "GRASS_PNG_READ"        : "FALSE",
                }
-        if self.cmdfile:
-            env["GRASS_PNG_READ"] = "TRUE"
-        else:
-            env["GRASS_PNG_READ"] = "FALSE"
-
+        
         self._writeEnvFile(env)
+        self._writeEnvFile({"GRASS_PNG_READ" : "TRUE"})
         for k, v in env.iteritems():
             os.environ[k] = v
         
@@ -868,6 +866,7 @@ class Map(object):
             cmdLines = fd.readlines()
             gcmd.RunCommand('g.gisenv',
                             set = 'MONITOR_%s_CMDFILE=' % self.monitor)
+            
             for cmd in cmdLines:
                 cmdStr = cmd.strip().split(' ')
                 cmd = utils.CmdToTuple(cmdStr)
@@ -901,6 +900,8 @@ class Map(object):
         if currMon != self.monitor:
             gcmd.RunCommand('g.gisenv',
                             set = 'MONITOR=%s' % self.monitor)
+        
+        grass.try_remove(self.mapfileCmd) # GRASS_PNG_READ is TRUE
         
         nlayers = self._parseCmdFile()
         
