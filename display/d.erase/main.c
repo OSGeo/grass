@@ -4,7 +4,7 @@
  * MODULE:       d.erase
  * AUTHOR(S):    James Westervelt - USA CERL
  * PURPOSE:      Erase the current display frame with user defined color.
- * COPYRIGHT:    (C) 2000 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2000, 2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -27,29 +27,25 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("display"));
-    G_add_keyword(_("setup"));
+    G_add_keyword(_("graphics"));
+    G_add_keyword(_("monitors"));
+    G_add_keyword(_("CLI"));
     module->description =
-	_("Erase the contents of the active display frame with user defined color");
+	_("Erases the contents of the active graphics display frame with user defined color.");
 
-    color = G_define_option();
-    color->key = "color";
-    color->type = TYPE_STRING;
-    color->required = NO;
-    color->answer = DEFAULT_BG_COLOR;
-    color->description =
-	_("Color to erase with, either a standard GRASS color or R:G:B triplet (separated by colons)");
-    color->gisprompt = "old_color,color,color";
-
+    color = G_define_standard_option(G_OPT_C_BG);
+    
     eraseframe = G_define_flag();
     eraseframe->key = 'f';
     eraseframe->description = _("Remove all frames and erase the screen");
 
     if (G_parser(argc, argv))
-	exit(1);
+	exit(EXIT_FAILURE);
 
     if (D_open_driver() != 0)
-	G_fatal_error(_("No graphics device selected"));
-
+	G_fatal_error(_("No graphics device selected. "
+			"Use d.mon to select graphics device."));
+    
     D_setup_unity(0);
 
     D_erase(color->answer);
@@ -57,7 +53,8 @@ int main(int argc, char *argv[])
     if (eraseframe->answer)
 	D__erase();
 
+    D_save_command(NULL);
     D_close_driver();
 
-    exit(0);
+    exit(EXIT_SUCCESS);
 }
