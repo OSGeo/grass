@@ -19,7 +19,9 @@
 
 #%Module
 #% description: Import GetFeature from WFS.
-#% keywords: vector, import, wfs
+#% keywords: vector
+#% keywords: import
+#% keywords: wfs
 #%end
 #%option
 #% key: url
