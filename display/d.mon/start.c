@@ -45,7 +45,8 @@ void start_wx(const char *name, const char *tempfile,
 }
 
 int start_mon(const char *name, const char *output, int select,
-	      const char *width, const char *height, const char *bgcolor)
+	      const char *width, const char *height, const char *bgcolor,
+	      int truecolor)
 {
     const char *curr_mon;
     char *env_name, *env_value, *cmd_value;
@@ -78,6 +79,10 @@ int start_mon(const char *name, const char *output, int select,
 	    sprintf(buf, "GRASS_TRANSPARENT=TRUE\n");
 	else
 	    sprintf(buf, "GRASS_BACKGROUNDCOLOR=%s\n", bgcolor);
+	write(env_fd, buf, strlen(buf));
+    }
+    if (truecolor) {
+	sprintf(buf, "GRASS_TRUECOLOR=TRUE\n");
 	write(env_fd, buf, strlen(buf));
     }
     close(env_fd);

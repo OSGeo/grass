@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     struct Option *start_opt, *select_opt, *stop_opt, *output_opt,
       *width_opt, *height_opt, *bgcolor_opt;
     struct Flag *list_flag, *selected_flag, *select_flag, *release_flag, 
-	*cmd_flag;
+	*cmd_flag, *truecolor_flag;
     
     int nopts, ret;
     const char *mon;
@@ -109,6 +109,11 @@ int main(int argc, char *argv[])
     release_flag->description = _("Release currently selected monitor and exit");
     release_flag->guisection = _("Manage");
 
+    truecolor_flag = G_define_flag();
+    truecolor_flag->key = 't';
+    truecolor_flag->description = _("Disable true colors");
+    truecolor_flag->guisection = _("Manage");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
     
@@ -159,7 +164,8 @@ int main(int argc, char *argv[])
     
     if (start_opt->answer)
 	ret = start_mon(start_opt->answer, output_opt->answer, !select_flag->answer,
-			width_opt->answer, height_opt->answer, bgcolor_opt->answer);
+			width_opt->answer, height_opt->answer, bgcolor_opt->answer,
+			!truecolor_flag->answer);
     
     if (stop_opt->answer)
 	ret = stop_mon(stop_opt->answer);
