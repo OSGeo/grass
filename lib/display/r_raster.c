@@ -82,7 +82,7 @@ int read_env_file(const char *path)
 	if (G_number_of_tokens(token) != 2)
 	    continue;
 	
-	setenv(token[0], token[1], 1);
+	G_setenv(token[0], token[1]);
 	G_free_tokens(token);
 	token = NULL;
     }
@@ -123,9 +123,9 @@ int D_open_driver(void)
 	
 	if (v) {
 	    if (p && G_strcasecmp(p, "ps") == 0)
-		setenv("GRASS_PSFILE", v, 1);
+		G_setenv("GRASS_PSFILE", v);
 	    else
-		setenv("GRASS_PNGFILE", v, 1);
+		G_setenv("GRASS_PNGFILE", v);
 	}
 	
 	G_asprintf(&env, "MONITOR_%s_ENVFILE", m);
