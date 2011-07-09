@@ -895,7 +895,8 @@ class Map(object):
                     [self.maskfileCmd],
                     ['1.0'])
         
-        os.environ["GRASS_REGION"] = self.SetRegion(windres)
+        region = os.environ["GRASS_REGION"] = self.SetRegion(windres)
+        self._writeEnvFile({'GRASS_REGION' : region})
         currMon = grass.gisenv()['MONITOR']
         if currMon != self.monitor:
             gcmd.RunCommand('g.gisenv',
