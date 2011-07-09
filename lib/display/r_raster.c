@@ -81,7 +81,7 @@ int read_env_file(const char *path)
 	token = G_tokenize(buf, "=");
 	if (G_number_of_tokens(token) != 2)
 	    continue;
-	
+	G_debug(3, "\tread_env_file(): %s=%s", token[0], token[1]);
 	G_setenv(token[0], token[1]);
 	G_free_tokens(token);
 	token = NULL;
@@ -104,6 +104,7 @@ int D_open_driver(void)
 {
     const char *p, *m;
     
+    G_debug(1, "D_open_driver():");
     p = getenv("GRASS_RENDER_IMMEDIATE");
     m = G__getenv("MONITOR");
     if (m) {
