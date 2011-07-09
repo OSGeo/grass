@@ -5,6 +5,7 @@ SUBDIRS = \
 	d.polar \
 	d.rast.edit \
 	d.rast.leg \
+	d.redraw \
 	d.shadedmap \
 	d.vect.thematic \
 	db.dropcolumn \
