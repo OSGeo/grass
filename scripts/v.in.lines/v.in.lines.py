@@ -17,7 +17,8 @@
 #############################################################################
 #%Module
 #% description: Import ASCII x,y[,z] coordinates as a series of lines.
-#% keywords: vector, import
+#% keywords: vector
+#% keywords: import
 #%End
 #%flag
 #% key: z

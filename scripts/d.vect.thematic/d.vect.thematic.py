@@ -17,8 +17,11 @@
 
 
 #%Module
-#%  description: Displays thematic vector map
-#%  keywords: display, vector, thematic, legend
+#% description: Displays thematic vector map
+#% keywords: display
+#% keywords: vector
+#% keywords: thematic
+#% keywords: legend
 #%End
 #%option
 #% guisection: Files

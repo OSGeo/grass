@@ -15,7 +15,9 @@
 
 #%module
 #% description: Unpacks a raster map packed with r.pack.
-#% keywords: raster, import, copying
+#% keywords: raster
+#% keywords: import
+#% keywords: copying
 #%end
 #%option
 #% key: input

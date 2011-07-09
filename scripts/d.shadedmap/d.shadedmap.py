@@ -16,6 +16,7 @@
 
 #%Module
 #% description: Drapes a color raster over a shaded relief map using d.his
+#% keywords: display
 #%End
 #%option
 #% key: reliefmap
