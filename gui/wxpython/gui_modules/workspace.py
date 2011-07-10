@@ -638,6 +638,17 @@ class Nviz:
         
         return data
     
+    def SetIsosurfaceDefaultProp(self):
+        """!Set default isosurface properties"""
+        data = dict()
+        for attr in ('shine', 'topo', 'transp', 'color'):
+            data[attr] = {}
+            for key, value in UserSettings.Get(group = 'nviz', key = 'volume',
+                                               subkey = attr).iteritems():
+                data[attr][key] = value
+            data[attr]['update'] = None
+        return data
+
     def SetVectorDefaultProp(self):
         """Set default vector data properties"""
         data = dict()
