@@ -550,6 +550,22 @@ class Settings:
                         'map' : False,
                         'value' : 60,
                         },
+                    'topo': {
+                        'map' : None,
+                        'value' : 0.0
+                        },
+                    'color': {
+                        'map' : True,
+                        'value': ''
+                        },
+                    'transp': {
+                        'map' : None,
+                        'value': 0
+                        },
+                    'mask': {
+                        'map' : None,
+                        'value': ''
+                        }
                     },
                 'cplane' : {
                     'shading': 0,

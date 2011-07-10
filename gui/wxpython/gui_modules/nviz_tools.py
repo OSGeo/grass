@@ -95,21 +95,23 @@ class NTCValidator(wx.PyValidator):
 class NumTextCtrl(wx.TextCtrl):
     """!Class derived from wx.TextCtrl for numerical values only"""
     def __init__(self, parent,  **kwargs):
+        self.precision = kwargs.pop('prec')
         wx.TextCtrl.__init__(self, parent = parent,
             validator = NTCValidator(flag = 'DIGIT_ONLY'), **kwargs)
         
+            
     def SetValue(self, value):
-        super(NumTextCtrl, self).SetValue(str(int(value)))
+        super(NumTextCtrl, self).SetValue(("%." + str(self.precision) + "f") % float(value))
         
     def GetValue(self):
         val = super(NumTextCtrl, self).GetValue()
         if val == '':
             val = '0'
         try:
-            return int(float(val))
+            return float(val)
         except ValueError:
             val = ''.join(''.join(val.split('-')).split('.'))
-            return int(float(val))
+            return float(val)
         
     def SetRange(self, min, max):
         pass
@@ -285,7 +287,7 @@ class NvizToolWindow(FN.FlatNotebook):
                             range = (0, 1),
                             bind = (self.OnViewChange, self.OnViewChanged, self.OnViewChangedText))
         self._createControl(panel, data = self.win['view'], name = 'z-exag', sliderHor = False,
-                            range = (0, 5),
+                            range = (0, 5), prec = 1,
                             bind = (self.OnViewChange, self.OnViewChanged, self.OnViewChangedText))
         self.FindWindowById(self.win['view']['z-exag']['slider']).SetValue(1)
         self.FindWindowById(self.win['view']['z-exag']['text']).SetValue(1)
@@ -1434,7 +1436,7 @@ class NvizToolWindow(FN.FlatNotebook):
                 use.Bind(wx.EVT_CHOICE, self.OnMapObjUse)
                 gridSizer.Add(item = use, flag = wx.ALIGN_CENTER_VERTICAL,
                               pos = (row, 1))
-            
+                    
             if code != 'topo':
                 map = gselect.Select(parent = panel, id = wx.ID_ANY,
                                      # size = globalvar.DIALOG_GSELECT_SIZE,
@@ -1455,33 +1457,22 @@ class NvizToolWindow(FN.FlatNotebook):
                 value.SetName('color')
             elif code == 'mask':
                 value = None
+            elif code == 'topo':
+                prec = 2 # do settings?
+                value = NumTextCtrl(parent = panel, id = wx.ID_ANY, size = (200, -1),
+                            style = wx.TE_PROCESS_ENTER, prec = prec)
+                value.Bind(wx.EVT_TEXT_ENTER, self.OnVolumeIsosurfMap)
+                value.Bind(wx.EVT_KILL_FOCUS, self.OnVolumeIsosurfMap)
             else:
+                size = (65, -1)
+                value = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = size,
+                                    initial = 0)
                 if code == 'topo':
-                    size = (200, -1)
-                else:
-                    size = (65, -1)
-                if fs:
-                    value = fs.FloatSpin(parent = panel, id = wx.ID_ANY,
-                                         size = size, increment = 1, value = 0)
-                    value.SetFormat("%f")
-                    value.SetDigits(1)
-                else:
-                    value = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = size,
-                                        initial = 0)
-                if code == 'topo':
-                    if fs:
-                        value.SetRange(min_val = -1e9, max_val = 1e9)
-                    else:
-                        value.SetRange(minVal = -1e9, maxVal = 1e9)
+                    value.SetRange(minVal = -1e9, maxVal = 1e9)
                 elif code in ('shine', 'transp'):
-                    if fs:
-                        value.SetRange(min_val = 0, max_val = 255)
-                    else:
-                        value.SetRange(minVal = 0, maxVal = 255)
-                if fs:
-                    value.Bind(fs.EVT_FLOATSPIN, self.OnVolumeIsosurfMap)
-                else:
-                    value.Bind(wx.EVT_SPINCTRL, self.OnVolumeIsosurfMap)
+                    value.SetRange(minVal = 0, maxVal = 255)
+                
+                value.Bind(wx.EVT_SPINCTRL, self.OnVolumeIsosurfMap)
                 value.Bind(wx.EVT_TEXT, self.OnVolumeIsosurfMap)
             
             if value:
@@ -1945,7 +1936,7 @@ class NvizToolWindow(FN.FlatNotebook):
             slider.SetRange(min(minim, value), max(maxim, value))
         
     def _createControl(self, parent, data, name, range, bind = (None, None, None),
-                       sliderHor = True, size = 200):
+                       sliderHor = True, size = 200, prec = 0):
         """!Add control (Slider + TextCtrl)"""
         data[name] = dict()
         if sliderHor:
@@ -1972,7 +1963,7 @@ class NvizToolWindow(FN.FlatNotebook):
         data[name]['slider'] = slider.GetId()
         
         text = NumTextCtrl(parent = parent, id = wx.ID_ANY, size = (65, -1),
-                            style = wx.TE_PROCESS_ENTER)
+                            style = wx.TE_PROCESS_ENTER, prec = prec)
         
         text.SetName('text')
         if bind[2]:
@@ -2176,7 +2167,11 @@ class NvizToolWindow(FN.FlatNotebook):
         else:
             self.PostViewEvent(zExag = False)
         
-        view[winName]['value'] = value    
+        if winName in ('persp', 'twist'):
+            convert = int
+        else:
+            convert = float
+        view[winName]['value'] = convert(value)
         for win in self.win['view'][winName].itervalues():
             self.FindWindowById(win).SetValue(value)
 
@@ -2566,6 +2561,17 @@ class NvizToolWindow(FN.FlatNotebook):
     def _getColorFromString(self, color, delim = ':'):
         """!change color from R:G:B format to wx.Color"""
         return wx.Color(*map(int, color.split(delim)))
+    
+    def _get3dRange(self, name):
+        """!helper func for getting range of 3d map"""
+        ret = gcmd.RunCommand('r3.info', read = True, flags = 'r', map = name)
+        if ret:
+            range = []
+            for value in ret.strip('\n').split('\n'):
+                range.append(float(value.split('=')[1]))
+            return range
+        
+        return -1e6, 1e6
     
     def OnSurfaceWireColor(self, event):
         """!Set wire color"""
@@ -3035,7 +3041,18 @@ class NvizToolWindow(FN.FlatNotebook):
     def OnVolumeIsosurfAdd(self, event):
         """!Add new isosurface to the list"""
         list = self.FindWindowById(self.win['volume']['isosurfs'])
-        level = self.FindWindowById(self.win['volume']['topo']['const']).GetValue()
+        
+        isosurfData = self.mapWindow.nvizDefault.SetIsosurfaceDefaultProp()
+        
+        name = self.FindWindowById(self.win['volume']['map']).GetValue()
+        layer = self.mapWindow.GetLayerByName(name, mapType = '3d-raster')
+        data = self.GetLayerData('volume')['volume']
+        id = data['object']['id']
+        
+        if isosurfData['color']['map']:
+            isosurfData['color']['value'] = layer.name
+        prec = 2
+        level = isosurfData['topo']['value'] = round(self._get3dRange(name = layer.name)[0], prec)
         
         sel = list.GetSelection()
         if sel < 0 or sel >= list.GetCount() - 1:
@@ -3048,48 +3065,12 @@ class NvizToolWindow(FN.FlatNotebook):
         list.Check(item)
         list.SetSelection(item)
         
-        name = self.FindWindowById(self.win['volume']['map']).GetValue()
-        layer = self.mapWindow.GetLayerByName(name, mapType = '3d-raster')
-        data = self.GetLayerData('volume')['volume']
-        id = data['object']['id']
-        
-        # collect properties
-        isosurfData = {}
-        for attrb in ('topo', 'color', 'mask',
-                      'transp', 'shine'):
-            if attrb == 'topo':
-                isosurfData[attrb] = {}
-                win = self.FindWindowById(self.win['volume'][attrb]['const'])
-                isosurfData[attrb]['value'] = win.GetValue()
-                isosurfData[attrb]['map'] = None
-            else:
-                uwin = self.FindWindowById(self.win['volume'][attrb]['use'])
-                sel = uwin.GetSelection()
-                if self.win['volume'][attrb]['required']:
-                    sel += 1
-                if sel == 0: # unset
-                    continue
-                
-                isosurfData[attrb] = {}
-                if sel == 1: # map
-                    isosurfData[attrb]['map'] = True
-                    vwin = self.FindWindowById(self.win['volume'][attrb]['map'])
-                    value = vwin.GetValue()
-                else: # const
-                    isosurfData[attrb]['map'] = False
-                    vwin = self.FindWindowById(self.win['volume'][attrb]['const'])
-                    if vwin.GetName() == "color":
-                        value = self._getColorString(vwin.GetValue())
-                    else:
-                        value = vwin.GetValue()
-                isosurfData[attrb]['value'] = value
-        
         data['isosurface'].insert(item, isosurfData)
-        
         # add isosurface        
-        self._display.AddIsosurface(id, level)
-        # use by default 3d raster map for color
-        self._display.SetIsosurfaceColor(id, item, True, str(layer.name))
+        self._display.AddIsosurface(id, float(level))
+        # update properties
+        event = wxUpdateProperties(data = data)
+        wx.PostEvent(self.mapWindow, event)
         
         # update buttons
         self.UpdateIsosurfButtons(list)
@@ -3837,16 +3818,9 @@ class NvizToolWindow(FN.FlatNotebook):
             self.SetMapObjUseMap(nvizType = 'volume',
                                  attrb = attrb, map = data[attrb]['map'])
         # set topo range
-        ret = gcmd.RunCommand('r3.info', read = True, flags = 'r', map = layer.name)
-        if ret:
-            range = []
-            for value in ret.strip('\n').split('\n'):
-                range.append(value.split('=')[1])
-            topo = self.FindWindowById(self.win['volume']['topo']['const'])
-            if fs:
-                topo.SetRange(min_val = float(range[0]), max_val = float(range[1]))
-            else:
-                topo.SetRange(minVal = int(range[0]), maxVal = int(range[1]))
+        range = self._get3dRange(name = layer.name)
+        desc = self.FindWindowById(self.win['volume']['desc'])
+        desc.SetLabel("%s %.3f - %.3f" % (_("range:"), range[0], range[1]))
         # set inout
         if 'inout' in data:
             self.FindWindowById(self.win['volume']['inout']).SetValue(data['inout'])
