@@ -671,10 +671,7 @@ class NvizToolWindow(FN.FlatNotebook):
             else:
                 value = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (65, -1),
                                     initial = 0)
-                if code in ('shine', 'transp'):
-                    value.SetRange(minVal = 0, maxVal = 255)
-                else:
-                    value.SetRange(minVal = 0, maxVal = 100)
+                value.SetRange(minVal = 0, maxVal = 100)
                 value.Bind(wx.EVT_TEXT, self.OnSurfaceMap)
             
             if value:
@@ -1415,9 +1412,12 @@ class NvizToolWindow(FN.FlatNotebook):
                             ('shine', _("Shininess"))):
             self.win['volume'][code] = {} 
             # label
+            colspan = 1
+            if code == 'topo':
+                colspan = 2
             gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
                                              label = attrb + ':'),
-                          pos = (row, 0), flag = wx.ALIGN_CENTER_VERTICAL)
+                          pos = (row, 0), span = (1, colspan),flag = wx.ALIGN_CENTER_VERTICAL)
             if code != 'topo':
                 use = wx.Choice (parent = panel, id = wx.ID_ANY, size = (100, -1),
                                  choices = [_("map")])
@@ -1470,7 +1470,7 @@ class NvizToolWindow(FN.FlatNotebook):
                 if code == 'topo':
                     value.SetRange(minVal = -1e9, maxVal = 1e9)
                 elif code in ('shine', 'transp'):
-                    value.SetRange(minVal = 0, maxVal = 255)
+                    value.SetRange(minVal = 0, maxVal = 100)
                 
                 value.Bind(wx.EVT_SPINCTRL, self.OnVolumeIsosurfMap)
                 value.Bind(wx.EVT_TEXT, self.OnVolumeIsosurfMap)
@@ -2331,7 +2331,7 @@ class NvizToolWindow(FN.FlatNotebook):
                 value = self.FindWindowById(self.win[nvizType][attrb]['const']).GetColour()
                 value = self._getColorString(value)
             else:
-                value = self.FindWindowById(self.win[nvizType][attrb]['const']).GetValue()
+                value = self._getPercent(self.FindWindowById(self.win[nvizType][attrb]['const']).GetValue(), toPercent = False)
         
         self.SetMapObjUseMap(nvizType = nvizType,
                              attrb = attrb, map = useMap)
@@ -2436,7 +2436,8 @@ class NvizToolWindow(FN.FlatNotebook):
                     # tuple to string
                     value = self._getColorString(value)
                 else:
-                    value = self.FindWindowById(self.win[nvizType][attrb]['const']).GetValue()
+                    value = self._getPercent(
+                        self.FindWindowById(self.win[nvizType][attrb]['const']).GetValue(), toPercent = False)
                     
                 useMap = False
         else:
@@ -2572,6 +2573,15 @@ class NvizToolWindow(FN.FlatNotebook):
             return range
         
         return -1e6, 1e6
+    
+    def _getPercent(self, value, toPercent = True):
+        """!Convert values 0 - 255 to percents and vice versa"""
+        value = int(value)
+        if toPercent:
+            value = int(value/255. * 100)
+        else:
+            value = int(value/100. * 255)
+        return value
     
     def OnSurfaceWireColor(self, event):
         """!Set wire color"""
@@ -3537,13 +3547,13 @@ class NvizToolWindow(FN.FlatNotebook):
         if data['attribute']['shine']['map']:
             self.FindWindowById(self.win['surface']['shine']['map']).SetValue(value)
         else:
-            self.FindWindowById(self.win['surface']['shine']['const']).SetValue(value)
+            self.FindWindowById(self.win['surface']['shine']['const']).SetValue(self._getPercent(value))
         if 'transp' in data['attribute']:  
             value = data['attribute']['transp']['value']  
             if data['attribute']['transp']['map']:
                 self.FindWindowById(self.win['surface']['color']['map']).SetValue(value)
             else:
-                self.FindWindowById(self.win['surface']['transp']['const']).SetValue(value)
+                self.FindWindowById(self.win['surface']['transp']['const']).SetValue(self._getPercent(value))
             self.SetMapObjUseMap(nvizType = 'surface', attrb = 'transp', map = data['attribute']['transp']['map'])
         else:
             self.SetMapObjUseMap(nvizType = 'surface', attrb = 'transp', map = None)
@@ -3813,7 +3823,10 @@ class NvizToolWindow(FN.FlatNotebook):
                 else:
                     if value:
                         win = self.FindWindowById(self.win['volume'][attrb]['const'])
-                        win.SetValue(float(value))
+                        if attrb == 'topo':
+                            win.SetValue(float(value))
+                        else:
+                            win.SetValue(self._getPercent(value))
                     
             self.SetMapObjUseMap(nvizType = 'volume',
                                  attrb = attrb, map = data[attrb]['map'])
