@@ -3808,7 +3808,11 @@ class NvizToolWindow(FN.FlatNotebook):
             for plane in range(count):
                 choices.append("%s %i" % (_("Plane"), plane))
             self.FindWindowById(self.win['cplane']['planes']).SetItems(choices)
-            self.FindWindowById(self.win['cplane']['planes']).SetSelection(0)
+            current = 0
+            for i, cplane in enumerate(self.mapWindow.cplanes):
+                if cplane['on']:
+                    current = i + 1
+            self.FindWindowById(self.win['cplane']['planes']).SetSelection(current)
             
             xyRange, zRange = self._display.GetXYRange(), self._display.GetZRange()
             if xyRange > 0: # GTK warning
