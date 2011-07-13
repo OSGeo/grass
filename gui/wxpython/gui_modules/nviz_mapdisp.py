@@ -1172,14 +1172,25 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
     def UpdateVolumeProperties(self, id, data, isosurfId = None):
         """!Update volume (isosurface/slice) map object properties"""
         if 'update' in data['draw']['resolution']:
-            self._display.SetIsosurfaceRes(id, data['draw']['resolution']['value'])
+            if data['draw']['mode']['value'] == 0:
+                self._display.SetIsosurfaceRes(id, data['draw']['resolution']['isosurface']['value'])
+            else:
+                self._display.SetSliceRes(id, data['draw']['resolution']['slice']['value'])                
             data['draw']['resolution'].pop('update')
         
         if 'update' in data['draw']['shading']:
-            if data['draw']['shading']['value'] < 0: # need to calculate
-                data['draw']['shading']['value'] = \
-                    self.nvizDefault.GetDrawMode(shade = data['draw']['shading'],
-                                                 string = False)
+            if data['draw']['mode']['value'] == 0:
+                if data['draw']['shading']['isosurface']['value'] < 0: # need to calculate
+                    mode = data['draw']['shading']['isosurface']['value'] = \
+                        self.nvizDefault.GetDrawMode(shade = data['draw']['shading']['isosurface'],
+                                                     string = False)
+                    self._display.SetIsosurfaceMode(id, mode)
+            else:
+                if data['draw']['shading']['slice']['value'] < 0: # need to calculate
+                    mode = data['draw']['shading']['slice']['value'] = \
+                        self.nvizDefault.GetDrawMode(shade = data['draw']['shading']['slice'],
+                                                     string = False)
+                    self._display.SetSliceMode(id, mode)
             data['draw']['shading'].pop('update')
         
         #
@@ -1222,6 +1233,23 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                         self._display.SetIsosurfaceShine(id, isosurfId, map, str(value))  
                 isosurf[attrb].pop('update')
             isosurfId +=  1
+        #
+        # slice attributes
+        #
+        sliceId = 0
+        for slice in data['slice']:
+            ret = self._display.AddSlice(id, slice_id = sliceId)
+            if 'update' in slice['position']:
+                pos = slice['position']
+                ret = self._display.SetSlicePosition(id, sliceId, pos['x1'], pos['x2'],
+                                               pos['y1'], pos['y2'], pos['z1'], pos['z2'], pos['axis'])
+                
+                slice['position'].pop('update')
+            if 'update' in slice['transp']:
+                tr = slice['transp']['value']
+                self._display.SetSliceTransp(id, sliceId, tr)
+            sliceId += 1
+                
         # position
         if 'update' in data['position']:
             x = data['position']['x']
@@ -1538,8 +1566,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             for i, volume in enumerate(volumes):
                 nvizData = self.tree.GetPyData(volume)[0]['nviz']['volume']
                 cmdName += "%s," % self.tree.GetPyData(volume)[0]['maplayer'].GetName()
-                cmdShade += "%s," % nvizData['draw']['shading']['desc']
-                cmdRes += "%d," % nvizData['draw']['resolution']['value']
+                cmdShade += "%s," % nvizData['draw']['shading']['isosurface']['desc']
+                cmdRes += "%d," % nvizData['draw']['resolution']['isosurface']['value']
                 if nvizData['position']:
                     cmdPos += "%d,%d,%d," % (nvizData['position']['x'], nvizData['position']['y'],
                                             nvizData['position']['z'])

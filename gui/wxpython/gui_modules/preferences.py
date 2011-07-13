@@ -565,6 +565,15 @@ class Settings:
                     'mask': {
                         'map' : None,
                         'value': ''
+                        },
+                    'slice_position': {
+                        'x1' : 0,
+                        'x2' : 1,
+                        'y1' : 0,
+                        'y2' : 1,
+                        'z1' : 0,
+                        'z2' : 1,
+                        'axis' : 0,
                         }
                     },
                 'cplane' : {
