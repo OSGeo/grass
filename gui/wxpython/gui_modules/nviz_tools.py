@@ -40,10 +40,6 @@ except ImportError: # if it's not there locally, try the wxPython lib.
         import wx.lib.agw.foldpanelbar as fpb
     except ImportError:
         import wx.lib.foldpanelbar as fpb # versions <=2.5.5.1
-try:
-    import wx.lib.agw.floatspin as fs
-except ImportError:
-    fs = None
         
 import grass.script as grass
 
@@ -145,7 +141,7 @@ class NvizToolWindow(FN.FlatNotebook):
         # data page
         self.AddPage(page = self._createDataPage(),
                      text = " %s " % _("Data"))
-
+        
         # appearance page
         self.AddPage(page = self._createAppearancePage(),
                      text = " %s " % _("Appearance"))
@@ -191,7 +187,7 @@ class NvizToolWindow(FN.FlatNotebook):
                 self.FindWindowById(self.win['vector']['map']).SetValue(selection)
             elif l_type == '3d-raster':
                 self.FindWindowById(self.win['volume']['map']).SetValue(selection)
-                
+               
     def UpdateState(self, **kwargs):
         if 'view' in kwargs:
             self.mapWindow.view = kwargs['view']
@@ -1300,10 +1296,10 @@ class NvizToolWindow(FN.FlatNotebook):
                       pos = (0, 0), flag = wx.ALIGN_CENTER_VERTICAL)
         mode = wx.Choice (parent = panel, id = wx.ID_ANY, size = (-1, -1),
                           choices = [_("isosurfaces"),
-                                     _("slides")])
+                                     _("slices")])
         mode.SetSelection(0)
         mode.SetName("selection")
-        # mode.Bind(wx.EVT_CHOICE, self.OnSurfaceMode)
+        mode.Bind(wx.EVT_CHOICE, self.OnVolumeMode)
         self.win['volume']['draw']['mode'] = mode.GetId()
         gridSizer.Add(item = mode, flag = wx.ALIGN_CENTER_VERTICAL,
                       pos = (0, 1))
@@ -1317,7 +1313,7 @@ class NvizToolWindow(FN.FlatNotebook):
                                       _("gouraud")])
         shade.SetName("selection")
         self.win['volume']['draw']['shading'] = shade.GetId()
-        shade.Bind(wx.EVT_CHOICE, self.OnVolumeIsosurfMode)
+        shade.Bind(wx.EVT_CHOICE, self.OnVolumeDrawMode)
         gridSizer.Add(item = shade, flag = wx.ALIGN_CENTER_VERTICAL,
                       pos = (0, 3))
         
@@ -1331,11 +1327,11 @@ class NvizToolWindow(FN.FlatNotebook):
                             max = 100)
         resol.SetName("value")
         self.win['volume']['draw']['resolution'] = resol.GetId()
-        resol.Bind(wx.EVT_SPINCTRL, self.OnVolumeIsosurfResolution)
-        resol.Bind(wx.EVT_TEXT, self.OnVolumeIsosurfResolution)
+        resol.Bind(wx.EVT_SPINCTRL, self.OnVolumeResolution)
+        resol.Bind(wx.EVT_TEXT, self.OnVolumeResolution)
         gridSizer.Add(item = resol, pos = (0, 5))
         
-        boxSizer.Add(item = gridSizer, proportion = 1,
+        boxSizer.Add(item = gridSizer, proportion = 0,
                      flag = wx.ALL | wx.EXPAND, border = 3)
         pageSizer.Add(item = boxSizer, proportion = 0,
                       flag = wx.EXPAND | wx.ALL,
@@ -1344,41 +1340,43 @@ class NvizToolWindow(FN.FlatNotebook):
         #
         # manage isosurfaces
         #
-        box = wx.StaticBox (parent = panel, id = wx.ID_ANY,
-                            label = " %s " % (_("List of isosurfaces")))
+        box = wx.StaticBox(parent = panel, id = wx.ID_ANY, 
+                           label = " %s " % (_("List of isosurfaces")))
+        box.SetName('listStaticBox')
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(vgap = 3, hgap = 3)
         
         # list
         isolevel = wx.CheckListBox(parent = panel, id = wx.ID_ANY,
                                    size = (300, 150))
-        self.Bind(wx.EVT_CHECKLISTBOX, self.OnVolumeIsosurfCheck, isolevel)
-        self.Bind(wx.EVT_LISTBOX, self.OnVolumeIsosurfSelect, isolevel)
+        self.Bind(wx.EVT_CHECKLISTBOX, self.OnVolumeCheck, isolevel)
+        self.Bind(wx.EVT_LISTBOX, self.OnVolumeSelect, isolevel)
         
         self.win['volume']['isosurfs'] = isolevel.GetId()
+        self.win['volume']['slices'] = isolevel.GetId()
         gridSizer.Add(item = isolevel, pos = (0, 0), span = (4, 1))
         
         # buttons (add, delete, move up, move down)
         btnAdd = wx.Button(parent = panel, id = wx.ID_ADD)
-        self.win['volume']['btnIsosurfAdd'] = btnAdd.GetId()
-        btnAdd.Bind(wx.EVT_BUTTON, self.OnVolumeIsosurfAdd)
+        self.win['volume']['btnAdd'] = btnAdd.GetId()
+        btnAdd.Bind(wx.EVT_BUTTON, self.OnVolumeAdd)
         gridSizer.Add(item = btnAdd,
                       pos = (0, 1))
         btnDelete = wx.Button(parent = panel, id = wx.ID_DELETE)
-        self.win['volume']['btnIsosurfDelete'] = btnDelete.GetId()
-        btnDelete.Bind(wx.EVT_BUTTON, self.OnVolumeIsosurfDelete)
+        self.win['volume']['btnDelete'] = btnDelete.GetId()
+        btnDelete.Bind(wx.EVT_BUTTON, self.OnVolumeDelete)
         btnDelete.Enable(False)
         gridSizer.Add(item = btnDelete,
                       pos = (1, 1))
         btnMoveUp = wx.Button(parent = panel, id = wx.ID_UP)
-        self.win['volume']['btnIsosurfMoveUp'] = btnMoveUp.GetId()
-        btnMoveUp.Bind(wx.EVT_BUTTON, self.OnVolumeIsosurfMoveUp)
+        self.win['volume']['btnMoveUp'] = btnMoveUp.GetId()
+        btnMoveUp.Bind(wx.EVT_BUTTON, self.OnVolumeMoveUp)
         btnMoveUp.Enable(False)
         gridSizer.Add(item = btnMoveUp,
                       pos = (2, 1))
         btnMoveDown = wx.Button(parent = panel, id = wx.ID_DOWN)
-        self.win['volume']['btnIsosurfMoveDown'] = btnMoveDown.GetId()
-        btnMoveDown.Bind(wx.EVT_BUTTON, self.OnVolumeIsosurfMoveDown)
+        self.win['volume']['btnMoveDown'] = btnMoveDown.GetId()
+        btnMoveDown.Bind(wx.EVT_BUTTON, self.OnVolumeMoveDown)
         btnMoveDown.Enable(False)
         gridSizer.Add(item = btnMoveDown,
                       pos = (3, 1))
@@ -1388,117 +1386,16 @@ class NvizToolWindow(FN.FlatNotebook):
         pageSizer.Add(item = boxSizer, proportion = 0,
                       flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
                       border = 3)
-        
-        #
-        # isosurface attributes
-        #
-        box = wx.StaticBox (parent = panel, id = wx.ID_ANY,
-                            label = " %s " % (_("Isosurface attributes")))
-        boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
-        gridSizer = wx.GridBagSizer(vgap = 3, hgap = 3)
-        
-        self.win['volume']['attr'] = {}
-        inout = wx.CheckBox(parent = panel, id = wx.ID_ANY, 
-                            label = _("toggle normal direction"))
-        gridSizer.Add(item = inout, pos = (0,0), span = (1,2), flag = wx.ALIGN_CENTER_VERTICAL)
-        inout.Bind(wx.EVT_CHECKBOX, self.OnInOutMode)
-        self.win['volume']['inout'] = inout.GetId()
-        
-        row = 1
-        for code, attrb in (('topo', _("Topography level")),
-                            ('color', _("Color")),
-                            ('mask', _("Mask")),
-                            ('transp', _("Transparency")),
-                            ('shine', _("Shininess"))):
-            self.win['volume'][code] = {} 
-            # label
-            colspan = 1
-            if code == 'topo':
-                colspan = 2
-            gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                             label = attrb + ':'),
-                          pos = (row, 0), span = (1, colspan),flag = wx.ALIGN_CENTER_VERTICAL)
-            if code != 'topo':
-                use = wx.Choice (parent = panel, id = wx.ID_ANY, size = (100, -1),
-                                 choices = [_("map")])
-            else:
-                use = None
-            # check for required properties
-            if code not in ('topo', 'color', 'shine'):
-                use.Insert(item = _("unset"), pos = 0)
-                self.win['volume'][code]['required'] = False
-            else:
-                self.win['volume'][code]['required'] = True
-            if use and code != 'mask':
-                use.Append(item = _('constant'))
-            if use:
-                self.win['volume'][code]['use'] = use.GetId()
-                use.Bind(wx.EVT_CHOICE, self.OnMapObjUse)
-                gridSizer.Add(item = use, flag = wx.ALIGN_CENTER_VERTICAL,
-                              pos = (row, 1))
-                    
-            if code != 'topo':
-                map = gselect.Select(parent = panel, id = wx.ID_ANY,
-                                     # size = globalvar.DIALOG_GSELECT_SIZE,
-                                     size = (200, -1),
-                                     type = "grid3")
-                self.win['volume'][code]['map'] = map.GetId() - 1 # FIXME
-                map.Bind(wx.EVT_TEXT, self.OnVolumeIsosurfMap)
-                gridSizer.Add(item = map, flag = wx.ALIGN_CENTER_VERTICAL,
-                              pos = (row, 2))
-            else:
-                map = None
-            
-            if code == 'color':
-                value = csel.ColourSelect(panel, id = wx.ID_ANY,
-                                          colour = (0,0,0),
-                                          size = globalvar.DIALOG_COLOR_SIZE)
-                value.Bind(csel.EVT_COLOURSELECT, self.OnVolumeIsosurfMap)
-                value.SetName('color')
-            elif code == 'mask':
-                value = None
-            elif code == 'topo':
-                prec = 2 # do settings?
-                value = NumTextCtrl(parent = panel, id = wx.ID_ANY, size = (200, -1),
-                            style = wx.TE_PROCESS_ENTER, prec = prec)
-                value.Bind(wx.EVT_TEXT_ENTER, self.OnVolumeIsosurfMap)
-                value.Bind(wx.EVT_KILL_FOCUS, self.OnVolumeIsosurfMap)
-            else:
-                size = (65, -1)
-                value = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = size,
-                                    initial = 0)
-                if code == 'topo':
-                    value.SetRange(minVal = -1e9, maxVal = 1e9)
-                elif code in ('shine', 'transp'):
-                    value.SetRange(minVal = 0, maxVal = 100)
-                
-                value.Bind(wx.EVT_SPINCTRL, self.OnVolumeIsosurfMap)
-                value.Bind(wx.EVT_TEXT, self.OnVolumeIsosurfMap)
-            
-            if value:
-                self.win['volume'][code]['const'] = value.GetId()
-                if code == 'topo':
-                    gridSizer.Add(item = value, flag = wx.ALIGN_CENTER_VERTICAL,
-                                  pos = (row, 2))
-                else:
-                    value.Enable(False)
-                    gridSizer.Add(item = value, flag = wx.ALIGN_CENTER_VERTICAL,
-                                  pos = (row, 3))
-            else:
-                self.win['volume'][code]['const'] = None
-            
-            if code != 'topo':
-                self.SetMapObjUseMap(nvizType = 'volume',
-                                     attrb = code) # -> enable map / disable constant
-            
-            row += 1
-        
-        boxSizer.Add(item = gridSizer, proportion = 1,
-                     flag = wx.ALL | wx.EXPAND, border = 3)
-        pageSizer.Add(item = boxSizer, proportion = 0,
-                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
+        # isosurface/slice 
+        sizer = wx.BoxSizer()
+        self.isoPanel = self._createIsosurfacePanel(panel)
+        self.slicePanel = self._createSlicePanel(panel)
+        sizer.Add(self.isoPanel, proportion = 1, flag = wx.EXPAND|wx.ALL, border = 0)
+        sizer.Add(self.slicePanel, proportion = 1, flag = wx.EXPAND|wx.ALL, border = 0)
+        sizer.Hide(self.slicePanel)
+        pageSizer.Add(item = sizer, proportion = 0,
+                      flag = wx.EXPAND | wx.ALL,
                       border = 3)
-        
         #
         # position
         #
@@ -1540,7 +1437,7 @@ class NvizToolWindow(FN.FlatNotebook):
         boxSizer.Add(item = gridSizer, proportion = 1,
                   flag = wx.ALL | wx.EXPAND, border = 3)
         
-        pageSizer.Add(item = boxSizer, proportion = 1,
+        pageSizer.Add(item = boxSizer, proportion = 0,
                       flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
                       border = 3)
         panel.SetSizer(pageSizer)
@@ -1934,7 +1831,221 @@ class NvizToolWindow(FN.FlatNotebook):
         minim, maxim = slider.GetRange()
         if not (minim <= value <= maxim):
             slider.SetRange(min(minim, value), max(maxim, value))
+    
+    def _createIsosurfacePanel(self, parent):
+        panel = wx.Panel(parent = parent, id = wx.ID_ANY)
         
+        vSizer = wx.BoxSizer(wx.HORIZONTAL)
+        
+        box = wx.StaticBox (parent = panel, id = wx.ID_ANY,
+                            label = " %s " % (_("Isosurface attributes")))
+        boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        gridSizer = wx.GridBagSizer(vgap = 3, hgap = 3)
+        
+        self.win['volume']['attr'] = {}
+        inout = wx.CheckBox(parent = panel, id = wx.ID_ANY, 
+                            label = _("toggle normal direction"))
+        gridSizer.Add(item = inout, pos = (0,0), span = (1,2), flag = wx.ALIGN_CENTER_VERTICAL)
+        inout.Bind(wx.EVT_CHECKBOX, self.OnInOutMode)
+        self.win['volume']['inout'] = inout.GetId()
+        
+        row = 1
+        for code, attrb in (('topo', _("Topography level")),
+                            ('color', _("Color")),
+                            ('mask', _("Mask")),
+                            ('transp', _("Transparency")),
+                            ('shine', _("Shininess"))):
+            self.win['volume'][code] = {} 
+            # label
+            colspan = 1
+            if code == 'topo':
+                colspan = 2
+            gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                             label = attrb + ':'),
+                          pos = (row, 0), span = (1, colspan),flag = wx.ALIGN_CENTER_VERTICAL)
+            if code != 'topo':
+                use = wx.Choice (parent = panel, id = wx.ID_ANY, size = (100, -1),
+                                 choices = [_("map")])
+            else:
+                use = None
+            # check for required properties
+            if code not in ('topo', 'color', 'shine'):
+                use.Insert(item = _("unset"), pos = 0)
+                self.win['volume'][code]['required'] = False
+            else:
+                self.win['volume'][code]['required'] = True
+            if use and code != 'mask':
+                use.Append(item = _('constant'))
+            if use:
+                self.win['volume'][code]['use'] = use.GetId()
+                use.Bind(wx.EVT_CHOICE, self.OnMapObjUse)
+                gridSizer.Add(item = use, flag = wx.ALIGN_CENTER_VERTICAL,
+                              pos = (row, 1))
+                    
+            if code != 'topo':
+                map = gselect.Select(parent = panel, id = wx.ID_ANY,
+                                     # size = globalvar.DIALOG_GSELECT_SIZE,
+                                     size = (200, -1),
+                                     type = "grid3")
+                self.win['volume'][code]['map'] = map.GetId() - 1 # FIXME
+                map.Bind(wx.EVT_TEXT, self.OnVolumeIsosurfMap)
+                gridSizer.Add(item = map, flag = wx.ALIGN_CENTER_VERTICAL,
+                              pos = (row, 2))
+            else:
+                map = None
+            
+            if code == 'color':
+                value = csel.ColourSelect(panel, id = wx.ID_ANY,
+                                          colour = (0,0,0),
+                                          size = globalvar.DIALOG_COLOR_SIZE)
+                value.Bind(csel.EVT_COLOURSELECT, self.OnVolumeIsosurfMap)
+                value.SetName('color')
+            elif code == 'mask':
+                value = None
+            elif code == 'topo':
+                prec = 2 # do settings?
+                value = NumTextCtrl(parent = panel, id = wx.ID_ANY, size = (200, -1),
+                            style = wx.TE_PROCESS_ENTER, prec = prec)
+                value.Bind(wx.EVT_TEXT_ENTER, self.OnVolumeIsosurfMap)
+                value.Bind(wx.EVT_KILL_FOCUS, self.OnVolumeIsosurfMap)
+                value.Bind(wx.EVT_TEXT, self.OnVolumeIsosurfMap)
+            else:
+                size = (65, -1)
+                value = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = size,
+                                    initial = 0)
+                if code == 'topo':
+                    value.SetRange(minVal = -1e9, maxVal = 1e9)
+                elif code in ('shine', 'transp'):
+                    value.SetRange(minVal = 0, maxVal = 100)
+                
+                value.Bind(wx.EVT_SPINCTRL, self.OnVolumeIsosurfMap)
+                value.Bind(wx.EVT_TEXT, self.OnVolumeIsosurfMap)
+            
+            if value:
+                self.win['volume'][code]['const'] = value.GetId()
+                if code == 'topo':
+                    gridSizer.Add(item = value, flag = wx.ALIGN_CENTER_VERTICAL,
+                                  pos = (row, 2))
+                else:
+                    value.Enable(False)
+                    gridSizer.Add(item = value, flag = wx.ALIGN_CENTER_VERTICAL,
+                                  pos = (row, 3))
+            else:
+                self.win['volume'][code]['const'] = None
+            
+            if code != 'topo':
+                self.SetMapObjUseMap(nvizType = 'volume',
+                                     attrb = code) # -> enable map / disable constant
+            
+            row += 1
+        
+        boxSizer.Add(item = gridSizer, proportion = 1,
+                     flag = wx.ALL | wx.EXPAND, border = 3)
+        vSizer.Add(item = boxSizer, proportion = 1,
+                     flag = wx.EXPAND, border = 0)
+        panel.SetSizer(vSizer)
+        
+        return panel
+    
+    def _createSlicePanel(self, parent):
+        panel = wx.Panel(parent = parent, id = wx.ID_ANY)
+        
+        vSizer = wx.BoxSizer(wx.HORIZONTAL)
+        
+        box = wx.StaticBox (parent = panel, id = wx.ID_ANY,
+                            label = " %s " % (_("Slice attributes")))
+        boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        hSizer = wx.BoxSizer()
+        
+        self.win['volume']['slice'] = {}
+        hSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                      label = _("Slice parallel to axis:")), proportion = 0,
+                      flag = wx.ALIGN_CENTER_VERTICAL|wx.RIGHT, border = 3)
+        axes = wx.Choice(parent = panel, id = wx.ID_ANY, size = (65, -1), choices = ("X", "Y", "Z"))
+        hSizer.Add(axes, proportion = 0, flag = wx.ALIGN_LEFT|wx.LEFT, border = 3)
+        self.win['volume']['slice']['axes'] = axes.GetId()
+        axes.Bind(wx.EVT_CHOICE, self.OnVolumeSliceAxes)
+        boxSizer.Add(hSizer, proportion = 0, flag = wx.ALL|wx.EXPAND, border = 3)
+        
+        gridSizer = wx.GridBagSizer(vgap = 3, hgap = 3)
+        gridSizer.AddGrowableCol(0,1)
+        gridSizer.AddGrowableCol(1,2)
+        gridSizer.AddGrowableCol(2,2)
+        
+        # text labels
+        for i in range(2):
+            label = wx.StaticText(parent = panel, id = wx.ID_ANY)
+            label.SetName('label_edge_' + str(i))
+            gridSizer.Add(item = label, pos = (0, i + 1),
+                          flag = wx.ALIGN_CENTER)
+        for i in range(2,4):
+            label = wx.StaticText(parent = panel, id = wx.ID_ANY)
+            label.SetName('label_edge_' + str(i))
+            gridSizer.Add(item = label, pos = (3, i -1),
+                          flag = wx.ALIGN_CENTER)
+        for i in range(2):
+            label = wx.StaticText(parent = panel, id = wx.ID_ANY)
+            label.SetName('label_coord_' + str(i))
+            gridSizer.Add(item = label, pos = (i + 1, 0),
+                          flag = wx.ALIGN_CENTER_VERTICAL)
+        label = wx.StaticText(parent = panel, id = wx.ID_ANY)
+        label.SetName('label_coord_2')
+        gridSizer.Add(item = label, pos = (4, 0), 
+                          flag = wx.ALIGN_CENTER_VERTICAL)
+        # sliders
+        for i, coord in enumerate(('x1', 'x2')):
+            slider = wx.Slider(parent = panel, id = wx.ID_ANY, minValue = 0, maxValue = 100, value = 0)
+            self.win['volume']['slice']['slider_' + coord] = slider.GetId()
+            slider.Bind(wx.EVT_SPIN, self.OnSlicePositionChange)
+            slider.Bind(wx.EVT_SCROLL_THUMBRELEASE, self.OnSlicePositionChanged)
+            gridSizer.Add(item = slider, pos = (1, i + 1), 
+                          flag = wx.ALIGN_CENTER|wx.EXPAND)
+                        
+        for i, coord in enumerate(('y1', 'y2')):
+            slider = wx.Slider(parent = panel, id = wx.ID_ANY, minValue = 0, maxValue = 100, value = 0)
+            self.win['volume']['slice']['slider_' + coord] = slider.GetId()
+            slider.Bind(wx.EVT_SPIN, self.OnSlicePositionChange)
+            slider.Bind(wx.EVT_SCROLL_THUMBRELEASE, self.OnSlicePositionChanged)
+            gridSizer.Add(item = slider, pos = (2, i + 1), 
+                          flag = wx.ALIGN_CENTER|wx.EXPAND)
+        
+        for i, coord in enumerate(('z1', 'z2')):
+            slider = wx.Slider(parent = panel, id = wx.ID_ANY, minValue = 0, maxValue = 100, value = 0)
+            self.win['volume']['slice']['slider_' + coord] = slider.GetId()
+            slider.Bind(wx.EVT_SPIN, self.OnSlicePositionChange)
+            slider.Bind(wx.EVT_SCROLL_THUMBRELEASE, self.OnSlicePositionChanged)
+            gridSizer.Add(item = slider, pos = (4,i+1), 
+                          flag = wx.ALIGN_CENTER|wx.EXPAND)
+                        
+        
+        boxSizer.Add(item = gridSizer, proportion = 1,
+                     flag = wx.ALL | wx.EXPAND, border = 3)
+        
+        # transparency, reset
+        hSizer = wx.BoxSizer()
+        hSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                      label = _("Transparency:")), proportion = 0,
+                      flag = wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.TOP, border = 7)
+        spin = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (65, -1),
+                           min = 0, max = 100, initial = 0)
+        spin.Bind(wx.EVT_SPINCTRL, self.OnSliceTransparency)
+        self.win['volume']['slice']['transp'] = spin.GetId()
+        hSizer.Add(item = spin, proportion = 0,
+                      flag = wx.ALIGN_CENTER_VERTICAL|wx.LEFT|wx.TOP, border = 7)
+                    
+        hSizer.Add(item = wx.Size(-1, -1), proportion = 1,
+                      flag = wx.EXPAND)
+        reset = wx.Button(parent = panel, id = wx.ID_ANY, label = _("Reset"))
+        reset.Bind(wx.EVT_BUTTON, self.OnSliceReset)
+        self.win['volume']['slice']['reset'] = reset.GetId()
+        hSizer.Add(item = reset, proportion = 0,
+                      flag = wx.ALIGN_CENTER_VERTICAL|wx.TOP, border = 7)
+        
+        boxSizer.Add(hSizer, proportion = 0, flag = wx.ALL|wx.EXPAND, border = 3)
+        panel.SetSizer(boxSizer)
+        
+        return panel
+    
     def _createControl(self, parent, data, name, range, bind = (None, None, None),
                        sliderHor = True, size = 200, prec = 0):
         """!Add control (Slider + TextCtrl)"""
@@ -2461,7 +2572,7 @@ class NvizToolWindow(FN.FlatNotebook):
                     if attrb == 'topo':
                         list = self.FindWindowById(self.win['volume']['isosurfs'])
                         sel = list.GetSelection()
-                        list.SetString(sel, "%s %.1f" % (_("Level"), value))
+                        list.SetString(sel, "%s %.2f" % (_("Level"), value))
                         list.Check(sel)
             
             # update properties
@@ -2909,10 +3020,10 @@ class NvizToolWindow(FN.FlatNotebook):
         """!Enable/disable buttons 'add', 'delete',
         'move up', 'move down'"""
         nitems = list.GetCount()
-        add = self.parent.FindWindowById(self.win['volume']['btnIsosurfAdd'])
-        delete = self.parent.FindWindowById(self.win['volume']['btnIsosurfDelete'])
-        moveDown = self.parent.FindWindowById(self.win['volume']['btnIsosurfMoveDown'])
-        moveUp = self.parent.FindWindowById(self.win['volume']['btnIsosurfMoveUp'])
+        add = self.parent.FindWindowById(self.win['volume']['btnAdd'])
+        delete = self.parent.FindWindowById(self.win['volume']['btnDelete'])
+        moveDown = self.parent.FindWindowById(self.win['volume']['btnMoveDown'])
+        moveUp = self.parent.FindWindowById(self.win['volume']['btnMoveUp'])
         if nitems >= wxnviz.MAX_ISOSURFS:
             # disable add button on max
             add.Enable(False)
@@ -2936,12 +3047,41 @@ class NvizToolWindow(FN.FlatNotebook):
             moveUp.Enable(False)
         else:
             moveUp.Enable(True)
+            
+    def OnVolumeMode(self, event):
+        """!Change mode isosurfaces/slices"""
+        mode = self.FindWindowById(self.win['volume']['draw']['mode']).GetSelection()
+        data = self.GetLayerData('volume')['volume']
         
-    def OnVolumeIsosurfMode(self, event):
-        """!Set isosurface draw mode"""
-        self.SetIsosurfaceMode(event.GetSelection())
-    
-    def SetIsosurfaceMode(self, selection):
+        sizer = self.isoPanel.GetContainingSizer()
+        sizer = self.slicePanel.GetContainingSizer()
+        listBox = self.FindWindowByName('listStaticBox')
+        if mode == 0:
+            sizer.Show(self.isoPanel)
+            sizer.Hide(self.slicePanel)
+            listBox.SetLabel(" %s " % _("List of isosurfaces"))
+            data['draw']['mode']['value'] = 0
+            data['draw']['mode']['desc'] = 'isosurface'
+        else:
+            sizer.Hide(self.isoPanel)
+            sizer.Show(self.slicePanel)
+            listBox.SetLabel(" %s " % _("List of slices"))
+            data['draw']['mode']['value'] = 1
+            data['draw']['mode']['desc'] = 'slice'
+        
+        if event:
+            name = self.FindWindowById(self.win['volume']['map']).GetValue()
+            layer = self.mapWindow.GetLayerByName(name, mapType = '3d-raster')
+            self.UpdateVolumePage(layer, data, updateName = False)
+            
+        sizer.Layout()
+        listBox.GetParent().Fit()
+            
+    def OnVolumeDrawMode(self, event):
+        """!Set isosurface/slice draw mode"""
+        self.SetVolumeDrawMode(event.GetSelection())
+        
+    def SetVolumeDrawMode(self, selection):
         """!Set isosurface draw mode"""
         data = self.GetLayerData('volume')['volume']
         id = data['object']['id']
@@ -2951,22 +3091,34 @@ class NvizToolWindow(FN.FlatNotebook):
             mode |= wxnviz.DM_FLAT
         else:
             mode |= wxnviz.DM_GOURAUD
-        
-        self._display.SetIsosurfaceMode(id, mode)
+            
+        if self.FindWindowById(self.win['volume']['draw']['mode']).GetSelection() == 0:
+            self._display.SetIsosurfaceMode(id, mode)
+            data['draw']['shading']['isosurface']['desc'] = 'gouraud'
+            data['draw']['shading']['isosurface']['value'] = mode
+        else:
+            self._display.SetSliceMode(id, mode)
+            data['draw']['shading']['slice']['desc'] = 'flat'
+            data['draw']['shading']['slice']['value'] = mode
         
         if self.mapDisplay.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
         
-    def OnVolumeIsosurfResolution(self, event):
-        """!Set isosurface draw resolution"""
-        self.SetIsosurfaceResolution(event.GetInt())
+    def OnVolumeResolution(self, event):
+        """!Set isosurface/slice draw resolution"""
+        self.SetVolumeResolution(event.GetInt())
         
-    def SetIsosurfaceResolution(self, res):
+    def SetVolumeResolution(self, res):
         """!Set isosurface draw resolution"""
         data = self.GetLayerData('volume')['volume']
-        
         id = data['object']['id']
-        self._display.SetIsosurfaceRes(id, res)
+        
+        if self.FindWindowById(self.win['volume']['draw']['mode']).GetSelection() == 0:
+            self._display.SetIsosurfaceRes(id, res)
+            data['draw']['resolution']['isosurface']['value'] = res
+        else:
+            self._display.SetSliceRes(id, res)
+            data['draw']['resolution']['slice']['value'] = res
         
         if self.mapDisplay.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
@@ -2983,7 +3135,8 @@ class NvizToolWindow(FN.FlatNotebook):
             
         if self.mapDisplay.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
-            
+    
+        
     def OnVolumeIsosurfMap(self, event):
         """!Set surface attribute"""
         if self.vetoGSelectEvt:
@@ -2991,39 +3144,56 @@ class NvizToolWindow(FN.FlatNotebook):
             return
         self.SetMapObjAttrb(nvizType = 'volume', winId = event.GetId())
         
-    def OnVolumeIsosurfCheck(self, event):
-        """!Isosurface checked (->load) or unchecked (->unload)"""
+    def OnVolumeCheck(self, event):
+        """!Isosurface/slice checked (->load) or unchecked (->unload)"""
+        if self.FindWindowById(self.win['volume']['draw']['mode']).GetSelection() == 0:
+            mode = 'isosurf'
+        else:
+            mode = 'slice'
         index = event.GetSelection()
-        list = self.FindWindowById(self.win['volume']['isosurfs'])
+        list = self.FindWindowById(self.win['volume'][mode + 's'])
         
         data = self.GetLayerData('volume')['volume']
-        id = data['object']['id']
+        vid = data['object']['id']
         
-        isosurfId = event.GetSelection()
+        id = event.GetSelection()
         
-        if list.IsChecked(index):
-            if 'transp' in data['isosurface'][isosurfId] and\
-                data['isosurface'][isosurfId]['transp']['map'] is not None:
-                if data['isosurface'][isosurfId]['transp']['map']:
-                    map = True
-                    value = data['isosurface'][isosurfId]['transp']['value']
-                elif data['isosurface'][isosurfId]['transp']['map'] is not None:
-                    map = False
-                    value = data['isosurface'][isosurfId]['transp']['value']
-                self._display.SetIsosurfaceTransp(id, isosurfId, map, value)
+        if mode == 'isosurf':
+            if list.IsChecked(index):
+                if 'transp' in data['isosurface'][id] and\
+                    data['isosurface'][id]['transp']['map'] is not None:
+                    if data['isosurface'][id]['transp']['map']:
+                        map = True
+                        value = data['isosurface'][id]['transp']['value']
+                    elif data['isosurface'][id]['transp']['map'] is not None:
+                        map = False
+                        value = data['isosurface'][id]['transp']['value']
+                    self._display.SetIsosurfaceTransp(vid, id, map, value)
+                else:
+                    self._display.SetIsosurfaceTransp(vid, id, False, "0")
             else:
-                self._display.SetIsosurfaceTransp(id, isosurfId, False, "0")
+                # disable -> make transparent
+                self._display.SetIsosurfaceTransp(vid, id, False, "255")
         else:
-            # disable -> make transparent
-            self._display.SetIsosurfaceTransp(id, isosurfId, False, "255")
-        
+            if list.IsChecked(index):
+                value = data['slice'][id]['transp']['value']
+                self._display.SetSliceTransp(vid, id, value)
+            else:
+                # disable -> make transparent
+                self._display.SetSliceTransp(vid, id, 255)
+                
         if self.mapDisplay.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
         
-    def OnVolumeIsosurfSelect(self, event):
-        """!Isosurface item selected"""
-        winUp = self.FindWindowById(self.win['volume']['btnIsosurfMoveUp'])
-        winDown = self.FindWindowById(self.win['volume']['btnIsosurfMoveDown'])
+    def OnVolumeSelect(self, event):
+        """!Isosurface/Slice item selected"""
+        if self.FindWindowById(self.win['volume']['draw']['mode']).GetSelection() == 0:
+            mode = 'isosurf'
+        else:
+            mode = 'slice'
+            
+        winUp = self.FindWindowById(self.win['volume']['btnMoveUp'])
+        winDown = self.FindWindowById(self.win['volume']['btnMoveDown'])
         selection = event.GetSelection()
         if selection == -1:
             return
@@ -3044,60 +3214,95 @@ class NvizToolWindow(FN.FlatNotebook):
         # update dialog
         name = self.FindWindowById(self.win['volume']['map']).GetValue()
         layer = self.mapWindow.GetLayerByName(name, mapType = '3d-raster')
-        data = self.GetLayerData('volume')['volume']['isosurface'][selection]
         
-        self.UpdateVolumeIsosurfPage(layer, data)
+        if mode == 'isosurf':
+            data = self.GetLayerData('volume')['volume']['isosurface'][selection]
+            self.UpdateVolumeIsosurfPage(data)
+        else:
+            data = self.GetLayerData('volume')['volume']['slice'][selection]
+            self.UpdateVolumeSlicePage(data)
         
-    def OnVolumeIsosurfAdd(self, event):
-        """!Add new isosurface to the list"""
-        list = self.FindWindowById(self.win['volume']['isosurfs'])
         
-        isosurfData = self.mapWindow.nvizDefault.SetIsosurfaceDefaultProp()
+        
+    def OnVolumeAdd(self, event):
+        """!Add new isosurface/slice to the list"""
+        if self.FindWindowById(self.win['volume']['draw']['mode']).GetSelection() == 0:
+            mode = 'isosurf'
+        else:
+            mode = 'slice'
+        list = self.FindWindowById(self.win['volume'][mode + 's'])
         
         name = self.FindWindowById(self.win['volume']['map']).GetValue()
         layer = self.mapWindow.GetLayerByName(name, mapType = '3d-raster')
         data = self.GetLayerData('volume')['volume']
         id = data['object']['id']
         
-        if isosurfData['color']['map']:
-            isosurfData['color']['value'] = layer.name
-        prec = 2
-        level = isosurfData['topo']['value'] = round(self._get3dRange(name = layer.name)[0], prec)
-        
         sel = list.GetSelection()
-        if sel < 0 or sel >= list.GetCount() - 1:
-            item = list.Append(item = "%s %s" % (_("Level"), str(level)))
+        if mode == 'isosurf':
+            isosurfData = self.mapWindow.nvizDefault.SetIsosurfaceDefaultProp()
+            if isosurfData['color']['map']:
+                isosurfData['color']['value'] = layer.name
+            prec = 2
+            level = isosurfData['topo']['value'] = round(self._get3dRange(name = layer.name)[0], prec)
+        
+            if sel < 0 or sel >= list.GetCount() - 1:
+                item = list.Append(item = "%s %s" % (_("Level"), str(level)))
+            else:
+                list.Insert(item = "%s %s" % (_("Level"), str(level)),
+                            pos = sel+1) # append
+                item = sel + 1
         else:
-            list.Insert(item = "%s %s" % (_("Level"), str(level)),
-                        pos = sel+1) # append
-            item = sel + 1
+            sliceData = self.mapWindow.nvizDefault.SetSliceDefaultProp()
+            axis = ("X", "Y", "Z")[sliceData['position']['axis']]
+            if sel < 0 or sel >= list.GetCount() - 1:
+                item = list.Append(item = "%s %s" % (_("Slice parallel to"), axis))
+            else:
+                list.Insert(item = "%s" % (_("Slice parallel to"), axis),
+                            pos = sel+1) # append
+                item = sel + 1
         
         list.Check(item)
         list.SetSelection(item)
         
-        data['isosurface'].insert(item, isosurfData)
-        # add isosurface        
-        self._display.AddIsosurface(id, float(level))
+        if mode == 'isosurf':
+            data['isosurface'].insert(item, isosurfData)
+            # add isosurface        
+            self._display.AddIsosurface(id, float(level))
+        else:
+            data['slice'].insert(item, sliceData)
+            # add isosurface        
+            nslice = self._display.AddSlice(id)
+            self._display.SetSlicePosition(id, nslice -1, sliceData['position']['x1'], sliceData['position']['x2'],
+                                               sliceData['position']['y1'], sliceData['position']['y2'],
+                                               sliceData['position']['z1'], sliceData['position']['z2'],
+                                               sliceData['position']['axis'])
         # update properties
         event = wxUpdateProperties(data = data)
         wx.PostEvent(self.mapWindow, event)
         
         # update buttons
         self.UpdateIsosurfButtons(list)
-        self.UpdateVolumeIsosurfPage(layer, isosurfData)
+        if mode == 'isosurf':
+            self.UpdateVolumeIsosurfPage(isosurfData)
+        else:
+            self.UpdateVolumeSlicePage(sliceData)
         
         if self.mapDisplay.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
         
         event.Skip()
         
-    def OnVolumeIsosurfDelete(self, event):
-        """!Remove isosurface from list"""
-        list = self.FindWindowById(self.win['volume']['isosurfs'])
+    def OnVolumeDelete(self, event):
+        """!Remove isosurface/slice from list"""
+        if self.FindWindowById(self.win['volume']['draw']['mode']).GetSelection() == 0:
+            mode = 'isosurf'
+        else:
+            mode = 'slice'
+        list = self.FindWindowById(self.win['volume'][mode + 's'])
         
         # remove item from list
-        isosurfId = list.GetSelection()
-        list.Delete(isosurfId)
+        id = list.GetSelection()
+        list.Delete(id)
         # select last item
         if list.GetCount() > 0:
             list.SetSelection(list.GetCount()-1)
@@ -3106,14 +3311,27 @@ class NvizToolWindow(FN.FlatNotebook):
         layer = self.mapWindow.GetLayerByName(name, mapType = '3d-raster')
         data = self.GetLayerData('volume')['volume']
 
-        id = data['object']['id']
+        vid = data['object']['id']
         
         # delete isosurface
-        del data['isosurface'][isosurfId]
-        
-        self._display.DeleteIsosurface(id, isosurfId)
+        if mode == 'isosurf':
+            del data['isosurface'][id]
+            self._display.DeleteIsosurface(vid, id)
+        else:
+            del data['slice'][id]
+            self._display.DeleteSlice(vid, id)
         
         # update buttons
+        if list.GetCount() > 0:
+            if mode == 'isosurf':
+                self.UpdateVolumeIsosurfPage(data['isosurface'][list.GetSelection()])
+            else:
+                self.UpdateVolumeSlicePage(data['slice'][list.GetSelection()])
+        else:
+            if mode == 'isosurf':
+                self.UpdateVolumeIsosurfPage(data['attribute'])
+            else:
+                self.UpdateVolumeSlicePage(None)
         self.UpdateIsosurfButtons(list)
         
         if self.mapDisplay.statusbarWin['render'].IsChecked():
@@ -3121,9 +3339,13 @@ class NvizToolWindow(FN.FlatNotebook):
         
         event.Skip()
         
-    def OnVolumeIsosurfMoveUp(self, event):
-        """!Move isosurface up in the list"""
-        list = self.FindWindowById(self.win['volume']['isosurfs'])
+    def OnVolumeMoveUp(self, event):
+        """!Move isosurface/slice up in the list"""
+        if self.FindWindowById(self.win['volume']['draw']['mode']).GetSelection() == 0:
+            mode = 'isosurf'
+        else:
+            mode = 'slice'
+        list = self.FindWindowById(self.win['volume'][mode + 's'])
         sel = list.GetSelection()
         
         if sel < 1:
@@ -3141,9 +3363,14 @@ class NvizToolWindow(FN.FlatNotebook):
         list.Check(sel-1)
         list.SetSelection(sel-1)
         list.Delete(sel+1)
-        data['isosurface'].insert(sel-1, data['isosurface'][sel])
-        del data['isosurface'][sel+1]
-        self._display.MoveIsosurface(id, sel, True)
+        if mode == 'isosurf':
+            data['isosurface'].insert(sel-1, data['isosurface'][sel])
+            del data['isosurface'][sel+1]
+            self._display.MoveIsosurface(id, sel, True)
+        else:
+            data['slice'].insert(sel-1, data['slice'][sel])
+            del data['slice'][sel+1]
+            self._display.MoveSlice(id, sel, True)
         
         # update buttons
         self.UpdateIsosurfButtons(list)
@@ -3153,9 +3380,13 @@ class NvizToolWindow(FN.FlatNotebook):
         
         event.Skip()
         
-    def OnVolumeIsosurfMoveDown(self, event):
-        """!Move isosurface dowm in the list"""
-        list = self.FindWindowById(self.win['volume']['isosurfs'])
+    def OnVolumeMoveDown(self, event):
+        """!Move isosurface/slice down in the list"""
+        if self.FindWindowById(self.win['volume']['draw']['mode']).GetSelection() == 0:
+            mode = 'isosurf'
+        else:
+            mode = 'slice'
+        list = self.FindWindowById(self.win['volume'][mode + 's'])
         sel = list.GetSelection()
         
         if sel >= list.GetCount() - 1:
@@ -3173,9 +3404,14 @@ class NvizToolWindow(FN.FlatNotebook):
         list.Check(sel+2)
         list.SetSelection(sel+2)
         list.Delete(sel)
-        data['isosurface'].insert(sel+2, data['isosurface'][sel])
-        del data['isosurface'][sel]
-        self._display.MoveIsosurface(id, sel, False)
+        if mode == 'isosurf':
+            data['isosurface'].insert(sel+2, data['isosurface'][sel])
+            del data['isosurface'][sel]
+            self._display.MoveIsosurface(id, sel, False)
+        else:
+            data['slice'].insert(sel+2, data['slice'][sel])
+            del data['slice'][sel]
+            self._display.MoveSlice(id, sel, False)
         
         # update buttons
         self.UpdateIsosurfButtons(list)
@@ -3279,7 +3515,101 @@ class NvizToolWindow(FN.FlatNotebook):
         
         if self.mapDisplay.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
-                    
+        
+    def OnVolumeSliceAxes(self, event):
+        """!Slice axis changed"""
+        self.UpdateSliceLabels()
+        data = self.GetLayerData('volume')
+        list = self.FindWindowById(self.win['volume']['slices'])
+        sel = list.GetSelection()
+        if sel < 0:
+            return
+        axis = self.FindWindowById(self.win['volume']['slice']['axes']).GetSelection()
+        data['volume']['slice'][sel]['position']['axis'] = axis
+        data['volume']['slice'][sel]['position']['update'] = None
+        
+        axis = ("X", "Y", "Z")[axis]
+        list.SetString(sel, "%s %s" % (_("Slice parallel to"), axis))
+        list.Check(sel)
+        
+        # update properties
+        event = wxUpdateProperties(data = data)
+        wx.PostEvent(self.mapWindow, event) 
+        
+        if self.mapDisplay.statusbarWin['render'].IsChecked():
+            self.mapWindow.Refresh(False)
+    
+    def OnSliceTransparency(self, event):
+        """!Slice transparency changed"""
+        data = self.GetLayerData('volume')
+        
+        list = self.FindWindowById(self.win['volume']['slices'])
+        sel = list.GetSelection()
+        if sel < 0:
+            return
+        
+        val = self.FindWindowById(self.win['volume']['slice']['transp']).GetValue()
+        data['volume']['slice'][sel]['transp']['value'] = self._getPercent(val, toPercent = False)
+        data['volume']['slice'][sel]['transp']['update'] = None
+        
+        # update properties
+        event = wxUpdateProperties(data = data)
+        wx.PostEvent(self.mapWindow, event)
+        
+        if self.mapDisplay.statusbarWin['render'].IsChecked():
+            self.mapWindow.Refresh(False)
+        
+    def OnSliceReset(self, event):
+        """!Slice position reset"""
+        data = self.GetLayerData('volume')
+        
+        list = self.FindWindowById(self.win['volume']['slices'])
+        sel = list.GetSelection()
+        if sel < 0:
+            return
+        
+        for coord, val in zip(('x1', 'x2', 'y1', 'y2', 'z1', 'z2'),(0, 1, 0, 1, 0, 1, 0)):
+            data['volume']['slice'][sel]['position'][coord] = val
+        data['volume']['slice'][sel]['position']['update'] = None
+        
+        self.UpdateVolumeSlicePage(data['volume']['slice'][sel])
+        # update properties
+        event = wxUpdateProperties(data = data)
+        wx.PostEvent(self.mapWindow, event)
+        
+        if self.mapDisplay.statusbarWin['render'].IsChecked():
+            self.mapWindow.Refresh(False)
+        
+    def OnSlicePositionChange(self, event):
+        """!Slice position is changing"""
+        data = self.GetLayerData('volume')
+        list = self.FindWindowById(self.win['volume']['slices'])
+        sel = list.GetSelection()
+        if sel < 0:
+            return
+        win = self.win['volume']['slice']
+        winId = event.GetId()
+        value = event.GetInt()/100.
+        
+        for coord in ('x1', 'x2', 'y1', 'y2', 'z1', 'z2'):
+            if win['slider_' + coord] == winId:
+                data['volume']['slice'][sel]['position'][coord] = value
+                data['volume']['slice'][sel]['position']['update'] = None
+                break
+        self.mapWindow.render['quick'] = True
+        # update properties
+        event = wxUpdateProperties(data = data)
+        wx.PostEvent(self.mapWindow, event) 
+        
+        if self.mapDisplay.statusbarWin['render'].IsChecked():
+            self.mapWindow.Refresh(False)
+               
+    def OnSlicePositionChanged(self, event):
+        """!Slice position is changed"""
+        self.mapWindow.render['quick'] = False
+        if self.mapDisplay.statusbarWin['render'].IsChecked():
+            self.mapWindow.Refresh(False)
+                
     def OnCPlaneSelection(self, event):
         """!Cutting plane selected"""
         plane = self.FindWindowById(self.win['cplane']['planes']).GetStringSelection()
@@ -3745,36 +4075,57 @@ class NvizToolWindow(FN.FlatNotebook):
         for control, idata in data['draw'].iteritems():
             if control == 'all': # skip 'all' property
                 continue
-            
+                
             win = self.FindWindowById(self.win['volume']['draw'][control])
-            
+            if control == 'mode':
+                value = data['draw']['mode']['value']
             if control == 'shading':
-                if data['draw']['shading']['desc'] == 'flat':
+                if data['draw']['shading'][data['draw']['mode']['desc']]['desc'] == 'flat':
                     value = 0
                 else:
                     value = 1
-            else:
-                value = idata['value']
+            if control == 'resolution':
+                value = idata[data['draw']['mode']['desc']]['value']
             
             if win.GetName() == "selection":
                 win.SetSelection(value)
             else:
                 win.SetValue(value)
-        
-        self.SetIsosurfaceMode(data['draw']['shading']['value'])
-        self.SetIsosurfaceResolution(data['draw']['resolution']['value'])
-        isobox = self.FindWindowById(self.win['volume']['isosurfs'])
-        isosurfaces = []
-        for iso in data['isosurface']:
-            level = iso['topo']['value']
-            isosurfaces.append("%s %s" % (_("Level"), level))
-        isobox.Set(isosurfaces)
-        isobox.SetChecked(range(len(isosurfaces)))
-        if data['isosurface']:
-            isobox.SetSelection(0)
-            self.UpdateVolumeIsosurfPage(layer, data['isosurface'][0])
+                
+        self.OnVolumeMode(None)
+        id = data['object']['id']
+        if data['draw']['mode']['desc'] == 'isosurface':
+            self._display.SetIsosurfaceMode(id, data['draw']['shading']['isosurface']['value'])
+            self._display.SetIsosurfaceRes(id, data['draw']['resolution']['isosurface']['value'])
         else:
-            self.UpdateVolumeIsosurfPage(layer, data['attribute'])
+            self._display.SetSliceMode(id, data['draw']['shading']['slice']['value'])
+            self._display.SetSliceRes(id, data['draw']['resolution']['slice']['value'])
+        box = self.FindWindowById(self.win['volume']['isosurfs'])
+        
+        if data['draw']['mode']['desc'] == 'isosurface':
+            isosurfaces = []
+            for iso in data['isosurface']:
+                level = iso['topo']['value']
+                isosurfaces.append("%s %s" % (_("Level"), level))
+            box.Set(isosurfaces)
+            box.SetChecked(range(len(isosurfaces)))
+            if data['isosurface']:
+                box.SetSelection(0)
+                self.UpdateVolumeIsosurfPage(data['isosurface'][0])
+            else:
+                self.UpdateVolumeIsosurfPage(data['attribute'])
+        else:
+            slices = []
+            for slice in data['slice']:
+                axis = ("X", "Y", "Z")[slice['position']['axis']]
+                slices.append("%s" % _("Slice parallel to"))
+            box.Set(slices)
+            box.SetChecked(range(len(slices)))
+            if data['slice']:
+                box.SetSelection(0)
+                self.UpdateVolumeSlicePage(data['slice'][0])
+            else:
+                self.UpdateVolumeSlicePage(None)
         #
         # position
         #
@@ -3783,30 +4134,22 @@ class NvizToolWindow(FN.FlatNotebook):
             self.FindWindowById(self.win['volume']['position']['axis']).SetSelection(0)
             for control in ('slider','text'):
                     self.FindWindowById(self.win['volume']['position'][control]).SetValue(xval)    
+        # set topo range
+        mapRange = self._get3dRange(name = layer.name)
+        desc = self.FindWindowById(self.win['volume']['desc'])
+        desc.SetLabel("%s %.2f - %.2f" % (_("range:"), mapRange[0], mapRange[1]))
         
-    def UpdateVolumeIsosurfPage(self, layer, data):
+    def UpdateVolumeIsosurfPage(self, data):
         """!Update dialog -- isosurface attributes"""
         #
         # isosurface attributes
         #
         for attrb in ('topo', 'color', 'mask',
                      'transp', 'shine'):
-            # check required first
-            if attrb == 'color':
-                if layer and layer.type == '3d-raster':
-                    self.vetoGSelectEvt = True
-                    self.FindWindowById(self.win['volume'][attrb]['map']).SetValue(layer.name)
-                else:
-                    self.FindWindowById(self.win['volume'][attrb]['map']).SetValue('')
-                self.SetMapObjUseMap(nvizType = 'volume',
-                                     attrb = attrb, map = True) # -> map
-                #continue
-                
             # skip empty attributes
             if attrb not in data:
-                self.SetMapObjUseMap(nvizType = 'volume',
-                                     attrb = attrb, map = None)
-                continue
+                self.SetMapObjUseMap(nvizType = 'volume', attrb = attrb, map = None)
+                continue     
             
             value = data[attrb]['value']
             if attrb == 'color':
@@ -3830,14 +4173,65 @@ class NvizToolWindow(FN.FlatNotebook):
                     
             self.SetMapObjUseMap(nvizType = 'volume',
                                  attrb = attrb, map = data[attrb]['map'])
-        # set topo range
-        range = self._get3dRange(name = layer.name)
-        desc = self.FindWindowById(self.win['volume']['desc'])
-        desc.SetLabel("%s %.3f - %.3f" % (_("range:"), range[0], range[1]))
         # set inout
         if 'inout' in data:
             self.FindWindowById(self.win['volume']['inout']).SetValue(data['inout'])
-                
+            
+    def UpdateVolumeSlicePage(self, data):
+        """!Update dialog -- slice attributes"""
+        if data:
+            for coord in ('x1', 'x2', 'y1', 'y2', 'z1', 'z2'):
+                win = self.FindWindowById(self.win['volume']['slice']['slider_' + coord])
+                win.Enable()
+                win.SetValue(data['position'][coord] * 100)
+            win = self.FindWindowById(self.win['volume']['slice']['axes'])
+            win.SetSelection(data['position']['axis'])
+            win.Enable()
+            
+            win = self.FindWindowById(self.win['volume']['slice']['transp'])
+            win.SetValue(self._getPercent(data['transp']['value']))
+            win.Enable()
+            self.FindWindowById(self.win['volume']['slice']['reset']).Enable()
+        else:
+            for coord in ('x1', 'x2', 'y1', 'y2', 'z1', 'z2'):
+                self.FindWindowById(self.win['volume']['slice']['slider_' + coord]).Disable()
+            self.FindWindowById(self.win['volume']['slice']['axes']).Disable()
+            self.FindWindowById(self.win['volume']['slice']['transp']).Disable()
+            self.FindWindowById(self.win['volume']['slice']['reset']).Disable()
+        
+        self.UpdateSliceLabels()
+        
+    def UpdateSliceLabels(self):
+        """!Update text labels of slice controls according to axis"""
+        sel = self.FindWindowById(self.win['volume']['slice']['axes']).GetSelection()
+        if sel == 0:
+            self.FindWindowByName('label_edge_0').SetLabel(_("North edge:"))
+            self.FindWindowByName('label_edge_1').SetLabel(_("South edge:"))
+            self.FindWindowByName('label_edge_2').SetLabel(_("West edge:"))
+            self.FindWindowByName('label_edge_3').SetLabel(_("East edge:"))
+            
+            self.FindWindowByName('label_coord_0').SetLabel(_("Northing (Y):"))
+            self.FindWindowByName('label_coord_1').SetLabel(_("Height (Z):"))
+            self.FindWindowByName('label_coord_2').SetLabel(_("Easting (X):"))
+        elif sel == 1:
+            self.FindWindowByName('label_edge_0').SetLabel(_("West edge:"))
+            self.FindWindowByName('label_edge_1').SetLabel(_("East edge:"))
+            self.FindWindowByName('label_edge_2').SetLabel(_("North edge:"))
+            self.FindWindowByName('label_edge_3').SetLabel(_("South edge:"))
+            
+            self.FindWindowByName('label_coord_0').SetLabel(_("Easting (X):"))
+            self.FindWindowByName('label_coord_1').SetLabel(_("Height (Z):"))
+            self.FindWindowByName('label_coord_2').SetLabel(_("Northing (Y):"))
+        else:
+            self.FindWindowByName('label_edge_0').SetLabel(_("West edge:"))
+            self.FindWindowByName('label_edge_1').SetLabel(_("East edge:"))
+            self.FindWindowByName('label_edge_2').SetLabel(_("Bottom edge:"))
+            self.FindWindowByName('label_edge_3').SetLabel(_("Top edge:"))  
+            
+            self.FindWindowByName('label_coord_0').SetLabel(_("Easting (X):"))
+            self.FindWindowByName('label_coord_1').SetLabel(_("Northing (Y):"))
+            self.FindWindowByName('label_coord_2').SetLabel(_("Height (Z):")) 
+        
     def SetPage(self, name):
         """!Get named page"""
         if name == 'view':

@@ -19,6 +19,7 @@ for details.
 
 import os
 import sys
+import copy
 
 import wx
 
@@ -605,14 +606,15 @@ class Nviz:
         # draw
         #
         for control, value in UserSettings.Get(group='nviz', key='volume', subkey='draw').iteritems():
-            if control == 'mode':
-                continue
             if control == 'shading':
                 sel = UserSettings.Get(group='nviz', key='volume', subkey=['draw', 'shading'])
                 value, desc = self.GetDrawMode(shade=sel, string=False)
-
-                data['draw']['shading'] = { 'value' : value,
-                                            'desc' : desc['shading'] }
+                
+                data['draw']['shading'] = {}
+                data['draw']['shading']['isosurface'] = { 'value' : value,
+                                                          'desc' : desc['shading'] }
+                data['draw']['shading']['slice'] = { 'value' : value,
+                                                     'desc' : desc['shading'] }
             elif control == 'mode':
                 sel = UserSettings.Get(group='nviz', key='volume', subkey=['draw', 'mode'])
                 if sel == 0:
@@ -622,7 +624,9 @@ class Nviz:
                 data['draw']['mode'] = { 'value' : sel,
                                          'desc' : desc, }
             else:
-                data['draw'][control] = { 'value' : value }
+                data['draw'][control] = {}
+                data['draw'][control]['isosurface'] = { 'value' : value }
+                data['draw'][control]['slice'] = { 'value' : value }
 
             if 'update' not in data['draw'][control]:
                 data['draw'][control]['update'] = None
@@ -648,7 +652,18 @@ class Nviz:
                 data[attr][key] = value
             data[attr]['update'] = None
         return data
-
+    
+    def SetSliceDefaultProp(self):
+        """!Set default slice properties"""
+        data = dict()
+        data['position'] = copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'volume',
+                                               subkey = 'slice_position'))
+        data['position']['update'] = None
+        
+        data['transp'] = copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'volume',
+                                               subkey = 'transp'))
+        return data
+    
     def SetVectorDefaultProp(self):
         """Set default vector data properties"""
         data = dict()

@@ -974,6 +974,27 @@ class Nviz(object):
         
         return GVL_isosurf_set_att_const(id, nisosurfs - 1, ATT_TOPO, level)
     
+    def AddSlice(self, id, slice_id = None):
+        """!Add new slice
+        
+        @param id volume id
+        
+        @return -1 on failure
+        @return number of slices
+        """
+        if not GVL_vol_exists(id):
+            return -1
+        
+        if slice_id is not None:
+            num = GVL_slice_num_slices(id)
+            if num < 0 or slice_id != num:
+                return -1
+                
+        if GVL_slice_add(id) < 0:
+            return -1
+        
+        return GVL_slice_num_slices(id)
+    
     def DeleteIsosurface(self, id, isosurf_id):
         """!Delete isosurface
         
@@ -992,6 +1013,30 @@ class Nviz(object):
             return -2
         
         ret = GVL_isosurf_del(id, isosurf_id)
+        
+        if ret < 0:
+            return -3
+
+        return 1
+    
+    def DeleteSlice(self, id, slice_id):
+        """!Delete slice
+        
+        @param id volume id
+        @param slice_id slice id
+        
+        @return 1 on success
+        @return -1 volume not found
+        @return -2 slice not found
+        @return -3 on failure
+        """
+        if not GVL_vol_exists(id):
+            return -1
+        
+        if slice_id > GVL_slice_num_slices(id):
+            return -2
+        
+        ret = GVL_slice_del(id, slice_id)
         
         if ret < 0:
             return -3
@@ -1026,6 +1071,34 @@ class Nviz(object):
 
         return 1
 
+    def MoveSlice(self, id, slice_id, up):
+        """!Move slice up/down in the list
+        
+        @param id volume id
+        @param slice_id slice id
+        @param up if true move up otherwise down
+        
+        @return 1 on success
+        @return -1 volume not found
+        @return -2 slice not found
+        @return -3 on failure
+        """
+        if not GVL_vol_exists(id):
+            return -1
+        
+        if slice_id > GVL_slice_num_slices(id):
+            return -2
+        
+        if up:
+            ret = GVL_slice_move_up(id, slice_id)
+        else:
+            ret = GVL_slice_move_down(id, slice_id)
+        
+        if ret < 0:
+            return -3
+
+        return 1
+    
     def SetIsosurfaceTopo(self, id, isosurf_id, map, value):
         """!Set isosurface level
         
@@ -1149,7 +1222,7 @@ class Nviz(object):
             ret = GVL_isosurf_set_att_const(id, isosurf_id, attr, val)
         
         Debug.msg(3, "Nviz::SetIsosurfaceAttr(): id=%d, isosurf=%d, "
-                  "attr=%d, map=%d, value=%s",
+                  "attr=%d, map=%s, value=%s",
                   id, isosurf_id, attr, map, value)
         
         if ret < 0:
@@ -1243,6 +1316,25 @@ class Nviz(object):
         
         return 1
     
+    def SetSliceMode(self, id, mode):
+        """!Set draw mode for slices
+        
+        @param mode
+        
+        @return 1 on success
+        @return -1 volume set not found
+        @return -2 on failure
+        """
+        if not GVL_vol_exists(id):
+            return -1
+        
+        ret = GVL_slice_set_drawmode(id, mode)
+        
+        if ret < 0:
+            return -2
+        
+        return 1
+    
     def SetIsosurfaceRes(self, id, res):
         """!Set draw resolution for isosurfaces
         
@@ -1256,6 +1348,78 @@ class Nviz(object):
             return -1
         
         ret = GVL_isosurf_set_drawres(id, res, res, res)
+        
+        if ret < 0:
+            return -2
+        
+        return 1
+    
+    def SetSliceRes(self, id, res):
+        """!Set draw resolution for slices
+        
+        @param res resolution value
+        
+        @return 1 on success
+        @return -1 volume set not found
+        @return -2 on failure
+        """
+        if not GVL_vol_exists(id):
+            return -1
+        
+        ret = GVL_slice_set_drawres(id, res, res, res)
+        
+        if ret < 0:
+            return -2
+        
+        return 1
+    
+    def SetSlicePosition(self, id, slice_id, x1, x2, y1, y2, z1, z2, dir):
+        """!Set slice position
+        
+        @param id volume id
+        @param slice_id slice id
+        @param x1,x2,y1,y2,z1,z2 slice coordinates
+        @param dir axis
+        
+        @return 1 on success
+        @return -1 volume not found
+        @return -2 slice not found
+        @return -3 on failure
+        """
+        if not GVL_vol_exists(id):
+            return -1
+        
+        if slice_id > GVL_slice_num_slices(id):
+            return -2
+        
+        ret = GVL_slice_set_pos(id, slice_id, x1, x2, y1, y2, z1, z2, dir)
+        
+        if ret < 0:
+            return -2
+        
+        return 1
+    
+    def SetSliceTransp(self, id, slice_id, value):
+        """!Set slice transparency
+        
+        @param id volume id
+        @param slice_id slice id
+        @param x1,x2,y1,y2,z1,z2 slice coordinates
+        @param value transparency value (0 - 255)
+        
+        @return 1 on success
+        @return -1 volume not found
+        @return -2 slice not found
+        @return -3 on failure
+        """
+        
+        if not GVL_vol_exists(id):
+            return -1
+        
+        if slice_id > GVL_slice_num_slices(id):
+            return -2
+        
+        ret = GVL_slice_set_transp(id, slice_id, value)
         
         if ret < 0:
             return -2
