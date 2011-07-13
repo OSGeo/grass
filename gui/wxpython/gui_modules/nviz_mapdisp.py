@@ -165,6 +165,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         """!Initialize cutting planes list"""
         for i in range(self._display.GetCPlanesCount()):
             cplane = copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'cplane'))
+            cplane['on'] = False
             self.cplanes.append(cplane)
             
             
@@ -818,9 +819,14 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         for plane in range (self._display.GetCPlanesCount()):
             if plane == index:
                 self._display.SelectCPlane(plane)
+                self.cplanes[plane]['on'] = True
             else:
                 self._display.UnselectCPlane(plane)
-    
+                try:
+                    self.cplanes[plane]['on'] = False
+                except IndexError:
+                    pass
+                    
     def UpdateCPlane(self, event):
         """!Change cutting plane settings"""
         current = event.current
