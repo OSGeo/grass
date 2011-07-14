@@ -54,11 +54,12 @@ int main(int argc, char *argv[])
     int nrows, ncols;
     int row, col, i, j;
     CELL **data;		/* Data structure containing image */
-    CELL *cell_row;
+    DCELL *dcell_row;
+    struct FPRange range;
+    DCELL min, max, inscale;
     FCELL measure;		/* Containing measure done */
     int t_measure, dist, size;	/* dist = value of distance, size = s. of sliding window */
     int infd, outfd;
-    int verbose;
     int a, c, corr, v, idm, sa, sv, se, e, dv, de, moc1, moc2, mcc;
     RASTER_MAP_TYPE data_type, out_data_type;
     struct GModule *module;
@@ -230,7 +231,7 @@ int main(int argc, char *argv[])
     /* Load raster map. */
 
     /* allocate the space for one row of cell map data *A* */
-    cell_row = Rast_allocate_c_buf();
+    dcell_row = Rast_allocate_d_buf();
 
     /* Allocate appropriate memory for the structure containing the image */
     data = (int **)G_malloc(nrows * sizeof(int *));
@@ -238,17 +239,37 @@ int main(int argc, char *argv[])
 	data[i] = (int *)G_malloc(ncols * sizeof(int));
     }
 
+    /* read input range */
+    Rast_init_fp_range(&range);
+    Rast_read_fp_range(name, "", &range);
+    Rast_get_fp_range_min_max(&range, &min, &max);
+    inscale = 0;
+    if (min < 0 || max > 255) {
+	inscale = 255. / (max - min);
+    }
+    /* input has 0 - 1 range */
+    else if (max <= 1.) {
+	inscale = 255. / (max - min);
+    }
+
     /* Read in cell map values */
     G_important_message(_("Reading raster map..."));
     for (j = 0; j < nrows; j++) {
-	Rast_get_row(infd, cell_row, j, CELL_TYPE);
-	for (i = 0; i < ncols; i++)
-	    data[j][i] = (int)cell_row[i];
+	Rast_get_row(infd, dcell_row, j, DCELL_TYPE);
+	for (i = 0; i < ncols; i++) {
+	    if (Rast_is_d_null_value(&(dcell_row[i])))
+		data[j][i] = -1;
+	    else if (inscale) {
+		data[j][i] = (CELL)((dcell_row[i] - min) * inscale);
+	    }
+	    else
+		data[j][i] = (CELL)dcell_row[i];
+	}
     }
 
     /* close input cell map and release the row buffer */
     Rast_close(infd);
-    G_free(cell_row);
+    G_free(dcell_row);
 
     /* Now raster map is into memory. */
 
@@ -288,9 +309,13 @@ int main(int argc, char *argv[])
 				  out_data_type);
 	    *result = '\0';
 
+	    strcpy(mapname, filename);
+	    strcat(mapname, suffixes[t_measure]);
+	    G_important_message(_("Calculating measure #%d <%s> (56 measures available)"),
+				(t_measure + 1), mapname);
+
 	    for (row = 0; row < nrows - (size - 1); row++) {
-		if (verbose)
-		    G_percent(row, nrows, 2);
+		G_percent(row, nrows, 2);
 
 		/*process the data */
 		for (col = 0; col < ncols - (size - 1); col++) {
@@ -340,10 +365,6 @@ int main(int argc, char *argv[])
 		    Rast_put_row(outfd, outrast, out_data_type);
 
 	    Rast_close(outfd);
-	    strcpy(mapname, filename);
-	    strcat(mapname, suffixes[t_measure]);
-	    G_important_message(_("Calculated measure #%d <%s> (56 measures available)"),
-				(t_measure + 1), mapname);
 
 	    Rast_short_history(mapname, "raster", &history);
 	    Rast_command_history(&history);
