@@ -91,13 +91,13 @@ class NTCValidator(wx.PyValidator):
 class NumTextCtrl(wx.TextCtrl):
     """!Class derived from wx.TextCtrl for numerical values only"""
     def __init__(self, parent,  **kwargs):
-        self.precision = kwargs.pop('prec')
+##        self.precision = kwargs.pop('prec')
         wx.TextCtrl.__init__(self, parent = parent,
             validator = NTCValidator(flag = 'DIGIT_ONLY'), **kwargs)
         
             
     def SetValue(self, value):
-        super(NumTextCtrl, self).SetValue(("%." + str(self.precision) + "f") % float(value))
+        super(NumTextCtrl, self).SetValue( str(value))
         
     def GetValue(self):
         val = super(NumTextCtrl, self).GetValue()
@@ -283,7 +283,7 @@ class NvizToolWindow(FN.FlatNotebook):
                             range = (0, 1),
                             bind = (self.OnViewChange, self.OnViewChanged, self.OnViewChangedText))
         self._createControl(panel, data = self.win['view'], name = 'z-exag', sliderHor = False,
-                            range = (0, 5), prec = 1,
+                            range = (0, 5),
                             bind = (self.OnViewChange, self.OnViewChanged, self.OnViewChangedText))
         self.FindWindowById(self.win['view']['z-exag']['slider']).SetValue(1)
         self.FindWindowById(self.win['view']['z-exag']['text']).SetValue(1)
@@ -1903,12 +1903,11 @@ class NvizToolWindow(FN.FlatNotebook):
             elif code == 'mask':
                 value = None
             elif code == 'topo':
-                prec = 2 # do settings?
                 value = NumTextCtrl(parent = panel, id = wx.ID_ANY, size = (200, -1),
-                            style = wx.TE_PROCESS_ENTER, prec = prec)
+                            style = wx.TE_PROCESS_ENTER)
                 value.Bind(wx.EVT_TEXT_ENTER, self.OnVolumeIsosurfMap)
                 value.Bind(wx.EVT_KILL_FOCUS, self.OnVolumeIsosurfMap)
-                value.Bind(wx.EVT_TEXT, self.OnVolumeIsosurfMap)
+##                value.Bind(wx.EVT_TEXT, self.OnVolumeIsosurfMap)
             else:
                 size = (65, -1)
                 value = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = size,
@@ -2047,7 +2046,7 @@ class NvizToolWindow(FN.FlatNotebook):
         return panel
     
     def _createControl(self, parent, data, name, range, bind = (None, None, None),
-                       sliderHor = True, size = 200, prec = 0):
+                       sliderHor = True, size = 200):
         """!Add control (Slider + TextCtrl)"""
         data[name] = dict()
         if sliderHor:
@@ -2074,7 +2073,7 @@ class NvizToolWindow(FN.FlatNotebook):
         data[name]['slider'] = slider.GetId()
         
         text = NumTextCtrl(parent = parent, id = wx.ID_ANY, size = (65, -1),
-                            style = wx.TE_PROCESS_ENTER, prec = prec)
+                            style = wx.TE_PROCESS_ENTER)
         
         text.SetName('text')
         if bind[2]:
@@ -2130,7 +2129,7 @@ class NvizToolWindow(FN.FlatNotebook):
             for win in self.win['view'][control].itervalues():             
                 try:
                     if control == 'height':
-                        value = self.mapWindow.iview[control]['value']
+                        value = int(self.mapWindow.iview[control]['value'])
                     else:
                         value = self.mapWindow.view[control]['value']
                 except KeyError:
@@ -2572,7 +2571,7 @@ class NvizToolWindow(FN.FlatNotebook):
                     if attrb == 'topo':
                         list = self.FindWindowById(self.win['volume']['isosurfs'])
                         sel = list.GetSelection()
-                        list.SetString(sel, "%s %.2f" % (_("Level"), value))
+                        list.SetString(sel, "%s %s" % (_("Level"), str(value)))
                         list.Check(sel)
             
             # update properties
@@ -3242,8 +3241,8 @@ class NvizToolWindow(FN.FlatNotebook):
             isosurfData = self.mapWindow.nvizDefault.SetIsosurfaceDefaultProp()
             if isosurfData['color']['map']:
                 isosurfData['color']['value'] = layer.name
-            prec = 2
-            level = isosurfData['topo']['value'] = round(self._get3dRange(name = layer.name)[0], prec)
+
+            level = isosurfData['topo']['value'] = round(self._get3dRange(name = layer.name)[0], 2)
         
             if sel < 0 or sel >= list.GetCount() - 1:
                 item = list.Append(item = "%s %s" % (_("Level"), str(level)))
@@ -3749,7 +3748,7 @@ class NvizToolWindow(FN.FlatNotebook):
                 self.FindWindowById(self.win['view']['height'][control]).SetRange(
                                                                         hmin,hmax)
                 self.FindWindowById(self.win['view']['z-exag'][control]).SetRange(
-                                                                            zmin, zmax)                                                                
+                                                                        zmin, zmax) 
                 self.FindWindowById(self.win['view']['height'][control]).SetValue(hval)                                      
                 
                 self.FindWindowById(self.win['view']['z-exag'][control]).SetValue(zval)                                      
@@ -3827,7 +3826,7 @@ class NvizToolWindow(FN.FlatNotebook):
             
         self.Update()
         self.pageChanging = False
-    
+        
     def UpdateCPlanePage(self, index):
         """!Update widgets according to selected clip plane"""
         if index == -1:   
@@ -4122,7 +4121,7 @@ class NvizToolWindow(FN.FlatNotebook):
             slices = []
             for slice in data['slice']:
                 axis = ("X", "Y", "Z")[slice['position']['axis']]
-                slices.append("%s" % _("Slice parallel to"))
+                slices.append("%s %s" % (_("Slice parallel to"), axis))
             box.Set(slices)
             box.SetChecked(range(len(slices)))
             if data['slice']:
