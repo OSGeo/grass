@@ -3625,7 +3625,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:557
 #, fuzzy
-msgid "Interacrive management of vector color tables."
+msgid "Interactive management of vector color tables."
 msgstr "提供色彩表的栅格图名称"
 
 #: ../gui/wxpython/menustrings.py:558

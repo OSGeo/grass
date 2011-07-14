@@ -3736,7 +3736,7 @@ msgstr ""
 "sloupce."
 
 #: ../gui/wxpython/menustrings.py:557
-msgid "Interacrive management of vector color tables."
+msgid "Interactive management of vector color tables."
 msgstr "Interaktivní správa vektorové tabulky barev"
 
 #: ../gui/wxpython/menustrings.py:558

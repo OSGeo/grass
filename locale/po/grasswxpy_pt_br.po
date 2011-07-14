@@ -3792,7 +3792,7 @@ msgid "Sets color rules for features in a vector map using a numeric attribute c
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:557
-msgid "Interacrive management of vector color tables."
+msgid "Interactive management of vector color tables."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:558
