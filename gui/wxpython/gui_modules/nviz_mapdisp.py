@@ -1094,6 +1094,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self._display.SetSurfaceColor(id = id, map = False, value = data['color'])
         self._display.SetSurfaceTopo(id = id, map = False, value = data['value'])
         self._display.SetSurfaceRes(id, data['resolution'], data['resolution'])
+        if data['transp'] == 0:
+            self._display.UnsetSurfaceTransp(id)
+        else:
+            self._display.SetSurfaceTransp(id, map = False, value = data['transp'])
             
     def UpdateSurfaceProperties(self, id, data):
         """!Update surface map object properties"""
