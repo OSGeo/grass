@@ -214,3 +214,93 @@ int add_isosurfs(const struct GParams *params, nv_data *data)
 
     return 1;
 }
+
+int add_slices(const struct GParams *params, nv_data *data)
+{
+    int i;
+    int num, nvols, *vol_list, id, nslices, axis;
+    int res, draw_mode;
+    char **tokens;
+    const char* style;
+
+    vol_list = GVL_get_vol_list(&nvols);
+
+    for (i = 0; params->slice->answers[i]; i++) {
+	tokens = G_tokenize(params->slice->answers[i], ":");
+	if (G_number_of_tokens(tokens) != 2) 
+	    G_fatal_error(_("Error tokenize '%s'"), 
+			  params->slice->answers[i]);
+	num = atoi(tokens[0]);
+
+	if (!strcmp(tokens[1],"x") || !strcmp(tokens[1],"X"))
+	    axis = 0;
+	else if (!strcmp(tokens[1],"y") || !strcmp(tokens[1],"Y"))
+	    axis = 1;
+	else if (!strcmp(tokens[1],"z") || !strcmp(tokens[1],"Z"))
+	    axis = 2;
+	else
+	    G_fatal_error(_("Wrong name for axis: %s"), 
+			  tokens[1]);
+	G_free_tokens(tokens);
+
+	if (num > nvols) {
+	    G_fatal_error(_("Volume set number %d is not available"), 
+			  num);
+	}
+
+	id = vol_list[num-1];
+	if (GVL_slice_add(id) < 0) {
+	    G_fatal_error(_("Unable to add slice (volume set %d)"),
+			  id);
+	}
+
+	nslices = GVL_slice_num_slices(id);
+
+	if (GVL_slice_set_pos(id, nslices-1, atof(params->slice_pos->answers[i*6+0]),
+					     atof(params->slice_pos->answers[i*6+1]),
+					     atof(params->slice_pos->answers[i*6+2]),
+					     atof(params->slice_pos->answers[i*6+3]),
+					     atof(params->slice_pos->answers[i*6+4]),
+					     atof(params->slice_pos->answers[i*6+5]),
+					     axis) < 0) 
+	    G_fatal_error(_("Unable to set slice (%d) position of volume %d"),
+			  nslices-1, id);
+
+	/* set transparency */
+	if (GVL_slice_set_transp(id, nslices-1, atoi(params->slice_transp->answers[i])) < 0)
+	    G_fatal_error(_("Unable to set slice (%d) transparency of volume %d"),
+			  nslices-1, id);
+    }
+
+    /* set draw resolution and shading after slices are added*/
+    for (i = 0; i < nvols; i++) {
+
+	id = vol_list[i];
+	/* set resolution */
+	if (opt_get_num_answers(params->volume_res) != nvols)
+	    res = atof(params->volume_res->answers[0]);
+	else
+	    res = atof(params->volume_res->answers[i]);
+
+	GVL_slice_set_drawres(id, res, res, res);
+
+	/* set shading */
+	if (opt_get_num_answers(params->volume_shade) != nvols)
+	    style = params->volume_shade->answers[0];
+	else
+	    style = params->volume_shade->answers[i];
+
+	draw_mode = 0;
+
+	if (strcmp(style, "flat") == 0) {
+	    draw_mode |= DM_FLAT;
+	}
+	else {
+	    draw_mode |= DM_GOURAUD;
+	}
+
+	GVL_slice_set_drawmode(id, draw_mode);
+    }
+
+    return 1;
+}

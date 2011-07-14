@@ -627,7 +627,7 @@ void args_volume(struct GParams *params)
     params->isosurf_transp_map->multiple = YES;
     params->isosurf_transp_map->required = NO;
     params->isosurf_transp_map->description =
-	_("Name of 3D raster map(s) for transparency");
+	_("Name of 3D raster map(s) for isosurface transparency");
     params->isosurf_transp_map->guisection = _("Volumes");
     params->isosurf_transp_map->key = "isosurf_transparency_map";
 
@@ -659,6 +659,40 @@ void args_volume(struct GParams *params)
     params->isosurf_shine_const->guisection = _("Volumes");
     params->isosurf_shine_const->options = "0-255";
     
+    /* slices */
+    /* slice axis */
+    params->slice = G_define_option();
+    params->slice->key = "slice";
+    params->slice->key_desc = "volume:axis";
+    params->slice->type = TYPE_STRING;
+    params->slice->required = NO;
+    params->slice->multiple = YES;
+    params->slice->description = _("Volume slice parallel to given axis (x, y, z)");
+    params->slice->guisection = _("Volumes");
+
+    /* slice position */
+    params->slice_pos = G_define_option();
+    params->slice_pos->key = "slice_position";
+    params->slice_pos->key_desc = "x1,x2,y1,y2,z1,z2";
+    params->slice_pos->type = TYPE_DOUBLE;
+    params->slice_pos->required = NO;
+    params->slice_pos->multiple = YES;
+    params->slice_pos->description = _("Volume slice position");
+    params->slice_pos->guisection = _("Volumes");
+    params->slice_pos->answer = "0,1,0,1,0,1";
+    
+    /* slice transparency */
+    params->slice_transp = G_define_option();
+    params->slice_transp->key = "slice_transparency";
+    params->slice_transp->key_desc = "value";
+    params->slice_transp->type = TYPE_INTEGER;
+    params->slice_transp->required = NO;
+    params->slice_transp->multiple = YES;
+    params->slice_transp->description = _("Volume slice transparency");
+    params->slice_transp->guisection = _("Volumes");
+    params->slice_transp->answer = "0";
+    params->slice_transp->options = "0-255";
+
     return;
 }
 
@@ -852,7 +886,7 @@ void check_parameters(const struct GParams *params)
 
     int nvpoints;
     
-    int nvolumes, nisosurf;
+    int nvolumes, nisosurf, nslices;
 
     /* topography */
     nelev_map = opt_get_num_answers(params->elev_map);
@@ -1009,8 +1043,9 @@ void check_parameters(const struct GParams *params)
      */
     nvolumes = opt_get_num_answers(params->volume);
     nisosurf = opt_get_num_answers(params->isosurf_level);
+    nslices = opt_get_num_answers(params->slice);
 
-    /* transparency */
+    /* isosurface transparency */
     nmaps = opt_get_num_answers(params->isosurf_transp_map);
     nconsts = opt_get_num_answers(params->isosurf_transp_const);
 
@@ -1019,14 +1054,26 @@ void check_parameters(const struct GParams *params)
 		      params->isosurf_level->key, nisosurf, params->isosurf_transp_map->key, nmaps,
 		      params->isosurf_transp_const->key, nconsts);
 
-    /* shininess */
+    /* isosurface shininess */
     nmaps = opt_get_num_answers(params->isosurf_shine_map);
     nconsts = opt_get_num_answers(params->isosurf_shine_const);
 
     if ((nmaps + nconsts > 0) && (nisosurf != nmaps + nconsts))
-    G_fatal_error(_("Inconsistent number of attributes (<%s> %d: <%s> %d, <%s> %d"),
-		    params->isosurf_level->key, nisosurf, params->isosurf_shine_map->key, nmaps,
-		    params->isosurf_shine_const->key, nconsts);
+	G_fatal_error(_("Inconsistent number of attributes (<%s> %d: <%s> %d, <%s> %d"),
+			params->isosurf_level->key, nisosurf, params->isosurf_shine_map->key, nmaps,
+			params->isosurf_shine_const->key, nconsts);
+
+    /* slice transparency */
+    nconsts = opt_get_num_answers(params->slice_transp);
+    if (nslices != nconsts)
+	G_fatal_error(_("Inconsistent number of attributes (<%s> %d: <%s> %d)"),
+			params->slice->key, nslices, params->slice_transp->key, nconsts);
+
+    /* slice position */
+    ncoords = opt_get_num_answers(params->slice_pos);
+    if (ncoords != 6 * nslices)
+	G_fatal_error(_("Inconsistent number of attributes (<%s> %d: <%s> %d x 6)"),
+			  params->slice->key, nslices, params->slice_pos->key, ncoords/6);
 
     return;
 }
