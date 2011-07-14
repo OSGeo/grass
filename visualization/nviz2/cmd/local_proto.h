@@ -23,7 +23,7 @@ struct GParams
     /* volumes */
 	*volume, *volume_mode, *volume_shade, *volume_pos, *volume_res, *isosurf_level,
 	*isosurf_color_map, *isosurf_color_const, *isosurf_transp_map, *isosurf_transp_const,
-	*isosurf_shine_map, *isosurf_shine_const,
+	*isosurf_shine_map, *isosurf_shine_const, *slice_pos, *slice, *slice_transp,
     /* misc */
 	*exag, *bgcolor,
     /* cutting planes */
@@ -60,6 +60,7 @@ int check_thematic(const struct GParams *, int);
 /* volume.c */
 int load_rasters3d(const struct GParams *, nv_data *);
 int add_isosurfs(const struct GParams *, nv_data *);
+int add_slices(const struct GParams *, nv_data *);
 
 /* cutting planes */
 void draw_cplane(const struct GParams *, nv_data *);

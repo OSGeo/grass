@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
     struct GParams *params;
 
     int i, ret;
-    int red, grn, blu, sx, sy;
+    int red, grn, blu;
     float size;
     double vp_height, z_exag;	/* calculated viewpoint height, z-exag */
     int width, height;		/* output image size */
@@ -118,6 +118,11 @@ int main(int argc, char *argv[])
     /* define isosurfaces for displaying volumes */
     if (params->isosurf_level->answer) {
 	add_isosurfs(params, &data);
+    }
+
+    /* define slices for displaying volumes */
+    if (params->slice->answer) {
+	add_slices(params, &data);
     }
 
     /* focus on loaded data */
