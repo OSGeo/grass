@@ -58,10 +58,10 @@ f11_dentropy(), f12_icorr(), f13_icorr(), f14_maxcorr(), *vector(),
 **matrix();
 
 
-float **P_matrix0;
-float **P_matrix45;
-float **P_matrix90;
-float **P_matrix135;
+static float **P_matrix0 = NULL;
+static float **P_matrix45 = NULL;
+static float **P_matrix90 = NULL;
+static float **P_matrix135 = NULL;
 
 int tone[PGM_MAXMAXVAL + 1];
 
@@ -454,6 +454,8 @@ float f3_corr(float **P, int Ng)
 	for (j = 0; j < Ng; ++j)
 	    tmp += i * j * P[i][j];
 
+    G_free(px);
+
     return (tmp - meanx * meany) / (stddevx * stddevy);
     /*
      * This correlation feature is a measure of gray-tone linear-dependencies
@@ -660,6 +662,8 @@ float f12_icorr(float **P, int Ng)
 	hx -= px[i] * log10(px[i] + EPSILON);
 	hy -= py[i] * log10(py[i] + EPSILON);
     }
+    G_free(px);
+    G_free(py);
     /* fprintf(stderr,"hxy1=%f\thxy=%f\thx=%f\thy=%f\n",hxy1,hxy,hx,hy); */
     return ((hxy - hxy1) / (hx > hy ? hx : hy));
 }
@@ -698,6 +702,8 @@ float f13_icorr(float **P, int Ng)
 	hx -= px[i] * log10(px[i] + EPSILON);
 	hy -= py[i] * log10(py[i] + EPSILON);
     }
+    G_free(px);
+    G_free(py);
     /* fprintf(stderr,"hx=%f\thxy2=%f\n",hx,hxy2); */
     return (sqrt(abs(1 - exp(-2.0 * (hxy2 - hxy)))));
 }
@@ -746,6 +752,12 @@ float f14_maxcorr(float **P, int Ng)
     /* Returns the sqrt of the second largest eigenvalue of Q */
     for (i = 2, tmp = x[1]; i <= Ng; ++i)
 	tmp = (tmp > x[i]) ? tmp : x[i];
+
+    MatrixDealloc(Q, Ng);
+    G_free(px);
+    G_free(py);
+    G_free(x);
+    G_free(iy);
     return sqrt(x[Ng - 1]);
 }
 
@@ -756,7 +768,7 @@ float *vector(int nl, int nh)
     v = (float *)G_malloc((unsigned)(nh - nl + 1) * sizeof(float));
     if (!v)
 	G_fatal_error(_("Unable to allocate memory")), exit(EXIT_FAILURE);
-    return v - nl;
+    return v;
 }
 
 
@@ -769,12 +781,10 @@ float **matrix(int nrl, int nrh, int ncl, int nch)
 
     /* allocate pointers to rows */
     m = (float **)G_malloc((unsigned)(nrh - nrl + 1) * sizeof(float *));
-    m -= ncl;
 
-    /* allocate rows and set pointers to them */
-    for (i = nrl; i <= nrh; i++) {
+    /* allocate rows */
+    for (i = 0; i < (nrh - nrl + 1); i++) {
 	m[i] = (float *)G_malloc((unsigned)(nch - ncl + 1) * sizeof(float));
-	m[i] -= ncl;
     }
     /* return pointer to array of pointers to rows */
     return m;
