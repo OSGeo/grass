@@ -1595,7 +1595,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                     axis = ('x','y','z')[slice['position']['axis']]
                     cmdSlice += "%d:%s," % (i + 1, axis)
                     for coord in ('x1', 'x2', 'y1', 'y2', 'z1', 'z2'):
-                        cmdSlicePos += "%d," % slice['position'][coord]
+                        cmdSlicePos += "%f," % slice['position'][coord]
                     cmdSliceTransp += "%s," % slice['transp']['value']
                         
             cmd += "volume=" + cmdName.strip(',') + ' '
