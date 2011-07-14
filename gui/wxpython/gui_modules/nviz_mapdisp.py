@@ -1569,6 +1569,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         if volumes:
             cmdName = cmdShade = cmdRes = cmdPos = cmdIso = ""
             cmdIsoColorMap = cmdIsoColorVal = cmdIsoTrMap = cmdIsoTrVal = ""
+            cmdSlice = cmdSliceTransp = cmdSlicePos = ""
             for i, volume in enumerate(volumes):
                 nvizData = self.tree.GetPyData(volume)[0]['nviz']['volume']
                 cmdName += "%s," % self.tree.GetPyData(volume)[0]['maplayer'].GetName()
@@ -1588,22 +1589,35 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                         if iso['transp']['map']:
                             cmdIsoTrMap += "%s," % iso['transp']['value']
                         else:
-                            cmdIsoTrVal += "%s," % iso['transp']['value']                    
-                    
+                            cmdIsoTrVal += "%s," % iso['transp']['value']     
+                            
+                for slice in nvizData['slice']:
+                    axis = ('x','y','z')[slice['position']['axis']]
+                    cmdSlice += "%d:%s," % (i + 1, axis)
+                    for coord in ('x1', 'x2', 'y1', 'y2', 'z1', 'z2'):
+                        cmdSlicePos += "%d," % slice['position'][coord]
+                    cmdSliceTransp += "%s," % slice['transp']['value']
+                        
             cmd += "volume=" + cmdName.strip(',') + ' '
             cmd += "volume_shading=" + cmdShade.strip(',') + ' '
             cmd += "volume_resolution=" + cmdRes.strip(',') + ' '
             if nvizData['position']:
                 cmd += "volume_position=" + cmdPos.strip(',') + ' '
-            cmd += "isosurf_level=" + cmdIso.strip(',') + ' '
-            if cmdIsoColorMap:
-                cmd += "isosurf_color_map=" + cmdIsoColorMap.strip(',') + ' '
-            if cmdIsoColorVal:
-                cmd += "isosurf_color_value=" + cmdIsoColorVal.strip(',') + ' ' 
-            if cmdIsoTrMap:
-                cmd += "isosurf_transp_map=" + cmdIsoTrMap.strip(',') + ' '
-            if cmdIsoTrVal:
-                cmd += "isosurf_transp_value=" + cmdIsoTrVal.strip(',') + ' '    
+            if cmdIso:
+                cmd += "isosurf_level=" + cmdIso.strip(',') + ' '
+                if cmdIsoColorMap:
+                    cmd += "isosurf_color_map=" + cmdIsoColorMap.strip(',') + ' '
+                if cmdIsoColorVal:
+                    cmd += "isosurf_color_value=" + cmdIsoColorVal.strip(',') + ' ' 
+                if cmdIsoTrMap:
+                    cmd += "isosurf_transp_map=" + cmdIsoTrMap.strip(',') + ' '
+                if cmdIsoTrVal:
+                    cmd += "isosurf_transp_value=" + cmdIsoTrVal.strip(',') + ' '
+            if cmdSlice:
+                cmd += "slice=" + cmdSlice.strip(',') + ' '
+                cmd += "slice_position=" + cmdSlicePos.strip(',') + ' '
+                cmd += "slice_transparency=" + cmdSliceTransp.strip(',') + ' '
+                
         #
         # cutting planes
         #
