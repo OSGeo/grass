@@ -966,16 +966,28 @@ class NvizToolWindow(FN.FlatNotebook):
         value.Bind(wx.EVT_SPINCTRL, self.OnSetConstantProp)
         gridSizer.Add(item = value, pos = (1, 1))
         
+        # transparency 
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("Transparency:")), pos = (2, 0),
+                                         flag = wx.ALIGN_CENTER_VERTICAL)
+        
+        transp = wx.SpinCtrl(panel, id = wx.ID_ANY,
+                                  min = 0, max = 100,
+                                  size = (65, -1))
+        self.win['constant']['transp'] = transp.GetId()
+        transp.Bind(wx.EVT_SPINCTRL, self.OnSetConstantProp)
+        gridSizer.Add(item = transp, pos = (2, 1))
+        
         # color
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                         label = _("Color:")), pos = (2, 0),
+                                         label = _("Color:")), pos = (3, 0),
                                          flag = wx.ALIGN_CENTER_VERTICAL)
         color = csel.ColourSelect(panel, id = wx.ID_ANY,
                                   colour = (0,0,0),
                                   size = globalvar.DIALOG_COLOR_SIZE)
         self.win['constant']['color'] = color.GetId()
         color.Bind(csel.EVT_COLOURSELECT, self.OnSetConstantProp)
-        gridSizer.Add(item = color, pos = (2, 1))
+        gridSizer.Add(item = color, pos = (3, 1))
         boxSizer.Add(item = gridSizer, proportion = 0, flag = wx.ALL,
                       border = 5)
         pageSizer.Add(item = boxSizer, proportion = 0,
@@ -1780,7 +1792,9 @@ class NvizToolWindow(FN.FlatNotebook):
         for attr, value in data['constant'].iteritems():
             if attr == 'color':
                 value = self._getColorFromString(value)
-            if attr in ('color', 'value', 'resolution'):
+            if attr in ('color', 'value', 'resolution', 'transp'):
+                if attr == 'transp':
+                    self.FindWindowById(self.win['constant'][attr]).SetValue(self._getPercent(value))
                 self.FindWindowById(self.win['constant'][attr]).SetValue(value)
         
     def OnSetConstantProp(self, event):
@@ -1790,11 +1804,12 @@ class NvizToolWindow(FN.FlatNotebook):
         if layerIdx == wx.NOT_FOUND:
             return
         data = self.mapWindow.constants[layerIdx]
-        for attr in ('resolution', 'value'):
+        for attr in ('resolution', 'value', 'transp'):
             data['constant'][attr] = self.FindWindowById(self.win['constant'][attr]).GetValue()
         data['constant']['color'] = self._getColorString(
                 self.FindWindowById(self.win['constant']['color']).GetValue())
-                
+        data['constant']['transp'] = self._getPercent(data['constant']['transp'], toPercent = False)
+        
        # update properties
         event = wxUpdateProperties(data = data)
         wx.PostEvent(self.mapWindow, event) 
