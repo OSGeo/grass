@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: grasslibs_it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-06-09 19:50+0200\n"
-"PO-Revision-Date: 2011-07-15 10:50+0100\n"
+"PO-Revision-Date: 2011-07-15 19:13+0100\n"
 "Last-Translator: Anne Ghisla <a.ghisla@gmail.com>\n"
 "Language-Team: Italian <grass-translations@lists.osgeo.org>\n"
 "Language: it\n"
@@ -1710,14 +1710,12 @@ msgid "Feature ids"
 msgstr "Id delle feature"
 
 #: ../lib/gis/parser_standard_options.c:430
-#, fuzzy
 msgid "Name to input file"
 msgstr "Percorso al file di input"
 
 #: ../lib/gis/parser_standard_options.c:438
-#, fuzzy
 msgid "Name for output file"
-msgstr "Percorso al file di output"
+msgstr "Nome per il file di output"
 
 #: ../lib/gis/parser_standard_options.c:446
 msgid "Field separator"
@@ -2591,7 +2589,7 @@ msgstr "Feature OGR senza ID"
 msgid "Unable to get feature geometry, FID %ld"
 msgstr "Impossibile ottenere la geometria della feature, FID %ld"
 
-# riga o linea? 
+# riga o linea?
 #: ../lib/vector/Vlib/read_ogr.c:462 ../lib/vector/Vlib/geos.c:65
 #: ../lib/vector/Vlib/geos.c:255 ../lib/vector/Vlib/read_nat.c:132
 msgid "Attempt to read dead line"
@@ -3215,9 +3213,8 @@ msgid "zero area size"
 msgstr "Area nulla"
 
 #: ../lib/vector/Vlib/buffer2.c:896 ../lib/vector/Vlib/buffer2.c:943
-#, fuzzy
 msgid "Line was not closed"
-msgstr "non è impostato"
+msgstr "La linea non era chiusa"
 
 #: ../lib/vector/Vlib/buffer2.c:909 ../lib/vector/Vlib/buffer2.c:960
 msgid "Vect_get_point_in_poly() failed"
@@ -3880,7 +3877,7 @@ msgstr "impossibile cambiare la directory %s"
 #: ../lib/vector/Vlib/write_ogr.c:387 ../lib/db/dbmi_client/copy_tab.c:303
 #, c-format
 msgid "Unable to fetch data from table <%s>"
-msgstr ""
+msgstr "Impossibile ottenere i dati dalla tabella <%s>"
 
 #: ../lib/vector/Vlib/write_ogr.c:392
 #, c-format
@@ -3930,14 +3927,12 @@ msgid "'where' and 'cats' parameters were supplied, cat will be ignored"
 msgstr "i parametri 'where' e 'cats' sono stati forniti, cat verrà ignorato"
 
 #: ../lib/vector/neta/utils.c:225
-#, fuzzy
 msgid "Unable to load data from database"
-msgstr "Impossibile aggiungere un collegamento database"
+msgstr "Impossibile caricare dati dal database"
 
 #: ../lib/vector/neta/utils.c:236
-#, fuzzy
 msgid "Problem loading category values"
-msgstr "Problemi leggendo la mappa raster"
+msgstr "Problemi caricando i valori delle categorie"
 
 #: ../lib/vector/neta/allpairs.c:53
 msgid "Computing all pairs shortest paths..."
@@ -3955,7 +3950,7 @@ msgstr "Connessione al server non valida"
 
 #: ../lib/nviz/render.c:113
 msgid "Unable to create rendering context"
-msgstr ""
+msgstr "Impossibile creare il contesto di rendering"
 
 #: ../lib/nviz/lights.c:171
 msgid "Unable to define new light"
@@ -3972,11 +3967,11 @@ msgstr "Colore (%s) invalido, usa \"white\" come default"
 
 #: ../lib/nviz/map_obj.c:59
 msgid "Maximum surfaces loaded!"
-msgstr ""
+msgstr "Caricato il numero massimo di superfici!"
 
 #: ../lib/nviz/map_obj.c:88
 msgid "Maximum vector line maps loaded!"
-msgstr ""
+msgstr "Caricato il numero massimo di mappe vettoriali lineari!"
 
 #: ../lib/nviz/map_obj.c:97 ../lib/nviz/map_obj.c:128
 #, c-format
@@ -3985,11 +3980,11 @@ msgstr "Errore caricando il vettoriale <%s>"
 
 #: ../lib/nviz/map_obj.c:116
 msgid "Maximum vector point maps loaded!"
-msgstr ""
+msgstr "Caricato il numero massimo di mappe vettoriali a punti!"
 
 #: ../lib/nviz/map_obj.c:143
 msgid "Maximum volumes loaded!"
-msgstr ""
+msgstr "Caricato il numero massimo di volumi!"
 
 #: ../lib/nviz/map_obj.c:152
 #, c-format
@@ -4012,12 +4007,12 @@ msgstr "Array N_array_2d * vuoto"
 #: ../lib/gpde/N_arrays_io.c:202
 #, c-format
 msgid "Write 2d array to raster map <%s>"
-msgstr ""
+msgstr "Scrittura dell'array 2d nella mappa raster <%s>"
 
 #: ../lib/gpde/N_arrays_io.c:273
 #, c-format
 msgid "Requested g3d map <%s> not found"
-msgstr ""
+msgstr "Impossibile trovare la mappa g3d <%s>"
 
 #: ../lib/gpde/N_arrays_io.c:281 ../lib/gpde/N_arrays_io.c:423
 #, c-format
@@ -4036,11 +4031,11 @@ msgstr "Errore nella chiusura del file g3d"
 #: ../lib/gpde/N_arrays_io.c:425
 #, c-format
 msgid "Write 3d array to g3d map <%s>"
-msgstr ""
+msgstr "Scrittura dell'array 3d nella mappa g3d <%s>"
 
 #: ../lib/gpde/N_parse_options.c:106
 msgid "The calculation time in seconds"
-msgstr ""
+msgstr "Tempo di calcolo in secondi"
 
 #: ../lib/gpde/test/test_geom.c:36
 msgid ""
@@ -4089,31 +4084,31 @@ msgstr ""
 #: ../lib/gpde/test/test_main.c:50 ../lib/db/dbmi_base/test/test_main.c:47
 #: ../lib/gmath/test/test_main.c:47
 msgid "Choose the unit tests to run"
-msgstr ""
+msgstr "Scegliere gli unittest da eseguire"
 
 #: ../lib/gpde/test/test_main.c:57 ../lib/db/dbmi_base/test/test_main.c:54
 #: ../lib/gmath/test/test_main.c:54
 msgid "Choose the integration tests to run"
-msgstr ""
+msgstr "Scegliere gli integration test da eseguire"
 
 #: ../lib/gpde/test/test_main.c:62 ../lib/db/dbmi_base/test/test_main.c:58
 #: ../lib/gmath/test/test_main.c:79
 msgid "Run all unit tests"
-msgstr ""
+msgstr "Esegue tutti gli unittest"
 
 #: ../lib/gpde/test/test_main.c:66 ../lib/db/dbmi_base/test/test_main.c:62
 #: ../lib/gmath/test/test_main.c:83
 msgid "Run all integration tests"
-msgstr ""
+msgstr "Esegue tutti gli integration test"
 
 #: ../lib/gpde/test/test_main.c:70 ../lib/db/dbmi_base/test/test_main.c:66
 #: ../lib/gmath/test/test_main.c:87
 msgid "Run all unit and integration tests"
-msgstr ""
+msgstr "Esegue tutti gli unittest e gli integration test"
 
 #: ../lib/gpde/test/test_main.c:89
 msgid "Performs unit and integration tests for gpde library"
-msgstr ""
+msgstr "Esegue unittest e integration test per la libreria gpde"
 
 #: ../lib/gpde/test/test_gwflow.c:47
 msgid ""
@@ -4310,16 +4305,16 @@ msgstr ""
 #: ../lib/init/lock.c:38
 #, c-format
 msgid "Usage: %s file pid"
-msgstr ""
+msgstr "Uso: %s file pid"
 
 #: ../lib/init/lock.c:42
 msgid "Concurrent mapset locking is not supported on Windows"
-msgstr ""
+msgstr "Il locking concorrente del mapset non è supportato in Windows."
 
 #: ../lib/init/lock.c:60
 #, c-format
 msgid "Unable to write lockfile %s (disk full? Permissions?)"
-msgstr ""
+msgstr "Impossibile scriver il lockfile %s (Fine dello spazio su disco? Permessi?)"
 
 #: ../lib/init/grass.py:60
 #, fuzzy
@@ -4630,12 +4625,12 @@ msgstr ""
 
 #: ../lib/rst/interp_float/segmen2d.c:111
 msgid "Taking too long to find points for interpolation - please change the region to area where your points are. Continuing calculations..."
-msgstr ""
+msgstr "La ricerca dei punti per l'interpolazione sta durando troppo - si modifichi la regione per includere l'area dove si trovano i punti. Continuando i calcoli..."
 
 #: ../lib/rst/interp_float/interp2d.c:214
 #, c-format
 msgid "Overshoot - increase in tension suggested. Overshoot occures at (%d,%d) cell. Z-value %f, zmin %f, zmax %f."
-msgstr ""
+msgstr "Overshoot - si suggerisce un aumento della tensione. L'overshoot avviene alla cella (%d,%d). Z-value %f, zmin %f, zmax %f."
 
 #: ../lib/rst/interp_float/resout2d.c:77
 msgid "Temporarily changing the region to desired resolution..."
@@ -4666,7 +4661,7 @@ msgstr "La maschera raster <%s> non trovata"
 
 #: ../lib/rst/interp_float/input2d.c:71
 msgid "Bitmap mask created"
-msgstr ""
+msgstr "Creata maschera bitmap"
 
 #: ../lib/rst/interp_float/vinput2d.c:73
 #, c-format
@@ -4702,7 +4697,7 @@ msgstr "Non trovo il record database per la cat %d"
 #: ../lib/rst/interp_float/vinput2d.c:171
 #: ../lib/rst/interp_float/vinput2d.c:288
 msgid "Negative value of smoothing detected: sm must be >= 0"
-msgstr ""
+msgstr "Rilevato valore negativo di smoothing: sm deve essere >= 0"
 
 #: ../lib/rst/interp_float/vinput2d.c:233
 msgid "Reading nodes from vector map ..."
@@ -4715,7 +4710,7 @@ msgstr ""
 #: ../lib/rst/interp_float/vinput2d.c:328
 #, c-format
 msgid "There are points outside specified 2D/3D region - %d points ignored"
-msgstr ""
+msgstr "Ci sono punti fuori dalla regione 2D/3D specificata - %d punti ignorati"
 
 #: ../lib/rst/interp_float/vinput2d.c:331
 #, c-format
@@ -4739,7 +4734,7 @@ msgstr ""
 #: ../lib/rst/interp_float/vinput2d.c:351
 #, c-format
 msgid "There are less than %d points for interpolation. No segmentation is necessary, to run the program faster set segmax=%d (see manual)"
-msgstr ""
+msgstr "Ci sono meno di %d punti per l'interpolazione. Non è richiesta segmentazione, per accelerare il programma impostare segmax=%d (cfr. manuale)"
 
 #: ../lib/rst/interp_float/vinput2d.c:355
 #, c-format
@@ -4904,7 +4899,7 @@ msgstr "Bug: attesa di aggiornamento di una mappa non presente nel mapset in uso
 
 #: ../lib/arraystats/class.c:21
 msgid "Discont algorithm currently not available because of bugs"
-msgstr ""
+msgstr "Algoritmo di discont attualmente non disponibile a causa di bugs"
 
 #: ../lib/arraystats/class.c:23
 #, c-format
@@ -4968,7 +4963,7 @@ msgstr "Troppe categorie per mostrare come distinte!"
 
 #: ../lib/ogsf/gsd_legend.c:503
 msgid "Try using smaller font!"
-msgstr ""
+msgstr "Si provi un font più piccolo!"
 
 #: ../lib/ogsf/gsd_surf.c:1742
 msgid "Cut-plane points mis-match between surfaces. Check resolution(s)."
@@ -5001,7 +4996,7 @@ msgstr ""
 #: ../lib/ogsf/gsd_prim.c:630
 #, c-format
 msgid "gsd_rot(): %c is an invalid axis specification. Rotation ignored. Please advise GRASS developers of this error"
-msgstr ""
+msgstr "gsd_rot(): %c è una specifica dell'asse non valida. Rotazione ignorata. Si notifichino gli sviluppatori GRASS"
 
 #: ../lib/ogsf/gsd_img_tif.c:64 ../lib/ogsf/gsd_img_ppm.c:53
 #: ../lib/ogsf/gsd_img_ppm.c:96 ../lib/ogsf/GK2.c:219
@@ -5010,8 +5005,9 @@ msgid "Unable to open file <%s> for writing"
 msgstr "Impossibile aprire il file <%s> per la scrittura"
 
 #: ../lib/ogsf/GK2.c:275 ../lib/ogsf/GK2.c:288
+#, fuzzy
 msgid "Check no. of frames requested and keyframes marked"
-msgstr ""
+msgstr "Controllare il numero di frame richieste e keyframe marcate"
 
 #: ../lib/ogsf/Gs3.c:133 ../lib/ogsf/Gs3.c:197 ../lib/ogsf/Gs3.c:349
 #: ../lib/ogsf/Gs3.c:455 ../lib/ogsf/Gs3.c:541
@@ -5022,16 +5018,16 @@ msgstr "Caricando raster <%s>"
 #: ../lib/ogsf/Gs3.c:597
 #, c-format
 msgid "Color table range doesn't match data (mincol=%d, maxcol=%d"
-msgstr ""
+msgstr "Il range della tabella di colori non corrisponde ai dati (mincol=%d, maxcol=%d"
 
 #: ../lib/ogsf/Gs3.c:659 ../lib/ogsf/Gs3.c:731
 #, c-format
 msgid "Translating colors from raster map <%s>..."
-msgstr ""
+msgstr "Convertendo i colori dalla mappa raster <%s>..."
 
 #: ../lib/ogsf/Gs3.c:968
 msgid "View not saved by this program,there may be some inconsistancies"
-msgstr ""
+msgstr "Vista non salvata da questo programma, potrebbero esserci discrepanze"
 
 #: ../lib/ogsf/gsds.c:109
 msgid "Maximum number of datasets exceeded"
@@ -5040,7 +5036,7 @@ msgstr "Superato il numero massimo del dataset"
 #: ../lib/ogsf/Gv3.c:259
 #, c-format
 msgid "No features from vector map <%s> fall within current region"
-msgstr ""
+msgstr "Nessun elemento della mappa vettoriale <%s> ricade nella regione corrente"
 
 #: ../lib/ogsf/Gv3.c:264
 #, c-format
@@ -5082,12 +5078,12 @@ msgstr "Errore trovando il range"
 
 #: ../lib/ogsf/gsd_label.c:58
 msgid "Max. number of labels reached!"
-msgstr ""
+msgstr "Raggiunto il numero massimo di etichette!"
 
 #: ../lib/ogsf/Gp3.c:150
 #, c-format
 msgid "No points from vector map <%s> fall within current region"
-msgstr ""
+msgstr "Nessun punto della mappa vettoriale <%s> ricadono nella regione corrente"
 
 #: ../lib/ogsf/Gp3.c:155
 #, c-format
@@ -5116,11 +5112,11 @@ msgstr "Impossibile aprire il codec"
 
 #: ../lib/ogsf/gsd_img_mpeg.c:181
 msgid "Unable to allocate picture"
-msgstr ""
+msgstr "Impossibile allocare l'immagine"
 
 #: ../lib/ogsf/gsd_img_mpeg.c:192
 msgid "Unable to allocate temporary picture"
-msgstr ""
+msgstr "Impossibile allocare l'immagine temporanea"
 
 #: ../lib/ogsf/gsd_img_mpeg.c:252
 msgid "Error while writing video frame"
@@ -5137,7 +5133,7 @@ msgstr "Impossibile ricavare il formato di output dall'estensione del file: si u
 
 #: ../lib/ogsf/gsd_img_mpeg.c:310
 msgid "Unable to find suitable output format"
-msgstr ""
+msgstr "impossibile trovare un formato di output adeguato"
 
 #: ../lib/ogsf/gsd_img_mpeg.c:337
 msgid "Invalid output format parameters"
@@ -5326,7 +5322,7 @@ msgstr ""
 
 #: ../lib/db/dbmi_base/default_name.c:127
 msgid "Programmer error"
-msgstr ""
+msgstr "Errore del programmatore"
 
 #: ../lib/db/dbmi_client/table.c:46
 #, c-format
@@ -5372,11 +5368,11 @@ msgstr "Tipo della colonna sconosciuto (colonna <%s>"
 #: ../lib/db/dbmi_client/select.c:119 ../lib/db/dbmi_client/select.c:220
 #: ../lib/db/dbmi_client/select.c:286
 msgid "Missing column name"
-msgstr ""
+msgstr "Manca il nome della colonna"
 
 #: ../lib/db/dbmi_client/select.c:215 ../lib/db/dbmi_client/select.c:281
 msgid "Missing key column name"
-msgstr ""
+msgstr "Manca il nome della colonna chiave"
 
 #: ../lib/db/dbmi_client/select.c:307
 #, c-format
@@ -5409,7 +5405,7 @@ msgstr "Categoria dev'essere intero"
 
 #: ../lib/sites/sites.c:210
 msgid "Memory error in writing timestamp"
-msgstr ""
+msgstr "Errore di memoria nello scrivere il timestamp"
 
 #: ../lib/sites/sites.c:212
 msgid "Illegal TimeStamp string"
@@ -5417,15 +5413,15 @@ msgstr "Stringa del timestamp non valida"
 
 #: ../lib/sites/sites.c:241
 msgid "Memory error in allocating timestamp"
-msgstr ""
+msgstr "Errore di memoria nell'allocare il timestamp"
 
 #: ../lib/sites/sites.c:296 ../lib/sites/sites.c:426
 msgid "Dev note: Adapted sites library used for vector points. (module should be updated to GRASS 6 vector library)"
-msgstr ""
+msgstr "Nota per sviluppatori: Per i vettoriali a punti viene usata una sites library modificata. (il modulo va aggiornato alla libreria vettoriale di GRASS6)"
 
 #: ../lib/sites/sites.c:345
 msgid "Cannot fetch row"
-msgstr ""
+msgstr "Impossibile estrarre la riga"
 
 #: ../lib/sites/sites.c:527
 msgid "G_oldsite_new_struct: invalid # dims or fields"
@@ -5634,7 +5630,7 @@ msgstr ""
 #: ../lib/gmath/solvers_krylov.c:254 ../lib/gmath/solvers_krylov.c:482
 #: ../lib/gmath/solvers_krylov.c:646 ../lib/gmath/solvers_direct.c:134
 msgid "Unable to solve the linear equation system"
-msgstr ""
+msgstr "Impossibile risolvere il sistema di equazioni lineari"
 
 #: ../lib/gmath/solvers_krylov.c:262
 #, c-format
@@ -5668,11 +5664,11 @@ msgstr ""
 
 #: ../lib/gmath/la.c:64 ../lib/gmath/la.c:120
 msgid "Matrix dimensions out of range"
-msgstr ""
+msgstr "Dimensioni della matrice fuori range."
 
 #: ../lib/gmath/la.c:153
 msgid "Matrix is not initialised fully."
-msgstr ""
+msgstr "La matrice non è completamente inizializzata."
 
 #: ../lib/gmath/la.c:158
 msgid "Unable to allocate space for matrix copy"
@@ -5680,11 +5676,11 @@ msgstr "Impossibile allocare spazio per la copia della matrice"
 
 #: ../lib/gmath/la.c:247
 msgid "First scalar multiplier must be non-zero"
-msgstr ""
+msgstr "Il primo moltiplicatore scalare deve essere diverso da zero"
 
 #: ../lib/gmath/la.c:253 ../lib/gmath/la.c:261 ../lib/gmath/la.c:326
 msgid "One or both input matrices uninitialised"
-msgstr ""
+msgstr "Una o entrambe le matrici di dati non sono inizializzate"
 
 #: ../lib/gmath/la.c:266 ../lib/gmath/la.c:331
 msgid "Matrix order does not match"
@@ -5700,15 +5696,15 @@ msgstr "Impossibile allocare spazio per il prodotto della matrice"
 
 #: ../lib/gmath/la.c:448
 msgid "Input: one or both data matrices uninitialised"
-msgstr ""
+msgstr "Input: una o entrambe le matrici di dati non sono inizializzate"
 
 #: ../lib/gmath/la.c:453
 msgid "Principal matrix is not properly dimensioned"
-msgstr ""
+msgstr "La matrice principale non è correttamente dimensionata."
 
 #: ../lib/gmath/la.c:458
 msgid "Input: you must have at least one array to solve"
-msgstr ""
+msgstr "Input: è necessario avere almeno un array da risolvere."
 
 #: ../lib/gmath/la.c:464
 msgid "Could not allocate space for solution matrix"
@@ -5720,11 +5716,11 @@ msgstr "Impossibile allocare lo spazio per la matrice di lavoro"
 
 #: ../lib/gmath/la.c:531
 msgid "Matrix (or submatrix is singular). Solution undetermined"
-msgstr ""
+msgstr "La matrice (o sottomatrice) presenta singolarità. La soluzione è indeterminata."
 
 #: ../lib/gmath/la.c:535
 msgid "Problem in LA routine."
-msgstr ""
+msgstr "Problema nella routine LA."
 
 #: ../lib/gmath/la.c:542
 msgid "Procedure not yet available for selected matrix type"
@@ -5744,19 +5740,19 @@ msgstr "Matrice è singolare"
 
 #: ../lib/gmath/la.c:603
 msgid "Problem in LA procedure."
-msgstr ""
+msgstr "Problema nella procedura LA."
 
 #: ../lib/gmath/la.c:691
 msgid "Element array has not been allocated"
-msgstr ""
+msgstr "L'elemento dell'array non è stato allocato"
 
 #: ../lib/gmath/la.c:696
 msgid "Specified element is outside array bounds"
-msgstr ""
+msgstr "L'elemento specificato è fuori dai limiti dell'array"
 
 #: ../lib/gmath/la.c:750
 msgid "Specified matrix column index is outside range"
-msgstr ""
+msgstr "L'indice di colonna della matrice è fuori range."
 
 #: ../lib/gmath/la.c:755 ../lib/gmath/la.c:796 ../lib/gmath/la.c:1109
 #: ../lib/gmath/la.c:1161 ../lib/gmath/la.c:1236
@@ -5769,7 +5765,7 @@ msgstr "Non è possibile alloccare spazio per la struttura del vettoriale"
 
 #: ../lib/gmath/la.c:791
 msgid "Specified matrix row index is outside range"
-msgstr ""
+msgstr "L'indice di riga della matrice è fuori range."
 
 #: ../lib/gmath/la.c:831
 msgid "Specified row index is outside range"
