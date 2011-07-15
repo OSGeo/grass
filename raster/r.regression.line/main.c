@@ -79,8 +79,8 @@ int main(int argc, char *argv[])
     cols = region.cols;
 
     /* open maps */
-    map1_fd = Rast_open_old(input_map1->answer, G_mapset());
-    map2_fd = Rast_open_old(input_map2->answer, G_mapset());
+    map1_fd = Rast_open_old(input_map1->answer, "");
+    map2_fd = Rast_open_old(input_map2->answer, "");
 
     map1_buf = Rast_allocate_d_buf();
     map2_buf = Rast_allocate_d_buf();
