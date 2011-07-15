@@ -832,7 +832,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
                         if paramName:
                             try:
                                 param = self.cmdDesc.get_param(paramName)
-                            except ValueError:
+                            except (ValueError, AttributeError):
                                 return
                         else:
                             return
@@ -901,11 +901,11 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             self.InsertText(pos, '.')
             self.CharRight()
             self.toComplete = self.EntityToComplete()
-            if self.toComplete['entity'] == 'command': 
-                try:
+            try:
+                if self.toComplete['entity'] == 'command': 
                     self.autoCompList = self.moduleList[entry.strip()]
-                except KeyError:
-                    return
+            except (KeyError, TypeError):
+                return
             self.ShowList()
 
         # complete flags after pressing '-'       
@@ -960,7 +960,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             # complete flags in such situations (| is cursor):
             # r.colors -| ...w, q, l
             # r.colors -w| ...w, q, l  
-            elif self.toComplete['entity'] == 'flags':
+            elif self.toComplete['entity'] == 'flags' and self.cmdDesc:
                 for flag in self.cmdDesc.get_options()['flags']:
                     if len(flag['name']) == 1:
                         self.autoCompList.append(flag['name'])
@@ -968,7 +968,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             # complete parameters in such situations (| is cursor):
             # r.colors -w | ...color, map, rast, rules
             # r.colors col| ...color
-            elif self.toComplete['entity'] == 'params':
+            elif self.toComplete['entity'] == 'params' and self.cmdDesc:
                 for param in self.cmdDesc.get_options()['params']:
                     if param['name'].find(self.GetWordLeft(withDelimiter=False)) == 0:
                         self.autoCompList.append(param['name'])           
@@ -976,7 +976,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             # complete flags or parameters in such situations (| is cursor):
             # r.colors | ...-w, -q, -l, color, map, rast, rules
             # r.colors color=grey | ...-w, -q, -l, color, map, rast, rules
-            elif self.toComplete['entity'] == 'params+flags':
+            elif self.toComplete['entity'] == 'params+flags' and self.cmdDesc:
                 self.autoCompList = list()
                 
                 for param in self.cmdDesc.get_options()['params']:
