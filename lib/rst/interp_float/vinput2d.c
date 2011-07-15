@@ -42,7 +42,7 @@ int IL_vector_input_data_2d(struct interp_params *params, struct Map_info *Map,	
 {
     double dmax2;		/* max distance between points squared */
     double c1, c2, c3, c4;
-    int i, line, k = 0, nnodes;
+    int i, line, k = 0;
     double ns_res, ew_res;
     int npoint, OUTRANGE;
     int totsegm;
@@ -50,7 +50,7 @@ int IL_vector_input_data_2d(struct interp_params *params, struct Map_info *Map,	
     double xprev, yprev, zprev, x1, y1, z1, d1, xt, yt, z, sm;
     struct line_pnts *Points;
     struct line_cats *Cats;
-    int times, j1, k1, ltype, cat, zctype = 0, sctype = 0;
+    int times, j1, ltype, cat, zctype = 0, sctype = 0;
     struct field_info *Fi;
     dbDriver *driver;
     dbHandle handle;
@@ -174,27 +174,14 @@ int IL_vector_input_data_2d(struct interp_params *params, struct Map_info *Map,	
 	    }
 	}
 
-	if (Vect_level(Map) == 1) {
-	    /* Insert all points including nodes (end points) */
-	    for (i = 0; i < Points->n_points; i++) {
-		if (field == 0)
-		    z = Points->z[i];
-		process_point(Points->x[i], Points->y[i], z, sm, info,
-			      params->zmult, xmin, xmax, ymin, ymax, zmin,
-			      zmax, &npoint, &OUTRANGE, &k);
+	/* Insert all points including nodes (end points) */
+	for (i = 0; i < Points->n_points; i++) {
+	    if (field == 0)
+		z = Points->z[i];
+	    process_point(Points->x[i], Points->y[i], z, sm, info,
+			  params->zmult, xmin, xmax, ymin, ymax, zmin,
+			  zmax, &npoint, &OUTRANGE, &k);
 
-	    }
-	}
-	else {
-	    /* Insert all points except nodes (end points) */
-	    for (i = 1; i < Points->n_points - 1; i++) {
-		if (field == 0)
-		    z = Points->z[i];
-		process_point(Points->x[i], Points->y[i], z, sm, info,
-			      params->zmult, xmin, xmax, ymin, ymax, zmin,
-			      zmax, &npoint, &OUTRANGE, &k);
-
-	    }
 	}
 
 	/* Check all segments */
@@ -229,72 +216,6 @@ int IL_vector_input_data_2d(struct interp_params *params, struct Map_info *Map,	
 	}
     }
 
-    /* Process all nodes */
-    G_message(_("Reading nodes from vector map ..."));
-    nnodes = Vect_get_num_nodes(Map);
-    for (k1 = 1; k1 <= nnodes; k1++) {
-	G_debug(5, "  node %d", k1);
-	G_percent(k1, nnodes, 1);
-	Vect_get_node_coor(Map, k1, &x1, &y1, &z);
-
-	/* TODO: check more lines ? */
-	if (field > 0) {
-	    line = abs(Vect_get_node_line(Map, k1, 0));
-	    ltype = Vect_read_line(Map, NULL, Cats, line);
-	    Vect_cat_get(Cats, field, &cat);
-	    if (zcol == NULL) {	/* use categories */
-		if (cat < 0)
-		    continue;
-		z = (double)cat;
-	    }
-	    else {		/* read att from db */
-		int ret, intval;
-
-		if (cat == 0)
-		    continue;
-
-		if (zctype == DB_C_TYPE_INT) {
-		    ret = db_CatValArray_get_value_int(&zarray, cat, &intval);
-		    z = intval;
-		}
-		else {		/* DB_C_TYPE_DOUBLE */
-		    ret = db_CatValArray_get_value_double(&zarray, cat, &z);
-		}
-
-		if (ret != DB_OK) {
-		    if (params->wheresql != NULL)
-			/* G_message(_("Database record for cat %d not used due to SQL statement")); */
-			/* do nothing in this case to not confuse user. Or implement second cat list */
-			;
-		    else
-			G_warning(_("Database record for cat %d not found"),
-				  cat);
-		    continue;
-		}
-
-		if (scol != NULL) {
-		    if (sctype == DB_C_TYPE_INT) {
-			ret =
-			    db_CatValArray_get_value_int(&sarray, cat,
-							 &intval);
-			sm = intval;
-		    }
-		    else {	/* DB_C_TYPE_DOUBLE */
-			ret =
-			    db_CatValArray_get_value_double(&sarray, cat,
-							    &sm);
-		    }
-		    if (sm < 0.0)
-			G_fatal_error(_("Negative value of smoothing detected: sm must be >= 0"));
-		}
-		G_debug(5, "  z = %f sm = %f", z, sm);
-	    }
-	}
-
-	process_point(x1, y1, z, sm, info, params->zmult, xmin, xmax, ymin,
-		      ymax, zmin, zmax, &npoint, &OUTRANGE, &k);
-    }
-    
     if (field > 0 && zcol != NULL)
 	db_CatValArray_free(&zarray);
     if (scol != NULL) {
