@@ -1,6 +1,6 @@
 /*
  * Function added to r.proj
- * GNU GPL by Morten Hulden <morten@ngb.se>, August 2000
+ * GNU GPL by Morten Hulden <morten@untamo.net>, August 2000
  *
  * bordwalk.c - projects the border cell centers of a map or region
  * to check whether they are inside the borders of another map/region 

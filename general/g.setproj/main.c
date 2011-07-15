@@ -3,7 +3,7 @@
  *
  * MODULE:       g.setproj 
  * AUTHOR(S):    M. L. Holko - Soil Conservation Service, USDA
- *               Morten Hulden - morten@ngb.se
+ *               Morten Hulden - morten@untamo.net
  *               Andreas Lange - andreas.lange@rhein-main.de
  * PURPOSE:      Provides a means of creating a new projection information
  *               file (productivity tool).
@@ -29,7 +29,7 @@
  *                    proj=projection of the output project info file
  *
  *   1.2 Changed by Morten Hulden 10/10/99 to add support for more projections        
- *                  morten@ngb.se
+ *                  morten@untamo.net
  *
  *   1.3 Changed by Andreas Lange 07/25/00 to add datum support
  *                  Andreas.Lange@Rhein-Main.de
