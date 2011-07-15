@@ -24,7 +24,7 @@
 *               for details.
 *
 * Changes
-*		 Morten Hulden <morten@ngb.se>, Aug 2000:
+*		 Morten Hulden <morten@untamo.net>, Aug 2000:
 *		 - aborts if input map is outside current location.
 *		 - can handle projections (conic, azimuthal etc) where 
 *		 part of the map may fall into areas where south is 

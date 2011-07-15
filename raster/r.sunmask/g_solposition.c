@@ -3,7 +3,7 @@
  * given position, date and time
  *
  * Written by Markus Neteler <neteler@geog.uni-hannover.de>
- * with kind help from Morten Hulden
+ * with kind help from Morten Hulden <morten untamo.net>
  *
  *----------------------------------------------------------------------------
  * using solpos.c with permission from
