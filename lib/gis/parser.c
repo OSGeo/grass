@@ -1370,6 +1370,6 @@ static void split_gisprompt(const char *gisprompt, char *age, char *element,
 
 static void append_error(const char *msg)
 {
-    st->error = G_realloc(st->error, sizeof(char *) * st->n_errors + 1);
+    st->error = G_realloc(st->error, sizeof(char *) * (st->n_errors + 1));
     st->error[st->n_errors++] = G_store(msg);
 }
