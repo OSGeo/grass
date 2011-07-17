@@ -1218,7 +1218,8 @@ class MapFrame(wx.Frame):
 
     def _OnQuery(self):
         """!Internal method used by OnQuery*() methods"""
-        if self.toolbars['map'].GetAction() == 'displayAttrb':
+        if not self.IsStandalone() and  \
+                self.toolbars['map'].GetAction() == 'displayAttrb':
             # switch to output console to show query results
             self._layerManager.notebook.SetSelectionByName('output')
         
@@ -1277,94 +1278,95 @@ class MapFrame(wx.Frame):
         self._OnQuery()
         
     def QueryMap(self, x, y):
-        """!Query map layer features
-        
-        Currently only raster and vector map layers are supported.
+        """!Query raster or vector map layers by r/v.what
         
         @param x,y coordinates
         """
-        #set query snap distance for v.what at mapunit equivalent of 10 pixels
+        # set query snap distance for v.what at map unit equivalent of 10 pixels
         qdist = 10.0 * ((self.Map.region['e'] - self.Map.region['w']) / self.Map.width)
         east, north = self.MapWindow.Pixel2Cell((x, y))
         
-        num = 0
-        for layer in self.tree.GetSelections():
-            type = self.tree.GetPyData(layer)[0]['maplayer'].GetType()
-            if type in ('raster', 'rgb', 'his',
-                        'vector', 'thememap', 'themechart'):
-                num += 1
+        if not self.IsStandalone():
+            num = 0
+            for layer in self.tree.GetSelections():
+                ltype = self.tree.GetPyData(layer)[0]['maplayer'].GetType()
+                if ltype in ('raster', 'rgb', 'his',
+                             'vector', 'thememap', 'themechart'):
+                    num += 1
+            
+            if num < 1:
+                gcmd.GMessage(parent = self,
+                              message = _('No raster or vector map layer selected for querying.'))
+                return
         
-        if num < 1:
-            dlg = wx.MessageDialog(parent = self,
-                                   message = _('No raster or vector map layer selected for querying.'),
-                                   caption = _('No map layer selected'),
-                                   style = wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
-            dlg.ShowModal()
-            dlg.Destroy()
-            return
-        
-        mapname = None
-        raststr = ''
-        vectstr = ''
+        rast = list()
+        vect = list()
         rcmd = ['r.what', '--v']
         vcmd = ['v.what', '--v']
-        for layer in self.tree.GetSelections():
-            type = self.tree.GetPyData(layer)[0]['maplayer'].GetType()
-            dcmd = self.tree.GetPyData(layer)[0]['cmd']
-            name, found = utils.GetLayerNameFromCmd(dcmd)
-            if not found:
-                continue
-            if type in ('raster', 'rgb', 'his'):
-                raststr += "%s," % name
-            elif type in ('vector', 'thememap', 'themechart'):
-                vectstr += "%s," % name
+        
+        if self.IsStandalone():
+            pass
+        else:
+            for layer in self.tree.GetSelections():
+                ltype = self.tree.GetPyData(layer)[0]['maplayer'].GetType()
+                dcmd = self.tree.GetPyData(layer)[0]['cmd']
+                name, found = utils.GetLayerNameFromCmd(dcmd)
+                if not found:
+                    continue
+                if ltype is 'raster':
+                    rast.append(name)
+                elif ltype in ('rgb', 'his'):
+                    for iname in name.split('\n'):
+                        rast.append(iname)
+                elif ltype in ('vector', 'thememap', 'themechart'):
+                    vect.append(name)
         
         # use display region settings instead of computation region settings
         self.tmpreg = os.getenv("GRASS_REGION")
         os.environ["GRASS_REGION"] = self.Map.SetRegion(windres = False)
         
         # build query commands for any selected rasters and vectors
-        if raststr != '':
+        if rast:
             rcmd.append('-f')
-            rcmd.append('input=%s' % raststr.rstrip(','))
+            rcmd.append('-n')
+            rcmd.append('input=%s' % ','.join(rast))
             rcmd.append('east_north=%f,%f' % (float(east), float(north)))
         
-        if vectstr != '':
+        if vect:
             # check for vector maps open to be edited
             digitToolbar = self.toolbars['vdigit']
             if digitToolbar:
-                map = digitToolbar.GetLayer().GetName()
-                vect = []
-                for vector in vectstr.split(','):
-                    if map == vector:
-                        self._layerManager.goutput.WriteWarning("Vector map <%s> "
-                                                                "opened for editing - skipped." % map)
-                        continue
-                    vect.append(vector)
-                vectstr = ','.join(vect)
+                lmap = digitToolbar.GetLayer().GetName()
+                for name in vect:
+                    if lmap == name:
+                        self._layerManager.goutput.WriteWarning(_("Vector map <%s> "
+                                                                  "opened for editing - skipped.") % map)
+                        vect.remove(name)
             
-            if len(vectstr) <= 1:
-                self._layerManager.goutput.WriteCmdLog("Nothing to query.")
+            if len(vect) < 1:
+                self._layerManager.goutput.WriteCmdLog(_("Nothing to query."))
                 return
             
             vcmd.append('-a')
-            vcmd.append('map=%s' % vectstr.rstrip(','))
+            vcmd.append('map=%s' % ','.join(vect))
             vcmd.append('east_north=%f,%f' % (float(east), float(north)))
             vcmd.append('distance=%f' % float(qdist))
         
+        Debug.msg(1, "QueryMap(): raster=%s vector=%s" % (','.join(rast),
+                                                          ','.join(vect)))
         # parse query command(s)
-        if self._layerManager:
-            if raststr:
+        if not self.IsStandalone():
+            if rast:
                 self._layerManager.goutput.RunCmd(rcmd,
                                                   compReg = False,
                                                   onDone  =  self._QueryMapDone)
-            if vectstr:
+            if vect:
                 self._layerManager.goutput.RunCmd(vcmd,
                                                   onDone = self._QueryMapDone)
         else:
-            if raststr:
+            if rast:
                 gcmd.RunCommand(rcmd)
-            if vectstr:
+            if vect:
                 gcmd.RunCommand(vcmd)
         
     def _QueryMapDone(self, cmd, returncode):
@@ -1468,7 +1470,7 @@ class MapFrame(wx.Frame):
         
         point = wx.GetMousePosition()
         toolsmenu = wx.Menu()
-
+        
         # add items to the menu
         if self.toolbars['nviz']:
             raster = wx.MenuItem(parentMenu = toolsmenu, id = wx.ID_ANY,
@@ -1492,12 +1494,13 @@ class MapFrame(wx.Frame):
             toolsmenu.AppendItem(display)
             self.Bind(wx.EVT_MENU, self.OnQueryDisplay, display)
             numLayers = 0
-            for layer in self.tree.GetSelections():
-                type = self.tree.GetPyData(layer)[0]['maplayer'].GetType()
-                if type in ('raster', 'rgb', 'his',
-                            'vector', 'thememap', 'themechart'):
-                    numLayers += 1
-            if numLayers < 1:
+            if self.tree:
+                for layer in self.tree.GetSelections():
+                    ltype = self.tree.GetPyData(layer)[0]['maplayer'].GetType()
+                    if ltype in ('raster', 'rgb', 'his',
+                                 'vector', 'thememap', 'themechart'):
+                        numLayers += 1
+            if not self.IsStandalone() and numLayers < 1:
                 display.Enable(False)
             if action == "displayAttrb":
                 display.Check(True)
@@ -1512,7 +1515,7 @@ class MapFrame(wx.Frame):
                 modify.Check(True)
             
             digitToolbar = self.toolbars['vdigit']
-            if self.tree.layer_selected:
+            if self.tree and self.tree.layer_selected:
                 mapLayer = self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer']
                 if mapLayer.GetType() == 'vector' and \
                         mapLayer.GetMapset() == grass.gisenv()['MAPSET'] and \
