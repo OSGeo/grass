@@ -23,27 +23,17 @@ There are two types of variables:
 
 There are a number of <i>shell</i> environment variable groups:
 <ul>
-<li><a href="#cairo">Cairo driver</a></li>
-<li><a href="#png">PNG driver</a></li>
-<li><a href="#ps">PS driver (PostScript)</a></li>
-<li><a href="#html">HTMLMAP driver</a></li>
-<li><a href="#dirrend">variables for direct rendering</a></li>
+<li><a href="#rendering">variables for rendering</a></li>
 <li><a href="#internal">variables for internal use</a></li>
 </ul>
 
-Any setting which needs to be modifiable by a GRASS program (e.g. MONITOR)
-has to be a GRASS <i>gisenv</i> variable.
+<i>Note:</i> Any setting which needs to be modifiable by a GRASS module
+(e.g. MONITOR by <em><a href="d.mon.html">d.mon</a></em>) has to be a GRASS
+gisenv variable.
 
+<h2>Setting shell environment variables</h2>
 
-<h2>GRASS-related Files</h2>
-
-GRASS maintains some settings in a number of files on the system. They are
-detailed <a href="#files">below</a>.
-
-
-<h2>Setting environment variables</h2>
-
-Setting environment variables depends on the shell being used:
+Setting shell environment variables depends on the shell being used:
 <br><br>
 Bash:
 <div class="code"><pre>
@@ -58,7 +48,7 @@ Cmd.exe (Windows):
 set VARIABLE=value
 </pre></div>
 
-<h2>Setting environment variables permanently</h2>
+To set up shell environment variables permanently:
 
 <ul>
 <li>
@@ -72,7 +62,7 @@ into GRASS, store them in:<br>
 </ul>
 
 
-<h2>Setting GRASS variables</h2>
+<h2>Setting GRASS gisenv variables</h2>
 
 Use <em><a href="g.gisenv.html">g.gisenv</a></em> within GRASS. This permanently
 predefines GRASS variables in the <tt>.grass7/rc</tt> file.
@@ -88,12 +78,12 @@ getting and setting GRASS variables.
 If the user just specifies a variable name, it defaults to <b>get</b> mode.
 For example:
 <div class="code"><pre>
-g.gisenv GRASS_GUI
-text
+g.gisenv MAPSET
+PERMANENT
 </pre></div>
 
 <a name="enviro"></a>
-<h2>List of selected (GRASS related) environment variables</h2>
+<h2>List of selected (GRASS related) shell environment variables</h2>
 
 <blockquote>
 [ To be set from the terminal shell or startup scripts ]
@@ -110,9 +100,9 @@ text
     while in a GRASS session.</dd>
   
   <dt>GRASS_ADDON_PATH</dt>
-  <dd>[grass startup script]<br>
-    allows to specify additional paths to local GRASS modules extra
-    to standard distribution. The default on GNU/Linux is $HOME/.grass7/addons</dd>
+  <dd>[grass startup script]<br> allows to specify additional paths to
+    local GRASS modules extra to standard distribution. The default on
+    GNU/Linux is <tt>$HOME/.grass7/addons</tt>.</dd>
   
   <dt>GRASS_ADDON_ETC</dt>
   <dd>[libgis, g.findetc]<br>
@@ -120,22 +110,35 @@ text
     standard distribution.</dd>
   
   <dt>GRASS_BATCH_JOB</dt>
-  <dd>defines the name (path) of a shell script to be processed as batch job.</dd>
+  <dd>defines the name (path) of a shell script to be processed as
+  batch job.</dd>
 
   <dt>GIS_ERROR_LOG</dt>
-  <dd>If set, $GIS_ERROR_LOG should be the absolute path to the log file (a
-   relative path will be interpreted relative to the process' cwd, not
-   the cwd at the point the user set the variable). If not set,
-   $HOME/GIS_ERROR_LOG is used instead. The file will only be used if
-   it already exists.</dd>
+  <dd>If set, GIS_ERROR_LOG should be the absolute path to the log
+   file (a relative path will be interpreted relative to the process'
+   cwd, not the cwd at the point the user set the variable). If not
+   set, <tt>$HOME/GIS_ERROR_LOG</tt> is used instead. The file will
+   only be used if it already exists.</dd>
 
   <dt>GRASS_ERROR_MAIL</dt>
   <dd>set to any value to send user mail on an error or warning that 
     happens while stderr is being redirected.</dd>
   
+  <dt>GRASS_FONT</dt>
+  <dd>[display drivers]<br>
+    specifies the font as either the name of a font from
+    <tt>$GISBASE/etc/fontcap</tt> (or alternative fontcap file
+    specified by GRASS_FONT_CAP), or alternatively the full path to a
+    FreeType font file.</dd>
+  
+  <dt>GRASS_ENCODING</dt>
+  <dd>[display drivers]<br>
+    the encoding to be assumed for text which is drawn using a
+    freetype font; may be any encoding know to <em>iconv</em>.</dd>
+
   <dt>GRASS_FONT_CAP</dt>
   <dd>[g.mkfontcap, d.font, display drivers]<br>
-    specifies an alternative location (to $GISBASE/etc/fontcap) for 
+    specifies an alternative location (to <tt>$GISBASE/etc/fontcap</tt>) for 
     the font configuration file.</dd>
   
   <dt>GRASS_GNUPLOT</dt>
@@ -144,44 +147,39 @@ text
   
   <dt>GRASS_GUI</dt>
   <dd>either <tt>text</tt> or <tt>gui</tt> to define non-/graphical startup.
-    <br><br>
-    Can also specify the name of the GUI to use, e.g. <tt>wxpython</tt>
+    <br><br> Can also specify the name of the GUI to use,
+    e.g. <tt>wxpython</tt>
     (<em><a href="wxGUI.html">wxGUI</a></em>). Also exists as a GRASS
-    gisenv variable (see below). If this shell variable exists at GRASS
-    startup, it will determine the GUI used. If it is not defined startup
-    will default to the last GUI used.</dd>
+    gisenv variable (see below). If this shell variable exists at
+    GRASS startup, it will determine the GUI used. If it is not
+    defined startup will default to the last GUI used.</dd>
   
-  <dt>GRASS_HEIGHT</dt>
-  <dd>[d.mon]<br>
-    defines the height of GRASS monitor, see also GRASS_WIDTH.</dd>
   
   <dt>GRASS_HTML_BROWSER</dt>
-  <dd>[init.sh, wxgui]<br>
-    defines name of HTML browser. For most platforms this should be
-    an executable in your PATH, or the full path to an executable.<br>
-    Mac OS X runs applications differently from the CLI.
-    Therefore, GRASS_HTML_BROWSER should be the application's signature,
-    which is a domain-like name, just reversed, i.e. com.apple.Safari. To
-    find an application's signature, type the following in a Terminal
-    (fill in the path to the application you are interested in, for
-    example: /Applications/Safari.app):<br> &nbsp; &nbsp; <code>grep -A 1
-      &quot;CFBundleIdentifier&quot;</code> <i>/path/to/application.app</i><code>/Contents/Info.plist</code><br>
-    &nbsp; The signature is the &lt;string&gt; following the &lt;key&gt;,
-    without the bracketing &lt;string&gt; tags.</dd>
+  <dd>[init.sh, wxgui]<br> defines name of HTML browser. For most
+    platforms this should be an executable in your PATH, or the full
+    path to an executable.<br>  Mac OS X runs applications differently
+    from the CLI.  Therefore, GRASS_HTML_BROWSER should be the
+    application's signature, which is a domain-like name, just
+    reversed, i.e. com.apple.Safari. To find an application's
+    signature, type the following in a Terminal (fill in the path to
+    the application you are interested in, for example:
+    /Applications/Safari.app):<br> &nbsp; &nbsp; <code>grep -A 1
+    &quot;CFBundleIdentifier&quot;</code> <i>/path/to/application.app</i><code>/Contents/Info.plist</code><br>
+    &nbsp; The signature is the &lt;string&gt; following the
+    &lt;key&gt;, without the bracketing &lt;string&gt; tags.</dd>
 
   <dt>GRASS_INT_ZLIB</dt>
-  <dd>[libgis]<br>
-    if the environment variable GRASS_INT_ZLIB exists, new compressed
-    rasters will be compressed using zlib instead of RLE
-    compression. Such rasters will have a <tt>compressed</tt> value of 2 in the
-    cellhd file.
+  <dd>[libgis]<br> if the environment variable GRASS_INT_ZLIB exists,
+    new compressed rasters will be compressed using zlib instead of
+    RLE compression. Such rasters will have a <tt>compressed</tt>
+    value of 2 in the cellhd file.
     <br><br>
     Obviously, decompression is controlled by the
     raster's <tt>compressed</tt> value, not the environment variable.</dd>
   
   <dt>GRASS_MESSAGE_FORMAT</dt>
-  <dd>[various modules, wxGUI]<br>
-    maybe set to either
+  <dd>[various modules, wxGUI]<br> maybe set to either
     <ul>
       <li><tt>standard</tt> - sets percentage output and message
 	formatting style to standard formatting,</li>
@@ -195,11 +193,12 @@ text
   </ul></dd>
   
   <dt>GRASS_MOUSE_BUTTON</dt>
-  <dd>[various modules]<br>
-    swaps mouse buttons for two-button or left-handed mice. Its value
-    has three digits 1, 2, and 3, which represent default left, middle, and right
-    buttons respectively. Setting to <tt>132</tt> will swap middle and right buttons. Note
-    that this variable should be set before a display driver is initialized (e.g.,
+  <dd>[various modules]<br> swaps mouse buttons for two-button or
+    left-handed mice. Its value has three digits 1, 2, and 3, which
+    represent default left, middle, and right buttons
+    respectively. Setting to <tt>132</tt> will swap middle and right
+    buttons. Note that this variable should be set before a display
+    driver is initialized (e.g.,
     <tt>d.mon x0</tt>).</dd>
   
   <dt>GRASS_PAGER</dt>
@@ -261,11 +260,7 @@ text
   <dt>GRASS_VERSION</dt>
   <dd>reports the current version number (used by R-stats interface etc);
     should not be changed by user.</dd>
-  
-  <dt>GRASS_WIDTH</dt>
-  <dd>[d.mon]<br>
-    defines the width of GRASS monitor, see also GRASS_HEIGHT.</dd>
-  
+    
   <dt>GRASS_NO_GLX_PBUFFERS</dt>
   <dd>[nviz]<br>
     set to any value to disable the use of GLX Pbuffers.</dd>
@@ -275,71 +270,34 @@ text
     Set to any value to disable the use of GLX Pixmaps.</dd>
 </dl>
 
-<a name="cairo"></a>
-<h3>List of selected GRASS Cairo driver environment variables</h3>
-
+<a name="rendering"></a>
+<h3>List of selected GRASS environment variables for rendering</h3>
 <blockquote>
-[ These variables control the function of the Cairo driver. ]
-</blockquote>
-
-See <a href="cairodriver.html">Cairo driver</a> manual page for detailed
-list of the variables.
-
-<a name="png"></a>
-<h3>List of selected GRASS PNG driver environment variables</h3>
-
-<blockquote>
-[ These variables control the function of the PNG driver. ]
-</blockquote>
-
-See <a href="pngdriver.html">PNG driver</a> manual page for detailed
-list of the variables.
-
-<a name="ps"></a>
-<h3>List of selected GRASS PS driver environment variables</h3>
-
-<blockquote>
-[ These variables control the function of the PS driver. ]
-</blockquote>
-
-See <a href="psdriver.html">PS driver</a> manual page for detailed
-list of the variables.
-
-<a name="html"></a>
-<h3>List of selected HTMLMAP driver environment variables</h3>
-
-<blockquote>
-[ These variables control the function of the HTMLMAP driver. ]
-</blockquote>
-
-See <a href="htmldriver.html">HTMLMAP driver</a> manual page for
-detailed list of the variables.
-
-<a name="dirrend"></a>
-<h3>List of selected GRASS environment variables for direct rendering</h3>
-<blockquote>
-[ In addition to those which are understood by the
- <a href="pngdriver.html">PNG driver</a>, the following variables
- affect direct rendering. ]
+[ In addition to those which are understood by specific <em>GRASS display
+ drivers</em>, the following variables affect rendering. ]
 </blockquote>
 
 <dl>
-
   <dt>GRASS_RENDER_IMMEDIATE</dt>
-  <dd>tells the raster library to use its built-in PNG/PS driver rather
-    than connecting to an external monitor process using sockets. If
-    GRASS_RENDER_IMMEDIATE=TRUE is set, there is no need to run 
-    <tt>d.mon&nbsp;start=PNG</tt>.</dd>
+  <dd>tells the display library which driver to use; possible
+  values: <em><a href="cairodriver.html">cairo</a></em>, <em><a href="pngdriver.html">png</a></em>, <em><a href="psdriver.html">ps</a></em>
+  or <em><a href="htmldriver.html">html</a></em></dd>
   
-  <dt>GRASS_FONT</dt>
-  <dd>specifies the font as either the name of a font from
-    $GISBASE/etc/fontcap (or alternative fontcap file specified by GRASS_FONT_CAP),
-    or alternatively the full path to a FreeType font file.</dd>
+  <dt>GRASS_WIDTH</dt>
+  <dd>defines the width of output image (default is 640).</dd>
   
-  <dt>GRASS_ENCODING</dt>
-  <dd>the encoding to be assumed for text which is drawn using a
-    freetype font; may be any encoding know to <em>iconv</em>.</dd>
+  <dt>GRASS_HEIGHT</dt>
+  <dd>defines the height of output image (default is 480).</dd>
 </dl>
+
+For specific driver-related variables see:
+
+<ul>
+  <li><em><a href="cairodriver.html">Cairo driver</a></em></li>
+  <li><em><a href="pngdriver.html">PNG driver</a></em></li>
+  <li><em><a href="psdriver.html">PS (Postscript) driver</a></em></li>
+  <li><em><a href="htmldriver.html">HTML driver</a></em></li>
+</ul>
 
 <a name="internal"></a>
 <h3>List of selected internal GRASS environment variables</h3>
@@ -460,30 +418,26 @@ g.gisenv set=DEBUG=0
     below will cause maps with identical names to be overwritten.</dd>
 </dl>
 
-<a name="files"></a>
 <h2>GRASS-related Files</h2>
 
 <dl>
-  <dt>$HOME/.grass7/rc</dt>
-  <dd>stores the GRASS variables (but not environment variables)</dd>
+  <dt><tt>$HOME/.grass7/rc</tt></dt>
+  <dd>stores the GRASS gisenv variables (not shell environment variables)</dd>
   
-  <dt>$HOME/.grasslogin7</dt>
+  <dt><tt>$HOME/.grass7/login</tt></dt>
   <dd>stores the DBMI passwords in this hidden file.
     Only the file owner can access this file.</dd>
 
-  <dt>$HOME/GIS_ERROR_LOG</dt>
+  <dt><tt>$HOME/GIS_ERROR_LOG</tt></dt>
   <dd>if this file exists then all GRASS error and warning messages are 
     logged here. Applies to current user. To generate the file, use:
     <tt>touch $HOME/GIS_ERROR_LOG</tt><br>
    See also GIS_ERROR_LOG variable.</dd>
-  
 </dl>
 
-<h3>SEE ALSO</h3>
+<h2>SEE ALSO</h2>
 
 <em>
-  <a href="displaydrivers.html">Display drivers</a>
-  <br>
   <a href="g.gisenv.html">g.gisenv</a>,
   <a href="g.parser.html">g.parser</a>
 </em>
@@ -496,7 +450,7 @@ g.gisenv set=DEBUG=0
 <p>
 <a href=index.html>Help Index</a>
 <p>
-&copy; 2008 <a href="http://grass.osgeo.org">GRASS Development Team</a>
+&copy; 2008-2011 <a href="http://grass.osgeo.org">GRASS Development Team</a>
 
 </body>
 </html>

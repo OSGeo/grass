@@ -9,149 +9,171 @@
 
 <img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
 
-<H2>NAME</H2>
-<EM><B>Cairo driver</B></EM> - driver for bitmap or vector output using
-the Cairo graphics library.
-<BR>
-<EM>(drivers)</EM> 
+<h2>NAME</h2>
+<em><b>Cairo driver</b></em> - display driver for bitmap or vector
+output using the Cairo graphics library.
 
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-The Cairo driver generates PNG, BMP, PPM, PS, PDF or SVG images from GRASS
-display commands, using the
-<A HREF="http://www.cairographics.org/">Cairo graphics library</A>.
+The Cairo driver generates PNG, BMP, PPM, PS, PDF or SVG images by
+GRASS display commands, using the
+<a href="http://www.cairographics.org/">Cairo graphics library</a>.
 The image format is selected from the extension of the output file.
 
-<P>
-It is started as 'pseudo' monitor (output to an image file) and when
-stopped, all output from previously used display commands are written to
-the output file.
+The Cairo driver is used for GRASS display commands by default if
+available, otherwise <em><a href="pngdriver.html">PNG driver</a></em>
+is used.
 
-<H2>USAGE</H2>
+<h2>USAGE</h2>
 
-<H3>Environment variables</H3>
+<h3>Environment variables</h3>
+
+The Cairo driver can be enabled by
+setting <b>GRASS_RENDER_IMMEDIATE</b> variable, eg.
+
+<div class="code"><pre>
+export GRASS_RENDER_IMMEDIATE=cairo
+</pre></div>
 
 Several environment variables affect the operation of the Cairo driver:
 
-<UL>
-  <LI><B>GRASS_RENDER_IMMEDIATE=[FALSE|TRUE|PNG|PS|HTML|cairo]</B><BR>
-     tells the raster library which driver to use. If
-     <tt>TRUE</tt>, the cairo driver is used if it is enabled, otherwise the PNG driver is used.
-  <LI><B>GRASS_WIDTH=xxx</B><BR>
-     the width of the image.
-  </LI>
-  <LI><B>GRASS_HEIGHT=yyy</B><BR>
-    the height of the image.
-  </LI>
-  <LI><B>GRASS_PNGFILE=filename</B><BR>
-     the name and format of the resulting image file, default is
-     <tt>map.png</tt>.<BR>
-     The image format is determined from the file extension.<BR>
-     Supported bitmap formats:
-     <UL>
-       <LI><B>.png</B> - Portable Network Graphics (PNG)</LI>
-       <LI><B>.bmp</B> - Windows Bitmap (BMP, 32-bpp)
-           (these are not readable by some older viewers)</LI>
-       <LI><B>.ppm</B> - Portable Pixmap (PPM + PGM for alpha channel)</LI>
-     </UL>
-     Supported vector formats:
-     <UL>
-       <LI><B>.pdf</B> - Portable Document Format (PDF)</LI>
-       <LI><B>.ps</B> - PostScript (PS)</LI>
-       <LI><B>.svg</B> - Scalable Vector Graphics (SVG)</LI>
-     </UL>
-     (Note: Some formats may not be available, depending on your platform and
-     the Cairo library that GRASS was built with.)
-  </LI> 
-  <LI><B>GRASS_BACKGROUNDCOLOR=RRGGBB</B><BR>
-     specifies the background color to use in RGB
-    notation (hex values). Default is <b>FFFFFF</b> (white).
-  </LI>
-  <LI><B>GRASS_TRANSPARENT=[TRUE|FALSE]</B><BR>
+<ul>
+  <li><b>GRASS_WIDTH=xxx</b><br>
+    the width of the image map (default is 640).
+  </li>
+  <li><b>GRASS_HEIGHT=yyy</b><br>
+    the height of the image map (default is 480).
+  </li>
+  <li><b>GRASS_BACKGROUNDCOLOR=RRGGBB</b><br>
+    specifies the background color to use in RGB notation (hex or
+    R:G:B values). Named colors are also supported. Default
+    is <b>FFFFFF</b> (white).
+  </li>
+  <li><b>GRASS_TRANSPARENT=[TRUE|FALSE]</b><br>
     sets transparent background on (TRUE) or off (FALSE, default).
-  </LI>
-  <LI><B>GRASS_PNG_READ</B><BR>
-     if <tt>TRUE</tt>, the Cairo driver will initialize the image from
-    the contents of GRASS_PNGFILE.<BR>
-    (Note: This is only supported for bitmap formats)
-  </LI>
-  <LI><B>GRASS_PNG_MAPPED</B><BR>
-    if <tt>TRUE</tt>, the Cairo driver will map GRASS_PNGFILE as its framebuffer,
-    rather than using memory. This only works with BMP files.
-  </LI>
-  <LI><B>GRASS_ANTIALIAS</B><BR> can be <em>default</em>,
+  </li>
+  <li><b>GRASS_ANTIALIAS</b><br> can be <em>default</em>,
     <em>none</em>, <em>gray</em>, or <em>subpixel</em>, corresponding to
     <a href="http://www.cairographics.org/manual/cairo-cairo-t.html#cairo-antialias-t">cairo_antialias_t</a>
-  </LI>
-  <LI><B>GRASS_LINE_WIDTH</B><BR>
+  </li>
+  <li><b>GRASS_PNGFILE=filename</b><br>
+     the name and format of the resulting image file, default is
+     <tt>map.png</tt>.<br>
+     The image format is determined from the file extension.<br>
+     Supported bitmap formats:
+     <ul>
+       <li><b>.png</b> - Portable Network Graphics (PNG)</li>
+       <li><b>.bmp</b> - Windows Bitmap (BMP, 32-bpp)
+           (these are not readable by some older viewers)</li>
+       <li><b>.ppm</b> - Portable Pixmap (PPM + PGM for alpha channel)</li>
+     </ul>
+     Supported vector formats:
+     <ul>
+       <li><b>.pdf</b> - Portable Document Format (PDF)</li>
+       <li><b>.ps</b> - PostScript (PS)</li>
+       <li><b>.svg</b> - Scalable Vector Graphics (SVG)</li>
+     </ul>
+     (Note: Some formats may not be available, depending on your platform and
+     the Cairo library that GRASS was built with.)
+  </li> 
+  <li><b>GRASS_PNG_READ</b><br>
+     if <tt>TRUE</tt>, the Cairo driver will initialize the image from
+    the contents of GRASS_PNGFILE.<br>
+    (<em>Note: This is only supported for bitmap formats</em>)
+  </li>
+  <li><b>GRASS_PNG_MAPPED</b><br>
+    if <tt>TRUE</tt>, the Cairo driver will map GRASS_PNGFILE as its framebuffer,
+    rather than using memory.<br>
+    (<em>Note: This only works with BMP files.</em>)
+  </li>
+<!-- used ?
+  <li><b>GRASS_LINE_WIDTH</b><br>
     the default line width.
-  </LI>
-  <LI><B>GRASS_TEXT_SIZE</B><BR>
+  </li>
+  <li><b>GRASS_TEXT_SIZE</b><br>
     the default text size.
-  </LI>
-  <LI><B>GRASS_FRAME</B><BR>
+  </li>
+  <li><b>GRASS_FRAME</b><br>
     contains 4 coordinates, <em>top,bottom,left,right</em>, defining the initial frame.
-  </LI>
-</UL>
+  </li>
+-->
+  <li><b>GRASS_CAIRO_SCREEN</b><br>
+    defines Cairo screen
+  </li>
+  <li><b>GRASS_CAIRO_VISUAL</b><br>
+    defines Cairo visual
+  </li>
+</ul>
 
-<H3>Examples</H3>
+<h3>Examples</h3>
 
 Example using the driver to generate a PNG file (bash-syntax):
-<div class="code"><PRE>
-export GRASS_PNGFILE=spearfish.png
+
+<div class="code"><pre>
+export GRASS_RENDER_IMMEDIATE=cairo
+export GRASS_PNGFILE=nc_spm.png
 export GRASS_WIDTH=800
 export GRASS_HEIGHT=800
-export GRASS_RENDER_IMMEDIATE=CAIRO
 export GRASS_PNG_READ=TRUE
 
-d.rast map=elevation.10m
+g.region rast=elevation
+d.rast map=elevation
 d.vect map=streams width=1 color=blue fcolor=aqua type=area,line
-d.vect map=roads width=2
-</PRE></div>
+d.vect map=roadsmajor width=2
+</pre></div>
 
 Example using the driver to generate a PDF file (bash-syntax):
-<div class="code"><PRE>
-export GRASS_PNGFILE=spearfish.pdf
+
+<div class="code"><pre>
+export GRASS_RENDER_IMMEDIATE=cairo
+export GRASS_PNGFILE=nc_spm.pdf
 export GRASS_WIDTH=800
 export GRASS_HEIGHT=800
-export GRASS_RENDER_IMMEDIATE=CAIRO
-export GRASS_PNG_READ=TRUE
 
-d.rast map=elevation.10m
-d.vect map=streams width=1 color=blue fcolor=aqua type=area,line
-d.vect map=roads width=2
-</PRE></div>
+g.region rast=elevation
+d.rast map=elevation
+</pre></div>
 
 
-<H2>NOTES</H2> 
+<h2>NOTES</h2> 
 
 The driver is still in development. Enable it by specifying
-<CODE>--with-cairo</CODE> when configuring GRASS. This
+<code>--with-cairo</code> when configuring GRASS. This
 requires a reasonably recent version of the Cairo libraries
-and a working pkg-config.
+and a working <tt>pkg-config</tt>.
 
-<P>
+<p>
 Antialiasing is enabled by default for bitmap formats. There is
 currently no way of disabling this.
 
-<P>
+<p>
+The resolution of the output images is defined by current region
+extents. Use <tt>g.region -p</tt> to get the number of rows and cols
+and use the environment variables to set the image size. If you would
+like a larger image, multiply both rows and cols by the same whole
+number to preserve the aspect ratio.
+
+<p>
 Cairo supports true vector format output whenever possible. However,
 if the selected format doesn't support a necessary feature, Cairo may
 fall back on rendering a bitmap representation of the image wrapped in
 the selected vector format.
 
 <h2>SEE ALSO</h2>
-<EM>
-<a href="displaydrivers.html">Display drivers</a>
-<br>
-<A HREF="pngdriver.html">PNG driver</A>,
-<A HREF="psdriver.html">PostScript driver</A>,
-<BR>
-<A href="d.rast.html">d.rast</A>,
-<A href="d.vect.html">d.vect</A>
-</EM>
+<em>
+  <a href="pngdriver.html">PNG driver</a>,
+  <a href="psdriver.html">PS driver</a>,
+  <a href="htmldriver.html">HTML driver</a>,
+  <a href="variables.html">variables</a>
+  <br><br>
+  <a href="d.rast.html">d.rast</a>,
+  <a href="d.vect.html">d.vect</a>,
+  <a href="d.mon.html">d.mon</a>,
+  <a href="d.erase.html">d.erase</a>,
+  <a href="d.redraw.html">d.redraw</a>
+</em>
 
-<H2>AUTHOR</H2>
-Lars Ahlzen &lt;<I>lars (at) ahlzen.com</I>&gt;<BR>
+<h2>AUTHOR</h2>
+Lars Ahlzen &lt;<i>lars (at) ahlzen.com</i>&gt;<br>
 and the GRASS Development Team.
 
