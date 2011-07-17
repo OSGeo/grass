@@ -785,7 +785,6 @@ class Map(object):
         for layer in llist:
             # specified type only
             if l_type != None:
-                print one_type, layer.type, l_type
                 if one_type and layer.type != l_type:
                     continue
                 elif not one_type and layer.type not in l_type:
