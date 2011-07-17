@@ -41,7 +41,4 @@ SUBDIRS = \
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 
-default: parsubdirs $(HTMLDIR)/displaydrivers.html
-
-$(HTMLDIR)/displaydrivers.html: displaydrivers.html
-	$(INSTALL_DATA) $< $@
+default: parsubdirs

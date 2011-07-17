@@ -9,106 +9,131 @@
 
 <img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
 
-<H2>NAME</H2>
-<EM><B> PNG driver</B></EM> - driver to create PNG and PPM images.
-<BR><EM>(drivers)</EM> 
+<h2>NAME</h2>
+<em><b>PNG driver</b></em> - display driver to create PNG, PPM, or BMP images.
 
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-The PNG driver generates PNG and PPM images from GRASS display commands.
-Per default PNG files are written with this driver. It is started as 'pseudo' monitor
-(image file instead) and when stopped, all output from previously used
-display commands are written to the PNG image file.
+The PNG driver generates PNG, PPM, or BMP images from GRASS display
+commands. Per default PNG files are written with this driver. This
+driver is used by default if <em><a href="cairodriver.html">Cairo
+driver</a></em> is not available.
 
-<H2>USAGE</H2>
+<h2>USAGE</h2>
 
-<H3>Environment variables</H3>
-Several environment variables effect the operation 
-of the PNG driver. 
-<UL>
-  <LI><B>GRASS_WIDTH=xxx</B><BR>
-     the width of the image map (default is 640).</LI>
-  <LI><B>GRASS_HEIGHT=yyy</B><BR>
-    the height of the image map (default is 480).</LI>
-  <LI><B>GRASS_PNGFILE=filename</B><BR>
+<h3>Environment variables</h3>
+
+The PNG driver can be enabled by setting <b>GRASS_RENDER_IMMEDIATE</b>
+variable, eg.
+
+<div class="code"><pre>
+export GRASS_RENDER_IMMEDIATE=png
+</pre></div>
+
+Several environment variables affect the operation of the PNG driver:
+
+<ul>
+  <li><b>GRASS_WIDTH=xxx</b><br>
+     the width of the image map (default is 640).
+  </li>
+  <li><b>GRASS_HEIGHT=yyy</b><br>
+    the height of the image map (default is 480).
+  </li>
+  <li><b>GRASS_BACKGROUNDCOLOR=RRGGBB</b><br>
+    specifies the background color to use in RGB notation (hex or
+    R:G:B values). Named colors are also supported. Default
+    is <b>FFFFFF</b> (white).
+  </li>
+  <li><b>GRASS_TRANSPARENT=[TRUE|FALSE]</b><br>
+    sets transparent background on (TRUE) or off (FALSE, default).
+  </li>
+  <li><b>GRASS_TRUECOLOR=[TRUE|FALSE]</b><br>
+    sets true-color support. Default is TRUE.
+  </li>
+  <li><b>GRASS_PNGFILE=filename</b><br>
      the filename to put the resulting image in, default is <tt>map.png</tt>.
      If you set GRASS_PNGFILE to a filename which ends in ".ppm", a PPM 
      file will be created (with alpha channel stored in a PGM image, if applicable).
      If you set GRASS_PNGFILE to a filename which ends in ".bmp", a 32-bpp
      BMP file will be created (these are not readable by some older viewers).
-     <br><br> 
-  <LI><B>GRASS_BACKGROUNDCOLOR=RRGGBB</B><BR>
-     specifies the background color to use in RGB
-     notation (hex values). Default is <b>000000</b> (black).<br><br>
-  <LI><B>GRASS_TRANSPARENT=[TRUE|FALSE]</B><BR>
-    sets transparent background on (TRUE) or off (FALSE, default).</LI>
-  <LI><B>GRASS_TRUECOLOR=[TRUE|FALSE]</B><BR>
-    sets true-color support. Default is TRUE</LI>
-  <LI><B>GRASS_PNG_COMPRESSION=[0|1|9]</B><BR>
-    compression level of PNG files (0 = none, 1 = fastest, 9 = best, default is 6)</LI>
-  <LI><B>GRASS_PNG_READ</B><BR>
+  </li>
+  <li><b>GRASS_PNG_COMPRESSION=[0|1|9]</b><br>
+    compression level of PNG files (0 = none, 1 = fastest, 9 = best, default is 6)
+  </li>
+  <li><b>GRASS_PNG_READ</b><br>
      if <tt>TRUE</tt>, the PNG driver will initialize the image from
-     the contents of GRASS_PNGFILE.</LI>
-  <LI><B>GRASS_PNG_MAPPED</B><BR>
-     if <tt>TRUE</tt>, the PNG driver will map GRASS_PNGFILE as its framebuffer,
-     rather than using memory. This only works with BMP files.</LI>
-  <LI><B>GRASS_RENDER_IMMEDIATE=[FALSE|TRUE|PNG|PS|HTML|cairo]</B><BR>
-     tells the raster library which driver to use. If
-     <tt>TRUE</tt>, the cairo driver is used if it is enabled, otherwise the PNG driver is used.
-  <LI><B>GRASS_LINE_WIDTH</B><BR>
+     the contents of GRASS_PNGFILE.
+  </li>
+  <li><b>GRASS_PNG_MAPPED</b><br>
+    if <tt>TRUE</tt>, the PNG driver
+    will map GRASS_PNGFILE as its framebuffer, rather than using
+    memory. This only works with BMP files.
+  </li>
+  <!-- used ?
+  <li><b>GRASS_LINE_WIDTH</b><br>
     the default line width.
-  </LI>
-  <LI><B>GRASS_TEXT_SIZE</B><BR>
+  </li>
+  <li><b>GRASS_TEXT_SIZE</b><br>
     the default text size.
-  </LI>
-  <LI><B>GRASS_FRAME</B><BR>
+  </li>
+  <li><b>GRASS_FRAME</b><br>
     contains 4 coordinates, <em>top,bottom,left,right</em>, defining the initial frame.
-  </LI>
-</UL>
+  </li>
+  -->
+</ul>
 
-<H3>Example</H3>
+<h3>Example</h3>
 
-<DIV class="code"><PRE>
-# Define driver settings (here: bash shell syntax)
-export GRASS_RENDER_IMMEDIATE=PNG
+<div class="code"><pre>
+export GRASS_RENDER_IMMEDIATE=png
 export GRASS_TRUECOLOR=TRUE
 
-# Display raster map and vector polygons
-d.rast <i>somerastermap</i>
-d.vect <i>somevectormap</i> color=red
-</PRE></DIV>
+g.region rast=elevation
+d.rast elevation
+d.vect roadsmajor color=red
+</pre></div>
+
 This writes a file named <tt>map.png</tt> in your current directory.
 
-<H2>NOTES</H2> 
+<h2>NOTES</h2> 
 
-The PNG driver uses the libpng (see the <a href="http://www.libpng.org/pub/png/">libpng</a>
-home page) and zlib (see the 
+The PNG driver uses the libpng (see
+the <a href="http://www.libpng.org/pub/png/">libpng</a> home page) and
+zlib (see the
 <a href="http://www.zlib.net">zlib</a> home page), all which needs to
 be installed for the PNG driver to work (it's worth it).
+
 <p>
-The resolution of the <i>PNG</i> raster map is defined by the map
-extents. Use <em>g.region -p</em> to get the number of rows and cols and
-use the environment variables to set the PNG size. If you would like a
-larger image, multiply both rows and cols by the same whole number to
-preserve the aspect ratio.
+The resolution of the output images is defined by current region
+extents. Use <tt>g.region -p</tt> to get the number of rows and cols
+and use the environment variables to set the image size. If you would
+like a larger image, multiply both rows and cols by the same whole
+number to preserve the aspect ratio.
+
 <p>
-Further PNG file processing (e.g. quantization to 1 bit for monochrome images)
-can be done with 'pnmquant' of the <a href="http://netpbm.sourceforge.net/">netpbm</a> tools.
+Further PNG file processing (e.g. quantization to 1 bit for monochrome
+images) can be done with <tt>pnmquant</tt> of
+the <a href="http://netpbm.sourceforge.net/">netpbm</a> tools.
 
 <h2>SEE ALSO</h2>
-<EM>
-<a href="displaydrivers.html">Display drivers</a>
-<br>
-<A HREF="cairodriver.html">CAIRO driver</A>,
-<A HREF="psdriver.html">PostScript driver</A>,
-<BR>
-<A href="d.rast.html">d.rast</A>,
-<A href="d.vect.html">d.vect</A>
-</EM>
+<em>
+  <a href="cairodriver.html">Cairo driver</a>,
+  <a href="psdriver.html">PS driver</a>,
+  <a href="htmldriver.html">HTML driver</a>,
+  <a href="variables.html">variables</a>
+  <br><br>
+  <a href="d.rast.html">d.rast</a>,
+  <a href="d.vect.html">d.vect</a>,
+  <a href="d.mon.html">d.mon</a>,
+  <a href="d.erase.html">d.erase</a>,
+  <a href="d.redraw.html">d.redraw</a>
+</em>
 
-<H2>AUTHOR</H2>
-Original version: Per Henrik Johansen &lt;<I>phj (at) norgit.no</I>&gt; <I><a href="http://www.norgit.no">NORGIT AS</a></I>
-<BR>
+<h2>AUTHOR</h2>
+
+Original version: Per Henrik Johansen &lt;<i>phj (at)
+norgit.no</i>&gt; <!-- broken link <I><a href="http://www.norgit.no">NORGIT AS</a></i> -->
+<br>
 Rewritten by: Glynn Clements, 2003
 
 <p>

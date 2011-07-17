@@ -9,99 +9,113 @@
 
 <img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
 
-<H2>NAME</H2>
-<EM><B> PS driver</B></EM> - driver to create PostScript files.
-<BR><EM>(drivers)</EM> 
+<h2>NAME</h2>
+<em><b>PS driver</b></em> - display driver to create PostScript files.
 
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
 The PS driver generates a PostScript file from GRASS display commands.
-The driver is started as 'pseudo' monitor (PS file instead) and when
-stopped, all output from previously used display commands are written
-to the PostScript file.
 
-<H2>USAGE</H2>
-<H3>Environment variables</H3>
-Several environment variables effect the operation 
-of the PS driver:
+<h2>USAGE</h2>
 
-<UL>
-  <LI><B>GRASS_RENDER_IMMEDIATE=[FALSE|TRUE|PNG|PS|HTML|cairo]</B><BR>
-     tells the raster library which driver to use. If
-     <tt>TRUE</tt>, the cairo driver is used if it is enabled, otherwise the PNG driver is used.
-  <LI><B>GRASS_PSFILE</B><BR>
+<h3>Environment variables</h3>
+
+The PS driver can be enabled by setting <b>GRASS_RENDER_IMMEDIATE</b>
+variable, eg.
+
+<div class="code"><pre>
+export GRASS_RENDER_IMMEDIATE=ps
+</pre></div>
+
+Several environment variables effect the operation of the PS driver:
+
+<ul>
+  <li><b>GRASS_WIDTH=xxx</b><br>
+     the width of the image map (default is 640).
+  </li>
+  <li><b>GRASS_HEIGHT=yyy</b><br>
+    the height of the image map (default is 480).
+  </li>
+  <li><b>GRASS_TRUECOLOR=[TRUE|FALSE]</b><br>
+    sets true-color support. Default is FALSE.
+  </li>
+  <li><b>GRASS_PSFILE</b><br>
     name of output file. If it ends with ".eps" an EPS file
-    will be created.</LI>
-  <LI><B>GRASS_PAPER</B><BR>
+    will be created.
+  </li>
+  <li><b>GRASS_PAPER</b><br>
     sets the screen dimensions and margins to
-    fit a standard paper size, see also GRASS_WIDTH, GRASS_HEIGHT.</LI>
-  <LI><B>GRASS_WIDTH</B><BR>
-    defines the width of the screen, see also GRASS_HEIGHT</LI>
-  <LI><B>GRASS_HEIGHT</B><BR>
-    defines the height of the screen, see also GRASS_WIDTH</LI>
-  <LI><B>GRASS_TRUECOLOR</B><BR>
-    if <tt>TRUE</tt>, the PS driver generates color output, otherwise
-    monochrome.</LI>
-  <LI><B>GRASS_LANDSCAPE</B><BR>
+    fit a standard paper size, see also GRASS_WIDTH, GRASS_HEIGHT.
+  </li>
+  <li><b>GRASS_LANDSCAPE</b><br>
     if <tt>TRUE</tt>, the screen is rotated 90 degrees
     counter-clockwise so that a "landscape" screen fits better on
-    "portrait" paper.</LI>
-  <LI><B>GRASS_PS_HEADER</B><BR>
+    "portrait" paper.
+  </li>
+  <li><b>GRASS_PS_HEADER</b><br>
     if <tt>FALSE</tt>, the output is appended to any existing file,
-    and no prolog or setup sections are generated.</LI>
-  <LI><B>GRASS_PS_TRAILER</B><BR>
-    if <tt>FALSE</tt>, no trailer section is generated.</LI>
-  <LI><B>GRASS_LINE_WIDTH</B><BR>
+    and no prolog or setup sections are generated.
+  </li>
+  <li><b>GRASS_PS_TRAILER</b><br>
+    if <tt>FALSE</tt>, no trailer section is generated.
+  </li>
+  <!-- used ?
+  <li><b>GRASS_LINE_WIDTH</b><br>
     the default line width.
-  </LI>
-  <LI><B>GRASS_TEXT_SIZE</B><BR>
+  </li>
+  <li><b>GRASS_TEXT_SIZE</b><br>
     the default text size.
-  </LI>
-  <LI><B>GRASS_FRAME</B><BR>
+  </li>
+  <li><b>GRASS_FRAME</b><br>
     contains 4 coordinates, <em>top,bottom,left,right</em>, defining the initial frame.
-  </LI>
-</UL>
+  </li>
+  -->
+</ul>
 
-<H3>Example</H3>
+<h3>Example</h3>
 
-<DIV class="code"><PRE>
-# Define driver settings (here: bash shell syntax)
-export GRASS_RENDER_IMMEDIATE=PS
+<div class="code"><pre>
+export GRASS_RENDER_IMMEDIATE=ps
 export GRASS_TRUECOLOR=TRUE
 
-# Display raster map and vector polygons
-d.rast <i>somerastermap</i>
-d.vect <i>somevectormap</i> color=red
-</PRE></DIV>
+g.region rast=elevation
+d.rast elevation
+d.vect roadsmajor color=red
+</pre></div>
 This writes a file named <tt>map.ps</tt> in your current directory.
 
-<H2>NOTES</H2> 
+<h2>NOTES</h2> 
 
-The resolution of the <i>PS</i> raster map is defined by the map
-extents. Use <em>g.region -p</em> to get the number of rows and cols and
-use the environment variables to set the PS size. If you would like a
-larger image, multiply both rows and cols by the same whole number to
-preserve the aspect ratio.
-<P>
-GRASS_TRUECOLOR requires either PostScript level 2 or level 1 plus the
-colorimage and setrgbcolor operators (this is the case for colour printers
-which pre-date level 2 PostScript).
+The resolution of the output files is defined by current region
+extents. Use <tt>g.region -p</tt> to get the number of rows and cols
+and use the environment variables to set the image size. If you would
+like a larger image, multiply both rows and cols by the same whole
+number to preserve the aspect ratio.
+
 <p>
-Only masked images (<tt>d.rast -o</tt>, <tt>d.rgb -o</tt>, <tt>d.his
--n</tt>) require PostScript level 3.
+GRASS_TRUECOLOR requires either PostScript level 2 or level 1 plus the
+colorimage and setrgbcolor operators (this is the case for colour
+printers which pre-date level 2 PostScript).
+
+<p>
+Masked images (<tt>d.rast</tt>, <tt>d.rgb</tt>, <tt>d.his -n</tt>)
+require PostScript level 3.
 
 <h2>SEE ALSO</h2>
-<EM>
-<a href="displaydrivers.html">Display drivers</a>
-<br>
-<A HREF="cairodriver.html">CAIRO driver</A>,
-<A HREF="pngdriver.html">PNG driver</A>
-<BR>
-<A href="d.rast.html">d.rast</A>,
-<A href="d.vect.html">d.vect</A>
-</EM>
+<em>
+  <a href="cairodriver.html">Cairo driver</a>,
+  <a href="pngdriver.html">PNG driver</a>,
+  <a href="htmldriver.html">HTML driver</a>,
+  <a href="variables.html">variables</a>
+  <br><br>
+  <a href="d.rast.html">d.rast</a>,
+  <a href="d.vect.html">d.vect</a>,
+  <a href="d.mon.html">d.mon</a>,
+  <a href="d.erase.html">d.erase</a>,
+  <a href="d.redraw.html">d.redraw</a>
+</em>
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 Glynn Clements, 2007
 
