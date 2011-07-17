@@ -60,12 +60,7 @@ int main(int argc, char **argv)
 
     field_opt = G_define_standard_option(G_OPT_V_FIELD_ALL);
     
-    coords_opt = G_define_option();
-    coords_opt->key = "east_north";
-    coords_opt->type = TYPE_DOUBLE;
-    coords_opt->key_desc = "east,north";
-    coords_opt->required = NO;
-    coords_opt->multiple = YES;
+    coords_opt = G_define_standard_option(G_OPT_M_EN);
     coords_opt->label = _("Coordinates for query");
     coords_opt->description = _("If not given read from standard input");
 
