@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: grasslibs_it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-06-09 19:50+0200\n"
-"PO-Revision-Date: 2011-07-15 19:13+0100\n"
+"PO-Revision-Date: 2011-07-17 18:16+0100\n"
 "Last-Translator: Anne Ghisla <a.ghisla@gmail.com>\n"
 "Language-Team: Italian <grass-translations@lists.osgeo.org>\n"
 "Language: it\n"
@@ -1188,7 +1188,7 @@ msgstr " Solo  %d%% della finestra salvata in \"%s\" si sovrappone con la finest
 #: ../lib/gis/mapset_msc.c:61
 #, c-format
 msgid "Unable to make mapset element %s (%s): %s"
-msgstr ""
+msgstr "Impossibile creare l'elemento %s (%s) nel mapset: %s"
 
 #: ../lib/gis/mapset_msc.c:65
 #, c-format
@@ -1214,7 +1214,7 @@ msgstr "Valore illegale di col"
 #: ../lib/gis/adj_cellhd.c:76 ../lib/gis/adj_cellhd.c:240
 #, c-format
 msgid "Fixing subtle input data rounding error of north boundary (%g>%g)"
-msgstr ""
+msgstr "Risolto leggero errore di arrotondamento del dato in input del confine nord (%g>%g)"
 
 #: ../lib/gis/adj_cellhd.c:81 ../lib/gis/adj_cellhd.c:245
 msgid "Illegal latitude for North"
@@ -1223,7 +1223,7 @@ msgstr "Valore di latitudine Nord non valido"
 #: ../lib/gis/adj_cellhd.c:87 ../lib/gis/adj_cellhd.c:251
 #, c-format
 msgid "Fixing subtle input data rounding error of south boundary (%g>%g)"
-msgstr ""
+msgstr "Risolto leggero errore di arrotondamento del dato in input del confine sud (%g>%g)"
 
 #: ../lib/gis/adj_cellhd.c:92 ../lib/gis/adj_cellhd.c:256
 msgid "Illegal latitude for South"
@@ -1232,12 +1232,12 @@ msgstr "Valore di latitudine Sud non valido"
 #: ../lib/gis/adj_cellhd.c:104 ../lib/gis/adj_cellhd.c:268
 #, c-format
 msgid "Fixing subtle input data rounding error of west boundary (%g>%g)"
-msgstr ""
+msgstr "Risolto leggero errore di arrotondamento del dato in input del confine ovest (%g>%g)"
 
 #: ../lib/gis/adj_cellhd.c:115 ../lib/gis/adj_cellhd.c:279
 #, c-format
 msgid "Fixing subtle input data rounding error of east boundary (%g>%g)"
-msgstr ""
+msgstr "Risolto leggero errore di arrotondamento del dato in input del confine est (%g>%g)"
 
 #: ../lib/gis/adj_cellhd.c:128 ../lib/gis/adj_cellhd.c:292
 msgid "North must be north of South"
@@ -1504,12 +1504,12 @@ msgstr "errore nel file tabella datum, linea %d"
 #: ../lib/gis/open_misc.c:45
 #, c-format
 msgid "G__open_misc(read): mapset <%s> doesn't match xmapset <%s>"
-msgstr ""
+msgstr "G__open_misc(read): mapset <%s> non corrisponde a xmapset <%s>"
 
 #: ../lib/gis/open_misc.c:67
 #, c-format
 msgid "G__open_misc(write): xmapset <%s> != G_mapset() <%s>"
-msgstr ""
+msgstr "G__open_misc(write): xmapset <%s> != G_mapset() <%s>"
 
 #: ../lib/gis/home.c:35
 #, fuzzy
@@ -1532,7 +1532,7 @@ msgstr "La clausola WHERE del comando SQL manca della parola chiave 'where'"
 
 #: ../lib/gis/parser_standard_options.c:109
 msgid "Example: income < 1000 and inhab >= 10000"
-msgstr ""
+msgstr "Esempio: income < 1000 e inhab >= 10000"
 
 #: ../lib/gis/parser_standard_options.c:117
 msgid "Table name"
@@ -2309,7 +2309,7 @@ msgstr "Sistema non inizializzato. Il programmatore si è scordato di usare la f
 #: ../lib/rst/interp_float/interp2d.c:121
 #: ../lib/rst/interp_float/interp2d.c:127 ../lib/ogsf/gsd_img_mpeg.c:317
 msgid "Out of memory"
-msgstr "Fuori memoria"
+msgstr "Memoria esaurita"
 
 #: ../lib/driver/parse_ftcap.c:53
 #, c-format
@@ -2440,7 +2440,7 @@ msgstr "La linea %d ha già un'area/isola %d alla propria destra"
 
 #: ../lib/vector/diglib/plus_area.c:301
 msgid "Attempt to delete isle from dead area"
-msgstr "Tentativo di cancellare isola da area "
+msgstr "Tentativo di cancellare isola da area inesistente"
 
 #: ../lib/vector/diglib/plus_area.c:318
 #, c-format
@@ -2597,7 +2597,7 @@ msgstr "Tentativo di leggere riga inesistente"
 
 #: ../lib/vector/Vlib/cats.c:42
 msgid "Vect_new_cats_struct(): Out of memory"
-msgstr ""
+msgstr "Vect_new_cats_struct(): Memoria esaurita"
 
 #: ../lib/vector/Vlib/cats.c:124
 #, c-format
@@ -2650,7 +2650,7 @@ msgstr "Vect_segment_intersection() ERROR (segmenti non verticali collineari)"
 #: ../lib/vector/Vlib/intersect.c:1162 ../lib/vector/Vlib/intersect.c:1183
 #: ../lib/vector/Vlib/intersect.c:1200
 msgid "Error while adding point to array. Out of memory"
-msgstr ""
+msgstr "Errore nell'aggiungere il punto all'array. Memoria eaurita"
 
 #: ../lib/vector/Vlib/level.c:34
 msgid "Map structure was never initialized"
@@ -2707,7 +2707,7 @@ msgstr "Il vettoriale non è aperto"
 #: ../lib/vector/Vlib/geos.c:55
 #, c-format
 msgid "Vect_read_line_geos(): feature id %d is not reasonable (max features in vector map <%s>: %d)"
-msgstr ""
+msgstr "Vect_read_line_geos(): l'id %d della feature è irragionevole (numero massimo di features nella mappa vettoriale <%s>: %d)"
 
 #: ../lib/vector/Vlib/geos.c:60
 msgid "only native format supported"
@@ -2726,7 +2726,7 @@ msgstr "Vect_read_area_geos(): impossibile leggere l'isola con id %d nell' area 
 #: ../lib/vector/Vlib/geos.c:202
 #, c-format
 msgid "Unable to read line offset %ld"
-msgstr ""
+msgstr "Impossibile leggere l'offset %ld della linea "
 
 #: ../lib/vector/Vlib/geos.c:409
 #, c-format
@@ -3024,12 +3024,12 @@ msgstr "Impossibile leggere la linea %d"
 #: ../lib/vector/Vlib/area.c:255 ../lib/vector/Vlib/area.c:284
 #, c-format
 msgid "Attempt to read topo for dead area (%d)"
-msgstr ""
+msgstr "Tentativo di leggere la topologia da un'area inesistente (%d)"
 
 #: ../lib/vector/Vlib/area.c:225 ../lib/vector/Vlib/area.c:311
 #, c-format
 msgid "Attempt to read topo for dead isle (%d)"
-msgstr ""
+msgstr "Tentativo di leggere la topologia da un'isola inesistente (%d)"
 
 #: ../lib/vector/Vlib/header.c:87 ../lib/vector/Vlib/header.c:135
 #, c-format
@@ -3119,7 +3119,7 @@ msgstr "sconosciuto"
 #: ../lib/vector/Vlib/read.c:107
 #, c-format
 msgid "Vect_read_line(): feature id %d is not reasonable (max features in vector map <%s>: %d)"
-msgstr ""
+msgstr "Vect_read_line(): l'id %d della feature è irragionevole (numero massimo di features nella mappa vettoriale <%s>: %d)"
 
 #: ../lib/vector/Vlib/build_nat.c:98
 msgid "Unable to add area (map closed, topo saved)"
@@ -3404,12 +3404,12 @@ msgstr ""
 
 #: ../lib/vector/Vlib/net.c:341
 msgid "Setting node costs..."
-msgstr ""
+msgstr "Impostazione in corso dei costi dei nodi..."
 
 #: ../lib/vector/Vlib/net.c:397
 #, c-format
 msgid "Database record for node %d (cat = %d) not found (cost set to 0)"
-msgstr ""
+msgstr "Record del database non trovato per il nodo %d (cat = %d) (costo impostato a 0)"
 
 #: ../lib/vector/Vlib/net.c:424
 msgid "Flattening the graph..."
@@ -3597,7 +3597,7 @@ msgstr "Non riesco ad aprire lo storico per il vettoriale '%s'"
 #: ../lib/vector/Vlib/open.c:837
 #, c-format
 msgid "Unable to stat file <%s>"
-msgstr ""
+msgstr "Impossibile eseguire 'stat' sul file <%s>"
 
 #: ../lib/vector/Vlib/open.c:896
 #, c-format
@@ -3639,12 +3639,12 @@ msgstr "Impossibile aprire il file fixd per il vettoriale <%s@%s>"
 #: ../lib/vector/Vlib/open_ogr.c:164
 #, c-format
 msgid "Feature index format version %d.%d is not supported by this release. Try to rebuild topology or upgrade GRASS."
-msgstr ""
+msgstr "Versione %d.%d del formato dell'indice delle features non è supportata da questa release. Ricostruire la topologia o aggiornare GRASS."
 
 #: ../lib/vector/Vlib/open_ogr.c:169
 #, c-format
 msgid "Your GRASS version does not fully support feature index format %d.%d of the vector. Consider to rebuild topology or upgrade GRASS."
-msgstr ""
+msgstr "Questa versione di GRASS non supporta appieno il formato %d.%d dell'indice delle features del vettore. Si consiglia di ricostruire la topologia o aggiornare GRASS."
 
 #: ../lib/vector/Vlib/open_ogr.c:236
 #, fuzzy, c-format
@@ -3821,7 +3821,7 @@ msgstr "Impossibile calcolare il centroide per l'area %d"
 
 #: ../lib/vector/Vlib/build_ogr.c:351
 msgid "Partial build for OGR is not supported"
-msgstr ""
+msgstr "Build parziale per OGR non supportato"
 
 #: ../lib/vector/Vlib/build_ogr.c:370
 msgid "Random read is not supported by OGR for this layer, unable to build topology"
@@ -4042,44 +4042,56 @@ msgid ""
 "\n"
 "++ Running geom_data unit tests ++"
 msgstr ""
+"\n"
+"++ Esecuzione degli unit test geom_data ++"
 
 #: ../lib/gpde/test/test_geom.c:41
 msgid ""
 "\n"
 "-- geom_data unit tests failure --"
 msgstr ""
+"\n"
+"-- Fallimento degli unit test geom_data --"
 
 #: ../lib/gpde/test/test_geom.c:43
 msgid ""
 "\n"
 "-- geom_data unit tests finished successfully --"
 msgstr ""
+"\n"
+"-- Unit test geom_data conclusi con successo --"
 
 #: ../lib/gpde/test/test_gradient.c:42
 msgid ""
 "\n"
 "++ Running gradient unit tests ++"
 msgstr ""
+"\n"
+"++ Esecuzione degli unit test gradient ++"
 
 #: ../lib/gpde/test/test_gradient.c:44
 msgid "\t 1. testing 2d gradient"
-msgstr ""
+msgstr "\t 1. test del secondo gradient"
 
 #: ../lib/gpde/test/test_gradient.c:47
 msgid "\t 2. testing 3d gradient"
-msgstr ""
+msgstr "\t 2. test del terzo gradient"
 
 #: ../lib/gpde/test/test_gradient.c:51
 msgid ""
 "\n"
 "-- Gradient unit tests failure --"
 msgstr ""
+"\n"
+"-- Fallimento degli unit test gradient --"
 
 #: ../lib/gpde/test/test_gradient.c:53
 msgid ""
 "\n"
 "-- Gradient unit tests finished successfully --"
 msgstr ""
+"\n"
+"-- Unit test gradient conclusi con successo --"
 
 #: ../lib/gpde/test/test_main.c:50 ../lib/db/dbmi_base/test/test_main.c:47
 #: ../lib/gmath/test/test_main.c:47
@@ -4115,130 +4127,160 @@ msgid ""
 "\n"
 "++ Running gwflow integration tests ++"
 msgstr ""
+"\n"
+"++ Esecuzione degli integration test gwflow ++"
 
 #: ../lib/gpde/test/test_gwflow.c:49
 msgid "\t 1. testing 2d gwflow"
-msgstr ""
+msgstr "\t 1. test di gwflow 2D"
 
 #: ../lib/gpde/test/test_gwflow.c:52
 msgid "\t 2. testing 3d gwflow"
-msgstr ""
+msgstr "\t 2. test di gwflow 3D"
 
 #: ../lib/gpde/test/test_gwflow.c:56
 msgid ""
 "\n"
 "-- gwflow integration tests failure --"
 msgstr ""
+"\n"
+"-- Fallimento degli integration test gwflow --"
 
 #: ../lib/gpde/test/test_gwflow.c:58
 msgid ""
 "\n"
 "-- gwflow integration tests finished successfully --"
 msgstr ""
+"\n"
+"-- Integration test gwflow conclusi con successo --"
 
 #: ../lib/gpde/test/test_solute_transport.c:43
 msgid ""
 "\n"
 "++ Running solute_transport integration tests ++"
 msgstr ""
+"\n"
+"++ Esecuzione degli integration test solute_transport ++"
 
 #: ../lib/gpde/test/test_solute_transport.c:45
 msgid "\t 1. testing 2d solute_transport"
-msgstr ""
+msgstr "\t 1. test di solute_transport 2D"
 
 #: ../lib/gpde/test/test_solute_transport.c:48
 msgid "\t 2. testing 3d solute_transport"
-msgstr ""
+msgstr "\t 2. test di solute_transport 3D"
 
 #: ../lib/gpde/test/test_solute_transport.c:52
 msgid ""
 "\n"
 "-- solute_transport integration tests failure --"
 msgstr ""
+"\n"
+"-- Fallimento degli integration test solute_transport --"
 
 #: ../lib/gpde/test/test_solute_transport.c:55
 msgid ""
 "\n"
 "-- solute_transport integration tests finished successfully --"
 msgstr ""
+"\n"
+"-- Integration test solute_transport conclusi con successo --"
 
 #: ../lib/gpde/test/test_assemble.c:42
 msgid ""
 "\n"
 "++ Running assembling unit tests ++"
 msgstr ""
+"\n"
+"++ Esecuzione degli unit test assembling ++"
 
 #: ../lib/gpde/test/test_assemble.c:44
 msgid "\t 1. testing 2d assembling"
-msgstr ""
+msgstr "\t 1. testing di assembling 2D"
 
 #: ../lib/gpde/test/test_assemble.c:47
 msgid "\t 2. testing 3d assembling"
-msgstr ""
+msgstr "\t 2. testing di assembling 3D"
 
 #: ../lib/gpde/test/test_assemble.c:51
 msgid ""
 "\n"
 "-- Assembling unit tests failure --"
 msgstr ""
+"\n"
+"-- Fallimento degli unit test assembling --"
 
 #: ../lib/gpde/test/test_assemble.c:53
 msgid ""
 "\n"
 "-- Assembling unit tests finished successfully --"
 msgstr ""
+"\n"
+"-- Unit test assembling conclusi con successo --"
 
 #: ../lib/gpde/test/test_heat.c:33
 msgid ""
 "\n"
 "++ Running heat flow integration tests ++"
 msgstr ""
+"\n"
+"++ Esecuzione degli untegration test del flusso di calore ++"
 
 #: ../lib/gpde/test/test_heat.c:35
 msgid "\t 1. testing 2d heat flow"
-msgstr ""
+msgstr "\t 1. test del flusso di calore 2D"
 
 #: ../lib/gpde/test/test_heat.c:37
 msgid "\t 2. testing 3d heat flow"
-msgstr ""
+msgstr "\t 1. test del flusso di calore 3D"
 
 #: ../lib/gpde/test/test_heat.c:40
 msgid ""
 "\n"
 "-- heat flow integration tests failure --"
 msgstr ""
+"\n"
+"-- Fallimento degli integration test del flusso di calore --"
 
 #: ../lib/gpde/test/test_heat.c:42
 msgid ""
 "\n"
 "-- heat flow integration tests finished successfully --"
 msgstr ""
+"\n"
+"-- Integration test del flusso di calore conclusi con successo --"
 
 #: ../lib/gpde/test/test_arrays.c:48
 msgid ""
 "\n"
 "++ Running array unit tests ++"
 msgstr ""
+"\n"
+"++ Esecuzione degli unit test array ++"
 
 #: ../lib/gpde/test/test_arrays.c:50
 msgid "\t 1. testing 2d arrays"
-msgstr ""
+msgstr "\t 1. test degli array 2D"
 
 #: ../lib/gpde/test/test_arrays.c:53
 msgid "\t 2. testing 3d arrays"
-msgstr ""
+msgstr "\t 2. test degli array 3D"
 
 #: ../lib/gpde/test/test_arrays.c:57
 msgid ""
 "\n"
 "-- Array unit tests failure --"
 msgstr ""
+"\n"
+"-- Fallimento degli unit test array --"
 
 #: ../lib/gpde/test/test_arrays.c:59
 msgid ""
 "\n"
 "-- Array unit tests finished successfully --"
 msgstr ""
+"\n"
+"-- Unit test array conclusi con successo --"
 
 #: ../lib/gpde/test/test_les.c:35
 msgid ""
@@ -5066,7 +5108,7 @@ msgstr "Raster <%s> è al di fuori della regione. Caricamento fallito."
 #: ../lib/ogsf/GS2.c:1742 ../lib/ogsf/GS2.c:1750 ../lib/ogsf/GS2.c:1760
 #: ../lib/ogsf/GS2.c:1808
 msgid "GS_load_att_map(): Out of memory. Unable to load map"
-msgstr ""
+msgstr "GS_load_att_map(): Memoria esaurita. Impossibile caricare la mappa"
 
 #: ../lib/ogsf/GS2.c:1836
 msgid "Loading failed"
@@ -5150,7 +5192,7 @@ msgstr "NVIZ non è stato compilato con il supporto di output MPEG"
 
 #: ../lib/ogsf/gsdrape.c:207
 msgid "Unable to process vector map - out of memory"
-msgstr "Impossibile processare il vettoriale - fuori memoria"
+msgstr "Impossibile processare il vettoriale - memoria esaurita"
 
 #: ../lib/python/vector.py:91
 #, fuzzy, python-format
@@ -5568,18 +5610,24 @@ msgid ""
 "\n"
 "++ Running solver unit tests ++"
 msgstr ""
+"\n"
+"++ Esecuzione degli unit test solver ++"
 
 #: ../lib/gmath/test/test_solvers.c:42
 msgid ""
 "\n"
 "-- Solver unit tests failure --"
 msgstr ""
+"\n"
+"-- Fallimento degli unit test solver --"
 
 #: ../lib/gmath/test/test_solvers.c:44
 msgid ""
 "\n"
 "-- Solver unit tests finished successfully --"
 msgstr ""
+"\n"
+"-- Unit test solver conclusi con successo --"
 
 #: ../lib/gmath/test/bench_solver_krylov.c:34
 msgid ""
