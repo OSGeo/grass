@@ -1,16 +1,16 @@
 /*!
- * \file gis/parser_standard_options.c
- *
- * \brief GIS Library - Argument parsing functions (standard options)
- *
- * (C) 2001-2010 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
- *
- * \author Original author CERL
- * \author Soeren Gebbert added Dec. 2009 WPS process_description document
- */
+  \file lib/gis/parser_standard_options.c
+  
+  \brief GIS Library - Argument parsing functions (standard options)
+  
+  (C) 2001-2011 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Original author CERL
+  \author Soeren Gebbert added Dec. 2009 WPS process_description document
+*/
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -18,81 +18,80 @@
 #include "parser_local_proto.h"
 
 /*!
- * \brief Create standardised Option structure.
- *
- * This function will create a standardised Option structure defined
- * by parameter opt. A list of valid parameters can be found in gis.h.
- * It allocates memory for the Option structure and returns a pointer
- * to this memory.
- *
- * If an invalid parameter was specified a empty Option structure will
- * be returned (not NULL).
- *
- *  - database:
- *   - G_OPT_DB_WHERE
- *   - G_OPT_DB_COLUMN
- *   - G_OPT_DB_COLUMNS
- *   - G_OPT_DB_TABLE
- *   - G_OPT_DB_DRIVER
- *   - G_OPT_DB_DATABASE
- *   - G_OPT_DB_SCHEMA
- *
- *  - imagery:
- *   - G_OPT_I_GROUP
- *   - G_OPT_I_SUBGROUP
- *
- *  - raster:
- *   - G_OPT_R_INPUT
- *   - G_OPT_R_INPUTS
- *   - G_OPT_R_OUTPUT
- *   - G_OPT_R_MAP
- *   - G_OPT_R_MAPS
- *   - G_OPT_R_BASE
- *   - G_OPT_R_COVER
- *   - G_OPT_R_ELEV
- *   - G_OPT_R_ELEVS
- *
- *  - raster3d:
- *   - G_OPT_R3_INPUT
- *   - G_OPT_R3_INPUTS
- *   - G_OPT_R3_OUTPUT
- *   - G_OPT_R3_MAP
- *   - G_OPT_R3_MAPS
- *
- *  - vector:
- *   - G_OPT_V_INPUT
- *   - G_OPT_V_INPUTS
- *   - G_OPT_V_OUTPUT
- *   - G_OPT_V_MAP
- *   - G_OPT_V_MAPS
- *   - G_OPT_V_TYPE
- *   - G_OPT_V_FIELD
- *   - G_OPT_V_FIELD_ALL
- *   - G_OPT_V_CAT
- *   - G_OPT_V_CATS
- *   - G_OPT_V_ID
- *   - G_OPT_V_IDS
- * 
- *  - files
- *   - G_OPT_F_INPUT
- *   - G_OPT_F_OUTPUT
- *   - G_OPT_F_SEP
- *
- *  - colors
- *   - G_OPT_C_FG
- *   - G_OPT_C_BG
- *
- *  - misc
- *
- *   - G_OPT_M_UNITS
- *   - G_OPT_M_DATATYPE
- *   - G_OPT_M_MAPSET
- *
- * \param opt type of Option struct to create
- *
- * \return pointer to an Option struct
- */
+  \brief Create standardised Option structure.
+  
+  This function will create a standardised Option structure defined
+  by parameter opt. A list of valid parameters can be found in gis.h.
+  It allocates memory for the Option structure and returns a pointer
+  to this memory.
+  
+  If an invalid parameter was specified a empty Option structure will
+  be returned (not NULL).
+  
+  - database:
+   - G_OPT_DB_WHERE
+   - G_OPT_DB_COLUMN
+   - G_OPT_DB_COLUMNS
+   - G_OPT_DB_TABLE
+   - G_OPT_DB_DRIVER
+   - G_OPT_DB_DATABASE
+   - G_OPT_DB_SCHEMA
+ 
+  - imagery:
+   - G_OPT_I_GROUP
+   - G_OPT_I_SUBGROUP
 
+  - raster:
+   - G_OPT_R_INPUT
+   - G_OPT_R_INPUTS
+   - G_OPT_R_OUTPUT
+   - G_OPT_R_MAP
+   - G_OPT_R_MAPS
+   - G_OPT_R_BASE
+   - G_OPT_R_COVER
+   - G_OPT_R_ELEV
+   - G_OPT_R_ELEVS
+   
+  - raster3d:
+   - G_OPT_R3_INPUT
+   - G_OPT_R3_INPUTS
+   - G_OPT_R3_OUTPUT
+   - G_OPT_R3_MAP
+   - G_OPT_R3_MAPS
+   
+  - vector:
+   - G_OPT_V_INPUT
+   - G_OPT_V_INPUTS
+   - G_OPT_V_OUTPUT
+   - G_OPT_V_MAP
+   - G_OPT_V_MAPS
+   - G_OPT_V_TYPE
+   - G_OPT_V_FIELD
+   - G_OPT_V_FIELD_ALL
+   - G_OPT_V_CAT
+   - G_OPT_V_CATS
+   - G_OPT_V_ID
+   - G_OPT_V_IDS
+   
+  - files
+   - G_OPT_F_INPUT
+   - G_OPT_F_OUTPUT
+   - G_OPT_F_SEP
+   
+  - colors
+   - G_OPT_C_FG
+   - G_OPT_C_BG
+ 
+  - misc
+   - G_OPT_M_UNITS
+   - G_OPT_M_DATATYPE
+   - G_OPT_M_MAPSET
+   - G_OPT_M_EN
+
+   \param opt type of Option struct to create
+   
+   \return pointer to an Option struct
+*/
 struct Option *G_define_standard_option(int opt)
 {
     struct Option *Opt;
@@ -537,7 +536,16 @@ struct Option *G_define_standard_option(int opt)
 	Opt->gisprompt = "old,mapset,mapset";
 	Opt->label = _("Name of mapset (default: current search path)");
 	Opt->description = _("'.' for current mapset");
+	break;
+
+    case G_OPT_M_EN:
+	Opt->key = "east_north";
+	Opt->type = TYPE_DOUBLE;
+	Opt->required = NO;
+	Opt->multiple = YES;
+	Opt->key_desc = "east,north";
+	Opt->description = _("Coordinates");
     }
 
-    return (Opt);
+    return Opt;
 }

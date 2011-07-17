@@ -218,6 +218,7 @@ static const char *GRASS_copyright __attribute__ ((unused))
     G_OPT_M_UNITS,              /* units */
     G_OPT_M_DATATYPE,           /* datatype */
     G_OPT_M_MAPSET,             /* mapset */
+    G_OPT_M_EN,                 /* coordinates */
 } STD_OPT;
 
 /* Message format */
