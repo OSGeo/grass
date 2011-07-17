@@ -55,9 +55,13 @@ int stop_wx(const char *name)
 	G_fatal_error(_("PID file not found"));
     }
     
+#ifdef __MINGW32__
+    /* TODO */
+#else
     if (kill((pid_t) atoi(pid), SIGTERM) != 0) {
 	/* G_fatal_error(_("Unable to stop monitor <%s>"), name); */
     }
+#endif
     
     clean_env(name);
 
