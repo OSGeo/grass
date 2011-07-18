@@ -96,12 +96,11 @@ from grass.script import core as grass
 
 # temp dir
 remove_tmpdir = True
-tmpdir = grass.tempdir()
 
 def check():
     for prog in ('svn', 'make', 'install', 'gcc'):
         if not grass.find_program(prog, ['--help']):
-            grass.fatal(_("%s required. Please install '%s' first.") % (prog, prog))
+            grass.fatal(_("'%s' required. Please install '%s' first.") % (prog, prog))
     
 def expand_module_class_name(c):
     name = { 'd'   : 'display',
@@ -283,7 +282,6 @@ def get_module_script(f):
     return ret
 
 def cleanup():
-    global tmpdir, remove_tmpdir
     if remove_tmpdir:
         grass.try_rmdir(tmpdir)
     else:
@@ -309,7 +307,7 @@ def install_extension():
             grass.fatal(_("Installation of wxGUI extension requires -%s flag.") % 's')
         
     grass.message(_("Fetching '%s' from GRASS-Addons SVN (be patient)...") % options['extension'])
-    global tmpdir
+    
     os.chdir(tmpdir)
     if grass.verbosity() == 0:
         outdev = open(os.devnull, 'w')
@@ -465,5 +463,7 @@ def main():
 
 if __name__ == "__main__":
     options, flags = grass.parser()
+    global tmpdir
+    tmpdir = grass.tempdir()
     atexit.register(cleanup)
     sys.exit(main())
