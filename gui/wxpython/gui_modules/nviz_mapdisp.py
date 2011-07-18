@@ -141,7 +141,11 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.nvizDefault = NvizDefault()
         self.light = copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'light')) # copy
         self.decoration = self.nvizDefault.SetDecorDefaultProp()
-        self.decoration['arrow']['size'] = round(self._display.GetLongDim() / 8., -2)
+        arwSize = self._display.GetLongDim()/8.
+        coef = 0.01
+        if arwSize < 1:
+            coef = 100.
+        self.decoration['arrow']['size'] = int(arwSize * coef)/coef
         
         self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
         self.Bind(wx.EVT_SIZE,             self.OnSize)
