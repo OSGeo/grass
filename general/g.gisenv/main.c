@@ -24,10 +24,10 @@
 
 int main(int argc, char *argv[])
 {
-    int n, store;
+    int n, store, nopts;
     const char *name, *value;
     char *ptr;
-    struct Option *get, *set, *store_opt;
+    struct Option *get_opt, *set_opt, *unset_opt, *store_opt;
     struct Flag *flag_s, *flag_n;
     struct GModule *module;
 
@@ -37,24 +37,34 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("general"));
     G_add_keyword(_("settings"));
-    module->description =
+    G_add_keyword(_("variables"));
+    module->label =
 	_("Outputs and modifies the user's current GRASS variable settings.");
+    module->description = _("Prints all defined GRASS variables if no option is given.");
 
-    get = G_define_option();
-    get->key = "get";
-    get->type = TYPE_STRING;
-    get->description = _("GRASS variable to get");
-    get->key_desc = "VARIABLE";
-    get->required = NO;
-    get->guisection = _("Get");
+    get_opt = G_define_option();
+    get_opt->key = "get";
+    get_opt->type = TYPE_STRING;
+    get_opt->description = _("GRASS variable to get");
+    get_opt->key_desc = "VARIABLE";
+    get_opt->required = NO;
+    get_opt->guisection = _("Get");
 
-    set = G_define_option();
-    set->key = "set";
-    set->type = TYPE_STRING;
-    set->description = _("GRASS variable to set");
-    set->key_desc = "VARIABLE=value";
-    set->required = NO;
-    set->guisection = _("Set");
+    set_opt = G_define_option();
+    set_opt->key = "set";
+    set_opt->type = TYPE_STRING;
+    set_opt->description = _("GRASS variable to set");
+    set_opt->key_desc = "\"VARIABLE=value\"";
+    set_opt->required = NO;
+    set_opt->guisection = _("Set");
+
+    unset_opt = G_define_option();
+    unset_opt->key = "unset";
+    unset_opt->type = TYPE_STRING;
+    unset_opt->description = _("GRASS variable to unset");
+    unset_opt->key_desc = "VARIABLE";
+    unset_opt->required = NO;
+    unset_opt->guisection = _("Set");
 
     store_opt = G_define_option();
     store_opt->key = "store";
@@ -81,42 +91,54 @@ int main(int argc, char *argv[])
     if (flag_s->answer && flag_n->answer)
 	G_fatal_error(_("Flags -%c and -%c are mutually exclusive"), flag_s->key, flag_n->key);
 
-    /* Print or optionally set environment variables */
-    if (!get->answer && !set->answer) {
+    nopts = 0;
+    if (get_opt->answer)
+	nopts++;
+    if (set_opt->answer)
+	nopts++;
+    if (unset_opt->answer)
+	nopts++;
+
+    if (nopts == 0) {
+	/* Print or optionally set environment variables */
+	int quote;
+	
+	if (flag_s->answer)
+	    quote = TRUE;
+	else if (flag_n->answer)
+	    quote = FALSE;
+	else
+	    quote = !isatty(fileno(stdout));
+	
 	for (n = 0; (name = G__env_name(n)); n++) {
-	    int quote;
-
-	    if (flag_s->answer)
-		quote = 1;
-	    else if (flag_n->answer)
-		quote = 0;
-	    else
-		quote = !isatty(fileno(stdout));
-
-	    if ((value = G__getenv(name))) {
+	    value = G__getenv(name);
+	    if (value) {
 		if (!quote)
 		    fprintf(stdout, "%s=%s\n", name, value);
 		else
 		    fprintf(stdout, "%s='%s';\n", name, value);
 	    }
 	}
-	return 0;
+	exit(EXIT_SUCCESS);
     }
-
+    
+    if (nopts != 1)
+	G_fatal_error(_("Options <%s>, <%s>, and <%s> are mutually exclusive"),
+		      get_opt->key, set_opt->key, unset_opt->key);
+    
     store = G_VAR_GISRC;
     if (store_opt->answer[0] == 'm')
 	store = G_VAR_MAPSET;
 
-    if (get->answer != NULL) {
-	value = G__getenv2(get->answer, store);
-	if (value != NULL)
-	    fprintf(stdout, "%s\n", value);
-	return 0;
+    if (get_opt->answer) {
+	value = G_getenv2(get_opt->answer, store);
+	fprintf(stdout, "%s\n", value);
+	exit(EXIT_SUCCESS);
     }
 
-    if (set->answer != NULL) {
+    if (set_opt->answer) {
 	value = NULL;
-	name = set->answer;
+	name = set_opt->answer;
 	ptr = strchr(name, '=');
 	if (ptr != NULL) {
 	    *ptr = '\0';
@@ -125,13 +147,27 @@ int main(int argc, char *argv[])
 	/* Allow unset without '=' sign */
 	if (value != NULL && *value == '\0')
 	    value = NULL;
+	
+	if (value) {
+	    G_setenv2(name, value, store);
+	}
+	else {
+	    G_getenv2(name, store); /* G_fatal_error() if not defined */
+	    G_unsetenv2(name, store);
+	}
+	
+	exit(EXIT_SUCCESS);
+    }
 
-	G_setenv2(name, value, store);
-
-	return 0;
+    if (unset_opt->answer) {
+	G_getenv2(unset_opt->answer, store); /* G_fatal_error() if not defined */
+	G_unsetenv2(unset_opt->answer, store);
+	
+	exit(EXIT_SUCCESS);
     }
 
     /* Something's wrong if we got this far */
     G_usage();
+
     exit(EXIT_FAILURE);
 }
