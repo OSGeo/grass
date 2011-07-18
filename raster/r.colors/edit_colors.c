@@ -4,11 +4,12 @@
  *
  * AUTHOR(S):    Michael Shapiro - CERL
  *               David Johnson
+ *               Support for 3D rasters by Soeren Gebbert
  *
  * PURPOSE:      Allows creation and/or modification of the color table
  *               for a raster map layer.
  *
- * COPYRIGHT:    (C) 2006-2008, 2010 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2006-2008, 2010-2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -161,17 +162,17 @@ int edit_colors(int argc, char **argv, int type, const char *maptype, const char
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    G_add_keyword(_("raster3d"));
-    G_add_keyword(_("raster"));
-    G_add_keyword(_("color table"));
     
     if (type == RASTER3D_TYPE) {
+	G_add_keyword(_("raster3d"));
         module->description =
-            _("Creates/modifies the color table associated with a raster3d map.");
+            _("Creates/modifies the color table associated with a 3D raster map.");
     } else {
+	G_add_keyword(_("raster"));
         module->description =
             _("Creates/modifies the color table associated with a raster map.");
     }
+    G_add_keyword(_("color table"));
 
     if (type == RASTER3D_TYPE) {
         opt.map = G_define_standard_option(G_OPT_R3_MAP);
@@ -201,7 +202,7 @@ int edit_colors(int argc, char **argv, int type, const char *maptype, const char
     opt.volume->key = "volume";
     opt.volume->required = NO;
     opt.volume->description =
-        _("Raster3d map from which to copy color table");
+        _("3D raster map from which to copy color table");
     opt.volume->guisection = _("Define");
 
     opt.rules = G_define_standard_option(G_OPT_F_INPUT);
