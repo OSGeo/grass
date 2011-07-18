@@ -276,7 +276,7 @@ static FILE *open_env(const char *mode, int loc)
 /*!
   \brief Get environment variable
   
-  Calls G_fatal_error() if name not set.
+  G_fatal_error() is called when variable is not found.
   
   \param name variable name
   
@@ -289,12 +289,12 @@ const char *G_getenv(const char *name)
     if (value)
 	return value;
 
-    G_fatal_error(_("G_getenv(): Variable %s not set"), name);
+    G_fatal_error(_("Variable '%s' not set"), name);
     return NULL;
 }
 
 /*!
-  \brief Read variable from specific place
+  \brief Get variable from specific place
   
   Locations:
    - G_VAR_GISRC
@@ -303,7 +303,7 @@ const char *G_getenv(const char *name)
   G_fatal_error() is called when variable is not found.
   
   \param name variable name
-  \param loc location id
+  \param loc location (G_VAR_GISRC, G_VAR_MAPSET)
    
   \return variable value
   \return NULL if not found
@@ -315,7 +315,7 @@ const char *G_getenv2(const char *name, int loc)
     if (value)
 	return value;
 
-    G_fatal_error(_("%s not set"), name);
+    G_fatal_error(_("Variable '%s' not set"), name);
     return NULL;
 }
 
@@ -341,7 +341,7 @@ const char *G__getenv(const char *name)
   \brief Get environment variable from specific place
   
   \param name variable name
-  \param loc location id
+  \param loc location (G_VAR_GISRC, G_VAR_MAPSET)
   
   \return char pointer to value for name
   \return NULL if name not set
@@ -357,11 +357,10 @@ const char *G__getenv2(const char *name, int loc)
 }
 
 /*!
-  \brief Set environment variable
+  \brief Set environment variable (updates .gisrc)
 
   If value is NULL, becomes an G_unsetenv().
-  Updates .gisrc
-  
+    
   \param name variable name
   \param value variable value
 */
@@ -373,11 +372,9 @@ void G_setenv(const char *name, const char *value)
 }
 
 /*!
-  \brief Set environment variable from specific place
+  \brief Set environment variable from specific place (updates .gisrc)
   
   If value is NULL, becomes an G_unsetenv().
-  Updates .gisrc
-
   
   \param name variable name
   \param value variable value
@@ -392,7 +389,7 @@ void G_setenv2(const char *name, const char *value, int loc)
 }
 
 /*!
-  \brief Set environment name to value
+  \brief Set environment name to value (doesn't update .gisrc)
   
   \param name variable name
   \param value variable value
@@ -404,11 +401,11 @@ void G__setenv(const char *name, const char *value)
 }
 
 /*!
-  \brief Set environment name to value from specific place
+  \brief Set environment name to value from specific place (doesn't update .gisrc)
   
   \param name variable name
   \param value variable value
-  \param loc location id
+  \param loc location (G_VAR_GISRC, G_VAR_MAPSET)
 */
 void G__setenv2(const char *name, const char *value, int loc)
 {
@@ -436,7 +433,7 @@ void G_unsetenv(const char *name)
   Updates .gisrc
   
   \param name variable name
-  \param loc location id
+  \param loc location (G_VAR_GISRC, G_VAR_MAPSET)
 */
 void G_unsetenv2(const char *name, int loc)
 {
