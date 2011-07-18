@@ -5,11 +5,12 @@
  *
  * AUTHOR(S):    Michael Shapiro - CERL
  *               David Johnson
+ *               Support for 3D rasters by Soeren Gebbert
  *
  * PURPOSE:      Allows creation and/or modification of the color table
  *               for a raster map layer.
  *
- * COPYRIGHT:    (C) 2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2006, 2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
