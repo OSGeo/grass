@@ -930,7 +930,7 @@ class GMFrame(wx.Frame):
 
         if os.path.exists(filename):
             dlg = wx.MessageDialog(self, message = _("Workspace file <%s> already exists. "
-                                                   "Do you want to overwrite this file?") % filename,
+                                                     "Do you want to overwrite this file?") % filename,
                                    caption = _("Save workspace"), style = wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
             if dlg.ShowModal() != wx.ID_YES:
                 dlg.Destroy()

@@ -1194,8 +1194,23 @@ class BufferedWindow(MapWindow, wx.Window):
             
         elif self.mouse["use"] == "query":
             # querying
-            self.parent.QueryMap(self.mouse['begin'][0],self.mouse['begin'][1])
-        
+            layers = self.GetSelectedLayer(multi = True)
+            isRaster = False
+            nVectors = 0
+            for l in layers:
+                if l.GetType() == 'raster':
+                    isRaster = True
+                    break
+                if l.GetType() == 'vector':
+                    nVectors += 1
+            
+            if isRaster or nVectors > 1:
+                self.parent.QueryMap(self.mouse['begin'][0],self.mouse['begin'][1])
+            else:
+                self.parent.QueryVector(self.mouse['begin'][0], self.mouse['begin'][1])
+                # clear temp canvas
+                self.UpdateMap(render = False, renderVector = False)
+            
         elif self.mouse["use"] == "queryVector":
             # editable mode for vector map layers
             self.parent.QueryVector(self.mouse['begin'][0], self.mouse['begin'][1])
