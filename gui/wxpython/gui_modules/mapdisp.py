@@ -354,12 +354,10 @@ class MapFrame(wx.Frame):
         # check for GLCanvas and OpenGL
         if not nviz.haveNviz:
             self.toolbars['map'].combo.SetValue(_("2D view"))
-            wx.MessageBox(parent = self,
-                          message = _("Unable to switch to 3D display mode.\nThe Nviz python extension "
-                                      "was not found or loaded properly.\n"
-                                      "Switching back to 2D display mode.\n\nDetails: %s" % nviz.errorMsg),
-                          caption = _("Error"),
-                          style = wx.OK | wx.ICON_ERROR | wx.CENTRE)
+            gcmd.GError(parent = self,
+                        message = _("Unable to switch to 3D display mode.\nThe Nviz python extension "
+                                    "was not found or loaded properly.\n"
+                                    "Switching back to 2D display mode.\n\nDetails: %s" % nviz.errorMsg))
             return
         
         # add Nviz toolbar and disable 2D display mode tools
@@ -608,7 +606,7 @@ class MapFrame(wx.Frame):
                 else: # line, boundary
                     self.MapWindow.mouse['box'] = 'line'
             elif self.toolbars['vdigit'].GetAction() in ['addVertex', 'removeVertex', 'splitLine',
-                                                         'editLine', 'displayCats', 'displayAttrs',
+                                                         'editLine', 'displayCats', 'queryMap',
                                                          'copyCats']:
                 self.MapWindow.mouse['box'] = 'point'
             else: # moveLine, deleteLine
@@ -1215,46 +1213,7 @@ class MapFrame(wx.Frame):
     def GetWindow(self):
         """!Get map window"""
         return self.MapWindow
-
-    def _OnQuery(self):
-        """!Internal method used by OnQuery*() methods"""
-        if not self.IsStandalone() and  \
-                self.toolbars['map'].GetAction() == 'displayAttrb':
-            # switch to output console to show query results
-            self._layerManager.notebook.SetSelectionByName('output')
-        
-        self.MapWindow.mouse['box'] = "point"
-        self.MapWindow.zoomtype = 0
-        
-        # change the cursor
-        self.MapWindow.SetCursor(self.cursors["cross"])
-        
-    def OnQueryDisplay(self, event):
-        """!Query currrent raster/vector map layers (display mode) -
-        2D view mode
-        """
-        if self.toolbars['map'].GetAction() == 'displayAttrb': # select previous action
-            self.toolbars['map'].SelectDefault(event)
-            return
-        
-        self.toolbars['map'].action['desc'] = 'displayAttrb'
-        
-        self.MapWindow.mouse['use'] = "query"
-        self._OnQuery()
-        
-    def OnQueryModify(self, event):
-        """!Query vector map layer (edit mode) - 2D view mode
-        """
-        if self.toolbars['map'].GetAction() == 'modifyAttrb': # select previous action
-            self.toolbars['map'].SelectDefault(event)
-            return
-        
-        self.toolbars['map'].action['desc'] = 'modifyAttrb'
-        
-        self.MapWindow.mouse['use'] = "queryVector"
-        self.MapWindow.pen = wx.Pen(colour = 'Red', width = 2, style = wx.SHORT_DASH)
-        self._OnQuery()
-        
+    
     def OnNvizQuerySurface(self, event):
         """!Query current surface in 3D view mode"""
         if self.toolbars['map'].GetAction() == 'nvizQuerySurface':
@@ -1311,9 +1270,10 @@ class MapFrame(wx.Frame):
                 ltype = self.tree.GetPyData(layer)[0]['maplayer'].GetType()
                 dcmd = self.tree.GetPyData(layer)[0]['cmd']
                 name, found = utils.GetLayerNameFromCmd(dcmd)
+                
                 if not found:
                     continue
-                if ltype is 'raster':
+                if ltype == 'raster':
                     rast.append(name)
                 elif ltype in ('rgb', 'his'):
                     for iname in name.split('\n'):
@@ -1349,6 +1309,7 @@ class MapFrame(wx.Frame):
             
             vcmd.append('-a')
             vcmd.append('map=%s' % ','.join(vect))
+            vcmd.append('layer=%s' % ','.join(['-1'] * len(vect)))
             vcmd.append('east_north=%f,%f' % (float(east), float(north)))
             vcmd.append('distance=%f' % float(qdist))
         
@@ -1393,23 +1354,13 @@ class MapFrame(wx.Frame):
         """
         if not self.tree.layer_selected or \
                 self.tree.GetPyData(self.tree.layer_selected)[0]['type'] != 'vector':
-            wx.MessageBox(parent = self,
-                          message = _("No vector map selected for querying."),
-                          caption = _("Vector querying"),
-                          style = wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
-            return
-        
-        if self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer'].GetMapset() != \
-                grass.gisenv()['MAPSET']:
-            wx.MessageBox(parent = self,
-                          message = _("Only vector map from the current mapset can be modified."),
-                          caption = _("Vector querying"),
-                          style = wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
+            gcmd.GMessage(parent = self,
+                          message = _("No vector map selected for querying."))
             return
         
         posWindow = self.ClientToScreen((x + self.MapWindow.dialogOffset,
                                          y + self.MapWindow.dialogOffset))
-
+        
         qdist = 10.0 * ((self.Map.region['e'] - self.Map.region['w']) /
                         self.Map.width)
         
@@ -1417,21 +1368,32 @@ class MapFrame(wx.Frame):
         
         mapName = self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer'].name
         
+        if self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer'].GetMapset() != \
+                grass.gisenv()['MAPSET']:
+            mode = 'display'
+        else:
+            mode = 'update'
+        
         if self.dialogs['attributes'] is None:
-            self.dialogs['attributes'] = \
-                dbm_dialogs.DisplayAttributesDialog(parent = self.MapWindow,
-                                                    map = mapName,
-                                                    query = ((east, north), qdist),
-                                                    pos = posWindow,
-                                                    action = "update")
+            dlg = dbm_dialogs.DisplayAttributesDialog(parent = self.MapWindow,
+                                                      map = mapName,
+                                                      query = ((east, north), qdist),
+                                                      pos = posWindow,
+                                                      action = mode)
+            self.dialogs['attributes'] = dlg
+        
         else:
             # selection changed?
             if not self.dialogs['attributes'].mapDBInfo or \
                     self.dialogs['attributes'].mapDBInfo.map != mapName:
-                self.dialogs['attributes'].UpdateDialog(map = mapName, query = ((east, north), qdist))
+                self.dialogs['attributes'].UpdateDialog(map = mapName, query = ((east, north), qdist),
+                                                        action = mode)
             else:
-                self.dialogs['attributes'].UpdateDialog(query = ((east, north), qdist))
-                
+                self.dialogs['attributes'].UpdateDialog(query = ((east, north), qdist),
+                                                        action = mode)
+        if not self.dialogs['attributes'].IsFound():
+            self._layerManager.goutput.WriteLog(_('Nothing found.'))
+        
         cats = self.dialogs['attributes'].GetCats()
         
         try:
@@ -1468,11 +1430,8 @@ class MapFrame(wx.Frame):
             self.toolbars['map'].OnTool(event)
             action = self.toolbars['map'].GetAction()
         
-        point = wx.GetMousePosition()
-        toolsmenu = wx.Menu()
-        
-        # add items to the menu
         if self.toolbars['nviz']:
+            toolsmenu = wx.Menu()
             raster = wx.MenuItem(parentMenu = toolsmenu, id = wx.ID_ANY,
                                  text = _("Query surface (raster map)"),
                                  kind = wx.ITEM_CHECK)
@@ -1487,48 +1446,23 @@ class MapFrame(wx.Frame):
             self.Bind(wx.EVT_MENU, self.OnNvizQueryVector, vector)
             if action == "nvizQueryVector":
                 vector.Check(True)
-        else:
-            display = wx.MenuItem(parentMenu = toolsmenu, id = wx.ID_ANY,
-                                  text = _("Query raster/vector map(s) (display mode)"),
-                                  kind = wx.ITEM_CHECK)
-            toolsmenu.AppendItem(display)
-            self.Bind(wx.EVT_MENU, self.OnQueryDisplay, display)
-            numLayers = 0
-            if self.tree:
-                for layer in self.tree.GetSelections():
-                    ltype = self.tree.GetPyData(layer)[0]['maplayer'].GetType()
-                    if ltype in ('raster', 'rgb', 'his',
-                                 'vector', 'thememap', 'themechart'):
-                        numLayers += 1
-            if not self.IsStandalone() and numLayers < 1:
-                display.Enable(False)
-            if action == "displayAttrb":
-                display.Check(True)
-            
-            modify = wx.MenuItem(parentMenu = toolsmenu, id = wx.ID_ANY,
-                                 text = _("Query vector map (edit mode)"),
-                                 kind = wx.ITEM_CHECK)
-            toolsmenu.AppendItem(modify)
-            self.Bind(wx.EVT_MENU, self.OnQueryModify, modify)
-            modify.Enable(False)
-            if action == "modifyAttrb":
-                modify.Check(True)
-            
-            digitToolbar = self.toolbars['vdigit']
-            if self.tree and self.tree.layer_selected:
-                mapLayer = self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer']
-                if mapLayer.GetType() == 'vector' and \
-                        mapLayer.GetMapset() == grass.gisenv()['MAPSET'] and \
-                        (not digitToolbar or (digitToolbar and \
-                             digitToolbar.GetLayer() != mapLayer)):
-                    modify.Enable(True)
-            else:
-                if action == "modifyAttrb":
-                    modify.Check(True)
-        
-        self.PopupMenu(toolsmenu)
-        toolsmenu.Destroy()
 
+            self.PopupMenu(toolsmenu)
+            toolsmenu.Destroy()
+        else:
+            self.toolbars['map'].action['desc'] = 'queryMap'
+            self.MapWindow.mouse['use'] = "query"
+            
+            if not self.IsStandalone():
+                # switch to output console to show query results
+                self._layerManager.notebook.SetSelectionByName('output')
+            
+            self.MapWindow.mouse['box'] = "point"
+            self.MapWindow.zoomtype = 0
+            
+            # change the cursor
+            self.MapWindow.SetCursor(self.cursors["cross"])
+        
     def AddTmpVectorMapLayer(self, name, cats, useId = False, addLayer = True):
         """!Add temporal vector map layer to map composition
 
