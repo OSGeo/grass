@@ -868,7 +868,6 @@ void reduction(float **a, int n)
 		SWAP(a[i][j], a[m][j])
 		    for (j = 1; j <= n; j++)
 		    SWAP(a[j][i], a[j][m])
-			a[j][i] = a[j][i];
 	}
 	if (x) {
 	    for (i = m + 1; i <= n; i++) {
