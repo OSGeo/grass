@@ -118,6 +118,9 @@ class FloatSlider(wx.Slider):
         Debug.msg(1, "FloatSlider.__init__()")
         wx.Slider.__init__(self, **kwargs)
         self.coef = 1.
+        #init range
+        self.minValueOrig = 0
+        self.maxValueOrig = 1
         
     def SetValue(self, value):
         value *= self.coef 
