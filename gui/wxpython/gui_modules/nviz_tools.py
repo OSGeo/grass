@@ -111,7 +111,43 @@ class NumTextCtrl(wx.TextCtrl):
         
     def SetRange(self, min, max):
         pass
-    
+   
+class FloatSlider(wx.Slider):
+    """!Class derived from wx.Slider for floats"""
+    def __init__(self, **kwargs):
+        Debug.msg(1, "FloatSlider.__init__()")
+        wx.Slider.__init__(self, **kwargs)
+        self.coef = 1.
+        
+    def SetValue(self, value):
+        value *= self.coef 
+        if abs(value) < 1 and value != 0:
+            while abs(value) < 1:
+                value *= 100
+                self.coef *= 100
+            super(FloatSlider, self).SetRange(self.minValueOrig * self.coef, self.maxValueOrig * self.coef)
+        super(FloatSlider, self).SetValue(value)
+        
+        Debug.msg(4, "FloatSlider.SetValue(): value = %f" % value)
+        
+    def SetRange(self, minValue, maxValue):
+        self.coef = 1.
+        self.minValueOrig = minValue
+        self.maxValueOrig = maxValue
+        if abs(minValue) < 1 or abs(maxValue) < 1:
+            while (abs(minValue) < 1 and minValue != 0) or (abs(maxValue) < 1 and maxValue != 0):
+                minValue *= 100
+                maxValue *= 100
+                self.coef *= 100
+            super(FloatSlider, self).SetValue(super(FloatSlider, self).GetValue() * self.coef)
+        super(FloatSlider, self).SetRange(minValue, maxValue)
+        Debug.msg(4, "FloatSlider.SetRange(): minValue = %f, maxValue = %f" % (minValue, maxValue))
+            
+    def GetValue(self):
+        val = super(FloatSlider, self).GetValue()
+        Debug.msg(4, "FloatSlider.GetValue(): value = %f" % (val/self.coef))
+        return val/self.coef
+        
 class NvizToolWindow(FN.FlatNotebook):
     """!Nviz (3D view) tools panel
     """
@@ -283,7 +319,7 @@ class NvizToolWindow(FN.FlatNotebook):
                             range = (0, 1),
                             bind = (self.OnViewChange, self.OnViewChanged, self.OnViewChangedText))
         self._createControl(panel, data = self.win['view'], name = 'z-exag', sliderHor = False,
-                            range = (0, 5),
+                            range = (0, 10), floatSlider = True,
                             bind = (self.OnViewChange, self.OnViewChanged, self.OnViewChangedText))
         self.FindWindowById(self.win['view']['z-exag']['slider']).SetValue(1)
         self.FindWindowById(self.win['view']['z-exag']['text']).SetValue(1)
@@ -699,7 +735,7 @@ class NvizToolWindow(FN.FlatNotebook):
         
         # position
         self._createControl(panel, data = self.win['surface'], name = 'position',
-                            range = (-10000, 10000),
+                            range = (-10000, 10000), floatSlider = True,
                             bind = (self.OnSurfacePosition, self.OnSurfacePositionChanged, self.OnSurfacePositionText))
         
         axis = wx.Choice (parent = panel, id = wx.ID_ANY, size = (75, -1),
@@ -819,7 +855,7 @@ class NvizToolWindow(FN.FlatNotebook):
                                          label = _("Height:")),
                       pos = (2, 0), flag = wx.ALIGN_CENTER_VERTICAL)
         self._createControl(panel, data = self.win['cplane']['position'], name = 'x', size = 250,
-                            range = (-1000, 1000), sliderHor = True,
+                            range = (-1000, 1000), sliderHor = True, floatSlider = True,
                             bind = (self.OnCPlaneChanging, self.OnCPlaneChangeDone, self.OnCPlaneChangeText))
         self.FindWindowById(self.win['cplane']['position']['x']['slider']).SetValue(0)
         self.FindWindowById(self.win['cplane']['position']['x']['text']).SetValue(0)
@@ -830,7 +866,7 @@ class NvizToolWindow(FN.FlatNotebook):
                       flag = wx.ALIGN_CENTER)
                     
         self._createControl(panel, data = self.win['cplane']['position'], name = 'y', size = 250,
-                            range = (-1000, 1000), sliderHor = True,
+                            range = (-1000, 1000), sliderHor = True, floatSlider = True,
                             bind = (self.OnCPlaneChanging, self.OnCPlaneChangeDone, self.OnCPlaneChangeText))
         self.FindWindowById(self.win['cplane']['position']['y']['slider']).SetValue(0)
         self.FindWindowById(self.win['cplane']['position']['y']['text']).SetValue(0)
@@ -1420,7 +1456,7 @@ class NvizToolWindow(FN.FlatNotebook):
         
         # position
         self._createControl(panel, data = self.win['volume'], name = 'position',
-                            range = (-10000, 10000),
+                            range = (-10000, 10000), floatSlider = True,
                             bind = (self.OnVolumePosition, self.OnVolumePositionChanged, self.OnVolumePositionText))
         
         axis = wx.Choice (parent = panel, id = wx.ID_ANY, size = (75, -1),
@@ -2061,7 +2097,7 @@ class NvizToolWindow(FN.FlatNotebook):
         return panel
     
     def _createControl(self, parent, data, name, range, bind = (None, None, None),
-                       sliderHor = True, size = 200):
+                       sliderHor = True, size = 200, floatSlider = False):
         """!Add control (Slider + TextCtrl)"""
         data[name] = dict()
         if sliderHor:
@@ -2073,11 +2109,16 @@ class NvizToolWindow(FN.FlatNotebook):
                 wx.SL_INVERSE
             sizeW = (-1, size)
         
-        slider = wx.Slider(parent = parent, id = wx.ID_ANY,
+        kwargs = dict(parent = parent, id = wx.ID_ANY,
                            minValue = range[0],
                            maxValue = range[1],
                            style = style,
                            size = sizeW)
+        if floatSlider:
+            slider = FloatSlider(**kwargs)
+        else:
+            slider = wx.Slider(**kwargs)
+            
         slider.SetName('slider')
         if bind[0]:
             #EVT_SCROLL emits event after slider is released, EVT_SPIN not
@@ -2296,7 +2337,9 @@ class NvizToolWindow(FN.FlatNotebook):
             convert = int
         else:
             convert = float
+        
         view[winName]['value'] = convert(value)
+            
         for win in self.win['view'][winName].itervalues():
             self.FindWindowById(win).SetValue(value)
 
@@ -2730,16 +2773,22 @@ class NvizToolWindow(FN.FlatNotebook):
         axis = self.FindWindowById(self.win['surface']['position']['axis']).GetSelection()
         slider = self.FindWindowById(self.win['surface']['position']['slider'])
         text = self.FindWindowById(self.win['surface']['position']['text'])
+        xydim = self._display.GetLongDim()
+        zdim = self._display.GetZRange()
+        zdim = zdim[1] - zdim[0]
         
         x, y, z = self._display.GetSurfacePosition(id)
         
         if axis == 0: # x
+            slider.SetRange(-3 * xydim, 3 * xydim)
             slider.SetValue(x)
             text.SetValue(x)
         elif axis == 1: # y
+            slider.SetRange(-3 * xydim, 3 * xydim)
             slider.SetValue(y)
             text.SetValue(y)
         else: # z
+            slider.SetRange(-3 * zdim, 3 * zdim)
             slider.SetValue(z)
             text.SetValue(z)
         
@@ -3490,16 +3539,21 @@ class NvizToolWindow(FN.FlatNotebook):
         axis = self.FindWindowById(self.win['volume']['position']['axis']).GetSelection()
         slider = self.FindWindowById(self.win['volume']['position']['slider'])
         text = self.FindWindowById(self.win['volume']['position']['text'])
-        
+        xydim = self._display.GetLongDim()
+        zdim = self._display.GetZRange()
+        zdim = zdim[1] - zdim[0]
         x, y, z = self._display.GetVolumePosition(id)
         
         if axis == 0: # x
+            slider.SetRange(-3 * xydim, 3 * xydim)
             slider.SetValue(x)
             text.SetValue(x)
         elif axis == 1: # y
+            slider.SetRange(-3 * xydim, 3 * xydim)
             slider.SetValue(y)
             text.SetValue(y)
         else: # z
+            slider.SetRange(-3 * zdim, 3 * zdim)
             slider.SetValue(z)
             text.SetValue(z)
             
@@ -3830,8 +3884,10 @@ class NvizToolWindow(FN.FlatNotebook):
             
             xyRange, zRange = self._display.GetXYRange(), self._display.GetZRange()
             if xyRange > 0: # GTK warning
-                self.FindWindowById(self.win['cplane']['position']['x']['slider']).SetRange(-xyRange/2., xyRange/2.)
-                self.FindWindowById(self.win['cplane']['position']['y']['slider']).SetRange(-xyRange/2., xyRange/2.)
+                self.FindWindowById(self.win['cplane']['position']['x']['slider']).SetRange(
+                                                                    -xyRange/2., xyRange/2.)
+                self.FindWindowById(self.win['cplane']['position']['y']['slider']).SetRange(
+                                                                    -xyRange/2., xyRange/2.)
             if zRange[0] - zRange[1] > 0:
                 self.FindWindowById(self.win['cplane']['position']['z']['slider']).SetRange(zRange[0], zRange[1])
             self.FindWindowById(self.win['cplane']['position']['z']['slider']).SetValue(zRange[0])
@@ -3951,6 +4007,8 @@ class NvizToolWindow(FN.FlatNotebook):
         #
         # position
         #
+        dim = self._display.GetLongDim()
+        self.FindWindowById(self.win['surface']['position']['slider']).SetRange(-2 * dim, 2 * dim)
         if 'x' in data['position']:
             xval = data['position']['x']
             self.FindWindowById(self.win['surface']['position']['axis']).SetSelection(0)

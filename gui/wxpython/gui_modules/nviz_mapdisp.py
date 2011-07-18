@@ -1036,8 +1036,16 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self.iview['height']['min'], \
             self.iview['height']['max'] = self._display.SetViewDefault()
         
-        self.view['z-exag']['min'] = 0
-        self.view['z-exag']['max'] = self.view['z-exag']['value'] * 10
+        self.view['z-exag']['min'] = UserSettings.Get(group = 'nviz', key = 'view',
+                                                      subkey = ('z-exag', 'min'))
+        zexagMax = UserSettings.Get(group = 'nviz', key = 'view',
+                                    subkey = ('z-exag', 'max'))
+        if zexagMax < self.view['z-exag']['value']:
+            self.view['z-exag']['max'] = self.view['z-exag']['value']
+        elif self.view['z-exag']['value'] < 1:
+            self.view['z-exag']['max'] = 10 * self.view['z-exag']['value']
+        else:
+            self.view['z-exag']['max'] = zexagMax
         
         self.view['position']['x'] = UserSettings.Get(group = 'nviz', key = 'view',
                                                  subkey = ('position', 'x'))
