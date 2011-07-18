@@ -1724,11 +1724,11 @@ class NvizToolWindow(FN.FlatNotebook):
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
                                            label = _("Arrow size (in map units):")),
                       pos = (0,0), span = (1, 2), flag = wx.ALIGN_CENTER_VERTICAL)
-        sizeSpin = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (65, -1),
-                               min = 0, max = 1e6, initial = 1000)
-        gridSizer.Add(sizeSpin, pos = (0, 2))
-        self.win['decoration']['arrow']['size'] = sizeSpin.GetId()
-        sizeSpin.Bind(wx.EVT_SPINCTRL, self.OnArrowProp)
+        sizeCtrl = NumTextCtrl(parent = panel, id = wx.ID_ANY, size = (65, -1), style = wx.TE_PROCESS_ENTER)
+        gridSizer.Add(sizeCtrl, pos = (0, 2))
+        self.win['decoration']['arrow']['size'] = sizeCtrl.GetId()
+        sizeCtrl.Bind(wx.EVT_TEXT_ENTER, self.OnArrowProp)
+        sizeCtrl.Bind(wx.EVT_KILL_FOCUS, self.OnArrowProp)
         
         # color
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
