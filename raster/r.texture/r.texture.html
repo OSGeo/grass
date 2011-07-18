@@ -5,6 +5,9 @@ user-specified raster map layer. The module calculates textural features
 based on spatial dependence matrices at 0, 45, 90, and 135 
 degrees for a <em>distance</em> (default = 1).
 <p>
+<em>r.texture</em> assumes grey levels ranging from 0 to 255 as input. 
+The input is rescaled to 0 to 255 if needed.
+<p>
 In general, several variables constitute texture: differences in grey level values,
 coarseness as scale of grey level differences, presence or lack of directionality
 and regular patterns.
@@ -94,7 +97,12 @@ Calculation of Angular Second Moment of B/W orthophoto (North Carolina data set)
 
 <div class="code"><pre>
 g.region rast=ortho_2001_t792_1m -p
-r.texture -a ortho_2001_t792_1m prefix=ortho_texture
+# set grey level color table 0% black 100% white
+r.colors ortho_2001_t792_1m color=grey
+# extract grey levels
+r.mapcalc "ortho_2001_t792_1m.greylevel = #ortho_2001_t792_1m"
+# texture analysis
+r.texture ortho_2001_t792_1m.greylevel prefix=ortho_texture -a 
 # display
 g.region n=221461 s=221094 w=638279 e=638694
 d.shadedmap drape=ortho_texture_ASM_0 rel=ortho_2001_t792_1m
