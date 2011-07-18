@@ -114,14 +114,16 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Unable to open label file <%s>"), label_name);
 
     if (D_open_driver() != 0)
-	G_fatal_error(_("No graphics device selected"));
-
+      	G_fatal_error(_("No graphics device selected. "
+			"Use d.mon to select graphics device."));
+    
     D_setup(0);
 
     /* Go draw the raster map */
     do_labels(infile, !horiz_flag->answer);
 
+    D_save_command(G_recreate_command());
     D_close_driver();
 
-    exit(0);
+    exit(EXIT_SUCCESS);
 }

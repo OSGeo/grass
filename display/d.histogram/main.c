@@ -187,8 +187,9 @@ int main(int argc, char **argv)
     /* set up the graphics driver and initialize its color-table */
 
     if (D_open_driver() != 0)
-	G_fatal_error(_("No graphics device selected"));
-
+	G_fatal_error(_("No graphics device selected. "
+			"Use d.mon to select graphics device."));
+    
     D_setup_unity(0);			/* 0 = don't clear frame */
     D_get_src(&t, &b, &l, &r);
 
@@ -213,6 +214,7 @@ int main(int argc, char **argv)
     else
 	bar(&dist_stats, &pcolors);
 
+    D_save_command(G_recreate_command());
     D_close_driver();
 
     exit(EXIT_SUCCESS);

@@ -84,7 +84,8 @@ int main(int argc, char **argv)
 
     /* load the font */
     if (D_open_driver() != 0)
-	G_fatal_error(_("No graphics device selected"));
+	G_fatal_error(_("No graphics device selected. "
+			"Use d.mon to select graphics device."));
 
     if (flag1->answer) {	/* List font names */
 	print_font_list(stdout, 0);

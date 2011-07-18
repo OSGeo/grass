@@ -288,9 +288,9 @@ int main(int argc, char **argv)
     bold = flag.b->answer;
 
     if (D_open_driver() != 0)
-	G_fatal_error(_("No graphics device selected"));
-
-
+	G_fatal_error(_("No graphics device selected. "
+			"Use d.mon to select graphics device."));
+    
     if (opt.font->answer)
 	D_font(opt.font->answer);
     else if (opt.path->answer)
@@ -357,6 +357,7 @@ int main(int argc, char **argv)
 	D_text_size(5, 5);
 	D_text_rotation(0.0);
 
+	D_save_command(G_recreate_command());
 	D_close_driver();
 
 	exit(EXIT_SUCCESS);

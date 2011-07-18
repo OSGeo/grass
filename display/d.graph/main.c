@@ -98,8 +98,9 @@ int main(int argc, char **argv)
 
     /* open graphics window */
     if (D_open_driver() != 0)
-	G_fatal_error(_("No graphics device selected"));
-
+	G_fatal_error(_("No graphics device selected. "
+			"Use d.mon to select graphics device."));
+    
     /* Parse and select color */
     if (opt2->answer != NULL) {
 	color = G_str_to_color(opt2->answer, &R, &G, &B);
@@ -129,6 +130,7 @@ int main(int argc, char **argv)
     set_text_size();
     graphics(infile);
 
+    D_save_command(G_recreate_command());
     D_close_driver();
 
     exit(EXIT_SUCCESS);

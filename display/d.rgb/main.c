@@ -77,8 +77,9 @@ int main(int argc, char **argv)
 
     /* Do screen initializing stuff */
     if (D_open_driver() != 0)
-	G_fatal_error(_("No graphics device selected"));
-
+	G_fatal_error(_("No graphics device selected. "
+			"Use d.mon to select graphics device."));
+    
     overlay = !flag_n->answer;
 
     D_setup(0);
@@ -125,7 +126,8 @@ int main(int argc, char **argv)
     }
     G_percent(window.rows, window.rows, 5);
     D_cell_draw_end();
-
+    
+    D_save_command(G_recreate_command());
     D_close_driver();
 
     /* Close the raster maps */

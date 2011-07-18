@@ -114,8 +114,9 @@ int main(int argc, char **argv)
     /* Do screen initializing stuff */
 
     if (D_open_driver() != 0)
-	G_fatal_error(_("No graphics device selected"));
-
+	G_fatal_error(_("No graphics device selected. "
+			"Use d.mon to select graphics device."));
+    
     /* Prepare the raster cell drawing functions */
     D_setup(0);
     D_set_overlay_mode(nulldraw->answer ? 1 : 0);
@@ -237,6 +238,8 @@ int main(int argc, char **argv)
     G_percent(window.rows, window.rows, 5);
     D_cell_draw_end();
 
+    D_save_command(G_recreate_command());
+    
     /* Close down connection to display driver */
     D_close_driver();
 

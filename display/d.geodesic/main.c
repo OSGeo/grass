@@ -93,8 +93,9 @@ int main(int argc, char *argv[])
 
 
     if (D_open_driver() != 0)
-	G_fatal_error(_("No graphics device selected"));
-
+      	G_fatal_error(_("No graphics device selected. "
+			"Use d.mon to select graphics device."));
+    
     line_color = D_translate_color(parm.lcolor->answer);
     if (!line_color)
 	line_color = D_translate_color(parm.lcolor->answer =
@@ -113,7 +114,8 @@ int main(int argc, char *argv[])
 	text_color = D_translate_color(parm.tcolor->answer);
 
     plot(lon1, lat1, lon2, lat2, line_color, text_color);
-
+    
+    D_save_command(G_recreate_command());
     D_close_driver();
 
     exit(EXIT_SUCCESS);

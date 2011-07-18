@@ -51,8 +51,9 @@ int main(int argc, char **argv)
 	exit(EXIT_FAILURE);
 
     if (D_open_driver() != 0)
-	G_fatal_error(_("No graphics device selected"));
-
+	G_fatal_error(_("No graphics device selected. "
+			"Use d.mon to select graphics device."));
+    
     if (flagL->answer)
 	D_font_info(&list, &count);
     else
@@ -60,7 +61,7 @@ int main(int argc, char **argv)
 
     for (i = 0; i < count; i++)
 	fprintf(stdout, "%s\n", list[i]);
-
+    
     D_close_driver();
 
     exit(EXIT_SUCCESS);
