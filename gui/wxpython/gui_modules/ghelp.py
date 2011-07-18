@@ -15,7 +15,7 @@ Classes:
  - HelpWindow
  - HelpPanel
 
-(C) 2008-2010 by the GRASS Development Team
+(C) 2008-2011 by the GRASS Development Team
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
@@ -822,7 +822,8 @@ class InstallExtensionWindow(wx.Frame):
                 desc = f.get('description', '')
             if not name and not desc:
                 continue
-            if name in ('l', 'f', 'g'):
+            print name
+            if name in ('l', 'f', 'g', 'quiet', 'verbose'):
                 continue
             self.options[name] = wx.CheckBox(parent = self.panel, id = wx.ID_ANY,
                                              label = desc)
