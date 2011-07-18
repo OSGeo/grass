@@ -1355,7 +1355,7 @@ class MapFrame(wx.Frame):
         if not self.tree.layer_selected or \
                 self.tree.GetPyData(self.tree.layer_selected)[0]['type'] != 'vector':
             gcmd.GMessage(parent = self,
-                          message = _("No vector map selected for querying."))
+                          message = _("No map layer selected for querying."))
             return
         
         posWindow = self.ClientToScreen((x + self.MapWindow.dialogOffset,
