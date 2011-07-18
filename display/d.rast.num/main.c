@@ -190,8 +190,9 @@ int main(int argc, char **argv)
     /* Setup driver and check important information */
 
     if (D_open_driver() != 0)
-	G_fatal_error(_("No graphics device selected"));
-
+      	G_fatal_error(_("No graphics device selected. "
+			"Use d.mon to select graphics device."));
+    
     D_setup2(0, 0, t, b, l, r);
 
     D_ns = fabs(D_get_u_to_d_yconv());
@@ -241,6 +242,7 @@ int main(int argc, char **argv)
 
     Rast_close(layer_fd);
 
+    D_save_command(G_recreate_command());
     D_close_driver();
 
     exit(EXIT_SUCCESS);

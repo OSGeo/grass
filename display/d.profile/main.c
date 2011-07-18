@@ -260,8 +260,9 @@ int main(int argc, char **argv)
 
     /* establish connection with graphics driver */
     if (D_open_driver() != 0)
-	G_fatal_error(_("No graphics device selected"));
-
+	G_fatal_error(_("No graphics device selected. "
+			"Use d.mon to select graphics device."));
+    
     D_setup2(1, 0, 1.05, -0.05, -0.15, 1.05);
 
     plot_axes();
@@ -313,7 +314,7 @@ int main(int argc, char **argv)
 
     D_end();
     D_stroke();
-
+    
     D_close_driver();
 
     exit(EXIT_SUCCESS);

@@ -255,7 +255,9 @@ int main(int argc, char **argv)
 
     /* get coordinates of current screen window, in pixels */
     if (D_open_driver() != 0)
-	G_fatal_error(_("No graphics device selected"));
+	G_fatal_error(_("No graphics device selected. "
+			"Use d.mon to select graphics device."));
+    
     D_setup_unity(0);
     D_get_src(&t, &b, &l, &r);
 
@@ -567,7 +569,9 @@ int main(int argc, char **argv)
     D_use_color(title_color);
     D_polyline_abs(x_line, y_line, 3);
 
+    D_save_command(G_recreate_command());
     D_close_driver();
+    
     exit(EXIT_SUCCESS);
 }
 

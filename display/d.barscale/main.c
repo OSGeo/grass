@@ -125,8 +125,9 @@ int main(int argc, char **argv)
     fontsize = atoi(fsize->answer);
 
     if (D_open_driver() != 0)
-	G_fatal_error(_("No graphics device selected"));
-
+	G_fatal_error(_("No graphics device selected. "
+			"Use d.mon to select graphics device."));
+    
     D_setup(0);
 
     /* Parse and select background color */
@@ -140,6 +141,7 @@ int main(int argc, char **argv)
     /* Draw the scale */
     draw_scale(top->answer, fontsize);
 
+    D_save_command(G_recreate_command());
     D_close_driver();
 
     exit(EXIT_SUCCESS);

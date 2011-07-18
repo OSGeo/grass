@@ -260,8 +260,9 @@ int main(int argc, char **argv)
     Rast_set_c_null_value(&null_cell, 1);
 
     if (D_open_driver() != 0)
-	G_fatal_error(_("No graphics device selected"));
-
+      	G_fatal_error(_("No graphics device selected. "
+			"Use d.mon to select graphics device."));
+    
     white = D_translate_color(DEFAULT_FG_COLOR);
     black = D_translate_color(DEFAULT_BG_COLOR);
 
@@ -902,6 +903,8 @@ int main(int argc, char **argv)
 	}
     }
 
+    D_save_command(G_recreate_command());
     D_close_driver();
+    
     exit(EXIT_SUCCESS);
 }

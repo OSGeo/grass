@@ -227,9 +227,9 @@ int main(int argc, char **argv)
 
     /* Setup driver and check important information */
     if (D_open_driver() != 0)
-	G_fatal_error(_("No graphics device selected"));
-
-
+	G_fatal_error(_("No graphics device selected. "
+			"Use d.mon to select graphics device."));
+    
     /* Parse and select grid color */
     colorg = D_parse_color(opt1->answer, FALSE);
     /* Parse and select border color */
@@ -264,6 +264,7 @@ int main(int argc, char **argv)
 	plot_border(size, east, north);
     }
 
+    D_save_command(G_recreate_command());
     D_close_driver();
 
     exit(EXIT_SUCCESS);

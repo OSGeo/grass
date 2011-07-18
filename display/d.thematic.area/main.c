@@ -363,8 +363,9 @@ int main(int argc, char **argv)
     if (!nodraw_flag->answer) {
 	/* Now's let's prepare the actual plotting */
 	if (D_open_driver() != 0)
-	    G_fatal_error(_("No graphics device selected"));
-
+	    G_fatal_error(_("No graphics device selected. "
+			    "Use d.mon to select graphics device."));
+	
 	D_setup(0);
 
 	if (verbose)
@@ -407,6 +408,7 @@ int main(int argc, char **argv)
 
 	}			/* end window check if */
 
+	D_save_command(G_recreate_command());
 	D_close_driver();
 
     }				/* end of nodraw_flag condition */

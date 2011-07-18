@@ -250,8 +250,9 @@ int main(int argc, char **argv)
 	ctype = CTYPE_BAR;
 
     if (D_open_driver() != 0)
-	G_fatal_error(_("No graphics device selected"));
-
+	G_fatal_error(_("No graphics device selected. "
+			"Use d.mon to select graphics device."));
+    
     /* should we plot the maximum reference on bar plots? */
     if (max_reference_opt->answer != NULL) {
 
@@ -272,6 +273,7 @@ int main(int argc, char **argv)
 	       sizecol_opt->answer, size, scale,
 	       &ocolor, colors, y_center, max_reference);
 
+    D_save_command(G_recreate_command());
     D_close_driver();
 
     Vect_close(&Map);

@@ -150,8 +150,9 @@ int main(int argc, char **argv)
 
 
     if (D_open_driver() != 0)
-	G_fatal_error(_("No graphics device selected"));
-
+      	G_fatal_error(_("No graphics device selected. "
+			"Use d.mon to select graphics device."));
+    
     color = G_standard_color_rgb(BLACK);
     if (G_str_to_color(color_opt->answer, &r, &g, &b)) {
 	color.r = r;
@@ -190,7 +191,6 @@ int main(int argc, char **argv)
 			 abcol->answer, ncol->answer, geo, 0);
 
     coor_path(&Map, &hcolor, bold_f->answer, x1, y1, x2, y2);
-
 
     D_close_driver();
 

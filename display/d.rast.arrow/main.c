@@ -221,8 +221,9 @@ int main(int argc, char **argv)
 
     /* Setup driver and check important information */
     if (D_open_driver() != 0)
-	G_fatal_error(_("No graphics device selected"));
-
+      	G_fatal_error(_("No graphics device selected. "
+			"Use d.mon to select graphics device."));
+    
     D_setup(0);
 
     /* Read in the map window associated with window */
@@ -500,9 +501,10 @@ int main(int argc, char **argv)
     if (opt7->answer)
 	Rast_close(mag_fd);
 
+    D_save_command(G_recreate_command());
     D_close_driver();
 
-    exit(0);
+    exit(EXIT_SUCCESS);
 }
 
 /* --- end of main --- */

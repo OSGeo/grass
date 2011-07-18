@@ -65,9 +65,9 @@ int main(int argc, char *argv[])
     }
 
     if (D_open_driver() != 0)
-	G_fatal_error(_("No graphics device selected"));
-
-
+	G_fatal_error(_("No graphics device selected. "
+			"Use d.mon to select graphics device."));
+    
     if (rflag->answer || dflag->answer || fflag->answer)
 	D_get_window(&t, &b, &l, &r);
 
@@ -109,6 +109,7 @@ int main(int argc, char *argv[])
 	fprintf(stdout, "nsres=%.15g\n", (n-s)/(b-t) );
     }
 
+    
     D_close_driver();
 
     return EXIT_SUCCESS;
