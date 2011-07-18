@@ -486,6 +486,8 @@ class Settings:
                         },
                     'z-exag' : {
                         'step' : 1,
+                        'min' : 0,
+                        'max' : 10,
                         },
                     'background' : {
                         'color' : (255, 255, 255, 255), # white
