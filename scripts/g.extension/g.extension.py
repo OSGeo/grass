@@ -98,7 +98,7 @@ from grass.script import core as grass
 remove_tmpdir = True
 
 def check():
-    for prog in ('svn', 'make', 'install', 'gcc'):
+    for prog in ('svn', 'make', 'gcc'):
         if not grass.find_program(prog, ['--help']):
             grass.fatal(_("'%s' required. Please install '%s' first.") % (prog, prog))
     
