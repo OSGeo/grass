@@ -2,8 +2,8 @@ MODULE_TOPDIR = ../..
 
 PGM = d.mon
 
-LIBES = $(GISLIB)
-DEPENDENCIES= $(GISDEP)
+LIBES = $(DISPLAYLIB) $(GISLIB)
+DEPENDENCIES= $(DISPLAYDEP) $(GISDEP)
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 
