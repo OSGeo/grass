@@ -1213,28 +1213,6 @@ class MapFrame(wx.Frame):
     def GetWindow(self):
         """!Get map window"""
         return self.MapWindow
-    
-    def OnNvizQuerySurface(self, event):
-        """!Query current surface in 3D view mode"""
-        if self.toolbars['map'].GetAction() == 'nvizQuerySurface':
-            self.toolbars['map'].SelectDefault(event)
-            return
-        
-        self.toolbars['map'].action['desc'] = 'nvizQuerySurface'
-        
-        self.MapWindow.mouse['use'] = "nvizQuerySurface"
-        self._OnQuery()
-
-    def OnNvizQueryVector(self, event):
-        """!Query current vector in 3D view mode"""
-        if self.toolbars['map'].GetAction() == 'nvizQueryVector':
-            self.toolbars['map'].SelectDefault(event)
-            return
-        
-        self.toolbars['map'].action['desc'] = 'nvizQueryVector'
-        
-        self.MapWindow.mouse['use'] = "nvizQueryVector"
-        self._OnQuery()
         
     def QueryMap(self, x, y):
         """!Query raster or vector map layers by r/v.what
@@ -1429,39 +1407,19 @@ class MapFrame(wx.Frame):
         if self.toolbars['map']:
             self.toolbars['map'].OnTool(event)
             action = self.toolbars['map'].GetAction()
+            
+        self.toolbars['map'].action['desc'] = 'queryMap'
+        self.MapWindow.mouse['use'] = "query"
         
-        if self.toolbars['nviz']:
-            toolsmenu = wx.Menu()
-            raster = wx.MenuItem(parentMenu = toolsmenu, id = wx.ID_ANY,
-                                 text = _("Query surface (raster map)"),
-                                 kind = wx.ITEM_CHECK)
-            toolsmenu.AppendItem(raster)
-            self.Bind(wx.EVT_MENU, self.OnNvizQuerySurface, raster)
-            if action == "nvizQuerySurface":
-                raster.Check(True)
-            vector = wx.MenuItem(parentMenu = toolsmenu, id = wx.ID_ANY,
-                                 text = _("Query vector map"),
-                                 kind = wx.ITEM_CHECK)
-            toolsmenu.AppendItem(vector)
-            self.Bind(wx.EVT_MENU, self.OnNvizQueryVector, vector)
-            if action == "nvizQueryVector":
-                vector.Check(True)
-
-            self.PopupMenu(toolsmenu)
-            toolsmenu.Destroy()
-        else:
-            self.toolbars['map'].action['desc'] = 'queryMap'
-            self.MapWindow.mouse['use'] = "query"
-            
-            if not self.IsStandalone():
-                # switch to output console to show query results
-                self._layerManager.notebook.SetSelectionByName('output')
-            
-            self.MapWindow.mouse['box'] = "point"
-            self.MapWindow.zoomtype = 0
-            
-            # change the cursor
-            self.MapWindow.SetCursor(self.cursors["cross"])
+        if not self.IsStandalone():
+            # switch to output console to show query results
+            self._layerManager.notebook.SetSelectionByName('output')
+        
+        self.MapWindow.mouse['box'] = "point"
+        self.MapWindow.zoomtype = 0
+        
+        # change the cursor
+        self.MapWindow.SetCursor(self.cursors["cross"])
         
     def AddTmpVectorMapLayer(self, name, cats, useId = False, addLayer = True):
         """!Add temporal vector map layer to map composition
