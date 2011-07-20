@@ -190,7 +190,7 @@ int poly_count(OGRGeometryH hGeom, int line2boundary)
 
 	    ret = poly_count(hRing, line2boundary);
 	    if (ret == -1) {
-		G_warning(_("Cannot read part of geometry"));
+		G_warning(_("Unable to read part of geometry"));
 	    }
 	}
     }
@@ -211,7 +211,7 @@ int poly_count(OGRGeometryH hGeom, int line2boundary)
 
 	    ret = poly_count(hRing, line2boundary);
 	    if (ret == -1) {
-		G_warning(_("Cannot read part of geometry"));
+		G_warning(_("Unable to read part of geometry"));
 	    }
 	}
     }
@@ -308,7 +308,7 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
 	/* Degenerate is not ignored because it may be useful to see where it is,
 	 * but may be eliminated by min_area option */
 	if (Points->n_points < 4)
-	    G_warning(_("Degenerate polygon ([%d] vertices)"),
+	    G_warning(_("Degenerate polygon (%d vertices)"),
 		      Points->n_points);
 
 	size = G_area_of_polygon(Points->x, Points->y, Points->n_points);
@@ -385,7 +385,7 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
 		    Vect_get_point_in_poly_isl(Points, (const struct line_pnts **)IPoints,
 					       valid_isles, &x, &y);
 		if (ret == -1) {
-		    G_warning(_("Cannot calculate centroid"));
+		    G_warning(_("Unable calculate centroid"));
 		}
 		else {
 		    Vect_reset_line(Points);
@@ -437,7 +437,7 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
 
 	    ret = geom(hRing, Map, field, cat, min_area, type, mk_centr);
 	    if (ret == -1) {
-		G_warning(_("Cannot write part of geometry"));
+		G_warning(_("Unable to write part of geometry"));
 	    }
 	}
     }
