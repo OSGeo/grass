@@ -829,7 +829,7 @@ class InstallExtensionWindow(wx.Frame):
         self.repo.SetValue(task.get_param(value = 'svnurl').get('default',
                                                                 'https://svn.osgeo.org/grass/grass-addons'))
         
-        self.statusbar = self.CreateStatusBar(0)
+        self.statusbar = self.CreateStatusBar(number = 1)
         
         self.btnFetch = wx.Button(parent = self.panel, id = wx.ID_ANY,
                                   label = _("&Fetch"))
