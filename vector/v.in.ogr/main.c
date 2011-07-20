@@ -48,20 +48,26 @@ int poly_count(OGRGeometryH hGeom, int line2boundary);
 
 int main(int argc, char *argv[])
 {
-    int i, j, layer, arg_s_num, nogeom, ncnames;
-    float xmin = 0., ymin = 0., xmax = 0., ymax = 0.;
-    int ncols = 0, type;
     struct GModule *module;
+    struct _param {
+	struct Option *dsn, *out, *layer, *spat, *where,
+	    *min_area;
+	struct Option *snap, *type, *outloc, *cnames;
+    } param;
+    struct _flag {
+	struct Flag *list, *no_clean, *z, *notab,
+	    *region;
+	struct Flag *over, *extend, *formats, *tolower, *no_import;
+    } flag;
+
+    int i, j, layer, arg_s_num, nogeom, ncnames;
+    float xmin, ymin, xmax, ymax;
+    int ncols = 0, type;
     double min_area, snap;
-    struct Option *dsn_opt, *out_opt, *layer_opt, *spat_opt, *where_opt,
-	*min_area_opt;
-    struct Option *snap_opt, *type_opt, *outloc_opt, *cnames_opt;
-    struct Flag *list_flag, *no_clean_flag, *z_flag, *notab_flag,
-	*region_flag;
-    struct Flag *over_flag, *extend_flag, *formats_flag, *tolower_flag, *no_import_flag;
-    char buf[2000], namebuf[2000], tempvect[2000];
+    char buf[2000], namebuf[2000], tempvect[GNAME_MAX];
     char *separator;
-    struct Key_Value *loc_proj_info = NULL, *loc_proj_units = NULL;
+    
+    struct Key_Value *loc_proj_info, *loc_proj_units;
     struct Key_Value *proj_info, *proj_units;
     struct Cell_head cellhd, loc_wind, cur_wind;
     char error_msg[8192];
@@ -77,18 +83,19 @@ int main(int argc, char *argv[])
     int dim, with_z;
 
     /* OGR */
-    OGRDataSourceH Ogr_ds = NULL;
+    OGRDataSourceH Ogr_ds;
     OGRLayerH Ogr_layer;
     OGRFieldDefnH Ogr_field;
     char *Ogr_fieldname;
     OGRFieldType Ogr_ftype;
     OGRFeatureH Ogr_feature;
     OGRFeatureDefnH Ogr_featuredefn;
-    OGRGeometryH Ogr_geometry, Ogr_oRing = NULL, poSpatialFilter = NULL;
+    OGRGeometryH Ogr_geometry, Ogr_oRing, poSpatialFilter;
     OGRSpatialReferenceH Ogr_projection;
     OGREnvelope oExt;
-    int OFTIntegerListlength = 40;	/* hack due to limitation in OGR */
+    int OFTIntegerListlength;
 
+    char *output;
     char **layer_names;		/* names of layers to be imported */
     int *layers;		/* layer indexes */
     int nlayers;		/* number of layers to import */
@@ -97,153 +104,165 @@ int main(int argc, char *argv[])
     int layer_id;
     unsigned int n_features, feature_count;
     int overwrite;
-    double area_size = 0.;
-    int use_tmp_vect = 0;
+    double area_size;
+    int use_tmp_vect;
+
+    xmin = ymin = xmax = ymax = 0.0;
+    loc_proj_info = loc_proj_units = NULL;
+    Ogr_ds = Ogr_oRing = poSpatialFilter = NULL;
+    OFTIntegerListlength = 40;	/* hack due to limitation in OGR */
+    area_size = 0.0;
+    use_tmp_vect = FALSE;
 
     G_gisinit(argv[0]);
 
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("import"));
-    module->description = _("Converts vector daya into a GRASS vector map using OGR library.");
+    module->description = _("Converts vector data into a GRASS vector map using OGR library.");
 
-    dsn_opt = G_define_option();
-    dsn_opt->key = "dsn";
-    dsn_opt->type = TYPE_STRING;
-    dsn_opt->required =YES;
-    dsn_opt->label = _("OGR datasource name");
-    dsn_opt->description = _("Examples:\n"
-			     "\t\tESRI Shapefile: directory containing shapefiles\n"
-			     "\t\tMapInfo File: directory containing mapinfo files");
-
-    out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
+    param.dsn = G_define_option();
+    param.dsn->key = "dsn";
+    param.dsn->type = TYPE_STRING;
+    param.dsn->required =YES;
+    param.dsn->label = _("OGR datasource name");
+    param.dsn->description = _("Examples:\n"
+				   "\t\tESRI Shapefile: directory containing shapefiles\n"
+				   "\t\tMapInfo File: directory containing mapinfo files");
     
-    layer_opt = G_define_option();
-    layer_opt->key = "layer";
-    layer_opt->type = TYPE_STRING;
-    layer_opt->required = NO;
-    layer_opt->multiple = YES;
-    layer_opt->label =
+    param.layer = G_define_option();
+    param.layer->key = "layer";
+    param.layer->type = TYPE_STRING;
+    param.layer->required = NO;
+    param.layer->multiple = YES;
+    param.layer->label =
 	_("OGR layer name. If not given, all available layers are imported");
-    layer_opt->description =
+    param.layer->description =
 	_("Examples:\n" "\t\tESRI Shapefile: shapefile name\n"
 	  "\t\tMapInfo File: mapinfo file name");
-    layer_opt->guisection = _("Selection");
+    param.layer->guisection = _("Selection");
 
-    spat_opt = G_define_option();
-    spat_opt->key = "spatial";
-    spat_opt->type = TYPE_DOUBLE;
-    spat_opt->multiple = YES;
-    spat_opt->required = NO;
-    spat_opt->key_desc = "xmin,ymin,xmax,ymax";
-    spat_opt->label = _("Import subregion only");
-    spat_opt->guisection = _("Subregion");
-    spat_opt->description =
+    param.out = G_define_standard_option(G_OPT_V_OUTPUT);
+    param.out->required = NO;
+    param.out->guisection = _("Output");
+    
+    param.spat = G_define_option();
+    param.spat->key = "spatial";
+    param.spat->type = TYPE_DOUBLE;
+    param.spat->multiple = YES;
+    param.spat->required = NO;
+    param.spat->key_desc = "xmin,ymin,xmax,ymax";
+    param.spat->label = _("Import subregion only");
+    param.spat->guisection = _("Selection");
+    param.spat->description =
 	_("Format: xmin,ymin,xmax,ymax - usually W,S,E,N");
 
-    where_opt = G_define_standard_option(G_OPT_DB_WHERE);
-    where_opt->guisection = _("Selection");
+    param.where = G_define_standard_option(G_OPT_DB_WHERE);
+    param.where->guisection = _("Selection");
 
-    min_area_opt = G_define_option();
-    min_area_opt->key = "min_area";
-    min_area_opt->type = TYPE_DOUBLE;
-    min_area_opt->required = NO;
-    min_area_opt->answer = "0.0001";
-    min_area_opt->label =
+    param.min_area = G_define_option();
+    param.min_area->key = "min_area";
+    param.min_area->type = TYPE_DOUBLE;
+    param.min_area->required = NO;
+    param.min_area->answer = "0.0001";
+    param.min_area->label =
 	_("Minimum size of area to be imported (square units)");
-    min_area_opt->guisection = _("Min-area & snap");
-    min_area_opt->description = _("Smaller areas and "
+    param.min_area->guisection = _("Selection");
+    param.min_area->description = _("Smaller areas and "
 				  "islands are ignored. Should be greater than snap^2");
 
-    type_opt = G_define_standard_option(G_OPT_V_TYPE);
-    type_opt->options = "point,line,boundary,centroid";
-    type_opt->answer = "";
-    type_opt->description = _("Optionally change default input type");
-    type_opt->descriptions =
+    param.type = G_define_standard_option(G_OPT_V_TYPE);
+    param.type->options = "point,line,boundary,centroid";
+    param.type->answer = "";
+    param.type->description = _("Optionally change default input type");
+    param.type->descriptions =
 	_("point;import area centroids as points;"
 	  "line;import area boundaries as lines;"
 	  "boundary;import lines as area boundaries;"
 	  "centroid;import points as centroids");
-    type_opt->guisection = _("Selection");
+    param.type->guisection = _("Selection");
 
-    snap_opt = G_define_option();
-    snap_opt->key = "snap";
-    snap_opt->type = TYPE_DOUBLE;
-    snap_opt->required = NO;
-    snap_opt->answer = "-1";
-    snap_opt->label = _("Snapping threshold for boundaries");
-    snap_opt->guisection = _("Min-area & snap");
-    snap_opt->description = _("'-1' for no snap");
+    param.snap = G_define_option();
+    param.snap->key = "snap";
+    param.snap->type = TYPE_DOUBLE;
+    param.snap->required = NO;
+    param.snap->answer = "-1";
+    param.snap->label = _("Snapping threshold for boundaries");
+    param.snap->description = _("'-1' for no snap");
 
-    outloc_opt = G_define_option();
-    outloc_opt->key = "location";
-    outloc_opt->type = TYPE_STRING;
-    outloc_opt->required = NO;
-    outloc_opt->description = _("Name for new location to create");
-    outloc_opt->key_desc = "name";
+    param.outloc = G_define_option();
+    param.outloc->key = "location";
+    param.outloc->type = TYPE_STRING;
+    param.outloc->required = NO;
+    param.outloc->description = _("Name for new location to create");
+    param.outloc->key_desc = "name";
     
-    cnames_opt = G_define_option();
-    cnames_opt->key = "cnames";
-    cnames_opt->type = TYPE_STRING;
-    cnames_opt->required = NO;
-    cnames_opt->multiple = YES;
-    cnames_opt->description =
+    param.cnames = G_define_option();
+    param.cnames->key = "cnames";
+    param.cnames->type = TYPE_STRING;
+    param.cnames->required = NO;
+    param.cnames->multiple = YES;
+    param.cnames->description =
 	_("List of column names to be used instead of original names, "
 	  "first is used for category column");
-    cnames_opt->guisection = _("Attributes");
+    param.cnames->guisection = _("Attributes");
 
-    list_flag = G_define_flag();
-    list_flag->key = 'l';
-    list_flag->description =
+    flag.list = G_define_flag();
+    flag.list->key = 'l';
+    flag.list->description =
 	_("List available layers in data source and exit");
-    list_flag->suppress_required = YES;
-    
-    formats_flag = G_define_flag();
-    formats_flag->key = 'f';
-    formats_flag->description = _("List supported formats and exit");
-    formats_flag->suppress_required = YES;
-    
+    flag.list->suppress_required = YES;
+    flag.list->guisection = _("Print");
+
+    flag.formats = G_define_flag();
+    flag.formats->key = 'f';
+    flag.formats->description = _("List supported formats and exit");
+    flag.formats->suppress_required = YES;
+    flag.formats->guisection = _("Print");
+
     /* if using -c, you lose topological information ! */
-    no_clean_flag = G_define_flag();
-    no_clean_flag->key = 'c';
-    no_clean_flag->description = _("Do not clean polygons (not recommended)");
+    flag.no_clean = G_define_flag();
+    flag.no_clean->key = 'c';
+    flag.no_clean->description = _("Do not clean polygons (not recommended)");
+    flag.no_clean->guisection = _("Output");
 
-    z_flag = G_define_flag();
-    z_flag->key = 'z';
-    z_flag->description = _("Create 3D output");
+    flag.z = G_define_flag();
+    flag.z->key = 'z';
+    flag.z->description = _("Create 3D output");
+    flag.z->guisection = _("Output");
 
-    notab_flag = G_define_flag();
-    notab_flag->key = 't';
-    notab_flag->description = _("Do not create attribute table");
-    notab_flag->guisection = _("Attributes");
+    flag.notab = G_define_flag();
+    flag.notab->key = 't';
+    flag.notab->description = _("Do not create attribute table");
+    flag.notab->guisection = _("Attributes");
 
-    over_flag = G_define_flag();
-    over_flag->key = 'o';
-    over_flag->description =
+    flag.over = G_define_flag();
+    flag.over->key = 'o';
+    flag.over->description =
 	_("Override dataset projection (use location's projection)");
 
-    region_flag = G_define_flag();
-    region_flag->key = 'r';
-    region_flag->guisection = _("Subregion");
-    region_flag->description = _("Limit import to the current region");
+    flag.region = G_define_flag();
+    flag.region->key = 'r';
+    flag.region->guisection = _("Selection");
+    flag.region->description = _("Limit import to the current region");
 
-    extend_flag = G_define_flag();
-    extend_flag->key = 'e';
-    extend_flag->description =
+    flag.extend = G_define_flag();
+    flag.extend->key = 'e';
+    flag.extend->description =
 	_("Extend location extents based on new dataset");
 
-    tolower_flag = G_define_flag();
-    tolower_flag->key = 'w';
-    tolower_flag->description =
+    flag.tolower = G_define_flag();
+    flag.tolower->key = 'w';
+    flag.tolower->description =
 	_("Change column names to lowercase characters");
-    tolower_flag->guisection = _("Attributes");
+    flag.tolower->guisection = _("Attributes");
 
-    no_import_flag = G_define_flag();
-    no_import_flag->key = 'i';
-    no_import_flag->description =
+    flag.no_import = G_define_flag();
+    flag.no_import->key = 'i';
+    flag.no_import->description =
 	_("Create the location specified by the \"location\" parameter and exit."
-          " Do not import the vector file.");
-
+          " Do not import the vector data.");
+    
     /* The parser checks if the map already exists in current mapset, this is
      * wrong if location options is used, so we switch out the check and do it
      * in the module after the parser */
@@ -257,10 +276,10 @@ int main(int argc, char *argv[])
     OGRRegisterAll();
 
     /* list supported formats */
-    if (formats_flag->answer) {
+    if (flag.formats->answer) {
 	int iDriver;
 
-	G_important_message(_("Available OGR Drivers:"));
+	G_message(_("Available OGR Drivers:"));
 
 	for (iDriver = 0; iDriver < OGRGetDriverCount(); iDriver++) {
 	    OGRSFDriverH poDriver = OGRGetDriver(iDriver);
@@ -278,38 +297,38 @@ int main(int argc, char *argv[])
 	exit(EXIT_SUCCESS);
     }
 
-    if (dsn_opt->answer == NULL) {
-	G_fatal_error(_("Required parameter <%s> not set"), dsn_opt->key);
+    if (param.dsn->answer == NULL) {
+	G_fatal_error(_("Required parameter <%s> not set"), param.dsn->key);
     }
 
-    min_area = atof(min_area_opt->answer);
-    snap = atof(snap_opt->answer);
-    type = Vect_option_to_types(type_opt);
+    min_area = atof(param.min_area->answer);
+    snap = atof(param.snap->answer);
+    type = Vect_option_to_types(param.type);
 
     ncnames = 0;
-    if (cnames_opt->answers) {
+    if (param.cnames->answers) {
 	i = 0;
-	while (cnames_opt->answers[i++]) {
+	while (param.cnames->answers[i++]) {
 	    ncnames++;
 	}
     }
 
     /* Open OGR DSN */
     Ogr_ds = NULL;
-    if (strlen(dsn_opt->answer) > 0)
-	Ogr_ds = OGROpen(dsn_opt->answer, FALSE, NULL);
+    if (strlen(param.dsn->answer) > 0)
+	Ogr_ds = OGROpen(param.dsn->answer, FALSE, NULL);
 
     if (Ogr_ds == NULL)
-	G_fatal_error(_("Unable to open data source <%s>"), dsn_opt->answer);
+	G_fatal_error(_("Unable to open data source <%s>"), param.dsn->answer);
 
     /* Make a list of available layers */
     navailable_layers = OGR_DS_GetLayerCount(Ogr_ds);
     available_layer_names =
 	(char **)G_malloc(navailable_layers * sizeof(char *));
 
-    if (list_flag->answer)
-	G_important_message(_("Data source contains %d layers:"),
-			    navailable_layers);
+    if (flag.list->answer)
+	G_message(_("Data source contains %d layers:"),
+		  navailable_layers);
 
     for (i = 0; i < navailable_layers; i++) {
 	Ogr_layer = OGR_DS_GetLayer(Ogr_ds, i);
@@ -317,37 +336,26 @@ int main(int argc, char *argv[])
 	available_layer_names[i] =
 	    G_store((char *)OGR_FD_GetName(Ogr_featuredefn));
 
-	if (list_flag->answer) {
+	if (flag.list->answer) {
 	    fprintf(stdout, "%s\n", available_layer_names[i]);
 	}
     }
-    if (list_flag->answer) {
+    if (flag.list->answer) {
 	fflush(stdout);
 	exit(EXIT_SUCCESS);
     }
-
-    if (!outloc_opt->answer) {	/* Check if the map exists */
-	if (G_find_vector2(out_opt->answer, G_mapset())) {
-	    if (overwrite)
-		G_warning(_("Vector map <%s> already exists and will be overwritten"),
-			  out_opt->answer);
-	    else
-		G_fatal_error(_("Vector map <%s> already exists"),
-			      out_opt->answer);
-	}
-    }
-
+    
     /* Make a list of layers to be imported */
-    if (layer_opt->answer) {	/* From option */
+    if (param.layer->answer) {	/* From option */
 	nlayers = 0;
-	while (layer_opt->answers[nlayers])
+	while (param.layer->answers[nlayers])
 	    nlayers++;
 
 	layer_names = (char **)G_malloc(nlayers * sizeof(char *));
 	layers = (int *)G_malloc(nlayers * sizeof(int));
 
 	for (i = 0; i < nlayers; i++) {
-	    layer_names[i] = G_store(layer_opt->answers[i]);
+	    layer_names[i] = G_store(param.layer->answers[i]);
 	    /* Find it in the source */
 	    layers[i] = -1;
 	    for (j = 0; j < navailable_layers; j++) {
@@ -368,11 +376,27 @@ int main(int argc, char *argv[])
 	    layers[i] = i;
     }
 
+    if (param.out->answer) {
+	output = G_store(param.out->answer);
+    }
+    else {
+	if (nlayers < 1)
+	    G_fatal_error(_("No OGR layers available"));
+	output = G_store(layer_names[0]);
+	G_message(_("All available OGR layers will be imported into vector map <%s>"), output);
+    }
+    
+    if (!param.outloc->answer) {	/* Check if the map exists */
+	if (G_find_vector2(output, G_mapset()) && !overwrite)
+	    G_fatal_error(_("Vector map <%s> already exists"),
+			  output);
+    }
+    
     /* Get first imported layer to use for extents and projection check */
     Ogr_layer = OGR_DS_GetLayer(Ogr_ds, layers[0]);
 
-    if (region_flag->answer) {
-	if (spat_opt->answer)
+    if (flag.region->answer) {
+	if (param.spat->answer)
 	    G_fatal_error(_("Select either the current region flag or the spatial option, not both"));
 
 	G_get_window(&cur_wind);
@@ -381,29 +405,29 @@ int main(int argc, char *argv[])
 	ymin = cur_wind.south;
 	ymax = cur_wind.north;
     }
-    if (spat_opt->answer) {
+    if (param.spat->answer) {
 	/* See as reference: gdal/ogr/ogr_capi_test.c */
 
 	/* cut out a piece of the map */
 	/* order: xmin,ymin,xmax,ymax */
 	arg_s_num = 0;
 	i = 0;
-	while (spat_opt->answers[i]) {
+	while (param.spat->answers[i]) {
 	    if (i == 0)
-		xmin = atof(spat_opt->answers[i]);
+		xmin = atof(param.spat->answers[i]);
 	    if (i == 1)
-		ymin = atof(spat_opt->answers[i]);
+		ymin = atof(param.spat->answers[i]);
 	    if (i == 2)
-		xmax = atof(spat_opt->answers[i]);
+		xmax = atof(param.spat->answers[i]);
 	    if (i == 3)
-		ymax = atof(spat_opt->answers[i]);
+		ymax = atof(param.spat->answers[i]);
 	    arg_s_num++;
 	    i++;
 	}
 	if (arg_s_num != 4)
 	    G_fatal_error(_("4 parameters required for 'spatial' parameter"));
     }
-    if (spat_opt->answer || region_flag->answer) {
+    if (param.spat->answer || flag.region->answer) {
 	G_debug(2, "cut out with boundaries: xmin:%f ymin:%f xmax:%f ymax:%f",
 		xmin, ymin, xmax, ymax);
 
@@ -420,10 +444,9 @@ int main(int argc, char *argv[])
 	OGR_L_SetSpatialFilter(Ogr_layer, poSpatialFilter);
     }
 
-    if (where_opt->answer) {
-
+    if (param.where->answer) {
 	/* select by attribute */
-	OGR_L_SetAttributeFilter(Ogr_layer, where_opt->answer);
+	OGR_L_SetAttributeFilter(Ogr_layer, param.where->answer);
     }
 
     /* fetch boundaries */
@@ -458,7 +481,7 @@ int main(int argc, char *argv[])
     }
 
     /* suppress boundary splitting ? */
-    if (no_clean_flag->answer) {
+    if (flag.no_clean->answer) {
 	split_distance = -1.;
     }
     else {
@@ -473,7 +496,7 @@ int main(int argc, char *argv[])
     Ogr_projection = OGR_L_GetSpatialRef(Ogr_layer);	/* should not be freed later */
 
     /* Do we need to create a new location? */
-    if (outloc_opt->answer != NULL) {
+    if (param.outloc->answer != NULL) {
 	/* Convert projection information non-interactively as we can't
 	 * assume the user has a terminal open */
 	if (GPJ_osr_to_grass(&cellhd, &proj_info,
@@ -482,13 +505,13 @@ int main(int argc, char *argv[])
 			    "format; cannot create new location."));
 	}
 	else {
-	    G_make_location(outloc_opt->answer, &cellhd,
+	    G_make_location(param.outloc->answer, &cellhd,
 			    proj_info, proj_units, NULL);
-	    G_message(_("Location <%s> created"), outloc_opt->answer);
+	    G_message(_("Location <%s> created"), param.outloc->answer);
 	}
 
         /* If the i flag is set, clean up? and exit here */
-        if(no_import_flag->answer)
+        if(flag.no_import->answer)
         {
             exit(EXIT_SUCCESS);
         }
@@ -511,7 +534,7 @@ int main(int argc, char *argv[])
 	    loc_proj_units = G_get_projunits();
 	}
 
-	if (over_flag->answer) {
+	if (flag.over->answer) {
 	    cellhd.proj = loc_wind.proj;
 	    cellhd.zone = loc_wind.zone;
 	    G_message(_("Over-riding projection check"));
@@ -606,19 +629,17 @@ int main(int argc, char *argv[])
     db_init_string(&strval);
 
     /* open output vector */
-    sprintf(buf, "%s", out_opt->answer);
     /* strip any @mapset from vector output name */
-    G_find_vector(buf, G_mapset());
-    Vect_open_new(&Map, out_opt->answer, z_flag->answer != 0);
+    G_find_vector(output, G_mapset());
+    Vect_open_new(&Map, output, flag.z->answer != 0);
     Out = &Map;
 
     n_polygon_boundaries = 0;
-    if (!no_clean_flag->answer) {
+    if (!flag.no_clean->answer) {
 	/* check if we need a tmp vector */
 
 	/* estimate distance for boundary splitting --> */
 	for (layer = 0; layer < nlayers; layer++) {
-	    G_message(_("Counting polygons for layer: %s"), layer_names[layer]);
 	    layer_id = layers[layer];
 
 	    Ogr_layer = OGR_DS_GetLayer(Ogr_ds, layer_id);
@@ -630,7 +651,8 @@ int main(int argc, char *argv[])
 	    OGR_L_ResetReading(Ogr_layer);
 
 	    /* count polygons and isles */
-	    G_message(_("Counting polygons for %d features..."), n_features);
+	    G_message(_("Counting polygons for %d features (OGR layer <%s>)..."),
+		      n_features, layer_names[layer]);
 	    while ((Ogr_feature = OGR_L_GetNextFeature(Ogr_layer)) != NULL) {
 		G_percent(feature_count++, n_features, 1);	/* show something happens */
 		/* Geometry */
@@ -661,9 +683,9 @@ int main(int argc, char *argv[])
 	     * at the end copy alive lines to output vector
 	     * in case of polygons this reduces the coor file size by a factor of 2 to 5
 	     * only needed when cleaning polygons */
-	    sprintf(tempvect, "%s_tmp", buf);
+	    sprintf(tempvect, "%s_tmp", output);
 	    G_verbose_message(_("Using temporary vector <%s>"), tempvect);
-	    Vect_open_new(&Tmp, tempvect, z_flag->answer != 0);
+	    Vect_open_new(&Tmp, tempvect, flag.z->answer != 0);
 	    Out = &Tmp;
 	}
     }
@@ -677,14 +699,13 @@ int main(int argc, char *argv[])
      * of one ore more (more input layers) fields. */
     with_z = 0;
     for (layer = 0; layer < nlayers; layer++) {
-	G_message(_("Layer: %s"), layer_names[layer]);
 	layer_id = layers[layer];
 
 	Ogr_layer = OGR_DS_GetLayer(Ogr_ds, layer_id);
 	Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
 
 	/* Add DB link */
-	if (!notab_flag->answer) {
+	if (!flag.notab->answer) {
 	    char *cat_col_name = "cat";
 
 	    if (nlayers == 1) {	/* one layer only */
@@ -697,7 +718,7 @@ int main(int argc, char *argv[])
 	    }
 
 	    if (ncnames > 0) {
-		cat_col_name = cnames_opt->answers[0];
+		cat_col_name = param.cnames->answers[0];
 	    }
 	    Vect_map_add_dblink(&Map, layer + 1, layer_names[layer], Fi->table,
 				cat_col_name, Fi->database, Fi->driver);
@@ -717,7 +738,7 @@ int main(int argc, char *argv[])
 		G_debug(3, "Ogr_ftype: %i", Ogr_ftype);	/* look up below */
 
 		if (i < ncnames - 1) {
-		    Ogr_fieldname = G_store(cnames_opt->answers[i + 1]);
+		    Ogr_fieldname = G_store(param.cnames->answers[i + 1]);
 		}
 		else {
 		    /* Change column names to [A-Za-z][A-Za-z0-9_]* */
@@ -737,7 +758,7 @@ int main(int argc, char *argv[])
 		}
 
 		/* captial column names are a pain in SQL */
-		if (tolower_flag->answer)
+		if (flag.tolower->answer)
 		    G_str_to_lower(Ogr_fieldname);
 
 		if (strcmp(OGR_Fld_GetNameRef(Ogr_field), Ogr_fieldname) != 0) {
@@ -863,7 +884,8 @@ int main(int argc, char *argv[])
 
 	n_features = OGR_L_GetFeatureCount(Ogr_layer, 1);
 
-	G_important_message(_("Importing %d features..."), n_features);
+	G_important_message(_("Importing %d features (OGR layer <%s>)..."),
+			    n_features, layer_names[layer]);
 	while ((Ogr_feature = OGR_L_GetNextFeature(Ogr_layer)) != NULL) {
 	    G_percent(feature_count++, n_features, 1);	/* show something happens */
 	    /* Geometry */
@@ -877,11 +899,11 @@ int main(int argc, char *argv[])
 		    with_z = 1;
 
 		geom(Ogr_geometry, Out, layer + 1, cat, min_area, type,
-		     no_clean_flag->answer);
+		     flag.no_clean->answer);
 	    }
 
 	    /* Attributes */
-	    if (!notab_flag->answer) {
+	    if (!flag.notab->answer) {
 		sprintf(buf, "insert into %s values ( %d", Fi->table, cat);
 		db_set_string(&sql, buf);
 		for (i = 0; i < ncols; i++) {
@@ -950,9 +972,9 @@ int main(int argc, char *argv[])
 	    OGR_F_Destroy(Ogr_feature);
 	    cat++;
 	}
-	G_percent(n_features, n_features, 1);	/* finish it */
+	G_percent(1, 1, 1);	/* finish it */
 
-	if (!notab_flag->answer) {
+	if (!flag.notab->answer) {
 	    db_commit_transaction(driver);
 	    db_close_database_shutdown_driver(driver);
 	}
@@ -972,7 +994,7 @@ int main(int argc, char *argv[])
 	Vect_build_partial(&Tmp, GV_BUILD_BASE);
     }
 
-    if (use_tmp_vect && !no_clean_flag->answer &&
+    if (use_tmp_vect && !flag.no_clean->answer &&
 	Vect_get_num_primitives(Out, GV_BOUNDARY) > 0) {
 	int ret, centr, ncentr, otype, n_overlaps, n_nocat;
 	CENTR *Centr;
@@ -990,7 +1012,7 @@ int main(int argc, char *argv[])
 
 	if (snap >= 0) {
 	    G_message("%s", separator);
-	    G_message(_("Snap boundaries (threshold = %.3e):"), snap);
+	    G_message(_("Snapping boundaries (threshold = %.3e)..."), snap);
 	    Vect_snap_lines(&Tmp, GV_BOUNDARY, snap, NULL);
 	}
 
@@ -1004,12 +1026,12 @@ int main(int argc, char *argv[])
 	 */
 
 	G_message("%s", separator);
-	G_message(_("Break polygons:"));
+	G_message(_("Breaking polygons..."));
 	Vect_break_polygons(&Tmp, GV_BOUNDARY, NULL);
 
 	/* It is important to remove also duplicate centroids in case of duplicate input polygons */
 	G_message("%s", separator);
-	G_message(_("Remove duplicates:"));
+	G_message(_("Removing duplicates..."));
 	Vect_remove_duplicates(&Tmp, GV_BOUNDARY | GV_CENTROID, NULL);
 
 	/* in non-pathological cases, the bulk of the cleaning is now done */
@@ -1019,41 +1041,41 @@ int main(int argc, char *argv[])
 	 * and Vect_clean_small_angles_at_nodes() until no more small angles are found */
 	do {
 	    G_message("%s", separator);
-	    G_message(_("Break boundaries:"));
+	    G_message(_("Breaking boundaries..."));
 	    Vect_break_lines(&Tmp, GV_BOUNDARY, NULL);
 
 	    G_message("%s", separator);
-	    G_message(_("Remove duplicates:"));
+	    G_message(_("Removing duplicates..."));
 	    Vect_remove_duplicates(&Tmp, GV_BOUNDARY, NULL);
 
 	    G_message("%s", separator);
-	    G_message(_("Clean boundaries at nodes:"));
+	    G_message(_("Cleaning boundaries at nodes..."));
 	    nmodif =
 		Vect_clean_small_angles_at_nodes(&Tmp, GV_BOUNDARY, NULL);
 	} while (nmodif > 0);
 
 	/* merge boundaries */
 	G_message("%s", separator);
-	G_message(_("Merge boundaries:"));
+	G_message(_("Merging boundaries..."));
 	Vect_merge_lines(&Tmp, GV_BOUNDARY, NULL, NULL);
 
 	G_message("%s", separator);
 	if (type & GV_BOUNDARY) {	/* that means lines were converted to boundaries */
-	    G_message(_("Change boundary dangles to lines:"));
+	    G_message(_("Changing boundary dangles to lines..."));
 	    Vect_chtype_dangles(&Tmp, -1.0, NULL);
 	}
 	else {
-	    G_message(_("Remove dangles:"));
+	    G_message(_("Removing dangles..."));
 	    Vect_remove_dangles(&Tmp, GV_BOUNDARY, -1.0, NULL);
 	}
 
 	G_message("%s", separator);
 	if (type & GV_BOUNDARY) {
-	    G_message(_("Change boundary bridges to lines:"));
+	    G_message(_("Changing boundary bridges to lines..."));
 	    Vect_chtype_bridges(&Tmp, NULL);
 	}
 	else {
-	    G_message(_("Remove bridges:"));
+	    G_message(_("Removing bridges..."));
 	    Vect_remove_bridges(&Tmp, NULL);
 	}
 
@@ -1072,7 +1094,7 @@ int main(int argc, char *argv[])
 	    Centr[centr].cats = Vect_new_cats_struct();
 	    ret = Vect_get_point_in_area(&Tmp, centr, &x, &y);
 	    if (ret < 0) {
-		G_warning(_("Cannot calculate area centroid"));
+		G_warning(_("Unable to calculate area centroid"));
 		continue;
 	    }
 
@@ -1088,7 +1110,7 @@ int main(int argc, char *argv[])
 	/* Go through all layers and find centroids for each polygon */
 	for (layer = 0; layer < nlayers; layer++) {
 	    G_message("%s", separator);
-	    G_message(_("Find centroids for layer: %s"), layer_names[layer]);
+	    G_message(_("Finding centroids for OGR layer <%s>..."), layer_names[layer]);
 	    layer_id = layers[layer];
 	    Ogr_layer = OGR_DS_GetLayer(Ogr_ds, layer_id);
 	    n_features = OGR_L_GetFeatureCount(Ogr_layer, 1);
@@ -1112,7 +1134,7 @@ int main(int argc, char *argv[])
 
 	/* Write centroids */
 	G_message("%s", separator);
-	G_message(_("Write centroids:"));
+	G_message(_("Writing centroids..."));
 
 	n_overlaps = n_nocat = 0;
 	total_area = overlap_area = nocat_area = 0.0;
@@ -1206,7 +1228,7 @@ int main(int argc, char *argv[])
     /* -------------------------------------------------------------------- */
     /*      Extend current window based on dataset.                         */
     /* -------------------------------------------------------------------- */
-    if (extend_flag->answer) {
+    if (flag.extend->answer) {
 	G_get_default_window(&loc_wind);
 
 	loc_wind.north = MAX(loc_wind.north, cellhd.north);
@@ -1225,9 +1247,9 @@ int main(int argc, char *argv[])
 	G__put_window(&loc_wind, "../PERMANENT", "DEFAULT_WIND");
     }
 
-    if (with_z && !z_flag->answer)
+    if (with_z && !flag.z->answer)
 	G_warning(_("Input data contains 3D features. Created vector is 2D only, "
-		   "use -z flag to import 3D vector"));
+		   "use -z flag to import 3D vector."));
 
     exit(EXIT_SUCCESS);
 }
