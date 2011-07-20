@@ -150,7 +150,6 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
         self.Bind(wx.EVT_SIZE,             self.OnSize)
         self.Bind(wx.EVT_PAINT,            self.OnPaint)
-        self.Bind(wx.EVT_LEFT_UP,          self.OnLeftUp)
         self.Bind(wx.EVT_MOUSE_EVENTS,     self.OnMouseAction)
         self.Bind(wx.EVT_MOTION,           self.OnMotion)
         
@@ -356,10 +355,15 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
     
     def OnLeftUp(self, event):
         self.ReleaseMouse()
-        if self.mouse["use"] == "nvizQuerySurface":
-            self.OnQuerySurface(event)
-        elif self.mouse["use"] == "nvizQueryVector":
-            self.OnQueryVector(event)
+        if self.mouse["use"] == "query":
+            layers = self.GetSelectedLayer(multi = True)
+            
+            for l in layers:
+                if l.GetType() == 'raster':
+                    self.OnQuerySurface(event)
+                if l.GetType() == 'vector':
+                    self.OnQueryVector(event)
+                    
         elif self.mouse["use"] == 'cplane':
             self.lmgr.nviz.OnCPlaneChangeDone(None)
             idx = self._display.GetCPlaneCurrent() 
@@ -371,15 +375,25 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self.lmgr.nviz.FindWindowByName('placeArrow').SetValue(False)
             self.mouse['use'] = 'default'
             self.SetCursor(self.cursors['default'])
-    
+        
+        event.Skip()
+        
     def OnQuerySurface(self, event):
         """!Query surface on given position"""
-        result = self._display.QueryMap(event.GetX(), event.GetY())
+        size = self.GetClientSizeTuple()
+        result = self._display.QueryMap(event.GetX(), size[1] - event.GetY())
         if result:
             self.qpoints.append((result['x'], result['y'], result['z']))
             self.log.WriteLog("%-30s: %.3f" % (_("Easting"),   result['x']))
             self.log.WriteLog("%-30s: %.3f" % (_("Northing"),  result['y']))
             self.log.WriteLog("%-30s: %.3f" % (_("Elevation"), result['z']))
+            name = ''
+            for item in self.layers:
+                self.tree.GetPyData(item)[0]['nviz']
+                if self.tree.GetPyData(item)[0]['maplayer'].type == 'raster' and\
+                    self.tree.GetPyData(item)[0]['nviz']['surface']['object']['id'] == result['id']:
+                    name = self.tree.GetPyData(item)[0]['maplayer'].name
+            self.log.WriteLog("%-30s: %s" % (_("Surface map name"), name))
             self.log.WriteLog("%-30s: %s" % (_("Surface map elevation"), result['elevation']))
             self.log.WriteLog("%-30s: %s" % (_("Surface map color"), result['color']))
             if len(self.qpoints) > 1:
@@ -409,7 +423,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
     
     def OnQueryVector(self, event):
         """!Query vector on given position"""
-        self.log.WriteWarning(_("Function not implemented yet"))
+        self.log.WriteWarning(_("Vector querying is not implemented yet"))
         self.log.WriteCmdLog('-' * 80)
         
     def UpdateView(self, event):
