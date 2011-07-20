@@ -30,13 +30,13 @@
 #% type: string
 #% key_desc: name
 #% description: Name of extension to install/remove
-#% required: no
+#% required: yes
 #%end
 #%option
 #% key: operation
 #% type: string
 #% description: Operation to be performed
-#% required: no
+#% required: yes
 #% options: add,remove
 #% answer: add
 #%end
@@ -54,23 +54,26 @@
 #% key_desc: path
 #% description: Prefix where to install extension (ignored when flag -s is given)
 #% answer: $GRASS_ADDON_PATH
-#% required: yes
+#% required: no
 #%end
 
 #%flag
 #% key: l
 #% description: List available modules in the GRASS Addons SVN repository
 #% guisection: Print
+#% suppress_required: yes
 #%end
 #%flag
 #% key: f
 #% description: List available modules in the GRASS Addons SVN repository including modules description
 #% guisection: Print
+#% suppress_required: yes
 #%end
 #%flag
 #% key: g
 #% description: List available modules in the GRASS Addons SVN repository (shell script style)
 #% guisection: Print
+#% suppress_required: yes
 #%end
 #%flag
 #% key: s
