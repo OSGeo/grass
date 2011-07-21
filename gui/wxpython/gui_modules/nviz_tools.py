@@ -424,8 +424,18 @@ class NvizToolWindow(FN.FlatNotebook):
 ##        style = fpb.CaptionBarStyle()
 ##        style.SetCaptionStyle(fpb.CAPTIONBAR_FILLED_RECTANGLE)
 ##        style.SetFirstColour(wx.Color(250,250,250))
-        self.foldpanelData = fpb.FoldPanelBar(parent = self.mainPanelData, id = wx.ID_ANY,
-                                              style = fpb.FPB_SINGLE_FOLD)
+        try:# wxpython <= 2.8.10
+            self.foldpanelData = fpb.FoldPanelBar(parent = self.mainPanelData, id = wx.ID_ANY,
+                                                  style = fpb.FPB_DEFAULT_STYLE,
+                                                  extraStyle = fpb.FPB_SINGLE_FOLD)
+        except:
+            try:# wxpython >= 2.8.11
+                self.foldpanelData = fpb.FoldPanelBar(parent = self.mainPanelData, id = wx.ID_ANY,                               
+                                                      agwStyle = fpb.FPB_SINGLE_FOLD)
+            except: # to be sure
+                self.foldpanelData = fpb.FoldPanelBar(parent = self.mainPanelData, id = wx.ID_ANY,                               
+                                                      style = fpb.FPB_SINGLE_FOLD)
+            
                      
         self.foldpanelData.Bind(fpb.EVT_CAPTIONBAR, self.OnPressCaption)
 
