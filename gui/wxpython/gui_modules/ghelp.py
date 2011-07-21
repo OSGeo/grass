@@ -960,7 +960,7 @@ class InstallExtensionWindow(wx.Frame):
         log = self.parent.GetLogWindow()
         log.RunCmd(self._getCmd())
         
-        self.OnCloseWindow(None)
+        ### self.OnCloseWindow(None)
                 
     def OnItemSelected(self, event):
         """!Item selected"""
