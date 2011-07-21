@@ -1322,6 +1322,12 @@ class Map(object):
         """!Reverse list of layers"""
         return self.layers.reverse()
 
+    def RenderOverlays(self, force):
+        """!Render overlays only (for nviz)"""
+        for layer in self.overlays:
+            if force or layer.force_render:
+                layer.Render()
+                
 if __name__ == "__main__":
     """!Test of Display class.
     Usage: display=Render()

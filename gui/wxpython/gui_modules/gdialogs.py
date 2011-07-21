@@ -484,14 +484,16 @@ class DecorationDialog(wx.Dialog):
             overlay = self.parent.Map.AddOverlay(id=self.ovlId, type=self.name,
                                                  command=self.cmd,
                                                  l_active=False, l_render=False, l_hidden=True)
-
-            self.parent.MapWindow.overlays[self.ovlId] = {}
-            self.parent.MapWindow.overlays[self.ovlId] = { 'layer' : overlay,
-                                                           'params' : None,
-                                                           'propwin' : None,
-                                                           'cmd' : self.cmd,
-                                                           'coords': (10, 10),
-                                                           'pdcType': 'image' }
+            prop = { 'layer' : overlay,
+                     'params' : None,
+                     'propwin' : None,
+                     'cmd' : self.cmd,
+                     'coords': (10, 10),
+                     'pdcType': 'image' }
+            self.parent.MapWindow2D.overlays[self.ovlId] = prop
+            if self.parent.MapWindow3D:
+                self.parent.MapWindow3D.overlays[self.ovlId] = prop
+                
         else:
             if self.parent.MapWindow.overlays[self.ovlId]['propwin'] == None:
                 return
@@ -528,6 +530,9 @@ class DecorationDialog(wx.Dialog):
         self.parent.Map.GetOverlay(self.ovlId).SetActive(self.chkbox.IsChecked())
 
         # update map
+        if self.parent.MapWindow.parent.toolbars['nviz']:
+            self.parent.MapWindow.UpdateOverlays()
+        
         self.parent.MapWindow.UpdateMap()
 
         # close dialog

@@ -4323,6 +4323,7 @@ class NvizToolWindow(FN.FlatNotebook):
         win = self.FindWindowById(self.page[name]['notebook'])
         try:
             win.Expand(win.GetFoldPanel(self.page[name]['id']))
+            self.UpdateScrolling((win.GetFoldPanel(self.page[name]['id']).GetGrandParent(),))
         except AttributeError:
             win.SetSelection(self.page[name]['id'])
 
