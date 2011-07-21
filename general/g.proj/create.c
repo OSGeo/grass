@@ -23,8 +23,8 @@ void create_location(char *location)
 	/* Shouldn't happen */
 	G_fatal_error(_("Unspecified error while creating new location"));
 
-    G_message(_("You can switch to the new location by `%s=%s`"),
-	      "g.gisenv set=LOCATION_NAME", location);
+    G_message(_("You can switch to the new location by\n`%s=%s`"),
+	      "g.mapset mapset=PERMANENT location", location);
 }
 
 void modify_projinfo()
