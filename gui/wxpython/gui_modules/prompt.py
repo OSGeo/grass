@@ -629,6 +629,7 @@ class GPrompt(object):
     def SetFilter(self, data, module = True):
         """!Set filter
 
+        @param data data dict
         @param module True to filter modules, otherwise data
         """
         if module:
