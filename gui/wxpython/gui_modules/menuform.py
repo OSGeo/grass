@@ -669,10 +669,10 @@ class mainFrame(wx.Frame):
     def OnApply(self, event):
         """!Apply the command"""
         if self.modeler:
-            cmd = self.createCmd(ignoreErrors = True)
+            cmd = self.createCmd(ignoreErrors = True, ignoreRequired = True)
         else:
             cmd = self.createCmd()
-            
+        
         if cmd is not None and self.get_dcmd is not None:
             # return d.* command to layer tree for rendering
             self.get_dcmd(cmd, self.layer, {"params": self.task.params, 
@@ -761,9 +761,10 @@ class mainFrame(wx.Frame):
         if event:    
             event.Skip()
         
-    def createCmd(self, ignoreErrors = False):
+    def createCmd(self, ignoreErrors = False, ignoreRequired = False):
         """!Create command string (python list)"""
-        return self.notebookpanel.createCmd(ignoreErrors = ignoreErrors)
+        return self.notebookpanel.createCmd(ignoreErrors = ignoreErrors,
+                                            ignoreRequired = ignoreRequired)
 
 class cmdPanel(wx.Panel):
     """!A panel containing a notebook dividing in tabs the different
@@ -1774,15 +1775,16 @@ class cmdPanel(wx.Panel):
                                             None,
                                             self.task)
             
-    def createCmd(self, ignoreErrors = False):
+    def createCmd(self, ignoreErrors = False, ignoreRequired = False):
         """!Produce a command line string (list) or feeding into GRASS.
 
-        If ignoreErrors == True then it will return whatever has been
+        @param ignoreErrors True then it will return whatever has been
         built so far, even though it would not be a correct command
-        for GRASS.
+        for GRASS
         """
         try:
-            cmd = self.task.getCmd(ignoreErrors = ignoreErrors)
+            cmd = self.task.getCmd(ignoreErrors = ignoreErrors,
+                                   ignoreRequired = ignoreRequired)
         except ValueError, err:
             dlg = wx.MessageDialog(parent = self,
                                    message = unicode(err),
@@ -1863,7 +1865,7 @@ class GUI:
         """
         start = time.time()
         dcmd_params = {}
-        if completed ==  None:
+        if completed == None:
             get_dcmd = None
             layer = None
             dcmd_params = None

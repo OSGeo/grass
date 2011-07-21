@@ -191,12 +191,14 @@ class grassTask:
         
         return errorList
     
-    def getCmd(self, ignoreErrors = False):
+    def getCmd(self, ignoreErrors = False, ignoreRequired = False):
         """!Produce an array of command name and arguments for feeding
         into some execve-like command processor.
 
         @param ignoreErrors True to return whatever has been built so
         far, even though it would not be a correct command for GRASS
+        @param ignoreRequired True to ignore required flags, otherwise
+        '<required>' is shown
         """
         cmd = [self.name]
         
@@ -213,7 +215,7 @@ class grassTask:
             if p.get('value','') ==  '' and p.get('required', False):
                 if p.get('default', '') !=  '':
                     cmd +=  [ '%s=%s' % (p['name'], p['default']) ]
-                elif ignoreErrors is True and not suppress_required:
+                elif ignoreErrors and not suppress_required and not ignoreRequired:
                     cmd +=  [ '%s=%s' % (p['name'], _('<required>')) ]
             elif p.get('value','') !=  '' and p['value'] !=  p.get('default','') :
                 # Output only values that have been set, and different from defaults

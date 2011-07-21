@@ -19,7 +19,8 @@ Classes:
  - FormatSelect
  - GdalSelect
  - ProjSelect
- 
+ - ElementSelect
+
 (C) 2007-2011 by the GRASS Development Team This program is free
 software under the GNU General Public License (>=v2). Read the file
 COPYING that comes with GRASS for details.
@@ -42,6 +43,7 @@ import globalvar
 
 sys.path.append(os.path.join(globalvar.ETCDIR, "python"))
 import grass.script as grass
+from   grass.script import task as gtask
 
 import gcmd
 import utils
@@ -98,6 +100,16 @@ class Select(wx.combo.ComboCtrl):
         """!Load elements"""
         self.tcp.GetElementList()
     
+    def SetType(self, etype, multiple = False, mapsets = None,
+                updateOnPopup = True, onPopup = None):
+        """!Param set element type for widget
+
+        @param etype element type, see gselect.ElementSelect
+        """
+        self.tcp.SetData(type = etype, mapsets = mapsets,
+                         multiple = multiple,
+                         updateOnPopup = updateOnPopup, onPopup = onPopup)
+        
 class VectorSelect(Select):
     def __init__(self, parent, ftype, **kwargs):
         """!Custom to create a ComboBox with a tree control to display and
@@ -512,7 +524,12 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
             self.updateOnPopup = kargs['updateOnPopup']
         if 'onPopup' in kargs:
             self.onPopup = kargs['onPopup']
-        
+
+    def GetType(self):
+        """!Get element type
+        """
+        return self.type
+    
 class VectorDBInfo:
     """!Class providing information about attribute tables
     linked to a vector map"""
@@ -1595,3 +1612,31 @@ class ProjSelect(wx.ComboBox):
         
         self.SetItems(listMaps)
         self.SetValue('')
+
+class ElementSelect(wx.Choice):
+    def __init__(self, parent, id = wx.ID_ANY, size = globalvar.DIALOG_COMBOBOX_SIZE, 
+                 **kwargs):
+        """!Widget for selecting GIS element
+        
+        @param parent parent window
+        """
+        super(ElementSelect, self).__init__(parent, id, size = size, 
+                                            style = wx.CB_READONLY, **kwargs)
+        self.SetName("ElementSelect")
+        
+        task = gtask.parse_interface('g.list')
+        p = task.get_param(value = 'type')
+        self.values = p.get('values', [])
+        self.valuesDesc = p.get('values_desc', [])
+        
+        self.SetItems(self.valuesDesc)
+
+    def GetValue(self, name):
+        """!Translate value
+
+        @param name element name
+        """
+        idx = self.valuesDesc.index(name)
+        if idx > -1:
+            return self.values[idx]
+        return ''
