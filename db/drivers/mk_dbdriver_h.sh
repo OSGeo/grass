@@ -7,7 +7,7 @@ cat <<'EOT'> dbdriver.h
 #ifndef DBDRIVER_H
 #define	DBDRIVER_H
 
-#include "dbstubs.h"
+#include <grass/dbstubs.h>
 
 EOT
 
@@ -17,6 +17,7 @@ grep -h '^\( *int *\)\?db__driver' *.c | sed \
 cat $tmp >> dbdriver.h
 
 cat <<'EOT' >> dbdriver.h
+
 #define	init_dbdriver() do{\
 EOT
 
