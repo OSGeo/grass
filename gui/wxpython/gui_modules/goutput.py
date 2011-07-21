@@ -250,16 +250,16 @@ class GMConsole(wx.SplitterWindow):
         # buttons
         #
         self.btn_console_clear = wx.Button(parent = self.panelPrompt, id = wx.ID_ANY,
-                                           label = _("&Clear output"), size=(125,-1))
+                                           label = _("&Clear output"), size=(100,-1))
         self.btn_cmd_clear = wx.Button(parent = self.panelPrompt, id = wx.ID_ANY,
-                                       label = _("C&lear command"), size=(125,-1))
+                                       label = _("C&lear cmd"), size=(100,-1))
         if self.parent.GetName() != 'LayerManager':
             self.btn_cmd_clear.Hide()
         self.btn_console_save  = wx.Button(parent = self.panelPrompt, id = wx.ID_ANY,
-                                           label = _("&Save output"), size=(125,-1))
+                                           label = _("&Save output"), size=(100,-1))
         # abort
-        self.btn_abort = wx.Button(parent = self.panelPrompt, id = wx.ID_ANY, label = _("&Abort command"),
-                                   size=(125,-1))
+        self.btn_abort = wx.Button(parent = self.panelPrompt, id = wx.ID_ANY, label = _("&Abort cmd"),
+                                   size=(100,-1))
         self.btn_abort.SetToolTipString(_("Abort the running command"))
         self.btn_abort.Enable(False)
         
