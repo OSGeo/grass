@@ -340,14 +340,12 @@ class MapToolbar(AbstractToolbar):
         
     def Enable2D(self, enabled):
         """!Enable/Disable 2D display mode specific tools"""
-        for tool in (self.pointer,
-                     self.pan,
+        for tool in (self.pan,
                      self.zoomin,
                      self.zoomout,
                      self.zoomback,
                      self.zoommenu,
                      self.analyze,
-                     self.dec,
                      self.printmap):
             self.EnableTool(tool, enabled)
         

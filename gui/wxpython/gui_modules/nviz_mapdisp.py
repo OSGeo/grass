@@ -86,7 +86,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                         'vlines' : False,
                         'vpoints' : False }
         self.mouse = {
-            'use': 'default'
+            'use': 'pointer'
             }
         self.cursors = {
             'default' : wx.StockCursor(wx.CURSOR_ARROW),
@@ -100,6 +100,12 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.cplanes = list()
         # list of query points
         self.qpoints = list()
+        # overlays
+        self.overlays = {}
+        self.imagedict = {}
+        self.shapes = []
+        self.dragShape = None
+        self.dragImage = None
         
         #
         # use display region instead of computational
@@ -171,7 +177,23 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             cplane['on'] = False
             self.cplanes.append(cplane)
             
-            
+    def GetOverlay(self):
+        """!Converts rendered overlay files to wx.Image
+        
+        Updates self.imagedict
+        
+        @return list of images
+        """
+        imgs = []
+        for overlay in self.Map.GetListOfLayers(l_type = "overlay", l_active = True):
+            if os.path.isfile(overlay.mapfile) and os.path.getsize(overlay.mapfile):
+                img = wx.Image(overlay.mapfile, wx.BITMAP_TYPE_ANY)
+                self.imagedict[img] = { 'id' : overlay.id,
+                                        'layer' : overlay }
+                imgs.append(img)
+
+        return imgs        
+                    
     def OnClose(self, event):
         # cleanup when window actually closes (on quit) and not just is hidden
         self.Reset()
@@ -196,6 +218,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         dc = wx.PaintDC(self)
         self.DoPaint()
+        self.DrawShapes(dc)
 
     def DoPaint(self):
         self.SetCurrent()
@@ -233,7 +256,24 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self.init = True
         
         self.UpdateMap()
-                
+    
+    def UpdateOverlays(self):
+        if self.img is None:
+            self.Map.ChangeMapSize(self.GetClientSize())
+            self.Map.RenderOverlays(force = True)
+        else:
+            self.Map.RenderOverlays(force = False)
+        self.shapes = []
+        for img in self.GetOverlay():
+            # draw any active and defined overlays
+            if self.imagedict[img]['layer'].IsActive():
+                id = self.imagedict[img]['id']
+                coords = self.overlays[id]['coords']
+                bitmap = wx.BitmapFromImage(img)
+                self.shapes.append(DragShape(bitmap, id))
+                self.shapes[-1].pos = coords[:2]
+        self.Refresh(False)  
+                    
     def OnMouseAction(self, event):
         """!Handle mouse events"""
         # zoom with mouse wheel
@@ -251,6 +291,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         # dragging
         elif event.Dragging():
             self.OnDragging(event)
+            
+        # double click    
+        elif event.ButtonDClick():
+            self.OnDClick(event)
         
         event.Skip()
 
@@ -297,7 +341,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 self.iview['focus'][coord] = focus[i]
             toggle = self.lmgr.nviz.FindWindowByName('here')
             toggle.SetValue(False)
-            self.mouse['use'] = 'default'
+            self.mouse['use'] = 'pointer'
             self.SetCursor(self.cursors['default'])
             
         if self.mouse['use'] == "cplane":   
@@ -321,7 +365,15 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 self.decoration['arrow']['show'] = True
                 self.decoration['arrow']['position']['x'] = pos[0]
                 self.decoration['arrow']['position']['y'] = size[1] - pos[1]
-                self.DoPaint()
+                self.Refresh(False)
+                
+        if self.mouse['use'] == 'pointer':
+            shape = self.FindShape(event.GetPosition())
+            if shape:
+                self.dragShape = shape
+                self.dragStartPos = event.GetPosition()
+                self.deleteOld = True
+                
         event.Skip()    
         
     def OnDragging(self, event):
@@ -333,6 +385,44 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             if x is not None: 
                 self.cplanes[idx]['position']['x'] = x
                 self.cplanes[idx]['position']['y'] = y 
+            
+        if self.mouse['use'] == 'pointer':
+            if not self.dragShape:
+                event.Skip()
+                return
+            if self.dragShape and not self.dragImage:
+            # only start the drag after having moved a couple pixels
+                tolerance = 2
+                pt = event.GetPosition()
+                dx = abs(pt.x - self.dragStartPos.x)
+                dy = abs(pt.y - self.dragStartPos.y)
+                if dx <= tolerance and dy <= tolerance:
+                    return
+                elif self.deleteOld:
+                    # refresh the area of the window where the shape was so it
+                    # will get erased.
+                    # need to be redrawn now ?
+                    self.dragShape.shown = False
+                    self.RefreshRect(self.dragShape.GetRect(), False)
+                    self.Update()
+                    self.deleteOld = False
+                    return
+                else:
+                    if self.dragShape.text:
+                        self.dragImage = wx.DragString(self.dragShape.text,
+                                                      wx.StockCursor(wx.CURSOR_HAND))
+                    else:
+                        self.dragImage = wx.DragImage(self.dragShape.bmp,
+                                                     wx.StockCursor(wx.CURSOR_HAND))
+                    hotspot = self.dragStartPos - self.dragShape.pos
+                    self.dragImage.BeginDrag(hotspot, self)
+                    self.dragImage.Move(pt)
+                    self.dragImage.Show()
+
+            elif self.dragShape and self.dragImage:
+            # now move it and show it again if needed
+                self.dragImage.Move(event.GetPosition())
+                self.dragImage.Show()
                 
         event.Skip()
             
@@ -369,15 +459,40 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             idx = self._display.GetCPlaneCurrent() 
             self.lmgr.nviz.UpdateCPlanePage(idx)
             self.lmgr.nviz.FindWindowByName('cplaneHere').SetValue(False)
-            self.mouse['use'] = 'default'
+            self.mouse['use'] = 'pointer'
             self.SetCursor(self.cursors['default'])
         elif self.mouse["use"] == 'arrow':
             self.lmgr.nviz.FindWindowByName('placeArrow').SetValue(False)
-            self.mouse['use'] = 'default'
+            self.mouse['use'] = 'pointer'
             self.SetCursor(self.cursors['default'])
-        
+        elif self.mouse['use'] == 'pointer':
+            if not self.dragImage or not self.dragShape:
+                self.dragImage = None
+                self.dragShape = None
+                return
+
+            # Hide the image, end dragging, and nuke out the drag image.
+            self.dragImage.Hide()
+            self.dragImage.EndDrag()
+            self.dragImage = None
+
+
+            # reposition and draw the shape
+            self.dragShape.pos = (
+                self.dragShape.pos[0] + event.GetPosition()[0] - self.dragStartPos[0],
+                self.dragShape.pos[1] + event.GetPosition()[1] - self.dragStartPos[1]
+                )
+            self.overlays[self.dragShape.id]['coords'] = tuple(self.dragShape.GetRect())
+            self.dragShape.shown = True
+            self.RefreshRect(self.dragShape.GetRect())
+            self.dragShape = None
         event.Skip()
-        
+    
+    def OnDClick(self, event):
+        shape = self.FindShape(event.GetPosition())
+        if shape.id == 1:
+                self.parent.OnAddLegend(None)
+                    
     def OnQuerySurface(self, event):
         """!Query surface on given position"""
         size = self.GetClientSizeTuple()
@@ -506,7 +621,18 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         """
         self._display.EraseMap()
         self.SwapBuffers()
-        
+    
+    def DrawShapes(self, dc):
+        for shape in self.shapes:
+            if shape.shown:
+                shape.Draw(dc)
+                
+    def FindShape(self, pt):
+        for shape in self.shapes:
+            if shape.HitTest(pt):
+                return shape
+        return None
+    
     def IsLoaded(self, item):
         """!Check if layer (item) is already loaded
         
@@ -1753,3 +1879,32 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         """
         self.lmgr.nviz.OnResetView(None)
 
+class DragShape:
+    """!Class for drawing overlays (based on wxpython demo)"""
+    def __init__(self, bmp, id):
+        self.bmp = bmp
+        self.id = id
+        self.pos = (0,0)
+        self.shown = True
+        self.text = None
+
+    def HitTest(self, pt):
+        rect = self.GetRect()
+        return rect.InsideXY(pt.x, pt.y)
+
+    def GetRect(self):
+        return wx.Rect(self.pos[0], self.pos[1],
+                      self.bmp.GetWidth(), self.bmp.GetHeight())
+
+    def Draw(self, dc, op = wx.COPY):
+        if self.bmp.Ok():
+            memDC = wx.MemoryDC()
+            memDC.SelectObject(self.bmp)
+
+            dc.Blit(self.pos[0], self.pos[1],
+                    self.bmp.GetWidth(), self.bmp.GetHeight(),
+                    memDC, 0, 0, op, True)
+
+            return True
+        else:
+            return False
