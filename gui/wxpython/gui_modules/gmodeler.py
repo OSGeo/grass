@@ -32,7 +32,7 @@ Classes:
  - ModelConditionDialog
  - WritePythonFile
 
-(C) 2010 by the GRASS Development Team
+(C) 2010-2011 by the GRASS Development Team
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
@@ -134,7 +134,14 @@ class Model(object):
             return len(self.GetItems(objType = ModelAction))
         
         return len(self.GetItems())
-    
+
+    def GetNextId(self):
+        """!Get next id (data ignored)"""
+        currId = self.items[-1].GetId()
+        if currId > 0:
+            return currId + 1
+        return 1
+
     def GetProperties(self):
         """!Get model properties"""
         return self.properties
@@ -196,11 +203,17 @@ class Model(object):
     def GetData(self):
         """!Get list of data items"""
         result = list()
+        dataItems = self.GetItems(objType = ModelData)
         for action in self.GetItems(objType = ModelAction):
             for rel in action.GetRelations():
                 dataItem = rel.GetData()
                 if dataItem not in result:
                     result.append(dataItem)
+                dataItems.remove(dataItem)
+        
+        # standalone data
+        if dataItems:
+            result += dataItems
         
         return result
 
@@ -356,7 +369,7 @@ class Model(object):
         """!Add item to the list"""
         iId = newItem.GetId()
         
-        i   = 0
+        i  = 0
         for item in self.items:
             if item.GetId() > iId:
                 self.items.insert(i, newItem)
@@ -1173,7 +1186,7 @@ class ModelFrame(wx.Frame):
         # add action to canvas
         width, height = self.canvas.GetSize()
         action = ModelAction(self.model, cmd = cmd, x = width/2, y = height/2,
-                             id = self.model.GetNumItems() + 1)
+                             id = self.model.GetNextId())
         overwrite = self.model.GetProperties().get('overwrite', None)
         if overwrite is not None:
             action.GetTask().set_flag('overwrite', overwrite)
@@ -1201,19 +1214,26 @@ class ModelFrame(wx.Frame):
         
     def OnAddData(self, event):
         """!Add data item to model
-
-        @todo
         """
         # add action to canvas
         width, height = self.canvas.GetSize()
         data = ModelData(self, x = width/2, y = height/2)
+        
         self.canvas.diagram.AddShape(data)
         data.Show(True)
         
+        self.ModelChanged()
+        
         self._addEvent(data)
-        # self.model.AddData(data)
+        self.model.AddItem(data)
         
         self.canvas.Refresh()
+        
+        # show data properties dialog
+        dlg = ModelDataDialog(parent = self, shape = data)
+        data.SetPropDialog(dlg)
+        dlg.CentreOnParent()
+        dlg.Show()
         
     def OnHelp(self, event):
         """!Display manual page"""
@@ -1236,22 +1256,22 @@ class ModelFrame(wx.Frame):
     def GetOptData(self, dcmd, layer, params, propwin):
         """!Process action data"""
         if params: # add data items
-            for p in params['params']:
-                if p.get('prompt', '') in ('raster', 'vector', 'raster3d'):
-                    try:
-                        name, mapset = p.get('value', '').split('@', 1)
-                    except (ValueError, IndexError):
-                        continue
+            # for p in params['params']:
+            #     if p.get('prompt', '') in ('raster', 'vector', 'raster3d'):
+            #         try:
+            #             name, mapset = p.get('value', '').split('@', 1)
+            #         except (ValueError, IndexError):
+            #             continue
                     
-                    if mapset != grass.gisenv()['MAPSET']:
-                        continue
+            #         if mapset != grass.gisenv()['MAPSET']:
+            #             continue
                     
-                    # don't use fully qualified names
-                    p['value'] = p.get('value', '').split('@')[0]
-                    for idx in range(1, len(dcmd)):
-                        if p.get('name', '') in dcmd[idx]:
-                            dcmd[idx] = p.get('name', '') + '=' + p.get('value', '')
-                            break
+            #         # don't use fully qualified names
+            #         p['value'] = p.get('value', '').split('@')[0]
+            #         for idx in range(1, len(dcmd)):
+            #             if p.get('name', '') in dcmd[idx]:
+            #                 dcmd[idx] = p.get('name', '') + '=' + p.get('value', '')
+            #                 break
             
             width, height = self.canvas.GetSize()
             x = [width/2 + 200, width/2 - 200]
@@ -1734,7 +1754,8 @@ class ModelAction(ModelObject, ogl.RectangleShape):
 
     def GetLog(self, string = True):
         """!Get logging info"""
-        cmd = self.task.getCmd(ignoreErrors = True)
+        cmd = self.task.getCmd(ignoreErrors = True, ignoreRequired = True)
+        
         # substitute variables
         variables = self.parent.GetVariables()
         fparams = self.parent.GetVariables(params = True)
@@ -1904,7 +1925,7 @@ class ModelData(ModelObject, ogl.EllipseShape):
         if name:
             return '/'.join(name) + '=' + self.value + ' (' + self.prompt + ')'
         else:
-            return _('unknown')
+            return self.value + ' (' + self.prompt + ')'
 
     def GetName(self):
         """!Get list of names"""
@@ -1918,12 +1939,22 @@ class ModelData(ModelObject, ogl.EllipseShape):
         """!Get prompt"""
         return self.prompt
 
+    def SetPrompt(self, prompt):
+        """!Set prompt
+        
+        @param prompt
+        """
+        self.prompt = prompt
+        
     def GetValue(self):
         """!Get value"""
         return self.value
 
     def SetValue(self, value):
-        """!Set value"""
+        """!Set value
+
+        @param value
+        """
         self.value = value
         self._setText()
         for direction in ('from', 'to'):
@@ -2016,19 +2047,11 @@ class ModelDataDialog(ElementDialog):
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
         self.parent = parent
         self.shape = shape
-        prompt = shape.GetPrompt()
         
-        if prompt == 'raster':
-            label = _('Name of raster map:')
-        elif prompt == 'vector':
-            label = _('Name of vector map:')
-        else:
-            label = _('Name of element:')
-        
-        ElementDialog.__init__(self, parent, title, label = label)
-        
-        self.element = gselect.Select(parent = self.panel, id = wx.ID_ANY,
-                                      size = globalvar.DIALOG_GSELECT_SIZE,
+        label, etype = self._getLabel()
+        ElementDialog.__init__(self, parent, title, label = label, etype = etype)
+                
+        self.element = gselect.Select(parent = self.panel,
                                       type = prompt)
         self.element.SetValue(shape.GetValue())
         
@@ -2043,6 +2066,19 @@ class ModelDataDialog(ElementDialog):
         self._layout()
         self.SetMinSize(self.GetSize())
         
+    def _getLabel(self):
+        etype = False
+        prompt = self.shape.GetPrompt()
+        if prompt == 'raster':
+            label = _('Name of raster map:')
+        elif prompt == 'vector':
+            label = _('Name of vector map:')
+        else:
+            etype = True
+            label = _('Name of element:')
+
+        return label, etype
+    
     def _layout(self):
         """!Do layout"""
         self.dataSizer.Add(self.element, proportion=0,
@@ -2054,6 +2090,13 @@ class ModelDataDialog(ElementDialog):
     def OnOK(self, event):
         """!Ok pressed"""
         self.shape.SetValue(self.GetElement())
+        if self.etype:
+            elem = self.GetType()
+            if elem == 'rast':
+                self.shape.SetPrompt('raster')
+            elif elem == 'vect':
+                self.shape.SetPrompt('raster')
+        
         self.parent.canvas.Refresh()
         self.parent.SetStatusText('', 0)
         self.OnCancel(event)
@@ -3998,6 +4041,7 @@ class ItemListCtrl(ModelListCtrl):
     def Populate(self, data):
         """!Populate the list"""
         self.itemDataMap = dict()
+        
         if self.shape:
             if isinstance(self.shape, ModelCondition):
                 if self.GetName() == 'ElseBlockList':
@@ -4012,6 +4056,9 @@ class ItemListCtrl(ModelListCtrl):
         if len(self.columns) == 3: # ItemCheckList
             checked = list()
         for action in data:
+            if isinstance(action, ModelData):
+                continue
+            
             if len(self.columns) == 3:
                 self.itemDataMap[i] = [str(action.GetId()),
                                        action.GetName(),

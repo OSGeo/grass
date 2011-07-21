@@ -49,12 +49,20 @@ import utils
 from preferences import globalSettings as UserSettings
 
 class ElementDialog(wx.Dialog):
-    """!General dialog to choose given element (location, mapset, vector map, etc.)"""
     def __init__(self, parent, title, label, id = wx.ID_ANY,
-                 style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
+                 etype = False, style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
                  **kwargs):
+        """!General dialog to choose given element (location, mapset, vector map, etc.)
         
+        @param parent window
+        @param title window title
+        @param label element label
+        @param etype show also ElementSelect
+        """
         wx.Dialog.__init__(self, parent, id, title, style = style, **kwargs)
+        
+        self.etype = etype
+        self.label = label
         
         self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
         
@@ -63,16 +71,25 @@ class ElementDialog(wx.Dialog):
         self.btnOK.SetDefault()
         self.btnOK.Enable(False)
         
-        self.label = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
-                                   label = label)
+        if self.etype:
+            self.typeSelect = gselect.ElementSelect(parent = self.panel,
+                                                    size = globalvar.DIALOG_GSELECT_SIZE)
+            self.typeSelect.Bind(wx.EVT_CHOICE, self.OnType)
         
         self.element = None # must be defined 
         
-        self.__Layout()
+        self.__layout()
         
     def PostInit(self):
         self.element.SetFocus()
         self.element.Bind(wx.EVT_TEXT, self.OnElement)
+        
+    def OnType(self, event):
+        """!Select element type"""
+        if not self.etype:
+            return
+        evalue = self.typeSelect.GetValue(event.GetString())
+        self.element.SetType(evalue)
         
     def OnElement(self, event):
         """!Name for vector map layer given"""
@@ -81,13 +98,22 @@ class ElementDialog(wx.Dialog):
         else:
             self.btnOK.Enable(False)
         
-    def __Layout(self):
+    def __layout(self):
         """!Do layout"""
         self.sizer = wx.BoxSizer(wx.VERTICAL)
         
         self.dataSizer = wx.BoxSizer(wx.VERTICAL)
-        self.dataSizer.Add(self.label, proportion=0,
-                           flag=wx.ALL, border=1)
+        
+        if self.etype:
+            self.dataSizer.Add(item = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
+                                                    label = _("Type of element:")),
+                               proportion=0, flag=wx.ALL, border=1)
+            self.dataSizer.Add(item = self.typeSelect,
+                               proportion=0, flag=wx.ALL, border=1)
+        
+        self.dataSizer.Add(item = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
+                                                label = self.label),
+                           proportion=0, flag=wx.ALL, border=1)
         
         # buttons
         btnSizer = wx.StdDialogButtonSizer()
@@ -105,6 +131,10 @@ class ElementDialog(wx.Dialog):
         """!Return (mapName, overwrite)"""
         return self.element.GetValue()
     
+    def GetType(self):
+        """!Get element type"""
+        return self.element.tcp.GetType()
+        
 class LocationDialog(ElementDialog):
     """!Dialog used to select location"""
     def __init__(self, parent, title = _("Select GRASS location and mapset"), id =  wx.ID_ANY):
