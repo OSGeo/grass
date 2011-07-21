@@ -500,7 +500,6 @@ class GPrompt(object):
         self.cmdDesc = None
         self.cmdbuffer = self._readHistory()
         self.cmdindex = len(self.cmdbuffer)
-
         
     def _readHistory(self):
         """!Get list of commands from history file"""
@@ -627,6 +626,22 @@ class GPrompt(object):
         """!Get main prompt widget"""
         return self.input
     
+    def SetFilter(self, data, module = True):
+        """!Set filter
+
+        @param module True to filter modules, otherwise data
+        """
+        if module:
+            if data:
+                self.moduleList = data
+            else:
+                self.moduleList = self._getListOfModules()
+        else:
+            if data:
+                self.dataList = data
+            else:
+                self.dataList = self._getListOfMaps()
+        
 class GPromptPopUp(GPrompt, TextCtrlAutoComplete):
     """!Interactive wxGUI prompt - popup version"""
     def __init__(self, parent):
