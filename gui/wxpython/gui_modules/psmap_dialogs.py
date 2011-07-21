@@ -3960,7 +3960,7 @@ class LegendDialog(PsmapDialog):
         self.borderCheck = wx.CheckBox(panel, id = wx.ID_ANY, label = _("draw border around legend"))
         self.borderColorCtrl = wx.ColourPickerCtrl(panel, id = wx.ID_ANY, style = wx.FNTP_FONTDESC_AS_LABEL)
         if self.vLegendDict['border'] == 'none':
-            self.borderColorCtrl.SetColour('black')
+            self.borderColorCtrl.SetColour(wx.BLACK)
             self.borderCheck.SetValue(False)
         else:
             self.borderColorCtrl.SetColour(convertRGB(self.vLegendDict['border']))
