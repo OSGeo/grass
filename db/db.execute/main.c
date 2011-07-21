@@ -3,23 +3,28 @@
  *
  * MODULE:       db.execute
  * AUTHOR(S):    Radim Blazek <radim.blazek gmail.com> (original contributor)
- *               Huidae Cho <grass4u gmail.com>, Glynn Clements <glynn gclements.plus.com>, Hamish Bowman <hamish_b yahoo.com>, Markus Neteler <neteler itc.it>, Stephan Holl
+ *               Huidae Cho <grass4u gmail.com>
+ *               Glynn Clements <glynn gclements.plus.com>
+ *               Hamish Bowman <hamish_b yahoo.com>
+ *               Markus Neteler <neteler itc.it>
+ *               Stephan Holl
+ *               Martin Landa <landa.martin gmail.com>
  * PURPOSE:      process one non-select sql statement
- * COPYRIGHT:    (C) 2002-2010 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2011 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ *               This program is free software under the GNU General
+ *               Public License (>=v2). Read the file COPYING that
+ *               comes with GRASS for details.
  *
  *****************************************************************************/
 
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 #include <grass/gis.h>
 #include <grass/dbmi.h>
 #include <grass/codes.h>
 #include <grass/glocale.h>
-
 
 struct
 {
@@ -27,12 +32,10 @@ struct
     int i;
 } parms;
 
-
 /* function prototypes */
 static void parse_command_line(int, char **);
 static int get_stmt(FILE *, dbString *);
 static int stmt_is_empty(dbString *);
-
 
 int main(int argc, char **argv)
 {
@@ -50,8 +53,8 @@ int main(int argc, char **argv)
     if (strcmp(parms.input, "-")) {
 	fd = fopen(parms.input, "r");
 	if (fd == NULL) {
-	    perror(parms.input);
-	    exit(EXIT_FAILURE);
+	    G_fatal_error(_("Unable to open file <%s> for reading.\n"
+			    "Details: %s"), parms.input, strerror(errno));
 	}
     }
     else {
@@ -109,7 +112,8 @@ static void parse_command_line(int argc, char **argv)
     G_add_keyword(_("database"));
     G_add_keyword(_("attribute table"));
     G_add_keyword(_("SQL"));
-    module->description = _("Executes any SQL statement.");
+    module->label = _("Executes any SQL statement.");
+    module->description = _("For SELECT statements use 'db.select'.");
 
     input = G_define_standard_option(G_OPT_F_INPUT);
     input->label = _("Name of file containing SQL statements");
@@ -134,7 +138,8 @@ static void parse_command_line(int argc, char **argv)
     i = G_define_flag();
     i->key = 'i';
     i->description = _("Ignore SQL errors and continue");
-
+    i->guisection = _("Errors");
+    
     if (G_parser(argc, argv))
 	exit(EXIT_SUCCESS);
 
@@ -159,12 +164,14 @@ static int get_stmt(FILE * fd, dbString * stmt)
 	len = strlen(buf2);
 
 	if (buf2[len - 1] == ';') {	/* end of statement */
-	    buf2[len - 1] = 0;	/* truncate ';' */
-	    db_append_string(stmt, buf2);	/* append truncated */
+	    buf2[len - 1] = 0;	        /* truncate ';' */
+	    /* append truncated */
+	    db_append_string(stmt, buf2);	
 	    return 1;
 	}
 	else {
-	    db_append_string(stmt, buf);	/* append not truncated string (\n may be part of value) */
+	    /* append not truncated string (\n may be part of value) */
+	    db_append_string(stmt, buf);	
 	}
 	row++;
     }
