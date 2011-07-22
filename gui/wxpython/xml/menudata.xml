@@ -818,14 +818,14 @@
 	    <menuitem>
 	      <label>Show settings</label>
 	      <help>Outputs and modifies the user's current GRASS variable settings.</help>
-	      <keywords>general,settings</keywords>
+	      <keywords>general,settings,variables</keywords>
               <handler>RunMenuCmd</handler>
 	      <command>g.gisenv -n</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Change settings</label>
 	      <help>Outputs and modifies the user's current GRASS variable settings.</help>
-	      <keywords>general,settings</keywords>
+	      <keywords>general,settings,variables</keywords>
               <handler>OnMenuCmd</handler>
 	      <command>g.gisenv</command>
 	    </menuitem>
@@ -845,14 +845,14 @@
 	    <menuitem>
 	     <label>Display map projection</label>
 	     <help>Converts co-ordinate system descriptions (i.e. projection information) between various formats (including GRASS format).</help>
-	     <keywords>general,projection</keywords>
+	     <keywords>general,projection,create location</keywords>
 	     <handler>RunMenuCmd</handler>
 	     <command>g.proj -p</command>
 	   </menuitem>
 	   <menuitem>
 	      <label>Manage projections</label>
-	      <help>Converts co-ordinate system descriptions (i.e. projection information) between various formats (including GRASS format).</help>
-	      <keywords>general,projection</keywords>
+	      <help>Prints and manipulates GRASS projection information files (in various co-ordinate system descriptions).</help>
+	      <keywords>general,projection,create location</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>g.proj</command>
 	    </menuitem>
@@ -1005,7 +1005,7 @@
 	    <menuitem>
 	      <label>Color tables</label>
 	      <help>Creates/modifies the color table associated with a raster map.</help>
-	      <keywords>raster3d,raster,color table</keywords>
+	      <keywords>raster,color table</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.colors</command>
 	    </menuitem>
@@ -1019,7 +1019,7 @@
 	    <menuitem>
 	      <label>Color rules</label>
 	      <help>Interactive management of raster color tables.</help>
-	      <keywords>raster3d,raster,color table</keywords>
+	      <keywords>raster,color table</keywords>
 	      <handler>RulesCmd</handler>
 	      <command>r.colors</command>
 	    </menuitem>
@@ -2164,8 +2164,8 @@
 	  <items>`
 	    <menuitem>
 	      <label>Network preparation</label>
-	      <help>Prepares a network.</help>
-	      <keywords>vector,network,preparation</keywords>
+	      <help>Performs network maintenance.</help>
+	      <keywords>vector,network,maintenance</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.net</command>
 	    </menuitem>
@@ -2909,18 +2909,19 @@
 	</menu>
 	<menuitem>
 	  <label>3D color tables</label>
-	  <help>Creates/modifies color table associated with a 3D volume.</help>
-	  <keywords>raster3d,voxel</keywords>
+	  <help>Creates/modifies the color table associated with a 3D raster map.</help>
+	  <keywords>raster3d,color table</keywords>
 	  <handler>OnMenuCmd</handler>
 	  <command>r3.colors</command>
 	</menuitem>
 	<menuitem>
 	  <label>Export 3D color table</label>
-	  <help>Export color table associated with a 3D volume.</help>
-	  <keywords>raster3d,voxel</keywords>
+	  <help>Exports the color table associated with a raster3d map layer.</help>
+	  <keywords>raster3d,color table,export</keywords>
 	  <handler>OnMenuCmd</handler>
 	  <command>r3.colors.out</command>
-	</menuitem>	<separator />
+	</menuitem>
+	<separator />
 	<menuitem>
 	  <label>3D Mask</label>
 	  <help>Establishes the current working 3D raster mask.</help>
