@@ -1295,7 +1295,7 @@ class Map(object):
     def DeleteOverlay(self, overlay):
         """!Delete overlay
         
-        @param id overlay id
+        @param overlay overlay layer
         
         @return removed overlay on success or None
         """

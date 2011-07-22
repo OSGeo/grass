@@ -511,10 +511,10 @@ class DecorationDialog(wx.Dialog):
         
     def _CreateOverlay(self):
         if not self.parent.Map.GetOverlay(self.ovlId):
-            overlay = self.parent.Map.AddOverlay(id=self.ovlId, type=self.name,
+            self.newOverlay = self.parent.Map.AddOverlay(id=self.ovlId, type=self.name,
                                                  command=self.cmd,
                                                  l_active=False, l_render=False, l_hidden=True)
-            prop = { 'layer' : overlay,
+            prop = { 'layer' : self.newOverlay,
                      'params' : None,
                      'propwin' : None,
                      'cmd' : self.cmd,
@@ -551,7 +551,7 @@ class DecorationDialog(wx.Dialog):
     def OnCancel(self, event):
         """!Cancel dialog"""
         self.parent.dialogs['barscale'] = None
-
+        self.parent.Map.DeleteOverlay(self.newOverlay)
         self.Destroy()
 
     def OnOK(self, event):
@@ -613,12 +613,14 @@ class TextLayerDialog(wx.Dialog):
             self.currClr  = self.parent.MapWindow.textdict[self.ovlId]['color']
             self.currRot  = self.parent.MapWindow.textdict[self.ovlId]['rotation']
             self.currCoords = self.parent.MapWindow.textdict[self.ovlId]['coords']
+            self.currBB = self.parent.MapWindow.textdict[self.ovlId]['bbox']
         else:
             self.currClr = wx.BLACK
             self.currText = ''
             self.currFont = self.GetFont()
             self.currRot = 0.0
-            self.currCoords = [10, 10, 10, 10]
+            self.currCoords = [10, 10]
+            self.currBB = wx.Rect()
 
         self.sizer = wx.BoxSizer(wx.VERTICAL)
         box = wx.GridBagSizer(vgap=5, hgap=5)
