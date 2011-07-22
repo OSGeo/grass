@@ -4,10 +4,10 @@
 #
 # MODULE:       v.db.update
 # AUTHOR(S):    Moritz Lennert
-#               extensions by Markus Neteler
+#               Extensions by Markus Neteler
 #               Converted to Python by Glynn Clements
-# PURPOSE:      interface to db.execute to update a column in the attribute table connected to a given map
-# COPYRIGHT:    (C) 2005,2007,2008 by the GRASS Development Team
+# PURPOSE:      Interface to db.execute to update a column in the attribute table connected to a given map
+# COPYRIGHT:    (C) 2005,2007-2008,2011 by the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
@@ -25,23 +25,27 @@
 #% key: map
 #% type: string
 #% gisprompt: old,vector,vector
-#% description: Vector map to edit the attribute table for
+#% description: Name of vector map
 #% required : yes
+#% key_desc: name
 #%end
 #%option
 #% key: layer
-#% type: integer
+#% type: string
 #% gisprompt: old_layer,layer,layer
-#% description: Layer to which the table to be changed is connected
+#% label: Layer number or name
+#% description: A single vector map can be connected to multiple database tables. This number determines which table to use. Layer name for direct OGR access. 
 #% answer: 1
 #% required : no
+#% key_desc: name
 #%end
 #%option
 #% key: column
 #% type: string
 #% gisprompt: old_dbcolumn,dbcolumn,dbcolumn
-#% description: Column to update
+#% description: Name of column to update
 #% required : yes
+#% key_desc: name
 #%end
 #%option
 #% key: value
@@ -53,13 +57,15 @@
 #% key: qcolumn
 #% type: string
 #% gisprompt: old_dbcolumn,dbcolumn,dbcolumn
-#% description: Column to query
+#% description: Name of column to query
 #% required : no
+#% key_desc: name
 #%end
 #%option
 #% key: where
 #% type: string
-#% description: WHERE conditions for update, without 'where' keyword (e.g. cat=1 or col1/col2>1)
+#% label: WHERE conditions of SQL statement without 'where' keyword
+#% description: Example: income < 1000 and inhab >= 10000
 #% required : no
 #%end
 
@@ -68,7 +74,7 @@ import os
 import grass.script as grass
 
 def main():
-    map = options['map']
+    vector = options['map']
     layer = options['layer']
     column = options['column']
     value = options['value']
@@ -78,11 +84,11 @@ def main():
     mapset = grass.gisenv()['MAPSET']
 
     # does map exist in CURRENT mapset?
-    if not grass.find_file(map, element = 'vector', mapset = mapset)['file']:
-	grass.fatal(_("Vector map '$GIS_OPT_MAP' not found in current mapset"))
+    if not grass.find_file(vector, element = 'vector', mapset = mapset)['file']:
+	grass.fatal(_("Vector map <%s> not found in current mapset") % vector)
 
     try:
-        f = grass.vector_db(map)[int(layer)]
+        f = grass.vector_db(vector)[int(layer)]
     except KeyError:
 	grass.fatal(_('There is no table connected to this map. Run v.db.connect or v.db.addtable first.'))
 
@@ -92,18 +98,18 @@ def main():
 
     # checking column types
     try:
-        coltype = grass.vector_columns(map, layer)[column]['type']
+        coltype = grass.vector_columns(vector, layer)[column]['type']
     except KeyError:
 	grass.fatal(_('Column <%s> not found') % column)
 
     if qcolumn:
 	if value:
-	    grass.fatal(_('value= and qcolumn= are mutually exclusive'))
+	    grass.fatal(_('<value> and <qcolumn> are mutually exclusive'))
 	# special case: we copy from another column
 	value = qcolumn
     else:
 	if not value:
-	    grass.fatal(_('Either value= or qcolumn= must be given'))
+	    grass.fatal(_('Either <value> or <qcolumn> must be given'))
 	# we insert a value
 	if coltype.upper() not in ["INTEGER", "DOUBLE PRECISION"]:
 	    value = "'%s'" % value
@@ -117,8 +123,10 @@ def main():
     grass.write_command('db.execute', input = '-', database = database, driver = driver, stdin = cmd)
 
     # write cmd history:
-    grass.vector_history(map)
+    grass.vector_history(vector)
+
+    return 0
 
 if __name__ == "__main__":
     options, flags = grass.parser()
-    main()
+    sys.exit(main())
