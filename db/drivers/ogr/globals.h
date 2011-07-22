@@ -27,5 +27,15 @@ typedef struct
     int ncols;			/* num columns (without fid column) */
 } cursor;
 
+/* column info (see execute.c) */
+typedef struct
+{
+    char *name;
+    char *value;
+    int  index;
+    int  qindex; /* query column */
+    OGRFieldType type;
+} column_info;
+
 extern OGRDataSourceH hDs;
 extern dbString *errMsg;
