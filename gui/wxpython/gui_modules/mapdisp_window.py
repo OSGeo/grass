@@ -392,12 +392,12 @@ class BufferedWindow(MapWindow, wx.Window):
             w, h = self.GetFullTextExtent(img['text'])[0:2]
             pdc.SetFont(img['font'])
             pdc.SetTextForeground(img['color'])
-            coords, w, h = self.TextBounds(img)
+            coords, bbox = self.TextBounds(img)
             if rotation == 0:
                 pdc.DrawText(img['text'], coords[0], coords[1])
             else:
                 pdc.DrawRotatedText(img['text'], coords[0], coords[1], rotation)
-            pdc.SetIdBounds(drawid, wx.Rect(coords[0], coords[1], w, h))
+            pdc.SetIdBounds(drawid, bbox)
         
         pdc.EndDrawing()
         
@@ -405,11 +405,15 @@ class BufferedWindow(MapWindow, wx.Window):
         
         return drawid
     
-    def TextBounds(self, textinfo):
+    def TextBounds(self, textinfo, relcoords = False):
         """!Return text boundary data
         
         @param textinfo text metadata (text, font, color, rotation)
         @param coords reference point
+        
+        @return coords of nonrotated text bbox (TL corner)
+        @return bbox of rotated text bbox (wx.Rect)
+        @return relCoords are text coord inside bbox
         """
         if 'rotation' in textinfo:
             rotation = float(textinfo['rotation'])
@@ -417,7 +421,8 @@ class BufferedWindow(MapWindow, wx.Window):
             rotation = 0.0
         
         coords = textinfo['coords']
-        
+        bbox = wx.Rect(coords[0], coords[1], 0, 0)
+        relCoords = (0, 0)
         Debug.msg (4, "BufferedWindow.TextBounds(): text=%s, rotation=%f" % \
                    (textinfo['text'], rotation))
         
@@ -428,15 +433,31 @@ class BufferedWindow(MapWindow, wx.Window):
         w, h = self.GetTextExtent(textinfo['text'])
         
         if rotation == 0:
-            coords[2], coords[3] = coords[0] + w, coords[1] + h
-            return coords, w, h
+            bbox[2], bbox[3] = w, h
+            if relcoords:
+                return coords, bbox, relCoords
+            else:
+                return coords, bbox
         
         boxh = math.fabs(math.sin(math.radians(rotation)) * w) + h
         boxw = math.fabs(math.cos(math.radians(rotation)) * w) + h
-        coords[2] = coords[0] + boxw
-        coords[3] = coords[1] + boxh
-        
-        return coords, boxw, boxh
+        if rotation > 0 and rotation < 90:
+            bbox[1] -= boxh
+            relCoords = (0, boxh)
+        elif rotation >= 90 and rotation < 180:
+            bbox[0] -= boxw
+            bbox[1] -= boxh
+            relCoords = (boxw, boxh)
+        elif rotation >= 180 and rotation < 270:
+            bbox[0] -= boxw
+            relCoords = (boxw, 0)
+        bbox[2] = boxw
+        bbox[3] = boxh
+        bbox.Inflate(h,h)
+        if relcoords:
+            return coords, bbox, relCoords
+        else:
+            return coords, bbox
 
     def OnPaint(self, event):
         """!Draw PseudoDC's to buffered paint DC
@@ -862,6 +883,7 @@ class BufferedWindow(MapWindow, wx.Window):
         dy = event.GetY() - y
         self.pdc.SetBackground(wx.Brush(self.GetBackgroundColour()))
         r = self.pdc.GetIdBounds(id)
+        
         if type(r) is list:
             r = wx.Rect(r[0], r[1], r[2], r[3])
         if id > 100: # text dragging
@@ -875,7 +897,9 @@ class BufferedWindow(MapWindow, wx.Window):
         if type(r2) is list:
             r2 = wx.Rect(r[0], r[1], r[2], r[3])
         if id > 100: # text
-            self.textdict[id]['coords'] = r2
+            self.textdict[id]['bbox'] = r2
+            self.textdict[id]['coords'][0] += dx
+            self.textdict[id]['coords'][1] += dy
         r = r.Union(r2)
         r.Inflate(4,4)
         self.RefreshRect(r, False)
@@ -1265,7 +1289,7 @@ class BufferedWindow(MapWindow, wx.Window):
             if self.dragid < 99 and self.dragid in self.overlays:
                 self.overlays[self.dragid]['coords'] = self.pdc.GetIdBounds(self.dragid)
             elif self.dragid > 100 and self.dragid in self.textdict:
-                self.textdict[self.dragid]['coords'] = self.pdc.GetIdBounds(self.dragid)
+                self.textdict[self.dragid]['bbox'] = self.pdc.GetIdBounds(self.dragid)
             else:
                 pass
             self.dragid = None

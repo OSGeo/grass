@@ -106,6 +106,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.shapes = []
         self.dragShape = None
         self.dragImage = None
+        self.textdict = {}
+        self.dragid = None
         
         #
         # use display region instead of computational
@@ -268,10 +270,42 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             # draw any active and defined overlays
             if self.imagedict[img]['layer'].IsActive():
                 id = self.imagedict[img]['id']
+                if id == 0: # barscale
+                    continue
                 coords = self.overlays[id]['coords']
                 bitmap = wx.BitmapFromImage(img)
                 self.shapes.append(DragShape(bitmap, id))
                 self.shapes[-1].pos = coords[:2]
+        
+        for textId in self.textdict.keys():
+            text = self.textdict[textId]['text']
+            color = self.textdict[textId]['color']
+            bgcolor = self.view['background']['color']
+            font = self.textdict[textId]['font']
+            rot = self.textdict[textId]['rotation']
+            coords, bbox, relCoords = self.TextBounds(self.textdict[textId])
+            # create a bitmap the same size as our text
+            bmp = wx.EmptyBitmap(bbox[2], bbox[3])
+
+            # 'draw' the text onto the bitmap
+            dc = wx.MemoryDC()
+            dc.SelectObject(bmp)
+            dc.SetBackground(wx.Brush(bgcolor, wx.SOLID))
+            dc.Clear()
+            dc.SetTextForeground(color)
+            dc.SetFont(font)
+            if rot == 0:
+                dc.DrawText(text, 0, 0)
+            else:
+                dc.DrawRotatedText(text, relCoords[0], relCoords[1], rot)
+            # setbackgroundMode(wx.TRANSPARENT) doesn't work
+            dc.SelectObject(wx.NullBitmap)
+            mask = wx.Mask(bmp, bgcolor)
+            bmp.SetMask(mask)
+            shape = DragShape(bmp, textId)
+            shape.pos = bbox[:2]
+            self.shapes.append(shape)
+        
         self.Refresh(False)  
                     
     def OnMouseAction(self, event):
@@ -357,15 +391,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         if self.mouse['use'] == 'arrow':
             pos = event.GetPosition()
             size = self.GetClientSize()
-            if self._display.SetArrow(pos[0], size[1] - pos[1], 
-                                     self.decoration['arrow']['size'],
-                                     self.decoration['arrow']['color']):
-                self._display.DrawArrow()
-                # update
-                self.decoration['arrow']['show'] = True
-                self.decoration['arrow']['position']['x'] = pos[0]
-                self.decoration['arrow']['position']['y'] = size[1] - pos[1]
-                self.Refresh(False)
+            self.SetDrawArrow((pos[0], size[1] - pos[1]))
                 
         if self.mouse['use'] == 'pointer':
             shape = self.FindShape(event.GetPosition())
@@ -482,7 +508,12 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 self.dragShape.pos[0] + event.GetPosition()[0] - self.dragStartPos[0],
                 self.dragShape.pos[1] + event.GetPosition()[1] - self.dragStartPos[1]
                 )
-            self.overlays[self.dragShape.id]['coords'] = tuple(self.dragShape.GetRect())
+            if self.dragShape.id in self.overlays:
+                self.overlays[self.dragShape.id]['coords'] = tuple(self.dragShape.GetRect())
+            else: # text
+                self.textdict[self.dragShape.id]['bbox'] = self.dragShape.GetRect()
+                self.textdict[self.dragShape.id]['coords'][0] += event.GetPosition()[0] - self.dragStartPos[0]
+                self.textdict[self.dragShape.id]['coords'][1] += event.GetPosition()[1] - self.dragStartPos[1]
             self.dragShape.shown = True
             self.RefreshRect(self.dragShape.GetRect())
             self.dragShape = None
@@ -491,7 +522,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
     def OnDClick(self, event):
         shape = self.FindShape(event.GetPosition())
         if shape.id == 1:
-                self.parent.OnAddLegend(None)
+            self.parent.OnAddLegend(None)
+        elif shape.id > 100:
+            self.dragid = shape.id
+            self.parent.OnAddText(None)
                     
     def OnQuerySurface(self, event):
         """!Query surface on given position"""
@@ -633,6 +667,18 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 return shape
         return None
     
+    def SetDrawArrow(self, pos):
+        
+        if self._display.SetArrow(pos[0], pos[1], 
+                                 self.decoration['arrow']['size'],
+                                 self.decoration['arrow']['color']):
+            self._display.DrawArrow()
+            # update
+            self.decoration['arrow']['show'] = True
+            self.decoration['arrow']['position']['x'] = pos[0]
+            self.decoration['arrow']['position']['y'] = pos[1]
+            self.Refresh(False)
+            
     def IsLoaded(self, item):
         """!Check if layer (item) is already loaded
         
@@ -1878,7 +1924,15 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         """!Reset view
         """
         self.lmgr.nviz.OnResetView(None)
+        
+    def TextBounds(self, textinfo):
+        """!Return text boundary data
+        
+        @param textinfo text metadata (text, font, color, rotation)
+        """
+        return self.parent.MapWindow2D.TextBounds(textinfo, relcoords = True)
 
+    
 class DragShape:
     """!Class for drawing overlays (based on wxpython demo)"""
     def __init__(self, bmp, id):
