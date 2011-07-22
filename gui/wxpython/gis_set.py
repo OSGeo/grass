@@ -739,11 +739,27 @@ class GRASSStartup(wx.Frame):
         
         lockfile = os.path.join(dbase, location, mapset, '.gislock')
         if os.path.isfile(lockfile):
-            GError(_("GRASS is already running in selected mapset <%(mapset)s>\n"
-                     "(File %(lock)s found).\n\n"
-                     "Concurrent use not allowed.") % { 'mapset' : mapset, 'lock' : lockfile },
-                   parent = self)
-            return
+            dlg = wx.MessageDialog(parent = self,
+                                   message = _("GRASS is already running in selected mapset <%(mapset)s>\n"
+                                               "(file %(lock)s found).\n\n"
+                                               "Concurrent use not allowed.\n\n"
+                                               "Do you want to try to remove .gislock (note that you "
+                                               "need permission for this operation) and continue?") % 
+                                   { 'mapset' : mapset, 'lock' : lockfile },
+                                   caption = _("Lock file found"),
+                                   style = wx.YES_NO | wx.NO_DEFAULT |
+                                   wx.ICON_QUESTION | wx.CENTRE)
+            
+            ret = dlg.ShowModal()
+            if ret == wx.ID_YES:
+                try:
+                    os.remove(lockfile)
+                except IOError, e:
+                    GError(_("Unable to remove '%(lock)s'.\n\n"
+                             "Details: %(reason)s") % { 'lock' : lockfile, 'reason' : e})
+                    return
+            else:
+                return
         
         gcmd.RunCommand("g.gisenv",
                         set = "GISDBASE=%s" % dbase)
