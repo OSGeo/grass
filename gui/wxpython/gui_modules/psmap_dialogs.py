@@ -3778,16 +3778,26 @@ class LegendDialog(PsmapDialog):
         
         self._layout(self.notebook)
         self.notebook.ChangeSelection(page)
+        self.notebook.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGING, self.OnPageChanging)
         
+    def OnPageChanging(self, event):
+        """!Workaround to scroll up to see the checkbox"""
+        wx.CallAfter(self.FindWindowByName('rasterPanel').ScrollChildIntoView,
+                                            self.FindWindowByName('showRLegend'))
+        wx.CallAfter(self.FindWindowByName('vectorPanel').ScrollChildIntoView,
+                                            self.FindWindowByName('showVLegend'))
+                                            
     def _rasterLegend(self, notebook):
         panel = scrolled.ScrolledPanel(parent = notebook, id = wx.ID_ANY, size = (-1, 500), style = wx.TAB_TRAVERSAL)
         panel.SetupScrolling(scroll_x = False, scroll_y = True)
+        panel.SetName('rasterPanel')
         notebook.AddPage(page = panel, text = _("Raster legend"))
 
         border = wx.BoxSizer(wx.VERTICAL)
         # is legend
         self.isRLegend = wx.CheckBox(panel, id = wx.ID_ANY, label = _("Show raster legend"))
         self.isRLegend.SetValue(self.rLegendDict['rLegend'])
+        self.isRLegend.SetName("showRLegend")
         border.Add(item = self.isRLegend, proportion = 0, flag = wx.ALL | wx.EXPAND, border = 5)
 
         # choose raster
@@ -3898,12 +3908,14 @@ class LegendDialog(PsmapDialog):
     def _vectorLegend(self, notebook):
         panel = scrolled.ScrolledPanel(parent = notebook, id = wx.ID_ANY, size = (-1, 500), style = wx.TAB_TRAVERSAL)
         panel.SetupScrolling(scroll_x = False, scroll_y = True)
+        panel.SetName('vectorPanel')
         notebook.AddPage(page = panel, text = _("Vector legend"))
 
         border = wx.BoxSizer(wx.VERTICAL)
         # is legend
         self.isVLegend = wx.CheckBox(panel, id = wx.ID_ANY, label = _("Show vector legend"))
         self.isVLegend.SetValue(self.vLegendDict['vLegend'])
+        self.isVLegend.SetName("showVLegend")
         border.Add(item = self.isVLegend, proportion = 0, flag = wx.ALL | wx.EXPAND, border = 5)
         
         #vector maps, their order, labels
@@ -4127,8 +4139,8 @@ class LegendDialog(PsmapDialog):
                 self.OnRange(None)
                 self.OnDiscrete(None)
             else:
-                for i,widget in enumerate(children):
-                    if i != 0:
+                for widget in children:
+                    if widget.GetName() != 'showRLegend':
                         widget.Disable()
         if page == 1 or event is None:
             children = self.panelVector.GetChildren()
@@ -4138,8 +4150,8 @@ class LegendDialog(PsmapDialog):
                 self.OnSpan(None)
                 self.OnBorder(None)
             else:
-                for i, widget in enumerate(children):
-                    if i != 0:
+                for widget in children:
+                    if widget.GetName() != 'showVLegend':
                         widget.Disable()
                     
     def OnRaster(self, event):
