@@ -2907,7 +2907,20 @@
 	    </menuitem>
 	  </items>
 	</menu>
-	<separator />
+	<menuitem>
+	  <label>3D color tables</label>
+	  <help>Creates/modifies color table associated with a 3D volume.</help>
+	  <keywords>raster3d,voxel</keywords>
+	  <handler>OnMenuCmd</handler>
+	  <command>r3.colors</command>
+	</menuitem>
+	<menuitem>
+	  <label>Export 3D color table</label>
+	  <help>Export color table associated with a 3D volume.</help>
+	  <keywords>raster3d,voxel</keywords>
+	  <handler>OnMenuCmd</handler>
+	  <command>r3.colors.out</command>
+	</menuitem>	<separator />
 	<menuitem>
 	  <label>3D Mask</label>
 	  <help>Establishes the current working 3D raster mask.</help>
