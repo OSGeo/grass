@@ -1,18 +1,15 @@
-
-/**
- * \file gisinit.c
- * 
- * \brief GIS Library - Handles program initialization.
- *
- * (C) 2001-2008 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
- *
- * \author GRASS GIS Development Team
- *
- * \date 2000-2008
- */
+/*!
+  \file lib/gis/gisinit.c
+  
+  \brief GIS Library - Handles program initialization.
+  
+  (C) 2001-2008, 2011 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author GRASS GIS Development Team
+*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -32,17 +29,14 @@ struct G__ G__;
 static int initialized = 0; /** Is set when engine is initialized */
 static int gisinit(void);
 
-
-/**
- * \brief Initialize GRASS GIS engine.
- *
- * Initializes GIS engine and ensures a valid mapset is available.
- *
- * \param[in] pgm Program (module) name
- * \return always returns 0 on success
- * \return exit() is called on error
- */
-
+/*!
+  \brief Initialize GIS Library and ensures a valid mapset is available.
+  
+  \param pgm program (module) name
+  
+  \return always returns 0 on success
+  \return G_fatal_error() is called on error
+*/
 void G__gisinit(const char *version, const char *pgm)
 {
     const char *mapset;
@@ -74,14 +68,11 @@ void G__gisinit(const char *version, const char *pgm)
 }
 
 
-/**
- * \brief Initialize GRASS GIS engine.
- *
- * Initializes GIS engine, but does not check for a valid mapset.
- *
- * \return
- */
-
+/*!
+  \brief Initialize GIS Library
+  
+  Initializes GIS engine, but does not check for a valid mapset.
+*/
 void G__no_gisinit(const char *version)
 {
     if (initialized)
@@ -95,12 +86,9 @@ void G__no_gisinit(const char *version)
 }
 
 
-/**
- * \brief Checks to see if GIS engine is initialized.
- *
- * \return
- */
-
+/*!
+  \brief Checks to see if GIS engine is initialized.
+*/
 void G__check_gisinit(void)
 {
     if (initialized)
@@ -126,6 +114,9 @@ static int gisinit(void)
     return 0;
 }
 
+/*!
+  \brief Initialize environment
+*/
 void G_init_all(void)
 {
     G__check_gisinit();
