@@ -1262,7 +1262,7 @@ class Map(object):
         if 'opacity' in kargs:
             overlay.SetOpacity(kargs['opacity'])
         
-        if render and command != [] and not overlay.Render():
+        if render and overlay.GetCmd() != [] and not overlay.Render():
             raise gcmd.GException(_("Unable render overlay <%s>") % 
                                   name)
         

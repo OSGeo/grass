@@ -1158,7 +1158,7 @@ class BufferedWindow(MapWindow, wx.Window):
             else:
                 self.mouse['begin'] = self.mouse['end']
         
-        elif self.mouse['use'] == 'zoom':
+        elif self.mouse['use'] in ('zoom', 'legend'):
             pass
         
         # vector digizer
@@ -1294,7 +1294,16 @@ class BufferedWindow(MapWindow, wx.Window):
                 pass
             self.dragid = None
             self.currtxtid = None
-        
+            
+        elif self.mouse['use'] == 'legend':
+            self.ResizeLegend(self.mouse["begin"], self.mouse["end"])
+            self.parent.dialogs['legend'].FindWindowByName("resize").SetValue(False)
+            self.Map.GetOverlay(1).SetActive(True)
+            self.parent.MapWindow.SetCursor(self.parent.cursors["default"])
+            self.parent.MapWindow.mouse['use'] = 'pointer'
+            
+            self.UpdateMap()
+            
     def OnButtonDClick(self, event):
         """!Mouse button double click
         """
@@ -1475,6 +1484,29 @@ class BufferedWindow(MapWindow, wx.Window):
         
         return (x, y)
     
+    def ResizeLegend(self, begin, end):
+        w = abs(begin[0] - end[0])
+        h = abs(begin[1] - end[1])
+        if begin[0] < end[0]:
+            x = begin[0]
+        else:
+            x = end[0]
+        if begin[1] < end[1]:
+            y = begin[1]
+        else:
+            y = end[1]
+        screenRect = wx.Rect(x, y, w, h)
+        screenSize = self.GetClientSizeTuple()
+        at = [(screenSize[1] - (y + h)) / float(screenSize[1]) * 100,
+              (screenSize[1] - y) / float(screenSize[1]) * 100,
+              x / float(screenSize[0]) * 100,
+              (x + w) / float(screenSize[0]) * 100]
+        for i, subcmd in enumerate(self.overlays[1]['cmd']):
+            if subcmd.startswith('at='):
+                self.overlays[1]['cmd'][i] = "at=%d,%d,%d,%d" % (at[0], at[1], at[2], at[3])
+        self.Map.ChangeOverlay(1, True, command = self.overlays[1]['cmd'])
+        self.overlays[1]['coords'] = (0,0)
+        
     def Zoom(self, begin, end, zoomtype):
         """!Calculates new region while (un)zoom/pan-ing
         """
