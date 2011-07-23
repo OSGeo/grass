@@ -448,6 +448,17 @@ class DecorationDialog(wx.Dialog):
         box.Add(item=optnbtn, proportion=0, flag=wx.ALIGN_CENTRE|wx.ALL, border=5)
         sizer.Add(item=box, proportion=0,
                   flag=wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, border=5)
+        if self.name == 'legend':
+            box = wx.BoxSizer(wx.HORIZONTAL)
+            resize = wx.ToggleButton(parent=self, id=wx.ID_ANY, label=_("Set size and position"))
+            resize.SetToolTipString(_("Click and drag on the map display to set legend"
+                                        " size and position and then press OK"))
+            resize.SetName('resize')
+            if self.parent.toolbars['nviz']:
+                resize.Disable()
+            box.Add(item=resize, proportion=0, flag=wx.ALIGN_CENTRE|wx.ALL, border=5)
+            sizer.Add(item=box, proportion=0,
+                      flag=wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, border=5)
 
         box = wx.BoxSizer(wx.HORIZONTAL)
         label = wx.StaticText(parent=self, id=wx.ID_ANY,
@@ -485,6 +496,8 @@ class DecorationDialog(wx.Dialog):
         # bindings
         #
         self.Bind(wx.EVT_BUTTON,   self.OnOptions, optnbtn)
+        if self.name == 'legend':
+            self.Bind(wx.EVT_TOGGLEBUTTON,   self.OnResize, resize)
         self.Bind(wx.EVT_BUTTON,   self.OnCancel,  btnCancel)
         self.Bind(wx.EVT_BUTTON,   self.OnOK,      self.btnOK)
 
@@ -518,7 +531,7 @@ class DecorationDialog(wx.Dialog):
                      'params' : None,
                      'propwin' : None,
                      'cmd' : self.cmd,
-                     'coords': (10, 10),
+                     'coords': (0, 0),
                      'pdcType': 'image' }
             self.parent.MapWindow2D.overlays[self.ovlId] = prop
             if self.parent.MapWindow3D:
@@ -547,11 +560,26 @@ class DecorationDialog(wx.Dialog):
                 self.parent.MapWindow.overlays[self.ovlId]['propwin'].SetFocus()
             else:
                 self.parent.MapWindow.overlays[self.ovlId]['propwin'].Show()
-
+    
+    def OnResize(self, event):
+        if self.FindWindowByName('resize').GetValue():
+            self.parent.MapWindow.SetCursor(self.parent.cursors["cross"])
+            self.parent.MapWindow.mouse['use'] = 'legend'
+            self.parent.MapWindow.mouse['box'] = 'box'
+            self.parent.MapWindow.pen = wx.Pen(colour = 'Black', width = 2, style = wx.SHORT_DASH)
+        else:
+            self.parent.MapWindow.SetCursor(self.parent.cursors["default"])
+            self.parent.MapWindow.mouse['use'] = 'pointer'
+            
     def OnCancel(self, event):
         """!Cancel dialog"""
+        if self.name == 'legend' and self.FindWindowByName('resize').GetValue():
+            self.FindWindowByName('resize').SetValue(False)
+            self.OnResize(None)
+            
         self.parent.dialogs['barscale'] = None
-        self.parent.Map.DeleteOverlay(self.newOverlay)
+        if event and hasattr(self, 'newOverlay'):
+            self.parent.Map.DeleteOverlay(self.newOverlay)
         self.Destroy()
 
     def OnOK(self, event):
