@@ -17,7 +17,7 @@ for details.
 
 @author Martin Landa <landa.martin gmail.com> (Google SoC 2008/2010)
 @author Enhancements by Michael Barton <michael.barton asu.edu>
-@author Anna Kratochvilova <KratochAnna seznam.cz> (Google SoC 2011)
+@author Anna Kratochvilova <kratochanna gmail.com> (Google SoC 2011)
 """
 
 import os

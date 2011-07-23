@@ -11,7 +11,7 @@ Classes:
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
-@author Anna Kratochvilova <anna.kratochvilova fsv.cvut.cz> (bachelor's project)
+@author Anna Kratochvilova <kratochanna gmail.com> (bachelor's project)
 @author Martin Landa <landa.martin gmail.com> (mentor)
 """
 
