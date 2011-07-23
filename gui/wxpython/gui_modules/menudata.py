@@ -28,7 +28,7 @@ This program is free software under the GNU General Public License
 @author Yann Chemin <yann.chemin gmail.com>
 @author Martin Landa <landa.martin gmail.com>
 @author Glynn Clements
-@author Anna Kratochvilova <anna.kratochvilova fsv.cvut.cz>
+@author Anna Kratochvilova <kratochanna gmail.com>
 """
 
 import os

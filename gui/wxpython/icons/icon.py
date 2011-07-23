@@ -16,7 +16,7 @@ License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 @author Martin Landa <landa.martin gmail.com>
-@author Anna Kratochvilova <anna.kratochvilova fsv.cvut.cz>
+@author Anna Kratochvilova <kratochanna gmail.com>
 """
 
 import os

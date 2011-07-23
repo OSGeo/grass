@@ -9,7 +9,7 @@
    License (>=v2). Read the file COPYING that comes with GRASS
    for details.
 
-   \author Anna Kratochvilova <kratochanna seznam.cz> (Google SoC 2010/2011)
+   \author Anna Kratochvilova <kratochanna gmail.com> (Google SoC 2010/2011)
  */
 
 #include <stdlib.h>

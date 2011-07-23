@@ -27,7 +27,7 @@ This program is free software under the GNU General Public License
 @author Michael Barton
 @author Jachym Cepicky
 @author Martin Landa <landa.martin gmail.com>
-@author Anna Kratochvilova <anna.kratochvilova fsv.cvut.cz>
+@author Anna Kratochvilova <kratochanna gmail.com>
 """
 
 import os
