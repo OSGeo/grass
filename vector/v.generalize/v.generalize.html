@@ -81,24 +81,26 @@ the degree of simplification increases with the increasing value of
 <i>Douglas-Peucker</i> and <i>Douglas-Peucker Reduction Algorithm</i> 
 use the same method to simplify the lines. Note that 
 <div class="code"><pre>
-v.generalize input=in output=out method=douglas threshold=eps
+v.generalize input=boundary_county output=boundary_county_dp20 method=douglas threshold=20
 </pre></div>
 is equivalent to
 <div class="code"><pre>
-v.generalize input=in output=out method=douglas_reduction threshold=eps reduction=100
+v.generalize input=boundary_county output=boundary_county_dp_red20_100 \
+             method=douglas_reduction threshold=20 reduction=100
 </pre></div>
 However, in this case, the first method is faster. Also observe that
 <i>douglas_reduction</i> never outputs more vertices than <i>douglas</i>,
 and that, in general, <i>douglas</i> is more efficient than 
 <i>douglas_reduction</i>. More importantly, the effect of
 <div class="code"><pre>
-v.generalize input=in output=out method=douglas_reduction threshold=0 reduction=X
+v.generalize input=boundary_county output=boundary_county_dp_red0_30 \
+             method=douglas_reduction threshold=0 reduction=30
 </pre></div>
-is that 'out' contains approximately only X% of points of 'in'.
+is that 'out' contains approximately only 30% of points of 'in'.
 
 <h3>SMOOTHING</h3>
 
-The following smoothing algorithms are implemented in <em>v.generalize</em>
+The following smoothing algorithms are implemented in <em>v.generalize</em>:
 
 <ul>
 <li><i>Boyle's Forward-Looking Algorithm</i> - The position of each point 
