@@ -100,7 +100,6 @@ int main(int argc, char *argv[])
     method_opt->multiple = NO;
     method_opt->options =
 	"douglas,douglas_reduction,lang,reduction,reumann,boyle,sliding_averaging,distance_weighting,chaiken,hermite,snakes,network,displacement";
-    method_opt->answer = "douglas";
     method_opt->descriptions = _("douglas;Douglas-Peucker Algorithm;"
 				 "douglas_reduction;Douglas-Peucker Algorithm with reduction parameter;"
 				 "lang;Lang Simplification Algorithm;"
@@ -122,20 +121,19 @@ int main(int argc, char *argv[])
     thresh_opt->type = TYPE_DOUBLE;
     thresh_opt->required = YES;
     thresh_opt->options = "0-1000000000";
-    thresh_opt->answer = "1.0";
     thresh_opt->description = _("Maximal tolerance value");
 
     look_ahead_opt = G_define_option();
     look_ahead_opt->key = "look_ahead";
     look_ahead_opt->type = TYPE_INTEGER;
-    look_ahead_opt->required = YES;
+    look_ahead_opt->required = NO;
     look_ahead_opt->answer = "7";
     look_ahead_opt->description = _("Look-ahead parameter");
 
     reduction_opt = G_define_option();
     reduction_opt->key = "reduction";
     reduction_opt->type = TYPE_DOUBLE;
-    reduction_opt->required = YES;
+    reduction_opt->required = NO;
     reduction_opt->answer = "50";
     reduction_opt->options = "0-100";
     reduction_opt->description =
@@ -144,7 +142,7 @@ int main(int argc, char *argv[])
     slide_opt = G_define_option();
     slide_opt->key = "slide";
     slide_opt->type = TYPE_DOUBLE;
-    slide_opt->required = YES;
+    slide_opt->required = NO;
     slide_opt->answer = "0.5";
     slide_opt->options = "0-1";
     slide_opt->description =
@@ -153,7 +151,7 @@ int main(int argc, char *argv[])
     angle_thresh_opt = G_define_option();
     angle_thresh_opt->key = "angle_thresh";
     angle_thresh_opt->type = TYPE_DOUBLE;
-    angle_thresh_opt->required = YES;
+    angle_thresh_opt->required = NO;
     angle_thresh_opt->answer = "3";
     angle_thresh_opt->options = "0-180";
     angle_thresh_opt->description =
@@ -162,7 +160,7 @@ int main(int argc, char *argv[])
     degree_thresh_opt = G_define_option();
     degree_thresh_opt->key = "degree_thresh";
     degree_thresh_opt->type = TYPE_INTEGER;
-    degree_thresh_opt->required = YES;
+    degree_thresh_opt->required = NO;
     degree_thresh_opt->answer = "0";
     degree_thresh_opt->description =
 	_("Degree threshold in network generalization");
@@ -170,7 +168,7 @@ int main(int argc, char *argv[])
     closeness_thresh_opt = G_define_option();
     closeness_thresh_opt->key = "closeness_thresh";
     closeness_thresh_opt->type = TYPE_DOUBLE;
-    closeness_thresh_opt->required = YES;
+    closeness_thresh_opt->required = NO;
     closeness_thresh_opt->answer = "0";
     closeness_thresh_opt->options = "0-1";
     closeness_thresh_opt->description =
@@ -179,7 +177,7 @@ int main(int argc, char *argv[])
     betweeness_thresh_opt = G_define_option();
     betweeness_thresh_opt->key = "betweeness_thresh";
     betweeness_thresh_opt->type = TYPE_DOUBLE;
-    betweeness_thresh_opt->required = YES;
+    betweeness_thresh_opt->required = NO;
     betweeness_thresh_opt->answer = "0";
     betweeness_thresh_opt->description =
 	_("Betweeness threshold in network generalization");
@@ -187,21 +185,21 @@ int main(int argc, char *argv[])
     alpha_opt = G_define_option();
     alpha_opt->key = "alpha";
     alpha_opt->type = TYPE_DOUBLE;
-    alpha_opt->required = YES;
+    alpha_opt->required = NO;
     alpha_opt->answer = "1.0";
     alpha_opt->description = _("Snakes alpha parameter");
 
     beta_opt = G_define_option();
     beta_opt->key = "beta";
     beta_opt->type = TYPE_DOUBLE;
-    beta_opt->required = YES;
+    beta_opt->required = NO;
     beta_opt->answer = "1.0";
     beta_opt->description = _("Snakes beta parameter");
 
     iterations_opt = G_define_option();
     iterations_opt->key = "iterations";
     iterations_opt->type = TYPE_INTEGER;
-    iterations_opt->required = YES;
+    iterations_opt->required = NO;
     iterations_opt->answer = "1";
     iterations_opt->description = _("Number of iterations");
 
