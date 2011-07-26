@@ -1169,6 +1169,7 @@ class ImportDialog(wx.Dialog):
             name = output + '@' + grass.gisenv()['MAPSET']
         else:
             name = output
+        
         # add imported layers into layer tree
         if self.importType == 'gdal':
             cmd = ['d.rast',
@@ -1176,14 +1177,15 @@ class ImportDialog(wx.Dialog):
             if UserSettings.Get(group='cmd', key='rasterOverlay', subkey='enabled'):
                 cmd.append('-o')
                 
-            item = maptree.AddLayer(ltype='raster',
-                                    lname=name,
-                                    lcmd=cmd)
+            item = maptree.AddLayer(ltype = 'raster',
+                                    lname = name, lchecked = False,
+                                    lcmd = cmd)
         else:
-            item = maptree.AddLayer(ltype='vector',
-                                    lname=name,
-                                    lcmd=['d.vect',
-                                          'map=%s' % name])
+            item = maptree.AddLayer(ltype = 'vector',
+                                    lname = name, lchecked = False,
+                                    lcmd = ['d.vect',
+                                            'map=%s' % name])
+        
         maptree.mapdisplay.MapWindow.ZoomToMap()
         
     def OnAbort(self, event):
