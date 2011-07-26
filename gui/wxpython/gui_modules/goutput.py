@@ -471,7 +471,8 @@ class GMConsole(wx.SplitterWindow):
             # send GRASS command without arguments to GUI command interface
             # except display commands (they are handled differently)
             if self.parent.GetName() == "LayerManager" and \
-                    command[0][0:2] == "d.":
+                    command[0][0:2] == "d." and \
+                    (len(command) > 1 and 'help' not in ' '.join(command[1:])):
                 # display GRASS commands
                 try:
                     layertype = {'d.rast'         : 'raster',
@@ -508,7 +509,7 @@ class GMConsole(wx.SplitterWindow):
                         self.parent.curr_page.maptree.AddLayer(ltype = layertype,
                                                                lname = lname,
                                                                lcmd = command)
-                
+            
             else:
                 # other GRASS commands (r|v|g|...)
                 # switch to 'Command output' if required

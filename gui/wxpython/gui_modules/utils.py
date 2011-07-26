@@ -24,6 +24,7 @@ import globalvar
 sys.path.append(os.path.join(globalvar.ETCDIR, "python"))
 
 from grass.script import core as grass
+from grass.script import task as gtask
 
 import gcmd
 from debug import Debug
@@ -75,6 +76,9 @@ def GetLayerNameFromCmd(dcmd, fullyQualified = False, param = None,
                         layerType = None):
     """!Get map name from GRASS command
     
+    Parameter dcmd can be modified when first parameter is not
+    defined.
+    
     @param dcmd GRASS command (given as list)
     @param fullyQualified change map name to be fully qualified
     @param param params directory
@@ -116,7 +120,9 @@ def GetLayerNameFromCmd(dcmd, fullyQualified = False, param = None,
         
         if len(params) < 1:
             if len(dcmd) > 1 and '=' not in dcmd[1]:
-                params.append((1, None, dcmd[1]))
+                task = gtask.parse_interface(dcmd[0])
+                p = task.get_options()['params'][0].get('name', '')
+                params.append((1, p, dcmd[1]))
             else:
                 return mapname, False
         

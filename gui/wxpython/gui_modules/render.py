@@ -150,15 +150,14 @@ class Layer(object):
             else:
                 ret, msg = gcmd.RunCommand(self.cmd[0],
                                            getErrorMsg = True,
-                                           # quiet = True,
-                                           verbose = True,
+                                           quiet = True,
                                            **self.cmd[1])
-            
+                
             if ret != 0:
-                raise gcmd.GException(value = _("%s failed") % self.cmd[0])
+                raise gcmd.GException(value = _("'%s' failed. Details: %s") % (self.cmd[0], msg))
             
         except gcmd.GException, e:
-            # sys.stderr.write(e.value)
+            print >> sys.stderr, e.value
             # clean up after problems
             for f in [self.mapfile, self.maskfile]:
                 if not f:
