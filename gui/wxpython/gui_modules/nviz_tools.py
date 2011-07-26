@@ -1725,9 +1725,8 @@ class NvizToolWindow(FN.FlatNotebook):
         self.win['decoration'] = {}
 
         pageSizer = wx.BoxSizer(wx.VERTICAL)
-        #
+        
         # north arrow
-        #
         self.win['decoration']['arrow'] = {}
         nabox = wx.StaticBox (parent = panel, id = wx.ID_ANY,
                              label = " %s " % (_("North Arrow")))
@@ -2737,15 +2736,26 @@ class NvizToolWindow(FN.FlatNotebook):
             self.mapWindow.Refresh(False)
         
     def _getColorString(self, color):
-        """!change color to R:G:B format"""
+        """!Convert color tuple to R:G:B format
+
+        @param color tuple
+        
+        @return string R:G:B
+        """
         return str(color[0]) + ':' + str(color[1]) + ':' + str(color[2])
     
     def _getColorFromString(self, color, delim = ':'):
-        """!change color from R:G:B format to wx.Color"""
+        """!Convert color string (R:G:B) to wx.Color
+
+        @param color string
+        @param delim delimiter
+
+        @return wx.Color instance
+        """
         return wx.Color(*map(int, color.split(delim)))
     
     def _get3dRange(self, name):
-        """!helper func for getting range of 3d map"""
+        """!Gelper func for getting range of 3d map"""
         ret = gcmd.RunCommand('r3.info', read = True, flags = 'r', map = name)
         if ret:
             range = []
