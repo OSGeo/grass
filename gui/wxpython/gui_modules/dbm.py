@@ -358,8 +358,7 @@ class VirtualAttributeList(wx.ListCtrl,
 
     def OnGetItemAttr(self, item):
         """!Get item attributes"""
-        index = self.itemIndexMap[item]
-        if ( index % 2) == 0:
+        if ( item % 2) == 0:
             return self.attr2
         else:
             return self.attr1
