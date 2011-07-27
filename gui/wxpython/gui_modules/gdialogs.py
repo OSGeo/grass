@@ -506,21 +506,17 @@ class DecorationDialog(wx.Dialog):
 
         # create overlay if doesn't exist
         self._CreateOverlay()
-
+        
         if len(self.parent.MapWindow.overlays[self.ovlId]['cmd']) > 1:
-            mapName, found = utils.GetLayerNameFromCmd(self.parent.MapWindow.overlays[self.ovlId]['cmd'])
-            if self.parent.MapWindow.overlays[self.ovlId]['propwin'] is None and mapName:
-                # build properties dialog
-                menuform.GUI(parent = self.parent, show = False).ParseCommand(cmd=self.cmd,
-                                                                              completed=(self.GetOptData, self.name, ''))
-                
-            if found:
-                # enable 'OK' button
-                self.btnOK.Enable()
-                if name == 'legend':
+            if name == 'legend':
+                mapName, found = utils.GetLayerNameFromCmd(self.parent.MapWindow.overlays[self.ovlId]['cmd'])
+                if found:
+                    # enable 'OK' button
+                    self.btnOK.Enable()
                     # set title
                     self.SetTitle(_('Legend of raster map <%s>') % \
                                       mapName)
+            
         
     def _CreateOverlay(self):
         if not self.parent.Map.GetOverlay(self.ovlId):
