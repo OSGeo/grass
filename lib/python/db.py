@@ -98,13 +98,15 @@ def db_select(table, sql, file = False, **args):
                           flags = 'c',
                           table = table,
                           sql = sql,
-                          output = fname)
+                          output = fname,
+			  **args)
     else: # -> sql is file
         ret = run_command('db.select', quiet = True,
                           flags = 'c',
                           table = table,
                           input = sql,
-                          output = fname)
+                          output = fname,
+			  **args)
     
     if ret != 0:
         fatal(_("Fetching data from table <%s> failed") % table)
