@@ -129,6 +129,7 @@ class SQLFrame(wx.Frame):
         if self.qtype.lower() == "select":
             self.text_sql.SetValue("SELECT * FROM %s" % self.tablename)
         self.text_sql.SetInsertionPointEnd()
+        self.text_sql.SetToolTipString(_("Example: %s") % "SELECT * FROM roadsmajor WHERE MULTILANE = 'no' OR OBJECTID < 10")
         wx.CallAfter(self.text_sql.SetFocus)
 
         #
@@ -301,7 +302,7 @@ class SQLFrame(wx.Frame):
                 self.list_values.Append(line.strip())
             else:
                 break
-            i += 0
+            i += 1
         
     def OnSampleValues(self, event):
         """!Get sample values"""
