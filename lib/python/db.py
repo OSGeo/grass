@@ -108,8 +108,8 @@ def db_select(table, sql, file = False, **args):
     
     if ret != 0:
         fatal(_("Fetching data from table <%s> failed") % table)
-    ofile = open(fname)
 
+    ofile = open(fname)
     result = ofile.readlines()
     ofile.close()
     try_remove(fname)
