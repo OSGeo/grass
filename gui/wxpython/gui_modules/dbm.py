@@ -746,11 +746,13 @@ class AttributeManager(wx.Frame):
                                        choices=self.mapDBInfo.GetColumns(self.mapDBInfo.layers[layer]['table']))
             sqlWhereValue = wx.TextCtrl(parent=panel, id=wx.ID_ANY, value="",
                                         style=wx.TE_PROCESS_ENTER)
+            sqlWhereValue.SetToolTipString(_("Example: %s") % "MULTILANE = 'no' AND OBJECTID < 10")
 
             sqlStatement = wx.TextCtrl(parent=panel, id=wx.ID_ANY,
                                        value="SELECT * FROM %s" % \
                                            self.mapDBInfo.layers[layer]['table'],
                                        style=wx.TE_PROCESS_ENTER)
+            sqlStatement.SetToolTipString(_("Example: %s") % "SELECT * FROM roadsmajor WHERE MULTILANE = 'no' AND OBJECTID < 10")
             sqlWhereValue.Bind(wx.EVT_TEXT_ENTER, self.OnApplySqlStatement)
             sqlStatement.Bind(wx.EVT_TEXT_ENTER, self.OnApplySqlStatement)
 
