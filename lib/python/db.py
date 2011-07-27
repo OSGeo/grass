@@ -92,21 +92,26 @@ def db_select(table, sql, file = False, **args):
     @param file  True if sql is filename
     @param args  see db.select arguments
     """
-    ofile = pytempfile.NamedTemporaryFile(mode = 'w+b')
+    fname = tempfile(create = False)
     if not file:
         ret = run_command('db.select', quiet = True,
                           flags = 'c',
                           table = table,
                           sql = sql,
-                          output = ofile.name)
+                          output = fname)
     else: # -> sql is file
         ret = run_command('db.select', quiet = True,
                           flags = 'c',
                           table = table,
                           input = sql,
-                          output = ofile.name)
+                          output = fname)
     
     if ret != 0:
         fatal(_("Fetching data from table <%s> failed") % table)
+    ofile = open(fname)
+
+    result = ofile.readlines()
+    ofile.close()
+    try_remove(fname)
         
-    return ofile.readlines()
+    return result
