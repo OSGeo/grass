@@ -201,8 +201,8 @@ ifelse($7,[],[
 ],[
 ifelse($8,[],[
 ifelse($2,[],
-    [AC_MSG_ERROR([*** Unable to locate $2.])],
-    [AC_MSG_ERROR([*** Unable to locate $1.])]
+    [AC_MSG_ERROR([*** Unable to locate $1.])],
+    [AC_MSG_ERROR([*** Unable to locate $2.])]
 )
 ],$8)
 ])
