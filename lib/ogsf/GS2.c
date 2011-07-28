@@ -114,9 +114,15 @@ void GS_libinit(void)
 
     Gv.scale = GS_UNIT_SIZE / Longdim;
 
+    G_debug(1, "GS_libinit(): n=%f s=%f w=%f e=%f scale=%f first=%d",
+	    Region[0], Region[1], Region[2], Region[3], Gv.scale, first);
+    
     Cxl_func = void_func;
     Swap_func = void_func;
 
+    /* reset lights */
+    Numlights = 0;
+    
     if (first) {
 	gs_init();
     }
@@ -278,10 +284,10 @@ int GS_new_light(void)
 	gsd_deflight(Numlights + 1, &(Gv.lights[Numlights]));
 	gsd_switchlight(Numlights + 1, 1);
 
-	return (++Numlights);
+	return ++Numlights;
     }
 
-    return (-1);
+    return -1;
 }
 
 /*!
@@ -1553,32 +1559,33 @@ int *GS_get_surf_list(int *numsurfs)
  */
 int GS_delete_surface(int id)
 {
-    int i, j, found = 0;
-
-    G_debug(3, "GS_delete_surface");
-
+    int i, j, found;
+    
+    found = FALSE;
+    
+    G_debug(1, "GS_delete_surface(): id=%d", id);
+    
     if (GS_surf_exists(id)) {
 	gs_delete_surf(id);
-
 	for (i = 0; i < Next_surf && !found; i++) {
 	    if (Surf_ID[i] == id) {
-		found = 1;
+		found = TRUE;
 
 		for (j = i; j < Next_surf; j++) {
 		    Surf_ID[j] = Surf_ID[j + 1];
 		}
 	    }
 	}
-
+	
 	gv_update_drapesurfs();
 
 	if (found) {
 	    --Next_surf;
-	    return (1);
+	    return 1;
 	}
     }
 
-    return (-1);
+    return -1;
 }
 
 
