@@ -350,7 +350,7 @@ class MapFrame(wx.Frame):
         """!Add 3D view mode toolbar
         """
         import nviz
-        Debug.msg(5, "MapFrame._addToolbarNviz(): begin")
+        
         # check for GLCanvas and OpenGL
         if not nviz.haveNviz:
             self.toolbars['map'].combo.SetValue(_("2D view"))
@@ -375,12 +375,12 @@ class MapFrame(wx.Frame):
         # erase map window
         self.MapWindow.EraseMap()
         
-        self._layerManager.goutput.WriteCmdLog(_("Starting 3D view mode..."))
+        self._layerManager.goutput.WriteCmdLog(_("Starting 3D view mode..."),
+                                               switchPage = False)
         self.statusbar.SetStatusText(_("Please wait, loading data..."), 0)
         
         # create GL window & NVIZ toolbar
         if not self.MapWindow3D:
-            Debug.msg(5, "MapFrame._addToolbarNviz(): GLWindow will be created")
             self.MapWindow3D = nviz.GLWindow(self, id = wx.ID_ANY,
                                              Map = self.Map, tree = self.tree, lmgr = self._layerManager)
             self.MapWindow = self.MapWindow3D
@@ -389,7 +389,7 @@ class MapFrame(wx.Frame):
             self.MapWindow3D.textdict = self.MapWindow2D.textdict
             self.MapWindow3D.UpdateOverlays()
             
-                # add Nviz notebookpage
+            # add Nviz notebookpage
             self._layerManager.AddNviz()
             
             self.MapWindow3D.OnPaint(None) # -> LoadData
@@ -402,7 +402,6 @@ class MapFrame(wx.Frame):
             self._layerManager.AddNviz()
             for page in ('view', 'light', 'fringe', 'constant', 'cplane'):
                 self._layerManager.nviz.UpdatePage(page)
-
         
         # switch from MapWindow to MapWindowGL
         # add nviz toolbar
@@ -422,8 +421,7 @@ class MapFrame(wx.Frame):
                           BestSize((self.toolbars['nviz'].GetBestSize())))
         
         self.SetStatusText("", 0)
-        Debug.msg(5, "MapFrame._addToolbarNviz(): end")
-
+        
     def AddToolbar(self, name):
         """!Add defined toolbar to the window
         
@@ -494,11 +492,14 @@ class MapFrame(wx.Frame):
             self.MapWindow = self.MapWindow2D
         
         elif name == 'nviz':
-            # unload data
-            # self.MapWindow3D.Reset()
+            self.statusbar.SetStatusText(_("Please wait, unloading data..."), 0)
+            self._layerManager.goutput.WriteCmdLog(_("Switching back to 2D view mode..."),
+                                                   switchPage = False)
+            # self.MapWindow3D.UnloadDataLayers(force = True)
             # switch from MapWindowGL to MapWindow
             self._mgr.DetachPane(self.MapWindow3D)
-            self.MapWindow3D.Hide()
+            self.MapWindow3D.Destroy()
+            self.MapWindow3D = None
             self.MapWindow2D.Show()
             self._mgr.AddPane(self.MapWindow2D, wx.aui.AuiPaneInfo().CentrePane().
                               Dockable(False).BestSize((-1,-1)).
@@ -538,8 +539,7 @@ class MapFrame(wx.Frame):
         event.Skip()
         
     def OnFocus(self, event):
-        """
-        Change choicebook page to match display.
+        """!Change choicebook page to match display.
         Or set display for georectifying
         """
         if self._layerManager and \

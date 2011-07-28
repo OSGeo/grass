@@ -9,17 +9,19 @@ Classes:
  - WriteWorkspaceFile
  - ProcessGrcFile
 
-(C) 2007-2010 by the GRASS Development Team
+(C) 2007-2011 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 @author Martin Landa <landa.martin gmail.com>
+@author Anna Kratochvilova <kratochanna gmail.com> (wxNviz / Google SoC 2011)
 """
 
 import os
 import sys
 import copy
+import types
 
 import wx
 
@@ -525,11 +527,10 @@ class ProcessWorkspaceFile:
                 constants.append({'constant': plane})
         self.nviz_state['constants'] = constants    
         
-        
 class Nviz:
     def __init__(self):
         """Default 3D settings"""
-        pass
+        UserSettings.Reset('nviz')
         
     def SetConstantDefaultProp(self):
         """Set default constant data properties"""
@@ -807,18 +808,19 @@ class Nviz:
         return (value, desc)
     
     def SetDecorDefaultProp(self):
+        """!Set default arrow properties
+        """
         data = {}
-
+        
         # arrow
         data['arrow'] = UserSettings.Get(group = 'nviz', key = 'arrow')
         data['arrow']['color'] = "%d:%d:%d" % (
-                UserSettings.Get(group = 'nviz', key = 'arrow', subkey = 'color')[:3])
+            UserSettings.Get(group = 'nviz', key = 'arrow', subkey = 'color')[:3])
         data['arrow'].update(UserSettings.Get(group = 'nviz', key = 'arrow', internal = True))
         data['arrow']['show'] = False
+        
         return data
-            
-        
-        
+    
 class WriteWorkspaceFile(object):
     """!Generic class for writing workspace file"""
     def __init__(self, lmgr, file):

@@ -392,7 +392,7 @@ class GMConsole(wx.SplitterWindow):
         
         # p1 = self.cmd_output.GetCurrentPos()
         p1 = self.cmd_output.GetEndStyled()
-#        self.cmd_output.GotoPos(p1)
+        # self.cmd_output.GotoPos(p1)
         self.cmd_output.DocumentEnd()
         
         for line in text.splitlines():
@@ -410,11 +410,16 @@ class GMConsole(wx.SplitterWindow):
         
         self.cmd_output.EnsureCaretVisible()
         
-    def WriteCmdLog(self, line, pid=None):
-        """!Write message in selected style"""
+    def WriteCmdLog(self, line, pid = None, switchPage = True):
+        """!Write message in selected style
+        
+        @param line message to be printed
+        @param pid process pid or None
+        @param switchPage True to switch page
+        """
         if pid:
             line = '(' + str(pid) + ') ' + line
-        self.WriteLog(line, style=self.cmd_output.StyleCommand, switchPage = True)
+        self.WriteLog(line, style = self.cmd_output.StyleCommand, switchPage = switchPage)
 
     def WriteWarning(self, line):
         """!Write message in warning style"""

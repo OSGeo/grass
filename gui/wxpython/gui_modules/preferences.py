@@ -606,7 +606,7 @@ class Settings:
                     'color'  : (128, 128, 128, 255), # grey
                     },
                 'arrow': {
-                    'color': (0, 0, 0)
+                    'color': (0, 0, 0),
                     }
                 },
             'modeler' : {
@@ -979,6 +979,16 @@ class Settings:
         """!Get default user settings"""
         return self.defaultSettings
 
+    def Reset(self, key = None):
+        """!Reset to default settings
+
+        @key key in settings dict (None for all keys)
+        """
+        if not key:
+            self.userSettings = copy.deepcopy(self.defaultSettings)
+        else:
+            self.userSettings[key] = copy.deepcopy(self.defaultSettings[key])
+        
 globalSettings = Settings()
 
 class PreferencesBaseDialog(wx.Dialog):
