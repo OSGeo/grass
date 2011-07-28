@@ -243,11 +243,16 @@ def read_gui():
 	# Check for a reference to the GRASS user interface in the grassrc file
 	if os.access(gisrc, os.R_OK):
 	    kv = read_gisrc()
-	    if not kv.has_key('GRASS_GUI'):
+            if 'GRASS_GUI' in os.environ:
+                grass_gui = os.environ['GRASS_GUI']
+            elif 'GUI' in kv:
+                grass_gui = kv['GUI']
+            elif 'GRASS_GUI' in kv:
+                # For backward compatibility (GRASS_GUI renamed to GUI)
+                grass_gui = kv['GRASS_GUI']
+            else:
 		# Set the GRASS user interface to the default if needed
 		grass_gui = default_gui
-            else:
-                grass_gui = kv['GRASS_GUI']
     
     if not grass_gui:
 	grass_gui = default_gui
@@ -257,8 +262,9 @@ def read_gui():
     
     # FIXME oldtcltk, gis.m, d.m no longer exist
     if grass_gui in ['d.m', 'gis.m', 'oldtcltk', 'tcltk']:
+        warning(_("GUI '%s' not supported in this version") % grass_gui)
 	grass_gui = default_gui
-
+    
 def get_locale():
     global locale
     locale = None
@@ -445,7 +451,7 @@ def check_gui():
     # file name that should not match another file
     if os.access(gisrc, os.F_OK):
 	kv = read_gisrc()
-	kv['GRASS_GUI'] = grass_gui
+	kv['GUI'] = grass_gui
 	write_gisrc(kv)
 
 def non_interactive(arg, geofile = None):
@@ -952,7 +958,7 @@ create_tmp()
 # Create the session grassrc file
 create_gisrc()
 
-# Ensure GRASS_GUI is set
+# Ensure GUI is set
 read_gui()
 
 # Get Locale name
