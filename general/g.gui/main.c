@@ -8,7 +8,7 @@
  *
  * PURPOSE:      Start GRASS GUI from command line.
  *
- * COPYRIGHT:    (C) 2008, 2010 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2008, 2010-2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
 	update->answer = TRUE;
 
 
-    gui_type_env = G__getenv("GRASS_GUI");
+    gui_type_env = G__getenv("GUI");
 
     if (!type->answer) {
 	if (gui_type_env && strcmp(gui_type_env, "text")) {
@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
 
     if (((gui_type_env && update->answer) &&
 	 strcmp(gui_type_env, type->answer) != 0) || !gui_type_env) {
-	G_setenv("GRASS_GUI", type->answer);
+	G_setenv("GUI", type->answer);
 	G_message(_("<%s> is now the default GUI"), type->answer);
     }
     else {

@@ -144,7 +144,7 @@ def start_command(prog, flags = "", overwrite = False, quiet = False, verbose = 
     LOCATION_NAME='spearfish60';
     MAPSET='glynn';
     GRASS_DB_ENCODING='ascii';
-    GRASS_GUI='text';
+    GUI='text';
     MONITOR='x0';
     \endcode
     
@@ -199,7 +199,7 @@ def pipe_command(*args, **kwargs):
     LOCATION_NAME='spearfish60';
     MAPSET='glynn';
     GRASS_DB_ENCODING='ascii';
-    GRASS_GUI='text';
+    GUI='text';
     MONITOR='x0';
     \endcode
     
