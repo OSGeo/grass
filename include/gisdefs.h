@@ -562,6 +562,7 @@ void G_fseek(FILE *, off_t, int);
 /* set_window.c */
 void G_get_set_window(struct Cell_head *);
 void G_set_window(struct Cell_head *);
+void G_unset_window();
 
 /* short_way.c */
 void G_shortest_way(double *, double *);
