@@ -1,12 +1,12 @@
 /*!
-  \file gis/get_window.c
+  \file lib/gis/get_window.c
 
   \brief GIS Library - Get window (i.e. GRASS region)
 
-  (C) 2001-2009 by the GRASS Development Team
-
+  (C) 2001-2009, 2011 by the GRASS Development Team
+  
   This program is free software under the GNU General Public License
-  (>=v2).  Read the file COPYING that comes with GRASS for details.
+  (>=v2). Read the file COPYING that comes with GRASS for details.
 
   \author Original author CERL
 */
@@ -26,24 +26,23 @@ static struct state {
 static struct state *st = &state;
 
 /*!
- * \brief Read the database region
- *
- * Reads the database region as stored in the WIND file in the user's
- * current mapset into region.
- *
- * 3D values are set to defaults if not available in WIND file.
- * An error message is printed and exit() is called if there is a problem reading
- * the region.
- *
- * <b>Note:</b> GRASS applications that read or write raster maps
- * should not use this routine since its use implies that the active
- * module region will not be used. Programs that read or write raster
- * map data (or vector data) can query the active module region using
- * Rast_window_rows() and Rast_window_cols().
- *
- * \param window pointer to Cell_head
- */
-
+  \brief Read the database region
+  
+  Reads the database region as stored in the WIND file in the user's
+  current mapset into region.
+  
+  3D values are set to defaults if not available in WIND file.  An
+  error message is printed and exit() is called if there is a problem
+  reading the region.
+  
+  <b>Note:</b> GRASS applications that read or write raster maps
+  should not use this routine since its use implies that the active
+  module region will not be used. Programs that read or write raster
+  map data (or vector data) can query the active module region using
+  Rast_window_rows() and Rast_window_cols().
+  
+  \param[out] window pointer to Cell_head
+*/
 void G_get_window(struct Cell_head *window)
 {
     const char *regvar;
@@ -80,32 +79,30 @@ void G_get_window(struct Cell_head *window)
 }
 
 /*!
- * \brief Read the default region
- *
- * Reads the default region for the location into <i>region.</i> 3D
- * values are set to defaults if not available in WIND file.
- *
- * An error message is printed and exit() is called if there is a
- * problem reading the default region.
- *
- * \param[out] window pointer to Cell_head
- */
-
+  \brief Read the default region
+  
+  Reads the default region for the location into <i>region.</i> 3D
+  values are set to defaults if not available in WIND file.
+  
+  An error message is printed and exit() is called if there is a
+  problem reading the default region.
+  
+  \param[out] window pointer to Cell_head
+*/
 void G_get_default_window(struct Cell_head *window)
 {
     G__get_window(window, "", "DEFAULT_WIND", "PERMANENT");
 }
 
 /*!
-  \brief Get cwindow (region) of selected map layer
+  \brief Get window (region) of selected map
   
-  \param window pointer to Cell_head
-  \param element element name
+  G_fatal_error() is called on error
+  
+  \param window[out] pointer to Cell_head
+  \param element element type
   \param name map name
   \param mapset mapset name
-
-  \return string on error
-  \return NULL on success
 */
 void G__get_window(struct Cell_head *window,
 		   const char *element, const char *name, const char *mapset)
@@ -122,4 +119,13 @@ void G__get_window(struct Cell_head *window,
 
     G__read_Cell_head(fp, window, 0);
     fclose(fp);
+}
+
+/*!
+  \brief Unset current window
+*/
+void G_unset_window()
+{
+    st->initialized = 0;
+    G__.window_set = 0;
 }
