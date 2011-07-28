@@ -3,12 +3,13 @@
 
 @brief wxGUI 3D view mode
 
-This module implements 3D visualization mode for map display.
+This module implements 3D visualization mode for map display (ctypes
+required).
 
 List of classes:
  - Nviz
 
-(C) 2008-2010 by the GRASS Development Team
+(C) 2008-2011 by the GRASS Development Team
 
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
@@ -16,6 +17,7 @@ for details.
 
 @author Martin Landa <landa.martin gmail.com> (Google SoC 2008/2010)
 @author Pythonized by Glynn Clements
+@author Anna Kratochvilova <KratochAnna seznam.cz> (Google SoC 2011)
 """
 
 import sys
@@ -62,6 +64,7 @@ class Nviz(object):
         """!Initialize Nviz class instance
         
         @param log logging area
+        @param gprogress progressbar
         """
         global errfunc, perfunc, log, progress
         log = glog
@@ -71,6 +74,7 @@ class Nviz(object):
         G_set_error_routine(errfunc) 
         G_set_percent_routine(perfunc)
         
+        G_unset_window()
         GS_libinit()
         GVL_libinit()
         
@@ -1563,7 +1567,6 @@ class Nviz(object):
         
         @param index type of fence - from 0 (off) to 4
         """    
-        
         Nviz_set_fence_color(self.data, index)
             
     def GetXYRange(self):
@@ -1683,3 +1686,4 @@ class Nviz(object):
                                   byref(d), int(useExag))
         
         return d.value
+        

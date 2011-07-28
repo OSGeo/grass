@@ -8,6 +8,7 @@ This module implements 3D visualization mode for map display.
 List of classes:
  - NvizThread
  - GLWindow
+ - DragShape
 
 (C) 2008-2011 by the GRASS Development Team
 
@@ -24,6 +25,7 @@ import sys
 import time
 import copy
 import math
+import types
 
 from threading import Thread
 
@@ -65,13 +67,13 @@ class NvizThread(Thread):
     def GetDisplay(self):
         """!Get display instance"""
         return self._display
-    
+
 class GLWindow(MapWindow, glcanvas.GLCanvas):
     """!OpenGL canvas for Map Display Window"""
     def __init__(self, parent, id = wx.ID_ANY,
                  Map = None, tree = None, lmgr = None):
         self.parent = parent # MapFrame
-        Debug.msg(5, "GLCanvas.__init__(): begin")
+        
         glcanvas.GLCanvas.__init__(self, parent, id)
         MapWindow.__init__(self, parent, id, 
                            Map, tree, lmgr)
@@ -109,14 +111,6 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.textdict = {}
         self.dragid = None
         
-        #
-        # use display region instead of computational
-        #
-        os.environ['GRASS_REGION'] = self.Map.SetRegion()
-        
-        #
-        # create nviz instance
-        #
         if self.lmgr:
             self.log = self.lmgr.goutput
             logerr = self.lmgr.goutput.cmd_stderr
@@ -124,6 +118,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         else:
             self.log = logmsg = sys.stdout
             logerr = sys.stderr
+        
+        # create nviz instanve - use display region instead of computational
+        os.environ['GRASS_REGION'] = self.Map.SetRegion()
         
         self.nvizThread = NvizThread(logerr,
                                      self.parent.statusbarWin['progress'],
@@ -138,18 +135,16 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.img = wx.Image(self.Map.mapfile, wx.BITMAP_TYPE_ANY)
         
         # size of MapWindow, to avoid resizing if size is the same
-        self.size = (0,0)
+        self.size = (0, 0)
         
-        #
         # default values
-        #
         self.view = copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'view')) # copy
         self.iview = UserSettings.Get(group = 'nviz', key = 'view', internal = True)
         
         self.nvizDefault = NvizDefault()
         self.light = copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'light')) # copy
         self.decoration = self.nvizDefault.SetDecorDefaultProp()
-        arwSize = self._display.GetLongDim()/8.
+        arwSize = self._display.GetLongDim() / 8.
         coef = 0.01
         if arwSize < 1:
             coef = 100.
@@ -161,16 +156,18 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.Bind(wx.EVT_MOUSE_EVENTS,     self.OnMouseAction)
         self.Bind(wx.EVT_MOTION,           self.OnMotion)
         
-        self.Bind(EVT_UPDATE_PROP,  self.UpdateMapObjProperties)
-        self.Bind(EVT_UPDATE_VIEW,  self.UpdateView)
-        self.Bind(EVT_UPDATE_LIGHT, self.UpdateLight)
+        self.Bind(EVT_UPDATE_PROP,   self.UpdateMapObjProperties)
+        self.Bind(EVT_UPDATE_VIEW,   self.UpdateView)
+        self.Bind(EVT_UPDATE_LIGHT,  self.UpdateLight)
         self.Bind(EVT_UPDATE_CPLANE, self.UpdateCPlane)
         
         self.Bind(wx.EVT_CLOSE, self.OnClose)
         
-        Debug.msg(5, "GLCanvas.__init__(): end")
-        #cplanes cannot be initialized now
+        # cplanes cannot be initialized now
         wx.CallAfter(self.InitCPlanes)
+
+    def __del__(self):
+        self.UnloadDataLayers(force = True)
         
     def InitCPlanes(self):
         """!Initialize cutting planes list"""
@@ -178,7 +175,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             cplane = copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'cplane'))
             cplane['on'] = False
             self.cplanes.append(cplane)
-            
+        
     def GetOverlay(self):
         """!Converts rendered overlay files to wx.Image
         
@@ -195,10 +192,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 imgs.append(img)
 
         return imgs        
-                    
+    
     def OnClose(self, event):
         # cleanup when window actually closes (on quit) and not just is hidden
-        self.Reset()
+        self.UnloadDataLayers(force = True)
         
     def OnEraseBackground(self, event):
         pass # do nothing, to avoid flashing on MSW
@@ -767,41 +764,48 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         stop = time.time()
         
-        Debug.msg(3, "GLWindow.LoadDataLayers(): time = %f" % (stop-start))
+        Debug.msg(1, "GLWindow.LoadDataLayers(): time = %f" % (stop-start))
                 
-    def UnloadDataLayers(self):
-        """!Unload any layers that have been deleted from layer tree"""
+    def UnloadDataLayers(self, force = False):
+        """!Unload any layers that have been deleted from layer tree
+
+        @param force True to unload all data layers
+        """
         if not self.tree:
             return
         
         listOfItems = []
-        item = self.tree.GetFirstChild(self.tree.root)[0]
-        self._GetDataLayers(item, listOfItems)
+        if not force:
+            item = self.tree.GetFirstChild(self.tree.root)[0]
+            self._GetDataLayers(item, listOfItems)
         
         start = time.time()
         
+        update = False
         for layer in self.layers:
-            if layer not in listOfItems:
-                ltype = self.tree.GetPyData(layer)[0]['type']
-                try:
-                    if ltype ==  'raster':
-                        self.UnloadRaster(layer)
-                    elif ltype ==  '3d-raster':
-                        self.UnloadRaster3d(layer) 
-                    elif ltype ==  'vector':
-                        self.UnloadVector(layer, True)
-                        self.UnloadVector(layer, False)
-                    
-                    self.UpdateView(None)
-                except gcmd.GException, e:
-                    gcmd.GError(parent = self,
-                                message = e.value)
-                
-                self.lmgr.nviz.UpdateSettings()        
+            if layer in listOfItems:
+                continue
+            ltype = self.tree.GetPyData(layer)[0]['type']
+            try:
+                if ltype ==  'raster':
+                    self.UnloadRaster(layer)
+                elif ltype ==  '3d-raster':
+                    self.UnloadRaster3d(layer) 
+                elif ltype ==  'vector':
+                    self.UnloadVector(layer, True)
+                    self.UnloadVector(layer, False)
+
+            except gcmd.GException, e:
+                gcmd.GError(parent = self,
+                            message = e.value)
+        
+        if update:
+            self.lmgr.nviz.UpdateSettings()        
+            self.UpdateView(None)
         
         stop = time.time()
         
-        Debug.msg(3, "GLWindow.UnloadDataLayers(): time = %f" % (stop-start))        
+        Debug.msg(1, "GLWindow.UnloadDataLayers(): time = %f" % (stop-start))        
         
     def SetVectorSurface(self, data):
         """!Set reference surfaces of vector"""
@@ -847,7 +851,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         else:
             mapType = nvizType
             data = self.constants[item]
-            
+        
         if not data:
             # init data structure
             if nvizType != 'constant':
@@ -888,11 +892,11 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                     if sec1 == 'position':
                         data[sec][sec1]['update'] = None
                         continue
-                    if type(data[sec][sec1]) == type({}):
+                    if type(data[sec][sec1]) == types.DictType:
                         for sec2 in data[sec][sec1].keys():
-                            if sec2 !=  'all':
+                            if sec2 not in ('all', 'init', 'id'):
                                 data[sec][sec1][sec2]['update'] = None
-                    elif type(data[sec][sec1]) == type([]):
+                    elif type(data[sec][sec1]) == types.ListType:
                         for i in range(len(data[sec][sec1])):
                             for sec2 in data[sec][sec1][i].keys():
                                 data[sec][sec1][i][sec2]['update'] = None
@@ -1093,7 +1097,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             if layer.type ==  'vector':
                 win = toolWin.FindWindowById(toolWin.win['vector']['map'])
                 win.SetValue('')
-            
+        
     def LoadVector(self, item, points = None):
         """!Load 2D or 3D vector map overlay
         
@@ -1190,19 +1194,6 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             
             ### self.layers.remove(id)
         
-    def Reset(self):
-        """!Reset (unload data)"""
-        for item in self.layers:
-            type = self.tree.GetPyData(item)[0]['maplayer'].type
-            if type ==  'raster':
-                self.UnloadRaster(item)
-            elif type ==  '3d-raster':
-                self.UnloadRaster3d(item)
-            elif type ==  'vector':
-                self.UnloadVector(item)
-        
-        self.init = False
-
     def OnZoomToMap(self, event):
         """!Set display extents to match selected raster or vector
         map or volume.
@@ -1318,7 +1309,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 elif attrb ==  'transp':
                     self._display.UnsetSurfaceTransp(id) 
             else:
-                if type(value) ==  type('') and \
+                if type(value) == types.StringType and \
                         len(value) <=  0: # ignore empty values (TODO: warning)
                     continue
                 if attrb ==  'color':
@@ -1426,7 +1417,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                     elif attrb ==  'transp':
                         self._display.UnsetIsosurfaceTransp(id, isosurfId) 
                 else:
-                    if type(value) ==  type('') and \
+                    if type(value) == types.StringType and \
                             len(value) <=  0: # ignore empty values (TODO: warning)
                         continue
                     elif attrb ==  'color':
@@ -1931,7 +1922,6 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         @param textinfo text metadata (text, font, color, rotation)
         """
         return self.parent.MapWindow2D.TextBounds(textinfo, relcoords = True)
-
     
 class DragShape:
     """!Class for drawing overlays (based on wxpython demo)"""
