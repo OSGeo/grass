@@ -831,6 +831,13 @@
 	    </menuitem>
 	    <separator />
 	    <menuitem>
+	      <label>Create new location</label>
+	      <help>Launches location wizard to create new GRASS location.</help>
+	      <keywords>location, wizard</keywords>
+              <handler>OnLocationWizard</handler>
+	    </menuitem>
+	    <separator />
+	    <menuitem>
 	      <label>Version</label>
 	      <help>Displays version and copyright information.</help>
 	      <keywords>general,version</keywords>
