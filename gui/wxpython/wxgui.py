@@ -302,6 +302,32 @@ class GMFrame(wx.Frame):
         if self.workspaceFile:
             self.SetTitle(self.baseTitle + " - " +  os.path.basename(self.workspaceFile) + '*')
         
+    def OnLocationWizard(self, event):
+        """!Launch location wizard"""
+        from gui_modules import location_wizard
+        
+        gisdbase = grass.gisenv()['GISDBASE']
+        gWizard = location_wizard.LocationWizard(parent = self,
+                                                 grassdatabase = gisdbase)
+        
+        if gWizard.location !=  None:
+            dlg = wx.MessageDialog(parent = self,
+                                   message = _('Location <%s> created.\n\n'
+                                               'Do you want to switch to the '
+                                               'new location?') % gWizard.location,
+                                   caption=_("Switch to new location?"),
+                                   style = wx.YES_NO | wx.NO_DEFAULT |
+                                   wx.ICON_QUESTION | wx.CENTRE)
+            
+            ret = dlg.ShowModal()
+            if ret == wx.ID_YES:
+                gcmd.RunCommand("g.gisenv",
+                                set = "LOCATION_NAME=%s" % gWizard.location)
+                gcmd.RunCommand("g.gisenv",
+                                set = "MAPSET=PERMANENT")
+            
+            dlg.Destroy()
+            
     def OnSettingsChanged(self, event):
         """!Here can be functions which have to be called after EVT_SETTINGS_CHANGED. 
         Now only set copying of selected text to clipboard (in goutput).
