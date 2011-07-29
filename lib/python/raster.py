@@ -27,10 +27,6 @@ import string
 
 from core import *
 
-# i18N
-import gettext
-gettext.install('grasslibs', os.path.join(os.getenv("GISBASE"), 'locale'), unicode=True)
-
 # add raster history
 
 def raster_history(map):

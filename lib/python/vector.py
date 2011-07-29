@@ -28,10 +28,6 @@ import __builtin__
 
 from core import *
 
-# i18N
-import gettext
-gettext.install('grasslibs', os.path.join(os.getenv("GISBASE"), 'locale'), unicode=True)
-
 # run "v.db.connect -g ..." and parse output
 
 def vector_db(map, **args):

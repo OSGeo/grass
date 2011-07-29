@@ -35,7 +35,7 @@ import codecs
 
 # i18N
 import gettext
-gettext.install('grasslibs', os.path.join(os.getenv("GISBASE"), 'locale'), unicode=True)
+gettext.install('grasslibs', os.path.join(os.getenv("GISBASE"), 'locale'))
 
 # subprocess wrapper that uses shell on Windows
 
