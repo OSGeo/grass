@@ -12812,9 +12812,9 @@ CAIROLIB=
 if test -n "$USE_CAIRO"; then
 
 cairo="cairo"
-pkgs="cairo-ft cairo-fc"
+pkgs="cairo-ft cairo-fc cairo-pdf cairo-ps cairo-svg"
 if test -n "$USE_X11"; then
-	pkgs="$pkgs cairo-xlib-xrender"
+	pkgs="$pkgs cairo-xlib cairo-xlib-xrender"
 fi
 for pkg in $pkgs ; do
     if pkg-config --exists $pkg ; then

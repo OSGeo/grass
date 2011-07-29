@@ -14,9 +14,15 @@
 
 #include "cairodriver.h"
 
+#if CAIRO_HAS_PS_SURFACE
 #include <cairo-ps.h>
+#endif
+#if CAIRO_HAS_PDF_SURFACE
 #include <cairo-pdf.h>
+#endif
+#if CAIRO_HAS_SVG_SURFACE
 #include <cairo-svg.h>
+#endif
 #if CAIRO_HAS_XLIB_XRENDER_SURFACE
 #include <cairo-xlib.h>
 #include <cairo-xlib-xrender.h>
