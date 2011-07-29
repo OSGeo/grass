@@ -24,10 +24,6 @@ import numpy
 
 import core as grass
 
-# i18N
-import gettext
-gettext.install('grasslibs', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
-
 class array(numpy.memmap):
     def __new__(cls, dtype = numpy.double):
         """!Define new numpy array
