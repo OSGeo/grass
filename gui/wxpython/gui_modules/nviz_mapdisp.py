@@ -86,7 +86,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.render = { 'quick' : False,
                         # do not render vector lines in quick mode
                         'vlines' : False,
-                        'vpoints' : False }
+                        'vpoints' : False,
+                        'overlays': False }
         self.mouse = {
             'use': 'pointer'
             }
@@ -105,11 +106,11 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         # overlays
         self.overlays = {}
         self.imagedict = {}
-        self.shapes = []
-        self.dragShape = None
-        self.dragImage = None
+        self.overlay = wx.Overlay()
+        self.pdc = wx.PseudoDC()
         self.textdict = {}
         self.dragid = None
+        self.hitradius = 5
         
         if self.lmgr:
             self.log = self.lmgr.goutput
@@ -119,7 +120,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self.log = logmsg = sys.stdout
             logerr = sys.stderr
         
-        # create nviz instanve - use display region instead of computational
+        # create nviz instance - use display region instead of computational
         os.environ['GRASS_REGION'] = self.Map.SetRegion()
         
         self.nvizThread = NvizThread(logerr,
@@ -155,6 +156,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.Bind(wx.EVT_PAINT,            self.OnPaint)
         self.Bind(wx.EVT_MOUSE_EVENTS,     self.OnMouseAction)
         self.Bind(wx.EVT_MOTION,           self.OnMotion)
+        self.Bind(wx.EVT_IDLE,             self.OnIdle)
         
         self.Bind(EVT_UPDATE_PROP,   self.UpdateMapObjProperties)
         self.Bind(EVT_UPDATE_VIEW,   self.UpdateView)
@@ -211,13 +213,19 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                                        size.height)
         self.size = size
         event.Skip()
-        
+    
+    def OnIdle(self, event):
+        if self.render['overlays']:
+            self.DrawOverlays()
+            self.render['overlays'] = False
+            
     def OnPaint(self, event):
         Debug.msg(1, "GLCanvas.OnPaint()")
         
+        self.render['overlays'] = True
         dc = wx.PaintDC(self)
         self.DoPaint()
-        self.DrawShapes(dc)
+        
 
     def DoPaint(self):
         self.SetCurrent()
@@ -256,54 +264,67 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         self.UpdateMap()
     
-    def UpdateOverlays(self):
-        if self.img is None:
-            self.Map.ChangeMapSize(self.GetClientSize())
-            self.Map.RenderOverlays(force = True)
-        else:
-            self.Map.RenderOverlays(force = False)
-        self.shapes = []
+    def DrawOverlays(self):
+        """!Draw overlays with wx.Overlay"""
+        dc = wx.ClientDC(self)
+        odc = wx.DCOverlay(self.overlay, dc)
+        self.pdc.Clear()
+        self.pdc.RemoveAll()
         for img in self.GetOverlay():
             # draw any active and defined overlays
             if self.imagedict[img]['layer'].IsActive():
                 id = self.imagedict[img]['id']
-                if id == 0: # barscale
-                    continue
-                coords = self.overlays[id]['coords']
-                bitmap = wx.BitmapFromImage(img)
-                self.shapes.append(DragShape(bitmap, id))
-                self.shapes[-1].pos = coords[:2]
-        
+                self.DrawImage(img = img, drawid = id, coords = self.overlays[id]['coords'])
+            
         for textId in self.textdict.keys():
-            text = self.textdict[textId]['text']
-            color = self.textdict[textId]['color']
-            bgcolor = self.view['background']['color']
-            font = self.textdict[textId]['font']
-            rot = self.textdict[textId]['rotation']
-            coords, bbox, relCoords = self.TextBounds(self.textdict[textId])
             # create a bitmap the same size as our text
-            bmp = wx.EmptyBitmap(bbox[2], bbox[3])
-
-            # 'draw' the text onto the bitmap
-            dc = wx.MemoryDC()
-            dc.SelectObject(bmp)
-            dc.SetBackground(wx.Brush(bgcolor, wx.SOLID))
-            dc.Clear()
-            dc.SetTextForeground(color)
-            dc.SetFont(font)
-            if rot == 0:
-                dc.DrawText(text, 0, 0)
-            else:
-                dc.DrawRotatedText(text, relCoords[0], relCoords[1], rot)
-            # setbackgroundMode(wx.TRANSPARENT) doesn't work
-            dc.SelectObject(wx.NullBitmap)
-            mask = wx.Mask(bmp, bgcolor)
-            bmp.SetMask(mask)
-            shape = DragShape(bmp, textId)
-            shape.pos = bbox[:2]
-            self.shapes.append(shape)
+            self.DrawText(drawid = textId)
+            
+        self.pdc.DrawToDC(dc)
+        del odc
+        self.overlay.Reset()
         
-        self.Refresh(False)  
+    def DrawImage(self, img, drawid, coords):
+        """!Draw overlay image"""
+        bitmap = wx.BitmapFromImage(img)
+        w,h = bitmap.GetSize()
+        
+        self.pdc.BeginDrawing()
+        self.pdc.SetBackground(wx.TRANSPARENT_BRUSH)
+        self.pdc.RemoveId(drawid)
+        self.pdc.SetId(drawid)
+        self.pdc.DrawBitmap(bitmap, coords[0], coords[1], True)
+        self.pdc.SetIdBounds(drawid, wx.Rect(coords[0],coords[1], w, h))
+        self.pdc.EndDrawing()
+        
+    def DrawText(self, drawid):
+        """!Draw overlay text"""
+        self.pdc.BeginDrawing()
+        self.pdc.SetBackground(wx.TRANSPARENT_BRUSH)
+        self.pdc.RemoveId(drawid)
+        self.pdc.SetId(drawid)
+        self.pdc.SetFont(self.textdict[drawid]['font'])
+        self.pdc.SetTextForeground(self.textdict[drawid]['color'])
+        if self.textdict[drawid]['rotation'] == 0:
+            self.pdc.DrawText(self.textdict[drawid]['text'], self.textdict[drawid]['coords'][0],
+                                                             self.textdict[drawid]['coords'][1])
+        else:
+            self.pdc.DrawRotatedText(self.textdict[drawid]['text'], self.textdict[drawid]['coords'][0],
+                                                                    self.textdict[drawid]['coords'][1],
+                                                                    self.textdict[drawid]['rotation'])
+        self.pdc.SetIdBounds(drawid, self.textdict[drawid]['bbox'])
+        self.pdc.EndDrawing()
+        
+    def UpdateOverlays(self):
+        self.Map.ChangeMapSize(self.GetClientSize())
+        self.Map.RenderOverlays(force = True)
+
+        for textId in self.textdict.keys():
+            coords, bbox, relCoords = self.TextBounds(self.textdict[textId])
+            self.textdict[textId]['coords'] = coords
+            self.textdict[textId]['bbox'] = bbox
+        # rerender OnIdle
+        self.render['overlays'] = True
                     
     def OnMouseAction(self, event):
         """!Handle mouse events"""
@@ -362,6 +383,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             
     def OnLeftDown(self, event):
         """!On left mouse down"""
+        self.mouse['begin'] = event.GetPositionTuple()
         if self.mouse['use'] == "lookHere":
             pos = event.GetPosition()
             size = self.GetClientSize()
@@ -391,11 +413,13 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self.SetDrawArrow((pos[0], size[1] - pos[1]))
                 
         if self.mouse['use'] == 'pointer':
-            shape = self.FindShape(event.GetPosition())
-            if shape:
-                self.dragShape = shape
-                self.dragStartPos = event.GetPosition()
-                self.deleteOld = True
+            # get decoration or text id
+            self.dragid = None
+            self.mouse['tmp'] = self.mouse['begin']
+            idlist = self.pdc.FindObjects(self.mouse['tmp'][0], self.mouse['tmp'][1],
+                                          self.hitradius)                            
+            if idlist != []:
+                self.dragid = idlist[0] #drag whatever is on top
                 
         event.Skip()    
         
@@ -410,42 +434,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 self.cplanes[idx]['position']['y'] = y 
             
         if self.mouse['use'] == 'pointer':
-            if not self.dragShape:
-                event.Skip()
-                return
-            if self.dragShape and not self.dragImage:
-            # only start the drag after having moved a couple pixels
-                tolerance = 2
-                pt = event.GetPosition()
-                dx = abs(pt.x - self.dragStartPos.x)
-                dy = abs(pt.y - self.dragStartPos.y)
-                if dx <= tolerance and dy <= tolerance:
-                    return
-                elif self.deleteOld:
-                    # refresh the area of the window where the shape was so it
-                    # will get erased.
-                    # need to be redrawn now ?
-                    self.dragShape.shown = False
-                    self.RefreshRect(self.dragShape.GetRect(), False)
-                    self.Update()
-                    self.deleteOld = False
-                    return
-                else:
-                    if self.dragShape.text:
-                        self.dragImage = wx.DragString(self.dragShape.text,
-                                                      wx.StockCursor(wx.CURSOR_HAND))
-                    else:
-                        self.dragImage = wx.DragImage(self.dragShape.bmp,
-                                                     wx.StockCursor(wx.CURSOR_HAND))
-                    hotspot = self.dragStartPos - self.dragShape.pos
-                    self.dragImage.BeginDrag(hotspot, self)
-                    self.dragImage.Move(pt)
-                    self.dragImage.Show()
-
-            elif self.dragShape and self.dragImage:
-            # now move it and show it again if needed
-                self.dragImage.Move(event.GetPosition())
-                self.dragImage.Show()
+            self.DragItem(self.dragid, event)
                 
         event.Skip()
             
@@ -489,41 +478,57 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self.mouse['use'] = 'pointer'
             self.SetCursor(self.cursors['default'])
         elif self.mouse['use'] == 'pointer':
-            if not self.dragImage or not self.dragShape:
-                self.dragImage = None
-                self.dragShape = None
-                return
-
-            # Hide the image, end dragging, and nuke out the drag image.
-            self.dragImage.Hide()
-            self.dragImage.EndDrag()
-            self.dragImage = None
-
-
-            # reposition and draw the shape
-            self.dragShape.pos = (
-                self.dragShape.pos[0] + event.GetPosition()[0] - self.dragStartPos[0],
-                self.dragShape.pos[1] + event.GetPosition()[1] - self.dragStartPos[1]
-                )
-            if self.dragShape.id in self.overlays:
-                self.overlays[self.dragShape.id]['coords'] = tuple(self.dragShape.GetRect())
-            else: # text
-                self.textdict[self.dragShape.id]['bbox'] = self.dragShape.GetRect()
-                self.textdict[self.dragShape.id]['coords'][0] += event.GetPosition()[0] - self.dragStartPos[0]
-                self.textdict[self.dragShape.id]['coords'][1] += event.GetPosition()[1] - self.dragStartPos[1]
-            self.dragShape.shown = True
-            self.RefreshRect(self.dragShape.GetRect())
-            self.dragShape = None
-        event.Skip()
+            if self.dragid < 99 and self.dragid in self.overlays:
+                self.overlays[self.dragid]['coords'] = self.pdc.GetIdBounds(self.dragid)
+            elif self.dragid > 100 and self.dragid in self.textdict:
+                self.textdict[self.dragid]['bbox'] = self.pdc.GetIdBounds(self.dragid)
+                
+            self.dragid = None
+            self.Refresh(False)
     
     def OnDClick(self, event):
-        shape = self.FindShape(event.GetPosition())
-        if shape.id == 1:
+        """!On mouse double click"""
+        if self.mouse['use'] != 'pointer': return
+        pos = event.GetPositionTuple()
+        idlist  = self.pdc.FindObjects(pos[0], pos[1], self.hitradius)
+        if idlist == []:
+            return
+        self.dragid = idlist[0]
+        
+        if self.dragid == 1:
             self.parent.OnAddLegend(None)
-        elif shape.id > 100:
-            self.dragid = shape.id
+        elif self.dragid > 100:
             self.parent.OnAddText(None)
-                    
+            
+    def DragItem(self, id, event):
+        """!Drag an overlay decoration item
+        """
+        if not id: return
+        Debug.msg (5, "GLWindow.DragItem(): id=%d" % id)
+    
+        x, y = self.mouse['tmp']
+        dx = event.GetX() - x
+        dy = event.GetY() - y
+        self.pdc.SetBackground(wx.TRANSPARENT_BRUSH)
+        self.pdc.TranslateId(id, dx, dy)
+        
+        r2 = self.pdc.GetIdBounds(id)
+        if type(r2) is list:
+            r2 = wx.Rect(r[0], r[1], r[2], r[3])
+        if id > 100: # text
+            self.textdict[id]['bbox'] = r2
+            self.textdict[id]['coords'][0] += dx
+            self.textdict[id]['coords'][1] += dy
+        else:
+            self.overlays[id]['coords'] = r2
+        
+        dc = wx.ClientDC(self)
+        odc = wx.DCOverlay(self.overlay, dc)
+        odc.Clear()
+        self.pdc.DrawToDC(dc)
+        del odc
+        self.mouse['tmp'] = (event.GetX(), event.GetY()) 
+                       
     def OnQuerySurface(self, event):
         """!Query surface on given position"""
         size = self.GetClientSizeTuple()
@@ -652,17 +657,6 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         """
         self._display.EraseMap()
         self.SwapBuffers()
-    
-    def DrawShapes(self, dc):
-        for shape in self.shapes:
-            if shape.shown:
-                shape.Draw(dc)
-                
-    def FindShape(self, pt):
-        for shape in self.shapes:
-            if shape.HitTest(pt):
-                return shape
-        return None
     
     def SetDrawArrow(self, pos):
         
@@ -1923,32 +1917,4 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         """
         return self.parent.MapWindow2D.TextBounds(textinfo, relcoords = True)
     
-class DragShape:
-    """!Class for drawing overlays (based on wxpython demo)"""
-    def __init__(self, bmp, id):
-        self.bmp = bmp
-        self.id = id
-        self.pos = (0,0)
-        self.shown = True
-        self.text = None
 
-    def HitTest(self, pt):
-        rect = self.GetRect()
-        return rect.InsideXY(pt.x, pt.y)
-
-    def GetRect(self):
-        return wx.Rect(self.pos[0], self.pos[1],
-                      self.bmp.GetWidth(), self.bmp.GetHeight())
-
-    def Draw(self, dc, op = wx.COPY):
-        if self.bmp.Ok():
-            memDC = wx.MemoryDC()
-            memDC.SelectObject(self.bmp)
-
-            dc.Blit(self.pos[0], self.pos[1],
-                    self.bmp.GetWidth(), self.bmp.GetHeight(),
-                    memDC, 0, 0, op, True)
-
-            return True
-        else:
-            return False
