@@ -25,23 +25,19 @@ static int parse_sql_update(const char *, char **, column_info **, int *, char *
 
 int db__driver_execute_immediate(dbString * sql)
 {
-    cursor *c;
     char *where, *table;
     int res, ncols, i;
     column_info *cols;
 
-    OGRFeatureH feature;
-    OGRFeatureDefnH feature_defn;
-    OGRFieldDefnH field_defn;
+    OGRLayerH hLayer;
+    OGRFeatureH hFeature;
+    OGRFeatureDefnH hFeatureDefn;
+    OGRFieldDefnH hFieldDefn;
     
     G_debug(1, "db__driver_execute_immediate():");
     
     init_error();
     
-    c = alloc_cursor();
-    if (c == NULL)
-	return DB_FAILED;
-
     /* parse UPDATE statement */
     G_debug(3, "\tSQL: '%s'", db_get_string(sql));
     res = parse_sql_update(db_get_string(sql), &table, &cols, &ncols, &where);
@@ -54,29 +50,29 @@ int db__driver_execute_immediate(dbString * sql)
     }
 
     /* get OGR layer */
-    c->hLayer = OGR_DS_GetLayerByName(hDs, table);
-    if (!c->hLayer) {
+    hLayer = OGR_DS_GetLayerByName(hDs, table);
+    if (hLayer) {
 	append_error(_("OGR layer <%s> not found"), table);
 	report_error();
 	return DB_FAILED;
     }
     
     if (where)
-	OGR_L_SetAttributeFilter(c->hLayer, where);
+	OGR_L_SetAttributeFilter(hLayer, where);
     
     /* get columns info */
-    feature_defn = OGR_L_GetLayerDefn(c->hLayer);
+    hFeatureDefn = OGR_L_GetLayerDefn(hLayer);
     for (i = 0; i < ncols; i++) {
-	cols[i].index = OGR_FD_GetFieldIndex(feature_defn, cols[i].name);
+	cols[i].index = OGR_FD_GetFieldIndex(hFeatureDefn, cols[i].name);
 	if (cols[i].index < 0) {
 	    append_error(_("Column <%s> not found in table <%s>"),
 			 cols[i].name, table);
 	    report_error();
 	    return DB_FAILED;
 	}
-	cols[i].qindex = OGR_FD_GetFieldIndex(feature_defn, cols[i].value);
-	field_defn = OGR_FD_GetFieldDefn(feature_defn, cols[i].index);
-	cols[i].type = OGR_Fld_GetType(field_defn);
+	cols[i].qindex = OGR_FD_GetFieldIndex(hFeatureDefn, cols[i].value);
+	hFieldDefn = OGR_FD_GetFieldDefn(hFeatureDefn, cols[i].index);
+	cols[i].type = OGR_Fld_GetType(hFieldDefn);
 
 	G_debug(3, "\t\tcol=%s, val=%s idx=%d, type=%d, qidx=%d",
 		cols[i].name, cols[i].value, cols[i].index, cols[i].type,
@@ -84,18 +80,18 @@ int db__driver_execute_immediate(dbString * sql)
     }
     
     /* update features */
-    OGR_L_ResetReading(c->hLayer);
+    OGR_L_ResetReading(hLayer);
     while(TRUE) {
 	char *value;
 	
-	feature = OGR_L_GetNextFeature(c->hLayer);
-	if (!feature)
+	hFeature = OGR_L_GetNextFeature(hLayer);
+	if (!hFeature)
 	    break;
-	G_debug(5, "\tfid=%ld", OGR_F_GetFID(feature));
+	G_debug(5, "\tfid=%ld", OGR_F_GetFID(hFeature));
 	
 	for (i = 0; i < ncols; i++) {
 	    if (cols[i].qindex > -1) {
-		value = (char *)OGR_F_GetFieldAsString(feature, cols[i].qindex);
+		value = (char *)OGR_F_GetFieldAsString(hFeature, cols[i].qindex);
 	    }
 	    else {
 		if ((cols[i].type != OFTInteger ||
@@ -107,10 +103,10 @@ int db__driver_execute_immediate(dbString * sql)
 		    value = cols[i].value;
 		}
 	    }
-	    OGR_F_SetFieldString(feature, cols[i].index, value);
+	    OGR_F_SetFieldString(hFeature, cols[i].index, value);
 	}
-	OGR_L_SetFeature(c->hLayer, feature);
-	OGR_F_Destroy(feature);
+	OGR_L_SetFeature(hLayer, hFeature);
+	OGR_F_Destroy(hFeature);
     }
     
     G_free(table);
