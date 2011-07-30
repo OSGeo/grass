@@ -603,6 +603,9 @@ class Settings:
                     },
                 'arrow': {
                     'color': (0, 0, 0),
+                    },
+                'scalebar': {
+                    'color': (0, 0, 0),
                     }
                 },
             'modeler' : {
@@ -710,11 +713,12 @@ class Settings:
         self.internalSettings['nviz']['view']['focus']['x'] = -1
         self.internalSettings['nviz']['view']['focus']['y'] = -1
         self.internalSettings['nviz']['view']['focus']['z'] = -1
-        self.internalSettings['nviz']['arrow'] = {}
-        self.internalSettings['nviz']['arrow']['position'] = {}
-        self.internalSettings['nviz']['arrow']['position']['x'] = 0
-        self.internalSettings['nviz']['arrow']['position']['y'] = 0
-        self.internalSettings['nviz']['arrow']['size'] = 100
+        for decor in ('arrow', 'scalebar'):
+            self.internalSettings['nviz'][decor] = {}
+            self.internalSettings['nviz'][decor]['position'] = {}
+            self.internalSettings['nviz'][decor]['position']['x'] = 0
+            self.internalSettings['nviz'][decor]['position']['y'] = 0
+            self.internalSettings['nviz'][decor]['size'] = 100
         self.internalSettings['nviz']['vector'] = {}
         self.internalSettings['nviz']['vector']['points'] = {}
         self.internalSettings['nviz']['vector']['points']['marker'] = ("x",

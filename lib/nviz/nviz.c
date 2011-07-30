@@ -50,7 +50,11 @@ void Nviz_init_data(nv_data * data)
     /* north arrow */
     data->draw_arrow = 0;
     data->arrow = NULL;
-    
+
+    /* scale bar*/
+    data->num_scalebars = 0;
+    data->scalebar = NULL;
+
     return;
 }
 
@@ -73,7 +77,13 @@ void Nviz_destroy_data(nv_data *data)
 	data->arrow = NULL;
 	data->draw_arrow = 0;
     }
-    
+
+    for (i = 0; data->num_scalebars; i++) {
+	G_free(data->scalebar[i]);
+	data->scalebar[i] = NULL;
+    }
+    data->num_scalebars = 0;
+    data->scalebar = NULL;
 }
 
 /*!
@@ -305,4 +315,120 @@ void Nviz_delete_arrow(nv_data *data)
     data->draw_arrow = 0;
 
     return;
+}
+
+/*! Add new scalebar
+
+  \param data nviz data
+  \param bar_id scale bar id
+  \param coords real(?) coordinates
+  \param size scale bar length
+  \param color scalebar/text color
+
+  \return pointer to allocated scalebar_data structure
+  \return NULL on error
+*/
+
+struct scalebar_data *Nviz_new_scalebar(nv_data *data,
+		      int bar_id, float *coords, float size,
+		      unsigned int color)
+{
+    struct scalebar_data *s;
+     
+
+    s = (struct scalebar_data *) G_malloc(sizeof(struct scalebar_data));
+    s->id = bar_id;
+    s->color = color;
+    s->size = size;
+    s->where[0] = coords[0];
+    s->where[1] = coords[1];
+    s->where[2] = coords[2];
+
+    data->scalebar = (struct scalebar_data **) G_realloc(data->scalebar,
+		      data->num_scalebars + 1 * sizeof(struct scalebar_data *));
+    data->scalebar[data->num_scalebars++] = s;
+
+    return s;
+
+}
+/*!
+   \brief Sets the scale bar position and return world coords
+
+   \param data nviz data
+   \param bar_id scale bar id
+   \param sx,sy screen coordinates
+   \param size scale bar length
+   \param color scalebar/text color
+
+   \return pointer to allocated scalebar_data structure
+   \return NULL when there's no surface
+ */
+struct scalebar_data *Nviz_set_scalebar(nv_data *data, int bar_id,
+		      int sx, int sy, float size,
+		      unsigned int color)
+{
+    int i, id, pt[2];
+    int *surf_list, num_surfs;
+    float coords[3];
+    struct scalebar_data *s;
+
+    if (GS_num_surfs() > 0) {
+	surf_list = GS_get_surf_list(&num_surfs);
+	id = surf_list[0];
+	G_free(surf_list);
+
+	pt[0] = sx;
+	pt[1] = sy;
+
+	GS_set_Narrow(pt, id, coords); /* the same like arrow */
+
+	for (i = 0; i < data->num_scalebars; i++) {
+	    s = data->scalebar[i];
+	    if (s->id == bar_id) {
+		s->color = color;
+		s->size = size;
+		s->where[0] = coords[0];
+		s->where[1] = coords[1];
+		s->where[2] = coords[2];
+
+		return s;
+	    }
+	}
+	
+	s = Nviz_new_scalebar(data, bar_id, coords, size, color);
+
+	return s;
+    }
+    return NULL;
+}
+/*!
+   \brief Draws the Scale bar
+
+   \param data nviz data
+ */
+void Nviz_draw_scalebar(nv_data *data)
+{
+    int i;
+
+    GLuint FontBase = 0; /* don't know how to get fontbase*/
+
+    for (i = 0; i < data->num_scalebars; i++) {
+	struct scalebar_data *s = data->scalebar[i];
+
+	gsd_scalebar(s->where, s->size, FontBase, s->color, s->color);
+    }
+}
+
+/*!
+   \brief Deletes scale bar
+
+   \param data nviz data
+ */
+void Nviz_delete_scalebar(nv_data *data, int bar_id)
+{
+    if (bar_id < data->num_scalebars) {
+	G_free(data->scalebar[bar_id]);
+	data->scalebar[bar_id] = NULL;
+	data->num_scalebars--;
+    }
 }
