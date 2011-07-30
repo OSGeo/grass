@@ -347,7 +347,9 @@ def install_extension():
                   ]
     
     if flags['d']:
+        grass.message(_("To compile run:"))
         sys.stderr.write(' '.join(makeCmd) + '\n')
+        grass.message(_("To install run:\n\n"))
         sys.stderr.write(' '.join(installCmd) + '\n')
         return
     
