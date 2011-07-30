@@ -735,6 +735,12 @@
 	  <label>GSoC testing</label>
 	  <items>
 	    <menuitem>
+	      <label>WMS</label>
+	      <help>Experimental WMS support for wxGUI</help>
+	      <keywords>display,wms</keywords>
+	      <handler>OnNewDisplayWMS</handler>
+	    </menuitem>
+	    <menuitem>
 	      <label>RStream</label>
 	      <help>GUI for hydrological modelling (r.stream.*)</help>
 	      <keywords>raster,hydrology</keywords>
