@@ -500,7 +500,7 @@ class Settings:
                         },
                     'color' : {
                         'map' : True,
-                        'value' : (0, 0, 0, 255), # constant: black
+                        'value' : (100, 100, 100, 255), # constant: grey
                         },
                     'draw' : {
                         'wire-color' : (136, 136, 136, 255),
@@ -542,7 +542,7 @@ class Settings:
                 'volume' : {
                     'color' : {
                         'map' : True,
-                        'value' : (0, 0, 0, 255), # constant: black
+                        'value' : (100, 100, 100, 255), # constant: grey
                         },
                     'draw' : {
                         'mode'       : 0, # isosurfaces
@@ -556,10 +556,6 @@ class Settings:
                     'topo': {
                         'map' : None,
                         'value' : 0.0
-                        },
-                    'color': {
-                        'map' : True,
-                        'value': ''
                         },
                     'transp': {
                         'map' : None,
