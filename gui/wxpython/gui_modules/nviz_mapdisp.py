@@ -144,12 +144,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         self.nvizDefault = NvizDefault()
         self.light = copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'light')) # copy
-        self.decoration = self.nvizDefault.SetDecorDefaultProp()
-        arwSize = self._display.GetLongDim() / 8.
-        coef = 0.01
-        if arwSize < 1:
-            coef = 100.
-        self.decoration['arrow']['size'] = int(arwSize * coef)/coef
+        self.decoration = self.nvizDefault.SetDecorDefaultProp(type = 'arrow')
+        self.decoration['scalebar'] = []
+        self.decoration['arrow']['size'] = self._getDecorationSize()
         
         self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
         self.Bind(wx.EVT_SIZE,             self.OnSize)
@@ -412,6 +409,11 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             size = self.GetClientSize()
             self.SetDrawArrow((pos[0], size[1] - pos[1]))
                 
+        if self.mouse['use'] == 'scalebar':
+            pos = event.GetPosition()
+            size = self.GetClientSize()
+            self.SetDrawScalebar((pos[0], size[1] - pos[1]))
+            
         if self.mouse['use'] == 'pointer':
             # get decoration or text id
             self.dragid = None
@@ -473,8 +475,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self.lmgr.nviz.FindWindowByName('cplaneHere').SetValue(False)
             self.mouse['use'] = 'pointer'
             self.SetCursor(self.cursors['default'])
-        elif self.mouse["use"] == 'arrow':
-            self.lmgr.nviz.FindWindowByName('placeArrow').SetValue(False)
+        elif self.mouse["use"] in ('arrow', 'scalebar'):
+            self.lmgr.nviz.FindWindowById(
+                    self.lmgr.nviz.win['decoration'][self.mouse["use"]]['place']).SetValue(False)
             self.mouse['use'] = 'pointer'
             self.SetCursor(self.cursors['default'])
         elif self.mouse['use'] == 'pointer':
@@ -641,6 +644,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self._display.DrawFringe()
             if self.decoration['arrow']['show']:
                 self._display.DrawArrow()
+            if self.decoration['scalebar']:
+                self._display.DrawScalebar()
         
         stop = time.clock()
         
@@ -658,6 +663,14 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self._display.EraseMap()
         self.SwapBuffers()
     
+    def _getDecorationSize(self):
+        """!Get initial size of north arrow/scalebar"""
+        size = self._display.GetLongDim() / 8.
+        coef = 0.01
+        if size < 1:
+            coef = 100.
+        return int(size * coef)/coef
+    
     def SetDrawArrow(self, pos):
         
         if self._display.SetArrow(pos[0], pos[1], 
@@ -669,7 +682,27 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self.decoration['arrow']['position']['x'] = pos[0]
             self.decoration['arrow']['position']['y'] = pos[1]
             self.Refresh(False)
-            
+    
+    def SetDrawScalebar(self, pos):
+        """!Add scale bar, sets properties and draw"""
+        if len(self.decoration['scalebar']) == 0:
+            self.decoration['scalebar'].append(
+                    self.nvizDefault.SetDecorDefaultProp(type = 'scalebar')['scalebar'])
+            self.decoration['scalebar'][0]['size'] = self._getDecorationSize()
+        else:
+            self.decoration['scalebar'].append(copy.deepcopy(self.decoration['scalebar'][-1]))
+            self.decoration['scalebar'][-1]['id'] += 1
+        
+        ret = self._display.SetScalebar(self.decoration['scalebar'][-1]['id'], pos[0], pos[1], 
+                                 self.decoration['scalebar'][-1]['size'],
+                                 self.decoration['scalebar'][-1]['color'])
+        if ret:
+            self._display.DrawScalebar()
+            # update
+            self.decoration['scalebar'][-1]['position']['x'] = pos[0]
+            self.decoration['scalebar'][-1]['position']['y'] = pos[1]
+            self.Refresh(False)
+        
     def IsLoaded(self, item):
         """!Check if layer (item) is already loaded
         

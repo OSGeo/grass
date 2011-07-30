@@ -87,6 +87,14 @@ struct arrow_data
     float	  where[3];
 };
 
+struct scalebar_data
+{
+    int           id;
+    unsigned long color;
+    float	  size;
+    float	  where[3];
+};
+
 typedef struct
 {
     /* ranges */
@@ -108,6 +116,10 @@ typedef struct
     /* north arrow */
     int draw_arrow;
     struct arrow_data *arrow;
+    
+    /* scalebar */
+    int num_scalebars;
+    struct scalebar_data **scalebar;
     
     /* background color */
     int bgcolor;
@@ -200,6 +212,10 @@ void Nviz_draw_fringe(nv_data *data);
 int Nviz_draw_arrow(nv_data *);
 int Nviz_set_arrow(nv_data *, int, int, float, unsigned int);
 void Nviz_delete_arrow(nv_data *);
+struct scalebar_data * Nviz_new_scalebar(nv_data *, int, float *, float, unsigned int);
+struct scalebar_data * Nviz_set_scalebar(nv_data *, int , int, int, float, unsigned int);
+void Nviz_draw_scalebar(nv_data *);
+void Nviz_delete_scalebar(nv_data *, int);
 
 /* position.c */
 void Nviz_init_view(nv_data *);

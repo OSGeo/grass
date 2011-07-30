@@ -1637,9 +1637,29 @@ class Nviz(object):
         return Nviz_set_arrow(self.data, sx, sy, size, Nviz_color_from_str(color))       
         
     def DeleteArrow(self):
-        """!Delete draw north arrow
+        """!Delete north arrow
         """
         Nviz_delete_arrow(self.data)
+    
+    def SetScalebar(self, id, sx, sy, size, color):
+        """!Set scale bar from canvas coordinates
+        
+        @param sx,sy canvas coordinates
+        @param id scale bar id
+        @param size scale bar length
+        @param color scale bar color
+        """
+        return Nviz_set_scalebar(self.data, id, sx, sy, size, Nviz_color_from_str(color))
+    
+##    def DrawScalebar(self):
+##        """!Draw scale bar
+##        """
+##        return Nviz_draw_scalebar(self.data)
+    
+    def DeleteScalebar(self, id):
+        """!Delete scalebar
+        """
+        Nviz_delete_scalebar(self.data, id)
         
     def GetPointOnSurface(self, sx, sy):
         """!Get point on surface
@@ -1686,4 +1706,3 @@ class Nviz(object):
                                   byref(d), int(useExag))
         
         return d.value
-        

@@ -807,18 +807,26 @@ class Nviz:
         
         return (value, desc)
     
-    def SetDecorDefaultProp(self):
+    def SetDecorDefaultProp(self, type):
         """!Set default arrow properties
         """
         data = {}
         
         # arrow
-        data['arrow'] = UserSettings.Get(group = 'nviz', key = 'arrow')
-        data['arrow']['color'] = "%d:%d:%d" % (
-            UserSettings.Get(group = 'nviz', key = 'arrow', subkey = 'color')[:3])
-        data['arrow'].update(UserSettings.Get(group = 'nviz', key = 'arrow', internal = True))
-        data['arrow']['show'] = False
+        if type == 'arrow':
+            data['arrow'] = UserSettings.Get(group = 'nviz', key = 'arrow')
+            data['arrow']['color'] = "%d:%d:%d" % (
+                UserSettings.Get(group = 'nviz', key = 'arrow', subkey = 'color')[:3])
+            data['arrow'].update(UserSettings.Get(group = 'nviz', key = 'arrow', internal = True))
+            data['arrow']['show'] = False
         
+        # arrow
+        if type == 'scalebar':
+            data['scalebar'] = copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'scalebar'))
+            data['scalebar']['color'] = "%d:%d:%d" % (
+                UserSettings.Get(group = 'nviz', key = 'scalebar', subkey = 'color')[:3])
+            data['scalebar'].update(copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'scalebar', internal = True)))
+            data['scalebar']['id'] = 0
         return data
     
 class WriteWorkspaceFile(object):
