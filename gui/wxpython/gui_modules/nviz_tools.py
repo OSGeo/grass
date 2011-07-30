@@ -707,8 +707,9 @@ class NvizToolWindow(FN.FlatNotebook):
                           pos = (row, 2))
             
             if code == 'color':
+                color = UserSettings.Get(group = 'nviz', key = 'surface', subkey = ['color', 'value'])
                 value = csel.ColourSelect(panel, id = wx.ID_ANY,
-                                          colour = (0,0,0),
+                                          colour = color,
                                           size = globalvar.DIALOG_COLOR_SIZE)
                 value.Bind(csel.EVT_COLOURSELECT, self.OnSurfaceMap)
             elif code == 'mask':
@@ -1913,7 +1914,7 @@ class NvizToolWindow(FN.FlatNotebook):
         self.win['volume']['inout'] = inout.GetId()
         
         row = 1
-        for code, attrb in (('topo', _("Topography level")),
+        for code, attrb in (('topo', _("Isosurface value")),
                             ('color', _("Color")),
                             ('mask', _("Mask")),
                             ('transp', _("Transparency")),
@@ -1958,8 +1959,9 @@ class NvizToolWindow(FN.FlatNotebook):
                 map = None
             
             if code == 'color':
+                color = UserSettings.Get(group = 'nviz', key = 'volume', subkey = ['color', 'value'])
                 value = csel.ColourSelect(panel, id = wx.ID_ANY,
-                                          colour = (0,0,0),
+                                          colour = color,
                                           size = globalvar.DIALOG_COLOR_SIZE)
                 value.Bind(csel.EVT_COLOURSELECT, self.OnVolumeIsosurfMap)
                 value.SetName('color')
