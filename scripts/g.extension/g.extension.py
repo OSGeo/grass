@@ -288,7 +288,8 @@ def cleanup():
     if remove_tmpdir:
         grass.try_rmdir(tmpdir)
     else:
-        grass.info(_("Path to the source code: '%s'") % os.path.join(tmpdir, options['extension']))
+        grass.message(_("Path to the source code:"))
+        sys.stderr.write('%s\n' % os.path.join(tmpdir, options['extension']))
                         
 def install_extension():
     gisbase = os.getenv('GISBASE')
