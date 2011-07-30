@@ -165,6 +165,8 @@ Icons = {
     'layerManager' : {
         'newdisplay'   : MetaIcon(img = iconSet.get('monitor-create', wx.ART_ERROR),
                                   label = _('Start new map display')),
+        'newdisplayWMS' : MetaIcon(img = iconSet.get('layer-wms-add', wx.ART_ERROR),
+                                   label = _('Start new map display (experimental WMS support)')),
         'workspaceNew'  : MetaIcon(img = iconSet.get('create', wx.ART_ERROR),
                                    label = _('Create new workspace (Ctrl+N)')),
         'workspaceOpen' : MetaIcon(img = iconSet.get('open', wx.ART_ERROR),
