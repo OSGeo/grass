@@ -1,17 +1,28 @@
 <H2>DESCRIPTION</H2>
 
-<EM>i.eb.netrad</EM> calculates the net radiation at the time of satellite overpass, the way it is in the SEBAL model of bastiaanssen (1995).
+<EM>i.eb.netrad</EM> calculates the net radiation at the time of satellite
+overpass, the way it is in the SEBAL model of Bastiaanssen (1995).
 
-It takes input of Albedo, NDVI, Surface Skin temperature, time of satellite overpass, surface emissivity, difference of temperature from surface skin and about 2 m height (dT), instantaneous satellite overpass single-way atmospheric transmissivity (tsw), Day of Year (DOY), and sun zenith angle.
+It takes input of Albedo, NDVI, Surface Skin temperature, time of satellite
+overpass, surface emissivity, difference of temperature from surface skin and
+about 2 m height (dT), instantaneous satellite overpass single-way atmospheric
+transmissivity (tsw), Day of Year (DOY), and sun zenith angle.
 
 <H2>NOTES</H2>
-In the old methods, dT was taken as flat images (dT=5.0), if you don't have a dT map from ground data, you would want to try something in this line, this is to calculate atmospherical energy balance. In the same way, a standard tsw is used in those equations. Refer to r_net.c for that and for other non-used equations, but stored in there for further research convenience.
+In the old methods, dT was taken as flat images (dT=5.0), if you don't have a dT
+map from ground data, you would want to try something in this line, this is to
+calculate atmospherical energy balance. In the same way, a standard tsw is used
+in those equations. Refer to r_net.c for that and for other non-used equations,
+but stored in there for further research convenience.
+
 <H2>TODO</H2>
+Add more explanations.
 
 <H2>SEE ALSO</H2>
 
 <em>
-<A HREF="i.eb.g0.html">i.eb.g0</A><br>
+<A HREF="i.eb.soilheatflux.html">i.eb.soilheatflux</A><br>
+<A HREF="i.eb.h_SEBAL01.html">i.eb.h_SEBAL01</A><br>
 <A HREF="i.albedo.html">i.albedo</A><br>
 </em>
 
@@ -19,7 +30,6 @@ In the old methods, dT was taken as flat images (dT=5.0), if you don't have a dT
 <H2>AUTHORS</H2>
 
 Yann Chemin, International Rice Research Institute, The Philippines<BR>
-
 
 <p>
 <i>Last changed: $Date$</i>

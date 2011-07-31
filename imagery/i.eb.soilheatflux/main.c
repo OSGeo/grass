@@ -47,8 +47,8 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("imagery"));
-    G_add_keyword(_("soil heat flux"));
     G_add_keyword(_("energy balance"));
+    G_add_keyword(_("soil heat flux"));
     G_add_keyword(_("SEBAL"));
     module->description = _("Soil heat flux approximation (Bastiaanssen, 1995).");
     

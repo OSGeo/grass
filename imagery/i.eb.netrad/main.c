@@ -53,8 +53,9 @@ int main(int argc, char *argv[])
     /************************************/ 
     G_gisinit(argv[0]);
     module = G_define_module();
-    G_add_keyword(_("net radiation, energy balance, SEBAL"));
+    G_add_keyword(_("imagery"));
     G_add_keyword(_("energy balance"));
+    G_add_keyword(_("net radiation"));
     G_add_keyword(_("SEBAL"));
     module->description =
 	_("Net radiation approximation (Bastiaanssen, 1995).");
