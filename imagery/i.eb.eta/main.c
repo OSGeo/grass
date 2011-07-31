@@ -41,8 +41,8 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("imagery"));
-    G_add_keyword(_("actual evapotranspiration"));
     G_add_keyword(_("energy balance"));
+    G_add_keyword(_("actual evapotranspiration"));
     G_add_keyword(_("SEBAL"));
     module->description =
 	_("Actual evapotranspiration for diurnal period (Bastiaanssen, 1995).");

@@ -12,8 +12,7 @@
  *   	    	 for details.
  *
  *****************************************************************************/
-     
-    
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -46,9 +45,9 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
     module = G_define_module();
     G_add_keyword(_("imagery"));
-    G_add_keyword(_("evaporative fraction"));
-    G_add_keyword(_("soil moisture"));
     G_add_keyword(_("energy balance"));
+    G_add_keyword(_("soil moisture"));
+    G_add_keyword(_("evaporative fraction"));
     G_add_keyword(_("SEBAL"));
     module->description =
 	_("Computes evaporative fraction (Bastiaanssen, 1995) and "
