@@ -719,7 +719,8 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
     }
 
     /* determine output format native or ogr */
-    if (G_find_file2("", "OGR", G_mapset())) {
+    if (strcmp(G_program_name(), "v.external") != 0 &&
+	G_find_file2("", "OGR", G_mapset())) {
 	/* OGR */
 	FILE *fp;
 	struct Key_Value *key_val;
