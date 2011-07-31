@@ -1243,11 +1243,12 @@ class GMFrame(wx.Frame):
     def NewDisplayWMS(self, show = True):
         Debug.msg(1, "GMFrame.NewDisplay(): idx=%d" % self.disp_idx)
         try:
-            from gui_modules.wmsmenu import DisplayWMSMenu
+            from gui_modules.wms.wmsmenu import DisplayWMSMenu
         except:
             gcmd.GError(parent = self.parent,
-                        message = _("Experimental WMS support for wxGUI not available. You can install it by %s") % \
-                            'g.extension -s extension=wx.wms')
+                        message = _("Experimental WMS support for wxGUI not available. "
+                                    "You can install it by '%s'") % \
+                            "g.extension -s extension=wx.wms")
             return
         
     	DisplayWMSMenu()
