@@ -50,7 +50,8 @@ struct Option* M_define_option(int n, const char *desc, int multiple)
     if (strcmp(p->key, "rast") == 0 || strcmp(p->key, "rast3d") == 0)
 	p->guisection = _("Raster");
     else if (strcmp(p->key, "vect") == 0 || strcmp(p->key, "oldvect") == 0 ||
-	     strcmp(p->key, "asciivect") == 0)
+	     strcmp(p->key, "asciivect") == 0 ||
+	     strcmp(p->key, "sites") == 0)
 	p->guisection = _("Vector");
     else if (strcmp(p->key, "region") == 0 || strcmp(p->key, "region3d") == 0)
 	p->guisection = _("Region");
