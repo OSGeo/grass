@@ -191,20 +191,22 @@ class VirtualAttributeList(wx.ListCtrl,
             if columns:
                 ret = gcmd.RunCommand('v.db.select',
                                       quiet = True,
+                                      parent = self,
                                       flags = 'c',
                                       map = self.mapDBInfo.map,
                                       layer = layer,
                                       columns = ','.join(columns),
                                       where = where,
-                                      stdout=outFile)
+                                      stdout = outFile)
             else:
                 ret = gcmd.RunCommand('v.db.select',
                                       quiet = True,
+                                      parent = self,
                                       flags = 'c',
                                       map = self.mapDBInfo.map,
                                       layer = layer,
                                       where = where,
-                                      stdout=outFile) 
+                                      stdout = outFile) 
         
         # These two should probably be passed to init more cleanly
         # setting the numbers of items = number of elements in the dictionary
@@ -699,9 +701,12 @@ class AttributeManager(wx.Frame):
             win.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.OnDataItemActivated)
 
             self.layerPage[layer] = {'browsePage': panel.GetId()}
-
+            
+            label = _("Table")
+            if not self.editable:
+                label += _(" (readonly)")
             self.browsePage.AddPage(page=panel, text=" %d / %s %s" % \
-                                        (layer, _("Table"), self.mapDBInfo.layers[layer]['table']))
+                                        (layer, label, self.mapDBInfo.layers[layer]['table']))
 
             pageSizer = wx.BoxSizer(wx.VERTICAL)
 
