@@ -216,14 +216,25 @@ class MapsetDialog(ElementDialog):
         return self.GetElement()
     
 class NewVectorDialog(ElementDialog):
-    """!Dialog for creating new vector map"""
-    def __init__(self, parent, id, title, disableAdd=False, disableTable=False,
-                 style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
+    def __init__(self, parent, id = wx.ID_ANY, title = _('Create new vector map'),
+                 disableAdd = False, disableTable = False,
+                 style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, *kwargs):
+        """!Dialog for creating new vector map
+
+        @param parent parent window
+        @param id window id
+        @param title window title
+        @param disableAdd disable 'add layer' checkbox
+        @param disableTable disable 'create table' checkbox
+        @param style window style
+        @param kwargs other argumentes for ElementDialog
         
+        @return dialog instance       
+        """
         ElementDialog.__init__(self, parent, title, label = _("Name for new vector map:"))
         
-        self.element = gselect.Select(parent=self.panel, id=wx.ID_ANY, size=globalvar.DIALOG_GSELECT_SIZE,
-                                      type='vector', mapsets=[grass.gisenv()['MAPSET'],])
+        self.element = gselect.Select(parent = self.panel, id = wx.ID_ANY, size = globalvar.DIALOG_GSELECT_SIZE,
+                                      type = 'vector', mapsets = [grass.gisenv()['MAPSET'],])
         
         self.table = wx.CheckBox(parent = self.panel, id = wx.ID_ANY,
                                  label = _("Create attribute table"))
@@ -241,55 +252,76 @@ class NewVectorDialog(ElementDialog):
         
         self.PostInit()
         
-        self.__Layout()
+        self._layout()
         self.SetMinSize(self.GetSize())
         
     def OnMapName(self, event):
         """!Name for vector map layer given"""
         self.OnElement(event)
         
-    def __Layout(self):
+    def _layout(self):
         """!Do layout"""
-        self.dataSizer.Add(self.element, proportion=0,
-                      flag=wx.EXPAND | wx.ALL, border=1)
+        self.dataSizer.Add(self.element, proportion = 0,
+                      flag = wx.EXPAND | wx.ALL, border = 1)
         
-        self.dataSizer.Add(self.table, proportion=0,
-                      flag=wx.EXPAND | wx.ALL, border=1)
+        self.dataSizer.Add(self.table, proportion = 0,
+                      flag = wx.EXPAND | wx.ALL, border = 1)
         
         self.dataSizer.AddSpacer(5)
         
-        self.dataSizer.Add(item=self.addbox, proportion=0,
-                      flag=wx.EXPAND | wx.ALL, border=1)
+        self.dataSizer.Add(item = self.addbox, proportion = 0,
+                      flag = wx.EXPAND | wx.ALL, border = 1)
         
         self.panel.SetSizer(self.sizer)
         self.sizer.Fit(self)
 
     def GetName(self):
-        """!Return (mapName, overwrite)"""
+        """!Get name of vector map to be created"""
         return self.GetElement().split('@', 1)[0]
-            
-def CreateNewVector(parent, cmd, title=_('Create new vector map'),
-                    exceptMap=None, log=None, disableAdd=False, disableTable=False):
-    """!Create new vector map layer
 
-    @cmd cmd (prog, **kwargs)
+    def IsChecked(self, key):
+        """!Get dialog properties
+
+        @param key window key ('add', 'table')
+
+        @return True/False
+        @return None on error
+        """
+        if key == 'add':
+            return self.addbox.IsChecked()
+        elif key == 'table':
+            return self.table.IsChecked()
+        
+        return None
     
-    @return tuple (name of create vector map, add to layer tree)
-    @return None of failure
+def CreateNewVector(parent, cmd, title = _('Create new vector map'),
+                    exceptMap = None, log = None, disableAdd = False, disableTable = False):
+    """!Create new vector map layer
+    
+    @param cmd (prog, **kwargs)
+    @param title window title
+    @param exceptMap list of maps to be excepted
+    @param log
+    @param disableAdd disable 'add layer' checkbox
+    @param disableTable disable 'create table' checkbox
+
+    @return dialog instance
+    @return None on error
     """
-    dlg = NewVectorDialog(parent, wx.ID_ANY, title,
-                          disableAdd, disableTable)
+    dlg = NewVectorDialog(parent, title = title,
+                          disableAdd = disableAdd, disableTable = disableTable)
+    
     if dlg.ShowModal() == wx.ID_OK:
         outmap = dlg.GetName()
         if outmap == exceptMap:
-            wx.MessageBox(parent=parent,
-                          message=_("Unable to create vector map <%s>.") % outmap,
-                          caption=_("Error"),
-                          style=wx.ID_OK | wx.ICON_ERROR | wx.CENTRE)
-            return (None, None)
+            gcmd.GError(parent = parent,
+                        message = _("Unable to create vector map <%s>.") % outmap)
+            dlg.Destroy()
+            return None
         
         if outmap == '': # should not happen
-            return (None, None)
+            dlg.Destroy()
+            return None
         
         cmd[1][cmd[2]] = outmap
         
@@ -299,20 +331,21 @@ def CreateNewVector(parent, cmd, title=_('Create new vector map'),
             listOfVectors = []
         
         overwrite = False
-        if not UserSettings.Get(group='cmd', key='overwrite', subkey='enabled') and \
+        if not UserSettings.Get(group = 'cmd', key = 'overwrite', subkey = 'enabled') and \
                 outmap in listOfVectors:
-            dlgOw = wx.MessageDialog(parent, message=_("Vector map <%s> already exists "
-                                                       "in the current mapset. "
-                                                       "Do you want to overwrite it?") % outmap,
-                                     caption=_("Overwrite?"),
-                                     style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
+            dlgOw = wx.MessageDialog(parent, message = _("Vector map <%s> already exists "
+                                                         "in the current mapset. "
+                                                         "Do you want to overwrite it?") % outmap,
+                                     caption = _("Overwrite?"),
+                                     style = wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
             if dlgOw.ShowModal() == wx.ID_YES:
                 overwrite = True
             else:
                 dlgOw.Destroy()
-                return (None, None)
-
-        if UserSettings.Get(group='cmd', key='overwrite', subkey='enabled') is True:
+                dlg.Destroy()
+                return None
+        
+        if UserSettings.Get(group = 'cmd', key = 'overwrite', subkey = 'enabled'):
             overwrite = True
         
         try:
@@ -322,13 +355,12 @@ def CreateNewVector(parent, cmd, title=_('Create new vector map'),
         except gcmd.GException, e:
             gcmd.GError(parent = self,
                         message = e.value)
-            return (None, None)
+            dlg.Destroy()
+            return None
         
-        #
         # create attribute table
-        #
         if dlg.table.IsEnabled() and dlg.table.IsChecked():
-            key = UserSettings.Get(group='atm', key='keycolumn', subkey='value')
+            key = UserSettings.Get(group = 'atm', key = 'keycolumn', subkey = 'value')
             sql = 'CREATE TABLE %s (%s INTEGER)' % (outmap, key)
             
             gcmd.RunCommand('db.connect',
@@ -347,17 +379,17 @@ def CreateNewVector(parent, cmd, title=_('Create new vector map'),
                             table = outmap,
                             key = key,
                             layer = '1')
-            
+        
         # return fully qualified map name
         if '@' not in outmap:
             outmap += '@' + grass.gisenv()['MAPSET']
-
+        
         if log:
             log.WriteLog(_("New vector map <%s> created") % outmap)
 
-        return (outmap, dlg.addbox.IsChecked())
+        return dlg
     
-    return (None, dlg.addbox.IsChecked())
+    return dlg
 
 class SavedRegion(wx.Dialog):
     def __init__(self, parent, id = wx.ID_ANY, title="", loadsave='load',
