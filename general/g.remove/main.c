@@ -1,4 +1,4 @@
-
+\
 /****************************************************************************
  *
  * MODULE:       cmd
@@ -86,15 +86,15 @@ int main(int argc, char *argv[])
 {
     int i, n, nlist;
     struct GModule *module;
-    struct Option **parm, *p;
+    struct Option **parm;
     struct Flag *force_flag;
     const char *name, *mapset;
-    const char *location_path;
-    int result = EXIT_SUCCESS;
-    int force = 0;
+    int result;
 
     G_gisinit(argv[0]);
 
+    result = EXIT_SUCCESS;
+    
     M_read_list(FALSE, &nlist);
 
     module = G_define_module();
@@ -107,28 +107,24 @@ int main(int argc, char *argv[])
 
     force_flag = G_define_flag();
     force_flag->key = 'f';
-    force_flag->description = _("Force remove");
+    force_flag->description = _("Force removal for base raster maps");
 
     parm = (struct Option **)G_calloc(nlist, sizeof(struct Option *));
 
     for (n = 0; n < nlist; n++) {
-	p = parm[n] = M_define_option(n, "removed", YES);
+	parm[n] = M_define_option(n, "removed", YES);
     }
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    location_path = G_location_path();
     mapset = G_mapset();
-
-    if (force_flag->answer)
-	force = 1;
 
     for (n = 0; n < nlist; n++) {
 	if (parm[n]->answers)
 	    for (i = 0; (name = parm[n]->answers[i]); i++) {
 		if (G_strcasecmp(M_get_list(n)->alias, "rast") == 0 &&
-		    check_reclass(name, mapset, force))
+		    check_reclass(name, mapset, force_flag->answer))
 		    continue;
 
 		if (M_do_remove(n, name) == 1) {
