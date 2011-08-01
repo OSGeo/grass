@@ -275,9 +275,19 @@ class NewVectorDialog(ElementDialog):
         self.panel.SetSizer(self.sizer)
         self.sizer.Fit(self)
 
-    def GetName(self):
-        """!Get name of vector map to be created"""
-        return self.GetElement().split('@', 1)[0]
+    def GetName(self, full = False):
+        """!Get name of vector map to be created
+
+        @param full True to get fully qualified name
+        """
+        name = self.GetElement()
+        if full:
+            if '@' in name:
+                return name
+            else:
+                return name + '@' + grass.gisenv()['MAPSET']
+        
+        return name.split('@', 1)[0]
 
     def IsChecked(self, key):
         """!Get dialog properties

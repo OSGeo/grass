@@ -2063,8 +2063,8 @@ class AttributeManager(wx.Frame):
             if not dlg:
                 return
             
-            if dlg.GetName() and dlg.IsChecked('add'):
-                name = dlg.GetName() + '@' + grass.gisenv()['MAPSET']
+            name = dlg.GetName(full = True)
+            if name and dlg.IsChecked('add'):
                 # add layer to map layer tree
                 self.parent.curr_page.maptree.AddLayer(ltype = 'vector',
                                                        lname = name,
