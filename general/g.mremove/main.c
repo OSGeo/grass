@@ -17,11 +17,11 @@
  *
  * PURPOSE:      lets users remove GRASS database files
  *
- * COPYRIGHT:    (C) 1999-2010 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2011 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ *               This program is free software under the GNU General
+ *               Public License (>=v2). Read the file COPYING that
+ *               comes with GRASS for details.
  *
  *****************************************************************************/
 
@@ -46,15 +46,17 @@ int main(int argc, char *argv[])
 	struct Flag *force;
 	struct Flag *basemap;
     } flag;
-    const char *mapset, *location_path;
+    const char *mapset;
     char *name, path[GPATH_MAX], **files;
-    char *alias;
-    int num_files, rast, result = EXIT_SUCCESS;
+    const struct list *option;
+    int num_files, rast, result;
     int i, j, n, nlist;
     void *filter;
 
     G_gisinit(argv[0]);
 
+    result = EXIT_SUCCESS;
+    
     module = G_define_module();
     G_add_keyword(_("general"));
     G_add_keyword(_("map management"));
@@ -62,8 +64,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("multi"));
     module->description =
 	_("Removes data base element files from "
-	  "the user's current mapset.");
-
+	  "the user's current mapset using regular expressions.");
     flag.regex = G_define_flag();
     flag.regex->key = 'r';
     flag.regex->description =
@@ -81,8 +82,9 @@ int main(int argc, char *argv[])
 
     flag.basemap = G_define_flag();
     flag.basemap->key = 'b';
-    flag.basemap->description = _("Remove base maps");
-
+    flag.basemap->description = _("Remove base raster maps");
+    flag.basemap->guisection = _("Raster");
+    
     M_read_list(FALSE, &nlist);
 
     opt = (struct Option **)G_calloc(nlist, sizeof(struct Option *));
@@ -95,10 +97,11 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
     if (flag.regex->answer && flag.extended->answer)
-	G_fatal_error(_("-r and -e are mutually exclusive"));
+	G_fatal_error(_("-%c and -%c are mutually exclusive"),
+		      flag.regex->key, flag.extended->key);
 
     if (!flag.force->answer)
-	G_message(_("The following files would be deleted:"));
+	G_message(_("The following data base element files would be deleted:"));
 
     for (n = 0; n < nlist; n++) {
 	o = opt[n];
@@ -106,16 +109,15 @@ int main(int argc, char *argv[])
 	G_free((char *)o->description);
     }
 
-    location_path = G_location_path();
     mapset = G_mapset();
 
     for (n = 0; n < nlist; n++) {
-	alias = M_get_list(n)->alias;
+	option = M_get_list(n);
 	if (opt[n]->answers) {
 	    G_file_name(path, M_get_list(n)->element[0], "", mapset);
 	    if (access(path, 0) != 0)
 		continue;
-	    rast = !G_strcasecmp(alias, "rast");
+	    rast = !G_strcasecmp(option->alias, "rast");
 	    for (i = 0; (name = opt[n]->answers[i]); i++) {
 		if (!flag.regex->answer && !flag.extended->answer)
 		    filter = G_ls_glob_filter(name, 0);
@@ -132,7 +134,7 @@ int main(int argc, char *argv[])
 
 		for (j = 0; j < num_files; j++) {
 		    if (!flag.force->answer) {
-			fprintf(stdout, "%s/%s@%s\n", alias, files[j],
+			fprintf(stdout, "%s/%s@%s\n", option->alias, files[j],
 				mapset);
 			continue;
 		    }
@@ -148,8 +150,8 @@ int main(int argc, char *argv[])
     }
 
     if (!flag.force->answer) {
-	G_message(" ");
-	G_message(_("You must use the force flag to actually remove them. Exiting."));
+	G_important_message(_("You must use the force flag (-%c) to actually "
+			      "remove them. Exiting."), flag.force->key);
     }
 
     exit(result);
