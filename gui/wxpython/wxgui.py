@@ -1189,7 +1189,7 @@ class GMFrame(wx.Frame):
                 
         dlg.Destroy()
         
-    def OnShowAttributeTable(self, event):
+    def OnShowAttributeTable(self, event, selection = None):
         """!Show attribute table of the given vector map layer
         """
         if not self.curr_page:
@@ -1226,7 +1226,8 @@ class GMFrame(wx.Frame):
         
         dbmanager = dbm.AttributeManager(parent = self, id = wx.ID_ANY,
                                          size = wx.Size(500, 300),
-                                         item = layer, log = self.goutput)
+                                         item = layer, log = self.goutput,
+                                         selection = selection)
         
         busy.Destroy()
         

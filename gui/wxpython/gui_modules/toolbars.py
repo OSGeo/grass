@@ -966,34 +966,41 @@ class VDigitToolbar(AbstractToolbar):
                 openVectorMap = self.mapLayer.GetName(fullyQualified = False)['name']
             else:
                 openVectorMap = None
-            mapName = gdialogs.CreateNewVector(self.parent,
-                                               exceptMap = openVectorMap, log = self.log,
-                                               cmd = (('v.edit',
-                                                       { 'tool' : 'create' },
-                                                       'map')),
-                                               disableAdd = True)[0]
-            if mapName:
+            dlg = gdialogs.CreateNewVector(self.parent,
+                                           exceptMap = openVectorMap, log = self.log,
+                                           cmd = (('v.edit',
+                                                   { 'tool' : 'create' },
+                                                   'map')),
+                                           disableAdd = True)
+            
+            if dlg and dlg.GetName():
                 # add layer to map layer tree
                 if self.layerTree:
+                    mapName = dlg.GetName() + '@' + grass.gisenv()['MAPSET']
                     self.layerTree.AddLayer(ltype = 'vector',
                                             lname = mapName,
-                                            lchecked = True,
-                                            lopacity = 1.0,
                                             lcmd = ['d.vect', 'map=%s' % mapName])
                     
                     vectLayers = self.UpdateListOfLayers(updateTool = True)
                     selection = vectLayers.index(mapName)
-                else:
-                    pass # TODO (no Layer Manager)
+                
+                # create table ?
+                if dlg.IsChecked('table'):
+                    lmgr = self.parent.GetLayerManager()
+                    if lmgr:
+                        lmgr.OnShowAttributeTable(None, selection = 'table')
+                dlg.Destroy()
             else:
                 self.combo.SetValue(_('Select vector map'))
-                return 
+                if dlg:
+                    dlg.Destroy()
+                return
         else:
             selection = event.GetSelection() - 1 # first option is 'New vector map'
         
         # skip currently selected map
         if self.layers[selection] == self.mapLayer:
-            return False
+            return
         
         if self.mapLayer:
             # deactive map layer for editing
@@ -1003,9 +1010,7 @@ class VDigitToolbar(AbstractToolbar):
         self.StartEditing(self.layers[selection])
         
         event.Skip()
-
-        return True
-    
+        
     def StartEditing (self, mapLayer):
         """!Start editing selected vector map layer.
 
@@ -1127,7 +1132,7 @@ class VDigitToolbar(AbstractToolbar):
         Update list of available vector map layers.
         This list consists only editable layers (in the current mapset)
 
-        Optionally also update toolbar
+        @param updateTool True to update also toolbar
         """
         Debug.msg (4, "VDigitToolbar.UpdateListOfLayers(): updateTool=%d" % \
                    updateTool)
@@ -1141,6 +1146,7 @@ class VDigitToolbar(AbstractToolbar):
         layerNameList = []
         self.layers = self.mapcontent.GetListOfLayers(l_type = "vector",
                                                       l_mapset = grass.gisenv()['MAPSET'])
+        
         for layer in self.layers:
             if not layer.name in layerNameList: # do not duplicate layer
                 layerNameList.append (layer.GetName())

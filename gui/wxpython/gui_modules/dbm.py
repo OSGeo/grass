@@ -51,10 +51,10 @@ import gcmd
 import utils
 import gdialogs
 import dbm_base
-from debug import Debug
+from debug       import Debug
 from dbm_dialogs import ModifyTableRecord
 from preferences import globalSettings as UserSettings
-
+from menuform    import GNotebook
 class Log:
     """
     The log output is redirected to the status bar of the containing frame.
@@ -526,13 +526,20 @@ class VirtualAttributeList(wx.ListCtrl,
         return True
     
 class AttributeManager(wx.Frame):
-    """
-    GRASS Attribute manager main window
-    """
-    def __init__(self, parent, id=wx.ID_ANY,
-                 size = wx.DefaultSize, style = wx.DEFAULT_FRAME_STYLE,
-                 title=None, vectorName=None, item=None, log=None):
+    def __init__(self, parent, id = wx.ID_ANY,
+                 title = None, vectorName = None, item = None, log = None,
+                 selection = None, **kwargs):
+        """!GRASS Attribute Table Manager window
 
+        @param parent parent window
+        @parem id window id
+        @param title window title or None for default title
+        @param vetorName name of vector map
+        @param item item from Layer Tree
+        @param log log window
+        @param selection name of page to be selected
+        @param kwagrs other wx.Frame's arguments
+        """
         self.vectorName = vectorName
         self.parent     = parent # GMFrame
         self.treeItem   = item   # item in layer tree
@@ -549,9 +556,9 @@ class AttributeManager(wx.Frame):
         else:
             self.editable = False
         
-        self.cmdLog     = log    # self.parent.goutput
+        self.cmdLog = log    # self.parent.goutput
         
-        wx.Frame.__init__(self, parent, id, style=style)
+        wx.Frame.__init__(self, parent, id, *kwargs)
 
         # title
         if not title:
@@ -604,22 +611,7 @@ class AttributeManager(wx.Frame):
         ### {layer: list, widgets...}
         self.layerPage = {}
 
-        # auinotebook (browse, manage, settings)
-        #self.notebook = wx.aui.AuiNotebook(parent=self, id=wx.ID_ANY,
-        #                                   style=wx.aui.AUI_NB_BOTTOM)
-        # really needed (ML)
-        # self.notebook.SetFont(wx.Font(10, wx.FONTFAMILY_MODERN, wx.NORMAL, wx.NORMAL, 0, ''))
-
-        if globalvar.hasAgw:
-            self.notebook = FN.FlatNotebook(parent = self.panel, id = wx.ID_ANY,
-                                            agwStyle = FN.FNB_BOTTOM |
-                                            FN.FNB_NO_NAV_BUTTONS |
-                                            FN.FNB_FANCY_TABS | FN.FNB_NO_X_BUTTON)
-        else:
-            self.notebook = FN.FlatNotebook(parent = self.panel, id = wx.ID_ANY,
-                                            style = FN.FNB_BOTTOM |
-                                            FN.FNB_NO_NAV_BUTTONS |
-                                            FN.FNB_FANCY_TABS | FN.FNB_NO_X_BUTTON)
+        self.notebook = GNotebook(self.panel, style = globalvar.FNPageDStyle)
         
         if globalvar.hasAgw:
             dbmStyle = { 'agwStyle' : globalvar.FNPageStyle }
@@ -628,22 +620,22 @@ class AttributeManager(wx.Frame):
         
         self.browsePage = FN.FlatNotebook(self.panel, id = wx.ID_ANY,
                                           **dbmStyle)
-        # self.notebook.AddPage(self.browsePage, caption=_("Browse data"))
-        self.notebook.AddPage(self.browsePage, text=_("Browse data")) # FN
+        self.notebook.AddPage(page = self.browsePage, text = _("Browse data"),
+                              name = 'browse')
         self.browsePage.SetTabAreaColour(globalvar.FNPageColor)
 
         self.manageTablePage = FN.FlatNotebook(self.panel, id = wx.ID_ANY,
                                                **dbmStyle)
-        #self.notebook.AddPage(self.manageTablePage, caption=_("Manage tables"))
-        self.notebook.AddPage(self.manageTablePage, text=_("Manage tables")) # FN
+        self.notebook.AddPage(page = self.manageTablePage, text = _("Manage tables"),
+                              name = 'table')
         if not self.editable:
             self.notebook.GetPage(self.notebook.GetPageCount()-1).Enable(False)
         self.manageTablePage.SetTabAreaColour(globalvar.FNPageColor)
 
         self.manageLayerPage = FN.FlatNotebook(self.panel, id = wx.ID_ANY,
                                                **dbmStyle)
-        #self.notebook.AddPage(self.manageLayerPage, caption=_("Manage layers"))
-        self.notebook.AddPage(self.manageLayerPage, text=_("Manage layers")) # FN
+        self.notebook.AddPage(page = self.manageLayerPage, text = _("Manage layers"),
+                              name = 'layers')
         self.manageLayerPage.SetTabAreaColour(globalvar.FNPageColor)
         if not self.editable:
             self.notebook.GetPage(self.notebook.GetPageCount()-1).Enable(False)
@@ -652,11 +644,10 @@ class AttributeManager(wx.Frame):
         self.__createManageTablePage()
         self.__createManageLayerPage()
 
-        self.notebook.SetSelection(0) # select browse tab
+        if selection:
+            wx.CallAfter(self.notebook.SetSelectionByName, selection) # select browse tab
 
-        #
         # buttons
-        #
         self.btnQuit   = wx.Button(parent=self.panel, id=wx.ID_EXIT)
         self.btnQuit.SetToolTipString(_("Close Attribute Table Manager"))
         self.btnReload = wx.Button(parent=self.panel, id=wx.ID_REFRESH)
@@ -2049,8 +2040,7 @@ class AttributeManager(wx.Frame):
         event.Skip()
 
     def OnExtractSelected(self, event):
-        """!
-        Extract vector objects selected in attribute browse window
+        """!Extract vector objects selected in attribute browse window
         to new vector map
         """
         list = self.FindWindowById(self.layerPage[self.layer]['data'])
@@ -2063,24 +2053,26 @@ class AttributeManager(wx.Frame):
             return
         else:
             # dialog to get file name
-            name, add = gdialogs.CreateNewVector(parent = self, title = _('Extract selected features'),
-                                                 log = self.cmdLog,
-                                                 cmd = (('v.extract',
-                                                         { 'input' : self.vectorName,
-                                                           'list' : utils.ListOfCatsToRange(cats) },
-                                                         'output')),
-                                                 disableTable = True)
-            if name and add:
+            dlg = gdialogs.CreateNewVector(parent = self, title = _('Extract selected features'),
+                                           log = self.cmdLog,
+                                           cmd = (('v.extract',
+                                                   { 'input' : self.vectorName,
+                                                     'list' : utils.ListOfCatsToRange(cats) },
+                                                   'output')),
+                                           disableTable = True)
+            if not dlg:
+                return
+            
+            if dlg.GetName() and dlg.IsChecked('add'):
+                name = dlg.GetName() + '@' + grass.gisenv()['MAPSET']
                 # add layer to map layer tree
-                self.parent.curr_page.maptree.AddLayer(ltype='vector',
-                                                       lname=name,
-                                                       lchecked=True,
-                                                       lopacity=1.0,
-                                                       lcmd=['d.vect', 'map=%s' % name])
+                self.parent.curr_page.maptree.AddLayer(ltype = 'vector',
+                                                       lname = name,
+                                                       lcmd = ['d.vect', 'map=%s' % name])
+            dlg.Destroy()
             
     def OnDeleteSelected(self, event):
-        """
-        Delete vector objects selected in attribute browse window
+        """!Delete vector objects selected in attribute browse window
         (attribures and geometry)
         """
         list = self.FindWindowById(self.layerPage[self.layer]['data'])
@@ -2128,9 +2120,7 @@ class AttributeManager(wx.Frame):
     
     def UpdateDialog(self, layer):
         """!Updates dialog layout for given layer"""
-        #
         # delete page
-        #
         if layer in self.mapDBInfo.layers.keys():
             # delete page
             # draging pages disallowed
@@ -2140,7 +2130,7 @@ class AttributeManager(wx.Frame):
             self.browsePage.DeletePage(self.mapDBInfo.layers.keys().index(layer))
             self.manageTablePage.DeletePage(self.mapDBInfo.layers.keys().index(layer))
             # set current page selection
-            self.notebook.SetSelection(2)
+            self.notebook.SetSelectionByName('layers')
             
         # fetch fresh db info
         self.mapDBInfo = dbm_base.VectorDBInfo(self.vectorName)    
@@ -2154,7 +2144,7 @@ class AttributeManager(wx.Frame):
             # 'manage tables' page
             self.__createManageTablePage(layer)
             # set current page selection
-            self.notebook.SetSelection(2)
+            self.notebook.SetSelectionByName('layers')
             
         #
         # 'manage layers' page
