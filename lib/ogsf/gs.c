@@ -572,7 +572,7 @@ void gs_free_unshared_buffs(geosurf * fs)
 	    /* for ea att of all other surfs */
 	    for (gs = Surf_top; gs; gs = gs->next) {
 		for (j = 0; j < MAX_ATTS; j++) {
-		    if (old_datah == gs->att[j].hdata) {
+		    if ((old_datah == gs->att[j].hdata) && (fs != gs)) {
 			same = 1;
 		    }
 		}
