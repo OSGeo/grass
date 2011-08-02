@@ -235,4 +235,43 @@ int Nviz_look_here(double sx, double sy)
      return 1;
 }
 
+/*!
+  \brief Get current modelview matrix
+*/
+void Nviz_get_modelview(double *modelMatrix)
+{
+    glGetDoublev(GL_MODELVIEW_MATRIX, modelMatrix);
+}
 
+/*!
+  \brief Set rotation parameters
+
+  Rotate scene by given parameters related to mouse drag event
+  (difference from current state).
+  Coordinates determine the second point of rotation axis,
+  the first point is (0, 0, 0).
+
+  \param angle angle
+  \param x,y,z axis coordinate
+*/
+void Nviz_set_rotation(double angle, double x, double y, double z)
+{
+    G_debug(3, "Nviz_set_rotation(): angle = %f, x = %f, y = %f, z = %f", angle, x, y, z); 
+    GS_set_rotation(angle, x, y, z);
+}
+
+/*!
+  \brief Stop scene rotation
+*/
+void Nviz_unset_rotation(void)
+{
+    GS_unset_rotation();
+}
+
+/*!
+  \brief Stop scene rotation
+*/
+void Nviz_init_rotation(void)
+{
+    GS_init_rotation();
+}

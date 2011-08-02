@@ -88,7 +88,7 @@ int gsd_get_los(float (*vect)[3], short sx, short sy)
     return (1);
 }
 
-
+#if 0
 /*!
    \brief Set view
 
@@ -134,7 +134,79 @@ void gsd_set_view(geoview * gv, geodisplay * gd)
 
     return;
 }
+#endif
+/*!
+   \brief Set view
 
+   Establishes viewing & projection matrices
+
+   \param gv view (geoview)
+   \param dp display (geodisplay)
+ */
+void gsd_set_view(geoview * gv, geodisplay * gd)
+{
+    double up[3];
+    float pos[3];
+    int i;
+    GLdouble modelMatrix[16];
+    GLint mm;
+
+    /* will expand when need to check for in focus, ortho, etc. */
+
+    gsd_check_focus(gv);
+    gsd_get_zup(gv, up);
+
+    gd->aspect = GS_get_aspect();
+
+    glGetIntegerv(GL_MATRIX_MODE, &mm);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective((double).1 * (gv->fov), (double)gd->aspect,
+		   (double)gd->nearclip, (double)gd->farclip);
+
+    glMatrixMode(mm);
+    
+    glLoadIdentity();
+
+    /* update twist parm */
+    glRotatef((float)(gv->twist / 10.), 0.0, 0.0, 1.0);
+
+    /* OGLXXX lookat: replace UPx with vector */
+    gluLookAt((double)gv->from_to[FROM][X], (double)gv->from_to[FROM][Y],
+	      (double)gv->from_to[FROM][Z], (double)gv->from_to[TO][X],
+	      (double)gv->from_to[TO][Y], (double)gv->from_to[TO][Z],
+	      (double)up[X], (double)up[Y], (double)up[Z]);
+	      
+    /* rotate to get rotation matrix and then save it*/
+    if (gv->rotate.do_rot) {
+
+	glPushMatrix();
+	glLoadMatrixd(gv->rotate.rotMatrix);
+
+	glRotated(gv->rotate.rot_angle, gv->rotate.rot_axes[0], 
+		  gv->rotate.rot_axes[1], gv->rotate.rot_axes[2]);
+	glGetDoublev(GL_MODELVIEW_MATRIX, modelMatrix);
+
+	for (i = 0; i < 16; i++) {
+	    gv->rotate.rotMatrix[i] = modelMatrix[i];
+	}
+
+	glPopMatrix();
+    }
+    
+    gs_get_datacenter(pos);
+    gsd_surf2model(pos);
+    /* translate rotation center to view center, rotate and translate back */
+    glTranslatef(pos[0], pos[1], pos[2]);
+    glMultMatrixd(gv->rotate.rotMatrix);
+    glTranslatef(-pos[0], -pos[1], -pos[2]);
+
+    /* have to redefine clipping planes when view changes */
+
+    gsd_update_cplanes();
+
+    return;
+}
 /*!
    \brief Check focus
 
@@ -361,7 +433,28 @@ void gsd_model2surf(geosurf * gs, Point3 point)
 
     return;
 }
+/*!
+   \brief Convert surface to model coordinates
 
+   \param point 3d point (Point3)
+ */
+void gsd_surf2model(Point3 point)
+{
+    float min, max, sx, sy, sz;
+
+    /* need to undo z scaling & translate */
+    GS_get_scale(&sx, &sy, &sz, 1);
+    GS_get_zrange(&min, &max, 0);
+
+    point[Z] = (sz ? (point[Z] - min) * sz : 0.0);
+
+    /* need to unscale x & y */
+    point[X] = (sx ? point[X] * sx : 0.0);
+    point[Y] = (sy ? point[Y] * sy : 0.0);
+
+
+    return;
+}
 /*!
    \brief Convert surface to real coordinates
 

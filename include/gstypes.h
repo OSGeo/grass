@@ -362,12 +362,21 @@ struct lightdefs
     float shine;		/* 0. to 128. */
 };
 
+struct georot
+{
+    int do_rot;			/* do rotation */
+    double rot_angle;		/* rotation angle */
+    double rot_axes[3];		/* rotation axis */
+    GLdouble rotMatrix[16];	/* rotation matrix */
+};
+
 typedef struct
 {
     int coord_sys;		/* latlon, equal area, etc */
     int view_proj;		/* perspective, ortho */
     int infocus;		/* fixed center of view - true or false */
     float from_to[2][4];
+    struct georot rotate;
     int twist, fov, incl, look;	/* 10ths of degrees */
     float real_to[4], vert_exag;	/* a global Z exag */
     float scale;

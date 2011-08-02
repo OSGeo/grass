@@ -153,6 +153,10 @@ int Nviz_set_viewpoint_persp(int);
 int Nviz_set_viewpoint_twist(int);
 int Nviz_change_exag(nv_data *, double);
 int Nviz_look_here(double, double);
+void Nviz_get_modelview(double *);
+void Nviz_set_rotation(double, double, double, double);
+void Nviz_unset_rotation(void);
+void Nviz_init_rotation(void);
 
 /* cplanes_obj.c */
 int Nviz_new_cplane(nv_data *, int);

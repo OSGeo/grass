@@ -168,6 +168,9 @@ void GS_get_to(float *);
 void GS_get_viewdir(float *);
 void GS_set_viewdir(float *);
 void GS_set_fov(int);
+void GS_set_rotation(double, double, double, double);
+void GS_init_rotation(void);
+void GS_unset_rotation(void);
 int GS_get_fov(void);
 int GS_get_twist(void);
 void GS_set_twist(int);
@@ -587,6 +590,7 @@ void gsd_do_scale(int);
 void gsd_real2model(Point3);
 void gsd_model2real(Point3);
 void gsd_model2surf(geosurf *, Point3);
+void gsd_surf2model(Point3);
 void gsd_surf2real(geosurf *, Point3);
 void gsd_real2surf(geosurf *, Point3);
 

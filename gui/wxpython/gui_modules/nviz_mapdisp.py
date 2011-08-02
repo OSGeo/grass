@@ -111,7 +111,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.textdict = {}
         self.dragid = None
         self.hitradius = 5
-        
+        self.lastMouseVector = (0,0)
+        self.sumdxdy = [0, 0]
         if self.lmgr:
             self.log = self.lmgr.goutput
             logerr = self.lmgr.goutput.cmd_stderr
@@ -381,6 +382,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
     def OnLeftDown(self, event):
         """!On left mouse down"""
         self.mouse['begin'] = event.GetPositionTuple()
+        self.mouse['tmp'] = event.GetPositionTuple()
         if self.mouse['use'] == "lookHere":
             pos = event.GetPosition()
             size = self.GetClientSize()
@@ -413,11 +415,13 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             pos = event.GetPosition()
             size = self.GetClientSize()
             self.SetDrawScalebar((pos[0], size[1] - pos[1]))
-            
+        
+        if self.mouse['use'] == 'pan':
+            pass
+                
         if self.mouse['use'] == 'pointer':
             # get decoration or text id
             self.dragid = None
-            self.mouse['tmp'] = self.mouse['begin']
             idlist = self.pdc.FindObjects(self.mouse['tmp'][0], self.mouse['tmp'][1],
                                           self.hitradius)                            
             if idlist != []:
@@ -434,10 +438,18 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             if x is not None: 
                 self.cplanes[idx]['position']['x'] = x
                 self.cplanes[idx]['position']['y'] = y 
-            
+                
         if self.mouse['use'] == 'pointer':
             self.DragItem(self.dragid, event)
-                
+            
+        if self.mouse['use'] == 'pan':    
+            dx, dy = event.GetX() - self.mouse['tmp'][0], event.GetY() - self.mouse['tmp'][1]
+            self.mouse['tmp'] = event.GetPositionTuple()
+            angle, x, y, z = self._display.GetRotationParameters(dx, dy)
+            self._display.Rotate(angle, x, y, z)
+            
+            self.render['quick'] = True
+            self.Refresh(False)
         event.Skip()
             
     def Pixel2Cell(self, (x, y)):
@@ -485,10 +497,15 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 self.overlays[self.dragid]['coords'] = self.pdc.GetIdBounds(self.dragid)
             elif self.dragid > 100 and self.dragid in self.textdict:
                 self.textdict[self.dragid]['bbox'] = self.pdc.GetIdBounds(self.dragid)
-                
-            self.dragid = None
+            if self.dragid:    
+                self.dragid = None
+                self.Refresh(False)
+            
+        elif self.mouse['use'] == 'pan':
+            self._display.UnsetRotation()
+            self.render['quick'] = False
             self.Refresh(False)
-    
+            
     def OnDClick(self, event):
         """!On mouse double click"""
         if self.mouse['use'] != 'pointer': return
@@ -1264,7 +1281,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         self.view['twist']['value'] = UserSettings.Get(group = 'nviz', key = 'view',
                                                        subkey = ('twist', 'value'))
-                                                    
+        self._display.ResetRotation()
         self._display.LookAtCenter()
         focus = self.iview['focus']
         focus['x'], focus['y'], focus['z'] = self._display.GetFocus()

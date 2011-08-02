@@ -22,6 +22,8 @@ for details.
 
 import sys
 from threading import Thread
+from math import sqrt
+from numpy import matrix
 
 from ctypes import *
 from grass.lib.gis   import *
@@ -1651,10 +1653,10 @@ class Nviz(object):
         """
         return Nviz_set_scalebar(self.data, id, sx, sy, size, Nviz_color_from_str(color))
     
-##    def DrawScalebar(self):
-##        """!Draw scale bar
-##        """
-##        return Nviz_draw_scalebar(self.data)
+    def DrawScalebar(self):
+        """!Draw scale bar
+        """
+        return Nviz_draw_scalebar(self.data)
     
     def DeleteScalebar(self, id):
         """!Delete scalebar
@@ -1706,3 +1708,44 @@ class Nviz(object):
                                   byref(d), int(useExag))
         
         return d.value
+
+    def GetRotationParameters(self, dx, dy):
+        """!Get rotation parameters (angle, x, y, z axes)
+        
+        @param dx,dy difference from previous mouse drag event
+        """
+        modelview = (c_double * 16)()
+        Nviz_get_modelview(byref(modelview))
+        
+        angle = sqrt(dx*dx+dy*dy)/float(self.width+1)*180.0
+        m = []
+        row = []
+        for i, item in enumerate(modelview):
+            row.append(item)
+            if (i+1) % 4 == 0:
+                m.append(row)
+                row = []
+        inv = matrix(m).I
+        ax, ay, az = dy, dx, 0.
+        x = inv[0,0]*ax + inv[1,0]*ay + inv[2,0]*az
+        y = inv[0,1]*ax + inv[1,1]*ay + inv[2,1]*az
+        z = inv[0,2]*ax + inv[1,2]*ay + inv[2,2]*az
+        
+        return angle, x, y, z 
+       
+    def Rotate(self, angle, x, y, z):
+        """!Set rotation parameters
+        Rotate scene (difference from current state).
+
+        @param angle angle
+        @param x,y,z axis coordinate
+        """
+        Nviz_set_rotation(angle, x, y, z)
+        
+    def UnsetRotation(self):
+        """!Stop rotating the scene"""
+        Nviz_unset_rotation()
+        
+    def ResetRotation(self):
+        """!Reset scene rotation"""
+        Nviz_init_rotation()
