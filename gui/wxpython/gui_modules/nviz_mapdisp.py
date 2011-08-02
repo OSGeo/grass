@@ -122,7 +122,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             logerr = sys.stderr
         
         # create nviz instance - use display region instead of computational
-        os.environ['GRASS_REGION'] = self.Map.SetRegion()
+        os.environ['GRASS_REGION'] = self.Map.SetRegion(windres = True)
         
         self.nvizThread = NvizThread(logerr,
                                      self.parent.statusbarWin['progress'],
