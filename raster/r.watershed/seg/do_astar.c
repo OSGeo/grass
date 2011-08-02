@@ -143,7 +143,11 @@ int do_astar(void)
 			    wa.wat = -wa.wat;
 			    seg_put(&watalt, (char *)&wa, r, c);
 			}
-			    
+		    }
+		    /* neighbour is inside real depression, not yet worked */
+		    else if (asp_val == 0) {
+			asp_val = drain[upr - r + 1][upc - c + 1];
+			bseg_put(&asp, &asp_val, upr, upc);
 		    }
 		}
 	    }

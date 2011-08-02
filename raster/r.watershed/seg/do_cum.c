@@ -66,13 +66,6 @@ int do_cum(void)
 	    wadown.wat = valued;
 	    seg_put(&watalt, (char *)&wadown, dr, dc);
 	    /* update asp for depression */
-	    if (is_swale && pit_flag) {
-		bseg_get(&asp, &asp_val_down, dr, dc);
-		if (asp_val > 0 && asp_val_down == 0) {
-		    asp_val = -asp_val;
-		    bseg_put(&asp, &asp_val, r, c);
-		}
-	    }
 	    if (is_swale || fabs(valued) >= threshold) {
 		bseg_get(&bitflags, &flag_value, dr, dc);
 		FLAG_SET(flag_value, SWALEFLAG);
@@ -397,14 +390,6 @@ int do_cum_mfd(void)
 		swale_cells < 1 && !flat) {
 		FLAG_SET(this_flag_value, SWALEFLAG);
 		is_swale = 1;
-	    }
-	    /* update asp for depression */
-	    if (is_swale && pit_flag) {
-		bseg_get(&asp, &asp_val_down, dr, dc);
-		if (asp_val > 0 && asp_val_down == 0) {
-		    asp_val = -asp_val;
-		    bseg_put(&asp, &asp_val, r, c);
-		}
 	    }
 	    /* continue stream */
 	    if (is_swale) {
