@@ -238,23 +238,7 @@ int init_vars(int argc, char *argv[])
 	G_free(dbuf);
     }
 
-    /* depression: drainage direction will be set to zero later */
-    if (pit_flag) {
-	buf = Rast_allocate_c_buf();
-	fd = Rast_open_old(pit_name, "");
-	for (r = 0; r < nrows; r++) {
-	    Rast_get_c_row(fd, buf, r);
-	    for (c = 0; c < ncols; c++) {
-		asp_value = buf[c];
-		if (!Rast_is_c_null_value(&asp_value) && asp_value)
-		    asp[SEG_INDEX(asp_seg, r, c)] = 1;
-	    }
-	}
-	Rast_close(fd);
-	G_free(buf);
-    }
-
-    /* this is also creating streams... */
+    /* overland blocking map; this is also creating streams... */
     if (ob_flag) {
 	buf = Rast_allocate_c_buf();
 	fd = Rast_open_old(ob_name, "");
@@ -302,129 +286,32 @@ int init_vars(int argc, char *argv[])
     /* heap is empty */
     heap_size = 0;
 
-    first_astar = first_cum = -1;
-    if (MASK_flag) {
-	for (r = 0; r < nrows; r++) {
-	    G_percent(r, nrows, 3);
-	    for (c = 0; c < ncols; c++) {
-		seg_idx = SEG_INDEX(wat_seg, r, c);
-		if (FLAG_GET(worked, r, c)) {
-		    wat[seg_idx] = 0;
-		}
-		else {
-		    if (er_flag)
-			s_l[seg_idx] = half_res;
-		    asp_value = asp[seg_idx];
-		    if (r == 0 || c == 0 || r == nrows - 1 ||
-			c == ncols - 1 || asp_value != 0) {
-			wat_value = wat[seg_idx];
-			if (wat_value > 0)
-			    wat[seg_idx] = -wat_value;
-			/* set depression */
-			if (asp_value) {
-			    asp_value = 0;
-			    wat[seg_idx] = ABS(wat_value);
-			}
-			else if (r == 0)
-			    asp_value = -2;
-			else if (c == 0)
-			    asp_value = -4;
-			else if (r == nrows - 1)
-			    asp_value = -6;
-			else if (c == ncols - 1)
-			    asp_value = -8;
-			asp[seg_idx] = asp_value;
-			alt_value = alt[seg_idx];
-			add_pt(r, c, alt_value, alt_value);
-		    }
-		    else if (FLAG_GET(worked, r - 1, c)) {
-			alt_value = alt[seg_idx];
-			add_pt(r, c, alt_value, alt_value);
-			asp[seg_idx] = -2;
-			wat_value = wat[seg_idx];
-			if (wat_value > 0)
-			    wat[seg_idx] = -wat_value;
-		    }
-		    else if (FLAG_GET(worked, r + 1, c)) {
-			alt_value = alt[seg_idx];
-			add_pt(r, c, alt_value, alt_value);
-			asp[seg_idx] = -6;
-			wat_value = wat[seg_idx];
-			if (wat_value > 0)
-			    wat[seg_idx] = -wat_value;
-		    }
-		    else if (FLAG_GET(worked, r, c - 1)) {
-			alt_value = alt[seg_idx];
-			add_pt(r, c, alt_value, alt_value);
-			asp[seg_idx] = -4;
-			wat_value = wat[seg_idx];
-			if (wat_value > 0)
-			    wat[seg_idx] = -wat_value;
-		    }
-		    else if (FLAG_GET(worked, r, c + 1)) {
-			alt_value = alt[seg_idx];
-			add_pt(r, c, alt_value, alt_value);
-			asp[seg_idx] = -8;
-			wat_value = wat[seg_idx];
-			if (wat_value > 0)
-			    wat[seg_idx] = -wat_value;
-		    }
-		    else if (sides == 8 && FLAG_GET(worked, r - 1, c - 1)) {
-			alt_value = alt[seg_idx];
-			add_pt(r, c, alt_value, alt_value);
-			asp[seg_idx] = -3;
-			wat_value = wat[seg_idx];
-			if (wat_value > 0)
-			    wat[seg_idx] = -wat_value;
-		    }
-		    else if (sides == 8 && FLAG_GET(worked, r - 1, c + 1)) {
-			alt_value = alt[seg_idx];
-			add_pt(r, c, alt_value, alt_value);
-			asp[seg_idx] = -1;
-			wat_value = wat[seg_idx];
-			if (wat_value > 0)
-			    wat[seg_idx] = -wat_value;
-		    }
-		    else if (sides == 8 && FLAG_GET(worked, r + 1, c - 1)) {
-			alt_value = alt[seg_idx];
-			add_pt(r, c, alt_value, alt_value);
-			asp[seg_idx] = -5;
-			wat_value = wat[seg_idx];
-			if (wat_value > 0)
-			    wat[seg_idx] = -wat_value;
-		    }
-		    else if (sides == 8 && FLAG_GET(worked, r + 1, c + 1)) {
-			alt_value = alt[seg_idx];
-			add_pt(r, c, alt_value, alt_value);
-			asp[seg_idx] = -7;
-			wat_value = wat[seg_idx];
-			if (wat_value > 0)
-			    wat[seg_idx] = -wat_value;
-		    }
-		}
-	    }
-	}
+    if (pit_flag) {
+	buf = Rast_allocate_c_buf();
+	fd = Rast_open_old(pit_name, "");
     }
-    else {
-	for (r = 0; r < nrows; r++) {
-	    G_percent(r, nrows, 3);
-	    for (c = 0; c < ncols; c++) {
-		seg_idx = SEG_INDEX(wat_seg, r, c);
+    else
+	buf = NULL;
+    first_astar = first_cum = -1;
+    for (r = 0; r < nrows; r++) {
+	G_percent(r, nrows, 3);
+	if (pit_flag)
+	    Rast_get_c_row(fd, buf, r);
+	for (c = 0; c < ncols; c++) {
+	    seg_idx = SEG_INDEX(wat_seg, r, c);
+	    if (FLAG_GET(worked, r, c)) {
+		wat[seg_idx] = 0;
+	    }
+	    else {
+		asp_value = asp[seg_idx];
 		if (er_flag)
 		    s_l[seg_idx] = half_res;
-		asp_value = asp[seg_idx];
 		if (r == 0 || c == 0 || r == nrows - 1 ||
-		    c == ncols - 1 || asp_value != 0) {
+		    c == ncols - 1) {
 		    wat_value = wat[seg_idx];
-		    if (wat_value > 0) {
+		    if (wat_value > 0)
 			wat[seg_idx] = -wat_value;
-		    }
-		    /* set depression */
-		    if (asp_value) {
-			asp_value = 0;
-			wat[seg_idx] = ABS(wat_value);
-		    }
-		    else if (r == 0)
+		    if (r == 0)
 			asp_value = -2;
 		    else if (c == 0)
 			asp_value = -4;
@@ -434,13 +321,90 @@ int init_vars(int argc, char *argv[])
 			asp_value = -8;
 		    asp[seg_idx] = asp_value;
 		    alt_value = alt[seg_idx];
-		    add_pt(r, c, alt_value, alt_value);
+		    add_pt(r, c, alt_value);
+		}
+		else if (FLAG_GET(worked, r - 1, c)) {
+		    alt_value = alt[seg_idx];
+		    add_pt(r, c, alt_value);
+		    asp[seg_idx] = -2;
+		    wat_value = wat[seg_idx];
+		    if (wat_value > 0)
+			wat[seg_idx] = -wat_value;
+		}
+		else if (FLAG_GET(worked, r + 1, c)) {
+		    alt_value = alt[seg_idx];
+		    add_pt(r, c, alt_value);
+		    asp[seg_idx] = -6;
+		    wat_value = wat[seg_idx];
+		    if (wat_value > 0)
+			wat[seg_idx] = -wat_value;
+		}
+		else if (FLAG_GET(worked, r, c - 1)) {
+		    alt_value = alt[seg_idx];
+		    add_pt(r, c, alt_value);
+		    asp[seg_idx] = -4;
+		    wat_value = wat[seg_idx];
+		    if (wat_value > 0)
+			wat[seg_idx] = -wat_value;
+		}
+		else if (FLAG_GET(worked, r, c + 1)) {
+		    alt_value = alt[seg_idx];
+		    add_pt(r, c, alt_value);
+		    asp[seg_idx] = -8;
+		    wat_value = wat[seg_idx];
+		    if (wat_value > 0)
+			wat[seg_idx] = -wat_value;
+		}
+		else if (sides == 8 && FLAG_GET(worked, r - 1, c - 1)) {
+		    alt_value = alt[seg_idx];
+		    add_pt(r, c, alt_value);
+		    asp[seg_idx] = -3;
+		    wat_value = wat[seg_idx];
+		    if (wat_value > 0)
+			wat[seg_idx] = -wat_value;
+		}
+		else if (sides == 8 && FLAG_GET(worked, r - 1, c + 1)) {
+		    alt_value = alt[seg_idx];
+		    add_pt(r, c, alt_value);
+		    asp[seg_idx] = -1;
+		    wat_value = wat[seg_idx];
+		    if (wat_value > 0)
+			wat[seg_idx] = -wat_value;
+		}
+		else if (sides == 8 && FLAG_GET(worked, r + 1, c - 1)) {
+		    alt_value = alt[seg_idx];
+		    add_pt(r, c, alt_value);
+		    asp[seg_idx] = -5;
+		    wat_value = wat[seg_idx];
+		    if (wat_value > 0)
+			wat[seg_idx] = -wat_value;
+		}
+		else if (sides == 8 && FLAG_GET(worked, r + 1, c + 1)) {
+		    alt_value = alt[seg_idx];
+		    add_pt(r, c, alt_value);
+		    asp[seg_idx] = -7;
+		    wat_value = wat[seg_idx];
+		    if (wat_value > 0)
+			wat[seg_idx] = -wat_value;
+		}
+
+		/* real depression ? */
+		if (pit_flag && asp[seg_idx] == 0) {
+		    if (!Rast_is_c_null_value(&buf[c]) && buf[c] != 0) {
+			alt_value = alt[seg_idx];
+			add_pt(r, c, alt_value);
+		    }
 		}
 	    }
 	}
     }
 
     G_percent(r, nrows, 1);	/* finish it */
+
+    if (pit_flag) {
+	Rast_close(fd);
+	G_free(buf);
+    }
 
     return 0;
 }

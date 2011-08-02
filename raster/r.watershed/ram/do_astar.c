@@ -153,7 +153,7 @@ int do_astar(void)
 
 		/* add neighbour as new point if not in the list */
 		if (is_in_list == 0 && skip_diag == 0) {
-		    add_pt(upr, upc, alt_nbr[ct_dir], alt_val);
+		    add_pt(upr, upc, alt_nbr[ct_dir]);
 		    /* set flow direction */
 		    asp[index_up] = drain[upr - r + 1][upc - c + 1];
 		}
@@ -164,6 +164,10 @@ int do_astar(void)
 
 			if (wat[index_doer] > 0)
 			    wat[index_doer] = -wat[index_doer];
+		    }
+		    /* neighbour is inside real depression, not yet worked */
+		    else if (asp[index_up] == 0) {
+			asp[index_up] = drain[upr - r + 1][upc - c + 1];
 		    }
 		}
 	    }    /* end if in region */
@@ -205,7 +209,7 @@ int cmp_pnt(CELL elea, CELL eleb, int addeda, int addedb)
 }
 
 /* add point routine for min heap */
-int add_pt(int r, int c, CELL ele, CELL downe)
+int add_pt(int r, int c, CELL ele)
 {
     FLAG_SET(in_list, r, c);
 

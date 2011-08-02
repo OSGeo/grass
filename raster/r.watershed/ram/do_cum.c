@@ -53,13 +53,6 @@ int do_cum(void)
 	    wat[down_index] = valued;
 	    valued = ABS(valued) + 0.5;
 	    is_swale = FLAG_GET(swale, r, c);
-	    /* update asp for depression */
-	    if (is_swale && pit_flag) {
-		if (aspect > 0 && asp[down_index] == 0) {
-		    aspect = -aspect;
-		    asp[this_index] = aspect;
-		}
-	    }
 	    if (is_swale || ((int)valued) >= threshold) {
 		FLAG_SET(swale, dr, dc);
 	    }
@@ -340,13 +333,6 @@ int do_cum_mfd(void)
 		asp[this_index] = aspect;
 	    }
 	    is_swale = FLAG_GET(swale, r, c);
-	    /* update asp for depression */
-	    if (is_swale && pit_flag) {
-		if (aspect > 0 && asp[SEG_INDEX(asp_seg, r_max, c_max)] == 0) {
-		    aspect = -aspect;
-		    asp[this_index] = aspect;
-		}
-	    }
 	    /* start new stream */
 	    value = ABS(value) + 0.5;
 	    if (!is_swale && (int)value >= threshold && stream_cells < 1 &&
@@ -380,14 +366,10 @@ int do_cum_mfd(void)
 
 double mfd_pow(double base, int exp)
 {
-    int x;
-    double result;
+    int i;
+    double result = base;
 
-    result = base;
-    if (exp == 1)
-	return result;
-
-    for (x = 2; x <= exp; x++) {
+    for (i = 2; i <= exp; i++) {
 	result *= base;
     }
     return result;

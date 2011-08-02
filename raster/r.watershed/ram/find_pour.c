@@ -16,7 +16,7 @@ int find_pourpts(void)
 	northing = window.north - (row + .5) * window.ns_res;
 	for (col = 0; col < ncols; col++) {
 	    value = FLAG_GET(swale, row, col);
-	    if (value && asp[SEG_INDEX(asp_seg, row, col)] < 0) {
+	    if (value && asp[SEG_INDEX(asp_seg, row, col)] <= 0) {
 		basin_num += 2;
 		if (arm_flag) {
 		    easting = window.west + (col + .5) * window.ew_res;

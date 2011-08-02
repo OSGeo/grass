@@ -14,6 +14,8 @@ CELL def_basin(int row, int col, CELL basin_num,
 	for (r = row - 1, rr = 0; rr < 3; r++, rr++) {
 	    for (c = col - 1, cc = 0; cc < 3; c++, cc++) {
 		if (r >= 0 && c >= 0 && r < nrows && c < ncols) {
+		    if (r == row && c == col)
+			continue;
 		    value = asp[SEG_INDEX(asp_seg, r, c)];
 		    if (value < -1)
 			value = -value;
@@ -44,6 +46,8 @@ CELL def_basin(int row, int col, CELL basin_num,
 	for (r = row - 1, rr = 0; rr < 3; r++, rr++) {
 	    for (c = col - 1, cc = 0; cc < 3; c++, cc++) {
 		if (r >= 0 && c >= 0 && r < nrows && c < ncols) {
+		    if (r == row && c == col)
+			continue;
 		    direction = asp[SEG_INDEX(asp_seg, r, c)];
 		    if (direction == drain[rr][cc]) {
 			thisdir = updrain[rr][cc];
