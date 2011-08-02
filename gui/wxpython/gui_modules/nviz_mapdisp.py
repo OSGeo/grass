@@ -825,7 +825,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         start = time.time()
         
         update = False
-        for layer in self.layers:
+        layersTmp = self.layers[:]
+        for layer in layersTmp:
             if layer in listOfItems:
                 continue
             ltype = self.tree.GetPyData(layer)[0]['type']
