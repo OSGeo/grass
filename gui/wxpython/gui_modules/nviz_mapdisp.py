@@ -111,8 +111,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.textdict = {}
         self.dragid = None
         self.hitradius = 5
-        self.lastMouseVector = (0,0)
-        self.sumdxdy = [0, 0]
+    
         if self.lmgr:
             self.log = self.lmgr.goutput
             logerr = self.lmgr.goutput.cmd_stderr
@@ -1895,7 +1894,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                                                       self.light['position']['z']/100.)
         subcmd += "light_brightness=%d " % (self.light['bright'])
         subcmd += "light_ambient=%d " % (self.light['ambient'])
-        subcmd += "light_color=%d:%d:%d " % (self.light['color'])
+        subcmd += "light_color=%d:%d:%d " % (self.light['color'][:3])
         cmd += subcmd
         cmd += "\\\n"
         # fringe
