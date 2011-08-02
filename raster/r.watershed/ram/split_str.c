@@ -22,6 +22,8 @@ split_stream(int row, int col, int new_r[], int new_c[], int ct,
     for (r = row - 1, rr = 0; rr < 3; r++, rr++) {
 	for (c = col - 1, cc = 0; cc < 3; c++, cc++) {
 	    if (r >= 0 && c >= 0 && r < nrows && c < ncols) {
+		if (r == row && c == col)
+		    continue;
 		aspect = asp[SEG_INDEX(asp_seg, r, c)];
 		if (aspect == drain[rr][cc]) {
 		    doit = 1;
