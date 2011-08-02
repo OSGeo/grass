@@ -2878,6 +2878,48 @@ void GS_set_twist(int t)
 }
 
 /*!
+   \brief Set rotation params
+ */
+void GS_set_rotation(double angle, double x, double y, double z)
+{
+    Gv.rotate.rot_angle = angle;
+    Gv.rotate.rot_axes[0] = x;
+    Gv.rotate.rot_axes[1] = y;
+    Gv.rotate.rot_axes[2] = z;
+    Gv.rotate.do_rot = 1;
+
+    return;
+}
+
+/*!
+   \brief Stop scene rotation
+ */
+void GS_unset_rotation(void)
+{
+    Gv.rotate.do_rot = 0;
+}
+
+/*!
+   \brief Reset scene rotation
+ */
+void GS_init_rotation(void)
+{
+    int i;
+
+    for (i = 0; i < 16; i++) {
+	if (i == 0 || i == 5 || i == 10 || i == 15)
+	    Gv.rotate.rotMatrix[i] = 1.0;
+	else
+	    Gv.rotate.rotMatrix[i] = 0.0;
+    }
+    Gv.rotate.rot_angle = 0.0;
+    Gv.rotate.rot_axes[0] = 0.0;
+    Gv.rotate.rot_axes[1] = 0.0;
+    Gv.rotate.rot_axes[2] = 0.0;
+    Gv.rotate.do_rot = 0;
+    
+}
+/*!
    \brief Unset focus
  */
 void GS_set_nofocus(void)
@@ -3276,6 +3318,7 @@ int GS_load_3dview(const char *vname, int surfid)
  */
 void GS_init_view(void)
 {
+    int i;
     static int first = 1;
 
     G_debug(3, "GS_init_view");
@@ -3309,6 +3352,9 @@ void GS_init_view(void)
 	/* replace these with something meaningful */
 	Gv.fov = 450;
 	Gv.twist = 0;
+
+	GS_init_rotation();
+
 	Gv.from_to[FROM][X] = Gv.from_to[FROM][Y] =
 	    Gv.from_to[FROM][Z] = GS_UNIT_SIZE / 2.;
 
