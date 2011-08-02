@@ -208,21 +208,18 @@ dig_cidx_add_cat_sorted(struct Plus_head *Plus, int field, int cat, int line,
 	ci->cat = G_realloc(ci->cat, ci->a_cats * 3 * sizeof(int));
     }
 
-    /* Find position */
-    for (position = 0; position < ci->n_cats; position++) {
-	if (ci->cat[position][0] >= cat) {
-	    break;
+    /* Find position and move on the way */
+    for (position = ci->n_cats; position > 0; position--) {
+	if (ci->cat[position - 1][0] < cat ||
+	   (ci->cat[position - 1][0] == cat && ci->cat[position - 1][1] <= type)) {
+	       break;
 	}
+	ci->cat[position][0] = ci->cat[position - 1][0];
+	ci->cat[position][1] = ci->cat[position - 1][1];
+	ci->cat[position][2] = ci->cat[position - 1][2];
     }
 
     G_debug(4, "position = %d", position);
-
-    /* Move */
-    for (i = ci->n_cats; i > position; i--) {
-	ci->cat[i][0] = ci->cat[i - 1][0];
-	ci->cat[i][1] = ci->cat[i - 1][1];
-	ci->cat[i][2] = ci->cat[i - 1][2];
-    }
 
     ci->cat[position][0] = cat;
     ci->cat[position][1] = type;
