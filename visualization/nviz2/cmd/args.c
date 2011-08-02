@@ -869,6 +869,8 @@ int opt_get_num_answers(const struct Option *opt)
 	}
     }
 
+    G_debug(3, "opt_get_num_answers(): opt=%s num=%d", opt->key, i);
+    
     return i;
 }
 
@@ -1065,13 +1067,13 @@ void check_parameters(const struct GParams *params)
 
     /* slice transparency */
     nconsts = opt_get_num_answers(params->slice_transp);
-    if (nslices != nconsts)
+    if (nslices > 0 && nslices != nconsts)
 	G_fatal_error(_("Inconsistent number of attributes (<%s> %d: <%s> %d)"),
 			params->slice->key, nslices, params->slice_transp->key, nconsts);
 
     /* slice position */
     ncoords = opt_get_num_answers(params->slice_pos);
-    if (ncoords != 6 * nslices)
+    if (nslices > 0 && ncoords != 6 * nslices)
 	G_fatal_error(_("Inconsistent number of attributes (<%s> %d: <%s> %d x 6)"),
 			  params->slice->key, nslices, params->slice_pos->key, ncoords/6);
 
