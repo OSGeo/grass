@@ -15,6 +15,8 @@ def_basin(int row, int col, CELL basin_num, double stream_length,
 	for (r = row - 1, rr = 0; rr < 3; r++, rr++) {
 	    for (c = col - 1, cc = 0; cc < 3; c++, cc++) {
 		if (r >= 0 && c >= 0 && r < nrows && c < ncols) {
+		    if (r == row && c == col)
+			continue;
 		    bseg_get(&asp, &asp_value, r, c);
 		    if (asp_value < -1)
 			asp_value = -asp_value;
@@ -45,6 +47,8 @@ def_basin(int row, int col, CELL basin_num, double stream_length,
 	for (r = row - 1, rr = 0; rr < 3; r++, rr++) {
 	    for (c = col - 1, cc = 0; cc < 3; c++, cc++) {
 		if (r >= 0 && c >= 0 && r < nrows && c < ncols) {
+		    if (r == row && c == col)
+			continue;
 		    bseg_get(&asp, &direction, r, c);
 		    if (direction == drain[rr][cc]) {
 			thisdir = updrain[rr][cc];

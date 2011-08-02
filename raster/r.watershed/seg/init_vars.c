@@ -17,7 +17,7 @@ int init_vars(int argc, char *argv[])
     /* int page_block, num_cseg; */
     int max_bytes;
     CELL *buf, alt_value, *alt_value_buf, block_value;
-    char asp_value;
+    char asp_value, *asp_buf;
     char worked_value, flag_value, *flag_value_buf;
     DCELL wat_value;
     DCELL dvalue;
@@ -238,6 +238,7 @@ int init_vars(int argc, char *argv[])
     ele_map_type = Rast_get_map_type(ele_fd);
     ele_size = Rast_cell_size(ele_map_type);
     elebuf = Rast_allocate_buf(ele_map_type);
+    asp_buf = G_malloc(ncols * sizeof(char));
 
     if (ele_map_type == FCELL_TYPE || ele_map_type == DCELL_TYPE)
 	ele_scale = 1000; 	/* should be enough to do the trick */
@@ -275,6 +276,7 @@ int init_vars(int argc, char *argv[])
 	for (c = 0; c < ncols; c++) {
 
 	    flag_value_buf[c] = 0;
+	    asp_buf[c] = 0;
 
 	    /* check for masked and NULL cells */
 	    if (Rast_is_null_value(ptr, ele_map_type)) {
@@ -332,8 +334,8 @@ int init_vars(int argc, char *argv[])
 	    }
 	}
 	seg_put_row(&watalt, (char *) wabuf, r);
-
 	bseg_put_row(&bitflags, flag_value_buf, r);
+	bseg_put_row(&asp, asp_buf, r);
 	
 	if (er_flag) {
 	    cseg_put_row(&r_h, alt_value_buf, r);
@@ -343,6 +345,7 @@ int init_vars(int argc, char *argv[])
     Rast_close(ele_fd);
     G_free(wabuf);
     G_free(flag_value_buf);
+    G_free(asp_buf);
     
     if (run_flag) {
 	Rast_close(wat_fd);
@@ -351,31 +354,6 @@ int init_vars(int argc, char *argv[])
 
     MASK_flag = (do_points < nrows * ncols);
     
-    /* depression: drainage direction will be set to zero later */
-    if (pit_flag) {
-	CELL cval;
-	char charone = 1;
-	
-	fd = Rast_open_old(pit_name, "");
-	buf = Rast_allocate_c_buf();
-	for (r = 0; r < nrows; r++) {
-	    G_percent(r, nrows, 1);
-	    Rast_get_c_row(fd, buf, r);
-	    for (c = 0; c < ncols; c++) {
-		cval = buf[c];
-		if (!Rast_is_c_null_value(&cval) && cval) {
-		    bseg_put(&asp, &charone, r, c);
-		    bseg_get(&bitflags, &flag_value, r, c);
-		    FLAG_SET(flag_value, PITFLAG);
-		    bseg_put(&bitflags, &flag_value, r, c);
-		}
-	    }
-	}
-	G_percent(nrows, nrows, 1);    /* finish it */
-	Rast_close(fd);
-	G_free(buf);
-    }
-
     /* do RUSLE */
     if (er_flag) {
 	if (ob_flag) {
@@ -456,110 +434,36 @@ int init_vars(int argc, char *argv[])
     /* heap is empty */
     heap_size = 0;
 
+    if (pit_flag) {
+	buf = Rast_allocate_c_buf();
+	fd = Rast_open_old(pit_name, "");
+    }
+    else
+	buf = NULL;
     first_astar = first_cum = -1;
 
-    if (MASK_flag) {
-	for (r = 0; r < nrows; r++) {
-	    G_percent(r, nrows, 1);
-	    for (c = 0; c < ncols; c++) {
-		bseg_get(&bitflags, &flag_value, r, c);
-		if (!FLAG_GET(flag_value, NULLFLAG)) {
-		    if (er_flag)
-			dseg_put(&s_l, &half_res, r, c);
-		    bseg_get(&asp, &asp_value, r, c);
-		    if (r == 0 || c == 0 || r == nrows - 1 ||
-			c == ncols - 1 || asp_value != 0) {
-			/* dseg_get(&wat, &wat_value, r, c); */
-			seg_get(&watalt, (char *)&wa, r, c);
-			wat_value = wa.wat;
-			if (wat_value > 0) {
-			    wat_value = -wat_value;
-			    /* dseg_put(&wat, &wat_value, r, c); */
-			    wa.wat = wat_value;
-			    seg_put(&watalt, (char *)&wa, r, c);
-			}
-			/* set depression */
-			if (asp_value) {
-			    asp_value = 0;
-			    if (wat_value < 0) {
-				wat_value = -wat_value;
-				/* dseg_put(&wat, &wat_value, r, c); */
-				wa.wat = wat_value;
-				seg_put(&watalt, (char *)&wa, r, c);
-			    }
-			}
-			else if (r == 0)
-			    asp_value = -2;
-			else if (c == 0)
-			    asp_value = -4;
-			else if (r == nrows - 1)
-			    asp_value = -6;
-			else if (c == ncols - 1)
-			    asp_value = -8;
-			if (-1 == bseg_put(&asp, &asp_value, r, c))
-			    exit(EXIT_FAILURE);
-			/* cseg_get(&alt, &alt_value, r, c); */
-			alt_value = wa.ele;
-			add_pt(r, c, alt_value);
-			FLAG_SET(flag_value, INLISTFLAG);
-			FLAG_SET(flag_value, EDGEFLAG);
-			bseg_put(&bitflags, &flag_value, r, c);
-		    }
-		    else {
-			seg_get(&watalt, (char *)&wa, r, c);
-			for (ct_dir = 0; ct_dir < sides; ct_dir++) {
-			    /* get r, c (r_nbr, c_nbr) for neighbours */
-			    r_nbr = r + nextdr[ct_dir];
-			    c_nbr = c + nextdc[ct_dir];
-
-			    bseg_get(&bitflags, &worked_value, r_nbr, c_nbr);
-			    if (FLAG_GET(worked_value, NULLFLAG)) {
-				asp_value = -1 * drain[r - r_nbr + 1][c - c_nbr + 1];
-				add_pt(r, c, wa.ele);
-				FLAG_SET(flag_value, INLISTFLAG);
-				FLAG_SET(flag_value, EDGEFLAG);
-				bseg_put(&bitflags, &flag_value, r, c);
-				bseg_put(&asp, &asp_value, r, c);
-				wat_value = wa.wat;
-				if (wat_value > 0) {
-				    wa.wat = -wat_value;
-				    seg_put(&watalt, (char *)&wa, r, c);
-				}
-				break;
-			    }
-			}
-		    }
-		}  /* end non-NULL cell */
-	    }  /* end column */
-	}
-    }
-    else {
-	for (r = 0; r < nrows; r++) {
-	    G_percent(r, nrows, 1);
-	    for (c = 0; c < ncols; c++) {
-		/* bseg_put(&worked, &zero, r, c); */
+    for (r = 0; r < nrows; r++) {
+	G_percent(r, nrows, 1);
+	if (pit_flag)
+	    Rast_get_c_row(fd, buf, r);
+	for (c = 0; c < ncols; c++) {
+	    bseg_get(&bitflags, &flag_value, r, c);
+	    if (!FLAG_GET(flag_value, NULLFLAG)) {
 		if (er_flag)
 		    dseg_put(&s_l, &half_res, r, c);
 		bseg_get(&asp, &asp_value, r, c);
 		if (r == 0 || c == 0 || r == nrows - 1 ||
-		    c == ncols - 1 || asp_value != 0) {
+		    c == ncols - 1) {
+		    /* dseg_get(&wat, &wat_value, r, c); */
 		    seg_get(&watalt, (char *)&wa, r, c);
 		    wat_value = wa.wat;
 		    if (wat_value > 0) {
 			wat_value = -wat_value;
+			/* dseg_put(&wat, &wat_value, r, c); */
 			wa.wat = wat_value;
 			seg_put(&watalt, (char *)&wa, r, c);
 		    }
-		    /* set depression */
-		    if (asp_value) {
-			asp_value = 0;
-			if (wat_value < 0) {
-			    wat_value = -wat_value;
-			    wa.wat = wat_value;
-			    seg_put(&watalt, (char *)&wa, r, c);
-			}
-		    }
-		    else if (r == 0)
+		    if (r == 0)
 			asp_value = -2;
 		    else if (c == 0)
 			asp_value = -4;
@@ -570,14 +474,56 @@ int init_vars(int argc, char *argv[])
 		    if (-1 == bseg_put(&asp, &asp_value, r, c))
 			exit(EXIT_FAILURE);
 		    /* cseg_get(&alt, &alt_value, r, c); */
-		    add_pt(r, c, wa.ele);
-		    bseg_get(&bitflags, &flag_value, r, c);
+		    alt_value = wa.ele;
+		    add_pt(r, c, alt_value);
 		    FLAG_SET(flag_value, INLISTFLAG);
 		    FLAG_SET(flag_value, EDGEFLAG);
 		    bseg_put(&bitflags, &flag_value, r, c);
 		}
-	    }
-	}
+		else {
+		    seg_get(&watalt, (char *)&wa, r, c);
+		    for (ct_dir = 0; ct_dir < sides; ct_dir++) {
+			/* get r, c (r_nbr, c_nbr) for neighbours */
+			r_nbr = r + nextdr[ct_dir];
+			c_nbr = c + nextdc[ct_dir];
+
+			bseg_get(&bitflags, &worked_value, r_nbr, c_nbr);
+			if (FLAG_GET(worked_value, NULLFLAG)) {
+			    asp_value = -1 * drain[r - r_nbr + 1][c - c_nbr + 1];
+			    add_pt(r, c, wa.ele);
+			    FLAG_SET(flag_value, INLISTFLAG);
+			    FLAG_SET(flag_value, EDGEFLAG);
+			    bseg_put(&bitflags, &flag_value, r, c);
+			    bseg_put(&asp, &asp_value, r, c);
+			    wat_value = wa.wat;
+			    if (wat_value > 0) {
+				wa.wat = -wat_value;
+				seg_put(&watalt, (char *)&wa, r, c);
+			    }
+			    break;
+			}
+		    }
+		}
+		/* real depression ? */
+		if (pit_flag && asp_value == 0) {
+		    if (!Rast_is_c_null_value(&buf[c]) && buf[c] != 0) {
+
+			seg_get(&watalt, (char *)&wa, r, c);
+			add_pt(r, c, wa.ele);
+
+			FLAG_SET(flag_value, INLISTFLAG);
+			FLAG_SET(flag_value, EDGEFLAG);
+			bseg_put(&bitflags, &flag_value, r, c);
+			wat_value = wa.wat;
+			if (wat_value > 0) {
+			    wa.wat = -wat_value;
+			    seg_put(&watalt, (char *)&wa, r, c);
+			}
+		    }
+		}
+
+	    }  /* end non-NULL cell */
+	}  /* end column */
     }
     G_percent(r, nrows, 1);	/* finish it */
 
