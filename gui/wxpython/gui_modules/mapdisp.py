@@ -1119,8 +1119,8 @@ class MapFrame(wx.Frame):
         """
         if self.toolbars['nviz']:
             filetype = "PPM file (*.ppm)|*.ppm|TIF file (*.tif)|*.tif"
-            ltype = [{ 'ext' : 'ppm', 'type' : -1 },
-                     { 'ext' : 'tif', 'type' : wx.BITMAP_TYPE_TIF }]
+            ltype = [{ 'ext' : 'ppm', 'type' : 'ppm' },
+                     { 'ext' : 'tif', 'type' : 'tif' }]
         else:
             img = self.MapWindow.img
             if not img:

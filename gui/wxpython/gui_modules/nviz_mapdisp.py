@@ -1924,7 +1924,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         @param width image width
         @param height image height
         """
-        self._display.SaveToFile(FileName, width, height)
+        self._display.SaveToFile(FileName, width, height, FileType)
                 
         # pbuffer = wx.EmptyBitmap(max(1, self.Map.width), max(1, self.Map.height))
         # dc = wx.BufferedPaintDC(self, pbuffer)
