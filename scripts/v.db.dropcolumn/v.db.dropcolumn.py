@@ -36,7 +36,7 @@
 
 #%option
 #% key: layer
-#% type: integer
+#% gisprompt:  old_layer,layer,layer
 #% description: Layer where to drop column
 #% answer: 1
 #% required : no
@@ -44,7 +44,7 @@
 
 #%option
 #% key: column
-#% type: string
+#% gisprompt: old_dbcolumn,dbcolumn,dbcolumn
 #% description: Name of the column to drop
 #% required : yes
 #%end
