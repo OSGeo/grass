@@ -35,7 +35,7 @@
 #% description: Data source for OGR access
 #% required: yes
 #%end
-#%option
+#%option G_OPT_V_MAP
 #% key: layer
 #% type: string
 #% answer: 1

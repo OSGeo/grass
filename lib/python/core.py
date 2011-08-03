@@ -77,7 +77,7 @@ _popen_args = ["bufsize", "executable", "stdin", "stdout", "stderr",
 	       "preexec_fn", "close_fds", "cwd", "env",
 	       "universal_newlines", "startupinfo", "creationflags"]
 
-def _decode(string):
+def decode(string):
     enc = locale.getdefaultlocale()[1]
     if enc:
         return string.decode(enc)
