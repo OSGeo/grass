@@ -76,9 +76,7 @@ class Nviz(object):
         G_set_error_routine(errfunc) 
         G_set_percent_routine(perfunc)
         
-        G_unset_window()
-        GS_libinit()
-        GVL_libinit()
+        self.Init()
         
         self.data_obj = nv_data()
         self.data = pointer(self.data_obj)
@@ -94,6 +92,12 @@ class Nviz(object):
         del self.data
         del self.data_obj
         self.log = None
+
+    def Init(self):
+        """!Initialize window"""
+        G_unset_window()
+        GS_libinit()
+        GVL_libinit()
         
     def ResizeWindow(self, width, height):
         """!GL canvas resized

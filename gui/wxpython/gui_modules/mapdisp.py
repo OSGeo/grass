@@ -397,6 +397,7 @@ class MapFrame(wx.Frame):
             self.MapWindow3D.UpdateView(None)
         else:
             self.MapWindow = self.MapWindow3D
+            self.MapWindow3D.GetDisplay().Init()
             self.MapWindow3D.UpdateOverlays()
             # add Nviz notebookpage
             self._layerManager.AddNviz()
@@ -495,11 +496,12 @@ class MapFrame(wx.Frame):
             self.statusbar.SetStatusText(_("Please wait, unloading data..."), 0)
             self._layerManager.goutput.WriteCmdLog(_("Switching back to 2D view mode..."),
                                                    switchPage = False)
-            # self.MapWindow3D.UnloadDataLayers(force = True)
+            self.MapWindow3D.UnloadDataLayers(force = True)
             # switch from MapWindowGL to MapWindow
             self._mgr.DetachPane(self.MapWindow3D)
-            self.MapWindow3D.Destroy()
-            self.MapWindow3D = None
+            self.MapWindow3D.Hide()
+            #self.MapWindow3D.Destroy()
+            #self.MapWindow3D = None
             self.MapWindow2D.Show()
             self._mgr.AddPane(self.MapWindow2D, wx.aui.AuiPaneInfo().CentrePane().
                               Dockable(False).BestSize((-1,-1)).
