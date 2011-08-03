@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#
+
 ############################################################################
 #
 # MODULE:       v.db.droptable
@@ -40,7 +40,7 @@
 #%end
 #%option
 #% key: layer
-#% type: integer
+#% gisprompt: old_layer,layer,layer
 #% description: Layer from which to drop linked attribute table
 #% answer: 1
 #% required : no

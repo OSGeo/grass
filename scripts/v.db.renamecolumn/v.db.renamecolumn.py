@@ -36,7 +36,7 @@
 #%end
 #%option
 #% key: layer
-#% type: integer
+#% gisprompt:  old_layer,layer,layer
 #% description: Layer where to rename column
 #% answer: 1
 #% required : no
