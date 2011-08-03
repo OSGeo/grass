@@ -35,10 +35,6 @@ import tempfile
 import copy
 import types
 
-### i18N
-import gettext
-gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode=True)
-
 import globalvar
 import wx
 import wx.lib.mixins.listctrl as listmix
@@ -3049,30 +3045,28 @@ class LayerBook(wx.Notebook):
 
         event.Skip()
 
-def main(argv=None):
+def main(argv = None):
+    import gettext
+    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode=True)
+    
     if argv is None:
         argv = sys.argv
-
+    
     if len(argv) != 2:
         print >> sys.stderr, __doc__
         sys.exit()
-
-    # Command line arguments of the script to be run are preserved by the
-    # hotswap.py wrapper but hotswap.py and its options are removed that
-    # sys.argv looks as if no wrapper was present.
-    #print "argv:", `argv`
-
+    
     #some applications might require image handlers
     wx.InitAllImageHandlers()
-
+    
     app = wx.PySimpleApp()
     f = AttributeManager(parent=None, id=wx.ID_ANY,
                          title="%s - <%s>" % (_("GRASS GIS Attribute Table Manager"),
                                               argv[1]),
                          size=(900,600), vectorName=argv[1])
     f.Show()
-
+    
     app.MainLoop()
-
+    
 if __name__ == '__main__':
     main()

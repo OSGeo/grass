@@ -37,10 +37,6 @@ try:
 except ImportError:
     havePwd = False
 
-### i18N
-import gettext
-gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
-
 import wx
 import wx.lib.filebrowsebutton as filebrowse
 import wx.lib.colourselect as csel

@@ -57,10 +57,6 @@ from threading import Thread
 import Queue
 import tempfile
 
-### i18N
-import gettext
-gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
-
 import globalvar
 import wx
 import wx.html
@@ -2083,9 +2079,12 @@ class GNotebook(FN.FlatNotebook):
         return self.GetPageIndex(self.notebookPages[page])
     
 if __name__ ==  "__main__":
-
+    import gettext
+    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
+    
     if len(sys.argv) ==  1:
         sys.exit(_("usage: %s <grass command>") % sys.argv[0])
+    
     if sys.argv[1] !=  'test':
         q = wx.LogNull()
         cmd = utils.split(sys.argv[1])

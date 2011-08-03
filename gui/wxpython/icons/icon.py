@@ -22,11 +22,11 @@ for details.
 import os
 import sys
 
-sys.path.append(os.path.join(os.getenv("GISBASE"), "etc", "wxpython", "gui_modules"))
+sys.path.append(os.path.join(os.getenv("GISBASE"), "etc", "gui", "wxpython", "gui_modules"))
 
 import wx
 
-from gui_modules.preferences import globalSettings as UserSettings
+from preferences import globalSettings as UserSettings
 
 # default icon set
 import grass_icons
@@ -445,4 +445,5 @@ Icons = {
 # testing ...
 if __name__ == '__main__':
     for k, v in Icons.iteritems():
-        print v.GetImageName()
+        for kk, vv in v.iteritems():
+            print k, kk, vv.GetImageName()

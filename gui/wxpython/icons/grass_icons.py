@@ -7,7 +7,7 @@ __author__ = "Robert Szczepanek"
 
 import os
 
-from gui_modules import globalvar
+import globalvar
 
 iconPath = os.path.join(globalvar.ETCDIR, "gui", "icons", "grass")
 

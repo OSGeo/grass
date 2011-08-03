@@ -13,7 +13,7 @@ Usage:
 python sqlbuilder.py vector_map
 @endcode
 
-(C) 2007-2009 by the GRASS Development Team
+(C) 2007-2009, 2011 by the GRASS Development Team
 
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
@@ -27,10 +27,6 @@ for details.
 import os
 import sys
 import time
-
-### i18N
-import gettext
-gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode=True)
 
 import globalvar
 import wx
@@ -58,7 +54,7 @@ class SQLFrame(wx.Frame):
         #
         self.vectmap = vectmap # fullname
         if not "@" in self.vectmap:
-            self.vectmap = self.vectmap + "@" + grass.gisenv()['MAPSET']
+            self.vectmap = grass.find_file(self.vectmap, element = 'vector')['fullname']
         self.mapname, self.mapset = self.vectmap.split("@")
         
         # db info
@@ -445,6 +441,9 @@ if __name__ == "__main__":
     if len(sys.argv) != 2:
         print >>sys.stderr, __doc__
         sys.exit()
+    
+    import gettext
+    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode=True)
     
     app = wx.App(0)
     sqlb = SQLFrame(parent = None, title = _('SQL Builder'), vectmap = sys.argv[1])

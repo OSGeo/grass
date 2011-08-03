@@ -2668,11 +2668,3 @@ class SelectTransformDialog(wx.Dialog):
         self.transnum = self.translist.GetSelection()
         self.transnum = self.transnum - 1
         return self.transnum
-
-if __name__ == "__main__":
-    import gettext
-    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
-    app = wx.PySimpleApp()
-    gWizard = RegionDef(None)
-    gWizzard.Show()
-    app.MainLoop()

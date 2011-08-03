@@ -20,9 +20,6 @@ import locale
 
 if not os.getenv("GISBASE"):
     sys.exit("GRASS is not running. Exiting...")
-### i18N
-import gettext
-gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode=True)
 
 # path to python scripts
 ETCDIR = os.path.join(os.getenv("GISBASE"), "etc")

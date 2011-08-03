@@ -4546,6 +4546,9 @@ if __name__ == "__main__":
 
         
 def main():
+    import gettext
+    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
+    
     app = wx.PySimpleApp()
     wx.InitAllImageHandlers()
     frame = ModelFrame(parent = None)
