@@ -604,8 +604,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                               data['persp']['value'],
                               data['twist']['value'])
         
+        ## multiple z-exag value from slider by original value computed in ogsf so it scales
+        ## correctly with maps of different height ranges        
         if event and event.zExag and 'value' in data['z-exag']:
-            self._display.SetZExag(data['z-exag']['value'])
+            self._display.SetZExag(self.iview['z-exag']['original'] * data['z-exag']['value'])
         if self.iview['focus']['x'] != -1:
             self._display.SetFocus(self.iview['focus']['x'], self.iview['focus']['y'],
                                    self.iview['focus']['z'])
@@ -1256,21 +1258,18 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
 
     def ResetView(self):
         """!Reset to default view"""
-        self.view['z-exag']['value'], \
+        self.iview['z-exag']['original'], \
             self.iview['height']['value'], \
             self.iview['height']['min'], \
             self.iview['height']['max'] = self._display.SetViewDefault()
+            
+        ## set initial z-exag value at 1X    
+        self.view['z-exag']['value'] = 1.0
         
         self.view['z-exag']['min'] = UserSettings.Get(group = 'nviz', key = 'view',
-                                                      subkey = ('z-exag', 'min'))
+                                                      subkey = ('z-exag', 'min'))        
         zexagMax = UserSettings.Get(group = 'nviz', key = 'view',
-                                    subkey = ('z-exag', 'max'))
-        if zexagMax < self.view['z-exag']['value']:
-            self.view['z-exag']['max'] = self.view['z-exag']['value']
-        elif self.view['z-exag']['value'] < 1:
-            self.view['z-exag']['max'] = 10 * self.view['z-exag']['value']
-        else:
-            self.view['z-exag']['max'] = zexagMax
+                                    subkey = ('z-exag', 'max'))        
         
         self.view['position']['x'] = UserSettings.Get(group = 'nviz', key = 'view',
                                                  subkey = ('position', 'x'))
