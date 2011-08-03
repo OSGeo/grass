@@ -401,7 +401,7 @@ int main(int argc, char *argv[])
 		       (strcmp(argv[1], "-help") == 0) ||
 		       (strcmp(argv[1], "--help") == 0))) {
 	fprintf(stderr, "%s: %s [-t] [-s] <filename> [<argument> ...]\n",
-		_("Usage:"), argv[0]);
+		_("Usage"), argv[0]);
 	exit(EXIT_FAILURE);
     }
 
