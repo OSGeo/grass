@@ -75,10 +75,10 @@ char *translate(const char *arg)
 
 static int parse_boolean(struct context *ctx, const char *arg)
 {
-    if (strcasecmp(arg, "yes") == 0)
+    if (G_strcasecmp(arg, "yes") == 0)
 	return YES;
 
-    if (strcasecmp(arg, "no") == 0)
+    if (G_strcasecmp(arg, "no") == 0)
 	return NO;
 
     fprintf(stderr, _("Unknown boolean value \"%s\" at line %d\n"),
@@ -89,13 +89,13 @@ static int parse_boolean(struct context *ctx, const char *arg)
 
 static void parse_toplevel(struct context *ctx, const char *cmd)
 {
-    if (strcasecmp(cmd, "module") == 0) {
+    if (G_strcasecmp(cmd, "module") == 0) {
 	ctx->state = S_MODULE;
 	ctx->module = G_define_module();
 	return;
     }
 
-    if (strcasecmp(cmd, "flag") == 0) {
+    if (G_strcasecmp(cmd, "flag") == 0) {
 	ctx->state = S_FLAG;
 	ctx->flag = G_define_flag();
 	if (!ctx->first_flag)
@@ -103,7 +103,7 @@ static void parse_toplevel(struct context *ctx, const char *cmd)
 	return;
     }
 
-    if (strcasecmp(cmd, "option") == 0) {
+    if (G_strcasecmp(cmd, "option") == 0) {
 	ctx->state = S_OPTION;
 	ctx->option = G_define_option();
 	if (!ctx->first_option)
@@ -119,22 +119,22 @@ static void parse_module(struct context *ctx, const char *cmd,
 {
 
     /* Label and description can be internationalized */
-    if (strcasecmp(cmd, "label") == 0) {
+    if (G_strcasecmp(cmd, "label") == 0) {
 	ctx->module->label = translate(strdup(arg));
 	return;
     }
 
-    if (strcasecmp(cmd, "description") == 0) {
+    if (G_strcasecmp(cmd, "description") == 0) {
 	ctx->module->description = translate(strdup(arg));
 	return;
     }
 
-    if (strcasecmp(cmd, "keywords") == 0) {
+    if (G_strcasecmp(cmd, "keywords") == 0) {
 	G_add_keyword(translate(strdup(arg)));
 	return;
     }
 
-    if (strcasecmp(cmd, "end") == 0) {
+    if (G_strcasecmp(cmd, "end") == 0) {
 	ctx->state = S_TOPLEVEL;
 	return;
     }
@@ -145,38 +145,38 @@ static void parse_module(struct context *ctx, const char *cmd,
 
 static void parse_flag(struct context *ctx, const char *cmd, const char *arg)
 {
-    if (strcasecmp(cmd, "key") == 0) {
+    if (G_strcasecmp(cmd, "key") == 0) {
 	ctx->flag->key = arg[0];
 	return;
     }
 
-    if (strcasecmp(cmd, "suppress_required") == 0) {
+    if (G_strcasecmp(cmd, "suppress_required") == 0) {
 	ctx->flag->suppress_required = parse_boolean(ctx, arg);
 	return;
     }
 
-    if (strcasecmp(cmd, "answer") == 0) {
+    if (G_strcasecmp(cmd, "answer") == 0) {
 	ctx->flag->answer = atoi(arg);
 	return;
     }
 
     /* Label, description, and guisection can all be internationalized */
-    if (strcasecmp(cmd, "label") == 0) {
+    if (G_strcasecmp(cmd, "label") == 0) {
 	ctx->flag->label = translate(strdup(arg));
 	return;
     }
 
-    if (strcasecmp(cmd, "description") == 0) {
+    if (G_strcasecmp(cmd, "description") == 0) {
 	ctx->flag->description = translate(strdup(arg));
 	return;
     }
 
-    if (strcasecmp(cmd, "guisection") == 0) {
+    if (G_strcasecmp(cmd, "guisection") == 0) {
 	ctx->flag->guisection = translate(strdup(arg));
 	return;
     }
 
-    if (strcasecmp(cmd, "end") == 0) {
+    if (G_strcasecmp(cmd, "end") == 0) {
 	ctx->state = S_TOPLEVEL;
 	return;
     }
@@ -187,13 +187,13 @@ static void parse_flag(struct context *ctx, const char *cmd, const char *arg)
 
 static int parse_type(struct context *ctx, const char *arg)
 {
-    if (strcasecmp(arg, "integer") == 0)
+    if (G_strcasecmp(arg, "integer") == 0)
 	return TYPE_INTEGER;
 
-    if (strcasecmp(arg, "double") == 0)
+    if (G_strcasecmp(arg, "double") == 0)
 	return TYPE_DOUBLE;
 
-    if (strcasecmp(arg, "string") == 0)
+    if (G_strcasecmp(arg, "string") == 0)
 	return TYPE_STRING;
 
     fprintf(stderr, _("Unknown type \"%s\" at line %d\n"), arg, ctx->line);
@@ -204,73 +204,73 @@ static int parse_type(struct context *ctx, const char *arg)
 static void parse_option(struct context *ctx, const char *cmd,
 			 const char *arg)
 {
-    if (strcasecmp(cmd, "key") == 0) {
+    if (G_strcasecmp(cmd, "key") == 0) {
 	ctx->option->key = strdup(arg);
 	return;
     }
 
-    if (strcasecmp(cmd, "type") == 0) {
+    if (G_strcasecmp(cmd, "type") == 0) {
 	ctx->option->type = parse_type(ctx, arg);
 	return;
     }
 
-    if (strcasecmp(cmd, "required") == 0) {
+    if (G_strcasecmp(cmd, "required") == 0) {
 	ctx->option->required = parse_boolean(ctx, arg);
 	return;
     }
 
-    if (strcasecmp(cmd, "multiple") == 0) {
+    if (G_strcasecmp(cmd, "multiple") == 0) {
 	ctx->option->multiple = parse_boolean(ctx, arg);
 	return;
     }
 
-    if (strcasecmp(cmd, "options") == 0) {
+    if (G_strcasecmp(cmd, "options") == 0) {
 	ctx->option->options = strdup(arg);
 	return;
     }
 
-    if (strcasecmp(cmd, "key_desc") == 0) {
+    if (G_strcasecmp(cmd, "key_desc") == 0) {
 	ctx->option->key_desc = strdup(arg);
 	return;
     }
 
     /* Label, description, descriptions, and guisection can all be internationalized */
-    if (strcasecmp(cmd, "label") == 0) {
+    if (G_strcasecmp(cmd, "label") == 0) {
 	ctx->option->label = translate(strdup(arg));
 	return;
     }
 
-    if (strcasecmp(cmd, "description") == 0) {
+    if (G_strcasecmp(cmd, "description") == 0) {
 	ctx->option->description = translate(strdup(arg));
 	return;
     }
 
-    if (strcasecmp(cmd, "descriptions") == 0) {
+    if (G_strcasecmp(cmd, "descriptions") == 0) {
 	ctx->option->descriptions = translate(strdup(arg));
 	return;
     }
 
-    if (strcasecmp(cmd, "answer") == 0) {
+    if (G_strcasecmp(cmd, "answer") == 0) {
 	ctx->option->answer = strdup(arg);
 	return;
     }
 
-    if (strcasecmp(cmd, "gisprompt") == 0) {
+    if (G_strcasecmp(cmd, "gisprompt") == 0) {
 	ctx->option->gisprompt = strdup(arg);
 	return;
     }
 
-    if (strcasecmp(cmd, "guisection") == 0) {
+    if (G_strcasecmp(cmd, "guisection") == 0) {
 	ctx->option->guisection = translate(strdup(arg));
 	return;
     }
 
-    if (strcasecmp(cmd, "guidependency") == 0) {
+    if (G_strcasecmp(cmd, "guidependency") == 0) {
 	ctx->option->guidependency = translate(strdup(arg));
 	return;
     }
 
-    if (strcasecmp(cmd, "end") == 0) {
+    if (G_strcasecmp(cmd, "end") == 0) {
 	ctx->state = S_TOPLEVEL;
 	return;
     }
