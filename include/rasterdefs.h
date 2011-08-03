@@ -551,6 +551,7 @@ DCELL Rast_get_sample(int, const struct Cell_head *, struct Categories *, double
 /* set_window.c */
 void Rast__init_window(void);
 void Rast_set_window(struct Cell_head *);
+void Rast_unset_window(void);
 void Rast_set_output_window(struct Cell_head *);
 void Rast_set_input_window(struct Cell_head *);
 

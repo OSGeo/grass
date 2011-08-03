@@ -397,13 +397,16 @@ class MapFrame(wx.Frame):
             self.MapWindow3D.UpdateView(None)
         else:
             self.MapWindow = self.MapWindow3D
+            os.environ['GRASS_REGION'] = self.Map.SetRegion(windres = True)
             self.MapWindow3D.GetDisplay().Init()
+            del os.environ['GRASS_REGION']
+            
             self.MapWindow3D.UpdateOverlays()
             # add Nviz notebookpage
             self._layerManager.AddNviz()
             for page in ('view', 'light', 'fringe', 'constant', 'cplane'):
                 self._layerManager.nviz.UpdatePage(page)
-        
+
         # switch from MapWindow to MapWindowGL
         # add nviz toolbar
         self._mgr.DetachPane(self.MapWindow2D)
@@ -500,8 +503,6 @@ class MapFrame(wx.Frame):
             # switch from MapWindowGL to MapWindow
             self._mgr.DetachPane(self.MapWindow3D)
             self.MapWindow3D.Hide()
-            #self.MapWindow3D.Destroy()
-            #self.MapWindow3D = None
             self.MapWindow2D.Show()
             self._mgr.AddPane(self.MapWindow2D, wx.aui.AuiPaneInfo().CentrePane().
                               Dockable(False).BestSize((-1,-1)).
@@ -1792,20 +1793,18 @@ class MapFrame(wx.Frame):
             # delete object if it has no text or is not active
             if text == '' or active == False:
                 try:
-                    self.MapWindow2D.pdc.ClearId(id)
-                    self.MapWindow2D.pdc.RemoveId(id)
+                    self.MapWindow.pdc.ClearId(id)
+                    self.MapWindow.pdc.RemoveId(id)
                     del self.MapWindow.textdict[id]
-                    if self.MapWindow3D:
-                        self.MapWindow3D.UpdateOverlays()
                 except:
                     pass
                 return
 
-            self.MapWindow2D.pdc.ClearId(id)
-            self.MapWindow2D.pdc.SetId(id)
-            self.MapWindow2D.textdict[id] = self.dialogs['text'].GetValues()
-            if self.MapWindow3D:
-                self.MapWindow3D.textdict[id] = self.dialogs['text'].GetValues()
+            self.MapWindow.pdc.ClearId(id)
+            self.MapWindow.pdc.SetId(id)
+            self.MapWindow.textdict[id] = self.dialogs['text'].GetValues()
+##            if self.MapWindow3D:
+##                self.MapWindow3D.textdict[id] = self.dialogs['text'].GetValues()
                 
             
             self.MapWindow2D.UpdateMap(render = False, renderVector = False)
