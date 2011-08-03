@@ -79,6 +79,7 @@ static geodisplay Gd;
 static struct Cell_head wind;
 static int Buffermode;
 static int Numlights = 0;
+static int Resetlight = 1;
 static int Modelshowing = 0;
 
 void void_func(void)
@@ -249,7 +250,16 @@ int GS_new_surface(void)
 
     return (-1);
 }
-
+void GS_set_light_reset(int i)
+{
+    Resetlight = i;
+    if (i)
+	Numlights = 0;
+}
+int GS_get_light_reset(void)
+{
+    return Resetlight;
+}
 /*!
    \brief Add new model light
 
@@ -258,11 +268,11 @@ int GS_new_surface(void)
  */
 int GS_new_light(void)
 {
-    static int first = 1;
     int i;
 
-    if (first) {
-	first = 0;
+    if (GS_get_light_reset()) {
+
+	GS_set_light_reset(0);
 
 	for (i = 0; i < MAX_LIGHTS; i++) {
 	    Gv.lights[i].position[X] = Gv.lights[i].position[Y] = 0.0;
