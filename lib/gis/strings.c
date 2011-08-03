@@ -1,20 +1,20 @@
 /*!
- * \file strings.c
- * 
- * \brief GIS Library - string/chring movement functions
- *
- * \todo merge interesting functions from ../datetime/scan.c here
- *
- * (C) 1999-2008 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public
- * License (>=v2). Read the file COPYING that comes with GRASS
- * for details.
- *
- * \author Dave Gerdes (USACERL), Michael Shapiro (USACERL), Amit
- * Parghi (USACERL), Bernhard Reiter (Intevation GmbH, Germany) and
- * many others
- */
+  \file lib/gis/strings.c
+  
+  \brief GIS Library - string/chring movement functions
+  
+  \todo merge interesting functions from ../datetime/scan.c here
+  
+  (C) 1999-2008, 2011 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Dave Gerdes (USACERL)
+  \author Michael Shapiro (USACERL)
+  \author Amit Parghi (USACERL)
+  \author Bernhard Reiter (Intevation GmbH, Germany) and many others
+*/
 
 #include <string.h>
 #include <stdlib.h>
@@ -27,17 +27,20 @@
 #endif
 
 /*!
- * \brief String compare ignoring case (upper or lower)
- *
- * Returning a value that has the same sign as the difference between
- * the first differing pair of characters
- *
- * \param[in] x first string to compare
- * \param[in] y second string to compare
- *
- * \return 0 the two strings are equal
- * \return -1, 1
- */
+  \brief String compare ignoring case (upper or lower)
+  
+  Returning a value that has the same sign as the difference between
+  the first differing pair of characters.
+
+  Note: strcasecmp() is affected by the locale (LC_CTYPE), while
+  G_strcasecmp() isn't.
+  
+  \param x first string to compare
+  \param y second string to compare
+  
+  \return 0 the two strings are equal
+  \return -1, 1
+*/
 int G_strcasecmp(const char *x, const char *y)
 {
     int xx, yy;
@@ -66,19 +69,18 @@ int G_strcasecmp(const char *x, const char *y)
 }
 
 /*!
- * \brief Copy string to allocated memory.
- *
- * This routine allocates enough memory to hold the string <b>s</b>,
- * copies <b>s</b> to the allocated memory, and returns a pointer
- * to the allocated memory.
- *
- * If <em>s</em> is NULL then empty string is returned.
- *
- *  \param s string
- *
- *  \return pointer to newly allocated string
- */
-
+  \brief Copy string to allocated memory.
+  
+  This routine allocates enough memory to hold the string <b>s</b>,
+  copies <em>s</em> to the allocated memory, and returns a pointer
+  to the allocated memory.
+  
+  If <em>s</em> is NULL then empty string is returned.
+  
+  \param s string
+ 
+  \return pointer to newly allocated string
+*/
 char *G_store(const char *s)
 {
     char *buf;
@@ -96,14 +98,14 @@ char *G_store(const char *s)
 }
 
 /*!
- * \brief Replace all occurencies of character in string bug with new
- *
- * \param[in,out] bug base string
- * \param[in] character character to replace
- * \param[in] new new character
- *
- * \return bug string
- */
+  \brief Replace all occurencies of character in string bug with new
+  
+  \param[in,out] bug base string
+  \param character character to replace
+  \param new new character
+  
+  \return bug string
+*/
 char *G_strchg(char *bug, char character, char new)
 {
     char *help = bug;
@@ -117,26 +119,26 @@ char *G_strchg(char *bug, char character, char new)
 }
 
 /*!
- * \brief Replace all occurencies of old_str in buffer with new_str
- *
- * Code example:
- * \code
- * char *name;
- * name = G_str_replace ( inbuf, ".exe", "" );
- * ... 
- * G_free (name);
- * \endcode
- *
- * \param buffer input string buffer
- * \param old_str string to be replaced
- * \param new_str new string
- *
- * \return the newly allocated string, input buffer is unchanged 
- */
+  \brief Replace all occurencies of old_str in buffer with new_str
+  
+  Code example:
+  \code
+  char *name;
+  name = G_str_replace ( inbuf, ".exe", "" );
+  ... 
+  G_free (name);
+  \endcode
+  
+  \param buffer input string buffer
+  \param old_str string to be replaced
+  \param new_str new string
+  
+  \return the newly allocated string, input buffer is unchanged 
+*/
 char *G_str_replace(const char *buffer, const char *old_str, const char *new_str)
 {
-    char *B, *R;
-    const char *N;
+    char *R;
+    const char *N, *B;
     char *replace;
     int count, len;
 
@@ -199,12 +201,10 @@ char *G_str_replace(const char *buffer, const char *old_str, const char *new_str
 }
 
 /*!
- * \brief Removes all leading and trailing white space from string.
- *
- * \param[in,out] buf buffer to be worked on
- *
- * \return
- */
+  \brief Removes all leading and trailing white space from string.
+  
+  \param[in,out] buf buffer to be worked on
+*/
 void G_strip(char *buf)
 {
     char *a, *b;
@@ -223,15 +223,16 @@ void G_strip(char *buf)
 }
 
 /*!
- * \brief Chop leading and trailing white spaces:
- * \verbatim space, \f, \n, \r, \t, \v \endverbatim
- *
- * modified copy of G_squeeze();    RB March 2000 <Radim.Blazek@dhv.cz>
- *
- * \param line buffer to be worked on
- *
- * \return pointer to string
- */
+  \brief Chop leading and trailing white spaces.
+  
+  \verbatim space, \f, \n, \r, \t, \v \endverbatim
+  
+  Modified copy of G_squeeze() by RB in March 2000.
+  
+  \param line buffer to be worked on
+  
+  \return pointer to string
+*/
 char *G_chop(char *line)
 {
     char *f = line, *t = line;
@@ -258,10 +259,10 @@ char *G_chop(char *line)
 }
 
 /*!
- * \brief Convert string to upper case
- *
- * \param[in,out] str pointer to string
- */
+  \brief Convert string to upper case
+  
+  \param[in,out] str pointer to string
+*/
 void G_str_to_upper(char *str)
 {
     int i = 0;
@@ -276,10 +277,10 @@ void G_str_to_upper(char *str)
 }
 
 /*!
- * \brief Convert string to lower case
- *
- * \param[in,out] str pointer to string
- */
+  \brief Convert string to lower case
+  
+  \param[in,out] str pointer to string
+*/
 void G_str_to_lower(char *str)
 {
     int i = 0;
@@ -294,12 +295,12 @@ void G_str_to_lower(char *str)
 }
 
 /*!
- * \brief Make string SQL compliant
- *
- * \param[in,out] str pointer to string
- *
- * \return number of changed characters
- */
+  \brief Make string SQL compliant
+  
+  \param[in,out] str pointer to string
+  
+  \return number of changed characters
+*/
 int G_str_to_sql(char *str)
 {
     int count;
@@ -332,18 +333,18 @@ int G_str_to_sql(char *str)
 }
 
 /*!
- * \brief Remove superfluous white space.
- *
- * Leading and trailing white space is removed from the string 
- * <b>line</b> and internal white space which is more than one character 
- * is reduced to a single space character. White space here means 
- * spaces, tabs, linefeeds, newlines, and formfeeds.
- *
- * \param[in,out] line
- * \return Pointer to <b>line</b>
- */
+  \brief Remove superfluous white space.
+  
+  Leading and trailing white space is removed from the string 
+  <b>line</b> and internal white space which is more than one character 
+  is reduced to a single space character. White space here means 
+  spaces, tabs, linefeeds, newlines, and formfeeds.
+  
+  \param[in,out] line
 
-char *G_squeeze(char *line)
+  \return Pointer to <b>line</b>
+*/
+void G_squeeze(char *line)
 {
     char *f = line, *t = line;
     int l;
@@ -362,6 +363,4 @@ char *G_squeeze(char *line)
     l = strlen(line) - 1;
     if (*(line + l) == '\n')
 	*(line + l) = '\0';
-
-    return line;
 }
