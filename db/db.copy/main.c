@@ -29,6 +29,8 @@ int main(int argc, char **argv)
     struct GModule *module;
     const char *drv, *db;
 
+    G_gisinit(argv[0]);
+    
     /* Set description */
     module = G_define_module();
     G_add_keyword(_("database"));
