@@ -81,7 +81,7 @@ static int parse_boolean(struct context *ctx, const char *arg)
     if (strcasecmp(arg, "no") == 0)
 	return NO;
 
-    fprintf(stderr, "Unknown boolean value \"%s\" at line %d\n",
+    fprintf(stderr, _("Unknown boolean value \"%s\" at line %d\n"),
 	    arg, ctx->line);
 
     return NO;
@@ -111,7 +111,7 @@ static void parse_toplevel(struct context *ctx, const char *cmd)
 	return;
     }
 
-    fprintf(stderr, "Unknown command \"%s\" at line %d\n", cmd, ctx->line);
+    fprintf(stderr, _("Unknown command \"%s\" at line %d\n"), cmd, ctx->line);
 }
 
 static void parse_module(struct context *ctx, const char *cmd,
@@ -139,7 +139,7 @@ static void parse_module(struct context *ctx, const char *cmd,
 	return;
     }
 
-    fprintf(stderr, "Unknown module parameter \"%s\" at line %d\n",
+    fprintf(stderr, _("Unknown module parameter \"%s\" at line %d\n"),
 	    cmd, ctx->line);
 }
 
@@ -181,7 +181,7 @@ static void parse_flag(struct context *ctx, const char *cmd, const char *arg)
 	return;
     }
 
-    fprintf(stderr, "Unknown flag parameter \"%s\" at line %d\n",
+    fprintf(stderr, _("Unknown flag parameter \"%s\" at line %d\n"),
 	    cmd, ctx->line);
 }
 
@@ -196,7 +196,7 @@ static int parse_type(struct context *ctx, const char *arg)
     if (strcasecmp(arg, "string") == 0)
 	return TYPE_STRING;
 
-    fprintf(stderr, "Unknown type \"%s\" at line %d\n", arg, ctx->line);
+    fprintf(stderr, _("Unknown type \"%s\" at line %d\n"), arg, ctx->line);
 
     return TYPE_STRING;
 }
