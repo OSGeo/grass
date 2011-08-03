@@ -291,14 +291,14 @@ def GetVectorNumberOfLayers(parent, vector):
         Debug.msg(5, "utils.GetVectorNumberOfLayers(): vector map '%s' not found" % vector)
         return layers
     
-    ret = gcmd.RunCommand('v.db.connect',
-                          parent = parent,
-                          flags = 'g',
-                          read = True,
-                          map = fullname,
-                          fs = ';')
-        
-    if not ret:
+    ret, out, msg = gcmd.RunCommand('v.db.connect',
+                                    getErrorMsg = True,
+                                    read = True,
+                                    flags = 'g',
+                                    map = fullname,
+                                    fs = ';')
+    if ret != 0:
+        sys.stderr.write(_("Vector map <%s>: %s\n") % (fullname, msg))
         return layers
     else:
         Debug.msg(1, "GetVectorNumberOfLayers(): ret %s" % ret)
@@ -651,21 +651,19 @@ def GetColorTables():
     return ret.splitlines()
 
 def DecodeString(string):
-    """!Return decoded string
+    """!Decode string using system encoding
     
-    String is decoded as unicode, on failure
-    are used system locales.
-
     @param string string to be decoded
     
     @return decoded string
     """
-    try:
-        return string.decode('utf-8')
-    except LookupError:
-        enc = locale.getdefaultlocale()[1]
-        if enc:
-            return string.decode(enc)
+    if not string:
+        return string
+    
+    enc = locale.getdefaultlocale()[1]
+    if enc:
+        Debug.msg(5, "DecodeString(): enc=%s" % enc)
+        return string.decode(enc)
     
     return string
 
@@ -676,8 +674,11 @@ def EncodeString(string):
     
     @return encoded string
     """
+    if not string:
+        return string
     enc = locale.getdefaultlocale()[1]
     if enc:
+        Debug.msg(5, "EncodeString(): enc=%s" % enc)
         return string.encode(enc)
     
     return string

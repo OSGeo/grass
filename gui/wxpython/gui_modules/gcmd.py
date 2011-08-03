@@ -607,7 +607,7 @@ def RunCommand(prog, flags = "", overwrite = False, quiet = False, verbose = Fal
         ps.stdin = None
     
     Debug.msg(3, "gcmd.RunCommand(): decoding string")
-    stdout, stderr = map(lambda x: utils.DecodeString(x) if type(x) is types.StringType else x, ps.communicate())
+    stdout, stderr = map(utils.DecodeString, ps.communicate())
     
     ret = ps.returncode
     Debug.msg(1, "gcmd.RunCommand(): get return code %d" % ret)
