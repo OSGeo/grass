@@ -120,8 +120,6 @@ void GS_libinit(void)
     Cxl_func = void_func;
     Swap_func = void_func;
 
-    /* reset lights */
-    Numlights = 0;
     
     if (first) {
 	gs_init();
