@@ -709,6 +709,8 @@ class Settings:
         self.internalSettings['nviz']['view']['persp']['max'] = 100
         self.internalSettings['nviz']['view']['height'] = {}
         self.internalSettings['nviz']['view']['height']['value'] = -1
+        self.internalSettings['nviz']['view']['z-exag'] = {}
+        self.internalSettings['nviz']['view']['z-exag']['original'] = 1
         self.internalSettings['nviz']['view']['focus'] = {}
         self.internalSettings['nviz']['view']['focus']['x'] = -1
         self.internalSettings['nviz']['view']['focus']['y'] = -1
