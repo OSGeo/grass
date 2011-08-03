@@ -1328,30 +1328,22 @@ class Map(object):
                 layer.Render()
                 
 if __name__ == "__main__":
-    """!Test of Display class.
-    Usage: display=Render()
-    """
     import gettext
     gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
     
-    print "Initializing..."
-    grass.run_command("g.region", flags = "d")
+    Map = Map()
+    Map.GetRegion(update = True)
     
-    map = Map()
-    map.width = 640
-    map.height = 480
-    
-    map.AddLayer(type = "raster",
-                 name = "elevation.dem",
-                 command = ["d.rast", "elevation.dem@PERMANENT", "catlist=1000-1500", "-i"],
+    Map.AddLayer(type = "raster",
+                 name = "elevation",
+                 command = ["d.rast", "map=elevation@PERMANENT"],
                  l_opacity = .7)
     
-    map.AddLayer(type = "vector",
-                 name = "streams",
-                 command = ["d.vect", "streams@PERMANENT", "color=red", "width=3", "type=line"])
+    Map.AddLayer(type = "vector",
+                 name = "roadsmajor",
+                 command = ["d.vect", "map=roadsmajor@PERMANENT", "color=red", "width=3", "type=line"])
     
-    image = map.Render(force = True)
+    image = Map.Render(force = True)
     
     if image:
-        os.system("display %s" % image)
-    
+        grass.call(["display", image])

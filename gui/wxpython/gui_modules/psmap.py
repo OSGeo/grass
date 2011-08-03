@@ -1647,6 +1647,9 @@ class PsMapBufferedWindow(wx.Window):
                        rect.GetSize()[0]*scale, rect.GetSize()[1]*scale)   
     
 def main():
+    import gettext
+    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
+    
     app = wx.PySimpleApp()
     wx.InitAllImageHandlers()
     frame = PsMapFrame()

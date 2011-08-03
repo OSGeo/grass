@@ -23,6 +23,7 @@ This program is free software under the GNU General Public License
 """
 
 import os
+import codecs
 
 import wx
 try:
@@ -667,7 +668,7 @@ class AboutWindow(wx.Frame):
         """Contributors info"""
         contribfile = os.path.join(os.getenv("GISBASE"), "contributors.csv")
         if os.path.exists(contribfile):
-            contribFile = open(contribfile, 'r')
+            contribFile = codecs.open(contribfile, encoding = 'utf-8', mode = 'r')
             contribs = dict()
             errLines = list()
             for line in contribFile.readlines():

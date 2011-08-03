@@ -28,16 +28,10 @@ import getopt
 import platform
 import signal
 import tempfile
-
-### XML
 try:
     import xml.etree.ElementTree as etree
 except ImportError:
     import elementtree.ElementTree as etree # Python <= 2.4
-
-### i18N
-import gettext
-gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
 
 from gui_modules import globalvar
 import wx
@@ -1715,9 +1709,9 @@ def process_opt(opts, args):
     return (workspaceFile,)
 
 def main(argv = None):
-    #
-    # process command-line arguments
-    #
+    import gettext
+    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
+    
     if argv is None:
         argv = sys.argv
     try:
@@ -1726,19 +1720,18 @@ def main(argv = None):
                                        ["help", "workspace"])
         except getopt.error, msg:
             raise Usage(msg)
-
+    
     except Usage, err:
         print >> sys.stderr, err.msg
         print >> sys.stderr, "for help use --help"
         printHelp()
-
+    
     workspaceFile = process_opt(opts, args)[0]
-
-    # run application
+    
     app = GMApp(workspaceFile)
     # suppress wxPython logs
     q = wx.LogNull()
-
+    
     app.MainLoop()
     
 if __name__ == "__main__":
