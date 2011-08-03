@@ -245,7 +245,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         if not root:
             return
         found = self.FindItem(root, value)
-        
+        self.value = self.GetCombo().GetValue().strip(',').split(',')
         if found:
             self.value.append(found)
             self.seltree.SelectItem(found)
