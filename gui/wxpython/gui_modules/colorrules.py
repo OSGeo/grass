@@ -8,7 +8,7 @@ Classes:
  - ColorTable
  - BuferedWindow
 
-(C) 2008, 2010 by the GRASS Development Team
+(C) 2008, 2010-2011 by the GRASS Development Team
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
@@ -37,8 +37,8 @@ from debug import Debug as Debug
 from preferences import globalSettings as UserSettings
 
 class ColorTable(wx.Frame):
-    def __init__(self, parent, raster, id=wx.ID_ANY, title = _("Set color table"),
-                 style=wx.DEFAULT_FRAME_STYLE | wx.RESIZE_BORDER,
+    def __init__(self, parent, raster, id = wx.ID_ANY, title = _("Set color table"),
+                 style = wx.DEFAULT_FRAME_STYLE | wx.RESIZE_BORDER,
                  **kwargs):
         """!Dialog for interactively entering rules for map management
         commands
@@ -101,64 +101,64 @@ class ColorTable(wx.Frame):
             maplabel = _('Select raster map:')
         else:
             maplabel = _('Select vector map:')
-        inputBox = wx.StaticBox(parent=self, id=wx.ID_ANY,
-                                label=" %s " % maplabel)
+        inputBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
+                                label = " %s " % maplabel)
         self.inputSizer = wx.StaticBoxSizer(inputBox, wx.VERTICAL)
         if self.raster:
             elem = 'cell'
         else:
             elem = 'vector'
-        self.selectionInput = gselect.Select(parent=self, id=wx.ID_ANY,
-                                             size=globalvar.DIALOG_GSELECT_SIZE,
-                                             type=elem)
+        self.selectionInput = gselect.Select(parent = self, id = wx.ID_ANY,
+                                             size = globalvar.DIALOG_GSELECT_SIZE,
+                                             type = elem)
         
-        self.ovrwrtcheck = wx.CheckBox(parent=self, id=wx.ID_ANY,
-                                       label=_('replace existing color table'))
-        self.ovrwrtcheck.SetValue(UserSettings.Get(group='cmd', key='overwrite', subkey='enabled'))
+        self.ovrwrtcheck = wx.CheckBox(parent = self, id = wx.ID_ANY,
+                                       label = _('replace existing color table'))
+        self.ovrwrtcheck.SetValue(UserSettings.Get(group = 'cmd', key = 'overwrite', subkey = 'enabled'))
         
         if self.raster:
-            self.btnSave = wx.Button(parent=self, id=wx.ID_SAVE)
+            self.btnSave = wx.Button(parent = self, id = wx.ID_SAVE)
             self.btnSave.SetToolTipString(_('Save color table to file'))
         
         if not self.raster:
-            self.cb_vl_label = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                             label=_('Layer:'))
-            self.cb_vc_label = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                             label=_('Attribute column:'))
-            self.cb_vrgb_label = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                               label=_('RGB color column:'))
+            self.cb_vl_label = wx.StaticText(parent = self, id = wx.ID_ANY,
+                                             label = _('Layer:'))
+            self.cb_vc_label = wx.StaticText(parent = self, id = wx.ID_ANY,
+                                             label = _('Attribute column:'))
+            self.cb_vrgb_label = wx.StaticText(parent = self, id = wx.ID_ANY,
+                                               label = _('RGB color column:'))
             self.cb_vlayer = gselect.LayerSelect(self)
             self.cb_vcol = gselect.ColumnSelect(self)
             self.cb_vrgb = gselect.ColumnSelect(self)
         
         # color table and preview window
-        self.cr_label = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                      label=crlabel)
+        self.cr_label = wx.StaticText(parent = self, id = wx.ID_ANY,
+                                      label = crlabel)
         self.cr_panel = self._colorRulesPanel()
         # add two rules as default
         self.AddRules(2)
         
-        self.numRules = wx.SpinCtrl(parent=self, id=wx.ID_ANY,
-                                    min=1, max=1e6)
+        self.numRules = wx.SpinCtrl(parent = self, id = wx.ID_ANY,
+                                    min = 1, max = 1e6)
         
         # initialize preview display
         self.InitDisplay()
-        self.preview = BufferedWindow(self, id=wx.ID_ANY, size=(400, 300),
-                                      Map=self.Map)
+        self.preview = BufferedWindow(self, id = wx.ID_ANY, size = (400, 300),
+                                      Map = self.Map)
         self.preview.EraseMap()
         
-        self.btnCancel = wx.Button(parent=self, id=wx.ID_CANCEL)
-        self.btnApply = wx.Button(parent=self, id=wx.ID_APPLY) 
-        self.btnOK = wx.Button(parent=self, id=wx.ID_OK)
+        self.btnCancel = wx.Button(parent = self, id = wx.ID_CANCEL)
+        self.btnApply = wx.Button(parent = self, id = wx.ID_APPLY) 
+        self.btnOK = wx.Button(parent = self, id = wx.ID_OK)
         self.btnOK.SetDefault()
         self.btnOK.Enable(False)
         self.btnApply.Enable(False)
         
-        self.btnPreview = wx.Button(parent=self, id=wx.ID_ANY,
-                                    label=_("Preview"))
+        self.btnPreview = wx.Button(parent = self, id = wx.ID_ANY,
+                                    label = _("Preview"))
         self.btnPreview.Enable(False)
-        self.btnAdd = wx.Button(parent=self, id=wx.ID_ADD)
-        self.helpbtn = wx.Button(parent=self, id=wx.ID_HELP)
+        self.btnAdd = wx.Button(parent = self, id = wx.ID_ADD)
+        self.helpbtn = wx.Button(parent = self, id = wx.ID_HELP)
             
         
         # bindings
@@ -205,82 +205,82 @@ class ColorTable(wx.Frame):
         #
         # input
         #
-        self.inputSizer.Add(item=self.selectionInput,
-                       flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND, border=5)
+        self.inputSizer.Add(item = self.selectionInput,
+                       flag = wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND, border = 5)
         replaceSizer = wx.BoxSizer(wx.HORIZONTAL)
-        replaceSizer.Add(item=self.ovrwrtcheck, proportion=1,
-                         flag=wx.ALL | wx.ALIGN_CENTER_VERTICAL, border=1)
+        replaceSizer.Add(item = self.ovrwrtcheck, proportion = 1,
+                         flag = wx.ALL | wx.ALIGN_CENTER_VERTICAL, border = 1)
         if self.raster:
-            replaceSizer.Add(item=self.btnSave, proportion=0,
-                            flag=wx.ALIGN_RIGHT | wx.ALL, border=5)
+            replaceSizer.Add(item = self.btnSave, proportion = 0,
+                            flag = wx.ALIGN_RIGHT | wx.ALL, border = 5)
         
-        self.inputSizer.Add(item=replaceSizer, proportion=1,
-                       flag=wx.ALL | wx.EXPAND, border=0)
+        self.inputSizer.Add(item = replaceSizer, proportion = 1,
+                       flag = wx.ALL | wx.EXPAND, border = 0)
 
         #
         # body & preview
         #
-        bodySizer =  wx.GridBagSizer(hgap=5, vgap=5)
+        bodySizer =  wx.GridBagSizer(hgap = 5, vgap = 5)
         row = 0
-        bodySizer.Add(item=self.cr_label, pos=(row, 0), span=(1, 3),
-                      flag=wx.ALL, border=5)
+        bodySizer.Add(item = self.cr_label, pos = (row, 0), span = (1, 3),
+                      flag = wx.ALL, border = 5)
         
         if not self.raster:
-            vSizer = wx.GridBagSizer(hgap=5, vgap=5)
-            vSizer.Add(self.cb_vl_label, pos=(0, 0),
-                       flag=wx.ALIGN_CENTER_VERTICAL)
-            vSizer.Add(self.cb_vlayer,  pos=(0, 1),
-                       flag=wx.ALIGN_CENTER_VERTICAL)
-            vSizer.Add(self.cb_vc_label, pos=(0, 2),
-                       flag=wx.ALIGN_CENTER_VERTICAL)
-            vSizer.Add(self.cb_vcol, pos=(0, 3),
-                       flag=wx.ALIGN_CENTER_VERTICAL)
-            vSizer.Add(self.cb_vrgb_label, pos=(1, 2),
-                      flag=wx.ALIGN_CENTER_VERTICAL)
-            vSizer.Add(self.cb_vrgb, pos=(1, 3),
-                       flag=wx.ALIGN_CENTER_VERTICAL)
+            vSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
+            vSizer.Add(self.cb_vl_label, pos = (0, 0),
+                       flag = wx.ALIGN_CENTER_VERTICAL)
+            vSizer.Add(self.cb_vlayer,  pos = (0, 1),
+                       flag = wx.ALIGN_CENTER_VERTICAL)
+            vSizer.Add(self.cb_vc_label, pos = (0, 2),
+                       flag = wx.ALIGN_CENTER_VERTICAL)
+            vSizer.Add(self.cb_vcol, pos = (0, 3),
+                       flag = wx.ALIGN_CENTER_VERTICAL)
+            vSizer.Add(self.cb_vrgb_label, pos = (1, 2),
+                      flag = wx.ALIGN_CENTER_VERTICAL)
+            vSizer.Add(self.cb_vrgb, pos = (1, 3),
+                       flag = wx.ALIGN_CENTER_VERTICAL)
             row += 1
-            bodySizer.Add(item=vSizer, pos=(row, 0), span=(1, 3))
+            bodySizer.Add(item = vSizer, pos = (row, 0), span = (1, 3))
         
         row += 1
-        bodySizer.Add(item=self.cr_panel, pos=(row, 0), span=(1, 2))
+        bodySizer.Add(item = self.cr_panel, pos = (row, 0), span = (1, 2))
         
-        bodySizer.Add(item=self.preview, pos=(row, 2),
-                      flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=10)
+        bodySizer.Add(item = self.preview, pos = (row, 2),
+                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT, border = 10)
         bodySizer.AddGrowableRow(row)
         bodySizer.AddGrowableCol(2)
         
         row += 1
-        bodySizer.Add(item=self.numRules, pos=(row, 0),
-                      flag=wx.ALIGN_CENTER_VERTICAL)
+        bodySizer.Add(item = self.numRules, pos = (row, 0),
+                      flag = wx.ALIGN_CENTER_VERTICAL)
         
-        bodySizer.Add(item=self.btnAdd, pos=(row, 1))
-        bodySizer.Add(item=self.btnPreview, pos=(row, 2),
-                      flag=wx.ALIGN_RIGHT)
+        bodySizer.Add(item = self.btnAdd, pos = (row, 1))
+        bodySizer.Add(item = self.btnPreview, pos = (row, 2),
+                      flag = wx.ALIGN_RIGHT)
         
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
         btnSizer.Add(self.helpbtn,
-                     flag=wx.LEFT | wx.RIGHT, border=5)
+                     flag = wx.LEFT | wx.RIGHT, border = 5)
         btnSizer.Add(self.btnCancel,
-                     flag=wx.LEFT | wx.RIGHT, border=5)
+                     flag = wx.LEFT | wx.RIGHT, border = 5)
         btnSizer.Add(self.btnApply,
-                     flag=wx.LEFT | wx.RIGHT, border=5)
+                     flag = wx.LEFT | wx.RIGHT, border = 5)
         btnSizer.Add(self.btnOK,
-                     flag=wx.LEFT | wx.RIGHT, border=5)
+                     flag = wx.LEFT | wx.RIGHT, border = 5)
         
-        sizer.Add(item=self.inputSizer, proportion=0,
-                  flag=wx.ALL | wx.EXPAND, border=5)
+        sizer.Add(item = self.inputSizer, proportion = 0,
+                  flag = wx.ALL | wx.EXPAND, border = 5)
         
-        sizer.Add(item=bodySizer, proportion=1,
-                  flag=wx.ALL | wx.EXPAND, border=5)
+        sizer.Add(item = bodySizer, proportion = 1,
+                  flag = wx.ALL | wx.EXPAND, border = 5)
         
-        sizer.Add(item=wx.StaticLine(parent=self, id=wx.ID_ANY,
-                                     style=wx.LI_HORIZONTAL),
-                  proportion=0,
-                  flag=wx.EXPAND | wx.ALL, border=5) 
+        sizer.Add(item = wx.StaticLine(parent = self, id = wx.ID_ANY,
+                                     style = wx.LI_HORIZONTAL),
+                  proportion = 0,
+                  flag = wx.EXPAND | wx.ALL, border = 5) 
         
-        sizer.Add(item=btnSizer, proportion=0,
-                  flag=wx.ALL | wx.ALIGN_RIGHT, border=5)
+        sizer.Add(item = btnSizer, proportion = 0,
+                  flag = wx.ALL | wx.ALIGN_RIGHT, border = 5)
         
         self.SetSizer(sizer)
         sizer.Fit(self)
@@ -288,11 +288,11 @@ class ColorTable(wx.Frame):
         
     def _colorRulesPanel(self):
         """!Create rules panel"""
-        cr_panel = scrolled.ScrolledPanel(parent=self, id=wx.ID_ANY,
-                                          size=(180, 300),
-                                          style=wx.TAB_TRAVERSAL | wx.SUNKEN_BORDER)
+        cr_panel = scrolled.ScrolledPanel(parent = self, id = wx.ID_ANY,
+                                          size = (180, 300),
+                                          style = wx.TAB_TRAVERSAL | wx.SUNKEN_BORDER)
         cr_panel.SetupScrolling(scroll_x = False)
-        self.cr_sizer = wx.GridBagSizer(vgap=2, hgap=4)
+        self.cr_sizer = wx.GridBagSizer(vgap = 2, hgap = 4)
         
         cr_panel.SetSizer(self.cr_sizer)
         cr_panel.SetAutoLayout(True)
@@ -309,27 +309,27 @@ class ColorTable(wx.Frame):
         snum = len(self.ruleslines.keys())
         for num in range(snum, snum + nrules):
             # enable
-            enable = wx.CheckBox(parent=self.cr_panel, id=num)
+            enable = wx.CheckBox(parent = self.cr_panel, id = num)
             enable.SetValue(True)
             self.Bind(wx.EVT_CHECKBOX, self.OnRuleEnable, enable)
             # value
-            txt_ctrl = wx.TextCtrl(parent=self.cr_panel, id=1000 + num,
-                                   size=(90, -1),
-                                   style=wx.TE_NOHIDESEL)
+            txt_ctrl = wx.TextCtrl(parent = self.cr_panel, id = 1000 + num,
+                                   size = (90, -1),
+                                   style = wx.TE_NOHIDESEL)
             self.Bind(wx.EVT_TEXT, self.OnRuleValue, txt_ctrl)
             # color
-            color_ctrl = csel.ColourSelect(self.cr_panel, id=2000 + num,
-                                           size = globalvar.DIALOG_COLOR_SIZE)
+            color_ctrl = csel.ColourSelect(self.cr_panel, id = 2000 + num,
+                                           size  =  globalvar.DIALOG_COLOR_SIZE)
             self.Bind(csel.EVT_COLOURSELECT, self.OnRuleColor, color_ctrl)
             self.ruleslines[enable.GetId()] = { 'value' : '',
                                                 'color': "0:0:0" }
             
-            self.cr_sizer.Add(item=enable, pos=(num, 0),
-                              flag=wx.ALIGN_CENTER_VERTICAL)
-            self.cr_sizer.Add(item=txt_ctrl, pos=(num, 1),
-                              flag=wx.ALIGN_CENTER | wx.RIGHT, border=5)
-            self.cr_sizer.Add(item=color_ctrl, pos=(num, 2),
-                              flag=wx.ALIGN_CENTER | wx.RIGHT, border=10)
+            self.cr_sizer.Add(item = enable, pos = (num, 0),
+                              flag = wx.ALIGN_CENTER_VERTICAL)
+            self.cr_sizer.Add(item = txt_ctrl, pos = (num, 1),
+                              flag = wx.ALIGN_CENTER | wx.RIGHT, border = 5)
+            self.cr_sizer.Add(item = color_ctrl, pos = (num, 2),
+                              flag = wx.ALIGN_CENTER | wx.RIGHT, border = 10)
         
         self.cr_panel.Layout()
         self.cr_panel.SetupScrolling(scroll_x = False)
@@ -344,7 +344,7 @@ class ColorTable(wx.Frame):
     def OnErase(self, event):
         """!Erase the histogram display
         """
-        self.PreviewWindow.Draw(self.HistWindow.pdc, pdctype='clear')
+        self.PreviewWindow.Draw(self.HistWindow.pdc, pdctype = 'clear')
 
     def OnCloseWindow(self, event):
         """!Window closed
@@ -406,8 +406,8 @@ class ColorTable(wx.Frame):
             layer = int(self.properties['layer'])
             self.properties['table'] = gselect.VectorDBInfo(self.inmap).layers[layer]['table']
             # initialize column selection comboboxes 
-            self.cb_vcol.InsertColumns(vector=self.inmap, layer=layer)
-            self.cb_vrgb.InsertColumns(vector=self.inmap, layer=layer)
+            self.cb_vcol.InsertColumns(vector = self.inmap, layer = layer)
+            self.cb_vrgb.InsertColumns(vector = self.inmap, layer = layer)
             self.Update()
     
         self.btnPreview.Enable(True)
@@ -418,8 +418,8 @@ class ColorTable(wx.Frame):
         # reset choices in column selection comboboxes if layer changes
         self.vlayer = int(event.GetString())
         self.vtable = gselect.VectorDBInfo(self.inmap).layers[str(self.vlayer)]
-        self.cb_vcol.InsertColumns(vector=self.inmap, layer=self.vlayer)
-        self.cb_vrgb.InsertColumns(vector=self.inmap, layer=self.vlayer)
+        self.cb_vcol.InsertColumns(vector = self.inmap, layer = self.vlayer)
+        self.cb_vrgb.InsertColumns(vector = self.inmap, layer = self.vlayer)
         self.Update()
         
     def OnColumnSelection(self, event):
@@ -461,8 +461,8 @@ class ColorTable(wx.Frame):
         else:
             if self.properties['column'] == '' or self.properties['rgb'] == '':
                 tc.SetValue('')
-                gcmd.GMessage(parent=self,
-                              message=_("Please select attribute column "
+                gcmd.GMessage(parent = self,
+                              message = _("Please select attribute column "
                                         "and RGB color column first"))
             else:
                 try:
@@ -593,9 +593,9 @@ class ColorTable(wx.Frame):
                     return
             old_colrtable = None
             if mapset == grass.gisenv()['MAPSET']:
-                old_colrtable = grass.find_file(name=name, element='colr')['file']
+                old_colrtable = grass.find_file(name = name, element = 'colr')['file']
             else:
-                old_colrtable = grass.find_file(name=name, element='colr2/' + mapset)['file']
+                old_colrtable = grass.find_file(name = name, element = 'colr2/' + mapset)['file']
             
             if old_colrtable:
                 colrtemp = utils.GetTempfile()
@@ -610,9 +610,9 @@ class ColorTable(wx.Frame):
             ltype = 'vector'
         
         if not self.layer:
-            self.layer = self.Map.AddLayer(type=ltype, name='preview', command=cmdlist,
-                                           l_active=True, l_hidden=False, l_opacity=1.0,
-                                           l_render=False) 
+            self.layer = self.Map.AddLayer(type = ltype, name = 'preview', command = cmdlist,
+                                           l_active = True, l_hidden = False, l_opacity = 1.0,
+                                           l_render = False) 
         else:
             self.layer.SetCmd(cmdlist)
         
@@ -714,8 +714,8 @@ class ColorTable(wx.Frame):
 class BufferedWindow(wx.Window):
     """!A Buffered window class"""
     def __init__(self, parent, id,
-                 style=wx.NO_FULL_REPAINT_ON_RESIZE,
-                 Map=None, **kwargs):
+                 style = wx.NO_FULL_REPAINT_ON_RESIZE,
+                 Map = None, **kwargs):
         
         wx.Window.__init__(self, parent, id, style = style, **kwargs)
 
@@ -750,7 +750,7 @@ class BufferedWindow(wx.Window):
         self.Map.region = self.Map.GetRegion()
         self.Map.SetRegion()
 
-    def Draw(self, pdc, img=None, pdctype='image'):
+    def Draw(self, pdc, img = None, pdctype = 'image'):
         """!Draws preview or clears window"""
         pdc.BeginDrawing()
 
@@ -836,7 +836,7 @@ class BufferedWindow(wx.Window):
         
         return img
     
-    def UpdatePreview(self, img=None):
+    def UpdatePreview(self, img = None):
         """!Update canvas if window changes geometry"""
         Debug.msg (2, "BufferedWindow.UpdatePreview(%s): render=%s" % (img, self.render))
         oldfont = ""
@@ -848,7 +848,7 @@ class BufferedWindow(wx.Window):
             self.Map.SetRegion()
             
             # render new map images
-            self.mapfile = self.Map.Render(force=self.render)
+            self.mapfile = self.Map.Render(force = self.render)
             self.img = self.GetImage()
             self.resize = False
         
@@ -859,11 +859,11 @@ class BufferedWindow(wx.Window):
         self.pdc.Clear()
         self.pdc.RemoveAll()
         # draw map image background
-        self.Draw(self.pdc, self.img, pdctype='image')
+        self.Draw(self.pdc, self.img, pdctype = 'image')
         
         self.resize = False
         
     def EraseMap(self):
         """!Erase preview"""
-        self.Draw(self.pdc, pdctype='clear')
+        self.Draw(self.pdc, pdctype = 'clear')
     
