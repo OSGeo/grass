@@ -9,7 +9,7 @@
  *               Paul Kelly <paul-grass stjohnspoint.co.uk>, 
  *               Radim Blazek <radim.blazek gmail.com>
  * PURPOSE:      
- * COPYRIGHT:    (C) 2001-2007, 2010 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2001-2007, 2010-2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -275,7 +275,7 @@ static void parse_option(struct context *ctx, const char *cmd,
 	return;
     }
 
-    fprintf(stderr, "Unknown option parameter \"%s\" at line %d\n",
+    fprintf(stderr, _("Unknown option parameter \"%s\" at line %d\n"),
 	    cmd, ctx->line);
 }
 
@@ -301,7 +301,7 @@ static int print_options(const struct context *ctx)
 	printf("opt_%s=%s\n", option->key,
 	       option->answer ? option->answer : "");
 
-    return 0;
+    return EXIT_SUCCESS;
 }
 
 static int reinvoke_script(const struct context *ctx, const char *filename)
@@ -357,16 +357,16 @@ static int reinvoke_script(const struct context *ctx, const char *filename)
 	ret = G_spawn(shell, shell, filename, "@ARGS_PARSED@", NULL);
 	G_debug(1, "ret = %d", ret);
 	if (ret == -1) {
-	    perror("G_spawn() failed");
-	    return 1;
+	    perror(_("G_spawn() failed"));
+	    return EXIT_FAILURE;
 	}
-	return ret;
+	return EXIT_SUCCESS;
     }
 #else
     execl(filename, filename, "@ARGS_PARSED@", NULL);
 
-    perror("execl() failed");
-    return 1;
+    perror(_("execl() failed"));
+    return EXIT_FAILURE;
 #endif
 }
 
@@ -400,9 +400,9 @@ int main(int argc, char *argv[])
     if ((argc < 2) || ((strcmp(argv[1], "help") == 0) ||
 		       (strcmp(argv[1], "-help") == 0) ||
 		       (strcmp(argv[1], "--help") == 0))) {
-	fprintf(stderr, "Usage: %s [-t] [-s] <filename> [<argument> ...]\n",
-		argv[0]);
-	return 1;
+	fprintf(stderr, "%s: %s [-t] [-s] <filename> [<argument> ...]\n",
+		_("Usage:"), argv[0]);
+	exit(EXIT_FAILURE);
     }
 
     filename = argv[1];
@@ -411,8 +411,8 @@ int main(int argc, char *argv[])
 
     ctx.fp = fopen(filename, "r");
     if (!ctx.fp) {
-	perror("Unable to open script file");
-	return 1;
+	perror(_("Unable to open script file"));
+	exit(EXIT_FAILURE);
     }
 
     G_gisinit((char *)filename);
@@ -426,9 +426,9 @@ int main(int argc, char *argv[])
 
 	arg = strchr(buff, '\n');
 	if (!arg) {
-	    fprintf(stderr, "Line too long or missing newline at line %d\n",
+	    fprintf(stderr, _("Line too long or missing newline at line %d\n"),
 		    ctx.line);
-	    return 1;
+	    exit(EXIT_FAILURE);
 	}
 	*arg = '\0';
 
@@ -463,17 +463,17 @@ int main(int argc, char *argv[])
     }
 
     if (fclose(ctx.fp) != 0) {
-	perror("Error closing script file");
-	return 1;
+	perror(_("Error closing script file"));
+	exit(EXIT_FAILURE);
     }
 
     /* Stop here successfully if all that was desired was output of text to translate */
     /* Continuing from here would get argc and argv all wrong in G_parser. */
     if (translate_output)
-	return EXIT_SUCCESS;
+	exit(EXIT_SUCCESS);
 
     if (G_parser(argc, argv))
-	return 1;
+	exit(EXIT_FAILURE);
 
     return standard_output
 	? print_options(&ctx)
