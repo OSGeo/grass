@@ -39,6 +39,8 @@ void Nviz_init_data(nv_data * data)
     }
 
     /* lights */
+    GS_set_light_reset(1);
+    
     for (i = 0; i < MAX_LIGHTS - 1; i++) {
 	Nviz_new_light(data);
     }

@@ -88,6 +88,8 @@ void GS_set_att_defaults(float *, float *);
 int GS_surf_exists(int);
 int GS_new_surface(void);
 int GS_new_light(void);
+void GS_set_light_reset(int);
+int GS_get_light_reset(void);
 void GS_setlight_position(int, float, float, float, int);
 void GS_setlight_color(int, float, float, float);
 void GS_setlight_ambient(int, float, float, float);
