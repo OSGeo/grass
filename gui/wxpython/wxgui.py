@@ -114,7 +114,7 @@ class GMFrame(wx.Frame):
         self.workspaceChanged = False     # track changes in workspace
         self.georectifying = None         # reference to GCP class or None
         self.gcpmanagement = None         # reference to GCP class or None
-        self.existNviz = False
+        
         # list of open dialogs
         self.dialogs        = dict()
         self.dialogs['preferences'] = None
@@ -278,8 +278,7 @@ class GMFrame(wx.Frame):
         idx = self.notebook.GetPageIndexByName('layers')
         self.notebook.InsertPage(indx = idx + 1, page = self.nviz, text = _("3D view"), name = 'nviz')
         self.notebook.SetSelectionByName('nviz')
-        self.existNviz = True
-        Debug.msg(5, "GMFrame.AddNviz(): end")
+        
         
     def RemoveNviz(self):
         """!Remove nviz notebook page"""
@@ -875,13 +874,6 @@ class GMFrame(wx.Frame):
             mdisp.MapWindow2D.UpdateMap()
             #nviz
             if gxwXml.displays[idx]['viewMode'] == '3d':
-                # check if nviz exist, if so, don't open workspace in 3D mode
-                # sofar only one nviz can exist
-                if self.existNviz:
-                    gcmd.GMessage(parent = self,
-                          message = _("3D view is not available. Please do not switch to 3D view "
-                                      "before opening workspace in 3D view mode."))
-                    continue
                 mdisp.AddToolbar(name = 'nviz')
                 self.nviz.UpdateState(view = gxwXml.nviz_state['view'],
                                               iview = gxwXml.nviz_state['iview'],

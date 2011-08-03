@@ -208,12 +208,8 @@ class MapToolbar(AbstractToolbar):
             log = self.parent.GetLayerManager().GetLogWindow()
         
         if haveNviz:
-            if self.parent.GetLayerManager() and \
-                    not self.parent.GetLayerManager().existNviz:
-                choices.append(_('3D view'))
-                self.toolId['3d'] = 1
-            else:
-                self.toolId['3d'] = -1
+            choices.append(_('3D view'))
+            self.toolId['3d'] = 1
         else:
             from nviz import errorMsg
             log.WriteCmdLog(_('3D view mode not available'))
