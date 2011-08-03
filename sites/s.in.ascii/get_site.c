@@ -80,7 +80,7 @@ Site *get_site(FILE * fd, int dims, char *fs, int *has_cat)
 
 	buf = save;
 	strcpy(buf, ibuf);
-	buf = G_squeeze(buf);
+	G_squeeze(buf);
 
 	if (*buf == 0)
 	    return (Site *) NULL;
