@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: grasswxpy_pt_br\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-06-09 19:50+0200\n"
-"PO-Revision-Date: 2011-07-27 00:02-0300\n"
+"PO-Revision-Date: 2011-08-03 03:11-0300\n"
 "Last-Translator: \n"
 "Language-Team: Português do Brasil <grass-translations@lists.osgeo.org>\n"
 "MIME-Version: 1.0\n"
@@ -1451,7 +1451,6 @@ msgid "Import ASCII x,y[,z] coordinates as a series of lines."
 msgstr "Importar coordenadas x,y[,z] em ASCII como uma série de linhas."
 
 #: ../gui/wxpython/menustrings.py:63
-#, fuzzy
 msgid "Historical GRASS vector import"
 msgstr "Importação de vectores do antigo GRASS"
 
@@ -1460,9 +1459,8 @@ msgid "Imports older versions of GRASS vector maps."
 msgstr "Importa versões antigas de mapas vetoriais do GRASS."
 
 #: ../gui/wxpython/menustrings.py:65
-#, fuzzy
 msgid "Historical GRASS vector import (all maps)"
-msgstr "Importação de vectores do antigo GRASS"
+msgstr "Importação de vectores do antigo GRASS (todos os mapas)"
 
 #: ../gui/wxpython/menustrings.py:66
 msgid "Converts all older versions of GRASS vector maps in current mapset to current format."
@@ -1486,12 +1484,10 @@ msgid "Import GetFeature from WFS."
 msgstr "Descarga e importa datos de servidores WMS."
 
 #: ../gui/wxpython/menustrings.py:71
-#, fuzzy
 msgid "ESRI e00 import"
 msgstr "Importar e00 de ESRI"
 
 #: ../gui/wxpython/menustrings.py:72
-#, fuzzy
 msgid "Import E00 file into a vector map."
 msgstr "Importar arquivo E00 para mapa vectorial."
 
@@ -1506,39 +1502,32 @@ msgid "Import waypoints, routes, and tracks from a GPS receiver or many common G
 msgstr "Importar waypoints, rutas y caminos desde un receptor GPS o un archivo de descarga de GPS a un mapa vectorial."
 
 #: ../gui/wxpython/menustrings.py:75
-#, fuzzy
 msgid "Geonames import"
-msgstr "Importación de GEOnet"
+msgstr "Importación de geonames"
 
 #: ../gui/wxpython/menustrings.py:76
-#, fuzzy
 msgid "Imports geonames.org country files into a GRASS vector points map."
-msgstr "Importa archivos de país del Servidor de Nombres Geonet (GNS) US-NGA a un mapa vectorial de puntos de GRASS."
+msgstr "Importa archivos de país geonames.org a un mapa vectorial de puntos de GRASS."
 
 #: ../gui/wxpython/menustrings.py:77
-#, fuzzy
 msgid "GEOnet import"
 msgstr "Importação de GEOnet"
 
 #: ../gui/wxpython/menustrings.py:78
-#, fuzzy
 msgid "Imports US-NGA GEOnet Names Server (GNS) country files into a GRASS vector points map."
 msgstr "Importa archivos de país del Servidor de Nombres Geonet (GNS) US-NGA a un mapa vectorial de puntos de GRASS."
 
 #: ../gui/wxpython/menustrings.py:79
-#, fuzzy
 msgid "Matlab array or Mapgen format import"
-msgstr "Importação de Matlab e MapGen"
+msgstr "Importação de array do Matlab ou formato MapGen"
 
 #: ../gui/wxpython/menustrings.py:80
-#, fuzzy
 msgid "Imports Mapgen or Matlab-ASCII vector maps into GRASS."
-msgstr "Importar mapas vectoriales Mapgen o Matlab a GRASS."
+msgstr "Importa mapas vetoriais Mapgen ou Matlab-ASCII para o GRASS."
 
 #: ../gui/wxpython/menustrings.py:81
-#, fuzzy
 msgid "Import 3D raster data"
-msgstr "Importar mapa raster"
+msgstr "Importa dados raster 3D"
 
 #: ../gui/wxpython/menustrings.py:82
 #, fuzzy
@@ -5077,7 +5066,7 @@ msgstr "Consultar qualquer tabela"
 
 #: ../gui/wxpython/menustrings.py:831
 msgid "Selects data from attribute table (performs SQL query statement(s))."
-msgstr ""
+msgstr "Selecionar dados da tabela de atributos (realiza consultas SQL)."
 
 #: ../gui/wxpython/menustrings.py:832
 #, fuzzy
@@ -5576,7 +5565,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:149
 msgid "divide"
-msgstr ""
+msgstr "dividir"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:151
 #, fuzzy
@@ -5980,6 +5969,8 @@ msgid ""
 "No maps in selected group <%s>.\n"
 "Please edit group or select another group."
 msgstr ""
+"Sem mapas no grupo <%s> selecionado.\n"
+"Favor editar grupo ou selecionar outro grupo."
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:730
 #, fuzzy
@@ -5993,7 +5984,7 @@ msgstr "Se necesitan al menos %d GCP. Operación cancelada."
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1040
 msgid "mapwin not defined for "
-msgstr ""
+msgstr "mapwin não definido para "
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1110
 #: ../gui/wxpython/gui_modules/toolbars.py:398
@@ -6018,6 +6009,10 @@ msgid ""
 "East: %(coor0)s \n"
 "North: %(coor1)s"
 msgstr ""
+"Ajusta %(coor)s coordenadas para GCP Num. %(key)s? \n"
+"\n"
+"Leste: %(coor0)s \n"
+"Norte: %(coor1)s"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1179
 #, fuzzy
@@ -6031,11 +6026,11 @@ msgstr "Arquivo de PONTOS gravado"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1204
 msgid "source mapwin not defined"
-msgstr ""
+msgstr "origem mapwin não definida"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1209
 msgid "target mapwin not defined"
-msgstr ""
+msgstr "destino mapwin não definido"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1237
 #, fuzzy
@@ -6078,16 +6073,16 @@ msgstr "El archivo de región <%s> ya existe. ¿Quiere sobrescribirlo?"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1456
 msgid "For all vector maps georectified successfully,"
-msgstr ""
+msgstr "Para todos os mapas vetoriais georetificados com sucesso,"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1457
 #, fuzzy
 msgid "you will need to copy any attribute tables"
-msgstr "Carregando dados da tabela de atributos ... "
+msgstr "Você vai precisar copiar todas as tabelas de atributos"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1458
 msgid "and reconnect them to the georectified vectors"
-msgstr ""
+msgstr "e reconectá-las aos vetores georetificados"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1481
 #, fuzzy
@@ -6117,11 +6112,11 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1862
 msgid "Adjust source display to target display"
-msgstr ""
+msgstr "Ajustar display origem para display destino"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1866
 msgid "Adjust target display to source display"
-msgstr ""
+msgstr "Ajustar display destino para display origem"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1927
 #: ../gui/wxpython/gui_modules/gcpmanager.py:1944
@@ -6197,7 +6192,7 @@ msgstr "Nome da coluna"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2267
 msgid "target E:"
-msgstr ""
+msgstr "destino E:"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2268
 #, fuzzy
@@ -6206,7 +6201,7 @@ msgstr "Nome da coluna"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2269
 msgid "target N:"
-msgstr ""
+msgstr "destino N:"
 
 #: ../gui/wxpython/gui_modules/gcpmanager.py:2371
 #: ../gui/wxpython/gui_modules/profile.py:1033
@@ -6356,13 +6351,13 @@ msgstr "Definições do perfil gravadas no arquivo  '%s'."
 #: ../gui/wxpython/gui_modules/mapdisp.py:882
 #: ../gui/wxpython/gui_modules/mapdisp.py:1035
 msgid "Projection not defined (check the settings)"
-msgstr ""
+msgstr "Projeção indefinida (verifique as configurações)"
 
 #: ../gui/wxpython/gui_modules/mapdisp_window.py:107
 #: ../gui/wxpython/gui_modules/mapdisp.py:926
 #: ../gui/wxpython/gui_modules/mapdisp.py:1052
 msgid "Error in projection (check the settings)"
-msgstr ""
+msgstr "Erro na projeção (verifique as configurações)"
 
 #: ../gui/wxpython/gui_modules/mapdisp_window.py:770
 msgid "MASK"
@@ -6470,7 +6465,7 @@ msgstr "Seleccionar projecção"
 #: ../gui/wxpython/gui_modules/mapdisp.py:214
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:220
 msgid "Reproject coordinates displayed in the statusbar. Projection can be defined in GUI preferences dialog (tab 'Display')"
-msgstr ""
+msgstr "Reprojetar coordenadas mostradas na barra de status. Projeção pode ser definida no diálogo de preferências da interface gráfica (aba 'Display')"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:297
 #: ../gui/wxpython/gui_modules/layertree.py:578
@@ -6481,6 +6476,10 @@ msgid ""
 "\n"
 "Details: %s"
 msgstr ""
+"Não posso iniciar o digitalizador de vetor wxGUI.\n"
+"Quer que eu inicie o digitalizador TCL/TK (v.digit)?\n"
+"\n"
+"Detalhes: %s"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:301
 #: ../gui/wxpython/gui_modules/mapdisp.py:312
@@ -6518,7 +6517,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:386
 msgid "Starting 3D view mode..."
-msgstr ""
+msgstr "Iniciando modo de visualização 3D..."
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:387
 #, fuzzy
@@ -13034,13 +13033,11 @@ msgstr "Utilidad de salida de mapas PostScript Hardcopy."
 #~ msgid "Import SRTM HGT files into GRASS"
 #~ msgstr "Importar arquivos SRTM HGT para GRASS"
 
-#, fuzzy
 #~ msgid "Garmin GPS import"
 #~ msgstr "Importação de GPS Garmin"
 
-#, fuzzy
 #~ msgid "Download waypoints, routes, and tracks from a Garmin GPS receiver into a vector map."
-#~ msgstr "Descarga waypoints, rutas y caminos desde un receptor GPS Garmin a un mapa vectorial."
+#~ msgstr "Descarga waypoints, rotas e trilhas de um receptor GPS Garmin num mapa vetorial."
 
 #, fuzzy
 #~ msgid "import of 3-dimensional Vis5D files (i.e. the v5d file with 1 variable and 1 time step)"
@@ -13995,19 +13992,15 @@ msgstr "Utilidad de salida de mapas PostScript Hardcopy."
 #~ msgid "ASCII points/GRASS ASCII vector import"
 #~ msgstr "importação de vetores ASCII GRASS/pontos ASCII"
 
-#, fuzzy
 #~ msgid "Creates a vector map from ASCII points file or ASCII vector file."
-#~ msgstr "Crea un mapa vectorial a partir de archivo de puntos ASCII o archivo ASCII vectorial."
+#~ msgstr "Cria un mapa vetorial a partir de arquivo de pontos ASCII ou arquivo ASCII vetorial."
 
-#, fuzzy
 #~ msgid "Import GetFeature from WFS"
-#~ msgstr "Descarga e importa datos de servidores WMS."
+#~ msgstr "Importa GeoFeature de WFS"
 
-#, fuzzy
 #~ msgid "GPSBabel GPS import"
 #~ msgstr "Importação de GPS de GPSBabel"
 
-#, fuzzy
 #~ msgid "Import waypoints, routes, and tracks from a GPS receiver or GPS download file into a vector map."
 #~ msgstr "Importar waypoints, rutas y caminos desde un receptor GPS o un archivo de descarga de GPS a un mapa vectorial."
 
