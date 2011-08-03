@@ -26,6 +26,7 @@ import time
 import threading
 import Queue
 import codecs
+import locale
 
 import wx
 import wx.stc
@@ -358,20 +359,20 @@ class GMConsole(wx.SplitterWindow):
     
     def Redirect(self):
         """!Redirect stdout/stderr
-        
-        @return True redirected
-        @return False failed
         """
         if Debug.GetLevel() == 0 and int(grass.gisenv().get('DEBUG', 0)) == 0:
             # don't redirect when debugging is enabled
             sys.stdout = self.cmd_stdout
             sys.stderr = self.cmd_stderr
-            return True
         else:
-            sys.stdout = sys.__stdout__
-            sys.stderr = sys.__stderr__
-        return False
-
+            enc = locale.getdefaultlocale()[1]
+            if enc:
+                sys.stdout = codecs.getwriter(enc)(sys.__stdout__)
+                sys.stderr = codecs.getwriter(enc)(sys.__stderr__)
+            else:
+                sys.stdout = sys.__stdout__
+                sys.stderr = sys.__stderr__
+        
     def WriteLog(self, text, style = None, wrap = None,
                  switchPage = False):
         """!Generic method for writing log message in 
