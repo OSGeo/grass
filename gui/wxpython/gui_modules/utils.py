@@ -683,22 +683,6 @@ def EncodeString(string):
     
     return string
 
-def UnicodeString(string):
-    """!Return unicode string
-    
-    @param string string to be converted
-    
-    @return unicode string
-    """
-    if isinstance(string, unicode):
-        return string
-    
-    enc = locale.getdefaultlocale()[1]
-    if enc:
-        return unicode(string, enc)
-    
-    return string
-
 def _getGDALFormats():
     """!Get dictionary of avaialble GDAL drivers"""
     ret = grass.read_command('r.in.gdal',
