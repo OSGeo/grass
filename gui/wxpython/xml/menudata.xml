@@ -612,7 +612,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Delete filtered</label>
-	      <help>Removes data base element files from the user's current mapset.</help>
+	      <help>Removes data base element files from the user's current mapset using regular expressions.</help>
 	      <keywords>general,map management,remove,multi</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>g.mremove</command>
@@ -2805,21 +2805,21 @@
 	    <menuitem>
 	      <label>Instantaneaous Net Radiation</label>
 	      <help>Net radiation approximation (Bastiaanssen, 1995).</help>
-	      <keywords>net radiation,energy balance,SEBAL,energy balance,SEBAL</keywords>
+	      <keywords>imagery,energy balance,net radiation,SEBAL</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>i.eb.netrad</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Soil heat flux</label>
 	      <help>Soil heat flux approximation (Bastiaanssen, 1995).</help>
-	      <keywords>imagery,soil heat flux,energy balance,SEBAL</keywords>
+	      <keywords>imagery,energy balance,soil heat flux,SEBAL</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>i.eb.soilheatflux</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Sensible heat flux</label>
 	      <help>Computes sensible heat flux iteration SEBAL 01.</help>
-	      <keywords>imagery,evaporative fraction,soil moisture,energy balance,SEBAL</keywords>
+	      <keywords>imagery,energy balance,soil moisture,evaporative fraction,SEBAL</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>i.eb.h_sebal01</command>
 	    </menuitem>
@@ -2827,14 +2827,14 @@
 	    <menuitem>
 	      <label>Evaporative fraction</label>
 	      <help>Computes evaporative fraction (Bastiaanssen, 1995) and root zone soil moisture (Makin, Molden and Bastiaanssen, 2001).</help>
-	      <keywords>imagery,evaporative fraction,soil moisture,energy balance,SEBAL</keywords>
+	      <keywords>imagery,energy balance,soil moisture,evaporative fraction,SEBAL</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>i.eb.evapfr</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Actual Evapotranspiration</label>
 	      <help>Actual evapotranspiration for diurnal period (Bastiaanssen, 1995).</help>
-	      <keywords>imagery,actual evapotranspiration,energy balance,SEBAL</keywords>
+	      <keywords>imagery,energy balance,actual evapotranspiration,SEBAL</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>i.eb.eta</command>
 	    </menuitem>
