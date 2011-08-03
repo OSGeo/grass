@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: grasswxpy_cs\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-06-09 19:50+0200\n"
-"PO-Revision-Date: 2010-11-24 21:18+0100\n"
+"PO-Revision-Date: 2011-08-03 16:35+0200\n"
 "Last-Translator: Jan Trochta <j.trochta@gmail.com>\n"
 "Language-Team:  <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -4287,7 +4287,7 @@ msgstr "Test normality bodù"
 
 #: ../gui/wxpython/menustrings.py:677
 msgid "&Imagery"
-msgstr "&Obrazová data"
+msgstr "&Obraz"
 
 #: ../gui/wxpython/menustrings.py:678
 msgid "Develop images and groups"
