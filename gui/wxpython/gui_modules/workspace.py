@@ -1226,7 +1226,7 @@ class WriteWorkspaceFile(object):
         # ambient
         self.__writeTagWithValue('ambient', light['ambient'])
         # color
-        self.__writeTagWithValue('color', light['color'], format = 'd:%d:%d')
+        self.__writeTagWithValue('color', light['color'][:3], format = 'd:%d:%d')
         
         self.indent -= 4
         self.file.write('%s</light>\n' % (' ' * self.indent))
