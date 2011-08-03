@@ -57,7 +57,15 @@ void Rast_set_window(struct Cell_head *window)
 
     update_window_mappings();
 }
+/*!
+  \brief Unset current window
+*/
+void Rast_unset_window(void)
+{
+    G_debug(4, "Rast_unset_window()");
 
+    R__.window_set = 0;
+}
 /*!
  * \brief Establishes 'window' as the current working window for output.
  * 

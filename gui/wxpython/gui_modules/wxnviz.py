@@ -30,6 +30,7 @@ from grass.lib.gis   import *
 from grass.lib.g3d   import *
 from grass.lib.ogsf  import *
 from grass.lib.nviz  import *
+from grass.lib.raster import *
 
 from debug import Debug
 
@@ -96,9 +97,11 @@ class Nviz(object):
     def Init(self):
         """!Initialize window"""
         G_unset_window()
+        Rast_unset_window()
+        Rast__init_window()
         GS_libinit()
         GVL_libinit()
-        
+    
     def ResizeWindow(self, width, height):
         """!GL canvas resized
         
