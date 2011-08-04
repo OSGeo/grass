@@ -85,7 +85,7 @@ class ColorTable(wx.Frame):
         self.ruleslines = {}
 
         # instance of render.Map to be associated with display
-        self.Map   = render.Map()  
+        self.Map   = render.Map()
 
         # reference to layer with preview
         self.layer = None          
@@ -116,7 +116,8 @@ class ColorTable(wx.Frame):
             self.Bind(wx.EVT_COMBOBOX, self.OnLayerSelection, self.cb_vlayer)
             self.Bind(wx.EVT_COMBOBOX, self.OnColumnSelection, self.cb_vcol)
             self.Bind(wx.EVT_COMBOBOX, self.OnRGBColSelection, self.cb_vrgb)
-
+            self.Bind(wx.EVT_BUTTON, self.OnAddColumn, self.btn_addCol)
+            
         # set map layer from layer tree
         try:
             layer = self.parent.curr_page.maptree.layer_selected
@@ -188,6 +189,9 @@ class ColorTable(wx.Frame):
         self.cb_vlayer = gselect.LayerSelect(self)
         self.cb_vcol = gselect.ColumnSelect(self)
         self.cb_vrgb = gselect.ColumnSelect(self)
+        self.btn_addCol = wx.Button(parent = self, id = wx.ID_ANY,
+                                             label = _('Add column'))
+        self.btn_addCol.SetToolTipString(_("Add GRASSRGB column to current attribute table."))
         
         # layout
         vSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
@@ -202,6 +206,8 @@ class ColorTable(wx.Frame):
         vSizer.Add(self.cb_vrgb_label, pos = (2, 0),
                   flag = wx.ALIGN_CENTER_VERTICAL)
         vSizer.Add(self.cb_vrgb, pos = (2, 1),
+                   flag = wx.ALIGN_CENTER_VERTICAL)
+        vSizer.Add(self.btn_addCol, pos = (2, 2),
                    flag = wx.ALIGN_CENTER_VERTICAL)
                 
         return vSizer
@@ -237,7 +243,7 @@ class ColorTable(wx.Frame):
         self.btnOK.SetDefault()
         self.btnOK.Enable(False)
         self.btnApply.Enable(False)
-        self.btnPreview.Enable(False)
+
         
         # layout
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -278,7 +284,7 @@ class ColorTable(wx.Frame):
         if self.raster:
             crlabel = _('Enter raster category values or percents')
         else:
-            crlabel = _('Enter vector attribute values or ranges (n or n1 to n2)')
+            crlabel = _('Enter vector attribute values or ranges')
         self.cr_label = wx.StaticText(parent = self, id = wx.ID_ANY, label = crlabel)
         bodySizer.Add(item = self.cr_label, pos = (row, 0), span = (1, 3),
                       flag = wx.ALL, border = 5)
@@ -311,6 +317,9 @@ class ColorTable(wx.Frame):
                                     label = _("Preview"))
         bodySizer.Add(item = self.btnPreview, pos = (row, 2),
                       flag = wx.ALIGN_RIGHT)
+        self.btnPreview.Enable(False)
+        self.btnPreview.SetToolTipString(_("Show preview of vector map "
+                                           "(current Map Display extent is used)."))
         
         
         sizer.Add(item = bodySizer, proportion = 1,
@@ -348,6 +357,9 @@ class ColorTable(wx.Frame):
             txt_ctrl = wx.TextCtrl(parent = self.cr_panel, id = 1000 + num,
                                    size = (90, -1),
                                    style = wx.TE_NOHIDESEL)
+            if not self.raster:
+                txt_ctrl.SetToolTipString(_("Enter vector attribute values (e.g. 5) "
+                                            "or ranges (e.g. 5 to 10)"))
             self.Bind(wx.EVT_TEXT, self.OnRuleValue, txt_ctrl)
             # color
             color_ctrl = csel.ColourSelect(self.cr_panel, id = 2000 + num,
@@ -434,7 +446,7 @@ class ColorTable(wx.Frame):
         else:
             # check for db connection
             if not len(gselect.VectorDBInfo(self.inmap).layers):
-                wx.CallAfter(self.OnNoConnection, self.inmap)
+                wx.CallAfter(self.NoConnection, self.inmap)
                 
                 self.cb_vlayer.Clear()
                 self.cb_vcol.Clear()
@@ -452,16 +464,28 @@ class ColorTable(wx.Frame):
                 
                 # initialize column selection comboboxes 
                 self.OnLayerSelection(event = None)
-                enable = True
+                
+                if self.CheckMapset():
+                    enable = True
+                    self.btn_addCol.Enable(True)
+                else:
+                    enable = False
+                    wx.CallAfter(gcmd.GMessage, parent = self, 
+                                 message = _("Selected map <%s> is not in current mapset <%s>. "
+                                            "Attribute table cannot be edited. "
+                                            "Color rules will not be saved.") % 
+                                            (self.inmap, grass.gisenv()['MAPSET']))
+                                  
+                    self.btn_addCol.Enable(False)
             
         self.btnPreview.Enable(enable)
         self.btnOK.Enable(enable)
         self.btnApply.Enable(enable)
     
-    def OnNoConnection(self, vectorName):
+    def NoConnection(self, vectorName):
         dlg = wx.MessageDialog(parent = self,
                                 message = _("Database connection for vector map <%s> "
-                                            "is not defined in DB file.  Do you want to create and"
+                                            "is not defined in DB file.  Do you want to create and "
                                             "connect new attribute table?") % vectorName,
                                 caption = _("No database connection defined"),
                                 style = wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION | wx.CENTRE)
@@ -470,7 +494,19 @@ class ColorTable(wx.Frame):
             menuform.GUI(parent = self).ParseCommand(['v.db.addtable'])
         else:
             dlg.Destroy()
-            
+    
+    def CheckMapset(self):
+        """!Check if current layer is in current mapset"""
+        if self.raster:
+            element = 'cell'
+        else:
+            element = 'vector'
+        if grass.find_file(name = self.inmap,
+                           element = element)['mapset'] == grass.gisenv()['MAPSET']:
+            return True
+        else:
+            return False
+    
     def OnLayerSelection(self, event):
         # reset choices in column selection comboboxes if layer changes
         vlayer = int(self.cb_vlayer.GetStringSelection())
@@ -490,8 +526,23 @@ class ColorTable(wx.Frame):
     def OnColumnSelection(self, event):
         self.properties['column'] = event.GetString()
         self.SetInfoString()
+    
+    def OnAddColumn(self, event):
+        """!Add GRASSRGB column if it doesn't exist"""
+        cmd = ['v.db.addcolumn', 'map=' + self.inmap, 'layer=' + self.properties['layer'],
+                'columns=GRASSRGB varchar(20)']
+        menuform.GUI(parent = self).ParseCommand(cmd, completed = (self.CreateColumn, self.inmap, ''))
         
+    def CreateColumn(self, dcmd, layer, params, propwin):
+        """!Create column for rgb values"""
+        if dcmd:
+            cmd = utils.CmdToTuple(dcmd)
+            gcmd.RunCommand(cmd[0], **cmd[1])
+            self.cb_vrgb.InsertColumns(self.inmap, self.properties['layer'])
+            self.cb_vrgb.SetSelection(self.cb_vrgb.GetCount() - 1)
+
     def SetInfoString(self):
+        """!Show information about vector map column type/range"""
         driver, db = gselect.VectorDBInfo(self.inmap).GetDbSettings(int(self.properties['layer']))
         nrows = grass.db_describe(table = self.properties['table'], driver = driver, database = db)['nrows']
         self.properties['min'] = self.properties['max'] = ''
@@ -943,9 +994,8 @@ class BufferedWindow(wx.Window):
         oldencoding = ""
         
         if self.render:
-            # make sure that extents are updated
-            self.Map.region = self.Map.GetRegion()
-            self.Map.SetRegion()
+            # extent is taken from current map display
+            self.Map.region = self.parent.parent.curr_page.maptree.Map.region
             
             # render new map images
             self.mapfile = self.Map.Render(force = self.render)
