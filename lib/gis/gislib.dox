@@ -1974,6 +1974,8 @@ Get position of delimiter.
 
  - G_strcasecmp()
 
+ - G_strncasecmp()
+
 String compare ignoring case (upper or lower).
 
  - G_strstr()
