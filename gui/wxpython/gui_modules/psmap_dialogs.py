@@ -738,7 +738,8 @@ class MapFrame(InstructionObject):
 
                 scale = 1/float(scaleText)
                 if abs(scale - self.instruction['scale']) > (0.01 * scale):
-                    GWarning(_("Scale has changed, old value: %s\nnew value: %s") % (scale, self.instruction['scale']))
+                    GWarning(_("Scale has changed, old value: %(old)s\nnew value: %(new)s") % \
+                                 { 'old' : scale, 'new' : self.instruction['scale'] })
             except (ValueError, IndexError):
                 GError(_("Failed to read instruction %s.\nUse 1:25000 notation.") % instruction)
                 return False
@@ -748,15 +749,17 @@ class MapFrame(InstructionObject):
             if len(maploc) >= 2:
                 if  abs(self.instruction['rect'].Get()[0] - float(maploc[0])) > 0.5 or \
                         abs(self.instruction['rect'].Get()[1] - float(maploc[1])) > 0.5:
-                    GWarning(_("Map frame position changed, old value: %s %s\nnew value: %s %s") % \
-                                 (maploc[0], maploc[1], self.instruction['rect'].Get()[0], self.instruction['rect'].Get()[1]))
+                    GWarning(_("Map frame position changed, old value: %(old1)s %(old2)s\nnew value: %(new1)s %(new2)s") % \
+                                 { 'old1' : maploc[0], 'old2' : maploc[1],
+                                   'new1' : self.instruction['rect'].Get()[0], 'new2' : self.instruction['rect'].Get()[1] })
                     
                 #instr['rect'] = wx.Rect2D(float(maploc[0]), float(maploc[1]), self.instruction['rect'][2], self.instruction['rect'][3])
             if len(maploc) == 4:
                 if  abs(self.instruction['rect'].Get()[2] - float(maploc[2])) > 0.5 or \
                         abs(self.instruction['rect'].Get()[3] - float(maploc[3])) > 0.5:
-                    GWarning(_("Map frame size changed, old value: %s %s\nnew value: %s %s") %(
-                            maploc[2], maploc[3], self.instruction['rect'].Get()[2], self.instruction['rect'].Get()[3]))
+                    GWarning(_("Map frame size changed, old value: %(old1)s %(old2)s\nnew value: %(new1)s %(new2)s") % \
+                                 { 'old1' : maploc[2], 'old2' : maploc[3],
+                                   'new1' : self.instruction['rect'].Get()[2], 'new2' : self.instruction['rect'].Get()[3] })
                 #instr['rect'] = wx.Rect2D(*map(float, maploc))
         self.instruction.update(instr)   
         return True 
@@ -801,7 +804,8 @@ class PageSetup(InstructionObject):
                                 instr[key] = float(value)
                             break
                         except KeyError:
-                            GError(_("Failed to read instruction %s.\nUnknown format %s") % (instruction, format))
+                            GError(_("Failed to read instruction %(file)s.\nUnknown format %(for)s") % \
+                                       { 'file' : instruction, 'for' : format })
                             return False
                         
                     else:
@@ -2208,8 +2212,8 @@ class MapFramePanel(wx.Panel):
                 stype = 'region'
                 self.select.SetElementList(type = stype)
                 self.mapText.SetLabel(self.mapOrRegionText[1])
-                self.select.SetToolTipString(_(""))
-                
+                self.select.SetToolTipString("")
+
             for each in self.mapSizer.GetChildren():
                 each.GetWindow().Enable()
             for each in self.centerSizer.GetChildren():
@@ -3815,7 +3819,8 @@ class LegendDialog(PsmapDialog):
         rasterType = getRasterType(map = self.currRaster)
 
         self.rasterCurrent = wx.StaticText(panel, id = wx.ID_ANY,
-                                label = _("%s: type %s" % (self.currRaster, rasterType)))
+                                label = _("%(rast)s: type %(type)s") % { 'rast' : self.currRaster,
+                                                                         'type' : rasterType })
         self.rasterSelect = Select(panel, id = wx.ID_ANY, size = globalvar.DIALOG_GSELECT_SIZE,
                                     type = 'raster', multiple = False,
                                     updateOnPopup = True, onPopup = None)
@@ -4523,9 +4528,10 @@ class LegendDialog(PsmapDialog):
             currRaster = raster['raster'] 
         else:
             currRaster = None
-
+            
         rasterType = getRasterType(map = currRaster)
-        self.rasterCurrent.SetLabel(_("%s: type %s") % (currRaster, str(rasterType)))
+        self.rasterCurrent.SetLabel(_("%(rast)s: type %(type)s") % \
+                                        { 'rast' : currRaster, 'type' : str(rasterType) })
         
         # vector legend
         

@@ -1098,7 +1098,7 @@ class PsMapBufferedWindow(wx.Window):
                     self.SetCursor(self.cursors["sizenwse"])
                     self.parent.SetStatusText(_('Click and drag to resize object'), 0)
                 else:
-                    self.parent.SetStatusText(_(''), 0)
+                    self.parent.SetStatusText('', 0)
                     self.SetCursor(self.cursors["default"])
                     
         elif event.LeftDown():
