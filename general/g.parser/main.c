@@ -16,366 +16,23 @@
  *               for details.
  *
  *****************************************************************************/
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <ctype.h>
 
-#include <grass/gis.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+
 #include <grass/glocale.h>
 
-enum state
-{
-    S_TOPLEVEL,
-    S_MODULE,
-    S_FLAG,
-    S_OPTION
-};
+#include "proto.h"
 
-struct context
-{
-    struct GModule *module;
-    struct Option *option;
-    struct Flag *flag;
-    struct Option *first_option;
-    struct Flag *first_flag;
-    int state;
-    FILE *fp;
-    int line;
-};
-
-int translate_output = 0;
-
-/* Returns translated version of a string.
-   If global variable to output strings for translation is set it spits them out */
-char *translate(const char *arg)
-{
-    static const char *domain;
-
-    if (*arg && translate_output) {
-	fputs(arg, stdout);
-	fputs("\n", stdout);
-    }
-
-#if defined(HAVE_LIBINTL_H) && defined(USE_NLS)
-    if (!domain) {
-	domain = getenv("GRASS_TRANSLATION_DOMAIN");
-	if (domain)
-	    G_putenv("GRASS_TRANSLATION_DOMAIN", "grassmods");
-	else
-	    domain = PACKAGE;
-    }
-
-    return G_gettext(domain, arg);
-#else
-    return arg;
-#endif
-}
-
-static int parse_boolean(struct context *ctx, const char *arg)
-{
-    if (G_strcasecmp(arg, "yes") == 0)
-	return YES;
-
-    if (G_strcasecmp(arg, "no") == 0)
-	return NO;
-
-    fprintf(stderr, _("Unknown boolean value \"%s\" at line %d\n"),
-	    arg, ctx->line);
-
-    return NO;
-}
-
-static void parse_toplevel(struct context *ctx, const char *cmd)
-{
-    if (G_strcasecmp(cmd, "module") == 0) {
-	ctx->state = S_MODULE;
-	ctx->module = G_define_module();
-	return;
-    }
-
-    if (G_strcasecmp(cmd, "flag") == 0) {
-	ctx->state = S_FLAG;
-	ctx->flag = G_define_flag();
-	if (!ctx->first_flag)
-	    ctx->first_flag = ctx->flag;
-	return;
-    }
-
-    if (G_strcasecmp(cmd, "option") == 0) {
-	ctx->state = S_OPTION;
-	ctx->option = G_define_option();
-	if (!ctx->first_option)
-	    ctx->first_option = ctx->option;
-	return;
-    }
-
-    fprintf(stderr, _("Unknown command \"%s\" at line %d\n"), cmd, ctx->line);
-}
-
-static void parse_module(struct context *ctx, const char *cmd,
-			 const char *arg)
-{
-
-    /* Label and description can be internationalized */
-    if (G_strcasecmp(cmd, "label") == 0) {
-	ctx->module->label = translate(strdup(arg));
-	return;
-    }
-
-    if (G_strcasecmp(cmd, "description") == 0) {
-	ctx->module->description = translate(strdup(arg));
-	return;
-    }
-
-    if (G_strcasecmp(cmd, "keywords") == 0) {
-	G_add_keyword(translate(strdup(arg)));
-	return;
-    }
-
-    if (G_strcasecmp(cmd, "end") == 0) {
-	ctx->state = S_TOPLEVEL;
-	return;
-    }
-
-    fprintf(stderr, _("Unknown module parameter \"%s\" at line %d\n"),
-	    cmd, ctx->line);
-}
-
-static void parse_flag(struct context *ctx, const char *cmd, const char *arg)
-{
-    if (G_strcasecmp(cmd, "key") == 0) {
-	ctx->flag->key = arg[0];
-	return;
-    }
-
-    if (G_strcasecmp(cmd, "suppress_required") == 0) {
-	ctx->flag->suppress_required = parse_boolean(ctx, arg);
-	return;
-    }
-
-    if (G_strcasecmp(cmd, "answer") == 0) {
-	ctx->flag->answer = atoi(arg);
-	return;
-    }
-
-    /* Label, description, and guisection can all be internationalized */
-    if (G_strcasecmp(cmd, "label") == 0) {
-	ctx->flag->label = translate(strdup(arg));
-	return;
-    }
-
-    if (G_strcasecmp(cmd, "description") == 0) {
-	ctx->flag->description = translate(strdup(arg));
-	return;
-    }
-
-    if (G_strcasecmp(cmd, "guisection") == 0) {
-	ctx->flag->guisection = translate(strdup(arg));
-	return;
-    }
-
-    if (G_strcasecmp(cmd, "end") == 0) {
-	ctx->state = S_TOPLEVEL;
-	return;
-    }
-
-    fprintf(stderr, _("Unknown flag parameter \"%s\" at line %d\n"),
-	    cmd, ctx->line);
-}
-
-static int parse_type(struct context *ctx, const char *arg)
-{
-    if (G_strcasecmp(arg, "integer") == 0)
-	return TYPE_INTEGER;
-
-    if (G_strcasecmp(arg, "double") == 0)
-	return TYPE_DOUBLE;
-
-    if (G_strcasecmp(arg, "string") == 0)
-	return TYPE_STRING;
-
-    fprintf(stderr, _("Unknown type \"%s\" at line %d\n"), arg, ctx->line);
-
-    return TYPE_STRING;
-}
-
-static void parse_option(struct context *ctx, const char *cmd,
-			 const char *arg)
-{
-    if (G_strcasecmp(cmd, "key") == 0) {
-	ctx->option->key = strdup(arg);
-	return;
-    }
-
-    if (G_strcasecmp(cmd, "type") == 0) {
-	ctx->option->type = parse_type(ctx, arg);
-	return;
-    }
-
-    if (G_strcasecmp(cmd, "required") == 0) {
-	ctx->option->required = parse_boolean(ctx, arg);
-	return;
-    }
-
-    if (G_strcasecmp(cmd, "multiple") == 0) {
-	ctx->option->multiple = parse_boolean(ctx, arg);
-	return;
-    }
-
-    if (G_strcasecmp(cmd, "options") == 0) {
-	ctx->option->options = strdup(arg);
-	return;
-    }
-
-    if (G_strcasecmp(cmd, "key_desc") == 0) {
-	ctx->option->key_desc = strdup(arg);
-	return;
-    }
-
-    /* Label, description, descriptions, and guisection can all be internationalized */
-    if (G_strcasecmp(cmd, "label") == 0) {
-	ctx->option->label = translate(strdup(arg));
-	return;
-    }
-
-    if (G_strcasecmp(cmd, "description") == 0) {
-	ctx->option->description = translate(strdup(arg));
-	return;
-    }
-
-    if (G_strcasecmp(cmd, "descriptions") == 0) {
-	ctx->option->descriptions = translate(strdup(arg));
-	return;
-    }
-
-    if (G_strcasecmp(cmd, "answer") == 0) {
-	ctx->option->answer = strdup(arg);
-	return;
-    }
-
-    if (G_strcasecmp(cmd, "gisprompt") == 0) {
-	ctx->option->gisprompt = strdup(arg);
-	return;
-    }
-
-    if (G_strcasecmp(cmd, "guisection") == 0) {
-	ctx->option->guisection = translate(strdup(arg));
-	return;
-    }
-
-    if (G_strcasecmp(cmd, "guidependency") == 0) {
-	ctx->option->guidependency = translate(strdup(arg));
-	return;
-    }
-
-    if (G_strcasecmp(cmd, "end") == 0) {
-	ctx->state = S_TOPLEVEL;
-	return;
-    }
-
-    fprintf(stderr, _("Unknown option parameter \"%s\" at line %d\n"),
-	    cmd, ctx->line);
-}
-
-static int print_options(const struct context *ctx)
-{
-    struct Option *option;
-    struct Flag *flag;
-    const char *overwrite = getenv("GRASS_OVERWRITE");
-    const char *verbose = getenv("GRASS_VERBOSE");
-
-    printf("@ARGS_PARSED@\n");
-
-    if (overwrite)
-	printf("GRASS_OVERWRITE=%s\n", overwrite);
-
-    if (verbose)
-	printf("GRASS_VERBOSE=%s\n", verbose);
-
-    for (flag = ctx->first_flag; flag; flag = flag->next_flag)
-	printf("flag_%c=%d\n", flag->key, flag->answer ? 1 : 0);
-
-    for (option = ctx->first_option; option; option = option->next_opt)
-	printf("opt_%s=%s\n", option->key,
-	       option->answer ? option->answer : "");
-
-    return EXIT_SUCCESS;
-}
-
-static int reinvoke_script(const struct context *ctx, const char *filename)
-{
-    struct Option *option;
-    struct Flag *flag;
-
-    /* Because shell from MINGW and CygWin converts all variables
-     * to uppercase it was necessary to use uppercase variables.
-     * Set both until all scripts are updated */
-    for (flag = ctx->first_flag; flag; flag = flag->next_flag) {
-	char buff[16];
-
-	sprintf(buff, "GIS_FLAG_%c=%d", flag->key, flag->answer ? 1 : 0);
-	putenv(G_store(buff));
-
-	sprintf(buff, "GIS_FLAG_%c=%d", toupper(flag->key),
-		flag->answer ? 1 : 0);
-
-	G_debug(2, "set %s", buff);
-	putenv(G_store(buff));
-    }
-
-    for (option = ctx->first_option; option; option = option->next_opt) {
-	char upper[4096];
-	char *str;
-
-	G_asprintf(&str, "GIS_OPT_%s=%s", option->key,
-		   option->answer ? option->answer : "");
-	putenv(str);
-
-	strcpy(upper, option->key);
-	G_str_to_upper(upper);
-	G_asprintf(&str, "GIS_OPT_%s=%s", upper,
-		   option->answer ? option->answer : "");
-
-	G_debug(2, "set %s", str);
-	putenv(str);
-    }
-
-#ifdef __MINGW32__
-    {
-	/* execlp() and _spawnlp ( _P_OVERLAY,..) do not work, they return 
-	 * immediately and that breaks scripts running GRASS scripts
-	 * because they dont wait until GRASS script finished */
-	/* execlp( "sh", "sh", filename, "@ARGS_PARSED@", NULL); */
-	/* _spawnlp ( _P_OVERLAY, filename, filename, "@ARGS_PARSED@", NULL ); */
-	int ret;
-	char *shell = getenv("GRASS_SH");
-
-	if (shell == NULL)
-	    shell = "sh";
-	ret = G_spawn(shell, shell, filename, "@ARGS_PARSED@", NULL);
-	G_debug(1, "ret = %d", ret);
-	if (ret == -1) {
-	    perror(_("G_spawn() failed"));
-	    return EXIT_FAILURE;
-	}
-	return EXIT_SUCCESS;
-    }
-#else
-    execl(filename, filename, "@ARGS_PARSED@", NULL);
-
-    perror(_("execl() failed"));
-    return EXIT_FAILURE;
-#endif
-}
+int translate_output;
 
 int main(int argc, char *argv[])
 {
     struct context ctx;
     const char *filename;
-    int standard_output = 0;
-
+    int standard_output;
+    
     ctx.module = NULL;
     ctx.option = NULL;
     ctx.flag = NULL;
@@ -383,17 +40,19 @@ int main(int argc, char *argv[])
     ctx.first_flag = NULL;
     ctx.state = S_TOPLEVEL;
 
+    standard_output = translate_output = FALSE;
+    
     /* Detect request to get strings to translate from a file */
     /* It comes BEFORE the filename to completely avoid confusion with parser.c behaviours */
     if (argc >= 2 && (strcmp(argv[1], "-t") == 0)) {
 	/* Turn on translation output */
-	translate_output = 1;
+	translate_output = TRUE;
 	argv++, argc--;
     }
 
     if (argc >= 2 && (strcmp(argv[1], "-s") == 0)) {
 	/* write to stdout rather than re-invoking */
-	standard_output = 1;
+	standard_output = TRUE;
 	argv++, argc--;
     }
 
