@@ -33,6 +33,7 @@ import globalvar
 import gselect
 import render
 import utils
+import menuform
 from debug import Debug as Debug
 from preferences import globalSettings as UserSettings
 
@@ -67,7 +68,7 @@ class ColorTable(wx.Frame):
             # vector properties
             self.properties = {
                 # list of database layers for vector (minimum of 1)
-                'layers' : ['1'],
+                'layers' : [],
                 # list of database columns for vector
                 'columns' : [],
                 # vector layer for attribute table to use for setting color
@@ -194,13 +195,13 @@ class ColorTable(wx.Frame):
                    flag = wx.ALIGN_CENTER_VERTICAL)
         vSizer.Add(self.cb_vlayer,  pos = (0, 1),
                    flag = wx.ALIGN_CENTER_VERTICAL)
-        vSizer.Add(self.cb_vc_label, pos = (0, 2),
+        vSizer.Add(self.cb_vc_label, pos = (1, 0),
                    flag = wx.ALIGN_CENTER_VERTICAL)
-        vSizer.Add(self.cb_vcol, pos = (0, 3),
+        vSizer.Add(self.cb_vcol, pos = (1, 1),
                    flag = wx.ALIGN_CENTER_VERTICAL)
-        vSizer.Add(self.cb_vrgb_label, pos = (1, 2),
+        vSizer.Add(self.cb_vrgb_label, pos = (2, 0),
                   flag = wx.ALIGN_CENTER_VERTICAL)
-        vSizer.Add(self.cb_vrgb, pos = (1, 3),
+        vSizer.Add(self.cb_vrgb, pos = (2, 1),
                    flag = wx.ALIGN_CENTER_VERTICAL)
                 
         return vSizer
@@ -429,33 +430,101 @@ class ColorTable(wx.Frame):
                                      { 'range' : mapRange,
                                        'min' : self.properties['min'],
                                        'max' : self.properties['max'] })
-        
+            enable = True                        
         else:
+            # check for db connection
+            if not len(gselect.VectorDBInfo(self.inmap).layers):
+                wx.CallAfter(self.OnNoConnection, self.inmap)
+                
+                self.cb_vlayer.Clear()
+                self.cb_vcol.Clear()
+                self.cb_vrgb.Clear()
+                enable = False
+                
+            else:
             # initialize layer selection combobox
-            self.cb_vlayer.InsertLayers(self.inmap)
-            # initialize attribute table for layer=1
-            layer = int(self.properties['layer'])
-            self.properties['table'] = gselect.VectorDBInfo(self.inmap).layers[layer]['table']
-            # initialize column selection comboboxes 
-            self.cb_vcol.InsertColumns(vector = self.inmap, layer = layer)
-            self.cb_vrgb.InsertColumns(vector = self.inmap, layer = layer)
-            self.Update()
+                self.cb_vlayer.InsertLayers(self.inmap)
+                # initialize attribute table for layer=1
+                self.properties['layer'] = self.cb_vlayer.GetString(0)
+                self.cb_vlayer.SetStringSelection(self.properties['layer'])
+                layer = int(self.properties['layer'])
+                self.properties['table'] = gselect.VectorDBInfo(self.inmap).layers[layer]['table']
+                
+                # initialize column selection comboboxes 
+                self.OnLayerSelection(event = None)
+                enable = True
+            
+        self.btnPreview.Enable(enable)
+        self.btnOK.Enable(enable)
+        self.btnApply.Enable(enable)
     
-        self.btnPreview.Enable(True)
-        self.btnOK.Enable(True)
-        self.btnApply.Enable(True)
-        
+    def OnNoConnection(self, vectorName):
+        dlg = wx.MessageDialog(parent = self,
+                                message = _("Database connection for vector map <%s> "
+                                            "is not defined in DB file.  Do you want to create and"
+                                            "connect new attribute table?") % vectorName,
+                                caption = _("No database connection defined"),
+                                style = wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION | wx.CENTRE)
+        if dlg.ShowModal() == wx.ID_YES:
+            dlg.Destroy()
+            menuform.GUI(parent = self).ParseCommand(['v.db.addtable'])
+        else:
+            dlg.Destroy()
+            
     def OnLayerSelection(self, event):
         # reset choices in column selection comboboxes if layer changes
-        self.vlayer = int(event.GetString())
-        self.vtable = gselect.VectorDBInfo(self.inmap).layers[str(self.vlayer)]
-        self.cb_vcol.InsertColumns(vector = self.inmap, layer = self.vlayer)
-        self.cb_vrgb.InsertColumns(vector = self.inmap, layer = self.vlayer)
+        vlayer = int(self.cb_vlayer.GetStringSelection())
+        self.cb_vcol.InsertColumns(vector = self.inmap, layer = vlayer)
+        self.cb_vcol.SetSelection(0)
+        self.properties['column'] = self.cb_vcol.GetString(0)
+        self.cb_vrgb.InsertColumns(vector = self.inmap, layer = vlayer)
+        found = self.cb_vrgb.FindString('GRASSRGB')
+        if found != wx.NOT_FOUND:
+            self.cb_vrgb.SetSelection(found)
+            self.properties['rgb'] = self.cb_vrgb.GetString(found)
+        else:
+            self.properties['rgb'] = ''
+        self.SetInfoString()
         self.Update()
         
     def OnColumnSelection(self, event):
         self.properties['column'] = event.GetString()
-    
+        self.SetInfoString()
+        
+    def SetInfoString(self):
+        driver, db = gselect.VectorDBInfo(self.inmap).GetDbSettings(int(self.properties['layer']))
+        nrows = grass.db_describe(table = self.properties['table'], driver = driver, database = db)['nrows']
+        self.properties['min'] = self.properties['max'] = ''
+        type = gselect.VectorDBInfo(self.inmap).GetTableDesc(self.properties['table'])\
+                                                    [self.properties['column']]['type']
+        ctype = gselect.VectorDBInfo(self.inmap).GetTableDesc(self.properties['table'])\
+                                                    [self.properties['column']]['ctype']
+        if ctype == int or ctype == float:  
+            if nrows < 500: # not too large
+                ret = gcmd.RunCommand('v.db.select',
+                                      quiet = True,
+                                      read  = True,
+                                      flags = 'c',
+                                      map = self.inmap,
+                                      layer = self.properties['layer'],
+                                      columns = self.properties['column']).strip('\n')
+                records = ret.split('\n')
+                try:
+                    self.properties['min'] = min(map(float, records))
+                    self.properties['max'] = max(map(float, records))
+                except ValueError:
+                    self.properties['min'] = self.properties['max'] = ''
+                    
+        if self.properties['min'] and self.properties['max']:
+            if ctype == int:
+                self.cr_label.SetLabel(_("Enter vector attribute values or ranges (type: %s, range: %d - %d )")
+                            % (type, self.properties['min'], self.properties['max']))
+            elif ctype == float:
+                self.cr_label.SetLabel(_("Enter vector attribute values or ranges (type: %s, range: %.1f - %.1f )")
+                            % (type, self.properties['min'], self.properties['max']))
+        else:
+            self.cr_label.SetLabel(_("Enter vector attribute values or ranges (type: %s)") % type)
+        
     def OnRGBColSelection(self, event):
         self.properties['rgb'] = event.GetString()
         
