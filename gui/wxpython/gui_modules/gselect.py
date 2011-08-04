@@ -268,10 +268,6 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         # get current mapset
         curr_mapset = grass.gisenv()['MAPSET']
         
-        # list of mapsets in current location
-        if mapsets is None:
-            mapsets = utils.ListOfMapsets(get = 'accessible')
-        
         # map element types to g.mlist types
         elementdict = {'cell':'rast',
                        'raster':'rast',
@@ -323,17 +319,19 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
             self.AddItem(_('Not selectable element'))
             return
         
-        # get directory tree nodes
-        # reorder mapsets based on search path (TODO)
-        for i in range(len(mapsets)):
-            if i > 0 and mapsets[i] == curr_mapset:
-                mapsets[i] = mapsets[0]
-                mapsets[0] = curr_mapset
-        
         if globalvar.have_mlist:
             filesdict = grass.mlist_grouped(elementdict[element])
         else:
             filesdict = grass.list_grouped(elementdict[element])
+        
+        # list of mapsets in current location
+        if mapsets is None:
+            mapsets = filesdict.keys()
+        
+        # current mapset first
+        if curr_mapset in mapsets and mapsets[0] != curr_mapset:
+            mapsets.remove(curr_mapset)
+            mapsets.insert(0, curr_mapset)
         
         first_mapset = None
         for mapset in mapsets:
