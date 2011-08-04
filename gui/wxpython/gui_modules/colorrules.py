@@ -89,80 +89,17 @@ class ColorTable(wx.Frame):
         # reference to layer with preview
         self.layer = None          
         
+        # set title
         if self.raster:
             self.SetTitle(_('Create new color table for raster map'))
-            crlabel = _('Enter raster category values or percents')
         else:
             self.SetTitle(_('Create new color table for vector map'))
-            crlabel = _('Enter vector attribute values or ranges (n or n1 to n2)')
-        
-        # top controls
-        if self.raster:
-            maplabel = _('Select raster map:')
-        else:
-            maplabel = _('Select vector map:')
-        inputBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
-                                label = " %s " % maplabel)
-        self.inputSizer = wx.StaticBoxSizer(inputBox, wx.VERTICAL)
-        if self.raster:
-            elem = 'cell'
-        else:
-            elem = 'vector'
-        self.selectionInput = gselect.Select(parent = self, id = wx.ID_ANY,
-                                             size = globalvar.DIALOG_GSELECT_SIZE,
-                                             type = elem)
-        
-        self.ovrwrtcheck = wx.CheckBox(parent = self, id = wx.ID_ANY,
-                                       label = _('replace existing color table'))
-        self.ovrwrtcheck.SetValue(UserSettings.Get(group = 'cmd', key = 'overwrite', subkey = 'enabled'))
-        
-        if self.raster:
-            self.btnSave = wx.Button(parent = self, id = wx.ID_SAVE)
-            self.btnSave.SetToolTipString(_('Save color table to file'))
-        
-        if not self.raster:
-            self.cb_vl_label = wx.StaticText(parent = self, id = wx.ID_ANY,
-                                             label = _('Layer:'))
-            self.cb_vc_label = wx.StaticText(parent = self, id = wx.ID_ANY,
-                                             label = _('Attribute column:'))
-            self.cb_vrgb_label = wx.StaticText(parent = self, id = wx.ID_ANY,
-                                               label = _('RGB color column:'))
-            self.cb_vlayer = gselect.LayerSelect(self)
-            self.cb_vcol = gselect.ColumnSelect(self)
-            self.cb_vrgb = gselect.ColumnSelect(self)
-        
-        # color table and preview window
-        self.cr_label = wx.StaticText(parent = self, id = wx.ID_ANY,
-                                      label = crlabel)
-        self.cr_panel = self._colorRulesPanel()
-        # add two rules as default
-        self.AddRules(2)
-        
-        self.numRules = wx.SpinCtrl(parent = self, id = wx.ID_ANY,
-                                    min = 1, max = 1e6)
-        
-        # initialize preview display
-        self.InitDisplay()
-        self.preview = BufferedWindow(self, id = wx.ID_ANY, size = (400, 300),
-                                      Map = self.Map)
-        self.preview.EraseMap()
-        
-        self.btnCancel = wx.Button(parent = self, id = wx.ID_CANCEL)
-        self.btnApply = wx.Button(parent = self, id = wx.ID_APPLY) 
-        self.btnOK = wx.Button(parent = self, id = wx.ID_OK)
-        self.btnOK.SetDefault()
-        self.btnOK.Enable(False)
-        self.btnApply.Enable(False)
-        
-        self.btnPreview = wx.Button(parent = self, id = wx.ID_ANY,
-                                    label = _("Preview"))
-        self.btnPreview.Enable(False)
-        self.btnAdd = wx.Button(parent = self, id = wx.ID_ADD)
-        self.helpbtn = wx.Button(parent = self, id = wx.ID_HELP)
             
+        # layout
+        self.__doLayout()
         
         # bindings
-        self.Bind(wx.EVT_BUTTON, self.OnHelp, self.helpbtn)
+        self.Bind(wx.EVT_BUTTON, self.OnHelp, self.btnHelp)
         self.selectionInput.Bind(wx.EVT_TEXT, self.OnSelectionInput)
         self.Bind(wx.EVT_BUTTON, self.OnCancel, self.btnCancel)
         self.Bind(wx.EVT_BUTTON, self.OnApply, self.btnApply)
@@ -192,101 +129,83 @@ class ColorTable(wx.Frame):
             self.inmap = name
             self.OnSelectionInput(None)
         
-        # layout
-        self.__doLayout()
         self.SetMinSize(self.GetSize())
         
         self.CentreOnScreen()
         self.Show()
+    
+    def _createMapSelection(self):
+        """!Create map selection part of dialog"""
+        # top controls
+        if self.raster:
+            maplabel = _('Select raster map:')
+        else:
+            maplabel = _('Select vector map:')
+        inputBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
+                                label = " %s " % maplabel)
+        self.inputSizer = wx.StaticBoxSizer(inputBox, wx.VERTICAL)
+        if self.raster:
+            elem = 'cell'
+        else:
+            elem = 'vector'
+        self.selectionInput = gselect.Select(parent = self, id = wx.ID_ANY,
+                                             size = globalvar.DIALOG_GSELECT_SIZE,
+                                             type = elem)
+        if self.raster:
+            self.ovrwrtcheck = wx.CheckBox(parent = self, id = wx.ID_ANY,
+                                           label = _('replace existing color table'))
+            self.ovrwrtcheck.SetValue(UserSettings.Get(group = 'cmd', key = 'overwrite', subkey = 'enabled'))
         
-    def __doLayout(self):
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        
-        #
-        # input
-        #
+        if self.raster:
+            self.btnSave = wx.Button(parent = self, id = wx.ID_SAVE)
+            self.btnSave.SetToolTipString(_('Save color table to file'))
+            
+        # layout
         self.inputSizer.Add(item = self.selectionInput,
                        flag = wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND, border = 5)
         replaceSizer = wx.BoxSizer(wx.HORIZONTAL)
-        replaceSizer.Add(item = self.ovrwrtcheck, proportion = 1,
-                         flag = wx.ALL | wx.ALIGN_CENTER_VERTICAL, border = 1)
         if self.raster:
+            replaceSizer.Add(item = self.ovrwrtcheck, proportion = 1,
+                             flag = wx.ALL | wx.ALIGN_CENTER_VERTICAL, border = 1)
+        
             replaceSizer.Add(item = self.btnSave, proportion = 0,
                             flag = wx.ALIGN_RIGHT | wx.ALL, border = 5)
         
         self.inputSizer.Add(item = replaceSizer, proportion = 1,
                        flag = wx.ALL | wx.EXPAND, border = 0)
-
-        #
-        # body & preview
-        #
-        bodySizer =  wx.GridBagSizer(hgap = 5, vgap = 5)
-        row = 0
-        bodySizer.Add(item = self.cr_label, pos = (row, 0), span = (1, 3),
-                      flag = wx.ALL, border = 5)
+    
+        return self.inputSizer
+    
+    def _createVectorAttrb(self):
+        """!Create part of dialog with layer/column selection"""
+        self.cb_vl_label = wx.StaticText(parent = self, id = wx.ID_ANY,
+                                             label = _('Layer:'))
+        self.cb_vc_label = wx.StaticText(parent = self, id = wx.ID_ANY,
+                                         label = _('Attribute column:'))
+        self.cb_vrgb_label = wx.StaticText(parent = self, id = wx.ID_ANY,
+                                           label = _('RGB color column:'))
+        self.cb_vlayer = gselect.LayerSelect(self)
+        self.cb_vcol = gselect.ColumnSelect(self)
+        self.cb_vrgb = gselect.ColumnSelect(self)
         
-        if not self.raster:
-            vSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
-            vSizer.Add(self.cb_vl_label, pos = (0, 0),
-                       flag = wx.ALIGN_CENTER_VERTICAL)
-            vSizer.Add(self.cb_vlayer,  pos = (0, 1),
-                       flag = wx.ALIGN_CENTER_VERTICAL)
-            vSizer.Add(self.cb_vc_label, pos = (0, 2),
-                       flag = wx.ALIGN_CENTER_VERTICAL)
-            vSizer.Add(self.cb_vcol, pos = (0, 3),
-                       flag = wx.ALIGN_CENTER_VERTICAL)
-            vSizer.Add(self.cb_vrgb_label, pos = (1, 2),
-                      flag = wx.ALIGN_CENTER_VERTICAL)
-            vSizer.Add(self.cb_vrgb, pos = (1, 3),
-                       flag = wx.ALIGN_CENTER_VERTICAL)
-            row += 1
-            bodySizer.Add(item = vSizer, pos = (row, 0), span = (1, 3))
-        
-        row += 1
-        bodySizer.Add(item = self.cr_panel, pos = (row, 0), span = (1, 2))
-        
-        bodySizer.Add(item = self.preview, pos = (row, 2),
-                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT, border = 10)
-        bodySizer.AddGrowableRow(row)
-        bodySizer.AddGrowableCol(2)
-        
-        row += 1
-        bodySizer.Add(item = self.numRules, pos = (row, 0),
-                      flag = wx.ALIGN_CENTER_VERTICAL)
-        
-        bodySizer.Add(item = self.btnAdd, pos = (row, 1))
-        bodySizer.Add(item = self.btnPreview, pos = (row, 2),
-                      flag = wx.ALIGN_RIGHT)
-        
-        btnSizer = wx.BoxSizer(wx.HORIZONTAL)
-        btnSizer.Add(self.helpbtn,
-                     flag = wx.LEFT | wx.RIGHT, border = 5)
-        btnSizer.Add(self.btnCancel,
-                     flag = wx.LEFT | wx.RIGHT, border = 5)
-        btnSizer.Add(self.btnApply,
-                     flag = wx.LEFT | wx.RIGHT, border = 5)
-        btnSizer.Add(self.btnOK,
-                     flag = wx.LEFT | wx.RIGHT, border = 5)
-        
-        sizer.Add(item = self.inputSizer, proportion = 0,
-                  flag = wx.ALL | wx.EXPAND, border = 5)
-        
-        sizer.Add(item = bodySizer, proportion = 1,
-                  flag = wx.ALL | wx.EXPAND, border = 5)
-        
-        sizer.Add(item = wx.StaticLine(parent = self, id = wx.ID_ANY,
-                                     style = wx.LI_HORIZONTAL),
-                  proportion = 0,
-                  flag = wx.EXPAND | wx.ALL, border = 5) 
-        
-        sizer.Add(item = btnSizer, proportion = 0,
-                  flag = wx.ALL | wx.ALIGN_RIGHT, border = 5)
-        
-        self.SetSizer(sizer)
-        sizer.Fit(self)
-        self.Layout()
-        
-    def _colorRulesPanel(self):
+        # layout
+        vSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
+        vSizer.Add(self.cb_vl_label, pos = (0, 0),
+                   flag = wx.ALIGN_CENTER_VERTICAL)
+        vSizer.Add(self.cb_vlayer,  pos = (0, 1),
+                   flag = wx.ALIGN_CENTER_VERTICAL)
+        vSizer.Add(self.cb_vc_label, pos = (0, 2),
+                   flag = wx.ALIGN_CENTER_VERTICAL)
+        vSizer.Add(self.cb_vcol, pos = (0, 3),
+                   flag = wx.ALIGN_CENTER_VERTICAL)
+        vSizer.Add(self.cb_vrgb_label, pos = (1, 2),
+                  flag = wx.ALIGN_CENTER_VERTICAL)
+        vSizer.Add(self.cb_vrgb, pos = (1, 3),
+                   flag = wx.ALIGN_CENTER_VERTICAL)
+                
+        return vSizer
+    
+    def _createColorRulesPanel(self):
         """!Create rules panel"""
         cr_panel = scrolled.ScrolledPanel(parent = self, id = wx.ID_ANY,
                                           size = (180, 300),
@@ -299,6 +218,118 @@ class ColorTable(wx.Frame):
         
         return cr_panel        
 
+    def _createPreview(self):
+        """!Create preview"""
+        # initialize preview display
+        self.InitDisplay()
+        self.preview = BufferedWindow(self, id = wx.ID_ANY, size = (400, 300),
+                                      Map = self.Map)
+        self.preview.EraseMap()
+        
+    def _createButtons(self):
+        """!Create buttons for leaving dialog"""
+        self.btnHelp = wx.Button(parent = self, id = wx.ID_HELP)
+        self.btnCancel = wx.Button(parent = self, id = wx.ID_CANCEL)
+        self.btnApply = wx.Button(parent = self, id = wx.ID_APPLY) 
+        self.btnOK = wx.Button(parent = self, id = wx.ID_OK)
+        
+        self.btnOK.SetDefault()
+        self.btnOK.Enable(False)
+        self.btnApply.Enable(False)
+        self.btnPreview.Enable(False)
+        
+        # layout
+        btnSizer = wx.BoxSizer(wx.HORIZONTAL)
+        btnSizer.Add(self.btnHelp,
+                     flag = wx.LEFT | wx.RIGHT, border = 5)
+        btnSizer.Add(self.btnCancel,
+                     flag = wx.LEFT | wx.RIGHT, border = 5)
+        btnSizer.Add(self.btnApply,
+                     flag = wx.LEFT | wx.RIGHT, border = 5)
+        btnSizer.Add(self.btnOK,
+                     flag = wx.LEFT | wx.RIGHT, border = 5)
+        
+        return btnSizer
+    
+    def __doLayout(self):
+        """!Do main layout"""
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        #
+        # map selection
+        #
+        mapSelection = self._createMapSelection()
+        sizer.Add(item = mapSelection, proportion = 0,
+                  flag = wx.ALL | wx.EXPAND, border = 5)
+        #
+        # set vector attributes
+        #
+        if not self.raster:
+            vectorAttrb = self._createVectorAttrb()
+            sizer.Add(item = vectorAttrb, proportion = 0,
+                      flag = wx.ALL | wx.EXPAND, border = 5)
+        #
+        # body & preview
+        #
+        bodySizer =  wx.GridBagSizer(hgap = 5, vgap = 5)
+        row = 0
+        
+        # label with range
+        if self.raster:
+            crlabel = _('Enter raster category values or percents')
+        else:
+            crlabel = _('Enter vector attribute values or ranges (n or n1 to n2)')
+        self.cr_label = wx.StaticText(parent = self, id = wx.ID_ANY, label = crlabel)
+        bodySizer.Add(item = self.cr_label, pos = (row, 0), span = (1, 3),
+                      flag = wx.ALL, border = 5)
+        row += 1
+        
+        # color table
+        self.cr_panel = self._createColorRulesPanel()
+        bodySizer.Add(item = self.cr_panel, pos = (row, 0), span = (1, 2))
+        # add two rules as default
+        self.AddRules(2)
+        
+        # preview window
+        self._createPreview()
+        bodySizer.Add(item = self.preview, pos = (row, 2),
+                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT, border = 10)
+        bodySizer.AddGrowableRow(row)
+        bodySizer.AddGrowableCol(2)
+        row += 1
+        
+        # add rules
+        self.numRules = wx.SpinCtrl(parent = self, id = wx.ID_ANY,
+                                    min = 1, max = 1e6)
+        self.btnAdd = wx.Button(parent = self, id = wx.ID_ADD)
+        bodySizer.Add(item = self.numRules, pos = (row, 0),
+                      flag = wx.ALIGN_CENTER_VERTICAL)
+        bodySizer.Add(item = self.btnAdd, pos = (row, 1))
+        
+        # preview button
+        self.btnPreview = wx.Button(parent = self, id = wx.ID_ANY,
+                                    label = _("Preview"))
+        bodySizer.Add(item = self.btnPreview, pos = (row, 2),
+                      flag = wx.ALIGN_RIGHT)
+        
+        
+        sizer.Add(item = bodySizer, proportion = 1,
+                  flag = wx.ALL | wx.EXPAND, border = 5)
+        #
+        # buttons
+        #
+        btnSizer = self._createButtons()
+        
+        sizer.Add(item = wx.StaticLine(parent = self, id = wx.ID_ANY,
+                                       style = wx.LI_HORIZONTAL), proportion = 0,
+                                       flag = wx.EXPAND | wx.ALL, border = 5) 
+        
+        sizer.Add(item = btnSizer, proportion = 0,
+                  flag = wx.ALL | wx.ALIGN_RIGHT, border = 5)
+        
+        self.SetSizer(sizer)
+        sizer.Fit(self)
+        self.Layout()
+        
     def OnAddRules(self, event):
         """!Add rules button pressed"""
         nrules = self.numRules.GetValue()
