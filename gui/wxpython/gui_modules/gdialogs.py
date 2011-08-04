@@ -693,7 +693,7 @@ class TextLayerDialog(wx.Dialog):
 
         # show/hide
         self.chkbox = wx.CheckBox(parent=self, id=wx.ID_ANY, \
-            label='Show text object')
+            label = _('Show text object'))
         if self.parent.Map.GetOverlay(self.ovlId) is None:
             self.chkbox.SetValue(True)
         else:
