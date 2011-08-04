@@ -320,13 +320,14 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
             return
         
         if globalvar.have_mlist:
-            filesdict = grass.mlist_grouped(elementdict[element])
+            filesdict = grass.mlist_grouped(elementdict[element],
+                                            check_search_path = False)
         else:
-            filesdict = grass.list_grouped(elementdict[element])
+            filesdict = grass.list_grouped(elementdict[element],
+                                           check_search_path = False)
         
         # list of mapsets in current location
         if mapsets is None:
-            # mapsets = filesdict.keys()
             mapsets = grass.mapsets()
         
         # current mapset first
