@@ -935,7 +935,7 @@ class AddMapLayersDialog(wx.Dialog):
         @param type layer type ('raster' or 'vector')
         @param mapset mapset name
         """
-        self.map_layers = grass.mlist(type = type, mapset = mapset)
+        self.map_layers = grass.mlist_grouped(type = type)[mapset]
         self.layers.Set(self.map_layers)
         
         # check all items by default
