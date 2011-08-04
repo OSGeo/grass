@@ -154,8 +154,9 @@ class Layer(object):
                                            **self.cmd[1])
                 
             if ret != 0:
-                raise gcmd.GException(value = _("'%s' failed. Details: %s") % (self.cmd[0], msg))
-            
+                raise gcmd.GException(value = _("'%(cmd)s' failed. Details: %(det)s") % \
+                                          { 'cmd' : self.cmd[0], 'det' : msg })
+        
         except gcmd.GException, e:
             print >> sys.stderr, e.value
             # clean up after problems
@@ -563,8 +564,8 @@ class Map(object):
             for k, v in data.iteritems():
                 fd.write('%s=%s\n' % (k.strip(), str(v).strip()))
         except IOError, e:
-            grass.warning(_("Unable to open file '%s' for writting. Details: %s") % \
-                              (self.envfile, e))
+            grass.warning(_("Unable to open file '%(file)s' for writting. Details: %(det)s") % \
+                              { 'cmd' : self.envfile, 'det' : e })
             return
         
         fd.close()
@@ -877,8 +878,8 @@ class Map(object):
             gcmd.RunCommand('g.gisenv',
                             set = 'MONITOR_%s_CMDFILE=%s' % (self.monitor, self.cmdfile))
         except IOError, e:
-            grass.warning(_("Unable to read cmdfile '%s'. Details: %s") % \
-                              (self.cmdfile, e))
+            grass.warning(_("Unable to read cmdfile '%(cmd)s'. Details: %(det)s") % \
+                              { 'cmd' : self.cmdfile, 'det' : e })
             return
         
         fd.close()
