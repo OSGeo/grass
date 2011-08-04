@@ -430,12 +430,12 @@ def get_interface_description(cmd):
         cmdout, cmderr = Popen([cmd, '--interface-description'], stdout = PIPE,
                                      stderr = PIPE).communicate()
     except OSError, e:
-        raise ScriptError, _("Unable to fetch interface description for command '%s'."
-                             "\n\nDetails: %s") % (cmd, e)
+        raise ScriptError, _("Unable to fetch interface description for command '%(cmd)s'."
+                             "\n\nDetails: %(det)s") % { 'cmd' : cmd, 'det' : e }
     
     if cmderr and cmderr[:7] != 'WARNING':
-        raise ScriptError, _("Unable to fetch interface description for command '%s'."
-                             "\n\nDetails: %s") % (cmd, decode(cmderr))
+        raise ScriptError, _("Unable to fetch interface description for command '%(cmd)s'."
+                             "\n\nDetails: %(det)s") % { 'cmd': cmd, 'det' : decode(cmderr) }
     
     return cmdout.replace('grass-interface.dtd', os.path.join(os.getenv('GISBASE'), 'etc', 'grass-interface.dtd'))
 
