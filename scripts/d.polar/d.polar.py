@@ -23,13 +23,8 @@
 #%  keywords: display
 #%  keywords: diagram
 #%End
-#%option
-#% key: map
-#% type: string
-#% key_desc: name
-#% gisprompt: old,cell,raster
+#%option G_OPT_R_MAP
 #% description: Name of raster angle map
-#% required : yes
 #%End
 #%option
 #% key: undef
@@ -37,11 +32,9 @@
 #% description: Pixel value to be interpreted as undefined (different from NULL)
 #% required : no
 #%End
-#%option
+#%option G_OPT_F_OUTPUT
 #% key: eps
-#% type: string
-#% gisprompt: new_file,file,output
-#% description: Name of optional EPS output file
+#% description: Name for optional EPS output file
 #% required : no
 #%end
 #%flag

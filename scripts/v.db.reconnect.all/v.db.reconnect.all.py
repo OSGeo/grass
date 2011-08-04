@@ -13,36 +13,30 @@
 #
 #############################################################################
 
-#%Module
+#%module
 #% description: Reconnects vectors to a new database.
 #% keywords: vector
 #% keywords: database
 #% keywords: attribute table
-#%End
-#%option
+#%end
+#%option G_OPT_DB_DATABASE
 #% key: old_database
-#% type: string
 #% description: Name of old database
-#% required : yes
-#%END
-#%option
+#% required: yes
+#%end
+#%option G_OPT_DB_DATABASE
 #% key: new_database
-#% type: string
 #% description: Name of new database
-#% required : yes
-#%END
-#%option
+#% required: yes
+#%end
+#%option G_OPT_DB_SCHEMA
 #% key: old_schema
-#% type: string
-#% description: Old schema
-#% required : no
-#%END
-#%option
+#% description: Old database schema
+#%end
+#%option G_OPT_DB_SCHEMA
 #% key: new_schema
-#% type: string
-#% description: New schema
-#% required : no
-#%END
+#% description: New database schema
+#%end
 
 import sys
 import os

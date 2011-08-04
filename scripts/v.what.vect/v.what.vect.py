@@ -13,54 +13,33 @@
 #
 #############################################################################
 
-#%Module
-#%  description: Uploads vector values at positions of vector points to the table.
-#%  keywords: vector
-#%  keywords: database
-#%  keywords: attribute table
-#%End
+#%module
+#% description: Uploads vector values at positions of vector points to the table.
+#% keywords: vector
+#% keywords: database
+#% keywords: attribute table
+#%end
 
-#%option
-#% key: vector
-#% type: string
-#% key_desc: name
-#% gisprompt: old,vector,vector
-#% description: Vector map to modify
+#%option G_OPT_V_MAP
+#%end
+#%option G_OPT_V_FIELD
+#%end
+#%option G_OPT_DB_COLUMN
+#% description: Name of attribute column to be updated with the query result
+#% required: yes
+#%end
+#%option G_OPT_V_MAP
+#% key: qmap
+#% description: Name of vector map to be queried
 #% required : yes
 #%end
-#%option
-#% key: layer
-#% type: integer
-#% description: Layer in the vector to be modified
-#% answer: 1
-#% required : no
-#%end
-#%option
-#% key: column
-#% type: string
-#% description: Column to be updated with the query result
-#% required : yes
-#%end
-#%option
-#% key: qvector
-#% type: string
-#% key_desc: name
-#% gisprompt: old,vector,vector
-#% description: Vector map to be queried
-#% required : yes
-#%end
-#%option
+#%option G_OPT_V_FIELD
 #% key: qlayer
-#% type: integer
-#% description: Layer of the query vector containing data
-#% answer: 1
-#% required : no
 #%end
-#%option
+#%option G_OPT_DB_COLUMN
 #% key: qcolumn
-#% type: string
-#% description: Column to be queried
-#% required : yes
+#% description: Name of attribute column to be queried
+#% required: yes
 #%end
 #%option
 #% key: dmax

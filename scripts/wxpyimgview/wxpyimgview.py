@@ -18,27 +18,23 @@
 #
 #############################################################################/
 
-#%Module
-#% description: View BMP images from the PNG driver.
+#%module
+#% description: Views BMP images from the PNG driver.
 #% keywords: display
 #% keywords: raster
-#%End
-#%Option
+#%end
+#%option G_OPT_F_INPUT
 #% key: image
-#% type: string
-#% required: yes
-#% multiple: no
-#% description: Image file
-#% gisprompt: old_file,file,input
-#%End
-#%Option
+#% description: Name of input image file
+#%end
+#%option
 #% key: percent
 #% type: integer
 #% required: no
 #% multiple: no
 #% description: Percentage of CPU time to use
 #% answer: 10
-#%End
+#%end
 
 import sys
 import os

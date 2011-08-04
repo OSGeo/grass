@@ -20,39 +20,30 @@
 # 2000: updated to GRASS 5
 # 1998 from NRCS, slightly modified for GRASS 4.2.1
 
-#%Module
-#%  description: Reclasses a raster map greater or less than user specified area size (in hectares).
-#%  keywords: raster
-#%  keywords: statistics
-#%  keywords: aggregation
-#%End
+#%module
+#% description: Reclasses a raster map greater or less than user specified area size (in hectares).
+#% keywords: raster
+#% keywords: statistics
+#% keywords: aggregation
+#%end
 
-#%option
-#% key: input
-#% type: string
-#% gisprompt: old,cell,raster
-#% description: Name of input raster map
-#% required : yes
-#%END
+#%option G_OPT_R_INPUT
+#%end
 
-#%option
-#% key: output
-#% type: string
-#% gisprompt: new,cell,raster
-#% description: Name for output raster map
-#% required : yes
-#%END
+#%option G_OPT_R_OUTPUT
+#%end
 
 #%option
 #% key: lesser
 #% type: double
 #% description: Lesser value option that sets the <= area size limit [hectares]
-#%END
+#%end
+
 #%option
 #% key: greater
 #% type: double
 #% description: Greater value option that sets the >= area size limit [hectares]
-#%END
+#%end
 
 import sys
 import os

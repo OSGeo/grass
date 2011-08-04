@@ -25,24 +25,12 @@
 #%  key: f
 #%  description: Force removal (required for actual deletion of table)
 #%end
-#%option
-#% key: map
-#% type: string
-#% gisprompt: old,vector,vector
-#% description: Vector map from which to remove attribute table
-#% required : yes
+#%option G_OPT_V_MAP
 #%end
-#%option
-#% key: table
-#% type: string
-#% description: Name of existing attribute table (default: vector map name)
-#% required : no
+#%option G_OPT_DB_TABLE
+#% description: Table name (default: vector map name)
 #%end
-#%option
-#% key: layer
-#% gisprompt: old_layer,layer,layer
-#% description: Layer from which to drop linked attribute table
-#% answer: 1
+#%option G_OPT_V_FIELD
 #% required : no
 #%end
 

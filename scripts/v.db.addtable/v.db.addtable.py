@@ -14,41 +14,35 @@
 #
 #############################################################################
 
-#%Module
-#%  description: Creates and connects a new attribute table to a given layer of an existing vector map.
-#%  keywords: vector
-#%  keywords: database
-#%  keywords: attribute table
-#%End
-#%option
-#% key: map
-#% type: string
-#% gisprompt: old,vector,vector
-#% description: Vector map for which to add new attribute table
-#% required : yes
-#% key_desc : name
+#%module
+#% description: Creates and connects a new attribute table to a given layer of an existing vector map.
+#% keywords: vector
+#% keywords: database
+#% keywords: attribute table
 #%end
-#%option
+#%option G_OPT_V_MAP
+#%end
+#%option 
 #% key: table
 #% type: string
 #% description: Name of new attribute table (default: vector map name)
 #% required : no
 #%end
-#%option
+#%option 
 #% key: layer
-#% gisprompt: old_layer,layer,layer
-#% description: Layer where to add new attribute table
+#% type: integer
+#% description: Layer number where to add new attribute table
 #% answer: 1
-#% required : no
+#% required: no
 #%end
 #%option
 #% key: columns
 #% type: string
 #% description: Name and type of the new column(s) (types depend on database backend, but all support VARCHAR(), INT, DOUBLE PRECISION and DATE)
 #% answer: cat integer
-#% required : no
-#% multiple : yes
-#% key_desc : name type
+#% required: no
+#% multiple: yes
+#% key_desc: name type
 #%end
 
 import sys

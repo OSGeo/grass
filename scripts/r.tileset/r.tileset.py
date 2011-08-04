@@ -35,11 +35,11 @@
 #    presenting data in a highly inappropriate projection. Do you really
 #    want their data?
 
-#%Module
+#%module
 #% description: Produces tilings of the source projection for use in the destination region and projection.
 #% keywords: raster
 #% keywords: tiling
-#%End
+#%end
 #%flag
 #% key: g
 #% description: Produces shell script output
@@ -95,17 +95,8 @@
 #% description: Number of cells tiles should overlap in each direction
 #% answer: 0
 #%end
-#%option
-#% key: fs
-#% type: string
+#%option G_OPT_F_SEP
 #% description: Output field separator
-#% answer: |
-#%end
-#%option
-#% key: v
-#% type: integer
-#% description: Verbosity level
-#% answer: 0
 #%end
 
 # Data structures used in this program:

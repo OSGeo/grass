@@ -18,78 +18,61 @@
 #
 #############################################################################/
 
-#%Module
-#% description: Interactively edit cell values in a raster map.
+#%module
+#% description: Edits cell values in a raster map.
 #% keywords: display
 #% keywords: raster
-#%End
-#%Option
-#% key: input
-#% type: string
-#% required: yes
-#% multiple: no
-#% key_desc: name
-#% description: Name of input raster map
-#% gisprompt: old,cell,raster
-#%End
-#%Option
-#% key: output
-#% type: string
-#% required: yes
-#% multiple: no
-#% key_desc: name
-#% description: Name for output raster map
-#% gisprompt: new,cell,raster
-#%End
-#%Option
+#% keywords: edit
+#%end
+#%option G_OPT_R_INPUT
+#%end
+#%option G_OPT_R_OUTPUT
+#%end
+#%option G_OPT_R_INPUT
 #% key: aspect
-#% type: string
 #% required: no
-#% multiple: no
-#% key_desc: name
-#% description: Name of aspect raster map
-#% gisprompt: old,cell,raster
-#%End
-#%Option
+#% description: Name of input aspect raster map
+#%end
+#%option
 #% key: width
 #% type: integer
 #% required: no
 #% multiple: no
 #% description: Width of display canvas
 #% answer: 640
-#%End
-#%Option
+#%end
+#%option
 #% key: height
 #% type: integer
 #% required: no
 #% multiple: no
 #% description: Height of display canvas
 #% answer: 480
-#%End
-#%Option
+#%end
+#%option
 #% key: size
 #% type: integer
 #% required: no
 #% multiple: no
 #% description: Minimum size of each cell
 #% answer: 12
-#%End
-#%Option
+#%end
+#%option
 #% key: rows
 #% type: integer
 #% required: no
 #% multiple: no
 #% description: Maximum number of rows to load
 #% answer: 100
-#%End
-#%Option
+#%end
+#%option
 #% key: cols
 #% type: integer
 #% required: no
 #% multiple: no
 #% description: Maximum number of columns to load
 #% answer: 100
-#%End
+#%end
 
 import sys
 import math

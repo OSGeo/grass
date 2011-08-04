@@ -13,18 +13,18 @@
 #
 #############################################################################
 
-#% Module
-#%  description: Test database driver, database must exist and set by db.connect.
-#%  keywords: database
-#%  keywords: attribute table
-#% End
-#% option
-#%  key: test
-#%  type: string
-#%  description: Test name
-#%  required : yes
-#%  options : test1
-#% end
+#%module
+#% description: Test database driver, database must exist and set by db.connect.
+#% keywords: database
+#% keywords: attribute table
+#%end
+#%option
+#% key: test
+#% type: string
+#% description: Test name
+#% required: yes
+#% options: test1
+#%end
 
 import sys
 import os

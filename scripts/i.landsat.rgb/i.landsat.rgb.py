@@ -20,32 +20,23 @@
 # TODO: implement better brightness control
 #############################################################################
 
-#%Module
-#%  description: Performs auto-balancing of colors for LANDSAT images.
-#%  keywords: raster
-#%  keywords: imagery
-#%  keywords: colors
-#%End
-#%option
+#%module
+#% description: Performs auto-balancing of colors for LANDSAT images.
+#% keywords: raster
+#% keywords: imagery
+#% keywords: colors
+#%end
+#%option G_OPT_R_INPUT
 #% key: red
-#% type: string
-#% gisprompt: old,cell,raster
-#% description: LANDSAT red channel
-#% required : yes
+#% description: Name of LANDSAT red channel
 #%end
-#%option
+#%option G_OPT_R_INPUT
 #% key: green
-#% type: string
-#% gisprompt: old,cell,raster
-#% description: LANDSAT green channel
-#% required : yes
+#% description: Name of LANDSAT green channel
 #%end
-#%option
+#%option G_OPT_R_INPUT
 #% key: blue
-#% type: string
-#% gisprompt: old,cell,raster
-#% description: LANDSAT blue channel
-#% required : yes
+#% description: Name of LANDSAT blue channel
 #%end
 #%option
 #% key: strength
@@ -53,7 +44,7 @@
 #% description: Cropping intensity (upper brightness level)
 #% options: 0-100
 #% answer : 98
-#% required : no
+#% required: no
 #%end
 #%flag
 #% key: f

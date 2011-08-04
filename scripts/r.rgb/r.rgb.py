@@ -13,23 +13,19 @@
 #
 #############################################################################
 
-#% Module
-#%  description: Split a raster map into red, green and blue maps
-#%  keywords: raster
-#% End
-#% option
-#%  key: input
-#%  type: string
-#%  gisprompt: old,cell,raster
-#%  description: Input map
-#%  required : yes
-#% end
-#% option
-#%  key: output
-#%  type: string
-#%  description: Base name for output maps
-#%  required : no
-#% end
+#%module
+#% description: Splits a raster map into red, green and blue maps.
+#% keywords: raster
+#% keywords: rgb
+#%end
+#%option G_OPT_R_INPUT
+#%end
+#%option
+#% key: output_prefix
+#% type: string
+#% description: Prefix for output raster maps (default: input)
+#% required: no
+#%end
 
 import sys
 import os
@@ -41,7 +37,7 @@ def main():
     output = options['output']
 
     if not grass.find_file(input)['file']:
-	grass.fatal(_("Map <%s> not found.") % input)
+	grass.fatal(_("Raster map <%s> not found") % input)
 
     if not output:
 	output = input

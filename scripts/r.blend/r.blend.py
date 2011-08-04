@@ -14,30 +14,22 @@
 #
 #############################################################################
 
-#%Module
-#%  description: Blends color components of two raster maps by a given ratio.
-#%  keywords: raster
-#%End
-#%option
+#%module
+#% description: Blends color components of two raster maps by a given ratio.
+#% keywords: raster
+#%end
+#%option G_OPT_R_INPUT
 #% key: first
-#% type: string
-#% gisprompt: old,cell,raster
 #% description: Name of first raster map for blending
-#% key_desc : name
-#% required : yes
 #%end
-#%option
+#%option G_OPT_R_INPUT
 #% key: second
-#% type: string
-#% gisprompt: old,cell,raster
 #% description: Name of second raster map for blending
-#% key_desc : name
-#% required : yes
 #%end
-#%option
-#% key: output
+#%option 
+#% key: output_prefix
 #% type: string
-#% description: Base name for red, green and blue output maps containing the blend
+#% description: Prefix for red, green and blue output raster maps containing
 #% key_desc : name
 #% required : yes
 #%end

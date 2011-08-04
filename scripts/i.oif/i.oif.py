@@ -29,47 +29,29 @@
 #%  keywords: imagery
 #%  keywords: statistics
 #% End
-#% option
+#% option G_OPT_R_INPUT
 #% key: image1
-#% type: string
-#% gisprompt: old,cell,raster
 #% description: LANDSAT TM band 1.
-#% required : yes
 #% end
-#% option
+#% option G_OPT_R_INPUT
 #% key: image2
-#% type: string
-#% gisprompt: old,cell,raster
 #% description: LANDSAT TM band 2.
-#% required : yes
 #% end
-#% option
+#% option G_OPT_R_INPUT
 #% key: image3
-#% type: string
-#% gisprompt: old,cell,raster
 #% description: LANDSAT TM band 3.
-#% required : yes
 #% end
-#% option
+#% option G_OPT_R_INPUT
 #% key: image4
-#% type: string
-#% gisprompt: old,cell,raster
 #% description: LANDSAT TM band 4.
-#% required : yes
 #% end
-#% option
+#% option G_OPT_R_INPUT
 #% key: image5
-#% type: string
-#% gisprompt: old,cell,raster
 #% description: LANDSAT TM band 5.
-#% required : yes
 #% end
-#% option
+#% option G_OPT_R_INPUT
 #% key: image7
-#% type: string
-#% gisprompt: old,cell,raster
 #% description: LANDSAT TM band 7.
-#% required : yes
 #% end
 #% Flag
 #% key: g
@@ -109,7 +91,7 @@ def main():
 	image[band] = options['image%d' % band]
 
     # calculate the Stddev for TM bands
-    grass.verbose("Calculating Standard deviations for all bands:")
+    grass.message(_("Calculating Standard deviations for all bands..."))
     stddev = {}
     for band in bands:
 	grass.verbose("band %d" % band)
@@ -117,7 +99,7 @@ def main():
 	kv = grass.parse_key_val(s)
 	stddev[band] = float(kv['stddev'])
 
-    grass.verbose("Calculating Correlation Matrix")
+    grass.message(_("Calculating Correlation Matrix..."))
     correlation = {}
     s = grass.read_command('r.covar', flags = 'r', map = [image[band] for band in bands])
     for i, row in zip(bands, s.splitlines()):
@@ -125,17 +107,16 @@ def main():
 	    correlation[i,j] = float(cell)
 
     # Calculate all combinations
-    grass.verbose("Calculating OIF for the 20 band combinations...")
+    grass.message(_("Calculating OIF for the 20 band combinations..."))
 
     oif = []
     for p in perms():
 	oif.append((oifcalc(stddev, correlation, *p), p))
     oif.sort(reverse = True)
 
-    grass.verbose("Ready.")
-    grass.verbose("The Optimum Index Factor analysis result:")
-    grass.verbose("    (Best combination comes first.)")
-
+    grass.verbose(_("The Optimum Index Factor analysis result "
+                    "(Best combination comes first):"))
+    
     if shell:
 	fmt = "%d%d%d:%f\n"
     else:

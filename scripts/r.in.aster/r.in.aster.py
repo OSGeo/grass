@@ -26,12 +26,8 @@
 #%  keywords: imagery
 #%  keywords: import
 #%End
-#%option
-#%  key: input
-#%  type: string
-#%  gisprompt: old_file,file,input
-#%  description: Input ASTER image to be georeferenced & rectified
-#%  required: yes
+#%option G_OPT_F_INPUT
+#%  description: Name of input ASTER image
 #%end
 #%option
 #%  key: proctype
@@ -48,17 +44,9 @@
 #%  answer: all
 #%  required: yes
 #%end
-#%option
-#%  key: output
-#%  type: string
+#%option G_OPT_R_OUTPUT
 #%  description: Base name for output raster map (band number will be appended to base name)
-#%  gisprompt: old,cell,raster
-#%  required: yes
 #%end
-#%flag
-#%  key: o
-#%  description: Overwrite existing file
-#%END
 
 import sys
 import os
@@ -168,7 +156,7 @@ def import_aster(proj, srcfile, tempfile, band):
     #import geotiff to GRASS
     grass.message(_("Importing into GRASS ..."))
     outfile = "%s.%s" % (output, band)
-    grass.run_command("r.in.gdal", overwrite = flags['o'], input = tempfile, output = outfile)
+    grass.run_command("r.in.gdal", input = tempfile, output = outfile)
 
     # write cmd history
     grass.raster_history(outfile)

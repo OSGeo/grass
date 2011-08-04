@@ -18,28 +18,21 @@ for details.
 ## g.parser informations
 
 #%module
-#% description: Performs ordinary or block kriging.
-#% keywords: vector, interpolation, kriging
+#% description: Performs ordinary or block kriging for vector maps.
+#% keywords: vector
+#% keywords: raster
+#% keywords: interpolation
+#% keywords: kriging
 #%end
 
-#%option
-#% key: input
-#% type: string
-#% gisprompt: old,vector,vector
+#%option G_OPT_V_INPUT
 #% description: Name of point vector map containing sample data
+#%end
+#%option G_OPT_DB_COLUMN
+#% description: Name of attribute column with numerical value to be interpolated
 #% required: yes
 #%end
-#%option
-#% key: column
-#% type: string
-#% gisprompt: old,dbcolumn,dbcolumn
-#% description: Name of attribute column with numerical value to be interpolated
-#% required : yes
-#%end
-#%option
-#% key: output
-#% type: string
-#% gisprompt: new,cell,raster
+#%option G_OPT_R_OUTPUT
 #% label: Name for output raster map
 #% description: If omitted, will be <input name>_kriging
 #% required : no
@@ -90,10 +83,8 @@ for details.
 #% description: Automatically fixed if not set
 #% required : no
 #%end
-#%option
+#%option G_OPT_R_OUTPUT
 #% key: output_var
-#% type: string
-#% gisprompt: new,cell,raster
 #% label: Name for output variance raster map
 #% description: If omitted, will be <input name>_kriging_var
 #% required : no

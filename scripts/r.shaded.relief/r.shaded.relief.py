@@ -48,64 +48,56 @@
 #   11/99 updated $ewres to ewres() and $nsres to nsres()
 #       updated number to FP in r.mapcalc statement Markus Neteler
 
-#% Module
-#%  description: Creates shaded relief map from an elevation map (DEM).
-#%  keywords: raster
-#% End
-#% option
-#%  key: input
-#%  type: string
-#%  gisprompt: old,cell,raster
-#%  description: Name of input elevation map
-#%  required : yes
-#% end
-#% option
-#%  key: output
-#%  type: string
-#%  gisprompt: new,cell,raster
-#%  description: Name for output shaded relief map
-#%  required : yes
-#% end
-#% option
-#%  key: altitude
-#%  type: double
-#%  description: Altitude of the sun in degrees above the horizon
-#%  required : no
-#%  options : 0-90
-#%  answer: 30
-#% end
-#% option
-#%  key: azimuth
-#%  type: double
-#%  description: Azimuth of the sun in degrees to the east of north
-#%  required : no
-#%  options : 0-360
-#%  answer: 270
-#% end
-#% option
-#%  key: zmult    
-#%  type: double
-#%  description: Factor for exaggerating relief
-#%  required : no
-#%  answer: 1
-#% end
-#% option
-#%  key: scale
-#%  type: double
-#%  description: Scale factor for converting horizontal units to elevation units
-#%  required : no
-#%  answer: 1
-#%  guisection: Scaling
-#% end
-#% option
-#%  key: units
-#%  type: string
-#%  description: Set scaling factor (applies to lat./long. locations only, none: scale=1)
-#%  required : no
-#%  options: none,meters,feet
-#%  answer: none
-#%  guisection: Scaling
-#% end
+#%module
+#% description: Creates shaded relief map from an elevation map (DEM).
+#% keywords: raster
+#% keywords: elevation
+#%end
+#%option G_OPT_R_INPUT
+#% description: Name of input elevation raster map
+#%end
+#%option G_OPT_R_OUTPUT
+#%end
+#%option
+#% key: altitude
+#% type: double
+#% description: Altitude of the sun in degrees above the horizon
+#% required: no
+#% options : 0-90
+#% answer: 30
+#%end
+#%option
+#% key: azimuth
+#% type: double
+#% description: Azimuth of the sun in degrees to the east of north
+#% required: no
+#% options : 0-360
+#% answer: 270
+#%end
+#%option
+#% key: zmult    
+#% type: double
+#% description: Factor for exaggerating relief
+#% required: no
+#% answer: 1
+#%end
+#%option
+#% key: scale
+#% type: double
+#% description: Scale factor for converting horizontal units to elevation units
+#% required: no
+#% answer: 1
+#% guisection: Scaling
+#%end
+#%option
+#% key: units
+#% type: string
+#% description: Set scaling factor (applies to lat./long. locations only, none: scale=1)
+#% required: no
+#% options: none,meters,feet
+#% answer: none
+#% guisection: Scaling
+#%end
 
 import sys
 import os

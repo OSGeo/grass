@@ -15,58 +15,32 @@
 #
 #############################################################################
 
-#%Module
-#%  description: Allows to update a column in the attribute table connected to a vector map.
-#%  keywords: vector
-#%  keywords: database
-#%  keywords: attribute table
-#%End
-#%option
-#% key: map
-#% type: string
-#% gisprompt: old,vector,vector
-#% description: Name of vector map
-#% required : yes
-#% key_desc: name
+#%module
+#% description: Allows to update a column in the attribute table connected to a vector map.
+#% keywords: vector
+#% keywords: database
+#% keywords: attribute table
 #%end
-#%option
-#% key: layer
-#% type: string
-#% gisprompt: old_layer,layer,layer
-#% label: Layer number or name
-#% description: A single vector map can be connected to multiple database tables. This number determines which table to use. Layer name for direct OGR access. 
-#% answer: 1
-#% required : no
-#% key_desc: name
+#%option G_OPT_V_MAP
 #%end
-#%option
+#%option G_OPT_V_FIELD
+#%end
+#%option G_OPT_DB_COLUMN
 #% key: column
-#% type: string
-#% gisprompt: old_dbcolumn,dbcolumn,dbcolumn
-#% description: Name of column to update
-#% required : yes
-#% key_desc: name
+#% description: Name of attribute column to update
+#% required: yes
 #%end
 #%option
 #% key: value
 #% type: string
 #% description: Value to update the column with, can be (combination of) other column(s)
-#% required : no
+#% required: no
 #%end
-#%option
+#%option G_OPT_DB_COLUMN
 #% key: qcolumn
-#% type: string
-#% gisprompt: old_dbcolumn,dbcolumn,dbcolumn
-#% description: Name of column to query
-#% required : no
-#% key_desc: name
+#% description: Name of attrubute column to query
 #%end
-#%option
-#% key: where
-#% type: string
-#% label: WHERE conditions of SQL statement without 'where' keyword
-#% description: Example: income < 1000 and inhab >= 10000
-#% required : no
+#%option G_OPT_DB_WHERE
 #%end
 
 import sys

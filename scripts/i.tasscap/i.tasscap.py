@@ -33,70 +33,51 @@
 #############################################################################
 #
 #%Module
-#%  description: Tasseled Cap (Kauth Thomas) transformation for LANDSAT-TM data
-#%  keywords: raster
-#%  keywords: imagery
-#%End
+#% description: Performs Tasseled Cap (Kauth Thomas) transformation for LANDSAT-TM data.
+#% keywords: imagery
+#% keywords: transformation
+#%end
 #%flag
-#%  key: 4
-#%  description: use transformation rules for LANDSAT-4
-#%END
+#% key: 4
+#% description: Use transformation rules for LANDSAT-4
+#%end
 #%flag
-#%  key: 5
-#%  description: use transformation rules for LANDSAT-5
-#%END
+#% key: 5
+#% description: Use transformation rules for LANDSAT-5
+#%end
 #%flag
-#%  key: 7
-#%  description: use transformation rules for LANDSAT-7
-#%END
-#%option
+#% key: 7
+#% description: Use transformation rules for LANDSAT-7
+#%end
+#%option G_OPT_R_INPUT
 #% key: band1
-#% type: string
-#% gisprompt: old,cell,raster
-#% description: raster input map (LANDSAT channel 1)
-#% required : yes
+#% description: Name of input raster map (LANDSAT channel 1)
 #%end
-#%option
+#%option G_OPT_R_INPUT
 #% key: band2
-#% type: string
-#% gisprompt: old,cell,raster
-#% description: raster input map (LANDSAT channel 2)
-#% required : yes
+#% description: Name of input raster map (LANDSAT channel 2)
 #%end
-#%option
+#%option G_OPT_R_INPUT
 #% key: band3
-#% type: string
-#% gisprompt: old,cell,raster
-#% description: raster input map (LANDSAT channel 3)
-#% required : yes
+#% description: Name of input raster map (LANDSAT channel 3)
 #%end
-#%option
+#%option G_OPT_R_INPUT
 #% key: band4
-#% type: string
-#% gisprompt: old,cell,raster
-#% description: raster input map (LANDSAT channel 4)
-#% required : yes
+#% description: Name of input raster map (LANDSAT channel 4)
 #%end
-#%option
+#%option G_OPT_R_INPUT
 #% key: band5
-#% type: string
-#% gisprompt: old,cell,raster
-#% description: raster input map (LANDSAT channel 5)
-#% required : yes
+#% description: Name of input raster map (LANDSAT channel 5)
 #%end
-#%option
+#%option G_OPT_R_INPUT
 #% key: band7
-#% type: string
-#% gisprompt: old,cell,raster
-#% description: raster input map (LANDSAT channel 7)
-#% required : yes
+#% description: Name of input raster map (LANDSAT channel 7)
 #%end
 #%option
-#% key: outprefix
+#% key: output_prefix
 #% type: string
-#% gisprompt: new,cell,raster
-#% description: raster output TC maps prefix
-#% required : yes
+#% description: Prefix for output raster maps
+#% required: yes
 #%end
 
 import sys

@@ -20,13 +20,8 @@
 #% keywords: raster
 #% keywords: mask
 #%end
-#%option
-#% key: input
-#% type: string
-#% gisprompt: old,cell,raster
-#% description: Raster map to use as mask
-#% required: no
-#% guisection: Create
+#%option G_OPT_R_INPUT
+#% description: Name of raster map to use as mask
 #%end
 #%option
 #% key: maskcats
@@ -44,6 +39,7 @@
 #% key: r
 #% description: Remove existing mask (overrides other options)
 #% guisection: Remove
+#% suppress_required: yes
 #%end
 
 import sys

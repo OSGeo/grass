@@ -16,34 +16,18 @@
 #
 #############################################################################
 
-#%Module
-#% description: Export a raster map to a text file as x,y,z values based on cell centers.
+#%module
+#% description: Exports a raster map to a text file as x,y,z values based on cell centers.
 #% keywords: raster
 #% keywords: export
-#%End
-#%option
-#% key: input
-#% type: string
-#% gisprompt: old,cell,raster
-#% key_desc: name
-#% description: Name of input raster map 
-#% required: yes
 #%end
-#%option
-#% key: output
-#% type: string
-#% gisprompt: new_file,file,output
-#% key_desc: name
+#%option G_OPT_R_INPUT
+#%end
+#%option G_OPT_F_OUTPUT
 #% description: Name for output file (if omitted or "-" output to stdout)
 #% required: no
 #%end
-#%option
-#% key: fs
-#% type: string
-#% key_desc: character
-#% description: Field separator
-#% answer: |
-#% required: no
+#%option G_OPT_F_SEP
 #%end
 
 import sys

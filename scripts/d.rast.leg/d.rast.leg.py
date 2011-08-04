@@ -36,10 +36,10 @@
 # Glynn Clements 10/2008: converted to Python
 ##############################################################################
 
-#%Module
-#%  description: Displays a raster map and its legend on a graphics window
-#%  keywords: display
-#%End
+#%module
+#% description: Displays a raster map and its legend on a graphics window
+#% keywords: display
+#%end
 #%flag
 #%  key: f
 #%  description: Flip legend
@@ -48,25 +48,19 @@
 #%  key: n
 #%  description: Omit entries with missing label
 #%end
-#%option
-#% key: map
-#% type: string
-#% gisprompt: old,cell,raster
+#%option G_OPT_R_MAP
 #% description: Name of raster map to display
-#% required : yes
 #%end
 #%option
 #% key: lines
 #% type: integer
 #% description: Number of lines to appear in the legend
-#% required : no
+#% required: no
 #%end
-#%option
-#% key: rast
-#% type: string
-#% gisprompt: old,cell,raster
-#% description: Name of raster map to generate legend from
-#% required : no
+#%option G_OPT_R_INPUT
+#% key: raster
+#% description: Name of input raster map to generate legend from
+#% required: no
 #%end
 
 import sys

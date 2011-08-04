@@ -14,23 +14,17 @@
 #
 #############################################################################
 
-#%Module
-#% description: Drapes a color raster over a shaded relief map using d.his
+#%module
+#% description: Drapes a color raster over a shaded relief map.
 #% keywords: display
-#%End
-#%option
-#% key: reliefmap
-#% type: string
-#% gisprompt: old,cell,raster
-#% description: Name of shaded relief or aspect map
-#% required : yes
 #%end
-#%option
+#%option G_OPT_R_INPUT
+#% key: reliefmap
+#% description: Name of shaded relief or aspect raster map
+#%end
+#%option G_OPT_R_INPUT
 #% key: drapemap
-#% type: string
-#% gisprompt: old,cell,raster
-#% description: Name of raster to drape over relief map
-#% required : yes
+#% description: Name of raster to drape over relief raster map
 #%end
 #%option
 #% key: brighten

@@ -13,21 +13,16 @@
 #               License (>=v2). Read the file COPYING that comes with GRASS
 #               for details.
 #
-# TODO GRASS 7: rename parameters to map1, map2 or better multiple map=map1[,map2[...]]
 #############################################################################
 
-#%Module
-#%  description: Prints a graph of the correlation between data layers (in pairs).
-#%  keywords: display
-#%  keywords: diagram
-#%End
-#%option
-#% key: layers
-#% type: string
-#% gisprompt: old,cell,raster
-#% description: raster input map
-#% required: yes
-#% multiple: yes
+#%module
+#% description: Prints a graph of the correlation between raster maps (in pairs).
+#% keywords: display
+#% keywords: raster
+#% keywords: diagram
+#% keywords: correlation
+#%end
+#%option G_OPT_R_MAPS
 #%end
 
 import sys

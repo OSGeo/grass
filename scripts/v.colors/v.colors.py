@@ -20,35 +20,17 @@
 #% keywords: vector
 #% keywords: color table
 #%end
-#% option
-#% key: map
-#% type: string
-#% gisprompt: old,vector,vector
-#% key_desc: name
-#% description: Name of vector map 
-#% required: yes
+#% option G_OPT_V_MAP
 #%end
-#%option
-#% key: layer
-#% type: integer
-#% description: Layer number
-#% gisprompt: old_layer,layer,layer
-#% answer: 1
-#% required: no
+#%option G_OPT_V_FIELD
 #%end
-#%option
-#% key: column
-#% type: string
-#% description: Name of column containing numeric data
-#% gisprompt: old_dbcolumn,dbcolumn,dbcolumn
+#%option G_OPT_DB_COLUMN
+#% description: Name of attribute column containing numeric data
 #% required : yes
 #%end
-#%option
+#%option G_OPT_DB_COLUMN
 #% key: rgb_column
-#% type: string
-#% required: no
 #% description: Name of color column to populate with RGB values
-#% gisprompt: new_dbcolumn,dbcolumn,dbcolumn
 #% answer: GRASSRGB
 #% guisection: Colors
 #%end
@@ -69,21 +51,16 @@
 #% required: no
 #% guisection: Colors
 #%end
-#%option
+#%option G_OPT_R_INPUT
 #% key: raster
-#% type: string
-#% key_desc: name
 #% required: no
 #% description: Name of raster map from which to copy color table
-#% gisprompt: old,cell,raster
 #% guisection: Colors
 #%end
-#%option
+#%option G_OPT_F_INPUT
 #% key: rules
-#% type: string
 #% required: no
 #% description: Name of file containing rules
-#% gisprompt: old_file,file,input
 #% guisection: Colors
 #%end
 #%flag

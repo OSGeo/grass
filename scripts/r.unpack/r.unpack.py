@@ -19,21 +19,12 @@
 #% keywords: import
 #% keywords: copying
 #%end
-#%option
-#% key: input
-#% type: string
-#% gisprompt: old,file,input
+#%option G_OPT_F_INPUT
 #% description: Name of input pack file
-#% key_desc: path
-#% required : yes
 #%end
-#%option
-#% key: output
-#% type: string
-#% gisprompt: new,cell,raster
+#%option G_OPT_R_OUTPUT
 #% description: Name for output raster map (default: taken from input file internals)
-#% key_desc: name
-#% required : no
+#% required: no
 #%end
 #%flag
 #% key: o

@@ -15,24 +15,20 @@
 #############################################################################
 
 
-#%Module
-#%  description: Drops an attribute table.
-#%  keywords: database
-#%  keywords: attribute table
-#%End
-
-#%flag
-#%  key: f
-#%  description: Force removal (required for actual deletion of files)
+#%module
+#% description: Drops an attribute table.
+#% keywords: database
+#% keywords: attribute table
 #%end
 
-#%option
-#% key: table
-#% type: string
-#% key_desc : name
-#% description: Table to drop
-#% required : yes
-#% gisprompt: old_dbtable,dbtable,dbtable
+#%flag
+#% key: f
+#% description: Force removal (required for actual deletion of files)
+#%end
+
+#%option G_OPT_DB_TABLE
+#% description: Table name to drop
+#% required: yes
 #%end
 
 import sys

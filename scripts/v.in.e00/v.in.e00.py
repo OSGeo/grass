@@ -21,34 +21,19 @@
 # REQUIREMENTS:
 #      -  avcimport: http://avce00.maptools.org
 
-#%Module
-#%  description: Import E00 file into a vector map.
-#%  keywords: vector
-#%  keywords: import
-#%End
-#%flag
-#%  key: v
-#%  description: Verbose mode
+#%module
+#% description: Imports E00 file into a vector map.
+#% keywords: vector
+#% keywords: import
 #%end
-#%option
-#% key: file
-#% type: string
-#% description: E00 file
-#% gisprompt: old_file,file,input
-#% required : yes
+#%option G_OPT_F_INPUT
+#% description: Name of input E00 file
 #%end
-#%option
-#% key: type
-#% type: string
+#%option G_OPT_V_TYPE
 #% options: point,line,area
-#% description: Input type point, line or area
-#% required : yes
+#% required: yes
 #%end
-#%option
-#% key: vect
-#% type: string
-#% gisprompt: new,vector,vector
-#% description: Name for output vector map
+#%option G_OPT_V_OUTPUT
 #% required : no
 #%end
 

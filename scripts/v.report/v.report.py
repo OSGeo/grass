@@ -13,36 +13,23 @@
 #
 #############################################################################
 
-#%Module
-#%  description: Reports geometry statistics for vector maps.
-#%  keywords: vector
-#%  keywords: geometry
-#%  keywords: statistics
-#%End
-#%Flag
+#%module
+#% description: Reports geometry statistics for vector maps.
+#% keywords: vector
+#% keywords: geometry
+#% keywords: statistics
+#%end
+#%flag
 #% key: r
 #% description: Reverse sort the result
-#%End
-#%Flag
+#%end
+#%flag
 #% key: s
 #% description: Sort the result
-#%End
-#%option
-#% key: map
-#% type: string
-#% gisprompt: old,vector,vector
-#% label: Name of input vector map
-#% description: Data source for OGR access
-#% required: yes
 #%end
-#%option
-#% key: layer
-#% type: string
-#% answer: 1
-#% label: Layer number or name
-#% description: A single vector map can be connected to multiple database tables. This number determines which table to use. Layer name for OGR access.
-#% gisprompt: old_layer,layer,layer
-#% required: no
+#%option G_OPT_V_MAP
+#%end
+#%option G_OPT_V_FIELD
 #%end
 #%option
 #% key: option
@@ -51,12 +38,8 @@
 #% options: area,length,coor
 #% required: yes
 #%end
-#%option
-#% key: units
-#% type: string
-#% description: Units
+#%option G_OPT_M_UNITS
 #% options: miles,feet,meters,kilometers,acres,hectares,percent
-#% required: no
 #%end
 
 import sys

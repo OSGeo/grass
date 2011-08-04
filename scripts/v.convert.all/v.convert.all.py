@@ -14,11 +14,11 @@
 #
 #############################################################################
 
-#%Module
-#%  description: Converts all older versions of GRASS vector maps in current mapset to current format.
-#%  keywords: vector
-#%  keywords: import
-#%  keywords: conversion
+#%module
+#% description: Converts all older versions of GRASS vector maps in current mapset to current format.
+#% keywords: vector
+#% keywords: import
+#% keywords: conversion
 #%end
 
 import sys
@@ -35,7 +35,7 @@ def main():
 	if grass.run_command("v.convert", input = inmap, output = outmap) == 0:
 	    converted += 1
 	else:
-	    grass.warning(_("Error converting map %s to %s") % (inmap, outmap))
+	    grass.warning(_("Error converting map <%s> to <%s>") % (inmap, outmap))
 	    ret = 1
 
 	if converted < 1:

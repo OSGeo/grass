@@ -30,31 +30,13 @@
 #% key: e
 #% description: Calculate extended statistics
 #%end
-#%option
-#% key: vector
-#% type: string
-#% key_desc: name
-#% gisprompt: old,vector,vector
-#% label: Name of input vector polygon map
-#% description: Data source for OGR access
-#% required : yes
+#%option G_OPT_V_MAP
 #%end
-#%option
-#% key: layer
-#% type: integer
-#% label: Layer number or name
-#% description: A single vector map can be connected to multiple database tables. This number determines which table to use. Layer name for OGR access.
-#% gisprompt: old,layer,layer
-#% answer: 1
-#% required : no
+#%option G_OPT_V_FIELD
 #%end
-#%option
+#%option G_OPT_R_INPUT
 #% key: raster
-#% type: string
-#% key_desc: name
-#% gisprompt: old,cell,raster
 #% description: Name of input raster map to calculate statistics from
-#% required : yes
 #%end
 #%option
 #% key: column_prefix

@@ -14,56 +14,39 @@
 #
 #############################################################################
 
-#%Module
+#%module
 #% description: Allows to join a table to a vector map table.
 #% keywords: vector
 #% keywords: database
 #% keywords: attribute table
-#%End
+#%end
 
-#%option
-#% key: map
-#% type: string
-#% key_desc : name
-#% gisprompt: old,vector,vector
+#%option G_OPT_V_MAP
 #% description: Vector map to which to join other table
-#% required : yes
 #% guidependency: layer,column
 #%end
 
-#%option
-#% key: layer
-#% type: integer
+#%option G_OPT_V_FIELD
 #% description: Layer where to join
-#% answer: 1
-#% required : no
-#% gisprompt: old_layer,layer,layer
 #% guidependency: column
 #%end
 
-#%option
-#% key: column
-#% type: string
-#% description: Join column in map table
+#%option G_OPT_DB_COLUMN
+#% description: Join column in table
 #% required : yes
-#% gisprompt: old_dbcolumn,dbcolumn,dbcolumn
 #%end
 
-#%option
+#%option G_OPT_DB_TABLE
 #% key: otable
-#% type: string
 #% description: Other table name
-#% required : yes
-#% gisprompt: old_dbtable,dbtable,dbtable
+#% required: yes
 #% guidependency: ocolumn
 #%end
 
-#%option
+#%option G_OPT_DB_COLUMN
 #% key: ocolumn
-#% type: string
 #% description: Join column in other table
-#% required : yes
-#% gisprompt: old_dbcolumn,dbcolumn,dbcolumn
+#% required: yes
 #%end
 
 import sys

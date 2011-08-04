@@ -28,21 +28,12 @@
 #%  description: Force removal (required for actual deletion of files)
 #%end
 
-#%option
-#% key: table
-#% type: string
-#% key_desc : name
-#% description: Table from which to drop attribute column
+#%option G_OPT_DB_TABLE
 #% required : yes
-#% gisprompt: old_dbtable,dbtable,dbtable
 #%end
 
-#%option
-#% key: column
-#% type: string
-#% description: Name of the column
+#%option G_OPT_DB_COLUMN
 #% required : yes
-#% gisprompt: old,dbcolumn,dbcolumn
 #%end
 
 import sys

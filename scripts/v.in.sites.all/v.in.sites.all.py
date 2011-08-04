@@ -13,12 +13,12 @@
 #
 #############################################################################
 
-#%Module
+#%module
 #% description: Converts all old GRASS < Ver5.7 sites maps in current mapset to vector maps.
 #% keywords: sites
 #% keywords: vector
 #% keywords: import
-#%End
+#%end
 
 import sys
 from grass.script import core as grass

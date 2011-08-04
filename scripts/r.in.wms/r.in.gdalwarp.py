@@ -40,18 +40,16 @@
 #% key: k
 #% description: Keep band numbers instead of using band color names
 #%end
-#%option
-#% key: input
-#% type: string
-#% label: Raster file or files to be imported
+#%option G_OPT_F_INPUT
+#% label: Name of raster file or files to be imported
 #% description: If multiple files are specified they will be patched together.
 #% multiple: yes
-#% required : yes
 #%end
 #%option
 #% key: output
 #% type: string
-#% description: Name for resultant raster map. Each band will be name output.bandname
+#% label: Prefix for resultant raster maps.
+#% description: Each band will be name output.bandname
 #% required : yes
 #%end
 #%option

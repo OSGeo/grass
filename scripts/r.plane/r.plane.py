@@ -16,24 +16,19 @@
 #
 #############################################################################
 
-#%Module
-#%  description: Creates raster plane map given dip (inclination), aspect (azimuth) and one point.
-#%  keywords: raster
-#%  keywords: elevation
-#%End
-#%option
-#% key: name
-#% type: string
-#% gisprompt: new,cell,raster
-#% description: Name of raster plane to be created
-#% required : yes
+#%module
+#% description: Creates raster plane map given dip (inclination), aspect (azimuth) and one point.
+#% keywords: raster
+#% keywords: elevation
+#%end
+#%option G_OPT_R_OUTPUT
 #%end
 #%option
 #% key: dip
 #% type: double
 #% gisprompt: -90-90
 #% answer: 0.0
-#% description: Dip of plane. Value must be between -90 and 90 degrees
+#% description: Dip of plane in degrees
 #% required : yes
 #%end
 #%option
@@ -41,7 +36,7 @@
 #% type: double
 #% gisprompt: 0-360
 #% answer: 0.0
-#% description: Azimuth of the plane. Value must be between 0 and 360 degrees
+#% description: Azimuth of the plane in degrees
 #% required : yes
 #%end
 #%option

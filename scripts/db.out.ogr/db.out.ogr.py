@@ -14,24 +14,21 @@
 #
 #############################################################################
 
-#%Module
-#%  description: Exports attribute tables into various formats.
-#%  keywords: database
-#%  keywords: attribute table
-#%End
+#%module
+#% description: Exports attribute tables into various formats.
+#% keywords: database
+#% keywords: attribute table
+#%end
 
-#%option
+#%option G_OPT_DB_TABLE
 #% key: input
-#% type: string
-#% key_desc : name
-#% description: GRASS table name
-#% required : yes
+#% required: yes
 #%end
 
 #%option
 #% key: dsn
 #% type: string
-#% key_desc : name
+#% key_desc: name
 #% gisprompt: new_file,file,input
 #% description: Table file to be exported or DB connection string
 #% required : yes
@@ -41,17 +38,17 @@
 #% key: format
 #% type: string
 #% description: Table format
-#% required : yes
+#% required: yes
 #% options: CSV,DBF,GML,MySQL,PostgreSQL,SQLite
 #% answer: DBF
 #%end
 
 #%option
-#% key: db_table
+#% key: table
 #% type: string
-#% key_desc : name
-#% description: Name for output table
-#% required : no
+#% key_desc: name
+#% description: Name for output table (defaut: input)
+#% required: no
 #%end
 
 import sys
