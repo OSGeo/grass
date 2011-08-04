@@ -576,6 +576,7 @@ int G_snprintf(char *, size_t, const char *, ...)
 
 /* strings.c */
 int G_strcasecmp(const char *, const char *);
+int G_strncasecmp(const char *, const char *, int);
 char *G_store(const char *);
 char *G_strchg(char *, char, char);
 char *G_str_replace(const char *, const char *, const char *);

@@ -26,6 +26,8 @@
 #define NULL		0
 #endif
 
+static int _strncasecmp(const char *, const char *, int);
+
 /*!
   \brief String compare ignoring case (upper or lower)
   
@@ -43,29 +45,29 @@
 */
 int G_strcasecmp(const char *x, const char *y)
 {
-    int xx, yy;
+    return _strncasecmp(x, y, -1);
+}
 
-    if (!x)
-	return y ? -1 : 0;
-    if (!y)
-	return x ? 1 : 0;
-    while (*x && *y) {
-	xx = *x++;
-	yy = *y++;
-	if (xx >= 'A' && xx <= 'Z')
-	    xx = xx + 'a' - 'A';
-	if (yy >= 'A' && yy <= 'Z')
-	    yy = yy + 'a' - 'A';
-	if (xx < yy)
-	    return -1;
-	if (xx > yy)
-	    return 1;
-    }
-    if (*x)
-	return 1;
-    if (*y)
-	return -1;
-    return 0;
+/*!
+  \brief String compare ignoring case (upper or lower) - limited
+  number of characters
+  
+  Returning a value that has the same sign as the difference between
+  the first differing pair of characters.
+
+  Note: strcasecmp() is affected by the locale (LC_CTYPE), while
+  G_strcasecmp() isn't.
+  
+  \param x first string to compare
+  \param y second string to compare
+  \param n number or characters to compare
+  
+  \return 0 the two strings are equal
+  \return -1, 1
+*/
+int G_strncasecmp(const char *x, const char *y, int n)
+{
+    return _strncasecmp(x, y, n);
 }
 
 /*!
@@ -363,4 +365,39 @@ void G_squeeze(char *line)
     l = strlen(line) - 1;
     if (*(line + l) == '\n')
 	*(line + l) = '\0';
+}
+
+int _strncasecmp(const char *x, const char *y, int n)
+{
+    int xx, yy, i;
+
+    if (!x)
+	return y ? -1 : 0;
+    if (!y)
+	return x ? 1 : 0;
+
+    i = 1;
+    while (*x && *y) {
+	xx = *x++;
+	yy = *y++;
+	if (xx >= 'A' && xx <= 'Z')
+	    xx = xx + 'a' - 'A';
+	if (yy >= 'A' && yy <= 'Z')
+	    yy = yy + 'a' - 'A';
+	if (xx < yy)
+	    return -1;
+	if (xx > yy)
+	    return 1;
+	
+	if (n > -1 && i >= n)
+	    return 0;
+	
+	i++;
+    }
+    
+    if (*x)
+	return 1;
+    if (*y)
+	return -1;
+    return 0;
 }
