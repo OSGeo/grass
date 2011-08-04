@@ -627,6 +627,9 @@ def list_grouped(type):
     dashes_re = re.compile("^----+$")
     mapset_re = re.compile("<(.*)>")
     result = {}
+    for mapset in mapsets(accessible = True):
+        result[mapset] = []
+    
     mapset = None
     for line in read_command("g.list", type = type).splitlines():
 	if line == "":
@@ -636,7 +639,6 @@ def list_grouped(type):
 	m = mapset_re.search(line)
 	if m:
 	    mapset = m.group(1)
-	    result[mapset] = []
 	    continue
         if mapset:
             result[mapset].extend(line.split())
@@ -686,24 +688,6 @@ def list_strings(type):
 
 # interface to g.mlist
 
-def mlist(type, pattern = None, mapset = None):
-    """!List of elements
-
-    @param type element type (rast, vect, rast3d, region, ...)
-    @param pattern pattern string
-    @param mapset mapset name (if not given use search path)
-
-    @return list of elements
-    """
-    result = list()
-    for line in read_command("g.mlist",
-                             type = type,
-                             pattern = pattern,
-                             mapset = mapset).splitlines():
-        result.append(line.strip())
-    
-    return result
-    
 def mlist_grouped(type, pattern = None):
     """!List of elements grouped by mapsets.
 
@@ -721,20 +705,20 @@ def mlist_grouped(type, pattern = None):
 
     @return directory of mapsets/elements
     """
-    result = dict()
-    mapset_element = None
+    result = {}
+    for mapset in mapsets(accessible = True):
+        result[mapset] = []
+    
+    mapset = None
     for line in read_command("g.mlist", flags = "m",
                              type = type, pattern = pattern).splitlines():
         try:
-            map, mapset_element = line.split('@')
+            name, mapset = line.split('@')
         except ValueError:
             warning(_("Invalid element '%s'") % line)
             continue
         
-        if mapset_element in result:
-            result[mapset_element].append(map)
-        else:
-	    result[mapset_element] = [map, ]
+        result[mapset].append(name)
     
     return result
 
