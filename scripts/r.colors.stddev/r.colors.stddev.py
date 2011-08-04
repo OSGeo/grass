@@ -14,18 +14,12 @@
 #
 #############################################################################
 
-#%Module
-#% description: Set color rules based on stddev from a raster map's mean value.
+#%module
+#% description: Sets color rules based on stddev from a raster map's mean value.
 #% keywords: raster
 #% keywords: color table
-#%End
-#% option
-#% key: map
-#% type: string
-#% gisprompt: old,cell,raster
-#% key_desc: name
-#% description: Name of raster map 
-#% required: yes
+#%end
+#% option G_OPT_R_MAP
 #%end
 #%flag
 #% key: b

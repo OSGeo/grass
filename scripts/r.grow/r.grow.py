@@ -17,38 +17,24 @@
 #%Module
 #% description: Generates a raster map layer with contiguous areas grown by one cell.
 #% keywords: raster
-#%End
-#%Flag
+#%end
+#%flag
 #% key: m
-#% description: radius is in map units rather than cells
-#%End
-#%Option
-#% key: input
-#% type: string
-#% required: yes
-#% multiple: no
-#% key_desc: name
-#% description: Name of input raster map
-#% gisprompt: old,cell,raster
-#%End
-#%Option
-#% key: output
-#% type: string
-#% required: yes
-#% multiple: no
-#% key_desc: name
-#% description: Name for output raster map
-#% gisprompt: new,cell,raster
-#%End
-#%Option
+#% description: Radius is in map units rather than cells
+#%end
+#%option G_OPT_R_INPUT
+#%end
+#%option G_OPT_R_OUTPUT
+#%end
+#%option
 #% key: radius
 #% type: double
 #% required: no
 #% multiple: no
 #% description: Radius of buffer in raster cells
 #% answer: 1.01
-#%End
-#%Option
+#%end
+#%option
 #% key: metric
 #% type: string
 #% required: no
@@ -56,21 +42,21 @@
 #% options: euclidean,maximum,manhattan
 #% description: Metric
 #% answer: euclidean
-#%End
-#%Option
+#%end
+#%option
 #% key: old
 #% type: integer
 #% required: no
 #% multiple: no
 #% description: Value to write for input cells which are non-NULL (-1 => NULL)
-#%End
-#%Option
+#%end
+#%option
 #% key: new
 #% type: integer
 #% required: no
 #% multiple: no
 #% description: Value to write for "grown" cells
-#%End
+#%end
 
 import sys
 import os

@@ -22,27 +22,16 @@
 #--------------------------------------------------
 
 
-#% Module
-#%  description: Mosaics several images and extends colormap
-#%  keywords: raster
-#%  keywords: imagery
-#%  keywords: mosaicking
-#% End
-#% option
-#% key: images
-#% type: string
-#% gisprompt: old,cell,raster
-#% description: maps for mosaic.
-#% required: yes
-#% multiple: yes
-#% end
-#%option
-#% key: output
-#% type: string
-#% gisprompt: new,cell,raster
-#% description: reclass raster output map
-#% required : no
-#%END
+#%module
+#% description: Mosaics several images and extends colormap.
+#% keywords: raster
+#% keywords: imagery
+#% keywords: mosaicking
+#%end
+#%option G_OPT_R_INPUTS
+#%end
+#%option G_OPT_R_OUTPUT
+#%end
 
 import sys
 import os
@@ -73,9 +62,6 @@ def main():
     images = options['images'].split(',')
     output = options['output']
 
-    if not output:
-	output = '.'.join(images) + '.mosaic'
-
     count = len(images)
 
     grass.warning(_('Do not forget to set region properly to cover all images.'))
@@ -102,7 +88,7 @@ def main():
     p.stdin.close()
     p.wait()
 
-    grass.message(_("Ready. File %s created.") % output)
+    grass.message(_("Done. Raster map <%s> created.") % output)
 
     # write cmd history:
     grass.raster_history(output)

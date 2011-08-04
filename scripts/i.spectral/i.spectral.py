@@ -27,35 +27,18 @@
 #%  keywords: raster
 #%  keywords: multispectral
 #%End
-#%option
-#% key: group
-#% type: string
-#% gisprompt: old,group
-#% description: Group input
+#%option G_OPT_I_GROUP
 #% required : no
 #%end
-#%option
-#% key: raster
-#% type: string
-#% gisprompt: old,cell,raster
-#% description: Raster input maps
-#% multiple : yes
+#%option G_OPT_R_INPUTS
 #% required : no
 #%end
-#%option
+#%option G_OPT_F_OUTPUT
 #% key: output
-#% type: string
-#% gisprompt: new_file,file,PNG
-#% description: Write output to PNG image
-#% multiple : no
+#% description: Name for output PNG image
 #% required : no
 #%end
-#%option
-#% key: coords
-#% type: double
-#% key_desc: east,north
-#% description: Coordinates
-#% multiple : yes
+#%option G_OPT_M_EN
 #% required : yes
 #%end
 #%flag 

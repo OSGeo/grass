@@ -16,43 +16,23 @@
 
 
 #%module
-#% description: Removes a vector object (point, line, area, face etc.) from a vector map through attribute selection.
+#% description: Removes a vector feature from a vector map through attribute selection.
 #% keywords: vector
 #% keywords: database
 #% keywords: attribute table
 #%end
 
-#%option
-#% key: input
-#% type: string
-#% gisprompt: old,vector,vector
-#% key_desc : name
-#% description: Vector map for which to drop vector objects
-#% required : yes
+#%option G_OPT_V_INPUT
 #%end
 
-#%option
-#% key: output
-#% type: string
-#% gisprompt: new,vector,vector
-#% key_desc : name
-#% description: Name for output vector map
-#% required : yes
+#%option G_OPT_V_FIELD
 #%end
 
-#%option
-#% key: layer
-#% type: integer
-#% description: Layer of attribute table to use for selection
-#% answer: 1
-#% required : no
+#%option G_OPT_DB_WHERE
+#% required :yes
 #%end
 
-#%option
-#% key: where
-#% type: string
-#% description: WHERE conditions for vector delete, without 'where' keyword (e.g. "elevation IS NULL")
-#% required : yes
+#%option G_OPT_V_OUTPUT
 #%end
 
 import sys

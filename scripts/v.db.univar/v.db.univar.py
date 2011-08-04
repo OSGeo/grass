@@ -16,54 +16,33 @@
 #
 #############################################################################
 
-#%Module
+#%module
 #% description: Calculates univariate statistics on selected table column for a GRASS vector map.
 #% keywords: vector
 #% keywords: statistics
-#%End
+#%end
 #%flag
-#%  key: e
-#%  description: Extended statistics (quartiles and 90th percentile)
-#%END
+#% key: e
+#% description: Extended statistics (quartiles and 90th percentile)
+#%end
 #%flag
-#%  key: g
-#%  description: Print stats in shell script style
-#%END
-#%option
+#% key: g
+#% description: Print stats in shell script style
+#%end
+#%option G_OPT_DB_TABLE
 #% key: table
-#% type: string
-#% gisprompt: old_dbtable,dbtable,dbtable
-#% description: Name of data table
-#% required : yes
-#%End
-#%option
-#% key: column
-#% type: string
-#% gisprompt: old_dbcolumn,dbcolumn,dbcolumn
-#% description: Column on which to calculate statistics (must be numeric)
-#% required : yes
+#% required: yes
 #%end
-#%option
-#% key: database
-#% type: string
-#% gisprompt: old_dbname,dbname,dbname
-#% answer: DEFAULT_DBNAME
-#% description: Database/directory for table
-#% required : no
+#%option G_OPT_DB_COLUMN
+#% description: Name of attribute column on which to calculate statistics (must be numeric)
+#% required: yes
 #%end
-#%option
-#% key: driver
-#% type: string
-#% gisprompt: old_dbdriver,dbdriver,dbdriver
-#% options: dbf,odbc,ogr,sqlite
-#% description: Database driver
-#% required : no
+#%option G_OPT_DB_DATABASE
 #%end
-#%option
-#% key: where
-#% type: string
-#% description: WHERE conditions of SQL statement without 'where' keyword
-#% required : no
+#%option G_OPT_DB_DRIVER
+#% options: dbf,odbc,ogr,sqlite,pg
+#%end
+#%option G_OPT_DB_WHERE
 #%end
 #%option
 #% key: percentile

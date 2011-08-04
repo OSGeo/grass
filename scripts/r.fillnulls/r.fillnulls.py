@@ -20,25 +20,15 @@
 #############################################################################
 
 
-#%Module
-#% description: Fills no-data areas in raster maps using v.surf.rst splines interpolation
+#%module
+#% description: Fills no-data areas in raster maps using splines interpolation.
 #% keywords: raster
 #% keywords: elevation
 #% keywords: interpolation
-#%End
-#%option
-#% key: input
-#% gisprompt: old,cell,raster
-#% type: string
-#% description: Raster map in which to fill nulls
-#% required : yes
 #%end
-#%option
-#% key: output
-#% gisprompt: new,cell,raster
-#% type: string
-#% description: Output raster map with nulls filled by interpolation from surrounding values
-#% required : yes
+#%option G_OPT_R_INPUT
+#%end
+#%option G_OPT_R_OUTPUT
 #%end
 #%option
 #% key: tension

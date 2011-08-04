@@ -19,20 +19,11 @@
 #% keywords: export
 #% keywords: copying
 #%end
-#%option
-#% key: input
-#% type: string
-#% gisprompt: old,cell,raster
+#%option G_OPT_R_INPUT
 #% description: Name of raster map to pack up
-#% key_desc: name
-#% required : yes
 #%end
-#%option
-#% key: output
-#% type: string
-#% gisprompt: new_file,file,output
+#%option G_OPT_F_OUTPUT
 #% description: Name for output file (default is <input>.pack)
-#% key_desc: path
 #% required : no
 #%end
 

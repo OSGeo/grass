@@ -24,37 +24,25 @@
 #    numeric and string columns would survive the trip, and 3rd column would
 #    not be modified as z.
 
-#%Module
-#%  description: Converts coordinates from one projection to another (cs2cs frontend).
-#%  keywords: miscellaneous
-#%  keywords: projection
-#%End
-#%option
-#% key: input
-#% type: string
-#% gisprompt: old_file,file,file
-#% description: Input coordinate file ('-' to read from stdin)
+#%module
+#% description: Converts coordinates from one projection to another (cs2cs frontend).
+#% keywords: miscellaneous
+#% keywords: projection
+#%end
+#%option G_OPT_F_INPUT
+#% description: Name of input coordinate file ('-' to read from stdin)
 #% answer: -
-#% key_desc : filename
 #% guisection: Files & format
 #%end
-#%option
-#% key: output
-#% type: string
-#% gisprompt: new_file,file,file
-#% description: Output coordinate file (omit to send to stdout)
+#%option G_OPT_F_OUTPUT
+#% description: Name for output coordinate file (omit to send to stdout)
 #% required : no
-#% key_desc : filename
 #% guisection: Files & format
 #%end
-#%option
-#% key: fs
-#% type: string
+#%option G_OPT_F_SEP
 #% label: Field separator (format: input[,output])
 #% description: Valid field separators are also "space", "tab", or "comma"
 #% required : no
-#% key_desc : string
-#% answer : |
 #% guisection: Files & format
 #%end
 #%option

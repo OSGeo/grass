@@ -20,32 +20,21 @@
 #############################################################################
 
 
-#%Module
-#%  description: Renames a column in the attribute table connected to a given vector map.
-#%  keywords: vector
-#%  keywords: database
-#%  keywords: attribute table
-#%End
-#%option
-#% key: map
-#% type: string
-#% gisprompt: old,vector,vector
-#% key_desc : name
-#% description: Vector map for which to rename attribute column
-#% required : yes
+#%module
+#% description: Renames a column in the attribute table connected to a given vector map.
+#% keywords: vector
+#% keywords: database
+#% keywords: attribute table
 #%end
-#%option
-#% key: layer
-#% gisprompt:  old_layer,layer,layer
-#% description: Layer where to rename column
-#% answer: 1
-#% required : no
+#%option G_OPT_V_MAP
 #%end
-#%option
+#%option G_OPT_V_FIELD
+#%end
+#%option 
 #% key: column
 #% type: string
 #% description: Old and new name of the column (old,new)
-#% required : yes
+#% required: yes
 #% multiple: no
 #% key_desc: oldcol,newcol
 #%end

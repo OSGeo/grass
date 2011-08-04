@@ -56,27 +56,13 @@
 ##%  description: Export altitude from 3D vector's z-coordinate
 ##%end
 ############
-#%option
-#% key: input
-#% type: string
-#% description: Name of input vector map
-#% gisprompt: old,vector,vector
-#% required: yes
+#%option G_OPT_V_INPUT
 #%end
-#%option
-#% key: type
-#% type: string
-#% description: Feature type(s)
+#%option G_OPT_V_TYPE
 #% options: point,centroid,line,boundary
-#% multiple: yes
 #%end
-#%option
-#% key: output
-#% type: string
+#%option G_OPT_F_OUTPUT
 #% description: Name for output file or GPS device
-#% gisprompt: new_file,file,output
-#% key_desc: name
-#% required: yes
 #%end
 #%option
 #% key: format
@@ -84,21 +70,11 @@
 #% description: GpsBabel supported output format
 #% answer: gpx
 #%end
-#%option
-#% key: layer
-#% type: integer
-#% label: Layer number
-#% description: A single vector map can be connected to multiple database tables. This number determines which table to use.
-#% answer: 1
-#% required : no
+#%option G_OPT_V_FIELD
+#% required: no
 #% guisection: Subset
 #%end
-#%option
-#% key: where
-#% type: string
-#% label: WHERE conditions of SQL statement without 'where' keyword
-#% description: Example: income < 1000 and inhab >= 10000
-#% required : no
+#%option G_OPT_DB_WHERE
 #% guisection: Subset
 #%end
 

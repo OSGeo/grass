@@ -48,18 +48,11 @@
 #%  keywords: raster
 #%  keywords: import
 #%End
-#%option
-#% key: input
-#% gisprompt: old_file,file,input
-#% type: string
-#% description: SRTM input tile (file without .hgt.zip extension)
-#% required : yes
+#%option G_OPT_F_INPUT
+#% description: Name of SRTM input tile (file without .hgt.zip extension)
 #%end
-#%option
-#% key: output
-#% gisprompt: new,cell,raster
-#% type: string
-#% description: Output raster map (default: input tile)
+#%option G_OPT_R_OUTPUT
+#% description: Name for output raster map (default: input tile)
 #% required : no
 #%end
 #%flag

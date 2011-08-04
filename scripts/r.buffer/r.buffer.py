@@ -14,49 +14,31 @@
 #
 #############################################################################
 
-#%Module
+#%module
 #% description: Creates a raster map showing buffer zones surrounding cells that contain non-NULL category values.
 #% keywords: raster
 #% keywords: buffer
-#%End
-#%Flag
+#%end
+#%flag
 #% key: z
 #% description: Ignore zero (0) data cells instead of NULL cells
-#%End
-#%Option
-#% key: input
-#% type: string
-#% required: yes
-#% multiple: no
-#% key_desc: name
-#% description: Name of input raster map
-#% gisprompt: old,cell,raster
-#%End
-#%Option
-#% key: output
-#% type: string
-#% required: yes
-#% multiple: no
-#% key_desc: name
-#% description: Name for output raster map
-#% gisprompt: new,cell,raster
-#%End
-#%Option
+#%end
+#%option G_OPT_R_INPUT
+#%end
+#%option G_OPT_R_OUTPUT
+#%end
+#%option
 #% key: distances
 #% type: double
 #% required: yes
 #% multiple: yes
 #% description: Distance zone(s)
-#%End
-#%Option
-#% key: units
-#% type: string
-#% required: no
-#% multiple: no
+#%end
+#%option G_OPT_M_UNITS
 #% options: meters,kilometers,feet,miles,nautmiles
 #% description: Units of distance
 #% answer: meters
-#%End
+#%end
 
 import sys
 import os

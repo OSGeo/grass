@@ -65,11 +65,7 @@
 #% description: Use GDAL WMS driver
 #% guisection: Request
 #%end
-#%option
-#% key: output
-#% type: string
-#% description: Name for output raster map
-#% gisprompt: new,cell,raster
+#%option G_OPT_R_OUTPUT
 #% required : no
 #% guisection: Import
 #%end

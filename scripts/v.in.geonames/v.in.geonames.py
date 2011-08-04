@@ -22,27 +22,16 @@
 #       fix spurious char stuff in elevation column
 #############################################################################
 
-#%Module
-#%  description: Imports geonames.org country files into a GRASS vector points map.
-#%  keywords: vector
-#%  keywords: import
-#%  keywords: gazetteer
-#%End
-#%option
-#% key: input
-#% type: string
-#% key_desc: name
-#% description: Uncompressed geonames file from (with .txt extension)
-#% gisprompt: old_file,file,input
-#% required : yes
+#%module
+#% description: Imports geonames.org country files into a vector points map.
+#% keywords: vector
+#% keywords: import
+#% keywords: gazetteer
 #%end
-#%option
-#% key: output
-#% type: string
-#% key_desc: name
-#% gisprompt: new,vector,vector
-#% description: Name for output vector map
-#% required : yes
+#%option G_OPT_F_INPUT
+#% description: Name of uncompressed geonames file (with .txt extension)
+#%end
+#%option G_OPT_V_OUTPUT
 #%end
 
 import sys

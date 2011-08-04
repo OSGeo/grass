@@ -48,39 +48,26 @@
 #%  description: SPOT sensor
 #%  guisection: Sensor
 #%END
-#%option
+#%option G_OPT_R_INPUT
 #% key: ms1
-#% type: string
-#% gisprompt: old,cell,raster
 #% description: Name of input raster map (green: tm2 | qbird_green | spot1)
-#% required : yes
 #%end
-#%option
+#%option G_OPT_R_INPUT
 #% key: ms2
-#% type: string
-#% gisprompt: old,cell,raster
 #% description: Name of input raster map (NIR: tm4 | qbird_nir | spot2
-#% required : yes
 #%end
-#%option
+#%option G_OPT_R_INPUT
 #% key: ms3
-#% type: string
-#% gisprompt: old,cell,raster
 #% description: Name of input raster map (MIR; tm5 | qbird_red | spot3
-#% required : yes
 #%end
-#%option
+#%option G_OPT_R_INPUT
 #% key: pan
-#% type: string
-#% gisprompt: old,cell,raster
 #% description: Name of input raster map (etmpan | qbird_pan | spotpan)
-#% required : yes
 #%end
 #%option
-#% key: outputprefix
+#% key: output_prefix
 #% type: string
-#% gisprompt: new,cell,raster
-#% description: Name for output raster map prefix (e.g. 'brov')
+#% description: Prefix for output raster maps
 #% required : yes
 #%end
 

@@ -15,36 +15,21 @@
 #               for details.
 #
 #############################################################################
-#%Module
-#% description: Import ASCII x,y[,z] coordinates as a series of lines.
+#%module
+#% description: Imports ASCII x,y[,z] coordinates as a series of lines.
 #% keywords: vector
 #% keywords: import
-#%End
+#%end
 #%flag
 #% key: z
 #% description: Create a 3D line from 3 column data 
 #%end
-#%option
-#% key: input
-#% type: string
-#% gisprompt: old_file,file,input
+#%option G_OPT_F_INPUT
 #% description: Name of input file (or "-" to read from stdin)
-#% required : yes
 #%end
-#%option
-#% key: output
-#% type: string
-#% gisprompt: new,vector,vector
-#% description: Name for output vector map
-#% required : yes
+#%option G_OPT_V_OUTPUT
 #%end
-#%option
-#% key: fs
-#% type: string
-#% key_desc: character
-#% description: Field separator
-#% answer: |
-#% required: no
+#%option G_OPT_F_SEP
 #%end
 
 import sys

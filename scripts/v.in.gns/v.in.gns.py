@@ -24,25 +24,17 @@
 #                 e.g. FC (Feature Classification)
 #############################################################################
 
-#%Module
-#%  description: Imports US-NGA GEOnet Names Server (GNS) country files into a GRASS vector points map.
-#%  keywords: vector
-#%  keywords: import
-#%  keywords: gazetteer
-#%End
-#%option
-#% key: file
-#% type: string
-#% description: Uncompressed GNS file from NGA (with .txt extension)
-#% gisprompt: old_file,file,input
-#% required : yes
+#%module
+#% description: Imports US-NGA GEOnet Names Server (GNS) country files into a GRASS vector points map.
+#% keywords: vector
+#% keywords: import
+#% keywords: gazetteer
 #%end
-#%option
-#% key: vect
-#% type: string
-#% gisprompt: new,vector,vector
-#% description: Name for output vector map
-#% required : no
+#%option G_OPT_F_INPUT
+#% description: Name of input uncompressed GNS file from NGA (with .txt extension)
+#%end
+#%option G_OPT_V_OUTPUT
+#% required: no
 #%end
 
 import sys

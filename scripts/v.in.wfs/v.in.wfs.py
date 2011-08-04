@@ -18,7 +18,7 @@
 #############################################################################
 
 #%Module
-#% description: Import GetFeature from WFS.
+#% description: Imports GetFeature from WFS.
 #% keywords: vector
 #% keywords: import
 #% keywords: wfs
@@ -27,13 +27,9 @@
 #% key: url
 #% type: string
 #% description: GetFeature URL starting with 'http'
+#% required: yes
 #%end
-#%option
-#% key: output
-#% type: string
-#% gisprompt: new,vector,vector
-#% description: Name for output vector map
-#% required : yes
+#%option G_OPT_V_OUTPUT
 #%end
 
 import os

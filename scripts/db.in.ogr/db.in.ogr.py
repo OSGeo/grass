@@ -37,7 +37,7 @@
 #% required : no
 #%end
 
-#%option
+#%option 
 #% key: output
 #% type: string
 #% description: Name for output table

@@ -18,35 +18,23 @@
 #############################################################################
 
 
-#%Module
-#%  description: Drops a column from the attribute table connected to a given vector map.
-#%  keywords: vector
-#%  keywords: database
-#%  keywords: attribute table
-#%End
+#%module
+#% description: Drops a column from the attribute table connected to a given vector map.
+#% keywords: vector
+#% keywords: database
+#% keywords: attribute table
+#%end
 
-#%option
+#%option G_OPT_V_MAP
 #% key: map
-#% type: string
-#% gisprompt: old,vector,vector
-#% key_desc : name
-#% description: Vector map for which to drop attribute column
-#% required : yes
 #%end
 
-#%option
-#% key: layer
-#% gisprompt:  old_layer,layer,layer
-#% description: Layer where to drop column
-#% answer: 1
-#% required : no
+#%option G_OPT_V_FIELD
 #%end
 
-#%option
-#% key: column
-#% gisprompt: old_dbcolumn,dbcolumn,dbcolumn
-#% description: Name of the column to drop
-#% required : yes
+#%option G_OPT_DB_COLUMN
+#% description: Name of attribute column to drop
+#% required: yes
 #%end
 
 import sys

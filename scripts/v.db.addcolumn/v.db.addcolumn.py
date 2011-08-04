@@ -16,30 +16,18 @@
 #############################################################################
 
 
-#%Module
-#%  description: Adds one or more columns to the attribute table connected to a given vector map.
-#%  keywords: vector
-#%  keywords: database
-#%  keywords: attribute table
-#%End
-
-#%option
-#% key: map
-#% type: string
-#% gisprompt: old,vector,vector
-#% key_desc : name
-#% description: Name of vector map for which to edit attribute table
-#% required : yes
+#%module
+#% description: Adds one or more columns to the attribute table connected to a given vector map.
+#% keywords: vector
+#% keywords: database
+#% keywords: attribute table
 #%end
 
-#%option
-#% key: layer
-#% type: integer
-#% gisprompt: old_layer,layer,layer
+#%option G_OPT_V_MAP
+#%end
+
+#%option G_OPT_V_FIELD
 #% label: Layer number where to add column(s)
-#% description: A single vector map can be connected to multiple database tables. This number determines which table to use.
-#% answer: 1
-#% required : no
 #%end
 
 #%option
@@ -47,7 +35,7 @@
 #% type: string
 #% label: Name and type of the new column(s) ('name type [,name type, ...]')
 #% description: Data types depend on database backend, but all support VARCHAR(), INT, DOUBLE PRECISION and DATE
-#% required : yes
+#% required: yes
 #%end
 
 import sys

@@ -18,22 +18,10 @@
 #% keywords: area
 #%End
 
-#%option
-#% key: input
-#% type: string
-#% gisprompt: old,vector,vector
-#% key_desc: name
-#% description: Name of input vector map 
-#%required: yes
+#%option G_OPT_V_INPUT
 #%end
 
-#%option
-#% key: output
-#% type: string
-#% gisprompt: new,vector,vector
-#% key_desc: name
-#% description: Name for output vector map
-#% required: yes
+#%option G_OPT_V_OUTPUT
 #%end
 
 #%option
@@ -45,21 +33,12 @@
 #% required: no
 #%end
 
-#%option
-#% key: layer
-#% type: integer
-#% description: Layer number
-#% gisprompt: new_layer,layer,layer
-#% answer: 1
-#% required: no
+#%option G_OPT_V_FIELD
 #%end
 
-#%option
-#% key: cat
-#% type: integer
+#%option G_OPT_V_CAT
 #% description: Category number starting value
 #% answer: 1
-#% required: no
 #%end
 
 #%option

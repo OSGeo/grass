@@ -15,45 +15,23 @@
 #
 #############################################################################
 
-#%Module
+#%module
 #% description: Dissolves boundaries between adjacent areas sharing a common category number or attribute.
 #% keywords: vector
 #% keywords: area
 #% keywords: dissolve
-#%End
-#%option
-#% key: input
-#% type: string
-#% gisprompt: old,vector,vector
-#% key_desc: name
-#% description: Name of input vector map 
-#% required: yes
 #%end
-#%option
-#% key: output
-#% type: string
-#% gisprompt: new,vector,vector
-#% key_desc: name
-#% description: Name for output vector map
-#% required: yes
+#%option G_OPT_V_INPUT
 #%end
-#%option
-#% key: layer
-#% type: string
+#%option G_OPT_V_FIELD_ALL
 #% label: Layer number or name. If -1, all layers are extracted.
-#% description: A single vector map can be connected to multiple database tables. This number determines which table to use.
-#% answer: 1
-#% gisprompt: old_layer,layer,layer_all
-#% required : no
+#% required: no
 #%end
-#%option
-#% key: column
-#% type: string
-#% description: Name of column used to dissolve common boundaries
-#% gisprompt: old_dbcolumn,dbcolumn,dbcolumn
-#% required : no
+#%option G_OPT_DB_COLUMN
+#% description: Name of attribute column used to dissolve common boundaries
 #%end
-
+#%option G_OPT_V_OUTPUT
+#%end
 import sys
 import os
 import atexit
