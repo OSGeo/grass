@@ -178,7 +178,6 @@ int parse_sql_update(const char *sql, char **table, column_info **cols, int *nco
     c = G_malloc(n + 1);
     strncpy(c, p, n);
     c[n] = '\0';
-    G_debug(0, "%s", w);
     
     token = G_tokenize(c, ",");
     *ncols = G_number_of_tokens(token);
