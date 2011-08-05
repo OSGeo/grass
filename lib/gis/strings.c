@@ -367,6 +367,41 @@ void G_squeeze(char *line)
 	*(line + l) = '\0';
 }
 
+/*!
+  \brief Finds the first occurrence of the sub-string in the
+  null-terminated string ignoring case (upper or lower)
+  
+  \param str string where to find sub-string
+  \param substr sub-string
+  
+  \return a pointer to the first occurrence of sub-string
+  \return NULL if no occurrences are found
+*/
+char *G_strcasestr(const char *str, const char *substr)
+{
+    const char *p;
+    const char *q;
+    int length;
+
+    p = substr;
+    q = str;
+    length = strlen(substr);
+
+    do {
+	/* match 1st substr char */
+	while (*q != '\0' && toupper(*q) != toupper(*p)) {
+	    q++;
+	}
+    } while (*q != '\0' && G_strncasecmp(p, q, length) != 0 && q++);
+    
+    if (*q == '\0') {	
+	/* ran off end of str */
+	return NULL;
+    }
+    
+    return (char *) q;
+}
+
 int _strncasecmp(const char *x, const char *y, int n)
 {
     int xx, yy, i;

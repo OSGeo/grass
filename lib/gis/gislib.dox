@@ -1978,7 +1978,7 @@ Get position of delimiter.
 
 String compare ignoring case (upper or lower).
 
- - G_strstr()
+ - G_strcasestr()
 
 Return a pointer to the first occurrence of subString in mainString,
 or NULL if no occurrences are found.
