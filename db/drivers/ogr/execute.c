@@ -17,6 +17,7 @@
 #include <grass/glocale.h>
 
 #include <ogr_api.h>
+#include <cpl_error.h>
 
 #include "globals.h"
 #include "proto.h"
@@ -38,20 +39,23 @@ int db__driver_execute_immediate(dbString * sql)
     
     init_error();
     
-    /* parse UPDATE statement */
     G_debug(3, "\tSQL: '%s'", db_get_string(sql));
+    
+    /* parse UPDATE statement */
     res = parse_sql_update(db_get_string(sql), &table, &cols, &ncols, &where);
-    G_debug(3, "\t table=%s, where=%s, ncols=%d", table, where ? where : "", ncols);
+    G_debug(3, "\tUPDATE: table=%s, where=%s, ncols=%d", table, where ? where : "", ncols);
     if (res != 0) {
-	append_error(_("Unable to parse '%s'\n"), db_get_string(sql));
-	append_error(_("DBMI-OGR driver only supports UPDATE statements"));
-	report_error();
-	return DB_FAILED;
-    }
+	/* try RDBMS SQL */
+	hLayer = OGR_DS_ExecuteSQL(hDs, db_get_string(sql), NULL, NULL);
+	if (CPLGetLastErrorType() != CE_None)
+	    return DB_FAILED;
 
+	return DB_OK;
+    }
+    
     /* get OGR layer */
     hLayer = OGR_DS_GetLayerByName(hDs, table);
-    if (hLayer) {
+    if (!hLayer) {
 	append_error(_("OGR layer <%s> not found"), table);
 	report_error();
 	return DB_FAILED;
@@ -74,7 +78,7 @@ int db__driver_execute_immediate(dbString * sql)
 	hFieldDefn = OGR_FD_GetFieldDefn(hFeatureDefn, cols[i].index);
 	cols[i].type = OGR_Fld_GetType(hFieldDefn);
 
-	G_debug(3, "\t\tcol=%s, val=%s idx=%d, type=%d, qidx=%d",
+	G_debug(3, "\t\tcol=%s, val=%s, idx=%d, type=%d, qidx=%d",
 		cols[i].name, cols[i].value, cols[i].index, cols[i].type,
 		cols[i].qindex);
     }
@@ -126,10 +130,10 @@ int parse_sql_update(const char *sql, char **table, column_info **cols, int *nco
     char *prefix;
     char *p, *w, *c, *t;
     char **token, **itoken;
-    
+
     prefix = "UPDATE";
     nprefix = strlen(prefix);
-    if (strncasecmp(sql, prefix, nprefix) != 0)
+    if (G_strncasecmp(sql, prefix, nprefix) != 0)
 	return 1;
 	
     p = (char *) sql + nprefix; /* skip 'UPDATE' */
@@ -150,7 +154,7 @@ int parse_sql_update(const char *sql, char **table, column_info **cols, int *nco
 	return 1;
     p++;
 
-    if (strncasecmp(p, "SET", 3) != 0)
+    if (G_strncasecmp(p, "SET", 3) != 0)
 	return 1;
 
     p += 3; /* skip 'SET' */
@@ -159,7 +163,8 @@ int parse_sql_update(const char *sql, char **table, column_info **cols, int *nco
 	return 1;
     p++;
     
-    w = strstr(p, "WHERE");
+    w = G_strcasestr(p, "WHERE");
+    
     if (!w) {
 	has_where = FALSE;
 	w = (char *)sql + strlen(sql);
@@ -173,7 +178,8 @@ int parse_sql_update(const char *sql, char **table, column_info **cols, int *nco
     c = G_malloc(n + 1);
     strncpy(c, p, n);
     c[n] = '\0';
-
+    G_debug(0, "%s", w);
+    
     token = G_tokenize(c, ",");
     *ncols = G_number_of_tokens(token);
     *cols = (column_info *)G_malloc(sizeof(column_info) * (*ncols));
@@ -191,7 +197,7 @@ int parse_sql_update(const char *sql, char **table, column_info **cols, int *nco
     
     G_free_tokens(token);
     G_free(c);
-    
+
     if (!has_where) {
 	*where = NULL;
 	return 0;
@@ -202,9 +208,9 @@ int parse_sql_update(const char *sql, char **table, column_info **cols, int *nco
     if (*w != ' ')
 	return 1;
     w++;
-    
+
     G_strip(w);
     *where = G_store(w);
-
+    
     return 0;
 }
