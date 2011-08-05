@@ -525,7 +525,7 @@ class ColorTable(wx.Frame):
         self.cb_vcol.InsertColumns(vector = self.inmap, layer = vlayer, dbInfo = self.dbInfo)
         self.cb_vcol.SetSelection(0)
         self.properties['column'] = self.cb_vcol.GetString(0)
-        self.cb_vrgb.InsertColumns(vector = self.inmap, layer = vlayer, dbInfo = self.dbInfo)
+        self.cb_vrgb.InsertColumns(vector = self.inmap, layer = vlayer, type = ["character"], dbInfo = self.dbInfo)
         found = self.cb_vrgb.FindString('GRASSRGB')
         if found != wx.NOT_FOUND:
             self.cb_vrgb.SetSelection(found)
@@ -546,7 +546,7 @@ class ColorTable(wx.Frame):
                                    map = self.inmap,
                                   layer = self.properties['layer'],
                                   columns = 'GRASSRGB varchar(20)')
-            self.cb_vrgb.InsertColumns(self.inmap, self.properties['layer'])
+            self.cb_vrgb.InsertColumns(self.inmap, type = ["character"], self.properties['layer'])
             self.cb_vrgb.SetStringSelection('GRASSRGB')
         else:
             gcmd.GMessage(parent = self,
