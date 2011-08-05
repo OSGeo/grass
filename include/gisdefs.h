@@ -586,6 +586,7 @@ void G_str_to_upper(char *);
 void G_str_to_lower(char *);
 int G_str_to_sql(char *);
 void G_squeeze(char *);
+char *G_strcasestr(const char *, const char *);
 
 /* tempfile.c */
 void G_init_tempfile(void);
