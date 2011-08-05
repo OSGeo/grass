@@ -118,9 +118,18 @@ class ColorTable(wx.Frame):
             self.Bind(wx.EVT_COMBOBOX, self.OnRGBColSelection, self.cb_vrgb)
             self.Bind(wx.EVT_BUTTON, self.OnAddColumn, self.btn_addCol)
             
-        # set map layer from layer tree
+        # set map layer from layer tree, first selected,
+        # if not the right type, than select another
+        if self.raster:
+            elem = 'raster'
+        else:
+            elem = 'vector'
         try:
-            layer = self.parent.curr_page.maptree.layer_selected
+            sel = self.parent.curr_page.maptree.layer_selected
+            if sel and self.parent.curr_page.maptree.GetPyData(sel)[0]['type'] == elem:
+                layer = sel
+            else:
+                layer = self.parent.curr_page.maptree.FindItemByData(key = 'type', value = elem)
         except:
             layer = None
         if layer:
@@ -129,7 +138,6 @@ class ColorTable(wx.Frame):
             type = mapLayer.GetType()
             self.selectionInput.SetValue(name)
             self.inmap = name
-            self.OnSelectionInput(None)
         
         self.SetMinSize(self.GetSize())
         
@@ -445,22 +453,25 @@ class ColorTable(wx.Frame):
             enable = True                        
         else:
             # check for db connection
-            if not len(gselect.VectorDBInfo(self.inmap).layers):
+            self.dbInfo = gselect.VectorDBInfo(self.inmap)
+            if not len(self.dbInfo.layers):
                 wx.CallAfter(self.NoConnection, self.inmap)
-                
-                self.cb_vlayer.Clear()
-                self.cb_vcol.Clear()
-                self.cb_vrgb.Clear()
+                for combo in (self.cb_vlayer, self.cb_vcol, self.cb_vrgb):
+                    combo.SetValue("")
+                    combo.Disable()
+                    combo.Clear()
                 enable = False
                 
             else:
             # initialize layer selection combobox
+                for combo in (self.cb_vlayer, self.cb_vcol, self.cb_vrgb):
+                    combo.Enable()
                 self.cb_vlayer.InsertLayers(self.inmap)
                 # initialize attribute table for layer=1
                 self.properties['layer'] = self.cb_vlayer.GetString(0)
                 self.cb_vlayer.SetStringSelection(self.properties['layer'])
                 layer = int(self.properties['layer'])
-                self.properties['table'] = gselect.VectorDBInfo(self.inmap).layers[layer]['table']
+                self.properties['table'] = self.dbInfo.layers[layer]['table']
                 
                 # initialize column selection comboboxes 
                 self.OnLayerSelection(event = None)
@@ -491,7 +502,8 @@ class ColorTable(wx.Frame):
                                 style = wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION | wx.CENTRE)
         if dlg.ShowModal() == wx.ID_YES:
             dlg.Destroy()
-            menuform.GUI(parent = self).ParseCommand(['v.db.addtable'])
+            menuform.GUI(parent = self).ParseCommand(['v.db.addtable', 'map=' + self.inmap], 
+                                                      completed = (self.CreateTable, self.inmap, ''))
         else:
             dlg.Destroy()
     
@@ -510,10 +522,10 @@ class ColorTable(wx.Frame):
     def OnLayerSelection(self, event):
         # reset choices in column selection comboboxes if layer changes
         vlayer = int(self.cb_vlayer.GetStringSelection())
-        self.cb_vcol.InsertColumns(vector = self.inmap, layer = vlayer)
+        self.cb_vcol.InsertColumns(vector = self.inmap, layer = vlayer, dbInfo = self.dbInfo)
         self.cb_vcol.SetSelection(0)
         self.properties['column'] = self.cb_vcol.GetString(0)
-        self.cb_vrgb.InsertColumns(vector = self.inmap, layer = vlayer)
+        self.cb_vrgb.InsertColumns(vector = self.inmap, layer = vlayer, dbInfo = self.dbInfo)
         found = self.cb_vrgb.FindString('GRASSRGB')
         if found != wx.NOT_FOUND:
             self.cb_vrgb.SetSelection(found)
@@ -529,26 +541,36 @@ class ColorTable(wx.Frame):
     
     def OnAddColumn(self, event):
         """!Add GRASSRGB column if it doesn't exist"""
-        cmd = ['v.db.addcolumn', 'map=' + self.inmap, 'layer=' + self.properties['layer'],
-                'columns=GRASSRGB varchar(20)']
-        menuform.GUI(parent = self).ParseCommand(cmd, completed = (self.CreateColumn, self.inmap, ''))
-        
-    def CreateColumn(self, dcmd, layer, params, propwin):
-        """!Create column for rgb values"""
+        if 'GRASSRGB' not in self.cb_vrgb.GetItems():
+            ret = gcmd.RunCommand('v.db.addcolumn',
+                                   map = self.inmap,
+                                  layer = self.properties['layer'],
+                                  columns = 'GRASSRGB varchar(20)')
+            self.cb_vrgb.InsertColumns(self.inmap, self.properties['layer'])
+            self.cb_vrgb.SetStringSelection('GRASSRGB')
+        else:
+            gcmd.GMessage(parent = self,
+                          message = _("GRASSRGB column already exists."))
+                        
+    def CreateTable(self, dcmd, layer, params, propwin):
+        """!Create attribute table"""
         if dcmd:
             cmd = utils.CmdToTuple(dcmd)
             gcmd.RunCommand(cmd[0], **cmd[1])
-            self.cb_vrgb.InsertColumns(self.inmap, self.properties['layer'])
-            self.cb_vrgb.SetSelection(self.cb_vrgb.GetCount() - 1)
-
+            self.OnSelectionInput(None)
+        else:
+            for combo in (self.cb_vlayer, self.cb_vcol, self.cb_vrgb):
+                combo.SetValue("")
+                combo.Disable()
+            
     def SetInfoString(self):
         """!Show information about vector map column type/range"""
-        driver, db = gselect.VectorDBInfo(self.inmap).GetDbSettings(int(self.properties['layer']))
+        driver, db = self.dbInfo.GetDbSettings(int(self.properties['layer']))
         nrows = grass.db_describe(table = self.properties['table'], driver = driver, database = db)['nrows']
         self.properties['min'] = self.properties['max'] = ''
-        type = gselect.VectorDBInfo(self.inmap).GetTableDesc(self.properties['table'])\
+        type = self.dbInfo.GetTableDesc(self.properties['table'])\
                                                     [self.properties['column']]['type']
-        ctype = gselect.VectorDBInfo(self.inmap).GetTableDesc(self.properties['table'])\
+        ctype = self.dbInfo.GetTableDesc(self.properties['table'])\
                                                     [self.properties['column']]['ctype']
         if ctype == int or ctype == float:  
             if nrows < 500: # not too large
@@ -787,7 +809,7 @@ class ColorTable(wx.Frame):
         if self.raster:
             cmd = 'r.colors'
         else:
-            cmd = 'vcolors'
+            cmd = 'v.colors'
         gcmd.RunCommand('g.manual',
                         quiet = True,
                         parent = self,
@@ -995,8 +1017,10 @@ class BufferedWindow(wx.Window):
         
         if self.render:
             # extent is taken from current map display
-            self.Map.region = self.parent.parent.curr_page.maptree.Map.region
-            
+            try:
+                self.Map.region = self.parent.parent.curr_page.maptree.Map.region
+            except AttributeError:
+                self.Map.region = self.Map.GetRegion()
             # render new map images
             self.mapfile = self.Map.Render(force = self.render)
             self.img = self.GetImage()
