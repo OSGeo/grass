@@ -46,6 +46,7 @@ import grass.script as grass
 import globalvar
 import gselect
 import gcmd
+import colorrules
 from preferences import globalSettings as UserSettings
 try:
     from nviz_mapdisp import wxUpdateView, wxUpdateLight, wxUpdateProperties,\
@@ -1207,8 +1208,12 @@ class NvizToolWindow(FN.FlatNotebook):
         box = wx.StaticBox (parent = panel, id = wx.ID_ANY,
                             label = " %s " % (_("Vector points")))
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        vertSizer = wx.BoxSizer(wx.VERTICAL)
         gridSizer = wx.GridBagSizer(vgap = 5, hgap = 5)
-        gridSizer.AddGrowableCol(5)
+        gridSizer.AddGrowableCol(0)
+        gridSizer.AddGrowableCol(2)
+        gridSizer.AddGrowableCol(4)
+        gridSizer.AddGrowableCol(6)
         
         # icon size
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
@@ -1246,51 +1251,69 @@ class NvizToolWindow(FN.FlatNotebook):
                       wx.ALIGN_LEFT,
                       pos = (0, 4))
 
-        # icon width
-        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                           label = _("width")),
-                      pos = (1, 1), flag = wx.ALIGN_CENTER_VERTICAL |
-                      wx.ALIGN_RIGHT)
-        
-        iwidth = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (65, -1),
-                             initial = 1,
-                             min = 1,
-                             max = 1e6)
-        iwidth.SetName('value')
-        iwidth.SetValue(100)
-        self.win['vector']['points']['width'] = iwidth.GetId()
-        iwidth.Bind(wx.EVT_SPINCTRL, self.OnVectorPoints)
-        iwidth.Bind(wx.EVT_TEXT, self.OnVectorPoints)
-        gridSizer.Add(item = iwidth, pos = (1, 2),
-                      flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
+        # icon width - seems to do nothing
+##        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+##                                           label = _("width")),
+##                      pos = (1, 1), flag = wx.ALIGN_CENTER_VERTICAL |
+##                      wx.ALIGN_RIGHT)
+##        
+##        iwidth = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (65, -1),
+##                             initial = 1,
+##                             min = 1,
+##                             max = 1e6)
+##        iwidth.SetName('value')
+##        iwidth.SetValue(100)
+##        self.win['vector']['points']['width'] = iwidth.GetId()
+##        iwidth.Bind(wx.EVT_SPINCTRL, self.OnVectorPoints)
+##        iwidth.Bind(wx.EVT_TEXT, self.OnVectorPoints)
+##        gridSizer.Add(item = iwidth, pos = (1, 2),
+##                      flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
         # icon symbol
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
                                          label = _("symbol:")),
-                      pos = (1, 3), flag = wx.ALIGN_CENTER_VERTICAL)
+                      pos = (0, 5), flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
         isym = wx.Choice (parent = panel, id = wx.ID_ANY, size = (100, -1),
                           choices = UserSettings.Get(group = 'nviz', key = 'vector',
                                                    subkey = ['points', 'marker'], internal = True))
         isym.SetName("selection")
         self.win['vector']['points']['marker'] = isym.GetId()
         isym.Bind(wx.EVT_CHOICE, self.OnVectorPoints)
-        gridSizer.Add(item = isym, flag = wx.ALIGN_CENTER_VERTICAL,
-                      pos = (1, 4))
+        gridSizer.Add(item = isym, flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT,
+                      pos = (0, 6))
+        # thematic mapping
+        self.win['vector']['points']['thematic'] = {}
+        checkThematic = wx.CheckBox(parent = panel, id = wx.ID_ANY,
+                                         label = _("use thematic mapping for vector points"))
+        self.win['vector']['points']['thematic']['check'] = checkThematic.GetId()
+        checkThematic.Bind(wx.EVT_CHECKBOX, self.OnCheckThematic)
+        checkThematic.SetValue(False)
         
+        gridSizer.Add(item = checkThematic, flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT,
+                      pos = (1, 1), span = (1, 5))
+        setThematic = wx.Button(parent = panel, id = wx.ID_ANY,
+                                         label = _("Set options..."))
+        self.win['vector']['points']['thematic']['button'] = setThematic.GetId()
+        setThematic.Bind(wx.EVT_BUTTON, self.OnSetThematic)
+        gridSizer.Add(item = setThematic, flag = wx.ALIGN_CENTER_VERTICAL,
+                      pos = (1, 6))
+                           
+        vertSizer.Add(gridSizer, proportion = 0, flag = wx.EXPAND, border = 0)
         # high
+        gridSizer = wx.GridBagSizer(vgap = 5, hgap = 5)
+        gridSizer.AddGrowableCol(1)
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
                                          label = _("Display on surface(s):")),
-                      pos = (2, 0), flag = wx.ALIGN_CENTER_VERTICAL,
-                      span = (1, 5))
+                      pos = (0, 0), flag = wx.ALIGN_CENTER_VERTICAL)
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
                                          label = _("Height above surface:")),
-                      pos = (3, 5), flag = wx.ALIGN_CENTER_VERTICAL)
+                      pos = (1, 1), flag = wx.ALIGN_CENTER_VERTICAL)
         
         surface = wx.CheckListBox(parent = panel, id = wx.ID_ANY, size = (-1, 60),
                                   choices = [], style = wx.LB_NEEDED_SB)
         surface.Bind(wx.EVT_CHECKLISTBOX, self.OnVectorSurface)
         self.win['vector']['points']['surface'] = surface.GetId()
         gridSizer.Add(item = surface, 
-                      pos = (3, 0), span = (3, 5),
+                      pos = (1, 0), span = (3, 1),
                       flag = wx.ALIGN_CENTER_VERTICAL|wx.EXPAND)
         
         self._createControl(panel, data = self.win['vector']['points'], name = 'height', size = -1,
@@ -1301,12 +1324,13 @@ class NvizToolWindow(FN.FlatNotebook):
         self.FindWindowById(self.win['vector']['points']['height']['text']).SetValue(0)
         
         gridSizer.Add(item = self.FindWindowById(self.win['vector']['points']['height']['slider']),
-                      pos = (4, 5),flag = wx.EXPAND|wx.ALIGN_CENTER_VERTICAL)
+                      pos = (2, 1),flag = wx.EXPAND|wx.ALIGN_CENTER_VERTICAL)
         gridSizer.Add(item = self.FindWindowById(self.win['vector']['points']['height']['text']),
-                      pos = (5, 5),
+                      pos = (3, 1),
                       flag = wx.ALIGN_CENTER)
-        
-        boxSizer.Add(item = gridSizer, proportion = 1,
+                    
+        vertSizer.Add(gridSizer, proportion = 0, flag = wx.EXPAND, border = 0)
+        boxSizer.Add(item = vertSizer, proportion = 1,
                      flag = wx.ALL | wx.EXPAND, border = 3)
         pageSizer.Add(item = boxSizer, proportion = 0,
                       flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
@@ -1827,9 +1851,11 @@ class NvizToolWindow(FN.FlatNotebook):
 
         return panel
     
-    def GetLayerData(self, nvizType):
+    def GetLayerData(self, nvizType, nameOnly = False):
         """!Get nviz data"""
         name = self.FindWindowById(self.win[nvizType]['map']).GetValue()
+        if nameOnly:
+            return name
         
         if nvizType == 'surface' or nvizType == 'fringe':
             return self.mapWindow.GetLayerByName(name, mapType = 'raster', dataType = 'nviz')
@@ -3158,6 +3184,33 @@ class NvizToolWindow(FN.FlatNotebook):
         if self.mapDisplay.statusbarWin['render'].IsChecked():
             self.mapWindow.Refresh(False)
 
+    def OnCheckThematic(self, event):
+        """!Switch on/off thematic mapping"""
+        check = self.win['vector']['points']['thematic']['check']
+        button = self.win['vector']['points']['thematic']['button']
+        if self.FindWindowById(check).GetValue():
+            checked = True
+        else:
+            checked = False
+        self.FindWindowById(button).Enable(checked)
+        
+        data = self.GetLayerData('vector')
+        data['vector']['points']['thematic']['use'] = checked
+        data['vector']['points']['thematic']['update'] = None
+        
+        # update properties
+        event = wxUpdateProperties(data = data)
+        wx.PostEvent(self.mapWindow, event)
+        
+        if self.mapDisplay.statusbarWin['render'].IsChecked():
+            self.mapWindow.Refresh(False)
+            
+    def OnSetThematic(self, event):
+        """!Set options for thematic points"""
+        ctable = colorrules.ColorTable(self, raster = False, nviz = True)
+        ctable.CentreOnScreen()
+        ctable.Show()
+        
     def UpdateIsosurfButtons(self, list):
         """!Enable/disable buttons 'add', 'delete',
         'move up', 'move down'"""
@@ -4251,6 +4304,7 @@ class NvizToolWindow(FN.FlatNotebook):
                 win.SetValue(color)
             else:
                 win.SetValue(data['points'][prop]['value'])
+        self.OnCheckThematic(None)
         # height
         for type in ('slider', 'text'):
             win = self.FindWindowById(self.win['vector']['points']['height'][type])

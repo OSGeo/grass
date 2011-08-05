@@ -36,18 +36,21 @@ import utils
 import menuform
 from debug import Debug as Debug
 from preferences import globalSettings as UserSettings
+from nviz_mapdisp import wxUpdateProperties
 
 class ColorTable(wx.Frame):
-    def __init__(self, parent, raster, id = wx.ID_ANY, title = _("Set color table"),
+    def __init__(self, parent, raster, nviz = False, id = wx.ID_ANY, title = _("Set color table"),
                  style = wx.DEFAULT_FRAME_STYLE | wx.RESIZE_BORDER,
                  **kwargs):
         """!Dialog for interactively entering rules for map management
         commands
 
         @param raster True to raster otherwise vector
+        @param nviz True if ColorTable is called from nviz thematic mapping
         """
         self.parent = parent # GMFrame
         self.raster = raster
+        self.nviz = nviz # called from nviz - thematic mapping
         
         wx.Frame.__init__(self, parent, id, title, style = style, **kwargs)
         
@@ -94,8 +97,7 @@ class ColorTable(wx.Frame):
         if self.raster:
             self.SetTitle(_('Create new color table for raster map'))
         else:
-            self.SetTitle(_('Create new color table for vector map'))
-            
+            self.SetTitle(_('Create new color table for vector map'))    
         # layout
         self.__doLayout()
         
@@ -117,28 +119,32 @@ class ColorTable(wx.Frame):
             self.Bind(wx.EVT_COMBOBOX, self.OnColumnSelection, self.cb_vcol)
             self.Bind(wx.EVT_COMBOBOX, self.OnRGBColSelection, self.cb_vrgb)
             self.Bind(wx.EVT_BUTTON, self.OnAddColumn, self.btn_addCol)
-            
-        # set map layer from layer tree, first selected,
-        # if not the right type, than select another
-        if self.raster:
-            elem = 'raster'
-        else:
-            elem = 'vector'
-        try:
-            sel = self.parent.curr_page.maptree.layer_selected
-            if sel and self.parent.curr_page.maptree.GetPyData(sel)[0]['type'] == elem:
-                layer = sel
+        if not self.nviz:
+            # set map layer from layer tree, first selected,
+            # if not the right type, than select another
+            if self.raster:
+                elem = 'raster'
             else:
-                layer = self.parent.curr_page.maptree.FindItemByData(key = 'type', value = elem)
-        except:
-            layer = None
-        if layer:
-            mapLayer = self.parent.curr_page.maptree.GetPyData(layer)[0]['maplayer']
-            name = mapLayer.GetName()
-            type = mapLayer.GetType()
-            self.selectionInput.SetValue(name)
-            self.inmap = name
-        
+                elem = 'vector'
+            try:
+                sel = self.parent.curr_page.maptree.layer_selected
+                if sel and self.parent.curr_page.maptree.GetPyData(sel)[0]['type'] == elem:
+                    layer = sel
+                else:
+                    layer = self.parent.curr_page.maptree.FindItemByData(key = 'type', value = elem)
+            except:
+                layer = None
+            if layer:
+                mapLayer = self.parent.curr_page.maptree.GetPyData(layer)[0]['maplayer']
+                name = mapLayer.GetName()
+                type = mapLayer.GetType()
+                self.selectionInput.SetValue(name)
+                self.inmap = name
+        else:
+            self.inmap = self.parent.GetLayerData(nvizType = 'vector', nameOnly = True)
+            self.OnSelectionInput(None)
+            self.nvizInfo.SetLabel(_("Set color rules for vector map %s:") % self.inmap)
+            
         self.SetMinSize(self.GetSize())
         
         self.CentreOnScreen()
@@ -202,6 +208,9 @@ class ColorTable(wx.Frame):
         self.btn_addCol.SetToolTipString(_("Add GRASSRGB column to current attribute table."))
         
         # layout
+        inputBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
+                                label = " %s " % _("Select vector columns"))
+        inputSizer = wx.StaticBoxSizer(inputBox, wx.VERTICAL)
         vSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
         vSizer.Add(self.cb_vl_label, pos = (0, 0),
                    flag = wx.ALIGN_CENTER_VERTICAL)
@@ -217,8 +226,10 @@ class ColorTable(wx.Frame):
                    flag = wx.ALIGN_CENTER_VERTICAL)
         vSizer.Add(self.btn_addCol, pos = (2, 2),
                    flag = wx.ALIGN_CENTER_VERTICAL)
+        inputSizer.Add(item = vSizer,
+                       flag = wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND, border = 5)
                 
-        return vSizer
+        return inputSizer
     
     def _createColorRulesPanel(self):
         """!Create rules panel"""
@@ -275,6 +286,16 @@ class ColorTable(wx.Frame):
         mapSelection = self._createMapSelection()
         sizer.Add(item = mapSelection, proportion = 0,
                   flag = wx.ALL | wx.EXPAND, border = 5)
+        if self.nviz:
+            sizerNviz = wx.BoxSizer(wx.HORIZONTAL)
+            self.nvizInfo = wx.StaticText(parent = self, id = wx.ID_ANY,
+                                 label = _('')) # set later
+            sizerNviz.Add(self.nvizInfo, proportion = 0, flag = wx.LEFT | wx.EXPAND, border = 0)
+            sizer.Add(item = sizerNviz, proportion = 0,
+                  flag = wx.LEFT | wx.BOTTOM | wx.EXPAND, border = 5)
+            sizer.Hide(mapSelection)
+            # doesn't work
+            sizer.Layout()
         #
         # set vector attributes
         #
@@ -345,6 +366,7 @@ class ColorTable(wx.Frame):
                   flag = wx.ALL | wx.ALIGN_RIGHT, border = 5)
         
         self.SetSizer(sizer)
+        sizer.Layout()
         sizer.Fit(self)
         self.Layout()
         
@@ -588,9 +610,9 @@ class ColorTable(wx.Frame):
                 except ValueError:
                     self.properties['min'] = self.properties['max'] = ''
                     
-        if self.properties['min'] and self.properties['max']:
+        if self.properties['min'] or self.properties['max']:
             if ctype == int:
-                self.cr_label.SetLabel(_("Enter vector attribute values or ranges (type: %s, range: %d - %d )")
+                self.cr_label.SetLabel(_("Enter vector attribute values or ranges (type: %s, range: %d - %d)")
                             % (type, self.properties['min'], self.properties['max']))
             elif ctype == float:
                 self.cr_label.SetLabel(_("Enter vector attribute values or ranges (type: %s, range: %.1f - %.1f )")
@@ -729,10 +751,22 @@ class ColorTable(wx.Frame):
         @return True on success otherwise False
         """
         ret = self.CreateColorTable()
-        display = self.parent.GetLayerTree().GetMapDisplay()
-        if display and display.IsAutoRendered():
-            display.GetWindow().UpdateMap(render = True)
-        
+        if not ret:
+            GMessage(parent = self, message = _("No color rules given."))
+            
+        if not self.nviz:
+            display = self.parent.GetLayerTree().GetMapDisplay()
+            if display and display.IsAutoRendered():
+                display.GetWindow().UpdateMap(render = True)
+        else:
+            data = self.parent.GetLayerData(nvizType = 'vector')
+            data['vector']['points']['thematic']['layer'] = int(self.properties['layer'])
+            data['vector']['points']['thematic']['rgbcolumn'] = self.properties['rgb']
+            data['vector']['points']['thematic']['update'] = None
+            
+            event = wxUpdateProperties(data = data)
+            wx.PostEvent(self.parent.mapWindow, event)
+            self.parent.mapWindow.Refresh(False)
         return ret
 
     def OnOK(self, event):

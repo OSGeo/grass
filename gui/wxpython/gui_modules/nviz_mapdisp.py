@@ -1563,6 +1563,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 'update' in data['width'] or \
                 'update' in data['marker'] or \
                 'update' in data['color']:
+                
             ret = self._display.SetVectorPointMode(id, data['color']['value'],
                                                    data['width']['value'], float(data['size']['value']),
                                                    data['marker']['value'] + 1)
@@ -1586,6 +1587,16 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                                                data['height']['value'])
             data['height'].pop('update')
         
+        # thematic
+        if 'update' in data['thematic']:
+            if data['thematic']['use']:
+                self._display.SetStyleThematic(id = id, layer = data['thematic']['layer'],
+                                               color = data['thematic']['rgbcolumn'],
+                                               size = data['thematic']['sizecolumn'])
+            else:
+                self._display.UnsetStyleThematic(id = id, layer = data['thematic']['layer'])
+            data['thematic'].pop('update')
+            
         # surface
         if 'update' in data['mode']:
             for item in range(len(data['mode']['surface']['value'])):
@@ -1599,7 +1610,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                             self._display.UnsetVectorPointSurface(id, sid)   
                         break
             data['mode'].pop('update')
-   
+            
     def GetLayerNames(self, type):
         """!Return list of map layer names of given type"""
         layerName = []

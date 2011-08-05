@@ -533,6 +533,8 @@ class Settings:
                         'marker' : 2,
                         'color' : (0, 0, 255, 255), # blue
                         'height' : 0,
+                        'rgbcolumn': None,
+                        'sizecolumn': None,
                         }
                     },
                 'volume' : {
