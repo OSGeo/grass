@@ -480,10 +480,12 @@ class ProcessWorkspaceFile:
         iview['twist']['max'] = self.__processLayerNvizNode(node_twist, 'max', int)
         node_zexag = node_view.find('z-exag')
         view['z-exag'] = {}
+        iview['z-exag'] = {}
         view['z-exag']['value'] = self.__processLayerNvizNode(node_zexag, 'value', int)
         view['z-exag']['step'] = self.__processLayerNvizNode(node_zexag, 'step', int)
         view['z-exag']['min'] = self.__processLayerNvizNode(node_zexag, 'min', int)
         view['z-exag']['max'] = self.__processLayerNvizNode(node_zexag, 'max', int)
+        iview['z-exag']['original'] = self.__processLayerNvizNode(node_zexag, 'original', float)
         node_focus = node_view.find('focus')
         iview['focus'] = {}
         iview['focus']['x'] = self.__processLayerNvizNode(node_focus, 'x', int)
@@ -735,10 +737,16 @@ class Nviz:
         # height
         data['height'] = { 'value' : UserSettings.Get(group='nviz', key='vector',
                                                       subkey=['points', 'height']) }
-
+        
+        data['thematic'] = {'rgbcolumn' : UserSettings.Get(group='nviz', key='vector',
+                                                      subkey=['points', 'rgbcolumn']),
+                            'sizecolumn' : UserSettings.Get(group='nviz', key='vector',
+                                                      subkey=['points', 'sizecolumn']),
+                            'layer': 1,
+                            'use' : False}
         if 'object' in data:
             for attrb in ('size', 'width', 'marker',
-                          'color', 'surface', 'height'):
+                          'color', 'surface', 'height', 'thematic'):
                 data[attrb]['update'] = None
         
     def GetDrawMode(self, mode=None, style=None, shade=None, string=False):
@@ -1109,7 +1117,7 @@ class WriteWorkspaceFile(object):
                                                            marker))
             self.indent += 4
             for name in data[attrb].iterkeys():
-                if name in ('object', 'marker'):
+                if name in ('object', 'marker', 'thematic'):
                     continue
                 if name == 'mode':
                     self.file.write('%s<%s type="%s">\n' % (' ' * self.indent, name,
@@ -1193,6 +1201,7 @@ class WriteWorkspaceFile(object):
         self.file.write('%s<step>%d</step>\n' % (' ' * self.indent, view['z-exag']['step']))
         self.file.write('%s<min>%d</min>\n' % (' ' * self.indent, view['z-exag']['min']))
         self.file.write('%s<max>%d</max>\n' % (' ' * self.indent, view['z-exag']['max']))
+        self.file.write('%s<original>%d</original>\n' % (' ' * self.indent, iview['z-exag']['original']))
         self.indent -= 4
         self.file.write('%s</z-exag>\n' % (' ' * self.indent))
         # focus (look here)
