@@ -546,7 +546,7 @@ class ColorTable(wx.Frame):
                                    map = self.inmap,
                                   layer = self.properties['layer'],
                                   columns = 'GRASSRGB varchar(20)')
-            self.cb_vrgb.InsertColumns(self.inmap, type = ["character"], self.properties['layer'])
+            self.cb_vrgb.InsertColumns(self.inmap, self.properties['layer'], type = ["character"])
             self.cb_vrgb.SetStringSelection('GRASSRGB')
         else:
             gcmd.GMessage(parent = self,
