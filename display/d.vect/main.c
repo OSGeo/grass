@@ -355,7 +355,7 @@ int main(int argc, char **argv)
 
     zcol_flag = G_define_flag();
     zcol_flag->key = 'z';
-    zcol_flag->description = _("Colorize polygons according to z height");
+    zcol_flag->description = _("Colorize features according to z-coordinate");
     zcol_flag->guisection = _("Colors");
 
     sqrt_flag = G_define_flag();
@@ -525,13 +525,14 @@ int main(int argc, char **argv)
     D_save_command(G_recreate_command());
     D_close_driver();
 
-    G_done_msg(" ");
-
     Vect_close(&Map);
     Vect_destroy_cat_list(Clist);
 
-    if (stat != 0)
+    if (stat != 0) {
+	G_fatal_error(_("Rendering failed"));
 	exit(EXIT_FAILURE);
-
+    }
+    
+    G_done_msg(" ");
     exit(EXIT_SUCCESS);
 }
