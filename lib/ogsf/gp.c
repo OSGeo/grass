@@ -201,6 +201,7 @@ int gp_set_defaults(geosite * gp)
     gp->hstyle->color = 0xFF0000;
     gp->hstyle->size = dim / 150.;
     gp->hstyle->symbol = ST_X;
+    gp->tstyle = NULL;
 
     return 1;
 }

@@ -64,6 +64,7 @@ int GP_get_sitename(int, char **);
 int GP_get_style(int, int *, int *, float *, int *);
 int GP_set_style(int, int, int, float, int);
 int GP_set_style_thematic(int, int, const char *, const char *, const char *, const char *);
+int GP_unset_style_thematic(int);
 int GP_attmode_color(int, const char *);
 int GP_attmode_none(int);
 int GP_set_zmode(int, int);
