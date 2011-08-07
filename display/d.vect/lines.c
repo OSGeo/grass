@@ -65,7 +65,9 @@ int display_lines(struct Map_info *Map, int type, struct cat_list *Clist,
     int width;
     SYMBOL *Symb;
     double var_size, rotation;
-
+    struct bound_box box;
+    struct Colors colors;
+    
     Symb = NULL;
     custom_rgb = FALSE;
     cv_rgb = cv_width = cv_size = cv_rot = NULL;
@@ -78,11 +80,17 @@ int display_lines(struct Map_info *Map, int type, struct cat_list *Clist,
 		    "v.build or v.build.all."));
     }
 
-    if (z_color_flag && !Vect_is_3d(Map)) {
-	G_warning(_("Vector map is not 3D. Unable to colorize features based on z-coordinates."));
-	z_color_flag = 0;
+    if (z_color_flag) {
+	if (!Vect_is_3d(Map)) {
+	    G_warning(_("Vector map is not 3D. Unable to colorize features based on z-coordinates."));
+	    z_color_flag = 0;
+	}
+	else {
+	    Vect_get_map_box(Map, &box);
+	    Rast_make_fp_colors(&colors, z_style, box.B, box.T);
+	}
     }
-
+    
     var_size = size;
     rotation = 0.0;
     nerror_rgb = 0;
@@ -196,20 +204,11 @@ int display_lines(struct Map_info *Map, int type, struct cat_list *Clist,
 
 	/* z height colors */
 	if (z_color_flag) {
-	    struct bound_box box;
-	    double zval;
-	    struct Colors colors;
-
-	    Vect_get_map_box(Map, &box);
-	    zval = Points->z[0];
-	    G_debug(3, "display line %d, cat %d, x: %f, y: %f, z: %f", line,
-		    cat, Points->x[0], Points->y[0], Points->z[0]);
 	    custom_rgb = TRUE;
-	    Rast_make_fp_colors(&colors, z_style, box.B, box.T);
-	    Rast_get_color(&zval, &red, &grn, &blu, &colors, DCELL_TYPE);
-	    G_debug(3, "b %d, g: %d, r %d", blu, grn, red);
+	    Rast_get_color(&Points->z[0], &red, &grn, &blu, &colors, DCELL_TYPE);
+	    G_debug(3, "\tb: %d, g: %d, r: %d", blu, grn, red);
 	}
-
+	
 	if (table_colors_flag) {
 	    /* only first category */
 	    Vect_cat_get(Cats, 
