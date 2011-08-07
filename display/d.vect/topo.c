@@ -5,7 +5,7 @@
 #include "local_proto.h"
 #include "plot.h"
 
-int topo(struct Map_info *Map, int type, int do_area, LATTR *lattr)
+int display_topo(struct Map_info *Map, int type, int do_area, LATTR *lattr)
 {
     int ltype, num, el;
     struct line_pnts *Points;
@@ -13,6 +13,13 @@ int topo(struct Map_info *Map, int type, int do_area, LATTR *lattr)
     char text[50];
     LATTR lattr2 = *lattr;
 
+    if (Vect_level(Map) < 2) {
+	G_warning(_("Unable to display topology, not available."
+		    "Please try to rebuild topology using "
+		    "v.build or v.build.all."));
+	return 1;
+    }
+    
     lattr2.xref = lattr->xref == LRIGHT ? LLEFT : LRIGHT;
 
     G_debug(1, "display topo:");
@@ -39,8 +46,7 @@ int topo(struct Map_info *Map, int type, int do_area, LATTR *lattr)
 	G_debug(3, "ltype = %d", ltype);
 	switch (ltype) {
 	case -1:
-	    fprintf(stderr, _("\nERROR: vector map - can't read\n"));
-	    return -1;
+	    G_fatal_error(_("Unable to read vector map"));
 	case -2:		/* EOF */
 	    return 0;
 	}

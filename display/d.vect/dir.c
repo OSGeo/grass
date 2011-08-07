@@ -4,7 +4,7 @@
 #include <grass/glocale.h>
 #include "plot.h"
 
-int dir(struct Map_info *Map, int type, struct cat_list *Clist, int chcat)
+int display_dir(struct Map_info *Map, int type, struct cat_list *Clist, int chcat)
 {
     int ltype, dsize;
     double len, x, y, angle, msize;
@@ -24,7 +24,7 @@ int dir(struct Map_info *Map, int type, struct cat_list *Clist, int chcat)
 	ltype = Vect_read_next_line(Map, Points, Cats);
 	switch (ltype) {
 	case -1:
-	    G_fatal_error(_("Can't read vector map"));
+	    G_fatal_error(_("Unable to read vector map"));
 	case -2:		/* EOF */
 	    return 0;
 	}
