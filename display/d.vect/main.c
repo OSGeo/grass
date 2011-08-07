@@ -530,7 +530,6 @@ int main(int argc, char **argv)
 
     if (stat != 0) {
 	G_fatal_error(_("Rendering failed"));
-	exit(EXIT_FAILURE);
     }
     
     G_done_msg(" ");
