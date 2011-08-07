@@ -17,7 +17,7 @@ int display_area(struct Map_info *Map, struct cat_list *Clist, const struct Cell
 		 const struct color_rgb *bcolor, const struct color_rgb *fcolor, int chcat, int id_flag, 
 		 int table_colors_flag, int cats_color_flag, const char *rgb_column,
 		 int default_width, const char *width_column, double width_scale,
-		 int z_color_flag, const char *z_column,
+		 int z_color_flag, const char *z_style,
 		 dbCatValArray *cvarr_rgb, dbCatValArray *cvarr_width, int nrec_width)
 {
     int num, area, isle, n_isles, n_points;
@@ -185,7 +185,7 @@ int display_area(struct Map_info *Map, struct cat_list *Clist, const struct Cell
 		    area, centroid, cat, Points->x[0], Points->y[0],
 		    Points->z[0]);
 	    rgb = 1;
-	    Rast_make_fp_colors(&colors, z_column, box.B, box.T);
+	    Rast_make_fp_colors(&colors, z_style, box.B, box.T);
 	    Rast_get_color(&zval, &red, &grn, &blu, &colors, DCELL_TYPE);
 	    G_debug(3, "b %d, g: %d, r %d", blu, grn, red);
 	}
