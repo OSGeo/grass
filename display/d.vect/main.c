@@ -192,13 +192,13 @@ int main(int argc, char **argv)
     width_opt->description = _("Line width");
 
     wcolumn_opt = G_define_standard_option(G_OPT_DB_COLUMN);
-    wcolumn_opt->key = "wcolumn";
+    wcolumn_opt->key = "width_column";
     wcolumn_opt->guisection = _("Lines");
     wcolumn_opt->description =
 	_("Name of column for line widths (these values will be scaled by wscale)");
 
     wscale_opt = G_define_option();
-    wscale_opt->key = "wscale";
+    wscale_opt->key = "width_scale";
     wscale_opt->type = TYPE_DOUBLE;
     wscale_opt->answer = "1";
     wscale_opt->guisection = _("Lines");
@@ -232,7 +232,7 @@ int main(int argc, char **argv)
 	_("Name of numeric column containing symbol size");
 
     rotcolumn_opt = G_define_standard_option(G_OPT_DB_COLUMN);
-    rotcolumn_opt->key = "rot_column";
+    rotcolumn_opt->key = "rotation_column";
     rotcolumn_opt->guisection = _("Symbols");
     rotcolumn_opt->label =
 	_("Name of numeric column containing symbol rotation angle");
