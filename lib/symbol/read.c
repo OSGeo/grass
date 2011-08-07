@@ -232,7 +232,7 @@ SYMBOL *err(FILE * fp, SYMBOL * s, char *msg)
  *  S_read() searches first in mapsets (standard GRASS search) and
  *   then in GISBASE/etc/symbol/ 
  */
-SYMBOL *S_read(char *sname)
+SYMBOL *S_read(const char *sname)
 {
     int i, j, k, l;
     FILE *fp;

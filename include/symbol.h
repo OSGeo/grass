@@ -72,7 +72,7 @@ typedef struct
 } SYMBOL;
 
 /* prototypes */
-SYMBOL *S_read(char *sname);
+SYMBOL *S_read(const char *sname);
 void S_stroke(SYMBOL * symb, double size, double rotation, int tolerance);
 
 #endif
