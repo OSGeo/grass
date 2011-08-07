@@ -636,9 +636,9 @@ class AttributeManager(wx.Frame):
         if not self.editable:
             self.notebook.GetPage(self.notebook.GetPageCount()-1).Enable(False)
         
-        self.__createBrowsePage()
-        self.__createManageTablePage()
-        self.__createManageLayerPage()
+        self._createBrowsePage()
+        self._createManageTablePage()
+        self._createManageLayerPage()
 
         if selection:
             wx.CallAfter(self.notebook.SetSelectionByName, selection) # select browse tab
@@ -655,15 +655,16 @@ class AttributeManager(wx.Frame):
         self.notebook.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
         self.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnLayerPageChanged, self.browsePage)
         self.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnLayerPageChanged, self.manageTablePage)
-        
+        self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
+
         # do layout
-        self.__layout()
+        self._layout()
 
         # self.SetMinSize(self.GetBestSize())
         self.SetSize((680, 550)) # FIXME hard-coded size
         self.SetMinSize(self.GetSize())
 
-    def __createBrowsePage(self, onlyLayer=-1):
+    def _createBrowsePage(self, onlyLayer=-1):
         """!Create browse tab page"""
         for layer in self.mapDBInfo.layers.keys():
             if onlyLayer > 0 and layer != onlyLayer:
@@ -810,7 +811,7 @@ class AttributeManager(wx.Frame):
         except (IndexError, KeyError):
             self.layer = None
         
-    def __createManageTablePage(self, onlyLayer=-1):
+    def _createManageTablePage(self, onlyLayer=-1):
         """!Create manage page (create/link and alter tables)"""
         for layer in self.mapDBInfo.layers.keys():
             if onlyLayer > 0 and layer != onlyLayer:
@@ -848,7 +849,7 @@ class AttributeManager(wx.Frame):
             
             tableSizer = wx.StaticBoxSizer(tableBox, wx.VERTICAL)
             
-            list = self.__createTableDesc(panel, table)
+            list = self._createTableDesc(panel, table)
             list.Bind(wx.EVT_COMMAND_RIGHT_CLICK, self.OnTableRightUp) #wxMSW
             list.Bind(wx.EVT_RIGHT_UP,            self.OnTableRightUp) #wxGTK
             self.layerPage[layer]['tableData'] = list.GetId()
@@ -980,7 +981,7 @@ class AttributeManager(wx.Frame):
         except IndexError:
             self.layer = None
         
-    def __createTableDesc(self, parent, table):
+    def _createTableDesc(self, parent, table):
         """!Create list with table description"""
         list = TableListCtrl(parent=parent, id=wx.ID_ANY,
                              table=self.mapDBInfo.tables[table],
@@ -992,7 +993,7 @@ class AttributeManager(wx.Frame):
 
         return list
 
-    def __createManageLayerPage(self):
+    def _createManageLayerPage(self):
         """!Create manage page"""
         splitterWin = wx.SplitterWindow(parent=self.manageLayerPage, id=wx.ID_ANY)
         splitterWin.SetMinimumPaneSize(100)
@@ -1010,7 +1011,7 @@ class AttributeManager(wx.Frame):
                                 label=" %s " % _("List of layers"))
         layerSizer = wx.StaticBoxSizer(layerBox, wx.VERTICAL)
 
-        self.layerList = self.__createLayerDesc(panelList)
+        self.layerList = self._createLayerDesc(panelList)
         self.layerList.Bind(wx.EVT_COMMAND_RIGHT_CLICK, self.OnLayerRightUp) #wxMSW
         self.layerList.Bind(wx.EVT_RIGHT_UP,            self.OnLayerRightUp) #wxGTK
         
@@ -1045,7 +1046,7 @@ class AttributeManager(wx.Frame):
         splitterWin.SplitHorizontally(panelList, panelManage, 100) 
         splitterWin.Fit()
 
-    def __createLayerDesc(self, parent):
+    def _createLayerDesc(self, parent):
         """!Create list of linked layers"""
         list = LayerListCtrl(parent=parent, id=wx.ID_ANY,
                              layers=self.mapDBInfo.layers)
@@ -1057,7 +1058,7 @@ class AttributeManager(wx.Frame):
 
         return list
 
-    def __layout(self):
+    def _layout(self):
         """!Do layout"""
         # frame body
         mainSizer = wx.BoxSizer(wx.VERTICAL)
@@ -1999,10 +2000,12 @@ class AttributeManager(wx.Frame):
     
     def OnCloseWindow(self, event):
         """!Cancel button pressed"""
-        self.Close()
         if self.parent and self.parent.GetName() == 'LayerManager':
             # deregister ATM
             self.parent.dialogs['atm'].remove(self)
+                    
+        if not isinstance(event, wx.CloseEvent):
+            self.Destroy()
         
         event.Skip()
 
@@ -2136,9 +2139,9 @@ class AttributeManager(wx.Frame):
         #
         if layer in self.mapDBInfo.layers.keys():
             # 'browse data' page
-            self.__createBrowsePage(layer)
+            self._createBrowsePage(layer)
             # 'manage tables' page
-            self.__createManageTablePage(layer)
+            self._createManageTablePage(layer)
             # set current page selection
             self.notebook.SetSelectionByName('layers')
             
@@ -2349,20 +2352,20 @@ class LayerBook(wx.Notebook):
                           caption=_("Warning"),
                           style=wx.OK | wx.ICON_WARNING | wx.CENTRE)
         
-        self.defaultTables = self.__getTables(self.defaultConnect['driver'],
+        self.defaultTables = self._getTables(self.defaultConnect['driver'],
                                               self.defaultConnect['database'])
         try:
-            self.defaultColumns = self.__getColumns(self.defaultConnect['driver'],
+            self.defaultColumns = self._getColumns(self.defaultConnect['driver'],
                                                     self.defaultConnect['database'],
                                                     self.defaultTables[0])
         except IndexError:
             self.defaultColumns = []
 
-        self.__createAddPage()
-        self.__createDeletePage()
-        self.__createModifyPage()
+        self._createAddPage()
+        self._createDeletePage()
+        self._createModifyPage()
 
-    def __createAddPage(self):
+    def _createAddPage(self):
         """!Add new layer"""
         self.addPanel = wx.Panel(parent=self, id=wx.ID_ANY)
         self.AddPage(page=self.addPanel, text=_("Add layer"))
@@ -2553,7 +2556,7 @@ class LayerBook(wx.Notebook):
         self.addPanel.SetSizer(pageSizer)
         pageSizer.Fit(self.addPanel)
         
-    def __createDeletePage(self):
+    def _createDeletePage(self):
         """!Delete layer"""
         self.deletePanel = wx.Panel(parent=self, id=wx.ID_ANY)
         self.AddPage(page=self.deletePanel, text=_("Remove layer"))
@@ -2621,7 +2624,7 @@ class LayerBook(wx.Notebook):
 
         self.deletePanel.SetSizer(pageSizer)
 
-    def __createModifyPage(self):
+    def _createModifyPage(self):
         """!Modify layer"""
         self.modifyPanel = wx.Panel(parent=self, id=wx.ID_ANY)
         self.AddPage(page=self.modifyPanel, text=_("Modify layer"))
@@ -2676,7 +2679,7 @@ class LayerBook(wx.Notebook):
             database = self.mapDBInfo.layers[layer]['database']
             table    = self.mapDBInfo.layers[layer]['table']
 
-            listOfColumns = self.__getColumns(driver, database, table)
+            listOfColumns = self._getColumns(driver, database, table)
             self.modifyLayerWidgets['driver'][1].SetStringSelection(driver)
             self.modifyLayerWidgets['database'][1].SetValue(database)
             if table in self.modifyLayerWidgets['table'][1].GetItems():
@@ -2731,7 +2734,7 @@ class LayerBook(wx.Notebook):
 
         self.modifyPanel.SetSizer(pageSizer)
 
-    def __getTables(self, driver, database):
+    def _getTables(self, driver, database):
         """!Get list of tables for given driver and database"""
         tables = []
 
@@ -2755,7 +2758,7 @@ class LayerBook(wx.Notebook):
         
         return tables
 
-    def __getColumns(self, driver, database, table):
+    def _getColumns(self, driver, database, table):
         """!Get list of column of given table"""
         columns = []
 
@@ -2782,7 +2785,7 @@ class LayerBook(wx.Notebook):
 
         winTable = self.addLayerWidgets['table'][1]
         winKey   = self.addLayerWidgets['key'][1]
-        tables   = self.__getTables(driver, database)
+        tables   = self._getTables(driver, database)
 
         winTable.SetItems(tables)
         winTable.SetSelection(0)
@@ -2803,7 +2806,7 @@ class LayerBook(wx.Notebook):
         table    = event.GetString()
 
         win  = self.addLayerWidgets['key'][1]
-        cols = self.__getColumns(driver, database, table)
+        cols = self._getColumns(driver, database, table)
         win.SetItems(cols)
         win.SetSelection(0)
 
@@ -2818,14 +2821,14 @@ class LayerBook(wx.Notebook):
 
         driver.SetStringSelection(self.defaultConnect['driver'])
         database.SetValue(self.defaultConnect['database'])
-        tables = self.__getTables(self.defaultConnect['driver'],
+        tables = self._getTables(self.defaultConnect['driver'],
                                   self.defaultConnect['database'])
         table.SetItems(tables)
         table.SetSelection(0)
         if len(tables) == 0:
             key.SetItems([])
         else:
-            cols = self.__getColumns(self.defaultConnect['driver'],
+            cols = self._getColumns(self.defaultConnect['driver'],
                                      self.defaultConnect['database'],
                                      tables[0])
             key.SetItems(cols)
@@ -2867,12 +2870,12 @@ class LayerBook(wx.Notebook):
         
         # update list of tables
         tableList = self.addLayerWidgets['table'][1]
-        tableList.SetItems(self.__getTables(driver, database))
+        tableList.SetItems(self._getTables(driver, database))
         tableList.SetStringSelection(table)
 
         # update key column selection
         keyList = self.addLayerWidgets['key'][1]
-        keyList.SetItems(self.__getColumns(driver, database, table))
+        keyList.SetItems(self._getColumns(driver, database, table))
         keyList.SetStringSelection(key)
         
         event.Skip()
@@ -2960,7 +2963,7 @@ class LayerBook(wx.Notebook):
             
             # update list of tables
             tableList = self.addLayerWidgets['table'][1]
-            tableList.SetItems(self.__getTables(driver, database))
+            tableList.SetItems(self._getTables(driver, database))
             tableList.SetStringSelection(table)
         
         # update dialog
@@ -2991,7 +2994,7 @@ class LayerBook(wx.Notebook):
             driver   = self.mapDBInfo.layers[layer]['driver']
             database = self.mapDBInfo.layers[layer]['database']
             table    = self.mapDBInfo.layers[layer]['table']
-            listOfColumns = self.__getColumns(driver, database, table)
+            listOfColumns = self._getColumns(driver, database, table)
             self.modifyLayerWidgets['driver'][1].SetStringSelection(driver)
             self.modifyLayerWidgets['database'][1].SetValue(database)
             self.modifyLayerWidgets['table'][1].SetStringSelection(table)
