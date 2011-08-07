@@ -105,11 +105,7 @@ int main(int argc, char **argv)
     }
 
     /* use DCELL even if the map is FCELL */
-
-    if (fp)
-	display(name, overlay, bg->answer, DCELL_TYPE, invert);
-    else
-	display(name, overlay, bg->answer, CELL_TYPE, invert);
+    display(name, overlay, bg->answer, fp ? DCELL_TYPE : CELL_TYPE, invert);
     
     D_save_command(G_recreate_command());
     D_close_driver();
