@@ -73,6 +73,12 @@ the appendix (PLEASE ADD EXPLANATIONS!!):
  - private types and defines include/gstypes.h
  - private utilities gsget.h
 
+\section ogsfTodo Major todos
+
+- remove global variables
+- dynamically allocate items instead of static arrays
+- merge GP_ functions into GV_
+
 \section ogsfPublic Public function prototypes
 
 \subsection ogsfGs Initialization and positioning surfaces (GS)
