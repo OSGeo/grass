@@ -944,10 +944,9 @@ class Nviz(object):
         """!Set thematic style for vector points"""
         GP_set_style_thematic(id, layer, color, width, size, symbol)
         
-    def UnsetStyleThematic(self, id, layer):
-        """!Set thematic style None for vector points"""
-        # this should be done in another way
-        GP_set_style_thematic(id, layer, None, None, None, None)
+    def UnsetStyleThematic(self, id):
+        """!Unset thematic style for vector points"""
+        GP_unset_style_thematic(id)
         
     def UnsetVectorPointSurface(self, id, surf_id):
         """!Unset reference surface of vector set (points)

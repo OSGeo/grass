@@ -1594,7 +1594,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                                                color = data['thematic']['rgbcolumn'],
                                                size = data['thematic']['sizecolumn'])
             else:
-                self._display.UnsetStyleThematic(id = id, layer = data['thematic']['layer'])
+                self._display.UnsetStyleThematic(id = id)
             data['thematic'].pop('update')
             
         # surface

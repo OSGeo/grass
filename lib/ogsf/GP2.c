@@ -319,6 +319,7 @@ int GP_set_style_thematic(int id, int layer, const char* color, const char* widt
 	gp->tstyle = (gvstyle_thematic *)G_malloc(sizeof(gvstyle_thematic));
     G_zero(gp->tstyle, sizeof(gvstyle_thematic));
     
+    gp->tstyle->active = 1;
     gp->tstyle->layer = layer;
     if (color)
 	gp->tstyle->color_column = G_store(color);
@@ -330,6 +331,31 @@ int GP_set_style_thematic(int id, int layer, const char* color, const char* widt
 	gp->tstyle->width_column = G_store(width);
 
     Gp_load_sites_thematic(gp);
+
+    return 1;
+}
+
+/*!
+   \brief Make style for thematic mapping inactive
+   
+   \param id point set id
+
+   \return 1 on success
+   \return -1 on error (point set not found)
+ */
+int GP_unset_style_thematic(int id)
+{
+    geosite *gp;
+
+    G_debug(4, "GP_unset_style_thematic(): id=%d", id);
+
+    if (NULL == (gp = gp_get_site(id))) {
+	return -1;
+    }
+
+    if (gp->tstyle) {
+	gp->tstyle->active = 0;
+    }
 
     return 1;
 }

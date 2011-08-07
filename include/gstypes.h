@@ -196,6 +196,7 @@ typedef struct g_vect_style
 /* Struct for vector map (thematic mapping) */
 typedef struct g_vect_style_thematic
 {
+    int active;
     int layer;
     
     char *color_column;  

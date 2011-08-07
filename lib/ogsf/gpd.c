@@ -280,7 +280,7 @@ int gpd_2dsite(geosite * gp, geosurf * gs, int do_fast)
 		    else {
 			if (gpt->highlighted > 0)
 			    gpd_obj(gs, gp->hstyle, site);
-			else if (gp->tstyle)
+			else if (gp->tstyle && gp->tstyle->active)
 			    gpd_obj(gs, gpt->style, site);
 			else
 			    gpd_obj(gs, gp->style, site);
@@ -372,7 +372,7 @@ int gpd_3dsite(geosite * gp, float xo, float yo, int do_fast)
 	{
 	    if (gpt->highlighted > 0)
 		gpd_obj(NULL, gp->hstyle, site);
-	    else if (gp->tstyle)
+	    else if (gp->tstyle && gp->tstyle->active)
 		gpd_obj(NULL, gpt->style, site);
 	    else
 		gpd_obj(NULL, gp->style, site);
