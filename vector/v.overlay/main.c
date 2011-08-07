@@ -463,7 +463,7 @@ int main(int argc, char *argv[])
 			  db_get_string(&stmt));
 	}
 	
-	if (db_create_index2(driver, Fi->table, "cat") != DB_OK)
+	if (db_create_index2(driver, Fi->table, GV_KEY_COLUMN) != DB_OK)
 	    G_warning(_("Unable to create index"));
 
 	if (db_grant_on_table
@@ -473,7 +473,7 @@ int main(int argc, char *argv[])
 			  Fi->table);
 
 	/* Table created, now we can write dblink */
-	Vect_map_add_dblink(&Out, ofield[0], NULL, Fi->table, "cat",
+	Vect_map_add_dblink(&Out, ofield[0], NULL, Fi->table, GV_KEY_COLUMN,
 			    Fi->database, Fi->driver);
     }
 

@@ -73,7 +73,7 @@ int execute_random(struct rr_state *theState)
 	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 			  Vect_subst_var(fi->database, &Out), fi->driver);
 
-	Vect_map_add_dblink(&Out, 1, NULL, fi->table, "cat", fi->database,
+	Vect_map_add_dblink(&Out, 1, NULL, fi->table, GV_KEY_COLUMN, fi->database,
 			    fi->driver);
 
 	if (theState->docover == TRUE)
@@ -83,7 +83,7 @@ int execute_random(struct rr_state *theState)
 	db_set_table_name(table, fi->table);
 
 	column = db_get_table_column(table, 0);
-	db_set_column_name(column, "cat");
+	db_set_column_name(column, GV_KEY_COLUMN);
 	db_set_column_sqltype(column, DB_SQL_TYPE_INTEGER);
 
 	column = db_get_table_column(table, 1);

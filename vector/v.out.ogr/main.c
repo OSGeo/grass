@@ -548,15 +548,15 @@ int main(int argc, char *argv[])
 	    
 	    if (flags.append->answer) {
 		Ogr_field = OGR_L_GetLayerDefn(Ogr_layer);
-		if (OGR_FD_GetFieldIndex(Ogr_field, "cat") > -1)
+		if (OGR_FD_GetFieldIndex(Ogr_field, GV_KEY_COLUMN) > -1)
 		    create_field = FALSE;
 		else 
 		    G_warning(_("New attribute column <%s> added to the table"),
-			      "cat");
+			      GV_KEY_COLUMN);
 	    }
 	    
 	    if (create_field) {
-		Ogr_field = OGR_Fld_Create("cat", OFTInteger);
+		Ogr_field = OGR_Fld_Create(GV_KEY_COLUMN, OFTInteger);
 		OGR_L_CreateField(Ogr_layer, Ogr_field, 0);
 		OGR_Fld_Destroy(Ogr_field);
 	    }

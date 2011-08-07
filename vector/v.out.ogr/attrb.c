@@ -21,7 +21,7 @@ int mk_att(int cat, struct field_info *Fi, dbDriver *Driver, int ncol,
     /* Attributes */
     /* Reset */
     if (!doatt) {
-	ogrfieldnum = OGR_F_GetFieldIndex(Ogr_feature, "cat");
+	ogrfieldnum = OGR_F_GetFieldIndex(Ogr_feature, GV_KEY_COLUMN);
 	OGR_F_UnsetField(Ogr_feature, ogrfieldnum);
 	/* doatt reset moved into have cat loop as the table needs to be
 	   open to know the OGR field ID. Hopefully this has no ill consequences */
@@ -130,7 +130,7 @@ int mk_att(int cat, struct field_info *Fi, dbDriver *Driver, int ncol,
 	    db_close_cursor(&cursor);
 	}
 	else {			/* Use cat only */
-	    ogrfieldnum = OGR_F_GetFieldIndex(Ogr_feature, "cat");
+	    ogrfieldnum = OGR_F_GetFieldIndex(Ogr_feature, GV_KEY_COLUMN);
 	    OGR_F_SetFieldInteger(Ogr_feature, ogrfieldnum, cat);
 	}
     }

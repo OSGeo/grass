@@ -20,6 +20,8 @@ struct Option *define_standard_option(const char *name)
 	key = G_OPT_DB_COLUMN;
     else if (G_strcasecmp(name, "G_OPT_DB_COLUMNS") == 0)
 	key = G_OPT_DB_COLUMNS;
+    else if (G_strcasecmp(name, "G_OPT_DB_KEYCOLUMN") == 0)
+	key = G_OPT_DB_KEYCOLUMN;
     else if (G_strcasecmp(name, "G_OPT_I_GROUP") == 0)
 	key = G_OPT_I_GROUP;
     else if (G_strcasecmp(name, "G_OPT_I_SUBGROUP") == 0)

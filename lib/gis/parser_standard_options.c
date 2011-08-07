@@ -30,13 +30,14 @@
   
   - database:
    - G_OPT_DB_WHERE
-   - G_OPT_DB_COLUMN
-   - G_OPT_DB_COLUMNS
    - G_OPT_DB_TABLE
    - G_OPT_DB_DRIVER
    - G_OPT_DB_DATABASE
    - G_OPT_DB_SCHEMA
- 
+   - G_OPT_DB_COLUMN
+   - G_OPT_DB_COLUMNS
+   - G_OPT_DB_KEYCOLUMN
+
   - imagery:
    - G_OPT_I_GROUP
    - G_OPT_I_SUBGROUP
@@ -161,6 +162,17 @@ struct Option *G_define_standard_option(int opt)
 	Opt->multiple = YES;
 	Opt->description = _("Name of attribute column(s)");
 	Opt->gisprompt = "old,dbcolumn,dbcolumn";
+	break;
+    case G_OPT_DB_KEYCOLUMN:
+	Opt->key = "key";
+	Opt->type = TYPE_STRING;
+	Opt->key_desc = "name";
+	Opt->required = NO;
+	Opt->multiple = NO;
+	Opt->description = _("Name of key column");
+	Opt->description = _("Must refer to an integer column");
+	/* Opt->gisprompt = "old,dbcolumn,dbcolumn"; */
+	Opt->answer = GV_KEY_COLUMN;
 	break;
 
 	/* imagery group */

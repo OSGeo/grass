@@ -44,7 +44,7 @@ int attributes(char *in, struct Map_info *Out)
     }
 
     fi = Vect_default_field_info(Out, 1, NULL, GV_1TABLE);
-    Vect_map_add_dblink(Out, 1, NULL, fi->table, "cat", fi->database,
+    Vect_map_add_dblink(Out, 1, NULL, fi->table, GV_KEY_COLUMN, fi->database,
 			fi->driver);
 
     /* Get maximum column length */
@@ -82,9 +82,9 @@ int attributes(char *in, struct Map_info *Out)
 		      db_get_string(&sql));
     }
 
-    if (db_create_index2(driver, fi->table, "cat") != DB_OK)
+    if (db_create_index2(driver, fi->table, GV_KEY_COLUMN) != DB_OK)
 	G_warning(_("Unable to create index for table <%s>, key <%s>"),
-		  fi->table, "cat");
+		  fi->table, GV_KEY_COLUMN);
 
     if (db_grant_on_table
 	(driver, fi->table, DB_PRIV_SELECT, DB_GROUP | DB_PUBLIC) != DB_OK)

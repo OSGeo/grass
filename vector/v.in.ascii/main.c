@@ -375,7 +375,7 @@ int main(int argc, char *argv[])
 
 	    /* this link is added with default 'cat' key, later deleted and replaced by true key name,
 	     * otherwise if module crashes when the table exists but link is not written it makes troubles */
-	    Vect_map_add_dblink(&Map, 1, NULL, Fi->table, "cat", Fi->database,
+	    Vect_map_add_dblink(&Map, 1, NULL, Fi->table, GV_KEY_COLUMN, Fi->database,
 				Fi->driver);
 
 	    /* Create table */
@@ -493,7 +493,7 @@ int main(int argc, char *argv[])
 	    }
 
 	    if (catcol < 0) {
-		key = "cat";
+		key = GV_KEY_COLUMN;
 	    }
 	    else if (!columns_opt->answer) {
 

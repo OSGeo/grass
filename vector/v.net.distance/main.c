@@ -190,7 +190,7 @@ int main(int argc, char *argv[])
 
     /* Create table */
     Fi = Vect_default_field_info(&Out, 1, NULL, GV_1TABLE);
-    Vect_map_add_dblink(&Out, 1, NULL, Fi->table, "cat", Fi->database,
+    Vect_map_add_dblink(&Out, 1, NULL, Fi->table, GV_KEY_COLUMN, Fi->database,
 			Fi->driver);
     db_init_string(&sql);
     driver = db_start_driver_open_database(Fi->driver, Fi->database);
@@ -210,7 +210,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Unable to create table: '%s'"), db_get_string(&sql));
     }
 
-    if (db_create_index2(driver, Fi->table, "cat") != DB_OK)
+    if (db_create_index2(driver, Fi->table, GV_KEY_COLUMN) != DB_OK)
 	G_warning(_("Cannot create index"));
 
     if (db_grant_on_table

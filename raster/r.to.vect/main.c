@@ -156,7 +156,7 @@ int main(int argc, char *argv[])
 	char buf[1000];
 
 	Fi = Vect_default_field_info(&Map, 1, NULL, GV_1TABLE);
-	Vect_map_add_dblink(&Map, 1, NULL, Fi->table, "cat", Fi->database,
+	Vect_map_add_dblink(&Map, 1, NULL, Fi->table, GV_KEY_COLUMN, Fi->database,
 			    Fi->driver);
 
 	driver =
@@ -202,7 +202,7 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Unable to create table: %s"),
 			  db_get_string(&sql));
 
-	if (db_create_index2(driver, Fi->table, "cat") != DB_OK)
+	if (db_create_index2(driver, Fi->table, GV_KEY_COLUMN) != DB_OK)
 	    G_warning(_("Unable to create index"));
 
 	if (db_grant_on_table

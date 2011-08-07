@@ -217,7 +217,7 @@ struct varray *parse_filter_options(struct Map_info *Map, int layer,
     }
     else if (cats) {
 	if (layer < 1)
-	    G_fatal_error(_("'%s' must be > 0 for '%s'"), "layer", "cat");
+	    G_fatal_error(_("'%s' must be > 0 for '%s'"), "layer", GV_KEY_COLUMN);
 	*chcat = 1;
 	varray = Vect_new_varray(Vect_get_num_lines(Map));
 

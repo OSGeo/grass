@@ -183,7 +183,7 @@ int main(int argc, char *argv[])
 	sprintf(buf, "create table %s (cat integer, %s %s)", Fi->table,
 		parm.zcol->answer, parm.ztype->answer);
 	db_set_string(&sql, buf);
-	Vect_map_add_dblink(&Out, 1, NULL, Fi->table, "cat", Fi->database,
+	Vect_map_add_dblink(&Out, 1, NULL, Fi->table, GV_KEY_COLUMN, Fi->database,
 			    Fi->driver);
 
 	/* Create table */

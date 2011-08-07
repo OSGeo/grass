@@ -557,7 +557,7 @@ int main(int argc, char *argv[])
 	    Vect_open_new(&Map2, cvdev, 1);
 	Vect_hist_command(&Map2);
 	ff = Vect_default_field_info(&Map2, 1, NULL, GV_1TABLE);
-	Vect_map_add_dblink(&Map2, 1, NULL, ff->table, "cat", ff->database,
+	Vect_map_add_dblink(&Map2, 1, NULL, ff->table, GV_KEY_COLUMN, ff->database,
 			    ff->driver);
 
 	/* Create new table */

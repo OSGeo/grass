@@ -163,7 +163,7 @@ int main(int argc, char *argv[])
 	    db_init_string(&lastval);
 
 	    NewFi = Vect_default_field_info(&Out, field, NULL, GV_1TABLE);
-	    Vect_map_add_dblink(&Out, field, NULL, NewFi->table, "cat",
+	    Vect_map_add_dblink(&Out, field, NULL, NewFi->table, GV_KEY_COLUMN,
 				NewFi->database, NewFi->driver);
 
 	    Driver2 = db_start_driver_open_database(NewFi->driver,

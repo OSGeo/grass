@@ -172,6 +172,7 @@ static const char *GRASS_copyright __attribute__ ((unused))
     G_OPT_DB_SCHEMA,            /* database schema */
     G_OPT_DB_COLUMN,		/* one attr column */
     G_OPT_DB_COLUMNS,		/* one or more attr columns */
+    G_OPT_DB_KEYCOLUMN,         /* key column */
 
     G_OPT_I_GROUP,		/* old input imagery group */
     G_OPT_I_SUBGROUP,		/* old input imagery subgroup */
@@ -241,6 +242,12 @@ static const char *GRASS_copyright __attribute__ ((unused))
 #define GR_FATAL_EXIT    0
 #define GR_FATAL_PRINT   1
 #define GR_FATAL_RETURN  2
+
+/* for vector maps */
+/*!
+  \brief Name of default key column
+*/
+#define GV_KEY_COLUMN    "cat"
 
 /* Element types */
 enum
