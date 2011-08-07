@@ -617,13 +617,14 @@ int main(int argc, char *argv[])
 	    Vect_open_new(&Map, cvdev, 1);
 	Vect_hist_command(&Map);
 	f = Vect_default_field_info(&Map, 1, NULL, GV_1TABLE);
-	Vect_map_add_dblink(&Map, 1, NULL, f->table, "cat", f->database,
+	Vect_map_add_dblink(&Map, 1, NULL, f->table, GV_KEY_COLUMN, f->database,
 			    f->driver);
 	/* Create new table */
 	db_zero_string(&sql);
 	sprintf(buf, "create table %s ( ", f->table);
 	db_append_string(&sql, buf);
-	db_append_string(&sql, "cat integer");
+	db_append_string(&sql, GV_KEY_COLUMN);
+	db_append_string(&sql, " integer");
 	db_append_string(&sql, ", flt1 double precision");
 	db_append_string(&sql, ")");
 	G_debug(1, db_get_string(&sql));

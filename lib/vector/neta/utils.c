@@ -232,7 +232,7 @@ int NetA_initialise_varray(struct Map_info *In, int layer, int mask_type,
     }
     else if (cat) {
 	if (layer < 1)
-	    G_fatal_error(_("'%s' must be > 0 for '%s'"), "layer", "cat");
+	    G_fatal_error(_("'%s' must be > 0 for '%s'"), "layer", GV_KEY_COLUMN);
 	*varray = Vect_new_varray(Vect_get_num_lines(In));
 	if (Vect_set_varray_from_cat_string
 	    (In, layer, cat, mask_type, 1, *varray) == -1) {

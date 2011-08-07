@@ -347,7 +347,7 @@ struct field_info *Vect_default_field_info(struct Map_info *Map,
 	fi->table = G_store(buf);
     }
 
-    fi->key = G_store("cat");	/* Should be: id/fid/gfid/... ? */
+    fi->key = G_store(GV_KEY_COLUMN);	/* Should be: id/fid/gfid/... ? */
     fi->database = G_store(db);
     fi->driver = G_store(drv);
 

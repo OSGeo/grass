@@ -71,12 +71,8 @@ int main(int argc, char **argv)
 
     dbtable = G_define_standard_option(G_OPT_DB_TABLE);
 
-    dbkey = G_define_standard_option(G_OPT_DB_COLUMN);
-    dbkey->key = "key";
-    dbkey->answer = "cat";
-    dbkey->label = _("Key column name");
-    dbkey->description = _("Must refer to an integer column");
-
+    dbkey = G_define_standard_option(G_OPT_DB_KEYCOLUMN);
+    
     field_opt = G_define_standard_option(G_OPT_V_FIELD);
     field_opt->description = _("Format: layer number[/layer name]");
     field_opt->gisprompt = "new_layer,layer,layer";

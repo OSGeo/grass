@@ -240,7 +240,7 @@ static int get_field_cat(struct Map_info *Map, char *layer, int *field,
 	G_warning(_("Unable to create index for table <%s>, key <%s>"),
 		  Fi[i]->table, Fi[i]->key);
 
-    if (Vect_map_add_dblink(Map, *field, field_name, Fi[i]->table, "cat",
+    if (Vect_map_add_dblink(Map, *field, field_name, Fi[i]->table, GV_KEY_COLUMN,
 			    Fi[i]->database, Fi[i]->driver))
 	G_warning(_("Unable to add database link for vector map <%s>"),
 		  Vect_get_full_name(Map));

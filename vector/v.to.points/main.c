@@ -274,7 +274,7 @@ int main(int argc, char **argv)
 	}
 
 	Fi = Vect_default_field_info(&Out, 2, NULL, GV_MTABLE);
-	Vect_map_add_dblink(&Out, 2, NULL, Fi->table, "cat", Fi->database,
+	Vect_map_add_dblink(&Out, 2, NULL, Fi->table, GV_KEY_COLUMN, Fi->database,
 			    Fi->driver);
 
 	/* Open driver */
@@ -294,9 +294,9 @@ int main(int argc, char **argv)
 			  db_get_string(&stmt));
 	}
 
-	if (db_create_index2(driver, Fi->table, "cat") != DB_OK)
+	if (db_create_index2(driver, Fi->table, GV_KEY_COLUMN) != DB_OK)
 	    G_warning(_("Unable to create index for table <%s>, key <%s>"),
-		      Fi->table, "cat");
+		      Fi->table, GV_KEY_COLUMN);
 
 	if (db_grant_on_table
 	    (driver, Fi->table, DB_PRIV_SELECT,

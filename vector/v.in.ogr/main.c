@@ -706,7 +706,7 @@ int main(int argc, char *argv[])
 
 	/* Add DB link */
 	if (!flag.notab->answer) {
-	    char *cat_col_name = "cat";
+	    char *cat_col_name = GV_KEY_COLUMN;
 
 	    if (nlayers == 1) {	/* one layer only */
 		Fi = Vect_default_field_info(&Map, layer + 1, NULL,
@@ -752,7 +752,7 @@ int main(int argc, char *argv[])
 		}
 
 		/* avoid that we get the 'cat' column twice */
-		if (strcmp(Ogr_fieldname, "cat") == 0) {
+		if (strcmp(Ogr_fieldname, GV_KEY_COLUMN) == 0) {
 		    sprintf(namebuf, "%s_", Ogr_fieldname);
 		    Ogr_fieldname = G_store(namebuf);
 		}

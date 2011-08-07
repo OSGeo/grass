@@ -497,7 +497,7 @@ int main(int argc, char *argv[])
 
     /* Add DB link */
     if (!notab_flag->answer) {
-	char *cat_col_name = "cat";
+	char *cat_col_name = GV_KEY_COLUMN;
 
 	Fi = Vect_default_field_info(&Map, 1, NULL, GV_1TABLE);
 
