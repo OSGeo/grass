@@ -1,16 +1,12 @@
 /*!
-   \file gv.c
+   \file lib/ogsf/gv.c
 
    \brief OGSF library - loading and manipulating vector sets (lower level functions)
 
-   GRASS OpenGL gsurf OGSF Library 
+   (C) 1999-2008, 2011 by the GRASS Development Team
 
-   (C) 1999-2008 by the GRASS Development Team
-
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
 
    \author Bill Brown USACERL (November 1993)
    \author Doxygenized by Martin Landa (June 2008)
@@ -42,11 +38,11 @@ geovect *gv_get_vect(int id)
 
     for (gv = Vect_top; gv; gv = gv->next) {
 	if (gv->gvect_id == id) {
-	    return (gv);
+	    return gv;
 	}
     }
 
-    return (NULL);
+    return NULL;
 }
 
 /*!
@@ -65,11 +61,11 @@ geovect *gv_get_prev_vect(int id)
 
     for (pv = Vect_top; pv; pv = pv->next) {
 	if (pv->gvect_id == id - 1) {
-	    return (pv);
+	    return pv;
 	}
     }
 
-    return (NULL);
+    return NULL;
 }
 
 /*!
@@ -86,7 +82,7 @@ int gv_num_vects(void)
 
     G_debug(5, "gv_num_vects(): num=%d", i);
 
-    return (i);
+    return i;
 }
 
 /*!
@@ -100,14 +96,14 @@ geovect *gv_get_last_vect(void)
     geovect *lv;
 
     if (!Vect_top) {
-	return (NULL);
+	return NULL;
     }
 
     for (lv = Vect_top; lv->next; lv = lv->next) ;
 
     G_debug(5, "gv_get_last_vect(): id=%d", lv->gvect_id);
 
-    return (lv);
+    return lv;
 }
 
 /*!
@@ -123,8 +119,9 @@ geovect *gv_get_new_vect(void)
     nv = (geovect *) G_malloc(sizeof(geovect));
     if (!nv) {
 	/* G_fatal_error */
-	return (NULL);
+	return NULL;
     }
+    G_zero(nv, sizeof(geovect));
 
     if ((lv = gv_get_last_vect())) {
 	lv->next = nv;
@@ -134,19 +131,19 @@ geovect *gv_get_new_vect(void)
 	Vect_top = nv;
 	nv->gvect_id = FIRST_VECT_ID;
     }
-
-    nv->next = NULL;
-
+    
     nv->style = (gvstyle *) G_malloc(sizeof(gvstyle));
     if (NULL == nv->style)
 	return NULL;
+    G_zero(nv->style, sizeof (gvstyle));
     nv->hstyle = (gvstyle *) G_malloc(sizeof(gvstyle));
     if (NULL == nv->hstyle)
 	return NULL;
+    G_zero(nv->hstyle, sizeof (gvstyle));
 
     G_debug(5, "gv_get_new_vect() id=%d", nv->gvect_id);
 
-    return (nv);
+    return nv;
 }
 
 /*!
@@ -188,11 +185,10 @@ int gv_set_defaults(geovect * gv)
 {
     int i;
 
-    G_debug(5, "gv_set_defaults() id=%d", gv->gvect_id);
-
     if (!gv) {
 	return (-1);
     }
+    G_debug(5, "gv_set_defaults() id=%d", gv->gvect_id);
 
     gv->filename = NULL;
     gv->n_lines = gv->n_surfs = gv->use_mem = 0;
@@ -200,20 +196,20 @@ int gv_set_defaults(geovect * gv)
     gv->lines = NULL;
     gv->fastlines = NULL;
     gv->flat_val = 0;
-    gv->thematic_layer = -1;
     gv->style->color = 0xF0F0F0;
     gv->style->width = 1;
     gv->style->next = NULL;
     gv->hstyle->color = 0xFF0000;
     gv->hstyle->width = 2;
     gv->hstyle->next = NULL;
+    gv->tstyle = NULL;
     gv->next = NULL;
 
     for (i = 0; i < MAX_SURFS; i++) {
 	gv->drape_surf_id[i] = 0;
     }
 
-    return (0);
+    return 0;
 }
 
 /*!
@@ -227,12 +223,12 @@ int gv_set_defaults(geovect * gv)
 int gv_init_vect(geovect * gv)
 {
     if (!gv) {
-	return (-1);
+	return -1;
     }
 
     G_debug(5, "gv_init_vect() id=%d", gv->gvect_id);
 
-    return (0);
+    return 0;
 }
 
 /*!
@@ -300,10 +296,10 @@ int gv_free_vect(geovect * fv)
 	    fv = NULL;
 	}
 
-	return (1);
+	return 1;
     }
 
-    return (-1);
+    return -1;
 }
 
 /*!
@@ -314,8 +310,7 @@ int gv_free_vect(geovect * fv)
 void gv_free_vectmem(geovect * fv)
 {
     geoline *gln, *tmpln;
-    gvstyle *gvs, *tmpstyle;
-
+    
     G_free((void *)fv->filename);
     fv->filename = NULL;
     if (fv->style)
@@ -335,14 +330,7 @@ void gv_free_vectmem(geovect * fv)
 	    }
 
 	    G_free(gln->cats);
-	    if (fv->thematic_layer > -1) {	/* Style also exists for features */
-		for (gvs = gln->style; gvs;) {
-		    tmpstyle = gvs;
-		    gvs = gvs->next;
-		    G_free(tmpstyle);
-		}
-	    }
-
+	    
 	    tmpln = gln;
 	    gln = gln->next;
 	    sub_Vectmem(sizeof(geoline));
@@ -351,6 +339,13 @@ void gv_free_vectmem(geovect * fv)
 
 	fv->n_lines = 0;
 	fv->lines = NULL;
+    }
+
+    if (fv->tstyle) {
+	G_free(fv->tstyle->color_column);
+	G_free(fv->tstyle->symbol_column);
+	G_free(fv->tstyle->size_column);
+	G_free(fv->tstyle->width_column);
     }
 
     return;

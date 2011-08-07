@@ -116,9 +116,7 @@ geosite *gp_get_last_site(void)
 geosite *gp_get_new_site(void)
 {
     geosite *np, *lp;
-
-    G_debug(5, "gp_get_new_site");
-
+    
     np = (geosite *) G_malloc(sizeof(geosite));	/* G_fatal_error */
     if (!np) {
 	return NULL;
@@ -143,6 +141,8 @@ geosite *gp_get_new_site(void)
 	return NULL;
     G_zero(np->hstyle, sizeof (gvstyle));
 
+    G_debug(5, "gp_get_new_site id=%d", np->gsite_id);
+    
     return np;
 }
 
@@ -187,11 +187,11 @@ int gp_set_defaults(geosite * gp)
 {
     float dim;
 
-    G_debug(5, "gp_set_defaults");
-
     if (!gp) {
 	return -1;
     }
+    G_debug(5, "gp_set_defaults() id=%d", gp->gsite_id);
+
     GS_get_longdim(&dim);
 
     gp->style->color = 0xF0F0F0;
@@ -332,7 +332,7 @@ void gp_free_sitemem(geosite * fp)
 	fp->points = NULL;
     }
 
-    if(fp->tstyle) {
+    if (fp->tstyle) {
 	G_free(fp->tstyle->color_column);
 	G_free(fp->tstyle->symbol_column);
 	G_free(fp->tstyle->size_column);

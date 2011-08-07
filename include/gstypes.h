@@ -237,10 +237,8 @@ typedef struct g_vect
     int (*bgn_read) (), (*end_read) (), (*nxt_line) ();
     struct g_vect *next;
     void *clientdata;
-
-    int thematic_layer;		/* Layer number to use for thematic mapping. <0 == no thematic mapping; 
-				   0 == thematic mapping is unset but initialized; 
-				   >0 use specified layer */
+  
+    gvstyle_thematic *tstyle;  /* thematic mapping */
     gvstyle *style;	/* Vector default look&feel */
     gvstyle *hstyle;	/* IMHO highlight should be per layer basis. */
 } geovect;

@@ -386,7 +386,7 @@ sets.
 
 - GV_get_vect_list()
 
-- GV_get_vectmode()
+- GV_get_style()
 
 - GV_get_vectname()
 
@@ -402,7 +402,7 @@ sets.
 
 - GV_set_trans()
 
-- GV_set_vectmode()
+- GV_set_style()
 
 - GV_surf_is_selected()
 

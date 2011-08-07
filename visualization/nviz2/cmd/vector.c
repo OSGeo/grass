@@ -112,21 +112,35 @@ int load_vectors(const struct Option *elev_map,
 */
 int vlines_set_attrb(const struct GParams *params)
 {
-    int i, color, width, flat, height;
+    int i, layer, color, width, flat, height;
     int *vect_list, nvects;
+    char *color_column, *width_column;
 
     vect_list = GV_get_vect_list(&nvects);
 
     for (i = 0; i < nvects; i++) {
-	/* mode -- use memory by default */
+	layer = check_thematic(params, TRUE);
+	
 	color = Nviz_color_from_str(params->vline_color->answers[i]);
+	color_column = params->vline_color_column->answers ?
+	    params->vline_color_column->answers[i] : NULL;
 	width = atoi(params->vline_width->answers[i]);
+	width_column = params->vline_width_column->answers ?
+	    params->vline_width_column->answers[i] : NULL;
+	
 	if (strcmp(params->vline_mode->answers[i], "flat") == 0)
 	    flat = 1;
 	else
 	    flat = 0;
-	if (GV_set_vectmode(vect_list[i], 1, color, width, flat) < 0)
+	
+	/* style (mode -- use memory by default) */
+	if (GV_set_style(vect_list[i], TRUE, color, width, flat) < 0)
 	    return 0;
+
+	if (color_column || width_column)
+	    if (GV_set_style_thematic(vect_list[i], layer, color_column,
+				      width_column) < 0)
+		return 0;
 
 	/* height */
 	height = atoi(params->vline_height->answers[i]);
@@ -171,10 +185,13 @@ int vpoints_set_attrb(const struct GParams *params)
 	    params->vpoint_marker_column->answers[i] : NULL;
 	marker = GP_str_to_marker(marker_str);
 	
-	GP_set_style(site_list[i], color, width, size, marker);
+	if (GP_set_style(site_list[i], color, width, size, marker) < 0)
+	    return 0;
+	
 	if (color_column || width_column || size_column || marker_column) {
-	    GP_set_style_thematic(site_list[i], layer, color_column, width_column,
-				  size_column, marker_column);
+	    if (GP_set_style_thematic(site_list[i], layer, color_column, width_column,
+				      size_column, marker_column) < 0)
+		return 0;
 	}
     }
 
@@ -192,11 +209,11 @@ int check_thematic(const struct GParams *params, int vlines)
     dbColumn *column;
     
     if (vlines) {
-	map    = params->vlines; /*TODO */
-	layer  = NULL;
-	color  = NULL;
+	map    = params->vlines;
+	layer  = params->vline_layer;
+	color  = params->vline_color_column;
 	size   = NULL;
-	width  = NULL;
+	width  = params->vline_width_column;
 	marker = NULL;
     }
     else {
@@ -229,7 +246,7 @@ int check_thematic(const struct GParams *params, int vlines)
 	    if (db_column_Ctype(driver, Fi->table, color->answers[i]) != DB_C_TYPE_STRING)
 		G_fatal_error(_("Data type of color column must be character"));
 	}
-	if (size->answers && size->answers[i]) {
+	if (size && size->answers && size->answers[i]) {
 	    db_get_column(driver, Fi->table, size->answers[i], &column);
 	    if (!column)
 		G_fatal_error(_("Column <%s> in table <%s> not found"),
@@ -249,7 +266,7 @@ int check_thematic(const struct GParams *params, int vlines)
 	    if (type != DB_C_TYPE_INT && type != DB_C_TYPE_DOUBLE)
 		G_fatal_error(_("Data type of width column must be numeric"));
 	}
-	if (marker->answers && marker->answers[i]) {
+	if (marker && marker->answers && marker->answers[i]) {
 	    db_get_column(driver, Fi->table, marker->answers[i], &column);
 	    if (!column)
 		G_fatal_error(_("Column <%s> in table <%s> not found"),

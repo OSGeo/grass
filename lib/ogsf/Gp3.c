@@ -158,8 +158,6 @@ geopoint *Gp_load_sites(const char *name, int *nsites, int *has_z)
 /*!
   \brief Load styles for geopoints based on thematic mapping
 
-  \todo Currently only supports color settings
-  
   \param gp pointer to geosite structure
 
   \return number of points defined by thematic mapping
