@@ -742,10 +742,12 @@ class Settings:
         self._readFile(self.filePath, settings)
         
         # set environment variables
-        os.environ["GRASS_FONT"] = self.Get(group = 'display',
-                                            key = 'font', subkey = 'type')
-        os.environ["GRASS_ENCODING"] = self.Get(group = 'display',
-                                                key = 'font', subkey = 'encoding')
+        font = self.Get(group = 'display', key = 'font', subkey = 'type')
+        enc  = self.Get(group = 'display', key = 'font', subkey = 'encoding')
+        if font:
+            os.environ["GRASS_FONT"] = font
+        if enc:
+            os.environ["GRASS_ENCODING"] = enc
         
     def _readFile(self, filename, settings = None):
         """!Read settings from file to dict
