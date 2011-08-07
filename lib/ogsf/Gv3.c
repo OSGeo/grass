@@ -1,31 +1,32 @@
 /*!
-   \file Gv3.c
+   \file lib/ogsf/Gv3.c
 
    \brief OGSF library - loading vector sets (lower level functions)
 
    GRASS OpenGL gsurf OGSF Library 
 
-   (C) 1999-2008 by the GRASS Development Team
+   (C) 1999-2008, 2011 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
 
    \author Bill Brown USACERL (December 1993)
-   \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
+   \author Updated by Martin Landa <landa.martin gmail.com>
+   (doxygenized in May 2008, thematic mapping in August 2011)
  */
 
 #include <stdlib.h>
 
 #include <grass/gis.h>
+#include <grass/colors.h>
 #include <grass/vector.h>
+#include <grass/dbmi.h>
 #include <grass/glocale.h>
 #include <grass/gstypes.h>
 
 /*
    #define TRAK_MEM
- */
+*/
 
 #ifdef TRAK_MEM
 static int Tot_mem = 0;
@@ -281,6 +282,7 @@ geoline *Gv_load_vect(const char *grassname, int *nlines)
  */
 void sub_Vectmem(int minus)
 {
+    G_debug(5, "sub_Vectmem(): minus=%d", minus);
 #ifdef TRAK_MEM
     {
 	Tot_mem -= minus;
@@ -288,4 +290,99 @@ void sub_Vectmem(int minus)
 #endif
 
     return;
+}
+
+/*!
+  \brief Load styles for geolines based on thematic mapping
+
+  \param gv pointer to geovect structure
+
+  \return number of features defined by thematic mapping
+  \return -1 on error
+*/
+int Gv_load_vect_thematic(geovect *gv)
+{
+    geoline *gvt;
+
+    struct Map_info Map;
+    struct field_info *Fi;
+    
+    int nvals, cat, nlines;
+    int red, blu, grn;
+    const char *str;
+    const char *mapset;
+
+    dbDriver *driver;
+    dbValue value;
+    
+    if(!gv || !gv->tstyle || !gv->filename)
+	return -1;
+
+    mapset = G_find_vector2(gv->filename, "");
+    if (!mapset) {
+	G_fatal_error(_("Vector map <%s> not found"), gv->filename);
+    }
+    
+    Vect_set_open_level(1);
+    if (Vect_open_old(&Map, gv->filename, "") == -1) {
+	G_fatal_error(_("Unable to open vector map <%s>"),
+		      G_fully_qualified_name(gv->filename, mapset));
+    }
+    
+    Fi = Vect_get_field(&Map, gv->tstyle->layer);
+    if (!Fi)
+	G_fatal_error(_("Database connection not defined for layer %d"),
+		      gv->tstyle->layer);
+    
+    driver = db_start_driver_open_database(Fi->driver, Fi->database);
+    if (!driver)
+	G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+		      Fi->database, Fi->driver);
+    
+    G_message(_("Loading thematic vector layer <%s>..."),
+	      G_fully_qualified_name(gv->filename, mapset));
+    nlines = 0;
+    for(gvt = gv->lines; gvt; gvt = gvt->next) {
+	gvt->style = (gvstyle *) G_malloc(sizeof(gvstyle));
+	G_zero(gvt->style, sizeof(gvstyle));
+	
+	/* use default style */
+	gvt->style->color  = gv->style->color;
+	gvt->style->symbol = gv->style->symbol;
+	gvt->style->size   = gv->style->size;
+	gvt->style->width  = gv->style->width;
+	
+	Vect_cat_get(gvt->cats, gv->tstyle->layer, &cat);
+	if (cat < 0)
+	    continue;
+
+	/* color */
+	if (gv->tstyle->color_column) {
+	    nvals = db_select_value(driver, Fi->table, Fi->key, cat, gv->tstyle->color_column, &value);
+	    if (nvals < 1)
+		continue;
+	    str = db_get_value_string(&value);
+	    if (G_str_to_color(str, &red, &grn, &blu) != 1) {
+		G_warning(_("Invalid color definition (%s)"),
+			  str);
+		gvt->style->color = gv->style->color;
+	    }
+	    else {
+		gvt->style->color = (red & RED_MASK) + ((int)((grn) << 8) & GRN_MASK) +
+		    ((int)((blu) << 16) & BLU_MASK);
+	    }
+	}
+	
+	/* width */
+	if (gv->tstyle->width_column) {
+	    nvals = db_select_value(driver, Fi->table, Fi->key, cat, gv->tstyle->width_column, &value);
+	    if (nvals < 1)
+		continue;
+	    gvt->style->width = db_get_value_int(&value);
+	}
+
+	nlines++;
+    }
+    
+    return nlines;
 }

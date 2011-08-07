@@ -308,6 +308,14 @@ void args_vline(struct GParams *params)
     params->vlines->guisection = _("Vector lines");
     params->vlines->key = "vline";
 
+    params->vline_layer = G_define_standard_option(G_OPT_V_FIELD);
+    params->vline_layer->multiple = YES;
+    params->vline_layer->required = NO;
+    params->vline_layer->description = _("Layer number or name for thematic mapping");
+    params->vline_layer->guisection = _("Vector lines");
+    params->vline_layer->key = "vline_layer";
+    params->vline_layer->answer = "1";
+
     /* line width */
     params->vline_width = G_define_option();
     params->vline_width->key = "vline_width";
@@ -320,6 +328,13 @@ void args_vline(struct GParams *params)
     params->vline_width->options = "1-100";
     params->vline_width->answer = "2";
 
+    params->vline_width_column = G_define_standard_option(G_OPT_DB_COLUMN);
+    params->vline_width_column->multiple = YES;
+    params->vline_width_column->required = NO;
+    params->vline_width_column->label = _("Name of width definition column");
+    params->vline_width_column->key = "vline_width_column";
+    params->vline_width_column->guisection = _("Vector lines");
+
     /* line color */
     params->vline_color = G_define_standard_option(G_OPT_C_FG);
     params->vline_color->multiple = YES;
@@ -328,6 +343,13 @@ void args_vline(struct GParams *params)
     params->vline_color->key = "vline_color";
     params->vline_color->answer = "blue";
     params->vline_color->guisection = _("Vector lines");
+
+    params->vline_color_column = G_define_standard_option(G_OPT_DB_COLUMN);
+    params->vline_color_column->multiple = YES;
+    params->vline_color_column->required = NO;
+    params->vline_color_column->label = _("Name of color definition column");
+    params->vline_color_column->key = "vline_color_column";
+    params->vline_color_column->guisection = _("Vector lines");
 
     /* line mode */
     params->vline_mode = G_define_option();

@@ -807,7 +807,7 @@ class Nviz(object):
         color = Nviz_color_from_str(color_str)
         
         # use memory by default
-        if GV_set_vectmode(id, 1, color, width, flat) < 0:
+        if GV_set_style(id, 1, color, width, flat) < 0:
             return -2
         
         return 1

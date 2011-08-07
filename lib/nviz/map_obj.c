@@ -101,7 +101,7 @@ int Nviz_new_map_obj(int type, const char *name, double value, nv_data * data)
 
 	/* initialize display parameters
 	   automatically select all surfaces to draw vector */
-	GV_set_vectmode(new_id, 1, 0xFF0000, 2, 0);
+	GV_set_style(new_id, 1, 0xFF0000, 2, 0);
 	surf_list = GS_get_surf_list(&num_surfs);
 	if (num_surfs) {
 	    for (i = 0; i < num_surfs; i++) {

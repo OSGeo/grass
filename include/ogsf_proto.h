@@ -242,8 +242,10 @@ int *GV_get_vect_list(int *);
 int GV_delete_vector(int);
 int GV_load_vector(int, const char *);
 int GV_get_vectname(int, char **);
-int GV_set_vectmode(int, int, int, int, int);
-int GV_get_vectmode(int, int *, int *, int *, int *);
+int GV_set_style(int, int, int, int, int);
+int GV_get_style(int, int *, int *, int *, int *);
+int GV_set_style_thematic(int, int, const char*, const char*);
+int GV_unset_style_thematic(int);
 void GV_set_trans(int, float, float, float);
 int GV_get_trans(int, float *, float *, float *);
 int GV_select_surf(int, int);
@@ -341,6 +343,7 @@ int Gs_update_attrange(geosurf *, int);
 
 /* Gv3.c */
 geoline *Gv_load_vect(const char *, int *);
+int Gv_load_vect_thematic(geovect *);
 void sub_Vectmem(int);
 
 /* gk.c */

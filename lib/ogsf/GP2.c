@@ -247,7 +247,7 @@ int GP_get_style(int id, int *color, int *width, float *size, int *symbol)
 }
 
 /*!
-   \brief Set point set style
+   \brief Set point style
 
    Supported icon symbols (markers):
     - ST_X

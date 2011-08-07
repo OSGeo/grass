@@ -227,88 +227,77 @@ int gpd_2dsite(geosite * gp, geosurf * gs, int do_fast)
 	return 0;
     }
 
-    if (gs) {
-	gs_update_curmask(gs);
+    if (!gs)
+	return 1;
 
-	src = gs_get_att_src(gs, ATT_TOPO);
-
-	if (src == CONST_ATT) {
-	    konst = gs->att[ATT_TOPO].constant;
-	    site[Z] = konst;
-	}
-	else {
-	    buf = gs_get_att_typbuff(gs, ATT_TOPO, 0);
-	}
-
-	/* Get viewport parameters for view check */
-	gsd_getwindow(window, viewport, modelMatrix, projMatrix);
-
-	gsd_pushmatrix();
-
-	gsd_do_scale(1);
-
-	gsd_translate(gs->x_trans, gs->y_trans, gs->z_trans);
-
-	gsd_linewidth(gp->style->width);
-	check = 0;
-
-	for (gpt = gp->points; gpt; gpt = gpt->next) {
-	    if (!(++check % CHK_FREQ)) {
-		if (GS_check_cancel()) {
-		    gsd_linewidth(1);
-		    gsd_popmatrix();
-
-		    return 0;
-		}
-	    }
-
-	    site[X] = gpt->p3[X] + gp->x_trans - gs->ox;
-	    site[Y] = gpt->p3[Y] + gp->y_trans - gs->oy;
-
-	    if (gs_point_is_masked(gs, site)) {
-		continue;
-	    }
-
-	    if (src == MAP_ATT) {
-		if (viewcell_tri_interp(gs, buf, site, 1)) {
-		    /* returns 0 if outside or masked */
-		    site[Z] += gp->z_trans;
-
-		    if (gsd_checkpoint(site, window,
-				       viewport, modelMatrix, projMatrix))
-			continue;
-		    else {
-			if (gpt->highlighted > 0)
-			    gpd_obj(gs, gp->hstyle, site);
-			else if (gp->tstyle && gp->tstyle->active)
-			    gpd_obj(gs, gpt->style, site);
-			else
-			    gpd_obj(gs, gp->style, site);
-		    }
-		}
-	    }
-	    else if (src == CONST_ATT) {
-		if (gs_point_in_region(gs, site, NULL)) {
-		    site[Z] += gp->z_trans;
-		    if (gsd_checkpoint(site, window,
-				       viewport, modelMatrix, projMatrix))
-			continue;
-		    else {
-			if (gpt->highlighted > 0)
-			    gpd_obj(gs, gp->hstyle, site);
-			else if (gp->tstyle)
-			    gpd_obj(gs, gpt->style, site);
-			else
-			    gpd_obj(gs, gp->style, site);
-		    }
-		}
+    gs_update_curmask(gs);
+    
+    src = gs_get_att_src(gs, ATT_TOPO);
+    
+    if (src == CONST_ATT) {
+	konst = gs->att[ATT_TOPO].constant;
+	site[Z] = konst;
+    }
+    else {
+	buf = gs_get_att_typbuff(gs, ATT_TOPO, 0);
+    }
+    
+    /* Get viewport parameters for view check */
+    gsd_getwindow(window, viewport, modelMatrix, projMatrix);
+    
+    gsd_pushmatrix();
+    gsd_do_scale(1);
+    gsd_translate(gs->x_trans, gs->y_trans, gs->z_trans);
+    gsd_linewidth(gp->style->width);
+    check = 0;
+    
+    for (gpt = gp->points; gpt; gpt = gpt->next) {
+	if (!(++check % CHK_FREQ)) {
+	    if (GS_check_cancel()) {
+		gsd_linewidth(1);
+		gsd_popmatrix();
+		
+		return 0;
 	    }
 	}
-
-	gsd_linewidth(1);
-	gsd_popmatrix();
+	
+	site[X] = gpt->p3[X] + gp->x_trans - gs->ox;
+	site[Y] = gpt->p3[Y] + gp->y_trans - gs->oy;
+	
+	if (gs_point_is_masked(gs, site)) {
+	    continue;
+	}
+	
+	if (gpt->highlighted > 0)
+	    gpd_obj(gs, gp->hstyle, site);
+	else if (gp->tstyle && gp->tstyle->active)
+	    gpd_obj(gs, gpt->style, site);
+	else
+	    gpd_obj(gs, gp->style, site);
+	
+	if (src == MAP_ATT) {
+	    if (viewcell_tri_interp(gs, buf, site, 1)) {
+		/* returns 0 if outside or masked */
+		site[Z] += gp->z_trans;
+		
+		if (gsd_checkpoint(site, window,
+				   viewport, modelMatrix, projMatrix))
+		    continue;
+	    }
+	}
+	else if (src == CONST_ATT) {
+	    if (gs_point_in_region(gs, site, NULL)) {
+		site[Z] += gp->z_trans;
+		if (gsd_checkpoint(site, window,
+				   viewport, modelMatrix, projMatrix))
+		    continue;
+	    }
+	}
     }
 
+    gsd_linewidth(1);
+    gsd_popmatrix();
+    
     return 1;
 }
 

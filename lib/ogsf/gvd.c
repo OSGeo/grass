@@ -1,17 +1,13 @@
 /*!
-   \file gvd.c
+   \file lib/ogsf/gvd.c
 
    \brief OGSF library - loading and manipulating vector sets (lower level functions)
 
-   GRASS OpenGL gsurf OGSF Library 
+   (C) 1999-2008, 2011 by the GRASS Development Team
 
-   (C) 1999-2008 by the GRASS Development Team
-
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
-
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
+   
    \author Bill Brown USACERL (December 1993)
    \author Doxygenized by Martin Landa (June 2008)
  */
@@ -92,7 +88,7 @@ int gvd_vect(geovect * gv, geosurf * gs, int do_fast)
     G_debug(5, "gvd_vect(): id=%d", gv->gvect_id);
 
     if (GS_check_cancel()) {
-	return (0);
+	return 0;
     }
 
     gs_update_curmask(gs);
@@ -123,8 +119,6 @@ int gvd_vect(geovect * gv, geosurf * gs, int do_fast)
     gsd_translate(gs->x_trans, gs->y_trans, gs->z_trans + fudge);
 
     gsd_colormode(CM_COLOR);
-    gsd_color_func(gv->style->color);
-    gsd_linewidth(gv->style->width);
 
     check = 0;
     if (do_fast) {
@@ -146,12 +140,27 @@ int gvd_vect(geovect * gv, geosurf * gs, int do_fast)
 		gsd_linewidth(1);
 		gsd_popmatrix();
 
-		return (0);
+		return 0;
 	    }
 	}
 
-	if (gln->type == OGSF_LINE) {	/* line */
-	    if (gln->dims == 2) {	/* 2d line */
+	if (gln->highlighted > 0) {
+	    gsd_color_func(gv->hstyle->color);
+	    gsd_linewidth(gv->hstyle->width);
+	}
+	else if (gv->tstyle && gv->tstyle->active) {
+	    gsd_color_func(gln->style->color);
+	    gsd_linewidth(gln->style->width);
+	}
+	else {
+	    gsd_color_func(gv->style->color);
+	    gsd_linewidth(gv->style->width);
+	}
+
+	/* line */
+	if (gln->type == OGSF_LINE) {	
+	    /* 2D line */
+	    if (gln->dims == 2) {	
 		G_debug(5, "gvd_vect(): 2D vector line");
 		for (k = 0; k < gln->npts - 1; k++) {
 		    bgn[X] = gln->p2[k][X] + gv->x_trans - gs->ox;
@@ -200,8 +209,8 @@ int gvd_vect(geovect * gv, geosurf * gs, int do_fast)
 		    }
 		}
 	    }
-	    else {		/* 3D line */
-
+	    /* 3D line */
+	    else {		
 		G_debug(5, "gvd_vect(): 3D vector line");
 		points = (Point3 *) malloc(sizeof(Point3));
 
@@ -220,8 +229,10 @@ int gvd_vect(geovect * gv, geosurf * gs, int do_fast)
 		free(points);
 	    }
 	}
-	else if (gln->type == OGSF_POLYGON) {	/* polygon */
-	    if (gln->dims == 3) {	/* 3D polygon */
+	/* polygon */
+	else if (gln->type == OGSF_POLYGON) {	
+	    /* 3D polygon */
+	    if (gln->dims == 3) {	
 		G_debug(5, "gvd_vect(): draw 3D polygon");
 
 		/* We want at least 3 points */
@@ -257,7 +268,8 @@ int gvd_vect(geovect * gv, geosurf * gs, int do_fast)
 		    G_free(points);
 		}
 	    }
-	    else {		/* 2D polygons */
+	    else {		
+		/* 2D polygons */
 		/* TODO */
 	    }
 	}
@@ -266,7 +278,7 @@ int gvd_vect(geovect * gv, geosurf * gs, int do_fast)
     gsd_linewidth(1);
     gsd_popmatrix();
 
-    return (1);
+    return 1;
 }
 
 /*!

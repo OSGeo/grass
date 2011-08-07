@@ -17,6 +17,7 @@ struct GParams
 	*mode, *res_fine, *res_coarse, *style, *shade, *wire_color, *surface_pos,
     /* vector lines */
 	*vlines, *vline_width, *vline_color, *vline_mode, *vline_height, *vline_pos,
+	*vline_layer, *vline_color_column, *vline_width_column,
     /* vector points */
 	*vpoints, *vpoint_size, *vpoint_marker, *vpoint_color, *vpoint_width, *vpoint_pos,
 	*vpoint_layer, *vpoint_size_column, *vpoint_marker_column, *vpoint_color_column, *vpoint_width_column,
