@@ -41,7 +41,7 @@ int display_lines(struct Map_info *Map, int type, struct cat_list *Clist,
 		  const char *symbol_name,  double size, const char *size_column, int sqrt_flag, const char *rot_column,
 		  int id_flag, int table_colors_flag, int cats_color_flag, const char *rgb_column,
 		  int default_width, const char *width_column, double width_scale,
-		  int z_color_flag, const char *z_column,
+		  int z_color_flag, const char *z_style,
 		  dbCatValArray *cvarr_rgb, dbCatValArray *cvarr_width, int nrec_width,
 		  dbCatValArray *cvarr_size, int nrec_size,
 		  dbCatValArray *cvarr_rot, int nrec_rot)
@@ -201,7 +201,7 @@ int display_lines(struct Map_info *Map, int type, struct cat_list *Clist,
 	    G_debug(3, "display line %d, cat %d, x: %f, y: %f, z: %f", line,
 		    cat, Points->x[0], Points->y[0], Points->z[0]);
 	    custom_rgb = TRUE;
-	    Rast_make_fp_colors(&colors, z_column, box.B, box.T);
+	    Rast_make_fp_colors(&colors, z_style, box.B, box.T);
 	    Rast_get_color(&zval, &red, &grn, &blu, &colors, DCELL_TYPE);
 	    G_debug(3, "b %d, g: %d, r %d", blu, grn, red);
 	}
