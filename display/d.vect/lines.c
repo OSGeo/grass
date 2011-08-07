@@ -76,7 +76,11 @@ int display_lines(struct Map_info *Map, int type, struct cat_list *Clist,
 	G_warning(_("Unable to display lines by id, topology not available. "
 		    "Please try to rebuild topology using "
 		    "v.build or v.build.all."));
-	return 1;
+    }
+
+    if (z_color_flag && !Vect_is_3d(Map)) {
+	G_warning(_("Vector map is not 3D. Unable to colorize features based on z-coordinates."));
+	z_color_flag = 0;
     }
 
     var_size = size;
@@ -191,7 +195,7 @@ int display_lines(struct Map_info *Map, int type, struct cat_list *Clist,
 	}
 
 	/* z height colors */
-	if (z_color_flag && Vect_is_3d(Map)) {
+	if (z_color_flag) {
 	    struct bound_box box;
 	    double zval;
 	    struct Colors colors;
