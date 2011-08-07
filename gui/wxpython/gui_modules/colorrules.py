@@ -143,7 +143,7 @@ class ColorTable(wx.Frame):
         else:
             self.inmap = self.parent.GetLayerData(nvizType = 'vector', nameOnly = True)
             self.OnSelectionInput(None)
-            self.nvizInfo.SetLabel(_("Set color rules for vector map %s:") % self.inmap)
+            self.nvizInfo.SetLabel(_("Set color rules for vector map <%s>:") % self.inmap)
             
         self.SetMinSize(self.GetSize())
         
@@ -280,32 +280,28 @@ class ColorTable(wx.Frame):
     def __doLayout(self):
         """!Do main layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
-        #
+        
         # map selection
-        #
         mapSelection = self._createMapSelection()
         sizer.Add(item = mapSelection, proportion = 0,
                   flag = wx.ALL | wx.EXPAND, border = 5)
         if self.nviz:
             sizerNviz = wx.BoxSizer(wx.HORIZONTAL)
-            self.nvizInfo = wx.StaticText(parent = self, id = wx.ID_ANY,
-                                 label = _('')) # set later
+            self.nvizInfo = wx.StaticText(parent = self, id = wx.ID_ANY) # set later
             sizerNviz.Add(self.nvizInfo, proportion = 0, flag = wx.LEFT | wx.EXPAND, border = 0)
             sizer.Add(item = sizerNviz, proportion = 0,
                   flag = wx.LEFT | wx.BOTTOM | wx.EXPAND, border = 5)
             sizer.Hide(mapSelection)
             # doesn't work
             sizer.Layout()
-        #
+        
         # set vector attributes
-        #
         if not self.raster:
             vectorAttrb = self._createVectorAttrb()
             sizer.Add(item = vectorAttrb, proportion = 0,
                       flag = wx.ALL | wx.EXPAND, border = 5)
-        #
+        
         # body & preview
-        #
         bodySizer =  wx.GridBagSizer(hgap = 5, vgap = 5)
         row = 0
         
@@ -353,9 +349,8 @@ class ColorTable(wx.Frame):
         
         sizer.Add(item = bodySizer, proportion = 1,
                   flag = wx.ALL | wx.EXPAND, border = 5)
-        #
+        
         # buttons
-        #
         btnSizer = self._createButtons()
         
         sizer.Add(item = wx.StaticLine(parent = self, id = wx.ID_ANY,
