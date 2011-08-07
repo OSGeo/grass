@@ -10,10 +10,9 @@
 
 int display_zcoor(struct Map_info *Map, int type, LATTR *lattr)
 {
-    int num, el;
+    int num, el, ltype;
     double xl, yl, zl;
     struct line_pnts *Points;
-    struct line_cats *Cats;
     char text[50];
 
     if (!Vect_is_3d(Map)) {
@@ -23,8 +22,7 @@ int display_zcoor(struct Map_info *Map, int type, LATTR *lattr)
     
     G_debug(1, "display zcoor:");
     Points = Vect_new_line_struct();
-    Cats = Vect_new_cats_struct();
-
+    
     D_RGB_color(lattr->color.R, lattr->color.G, lattr->color.B);
     D_text_size(lattr->size, lattr->size);
     if (lattr->font)
@@ -34,6 +32,21 @@ int display_zcoor(struct Map_info *Map, int type, LATTR *lattr)
 
     Vect_rewind(Map);
 
+    num = Vect_get_num_lines(Map);
+    G_debug(1, "n_lines = %d", num);
+    /* Points - no nodes registered */
+    for (el = 1; el <= num; el++) {
+	if (!Vect_line_alive(Map, el))
+	    continue;
+	ltype = Vect_read_line(Map, Points, NULL, el);
+	if ((ltype != GV_POINT) && (ltype & type))
+	    continue;
+	G_debug(3, "point = %d", el);
+	
+	sprintf(text, "%.2f", Points->z[0]);
+	show_label(&Points->x[0], &Points->y[0], lattr, text);
+    }
+    
     num = Vect_get_num_nodes(Map);
     G_debug(1, "n_nodes = %d", num);
 
@@ -49,7 +62,6 @@ int display_zcoor(struct Map_info *Map, int type, LATTR *lattr)
     }
 
     Vect_destroy_line_struct(Points);
-    Vect_destroy_cats_struct(Cats);
-
+    
     return 0;
 }
