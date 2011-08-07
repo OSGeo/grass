@@ -7,8 +7,8 @@
 #include "local_proto.h"
 #include "plot.h"
 
-int attr(struct Map_info *Map, int type, char *attrcol,
-	 struct cat_list *Clist, LATTR *lattr, int chcat)
+int display_attr(struct Map_info *Map, int type, char *attrcol,
+		 struct cat_list *Clist, LATTR *lattr, int chcat)
 {
     int i, ltype, more;
     struct line_pnts *Points;
@@ -49,7 +49,7 @@ int attr(struct Map_info *Map, int type, char *attrcol,
 	ltype = Vect_read_next_line(Map, Points, Cats);
 	switch (ltype) {
 	case -1:
-	    G_fatal_error(_("Can't read vector map"));
+	    G_fatal_error(_("Unable to read vector map"));
 	case -2:		/* EOF */
 	    return 0;
 	}

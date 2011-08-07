@@ -36,40 +36,48 @@ struct rgb_color palette[16] = {
     {0, 139, 139}		/* 16: dark cyan */
 };
 
-/* *************************************************************** */
-/* *************************************************************** */
-/* *************************************************************** */
-int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
-	  const struct color_rgb *color, const struct color_rgb *fcolor,
-	  int chcat, char *symbol_name, double size, char *size_column,
-	  int sqrt_flag, char *rot_column, int id_flag, int table_colors_flag,
-	  int cats_color_flag, char *rgb_column, int default_width,
-	  char *width_column, double width_scale, int z_color_flag,
-	  char *style)
+int display_lines(struct Map_info *Map, int type, struct cat_list *Clist,
+		  const struct color_rgb *color, const struct color_rgb *fcolor, int chcat,
+		  const char *symbol_name,  double size, const char *size_column, int sqrt_flag, const char *rot_column,
+		  int id_flag, int table_colors_flag, int cats_color_flag, const char *rgb_column,
+		  int default_width, const char *width_column, double width_scale,
+		  int z_color_flag, const char *z_column,
+		  dbCatValArray *cvarr_rgb, dbCatValArray *cvarr_width, int nrec_width,
+		  dbCatValArray *cvarr_size, int nrec_size,
+		  dbCatValArray *cvarr_rot, int nrec_rot)
+
 {
-    int i, ltype, nlines = 0, line, cat = -1;
+    int i, ltype, nlines, line, cat;
     double *x, *y;
-    struct line_pnts *Points, *PPoints;
+    struct line_pnts *Points;
     struct line_cats *Cats;
     double x0, y0;
 
-    struct field_info *fi = NULL;
-    dbDriver *driver = NULL;
-    dbCatValArray cvarr_rgb, cvarr_width, cvarr_size, cvarr_rot;
-    dbCatVal *cv_rgb = NULL, *cv_width = NULL, *cv_size = NULL, *cv_rot = NULL;
-    int nrec_rgb = 0, nrec_width = 0, nrec_size = 0, nrec_rot = 0;
+    dbCatVal *cv_rgb, *cv_width, *cv_size, *cv_rot;
     int nerror_rgb;
     int n_points, n_lines, n_centroids, n_boundaries, n_faces;
-
-    int open_db;
-    int custom_rgb = FALSE;
+    
+    int custom_rgb;
     char colorstring[12];	/* RRR:GGG:BBB */
     int red, grn, blu;
     RGBA_Color *line_color, *fill_color, *primary_color;
     unsigned char which;
     int width;
-    SYMBOL *Symb = NULL;
+    SYMBOL *Symb;
     double var_size, rotation;
+
+    Symb = NULL;
+    custom_rgb = FALSE;
+    cv_rgb = cv_width = cv_size = cv_rot = NULL;
+    cat = -1;
+    nlines = 0;
+    
+    if (id_flag && Vect_level(Map) < 2) {
+	G_warning(_("Unable to display lines by id, topology not available. "
+		    "Please try to rebuild topology using "
+		    "v.build or v.build.all."));
+	return 1;
+    }
 
     var_size = size;
     rotation = 0.0;
@@ -78,7 +86,6 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
     line_color = G_malloc(sizeof(RGBA_Color));
     fill_color = G_malloc(sizeof(RGBA_Color));
     primary_color = G_malloc(sizeof(RGBA_Color));
-
     primary_color->a = RGBA_COLOR_OPAQUE;
 
     /* change function prototype to pass RGBA_Color instead of color_rgb? */
@@ -100,160 +107,17 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
     else
 	fill_color->a = RGBA_COLOR_NONE;
 
-
     Points = Vect_new_line_struct();
-    PPoints = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
-    open_db = table_colors_flag || width_column || size_column || rot_column;
-
-    if (open_db) {
-	fi = Vect_get_field(Map, (Clist->field > 0 ? Clist->field : 1));
-	if (fi == NULL) {
-	    G_fatal_error(_("Database connection not defined for layer %d"),
-			  (Clist->field > 0 ? Clist->field : 1));
-	}
-
-	driver = db_start_driver_open_database(fi->driver, fi->database);
-	if (driver == NULL)
-	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
-			  fi->database, fi->driver);
-    }
-
-    if (table_colors_flag) {
-	/* for reading RRR:GGG:BBB color strings from table */
-
-	if (rgb_column == NULL || *rgb_column == '\0')
-	    G_fatal_error(_("Color definition column not specified"));
-
-	db_CatValArray_init(&cvarr_rgb);
-
-	nrec_rgb = db_select_CatValArray(driver, fi->table, fi->key,
-					 rgb_column, NULL, &cvarr_rgb);
-
-	G_debug(3, "nrec_rgb (%s) = %d", rgb_column, nrec_rgb);
-
-	if (cvarr_rgb.ctype != DB_C_TYPE_STRING)
-	    G_fatal_error(_("Color definition column (%s) not a string. "
-			    "Column must be of form RRR:GGG:BBB where RGB values range 0-255."),
-			  rgb_column);
-
-	if (nrec_rgb < 0)
-	    G_fatal_error(_("Cannot select data (%s) from table"),
-			  rgb_column);
-
-	G_debug(2, "\n%d records selected from table", nrec_rgb);
-
-	for (i = 0; i < cvarr_rgb.n_values; i++) {
-	    G_debug(4, "cat = %d  %s = %s", cvarr_rgb.value[i].cat,
-		    rgb_column, db_get_string(cvarr_rgb.value[i].val.s));
-	}
-    }
-
-    if (width_column) {
-	if (*width_column == '\0')
-	    G_fatal_error(_("Line width column not specified."));
-
-	db_CatValArray_init(&cvarr_width);
-
-	nrec_width = db_select_CatValArray(driver, fi->table, fi->key,
-					   width_column, NULL, &cvarr_width);
-
-	G_debug(3, "nrec_width (%s) = %d", width_column, nrec_width);
-
-	if (cvarr_width.ctype != DB_C_TYPE_INT &&
-	    cvarr_width.ctype != DB_C_TYPE_DOUBLE)
-	    G_fatal_error(_("Line width column (%s) is not numeric."),
-			  width_column);
-
-	if (nrec_width < 0)
-	    G_fatal_error(_("Cannot select data (%s) from table"),
-			  width_column);
-
-	G_debug(2, " %d records selected from table", nrec_width);
-
-	for (i = 0; i < cvarr_width.n_values; i++) {
-	    G_debug(4, "(width) cat = %d  %s = %d", cvarr_width.value[i].cat,
-		    width_column,
-		    (cvarr_width.ctype ==
-		     DB_C_TYPE_INT ? cvarr_width.value[i].val.
-		     i : (int)cvarr_width.value[i].val.d));
-	}
-    }
-
-    if (size_column) {
-	if (*size_column == '\0')
-	    G_fatal_error(_("Symbol size column not specified."));
-
-	db_CatValArray_init(&cvarr_size);
-
-	nrec_size = db_select_CatValArray(driver, fi->table, fi->key,
-					   size_column, NULL, &cvarr_size);
-
-	G_debug(3, "nrec_size (%s) = %d", size_column, nrec_size);
-
-	if (cvarr_size.ctype != DB_C_TYPE_INT &&
-	    cvarr_size.ctype != DB_C_TYPE_DOUBLE)
-	    G_fatal_error(_("Symbol size column (%s) is not numeric."),
-			  size_column);
-
-	if (nrec_size < 0)
-	    G_fatal_error(_("Cannot select data (%s) from table"),
-			  size_column);
-
-	G_debug(2, " %d records selected from table", nrec_size);
-
-	for (i = 0; i < cvarr_size.n_values; i++) {
-	    G_debug(4, "(size) cat = %d  %s = %.2f", cvarr_size.value[i].cat,
-		    size_column,
-		    (cvarr_size.ctype ==
-		     DB_C_TYPE_INT ? (double)cvarr_size.value[i].val.i
-		     : cvarr_size.value[i].val.d));
-	}
-    }
-
-    if (rot_column) {
-	if (*rot_column == '\0')
-	    G_fatal_error(_("Symbol rotation column not specified."));
-
-	db_CatValArray_init(&cvarr_rot);
-
-	nrec_rot = db_select_CatValArray(driver, fi->table, fi->key,
-					   rot_column, NULL, &cvarr_rot);
-
-	G_debug(3, "nrec_rot (%s) = %d", rot_column, nrec_rot);
-
-	if (cvarr_rot.ctype != DB_C_TYPE_INT &&
-	    cvarr_rot.ctype != DB_C_TYPE_DOUBLE)
-	    G_fatal_error(_("Symbol rotation column (%s) is not numeric."),
-			  rot_column);
-
-	if (nrec_rot < 0)
-	    G_fatal_error(_("Cannot select data (%s) from table"),
-			  rot_column);
-
-	G_debug(2, " %d records selected from table", nrec_rot);
-
-	for (i = 0; i < cvarr_rot.n_values; i++) {
-	    G_debug(4, "(rot) cat = %d  %s = %.2f", cvarr_rot.value[i].cat,
-		    rot_column,
-		    (cvarr_rot.ctype ==
-		     DB_C_TYPE_INT ? (double)cvarr_rot.value[i].val.i
-		     : cvarr_rot.value[i].val.d));
-	}
-    }
-
-    if( !(nrec_size || nrec_rot) ) {
+    if (!(nrec_size || nrec_rot) ) {
 	Symb = S_read(symbol_name);
-	if (Symb == NULL)
+	if (!Symb)
 	    G_warning(_("Unable to read symbol, unable to display points"));
 	else
 	    S_stroke(Symb, size, 0.0, 0);
     }
-
-    if (open_db)
-	db_close_database_shutdown_driver(driver);
-
+    
     Vect_rewind(Map);
 
     /* Is it necessary to reset line/label color in each loop ? */
@@ -337,7 +201,7 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 	    G_debug(3, "display line %d, cat %d, x: %f, y: %f, z: %f", line,
 		    cat, Points->x[0], Points->y[0], Points->z[0]);
 	    custom_rgb = TRUE;
-	    Rast_make_fp_colors(&colors, style, box.B, box.T);
+	    Rast_make_fp_colors(&colors, z_column, box.B, box.T);
 	    Rast_get_color(&zval, &red, &grn, &blu, &colors, DCELL_TYPE);
 	    G_debug(3, "b %d, g: %d, r %d", blu, grn, red);
 	}
@@ -353,7 +217,7 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 		G_debug(3, "display element %d, cat %d", line, cat);
 
 		/* Read RGB colors from db for current area # */
-		if (db_CatValArray_get_value(&cvarr_rgb, cat, &cv_rgb) !=
+		if (db_CatValArray_get_value(cvarr_rgb, cat, &cv_rgb) !=
 		    DB_OK) {
 		    custom_rgb = FALSE;
 		}
@@ -438,13 +302,13 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 		G_debug(3, "display element %d, cat %d", line, cat);
 
 		/* Read line width from db for current area # */
-		if (db_CatValArray_get_value(&cvarr_width, cat, &cv_width) !=
+		if (db_CatValArray_get_value(cvarr_width, cat, &cv_width) !=
 		    DB_OK) {
 		    width = default_width;
 		}
 		else {
 		    width =
-			width_scale * (cvarr_width.ctype ==
+			width_scale * (cvarr_width->ctype ==
 				       DB_C_TYPE_INT ? cv_width->val.i
 				       : (int)cv_width->val.d);
 		    if (width < 0) {
@@ -492,13 +356,13 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 		    G_debug(3, "display element %d, cat %d", line, cat);
 
 		    /* Read symbol size from db for current symbol # */
-		    if (db_CatValArray_get_value(&cvarr_size, cat, &cv_size) !=
+		    if (db_CatValArray_get_value(cvarr_size, cat, &cv_size) !=
 			DB_OK) {
 			var_size = size;
 		    }
 		    else {
 			var_size = size *
-			    (cvarr_size.ctype == DB_C_TYPE_INT ?
+			    (cvarr_size->ctype == DB_C_TYPE_INT ?
 			     (double)cv_size->val.i : cv_size->val.d);
 
 			if (var_size < 0.0) {
@@ -529,13 +393,13 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 		    G_debug(3, "display element %d, cat %d", line, cat);
 
 		    /* Read symbol rotation from db for current symbol # */
-		    if (db_CatValArray_get_value(&cvarr_rot, cat, &cv_rot) !=
+		    if (db_CatValArray_get_value(cvarr_rot, cat, &cv_rot) !=
 			DB_OK) {
 			rotation = 0.0;
 		    }
 		    else {
 			rotation =
-			    (cvarr_rot.ctype == DB_C_TYPE_INT ?
+			    (cvarr_rot->ctype == DB_C_TYPE_INT ?
 			     (double)cv_rot->val.i : cv_rot->val.d);
 		    }
 		}		/* end if cat */
@@ -630,6 +494,9 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
     
     Vect_destroy_line_struct(Points);
     Vect_destroy_cats_struct(Cats);
+    G_free(line_color);
+    G_free(fill_color);
+    G_free(primary_color);
 
     return 0;			/* not reached */
 }

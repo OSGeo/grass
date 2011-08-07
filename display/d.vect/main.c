@@ -19,8 +19,6 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/display.h>
-#include <grass/vector.h>
-#include <grass/colors.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 #include "plot.h"
@@ -76,16 +74,16 @@ static char *icon_files(void)
 int main(int argc, char **argv)
 {
     int ret, level;
-    int i, stat = 0, type, area, display;
-    int chcat = 0;
-    int r, g, b;
+    int stat, type, area, display;
+    int chcat;
     int has_color, has_fcolor;
     struct color_rgb color, fcolor;
     double size;
     int default_width;
     double width_scale;
     double minreg, maxreg, reg;
-    char map_name[128];
+    char map_name[GNAME_MAX];
+    
     struct GModule *module;
     struct Option *map_opt;
     struct Option *color_opt, *fcolor_opt, *rgbcol_opt, *zcol_opt;
@@ -99,17 +97,15 @@ int main(int argc, char **argv)
     struct Option *width_opt, *wcolumn_opt, *wscale_opt;
     struct Flag *id_flag, *table_acolors_flag, *cats_acolors_flag,
 	*zcol_flag, *sqrt_flag;
+    
     struct cat_list *Clist;
-    int *cats, ncat;
     LATTR lattr;
     struct Map_info Map;
-    struct field_info *fi;
-    dbDriver *driver;
-    dbHandle handle;
     struct Cell_head window;
     struct bound_box box;
     double overlap;
 
+    stat = 0;
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
 
@@ -380,15 +376,13 @@ int main(int argc, char **argv)
     
     G_get_set_window(&window);
     
-    /* Read map options */
-
     /* Check min/max region */
     reg = ((window.east - window.west) + (window.north - window.south)) / 2;
     if (minreg_opt->answer) {
 	minreg = atof(minreg_opt->answer);
 
 	if (reg < minreg) {
-	    G_message(_("Region size is lower than minreg, nothing displayed."));
+	    G_important_message(_("Region size is lower than minreg, nothing displayed"));
 	    exit(EXIT_SUCCESS);
 	}
     }
@@ -396,7 +390,7 @@ int main(int argc, char **argv)
 	maxreg = atof(maxreg_opt->answer);
 
 	if (reg > maxreg) {
-	    G_message(_("Region size is greater than maxreg, nothing displayed."));
+	    G_important_message(_("Region size is greater than maxreg, nothing displayed"));
 	    exit(EXIT_SUCCESS);
 	}
     }
@@ -415,35 +409,10 @@ int main(int argc, char **argv)
     }
 
     color = G_standard_color_rgb(WHITE);
-    ret = G_str_to_color(color_opt->answer, &r, &g, &b);
-    if (ret == 1) {
-	has_color = 1;
-	color.r = r;
-	color.g = g;
-	color.b = b;
-    }
-    else if (ret == 2) {	/* none */
-	has_color = 0;
-    }
-    else if (ret == 0) {	/* error */
-	G_fatal_error(_("Unknown color: [%s]"), color_opt->answer);
-    }
-
+    has_color = option_to_color(&color, color_opt->answer);
     fcolor = G_standard_color_rgb(WHITE);
-    ret = G_str_to_color(fcolor_opt->answer, &r, &g, &b);
-    if (ret == 1) {
-	has_fcolor = 1;
-	fcolor.r = r;
-	fcolor.g = g;
-	fcolor.b = b;
-    }
-    else if (ret == 2) {	/* none */
-	has_fcolor = 0;
-    }
-    else if (ret == 0) {	/* error */
-	G_fatal_error(_("Unknown color: '%s'"), fcolor_opt->answer);
-    }
-
+    has_fcolor = option_to_color(&fcolor, fcolor_opt->answer);
+    
     size = atof(size_opt->answer);
 
     /* if where_opt was specified select categories from db 
@@ -454,147 +423,32 @@ int main(int argc, char **argv)
     /* open vector */
     level = Vect_open_old2(&Map, map_name, "", field_opt->answer);
 
+    chcat = 0;
     if (where_opt->answer) {
 	if (Clist->field < 1)
-	    G_fatal_error(_("'layer' must be > 0 for 'where'."));
+	    G_fatal_error(_("Option <%s> must be > 0"), field_opt->key);
 	chcat = 1;
-	if ((fi = Vect_get_field(&Map, Clist->field)) == NULL)
-	    G_fatal_error(_("Database connection not defined"));
-	if (fi != NULL) {
-	    driver = db_start_driver(fi->driver);
-	    if (driver == NULL)
-		G_fatal_error(_("Unable to start driver <%s>"), fi->driver);
-
-	    db_init_handle(&handle);
-	    db_set_handle(&handle, fi->database, NULL);
-	    if (db_open_database(driver, &handle) != DB_OK)
-		G_fatal_error(_("Unable to open database <%s>"),
-			      fi->database);
-
-	    ncat =
-		db_select_int(driver, fi->table, fi->key, where_opt->answer,
-			      &cats);
-
-	    db_close_database(driver);
-	    db_shutdown_driver(driver);
-
-	    Vect_array_to_cat_list(cats, ncat, Clist);
-	}
+	option_to_where(&Map, Clist, where_opt->answer);
     }
     else if (cat_opt->answer) {
 	if (Clist->field < 1)
-	    G_fatal_error(_("'layer' must be > 0 for 'cats'."));
+	    G_fatal_error(_("Option <%s> must be > 0"), field_opt->key);
 	chcat = 1;
 	ret = Vect_str_to_cat_list(cat_opt->answer, Clist);
 	if (ret > 0)
 	    G_warning(_("%d errors in cat option"), ret);
     }
+    
+    type = Vect_option_to_types(type_opt);
+    area = type & GV_AREA;
+    
+    display = option_to_display(display_opt);
 
-    i = 0;
-    type = 0;
-    area = FALSE;
-    while (type_opt->answers[i]) {
-	switch (type_opt->answers[i][0]) {
-	case 'p':
-	    type |= GV_POINT;
-	    break;
-	case 'l':
-	    type |= GV_LINE;
-	    break;
-	case 'b':
-	    type |= GV_BOUNDARY;
-	    break;
-	case 'f':
-	    type |= GV_FACE;
-	    break;
-	case 'c':
-	    type |= GV_CENTROID;
-	    break;
-	case 'a':
-	    area = TRUE;
-	    break;
-	}
-	i++;
-    }
-
-    i = 0;
-    display = 0;
-    while (display_opt->answers[i]) {
-	switch (display_opt->answers[i][0]) {
-	case 's':
-	    display |= DISP_SHAPE;
-	    break;
-	case 'c':
-	    display |= DISP_CAT;
-	    break;
-	case 't':
-	    display |= DISP_TOPO;
-	    break;
-	case 'd':
-	    display |= DISP_DIR;
-	    break;
-	case 'a':
-	    display |= DISP_ATTR;
-	    break;
-	case 'z':
-	    display |= DISP_ZCOOR;
-	    break;
-	}
-	i++;
-    }
-
-    /* Read label options */
-    if (lfield_opt->answer != NULL)
-	lattr.field = atoi(lfield_opt->answer);
-    else
-	lattr.field = Clist->field;
-
-    lattr.color.R = lattr.color.G = lattr.color.B = 255;
-    if (G_str_to_color(lcolor_opt->answer, &r, &g, &b)) {
-	lattr.color.R = r;
-	lattr.color.G = g;
-	lattr.color.B = b;
-    }
-    lattr.has_bgcolor = 0;
-    if (G_str_to_color(bgcolor_opt->answer, &r, &g, &b) == 1) {
-	lattr.has_bgcolor = 1;
-	lattr.bgcolor.R = r;
-	lattr.bgcolor.G = g;
-	lattr.bgcolor.B = b;
-    }
-    lattr.has_bcolor = 0;
-    if (G_str_to_color(bcolor_opt->answer, &r, &g, &b) == 1) {
-	lattr.has_bcolor = 1;
-	lattr.bcolor.R = r;
-	lattr.bcolor.G = g;
-	lattr.bcolor.B = b;
-    }
-
-    lattr.size = atoi(lsize_opt->answer);
-    lattr.font = font_opt->answer;
-    lattr.enc = enc_opt->answer;
-    switch (xref_opt->answer[0]) {
-    case 'l':
-	lattr.xref = LLEFT;
-	break;
-    case 'c':
-	lattr.xref = LCENTER;
-	break;
-    case 'r':
-	lattr.xref = LRIGHT;
-	break;
-    }
-    switch (yref_opt->answer[0]) {
-    case 't':
-	lattr.yref = LTOP;
-	break;
-    case 'c':
-	lattr.yref = LCENTER;
-	break;
-    case 'b':
-	lattr.yref = LBOTTOM;
-	break;
-    }
+    /* labels */
+    options_to_lattr(&lattr, lfield_opt->answer,
+		     lcolor_opt->answer, bgcolor_opt->answer, bcolor_opt->answer,
+		     atoi(lsize_opt->answer), font_opt->answer, enc_opt->answer,
+		     xref_opt->answer, yref_opt->answer);
 
     D_setup(0);
     D_set_reduction(1.0);
@@ -608,12 +462,12 @@ int main(int argc, char **argv)
 		       window.east < box.W ||
 		       window.west > G_adjust_easting(box.E, &window))) {
 	G_message(_("The bounding box of the map is outside the current region, "
-		   "nothing drawn."));
-	stat = 0;
+		    "nothing drawn"));
+	exit(EXIT_SUCCESS);
     }
     else {
-	overlap =
-	    G_window_percentage_overlap(&window, box.N, box.S, box.E, box.W);
+	overlap = G_window_percentage_overlap(&window, box.N, box.S,
+					      box.E, box.W);
 	G_debug(1, "overlap = %f \n", overlap);
 	if (overlap < 1)
 	    Vect_set_constraint_region(&Map, window.north, window.south,
@@ -624,52 +478,22 @@ int main(int argc, char **argv)
 	if (!wcolumn_opt->answer)
 	    D_line_width(default_width);
 
-	if (area) {
-	    if (level >= 2) {
-		if (display & DISP_SHAPE) {
-		    stat = darea(&Map, Clist,
-				 has_color ? &color : NULL,
-				 has_fcolor ? &fcolor : NULL, chcat,
-				 (int)id_flag->answer,
-				 table_acolors_flag->answer,
-				 cats_acolors_flag->answer, &window,
-				 rgbcol_opt->answer, default_width,
-				 wcolumn_opt->answer, width_scale,
-				 zcol_flag->answer, zcol_opt->answer);
-		}
-		if (wcolumn_opt->answer)
-		    D_line_width(default_width);
-	    }
-	    else
-		G_warning(_("Unable to display areas, topology not available. "
-			    "Please try to rebuild topology using "
-			    "v.build or v.build.all."));
-	}
-
 	if (display & DISP_SHAPE) {
-	    if (id_flag->answer && level < 2) {
-		G_warning(_("Unable to display lines by id, topology not available. "
-			    "Please try to rebuild topology using "
-			    "v.build or v.build.all."));
-	    }
-	    else {
-		stat = plot1(&Map, type, area, Clist,
-			     has_color ? &color : NULL,
-			     has_fcolor ? &fcolor : NULL, chcat, icon_opt->answer,
-			     size, sizecolumn_opt->answer, (int)sqrt_flag->answer, rotcolumn_opt->answer,
-			     (int)id_flag->answer, table_acolors_flag->answer,
-			     cats_acolors_flag->answer, rgbcol_opt->answer,
-			     default_width, wcolumn_opt->answer, width_scale,
-			     zcol_flag->answer, zcol_opt->answer);
-		if (wcolumn_opt->answer)
-		    D_line_width(default_width);
-	    }
+	    stat += display_shape(&Map, type, area, Clist, &window,
+				  has_color ? &color : NULL, has_fcolor ? &fcolor : NULL, chcat,
+				  icon_opt->answer, size, sizecolumn_opt->answer, sqrt_flag->answer ? 1 : 0, rotcolumn_opt->answer,
+				  id_flag->answer ? 1 : 0, table_acolors_flag->answer ? 1 : 0, cats_acolors_flag->answer ? 1 : 0, rgbcol_opt->answer,
+				  default_width,  wcolumn_opt->answer, width_scale,
+				  zcol_flag->answer ? 1 : 0, zcol_opt->answer);
+	    
+	    if (wcolumn_opt->answer)
+		D_line_width(default_width);
 	}
 
 	if (has_color) {
 	    D_RGB_color(color.r, color.g, color.b);
 	    if (display & DISP_DIR)
-		stat = dir(&Map, type, Clist, chcat);
+		stat += display_dir(&Map, type, Clist, chcat);
 	}
 
 	/* reset line width: Do we need to get line width from display
@@ -678,9 +502,9 @@ int main(int argc, char **argv)
 	 * d.linewidth). */
 	if (!wcolumn_opt->answer)
 	    D_line_width(0);
-
+	
 	if (display & DISP_CAT)
-	    stat = label(&Map, type, area, Clist, &lattr, chcat);
+	    stat += display_label(&Map, type, area, Clist, &lattr, chcat);
 
 	if (display & DISP_ATTR) {
 	    int attr_type = type;
@@ -688,21 +512,14 @@ int main(int argc, char **argv)
 	    if (area && !(attr_type & GV_CENTROID))
 		attr_type |= GV_CENTROID;
 		
-	    stat =
-		attr(&Map, attr_type, attrcol_opt->answer, Clist, &lattr, chcat);
+	    stat += display_attr(&Map, attr_type, attrcol_opt->answer, Clist, &lattr, chcat);
 	    }
 
 	if (display & DISP_ZCOOR)
-	    stat = zcoor(&Map, type, &lattr);
+	    stat += display_zcoor(&Map, type, &lattr);
 
-	if (display & DISP_TOPO) {
-	    if (level >= 2)
-		stat = topo(&Map, type, area, &lattr);
-	    else
-		G_warning(_("Unable to display topology, not available."
-			    "Please try to rebuild topology using "
-			    "v.build or v.build.all."));
-	}
+	if (display & DISP_TOPO)
+	    stat += display_topo(&Map, type, area, &lattr);
     }
 
     D_save_command(G_recreate_command());
@@ -713,5 +530,8 @@ int main(int argc, char **argv)
     Vect_close(&Map);
     Vect_destroy_cat_list(Clist);
 
-    exit(stat);
+    if (stat != 0)
+	exit(EXIT_FAILURE);
+
+    exit(EXIT_SUCCESS);
 }
