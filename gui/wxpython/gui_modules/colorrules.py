@@ -752,7 +752,7 @@ class ColorTable(wx.Frame):
         """
         ret = self.CreateColorTable()
         if not ret:
-            GMessage(parent = self, message = _("No color rules given."))
+            gcmd.GMessage(parent = self, message = _("No color rules given."))
             
         if not self.nviz:
             display = self.parent.GetLayerTree().GetMapDisplay()
