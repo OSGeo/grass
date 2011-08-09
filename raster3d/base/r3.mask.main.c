@@ -55,13 +55,13 @@ static void makeMask(char *name, d_Mask * maskRules)
     cacheSize = G3d_cacheSizeEncode(G3D_USE_CACHE_XY, 1);
 
     if (NULL == G_find_grid3(name, ""))
-	G3d_fatalError(_("Requested 3d raster map not found"));
+	G3d_fatalError(_("3D raster map <%s> not found"), name);
 
     map = G3d_openCellOld(name, G_mapset(), G3D_DEFAULT_WINDOW,
 			  DCELL_TYPE, cacheSize);
 
     if (map == NULL)
-	G3d_fatalError(_("makeMask: error opening map."));
+	G3d_fatalError(_("Unable to open 3D raster map <%s>"), name);
 
     G3d_getRegionStructMap(map, &region);
 
@@ -72,7 +72,7 @@ static void makeMask(char *name, d_Mask * maskRules)
 			    tileX, tileY, tileZ);
 
     if (mask == NULL)
-	G3d_fatalError(_("makeMask: error opening g3d mask file"));
+	G3d_fatalError(_("Unable to open 3D raster mask file"));
 
     G3d_minUnlocked(map, G3D_USE_CACHE_X);
     G3d_autolockOn(map);
@@ -114,9 +114,9 @@ static void makeMask(char *name, d_Mask * maskRules)
     G3d_unlockAll(mask);
 
     if (!G3d_closeCell(mask))
-	G3d_fatalError(_("makeMask: error closing g3d mask file"));
+	G3d_fatalError(_("Unable to close 3D raster mask file"));
     if (!G3d_closeCell(map))
-	G3d_fatalError(_("makeMask: error closing map"));
+	G3d_fatalError(_("Unable to close raster map <%s>"), name);
 }
 
 /*--------------------------------------------------------------------------*/
@@ -141,7 +141,7 @@ int main(int argc, char *argv[])
     params.map->required = YES;
     params.map->multiple = NO;
     params.map->gisprompt = "old,grid3,3d-raster";
-    params.map->description = _("3d raster map with reference values");
+    params.map->description = _("3D raster map with reference values");
 
     params.maskVals = G_define_option();
     params.maskVals->key = "maskvalues";
