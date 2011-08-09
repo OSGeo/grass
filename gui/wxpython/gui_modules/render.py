@@ -153,12 +153,13 @@ class Layer(object):
                                            quiet = True,
                                            **self.cmd[1])
                 
+            if msg:
+                sys.stderr.write(_("Command '%s' failed\n") % self.GetCmd(string = True))
+                sys.stderr.write(_("Details: %s\n") % msg)
             if ret != 0:
-                raise gcmd.GException(value = _("'%(cmd)s' failed. Details: %(det)s") % \
-                                          { 'cmd' : self.cmd[0], 'det' : msg })
+                raise gcmd.GException()
         
-        except gcmd.GException, e:
-            print >> sys.stderr, e.value
+        except gcmd.GException:
             # clean up after problems
             for f in [self.mapfile, self.maskfile]:
                 if not f:
