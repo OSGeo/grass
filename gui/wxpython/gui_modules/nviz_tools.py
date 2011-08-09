@@ -1145,10 +1145,33 @@ class NvizToolWindow(FN.FlatNotebook):
         gridSizer.Add(item = color, pos = (0, 4), flag = wx.ALIGN_CENTER_VERTICAL |
                       wx.ALIGN_LEFT)
         
+        # thematic mapping
+        self.win['vector']['lines']['thematic'] = {}
+        checkThematic = wx.CheckBox(parent = panel, id = wx.ID_ANY,
+                                         label = _("use thematic mapping for vector lines"))
+        self.win['vector']['lines']['thematic']['check'] = checkThematic.GetId()
+        checkThematic.Bind(wx.EVT_CHECKBOX, self.OnCheckThematic)
+        checkThematic.SetValue(False)
+        
+        hSizer = wx.BoxSizer(wx.HORIZONTAL)
+        hSizer.Add(item = checkThematic, flag = wx.ALIGN_CENTER_VERTICAL,
+                    border = 5)
+        
+        setThematic = wx.Button(parent = panel, id = wx.ID_ANY,
+                                         label = _("Set options..."))
+        self.win['vector']['lines']['thematic']['button'] = setThematic.GetId()
+        setThematic.Bind(wx.EVT_BUTTON, self.OnSetThematic)
+        hSizer.Add(item = wx.Size(-1, -1), proportion = 1)
+        hSizer.Add(item = setThematic, flag = wx.ALIGN_CENTER_VERTICAL|wx.LEFT,
+                    border = 5, proportion = 0)
+        
+        gridSizer.Add(item = hSizer, flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+                      pos = (1, 1), span = (1, 5))
+        
         # display
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
                                          label = _("Display")),
-                      pos = (1, 0), flag = wx.ALIGN_CENTER_VERTICAL |
+                      pos = (2, 0), flag = wx.ALIGN_CENTER_VERTICAL |
                       wx.ALIGN_LEFT)
         
         display = wx.Choice (parent = panel, id = wx.ID_ANY, size = (-1, -1),
@@ -1158,12 +1181,12 @@ class NvizToolWindow(FN.FlatNotebook):
         display.Bind(wx.EVT_CHOICE, self.OnVectorDisplay)
         
         gridSizer.Add(item = display, flag = wx.ALIGN_CENTER_VERTICAL | 
-                      wx.ALIGN_LEFT|wx.EXPAND, pos = (1, 1), span = (1,4))
+                      wx.ALIGN_LEFT|wx.EXPAND, pos = (2, 1), span = (1,4))
         
         # height
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
                                          label = _("Height above surface:")),
-                      pos = (2, 5), flag = wx.ALIGN_BOTTOM|wx.EXPAND)
+                      pos = (3, 5), flag = wx.ALIGN_BOTTOM|wx.EXPAND)
         
         surface = wx.CheckListBox(parent = panel, id = wx.ID_ANY, size = (-1, 60),
                                   choices = [], style = wx.LB_NEEDED_SB)
@@ -1171,7 +1194,7 @@ class NvizToolWindow(FN.FlatNotebook):
         
         self.win['vector']['lines']['surface'] = surface.GetId()
         gridSizer.Add(item = surface, 
-                      pos = (2, 0), span = (3, 5),
+                      pos = (3, 0), span = (3, 5),
                       flag = wx.ALIGN_CENTER_VERTICAL|wx.EXPAND)
         
         self._createControl(panel, data = self.win['vector']['lines'], name = 'height', size = -1,
@@ -1180,9 +1203,9 @@ class NvizToolWindow(FN.FlatNotebook):
         self.FindWindowById(self.win['vector']['lines']['height']['slider']).SetValue(0)
         self.FindWindowById(self.win['vector']['lines']['height']['text']).SetValue(0)
         gridSizer.Add(item = self.FindWindowById(self.win['vector']['lines']['height']['slider']),
-                      pos = (3, 5),  flag = wx.EXPAND|wx.ALIGN_RIGHT)
+                      pos = (4, 5),  flag = wx.EXPAND|wx.ALIGN_RIGHT)
         gridSizer.Add(item = self.FindWindowById(self.win['vector']['lines']['height']['text']),
-                      pos = (4, 5),
+                      pos = (5, 5),
                       flag = wx.ALIGN_CENTER)
         
         boxSizer.Add(item = gridSizer, proportion = 1,
@@ -3186,17 +3209,28 @@ class NvizToolWindow(FN.FlatNotebook):
 
     def OnCheckThematic(self, event):
         """!Switch on/off thematic mapping"""
-        check = self.win['vector']['points']['thematic']['check']
-        button = self.win['vector']['points']['thematic']['button']
-        if self.FindWindowById(check).GetValue():
-            checked = True
+        # can be called with no event to enable/disable button
+        if not event:
+            ids = (self.win['vector']['points']['thematic']['check'],
+                  self.win['vector']['lines']['thematic']['check'])
         else:
-            checked = False
-        self.FindWindowById(button).Enable(checked)
-        
-        data = self.GetLayerData('vector')
-        data['vector']['points']['thematic']['use'] = checked
-        data['vector']['points']['thematic']['update'] = None
+            ids = (event.GetId(),)
+        for id in ids:
+            if id == self.win['vector']['points']['thematic']['check']:
+                type = 'points'
+            else:
+                type = 'lines'
+            check = self.win['vector'][type]['thematic']['check']
+            button = self.win['vector'][type]['thematic']['button']
+            if self.FindWindowById(check).GetValue():
+                checked = True
+            else:
+                checked = False
+            self.FindWindowById(button).Enable(checked)
+            
+            data = self.GetLayerData('vector')
+            data['vector'][type]['thematic']['use'] = checked
+            data['vector'][type]['thematic']['update'] = None
         
         # update properties
         event = wxUpdateProperties(data = data)
@@ -3207,7 +3241,11 @@ class NvizToolWindow(FN.FlatNotebook):
             
     def OnSetThematic(self, event):
         """!Set options for thematic points"""
-        ctable = colorrules.ThematicVectorTable(self)
+        if event.GetId() == self.win['vector']['points']['thematic']['button']:
+            vectorType = 'points'
+        else:
+            vectorType = 'lines'            
+        ctable = colorrules.ThematicVectorTable(self, vectorType)
         ctable.CentreOnScreen()
         ctable.Show()
         

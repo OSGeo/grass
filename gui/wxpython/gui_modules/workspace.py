@@ -705,7 +705,13 @@ class Nviz:
         # height
         data['height'] = { 'value' : UserSettings.Get(group='nviz', key='vector',
                                                       subkey=['lines', 'height']) }
-
+        # thematic
+        data['thematic'] = {'rgbcolumn' : UserSettings.Get(group='nviz', key='vector',
+                                                      subkey=['lines', 'rgbcolumn']),
+                            'sizecolumn' : UserSettings.Get(group='nviz', key='vector',
+                                                      subkey=['lines', 'sizecolumn']),
+                            'layer': 1,
+                            'use' : False}
         if 'object' in data:
             for attrb in ('color', 'width', 'mode', 'height'):
                 data[attrb]['update'] = None

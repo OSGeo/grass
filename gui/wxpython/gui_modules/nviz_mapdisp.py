@@ -1540,7 +1540,16 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self._display.SetVectorLineHeight(id,
                                               data['height']['value'])
             data['height'].pop('update')
-        
+            
+        # thematic
+        if 'update' in data['thematic']:
+            if data['thematic']['use']:
+                self._display.SetLinesStyleThematic(id = id, layer = data['thematic']['layer'],
+                                               color = data['thematic']['rgbcolumn'],
+                                               width = data['thematic']['sizecolumn'])
+            else:
+                self._display.UnsetLinesStyleThematic(id = id)
+            data['thematic'].pop('update')
         # surface
         if 'surface' in data['mode'] and 'update' in data['mode']:
             for item in range(len(data['mode']['surface']['value'])):
@@ -1590,11 +1599,11 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         # thematic
         if 'update' in data['thematic']:
             if data['thematic']['use']:
-                self._display.SetStyleThematic(id = id, layer = data['thematic']['layer'],
+                self._display.SetPointsStyleThematic(id = id, layer = data['thematic']['layer'],
                                                color = data['thematic']['rgbcolumn'],
                                                size = data['thematic']['sizecolumn'])
             else:
-                self._display.UnsetStyleThematic(id = id)
+                self._display.UnsetPointsStyleThematic(id = id)
             data['thematic'].pop('update')
             
         # surface
@@ -1890,7 +1899,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         subcmd += "height=%d " % (self.iview['height']['value'])
         subcmd += "perspective=%d " % (self.view['persp']['value'])
         subcmd += "twist=%d " % (self.view['twist']['value'])
-        subcmd += "zexag=%d " % (self.view['z-exag']['value'])
+        subcmd += "zexag=%d " % (self.view['z-exag']['value'] * self.iview['z-exag']['original'])
         subcmd += "focus=%d,%d,%d " % (self.iview['focus']['x'],self.iview['focus']['y'],self.iview['focus']['z'])
         cmd += subcmd
         

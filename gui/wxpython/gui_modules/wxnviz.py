@@ -940,13 +940,21 @@ class Nviz(object):
         
         return 1
 
-    def SetStyleThematic(self, id, layer, color = None, width = None, size = None, symbol = None):
+    def SetPointStyleThematic(self, id, layer, color = None, width = None, size = None, symbol = None):
         """!Set thematic style for vector points"""
         GP_set_style_thematic(id, layer, color, width, size, symbol)
+
+    def SetLinesStyleThematic(self, id, layer, color = None, width = None):
+        """!Set thematic style for vector lines"""
+        GV_set_style_thematic(id, layer, color, width) 
         
-    def UnsetStyleThematic(self, id):
+    def UnsetLinesStyleThematic(self, id):
         """!Unset thematic style for vector points"""
-        GP_unset_style_thematic(id)
+        GP_unset_style_thematic(id)      
+         
+    def UnsetPointStyleThematic(self, id):
+        """!Unset thematic style for vector lines"""
+        GV_unset_style_thematic(id)
         
     def UnsetVectorPointSurface(self, id, surf_id):
         """!Unset reference surface of vector set (points)
