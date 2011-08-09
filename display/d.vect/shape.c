@@ -4,7 +4,7 @@
 
 #include "local_proto.h"
 
-int display_shape(struct Map_info *Map, int type, int area, struct cat_list *Clist, const struct Cell_head *window, 
+int display_shape(struct Map_info *Map, int type, struct cat_list *Clist, const struct Cell_head *window, 
 		  const struct color_rgb *bcolor, const struct color_rgb *fcolor, int chcat,
 		  const char *icon, double size, const char *size_column, int sqrt_flag, const char *rot_column, /* lines only */
 		  int id_flag, int table_colors_flag, int cats_colors_flag, char *rgb_column,
@@ -162,7 +162,7 @@ int display_shape(struct Map_info *Map, int type, int area, struct cat_list *Cli
 	db_close_database_shutdown_driver(driver);
 
     stat = 0;
-    if (area)
+    if (type & GV_AREA)
 	stat += display_area(Map, Clist, window, 
 			     bcolor, fcolor, chcat,
 			     id_flag, table_colors_flag, cats_colors_flag,
