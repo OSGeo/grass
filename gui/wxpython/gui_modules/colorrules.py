@@ -65,6 +65,9 @@ class RulesPanel:
                                           style = wx.TAB_TRAVERSAL | wx.SUNKEN_BORDER)
         self.mainPanel.SetupScrolling(scroll_x = False)
         self.mainSizer = wx.FlexGridSizer(cols = 3, vgap = 6, hgap = 4)
+        # put small border at the top of panel
+        for i in range(3):
+            self.mainSizer.Add(item = wx.Size(3, 3))
         
         self.mainPanel.SetSizer(self.mainSizer)
         self.mainPanel.SetAutoLayout(True)
@@ -236,10 +239,10 @@ class RulesPanel:
         message = ""
         for item in range(len(self.ruleslines)):
             self.mainPanel.FindWindowById(item + 1000).SetValue(self.ruleslines[item]['value'])
-            r, g, b = (255, 255, 255) # default
+            r, g, b = (0, 0, 0) # default
             if self.ruleslines[item][self.columnType] == '':
                 if self.columnType == 'color':
-                    self.ruleslines[item][self.columnType] = (r, g, b)
+                    self.ruleslines[item][self.columnType] = '%d:%d:%d' % (r, g, b)
                 elif self.columnType == 'size':
                     self.ruleslines[item][self.columnType] = 100
                 
@@ -380,11 +383,12 @@ class ColorTable(wx.Frame):
         self.colorRulesPanel = RulesPanel(parent = parent, mapType = self.type,
                                           columnType = 'color', properties = self.properties)
         if self.type == 'vector':
-            bodySizer.Add(item = self.colorRulesPanel.label, pos = (row, 0), span = (1, 2))
+            bodySizer.Add(item = self.colorRulesPanel.label, pos = (row, 0), span = (1, 2),
+                          flag = wx.ALL, border = 5)
             row += 1
         
-        bodySizer.Add(item = self.colorRulesPanel.mainPanel, pos = (row, 0), span = (1, 2))
-        
+        bodySizer.Add(item = self.colorRulesPanel.mainPanel, pos = (row, 0), span = (1, 2),
+                      flag = wx.ALL, border = 5)
         # add two rules as default
         self.colorRulesPanel.AddRules(2)
         
@@ -801,7 +805,8 @@ class VectorColorTable(ColorTable):
         self.Bind(wx.EVT_BUTTON, self.OnAddColumn, self.btn_add_RGB)    
         
         self._initLayer()
-        self.cr_label.SetLabel(_("Enter vector attribute values or ranges"))
+        self.cr_label.SetLabel(_("Enter vector attribute values (e.g. 5) "
+                                            "or ranges (e.g. 5 to 10)"))
         self.SetMinSize(self.GetSize()) 
         self.CentreOnScreen()
         self.Show()
@@ -1034,6 +1039,7 @@ class VectorColorTable(ColorTable):
         self.cb_color_att.SetSelection(0)
         self.properties['source_rgb'] = self.cb_color_att.GetString(0)
         self.cb_rgb_col.InsertColumns(vector = self.inmap, layer = vlayer, type = ["character"], dbInfo = self.dbInfo)
+        self.cb_rgb_col.Delete(self.cb_rgb_col.FindString(self.properties['source_rgb']))
         found = self.cb_rgb_col.FindString('GRASSRGB')
         if found != wx.NOT_FOUND:
             self.cb_rgb_col.SetSelection(found)
@@ -1048,7 +1054,6 @@ class VectorColorTable(ColorTable):
         
     def OnColumnSelection(self, event):
         self.properties['source_rgb'] = event.GetString()
-##        self.SetInfoString()
         
         self.LoadTable(attColumn = self.properties['source_rgb'],
                        rgbColumn = self.properties['rgb'], rulesPanel = self.colorRulesPanel)
@@ -1063,6 +1068,9 @@ class VectorColorTable(ColorTable):
             self.cb_rgb_col.InsertColumns(self.inmap, self.properties['layer'], type = ["character"])
             self.cb_rgb_col.SetStringSelection('GRASSRGB')
             self.properties['rgb'] = self.cb_rgb_col.GetStringSelection()
+            
+            self.LoadTable(attColumn = self.properties['source_rgb'], rgbColumn = self.properties['rgb'],
+                       rulesPanel = self.colorRulesPanel, type = 'color')
         else:
             gcmd.GMessage(parent = self,
                           message = _("GRASSRGB column already exists."))
@@ -1085,6 +1093,9 @@ class VectorColorTable(ColorTable):
         """!Load current column (GRASSRGB, size column)"""
         
         rulesPanel.Clear()
+        if not attColumn or not rgbColumn:
+            self.preview.EraseMap()
+            return
         
         if self.inmap:
             outFile = tempfile.NamedTemporaryFile(mode='w+b')
@@ -1167,7 +1178,7 @@ class VectorColorTable(ColorTable):
             
     def OnPreview(self, event = None):
         """!Update preview (based on computational region)"""
-        if not self.inmap:
+        if not self.inmap or not self.properties["rgb"]:
             self.preview.EraseMap()
             return
         
