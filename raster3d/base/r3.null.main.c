@@ -100,14 +100,14 @@ modifyNull(char *name, d_Mask * maskRules, int changeNull, double newNullVal)
     cacheSize = G3d_cacheSizeEncode(G3D_USE_CACHE_XY, 1);
 
     if (NULL == G_find_grid3(name, ""))
-	G3d_fatalError(_("Requested 3d raster map not found"));
+	G3d_fatalError(_("3D raster map <%s> not found"), name);
 
     fprintf(stderr, "name %s Mapset %s \n", name, G_mapset());
     map = G3d_openCellOld(name, G_mapset(), G3D_DEFAULT_WINDOW,
 			  DCELL_TYPE, cacheSize);
 
     if (map == NULL)
-	G3d_fatalError(_("modifyNull: error opening map"));
+	G3d_fatalError(_("Unable to open 3D raster map <%s>"), name);
 
     G3d_getRegionStructMap(map, &region);
     G3d_getTileDimensionsMap(map, &tileX, &tileY, &tileZ);
@@ -166,9 +166,9 @@ modifyNull(char *name, d_Mask * maskRules, int changeNull, double newNullVal)
     G3d_unlockAll(mapOut);
 
     if (!G3d_closeCell(map))
-	G3d_fatalError(_("modifyNull: error closing map"));
+	G3d_fatalError(_("Unable to close raster map"));
     if (!G3d_closeCell(mapOut))
-	G3d_fatalError(_("modifyNull: error closing tmp file"));
+	G3d_fatalError(_("modifyNull: Unable to close tmp file"));
 }
 
 /*--------------------------------------------------------------------------*/
