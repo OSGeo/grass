@@ -124,14 +124,14 @@ int main(int argc, char *argv[])
     name = G_store(opt1->answer);
 
     if ((mapset = G_find_grid3(name, "")) == NULL)
-	G_fatal_error(_("Raster map <%s> not found"), name);
+	G_fatal_error(_("3D Raster map <%s> not found"), name);
 
     /*We need to open the map */
     g3map =
 	G3d_openCellOld(name, mapset, G3D_DEFAULT_WINDOW,
 			G3D_TILE_SAME_AS_FILE, G3D_NO_CACHE);
     if (NULL == g3map)
-	G_fatal_error(_("Error opening grid3 file [%s]"), name);
+	G_fatal_error(_("Unable to open 3D raster map <%s>"), name);
 
     /*Get the maptype */
     data_type = G3d_fileTypeMap(g3map);
@@ -340,7 +340,7 @@ int main(int argc, char *argv[])
 	    else
 		G_fatal_error(_("Cannot allocate memory for string"));
 	    if (0 == G3d_range_load(g3map))
-		G_fatal_error(_("Error reading range for [%s]"), name);
+		G_fatal_error(_("Unable to read range of 3D raster map <%s>"), name);
 
 	    G3d_range_min_max(g3map, &dmin, &dmax);
 	    format_double(dmin, tmp1);
@@ -402,7 +402,7 @@ int main(int argc, char *argv[])
     else {			/* Range */
 	if (rflag->answer) {
 	    if (0 == G3d_range_load(g3map))
-		G_fatal_error(_("Error reading range for [%s]"), name);
+		G_fatal_error(_("Unable to read range of 3D raster map <%s>"), name);
 
 	    G3d_range_min_max(g3map, &dmin, &dmax);
 	    fprintf(out, "min=%f\n", dmin);
@@ -486,7 +486,7 @@ int main(int argc, char *argv[])
 
     /*Close the opened map */
     if (!G3d_closeCell(g3map))
-	G_fatal_error(_("Error closing 3d raster map"));
+	G_fatal_error(_("Unable to close 3D raster map <%s>"), name);
 
 
     return 0;
