@@ -525,6 +525,8 @@ class Settings:
                         'color' : (0, 0, 255, 255), # blue
                         'flat' : False,
                         'height' : 0,
+                        'rgbcolumn': None,
+                        'sizecolumn': None,
                         },
                     'points' : {
                         'show' : False,

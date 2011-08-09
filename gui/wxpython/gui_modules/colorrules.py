@@ -75,9 +75,16 @@ class RulesPanel:
         if self.mapType == 'vector' and self.columnType == 'color':
             self.label = wx.StaticText(parent, id = wx.ID_ANY, label =  _("Set color for attribute values:"))
         elif self.mapType == 'vector' and self.columnType == 'size':
-            self.label = wx.StaticText(parent, id = wx.ID_ANY, label = _("Set size for attribute values:"))
+            if self.parent.vectorType == 'points':
+                label = label = _("Set size for attribute values:")
+            else:
+                label = label = _("Set width for attribute values:")                
+            self.label = wx.StaticText(parent, id = wx.ID_ANY, label = label)
+        
+        #  determines how many rules should be added
         self.numRules = wx.SpinCtrl(parent, id = wx.ID_ANY,
                                     min = 1, max = 1e6)
+        # add rules
         self.btnAdd = wx.Button(parent, id = wx.ID_ADD)
         
         self.btnAdd.Bind(wx.EVT_BUTTON, self.OnAddRules)
@@ -212,7 +219,11 @@ class RulesPanel:
     def SetVectorRule(self, num, vals):
         """!Set vector rule"""
         tc = self.mainPanel.FindWindowById(num)
-        if self.properties['source_rgb'] == '' or self.properties['rgb'] == '':
+        if self.columnType == 'color':
+            source, target = 'source_rgb', 'rgb'
+        else:
+            source, target = 'source_size', 'size'
+        if self.properties[source] == '' or self.properties[target] == '':
             tc.SetValue('')
             gcmd.GMessage(parent = self,
                           message = _("Please select attribute column "
@@ -1097,6 +1108,9 @@ class VectorColorTable(ColorTable):
             self.preview.EraseMap()
             return
         
+        busy = wx.BusyInfo(message = _("Please wait, loading data from attribute table..."),
+                           parent = self)
+        wx.Yield()
         if self.inmap:
             outFile = tempfile.NamedTemporaryFile(mode='w+b')
             sep = '|'
@@ -1111,6 +1125,7 @@ class VectorColorTable(ColorTable):
             
         else:
             self.OnPreview(event)
+            busy.Destroy()
             return
         if type == 'color':
             ctype = self.dbInfo.GetTableDesc(self.properties['table'])\
@@ -1150,6 +1165,8 @@ class VectorColorTable(ColorTable):
         else:
             rulesPanel.Clear()
     
+        busy.Destroy()
+        
     def SetRangeLabel(self, type, ctype, minim, maxim):
         """!Set labels with info about attribute column range"""
         if type == 'color':
@@ -1237,9 +1254,10 @@ class VectorColorTable(ColorTable):
 ##            return False
         
 class ThematicVectorTable(VectorColorTable):
-    def __init__(self, parent, **kwargs):
+    def __init__(self, parent, vectorType, **kwargs):
         """!Dialog for interactively entering color/size rules
             for vector maps for thematic mapping in nviz"""
+        self.vectorType = vectorType
         VectorColorTable.__init__(self, parent = parent, **kwargs)
         
         # additional bingings
@@ -1250,6 +1268,7 @@ class ThematicVectorTable(VectorColorTable):
         self.Bind(wx.EVT_CHECKBOX, self.OnSizeChecked,  self.size_check)
         
         self.SetTitle(_("Thematic mapping for vector map in 3D view"))
+        
         
     def UpdateDialog(self):
         """!Update dialog according to selected map"""
@@ -1410,7 +1429,12 @@ class ThematicVectorTable(VectorColorTable):
         """!Create part of dialog with layer/column selection"""
         layer_label = wx.StaticText(parent, id = wx.ID_ANY, label = _('Layer:'))
         self.rgb_check = wx.CheckBox(parent, id = wx.ID_ANY, label = _('Use color for thematic mapping:'))
-        self.size_check = wx.CheckBox(parent, id = wx.ID_ANY, label = _('Use size for thematic mapping:'))
+        if self.vectorType == 'points':
+            label = _('Use symbol size for thematic mapping:')
+        else:
+            label = _('Use line width for thematic mapping:')
+        self.size_check = wx.CheckBox(parent, id = wx.ID_ANY, label = label)
+        
         self.rgb_check.SetValue(True)
         self.size_check.SetValue(True)
                                             
@@ -1420,8 +1444,12 @@ class ThematicVectorTable(VectorColorTable):
                                          label = _('Attribute column:'))
         rgb_col_label = wx.StaticText(parent, id = wx.ID_ANY,
                                            label = _('RGB color column:'))
-        size_col_label = wx.StaticText(parent, id = wx.ID_ANY,
-                                           label = _('Size column:'))
+        if self.vectorType == 'points':
+            label = _('Symbol size column:')
+        else:
+            label = _('Line with column:')
+        size_col_label = wx.StaticText(parent, id = wx.ID_ANY, label = label)
+        
         self.rgb_range_label = wx.StaticText(parent, id = wx.ID_ANY)                                        
         self.size_range_label = wx.StaticText(parent, id = wx.ID_ANY)
         cb_size = (150, -1)
@@ -1435,7 +1463,12 @@ class ThematicVectorTable(VectorColorTable):
         self.btn_add_size = wx.Button(parent, id = wx.ID_ANY,
                                              label = _('Add column'))
         self.btn_add_RGB.SetToolTipString(_("Add GRASSRGB column to current attribute table."))
-        self.btn_add_size.SetToolTipString(_("Add size column to current attribute table."))
+        
+        if self.vectorType == 'points':
+            label = _("Add size column to current attribute table.")
+        else:
+            label = _("Add width column to current attribute table.")
+        self.btn_add_size.SetToolTipString(label)
         
         # layout
         inputBox = wx.StaticBox(parent = parent, id = wx.ID_ANY,
@@ -1490,7 +1523,11 @@ class ThematicVectorTable(VectorColorTable):
     
     def OnAddSizeColumn(self, event):
         """!Add size column if it doesn't exist"""
-        name = 'GRASSSIZE'
+        if self.vectorType == 'points':
+            name = 'GRASSSIZE'
+        else:
+            name = 'GRASSWIDTH'
+        
         ret = gcmd.RunCommand('v.db.addcolumn',
                                map = self.inmap,
                               layer = self.properties['layer'],
@@ -1526,8 +1563,13 @@ class ThematicVectorTable(VectorColorTable):
                     '-a',
                    'map=%s' % self.inmap,
                    'type=point,line,boundary,area']
+                
         if self.size_check.IsChecked() and self.properties["size"]:
-            cmdlist.append('size_column=%s' % self.properties["size"])
+            if self.vectorType == 'points':
+                cmdlist.append('size_column=%s' % self.properties["size"])
+            else:
+                cmdlist.append('width_column=%s' % self.properties["size"])
+            
         if self.rgb_check.IsChecked() and self.properties["rgb"]:
             cmdlist.append('rgb_column=%s' % self.properties["rgb"])
         ltype = 'vector'
@@ -1544,17 +1586,18 @@ class ThematicVectorTable(VectorColorTable):
         
         data = self.parent.GetLayerData(nvizType = 'vector')
         data['vector']['points']['thematic']['layer'] = int(self.properties['layer'])
+        
         if self.size_check.IsChecked() and self.properties['size']:
-            data['vector']['points']['thematic']['sizecolumn'] = self.properties['size']
+            data['vector'][self.vectorType]['thematic']['sizecolumn'] = self.properties['size']
         else:
-            data['vector']['points']['thematic']['sizecolumn'] = None
+            data['vector'][self.vectorType]['thematic']['sizecolumn'] = None
             
         if self.rgb_check.IsChecked() and self.properties['rgb']:
-            data['vector']['points']['thematic']['rgbcolumn'] = self.properties['rgb']
+            data['vector'][self.vectorType]['thematic']['rgbcolumn'] = self.properties['rgb']
         else:
-            data['vector']['points']['thematic']['rgbcolumn'] = None
+            data['vector'][self.vectorType]['thematic']['rgbcolumn'] = None
         
-        data['vector']['points']['thematic']['update'] = None
+        data['vector'][self.vectorType]['thematic']['update'] = None
         
         event = wxUpdateProperties(data = data)
         wx.PostEvent(self.parent.mapWindow, event)
