@@ -940,7 +940,7 @@ class Nviz(object):
         
         return 1
 
-    def SetPointStyleThematic(self, id, layer, color = None, width = None, size = None, symbol = None):
+    def SetPointsStyleThematic(self, id, layer, color = None, width = None, size = None, symbol = None):
         """!Set thematic style for vector points"""
         GP_set_style_thematic(id, layer, color, width, size, symbol)
 
@@ -952,7 +952,7 @@ class Nviz(object):
         """!Unset thematic style for vector points"""
         GP_unset_style_thematic(id)      
          
-    def UnsetPointStyleThematic(self, id):
+    def UnsetPointsStyleThematic(self, id):
         """!Unset thematic style for vector lines"""
         GV_unset_style_thematic(id)
         
