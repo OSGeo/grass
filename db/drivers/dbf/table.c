@@ -51,7 +51,7 @@ int add_table(char *table, char *name)
     strcpy(db.tables[db.ntables].name, table);
 
 #ifdef __MINGW32__
-    sprintf(db.tables[db.ntables].file, "%s\%s", db.name, name);
+    sprintf(db.tables[db.ntables].file, "%s\\%s", db.name, name);
 #else
     sprintf(db.tables[db.ntables].file, "%s/%s", db.name, name);
 #endif
