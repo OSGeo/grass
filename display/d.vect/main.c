@@ -74,7 +74,7 @@ static char *icon_files(void)
 int main(int argc, char **argv)
 {
     int ret, level;
-    int stat, type, area, display;
+    int stat, type, display;
     int chcat;
     int has_color, has_fcolor;
     struct color_rgb color, fcolor;
@@ -440,7 +440,6 @@ int main(int argc, char **argv)
     }
     
     type = Vect_option_to_types(type_opt);
-    area = type & GV_AREA;
     
     display = option_to_display(display_opt);
 
@@ -479,7 +478,7 @@ int main(int argc, char **argv)
 	    D_line_width(default_width);
 
 	if (display & DISP_SHAPE) {
-	    stat += display_shape(&Map, type, area, Clist, &window,
+	    stat += display_shape(&Map, type, Clist, &window,
 				  has_color ? &color : NULL, has_fcolor ? &fcolor : NULL, chcat,
 				  icon_opt->answer, size, sizecolumn_opt->answer, sqrt_flag->answer ? 1 : 0, rotcolumn_opt->answer,
 				  id_flag->answer ? 1 : 0, table_acolors_flag->answer ? 1 : 0, cats_acolors_flag->answer ? 1 : 0, rgbcol_opt->answer,
@@ -504,22 +503,16 @@ int main(int argc, char **argv)
 	    D_line_width(0);
 	
 	if (display & DISP_CAT)
-	    stat += display_label(&Map, type, area, Clist, &lattr, chcat);
+	    stat += display_label(&Map, type, Clist, &lattr, chcat);
 
-	if (display & DISP_ATTR) {
-	    int attr_type = type;
-
-	    if (area && !(attr_type & GV_CENTROID))
-		attr_type |= GV_CENTROID;
-		
-	    stat += display_attr(&Map, attr_type, attrcol_opt->answer, Clist, &lattr, chcat);
-	    }
+	if (display & DISP_ATTR)
+	    stat += display_attr(&Map, type, attrcol_opt->answer, Clist, &lattr, chcat);
 
 	if (display & DISP_ZCOOR)
 	    stat += display_zcoor(&Map, type, &lattr);
 
 	if (display & DISP_TOPO)
-	    stat += display_topo(&Map, type, area, &lattr);
+	    stat += display_topo(&Map, type, &lattr);
     }
 
     D_save_command(G_recreate_command());

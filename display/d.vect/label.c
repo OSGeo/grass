@@ -5,7 +5,7 @@
 #include "local_proto.h"
 #include "plot.h"
 
-int display_label(struct Map_info *Map, int type, int do_area,
+int display_label(struct Map_info *Map, int type,
 		  struct cat_list *Clist, LATTR *lattr, int chcat)
 {
     int i, ltype;

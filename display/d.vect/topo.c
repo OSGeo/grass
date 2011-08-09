@@ -5,7 +5,7 @@
 #include "local_proto.h"
 #include "plot.h"
 
-int display_topo(struct Map_info *Map, int type, int do_area, LATTR *lattr)
+int display_topo(struct Map_info *Map, int type, LATTR *lattr)
 {
     int ltype, num, el;
     struct line_pnts *Points;
