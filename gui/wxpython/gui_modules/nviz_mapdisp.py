@@ -1895,7 +1895,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         cmd += subcmd
         
         # background
-        subcmd  = "bgcolor=%d:%d:%d " % (self.view['background']['color'])
+        subcmd  = "bgcolor=%d:%d:%d " % (self.view['background']['color'][:3])
         if self.view['background']['color'] != (255, 255, 255):
             cmd += subcmd
         cmd += "\\\n"

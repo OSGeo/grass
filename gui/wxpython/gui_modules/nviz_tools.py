@@ -3207,7 +3207,7 @@ class NvizToolWindow(FN.FlatNotebook):
             
     def OnSetThematic(self, event):
         """!Set options for thematic points"""
-        ctable = colorrules.ColorTable(self, raster = False, nviz = True)
+        ctable = colorrules.ThematicVectorTable(self)
         ctable.CentreOnScreen()
         ctable.Show()
         
