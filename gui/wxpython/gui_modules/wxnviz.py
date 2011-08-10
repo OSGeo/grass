@@ -27,7 +27,7 @@ from numpy import matrix
 
 from ctypes import *
 from grass.lib.gis   import *
-from grass.lib.g3d   import *
+from grass.lib.raster3d   import *
 from grass.lib.ogsf  import *
 from grass.lib.nviz  import *
 from grass.lib.raster import *
