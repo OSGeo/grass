@@ -6,7 +6,9 @@ SUBDIRS = \
 	r3.in.ascii \
 	r3.in.v5d \
 	r3.info \
+	r3.mask \
 	r3.mkdspf \
+	r3.null \
 	r3.out.ascii \
 	r3.out.v5d \
 	r3.out.vtk \
@@ -14,7 +16,6 @@ SUBDIRS = \
 	r3.stats \
 	r3.timestamp \
 	r3.to.rast \
-	base
 
 PGM = raster3dintro
 
