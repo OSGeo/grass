@@ -1,16 +1,16 @@
 /*!
- * \file raster/color_read.c
- * 
- * \brief Raster Library - Read color table of raster map
- *
- * (C) 1999-2009 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public
- * License (>=v2). Read the file COPYING that comes with GRASS
- * for details.
- *
- * \author USACERL and many others
- */
+  \file lib/raster/color_read.c
+  
+  \brief Raster Library - Read color table of raster map
+  
+  (C) 1999-2009, 2011 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public
+  License (>=v2). Read the file COPYING that comes with GRASS
+  for details.
+  
+  \author USACERL and many others
+*/
 
 #include <string.h>
 
@@ -18,42 +18,40 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-static int read_colors(const char *, const char *, const char *,
-		       struct Colors *);
 static int read_new_colors(FILE *, struct Colors *);
 static int read_old_colors(FILE *, struct Colors *);
 
 
 /*!
- * \brief Read raster map layer color table
- *
- * The color table for the raster map <i>name</i> in the specified
- * <i>mapset</i> is read into the <i>colors</i> structure. If the data
- * layer has no color table, a default color table is generated and 0
- * is returned. If there is an error reading the color table, a
- * diagnostic message is printed and -1 is returned. If the color
- * table is read ok, 1 is returned.
- *
- * This routine reads the rules from the color file. If the input
- * raster map is is a floating-point map it calls
- * Rast_mark_colors_as_fp().
- *
- *  Note: If a secondary color file for map name <i>name</i> exists in
- *  the current project, that color file is read.  This allows the
- *  user to define their own color lookup tables for cell maps found
- *  in other mapsets.
- *
- *  Warning message is printed if the color file is
- *  missing or invalid.
- *
- * \param name map name
- * \param mapset mapset name
- * \param[out] colors pointer to Colors structure
- *
- * \return -1 on error
- * \return 0 if missing, but default colors generated
- * \return 1 on success
- */
+  \brief Read color table of raster map
+  
+  The color table for the raster map <i>name</i> in the specified
+  <i>mapset</i> is read into the <i>colors</i> structure. If the data
+  layer has no color table, a default color table is generated and 0
+  is returned. If there is an error reading the color table, a
+  diagnostic message is printed and -1 is returned. If the color
+  table is read ok, 1 is returned.
+  
+  This routine reads the rules from the color file. If the input
+  raster map is is a floating-point map it calls
+  Rast_mark_colors_as_fp().
+  
+  Note: If a secondary color file for map name <i>name</i> exists in
+  the current project, that color file is read.  This allows the
+  user to define their own color lookup tables for cell maps found
+  in other mapsets.
+  
+  Warning message is printed if the color file is
+  missing or invalid.
+  
+  \param name map name
+  \param mapset mapset name
+  \param[out] colors pointer to Colors structure
+  
+  \return -1 on error
+  \return 0 if missing, but default colors generated
+  \return 1 on success
+*/
 int Rast_read_colors(const char *name, const char *mapset,
 		     struct Colors *colors)
 {
@@ -78,11 +76,11 @@ int Rast_read_colors(const char *name, const char *mapset,
 
     /* first look for secondary color table in current mapset */
     sprintf(buf, "colr2/%s", mapset);
-    if (read_colors(buf, name, G_mapset(), colors) >= 0)
+    if (Rast__read_colors(buf, name, G_mapset(), colors) >= 0)
 	return 1;
 
     /* now look for the regular color table */
-    switch (read_colors("colr", name, mapset, colors)) {
+    switch (Rast__read_colors("colr", name, mapset, colors)) {
     case -2:
 	if (!fp) {
 	    if (Rast_read_range(name, mapset, &range) >= 0) {
@@ -115,8 +113,8 @@ int Rast_read_colors(const char *name, const char *mapset,
     return -1;
 }
 
-static int read_colors(const char *element, const char *name,
-		       const char *mapset, struct Colors *colors)
+int Rast__read_colors(const char *element, const char *name,
+		      const char *mapset, struct Colors *colors)
 {
     FILE *fd;
     int stat;

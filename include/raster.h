@@ -17,10 +17,6 @@
 #define CUBIC     3		/* cubic interpolation             */
 
 /*** typedefs ***/
-typedef int CELL;
-typedef double DCELL;
-typedef float FCELL;
-
 typedef int RASTER_MAP_TYPE;
 
 /* for G_get_raster_sample() */
@@ -223,70 +219,6 @@ struct FP_stats {
 };
 
 struct GDAL_link;
-
-struct _Color_Value_
-{
-    DCELL value;
-    unsigned char red;
-    unsigned char grn;
-    unsigned char blu;
-};
-
-struct _Color_Rule_
-{
-    struct _Color_Value_ low, high;
-    struct _Color_Rule_ *next;
-    struct _Color_Rule_ *prev;
-};
-
-struct _Color_Info_
-{
-    struct _Color_Rule_ *rules;
-    int n_rules;
-
-    struct
-    {
-	unsigned char *red;
-	unsigned char *grn;
-	unsigned char *blu;
-	unsigned char *set;
-	int nalloc;
-	int active;
-    } lookup;
-
-    struct
-    {
-	DCELL *vals;
-	/* pointers to color rules corresponding to the intervals btwn vals */
-	struct _Color_Rule_ **rules;
-	int nalloc;
-	int active;
-    } fp_lookup;
-
-    DCELL min, max;
-};
-
-struct Colors
-{
-    int version;		/* set by read_colors: -1=old,1=new */
-    DCELL shift;
-    int invert;
-    int is_float;		/* defined on floating point raster data? */
-    int null_set;		/* the colors for null are set? */
-    unsigned char null_red;
-    unsigned char null_grn;
-    unsigned char null_blu;
-    int undef_set;		/* the colors for cells not in range are set? */
-    unsigned char undef_red;
-    unsigned char undef_grn;
-    unsigned char undef_blu;
-    struct _Color_Info_ fixed;
-    struct _Color_Info_ modular;
-    DCELL cmin;
-    DCELL cmax;
-    int organizing;
-};
-
 
 typedef struct
 {

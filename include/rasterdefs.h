@@ -185,6 +185,7 @@ void Rast_get_d_color_range(DCELL *, DCELL *, const struct Colors *);
 
 /* color_read.c */
 int Rast_read_colors(const char *, const char *, struct Colors *);
+int Rast__read_colors(const char *, const char *, const char *, struct Colors *);
 void Rast_mark_colors_as_fp(struct Colors *);
 
 /* color_remove.c */
