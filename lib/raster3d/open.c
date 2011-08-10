@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <grass/raster3d.h>
 #include <grass/glocale.h>
-#include "G3d_intern.h"
+#include "raster3d_intern.h"
 
 /*---------------------------------------------------------------------------*/
 

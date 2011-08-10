@@ -31,7 +31,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <grass/glocale.h>
-#include "G3d_intern.h"
+#include "raster3d_intern.h"
 #include <grass/raster.h>
 
 /*simple error message */

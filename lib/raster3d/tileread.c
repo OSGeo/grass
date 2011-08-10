@@ -6,7 +6,7 @@
 #include <rpc/xdr.h>
 
 #include <grass/raster.h>
-#include "G3d_intern.h"
+#include "raster3d_intern.h"
 
 static int
 G3d_xdrTile2tile(G3D_Map * map, void *tile, int rows, int cols, int depths,

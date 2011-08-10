@@ -11,7 +11,7 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-#include "G3d_intern.h"
+#include "raster3d_intern.h"
 
 static int read_colors(const char *, const char *, struct Colors *);
 static int read_new_colors(FILE *, struct Colors *);
