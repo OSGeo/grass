@@ -591,10 +591,10 @@ int main(int argc, char *argv[])
 
 
     /*Set the defaults */
-    G3d_initDefaults();
+    Rast3d_initDefaults();
 
     /*get the current region */
-    G3d_getWindow(&region);
+    Rast3d_getWindow(&region);
 
     cols = region.cols;
     rows = region.rows;
@@ -609,16 +609,16 @@ int main(int argc, char *argv[])
     infile = inputfile->answer;
 
     if (NULL == G_find_grid3(infile, ""))
-	G3d_fatalError(_("Requested g3d map <%s> not found"), infile);
+	Rast3d_fatalError(_("Requested g3d map <%s> not found"), infile);
 
     map =
-	G3d_openCellOld(infile, G_find_grid3(infile, ""), &region,
+	Rast3d_openCellOld(infile, G_find_grid3(infile, ""), &region,
 			RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
     if (map == NULL)
-	G3d_fatalError(_("Error opening g3d map <%s>"), infile);
+	Rast3d_fatalError(_("Error opening g3d map <%s>"), infile);
 
-    map_type = G3d_tileTypeMap(map);
+    map_type = Rast3d_tileTypeMap(map);
 
     /* calculate statistics for groups of equal values */
     if ((equal->answer)) {
@@ -631,8 +631,8 @@ int main(int argc, char *argv[])
 	    for (y = 0; y < rows; y++) {
 		for (x = 0; x < cols; x++) {
 		    if (map_type == FCELL_TYPE) {
-			G3d_getValue(map, x, y, z, &val_f, map_type);
-			if (!G3d_isNullValueNum(&val_f, map_type)) {
+			Rast3d_getValue(map, x, y, z, &val_f, map_type);
+			if (!Rast3d_isNullValueNum(&val_f, map_type)) {
 			    /*the first entry */
 			    if (eqvals == NULL)
 				eqvals =
@@ -645,8 +645,8 @@ int main(int argc, char *argv[])
 			}
 		    }
 		    else if (map_type == DCELL_TYPE) {
-			G3d_getValue(map, x, y, z, &val_d, map_type);
-			if (!G3d_isNullValueNum(&val_d, map_type)) {
+			Rast3d_getValue(map, x, y, z, &val_d, map_type);
+			if (!Rast3d_isNullValueNum(&val_d, map_type)) {
 			    /*the first entry */
 			    if (eqvals == NULL)
 				eqvals =
@@ -679,8 +679,8 @@ int main(int argc, char *argv[])
 	/*create the statistic table based on value ranges */
 
 	/* get the range of the map */
-	G3d_range_load(map);
-	G3d_range_min_max(map, &min, &max);
+	Rast3d_range_load(map);
+	Rast3d_range_min_max(map, &min, &max);
 
 	stats = create_stat_table(nsteps, NULL, min, max);
 
@@ -690,15 +690,15 @@ int main(int argc, char *argv[])
 	    for (y = 0; y < rows; y++) {
 		for (x = 0; x < cols; x++) {
 		    if (map_type == FCELL_TYPE) {
-			G3d_getValue(map, x, y, z, &val_f, map_type);
-			if (!G3d_isNullValueNum(&val_f, map_type)) {
+			Rast3d_getValue(map, x, y, z, &val_f, map_type);
+			if (!Rast3d_isNullValueNum(&val_f, map_type)) {
 			    check_range_value(stats, (double)val_f);
 			    n++;
 			}
 		    }
 		    else if (map_type == DCELL_TYPE) {
-			G3d_getValue(map, x, y, z, &val_d, map_type);
-			if (!G3d_isNullValueNum(&val_d, map_type)) {
+			Rast3d_getValue(map, x, y, z, &val_d, map_type);
+			if (!Rast3d_isNullValueNum(&val_d, map_type)) {
 			    check_range_value(stats, val_d);
 			    n++;
 			}

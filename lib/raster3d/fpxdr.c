@@ -12,7 +12,7 @@
 
 /*---------------------------------------------------------------------------*/
 
-int G3d_isXdrNullNum(const void *num, int isFloat)
+int Rast3d_isXdrNullNum(const void *num, int isFloat)
 {
     static const char null_bytes[8] = {
 	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
@@ -23,21 +23,21 @@ int G3d_isXdrNullNum(const void *num, int isFloat)
 
 /*---------------------------------------------------------------------------*/
 
-int G3d_isXdrNullFloat(const float *f)
+int Rast3d_isXdrNullFloat(const float *f)
 {
-    return G3d_isXdrNullNum(f, 1);
+    return Rast3d_isXdrNullNum(f, 1);
 }
 
 /*---------------------------------------------------------------------------*/
 
-int G3d_isXdrNullDouble(const double *d)
+int Rast3d_isXdrNullDouble(const double *d)
 {
-    return G3d_isXdrNullNum(d, 0);
+    return Rast3d_isXdrNullNum(d, 0);
 }
 
 /*---------------------------------------------------------------------------*/
 
-void G3d_setXdrNullNum(void *num, int isFloat)
+void Rast3d_setXdrNullNum(void *num, int isFloat)
 {
     static const char null_bytes[8] = {
 	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
@@ -48,23 +48,23 @@ void G3d_setXdrNullNum(void *num, int isFloat)
 
 /*---------------------------------------------------------------------------*/
 
-void G3d_setXdrNullDouble(double *d)
+void Rast3d_setXdrNullDouble(double *d)
 {
-    G3d_setXdrNullNum(d, 0);
+    Rast3d_setXdrNullNum(d, 0);
 }
 
 /*---------------------------------------------------------------------------*/
 
-void G3d_setXdrNullFloat(float *f)
+void Rast3d_setXdrNullFloat(float *f)
 {
-    G3d_setXdrNullNum(f, 1);
+    Rast3d_setXdrNullNum(f, 1);
 }
 
 /*---------------------------------------------------------------------------*/
 
 XDR xdrEncodeStream, xdrDecodeStream;	/* xdr support structures */
 
-int G3d_initFpXdr(RASTER3D_Map * map, int misuseBytes)
+int Rast3d_initFpXdr(RASTER3D_Map * map, int misuseBytes)
 
 
 
@@ -79,9 +79,9 @@ int G3d_initFpXdr(RASTER3D_Map * map, int misuseBytes)
 	xdrLength = map->tileSize * RASTER3D_MAX(map->numLengthExtern,
 					    map->numLengthIntern) +
 	    misuseBytes;
-	xdr = G3d_malloc(xdrLength);
+	xdr = Rast3d_malloc(xdrLength);
 	if (xdr == NULL) {
-	    G3d_error("G3d_initFpXdr: error in G3d_malloc");
+	    Rast3d_error("Rast3d_initFpXdr: error in Rast3d_malloc");
 	    return 0;
 	}
 
@@ -93,9 +93,9 @@ int G3d_initFpXdr(RASTER3D_Map * map, int misuseBytes)
 	xdrLength = map->tileSize * RASTER3D_MAX(map->numLengthExtern,
 					    map->numLengthIntern) +
 	    misuseBytes;
-	xdr = G3d_realloc(xdr, xdrLength);
+	xdr = Rast3d_realloc(xdr, xdrLength);
 	if (xdr == NULL) {
-	    G3d_error("G3d_initFpXdr: error in G3d_realloc");
+	    Rast3d_error("Rast3d_initFpXdr: error in Rast3d_realloc");
 	    return 0;
 	}
 
@@ -118,7 +118,7 @@ static int (*xdrFun) ();
 static XDR *xdrs;
 static double tmpValue, *tmp;
 
-int G3d_initCopyToXdr(RASTER3D_Map * map, int sType)
+int Rast3d_initCopyToXdr(RASTER3D_Map * map, int sType)
 {
     xdrTmp = xdr;
     useXdr = map->useXdr;
@@ -126,7 +126,7 @@ int G3d_initCopyToXdr(RASTER3D_Map * map, int sType)
 
     if (map->useXdr == RASTER3D_USE_XDR) {
 	if (!xdr_setpos(&(xdrEncodeStream), 0)) {
-	    G3d_error("G3d_InitCopyToXdr: positioning xdr failed");
+	    Rast3d_error("Rast3d_InitCopyToXdr: positioning xdr failed");
 	    return 0;
 	}
 	xdrs = &(xdrEncodeStream);
@@ -134,8 +134,8 @@ int G3d_initCopyToXdr(RASTER3D_Map * map, int sType)
 
     type = map->type;
     isFloat = (type == FCELL_TYPE);
-    externLength = G3d_externLength(type);
-    eltLength = G3d_length(srcType);
+    externLength = Rast3d_externLength(type);
+    eltLength = Rast3d_length(srcType);
     if (isFloat)
 	xdrFun = xdr_float;
     else
@@ -147,29 +147,29 @@ int G3d_initCopyToXdr(RASTER3D_Map * map, int sType)
 
 /*---------------------------------------------------------------------------*/
 
-int G3d_copyToXdr(const void *src, int nofNum)
+int Rast3d_copyToXdr(const void *src, int nofNum)
 {
     int i;
 
     if (useXdr == RASTER3D_NO_XDR) {
-	G3d_copyValues(src, 0, srcType, xdrTmp, 0, type, nofNum);
-	xdrTmp = G_incr_void_ptr(xdrTmp, nofNum * G3d_externLength(type));
+	Rast3d_copyValues(src, 0, srcType, xdrTmp, 0, type, nofNum);
+	xdrTmp = G_incr_void_ptr(xdrTmp, nofNum * Rast3d_externLength(type));
 	return 1;
     }
 
     for (i = 0; i < nofNum; i++, src = G_incr_void_ptr(src, eltLength)) {
 
-	if (G3d_isNullValueNum(src, srcType)) {
-	    G3d_setXdrNullNum(xdrTmp, isFloat);
+	if (Rast3d_isNullValueNum(src, srcType)) {
+	    Rast3d_setXdrNullNum(xdrTmp, isFloat);
 	    if (!xdr_setpos(xdrs, xdr_getpos(xdrs) + externLength)) {
-		G3d_error("G3d_copyToXdr: positioning xdr failed");
+		Rast3d_error("Rast3d_copyToXdr: positioning xdr failed");
 		return 0;
 	    }
 	}
 	else {
 	    if (type == srcType) {
 		if (xdrFun(xdrs, src) < 0) {
-		    G3d_error("G3d_copyToXdr: writing xdr failed");
+		    Rast3d_error("Rast3d_copyToXdr: writing xdr failed");
 		    return 0;
 		}
 	    }
@@ -179,7 +179,7 @@ int G3d_copyToXdr(const void *src, int nofNum)
 		else
 		    *((double *)tmp) = (double)*((float *)src);
 		if (xdrFun(xdrs, tmp) < 0) {
-		    G3d_error("G3d_copyToXdr: writing xdr failed");
+		    Rast3d_error("Rast3d_copyToXdr: writing xdr failed");
 		    return 0;
 		}
 	    }
@@ -193,7 +193,7 @@ int G3d_copyToXdr(const void *src, int nofNum)
 
 /*---------------------------------------------------------------------------*/
 
-int G3d_initCopyFromXdr(RASTER3D_Map * map, int dType)
+int Rast3d_initCopyFromXdr(RASTER3D_Map * map, int dType)
 {
     xdrTmp = xdr;
     useXdr = map->useXdr;
@@ -201,7 +201,7 @@ int G3d_initCopyFromXdr(RASTER3D_Map * map, int dType)
 
     if (useXdr == RASTER3D_USE_XDR) {
 	if (!xdr_setpos(&(xdrDecodeStream), 0)) {
-	    G3d_error("G3d_initCopyFromXdr: positioning xdr failed");
+	    Rast3d_error("Rast3d_initCopyFromXdr: positioning xdr failed");
 	    return 0;
 	}
 	xdrs = &(xdrDecodeStream);
@@ -209,8 +209,8 @@ int G3d_initCopyFromXdr(RASTER3D_Map * map, int dType)
 
     type = map->type;
     isFloat = (type == FCELL_TYPE);
-    externLength = G3d_externLength(type);
-    eltLength = G3d_length(dstType);
+    externLength = Rast3d_externLength(type);
+    eltLength = Rast3d_length(dstType);
     if (isFloat)
 	xdrFun = xdr_float;
     else
@@ -222,35 +222,35 @@ int G3d_initCopyFromXdr(RASTER3D_Map * map, int dType)
 
 /*---------------------------------------------------------------------------*/
 
-int G3d_copyFromXdr(int nofNum, void *dst)
+int Rast3d_copyFromXdr(int nofNum, void *dst)
 {
     int i;
 
     if (useXdr == RASTER3D_NO_XDR) {
-	G3d_copyValues(xdrTmp, 0, type, dst, 0, dstType, nofNum);
-	xdrTmp = G_incr_void_ptr(xdrTmp, nofNum * G3d_externLength(type));
+	Rast3d_copyValues(xdrTmp, 0, type, dst, 0, dstType, nofNum);
+	xdrTmp = G_incr_void_ptr(xdrTmp, nofNum * Rast3d_externLength(type));
 	return 1;
     }
 
     for (i = 0; i < nofNum; i++, dst = G_incr_void_ptr(dst, eltLength)) {
 
-	if (G3d_isXdrNullNum(xdrTmp, isFloat)) {
-	    G3d_setNullValue(dst, 1, dstType);
+	if (Rast3d_isXdrNullNum(xdrTmp, isFloat)) {
+	    Rast3d_setNullValue(dst, 1, dstType);
 	    if (!xdr_setpos(xdrs, xdr_getpos(xdrs) + externLength)) {
-		G3d_error("G3d_copyFromXdr: positioning xdr failed");
+		Rast3d_error("Rast3d_copyFromXdr: positioning xdr failed");
 		return 0;
 	    }
 	}
 	else {
 	    if (type == dstType) {
 		if (xdrFun(xdrs, dst) < 0) {
-		    G3d_error("G3d_copyFromXdr: reading xdr failed");
+		    Rast3d_error("Rast3d_copyFromXdr: reading xdr failed");
 		    return 0;
 		}
 	    }
 	    else {
 		if (xdrFun(xdrs, tmp) < 0) {
-		    G3d_error("G3d_copyFromXdr: reading xdr failed");
+		    Rast3d_error("Rast3d_copyFromXdr: reading xdr failed");
 		    return 0;
 		}
 		if (type == FCELL_TYPE)

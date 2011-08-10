@@ -64,9 +64,9 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
     
-    G3d_initDefaults();
+    Rast3d_initDefaults();
 
-    G3d_getWindow(&region);
+    Rast3d_getWindow(&region);
 
     Vect_set_open_level(2);
     Vect_open_old2(&Map, in_opt->answer, "", field_opt->answer);
@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
 
     db_close_database_shutdown_driver(Driver);
 
-    map = G3d_openNewOptTileSize(out_opt->answer,
+    map = Rast3d_openNewOptTileSize(out_opt->answer,
 			  RASTER3D_USE_CACHE_DEFAULT, &region, FCELL_TYPE, 32);
 
     if (map == NULL)
@@ -122,11 +122,11 @@ int main(int argc, char *argv[])
 	    continue;
 	}
         /* Check if the coordinates are located in the cube */
-	if (!G3d_isValidLocation(&(map->region), Points->y[0], Points->x[0], Points->z[0])) {
+	if (!Rast3d_isValidLocation(&(map->region), Points->y[0], Points->x[0], Points->z[0])) {
 	    continue;
 	}
         /* Convert the north, east and top coorindate into row, col and depth*/
-        G3d_location2coord2(&(map->region), Points->y[0], Points->x[0], Points->z[0], &col, &row, &depth);
+        Rast3d_location2coord2(&(map->region), Points->y[0], Points->x[0], Points->z[0], &col, &row, &depth);
 
 	if (ctype == DB_C_TYPE_INT) {
 	    int ivalue;
@@ -145,12 +145,12 @@ int main(int argc, char *argv[])
 
 	G_debug(3, "col,row,depth,val: %d %d %d %f", col, row, depth, value);
 
-	G3d_putFloat(map, col, row, depth, (float)value);
+	Rast3d_putFloat(map, col, row, depth, (float)value);
     }
 
     Vect_close(&Map);
 
-    if (!G3d_closeCell(map))
+    if (!Rast3d_closeCell(map))
 	G_fatal_error(_("Unable to close new 3d raster map"));
     
     exit(EXIT_SUCCESS);

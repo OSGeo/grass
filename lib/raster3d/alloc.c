@@ -13,7 +13,7 @@
  * \brief 
  *
  *  Same as <em>malloc (nBytes)</em>, except that in case of error
- * <tt>G3d_error()</tt> is invoked.
+ * <tt>Rast3d_error()</tt> is invoked.
  *
  *  \param nBytes
  *  \return void *: a pointer ... if successful,
@@ -21,7 +21,7 @@
 
  */
 
-void *G3d_malloc(int nBytes)
+void *Rast3d_malloc(int nBytes)
 {
     void *buf;
 
@@ -30,7 +30,7 @@ void *G3d_malloc(int nBytes)
     if ((buf = malloc(nBytes)) != NULL)
 	return buf;
 
-    G3d_error("G3d_malloc: out of memory");
+    Rast3d_error("Rast3d_malloc: out of memory");
     return (void *)NULL;
 }
 
@@ -39,7 +39,7 @@ void *G3d_malloc(int nBytes)
  * \brief 
  *
  *  Same as <em>realloc (ptr, nBytes)</em>, except that in case of error
- *  <tt>G3d_error()</tt> is invoked. 
+ *  <tt>Rast3d_error()</tt> is invoked. 
  *
  *  \param ptr
  *  \param nBytes
@@ -47,14 +47,14 @@ void *G3d_malloc(int nBytes)
  *         NULL ... otherwise.
  */
 
-void *G3d_realloc(void *ptr, int nBytes)
+void *Rast3d_realloc(void *ptr, int nBytes)
 {
     if (nBytes <= 0)
 	nBytes = 1;
     if ((ptr = realloc(ptr, nBytes)) != NULL)
 	return ptr;
 
-    G3d_error("G3d_realloc: out of memory");
+    Rast3d_error("Rast3d_realloc: out of memory");
     return (void *)NULL;
 }
 
@@ -68,7 +68,7 @@ void *G3d_realloc(void *ptr, int nBytes)
  *  \return void
  */
 
-void G3d_free(void *buf)
+void Rast3d_free(void *buf)
 {
     free(buf);
 }

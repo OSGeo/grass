@@ -147,12 +147,12 @@ msgid "Unable to write output file <%s>"
 msgstr "Impossibile aprire il file %s in %s"
 
 #: ../lib/g3d/g3dparam.c:86
-msgid "G3d_getStandard3dParams: precision value invalid"
-msgstr "G3d_getStandard3dParams: valore di precisione invalido"
+msgid "Rast3d_getStandard3dParams: precision value invalid"
+msgstr "Rast3d_getStandard3dParams: valore di precisione invalido"
 
 #: ../lib/g3d/g3dparam.c:119
-msgid "G3d_getStandard3dParams: tile dimension value invalid"
-msgstr "G3d_getStandard3dParams: valore di dimensione tile invalido"
+msgid "Rast3d_getStandard3dParams: tile dimension value invalid"
+msgstr "Rast3d_getStandard3dParams: valore di dimensione tile invalido"
 
 #: ../lib/g3d/g3dparam.c:143
 msgid "Window replacing the default"
@@ -263,61 +263,61 @@ msgid "can't get history information for [%s] in mapset [%s]"
 msgstr "Non riesco a trovare lo storico per [%s] nel mapset [%s]"
 
 #: ../lib/g3d/g3dopen.c:20
-msgid "G3d_openCellOldNoHeader: error in G3d_maskOpenOld"
-msgstr "G3d_openCellOldNoHeader: errore in G3d_maskOpenOld"
+msgid "Rast3d_openCellOldNoHeader: error in Rast3d_maskOpenOld"
+msgstr "Rast3d_openCellOldNoHeader: errore in Rast3d_maskOpenOld"
 
 #: ../lib/g3d/g3dopen.c:26
-msgid "G3d_openCellOldNoHeader: error in G3d_malloc"
-msgstr "G3d_openCellOldNoHeader: errore in G3d_malloc"
+msgid "Rast3d_openCellOldNoHeader: error in Rast3d_malloc"
+msgstr "Rast3d_openCellOldNoHeader: errore in Rast3d_malloc"
 
 #: ../lib/g3d/g3dopen.c:37
-msgid "G3d_openCellOldNoHeader: error in G_open_old"
-msgstr "G3d_openCellOldNoHeader: errore in G_open_old"
+msgid "Rast3d_openCellOldNoHeader: error in G_open_old"
+msgstr "Rast3d_openCellOldNoHeader: errore in G_open_old"
 
 #: ../lib/g3d/g3dopen.c:91
-msgid "G3d_openCellOld: error in G3d_openCellOldNoHeader"
-msgstr "G3d_openCellOld: errore in G3d_openCellOldNoHeader"
+msgid "Rast3d_openCellOld: error in Rast3d_openCellOldNoHeader"
+msgstr "Rast3d_openCellOld: errore in Rast3d_openCellOldNoHeader"
 
 #: ../lib/g3d/g3dopen.c:96
-msgid "G3d_openCellOld: can't rewind file"
-msgstr "G3d_openCellOld: impossibile riavvolgere file"
+msgid "Rast3d_openCellOld: can't rewind file"
+msgstr "Rast3d_openCellOld: impossibile riavvolgere file"
 
 #: ../lib/g3d/g3dopen.c:108
-msgid "G3d_openCellOld: error in G3d_readHeader"
-msgstr "G3d_openCellOld: errore in G3d_readHeader"
+msgid "Rast3d_openCellOld: error in Rast3d_readHeader"
+msgstr "Rast3d_openCellOld: errore in Rast3d_readHeader"
 
 #: ../lib/g3d/g3dopen.c:116
-msgid "G3d_openCellOld: projection does not match window projection"
+msgid "Rast3d_openCellOld: projection does not match window projection"
 msgstr ""
-"G3d_openCellOld: proiezione non corrisponde alla proiezione della finestra"
+"Rast3d_openCellOld: proiezione non corrisponde alla proiezione della finestra"
 
 #: ../lib/g3d/g3dopen.c:120
-msgid "G3d_openCellOld: zone does not match window zone"
-msgstr "G3d_openCellOld: zona non corrisponde alla zona della finestra"
+msgid "Rast3d_openCellOld: zone does not match window zone"
+msgstr "Rast3d_openCellOld: zona non corrisponde alla zona della finestra"
 
 #: ../lib/g3d/g3dopen.c:132 ../lib/g3d/g3dopen.c:149
-msgid "G3d_openCellOld: can't read header"
-msgstr "G3d_openCellOld: impossibile leggere testata"
+msgid "Rast3d_openCellOld: can't read header"
+msgstr "Rast3d_openCellOld: impossibile leggere testata"
 
 #: ../lib/g3d/g3dopen.c:138
-msgid "G3d_openCellOld: index does not fit into long"
-msgstr "G3d_openCellOld: indice non è adatto per long"
+msgid "Rast3d_openCellOld: index does not fit into long"
+msgstr "Rast3d_openCellOld: indice non è adatto per long"
 
 #: ../lib/g3d/g3dopen.c:142
-msgid "G3d_openCellOld: error in G3d_malloc"
-msgstr "G3d_openCellOld: errore in G3d_malloc"
+msgid "Rast3d_openCellOld: error in Rast3d_malloc"
+msgstr "Rast3d_openCellOld: errore in Rast3d_malloc"
 
 #: ../lib/g3d/g3dopen.c:168
-msgid "G3d_openCellOld: error in G3d_fillHeader"
-msgstr "G3d_openCellOld: errore in G3d_fillHeader"
+msgid "Rast3d_openCellOld: error in Rast3d_fillHeader"
+msgstr "Rast3d_openCellOld: errore in Rast3d_fillHeader"
 
 #: ../lib/g3d/g3dopen.c:215
-msgid "G3d_openCellNew: error in G3d_maskOpenOld"
-msgstr "G3d_openCellNew: errore in G3d_maskOpenOld"
+msgid "Rast3d_openCellNew: error in Rast3d_maskOpenOld"
+msgstr "Rast3d_openCellNew: errore in Rast3d_maskOpenOld"
 
 #: ../lib/g3d/g3dopen.c:224
-msgid "G3d_openCellNew: error in G3d_malloc"
-msgstr "G3d_openCellNew: errore in G3d_malloc"
+msgid "Rast3d_openCellNew: error in Rast3d_malloc"
+msgstr "Rast3d_openCellNew: errore in Rast3d_malloc"
 
 #: ../lib/g3d/g3dopen.c:229
 #, fuzzy, c-format
@@ -326,16 +326,16 @@ msgstr ""
 "Bug: attesa di aggiornamento di una mappa non presente nel mapset in uso"
 
 #: ../lib/g3d/g3dopen.c:239
-msgid "G3d_openCellNew: could not open file"
-msgstr "G3d_openCellNew: impossibile aprire file"
+msgid "Rast3d_openCellNew: could not open file"
+msgstr "Rast3d_openCellNew: impossibile aprire file"
 
 #: ../lib/g3d/g3dopen.c:284 ../lib/g3d/g3dopen.c:289
-msgid "G3d_openCellNew: can't write header"
-msgstr "G3d_openCellNew: impossibile scrivere testata"
+msgid "Rast3d_openCellNew: can't write header"
+msgstr "Rast3d_openCellNew: impossibile scrivere testata"
 
 #: ../lib/g3d/g3dopen.c:312
-msgid "G3d_openCellNew: error in G3d_fillHeader"
-msgstr "G3d_openCellNew: errore in G3d_fillHeader"
+msgid "Rast3d_openCellNew: error in Rast3d_fillHeader"
+msgstr "Rast3d_openCellNew: errore in Rast3d_fillHeader"
 
 #: ../lib/vector/vedit/select.c:231
 msgid "Unknown query tool"

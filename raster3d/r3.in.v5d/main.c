@@ -49,7 +49,7 @@ static void fatalError(char *errorMsg)
 	/* should unopen map here! */
     }
 
-    G3d_fatalError(errorMsg);
+    Rast3d_fatalError(errorMsg);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -159,8 +159,8 @@ void convert(char *openFile, RASTER3D_Region * region, int convertNull,
 		    for (x = 0; x < region->cols; x++) {
 			value = data1[cnt++];
 			if (convertNull && (value == MISSING))
-			    G3d_setNullValue(&value, 1, FCELL_TYPE);
-			G3d_putFloat(map, x, y, z, value);
+			    Rast3d_setNullValue(&value, 1, FCELL_TYPE);
+			Rast3d_putFloat(map, x, y, z, value);
 		    }
 		}
 	    }
@@ -197,13 +197,13 @@ int main(int argc, char *argv[])
 	_("Import 3-dimensional Vis5D files.");
 
     setParams();
-    G3d_setStandard3dInputParams();
+    Rast3d_setStandard3dInputParams();
 
     if (G_parser(argc, argv))
 	exit(1);
 
     getParams(&input, &output, &convertNull, &nullValue);
-    if (!G3d_getStandard3dParams(&useTypeDefault, &type,
+    if (!Rast3d_getStandard3dParams(&useTypeDefault, &type,
 				 &useLzwDefault, &doLzw,
 				 &useRleDefault, &doRle,
 				 &usePrecisionDefault, &precision,
@@ -211,14 +211,14 @@ int main(int argc, char *argv[])
 				 &tileZ))
 	fatalError("main: error getting standard parameters");
 
-    G3d_getWindow(&region);
-    map = G3d_openCellNew(output, FCELL_TYPE, RASTER3D_USE_CACHE_XY, &region);
+    Rast3d_getWindow(&region);
+    map = Rast3d_openCellNew(output, FCELL_TYPE, RASTER3D_USE_CACHE_XY, &region);
     if (map == NULL)
 	fatalError(_("Error opening 3d raster map"));
 
     convert(input, &region, convertNull, nullValue);
 
-    if (!G3d_closeCell(map))
+    if (!Rast3d_closeCell(map))
 	fatalError(_("Error closing 3d raster map"));
     map = NULL;
 

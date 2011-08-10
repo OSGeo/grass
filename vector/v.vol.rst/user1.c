@@ -423,7 +423,7 @@ int OUTGR()
   /*** Write elevation results ***/
     if (outz != NULL) {
 
-	cf1 = G3d_openNewOptTileSize(outz, RASTER3D_USE_CACHE_DEFAULT, &current_region, FCELL_TYPE, 32); 
+	cf1 = Rast3d_openNewOptTileSize(outz, RASTER3D_USE_CACHE_DEFAULT, &current_region, FCELL_TYPE, 32); 
 	if (cf1 == NULL) {
 	    sprintf(buff, "Can't open %s for writing ", outz);
 	    clean_fatal_error(buff);
@@ -449,8 +449,8 @@ int OUTGR()
 			bmask = 1;
 		    value = data[cnt];
 		    if (!bmask)
-			G3d_setNullValue(&value, 1, FCELL_TYPE);
-		    if (G3d_putFloat(cf1, x, y, iarc, value) == 0) {
+			Rast3d_setNullValue(&value, 1, FCELL_TYPE);
+		    if (Rast3d_putFloat(cf1, x, y, iarc, value) == 0) {
 			sprintf(buff,
 				"Error writing cell (%d,%d,%d) with value %f",
 				x, y, iarc, value);
@@ -464,7 +464,7 @@ int OUTGR()
 	}
 
 	/* Close the file */
-	if (G3d_closeCell(cf1) == 0) {
+	if (Rast3d_closeCell(cf1) == 0) {
 	    sprintf(buff, "Error closing output file %s ", outz);
 	    clean_fatal_error(buff);
 	}
@@ -473,7 +473,7 @@ int OUTGR()
   /*** Write out the gradient results ***/
     if (gradient != NULL) {
 
-	cf2 = G3d_openNewOptTileSize(gradient, RASTER3D_USE_CACHE_DEFAULT, &current_region, FCELL_TYPE, 32); 
+	cf2 = Rast3d_openNewOptTileSize(gradient, RASTER3D_USE_CACHE_DEFAULT, &current_region, FCELL_TYPE, 32); 
 	if (cf2 == NULL) {
 	    sprintf(buff, "Can't open %s for writing ", gradient);
 	    clean_fatal_error(buff);
@@ -499,8 +499,8 @@ int OUTGR()
 			bmask = 1;
 		    value = data[cnt];
 		    if (!bmask)
-			G3d_setNullValue(&value, 1, FCELL_TYPE);
-		    if (G3d_putFloat(cf2, x, y, iarc, value) == 0) {
+			Rast3d_setNullValue(&value, 1, FCELL_TYPE);
+		    if (Rast3d_putFloat(cf2, x, y, iarc, value) == 0) {
 			sprintf(buff,
 				"Error writing cell (%d,%d,%d) with value %f",
 				x, y, iarc, value);
@@ -514,7 +514,7 @@ int OUTGR()
 	}
 
 	/* Close the file */
-	if (G3d_closeCell(cf2) == 0) {
+	if (Rast3d_closeCell(cf2) == 0) {
 	    sprintf(buff, "Error closing output file %s ", gradient);
 	    clean_fatal_error(buff);
 	}
@@ -523,7 +523,7 @@ int OUTGR()
   /*** Write out aspect1 results ***/
     if (aspect1 != NULL) {
 
-	cf3 = G3d_openNewOptTileSize(aspect1, RASTER3D_USE_CACHE_DEFAULT, &current_region, FCELL_TYPE, 32); 
+	cf3 = Rast3d_openNewOptTileSize(aspect1, RASTER3D_USE_CACHE_DEFAULT, &current_region, FCELL_TYPE, 32); 
 	if (cf3 == NULL) {
 	    sprintf(buff, "Can't open %s for writing ", aspect1);
 	    clean_fatal_error(buff);
@@ -549,8 +549,8 @@ int OUTGR()
 			bmask = 1;
 		    value = data[cnt];
 		    if (!bmask)
-			G3d_setNullValue(&value, 1, FCELL_TYPE);
-		    if (G3d_putFloat(cf3, x, y, iarc, value) == 0) {
+			Rast3d_setNullValue(&value, 1, FCELL_TYPE);
+		    if (Rast3d_putFloat(cf3, x, y, iarc, value) == 0) {
 			sprintf(buff,
 				"Error writing cell (%d,%d,%d) with value %f",
 				x, y, iarc, value);
@@ -564,7 +564,7 @@ int OUTGR()
 	}
 
 	/* Close the file */
-	if (G3d_closeCell(cf3) == 0) {
+	if (Rast3d_closeCell(cf3) == 0) {
 	    sprintf(buff, "Error closing output file %s ", aspect1);
 	    clean_fatal_error(buff);
 	}
@@ -573,7 +573,7 @@ int OUTGR()
   /*** Write out aspect2 results ***/
     if (aspect2 != NULL) {
 
-	cf4 = G3d_openNewOptTileSize(aspect2, RASTER3D_USE_CACHE_DEFAULT, &current_region, FCELL_TYPE, 32); 
+	cf4 = Rast3d_openNewOptTileSize(aspect2, RASTER3D_USE_CACHE_DEFAULT, &current_region, FCELL_TYPE, 32); 
 	if (cf4 == NULL) {
 	    sprintf(buff, "Can't open %s for writing ", aspect2);
 	    clean_fatal_error(buff);
@@ -599,8 +599,8 @@ int OUTGR()
 			bmask = 1;
 		    value = data[cnt];
 		    if (!bmask)
-			G3d_setNullValue(&value, 1, FCELL_TYPE);
-		    if (G3d_putFloat(cf4, x, y, iarc, value) == 0) {
+			Rast3d_setNullValue(&value, 1, FCELL_TYPE);
+		    if (Rast3d_putFloat(cf4, x, y, iarc, value) == 0) {
 			sprintf(buff,
 				"Error writing cell (%d,%d,%d) with value %f",
 				x, y, iarc, value);
@@ -614,7 +614,7 @@ int OUTGR()
 	}
 
 	/* Close the file */
-	if (G3d_closeCell(cf4) == 0) {
+	if (Rast3d_closeCell(cf4) == 0) {
 	    sprintf(buff, "Error closing output file %s ", aspect2);
 	    clean_fatal_error(buff);
 	}
@@ -623,7 +623,7 @@ int OUTGR()
   /*** Write out ncurv results ***/
     if (ncurv != NULL) {
 
-	cf5 = G3d_openNewOptTileSize(ncurv, RASTER3D_USE_CACHE_DEFAULT, &current_region, FCELL_TYPE, 32); 
+	cf5 = Rast3d_openNewOptTileSize(ncurv, RASTER3D_USE_CACHE_DEFAULT, &current_region, FCELL_TYPE, 32); 
 	if (cf5 == NULL) {
 	    sprintf(buff, "Can't open %s for writing ", ncurv);
 	    clean_fatal_error(buff);
@@ -649,8 +649,8 @@ int OUTGR()
 			bmask = 1;
 		    value = data[cnt];
 		    if (!bmask)
-			G3d_setNullValue(&value, 1, FCELL_TYPE);
-		    if (G3d_putFloat(cf5, x, y, iarc, value) == 0) {
+			Rast3d_setNullValue(&value, 1, FCELL_TYPE);
+		    if (Rast3d_putFloat(cf5, x, y, iarc, value) == 0) {
 			sprintf(buff,
 				"Error writing cell (%d,%d,%d) with value %f",
 				x, y, iarc, value);
@@ -664,7 +664,7 @@ int OUTGR()
 	}
 
 	/* Close the file */
-	if (G3d_closeCell(cf5) == 0) {
+	if (Rast3d_closeCell(cf5) == 0) {
 	    sprintf(buff, "Error closing output file %s ", ncurv);
 	    clean_fatal_error(buff);
 	}
@@ -673,7 +673,7 @@ int OUTGR()
   /*** Write out gcurv results ***/
     if (gcurv != NULL) {
 
-	cf6 = G3d_openNewOptTileSize(gcurv, RASTER3D_USE_CACHE_DEFAULT, &current_region, FCELL_TYPE, 32); 
+	cf6 = Rast3d_openNewOptTileSize(gcurv, RASTER3D_USE_CACHE_DEFAULT, &current_region, FCELL_TYPE, 32); 
 	if (cf6 == NULL) {
 	    sprintf(buff, "Can't open %s for writing ", gcurv);
 	    clean_fatal_error(buff);
@@ -699,8 +699,8 @@ int OUTGR()
 			bmask = 1;
 		    value = data[cnt];
 		    if (!bmask)
-			G3d_setNullValue(&value, 1, FCELL_TYPE);
-		    if (G3d_putFloat(cf6, x, y, iarc, value) == 0) {
+			Rast3d_setNullValue(&value, 1, FCELL_TYPE);
+		    if (Rast3d_putFloat(cf6, x, y, iarc, value) == 0) {
 			sprintf(buff,
 				"Error writing cell (%d,%d,%d) with value %f",
 				x, y, iarc, value);
@@ -714,7 +714,7 @@ int OUTGR()
 	}
 
 	/* Close the file */
-	if (G3d_closeCell(cf6) == 0) {
+	if (Rast3d_closeCell(cf6) == 0) {
 	    sprintf(buff, "Error closing output file %s ", gcurv);
 	    clean_fatal_error(buff);
 	}
@@ -723,7 +723,7 @@ int OUTGR()
   /*** Write mcurv results ***/
     if (mcurv != NULL) {
 
-	cf7 = G3d_openNewOptTileSize(mcurv, RASTER3D_USE_CACHE_DEFAULT, &current_region, FCELL_TYPE, 32); 
+	cf7 = Rast3d_openNewOptTileSize(mcurv, RASTER3D_USE_CACHE_DEFAULT, &current_region, FCELL_TYPE, 32); 
 	if (cf7 == NULL) {
 	    sprintf(buff, "Can't open %s for writing ", mcurv);
 	    clean_fatal_error(buff);
@@ -749,8 +749,8 @@ int OUTGR()
 			bmask = 1;
 		    value = data[cnt];
 		    if (!bmask)
-			G3d_setNullValue(&value, 1, FCELL_TYPE);
-		    if (G3d_putFloat(cf7, x, y, iarc, value) == 0) {
+			Rast3d_setNullValue(&value, 1, FCELL_TYPE);
+		    if (Rast3d_putFloat(cf7, x, y, iarc, value) == 0) {
 			sprintf(buff,
 				"Error writing cell (%d,%d,%d) with value %f",
 				x, y, iarc, value);
@@ -764,7 +764,7 @@ int OUTGR()
 	}
 
 	/* Close the file */
-	if (G3d_closeCell(cf7) == 0) {
+	if (Rast3d_closeCell(cf7) == 0) {
 	    sprintf(buff, "Error closing output file %s ", mcurv);
 	    clean_fatal_error(buff);
 	}

@@ -32,7 +32,7 @@ int xdrLength;
 /*---------------------------------------------------------------------------*/
 
 static int
-G3d_readWriteHeader(struct Key_Value *headerKeys, int doRead, int *proj,
+Rast3d_readWriteHeader(struct Key_Value *headerKeys, int doRead, int *proj,
 		    int *zone, double *north, double *south, double *east,
 		    double *west, double *top, double *bottom, int *rows,
 		    int *cols, int *depths, double *ew_res, double *ns_res,
@@ -46,16 +46,16 @@ G3d_readWriteHeader(struct Key_Value *headerKeys, int doRead, int *proj,
     int (*headerString) ();
 
     if (doRead) {
-	headerDouble = G3d_keyGetDouble;
-	headerInt = G3d_keyGetInt;
-	headerString = G3d_keyGetString;
-	headerValue = G3d_keyGetValue;
+	headerDouble = Rast3d_keyGetDouble;
+	headerInt = Rast3d_keyGetInt;
+	headerString = Rast3d_keyGetString;
+	headerValue = Rast3d_keyGetValue;
     }
     else {
-	headerDouble = G3d_keySetDouble;
-	headerInt = G3d_keySetInt;
-	headerString = G3d_keySetString;
-	headerValue = G3d_keySetValue;
+	headerDouble = Rast3d_keySetDouble;
+	headerInt = Rast3d_keySetInt;
+	headerString = Rast3d_keySetString;
+	headerValue = Rast3d_keySetValue;
     }
 
     returnVal = 1;
@@ -102,14 +102,14 @@ G3d_readWriteHeader(struct Key_Value *headerKeys, int doRead, int *proj,
     if (returnVal)
 	return 1;
 
-    G3d_error("G3d_readWriteHeader: error writing header");
+    Rast3d_error("Rast3d_readWriteHeader: error writing header");
     return 0;
 }
 
 /*---------------------------------------------------------------------------*/
 
 int
-G3d_readHeader(RASTER3D_Map * map, int *proj, int *zone, double *north,
+Rast3d_readHeader(RASTER3D_Map * map, int *proj, int *zone, double *north,
 	       double *south, double *east, double *west, double *top,
 	       double *bottom, int *rows, int *cols, int *depths,
 	       double *ew_res, double *ns_res, double *tb_res, int *tileX,
@@ -120,15 +120,15 @@ G3d_readHeader(RASTER3D_Map * map, int *proj, int *zone, double *north,
     struct Key_Value *headerKeys;
     char path[GPATH_MAX];
 
-    G3d_filename(path, RASTER3D_HEADER_ELEMENT, map->fileName, map->mapset);
+    Rast3d_filename(path, RASTER3D_HEADER_ELEMENT, map->fileName, map->mapset);
     if (access(path, R_OK) != 0) {
-	G3d_error("G3d_readHeader: unable to find [%s]", path);
+	Rast3d_error("Rast3d_readHeader: unable to find [%s]", path);
 	return 0;
     }
 
     headerKeys = G_read_key_value_file(path);
 
-    if (!G3d_readWriteHeader(headerKeys, 1,
+    if (!Rast3d_readWriteHeader(headerKeys, 1,
 			     proj, zone,
 			     north, south, east, west, top, bottom,
 			     rows, cols, depths,
@@ -136,7 +136,7 @@ G3d_readHeader(RASTER3D_Map * map, int *proj, int *zone, double *north,
 			     tileX, tileY, tileZ,
 			     type, compression, useRle, useLzw, precision,
 			     dataOffset, useXdr, hasIndex, unit)) {
-	G3d_error("G3d_readHeader: error extracting header key(s) of file %s",
+	Rast3d_error("Rast3d_readHeader: error extracting header key(s) of file %s",
 		  path);
 	return 0;
     }
@@ -148,7 +148,7 @@ G3d_readHeader(RASTER3D_Map * map, int *proj, int *zone, double *north,
 /*---------------------------------------------------------------------------*/
 
 int
-G3d_writeHeader(RASTER3D_Map * map, int proj, int zone, double north, double south,
+Rast3d_writeHeader(RASTER3D_Map * map, int proj, int zone, double north, double south,
 		double east, double west, double top, double bottom, int rows,
 		int cols, int depths, double ew_res, double ns_res,
 		double tb_res, int tileX, int tileY, int tileZ, int type,
@@ -160,7 +160,7 @@ G3d_writeHeader(RASTER3D_Map * map, int proj, int zone, double north, double sou
 
     headerKeys = G_create_key_value();
 
-    if (!G3d_readWriteHeader(headerKeys, 0,
+    if (!Rast3d_readWriteHeader(headerKeys, 0,
 			     &proj, &zone,
 			     &north, &south, &east, &west, &top, &bottom,
 			     &rows, &cols, &depths,
@@ -169,13 +169,13 @@ G3d_writeHeader(RASTER3D_Map * map, int proj, int zone, double north, double sou
 			     &type, &compression, &useRle, &useLzw,
 			     &precision, &dataOffset, &useXdr, &hasIndex,
 			     &unit)) {
-	G3d_error("G3d_writeHeader: error adding header key(s) for file %s",
+	Rast3d_error("Rast3d_writeHeader: error adding header key(s) for file %s",
 		  path);
 	return 0;
     }
 
-    G3d_filename(path, RASTER3D_HEADER_ELEMENT, map->fileName, map->mapset);
-    G3d_makeMapsetMapDirectory(map->fileName);
+    Rast3d_filename(path, RASTER3D_HEADER_ELEMENT, map->fileName, map->mapset);
+    Rast3d_makeMapsetMapDirectory(map->fileName);
     G_write_key_value_file(path, headerKeys);
 
     G_free_key_value(headerKeys);
@@ -211,7 +211,7 @@ G3d_writeHeader(RASTER3D_Map * map, int proj, int zone, double north, double sou
  *  \return int
  */
 
-int G3d_cacheSizeEncode(int cacheCode, int n)
+int Rast3d_cacheSizeEncode(int cacheCode, int n)
 {
     if (cacheCode >= RASTER3D_NO_CACHE)
 	return cacheCode * n;
@@ -219,14 +219,14 @@ int G3d_cacheSizeEncode(int cacheCode, int n)
 	return cacheCode;
 
     if (cacheCode < RASTER3D_USE_CACHE_XYZ)
-	G3d_fatalError("G3d_cacheSizeEncode: invalid cache code");
+	Rast3d_fatalError("Rast3d_cacheSizeEncode: invalid cache code");
 
     return n * (-10) + cacheCode;
 }
 
 /*---------------------------------------------------------------------------*/
 
-int G3d__computeCacheSize(RASTER3D_Map * map, int cacheCode)
+int Rast3d__computeCacheSize(RASTER3D_Map * map, int cacheCode)
 {
     int n, size;
 
@@ -254,7 +254,7 @@ int G3d__computeCacheSize(RASTER3D_Map * map, int cacheCode)
     else if (cacheCode == RASTER3D_USE_CACHE_XYZ)
 	size = map->nTiles;
     else
-	G3d_fatalError("G3d__computeCacheSize: invalid cache code");
+	Rast3d_fatalError("Rast3d__computeCacheSize: invalid cache code");
 
     return RASTER3D_MIN(size, map->nTiles);
 }
@@ -266,7 +266,7 @@ int G3d__computeCacheSize(RASTER3D_Map * map, int cacheCode)
 /* and initializes the index and cache. This function should be taken apart. */
 
 int
-G3d_fillHeader(RASTER3D_Map * map, int operation, int compression, int useRle,
+Rast3d_fillHeader(RASTER3D_Map * map, int operation, int compression, int useRle,
 	       int useLzw, int type, int precision, int cache, int hasIndex,
 	       int useXdr, int typeIntern, int nofHeaderBytes, int tileX,
 	       int tileY, int tileZ, int proj, int zone, double north,
@@ -275,7 +275,7 @@ G3d_fillHeader(RASTER3D_Map * map, int operation, int compression, int useRle,
 	       double ns_res, double tb_res, char *unit)
 {
     if (!RASTER3D_VALID_OPERATION(operation))
-	G3d_fatalError("G3d_fillHeader: operation not valid\n");
+	Rast3d_fatalError("Rast3d_fillHeader: operation not valid\n");
 
     map->operation = operation;
 
@@ -299,7 +299,7 @@ G3d_fillHeader(RASTER3D_Map * map, int operation, int compression, int useRle,
     map->region.ns_res = ns_res;
     map->region.tb_res = tb_res;
 
-    G3d_adjustRegion(&(map->region));
+    Rast3d_adjustRegion(&(map->region));
 
     map->tileX = tileX;
     map->tileY = tileY;
@@ -327,28 +327,28 @@ G3d_fillHeader(RASTER3D_Map * map, int operation, int compression, int useRle,
 	map->clipZ = -1;
 
     if ((type != FCELL_TYPE) && (type != DCELL_TYPE))
-	G3d_fatalError("G3d_fillHeader: invalid type");
+	Rast3d_fatalError("Rast3d_fillHeader: invalid type");
     map->type = type;
 
     if ((typeIntern != FCELL_TYPE) && (typeIntern != DCELL_TYPE))
-	G3d_fatalError("G3d_fillHeader: invalid type");
+	Rast3d_fatalError("Rast3d_fillHeader: invalid type");
     map->typeIntern = typeIntern;
 
     if (!RASTER3D_VALID_XDR_OPTION(useXdr))
-	G3d_fatalError("G3d_fillHeader: invalid xdr option");
+	Rast3d_fatalError("Rast3d_fillHeader: invalid xdr option");
     map->useXdr = useXdr;
 
     map->offset = nofHeaderBytes;
 
     if ((map->fileEndPtr = lseek(map->data_fd, (long)0, SEEK_END)) == -1) {
-	G3d_error("G3d_fillHeader: can't position file");
+	Rast3d_error("Rast3d_fillHeader: can't position file");
 	return 0;
     }
 
     map->useCache = (cache != RASTER3D_NO_CACHE);
 
-    map->numLengthIntern = G3d_length(map->typeIntern);
-    map->numLengthExtern = G3d_externLength(map->type);
+    map->numLengthIntern = Rast3d_length(map->typeIntern);
+    map->numLengthExtern = Rast3d_externLength(map->type);
 
     map->compression = compression;
     map->useRle = useRle;
@@ -362,9 +362,9 @@ G3d_fillHeader(RASTER3D_Map * map, int operation, int compression, int useRle,
 	    tmpCompressLength = map->tileSize *
 		RASTER3D_MAX(map->numLengthIntern, map->numLengthExtern) +
 		RLE_STATUS_BYTES;
-	    tmpCompress = G3d_malloc(tmpCompressLength);
+	    tmpCompress = Rast3d_malloc(tmpCompressLength);
 	    if (tmpCompress == NULL) {
-		G3d_error("G3d_fillHeader: error in G3d_malloc");
+		Rast3d_error("Rast3d_fillHeader: error in Rast3d_malloc");
 		return 0;
 	    }
 	}
@@ -374,9 +374,9 @@ G3d_fillHeader(RASTER3D_Map * map, int operation, int compression, int useRle,
 	    tmpCompressLength = map->tileSize *
 		RASTER3D_MAX(map->numLengthIntern, map->numLengthExtern) +
 		RLE_STATUS_BYTES;
-	    tmpCompress = G3d_realloc(tmpCompress, tmpCompressLength);
+	    tmpCompress = Rast3d_realloc(tmpCompress, tmpCompressLength);
 	    if (tmpCompress == NULL) {
-		G3d_error("G3d_fillHeader: error in G3d_realloc");
+		Rast3d_error("Rast3d_fillHeader: error in Rast3d_realloc");
 		return 0;
 	    }
 	}
@@ -384,8 +384,8 @@ G3d_fillHeader(RASTER3D_Map * map, int operation, int compression, int useRle,
 
 #define XDR_MISUSE_BYTES 10
 
-    if (!G3d_initFpXdr(map, XDR_MISUSE_BYTES)) {
-	G3d_error("G3d_fillHeader: error in G3d_initFpXdr");
+    if (!Rast3d_initFpXdr(map, XDR_MISUSE_BYTES)) {
+	Rast3d_error("Rast3d_fillHeader: error in Rast3d_initFpXdr");
 	return 0;
     }
 
@@ -394,27 +394,27 @@ G3d_fillHeader(RASTER3D_Map * map, int operation, int compression, int useRle,
 	map->useCache = 0;
 	map->cache = NULL;
 	/* allocate one tile buffer */
-	map->data = G3d_malloc(map->tileSize * map->numLengthIntern);
+	map->data = Rast3d_malloc(map->tileSize * map->numLengthIntern);
 	if (map->data == NULL) {
-	    G3d_error("G3d_fillHeader: error in G3d_malloc");
+	    Rast3d_error("Rast3d_fillHeader: error in Rast3d_malloc");
 	    return 0;
 	}
 	map->currentIndex = -1;
     }
     else {
-	if (!G3d_initCache(map,
+	if (!Rast3d_initCache(map,
 			   RASTER3D_MAX(1,
-				   RASTER3D_MIN(G3d__computeCacheSize(map, cache),
+				   RASTER3D_MIN(Rast3d__computeCacheSize(map, cache),
 					   g3d_cache_max /
 					   map->tileSize /
 					   map->numLengthIntern)))) {
-	    G3d_error("G3d_fillHeader: error in G3d_initCache");
+	    Rast3d_error("Rast3d_fillHeader: error in Rast3d_initCache");
 	    return 0;
 	}
     }
 
-    if (!G3d_initIndex(map, hasIndex)) {
-	G3d_error("G3d_fillHeader: error in G3d_initIndex");
+    if (!Rast3d_initIndex(map, hasIndex)) {
+	Rast3d_error("Rast3d_fillHeader: error in Rast3d_initIndex");
 	return 0;
     }
 

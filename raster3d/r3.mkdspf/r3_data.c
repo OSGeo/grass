@@ -9,16 +9,16 @@ int r3read_level(void *g3map, RASTER3D_Region * g3reg, file_info * Headfax,
 		 float *data, int n_lev)
 {
 #ifdef NO_RESAMPLE
-    G3d_getBlock(g3map, 0, 0, n_lev,
+    Rast3d_getBlock(g3map, 0, 0, n_lev,
 		 Headfax->xdim, Headfax->ydim, 1, (char *)data, FCELL_TYPE);
 #else
-    /* G3d_getBlockRegion might be handy */
+    /* Rast3d_getBlockRegion might be handy */
     /*
-       G3d_getAllignedVolume (map, originNorth, originWest, originBottom, 
+       Rast3d_getAllignedVolume (map, originNorth, originWest, originBottom, 
        lengthNorth, lengthWest, lengthBottom, 
        nx, ny, nz, volumeBuf, type);
      */
-    G3d_getAllignedVolume(g3map, g3reg->north, g3reg->west,
+    Rast3d_getAllignedVolume(g3map, g3reg->north, g3reg->west,
 			  g3reg->top - n_lev * g3reg->tb_res,
 			  g3reg->north - g3reg->south,
 			  g3reg->east - g3reg->west,

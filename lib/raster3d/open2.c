@@ -12,7 +12,7 @@
  * cache-mode used and must be either RASTER3D_NO_CACHE, RASTER3D_USE_CACHE_DEFAULT,
  * RASTER3D_USE_CACHE_X, RASTER3D_USE_CACHE_Y, RASTER3D_USE_CACHE_Z,
  * RASTER3D_USE_CACHE_XY, RASTER3D_USE_CACHE_XZ, RASTER3D_USE_CACHE_YZ,
- * RASTER3D_USE_CACHE_XYZ, the result of <tt>G3d_cacheSizeEncode ()</tt>
+ * RASTER3D_USE_CACHE_XYZ, the result of <tt>Rast3d_cacheSizeEncode ()</tt>
  * (cf.{g3d:G3d.cacheSizeEncode}), or any positive integer which
  * specifies the number of tiles buffered in the cache.  <em>region</em> specifies
  * the 3d region.  
@@ -38,7 +38,7 @@
  */
 
 
-void *G3d_openNewParam(const char *name, int typeIntern, int cache,
+void *Rast3d_openNewParam(const char *name, int typeIntern, int cache,
 		       RASTER3D_Region * region, int type, int doLzw, int doRle,
 		       int precision, int tileX, int tileY, int tileZ)
 {
@@ -47,22 +47,22 @@ void *G3d_openNewParam(const char *name, int typeIntern, int cache,
 	oldTileZ;
     int oldType;
 
-    G3d_initDefaults();
+    Rast3d_initDefaults();
 
-    G3d_getCompressionMode(&oldCompress, &oldLzw, &oldRle, &oldPrecision);
-    G3d_setCompressionMode(oldCompress, doLzw, doRle, precision);
+    Rast3d_getCompressionMode(&oldCompress, &oldLzw, &oldRle, &oldPrecision);
+    Rast3d_setCompressionMode(oldCompress, doLzw, doRle, precision);
 
-    G3d_getTileDimension(&oldTileX, &oldTileY, &oldTileZ);
-    G3d_setTileDimension(tileX, tileY, tileZ);
+    Rast3d_getTileDimension(&oldTileX, &oldTileY, &oldTileZ);
+    Rast3d_setTileDimension(tileX, tileY, tileZ);
 
-    oldType = G3d_getFileType();
-    G3d_setFileType(type);
+    oldType = Rast3d_getFileType();
+    Rast3d_setFileType(type);
 
-    map = G3d_openCellNew(name, typeIntern, cache, region);
+    map = Rast3d_openCellNew(name, typeIntern, cache, region);
 
-    G3d_setCompressionMode(oldCompress, oldLzw, oldRle, oldPrecision);
-    G3d_setTileDimension(oldTileX, oldTileY, oldTileZ);
-    G3d_setFileType(oldType);
+    Rast3d_setCompressionMode(oldCompress, oldLzw, oldRle, oldPrecision);
+    Rast3d_setTileDimension(oldTileX, oldTileY, oldTileZ);
+    Rast3d_setFileType(oldType);
 
     return map;
 }
@@ -78,7 +78,7 @@ void *G3d_openNewParam(const char *name, int typeIntern, int cache,
  * cache-mode used and must be either RASTER3D_NO_CACHE, RASTER3D_USE_CACHE_DEFAULT,
  * RASTER3D_USE_CACHE_X, RASTER3D_USE_CACHE_Y, RASTER3D_USE_CACHE_Z,
  * RASTER3D_USE_CACHE_XY, RASTER3D_USE_CACHE_XZ, RASTER3D_USE_CACHE_YZ,
- * RASTER3D_USE_CACHE_XYZ, the result of <tt>G3d_cacheSizeEncode ()</tt>
+ * RASTER3D_USE_CACHE_XYZ, the result of <tt>Rast3d_cacheSizeEncode ()</tt>
  * (cf.{g3d:G3d.cacheSizeEncode}), or any positive integer which
  * specifies the number of tiles buffered in the cache.  <em>region</em> specifies
  * the 3d region.  
@@ -95,28 +95,28 @@ void *G3d_openNewParam(const char *name, int typeIntern, int cache,
  */
 
 
-void *G3d_openNewOptTileSize(const char *name, int cache, RASTER3D_Region * region, int type, int maxSize)
+void *Rast3d_openNewOptTileSize(const char *name, int cache, RASTER3D_Region * region, int type, int maxSize)
 {
     void *map;
     int oldTileX, oldTileY, oldTileZ, oldType;
     int tileX, tileY, tileZ;
 
-    G3d_initDefaults();
+    Rast3d_initDefaults();
 
 
-    G3d_getTileDimension(&oldTileX, &oldTileY, &oldTileZ);
+    Rast3d_getTileDimension(&oldTileX, &oldTileY, &oldTileZ);
     
-    G3d_computeOptimalTileDimension(region, type, &tileX, &tileY, &tileZ, maxSize);
+    Rast3d_computeOptimalTileDimension(region, type, &tileX, &tileY, &tileZ, maxSize);
 
-    G3d_setTileDimension(tileX, tileY, tileZ);
+    Rast3d_setTileDimension(tileX, tileY, tileZ);
 
-    oldType = G3d_getFileType();
-    G3d_setFileType(type);
+    oldType = Rast3d_getFileType();
+    Rast3d_setFileType(type);
 
-    map = G3d_openCellNew(name, RASTER3D_TILE_SAME_AS_FILE, cache, region);
+    map = Rast3d_openCellNew(name, RASTER3D_TILE_SAME_AS_FILE, cache, region);
 
-    G3d_setTileDimension(oldTileX, oldTileY, oldTileZ);
-    G3d_setFileType(oldType);
+    Rast3d_setTileDimension(oldTileX, oldTileY, oldTileZ);
+    Rast3d_setFileType(oldType);
 
     return map;
 }

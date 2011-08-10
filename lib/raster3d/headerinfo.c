@@ -16,7 +16,7 @@
  *  \return void
  */
 
-void G3d_getCoordsMap(RASTER3D_Map * map, int *rows, int *cols, int *depths)
+void Rast3d_getCoordsMap(RASTER3D_Map * map, int *rows, int *cols, int *depths)
 {
     *rows = map->region.rows;
     *cols = map->region.cols;
@@ -25,7 +25,7 @@ void G3d_getCoordsMap(RASTER3D_Map * map, int *rows, int *cols, int *depths)
 
 /*---------------------------------------------------------------------------*/
 
-void G3d_getCoordsMapWindow(RASTER3D_Map * map, int *rows, int *cols, int *depths)
+void Rast3d_getCoordsMapWindow(RASTER3D_Map * map, int *rows, int *cols, int *depths)
 {
     *rows = map->window.rows;
     *cols = map->window.cols;
@@ -48,7 +48,7 @@ void G3d_getCoordsMapWindow(RASTER3D_Map * map, int *rows, int *cols, int *depth
  *  \return void
  */
 
-void G3d_getNofTilesMap(RASTER3D_Map * map, int *nx, int *ny, int *nz)
+void Rast3d_getNofTilesMap(RASTER3D_Map * map, int *nx, int *ny, int *nz)
 {
     *nx = map->nx;
     *ny = map->ny;
@@ -74,7 +74,7 @@ void G3d_getNofTilesMap(RASTER3D_Map * map, int *nx, int *ny, int *nz)
  */
 
 void
-G3d_getRegionMap(RASTER3D_Map * map, double *north, double *south, double *east,
+Rast3d_getRegionMap(RASTER3D_Map * map, double *north, double *south, double *east,
 		 double *west, double *top, double *bottom)
 {
     *north = map->region.north;
@@ -88,7 +88,7 @@ G3d_getRegionMap(RASTER3D_Map * map, double *north, double *south, double *east,
 /*---------------------------------------------------------------------------*/
 
 void
-G3d_getWindowMap(RASTER3D_Map * map, double *north, double *south, double *east,
+Rast3d_getWindowMap(RASTER3D_Map * map, double *north, double *south, double *east,
 		 double *west, double *top, double *bottom)
 {
     *north = map->window.north;
@@ -112,16 +112,16 @@ G3d_getWindowMap(RASTER3D_Map * map, double *north, double *south, double *east,
  *  \return void
  */
 
-void G3d_getRegionStructMap(RASTER3D_Map * map, RASTER3D_Region * region)
+void Rast3d_getRegionStructMap(RASTER3D_Map * map, RASTER3D_Region * region)
 {
-    G3d_regionCopy(region, &(map->region));
+    Rast3d_regionCopy(region, &(map->region));
 }
 
 /*---------------------------------------------------------------------------*/
 
-void G3d_getWindowStructMap(RASTER3D_Map * map, RASTER3D_Region * window)
+void Rast3d_getWindowStructMap(RASTER3D_Map * map, RASTER3D_Region * window)
 {
-    G3d_regionCopy(window, &(map->window));
+    Rast3d_regionCopy(window, &(map->window));
 }
 
 /*---------------------------------------------------------------------------*/
@@ -139,7 +139,7 @@ void G3d_getWindowStructMap(RASTER3D_Map * map, RASTER3D_Region * window)
  *  \return void
  */
 
-void G3d_getTileDimensionsMap(RASTER3D_Map * map, int *x, int *y, int *z)
+void Rast3d_getTileDimensionsMap(RASTER3D_Map * map, int *x, int *y, int *z)
 {
     *x = map->tileX;
     *y = map->tileY;
@@ -158,7 +158,7 @@ void G3d_getTileDimensionsMap(RASTER3D_Map * map, int *x, int *y, int *z)
  *  \return int
  */
 
-int G3d_tileTypeMap(RASTER3D_Map * map)
+int Rast3d_tileTypeMap(RASTER3D_Map * map)
 {
     return map->typeIntern;
 }
@@ -175,7 +175,7 @@ int G3d_tileTypeMap(RASTER3D_Map * map)
  *  \return int
  */
 
-int G3d_fileTypeMap(RASTER3D_Map * map)
+int Rast3d_fileTypeMap(RASTER3D_Map * map)
 {
     return map->type;
 }
@@ -192,7 +192,7 @@ int G3d_fileTypeMap(RASTER3D_Map * map)
  *  \return int
  */
 
-int G3d_tilePrecisionMap(RASTER3D_Map * map)
+int Rast3d_tilePrecisionMap(RASTER3D_Map * map)
 {
     return map->precision;
 }
@@ -209,7 +209,7 @@ int G3d_tilePrecisionMap(RASTER3D_Map * map)
  *  \return int
  */
 
-int G3d_tileUseCacheMap(RASTER3D_Map * map)
+int Rast3d_tileUseCacheMap(RASTER3D_Map * map)
 {
     return map->useCache;
 }
@@ -225,7 +225,7 @@ int G3d_tileUseCacheMap(RASTER3D_Map * map)
  *  \return void
  */
 
-void G3d_printHeader(RASTER3D_Map * map)
+void Rast3d_printHeader(RASTER3D_Map * map)
 {
     double rangeMin, rangeMax;
 
@@ -256,7 +256,7 @@ void G3d_printHeader(RASTER3D_Map * map)
 	       (map->operation == RASTER3D_WRITE_DATA ? ", File Cache used" : ""));
     }
 
-    G3d_range_min_max(map, &rangeMin, &rangeMax);
+    Rast3d_range_min_max(map, &rangeMin, &rangeMax);
 
     printf("  Region: (%f %f) (%f %f) (%f %f)\n",
 	   map->region.south, map->region.north, map->region.west,
@@ -265,11 +265,11 @@ void G3d_printHeader(RASTER3D_Map * map)
 	   map->region.depths);
     printf("  Tile size (%d %d %d)\n", map->tileX, map->tileY, map->tileZ);
     printf("  Range (");
-    if (G3d_isNullValueNum(&rangeMin, DCELL_TYPE))
+    if (Rast3d_isNullValueNum(&rangeMin, DCELL_TYPE))
 	printf("NULL, ");
     else
 	printf("%f, ", (double)rangeMin);
-    if (G3d_isNullValueNum(&rangeMax, DCELL_TYPE))
+    if (Rast3d_isNullValueNum(&rangeMax, DCELL_TYPE))
 	printf("NULL)\n");
     else
 	printf("%f)\n", (double)rangeMax);

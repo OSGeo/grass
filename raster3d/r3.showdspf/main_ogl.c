@@ -163,7 +163,7 @@ int main(int argc, char **argv)
 	/* opens grid3 file to read in original data 
 	 */
 
-	G3d_setErrorFun(G3d_printError);
+	Rast3d_setErrorFun(Rast3d_printError);
 
 	/* open g3 file for reading */
 	if (NULL == (mapset = G_find_file2("grid3", g3->answer, ""))) {
@@ -171,7 +171,7 @@ int main(int argc, char **argv)
 	    G_fatal_error(buff);
 	}
 
-	g3map = G3d_openCellOld(g3->answer, mapset, RASTER3D_DEFAULT_WINDOW,
+	g3map = Rast3d_openCellOld(g3->answer, mapset, RASTER3D_DEFAULT_WINDOW,
 				RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
 	if (NULL == g3map) {
@@ -179,12 +179,12 @@ int main(int argc, char **argv)
 	    G_fatal_error(buff);
 	}
 
-	if (0 == G3d_range_load(g3map)) {
+	if (0 == Rast3d_range_load(g3map)) {
 	    sprintf(buff, "Error reading range for [%s]", g3->answer);
 	    G_fatal_error(buff);
 	}
-	G3d_range_min_max(g3map, &dmin, &dmax);
-	G3d_getRegionStructMap(g3map, &g3reg);
+	Rast3d_range_min_max(g3map, &dmin, &dmax);
+	Rast3d_getRegionStructMap(g3map, &g3reg);
 
 	viz_make_header(&G3header, dmin, dmax, &g3reg);
 	init_caps(&D_Cap, &g3reg);

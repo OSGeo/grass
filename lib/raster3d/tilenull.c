@@ -20,9 +20,9 @@
  *  \return void
  */
 
-void G3d_setNullTileType(RASTER3D_Map * map, void *tile, int type)
+void Rast3d_setNullTileType(RASTER3D_Map * map, void *tile, int type)
 {
-    G3d_setNullValue(tile, map->tileSize, type);
+    Rast3d_setNullValue(tile, map->tileSize, type);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -31,14 +31,14 @@ void G3d_setNullTileType(RASTER3D_Map * map, void *tile, int type)
 /*!
  * \brief 
  *
- * Is equivalent to G3d_setNullTileType (map, tile, G3d_fileTypeMap (map)).
+ * Is equivalent to Rast3d_setNullTileType (map, tile, Rast3d_fileTypeMap (map)).
  *
  *  \param map
  *  \param tile
  *  \return void
  */
 
-void G3d_setNullTile(RASTER3D_Map * map, void *tile)
+void Rast3d_setNullTile(RASTER3D_Map * map, void *tile)
 {
-    G3d_setNullTileType(map, tile, map->typeIntern);
+    Rast3d_setNullTileType(map, tile, map->typeIntern);
 }

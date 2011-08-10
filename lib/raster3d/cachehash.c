@@ -17,12 +17,12 @@ typedef struct
     int lastIndex;
     int lastIndexActive;
 
-} G3d_cache_hash;
+} Rast3d_cache_hash;
 #endif
 
 /*---------------------------------------------------------------------------*/
 
-void G3d_cache_hash_reset(G3d_cache_hash * h)
+void Rast3d_cache_hash_reset(Rast3d_cache_hash * h)
 {
     int i;
 
@@ -34,53 +34,53 @@ void G3d_cache_hash_reset(G3d_cache_hash * h)
 
 /*---------------------------------------------------------------------------*/
 
-void G3d_cache_hash_dispose(G3d_cache_hash * h)
+void Rast3d_cache_hash_dispose(Rast3d_cache_hash * h)
 {
     if (h == NULL)
 	return;
 
     if (h->index != NULL)
-	G3d_free(h->index);
+	Rast3d_free(h->index);
     if (h->active != NULL)
-	G3d_free(h->active);
-    G3d_free(h);
+	Rast3d_free(h->active);
+    Rast3d_free(h);
 }
 
 /*---------------------------------------------------------------------------*/
 
-void *G3d_cache_hash_new(int nofNames)
+void *Rast3d_cache_hash_new(int nofNames)
 {
-    G3d_cache_hash *tmp;
+    Rast3d_cache_hash *tmp;
 
-    tmp = G3d_malloc(sizeof(G3d_cache_hash));
+    tmp = Rast3d_malloc(sizeof(Rast3d_cache_hash));
     if (tmp == NULL) {
-	G3d_error("G3d_cache_hash_new: error in G3d_malloc");
+	Rast3d_error("Rast3d_cache_hash_new: error in Rast3d_malloc");
 	return (void *)NULL;
     }
 
     tmp->nofNames = nofNames;
-    tmp->index = G3d_malloc(sizeof(int) * tmp->nofNames);
-    tmp->active = G3d_malloc(sizeof(char) * tmp->nofNames);
+    tmp->index = Rast3d_malloc(sizeof(int) * tmp->nofNames);
+    tmp->active = Rast3d_malloc(sizeof(char) * tmp->nofNames);
     if ((tmp->index == NULL) || (tmp->active == NULL)) {
-	G3d_cache_hash_dispose(tmp);
-	G3d_error("G3d_cache_hash_new: error in G3d_malloc");
+	Rast3d_cache_hash_dispose(tmp);
+	Rast3d_error("Rast3d_cache_hash_new: error in Rast3d_malloc");
 	return (void *)NULL;
     }
 
-    G3d_cache_hash_reset(tmp);
+    Rast3d_cache_hash_reset(tmp);
 
     return tmp;
 }
 
 /*---------------------------------------------------------------------------*/
 
-void G3d_cache_hash_remove_name(G3d_cache_hash * h, int name)
+void Rast3d_cache_hash_remove_name(Rast3d_cache_hash * h, int name)
 {
     if (name >= h->nofNames)
-	G3d_fatalError("G3d_cache_hash_remove_name: name out of range");
+	Rast3d_fatalError("Rast3d_cache_hash_remove_name: name out of range");
 
     if (h->active[name] == 0)
-	G3d_fatalError("G3d_cache_hash_remove_name: name not in hashtable");
+	Rast3d_fatalError("Rast3d_cache_hash_remove_name: name not in hashtable");
 
     h->active[name] = 0;
     if (name == h->lastName)
@@ -89,13 +89,13 @@ void G3d_cache_hash_remove_name(G3d_cache_hash * h, int name)
 
 /*---------------------------------------------------------------------------*/
 
-void G3d_cache_hash_load_name(G3d_cache_hash * h, int name, int index)
+void Rast3d_cache_hash_load_name(Rast3d_cache_hash * h, int name, int index)
 {
     if (name >= h->nofNames)
-	G3d_fatalError("G3d_cache_hash_load_name: name out of range");
+	Rast3d_fatalError("Rast3d_cache_hash_load_name: name out of range");
 
     if (h->active[name] != 0)
-	G3d_fatalError("G3d_cache_hash_load_name: name already in hashtable");
+	Rast3d_fatalError("Rast3d_cache_hash_load_name: name already in hashtable");
 
     h->index[name] = index;
     h->active[name] = 1;
@@ -103,7 +103,7 @@ void G3d_cache_hash_load_name(G3d_cache_hash * h, int name, int index)
 
 /*---------------------------------------------------------------------------*/
 
-int G3d_cache_hash_name2index(G3d_cache_hash * h, int name)
+int Rast3d_cache_hash_name2index(Rast3d_cache_hash * h, int name)
 {
     int index;
 

@@ -139,9 +139,9 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    G3d_initDefaults();
+    Rast3d_initDefaults();
 
-    G3d_getWindow(&g3reg);
+    Rast3d_getWindow(&g3reg);
     G_message(_("Region from getWindow: %d %d %d"),
 	      g3reg.rows, g3reg.cols, g3reg.depths);
 
@@ -150,17 +150,17 @@ int main(int argc, char *argv[])
 	 check_get_any_dspname(out->answer, name->answer, G_mapset())))
 	exit(EXIT_FAILURE);
 
-    G3d_setErrorFun(G3d_printError);
+    Rast3d_setErrorFun(Rast3d_printError);
 
     /* open g3 file for reading and writing */
     if (NULL == (mapset = G_find_file2("grid3", name->answer, "")))
 	G_fatal_error(_("Not able to find grid3 file for [%s]"),
 		      name->answer);
 
-    g3map = G3d_openCellOld(name->answer, mapset, &g3reg,
+    g3map = Rast3d_openCellOld(name->answer, mapset, &g3reg,
 			    RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
     /*
-       g3map = G3d_openCellOld (name->answer, mapset, RASTER3D_DEFAULT_WINDOW,
+       g3map = Rast3d_openCellOld (name->answer, mapset, RASTER3D_DEFAULT_WINDOW,
        RASTER3D_TILE_SAME_AS_FILE,
        RASTER3D_USE_CACHE_DEFAULT);
      */
@@ -168,19 +168,19 @@ int main(int argc, char *argv[])
     if (NULL == g3map)
 	G_fatal_error(_("Error opening grid3 file [%s]"), name->answer);
 
-    if (0 == G3d_range_load(g3map))
+    if (0 == Rast3d_range_load(g3map))
 	G_fatal_error(_("Error reading range for [%s]"), name->answer);
 
     /* TODO: look at this - should use current 3dregion rather than
        region represented by original 3dgrid file */
     /*
-       G3d_getRegionStructMap (g3map, &g3reg);
+       Rast3d_getRegionStructMap (g3map, &g3reg);
      */
 
     /* DONT USE Headfax any more ?
        g3read_header(&Headfax);
      */
-    G3d_range_min_max(g3map, &dmin, &dmax);
+    Rast3d_range_min_max(g3map, &dmin, &dmax);
     viz_make_header(&Headfax, dmin, dmax, &g3reg);
 
     /* puts command line options into cmndln_info structure */
@@ -227,7 +227,7 @@ int main(int argc, char *argv[])
 	fprintf(stderr, "\n");
 
     /* tries to write a header! */
-    G3d_closeCell(g3map);
+    Rast3d_closeCell(g3map);
 
     fclose(Headfax.dspfoutfp);
 

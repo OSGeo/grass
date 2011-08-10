@@ -44,7 +44,7 @@ int Gvl_load_colors_data(void **color_data, const char *name)
     if (NULL == (colors = (struct Colors *)G_malloc(sizeof(struct Colors))))
 	return (-1);
 
-    if (0 > G3d_readColors(name, mapset, colors)) {
+    if (0 > Rast3d_readColors(name, mapset, colors)) {
 	G_free(colors);
 	return (-1);
     }

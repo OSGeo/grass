@@ -242,7 +242,7 @@ void N_write_array_2d_to_rast(N_array_2d * array, char *name)
  * <br><br>
  *
  * The new created or the provided array is returned.
- * If the reading of the volume map fails, G3d_fatalError() will
+ * If the reading of the volume map fails, Rast3d_fatalError() will
  * be invoked.
  *
  * \param name * char - the name of an existing volume map
@@ -262,7 +262,7 @@ N_array_3d *N_read_rast3d_to_array_3d(char *name, N_array_3d * array,
 
 
     /*get the current region */
-    G3d_getWindow(&region);
+    Rast3d_getWindow(&region);
 
     cols = region.cols;
     rows = region.rows;
@@ -270,17 +270,17 @@ N_array_3d *N_read_rast3d_to_array_3d(char *name, N_array_3d * array,
 
 
     if (NULL == G_find_grid3(name, ""))
-	G3d_fatalError(_("Requested g3d map <%s> not found"), name);
+	Rast3d_fatalError(_("Requested g3d map <%s> not found"), name);
 
     /*Open all maps with default region */
     map =
-	G3d_openCellOld(name, G_find_grid3(name, ""), RASTER3D_DEFAULT_WINDOW,
+	Rast3d_openCellOld(name, G_find_grid3(name, ""), RASTER3D_DEFAULT_WINDOW,
 			RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
     if (map == NULL)
-	G3d_fatalError(_("Error opening g3d map <%s>"), name);
+	Rast3d_fatalError(_("Error opening g3d map <%s>"), name);
 
-    type = G3d_tileTypeMap(map);
+    type = Rast3d_tileTypeMap(map);
 
     /*if the array is NULL create a new one with the data type of the volume map */
     /*the offset is 0 by default */
@@ -310,10 +310,10 @@ N_array_3d *N_read_rast3d_to_array_3d(char *name, N_array_3d * array,
 
     /*if requested set the Mask on */
     if (mask) {
-	if (G3d_maskFileExists()) {
+	if (Rast3d_maskFileExists()) {
 	    changemask = 0;
-	    if (G3d_maskIsOff(map)) {
-		G3d_maskOn(map);
+	    if (Rast3d_maskIsOff(map)) {
+		Rast3d_maskOn(map);
 		changemask = 1;
 	    }
 	}
@@ -324,7 +324,7 @@ N_array_3d *N_read_rast3d_to_array_3d(char *name, N_array_3d * array,
 	for (y = 0; y < rows; y++) {
 	    for (x = 0; x < cols; x++) {
 		if (type == FCELL_TYPE) {
-		    G3d_getValue(map, x, y, z, &f1, type);
+		    Rast3d_getValue(map, x, y, z, &f1, type);
 		    if (Rast_is_f_null_value((void *)&f1)) {
 			N_put_array_3d_value_null(data, x, y, z);
 		    }
@@ -336,7 +336,7 @@ N_array_3d *N_read_rast3d_to_array_3d(char *name, N_array_3d * array,
 		    }
 		}
 		else {
-		    G3d_getValue(map, x, y, z, &d1, type);
+		    Rast3d_getValue(map, x, y, z, &d1, type);
 		    if (Rast_is_d_null_value((void *)&d1)) {
 			N_put_array_3d_value_null(data, x, y, z);
 		    }
@@ -354,14 +354,14 @@ N_array_3d *N_read_rast3d_to_array_3d(char *name, N_array_3d * array,
 
     /*We set the Mask off, if it was off before */
     if (mask) {
-	if (G3d_maskFileExists())
-	    if (G3d_maskIsOn(map) && changemask)
-		G3d_maskOff(map);
+	if (Rast3d_maskFileExists())
+	    if (Rast3d_maskIsOn(map) && changemask)
+		Rast3d_maskOff(map);
     }
 
     /* Close files and exit */
-    if (!G3d_closeCell(map))
-	G3d_fatalError(map, NULL, 0, _("Error closing g3d file"));
+    if (!Rast3d_closeCell(map))
+	Rast3d_fatalError(map, NULL, 0, _("Error closing g3d file"));
 
     return data;
 }
@@ -372,7 +372,7 @@ N_array_3d *N_read_rast3d_to_array_3d(char *name, N_array_3d * array,
  * A new volume map is created with the same type as the N_array_3d.
  * The current region is used to open the volume map.
  * The N_array_3d must have the same size as the current region.
- * If the writing of the volume map fails, G3d_fatalError() will
+ * If the writing of the volume map fails, Rast3d_fatalError() will
  * be invoked.
  *
  *
@@ -392,7 +392,7 @@ void N_write_array_3d_to_rast3d(N_array_3d * array, char *name, int mask)
     RASTER3D_Region region;
 
     /*get the current region */
-    G3d_getWindow(&region);
+    Rast3d_getWindow(&region);
 
     cols = region.cols;
     rows = region.rows;
@@ -412,21 +412,21 @@ void N_write_array_3d_to_rast3d(N_array_3d * array, char *name, int mask)
 
     /*Open the new map */
     if (type == DCELL_TYPE)
-        map = G3d_openNewOptTileSize(name, RASTER3D_USE_CACHE_XY, &region, DCELL_TYPE, 32);
+        map = Rast3d_openNewOptTileSize(name, RASTER3D_USE_CACHE_XY, &region, DCELL_TYPE, 32);
     else if (type == FCELL_TYPE)
-        map = G3d_openNewOptTileSize(name, RASTER3D_USE_CACHE_XY, &region, FCELL_TYPE, 32);
+        map = Rast3d_openNewOptTileSize(name, RASTER3D_USE_CACHE_XY, &region, FCELL_TYPE, 32);
 
     if (map == NULL)
-	G3d_fatalError(_("Error opening g3d map <%s>"), name);
+	Rast3d_fatalError(_("Error opening g3d map <%s>"), name);
 
     G_message(_("Write 3d array to g3d map <%s>"), name);
 
     /*if requested set the Mask on */
     if (mask) {
-	if (G3d_maskFileExists()) {
+	if (Rast3d_maskFileExists()) {
 	    changemask = 0;
-	    if (G3d_maskIsOff(map)) {
-		G3d_maskOn(map);
+	    if (Rast3d_maskIsOff(map)) {
+		Rast3d_maskOn(map);
 		changemask = 1;
 	    }
 	}
@@ -439,11 +439,11 @@ void N_write_array_3d_to_rast3d(N_array_3d * array, char *name, int mask)
 	    for (x = 0; x < cols; x++) {
 		if (type == FCELL_TYPE) {
 		    f1 = N_get_array_3d_f_value(data, x, y, z);
-		    G3d_putFloat(map, x, y, z, f1);
+		    Rast3d_putFloat(map, x, y, z, f1);
 		}
 		else if (type == DCELL_TYPE) {
 		    d1 = N_get_array_3d_d_value(data, x, y, z);
-		    G3d_putDouble(map, x, y, z, d1);
+		    Rast3d_putDouble(map, x, y, z, d1);
 		}
 	    }
 	}
@@ -451,17 +451,17 @@ void N_write_array_3d_to_rast3d(N_array_3d * array, char *name, int mask)
 
     /*We set the Mask off, if it was off before */
     if (mask) {
-	if (G3d_maskFileExists())
-	    if (G3d_maskIsOn(map) && changemask)
-		G3d_maskOff(map);
+	if (Rast3d_maskFileExists())
+	    if (Rast3d_maskIsOn(map) && changemask)
+		Rast3d_maskOff(map);
     }
 
     /* Flush all tile */
-    if (!G3d_flushAllTiles(map))
-	G3d_fatalError("Error flushing tiles with G3d_flushAllTiles");
+    if (!Rast3d_flushAllTiles(map))
+	Rast3d_fatalError("Error flushing tiles with Rast3d_flushAllTiles");
     /* Close files and exit */
-    if (!G3d_closeCell(map))
-	G3d_fatalError(map, NULL, 0, _("Error closing g3d file"));
+    if (!Rast3d_closeCell(map))
+	Rast3d_fatalError(map, NULL, 0, _("Error closing g3d file"));
 
     return;
 }

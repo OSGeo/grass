@@ -156,30 +156,30 @@ cache instead.
 In non-cache mode the application should only use the functions
 
 <P>
-int G3d_readTile() 
+int Rast3d_readTile() 
 
 <P>
 and 
 
 <P>
-int G3d_writeTile() 
+int Rast3d_writeTile() 
 
 <P>
 to read and write tiles.  The application can use one tile provided by the map
-structure as buffer. See <TT>G3d_getTilePtr()</TT>.
+structure as buffer. See <TT>Rast3d_getTilePtr()</TT>.
 
 <P>
 In cache mode the application can access cell-values directly by their
 coordinates. The corresponding functions are
 
 <P>
-int G3d_getValue() 
+int Rast3d_getValue() 
 
 <P>
 and
 
 <P>
-int G3d_putValue() 
+int Rast3d_putValue() 
 
 <P>
 and their corresponding typed versions.
@@ -191,7 +191,7 @@ Tiles are written (flushed) to the data-file either at closing time or if
 explicitly requested.
 <BR>
 <P>
-If the map is new <TT>G3d_getValue()</TT> can be used even if the tile which
+If the map is new <TT>Rast3d_getValue()</TT> can be used even if the tile which
 contains the cell has already been flushed to the data file. In this case the
 tile is simply read back into the memory-cache from the data file.
 <BR>
@@ -210,7 +210,7 @@ possible problems arising from mixing different precisions.
 <P>
 As an example consider the case where the data is stored in the file with double
 precision and the tiles are stored in memory in single precision.  Then using
-<TT>G3d_getValue()</TT> will actually return a double precision number whose precision
+<TT>Rast3d_getValue()</TT> will actually return a double precision number whose precision
 is only 23 bits.  It is therefore a good idea to use the types in the memory
 consistently.
 <BR>
@@ -301,7 +301,7 @@ data entry.
 
 <P>
 For performance reasons it is a good idea to use function
-<TT>G3d_retile()</TT> before using the file in other applications.
+<TT>Rast3d_retile()</TT> before using the file in other applications.
 
 <P>
 
@@ -339,7 +339,7 @@ nearest neighbor method as well as an application provided method.
 <BR>
 <P>
 The default <EM>3d</EM> window file is <EM>WIND3</EM> located in the mapset.
-Application programs should use <TT>G3d_useWindowParams()</TT> to allow the
+Application programs should use <TT>Rast3d_useWindowParams()</TT> to allow the
 user to overwrite this default.
 
 <P>
@@ -439,10 +439,10 @@ be changed at compilation time of the library.
 Environment variable RASTER3D_MAX_CACHE_SIZE.
 
 <P>
-void G3d_setCacheLimit(int nBytes)Set cache limit
+void Rast3d_setCacheLimit(int nBytes)Set cache limit
 
 <P>
-int G3d_getCacheLimit(int nBytes)Get cache limit
+int Rast3d_getCacheLimit(int nBytes)Get cache limit
 
 <P>
 
@@ -462,10 +462,10 @@ changed at compilation time of the library.
 Environment variable RASTER3D_DEFAULT_CACHE_SIZE.
 
 <P>
-void G3d_setCacheSize(int nTiles)
+void Rast3d_setCacheSize(int nTiles)
 
 <P>
-int G3d_getCacheSize()
+int Rast3d_getCacheSize()
 
 <P>
 
@@ -485,8 +485,8 @@ default should not be changed.
 Environment variables RASTER3D_USE_COMPRESSION and RASTER3D_NO_COMPRESSION.
 
 <P>
-See functions G3d_setCompressionMode() (cf. 
-Section 22.3.2.3 ) and G3d_getCompressionMode() (cf. Section 22.3.2.3 ).
+See functions Rast3d_setCompressionMode() (cf. 
+Section 22.3.2.3 ) and Rast3d_getCompressionMode() (cf. Section 22.3.2.3 ).
 
 <P>
 
@@ -504,8 +504,8 @@ be changed at compilation time of the library.
 Environment variables RASTER3D_USE_RLE and RASTER3D_NO_RLE.
 
 <P>
-See functions G3d_setCompressionMode() (cf. 
-Section 22.3.2.3) and G3d_getCompressionMode() (cf. Section 22.3.2.3).
+See functions Rast3d_setCompressionMode() (cf. 
+Section 22.3.2.3) and Rast3d_getCompressionMode() (cf. Section 22.3.2.3).
 
 \section Setting_the_precision Setting the precision
 
@@ -522,14 +522,14 @@ default should not be changed.
 Environment variables RASTER3D_PRECISION and RASTER3D_MAX_PRECISION.
 
 <P>
-void G3d_setCompressionMode(int doCompress, int doLzw, int doRle, int
+void Rast3d_setCompressionMode(int doCompress, int doLzw, int doRle, int
   precision) <EM>doCompress</EM> should be one of RASTER3D_NO_COMPRESSION and
   RASTER3D_COMPRESSION, <EM>doRle</EM> should be either RASTER3D_NO_RLE or
   RASTER3D_USE_RLE, and <EM>precision</EM> should be either RASTER3D_MAX_PRECISION or
   a positive integer.
 
 <P>
-void G3d_getCompressionMode(int *doCompress, int *doLzw, int *doRle,
+void Rast3d_getCompressionMode(int *doCompress, int *doLzw, int *doRle,
   int *precision)
 
 <P>
@@ -551,10 +551,10 @@ Environment variables RASTER3D_TILE_DIMENSION_X, RASTER3D_TILE_DIMENSION_Y, and
 RASTER3D_TILE_DIMENSION_Z.
 
 <P>
-void G3d_setTileDimension(int tileX, int tileY, int tileZ)
+void Rast3d_setTileDimension(int tileX, int tileY, int tileZ)
 
 <P>
-void G3d_getTileDimension(int *tileX, int *tileY, int *tileZ)
+void Rast3d_getTileDimension(int *tileX, int *tileY, int *tileZ)
 
 <P>
 
@@ -572,10 +572,10 @@ should not be changed.
 Environment variables RASTER3D_WRITE_FLOAT and RASTER3D_WRITE_DOUBLE.
 
 <P>
-void G3d_setFileType(int type)
+void Rast3d_setFileType(int type)
 
 <P>
-int G3d_getFileType(int type)
+int Rast3d_getFileType(int type)
 
 <P>
 
@@ -604,13 +604,13 @@ Environment variable RASTER3D_DEFAULT_WINDOW3D.
 See functions 
 
 <P>
-<TT>G3d_useWindowParams()</TT>,
+<TT>Rast3d_useWindowParams()</TT>,
 
 <P>
-<TT>G3d_setWindow()</TT>, and
+<TT>Rast3d_setWindow()</TT>, and
 
 <P>
-<TT>G3d_setWindowMap()</TT>.
+<TT>Rast3d_setWindowMap()</TT>.
 
 <P>
 
@@ -623,7 +623,7 @@ Default <TT>"none"</TT>.
 No environment variable.
 
 <P>
-void G3d_setUnit (unit)
+void Rast3d_setUnit (unit)
         char *unit;
 
 <P>
@@ -633,32 +633,32 @@ void G3d_setUnit (unit)
 <P>
 This variable specifies the function which is invoked when an error
 (not a fatal error) occurs. For example setting the error function to
-<TT>G3d_fatalError</TT> simplifies debugging with dbx and also might show
+<TT>Rast3d_fatalError</TT> simplifies debugging with dbx and also might show
 errors which are missed because the application does not check the
 return value.
 
 <P>
-Default <TT>G3d_skipError</TT>.
+Default <TT>Rast3d_skipError</TT>.
 
 <P>
 Environment variables RASTER3D_USE_FATAL_ERROR and RASTER3D_USE_PRINT_ERROR.
 
 <P>
-void G3d_setErrorFun(void (*fun)(char *))
+void Rast3d_setErrorFun(void (*fun)(char *))
 
 <P>
 The following 3 functions are possible choices for error functions.
 
 <P>
-void G3d_skipError(char (*msg)(char *)) This function ignores the
+void Rast3d_skipError(char (*msg)(char *)) This function ignores the
   error.
 
 <P>
-void G3d_printError(char (*msg)(char *)) This function prints the
+void Rast3d_printError(char (*msg)(char *)) This function prints the
   error message <EM>msg</EM> to <EM>stderr</EM> and returns.
 
 <P>
-void G3d_fatalError(char (*msg)(char *)) This function prints the
+void Rast3d_fatalError(char (*msg)(char *)) This function prints the
   error message <EM>msg</EM> to <EM>stderr</EM>, flushes <EM>stdout</EM> 
   and <EM>stderr</EM>, and terminates the program with a segementation fault.
 
@@ -669,7 +669,7 @@ void G3d_fatalError(char (*msg)(char *)) This function prints the
 \subsection Opening_and_Closing_RASTER3D_Files Opening and Closing RASTER3D Files
 
 <P>
-void  *G3d_openCellOld(char *name, char *mapset, RASTER3D_Region *window,
+void  *Rast3d_openCellOld(char *name, char *mapset, RASTER3D_Region *window,
   int type, int cache)Opens existing g3d-file <EM>name</EM> in <EM>mapset</EM>.
 
 <P>
@@ -678,28 +678,28 @@ Tiles are stored in memory with <EM>type</EM> which must be any of FCELL_TYPE,
   cache-mode used and must be either RASTER3D_NO_CACHE, RASTER3D_USE_CACHE_DEFAULT,
   RASTER3D_USE_CACHE_X, RASTER3D_USE_CACHE_Y, RASTER3D_USE_CACHE_Z,
   RASTER3D_USE_CACHE_XY, RASTER3D_USE_CACHE_XZ, RASTER3D_USE_CACHE_YZ,
-  RASTER3D_USE_CACHE_XYZ, the result of <TT>G3d_cacheSizeEncode()</TT> (cf. 
+  RASTER3D_USE_CACHE_XYZ, the result of <TT>Rast3d_cacheSizeEncode()</TT> (cf. 
   Section 22.4.6), or any positive integer which
   specifies the number of tiles buffered in the cache.  <EM>window</EM> sets the
   window-region for the map. It is either a pointer to a window structure or
   RASTER3D_DEFAULT_WINDOW, which uses the window stored at initialization time or
-  set via <TT>G3d_setWindow()</TT> (cf. Section 22.4.16).
+  set via <TT>Rast3d_setWindow()</TT> (cf. Section 22.4.16).
   To modify the window for the map after it has already been opened use
-  <TT>G3d_setWindowMap()</TT> (cf. Section 22.4.16).
+  <TT>Rast3d_setWindowMap()</TT> (cf. Section 22.4.16).
 
 <P>
 Returns a pointer to the cell structure ... if successful, NULL ...
   otherwise.
 
 <P>
-void  *G3d_openCellNew(char *name, int type, int cache, RASTER3D_Region
+void  *Rast3d_openCellNew(char *name, int type, int cache, RASTER3D_Region
   *region)Opens new g3d-file with <EM>name</EM> in the current mapset. Tiles
   are stored in memory with <EM>type</EM> which must be one of FCELL_TYPE,
   DCELL_TYPE, or RASTER3D_TILE_SAME_AS_FILE. <EM>cache</EM> specifies the
   cache-mode used and must be either RASTER3D_NO_CACHE, RASTER3D_USE_CACHE_DEFAULT,
   RASTER3D_USE_CACHE_X, RASTER3D_USE_CACHE_Y, RASTER3D_USE_CACHE_Z,
   RASTER3D_USE_CACHE_XY, RASTER3D_USE_CACHE_XZ, RASTER3D_USE_CACHE_YZ,
-  RASTER3D_USE_CACHE_XYZ, the result of <TT>G3d_cacheSizeEncode()</TT> (cf. 
+  RASTER3D_USE_CACHE_XYZ, the result of <TT>Rast3d_cacheSizeEncode()</TT> (cf. 
   Section 22.4.6), or any positive integer which
   specifies the number of tiles buffered in the cache.  <EM>region</EM> specifies
   the 3d region.  
@@ -709,7 +709,7 @@ Returns a pointer to the cell structure ... if successful,
   NULL ... otherwise.
 
 <P>
-void  *G3d_openCellNewParam(char *name, int typeIntern, int cache,
+void  *Rast3d_openCellNewParam(char *name, int typeIntern, int cache,
   RASTER3D_Region *region, int type, int doLzw, int doRle, int precision, int tileX,
   int tileY, int tileZ)Opens new g3d-file with <EM>name</EM> in the current
   mapset. Tiles are stored in memory with <EM>typeIntern</EM> which must be one of
@@ -718,7 +718,7 @@ void  *G3d_openCellNewParam(char *name, int typeIntern, int cache,
   RASTER3D_USE_CACHE_DEFAULT, RASTER3D_USE_CACHE_X, RASTER3D_USE_CACHE_Y,
   RASTER3D_USE_CACHE_Z, RASTER3D_USE_CACHE_XY, RASTER3D_USE_CACHE_XZ,
   RASTER3D_USE_CACHE_YZ, RASTER3D_USE_CACHE_XYZ, the result of
-  <TT>G3d_cacheSizeEncode()</TT> (cf. 
+  <TT>Rast3d_cacheSizeEncode()</TT> (cf. 
   Section 22.4.6), or any positive integer which
   specifies the number of tiles buffered in the cache.  <EM>region</EM> specifies
   the 3d region.
@@ -728,16 +728,16 @@ In addition the properties of the new file have to be specified. It is
   assumed by default that compression is used. This function first sets the
   global default values to the specified values, and then restores the original
   global defaults. This function can be used in conjunction with
-  <TT>G3d_setStandard3dInputParams()</TT> (cf. 
+  <TT>Rast3d_setStandard3dInputParams()</TT> (cf. 
   Section 22.4.18) and
-  <TT>G3d_getStandard3dParams()</TT>.
+  <TT>Rast3d_getStandard3dParams()</TT>.
 
 <P>
 Returns a pointer to the cell structure ... if successful, NULL ...
   otherwise.
 
 <P>
-int G3d_closeCell(void *map)Closes g3d-file. If <EM>map</EM> is new
+int Rast3d_closeCell(void *map)Closes g3d-file. If <EM>map</EM> is new
   and cache-mode is used for <EM>map</EM> then every tile which is not flushed
   before closing is flushed.  
 
@@ -755,7 +755,7 @@ unexpected side-effects the use of these functions in cache mode is
 discouraged.
 
 <P>
-int G3d_readTile(void *map, char *tileIndex, int tile, int type)
+int Rast3d_readTile(void *map, char *tileIndex, int tile, int type)
   Reads tile with index <EM>tileIndex</EM> into the <EM>tile</EM> buffer. The cells
   are stored with type <EM>type</EM> which must be one of FCELL_TYPE and
   DCELL_TYPE. If the tile with <EM>tileIndex</EM> is not stored on the file
@@ -768,15 +768,15 @@ Returns
         0 ... otherwise.
 
 <P>
-int G3d_readTileFloat(void *map, char *tileIndex, int tile)
-Is equivalent to G3d_readTile (map, tileIndex, tile, FCELL_TYPE).
+int Rast3d_readTileFloat(void *map, char *tileIndex, int tile)
+Is equivalent to Rast3d_readTile (map, tileIndex, tile, FCELL_TYPE).
 
 <P>
-int G3d_readTileDouble(void *map, char *tileIndex, int tile)
-Is equivalent to G3d_readTile (map, tileIndex, tile, DCELL_TYPE).
+int Rast3d_readTileDouble(void *map, char *tileIndex, int tile)
+Is equivalent to Rast3d_readTile (map, tileIndex, tile, DCELL_TYPE).
 
 <P>
-int G3d_writeTile(void *map, char *tileIndex, int tile, int type)
+int Rast3d_writeTile(void *map, char *tileIndex, int tile, int type)
   Writes tile with index <EM>tileIndex</EM> to the file corresponding to <EM>map</EM>. It is assumed that the cells in <EM>tile</EM> are of <EM>type</EM> which
   must be one of FCELL_TYPE and DCELL_TYPE.  The actual type used to write the
   tile depends on the type specified at the time when <EM>map</EM> is initialized.
@@ -792,19 +792,19 @@ Returns
         0 ... otherwise.
 
 <P>
-int G3d_writeTileFloat(void *map, char *tileIndex, int tile)
-Is equivalent to <TT>G3d_writeTile (map, tileIndex, tile, FCELL_TYPE).</TT>
+int Rast3d_writeTileFloat(void *map, char *tileIndex, int tile)
+Is equivalent to <TT>Rast3d_writeTile (map, tileIndex, tile, FCELL_TYPE).</TT>
 
 <P>
-int G3d_writeTileDouble(void *map, char *tileIndex, int tile)
-Is equivalent to <TT>G3d_writeTile (map, tileIndex, tile, DCELL_TYPE).</TT>
+int Rast3d_writeTileDouble(void *map, char *tileIndex, int tile)
+Is equivalent to <TT>Rast3d_writeTile (map, tileIndex, tile, DCELL_TYPE).</TT>
 
 <P>
 
 \subsection Reading_and_Writing_Cells Reading and Writing Cells
 
 <P>
-void G3d_getValue(void *map, int x, int y, int z, char *value, int
+void Rast3d_getValue(void *map, int x, int y, int z, char *value, int
   type) Returns in <EM>*value</EM> the cell-value of the cell with
   window-coordinate <EM>(x, y, z)</EM>.  The value returned is of <EM>type</EM>.
 
@@ -812,15 +812,15 @@ void G3d_getValue(void *map, int x, int y, int z, char *value, int
 This function invokes a fatal error if an error occurs.
 
 <P>
-float G3d_getFloat(void *map, int x, int y, int z)Is equivalent to
-  <TT>G3d_getValue (map, x, y, z, &amp;value, FCELL_TYPE);</TT> return value.
+float Rast3d_getFloat(void *map, int x, int y, int z)Is equivalent to
+  <TT>Rast3d_getValue (map, x, y, z, &amp;value, FCELL_TYPE);</TT> return value.
 
 <P>
-double G3d_getDouble(void *map, int x, int y, int z)Is equivalent
-  to <TT>G3d_getValue (map, x, y, z, &amp;value, DCELL_TYPE);</TT> return value.
+double Rast3d_getDouble(void *map, int x, int y, int z)Is equivalent
+  to <TT>Rast3d_getValue (map, x, y, z, &amp;value, DCELL_TYPE);</TT> return value.
 
 <P>
-void G3d_getValueRegion(void *map, int x, int y, int z, char*value,
+void Rast3d_getValueRegion(void *map, int x, int y, int z, char*value,
   int type) Returns in <EM>*value</EM> the cell-value of the cell with
   region-coordinate <EM>(x, y, z)</EM>.  The value returned is of <EM>type</EM>.
   Here <EM>region</EM> means the coordinate in the cube of data in the file, i.e.
@@ -830,17 +830,17 @@ void G3d_getValueRegion(void *map, int x, int y, int z, char*value,
 This function invokes a fatal error if an error occurs.
 
 <P>
-float G3d_getFloatRegion(void *map, int x, int y, int z)Is
-  equivalent to <TT>G3d_getValueRegion (map, x, y, z, &amp;value, FCELL_TYPE);</TT>
+float Rast3d_getFloatRegion(void *map, int x, int y, int z)Is
+  equivalent to <TT>Rast3d_getValueRegion (map, x, y, z, &amp;value, FCELL_TYPE);</TT>
   return value.
 
 <P>
-double G3d_getDoubleRegion(void *map, int x, int y, int z)Is
-  equivalent to <TT>G3d_getValueRegion (map, x, y, z, &amp;value,
+double Rast3d_getDoubleRegion(void *map, int x, int y, int z)Is
+  equivalent to <TT>Rast3d_getValueRegion (map, x, y, z, &amp;value,
     DCELL_TYPE);</TT> return value.
 
 <P>
-int G3d_putValue(void *map, int x, int y, int z, char *value, int
+int Rast3d_putValue(void *map, int x, int y, int z, char *value, int
   type)After converting <EM>*value</EM> of <EM>type</EM> into the type specified
   at the initialization time (i.e. <EM>typeIntern</EM>) this function writes the
   value into the tile buffer corresponding to cell-coordinate <EM>(x, y, z)</EM>.
@@ -853,19 +853,19 @@ Returns
   0 ... otherwise.
 
 <P>
-int G3d_putFloat(void *map, int x, int y, int z, char *value)Is
-  equivalent to G3d_putValue (map, x, y, z, &amp;value, FCELL_TYPE).
+int Rast3d_putFloat(void *map, int x, int y, int z, char *value)Is
+  equivalent to Rast3d_putValue (map, x, y, z, &amp;value, FCELL_TYPE).
 
 <P>
-int G3d_putDouble(void *map, int x, int y, int z, char *value) Is
-  equivalent to G3d_putValue (map, x, y, z, &amp;value, DCELL_TYPE).
+int Rast3d_putDouble(void *map, int x, int y, int z, char *value) Is
+  equivalent to Rast3d_putValue (map, x, y, z, &amp;value, DCELL_TYPE).
 
 <P>
 
 \subsection Loading_and_Removing_TilesLoading and Removing Tiles
 
 <P>
-char *G3d_getTilePtr(void *map, int tileIndex) This function
+char *Rast3d_getTilePtr(void *map, int tileIndex) This function
   returns a pointer to a tile which contains the data for the tile with index
   <EM>tileIndex</EM>.  The type of the data stored in the tile depends on the type
   specified at the initialization time of <EM>map</EM>.  The functionality is
@@ -877,7 +877,7 @@ If <EM>map</EM> is old and the cache is not used the tile with <EM>tileIndex</EM
   is read from file and stored in the buffer provided by the map structure.
   The pointer to this buffer is returned. If the buffer already contains the
   tile with <EM>tileIndex</EM> reading is skipped. Data which was stored in
-  earlier calls to <TT>G3d_getTilePtr</TT> is destroyed.  If the tile with 
+  earlier calls to <TT>Rast3d_getTilePtr</TT> is destroyed.  If the tile with 
   <EM>tileIndex</EM> is not stored on the file corresponding to <EM>map</EM>, and 
   <EM>tileIndex</EM> is a valid index the buffer is filled with NULL-values.
 <BR>
@@ -896,8 +896,8 @@ If <EM>map</EM> is new and the cache is not used the functionality is the same
   as if <EM>map</EM> is old and the cache is not used.  If the tile with 
   <EM>tileIndex</EM> is already stored on file, it is read into the buffer, if not,
   the cells are set to null-values.  If the buffer corresponding to the pointer
-  is used for writing, subsequent calls to <TT>G3d_getTilePtr</TT> may destroy the
-  values already stored in the buffer.  Use <TT>G3d_flushTile</TT> to write the buffer
+  is used for writing, subsequent calls to <TT>Rast3d_getTilePtr</TT> may destroy the
+  values already stored in the buffer.  Use <TT>Rast3d_flushTile</TT> to write the buffer
   to the file before reusing it for a different index.  The use of this buffer
   as write buffer is discouraged.
 <BR>
@@ -917,8 +917,8 @@ If <EM>map</EM> is new and the cache is used the functionality is the same as if
 Care has to be taken if this function is used in non-cache mode since it is
   implicitly invoked every time a read or write request is issued.  The only
   I/O-functions for which it is safe to assume that they do not invoke
-  <TT>G3d_getTilePtr</TT> are <TT>G3d_readTile()</TT> and
-  <TT>G3d_writeTile()</TT> and their corresponding type-specific versions.
+  <TT>Rast3d_getTilePtr</TT> are <TT>Rast3d_readTile()</TT> and
+  <TT>Rast3d_writeTile()</TT> and their corresponding type-specific versions.
 
 <P>
 Returns 
@@ -926,8 +926,8 @@ Returns
         NULL ... otherwise.
 
 <P>
-int G3d_tileLoad(void *map, int tileIndex)
-Same functionality as <TT>G3d_getTilePtr()</TT> but does not return the
+int Rast3d_tileLoad(void *map, int tileIndex)
+Same functionality as <TT>Rast3d_getTilePtr()</TT> but does not return the
 pointer.
 
 <P>
@@ -936,11 +936,11 @@ Returns
         0 ... otherwise.
 
 <P>
-int G3d_removeTile(void *map, inttileIndex) Removes a tile
+int Rast3d_removeTile(void *map, inttileIndex) Removes a tile
         from memory-cache if tile is in memory-cache.  For new maps the
         application does not know whether the tile is in the memory-cache or in
         the file-cache. Therefore, for new maps this function should be
-        preceded by <TT>G3d_tileLoad()</TT>.
+        preceded by <TT>Rast3d_tileLoad()</TT>.
 
 <P>
 <EM>(Question: Is this a useful function?)</EM>
@@ -953,14 +953,14 @@ Returns 1 ... if successful, 0 ... otherwise.
 \subsection Write_Functions_used_in_Cache_Mode Write Functions used in Cache Mode
 
 <P>
-int G3d_flushTile(void *map, int tileIndex) Writes the tile with
+int Rast3d_flushTile(void *map, int tileIndex) Writes the tile with
   <EM>tileIndex</EM> to the file corresponding to <EM>map</EM> and removes the tile
   from the cache (in non-cache mode the buffer provided by the map-structure is
   written).
 
 <P>
 If this tile has already been written before the write request is ignored.
-  If the tile was never referred to before the invokation of G3d_flushTile, a
+  If the tile was never referred to before the invokation of Rast3d_flushTile, a
   tile filled with NULL-values is written.
 
 <P>
@@ -969,7 +969,7 @@ Returns
         0 ... otherwise.
 
 <P>
-int G3d_flushTileCube(void *map, int xMin, int yMin, int zMin, int
+int Rast3d_flushTileCube(void *map, int xMin, int yMin, int zMin, int
   xMax, int yMax, int zMax) Writes the tiles with tile-coordinates
   contained in the axis-parallel cube with vertices <EM>(xMin, yMin, zMin)</EM>
   and <EM>(xMax, yMax, zMax</EM>).  Tiles which are not stored in the cache are
@@ -982,7 +982,7 @@ Returns
         0 ... otherwise.
 
 <P>
-int G3d_flushTilesInCube(void *map, int xMin, int yMin, int
+int Rast3d_flushTilesInCube(void *map, int xMin, int yMin, int
         zMin, int xMax, int yMax, int zMax) Writes those tiles for which
         <EM>every</EM> cell has coordinate contained in the axis-parallel cube
         defined by the vertices with cell-coordinates <EM>(xMin, yMin, zMin)</EM>
@@ -1003,7 +1003,7 @@ Returns
 \subsection Locking_and_Unlocking_Tiles_and_CyclesLocking and Unlocking Tiles, and Cycles
 
 <P>
-int G3d_lockTile(void *map, int tileIndex) Locks tile with <EM>tileIndex</EM> in cache. 
+int Rast3d_lockTile(void *map, int tileIndex) Locks tile with <EM>tileIndex</EM> in cache. 
 If after locking fewer than the minimum number of
   unlocked tiles are unlocked, the lock request is ignored.
 
@@ -1014,7 +1014,7 @@ Returns
          0 ... otherwise.
 
 <P>
-int G3d_unlockTile(void *map, int tileIndex)
+int Rast3d_unlockTile(void *map, int tileIndex)
 Unlocks tile with <EM>tileIndex</EM>.
 
 <P>
@@ -1023,7 +1023,7 @@ Returns
         0 ... otherwise.
 
 <P>
-int G3d_unlockAll(void *map)
+int Rast3d_unlockAll(void *map)
 Unlocks every tile in cache of <EM>map</EM>.
 
 <P>
@@ -1032,28 +1032,28 @@ Returns
         0 ... otherwise.
 
 <P>
-void G3d_autolockOn(void *map)
+void Rast3d_autolockOn(void *map)
 Turns autolock mode on.
 
 <P>
-void G3d_autolockOff(void *map)
+void Rast3d_autolockOff(void *map)
 Turns autolock mode Off.
 
 <P>
-void G3d_minUnlocked(void *map, int minUnlocked) Sets the minimum
+void Rast3d_minUnlocked(void *map, int minUnlocked) Sets the minimum
   number of unlocked tiles to <EM>minUnlocked</EM>.  This function should be used
-  in combination with <TT>G3d_unlockAll()</TT> in order to avoid  situations where the
+  in combination with <TT>Rast3d_unlockAll()</TT> in order to avoid  situations where the
   new minimum is larger than the actual number of unlocked tiles.
 
 <P>
 <EM>minUnlocked</EM> must be one of RASTER3D_USE_CACHE_X, RASTER3D_USE_CACHE_Y,
   RASTER3D_USE_CACHE_Z, RASTER3D_USE_CACHE_XY, RASTER3D_USE_CACHE_XZ,
-  RASTER3D_USE_CACHE_YZ, RASTER3D_USE_CACHE_XYZ, the result of G3d_cacheSizeEncode()
+  RASTER3D_USE_CACHE_YZ, RASTER3D_USE_CACHE_XYZ, the result of Rast3d_cacheSizeEncode()
   (cf. Section 22.4.6), or any positive integer
   which explicitly specifies the number of tiles.
 
 <P>
-int G3d_beginCycle(void *map)
+int Rast3d_beginCycle(void *map)
 Starts a new cycle.
 
 <P>
@@ -1062,7 +1062,7 @@ Returns
         0 ... otherwise.
 
 <P>
-int G3d_endCycle(void *map)
+int Rast3d_endCycle(void *map)
 Ends a cycle.
 
 <P>
@@ -1071,7 +1071,7 @@ Returns
         0 ... otherwise.
 
 <P>
-int G3d_cacheSizeEncode(int cacheCode, int n) Returns a number
+int Rast3d_cacheSizeEncode(int cacheCode, int n) Returns a number
   which encodes multiplicity <EM>n</EM> of <EM>cacheCode</EM>. This value can be used
   to specify the size of the cache.
 
@@ -1099,7 +1099,7 @@ If <EM>cacheCode</EM> is RASTER3D_USE_CACHE_??? the function returns a value
 \subsection Reading_Volumes Reading Volumes
 
 <P>
-int G3d_getVolume(void *map, double originNorth, double originWest,
+int Rast3d_getVolume(void *map, double originNorth, double originWest,
   double originBottom, double vxNorth, double vxWest, double vxBottom, double
   vyNorth, double vyWest, double vyBottom, double vzNorth, double vzWest,
   double vzBottom, int nx, int ny, int nz, char *volumeBuf, int type)
@@ -1118,7 +1118,7 @@ The values stored are of <EM>type</EM>.
 Returns 1 ... if successful, 0 ... otherwise.
 
 <P>
-int G3d_getAllignedVolume(void *map, double originNorth, double
+int Rast3d_getAllignedVolume(void *map, double originNorth, double
   originWest, double originBottom, double lengthNorth, double lengthWest,
   double lengthBottom, int nx, int ny, int nz, char *volumeBuf, int type)
   Resamples the axis-parallel cube defined by <EM>origin</EM> and the lengths of
@@ -1134,9 +1134,9 @@ Returns 1 ... if successful, 0 ... otherwise.
 \subsection Allocating_and_Freeing_Memory Allocating and Freeing Memory
 
 <P>
-void  *G3d_malloc(int nBytes)
+void  *Rast3d_malloc(int nBytes)
 Same as <EM>malloc (nBytes)</EM>, except that in case of error
-<TT>G3d_error()</TT> is invoked.
+<TT>Rast3d_error()</TT> is invoked.
 
 <P>
 Returns 
@@ -1144,9 +1144,9 @@ Returns
         NULL ... otherwise.
 
 <P>
-void  *G3d_realloc(void *ptr, int nBytes)
+void  *Rast3d_realloc(void *ptr, int nBytes)
 Same as <EM>realloc (ptr, nBytes)</EM>, except that in case of error
-<TT>G3d_error()</TT> is invoked. 
+<TT>Rast3d_error()</TT> is invoked. 
 
 <P>
 Returns 
@@ -1154,10 +1154,10 @@ Returns
         NULL ... otherwise.
 
 <P>
-void G3d_free(void *ptr) Same as <EM>free (ptr)</EM>.
+void Rast3d_free(void *ptr) Same as <EM>free (ptr)</EM>.
 
 <P>
-char *G3d_allocTilesType(void *map, int nofTiles, int type)
+char *Rast3d_allocTilesType(void *map, int nofTiles, int type)
 Allocates a vector of <EM>nofTiles</EM> tiles with the same dimensions
 as the tiles of <EM>map</EM> and large enough to store cell-values of
 <EM>type</EM>.
@@ -1168,80 +1168,80 @@ Returns
         NULL ... otherwise.
 
 <P>
-char *G3d_allocTiles(void *map, int nofTiles)
-Is equivalent to G3d_allocTilesType (map, nofTiles, G3d_fileTypeMap (map)).
+char *Rast3d_allocTiles(void *map, int nofTiles)
+Is equivalent to Rast3d_allocTilesType (map, nofTiles, Rast3d_fileTypeMap (map)).
 
 <P>
-void G3d_freeTiles(char *tiles)
-Is equivalent to <TT>G3d_free (tiles);</TT>
+void Rast3d_freeTiles(char *tiles)
+Is equivalent to <TT>Rast3d_free (tiles);</TT>
 
 <P>
 
 \subsection RASTER3D_Null_Value_Support RASTER3D Null Value Support
 
 <P>
-void G3d_isNullValueNum(void *n, int type)
+void Rast3d_isNullValueNum(void *n, int type)
 Returns 1 if the value of <EM>*n</EM> is a NULL-value. Returns 0
 otherwise.
 
 <P>
-void G3d_setNullValue(void *c, int nofElts, int type)
+void Rast3d_setNullValue(void *c, int nofElts, int type)
 Fills the vector pointed to by <EM>c</EM> with <EM>nofElts</EM> NULL-values
 of <EM>type</EM>.
 
 <P>
-void G3d_setNullTileType(void *map, int tile, int type)
+void Rast3d_setNullTileType(void *map, int tile, int type)
 Assumes that <EM>tile</EM> is a tile with the same dimensions as the
 tiles of <EM>map</EM>. Fills <EM>tile</EM> with NULL-values of
 <EM>type</EM>.
 
 <P>
-void G3d_setNullTile(void *map, int tile)
-Is equivalent to G3d_setNullTileType (map, tile, G3d_fileTypeMap (map)).
+void Rast3d_setNullTile(void *map, int tile)
+Is equivalent to Rast3d_setNullTileType (map, tile, Rast3d_fileTypeMap (map)).
 
 <P>
 
 \subsection RASTER3D_Map_Header_Information RASTER3D Map Header Information
 
 <P>
-void G3d_getCoordsMap(void *map, int *rows, int *cols, int *depths)
+void Rast3d_getCoordsMap(void *map, int *rows, int *cols, int *depths)
 Returns the size of the region of <EM>map</EM> in cells.
 
 <P>
-void G3d_getRegionMap(void *map, int *north, int *south, int *east,
+void Rast3d_getRegionMap(void *map, int *north, int *south, int *east,
   int *west, int *top, int *bottom)Returns the size of the region.
 
 <P>
-void G3d_getRegionStructMap(void *map, RASTER3D_Region *region)
+void Rast3d_getRegionStructMap(void *map, RASTER3D_Region *region)
 Returns in <EM>region</EM> the region of <EM>map</EM>.
 
 <P>
-void G3d_getTileDimensionsMap(void *map, int *x, int *y, int *z)
+void Rast3d_getTileDimensionsMap(void *map, int *x, int *y, int *z)
 Returns the tile dimensions used for <EM>map</EM>.
 
 <P>
-void G3d_getNofTilesMap(void *map, int *nx, int *ny, int *nz)
+void Rast3d_getNofTilesMap(void *map, int *nx, int *ny, int *nz)
   Returns the dimensions of the tile-cube used to tile the region of <EM>map</EM>.
   These numbers include partial tiles.
 
 <P>
-int G3d_tileTypeMap(void *map)
+int Rast3d_tileTypeMap(void *map)
 Returns the type in which tiles of <EM>map</EM> are stored in memory.
 
 <P>
-int G3d_fileTypeMap(void *map)
+int Rast3d_fileTypeMap(void *map)
 Returns the type with which tiles of <EM>map</EM> are stored on file.
 
 <P>
-int G3d_tilePrecisionMap(void *map)
+int Rast3d_tilePrecisionMap(void *map)
 Returns the precision used to store <EM>map</EM>.
 
 <P>
-int G3d_tileUseCacheMap(void *map)
+int Rast3d_tileUseCacheMap(void *map)
 Returns 1 if <EM>map</EM> uses cache, returns 0 otherwise.
 
 <P>
-void G3d_printHeader(void *map)
+void Rast3d_printHeader(void *map)
 Prints the header information of <EM>map</EM>.
 
 <P>
@@ -1249,65 +1249,65 @@ Prints the header information of <EM>map</EM>.
 \subsection RASTER3D_Tile_Math RASTER3D Tile Math
 
 <P>
-void G3d_tileIndex2tile(void *map, int tileIndex, int *xTile, int
+void Rast3d_tileIndex2tile(void *map, int tileIndex, int *xTile, int
   *yTile, int *zTile) Converts index <EM>tileIndex</EM> into tile-coordinates
   <EM>(xTile, yTile, zTile)</EM>.
 
 <P>
-int G3d_tile2tileIndex(void *map, int xTile, int yTile, int
+int Rast3d_tile2tileIndex(void *map, int xTile, int yTile, int
   zTile) Returns tile-index corresponding to tile-coordinates <EM>(xTile,
     yTile, zTile)</EM>.
 
 <P>
-void G3d_coord2tileCoord(void *map, int x, int y, int z, int *xTile,
+void Rast3d_coord2tileCoord(void *map, int x, int y, int z, int *xTile,
   int *yTile, int *zTile, int *xOffs, int *yOffs, int *zOffs) Converts
   cell-coordinates <EM>(x, y, z)</EM> into tile-coordinates <EM>(xTile, yTile,
     zTile)</EM> and the coordinate of the cell <EM>(xOffs, yOffs, zOffs)</EM> within
   the tile.
 
 <P>
-void G3d_tileCoordOrigin(void *map, int xTile, int yTile, int zTile,
+void Rast3d_tileCoordOrigin(void *map, int xTile, int yTile, int zTile,
   int *x, int *y, int *z) Computes the cell-coordinates <EM>(x, y, z)</EM>
   which correspond to the origin of the tile with tile-coordinates <EM>(xTile,
     yTile, zTile)</EM>.
 
 <P>
-void G3d_tileIndexOrigin(void *map, int tileIndex, int *x, int *y,
+void Rast3d_tileIndexOrigin(void *map, int tileIndex, int *x, int *y,
   int *z) Computes the cell-coordinates <EM>(x, y, z)</EM> which correspond to
   the origin of the tile with <EM>tileIndex</EM>.
 
 <P>
-void G3d_coord2tileIndex(void *map, int x, int y, int z, int
+void Rast3d_coord2tileIndex(void *map, int x, int y, int z, int
   *tileIndex, int *offset) Converts cell-coordinates <EM>(x, y, z)</EM> into
   <EM>tileIndex</EM> and the <EM>offset</EM> of the cell within the tile.
 
 <P>
-int G3d_coordInRange(void *map, int x, int y, int z) Returns 1 if
+int Rast3d_coordInRange(void *map, int x, int y, int z) Returns 1 if
   cell-coordinate <EM>(x, y, z)</EM> is a coordinate inside the region. Returns 0
   otherwise.
 
 <P>
-int G3d_tileInRange(void *map, int x, int y, int z) Returns 1 if
+int Rast3d_tileInRange(void *map, int x, int y, int z) Returns 1 if
   tile-coordinate <EM>(x, y, z)</EM> is a coordinate inside tile cube. Returns 0
   otherwise.
 
 <P>
-int G3d_tileIndexInRange(void *map, int tileIndex)
+int Rast3d_tileIndexInRange(void *map, int tileIndex)
 Returns 1 if <EM>tileIndex</EM> is a valid index for <EM>map</EM>.
 Returns 0 otherwise.
 
 <P>
-int G3d_isValidLocation(void *map, double north, double west, double
+int Rast3d_isValidLocation(void *map, double north, double west, double
   bottom) Returns 1 if region-coordinates <EM>(north, west, bottom)</EM> are
   inside the region of <EM>map</EM>. Returns 0 otherwise.
 
 <P>
-void G3d_location2coord(void *map, double north, double west, double
+void Rast3d_location2coord(void *map, double north, double west, double
   bottom, int *x, *y, *z) Converts region-coordinates <EM>(north, west,
     bottom)</EM> into cell-coordinates <EM>(x, y, z)</EM>.
 
 <P>
-int G3d_computeClippedTileDimensions(void *map, int tileIndex, int
+int Rast3d_computeClippedTileDimensions(void *map, int tileIndex, int
   *rows, int *cols, int *depths, int *xRedundant, int *yRedundant, int
   *zRedundant) Computes the dimensions of the tile when clipped to fit the
   region of <EM>map</EM>. The clipped dimensions are returned in <EM>rows</EM>, 
@@ -1323,13 +1323,13 @@ int G3d_computeClippedTileDimensions(void *map, int tileIndex, int
 The map structure of RASTER3D provides storage for the range.  The range of a map is
 updated every time a cell is written to the file. When an old map is opened the
 range is not automatically loaded. The application has to invoke
-<TT>G3d_range_load()</TT> (cf. Section 22.4.12)
+<TT>Rast3d_range_load()</TT> (cf. Section 22.4.12)
  explicitly.  In
 addition to these function the application can also use the standard grass
 functions to manipulate the range.
 
 <P>
-int G3d_range_load(void *map)
+int Rast3d_range_load(void *map)
 Loads the range into the range structure of <EM>map</EM>.
 
 <P>
@@ -1338,12 +1338,12 @@ Returns
         0 ... otherwise.
 
 <P>
-void G3d_range_min_max(void *map, double *min, double *max)
+void Rast3d_range_min_max(void *map, double *min, double *max)
         Returns in <EM>min</EM> and <EM>max</EM> the minimum and maximum values of
         the range.
 
 <P>
-int G3d_range_write(void *map)
+int Rast3d_range_write(void *map)
 Writes the range which is stored in the range structure of <EM>map</EM>. 
 (This function is invoked automatically when a new file is closed).
 
@@ -1361,7 +1361,7 @@ Applications can use the standard grass functions to work with colors, except
 for the file manipulations.
 
 <P>
-int G3d_removeColor(char *name)
+int Rast3d_removeColor(char *name)
 Removes the primary and/or secondary color file. See <EM>G_remove_colr</EM> for
 details.
 
@@ -1369,13 +1369,13 @@ details.
 Returns always 0.
 
 <P>
-int G3d_readColors(char *name, char *mapset, struct Colors
+int Rast3d_readColors(char *name, char *mapset, struct Colors
    *colors) Reads color file for map <EM>name</EM> in <EM>mapset</EM> into the
    <EM>colors</EM> structure.  See <EM>G_read_colors</EM>
    (Raster_Color_Table) for details and return values.
 
 <P>
-int G3d_writeColors(char *name, char *mapset, struct Colors
+int Rast3d_writeColors(char *name, char *mapset, struct Colors
    *colors)Writes colors stored in <EM>colors</EM> structure into the color
    file for map <EM>name</EM> in <EM>mapset</EM>.  See <EM>G_write_colors</EM>
    (Raster_Color_Table) for
@@ -1390,13 +1390,13 @@ Applications can use the standard grass functions to work with categories,
 except for the file manipulations.
 
 <P>
-int G3d_readCats(char *name, char *mapset, struct Categories *cats)
+int Rast3d_readCats(char *name, char *mapset, struct Categories *cats)
 Reads the categories file for map <EM>name</EM> in <EM>mapset</EM> and
 stores the categories in the <EM>cats</EM> structure.  See <EM>G_read_cats</EM>
 (Raster_Category_File) for details and return values.
 
 <P>
-int G3d_writeCats(char *name, struct Categories *cats) Writes the
+int Rast3d_writeCats(char *name, struct Categories *cats) Writes the
   categories stored in the <EM>cats</EM> structure into the categories file for
   map <EM>name</EM> in the current mapset.  See <EM>G_write_cats</EM>
   (Raster_Category_File) for details and return values.
@@ -1411,13 +1411,13 @@ Applications can use the standard grass functions to work with histories,
 except for the file manipulations.
 
 <P>
-int G3d_readHistory(char *name, char *mapset, struct History *hist)
+int Rast3d_readHistory(char *name, char *mapset, struct History *hist)
   Reads the history file for map <EM>name</EM> in <EM>mapset</EM> and
   stores the history in the <EM>hist</EM> structure.  See <EM>G_read_history</EM>
   (Raster_History_File) for details and return values.
 
 <P>
-int G3d_writeHistory(char *name, struct History *hist) 
+int Rast3d_writeHistory(char *name, struct History *hist) 
   Writes the
   history stored in the <EM>hist</EM> structure into the categories file for
   map <EM>name</EM> in the current mapset.  See <EM>G_write_history</EM>
@@ -1428,21 +1428,21 @@ int G3d_writeHistory(char *name, struct History *hist)
 \subsection RASTER3D_Mask_Support RASTER3D Mask Support
 
 <P>
-void G3d_maskOn(void *map) Turns on the mask for <EM>map</EM>. Do
+void Rast3d_maskOn(void *map) Turns on the mask for <EM>map</EM>. Do
   not invoke this function after the first tile has been read since the result
   might be inconsistent cell-values.
 
 <P>
-void G3d_maskOff(void *map) Turns off the mask for <EM>map</EM>.
+void Rast3d_maskOff(void *map) Turns off the mask for <EM>map</EM>.
   This is the default.  Do not invoke this function after the first tile has
   been read since the result might be inconsistent cell-values.
 
 <P>
-int G3d_maskIsOn(void *map) Returns 1 if the mask for <EM>map</EM>
+int Rast3d_maskIsOn(void *map) Returns 1 if the mask for <EM>map</EM>
   is turned on. Returns 0 otherwise.
 
 <P>
-int G3d_maskIsOff(void *map)
+int Rast3d_maskIsOff(void *map)
 Returns 1 if the mask for <EM>map</EM> is turned off. Returns 0 otherwise.
 
 <P>
@@ -1452,7 +1452,7 @@ library and might have applications in situations where both the masked and
 non-masked value of a cell has to be known.  
 
 <P>
-int G3d_maskReopen(int cache)
+int Rast3d_maskReopen(int cache)
 This function should be used to adjust the cache size used for the
 3d-mask. First the open 3d-mask is closed and then opened again with 
 a cache size as specified with <EM>cache</EM>.
@@ -1463,40 +1463,40 @@ Returns
         0 ... otherwise.
 
 <P>
-int G3d_maskFileExists() Returns 1 if the 3d mask file
+int Rast3d_maskFileExists() Returns 1 if the 3d mask file
         exists.
 
 <P>
-int G3d_maskMapExists()
+int Rast3d_maskMapExists()
 Returns 1 if the 3d mask is loaded.
 
 <P>
-char *G3d_maskFile()
+char *Rast3d_maskFile()
 Returns the name of the 3d mask file.
 
 <P>
-int G3d_isMasked(int x, int y, int z)
+int Rast3d_isMasked(int x, int y, int z)
 Returns 1 if the cell with cell-coordinates <EM>(x, y, z)</EM> is masked
 out. Returns 0 otherwise.
 
 <P>
-void G3d_maskNum(int x, int y, int z, void  *value, int type)
+void Rast3d_maskNum(int x, int y, int z, void  *value, int type)
 Replaces the value stored in <EM>value</EM> with the NULL-value if 
-<EM>G3d_isMasked (x, y, z)</EM> returns 1. Does nothing otherwise.
+<EM>Rast3d_isMasked (x, y, z)</EM> returns 1. Does nothing otherwise.
 <EM>value</EM> is assumed to be of<EM>type</EM>.
 
 <P>
-void G3d_maskFloat(int x, int y, int z, float *value)
-Same as <EM>G3d_maskNum (x, y, z, value, FCELL_TYPE)</EM>.
+void Rast3d_maskFloat(int x, int y, int z, float *value)
+Same as <EM>Rast3d_maskNum (x, y, z, value, FCELL_TYPE)</EM>.
 
 <P>
-void G3d_maskDouble(int x, int y, int z, double *value)
-Same as <EM>G3d_maskNum (x, y, z, value, DCELL_TYPE)</EM>.
+void Rast3d_maskDouble(int x, int y, int z, double *value)
+Same as <EM>Rast3d_maskNum (x, y, z, value, DCELL_TYPE)</EM>.
 
 <P>
-void G3d_maskTile(void *map, int tileIndex, char *tile, int type)
+void Rast3d_maskTile(void *map, int tileIndex, char *tile, int type)
 Replaces the values stored in <EM>tile</EM> (with <EM>tileIndex</EM>) for 
-which <EM>G3d_isMasked</EM> returns 1 with NULL-values. Does not change
+which <EM>Rast3d_isMasked</EM> returns 1 with NULL-values. Does not change
 the remaining values. The values are assumed to be of <EM>type</EM>. 
 Whether replacement is performed or not only depends on location of the
 cells of the tile and not on the status of the mask for <EM>map</EM>
@@ -1507,27 +1507,27 @@ cells of the tile and not on the status of the mask for <EM>map</EM>
 \subsection RASTER3D_Window_Support RASTER3D Window Support
 
 <P>
-void G3d_setWindowMap(void *map, RASTER3D_Region *window)
+void Rast3d_setWindowMap(void *map, RASTER3D_Region *window)
 Sets the window for <EM>map</EM> to <EM>window</EM>.
 Can be used multiple times for the same map.
 
 <P>
-void G3d_setWindow(RASTER3D_Region *window)
+void Rast3d_setWindow(RASTER3D_Region *window)
 Sets the default window used for every map opened later in the program.
 Can be used multiple times in the same program.
 
 <P>
-void G3d_getWindow(RASTER3D_Region *window)
+void Rast3d_getWindow(RASTER3D_Region *window)
 Stores the current default window in <EM>window</EM>.
 
 <P>
-void  *G3d_windowPtr()
+void  *Rast3d_windowPtr()
 Returns a pointer to the current default window. This pointer should not be
 (ab)used to modify the current window structure directly. It is
 provided to pass a window pointer when opening a map.
 
 <P>
-int G3d_readWindow(RASTER3D_Region *window, char *windowName) Reads
+int Rast3d_readWindow(RASTER3D_Region *window, char *windowName) Reads
   <EM>window</EM> from the file specified by <EM>windowName</EM>. The name is
   converted by the rules defined in window defaults. A NULL pointer indicates
   the <EM>WIND3</EM> file in the current mapset.
@@ -1538,7 +1538,7 @@ Returns
         0 ... otherwise.
 
 <P>
-int G3d_writeWindow(RASTER3D_Region *window, char *windowName)
+int Rast3d_writeWindow(RASTER3D_Region *window, char *windowName)
         Writes <EM>window</EM> to the file specified by <EM>windowName</EM>. The name
         is converted by the rules defined in window defaults. A NULL pointer
         indicates the <EM>WIND3</EM> file in the current mapset.
@@ -1549,39 +1549,39 @@ Returns
         0 ... otherwise.
 
 <P>
-void G3d_useWindowParams()
+void Rast3d_useWindowParams()
 Allows the window to be set at run-time via the <EM>region3</EM>
 command line argument. This function has to be called before
 <EM>G_parser()</EM>. See also
  window defaults.
 
 <P>
-void G3d_setResamplingFun(void *map, void  (*resampleFun)())
+void Rast3d_setResamplingFun(void *map, void  (*resampleFun)())
 Sets the resampling function to be used by
-G3d_getValue() (cf. Section 22.4.3). This function is defined
+Rast3d_getValue() (cf. Section 22.4.3). This function is defined
 as follows:
 
 <P>
-void G3d_customResampleFun(void *map, int row, int col, int depth,
+void Rast3d_customResampleFun(void *map, int row, int col, int depth,
   char *value, int type) <EM>row</EM>, <EM>col</EM>, and <EM>depth</EM> are in
   region coordinates. The result is returned in <EM>value</EM> as <EM>type</EM> which
   is one of FCELL_TYPE or DCELL_TYPE. Possible choices include
-  G3d_nearestNeighbor() (cf. Section22.4.16) and
-  G3d_getValueRegion() (cf. Section 22.4.3).
+  Rast3d_nearestNeighbor() (cf. Section22.4.16) and
+  Rast3d_getValueRegion() (cf. Section 22.4.3).
 
 <P>
-void G3d_nearestNeighbor(void *map, int row, int col, int depth, char
+void Rast3d_nearestNeighbor(void *map, int row, int col, int depth, char
   *value, int type) The default resampling function which uses nearest
   neighbor resampling.
 
 <P>
-void G3d_getResamplingFun(void *map, void  (**resampleFun)())
+void Rast3d_getResamplingFun(void *map, void  (**resampleFun)())
   Returns in <EM>resampleFun</EM> a pointer to the resampling function used by
   <EM>map</EM>.
 
 <P>
-void G3d_getNearestNeighborFunPtr(void (**nnFunPtr)()) Returns
-  in <EM>nnFunPtr</EM> a pointer to G3d_nearestNeighbor() (cf. 
+void Rast3d_getNearestNeighborFunPtr(void (**nnFunPtr)()) Returns
+  in <EM>nnFunPtr</EM> a pointer to Rast3d_nearestNeighbor() (cf. 
   Section&nbsp;<A HREF="#g3d:G3d.nearestNeighbor">22.4.16</A>).
 
 <P>
@@ -1589,39 +1589,39 @@ void G3d_getNearestNeighborFunPtr(void (**nnFunPtr)()) Returns
 \subsection RASTER3D_Region RASTER3D Region
 
 <P>
-void G3d_extract2dRegion(RASTER3D_Region *region3d, struct Cell_head
+void Rast3d_extract2dRegion(RASTER3D_Region *region3d, struct Cell_head
   *region2d) Returns in <EM>region2d</EM> the <EM>2d</EM> portion of <EM>region3d</EM>.
 
 <P>
-void G3d_incorporate2dRegion(struct Cell_head *region2d, RASTER3D_Region
+void Rast3d_incorporate2dRegion(struct Cell_head *region2d, RASTER3D_Region
   *region3d) Replaces the <EM>2d</EM> portion of <EM>region3d</EM> with the
   values stored in <EM>region2d</EM>.
 
 <P>
-void G3d_adjustRegion(RASTER3D_Region *region)
+void Rast3d_adjustRegion(RASTER3D_Region *region)
 Computes an adjusts the resolutions in the region structure from the region
 boundaries and number of cells per dimension.
 
 <P>
-void G3d_adjustRegionRes(RASTER3D_Region *region)
+void Rast3d_adjustRegionRes(RASTER3D_Region *region)
 Computes an adjusts the number of cells per dimension in the region
 structure from the region boundaries and resolutions.
 
 <P>
-void G3d_regionCopy(RASTER3D_Region *regionDest, RASTER3D_Region *regionSrc)
+void Rast3d_regionCopy(RASTER3D_Region *regionDest, RASTER3D_Region *regionSrc)
 Copies the values of <EM>regionSrc</EM> into <EM>regionDst</EM>.
 (The unfortunate order of parameters was chosen in order to conform to the
 order used in <EM>G_copy()</EM>).
 
 <P>
-void G3d_getRegionValue(void *map, double north, double east, double
+void Rast3d_getRegionValue(void *map, double north, double east, double
   top, char *value, int type) Returns in <EM>value</EM> the value of the <EM>map</EM>
    which corresponds to region coordinates <EM>(north, east, top)</EM>.  The
   value is resampled using the resampling function specified for <EM>map</EM>. The
   <EM>value</EM> is of <EM>type</EM>.
 
 <P>
-void G3d_readRegionMap(char *name, char *mapset, RASTER3D_Region *region)
+void Rast3d_readRegionMap(char *name, char *mapset, RASTER3D_Region *region)
 Returns in <EM>region</EM> the region information for 3d cell <EM>name@mapset</EM>.
 
 <P>
@@ -1629,17 +1629,17 @@ Returns in <EM>region</EM> the region information for 3d cell <EM>name@mapset</E
 \subsection Miscellaneous_Functions Miscellaneous Functions
 
 <P>
-void G3d_g3dType2cellType(int g3dType) Returns the GRASS floating
+void Rast3d_g3dType2cellType(int g3dType) Returns the GRASS floating
   point type which is equivalent to the RASTER3D type of <EM>g3dType</EM>.
 
 <P>
-void G3d_initDefaults() Initializes the default values described
+void Rast3d_initDefaults() Initializes the default values described
   in RASTER3D Defaults.  Applications have to use this function only if they need to
   query the default values before the first file (either old or new) has been
   opened.
 
 <P>
-void G3d_setStandard3dInputParams() 
+void Rast3d_setStandard3dInputParams() 
  Initializes a parameter
   structure for the subset of command line arguments which lets the user
   overwrite the default properties of the new file.  Applications are
@@ -1651,11 +1651,11 @@ void G3d_setStandard3dInputParams()
 
 <P>
 This function has to be used in conjunction with
-  G3d_getStandard3dInputParams() (cf. 
+  Rast3d_getStandard3dInputParams() (cf. 
   Section 22.4.18).
 
 <P>
-int G3d_getStandard3dInputParams(int *useTypeDefault, *type, *useLzwDefault, *doLzw,
+int Rast3d_getStandard3dInputParams(int *useTypeDefault, *type, *useLzwDefault, *doLzw,
         int *useRleDefault, *doRle, *usePrecisionDefault, *precision,
         int *useDimensionDefault, *tileX, *tileY, *tileZ
 Returns the properties of the new file as chosen by the user via command
@@ -1667,7 +1667,7 @@ corresponding parameters contain the default value if
 
 <P>
 Function 
-G3d_setStandard3dInputParams() (cf. Section 22.4.18)
+Rast3d_setStandard3dInputParams() (cf. Section 22.4.18)
 has to be used to initialize the internal parameter structure.
 
 <P>
@@ -1676,11 +1676,11 @@ Returns
         0 ... otherwise.
 
 <P>
-int G3d_makeMapsetMapDirectory(char *mapName)
+int Rast3d_makeMapsetMapDirectory(char *mapName)
 Creates the 3d mapset element for map <EM>mapName</EM>.
 
 <P>
-int G3d_filename(char *path, *elementName, *mapName, *mapset)
+int Rast3d_filename(char *path, *elementName, *mapName, *mapset)
 Returns in <EM>path</EM> the path for element <EM>elementName</EM> for map
 <EM>mapName</EM> in <EM>mapset</EM>. Note, an error occurs if <EM>mapName</EM>
 is fully qualified.
@@ -1700,7 +1700,7 @@ applications. Some of them might actually be useful. They are available from
 GRASS 7 source code in lib/g3d/.
 
 <P>
-void G3d_retile(void *map, char *nameOut, int tileX, int tileY, int tileZ)
+void Rast3d_retile(void *map, char *nameOut, int tileX, int tileY, int tileZ)
 Makes a copy of <EM>map</EM> with name <EM>nameOut</EM> which has
 tile dimensions <EM>tileX</EM>, <EM>tileY</EM>, <EM>tileZ</EM>.
 
@@ -1708,7 +1708,7 @@ tile dimensions <EM>tileX</EM>, <EM>tileY</EM>, <EM>tileZ</EM>.
 The source code can be found in <EM>retile.c</EM>.
 
 <P>
-void G3d_changePrecision(void *map, int precision, char *nameOut)
+void Rast3d_changePrecision(void *map, int precision, char *nameOut)
 Makes a copy of <EM>map</EM> with name <EM>nameOut</EM> which is
 written with <EM>precision</EM>.
 
@@ -1716,7 +1716,7 @@ written with <EM>precision</EM>.
 The source code can be found in <EM>changeprecision.c</EM>.
 
 <P>
-void G3d_changeType(void *map, char *nameOut)
+void Rast3d_changeType(void *map, char *nameOut)
 Makes a copy of <EM>map</EM> with name <EM>nameOut</EM> in which the
 cells are of type FCELL_TYPE if they are DCELL_TYPE in <EM>map</EM>,
 and in DCELL_TYPE otherwise.
@@ -1725,7 +1725,7 @@ and in DCELL_TYPE otherwise.
 The source code can be found in <EM>changetype.c</EM>.
 
 <P>
-void G3d_compareFiles(char *f1, char *mapset1, char *f2, char *mapset2)
+void Rast3d_compareFiles(char *f1, char *mapset1, char *f2, char *mapset2)
 Compares the cell-values of file <EM>f1</EM> in mapset
 <EM>mapset1</EM> and file <EM>f2</EM> in mapset <EM>mapset2</EM>.
 The values are compared up to precision.
@@ -1736,7 +1736,7 @@ This function uses the more advanced features of the cache.
 The source code can be found in <EM>filecompare.c</EM>.
 
 <P>
-void G3d_getBlock(void *map, int x0, int y0, int z0, int nx, int ny,
+void Rast3d_getBlock(void *map, int x0, int y0, int z0, int nx, int ny,
 int nz, char *block,  int type)
 Copies the cells contained in the block (cube) with vertices 
 <EM>(x0, y0, z0)</EM> and <EM>(x0 + nx - 1, y0 + ny - 1, z0 + nz - 1)</EM>
@@ -1746,7 +1746,7 @@ into <EM>block</EM>. The cell-values in <EM>block</EM> are of <EM>type</EM>.
 The source code can be found in <EM>getblock.c</EM>.
 
 <P>
-void G3d_writeAscii(void *map, char *fname)
+void Rast3d_writeAscii(void *map, char *fname)
 Writes the cell-values of <EM>map</EM> in ascii format to file 
 <EM>fname</EM>. The values are organized by horizontal slices.
 

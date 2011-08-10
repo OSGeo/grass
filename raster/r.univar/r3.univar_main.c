@@ -108,10 +108,10 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
     /* Set the defaults */
-    G3d_initDefaults();
+    Rast3d_initDefaults();
 
     /* get the current region */
-    G3d_getWindow(&region);
+    Rast3d_getWindow(&region);
 
     cols = region.cols;
     rows = region.rows;
@@ -144,24 +144,24 @@ int main(int argc, char *argv[])
     /* open 3D zoning raster with default region */
     if ((zonemap = param.zonefile->answer) != NULL) {
 	if (NULL == (mapset = G_find_grid3(zonemap, "")))
-	    G3d_fatalError(_("Requested g3d map <%s> not found"), zonemap);
+	    Rast3d_fatalError(_("Requested g3d map <%s> not found"), zonemap);
 
 	zmap =
-	    G3d_openCellOld(zonemap, G_find_grid3(zonemap, ""), &region,
+	    Rast3d_openCellOld(zonemap, G_find_grid3(zonemap, ""), &region,
 			    RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
 	if (zmap == NULL)
-	    G3d_fatalError(_("Error opening g3d map <%s>"), zonemap);
+	    Rast3d_fatalError(_("Error opening g3d map <%s>"), zonemap);
 
-	zmap_type = G3d_tileTypeMap(zmap);
+	zmap_type = Rast3d_tileTypeMap(zmap);
 	
-	if (G3d_readCats(zonemap, mapset, &(zone_info.cats)))
+	if (Rast3d_readCats(zonemap, mapset, &(zone_info.cats)))
 	    G_warning("no category support for zoning raster");
 	    
-	G3d_range_init(zmap);
-	if (!G3d_range_load(zmap))
+	Rast3d_range_init(zmap);
+	if (!Rast3d_range_load(zmap))
 	    G_fatal_error(_("Unable it load G3d range"));
-	G3d_range_min_max(zmap, &dmin, &dmax);
+	Rast3d_range_min_max(zmap, &dmin, &dmax);
 
 	/* properly round dmin and dmax */
 	if (dmin < 0)
@@ -183,16 +183,16 @@ int main(int argc, char *argv[])
     infile = param.inputfile->answer;
 
     if (NULL == G_find_grid3(infile, ""))
-	G3d_fatalError(_("Requested g3d map <%s> not found"), infile);
+	Rast3d_fatalError(_("Requested g3d map <%s> not found"), infile);
 
     map =
-	G3d_openCellOld(infile, G_find_grid3(infile, ""), &region,
+	Rast3d_openCellOld(infile, G_find_grid3(infile, ""), &region,
 			RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
     if (map == NULL)
-	G3d_fatalError(_("Error opening g3d map <%s>"), infile);
+	Rast3d_fatalError(_("Error opening g3d map <%s>"), infile);
 
-    map_type = G3d_tileTypeMap(map);
+    map_type = Rast3d_tileTypeMap(map);
 
     i = 0;
     while (param.percentile->answers[i])
@@ -219,8 +219,8 @@ int main(int argc, char *argv[])
 		zone = 0;
 		if (zone_info.n_zones) {
 		    if (zmap_type == FCELL_TYPE) {
-			G3d_getValue(zmap, x, y, z, &val_f, FCELL_TYPE);
-			if (G3d_isNullValueNum(&val_f, FCELL_TYPE))
+			Rast3d_getValue(zmap, x, y, z, &val_f, FCELL_TYPE);
+			if (Rast3d_isNullValueNum(&val_f, FCELL_TYPE))
 			    continue;
 			if (val_f < 0)
 			    zone = val_f - 0.5;
@@ -228,8 +228,8 @@ int main(int argc, char *argv[])
 			    zone = val_f + 0.5;
 		    }
 		    else if (zmap_type == DCELL_TYPE) {
-			G3d_getValue(zmap, x, y, z, &val_d, DCELL_TYPE);
-			if (G3d_isNullValueNum(&val_d, DCELL_TYPE))
+			Rast3d_getValue(zmap, x, y, z, &val_d, DCELL_TYPE);
+			if (Rast3d_isNullValueNum(&val_d, DCELL_TYPE))
 			    continue;
 			if (val_d < 0)
 			    zone = val_d - 0.5;
@@ -239,8 +239,8 @@ int main(int argc, char *argv[])
                     zone -= zone_info.min;
                 }
 		if (map_type == FCELL_TYPE) {
-		    G3d_getValue(map, x, y, z, &val_f, map_type);
-		    if (!G3d_isNullValueNum(&val_f, map_type)) {
+		    Rast3d_getValue(map, x, y, z, &val_f, map_type);
+		    if (!Rast3d_isNullValueNum(&val_f, map_type)) {
 			if (param.extended->answer) {
 			    if (stats[zone].n >= stats[zone].n_alloc) {
 				size_t msize;
@@ -273,8 +273,8 @@ int main(int argc, char *argv[])
 		    stats[zone].size++;
 		}
 		else if (map_type == DCELL_TYPE) {
-		    G3d_getValue(map, x, y, z, &val_d, map_type);
-		    if (!G3d_isNullValueNum(&val_d, map_type)) {
+		    Rast3d_getValue(map, x, y, z, &val_d, map_type);
+		    if (!Rast3d_isNullValueNum(&val_d, map_type)) {
 			if (param.extended->answer) {
 			    if (stats[zone].n >= stats[zone].n_alloc) {
 				size_t msize;
@@ -311,9 +311,9 @@ int main(int argc, char *argv[])
     }
 
     /* close maps */
-    G3d_closeCell(map);
+    Rast3d_closeCell(map);
     if (zone_info.n_zones)
-	G3d_closeCell(zmap);
+	Rast3d_closeCell(zmap);
 
     /* create the output */
     if (param.table->answer)

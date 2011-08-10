@@ -31,7 +31,7 @@
 
 /*---------------------------------------------------------------------------*/
 
-void G3d_cache_reset(RASTER3D_cache * c)
+void Rast3d_cache_reset(RASTER3D_cache * c)
 {
     int i;
 
@@ -50,7 +50,7 @@ void G3d_cache_reset(RASTER3D_cache * c)
     c->nofUnlocked = c->nofElts;
     c->minUnlocked = 1;
 
-    G3d_cache_hash_reset(c->hash);
+    Rast3d_cache_hash_reset(c->hash);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -62,38 +62,38 @@ static int cache_dummy_fun(int tileIndex, const void *tileBuf, void *map)
 
 /*---------------------------------------------------------------------------*/
 
-void G3d_cache_dispose(RASTER3D_cache * c)
+void Rast3d_cache_dispose(RASTER3D_cache * c)
 {
     if (c == NULL)
 	return;
 
-    G3d_cache_hash_dispose(c->hash);
+    Rast3d_cache_hash_dispose(c->hash);
 
     if (c->elts != NULL)
-	G3d_free(c->elts);
+	Rast3d_free(c->elts);
     if (c->names != NULL)
-	G3d_free(c->names);
+	Rast3d_free(c->names);
     if (c->locks != NULL)
-	G3d_free(c->locks);
+	Rast3d_free(c->locks);
     if (c->next != NULL)
-	G3d_free(c->next);
+	Rast3d_free(c->next);
     if (c->prev != NULL)
-	G3d_free(c->prev);
+	Rast3d_free(c->prev);
 
-    G3d_free(c);
+    Rast3d_free(c);
 }
 
 /*---------------------------------------------------------------------------*/
 
-void *G3d_cache_new(int nofElts, int sizeOfElts, int nofNames,
+void *Rast3d_cache_new(int nofElts, int sizeOfElts, int nofNames,
 		    int (*eltRemoveFun) (), void *eltRemoveFunData,
 		    int (*eltLoadFun) (), void *eltLoadFunData)
 {
     RASTER3D_cache *tmp;
 
-    tmp = G3d_malloc(sizeof(RASTER3D_cache));
+    tmp = Rast3d_malloc(sizeof(RASTER3D_cache));
     if (tmp == NULL) {
-	G3d_error("G3d_cache_new: error in G3d_malloc");
+	Rast3d_error("Rast3d_cache_new: error in Rast3d_malloc");
 	return (void *)NULL;
     }
 
@@ -101,17 +101,17 @@ void *G3d_cache_new(int nofElts, int sizeOfElts, int nofNames,
 
     tmp->nofElts = nofElts;
     tmp->eltSize = sizeOfElts;
-    tmp->elts = G3d_malloc(tmp->eltSize * tmp->nofElts);
-    tmp->names = G3d_malloc(sizeof(int) * tmp->nofElts);
-    tmp->locks = G3d_malloc(tmp->nofElts);
-    tmp->next = G3d_malloc(sizeof(int) * tmp->nofElts);
-    tmp->prev = G3d_malloc(sizeof(int) * tmp->nofElts);
+    tmp->elts = Rast3d_malloc(tmp->eltSize * tmp->nofElts);
+    tmp->names = Rast3d_malloc(sizeof(int) * tmp->nofElts);
+    tmp->locks = Rast3d_malloc(tmp->nofElts);
+    tmp->next = Rast3d_malloc(sizeof(int) * tmp->nofElts);
+    tmp->prev = Rast3d_malloc(sizeof(int) * tmp->nofElts);
 
     if ((tmp->elts == NULL) || (tmp->names == NULL) || (tmp->locks == NULL) ||
 	(tmp->next == NULL) || (tmp->prev == NULL)) {
 
-	G3d_cache_dispose(tmp);
-	G3d_error("G3d_cache_new: error in G3d_malloc");
+	Rast3d_cache_dispose(tmp);
+	Rast3d_error("Rast3d_cache_new: error in Rast3d_malloc");
 	return (void *)NULL;
     }
 
@@ -120,14 +120,14 @@ void *G3d_cache_new(int nofElts, int sizeOfElts, int nofNames,
     tmp->eltLoadFun = eltLoadFun;
     tmp->eltLoadFunData = eltLoadFunData;
 
-    tmp->hash = G3d_cache_hash_new(nofNames);
+    tmp->hash = Rast3d_cache_hash_new(nofNames);
     if (tmp->hash == NULL) {
-	G3d_cache_dispose(tmp);
-	G3d_error("G3d_cache_new: error in G3d_cache_hash_new");
+	Rast3d_cache_dispose(tmp);
+	Rast3d_error("Rast3d_cache_new: error in Rast3d_cache_hash_new");
 	return (void *)NULL;
     }
 
-    G3d_cache_reset(tmp);
+    Rast3d_cache_reset(tmp);
 
     return tmp;
 }
@@ -135,7 +135,7 @@ void *G3d_cache_new(int nofElts, int sizeOfElts, int nofNames,
 /*---------------------------------------------------------------------------*/
 
 void
-G3d_cache_set_removeFun(RASTER3D_cache * c, int (*eltRemoveFun) (),
+Rast3d_cache_set_removeFun(RASTER3D_cache * c, int (*eltRemoveFun) (),
 			void *eltRemoveFunData)
 {
     c->eltRemoveFun = eltRemoveFun;
@@ -145,7 +145,7 @@ G3d_cache_set_removeFun(RASTER3D_cache * c, int (*eltRemoveFun) (),
 /*---------------------------------------------------------------------------*/
 
 void
-G3d_cache_set_loadFun(RASTER3D_cache * c, int (*eltLoadFun) (),
+Rast3d_cache_set_loadFun(RASTER3D_cache * c, int (*eltLoadFun) (),
 		      void *eltLoadFunData)
 {
     c->eltLoadFun = eltLoadFun;
@@ -154,10 +154,10 @@ G3d_cache_set_loadFun(RASTER3D_cache * c, int (*eltLoadFun) (),
 
 /*---------------------------------------------------------------------------*/
 
-void *G3d_cache_new_read(int nofElts, int sizeOfElts, int nofNames,
+void *Rast3d_cache_new_read(int nofElts, int sizeOfElts, int nofNames,
 			 read_fn * eltLoadFun, void *eltLoadFunData)
 {
-    return G3d_cache_new(nofElts, sizeOfElts, nofNames,
+    return Rast3d_cache_new(nofElts, sizeOfElts, nofNames,
 			 cache_dummy_fun, NULL, eltLoadFun, eltLoadFunData);
 }
 
@@ -166,7 +166,7 @@ void *G3d_cache_new_read(int nofElts, int sizeOfElts, int nofNames,
 static void cache_queue_dequeue(RASTER3D_cache * c, int index)
 {
     if (IS_NOT_IN_QUEUE_ELT(index))
-	G3d_fatalError("cache_queue_dequeue: index not in queue");
+	Rast3d_fatalError("cache_queue_dequeue: index not in queue");
 
     if (index == c->first)
 	c->first = c->next[index];
@@ -186,18 +186,18 @@ static void cache_queue_dequeue(RASTER3D_cache * c, int index)
 static void cache_queue_enqueue(RASTER3D_cache * c, int left, int index)
 {
     if (IS_IN_QUEUE_ELT(index))
-	G3d_fatalError("cache_queue_enqueue: index already in queue");
+	Rast3d_fatalError("cache_queue_enqueue: index already in queue");
 
     if (c->first == -1) {
 	if (left != c->last)
-	    G3d_fatalError("cache_queue_enqueue: position out of range");
+	    Rast3d_fatalError("cache_queue_enqueue: position out of range");
 
 	c->first = c->last = index;
 	return;
     }
 
     if (IS_NOT_IN_QUEUE_ELT(left))
-	G3d_fatalError("cache_queue_enqueue: position not in queue");
+	Rast3d_fatalError("cache_queue_enqueue: position not in queue");
 
 
     if (left == -1) {
@@ -259,13 +259,13 @@ static void cache_queue_preppend(RASTER3D_cache * c, int index)
 
 /*---------------------------------------------------------------------------*/
 
-int G3d_cache_lock(RASTER3D_cache * c, int name)
+int Rast3d_cache_lock(RASTER3D_cache * c, int name)
 {
     int index;
 
-    index = G3d_cache_hash_name2index(c->hash, name);
+    index = Rast3d_cache_hash_name2index(c->hash, name);
     if (index == -1) {
-	G3d_error("G3d_cache_lock: name not in cache");
+	Rast3d_error("Rast3d_cache_lock: name not in cache");
 	return 0;
     }
 
@@ -284,7 +284,7 @@ int G3d_cache_lock(RASTER3D_cache * c, int name)
 
 /*---------------------------------------------------------------------------*/
 
-void G3d_cache_lock_intern(RASTER3D_cache * c, int index)
+void Rast3d_cache_lock_intern(RASTER3D_cache * c, int index)
 {
     if (IS_LOCKED_ELT(index))
 	return;
@@ -295,13 +295,13 @@ void G3d_cache_lock_intern(RASTER3D_cache * c, int index)
 
 /*---------------------------------------------------------------------------*/
 
-int G3d_cache_unlock(RASTER3D_cache * c, int name)
+int Rast3d_cache_unlock(RASTER3D_cache * c, int name)
 {
     int index;
 
-    index = G3d_cache_hash_name2index(c->hash, name);
+    index = Rast3d_cache_hash_name2index(c->hash, name);
     if (index == -1) {
-	G3d_error("G3d_cache_unlock: name not in cache");
+	Rast3d_error("Rast3d_cache_unlock: name not in cache");
 	return 0;
     }
 
@@ -316,14 +316,14 @@ int G3d_cache_unlock(RASTER3D_cache * c, int name)
 
 /*---------------------------------------------------------------------------*/
 
-int G3d_cache_unlock_all(RASTER3D_cache * c)
+int Rast3d_cache_unlock_all(RASTER3D_cache * c)
 {
     int index;
 
     for (index = 0; index < c->nofElts; index++)
 	if (IS_LOCKED_ELT(index))
-	    if (!G3d_cache_unlock(c, c->names[index])) {
-		G3d_error("G3d_cache_unlock_all: error in G3d_cache_unlock");
+	    if (!Rast3d_cache_unlock(c, c->names[index])) {
+		Rast3d_error("Rast3d_cache_unlock_all: error in Rast3d_cache_unlock");
 		return 0;
 	    }
 
@@ -332,34 +332,34 @@ int G3d_cache_unlock_all(RASTER3D_cache * c)
 
 /*---------------------------------------------------------------------------*/
 
-int G3d_cache_lock_all(RASTER3D_cache * c)
+int Rast3d_cache_lock_all(RASTER3D_cache * c)
 {
     int index;
 
     for (index = 0; index < c->nofElts; index++)
 	if (IS_UNLOCKED_ELT(index))
-	    G3d_cache_lock_intern(c, index);
+	    Rast3d_cache_lock_intern(c, index);
 
     return 1;
 }
 
 /*---------------------------------------------------------------------------*/
 
-void G3d_cache_autolock_on(RASTER3D_cache * c)
+void Rast3d_cache_autolock_on(RASTER3D_cache * c)
 {
     c->autoLock = 1;
 }
 
 /*---------------------------------------------------------------------------*/
 
-void G3d_cache_autolock_off(RASTER3D_cache * c)
+void Rast3d_cache_autolock_off(RASTER3D_cache * c)
 {
     c->autoLock = 0;
 }
 
 /*---------------------------------------------------------------------------*/
 
-void G3d_cache_set_minUnlock(RASTER3D_cache * c, int nofMinUnLocked)
+void Rast3d_cache_set_minUnlock(RASTER3D_cache * c, int nofMinUnLocked)
 {
     c->minUnlocked = nofMinUnLocked;
 }
@@ -370,9 +370,9 @@ static int cache_remove_elt(RASTER3D_cache * c, int name, int doFlush)
 {
     int index;
 
-    index = G3d_cache_hash_name2index(c->hash, name);
+    index = Rast3d_cache_hash_name2index(c->hash, name);
     if (index == -1) {
-	G3d_error("G3d_cache_deactivate_elt : name not in cache");
+	Rast3d_error("Rast3d_cache_deactivate_elt : name not in cache");
 	return 0;
     }
 
@@ -387,24 +387,24 @@ static int cache_remove_elt(RASTER3D_cache * c, int name, int doFlush)
     if (doFlush)
 	if (!c->eltRemoveFun(name, c->elts + c->eltSize * index,
 			     c->eltRemoveFunData)) {
-	    G3d_error("cache_remove_elt: error in c->eltRemoveFun");
+	    Rast3d_error("cache_remove_elt: error in c->eltRemoveFun");
 	    return 0;
 	}
 
     cache_queue_preppend(c, index);
     DEACTIVATE_ELT(index);
 
-    G3d_cache_hash_remove_name(c->hash, name);
+    Rast3d_cache_hash_remove_name(c->hash, name);
 
     return 1;
 }
 
 /*---------------------------------------------------------------------------*/
 
-int G3d_cache_remove_elt(RASTER3D_cache * c, int name)
+int Rast3d_cache_remove_elt(RASTER3D_cache * c, int name)
 {
     if (!cache_remove_elt(c, name, 0)) {
-	G3d_error("G3d_cache_remove_elt: error in cache_remove_elt");
+	Rast3d_error("Rast3d_cache_remove_elt: error in cache_remove_elt");
 	return 0;
     }
 
@@ -413,10 +413,10 @@ int G3d_cache_remove_elt(RASTER3D_cache * c, int name)
 
 /*---------------------------------------------------------------------------*/
 
-int G3d_cache_flush(RASTER3D_cache * c, int name)
+int Rast3d_cache_flush(RASTER3D_cache * c, int name)
 {
     if (!cache_remove_elt(c, name, 1)) {
-	G3d_error("G3d_cache_flush: error in cache_remove_elt");
+	Rast3d_error("Rast3d_cache_flush: error in cache_remove_elt");
 	return 0;
     }
 
@@ -425,15 +425,15 @@ int G3d_cache_flush(RASTER3D_cache * c, int name)
 
 /*---------------------------------------------------------------------------*/
 
-int G3d_cache_remove_all(RASTER3D_cache * c)
+int Rast3d_cache_remove_all(RASTER3D_cache * c)
 {
     int index;
 
     for (index = 0; index < c->nofElts; index++)
 	if (IS_ACTIVE_ELT(index))
-	    if (!G3d_cache_remove_elt(c, c->names[index])) {
-		G3d_error
-		    ("G3d_cache_remove_all: error in G3d_cache_remove_elt");
+	    if (!Rast3d_cache_remove_elt(c, c->names[index])) {
+		Rast3d_error
+		    ("Rast3d_cache_remove_all: error in Rast3d_cache_remove_elt");
 		return 0;
 	    }
 
@@ -442,14 +442,14 @@ int G3d_cache_remove_all(RASTER3D_cache * c)
 
 /*---------------------------------------------------------------------------*/
 
-int G3d_cache_flush_all(RASTER3D_cache * c)
+int Rast3d_cache_flush_all(RASTER3D_cache * c)
 {
     int index;
 
     for (index = 0; index < c->nofElts; index++)
 	if (IS_ACTIVE_ELT(index))
-	    if (!G3d_cache_flush(c, c->names[index])) {
-		G3d_error("G3d_cache_flush_all: error in G3d_cache_flush");
+	    if (!Rast3d_cache_flush(c, c->names[index])) {
+		Rast3d_error("Rast3d_cache_flush_all: error in Rast3d_cache_flush");
 		return 0;
 	    }
 
@@ -458,17 +458,17 @@ int G3d_cache_flush_all(RASTER3D_cache * c)
 
 /*---------------------------------------------------------------------------*/
 
-void *G3d_cache_elt_ptr(RASTER3D_cache * c, int name)
+void *Rast3d_cache_elt_ptr(RASTER3D_cache * c, int name)
 {
     int index, oldName, doUnlock;
 
-    index = G3d_cache_hash_name2index(c->hash, name);
+    index = Rast3d_cache_hash_name2index(c->hash, name);
 
     if (index != -1) {
 	if (c->autoLock)
 	    if (IS_UNLOCKED_ELT(index) && (!ONE_UNLOCKED_ELT_ONLY) &&
 		(!ARE_MIN_UNLOCKED))
-		G3d_cache_lock_intern(c, index);
+		Rast3d_cache_lock_intern(c, index);
 
 	return c->elts + c->eltSize * index;
     }
@@ -476,30 +476,30 @@ void *G3d_cache_elt_ptr(RASTER3D_cache * c, int name)
     index = c->first;
     if (IS_ACTIVE_ELT(index)) {
 	oldName = c->names[index];
-	G3d_cache_hash_remove_name(c->hash, oldName);
+	Rast3d_cache_hash_remove_name(c->hash, oldName);
 	if (!c->eltRemoveFun(oldName, c->elts + c->eltSize * index,
 			     c->eltRemoveFunData)) {
-	    G3d_error("G3d_cache_elt_ptr: error in c->eltRemoveFun");
+	    Rast3d_error("Rast3d_cache_elt_ptr: error in c->eltRemoveFun");
 	    return NULL;
 	}
     }
 
-    G3d_cache_hash_load_name(c->hash, name, index);
+    Rast3d_cache_hash_load_name(c->hash, name, index);
 
     doUnlock = ((!c->autoLock) || ONE_UNLOCKED_ELT_ONLY || ARE_MIN_UNLOCKED);
 
     UNLOCK_ELT(index);
     c->names[index] = name;
-    G3d_cache_lock_intern(c, index);
+    Rast3d_cache_lock_intern(c, index);
 
     if (doUnlock)
-	if (!G3d_cache_unlock(c, name)) {
-	    G3d_error("G3d_cache_elt_ptr: error in G3d_cache_unlock");
+	if (!Rast3d_cache_unlock(c, name)) {
+	    Rast3d_error("Rast3d_cache_elt_ptr: error in Rast3d_cache_unlock");
 	    return NULL;
 	}
 
     if (!c->eltLoadFun(name, c->elts + c->eltSize * index, c->eltLoadFunData)) {
-	G3d_error("G3d_cache_elt_ptr: error in c->eltLoadFun");
+	Rast3d_error("Rast3d_cache_elt_ptr: error in c->eltLoadFun");
 	return NULL;
     }
 
@@ -508,10 +508,10 @@ void *G3d_cache_elt_ptr(RASTER3D_cache * c, int name)
 
 /*---------------------------------------------------------------------------*/
 
-int G3d_cache_load(RASTER3D_cache * c, int name)
+int Rast3d_cache_load(RASTER3D_cache * c, int name)
 {
-    if (G3d_cache_elt_ptr(c, name) == NULL) {
-	G3d_error("G3d_cache_load: error in G3d_cache_elt_ptr");
+    if (Rast3d_cache_elt_ptr(c, name) == NULL) {
+	Rast3d_error("Rast3d_cache_load: error in Rast3d_cache_elt_ptr");
 	return 0;
     }
 
@@ -520,13 +520,13 @@ int G3d_cache_load(RASTER3D_cache * c, int name)
 
 /*---------------------------------------------------------------------------*/
 
-int G3d_cache_get_elt(RASTER3D_cache * c, int name, void *dst)
+int Rast3d_cache_get_elt(RASTER3D_cache * c, int name, void *dst)
 {
     const void *elt;
 
-    elt = G3d_cache_elt_ptr(c, name);
+    elt = Rast3d_cache_elt_ptr(c, name);
     if (elt == NULL) {
-	G3d_error("G3d_cache_get_elt: error in G3d_cache_elt_ptr");
+	Rast3d_error("Rast3d_cache_get_elt: error in Rast3d_cache_elt_ptr");
 	return 0;
     }
 
@@ -537,13 +537,13 @@ int G3d_cache_get_elt(RASTER3D_cache * c, int name, void *dst)
 
 /*---------------------------------------------------------------------------*/
 
-int G3d_cache_put_elt(RASTER3D_cache * c, int name, const void *src)
+int Rast3d_cache_put_elt(RASTER3D_cache * c, int name, const void *src)
 {
     void *elt;
 
-    elt = G3d_cache_elt_ptr(c, name);
+    elt = Rast3d_cache_elt_ptr(c, name);
     if (elt == NULL) {
-	G3d_error("G3d_cache_put_elt: error in G3d_cache_elt_ptr");
+	Rast3d_error("Rast3d_cache_put_elt: error in Rast3d_cache_elt_ptr");
 	return 0;
     }
 
@@ -568,7 +568,7 @@ static void cache_test_print(RASTER3D_cache * c)
     int *a;
 
     al = c->autoLock;
-    G3d_cache_autolock_off(c);
+    Rast3d_cache_autolock_off(c);
 
     printf("\n--------------------------------\n");
     for (i = 0; i < c->nofElts; i++) {
@@ -578,8 +578,8 @@ static void cache_test_print(RASTER3D_cache * c)
 	    continue;
 	}
 
-	a = (int *)G3d_cache_elt_ptr(c, c->names[i]);
-	/*G3d_cache_get_elt (c, c->names[i], a); */
+	a = (int *)Rast3d_cache_elt_ptr(c, c->names[i]);
+	/*Rast3d_cache_get_elt (c, c->names[i], a); */
 	printf("name %d val %d %s\n", c->names[i], a[17],
 	       (IS_LOCKED_ELT(i) ? "locked" :
 		IS_UNLOCKED_ELT(i) ? "unlocked" : ""));
@@ -587,7 +587,7 @@ static void cache_test_print(RASTER3D_cache * c)
     printf("\n--------------------------------\n");
 
     if (al)
-	G3d_cache_autolock_on(c);
+	Rast3d_cache_autolock_on(c);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -630,14 +630,14 @@ static void cache_test_add(void *c, int name, int val)
     static int firstTime = 1;
 
     if (firstTime) {
-	ctd.value = G3d_malloc(((RASTER3D_cache *) c)->eltSize * sizeof(int));
+	ctd.value = Rast3d_malloc(((RASTER3D_cache *) c)->eltSize * sizeof(int));
 	firstTime = 0;
     }
 
     ctd.value[17] = val;
     ctd.size = ((RASTER3D_cache *) c)->eltSize;
 
-    G3d_cache_load(c, name);
+    Rast3d_cache_load(c, name);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -646,10 +646,10 @@ int MAIN()
 {
     void *c;
 
-    c = G3d_cache_new(3, 76 * sizeof(int), 100000,
+    c = Rast3d_cache_new(3, 76 * sizeof(int), 100000,
 		      cache_test_flush_fun, NULL, cache_test_load_fun, &ctd);
 
-    G3d_cache_autolock_on(c);
+    Rast3d_cache_autolock_on(c);
     cache_test_print(c);
     cache_test_add(c, 1111, -11);
     cache_test_print(c);
@@ -659,9 +659,9 @@ int MAIN()
     cache_test_print(c);
     cache_test_add(c, 4444, -44);
     cache_test_print(c);
-    G3d_cache_unlock_all(c);
+    Rast3d_cache_unlock_all(c);
     cache_test_print(c);
-    G3d_cache_load(c, 2222);
+    Rast3d_cache_load(c, 2222);
     cache_test_print(c);
     cache_test_add(c, 5555, -55);
     cache_test_print(c);
@@ -673,9 +673,9 @@ int MAIN()
     cache_test_print(c);
     cache_test_add(c, 9999, -99);
     cache_test_print(c);
-    G3d_cache_flush(c, 9999);
+    Rast3d_cache_flush(c, 9999);
     cache_test_print(c);
-    G3d_cache_flush_all(c);
+    Rast3d_cache_flush_all(c);
     cache_test_print(c);
     cache_test_add(c, 1111, -11);
     cache_test_print(c);
@@ -683,7 +683,7 @@ int MAIN()
     cache_test_print(c);
     cache_test_add(c, 3333, -33);
     cache_test_print(c);
-    G3d_cache_reset(c);
+    Rast3d_cache_reset(c);
     cache_test_print(c);
     cache_test_add(c, 1111, -11);
     cache_test_print(c);

@@ -14,7 +14,7 @@
 /*---------------------------------------------------------------------------*/
 
 void
-G3d_range_updateFromTile(RASTER3D_Map * map, const void *tile, int rows, int cols,
+Rast3d_range_updateFromTile(RASTER3D_Map * map, const void *tile, int rows, int cols,
 			 int depths, int xRedundant, int yRedundant,
 			 int zRedundant, int nofNum, int type)
 {
@@ -22,7 +22,7 @@ G3d_range_updateFromTile(RASTER3D_Map * map, const void *tile, int rows, int col
     struct FPRange *range;
 
     range = &(map->range);
-    cellType = G3d_g3dType2cellType(type);
+    cellType = Rast3d_g3dType2cellType(type);
 
     if (nofNum == map->tileSize) {
 	Rast_row_update_fp_range(tile, map->tileSize, range, cellType);
@@ -33,13 +33,13 @@ G3d_range_updateFromTile(RASTER3D_Map * map, const void *tile, int rows, int col
 	for (z = 0; z < depths; z++) {
 	    for (y = 0; y < rows; y++) {
 		Rast_row_update_fp_range(tile, cols, range, cellType);
-		tile = G_incr_void_ptr(tile, map->tileX * G3d_length(type));
+		tile = G_incr_void_ptr(tile, map->tileX * Rast3d_length(type));
 	    }
 	    if (yRedundant)
 		tile =
 		    G_incr_void_ptr(tile,
 				    map->tileX * yRedundant *
-				    G3d_length(type));
+				    Rast3d_length(type));
 	}
 	return;
     }
@@ -47,7 +47,7 @@ G3d_range_updateFromTile(RASTER3D_Map * map, const void *tile, int rows, int col
     if (yRedundant) {
 	for (z = 0; z < depths; z++) {
 	    Rast_row_update_fp_range(tile, map->tileX * rows, range, cellType);
-	    tile = G_incr_void_ptr(tile, map->tileXY * G3d_length(type));
+	    tile = G_incr_void_ptr(tile, map->tileXY * Rast3d_length(type));
 	}
 	return;
     }
@@ -58,7 +58,7 @@ G3d_range_updateFromTile(RASTER3D_Map * map, const void *tile, int rows, int col
 /*---------------------------------------------------------------------------*/
 
 int
-G3d_readRange(const char *name, const char *mapset, struct FPRange *drange)
+Rast3d_readRange(const char *name, const char *mapset, struct FPRange *drange)
  /* adapted from Rast_read_fp_range */
 {
     int fd;
@@ -111,11 +111,11 @@ G3d_readRange(const char *name, const char *mapset, struct FPRange *drange)
  *          0 ... otherwise.
  */
 
-int G3d_range_load(RASTER3D_Map * map)
+int Rast3d_range_load(RASTER3D_Map * map)
 {
     if (map->operation == RASTER3D_WRITE_DATA)
 	return 1;
-    if (G3d_readRange(map->fileName, map->mapset, &(map->range)) == -1) {
+    if (Rast3d_readRange(map->fileName, map->mapset, &(map->range)) == -1) {
 	return 0;
     }
 
@@ -137,7 +137,7 @@ int G3d_range_load(RASTER3D_Map * map)
  *  \return void
  */
 
-void G3d_range_min_max(RASTER3D_Map * map, double *min, double *max)
+void Rast3d_range_min_max(RASTER3D_Map * map, double *min, double *max)
 {
     Rast_get_fp_range_min_max(&(map->range), min, max);
 }
@@ -198,15 +198,15 @@ static int writeRange(const char *name, struct FPRange *range)
  *          0 ... otherwise.
  */
 
-int G3d_range_write(RASTER3D_Map * map)
+int Rast3d_range_write(RASTER3D_Map * map)
 {
     char path[GPATH_MAX];
 
-    G3d_filename(path, RASTER3D_RANGE_ELEMENT, map->fileName, map->mapset);
+    Rast3d_filename(path, RASTER3D_RANGE_ELEMENT, map->fileName, map->mapset);
     remove(path);
 
     if (writeRange(map->fileName, &(map->range)) == -1) {
-	G3d_error("G3d_closeCellNew: error in writeRange");
+	Rast3d_error("Rast3d_closeCellNew: error in writeRange");
 	return 0;
     }
 
@@ -215,7 +215,7 @@ int G3d_range_write(RASTER3D_Map * map)
 
 /*---------------------------------------------------------------------------*/
 
-int G3d_range_init(RASTER3D_Map * map)
+int Rast3d_range_init(RASTER3D_Map * map)
 {
     Rast_init_fp_range(&(map->range));
     return 0;

@@ -60,10 +60,10 @@ int test_geom_data(void)
     G_get_set_window(&region2d);
 
     /*Set the defaults */
-    G3d_initDefaults();
+    Rast3d_initDefaults();
 
     /*get the current region */
-    G3d_getWindow(&region3d);
+    Rast3d_getWindow(&region3d);
 
     geom = N_alloc_geom_data();
     if (!geom) {

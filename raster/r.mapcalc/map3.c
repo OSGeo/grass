@@ -21,8 +21,8 @@ RASTER3D_Region current_region3;
 
 void setup_region(void)
 {
-    G3d_initDefaults();
-    G3d_getWindow(&current_region3);
+    Rast3d_initDefaults();
+    Rast3d_getWindow(&current_region3);
 
     rows = current_region3.rows;
     columns = current_region3.cols;
@@ -74,8 +74,8 @@ static void read_row(void *handle, char *buf, int type, int depth, int row)
 	for (i = 0; i < columns; i++) {
 	    double x;
 
-	    G3d_getValue(handle, i, row, depth, (char *)&x, DCELL_TYPE);
-	    if (G3d_isNullValueNum(&x, DCELL_TYPE))
+	    Rast3d_getValue(handle, i, row, depth, (char *)&x, DCELL_TYPE);
+	    if (Rast3d_isNullValueNum(&x, DCELL_TYPE))
 		SET_NULL_C(&((CELL *) buf)[i]);
 	    else
 		((CELL *) buf)[i] = (CELL) x;
@@ -85,8 +85,8 @@ static void read_row(void *handle, char *buf, int type, int depth, int row)
 	for (i = 0; i < columns; i++) {
 	    float x;
 
-	    G3d_getValue(handle, i, row, depth, (char *)&x, FCELL_TYPE);
-	    if (G3d_isNullValueNum(&x, FCELL_TYPE))
+	    Rast3d_getValue(handle, i, row, depth, (char *)&x, FCELL_TYPE);
+	    if (Rast3d_isNullValueNum(&x, FCELL_TYPE))
 		SET_NULL_F(&((FCELL *) buf)[i]);
 	    else
 		((FCELL *) buf)[i] = x;
@@ -96,8 +96,8 @@ static void read_row(void *handle, char *buf, int type, int depth, int row)
 	for (i = 0; i < columns; i++) {
 	    double x;
 
-	    G3d_getValue(handle, i, row, depth, (char *)&x, DCELL_TYPE);
-	    if (G3d_isNullValueNum(&x, DCELL_TYPE))
+	    Rast3d_getValue(handle, i, row, depth, (char *)&x, DCELL_TYPE);
+	    if (Rast3d_isNullValueNum(&x, DCELL_TYPE))
 		SET_NULL_D(&((DCELL *) buf)[i]);
 	    else
 		((DCELL *) buf)[i] = x;
@@ -117,11 +117,11 @@ static void write_row(void *handle, const char *buf, int type, int depth,
 	    double x;
 
 	    if (IS_NULL_C(&((CELL *) buf)[i]))
-		G3d_setNullValue(&x, 1, DCELL_TYPE);
+		Rast3d_setNullValue(&x, 1, DCELL_TYPE);
 	    else
 		x = ((CELL *) buf)[i];
 
-	    if (G3d_putValue(handle, i, row, depth, (char *)&x, DCELL_TYPE) <
+	    if (Rast3d_putValue(handle, i, row, depth, (char *)&x, DCELL_TYPE) <
 		0)
 		G_fatal_error(_("Error writing data"));
 	}
@@ -131,11 +131,11 @@ static void write_row(void *handle, const char *buf, int type, int depth,
 	    float x;
 
 	    if (IS_NULL_F(&((FCELL *) buf)[i]))
-		G3d_setNullValue(&x, 1, FCELL_TYPE);
+		Rast3d_setNullValue(&x, 1, FCELL_TYPE);
 	    else
 		x = ((FCELL *) buf)[i];
 
-	    if (G3d_putValue(handle, i, row, depth, (char *)&x, FCELL_TYPE) <
+	    if (Rast3d_putValue(handle, i, row, depth, (char *)&x, FCELL_TYPE) <
 		0)
 		G_fatal_error(_("Error writing data"));
 	}
@@ -145,11 +145,11 @@ static void write_row(void *handle, const char *buf, int type, int depth,
 	    double x;
 
 	    if (IS_NULL_D(&((DCELL *) buf)[i]))
-		G3d_setNullValue(&x, 1, DCELL_TYPE);
+		Rast3d_setNullValue(&x, 1, DCELL_TYPE);
 	    else
 		x = ((DCELL *) buf)[i];
 
-	    if (G3d_putValue(handle, i, row, depth, (char *)&x, DCELL_TYPE) <
+	    if (Rast3d_putValue(handle, i, row, depth, (char *)&x, DCELL_TYPE) <
 		0)
 		G_fatal_error(_("Error writing data"));
 	}
@@ -175,7 +175,7 @@ static void init_colors(map * m)
     if (!set)
 	set = G_malloc(columns);
 
-    if (G3d_readColors((char *)m->name, (char *)m->mapset, &m->colors) < 0)
+    if (Rast3d_readColors((char *)m->name, (char *)m->mapset, &m->colors) < 0)
 	G_fatal_error(_("Unable to read color file for raster map <%s@%s>"),
 		      m->name, m->mapset);
 
@@ -184,7 +184,7 @@ static void init_colors(map * m)
 
 static void init_cats(map * m)
 {
-    if (G3d_readCats((char *)m->name, (char *)m->mapset, &m->cats) < 0)
+    if (Rast3d_readCats((char *)m->name, (char *)m->mapset, &m->cats) < 0)
 	G_fatal_error(_("Unable to read category file of raster map <%s@%s>"),
 		      m->name, m->mapset);
 
@@ -366,7 +366,7 @@ static void close_map(map * m)
     if (!m->handle)
 	return;
 
-    if (!G3d_closeCell(m->handle))
+    if (!Rast3d_closeCell(m->handle))
 	G_fatal_error(_("Unable to close raster map <%s@%s>"),
 		      m->name, m->mapset);
 
@@ -397,11 +397,11 @@ int map_type(const char *name, int mod)
 	    void *handle;
 
 	    setup_region();	/* TODO: setup_region should be called by evaluate() ? */
-	    handle = G3d_openCellOld(tmpname, mapset, &current_region3,
+	    handle = Rast3d_openCellOld(tmpname, mapset, &current_region3,
 				     RASTER3D_TILE_SAME_AS_FILE, RASTER3D_NO_CACHE);
-	    result = (G3d_fileTypeMap(handle) == FCELL_TYPE)
+	    result = (Rast3d_fileTypeMap(handle) == FCELL_TYPE)
 		? FCELL_TYPE : DCELL_TYPE;
-	    G3d_closeCell(handle);
+	    Rast3d_closeCell(handle);
 	}
 	else
 	    result = -1;
@@ -505,7 +505,7 @@ int open_map(const char *name, int mod, int row, int col)
     if (use_colors)
 	init_colors(m);
 
-    m->handle = G3d_openCellOld((char *)name, (char *)mapset,
+    m->handle = Rast3d_openCellOld((char *)name, (char *)mapset,
 				&current_region3, DCELL_TYPE,
 				RASTER3D_USE_CACHE_DEFAULT);
 
@@ -578,9 +578,9 @@ int open_output_map(const char *name, int res_type)
 {
     void *handle;
 
-    G3d_setFileType(res_type == FCELL_TYPE ? FCELL_TYPE : DCELL_TYPE);
+    Rast3d_setFileType(res_type == FCELL_TYPE ? FCELL_TYPE : DCELL_TYPE);
 
-    handle = G3d_openNewOptTileSize((char *)name, RASTER3D_USE_CACHE_XYZ, &current_region3, res_type == FCELL_TYPE ? FCELL_TYPE : DCELL_TYPE, 32);
+    handle = Rast3d_openNewOptTileSize((char *)name, RASTER3D_USE_CACHE_XYZ, &current_region3, res_type == FCELL_TYPE ? FCELL_TYPE : DCELL_TYPE, 32);
 
     if (!handle)
 	G_fatal_error(_("Unable to create raster map <%s>"), name);
@@ -607,7 +607,7 @@ void close_output_map(int fd)
 {
     void *handle = omaps[fd];
 
-    if (!G3d_closeCell(handle))
+    if (!Rast3d_closeCell(handle))
 	G_fatal_error(_("Unable to close output raster map"));
 }
 
@@ -623,10 +623,10 @@ void copy_cats(const char *dst, int idx)
     const map *m = &maps[idx];
     struct Categories cats;
 
-    if (G3d_readCats((char *)m->name, (char *)m->mapset, &cats) < 0)
+    if (Rast3d_readCats((char *)m->name, (char *)m->mapset, &cats) < 0)
 	return;
 
-    G3d_writeCats((char *)dst, &cats);
+    Rast3d_writeCats((char *)dst, &cats);
     Rast_free_cats(&cats);
 }
 
@@ -635,10 +635,10 @@ void copy_colors(const char *dst, int idx)
     const map *m = &maps[idx];
     struct Colors colr;
 
-    if (G3d_readColors((char *)m->name, (char *)m->mapset, &colr) <= 0)
+    if (Rast3d_readColors((char *)m->name, (char *)m->mapset, &colr) <= 0)
 	return;
 
-    G3d_writeColors((char *)dst, G_mapset(), &colr);
+    Rast3d_writeColors((char *)dst, G_mapset(), &colr);
     Rast_free_colors(&colr);
 }
 

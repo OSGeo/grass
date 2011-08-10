@@ -10,7 +10,7 @@
 /*---------------------------------------------------------------------------*/
 
 static int
-G3d_readWriteWindow(struct Key_Value *windowKeys, int doRead, int *proj,
+Rast3d_readWriteWindow(struct Key_Value *windowKeys, int doRead, int *proj,
 		    int *zone, double *north, double *south, double *east,
 		    double *west, double *top, double *bottom, int *rows,
 		    int *cols, int *depths, double *ew_res, double *ns_res,
@@ -20,12 +20,12 @@ G3d_readWriteWindow(struct Key_Value *windowKeys, int doRead, int *proj,
     int (*windowInt) (), (*windowDouble) ();
 
     if (doRead) {
-	windowDouble = G3d_keyGetDouble;
-	windowInt = G3d_keyGetInt;
+	windowDouble = Rast3d_keyGetDouble;
+	windowInt = Rast3d_keyGetInt;
     }
     else {
-	windowDouble = G3d_keySetDouble;
-	windowInt = G3d_keySetInt;
+	windowDouble = Rast3d_keySetDouble;
+	windowInt = Rast3d_keySetInt;
     }
 
     returnVal = 1;
@@ -50,7 +50,7 @@ G3d_readWriteWindow(struct Key_Value *windowKeys, int doRead, int *proj,
     if (returnVal)
 	return 1;
 
-    G3d_error("G3d_readWriteWindow: error writing window");
+    Rast3d_error("Rast3d_readWriteWindow: error writing window");
     return 0;
 }
 
@@ -58,7 +58,7 @@ G3d_readWriteWindow(struct Key_Value *windowKeys, int doRead, int *proj,
  * If windowName == NULL -> RASTER3D_WINDOW_ELEMENT ("$MAPSET/WIND3")
  * otherwise RASTER3D_WINDOW_DATABASE ("$MAPSET/windows3d/$NAME")
  */
-static void G3d_getFullWindowPath(char *path, const char *windowName)
+static void Rast3d_getFullWindowPath(char *path, const char *windowName)
 {
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
@@ -86,7 +86,7 @@ static void G3d_getFullWindowPath(char *path, const char *windowName)
 /*---------------------------------------------------------------------------*/
 /*
    static void
-   G3d_getWindowLocation (path, windowName)
+   Rast3d_getWindowLocation (path, windowName)
 
    char path[1024];
    char *windowName;
@@ -136,7 +136,7 @@ static void G3d_getFullWindowPath(char *path, const char *windowName)
  *          0 ... otherwise.
  */
 
-int G3d_readWindow(RASTER3D_Region * window, const char *windowName)
+int Rast3d_readWindow(RASTER3D_Region * window, const char *windowName)
 {
     struct Cell_head win;
     struct Key_Value *windowKeys;
@@ -162,16 +162,16 @@ int G3d_readWindow(RASTER3D_Region * window, const char *windowName)
 	window->tb_res = win.tb_res;
     }
     else {
-	G3d_getFullWindowPath(path, windowName);
+	Rast3d_getFullWindowPath(path, windowName);
 
 	if (access(path, R_OK) != 0) {
-	    G_warning("G3d_readWindow: unable to find [%s].", path);
+	    G_warning("Rast3d_readWindow: unable to find [%s].", path);
 	    return 0;
 	}
 
 	windowKeys = G_read_key_value_file(path);
 
-	if (!G3d_readWriteWindow(windowKeys, 1,
+	if (!Rast3d_readWriteWindow(windowKeys, 1,
 				 &(window->proj), &(window->zone),
 				 &(window->north), &(window->south),
 				 &(window->east), &(window->west),
@@ -179,8 +179,8 @@ int G3d_readWindow(RASTER3D_Region * window, const char *windowName)
 				 &(window->rows), &(window->cols),
 				 &(window->depths), &(window->ew_res),
 				 &(window->ns_res), &(window->tb_res))) {
-	    G3d_error
-		("G3d_readWindow: error extracting window key(s) of file %s",
+	    Rast3d_error
+		("Rast3d_readWindow: error extracting window key(s) of file %s",
 		 path);
 	    return 0;
 	}
@@ -195,7 +195,7 @@ int G3d_readWindow(RASTER3D_Region * window, const char *windowName)
 /* modified version of G__make_mapset_element */
 /*
    static int
-   G3d_createPath (thePath)
+   Rast3d_createPath (thePath)
 
    char *thePath;
 
@@ -250,7 +250,7 @@ int G3d_readWindow(RASTER3D_Region * window, const char *windowName)
 
 /*
    int
-   G3d_writeWindow (window, windowName)
+   Rast3d_writeWindow (window, windowName)
 
    RASTER3D_Region *window;
    char *windowName;
@@ -273,7 +273,7 @@ int G3d_readWindow(RASTER3D_Region * window, const char *windowName)
  *  \return void
  */
 
-void G3d_useWindowParams(void)
+void Rast3d_useWindowParams(void)
 {
-    G3d_setWindowParams();
+    Rast3d_setWindowParams();
 }

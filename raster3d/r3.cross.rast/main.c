@@ -51,8 +51,8 @@ void fatal_error(void *map, int elevfd, int outfd, char *errorMsg)
     /* Close files and exit */
 
     if (map != NULL) {
-        if (!G3d_closeCell(map))
-            G3d_fatalError(_("Could not close RASTER3D map"));
+        if (!Rast3d_closeCell(map))
+            Rast3d_fatalError(_("Could not close RASTER3D map"));
     }
 
     /*unopen the output map */
@@ -62,7 +62,7 @@ void fatal_error(void *map, int elevfd, int outfd, char *errorMsg)
     if (elevfd != -1)
         close_output_map(elevfd);
 
-    G3d_fatalError(errorMsg);
+    Rast3d_fatalError(errorMsg);
     exit(EXIT_FAILURE);
 
 }
@@ -136,7 +136,7 @@ void rast3d_cross_section(void *map,RASTER3D_Region region, int elevfd, int outf
     depths = region.depths;
     
     /*Typ of the RASTER3D Tile */
-    typeIntern = G3d_tileTypeMap(map);
+    typeIntern = Rast3d_tileTypeMap(map);
 
     /*Allocate mem for the output maps row */
     if (typeIntern == FCELL_TYPE)
@@ -182,10 +182,10 @@ void rast3d_cross_section(void *map,RASTER3D_Region region, int elevfd, int outf
 
             /* Get the voxel value */
             if (typeIntern == FCELL_TYPE)
-                G3d_getRegionValue(map, north, east, elevation, &fcell[col], FCELL_TYPE);
+                Rast3d_getRegionValue(map, north, east, elevation, &fcell[col], FCELL_TYPE);
 
             if (typeIntern == DCELL_TYPE)
-                G3d_getRegionValue(map, north, east, elevation, &dcell[col], DCELL_TYPE);
+                Rast3d_getRegionValue(map, north, east, elevation, &dcell[col], DCELL_TYPE);
         }
 
         /*Write the data to the output map */
@@ -241,12 +241,12 @@ int main(int argc, char *argv[])
     G_debug(3, "Open 3D raster map %s", param.input->answer);
 
     if (NULL == G_find_grid3(param.input->answer, ""))
-        G3d_fatalError(_("3d raster map <%s> not found"),
+        Rast3d_fatalError(_("3d raster map <%s> not found"),
                        param.input->answer);
 
     /* Figure out the region from the map */
-    G3d_initDefaults();
-    G3d_getWindow(&region);
+    Rast3d_initDefaults();
+    Rast3d_getWindow(&region);
 
     /*Check if the g3d-region is equal to the 2d rows and cols */
     rows = Rast_window_rows();
@@ -269,17 +269,17 @@ int main(int argc, char *argv[])
     /*Open the 3d raster map */
 
     /*******************/
-    map = G3d_openCellOld(param.input->answer,
+    map = Rast3d_openCellOld(param.input->answer,
                           G_find_grid3(param.input->answer, ""),
                           &region, RASTER3D_TILE_SAME_AS_FILE,
                           RASTER3D_USE_CACHE_DEFAULT);
 
     if (map == NULL)
-        G3d_fatalError(_("Error opening 3d raster map <%s>"),
+        Rast3d_fatalError(_("Error opening 3d raster map <%s>"),
                        param.input->answer);
 
     /*Get the output type */
-    output_type = G3d_fileTypeMap(map);
+    output_type = Rast3d_fileTypeMap(map);
 
     if (output_type == FCELL_TYPE || output_type == DCELL_TYPE) {
 
@@ -307,10 +307,10 @@ int main(int argc, char *argv[])
 
         /*if requested set the Mask on */
         if (param.mask->answer) {
-            if (G3d_maskFileExists()) {
+            if (Rast3d_maskFileExists()) {
                 changemask = 0;
-                if (G3d_maskIsOff(map)) {
-                    G3d_maskOn(map);
+                if (Rast3d_maskIsOff(map)) {
+                    Rast3d_maskOn(map);
                     changemask = 1;
                 }
             }
@@ -324,9 +324,9 @@ int main(int argc, char *argv[])
 
         /*We set the Mask off, if it was off before */
         if (param.mask->answer) {
-            if (G3d_maskFileExists())
-                if (G3d_maskIsOn(map) && changemask)
-                    G3d_maskOff(map);
+            if (Rast3d_maskFileExists())
+                if (Rast3d_maskIsOn(map) && changemask)
+                    Rast3d_maskOff(map);
         }
 
         Rast_close(outfd);
@@ -338,8 +338,8 @@ int main(int argc, char *argv[])
     }
 
     /* Close files and exit */
-    if (!G3d_closeCell(map))
-        G3d_fatalError(_("Could not close RASTER3D map <%s>"),
+    if (!Rast3d_closeCell(map))
+        Rast3d_fatalError(_("Could not close RASTER3D map <%s>"),
                        param.input->answer);
 
     return (EXIT_SUCCESS);

@@ -62,13 +62,13 @@ void get_fp_stats(const char *name, const char *mapset,
         ncols = Rast_window_cols();
     } else {
         /* Initiate the default settings */
-        G3d_initDefaults();
+        Rast3d_initDefaults();
 
-        map3d = G3d_openCellOld(name, mapset, RASTER3D_DEFAULT_WINDOW,
+        map3d = Rast3d_openCellOld(name, mapset, RASTER3D_DEFAULT_WINDOW,
                 RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
         if (map3d == NULL)
-            G3d_fatalError(_("Error opening 3d raster map"));
+            Rast3d_fatalError(_("Error opening 3d raster map"));
 
         nrows = map3d->window.rows;
         ncols = map3d->window.cols;
@@ -126,7 +126,7 @@ void get_fp_stats(const char *name, const char *mapset,
                 if (type == RASTER_TYPE)
                     x = dcell[col];
                 else
-                    x = G3d_getDouble(map3d, col, row, depth);
+                    x = Rast3d_getDouble(map3d, col, row, depth);
 
                 if (Rast_is_d_null_value(&x))
                     continue;
@@ -152,6 +152,6 @@ void get_fp_stats(const char *name, const char *mapset,
 	if(dcell)
     	    G_free(dcell);
     } else {
-        G3d_closeCell(map3d);
+        Rast3d_closeCell(map3d);
     }
 }

@@ -14,11 +14,11 @@ typedef struct
     struct Option *dimension;
     struct Option *cache;
 
-} G3d_paramType;
+} Rast3d_paramType;
 
 /*----------------------------------------------------------------------------*/
 
-static G3d_paramType *param;
+static Rast3d_paramType *param;
 
 
 /*!
@@ -33,14 +33,14 @@ static G3d_paramType *param;
  * of the tiles (<em>tiledimension</em>). Every of these values defaults to the
  * value described in RASTER3D Defaults.
  * This function has to be used in conjunction with
- * G3d_getStandard3dInputParams() (cf.{g3d:G3d.getStandard3dInputParams}).
+ * Rast3d_getStandard3dInputParams() (cf.{g3d:G3d.getStandard3dInputParams}).
  *
  *  \return void
  */
 
-void G3d_setStandard3dInputParams()
+void Rast3d_setStandard3dInputParams()
 {
-    param = G3d_malloc(sizeof(G3d_paramType));
+    param = Rast3d_malloc(sizeof(Rast3d_paramType));
 
     param->type = G_define_standard_option(G_OPT_R3_TYPE);
 
@@ -53,7 +53,7 @@ void G3d_setStandard3dInputParams()
 
 /*----------------------------------------------------------------------------*/
 
-int G3d_getStandard3dParams(int *useTypeDefault, int *type,
+int Rast3d_getStandard3dParams(int *useTypeDefault, int *type,
 			    int *useLzwDefault, int *doLzw,
 			    int *useRleDefault, int *doRle,
 			    int *usePrecisionDefault, int *precision,
@@ -65,25 +65,25 @@ int G3d_getStandard3dParams(int *useTypeDefault, int *type,
     *useTypeDefault = *useLzwDefault = *useRleDefault = 0;
     *usePrecisionDefault = *useDimensionDefault = 0;
 
-    G3d_initDefaults();
+    Rast3d_initDefaults();
 
     if (strcmp(param->type->answer, "double") == 0)
 	*type = DCELL_TYPE;
     else if (strcmp(param->type->answer, "float") == 0)
 	*type = FCELL_TYPE;
     else {
-	*type = G3d_getFileType();
+	*type = Rast3d_getFileType();
 	*useTypeDefault = 1;
     }
 
-    G3d_getCompressionMode(&doCompress, doLzw, doRle, precision);
+    Rast3d_getCompressionMode(&doCompress, doLzw, doRle, precision);
 
     if (strcmp(param->precision->answer, "default") != 0) {
 	if (strcmp(param->precision->answer, "max") == 0)
 	    *precision = -1;
 	else if ((sscanf(param->precision->answer, "%d", precision) != 1) ||
 		 (*precision < 0)) {
-	    G3d_error(_("G3d_getStandard3dParams: precision value invalid"));
+	    Rast3d_error(_("Rast3d_getStandard3dParams: precision value invalid"));
 	    return 0;
 	}
     }
@@ -112,18 +112,18 @@ int G3d_getStandard3dParams(int *useTypeDefault, int *type,
     else
 	*useLzwDefault = *useRleDefault = 1;
 
-    G3d_getTileDimension(tileX, tileY, tileZ);
+    Rast3d_getTileDimension(tileX, tileY, tileZ);
     if (strcmp(param->dimension->answer, "default") != 0) {
 	if (sscanf(param->dimension->answer, "%dx%dx%d",
 		   tileX, tileY, tileZ) != 3) {
-	    G3d_error(_("G3d_getStandard3dParams: tile dimension value invalid"));
+	    Rast3d_error(_("Rast3d_getStandard3dParams: tile dimension value invalid"));
 	    return 0;
 	}
     }
     else
 	*useDimensionDefault = 1;
 
-    G3d_free(param);
+    Rast3d_free(param);
 
     return 1;
 }
@@ -132,7 +132,7 @@ int G3d_getStandard3dParams(int *useTypeDefault, int *type,
 
 static struct Option *windowParam = NULL;
 
-void G3d_setWindowParams(void)
+void Rast3d_setWindowParams(void)
 {
     windowParam = G_define_option();
     windowParam->key = "region3";
@@ -145,7 +145,7 @@ void G3d_setWindowParams(void)
 
 /*----------------------------------------------------------------------------*/
 
-char *G3d_getWindowParams(void)
+char *Rast3d_getWindowParams(void)
 {
     if (windowParam == NULL)
 	return NULL;

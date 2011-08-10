@@ -79,14 +79,14 @@ double get_g3d_raster_value_as_double(void *map, int x, int y, int z,
     double dvalue;
 
     if (type == FCELL_TYPE) {
-        G3d_getValue(map, x, y, z, &fvalue, type);
-        if (G3d_isNullValueNum(&fvalue, FCELL_TYPE))
+        Rast3d_getValue(map, x, y, z, &fvalue, type);
+        if (Rast3d_isNullValueNum(&fvalue, FCELL_TYPE))
             val = nullval;
         else
             val = (double) fvalue;
     } else {
-        G3d_getValue(map, x, y, z, &dvalue, type);
-        if (G3d_isNullValueNum(&dvalue, DCELL_TYPE))
+        Rast3d_getValue(map, x, y, z, &dvalue, type);
+        if (Rast3d_isNullValueNum(&dvalue, DCELL_TYPE))
             val = nullval;
         else
             val = dvalue;
@@ -338,7 +338,7 @@ void write_vtk_data(FILE * fp, void *map, RASTER3D_Region region, char *varname,
     fprintf(fp, "SCALARS %s float 1\n", varname);
     fprintf(fp, "LOOKUP_TABLE default\n");
 
-    typeIntern = G3d_tileTypeMap(map);
+    typeIntern = Rast3d_tileTypeMap(map);
 
     percentage = 0;
 
@@ -398,9 +398,9 @@ void write_vtk_rgb_data(void *map_r, void *map_g, void *map_b,
     cols = region.cols;
     depths = region.depths;
 
-    typeIntern[0] = G3d_tileTypeMap(map_r);
-    typeIntern[1] = G3d_tileTypeMap(map_g);
-    typeIntern[2] = G3d_tileTypeMap(map_b);
+    typeIntern[0] = Rast3d_tileTypeMap(map_r);
+    typeIntern[1] = Rast3d_tileTypeMap(map_g);
+    typeIntern[2] = Rast3d_tileTypeMap(map_b);
 
     percentage = 0;
 
@@ -473,9 +473,9 @@ void write_vtk_vector_data(void *map_x, void *map_y, void *map_z,
     cols = region.cols;
     depths = region.depths;
 
-    typeIntern[0] = G3d_tileTypeMap(map_x);
-    typeIntern[1] = G3d_tileTypeMap(map_y);
-    typeIntern[2] = G3d_tileTypeMap(map_z);
+    typeIntern[0] = Rast3d_tileTypeMap(map_x);
+    typeIntern[1] = Rast3d_tileTypeMap(map_y);
+    typeIntern[2] = Rast3d_tileTypeMap(map_z);
 
     percentage = 0;
 
