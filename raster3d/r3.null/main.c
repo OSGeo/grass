@@ -21,7 +21,6 @@
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/G3d.h>
-#include "mask_functions.h"
 #include <grass/glocale.h>
 
 
@@ -77,7 +76,7 @@ getParams(char **name, d_Mask ** maskRules, int *changeNull,
 	  double *newNullVal)
 {
     *name = params.map->answer;
-    parse_vallist(params.setNull->answers, maskRules);
+    G3d_parse_vallist(params.setNull->answers, maskRules);
 
     *changeNull = (params.null->answer != NULL);
     if (*changeNull)
@@ -143,7 +142,7 @@ modifyNull(char *name, d_Mask * maskRules, int changeNull, double newNullVal)
 			value = newNullVal;
 		    }
 		}
-		else if (mask_d_select((DCELL *) & value, maskRules)) {
+		else if (G3d_mask_d_select((DCELL *) & value, maskRules)) {
 		    G3d_setNullValue(&value, 1, DCELL_TYPE);
 		}
 
