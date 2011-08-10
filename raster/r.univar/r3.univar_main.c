@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
 
     char *infile, *zonemap;
     void *map, *zmap = NULL;
-    G3D_Region region;
+    RASTER3D_Region region;
     unsigned int i;
     unsigned int rows, cols, depths;
     unsigned int x, y, z;
@@ -148,7 +148,7 @@ int main(int argc, char *argv[])
 
 	zmap =
 	    G3d_openCellOld(zonemap, G_find_grid3(zonemap, ""), &region,
-			    G3D_TILE_SAME_AS_FILE, G3D_USE_CACHE_DEFAULT);
+			    RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
 	if (zmap == NULL)
 	    G3d_fatalError(_("Error opening g3d map <%s>"), zonemap);
@@ -187,7 +187,7 @@ int main(int argc, char *argv[])
 
     map =
 	G3d_openCellOld(infile, G_find_grid3(infile, ""), &region,
-			G3D_TILE_SAME_AS_FILE, G3D_USE_CACHE_DEFAULT);
+			RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
     if (map == NULL)
 	G3d_fatalError(_("Error opening g3d map <%s>"), infile);

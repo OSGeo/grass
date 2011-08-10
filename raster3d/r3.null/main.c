@@ -90,19 +90,19 @@ static void
 modifyNull(char *name, d_Mask * maskRules, int changeNull, double newNullVal)
 {
     void *map, *mapOut;
-    G3D_Region region;
+    RASTER3D_Region region;
     int tileX, tileY, tileZ, x, y, z;
     double value;
     int doCompress, doLzw, doRle, precision;
     int cacheSize;
 
-    cacheSize = G3d_cacheSizeEncode(G3D_USE_CACHE_XY, 1);
+    cacheSize = G3d_cacheSizeEncode(RASTER3D_USE_CACHE_XY, 1);
 
     if (NULL == G_find_grid3(name, ""))
 	G3d_fatalError(_("3D raster map <%s> not found"), name);
 
     fprintf(stderr, "name %s Mapset %s \n", name, G_mapset());
-    map = G3d_openCellOld(name, G_mapset(), G3D_DEFAULT_WINDOW,
+    map = G3d_openCellOld(name, G_mapset(), RASTER3D_DEFAULT_WINDOW,
 			  DCELL_TYPE, cacheSize);
 
     if (map == NULL)
@@ -113,17 +113,17 @@ modifyNull(char *name, d_Mask * maskRules, int changeNull, double newNullVal)
 
     G3d_getCompressionMode(&doCompress, &doLzw, &doRle, &precision);
 
-    mapOut = G3d_openNewParam(name, DCELL_TYPE, G3D_USE_CACHE_XY,
+    mapOut = G3d_openNewParam(name, DCELL_TYPE, RASTER3D_USE_CACHE_XY,
 			      &region, G3d_fileTypeMap(map),
 			      doLzw, doRle, G3d_tilePrecisionMap(map), tileX,
 			      tileY, tileZ);
     if (mapOut == NULL)
 	G3d_fatalError(_("modifyNull: error opening tmp file"));
 
-    G3d_minUnlocked(map, G3D_USE_CACHE_X);
+    G3d_minUnlocked(map, RASTER3D_USE_CACHE_X);
     G3d_autolockOn(map);
     G3d_unlockAll(map);
-    G3d_minUnlocked(mapOut, G3D_USE_CACHE_X);
+    G3d_minUnlocked(mapOut, RASTER3D_USE_CACHE_X);
     G3d_autolockOn(mapOut);
     G3d_unlockAll(mapOut);
 

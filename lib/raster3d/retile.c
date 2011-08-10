@@ -14,7 +14,7 @@ retileNocache(void *map, const char *nameOut, int tileX, int tileY, int tileZ)
     int typeIntern;
     void *data;
     int tileXsave, tileYsave, tileZsave;
-    G3D_Region region;
+    RASTER3D_Region region;
 
     saveType = G3d_getFileType();
     G3d_setFileType(G3d_fileTypeMap(map));
@@ -23,7 +23,7 @@ retileNocache(void *map, const char *nameOut, int tileX, int tileY, int tileZ)
     typeIntern = G3d_tileTypeMap(map);
     G3d_getRegionStructMap(map, &region);
 
-    map2 = G3d_openCellNew(nameOut, typeIntern, G3D_NO_CACHE, &region);
+    map2 = G3d_openCellNew(nameOut, typeIntern, RASTER3D_NO_CACHE, &region);
 
     if (map2 == NULL)
 	G3d_fatalError("G3d_retile: error in G3d_openCellNew");
@@ -85,7 +85,7 @@ G3d_retile(void *map, const char *nameOut, int tileX, int tileY, int tileZ)
     int xTile, yTile, zTile;
     int xOffs, yOffs, zOffs, prev;
     int tileXsave, tileYsave, tileZsave;
-    G3D_Region region;
+    RASTER3D_Region region;
 
     if (!G3d_tileUseCacheMap(map)) {
 	retileNocache(map, nameOut, tileX, tileY, tileZ);
@@ -101,7 +101,7 @@ G3d_retile(void *map, const char *nameOut, int tileX, int tileY, int tileZ)
     G3d_getRegionStructMap(map, &region);
 
     map2 =
-	G3d_openCellNew(nameOut, typeIntern, G3D_USE_CACHE_DEFAULT, &region);
+	G3d_openCellNew(nameOut, typeIntern, RASTER3D_USE_CACHE_DEFAULT, &region);
     if (map2 == NULL)
 	G3d_fatalError("G3d_retile: error in G3d_openCellNew");
 

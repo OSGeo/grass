@@ -42,7 +42,7 @@ static void set_params(void);	/*Fill the paramType structure */
 
 static void write_result(N_array_3d * status, N_array_3d * phead_start,
 			 N_array_3d * phead, double *result,
-			 G3D_Region * region, char *name);
+			 RASTER3D_Region * region, char *name);
 
 /* ************************************************************************* */
 /* Set up the arguments we are expecting ********************************** */
@@ -124,7 +124,7 @@ void set_params(void)
 
     param.mask = G_define_flag();
     param.mask->key = 'm';
-    param.mask->description = _("Use G3D mask (if exists)");
+    param.mask->description = _("Use RASTER3D mask (if exists)");
 
     param.full_les = G_define_flag();
     param.full_les->key = 'f';
@@ -142,7 +142,7 @@ int main(int argc, char *argv[])
     N_geom_data *geom = NULL;
     N_les *les = NULL;
     N_les_callback_3d *call = NULL;
-    G3D_Region region;
+    RASTER3D_Region region;
     N_gradient_field_3d *field = NULL;
     N_array_3d *xcomp = NULL;
     N_array_3d *ycomp = NULL;
@@ -348,7 +348,7 @@ int main(int argc, char *argv[])
 /* ************************************************************************* */
 void
 write_result(N_array_3d * status, N_array_3d * phead_start,
-	     N_array_3d * phead, double *result, G3D_Region * region,
+	     N_array_3d * phead, double *result, RASTER3D_Region * region,
 	     char *name)
 {
     void *map = NULL;
@@ -364,7 +364,7 @@ write_result(N_array_3d * status, N_array_3d * phead_start,
     depths = region->depths;
 
     /*Open the new map */
-    map = G3d_openNewOptTileSize(name, G3D_USE_CACHE_XY, region, DCELL_TYPE, 32);
+    map = G3d_openNewOptTileSize(name, RASTER3D_USE_CACHE_XY, region, DCELL_TYPE, 32);
 
     if (map == NULL)
 	G3d_fatalError(_("Error opening g3d map <%s>"), name);

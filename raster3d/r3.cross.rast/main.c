@@ -6,7 +6,7 @@
  * AUTHOR(S):    Original author 
  *               Soeren Gebbert soerengebbert at gmx de
  * 		23 Feb 2006 Berlin
- * PURPOSE:      Creates a cross section 2D map from one G3D raster map based on a 2D elevation map  
+ * PURPOSE:      Creates a cross section 2D map from one RASTER3D raster map based on a 2D elevation map  
  *
  * COPYRIGHT:    (C) 2005 by the GRASS Development Team
  *
@@ -37,7 +37,7 @@ int globalElevMapType;
 /*- prototypes --------------------------------------------------------------*/
 void fatal_error(void *map, int elevfd, int outfd, char *errorMsg); /*Simple Error message */
 void set_params(); /*Fill the paramType structure */
-void rast3d_cross_section(void *map, G3D_Region region, int elevfd, int outfd); /*Write the raster */
+void rast3d_cross_section(void *map, RASTER3D_Region region, int elevfd, int outfd); /*Write the raster */
 void close_output_map(int fd); /*close the map */
 
 
@@ -52,7 +52,7 @@ void fatal_error(void *map, int elevfd, int outfd, char *errorMsg)
 
     if (map != NULL) {
         if (!G3d_closeCell(map))
-            G3d_fatalError(_("Could not close G3D map"));
+            G3d_fatalError(_("Could not close RASTER3D map"));
     }
 
     /*unopen the output map */
@@ -114,7 +114,7 @@ void set_params()
 /* ************************************************************************* */
 /* Compute the cross section raster map ************************************ */
 /* ************************************************************************* */
-void rast3d_cross_section(void *map,G3D_Region region, int elevfd, int outfd)
+void rast3d_cross_section(void *map,RASTER3D_Region region, int elevfd, int outfd)
 {
     int col, row;
     int rows, cols, depths, typeIntern;
@@ -135,7 +135,7 @@ void rast3d_cross_section(void *map,G3D_Region region, int elevfd, int outfd)
     cols = region.cols;
     depths = region.depths;
     
-    /*Typ of the G3D Tile */
+    /*Typ of the RASTER3D Tile */
     typeIntern = G3d_tileTypeMap(map);
 
     /*Allocate mem for the output maps row */
@@ -208,12 +208,12 @@ void rast3d_cross_section(void *map,G3D_Region region, int elevfd, int outfd)
 
 
 /* ************************************************************************* */
-/* Main function, open the G3D map and create the cross section map ******** */
+/* Main function, open the RASTER3D map and create the cross section map ******** */
 
 /* ************************************************************************* */
 int main(int argc, char *argv[])
 {
-    G3D_Region region;
+    RASTER3D_Region region;
     struct Cell_head window2d;
     struct GModule *module;
     void *map = NULL; /*The 3D Rastermap */
@@ -271,8 +271,8 @@ int main(int argc, char *argv[])
     /*******************/
     map = G3d_openCellOld(param.input->answer,
                           G_find_grid3(param.input->answer, ""),
-                          &region, G3D_TILE_SAME_AS_FILE,
-                          G3D_USE_CACHE_DEFAULT);
+                          &region, RASTER3D_TILE_SAME_AS_FILE,
+                          RASTER3D_USE_CACHE_DEFAULT);
 
     if (map == NULL)
         G3d_fatalError(_("Error opening 3d raster map <%s>"),
@@ -334,12 +334,12 @@ int main(int argc, char *argv[])
 
     } else {
         fatal_error(map, -1, -1,
-                    _("Wrong G3D Datatype! Cannot create raster map."));
+                    _("Wrong RASTER3D Datatype! Cannot create raster map."));
     }
 
     /* Close files and exit */
     if (!G3d_closeCell(map))
-        G3d_fatalError(_("Could not close G3D map <%s>"),
+        G3d_fatalError(_("Could not close RASTER3D map <%s>"),
                        param.input->answer);
 
     return (EXIT_SUCCESS);

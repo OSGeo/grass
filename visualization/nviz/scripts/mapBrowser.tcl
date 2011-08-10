@@ -99,7 +99,7 @@ proc get_map_browser_element {w} {
 	set element paint/labels
     } elseif {![string compare $element Icons]} {
 	set element icons
-    } elseif {![string compare $element G3D]} {
+    } elseif {![string compare $element RASTER3D]} {
 	set element grid3
     }
     return $element
@@ -199,7 +199,7 @@ proc create_map_browser {{w .map_browser} {type all} {mode 0}} {
     } elseif { ![string compare 3d.view $type]} {
 		set name 3d.view
     } elseif {![string compare vol $type]} {
-		set name G3D
+		set name RASTER3D
     }
 
     if [string compare $type all] {

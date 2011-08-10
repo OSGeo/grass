@@ -258,7 +258,7 @@ N_array_3d *N_read_rast3d_to_array_3d(char *name, N_array_3d * array,
     int x, y, z, cols, rows, depths, type;
     double d1 = 0, f1 = 0;
     N_array_3d *data = array;
-    G3D_Region region;
+    RASTER3D_Region region;
 
 
     /*get the current region */
@@ -274,8 +274,8 @@ N_array_3d *N_read_rast3d_to_array_3d(char *name, N_array_3d * array,
 
     /*Open all maps with default region */
     map =
-	G3d_openCellOld(name, G_find_grid3(name, ""), G3D_DEFAULT_WINDOW,
-			G3D_TILE_SAME_AS_FILE, G3D_USE_CACHE_DEFAULT);
+	G3d_openCellOld(name, G_find_grid3(name, ""), RASTER3D_DEFAULT_WINDOW,
+			RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
     if (map == NULL)
 	G3d_fatalError(_("Error opening g3d map <%s>"), name);
@@ -389,7 +389,7 @@ void N_write_array_3d_to_rast3d(N_array_3d * array, char *name, int mask)
     int x, y, z, cols, rows, depths, count, type;
     double d1 = 0.0, f1 = 0.0;
     N_array_3d *data = array;
-    G3D_Region region;
+    RASTER3D_Region region;
 
     /*get the current region */
     G3d_getWindow(&region);
@@ -412,9 +412,9 @@ void N_write_array_3d_to_rast3d(N_array_3d * array, char *name, int mask)
 
     /*Open the new map */
     if (type == DCELL_TYPE)
-        map = G3d_openNewOptTileSize(name, G3D_USE_CACHE_XY, &region, DCELL_TYPE, 32);
+        map = G3d_openNewOptTileSize(name, RASTER3D_USE_CACHE_XY, &region, DCELL_TYPE, 32);
     else if (type == FCELL_TYPE)
-        map = G3d_openNewOptTileSize(name, G3D_USE_CACHE_XY, &region, FCELL_TYPE, 32);
+        map = G3d_openNewOptTileSize(name, RASTER3D_USE_CACHE_XY, &region, FCELL_TYPE, 32);
 
     if (map == NULL)
 	G3d_fatalError(_("Error opening g3d map <%s>"), name);

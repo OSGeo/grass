@@ -9941,7 +9941,7 @@ msgstr "Sto attaccando i centroidi..."
 
 #: ../vector/v.vol.rst/main.c:245
 msgid ""
-"Interpolates point data to a G3D grid volume using regularized spline with "
+"Interpolates point data to a RASTER3D grid volume using regularized spline with "
 "tension (RST) algorithm."
 msgstr ""
 
@@ -28508,7 +28508,7 @@ msgstr ""
 
 #: ../raster/r.to.rast3/main.c:93
 #, fuzzy
-msgid "Use G3D mask (if exists) with output map"
+msgid "Use RASTER3D mask (if exists) with output map"
 msgstr "Usa una mask G3d (se esiste) con la mappa di output"
 
 #: ../raster/r.to.rast3/main.c:201
@@ -30069,11 +30069,11 @@ msgstr ""
 
 #: ../raster/r.to.rast3elev/main.c:194 ../raster3d/r3.out.ascii/main.c:124
 #: ../raster3d/r3.to.rast/main.c:91
-msgid "Use G3D mask (if exists) with input map"
+msgid "Use RASTER3D mask (if exists) with input map"
 msgstr ""
 
 #: ../raster/r.to.rast3elev/main.c:287 ../raster/r.to.rast3elev/main.c:320
-msgid "Error writing G3D double data"
+msgid "Error writing RASTER3D double data"
 msgstr ""
 
 #: ../raster/r.to.rast3elev/main.c:363 ../raster3d/r3.gwflow/main.c:160
@@ -32465,8 +32465,8 @@ msgstr ""
 
 #: ../raster3d/r3.gwflow/main.c:127
 #, fuzzy
-msgid "Use G3D mask (if exists)"
-msgstr "Usa una mask G3D (se esiste)"
+msgid "Use RASTER3D mask (if exists)"
+msgstr "Usa una mask RASTER3D (se esiste)"
 
 #: ../raster3d/r3.gwflow/main.c:162
 #, fuzzy
@@ -32519,7 +32519,7 @@ msgid "retile"
 msgstr ""
 
 #: ../raster3d/r3.retile/main.c:104
-msgid "Retiles an existing G3D map with user defined x, y and z tile size"
+msgid "Retiles an existing RASTER3D map with user defined x, y and z tile size"
 msgstr ""
 
 #: ../raster3d/r3.retile/main.c:113 ../raster3d/r3.to.rast/main.c:218
@@ -32651,8 +32651,8 @@ msgstr "Grid3 <%s> non trovato %s"
 
 #: ../raster3d/r3.cross.rast/main.c:55
 #, fuzzy
-msgid "Could not close G3D map"
-msgstr "Impossibile chiudere la mappa G3D"
+msgid "Could not close RASTER3D map"
+msgstr "Impossibile chiudere la mappa RASTER3D"
 
 #: ../raster3d/r3.cross.rast/main.c:90
 msgid "Input 3D raster map for cross section."
@@ -32689,13 +32689,13 @@ msgid "Output map already exists. Will be overwritten!"
 msgstr "Mappa in uscita già esistente. Sarà sovrascritta!"
 
 #: ../raster3d/r3.cross.rast/main.c:337
-msgid "Wrong G3D Datatype! Cannot create raster map."
+msgid "Wrong RASTER3D Datatype! Cannot create raster map."
 msgstr ""
 
 #: ../raster3d/r3.cross.rast/main.c:342
 #, fuzzy, c-format
-msgid "Could not close G3D map <%s>"
-msgstr "impossibile chiudere la mappa G3D <%s>"
+msgid "Could not close RASTER3D map <%s>"
+msgstr "impossibile chiudere la mappa RASTER3D <%s>"
 
 #: ../raster3d/r3.mkdspf/main.c:82
 msgid ""
@@ -32843,10 +32843,10 @@ msgstr "Elenco dei valori del raster da mascherare"
 
 #: ../raster3d/base/r3.mask.main.c:158
 #, fuzzy
-msgid "Cannot create mask file: G3D_MASK already exists"
+msgid "Cannot create mask file: RASTER3D_MASK already exists"
 msgstr ""
-"Impossibile creare la mask. MASK G3D già esistente!\n"
-"Usa il comando 'g.remove rast3d=G3D MASK' per rimuovere la maschera esistente"
+"Impossibile creare la mask. MASK RASTER3D già esistente!\n"
+"Usa il comando 'g.remove rast3d=RASTER3D MASK' per rimuovere la maschera esistente"
 
 #: ../raster3d/r3.out.vtk/writeVTKHead.c:40
 msgid "write_vtk_structured_point_header: Writing VTKStructuredPoint-Header"
@@ -32861,8 +32861,8 @@ msgid "write_vtk_unstructured_grid_header: Writing VTKUnstructuredGrid-Header"
 msgstr ""
 
 #: ../raster3d/r3.out.vtk/parameters.c:30
-msgid "G3D map(s) to be converted to VTK-ASCII data format"
-msgstr "Mappa/e G3D da convertire nel formato VTK-ASCII"
+msgid "RASTER3D map(s) to be converted to VTK-ASCII data format"
+msgstr "Mappa/e RASTER3D da convertire nel formato VTK-ASCII"
 
 #: ../raster3d/r3.out.vtk/parameters.c:41
 #, fuzzy
@@ -32901,7 +32901,7 @@ msgstr ""
 
 #: ../raster3d/r3.out.vtk/parameters.c:117
 msgid "Use g3d mask (if exists) with input maps"
-msgstr "Utilizza maschera G3D (se esiste) con le mappe di input"
+msgstr "Utilizza maschera RASTER3D (se esiste) con le mappe di input"
 
 #: ../raster3d/r3.out.vtk/parameters.c:122
 msgid "Scale factor effects the origin"
@@ -33043,10 +33043,10 @@ msgstr ""
 
 #: ../raster3d/r3.to.rast/main.c:96
 msgid ""
-"Use the same resolution as the input G3D map for the 2d output maps, "
+"Use the same resolution as the input RASTER3D map for the 2d output maps, "
 "independent of the current region settings"
 msgstr ""
-"Utilizza la stessa risoluzione della map G3D di input per la mappa output "
+"Utilizza la stessa risoluzione della map RASTER3D di input per la mappa output "
 "2D, indipendentemente dalle impostazioni attuali della region"
 
 #: ../raster3d/r3.to.rast/main.c:209
@@ -33423,8 +33423,8 @@ msgstr "Ordina valori non nulli"
 #~ msgid "Could not open map %s"
 #~ msgstr "Impossibile aprire la mappa %s"
 
-#~ msgid "Converts 3D raster maps (G3D) into the VTK-Ascii format"
-#~ msgstr "Converte una mappa raster 3D (G3D) nel formato VTK-Ascii"
+#~ msgid "Converts 3D raster maps (RASTER3D) into the VTK-Ascii format"
+#~ msgstr "Converte una mappa raster 3D (RASTER3D) nel formato VTK-Ascii"
 
 #, fuzzy
 #~ msgid "unable to close top raster map"
@@ -33447,11 +33447,11 @@ msgstr "Ordina valori non nulli"
 #~ msgstr "raster, statistica, riclassificazione"
 
 #~ msgid ""
-#~ "Cannot create mask file: G3D_MASK already exists!\n"
-#~ " Use 'g.remove rast3d=G3D_MASK' to remove the existing mask."
+#~ "Cannot create mask file: RASTER3D_MASK already exists!\n"
+#~ " Use 'g.remove rast3d=RASTER3D_MASK' to remove the existing mask."
 #~ msgstr ""
-#~ "Impossibile creare la mask. MASK G3D già esistente!\n"
-#~ "Usa il comando 'g.remove rast3d=G3D MASK' per rimuovere la maschera "
+#~ "Impossibile creare la mask. MASK RASTER3D già esistente!\n"
+#~ "Usa il comando 'g.remove rast3d=RASTER3D MASK' per rimuovere la maschera "
 #~ "esistente"
 
 #~ msgid "Export of GRASS 3D raster map to 3-dimensional Vis5D file."

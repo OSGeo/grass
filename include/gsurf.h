@@ -112,7 +112,7 @@
 #define LT_SHOW_LABELS   0x00002000
 
 /* types of volume files */
-#define VOL_FTYPE_G3D        0
+#define VOL_FTYPE_RASTER3D        0
 
 /* types of volume values */
 #define VOL_DTYPE_FLOAT     0

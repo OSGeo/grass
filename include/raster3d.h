@@ -4,44 +4,44 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 
-#define G3D_TILE_SAME_AS_FILE 2
+#define RASTER3D_TILE_SAME_AS_FILE 2
 
-#define G3D_NO_COMPRESSION 0
-#define G3D_COMPRESSION 1
+#define RASTER3D_NO_COMPRESSION 0
+#define RASTER3D_COMPRESSION 1
 
-#define G3D_USE_LZW 1
-#define G3D_NO_LZW 0
+#define RASTER3D_USE_LZW 1
+#define RASTER3D_NO_LZW 0
 
-#define G3D_USE_RLE 1
-#define G3D_NO_RLE 0
+#define RASTER3D_USE_RLE 1
+#define RASTER3D_NO_RLE 0
 
-#define G3D_MAX_PRECISION -1
+#define RASTER3D_MAX_PRECISION -1
 
-#define G3D_NO_CACHE 0
-#define G3D_USE_CACHE_DEFAULT -1
-#define G3D_USE_CACHE_X -2
-#define G3D_USE_CACHE_Y -3
-#define G3D_USE_CACHE_Z -4
-#define G3D_USE_CACHE_XY -5
-#define G3D_USE_CACHE_XZ -6
-#define G3D_USE_CACHE_YZ -7
-#define G3D_USE_CACHE_XYZ -8
+#define RASTER3D_NO_CACHE 0
+#define RASTER3D_USE_CACHE_DEFAULT -1
+#define RASTER3D_USE_CACHE_X -2
+#define RASTER3D_USE_CACHE_Y -3
+#define RASTER3D_USE_CACHE_Z -4
+#define RASTER3D_USE_CACHE_XY -5
+#define RASTER3D_USE_CACHE_XZ -6
+#define RASTER3D_USE_CACHE_YZ -7
+#define RASTER3D_USE_CACHE_XYZ -8
 
-#define G3D_DEFAULT_WINDOW NULL
+#define RASTER3D_DEFAULT_WINDOW NULL
 
-#define G3D_DIRECTORY      "grid3"
-#define G3D_CELL_ELEMENT   "cell"
-#define G3D_CATS_ELEMENT   "cats"
-#define G3D_RANGE_ELEMENT  "range"
-#define G3D_HEADER_ELEMENT "cellhd"
-#define G3D_HISTORY_ELEMENT "hist"
-#define G3D_COLOR_ELEMENT  "color"
-#define G3D_COLOR2_DIRECTORY  "colr2"
-#define G3D_MASK_MAP       "G3D_MASK"
-#define G3D_WINDOW_ELEMENT   "WIND3"
-#define G3D_DEFAULT_WINDOW_ELEMENT   "DEFAULT_WIND3"
-#define G3D_WINDOW_DATABASE "windows3d"
-#define G3D_PERMANENT_MAPSET "PERMANENT"
+#define RASTER3D_DIRECTORY      "grid3"
+#define RASTER3D_CELL_ELEMENT   "cell"
+#define RASTER3D_CATS_ELEMENT   "cats"
+#define RASTER3D_RANGE_ELEMENT  "range"
+#define RASTER3D_HEADER_ELEMENT "cellhd"
+#define RASTER3D_HISTORY_ELEMENT "hist"
+#define RASTER3D_COLOR_ELEMENT  "color"
+#define RASTER3D_COLOR2_DIRECTORY  "colr2"
+#define RASTER3D_MASK_MAP       "RASTER3D_MASK"
+#define RASTER3D_WINDOW_ELEMENT   "WIND3"
+#define RASTER3D_DEFAULT_WINDOW_ELEMENT   "DEFAULT_WIND3"
+#define RASTER3D_WINDOW_DATABASE "windows3d"
+#define RASTER3D_PERMANENT_MAPSET "PERMANENT"
 
 /*---------------------------------------------------------------------------*/
 
@@ -60,17 +60,17 @@ typedef struct
     int proj;			/* Projection (see gis.h) */
     int zone;			/* Projection zone (see gis.h) */
 
-} G3D_Region;
+} RASTER3D_Region;
 
 /*---------------------------------------------------------------------------*/
 
-struct G3D_Map;
+struct RASTER3D_Map;
 
-typedef void resample_fn(struct G3D_Map *, int, int, int, void *, int);
+typedef void resample_fn(struct RASTER3D_Map *, int, int, int, void *, int);
 
 /*---------------------------------------------------------------------------*/
 
-typedef struct G3D_Map
+typedef struct RASTER3D_Map
 {
 
     char *fileName;
@@ -78,13 +78,13 @@ typedef struct G3D_Map
     char *mapset;
 
     /* operation performed on map */
-    int operation;		/* G3D_WRITE_DATA or G3D_READ_DATA */
+    int operation;		/* RASTER3D_WRITE_DATA or RASTER3D_READ_DATA */
 
     /* region */
-    G3D_Region region;
+    RASTER3D_Region region;
 
     /* window for map */
-    G3D_Region window;
+    RASTER3D_Region window;
 
     /* resmapling function used for map. default is nearest neighbor */
     resample_fn *resampleFun;
@@ -107,12 +107,12 @@ typedef struct G3D_Map
     int type;			/* DCELL_TYPE or FCELL_TYPE */
 
     /* data concering the compression */
-    int precision;		/* G3D_MAX_PRECISION or, 0 .. 23 for float, 
+    int precision;		/* RASTER3D_MAX_PRECISION or, 0 .. 23 for float, 
 				   0 .. 52 for double */
-    int compression;		/* G3D_NO_COMPRESSION or G3D_USE_COMPRESSION */
-    int useLzw;			/* G3D_USE_LZW or G3D_NO_LZW */
-    int useRle;			/* G3D_USE_RLE or G3D_NO_RLE */
-    int useXdr;			/* G3D_USE_XDR or G3D_NO_XDR */
+    int compression;		/* RASTER3D_NO_COMPRESSION or RASTER3D_USE_COMPRESSION */
+    int useLzw;			/* RASTER3D_USE_LZW or RASTER3D_NO_LZW */
+    int useRle;			/* RASTER3D_USE_RLE or RASTER3D_NO_RLE */
+    int useXdr;			/* RASTER3D_USE_XDR or RASTER3D_NO_XDR */
 
     /* pointer to first tile in file */
     int offset;
@@ -130,8 +130,8 @@ typedef struct G3D_Map
     /* pointer to the last entry in the file */
     int fileEndPtr;
 
-    /* indicates if index is stored in file; used for G3D_READ_DATA only */
-    int hasIndex;		/* G3D_HAS_INDEX or G3D_NO_INDEX */
+    /* indicates if index is stored in file; used for RASTER3D_READ_DATA only */
+    int hasIndex;		/* RASTER3D_HAS_INDEX or RASTER3D_NO_INDEX */
 
     /* information concerning internal storage of data */
 
@@ -182,7 +182,7 @@ typedef struct G3D_Map
 
     int useMask;		/* 1 if mask is used; 0 otherwise */
 
-} G3D_Map;
+} RASTER3D_Map;
 
 /*---------------------------------------------------------------------------*/
 
@@ -217,7 +217,7 @@ typedef struct
     void *hash;			/* ptr to hashTable used to relate external names to
 				   internal indices (elts) */
 
-} G3D_cache;
+} RASTER3D_cache;
 
 /*---------------------------------------------------------------------------*/
 

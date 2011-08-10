@@ -5,7 +5,7 @@
 #define NO_RESAMPLE
 
 
-int r3read_level(void *g3map, G3D_Region * g3reg, file_info * Headfax,
+int r3read_level(void *g3map, RASTER3D_Region * g3reg, file_info * Headfax,
 		 float *data, int n_lev)
 {
 #ifdef NO_RESAMPLE

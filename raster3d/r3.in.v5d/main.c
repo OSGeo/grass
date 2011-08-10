@@ -1,6 +1,6 @@
 /*
  * r3.in.v5d - program for data conversion from the V5D format 
- * of the VIS5D visualization software to G3D GRASS
+ * of the VIS5D visualization software to RASTER3D GRASS
  * data format.
  *
  * Copyright Jaroslav Hofierka
@@ -102,7 +102,7 @@ getParams(char **input, char **output, int *convertNull, double *nullValue)
 
 /*---------------------------------------------------------------------------*/
 
-void convert(char *openFile, G3D_Region * region, int convertNull,
+void convert(char *openFile, RASTER3D_Region * region, int convertNull,
 	     double nullValue)
 {
     v5dstruct v5d;
@@ -184,7 +184,7 @@ int main(int argc, char *argv[])
     int useTypeDefault, type, useLzwDefault, doLzw, useRleDefault, doRle;
     int usePrecisionDefault, precision, useDimensionDefault, tileX, tileY,
 	tileZ;
-    G3D_Region region;
+    RASTER3D_Region region;
     struct GModule *module;
 
     map = NULL;
@@ -212,7 +212,7 @@ int main(int argc, char *argv[])
 	fatalError("main: error getting standard parameters");
 
     G3d_getWindow(&region);
-    map = G3d_openCellNew(output, FCELL_TYPE, G3D_USE_CACHE_XY, &region);
+    map = G3d_openCellNew(output, FCELL_TYPE, RASTER3D_USE_CACHE_XY, &region);
     if (map == NULL)
 	fatalError(_("Error opening 3d raster map"));
 

@@ -6,7 +6,7 @@
 * AUTHOR(S):    Original author 
 *               Soeren Gebbert soerengebbert at gmx de
 * 		27 Feb 2006 Berlin
-* PURPOSE:      Converts 3D raster maps (G3D) into the VTK-Ascii format  
+* PURPOSE:      Converts 3D raster maps (RASTER3D) into the VTK-Ascii format  
 *
 * COPYRIGHT:    (C) 2005 by the GRASS Development Team
 *
@@ -27,7 +27,7 @@ void set_params()
     param.input = G_define_standard_option(G_OPT_R3_INPUTS);
     param.input->required = NO;
     param.input->description =
-	_("G3D map(s) to be converted to VTK-ASCII data format");
+	_("RASTER3D map(s) to be converted to VTK-ASCII data format");
 
     param.output = G_define_standard_option(G_OPT_F_OUTPUT);
     param.output->required = NO;

@@ -9945,7 +9945,7 @@ msgstr "セントロイドを添付しています、、、"
 
 #: ../vector/v.vol.rst/main.c:245
 msgid ""
-"Interpolates point data to a G3D grid volume using regularized spline with "
+"Interpolates point data to a RASTER3D grid volume using regularized spline with "
 "tension (RST) algorithm."
 msgstr ""
 "テンション (RST) アルゴリズムの正規化スプライン曲線を使って，ポイントデータを"
@@ -28593,8 +28593,8 @@ msgid "The maximum tile size in kilo bytes. Default is 32KB."
 msgstr ""
 
 #: ../raster/r.to.rast3/main.c:93
-msgid "Use G3D mask (if exists) with output map"
-msgstr "出力マップとともにG3Dマスク（もしあれば）を使用してください"
+msgid "Use RASTER3D mask (if exists) with output map"
+msgstr "出力マップとともにRASTER3Dマスク（もしあれば）を使用してください"
 
 #: ../raster/r.to.rast3/main.c:201
 msgid "Converts 2D raster map slices to one 3D raster volume map."
@@ -30139,11 +30139,11 @@ msgstr "入力マップの値を使ってローワーセルを埋める  "
 
 #: ../raster/r.to.rast3elev/main.c:194 ../raster3d/r3.out.ascii/main.c:124
 #: ../raster3d/r3.to.rast/main.c:91
-msgid "Use G3D mask (if exists) with input map"
+msgid "Use RASTER3D mask (if exists) with input map"
 msgstr "入力マップに3Dグリッドマスクを使う"
 
 #: ../raster/r.to.rast3elev/main.c:287 ../raster/r.to.rast3elev/main.c:320
-msgid "Error writing G3D double data"
+msgid "Error writing RASTER3D double data"
 msgstr "エラー:3Dグリッド倍精度浮動小数点値データを書き込めません"
 
 #: ../raster/r.to.rast3elev/main.c:363 ../raster3d/r3.gwflow/main.c:160
@@ -32519,7 +32519,7 @@ msgid ""
 msgstr ""
 
 #: ../raster3d/r3.gwflow/main.c:127
-msgid "Use G3D mask (if exists)"
+msgid "Use RASTER3D mask (if exists)"
 msgstr "（可能であれば）3Dグリッドマスクの使用"
 
 #: ../raster3d/r3.gwflow/main.c:162
@@ -32571,7 +32571,7 @@ msgid "retile"
 msgstr ""
 
 #: ../raster3d/r3.retile/main.c:104
-msgid "Retiles an existing G3D map with user defined x, y and z tile size"
+msgid "Retiles an existing RASTER3D map with user defined x, y and z tile size"
 msgstr ""
 
 #: ../raster3d/r3.retile/main.c:113 ../raster3d/r3.to.rast/main.c:218
@@ -32692,7 +32692,7 @@ msgid "Grid3 <%s> not found %s"
 msgstr "Grid3 <%s> が見つかりません %s"
 
 #: ../raster3d/r3.cross.rast/main.c:55
-msgid "Could not close G3D map"
+msgid "Could not close RASTER3D map"
 msgstr "3Dグリッドマップを閉じれません"
 
 #: ../raster3d/r3.cross.rast/main.c:90
@@ -32731,12 +32731,12 @@ msgid "Output map already exists. Will be overwritten!"
 msgstr "出力マップが存在しています。上書きされます！"
 
 #: ../raster3d/r3.cross.rast/main.c:337
-msgid "Wrong G3D Datatype! Cannot create raster map."
+msgid "Wrong RASTER3D Datatype! Cannot create raster map."
 msgstr "3Dグリッドのデータタイプが不正です。ラスターマップが作成できません"
 
 #: ../raster3d/r3.cross.rast/main.c:342
 #, c-format
-msgid "Could not close G3D map <%s>"
+msgid "Could not close RASTER3D map <%s>"
 msgstr "3Dグリッドマップ <%s> が閉じれません"
 
 #: ../raster3d/r3.mkdspf/main.c:82
@@ -32881,7 +32881,7 @@ msgid "List of cell values to be masked out"
 msgstr "マスクするセル値一覧"
 
 #: ../raster3d/base/r3.mask.main.c:158
-msgid "Cannot create mask file: G3D_MASK already exists"
+msgid "Cannot create mask file: RASTER3D_MASK already exists"
 msgstr ""
 
 #: ../raster3d/r3.out.vtk/writeVTKHead.c:40
@@ -32899,7 +32899,7 @@ msgstr ""
 "write_vtk_unstructured_grid_header: VTK非構造グリッドのヘッダを書出します"
 
 #: ../raster3d/r3.out.vtk/parameters.c:30
-msgid "G3D map(s) to be converted to VTK-ASCII data format"
+msgid "RASTER3D map(s) to be converted to VTK-ASCII data format"
 msgstr " VTK-ASCII データフォーマットに変換する3Dグリッドマップ"
 
 #: ../raster3d/r3.out.vtk/parameters.c:41
@@ -33078,7 +33078,7 @@ msgstr "結果ラスタースライスマップのベース名"
 
 #: ../raster3d/r3.to.rast/main.c:96
 msgid ""
-"Use the same resolution as the input G3D map for the 2d output maps, "
+"Use the same resolution as the input RASTER3D map for the 2d output maps, "
 "independent of the current region settings"
 msgstr ""
 "現在の領域の設定とは無関係に、出力する2Dマップに入力3Dグリッドマップと同じ解"

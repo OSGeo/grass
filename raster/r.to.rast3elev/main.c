@@ -50,7 +50,7 @@ paramType param; /*params */
 /*- prototypes --------------------------------------------------------------*/
 void fatal_error(Database db, char *errorMsg); /*Simple Error message */
 void set_params(); /*Fill the paramType structure */
-void elev_raster_to_g3d(Database db, G3D_Region region); /*Write the raster */
+void elev_raster_to_g3d(Database db, RASTER3D_Region region); /*Write the raster */
 int open_input_raster_map(const char *name); /*opens the outputmap */
 void close_input_raster_map(int fd); /*close the map */
 double get_raster_value_as_double(int maptype, void *ptr, double nullval);
@@ -191,16 +191,16 @@ void set_params()
 
     param.mask = G_define_flag();
     param.mask->key = 'm';
-    param.mask->description = _("Use G3D mask (if exists) with input map");
+    param.mask->description = _("Use RASTER3D mask (if exists) with input map");
 
     return;
 }
 
 /* ************************************************************************* */
-/* Write the raster maps into the G3D map *********************************** */
+/* Write the raster maps into the RASTER3D map *********************************** */
 
 /* ************************************************************************* */
-void elev_raster_to_g3d(Database db, G3D_Region region)
+void elev_raster_to_g3d(Database db, RASTER3D_Region region)
 {
     int x, y, z = 0;
     int rows, cols, depths;
@@ -254,7 +254,7 @@ void elev_raster_to_g3d(Database db, G3D_Region region)
                     "Caluclating position in 3d region -> height %g with value %g",
                     height, inval);
 
-            /* Calculate if the G3D cell is lower or upper the elevation map
+            /* Calculate if the RASTER3D cell is lower or upper the elevation map
              *  and set the value.*/
             if (db.count == 0) {
                 /*Use this method if the 3d raster map was not touched befor */
@@ -278,13 +278,13 @@ void elev_raster_to_g3d(Database db, G3D_Region region)
                     if (height >= (z * tbres + bottom) &&
                         height <= ((z + 1) * tbres + bottom))
                         value = inval;
-                    /*If the elevation is null, set the G3D value null */
+                    /*If the elevation is null, set the RASTER3D value null */
                     if (G3d_isNullValueNum(&height, DCELL_TYPE))
                         value = null;
 
                     /*Write the value to the 3D map */
                     if (G3d_putDouble(db.map, x, y, z, value) < 0)
-                        fatal_error(db, _("Error writing G3D double data"));
+                        fatal_error(db, _("Error writing RASTER3D double data"));
                 }
             } else {
                 /*Use this method for every following 3d raster maps access */
@@ -311,13 +311,13 @@ void elev_raster_to_g3d(Database db, G3D_Region region)
                     if (height >= (z * tbres + bottom) &&
                         height <= ((z + 1) * tbres + bottom))
                         value = inval;
-                    /*If the elevation is null, set the G3D value null */
+                    /*If the elevation is null, set the RASTER3D value null */
                     if (G3d_isNullValueNum(&height, DCELL_TYPE))
                         value = G3d_getDouble(db.map, x, y, z);
 
                     /*Write the value to the 3D map */
                     if (G3d_putDouble(db.map, x, y, z, value) < 0)
-                        fatal_error(db, _("Error writing G3D double data"));
+                        fatal_error(db, _("Error writing RASTER3D double data"));
 
                 }
             }
@@ -333,12 +333,12 @@ void elev_raster_to_g3d(Database db, G3D_Region region)
 }
 
 /* ************************************************************************* */
-/* Main function, open the raster maps and create the G3D raster maps ****** */
+/* Main function, open the raster maps and create the RASTER3D raster maps ****** */
 
 /* ************************************************************************* */
 int main(int argc, char *argv[])
 {
-    G3D_Region region;
+    RASTER3D_Region region;
     struct Cell_head window2d;
     struct GModule *module;
     int cols, rows, i;
@@ -435,9 +435,9 @@ int main(int argc, char *argv[])
 
     G_debug(2, "Open 3d raster map %s", param.output->answer);
 
-    /*open G3D output map */
+    /*open RASTER3D output map */
     db.map = NULL;
-    db.map = G3d_openNewOptTileSize(param.output->answer, G3D_USE_CACHE_XY, &region, DCELL_TYPE, maxSize);
+    db.map = G3d_openNewOptTileSize(param.output->answer, RASTER3D_USE_CACHE_XY, &region, DCELL_TYPE, maxSize);
 
     if (db.map == NULL)
         fatal_error(db, _("Error opening 3d raster map"));
@@ -475,7 +475,7 @@ int main(int argc, char *argv[])
         db.elevmaptype = Rast_map_type(name, "");
 
         /****************************************/
-        /*Write the data into the G3D Rastermap */
+        /*Write the data into the RASTER3D Rastermap */
         elev_raster_to_g3d(db, region);
 
         /*****************************************/

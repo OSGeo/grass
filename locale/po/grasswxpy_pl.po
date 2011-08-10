@@ -4586,9 +4586,9 @@ msgstr "Raster 3D z punktów"
 
 #: ../gui/wxpython/menustrings.py:803
 msgid ""
-"Interpolates point data to a G3D grid volume using regularized spline with "
+"Interpolates point data to a RASTER3D grid volume using regularized spline with "
 "tension (RST) algorithm."
-msgstr "Interpoluje dane punktowe do G3D za pomocą algorytmu RST."
+msgstr "Interpoluje dane punktowe do RASTER3D za pomocą algorytmu RST."
 
 #: ../gui/wxpython/menustrings.py:804
 msgid "Report and Statistics"
@@ -12823,7 +12823,7 @@ msgstr "Nie znaleziono pliku."
 #~ msgid "Export of GRASS 3D raster map to 3-dimensional Vis5D file."
 #~ msgstr "Eksportuje raster 3D GRASS-a do trójwymiarowego pliku Vis5D."
 
-#~ msgid "Converts 3D raster maps (G3D) into the VTK-Ascii format"
+#~ msgid "Converts 3D raster maps (RASTER3D) into the VTK-Ascii format"
 #~ msgstr "Konwertuje mapę rastrową 3D GRASS-a do formatu VTK-Ascii."
 
 #, fuzzy

@@ -10115,7 +10115,7 @@ msgstr "分类...\n"
 
 #: ../vector/v.vol.rst/main.c:245
 msgid ""
-"Interpolates point data to a G3D grid volume using regularized spline with "
+"Interpolates point data to a RASTER3D grid volume using regularized spline with "
 "tension (RST) algorithm."
 msgstr ""
 
@@ -25079,7 +25079,7 @@ msgstr "开启缓存报告"
 #: ../raster/r.what/main.c:196
 #, fuzzy, c-format
 msgid "can only do up to %d raster maps"
-msgstr "输出的 G3D grid 文件名称"
+msgstr "输出的 RASTER3D grid 文件名称"
 
 #: ../raster/r.what/main.c:212
 #, fuzzy, c-format
@@ -28994,7 +28994,7 @@ msgid "The maximum tile size in kilo bytes. Default is 32KB."
 msgstr ""
 
 #: ../raster/r.to.rast3/main.c:93
-msgid "Use G3D mask (if exists) with output map"
+msgid "Use RASTER3D mask (if exists) with output map"
 msgstr ""
 
 #: ../raster/r.to.rast3/main.c:201
@@ -30587,12 +30587,12 @@ msgstr ""
 
 #: ../raster/r.to.rast3elev/main.c:194 ../raster3d/r3.out.ascii/main.c:124
 #: ../raster3d/r3.to.rast/main.c:91
-msgid "Use G3D mask (if exists) with input map"
+msgid "Use RASTER3D mask (if exists) with input map"
 msgstr ""
 
 #: ../raster/r.to.rast3elev/main.c:287 ../raster/r.to.rast3elev/main.c:320
 #, fuzzy
-msgid "Error writing G3D double data"
+msgid "Error writing RASTER3D double data"
 msgstr "读取地图 %s 时发生错误"
 
 #: ../raster/r.to.rast3elev/main.c:363 ../raster3d/r3.gwflow/main.c:160
@@ -33024,7 +33024,7 @@ msgid ""
 msgstr ""
 
 #: ../raster3d/r3.gwflow/main.c:127
-msgid "Use G3D mask (if exists)"
+msgid "Use RASTER3D mask (if exists)"
 msgstr ""
 
 #: ../raster3d/r3.gwflow/main.c:162
@@ -33078,7 +33078,7 @@ msgid "retile"
 msgstr ""
 
 #: ../raster3d/r3.retile/main.c:104
-msgid "Retiles an existing G3D map with user defined x, y and z tile size"
+msgid "Retiles an existing RASTER3D map with user defined x, y and z tile size"
 msgstr ""
 
 #: ../raster3d/r3.retile/main.c:113 ../raster3d/r3.to.rast/main.c:218
@@ -33210,7 +33210,7 @@ msgstr "grid3 <%s> 未找到 %s\n"
 
 #: ../raster3d/r3.cross.rast/main.c:55
 #, fuzzy
-msgid "Could not close G3D map"
+msgid "Could not close RASTER3D map"
 msgstr "无法关闭地图"
 
 #: ../raster3d/r3.cross.rast/main.c:90
@@ -33250,12 +33250,12 @@ msgstr "栅格地图 %i 文件名成： %s 已经存在。它将被覆盖！\n"
 
 #: ../raster3d/r3.cross.rast/main.c:337
 #, fuzzy
-msgid "Wrong G3D Datatype! Cannot create raster map."
-msgstr "错误的 G3D 数据类型！无法创建栅格地图。"
+msgid "Wrong RASTER3D Datatype! Cannot create raster map."
+msgstr "错误的 RASTER3D 数据类型！无法创建栅格地图。"
 
 #: ../raster3d/r3.cross.rast/main.c:342
 #, fuzzy, c-format
-msgid "Could not close G3D map <%s>"
+msgid "Could not close RASTER3D map <%s>"
 msgstr "无法关闭地图"
 
 #: ../raster3d/r3.mkdspf/main.c:82
@@ -33405,10 +33405,10 @@ msgstr ""
 
 #: ../raster3d/base/r3.mask.main.c:158
 #, fuzzy
-msgid "Cannot create mask file: G3D_MASK already exists"
+msgid "Cannot create mask file: RASTER3D_MASK already exists"
 msgstr ""
-"无法生成掩模文件：G3D_MASK 已经存在！\n"
-"请先使用 'g.remove rast3d=G3D_MASK' 删除已有的掩模文件。"
+"无法生成掩模文件：RASTER3D_MASK 已经存在！\n"
+"请先使用 'g.remove rast3d=RASTER3D_MASK' 删除已有的掩模文件。"
 
 #: ../raster3d/r3.out.vtk/writeVTKHead.c:40
 msgid "write_vtk_structured_point_header: Writing VTKStructuredPoint-Header"
@@ -33423,7 +33423,7 @@ msgid "write_vtk_unstructured_grid_header: Writing VTKUnstructuredGrid-Header"
 msgstr ""
 
 #: ../raster3d/r3.out.vtk/parameters.c:30
-msgid "G3D map(s) to be converted to VTK-ASCII data format"
+msgid "RASTER3D map(s) to be converted to VTK-ASCII data format"
 msgstr ""
 
 #: ../raster3d/r3.out.vtk/parameters.c:41
@@ -33601,7 +33601,7 @@ msgstr "生成的栅格分块地图的基础名称"
 
 #: ../raster3d/r3.to.rast/main.c:96
 msgid ""
-"Use the same resolution as the input G3D map for the 2d output maps, "
+"Use the same resolution as the input RASTER3D map for the 2d output maps, "
 "independent of the current region settings"
 msgstr ""
 

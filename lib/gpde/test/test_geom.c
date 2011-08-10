@@ -52,7 +52,7 @@ int unit_test_geom_data(void)
 int test_geom_data(void)
 {
     struct Cell_head region2d;
-    G3D_Region region3d;
+    RASTER3D_Region region3d;
     N_geom_data *geom = NULL;
     int sum = 0, i;
     double area = 0;

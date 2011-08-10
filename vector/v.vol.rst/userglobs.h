@@ -43,6 +43,6 @@ extern int count;
 
 extern FILE *dev, *cvdevf;
 extern FCELL *zero_array_cell;
-extern G3D_Region current_region;
+extern RASTER3D_Region current_region;
 
 #endif

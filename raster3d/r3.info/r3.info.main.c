@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
     char timebuff[256];
     int i;
     FILE *out;
-    G3D_Region cellhd;
+    RASTER3D_Region cellhd;
     void *g3map;
     struct Categories cats;
     struct History hist;
@@ -128,8 +128,8 @@ int main(int argc, char *argv[])
 
     /*We need to open the map */
     g3map =
-	G3d_openCellOld(name, mapset, G3D_DEFAULT_WINDOW,
-			G3D_TILE_SAME_AS_FILE, G3D_NO_CACHE);
+	G3d_openCellOld(name, mapset, RASTER3D_DEFAULT_WINDOW,
+			RASTER3D_TILE_SAME_AS_FILE, RASTER3D_NO_CACHE);
     if (NULL == g3map)
 	G_fatal_error(_("Unable to open 3D raster map <%s>"), name);
 
@@ -250,8 +250,8 @@ int main(int argc, char *argv[])
 		G_fatal_error(_("Cannot allocate memory for string"));
 
             double totalSize = 0;
-            for(i = 0; i < ((G3D_Map* )g3map)->nTiles; i++)
-                totalSize += ((G3D_Map* )g3map)->tileLength[i];
+            for(i = 0; i < ((RASTER3D_Map* )g3map)->nTiles; i++)
+                totalSize += ((RASTER3D_Map* )g3map)->tileLength[i];
 
 	    if (G_asprintf(&line, "  Total size:           %ld Bytes",
                 (long)(totalSize)) > 0)
@@ -260,13 +260,13 @@ int main(int argc, char *argv[])
 		G_fatal_error(_("Cannot allocate memory for string"));
 
 	    if (G_asprintf(&line, "  Number of tiles:      %d",
-                ((G3D_Map* )g3map)->nTiles) > 0)
+                ((RASTER3D_Map* )g3map)->nTiles) > 0)
 		printline(line);
 	    else
 		G_fatal_error(_("Cannot allocate memory for string"));
 
 	    if (G_asprintf(&line, "  Mean tile size:       %ld Bytes",
-                (long)(totalSize/((G3D_Map* )g3map)->nTiles)) > 0)
+                (long)(totalSize/((RASTER3D_Map* )g3map)->nTiles)) > 0)
 		printline(line);
 	    else
 		G_fatal_error(_("Cannot allocate memory for string"));
@@ -274,12 +274,12 @@ int main(int argc, char *argv[])
             int tileSize = 0;
 
             if(data_type == FCELL_TYPE)
-                tileSize = sizeof(FCELL) * ((G3D_Map* )g3map)->tileX * ((G3D_Map* )g3map)->tileY *
-                        ((G3D_Map* )g3map)->tileZ;
+                tileSize = sizeof(FCELL) * ((RASTER3D_Map* )g3map)->tileX * ((RASTER3D_Map* )g3map)->tileY *
+                        ((RASTER3D_Map* )g3map)->tileZ;
 
             if(data_type == DCELL_TYPE)
-                tileSize = sizeof(DCELL) * ((G3D_Map* )g3map)->tileX * ((G3D_Map* )g3map)->tileY *
-                        ((G3D_Map* )g3map)->tileZ;
+                tileSize = sizeof(DCELL) * ((RASTER3D_Map* )g3map)->tileX * ((RASTER3D_Map* )g3map)->tileY *
+                        ((RASTER3D_Map* )g3map)->tileZ;
 
 	    if (G_asprintf(&line, "  Tile size in memory:  %ld Bytes",
                 (long)(tileSize)) > 0)
@@ -288,15 +288,15 @@ int main(int argc, char *argv[])
 		G_fatal_error(_("Cannot allocate memory for string"));
 
 	    if (G_asprintf(&line, "  Number of tiles in x, y and  z:   %d, %d, %d",
-                                  ((G3D_Map* )g3map)->nx, ((G3D_Map* )g3map)->ny,
-                                  ((G3D_Map* )g3map)->nz) > 0)
+                                  ((RASTER3D_Map* )g3map)->nx, ((RASTER3D_Map* )g3map)->ny,
+                                  ((RASTER3D_Map* )g3map)->nz) > 0)
 		printline(line);
 	    else
 		G_fatal_error(_("Cannot allocate memory for string"));
 
 	    if (G_asprintf(&line, "  Dimension of a tile in x, y, z:   %d, %d, %d",
-                                  ((G3D_Map* )g3map)->tileX, ((G3D_Map* )g3map)->tileY,
-                                  ((G3D_Map* )g3map)->tileZ) > 0)
+                                  ((RASTER3D_Map* )g3map)->tileX, ((RASTER3D_Map* )g3map)->tileY,
+                                  ((RASTER3D_Map* )g3map)->tileZ) > 0)
 		printline(line);
 	    else
 		G_fatal_error(_("Cannot allocate memory for string"));
@@ -444,12 +444,12 @@ int main(int argc, char *argv[])
 
 	}			/*Resolution */
 	else if (iflag->answer) {
-	    fprintf(out, "tilenumx=%d\n", ((G3D_Map* )g3map)->nx);
-	    fprintf(out, "tilenumy=%d\n", ((G3D_Map* )g3map)->ny);
-	    fprintf(out, "tilenumz=%d\n", ((G3D_Map* )g3map)->nz);
-	    fprintf(out, "tiledimx=%d\n", ((G3D_Map* )g3map)->tileX);
-	    fprintf(out, "tiledimy=%d\n", ((G3D_Map* )g3map)->tileY);
-	    fprintf(out, "tiledimz=%d\n", ((G3D_Map* )g3map)->tileZ);
+	    fprintf(out, "tilenumx=%d\n", ((RASTER3D_Map* )g3map)->nx);
+	    fprintf(out, "tilenumy=%d\n", ((RASTER3D_Map* )g3map)->ny);
+	    fprintf(out, "tilenumz=%d\n", ((RASTER3D_Map* )g3map)->nz);
+	    fprintf(out, "tiledimx=%d\n", ((RASTER3D_Map* )g3map)->tileX);
+	    fprintf(out, "tiledimy=%d\n", ((RASTER3D_Map* )g3map)->tileY);
+	    fprintf(out, "tiledimz=%d\n", ((RASTER3D_Map* )g3map)->tileZ);
 	}			/*History output */
 	else if (hflag->answer) {
 	    if (hist_ok) {

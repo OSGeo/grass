@@ -4836,10 +4836,10 @@ msgstr "Интерполировать объем по точкам"
 
 #: ../gui/wxpython/menustrings.py:803
 msgid ""
-"Interpolates point data to a G3D grid volume using regularized spline with "
+"Interpolates point data to a RASTER3D grid volume using regularized spline with "
 "tension (RST) algorithm."
 msgstr ""
-"Интерполировать точечные данные в G3D объемный грид, используя алгоритм "
+"Интерполировать точечные данные в RASTER3D объемный грид, используя алгоритм "
 "сплайн-интерполяции (RST)."
 
 #: ../gui/wxpython/menustrings.py:804

@@ -25,7 +25,7 @@ void G3d_changePrecision(void *map, int precision, const char *nameOut)
     void *map2;
     int x, y, z, savePrecision, saveCompression, saveLzw, saveRle;
     char *data;
-    G3D_Region region;
+    RASTER3D_Region region;
     int typeIntern;
     int nx, ny, nz;
     int tileXsave, tileYsave, tileZsave, tileX, tileY, tileZ, saveType;
@@ -34,7 +34,7 @@ void G3d_changePrecision(void *map, int precision, const char *nameOut)
     /*   G3d_setFileType (G3d_fileTypeMap (map)); */
     G3d_getCompressionMode(&saveCompression, &saveLzw, &saveRle,
 			   &savePrecision);
-    G3d_setCompressionMode(G3D_COMPRESSION, saveLzw, saveRle, precision);
+    G3d_setCompressionMode(RASTER3D_COMPRESSION, saveLzw, saveRle, precision);
     G3d_getTileDimension(&tileXsave, &tileYsave, &tileZsave);
     G3d_getTileDimensionsMap(map, &tileX, &tileY, &tileZ);
     G3d_setTileDimension(tileX, tileY, tileZ);
@@ -43,7 +43,7 @@ void G3d_changePrecision(void *map, int precision, const char *nameOut)
     G3d_getRegionStructMap(map, &region);
 
     map2 =
-	G3d_openCellNew(nameOut, typeIntern, G3D_USE_CACHE_DEFAULT, &region);
+	G3d_openCellNew(nameOut, typeIntern, RASTER3D_USE_CACHE_DEFAULT, &region);
     if (map2 == NULL)
 	G3d_fatalError("G3d_changePrecision: error in G3d_openCellNew");
 

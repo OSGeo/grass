@@ -38,7 +38,7 @@ int globalG3dMapType;
 /*- prototypes --------------------------------------------------------------*/
 void fatal_error(void *map, int *fd, int depths, char *errorMsg); /*Simple Error message */
 void set_params(); /*Fill the paramType structure */
-void raster_to_g3d(void *map, G3D_Region region, int *fd); /*Write the raster */
+void raster_to_g3d(void *map, RASTER3D_Region region, int *fd); /*Write the raster */
 int open_input_raster_map(const char *name); /*opens the outputmap */
 void close_input_raster_map(int fd); /*close the map */
 
@@ -90,17 +90,17 @@ void set_params()
 
     param.mask = G_define_flag();
     param.mask->key = 'm';
-    param.mask->description = _("Use G3D mask (if exists) with output map");
+    param.mask->description = _("Use RASTER3D mask (if exists) with output map");
 
 }
 
 
 
 /* ************************************************************************* */
-/* Write the raster maps into one G3D map ********************************** */
+/* Write the raster maps into one RASTER3D map ********************************** */
 
 /* ************************************************************************* */
-void raster_to_g3d(void *map, G3D_Region region, int *fd)
+void raster_to_g3d(void *map, RASTER3D_Region region, int *fd)
 {
     int x, y, z;
     int rows, cols, depths;
@@ -173,12 +173,12 @@ void raster_to_g3d(void *map, G3D_Region region, int *fd)
 
 
 /* ************************************************************************* */
-/* Main function, open the raster maps and create the G3D raster map ******* */
+/* Main function, open the raster maps and create the RASTER3D raster map ******* */
 
 /* ************************************************************************* */
 int main(int argc, char *argv[])
 {
-    G3D_Region region;
+    RASTER3D_Region region;
     struct Cell_head window2d;
     struct GModule *module;
     void *map = NULL; /*The 3D Rastermap */
@@ -285,7 +285,7 @@ int main(int argc, char *argv[])
     else
         globalG3dMapType = FCELL_TYPE;
 
-    map = G3d_openNewOptTileSize(param.output->answer, G3D_USE_CACHE_XY, &region, globalG3dMapType, maxSize);
+    map = G3d_openNewOptTileSize(param.output->answer, RASTER3D_USE_CACHE_XY, &region, globalG3dMapType, maxSize);
 
     if (map == NULL)
         fatal_error(map, fd, opencells, _("Error opening 3d raster map"));
@@ -301,7 +301,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    /*Create the G3D Rastermap */
+    /*Create the RASTER3D Rastermap */
     raster_to_g3d(map, region, fd);
 
     /*We set the Mask off, if it was off before */

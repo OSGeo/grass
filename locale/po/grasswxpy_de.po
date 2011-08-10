@@ -1716,7 +1716,7 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:147
 #, fuzzy
 msgid "Converts 3D raster maps into the VTK-ASCII format."
-msgstr "Konvertiert eine 3D-Rasterkarte (G3D) in das VTK-ASCII-Format."
+msgstr "Konvertiert eine 3D-Rasterkarte (RASTER3D) in das VTK-ASCII-Format."
 
 #: ../gui/wxpython/menustrings.py:148
 msgid "Export database table"
@@ -4747,10 +4747,10 @@ msgstr "Interpoliere Volumen aus Punkten"
 
 #: ../gui/wxpython/menustrings.py:803
 msgid ""
-"Interpolates point data to a G3D grid volume using regularized spline with "
+"Interpolates point data to a RASTER3D grid volume using regularized spline with "
 "tension (RST) algorithm."
 msgstr ""
-"Interpoliert Punkte zu einem G3D Grid Volumen unter Verwendung des "
+"Interpoliert Punkte zu einem RASTER3D Grid Volumen unter Verwendung des "
 "regularized spline with tension (RST) Algorithmus."
 
 #: ../gui/wxpython/menustrings.py:804
@@ -13255,8 +13255,8 @@ msgstr "Datei nicht gefunden"
 #~ msgstr ""
 #~ "Exportiert eine GRASS 3D Rasterkarte in eine 3-dimensionale Vis5D Datei"
 
-#~ msgid "Converts 3D raster maps (G3D) into the VTK-Ascii format"
-#~ msgstr "Konvertiert eine 3D-Rasterkarte (G3D) in das VTK-ASCII-Format."
+#~ msgid "Converts 3D raster maps (RASTER3D) into the VTK-Ascii format"
+#~ msgstr "Konvertiert eine 3D-Rasterkarte (RASTER3D) in das VTK-ASCII-Format."
 
 #~ msgid "Multiple export formats using OGR"
 #~ msgstr "Vektorexport über OGR"

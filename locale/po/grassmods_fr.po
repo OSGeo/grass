@@ -10717,7 +10717,7 @@ msgstr "Rattachement des catégories...\n"
 
 #: ../vector/v.vol.rst/main.c:245
 msgid ""
-"Interpolates point data to a G3D grid volume using regularized spline with "
+"Interpolates point data to a RASTER3D grid volume using regularized spline with "
 "tension (RST) algorithm."
 msgstr ""
 
@@ -26834,7 +26834,7 @@ msgstr "Activer le retour d'information du cache"
 #: ../raster/r.what/main.c:196
 #, fuzzy, c-format
 msgid "can only do up to %d raster maps"
-msgstr "Nom du fichier grille G3D en sortie"
+msgstr "Nom du fichier grille RASTER3D en sortie"
 
 #: ../raster/r.what/main.c:212
 #, fuzzy, c-format
@@ -31019,7 +31019,7 @@ msgstr ""
 
 #: ../raster/r.to.rast3/main.c:93
 #, fuzzy
-msgid "Use G3D mask (if exists) with output map"
+msgid "Use RASTER3D mask (if exists) with output map"
 msgstr "Utilisez le masque raster 3D (s'il existe) sur la couche en entrée"
 
 #: ../raster/r.to.rast3/main.c:201
@@ -31067,7 +31067,7 @@ msgstr "Erreur de fermeture du fichier raster 3D"
 #: ../raster/r.out.vtk/parameters.c:34
 #, fuzzy
 msgid "Raster map(s) to be converted to VTK-ASCII data format"
-msgstr "Couche(s) G3D à convertir au format de données VTK-ASCII"
+msgstr "Couche(s) RASTER3D à convertir au format de données VTK-ASCII"
 
 #: ../raster/r.out.vtk/parameters.c:41 ../raster3d/r3.out.vtk/parameters.c:34
 msgid "Name for VTK-ASCII output file"
@@ -32707,12 +32707,12 @@ msgstr ""
 
 #: ../raster/r.to.rast3elev/main.c:194 ../raster3d/r3.out.ascii/main.c:124
 #: ../raster3d/r3.to.rast/main.c:91
-msgid "Use G3D mask (if exists) with input map"
+msgid "Use RASTER3D mask (if exists) with input map"
 msgstr "Utilisez le masque raster 3D (s'il existe) sur la couche en entrée"
 
 #: ../raster/r.to.rast3elev/main.c:287 ../raster/r.to.rast3elev/main.c:320
 #, fuzzy
-msgid "Error writing G3D double data"
+msgid "Error writing RASTER3D double data"
 msgstr "Erreur de lecture des cellules de données"
 
 #: ../raster/r.to.rast3elev/main.c:363 ../raster3d/r3.gwflow/main.c:160
@@ -32730,7 +32730,7 @@ msgstr ""
 #, fuzzy
 msgid "Creates a 3D volume map based on 2D elevation and value raster maps."
 msgstr ""
-"Crée une couche raster de coupe 2D à partir du raster volumique G3D à partir "
+"Crée une couche raster de coupe 2D à partir du raster volumique RASTER3D à partir "
 "d'une couche de relief 2D"
 
 #: ../raster/r.to.rast3elev/main.c:400
@@ -35261,7 +35261,7 @@ msgstr ""
 
 #: ../raster3d/r3.gwflow/main.c:127
 #, fuzzy
-msgid "Use G3D mask (if exists)"
+msgid "Use RASTER3D mask (if exists)"
 msgstr "Utilisez le masque raster 3D (s'il existe) sur la couche en entrée"
 
 #: ../raster3d/r3.gwflow/main.c:162
@@ -35315,7 +35315,7 @@ msgid "retile"
 msgstr ""
 
 #: ../raster3d/r3.retile/main.c:104
-msgid "Retiles an existing G3D map with user defined x, y and z tile size"
+msgid "Retiles an existing RASTER3D map with user defined x, y and z tile size"
 msgstr ""
 
 # c-format
@@ -35452,8 +35452,8 @@ msgid "Grid3 <%s> not found %s"
 msgstr "couche 3D <%s> non trouvée %s\n"
 
 #: ../raster3d/r3.cross.rast/main.c:55
-msgid "Could not close G3D map"
-msgstr "Impossible de fermer la couche G3D"
+msgid "Could not close RASTER3D map"
+msgstr "Impossible de fermer la couche RASTER3D"
 
 #: ../raster3d/r3.cross.rast/main.c:90
 msgid "Input 3D raster map for cross section."
@@ -35476,7 +35476,7 @@ msgid ""
 "Creates cross section 2D raster map from 3d raster map based on 2D elevation "
 "map"
 msgstr ""
-"Crée une couche raster de coupe 2D à partir du raster volumique G3D à partir "
+"Crée une couche raster de coupe 2D à partir du raster volumique RASTER3D à partir "
 "d'une couche de relief 2D"
 
 #: ../raster3d/r3.cross.rast/main.c:278 ../raster3d/r3.out.vtk/main.c:207
@@ -35496,14 +35496,14 @@ msgid "Output map already exists. Will be overwritten!"
 msgstr "La couche de sortie existe déjà. Ce fichier va être écrasé!\n"
 
 #: ../raster3d/r3.cross.rast/main.c:337
-msgid "Wrong G3D Datatype! Cannot create raster map."
+msgid "Wrong RASTER3D Datatype! Cannot create raster map."
 msgstr ""
-"Erreur sur le type de raster G3D! Impossible de créer la couche raster."
+"Erreur sur le type de raster RASTER3D! Impossible de créer la couche raster."
 
 #: ../raster3d/r3.cross.rast/main.c:342
 #, c-format
-msgid "Could not close G3D map <%s>"
-msgstr "Impossible de fermer la couche G3D <%s>"
+msgid "Could not close RASTER3D map <%s>"
+msgstr "Impossible de fermer la couche RASTER3D <%s>"
 
 #: ../raster3d/r3.mkdspf/main.c:82
 msgid ""
@@ -35662,10 +35662,10 @@ msgstr "Liste de valeurs de cellules à masquer"
 
 #: ../raster3d/base/r3.mask.main.c:158
 #, fuzzy
-msgid "Cannot create mask file: G3D_MASK already exists"
+msgid "Cannot create mask file: RASTER3D_MASK already exists"
 msgstr ""
-"Impossible de créer un fichier masque : G3D_MASK existe déjà!\n"
-"Utilisez 'g.remove rast3d=G3D_MASK' pour supprimer le masque existant."
+"Impossible de créer un fichier masque : RASTER3D_MASK existe déjà!\n"
+"Utilisez 'g.remove rast3d=RASTER3D_MASK' pour supprimer le masque existant."
 
 #: ../raster3d/r3.out.vtk/writeVTKHead.c:40
 #, fuzzy
@@ -35683,8 +35683,8 @@ msgid "write_vtk_unstructured_grid_header: Writing VTKUnstructuredGrid-Header"
 msgstr "writeVTKStructuredElevationHeader: Ecriture de l'en-tête VTK"
 
 #: ../raster3d/r3.out.vtk/parameters.c:30
-msgid "G3D map(s) to be converted to VTK-ASCII data format"
-msgstr "Couche(s) G3D à convertir au format de données VTK-ASCII"
+msgid "RASTER3D map(s) to be converted to VTK-ASCII data format"
+msgstr "Couche(s) RASTER3D à convertir au format de données VTK-ASCII"
 
 #: ../raster3d/r3.out.vtk/parameters.c:41
 msgid "Float value to represent no data cell/points"
@@ -35797,7 +35797,7 @@ msgstr "Ouvrir le fichier raster 3D %s"
 #, fuzzy
 msgid "No RGB Data will be created."
 msgstr ""
-"Erreur d'ouverture du fichier G3D <%s>. Aucune données RGB ne sera créée."
+"Erreur d'ouverture du fichier RASTER3D <%s>. Aucune données RGB ne sera créée."
 
 #: ../raster3d/r3.out.vtk/main.c:252
 #, fuzzy
@@ -35832,7 +35832,7 @@ msgstr ""
 #: ../raster3d/r3.out.vtk/main.c:540
 msgid "Error closing 3d raster map, the VTK file may be incomplete."
 msgstr ""
-"Erreur de fermeture de la couche de données G3D, le fichier VTK risque "
+"Erreur de fermeture de la couche de données RASTER3D, le fichier VTK risque "
 "d'être incomplet."
 
 #: ../raster3d/r3.out.vtk/errorHandling.c:65
@@ -35867,7 +35867,7 @@ msgstr "writeVTKData: Ecriture de données VTK"
 #: ../raster3d/r3.out.vtk/writeVTKData.c:441
 msgid "Wrong 3d raster map values! Values should in between 0 and 255!\n"
 msgstr ""
-"Valeurs de couches G3D erronées! Les valeurs doivent être comprises entre 0 "
+"Valeurs de couches RASTER3D erronées! Les valeurs doivent être comprises entre 0 "
 "et 255!\n"
 
 #: ../raster3d/r3.out.vtk/writeVTKData.c:470
@@ -35884,7 +35884,7 @@ msgstr "Racine du nom des tranches rasters créées"
 
 #: ../raster3d/r3.to.rast/main.c:96
 msgid ""
-"Use the same resolution as the input G3D map for the 2d output maps, "
+"Use the same resolution as the input RASTER3D map for the 2d output maps, "
 "independent of the current region settings"
 msgstr ""
 
@@ -37633,7 +37633,7 @@ msgstr "Pas de valeurs non-null"
 #~ msgid "Unable to access table <%s>"
 #~ msgstr "impossible de créer la sortie <%s>"
 
-#~ msgid "Converts 3D raster maps (G3D) into the VTK-Ascii format"
+#~ msgid "Converts 3D raster maps (RASTER3D) into the VTK-Ascii format"
 #~ msgstr "Convertit une couche raster 3D au format VTK-ASCII"
 
 #, fuzzy
@@ -42697,7 +42697,7 @@ msgstr "Pas de valeurs non-null"
 #~ msgstr "[%s] n'est pas un nom légal\n"
 
 #~ msgid "Requested 3d raster map not found <%s>"
-#~ msgstr "Le fichier raster G3D <%s> demandé n'a pas été trouvé"
+#~ msgstr "Le fichier raster RASTER3D <%s> demandé n'a pas été trouvé"
 
 #, fuzzy
 #~ msgid "Could not open output map"
@@ -43837,7 +43837,7 @@ msgstr "Pas de valeurs non-null"
 #, fuzzy
 #~ msgid "raster_to_g3d: Writing %i raster maps with rows %i cols."
 #~ msgstr ""
-#~ "RasterToG3D(Raster vers Raster 3D) : créer %i couches rasters de "
+#~ "RasterToRASTER3D(Raster vers Raster 3D) : créer %i couches rasters de "
 #~ "dimensions lignes %i colonnes"
 
 #~ msgid "Writing g3d slice %i\n"
@@ -43866,7 +43866,7 @@ msgstr "Pas de valeurs non-null"
 #~ "elev_raster_to_g3d: Writing 3D raster map with depths %i rows %i cols %i "
 #~ "and count %i."
 #~ msgstr ""
-#~ "RasterToG3D(Raster vers Raster 3D) : créer %i couches rasters de "
+#~ "RasterToRASTER3D(Raster vers Raster 3D) : créer %i couches rasters de "
 #~ "dimensions lignes %i colonnes"
 
 # c-format
@@ -44361,11 +44361,11 @@ msgstr "Pas de valeurs non-null"
 #~ msgstr "Lecteur du fichier raster..."
 
 #~ msgid ""
-#~ "Cannot create mask file: G3D_MASK already exists!\n"
-#~ " Use 'g.remove rast3d=G3D_MASK' to remove the existing mask."
+#~ "Cannot create mask file: RASTER3D_MASK already exists!\n"
+#~ " Use 'g.remove rast3d=RASTER3D_MASK' to remove the existing mask."
 #~ msgstr ""
-#~ "Impossible de créer un fichier masque : G3D_MASK existe déjà!\n"
-#~ "Utilisez 'g.remove rast3d=G3D_MASK' pour supprimer le masque existant."
+#~ "Impossible de créer un fichier masque : RASTER3D_MASK existe déjà!\n"
+#~ "Utilisez 'g.remove rast3d=RASTER3D_MASK' pour supprimer le masque existant."
 
 #~ msgid "Export of GRASS 3D raster map to 3-dimensional Vis5D file."
 #~ msgstr "Exporter une couche raster 3D GRASS vers un fichier 3D VIS-5D"
@@ -45743,7 +45743,7 @@ msgstr "Pas de valeurs non-null"
 #~ msgstr "Ligne d'historique trop longue : tronquée à %d caractères"
 
 #~ msgid "Name of output 3d raster map"
-#~ msgstr "Nom du fichier grille G3D en sortie"
+#~ msgstr "Nom du fichier grille RASTER3D en sortie"
 
 #, fuzzy
 #~ msgid "input layer name"

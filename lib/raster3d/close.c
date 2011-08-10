@@ -12,7 +12,7 @@
 
 /*---------------------------------------------------------------------------*/
 
-static int G3d_closeNew(G3D_Map * map)
+static int G3d_closeNew(RASTER3D_Map * map)
 {
     char path[GPATH_MAX];
     struct Categories cats;
@@ -40,7 +40,7 @@ static int G3d_closeNew(G3D_Map * map)
     close(map->data_fd);
 
     /* finally move tempfile to data file */
-    G3d_filename(path, G3D_CELL_ELEMENT, map->fileName, map->mapset);
+    G3d_filename(path, RASTER3D_CELL_ELEMENT, map->fileName, map->mapset);
 #ifdef __MINGW32__
     if (CopyFile(map->tempName, path, FALSE) == 0) {
 #else
@@ -61,7 +61,7 @@ static int G3d_closeNew(G3D_Map * map)
 
 /*---------------------------------------------------------------------------*/
 
-static int G3d_closeCellNew(G3D_Map * map)
+static int G3d_closeCellNew(RASTER3D_Map * map)
 {
     long ltmp;
 
@@ -107,7 +107,7 @@ static int G3d_closeCellNew(G3D_Map * map)
 
 /*---------------------------------------------------------------------------*/
 
-static int G3d_closeOld(G3D_Map * map)
+static int G3d_closeOld(RASTER3D_Map * map)
 {
     if (close(map->data_fd) != 0) {
 	G3d_error("G3d_closeOld: could not close file");
@@ -119,7 +119,7 @@ static int G3d_closeOld(G3D_Map * map)
 
 /*---------------------------------------------------------------------------*/
 
-static int G3d_closeCellOld(G3D_Map * map)
+static int G3d_closeCellOld(RASTER3D_Map * map)
 {
     if (!G3d_closeOld(map) != 0) {
 	G3d_error("G3d_closeCellOld: error in G3d_closeOld");
@@ -144,9 +144,9 @@ static int G3d_closeCellOld(G3D_Map * map)
  *          0 ...  otherwise.
  */
 
-int G3d_closeCell(G3D_Map * map)
+int G3d_closeCell(RASTER3D_Map * map)
 {
-    if (map->operation == G3D_WRITE_DATA) {
+    if (map->operation == RASTER3D_WRITE_DATA) {
 	if (!G3d_closeCellNew(map)) {
 	    G3d_error("G3d_closeCell: error in G3d_closeCellNew");
 	    return 0;
@@ -171,7 +171,7 @@ int G3d_closeCell(G3D_Map * map)
     else
 	G3d_free(map->data);
 
-    if (map->operation == G3D_WRITE_DATA)
+    if (map->operation == RASTER3D_WRITE_DATA)
 	if (!G3d_writeHeader(map,
 			     map->region.proj, map->region.zone,
 			     map->region.north, map->region.south,

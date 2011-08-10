@@ -16,18 +16,18 @@ int xdrLength;
 
 /*---------------------------------------------------------------------------*/
 
-#define G3D_HEADER_TILEX "TileDimensionX"
-#define G3D_HEADER_TILEY "TileDimensionY"
-#define G3D_HEADER_TILEZ "TileDimensionZ"
-#define G3D_HEADER_TYPE "CellType"
-#define G3D_HEADER_COMPRESSION "useCompression"
-#define G3D_HEADER_USERLE "useRle"
-#define G3D_HEADER_USELZW "useLzw"
-#define G3D_HEADER_PRECISION "Precision"
-#define G3D_HEADER_DATA_OFFSET "nofHeaderBytes"
-#define G3D_HEADER_USEXDR "useXdr"
-#define G3D_HEADER_HASINDEX "hasIndex"
-#define G3D_HEADER_UNIT "Units"
+#define RASTER3D_HEADER_TILEX "TileDimensionX"
+#define RASTER3D_HEADER_TILEY "TileDimensionY"
+#define RASTER3D_HEADER_TILEZ "TileDimensionZ"
+#define RASTER3D_HEADER_TYPE "CellType"
+#define RASTER3D_HEADER_COMPRESSION "useCompression"
+#define RASTER3D_HEADER_USERLE "useRle"
+#define RASTER3D_HEADER_USELZW "useLzw"
+#define RASTER3D_HEADER_PRECISION "Precision"
+#define RASTER3D_HEADER_DATA_OFFSET "nofHeaderBytes"
+#define RASTER3D_HEADER_USEXDR "useXdr"
+#define RASTER3D_HEADER_HASINDEX "hasIndex"
+#define RASTER3D_HEADER_UNIT "Units"
 
 /*---------------------------------------------------------------------------*/
 
@@ -59,45 +59,45 @@ G3d_readWriteHeader(struct Key_Value *headerKeys, int doRead, int *proj,
     }
 
     returnVal = 1;
-    returnVal &= headerInt(headerKeys, G3D_REGION_PROJ, proj);
-    returnVal &= headerInt(headerKeys, G3D_REGION_ZONE, zone);
+    returnVal &= headerInt(headerKeys, RASTER3D_REGION_PROJ, proj);
+    returnVal &= headerInt(headerKeys, RASTER3D_REGION_ZONE, zone);
 
-    returnVal &= headerDouble(headerKeys, G3D_REGION_NORTH, north);
-    returnVal &= headerDouble(headerKeys, G3D_REGION_SOUTH, south);
-    returnVal &= headerDouble(headerKeys, G3D_REGION_EAST, east);
-    returnVal &= headerDouble(headerKeys, G3D_REGION_WEST, west);
-    returnVal &= headerDouble(headerKeys, G3D_REGION_TOP, top);
-    returnVal &= headerDouble(headerKeys, G3D_REGION_BOTTOM, bottom);
+    returnVal &= headerDouble(headerKeys, RASTER3D_REGION_NORTH, north);
+    returnVal &= headerDouble(headerKeys, RASTER3D_REGION_SOUTH, south);
+    returnVal &= headerDouble(headerKeys, RASTER3D_REGION_EAST, east);
+    returnVal &= headerDouble(headerKeys, RASTER3D_REGION_WEST, west);
+    returnVal &= headerDouble(headerKeys, RASTER3D_REGION_TOP, top);
+    returnVal &= headerDouble(headerKeys, RASTER3D_REGION_BOTTOM, bottom);
 
-    returnVal &= headerInt(headerKeys, G3D_REGION_ROWS, rows);
-    returnVal &= headerInt(headerKeys, G3D_REGION_COLS, cols);
-    returnVal &= headerInt(headerKeys, G3D_REGION_DEPTHS, depths);
+    returnVal &= headerInt(headerKeys, RASTER3D_REGION_ROWS, rows);
+    returnVal &= headerInt(headerKeys, RASTER3D_REGION_COLS, cols);
+    returnVal &= headerInt(headerKeys, RASTER3D_REGION_DEPTHS, depths);
 
-    returnVal &= headerDouble(headerKeys, G3D_REGION_NSRES, ns_res);
-    returnVal &= headerDouble(headerKeys, G3D_REGION_EWRES, ew_res);
-    returnVal &= headerDouble(headerKeys, G3D_REGION_TBRES, tb_res);
+    returnVal &= headerDouble(headerKeys, RASTER3D_REGION_NSRES, ns_res);
+    returnVal &= headerDouble(headerKeys, RASTER3D_REGION_EWRES, ew_res);
+    returnVal &= headerDouble(headerKeys, RASTER3D_REGION_TBRES, tb_res);
 
-    returnVal &= headerInt(headerKeys, G3D_HEADER_TILEX, tileX);
-    returnVal &= headerInt(headerKeys, G3D_HEADER_TILEY, tileY);
-    returnVal &= headerInt(headerKeys, G3D_HEADER_TILEZ, tileZ);
+    returnVal &= headerInt(headerKeys, RASTER3D_HEADER_TILEX, tileX);
+    returnVal &= headerInt(headerKeys, RASTER3D_HEADER_TILEY, tileY);
+    returnVal &= headerInt(headerKeys, RASTER3D_HEADER_TILEZ, tileZ);
 
-    returnVal &= headerValue(headerKeys, G3D_HEADER_TYPE,
+    returnVal &= headerValue(headerKeys, RASTER3D_HEADER_TYPE,
 			     "double", "float", DCELL_TYPE, FCELL_TYPE, type);
-    returnVal &= headerValue(headerKeys, G3D_HEADER_COMPRESSION,
+    returnVal &= headerValue(headerKeys, RASTER3D_HEADER_COMPRESSION,
 			     "0", "1", 0, 1, compression);
-    returnVal &= headerValue(headerKeys, G3D_HEADER_USERLE,
+    returnVal &= headerValue(headerKeys, RASTER3D_HEADER_USERLE,
 			     "0", "1", 0, 1, useRle);
-    returnVal &= headerValue(headerKeys, G3D_HEADER_USELZW,
+    returnVal &= headerValue(headerKeys, RASTER3D_HEADER_USELZW,
 			     "0", "1", 0, 1, useLzw);
 
-    returnVal &= headerInt(headerKeys, G3D_HEADER_PRECISION, precision);
-    returnVal &= headerInt(headerKeys, G3D_HEADER_DATA_OFFSET, dataOffset);
+    returnVal &= headerInt(headerKeys, RASTER3D_HEADER_PRECISION, precision);
+    returnVal &= headerInt(headerKeys, RASTER3D_HEADER_DATA_OFFSET, dataOffset);
 
-    returnVal &= headerValue(headerKeys, G3D_HEADER_USEXDR,
+    returnVal &= headerValue(headerKeys, RASTER3D_HEADER_USEXDR,
 			     "0", "1", 0, 1, useXdr);
-    returnVal &= headerValue(headerKeys, G3D_HEADER_HASINDEX,
+    returnVal &= headerValue(headerKeys, RASTER3D_HEADER_HASINDEX,
 			     "0", "1", 0, 1, hasIndex);
-    returnVal &= headerString(headerKeys, G3D_HEADER_UNIT, unit);
+    returnVal &= headerString(headerKeys, RASTER3D_HEADER_UNIT, unit);
 
     if (returnVal)
 	return 1;
@@ -109,7 +109,7 @@ G3d_readWriteHeader(struct Key_Value *headerKeys, int doRead, int *proj,
 /*---------------------------------------------------------------------------*/
 
 int
-G3d_readHeader(G3D_Map * map, int *proj, int *zone, double *north,
+G3d_readHeader(RASTER3D_Map * map, int *proj, int *zone, double *north,
 	       double *south, double *east, double *west, double *top,
 	       double *bottom, int *rows, int *cols, int *depths,
 	       double *ew_res, double *ns_res, double *tb_res, int *tileX,
@@ -120,7 +120,7 @@ G3d_readHeader(G3D_Map * map, int *proj, int *zone, double *north,
     struct Key_Value *headerKeys;
     char path[GPATH_MAX];
 
-    G3d_filename(path, G3D_HEADER_ELEMENT, map->fileName, map->mapset);
+    G3d_filename(path, RASTER3D_HEADER_ELEMENT, map->fileName, map->mapset);
     if (access(path, R_OK) != 0) {
 	G3d_error("G3d_readHeader: unable to find [%s]", path);
 	return 0;
@@ -148,7 +148,7 @@ G3d_readHeader(G3D_Map * map, int *proj, int *zone, double *north,
 /*---------------------------------------------------------------------------*/
 
 int
-G3d_writeHeader(G3D_Map * map, int proj, int zone, double north, double south,
+G3d_writeHeader(RASTER3D_Map * map, int proj, int zone, double north, double south,
 		double east, double west, double top, double bottom, int rows,
 		int cols, int depths, double ew_res, double ns_res,
 		double tb_res, int tileX, int tileY, int tileZ, int type,
@@ -174,7 +174,7 @@ G3d_writeHeader(G3D_Map * map, int proj, int zone, double north, double south,
 	return 0;
     }
 
-    G3d_filename(path, G3D_HEADER_ELEMENT, map->fileName, map->mapset);
+    G3d_filename(path, RASTER3D_HEADER_ELEMENT, map->fileName, map->mapset);
     G3d_makeMapsetMapDirectory(map->fileName);
     G_write_key_value_file(path, headerKeys);
 
@@ -194,15 +194,15 @@ G3d_writeHeader(G3D_Map * map, int proj, int zone, double north, double south,
  * to specify the size of the cache.
  * If <em>cacheCode</em> is the size (in tiles) of the cache the function returns
  * <em>cacheCode * n</em>.
- * If <em>cacheCode</em> is G3D_USE_CACHE_DEFAULT the function returns
- * G3D_USE_CACHE_DEFAULT.
- * If <em>cacheCode</em> is G3D_USE_CACHE_??? the function returns a value
- * encoding G3D_USE_CACHE_??? and <em>n</em>. Here G3D_USE_CACHE_??? is one
- * of G3D_USE_CACHE_X, G3D_USE_CACHE_Y, G3D_USE_CACHE_Z,
- * G3D_USE_CACHE_XY, G3D_USE_CACHE_XZ, G3D_USE_CACHE_YZ, or
- * G3D_USE_CACHE_XYZ, where e.g.  G3D_USE_CACHE_X specifies that the cache
+ * If <em>cacheCode</em> is RASTER3D_USE_CACHE_DEFAULT the function returns
+ * RASTER3D_USE_CACHE_DEFAULT.
+ * If <em>cacheCode</em> is RASTER3D_USE_CACHE_??? the function returns a value
+ * encoding RASTER3D_USE_CACHE_??? and <em>n</em>. Here RASTER3D_USE_CACHE_??? is one
+ * of RASTER3D_USE_CACHE_X, RASTER3D_USE_CACHE_Y, RASTER3D_USE_CACHE_Z,
+ * RASTER3D_USE_CACHE_XY, RASTER3D_USE_CACHE_XZ, RASTER3D_USE_CACHE_YZ, or
+ * RASTER3D_USE_CACHE_XYZ, where e.g.  RASTER3D_USE_CACHE_X specifies that the cache
  * should store as many tiles as there exist in one row along the x-axis of the
- * tile cube, and G3D_USE_CACHE_XY specifies that the cache should store as
+ * tile cube, and RASTER3D_USE_CACHE_XY specifies that the cache should store as
  * many tiles as there exist in one slice of the tile cube with constant Z
  * coordinate.
  *
@@ -213,12 +213,12 @@ G3d_writeHeader(G3D_Map * map, int proj, int zone, double north, double south,
 
 int G3d_cacheSizeEncode(int cacheCode, int n)
 {
-    if (cacheCode >= G3D_NO_CACHE)
+    if (cacheCode >= RASTER3D_NO_CACHE)
 	return cacheCode * n;
-    if (cacheCode == G3D_USE_CACHE_DEFAULT)
+    if (cacheCode == RASTER3D_USE_CACHE_DEFAULT)
 	return cacheCode;
 
-    if (cacheCode < G3D_USE_CACHE_XYZ)
+    if (cacheCode < RASTER3D_USE_CACHE_XYZ)
 	G3d_fatalError("G3d_cacheSizeEncode: invalid cache code");
 
     return n * (-10) + cacheCode;
@@ -226,47 +226,47 @@ int G3d_cacheSizeEncode(int cacheCode, int n)
 
 /*---------------------------------------------------------------------------*/
 
-int G3d__computeCacheSize(G3D_Map * map, int cacheCode)
+int G3d__computeCacheSize(RASTER3D_Map * map, int cacheCode)
 {
     int n, size;
 
-    if (cacheCode >= G3D_NO_CACHE)
+    if (cacheCode >= RASTER3D_NO_CACHE)
 	return cacheCode;
-    if (cacheCode == G3D_USE_CACHE_DEFAULT)
-	return G3D_MIN(g3d_cache_default, map->nTiles);
+    if (cacheCode == RASTER3D_USE_CACHE_DEFAULT)
+	return RASTER3D_MIN(g3d_cache_default, map->nTiles);
 
     n = -(cacheCode / 10);
-    n = G3D_MAX(1, n);
+    n = RASTER3D_MAX(1, n);
     cacheCode = -((-cacheCode) % 10);
 
-    if (cacheCode == G3D_USE_CACHE_X)
+    if (cacheCode == RASTER3D_USE_CACHE_X)
 	size = map->nx * n;
-    else if (cacheCode == G3D_USE_CACHE_Y)
+    else if (cacheCode == RASTER3D_USE_CACHE_Y)
 	size = map->ny * n;
-    else if (cacheCode == G3D_USE_CACHE_Z)
+    else if (cacheCode == RASTER3D_USE_CACHE_Z)
 	size = map->nz * n;
-    else if (cacheCode == G3D_USE_CACHE_XY)
+    else if (cacheCode == RASTER3D_USE_CACHE_XY)
 	size = map->nxy * n;
-    else if (cacheCode == G3D_USE_CACHE_XZ)
+    else if (cacheCode == RASTER3D_USE_CACHE_XZ)
 	size = map->nx * map->nz * n;
-    else if (cacheCode == G3D_USE_CACHE_YZ)
+    else if (cacheCode == RASTER3D_USE_CACHE_YZ)
 	size = map->ny * map->nz * n;
-    else if (cacheCode == G3D_USE_CACHE_XYZ)
+    else if (cacheCode == RASTER3D_USE_CACHE_XYZ)
 	size = map->nTiles;
     else
 	G3d_fatalError("G3d__computeCacheSize: invalid cache code");
 
-    return G3D_MIN(size, map->nTiles);
+    return RASTER3D_MIN(size, map->nTiles);
 }
 
 /*---------------------------------------------------------------------------*/
 
 /* this function does actually more than filling the header fields of the */
-/* G3D-Map structure. It also allocates memory for compression and xdr, */
+/* RASTER3D-Map structure. It also allocates memory for compression and xdr, */
 /* and initializes the index and cache. This function should be taken apart. */
 
 int
-G3d_fillHeader(G3D_Map * map, int operation, int compression, int useRle,
+G3d_fillHeader(RASTER3D_Map * map, int operation, int compression, int useRle,
 	       int useLzw, int type, int precision, int cache, int hasIndex,
 	       int useXdr, int typeIntern, int nofHeaderBytes, int tileX,
 	       int tileY, int tileZ, int proj, int zone, double north,
@@ -274,7 +274,7 @@ G3d_fillHeader(G3D_Map * map, int operation, int compression, int useRle,
 	       double bottom, int rows, int cols, int depths, double ew_res,
 	       double ns_res, double tb_res, char *unit)
 {
-    if (!G3D_VALID_OPERATION(operation))
+    if (!RASTER3D_VALID_OPERATION(operation))
 	G3d_fatalError("G3d_fillHeader: operation not valid\n");
 
     map->operation = operation;
@@ -334,7 +334,7 @@ G3d_fillHeader(G3D_Map * map, int operation, int compression, int useRle,
 	G3d_fatalError("G3d_fillHeader: invalid type");
     map->typeIntern = typeIntern;
 
-    if (!G3D_VALID_XDR_OPTION(useXdr))
+    if (!RASTER3D_VALID_XDR_OPTION(useXdr))
 	G3d_fatalError("G3d_fillHeader: invalid xdr option");
     map->useXdr = useXdr;
 
@@ -345,7 +345,7 @@ G3d_fillHeader(G3D_Map * map, int operation, int compression, int useRle,
 	return 0;
     }
 
-    map->useCache = (cache != G3D_NO_CACHE);
+    map->useCache = (cache != RASTER3D_NO_CACHE);
 
     map->numLengthIntern = G3d_length(map->typeIntern);
     map->numLengthExtern = G3d_externLength(map->type);
@@ -357,10 +357,10 @@ G3d_fillHeader(G3D_Map * map, int operation, int compression, int useRle,
 
 #define RLE_STATUS_BYTES 2
 
-    if (map->compression != G3D_NO_COMPRESSION) {
+    if (map->compression != RASTER3D_NO_COMPRESSION) {
 	if (tmpCompress == NULL) {
 	    tmpCompressLength = map->tileSize *
-		G3D_MAX(map->numLengthIntern, map->numLengthExtern) +
+		RASTER3D_MAX(map->numLengthIntern, map->numLengthExtern) +
 		RLE_STATUS_BYTES;
 	    tmpCompress = G3d_malloc(tmpCompressLength);
 	    if (tmpCompress == NULL) {
@@ -369,10 +369,10 @@ G3d_fillHeader(G3D_Map * map, int operation, int compression, int useRle,
 	    }
 	}
 	else if (map->tileSize *
-		 G3D_MAX(map->numLengthIntern, map->numLengthExtern)
+		 RASTER3D_MAX(map->numLengthIntern, map->numLengthExtern)
 		 + RLE_STATUS_BYTES > tmpCompressLength) {
 	    tmpCompressLength = map->tileSize *
-		G3D_MAX(map->numLengthIntern, map->numLengthExtern) +
+		RASTER3D_MAX(map->numLengthIntern, map->numLengthExtern) +
 		RLE_STATUS_BYTES;
 	    tmpCompress = G3d_realloc(tmpCompress, tmpCompressLength);
 	    if (tmpCompress == NULL) {
@@ -390,7 +390,7 @@ G3d_fillHeader(G3D_Map * map, int operation, int compression, int useRle,
     }
 
     if ((!map->useCache) ||
-	((cache == G3D_USE_CACHE_DEFAULT) && (g3d_cache_default == 0))) {
+	((cache == RASTER3D_USE_CACHE_DEFAULT) && (g3d_cache_default == 0))) {
 	map->useCache = 0;
 	map->cache = NULL;
 	/* allocate one tile buffer */
@@ -403,8 +403,8 @@ G3d_fillHeader(G3D_Map * map, int operation, int compression, int useRle,
     }
     else {
 	if (!G3d_initCache(map,
-			   G3D_MAX(1,
-				   G3D_MIN(G3d__computeCacheSize(map, cache),
+			   RASTER3D_MAX(1,
+				   RASTER3D_MIN(G3d__computeCacheSize(map, cache),
 					   g3d_cache_max /
 					   map->tileSize /
 					   map->numLengthIntern)))) {

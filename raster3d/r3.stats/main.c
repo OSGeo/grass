@@ -60,7 +60,7 @@ static stat_table *create_stat_table(int nsteps, equal_val_array * values,
 			      double min, double max);
 static void free_stat_table(stat_table * stats);
 static void print_stat_table(stat_table * stats);
-static void update_stat_table(stat_table * stats, G3D_Region * region);
+static void update_stat_table(stat_table * stats, RASTER3D_Region * region);
 static void heapsort_eqvals(equal_val_array * data, int n);
 static void downheap_eqvals(equal_val_array * data, int n, int k);
 static void check_range_value(stat_table * stats, double value);
@@ -271,7 +271,7 @@ void free_stat_table(stat_table * stats)
 /* *************************************************************** */
 /* **** Compute the volume, percentage and sums ****************** */
 /* *************************************************************** */
-void update_stat_table(stat_table * stats, G3D_Region * region)
+void update_stat_table(stat_table * stats, RASTER3D_Region * region)
 {
     int i;
     double vol = region->ns_res * region->ew_res * region->tb_res;
@@ -554,7 +554,7 @@ int main(int argc, char *argv[])
     int map_type;
     char *infile = NULL;
     void *map = NULL;
-    G3D_Region region;
+    RASTER3D_Region region;
     unsigned int rows, cols, depths;
     unsigned int x, y, z;
 
@@ -613,7 +613,7 @@ int main(int argc, char *argv[])
 
     map =
 	G3d_openCellOld(infile, G_find_grid3(infile, ""), &region,
-			G3D_TILE_SAME_AS_FILE, G3D_USE_CACHE_DEFAULT);
+			RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
     if (map == NULL)
 	G3d_fatalError(_("Error opening g3d map <%s>"), infile);

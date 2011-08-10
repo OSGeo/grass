@@ -611,7 +611,7 @@ int test_array_3d(void)
 {
     int sum = 0, res = 0;
     char buff[1024];
-    G3D_Region region;
+    RASTER3D_Region region;
 
     N_array_3d *data1;
     N_array_3d *data11;

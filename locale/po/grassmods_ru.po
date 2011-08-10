@@ -10150,10 +10150,10 @@ msgstr "Назначаются центроиды..."
 
 #: ../vector/v.vol.rst/main.c:245
 msgid ""
-"Interpolates point data to a G3D grid volume using regularized spline with "
+"Interpolates point data to a RASTER3D grid volume using regularized spline with "
 "tension (RST) algorithm."
 msgstr ""
-"Интерполировать точечные данные в G3D объемный грид, используя алгоритм "
+"Интерполировать точечные данные в RASTER3D объемный грид, используя алгоритм "
 "сплайн-интерполяции (RST) ."
 
 #: ../vector/v.vol.rst/main.c:253
@@ -29231,8 +29231,8 @@ msgid "The maximum tile size in kilo bytes. Default is 32KB."
 msgstr ""
 
 #: ../raster/r.to.rast3/main.c:93
-msgid "Use G3D mask (if exists) with output map"
-msgstr "Использовать маску G3D (если существует) для выходного слоя"
+msgid "Use RASTER3D mask (if exists) with output map"
+msgstr "Использовать маску RASTER3D (если существует) для выходного слоя"
 
 #: ../raster/r.to.rast3/main.c:201
 msgid "Converts 2D raster map slices to one 3D raster volume map."
@@ -30804,12 +30804,12 @@ msgstr "Использовать значения исходного слоя д
 
 #: ../raster/r.to.rast3elev/main.c:194 ../raster3d/r3.out.ascii/main.c:124
 #: ../raster3d/r3.to.rast/main.c:91
-msgid "Use G3D mask (if exists) with input map"
-msgstr "Использовать маску G3D (если существует) для вставляемого слоя"
+msgid "Use RASTER3D mask (if exists) with input map"
+msgstr "Использовать маску RASTER3D (если существует) для вставляемого слоя"
 
 #: ../raster/r.to.rast3elev/main.c:287 ../raster/r.to.rast3elev/main.c:320
-msgid "Error writing G3D double data"
-msgstr "Ошибка записи данных G3D double"
+msgid "Error writing RASTER3D double data"
+msgstr "Ошибка записи данных RASTER3D double"
 
 #: ../raster/r.to.rast3elev/main.c:363 ../raster3d/r3.gwflow/main.c:160
 #: ../raster3d/r3.in.v5d/main.c:195 ../raster3d/r3.retile/main.c:103
@@ -33255,8 +33255,8 @@ msgid ""
 msgstr ""
 
 #: ../raster3d/r3.gwflow/main.c:127
-msgid "Use G3D mask (if exists)"
-msgstr "Используйте G3D маски (если есть)"
+msgid "Use RASTER3D mask (if exists)"
+msgstr "Используйте RASTER3D маски (если есть)"
 
 #: ../raster3d/r3.gwflow/main.c:162
 #, fuzzy
@@ -33309,7 +33309,7 @@ msgid "retile"
 msgstr ""
 
 #: ../raster3d/r3.retile/main.c:104
-msgid "Retiles an existing G3D map with user defined x, y and z tile size"
+msgid "Retiles an existing RASTER3D map with user defined x, y and z tile size"
 msgstr ""
 
 #: ../raster3d/r3.retile/main.c:113 ../raster3d/r3.to.rast/main.c:218
@@ -33433,8 +33433,8 @@ msgid "Grid3 <%s> not found %s"
 msgstr "   Grid3 <%s> не найден %s"
 
 #: ../raster3d/r3.cross.rast/main.c:55
-msgid "Could not close G3D map"
-msgstr "Не закрыта карта G3D"
+msgid "Could not close RASTER3D map"
+msgstr "Не закрыта карта RASTER3D"
 
 #: ../raster3d/r3.cross.rast/main.c:90
 msgid "Input 3D raster map for cross section."
@@ -33472,13 +33472,13 @@ msgid "Output map already exists. Will be overwritten!"
 msgstr "Выводимая карта уже существует. Она будет перезаписана!"
 
 #: ../raster3d/r3.cross.rast/main.c:337
-msgid "Wrong G3D Datatype! Cannot create raster map."
-msgstr "Ошибочный G3D тип данных! Невозможно создать растровый слой."
+msgid "Wrong RASTER3D Datatype! Cannot create raster map."
+msgstr "Ошибочный RASTER3D тип данных! Невозможно создать растровый слой."
 
 #: ../raster3d/r3.cross.rast/main.c:342
 #, c-format
-msgid "Could not close G3D map <%s>"
-msgstr "Не был закрыт слой G3D <%s>"
+msgid "Could not close RASTER3D map <%s>"
+msgstr "Не был закрыт слой RASTER3D <%s>"
 
 #: ../raster3d/r3.mkdspf/main.c:82
 msgid ""
@@ -33624,10 +33624,10 @@ msgstr "Список маскируемых значений ячеек"
 
 #: ../raster3d/base/r3.mask.main.c:158
 #, fuzzy
-msgid "Cannot create mask file: G3D_MASK already exists"
+msgid "Cannot create mask file: RASTER3D_MASK already exists"
 msgstr ""
-"Невозможно создать файл маски: G3D_MASK уже существует!\n"
-"Используйте 'g.remove rast3d=G3D_MASK' для удаления существующей маски."
+"Невозможно создать файл маски: RASTER3D_MASK уже существует!\n"
+"Используйте 'g.remove rast3d=RASTER3D_MASK' для удаления существующей маски."
 
 #: ../raster3d/r3.out.vtk/writeVTKHead.c:40
 msgid "write_vtk_structured_point_header: Writing VTKStructuredPoint-Header"
@@ -33644,8 +33644,8 @@ msgstr ""
 "write_vtk_structured_elevation_header: Запись VTKUnstructuredGrid-Header"
 
 #: ../raster3d/r3.out.vtk/parameters.c:30
-msgid "G3D map(s) to be converted to VTK-ASCII data format"
-msgstr "G3D слой(-и) будет(-ут)  преобразован(ы) в формат данных VTK-ASCII"
+msgid "RASTER3D map(s) to be converted to VTK-ASCII data format"
+msgstr "RASTER3D слой(-и) будет(-ут)  преобразован(ы) в формат данных VTK-ASCII"
 
 #: ../raster3d/r3.out.vtk/parameters.c:41
 msgid "Float value to represent no data cell/points"
@@ -33823,10 +33823,10 @@ msgstr "Шаблон имени для выходной серии растро�
 
 #: ../raster3d/r3.to.rast/main.c:96
 msgid ""
-"Use the same resolution as the input G3D map for the 2d output maps, "
+"Use the same resolution as the input RASTER3D map for the 2d output maps, "
 "independent of the current region settings"
 msgstr ""
-"Использовать такое же разрешение, как у входящего G3D слоя, для выходных 2D "
+"Использовать такое же разрешение, как у входящего RASTER3D слоя, для выходных 2D "
 "слоев; независимо от параметров областей"
 
 #: ../raster3d/r3.to.rast/main.c:209

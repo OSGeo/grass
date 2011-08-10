@@ -67,7 +67,7 @@ int G3d_readHistory(const char *name, const char *mapset, struct History *hist)
 
     G_zero(hist, sizeof(struct History));
 
-    fp = G_fopen_old_misc(G3D_DIRECTORY, G3D_HISTORY_ELEMENT, name, mapset);
+    fp = G_fopen_old_misc(RASTER3D_DIRECTORY, RASTER3D_HISTORY_ELEMENT, name, mapset);
     if (!fp)
 	return -2;
 
@@ -97,7 +97,7 @@ int G3d_readHistory(const char *name, const char *mapset, struct History *hist)
 int G3d_writeHistory(const char *name, struct History *hist)
 /* This function is adapted from Rast_write_history */
 {
-    FILE *fp = G_fopen_new_misc(G3D_DIRECTORY, G3D_HISTORY_ELEMENT, name);
+    FILE *fp = G_fopen_new_misc(RASTER3D_DIRECTORY, RASTER3D_HISTORY_ELEMENT, name);
     if (!fp)
 	return -1;
 

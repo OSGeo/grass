@@ -276,7 +276,7 @@ GRASS 5 Core Team (most have CVS write access):
                                                 interpolation (RST) 
                                                 and erosion modeling)
  Helena Mitasova <hmitaso unity.ncsu.edu>      (interpolation modules, NVIZ,
-                                                G3D, erosion modelling)
+                                                RASTER3D, erosion modelling)
  Eric G. Miller  <egm2 jps.net>                (sites format, new autoconf 
                                                 system, bugfixes etc.)
  Roger S. Miller <rgrmill rt66.com>            (raster modules, r.drain etc.)
@@ -340,9 +340,9 @@ Former GRASS 4 development (1984 to 1995):
 
 Former Institutions
  - University of Illinois at Urbana-Champaign, USA
-   Helena Mitasova <hmitaso unity.ncsu.edu> (interpolation modules, NVIZ, G3D)
+   Helena Mitasova <hmitaso unity.ncsu.edu> (interpolation modules, NVIZ, RASTER3D)
    William Brown   <brown gis.uiuc.edu>     (libraries, interpolation modules, 
-					     NVIZ, G3D)
+					     NVIZ, RASTER3D)
 
  - National Center for Supercomputing Applications, USA
    Lubos Mitas (multivariate spline interpolation (RST) and erosion modeling)

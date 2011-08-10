@@ -3,7 +3,7 @@
 
 
 void viz_make_header(file_info * hf, double dmin, double dmax,
-		     G3D_Region * g3reg)
+		     RASTER3D_Region * g3reg)
 {
     hf->min = dmin;
     hf->max = dmax;

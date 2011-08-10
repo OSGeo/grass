@@ -35,7 +35,7 @@ int G3d_writeCats(const char *name, struct Categories *cats)
     DCELL val1, val2;
     char str1[100], str2[100];
 
-    fd = G_fopen_new_misc(G3D_DIRECTORY, G3D_CATS_ELEMENT, name);
+    fd = G_fopen_new_misc(RASTER3D_DIRECTORY, RASTER3D_CATS_ELEMENT, name);
     if (!fd)
 	return -1;
 
@@ -86,7 +86,7 @@ read_cats(const char *name, const char *mapset, struct Categories *pcats)
     int old;
     long num = -1;
 
-    fd = G_fopen_old_misc(G3D_DIRECTORY, G3D_CATS_ELEMENT, name, mapset);
+    fd = G_fopen_old_misc(RASTER3D_DIRECTORY, RASTER3D_CATS_ELEMENT, name, mapset);
     if (!fd)
 	return -2;
 

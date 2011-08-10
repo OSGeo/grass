@@ -41,11 +41,11 @@ static void getParams(char **input, char **output, int *convertNull,
 /*reads a g3d ascii-file headerfile-string */
 static void readHeaderString(FILE * fp, char *valueString, double *value);
 
-static FILE *openAscii(char *asciiFile, G3D_Region * region); /*open the g3d ascii file */
+static FILE *openAscii(char *asciiFile, RASTER3D_Region * region); /*open the g3d ascii file */
 
 /*This function does all the work, it reads the values from the g3d ascii-file and put 
    it into an g3d-map */
-static void asciiToG3d(FILE * fp, G3D_Region * region, int convertNull,
+static void asciiToG3d(FILE * fp, RASTER3D_Region * region, int convertNull,
                        char *nullValue);
 
 /*---------------------------------------------------------------------------*/
@@ -131,7 +131,7 @@ void readHeaderString(FILE * fp, char *valueString, double *value)
 
 /*---------------------------------------------------------------------------*/
 
-FILE *openAscii(char *asciiFile, G3D_Region * region)
+FILE *openAscii(char *asciiFile, RASTER3D_Region * region)
 {
     FILE *fp;
     double tmp;
@@ -215,7 +215,7 @@ FILE *openAscii(char *asciiFile, G3D_Region * region)
 #define MAX(a,b) (a > b ? a : b)
 
 void
-asciiToG3d(FILE * fp, G3D_Region * region, int convertNull, char *nullValue)
+asciiToG3d(FILE * fp, RASTER3D_Region * region, int convertNull, char *nullValue)
 {
     int x, y, z;
     int col, row, depth;
@@ -224,7 +224,7 @@ asciiToG3d(FILE * fp, G3D_Region * region, int convertNull, char *nullValue)
     int tileX, tileY, tileZ;
 
     G3d_getTileDimensionsMap(map, &tileX, &tileY, &tileZ);
-    G3d_minUnlocked(map, G3D_USE_CACHE_X);
+    G3d_minUnlocked(map, RASTER3D_USE_CACHE_X);
 
     G3d_autolockOn(map);
     G3d_unlockAll(map);
@@ -313,7 +313,7 @@ int main(int argc, char *argv[])
     int useTypeDefault, type, useLzwDefault, doLzw, useRleDefault, doRle;
     int usePrecisionDefault, precision, useDimensionDefault, tileX, tileY,
         tileZ;
-    G3D_Region region;
+    RASTER3D_Region region;
     FILE *fp;
     struct GModule *module;
     struct History history;
@@ -347,8 +347,8 @@ int main(int argc, char *argv[])
 
     fp = openAscii(input, &region);
 
-    /*Open the new G3D map */
-    map = G3d_openNewParam(output, G3D_TILE_SAME_AS_FILE, G3D_USE_CACHE_XY,
+    /*Open the new RASTER3D map */
+    map = G3d_openNewParam(output, RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_XY,
                            &region,
                            type, doLzw, doRle, precision, tileX, tileY,
                            tileZ);
@@ -356,7 +356,7 @@ int main(int argc, char *argv[])
     if (map == NULL)
         fatalError(_("Error opening 3d raster map"));
 
-    /*Create the new G3D Map */
+    /*Create the new RASTER3D Map */
     asciiToG3d(fp, &region, convertNull, nullValue);
 
     if (!G3d_closeCell(map))

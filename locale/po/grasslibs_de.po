@@ -4902,26 +4902,26 @@ msgstr "Schreibe 2D Array in die Rasterkarte <%s>"
 #: ../lib/gpde/N_arrays_io.c:273
 #, c-format
 msgid "Requested g3d map <%s> not found"
-msgstr "Angeforderte G3D Karte <%s> nicht gefunden"
+msgstr "Angeforderte RASTER3D Karte <%s> nicht gefunden"
 
 #: ../lib/gpde/N_arrays_io.c:281 ../lib/gpde/N_arrays_io.c:420
 #, c-format
 msgid "Error opening g3d map <%s>"
-msgstr "Fehler beim ÷ffnen der G3D-Rasterkarte <%s>."
+msgstr "Fehler beim ÷ffnen der RASTER3D-Rasterkarte <%s>."
 
 #: ../lib/gpde/N_arrays_io.c:309
 #, c-format
 msgid "Read g3d map <%s> into the memory"
-msgstr "Lese G3D-Karte <%s> in den Speicher"
+msgstr "Lese RASTER3D-Karte <%s> in den Speicher"
 
 #: ../lib/gpde/N_arrays_io.c:364 ../lib/gpde/N_arrays_io.c:464
 msgid "Error closing g3d file"
-msgstr "Fehler beim Schlieﬂen der G3D-Datei."
+msgstr "Fehler beim Schlieﬂen der RASTER3D-Datei."
 
 #: ../lib/gpde/N_arrays_io.c:422
 #, c-format
 msgid "Write 3d array to g3d map <%s>"
-msgstr "Schreibe 3D Array in die G3D-Karte <%s>"
+msgstr "Schreibe 3D Array in die RASTER3D-Karte <%s>"
 
 #: ../lib/gpde/test/test_heat.c:33
 msgid ""

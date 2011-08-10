@@ -9,7 +9,7 @@
 #include "raster3d_intern.h"
 
 static int
-G3d_xdrTile2tile(G3D_Map * map, void *tile, int rows, int cols, int depths,
+G3d_xdrTile2tile(RASTER3D_Map * map, void *tile, int rows, int cols, int depths,
 		 int xRedundant, int yRedundant, int zRedundant, int nofNum,
 		 int type)
 {
@@ -88,12 +88,12 @@ G3d_xdrTile2tile(G3D_Map * map, void *tile, int rows, int cols, int depths,
 
 /*---------------------------------------------------------------------------*/
 
-static int G3d_readTileUncompressed(G3D_Map * map, int tileIndex, int nofNum)
+static int G3d_readTileUncompressed(RASTER3D_Map * map, int tileIndex, int nofNum)
 {
     int nofBytes;
 
     nofBytes = nofNum * map->numLengthExtern;
-    nofBytes = G3D_MIN(nofBytes, map->fileEndPtr - map->index[tileIndex]);
+    nofBytes = RASTER3D_MIN(nofBytes, map->fileEndPtr - map->index[tileIndex]);
 
     if (read(map->data_fd, xdr, nofBytes) != nofBytes) {
 	G3d_error("G3d_readTileUncompressed: can't read file");
@@ -105,7 +105,7 @@ static int G3d_readTileUncompressed(G3D_Map * map, int tileIndex, int nofNum)
 
 /*---------------------------------------------------------------------------*/
 
-static int G3d_readTileCompressed(G3D_Map * map, int tileIndex, int nofNum)
+static int G3d_readTileCompressed(RASTER3D_Map * map, int tileIndex, int nofNum)
 {
     if (!G_fpcompress_readXdrNums(map->data_fd, xdr, nofNum,
 				  map->tileLength[tileIndex],
@@ -144,7 +144,7 @@ static int G3d_readTileCompressed(G3D_Map * map, int tileIndex, int nofNum)
  *          0 ... otherwise.
  */
 
-int G3d_readTile(G3D_Map * map, int tileIndex, void *tile, int type)
+int G3d_readTile(RASTER3D_Map * map, int tileIndex, void *tile, int type)
 {
     int nofNum, rows, cols, depths, xRedundant, yRedundant, zRedundant;
 
@@ -166,7 +166,7 @@ int G3d_readTile(G3D_Map * map, int tileIndex, void *tile, int type)
 	return 0;
     }
 
-    if (map->compression == G3D_NO_COMPRESSION) {
+    if (map->compression == RASTER3D_NO_COMPRESSION) {
 	if (!G3d_readTileUncompressed(map, tileIndex, nofNum)) {
 	    G3d_error("G3d_readTile: error in G3d_readTileUncompressed");
 	    return 0;
@@ -204,7 +204,7 @@ int G3d_readTile(G3D_Map * map, int tileIndex, void *tile, int type)
  *  \return int
  */
 
-int G3d_readTileFloat(G3D_Map * map, int tileIndex, void *tile)
+int G3d_readTileFloat(RASTER3D_Map * map, int tileIndex, void *tile)
 {
     if (!G3d_readTile(map, tileIndex, tile, FCELL_TYPE)) {
 	G3d_error("G3d_readTileFloat: error in G3d_readTile");
@@ -228,7 +228,7 @@ int G3d_readTileFloat(G3D_Map * map, int tileIndex, void *tile)
  *  \return int
  */
 
-int G3d_readTileDouble(G3D_Map * map, int tileIndex, void *tile)
+int G3d_readTileDouble(RASTER3D_Map * map, int tileIndex, void *tile)
 {
     if (!G3d_readTile(map, tileIndex, tile, DCELL_TYPE)) {
 	G3d_error("G3d_readTileDouble: error in G3d_readTile");
@@ -258,7 +258,7 @@ int G3d_readTileDouble(G3D_Map * map, int tileIndex, void *tile)
  *          0 ... otherwise.
  */
 
-int G3d_lockTile(G3D_Map * map, int tileIndex)
+int G3d_lockTile(RASTER3D_Map * map, int tileIndex)
 {
     if (!map->useCache)
 	G3d_fatalError("G3d_lockTile: function invalid in non-cache mode");
@@ -285,7 +285,7 @@ int G3d_lockTile(G3D_Map * map, int tileIndex)
  *          0 ... otherwise.
  */
 
-int G3d_unlockTile(G3D_Map * map, int tileIndex)
+int G3d_unlockTile(RASTER3D_Map * map, int tileIndex)
 {
     if (!map->useCache)
 	G3d_fatalError("G3d_unlockTile: function invalid in non-cache mode");
@@ -311,7 +311,7 @@ int G3d_unlockTile(G3D_Map * map, int tileIndex)
  *          0 ... otherwise.
  */
 
-int G3d_unlockAll(G3D_Map * map)
+int G3d_unlockAll(RASTER3D_Map * map)
 {
     if (!map->useCache)
 	G3d_fatalError("G3d_unlockAll: function invalid in non-cache mode");
@@ -336,7 +336,7 @@ int G3d_unlockAll(G3D_Map * map)
  *  \return void
  */
 
-void G3d_autolockOn(G3D_Map * map)
+void G3d_autolockOn(RASTER3D_Map * map)
 {
     if (!map->useCache)
 	G3d_fatalError("G3d_autoLockOn: function invalid in non-cache mode");
@@ -356,7 +356,7 @@ void G3d_autolockOn(G3D_Map * map)
  *  \return void
  */
 
-void G3d_autolockOff(G3D_Map * map)
+void G3d_autolockOff(RASTER3D_Map * map)
 {
     if (!map->useCache)
 	G3d_fatalError("G3d_autoLockOff: function invalid in non-cache mode");
@@ -374,9 +374,9 @@ void G3d_autolockOff(G3D_Map * map)
  * number of unlocked tiles to <em>minUnlocked</em>.  This function should be used
  * in combination with <tt>G3d_unlockAll ()</tt> in order to avoid situations where the
  * new minimum is larger than the actual number of unlocked tiles.
- * <em>minUnlocked</em> must be one of G3D_USE_CACHE_X, G3D_USE_CACHE_Y,
- * G3D_USE_CACHE_Z, G3D_USE_CACHE_XY, G3D_USE_CACHE_XZ,
- * G3D_USE_CACHE_YZ, G3D_USE_CACHE_XYZ, the result of G3d_cacheSizeEncode()
+ * <em>minUnlocked</em> must be one of RASTER3D_USE_CACHE_X, RASTER3D_USE_CACHE_Y,
+ * RASTER3D_USE_CACHE_Z, RASTER3D_USE_CACHE_XY, RASTER3D_USE_CACHE_XZ,
+ * RASTER3D_USE_CACHE_YZ, RASTER3D_USE_CACHE_XYZ, the result of G3d_cacheSizeEncode()
  * (cf.{g3d:G3d.cacheSizeEncode}), or any positive integer
  * which explicitly specifies the number of tiles.
  *
@@ -385,7 +385,7 @@ void G3d_autolockOff(G3D_Map * map)
  *  \return void
  */
 
-void G3d_minUnlocked(G3D_Map * map, int minUnlocked)
+void G3d_minUnlocked(RASTER3D_Map * map, int minUnlocked)
 {
     if (!map->useCache)
 	G3d_fatalError("G3d_autoLockOff: function invalid in non-cache mode");
@@ -407,7 +407,7 @@ void G3d_minUnlocked(G3D_Map * map, int minUnlocked)
  *          0 ... otherwise.
  */
 
-int G3d_beginCycle(G3D_Map * map)
+int G3d_beginCycle(RASTER3D_Map * map)
 {
     if (!G3d_unlockAll(map)) {
 	G3d_fatalError("G3d_beginCycle: error in G3d_unlockAll");
@@ -431,7 +431,7 @@ int G3d_beginCycle(G3D_Map * map)
  *          0 ... otherwise.
  */
 
-int G3d_endCycle(G3D_Map * map)
+int G3d_endCycle(RASTER3D_Map * map)
 {
     G3d_autolockOff(map);
     return 1;

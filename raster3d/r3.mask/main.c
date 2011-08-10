@@ -46,17 +46,17 @@ void getParams(char **name, d_Mask ** maskRules)
 static void makeMask(char *name, d_Mask * maskRules)
 {
     void *map, *mask;
-    G3D_Region region;
+    RASTER3D_Region region;
     int tileX, tileY, tileZ, x, y, z, cacheSize;
     double value;
     float floatNull;
 
-    cacheSize = G3d_cacheSizeEncode(G3D_USE_CACHE_XY, 1);
+    cacheSize = G3d_cacheSizeEncode(RASTER3D_USE_CACHE_XY, 1);
 
     if (NULL == G_find_grid3(name, ""))
 	G3d_fatalError(_("3D raster map <%s> not found"), name);
 
-    map = G3d_openCellOld(name, G_mapset(), G3D_DEFAULT_WINDOW,
+    map = G3d_openCellOld(name, G_mapset(), RASTER3D_DEFAULT_WINDOW,
 			  DCELL_TYPE, cacheSize);
 
     if (map == NULL)
@@ -67,16 +67,16 @@ static void makeMask(char *name, d_Mask * maskRules)
     G3d_getTileDimensionsMap(map, &tileX, &tileY, &tileZ);
 
     mask = G3d_openNewParam(G3d_maskFile(), FCELL_TYPE, cacheSize,
-			    &region, FCELL_TYPE, G3D_NO_LZW, G3D_USE_RLE, 0,
+			    &region, FCELL_TYPE, RASTER3D_NO_LZW, RASTER3D_USE_RLE, 0,
 			    tileX, tileY, tileZ);
 
     if (mask == NULL)
 	G3d_fatalError(_("Unable to open 3D raster mask file"));
 
-    G3d_minUnlocked(map, G3D_USE_CACHE_X);
+    G3d_minUnlocked(map, RASTER3D_USE_CACHE_X);
     G3d_autolockOn(map);
     G3d_unlockAll(map);
-    G3d_minUnlocked(mask, G3D_USE_CACHE_X);
+    G3d_minUnlocked(mask, RASTER3D_USE_CACHE_X);
     G3d_autolockOn(mask);
     G3d_unlockAll(mask);
 
@@ -154,7 +154,7 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
     if (G3d_maskFileExists())
-	G_fatal_error(_("Cannot create mask file: G3D_MASK already exists"));
+	G_fatal_error(_("Cannot create mask file: RASTER3D_MASK already exists"));
 
     getParams(&name, &maskRules);
 

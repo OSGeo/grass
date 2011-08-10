@@ -12,13 +12,13 @@ int G3d_writeDoubles(int fd, int useXdr, const double *i, int nofNum)
 {
     int firstTime = 1;
     XDR xdrEncodeStream;
-    char xdrDoubleBuf[G3D_XDR_DOUBLE_LENGTH * 1024];
+    char xdrDoubleBuf[RASTER3D_XDR_DOUBLE_LENGTH * 1024];
     u_int n;
 
     if (nofNum <= 0)
 	G3d_fatalError("G3d_writeDoubles: nofNum out of range");
 
-    if (useXdr == G3D_NO_XDR) {
+    if (useXdr == RASTER3D_NO_XDR) {
 	if (write(fd, i, sizeof(double) * nofNum) != sizeof(double) * nofNum) {
 	    G3d_error("G3d_writeDoubles: writing to file failed");
 	    return 0;
@@ -31,7 +31,7 @@ int G3d_writeDoubles(int fd, int useXdr, const double *i, int nofNum)
 
     if (firstTime) {
 	xdrmem_create(&xdrEncodeStream, xdrDoubleBuf,
-		      G3D_XDR_DOUBLE_LENGTH * 1024, XDR_ENCODE);
+		      RASTER3D_XDR_DOUBLE_LENGTH * 1024, XDR_ENCODE);
 	firstTime = 1;
     }
 
@@ -51,8 +51,8 @@ int G3d_writeDoubles(int fd, int useXdr, const double *i, int nofNum)
 	    return 0;
 	}
 
-	if (write(fd, xdrDoubleBuf, G3D_XDR_DOUBLE_LENGTH * n) !=
-	    G3D_XDR_DOUBLE_LENGTH * n) {
+	if (write(fd, xdrDoubleBuf, RASTER3D_XDR_DOUBLE_LENGTH * n) !=
+	    RASTER3D_XDR_DOUBLE_LENGTH * n) {
 	    G3d_error("G3d_writeDoubles: writing xdr to file failed");
 	    return 0;
 	}
@@ -70,13 +70,13 @@ int G3d_readDoubles(int fd, int useXdr, double *i, int nofNum)
 {
     int firstTime = 1;
     XDR xdrDecodeStream;
-    char xdrDoubleBuf[G3D_XDR_DOUBLE_LENGTH * 1024];
+    char xdrDoubleBuf[RASTER3D_XDR_DOUBLE_LENGTH * 1024];
     u_int n;
 
     if (nofNum <= 0)
 	G3d_fatalError("G3d_readDoubles: nofNum out of range");
 
-    if (useXdr == G3D_NO_XDR) {
+    if (useXdr == RASTER3D_NO_XDR) {
 	if (read(fd, i, sizeof(double) * nofNum) != sizeof(double) * nofNum) {
 	    G3d_error("G3d_readDoubles: reading from file failed");
 	    return 0;
@@ -88,7 +88,7 @@ int G3d_readDoubles(int fd, int useXdr, double *i, int nofNum)
 
     if (firstTime) {
 	xdrmem_create(&xdrDecodeStream, xdrDoubleBuf,
-		      G3D_XDR_DOUBLE_LENGTH * 1024, XDR_DECODE);
+		      RASTER3D_XDR_DOUBLE_LENGTH * 1024, XDR_DECODE);
 	firstTime = 1;
     }
 
@@ -97,8 +97,8 @@ int G3d_readDoubles(int fd, int useXdr, double *i, int nofNum)
 	if (n == 0)
 	    n = 1024;
 
-	if (read(fd, xdrDoubleBuf, G3D_XDR_DOUBLE_LENGTH * n) !=
-	    G3D_XDR_DOUBLE_LENGTH * n) {
+	if (read(fd, xdrDoubleBuf, RASTER3D_XDR_DOUBLE_LENGTH * n) !=
+	    RASTER3D_XDR_DOUBLE_LENGTH * n) {
 	    G3d_error("G3d_readDoubles: reading xdr from file failed");
 	    return 0;
 	}

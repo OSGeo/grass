@@ -216,7 +216,7 @@ G3d_makeAlignedVolumeFile(void *map, const char *fileName,
     void *volumeBuf;
     void *mapVolume;
     int x, y, z, eltLength;
-    G3D_Region region;
+    RASTER3D_Region region;
 
     volumeBuf = G3d_malloc(nx * ny * nz * sizeof(G3d_getFileType()));
     if (volumeBuf == NULL)
@@ -239,7 +239,7 @@ G3d_makeAlignedVolumeFile(void *map, const char *fileName,
     region.depths = nz;
 
     mapVolume = G3d_openCellNew(fileName, G3d_getFileType(),
-				G3D_USE_CACHE_DEFAULT, &region);
+				RASTER3D_USE_CACHE_DEFAULT, &region);
     if (mapVolume == NULL)
 	G3d_fatalError("G3d_makeAlignedVolumeFile: error in G3d_openCellNew");
 

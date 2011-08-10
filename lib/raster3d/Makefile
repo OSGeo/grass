@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ../..
 
-LIB = G3D
+LIB = RASTER3D
 
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make

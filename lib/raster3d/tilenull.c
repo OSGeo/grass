@@ -20,7 +20,7 @@
  *  \return void
  */
 
-void G3d_setNullTileType(G3D_Map * map, void *tile, int type)
+void G3d_setNullTileType(RASTER3D_Map * map, void *tile, int type)
 {
     G3d_setNullValue(tile, map->tileSize, type);
 }
@@ -38,7 +38,7 @@ void G3d_setNullTileType(G3D_Map * map, void *tile, int type)
  *  \return void
  */
 
-void G3d_setNullTile(G3D_Map * map, void *tile)
+void G3d_setNullTile(RASTER3D_Map * map, void *tile)
 {
     G3d_setNullTileType(map, tile, map->typeIntern);
 }

@@ -25,7 +25,7 @@ static void xings_grad(float *data[], int c_ndx, int x1, int y1,
 static void normalize(float n[3]);
 
 
-void viz_iso_surface(void *g3map, G3D_Region * g3reg,
+void viz_iso_surface(void *g3map, RASTER3D_Region * g3reg,
 		     cmndln_info * linefax, int quiet)
 {
     float *data[4];		/* will hold 4 slices of xy data */

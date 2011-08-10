@@ -10,7 +10,7 @@ DOXNAME=
 DOXINPUT=grasspython.dox
 
 MODULES = date gis raster gmath proj imagery vector display stats \
-	dbmi g3d arraystats cluster trans vedit ogsf nviz
+	dbmi raster3d arraystats cluster trans vedit ogsf nviz
 
 date_LIBS       = $(DATETIMELIB)
 gis_LIBS      = $(GISLIB)
@@ -22,7 +22,7 @@ vector_LIBS     = $(VECTLIB)
 display_LIBS    = $(DISPLAYLIB)
 stats_LIBS      = $(STATSLIB)
 dbmi_LIBS       = $(DBMILIB)
-g3d_LIBS        = $(G3DLIB)
+raster3d_LIBS   = $(RASTER3DLIB)
 arraystats_LIBS = $(ARRAYSTATSLIB)
 cluster_LIBS    = $(CLUSTERLIB)
 trans_LIBS      = $(TRANSLIB)
@@ -40,7 +40,7 @@ vector_HDRS     = vector.h vect/dig_structs.h vect/dig_defines.h
 display_HDRS    = display.h
 stats_HDRS      = stats.h
 dbmi_HDRS       = dbmi.h dbmidefs.h
-g3d_HDRS        = G3d.h
+raster3d_HDRS   = raster3d.h
 arraystats_HDRS = arraystats.h
 cluster_HDRS    = cluster.h
 trans_HDRS      = transform.h

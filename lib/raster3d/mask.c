@@ -13,7 +13,7 @@
 /*--------------------------------------------------------------------------*/
 
 static int G3d_maskMapExistsVar = 0;
-static G3D_Map *G3d_maskMap;
+static RASTER3D_Map *G3d_maskMap;
 
 /*--------------------------------------------------------------------------*/
 static void dummy(void)
@@ -22,13 +22,13 @@ static void dummy(void)
 }
 
 
-static float G3D_MASKNUMmaskValue;
+static float RASTER3D_MASKNUMmaskValue;
 
 /* Call to dummy() to match void return type of G3d_setNullValue() */
-#define G3D_MASKNUM(map,Xmask,Ymask,Zmask,VALUEmask,TYPEmask) \
+#define RASTER3D_MASKNUM(map,Xmask,Ymask,Zmask,VALUEmask,TYPEmask) \
 \
-   (G3D_MASKNUMmaskValue = G3d_getMaskFloat (map, Xmask, Ymask, Zmask), \
-    ((G3d_isNullValueNum (&G3D_MASKNUMmaskValue, FCELL_TYPE)) ? \
+   (RASTER3D_MASKNUMmaskValue = G3d_getMaskFloat (map, Xmask, Ymask, Zmask), \
+    ((G3d_isNullValueNum (&RASTER3D_MASKNUMmaskValue, FCELL_TYPE)) ? \
       G3d_setNullValue (VALUEmask, 1, TYPEmask) : dummy()))
 
 /*--------------------------------------------------------------------------*/
@@ -63,16 +63,16 @@ int G3d_maskClose()
 
 int G3d_maskFileExists(void)
 {
-    return G_find_file_misc(G3D_DIRECTORY, G3D_CELL_ELEMENT, G3D_MASK_MAP, G_mapset()) != NULL;
+    return G_find_file_misc(RASTER3D_DIRECTORY, RASTER3D_CELL_ELEMENT, RASTER3D_MASK_MAP, G_mapset()) != NULL;
 }
 
 /*--------------------------------------------------------------------------*/
 
-static int maskOpenOldCacheDefault = G3D_USE_CACHE_DEFAULT;
+static int maskOpenOldCacheDefault = RASTER3D_USE_CACHE_DEFAULT;
 
 int G3d_maskOpenOld(void)
 {
-    G3D_Region region;
+    RASTER3D_Region region;
 
     /* No Idea if this is correct return value */
     if (G3d_maskMapExistsVar)
@@ -83,8 +83,8 @@ int G3d_maskOpenOld(void)
     if (!G3d_maskMapExistsVar)
 	return 1;
 
-    if ((G3d_maskMap = G3d_openCellOld(G3D_MASK_MAP, G_mapset(),
-				       G3D_DEFAULT_WINDOW, FCELL_TYPE,
+    if ((G3d_maskMap = G3d_openCellOld(RASTER3D_MASK_MAP, G_mapset(),
+				       RASTER3D_DEFAULT_WINDOW, FCELL_TYPE,
 				       maskOpenOldCacheDefault))
 	== NULL) {
 	G3d_error("G3d_maskOpenOld: cannot open mask");
@@ -100,7 +100,7 @@ int G3d_maskOpenOld(void)
 
 /*--------------------------------------------------------------------------*/
 
-static float G3d_getMaskFloat(G3D_Map * map, int x, int y, int z)
+static float G3d_getMaskFloat(RASTER3D_Map * map, int x, int y, int z)
 {
     double north, east, top;
     float value;
@@ -170,13 +170,13 @@ int G3d_maskReopen(int cache)
  *  \return int
  */
 
-int G3d_isMasked(G3D_Map * map, int x, int y, int z)
+int G3d_isMasked(RASTER3D_Map * map, int x, int y, int z)
 {
     if (!G3d_maskMapExistsVar)
 	return 0;
 
-    G3D_MASKNUMmaskValue = G3d_getMaskFloat(map, x, y, z);
-    return (G3d_isNullValueNum(&G3D_MASKNUMmaskValue, FCELL_TYPE));
+    RASTER3D_MASKNUMmaskValue = G3d_getMaskFloat(map, x, y, z);
+    return (G3d_isNullValueNum(&RASTER3D_MASKNUMmaskValue, FCELL_TYPE));
 }
 
 /*--------------------------------------------------------------------------*/
@@ -197,11 +197,11 @@ int G3d_isMasked(G3D_Map * map, int x, int y, int z)
  *  \return void
  */
 
-void G3d_maskNum(G3D_Map * map, int x, int y, int z, void *value, int type)
+void G3d_maskNum(RASTER3D_Map * map, int x, int y, int z, void *value, int type)
 {
     if (!G3d_maskMapExistsVar)
 	return;
-    G3D_MASKNUM(map, x, y, z, value, type);
+    RASTER3D_MASKNUM(map, x, y, z, value, type);
 }
 
 /*--------------------------------------------------------------------------*/
@@ -219,11 +219,11 @@ void G3d_maskNum(G3D_Map * map, int x, int y, int z, void *value, int type)
  *  \return void
  */
 
-void G3d_maskFloat(G3D_Map * map, int x, int y, int z, float *value)
+void G3d_maskFloat(RASTER3D_Map * map, int x, int y, int z, float *value)
 {
     if (!G3d_maskMapExistsVar)
 	return;
-    G3D_MASKNUM(map, x, y, z, value, FCELL_TYPE);
+    RASTER3D_MASKNUM(map, x, y, z, value, FCELL_TYPE);
 }
 
 /*--------------------------------------------------------------------------*/
@@ -241,11 +241,11 @@ void G3d_maskFloat(G3D_Map * map, int x, int y, int z, float *value)
  *  \return void
  */
 
-void G3d_maskDouble(G3D_Map * map, int x, int y, int z, double *value)
+void G3d_maskDouble(RASTER3D_Map * map, int x, int y, int z, double *value)
 {
     if (!G3d_maskMapExistsVar)
 	return;
-    G3D_MASKNUM(map, x, y, z, value, DCELL_TYPE);
+    RASTER3D_MASKNUM(map, x, y, z, value, DCELL_TYPE);
 }
 
 /*--------------------------------------------------------------------------*/
@@ -268,7 +268,7 @@ void G3d_maskDouble(G3D_Map * map, int x, int y, int z, double *value)
  *  \return void
  */
 
-void G3d_maskTile(G3D_Map * map, int tileIndex, void *tile, int type)
+void G3d_maskTile(RASTER3D_Map * map, int tileIndex, void *tile, int type)
 {
     int nofNum, rows, cols, depths, xRedundant, yRedundant, zRedundant;
     int x, y, z, xLength, yLength, dx, dy, dz, length;
@@ -305,7 +305,7 @@ void G3d_maskTile(G3D_Map * map, int tileIndex, void *tile, int type)
     for (dz = z; dz < depths; dz++) {
 	for (dy = y; dy < rows; dy++) {
 	    for (dx = x; dx < cols; dx++) {
-		G3D_MASKNUM(map, dx, dy, dz, tile, type);
+		RASTER3D_MASKNUM(map, dx, dy, dz, tile, type);
 		tile += length;
 	    }
 
@@ -329,7 +329,7 @@ void G3d_maskTile(G3D_Map * map, int tileIndex, void *tile, int type)
  *  \return void
  */
 
-void G3d_maskOn(G3D_Map * map)
+void G3d_maskOn(RASTER3D_Map * map)
 {
     map->useMask = 1;
 }
@@ -346,7 +346,7 @@ void G3d_maskOn(G3D_Map * map)
  *  \return void
  */
 
-void G3d_maskOff(G3D_Map * map)
+void G3d_maskOff(RASTER3D_Map * map)
 {
     map->useMask = 0;
 }
@@ -362,7 +362,7 @@ void G3d_maskOff(G3D_Map * map)
  *  \return int
  */
 
-int G3d_maskIsOn(G3D_Map * map)
+int G3d_maskIsOn(RASTER3D_Map * map)
 {
     return map->useMask;
 }
@@ -377,7 +377,7 @@ int G3d_maskIsOn(G3D_Map * map)
  *  \return int
  */
 
-int G3d_maskIsOff(G3D_Map * map)
+int G3d_maskIsOff(RASTER3D_Map * map)
 {
     return !map->useMask;
 }
@@ -393,7 +393,7 @@ int G3d_maskIsOff(G3D_Map * map)
 
 const char *G3d_maskFile(void)
 {
-    return G3D_MASK_MAP;
+    return RASTER3D_MASK_MAP;
 }
 
 

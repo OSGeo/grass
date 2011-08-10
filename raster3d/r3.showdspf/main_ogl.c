@@ -105,7 +105,7 @@ int main(int argc, char **argv)
     XEvent event;
     int i, fdes[2];
     void *g3map;
-    G3D_Region g3reg;
+    RASTER3D_Region g3reg;
     char *p, *mapset;
     double dmin, dmax;
     fd_set set;
@@ -171,8 +171,8 @@ int main(int argc, char **argv)
 	    G_fatal_error(buff);
 	}
 
-	g3map = G3d_openCellOld(g3->answer, mapset, G3D_DEFAULT_WINDOW,
-				G3D_TILE_SAME_AS_FILE, G3D_USE_CACHE_DEFAULT);
+	g3map = G3d_openCellOld(g3->answer, mapset, RASTER3D_DEFAULT_WINDOW,
+				RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
 	if (NULL == g3map) {
 	    sprintf(buff, "Error opening grid3 file [%s]", g3->answer);

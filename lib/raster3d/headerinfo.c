@@ -16,7 +16,7 @@
  *  \return void
  */
 
-void G3d_getCoordsMap(G3D_Map * map, int *rows, int *cols, int *depths)
+void G3d_getCoordsMap(RASTER3D_Map * map, int *rows, int *cols, int *depths)
 {
     *rows = map->region.rows;
     *cols = map->region.cols;
@@ -25,7 +25,7 @@ void G3d_getCoordsMap(G3D_Map * map, int *rows, int *cols, int *depths)
 
 /*---------------------------------------------------------------------------*/
 
-void G3d_getCoordsMapWindow(G3D_Map * map, int *rows, int *cols, int *depths)
+void G3d_getCoordsMapWindow(RASTER3D_Map * map, int *rows, int *cols, int *depths)
 {
     *rows = map->window.rows;
     *cols = map->window.cols;
@@ -48,7 +48,7 @@ void G3d_getCoordsMapWindow(G3D_Map * map, int *rows, int *cols, int *depths)
  *  \return void
  */
 
-void G3d_getNofTilesMap(G3D_Map * map, int *nx, int *ny, int *nz)
+void G3d_getNofTilesMap(RASTER3D_Map * map, int *nx, int *ny, int *nz)
 {
     *nx = map->nx;
     *ny = map->ny;
@@ -74,7 +74,7 @@ void G3d_getNofTilesMap(G3D_Map * map, int *nx, int *ny, int *nz)
  */
 
 void
-G3d_getRegionMap(G3D_Map * map, double *north, double *south, double *east,
+G3d_getRegionMap(RASTER3D_Map * map, double *north, double *south, double *east,
 		 double *west, double *top, double *bottom)
 {
     *north = map->region.north;
@@ -88,7 +88,7 @@ G3d_getRegionMap(G3D_Map * map, double *north, double *south, double *east,
 /*---------------------------------------------------------------------------*/
 
 void
-G3d_getWindowMap(G3D_Map * map, double *north, double *south, double *east,
+G3d_getWindowMap(RASTER3D_Map * map, double *north, double *south, double *east,
 		 double *west, double *top, double *bottom)
 {
     *north = map->window.north;
@@ -112,14 +112,14 @@ G3d_getWindowMap(G3D_Map * map, double *north, double *south, double *east,
  *  \return void
  */
 
-void G3d_getRegionStructMap(G3D_Map * map, G3D_Region * region)
+void G3d_getRegionStructMap(RASTER3D_Map * map, RASTER3D_Region * region)
 {
     G3d_regionCopy(region, &(map->region));
 }
 
 /*---------------------------------------------------------------------------*/
 
-void G3d_getWindowStructMap(G3D_Map * map, G3D_Region * window)
+void G3d_getWindowStructMap(RASTER3D_Map * map, RASTER3D_Region * window)
 {
     G3d_regionCopy(window, &(map->window));
 }
@@ -139,7 +139,7 @@ void G3d_getWindowStructMap(G3D_Map * map, G3D_Region * window)
  *  \return void
  */
 
-void G3d_getTileDimensionsMap(G3D_Map * map, int *x, int *y, int *z)
+void G3d_getTileDimensionsMap(RASTER3D_Map * map, int *x, int *y, int *z)
 {
     *x = map->tileX;
     *y = map->tileY;
@@ -158,7 +158,7 @@ void G3d_getTileDimensionsMap(G3D_Map * map, int *x, int *y, int *z)
  *  \return int
  */
 
-int G3d_tileTypeMap(G3D_Map * map)
+int G3d_tileTypeMap(RASTER3D_Map * map)
 {
     return map->typeIntern;
 }
@@ -175,7 +175,7 @@ int G3d_tileTypeMap(G3D_Map * map)
  *  \return int
  */
 
-int G3d_fileTypeMap(G3D_Map * map)
+int G3d_fileTypeMap(RASTER3D_Map * map)
 {
     return map->type;
 }
@@ -192,7 +192,7 @@ int G3d_fileTypeMap(G3D_Map * map)
  *  \return int
  */
 
-int G3d_tilePrecisionMap(G3D_Map * map)
+int G3d_tilePrecisionMap(RASTER3D_Map * map)
 {
     return map->precision;
 }
@@ -209,7 +209,7 @@ int G3d_tilePrecisionMap(G3D_Map * map)
  *  \return int
  */
 
-int G3d_tileUseCacheMap(G3D_Map * map)
+int G3d_tileUseCacheMap(RASTER3D_Map * map)
 {
     return map->useCache;
 }
@@ -225,13 +225,13 @@ int G3d_tileUseCacheMap(G3D_Map * map)
  *  \return void
  */
 
-void G3d_printHeader(G3D_Map * map)
+void G3d_printHeader(RASTER3D_Map * map)
 {
     double rangeMin, rangeMax;
 
     printf("File %s open for %sing:\n", map->fileName,
-	   (map->operation == G3D_WRITE_DATA ? "writ" :
-	    (map->operation == G3D_READ_DATA ? "read" : "unknown")));
+	   (map->operation == RASTER3D_WRITE_DATA ? "writ" :
+	    (map->operation == RASTER3D_READ_DATA ? "read" : "unknown")));
     printf("  Fd = %d, Unit %s, Type: %s, ", map->data_fd,
 	   map->unit,
 	   (map->type == FCELL_TYPE ? "float" :
@@ -239,7 +239,7 @@ void G3d_printHeader(G3D_Map * map)
     printf("Type intern: %s\n",
 	   (map->typeIntern == FCELL_TYPE ? "float" :
 	    (map->typeIntern == DCELL_TYPE ? "double" : "unknown")));
-    if (map->compression == G3D_NO_COMPRESSION)
+    if (map->compression == RASTER3D_NO_COMPRESSION)
 	printf("  Compression: none\n");
     else {
 	printf("  Compression:%s%s Precision: %s",
@@ -253,7 +253,7 @@ void G3d_printHeader(G3D_Map * map)
 	printf("  Cache: none\n");
     else {
 	printf("  Cache: used%s\n",
-	       (map->operation == G3D_WRITE_DATA ? ", File Cache used" : ""));
+	       (map->operation == RASTER3D_WRITE_DATA ? ", File Cache used" : ""));
     }
 
     G3d_range_min_max(map, &rangeMin, &rangeMax);

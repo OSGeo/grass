@@ -14,7 +14,7 @@
 /*---------------------------------------------------------------------------*/
 
 void
-G3d_range_updateFromTile(G3D_Map * map, const void *tile, int rows, int cols,
+G3d_range_updateFromTile(RASTER3D_Map * map, const void *tile, int rows, int cols,
 			 int depths, int xRedundant, int yRedundant,
 			 int zRedundant, int nofNum, int type)
 {
@@ -70,19 +70,19 @@ G3d_readRange(const char *name, const char *mapset, struct FPRange *drange)
 
     fd = -1;
 
-    fd = G_open_old_misc(G3D_DIRECTORY, G3D_RANGE_ELEMENT, name, mapset);
+    fd = G_open_old_misc(RASTER3D_DIRECTORY, RASTER3D_RANGE_ELEMENT, name, mapset);
     if (fd < 0) {
 	G_warning(_("Unable to open range file for [%s in %s]"), name, mapset);
 	return -1;
     }
 
-    if (read(fd, xdr_buf, 2 * G3D_XDR_DOUBLE_LENGTH) != 2 * G3D_XDR_DOUBLE_LENGTH) {
+    if (read(fd, xdr_buf, 2 * RASTER3D_XDR_DOUBLE_LENGTH) != 2 * RASTER3D_XDR_DOUBLE_LENGTH) {
 	close(fd);
 	G_warning(_("Error reading range file for [%s in %s]"), name, mapset);
 	return 2;
     }
 
-    xdrmem_create(&xdr_str, xdr_buf, (u_int) G3D_XDR_DOUBLE_LENGTH * 2,
+    xdrmem_create(&xdr_str, xdr_buf, (u_int) RASTER3D_XDR_DOUBLE_LENGTH * 2,
 		  XDR_DECODE);
 
     /* if the f_range file exists, but empty */
@@ -111,9 +111,9 @@ G3d_readRange(const char *name, const char *mapset, struct FPRange *drange)
  *          0 ... otherwise.
  */
 
-int G3d_range_load(G3D_Map * map)
+int G3d_range_load(RASTER3D_Map * map)
 {
-    if (map->operation == G3D_WRITE_DATA)
+    if (map->operation == RASTER3D_WRITE_DATA)
 	return 1;
     if (G3d_readRange(map->fileName, map->mapset, &(map->range)) == -1) {
 	return 0;
@@ -137,7 +137,7 @@ int G3d_range_load(G3D_Map * map)
  *  \return void
  */
 
-void G3d_range_min_max(G3D_Map * map, double *min, double *max)
+void G3d_range_min_max(RASTER3D_Map * map, double *min, double *max)
 {
     Rast_get_fp_range_min_max(&(map->range), min, max);
 }
@@ -151,7 +151,7 @@ static int writeRange(const char *name, struct FPRange *range)
     int fd;
     XDR xdr_str;
 
-    fd = G_open_new_misc(G3D_DIRECTORY, G3D_RANGE_ELEMENT, name);
+    fd = G_open_new_misc(RASTER3D_DIRECTORY, RASTER3D_RANGE_ELEMENT, name);
     if (fd < 0) {
 	G_warning(_("Unable to open range file for <%s>"), name);
 	return -1;
@@ -163,7 +163,7 @@ static int writeRange(const char *name, struct FPRange *range)
 	return 0;
     }
 
-    xdrmem_create(&xdr_str, xdr_buf, (u_int) G3D_XDR_DOUBLE_LENGTH * 2,
+    xdrmem_create(&xdr_str, xdr_buf, (u_int) RASTER3D_XDR_DOUBLE_LENGTH * 2,
 		  XDR_ENCODE);
 
     if (!xdr_double(&xdr_str, &(range->min)))
@@ -171,7 +171,7 @@ static int writeRange(const char *name, struct FPRange *range)
     if (!xdr_double(&xdr_str, &(range->max)))
 	goto error;
 
-    if (write(fd, xdr_buf, G3D_XDR_DOUBLE_LENGTH * 2) != G3D_XDR_DOUBLE_LENGTH * 2)
+    if (write(fd, xdr_buf, RASTER3D_XDR_DOUBLE_LENGTH * 2) != RASTER3D_XDR_DOUBLE_LENGTH * 2)
 	goto error;
 
     close(fd);
@@ -179,7 +179,7 @@ static int writeRange(const char *name, struct FPRange *range)
 
   error:
     close(fd);
-    G_remove_misc(G3D_DIRECTORY, G3D_RANGE_ELEMENT, name);	/* remove the old file with this name */
+    G_remove_misc(RASTER3D_DIRECTORY, RASTER3D_RANGE_ELEMENT, name);	/* remove the old file with this name */
     G_warning("can't write range file for [%s in %s]", name, G_mapset());
     return -1;
 }
@@ -198,11 +198,11 @@ static int writeRange(const char *name, struct FPRange *range)
  *          0 ... otherwise.
  */
 
-int G3d_range_write(G3D_Map * map)
+int G3d_range_write(RASTER3D_Map * map)
 {
     char path[GPATH_MAX];
 
-    G3d_filename(path, G3D_RANGE_ELEMENT, map->fileName, map->mapset);
+    G3d_filename(path, RASTER3D_RANGE_ELEMENT, map->fileName, map->mapset);
     remove(path);
 
     if (writeRange(map->fileName, &(map->range)) == -1) {
@@ -215,7 +215,7 @@ int G3d_range_write(G3D_Map * map)
 
 /*---------------------------------------------------------------------------*/
 
-int G3d_range_init(G3D_Map * map)
+int G3d_range_init(RASTER3D_Map * map)
 {
     Rast_init_fp_range(&(map->range));
     return 0;

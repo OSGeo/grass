@@ -22,7 +22,7 @@ static int read_old_colors(FILE *, struct Colors *);
 int G3d_removeColor(const char *name)
  /* adapted from G_remove_colr */
 {
-    return G_remove_misc(G3D_DIRECTORY, G3D_COLOR_ELEMENT, name);
+    return G_remove_misc(RASTER3D_DIRECTORY, RASTER3D_COLOR_ELEMENT, name);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -67,7 +67,7 @@ static int read_colors(const char *name, const char *mapset,
     int stat;
     char buf[1024];
 
-    fd = G_fopen_old_misc(G3D_DIRECTORY, G3D_COLOR_ELEMENT, name, mapset);
+    fd = G_fopen_old_misc(RASTER3D_DIRECTORY, RASTER3D_COLOR_ELEMENT, name, mapset);
     if (!fd)
 	return -2;
 
@@ -334,7 +334,7 @@ G3d_writeColors(const char *name, const char *mapset, struct Colors *colors)
 	return -1;
     }
 
-    fd = G_fopen_new_misc(G3D_DIRECTORY, G3D_COLOR_ELEMENT, name);
+    fd = G_fopen_new_misc(RASTER3D_DIRECTORY, RASTER3D_COLOR_ELEMENT, name);
     if (!fd)
 	return -1;
 

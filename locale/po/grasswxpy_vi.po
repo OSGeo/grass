@@ -4845,10 +4845,10 @@ msgstr "Nội suy thể tích từ các điểm"
 
 #: ../gui/wxpython/menustrings.py:803
 msgid ""
-"Interpolates point data to a G3D grid volume using regularized spline with "
+"Interpolates point data to a RASTER3D grid volume using regularized spline with "
 "tension (RST) algorithm."
 msgstr ""
-"Nội suy dữ liệu điểm thành thể tích lưới G3D bằng cách dùng thuật toán đường "
+"Nội suy dữ liệu điểm thành thể tích lưới RASTER3D bằng cách dùng thuật toán đường "
 "spline chính tắc có sức căng (RST)."
 
 #: ../gui/wxpython/menustrings.py:804

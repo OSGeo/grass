@@ -22,7 +22,7 @@
  */
 
 void
-G3d_tileIndex2tile(G3D_Map * map, int tileIndex, int *xTile, int *yTile,
+G3d_tileIndex2tile(RASTER3D_Map * map, int tileIndex, int *xTile, int *yTile,
 		   int *zTile)
 {
     int tileIndex2d;
@@ -49,7 +49,7 @@ G3d_tileIndex2tile(G3D_Map * map, int tileIndex, int *xTile, int *yTile,
  *  \return int
  */
 
-int G3d_tile2tileIndex(G3D_Map * map, int xTile, int yTile, int zTile)
+int G3d_tile2tileIndex(RASTER3D_Map * map, int xTile, int yTile, int zTile)
 {
     return map->nxy * zTile + map->nx * yTile + xTile;
 }
@@ -75,7 +75,7 @@ int G3d_tile2tileIndex(G3D_Map * map, int xTile, int yTile, int zTile)
  */
 
 void
-G3d_tileCoordOrigin(G3D_Map * map, int xTile, int yTile, int zTile, int *x,
+G3d_tileCoordOrigin(RASTER3D_Map * map, int xTile, int yTile, int zTile, int *x,
 		    int *y, int *z)
 {
     *x = map->tileX * xTile;
@@ -100,7 +100,7 @@ G3d_tileCoordOrigin(G3D_Map * map, int xTile, int yTile, int zTile, int *x,
  *  \return void
  */
 
-void G3d_tileIndexOrigin(G3D_Map * map, int tileIndex, int *x, int *y, int *z)
+void G3d_tileIndexOrigin(RASTER3D_Map * map, int tileIndex, int *x, int *y, int *z)
 {
     int xTile, yTile, zTile;
 
@@ -133,7 +133,7 @@ void G3d_tileIndexOrigin(G3D_Map * map, int tileIndex, int *x, int *y, int *z)
  */
 
 void
-G3d_coord2tileCoord(G3D_Map * map, int x, int y, int z, int *xTile,
+G3d_coord2tileCoord(RASTER3D_Map * map, int x, int y, int z, int *xTile,
 		    int *yTile, int *zTile, int *xOffs, int *yOffs,
 		    int *zOffs)
 {
@@ -164,7 +164,7 @@ G3d_coord2tileCoord(G3D_Map * map, int x, int y, int z, int *xTile,
  */
 
 void
-G3d_coord2tileIndex(G3D_Map * map, int x, int y, int z, int *tileIndex,
+G3d_coord2tileIndex(RASTER3D_Map * map, int x, int y, int z, int *tileIndex,
 		    int *offset)
 {
     int xTile, yTile, zTile, xOffs, yOffs, zOffs;
@@ -192,7 +192,7 @@ G3d_coord2tileIndex(G3D_Map * map, int x, int y, int z, int *tileIndex,
  *  \return int
  */
 
-int G3d_coordInRange(G3D_Map * map, int x, int y, int z)
+int G3d_coordInRange(RASTER3D_Map * map, int x, int y, int z)
 {
     return (x >= 0) && (x < map->region.cols) && (y >= 0) &&
 	(y < map->region.rows) && (z >= 0) && (z < map->region.depths);
@@ -212,7 +212,7 @@ int G3d_coordInRange(G3D_Map * map, int x, int y, int z)
  *  \return int
  */
 
-int G3d_tileIndexInRange(G3D_Map * map, int tileIndex)
+int G3d_tileIndexInRange(RASTER3D_Map * map, int tileIndex)
 {
     return (tileIndex < map->nTiles) && (tileIndex >= 0);
 }
@@ -234,7 +234,7 @@ int G3d_tileIndexInRange(G3D_Map * map, int tileIndex)
  *  \return int
  */
 
-int G3d_tileInRange(G3D_Map * map, int x, int y, int z)
+int G3d_tileInRange(RASTER3D_Map * map, int x, int y, int z)
 {
     return (x >= 0) && (x < map->nx) && (y >= 0) && (y < map->ny) &&
 	(z >= 0) && (z < map->nz);
@@ -264,7 +264,7 @@ int G3d_tileInRange(G3D_Map * map, int x, int y, int z)
  */
 
 int
-G3d_computeClippedTileDimensions(G3D_Map * map, int tileIndex, int *rows,
+G3d_computeClippedTileDimensions(RASTER3D_Map * map, int tileIndex, int *rows,
 				 int *cols, int *depths, int *xRedundant,
 				 int *yRedundant, int *zRedundant)
 {
@@ -329,7 +329,7 @@ G3d_computeClippedTileDimensions(G3D_Map * map, int tileIndex, int *rows,
  */
 
 void
-G3d_computeOptimalTileDimension(G3D_Region *region, int type, int *tileX, int *tileY, int *tileZ, int maxSize)
+G3d_computeOptimalTileDimension(RASTER3D_Region *region, int type, int *tileX, int *tileY, int *tileZ, int maxSize)
 {
    int size = 0;
    int x, y, z;

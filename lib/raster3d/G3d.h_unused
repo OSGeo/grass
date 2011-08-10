@@ -1,42 +1,42 @@
-#define G3D_FLOAT 0
-#define G3D_DOUBLE 1
-#define G3D_TILE_SAME_AS_FILE 2
+#define RASTER3D_FLOAT 0
+#define RASTER3D_DOUBLE 1
+#define RASTER3D_TILE_SAME_AS_FILE 2
 
-#define G3D_NO_COMPRESSION 0
-#define G3D_COMPRESSION 1
+#define RASTER3D_NO_COMPRESSION 0
+#define RASTER3D_COMPRESSION 1
 
-#define G3D_USE_LZW 1
-#define G3D_NO_LZW 0
+#define RASTER3D_USE_LZW 1
+#define RASTER3D_NO_LZW 0
 
-#define G3D_USE_RLE 1
-#define G3D_NO_RLE 0
+#define RASTER3D_USE_RLE 1
+#define RASTER3D_NO_RLE 0
 
-#define G3D_MAX_PRECISION -1
+#define RASTER3D_MAX_PRECISION -1
 
-#define G3D_NO_CACHE 0
-#define G3D_USE_CACHE_DEFAULT -1
-#define G3D_USE_CACHE_X -2
-#define G3D_USE_CACHE_Y -3
-#define G3D_USE_CACHE_Z -4
-#define G3D_USE_CACHE_XY -5
-#define G3D_USE_CACHE_XZ -6
-#define G3D_USE_CACHE_YZ -7
-#define G3D_USE_CACHE_XYZ -8
+#define RASTER3D_NO_CACHE 0
+#define RASTER3D_USE_CACHE_DEFAULT -1
+#define RASTER3D_USE_CACHE_X -2
+#define RASTER3D_USE_CACHE_Y -3
+#define RASTER3D_USE_CACHE_Z -4
+#define RASTER3D_USE_CACHE_XY -5
+#define RASTER3D_USE_CACHE_XZ -6
+#define RASTER3D_USE_CACHE_YZ -7
+#define RASTER3D_USE_CACHE_XYZ -8
 
-#define G3D_DEFAULT_WINDOW NULL
+#define RASTER3D_DEFAULT_WINDOW NULL
 
-#define G3D_DIRECTORY      "grid3"
-#define G3D_CELL_ELEMENT   "cell"
-#define G3D_CATS_ELEMENT   "cats"
-#define G3D_RANGE_ELEMENT  "range"
-#define G3D_HEADER_ELEMENT "cellhd"
-#define G3D_COLOR_ELEMENT  "color"
-#define G3D_COLOR2_DIRECTORY  "colr2"
-#define G3D_MASK_MAP       "G3D_MASK"
-#define G3D_WINDOW_ELEMENT   "WIND3"
-#define G3D_DEFAULT_WINDOW_ELEMENT   "DEFAULT_WIND3"
-#define G3D_WINDOW_DATABASE "windows3d"
-#define G3D_PERMANENT_MAPSET "PERMANENT"
+#define RASTER3D_DIRECTORY      "grid3"
+#define RASTER3D_CELL_ELEMENT   "cell"
+#define RASTER3D_CATS_ELEMENT   "cats"
+#define RASTER3D_RANGE_ELEMENT  "range"
+#define RASTER3D_HEADER_ELEMENT "cellhd"
+#define RASTER3D_COLOR_ELEMENT  "color"
+#define RASTER3D_COLOR2_DIRECTORY  "colr2"
+#define RASTER3D_MASK_MAP       "RASTER3D_MASK"
+#define RASTER3D_WINDOW_ELEMENT   "WIND3"
+#define RASTER3D_DEFAULT_WINDOW_ELEMENT   "DEFAULT_WIND3"
+#define RASTER3D_WINDOW_DATABASE "windows3d"
+#define RASTER3D_PERMANENT_MAPSET "PERMANENT"
 
 /*---------------------------------------------------------------------------*/
 
@@ -54,7 +54,7 @@ typedef struct {
   int proj;  /* Projection (see gis.h) */
   int zone;  /* Projection zone (see gis.h) */
 
-} G3D_Region;
+} RASTER3D_Region;
 
 /*---------------------------------------------------------------------------*/
 
@@ -90,7 +90,7 @@ extern void G3d_printError (/* msg */);
 
 extern void G3d_setWindow (/* window */);
 /*extern void G3d_getWindow ();*/
-extern G3D_Region *G3d_windowPtr ();
+extern RASTER3D_Region *G3d_windowPtr ();
 
 /*---------------------------------------------------------------------------*/
 
