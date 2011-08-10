@@ -29,23 +29,23 @@ G3d_readWriteWindow(struct Key_Value *windowKeys, int doRead, int *proj,
     }
 
     returnVal = 1;
-    returnVal &= windowInt(windowKeys, G3D_REGION_PROJ, proj);
-    returnVal &= windowInt(windowKeys, G3D_REGION_ZONE, zone);
+    returnVal &= windowInt(windowKeys, RASTER3D_REGION_PROJ, proj);
+    returnVal &= windowInt(windowKeys, RASTER3D_REGION_ZONE, zone);
 
-    returnVal &= windowDouble(windowKeys, G3D_REGION_NORTH, north);
-    returnVal &= windowDouble(windowKeys, G3D_REGION_SOUTH, south);
-    returnVal &= windowDouble(windowKeys, G3D_REGION_EAST, east);
-    returnVal &= windowDouble(windowKeys, G3D_REGION_WEST, west);
-    returnVal &= windowDouble(windowKeys, G3D_REGION_TOP, top);
-    returnVal &= windowDouble(windowKeys, G3D_REGION_BOTTOM, bottom);
+    returnVal &= windowDouble(windowKeys, RASTER3D_REGION_NORTH, north);
+    returnVal &= windowDouble(windowKeys, RASTER3D_REGION_SOUTH, south);
+    returnVal &= windowDouble(windowKeys, RASTER3D_REGION_EAST, east);
+    returnVal &= windowDouble(windowKeys, RASTER3D_REGION_WEST, west);
+    returnVal &= windowDouble(windowKeys, RASTER3D_REGION_TOP, top);
+    returnVal &= windowDouble(windowKeys, RASTER3D_REGION_BOTTOM, bottom);
 
-    returnVal &= windowInt(windowKeys, G3D_REGION_ROWS, rows);
-    returnVal &= windowInt(windowKeys, G3D_REGION_COLS, cols);
-    returnVal &= windowInt(windowKeys, G3D_REGION_DEPTHS, depths);
+    returnVal &= windowInt(windowKeys, RASTER3D_REGION_ROWS, rows);
+    returnVal &= windowInt(windowKeys, RASTER3D_REGION_COLS, cols);
+    returnVal &= windowInt(windowKeys, RASTER3D_REGION_DEPTHS, depths);
 
-    returnVal &= windowDouble(windowKeys, G3D_REGION_EWRES, ew_res);
-    returnVal &= windowDouble(windowKeys, G3D_REGION_NSRES, ns_res);
-    returnVal &= windowDouble(windowKeys, G3D_REGION_TBRES, tb_res);
+    returnVal &= windowDouble(windowKeys, RASTER3D_REGION_EWRES, ew_res);
+    returnVal &= windowDouble(windowKeys, RASTER3D_REGION_NSRES, ns_res);
+    returnVal &= windowDouble(windowKeys, RASTER3D_REGION_TBRES, tb_res);
 
     if (returnVal)
 	return 1;
@@ -55,15 +55,15 @@ G3d_readWriteWindow(struct Key_Value *windowKeys, int doRead, int *proj,
 }
 
 /*
- * If windowName == NULL -> G3D_WINDOW_ELEMENT ("$MAPSET/WIND3")
- * otherwise G3D_WINDOW_DATABASE ("$MAPSET/windows3d/$NAME")
+ * If windowName == NULL -> RASTER3D_WINDOW_ELEMENT ("$MAPSET/WIND3")
+ * otherwise RASTER3D_WINDOW_DATABASE ("$MAPSET/windows3d/$NAME")
  */
 static void G3d_getFullWindowPath(char *path, const char *windowName)
 {
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
     if (windowName == NULL) {
-	G_file_name(path, "", G3D_WINDOW_ELEMENT, G_mapset());
+	G_file_name(path, "", RASTER3D_WINDOW_ELEMENT, G_mapset());
 	return;
     }
 
@@ -76,11 +76,11 @@ static void G3d_getFullWindowPath(char *path, const char *windowName)
     }
 
     if (G_name_is_fully_qualified(windowName, xname, xmapset)) {
-	G_file_name(path, G3D_WINDOW_DATABASE, xname, xmapset);
+	G_file_name(path, RASTER3D_WINDOW_DATABASE, xname, xmapset);
 	return;
     }
 
-    G_file_name(path, G3D_WINDOW_DATABASE, windowName, G_mapset());
+    G_file_name(path, RASTER3D_WINDOW_DATABASE, windowName, G_mapset());
 }
 
 /*---------------------------------------------------------------------------*/
@@ -104,9 +104,9 @@ static void G3d_getFullWindowPath(char *path, const char *windowName)
 
    if ((*windowName != '/') && (*windowName != '.')) {
    if (G_name_is_fully_qualified (windowName, xname, xmapset)) 
-   G_file_name (path, G3D_WINDOW_DATABASE, xname, xmapset);
+   G_file_name (path, RASTER3D_WINDOW_DATABASE, xname, xmapset);
    else
-   G_file_name (path, G3D_WINDOW_DATABASE, windowName, G_mapset ());
+   G_file_name (path, RASTER3D_WINDOW_DATABASE, windowName, G_mapset ());
    } else
    sprintf (path, windowName);
    p = path;
@@ -136,7 +136,7 @@ static void G3d_getFullWindowPath(char *path, const char *windowName)
  *          0 ... otherwise.
  */
 
-int G3d_readWindow(G3D_Region * window, const char *windowName)
+int G3d_readWindow(RASTER3D_Region * window, const char *windowName)
 {
     struct Cell_head win;
     struct Key_Value *windowKeys;
@@ -252,7 +252,7 @@ int G3d_readWindow(G3D_Region * window, const char *windowName)
    int
    G3d_writeWindow (window, windowName)
 
-   G3D_Region *window;
+   RASTER3D_Region *window;
    char *windowName;
 
    {

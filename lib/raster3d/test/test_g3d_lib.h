@@ -15,8 +15,8 @@
 *
 *****************************************************************************/
 
-#ifndef _TEST_G3D_LIB_H_
-#define _TEST_G3D_LIB_H_
+#ifndef _TEST_RASTER3D_LIB_H_
+#define _TEST_RASTER3D_LIB_H_
 
 #include <grass/raster3d.h>
 #include <grass/gis.h>

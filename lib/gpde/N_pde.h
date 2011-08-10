@@ -120,7 +120,7 @@ typedef struct
 
 extern N_geom_data *N_alloc_geom_data(void);
 extern void N_free_geom_data(N_geom_data * geodata);
-extern N_geom_data *N_init_geom_data_3d(G3D_Region * region3d, N_geom_data * geodata);
+extern N_geom_data *N_init_geom_data_3d(RASTER3D_Region * region3d, N_geom_data * geodata);
 extern N_geom_data *N_init_geom_data_2d(struct Cell_head *region, N_geom_data * geodata);
 extern double N_get_geom_data_area_of_cell(N_geom_data * geom, int row);
 

@@ -29,7 +29,7 @@ typedef struct
 typedef struct
 {
     int token;			/*type of file */
-    void *g3mapin, *g3mapout;	/* G3D_Map */
+    void *g3mapin, *g3mapout;	/* RASTER3D_Map */
     FILE *datainfp, *dataoutfp;
     FILE *dspfinfp, *dspfoutfp;
     int xdim, ydim, zdim;

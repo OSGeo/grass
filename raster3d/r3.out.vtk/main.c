@@ -6,7 +6,7 @@
  * AUTHOR(S):    Original author 
  *               Soeren Gebbert soerengebbert at gmx de
  * 		27 Feb 2006 Berlin
- * PURPOSE:      Converts 3D raster maps (G3D) into the VTK-Ascii format  
+ * PURPOSE:      Converts 3D raster maps (RASTER3D) into the VTK-Ascii format  
  *
  * COPYRIGHT:    (C) 2005 by the GRASS Development Team
  *
@@ -39,11 +39,11 @@ double y_extent;
 /** prototypes ***************************************************************/
 
 /*Open the rgb voxel maps and write the data to the output */
-static void open_write_rgb_maps(input_maps * in, G3D_Region region, FILE * fp,
+static void open_write_rgb_maps(input_maps * in, RASTER3D_Region region, FILE * fp,
                                 int dp);
 
 /*Open the rgb voxel maps and write the data to the output */
-static void open_write_vector_maps(input_maps * in, G3D_Region region,
+static void open_write_vector_maps(input_maps * in, RASTER3D_Region region,
                                    FILE * fp, int dp);
 
 /*opens a raster input map */
@@ -183,7 +183,7 @@ void check_input_maps(void)
 /* Prepare the VTK RGB voxel data for writing ****************************** */
 
 /* ************************************************************************* */
-void open_write_rgb_maps(input_maps * in, G3D_Region region, FILE * fp,
+void open_write_rgb_maps(input_maps * in, RASTER3D_Region region, FILE * fp,
                          int dp)
 {
     int i, changemask[3] = {0, 0, 0};
@@ -201,8 +201,8 @@ void open_write_rgb_maps(input_maps * in, G3D_Region region, FILE * fp,
             maprgb =
                 G3d_openCellOld(param.rgbmaps->answers[i],
                                 G_find_grid3(param.rgbmaps->answers[i], ""),
-                                &region, G3D_TILE_SAME_AS_FILE,
-                                G3D_USE_CACHE_DEFAULT);
+                                &region, RASTER3D_TILE_SAME_AS_FILE,
+                                RASTER3D_USE_CACHE_DEFAULT);
             if (maprgb == NULL) {
                 G_warning(_("Error opening 3d raster map <%s>"),
                           param.rgbmaps->answers[i]);
@@ -268,7 +268,7 @@ void open_write_rgb_maps(input_maps * in, G3D_Region region, FILE * fp,
 /* Prepare the VTK vector data for writing ********************************* */
 
 /* ************************************************************************* */
-void open_write_vector_maps(input_maps * in, G3D_Region region, FILE * fp,
+void open_write_vector_maps(input_maps * in, RASTER3D_Region region, FILE * fp,
                             int dp)
 {
     int i, changemask[3] = {0, 0, 0};
@@ -287,7 +287,7 @@ void open_write_vector_maps(input_maps * in, G3D_Region region, FILE * fp,
                 G3d_openCellOld(param.vectormaps->answers[i],
                                 G_find_grid3(param.vectormaps->answers[i],
                                              ""), &region,
-                                G3D_TILE_SAME_AS_FILE, G3D_USE_CACHE_DEFAULT);
+                                RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
             if (mapvect == NULL) {
                 G_warning(_("Error opening 3d raster map <%s>"),
                           param.vectormaps->answers[i]);
@@ -357,7 +357,7 @@ void open_write_vector_maps(input_maps * in, G3D_Region region, FILE * fp,
 int main(int argc, char *argv[])
 {
     char *output = NULL;
-    G3D_Region region;
+    RASTER3D_Region region;
     struct Cell_head window2d;
     struct Cell_head default_region;
     FILE *fp = NULL;
@@ -505,8 +505,8 @@ int main(int argc, char *argv[])
             in->map =
                 G3d_openCellOld(param.input->answers[i],
                                 G_find_grid3(param.input->answers[i], ""),
-                                &region, G3D_TILE_SAME_AS_FILE,
-                                G3D_USE_CACHE_DEFAULT);
+                                &region, RASTER3D_TILE_SAME_AS_FILE,
+                                RASTER3D_USE_CACHE_DEFAULT);
             if (in->map == NULL) {
                 G_warning(_("Error opening 3d raster map <%s>"),
                           param.input->answers[i]);

@@ -22,7 +22,7 @@
  */
 
 void
-G3d_nearestNeighbor(G3D_Map * map, int x, int y, int z, void *value,
+G3d_nearestNeighbor(RASTER3D_Map * map, int x, int y, int z, void *value,
 		    int type)
 {
     double north, east, top;
@@ -59,7 +59,7 @@ G3d_nearestNeighbor(G3D_Map * map, int x, int y, int z, void *value,
  *  \return void
  */
 
-void G3d_setResamplingFun(G3D_Map * map, void (*resampleFun) ())
+void G3d_setResamplingFun(RASTER3D_Map * map, void (*resampleFun) ())
 {
     map->resampleFun = resampleFun;
 }
@@ -77,7 +77,7 @@ void G3d_setResamplingFun(G3D_Map * map, void (*resampleFun) ())
  *  \return void
  */
 
-void G3d_getResamplingFun(G3D_Map * map, void (**resampleFun) ())
+void G3d_getResamplingFun(RASTER3D_Map * map, void (**resampleFun) ())
 {
     *resampleFun = map->resampleFun;
 }

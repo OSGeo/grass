@@ -4723,10 +4723,10 @@ msgstr "Interpolovat 3D rastrovou vrstvu z vektorových bodù "
 
 #: ../gui/wxpython/menustrings.py:803
 msgid ""
-"Interpolates point data to a G3D grid volume using regularized spline with "
+"Interpolates point data to a RASTER3D grid volume using regularized spline with "
 "tension (RST) algorithm."
 msgstr ""
-"Interpoluje bodová data do G3D 3D rastrové grid vrstvy za pou¾ití "
+"Interpoluje bodová data do RASTER3D 3D rastrové grid vrstvy za pou¾ití "
 "regularized spline with tension (RST)"
 
 #: ../gui/wxpython/menustrings.py:804
@@ -14048,8 +14048,8 @@ msgstr "Soubor nebyl nalezen."
 #~ "Exportuje GRASS rastr do formátu TIFF 8/24bit v rozli¹ení daném aktuálním "
 #~ "regionem."
 
-#~ msgid "Converts 3D raster maps (G3D) into the VTK-Ascii format"
-#~ msgstr "Pøevede 3D rastrové mapy (G3D) do formátu VTK-Ascii"
+#~ msgid "Converts 3D raster maps (RASTER3D) into the VTK-Ascii format"
+#~ msgstr "Pøevede 3D rastrové mapy (RASTER3D) do formátu VTK-Ascii"
 
 #~ msgid ""
 #~ "Makes each cell value a function of the attribute values assigned to the "

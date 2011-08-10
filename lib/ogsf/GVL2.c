@@ -26,7 +26,7 @@
 static int Vol_ID[MAX_VOLS];
 static int Next_vol = 0;
 
-static G3D_Region wind3;
+static RASTER3D_Region wind3;
 static double Region[6];
 
 /*!
@@ -74,7 +74,7 @@ int GVL_get_region(float *n, float *s, float *w, float *e, float *t, float *b)
 
    \todo gvl_file.c use this - change
 
-   \return pointer to G3D_Region struct (static)
+   \return pointer to RASTER3D_Region struct (static)
  */
 void *GVL_get_window()
 {
@@ -247,7 +247,7 @@ int GVL_load_vol(int id, const char *filename)
 
     G_message(_("Loading 3d raster map <%s>..."), filename);
 
-    if (0 > (handle = gvl_file_newh(filename, VOL_FTYPE_G3D)))
+    if (0 > (handle = gvl_file_newh(filename, VOL_FTYPE_RASTER3D)))
 	return (-1);
 
     gvl->hfile = handle;

@@ -53,7 +53,7 @@ void get_fp_stats(const char *name, const char *mapset,
     DCELL *dcell = NULL;
     int row, col, depth, nrows, ncols, ndepths = 1;
     int fd;
-    G3D_Map *map3d = NULL;
+    RASTER3D_Map *map3d = NULL;
 
     if (type == RASTER_TYPE) {
         fd = Rast_open_old(name, mapset);
@@ -64,8 +64,8 @@ void get_fp_stats(const char *name, const char *mapset,
         /* Initiate the default settings */
         G3d_initDefaults();
 
-        map3d = G3d_openCellOld(name, mapset, G3D_DEFAULT_WINDOW,
-                G3D_TILE_SAME_AS_FILE, G3D_USE_CACHE_DEFAULT);
+        map3d = G3d_openCellOld(name, mapset, RASTER3D_DEFAULT_WINDOW,
+                RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
         if (map3d == NULL)
             G3d_fatalError(_("Error opening 3d raster map"));

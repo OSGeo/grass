@@ -12,7 +12,7 @@
 /*---------------------------------------------------------------------------*/
 
 static int
-G3d_tile2xdrTile(G3D_Map * map, const void *tile, int rows, int cols,
+G3d_tile2xdrTile(RASTER3D_Map * map, const void *tile, int rows, int cols,
 		 int depths, int xRedundant, int yRedundant, int zRedundant,
 		 int nofNum, int type)
 {
@@ -70,7 +70,7 @@ G3d_tile2xdrTile(G3D_Map * map, const void *tile, int rows, int cols,
 
 /*---------------------------------------------------------------------------*/
 
-static int G3d_writeTileUncompressed(G3D_Map * map, int nofNum)
+static int G3d_writeTileUncompressed(RASTER3D_Map * map, int nofNum)
 {
     if (write(map->data_fd, xdr, map->numLengthExtern * nofNum) !=
 	map->numLengthExtern * nofNum) {
@@ -83,7 +83,7 @@ static int G3d_writeTileUncompressed(G3D_Map * map, int nofNum)
 
 /*---------------------------------------------------------------------------*/
 
-static int G3d_writeTileCompressed(G3D_Map * map, int nofNum)
+static int G3d_writeTileCompressed(RASTER3D_Map * map, int nofNum)
 {
     if (!G_fpcompress_writeXdrNums(map->data_fd, xdr, nofNum, map->precision,
 				   tmpCompress, map->type == FCELL_TYPE,
@@ -127,7 +127,7 @@ static int G3d_writeTileCompressed(G3D_Map * map, int nofNum)
  *          0 ... otherwise.
  */
 
-int G3d_writeTile(G3D_Map * map, int tileIndex, const void *tile, int type)
+int G3d_writeTile(RASTER3D_Map * map, int tileIndex, const void *tile, int type)
 {
     int rows, cols, depths, xRedundant, yRedundant, zRedundant, nofNum;
 
@@ -161,7 +161,7 @@ int G3d_writeTile(G3D_Map * map, int tileIndex, const void *tile, int type)
 	return 0;
     }
 
-    if (map->compression == G3D_NO_COMPRESSION) {
+    if (map->compression == RASTER3D_NO_COMPRESSION) {
 	if (!G3d_writeTileUncompressed(map, nofNum)) {
 	    G3d_error("G3d_writeTile: error in G3d_writeTileUncompressed");
 	    return 0;
@@ -193,7 +193,7 @@ int G3d_writeTile(G3D_Map * map, int tileIndex, const void *tile, int type)
  *  \return int
  */
 
-int G3d_writeTileFloat(G3D_Map * map, int tileIndex, const void *tile)
+int G3d_writeTileFloat(RASTER3D_Map * map, int tileIndex, const void *tile)
 {
     int status;
 
@@ -218,7 +218,7 @@ int G3d_writeTileFloat(G3D_Map * map, int tileIndex, const void *tile)
  *  \return int
  */
 
-int G3d_writeTileDouble(G3D_Map * map, int tileIndex, const void *tile)
+int G3d_writeTileDouble(RASTER3D_Map * map, int tileIndex, const void *tile)
 {
     int status;
 
@@ -253,7 +253,7 @@ int G3d_writeTileDouble(G3D_Map * map, int tileIndex, const void *tile)
  *          0 ... otherwise.
  */
 
-int G3d_flushTile(G3D_Map * map, int tileIndex)
+int G3d_flushTile(RASTER3D_Map * map, int tileIndex)
 {
     const void *tile;
 
@@ -305,7 +305,7 @@ int G3d_flushTile(G3D_Map * map, int tileIndex)
  */
 
 int
-G3d_flushTileCube(G3D_Map * map, int xMin, int yMin, int zMin, int xMax,
+G3d_flushTileCube(RASTER3D_Map * map, int xMin, int yMin, int zMin, int xMax,
 		  int yMax, int zMax)
 {
     int x, y, z;
@@ -351,7 +351,7 @@ G3d_flushTileCube(G3D_Map * map, int xMin, int yMin, int zMin, int xMax,
  */
 
 int
-G3d_flushTilesInCube(G3D_Map * map, int xMin, int yMin, int zMin, int xMax,
+G3d_flushTilesInCube(RASTER3D_Map * map, int xMin, int yMin, int zMin, int xMax,
 		     int yMax, int zMax)
 {
     int xTileMin, yTileMin, zTileMin, xTileMax, yTileMax, zTileMax;

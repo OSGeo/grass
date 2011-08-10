@@ -36,8 +36,8 @@ int test_coordinate_transform(void)
     double north, east, top;
     int col = 0, row = 0, depth = 0;
     
-    G3D_Region region, default_region;
-    G3D_Map *map = NULL;
+    RASTER3D_Region region, default_region;
+    RASTER3D_Map *map = NULL;
     
     /* We need to set up a specific region for the new g3d map.
      * First we safe the default region. */
@@ -56,7 +56,7 @@ int test_coordinate_transform(void)
         
     G3d_adjustRegion(&region);
     
-    map = G3d_openNewOptTileSize("test_coordinate_transform", G3D_USE_CACHE_XYZ, &region, FCELL_TYPE, 32);
+    map = G3d_openNewOptTileSize("test_coordinate_transform", RASTER3D_USE_CACHE_XYZ, &region, FCELL_TYPE, 32);
         
     /* The window is the same as the map region ... of course */
     G3d_setWindowMap(map, &region);
@@ -155,7 +155,7 @@ int test_coordinate_transform(void)
 int test_region(void)
 {
     int sum = 0;
-    G3D_Region region, new_region;
+    RASTER3D_Region region, new_region;
     
     G3d_getWindow(&region);
     region.bottom = 0.0;

@@ -4786,10 +4786,10 @@ msgstr "Interpolar un volumen a partir de puntos."
 
 #: ../gui/wxpython/menustrings.py:803
 msgid ""
-"Interpolates point data to a G3D grid volume using regularized spline with "
+"Interpolates point data to a RASTER3D grid volume using regularized spline with "
 "tension (RST) algorithm."
 msgstr ""
-"Interpola datos de puntos a volumen de cuadrícula G3D usando una spline "
+"Interpola datos de puntos a volumen de cuadrícula RASTER3D usando una spline "
 "regularizada con el algoritmo de tensión (RST)."
 
 #: ../gui/wxpython/menustrings.py:804
@@ -13822,8 +13822,8 @@ msgstr "No se ha encontrado el archivo."
 #~ "Exporta un mapa raster de GRASS a una imagen TIFF de 8/24 bits a la "
 #~ "resolución de píxel de la región definida actualmente."
 
-#~ msgid "Converts 3D raster maps (G3D) into the VTK-Ascii format"
-#~ msgstr "Convierte mapas raster 3D (G3D) al formato VTK-ASCII."
+#~ msgid "Converts 3D raster maps (RASTER3D) into the VTK-Ascii format"
+#~ msgstr "Convierte mapas raster 3D (RASTER3D) al formato VTK-ASCII."
 
 #~ msgid ""
 #~ "Makes each cell value a function of the attribute values assigned to the "

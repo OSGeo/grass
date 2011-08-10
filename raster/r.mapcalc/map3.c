@@ -17,7 +17,7 @@
 
 /****************************************************************************/
 
-G3D_Region current_region3;
+RASTER3D_Region current_region3;
 
 void setup_region(void)
 {
@@ -398,7 +398,7 @@ int map_type(const char *name, int mod)
 
 	    setup_region();	/* TODO: setup_region should be called by evaluate() ? */
 	    handle = G3d_openCellOld(tmpname, mapset, &current_region3,
-				     G3D_TILE_SAME_AS_FILE, G3D_NO_CACHE);
+				     RASTER3D_TILE_SAME_AS_FILE, RASTER3D_NO_CACHE);
 	    result = (G3d_fileTypeMap(handle) == FCELL_TYPE)
 		? FCELL_TYPE : DCELL_TYPE;
 	    G3d_closeCell(handle);
@@ -507,7 +507,7 @@ int open_map(const char *name, int mod, int row, int col)
 
     m->handle = G3d_openCellOld((char *)name, (char *)mapset,
 				&current_region3, DCELL_TYPE,
-				G3D_USE_CACHE_DEFAULT);
+				RASTER3D_USE_CACHE_DEFAULT);
 
     if (!m->handle)
 	G_fatal_error(_("Unable to open raster map <%s>"), name);
@@ -580,7 +580,7 @@ int open_output_map(const char *name, int res_type)
 
     G3d_setFileType(res_type == FCELL_TYPE ? FCELL_TYPE : DCELL_TYPE);
 
-    handle = G3d_openNewOptTileSize((char *)name, G3D_USE_CACHE_XYZ, &current_region3, res_type == FCELL_TYPE ? FCELL_TYPE : DCELL_TYPE, 32);
+    handle = G3d_openNewOptTileSize((char *)name, RASTER3D_USE_CACHE_XYZ, &current_region3, res_type == FCELL_TYPE ? FCELL_TYPE : DCELL_TYPE, 32);
 
     if (!handle)
 	G_fatal_error(_("Unable to create raster map <%s>"), name);

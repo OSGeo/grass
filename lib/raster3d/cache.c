@@ -9,7 +9,7 @@
 
 static int cacheRead_readFun(int tileIndex, void *tileBuf, void *closure)
 {
-    G3D_Map *map = closure;
+    RASTER3D_Map *map = closure;
 
     if (!G3d_readTile(map, tileIndex, tileBuf, map->typeIntern)) {
 	G3d_error("cacheRead_readFun: error in G3d_readTile");
@@ -20,7 +20,7 @@ static int cacheRead_readFun(int tileIndex, void *tileBuf, void *closure)
 
 /*---------------------------------------------------------------------------*/
 
-static int initCacheRead(G3D_Map * map, int nCached)
+static int initCacheRead(RASTER3D_Map * map, int nCached)
 {
     map->cache = G3d_cache_new_read(nCached,
 				    map->tileSize * map->numLengthIntern,
@@ -55,7 +55,7 @@ static int initCacheRead(G3D_Map * map, int nCached)
 
 static int cacheWrite_readFun(int tileIndex, void *tileBuf, void *closure)
 {
-    G3D_Map *map = closure;
+    RASTER3D_Map *map = closure;
     int index, nBytes;
     long pos, offs, offsLast;
 
@@ -134,7 +134,7 @@ static int cacheWrite_readFun(int tileIndex, void *tileBuf, void *closure)
 static int
 cacheWrite_writeFun(int tileIndex, const void *tileBuf, void *closure)
 {
-    G3D_Map *map = closure;
+    RASTER3D_Map *map = closure;
     int nBytes;
     long offs;
 
@@ -165,7 +165,7 @@ cacheWrite_writeFun(int tileIndex, const void *tileBuf, void *closure)
 
 /*---------------------------------------------------------------------------*/
 
-static int disposeCacheWrite(G3D_Map * map)
+static int disposeCacheWrite(RASTER3D_Map * map)
 {
     if (map->cacheFD >= 0) {
 	if (close(map->cacheFD) != 0) {
@@ -183,7 +183,7 @@ static int disposeCacheWrite(G3D_Map * map)
 
 /*---------------------------------------------------------------------------*/
 
-static int initCacheWrite(G3D_Map * map, int nCached)
+static int initCacheWrite(RASTER3D_Map * map, int nCached)
 {
     map->cacheFileName = G_tempfile();
     map->cacheFD = open(map->cacheFileName, O_RDWR | O_CREAT | O_TRUNC, 0666);
@@ -212,9 +212,9 @@ static int initCacheWrite(G3D_Map * map, int nCached)
 
 /*---------------------------------------------------------------------------*/
 
-int G3d_initCache(G3D_Map * map, int nCached)
+int G3d_initCache(RASTER3D_Map * map, int nCached)
 {
-    if (map->operation == G3D_READ_DATA) {
+    if (map->operation == RASTER3D_READ_DATA) {
 	if (!initCacheRead(map, nCached)) {
 	    G3d_error("G3d_initCache: error in initCacheRead");
 	    return 0;
@@ -232,7 +232,7 @@ int G3d_initCache(G3D_Map * map, int nCached)
 
 /*---------------------------------------------------------------------------*/
 
-static int disposeCacheRead(G3D_Map * map)
+static int disposeCacheRead(RASTER3D_Map * map)
 {
     G3d_cache_dispose(map->cache);
     return 1;
@@ -240,9 +240,9 @@ static int disposeCacheRead(G3D_Map * map)
 
 /*---------------------------------------------------------------------------*/
 
-int G3d_disposeCache(G3D_Map * map)
+int G3d_disposeCache(RASTER3D_Map * map)
 {
-    if (map->operation == G3D_READ_DATA) {
+    if (map->operation == RASTER3D_READ_DATA) {
 	if (!disposeCacheRead(map)) {
 	    G3d_error("G3d_disposeCache: error in disposeCacheRead");
 	    return 0;
@@ -263,7 +263,7 @@ int G3d_disposeCache(G3D_Map * map)
 
 static int cacheFlushFun(int tileIndex, const void *tileBuf, void *closure)
 {
-    G3D_Map *map = closure;
+    RASTER3D_Map *map = closure;
 
     if (!G3d_writeTile(map, tileIndex, tileBuf, map->typeIntern)) {
 	G3d_error("cacheFlushFun: error in G3d_writeTile");
@@ -275,12 +275,12 @@ static int cacheFlushFun(int tileIndex, const void *tileBuf, void *closure)
 
 /*---------------------------------------------------------------------------*/
 
-int G3d_flushAllTiles(G3D_Map * map)
+int G3d_flushAllTiles(RASTER3D_Map * map)
 {
     int tileIndex, nBytes;
     long offs;
 
-    if (map->operation == G3D_READ_DATA) {
+    if (map->operation == RASTER3D_READ_DATA) {
 	if (!G3d_cache_remove_all(map->cache)) {
 	    G3d_error("G3d_flushAllTiles: error in G3d_cache_remove_all");
 	    return 0;

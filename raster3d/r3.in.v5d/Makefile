@@ -5,8 +5,8 @@ PGM=r3.in.v5d
 #for Linux/x86 et al. (needs fix for MacOSX)
 EXTRA_CFLAGS = -DLITTLE
 
-LIBES = $(G3DLIB) $(GISLIB) $(MATHLIB)
-DEPENDENCIES = $(G3DDEP) $(GISDEP)
+LIBES = $(RASTER3DLIB) $(GISLIB) $(MATHLIB)
+DEPENDENCIES = $(RASTER3DDEP) $(GISDEP)
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 

@@ -5,61 +5,61 @@
 
 /*---------------------------------------------------------------------------*/
 
-#define G3D_NO_DEFAULT -10
+#define RASTER3D_NO_DEFAULT -10
 
-#define G3D_COMPRESSION_DEFAULT G3D_COMPRESSION
-#define G3D_USE_LZW_DEFAULT G3D_NO_LZW
-#define G3D_USE_RLE_DEFAULT G3D_USE_RLE
-#define G3D_PRECISION_DEFAULT G3D_MAX_PRECISION
-#define G3D_CACHE_SIZE_DEFAULT 1000
-#define G3D_CACHE_SIZE_MAX_DEFAULT 16777216
-#define G3D_FILE_TYPE_DEFAULT DCELL_TYPE
-#define G3D_TILE_X_DEFAULT 16
-#define G3D_TILE_Y_DEFAULT 16
-#define G3D_TILE_Z_DEFAULT 8
-#define G3D_ERROR_FUN_DEFAULT G3d_skipError
-#define G3D_UNIT_DEFAULT "none"
-
-/*---------------------------------------------------------------------------*/
-
-#define G3D_COMPRESSION_ENV_VAR_YES "G3D_USE_COMPRESSION"
-#define G3D_COMPRESSION_ENV_VAR_NO "G3D_NO_COMPRESSION"
-
-#define G3D_LZW_ENV_VAR_YES "G3D_USE_LZW"
-#define G3D_LZW_ENV_VAR_NO "G3D_NO_LZW"
-
-#define G3D_RLE_ENV_VAR_YES "G3D_USE_RLE"
-#define G3D_RLE_ENV_VAR_NO "G3D_NO_RLE"
-
-#define G3D_PRECISION_ENV_VAR "G3D_PRECISION"
-#define G3D_PRECISION_ENV_VAR_MAX "G3D_MAX_PRECISION"
-
-#define G3D_CACHE_SIZE_ENV_VAR "G3D_DEFAULT_CACHE_SIZE"
-#define G3D_CACHE_SIZE_MAX_ENV_VAR "G3D_MAX_CACHE_SIZE"
-
-#define G3D_FILE_FLOAT_ENV_VAR "G3D_WRITE_FLOAT"
-#define G3D_FILE_DOUBLE_ENV_VAR "G3D_WRITE_DOUBLE"
-
-#define G3D_TILE_DIM_X_ENV_VAR "G3D_TILE_DIMENSION_X"
-#define G3D_TILE_DIM_Y_ENV_VAR "G3D_TILE_DIMENSION_Y"
-#define G3D_TILE_DIM_Z_ENV_VAR "G3D_TILE_DIMENSION_Z"
-
-#define G3D_FATAL_ERROR_ENV_VAR "G3D_USE_FATAL_ERROR"
-#define G3D_PRINT_ERROR_ENV_VAR "G3D_USE_PRINT_ERROR"
-
-#define G3D_DEFAULT_WINDOW3D "G3D_DEFAULT_WINDOW3D"
+#define RASTER3D_COMPRESSION_DEFAULT RASTER3D_COMPRESSION
+#define RASTER3D_USE_LZW_DEFAULT RASTER3D_NO_LZW
+#define RASTER3D_USE_RLE_DEFAULT RASTER3D_USE_RLE
+#define RASTER3D_PRECISION_DEFAULT RASTER3D_MAX_PRECISION
+#define RASTER3D_CACHE_SIZE_DEFAULT 1000
+#define RASTER3D_CACHE_SIZE_MAX_DEFAULT 16777216
+#define RASTER3D_FILE_TYPE_DEFAULT DCELL_TYPE
+#define RASTER3D_TILE_X_DEFAULT 16
+#define RASTER3D_TILE_Y_DEFAULT 16
+#define RASTER3D_TILE_Z_DEFAULT 8
+#define RASTER3D_ERROR_FUN_DEFAULT G3d_skipError
+#define RASTER3D_UNIT_DEFAULT "none"
 
 /*---------------------------------------------------------------------------*/
 
-int g3d_do_compression = G3D_NO_DEFAULT;
-int g3d_do_lzw_compression = G3D_NO_DEFAULT;
-int g3d_do_rle_compression = G3D_NO_DEFAULT;
-int g3d_precision = G3D_NO_DEFAULT;
-int g3d_cache_default = G3D_NO_DEFAULT;
-int g3d_cache_max = G3D_NO_DEFAULT;
-int g3d_file_type = G3D_NO_DEFAULT;
+#define RASTER3D_COMPRESSION_ENV_VAR_YES "RASTER3D_USE_COMPRESSION"
+#define RASTER3D_COMPRESSION_ENV_VAR_NO "RASTER3D_NO_COMPRESSION"
+
+#define RASTER3D_LZW_ENV_VAR_YES "RASTER3D_USE_LZW"
+#define RASTER3D_LZW_ENV_VAR_NO "RASTER3D_NO_LZW"
+
+#define RASTER3D_RLE_ENV_VAR_YES "RASTER3D_USE_RLE"
+#define RASTER3D_RLE_ENV_VAR_NO "RASTER3D_NO_RLE"
+
+#define RASTER3D_PRECISION_ENV_VAR "RASTER3D_PRECISION"
+#define RASTER3D_PRECISION_ENV_VAR_MAX "RASTER3D_MAX_PRECISION"
+
+#define RASTER3D_CACHE_SIZE_ENV_VAR "RASTER3D_DEFAULT_CACHE_SIZE"
+#define RASTER3D_CACHE_SIZE_MAX_ENV_VAR "RASTER3D_MAX_CACHE_SIZE"
+
+#define RASTER3D_FILE_FLOAT_ENV_VAR "RASTER3D_WRITE_FLOAT"
+#define RASTER3D_FILE_DOUBLE_ENV_VAR "RASTER3D_WRITE_DOUBLE"
+
+#define RASTER3D_TILE_DIM_X_ENV_VAR "RASTER3D_TILE_DIMENSION_X"
+#define RASTER3D_TILE_DIM_Y_ENV_VAR "RASTER3D_TILE_DIMENSION_Y"
+#define RASTER3D_TILE_DIM_Z_ENV_VAR "RASTER3D_TILE_DIMENSION_Z"
+
+#define RASTER3D_FATAL_ERROR_ENV_VAR "RASTER3D_USE_FATAL_ERROR"
+#define RASTER3D_PRINT_ERROR_ENV_VAR "RASTER3D_USE_PRINT_ERROR"
+
+#define RASTER3D_DEFAULT_WINDOW3D "RASTER3D_DEFAULT_WINDOW3D"
+
+/*---------------------------------------------------------------------------*/
+
+int g3d_do_compression = RASTER3D_NO_DEFAULT;
+int g3d_do_lzw_compression = RASTER3D_NO_DEFAULT;
+int g3d_do_rle_compression = RASTER3D_NO_DEFAULT;
+int g3d_precision = RASTER3D_NO_DEFAULT;
+int g3d_cache_default = RASTER3D_NO_DEFAULT;
+int g3d_cache_max = RASTER3D_NO_DEFAULT;
+int g3d_file_type = RASTER3D_NO_DEFAULT;
 int g3d_tile_dimension[3] =
-    { G3D_NO_DEFAULT, G3D_NO_DEFAULT, G3D_NO_DEFAULT };
+    { RASTER3D_NO_DEFAULT, RASTER3D_NO_DEFAULT, RASTER3D_NO_DEFAULT };
 void (*g3d_error_fun) (const char *) = NULL;
 char *g3d_unit_default = NULL;
 
@@ -69,9 +69,9 @@ char *g3d_unit_default = NULL;
 /*!
  * \brief 
  *
- * <em>doCompress</em> should be one of G3D_NO_COMPRESSION and
- * G3D_COMPRESSION, <em>doRle</em> should be either G3D_NO_RLE or
- * G3D_USE_RLE, and <em>precision</em> should be either G3D_MAX_PRECISION or
+ * <em>doCompress</em> should be one of RASTER3D_NO_COMPRESSION and
+ * RASTER3D_COMPRESSION, <em>doRle</em> should be either RASTER3D_NO_RLE or
+ * RASTER3D_USE_RLE, and <em>precision</em> should be either RASTER3D_MAX_PRECISION or
  * a positive integer.
  *
  *  \param doCompress
@@ -84,18 +84,18 @@ char *g3d_unit_default = NULL;
 void
 G3d_setCompressionMode(int doCompress, int doLzw, int doRle, int precision)
 {
-    if ((doCompress != G3D_NO_COMPRESSION) && (doCompress != G3D_COMPRESSION))
+    if ((doCompress != RASTER3D_NO_COMPRESSION) && (doCompress != RASTER3D_COMPRESSION))
 	G3d_fatalError("G3d_setCompressionMode: wrong value for doCompress.");
 
     g3d_do_compression = doCompress;
 
-    if (doCompress == G3D_NO_COMPRESSION)
+    if (doCompress == RASTER3D_NO_COMPRESSION)
 	return;
 
-    if ((doLzw != G3D_NO_LZW) && (doLzw != G3D_USE_LZW))
+    if ((doLzw != RASTER3D_NO_LZW) && (doLzw != RASTER3D_USE_LZW))
 	G3d_fatalError("G3d_setCompressionMode: wrong value for doLzw.");
 
-    if ((doRle != G3D_NO_RLE) && (doRle != G3D_USE_RLE))
+    if ((doRle != RASTER3D_NO_RLE) && (doRle != RASTER3D_USE_RLE))
 	G3d_fatalError("G3d_setCompressionMode: wrong value for doRle.");
 
     if (precision < -1)
@@ -337,7 +337,7 @@ void G3d_setUnit(const char *unit)
  * \brief 
  *
  *  Initializes the default values described
- * in G3D Defaults.  Applications have to use this function only if they need to
+ * in RASTER3D Defaults.  Applications have to use this function only if they need to
  * query the default values before the first file (either old or new) has been
  * opened.
  *
@@ -348,62 +348,62 @@ void G3d_initDefaults(void)
 {
     static int firstTime = 1;
     const char *value, *windowName;
-    G3D_Region window;
+    RASTER3D_Region window;
 
     if (!firstTime)
 	return;
     firstTime = 0;
 
-    if (g3d_do_compression == G3D_NO_DEFAULT) {
-	if (NULL != getenv(G3D_COMPRESSION_ENV_VAR_YES)) {
-	    g3d_do_compression = G3D_COMPRESSION;
+    if (g3d_do_compression == RASTER3D_NO_DEFAULT) {
+	if (NULL != getenv(RASTER3D_COMPRESSION_ENV_VAR_YES)) {
+	    g3d_do_compression = RASTER3D_COMPRESSION;
 	}
 	else {
-	    if (NULL != getenv(G3D_COMPRESSION_ENV_VAR_NO)) {
-		g3d_do_compression = G3D_NO_COMPRESSION;
+	    if (NULL != getenv(RASTER3D_COMPRESSION_ENV_VAR_NO)) {
+		g3d_do_compression = RASTER3D_NO_COMPRESSION;
 	    }
 	    else {
-		g3d_do_compression = G3D_COMPRESSION_DEFAULT;
+		g3d_do_compression = RASTER3D_COMPRESSION_DEFAULT;
 	    }
 	}
     }
 
-    if (g3d_do_lzw_compression == G3D_NO_DEFAULT) {
-	if (NULL != getenv(G3D_LZW_ENV_VAR_YES)) {
-	    g3d_do_lzw_compression = G3D_USE_LZW;
+    if (g3d_do_lzw_compression == RASTER3D_NO_DEFAULT) {
+	if (NULL != getenv(RASTER3D_LZW_ENV_VAR_YES)) {
+	    g3d_do_lzw_compression = RASTER3D_USE_LZW;
 	}
 	else {
-	    if (NULL != getenv(G3D_LZW_ENV_VAR_NO)) {
-		g3d_do_lzw_compression = G3D_NO_LZW;
+	    if (NULL != getenv(RASTER3D_LZW_ENV_VAR_NO)) {
+		g3d_do_lzw_compression = RASTER3D_NO_LZW;
 	    }
 	    else {
-		g3d_do_lzw_compression = G3D_USE_LZW_DEFAULT;
+		g3d_do_lzw_compression = RASTER3D_USE_LZW_DEFAULT;
 	    }
 	}
     }
 
-    if (g3d_do_rle_compression == G3D_NO_DEFAULT) {
-	if (NULL != getenv(G3D_RLE_ENV_VAR_YES)) {
-	    g3d_do_rle_compression = G3D_USE_RLE;
+    if (g3d_do_rle_compression == RASTER3D_NO_DEFAULT) {
+	if (NULL != getenv(RASTER3D_RLE_ENV_VAR_YES)) {
+	    g3d_do_rle_compression = RASTER3D_USE_RLE;
 	}
 	else {
-	    if (NULL != getenv(G3D_RLE_ENV_VAR_NO)) {
-		g3d_do_rle_compression = G3D_NO_RLE;
+	    if (NULL != getenv(RASTER3D_RLE_ENV_VAR_NO)) {
+		g3d_do_rle_compression = RASTER3D_NO_RLE;
 	    }
 	    else {
-		g3d_do_rle_compression = G3D_USE_RLE_DEFAULT;
+		g3d_do_rle_compression = RASTER3D_USE_RLE_DEFAULT;
 	    }
 	}
     }
 
-    if (g3d_precision == G3D_NO_DEFAULT) {
-	if (NULL != getenv(G3D_PRECISION_ENV_VAR_MAX)) {
-	    g3d_precision = G3D_MAX_PRECISION;
+    if (g3d_precision == RASTER3D_NO_DEFAULT) {
+	if (NULL != getenv(RASTER3D_PRECISION_ENV_VAR_MAX)) {
+	    g3d_precision = RASTER3D_MAX_PRECISION;
 	}
 	else {
-	    value = getenv(G3D_PRECISION_ENV_VAR);
+	    value = getenv(RASTER3D_PRECISION_ENV_VAR);
 	    if (value == NULL) {
-		g3d_precision = G3D_PRECISION_DEFAULT;
+		g3d_precision = RASTER3D_PRECISION_DEFAULT;
 	    }
 	    else {
 		if (sscanf(value, "%d", &g3d_precision) != 1) {
@@ -420,25 +420,25 @@ void G3d_initDefaults(void)
 	}
     }
 
-    if (g3d_file_type == G3D_NO_DEFAULT) {
-	if (NULL != getenv(G3D_FILE_FLOAT_ENV_VAR)) {
+    if (g3d_file_type == RASTER3D_NO_DEFAULT) {
+	if (NULL != getenv(RASTER3D_FILE_FLOAT_ENV_VAR)) {
 	    g3d_file_type = FCELL_TYPE;
 	}
 	else {
-	    if (NULL != getenv(G3D_FILE_DOUBLE_ENV_VAR)) {
+	    if (NULL != getenv(RASTER3D_FILE_DOUBLE_ENV_VAR)) {
 		g3d_file_type = DCELL_TYPE;
 	    }
 	    else {
-		g3d_file_type = G3D_FILE_TYPE_DEFAULT;
+		g3d_file_type = RASTER3D_FILE_TYPE_DEFAULT;
 	    }
 	}
     }
 
-    if (g3d_cache_default == G3D_NO_DEFAULT) {
-	value = getenv(G3D_CACHE_SIZE_ENV_VAR);
+    if (g3d_cache_default == RASTER3D_NO_DEFAULT) {
+	value = getenv(RASTER3D_CACHE_SIZE_ENV_VAR);
 
 	if (value == NULL) {
-	    g3d_cache_default = G3D_CACHE_SIZE_DEFAULT;
+	    g3d_cache_default = RASTER3D_CACHE_SIZE_DEFAULT;
 	}
 	else {
 	    if (sscanf(value, "%d", &g3d_cache_default) != 1) {
@@ -452,11 +452,11 @@ void G3d_initDefaults(void)
 	}
     }
 
-    if (g3d_cache_max == G3D_NO_DEFAULT) {
-	value = getenv(G3D_CACHE_SIZE_MAX_ENV_VAR);
+    if (g3d_cache_max == RASTER3D_NO_DEFAULT) {
+	value = getenv(RASTER3D_CACHE_SIZE_MAX_ENV_VAR);
 
 	if (value == NULL) {
-	    g3d_cache_max = G3D_CACHE_SIZE_MAX_DEFAULT;
+	    g3d_cache_max = RASTER3D_CACHE_SIZE_MAX_DEFAULT;
 	}
 	else {
 	    if (sscanf(value, "%d", &g3d_cache_max) != 1) {
@@ -470,11 +470,11 @@ void G3d_initDefaults(void)
 	}
     }
 
-    if (g3d_tile_dimension[0] == G3D_NO_DEFAULT) {
-	value = getenv(G3D_TILE_DIM_X_ENV_VAR);
+    if (g3d_tile_dimension[0] == RASTER3D_NO_DEFAULT) {
+	value = getenv(RASTER3D_TILE_DIM_X_ENV_VAR);
 
 	if (value == NULL) {
-	    g3d_tile_dimension[0] = G3D_TILE_X_DEFAULT;
+	    g3d_tile_dimension[0] = RASTER3D_TILE_X_DEFAULT;
 	}
 	else {
 	    if (sscanf(value, "%d", g3d_tile_dimension) != 1) {
@@ -487,10 +487,10 @@ void G3d_initDefaults(void)
 	    }
 	}
 
-	value = getenv(G3D_TILE_DIM_Y_ENV_VAR);
+	value = getenv(RASTER3D_TILE_DIM_Y_ENV_VAR);
 
 	if (value == NULL) {
-	    g3d_tile_dimension[1] = G3D_TILE_Y_DEFAULT;
+	    g3d_tile_dimension[1] = RASTER3D_TILE_Y_DEFAULT;
 	}
 	else {
 	    if (sscanf(value, "%d", g3d_tile_dimension + 1) != 1) {
@@ -503,10 +503,10 @@ void G3d_initDefaults(void)
 	    }
 	}
 
-	value = getenv(G3D_TILE_DIM_Z_ENV_VAR);
+	value = getenv(RASTER3D_TILE_DIM_Z_ENV_VAR);
 
 	if (value == NULL) {
-	    g3d_tile_dimension[2] = G3D_TILE_Z_DEFAULT;
+	    g3d_tile_dimension[2] = RASTER3D_TILE_Z_DEFAULT;
 	}
 	else {
 	    if (sscanf(value, "%d", g3d_tile_dimension + 2) != 1) {
@@ -521,29 +521,29 @@ void G3d_initDefaults(void)
     }
 
     if (g3d_error_fun == NULL) {
-	value = getenv(G3D_FATAL_ERROR_ENV_VAR);
+	value = getenv(RASTER3D_FATAL_ERROR_ENV_VAR);
 
 	if (value != NULL) {
 	    g3d_error_fun = G3d_fatalError_noargs;
 	}
 	else {
-	    value = getenv(G3D_PRINT_ERROR_ENV_VAR);
+	    value = getenv(RASTER3D_PRINT_ERROR_ENV_VAR);
 
 	    if (value != NULL) {
 		g3d_error_fun = G3d_printError;
 	    }
 	    else {
-		g3d_error_fun = G3D_ERROR_FUN_DEFAULT;
+		g3d_error_fun = RASTER3D_ERROR_FUN_DEFAULT;
 	    }
 	}
     }
 
     if (g3d_unit_default == NULL)
-	g3d_unit_default = G_store(G3D_UNIT_DEFAULT);
+	g3d_unit_default = G_store(RASTER3D_UNIT_DEFAULT);
 
     windowName = G3d_getWindowParams();
     if (windowName == NULL) {
-	value = getenv(G3D_DEFAULT_WINDOW3D);
+	value = getenv(RASTER3D_DEFAULT_WINDOW3D);
 	if (value != NULL)
 	    if (*value != 0)
 		windowName = value;

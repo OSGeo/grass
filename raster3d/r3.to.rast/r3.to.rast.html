@@ -1,9 +1,9 @@
 <H2>DESCRIPTION</H2>
 
-Converts one G3D raster map into several 2D raster maps (depends on depths). 
+Converts one RASTER3D raster map into several 2D raster maps (depends on depths). 
 If the 2D and 3D region settings are different,
 the 3D resolution will be adjust to the 2D resolution (the depths are not touched!).
-You can force r3.to.rast to use the 2D resolution of the input G3D map for the output maps, 
+You can force r3.to.rast to use the 2D resolution of the input RASTER3D map for the output maps, 
 independently from the current region settings.
 
 <center>
@@ -17,7 +17,7 @@ independently from the current region settings.
 
 
 <H2>NOTES</H2>
-Every slice of the G3D map is copied to one 2D raster map. The maps
+Every slice of the RASTER3D map is copied to one 2D raster map. The maps
 are named like <B>output</B><I>_slicenumber</I>. Slices are counted from bottom
 to the top, so the bottom slice has number 1. 
 

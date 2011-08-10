@@ -29,12 +29,12 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *in_opt, *out_opt, *field_opt, *col_opt;
     int field;
-    G3D_Region region;
+    RASTER3D_Region region;
 
     struct Map_info Map;
     struct line_pnts *Points;
     struct line_cats *Cats;
-    G3D_Map *map = NULL;
+    RASTER3D_Map *map = NULL;
 
     int nlines, line, nrec, ctype;
 
@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
     db_close_database_shutdown_driver(Driver);
 
     map = G3d_openNewOptTileSize(out_opt->answer,
-			  G3D_USE_CACHE_DEFAULT, &region, FCELL_TYPE, 32);
+			  RASTER3D_USE_CACHE_DEFAULT, &region, FCELL_TYPE, 32);
 
     if (map == NULL)
 	G_fatal_error(_("Unable to create output map"));

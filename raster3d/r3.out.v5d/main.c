@@ -40,11 +40,11 @@ void convert(char *fileout, int, int, int, int);
 /* globals */
 void *map = NULL;
 paramType param;
-G3D_Region region;
+RASTER3D_Region region;
 
 /*---------------------------------------------------------------------------*/
 /* Simple error handling routine, will eventually replace this with
- * G3D_fatalError.
+ * RASTER3D_fatalError.
  */
 void fatalError(char *errorMsg)
 {
@@ -311,8 +311,8 @@ int main(int argc, char *argv[])
     if (NULL == G_find_grid3(input, ""))
 	G3d_fatalError(_("Requested 3d raster map not found"));
 
-    map = G3d_openCellOld(input, G_find_grid3(input, ""), G3D_DEFAULT_WINDOW,
-			  G3D_TILE_SAME_AS_FILE, G3D_NO_CACHE);
+    map = G3d_openCellOld(input, G_find_grid3(input, ""), RASTER3D_DEFAULT_WINDOW,
+			  RASTER3D_TILE_SAME_AS_FILE, RASTER3D_NO_CACHE);
     if (map == NULL)
 	G3d_fatalError(_("Error opening 3d raster map"));
 

@@ -9,7 +9,7 @@
 /*---------------------------------------------------------------------------*/
 
 void
-G3d_getBlockNocache(G3D_Map * map, int x0, int y0, int z0, int nx, int ny,
+G3d_getBlockNocache(RASTER3D_Map * map, int x0, int y0, int z0, int nx, int ny,
 		    int nz, void *block, int type)
 {
     void *tile;
@@ -102,7 +102,7 @@ G3d_getBlockNocache(G3D_Map * map, int x0, int y0, int z0, int nx, int ny,
  */
 
 void
-G3d_getBlock(G3D_Map * map, int x0, int y0, int z0, int nx, int ny, int nz,
+G3d_getBlock(RASTER3D_Map * map, int x0, int y0, int z0, int nx, int ny, int nz,
 	     void *block, int type)
 {
     int x, y, z, nNull, x1, y1, z1, length;
@@ -112,9 +112,9 @@ G3d_getBlock(G3D_Map * map, int x0, int y0, int z0, int nx, int ny, int nz,
 	return;
     }
 
-    x1 = G3D_MIN(x0 + nx, map->region.cols);
-    y1 = G3D_MIN(y0 + ny, map->region.rows);
-    z1 = G3D_MIN(z0 + nz, map->region.depths);
+    x1 = RASTER3D_MIN(x0 + nx, map->region.cols);
+    y1 = RASTER3D_MIN(y0 + ny, map->region.rows);
+    z1 = RASTER3D_MIN(z0 + nz, map->region.depths);
 
     length = G3d_length(type);
 

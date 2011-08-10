@@ -65,12 +65,12 @@ void N_free_geom_data(N_geom_data * geom)
  * If the projection is not planimetric, a double array will be created based on the 
  * number of rows of the provided region
  *
- * \param region3d G3D_Region *
+ * \param region3d RASTER3D_Region *
  * \param geodata N_geom_data * - if a NULL pointer is given, a new structure will be allocatet and returned
  *
  * \return N_geom_data *
  * */
-N_geom_data *N_init_geom_data_3d(G3D_Region * region3d, N_geom_data * geodata)
+N_geom_data *N_init_geom_data_3d(RASTER3D_Region * region3d, N_geom_data * geodata)
 {
     N_geom_data *geom = geodata;
     struct Cell_head region2d;

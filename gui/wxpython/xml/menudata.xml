@@ -2965,7 +2965,7 @@
     </menuitem>
    	<menuitem>
 	  <label>Interpolate volume from points</label>
-	  <help>Interpolates point data to a G3D grid volume using regularized spline with tension (RST) algorithm.</help>
+	  <help>Interpolates point data to a RASTER3D grid volume using regularized spline with tension (RST) algorithm.</help>
 	  <keywords>vector,surface,interpolation,RST</keywords>
 	  <handler>OnMenuCmd</handler>
 	  <command>v.vol.rst</command>

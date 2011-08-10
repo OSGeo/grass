@@ -31,7 +31,7 @@ static G3d_paramType *param;
  * command line arguments provided are the <em>type</em> of the cell values, the
  * <em>precision</em>, the properties of the <em>compression</em>, and the dimension
  * of the tiles (<em>tiledimension</em>). Every of these values defaults to the
- * value described in G3D Defaults.
+ * value described in RASTER3D Defaults.
  * This function has to be used in conjunction with
  * G3d_getStandard3dInputParams() (cf.{g3d:G3d.getStandard3dInputParams}).
  *
@@ -93,20 +93,20 @@ int G3d_getStandard3dParams(int *useTypeDefault, int *type,
 
     if (strcmp(param->compression->answer, "default") != 0) {
 	if (strcmp(param->compression->answer, "rle") == 0) {
-	    *doRle = G3D_USE_RLE;
-	    *doLzw = G3D_NO_LZW;
+	    *doRle = RASTER3D_USE_RLE;
+	    *doLzw = RASTER3D_NO_LZW;
 	}
 	else if (strcmp(param->compression->answer, "lzw") == 0) {
-	    *doRle = G3D_NO_RLE;
-	    *doLzw = G3D_USE_LZW;
+	    *doRle = RASTER3D_NO_RLE;
+	    *doLzw = RASTER3D_USE_LZW;
 	}
 	else if (strcmp(param->compression->answer, "rle+lzw") == 0) {
-	    *doRle = G3D_USE_RLE;
-	    *doLzw = G3D_USE_LZW;
+	    *doRle = RASTER3D_USE_RLE;
+	    *doLzw = RASTER3D_USE_LZW;
 	}
 	else {
-	    *doRle = G3D_NO_RLE;
-	    *doLzw = G3D_NO_LZW;
+	    *doRle = RASTER3D_NO_RLE;
+	    *doLzw = RASTER3D_NO_LZW;
 	}
     }
     else
@@ -151,7 +151,7 @@ char *G3d_getWindowParams(void)
 	return NULL;
     if (windowParam->answer == NULL)
 	return NULL;
-    if (strcmp(windowParam->answer, G3D_WINDOW_ELEMENT) == 0)
-	return G_store(G3D_WINDOW_ELEMENT);
+    if (strcmp(windowParam->answer, RASTER3D_WINDOW_ELEMENT) == 0)
+	return G_store(RASTER3D_WINDOW_ELEMENT);
     return G_store(windowParam->answer);
 }

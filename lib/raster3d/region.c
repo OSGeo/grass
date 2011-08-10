@@ -19,7 +19,7 @@
  *  \return void
  */
 
-void G3d_extract2dRegion(G3D_Region * region3d, struct Cell_head *region2d)
+void G3d_extract2dRegion(RASTER3D_Region * region3d, struct Cell_head *region2d)
 {
     region2d->proj = region3d->proj;
     region2d->zone = region3d->zone;
@@ -46,7 +46,7 @@ void G3d_extract2dRegion(G3D_Region * region3d, struct Cell_head *region2d)
  *  \return void
  */
 
-void G3d_regionToCellHead(G3D_Region * region3d, struct Cell_head *region2d)
+void G3d_regionToCellHead(RASTER3D_Region * region3d, struct Cell_head *region2d)
 {
     region2d->proj = region3d->proj;
     region2d->zone = region3d->zone;
@@ -86,7 +86,7 @@ void G3d_regionToCellHead(G3D_Region * region3d, struct Cell_head *region2d)
  */
 
 void
-G3d_incorporate2dRegion(struct Cell_head *region2d, G3D_Region * region3d)
+G3d_incorporate2dRegion(struct Cell_head *region2d, RASTER3D_Region * region3d)
 {
     region3d->proj = region2d->proj;
     region3d->zone = region2d->zone;
@@ -115,7 +115,7 @@ G3d_incorporate2dRegion(struct Cell_head *region2d, G3D_Region * region3d)
  */
 
 void
-G3d_regionFromToCellHead(struct Cell_head *region2d, G3D_Region * region3d)
+G3d_regionFromToCellHead(struct Cell_head *region2d, RASTER3D_Region * region3d)
 {
     region3d->proj = region2d->proj;
     region3d->zone = region2d->zone;
@@ -149,7 +149,7 @@ G3d_regionFromToCellHead(struct Cell_head *region2d, G3D_Region * region3d)
  *  \return void
  */
 
-void G3d_adjustRegion(G3D_Region * region)
+void G3d_adjustRegion(RASTER3D_Region * region)
 {
     struct Cell_head region2d;
 
@@ -175,7 +175,7 @@ void G3d_adjustRegion(G3D_Region * region)
  *  \return void
  */
 
-void G3d_adjustRegionRes(G3D_Region * region)
+void G3d_adjustRegionRes(RASTER3D_Region * region)
 {
     struct Cell_head region2d;
 
@@ -205,7 +205,7 @@ void G3d_adjustRegionRes(G3D_Region * region)
  *  \return void
  */
 
-void G3d_regionCopy(G3D_Region * regionDest, G3D_Region * regionSrc)
+void G3d_regionCopy(RASTER3D_Region * regionDest, RASTER3D_Region * regionSrc)
 {
     *regionDest = *regionSrc;
 }
@@ -214,17 +214,17 @@ void G3d_regionCopy(G3D_Region * regionDest, G3D_Region * regionSrc)
 /*---------------------------------------------------------------------------*/
 
 int
-G3d_readRegionMap(const char *name, const char *mapset, G3D_Region * region)
+G3d_readRegionMap(const char *name, const char *mapset, RASTER3D_Region * region)
 {
     char fullName[GPATH_MAX];
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
     if (G_name_is_fully_qualified(name, xname, xmapset))
-	G3d_filename(fullName, G3D_HEADER_ELEMENT, xname, xmapset);
+	G3d_filename(fullName, RASTER3D_HEADER_ELEMENT, xname, xmapset);
     else {
 	if (!mapset || !*mapset)
 	    mapset = G_find_grid3(name, "");
-	G3d_filename(fullName, G3D_HEADER_ELEMENT, name, mapset);
+	G3d_filename(fullName, RASTER3D_HEADER_ELEMENT, name, mapset);
     }
     return G3d_readWindow(region, fullName);
 }
@@ -245,7 +245,7 @@ G3d_readRegionMap(const char *name, const char *mapset, G3D_Region * region)
  *  \return int
  */
 
-int G3d_isValidLocation(G3D_Region *region, double north, double east, double top)
+int G3d_isValidLocation(RASTER3D_Region *region, double north, double east, double top)
 {
     return ((north >= region->south) && (north <= region->north) &&
 	    (east >= region->west) && (east <= region->east) &&
@@ -272,7 +272,7 @@ int G3d_isValidLocation(G3D_Region *region, double north, double east, double to
  */
 
 void
-G3d_location2coord(G3D_Region *region, double north, double east, double top,
+G3d_location2coord(RASTER3D_Region *region, double north, double east, double top,
 		   int *x, int *y, int *z)
 {
     double col, row, depth;
@@ -311,7 +311,7 @@ G3d_location2coord(G3D_Region *region, double north, double east, double top,
  */
 
 void
-G3d_location2coord2(G3D_Region *region, double north, double east, double top,
+G3d_location2coord2(RASTER3D_Region *region, double north, double east, double top,
 		   int *x, int *y, int *z)
 {
     if (!G3d_isValidLocation(region, north, east, top))
@@ -354,7 +354,7 @@ G3d_location2coord2(G3D_Region *region, double north, double east, double top,
  */
 
 void
-G3d_coord2location(G3D_Region * region, double x, double y, double z, double *north, double *east, double *top)
+G3d_coord2location(RASTER3D_Region * region, double x, double y, double z, double *north, double *east, double *top)
 {
     *north = region->north - y * region->ns_res;
     *east = region->west + x * region->ew_res;

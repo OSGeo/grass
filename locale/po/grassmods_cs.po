@@ -10068,10 +10068,10 @@ msgstr "Pøidávám centroidy..."
 
 #: ../vector/v.vol.rst/main.c:245
 msgid ""
-"Interpolates point data to a G3D grid volume using regularized spline with "
+"Interpolates point data to a RASTER3D grid volume using regularized spline with "
 "tension (RST) algorithm."
 msgstr ""
-"Interpoluje bodová data do G3D volume za pou¾ití regularized spline with "
+"Interpoluje bodová data do RASTER3D volume za pou¾ití regularized spline with "
 "tension (RST)"
 
 #: ../vector/v.vol.rst/main.c:253
@@ -29113,8 +29113,8 @@ msgid "The maximum tile size in kilo bytes. Default is 32KB."
 msgstr ""
 
 #: ../raster/r.to.rast3/main.c:93
-msgid "Use G3D mask (if exists) with output map"
-msgstr "Pou¾ít masku G3D (pokud existuje) s výstupní mapovou vrstvou"
+msgid "Use RASTER3D mask (if exists) with output map"
+msgstr "Pou¾ít masku RASTER3D (pokud existuje) s výstupní mapovou vrstvou"
 
 #: ../raster/r.to.rast3/main.c:201
 msgid "Converts 2D raster map slices to one 3D raster volume map."
@@ -29157,7 +29157,7 @@ msgstr "Chyba pøi zavírání g3d souboru"
 #: ../raster/r.out.vtk/parameters.c:34
 #, fuzzy
 msgid "Raster map(s) to be converted to VTK-ASCII data format"
-msgstr "G3D mapa(y) pro konverzi do datového formátu VTK-ASCII"
+msgstr "RASTER3D mapa(y) pro konverzi do datového formátu VTK-ASCII"
 
 #: ../raster/r.out.vtk/parameters.c:41 ../raster3d/r3.out.vtk/parameters.c:34
 msgid "Name for VTK-ASCII output file"
@@ -30681,12 +30681,12 @@ msgstr "Pou¾ij hodnoty mapy pro výplò spodních bunìk"
 
 #: ../raster/r.to.rast3elev/main.c:194 ../raster3d/r3.out.ascii/main.c:124
 #: ../raster3d/r3.to.rast/main.c:91
-msgid "Use G3D mask (if exists) with input map"
-msgstr "Pou¾ít masku G3D (pokud existuje) s vstupní mapou"
+msgid "Use RASTER3D mask (if exists) with input map"
+msgstr "Pou¾ít masku RASTER3D (pokud existuje) s vstupní mapou"
 
 #: ../raster/r.to.rast3elev/main.c:287 ../raster/r.to.rast3elev/main.c:320
-msgid "Error writing G3D double data"
-msgstr "Chyba pøi zápisu G3D dat s plovoucí desetinnou èárkou"
+msgid "Error writing RASTER3D double data"
+msgstr "Chyba pøi zápisu RASTER3D dat s plovoucí desetinnou èárkou"
 
 #: ../raster/r.to.rast3elev/main.c:363 ../raster3d/r3.gwflow/main.c:160
 #: ../raster3d/r3.in.v5d/main.c:195 ../raster3d/r3.retile/main.c:103
@@ -33158,8 +33158,8 @@ msgid ""
 msgstr ""
 
 #: ../raster3d/r3.gwflow/main.c:127
-msgid "Use G3D mask (if exists)"
-msgstr "Pou¾ít masku G3D (pokud existuje)"
+msgid "Use RASTER3D mask (if exists)"
+msgstr "Pou¾ít masku RASTER3D (pokud existuje)"
 
 #: ../raster3d/r3.gwflow/main.c:162
 #, fuzzy
@@ -33211,7 +33211,7 @@ msgid "retile"
 msgstr ""
 
 #: ../raster3d/r3.retile/main.c:104
-msgid "Retiles an existing G3D map with user defined x, y and z tile size"
+msgid "Retiles an existing RASTER3D map with user defined x, y and z tile size"
 msgstr ""
 
 #: ../raster3d/r3.retile/main.c:113 ../raster3d/r3.to.rast/main.c:218
@@ -33334,8 +33334,8 @@ msgid "Grid3 <%s> not found %s"
 msgstr "Grid3 <%s> nebyl nalezen %s"
 
 #: ../raster3d/r3.cross.rast/main.c:55
-msgid "Could not close G3D map"
-msgstr "Nemohl jsem uzavøít G3D mapu"
+msgid "Could not close RASTER3D map"
+msgstr "Nemohl jsem uzavøít RASTER3D mapu"
 
 #: ../raster3d/r3.cross.rast/main.c:90
 msgid "Input 3D raster map for cross section."
@@ -33351,7 +33351,7 @@ msgstr "Výsledná 2D rastrová mapa prùseèíkù"
 
 #: ../raster3d/r3.cross.rast/main.c:109
 msgid "Use g3d mask (if exists) with input map"
-msgstr "Pou¾ít masku G3D (pokud existuje) se vstupní mapou"
+msgstr "Pou¾ít masku RASTER3D (pokud existuje) se vstupní mapou"
 
 #: ../raster3d/r3.cross.rast/main.c:232
 msgid ""
@@ -33371,13 +33371,13 @@ msgid "Output map already exists. Will be overwritten!"
 msgstr "Výstupní mapa ji¾ existuje. Mapa bude pøepsána!"
 
 #: ../raster3d/r3.cross.rast/main.c:337
-msgid "Wrong G3D Datatype! Cannot create raster map."
-msgstr "Chybný G3D datový typ! Nelze vytvoøit rastrové mapy."
+msgid "Wrong RASTER3D Datatype! Cannot create raster map."
+msgstr "Chybný RASTER3D datový typ! Nelze vytvoøit rastrové mapy."
 
 #: ../raster3d/r3.cross.rast/main.c:342
 #, c-format
-msgid "Could not close G3D map <%s>"
-msgstr "Nemohl jsem uzavøít mapu G3D <%s>"
+msgid "Could not close RASTER3D map <%s>"
+msgstr "Nemohl jsem uzavøít mapu RASTER3D <%s>"
 
 #: ../raster3d/r3.mkdspf/main.c:82
 msgid ""
@@ -33522,10 +33522,10 @@ msgstr "Seznam hodnot bunìk pro maskování"
 
 #: ../raster3d/base/r3.mask.main.c:158
 #, fuzzy
-msgid "Cannot create mask file: G3D_MASK already exists"
+msgid "Cannot create mask file: RASTER3D_MASK already exists"
 msgstr ""
-"Nelze vytvoøit soubor s maskou: G3D_MASK ji¾ existuje!\n"
-" Pro odstranìní existující masky pou¾ijte 'g.remove rast3d=G3D_MASK'."
+"Nelze vytvoøit soubor s maskou: RASTER3D_MASK ji¾ existuje!\n"
+" Pro odstranìní existující masky pou¾ijte 'g.remove rast3d=RASTER3D_MASK'."
 
 #: ../raster3d/r3.out.vtk/writeVTKHead.c:40
 msgid "write_vtk_structured_point_header: Writing VTKStructuredPoint-Header"
@@ -33540,8 +33540,8 @@ msgid "write_vtk_unstructured_grid_header: Writing VTKUnstructuredGrid-Header"
 msgstr "write_vtk_unstructured_grid_header: Zapisuji hlavièku VTK"
 
 #: ../raster3d/r3.out.vtk/parameters.c:30
-msgid "G3D map(s) to be converted to VTK-ASCII data format"
-msgstr "G3D mapa(y) pro konverzi do datového formátu VTK-ASCII"
+msgid "RASTER3D map(s) to be converted to VTK-ASCII data format"
+msgstr "RASTER3D mapa(y) pro konverzi do datového formátu VTK-ASCII"
 
 #: ../raster3d/r3.out.vtk/parameters.c:41
 msgid "Float value to represent no data cell/points"
@@ -33584,7 +33584,7 @@ msgstr ""
 
 #: ../raster3d/r3.out.vtk/parameters.c:117
 msgid "Use g3d mask (if exists) with input maps"
-msgstr "Pou¾ít masku G3D (pokud existuje) se vstupními mapami"
+msgstr "Pou¾ít masku RASTER3D (pokud existuje) se vstupními mapami"
 
 #: ../raster3d/r3.out.vtk/parameters.c:122
 msgid "Scale factor effects the origin"
@@ -33721,10 +33721,10 @@ msgstr "Základ názvu výsledného výøezu rastrové mapy"
 
 #: ../raster3d/r3.to.rast/main.c:96
 msgid ""
-"Use the same resolution as the input G3D map for the 2d output maps, "
+"Use the same resolution as the input RASTER3D map for the 2d output maps, "
 "independent of the current region settings"
 msgstr ""
-"Pou¾ij stejné rozli¹ení jako je vstupní G3D mapa pro 2d výstupní mapu, "
+"Pou¾ij stejné rozli¹ení jako je vstupní RASTER3D mapa pro 2d výstupní mapu, "
 "nezávisle na aktuálním rozli¹ení"
 
 #: ../raster3d/r3.to.rast/main.c:209
@@ -36018,8 +36018,8 @@ msgstr "Uspoøádat neNULLové hodnoty"
 #~ msgid "Redraw all frames"
 #~ msgstr "Vytiskni celkový rozsah ploch"
 
-#~ msgid "Converts 3D raster maps (G3D) into the VTK-Ascii format"
-#~ msgstr "Pøevede 3D rastrové mapy (G3D) do formátu VTK-Ascii"
+#~ msgid "Converts 3D raster maps (RASTER3D) into the VTK-Ascii format"
+#~ msgstr "Pøevede 3D rastrové mapy (RASTER3D) do formátu VTK-Ascii"
 
 #~ msgid "Import GDAL supported raster file into a binary raster map layer."
 #~ msgstr "Import rastrových souborù podporovaných knihovnou GDAL."
@@ -38149,11 +38149,11 @@ msgstr "Uspoøádat neNULLové hodnoty"
 #~ msgstr "Pøímá choleskyho analýza nepracuje s øídkou maticí"
 
 #~ msgid ""
-#~ "Cannot create mask file: G3D_MASK already exists!\n"
-#~ " Use 'g.remove rast3d=G3D_MASK' to remove the existing mask."
+#~ "Cannot create mask file: RASTER3D_MASK already exists!\n"
+#~ " Use 'g.remove rast3d=RASTER3D_MASK' to remove the existing mask."
 #~ msgstr ""
-#~ "Nelze vytvoøit soubor s maskou: G3D_MASK ji¾ existuje!\n"
-#~ " Pro odstranìní existující masky pou¾ijte 'g.remove rast3d=G3D_MASK'."
+#~ "Nelze vytvoøit soubor s maskou: RASTER3D_MASK ji¾ existuje!\n"
+#~ " Pro odstranìní existující masky pou¾ijte 'g.remove rast3d=RASTER3D_MASK'."
 
 #~ msgid "raster, resample"
 #~ msgstr "rastr, pøevzorkování"

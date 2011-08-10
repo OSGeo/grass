@@ -2,28 +2,28 @@
 #define GRASS_RASTER3DDEFS_H
 
 /* cache.c */
-void G3d_cache_reset(G3D_cache *);
-void G3d_cache_dispose(G3D_cache *);
+void G3d_cache_reset(RASTER3D_cache *);
+void G3d_cache_dispose(RASTER3D_cache *);
 void *G3d_cache_new(int, int, int, write_fn *, void *, read_fn *, void *);
-void G3d_cache_set_removeFun(G3D_cache *, write_fn *, void *);
-void G3d_cache_set_loadFun(G3D_cache *, read_fn *, void *);
+void G3d_cache_set_removeFun(RASTER3D_cache *, write_fn *, void *);
+void G3d_cache_set_loadFun(RASTER3D_cache *, read_fn *, void *);
 void *G3d_cache_new_read(int, int, int, read_fn *, void *);
-int G3d_cache_lock(G3D_cache *, int);
-void G3d_cache_lock_intern(G3D_cache *, int);
-int G3d_cache_unlock(G3D_cache *, int);
-int G3d_cache_unlock_all(G3D_cache *);
-int G3d_cache_lock_all(G3D_cache *);
-void G3d_cache_autolock_on(G3D_cache *);
-void G3d_cache_autolock_off(G3D_cache *);
-void G3d_cache_set_minUnlock(G3D_cache *, int);
-int G3d_cache_remove_elt(G3D_cache *, int);
-int G3d_cache_flush(G3D_cache *, int);
-int G3d_cache_remove_all(G3D_cache *);
-int G3d_cache_flush_all(G3D_cache *);
-void *G3d_cache_elt_ptr(G3D_cache *, int);
-int G3d_cache_load(G3D_cache *, int);
-int G3d_cache_get_elt(G3D_cache *, int, void *);
-int G3d_cache_put_elt(G3D_cache *, int, const void *);
+int G3d_cache_lock(RASTER3D_cache *, int);
+void G3d_cache_lock_intern(RASTER3D_cache *, int);
+int G3d_cache_unlock(RASTER3D_cache *, int);
+int G3d_cache_unlock_all(RASTER3D_cache *);
+int G3d_cache_lock_all(RASTER3D_cache *);
+void G3d_cache_autolock_on(RASTER3D_cache *);
+void G3d_cache_autolock_off(RASTER3D_cache *);
+void G3d_cache_set_minUnlock(RASTER3D_cache *, int);
+int G3d_cache_remove_elt(RASTER3D_cache *, int);
+int G3d_cache_flush(RASTER3D_cache *, int);
+int G3d_cache_remove_all(RASTER3D_cache *);
+int G3d_cache_flush_all(RASTER3D_cache *);
+void *G3d_cache_elt_ptr(RASTER3D_cache *, int);
+int G3d_cache_load(RASTER3D_cache *, int);
+int G3d_cache_get_elt(RASTER3D_cache *, int, void *);
+int G3d_cache_put_elt(RASTER3D_cache *, int, const void *);
 
 /* cachehash.c */
 void G3d_cache_hash_reset(G3d_cache_hash *);
@@ -64,16 +64,16 @@ void *G3d_realloc(void *, int);
 void G3d_free(void *);
 
 /* g3dcache.c */
-int G3d_initCache(G3D_Map *, int);
-int G3d_disposeCache(G3D_Map *);
-int G3d_flushAllTiles(G3D_Map *);
+int G3d_initCache(RASTER3D_Map *, int);
+int G3d_disposeCache(RASTER3D_Map *);
+int G3d_flushAllTiles(RASTER3D_Map *);
 
 /* g3dcats.c */
 int G3d_writeCats(const char *, struct Categories *);
 int G3d_readCats(const char *, const char *, struct Categories *);
 
 /* g3dclose.c */
-int G3d_closeCell(G3D_Map *);
+int G3d_closeCell(RASTER3D_Map *);
 
 /* g3dcolor.c */
 int G3d_removeColor(const char *);
@@ -114,10 +114,10 @@ int G3d_isXdrNullDouble(const double *);
 void G3d_setXdrNullNum(void *, int);
 void G3d_setXdrNullDouble(double *);
 void G3d_setXdrNullFloat(float *);
-int G3d_initFpXdr(G3D_Map *, int);
-int G3d_initCopyToXdr(G3D_Map *, int);
+int G3d_initFpXdr(RASTER3D_Map *, int);
+int G3d_initCopyToXdr(RASTER3D_Map *, int);
 int G3d_copyToXdr(const void *, int);
-int G3d_initCopyFromXdr(G3D_Map *, int);
+int G3d_initCopyFromXdr(RASTER3D_Map *, int);
 int G3d_copyFromXdr(int, void *);
 
 /* g3dhistory.c */
@@ -151,15 +151,15 @@ int G3d_maskClose(void);
 int G3d_maskFileExists(void);
 int G3d_maskOpenOld(void);
 int G3d_maskReopen(int);
-int G3d_isMasked(G3D_Map *, int, int, int);
-void G3d_maskNum(G3D_Map *, int, int, int, void *, int);
-void G3d_maskFloat(G3D_Map *, int, int, int, float *);
-void G3d_maskDouble(G3D_Map *, int, int, int, double *);
-void G3d_maskTile(G3D_Map *, int, void *, int);
-void G3d_maskOn(G3D_Map *);
-void G3d_maskOff(G3D_Map *);
-int G3d_maskIsOn(G3D_Map *);
-int G3d_maskIsOff(G3D_Map *);
+int G3d_isMasked(RASTER3D_Map *, int, int, int);
+void G3d_maskNum(RASTER3D_Map *, int, int, int, void *, int);
+void G3d_maskFloat(RASTER3D_Map *, int, int, int, float *);
+void G3d_maskDouble(RASTER3D_Map *, int, int, int, double *);
+void G3d_maskTile(RASTER3D_Map *, int, void *, int);
+void G3d_maskOn(RASTER3D_Map *);
+void G3d_maskOff(RASTER3D_Map *);
+int G3d_maskIsOn(RASTER3D_Map *);
+int G3d_maskIsOff(RASTER3D_Map *);
 const char *G3d_maskFile(void);
 int G3d_maskMapExists(void);
 
@@ -181,12 +181,12 @@ int G3d_isNullValueNum(const void *, int);
 void G3d_setNullValue(void *, int, int);
 
 /* g3dopen2.c */
-void *G3d_openNewParam(const char *, int , int, G3D_Region *, int, int, int, int, int, int, int);
+void *G3d_openNewParam(const char *, int , int, RASTER3D_Region *, int, int, int, int, int, int, int);
 /* g3dopen.c */
 void *G3d_openCellOldNoHeader(const char *, const char *);
-void *G3d_openCellOld(const char *, const char *, G3D_Region *, int, int);
-void *G3d_openCellNew(const char *, int, int, G3D_Region *);
-void *G3d_openNewOptTileSize(const char *, int , G3D_Region * , int , int );
+void *G3d_openCellOld(const char *, const char *, RASTER3D_Region *, int, int);
+void *G3d_openCellNew(const char *, int, int, RASTER3D_Region *);
+void *G3d_openNewOptTileSize(const char *, int , RASTER3D_Region * , int , int );
 
 /* g3dparam.c */
 void G3d_setStandard3dInputParams(void);
@@ -196,32 +196,32 @@ void G3d_setWindowParams(void);
 char *G3d_getWindowParams(void);
 
 /* g3drange.c */
-void G3d_range_updateFromTile(G3D_Map *, const void *, int, int, int, int,
+void G3d_range_updateFromTile(RASTER3D_Map *, const void *, int, int, int, int,
 			      int, int, int, int);
 int G3d_readRange(const char *, const char *, struct FPRange *);
-int G3d_range_load(G3D_Map *);
-void G3d_range_min_max(G3D_Map *, double *, double *);
-int G3d_range_write(G3D_Map *);
-int G3d_range_init(G3D_Map *);
+int G3d_range_load(RASTER3D_Map *);
+void G3d_range_min_max(RASTER3D_Map *, double *, double *);
+int G3d_range_write(RASTER3D_Map *);
+int G3d_range_init(RASTER3D_Map *);
 
 /* g3dregion.c */
-void G3d_getRegionValue(G3D_Map *, double, double, double, void *, int);
-void G3d_adjustRegion(G3D_Region *);
-void G3d_regionCopy(G3D_Region *, G3D_Region *);
-void G3d_incorporate2dRegion(struct Cell_head *, G3D_Region *);
-void G3d_regionFromToCellHead(struct Cell_head *, G3D_Region *);
-void G3d_adjustRegionRes(G3D_Region *);
-void G3d_extract2dRegion(G3D_Region *, struct Cell_head *);
-void G3d_regionToCellHead(G3D_Region *, struct Cell_head *);
-int G3d_readRegionMap(const char *, const char *, G3D_Region *);
-int G3d_isValidLocation(G3D_Region *, double, double, double);
-void G3d_location2coord(G3D_Region *, double, double, double, int *, int *, int *);
-void G3d_location2coord2(G3D_Region *, double, double, double, int *, int *, int *);
-void G3d_coord2location(G3D_Region *, double, double, double, double *, double *, double *);
+void G3d_getRegionValue(RASTER3D_Map *, double, double, double, void *, int);
+void G3d_adjustRegion(RASTER3D_Region *);
+void G3d_regionCopy(RASTER3D_Region *, RASTER3D_Region *);
+void G3d_incorporate2dRegion(struct Cell_head *, RASTER3D_Region *);
+void G3d_regionFromToCellHead(struct Cell_head *, RASTER3D_Region *);
+void G3d_adjustRegionRes(RASTER3D_Region *);
+void G3d_extract2dRegion(RASTER3D_Region *, struct Cell_head *);
+void G3d_regionToCellHead(RASTER3D_Region *, struct Cell_head *);
+int G3d_readRegionMap(const char *, const char *, RASTER3D_Region *);
+int G3d_isValidLocation(RASTER3D_Region *, double, double, double);
+void G3d_location2coord(RASTER3D_Region *, double, double, double, int *, int *, int *);
+void G3d_location2coord2(RASTER3D_Region *, double, double, double, int *, int *, int *);
+void G3d_coord2location(RASTER3D_Region *, double, double, double, double *, double *, double *);
 /* g3dresample.c */
-void G3d_nearestNeighbor(G3D_Map *, int, int, int, void *, int);
-void G3d_setResamplingFun(G3D_Map *, void (*)());
-void G3d_getResamplingFun(G3D_Map *, void (**)());
+void G3d_nearestNeighbor(RASTER3D_Map *, int, int, int, void *, int);
+void G3d_setResamplingFun(RASTER3D_Map *, void (*)());
+void G3d_getResamplingFun(RASTER3D_Map *, void (**)());
 void G3d_getNearestNeighborFunPtr(void (**)());
 
 /* g3dvolume.c */
@@ -234,61 +234,61 @@ void G3d_getAlignedVolume(void *, double, double, double, double, double,
 void G3d_makeAlignedVolumeFile(void *, const char *, double, double, double,
 			       double, double, double, int, int, int);
 /* g3dwindow.c */
-void G3d_getValue(G3D_Map *, int, int, int, void *, int);
-float G3d_getFloat(G3D_Map *, int, int, int);
-double G3d_getDouble(G3D_Map *, int, int, int);
-void G3d_getWindowValue(G3D_Map *, double, double, double, void *, int);
+void G3d_getValue(RASTER3D_Map *, int, int, int, void *, int);
+float G3d_getFloat(RASTER3D_Map *, int, int, int);
+double G3d_getDouble(RASTER3D_Map *, int, int, int);
+void G3d_getWindowValue(RASTER3D_Map *, double, double, double, void *, int);
 
 
-G3D_Region *G3d_windowPtr(void);
-void G3d_setWindow(G3D_Region *);
-void G3d_setWindowMap(G3D_Map *, G3D_Region *);
-void G3d_getWindow(G3D_Region *);
+RASTER3D_Region *G3d_windowPtr(void);
+void G3d_setWindow(RASTER3D_Region *);
+void G3d_setWindowMap(RASTER3D_Map *, RASTER3D_Region *);
+void G3d_getWindow(RASTER3D_Region *);
 
 /* g3dwindowio.c */
 void G3d_useWindowParams(void);
-int G3d_readWindow(G3D_Region *, const char *);
+int G3d_readWindow(RASTER3D_Region *, const char *);
 
-/* int G3d_writeWindow (G3D_Region *, char *); */
+/* int G3d_writeWindow (RASTER3D_Region *, char *); */
 /* getblock.c */
-void G3d_getBlockNocache(G3D_Map *, int, int, int, int, int, int, void *,
+void G3d_getBlockNocache(RASTER3D_Map *, int, int, int, int, int, int, void *,
 			 int);
-void G3d_getBlock(G3D_Map *, int, int, int, int, int, int, void *, int);
+void G3d_getBlock(RASTER3D_Map *, int, int, int, int, int, int, void *, int);
 
 /* header.c */
-int G3d_readHeader(G3D_Map *, int *, int *, double *, double *, double *,
+int G3d_readHeader(RASTER3D_Map *, int *, int *, double *, double *, double *,
 		   double *, double *, double *, int *, int *, int *,
 		   double *, double *, double *, int *, int *, int *, int *,
 		   int *, int *, int *, int *, int *, int *, int *, char **);
-int G3d_writeHeader(G3D_Map *, int, int, double, double, double, double,
+int G3d_writeHeader(RASTER3D_Map *, int, int, double, double, double, double,
 		    double, double, int, int, int, double, double, double,
 		    int, int, int, int, int, int, int, int, int, int, int,
 		    char *);
 int G3d_cacheSizeEncode(int, int);
-int G3d__computeCacheSize(G3D_Map *, int);
-int G3d_fillHeader(G3D_Map *, int, int, int, int, int, int, int, int, int,
+int G3d__computeCacheSize(RASTER3D_Map *, int);
+int G3d_fillHeader(RASTER3D_Map *, int, int, int, int, int, int, int, int, int,
 		   int, int, int, int, int, int, int, double, double, double,
 		   double, double, double, int, int, int, double, double,
 		   double, char *);
 /* headerinfo.c */
-void G3d_getCoordsMap(G3D_Map *, int *, int *, int *);
-void G3d_getCoordsMapWindow(G3D_Map *, int *, int *, int *);
-void G3d_getNofTilesMap(G3D_Map *, int *, int *, int *);
-void G3d_getRegionMap(G3D_Map *, double *, double *, double *, double *,
+void G3d_getCoordsMap(RASTER3D_Map *, int *, int *, int *);
+void G3d_getCoordsMapWindow(RASTER3D_Map *, int *, int *, int *);
+void G3d_getNofTilesMap(RASTER3D_Map *, int *, int *, int *);
+void G3d_getRegionMap(RASTER3D_Map *, double *, double *, double *, double *,
 		      double *, double *);
-void G3d_getWindowMap(G3D_Map *, double *, double *, double *, double *,
+void G3d_getWindowMap(RASTER3D_Map *, double *, double *, double *, double *,
 		      double *, double *);
-void G3d_getTileDimensionsMap(G3D_Map *, int *, int *, int *);
-int G3d_tileTypeMap(G3D_Map *);
-int G3d_fileTypeMap(G3D_Map *);
-int G3d_tilePrecisionMap(G3D_Map *);
-int G3d_tileUseCacheMap(G3D_Map *);
-void G3d_printHeader(G3D_Map *);
-void G3d_getRegionStructMap(G3D_Map *, G3D_Region *);
+void G3d_getTileDimensionsMap(RASTER3D_Map *, int *, int *, int *);
+int G3d_tileTypeMap(RASTER3D_Map *);
+int G3d_fileTypeMap(RASTER3D_Map *);
+int G3d_tilePrecisionMap(RASTER3D_Map *);
+int G3d_tileUseCacheMap(RASTER3D_Map *);
+void G3d_printHeader(RASTER3D_Map *);
+void G3d_getRegionStructMap(RASTER3D_Map *, RASTER3D_Region *);
 
 /* index.c */
-int G3d_flushIndex(G3D_Map *);
-int G3d_initIndex(G3D_Map *, int);
+int G3d_flushIndex(RASTER3D_Map *);
+int G3d_initIndex(RASTER3D_Map *, int);
 
 /* retile.c */
 void G3d_retile(void *, const char *, int, int, int);
@@ -299,60 +299,60 @@ void G_rle_encode(char *, char *, int, int);
 void G_rle_decode(char *, char *, int, int, int *, int *);
 
 /* tilealloc.c */
-void *G3d_allocTilesType(G3D_Map *, int, int);
-void *G3d_allocTiles(G3D_Map *, int);
+void *G3d_allocTilesType(RASTER3D_Map *, int, int);
+void *G3d_allocTiles(RASTER3D_Map *, int);
 void G3d_freeTiles(void *);
 
 /* tileio.c */
-void *G3d_getTilePtr(G3D_Map *, int);
-int G3d_tileLoad(G3D_Map *, int);
-int G3d__removeTile(G3D_Map *, int);
-float G3d_getFloatRegion(G3D_Map *, int, int, int);
-double G3d_getDoubleRegion(G3D_Map *, int, int, int);
-void G3d_getValueRegion(G3D_Map *, int, int, int, void *, int);
+void *G3d_getTilePtr(RASTER3D_Map *, int);
+int G3d_tileLoad(RASTER3D_Map *, int);
+int G3d__removeTile(RASTER3D_Map *, int);
+float G3d_getFloatRegion(RASTER3D_Map *, int, int, int);
+double G3d_getDoubleRegion(RASTER3D_Map *, int, int, int);
+void G3d_getValueRegion(RASTER3D_Map *, int, int, int, void *, int);
 
 /* tilemath.c */
-void G3d_computeOptimalTileDimension(G3D_Region *, int, int *, int *, int *, int);
-void G3d_tileIndex2tile(G3D_Map *, int, int *, int *, int *);
-int G3d_tile2tileIndex(G3D_Map *, int, int, int);
-void G3d_tileCoordOrigin(G3D_Map *, int, int, int, int *, int *, int *);
-void G3d_tileIndexOrigin(G3D_Map *, int, int *, int *, int *);
-void G3d_coord2tileCoord(G3D_Map *, int, int, int, int *, int *, int *, int *,
+void G3d_computeOptimalTileDimension(RASTER3D_Region *, int, int *, int *, int *, int);
+void G3d_tileIndex2tile(RASTER3D_Map *, int, int *, int *, int *);
+int G3d_tile2tileIndex(RASTER3D_Map *, int, int, int);
+void G3d_tileCoordOrigin(RASTER3D_Map *, int, int, int, int *, int *, int *);
+void G3d_tileIndexOrigin(RASTER3D_Map *, int, int *, int *, int *);
+void G3d_coord2tileCoord(RASTER3D_Map *, int, int, int, int *, int *, int *, int *,
 			 int *, int *);
-void G3d_coord2tileIndex(G3D_Map *, int, int, int, int *, int *);
-int G3d_coordInRange(G3D_Map *, int, int, int);
-int G3d_tileIndexInRange(G3D_Map *, int);
-int G3d_tileInRange(G3D_Map *, int, int, int);
-int G3d_computeClippedTileDimensions(G3D_Map *, int, int *, int *, int *,
+void G3d_coord2tileIndex(RASTER3D_Map *, int, int, int, int *, int *);
+int G3d_coordInRange(RASTER3D_Map *, int, int, int);
+int G3d_tileIndexInRange(RASTER3D_Map *, int);
+int G3d_tileInRange(RASTER3D_Map *, int, int, int);
+int G3d_computeClippedTileDimensions(RASTER3D_Map *, int, int *, int *, int *,
 				     int *, int *, int *);
 
 /* tilenull.c */
-void G3d_setNullTileType(G3D_Map *, void *, int);
-void G3d_setNullTile(G3D_Map *, void *);
+void G3d_setNullTileType(RASTER3D_Map *, void *, int);
+void G3d_setNullTile(RASTER3D_Map *, void *);
 
 /* tileread.c */
-int G3d_readTile(G3D_Map *, int, void *, int);
-int G3d_readTileFloat(G3D_Map *, int, void *);
-int G3d_readTileDouble(G3D_Map *, int, void *);
-int G3d_lockTile(G3D_Map *, int);
-int G3d_unlockTile(G3D_Map *, int);
-int G3d_unlockAll(G3D_Map *);
-void G3d_autolockOn(G3D_Map *);
-void G3d_autolockOff(G3D_Map *);
-void G3d_minUnlocked(G3D_Map *, int);
-int G3d_beginCycle(G3D_Map *);
-int G3d_endCycle(G3D_Map *);
+int G3d_readTile(RASTER3D_Map *, int, void *, int);
+int G3d_readTileFloat(RASTER3D_Map *, int, void *);
+int G3d_readTileDouble(RASTER3D_Map *, int, void *);
+int G3d_lockTile(RASTER3D_Map *, int);
+int G3d_unlockTile(RASTER3D_Map *, int);
+int G3d_unlockAll(RASTER3D_Map *);
+void G3d_autolockOn(RASTER3D_Map *);
+void G3d_autolockOff(RASTER3D_Map *);
+void G3d_minUnlocked(RASTER3D_Map *, int);
+int G3d_beginCycle(RASTER3D_Map *);
+int G3d_endCycle(RASTER3D_Map *);
 
 /* tilewrite.c */
-int G3d_writeTile(G3D_Map *, int, const void *, int);
-int G3d_writeTileFloat(G3D_Map *, int, const void *);
-int G3d_writeTileDouble(G3D_Map *, int, const void *);
-int G3d_flushTile(G3D_Map *, int);
-int G3d_flushTileCube(G3D_Map *, int, int, int, int, int, int);
-int G3d_flushTilesInCube(G3D_Map *, int, int, int, int, int, int);
-int G3d_putFloat(G3D_Map *, int, int, int, float);
-int G3d_putDouble(G3D_Map *, int, int, int, double);
-int G3d_putValue(G3D_Map *, int, int, int, const void *, int);
+int G3d_writeTile(RASTER3D_Map *, int, const void *, int);
+int G3d_writeTileFloat(RASTER3D_Map *, int, const void *);
+int G3d_writeTileDouble(RASTER3D_Map *, int, const void *);
+int G3d_flushTile(RASTER3D_Map *, int);
+int G3d_flushTileCube(RASTER3D_Map *, int, int, int, int, int, int);
+int G3d_flushTilesInCube(RASTER3D_Map *, int, int, int, int, int, int);
+int G3d_putFloat(RASTER3D_Map *, int, int, int, float);
+int G3d_putDouble(RASTER3D_Map *, int, int, int, double);
+int G3d_putValue(RASTER3D_Map *, int, int, int, const void *, int);
 
 /* writeascii.c */
 void G3d_writeAscii(void *, const char *);

@@ -720,10 +720,10 @@ G_fpcompress_writeXdrNums(int fd, char *src, int nofNum, int precision,
     G_lzw_set_bits(9);
 #endif
 
-    if (useRle == G3D_USE_RLE)
+    if (useRle == RASTER3D_USE_RLE)
 	rleLength = G_rle_count_only(compressBuf + 1, offsetMantissa, 1);
 
-    if ((useRle == G3D_USE_RLE) && (rleLength < offsetMantissa)) {
+    if ((useRle == RASTER3D_USE_RLE) && (rleLength < offsetMantissa)) {
 
 	G_rle_encode(compressBuf + 1, src, offsetMantissa, 1);
 	srcStop = src + rleLength;
@@ -733,7 +733,7 @@ G_fpcompress_writeXdrNums(int fd, char *src, int nofNum, int precision,
 
 	*(compressBuf + offsetMantissa - rleLength) = 1;
 
-	if (useLzw == G3D_USE_LZW)
+	if (useLzw == RASTER3D_USE_LZW)
 #ifdef USE_LZW_COMPRESSION
 	    status = G_lzw_write(fd, compressBuf + offsetMantissa - rleLength,
 				 nBytes - offsetMantissa + rleLength + 1);
@@ -764,7 +764,7 @@ G_fpcompress_writeXdrNums(int fd, char *src, int nofNum, int precision,
     else {
 
 	*compressBuf = 0;
-	if (useLzw == G3D_USE_LZW)
+	if (useLzw == RASTER3D_USE_LZW)
 #ifdef USE_LZW_COMPRESSION
 	    status = G_lzw_write(fd, compressBuf, nBytes + 1);
 #else

@@ -42,8 +42,8 @@ static void getParams(char **input, char **output, int *decim);
 static void writeHeaderString(FILE * fp, char *valueString, double value);
 static void writeHeaderString2(FILE * fp, char *valueString, int value);
 static void writeHeaderString3(FILE * fp, char *valueString, const char* value);
-static FILE *openAscii(char *asciiFile, G3D_Region region);
-static void G3dToascii(FILE * fp, G3D_Region region, int decim);
+static FILE *openAscii(char *asciiFile, RASTER3D_Region region);
+static void G3dToascii(FILE * fp, RASTER3D_Region region, int decim);
 
 /* globals */
 void *map = NULL;
@@ -52,7 +52,7 @@ paramType param;
 /*---------------------------------------------------------------------------*/
 
 /* Simple error handling routine, will eventually replace this with
- * G3D_fatalError.
+ * RASTER3D_fatalError.
  */
 void fatalError(char *errorMsg)
 {
@@ -121,7 +121,7 @@ void setParams()
 
     param.mask = G_define_flag();
     param.mask->key = 'm';
-    param.mask->description = _("Use G3D mask (if exists) with input map");
+    param.mask->description = _("Use RASTER3D mask (if exists) with input map");
 }
 
 /*---------------------------------------------------------------------------*/
@@ -175,7 +175,7 @@ void writeHeaderString3(FILE * fp, char *valueString, const char* value)
 /* Opens the output acsii file and writes the header.
  * Returns the file handle for the output file.
  */
-FILE *openAscii(char *asciiFile, G3D_Region region)
+FILE *openAscii(char *asciiFile, RASTER3D_Region region)
 {
     FILE *fp;
 
@@ -225,7 +225,7 @@ FILE *openAscii(char *asciiFile, G3D_Region region)
  * source G3d file one layer at a time.
  *//* * */
 
-void G3dToascii(FILE * fp, G3D_Region region, int decim)
+void G3dToascii(FILE * fp, RASTER3D_Region region, int decim)
 {
     DCELL dvalue;
     FCELL fvalue;
@@ -297,7 +297,7 @@ int main(int argc, char *argv[])
 {
     char *input, *output;
     int decim;
-    G3D_Region region;
+    RASTER3D_Region region;
     FILE *fp;
     int changemask = 0;
     struct GModule *module;
@@ -337,7 +337,7 @@ int main(int argc, char *argv[])
 
     /* Open the map and use XY cache mode */
     map = G3d_openCellOld(input, G_find_grid3(input, ""), &region,
-                          G3D_TILE_SAME_AS_FILE, G3D_USE_CACHE_DEFAULT);
+                          RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
     if (map == NULL)
         G3d_fatalError(_("Error opening 3d raster map"));

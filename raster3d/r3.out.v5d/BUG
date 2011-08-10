@@ -9,7 +9,7 @@ Date: 2004-11-09
  * with -m flag the "Probe" crashes in Vis5D
 
 
-G3D library bug?
+RASTER3D library bug?
         G3d_getValueRegion (map, x, y, z, d1p, typeIntern);                  
      produces output with different orientation comparing to:
         G3d_getValue(map, x, y, z, d1p, typeIntern); 

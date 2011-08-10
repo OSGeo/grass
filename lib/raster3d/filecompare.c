@@ -398,15 +398,15 @@ G3d_compareFiles(const char *f1, const char *mapset1, const char *f2,
 
     printf("\nComparing %s and %s\n", f1, f2);
 
-    map = G3d_openCellOld(f1, mapset1, G3D_DEFAULT_WINDOW,
-			  G3D_TILE_SAME_AS_FILE, G3D_USE_CACHE_DEFAULT);
+    map = G3d_openCellOld(f1, mapset1, RASTER3D_DEFAULT_WINDOW,
+			  RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
     if (map == NULL)
 	G3d_fatalError("G3d_compareFiles: error in G3d_openCellOld");
 
     G3d_printHeader(map);
 
-    map2 = G3d_openCellOld(f2, mapset2, G3D_DEFAULT_WINDOW,
-			   G3D_TILE_SAME_AS_FILE, G3D_USE_CACHE_DEFAULT);
+    map2 = G3d_openCellOld(f2, mapset2, RASTER3D_DEFAULT_WINDOW,
+			   RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
     if (map2 == NULL)
 	G3d_fatalError("G3d_compareFiles: error in G3d_openCellOld");
 

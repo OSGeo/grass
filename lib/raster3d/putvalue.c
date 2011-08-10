@@ -15,7 +15,7 @@
  *  \return int
  */
 
-int G3d_putFloat(G3D_Map * map, int x, int y, int z, float value)
+int G3d_putFloat(RASTER3D_Map * map, int x, int y, int z, float value)
 {
     int tileIndex, offs;
     float *tile;
@@ -55,7 +55,7 @@ int G3d_putFloat(G3D_Map * map, int x, int y, int z, float value)
  *  \return int
  */
 
-int G3d_putDouble(G3D_Map * map, int x, int y, int z, double value)
+int G3d_putDouble(RASTER3D_Map * map, int x, int y, int z, double value)
 {
     int tileIndex, offs;
     double *tile;
@@ -99,7 +99,7 @@ int G3d_putDouble(G3D_Map * map, int x, int y, int z, double value)
  */
 
 int
-G3d_putValue(G3D_Map * map, int x, int y, int z, const void *value, int type)
+G3d_putValue(RASTER3D_Map * map, int x, int y, int z, const void *value, int type)
 {
     if (type == FCELL_TYPE) {
 	if (!G3d_putFloat(map, x, y, z, *((float *)value))) {

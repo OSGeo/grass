@@ -694,7 +694,7 @@ int gvl_isosurf_set_att_map(geovol_isosurf * isosurf, int desc,
     G_debug(5, "gvl_isosurf_set_att_map(): att=%d map=%s", desc, filename);
 
     if (isosurf) {
-	if (0 > (hfile = gvl_file_newh(filename, VOL_FTYPE_G3D)))
+	if (0 > (hfile = gvl_file_newh(filename, VOL_FTYPE_RASTER3D)))
 	    return (-1);
 
 	gvl_isosurf_set_att_src(isosurf, desc, MAP_ATT);

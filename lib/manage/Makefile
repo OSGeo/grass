@@ -1,7 +1,7 @@
 MODULE_TOPDIR = ../..
 
 LIB = MANAGE
-DEPENDENCIES = $(GISDEP) $(VECTDEP) $(G3DDEP)
+DEPENDENCIES = $(GISDEP) $(VECTDEP) $(RASTER3DDEP)
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 include $(MODULE_TOPDIR)/include/Make/Doxygen.make

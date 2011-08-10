@@ -64,7 +64,7 @@ void G3d_setXdrNullFloat(float *f)
 
 XDR xdrEncodeStream, xdrDecodeStream;	/* xdr support structures */
 
-int G3d_initFpXdr(G3D_Map * map, int misuseBytes)
+int G3d_initFpXdr(RASTER3D_Map * map, int misuseBytes)
 
 
 
@@ -76,7 +76,7 @@ int G3d_initFpXdr(G3D_Map * map, int misuseBytes)
     doAlloc = 0;
 
     if (xdr == NULL) {
-	xdrLength = map->tileSize * G3D_MAX(map->numLengthExtern,
+	xdrLength = map->tileSize * RASTER3D_MAX(map->numLengthExtern,
 					    map->numLengthIntern) +
 	    misuseBytes;
 	xdr = G3d_malloc(xdrLength);
@@ -87,10 +87,10 @@ int G3d_initFpXdr(G3D_Map * map, int misuseBytes)
 
 	doAlloc = 1;
     }
-    else if (map->tileSize * G3D_MAX(map->numLengthExtern,
+    else if (map->tileSize * RASTER3D_MAX(map->numLengthExtern,
 				     map->numLengthIntern) + misuseBytes
 	     > xdrLength) {
-	xdrLength = map->tileSize * G3D_MAX(map->numLengthExtern,
+	xdrLength = map->tileSize * RASTER3D_MAX(map->numLengthExtern,
 					    map->numLengthIntern) +
 	    misuseBytes;
 	xdr = G3d_realloc(xdr, xdrLength);
@@ -118,13 +118,13 @@ static int (*xdrFun) ();
 static XDR *xdrs;
 static double tmpValue, *tmp;
 
-int G3d_initCopyToXdr(G3D_Map * map, int sType)
+int G3d_initCopyToXdr(RASTER3D_Map * map, int sType)
 {
     xdrTmp = xdr;
     useXdr = map->useXdr;
     srcType = sType;
 
-    if (map->useXdr == G3D_USE_XDR) {
+    if (map->useXdr == RASTER3D_USE_XDR) {
 	if (!xdr_setpos(&(xdrEncodeStream), 0)) {
 	    G3d_error("G3d_InitCopyToXdr: positioning xdr failed");
 	    return 0;
@@ -151,7 +151,7 @@ int G3d_copyToXdr(const void *src, int nofNum)
 {
     int i;
 
-    if (useXdr == G3D_NO_XDR) {
+    if (useXdr == RASTER3D_NO_XDR) {
 	G3d_copyValues(src, 0, srcType, xdrTmp, 0, type, nofNum);
 	xdrTmp = G_incr_void_ptr(xdrTmp, nofNum * G3d_externLength(type));
 	return 1;
@@ -193,13 +193,13 @@ int G3d_copyToXdr(const void *src, int nofNum)
 
 /*---------------------------------------------------------------------------*/
 
-int G3d_initCopyFromXdr(G3D_Map * map, int dType)
+int G3d_initCopyFromXdr(RASTER3D_Map * map, int dType)
 {
     xdrTmp = xdr;
     useXdr = map->useXdr;
     dstType = dType;
 
-    if (useXdr == G3D_USE_XDR) {
+    if (useXdr == RASTER3D_USE_XDR) {
 	if (!xdr_setpos(&(xdrDecodeStream), 0)) {
 	    G3d_error("G3d_initCopyFromXdr: positioning xdr failed");
 	    return 0;
@@ -226,7 +226,7 @@ int G3d_copyFromXdr(int nofNum, void *dst)
 {
     int i;
 
-    if (useXdr == G3D_NO_XDR) {
+    if (useXdr == RASTER3D_NO_XDR) {
 	G3d_copyValues(xdrTmp, 0, type, dst, 0, dstType, nofNum);
 	xdrTmp = G_incr_void_ptr(xdrTmp, nofNum * G3d_externLength(type));
 	return 1;

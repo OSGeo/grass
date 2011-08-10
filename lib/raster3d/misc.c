@@ -79,7 +79,7 @@ G3d_copyValues(const void *src, int offsSrc, int typeSrc, void *dst,
 
 int G3d_length(int t)
 {
-    if (!G3D_IS_CORRECT_TYPE(t))
+    if (!RASTER3D_IS_CORRECT_TYPE(t))
 	G3d_fatalError("G3d_length: invalid type");
 
     if (t == FCELL_TYPE)
@@ -91,12 +91,12 @@ int G3d_length(int t)
 
 int G3d_externLength(int t)
 {
-    if (!G3D_IS_CORRECT_TYPE(t))
+    if (!RASTER3D_IS_CORRECT_TYPE(t))
 	G3d_fatalError("G3d_externLength: invalid type");
 
     if (t == FCELL_TYPE)
-	return G3D_XDR_FLOAT_LENGTH;
+	return RASTER3D_XDR_FLOAT_LENGTH;
     if (t == DCELL_TYPE)
-	return G3D_XDR_DOUBLE_LENGTH;
+	return RASTER3D_XDR_DOUBLE_LENGTH;
     return 0;
 }

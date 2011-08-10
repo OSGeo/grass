@@ -72,7 +72,7 @@ void set_params(void)
 }
 
 /* ************************************************************************* */
-/* Main function, open the G3D map and create the raster maps ************** */
+/* Main function, open the RASTER3D map and create the raster maps ************** */
 /* ************************************************************************* */
 int main(int argc, char *argv[])
 {

@@ -22,9 +22,9 @@
 static int test_put_get_value_dcell(void);
 static int test_put_get_value_fcell(void);
 static int test_put_get_value_resampling(void);
-static int test_resampling_dcell(G3D_Map *map, double north, double east, double 
+static int test_resampling_dcell(RASTER3D_Map *map, double north, double east, double 
                                  top, int col, int row, int depth, int fact);
-static int test_resampling_fcell(G3D_Map *map, double north, double east, double 
+static int test_resampling_fcell(RASTER3D_Map *map, double north, double east, double 
                                  top, int col, int row, int depth, int fact);
 
 /* *************************************************************** */
@@ -63,8 +63,8 @@ int test_put_get_value_dcell(void)
     double north, east, top;
     int col, row, depth;
     
-    G3D_Region region;
-    G3D_Map *map = NULL;
+    RASTER3D_Region region;
+    RASTER3D_Map *map = NULL;
     
     /* We need to set up a specific region for the new g3d map.
      * First we safe the default region. */
@@ -82,7 +82,7 @@ int test_put_get_value_dcell(void)
         
     G3d_adjustRegion(&region);
         
-    map = G3d_openNewOptTileSize("test_put_get_value_dcell", G3D_USE_CACHE_XY, &region, DCELL_TYPE, 32);
+    map = G3d_openNewOptTileSize("test_put_get_value_dcell", RASTER3D_USE_CACHE_XY, &region, DCELL_TYPE, 32);
     
     /* The window is the same as the map region ... of course */
     G3d_setWindowMap(map, &region);
@@ -203,8 +203,8 @@ int test_put_get_value_fcell(void)
     double north, east, top;
     int col, row, depth;
     
-    G3D_Region region;
-    G3D_Map *map = NULL;
+    RASTER3D_Region region;
+    RASTER3D_Map *map = NULL;
     
     /* We need to set up a specific region for the new g3d map.
      * First we safe the default region. */
@@ -222,7 +222,7 @@ int test_put_get_value_fcell(void)
         
     G3d_adjustRegion(&region);
         
-    map = G3d_openNewOptTileSize("test_put_get_value_dcell", G3D_USE_CACHE_XY, &region, FCELL_TYPE, 32);
+    map = G3d_openNewOptTileSize("test_put_get_value_dcell", RASTER3D_USE_CACHE_XY, &region, FCELL_TYPE, 32);
     
     /* The window is the same as the map region ... of course */
     G3d_setWindowMap(map, &region);
@@ -324,9 +324,9 @@ int test_put_get_value_resampling(void)
     double north, east, top;
     int col, row, depth;
     
-    G3D_Region region;
-    G3D_Region window;
-    G3D_Map *map = NULL;
+    RASTER3D_Region region;
+    RASTER3D_Region window;
+    RASTER3D_Map *map = NULL;
     
     /* We need to set up a specific region for the new g3d map.
      * First we safe the default region. */
@@ -344,7 +344,7 @@ int test_put_get_value_resampling(void)
         
     G3d_adjustRegion(&region);
     
-    map = G3d_openNewOptTileSize("test_put_get_value_resample", G3D_USE_CACHE_XY, &region, DCELL_TYPE, 32);
+    map = G3d_openNewOptTileSize("test_put_get_value_resample", RASTER3D_USE_CACHE_XY, &region, DCELL_TYPE, 32);
     
     /* We modify the window for resampling tests */
     G3d_regionCopy(&window, &region);
@@ -444,7 +444,7 @@ int test_put_get_value_resampling(void)
 
 /* *************************************************************** */
 
-int test_resampling_dcell(G3D_Map *map, double north, double east, double top, int col, int row, int depth, int fact)
+int test_resampling_dcell(RASTER3D_Map *map, double north, double east, double top, int col, int row, int depth, int fact)
 {
     int sum = 0;
     DCELL value;
@@ -480,7 +480,7 @@ int test_resampling_dcell(G3D_Map *map, double north, double east, double top, i
 
 /* *************************************************************** */
 
-int test_resampling_fcell(G3D_Map *map, double north, double east, double top, int col, int row, int depth, int fact)
+int test_resampling_fcell(RASTER3D_Map *map, double north, double east, double top, int col, int row, int depth, int fact)
 {
     int sum = 0;
     FCELL value;

@@ -6,7 +6,7 @@
  * AUTHOR(S):    Original author 
  *               Soeren Gebbert soerengebbert <at> googlemail <dot> co
  * 
- * PURPOSE:      Retiles an existing G3D map with user defined x, y and z tile size
+ * PURPOSE:      Retiles an existing RASTER3D map with user defined x, y and z tile size
  *
  * COPYRIGHT:    (C) 2011 by the GRASS Development Team
  *
@@ -34,7 +34,7 @@ paramType param; /*Parameters */
 /*- prototypes --------------------------------------------------------------*/
 void fatal_error(void *map, int *fd, int depths, char *errorMsg); /*Simple Error message */
 void set_params(); /*Fill the paramType structure */
-void g3d_to_raster(void *map, G3D_Region region, int *fd); /*Write the raster */
+void g3d_to_raster(void *map, RASTER3D_Region region, int *fd); /*Write the raster */
 int open_output_map(const char *name, int res_type); /*opens the outputmap */
 void close_output_map(int fd); /*close the map */
 
@@ -84,13 +84,13 @@ void set_params()
 
 
 /* ************************************************************************* */
-/* Main function, open the G3D map and create the raster maps ************** */
+/* Main function, open the RASTER3D map and create the raster maps ************** */
 
 /* ************************************************************************* */
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    G3D_Map *map = NULL;
+    RASTER3D_Map *map = NULL;
     int tileX, tileY, tileZ;
     char *mapset;
 
@@ -101,7 +101,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster3d"));
     G_add_keyword(_("retile"));
     G_add_keyword(_("voxel"));
-    module->description = _("Retiles an existing G3D map with user defined x, y and z tile size");
+    module->description = _("Retiles an existing RASTER3D map with user defined x, y and z tile size");
 
     /* Get parameters from user */
     set_params();
@@ -122,11 +122,11 @@ int main(int argc, char *argv[])
     G3d_initDefaults();
     
     if(!param.cache->answer)
-        map = G3d_openCellOld(param.input->answer, mapset, G3D_DEFAULT_WINDOW, 
-                          G3D_TILE_SAME_AS_FILE, G3D_USE_CACHE_DEFAULT);
+        map = G3d_openCellOld(param.input->answer, mapset, RASTER3D_DEFAULT_WINDOW, 
+                          RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
     else
-        map = G3d_openCellOld(param.input->answer, mapset, G3D_DEFAULT_WINDOW, 
-                          G3D_TILE_SAME_AS_FILE, G3D_NO_CACHE);
+        map = G3d_openCellOld(param.input->answer, mapset, RASTER3D_DEFAULT_WINDOW, 
+                          RASTER3D_TILE_SAME_AS_FILE, RASTER3D_NO_CACHE);
 
     if (map == NULL)
         G3d_fatalError(_("Unable to open 3d raster map <%s>"),

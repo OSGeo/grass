@@ -85,7 +85,7 @@ int count;
 
 FILE *dev, *cvdevf;
 FCELL *zero_array_cell;
-G3D_Region current_region;
+RASTER3D_Region current_region;
 
 
 /* pargr */
@@ -190,7 +190,7 @@ const char *Tmp_file_cell;
 
 struct BM *bitmask;
 struct Cell_head cellhd;
-G3D_Region out_region;
+RASTER3D_Region out_region;
 
 int main(int argc, char *argv[])
 {
@@ -242,7 +242,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("interpolation"));
     G_add_keyword(_("RST"));
     module->description =
-	_("Interpolates point data to a G3D grid volume using "
+	_("Interpolates point data to a RASTER3D grid volume using "
 	  "regularized spline with tension (RST) algorithm.");
 
     parm.input = G_define_option();

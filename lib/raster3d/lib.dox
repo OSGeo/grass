@@ -16,7 +16,7 @@ Authors: Roman Waupotitsch and Michael Shapiro, Helena Mitasova,
 <b>Overview</b>
 
 The Grid3D raster volume Library is used for the r3.* and vector
-volume tools. The G3D library uses a tile cache based approach to store floating point
+volume tools. The RASTER3D library uses a tile cache based approach to store floating point
  values in abritrary order in a volume. The coordinate system of a volume is 
 column and row compatible to the raster library and counts from the bottom to the top
 of the cube.
@@ -25,7 +25,7 @@ of the cube.
 <img src=g3d_volume_layout.png border=0><BR>
 <table border=0 width=700>
 <tr><td><center>
-<i>The volume coordinate system and tile layout of the G3D library</i>
+<i>The volume coordinate system and tile layout of the RASTER3D library</i>
 </center></td></tr>
 </table>
 </center>
@@ -105,7 +105,7 @@ other method (for variables of type long only).
 \section Tile_Data_NULL_values Tile Data NULL-values
 
 <P>
-G3D uses the same functions as <EM>2d</EM> GRASS to set and test NULL-values.  The
+RASTER3D uses the same functions as <EM>2d</EM> GRASS to set and test NULL-values.  The
 storage in the file is different though.  NULL-values are stored with a special
 bit-pattern if maximum precision is chosen.  They are stored by adding an
 additional bit if the precision is smaller.
@@ -256,7 +256,7 @@ not be modified. The precision value -1 indicates that maximum
 precision is used.
 <BR>
 <P>
-Binary files not in G3D format can be read by the library. The
+Binary files not in RASTER3D format can be read by the library. The
 following actions have to be taken: 
 
 <P>
@@ -322,7 +322,7 @@ typedef struct{
     int proj;  /* Projection (see gis.h) */
     int zone;  /* Projection zone (see gis.h) */
 
-} G3D\_Region;
+} RASTER3D\_Region;
 \endverbatim
 
 <P>
@@ -378,7 +378,7 @@ performed every time it is being accessed.
 \section Masks Masks
 
 <P>
-G3D provides a mask for the <EM>3d</EM> region.  The mask structure is
+RASTER3D provides a mask for the <EM>3d</EM> region.  The mask structure is
 automatically initialized at the time the first file is opened. The same
 structure is used for all the files. The default for every file is that the
 mask is turned off. If masking should be performed, the application program has
@@ -402,11 +402,11 @@ of disk space and the access time for the mask.
 \section Include_File Include File
 
 <P>
-Exported G3D constants and structures can be found in <EM>G3d.h</EM>.
+Exported RASTER3D constants and structures can be found in <EM>G3d.h</EM>.
 
 <P>
 
-\section G3D_Defaults G3D Defaults
+\section RASTER3D_Defaults RASTER3D Defaults
 
 <P>
 There are three methods to set default variables. First, the default can be set
@@ -432,11 +432,11 @@ The limit is specified in bytes. It is a limit on the size of cell-data stored
 in the cache and does not include the support structure.
 
 <P>
-Default G3D_CACHE_SIZE_MAX_DEFAULT. This is currently set to 16meg and can
+Default RASTER3D_CACHE_SIZE_MAX_DEFAULT. This is currently set to 16meg and can
 be changed at compilation time of the library.
 
 <P>
-Environment variable G3D_MAX_CACHE_SIZE.
+Environment variable RASTER3D_MAX_CACHE_SIZE.
 
 <P>
 void G3d_setCacheLimit(int nBytes)Set cache limit
@@ -450,16 +450,16 @@ int G3d_getCacheLimit(int nBytes)Get cache limit
 
 <P>
 This value specifies the number of tiles stored in the cache. It is the value
-used if at opening time of a map G3D_USE_CACHE_DEFAULT is used for the cache
+used if at opening time of a map RASTER3D_USE_CACHE_DEFAULT is used for the cache
 mode. Any other value used at opening time will supersede the default value. A
 default value of 0 indicates that non-cache mode should be used by default.
 
 <P>
-Default G3D_CACHE_SIZE_DEFAULT. This is currently set to 1000 and can be
+Default RASTER3D_CACHE_SIZE_DEFAULT. This is currently set to 1000 and can be
 changed at compilation time of the library.
 
 <P>
-Environment variable G3D_DEFAULT_CACHE_SIZE.
+Environment variable RASTER3D_DEFAULT_CACHE_SIZE.
 
 <P>
 void G3d_setCacheSize(int nTiles)
@@ -478,11 +478,11 @@ This value specifies whether compression should be used while writing a new
 map. It does not have any effect on old maps.
 
 <P>
-Default G3D_COMPRESSION_DEFAULT. This is set to G3D_COMPRESSION. This
+Default RASTER3D_COMPRESSION_DEFAULT. This is set to RASTER3D_COMPRESSION. This
 default should not be changed.
 
 <P>
-Environment variables G3D_USE_COMPRESSION and G3D_NO_COMPRESSION.
+Environment variables RASTER3D_USE_COMPRESSION and RASTER3D_NO_COMPRESSION.
 
 <P>
 See functions G3d_setCompressionMode() (cf. 
@@ -497,11 +497,11 @@ This value specifies whether RLE compression should be used (in addition to
 precision).
 
 <P>
-Default G3D_USE_RLE_DEFAULT. This is currently set to G3D_USE_RLE and can
+Default RASTER3D_USE_RLE_DEFAULT. This is currently set to RASTER3D_USE_RLE and can
 be changed at compilation time of the library.
 
 <P>
-Environment variables G3D_USE_RLE and G3D_NO_RLE.
+Environment variables RASTER3D_USE_RLE and RASTER3D_NO_RLE.
 
 <P>
 See functions G3d_setCompressionMode() (cf. 
@@ -511,21 +511,21 @@ Section 22.3.2.3) and G3d_getCompressionMode() (cf. Section 22.3.2.3).
 
 <P>
 This number specifies how many mantissa bits should be used when writing a cell
-value. The minimum value is 0. The maximum value is 23 or G3D_MAX_PRECISION
-for type FCELL_TYPE, it is 52 or G3D_MAX_PRECISION for type DCELL_TYPE.
+value. The minimum value is 0. The maximum value is 23 or RASTER3D_MAX_PRECISION
+for type FCELL_TYPE, it is 52 or RASTER3D_MAX_PRECISION for type DCELL_TYPE.
 
 <P>
-Default G3D_PRECISION_DEFAULT. This is set to G3D_MAX_PRECISION. This
+Default RASTER3D_PRECISION_DEFAULT. This is set to RASTER3D_MAX_PRECISION. This
 default should not be changed.
 
 <P>
-Environment variables G3D_PRECISION and G3D_MAX_PRECISION.
+Environment variables RASTER3D_PRECISION and RASTER3D_MAX_PRECISION.
 
 <P>
 void G3d_setCompressionMode(int doCompress, int doLzw, int doRle, int
-  precision) <EM>doCompress</EM> should be one of G3D_NO_COMPRESSION and
-  G3D_COMPRESSION, <EM>doRle</EM> should be either G3D_NO_RLE or
-  G3D_USE_RLE, and <EM>precision</EM> should be either G3D_MAX_PRECISION or
+  precision) <EM>doCompress</EM> should be one of RASTER3D_NO_COMPRESSION and
+  RASTER3D_COMPRESSION, <EM>doRle</EM> should be either RASTER3D_NO_RLE or
+  RASTER3D_USE_RLE, and <EM>precision</EM> should be either RASTER3D_MAX_PRECISION or
   a positive integer.
 
 <P>
@@ -542,13 +542,13 @@ void G3d_getCompressionMode(int *doCompress, int *doLzw, int *doRle,
 The dimensions are specified in number of cell.
 
 <P>
-Defaults G3D_TILE_X_DEFAULT, G3D_TILE_Y_DEFAULT, and
-G3D_TILE_Z_DEFAULT. These are currently set to 8 and can be changed at
+Defaults RASTER3D_TILE_X_DEFAULT, RASTER3D_TILE_Y_DEFAULT, and
+RASTER3D_TILE_Z_DEFAULT. These are currently set to 8 and can be changed at
 compilation time of the library.
 
 <P>
-Environment variables G3D_TILE_DIMENSION_X, G3D_TILE_DIMENSION_Y, and
-G3D_TILE_DIMENSION_Z.
+Environment variables RASTER3D_TILE_DIMENSION_X, RASTER3D_TILE_DIMENSION_Y, and
+RASTER3D_TILE_DIMENSION_Z.
 
 <P>
 void G3d_setTileDimension(int tileX, int tileY, int tileZ)
@@ -565,11 +565,11 @@ Specifies which type is used to write cell-values on file. This type can be
 chosen independently of the type used to store cell-values in memory.
 
 <P>
-Default G3D_FILE_TYPE_DEFAULT. This is set to DCELL_TYPE. This default
+Default RASTER3D_FILE_TYPE_DEFAULT. This is set to DCELL_TYPE. This default
 should not be changed.
 
 <P>
-Environment variables G3D_WRITE_FLOAT and G3D_WRITE_DOUBLE.
+Environment variables RASTER3D_WRITE_FLOAT and RASTER3D_WRITE_DOUBLE.
 
 <P>
 void G3d_setFileType(int type)
@@ -598,7 +598,7 @@ specify the default window name in the (current)
 mapset but rather a window file in the window database of the (current) mapset.
 
 <P>
-Environment variable G3D_DEFAULT_WINDOW3D.
+Environment variable RASTER3D_DEFAULT_WINDOW3D.
 
 <P>
 See functions 
@@ -641,7 +641,7 @@ return value.
 Default <TT>G3d_skipError</TT>.
 
 <P>
-Environment variables G3D_USE_FATAL_ERROR and G3D_USE_PRINT_ERROR.
+Environment variables RASTER3D_USE_FATAL_ERROR and RASTER3D_USE_PRINT_ERROR.
 
 <P>
 void G3d_setErrorFun(void (*fun)(char *))
@@ -664,25 +664,25 @@ void G3d_fatalError(char (*msg)(char *)) This function prints the
 
 <P>
 
-\section G3D_Function_Index G3D Function Index
+\section RASTER3D_Function_Index RASTER3D Function Index
 
-\subsection Opening_and_Closing_G3D_Files Opening and Closing G3D Files
+\subsection Opening_and_Closing_RASTER3D_Files Opening and Closing RASTER3D Files
 
 <P>
-void  *G3d_openCellOld(char *name, char *mapset, G3D_Region *window,
+void  *G3d_openCellOld(char *name, char *mapset, RASTER3D_Region *window,
   int type, int cache)Opens existing g3d-file <EM>name</EM> in <EM>mapset</EM>.
 
 <P>
 Tiles are stored in memory with <EM>type</EM> which must be any of FCELL_TYPE,
-  DCELL_TYPE, or G3D_TILE_SAME_AS_FILE. <EM>cache</EM> specifies the
-  cache-mode used and must be either G3D_NO_CACHE, G3D_USE_CACHE_DEFAULT,
-  G3D_USE_CACHE_X, G3D_USE_CACHE_Y, G3D_USE_CACHE_Z,
-  G3D_USE_CACHE_XY, G3D_USE_CACHE_XZ, G3D_USE_CACHE_YZ,
-  G3D_USE_CACHE_XYZ, the result of <TT>G3d_cacheSizeEncode()</TT> (cf. 
+  DCELL_TYPE, or RASTER3D_TILE_SAME_AS_FILE. <EM>cache</EM> specifies the
+  cache-mode used and must be either RASTER3D_NO_CACHE, RASTER3D_USE_CACHE_DEFAULT,
+  RASTER3D_USE_CACHE_X, RASTER3D_USE_CACHE_Y, RASTER3D_USE_CACHE_Z,
+  RASTER3D_USE_CACHE_XY, RASTER3D_USE_CACHE_XZ, RASTER3D_USE_CACHE_YZ,
+  RASTER3D_USE_CACHE_XYZ, the result of <TT>G3d_cacheSizeEncode()</TT> (cf. 
   Section 22.4.6), or any positive integer which
   specifies the number of tiles buffered in the cache.  <EM>window</EM> sets the
   window-region for the map. It is either a pointer to a window structure or
-  G3D_DEFAULT_WINDOW, which uses the window stored at initialization time or
+  RASTER3D_DEFAULT_WINDOW, which uses the window stored at initialization time or
   set via <TT>G3d_setWindow()</TT> (cf. Section 22.4.16).
   To modify the window for the map after it has already been opened use
   <TT>G3d_setWindowMap()</TT> (cf. Section 22.4.16).
@@ -692,14 +692,14 @@ Returns a pointer to the cell structure ... if successful, NULL ...
   otherwise.
 
 <P>
-void  *G3d_openCellNew(char *name, int type, int cache, G3D_Region
+void  *G3d_openCellNew(char *name, int type, int cache, RASTER3D_Region
   *region)Opens new g3d-file with <EM>name</EM> in the current mapset. Tiles
   are stored in memory with <EM>type</EM> which must be one of FCELL_TYPE,
-  DCELL_TYPE, or G3D_TILE_SAME_AS_FILE. <EM>cache</EM> specifies the
-  cache-mode used and must be either G3D_NO_CACHE, G3D_USE_CACHE_DEFAULT,
-  G3D_USE_CACHE_X, G3D_USE_CACHE_Y, G3D_USE_CACHE_Z,
-  G3D_USE_CACHE_XY, G3D_USE_CACHE_XZ, G3D_USE_CACHE_YZ,
-  G3D_USE_CACHE_XYZ, the result of <TT>G3d_cacheSizeEncode()</TT> (cf. 
+  DCELL_TYPE, or RASTER3D_TILE_SAME_AS_FILE. <EM>cache</EM> specifies the
+  cache-mode used and must be either RASTER3D_NO_CACHE, RASTER3D_USE_CACHE_DEFAULT,
+  RASTER3D_USE_CACHE_X, RASTER3D_USE_CACHE_Y, RASTER3D_USE_CACHE_Z,
+  RASTER3D_USE_CACHE_XY, RASTER3D_USE_CACHE_XZ, RASTER3D_USE_CACHE_YZ,
+  RASTER3D_USE_CACHE_XYZ, the result of <TT>G3d_cacheSizeEncode()</TT> (cf. 
   Section 22.4.6), or any positive integer which
   specifies the number of tiles buffered in the cache.  <EM>region</EM> specifies
   the 3d region.  
@@ -710,14 +710,14 @@ Returns a pointer to the cell structure ... if successful,
 
 <P>
 void  *G3d_openCellNewParam(char *name, int typeIntern, int cache,
-  G3D_Region *region, int type, int doLzw, int doRle, int precision, int tileX,
+  RASTER3D_Region *region, int type, int doLzw, int doRle, int precision, int tileX,
   int tileY, int tileZ)Opens new g3d-file with <EM>name</EM> in the current
   mapset. Tiles are stored in memory with <EM>typeIntern</EM> which must be one of
-  FCELL_TYPE, DCELL_TYPE, or G3D_TILE_SAME_AS_FILE. <EM>cache</EM> specifies
-  the cache-mode used and must be either G3D_NO_CACHE,
-  G3D_USE_CACHE_DEFAULT, G3D_USE_CACHE_X, G3D_USE_CACHE_Y,
-  G3D_USE_CACHE_Z, G3D_USE_CACHE_XY, G3D_USE_CACHE_XZ,
-  G3D_USE_CACHE_YZ, G3D_USE_CACHE_XYZ, the result of
+  FCELL_TYPE, DCELL_TYPE, or RASTER3D_TILE_SAME_AS_FILE. <EM>cache</EM> specifies
+  the cache-mode used and must be either RASTER3D_NO_CACHE,
+  RASTER3D_USE_CACHE_DEFAULT, RASTER3D_USE_CACHE_X, RASTER3D_USE_CACHE_Y,
+  RASTER3D_USE_CACHE_Z, RASTER3D_USE_CACHE_XY, RASTER3D_USE_CACHE_XZ,
+  RASTER3D_USE_CACHE_YZ, RASTER3D_USE_CACHE_XYZ, the result of
   <TT>G3d_cacheSizeEncode()</TT> (cf. 
   Section 22.4.6), or any positive integer which
   specifies the number of tiles buffered in the cache.  <EM>region</EM> specifies
@@ -1046,9 +1046,9 @@ void G3d_minUnlocked(void *map, int minUnlocked) Sets the minimum
   new minimum is larger than the actual number of unlocked tiles.
 
 <P>
-<EM>minUnlocked</EM> must be one of G3D_USE_CACHE_X, G3D_USE_CACHE_Y,
-  G3D_USE_CACHE_Z, G3D_USE_CACHE_XY, G3D_USE_CACHE_XZ,
-  G3D_USE_CACHE_YZ, G3D_USE_CACHE_XYZ, the result of G3d_cacheSizeEncode()
+<EM>minUnlocked</EM> must be one of RASTER3D_USE_CACHE_X, RASTER3D_USE_CACHE_Y,
+  RASTER3D_USE_CACHE_Z, RASTER3D_USE_CACHE_XY, RASTER3D_USE_CACHE_XZ,
+  RASTER3D_USE_CACHE_YZ, RASTER3D_USE_CACHE_XYZ, the result of G3d_cacheSizeEncode()
   (cf. Section 22.4.6), or any positive integer
   which explicitly specifies the number of tiles.
 
@@ -1080,17 +1080,17 @@ If <EM>cacheCode</EM> is the size (in tiles) of the cache the function returns
   <EM>cacheCode * n</EM>.
 
 <P>
-If <EM>cacheCode</EM> is G3D_USE_CACHE_DEFAULT the function returns
-  G3D_USE_CACHE_DEFAULT.
+If <EM>cacheCode</EM> is RASTER3D_USE_CACHE_DEFAULT the function returns
+  RASTER3D_USE_CACHE_DEFAULT.
 
 <P>
-If <EM>cacheCode</EM> is G3D_USE_CACHE_??? the function returns a value
-  encoding G3D_USE_CACHE_??? and <EM>n</EM>. Here G3D_USE_CACHE_??? is one
-  of G3D_USE_CACHE_X, G3D_USE_CACHE_Y, G3D_USE_CACHE_Z,
-  G3D_USE_CACHE_XY, G3D_USE_CACHE_XZ, G3D_USE_CACHE_YZ, or
-  G3D_USE_CACHE_XYZ, where e.g.  G3D_USE_CACHE_X specifies that the cache
+If <EM>cacheCode</EM> is RASTER3D_USE_CACHE_??? the function returns a value
+  encoding RASTER3D_USE_CACHE_??? and <EM>n</EM>. Here RASTER3D_USE_CACHE_??? is one
+  of RASTER3D_USE_CACHE_X, RASTER3D_USE_CACHE_Y, RASTER3D_USE_CACHE_Z,
+  RASTER3D_USE_CACHE_XY, RASTER3D_USE_CACHE_XZ, RASTER3D_USE_CACHE_YZ, or
+  RASTER3D_USE_CACHE_XYZ, where e.g.  RASTER3D_USE_CACHE_X specifies that the cache
   should store as many tiles as there exist in one row along the x-axis of the
-  tile cube, and G3D_USE_CACHE_XY specifies that the cache should store as
+  tile cube, and RASTER3D_USE_CACHE_XY specifies that the cache should store as
   many tiles as there exist in one slice of the tile cube with constant Z
   coordinate.
 
@@ -1177,7 +1177,7 @@ Is equivalent to <TT>G3d_free (tiles);</TT>
 
 <P>
 
-\subsection G3D_Null_Value_Support G3D Null Value Support
+\subsection RASTER3D_Null_Value_Support RASTER3D Null Value Support
 
 <P>
 void G3d_isNullValueNum(void *n, int type)
@@ -1201,7 +1201,7 @@ Is equivalent to G3d_setNullTileType (map, tile, G3d_fileTypeMap (map)).
 
 <P>
 
-\subsection G3D_Map_Header_Information G3D Map Header Information
+\subsection RASTER3D_Map_Header_Information RASTER3D Map Header Information
 
 <P>
 void G3d_getCoordsMap(void *map, int *rows, int *cols, int *depths)
@@ -1212,7 +1212,7 @@ void G3d_getRegionMap(void *map, int *north, int *south, int *east,
   int *west, int *top, int *bottom)Returns the size of the region.
 
 <P>
-void G3d_getRegionStructMap(void *map, G3D_Region *region)
+void G3d_getRegionStructMap(void *map, RASTER3D_Region *region)
 Returns in <EM>region</EM> the region of <EM>map</EM>.
 
 <P>
@@ -1246,7 +1246,7 @@ Prints the header information of <EM>map</EM>.
 
 <P>
 
-\subsection G3D_Tile_Math G3D Tile Math
+\subsection RASTER3D_Tile_Math RASTER3D Tile Math
 
 <P>
 void G3d_tileIndex2tile(void *map, int tileIndex, int *xTile, int
@@ -1317,10 +1317,10 @@ int G3d_computeClippedTileDimensions(void *map, int tileIndex, int
 
 <P>
 
-\subsection G3D_Range_Support G3D Range Support
+\subsection RASTER3D_Range_Support RASTER3D Range Support
 
 <P>
-The map structure of G3D provides storage for the range.  The range of a map is
+The map structure of RASTER3D provides storage for the range.  The range of a map is
 updated every time a cell is written to the file. When an old map is opened the
 range is not automatically loaded. The application has to invoke
 <TT>G3d_range_load()</TT> (cf. Section 22.4.12)
@@ -1354,7 +1354,7 @@ Returns
 
 <P>
 
-\subsection G3D_Color_Support G3D Color Support
+\subsection RASTER3D_Color_Support RASTER3D Color Support
 
 <P>
 Applications can use the standard grass functions to work with colors, except
@@ -1383,7 +1383,7 @@ int G3d_writeColors(char *name, char *mapset, struct Colors
 
 <P>
 
-\subsection G3D_Categories_Support G3D Categories Support
+\subsection RASTER3D_Categories_Support RASTER3D Categories Support
 
 <P>
 Applications can use the standard grass functions to work with categories, 
@@ -1404,7 +1404,7 @@ int G3d_writeCats(char *name, struct Categories *cats) Writes the
 <P>
 
 
-\subsection G3D_History_Support G3D History Support
+\subsection RASTER3D_History_Support RASTER3D History Support
 
 <P>
 Applications can use the standard grass functions to work with histories, 
@@ -1425,7 +1425,7 @@ int G3d_writeHistory(char *name, struct History *hist)
 
 <P>
 
-\subsection G3D_Mask_Support G3D Mask Support
+\subsection RASTER3D_Mask_Support RASTER3D Mask Support
 
 <P>
 void G3d_maskOn(void *map) Turns on the mask for <EM>map</EM>. Do
@@ -1504,20 +1504,20 @@ cells of the tile and not on the status of the mask for <EM>map</EM>
 
 <P>
 
-\subsection G3D_Window_Support G3D Window Support
+\subsection RASTER3D_Window_Support RASTER3D Window Support
 
 <P>
-void G3d_setWindowMap(void *map, G3D_Region *window)
+void G3d_setWindowMap(void *map, RASTER3D_Region *window)
 Sets the window for <EM>map</EM> to <EM>window</EM>.
 Can be used multiple times for the same map.
 
 <P>
-void G3d_setWindow(G3D_Region *window)
+void G3d_setWindow(RASTER3D_Region *window)
 Sets the default window used for every map opened later in the program.
 Can be used multiple times in the same program.
 
 <P>
-void G3d_getWindow(G3D_Region *window)
+void G3d_getWindow(RASTER3D_Region *window)
 Stores the current default window in <EM>window</EM>.
 
 <P>
@@ -1527,7 +1527,7 @@ Returns a pointer to the current default window. This pointer should not be
 provided to pass a window pointer when opening a map.
 
 <P>
-int G3d_readWindow(G3D_Region *window, char *windowName) Reads
+int G3d_readWindow(RASTER3D_Region *window, char *windowName) Reads
   <EM>window</EM> from the file specified by <EM>windowName</EM>. The name is
   converted by the rules defined in window defaults. A NULL pointer indicates
   the <EM>WIND3</EM> file in the current mapset.
@@ -1538,7 +1538,7 @@ Returns
         0 ... otherwise.
 
 <P>
-int G3d_writeWindow(G3D_Region *window, char *windowName)
+int G3d_writeWindow(RASTER3D_Region *window, char *windowName)
         Writes <EM>window</EM> to the file specified by <EM>windowName</EM>. The name
         is converted by the rules defined in window defaults. A NULL pointer
         indicates the <EM>WIND3</EM> file in the current mapset.
@@ -1586,29 +1586,29 @@ void G3d_getNearestNeighborFunPtr(void (**nnFunPtr)()) Returns
 
 <P>
 
-\subsection G3D_Region G3D Region
+\subsection RASTER3D_Region RASTER3D Region
 
 <P>
-void G3d_extract2dRegion(G3D_Region *region3d, struct Cell_head
+void G3d_extract2dRegion(RASTER3D_Region *region3d, struct Cell_head
   *region2d) Returns in <EM>region2d</EM> the <EM>2d</EM> portion of <EM>region3d</EM>.
 
 <P>
-void G3d_incorporate2dRegion(struct Cell_head *region2d, G3D_Region
+void G3d_incorporate2dRegion(struct Cell_head *region2d, RASTER3D_Region
   *region3d) Replaces the <EM>2d</EM> portion of <EM>region3d</EM> with the
   values stored in <EM>region2d</EM>.
 
 <P>
-void G3d_adjustRegion(G3D_Region *region)
+void G3d_adjustRegion(RASTER3D_Region *region)
 Computes an adjusts the resolutions in the region structure from the region
 boundaries and number of cells per dimension.
 
 <P>
-void G3d_adjustRegionRes(G3D_Region *region)
+void G3d_adjustRegionRes(RASTER3D_Region *region)
 Computes an adjusts the number of cells per dimension in the region
 structure from the region boundaries and resolutions.
 
 <P>
-void G3d_regionCopy(G3D_Region *regionDest, G3D_Region *regionSrc)
+void G3d_regionCopy(RASTER3D_Region *regionDest, RASTER3D_Region *regionSrc)
 Copies the values of <EM>regionSrc</EM> into <EM>regionDst</EM>.
 (The unfortunate order of parameters was chosen in order to conform to the
 order used in <EM>G_copy()</EM>).
@@ -1621,7 +1621,7 @@ void G3d_getRegionValue(void *map, double north, double east, double
   <EM>value</EM> is of <EM>type</EM>.
 
 <P>
-void G3d_readRegionMap(char *name, char *mapset, G3D_Region *region)
+void G3d_readRegionMap(char *name, char *mapset, RASTER3D_Region *region)
 Returns in <EM>region</EM> the region information for 3d cell <EM>name@mapset</EM>.
 
 <P>
@@ -1630,11 +1630,11 @@ Returns in <EM>region</EM> the region information for 3d cell <EM>name@mapset</E
 
 <P>
 void G3d_g3dType2cellType(int g3dType) Returns the GRASS floating
-  point type which is equivalent to the G3D type of <EM>g3dType</EM>.
+  point type which is equivalent to the RASTER3D type of <EM>g3dType</EM>.
 
 <P>
 void G3d_initDefaults() Initializes the default values described
-  in G3D Defaults.  Applications have to use this function only if they need to
+  in RASTER3D Defaults.  Applications have to use this function only if they need to
   query the default values before the first file (either old or new) has been
   opened.
 
@@ -1647,7 +1647,7 @@ void G3d_setStandard3dInputParams()
   command line arguments provided are the <EM>type</EM> of the cell values, the
   <EM>precision</EM>, the properties of the <EM>compression</EM>, and the dimension
   of the tiles (<EM>tiledimension</EM>). Every of these values defaults to the
-  value described in G3D Defaults.
+  value described in RASTER3D Defaults.
 
 <P>
 This function has to be used in conjunction with
@@ -1691,7 +1691,7 @@ routines (reading, writing grid3d timestamps).
 
 <P>
 
-\section Sample_G3D_Applications Sample G3D Applications
+\section Sample_RASTER3D_Applications Sample RASTER3D Applications
 
 <P>
 These functions were implemented to test the library. They are not very

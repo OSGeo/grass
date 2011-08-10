@@ -19,7 +19,7 @@
  *  \return void
  */
 
-void G3d_getValue(G3D_Map * map, int x, int y, int z, void *value, int type)
+void G3d_getValue(RASTER3D_Map * map, int x, int y, int z, void *value, int type)
 {
     /* get the resampled value */
     map->resampleFun(map, x, y, z, value, type);
@@ -40,7 +40,7 @@ void G3d_getValue(G3D_Map * map, int x, int y, int z, void *value, int type)
  *  \return float
  */
 
-float G3d_getFloat(G3D_Map * map, int x, int y, int z)
+float G3d_getFloat(RASTER3D_Map * map, int x, int y, int z)
 {
     float value;
 
@@ -63,7 +63,7 @@ float G3d_getFloat(G3D_Map * map, int x, int y, int z)
  *  \return double
  */
 
-double G3d_getDouble(G3D_Map * map, int x, int y, int z)
+double G3d_getDouble(RASTER3D_Map * map, int x, int y, int z)
 {
     double value;
 
@@ -91,7 +91,7 @@ double G3d_getDouble(G3D_Map * map, int x, int y, int z)
  */
 
 void
-G3d_getWindowValue(G3D_Map * map, double north, double east, double top,
+G3d_getWindowValue(RASTER3D_Map * map, double north, double east, double top,
 		   void *value, int type)
 {
     int col, row, depth;
@@ -128,7 +128,7 @@ G3d_getWindowValue(G3D_Map * map, double north, double east, double top,
  */
 
 void
-G3d_getRegionValue(G3D_Map * map, double north, double east, double top,
+G3d_getRegionValue(RASTER3D_Map * map, double north, double east, double top,
 		   void *value, int type)
 {
     int row, col, depth;
@@ -162,7 +162,7 @@ G3d_getRegionValue(G3D_Map * map, double north, double east, double top,
  *  \return float
  */
 
-float G3d_getFloatRegion(G3D_Map * map, int x, int y, int z)
+float G3d_getFloatRegion(RASTER3D_Map * map, int x, int y, int z)
 {
     int tileIndex, offs;
     float *tile;
@@ -195,7 +195,7 @@ float G3d_getFloatRegion(G3D_Map * map, int x, int y, int z)
  *  \return double
  */
 
-double G3d_getDoubleRegion(G3D_Map * map, int x, int y, int z)
+double G3d_getDoubleRegion(RASTER3D_Map * map, int x, int y, int z)
 {
     int tileIndex, offs;
     double *tile;
@@ -234,7 +234,7 @@ double G3d_getDoubleRegion(G3D_Map * map, int x, int y, int z)
  */
 
 void
-G3d_getValueRegion(G3D_Map * map, int x, int y, int z, void *value, int type)
+G3d_getValueRegion(RASTER3D_Map * map, int x, int y, int z, void *value, int type)
 {
     if (type == FCELL_TYPE) {
 	*((float *)value) = G3d_getFloatRegion(map, x, y, z);

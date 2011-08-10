@@ -547,8 +547,8 @@ N_geom_data *#N_alloc_geom_data (void);
 Releasing memory<br>
 void #N_free_geom_data (N_geom_data *geodata);
 <p>
-Initialize the N_geom_data structure with a G3D_Region<br>
-N_geom_data *#N_init_geom_data_3d(G3D_Region * region3d, N_geom_data * geodata);
+Initialize the N_geom_data structure with a RASTER3D_Region<br>
+N_geom_data *#N_init_geom_data_3d(RASTER3D_Region * region3d, N_geom_data * geodata);
 <p>
 Initialize the N_geom_data structure with a 2d region<br>
 N_geom_data *#N_init_geom_data_2d(struct Cell_head * region, N_geom_data * geodata);

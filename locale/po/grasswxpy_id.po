@@ -4861,7 +4861,7 @@ msgstr "Interpolasi volume dari titik"
 
 #: ../gui/wxpython/menustrings.py:803
 msgid ""
-"Interpolates point data to a G3D grid volume using regularized spline with "
+"Interpolates point data to a RASTER3D grid volume using regularized spline with "
 "tension (RST) algorithm."
 msgstr ""
 "Interpolasi data titik dari sebuah volume grid 3D dengan algoritma "

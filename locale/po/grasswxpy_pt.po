@@ -5072,9 +5072,9 @@ msgstr "Interpolar volumes a partir de pontos"
 #: ../gui/wxpython/menustrings.py:803
 #, fuzzy
 msgid ""
-"Interpolates point data to a G3D grid volume using regularized spline with "
+"Interpolates point data to a RASTER3D grid volume using regularized spline with "
 "tension (RST) algorithm."
-msgstr "Interpola datos de puntos a volumen de cuadrícula G3D usando"
+msgstr "Interpola datos de puntos a volumen de cuadrícula RASTER3D usando"
 
 #: ../gui/wxpython/menustrings.py:804
 msgid "Report and Statistics"

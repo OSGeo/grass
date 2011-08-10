@@ -4561,10 +4561,10 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:803
 msgid ""
-"Interpolates point data to a G3D grid volume using regularized spline with "
+"Interpolates point data to a RASTER3D grid volume using regularized spline with "
 "tension (RST) algorithm."
 msgstr ""
-"ข้อมูลจุดไม่เหมาะสม กับค่า G3D กริด ใช้ regularized spline กับ tension (RST) "
+"ข้อมูลจุดไม่เหมาะสม กับค่า RASTER3D กริด ใช้ regularized spline กับ tension (RST) "
 "algorithm."
 
 #: ../gui/wxpython/menustrings.py:804

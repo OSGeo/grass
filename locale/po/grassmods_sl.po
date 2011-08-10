@@ -10090,7 +10090,7 @@ msgstr "Pripajam kategorije...\n"
 
 #: ../vector/v.vol.rst/main.c:245
 msgid ""
-"Interpolates point data to a G3D grid volume using regularized spline with "
+"Interpolates point data to a RASTER3D grid volume using regularized spline with "
 "tension (RST) algorithm."
 msgstr ""
 
@@ -29078,7 +29078,7 @@ msgid "The maximum tile size in kilo bytes. Default is 32KB."
 msgstr ""
 
 #: ../raster/r.to.rast3/main.c:93
-msgid "Use G3D mask (if exists) with output map"
+msgid "Use RASTER3D mask (if exists) with output map"
 msgstr ""
 
 #: ../raster/r.to.rast3/main.c:201
@@ -30648,12 +30648,12 @@ msgstr ""
 
 #: ../raster/r.to.rast3elev/main.c:194 ../raster3d/r3.out.ascii/main.c:124
 #: ../raster3d/r3.to.rast/main.c:91
-msgid "Use G3D mask (if exists) with input map"
+msgid "Use RASTER3D mask (if exists) with input map"
 msgstr ""
 
 #: ../raster/r.to.rast3elev/main.c:287 ../raster/r.to.rast3elev/main.c:320
 #, fuzzy
-msgid "Error writing G3D double data"
+msgid "Error writing RASTER3D double data"
 msgstr "Ne najdem vhodne datoteke %s\n"
 
 #: ../raster/r.to.rast3elev/main.c:363 ../raster3d/r3.gwflow/main.c:160
@@ -33134,7 +33134,7 @@ msgid ""
 msgstr ""
 
 #: ../raster3d/r3.gwflow/main.c:127
-msgid "Use G3D mask (if exists)"
+msgid "Use RASTER3D mask (if exists)"
 msgstr ""
 
 #: ../raster3d/r3.gwflow/main.c:162
@@ -33188,7 +33188,7 @@ msgid "retile"
 msgstr ""
 
 #: ../raster3d/r3.retile/main.c:104
-msgid "Retiles an existing G3D map with user defined x, y and z tile size"
+msgid "Retiles an existing RASTER3D map with user defined x, y and z tile size"
 msgstr ""
 
 #: ../raster3d/r3.retile/main.c:113 ../raster3d/r3.to.rast/main.c:218
@@ -33323,7 +33323,7 @@ msgstr "ne najdem regije <%s>"
 
 #: ../raster3d/r3.cross.rast/main.c:55
 #, fuzzy
-msgid "Could not close G3D map"
+msgid "Could not close RASTER3D map"
 msgstr "Ne morem najti vhodne datoteke <%s>\n"
 
 #: ../raster3d/r3.cross.rast/main.c:90
@@ -33366,12 +33366,12 @@ msgstr ""
 
 #: ../raster3d/r3.cross.rast/main.c:337
 #, fuzzy
-msgid "Wrong G3D Datatype! Cannot create raster map."
+msgid "Wrong RASTER3D Datatype! Cannot create raster map."
 msgstr "Tip zapisa izhodnega rastrskega sloja"
 
 #: ../raster3d/r3.cross.rast/main.c:342
 #, fuzzy, c-format
-msgid "Could not close G3D map <%s>"
+msgid "Could not close RASTER3D map <%s>"
 msgstr "Ne morem najti vhodne datoteke <%s>\n"
 
 #: ../raster3d/r3.mkdspf/main.c:82
@@ -33520,7 +33520,7 @@ msgid "List of cell values to be masked out"
 msgstr ""
 
 #: ../raster3d/base/r3.mask.main.c:158
-msgid "Cannot create mask file: G3D_MASK already exists"
+msgid "Cannot create mask file: RASTER3D_MASK already exists"
 msgstr ""
 
 #: ../raster3d/r3.out.vtk/writeVTKHead.c:40
@@ -33536,7 +33536,7 @@ msgid "write_vtk_unstructured_grid_header: Writing VTKUnstructuredGrid-Header"
 msgstr ""
 
 #: ../raster3d/r3.out.vtk/parameters.c:30
-msgid "G3D map(s) to be converted to VTK-ASCII data format"
+msgid "RASTER3D map(s) to be converted to VTK-ASCII data format"
 msgstr ""
 
 #: ../raster3d/r3.out.vtk/parameters.c:41
@@ -33711,7 +33711,7 @@ msgstr "Ime izhodnega rastrskega sloja"
 
 #: ../raster3d/r3.to.rast/main.c:96
 msgid ""
-"Use the same resolution as the input G3D map for the 2d output maps, "
+"Use the same resolution as the input RASTER3D map for the 2d output maps, "
 "independent of the current region settings"
 msgstr ""
 
@@ -35078,7 +35078,7 @@ msgstr ""
 #~ msgstr "ne morem odpreti <%s>"
 
 #, fuzzy
-#~ msgid "Converts 3D raster maps (G3D) into the VTK-Ascii format"
+#~ msgid "Converts 3D raster maps (RASTER3D) into the VTK-Ascii format"
 #~ msgstr "Preoblikuje rastrski sloj v vektorskega."
 
 #, fuzzy

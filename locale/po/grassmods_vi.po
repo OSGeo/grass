@@ -10111,10 +10111,10 @@ msgstr "Đang gắn các trọng tâm..."
 
 #: ../vector/v.vol.rst/main.c:245
 msgid ""
-"Interpolates point data to a G3D grid volume using regularized spline with "
+"Interpolates point data to a RASTER3D grid volume using regularized spline with "
 "tension (RST) algorithm."
 msgstr ""
-"Nội suy dữ liệu điểm thành thể tích lưới G3D bằng cách dùng thuật toán đường "
+"Nội suy dữ liệu điểm thành thể tích lưới RASTER3D bằng cách dùng thuật toán đường "
 "spline chính tắc có sức căng (RST)."
 
 #: ../vector/v.vol.rst/main.c:253
@@ -25294,7 +25294,7 @@ msgstr "Bật báo cáo bộ nhớ đệm (cache)"
 #: ../raster/r.what/main.c:196
 #, fuzzy, c-format
 msgid "can only do up to %d raster maps"
-msgstr "Tên của tập tin lưới G3D đầu ra"
+msgstr "Tên của tập tin lưới RASTER3D đầu ra"
 
 #: ../raster/r.what/main.c:212
 #, fuzzy, c-format
@@ -29238,8 +29238,8 @@ msgid "The maximum tile size in kilo bytes. Default is 32KB."
 msgstr ""
 
 #: ../raster/r.to.rast3/main.c:93
-msgid "Use G3D mask (if exists) with output map"
-msgstr "Dùng mặt nạ G3D (nếu có) với bản đồ đầu ra"
+msgid "Use RASTER3D mask (if exists) with output map"
+msgstr "Dùng mặt nạ RASTER3D (nếu có) với bản đồ đầu ra"
 
 #: ../raster/r.to.rast3/main.c:201
 msgid "Converts 2D raster map slices to one 3D raster volume map."
@@ -29283,7 +29283,7 @@ msgstr "Lỗi đóng bản đồ raster 3d"
 #: ../raster/r.out.vtk/parameters.c:34
 #, fuzzy
 msgid "Raster map(s) to be converted to VTK-ASCII data format"
-msgstr "Bản đồ G3D cần được đổi thành định dạng dữ liệu VTK-ASCII"
+msgstr "Bản đồ RASTER3D cần được đổi thành định dạng dữ liệu VTK-ASCII"
 
 #: ../raster/r.out.vtk/parameters.c:41 ../raster3d/r3.out.vtk/parameters.c:34
 msgid "Name for VTK-ASCII output file"
@@ -30805,12 +30805,12 @@ msgstr "Dùng các giá trị bản đồ đầu vào để lấp đầy các ô
 
 #: ../raster/r.to.rast3elev/main.c:194 ../raster3d/r3.out.ascii/main.c:124
 #: ../raster3d/r3.to.rast/main.c:91
-msgid "Use G3D mask (if exists) with input map"
-msgstr "Dùng mặt nạ G3D (nếu có) với bản đồ đầu vào"
+msgid "Use RASTER3D mask (if exists) with input map"
+msgstr "Dùng mặt nạ RASTER3D (nếu có) với bản đồ đầu vào"
 
 #: ../raster/r.to.rast3elev/main.c:287 ../raster/r.to.rast3elev/main.c:320
-msgid "Error writing G3D double data"
-msgstr "Lỗi khi đang ghi dữ liệu G3D kiểu double"
+msgid "Error writing RASTER3D double data"
+msgstr "Lỗi khi đang ghi dữ liệu RASTER3D kiểu double"
 
 #: ../raster/r.to.rast3elev/main.c:363 ../raster3d/r3.gwflow/main.c:160
 #: ../raster3d/r3.in.v5d/main.c:195 ../raster3d/r3.retile/main.c:103
@@ -33245,8 +33245,8 @@ msgid ""
 msgstr ""
 
 #: ../raster3d/r3.gwflow/main.c:127
-msgid "Use G3D mask (if exists)"
-msgstr "Dùng mặt nạ G3D (nếu có)"
+msgid "Use RASTER3D mask (if exists)"
+msgstr "Dùng mặt nạ RASTER3D (nếu có)"
 
 #: ../raster3d/r3.gwflow/main.c:162
 #, fuzzy
@@ -33299,7 +33299,7 @@ msgid "retile"
 msgstr ""
 
 #: ../raster3d/r3.retile/main.c:104
-msgid "Retiles an existing G3D map with user defined x, y and z tile size"
+msgid "Retiles an existing RASTER3D map with user defined x, y and z tile size"
 msgstr ""
 
 #: ../raster3d/r3.retile/main.c:113 ../raster3d/r3.to.rast/main.c:218
@@ -33421,8 +33421,8 @@ msgid "Grid3 <%s> not found %s"
 msgstr "Grid3 <%s> không thấy %s"
 
 #: ../raster3d/r3.cross.rast/main.c:55
-msgid "Could not close G3D map"
-msgstr "Không thể đóng bản đồ G3D"
+msgid "Could not close RASTER3D map"
+msgstr "Không thể đóng bản đồ RASTER3D"
 
 #: ../raster3d/r3.cross.rast/main.c:90
 msgid "Input 3D raster map for cross section."
@@ -33460,13 +33460,13 @@ msgid "Output map already exists. Will be overwritten!"
 msgstr "Bản đồ đầu ra đã có. Sẽ bị ghi đè!"
 
 #: ../raster3d/r3.cross.rast/main.c:337
-msgid "Wrong G3D Datatype! Cannot create raster map."
-msgstr "Kiểu dữ liệu G3D bị sai! Không thể tạo bản đồ raster."
+msgid "Wrong RASTER3D Datatype! Cannot create raster map."
+msgstr "Kiểu dữ liệu RASTER3D bị sai! Không thể tạo bản đồ raster."
 
 #: ../raster3d/r3.cross.rast/main.c:342
 #, c-format
-msgid "Could not close G3D map <%s>"
-msgstr "Không thể đóng bản đồ G3D <%s>"
+msgid "Could not close RASTER3D map <%s>"
+msgstr "Không thể đóng bản đồ RASTER3D <%s>"
 
 #: ../raster3d/r3.mkdspf/main.c:82
 msgid ""
@@ -33611,10 +33611,10 @@ msgstr "Liệt kê các giá trị ô bị loại bỏ bởi mặt nạ"
 
 #: ../raster3d/base/r3.mask.main.c:158
 #, fuzzy
-msgid "Cannot create mask file: G3D_MASK already exists"
+msgid "Cannot create mask file: RASTER3D_MASK already exists"
 msgstr ""
-"Không thể tạo tập tin mặt nạ: G3D_MASK đã tồn tại!\n"
-" Dùng 'g.remove rast3d=G3D_MASK' để loại bỏ mặt nạ hiện có."
+"Không thể tạo tập tin mặt nạ: RASTER3D_MASK đã tồn tại!\n"
+" Dùng 'g.remove rast3d=RASTER3D_MASK' để loại bỏ mặt nạ hiện có."
 
 #: ../raster3d/r3.out.vtk/writeVTKHead.c:40
 msgid "write_vtk_structured_point_header: Writing VTKStructuredPoint-Header"
@@ -33630,8 +33630,8 @@ msgstr ""
 "write_vtk_unstructured_grid_header: Đang ghi VTKUnstructuredGrid-Header"
 
 #: ../raster3d/r3.out.vtk/parameters.c:30
-msgid "G3D map(s) to be converted to VTK-ASCII data format"
-msgstr "Bản đồ G3D cần được đổi thành định dạng dữ liệu VTK-ASCII"
+msgid "RASTER3D map(s) to be converted to VTK-ASCII data format"
+msgstr "Bản đồ RASTER3D cần được đổi thành định dạng dữ liệu VTK-ASCII"
 
 #: ../raster3d/r3.out.vtk/parameters.c:41
 msgid "Float value to represent no data cell/points"
@@ -33807,10 +33807,10 @@ msgstr "Tên gốc cho các bản đồ phiến raster tạo thành"
 
 #: ../raster3d/r3.to.rast/main.c:96
 msgid ""
-"Use the same resolution as the input G3D map for the 2d output maps, "
+"Use the same resolution as the input RASTER3D map for the 2d output maps, "
 "independent of the current region settings"
 msgstr ""
-"Dùng cùng độ phân giải với bản đồ G3D đầu vào cho các bản đồ 2D đầu ra, "
+"Dùng cùng độ phân giải với bản đồ RASTER3D đầu vào cho các bản đồ 2D đầu ra, "
 "không phụ thuộc vào thiết lập vùng hiện tại."
 
 #: ../raster3d/r3.to.rast/main.c:209

@@ -11,7 +11,7 @@
 
 void *G3d_openCellOldNoHeader(const char *name, const char *mapset)
 {
-    G3D_Map *map;
+    RASTER3D_Map *map;
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
     G3d_initDefaults();
@@ -21,7 +21,7 @@ void *G3d_openCellOldNoHeader(const char *name, const char *mapset)
 	return (void *)NULL;
     }
 
-    map = G3d_malloc(sizeof(G3D_Map));
+    map = G3d_malloc(sizeof(RASTER3D_Map));
     if (map == NULL) {
 	G3d_error(_("G3d_openCellOldNoHeader: error in G3d_malloc"));
 	return (void *)NULL;
@@ -32,7 +32,7 @@ void *G3d_openCellOldNoHeader(const char *name, const char *mapset)
     map->fileName = G_store(xname);
     map->mapset = G_store(xmapset);
 
-    map->data_fd = G_open_old_misc(G3D_DIRECTORY, G3D_CELL_ELEMENT, xname, xmapset);
+    map->data_fd = G_open_old_misc(RASTER3D_DIRECTORY, RASTER3D_CELL_ELEMENT, xname, xmapset);
     if (map->data_fd < 0) {
 	G3d_error(_("G3d_openCellOldNoHeader: error in G_open_old"));
 	return (void *)NULL;
@@ -52,14 +52,14 @@ void *G3d_openCellOldNoHeader(const char *name, const char *mapset)
  *
  * Opens existing g3d-file <em>name</em> in <em>mapset</em>.
  * Tiles are stored in memory with <em>type</em> which must be any of FCELL_TYPE,
- * DCELL_TYPE, or G3D_TILE_SAME_AS_FILE. <em>cache</em> specifies the
- * cache-mode used and must be either G3D_NO_CACHE, G3D_USE_CACHE_DEFAULT,
- * G3D_USE_CACHE_X, G3D_USE_CACHE_Y, G3D_USE_CACHE_Z,
- * G3D_USE_CACHE_XY, G3D_USE_CACHE_XZ, G3D_USE_CACHE_YZ,
- * G3D_USE_CACHE_XYZ, the result of <tt>G3d_cacheSizeEncode ()</tt> (cf.{g3d:G3d.cacheSizeEncode}), or any positive integer which
+ * DCELL_TYPE, or RASTER3D_TILE_SAME_AS_FILE. <em>cache</em> specifies the
+ * cache-mode used and must be either RASTER3D_NO_CACHE, RASTER3D_USE_CACHE_DEFAULT,
+ * RASTER3D_USE_CACHE_X, RASTER3D_USE_CACHE_Y, RASTER3D_USE_CACHE_Z,
+ * RASTER3D_USE_CACHE_XY, RASTER3D_USE_CACHE_XZ, RASTER3D_USE_CACHE_YZ,
+ * RASTER3D_USE_CACHE_XYZ, the result of <tt>G3d_cacheSizeEncode ()</tt> (cf.{g3d:G3d.cacheSizeEncode}), or any positive integer which
  * specifies the number of tiles buffered in the cache.  <em>window</em> sets the
  * window-region for the map. It is either a pointer to a window structure or
- * G3D_DEFAULT_WINDOW, which uses the window stored at initialization time or
+ * RASTER3D_DEFAULT_WINDOW, which uses the window stored at initialization time or
  * set via <tt>G3d_setWindow ()</tt> (cf.{g3d:G3d.setWindow}).
  * To modify the window for the map after it has already been opened use
  * <tt>G3d_setWindowMap ()</tt> (cf.{g3d:G3d.setWindowMap}).
@@ -75,9 +75,9 @@ void *G3d_openCellOldNoHeader(const char *name, const char *mapset)
  */
 
 void *G3d_openCellOld(const char *name, const char *mapset,
-		      G3D_Region * window, int typeIntern, int cache)
+		      RASTER3D_Region * window, int typeIntern, int cache)
 {
-    G3D_Map *map;
+    RASTER3D_Map *map;
     int proj, zone;
     int compression, useRle, useLzw, type, tileX, tileY, tileZ;
     int rows, cols, depths, precision;
@@ -109,7 +109,7 @@ void *G3d_openCellOld(const char *name, const char *mapset,
 	return 0;
     }
 
-    if (window == G3D_DEFAULT_WINDOW)
+    if (window == RASTER3D_DEFAULT_WINDOW)
 	window = G3d_windowPtr();
 
     if (proj != window->proj) {
@@ -124,7 +124,7 @@ void *G3d_openCellOld(const char *name, const char *mapset,
     map->useXdr = useXdr;
 
     if (hasIndex) {
-	/* see G3D_openCell_new () for format of header */
+	/* see RASTER3D_openCell_new () for format of header */
 	if ((!G3d_readInts(map->data_fd, map->useXdr,
 			   &(map->indexLongNbytes), 1)) ||
 	    (!G3d_readInts(map->data_fd, map->useXdr,
@@ -155,10 +155,10 @@ void *G3d_openCellOld(const char *name, const char *mapset,
 
     nofHeaderBytes = dataOffset;
 
-    if (typeIntern == G3D_TILE_SAME_AS_FILE)
+    if (typeIntern == RASTER3D_TILE_SAME_AS_FILE)
 	typeIntern = type;
 
-    if (!G3d_fillHeader(map, G3D_READ_DATA, compression, useRle, useLzw,
+    if (!G3d_fillHeader(map, RASTER3D_READ_DATA, compression, useRle, useLzw,
 			type, precision, cache,
 			hasIndex, map->useXdr, typeIntern,
 			nofHeaderBytes, tileX, tileY, tileZ,
@@ -184,11 +184,11 @@ void *G3d_openCellOld(const char *name, const char *mapset,
  *
  * Opens new g3d-file with <em>name</em> in the current mapset. Tiles
  * are stored in memory with <em>type</em> which must be one of FCELL_TYPE,
- * DCELL_TYPE, or G3D_TILE_SAME_AS_FILE. <em>cache</em> specifies the
- * cache-mode used and must be either G3D_NO_CACHE, G3D_USE_CACHE_DEFAULT,
- * G3D_USE_CACHE_X, G3D_USE_CACHE_Y, G3D_USE_CACHE_Z,
- * G3D_USE_CACHE_XY, G3D_USE_CACHE_XZ, G3D_USE_CACHE_YZ,
- * G3D_USE_CACHE_XYZ, the result of <tt>G3d_cacheSizeEncode ()</tt>
+ * DCELL_TYPE, or RASTER3D_TILE_SAME_AS_FILE. <em>cache</em> specifies the
+ * cache-mode used and must be either RASTER3D_NO_CACHE, RASTER3D_USE_CACHE_DEFAULT,
+ * RASTER3D_USE_CACHE_X, RASTER3D_USE_CACHE_Y, RASTER3D_USE_CACHE_Z,
+ * RASTER3D_USE_CACHE_XY, RASTER3D_USE_CACHE_XZ, RASTER3D_USE_CACHE_YZ,
+ * RASTER3D_USE_CACHE_XYZ, the result of <tt>G3d_cacheSizeEncode ()</tt>
  * (cf.{g3d:G3d.cacheSizeEncode}), or any positive integer which
  * specifies the number of tiles buffered in the cache.  <em>region</em> specifies
  * the 3d region.  
@@ -203,9 +203,9 @@ void *G3d_openCellOld(const char *name, const char *mapset,
  */
 
 void *G3d_openCellNew(const char *name, int typeIntern, int cache,
-		      G3D_Region * region)
+		      RASTER3D_Region * region)
 {
-    G3D_Map *map;
+    RASTER3D_Map *map;
     int nofHeaderBytes, dummy = 0, compression, precision;
     long ldummy = 0;
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
@@ -219,7 +219,7 @@ void *G3d_openCellNew(const char *name, int typeIntern, int cache,
     compression = g3d_do_compression;
     precision = g3d_precision;
 
-    map = G3d_malloc(sizeof(G3D_Map));
+    map = G3d_malloc(sizeof(RASTER3D_Map));
     if (map == NULL) {
 	G3d_error(_("G3d_openCellNew: error in G3d_malloc"));
 	return (void *)NULL;
@@ -242,7 +242,7 @@ void *G3d_openCellNew(const char *name, int typeIntern, int cache,
 
     G3d_makeMapsetMapDirectory(map->fileName);
 
-    map->useXdr = G3D_USE_XDR;
+    map->useXdr = RASTER3D_USE_XDR;
 
     if (g3d_file_type == FCELL_TYPE) {
 	if (precision > 23)
@@ -260,15 +260,15 @@ void *G3d_openCellNew(const char *name, int typeIntern, int cache,
 	if (precision == -1)
 	    precision = 23;
 	else
-	    precision = G3D_MIN(precision, 23);
+	    precision = RASTER3D_MIN(precision, 23);
     }
 
-    if (compression == G3D_NO_COMPRESSION)
-	precision = G3D_MAX_PRECISION;
-    if (compression == G3D_COMPRESSION)
-	map->useXdr = G3D_USE_XDR;
+    if (compression == RASTER3D_NO_COMPRESSION)
+	precision = RASTER3D_MAX_PRECISION;
+    if (compression == RASTER3D_COMPRESSION)
+	map->useXdr = RASTER3D_USE_XDR;
 
-    if (G3D_HAS_INDEX) {
+    if (RASTER3D_HAS_INDEX) {
 	map->indexLongNbytes = sizeof(long);
 
 	/* at the beginning of the file write */
@@ -297,9 +297,9 @@ void *G3d_openCellNew(const char *name, int typeIntern, int cache,
     G3d_range_init(map);
     G3d_adjustRegion(region);
 
-    if (!G3d_fillHeader(map, G3D_WRITE_DATA, compression,
+    if (!G3d_fillHeader(map, RASTER3D_WRITE_DATA, compression,
 			g3d_do_rle_compression, g3d_do_lzw_compression,
-			g3d_file_type, precision, cache, G3D_HAS_INDEX,
+			g3d_file_type, precision, cache, RASTER3D_HAS_INDEX,
 			map->useXdr, typeIntern, nofHeaderBytes,
 			g3d_tile_dimension[0], g3d_tile_dimension[1],
 			g3d_tile_dimension[2],

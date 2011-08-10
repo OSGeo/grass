@@ -26,7 +26,7 @@ void G3d_changeType(void *map, const char *nameOut)
     void *map2;
     int x, y, z, saveType;
     void *data, *data2;
-    G3D_Region region;
+    RASTER3D_Region region;
     int tileSize;
     int tileX, tileY, tileZ, typeIntern, typeIntern2;
     int tileXsave, tileYsave, tileZsave, nx, ny, nz;
@@ -40,7 +40,7 @@ void G3d_changeType(void *map, const char *nameOut)
 
     G3d_getRegionStructMap(map, &region);
     map2 =
-	G3d_openCellNew(nameOut, FCELL_TYPE, G3D_USE_CACHE_DEFAULT, &region);
+	G3d_openCellNew(nameOut, FCELL_TYPE, RASTER3D_USE_CACHE_DEFAULT, &region);
 
     if (map2 == NULL)
 	G3d_fatalError("G3d_changeType: error in G3d_openCellNew");

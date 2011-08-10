@@ -6,7 +6,7 @@
 * AUTHOR(S):    Original author 
 *               Soeren Gebbert soerengebbert at gmx de
 * 		27 Feb 2006 Berlin
-* PURPOSE:      Converts 3D raster maps (G3D) into the VTK-Ascii format  
+* PURPOSE:      Converts 3D raster maps (RASTER3D) into the VTK-Ascii format  
 *
 * COPYRIGHT:    (C) 2005 by the GRASS Development Team
 *
@@ -21,7 +21,7 @@
 
 typedef struct
 {
-    /*G3D maps */
+    /*RASTER3D maps */
     void *map;
     void *map_r;
     void *map_g;

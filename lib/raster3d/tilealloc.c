@@ -23,7 +23,7 @@
  *                   NULL ... otherwise.
  */
 
-void *G3d_allocTilesType(G3D_Map * map, int nofTiles, int type)
+void *G3d_allocTilesType(RASTER3D_Map * map, int nofTiles, int type)
 {
     void *tiles;
 
@@ -49,7 +49,7 @@ void *G3d_allocTilesType(G3D_Map * map, int nofTiles, int type)
  *  \return void * 
  */
 
-void *G3d_allocTiles(G3D_Map * map, int nofTiles)
+void *G3d_allocTiles(RASTER3D_Map * map, int nofTiles)
 {
     void *tiles;
 

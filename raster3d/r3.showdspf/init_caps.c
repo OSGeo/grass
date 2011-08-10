@@ -12,7 +12,7 @@
 
 int init_caps(D_Cap, g3reg)
      struct Cap *D_Cap;
-     G3D_Region *g3reg;
+     RASTER3D_Region *g3reg;
 
 /* this subroutine only needs to be called once */
 {

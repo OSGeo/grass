@@ -7,7 +7,7 @@
 
 /*---------------------------------------------------------------------------*/
 
-static int G3d_readIndex(G3D_Map * map)
+static int G3d_readIndex(RASTER3D_Map * map)
 {
     unsigned char *tmp, *tmp2;
     int dummy1, dummy2, indexLength, tileIndex;
@@ -75,7 +75,7 @@ static int G3d_readIndex(G3D_Map * map)
 
 /*---------------------------------------------------------------------------*/
 
-int G3d_flushIndex(G3D_Map * map)
+int G3d_flushIndex(RASTER3D_Map * map)
 {
     int sizeCompressed, indexLength, tileIndex;
     unsigned char *tmp;
@@ -152,7 +152,7 @@ static int indexSortCompare(const void *a, const void *b)
 
 /*---------------------------------------------------------------------------*/
 
-int G3d_initIndex(G3D_Map * map, int hasIndex)
+int G3d_initIndex(RASTER3D_Map * map, int hasIndex)
 {
     int tile;
     int i0, i1, i2, i3, i4, i5, offset, nofElts;
@@ -167,7 +167,7 @@ int G3d_initIndex(G3D_Map * map, int hasIndex)
 	return 0;
     }
 
-    if (map->operation == G3D_WRITE_DATA) {
+    if (map->operation == RASTER3D_WRITE_DATA) {
 	for (tile = 0; tile < map->nTiles; tile++)
 	    map->index[tile] = -1;
 	return 1;

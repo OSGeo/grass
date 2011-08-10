@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
     char element[GNAME_MAX+10];
     const char *dspout;
     void *g3map;
-    G3D_Region g3reg;
+    RASTER3D_Region g3reg;
     const char *mapset;
     double dmin, dmax;
     struct GModule *module;
@@ -158,11 +158,11 @@ int main(int argc, char *argv[])
 		      name->answer);
 
     g3map = G3d_openCellOld(name->answer, mapset, &g3reg,
-			    G3D_TILE_SAME_AS_FILE, G3D_USE_CACHE_DEFAULT);
+			    RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
     /*
-       g3map = G3d_openCellOld (name->answer, mapset, G3D_DEFAULT_WINDOW,
-       G3D_TILE_SAME_AS_FILE,
-       G3D_USE_CACHE_DEFAULT);
+       g3map = G3d_openCellOld (name->answer, mapset, RASTER3D_DEFAULT_WINDOW,
+       RASTER3D_TILE_SAME_AS_FILE,
+       RASTER3D_USE_CACHE_DEFAULT);
      */
 
     if (NULL == g3map)

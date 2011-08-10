@@ -5249,9 +5249,9 @@ msgstr "Interpolar volumes a partir de pontos"
 #: ../gui/wxpython/menustrings.py:803
 #, fuzzy
 msgid ""
-"Interpolates point data to a G3D grid volume using regularized spline with "
+"Interpolates point data to a RASTER3D grid volume using regularized spline with "
 "tension (RST) algorithm."
-msgstr "Interpola datos de puntos a volumen de cuadrícula G3D usando"
+msgstr "Interpola datos de puntos a volumen de cuadrícula RASTER3D usando"
 
 #: ../gui/wxpython/menustrings.py:804
 #, fuzzy
@@ -14134,8 +14134,8 @@ msgstr "Arquivo não encontrado"
 #~ "resolución de píxel de la región definida actualmente."
 
 #, fuzzy
-#~ msgid "Converts 3D raster maps (G3D) into the VTK-Ascii format"
-#~ msgstr "Convierte mapas ráster 3D (G3D) en formato VTK-ASCII"
+#~ msgid "Converts 3D raster maps (RASTER3D) into the VTK-Ascii format"
+#~ msgstr "Convierte mapas ráster 3D (RASTER3D) en formato VTK-ASCII"
 
 #, fuzzy
 #~ msgid "Change default GUI"

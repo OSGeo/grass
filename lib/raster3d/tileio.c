@@ -68,7 +68,7 @@
  *                 NULL ... otherwise.
  */
 
-void *G3d_getTilePtr(G3D_Map * map, int tileIndex)
+void *G3d_getTilePtr(RASTER3D_Map * map, int tileIndex)
 {
     void *ptr;
 
@@ -112,7 +112,7 @@ void *G3d_getTilePtr(G3D_Map * map, int tileIndex)
  *          0 ... otherwise.
  */
 
-int G3d_tileLoad(G3D_Map * map, int tileIndex)
+int G3d_tileLoad(RASTER3D_Map * map, int tileIndex)
 {
     if (G3d_getTilePtr(map, tileIndex) == NULL) {
 	G3d_error("G3d_tileLoad: error in G3d_getTilePtr");
@@ -124,7 +124,7 @@ int G3d_tileLoad(G3D_Map * map, int tileIndex)
 
 /*---------------------------------------------------------------------------*/
 
-int G3d__removeTile(G3D_Map * map, int tileIndex)
+int G3d__removeTile(RASTER3D_Map * map, int tileIndex)
 {
     if (!map->useCache)
 	return 1;

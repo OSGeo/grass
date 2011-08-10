@@ -35,7 +35,7 @@ paramType param; /*Parameters */
 /*- prototypes --------------------------------------------------------------*/
 void fatal_error(void *map, int *fd, int depths, char *errorMsg); /*Simple Error message */
 void set_params(); /*Fill the paramType structure */
-void g3d_to_raster(void *map, G3D_Region region, int *fd); /*Write the raster */
+void g3d_to_raster(void *map, RASTER3D_Region region, int *fd); /*Write the raster */
 int open_output_map(const char *name, int res_type); /*opens the outputmap */
 void close_output_map(int fd); /*close the map */
 
@@ -88,12 +88,12 @@ void set_params()
 
     param.mask = G_define_flag();
     param.mask->key = 'm';
-    param.mask->description = _("Use G3D mask (if exists) with input map");
+    param.mask->description = _("Use RASTER3D mask (if exists) with input map");
 
     param.res = G_define_flag();
     param.res->key = 'r';
     param.res->description =
-        _("Use the same resolution as the input G3D map for the 2d output "
+        _("Use the same resolution as the input RASTER3D map for the 2d output "
           "maps, independent of the current region settings");
 }
 
@@ -101,7 +101,7 @@ void set_params()
 /* Write the slices to seperate raster maps ******************************** */
 
 /* ************************************************************************* */
-void g3d_to_raster(void *map, G3D_Region region, int *fd)
+void g3d_to_raster(void *map, RASTER3D_Region region, int *fd)
 {
     DCELL d1 = 0;
     FCELL f1 = 0;
@@ -184,12 +184,12 @@ void close_output_map(int fd)
 }
 
 /* ************************************************************************* */
-/* Main function, open the G3D map and create the raster maps ************** */
+/* Main function, open the RASTER3D map and create the raster maps ************** */
 
 /* ************************************************************************* */
 int main(int argc, char *argv[])
 {
-    G3D_Region region, inputmap_bounds;
+    RASTER3D_Region region, inputmap_bounds;
     struct Cell_head region2d;
     struct GModule *module;
     struct History history;
@@ -230,8 +230,8 @@ int main(int argc, char *argv[])
         /*Open the map with current region */
         map = G3d_openCellOld(param.input->answer,
                               G_find_grid3(param.input->answer, ""),
-                              G3D_DEFAULT_WINDOW, G3D_TILE_SAME_AS_FILE,
-                              G3D_USE_CACHE_DEFAULT);
+                              RASTER3D_DEFAULT_WINDOW, RASTER3D_TILE_SAME_AS_FILE,
+                              RASTER3D_USE_CACHE_DEFAULT);
         if (map == NULL)
             G3d_fatalError(_("Error opening 3d raster map <%s>"),
                            param.input->answer);
@@ -253,8 +253,8 @@ int main(int argc, char *argv[])
         /*Open the 3d raster map */
         map = G3d_openCellOld(param.input->answer,
                               G_find_grid3(param.input->answer, ""),
-                              &region, G3D_TILE_SAME_AS_FILE,
-                              G3D_USE_CACHE_DEFAULT);
+                              &region, RASTER3D_TILE_SAME_AS_FILE,
+                              RASTER3D_USE_CACHE_DEFAULT);
 
         if (map == NULL)
             G3d_fatalError(_("Error opening 3d raster map <%s>"),
