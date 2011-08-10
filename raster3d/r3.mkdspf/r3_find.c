@@ -5,7 +5,7 @@
  **************************************************************/
 #include <string.h>
 #include <grass/gis.h>
-#include <grass/G3d.h>
+#include <grass/raster3d.h>
 
 
 int g3_find_dsp_file(const char *cell, const char *file, const char *mset)

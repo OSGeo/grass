@@ -18,7 +18,7 @@
 #ifndef _TEST_G3D_LIB_H_
 #define _TEST_G3D_LIB_H_
 
-#include <grass/G3d.h>
+#include <grass/raster3d.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
 

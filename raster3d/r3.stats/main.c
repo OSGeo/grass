@@ -16,7 +16,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <grass/gis.h>
-#include <grass/G3d.h>
+#include <grass/raster3d.h>
 #include <grass/glocale.h>
 
 #define COMPARE_PRECISION 0.000000001

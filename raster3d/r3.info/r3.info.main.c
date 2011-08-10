@@ -28,7 +28,7 @@ int format_double(double value, char *buf);
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
-#include <grass/G3d.h>
+#include <grass/raster3d.h>
 #include <grass/glocale.h>
 
 #define printline(x) fprintf (out," | %-74.74s |\n",x)

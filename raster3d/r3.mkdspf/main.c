@@ -44,7 +44,7 @@
 #include <math.h>
 #include "vizual.h"
 #include <grass/gis.h>
-#include <grass/G3d.h>
+#include <grass/raster3d.h>
 #include "local_proto.h"
 #include <grass/glocale.h>
 

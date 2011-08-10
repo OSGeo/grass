@@ -18,7 +18,7 @@
 
 #include <string.h>
 #include "globals.h"
-#include "grass/G3d.h"
+#include "grass/raster3d.h"
 
 param_type param;
 zone_type zone_info;

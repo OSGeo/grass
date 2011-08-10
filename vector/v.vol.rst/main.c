@@ -39,7 +39,7 @@
 #include "userglobs.h"
 
 /* include G3d defs */
-#include <grass/G3d.h>
+#include <grass/raster3d.h>
 
 #include "oct.h"
 #include "surf.h"

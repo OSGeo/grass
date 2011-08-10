@@ -25,7 +25,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
-#include <grass/G3d.h>
+#include <grass/raster3d.h>
 #include <grass/glocale.h>
 
 int main(int argc, char *argv[])

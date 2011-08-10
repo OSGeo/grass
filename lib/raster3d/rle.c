@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <grass/G3d.h>
+#include <grass/raster3d.h>
 
 #define G_254_SQUARE 64516
 #define G_254_TIMES_2 508

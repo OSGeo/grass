@@ -20,7 +20,7 @@
 #include <string.h>
 #include <grass/glocale.h>
 #include <grass/N_pde.h>
-#include <grass/G3d.h>
+#include <grass/raster3d.h>
 #include "test_gpde_lib.h"
 
 /* prototypes */

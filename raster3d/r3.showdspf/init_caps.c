@@ -5,7 +5,7 @@
 
 #include <grass/gis.h>
 #include "vizual.h"
-#include <grass/G3d.h>
+#include <grass/raster3d.h>
 /*
    #define DEBUG1
  */

@@ -20,7 +20,7 @@
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
-#include <grass/G3d.h>
+#include <grass/raster3d.h>
 #include <grass/glocale.h>
 #include "globalDefs.h"
 #include "writeVTKData.h"
