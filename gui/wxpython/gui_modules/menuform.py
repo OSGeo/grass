@@ -1335,12 +1335,16 @@ class cmdPanel(wx.Panel):
                         p['wxId'].append(None)
                 # file selector
                 elif p.get('prompt','') !=  'color' and p.get('element', '') ==  'file':
+                    if p.get('age', 'new') == 'new':
+                        fmode = wx.SAVE
+                    else:
+                        fmode = wx.OPEN
                     fbb = filebrowse.FileBrowseButton(parent = which_panel, id = wx.ID_ANY, fileMask = '*',
                                                       size = globalvar.DIALOG_GSELECT_SIZE, labelText = '',
                                                       dialogTitle = _('Choose %s') % \
                                                           p.get('description',_('File')),
                                                       buttonText = _('Browse'),
-                                                      startDirectory = os.getcwd(), fileMode = 0,
+                                                      startDirectory = os.getcwd(), fileMode = fmode,
                                                       changeCallback = self.OnSetValue)
                     value = self._getValue(p)
                     if value:
@@ -1352,7 +1356,7 @@ class cmdPanel(wx.Panel):
                     # a textctl and a button;
                     # we have to target the button here
                     p['wxId'] = [ fbb.GetChildren()[1].GetId() ]
-                    if p.get('age', 'new') ==  'old' and \
+                    if p.get('age', 'new') == 'old' and \
                             UserSettings.Get(group = 'cmd', key = 'interactiveInput', subkey = 'enabled'):
                         # widget for interactive input
                         ifbb = wx.TextCtrl(parent = which_panel, id = wx.ID_ANY,
