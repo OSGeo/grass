@@ -1,6 +1,8 @@
 #ifndef GRASS_RASTER_H
 #define GRASS_RASTER_H
 
+#include <grass/gis.h>
+
 /*** defines ***/
 #define RECLASS_TABLE 1
 #define RECLASS_RULES 2
