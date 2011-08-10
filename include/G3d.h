@@ -235,12 +235,27 @@ typedef struct
 
 /*---------------------------------------------------------------------------*/
 
+/*Structures */
+typedef struct _d_interval
+{
+    double low, high;
+    int inf;
+    struct _d_interval *next;
+} d_Interval;
+
+typedef struct _d_mask
+{
+    d_Interval *list;
+} d_Mask;
+
+/*---------------------------------------------------------------------------*/
+
 typedef int write_fn(int, const void *, void *);
 typedef int read_fn(int, void *, void *);
 
 /*---------------------------------------------------------------------------*/
 
-/* grass/src/libes/g3d/cache.c */
+/* cache.c */
 void G3d_cache_reset(G3D_cache *);
 void G3d_cache_dispose(G3D_cache *);
 void *G3d_cache_new(int, int, int, write_fn *, void *, read_fn *, void *);
@@ -264,7 +279,7 @@ int G3d_cache_load(G3D_cache *, int);
 int G3d_cache_get_elt(G3D_cache *, int, void *);
 int G3d_cache_put_elt(G3D_cache *, int, const void *);
 
-/* grass/src/libes/g3d/cachehash.c */
+/* cachehash.c */
 void G3d_cache_hash_reset(G3d_cache_hash *);
 void G3d_cache_hash_dispose(G3d_cache_hash *);
 void *G3d_cache_hash_new(int);
@@ -272,22 +287,22 @@ void G3d_cache_hash_remove_name(G3d_cache_hash *, int);
 void G3d_cache_hash_load_name(G3d_cache_hash *, int, int);
 int G3d_cache_hash_name2index(G3d_cache_hash *, int);
 
-/* grass/src/libes/g3d/changeprecision.c */
+/* changeprecision.c */
 void G3d_changePrecision(void *, int, const char *);
 
-/* grass/src/libes/g3d/changetype.c */
+/* changetype.c */
 void G3d_changeType(void *, const char *);
 
-/* grass/src/libes/g3d/filecompare.c */
+/* filecompare.c */
 void G3d_compareFiles(const char *, const char *, const char *, const char *);
 
-/* grass/src/libes/g3d/filename.c */
+/* filename.c */
 void G3d_filename(char *, const char *, const char *, const char *);
 
-/* grass/src/libes/g3d/find_grid3.c */
+/* find_grid3.c */
 char *G_find_grid3(const char *, const char *);
 
-/* grass/src/libes/g3d/fpcompress.c */
+/* fpcompress.c */
 void G_fpcompress_printBinary(char *, int);
 void G_fpcompress_dissectXdrDouble(unsigned char *);
 int G_fpcompress_writeXdrNums(int, char *, int, int, char *, int, int, int);
@@ -297,29 +312,29 @@ int G_fpcompress_readXdrNums(int, char *, int, int, int, char *, int);
 int G_fpcompress_readXdrFloats(int, char *, int, int, int, char *);
 int G_fpcompress_readXdrDoubles(int, char *, int, int, int, char *);
 
-/* grass/src/libes/g3d/g3dalloc.c */
+/* g3dalloc.c */
 void *G3d_malloc(int);
 void *G3d_realloc(void *, int);
 void G3d_free(void *);
 
-/* grass/src/libes/g3d/g3dcache.c */
+/* g3dcache.c */
 int G3d_initCache(G3D_Map *, int);
 int G3d_disposeCache(G3D_Map *);
 int G3d_flushAllTiles(G3D_Map *);
 
-/* grass/src/libes/g3d/g3dcats.c */
+/* g3dcats.c */
 int G3d_writeCats(const char *, struct Categories *);
 int G3d_readCats(const char *, const char *, struct Categories *);
 
-/* grass/src/libes/g3d/g3dclose.c */
+/* g3dclose.c */
 int G3d_closeCell(G3D_Map *);
 
-/* grass/src/libes/g3d/g3dcolor.c */
+/* g3dcolor.c */
 int G3d_removeColor(const char *);
 int G3d_readColors(const char *, const char *, struct Colors *);
 int G3d_writeColors(const char *, const char *, struct Colors *);
 
-/* grass/src/libes/g3d/g3ddefaults.c */
+/* g3ddefaults.c */
 void G3d_setCompressionMode(int, int, int, int);
 void G3d_getCompressionMode(int *, int *, int *, int *);
 void G3d_setCacheSize(int);
@@ -334,11 +349,11 @@ void G3d_setErrorFun(void (*)(const char *));
 void G3d_setUnit(const char *);
 void G3d_initDefaults(void);
 
-/* grass/src/libes/g3d/g3ddoubleio.c */
+/* g3ddoubleio.c */
 int G3d_writeDoubles(int, int, const double *, int);
 int G3d_readDoubles(int, int, double *, int);
 
-/* grass/src/libes/g3d/g3derror.c */
+/* g3derror.c */
 void G3d_skipError(const char *);
 void G3d_printError(const char *);
 void G3d_fatalError(const char *, ...) __attribute__ ((format(printf, 1, 2)))
@@ -346,7 +361,7 @@ void G3d_fatalError(const char *, ...) __attribute__ ((format(printf, 1, 2)))
 void G3d_fatalError_noargs(const char *) __attribute__ ((noreturn));
 void G3d_error(const char *, ...) __attribute__ ((format(printf, 1, 2)));
 
-/* grass/src/libes/g3d/g3dfpxdr.c */
+/* g3dfpxdr.c */
 int G3d_isXdrNullNum(const void *, int);
 int G3d_isXdrNullFloat(const float *);
 int G3d_isXdrNullDouble(const double *);
@@ -359,15 +374,15 @@ int G3d_copyToXdr(const void *, int);
 int G3d_initCopyFromXdr(G3D_Map *, int);
 int G3d_copyFromXdr(int, void *);
 
-/* grass/src/libes/g3d/g3dhistory.c */
+/* g3dhistory.c */
 int G3d_writeHistory(const char *, struct History *);
 int G3d_readHistory(const char *, const char *, struct History *);
 
-/* grass/src/libes/g3d/g3dintio.c */
+/* g3dintio.c */
 int G3d_writeInts(int, int, const int *, int);
 int G3d_readInts(int, int, int *, int);
 
-/* grass/src/libes/g3d/g3dkeys.c */
+/* g3dkeys.c */
 int G3d_keyGetInt(struct Key_Value *, const char *, int *);
 int G3d_keyGetDouble(struct Key_Value *, const char *, double *);
 int G3d_keyGetString(struct Key_Value *, const char *, char **);
@@ -378,14 +393,14 @@ int G3d_keySetDouble(struct Key_Value *, const char *, const double *);
 int G3d_keySetString(struct Key_Value *, const char *, char *const *);
 int G3d_keySetValue(struct Key_Value *, const char *, const char *,
 		    const char *, int, int, const int *);
-/* grass/src/libes/g3d/g3dlong.c */
+/* g3dlong.c */
 int G3d_longEncode(long *, unsigned char *, int);
 void G3d_longDecode(unsigned char *, long *, int, int);
 
-/* grass/src/libes/g3d/g3dmapset.c */
+/* g3dmapset.c */
 void G3d_makeMapsetMapDirectory(const char *);
 
-/* grass/src/libes/g3d/g3dmask.c */
+/* g3dmask.c */
 int G3d_maskClose(void);
 int G3d_maskFileExists(void);
 int G3d_maskOpenOld(void);
@@ -402,7 +417,12 @@ int G3d_maskIsOff(G3D_Map *);
 const char *G3d_maskFile(void);
 int G3d_maskMapExists(void);
 
-/* grass/src/libes/g3d/g3dmisc.c */
+/* maskfn.c */
+int G3d_mask_d_select(DCELL *, d_Mask *);
+DCELL G3d_mask_match_d_interval(DCELL, d_Interval *);
+void G3d_parse_vallist(char **, d_Mask **);
+
+/* g3dmisc.c */
 int G3d_g3dType2cellType(int);
 void G3d_copyFloat2Double(const float *, int, double *, int, int);
 void G3d_copyDouble2Float(const double *, int, float *, int, int);
@@ -410,26 +430,26 @@ void G3d_copyValues(const void *, int, int, void *, int, int, int);
 int G3d_length(int);
 int G3d_externLength(int);
 
-/* grass/src/libes/g3d/g3dnull.c */
+/* g3dnull.c */
 int G3d_isNullValueNum(const void *, int);
 void G3d_setNullValue(void *, int, int);
 
-/* grass/src/libes/g3d/g3dopen2.c */
+/* g3dopen2.c */
 void *G3d_openNewParam(const char *, int , int, G3D_Region *, int, int, int, int, int, int, int);
-/* grass/src/libes/g3d/g3dopen.c */
+/* g3dopen.c */
 void *G3d_openCellOldNoHeader(const char *, const char *);
 void *G3d_openCellOld(const char *, const char *, G3D_Region *, int, int);
 void *G3d_openCellNew(const char *, int, int, G3D_Region *);
 void *G3d_openNewOptTileSize(const char *, int , G3D_Region * , int , int );
 
-/* grass/src/libes/g3d/g3dparam.c */
+/* g3dparam.c */
 void G3d_setStandard3dInputParams(void);
 int G3d_getStandard3dParams(int *, int *, int *, int *, int *, int *, int *,
 			    int *, int *, int *, int *, int *);
 void G3d_setWindowParams(void);
 char *G3d_getWindowParams(void);
 
-/* grass/src/libes/g3d/g3drange.c */
+/* g3drange.c */
 void G3d_range_updateFromTile(G3D_Map *, const void *, int, int, int, int,
 			      int, int, int, int);
 int G3d_readRange(const char *, const char *, struct FPRange *);
@@ -438,7 +458,7 @@ void G3d_range_min_max(G3D_Map *, double *, double *);
 int G3d_range_write(G3D_Map *);
 int G3d_range_init(G3D_Map *);
 
-/* grass/src/libes/g3d/g3dregion.c */
+/* g3dregion.c */
 void G3d_getRegionValue(G3D_Map *, double, double, double, void *, int);
 void G3d_adjustRegion(G3D_Region *);
 void G3d_regionCopy(G3D_Region *, G3D_Region *);
@@ -452,13 +472,13 @@ int G3d_isValidLocation(G3D_Region *, double, double, double);
 void G3d_location2coord(G3D_Region *, double, double, double, int *, int *, int *);
 void G3d_location2coord2(G3D_Region *, double, double, double, int *, int *, int *);
 void G3d_coord2location(G3D_Region *, double, double, double, double *, double *, double *);
-/* grass/src/libes/g3d/g3dresample.c */
+/* g3dresample.c */
 void G3d_nearestNeighbor(G3D_Map *, int, int, int, void *, int);
 void G3d_setResamplingFun(G3D_Map *, void (*)());
 void G3d_getResamplingFun(G3D_Map *, void (**)());
 void G3d_getNearestNeighborFunPtr(void (**)());
 
-/* grass/src/libes/g3d/g3dvolume.c */
+/* g3dvolume.c */
 void G3d_getVolumeA(void *, double[2][2][2][3], int, int, int, void *, int);
 void G3d_getVolume(void *, double, double, double, double, double, double,
 		   double, double, double, double, double, double, int, int,
@@ -467,7 +487,7 @@ void G3d_getAlignedVolume(void *, double, double, double, double, double,
 			  double, int, int, int, void *, int);
 void G3d_makeAlignedVolumeFile(void *, const char *, double, double, double,
 			       double, double, double, int, int, int);
-/* grass/src/libes/g3d/g3dwindow.c */
+/* g3dwindow.c */
 void G3d_getValue(G3D_Map *, int, int, int, void *, int);
 float G3d_getFloat(G3D_Map *, int, int, int);
 double G3d_getDouble(G3D_Map *, int, int, int);
@@ -479,17 +499,17 @@ void G3d_setWindow(G3D_Region *);
 void G3d_setWindowMap(G3D_Map *, G3D_Region *);
 void G3d_getWindow(G3D_Region *);
 
-/* grass/src/libes/g3d/g3dwindowio.c */
+/* g3dwindowio.c */
 void G3d_useWindowParams(void);
 int G3d_readWindow(G3D_Region *, const char *);
 
 /* int G3d_writeWindow (G3D_Region *, char *); */
-/* grass/src/libes/g3d/getblock.c */
+/* getblock.c */
 void G3d_getBlockNocache(G3D_Map *, int, int, int, int, int, int, void *,
 			 int);
 void G3d_getBlock(G3D_Map *, int, int, int, int, int, int, void *, int);
 
-/* grass/src/libes/g3d/header.c */
+/* header.c */
 int G3d_readHeader(G3D_Map *, int *, int *, double *, double *, double *,
 		   double *, double *, double *, int *, int *, int *,
 		   double *, double *, double *, int *, int *, int *, int *,
@@ -504,7 +524,7 @@ int G3d_fillHeader(G3D_Map *, int, int, int, int, int, int, int, int, int,
 		   int, int, int, int, int, int, int, double, double, double,
 		   double, double, double, int, int, int, double, double,
 		   double, char *);
-/* grass/src/libes/g3d/headerinfo.c */
+/* headerinfo.c */
 void G3d_getCoordsMap(G3D_Map *, int *, int *, int *);
 void G3d_getCoordsMapWindow(G3D_Map *, int *, int *, int *);
 void G3d_getNofTilesMap(G3D_Map *, int *, int *, int *);
@@ -520,24 +540,24 @@ int G3d_tileUseCacheMap(G3D_Map *);
 void G3d_printHeader(G3D_Map *);
 void G3d_getRegionStructMap(G3D_Map *, G3D_Region *);
 
-/* grass/src/libes/g3d/index.c */
+/* index.c */
 int G3d_flushIndex(G3D_Map *);
 int G3d_initIndex(G3D_Map *, int);
 
-/* grass/src/libes/g3d/retile.c */
+/* retile.c */
 void G3d_retile(void *, const char *, int, int, int);
 
-/* grass/src/libes/g3d/rle.c */
+/* rle.c */
 int G_rle_count_only(char *, int, int);
 void G_rle_encode(char *, char *, int, int);
 void G_rle_decode(char *, char *, int, int, int *, int *);
 
-/* grass/src/libes/g3d/tilealloc.c */
+/* tilealloc.c */
 void *G3d_allocTilesType(G3D_Map *, int, int);
 void *G3d_allocTiles(G3D_Map *, int);
 void G3d_freeTiles(void *);
 
-/* grass/src/libes/g3d/tileio.c */
+/* tileio.c */
 void *G3d_getTilePtr(G3D_Map *, int);
 int G3d_tileLoad(G3D_Map *, int);
 int G3d__removeTile(G3D_Map *, int);
@@ -545,7 +565,7 @@ float G3d_getFloatRegion(G3D_Map *, int, int, int);
 double G3d_getDoubleRegion(G3D_Map *, int, int, int);
 void G3d_getValueRegion(G3D_Map *, int, int, int, void *, int);
 
-/* grass/src/libes/g3d/tilemath.c */
+/* tilemath.c */
 void G3d_computeOptimalTileDimension(G3D_Region *, int, int *, int *, int *, int);
 void G3d_tileIndex2tile(G3D_Map *, int, int *, int *, int *);
 int G3d_tile2tileIndex(G3D_Map *, int, int, int);
@@ -560,11 +580,11 @@ int G3d_tileInRange(G3D_Map *, int, int, int);
 int G3d_computeClippedTileDimensions(G3D_Map *, int, int *, int *, int *,
 				     int *, int *, int *);
 
-/* grass/src/libes/g3d/tilenull.c */
+/* tilenull.c */
 void G3d_setNullTileType(G3D_Map *, void *, int);
 void G3d_setNullTile(G3D_Map *, void *);
 
-/* grass/src/libes/g3d/tileread.c */
+/* tileread.c */
 int G3d_readTile(G3D_Map *, int, void *, int);
 int G3d_readTileFloat(G3D_Map *, int, void *);
 int G3d_readTileDouble(G3D_Map *, int, void *);
@@ -577,7 +597,7 @@ void G3d_minUnlocked(G3D_Map *, int);
 int G3d_beginCycle(G3D_Map *);
 int G3d_endCycle(G3D_Map *);
 
-/* grass/src/libes/g3d/tilewrite.c */
+/* tilewrite.c */
 int G3d_writeTile(G3D_Map *, int, const void *, int);
 int G3d_writeTileFloat(G3D_Map *, int, const void *);
 int G3d_writeTileDouble(G3D_Map *, int, const void *);
@@ -588,7 +608,7 @@ int G3d_putFloat(G3D_Map *, int, int, int, float);
 int G3d_putDouble(G3D_Map *, int, int, int, double);
 int G3d_putValue(G3D_Map *, int, int, int, const void *, int);
 
-/* grass/src/libes/g3d/writeascii.c */
+/* writeascii.c */
 void G3d_writeAscii(void *, const char *);
 
 #endif /* #ifndef GRASS_G3D_H */
