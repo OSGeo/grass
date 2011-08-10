@@ -128,16 +128,16 @@ int main(int argc, char *argv[])
 
     /*We need to open the map */
     g3map =
-	G3d_openCellOld(name, mapset, RASTER3D_DEFAULT_WINDOW,
+	Rast3d_openCellOld(name, mapset, RASTER3D_DEFAULT_WINDOW,
 			RASTER3D_TILE_SAME_AS_FILE, RASTER3D_NO_CACHE);
     if (NULL == g3map)
 	G_fatal_error(_("Unable to open 3D raster map <%s>"), name);
 
     /*Get the maptype */
-    data_type = G3d_fileTypeMap(g3map);
-    head_ok = G3d_readRegionMap(name, mapset, &cellhd) >= 0;
-    hist_ok = G3d_readHistory(name, mapset, &hist) >= 0;
-    cats_ok = G3d_readCats(name, mapset, &cats) >= 0;
+    data_type = Rast3d_fileTypeMap(g3map);
+    head_ok = Rast3d_readRegionMap(name, mapset, &cellhd) >= 0;
+    hist_ok = Rast3d_readHistory(name, mapset, &hist) >= 0;
+    cats_ok = Rast3d_readCats(name, mapset, &cats) >= 0;
     /*Check the Timestamp */
     time_ok = G_read_grid3_timestamp(name, mapset, &ts) > 0;
 
@@ -339,10 +339,10 @@ int main(int argc, char *argv[])
 		printline(line);
 	    else
 		G_fatal_error(_("Cannot allocate memory for string"));
-	    if (0 == G3d_range_load(g3map))
+	    if (0 == Rast3d_range_load(g3map))
 		G_fatal_error(_("Unable to read range of 3D raster map <%s>"), name);
 
-	    G3d_range_min_max(g3map, &dmin, &dmax);
+	    Rast3d_range_min_max(g3map, &dmin, &dmax);
 	    format_double(dmin, tmp1);
 	    format_double(dmax, tmp2);
 
@@ -401,10 +401,10 @@ int main(int argc, char *argv[])
     }
     else {			/* Range */
 	if (rflag->answer) {
-	    if (0 == G3d_range_load(g3map))
+	    if (0 == Rast3d_range_load(g3map))
 		G_fatal_error(_("Unable to read range of 3D raster map <%s>"), name);
 
-	    G3d_range_min_max(g3map, &dmin, &dmax);
+	    Rast3d_range_min_max(g3map, &dmin, &dmax);
 	    fprintf(out, "min=%f\n", dmin);
 	    fprintf(out, "max=%f\n", dmax);
 
@@ -485,7 +485,7 @@ int main(int argc, char *argv[])
     }
 
     /*Close the opened map */
-    if (!G3d_closeCell(g3map))
+    if (!Rast3d_closeCell(g3map))
 	G_fatal_error(_("Unable to close 3D raster map <%s>"), name);
 
 

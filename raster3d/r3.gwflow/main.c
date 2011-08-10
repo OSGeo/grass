@@ -185,10 +185,10 @@ int main(int argc, char *argv[])
 
 
     /*Set the defaults */
-    G3d_initDefaults();
+    Rast3d_initDefaults();
 
     /*get the current region */
-    G3d_getWindow(&region);
+    Rast3d_getWindow(&region);
 
     /*allocate the geometry structure  for geometry and area calculation */
     geom = N_init_geom_data_3d(&region, geom);
@@ -364,19 +364,19 @@ write_result(N_array_3d * status, N_array_3d * phead_start,
     depths = region->depths;
 
     /*Open the new map */
-    map = G3d_openNewOptTileSize(name, RASTER3D_USE_CACHE_XY, region, DCELL_TYPE, 32);
+    map = Rast3d_openNewOptTileSize(name, RASTER3D_USE_CACHE_XY, region, DCELL_TYPE, 32);
 
     if (map == NULL)
-	G3d_fatalError(_("Error opening g3d map <%s>"), name);
+	Rast3d_fatalError(_("Error opening g3d map <%s>"), name);
 
     G_message(_("Write the result to g3d map <%s>"), name);
 
     /*if requested set the Mask on */
     if (param.mask->answer) {
-	if (G3d_maskFileExists()) {
+	if (Rast3d_maskFileExists()) {
 	    changemask = 0;
-	    if (G3d_maskIsOff(map)) {
-		G3d_maskOn(map);
+	    if (Rast3d_maskIsOff(map)) {
+		Rast3d_maskOn(map);
 		changemask = 1;
 	    }
 	}
@@ -398,25 +398,25 @@ write_result(N_array_3d * status, N_array_3d * phead_start,
 		    d1 = N_get_array_3d_d_value(phead_start, x, y, z);
 		}
 		else {
-		    G3d_setNullValue(&d1, 1, DCELL_TYPE);
+		    Rast3d_setNullValue(&d1, 1, DCELL_TYPE);
 		}
-		G3d_putDouble(map, x, y, z, d1);
+		Rast3d_putDouble(map, x, y, z, d1);
 	    }
 	}
     }
 
     /*We set the Mask off, if it was off before */
     if (param.mask->answer) {
-	if (G3d_maskFileExists())
-	    if (G3d_maskIsOn(map) && changemask)
-		G3d_maskOff(map);
+	if (Rast3d_maskFileExists())
+	    if (Rast3d_maskIsOn(map) && changemask)
+		Rast3d_maskOff(map);
     }
 
     /* Flush all tile */
-    if (!G3d_flushAllTiles(map))
-	G3d_fatalError("Error flushing tiles with G3d_flushAllTiles");
-    if (!G3d_closeCell(map))
-	G3d_fatalError(map, NULL, 0, _("Error closing g3d file"));
+    if (!Rast3d_flushAllTiles(map))
+	Rast3d_fatalError("Error flushing tiles with Rast3d_flushAllTiles");
+    if (!Rast3d_closeCell(map))
+	Rast3d_fatalError(map, NULL, 0, _("Error closing g3d file"));
 
     return;
 }

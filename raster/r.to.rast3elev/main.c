@@ -132,8 +132,8 @@ void fatal_error(Database db, char *errorMsg)
     /* Close files and exit */
     if (db.map != NULL) {
         /* should unopen map here! but this functionality is not jet implemented */
-        if (!G3d_closeCell(db.map))
-            G3d_fatalError(_("Could not close the map"));
+        if (!Rast3d_closeCell(db.map))
+            Rast3d_fatalError(_("Could not close the map"));
     }
 
     if (db.input)
@@ -142,7 +142,7 @@ void fatal_error(Database db, char *errorMsg)
     if (db.elev)
         close_input_raster_map(db.elev);
 
-    G3d_fatalError(errorMsg);
+    Rast3d_fatalError(errorMsg);
     exit(EXIT_FAILURE);
 }
 
@@ -224,7 +224,7 @@ void elev_raster_to_g3d(Database db, RASTER3D_Region region)
     input_rast = Rast_allocate_buf(db.inputmaptype);
     elev_rast = Rast_allocate_buf(db.elevmaptype);
 
-    G3d_setNullValue(&null, 1, DCELL_TYPE);
+    Rast3d_setNullValue(&null, 1, DCELL_TYPE);
 
 
     G_debug(3,
@@ -279,11 +279,11 @@ void elev_raster_to_g3d(Database db, RASTER3D_Region region)
                         height <= ((z + 1) * tbres + bottom))
                         value = inval;
                     /*If the elevation is null, set the RASTER3D value null */
-                    if (G3d_isNullValueNum(&height, DCELL_TYPE))
+                    if (Rast3d_isNullValueNum(&height, DCELL_TYPE))
                         value = null;
 
                     /*Write the value to the 3D map */
-                    if (G3d_putDouble(db.map, x, y, z, value) < 0)
+                    if (Rast3d_putDouble(db.map, x, y, z, value) < 0)
                         fatal_error(db, _("Error writing RASTER3D double data"));
                 }
             } else {
@@ -296,7 +296,7 @@ void elev_raster_to_g3d(Database db, RASTER3D_Region region)
                         else if (db.useUpperVal == 2)
                             value = db.upper;
                         else
-                            value = G3d_getDouble(db.map, x, y, z);
+                            value = Rast3d_getDouble(db.map, x, y, z);
                     }
                     /*lower cells */
                     if (height > ((z + 1) * tbres + bottom)) {
@@ -305,18 +305,18 @@ void elev_raster_to_g3d(Database db, RASTER3D_Region region)
                         else if (db.useLowerVal == 2)
                             value = db.lower;
                         else
-                            value = G3d_getDouble(db.map, x, y, z);
+                            value = Rast3d_getDouble(db.map, x, y, z);
                     }
                     /*If exactly at the border, fill upper AND lower cell */
                     if (height >= (z * tbres + bottom) &&
                         height <= ((z + 1) * tbres + bottom))
                         value = inval;
                     /*If the elevation is null, set the RASTER3D value null */
-                    if (G3d_isNullValueNum(&height, DCELL_TYPE))
-                        value = G3d_getDouble(db.map, x, y, z);
+                    if (Rast3d_isNullValueNum(&height, DCELL_TYPE))
+                        value = Rast3d_getDouble(db.map, x, y, z);
 
                     /*Write the value to the 3D map */
-                    if (G3d_putDouble(db.map, x, y, z, value) < 0)
+                    if (Rast3d_putDouble(db.map, x, y, z, value) < 0)
                         fatal_error(db, _("Error writing RASTER3D double data"));
 
                 }
@@ -399,7 +399,7 @@ int main(int argc, char *argv[])
         else
             G_fatal_error(_("The upper value is not valid"));
     } else {
-        G3d_setNullValue(&db.upper, 1, DCELL_TYPE);
+        Rast3d_setNullValue(&db.upper, 1, DCELL_TYPE);
     }
 
     /*Set the lower value */
@@ -409,12 +409,12 @@ int main(int argc, char *argv[])
         else
             G_fatal_error(_("The lower value is not valid"));
     } else {
-        G3d_setNullValue(&db.lower, 1, DCELL_TYPE);
+        Rast3d_setNullValue(&db.lower, 1, DCELL_TYPE);
     }
 
     /* Figure out the current g3d region */
-    G3d_initDefaults();
-    G3d_getWindow(&region);
+    Rast3d_initDefaults();
+    Rast3d_getWindow(&region);
 
     /*Check if the g3d-region is equal to the 2d rows and cols */
     rows = Rast_window_rows();
@@ -437,7 +437,7 @@ int main(int argc, char *argv[])
 
     /*open RASTER3D output map */
     db.map = NULL;
-    db.map = G3d_openNewOptTileSize(param.output->answer, RASTER3D_USE_CACHE_XY, &region, DCELL_TYPE, maxSize);
+    db.map = Rast3d_openNewOptTileSize(param.output->answer, RASTER3D_USE_CACHE_XY, &region, DCELL_TYPE, maxSize);
 
     if (db.map == NULL)
         fatal_error(db, _("Error opening 3d raster map"));
@@ -445,10 +445,10 @@ int main(int argc, char *argv[])
 
     /*if requested set the Mask on */
     if (param.mask->answer) {
-        if (G3d_maskFileExists()) {
+        if (Rast3d_maskFileExists()) {
             changemask = 0;
-            if (G3d_maskIsOff(db.map)) {
-                G3d_maskOn(db.map);
+            if (Rast3d_maskIsOff(db.map)) {
+                Rast3d_maskOn(db.map);
                 changemask = 1;
             }
         }
@@ -487,18 +487,18 @@ int main(int argc, char *argv[])
 
     /*We set the Mask off, if it was off before */
     if (param.mask->answer) {
-        if (G3d_maskFileExists())
-            if (G3d_maskIsOn(db.map) && changemask)
-                G3d_maskOff(db.map);
+        if (Rast3d_maskFileExists())
+            if (Rast3d_maskIsOn(db.map) && changemask)
+                Rast3d_maskOff(db.map);
     }
 
     G_debug(2, "Close 3d raster map");
 
     /* Flush all tile */
-    if (!G3d_flushAllTiles(db.map))
-        G3d_fatalError("Error flushing tiles with G3d_flushAllTiles");
-    if (!G3d_closeCell(db.map))
-        G3d_fatalError(_("Error closing 3d raster map"));
+    if (!Rast3d_flushAllTiles(db.map))
+        Rast3d_fatalError("Error flushing tiles with Rast3d_flushAllTiles");
+    if (!Rast3d_closeCell(db.map))
+        Rast3d_fatalError(_("Error closing 3d raster map"));
 
     G_debug(2, "\nDone\n");
 

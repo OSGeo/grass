@@ -43,20 +43,20 @@ void add_d_mask_rule(d_Mask * d_mask, double a, double b, int inf)
     d_mask->list = I;
 }
 
-int G3d_mask_d_select(DCELL * x, d_Mask * mask)
+int Rast3d_mask_d_select(DCELL * x, d_Mask * mask)
 {
     d_Interval *I;
 
     if (mask->list == NULL)
 	return 0;
     for (I = mask->list; I; I = I->next) {
-	if (G3d_mask_match_d_interval(*x, I))
+	if (Rast3d_mask_match_d_interval(*x, I))
 	    return 1;
     }
     return 0;
 }
 
-DCELL G3d_mask_match_d_interval(DCELL x, d_Interval * I)
+DCELL Rast3d_mask_match_d_interval(DCELL x, d_Interval * I)
 {
     if (I->inf < 0)
 	return x <= I->low;
@@ -98,7 +98,7 @@ void parse_d_mask_rule(char *vallist, d_Mask * d_mask, char *where)
     }
 }
 
-void G3d_parse_vallist(char **vallist, d_Mask ** d_mask)
+void Rast3d_parse_vallist(char **vallist, d_Mask ** d_mask)
 {
     char buf[1024];
     char x[2];

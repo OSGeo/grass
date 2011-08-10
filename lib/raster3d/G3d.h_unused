@@ -58,39 +58,39 @@ typedef struct {
 
 /*---------------------------------------------------------------------------*/
 
-extern void *G3d_openCellOldNoHeader (/* name */);
+extern void *Rast3d_openCellOldNoHeader (/* name */);
 
-extern void *G3d_openCellOld (/* name, cache */);
-extern void *G3d_openCellOld_NEW (/* name, cache */);
-extern void *G3d_openCellNew (/* name, cache, compression, type,
+extern void *Rast3d_openCellOld (/* name, cache */);
+extern void *Rast3d_openCellOld_NEW (/* name, cache */);
+extern void *Rast3d_openCellNew (/* name, cache, compression, type,
                                  tileX, tileY, tileZ,
                                  xMin, yMin, zMin, xMax, yMax, zMax */);
-extern void *G3d_openGrid3File (/* name, x, y, z */);
-extern void *G3d_malloc (/* nBytes */);
-extern void *G3d_realloc (/* ptr, nBytes */);
-extern char *G3d_allocTiles (/* map, nofTiles */);
-extern char *G3d_allocTilesType (/* map, nofTiles, type */);
-extern char *G3d_getTilePtr (/* map, tileIndex */);
+extern void *Rast3d_openGrid3File (/* name, x, y, z */);
+extern void *Rast3d_malloc (/* nBytes */);
+extern void *Rast3d_realloc (/* ptr, nBytes */);
+extern char *Rast3d_allocTiles (/* map, nofTiles */);
+extern char *Rast3d_allocTilesType (/* map, nofTiles, type */);
+extern char *Rast3d_getTilePtr (/* map, tileIndex */);
 
-extern float G3d_getFloat (/* map, x, y, z */);
-extern double G3d_getDouble (/* map, x, y, z */);
-extern float G3d_getFloatRegion (/* map, x, y, z */);
-extern double G3d_getDoubleRegion (/* map, x, y, z */);
+extern float Rast3d_getFloat (/* map, x, y, z */);
+extern double Rast3d_getDouble (/* map, x, y, z */);
+extern float Rast3d_getFloatRegion (/* map, x, y, z */);
+extern double Rast3d_getDoubleRegion (/* map, x, y, z */);
 
-extern void *G3d_cache_new ();
-extern void *G3d_cache_new_read ();
-extern char *G3d_cache_elt_ptr (/* c, name */);
+extern void *Rast3d_cache_new ();
+extern void *Rast3d_cache_new_read ();
+extern char *Rast3d_cache_elt_ptr (/* c, name */);
 
-extern void *G3d_cache_hash_new (/* nofNames */);
+extern void *Rast3d_cache_hash_new (/* nofNames */);
 
-extern void G3d_skipError (/* msg */);
-extern void G3d_printError (/* msg */);
-/*extern void *G3d_maskFile ();
+extern void Rast3d_skipError (/* msg */);
+extern void Rast3d_printError (/* msg */);
+/*extern void *Rast3d_maskFile ();
 */
 
-extern void G3d_setWindow (/* window */);
-/*extern void G3d_getWindow ();*/
-extern RASTER3D_Region *G3d_windowPtr ();
+extern void Rast3d_setWindow (/* window */);
+/*extern void Rast3d_getWindow ();*/
+extern RASTER3D_Region *Rast3d_windowPtr ();
 
 /*---------------------------------------------------------------------------*/
 

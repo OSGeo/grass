@@ -9,7 +9,7 @@
 /*---------------------------------------------------------------------------*/
 
 void
-G3d_getBlockNocache(RASTER3D_Map * map, int x0, int y0, int z0, int nx, int ny,
+Rast3d_getBlockNocache(RASTER3D_Map * map, int x0, int y0, int z0, int nx, int ny,
 		    int nz, void *block, int type)
 {
     void *tile;
@@ -19,13 +19,13 @@ G3d_getBlockNocache(RASTER3D_Map * map, int x0, int y0, int z0, int nx, int ny,
     int tileIndex;
 
     if (!map->useCache)
-	tile = G3d_allocTilesType(map, 1, type);
+	tile = Rast3d_allocTilesType(map, 1, type);
     if (tile == NULL)
-	G3d_fatalError("G3d_getBlockNocache: error in G3d_allocTiles");
+	Rast3d_fatalError("Rast3d_getBlockNocache: error in Rast3d_allocTiles");
 
-    G3d_coord2tileCoord(map, x0, y0, z0, &tileX0, &tileY0, &tileZ0,
+    Rast3d_coord2tileCoord(map, x0, y0, z0, &tileX0, &tileY0, &tileZ0,
 			&tileOffsX0, &tileOffsY0, &tileOffsZ0);
-    G3d_coord2tileCoord(map, x0 + nx - 1, y0 + ny - 1, z0 + nz - 1,
+    Rast3d_coord2tileCoord(map, x0 + nx - 1, y0 + ny - 1, z0 + nz - 1,
 			&tileX1, &tileY1, &tileZ1,
 			&tileOffsX1, &tileOffsY1, &tileOffsZ1);
 
@@ -36,24 +36,24 @@ G3d_getBlockNocache(RASTER3D_Map * map, int x0, int y0, int z0, int nx, int ny,
 	    for (tx = tileX0; tx <= tileX1; tx++) {
 		dx = (tx - tileX0) * map->tileX - tileOffsX0;
 
-		tileIndex = G3d_tile2tileIndex(map, tx, ty, tz);
+		tileIndex = Rast3d_tile2tileIndex(map, tx, ty, tz);
 
-		if (G3d_tileIndexInRange(map, tileIndex))
+		if (Rast3d_tileIndexInRange(map, tileIndex))
 		    if (map->useCache) {
-			tile = G3d_getTilePtr(map, tileIndex);
+			tile = Rast3d_getTilePtr(map, tileIndex);
 			if (tile == NULL)
-			    G3d_fatalError
-				("G3d_getBlockNocache: error in G3d_getTilePtr");
+			    Rast3d_fatalError
+				("Rast3d_getBlockNocache: error in Rast3d_getTilePtr");
 		    }
 		    else {
-			if (!G3d_readTile
+			if (!Rast3d_readTile
 			    (map, tileIndex, tile, map->typeIntern))
-			    G3d_fatalError
-				("G3d_getBlockNocache: error in G3d_readTile");
+			    Rast3d_fatalError
+				("Rast3d_getBlockNocache: error in Rast3d_readTile");
 		    }
 
 		else
-		    G3d_setNullTile(map, tile);
+		    Rast3d_setNullTile(map, tile);
 
 		cols = (tx == tileX1 ? tileOffsX1 : map->tileX - 1);
 		rows = (ty == tileY1 ? tileOffsY1 : map->tileY - 1);
@@ -63,7 +63,7 @@ G3d_getBlockNocache(RASTER3D_Map * map, int x0, int y0, int z0, int nx, int ny,
 
 		for (z = (tz == tileZ0 ? tileOffsZ0 : 0); z <= depths; z++)
 		    for (y = (ty == tileY0 ? tileOffsY0 : 0); y <= rows; y++) {
-			G3d_copyValues(tile,
+			Rast3d_copyValues(tile,
 				       z * map->tileXY + y * map->tileX + x,
 				       map->typeIntern,
 				       block,
@@ -75,7 +75,7 @@ G3d_getBlockNocache(RASTER3D_Map * map, int x0, int y0, int z0, int nx, int ny,
     }
 
     if (!map->useCache)
-	G3d_freeTiles(tile);
+	Rast3d_freeTiles(tile);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -102,13 +102,13 @@ G3d_getBlockNocache(RASTER3D_Map * map, int x0, int y0, int z0, int nx, int ny,
  */
 
 void
-G3d_getBlock(RASTER3D_Map * map, int x0, int y0, int z0, int nx, int ny, int nz,
+Rast3d_getBlock(RASTER3D_Map * map, int x0, int y0, int z0, int nx, int ny, int nz,
 	     void *block, int type)
 {
     int x, y, z, nNull, x1, y1, z1, length;
 
     if (!map->useCache) {
-	G3d_getBlockNocache(map, x0, y0, z0, nx, ny, nz, block, type);
+	Rast3d_getBlockNocache(map, x0, y0, z0, nx, ny, nz, block, type);
 	return;
     }
 
@@ -116,22 +116,22 @@ G3d_getBlock(RASTER3D_Map * map, int x0, int y0, int z0, int nx, int ny, int nz,
     y1 = RASTER3D_MIN(y0 + ny, map->region.rows);
     z1 = RASTER3D_MIN(z0 + nz, map->region.depths);
 
-    length = G3d_length(type);
+    length = Rast3d_length(type);
 
     for (z = z0; z < z1; z++) {
 	for (y = y0; y < y1; y++) {
 	    for (x = x0; x < x1; x++) {
-		G3d_getValueRegion(map, x, y, z, block, type);
+		Rast3d_getValueRegion(map, x, y, z, block, type);
 		block = G_incr_void_ptr(block, length);
 	    }
 	    nNull = x0 + nx - x;
-	    G3d_setNullValue(block, nNull, type);
+	    Rast3d_setNullValue(block, nNull, type);
 	    block = G_incr_void_ptr(block, length * nNull);
 	}
 	nNull = (y0 + ny - y) * nx;
-	G3d_setNullValue(block, nNull, type);
+	Rast3d_setNullValue(block, nNull, type);
 	block = G_incr_void_ptr(block, length * nNull);
     }
     nNull = (z0 + nz - z) * ny * nx;
-    G3d_setNullValue(block, nNull, type);
+    Rast3d_setNullValue(block, nNull, type);
 }

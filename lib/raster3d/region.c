@@ -19,7 +19,7 @@
  *  \return void
  */
 
-void G3d_extract2dRegion(RASTER3D_Region * region3d, struct Cell_head *region2d)
+void Rast3d_extract2dRegion(RASTER3D_Region * region3d, struct Cell_head *region2d)
 {
     region2d->proj = region3d->proj;
     region2d->zone = region3d->zone;
@@ -46,7 +46,7 @@ void G3d_extract2dRegion(RASTER3D_Region * region3d, struct Cell_head *region2d)
  *  \return void
  */
 
-void G3d_regionToCellHead(RASTER3D_Region * region3d, struct Cell_head *region2d)
+void Rast3d_regionToCellHead(RASTER3D_Region * region3d, struct Cell_head *region2d)
 {
     region2d->proj = region3d->proj;
     region2d->zone = region3d->zone;
@@ -86,7 +86,7 @@ void G3d_regionToCellHead(RASTER3D_Region * region3d, struct Cell_head *region2d
  */
 
 void
-G3d_incorporate2dRegion(struct Cell_head *region2d, RASTER3D_Region * region3d)
+Rast3d_incorporate2dRegion(struct Cell_head *region2d, RASTER3D_Region * region3d)
 {
     region3d->proj = region2d->proj;
     region3d->zone = region2d->zone;
@@ -115,7 +115,7 @@ G3d_incorporate2dRegion(struct Cell_head *region2d, RASTER3D_Region * region3d)
  */
 
 void
-G3d_regionFromToCellHead(struct Cell_head *region2d, RASTER3D_Region * region3d)
+Rast3d_regionFromToCellHead(struct Cell_head *region2d, RASTER3D_Region * region3d)
 {
     region3d->proj = region2d->proj;
     region3d->zone = region2d->zone;
@@ -149,16 +149,16 @@ G3d_regionFromToCellHead(struct Cell_head *region2d, RASTER3D_Region * region3d)
  *  \return void
  */
 
-void G3d_adjustRegion(RASTER3D_Region * region)
+void Rast3d_adjustRegion(RASTER3D_Region * region)
 {
     struct Cell_head region2d;
 
-    G3d_regionToCellHead(region, &region2d);
+    Rast3d_regionToCellHead(region, &region2d);
     G_adjust_Cell_head3(&region2d, 1, 1, 1);
-    G3d_regionFromToCellHead(&region2d, region);
+    Rast3d_regionFromToCellHead(&region2d, region);
 
     if (region->depths <= 0)
-	G3d_fatalError("G3d_adjustRegion: depths <= 0");
+	Rast3d_fatalError("Rast3d_adjustRegion: depths <= 0");
     region->tb_res = (region->top - region->bottom) / region->depths;
 }
 
@@ -175,16 +175,16 @@ void G3d_adjustRegion(RASTER3D_Region * region)
  *  \return void
  */
 
-void G3d_adjustRegionRes(RASTER3D_Region * region)
+void Rast3d_adjustRegionRes(RASTER3D_Region * region)
 {
     struct Cell_head region2d;
 
-    G3d_regionToCellHead(region, &region2d);
+    Rast3d_regionToCellHead(region, &region2d);
     G_adjust_Cell_head3(&region2d, 1, 1, 1);
-    G3d_regionFromToCellHead(&region2d, region);
+    Rast3d_regionFromToCellHead(&region2d, region);
 
     if (region->tb_res <= 0)
-	G3d_fatalError("G3d_adjustRegionRes: tb_res <= 0");
+	Rast3d_fatalError("Rast3d_adjustRegionRes: tb_res <= 0");
 
     region->depths = (region->top - region->bottom + region->tb_res / 2.0) /
 	region->tb_res;
@@ -205,7 +205,7 @@ void G3d_adjustRegionRes(RASTER3D_Region * region)
  *  \return void
  */
 
-void G3d_regionCopy(RASTER3D_Region * regionDest, RASTER3D_Region * regionSrc)
+void Rast3d_regionCopy(RASTER3D_Region * regionDest, RASTER3D_Region * regionSrc)
 {
     *regionDest = *regionSrc;
 }
@@ -214,19 +214,19 @@ void G3d_regionCopy(RASTER3D_Region * regionDest, RASTER3D_Region * regionSrc)
 /*---------------------------------------------------------------------------*/
 
 int
-G3d_readRegionMap(const char *name, const char *mapset, RASTER3D_Region * region)
+Rast3d_readRegionMap(const char *name, const char *mapset, RASTER3D_Region * region)
 {
     char fullName[GPATH_MAX];
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
     if (G_name_is_fully_qualified(name, xname, xmapset))
-	G3d_filename(fullName, RASTER3D_HEADER_ELEMENT, xname, xmapset);
+	Rast3d_filename(fullName, RASTER3D_HEADER_ELEMENT, xname, xmapset);
     else {
 	if (!mapset || !*mapset)
 	    mapset = G_find_grid3(name, "");
-	G3d_filename(fullName, RASTER3D_HEADER_ELEMENT, name, mapset);
+	Rast3d_filename(fullName, RASTER3D_HEADER_ELEMENT, name, mapset);
     }
-    return G3d_readWindow(region, fullName);
+    return Rast3d_readWindow(region, fullName);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -245,7 +245,7 @@ G3d_readRegionMap(const char *name, const char *mapset, RASTER3D_Region * region
  *  \return int
  */
 
-int G3d_isValidLocation(RASTER3D_Region *region, double north, double east, double top)
+int Rast3d_isValidLocation(RASTER3D_Region *region, double north, double east, double top)
 {
     return ((north >= region->south) && (north <= region->north) &&
 	    (east >= region->west) && (east <= region->east) &&
@@ -272,7 +272,7 @@ int G3d_isValidLocation(RASTER3D_Region *region, double north, double east, doub
  */
 
 void
-G3d_location2coord(RASTER3D_Region *region, double north, double east, double top,
+Rast3d_location2coord(RASTER3D_Region *region, double north, double east, double top,
 		   int *x, int *y, int *z)
 {
     double col, row, depth;
@@ -289,7 +289,7 @@ G3d_location2coord(RASTER3D_Region *region, double north, double east, double to
     *y = region->rows - (int)row - 1;
     *z = (int)depth;
         
-    G_debug(4, "G3d_location2coord x %i y %i z %i\n", *x, *y, *z);
+    G_debug(4, "Rast3d_location2coord x %i y %i z %i\n", *x, *y, *z);
 }
 
 
@@ -298,7 +298,7 @@ G3d_location2coord(RASTER3D_Region *region, double north, double east, double to
  *
  *  Converts region-coordinates <em>(north, east,
  *  top)</em> into cell-coordinates <em>(x, y, z)</em>.
- *  This function calls G3d_fatalError in case location is not in window.
+ *  This function calls Rast3d_fatalError in case location is not in window.
  *
  *  \param map
  *  \param north
@@ -311,13 +311,13 @@ G3d_location2coord(RASTER3D_Region *region, double north, double east, double to
  */
 
 void
-G3d_location2coord2(RASTER3D_Region *region, double north, double east, double top,
+Rast3d_location2coord2(RASTER3D_Region *region, double north, double east, double top,
 		   int *x, int *y, int *z)
 {
-    if (!G3d_isValidLocation(region, north, east, top))
-	G3d_fatalError("G3d_location2coord2: location not in region");
+    if (!Rast3d_isValidLocation(region, north, east, top))
+	Rast3d_fatalError("Rast3d_location2coord2: location not in region");
 
-    G3d_location2coord(region, north, east, top, x, y, z);
+    Rast3d_location2coord(region, north, east, top, x, y, z);
 }
 
 /*!
@@ -354,11 +354,11 @@ G3d_location2coord2(RASTER3D_Region *region, double north, double east, double t
  */
 
 void
-G3d_coord2location(RASTER3D_Region * region, double x, double y, double z, double *north, double *east, double *top)
+Rast3d_coord2location(RASTER3D_Region * region, double x, double y, double z, double *north, double *east, double *top)
 {
     *north = region->north - y * region->ns_res;
     *east = region->west + x * region->ew_res;
     *top = region->bottom + z * region->tb_res; 
         
-    G_debug(4, "G3d_coord2location north %g east %g top %g\n", *north, *east, *top);
+    G_debug(4, "Rast3d_coord2location north %g east %g top %g\n", *north, *east, *top);
 }

@@ -36,8 +36,8 @@ static double Region[6];
  */
 void GVL_libinit(void)
 {
-    G3d_initDefaults();
-    G3d_getWindow(&wind3);
+    Rast3d_initDefaults();
+    Rast3d_getWindow(&wind3);
 
     Region[0] = wind3.north;
     Region[1] = wind3.south;

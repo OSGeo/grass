@@ -449,8 +449,8 @@ int main(int argc, char *argv[])
 
     G_get_set_window(&cellhd);
 
-    G3d_getWindow(&current_region);
-    G3d_readWindow(&current_region, NULL);
+    Rast3d_getWindow(&current_region);
+    Rast3d_readWindow(&current_region, NULL);
 
     ew_res = current_region.ew_res;
     ns_res = current_region.ns_res;

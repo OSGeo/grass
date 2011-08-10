@@ -114,14 +114,14 @@ void check_input_maps(void)
     if (param.structgrid->answer) {
 
         if (!param.top->answer || !param.bottom->answer)
-            G3d_fatalError(_("You have to specify top and bottom map"));
+            Rast3d_fatalError(_("You have to specify top and bottom map"));
 
         mapset = NULL;
         name = NULL;
         name = param.top->answer;
         mapset = G_find_raster2(name, "");
         if (mapset == NULL) {
-            G3d_fatalError(_("Top cell map <%s> not found"),
+            Rast3d_fatalError(_("Top cell map <%s> not found"),
                            param.top->answer);
         }
 
@@ -130,7 +130,7 @@ void check_input_maps(void)
         name = param.bottom->answer;
         mapset = G_find_raster2(name, "");
         if (mapset == NULL) {
-            G3d_fatalError(_("Bottom cell map <%s> not found"),
+            Rast3d_fatalError(_("Bottom cell map <%s> not found"),
                            param.bottom->answer);
         }
     }
@@ -139,7 +139,7 @@ void check_input_maps(void)
     if (param.input->answers != NULL) {
         for (i = 0; param.input->answers[i] != NULL; i++) {
             if (NULL == G_find_grid3(param.input->answers[i], ""))
-                G3d_fatalError(_("Requested 3d raster map <%s> not found"),
+                Rast3d_fatalError(_("Requested 3d raster map <%s> not found"),
                                param.input->answers[i]);
         }
     }
@@ -149,10 +149,10 @@ void check_input_maps(void)
         for (i = 0; i < 3; i++) {
             if (param.rgbmaps->answers[i] != NULL) {
                 if (NULL == G_find_grid3(param.rgbmaps->answers[i], ""))
-                    G3d_fatalError(_("Requested g3d RGB map <%s> not found"),
+                    Rast3d_fatalError(_("Requested g3d RGB map <%s> not found"),
                                    param.rgbmaps->answers[i]);
             } else {
-                G3d_fatalError(_("Please provide three g3d RGB maps"));
+                Rast3d_fatalError(_("Please provide three g3d RGB maps"));
             }
         }
     }
@@ -162,10 +162,10 @@ void check_input_maps(void)
         for (i = 0; i < 3; i++) {
             if (param.vectormaps->answers[i] != NULL) {
                 if (NULL == G_find_grid3(param.vectormaps->answers[i], ""))
-                    G3d_fatalError(_("Requested g3d vector map <%s> not found"),
+                    Rast3d_fatalError(_("Requested g3d vector map <%s> not found"),
                                    param.vectormaps->answers[i]);
             } else {
-                G3d_fatalError(_("Please provide three g3d vector maps [x,y,z]"));
+                Rast3d_fatalError(_("Please provide three g3d vector maps [x,y,z]"));
             }
         }
     }
@@ -199,7 +199,7 @@ void open_write_rgb_maps(input_maps * in, RASTER3D_Region region, FILE * fp,
             maprgb = NULL;
             /*Open the map */
             maprgb =
-                G3d_openCellOld(param.rgbmaps->answers[i],
+                Rast3d_openCellOld(param.rgbmaps->answers[i],
                                 G_find_grid3(param.rgbmaps->answers[i], ""),
                                 &region, RASTER3D_TILE_SAME_AS_FILE,
                                 RASTER3D_USE_CACHE_DEFAULT);
@@ -211,10 +211,10 @@ void open_write_rgb_maps(input_maps * in, RASTER3D_Region region, FILE * fp,
 
             /*if requested set the Mask on */
             if (param.mask->answer) {
-                if (G3d_maskFileExists()) {
+                if (Rast3d_maskFileExists()) {
                     changemask[i] = 0;
-                    if (G3d_maskIsOff(maprgb)) {
-                        G3d_maskOn(maprgb);
+                    if (Rast3d_maskIsOff(maprgb)) {
+                        Rast3d_maskOn(maprgb);
                         changemask[i] = 1;
                     }
                 }
@@ -243,12 +243,12 @@ void open_write_rgb_maps(input_maps * in, RASTER3D_Region region, FILE * fp,
 
             /*We set the Mask off, if it was off before */
             if (param.mask->answer) {
-                if (G3d_maskFileExists())
-                    if (G3d_maskIsOn(maprgb) && changemask[i])
-                        G3d_maskOff(maprgb);
+                if (Rast3d_maskFileExists())
+                    if (Rast3d_maskIsOn(maprgb) && changemask[i])
+                        Rast3d_maskOff(maprgb);
             }
             /* Close the 3d raster map */
-            if (!G3d_closeCell(maprgb)) {
+            if (!Rast3d_closeCell(maprgb)) {
                 fatal_error(_("Error closing g3d rgb map."), in);
             }
 
@@ -284,7 +284,7 @@ void open_write_vector_maps(input_maps * in, RASTER3D_Region region, FILE * fp,
             mapvect = NULL;
             /*Open the map */
             mapvect =
-                G3d_openCellOld(param.vectormaps->answers[i],
+                Rast3d_openCellOld(param.vectormaps->answers[i],
                                 G_find_grid3(param.vectormaps->answers[i],
                                              ""), &region,
                                 RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
@@ -296,10 +296,10 @@ void open_write_vector_maps(input_maps * in, RASTER3D_Region region, FILE * fp,
 
             /*if requested set the Mask on */
             if (param.mask->answer) {
-                if (G3d_maskFileExists()) {
+                if (Rast3d_maskFileExists()) {
                     changemask[i] = 0;
-                    if (G3d_maskIsOff(mapvect)) {
-                        G3d_maskOn(mapvect);
+                    if (Rast3d_maskIsOff(mapvect)) {
+                        Rast3d_maskOn(mapvect);
                         changemask[i] = 1;
                     }
                 }
@@ -328,13 +328,13 @@ void open_write_vector_maps(input_maps * in, RASTER3D_Region region, FILE * fp,
 
             /*We set the Mask off, if it was off before */
             if (param.mask->answer) {
-                if (G3d_maskFileExists())
-                    if (G3d_maskIsOn(mapvect) && changemask[i])
-                        G3d_maskOff(mapvect);
+                if (Rast3d_maskFileExists())
+                    if (Rast3d_maskIsOn(mapvect) && changemask[i])
+                        Rast3d_maskOff(mapvect);
             }
 
             /* Close the 3d raster map */
-            if (!G3d_closeCell(mapvect)) {
+            if (!Rast3d_closeCell(mapvect)) {
                 fatal_error(_("Error closing g3d vector map."), in);
             }
             /*Set the pointer to null so we know later that these files are already closed */
@@ -423,8 +423,8 @@ int main(int argc, char *argv[])
         fp = stdout;
 
     /* Figure out the region from the map */
-    G3d_initDefaults();
-    G3d_getWindow(&region);
+    Rast3d_initDefaults();
+    Rast3d_getWindow(&region);
 
     /*initiate the input mpas structure */
     in = create_input_maps_struct();
@@ -503,7 +503,7 @@ int main(int argc, char *argv[])
 
             /*Open the map */
             in->map =
-                G3d_openCellOld(param.input->answers[i],
+                Rast3d_openCellOld(param.input->answers[i],
                                 G_find_grid3(param.input->answers[i], ""),
                                 &region, RASTER3D_TILE_SAME_AS_FILE,
                                 RASTER3D_USE_CACHE_DEFAULT);
@@ -515,10 +515,10 @@ int main(int argc, char *argv[])
 
             /*if requested set the Mask on */
             if (param.mask->answer) {
-                if (G3d_maskFileExists()) {
+                if (Rast3d_maskFileExists()) {
                     changemask = 0;
-                    if (G3d_maskIsOff(in->map)) {
-                        G3d_maskOn(in->map);
+                    if (Rast3d_maskIsOff(in->map)) {
+                        Rast3d_maskOn(in->map);
                         changemask = 1;
                     }
                 }
@@ -529,13 +529,13 @@ int main(int argc, char *argv[])
 
             /*We set the Mask off, if it was off before */
             if (param.mask->answer) {
-                if (G3d_maskFileExists())
-                    if (G3d_maskIsOn(in->map) && changemask)
-                        G3d_maskOff(in->map);
+                if (Rast3d_maskFileExists())
+                    if (Rast3d_maskIsOn(in->map) && changemask)
+                        Rast3d_maskOff(in->map);
             }
 
             /* Close the 3d raster map */
-            if (!G3d_closeCell(in->map)) {
+            if (!Rast3d_closeCell(in->map)) {
                 in->map = NULL;
                 fatal_error(_("Error closing 3d raster map, the VTK file may be incomplete."),
                             in);

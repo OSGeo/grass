@@ -26,7 +26,7 @@
  *  \return int
  */
 
-int G3d_writeCats(const char *name, struct Categories *cats)
+int Rast3d_writeCats(const char *name, struct Categories *cats)
  /* adapted from Rast_write_cats */
 {
     FILE *fd;
@@ -176,7 +176,7 @@ read_cats(const char *name, const char *mapset, struct Categories *pcats)
  */
 
 int
-G3d_readCats(const char *name, const char *mapset, struct Categories *pcats)
+Rast3d_readCats(const char *name, const char *mapset, struct Categories *pcats)
  /* adapted from Rast_read_cats */
 {
     const char *type;

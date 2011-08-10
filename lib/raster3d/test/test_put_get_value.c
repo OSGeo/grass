@@ -68,7 +68,7 @@ int test_put_get_value_dcell(void)
     
     /* We need to set up a specific region for the new g3d map.
      * First we safe the default region. */
-    G3d_getWindow(&region);
+    Rast3d_getWindow(&region);
     
     region.bottom = 0.0;
     region.top = 1000;
@@ -80,12 +80,12 @@ int test_put_get_value_dcell(void)
     region.cols = 10;
     region.depths = 5;
         
-    G3d_adjustRegion(&region);
+    Rast3d_adjustRegion(&region);
         
-    map = G3d_openNewOptTileSize("test_put_get_value_dcell", RASTER3D_USE_CACHE_XY, &region, DCELL_TYPE, 32);
+    map = Rast3d_openNewOptTileSize("test_put_get_value_dcell", RASTER3D_USE_CACHE_XY, &region, DCELL_TYPE, 32);
     
     /* The window is the same as the map region ... of course */
-    G3d_setWindowMap(map, &region);
+    Rast3d_setWindowMap(map, &region);
     /*
      ROWS
   1000 1500 2000 2500 3000 3500 4000 4500 5000 5500 6500 7000 7500 8000 8500 9000 north
@@ -108,12 +108,12 @@ int test_put_get_value_dcell(void)
             for(x = 0; x < region.cols; x++) {
                 /* Add cols, rows and depths and put this in the map */
                 value = x + y + z;
-                G3d_putValue(map, x, y, z, &value, DCELL_TYPE);
+                Rast3d_putValue(map, x, y, z, &value, DCELL_TYPE);
             }
         }
     }
     /* Write everything to the disk */
-    G3d_flushAllTiles(map);
+    Rast3d_flushAllTiles(map);
     
     /* Reread the map and compare the expected results */
     
@@ -168,21 +168,21 @@ int test_put_get_value_dcell(void)
     east = region.west + region.ew_res * col;
     top = region.bottom + region.tb_res * depth;
     
-    G3d_getRegionValue(map, north, east, top, &value, DCELL_TYPE);
-    G3d_getValue(map, col, row, depth, &value_ref, DCELL_TYPE);
-    /* G3d_getValueRegion does not work with coordinates outside the region */
+    Rast3d_getRegionValue(map, north, east, top, &value, DCELL_TYPE);
+    Rast3d_getValue(map, col, row, depth, &value_ref, DCELL_TYPE);
+    /* Rast3d_getValueRegion does not work with coordinates outside the region */
     printf("Value %g == %g\n", value, value_ref);
     
     if(value == 0 || value < 0 || value > 0) {
-        G_message("Error in G3d_getRegionValue");
+        G_message("Error in Rast3d_getRegionValue");
         sum++;
     }
     if(value_ref == 0 || value_ref < 0 || value_ref > 0) {
-        G_message("Error in G3d_getValue");
+        G_message("Error in Rast3d_getValue");
         sum++;
     }
     
-    G3d_closeCell(map);
+    Rast3d_closeCell(map);
     
     G_remove("grid3", "test_put_get_value_dcell");
     
@@ -208,7 +208,7 @@ int test_put_get_value_fcell(void)
     
     /* We need to set up a specific region for the new g3d map.
      * First we safe the default region. */
-    G3d_getWindow(&region);
+    Rast3d_getWindow(&region);
     
     region.bottom = 0.0;
     region.top = 1000;
@@ -220,24 +220,24 @@ int test_put_get_value_fcell(void)
     region.cols = 10;
     region.depths = 5;
         
-    G3d_adjustRegion(&region);
+    Rast3d_adjustRegion(&region);
         
-    map = G3d_openNewOptTileSize("test_put_get_value_dcell", RASTER3D_USE_CACHE_XY, &region, FCELL_TYPE, 32);
+    map = Rast3d_openNewOptTileSize("test_put_get_value_dcell", RASTER3D_USE_CACHE_XY, &region, FCELL_TYPE, 32);
     
     /* The window is the same as the map region ... of course */
-    G3d_setWindowMap(map, &region);
+    Rast3d_setWindowMap(map, &region);
     
     for(z = 0; z < region.depths; z++) {
         for(y = 0; y < region.rows; y++) {
             for(x = 0; x < region.cols; x++) {
                 /* Add cols, rows and depths and put this in the map */
                 value = x + y + z;
-                G3d_putValue(map, x, y, z, &value, FCELL_TYPE);
+                Rast3d_putValue(map, x, y, z, &value, FCELL_TYPE);
             }
         }
     }
     /* Write everything to the disk */
-    G3d_flushAllTiles(map);
+    Rast3d_flushAllTiles(map);
     
        /* Reread the map and compare the expected results */
     
@@ -290,21 +290,21 @@ int test_put_get_value_fcell(void)
     east = region.west + region.ew_res * col;
     top = region.bottom + region.tb_res * depth;
     
-    G3d_getRegionValue(map, north, east, top, &value, FCELL_TYPE);
-    G3d_getValue(map, 10, 15, 5, &value_ref, FCELL_TYPE);
-    /* G3d_getValueRegion does not work with coordinates outside the region */
+    Rast3d_getRegionValue(map, north, east, top, &value, FCELL_TYPE);
+    Rast3d_getValue(map, 10, 15, 5, &value_ref, FCELL_TYPE);
+    /* Rast3d_getValueRegion does not work with coordinates outside the region */
     printf("Value %g == %g\n", value, value_ref);
     
     if(value == 0 || value < 0 || value > 0) {
-        G_message("Error in G3d_getRegionValue");
+        G_message("Error in Rast3d_getRegionValue");
         sum++;
     }
     if(value_ref == 0 || value_ref < 0 || value_ref > 0) {
-        G_message("Error in G3d_getValue");
+        G_message("Error in Rast3d_getValue");
         sum++;
     }
     
-    G3d_closeCell(map);
+    Rast3d_closeCell(map);
     
     G_remove("grid3", "test_put_get_value_fcell");
     
@@ -330,7 +330,7 @@ int test_put_get_value_resampling(void)
     
     /* We need to set up a specific region for the new g3d map.
      * First we safe the default region. */
-    G3d_getWindow(&region);
+    Rast3d_getWindow(&region);
     
     region.bottom = 0.0;
     region.top = 1000;
@@ -342,22 +342,22 @@ int test_put_get_value_resampling(void)
     region.cols = 10;
     region.depths = 5;
         
-    G3d_adjustRegion(&region);
+    Rast3d_adjustRegion(&region);
     
-    map = G3d_openNewOptTileSize("test_put_get_value_resample", RASTER3D_USE_CACHE_XY, &region, DCELL_TYPE, 32);
+    map = Rast3d_openNewOptTileSize("test_put_get_value_resample", RASTER3D_USE_CACHE_XY, &region, DCELL_TYPE, 32);
     
     /* We modify the window for resampling tests */
-    G3d_regionCopy(&window, &region);
+    Rast3d_regionCopy(&window, &region);
         
     /* Double the cols, rows and depths -> 8x resolution window */
     window.rows = 30;
     window.cols = 20;
     window.depths = 10;
     
-    G3d_adjustRegion(&window);
+    Rast3d_adjustRegion(&window);
     
     /* The window is the same as the map region ... of course */
-    G3d_setWindowMap(map, &window);
+    Rast3d_setWindowMap(map, &window);
     /*
      ROWS
   1000 1500 2000 2500 3000 3500 4000 4500 5000 5500 6500 7000 7500 8000 8500 9000 north
@@ -385,12 +385,12 @@ int test_put_get_value_resampling(void)
             for(x = 0; x < region.cols; x++) {
                 /* Add cols, rows and depths and put this in the map */
                 value = x + y + z;
-                G3d_putDouble(map, x, y, z, value);
+                Rast3d_putDouble(map, x, y, z, value);
             }
         }
     }
     /* Write everything to the disk */
-    G3d_flushAllTiles(map);
+    Rast3d_flushAllTiles(map);
     
     /* Reread the map and compare the expected results */
     
@@ -435,7 +435,7 @@ int test_put_get_value_resampling(void)
     
     sum += test_resampling_dcell(map, north, east, top, col, row, depth, 2);
     
-    G3d_closeCell(map);
+    Rast3d_closeCell(map);
     
     G_remove("grid3", "test_put_get_value_dcell");
     
@@ -452,26 +452,26 @@ int test_resampling_dcell(RASTER3D_Map *map, double north, double east, double t
     DCELL value_reg;
     DCELL value_win;
     
-    G3d_getRegionValue(map, north, east, top, &value, DCELL_TYPE);
-    G3d_getWindowValue(map, north, east, top, &value_win, DCELL_TYPE);
-    G3d_getValue(map, col * fact, row * fact, depth * fact, &value_ref, DCELL_TYPE);
-    G3d_getValueRegion(map, col, row, depth, &value_reg, DCELL_TYPE);
+    Rast3d_getRegionValue(map, north, east, top, &value, DCELL_TYPE);
+    Rast3d_getWindowValue(map, north, east, top, &value_win, DCELL_TYPE);
+    Rast3d_getValue(map, col * fact, row * fact, depth * fact, &value_ref, DCELL_TYPE);
+    Rast3d_getValueRegion(map, col, row, depth, &value_reg, DCELL_TYPE);
     printf("Value %g == %g == %g == %g\n", value, value_win, value_ref, value_reg);
     
     if(value != col + row + depth) {
-        G_message("Error in G3d_getRegionValue");
+        G_message("Error in Rast3d_getRegionValue");
         sum++;
     }
     if(value != col + row + depth) {
-        G_message("Error in G3d_getWindowValue");
+        G_message("Error in Rast3d_getWindowValue");
         sum++;
     }
     if(value != col + row + depth) {
-        G_message("Error in G3d_getValue");
+        G_message("Error in Rast3d_getValue");
         sum++;
     }
     if(value != col + row + depth) {
-        G_message("Error in G3d_getValueRegion");
+        G_message("Error in Rast3d_getValueRegion");
         sum++;
     }
     
@@ -488,26 +488,26 @@ int test_resampling_fcell(RASTER3D_Map *map, double north, double east, double t
     FCELL value_reg;
     FCELL value_win;
     
-    G3d_getRegionValue(map, north, east, top, &value, FCELL_TYPE);
-    G3d_getWindowValue(map, north, east, top, &value_win, FCELL_TYPE);
-    G3d_getValue(map, col * fact, row * fact, depth * fact, &value_ref, FCELL_TYPE);
-    G3d_getValueRegion(map, col, row, depth, &value_reg, FCELL_TYPE);
+    Rast3d_getRegionValue(map, north, east, top, &value, FCELL_TYPE);
+    Rast3d_getWindowValue(map, north, east, top, &value_win, FCELL_TYPE);
+    Rast3d_getValue(map, col * fact, row * fact, depth * fact, &value_ref, FCELL_TYPE);
+    Rast3d_getValueRegion(map, col, row, depth, &value_reg, FCELL_TYPE);
     printf("Value %g == %g == %g == %g\n", value, value_win, value_ref, value_reg);
     
     if(value != col + row + depth) {
-        G_message("Error in G3d_getRegionValue");
+        G_message("Error in Rast3d_getRegionValue");
         sum++;
     }
     if(value != col + row + depth) {
-        G_message("Error in G3d_getWindowValue");
+        G_message("Error in Rast3d_getWindowValue");
         sum++;
     }
     if(value != col + row + depth) {
-        G_message("Error in G3d_getValue");
+        G_message("Error in Rast3d_getValue");
         sum++;
     }
     if(value != col + row + depth) {
-        G_message("Error in G3d_getValueRegion");
+        G_message("Error in Rast3d_getValueRegion");
         sum++;
     }
     

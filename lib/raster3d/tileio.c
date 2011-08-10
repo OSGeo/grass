@@ -29,7 +29,7 @@
  * is read from file and stored in the buffer provided by the map structure.
  * The pointer to this buffer is returned. If the buffer already contains the
  * tile with <em>tileIndex</em> reading is skipped. Data which was stored in
- * earlier calls to <tt>G3d_getTilePtr</tt> is destroyed.  If the tile with <em>tileIndex</em> is not stored on the file corresponding to <em>map</em>, and <em>tileIndex</em> is a valid index the buffer is filled with NULL-values.<br>
+ * earlier calls to <tt>Rast3d_getTilePtr</tt> is destroyed.  If the tile with <em>tileIndex</em> is not stored on the file corresponding to <em>map</em>, and <em>tileIndex</em> is a valid index the buffer is filled with NULL-values.<br>
  * If <em>map</em> is old and the cache is used the tile with <em>tileIndex</em> is
  * read from file and stored in one of the cache buffers.  The pointer to buffer
  * is returned.  If no free cache buffer is available an unlocked cache-buffer
@@ -42,8 +42,8 @@
  * as if <em>map</em> is old and the cache is not used.  If the tile with <em>tileIndex</em> 
  * is already stored on file, it is read into the buffer, if not,
  * the cells are set to null-values.  If the buffer corresponding to the pointer
- * is used for writing, subsequent calls to <tt>G3d_getTilePtr</tt> may destroy the
- * values already stored in the buffer.  Use <tt>G3d_flushTile</tt> to write the buffer
+ * is used for writing, subsequent calls to <tt>Rast3d_getTilePtr</tt> may destroy the
+ * values already stored in the buffer.  Use <tt>Rast3d_flushTile</tt> to write the buffer
  * to the file before reusing it for a different index.  The use of this buffer
  * as write buffer is discouraged.<br>
  * If <em>map</em> is new and the cache is used the functionality is the same as if
@@ -59,8 +59,8 @@
  * Care has to be taken if this function is used in non-cache mode since it is
  * implicitly invoked every time a read or write request is issued.  The only
  * I/O-functions for which it is safe to assume that they do not invoke
- * <tt>G3d_getTilePtr</tt> are <tt>G3d_readTile()</tt> and
- * <tt>G3d_writeTile()</tt> and their corresponding type-specific versions.
+ * <tt>Rast3d_getTilePtr</tt> are <tt>Rast3d_readTile()</tt> and
+ * <tt>Rast3d_writeTile()</tt> and their corresponding type-specific versions.
  *
  *  \param map
  *  \param tileIndex
@@ -68,19 +68,19 @@
  *                 NULL ... otherwise.
  */
 
-void *G3d_getTilePtr(RASTER3D_Map * map, int tileIndex)
+void *Rast3d_getTilePtr(RASTER3D_Map * map, int tileIndex)
 {
     void *ptr;
 
     if ((tileIndex >= map->nTiles) || (tileIndex < 0)) {
-	G3d_error("G3d_getTilePtr: tileIndex out of range");
+	Rast3d_error("Rast3d_getTilePtr: tileIndex out of range");
 	return NULL;
     }
 
     if (map->useCache) {
-	ptr = G3d_cache_elt_ptr(map->cache, tileIndex);
+	ptr = Rast3d_cache_elt_ptr(map->cache, tileIndex);
 	if (ptr == NULL) {
-	    G3d_error("G3d_getTilePtr: error in G3d_cache_elt_ptr");
+	    Rast3d_error("Rast3d_getTilePtr: error in Rast3d_cache_elt_ptr");
 	    return NULL;
 	}
 	return ptr;
@@ -90,8 +90,8 @@ void *G3d_getTilePtr(RASTER3D_Map * map, int tileIndex)
 	return map->data;
 
     map->currentIndex = tileIndex;
-    if (!G3d_readTile(map, map->currentIndex, map->data, map->typeIntern)) {
-	G3d_error("G3d_getTilePtr: error in G3d_readTile");
+    if (!Rast3d_readTile(map, map->currentIndex, map->data, map->typeIntern)) {
+	Rast3d_error("Rast3d_getTilePtr: error in Rast3d_readTile");
 	return NULL;
     }
 
@@ -104,7 +104,7 @@ void *G3d_getTilePtr(RASTER3D_Map * map, int tileIndex)
 /*!
  * \brief 
  *
- * Same functionality as <tt>G3d_getTilePtr()</tt> but does not return the pointer.
+ * Same functionality as <tt>Rast3d_getTilePtr()</tt> but does not return the pointer.
  *
  *  \param map
  *  \param tileIndex
@@ -112,10 +112,10 @@ void *G3d_getTilePtr(RASTER3D_Map * map, int tileIndex)
  *          0 ... otherwise.
  */
 
-int G3d_tileLoad(RASTER3D_Map * map, int tileIndex)
+int Rast3d_tileLoad(RASTER3D_Map * map, int tileIndex)
 {
-    if (G3d_getTilePtr(map, tileIndex) == NULL) {
-	G3d_error("G3d_tileLoad: error in G3d_getTilePtr");
+    if (Rast3d_getTilePtr(map, tileIndex) == NULL) {
+	Rast3d_error("Rast3d_tileLoad: error in Rast3d_getTilePtr");
 	return 0;
     }
 
@@ -124,13 +124,13 @@ int G3d_tileLoad(RASTER3D_Map * map, int tileIndex)
 
 /*---------------------------------------------------------------------------*/
 
-int G3d__removeTile(RASTER3D_Map * map, int tileIndex)
+int Rast3d__removeTile(RASTER3D_Map * map, int tileIndex)
 {
     if (!map->useCache)
 	return 1;
 
-    if (!G3d_cache_remove_elt(map->cache, tileIndex)) {
-	G3d_error("G3d_removeTile: error in G3d_cache_remove_elt");
+    if (!Rast3d_cache_remove_elt(map->cache, tileIndex)) {
+	Rast3d_error("Rast3d_removeTile: error in Rast3d_cache_remove_elt");
 	return 0;
     }
 

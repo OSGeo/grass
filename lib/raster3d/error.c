@@ -22,7 +22,7 @@
  *  \return void
  */
 
-void G3d_skipError(const char *msg)
+void Rast3d_skipError(const char *msg)
 {
 }
 
@@ -37,7 +37,7 @@ void G3d_skipError(const char *msg)
  *  \return void
  */
 
-void G3d_printError(const char *msg)
+void Rast3d_printError(const char *msg)
 {
     fprintf(stderr, "ERROR: ");
     fprintf(stderr, msg);
@@ -55,7 +55,7 @@ void G3d_printError(const char *msg)
  *  \return void
  */
 
-void G3d_fatalError(const char *msg, ...)
+void Rast3d_fatalError(const char *msg, ...)
 {
     char buffer[2000];		/* No novels to the error logs, OK? */
     va_list ap;
@@ -67,12 +67,12 @@ void G3d_fatalError(const char *msg, ...)
     G_fatal_error("%s", buffer);
 }
 
-void G3d_fatalError_noargs(const char *msg)
+void Rast3d_fatalError_noargs(const char *msg)
 {
     G_fatal_error("%s", msg);
 }
 
-void G3d_error(const char *msg, ...)
+void Rast3d_error(const char *msg, ...)
 {
     char buffer[2000];		/* No novels to the error logs, OK? */
     va_list ap;

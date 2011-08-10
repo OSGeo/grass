@@ -85,7 +85,7 @@ int main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     
     /* Initiate the defaults for testing */
-    G3d_initDefaults();
+    Rast3d_initDefaults();
 
     /*Run the unit tests */
     if (param.testunit->answer || param.full->answer) {

@@ -431,7 +431,7 @@ void *open_g3d_file(const char *filename, IFLAG * type, double *min,
 
     /* open g3d file */
     map =
-	G3d_openCellOld(filename, mapset, RASTER3D_DEFAULT_WINDOW,
+	Rast3d_openCellOld(filename, mapset, RASTER3D_DEFAULT_WINDOW,
 			RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
     if (!map) {
 	G_warning(_("Unable to open 3D raster map <%s>"), filename);
@@ -439,15 +439,15 @@ void *open_g3d_file(const char *filename, IFLAG * type, double *min,
     }
 
     /* load range into range structure of map */
-    if (!G3d_range_load(map)) {
+    if (!Rast3d_range_load(map)) {
 	G_warning(_("Unable to read range of 3D raster map <%s>"), filename);
 	return (NULL);
     }
 
-    G3d_range_min_max(map, min, max);
+    Rast3d_range_min_max(map, min, max);
 
     /* get file data type */
-    itype = G3d_fileTypeMap(map);
+    itype = Rast3d_fileTypeMap(map);
     if (itype == FCELL_TYPE)
 	*type = VOL_DTYPE_FLOAT;
     if (itype == DCELL_TYPE)
@@ -467,7 +467,7 @@ void *open_g3d_file(const char *filename, IFLAG * type, double *min,
 int close_g3d_file(void *map)
 {
     /* close opened g3d file */
-    if (G3d_closeCell((RASTER3D_Map *) map) != 1) {
+    if (Rast3d_closeCell((RASTER3D_Map *) map) != 1) {
 	G_warning(_("Unable to close 3D raster map <%s>"),
 		  ((RASTER3D_Map *) map)->fileName);
 	return (-1);
@@ -492,12 +492,12 @@ int read_g3d_value(IFLAG type, void *map, int x, int y, int z, void *value)
     switch (type) {
 	/* float data type */
     case (VOL_DTYPE_FLOAT):
-	*((float *)value) = G3d_getFloat(map, x, y, z);
+	*((float *)value) = Rast3d_getFloat(map, x, y, z);
 	break;
 
 	/* double data type */
     case (VOL_DTYPE_DOUBLE):
-	*((double *)value) = G3d_getDouble(map, x, y, z);
+	*((double *)value) = Rast3d_getDouble(map, x, y, z);
 	break;
 
 	/* unsupported data type */
@@ -529,7 +529,7 @@ int read_g3d_slice(IFLAG type, void *map, int level, void *data)
 	for (x = 0; x < Cols; x++) {
 	    for (y = 0; y < Rows; y++) {
 		((float *)data)[x + y * Cols] =
-		    G3d_getFloat(map, x, y, level);
+		    Rast3d_getFloat(map, x, y, level);
 	    }
 	}
 
@@ -540,7 +540,7 @@ int read_g3d_slice(IFLAG type, void *map, int level, void *data)
 	for (x = 0; x < Cols; x++) {
 	    for (y = 0; y < Rows; y++) {
 		((double *)data)[x + y * Cols] =
-		    G3d_getDouble(map, x, y, level);
+		    Rast3d_getDouble(map, x, y, level);
 	    }
 	}
 
@@ -575,7 +575,7 @@ int read_g3d_vol(IFLAG type, void *map, void *data)
 	    for (y = 0; y < Rows; y++) {
 		for (z = 0; z < Depths; z++) {
 		    ((float *)data)[x + y * Cols + z * Rows * Cols] =
-			G3d_getFloat(map, x, y, z);
+			Rast3d_getFloat(map, x, y, z);
 		}
 	    }
 	}
@@ -588,7 +588,7 @@ int read_g3d_vol(IFLAG type, void *map, void *data)
 	    for (y = 0; y < Rows; y++) {
 		for (z = 0; z < Depths; z++) {
 		    ((double *)data)[x + y * Cols + z * Rows * Cols] =
-			G3d_getDouble(map, x, y, z);
+			Rast3d_getDouble(map, x, y, z);
 		}
 	    }
 	}
@@ -618,12 +618,12 @@ int is_null_g3d_value(IFLAG type, void *value)
     switch (type) {
 	/* float data type */
     case (VOL_DTYPE_FLOAT):
-	return G3d_isNullValueNum(value, FCELL_TYPE);
+	return Rast3d_isNullValueNum(value, FCELL_TYPE);
 	break;
 
 	/* double data type */
     case (VOL_DTYPE_DOUBLE):
-	return G3d_isNullValueNum(value, DCELL_TYPE);
+	return Rast3d_isNullValueNum(value, DCELL_TYPE);
 	break;
 
 	/* unsupported data type */

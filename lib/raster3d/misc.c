@@ -12,7 +12,7 @@
 
 /*---------------------------------------------------------------------------*/
 
-int G3d_g3dType2cellType(int g3dType)
+int Rast3d_g3dType2cellType(int g3dType)
 {
     if (g3dType == FCELL_TYPE)
 	return FCELL_TYPE;
@@ -22,7 +22,7 @@ int G3d_g3dType2cellType(int g3dType)
 /*---------------------------------------------------------------------------*/
 
 void
-G3d_copyFloat2Double(const float *src, int offsSrc, double *dst, int offsDst,
+Rast3d_copyFloat2Double(const float *src, int offsSrc, double *dst, int offsDst,
 		     int nElts)
 {
     int i;
@@ -37,7 +37,7 @@ G3d_copyFloat2Double(const float *src, int offsSrc, double *dst, int offsDst,
 /*---------------------------------------------------------------------------*/
 
 void
-G3d_copyDouble2Float(const double *src, int offsSrc, float *dst, int offsDst,
+Rast3d_copyDouble2Float(const double *src, int offsSrc, float *dst, int offsDst,
 		     int nElts)
 {
     int i;
@@ -52,22 +52,22 @@ G3d_copyDouble2Float(const double *src, int offsSrc, float *dst, int offsDst,
 /*---------------------------------------------------------------------------*/
 
 void
-G3d_copyValues(const void *src, int offsSrc, int typeSrc, void *dst,
+Rast3d_copyValues(const void *src, int offsSrc, int typeSrc, void *dst,
 	       int offsDst, int typeDst, int nElts)
 {
     int eltLength;
 
     if ((typeSrc == FCELL_TYPE) && (typeDst == DCELL_TYPE)) {
-	G3d_copyFloat2Double(src, offsSrc, dst, offsDst, nElts);
+	Rast3d_copyFloat2Double(src, offsSrc, dst, offsDst, nElts);
 	return;
     }
 
     if ((typeSrc == DCELL_TYPE) && (typeDst == FCELL_TYPE)) {
-	G3d_copyDouble2Float(src, offsSrc, dst, offsDst, nElts);
+	Rast3d_copyDouble2Float(src, offsSrc, dst, offsDst, nElts);
 	return;
     }
 
-    eltLength = G3d_length(typeSrc);
+    eltLength = Rast3d_length(typeSrc);
 
     src = G_incr_void_ptr(src, eltLength * offsSrc);
     dst = G_incr_void_ptr(dst, eltLength * offsDst);
@@ -77,10 +77,10 @@ G3d_copyValues(const void *src, int offsSrc, int typeSrc, void *dst,
 
 /*---------------------------------------------------------------------------*/
 
-int G3d_length(int t)
+int Rast3d_length(int t)
 {
     if (!RASTER3D_IS_CORRECT_TYPE(t))
-	G3d_fatalError("G3d_length: invalid type");
+	Rast3d_fatalError("Rast3d_length: invalid type");
 
     if (t == FCELL_TYPE)
 	return sizeof(FCELL);
@@ -89,10 +89,10 @@ int G3d_length(int t)
     return 0;
 }
 
-int G3d_externLength(int t)
+int Rast3d_externLength(int t)
 {
     if (!RASTER3D_IS_CORRECT_TYPE(t))
-	G3d_fatalError("G3d_externLength: invalid type");
+	Rast3d_fatalError("Rast3d_externLength: invalid type");
 
     if (t == FCELL_TYPE)
 	return RASTER3D_XDR_FLOAT_LENGTH;

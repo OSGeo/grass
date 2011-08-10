@@ -11,8 +11,8 @@ static int cacheRead_readFun(int tileIndex, void *tileBuf, void *closure)
 {
     RASTER3D_Map *map = closure;
 
-    if (!G3d_readTile(map, tileIndex, tileBuf, map->typeIntern)) {
-	G3d_error("cacheRead_readFun: error in G3d_readTile");
+    if (!Rast3d_readTile(map, tileIndex, tileBuf, map->typeIntern)) {
+	Rast3d_error("cacheRead_readFun: error in Rast3d_readTile");
 	return 0;
     }
     return 1;
@@ -22,11 +22,11 @@ static int cacheRead_readFun(int tileIndex, void *tileBuf, void *closure)
 
 static int initCacheRead(RASTER3D_Map * map, int nCached)
 {
-    map->cache = G3d_cache_new_read(nCached,
+    map->cache = Rast3d_cache_new_read(nCached,
 				    map->tileSize * map->numLengthIntern,
 				    map->nTiles, cacheRead_readFun, map);
     if (map->cache == NULL) {
-	G3d_error("initCacheRead: error in G3d_cache_new_read");
+	Rast3d_error("initCacheRead: error in Rast3d_cache_new_read");
 	return 0;
     }
 
@@ -62,8 +62,8 @@ static int cacheWrite_readFun(int tileIndex, void *tileBuf, void *closure)
     pos = map->index[tileIndex];
 
     /* tile has already been flushed onto output file or does not exist yet */
-    if (pos >= -1) {		/* note, G3d_readTile takes care of the case pos == -1 */
-	G3d_readTile(map, tileIndex, tileBuf, map->typeIntern);
+    if (pos >= -1) {		/* note, Rast3d_readTile takes care of the case pos == -1 */
+	Rast3d_readTile(map, tileIndex, tileBuf, map->typeIntern);
 	return 1;
     }
 
@@ -77,11 +77,11 @@ static int cacheWrite_readFun(int tileIndex, void *tileBuf, void *closure)
     /* seek tile and read it into buffer */
 
     if (lseek(map->cacheFD, offs, SEEK_SET) == -1) {
-	G3d_error("cacheWrite_readFun: can't position file");
+	Rast3d_error("cacheWrite_readFun: can't position file");
 	return 0;
     }
     if (read(map->cacheFD, tileBuf, nBytes) != nBytes) {
-	G3d_error("cacheWrite_readFun: can't read file");
+	Rast3d_error("cacheWrite_readFun: can't read file");
 	return 0;
     }
 
@@ -103,21 +103,21 @@ static int cacheWrite_readFun(int tileIndex, void *tileBuf, void *closure)
     offsLast = map->cachePosLast * (nBytes + sizeof(int));
 
     if (lseek(map->cacheFD, offsLast, SEEK_SET) == -1) {
-	G3d_error("cacheWrite_readFun: can't position file");
+	Rast3d_error("cacheWrite_readFun: can't position file");
 	return 0;
     }
     if (read(map->cacheFD, xdr, nBytes + sizeof(int)) != nBytes + sizeof(int)) {
-	G3d_error("cacheWrite_readFun: can't read file");
+	Rast3d_error("cacheWrite_readFun: can't read file");
 	return 0;
     }
 
     if (lseek(map->cacheFD, offs, SEEK_SET) == -1) {
-	G3d_error("cacheWrite_readFun: can't position file");
+	Rast3d_error("cacheWrite_readFun: can't position file");
 	return 0;
     }
     if (write(map->cacheFD, xdr, nBytes + sizeof(int)) !=
 	nBytes + sizeof(int)) {
-	G3d_error("cacheWrite_readFun: can't write file");
+	Rast3d_error("cacheWrite_readFun: can't write file");
 	return 0;
     }
 
@@ -146,15 +146,15 @@ cacheWrite_writeFun(int tileIndex, const void *tileBuf, void *closure)
     offs = map->cachePosLast * (nBytes + sizeof(int));
 
     if (lseek(map->cacheFD, offs, SEEK_SET) == -1) {
-	G3d_error("cacheWrite_writeFun: can't position file");
+	Rast3d_error("cacheWrite_writeFun: can't position file");
 	return 0;
     }
     if (write(map->cacheFD, tileBuf, nBytes) != nBytes) {
-	G3d_error("cacheWrite_writeFun: can't write file");
+	Rast3d_error("cacheWrite_writeFun: can't write file");
 	return 0;
     }
     if (write(map->cacheFD, &tileIndex, sizeof(int)) != sizeof(int)) {
-	G3d_error("cacheWrite_writeFun: can't write file");
+	Rast3d_error("cacheWrite_writeFun: can't write file");
 	return 0;
     }
 
@@ -169,14 +169,14 @@ static int disposeCacheWrite(RASTER3D_Map * map)
 {
     if (map->cacheFD >= 0) {
 	if (close(map->cacheFD) != 0) {
-	    G3d_error("disposeCacheWrite: could not close file");
+	    Rast3d_error("disposeCacheWrite: could not close file");
 	    return 0;
 	}
 	remove(map->cacheFileName);
-	G3d_free(map->cacheFileName);
+	Rast3d_free(map->cacheFileName);
     }
 
-    G3d_cache_dispose(map->cache);
+    Rast3d_cache_dispose(map->cache);
 
     return 1;
 }
@@ -189,13 +189,13 @@ static int initCacheWrite(RASTER3D_Map * map, int nCached)
     map->cacheFD = open(map->cacheFileName, O_RDWR | O_CREAT | O_TRUNC, 0666);
 
     if (map->cacheFD < 0) {
-	G3d_error("initCacheWrite: could not open file");
+	Rast3d_error("initCacheWrite: could not open file");
 	return 0;
     }
 
     map->cachePosLast = -1;
 
-    map->cache = G3d_cache_new(nCached,
+    map->cache = Rast3d_cache_new(nCached,
 			       map->tileSize * map->numLengthIntern,
 			       map->nTiles,
 			       cacheWrite_writeFun, map,
@@ -203,7 +203,7 @@ static int initCacheWrite(RASTER3D_Map * map, int nCached)
 
     if (map->cache == NULL) {
 	disposeCacheWrite(map);
-	G3d_error("initCacheWrite: error in G3d_cache_new");
+	Rast3d_error("initCacheWrite: error in Rast3d_cache_new");
 	return 0;
     }
 
@@ -212,18 +212,18 @@ static int initCacheWrite(RASTER3D_Map * map, int nCached)
 
 /*---------------------------------------------------------------------------*/
 
-int G3d_initCache(RASTER3D_Map * map, int nCached)
+int Rast3d_initCache(RASTER3D_Map * map, int nCached)
 {
     if (map->operation == RASTER3D_READ_DATA) {
 	if (!initCacheRead(map, nCached)) {
-	    G3d_error("G3d_initCache: error in initCacheRead");
+	    Rast3d_error("Rast3d_initCache: error in initCacheRead");
 	    return 0;
 	}
 	return 1;
     }
 
     if (!initCacheWrite(map, nCached)) {
-	G3d_error("G3d_initCache: error in initCacheWrite");
+	Rast3d_error("Rast3d_initCache: error in initCacheWrite");
 	return 0;
     }
 
@@ -234,24 +234,24 @@ int G3d_initCache(RASTER3D_Map * map, int nCached)
 
 static int disposeCacheRead(RASTER3D_Map * map)
 {
-    G3d_cache_dispose(map->cache);
+    Rast3d_cache_dispose(map->cache);
     return 1;
 }
 
 /*---------------------------------------------------------------------------*/
 
-int G3d_disposeCache(RASTER3D_Map * map)
+int Rast3d_disposeCache(RASTER3D_Map * map)
 {
     if (map->operation == RASTER3D_READ_DATA) {
 	if (!disposeCacheRead(map)) {
-	    G3d_error("G3d_disposeCache: error in disposeCacheRead");
+	    Rast3d_error("Rast3d_disposeCache: error in disposeCacheRead");
 	    return 0;
 	}
 	return 1;
     }
 
     if (!disposeCacheWrite(map)) {
-	G3d_error("G3d_disposeCache: error in disposeCacheWrite");
+	Rast3d_error("Rast3d_disposeCache: error in disposeCacheWrite");
 	return 0;
     }
 
@@ -265,8 +265,8 @@ static int cacheFlushFun(int tileIndex, const void *tileBuf, void *closure)
 {
     RASTER3D_Map *map = closure;
 
-    if (!G3d_writeTile(map, tileIndex, tileBuf, map->typeIntern)) {
-	G3d_error("cacheFlushFun: error in G3d_writeTile");
+    if (!Rast3d_writeTile(map, tileIndex, tileBuf, map->typeIntern)) {
+	Rast3d_error("cacheFlushFun: error in Rast3d_writeTile");
 	return 0;
     }
 
@@ -275,21 +275,21 @@ static int cacheFlushFun(int tileIndex, const void *tileBuf, void *closure)
 
 /*---------------------------------------------------------------------------*/
 
-int G3d_flushAllTiles(RASTER3D_Map * map)
+int Rast3d_flushAllTiles(RASTER3D_Map * map)
 {
     int tileIndex, nBytes;
     long offs;
 
     if (map->operation == RASTER3D_READ_DATA) {
-	if (!G3d_cache_remove_all(map->cache)) {
-	    G3d_error("G3d_flushAllTiles: error in G3d_cache_remove_all");
+	if (!Rast3d_cache_remove_all(map->cache)) {
+	    Rast3d_error("Rast3d_flushAllTiles: error in Rast3d_cache_remove_all");
 	    return 0;
 	}
 	return 1;
     }
 
     /* make cache write into output file instead of cache file */
-    G3d_cache_set_removeFun(map->cache, cacheFlushFun, map);
+    Rast3d_cache_set_removeFun(map->cache, cacheFlushFun, map);
 
     /* first flush all the tiles which are in the file cache */
 
@@ -299,32 +299,32 @@ int G3d_flushAllTiles(RASTER3D_Map * map)
 	offs = map->cachePosLast * (nBytes + sizeof(int)) + nBytes;
 
 	if (lseek(map->cacheFD, offs, SEEK_SET) == -1) {
-	    G3d_error("G3d_flushAllTiles: can't position file");
+	    Rast3d_error("Rast3d_flushAllTiles: can't position file");
 	    return 0;
 	}
 	if (read(map->cacheFD, &tileIndex, sizeof(int)) != sizeof(int)) {
-	    G3d_error("G3d_flushAllTiles: can't read file");
+	    Rast3d_error("Rast3d_flushAllTiles: can't read file");
 	    return 0;
 	}
 
-	if (!G3d_cache_load(map->cache, tileIndex)) {
-	    G3d_error("G3d_flushAllTiles: error in G3d_cache_load");
+	if (!Rast3d_cache_load(map->cache, tileIndex)) {
+	    Rast3d_error("Rast3d_flushAllTiles: error in Rast3d_cache_load");
 	    return 0;
 	}
-	if (!G3d_cache_flush(map->cache, tileIndex)) {
-	    G3d_error("G3d_flushAllTiles: error in G3d_cache_flush");
+	if (!Rast3d_cache_flush(map->cache, tileIndex)) {
+	    Rast3d_error("Rast3d_flushAllTiles: error in Rast3d_cache_flush");
 	    return 0;
 	}
     }
 
     /* then flush all the tiles which remain in the non-file cache */
-    if (!G3d_cache_flush_all(map->cache)) {
-	G3d_error("G3d_flushAllTiles: error in G3d_cache_flush_all");
+    if (!Rast3d_cache_flush_all(map->cache)) {
+	Rast3d_error("Rast3d_flushAllTiles: error in Rast3d_cache_flush_all");
 	return 0;
     }
 
     /* now the cache should write into the cache file again */
-    G3d_cache_set_removeFun(map->cache, cacheWrite_writeFun, map);
+    Rast3d_cache_set_removeFun(map->cache, cacheWrite_writeFun, map);
 
     return 1;
 }

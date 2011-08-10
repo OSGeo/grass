@@ -35331,7 +35331,7 @@ msgid "Unable to open 3d raster map <%s>"
 msgstr "Impossible d'ouvrir la couche raster <%s>"
 
 #: ../raster3d/r3.retile/main.c:140
-msgid "G3d_getStandard3dParams: tile dimension value invalid"
+msgid "Rast3d_getStandard3dParams: tile dimension value invalid"
 msgstr ""
 
 #: ../raster3d/r3.info/r3.info.main.c:82

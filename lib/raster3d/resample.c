@@ -22,28 +22,28 @@
  */
 
 void
-G3d_nearestNeighbor(RASTER3D_Map * map, int x, int y, int z, void *value,
+Rast3d_nearestNeighbor(RASTER3D_Map * map, int x, int y, int z, void *value,
 		    int type)
 {
     double north, east, top;
     int row, col, depth;
 
     /* convert (x, y, z) window coordinates into (north, east, top) */
-    G3d_coord2location(&(map->window), (double)x + 0.5, (double)y + 0.5, (double)z + 0.5, &north, &east, &top);
+    Rast3d_coord2location(&(map->window), (double)x + 0.5, (double)y + 0.5, (double)z + 0.5, &north, &east, &top);
 
     /* convert (north, east, top) into map region coordinates (row, col, depth) */
-    G3d_location2coord(&(map->region), north, east, top, &col, &row, &depth);
+    Rast3d_location2coord(&(map->region), north, east, top, &col, &row, &depth);
 
     /* if (row, col, depth) outside map region return NULL value */
     if ((row < 0) || (row >= map->region.rows) ||
 	(col < 0) || (col >= map->region.cols) ||
 	(depth < 0) || (depth >= map->region.depths)) {
-	G3d_setNullValue(value, 1, type);
+	Rast3d_setNullValue(value, 1, type);
 	return;
     }
     
     /* Get the value from the map in map-region resolution */
-	G3d_getValueRegion(map, col, row, depth, value, type);
+	Rast3d_getValueRegion(map, col, row, depth, value, type);
 }
 
 /*--------------------------------------------------------------------------*/
@@ -53,13 +53,13 @@ G3d_nearestNeighbor(RASTER3D_Map * map, int x, int y, int z, void *value,
  * \brief 
  *
  * Sets the resampling function to be used by
- * G3d_getValue () (cf.{g3d:G3d.getValue}). This function is defined
+ * Rast3d_getValue () (cf.{g3d:G3d.getValue}). This function is defined
  * as follows:
  *
  *  \return void
  */
 
-void G3d_setResamplingFun(RASTER3D_Map * map, void (*resampleFun) ())
+void Rast3d_setResamplingFun(RASTER3D_Map * map, void (*resampleFun) ())
 {
     map->resampleFun = resampleFun;
 }
@@ -77,7 +77,7 @@ void G3d_setResamplingFun(RASTER3D_Map * map, void (*resampleFun) ())
  *  \return void
  */
 
-void G3d_getResamplingFun(RASTER3D_Map * map, void (**resampleFun) ())
+void Rast3d_getResamplingFun(RASTER3D_Map * map, void (**resampleFun) ())
 {
     *resampleFun = map->resampleFun;
 }
@@ -89,12 +89,12 @@ void G3d_getResamplingFun(RASTER3D_Map * map, void (**resampleFun) ())
  * \brief 
  *
  *  Returns
- * in <em>nnFunPtr</em> a pointer to G3d_nearestNeighbor () (cf.{g3d:G3d.nearestNeighbor}).
+ * in <em>nnFunPtr</em> a pointer to Rast3d_nearestNeighbor () (cf.{g3d:G3d.nearestNeighbor}).
  *
  *  \return void
  */
 
-void G3d_getNearestNeighborFunPtr(void (**nnFunPtr) ())
+void Rast3d_getNearestNeighborFunPtr(void (**nnFunPtr) ())
 {
-    *nnFunPtr = G3d_nearestNeighbor;
+    *nnFunPtr = Rast3d_nearestNeighbor;
 }

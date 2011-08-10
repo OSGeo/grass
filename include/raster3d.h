@@ -231,7 +231,7 @@ typedef struct
     int lastIndex;
     int lastIndexActive;
 
-} G3d_cache_hash;
+} Rast3d_cache_hash;
 
 /*---------------------------------------------------------------------------*/
 

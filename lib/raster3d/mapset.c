@@ -6,7 +6,7 @@
 
 /*---------------------------------------------------------------------------*/
 
-void G3d_makeMapsetMapDirectory(const char *mapName)
+void Rast3d_makeMapsetMapDirectory(const char *mapName)
 {
     char buf[GNAME_MAX + sizeof(RASTER3D_DIRECTORY) + 2];
 

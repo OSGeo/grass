@@ -9,7 +9,7 @@
 
 /*---------------------------------------------------------------------------*/
 
-int G3d_isNullValueNum(const void *n, int type)
+int Rast3d_isNullValueNum(const void *n, int type)
 {
     if (type == FCELL_TYPE)
 	return Rast_is_f_null_value(n);
@@ -32,7 +32,7 @@ int G3d_isNullValueNum(const void *n, int type)
  *  \return void
  */
 
-void G3d_setNullValue(void *c, int nofElts, int type)
+void Rast3d_setNullValue(void *c, int nofElts, int type)
 {
     if (type == FCELL_TYPE) {
 	Rast_set_f_null_value((float *)c, nofElts);

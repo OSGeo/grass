@@ -13,41 +13,41 @@ static unsigned char clearMask[9] =
 
 /*---------------------------------------------------------------------------*/
 
-static void G3d_float2xdrFloat(float *f, float *xdrf)
+static void Rast3d_float2xdrFloat(float *f, float *xdrf)
 {
     XDR xdrEncodeStream;
 
     xdrmem_create(&xdrEncodeStream, (caddr_t) xdrf, 4, XDR_ENCODE);
 
     if (!xdr_setpos(&xdrEncodeStream, 0))
-	G3d_fatalError("G3d_float2xdrFloat: positioning xdr failed");
+	Rast3d_fatalError("Rast3d_float2xdrFloat: positioning xdr failed");
 
     if (!xdr_float(&xdrEncodeStream, f))
-	G3d_fatalError("G3d_float2xdrFloat: writing xdr failed");
+	Rast3d_fatalError("Rast3d_float2xdrFloat: writing xdr failed");
 
     xdr_destroy(&xdrEncodeStream);
 }
 
 /*---------------------------------------------------------------------------*/
 
-static void G3d_double2xdrDouble(double *d, double *xdrd)
+static void Rast3d_double2xdrDouble(double *d, double *xdrd)
 {
     XDR xdrEncodeStream;
 
     xdrmem_create(&xdrEncodeStream, (caddr_t) xdrd, 8, XDR_ENCODE);
 
     if (!xdr_setpos(&xdrEncodeStream, 0))
-	G3d_fatalError("G3d_double2xdrDouble: positioning xdr failed");
+	Rast3d_fatalError("Rast3d_double2xdrDouble: positioning xdr failed");
 
     if (!xdr_double(&xdrEncodeStream, d))
-	G3d_fatalError("G3d_double2xdrDouble: writing xdr failed");
+	Rast3d_fatalError("Rast3d_double2xdrDouble: writing xdr failed");
 
     xdr_destroy(&xdrEncodeStream);
 }
 
 /*---------------------------------------------------------------------------*/
 
-static void G3d_truncFloat(float *f, int p)
+static void Rast3d_truncFloat(float *f, int p)
 {
     unsigned char *c;
 
@@ -78,7 +78,7 @@ static void G3d_truncFloat(float *f, int p)
 
 /*---------------------------------------------------------------------------*/
 
-static void G3d_truncDouble(double *d, int p)
+static void Rast3d_truncDouble(double *d, int p)
 {
     unsigned char *c;
 
@@ -151,7 +151,7 @@ static void G3d_truncDouble(double *d, int p)
 
 /*---------------------------------------------------------------------------*/
 
-static void G3d_float2Double(float *f, double *d)
+static void Rast3d_float2Double(float *f, double *d)
 {
     unsigned char *c1, *c2, sign, c;
     int e;
@@ -191,16 +191,16 @@ static void G3d_float2Double(float *f, double *d)
 
 /*---------------------------------------------------------------------------*/
 
-static int G3d_compareFloats(float *f1, int p1, float *f2, int p2)
+static int Rast3d_compareFloats(float *f1, int p1, float *f2, int p2)
 {
     unsigned char *c1, *c2;
     float xdrf1, xdrf2;
 
-    if (G3d_isNullValueNum(f1, FCELL_TYPE))
-	return G3d_isNullValueNum(f2, FCELL_TYPE);
+    if (Rast3d_isNullValueNum(f1, FCELL_TYPE))
+	return Rast3d_isNullValueNum(f2, FCELL_TYPE);
 
-    G3d_float2xdrFloat(f1, &xdrf1);
-    G3d_float2xdrFloat(f2, &xdrf2);
+    Rast3d_float2xdrFloat(f1, &xdrf1);
+    Rast3d_float2xdrFloat(f2, &xdrf2);
 
     c1 = (unsigned char *)&xdrf1;
     c2 = (unsigned char *)&xdrf2;
@@ -208,9 +208,9 @@ static int G3d_compareFloats(float *f1, int p1, float *f2, int p2)
     /*   printf ("%d %d (%d %d %d %d) (%d %d %d %d) %d\n", p1, p2, *c1, *(c1 + 1), *(c1 + 2), *(c1 + 3), *c2, *(c2 + 1), *(c2 + 2), *(c2 + 3), *f1 == *f2); */
 
     if ((p1 != -1) && (p1 < 23) && ((p1 < p2) || (p2 == -1)))
-	G3d_truncFloat(&xdrf2, p1);
+	Rast3d_truncFloat(&xdrf2, p1);
     if ((p2 != -1) && (p2 < 23) && ((p2 < p1) || (p1 == -1)))
-	G3d_truncFloat(&xdrf1, p2);
+	Rast3d_truncFloat(&xdrf1, p2);
 
     /*   printf ("%d %d (%d %d %d %d) (%d %d %d %d) %d\n", p1, p2, *c1, *(c1 + 1), *(c1 + 2), *(c1 + 3), *c2, *(c2 + 1), *(c2 + 2), *(c2 + 3), *f1 == *f2); */
 
@@ -222,16 +222,16 @@ static int G3d_compareFloats(float *f1, int p1, float *f2, int p2)
 
 /*---------------------------------------------------------------------------*/
 
-static int G3d_compareDoubles(double *d1, int p1, double *d2, int p2)
+static int Rast3d_compareDoubles(double *d1, int p1, double *d2, int p2)
 {
     unsigned char *c1, *c2;
     double xdrd1, xdrd2;
 
-    if (G3d_isNullValueNum(d1, DCELL_TYPE))
-	return G3d_isNullValueNum(d2, DCELL_TYPE);
+    if (Rast3d_isNullValueNum(d1, DCELL_TYPE))
+	return Rast3d_isNullValueNum(d2, DCELL_TYPE);
 
-    G3d_double2xdrDouble(d1, &xdrd1);
-    G3d_double2xdrDouble(d2, &xdrd2);
+    Rast3d_double2xdrDouble(d1, &xdrd1);
+    Rast3d_double2xdrDouble(d2, &xdrd2);
 
     c1 = (unsigned char *)&xdrd1;
     c2 = (unsigned char *)&xdrd2;
@@ -239,9 +239,9 @@ static int G3d_compareDoubles(double *d1, int p1, double *d2, int p2)
     /*    printf ("%d %d (%d %d %d %d %d %d %d %d) (%d %d %d %d %d %d %d %d)\n", p1, p2, *c1, *(c1 + 1), *(c1 + 2), *(c1 + 3), *(c1 + 4), *(c1 + 5), *(c1 + 6), *(c1 + 7), *c2, *(c2 + 1), *(c2 + 2), *(c2 + 3), *(c2 + 4), *(c2 + 5), *(c2 + 6), *(c2 + 7));  */
 
     if ((p1 != -1) && (p1 < 52) && ((p1 < p2) || (p2 == -1)))
-	G3d_truncDouble(&xdrd2, p1);
+	Rast3d_truncDouble(&xdrd2, p1);
     if ((p2 != -1) && (p2 < 52) && ((p2 < p1) || (p1 == -1)))
-	G3d_truncDouble(&xdrd1, p2);
+	Rast3d_truncDouble(&xdrd1, p2);
 
     /*    printf ("%d %d (%d %d %d %d %d %d %d %d) (%d %d %d %d %d %d %d %d)\n", p1, p2, *c1, *(c1 + 1), *(c1 + 2), *(c1 + 3), *(c1 + 4), *(c1 + 5), *(c1 + 6), *(c1 + 7), *c2, *(c2 + 1), *(c2 + 2), *(c2 + 3), *(c2 + 4), *(c2 + 5), *(c2 + 6), *(c2 + 7));  */
 
@@ -255,14 +255,14 @@ static int G3d_compareDoubles(double *d1, int p1, double *d2, int p2)
 
 /*---------------------------------------------------------------------------*/
 
-static int G3d_compareFloatDouble(float *f, int p1, double *d, int p2)
+static int Rast3d_compareFloatDouble(float *f, int p1, double *d, int p2)
 {
     unsigned char *c1, *c2;
     float xdrf, fTmp;
     double xdrd, xdrd2, dTmp;
 
-    if (G3d_isNullValueNum(f, FCELL_TYPE))
-	return G3d_isNullValueNum(d, DCELL_TYPE);
+    if (Rast3d_isNullValueNum(f, FCELL_TYPE))
+	return Rast3d_isNullValueNum(d, DCELL_TYPE);
 
     /* need this since assigning a double to a float actually may change the */
     /* bit pattern. an example (in xdr format) is the double */
@@ -272,9 +272,9 @@ static int G3d_compareFloatDouble(float *f, int p1, double *d, int p2)
     fTmp = *d;
     dTmp = fTmp;
 
-    G3d_float2xdrFloat(f, &xdrf);
-    G3d_float2Double(&xdrf, &xdrd2);
-    G3d_double2xdrDouble(&dTmp, &xdrd);
+    Rast3d_float2xdrFloat(f, &xdrf);
+    Rast3d_float2Double(&xdrf, &xdrd2);
+    Rast3d_double2xdrDouble(&dTmp, &xdrd);
 
     c1 = (unsigned char *)&xdrd2;
     c2 = (unsigned char *)&xdrd;
@@ -284,9 +284,9 @@ static int G3d_compareFloatDouble(float *f, int p1, double *d, int p2)
 
     if (((p1 != -1) && ((p1 < p2) || (p2 == -1))) ||
 	((p1 == -1) && ((p2 > 23) || (p2 == -1))))
-	G3d_truncDouble(&xdrd, (p1 != -1 ? p1 : 23));
+	Rast3d_truncDouble(&xdrd, (p1 != -1 ? p1 : 23));
     if ((p2 != -1) && (p2 < 23) && ((p2 < p1) || (p1 == -1)))
-	G3d_truncDouble(&xdrd2, p2);
+	Rast3d_truncDouble(&xdrd2, p2);
 
     /*   printf ("%d %d (%d %d %d %d) (%d %d %d %d %d %d %d %d) (%d %d %d %d %d %d %d %d)\n", p1, p2, *((unsigned char *) &xdrf), *(((unsigned char *) &xdrf) + 1), *(((unsigned char *) &xdrf) + 2), *(((unsigned char *) &xdrf) + 3), *c1, *(c1 + 1), *(c1 + 2), *(c1 + 3), *(c1 + 4), *(c1 + 5), *(c1 + 6), *(c1 + 7), *c2, *(c2 + 1), *(c2 + 2), *(c2 + 3), *(c2 + 4), *(c2 + 5), *(c2 + 6), *(c2 + 7));  */
 
@@ -309,13 +309,13 @@ static void compareFilesNocache(void *map, void *map2)
     int tileX, tileY, tileZ, typeIntern, typeIntern2;
     int nx, ny, nz;
 
-    p1 = G3d_tilePrecisionMap(map);
-    p2 = G3d_tilePrecisionMap(map2);
+    p1 = Rast3d_tilePrecisionMap(map);
+    p2 = Rast3d_tilePrecisionMap(map2);
 
-    G3d_getTileDimensionsMap(map, &tileX, &tileY, &tileZ);
-    G3d_getNofTilesMap(map2, &nx, &ny, &nz);
-    typeIntern = G3d_tileTypeMap(map);
-    typeIntern2 = G3d_tileTypeMap(map2);
+    Rast3d_getTileDimensionsMap(map, &tileX, &tileY, &tileZ);
+    Rast3d_getNofTilesMap(map2, &nx, &ny, &nz);
+    typeIntern = Rast3d_tileTypeMap(map);
+    typeIntern2 = Rast3d_tileTypeMap(map2);
 
     n1p = &n1;
     f1p = (float *)&n1;
@@ -328,31 +328,31 @@ static void compareFilesNocache(void *map, void *map2)
 	for (y = 0; y < ny * tileY; y++) {
 	    for (x = 0; x < nx * tileX; x++) {
 
-		G3d_getBlock(map, x, y, z, 1, 1, 1, n1p, typeIntern);
-		G3d_getBlock(map2, x, y, z, 1, 1, 1, n2p, typeIntern2);
+		Rast3d_getBlock(map, x, y, z, 1, 1, 1, n1p, typeIntern);
+		Rast3d_getBlock(map2, x, y, z, 1, 1, 1, n2p, typeIntern2);
 
 		if (typeIntern == FCELL_TYPE) {
 		    if (typeIntern2 == FCELL_TYPE)
-			correct = G3d_compareFloats(f1p, p1, f2p, p2);
+			correct = Rast3d_compareFloats(f1p, p1, f2p, p2);
 		    else
-			correct = G3d_compareFloatDouble(f1p, p1, n2p, p2);
+			correct = Rast3d_compareFloatDouble(f1p, p1, n2p, p2);
 		}
 		else {
 		    if (typeIntern2 == FCELL_TYPE)
-			correct = G3d_compareFloatDouble(f2p, p2, n1p, p1);
+			correct = Rast3d_compareFloatDouble(f2p, p2, n1p, p1);
 		    else
-			correct = G3d_compareDoubles(n1p, p1, n2p, p2);
+			correct = Rast3d_compareDoubles(n1p, p1, n2p, p2);
 		}
 
 		if (!correct) {
 		    int xTile, yTile, zTile, xOffs, yOffs, zOffs;
 
-		    G3d_coord2tileCoord(map2, x, y, z, &xTile, &yTile, &zTile,
+		    Rast3d_coord2tileCoord(map2, x, y, z, &xTile, &yTile, &zTile,
 					&xOffs, &yOffs, &zOffs);
 		    printf("(%d %d %d) (%d %d %d) (%d %d %d) %.20f %.20f\n",
 			   x, y, z, xTile, yTile, zTile, xOffs, yOffs, zOffs,
 			   *n1p, *n2p);
-		    G3d_fatalError
+		    Rast3d_fatalError
 			("compareFilesNocache: files don't match\n");
 		}
 	    }
@@ -383,7 +383,7 @@ static void compareFilesNocache(void *map, void *map2)
  */
 
 void
-G3d_compareFiles(const char *f1, const char *mapset1, const char *f2,
+Rast3d_compareFiles(const char *f1, const char *mapset1, const char *f2,
 		 const char *mapset2)
 {
     void *map, *map2;
@@ -398,35 +398,35 @@ G3d_compareFiles(const char *f1, const char *mapset1, const char *f2,
 
     printf("\nComparing %s and %s\n", f1, f2);
 
-    map = G3d_openCellOld(f1, mapset1, RASTER3D_DEFAULT_WINDOW,
+    map = Rast3d_openCellOld(f1, mapset1, RASTER3D_DEFAULT_WINDOW,
 			  RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
     if (map == NULL)
-	G3d_fatalError("G3d_compareFiles: error in G3d_openCellOld");
+	Rast3d_fatalError("Rast3d_compareFiles: error in Rast3d_openCellOld");
 
-    G3d_printHeader(map);
+    Rast3d_printHeader(map);
 
-    map2 = G3d_openCellOld(f2, mapset2, RASTER3D_DEFAULT_WINDOW,
+    map2 = Rast3d_openCellOld(f2, mapset2, RASTER3D_DEFAULT_WINDOW,
 			   RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
     if (map2 == NULL)
-	G3d_fatalError("G3d_compareFiles: error in G3d_openCellOld");
+	Rast3d_fatalError("Rast3d_compareFiles: error in Rast3d_openCellOld");
 
-    G3d_printHeader(map2);
+    Rast3d_printHeader(map2);
 
-    typeIntern = G3d_tileTypeMap(map);
-    typeIntern2 = G3d_tileTypeMap(map2);
+    typeIntern = Rast3d_tileTypeMap(map);
+    typeIntern2 = Rast3d_tileTypeMap(map2);
 
-    p1 = G3d_tilePrecisionMap(map);
-    p2 = G3d_tilePrecisionMap(map2);
+    p1 = Rast3d_tilePrecisionMap(map);
+    p2 = Rast3d_tilePrecisionMap(map2);
 
-    G3d_getTileDimensionsMap(map, &tileX, &tileY, &tileZ);
-    G3d_getTileDimensionsMap(map2, &tileX2, &tileY2, &tileZ2);
-    G3d_getNofTilesMap(map2, &nx, &ny, &nz);
-    G3d_getCoordsMap(map, &rows, &cols, &depths);
+    Rast3d_getTileDimensionsMap(map, &tileX, &tileY, &tileZ);
+    Rast3d_getTileDimensionsMap(map2, &tileX2, &tileY2, &tileZ2);
+    Rast3d_getNofTilesMap(map2, &nx, &ny, &nz);
+    Rast3d_getCoordsMap(map, &rows, &cols, &depths);
 
-    if ((!G3d_tileUseCacheMap(map)) || (!G3d_tileUseCacheMap(map2))) {
+    if ((!Rast3d_tileUseCacheMap(map)) || (!Rast3d_tileUseCacheMap(map2))) {
 	compareFilesNocache(map, map2);
-	G3d_closeCell(map);
-	G3d_closeCell(map2);
+	Rast3d_closeCell(map);
+	Rast3d_closeCell(map2);
 	return;
     }
 
@@ -435,59 +435,59 @@ G3d_compareFiles(const char *f1, const char *mapset1, const char *f2,
     n2p = &n2;
     f2p = (float *)&n2;
 
-    G3d_autolockOn(map);
-    G3d_autolockOn(map2);
-    G3d_minUnlocked(map, cols / tileX + 1);
+    Rast3d_autolockOn(map);
+    Rast3d_autolockOn(map2);
+    Rast3d_minUnlocked(map, cols / tileX + 1);
 
-    G3d_getCoordsMap(map2, &rows, &cols, &depths);
-    G3d_minUnlocked(map2, cols / tileX + 1);
+    Rast3d_getCoordsMap(map2, &rows, &cols, &depths);
+    Rast3d_minUnlocked(map2, cols / tileX + 1);
 
-    G3d_getCoordsMap(map, &rows, &cols, &depths);
+    Rast3d_getCoordsMap(map, &rows, &cols, &depths);
     for (z = 0; z < depths; z++) {
 	printf("comparing: z = %d\n", z);
 
 	if ((z % tileZ) == 0) {
-	    if (!G3d_unlockAll(map))
-		G3d_fatalError("G3d_compareFiles: error in G3d_unlockAll");
+	    if (!Rast3d_unlockAll(map))
+		Rast3d_fatalError("Rast3d_compareFiles: error in Rast3d_unlockAll");
 	}
 	if ((z % tileZ2) == 0) {
-	    if (!G3d_unlockAll(map2))
-		G3d_fatalError("G3d_compareFiles: error in G3d_unlockAll");
+	    if (!Rast3d_unlockAll(map2))
+		Rast3d_fatalError("Rast3d_compareFiles: error in Rast3d_unlockAll");
 	}
 
 	for (y = 0; y < rows; y++) {
 	    for (x = 0; x < cols; x++) {
-		G3d_getValueRegion(map, x, y, z, n1p, typeIntern);
-		G3d_getValueRegion(map2, x, y, z, n2p, typeIntern2);
+		Rast3d_getValueRegion(map, x, y, z, n1p, typeIntern);
+		Rast3d_getValueRegion(map2, x, y, z, n2p, typeIntern2);
 
-		G3d_isNullValueNum(n1p, typeIntern);
-		G3d_isNullValueNum(n2p, typeIntern2);
+		Rast3d_isNullValueNum(n1p, typeIntern);
+		Rast3d_isNullValueNum(n2p, typeIntern2);
 
 		if (typeIntern == FCELL_TYPE) {
 		    if (typeIntern2 == FCELL_TYPE)
-			correct = G3d_compareFloats(f1p, p1, f2p, p2);
+			correct = Rast3d_compareFloats(f1p, p1, f2p, p2);
 		    else
-			correct = G3d_compareFloatDouble(f1p, p1, n2p, p2);
+			correct = Rast3d_compareFloatDouble(f1p, p1, n2p, p2);
 		}
 		else {
 		    if (typeIntern2 == FCELL_TYPE)
-			correct = G3d_compareFloatDouble(f2p, p2, n1p, p1);
+			correct = Rast3d_compareFloatDouble(f2p, p2, n1p, p1);
 		    else
-			correct = G3d_compareDoubles(n1p, p1, n2p, p2);
+			correct = Rast3d_compareDoubles(n1p, p1, n2p, p2);
 		}
 
 		if (!correct) {
 		    int xTile, yTile, zTile, xOffs, yOffs, zOffs;
 
-		    G3d_coord2tileCoord(map2, x, y, z, &xTile, &yTile, &zTile,
+		    Rast3d_coord2tileCoord(map2, x, y, z, &xTile, &yTile, &zTile,
 					&xOffs, &yOffs, &zOffs);
-		    G3d_fatalError("G3d_compareFiles: files don't match\n");
+		    Rast3d_fatalError("Rast3d_compareFiles: files don't match\n");
 		}
 	    }
 	}
     }
 
     printf("Files are identical up to precision.\n");
-    G3d_closeCell(map);
-    G3d_closeCell(map2);
+    Rast3d_closeCell(map);
+    Rast3d_closeCell(map2);
 }

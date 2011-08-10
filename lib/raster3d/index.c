@@ -7,7 +7,7 @@
 
 /*---------------------------------------------------------------------------*/
 
-static int G3d_readIndex(RASTER3D_Map * map)
+static int Rast3d_readIndex(RASTER3D_Map * map)
 {
     unsigned char *tmp, *tmp2;
     int dummy1, dummy2, indexLength, tileIndex;
@@ -15,21 +15,21 @@ static int G3d_readIndex(RASTER3D_Map * map)
 
     indexLast = lseek(map->data_fd, (long)0, SEEK_END);
     if (indexLast == -1) {
-	G3d_error("G3d_readIndex: can't position file");
+	Rast3d_error("Rast3d_readIndex: can't position file");
 	return 0;
     }
 
     indexLength = indexLast - map->indexOffset;
 
     if (lseek(map->data_fd, map->indexOffset, SEEK_SET) == -1) {
-	G3d_error("G3d_readIndex: can't position file");
+	Rast3d_error("Rast3d_readIndex: can't position file");
 	return 0;
     }
 
-    tmp = G3d_malloc(map->indexLongNbytes * map->nTiles);
+    tmp = Rast3d_malloc(map->indexLongNbytes * map->nTiles);
 
     if (tmp == NULL) {
-	G3d_error("G3d_readIndex: error in G3d_malloc");
+	Rast3d_error("Rast3d_readIndex: error in Rast3d_malloc");
 	return 0;
     }
 
@@ -37,9 +37,9 @@ static int G3d_readIndex(RASTER3D_Map * map)
 
 	if (indexLength > sizeof(long) * map->nTiles) {
 						     /*->index large enough? */
-	    tmp2 = G3d_malloc(indexLength);
+	    tmp2 = Rast3d_malloc(indexLength);
 	    if (tmp2 == NULL) {
-		G3d_error("G3d_readIndex: error in G3d_malloc");
+		Rast3d_error("Rast3d_readIndex: error in Rast3d_malloc");
 		return 0;
 	    }
 	}
@@ -47,7 +47,7 @@ static int G3d_readIndex(RASTER3D_Map * map)
 	    tmp2 = (unsigned char *)map->index;
 
 	if (read(map->data_fd, tmp2, indexLength) != indexLength) {
-	    G3d_error("G3d_readIndex: can't read file");
+	    Rast3d_error("Rast3d_readIndex: can't read file");
 	    return 0;
 	}
 
@@ -55,27 +55,27 @@ static int G3d_readIndex(RASTER3D_Map * map)
 		     &dummy1, &dummy2);
 
 	if (indexLength > sizeof(long) * map->nTiles)
-	    G3d_free(tmp2);
+	    Rast3d_free(tmp2);
     }
     else /* NO RLE */ if (read(map->data_fd, tmp, indexLength) != indexLength) {
-	G3d_error("G3d_readIndex: can't read file");
+	Rast3d_error("Rast3d_readIndex: can't read file");
 	return 0;
     }
 
-    G3d_longDecode(tmp, map->index, map->nTiles, map->indexLongNbytes);
+    Rast3d_longDecode(tmp, map->index, map->nTiles, map->indexLongNbytes);
 
     for (tileIndex = 0; tileIndex < map->nTiles; tileIndex++)
 	if (map->index[tileIndex] == 0)
 	    map->index[tileIndex] = -1;
 
-    G3d_free(tmp);
+    Rast3d_free(tmp);
 
     return 1;
 }
 
 /*---------------------------------------------------------------------------*/
 
-int G3d_flushIndex(RASTER3D_Map * map)
+int Rast3d_flushIndex(RASTER3D_Map * map)
 {
     int sizeCompressed, indexLength, tileIndex;
     unsigned char *tmp;
@@ -86,16 +86,16 @@ int G3d_flushIndex(RASTER3D_Map * map)
 
     map->indexOffset = lseek(map->data_fd, (long)0, SEEK_END);
     if (map->indexOffset == -1) {
-	G3d_error("G3d_flushIndex: can't rewind file");
+	Rast3d_error("Rast3d_flushIndex: can't rewind file");
 	return 0;
     }
 
-    map->indexNbytesUsed = G3d_longEncode(&(map->indexOffset),
+    map->indexNbytesUsed = Rast3d_longEncode(&(map->indexOffset),
 					  (unsigned char *)&ldummy, 1);
 
-    tmp = G3d_malloc(sizeof(long) * map->nTiles);
+    tmp = Rast3d_malloc(sizeof(long) * map->nTiles);
     if (tmp == NULL) {
-	G3d_error("G3d_flushIndex: error in G3d_malloc");
+	Rast3d_error("Rast3d_flushIndex: error in Rast3d_malloc");
 	return 0;
     }
 
@@ -103,14 +103,14 @@ int G3d_flushIndex(RASTER3D_Map * map)
 	if (map->index[tileIndex] == -1)
 	    map->index[tileIndex] = 0;
 
-    (void)G3d_longEncode(map->index, tmp, map->nTiles);
+    (void)Rast3d_longEncode(map->index, tmp, map->nTiles);
 
     sizeCompressed = G_rle_count_only(tmp, sizeof(long) * map->nTiles, 1);
 
     if (sizeCompressed >= map->nTiles * sizeof(long)) {
 	indexLength = map->nTiles * sizeof(long);
 	if (write(map->data_fd, tmp, indexLength) != indexLength) {
-	    G3d_error("G3d_flushIndex: can't write file");
+	    Rast3d_error("Rast3d_flushIndex: can't write file");
 	    return 0;
 	}
     }
@@ -118,14 +118,14 @@ int G3d_flushIndex(RASTER3D_Map * map)
 	indexLength = sizeCompressed;
 	G_rle_encode(tmp, (char *)map->index, sizeof(long) * map->nTiles, 1);
 	if (write(map->data_fd, map->index, sizeCompressed) != sizeCompressed) {
-	    G3d_error("G3d_flushIndex: can't write file");
+	    Rast3d_error("Rast3d_flushIndex: can't write file");
 	    return 0;
 	}
     }
 
-    G3d_free(tmp);
-    if (!G3d_readIndex(map)) {
-	G3d_error("G3d_flushIndex: error in G3d_readIndex");
+    Rast3d_free(tmp);
+    if (!Rast3d_readIndex(map)) {
+	Rast3d_error("Rast3d_flushIndex: error in Rast3d_readIndex");
 	return 0;
     }
 
@@ -152,18 +152,18 @@ static int indexSortCompare(const void *a, const void *b)
 
 /*---------------------------------------------------------------------------*/
 
-int G3d_initIndex(RASTER3D_Map * map, int hasIndex)
+int Rast3d_initIndex(RASTER3D_Map * map, int hasIndex)
 {
     int tile;
     int i0, i1, i2, i3, i4, i5, offset, nofElts;
     int *offsetP;
 
     map->hasIndex = hasIndex;
-    map->index = G3d_malloc(sizeof(long) * map->nTiles);
-    map->tileLength = G3d_malloc(sizeof(int) * map->nTiles);
+    map->index = Rast3d_malloc(sizeof(long) * map->nTiles);
+    map->tileLength = Rast3d_malloc(sizeof(int) * map->nTiles);
 
     if ((map->index == NULL) || (map->tileLength == NULL)) {
-	G3d_error("G3d_initIndex: error in G3d_malloc");
+	Rast3d_error("Rast3d_initIndex: error in Rast3d_malloc");
 	return 0;
     }
 
@@ -177,7 +177,7 @@ int G3d_initIndex(RASTER3D_Map * map, int hasIndex)
 	offset = 0;
 	for (tile = 0; tile < map->nTiles; tile++) {
 	    map->index[tile] = offset * map->numLengthExtern + map->offset;
-	    nofElts = G3d_computeClippedTileDimensions
+	    nofElts = Rast3d_computeClippedTileDimensions
 		(map, tile, &i0, &i1, &i2, &i3, &i4, &i5);
 	    map->tileLength[tile] = nofElts * map->numLengthExtern;
 	    offset += nofElts;
@@ -185,14 +185,14 @@ int G3d_initIndex(RASTER3D_Map * map, int hasIndex)
 	return 1;
     }
 
-    if (!G3d_readIndex(map)) {
-	G3d_error("G3d_initIndex: error in G3d_readIndex");
+    if (!Rast3d_readIndex(map)) {
+	Rast3d_error("Rast3d_initIndex: error in Rast3d_readIndex");
 	return 0;
     }
 
-    offsetP = G3d_malloc(sizeof(int) * map->nTiles);
+    offsetP = Rast3d_malloc(sizeof(int) * map->nTiles);
     if (offsetP == NULL) {
-	G3d_error("G3d_initIndex: error in G3d_malloc");
+	Rast3d_error("Rast3d_initIndex: error in Rast3d_malloc");
 	return 0;
     }
 
@@ -217,7 +217,7 @@ int G3d_initIndex(RASTER3D_Map * map, int hasIndex)
 	map->tileLength[offsetP[map->nTiles - 1]] =
 	    map->indexOffset - map->index[offsetP[map->nTiles - 1]];
 
-    G3d_free(offsetP);
+    Rast3d_free(offsetP);
 
     return 1;
 }

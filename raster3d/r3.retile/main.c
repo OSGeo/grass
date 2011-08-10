@@ -50,8 +50,8 @@ void fatal_error(void *map, int *fd, int depths, char *errorMsg)
 
     /* Close files and exit */
     if (map != NULL) {
-        if (!G3d_closeCell(map))
-            G3d_fatalError(_("Unable to close the 3d raster map"));
+        if (!Rast3d_closeCell(map))
+            Rast3d_fatalError(_("Unable to close the 3d raster map"));
     }
 
     if (fd != NULL) {
@@ -59,7 +59,7 @@ void fatal_error(void *map, int *fd, int depths, char *errorMsg)
             Rast_unopen(fd[i]);
     }
 
-    G3d_fatalError(errorMsg);
+    Rast3d_fatalError(errorMsg);
     exit(EXIT_FAILURE);
 
 }
@@ -115,29 +115,29 @@ int main(int argc, char *argv[])
     mapset = G_find_grid3(param.input->answer, "");
     
     if (mapset == NULL)
-        G3d_fatalError(_("3d raster map <%s> not found"),
+        Rast3d_fatalError(_("3d raster map <%s> not found"),
                        param.input->answer);
 
     /*Set the defaults */
-    G3d_initDefaults();
+    Rast3d_initDefaults();
     
     if(!param.cache->answer)
-        map = G3d_openCellOld(param.input->answer, mapset, RASTER3D_DEFAULT_WINDOW, 
+        map = Rast3d_openCellOld(param.input->answer, mapset, RASTER3D_DEFAULT_WINDOW, 
                           RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
     else
-        map = G3d_openCellOld(param.input->answer, mapset, RASTER3D_DEFAULT_WINDOW, 
+        map = Rast3d_openCellOld(param.input->answer, mapset, RASTER3D_DEFAULT_WINDOW, 
                           RASTER3D_TILE_SAME_AS_FILE, RASTER3D_NO_CACHE);
 
     if (map == NULL)
-        G3d_fatalError(_("Unable to open 3d raster map <%s>"),
+        Rast3d_fatalError(_("Unable to open 3d raster map <%s>"),
                        param.input->answer);
 
     /* Get the tile dimension */
-    G3d_getTileDimension(&tileX, &tileY, &tileZ);    
+    Rast3d_getTileDimension(&tileX, &tileY, &tileZ);    
     if (strcmp(param.tiling->answer, "default") != 0) {
 	if (sscanf(param.tiling->answer, "%dx%dx%d",
 		   &tileX, &tileY, &tileZ) != 3) {
-	    G3d_fatalError(_("G3d_getStandard3dParams: tile dimension value invalid"));
+	    Rast3d_fatalError(_("Rast3d_getStandard3dParams: tile dimension value invalid"));
 	}
     }
     
@@ -146,10 +146,10 @@ int main(int argc, char *argv[])
     else
         G_message("Retile map without tile caching");
     
-    G3d_retile(map, param.output->answer, tileX, tileY, tileZ);
+    Rast3d_retile(map, param.output->answer, tileX, tileY, tileZ);
 
     /* Close files and exit */
-    if (!G3d_closeCell(map))
+    if (!Rast3d_closeCell(map))
         fatal_error(map, NULL, 0, _("Error closing 3d raster map"));
 
     map = NULL;

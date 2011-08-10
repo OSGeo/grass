@@ -834,8 +834,8 @@ int test_array_3d(void)
     N_free_array_3d(data2);
 
     /*Set the defaults */
-    G3d_initDefaults();
-    G3d_getWindow(&region);
+    Rast3d_initDefaults();
+    Rast3d_getWindow(&region);
 
     data1 =
 	N_alloc_array_3d(region.cols, region.rows, region.depths, 0,
