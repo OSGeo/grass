@@ -3,6 +3,7 @@
  *
  * MODULE:       d.vect
  * AUTHOR(S):    CERL, Radim Blazek, others
+ *               Updated to GRASS7 by Martin Landa <landa.martin gmail.com>
  * PURPOSE:      Display the vector map in map display
  * COPYRIGHT:    (C) 2004-2009, 2011 by the GRASS Development Team
  *
@@ -172,8 +173,7 @@ int main(int argc, char **argv)
     rgbcol_opt->key = "rgb_column";
     rgbcol_opt->guisection = _("Colors");
     rgbcol_opt->description = _("Name of color definition column (for use with -a flag)");
-    rgbcol_opt->answer = "GRASSRGB";
-
+    
     zcol_opt = G_define_option();
     zcol_opt->key = "zcolor";
     zcol_opt->key_desc = "style";
@@ -194,15 +194,15 @@ int main(int argc, char **argv)
     wcolumn_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     wcolumn_opt->key = "width_column";
     wcolumn_opt->guisection = _("Lines");
-    wcolumn_opt->description =
-	_("Name of column for line widths (these values will be scaled by wscale)");
+    wcolumn_opt->label = _("Name of numeric column containing line width");
+    wcolumn_opt->description = _("These values will be scaled by width_scale");
 
     wscale_opt = G_define_option();
     wscale_opt->key = "width_scale";
     wscale_opt->type = TYPE_DOUBLE;
     wscale_opt->answer = "1";
     wscale_opt->guisection = _("Lines");
-    wscale_opt->description = _("Scale factor for wcolumn");
+    wscale_opt->description = _("Scale factor for width_column");
 
     /* Symbols */
     icon_opt = G_define_option();
@@ -338,7 +338,7 @@ int main(int argc, char **argv)
     table_acolors_flag->key = 'a';
     table_acolors_flag->guisection = _("Colors");
     table_acolors_flag->description =
-	_("Get colors from map table column (of form RRR:GGG:BBB)");
+	_("Get colors from color table or attribute column (see 'rgb_column')");
 
     cats_acolors_flag = G_define_flag();
     cats_acolors_flag->key = 'c';
@@ -355,7 +355,7 @@ int main(int argc, char **argv)
 
     zcol_flag = G_define_flag();
     zcol_flag->key = 'z';
-    zcol_flag->description = _("Colorize features according to z-coordinate");
+    zcol_flag->description = _("Colorize features according to z-coordinate (only for 3D vector maps)");
     zcol_flag->guisection = _("Colors");
 
     sqrt_flag = G_define_flag();
@@ -480,8 +480,10 @@ int main(int argc, char **argv)
 	if (display & DISP_SHAPE) {
 	    stat += display_shape(&Map, type, Clist, &window,
 				  has_color ? &color : NULL, has_fcolor ? &fcolor : NULL, chcat,
-				  icon_opt->answer, size, sizecolumn_opt->answer, sqrt_flag->answer ? 1 : 0, rotcolumn_opt->answer,
-				  id_flag->answer ? 1 : 0, table_acolors_flag->answer ? 1 : 0, cats_acolors_flag->answer ? 1 : 0, rgbcol_opt->answer,
+				  icon_opt->answer, size, sizecolumn_opt->answer,
+				  sqrt_flag->answer ? 1 : 0, rotcolumn_opt->answer,
+				  id_flag->answer ? 1 : 0, table_acolors_flag->answer ? 1 : 0,
+				  cats_acolors_flag->answer ? 1 : 0, rgbcol_opt->answer,
 				  default_width,  wcolumn_opt->answer, width_scale,
 				  zcol_flag->answer ? 1 : 0, zcol_opt->answer);
 	    

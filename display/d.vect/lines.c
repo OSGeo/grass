@@ -38,39 +38,33 @@ struct rgb_color palette[16] = {
 
 int display_lines(struct Map_info *Map, int type, struct cat_list *Clist,
 		  const struct color_rgb *color, const struct color_rgb *fcolor, int chcat,
-		  const char *symbol_name,  double size, const char *size_column, int sqrt_flag, const char *rot_column,
-		  int id_flag, int table_colors_flag, int cats_color_flag, const char *rgb_column,
-		  int default_width, const char *width_column, double width_scale,
-		  int z_color_flag, const char *z_style,
-		  dbCatValArray *cvarr_rgb, dbCatValArray *cvarr_width, int nrec_width,
+		  const char *symbol_name, double size, int sqrt_flag,
+		  int id_flag, int table_colors_flag, int cats_color_flag, 
+		  int default_width, double width_scale,
+		  struct Colors* zcolors,
+		  dbCatValArray *cvarr_rgb, struct Colors *colors,
+		  dbCatValArray *cvarr_width, int nrec_width,
 		  dbCatValArray *cvarr_size, int nrec_size,
 		  dbCatValArray *cvarr_rot, int nrec_rot)
 
 {
-    int i, ltype, nlines, line, cat;
+    int i, ltype, nlines, line, cat, found;
     double *x, *y;
     struct line_pnts *Points;
     struct line_cats *Cats;
     double x0, y0;
 
-    dbCatVal *cv_rgb, *cv_width, *cv_size, *cv_rot;
     int nerror_rgb;
     int n_points, n_lines, n_centroids, n_boundaries, n_faces;
     
     int custom_rgb;
-    char colorstring[12];	/* RRR:GGG:BBB */
     int red, grn, blu;
     RGBA_Color *line_color, *fill_color, *primary_color;
-    unsigned char which;
     int width;
     SYMBOL *Symb;
     double var_size, rotation;
-    struct bound_box box;
-    struct Colors colors;
     
     Symb = NULL;
-    custom_rgb = FALSE;
-    cv_rgb = cv_width = cv_size = cv_rot = NULL;
     cat = -1;
     nlines = 0;
     
@@ -79,18 +73,7 @@ int display_lines(struct Map_info *Map, int type, struct cat_list *Clist,
 		    "Please try to rebuild topology using "
 		    "v.build or v.build.all."));
     }
-
-    if (z_color_flag) {
-	if (!Vect_is_3d(Map)) {
-	    G_warning(_("Vector map is not 3D. Unable to colorize features based on z-coordinates."));
-	    z_color_flag = 0;
-	}
-	else {
-	    Vect_get_map_box(Map, &box);
-	    Rast_make_fp_colors(&colors, z_style, box.B, box.T);
-	}
-    }
-    
+  
     var_size = size;
     rotation = 0.0;
     nerror_rgb = 0;
@@ -122,17 +105,17 @@ int display_lines(struct Map_info *Map, int type, struct cat_list *Clist,
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
-    if (!(nrec_size || nrec_rot) ) {
+    /* dynamic symbols for points */
+    if (!(nrec_size || nrec_rot)) {
 	Symb = S_read(symbol_name);
 	if (!Symb)
-	    G_warning(_("Unable to read symbol, unable to display points"));
+	    G_warning(_("Unable to read symbol <%s>, unable to display points"),
+		      symbol_name);
 	else
 	    S_stroke(Symb, size, 0.0, 0);
     }
     
     Vect_rewind(Map);
-
-    /* Is it necessary to reset line/label color in each loop ? */
 
     if (color && !table_colors_flag && !cats_color_flag)
 	D_RGB_color(color->r, color->g, color->b);
@@ -144,8 +127,10 @@ int display_lines(struct Map_info *Map, int type, struct cat_list *Clist,
     n_points = n_lines = 0;
     n_centroids = n_boundaries = 0;
     n_faces = 0;
-    while (1) {
+    while (TRUE) {
 	line++;
+	custom_rgb = FALSE;
+	
 	if (Vect_level(Map) >= 2) {
 	    if (line > nlines)
 		break;
@@ -168,10 +153,9 @@ int display_lines(struct Map_info *Map, int type, struct cat_list *Clist,
 
 	if (Points->n_points == 0)
 	    continue;
-
+	
+	found = FALSE;
 	if (chcat) {
-	    int found = 0;
-
 	    if (id_flag) {	/* use line id */
 		if (!(Vect_cat_in_cat_list(line, Clist)))
 		    continue;
@@ -180,7 +164,7 @@ int display_lines(struct Map_info *Map, int type, struct cat_list *Clist,
 		for (i = 0; i < Cats->n_cats; i++) {
 		    if (Cats->field[i] == Clist->field &&
 			Vect_cat_in_cat_list(Cats->cat[i], Clist)) {
-			found = 1;
+			found = TRUE;
 			break;
 		    }
 		}
@@ -189,11 +173,9 @@ int display_lines(struct Map_info *Map, int type, struct cat_list *Clist,
 	    }
 	}
 	else if (Clist->field > 0) {
-	    int found = 0;
-
 	    for (i = 0; i < Cats->n_cats; i++) {
 		if (Cats->field[i] == Clist->field) {
-		    found = 1;
+		    found = TRUE;
 		    break;
 		}
 	    }
@@ -202,133 +184,42 @@ int display_lines(struct Map_info *Map, int type, struct cat_list *Clist,
 		continue;
 	}
 
-	/* z height colors */
-	if (z_color_flag) {
-	    custom_rgb = TRUE;
-	    Rast_get_color(&Points->z[0], &red, &grn, &blu, &colors, DCELL_TYPE);
-	    G_debug(3, "\tb: %d, g: %d, r: %d", blu, grn, red);
-	}
+	G_debug(3, "\tdisplay feature %d, cat %d", line, cat);
 	
-	if (table_colors_flag) {
+	/* z height colors */
+	if (zcolors) {
+	    if (Rast_get_d_color(&Points->z[0], &red, &grn, &blu, zcolors) == 1)
+		custom_rgb = TRUE;
+	    else
+		custom_rgb = FALSE;
+	}
+
+	if (table_colors_flag || nrec_width > 0 || nrec_size > 0 || nrec_rot > 0)
 	    /* only first category */
 	    Vect_cat_get(Cats, 
-			 (Clist->field > 0 ? Clist->field :
-			  (Cats->n_cats >
-			   0 ? Cats->field[0] : 1)), &cat);
-
-	    if (cat >= 0) {
-		G_debug(3, "display element %d, cat %d", line, cat);
-
-		/* Read RGB colors from db for current area # */
-		if (db_CatValArray_get_value(cvarr_rgb, cat, &cv_rgb) !=
-		    DB_OK) {
-		    custom_rgb = FALSE;
-		}
-		else {
-		    sprintf(colorstring, "%s", db_get_string(cv_rgb->val.s));
-
-		    if (*colorstring != '\0') {
-			G_debug(3, "element %d: colorstring: %s", line,
-				colorstring);
-
-			if (G_str_to_color(colorstring, &red, &grn, &blu) ==
-			    1) {
-			    custom_rgb = TRUE;
-			    G_debug(3, "element:%d  cat %d r:%d g:%d b:%d",
-				    line, cat, red, grn, blu);
-			}
-			else {
-			    custom_rgb = FALSE;
-			    G_important_message(_("Error in color definition column '%s', feature id %d "
-						  "with cat %d: colorstring '%s'"),
-						rgb_column, line, cat, colorstring);
-			    nerror_rgb++;
-			}
-		    }
-		    else {
-			custom_rgb = FALSE;
-			G_important_message(_("Error in color definition column '%s', feature id %d "
-					      "with cat %d"),
-					    rgb_column, line, cat);
-			nerror_rgb++;
-		    }
-		}
-	    }			/* end if cat */
-	    else {
-		custom_rgb = FALSE;
-	    }
-	}			/* end if table_colors_flag */
-
-
+			 (Clist->field > 0 ? Clist->field : (Cats->n_cats > 0 ? Cats->field[0] : 1)),
+			 &cat);
+	
+	/* custom colors */
+	if (table_colors_flag) {
+	    custom_rgb = get_table_color(cat, line, colors, cvarr_rgb,
+					 &red, &grn, &blu, &nerror_rgb);
+	}
+	
 	/* random colors */
 	if (cats_color_flag) {
-	    custom_rgb = FALSE;
-	    if (Clist->field > 0) {
-		Vect_cat_get(Cats, Clist->field, &cat);
-		if (cat >= 0) {
-		    G_debug(3, "display element %d, cat %d", line, cat);
-		    /* fetch color number from category */
-		    which = (cat % palette_ncolors);
-		    G_debug(3, "cat:%d which color:%d r:%d g:%d b:%d", cat,
-			    which, palette[which].R, palette[which].G,
-			    palette[which].B);
-
-		    custom_rgb = TRUE;
-		    red = palette[which].R;
-		    grn = palette[which].G;
-		    blu = palette[which].B;
-		}
-	    }
-	    else if (Cats->n_cats > 0) {
-		/* fetch color number from layer */
-		which = (Cats->field[0] % palette_ncolors);
-		G_debug(3, "layer:%d which color:%d r:%d g:%d b:%d",
-			Cats->field[0], which, palette[which].R,
-			palette[which].G, palette[which].B);
-
-		custom_rgb = TRUE;
-		red = palette[which].R;
-		grn = palette[which].G;
-		blu = palette[which].B;
-	    }
+	    custom_rgb = get_cat_color(line, Cats, Clist,
+				       &red, &grn, &blu);
 	}
 
-
+	/* line width */
 	if (nrec_width) {
-	    /* only first category */
-	    Vect_cat_get(Cats,
-			 (Clist->field > 0 ? Clist->field :
-			  (Cats->n_cats >
-			   0 ? Cats->field[0] : 1)), &cat);
-
-	    if (cat >= 0) {
-		G_debug(3, "display element %d, cat %d", line, cat);
-
-		/* Read line width from db for current area # */
-		if (db_CatValArray_get_value(cvarr_width, cat, &cv_width) !=
-		    DB_OK) {
-		    width = default_width;
-		}
-		else {
-		    width =
-			width_scale * (cvarr_width->ctype ==
-				       DB_C_TYPE_INT ? cv_width->val.i
-				       : (int)cv_width->val.d);
-		    if (width < 0) {
-			G_warning(_("Error in line width column (%s), element %d "
-				   "with cat %d: line width [%d]"),
-				  width_column, line, cat, width);
-			width = default_width;
-		    }
-		}
-	    }		/* end if cat */
-	    else {
-		width = default_width;
-	    }
-
+	    width = (int) get_property(cat, line, cvarr_width,
+				       (double) width_scale,
+				       (double) default_width);
+	    
 	    D_line_width(width);
-	}		/* end if nrec_width */
-
+	}
 
 	/* enough of the prep work, lets start plotting stuff */
 	x = Points->x;
@@ -342,77 +233,24 @@ int display_lines(struct Map_info *Map, int type, struct cat_list *Clist,
 	    y0 = y[0];
 
 	    /* skip if the point is outside of the display window */
-	    /*      xy<0 tests make it go ever-so-slightly faster */
+	    /* xy < 0 tests make it go ever-so-slightly faster */
 	    if (x0 > D_get_u_east() || x0 < D_get_u_west() ||
 		y0 < D_get_u_south() || y0 > D_get_u_north())
 		continue;
 
 	    /* dynamic symbol size */
-	    if (nrec_size) {
-		/* only first category */
-		Vect_cat_get(Cats,
-			     (Clist->field > 0 ? Clist->field :
-			      (Cats->n_cats > 0 ?
-			       Cats->field[0] : 1)), &cat);
-
-		if (cat >= 0) {
-		    G_debug(3, "display element %d, cat %d", line, cat);
-
-		    /* Read symbol size from db for current symbol # */
-		    if (db_CatValArray_get_value(cvarr_size, cat, &cv_size) !=
-			DB_OK) {
-			var_size = size;
-		    }
-		    else {
-			var_size = size *
-			    (cvarr_size->ctype == DB_C_TYPE_INT ?
-			     (double)cv_size->val.i : cv_size->val.d);
-
-			if (var_size < 0.0) {
-			    G_warning(_("Error in symbol size column (%s), element %d "
-					"with cat %d: symbol size [%f]"),
-				      size_column, line, cat, var_size);
-			    var_size = size;
-			}
-		    }
-		}		/* end if cat */
-		else {
-		    var_size = size;
-		}
-	    }		/* end if nrec_size */
-
+	    if (nrec_size)
+		var_size = get_property(cat, line, cvarr_size, size, size);
+	    
             if (sqrt_flag)
                 var_size = sqrt(var_size);
 
 	    /* dynamic symbol rotation */
-	    if (nrec_rot) {
-		/* only first category */
-		Vect_cat_get(Cats,
-			     (Clist->field > 0 ? Clist->field :
-			      (Cats->n_cats > 0 ?
-			       Cats->field[0] : 1)), &cat);
-
-		if (cat >= 0) {
-		    G_debug(3, "display element %d, cat %d", line, cat);
-
-		    /* Read symbol rotation from db for current symbol # */
-		    if (db_CatValArray_get_value(cvarr_rot, cat, &cv_rot) !=
-			DB_OK) {
-			rotation = 0.0;
-		    }
-		    else {
-			rotation =
-			    (cvarr_rot->ctype == DB_C_TYPE_INT ?
-			     (double)cv_rot->val.i : cv_rot->val.d);
-		    }
-		}		/* end if cat */
-		else {
-		    rotation = 0.0;
-		}
-	    }		/* end if nrec_rot */
-
+	    if (nrec_rot)
+		rotation = get_property(cat, line, cvarr_rot, 1.0, 0.0);
+	    
 	    if(nrec_size || nrec_rot) {
-		G_debug(3, ". dynamic symbol: cat=%d  size=%.2f  rotation=%.2f",
+		G_debug(3, "\tdynamic symbol: cat=%d  size=%.2f  rotation=%.2f",
 			cat, var_size, rotation);
 
 		/* symbol stroking is cumulative, so we need to reread it each time */
@@ -420,11 +258,12 @@ int display_lines(struct Map_info *Map, int type, struct cat_list *Clist,
 		    G_free(Symb);
 		Symb = S_read(symbol_name);
 		if (Symb == NULL)
-		    G_warning(_("Unable to read symbol, unable to display points"));
+		    G_warning(_("Unable to read symbol <%s>, unable to display points"),
+			      symbol_name);
 		else
 		    S_stroke(Symb, var_size, rotation, 0);
 	    }
-
+	    
 	    /* use random or RGB column color if given, otherwise reset */
 	    /* centroids always use default color to stand out from underlying area */
 	    if (custom_rgb && (ltype != GV_CENTROID)) {
@@ -440,8 +279,8 @@ int display_lines(struct Map_info *Map, int type, struct cat_list *Clist,
 	    var_size = size;
 	    rotation = 0.0;
 	}
-	else if (color || custom_rgb || (z_color_flag && Vect_is_3d(Map))) {
-	    if (!table_colors_flag && !cats_color_flag && !z_color_flag)
+	else if (color || custom_rgb || zcolors) {
+	    if (!table_colors_flag && !cats_color_flag && !zcolors)
 		D_RGB_color(color->r, color->g, color->b);
 	    else {
 		if (custom_rgb)
@@ -454,7 +293,7 @@ int display_lines(struct Map_info *Map, int type, struct cat_list *Clist,
 	    /* Plot the lines */
 	    if (Points->n_points == 1)	/* line with one coor */
 		D_polydots_abs(x, y, Points->n_points);
-	    else		/*use different user defined render methods */
+	    else		/* use different user defined render methods */
 		D_polyline_abs(x, y, Points->n_points);
 	}
 	
@@ -479,10 +318,12 @@ int display_lines(struct Map_info *Map, int type, struct cat_list *Clist,
 	}
     }
     
+    /*
     if (nerror_rgb > 0) {
 	G_warning(_("Error in color definition column '%s': %d features affected"),
 		  rgb_column, nerror_rgb);
     }
+    */
     
     if (n_points > 0) 
 	G_verbose_message(_("%d points plotted"), n_points);
@@ -501,5 +342,5 @@ int display_lines(struct Map_info *Map, int type, struct cat_list *Clist,
     G_free(fill_color);
     G_free(primary_color);
 
-    return 0;			/* not reached */
+    return 0;
 }
