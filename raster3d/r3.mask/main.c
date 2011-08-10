@@ -21,7 +21,6 @@
 #include <grass/gis.h>
 #include <grass/G3d.h>
 #include <grass/glocale.h>
-#include "mask_functions.h"
 
 /*--------------------------------------------------------------------------*/
 
@@ -37,7 +36,7 @@ static paramType params;
 void getParams(char **name, d_Mask ** maskRules)
 {
     *name = params.map->answer;
-    parse_vallist(params.maskVals->answers, maskRules);
+    G3d_parse_vallist(params.maskVals->answers, maskRules);
 }
 
 /*-------------------------------------------------------------------------*/
@@ -92,7 +91,7 @@ static void makeMask(char *name, d_Mask * maskRules)
 	for (y = 0; y < region.rows; y++)	/* We count from north to south in the cube coordinate system */
 	    for (x = 0; x < region.cols; x++) {
 		value = G3d_getDoubleRegion(map, x, y, z);
-		if (mask_d_select((DCELL *) & value, maskRules))
+		if (G3d_mask_d_select((DCELL *) & value, maskRules))
 		    G3d_putFloat(mask, x, y, z, (float)floatNull);	/* mask-out value */
 		else
 		    G3d_putFloat(mask, x, y, z, (float)0.0);	/* not mask-out value */
