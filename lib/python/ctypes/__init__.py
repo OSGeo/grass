@@ -8,7 +8,7 @@ import vector
 import display
 import stats
 import dbmi
-import g3d
+import raster3d
 import arraystats
 import cluster
 import trans
