@@ -33,7 +33,7 @@
 #include "binio.h"
 #include "v5d.h"
 #include <grass/gis.h>
-#include <grass/G3d.h>
+#include <grass/raster3d.h>
 #include <grass/glocale.h>
 
 #define MAX(a,b) (a > b ? a : b)

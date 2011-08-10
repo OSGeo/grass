@@ -43,7 +43,7 @@
 #include "userextern.h"
 #include "userglobs.h"
 #include "user.h"
-#include <grass/G3d.h>
+#include <grass/raster3d.h>
 #include "points.h"
 #include <grass/bitmap.h>
 

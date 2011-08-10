@@ -16,7 +16,7 @@
  *
  *****************************************************************************/
 
-#include <grass/G3d.h>
+#include <grass/raster3d.h>
 #include <grass/config.h>
 
 #define TOGGLE(x) ((x) = (x) ? 0 : 1)

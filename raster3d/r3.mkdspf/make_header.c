@@ -1,5 +1,5 @@
 #include "vizual.h"
-#include <grass/G3d.h>
+#include <grass/raster3d.h>
 
 
 void viz_make_header(file_info * hf, double dmin, double dmax,

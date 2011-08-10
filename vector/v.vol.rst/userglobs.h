@@ -1,7 +1,7 @@
 #ifndef __USERGLOBS_H__
 #define __USERGLOBS_H__
 
-#include <grass/G3d.h>
+#include <grass/raster3d.h>
 #include <grass/vector.h>
 #include <grass/dbmi.h>
 

@@ -2,7 +2,7 @@
 #ifndef __GLOBALS3_H_
 #define __GLOBALS3_H_
 
-#include <grass/G3d.h>
+#include <grass/raster3d.h>
 
 extern G3D_Region current_region3;
 

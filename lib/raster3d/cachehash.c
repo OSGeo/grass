@@ -2,11 +2,11 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <grass/G3d.h>
+#include <grass/raster3d.h>
 #include "G3d_intern.h"
 
 /*---------------------------------------------------------------------------*/
-#ifndef GRASS_G3D_H
+#ifndef GRASS_RASTER3D_H
 typedef struct
 {
 

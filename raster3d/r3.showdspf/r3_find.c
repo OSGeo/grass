@@ -4,7 +4,7 @@
  * Find the a 3dcell in the current mapset
  **************************************************************/
 #include <grass/gis.h>
-#include <grass/G3d.h>
+#include <grass/raster3d.h>
 
 
 int g3_find_dsp_file(cell, file, mset)

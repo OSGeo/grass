@@ -42,7 +42,7 @@
 #include "userextern.h"
 #include "userglobs.h"
 #include "user.h"
-#include <grass/G3d.h>
+#include <grass/raster3d.h>
 #include "points.h"
 
 int point_save(double xmm, double ymm, double zmm, double err)
