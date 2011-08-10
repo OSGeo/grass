@@ -5,7 +5,7 @@
 
 #include <grass/raster.h>
 
-#include "G3d_intern.h"
+#include "raster3d_intern.h"
 
 /*---------------------------------------------------------------------------*/
 

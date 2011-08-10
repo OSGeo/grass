@@ -8,7 +8,7 @@
 #include <rpc/xdr.h>
 #include <grass/gis.h>
 
-#include "G3d_intern.h"
+#include "raster3d_intern.h"
 
 /*---------------------------------------------------------------------------*/
 
