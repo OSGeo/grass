@@ -93,7 +93,7 @@ undocumented.</i>
 \subsection rasteribs Raster Libraries
 
  - edit:	Raster edit library (cellhd, history, cats) - \ref edit
- - g3d:	        \ref g3dlib
+ - raster3d:	\ref raster3dlib
  - raster:	\ref rasterlib
  - rowio:	\ref rowiolib
  - rst:	        \ref rst - Library for interpolation with regularized splines with tension

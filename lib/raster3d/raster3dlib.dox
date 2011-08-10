@@ -1,35 +1,19 @@
-/*! \page g3dlib GRASS Grid3D raster volume Library
+/*! \page raster3dlib GRASS 3D Raster Volume Library
 <!-- doxygenized from "GRASS 5 Programmer's Manual" 
      by M. Neteler 5/2004, 8/2005
   -->
 
-\section g3dintro Grid3D raster volume Library
-
-
-<P>
-Authors: Roman Waupotitsch and Michael Shapiro, Helena Mitasova, 
-         Bill Brown, Lubos Mitas, Jaro Hofierka, 
-         Minor modification, code cleanup and test suite by Soeren Gebbert
-         
-
-
 <b>Overview</b>
 
-The Grid3D raster volume Library is used for the r3.* and vector
-volume tools. The RASTER3D library uses a tile cache based approach to store floating point
- values in abritrary order in a volume. The coordinate system of a volume is 
-column and row compatible to the raster library and counts from the bottom to the top
-of the cube.
+The 3D Raster Volume Library is used for the <tt>r3.*</tt> and vector
+volume tools. The library uses a tile cache based approach to store
+floating point values in abritrary order in a volume. The coordinate
+system of a volume is column and row compatible to the raster library
+and counts from the bottom to the top of the cube.
 
-<center>
-<img src=g3d_volume_layout.png border=0><BR>
-<table border=0 width=700>
-<tr><td><center>
-<i>The volume coordinate system and tile layout of the RASTER3D library</i>
-</center></td></tr>
-</table>
-</center>
+\image html "volume_layout.png" "The volume coordinate system and tile layout of the 3D Raster Library"
 
+<b>TODO: update for GRASS7</b>
 
 \section Directory_Structure Directory Structure
 
@@ -1755,4 +1739,8 @@ Writes the cell-values of <EM>map</EM> in ascii format to file
 See \ref Compiling_and_Installing_GRASS_Modules for a complete 
 discussion of Makefiles.
 
+Authors: Roman Waupotitsch and Michael Shapiro, Helena Mitasova, 
+         Bill Brown, Lubos Mitas, Jaro Hofierka, 
+         Minor modification, code cleanup and test suite by Soeren Gebbert
+         
 */
