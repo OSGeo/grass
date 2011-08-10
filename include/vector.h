@@ -540,4 +540,7 @@ GEOSCoordSequence *Vect_get_area_points_geos(struct Map_info *, int);
 GEOSCoordSequence *Vect_get_isle_points_geos(struct Map_info *, int);
 #endif
 
+    /* Raster color tables */
+int Vect_read_colors(const char *, const char *, struct Colors *);
+
 #endif /* GRASS_VECT_H */
