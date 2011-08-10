@@ -32,7 +32,7 @@ SUBDIRS = \
 	sites \
 	rst \
 	lidar \
-	g3d \
+	raster3d \
 	gpde \
 	dspf \
 	symbol \
