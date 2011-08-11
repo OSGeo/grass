@@ -671,7 +671,7 @@ def check_batch_job():
 	    message(_("Executing '%s' ...") % batch_job)
 	    grass_gui = "text"
 	    shell = batch_job
-	    bj = Popen(shell,shell=True)
+	    bj = Popen(shell, shell=True)
 	    bj.wait()
 	    message(_("Execution of '%s' finished.") % batch_job)
     
@@ -860,26 +860,31 @@ def grep(string,list):
     return [elem for elem in list if expr.match(elem)]
 
 def print_params():
-       plat = os.path.join(gisbase,'include','Make','Platform.make')
-       fileplat = open(plat)
-       linesplat = fileplat.readlines()
-       fileplat.close()
-       for i in sys.argv[2:]:
-               if i == 'path':
-                       print gisbase
-               elif i == 'arch':
-                       val = grep('ARCH',linesplat)
-                       print val[0].split('=')[1].strip()
-               elif i == 'build':
-                       build = os.path.join(gisbase,'include','grass','confparms.h')
-                       filebuild = open(build)
-                       val = filebuild.readline()
-                       print val.strip().strip('"').strip()
-               elif i == 'compiler':
-                       val = grep('CC',linesplat)
-                       print val[0].split('=')[1].strip()
-               else:
-                       print "Parameter not supported"
+    plat = gfile(gisbase, 'include', 'Make', 'Platform.make')
+    fileplat = open(plat)
+    linesplat = fileplat.readlines()
+    fileplat.close()
+    
+    params = sys.argv[2:]
+    if not params:
+        params = ['arch', 'build', 'compiler', 'path']
+        
+    for arg in params:
+        if arg == 'path':
+            sys.stdout.write("%s\n" % gisbase)
+        elif arg == 'arch':
+            val = grep('ARCH',linesplat)
+            sys.stdout.write("%s\n" % val[0].split('=')[1].strip())
+        elif arg == 'build':
+            build = os.path.join(gisbase,'include','grass','confparms.h')
+            filebuild = open(build)
+            val = filebuild.readline()
+            sys.stdout.write("%s\n" % val.strip().strip('"').strip())
+        elif arg == 'compiler':
+            val = grep('CC',linesplat)
+            sys.stdout.write("%s\n" % val[0].split('=')[1].strip())
+        else:
+            error(_("Parameter <%s> not supported") % i)
     
 def get_username():
     global user
