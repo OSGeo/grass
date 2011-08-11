@@ -41,7 +41,6 @@ SUBDIRS = \
 	r.unpack \
 	v.build.all \
 	v.centroids \
-	v.colors \
 	v.convert.all \
 	v.db.addcolumn \
 	v.db.addtable \
