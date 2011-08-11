@@ -10,6 +10,7 @@ SUBDIRS = \
 	v.category \
 	v.class \
 	v.clean \
+	v.colors \
 	v.convert \
 	v.db.connect \
 	v.db.select \
