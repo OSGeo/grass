@@ -10,6 +10,7 @@
 #		Hamish Bowman <hamish_b yahoo,com>
 #		Converted to Python (based on init.sh) by Glynn Clements
 #               Martin Landa <landa.martin gmail.com>
+#               Luca Delucchi <lucadeluge@gmail.com>
 # PURPOSE:  	Sets up environment variables, parses any remaining 
 #               command line options for setting the GISDBASE, LOCATION,
 #               and/or MAPSET. Finally it starts GRASS with the appropriate user
@@ -143,6 +144,8 @@ help_text = r"""
                                    %s
   -gui                           %s
                                    %s
+  --config                       %s
+                                   %s
 
 %s:
   GISDBASE                       %s
@@ -167,6 +170,8 @@ help_text = r"""
        _("and set as default"),
        _("use $DEFAULT_GUI graphical user interface"),
        _("and set as default"),
+       _("print GRASS configuration parameters"),
+       _("options: arch,build,compiler,path"),
        _("Parameters"),
        _("initial database (path to GIS data)"),
        _("initial location"),
@@ -849,6 +854,32 @@ def clean_temp():
     nul = open(os.devnull, 'w')
     call([gfile("etc", "clean_temp")], stdout = nul, stderr = nul)
     nul.close()
+
+def grep(string,list):
+    expr = re.compile(string)
+    return [elem for elem in list if expr.match(elem)]
+
+def print_params():
+       plat = os.path.join(gisbase,'include','Make','Platform.make')
+       fileplat = open(plat)
+       linesplat = fileplat.readlines()
+       fileplat.close()
+       for i in sys.argv[2:]:
+               if i == 'path':
+                       print gisbase
+               elif i == 'arch':
+                       val = grep('ARCH',linesplat)
+                       print val[0].split('=')[1].strip()
+               elif i == 'build':
+                       build = os.path.join(gisbase,'include','grass','confparms.h')
+                       filebuild = open(build)
+                       val = filebuild.readline()
+                       print val.strip().strip('"').strip()
+               elif i == 'compiler':
+                       val = grep('CC',linesplat)
+                       print val[0].split('=')[1].strip()
+               else:
+                       print "Parameter not supported"
     
 def get_username():
     global user
@@ -895,6 +926,9 @@ def parse_cmdline():
 	# Check if the user wants to create a new mapset
 	elif i == "-c":
 	    create_new = True
+	elif i == "--config":
+            print_params()
+            sys.exit()
 	else:
 	    args.append(i)
 
