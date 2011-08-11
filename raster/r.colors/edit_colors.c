@@ -33,22 +33,6 @@ static int cmp(const void *aa, const void *bb)
     return strcmp(*a, *b);
 }
 
-static void scan_rules(void)
-{
-    char path[GPATH_MAX];
-
-    G_snprintf(path, GPATH_MAX, "%s/etc/colors", G_gisbase());
-
-    rules = G__ls(path, &nrules);
-
-    rules = G_realloc(rules, (nrules + 3) * sizeof (const char *));
-
-    rules[nrules++] = G_store("random");
-    rules[nrules++] = G_store("grey.eq");
-    rules[nrules++] = G_store("grey.log");
-
-    qsort(rules, nrules, sizeof (char *), cmp);
-}
 
 static char *rules_list(void)
 {
