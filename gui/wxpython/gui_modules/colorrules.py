@@ -846,6 +846,8 @@ class VectorColorTable(ColorTable):
     
     def _createVectorAttrb(self, parent):
         """!Create part of dialog with layer/column selection"""
+        inputBox = wx.StaticBox(parent = parent, id = wx.ID_ANY,
+                                label = " %s " % _("Select vector columns"))
         cb_vl_label = wx.StaticText(parent, id = wx.ID_ANY,
                                              label = _('Layer:'))
         cb_vc_label = wx.StaticText(parent, id = wx.ID_ANY,
@@ -861,8 +863,6 @@ class VectorColorTable(ColorTable):
         self.btn_add_RGB.SetToolTipString(_("Add GRASSRGB column to current attribute table."))
         
         # layout
-        inputBox = wx.StaticBox(parent = parent, id = wx.ID_ANY,
-                                label = " %s " % _("Select vector columns"))
         inputSizer = wx.StaticBoxSizer(inputBox, wx.VERTICAL)
         vSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
         vSizer.Add(cb_vl_label, pos = (0, 0),
@@ -1427,6 +1427,8 @@ class ThematicVectorTable(VectorColorTable):
     
     def _createVectorAttrb(self, parent):
         """!Create part of dialog with layer/column selection"""
+        inputBox = wx.StaticBox(parent = parent, id = wx.ID_ANY,
+                                label = " %s " % _("Select vector columns"))
         layer_label = wx.StaticText(parent, id = wx.ID_ANY, label = _('Layer:'))
         self.rgb_check = wx.CheckBox(parent, id = wx.ID_ANY, label = _('Use color for thematic mapping:'))
         if self.vectorType == 'points':
@@ -1471,8 +1473,6 @@ class ThematicVectorTable(VectorColorTable):
         self.btn_add_size.SetToolTipString(label)
         
         # layout
-        inputBox = wx.StaticBox(parent = parent, id = wx.ID_ANY,
-                                label = " %s " % _("Select vector columns"))
         inputSizer = wx.StaticBoxSizer(inputBox, wx.VERTICAL)
         vSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
         vSizer.AddGrowableCol(2)
