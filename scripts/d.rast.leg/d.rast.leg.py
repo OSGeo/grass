@@ -85,7 +85,7 @@ def make_frame(f, b, t, l, r):
 def main():
     map = options['map']
     nlines = options['lines']
-    rast = options['rast']
+    rast = options['raster']
     omit = flags['n']
     flip = flags['f']
 
