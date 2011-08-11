@@ -4,6 +4,7 @@
  * MODULE:      Grass Include Files
  * AUTHOR(S):   Original author unknown - probably CERL
  *              Justin Hickey - Thailand - jhickey@hpcc.nectec.or.th
+ *              Luca Delucchi - Italy - lucadeluge@gmail.com
  * PURPOSE:     This file contains definitions of variables and data types
  *              for use with most, if not all, Grass programs. This file is
  *              usually included in every Grass program.
@@ -214,9 +215,11 @@ static const char *GRASS_copyright __attribute__ ((unused))
     G_OPT_F_OUTPUT,		/* new output file */
     G_OPT_F_SEP,		/* data field separator */
 
+    G_OPT_DIR,                  /* directory input */
+
     G_OPT_C_FG,			/* foreground color */
     G_OPT_C_BG,			/* background color */
-    
+
     G_OPT_M_UNITS,              /* units */
     G_OPT_M_DATATYPE,           /* datatype */
     G_OPT_M_MAPSET,             /* mapset */

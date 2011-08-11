@@ -10,6 +10,7 @@
   
   \author Original author CERL
   \author Soeren Gebbert added Dec. 2009 WPS process_description document
+  \author Luca Delucchi added Aug 2011 G_OPT_DIR
 */
 
 #include <grass/gis.h>
@@ -78,6 +79,9 @@
    - G_OPT_F_INPUT
    - G_OPT_F_OUTPUT
    - G_OPT_F_SEP
+   
+  - directory
+   - G_OPT_DIR
    
   - colors
    - G_OPT_C_FG
@@ -496,6 +500,16 @@ struct Option *G_define_standard_option(int opt)
 	Opt->label = _("Field separator");
 	Opt->description = _("Special characters: newline, space, comma, tab");
 	break;
+
+        /* directory */
+    case G_OPT_DIR:
+        Opt->key = "input";
+        Opt->type = TYPE_STRING;
+        Opt->key_desc = "name";
+        Opt->required = YES;
+        Opt->gisprompt = "old,dir,input";
+        Opt->description = _("Name to input directory");
+        break;
 
 	/* colors */
     case G_OPT_C_FG:

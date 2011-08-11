@@ -94,6 +94,8 @@ struct Option *define_standard_option(const char *name)
 	key = G_OPT_F_OUTPUT;
     else if (G_strcasecmp(name, "G_OPT_F_SEP") == 0)
 	key = G_OPT_F_SEP;
+    else if (G_strcasecmp(name, "G_OPT_DIR") == 0)
+        key = G_OPT_DIR;
     else if (G_strcasecmp(name, "G_OPT_C_FG") == 0)
 	key = G_OPT_C_FG;
     else if (G_strcasecmp(name, "G_OPT_C_BG") == 0)

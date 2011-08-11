@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """
 @brief Construct simple wxPython GUI from a GRASS command interface
 description.
@@ -41,6 +42,7 @@ COPYING coming with GRASS for details.
 @author Michael Barton, Arizona State University
 @author Daniel Calvelo <dca.gis@gmail.com>
 @author Martin Landa <landa.martin@gmail.com>
+@author Luca Delucchi <lucadeluge@gmail.com>
 """
 
 import sys
@@ -1110,7 +1112,7 @@ class cmdPanel(wx.Panel):
                                               'location',
                                               'mapset',
                                               'dbase') and \
-                       p.get('element', '') !=  'file':
+                       p.get('element', '') !=  'file' and p.get('element', '') !=  'dir':
                     multiple = p.get('multiple', False)
                     if p.get('age', '') ==  'new':
                         mapsets = [grass.gisenv()['MAPSET'],]
@@ -1375,7 +1377,26 @@ class cmdPanel(wx.Panel):
                         which_sizer.Add(item = ifbb, proportion = 1,
                                         flag = wx.EXPAND | wx.RIGHT | wx.LEFT, border = 5)
                         p['wxId'].append(ifbb.GetId())
-            
+                # directory selector
+                elif p.get('prompt','') !=  'color' and p.get('element', '') ==  'dir':
+                    fbb = filebrowse.DirBrowseButton(parent = which_panel, id = wx.ID_ANY,
+                                                      size = globalvar.DIALOG_GSELECT_SIZE, labelText = '',
+                                                      dialogTitle = _('Choose %s') % \
+                                                          p.get('description',_('Directory')),
+                                                      buttonText = _('Browse'),
+                                                      startDirectory = os.getcwd(),
+                                                      changeCallback = self.OnSetValue)
+                    value = self._getValue(p)
+                    if value:
+                        fbb.SetValue(value) # parameter previously set
+                    which_sizer.Add(item = fbb, proportion = 0,
+                                    flag = wx.EXPAND | wx.RIGHT, border = 5)
+                    
+                    # A file browse button is a combobox with two children:
+                    # a textctl and a button;
+                    # we have to target the button here
+                    p['wxId'] = [ fbb.GetChildren()[1].GetId() ]
+
             if self.parent.GetName() ==  'MainFrame' and self.parent.modeler:
                 parChk = wx.CheckBox(parent = which_panel, id = wx.ID_ANY,
                                      label = _("Parameterized in model"))
