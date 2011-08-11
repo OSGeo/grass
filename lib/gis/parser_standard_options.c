@@ -10,7 +10,7 @@
   
   \author Original author CERL
   \author Soeren Gebbert added Dec. 2009 WPS process_description document
-  \author Luca Delucchi added Aug 2011 G_OPT_DIR
+  \author Luca Delucchi added Aug 2011 G_OPT_M_DIR
 */
 
 #include <grass/gis.h>
@@ -80,9 +80,6 @@
    - G_OPT_F_OUTPUT
    - G_OPT_F_SEP
    
-  - directory
-   - G_OPT_DIR
-   
   - colors
    - G_OPT_C_FG
    - G_OPT_C_BG
@@ -93,6 +90,7 @@
    - G_OPT_M_MAPSET
    - G_OPT_M_EN
    - G_OPT_M_COLR
+   - G_OPT_M_DIR
 
    \param opt type of Option struct to create
    
@@ -501,16 +499,6 @@ struct Option *G_define_standard_option(int opt)
 	Opt->description = _("Special characters: newline, space, comma, tab");
 	break;
 
-        /* directory */
-    case G_OPT_DIR:
-        Opt->key = "input";
-        Opt->type = TYPE_STRING;
-        Opt->key_desc = "name";
-        Opt->required = YES;
-        Opt->gisprompt = "old,dir,input";
-        Opt->description = _("Name to input directory");
-        break;
-
 	/* colors */
     case G_OPT_C_FG:
 	Opt->key = "color";
@@ -535,6 +523,16 @@ struct Option *G_define_standard_option(int opt)
 	break;
 
 	/* misc */
+
+    case G_OPT_M_DIR:
+        Opt->key = "input";
+        Opt->type = TYPE_STRING;
+        Opt->key_desc = "name";
+        Opt->required = YES;
+        Opt->gisprompt = "old,dir,input";
+        Opt->description = _("Name to input directory");
+        break;
+
     case G_OPT_M_UNITS:
 	Opt->key = "units";
 	Opt->type = TYPE_STRING;
@@ -583,6 +581,6 @@ struct Option *G_define_standard_option(int opt)
 	Opt->description = _("Name of color table");
 	Opt->descriptions = G_color_rules_descriptions();
     }
-   
+
     return Opt;
 }

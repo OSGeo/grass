@@ -215,8 +215,6 @@ static const char *GRASS_copyright __attribute__ ((unused))
     G_OPT_F_OUTPUT,		/* new output file */
     G_OPT_F_SEP,		/* data field separator */
 
-    G_OPT_DIR,                  /* directory input */
-
     G_OPT_C_FG,			/* foreground color */
     G_OPT_C_BG,			/* background color */
 
@@ -225,6 +223,7 @@ static const char *GRASS_copyright __attribute__ ((unused))
     G_OPT_M_MAPSET,             /* mapset */
     G_OPT_M_EN,                 /* coordinates */
     G_OPT_M_COLR,               /* color rules */
+    G_OPT_M_DIR,                /* directory input */    
 } STD_OPT;
 
 /* Message format */
