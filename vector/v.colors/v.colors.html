@@ -1,0 +1,69 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.colors</em> allows the user to create and/or modify the color
+table for a vector map. The vector map (specified on the command line
+by <b>map=</b>) must exist in the user's current mapset search path.
+
+<p>
+The <b>rast</b> option allows user to specify a raster map <i>name</i>
+from which to copy the color map.
+
+<p>
+The <b>volume</b> option allows user to specify a volume (3D raster)
+map <i>name</i> from which to copy the color map.
+
+<p>
+If the user specifies the <b>-w</b> flag, the current color table file
+for the input map will not be overwritten. This means that the color
+table is created only if the <i>map</i> does not already have a color
+table. If this option is not specified, the color table will be
+created if one does not exist, or modified if it does.
+
+<p>
+In general, tables which associate colors with percentages (aspect,
+bcyr, byg, byr, elevation, grey, gyr, rainbow, ramp, ryb, ryg and
+wave) can be applied to any data, while those which use absolute
+values (aspectcolr, curvature, etopo2, evi, ndvi, population, slope,
+srtm, and terrain) only make sense for data with certain ranges.
+
+One can get a rough idea of the applicability of a colour table by
+reading the corresponding rules file
+(<tt>$GISBASE/etc/colors/&lt;name&gt;</tt>). For example
+the <em>ryg</em> rule is defined as:
+
+<div class="code"><pre>
+0% red
+50% yellow
+100% green
+</pre></div>
+
+<p>
+The <b>rules</b> color table type will cause <em>r.colors</em> to read
+color table specifications from standard input and will build
+the color table accordingly.
+
+<p>
+For details see <em><a href="r.colors.html">r.colors</a></em> manual page.
+
+<h2>EXAMPLES</h2>
+
+<h2>SEE ALSO</h2>
+
+<em>
+  <a href="d.vect.html">d.vect</a>,
+  <a href="r.colors.html">r.colors</a>,
+  <a href="r3.colors.html">r3.colors</a>,
+</em>
+
+<p>
+See also wiki
+page <a href="http://grass.osgeo.org/wiki/Color_tables">Color
+tables</a> (from GRASS User Wiki)
+
+<h2>AUTHORS</h2>
+
+Adopted <a href="r.colors.html">r.colors</a> by Martin Landa, Czech
+Technical University in Prague, Czech Republic
+
+<p>
+<i>Last changed: $Date$</i>
