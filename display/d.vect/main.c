@@ -174,12 +174,9 @@ int main(int argc, char **argv)
     rgbcol_opt->guisection = _("Colors");
     rgbcol_opt->description = _("Name of color definition column (for use with -a flag)");
     
-    zcol_opt = G_define_option();
+    zcol_opt = G_define_standard_option(G_OPT_M_COLR);
     zcol_opt->key = "zcolor";
-    zcol_opt->key_desc = "style";
-    zcol_opt->type = TYPE_STRING;
-    zcol_opt->required = NO;
-    zcol_opt->description = _("Type of color table (for use with -z flag)");
+    zcol_opt->description = _("Name of color table (for use with -z flag)");
     zcol_opt->answer = "terrain";
     zcol_opt->guisection = _("Colors");
 
