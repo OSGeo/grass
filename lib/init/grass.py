@@ -884,7 +884,7 @@ def print_params():
             val = grep('CC',linesplat)
             sys.stdout.write("%s\n" % val[0].split('=')[1].strip())
         else:
-            error(_("Parameter <%s> not supported") % i)
+            message(_("Parameter <%s> not supported") % arg)
     
 def get_username():
     global user
