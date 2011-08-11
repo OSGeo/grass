@@ -1,36 +1,36 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-Converts one RASTER3D raster map into several 2D raster maps (depends on depths). 
-If the 2D and 3D region settings are different,
-the 3D resolution will be adjust to the 2D resolution (the depths are not touched!).
-You can force r3.to.rast to use the 2D resolution of the input RASTER3D map for the output maps, 
-independently from the current region settings.
+Converts one 3D raster map into several 2D raster maps (depends on depths). 
+If the 2D and 3D region settings are different, the 3D resolution will be 
+adjusted to the 2D resolution (the depths are not touched).
+The user can force <em>r3.to.rast</em> to use the 2D resolution of the input 
+3D raster map for the output maps, independently from the current region settings.
 
 <center>
-<img src=r3.to.rast.png border=0><BR>
+<img src=r3.to.rast.png border=0><br>
 <table border=0 width=700>
 <tr><td><center>
-<i>How r3.to.rast works</i>
+<em>How r3.to.rast works</em>
 </center></td></tr>
 </table>
 </center>
 
 
-<H2>NOTES</H2>
-Every slice of the RASTER3D map is copied to one 2D raster map. The maps
-are named like <B>output</B><I>_slicenumber</I>. Slices are counted from bottom
+<h2>NOTES</h2>
+Every slice of the 3D raster map is copied to one 2D raster map. The maps
+are named like <b>output</b><em>_slicenumber</em>. Slices are counted from bottom
 to the top, so the bottom slice has number 1. 
 
 The number of slices is equal to the number of depths.
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM><A HREF="r3.cross.rast.html">r3.cross.rast</A></EM><br>
-<EM><A HREF="r3.out.vtk.html">r3.out.vtk</A></EM><br>
-<EM><A HREF="r3.out.ascii.html">r3.out.ascii</A></EM><br>
-<EM><A HREF="g.region.html">g.region</A></EM><br>
+<em><a href="r3.cross.rast.html">r3.cross.rast</a></em><br>
+<em><a href="r3.out.vtk.html">r3.out.vtk</a></em><br>
+<em><a href="r3.out.ascii.html">r3.out.ascii</a></em><br>
+<em><a href="g.region.html">g.region</a></em><br>
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 Soeren Gebbert
 
 <p><i>Last changed: $Date$</i>
