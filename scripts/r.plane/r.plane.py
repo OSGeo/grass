@@ -72,7 +72,7 @@ import string
 import grass.script as grass
 
 def main():
-    name = options['name']
+    name = options['output']
     type = options['type']
     dip = float(options['dip'])
     az  = float(options['azimuth'])
