@@ -22,103 +22,8 @@
 #include <sys/types.h>
 #include "local_proto.h"
 
-static char **rules;
-static int nrules;
-
-static int cmp(const void *aa, const void *bb)
-{
-    char *const *a = (char *const *) aa;
-    char *const *b = (char *const *) bb;
-
-    return strcmp(*a, *b);
-}
-
-
-static char *rules_list(void)
-{
-    char *list = NULL;
-    int size = 0;
-    int len = 0;
-    int i;
-
-    for (i = 0; i < nrules; i++) {
-        const char *name = rules[i];
-        int n = strlen(name);
-
-        if (size < len + n + 2) {
-            size = len + n + 200;
-            list = G_realloc(list, size);
-        }
-
-        if (len > 0)
-            list[len++] = ',';
-
-        memcpy(&list[len], name, n + 1);
-        len += n;
-    }
-
-    return list;
-}
-
-static char *rules_descriptions(void)
-{
-    char path[GPATH_MAX];
-    struct Key_Value *kv;
-    int result_len = 0;
-    int result_max = 2000;
-    char *result = G_malloc(result_max);
-    int i;
-
-    G_snprintf(path, GPATH_MAX, "%s/etc/colors.desc", G_gisbase());
-    kv = G_read_key_value_file(path);
-    if (!kv)
-        return NULL;
-
-    for (i = 0; i < nrules; i++) {
-        const char *name = rules[i];
-        const char *desc = G_find_key_value(name, kv);
-        int len;
-
-        if (!desc)
-            desc = "no description";
-
-        desc = _(desc);
-
-        len = strlen(name) + strlen(desc) + 2;
-        if (result_len + len >= result_max) {
-            result_max = result_len + len + 1000;
-            result = G_realloc(result, result_max);
-        }
-
-        sprintf(result + result_len, "%s;%s;", name, desc);
-        result_len += len;
-    }
-
-    G_free_key_value(kv);
-
-    return result;
-}
-
-static void list_rules(void)
-{
-    int i;
-
-    for (i = 0; i < nrules; i++)
-        printf("%s\n", rules[i]);
-}
-
-static int find_rule(const char *name)
-{
-    int i;
-
-    for (i = 0; i < nrules; i++)
-        if (strcmp(name, rules[i]) == 0)
-            return 1;
-
-    return 0;
-}
-
-int edit_colors(int argc, char **argv, int type, const char *maptype, const char* Maptype)
+int edit_colors(int argc, char **argv, int type, const char *maptype,
+		const char* Maptype)
 {
     int overwrite;
     int is_from_stdin;
@@ -163,16 +68,8 @@ int edit_colors(int argc, char **argv, int type, const char *maptype, const char
     } else {
         opt.map = G_define_standard_option(G_OPT_R_MAP);
     }
-    scan_rules();
 
-    opt.colr = G_define_option();
-    opt.colr->key = "color";
-    opt.colr->key_desc = "style";
-    opt.colr->type = TYPE_STRING;
-    opt.colr->required = NO;
-    opt.colr->options = rules_list();
-    opt.colr->description = _("Type of color table");
-    opt.colr->descriptions = rules_descriptions();
+    opt.colr = G_define_standard_option(G_OPT_M_COLR);
     opt.colr->guisection = _("Define");
 
     opt.rast = G_define_standard_option(G_OPT_R_INPUT);
@@ -236,7 +133,7 @@ int edit_colors(int argc, char **argv, int type, const char *maptype, const char
         exit(EXIT_FAILURE);
 
     if (flag.l->answer) {
-        list_rules();
+	G_list_color_rules(stdout);
         return EXIT_SUCCESS;
     }
 
@@ -343,7 +240,7 @@ int edit_colors(int argc, char **argv, int type, const char *maptype, const char
                 have_stats = get_stats(name, mapset, &statf);
             Rast_make_histogram_log_colors(&colors, &statf, (CELL) min,
                                            (CELL) max);
-        } else if (find_rule(style))
+        } else if (G_find_color_rule(style))
             Rast_make_fp_colors(&colors, style, min, max);
         else
             G_fatal_error(_("Unknown color request '%s'"), style);
