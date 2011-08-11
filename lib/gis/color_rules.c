@@ -1,7 +1,7 @@
 /*!
  \file lib/gis/color_tables.c
  
- \brief GIS Library - Color tables
+ \brief GIS Library - Color tables management subroutines
 
  Taken from r.colors module.
 
@@ -14,7 +14,7 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-static int scan_rules(char ***);
+static char **scan_rules(int *);
 static int cmp(const void *, const void *);
 
 /*!
@@ -22,7 +22,7 @@ static int cmp(const void *, const void *);
   
   \return allocated string buffer with options
 */
-char *G_color_rules_list(void)
+char *G_color_rules_options(void)
 {
     char *list, **rules;
     const char *name;
@@ -32,7 +32,7 @@ char *G_color_rules_list(void)
     list = NULL;
     size = len = 0;
 
-    nrules = scan_rules(&rules);
+    rules = scan_rules(&nrules);
     
     for (i = 0; i < nrules; i++) {
         name = rules[i];
@@ -64,10 +64,10 @@ char *G_color_rules_descriptions(void)
 {
     char path[GPATH_MAX];
     struct Key_Value *kv;
-    int result_len, result_max, nrules;
+    int result_len, result_max;
     char *result, **rules;
     const char *name, *desc;
-    int i, len;
+    int i, len, nrules;
 
     result_len = 0;
     result_max = 2000;
@@ -78,7 +78,7 @@ char *G_color_rules_descriptions(void)
     if (!kv)
         return NULL;
 
-    nrules = scan_rules(&rules);
+    rules = scan_rules(&nrules);
     
     for (i = 0; i < nrules; i++) {
         name = rules[i];
@@ -105,24 +105,24 @@ char *G_color_rules_descriptions(void)
     return result;
 }
 
-int scan_rules(char ***rules)
+char **scan_rules(int *nrules)
 {
-    int nrules;
+    char **rules;
     char path[GPATH_MAX];
 
     G_snprintf(path, GPATH_MAX, "%s/etc/colors", G_gisbase());
 
-    *rules = G__ls(path, &nrules);
+    rules = G__ls(path, nrules);
 
-    *rules = G_realloc(*rules, (nrules + 3) * sizeof (const char *));
+    rules = G_realloc(rules, (*nrules + 3) * sizeof (const char *));
 
-    (*rules)[nrules++] = G_store("random");
-    (*rules)[nrules++] = G_store("grey.eq");
-    (*rules)[nrules++] = G_store("grey.log");
+    rules[(*nrules)++] = G_store("random");
+    rules[(*nrules)++] = G_store("grey.eq");
+    rules[(*nrules)++] = G_store("grey.log");
 
-    qsort(*rules, nrules, sizeof (char *), cmp);
+    qsort(rules, *nrules, sizeof (char *), cmp);
 
-    return nrules;
+    return rules;
 }
 
 int cmp(const void *aa, const void *bb)
@@ -131,4 +131,42 @@ int cmp(const void *aa, const void *bb)
     char *const *b = (char *const *) bb;
 
     return strcmp(*a, *b);
+}
+
+/*!
+  \brief Print color rules
+
+  \param out file where to print
+*/
+void G_list_color_rules(FILE *out)
+{
+    int i, nrules;
+    char **rules;
+
+    rules = scan_rules(&nrules);
+
+    for (i = 0; i < nrules; i++)
+	fprintf(out, "%s\n", rules[i]);
+}
+
+/*!
+  \brief Check if color rule is defined
+
+  \param name color rule name
+
+  \return 1 found
+  \return 0 not found
+*/
+int G_find_color_rule(const char *name)
+{
+    int i, nrules;
+    char **rules;
+
+    rules = scan_rules(&nrules);
+    
+    for (i = 0; i < nrules; i++)
+        if (strcmp(name, rules[i]) == 0)
+            return 1;
+
+    return 0;
 }

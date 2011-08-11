@@ -126,8 +126,10 @@ void G_bresenham_line(int, int, int, int, int (*)(int, int));
 void G_clicker(void);
 
 /* color_rules.c */
-char *G_color_rules_list(void);
+char *G_color_rules_options(void);
 char *G_color_rules_descriptions(void);
+void G_list_color_rules(FILE *);
+int G_find_color_rule(const char *);
 
 /* color_str.c */
 int G_num_standard_colors(void);
