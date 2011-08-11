@@ -82,12 +82,13 @@
   - colors
    - G_OPT_C_FG
    - G_OPT_C_BG
- 
+
   - misc
    - G_OPT_M_UNITS
    - G_OPT_M_DATATYPE
    - G_OPT_M_MAPSET
    - G_OPT_M_EN
+   - G_OPT_M_COLR
 
    \param opt type of Option struct to create
    
@@ -557,7 +558,17 @@ struct Option *G_define_standard_option(int opt)
 	Opt->multiple = YES;
 	Opt->key_desc = "east,north";
 	Opt->description = _("Coordinates");
-    }
+	break;
 
+    case G_OPT_M_COLR:
+	Opt->key = "color";
+	Opt->key_desc = "style";
+	Opt->type = TYPE_STRING;
+	Opt->required = NO;
+	Opt->options = G_color_rules_options();
+	Opt->description = _("Name of color table");
+	Opt->descriptions = G_color_rules_descriptions();
+    }
+   
     return Opt;
 }

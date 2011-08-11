@@ -221,6 +221,7 @@ static const char *GRASS_copyright __attribute__ ((unused))
     G_OPT_M_DATATYPE,           /* datatype */
     G_OPT_M_MAPSET,             /* mapset */
     G_OPT_M_EN,                 /* coordinates */
+    G_OPT_M_COLR,               /* color rules */
 } STD_OPT;
 
 /* Message format */
