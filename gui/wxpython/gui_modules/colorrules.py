@@ -1050,7 +1050,7 @@ class VectorColorTable(ColorTable):
         self.cb_color_att.SetSelection(0)
         self.properties['source_rgb'] = self.cb_color_att.GetString(0)
         self.cb_rgb_col.InsertColumns(vector = self.inmap, layer = vlayer, type = ["character"], dbInfo = self.dbInfo)
-        self.cb_rgb_col.Delete(self.cb_rgb_col.FindString(self.properties['source_rgb']))
+#        self.cb_rgb_col.Delete(self.cb_rgb_col.FindString(self.properties['source_rgb']))
         found = self.cb_rgb_col.FindString('GRASSRGB')
         if found != wx.NOT_FOUND:
             self.cb_rgb_col.SetSelection(found)
@@ -1243,6 +1243,7 @@ class VectorColorTable(ColorTable):
                         parent = self,
                         input = gtemp)
         return True
+    
     
 ##    def ColorFromString(self, rgb):
 ##        """!Convert color string '255:255:255' to tuple"""
@@ -1580,9 +1581,12 @@ class ThematicVectorTable(VectorColorTable):
 
         @return True on success otherwise False
         """
-        ret = self.CreateColorTable()
+        ret = VectorColorTable.CreateColorTable(self)
         if not ret:
-            GMessage(parent = self, message = _("No color rules given."))
+            gcmd.GMessage(parent = self, message = _("No color rules given."))
+        ret = self.CreateSizeTable()
+        if not ret:
+            gcmd.GMessage(parent = self, message = _("No size rules given."))
         
         data = self.parent.GetLayerData(nvizType = 'vector')
         data['vector']['points']['thematic']['layer'] = int(self.properties['layer'])
@@ -1605,8 +1609,8 @@ class ThematicVectorTable(VectorColorTable):
         
         return ret
     
-    def CreateColorTable(self, force = False):
-        """!Creates color table
+    def CreateSizeTable(self, force = False):
+        """!Creates size table
 
         @return True on success
         @return False on failure
