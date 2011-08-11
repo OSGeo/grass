@@ -52,7 +52,7 @@ void fatal_error(void *map, int *fd, int depths, char *errorMsg)
     /* Close files and exit */
     if (map != NULL) {
         if (!Rast3d_closeCell(map))
-            Rast3d_fatalError(_("Unable to close the 3d raster map"));
+            Rast3d_fatalError(_("Unable to close 3Draster map"));
     }
 
     if (fd != NULL) {
@@ -77,7 +77,7 @@ void set_params()
     param.input->required = YES;
     param.input->gisprompt = "old,grid3,3d-raster";
     param.input->description =
-        _("3d raster map(s) to be converted to 2D raster slices");
+        _("3D raster map(s) to be converted to 2D raster slices");
 
     param.output = G_define_option();
     param.output->key = "output";
@@ -88,12 +88,12 @@ void set_params()
 
     param.mask = G_define_flag();
     param.mask->key = 'm';
-    param.mask->description = _("Use RASTER3D mask (if exists) with input map");
+    param.mask->description = _("Use 3D raster mask (if exists) with input map");
 
     param.res = G_define_flag();
     param.res->key = 'r';
     param.res->description =
-        _("Use the same resolution as the input RASTER3D map for the 2d output "
+        _("Use the same resolution as the input 3D raster map for the 2D output "
           "maps, independent of the current region settings");
 }
 
@@ -215,10 +215,10 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    G_debug(3, _("Open 3d raster map <%s>"), param.input->answer);
+    G_debug(3, _("Open 3D raster map <%s>"), param.input->answer);
 
     if (NULL == G_find_grid3(param.input->answer, ""))
-        Rast3d_fatalError(_("3d raster map <%s> not found"),
+        Rast3d_fatalError(_("3D raster map <%s> not found"),
                        param.input->answer);
 
     /*Set the defaults */
@@ -257,7 +257,7 @@ int main(int argc, char *argv[])
                               RASTER3D_USE_CACHE_DEFAULT);
 
         if (map == NULL)
-            Rast3d_fatalError(_("Error opening 3d raster map <%s>"),
+            Rast3d_fatalError(_("Error opening 3D raster map <%s>"),
                            param.input->answer);
     }
 
@@ -267,7 +267,7 @@ int main(int argc, char *argv[])
 
     /*If not equal, set the 3D window correct */
     if (rows != region.rows || cols != region.cols) {
-        G_message(_("The 2d and 3d region settings are different. "
+        G_message(_("The 2D and 3D region settings are different. "
                     "Using the 2D window settings to adjust the 2D part of the 3D region."));
         G_get_set_window(&region2d);
         region.ns_res = region2d.ns_res;
