@@ -147,7 +147,8 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
         G_fatal_error(_("No %s map specified"), maptype);
 
     if (opt.rast->answer && opt.volume->answer)
-        G_fatal_error(_("\raster\" and \"volume\" options are mutually exclusive"));
+        G_fatal_error(_("Options <%s> and <%s> options are mutually exclusive"),
+		      opt.rast->key, opt.volume->key);
 
     if (opt.rast->answer)
         cmap = opt.rast->answer;
@@ -155,13 +156,18 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
         cmap = opt.volume->answer;
 
     if (!cmap && !style && !rules && !remove)
-        G_fatal_error(_("One of \"-r\" or options \"color\", \"raster\" or \"rules\" must be specified!"));
-
+        G_fatal_error(_("One of -%c or options <%s>, <%s> or <%s> "
+			"must be specified"), flag.r->key, opt.colr->key,
+			opt.rast->key, opt.rules->key);
+    
     if (!!style + !!cmap + !!rules > 1)
-        G_fatal_error(_("\"color\", \"rules\", and \"raster\" options are mutually exclusive"));
-
+        G_fatal_error(_("Options <%s>, <%s>, and <%s> options are mutually "
+			"exclusive"), opt.colr->key, opt.rules->key,
+		      opt.rast->key);
+    
     if (flag.g->answer && flag.a->answer)
-        G_fatal_error(_("-g and -a flags are mutually exclusive"));
+        G_fatal_error(_("Flags -%c and -%c flags are mutually exclusive"),
+		      flag.g->key, flag.a->key);
 
     is_from_stdin = rules && strcmp(rules, "-") == 0;
     if (is_from_stdin)
@@ -189,7 +195,7 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
         return EXIT_SUCCESS;
     }
 
-    G_suppress_warnings(1);
+    G_suppress_warnings(TRUE);
     if (type == RASTER3D_TYPE) {
         have_colors = Rast3d_readColors(name, mapset, &colors);
     } else {
@@ -201,11 +207,10 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
      */
 
     if (have_colors > 0 && !overwrite) {
-        G_warning(_("Color table exists. Exiting."));
-        exit(EXIT_FAILURE);
+	G_fatal_error(_("Color table exists. Exiting."));
     }
 
-    G_suppress_warnings(0);
+    G_suppress_warnings(FALSE);
 
     if (type == RASTER3D_TYPE) {
         fp = 1; /* g3d maps are always floating point */
