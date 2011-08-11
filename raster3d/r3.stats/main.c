@@ -567,7 +567,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster3d"));
     G_add_keyword(_("statistics"));
-    module->description = _("Generates volume statistics for raster3d maps.");
+    module->description = _("Generates volume statistics for 3D raster maps.");
 
     /* Define the different options */
 
@@ -578,7 +578,7 @@ int main(int argc, char *argv[])
     steps->type = TYPE_INTEGER;
     steps->required = NO;
     steps->answer = "20";
-    steps->description = _("Number of sub-ranges to collect stats from");
+    steps->description = _("Number of subranges to collect stats from");
 
 
     equal = G_define_flag();
@@ -609,14 +609,14 @@ int main(int argc, char *argv[])
     infile = inputfile->answer;
 
     if (NULL == G_find_grid3(infile, ""))
-	Rast3d_fatalError(_("Requested g3d map <%s> not found"), infile);
+	Rast3d_fatalError(_("3D raster map <%s> not found"), infile);
 
     map =
 	Rast3d_openCellOld(infile, G_find_grid3(infile, ""), &region,
 			RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
     if (map == NULL)
-	Rast3d_fatalError(_("Error opening g3d map <%s>"), infile);
+	Rast3d_fatalError(_("Unable to open 3D raster map <%s>"), infile);
 
     map_type = Rast3d_tileTypeMap(map);
 
