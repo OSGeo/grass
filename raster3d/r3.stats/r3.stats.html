@@ -1,32 +1,34 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>r3.stats</EM> calculates volume statistics for raster3D maps.
+<em>r3.stats</em> calculates volume statistics for 3D raster maps.
 Volumes are created on base of value subranges or groups of equal values.
 The default number of subranges is 20 and can vary from 1 to infinite. 
-Larger subranges will result in larger memory consumption.
+Larger number of subranges will result in larger memory consumption.
 The volumes are calculated in qubic meters. Null values are marked with "*".
-If the flag <em>-e</em> is set, the number of subrange will be ignored.
+If the flag <em>-e</em> is set, the number of subranges will be ignored.
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
-As with most GRASS raster3D modules, <EM>r3.stats</EM> operates on the cell
+As with most GRASS 3D raster map modules, <em>r3.stats</em> operates on the cell
 array defined by the current 3D region settings, not the original extent and
-resolution of the input map. See <em><A HREF="g.region.html">g.region</A></em>.
-<P>
+resolution of the input map. See <em><a href="g.region.html">g.region</a></em>.
+<p>
+The region setting will not effect the memory consumption of this module.
 The number of subranges in case of value range calculation or the number of 
 equal value groups effect the memory consumption and the calculation time.
-You can expect a huge time consumption to calculate the equal value groups (flag <em>-e</em>)
-if you use large region settings + maps which have many equal value groups (> 100000).
+The user can expect a huge time consumption to calculate the equal value groups (flag <em>-e</em>)
+if large region settings occur for maps which have many equal value groups (> 100000).
 
-<H2>EXAMPLES</H2>
-<H3>Lausanne FOSS4G 2006 3D demo dataset example</H3>
+<h2>EXAMPLES</h2>
+<h3>Lausanne FOSS4G 2006 3D demo dataset example</h3>
 
 The 3D raster map <em>geology</em> has three values. Each value represents 
 a specific geological layer, clay = 1, sand = 2 and bedrock = 3. To calculate
 the volume of each geological layer, we can use the flag <em>-e</em> to group
 equal values into single volumes. 
-<em>r3.stats geology -e</em> will produce the following output:<br><br>
+<em>r3.stats geology -e</em> will produce the following output:
 
+<p>
 <div class="code"><pre>
   num   |        value       |     volume    |   perc  |    count
       1             1.000000   300822000.000   50.13700        50137
@@ -46,7 +48,7 @@ Sum of all cells:
         Count = 100000
 
 </pre></div>
-<H3>Generic example</H3>
+<h3>Generic example</h3>
 
 <div class="code"><pre>
 #create a small 3D region
@@ -85,18 +87,18 @@ Sum of all cells:
 
 </pre></div>
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
 <em>
-<A HREF="g.region.html">g.region</A><br>
-<A HREF="r3.univar.html">r3.univar</A><br>
-<A HREF="r.stats.html">r.stats</A><br>
-<A HREF="r.statistics.html">r.statistics</A><br>
-<A HREF="v.univar.html">v.univar</A><br>
+<a href="g.region.html">g.region</a>,
+<a href="r3.univar.html">r3.univar</a>,
+<a href="r.stats.html">r.stats</a>,
+<a href="r.statistics.html">r.statistics</a>,
+<a href="v.univar.html">v.univar</a>
 </em>
 
 
-<H2>AUTHORS</H2>
+<h2>AUTHOR</h2>
 
 Soeren Gebbert<br>
 
