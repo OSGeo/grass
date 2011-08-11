@@ -1112,7 +1112,7 @@ class cmdPanel(wx.Panel):
                                               'location',
                                               'mapset',
                                               'dbase') and \
-                       p.get('element', '') !=  'file' and p.get('element', '') !=  'dir':
+                                              p.get('element', '') not in ('file', 'dir'):
                     multiple = p.get('multiple', False)
                     if p.get('age', '') ==  'new':
                         mapsets = [grass.gisenv()['MAPSET'],]
@@ -1377,15 +1377,16 @@ class cmdPanel(wx.Panel):
                         which_sizer.Add(item = ifbb, proportion = 1,
                                         flag = wx.EXPAND | wx.RIGHT | wx.LEFT, border = 5)
                         p['wxId'].append(ifbb.GetId())
+                
                 # directory selector
-                elif p.get('prompt','') !=  'color' and p.get('element', '') ==  'dir':
+                elif p.get('prompt','') != 'color' and p.get('element', '') ==  'dir':
                     fbb = filebrowse.DirBrowseButton(parent = which_panel, id = wx.ID_ANY,
-                                                      size = globalvar.DIALOG_GSELECT_SIZE, labelText = '',
-                                                      dialogTitle = _('Choose %s') % \
-                                                          p.get('description',_('Directory')),
-                                                      buttonText = _('Browse'),
-                                                      startDirectory = os.getcwd(),
-                                                      changeCallback = self.OnSetValue)
+                                                     size = globalvar.DIALOG_GSELECT_SIZE, labelText = '',
+                                                     dialogTitle = _('Choose %s') % \
+                                                         p.get('description', _('Directory')),
+                                                     buttonText = _('Browse'),
+                                                     startDirectory = os.getcwd(),
+                                                     changeCallback = self.OnSetValue)
                     value = self._getValue(p)
                     if value:
                         fbb.SetValue(value) # parameter previously set
@@ -1397,7 +1398,7 @@ class cmdPanel(wx.Panel):
                     # we have to target the button here
                     p['wxId'] = [ fbb.GetChildren()[1].GetId() ]
 
-            if self.parent.GetName() ==  'MainFrame' and self.parent.modeler:
+            if self.parent.GetName() == 'MainFrame' and self.parent.modeler:
                 parChk = wx.CheckBox(parent = which_panel, id = wx.ID_ANY,
                                      label = _("Parameterized in model"))
                 parChk.SetName('ModelParam')
