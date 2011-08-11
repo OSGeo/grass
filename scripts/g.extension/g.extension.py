@@ -392,16 +392,17 @@ def install_extension():
 
 def remove_extension():
     # is module available?
-    if not os.path.exists(os.path.join(options['prefix'], 'bin', options['extension'])):
-        grass.fatal(_("Module '%s' not found") % options['extension'])
+    bin_dir = os.path.join(options['prefix'], 'bin', options['extension'])
+    scr_dir = os.path.join(options['prefix'], 'scripts', options['extension'])
+    if not os.path.exists(bin_dir) and not os.path.exists(scr_dir):
+        grass.fatal(_("Module <%s> not found") % options['extension'])
     
-    for file in [os.path.join(options['prefix'], 'bin', options['extension']),
-                 os.path.join(options['prefix'], 'scripts', options['extension']),
-                 os.path.join(options['prefix'], 'docs', 'html', options['extension'] + '.html')]:
-        if os.path.isfile(file):
-            os.remove(file)
-                    
-    grass.message(_("'%s' successfully uninstalled.") % options['extension'])
+    for f in [bin_dir, scr_dir,
+              os.path.join(options['prefix'], 'docs', 'html', options['extension'] + '.html'),
+              os.path.join(options['prefix'], 'man', 'man1', options['extension'] + '.1')]:
+        grass.try_remove(f)
+    
+    grass.message(_("Module <%s> successfully uninstalled") % options['extension'])
 
 def create_dir(path):
     if os.path.isdir(path):
