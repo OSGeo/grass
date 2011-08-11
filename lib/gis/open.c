@@ -88,7 +88,7 @@ static int G__open(const char *element,
 	    name = xname;
 	}
 
-	if (G_legal_filename(name) == -1)
+	if (*name && G_legal_filename(name) == -1)
 	    return -1;
 
 	G_file_name(path, element, name, mapset);
