@@ -62,21 +62,23 @@ Typical header definitions are as follows:
 
 <div class="code"><pre>
 #%module
-#%  description: g.parser test script   
+#% description: g.parser test script   
 #%end
 #%flag
-#%  key: f
-#%  description: A flag
+#% key: f
+#% description: A flag
 #%end
 #%option
-#%  key: raster
-#%  type: string
-#%  gisprompt: old,cell,raster
-#%  description: Raster input map
-#%  required : yes
+#% key: raster
+#% type: string
+#% gisprompt: old,cell,raster
+#% description: Raster input map
+#% required : yes
 #%end
 </pre></div>
 
+With <tt>{NULL}</tt> it is possible to suppress a predefined <tt>description</tt>
+or <tt>label</tt>.
 
 <h2>NOTES</h2>
 
