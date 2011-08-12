@@ -177,7 +177,10 @@ int main(int argc, char *argv[])
     Vect_open_old2(&Map, name, "", opt.field->answer);
     name   = Vect_get_name(&Map);
     mapset = Vect_get_mapset(&Map);
-    
+
+    if (strcmp(mapset, G_mapset()) != 0)
+      G_fatal_error(_("Module currently allows to modify only vector maps from the current mapset"));
+
     stat = -1;
     if (remove) {
 	stat = Vect_remove_colors(name, mapset);
