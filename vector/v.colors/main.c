@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
     int have_stats, is_fp;
     int overwrite, remove, is_from_stdin, stat, have_colors;
     const char *mapset, *cmapset;
-    const char *name, *style, *rules, *cmap, *attrcolumn;
+    const char *name, *style, *rules, *cmap, *attrcolumn, *rgbcolumn;
 
     struct Map_info Map;
     struct Colors colors, colors_tmp;
@@ -140,6 +140,7 @@ int main(int argc, char *argv[])
     style = opt.colr->answer;
     rules = opt.rules->answer;
     attrcolumn = opt.attrcol->answer;
+    rgbcolumn = opt.rgbcol->answer;
     have_stats = FALSE;
     
     if (!name)
@@ -294,7 +295,10 @@ int main(int argc, char *argv[])
         colors = colors_tmp;
     }
 
-    Vect_write_colors(name, mapset, &colors);
+    if (rgbcolumn)
+	write_rgb_values(&Map, layer, rgbcolumn, &colors);
+    else
+	Vect_write_colors(name, mapset, &colors);
 
     G_message(_("Color table for vector map <%s> set to '%s'"), 
 	      G_fully_qualified_name(name, mapset), 
