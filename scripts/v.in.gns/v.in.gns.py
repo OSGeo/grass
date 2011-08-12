@@ -40,10 +40,11 @@
 import sys
 import os
 from grass.script import core as grass
+from grass.script import vector as vgrass
 
 def main():
-    fileorig = options['file']
-    filevect = options['vect']
+    fileorig = options['input']
+    filevect = options['output']
     
     if not filevect:
 	filevect = grass.basename(fileorig, 'txt')
@@ -141,7 +142,7 @@ def main():
     grass.try_remove(tmpfile)
 
     # write cmd history:
-    grass.vector_history(filevect)
+    vgrass.vector_history(filevect)
 
 if __name__ == "__main__":
     options, flags = grass.parser()
