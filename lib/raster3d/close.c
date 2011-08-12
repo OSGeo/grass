@@ -141,7 +141,7 @@ static int close_cell_old(RASTER3D_Map * map)
   <em>map</em> then every tile which is not flushed before closing is
   flushed.
   
-  \param map name of 3D raster map
+  \param map pointer to RASTER3D_Map to be closed
 
   \return 1 success
   \return 0 failure
