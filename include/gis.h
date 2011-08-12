@@ -4,13 +4,12 @@
  * MODULE:      Grass Include Files
  * AUTHOR(S):   Original author unknown - probably CERL
  *              Justin Hickey - Thailand - jhickey@hpcc.nectec.or.th
- *              Luca Delucchi - Italy - lucadeluge@gmail.com
  * PURPOSE:     This file contains definitions of variables and data types
  *              for use with most, if not all, Grass programs. This file is
  *              usually included in every Grass program.
- * COPYRIGHT:    (C) 2000 by the GRASS Development Team
+ * COPYRIGHT:   (C) 2000-2011 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
+ *              This program is free software under the GNU General Public
  *              License (>=v2). Read the file COPYING that comes with GRASS
  *              for details.
  *
