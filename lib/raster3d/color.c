@@ -19,7 +19,7 @@ static int read_old_colors(FILE *, struct Colors *);
 
 /*---------------------------------------------------------------------------*/
 
-int Rast3d_removeColor(const char *name)
+int Rast3d_remove_color(const char *name)
  /* adapted from G_remove_colr */
 {
     return G_remove_misc(RASTER3D_DIRECTORY, RASTER3D_COLOR_ELEMENT, name);
@@ -28,7 +28,7 @@ int Rast3d_removeColor(const char *name)
 /*---------------------------------------------------------------------------*/
 
 int
-Rast3d_readColors(const char *name, const char *mapset, struct Colors *colors)
+Rast3d_read_colors(const char *name, const char *mapset, struct Colors *colors)
  /* adapted from Rast_read_colors */
 {
     const char *err;
@@ -41,7 +41,7 @@ Rast3d_readColors(const char *name, const char *mapset, struct Colors *colors)
 
     switch (read_colors(name, mapset, colors)) {
     case -2:
-	if (Rast3d_readRange(name, mapset, &drange) >= 0) {
+	if (Rast3d_read_range(name, mapset, &drange) >= 0) {
 	    Rast_get_fp_range_min_max(&drange, &dmin, &dmax);
 	    if (!Rast_is_d_null_value(&dmin) && !Rast_is_d_null_value(&dmax))
 		Rast_make_rainbow_fp_colors(colors, dmin, dmax);
@@ -324,7 +324,7 @@ static int read_old_colors(FILE * fd, struct Colors *colors)
 /*---------------------------------------------------------------------------*/
 
 int
-Rast3d_writeColors(const char *name, const char *mapset, struct Colors *colors)
+Rast3d_write_colors(const char *name, const char *mapset, struct Colors *colors)
  /* adapted from Rast_write_colors */
 {
     FILE *fd;

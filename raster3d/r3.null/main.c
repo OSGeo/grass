@@ -81,7 +81,7 @@ getParams(char **name, d_Mask ** maskRules, int *changeNull,
     *changeNull = (params.null->answer != NULL);
     if (*changeNull)
 	if (sscanf(params.null->answer, "%lf", newNullVal) != 1)
-	    Rast3d_fatalError(_("Illegal value for null"));
+	    Rast3d_fatal_error(_("Illegal value for null"));
 }
 
 /*-------------------------------------------------------------------------*/
@@ -96,78 +96,78 @@ modifyNull(char *name, d_Mask * maskRules, int changeNull, double newNullVal)
     int doCompress, doLzw, doRle, precision;
     int cacheSize;
 
-    cacheSize = Rast3d_cacheSizeEncode(RASTER3D_USE_CACHE_XY, 1);
+    cacheSize = Rast3d_cache_size_encode(RASTER3D_USE_CACHE_XY, 1);
 
     if (NULL == G_find_grid3(name, ""))
-	Rast3d_fatalError(_("3D raster map <%s> not found"), name);
+	Rast3d_fatal_error(_("3D raster map <%s> not found"), name);
 
     fprintf(stderr, "name %s Mapset %s \n", name, G_mapset());
-    map = Rast3d_openCellOld(name, G_mapset(), RASTER3D_DEFAULT_WINDOW,
+    map = Rast3d_open_cell_old(name, G_mapset(), RASTER3D_DEFAULT_WINDOW,
 			  DCELL_TYPE, cacheSize);
 
     if (map == NULL)
-	Rast3d_fatalError(_("Unable to open 3D raster map <%s>"), name);
+	Rast3d_fatal_error(_("Unable to open 3D raster map <%s>"), name);
 
-    Rast3d_getRegionStructMap(map, &region);
-    Rast3d_getTileDimensionsMap(map, &tileX, &tileY, &tileZ);
+    Rast3d_get_region_struct_map(map, &region);
+    Rast3d_get_tile_dimensions_map(map, &tileX, &tileY, &tileZ);
 
-    Rast3d_getCompressionMode(&doCompress, &doLzw, &doRle, &precision);
+    Rast3d_get_compression_mode(&doCompress, &doLzw, &doRle, &precision);
 
-    mapOut = Rast3d_openNewParam(name, DCELL_TYPE, RASTER3D_USE_CACHE_XY,
-			      &region, Rast3d_fileTypeMap(map),
-			      doLzw, doRle, Rast3d_tilePrecisionMap(map), tileX,
+    mapOut = Rast3d_open_new_param(name, DCELL_TYPE, RASTER3D_USE_CACHE_XY,
+			      &region, Rast3d_file_type_map(map),
+			      doLzw, doRle, Rast3d_tile_precision_map(map), tileX,
 			      tileY, tileZ);
     if (mapOut == NULL)
-	Rast3d_fatalError(_("modifyNull: error opening tmp file"));
+	Rast3d_fatal_error(_("modifyNull: error opening tmp file"));
 
-    Rast3d_minUnlocked(map, RASTER3D_USE_CACHE_X);
-    Rast3d_autolockOn(map);
-    Rast3d_unlockAll(map);
-    Rast3d_minUnlocked(mapOut, RASTER3D_USE_CACHE_X);
-    Rast3d_autolockOn(mapOut);
-    Rast3d_unlockAll(mapOut);
+    Rast3d_min_unlocked(map, RASTER3D_USE_CACHE_X);
+    Rast3d_autolock_on(map);
+    Rast3d_unlock_all(map);
+    Rast3d_min_unlocked(mapOut, RASTER3D_USE_CACHE_X);
+    Rast3d_autolock_on(mapOut);
+    Rast3d_unlock_all(mapOut);
 
 	for (z = 0; z < region.depths; z++) {
 	if ((z % tileZ) == 0) {
-	    Rast3d_unlockAll(map);
-	    Rast3d_unlockAll(mapOut);
+	    Rast3d_unlock_all(map);
+	    Rast3d_unlock_all(mapOut);
 	}
 	for (y = 0; y < region.rows; y++)
 	    for (x = 0; x < region.cols; x++) {
 
-		value = Rast3d_getDoubleRegion(map, x, y, z);
+		value = Rast3d_get_double_region(map, x, y, z);
 
-		if (Rast3d_isNullValueNum(&value, DCELL_TYPE)) {
+		if (Rast3d_is_null_value_num(&value, DCELL_TYPE)) {
 		    if (changeNull) {
 			value = newNullVal;
 		    }
 		}
 		else if (Rast3d_mask_d_select((DCELL *) & value, maskRules)) {
-		    Rast3d_setNullValue(&value, 1, DCELL_TYPE);
+		    Rast3d_set_null_value(&value, 1, DCELL_TYPE);
 		}
 
-		Rast3d_putDouble(mapOut, x, y, z, value);
+		Rast3d_put_double(mapOut, x, y, z, value);
 	    }
 	if ((z % tileZ) == 0) {
-	    if (!Rast3d_flushTilesInCube
+	    if (!Rast3d_flush_tiles_in_cube
 		(mapOut, 0, 0, MAX(0, z - tileZ), region.rows - 1,
 		 region.cols - 1, z))
-		Rast3d_fatalError(_("modifyNull: error flushing tiles in cube"));
+		Rast3d_fatal_error(_("modifyNull: error flushing tiles in cube"));
 	}
     }
 
-    if (!Rast3d_flushAllTiles(mapOut))
-	Rast3d_fatalError(_("modifyNull: error flushing all tiles"));
+    if (!Rast3d_flush_all_tiles(mapOut))
+	Rast3d_fatal_error(_("modifyNull: error flushing all tiles"));
 
-    Rast3d_autolockOff(map);
-    Rast3d_unlockAll(map);
-    Rast3d_autolockOff(mapOut);
-    Rast3d_unlockAll(mapOut);
+    Rast3d_autolock_off(map);
+    Rast3d_unlock_all(map);
+    Rast3d_autolock_off(mapOut);
+    Rast3d_unlock_all(mapOut);
 
-    if (!Rast3d_closeCell(map))
-	Rast3d_fatalError(_("Unable to close raster map"));
-    if (!Rast3d_closeCell(mapOut))
-	Rast3d_fatalError(_("modifyNull: Unable to close tmp file"));
+    if (!Rast3d_close_cell(map))
+	Rast3d_fatal_error(_("Unable to close raster map"));
+    if (!Rast3d_close_cell(mapOut))
+	Rast3d_fatal_error(_("modifyNull: Unable to close tmp file"));
 }
 
 /*--------------------------------------------------------------------------*/

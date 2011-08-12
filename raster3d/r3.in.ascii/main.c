@@ -55,17 +55,17 @@ void *map = NULL;
 int rowOrder;
 int depthOrder;
 
-extern void *Rast3d_openNewParam();
+extern void *Rast3d_open_new_param();
 
 /*---------------------------------------------------------------------------*/
 void fatalError(char *errorMsg)
 {
     if (map != NULL) {
         /* should unopen map here! */
-        Rast3d_closeCell(map);
+        Rast3d_close_cell(map);
     }
 
-    Rast3d_fatalError(errorMsg);
+    Rast3d_fatal_error(errorMsg);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -192,7 +192,7 @@ FILE *openAscii(char *asciiFile, RASTER3D_Region * region)
         rewind(fp);
     }
 
-    Rast3d_getWindow(region);
+    Rast3d_get_window(region);
 
     readHeaderString(fp, "north:", &(region->north));
     readHeaderString(fp, "south:", &(region->south));
@@ -223,11 +223,11 @@ asciiToG3d(FILE * fp, RASTER3D_Region * region, int convertNull, char *nullValue
     char buff[256];
     int tileX, tileY, tileZ;
 
-    Rast3d_getTileDimensionsMap(map, &tileX, &tileY, &tileZ);
-    Rast3d_minUnlocked(map, RASTER3D_USE_CACHE_X);
+    Rast3d_get_tile_dimensions_map(map, &tileX, &tileY, &tileZ);
+    Rast3d_min_unlocked(map, RASTER3D_USE_CACHE_X);
 
-    Rast3d_autolockOn(map);
-    Rast3d_unlockAll(map);
+    Rast3d_autolock_on(map);
+    Rast3d_unlock_all(map);
     G_message(_("Loading data ...  (%dx%dx%d)"), region->cols, region->rows,
               region->depths);
 
@@ -239,7 +239,7 @@ asciiToG3d(FILE * fp, RASTER3D_Region * region, int convertNull, char *nullValue
         G_percent(z, region->depths, 1);
 
         if ((z % tileZ) == 0)
-            Rast3d_unlockAll(map);
+            Rast3d_unlock_all(map);
 
         for (y = 0; y < region->rows; y++) /* go south to north */
             for (x = 0; x < region->cols; x++) {
@@ -270,7 +270,7 @@ asciiToG3d(FILE * fp, RASTER3D_Region * region, int convertNull, char *nullValue
 
                 /* Check for null value */
                 if (convertNull && strncmp(buff, nullValue, strlen(nullValue)) == 0) {
-                    Rast3d_setNullValue(&value, 1, DCELL_TYPE);
+                    Rast3d_set_null_value(&value, 1, DCELL_TYPE);
                 } else {
                     if (sscanf(buff, "%lf", &value) != 1) {
                         G_warning(_("Invalid value detected."));
@@ -280,10 +280,10 @@ asciiToG3d(FILE * fp, RASTER3D_Region * region, int convertNull, char *nullValue
                     }
                 }
                 /* Write the data */
-                Rast3d_putDouble(map, col, row, depth, value);
+                Rast3d_put_double(map, col, row, depth, value);
             }
 
-        if (!Rast3d_flushTilesInCube(map,
+        if (!Rast3d_flush_tiles_in_cube(map,
                                   0, 0, MAX(0, depth - tileZ),
                                   region->rows - 1, region->cols - 1, depth))
             fatalError("asciiTog3d: error flushing tiles");
@@ -294,11 +294,11 @@ asciiToG3d(FILE * fp, RASTER3D_Region * region, int convertNull, char *nullValue
                     "expected data.  [%.4f ...]"), value);
     }
 
-    if (!Rast3d_flushAllTiles(map))
+    if (!Rast3d_flush_all_tiles(map))
         fatalError("asciiTog3d: error flushing tiles");
 
-    Rast3d_autolockOff(map);
-    Rast3d_unlockAll(map);
+    Rast3d_autolock_off(map);
+    Rast3d_unlock_all(map);
 
     G_percent(1, 1, 1);
 }
@@ -329,13 +329,13 @@ int main(int argc, char *argv[])
         _("Converts a 3D ASCII raster text file into a (binary) 3D raster map.");
 
     setParams();
-    Rast3d_setStandard3dInputParams();
+    Rast3d_set_standard3d_input_params();
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
     getParams(&input, &output, &convertNull, nullValue);
-    if (!Rast3d_getStandard3dParams(&useTypeDefault, &type,
+    if (!Rast3d_get_standard3d_params(&useTypeDefault, &type,
                                  &useLzwDefault, &doLzw,
                                  &useRleDefault, &doRle,
                                  &usePrecisionDefault, &precision,
@@ -343,12 +343,12 @@ int main(int argc, char *argv[])
                                  &tileZ))
         fatalError("main: error getting standard parameters");
 
-    Rast3d_initDefaults();
+    Rast3d_init_defaults();
 
     fp = openAscii(input, &region);
 
     /*Open the new RASTER3D map */
-    map = Rast3d_openNewParam(output, RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_XY,
+    map = Rast3d_open_new_param(output, RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_XY,
                            &region,
                            type, doLzw, doRle, precision, tileX, tileY,
                            tileZ);
@@ -359,13 +359,13 @@ int main(int argc, char *argv[])
     /*Create the new RASTER3D Map */
     asciiToG3d(fp, &region, convertNull, nullValue);
 
-    if (!Rast3d_closeCell(map))
+    if (!Rast3d_close_cell(map))
         fatalError(_("Error closing new 3d raster map"));
 
     /* write input name to map history */
-    Rast3d_readHistory(output, G_mapset(), &history);
+    Rast3d_read_history(output, G_mapset(), &history);
     Rast_set_history(&history, HIST_DATSRC_1, input);
-    Rast3d_writeHistory(output, &history);
+    Rast3d_write_history(output, &history);
 
     map = NULL;
     if (fclose(fp))

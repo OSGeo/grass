@@ -55,8 +55,8 @@ void fatal_error(void *map, int *fd, int depths, char *errorMsg)
     /* Close files and exit */
     if (map != NULL) {
         /* should unopen map here! but this functionality is not jet implemented */
-        if (!Rast3d_closeCell(map))
-            Rast3d_fatalError(_("Could not close the map"));
+        if (!Rast3d_close_cell(map))
+            Rast3d_fatal_error(_("Could not close the map"));
     }
 
     if (fd != NULL) {
@@ -64,7 +64,7 @@ void fatal_error(void *map, int *fd, int depths, char *errorMsg)
             close_input_raster_map(fd[i]);
     }
 
-    Rast3d_fatalError(errorMsg);
+    Rast3d_fatal_error(errorMsg);
     exit(EXIT_FAILURE);
 
 }
@@ -131,31 +131,31 @@ void raster_to_g3d(void *map, RASTER3D_Region region, int *fd)
                 G_incr_void_ptr(ptr, Rast_cell_size(globalRastMapType))) {
                 if (globalRastMapType == CELL_TYPE) {
                     if (Rast_is_null_value(ptr, globalRastMapType)) {
-                        Rast3d_setNullValue(&dvalue, 1, DCELL_TYPE);
+                        Rast3d_set_null_value(&dvalue, 1, DCELL_TYPE);
                     } else {
                         dvalue = *(CELL *) ptr;
                     }
-                    if (Rast3d_putValue
+                    if (Rast3d_put_value
                         (map, x, y, z, (char *) &dvalue, DCELL_TYPE) < 0)
                         fatal_error(map, fd, depths,
                                     "Error writing double data");
                 } else if (globalRastMapType == FCELL_TYPE) {
                     if (Rast_is_null_value(ptr, globalRastMapType)) {
-                        Rast3d_setNullValue(&fvalue, 1, FCELL_TYPE);
+                        Rast3d_set_null_value(&fvalue, 1, FCELL_TYPE);
                     } else {
                         fvalue = *(FCELL *) ptr;
                     }
-                    if (Rast3d_putValue
+                    if (Rast3d_put_value
                         (map, x, y, z, (char *) &fvalue, FCELL_TYPE) < 0)
                         fatal_error(map, fd, depths,
                                     "Error writing float data");
                 } else if (globalRastMapType == DCELL_TYPE) {
                     if (Rast_is_null_value(ptr, globalRastMapType)) {
-                        Rast3d_setNullValue(&dvalue, 1, DCELL_TYPE);
+                        Rast3d_set_null_value(&dvalue, 1, DCELL_TYPE);
                     } else {
                         dvalue = *(DCELL *) ptr;
                     }
-                    if (Rast3d_putValue
+                    if (Rast3d_put_value
                         (map, x, y, z, (char *) &dvalue, DCELL_TYPE) < 0)
                         fatal_error(map, fd, depths,
                                     "Error writing double data");
@@ -210,14 +210,14 @@ int main(int argc, char *argv[])
 
     /*Check for output */
     if (param.output->answer == NULL)
-        Rast3d_fatalError(_("No output map"));
+        Rast3d_fatal_error(_("No output map"));
 
     /* Get the tile size */
     maxSize = atoi(param.tilesize->answer);
 
     /* Figure out the region from the map */
-    Rast3d_initDefaults();
-    Rast3d_getWindow(&region);
+    Rast3d_init_defaults();
+    Rast3d_get_window(&region);
 
     /*Check if the g3d-region is equal to the 2d rows and cols */
     rows = Rast_window_rows();
@@ -285,17 +285,17 @@ int main(int argc, char *argv[])
     else
         globalG3dMapType = FCELL_TYPE;
 
-    map = Rast3d_openNewOptTileSize(param.output->answer, RASTER3D_USE_CACHE_XY, &region, globalG3dMapType, maxSize);
+    map = Rast3d_open_new_opt_tile_size(param.output->answer, RASTER3D_USE_CACHE_XY, &region, globalG3dMapType, maxSize);
 
     if (map == NULL)
         fatal_error(map, fd, opencells, _("Error opening 3d raster map"));
 
     /*if requested set the Mask on */
     if (param.mask->answer) {
-        if (Rast3d_maskFileExists()) {
+        if (Rast3d_mask_file_exists()) {
             changemask = 0;
-            if (Rast3d_maskIsOff(map)) {
-                Rast3d_maskOn(map);
+            if (Rast3d_mask_is_off(map)) {
+                Rast3d_mask_on(map);
                 changemask = 1;
             }
         }
@@ -306,9 +306,9 @@ int main(int argc, char *argv[])
 
     /*We set the Mask off, if it was off before */
     if (param.mask->answer) {
-        if (Rast3d_maskFileExists())
-            if (Rast3d_maskIsOn(map) && changemask)
-                Rast3d_maskOff(map);
+        if (Rast3d_mask_file_exists())
+            if (Rast3d_mask_is_on(map) && changemask)
+                Rast3d_mask_off(map);
     }
 
     /*Loop over all output maps! close */
@@ -319,11 +319,11 @@ int main(int argc, char *argv[])
         G_free(fd);
 
     /* Flush all tile */
-    if (!Rast3d_flushAllTiles(map))
-        Rast3d_fatalError("Error flushing tiles with Rast3d_flushAllTiles");
+    if (!Rast3d_flush_all_tiles(map))
+        Rast3d_fatal_error("Error flushing tiles with Rast3d_flush_all_tiles");
     /* Close files and exit */
-    if (!Rast3d_closeCell(map))
-        Rast3d_fatalError(_("Error closing 3d raster map"));
+    if (!Rast3d_close_cell(map))
+        Rast3d_fatal_error(_("Error closing 3d raster map"));
 
     map = NULL;
 

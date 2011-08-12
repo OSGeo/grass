@@ -522,7 +522,7 @@ void N_copy_array_3d(N_array_3d * source, N_array_3d * target)
 	 i++) {
 	null = 0;
 	if (source->type == FCELL_TYPE) {
-	    if (Rast3d_isNullValueNum
+	    if (Rast3d_is_null_value_num
 		((void *)&(source->fcell_array[i]), FCELL_TYPE))
 		null = 1;
 
@@ -531,7 +531,7 @@ void N_copy_array_3d(N_array_3d * source, N_array_3d * target)
 	    }
 	    if (target->type == DCELL_TYPE) {
 		if (null)
-		    Rast3d_setNullValue((void *)&(target->dcell_array[i]), 1,
+		    Rast3d_set_null_value((void *)&(target->dcell_array[i]), 1,
 				     DCELL_TYPE);
 		else
 		    target->dcell_array[i] = (double)source->fcell_array[i];
@@ -539,13 +539,13 @@ void N_copy_array_3d(N_array_3d * source, N_array_3d * target)
 
 	}
 	if (source->type == DCELL_TYPE) {
-	    if (Rast3d_isNullValueNum
+	    if (Rast3d_is_null_value_num
 		((void *)&(source->dcell_array[i]), DCELL_TYPE))
 		null = 1;
 
 	    if (target->type == FCELL_TYPE) {
 		if (null)
-		    Rast3d_setNullValue((void *)&(target->fcell_array[i]), 1,
+		    Rast3d_set_null_value((void *)&(target->fcell_array[i]), 1,
 				     FCELL_TYPE);
 		else
 		    target->fcell_array[i] = (float)source->dcell_array[i];
@@ -596,19 +596,19 @@ double N_norm_array_3d(N_array_3d * a, N_array_3d * b, int type)
 	v2 = 0.0;
 
 	if (a->type == FCELL_TYPE) {
-	    if (!Rast3d_isNullValueNum((void *)&(a->fcell_array[i]), FCELL_TYPE))
+	    if (!Rast3d_is_null_value_num((void *)&(a->fcell_array[i]), FCELL_TYPE))
 		v1 = (double)a->fcell_array[i];
 	}
 	if (a->type == DCELL_TYPE) {
-	    if (!Rast3d_isNullValueNum((void *)&(a->dcell_array[i]), DCELL_TYPE))
+	    if (!Rast3d_is_null_value_num((void *)&(a->dcell_array[i]), DCELL_TYPE))
 		v1 = (double)a->dcell_array[i];
 	}
 	if (b->type == FCELL_TYPE) {
-	    if (!Rast3d_isNullValueNum((void *)&(b->fcell_array[i]), FCELL_TYPE))
+	    if (!Rast3d_is_null_value_num((void *)&(b->fcell_array[i]), FCELL_TYPE))
 		v2 = (double)b->fcell_array[i];
 	}
 	if (b->type == DCELL_TYPE) {
-	    if (!Rast3d_isNullValueNum((void *)&(b->dcell_array[i]), DCELL_TYPE))
+	    if (!Rast3d_is_null_value_num((void *)&(b->dcell_array[i]), DCELL_TYPE))
 		v2 = (double)b->dcell_array[i];
 	}
 
@@ -859,7 +859,7 @@ int N_convert_array_3d_null_to_zero(N_array_3d * a)
     if (a->type == FCELL_TYPE)
 	for (i = 0; i < a->cols_intern * a->rows_intern * a->depths_intern;
 	     i++) {
-	    if (Rast3d_isNullValueNum((void *)&(a->fcell_array[i]), FCELL_TYPE)) {
+	    if (Rast3d_is_null_value_num((void *)&(a->fcell_array[i]), FCELL_TYPE)) {
 		a->fcell_array[i] = 0.0;
 		count++;
 	    }
@@ -868,7 +868,7 @@ int N_convert_array_3d_null_to_zero(N_array_3d * a)
     if (a->type == DCELL_TYPE)
 	for (i = 0; i < a->cols_intern * a->rows_intern * a->depths_intern;
 	     i++) {
-	    if (Rast3d_isNullValueNum((void *)&(a->dcell_array[i]), DCELL_TYPE)) {
+	    if (Rast3d_is_null_value_num((void *)&(a->dcell_array[i]), DCELL_TYPE)) {
 		a->dcell_array[i] = 0.0;
 		count++;
 	    }

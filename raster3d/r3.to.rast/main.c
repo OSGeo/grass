@@ -51,8 +51,8 @@ void fatal_error(void *map, int *fd, int depths, char *errorMsg)
 
     /* Close files and exit */
     if (map != NULL) {
-        if (!Rast3d_closeCell(map))
-            Rast3d_fatalError(_("Unable to close 3Draster map"));
+        if (!Rast3d_close_cell(map))
+            Rast3d_fatal_error(_("Unable to close 3Draster map"));
     }
 
     if (fd != NULL) {
@@ -60,7 +60,7 @@ void fatal_error(void *map, int *fd, int depths, char *errorMsg)
             Rast_unopen(fd[i]);
     }
 
-    Rast3d_fatalError(errorMsg);
+    Rast3d_fatal_error(errorMsg);
     exit(EXIT_FAILURE);
 
 }
@@ -118,7 +118,7 @@ void g3d_to_raster(void *map, RASTER3D_Region region, int *fd)
     G_debug(2, "g3d_to_raster: Writing %i raster maps with %i rows %i cols.",
             depths, rows, cols);
 
-    typeIntern = Rast3d_tileTypeMap(map);
+    typeIntern = Rast3d_tile_type_map(map);
 
     if (typeIntern == FCELL_TYPE)
         fcell = Rast_allocate_f_buf();
@@ -134,14 +134,14 @@ void g3d_to_raster(void *map, RASTER3D_Region region, int *fd)
 
             for (x = 0; x < cols; x++) {
                 if (typeIntern == FCELL_TYPE) {
-                    Rast3d_getValue(map, x, y, z, &f1, typeIntern);
-                    if (Rast3d_isNullValueNum(&f1, FCELL_TYPE))
+                    Rast3d_get_value(map, x, y, z, &f1, typeIntern);
+                    if (Rast3d_is_null_value_num(&f1, FCELL_TYPE))
                         Rast_set_null_value(&fcell[x], 1, FCELL_TYPE);
                     else
                         fcell[x] = f1;
                 } else {
-                    Rast3d_getValue(map, x, y, z, &d1, typeIntern);
-                    if (Rast3d_isNullValueNum(&d1, DCELL_TYPE))
+                    Rast3d_get_value(map, x, y, z, &d1, typeIntern);
+                    if (Rast3d_is_null_value_num(&d1, DCELL_TYPE))
                         Rast_set_null_value(&dcell[x], 1, DCELL_TYPE);
                     else
                         dcell[x] = d1;
@@ -218,46 +218,46 @@ int main(int argc, char *argv[])
     G_debug(3, _("Open 3D raster map <%s>"), param.input->answer);
 
     if (NULL == G_find_grid3(param.input->answer, ""))
-        Rast3d_fatalError(_("3D raster map <%s> not found"),
+        Rast3d_fatal_error(_("3D raster map <%s> not found"),
                        param.input->answer);
 
     /*Set the defaults */
-    Rast3d_initDefaults();
+    Rast3d_init_defaults();
 
     /*Set the resolution of the output maps */
     if (param.res->answer) {
 
         /*Open the map with current region */
-        map = Rast3d_openCellOld(param.input->answer,
+        map = Rast3d_open_cell_old(param.input->answer,
                               G_find_grid3(param.input->answer, ""),
                               RASTER3D_DEFAULT_WINDOW, RASTER3D_TILE_SAME_AS_FILE,
                               RASTER3D_USE_CACHE_DEFAULT);
         if (map == NULL)
-            Rast3d_fatalError(_("Error opening 3d raster map <%s>"),
+            Rast3d_fatal_error(_("Error opening 3d raster map <%s>"),
                            param.input->answer);
 
 
         /*Get the region of the map */
-        Rast3d_getRegionStructMap(map, &region);
+        Rast3d_get_region_struct_map(map, &region);
         /*set this region as current 3d window for map */
-        Rast3d_setWindowMap(map, &region);
+        Rast3d_set_window_map(map, &region);
         /*Set the 2d region appropriate */
-        Rast3d_extract2dRegion(&region, &region2d);
+        Rast3d_extract2d_region(&region, &region2d);
         /*Make the new 2d region the default */
         Rast_set_window(&region2d);
 
     } else {
         /* Figure out the region from the map */
-        Rast3d_getWindow(&region);
+        Rast3d_get_window(&region);
 
         /*Open the 3d raster map */
-        map = Rast3d_openCellOld(param.input->answer,
+        map = Rast3d_open_cell_old(param.input->answer,
                               G_find_grid3(param.input->answer, ""),
                               &region, RASTER3D_TILE_SAME_AS_FILE,
                               RASTER3D_USE_CACHE_DEFAULT);
 
         if (map == NULL)
-            Rast3d_fatalError(_("Error opening 3D raster map <%s>"),
+            Rast3d_fatal_error(_("Error opening 3D raster map <%s>"),
                            param.input->answer);
     }
 
@@ -275,16 +275,16 @@ int main(int argc, char *argv[])
         region.rows = region2d.rows;
         region.cols = region2d.cols;
         
-        Rast3d_adjustRegion(&region);
+        Rast3d_adjust_region(&region);
         
-        Rast3d_setWindowMap(map, &region);
+        Rast3d_set_window_map(map, &region);
     }
 
     /* save the input map region for later use (history meta-data) */
-    Rast3d_getRegionStructMap(map, &inputmap_bounds);
+    Rast3d_get_region_struct_map(map, &inputmap_bounds);
 
     /*Get the output type */
-    output_type = Rast3d_fileTypeMap(map);
+    output_type = Rast3d_file_type_map(map);
 
 
     /*prepare the filehandler */
@@ -316,10 +316,10 @@ int main(int argc, char *argv[])
 
     /*if requested set the Mask on */
     if (param.mask->answer) {
-        if (Rast3d_maskFileExists()) {
+        if (Rast3d_mask_file_exists()) {
             changemask = 0;
-            if (Rast3d_maskIsOff(map)) {
-                Rast3d_maskOn(map);
+            if (Rast3d_mask_is_off(map)) {
+                Rast3d_mask_on(map);
                 changemask = 1;
             }
         }
@@ -364,9 +364,9 @@ int main(int argc, char *argv[])
 
     /*We set the Mask off, if it was off before */
     if (param.mask->answer) {
-        if (Rast3d_maskFileExists())
-            if (Rast3d_maskIsOn(map) && changemask)
-                Rast3d_maskOff(map);
+        if (Rast3d_mask_file_exists())
+            if (Rast3d_mask_is_on(map) && changemask)
+                Rast3d_mask_off(map);
     }
 
 
@@ -378,7 +378,7 @@ int main(int argc, char *argv[])
         G_free(fd);
 
     /* Close files and exit */
-    if (!Rast3d_closeCell(map))
+    if (!Rast3d_close_cell(map))
         fatal_error(map, NULL, 0, _("Error closing 3d raster map"));
 
     map = NULL;

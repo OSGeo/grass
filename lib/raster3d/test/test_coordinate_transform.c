@@ -41,8 +41,8 @@ int test_coordinate_transform(void)
     
     /* We need to set up a specific region for the new g3d map.
      * First we safe the default region. */
-    Rast3d_getWindow(&default_region);
-    Rast3d_regionCopy(&region, &default_region);
+    Rast3d_get_window(&default_region);
+    Rast3d_region_copy(&region, &default_region);
     
     region.bottom = 0.0;
     region.top = 1000;
@@ -54,12 +54,12 @@ int test_coordinate_transform(void)
     region.cols = 10;
     region.depths = 5;
         
-    Rast3d_adjustRegion(&region);
+    Rast3d_adjust_region(&region);
     
-    map = Rast3d_openNewOptTileSize("test_coordinate_transform", RASTER3D_USE_CACHE_XYZ, &region, FCELL_TYPE, 32);
+    map = Rast3d_open_new_opt_tile_size("test_coordinate_transform", RASTER3D_USE_CACHE_XYZ, &region, FCELL_TYPE, 32);
         
     /* The window is the same as the map region ... of course */
-    Rast3d_setWindowMap(map, &region);
+    Rast3d_set_window_map(map, &region);
     
     G_message("Test the upper right corner, coordinates must be col = 9, row = 0, depth = 4");
     
@@ -143,7 +143,7 @@ int test_coordinate_transform(void)
         sum++;
     }
     
-    Rast3d_closeCell(map);
+    Rast3d_close_cell(map);
     
     G_remove("grid3", "test_coordinate_transform");
     
@@ -157,7 +157,7 @@ int test_region(void)
     int sum = 0;
     RASTER3D_Region region, new_region;
     
-    Rast3d_getWindow(&region);
+    Rast3d_get_window(&region);
     region.bottom = 0.0;
     region.top = 1000;
     region.south = 10000;
@@ -172,93 +172,93 @@ int test_region(void)
     region.tb_res = 0;
         
     /* Test region adjustment */
-    Rast3d_adjustRegion(&region);
+    Rast3d_adjust_region(&region);
     
     if(region.ew_res != 500) {
-        G_message("Error in Rast3d_adjustRegion: region.ew_res != 500");
+        G_message("Error in Rast3d_adjust_region: region.ew_res != 500");
         sum++;
     }
     
     if(region.ns_res != 500) {
-        G_message("Error in Rast3d_adjustRegion: region.ew_res != 500");
+        G_message("Error in Rast3d_adjust_region: region.ew_res != 500");
         sum++;
     }
     
     if(region.tb_res != 200) {
-        G_message("Error in Rast3d_adjustRegion: region.ew_res != 500");
+        G_message("Error in Rast3d_adjust_region: region.ew_res != 500");
         sum++;
     }
     
     /* Test the region copy */
-    Rast3d_regionCopy(&new_region, &region);
+    Rast3d_region_copy(&new_region, &region);
         
     if(region.bottom != new_region.bottom) {
-        G_message("Error in Rast3d_regionCopy: region.bottom != new_region.bottom");
+        G_message("Error in Rast3d_region_copy: region.bottom != new_region.bottom");
         sum++;
     }
     
     if(region.cols != new_region.cols) {
-        G_message("Error in Rast3d_regionCopy: region.cols != new_region.cols");
+        G_message("Error in Rast3d_region_copy: region.cols != new_region.cols");
         sum++;
     }
     
     if(region.depths != new_region.depths) {
-        G_message("Error in Rast3d_regionCopy: region.depths != new_region.depths");
+        G_message("Error in Rast3d_region_copy: region.depths != new_region.depths");
         sum++;
     }
     
     if(region.east != new_region.east) {
-        G_message("Error in Rast3d_regionCopy: region.east != new_region.east");
+        G_message("Error in Rast3d_region_copy: region.east != new_region.east");
         sum++;
     }
     
     if(region.ew_res != new_region.ew_res) {
-        G_message("Error in Rast3d_regionCopy: region.ew_res != new_region.ew_res");
+        G_message("Error in Rast3d_region_copy: region.ew_res != new_region.ew_res");
         sum++;
     }
     
     if(region.north != new_region.north) {
-        G_message("Error in Rast3d_regionCopy: region.north != new_region.north");
+        G_message("Error in Rast3d_region_copy: region.north != new_region.north");
         sum++;
     }
     
     if(region.ns_res != new_region.ns_res) {
-        G_message("Error in Rast3d_regionCopy: region.ns_res != new_region.ns_res");
+        G_message("Error in Rast3d_region_copy: region.ns_res != new_region.ns_res");
         sum++;
     }
     
     if(region.proj != new_region.proj) {
-        G_message("Error in Rast3d_regionCopy: region.proj != new_region.proj");
+        G_message("Error in Rast3d_region_copy: region.proj != new_region.proj");
         sum++;
     }
     
     if(region.rows != new_region.rows) {
-        G_message("Error in Rast3d_regionCopy: region.rows != new_region.rows");
+        G_message("Error in Rast3d_region_copy: region.rows != new_region.rows");
         sum++;
     }
     
     if(region.south != new_region.south) {
-        G_message("Error in Rast3d_regionCopy: region.south != new_region.south");
+        G_message("Error in Rast3d_region_copy: region.south != new_region.south");
         sum++;
     }
     
     if(region.tb_res != new_region.tb_res) {
-        G_message("Error in Rast3d_regionCopy: region.tb_res != new_region.tb_res");
+        G_message("Error in Rast3d_region_copy: region.tb_res != new_region.tb_res");
         sum++;
     }
     
     if(region.top != new_region.top) {
-        G_message("Error in Rast3d_regionCopy: region.top != new_region.top");
+        G_message("Error in Rast3d_region_copy: region.top != new_region.top");
         sum++;
     }
     
     if(region.west != new_region.west) {
-        G_message("Error in Rast3d_regionCopy: region.west != new_region.west");
+        G_message("Error in Rast3d_region_copy: region.west != new_region.west");
         sum++;
     }
     
     if(region.zone != new_region.zone) {
-        G_message("Error in Rast3d_regionCopy: region.zone != new_region.zone");
+        G_message("Error in Rast3d_region_copy: region.zone != new_region.zone");
         sum++;
     }    
     

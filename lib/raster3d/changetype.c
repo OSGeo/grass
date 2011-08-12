@@ -21,7 +21,7 @@
  *  \return void
  */
 
-void Rast3d_changeType(void *map, const char *nameOut)
+void Rast3d_change_type(void *map, const char *nameOut)
 {
     void *map2;
     int x, y, z, saveType;
@@ -31,51 +31,51 @@ void Rast3d_changeType(void *map, const char *nameOut)
     int tileX, tileY, tileZ, typeIntern, typeIntern2;
     int tileXsave, tileYsave, tileZsave, nx, ny, nz;
 
-    saveType = Rast3d_getFileType();
-    Rast3d_setFileType(Rast3d_fileTypeMap(map) == FCELL_TYPE ?
+    saveType = Rast3d_get_file_type();
+    Rast3d_set_file_type(Rast3d_file_type_map(map) == FCELL_TYPE ?
 		    DCELL_TYPE : FCELL_TYPE);
-    Rast3d_getTileDimension(&tileXsave, &tileYsave, &tileZsave);
-    Rast3d_getTileDimensionsMap(map, &tileX, &tileY, &tileZ);
-    Rast3d_setTileDimension(tileX, tileY, tileZ);
+    Rast3d_get_tile_dimension(&tileXsave, &tileYsave, &tileZsave);
+    Rast3d_get_tile_dimensions_map(map, &tileX, &tileY, &tileZ);
+    Rast3d_set_tile_dimension(tileX, tileY, tileZ);
 
-    Rast3d_getRegionStructMap(map, &region);
+    Rast3d_get_region_struct_map(map, &region);
     map2 =
-	Rast3d_openCellNew(nameOut, FCELL_TYPE, RASTER3D_USE_CACHE_DEFAULT, &region);
+	Rast3d_open_cell_new(nameOut, FCELL_TYPE, RASTER3D_USE_CACHE_DEFAULT, &region);
 
     if (map2 == NULL)
-	Rast3d_fatalError("Rast3d_changeType: error in Rast3d_openCellNew");
+	Rast3d_fatal_error("Rast3d_change_type: error in Rast3d_open_cell_new");
 
-    Rast3d_setFileType(saveType);
-    Rast3d_setTileDimension(tileXsave, tileYsave, tileZsave);
+    Rast3d_set_file_type(saveType);
+    Rast3d_set_tile_dimension(tileXsave, tileYsave, tileZsave);
 
-    data = Rast3d_allocTiles(map, 1);
+    data = Rast3d_alloc_tiles(map, 1);
     if (data == NULL)
-	Rast3d_fatalError("Rast3d_changeType: error in Rast3d_allocTiles");
-    data2 = Rast3d_allocTiles(map2, 1);
+	Rast3d_fatal_error("Rast3d_change_type: error in Rast3d_alloc_tiles");
+    data2 = Rast3d_alloc_tiles(map2, 1);
     if (data2 == NULL)
-	Rast3d_fatalError("Rast3d_changeType: error in Rast3d_allocTiles");
+	Rast3d_fatal_error("Rast3d_change_type: error in Rast3d_alloc_tiles");
 
-    Rast3d_getNofTilesMap(map2, &nx, &ny, &nz);
-    typeIntern = Rast3d_tileTypeMap(map);
-    typeIntern2 = Rast3d_tileTypeMap(map2);
+    Rast3d_get_nof_tiles_map(map2, &nx, &ny, &nz);
+    typeIntern = Rast3d_tile_type_map(map);
+    typeIntern2 = Rast3d_tile_type_map(map2);
     tileSize = tileX * tileY * tileZ;
 
     for (z = 0; z < nz; z++)
 	for (y = 0; y < ny; y++)
 	    for (x = 0; x < nx; x++) {
-		if (!Rast3d_readTile(map, Rast3d_tile2tileIndex(map, x, y, z), data,
+		if (!Rast3d_read_tile(map, Rast3d_tile2tile_index(map, x, y, z), data,
 				  typeIntern))
-		    Rast3d_fatalError("Rast3d_changeType: error in Rast3d_readTile");
-		Rast3d_copyValues(data, 0, typeIntern, data2, 0, typeIntern2,
+		    Rast3d_fatal_error("Rast3d_change_type: error in Rast3d_read_tile");
+		Rast3d_copy_values(data, 0, typeIntern, data2, 0, typeIntern2,
 			       tileSize);
-		if (!Rast3d_writeTile
-		    (map2, Rast3d_tile2tileIndex(map2, x, y, z), data2,
+		if (!Rast3d_write_tile
+		    (map2, Rast3d_tile2tile_index(map2, x, y, z), data2,
 		     typeIntern2))
-		    Rast3d_fatalError("Rast3d_changeType: error in Rast3d_writeTile");
+		    Rast3d_fatal_error("Rast3d_change_type: error in Rast3d_write_tile");
 	    }
 
-    Rast3d_freeTiles(data);
-    Rast3d_freeTiles(data2);
-    if (!Rast3d_closeCell(map2))
-	Rast3d_fatalError("Rast3d_changeType: error in Rast3d_closeCell");
+    Rast3d_free_tiles(data);
+    Rast3d_free_tiles(data2);
+    if (!Rast3d_close_cell(map2))
+	Rast3d_fatal_error("Rast3d_change_type: error in Rast3d_close_cell");
 }

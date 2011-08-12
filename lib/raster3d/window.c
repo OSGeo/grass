@@ -21,10 +21,10 @@ RASTER3D_Region g3d_window;
  *  \return void
  */
 
-void Rast3d_setWindowMap(RASTER3D_Map * map, RASTER3D_Region * window)
+void Rast3d_set_window_map(RASTER3D_Map * map, RASTER3D_Region * window)
 {
-    Rast3d_regionCopy(&(map->window), window);
-    Rast3d_adjustRegion(&(map->window));
+    Rast3d_region_copy(&(map->window), window);
+    Rast3d_adjust_region(&(map->window));
 }
 
 /*---------------------------------------------------------------------------*/
@@ -40,10 +40,10 @@ void Rast3d_setWindowMap(RASTER3D_Map * map, RASTER3D_Region * window)
  *  \return void
  */
 
-void Rast3d_setWindow(RASTER3D_Region * window)
+void Rast3d_set_window(RASTER3D_Region * window)
 {
-    Rast3d_regionCopy(&g3d_window, window);
-    Rast3d_adjustRegion(&g3d_window);
+    Rast3d_region_copy(&g3d_window, window);
+    Rast3d_adjust_region(&g3d_window);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -58,14 +58,14 @@ void Rast3d_setWindow(RASTER3D_Region * window)
  *  \return void
  */
 
-void Rast3d_getWindow(RASTER3D_Region * window)
+void Rast3d_get_window(RASTER3D_Region * window)
 {
-    Rast3d_regionCopy(window, &g3d_window);
+    Rast3d_region_copy(window, &g3d_window);
 }
 
 /*---------------------------------------------------------------------------*/
 
-RASTER3D_Region *Rast3d_windowPtr()
+RASTER3D_Region *Rast3d_window_ptr()
 {
     return &g3d_window;
 }

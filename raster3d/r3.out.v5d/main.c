@@ -50,11 +50,11 @@ void fatalError(char *errorMsg)
 {
     if (map != NULL) {
 	/* should unopen map here! */
-	if (!Rast3d_closeCell(map))
+	if (!Rast3d_close_cell(map))
 	    fatalError("Error closing 3d raster map");
     }
 
-    Rast3d_fatalError(errorMsg);
+    Rast3d_fatal_error(errorMsg);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -140,7 +140,7 @@ void convert(char *fileout, int rows, int cols, int depths, int trueCoords)
 	   depths=region.depths;
 	 */
 	/* END OF ORIGINAL CODE WHICH IS NOT NECESSARY FOR ME, COMMENTED IT */
-	typeIntern = Rast3d_tileTypeMap(map);
+	typeIntern = Rast3d_tile_type_map(map);
 
     G_debug(3, "cols: %i rows: %i depths: %i\n", cols, rows, depths);
 
@@ -225,10 +225,10 @@ void convert(char *fileout, int rows, int cols, int depths, int trueCoords)
 	for (x = 0; x < cols; x++) {
 	    for (y = 0; y < rows; y++) {	/* north to south */
 
-		Rast3d_getValueRegion(map, x, y, z, d1p, typeIntern);
+		Rast3d_get_value_region(map, x, y, z, d1p, typeIntern);
 
 		if (typeIntern == FCELL_TYPE) {
-		    if (Rast3d_isNullValueNum(f1p, FCELL_TYPE)) {
+		    if (Rast3d_is_null_value_num(f1p, FCELL_TYPE)) {
 			g[cnt] = MISSING;
 			cnt++;
 		    }
@@ -238,7 +238,7 @@ void convert(char *fileout, int rows, int cols, int depths, int trueCoords)
 		    }
 		}
 		else {		/*double */
-		    if (Rast3d_isNullValueNum(d1p, DCELL_TYPE)) {
+		    if (Rast3d_is_null_value_num(d1p, DCELL_TYPE)) {
 			g[cnt] = MISSING;
 			cnt++;
 		    }
@@ -309,17 +309,17 @@ int main(int argc, char *argv[])
     trueCoords = coords->answer;
 
     if (NULL == G_find_grid3(input, ""))
-	Rast3d_fatalError(_("Requested 3d raster map not found"));
+	Rast3d_fatal_error(_("Requested 3d raster map not found"));
 
-    map = Rast3d_openCellOld(input, G_find_grid3(input, ""), RASTER3D_DEFAULT_WINDOW,
+    map = Rast3d_open_cell_old(input, G_find_grid3(input, ""), RASTER3D_DEFAULT_WINDOW,
 			  RASTER3D_TILE_SAME_AS_FILE, RASTER3D_NO_CACHE);
     if (map == NULL)
-	Rast3d_fatalError(_("Error opening 3d raster map"));
+	Rast3d_fatal_error(_("Error opening 3d raster map"));
 
     /* Use default region */
-    /*  Rast3d_getRegionStructMap(map, &region); */
+    /*  Rast3d_get_region_struct_map(map, &region); */
     /* Figure out the region from current settings: */
-    Rast3d_getWindow(&region);
+    Rast3d_get_window(&region);
 
     G_debug(3, "cols: %i rows: %i layers: %i\n", region.cols, region.rows,
 	    region.depths);
@@ -327,7 +327,7 @@ int main(int argc, char *argv[])
     convert(output, region.rows, region.cols, region.depths, trueCoords);
 
     /* Close files and exit */
-    if (!Rast3d_closeCell(map))
+    if (!Rast3d_close_cell(map))
 	fatalError(_("Error closing 3d raster map"));
 
     map = NULL;

@@ -4,12 +4,12 @@
 
 /*---------------------------------------------------------------------------*/
 
-int Rast3d_keyGetInt(struct Key_Value *keys, const char *key, int *i)
+int Rast3d_key_get_int(struct Key_Value *keys, const char *key, int *i)
 {
     const char *str;
 
     if ((str = G_find_key_value(key, keys)) == NULL) {
-	Rast3d_error("Rast3d_keyGetInt: cannot find field %s in key structure",
+	Rast3d_error("Rast3d_key_get_int: cannot find field %s in key structure",
 		  key);
 	return 0;
     }
@@ -17,18 +17,18 @@ int Rast3d_keyGetInt(struct Key_Value *keys, const char *key, int *i)
     if (sscanf(str, "%d", i) == 1)
 	return 1;
 
-    Rast3d_error("Rast3d_keyGetInt: invalid value: field %s in key structure", key);
+    Rast3d_error("Rast3d_key_get_int: invalid value: field %s in key structure", key);
     return 0;
 }
 
 /*---------------------------------------------------------------------------*/
 
-int Rast3d_keyGetDouble(struct Key_Value *keys, const char *key, double *d)
+int Rast3d_key_get_double(struct Key_Value *keys, const char *key, double *d)
 {
     const char *str;
 
     if ((str = G_find_key_value(key, keys)) == NULL) {
-	Rast3d_error("Rast3d_keyGetDouble: cannot find field %s in key structure",
+	Rast3d_error("Rast3d_key_get_double: cannot find field %s in key structure",
 		  key);
 	return 0;
     }
@@ -36,7 +36,7 @@ int Rast3d_keyGetDouble(struct Key_Value *keys, const char *key, double *d)
     if (sscanf(str, "%lf", d) == 1)
 	return 1;
 
-    Rast3d_error("Rast3d_keyGetDouble: invalid value: field %s in key structure",
+    Rast3d_error("Rast3d_key_get_double: invalid value: field %s in key structure",
 	      key);
     return 0;
 }
@@ -44,12 +44,12 @@ int Rast3d_keyGetDouble(struct Key_Value *keys, const char *key, double *d)
 /*---------------------------------------------------------------------------*/
 
 int
-Rast3d_keyGetString(struct Key_Value *keys, const char *key, char **returnStr)
+Rast3d_key_get_string(struct Key_Value *keys, const char *key, char **returnStr)
 {
     const char *str;
 
     if ((str = G_find_key_value(key, keys)) == NULL) {
-	Rast3d_error("Rast3d_keyGetString: cannot find field %s in key structure",
+	Rast3d_error("Rast3d_key_get_string: cannot find field %s in key structure",
 		  key);
 	return 0;
     }
@@ -61,13 +61,13 @@ Rast3d_keyGetString(struct Key_Value *keys, const char *key, char **returnStr)
 /*---------------------------------------------------------------------------*/
 
 int
-Rast3d_keyGetValue(struct Key_Value *keys, const char *key, char *val1,
+Rast3d_key_get_value(struct Key_Value *keys, const char *key, char *val1,
 		char *val2, int result1, int result2, int *resultVar)
 {
     const char *str;
 
     if ((str = G_find_key_value(key, keys)) == NULL) {
-	Rast3d_error("Rast3d_keyGetValue: cannot find field %s in key structure",
+	Rast3d_error("Rast3d_key_get_value: cannot find field %s in key structure",
 		  key);
 	return 0;
     }
@@ -81,14 +81,14 @@ Rast3d_keyGetValue(struct Key_Value *keys, const char *key, char *val1,
 	return 1;
     }
 
-    Rast3d_error("Rast3d_keyGetValue: invalid type: field %s in key structure",
+    Rast3d_error("Rast3d_key_get_value: invalid type: field %s in key structure",
 	      key);
     return 0;
 }
 
 /*---------------------------------------------------------------------------*/
 
-int Rast3d_keySetInt(struct Key_Value *keys, const char *key, const int *i)
+int Rast3d_key_set_int(struct Key_Value *keys, const char *key, const int *i)
 {
     char keyValStr[200];
 
@@ -99,7 +99,7 @@ int Rast3d_keySetInt(struct Key_Value *keys, const char *key, const int *i)
 
 /*---------------------------------------------------------------------------*/
 
-int Rast3d_keySetDouble(struct Key_Value *keys, const char *key, const double *d)
+int Rast3d_key_set_double(struct Key_Value *keys, const char *key, const double *d)
 {
     char keyValStr[200];
 
@@ -111,7 +111,7 @@ int Rast3d_keySetDouble(struct Key_Value *keys, const char *key, const double *d
 /*---------------------------------------------------------------------------*/
 
 int
-Rast3d_keySetString(struct Key_Value *keys, const char *key,
+Rast3d_key_set_string(struct Key_Value *keys, const char *key,
 		 char *const *keyValStr)
 {
     G_set_key_value(key, *keyValStr, keys);
@@ -121,7 +121,7 @@ Rast3d_keySetString(struct Key_Value *keys, const char *key,
 /*---------------------------------------------------------------------------*/
 
 int
-Rast3d_keySetValue(struct Key_Value *keys, const char *key, const char *val1,
+Rast3d_key_set_value(struct Key_Value *keys, const char *key, const char *val1,
 		const char *val2, int keyval1, int keyval2,
 		const int *keyvalVar)
 {
@@ -135,6 +135,6 @@ Rast3d_keySetValue(struct Key_Value *keys, const char *key, const char *val1,
 	return 1;
     }
 
-    Rast3d_error("Rast3d_keySetValue: wrong key value");
+    Rast3d_error("Rast3d_key_set_value: wrong key value");
     return 0;
 }

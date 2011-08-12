@@ -1,7 +1,7 @@
 
 /**********************************************************************
  *
- *  Rast3d_readHistory (name, mapset, hist)
+ *  Rast3d_read_history (name, mapset, hist)
  *      char *name                   name of map
  *      char *mapset                 mapset that map belongs to
  *      struct History *hist        structure to hold history info
@@ -16,7 +16,7 @@
  *
  **********************************************************************
  *
- *  Rast3d_writeHistory (name, hist)
+ *  Rast3d_write_history (name, hist)
  *      char *name                   name of map
  *      struct History *hist        structure holding history info
  *
@@ -61,7 +61,7 @@ void SimpleErrorMessage(FILE * fd, const char *name, const char *mapset)
  *  \return int
  */
 
-int Rast3d_readHistory(const char *name, const char *mapset, struct History *hist)
+int Rast3d_read_history(const char *name, const char *mapset, struct History *hist)
 {
     FILE *fp;
 
@@ -94,7 +94,7 @@ int Rast3d_readHistory(const char *name, const char *mapset, struct History *his
  *  \return int
  */
 
-int Rast3d_writeHistory(const char *name, struct History *hist)
+int Rast3d_write_history(const char *name, struct History *hist)
 /* This function is adapted from Rast_write_history */
 {
     FILE *fp = G_fopen_new_misc(RASTER3D_DIRECTORY, RASTER3D_HISTORY_ELEMENT, name);

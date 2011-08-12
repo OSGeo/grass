@@ -5,7 +5,7 @@
 /*!
  * \brief 
  *
- * Is equivalent to Rast3d_putValue (map, x, y, z, &value, FCELL_TYPE).
+ * Is equivalent to Rast3d_put_value (map, x, y, z, &value, FCELL_TYPE).
  *
  *  \param map
  *  \param x
@@ -15,23 +15,23 @@
  *  \return int
  */
 
-int Rast3d_putFloat(RASTER3D_Map * map, int x, int y, int z, float value)
+int Rast3d_put_float(RASTER3D_Map * map, int x, int y, int z, float value)
 {
     int tileIndex, offs;
     float *tile;
 
     if (map->typeIntern == DCELL_TYPE) {
-	if (!Rast3d_putDouble(map, x, y, z, (double)value)) {
-	    Rast3d_error("Rast3d_putFloat: error in Rast3d_putDouble");
+	if (!Rast3d_put_double(map, x, y, z, (double)value)) {
+	    Rast3d_error("Rast3d_put_float: error in Rast3d_put_double");
 	    return 0;
 	}
 	return 1;
     }
 
-    Rast3d_coord2tileIndex(map, x, y, z, &tileIndex, &offs);
-    tile = (float *)Rast3d_getTilePtr(map, tileIndex);
+    Rast3d_coord2tile_index(map, x, y, z, &tileIndex, &offs);
+    tile = (float *)Rast3d_get_tile_ptr(map, tileIndex);
     if (tile == NULL) {
-	Rast3d_error("Rast3d_putFloat: error in Rast3d_getTilePtr");
+	Rast3d_error("Rast3d_put_float: error in Rast3d_get_tile_ptr");
 	return 0;
     }
 
@@ -45,7 +45,7 @@ int Rast3d_putFloat(RASTER3D_Map * map, int x, int y, int z, float value)
 /*!
  * \brief 
  *
- *  Is equivalent to Rast3d_putValue (map, x, y, z, &value, DCELL_TYPE).
+ *  Is equivalent to Rast3d_put_value (map, x, y, z, &value, DCELL_TYPE).
  *
  *  \param map
  *  \param x
@@ -55,23 +55,23 @@ int Rast3d_putFloat(RASTER3D_Map * map, int x, int y, int z, float value)
  *  \return int
  */
 
-int Rast3d_putDouble(RASTER3D_Map * map, int x, int y, int z, double value)
+int Rast3d_put_double(RASTER3D_Map * map, int x, int y, int z, double value)
 {
     int tileIndex, offs;
     double *tile;
 
     if (map->typeIntern == FCELL_TYPE) {
-	if (!Rast3d_putFloat(map, x, y, z, (float)value)) {
-	    Rast3d_error("Rast3d_putDouble: error in Rast3d_putFloat");
+	if (!Rast3d_put_float(map, x, y, z, (float)value)) {
+	    Rast3d_error("Rast3d_put_double: error in Rast3d_put_float");
 	    return 0;
 	}
 	return 1;
     }
 
-    Rast3d_coord2tileIndex(map, x, y, z, &tileIndex, &offs);
-    tile = (double *)Rast3d_getTilePtr(map, tileIndex);
+    Rast3d_coord2tile_index(map, x, y, z, &tileIndex, &offs);
+    tile = (double *)Rast3d_get_tile_ptr(map, tileIndex);
     if (tile == NULL) {
-	Rast3d_error("Rast3d_putDouble: error in Rast3d_getTilePtr");
+	Rast3d_error("Rast3d_put_double: error in Rast3d_get_tile_ptr");
 	return 0;
     }
 
@@ -99,18 +99,18 @@ int Rast3d_putDouble(RASTER3D_Map * map, int x, int y, int z, double value)
  */
 
 int
-Rast3d_putValue(RASTER3D_Map * map, int x, int y, int z, const void *value, int type)
+Rast3d_put_value(RASTER3D_Map * map, int x, int y, int z, const void *value, int type)
 {
     if (type == FCELL_TYPE) {
-	if (!Rast3d_putFloat(map, x, y, z, *((float *)value))) {
-	    Rast3d_error("Rast3d_putValue: error in Rast3d_putFloat");
+	if (!Rast3d_put_float(map, x, y, z, *((float *)value))) {
+	    Rast3d_error("Rast3d_put_value: error in Rast3d_put_float");
 	    return 0;
 	}
 	return 1;
     }
 
-    if (!Rast3d_putDouble(map, x, y, z, *((double *)value))) {
-	Rast3d_error("Rast3d_putValue: error in Rast3d_putDouble");
+    if (!Rast3d_put_double(map, x, y, z, *((double *)value))) {
+	Rast3d_error("Rast3d_put_value: error in Rast3d_put_double");
 	return 0;
     }
     return 1;

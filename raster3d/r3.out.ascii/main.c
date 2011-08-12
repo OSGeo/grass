@@ -58,12 +58,12 @@ void fatalError(char *errorMsg)
 {
     if (map != NULL) {
         /* should unopen map here! */
-        if (!Rast3d_closeCell(map))
+        if (!Rast3d_close_cell(map))
             fatalError(_("Error closing 3d raster map"));
 
     }
 
-    Rast3d_fatalError(errorMsg);
+    Rast3d_fatal_error(errorMsg);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -237,7 +237,7 @@ void G3dToascii(FILE * fp, RASTER3D_Region region, int decim)
     cols = region.cols;
     depths = region.depths;
 
-    typeIntern = Rast3d_tileTypeMap(map);
+    typeIntern = Rast3d_tile_type_map(map);
 
     for (z = 0; z < depths; z++) {
         G_percent(z, depths, 1);
@@ -265,17 +265,17 @@ void G3dToascii(FILE * fp, RASTER3D_Region region, int decim)
 
                 if (typeIntern == FCELL_TYPE) {
                     
-                    Rast3d_getValue(map, col, row, depth, &fvalue, FCELL_TYPE);
+                    Rast3d_get_value(map, col, row, depth, &fvalue, FCELL_TYPE);
                     
-                    if (Rast3d_isNullValueNum(&fvalue, FCELL_TYPE))
+                    if (Rast3d_is_null_value_num(&fvalue, FCELL_TYPE))
                         fprintf(fp, "%s ", param.null_val->answer);
                     else
                         fprintf(fp, "%.*f ", decim, fvalue);
                 } else {
                     
-                    Rast3d_getValue(map, col, row, depth, &dvalue, DCELL_TYPE);
+                    Rast3d_get_value(map, col, row, depth, &dvalue, DCELL_TYPE);
                     
-                    if (Rast3d_isNullValueNum(&dvalue, DCELL_TYPE))
+                    if (Rast3d_is_null_value_num(&dvalue, DCELL_TYPE))
                         fprintf(fp, "%s ", param.null_val->answer);
                     else
                         fprintf(fp, "%.*lf ", decim, dvalue);
@@ -327,30 +327,30 @@ int main(int argc, char *argv[])
     }
 
     if (NULL == G_find_grid3(input, ""))
-        Rast3d_fatalError(_("Requested 3d raster map not found"));
+        Rast3d_fatal_error(_("Requested 3d raster map not found"));
 
     /* Initiate the default settings */
-    Rast3d_initDefaults();
+    Rast3d_init_defaults();
 
     /* Figure out the current region settings */
-    Rast3d_getWindow(&region);
+    Rast3d_get_window(&region);
 
     /* Open the map and use XY cache mode */
-    map = Rast3d_openCellOld(input, G_find_grid3(input, ""), &region,
+    map = Rast3d_open_cell_old(input, G_find_grid3(input, ""), &region,
                           RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
     if (map == NULL)
-        Rast3d_fatalError(_("Error opening 3d raster map"));
+        Rast3d_fatal_error(_("Error opening 3d raster map"));
 
     /* Open the output ascii file */
     fp = openAscii(output, region);
 
     /*if requested set the Mask on */
     if (param.mask->answer) {
-        if (Rast3d_maskFileExists()) {
+        if (Rast3d_mask_file_exists()) {
             changemask = 0;
-            if (Rast3d_maskIsOff(map)) {
-                Rast3d_maskOn(map);
+            if (Rast3d_mask_is_off(map)) {
+                Rast3d_mask_on(map);
                 changemask = 1;
             }
         }
@@ -361,13 +361,13 @@ int main(int argc, char *argv[])
 
     /*We set the Mask off, if it was off bevor */
     if (param.mask->answer) {
-        if (Rast3d_maskFileExists())
-            if (Rast3d_maskIsOn(map) && changemask)
-                Rast3d_maskOff(map);
+        if (Rast3d_mask_file_exists())
+            if (Rast3d_mask_is_on(map) && changemask)
+                Rast3d_mask_off(map);
     }
 
     /* Close files and exit */
-    if (!Rast3d_closeCell(map))
+    if (!Rast3d_close_cell(map))
         fatalError(_("Error closing 3d raster map"));
 
     if (output)

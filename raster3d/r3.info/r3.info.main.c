@@ -128,16 +128,16 @@ int main(int argc, char *argv[])
 
     /*We need to open the map */
     g3map =
-	Rast3d_openCellOld(name, mapset, RASTER3D_DEFAULT_WINDOW,
+	Rast3d_open_cell_old(name, mapset, RASTER3D_DEFAULT_WINDOW,
 			RASTER3D_TILE_SAME_AS_FILE, RASTER3D_NO_CACHE);
     if (NULL == g3map)
 	G_fatal_error(_("Unable to open 3D raster map <%s>"), name);
 
     /*Get the maptype */
-    data_type = Rast3d_fileTypeMap(g3map);
-    head_ok = Rast3d_readRegionMap(name, mapset, &cellhd) >= 0;
-    hist_ok = Rast3d_readHistory(name, mapset, &hist) >= 0;
-    cats_ok = Rast3d_readCats(name, mapset, &cats) >= 0;
+    data_type = Rast3d_file_type_map(g3map);
+    head_ok = Rast3d_read_region_map(name, mapset, &cellhd) >= 0;
+    hist_ok = Rast3d_read_history(name, mapset, &hist) >= 0;
+    cats_ok = Rast3d_read_cats(name, mapset, &cats) >= 0;
     /*Check the Timestamp */
     time_ok = G_read_grid3_timestamp(name, mapset, &ts) > 0;
 
@@ -485,7 +485,7 @@ int main(int argc, char *argv[])
     }
 
     /*Close the opened map */
-    if (!Rast3d_closeCell(g3map))
+    if (!Rast3d_close_cell(g3map))
 	G_fatal_error(_("Unable to close 3D raster map <%s>"), name);
 
 

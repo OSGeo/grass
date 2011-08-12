@@ -8,7 +8,7 @@
 
 /*---------------------------------------------------------------------------*/
 
-int Rast3d_writeInts(int fd, int useXdr, const int *i, int nofNum)
+int Rast3d_write_ints(int fd, int useXdr, const int *i, int nofNum)
 {
     int firstTime = 1;
     XDR xdrEncodeStream;
@@ -16,11 +16,11 @@ int Rast3d_writeInts(int fd, int useXdr, const int *i, int nofNum)
     u_int n;
 
     if (nofNum <= 0)
-	Rast3d_fatalError("Rast3d_writeInts: nofNum out of range");
+	Rast3d_fatal_error("Rast3d_write_ints: nofNum out of range");
 
     if (useXdr == RASTER3D_NO_XDR) {
 	if (write(fd, i, sizeof(int) * nofNum) != sizeof(int) * nofNum) {
-	    Rast3d_error("Rast3d_writeInts: writing to file failed");
+	    Rast3d_error("Rast3d_write_ints: writing to file failed");
 	    return 0;
 	}
 	else {
@@ -40,19 +40,19 @@ int Rast3d_writeInts(int fd, int useXdr, const int *i, int nofNum)
 	    n = 1024;
 
 	if (!xdr_setpos(&xdrEncodeStream, 0)) {
-	    Rast3d_error("Rast3d_writeInts: positioning xdr failed");
+	    Rast3d_error("Rast3d_write_ints: positioning xdr failed");
 	    return 0;
 	}
 
 	if (!xdr_vector(&xdrEncodeStream, (char *)i, n, sizeof(int),
 			(xdrproc_t) xdr_int)) {
-	    Rast3d_error("Rast3d_writeInts: writing xdr failed");
+	    Rast3d_error("Rast3d_write_ints: writing xdr failed");
 	    return 0;
 	}
 
 	if (write(fd, xdrIntBuf, RASTER3D_XDR_INT_LENGTH * n) !=
 	    RASTER3D_XDR_INT_LENGTH * n) {
-	    Rast3d_error("Rast3d_writeInts: writing xdr to file failed");
+	    Rast3d_error("Rast3d_write_ints: writing xdr to file failed");
 	    return 0;
 	}
 
@@ -65,7 +65,7 @@ int Rast3d_writeInts(int fd, int useXdr, const int *i, int nofNum)
 
 /*---------------------------------------------------------------------------*/
 
-int Rast3d_readInts(int fd, int useXdr, int *i, int nofNum)
+int Rast3d_read_ints(int fd, int useXdr, int *i, int nofNum)
 {
     int firstTime = 1;
     XDR xdrDecodeStream;
@@ -73,11 +73,11 @@ int Rast3d_readInts(int fd, int useXdr, int *i, int nofNum)
     u_int n;
 
     if (nofNum <= 0)
-	Rast3d_fatalError("Rast3d_readInts: nofNum out of range");
+	Rast3d_fatal_error("Rast3d_read_ints: nofNum out of range");
 
     if (useXdr == RASTER3D_NO_XDR) {
 	if (read(fd, i, sizeof(int) * nofNum) != sizeof(int) * nofNum) {
-	    Rast3d_error("Rast3d_readInts: reading from file failed");
+	    Rast3d_error("Rast3d_read_ints: reading from file failed");
 	    return 0;
 	}
 	else {
@@ -98,18 +98,18 @@ int Rast3d_readInts(int fd, int useXdr, int *i, int nofNum)
 
 	if (read(fd, xdrIntBuf, RASTER3D_XDR_INT_LENGTH * n) !=
 	    RASTER3D_XDR_INT_LENGTH * n) {
-	    Rast3d_error("Rast3d_readInts: reading xdr from file failed");
+	    Rast3d_error("Rast3d_read_ints: reading xdr from file failed");
 	    return 0;
 	}
 
 	if (!xdr_setpos(&xdrDecodeStream, 0)) {
-	    Rast3d_error("Rast3d_readInts: positioning xdr failed");
+	    Rast3d_error("Rast3d_read_ints: positioning xdr failed");
 	    return 0;
 	}
 
 	if (!xdr_vector(&xdrDecodeStream, (char *)i, n, sizeof(int),
 			(xdrproc_t) xdr_int)) {
-	    Rast3d_error("Rast3d_readInts: reading xdr failed");
+	    Rast3d_error("Rast3d_read_ints: reading xdr failed");
 	    return 0;
 	}
 

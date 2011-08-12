@@ -23,13 +23,13 @@
  *                   NULL ... otherwise.
  */
 
-void *Rast3d_allocTilesType(RASTER3D_Map * map, int nofTiles, int type)
+void *Rast3d_alloc_tiles_type(RASTER3D_Map * map, int nofTiles, int type)
 {
     void *tiles;
 
     tiles = Rast3d_malloc(map->tileSize * Rast3d_length(type) * nofTiles);
     if (tiles == NULL) {
-	Rast3d_error("Rast3d_allocTilesType: error in Rast3d_malloc");
+	Rast3d_error("Rast3d_alloc_tiles_type: error in Rast3d_malloc");
 	return NULL;
     }
 
@@ -42,20 +42,20 @@ void *Rast3d_allocTilesType(RASTER3D_Map * map, int nofTiles, int type)
 /*!
  * \brief 
  *
- *  Is equivalent to Rast3d_allocTilesType (map, nofTiles, Rast3d_fileTypeMap (map)).
+ *  Is equivalent to Rast3d_alloc_tiles_type (map, nofTiles, Rast3d_file_type_map (map)).
  *
  *  \param map
  *  \param nofTiles
  *  \return void * 
  */
 
-void *Rast3d_allocTiles(RASTER3D_Map * map, int nofTiles)
+void *Rast3d_alloc_tiles(RASTER3D_Map * map, int nofTiles)
 {
     void *tiles;
 
-    tiles = Rast3d_allocTilesType(map, nofTiles, map->typeIntern);
+    tiles = Rast3d_alloc_tiles_type(map, nofTiles, map->typeIntern);
     if (tiles == NULL) {
-	Rast3d_error("Rast3d_allocTiles: error in Rast3d_allocTilesType");
+	Rast3d_error("Rast3d_alloc_tiles: error in Rast3d_alloc_tiles_type");
 	return NULL;
     }
 
@@ -74,7 +74,7 @@ void *Rast3d_allocTiles(RASTER3D_Map * map, int nofTiles)
  *  \return void
  */
 
-void Rast3d_freeTiles(void *tiles)
+void Rast3d_free_tiles(void *tiles)
 {
     Rast3d_free(tiles);
 }

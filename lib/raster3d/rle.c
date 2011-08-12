@@ -120,13 +120,13 @@ static char *rle_code2length(char *src, int *length)
 
 /*---------------------------------------------------------------------------*/
 
-int G_rle_count_only(char *src, int nofElts, int eltLength)
+int Rast3d_rle_count_only(char *src, int nofElts, int eltLength)
 {
     int length, nofEqual;
     char *head, *tail, *headStop, *headStop2;
 
     if (nofElts <= 0)
-	Rast3d_fatalError("trying to encode 0-length list");
+	Rast3d_fatal_error("trying to encode 0-length list");
 
     length = 0;
     nofEqual = 1;
@@ -163,13 +163,13 @@ int G_rle_count_only(char *src, int nofElts, int eltLength)
 
 /*---------------------------------------------------------------------------*/
 
-void G_rle_encode(char *src, char *dst, int nofElts, int eltLength)
+void Rast3d_rle_encode(char *src, char *dst, int nofElts, int eltLength)
 {
     int length, nofEqual;
     char *head, *tail, *headStop, *headStop2;
 
     if (nofElts <= 0)
-	Rast3d_fatalError("trying to encode 0-length list");
+	Rast3d_fatal_error("trying to encode 0-length list");
 
     length = 0;
     nofEqual = 1;
@@ -220,7 +220,7 @@ void G_rle_encode(char *src, char *dst, int nofElts, int eltLength)
 /*---------------------------------------------------------------------------*/
 
 void
-G_rle_decode(char *src, char *dst, int nofElts, int eltLength,
+Rast3d_rle_decode(char *src, char *dst, int nofElts, int eltLength,
 	     int *lengthEncode, int *lengthDecode)
 {
     int nofEqual;
@@ -247,7 +247,7 @@ G_rle_decode(char *src, char *dst, int nofElts, int eltLength,
 	src += eltLength;
     }
 
-    Rast3d_fatalError("G_rle_decode: string ends prematurely");
+    Rast3d_fatal_error("Rast3d_rle_decode: string ends prematurely");
 }
 
 /*---------------------------------------------------------------------------*/

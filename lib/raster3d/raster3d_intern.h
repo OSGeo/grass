@@ -61,8 +61,8 @@ extern RASTER3D_Region g3d_window;
 
 /*---------------------------------------------------------------------------*/
 
-extern void Rast3d_fatalError(const char * /* msg */ , ...);
-extern void Rast3d_fatalError_noargs(const char * /* msg */ );
+extern void Rast3d_fatal_error(const char * /* msg */ , ...);
+extern void Rast3d_fatal_error_noargs(const char * /* msg */ );
 
 /*---------------------------------------------------------------------------*/
 

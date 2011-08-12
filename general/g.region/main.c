@@ -488,11 +488,11 @@ int main(int argc, char *argv[])
 	if ((mapset = G_find_grid3(name, "")) == NULL)
 	    G_fatal_error(_("3D raster map <%s> not found"), name);
 
-	if (Rast3d_readRegionMap(name, mapset, &win) < 0)
+	if (Rast3d_read_region_map(name, mapset, &win) < 0)
 	    G_fatal_error(_("Unable to read header of 3D raster map <%s@%s>"),
 			  name, mapset);
 
-	Rast3d_regionToCellHead(&win, &window);
+	Rast3d_region_to_cell_head(&win, &window);
     }
 
     /* vect= */

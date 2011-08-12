@@ -886,7 +886,7 @@ int N_is_array_3d_value_null(N_array_3d * data, int col, int row, int depth)
 	    G_debug(6,
 		    "N_is_array_3d_value_null: null value is of type DCELL_TYPE at pos [%i][%i][%i]",
 		    depth, row, col);
-	    return Rast3d_isNullValueNum((void *)
+	    return Rast3d_is_null_value_num((void *)
 				      &(data->
 					fcell_array[depth *
 						    (data->rows_intern *
@@ -898,7 +898,7 @@ int N_is_array_3d_value_null(N_array_3d * data, int col, int row, int depth)
 	    G_debug(6,
 		    "N_is_array_3d_value_null: null value is of type DCELL_TYPE at pos [%i][%i][%i]",
 		    depth, row, col);
-	    return Rast3d_isNullValueNum((void *)
+	    return Rast3d_is_null_value_num((void *)
 				      &(data->
 					dcell_array[depth *
 						    (data->rows_intern *
@@ -912,7 +912,7 @@ int N_is_array_3d_value_null(N_array_3d * data, int col, int row, int depth)
 	    G_debug(6,
 		    "N_is_array_3d_value_null: null value is of type DCELL_TYPE at pos [%i][%i][%i]",
 		    depth, row, col);
-	    return Rast3d_isNullValueNum((void *)
+	    return Rast3d_is_null_value_num((void *)
 				      &(data->
 					fcell_array[(depth +
 						     data->offset) *
@@ -928,7 +928,7 @@ int N_is_array_3d_value_null(N_array_3d * data, int col, int row, int depth)
 	    G_debug(6,
 		    "N_is_array_3d_value_null: null value is of type DCELL_TYPE at pos [%i][%i][%i]",
 		    depth, row, col);
-	    return Rast3d_isNullValueNum((void *)
+	    return Rast3d_is_null_value_num((void *)
 				      &(data->
 					dcell_array[(depth +
 						     data->offset) *
@@ -1082,7 +1082,7 @@ void N_put_array_3d_value_null(N_array_3d * data, int col, int row, int depth)
 
     if (data->offset == 0) {
 	if (data->type == FCELL_TYPE && data->fcell_array != NULL) {
-	    Rast3d_setNullValue((void *)
+	    Rast3d_set_null_value((void *)
 			     &(data->
 			       fcell_array[depth *
 					   (data->rows_intern *
@@ -1091,7 +1091,7 @@ void N_put_array_3d_value_null(N_array_3d * data, int col, int row, int depth)
 			     FCELL_TYPE);
 	}
 	else if (data->type == DCELL_TYPE && data->dcell_array != NULL) {
-	    Rast3d_setNullValue((void *)
+	    Rast3d_set_null_value((void *)
 			     &(data->
 			       dcell_array[depth *
 					   (data->rows_intern *
@@ -1102,7 +1102,7 @@ void N_put_array_3d_value_null(N_array_3d * data, int col, int row, int depth)
     }
     else {
 	if (data->type == FCELL_TYPE && data->fcell_array != NULL) {
-	    Rast3d_setNullValue((void *)
+	    Rast3d_set_null_value((void *)
 			     &(data->
 			       fcell_array[(depth +
 					    data->offset) *
@@ -1116,7 +1116,7 @@ void N_put_array_3d_value_null(N_array_3d * data, int col, int row, int depth)
 			     FCELL_TYPE);
 	}
 	else if (data->type == DCELL_TYPE && data->dcell_array != NULL) {
-	    Rast3d_setNullValue((void *)
+	    Rast3d_set_null_value((void *)
 			     &(data->
 			       dcell_array[(depth +
 					    data->offset) *

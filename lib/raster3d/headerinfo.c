@@ -16,7 +16,7 @@
  *  \return void
  */
 
-void Rast3d_getCoordsMap(RASTER3D_Map * map, int *rows, int *cols, int *depths)
+void Rast3d_get_coords_map(RASTER3D_Map * map, int *rows, int *cols, int *depths)
 {
     *rows = map->region.rows;
     *cols = map->region.cols;
@@ -25,7 +25,7 @@ void Rast3d_getCoordsMap(RASTER3D_Map * map, int *rows, int *cols, int *depths)
 
 /*---------------------------------------------------------------------------*/
 
-void Rast3d_getCoordsMapWindow(RASTER3D_Map * map, int *rows, int *cols, int *depths)
+void Rast3d_get_coords_map_window(RASTER3D_Map * map, int *rows, int *cols, int *depths)
 {
     *rows = map->window.rows;
     *cols = map->window.cols;
@@ -48,7 +48,7 @@ void Rast3d_getCoordsMapWindow(RASTER3D_Map * map, int *rows, int *cols, int *de
  *  \return void
  */
 
-void Rast3d_getNofTilesMap(RASTER3D_Map * map, int *nx, int *ny, int *nz)
+void Rast3d_get_nof_tiles_map(RASTER3D_Map * map, int *nx, int *ny, int *nz)
 {
     *nx = map->nx;
     *ny = map->ny;
@@ -74,7 +74,7 @@ void Rast3d_getNofTilesMap(RASTER3D_Map * map, int *nx, int *ny, int *nz)
  */
 
 void
-Rast3d_getRegionMap(RASTER3D_Map * map, double *north, double *south, double *east,
+Rast3d_get_region_map(RASTER3D_Map * map, double *north, double *south, double *east,
 		 double *west, double *top, double *bottom)
 {
     *north = map->region.north;
@@ -88,7 +88,7 @@ Rast3d_getRegionMap(RASTER3D_Map * map, double *north, double *south, double *ea
 /*---------------------------------------------------------------------------*/
 
 void
-Rast3d_getWindowMap(RASTER3D_Map * map, double *north, double *south, double *east,
+Rast3d_get_window_map(RASTER3D_Map * map, double *north, double *south, double *east,
 		 double *west, double *top, double *bottom)
 {
     *north = map->window.north;
@@ -112,16 +112,16 @@ Rast3d_getWindowMap(RASTER3D_Map * map, double *north, double *south, double *ea
  *  \return void
  */
 
-void Rast3d_getRegionStructMap(RASTER3D_Map * map, RASTER3D_Region * region)
+void Rast3d_get_region_struct_map(RASTER3D_Map * map, RASTER3D_Region * region)
 {
-    Rast3d_regionCopy(region, &(map->region));
+    Rast3d_region_copy(region, &(map->region));
 }
 
 /*---------------------------------------------------------------------------*/
 
 void Rast3d_getWindowStructMap(RASTER3D_Map * map, RASTER3D_Region * window)
 {
-    Rast3d_regionCopy(window, &(map->window));
+    Rast3d_region_copy(window, &(map->window));
 }
 
 /*---------------------------------------------------------------------------*/
@@ -139,7 +139,7 @@ void Rast3d_getWindowStructMap(RASTER3D_Map * map, RASTER3D_Region * window)
  *  \return void
  */
 
-void Rast3d_getTileDimensionsMap(RASTER3D_Map * map, int *x, int *y, int *z)
+void Rast3d_get_tile_dimensions_map(RASTER3D_Map * map, int *x, int *y, int *z)
 {
     *x = map->tileX;
     *y = map->tileY;
@@ -158,7 +158,7 @@ void Rast3d_getTileDimensionsMap(RASTER3D_Map * map, int *x, int *y, int *z)
  *  \return int
  */
 
-int Rast3d_tileTypeMap(RASTER3D_Map * map)
+int Rast3d_tile_type_map(RASTER3D_Map * map)
 {
     return map->typeIntern;
 }
@@ -175,7 +175,7 @@ int Rast3d_tileTypeMap(RASTER3D_Map * map)
  *  \return int
  */
 
-int Rast3d_fileTypeMap(RASTER3D_Map * map)
+int Rast3d_file_type_map(RASTER3D_Map * map)
 {
     return map->type;
 }
@@ -192,7 +192,7 @@ int Rast3d_fileTypeMap(RASTER3D_Map * map)
  *  \return int
  */
 
-int Rast3d_tilePrecisionMap(RASTER3D_Map * map)
+int Rast3d_tile_precision_map(RASTER3D_Map * map)
 {
     return map->precision;
 }
@@ -209,7 +209,7 @@ int Rast3d_tilePrecisionMap(RASTER3D_Map * map)
  *  \return int
  */
 
-int Rast3d_tileUseCacheMap(RASTER3D_Map * map)
+int Rast3d_tile_use_cache_map(RASTER3D_Map * map)
 {
     return map->useCache;
 }
@@ -225,7 +225,7 @@ int Rast3d_tileUseCacheMap(RASTER3D_Map * map)
  *  \return void
  */
 
-void Rast3d_printHeader(RASTER3D_Map * map)
+void Rast3d_print_header(RASTER3D_Map * map)
 {
     double rangeMin, rangeMax;
 
@@ -265,11 +265,11 @@ void Rast3d_printHeader(RASTER3D_Map * map)
 	   map->region.depths);
     printf("  Tile size (%d %d %d)\n", map->tileX, map->tileY, map->tileZ);
     printf("  Range (");
-    if (Rast3d_isNullValueNum(&rangeMin, DCELL_TYPE))
+    if (Rast3d_is_null_value_num(&rangeMin, DCELL_TYPE))
 	printf("NULL, ");
     else
 	printf("%f, ", (double)rangeMin);
-    if (Rast3d_isNullValueNum(&rangeMax, DCELL_TYPE))
+    if (Rast3d_is_null_value_num(&rangeMax, DCELL_TYPE))
 	printf("NULL)\n");
     else
 	printf("%f)\n", (double)rangeMax);

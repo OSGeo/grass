@@ -15,14 +15,14 @@ Rast3d_xdrTile2tile(RASTER3D_Map * map, void *tile, int rows, int cols, int dept
 {
     int y, z, xLength, yLength, length;
 
-    if (!Rast3d_initCopyFromXdr(map, type)) {
-	Rast3d_error("Rast3d_xdrTile2tile: error in Rast3d_initCopyFromXdr");
+    if (!Rast3d_init_copy_from_xdr(map, type)) {
+	Rast3d_error("Rast3d_xdrTile2tile: error in Rast3d_init_copy_from_xdr");
 	return 0;
     }
 
     if (nofNum == map->tileSize) {
-	if (!Rast3d_copyFromXdr(map->tileSize, tile)) {
-	    Rast3d_error("Rast3d_xdrTile2tile: error in Rast3d_copyFromXdr");
+	if (!Rast3d_copy_from_xdr(map->tileSize, tile)) {
+	    Rast3d_error("Rast3d_xdrTile2tile: error in Rast3d_copy_from_xdr");
 	    return 0;
 	}
 	return 1;
@@ -35,45 +35,45 @@ Rast3d_xdrTile2tile(RASTER3D_Map * map, void *tile, int rows, int cols, int dept
     if (xRedundant) {
 	for (z = 0; z < depths; z++) {
 	    for (y = 0; y < rows; y++) {
-		if (!Rast3d_copyFromXdr(cols, tile)) {
-		    Rast3d_error("Rast3d_xdrTile2tile: error in Rast3d_copyFromXdr");
+		if (!Rast3d_copy_from_xdr(cols, tile)) {
+		    Rast3d_error("Rast3d_xdrTile2tile: error in Rast3d_copy_from_xdr");
 		    return 0;
 		}
 		tile = G_incr_void_ptr(tile, cols * length);
-		Rast3d_setNullValue(tile, xRedundant, type);
+		Rast3d_set_null_value(tile, xRedundant, type);
 		tile = G_incr_void_ptr(tile, xLength);
 	    }
 	    if (yRedundant) {
-		Rast3d_setNullValue(tile, map->tileX * yRedundant, type);
+		Rast3d_set_null_value(tile, map->tileX * yRedundant, type);
 		tile = G_incr_void_ptr(tile, yLength);
 	    }
 	}
 	if (!zRedundant)
 	    return 1;
 
-	Rast3d_setNullValue(tile, map->tileXY * zRedundant, type);
+	Rast3d_set_null_value(tile, map->tileXY * zRedundant, type);
 	return 1;
     }
 
     if (yRedundant) {
 	for (z = 0; z < depths; z++) {
-	    if (!Rast3d_copyFromXdr(map->tileX * rows, tile)) {
-		Rast3d_error("Rast3d_xdrTile2tile: error in Rast3d_copyFromXdr");
+	    if (!Rast3d_copy_from_xdr(map->tileX * rows, tile)) {
+		Rast3d_error("Rast3d_xdrTile2tile: error in Rast3d_copy_from_xdr");
 		return 0;
 	    }
 	    tile = G_incr_void_ptr(tile, map->tileX * rows * length);
-	    Rast3d_setNullValue(tile, map->tileX * yRedundant, type);
+	    Rast3d_set_null_value(tile, map->tileX * yRedundant, type);
 	    tile = G_incr_void_ptr(tile, yLength);
 	}
 	if (!zRedundant)
 	    return 1;
 
-	Rast3d_setNullValue(tile, map->tileXY * zRedundant, type);
+	Rast3d_set_null_value(tile, map->tileXY * zRedundant, type);
 	return 1;
     }
 
-    if (!Rast3d_copyFromXdr(map->tileXY * depths, tile)) {
-	Rast3d_error("Rast3d_xdrTile2tile: error in Rast3d_copyFromXdr");
+    if (!Rast3d_copy_from_xdr(map->tileXY * depths, tile)) {
+	Rast3d_error("Rast3d_xdrTile2tile: error in Rast3d_copy_from_xdr");
 	return 0;
     }
 
@@ -81,7 +81,7 @@ Rast3d_xdrTile2tile(RASTER3D_Map * map, void *tile, int rows, int cols, int dept
 	return 1;
 
     tile = G_incr_void_ptr(tile, map->tileXY * depths * length);
-    Rast3d_setNullValue(tile, map->tileXY * zRedundant, type);
+    Rast3d_set_null_value(tile, map->tileXY * zRedundant, type);
 
     return 1;
 }
@@ -107,12 +107,12 @@ static int Rast3d_readTileUncompressed(RASTER3D_Map * map, int tileIndex, int no
 
 static int Rast3d_readTileCompressed(RASTER3D_Map * map, int tileIndex, int nofNum)
 {
-    if (!G_fpcompress_readXdrNums(map->data_fd, xdr, nofNum,
+    if (!Rast3d_fpcompress_read_xdr_nums(map->data_fd, xdr, nofNum,
 				  map->tileLength[tileIndex],
 				  map->precision, tmpCompress,
 				  map->type == FCELL_TYPE)) {
 	Rast3d_error
-	    ("Rast3d_readTileCompressed: error in G_fpcompress_readXdrNums");
+	    ("Rast3d_readTileCompressed: error in Rast3d_fpcompress_read_xdr_nums");
 	return 0;
     }
 
@@ -144,49 +144,49 @@ static int Rast3d_readTileCompressed(RASTER3D_Map * map, int tileIndex, int nofN
  *          0 ... otherwise.
  */
 
-int Rast3d_readTile(RASTER3D_Map * map, int tileIndex, void *tile, int type)
+int Rast3d_read_tile(RASTER3D_Map * map, int tileIndex, void *tile, int type)
 {
     int nofNum, rows, cols, depths, xRedundant, yRedundant, zRedundant;
 
     if ((tileIndex >= map->nTiles) || (tileIndex < 0))
-	Rast3d_fatalError("Rast3d_readTile: tile index out of range");
+	Rast3d_fatal_error("Rast3d_read_tile: tile index out of range");
 
     if (map->index[tileIndex] == -1) {
-	Rast3d_setNullTileType(map, tile, type);
+	Rast3d_set_null_tile_type(map, tile, type);
 	return 1;
     }
 
-    nofNum = Rast3d_computeClippedTileDimensions(map, tileIndex,
+    nofNum = Rast3d_compute_clipped_tile_dimensions(map, tileIndex,
 					      &rows, &cols, &depths,
 					      &xRedundant, &yRedundant,
 					      &zRedundant);
 
     if (lseek(map->data_fd, map->index[tileIndex], SEEK_SET) == -1) {
-	Rast3d_error("Rast3d_readTile: can't position file");
+	Rast3d_error("Rast3d_read_tile: can't position file");
 	return 0;
     }
 
     if (map->compression == RASTER3D_NO_COMPRESSION) {
 	if (!Rast3d_readTileUncompressed(map, tileIndex, nofNum)) {
-	    Rast3d_error("Rast3d_readTile: error in Rast3d_readTileUncompressed");
+	    Rast3d_error("Rast3d_read_tile: error in Rast3d_readTileUncompressed");
 	    return 0;
 	}
     }
     else if (!Rast3d_readTileCompressed(map, tileIndex, nofNum)) {
-	Rast3d_error("Rast3d_readTile: error in Rast3d_readTileCompressed");
+	Rast3d_error("Rast3d_read_tile: error in Rast3d_readTileCompressed");
 	return 0;
     }
 
     if (!Rast3d_xdrTile2tile(map, tile, rows, cols, depths,
 			  xRedundant, yRedundant, zRedundant, nofNum, type)) {
-	Rast3d_error("Rast3d_readTile: error in Rast3d_xdrTile2tile");
+	Rast3d_error("Rast3d_read_tile: error in Rast3d_xdrTile2tile");
 	return 0;
     }
 
-    if (Rast3d_maskIsOff(map))
+    if (Rast3d_mask_is_off(map))
 	return 1;
 
-    Rast3d_maskTile(map, tileIndex, tile, type);
+    Rast3d_mask_tile(map, tileIndex, tile, type);
     return 1;
 }
 
@@ -196,7 +196,7 @@ int Rast3d_readTile(RASTER3D_Map * map, int tileIndex, void *tile, int type)
 /*!
  * \brief 
  *
- *  Is equivalent to Rast3d_readTile (map, tileIndex, tile, FCELL_TYPE).
+ *  Is equivalent to Rast3d_read_tile (map, tileIndex, tile, FCELL_TYPE).
  *
  *  \param map
  *  \param tileIndex
@@ -204,10 +204,10 @@ int Rast3d_readTile(RASTER3D_Map * map, int tileIndex, void *tile, int type)
  *  \return int
  */
 
-int Rast3d_readTileFloat(RASTER3D_Map * map, int tileIndex, void *tile)
+int Rast3d_read_tile_float(RASTER3D_Map * map, int tileIndex, void *tile)
 {
-    if (!Rast3d_readTile(map, tileIndex, tile, FCELL_TYPE)) {
-	Rast3d_error("Rast3d_readTileFloat: error in Rast3d_readTile");
+    if (!Rast3d_read_tile(map, tileIndex, tile, FCELL_TYPE)) {
+	Rast3d_error("Rast3d_read_tile_float: error in Rast3d_read_tile");
 	return 0;
     }
 
@@ -220,7 +220,7 @@ int Rast3d_readTileFloat(RASTER3D_Map * map, int tileIndex, void *tile)
 /*!
  * \brief 
  *
- *  Is equivalent to Rast3d_readTile (map, tileIndex, tile, DCELL_TYPE).
+ *  Is equivalent to Rast3d_read_tile (map, tileIndex, tile, DCELL_TYPE).
  *
  *  \param map
  *  \param tileIndex
@@ -228,10 +228,10 @@ int Rast3d_readTileFloat(RASTER3D_Map * map, int tileIndex, void *tile)
  *  \return int
  */
 
-int Rast3d_readTileDouble(RASTER3D_Map * map, int tileIndex, void *tile)
+int Rast3d_read_tile_double(RASTER3D_Map * map, int tileIndex, void *tile)
 {
-    if (!Rast3d_readTile(map, tileIndex, tile, DCELL_TYPE)) {
-	Rast3d_error("Rast3d_readTileDouble: error in Rast3d_readTile");
+    if (!Rast3d_read_tile(map, tileIndex, tile, DCELL_TYPE)) {
+	Rast3d_error("Rast3d_read_tile_double: error in Rast3d_read_tile");
 	return 0;
     }
 
@@ -258,13 +258,13 @@ int Rast3d_readTileDouble(RASTER3D_Map * map, int tileIndex, void *tile)
  *          0 ... otherwise.
  */
 
-int Rast3d_lockTile(RASTER3D_Map * map, int tileIndex)
+int Rast3d_lock_tile(RASTER3D_Map * map, int tileIndex)
 {
     if (!map->useCache)
-	Rast3d_fatalError("Rast3d_lockTile: function invalid in non-cache mode");
+	Rast3d_fatal_error("Rast3d_lock_tile: function invalid in non-cache mode");
 
     if (!Rast3d_cache_lock(map->cache, tileIndex)) {
-	Rast3d_error("Rast3d_lockTile: error in Rast3d_cache_lock");
+	Rast3d_error("Rast3d_lock_tile: error in Rast3d_cache_lock");
 	return 0;
     }
 
@@ -285,13 +285,13 @@ int Rast3d_lockTile(RASTER3D_Map * map, int tileIndex)
  *          0 ... otherwise.
  */
 
-int Rast3d_unlockTile(RASTER3D_Map * map, int tileIndex)
+int Rast3d_unlock_tile(RASTER3D_Map * map, int tileIndex)
 {
     if (!map->useCache)
-	Rast3d_fatalError("Rast3d_unlockTile: function invalid in non-cache mode");
+	Rast3d_fatal_error("Rast3d_unlock_tile: function invalid in non-cache mode");
 
     if (!Rast3d_cache_unlock(map->cache, tileIndex)) {
-	Rast3d_error("Rast3d_unlockTile: error in Rast3d_cache_unlock");
+	Rast3d_error("Rast3d_unlock_tile: error in Rast3d_cache_unlock");
 	return 0;
     }
 
@@ -311,13 +311,13 @@ int Rast3d_unlockTile(RASTER3D_Map * map, int tileIndex)
  *          0 ... otherwise.
  */
 
-int Rast3d_unlockAll(RASTER3D_Map * map)
+int Rast3d_unlock_all(RASTER3D_Map * map)
 {
     if (!map->useCache)
-	Rast3d_fatalError("Rast3d_unlockAll: function invalid in non-cache mode");
+	Rast3d_fatal_error("Rast3d_unlock_all: function invalid in non-cache mode");
 
     if (!Rast3d_cache_unlock_all(map->cache)) {
-	Rast3d_error("Rast3d_unlockAll: error in Rast3d_cache_unlock_all");
+	Rast3d_error("Rast3d_unlock_all: error in Rast3d_cache_unlock_all");
 	return 0;
     }
 
@@ -336,10 +336,10 @@ int Rast3d_unlockAll(RASTER3D_Map * map)
  *  \return void
  */
 
-void Rast3d_autolockOn(RASTER3D_Map * map)
+void Rast3d_autolock_on(RASTER3D_Map * map)
 {
     if (!map->useCache)
-	Rast3d_fatalError("Rast3d_autoLockOn: function invalid in non-cache mode");
+	Rast3d_fatal_error("Rast3d_autoLockOn: function invalid in non-cache mode");
 
     Rast3d_cache_autolock_on(map->cache);
 }
@@ -356,10 +356,10 @@ void Rast3d_autolockOn(RASTER3D_Map * map)
  *  \return void
  */
 
-void Rast3d_autolockOff(RASTER3D_Map * map)
+void Rast3d_autolock_off(RASTER3D_Map * map)
 {
     if (!map->useCache)
-	Rast3d_fatalError("Rast3d_autoLockOff: function invalid in non-cache mode");
+	Rast3d_fatal_error("Rast3d_autoLockOff: function invalid in non-cache mode");
 
     Rast3d_cache_autolock_off(map->cache);
 }
@@ -372,11 +372,11 @@ void Rast3d_autolockOff(RASTER3D_Map * map)
  *
  * Sets the minimum
  * number of unlocked tiles to <em>minUnlocked</em>.  This function should be used
- * in combination with <tt>Rast3d_unlockAll ()</tt> in order to avoid situations where the
+ * in combination with <tt>Rast3d_unlock_all ()</tt> in order to avoid situations where the
  * new minimum is larger than the actual number of unlocked tiles.
  * <em>minUnlocked</em> must be one of RASTER3D_USE_CACHE_X, RASTER3D_USE_CACHE_Y,
  * RASTER3D_USE_CACHE_Z, RASTER3D_USE_CACHE_XY, RASTER3D_USE_CACHE_XZ,
- * RASTER3D_USE_CACHE_YZ, RASTER3D_USE_CACHE_XYZ, the result of Rast3d_cacheSizeEncode()
+ * RASTER3D_USE_CACHE_YZ, RASTER3D_USE_CACHE_XYZ, the result of Rast3d_cache_size_encode()
  * (cf.{g3d:G3d.cacheSizeEncode}), or any positive integer
  * which explicitly specifies the number of tiles.
  *
@@ -385,13 +385,13 @@ void Rast3d_autolockOff(RASTER3D_Map * map)
  *  \return void
  */
 
-void Rast3d_minUnlocked(RASTER3D_Map * map, int minUnlocked)
+void Rast3d_min_unlocked(RASTER3D_Map * map, int minUnlocked)
 {
     if (!map->useCache)
-	Rast3d_fatalError("Rast3d_autoLockOff: function invalid in non-cache mode");
+	Rast3d_fatal_error("Rast3d_autoLockOff: function invalid in non-cache mode");
 
-    Rast3d_cache_set_minUnlock(map->cache,
-			    Rast3d__computeCacheSize(map, minUnlocked));
+    Rast3d_cache_set_min_unlock(map->cache,
+			    Rast3d__compute_cache_size(map, minUnlocked));
 }
 
 /*---------------------------------------------------------------------------*/
@@ -407,14 +407,14 @@ void Rast3d_minUnlocked(RASTER3D_Map * map, int minUnlocked)
  *          0 ... otherwise.
  */
 
-int Rast3d_beginCycle(RASTER3D_Map * map)
+int Rast3d_begin_cycle(RASTER3D_Map * map)
 {
-    if (!Rast3d_unlockAll(map)) {
-	Rast3d_fatalError("Rast3d_beginCycle: error in Rast3d_unlockAll");
+    if (!Rast3d_unlock_all(map)) {
+	Rast3d_fatal_error("Rast3d_begin_cycle: error in Rast3d_unlock_all");
 	return 0;
     }
 
-    Rast3d_autolockOn(map);
+    Rast3d_autolock_on(map);
     return 1;
 }
 
@@ -431,8 +431,8 @@ int Rast3d_beginCycle(RASTER3D_Map * map)
  *          0 ... otherwise.
  */
 
-int Rast3d_endCycle(RASTER3D_Map * map)
+int Rast3d_end_cycle(RASTER3D_Map * map)
 {
-    Rast3d_autolockOff(map);
+    Rast3d_autolock_off(map);
     return 1;
 }
