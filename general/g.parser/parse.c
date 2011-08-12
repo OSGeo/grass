@@ -7,7 +7,6 @@
 
 static char *xstrdup(const char *arg)
 {
-   G_debug(0,"arg: %s", arg);
    return (G_strcasecmp(arg, "{NULL}") == 0)
 	? NULL : strdup(arg);
 }
