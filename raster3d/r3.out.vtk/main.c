@@ -248,7 +248,7 @@ void open_write_rgb_maps(input_maps * in, RASTER3D_Region region, FILE * fp,
                         Rast3d_mask_off(maprgb);
             }
             /* Close the 3d raster map */
-            if (!Rast3d_close_cell(maprgb)) {
+            if (!Rast3d_close(maprgb)) {
                 fatal_error(_("Error closing g3d rgb map."), in);
             }
 
@@ -334,7 +334,7 @@ void open_write_vector_maps(input_maps * in, RASTER3D_Region region, FILE * fp,
             }
 
             /* Close the 3d raster map */
-            if (!Rast3d_close_cell(mapvect)) {
+            if (!Rast3d_close(mapvect)) {
                 fatal_error(_("Error closing g3d vector map."), in);
             }
             /*Set the pointer to null so we know later that these files are already closed */
@@ -535,7 +535,7 @@ int main(int argc, char *argv[])
             }
 
             /* Close the 3d raster map */
-            if (!Rast3d_close_cell(in->map)) {
+            if (!Rast3d_close(in->map)) {
                 in->map = NULL;
                 fatal_error(_("Error closing 3d raster map, the VTK file may be incomplete."),
                             in);

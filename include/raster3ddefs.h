@@ -73,7 +73,7 @@ int Rast3d_write_cats(const char *, struct Categories *);
 int Rast3d_read_cats(const char *, const char *, struct Categories *);
 
 /* g3dclose.c */
-int Rast3d_close_cell(RASTER3D_Map *);
+int Rast3d_close(RASTER3D_Map *);
 
 /* g3dcolor.c */
 int Rast3d_remove_color(const char *);

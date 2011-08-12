@@ -62,7 +62,7 @@ void fatalError(char *errorMsg)
 {
     if (map != NULL) {
         /* should unopen map here! */
-        Rast3d_close_cell(map);
+        Rast3d_close(map);
     }
 
     Rast3d_fatal_error(errorMsg);
@@ -359,7 +359,7 @@ int main(int argc, char *argv[])
     /*Create the new RASTER3D Map */
     asciiToG3d(fp, &region, convertNull, nullValue);
 
-    if (!Rast3d_close_cell(map))
+    if (!Rast3d_close(map))
         fatalError(_("Error closing new 3d raster map"));
 
     /* write input name to map history */

@@ -71,6 +71,6 @@ void Rast3d_change_precision(void *map, int precision, const char *nameOut)
 	    }
 
     Rast3d_free_tiles(data);
-    if (!Rast3d_close_cell(map2))
-	Rast3d_fatal_error("Rast3d_change_precision: error in Rast3d_close_cell");
+    if (!Rast3d_close(map2))
+	Rast3d_fatal_error("Rast3d_change_precision: error in Rast3d_close");
 }

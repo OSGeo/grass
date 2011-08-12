@@ -51,7 +51,7 @@ void fatal_error(void *map, int elevfd, int outfd, char *errorMsg)
     /* Close files and exit */
 
     if (map != NULL) {
-        if (!Rast3d_close_cell(map))
+        if (!Rast3d_close(map))
             Rast3d_fatal_error(_("Could not close RASTER3D map"));
     }
 
@@ -338,7 +338,7 @@ int main(int argc, char *argv[])
     }
 
     /* Close files and exit */
-    if (!Rast3d_close_cell(map))
+    if (!Rast3d_close(map))
         Rast3d_fatal_error(_("Could not close RASTER3D map <%s>"),
                        param.input->answer);
 

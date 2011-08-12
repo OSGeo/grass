@@ -311,9 +311,9 @@ int main(int argc, char *argv[])
     }
 
     /* close maps */
-    Rast3d_close_cell(map);
+    Rast3d_close(map);
     if (zone_info.n_zones)
-	Rast3d_close_cell(zmap);
+	Rast3d_close(zmap);
 
     /* create the output */
     if (param.table->answer)

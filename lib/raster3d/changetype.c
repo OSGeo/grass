@@ -76,6 +76,6 @@ void Rast3d_change_type(void *map, const char *nameOut)
 
     Rast3d_free_tiles(data);
     Rast3d_free_tiles(data2);
-    if (!Rast3d_close_cell(map2))
-	Rast3d_fatal_error("Rast3d_change_type: error in Rast3d_close_cell");
+    if (!Rast3d_close(map2))
+	Rast3d_fatal_error("Rast3d_change_type: error in Rast3d_close");
 }

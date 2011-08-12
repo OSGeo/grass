@@ -366,7 +366,7 @@ static void close_map(map * m)
     if (!m->handle)
 	return;
 
-    if (!Rast3d_close_cell(m->handle))
+    if (!Rast3d_close(m->handle))
 	G_fatal_error(_("Unable to close raster map <%s@%s>"),
 		      m->name, m->mapset);
 
@@ -401,7 +401,7 @@ int map_type(const char *name, int mod)
 				     RASTER3D_TILE_SAME_AS_FILE, RASTER3D_NO_CACHE);
 	    result = (Rast3d_file_type_map(handle) == FCELL_TYPE)
 		? FCELL_TYPE : DCELL_TYPE;
-	    Rast3d_close_cell(handle);
+	    Rast3d_close(handle);
 	}
 	else
 	    result = -1;
@@ -607,7 +607,7 @@ void close_output_map(int fd)
 {
     void *handle = omaps[fd];
 
-    if (!Rast3d_close_cell(handle))
+    if (!Rast3d_close(handle))
 	G_fatal_error(_("Unable to close output raster map"));
 }
 

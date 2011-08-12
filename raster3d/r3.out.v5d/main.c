@@ -50,7 +50,7 @@ void fatalError(char *errorMsg)
 {
     if (map != NULL) {
 	/* should unopen map here! */
-	if (!Rast3d_close_cell(map))
+	if (!Rast3d_close(map))
 	    fatalError("Error closing 3d raster map");
     }
 
@@ -327,7 +327,7 @@ int main(int argc, char *argv[])
     convert(output, region.rows, region.cols, region.depths, trueCoords);
 
     /* Close files and exit */
-    if (!Rast3d_close_cell(map))
+    if (!Rast3d_close(map))
 	fatalError(_("Error closing 3d raster map"));
 
     map = NULL;

@@ -132,7 +132,7 @@ void fatal_error(Database db, char *errorMsg)
     /* Close files and exit */
     if (db.map != NULL) {
         /* should unopen map here! but this functionality is not jet implemented */
-        if (!Rast3d_close_cell(db.map))
+        if (!Rast3d_close(db.map))
             Rast3d_fatal_error(_("Could not close the map"));
     }
 
@@ -497,7 +497,7 @@ int main(int argc, char *argv[])
     /* Flush all tile */
     if (!Rast3d_flush_all_tiles(db.map))
         Rast3d_fatal_error("Error flushing tiles with Rast3d_flush_all_tiles");
-    if (!Rast3d_close_cell(db.map))
+    if (!Rast3d_close(db.map))
         Rast3d_fatal_error(_("Error closing 3d raster map"));
 
     G_debug(2, "\nDone\n");

@@ -152,6 +152,6 @@ void get_fp_stats(const char *name, const char *mapset,
 	if(dcell)
     	    G_free(dcell);
     } else {
-        Rast3d_close_cell(map3d);
+        Rast3d_close(map3d);
     }
 }

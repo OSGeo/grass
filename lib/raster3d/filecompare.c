@@ -425,8 +425,8 @@ Rast3d_compare_files(const char *f1, const char *mapset1, const char *f2,
 
     if ((!Rast3d_tile_use_cache_map(map)) || (!Rast3d_tile_use_cache_map(map2))) {
 	compareFilesNocache(map, map2);
-	Rast3d_close_cell(map);
-	Rast3d_close_cell(map2);
+	Rast3d_close(map);
+	Rast3d_close(map2);
 	return;
     }
 
@@ -488,6 +488,6 @@ Rast3d_compare_files(const char *f1, const char *mapset1, const char *f2,
     }
 
     printf("Files are identical up to precision.\n");
-    Rast3d_close_cell(map);
-    Rast3d_close_cell(map2);
+    Rast3d_close(map);
+    Rast3d_close(map2);
 }

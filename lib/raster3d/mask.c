@@ -41,7 +41,7 @@ int Rast3d_mask_close()
 
     Rast3d_maskMapExistsVar = 0;
 
-    if (!Rast3d_close_cell(Rast3d_maskMap)) {
+    if (!Rast3d_close(Rast3d_maskMap)) {
 	Rast3d_error("Rast3d_mask_close: error closing mask");
 
 	return 0;
