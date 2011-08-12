@@ -150,7 +150,7 @@ int main(int argc, char *argv[])
 
     Vect_close(&Map);
 
-    if (!Rast3d_close_cell(map))
+    if (!Rast3d_close(map))
 	G_fatal_error(_("Unable to close new 3d raster map"));
     
     exit(EXIT_SUCCESS);

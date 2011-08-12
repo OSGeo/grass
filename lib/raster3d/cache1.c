@@ -158,7 +158,7 @@ void *Rast3d_cache_new_read(int nofElts, int sizeOfElts, int nofNames,
 			 read_fn * eltLoadFun, void *eltLoadFunData)
 {
     return Rast3d_cache_new(nofElts, sizeOfElts, nofNames,
-			 cache_dummy_fun, NULL, eltLoadFun, eltLoadFunData);
+			    cache_dummy_fun, NULL, eltLoadFun, eltLoadFunData);
 }
 
 /*---------------------------------------------------------------------------*/

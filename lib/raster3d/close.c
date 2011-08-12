@@ -1,3 +1,17 @@
+/*!
+  \file lib/raster3d/close.c
+  
+  \brief 3D Raster Library - Close 3D raster file
+ 
+  (C) 1999-2009, 2011 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public
+  License (>=v2). Read the file COPYING that comes with GRASS
+  for details.
+  
+  \author USACERL and many others
+*/
+
 #ifdef __MINGW32__
 #  include <windows.h>
 #endif
@@ -7,12 +21,11 @@
 #include <unistd.h>
 
 #include <grass/raster.h>
+#include <grass/glocale.h>
 
 #include "raster3d_intern.h"
 
-/*---------------------------------------------------------------------------*/
-
-static int Rast3d_closeNew(RASTER3D_Map * map)
+static int close_new(RASTER3D_Map * map)
 {
     char path[GPATH_MAX];
     struct Categories cats;
@@ -31,9 +44,8 @@ static int Rast3d_closeNew(RASTER3D_Map * map)
     /*Use the G3d function to write the history file,
      * otherwise the path is wrong */
     if (!Rast3d_write_history(map->fileName, &hist)) {
-	Rast3d_error("Rast3d_closeNew: can't write raster3d history");
+	G_warning(_("Unable to write history for 3D raster map <%s>"), map);
     }
-
 
     Rast3d_range_write(map);
 
@@ -47,9 +59,8 @@ static int Rast3d_closeNew(RASTER3D_Map * map)
     if (link(map->tempName, path) < 0) {
 #endif
 	if (rename(map->tempName, path)) {
-	    Rast3d_error
-		("Rast3d_closeNew: can't move temp raster map %s\nto 3d data file %s",
-		 map->tempName, path);
+	    G_warning(_("Unable to move temp raster map <%s> to 3d data file <%s>"),
+		      map->tempName, path);
 	    return 0;
 	}
     }
@@ -59,20 +70,18 @@ static int Rast3d_closeNew(RASTER3D_Map * map)
     return 1;
 }
 
-/*---------------------------------------------------------------------------*/
-
-static int Rast3d_closeCellNew(RASTER3D_Map * map)
+static int close_cell_new(RASTER3D_Map * map)
 {
     long ltmp;
 
     if (map->useCache)
 	if (!Rast3d_flush_all_tiles(map)) {
-	    Rast3d_error("Rast3d_closeCellNew: error in Rast3d_flush_all_tiles");
+	    G_warning(_("Unable to flush all tiles"));
 	    return 0;
 	}
 
     if (!Rast3d_flush_index(map)) {
-	Rast3d_error("Rast3d_closeCellNew: error in Rast3d_flush_index");
+	G_warning(_("Unable to flush index"));
 	return 0;
     }
 
@@ -82,79 +91,72 @@ static int Rast3d_closeCellNew(RASTER3D_Map * map)
     if (lseek(map->data_fd,
 	      (long)(map->offset - sizeof(int) - sizeof(long)),
 	      SEEK_SET) == -1) {
-	Rast3d_error("Rast3d_closeCellNew: can't position file");
+	G_warning(_("Unable to position file"));
 	return 0;
     }
 
     if (!Rast3d_write_ints(map->data_fd, map->useXdr, &(map->indexNbytesUsed), 1)) {
-	Rast3d_error("Rast3d_closeCellNew: can't write header");
+	G_warning(_("Unable to write header for 3D raster map <%s>"), map);
 	return 0;
     }
 
     Rast3d_long_encode(&(map->indexOffset), (unsigned char *)&ltmp, 1);
     if (write(map->data_fd, &ltmp, sizeof(long)) != sizeof(long)) {
-	Rast3d_error("Rast3d_closeCellNew: can't write header");
+	G_warning(_("Unable to write header for 3D raster map <%s>"), map);
 	return 0;
     }
 
-    if (!Rast3d_closeNew(map) != 0) {
-	Rast3d_error("Rast3d_closeCellNew: error in Rast3d_closeNew");
+    if (!close_new(map) != 0) {
+	G_warning(_("Unable to create 3D raster map <%s>"), map);
 	return 0;
     }
 
     return 1;
 }
 
-/*---------------------------------------------------------------------------*/
-
-static int Rast3d_closeOld(RASTER3D_Map * map)
+static int close_old(RASTER3D_Map * map)
 {
     if (close(map->data_fd) != 0) {
-	Rast3d_error("Rast3d_closeOld: could not close file");
+	G_warning(_("Unable to close 3D raster map <%s>"), map);
 	return 0;
     }
 
     return 1;
 }
 
-/*---------------------------------------------------------------------------*/
-
-static int Rast3d_closeCellOld(RASTER3D_Map * map)
+static int close_cell_old(RASTER3D_Map * map)
 {
-    if (!Rast3d_closeOld(map) != 0) {
-	Rast3d_error("Rast3d_closeCellOld: error in Rast3d_closeOld");
+    if (!close_old(map) != 0) {
+	G_warning(_("Unable to close 3D raster map <%s>"), map);
 	return 0;
     }
 
     return 1;
 }
-
-/*---------------------------------------------------------------------------*/
-
 
 /*!
- * \brief 
- *
- * Closes g3d-file. If <em>map</em> is new
- * and cache-mode is used for <em>map</em> then every tile which is not flushed
- * before closing is flushed.  
- *
- *  \param map
- *  \return 1 ... if successful,
- *          0 ...  otherwise.
- */
+  \brief Close 3D raster map files
+  
+  Closes g3d-file. If <em>map</em> is new and cache-mode is used for
+  <em>map</em> then every tile which is not flushed before closing is
+  flushed.
+  
+  \param map name of 3D raster map
 
-int Rast3d_close_cell(RASTER3D_Map * map)
+  \return 1 success
+  \return 0 failure
+*/
+int Rast3d_close(RASTER3D_Map * map)
 {
     if (map->operation == RASTER3D_WRITE_DATA) {
-	if (!Rast3d_closeCellNew(map)) {
-	    Rast3d_error("Rast3d_close_cell: error in Rast3d_closeCellNew");
+	if (!close_cell_new(map)) {
+	    G_warning(_("Unable to create 3D raster map <%s>"), map);
 	    return 0;
 	}
     }
     else {
-	if (!Rast3d_closeCellOld(map) != 0) {
-	    Rast3d_error("Rast3d_close_cell: error in Rast3d_closeCellOld");
+	if (!close_cell_old(map) != 0) {
+	    G_warning(_("Unable to close 3D raster map <%s>"), map);
 	    return 0;
 	}
     }
@@ -164,7 +166,7 @@ int Rast3d_close_cell(RASTER3D_Map * map)
 
     if (map->useCache) {
 	if (!Rast3d_dispose_cache(map)) {
-	    Rast3d_error("Rast3d_close_cell: error in Rast3d_dispose_cache");
+	    G_warning(_("Error in cache"));
 	    return 0;
 	}
     }
@@ -186,11 +188,12 @@ int Rast3d_close_cell(RASTER3D_Map * map)
 			     map->compression, map->useRle, map->useLzw,
 			     map->precision, map->offset, map->useXdr,
 			     map->hasIndex, map->unit)) {
-	    Rast3d_error("Rast3d_close_cell: error in Rast3d_write_header");
+	    G_warning(_("Unable to write header for 3D raster map <%s>"), map);
 	    return 0;
 	}
 
     Rast3d_free(map->unit);
     Rast3d_free(map);
+    
     return 1;
 }

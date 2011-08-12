@@ -227,7 +227,7 @@ int main(int argc, char *argv[])
 	fprintf(stderr, "\n");
 
     /* tries to write a header! */
-    Rast3d_close_cell(g3map);
+    Rast3d_close(g3map);
 
     fclose(Headfax.dspfoutfp);
 

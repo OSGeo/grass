@@ -182,7 +182,7 @@ int test_put_get_value_dcell(void)
         sum++;
     }
     
-    Rast3d_close_cell(map);
+    Rast3d_close(map);
     
     G_remove("grid3", "test_put_get_value_dcell");
     
@@ -304,7 +304,7 @@ int test_put_get_value_fcell(void)
         sum++;
     }
     
-    Rast3d_close_cell(map);
+    Rast3d_close(map);
     
     G_remove("grid3", "test_put_get_value_fcell");
     
@@ -435,7 +435,7 @@ int test_put_get_value_resampling(void)
     
     sum += test_resampling_dcell(map, north, east, top, col, row, depth, 2);
     
-    Rast3d_close_cell(map);
+    Rast3d_close(map);
     
     G_remove("grid3", "test_put_get_value_dcell");
     

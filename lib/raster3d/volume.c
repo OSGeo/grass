@@ -260,8 +260,8 @@ Rast3d_make_aligned_volume_file(void *map, const char *fileName,
 	}
     }
 
-    if (!Rast3d_close_cell(mapVolume))
-	Rast3d_fatal_error("Rast3d_make_aligned_volume_file: error in Rast3d_close_cell");
+    if (!Rast3d_close(mapVolume))
+	Rast3d_fatal_error("Rast3d_make_aligned_volume_file: error in Rast3d_close");
 
     Rast3d_free(volumeBuf);
 }

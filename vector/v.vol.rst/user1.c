@@ -464,7 +464,7 @@ int OUTGR()
 	}
 
 	/* Close the file */
-	if (Rast3d_close_cell(cf1) == 0) {
+	if (Rast3d_close(cf1) == 0) {
 	    sprintf(buff, "Error closing output file %s ", outz);
 	    clean_fatal_error(buff);
 	}
@@ -514,7 +514,7 @@ int OUTGR()
 	}
 
 	/* Close the file */
-	if (Rast3d_close_cell(cf2) == 0) {
+	if (Rast3d_close(cf2) == 0) {
 	    sprintf(buff, "Error closing output file %s ", gradient);
 	    clean_fatal_error(buff);
 	}
@@ -564,7 +564,7 @@ int OUTGR()
 	}
 
 	/* Close the file */
-	if (Rast3d_close_cell(cf3) == 0) {
+	if (Rast3d_close(cf3) == 0) {
 	    sprintf(buff, "Error closing output file %s ", aspect1);
 	    clean_fatal_error(buff);
 	}
@@ -614,7 +614,7 @@ int OUTGR()
 	}
 
 	/* Close the file */
-	if (Rast3d_close_cell(cf4) == 0) {
+	if (Rast3d_close(cf4) == 0) {
 	    sprintf(buff, "Error closing output file %s ", aspect2);
 	    clean_fatal_error(buff);
 	}
@@ -664,7 +664,7 @@ int OUTGR()
 	}
 
 	/* Close the file */
-	if (Rast3d_close_cell(cf5) == 0) {
+	if (Rast3d_close(cf5) == 0) {
 	    sprintf(buff, "Error closing output file %s ", ncurv);
 	    clean_fatal_error(buff);
 	}
@@ -714,7 +714,7 @@ int OUTGR()
 	}
 
 	/* Close the file */
-	if (Rast3d_close_cell(cf6) == 0) {
+	if (Rast3d_close(cf6) == 0) {
 	    sprintf(buff, "Error closing output file %s ", gcurv);
 	    clean_fatal_error(buff);
 	}
@@ -764,7 +764,7 @@ int OUTGR()
 	}
 
 	/* Close the file */
-	if (Rast3d_close_cell(cf7) == 0) {
+	if (Rast3d_close(cf7) == 0) {
 	    sprintf(buff, "Error closing output file %s ", mcurv);
 	    clean_fatal_error(buff);
 	}

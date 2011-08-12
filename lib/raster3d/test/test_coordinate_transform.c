@@ -143,7 +143,7 @@ int test_coordinate_transform(void)
         sum++;
     }
     
-    Rast3d_close_cell(map);
+    Rast3d_close(map);
     
     G_remove("grid3", "test_coordinate_transform");
     

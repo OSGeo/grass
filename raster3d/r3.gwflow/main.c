@@ -415,7 +415,7 @@ write_result(N_array_3d * status, N_array_3d * phead_start,
     /* Flush all tile */
     if (!Rast3d_flush_all_tiles(map))
 	Rast3d_fatal_error("Error flushing tiles with Rast3d_flush_all_tiles");
-    if (!Rast3d_close_cell(map))
+    if (!Rast3d_close(map))
 	Rast3d_fatal_error(map, NULL, 0, _("Error closing g3d file"));
 
     return;

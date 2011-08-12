@@ -61,7 +61,7 @@ int CloseInputRasterMap(int fd)
 int close_input_raster3d_map(void *map)
 {
     if (map != NULL) {
-	if (!Rast3d_close_cell(map)) {
+	if (!Rast3d_close(map)) {
 	    G_warning(_("unable to close input 3d raster map"));
 	    return 1;
 	}

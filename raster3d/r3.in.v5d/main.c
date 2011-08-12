@@ -218,7 +218,7 @@ int main(int argc, char *argv[])
 
     convert(input, &region, convertNull, nullValue);
 
-    if (!Rast3d_close_cell(map))
+    if (!Rast3d_close(map))
 	fatalError(_("Error closing 3d raster map"));
     map = NULL;
 

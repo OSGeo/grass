@@ -485,7 +485,7 @@ int main(int argc, char *argv[])
     }
 
     /*Close the opened map */
-    if (!Rast3d_close_cell(g3map))
+    if (!Rast3d_close(g3map))
 	G_fatal_error(_("Unable to close 3D raster map <%s>"), name);
 
 

@@ -54,7 +54,7 @@ retileNocache(void *map, const char *nameOut, int tileX, int tileY, int tileZ)
     G_percent(1, 1, 1);
         
     Rast3d_free_tiles(data);
-    Rast3d_close_cell(map2);
+    Rast3d_close(map2);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -140,6 +140,6 @@ Rast3d_retile(void *map, const char *nameOut, int tileX, int tileY, int tileZ)
     G_percent(1, 1, 1);
     if (!Rast3d_flush_all_tiles(map2))
 	Rast3d_fatal_error("Rast3d_retile: error in Rast3d_flush_all_tiles");
-    if (!Rast3d_close_cell(map2))
-	Rast3d_fatal_error("Rast3d_retile: error in Rast3d_close_cell");
+    if (!Rast3d_close(map2))
+	Rast3d_fatal_error("Rast3d_retile: error in Rast3d_close");
 }

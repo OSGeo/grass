@@ -112,9 +112,9 @@ static void makeMask(char *name, d_Mask * maskRules)
     Rast3d_autolock_off(mask);
     Rast3d_unlock_all(mask);
 
-    if (!Rast3d_close_cell(mask))
+    if (!Rast3d_close(mask))
 	Rast3d_fatal_error(_("Unable to close 3D raster mask file"));
-    if (!Rast3d_close_cell(map))
+    if (!Rast3d_close(map))
 	Rast3d_fatal_error(_("Unable to close raster map <%s>"), name);
 }
 

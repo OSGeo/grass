@@ -55,7 +55,7 @@ void fatal_error(void *map, int *fd, int depths, char *errorMsg)
     /* Close files and exit */
     if (map != NULL) {
         /* should unopen map here! but this functionality is not jet implemented */
-        if (!Rast3d_close_cell(map))
+        if (!Rast3d_close(map))
             Rast3d_fatal_error(_("Could not close the map"));
     }
 
@@ -322,7 +322,7 @@ int main(int argc, char *argv[])
     if (!Rast3d_flush_all_tiles(map))
         Rast3d_fatal_error("Error flushing tiles with Rast3d_flush_all_tiles");
     /* Close files and exit */
-    if (!Rast3d_close_cell(map))
+    if (!Rast3d_close(map))
         Rast3d_fatal_error(_("Error closing 3d raster map"));
 
     map = NULL;
