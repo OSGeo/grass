@@ -184,7 +184,7 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
     int stat = -1;
     if (remove) {
         if (type == RASTER3D_TYPE) {
-            stat = Rast3d_removeColor(name);
+            stat = Rast3d_remove_color(name);
         } else {
             stat = Rast_remove_colors(name, mapset);
         }
@@ -197,7 +197,7 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
 
     G_suppress_warnings(TRUE);
     if (type == RASTER3D_TYPE) {
-        have_colors = Rast3d_readColors(name, mapset, &colors);
+        have_colors = Rast3d_read_colors(name, mapset, &colors);
     } else {
         have_colors = Rast_read_colors(name, mapset, &colors);
     }
@@ -214,7 +214,7 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
 
     if (type == RASTER3D_TYPE) {
         fp = 1; /* g3d maps are always floating point */
-        Rast3d_readRange(name, mapset, &range);
+        Rast3d_read_range(name, mapset, &range);
     } else {
         fp = Rast_map_is_fp(name, mapset);
         Rast_read_fp_range(name, mapset, &range);
@@ -274,7 +274,7 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
             if (cmapset == NULL)
                 G_fatal_error(_("Raster3d map <%s> not found"), cmap);
 
-            if (Rast3d_readColors(cmap, cmapset, &colors) < 0)
+            if (Rast3d_read_colors(cmap, cmapset, &colors) < 0)
                 G_fatal_error(_("Unable to read color table for raster3d map <%s>"), cmap);
         }
     }
@@ -311,7 +311,7 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
     if (fp)
         Rast_mark_colors_as_fp(&colors);
     if (type == RASTER3D_TYPE) {
-        Rast3d_writeColors(name, mapset, &colors);
+        Rast3d_write_colors(name, mapset, &colors);
     } else {
         Rast_write_colors(name, mapset, &colors);
     }

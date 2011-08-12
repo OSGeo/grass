@@ -19,7 +19,7 @@
  *  \return void
  */
 
-void Rast3d_getValue(RASTER3D_Map * map, int x, int y, int z, void *value, int type)
+void Rast3d_get_value(RASTER3D_Map * map, int x, int y, int z, void *value, int type)
 {
     /* get the resampled value */
     map->resampleFun(map, x, y, z, value, type);
@@ -31,7 +31,7 @@ void Rast3d_getValue(RASTER3D_Map * map, int x, int y, int z, void *value, int t
  * \brief 
  *
  * Is equivalent to
- * <tt>Rast3d_getValue (map, x, y, z, &value, FCELL_TYPE);</tt> return value.
+ * <tt>Rast3d_get_value (map, x, y, z, &value, FCELL_TYPE);</tt> return value.
  *
  *  \param map
  *  \param x
@@ -40,11 +40,11 @@ void Rast3d_getValue(RASTER3D_Map * map, int x, int y, int z, void *value, int t
  *  \return float
  */
 
-float Rast3d_getFloat(RASTER3D_Map * map, int x, int y, int z)
+float Rast3d_get_float(RASTER3D_Map * map, int x, int y, int z)
 {
     float value;
 
-    Rast3d_getValue(map, x, y, z, &value, FCELL_TYPE);
+    Rast3d_get_value(map, x, y, z, &value, FCELL_TYPE);
     return value;
 }
 
@@ -54,7 +54,7 @@ float Rast3d_getFloat(RASTER3D_Map * map, int x, int y, int z)
  * \brief 
  *
  * Is equivalent
- * to <tt>Rast3d_getValue (map, x, y, z, &value, DCELL_TYPE);</tt> return value.
+ * to <tt>Rast3d_get_value (map, x, y, z, &value, DCELL_TYPE);</tt> return value.
  *
  *  \param map
  *  \param x
@@ -63,11 +63,11 @@ float Rast3d_getFloat(RASTER3D_Map * map, int x, int y, int z)
  *  \return double
  */
 
-double Rast3d_getDouble(RASTER3D_Map * map, int x, int y, int z)
+double Rast3d_get_double(RASTER3D_Map * map, int x, int y, int z)
 {
     double value;
 
-    Rast3d_getValue(map, x, y, z, &value, DCELL_TYPE);
+    Rast3d_get_value(map, x, y, z, &value, DCELL_TYPE);
     return value;
 }
 
@@ -91,7 +91,7 @@ double Rast3d_getDouble(RASTER3D_Map * map, int x, int y, int z)
  */
 
 void
-Rast3d_getWindowValue(RASTER3D_Map * map, double north, double east, double top,
+Rast3d_get_window_value(RASTER3D_Map * map, double north, double east, double top,
 		   void *value, int type)
 {
     int col, row, depth;
@@ -102,7 +102,7 @@ Rast3d_getWindowValue(RASTER3D_Map * map, double north, double east, double top,
     if ((row < 0) || (row >= map->window.rows) ||
 	(col < 0) || (col >= map->window.cols) ||
 	(depth < 0) || (depth >= map->window.depths)) {
-	Rast3d_setNullValue(value, 1, type);
+	Rast3d_set_null_value(value, 1, type);
 	return;
     }
 
@@ -128,7 +128,7 @@ Rast3d_getWindowValue(RASTER3D_Map * map, double north, double east, double top,
  */
 
 void
-Rast3d_getRegionValue(RASTER3D_Map * map, double north, double east, double top,
+Rast3d_get_region_value(RASTER3D_Map * map, double north, double east, double top,
 		   void *value, int type)
 {
     int row, col, depth;
@@ -139,12 +139,12 @@ Rast3d_getRegionValue(RASTER3D_Map * map, double north, double east, double top,
     if ((row < 0) || (row >= map->region.rows) ||
 	(col < 0) || (col >= map->region.cols) ||
 	(depth < 0) || (depth >= map->region.depths)) {
-	Rast3d_setNullValue(value, 1, type);
+	Rast3d_set_null_value(value, 1, type);
 	return;
     }
 
     /* Get the value from the map in map-region resolution */
-	Rast3d_getValueRegion(map, col, row, depth, value, type);
+	Rast3d_get_value_region(map, col, row, depth, value, type);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -152,7 +152,7 @@ Rast3d_getRegionValue(RASTER3D_Map * map, double north, double east, double top,
 /*!
  * \brief 
  *
- * Is equivalent to <tt>Rast3d_getValueRegion (map, x, y, z, &value, FCELL_TYPE);</tt>
+ * Is equivalent to <tt>Rast3d_get_value_region (map, x, y, z, &value, FCELL_TYPE);</tt>
  * return value.
  *
  *  \param map
@@ -162,19 +162,19 @@ Rast3d_getRegionValue(RASTER3D_Map * map, double north, double east, double top,
  *  \return float
  */
 
-float Rast3d_getFloatRegion(RASTER3D_Map * map, int x, int y, int z)
+float Rast3d_get_float_region(RASTER3D_Map * map, int x, int y, int z)
 {
     int tileIndex, offs;
     float *tile;
 
     if (map->typeIntern == DCELL_TYPE)
-	return (float)Rast3d_getDoubleRegion(map, x, y, z);
+	return (float)Rast3d_get_double_region(map, x, y, z);
 
-    Rast3d_coord2tileIndex(map, x, y, z, &tileIndex, &offs);
-    tile = (float *)Rast3d_getTilePtr(map, tileIndex);
+    Rast3d_coord2tile_index(map, x, y, z, &tileIndex, &offs);
+    tile = (float *)Rast3d_get_tile_ptr(map, tileIndex);
 
     if (tile == NULL)
-	Rast3d_fatalError("Rast3d_getFloatRegion: error in Rast3d_getTilePtr");
+	Rast3d_fatal_error("Rast3d_get_float_region: error in Rast3d_get_tile_ptr");
 
     return tile[offs];
 }
@@ -185,7 +185,7 @@ float Rast3d_getFloatRegion(RASTER3D_Map * map, int x, int y, int z)
 /*!
  * \brief 
  *
- * Is equivalent to <tt>Rast3d_getValueRegion (map, x, y, z, &value,
+ * Is equivalent to <tt>Rast3d_get_value_region (map, x, y, z, &value,
  * DCELL_TYPE);</tt> return value.
  *
  *  \param map
@@ -195,19 +195,19 @@ float Rast3d_getFloatRegion(RASTER3D_Map * map, int x, int y, int z)
  *  \return double
  */
 
-double Rast3d_getDoubleRegion(RASTER3D_Map * map, int x, int y, int z)
+double Rast3d_get_double_region(RASTER3D_Map * map, int x, int y, int z)
 {
     int tileIndex, offs;
     double *tile;
 
     if (map->typeIntern == FCELL_TYPE)
-	return (double)Rast3d_getFloatRegion(map, x, y, z);
+	return (double)Rast3d_get_float_region(map, x, y, z);
 
-    Rast3d_coord2tileIndex(map, x, y, z, &tileIndex, &offs);
-    tile = (double *)Rast3d_getTilePtr(map, tileIndex);
+    Rast3d_coord2tile_index(map, x, y, z, &tileIndex, &offs);
+    tile = (double *)Rast3d_get_tile_ptr(map, tileIndex);
 
     if (tile == NULL)
-	Rast3d_fatalError("Rast3d_getDoubleRegion: error in Rast3d_getTilePtr");
+	Rast3d_fatal_error("Rast3d_get_double_region: error in Rast3d_get_tile_ptr");
 
     return tile[offs];
 }
@@ -234,12 +234,12 @@ double Rast3d_getDoubleRegion(RASTER3D_Map * map, int x, int y, int z)
  */
 
 void
-Rast3d_getValueRegion(RASTER3D_Map * map, int x, int y, int z, void *value, int type)
+Rast3d_get_value_region(RASTER3D_Map * map, int x, int y, int z, void *value, int type)
 {
     if (type == FCELL_TYPE) {
-	*((float *)value) = Rast3d_getFloatRegion(map, x, y, z);
+	*((float *)value) = Rast3d_get_float_region(map, x, y, z);
 	return;
     }
 
-    *((double *)value) = Rast3d_getDoubleRegion(map, x, y, z);
+    *((double *)value) = Rast3d_get_double_region(map, x, y, z);
 }

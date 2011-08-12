@@ -12,7 +12,7 @@
 
 /*---------------------------------------------------------------------------*/
 
-int Rast3d_g3dType2cellType(int g3dType)
+int Rast3d_g3d_type2cell_type(int g3dType)
 {
     if (g3dType == FCELL_TYPE)
 	return FCELL_TYPE;
@@ -22,7 +22,7 @@ int Rast3d_g3dType2cellType(int g3dType)
 /*---------------------------------------------------------------------------*/
 
 void
-Rast3d_copyFloat2Double(const float *src, int offsSrc, double *dst, int offsDst,
+Rast3d_copy_float2Double(const float *src, int offsSrc, double *dst, int offsDst,
 		     int nElts)
 {
     int i;
@@ -37,7 +37,7 @@ Rast3d_copyFloat2Double(const float *src, int offsSrc, double *dst, int offsDst,
 /*---------------------------------------------------------------------------*/
 
 void
-Rast3d_copyDouble2Float(const double *src, int offsSrc, float *dst, int offsDst,
+Rast3d_copy_double2Float(const double *src, int offsSrc, float *dst, int offsDst,
 		     int nElts)
 {
     int i;
@@ -52,18 +52,18 @@ Rast3d_copyDouble2Float(const double *src, int offsSrc, float *dst, int offsDst,
 /*---------------------------------------------------------------------------*/
 
 void
-Rast3d_copyValues(const void *src, int offsSrc, int typeSrc, void *dst,
+Rast3d_copy_values(const void *src, int offsSrc, int typeSrc, void *dst,
 	       int offsDst, int typeDst, int nElts)
 {
     int eltLength;
 
     if ((typeSrc == FCELL_TYPE) && (typeDst == DCELL_TYPE)) {
-	Rast3d_copyFloat2Double(src, offsSrc, dst, offsDst, nElts);
+	Rast3d_copy_float2Double(src, offsSrc, dst, offsDst, nElts);
 	return;
     }
 
     if ((typeSrc == DCELL_TYPE) && (typeDst == FCELL_TYPE)) {
-	Rast3d_copyDouble2Float(src, offsSrc, dst, offsDst, nElts);
+	Rast3d_copy_double2Float(src, offsSrc, dst, offsDst, nElts);
 	return;
     }
 
@@ -80,7 +80,7 @@ Rast3d_copyValues(const void *src, int offsSrc, int typeSrc, void *dst,
 int Rast3d_length(int t)
 {
     if (!RASTER3D_IS_CORRECT_TYPE(t))
-	Rast3d_fatalError("Rast3d_length: invalid type");
+	Rast3d_fatal_error("Rast3d_length: invalid type");
 
     if (t == FCELL_TYPE)
 	return sizeof(FCELL);
@@ -89,10 +89,10 @@ int Rast3d_length(int t)
     return 0;
 }
 
-int Rast3d_externLength(int t)
+int Rast3d_extern_length(int t)
 {
     if (!RASTER3D_IS_CORRECT_TYPE(t))
-	Rast3d_fatalError("Rast3d_externLength: invalid type");
+	Rast3d_fatal_error("Rast3d_extern_length: invalid type");
 
     if (t == FCELL_TYPE)
 	return RASTER3D_XDR_FLOAT_LENGTH;

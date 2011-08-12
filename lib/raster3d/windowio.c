@@ -20,12 +20,12 @@ Rast3d_readWriteWindow(struct Key_Value *windowKeys, int doRead, int *proj,
     int (*windowInt) (), (*windowDouble) ();
 
     if (doRead) {
-	windowDouble = Rast3d_keyGetDouble;
-	windowInt = Rast3d_keyGetInt;
+	windowDouble = Rast3d_key_get_double;
+	windowInt = Rast3d_key_get_int;
     }
     else {
-	windowDouble = Rast3d_keySetDouble;
-	windowInt = Rast3d_keySetInt;
+	windowDouble = Rast3d_key_set_double;
+	windowInt = Rast3d_key_set_int;
     }
 
     returnVal = 1;
@@ -136,7 +136,7 @@ static void Rast3d_getFullWindowPath(char *path, const char *windowName)
  *          0 ... otherwise.
  */
 
-int Rast3d_readWindow(RASTER3D_Region * window, const char *windowName)
+int Rast3d_read_window(RASTER3D_Region * window, const char *windowName)
 {
     struct Cell_head win;
     struct Key_Value *windowKeys;
@@ -165,7 +165,7 @@ int Rast3d_readWindow(RASTER3D_Region * window, const char *windowName)
 	Rast3d_getFullWindowPath(path, windowName);
 
 	if (access(path, R_OK) != 0) {
-	    G_warning("Rast3d_readWindow: unable to find [%s].", path);
+	    G_warning("Rast3d_read_window: unable to find [%s].", path);
 	    return 0;
 	}
 
@@ -180,7 +180,7 @@ int Rast3d_readWindow(RASTER3D_Region * window, const char *windowName)
 				 &(window->depths), &(window->ew_res),
 				 &(window->ns_res), &(window->tb_res))) {
 	    Rast3d_error
-		("Rast3d_readWindow: error extracting window key(s) of file %s",
+		("Rast3d_read_window: error extracting window key(s) of file %s",
 		 path);
 	    return 0;
 	}
@@ -273,7 +273,7 @@ int Rast3d_readWindow(RASTER3D_Region * window, const char *windowName)
  *  \return void
  */
 
-void Rast3d_useWindowParams(void)
+void Rast3d_use_window_params(void)
 {
-    Rast3d_setWindowParams();
+    Rast3d_set_window_params();
 }

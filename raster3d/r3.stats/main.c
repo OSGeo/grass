@@ -591,10 +591,10 @@ int main(int argc, char *argv[])
 
 
     /*Set the defaults */
-    Rast3d_initDefaults();
+    Rast3d_init_defaults();
 
     /*get the current region */
-    Rast3d_getWindow(&region);
+    Rast3d_get_window(&region);
 
     cols = region.cols;
     rows = region.rows;
@@ -609,16 +609,16 @@ int main(int argc, char *argv[])
     infile = inputfile->answer;
 
     if (NULL == G_find_grid3(infile, ""))
-	Rast3d_fatalError(_("3D raster map <%s> not found"), infile);
+	Rast3d_fatal_error(_("3D raster map <%s> not found"), infile);
 
     map =
-	Rast3d_openCellOld(infile, G_find_grid3(infile, ""), &region,
+	Rast3d_open_cell_old(infile, G_find_grid3(infile, ""), &region,
 			RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
     if (map == NULL)
-	Rast3d_fatalError(_("Unable to open 3D raster map <%s>"), infile);
+	Rast3d_fatal_error(_("Unable to open 3D raster map <%s>"), infile);
 
-    map_type = Rast3d_tileTypeMap(map);
+    map_type = Rast3d_tile_type_map(map);
 
     /* calculate statistics for groups of equal values */
     if ((equal->answer)) {
@@ -631,8 +631,8 @@ int main(int argc, char *argv[])
 	    for (y = 0; y < rows; y++) {
 		for (x = 0; x < cols; x++) {
 		    if (map_type == FCELL_TYPE) {
-			Rast3d_getValue(map, x, y, z, &val_f, map_type);
-			if (!Rast3d_isNullValueNum(&val_f, map_type)) {
+			Rast3d_get_value(map, x, y, z, &val_f, map_type);
+			if (!Rast3d_is_null_value_num(&val_f, map_type)) {
 			    /*the first entry */
 			    if (eqvals == NULL)
 				eqvals =
@@ -645,8 +645,8 @@ int main(int argc, char *argv[])
 			}
 		    }
 		    else if (map_type == DCELL_TYPE) {
-			Rast3d_getValue(map, x, y, z, &val_d, map_type);
-			if (!Rast3d_isNullValueNum(&val_d, map_type)) {
+			Rast3d_get_value(map, x, y, z, &val_d, map_type);
+			if (!Rast3d_is_null_value_num(&val_d, map_type)) {
 			    /*the first entry */
 			    if (eqvals == NULL)
 				eqvals =
@@ -690,15 +690,15 @@ int main(int argc, char *argv[])
 	    for (y = 0; y < rows; y++) {
 		for (x = 0; x < cols; x++) {
 		    if (map_type == FCELL_TYPE) {
-			Rast3d_getValue(map, x, y, z, &val_f, map_type);
-			if (!Rast3d_isNullValueNum(&val_f, map_type)) {
+			Rast3d_get_value(map, x, y, z, &val_f, map_type);
+			if (!Rast3d_is_null_value_num(&val_f, map_type)) {
 			    check_range_value(stats, (double)val_f);
 			    n++;
 			}
 		    }
 		    else if (map_type == DCELL_TYPE) {
-			Rast3d_getValue(map, x, y, z, &val_d, map_type);
-			if (!Rast3d_isNullValueNum(&val_d, map_type)) {
+			Rast3d_get_value(map, x, y, z, &val_d, map_type);
+			if (!Rast3d_is_null_value_num(&val_d, map_type)) {
 			    check_range_value(stats, val_d);
 			    n++;
 			}

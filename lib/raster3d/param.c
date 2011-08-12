@@ -38,7 +38,7 @@ static Rast3d_paramType *param;
  *  \return void
  */
 
-void Rast3d_setStandard3dInputParams()
+void Rast3d_set_standard3d_input_params()
 {
     param = Rast3d_malloc(sizeof(Rast3d_paramType));
 
@@ -53,7 +53,7 @@ void Rast3d_setStandard3dInputParams()
 
 /*----------------------------------------------------------------------------*/
 
-int Rast3d_getStandard3dParams(int *useTypeDefault, int *type,
+int Rast3d_get_standard3d_params(int *useTypeDefault, int *type,
 			    int *useLzwDefault, int *doLzw,
 			    int *useRleDefault, int *doRle,
 			    int *usePrecisionDefault, int *precision,
@@ -65,25 +65,25 @@ int Rast3d_getStandard3dParams(int *useTypeDefault, int *type,
     *useTypeDefault = *useLzwDefault = *useRleDefault = 0;
     *usePrecisionDefault = *useDimensionDefault = 0;
 
-    Rast3d_initDefaults();
+    Rast3d_init_defaults();
 
     if (strcmp(param->type->answer, "double") == 0)
 	*type = DCELL_TYPE;
     else if (strcmp(param->type->answer, "float") == 0)
 	*type = FCELL_TYPE;
     else {
-	*type = Rast3d_getFileType();
+	*type = Rast3d_get_file_type();
 	*useTypeDefault = 1;
     }
 
-    Rast3d_getCompressionMode(&doCompress, doLzw, doRle, precision);
+    Rast3d_get_compression_mode(&doCompress, doLzw, doRle, precision);
 
     if (strcmp(param->precision->answer, "default") != 0) {
 	if (strcmp(param->precision->answer, "max") == 0)
 	    *precision = -1;
 	else if ((sscanf(param->precision->answer, "%d", precision) != 1) ||
 		 (*precision < 0)) {
-	    Rast3d_error(_("Rast3d_getStandard3dParams: precision value invalid"));
+	    Rast3d_error(_("Rast3d_get_standard3d_params: precision value invalid"));
 	    return 0;
 	}
     }
@@ -112,11 +112,11 @@ int Rast3d_getStandard3dParams(int *useTypeDefault, int *type,
     else
 	*useLzwDefault = *useRleDefault = 1;
 
-    Rast3d_getTileDimension(tileX, tileY, tileZ);
+    Rast3d_get_tile_dimension(tileX, tileY, tileZ);
     if (strcmp(param->dimension->answer, "default") != 0) {
 	if (sscanf(param->dimension->answer, "%dx%dx%d",
 		   tileX, tileY, tileZ) != 3) {
-	    Rast3d_error(_("Rast3d_getStandard3dParams: tile dimension value invalid"));
+	    Rast3d_error(_("Rast3d_get_standard3d_params: tile dimension value invalid"));
 	    return 0;
 	}
     }
@@ -132,7 +132,7 @@ int Rast3d_getStandard3dParams(int *useTypeDefault, int *type,
 
 static struct Option *windowParam = NULL;
 
-void Rast3d_setWindowParams(void)
+void Rast3d_set_window_params(void)
 {
     windowParam = G_define_option();
     windowParam->key = "region3";
@@ -145,7 +145,7 @@ void Rast3d_setWindowParams(void)
 
 /*----------------------------------------------------------------------------*/
 
-char *Rast3d_getWindowParams(void)
+char *Rast3d_get_window_params(void)
 {
     if (windowParam == NULL)
 	return NULL;

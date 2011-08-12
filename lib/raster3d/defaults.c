@@ -17,7 +17,7 @@
 #define RASTER3D_TILE_X_DEFAULT 16
 #define RASTER3D_TILE_Y_DEFAULT 16
 #define RASTER3D_TILE_Z_DEFAULT 8
-#define RASTER3D_ERROR_FUN_DEFAULT Rast3d_skipError
+#define RASTER3D_ERROR_FUN_DEFAULT Rast3d_skip_error
 #define RASTER3D_UNIT_DEFAULT "none"
 
 /*---------------------------------------------------------------------------*/
@@ -82,10 +82,10 @@ char *g3d_unit_default = NULL;
  */
 
 void
-Rast3d_setCompressionMode(int doCompress, int doLzw, int doRle, int precision)
+Rast3d_set_compression_mode(int doCompress, int doLzw, int doRle, int precision)
 {
     if ((doCompress != RASTER3D_NO_COMPRESSION) && (doCompress != RASTER3D_COMPRESSION))
-	Rast3d_fatalError("Rast3d_setCompressionMode: wrong value for doCompress.");
+	Rast3d_fatal_error("Rast3d_set_compression_mode: wrong value for doCompress.");
 
     g3d_do_compression = doCompress;
 
@@ -93,13 +93,13 @@ Rast3d_setCompressionMode(int doCompress, int doLzw, int doRle, int precision)
 	return;
 
     if ((doLzw != RASTER3D_NO_LZW) && (doLzw != RASTER3D_USE_LZW))
-	Rast3d_fatalError("Rast3d_setCompressionMode: wrong value for doLzw.");
+	Rast3d_fatal_error("Rast3d_set_compression_mode: wrong value for doLzw.");
 
     if ((doRle != RASTER3D_NO_RLE) && (doRle != RASTER3D_USE_RLE))
-	Rast3d_fatalError("Rast3d_setCompressionMode: wrong value for doRle.");
+	Rast3d_fatal_error("Rast3d_set_compression_mode: wrong value for doRle.");
 
     if (precision < -1)
-	Rast3d_fatalError("Rast3d_setCompressionMode: wrong value for precision.");
+	Rast3d_fatal_error("Rast3d_set_compression_mode: wrong value for precision.");
 
     g3d_do_lzw_compression = doLzw;
     g3d_do_rle_compression = doRle;
@@ -122,7 +122,7 @@ Rast3d_setCompressionMode(int doCompress, int doLzw, int doRle, int precision)
  */
 
 void
-Rast3d_getCompressionMode(int *doCompress, int *doLzw, int *doRle,
+Rast3d_get_compression_mode(int *doCompress, int *doLzw, int *doRle,
 		       int *precision)
 {
     if (doCompress != NULL)
@@ -147,10 +147,10 @@ Rast3d_getCompressionMode(int *doCompress, int *doLzw, int *doRle,
  *  \return void
  */
 
-void Rast3d_setCacheSize(int nTiles)
+void Rast3d_set_cache_size(int nTiles)
 {
     if (nTiles < 0)
-	Rast3d_fatalError("Rast3d_setCacheSize: size out of range.");
+	Rast3d_fatal_error("Rast3d_set_cache_size: size out of range.");
 
     g3d_cache_default = nTiles;
 }
@@ -166,7 +166,7 @@ void Rast3d_setCacheSize(int nTiles)
  *  \return int
  */
 
-int Rast3d_getCacheSize()
+int Rast3d_get_cache_size()
 {
     return g3d_cache_default;
 }
@@ -183,10 +183,10 @@ int Rast3d_getCacheSize()
  *  \return void
  */
 
-void Rast3d_setCacheLimit(int nBytes)
+void Rast3d_set_cache_limit(int nBytes)
 {
     if (nBytes <= 0)
-	Rast3d_fatalError("Rast3d_setCacheLimit: size out of range.");
+	Rast3d_fatal_error("Rast3d_set_cache_limit: size out of range.");
 
     g3d_cache_max = nBytes;
 }
@@ -203,7 +203,7 @@ void Rast3d_setCacheLimit(int nBytes)
  *  \return int
  */
 
-int Rast3d_getCacheLimit()
+int Rast3d_get_cache_limit()
 {
     return g3d_cache_max;
 }
@@ -220,10 +220,10 @@ int Rast3d_getCacheLimit()
  *  \return void
  */
 
-void Rast3d_setFileType(int type)
+void Rast3d_set_file_type(int type)
 {
     if ((type != FCELL_TYPE) && (type != DCELL_TYPE))
-	Rast3d_fatalError("Rast3d_setFileTypeDefault: invalid type");
+	Rast3d_fatal_error("Rast3d_setFileTypeDefault: invalid type");
 
     g3d_file_type = type;
 }
@@ -240,7 +240,7 @@ void Rast3d_setFileType(int type)
  *  \return int
  */
 
-int Rast3d_getFileType()
+int Rast3d_get_file_type()
 {
     return g3d_file_type;
 }
@@ -259,19 +259,19 @@ int Rast3d_getFileType()
  *  \return void
  */
 
-void Rast3d_setTileDimension(int tileX, int tileY, int tileZ)
+void Rast3d_set_tile_dimension(int tileX, int tileY, int tileZ)
 {
     if ((g3d_tile_dimension[0] = tileX) <= 0)
-	Rast3d_fatalError
-	    ("Rast3d_setTileDimension: value for tile x environment variable out of range");
+	Rast3d_fatal_error
+	    ("Rast3d_set_tile_dimension: value for tile x environment variable out of range");
 
     if ((g3d_tile_dimension[1] = tileY) <= 0)
-	Rast3d_fatalError
-	    ("Rast3d_setTileDimension: value for tile y environment variable out of range");
+	Rast3d_fatal_error
+	    ("Rast3d_set_tile_dimension: value for tile y environment variable out of range");
 
     if ((g3d_tile_dimension[2] = tileZ) <= 0)
-	Rast3d_fatalError
-	    ("Rast3d_setTileDimension: value for tile z environment variable out of range");
+	Rast3d_fatal_error
+	    ("Rast3d_set_tile_dimension: value for tile z environment variable out of range");
 }
 
 /*---------------------------------------------------------------------------*/
@@ -288,7 +288,7 @@ void Rast3d_setTileDimension(int tileX, int tileY, int tileZ)
  *  \return void
  */
 
-void Rast3d_getTileDimension(int *tileX, int *tileY, int *tileZ)
+void Rast3d_get_tile_dimension(int *tileX, int *tileY, int *tileZ)
 {
     *tileX = g3d_tile_dimension[0];
     *tileY = g3d_tile_dimension[1];
@@ -307,7 +307,7 @@ void Rast3d_getTileDimension(int *tileX, int *tileY, int *tileZ)
  *  \return void
  */
 
-void Rast3d_setErrorFun(void (*fun) (const char *))
+void Rast3d_set_error_fun(void (*fun) (const char *))
 {
     g3d_error_fun = fun;
 }
@@ -324,7 +324,7 @@ void Rast3d_setErrorFun(void (*fun) (const char *))
  *  \return void
  */
 
-void Rast3d_setUnit(const char *unit)
+void Rast3d_set_unit(const char *unit)
 {
     Rast3d_free(g3d_unit_default);
     g3d_unit_default = G_store(unit);
@@ -344,7 +344,7 @@ void Rast3d_setUnit(const char *unit)
  *  \return void
  */
 
-void Rast3d_initDefaults(void)
+void Rast3d_init_defaults(void)
 {
     static int firstTime = 1;
     const char *value, *windowName;
@@ -407,13 +407,13 @@ void Rast3d_initDefaults(void)
 	    }
 	    else {
 		if (sscanf(value, "%d", &g3d_precision) != 1) {
-		    Rast3d_fatalError
-			("Rast3d_initDefaults: precision environment variable has invalid value");
+		    Rast3d_fatal_error
+			("Rast3d_init_defaults: precision environment variable has invalid value");
 		}
 		else {
 		    if (g3d_precision < -1) {
-			Rast3d_fatalError
-			    ("Rast3d_initDefaults: value for cache environment variable out of range");
+			Rast3d_fatal_error
+			    ("Rast3d_init_defaults: value for cache environment variable out of range");
 		    }
 		}
 	    }
@@ -442,12 +442,12 @@ void Rast3d_initDefaults(void)
 	}
 	else {
 	    if (sscanf(value, "%d", &g3d_cache_default) != 1) {
-		Rast3d_fatalError
-		    ("Rast3d_initDefaults: cache environment variable has invalid value");
+		Rast3d_fatal_error
+		    ("Rast3d_init_defaults: cache environment variable has invalid value");
 	    }
 	    if (g3d_cache_default < 0) {
-		Rast3d_fatalError
-		    ("Rast3d_initDefaults: value for cache environment variable out of range");
+		Rast3d_fatal_error
+		    ("Rast3d_init_defaults: value for cache environment variable out of range");
 	    }
 	}
     }
@@ -460,12 +460,12 @@ void Rast3d_initDefaults(void)
 	}
 	else {
 	    if (sscanf(value, "%d", &g3d_cache_max) != 1) {
-		Rast3d_fatalError
-		    ("Rast3d_initDefaults: cache environment variable has invalid value");
+		Rast3d_fatal_error
+		    ("Rast3d_init_defaults: cache environment variable has invalid value");
 	    }
 	    if (g3d_cache_max < 0) {
-		Rast3d_fatalError
-		    ("Rast3d_initDefaults: value for cache environment variable out of range");
+		Rast3d_fatal_error
+		    ("Rast3d_init_defaults: value for cache environment variable out of range");
 	    }
 	}
     }
@@ -478,12 +478,12 @@ void Rast3d_initDefaults(void)
 	}
 	else {
 	    if (sscanf(value, "%d", g3d_tile_dimension) != 1) {
-		Rast3d_fatalError
-		    ("Rast3d_initDefaults: tile dimension x environment variable has invalid value");
+		Rast3d_fatal_error
+		    ("Rast3d_init_defaults: tile dimension x environment variable has invalid value");
 	    }
 	    if (g3d_tile_dimension[0] <= 0) {
-		Rast3d_fatalError
-		    ("Rast3d_initDefaults: value for tile x environment variable out of range");
+		Rast3d_fatal_error
+		    ("Rast3d_init_defaults: value for tile x environment variable out of range");
 	    }
 	}
 
@@ -494,12 +494,12 @@ void Rast3d_initDefaults(void)
 	}
 	else {
 	    if (sscanf(value, "%d", g3d_tile_dimension + 1) != 1) {
-		Rast3d_fatalError
-		    ("Rast3d_initDefaults: tile dimension y environment variable has invalid value");
+		Rast3d_fatal_error
+		    ("Rast3d_init_defaults: tile dimension y environment variable has invalid value");
 	    }
 	    if (g3d_tile_dimension[1] <= 0) {
-		Rast3d_fatalError
-		    ("Rast3d_initDefaults: value for tile y environment variable out of range");
+		Rast3d_fatal_error
+		    ("Rast3d_init_defaults: value for tile y environment variable out of range");
 	    }
 	}
 
@@ -510,12 +510,12 @@ void Rast3d_initDefaults(void)
 	}
 	else {
 	    if (sscanf(value, "%d", g3d_tile_dimension + 2) != 1) {
-		Rast3d_fatalError
-		    ("Rast3d_initDefaults: tile dimension z environment variable has invalid value");
+		Rast3d_fatal_error
+		    ("Rast3d_init_defaults: tile dimension z environment variable has invalid value");
 	    }
 	    if (g3d_tile_dimension[2] <= 0) {
-		Rast3d_fatalError
-		    ("Rast3d_initDefaults: value for tile z environment variable out of range");
+		Rast3d_fatal_error
+		    ("Rast3d_init_defaults: value for tile z environment variable out of range");
 	    }
 	}
     }
@@ -524,13 +524,13 @@ void Rast3d_initDefaults(void)
 	value = getenv(RASTER3D_FATAL_ERROR_ENV_VAR);
 
 	if (value != NULL) {
-	    g3d_error_fun = Rast3d_fatalError_noargs;
+	    g3d_error_fun = Rast3d_fatal_error_noargs;
 	}
 	else {
 	    value = getenv(RASTER3D_PRINT_ERROR_ENV_VAR);
 
 	    if (value != NULL) {
-		g3d_error_fun = Rast3d_printError;
+		g3d_error_fun = Rast3d_print_error;
 	    }
 	    else {
 		g3d_error_fun = RASTER3D_ERROR_FUN_DEFAULT;
@@ -541,7 +541,7 @@ void Rast3d_initDefaults(void)
     if (g3d_unit_default == NULL)
 	g3d_unit_default = G_store(RASTER3D_UNIT_DEFAULT);
 
-    windowName = Rast3d_getWindowParams();
+    windowName = Rast3d_get_window_params();
     if (windowName == NULL) {
 	value = getenv(RASTER3D_DEFAULT_WINDOW3D);
 	if (value != NULL)
@@ -549,8 +549,8 @@ void Rast3d_initDefaults(void)
 		windowName = value;
     }
 
-    if (!Rast3d_readWindow(&window, windowName))
-	Rast3d_fatalError("Rast3d_initDefaults: Error reading window");
-    Rast3d_setWindow(&window);
+    if (!Rast3d_read_window(&window, windowName))
+	Rast3d_fatal_error("Rast3d_init_defaults: Error reading window");
+    Rast3d_set_window(&window);
 
 }

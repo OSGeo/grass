@@ -14,7 +14,7 @@
 /*---------------------------------------------------------------------------*/
 
 void
-Rast3d_range_updateFromTile(RASTER3D_Map * map, const void *tile, int rows, int cols,
+Rast3d_range_update_from_tile(RASTER3D_Map * map, const void *tile, int rows, int cols,
 			 int depths, int xRedundant, int yRedundant,
 			 int zRedundant, int nofNum, int type)
 {
@@ -22,7 +22,7 @@ Rast3d_range_updateFromTile(RASTER3D_Map * map, const void *tile, int rows, int 
     struct FPRange *range;
 
     range = &(map->range);
-    cellType = Rast3d_g3dType2cellType(type);
+    cellType = Rast3d_g3d_type2cell_type(type);
 
     if (nofNum == map->tileSize) {
 	Rast_row_update_fp_range(tile, map->tileSize, range, cellType);
@@ -58,7 +58,7 @@ Rast3d_range_updateFromTile(RASTER3D_Map * map, const void *tile, int rows, int 
 /*---------------------------------------------------------------------------*/
 
 int
-Rast3d_readRange(const char *name, const char *mapset, struct FPRange *drange)
+Rast3d_read_range(const char *name, const char *mapset, struct FPRange *drange)
  /* adapted from Rast_read_fp_range */
 {
     int fd;
@@ -115,7 +115,7 @@ int Rast3d_range_load(RASTER3D_Map * map)
 {
     if (map->operation == RASTER3D_WRITE_DATA)
 	return 1;
-    if (Rast3d_readRange(map->fileName, map->mapset, &(map->range)) == -1) {
+    if (Rast3d_read_range(map->fileName, map->mapset, &(map->range)) == -1) {
 	return 0;
     }
 

@@ -16,7 +16,7 @@
  *  \return void
  */
 
-void Rast3d_writeAscii(void *map, const char *fname)
+void Rast3d_write_ascii(void *map, const char *fname)
 {
     FILE *fp;
     DCELL d1 = 0;
@@ -25,8 +25,8 @@ void Rast3d_writeAscii(void *map, const char *fname)
     int x, y, z;
     int rows, cols, depths, typeIntern;
 
-    Rast3d_getCoordsMap(map, &rows, &cols, &depths);
-    typeIntern = Rast3d_tileTypeMap(map);
+    Rast3d_get_coords_map(map, &rows, &cols, &depths);
+    typeIntern = Rast3d_tile_type_map(map);
 
     d1p = &d1;
     f1p = (FCELL *) &d1;
@@ -34,13 +34,13 @@ void Rast3d_writeAscii(void *map, const char *fname)
     if (fname == NULL)
         fp = stdout;
     else if ((fp = fopen(fname, "w")) == NULL)
-        Rast3d_fatalError("Rast3d_writeAscii: can't open file to write\n");
+        Rast3d_fatal_error("Rast3d_write_ascii: can't open file to write\n");
 
     for (z = 0; z < depths; z++) {
         for (y = 0; y < rows; y++) {
             fprintf(fp, "z y x %d %d (%d - %d)\n", z, y, 0, cols - 1);
             for (x = 0; x < cols; x++) {
-                Rast3d_getValueRegion(map, x, y, z, d1p, typeIntern);
+                Rast3d_get_value_region(map, x, y, z, d1p, typeIntern);
 
                 if (typeIntern == FCELL_TYPE)
                     fprintf(fp, "%.18f ", *f1p);

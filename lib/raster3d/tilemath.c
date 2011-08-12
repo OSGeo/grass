@@ -22,7 +22,7 @@
  */
 
 void
-Rast3d_tileIndex2tile(RASTER3D_Map * map, int tileIndex, int *xTile, int *yTile,
+Rast3d_tile_index2tile(RASTER3D_Map * map, int tileIndex, int *xTile, int *yTile,
 		   int *zTile)
 {
     int tileIndex2d;
@@ -49,7 +49,7 @@ Rast3d_tileIndex2tile(RASTER3D_Map * map, int tileIndex, int *xTile, int *yTile,
  *  \return int
  */
 
-int Rast3d_tile2tileIndex(RASTER3D_Map * map, int xTile, int yTile, int zTile)
+int Rast3d_tile2tile_index(RASTER3D_Map * map, int xTile, int yTile, int zTile)
 {
     return map->nxy * zTile + map->nx * yTile + xTile;
 }
@@ -75,7 +75,7 @@ int Rast3d_tile2tileIndex(RASTER3D_Map * map, int xTile, int yTile, int zTile)
  */
 
 void
-Rast3d_tileCoordOrigin(RASTER3D_Map * map, int xTile, int yTile, int zTile, int *x,
+Rast3d_tile_coord_origin(RASTER3D_Map * map, int xTile, int yTile, int zTile, int *x,
 		    int *y, int *z)
 {
     *x = map->tileX * xTile;
@@ -100,12 +100,12 @@ Rast3d_tileCoordOrigin(RASTER3D_Map * map, int xTile, int yTile, int zTile, int 
  *  \return void
  */
 
-void Rast3d_tileIndexOrigin(RASTER3D_Map * map, int tileIndex, int *x, int *y, int *z)
+void Rast3d_tile_index_origin(RASTER3D_Map * map, int tileIndex, int *x, int *y, int *z)
 {
     int xTile, yTile, zTile;
 
-    Rast3d_tileIndex2tile(map, tileIndex, &xTile, &yTile, &zTile);
-    Rast3d_tileCoordOrigin(map, xTile, yTile, zTile, x, y, z);
+    Rast3d_tile_index2tile(map, tileIndex, &xTile, &yTile, &zTile);
+    Rast3d_tile_coord_origin(map, xTile, yTile, zTile, x, y, z);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -133,7 +133,7 @@ void Rast3d_tileIndexOrigin(RASTER3D_Map * map, int tileIndex, int *x, int *y, i
  */
 
 void
-Rast3d_coord2tileCoord(RASTER3D_Map * map, int x, int y, int z, int *xTile,
+Rast3d_coord2tile_coord(RASTER3D_Map * map, int x, int y, int z, int *xTile,
 		    int *yTile, int *zTile, int *xOffs, int *yOffs,
 		    int *zOffs)
 {
@@ -164,14 +164,14 @@ Rast3d_coord2tileCoord(RASTER3D_Map * map, int x, int y, int z, int *xTile,
  */
 
 void
-Rast3d_coord2tileIndex(RASTER3D_Map * map, int x, int y, int z, int *tileIndex,
+Rast3d_coord2tile_index(RASTER3D_Map * map, int x, int y, int z, int *tileIndex,
 		    int *offset)
 {
     int xTile, yTile, zTile, xOffs, yOffs, zOffs;
 
-    Rast3d_coord2tileCoord(map, x, y, z,
+    Rast3d_coord2tile_coord(map, x, y, z,
 			&xTile, &yTile, &zTile, &xOffs, &yOffs, &zOffs);
-    *tileIndex = Rast3d_tile2tileIndex(map, xTile, yTile, zTile);
+    *tileIndex = Rast3d_tile2tile_index(map, xTile, yTile, zTile);
     *offset = zOffs * map->tileXY + yOffs * map->tileX + xOffs;
 }
 
@@ -192,7 +192,7 @@ Rast3d_coord2tileIndex(RASTER3D_Map * map, int x, int y, int z, int *tileIndex,
  *  \return int
  */
 
-int Rast3d_coordInRange(RASTER3D_Map * map, int x, int y, int z)
+int Rast3d_coord_in_range(RASTER3D_Map * map, int x, int y, int z)
 {
     return (x >= 0) && (x < map->region.cols) && (y >= 0) &&
 	(y < map->region.rows) && (z >= 0) && (z < map->region.depths);
@@ -212,7 +212,7 @@ int Rast3d_coordInRange(RASTER3D_Map * map, int x, int y, int z)
  *  \return int
  */
 
-int Rast3d_tileIndexInRange(RASTER3D_Map * map, int tileIndex)
+int Rast3d_tile_index_in_range(RASTER3D_Map * map, int tileIndex)
 {
     return (tileIndex < map->nTiles) && (tileIndex >= 0);
 }
@@ -234,7 +234,7 @@ int Rast3d_tileIndexInRange(RASTER3D_Map * map, int tileIndex)
  *  \return int
  */
 
-int Rast3d_tileInRange(RASTER3D_Map * map, int x, int y, int z)
+int Rast3d_tile_in_range(RASTER3D_Map * map, int x, int y, int z)
 {
     return (x >= 0) && (x < map->nx) && (y >= 0) && (y < map->ny) &&
 	(z >= 0) && (z < map->nz);
@@ -264,13 +264,13 @@ int Rast3d_tileInRange(RASTER3D_Map * map, int x, int y, int z)
  */
 
 int
-Rast3d_computeClippedTileDimensions(RASTER3D_Map * map, int tileIndex, int *rows,
+Rast3d_compute_clipped_tile_dimensions(RASTER3D_Map * map, int tileIndex, int *rows,
 				 int *cols, int *depths, int *xRedundant,
 				 int *yRedundant, int *zRedundant)
 {
     int x, y, z;
 
-    Rast3d_tileIndex2tile(map, tileIndex, &x, &y, &z);
+    Rast3d_tile_index2tile(map, tileIndex, &x, &y, &z);
 
     if ((x != map->clipX) && (y != map->clipY) && (z != map->clipZ)) {
 	return map->tileSize;
@@ -329,7 +329,7 @@ Rast3d_computeClippedTileDimensions(RASTER3D_Map * map, int tileIndex, int *rows
  */
 
 void
-Rast3d_computeOptimalTileDimension(RASTER3D_Region *region, int type, int *tileX, int *tileY, int *tileZ, int maxSize)
+Rast3d_compute_optimal_tile_dimension(RASTER3D_Region *region, int type, int *tileX, int *tileY, int *tileZ, int maxSize)
 {
    int size = 0;
    int x, y, z;

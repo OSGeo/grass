@@ -90,7 +90,7 @@ N_geom_data *N_init_geom_data_3d(RASTER3D_Region * region3d, N_geom_data * geoda
 
 	/*convert the 3d into a 2d region and begin the area calculation */
 	G_get_set_window(&region2d);	/*this function is not thread safe */
-	Rast3d_regionToCellHead(region3d, &region2d);
+	Rast3d_region_to_cell_head(region3d, &region2d);
     }
 
     return N_init_geom_data_2d(&region2d, geom);

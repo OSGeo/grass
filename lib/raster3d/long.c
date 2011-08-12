@@ -2,7 +2,7 @@
 
 /*---------------------------------------------------------------------------*/
 
-int Rast3d_longEncode(long *source, unsigned char *dst, int nofNums)
+int Rast3d_long_encode(long *source, unsigned char *dst, int nofNums)
 {
     long *src, d;
     int eltLength, nBytes;
@@ -33,7 +33,7 @@ int Rast3d_longEncode(long *source, unsigned char *dst, int nofNums)
 /*---------------------------------------------------------------------------*/
 
 void
-Rast3d_longDecode(unsigned char *source, long *dst, int nofNums, int longNbytes)
+Rast3d_long_decode(unsigned char *source, long *dst, int nofNums, int longNbytes)
 {
     long *dest;
     int eltLength;
@@ -50,7 +50,7 @@ Rast3d_longDecode(unsigned char *source, long *dst, int nofNums, int longNbytes)
     while (source != srcStop) {
 	*dest = *source--;
 	if ((eltLength >= RASTER3D_LONG_LENGTH) && (*dest != 0))
-	    Rast3d_fatalError("Rast3d_longDecode: decoded long too long");
+	    Rast3d_fatal_error("Rast3d_long_decode: decoded long too long");
 	dest--;
     }
 
@@ -62,7 +62,7 @@ Rast3d_longDecode(unsigned char *source, long *dst, int nofNums, int longNbytes)
 	    *dest *= 256;
 	    *dest += *source--;
 	    if ((eltLength >= RASTER3D_LONG_LENGTH) && (*dest != 0))
-		Rast3d_fatalError("Rast3d_longDecode: decoded long too long");
+		Rast3d_fatal_error("Rast3d_long_decode: decoded long too long");
 	    dest--;
 	}
     }

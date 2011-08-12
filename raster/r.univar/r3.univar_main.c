@@ -108,10 +108,10 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
     /* Set the defaults */
-    Rast3d_initDefaults();
+    Rast3d_init_defaults();
 
     /* get the current region */
-    Rast3d_getWindow(&region);
+    Rast3d_get_window(&region);
 
     cols = region.cols;
     rows = region.rows;
@@ -144,18 +144,18 @@ int main(int argc, char *argv[])
     /* open 3D zoning raster with default region */
     if ((zonemap = param.zonefile->answer) != NULL) {
 	if (NULL == (mapset = G_find_grid3(zonemap, "")))
-	    Rast3d_fatalError(_("Requested g3d map <%s> not found"), zonemap);
+	    Rast3d_fatal_error(_("Requested g3d map <%s> not found"), zonemap);
 
 	zmap =
-	    Rast3d_openCellOld(zonemap, G_find_grid3(zonemap, ""), &region,
+	    Rast3d_open_cell_old(zonemap, G_find_grid3(zonemap, ""), &region,
 			    RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
 	if (zmap == NULL)
-	    Rast3d_fatalError(_("Error opening g3d map <%s>"), zonemap);
+	    Rast3d_fatal_error(_("Error opening g3d map <%s>"), zonemap);
 
-	zmap_type = Rast3d_tileTypeMap(zmap);
+	zmap_type = Rast3d_tile_type_map(zmap);
 	
-	if (Rast3d_readCats(zonemap, mapset, &(zone_info.cats)))
+	if (Rast3d_read_cats(zonemap, mapset, &(zone_info.cats)))
 	    G_warning("no category support for zoning raster");
 	    
 	Rast3d_range_init(zmap);
@@ -183,16 +183,16 @@ int main(int argc, char *argv[])
     infile = param.inputfile->answer;
 
     if (NULL == G_find_grid3(infile, ""))
-	Rast3d_fatalError(_("Requested g3d map <%s> not found"), infile);
+	Rast3d_fatal_error(_("Requested g3d map <%s> not found"), infile);
 
     map =
-	Rast3d_openCellOld(infile, G_find_grid3(infile, ""), &region,
+	Rast3d_open_cell_old(infile, G_find_grid3(infile, ""), &region,
 			RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
     if (map == NULL)
-	Rast3d_fatalError(_("Error opening g3d map <%s>"), infile);
+	Rast3d_fatal_error(_("Error opening g3d map <%s>"), infile);
 
-    map_type = Rast3d_tileTypeMap(map);
+    map_type = Rast3d_tile_type_map(map);
 
     i = 0;
     while (param.percentile->answers[i])
@@ -219,8 +219,8 @@ int main(int argc, char *argv[])
 		zone = 0;
 		if (zone_info.n_zones) {
 		    if (zmap_type == FCELL_TYPE) {
-			Rast3d_getValue(zmap, x, y, z, &val_f, FCELL_TYPE);
-			if (Rast3d_isNullValueNum(&val_f, FCELL_TYPE))
+			Rast3d_get_value(zmap, x, y, z, &val_f, FCELL_TYPE);
+			if (Rast3d_is_null_value_num(&val_f, FCELL_TYPE))
 			    continue;
 			if (val_f < 0)
 			    zone = val_f - 0.5;
@@ -228,8 +228,8 @@ int main(int argc, char *argv[])
 			    zone = val_f + 0.5;
 		    }
 		    else if (zmap_type == DCELL_TYPE) {
-			Rast3d_getValue(zmap, x, y, z, &val_d, DCELL_TYPE);
-			if (Rast3d_isNullValueNum(&val_d, DCELL_TYPE))
+			Rast3d_get_value(zmap, x, y, z, &val_d, DCELL_TYPE);
+			if (Rast3d_is_null_value_num(&val_d, DCELL_TYPE))
 			    continue;
 			if (val_d < 0)
 			    zone = val_d - 0.5;
@@ -239,8 +239,8 @@ int main(int argc, char *argv[])
                     zone -= zone_info.min;
                 }
 		if (map_type == FCELL_TYPE) {
-		    Rast3d_getValue(map, x, y, z, &val_f, map_type);
-		    if (!Rast3d_isNullValueNum(&val_f, map_type)) {
+		    Rast3d_get_value(map, x, y, z, &val_f, map_type);
+		    if (!Rast3d_is_null_value_num(&val_f, map_type)) {
 			if (param.extended->answer) {
 			    if (stats[zone].n >= stats[zone].n_alloc) {
 				size_t msize;
@@ -273,8 +273,8 @@ int main(int argc, char *argv[])
 		    stats[zone].size++;
 		}
 		else if (map_type == DCELL_TYPE) {
-		    Rast3d_getValue(map, x, y, z, &val_d, map_type);
-		    if (!Rast3d_isNullValueNum(&val_d, map_type)) {
+		    Rast3d_get_value(map, x, y, z, &val_d, map_type);
+		    if (!Rast3d_is_null_value_num(&val_d, map_type)) {
 			if (param.extended->answer) {
 			    if (stats[zone].n >= stats[zone].n_alloc) {
 				size_t msize;
@@ -311,9 +311,9 @@ int main(int argc, char *argv[])
     }
 
     /* close maps */
-    Rast3d_closeCell(map);
+    Rast3d_close_cell(map);
     if (zone_info.n_zones)
-	Rast3d_closeCell(zmap);
+	Rast3d_close_cell(zmap);
 
     /* create the output */
     if (param.table->answer)

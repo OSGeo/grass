@@ -135,7 +135,7 @@ void *Rast3d_cache_new(int nofElts, int sizeOfElts, int nofNames,
 /*---------------------------------------------------------------------------*/
 
 void
-Rast3d_cache_set_removeFun(RASTER3D_cache * c, int (*eltRemoveFun) (),
+Rast3d_cache_set_remove_fun(RASTER3D_cache * c, int (*eltRemoveFun) (),
 			void *eltRemoveFunData)
 {
     c->eltRemoveFun = eltRemoveFun;
@@ -145,7 +145,7 @@ Rast3d_cache_set_removeFun(RASTER3D_cache * c, int (*eltRemoveFun) (),
 /*---------------------------------------------------------------------------*/
 
 void
-Rast3d_cache_set_loadFun(RASTER3D_cache * c, int (*eltLoadFun) (),
+Rast3d_cache_set_load_fun(RASTER3D_cache * c, int (*eltLoadFun) (),
 		      void *eltLoadFunData)
 {
     c->eltLoadFun = eltLoadFun;
@@ -166,7 +166,7 @@ void *Rast3d_cache_new_read(int nofElts, int sizeOfElts, int nofNames,
 static void cache_queue_dequeue(RASTER3D_cache * c, int index)
 {
     if (IS_NOT_IN_QUEUE_ELT(index))
-	Rast3d_fatalError("cache_queue_dequeue: index not in queue");
+	Rast3d_fatal_error("cache_queue_dequeue: index not in queue");
 
     if (index == c->first)
 	c->first = c->next[index];
@@ -186,18 +186,18 @@ static void cache_queue_dequeue(RASTER3D_cache * c, int index)
 static void cache_queue_enqueue(RASTER3D_cache * c, int left, int index)
 {
     if (IS_IN_QUEUE_ELT(index))
-	Rast3d_fatalError("cache_queue_enqueue: index already in queue");
+	Rast3d_fatal_error("cache_queue_enqueue: index already in queue");
 
     if (c->first == -1) {
 	if (left != c->last)
-	    Rast3d_fatalError("cache_queue_enqueue: position out of range");
+	    Rast3d_fatal_error("cache_queue_enqueue: position out of range");
 
 	c->first = c->last = index;
 	return;
     }
 
     if (IS_NOT_IN_QUEUE_ELT(left))
-	Rast3d_fatalError("cache_queue_enqueue: position not in queue");
+	Rast3d_fatal_error("cache_queue_enqueue: position not in queue");
 
 
     if (left == -1) {
@@ -359,7 +359,7 @@ void Rast3d_cache_autolock_off(RASTER3D_cache * c)
 
 /*---------------------------------------------------------------------------*/
 
-void Rast3d_cache_set_minUnlock(RASTER3D_cache * c, int nofMinUnLocked)
+void Rast3d_cache_set_min_unlock(RASTER3D_cache * c, int nofMinUnLocked)
 {
     c->minUnlocked = nofMinUnLocked;
 }

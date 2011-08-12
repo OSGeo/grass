@@ -40,7 +40,7 @@ void fatal_error(char *errorMsg, input_maps * in)
     /*close all open maps and free memory */
     release_input_maps_struct(in);
 
-    Rast3d_fatalError("Break because of errors.");
+    Rast3d_fatal_error("Break because of errors.");
 }
 
 /* ************************************************************************* */
@@ -61,7 +61,7 @@ int CloseInputRasterMap(int fd)
 int close_input_raster3d_map(void *map)
 {
     if (map != NULL) {
-	if (!Rast3d_closeCell(map)) {
+	if (!Rast3d_close_cell(map)) {
 	    G_warning(_("unable to close input 3d raster map"));
 	    return 1;
 	}
@@ -102,7 +102,7 @@ void release_input_maps_struct(input_maps * in)
     free(in);
 
     if (error > 0)
-	Rast3d_fatalError("Error while closing the input maps");
+	Rast3d_fatal_error("Error while closing the input maps");
 
     return;
 }

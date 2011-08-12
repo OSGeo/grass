@@ -18,11 +18,11 @@ static int Rast3d_closeNew(RASTER3D_Map * map)
     struct Categories cats;
     struct History hist;
 
-    Rast3d_removeColor(map->fileName);
+    Rast3d_remove_color(map->fileName);
 
     /* create empty cats file */
     Rast_init_cats(NULL, &cats);
-    Rast3d_writeCats(map->fileName, &cats);
+    Rast3d_write_cats(map->fileName, &cats);
     Rast_free_cats(&cats);
 
     /*genrate the history file, use the normal G_ functions */
@@ -30,7 +30,7 @@ static int Rast3d_closeNew(RASTER3D_Map * map)
     Rast_command_history(&hist);
     /*Use the G3d function to write the history file,
      * otherwise the path is wrong */
-    if (!Rast3d_writeHistory(map->fileName, &hist)) {
+    if (!Rast3d_write_history(map->fileName, &hist)) {
 	Rast3d_error("Rast3d_closeNew: can't write raster3d history");
     }
 
@@ -66,13 +66,13 @@ static int Rast3d_closeCellNew(RASTER3D_Map * map)
     long ltmp;
 
     if (map->useCache)
-	if (!Rast3d_flushAllTiles(map)) {
-	    Rast3d_error("Rast3d_closeCellNew: error in Rast3d_flushAllTiles");
+	if (!Rast3d_flush_all_tiles(map)) {
+	    Rast3d_error("Rast3d_closeCellNew: error in Rast3d_flush_all_tiles");
 	    return 0;
 	}
 
-    if (!Rast3d_flushIndex(map)) {
-	Rast3d_error("Rast3d_closeCellNew: error in Rast3d_flushIndex");
+    if (!Rast3d_flush_index(map)) {
+	Rast3d_error("Rast3d_closeCellNew: error in Rast3d_flush_index");
 	return 0;
     }
 
@@ -86,12 +86,12 @@ static int Rast3d_closeCellNew(RASTER3D_Map * map)
 	return 0;
     }
 
-    if (!Rast3d_writeInts(map->data_fd, map->useXdr, &(map->indexNbytesUsed), 1)) {
+    if (!Rast3d_write_ints(map->data_fd, map->useXdr, &(map->indexNbytesUsed), 1)) {
 	Rast3d_error("Rast3d_closeCellNew: can't write header");
 	return 0;
     }
 
-    Rast3d_longEncode(&(map->indexOffset), (unsigned char *)&ltmp, 1);
+    Rast3d_long_encode(&(map->indexOffset), (unsigned char *)&ltmp, 1);
     if (write(map->data_fd, &ltmp, sizeof(long)) != sizeof(long)) {
 	Rast3d_error("Rast3d_closeCellNew: can't write header");
 	return 0;
@@ -144,17 +144,17 @@ static int Rast3d_closeCellOld(RASTER3D_Map * map)
  *          0 ...  otherwise.
  */
 
-int Rast3d_closeCell(RASTER3D_Map * map)
+int Rast3d_close_cell(RASTER3D_Map * map)
 {
     if (map->operation == RASTER3D_WRITE_DATA) {
 	if (!Rast3d_closeCellNew(map)) {
-	    Rast3d_error("Rast3d_closeCell: error in Rast3d_closeCellNew");
+	    Rast3d_error("Rast3d_close_cell: error in Rast3d_closeCellNew");
 	    return 0;
 	}
     }
     else {
 	if (!Rast3d_closeCellOld(map) != 0) {
-	    Rast3d_error("Rast3d_closeCell: error in Rast3d_closeCellOld");
+	    Rast3d_error("Rast3d_close_cell: error in Rast3d_closeCellOld");
 	    return 0;
 	}
     }
@@ -163,8 +163,8 @@ int Rast3d_closeCell(RASTER3D_Map * map)
     Rast3d_free(map->tileLength);
 
     if (map->useCache) {
-	if (!Rast3d_disposeCache(map)) {
-	    Rast3d_error("Rast3d_closeCell: error in Rast3d_disposeCache");
+	if (!Rast3d_dispose_cache(map)) {
+	    Rast3d_error("Rast3d_close_cell: error in Rast3d_dispose_cache");
 	    return 0;
 	}
     }
@@ -172,7 +172,7 @@ int Rast3d_closeCell(RASTER3D_Map * map)
 	Rast3d_free(map->data);
 
     if (map->operation == RASTER3D_WRITE_DATA)
-	if (!Rast3d_writeHeader(map,
+	if (!Rast3d_write_header(map,
 			     map->region.proj, map->region.zone,
 			     map->region.north, map->region.south,
 			     map->region.east, map->region.west,
@@ -186,7 +186,7 @@ int Rast3d_closeCell(RASTER3D_Map * map)
 			     map->compression, map->useRle, map->useLzw,
 			     map->precision, map->offset, map->useXdr,
 			     map->hasIndex, map->unit)) {
-	    Rast3d_error("Rast3d_closeCell: error in Rast3d_writeHeader");
+	    Rast3d_error("Rast3d_close_cell: error in Rast3d_write_header");
 	    return 0;
 	}
 

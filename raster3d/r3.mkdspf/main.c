@@ -139,9 +139,9 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    Rast3d_initDefaults();
+    Rast3d_init_defaults();
 
-    Rast3d_getWindow(&g3reg);
+    Rast3d_get_window(&g3reg);
     G_message(_("Region from getWindow: %d %d %d"),
 	      g3reg.rows, g3reg.cols, g3reg.depths);
 
@@ -150,17 +150,17 @@ int main(int argc, char *argv[])
 	 check_get_any_dspname(out->answer, name->answer, G_mapset())))
 	exit(EXIT_FAILURE);
 
-    Rast3d_setErrorFun(Rast3d_printError);
+    Rast3d_set_error_fun(Rast3d_print_error);
 
     /* open g3 file for reading and writing */
     if (NULL == (mapset = G_find_file2("grid3", name->answer, "")))
 	G_fatal_error(_("Not able to find grid3 file for [%s]"),
 		      name->answer);
 
-    g3map = Rast3d_openCellOld(name->answer, mapset, &g3reg,
+    g3map = Rast3d_open_cell_old(name->answer, mapset, &g3reg,
 			    RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
     /*
-       g3map = Rast3d_openCellOld (name->answer, mapset, RASTER3D_DEFAULT_WINDOW,
+       g3map = Rast3d_open_cell_old (name->answer, mapset, RASTER3D_DEFAULT_WINDOW,
        RASTER3D_TILE_SAME_AS_FILE,
        RASTER3D_USE_CACHE_DEFAULT);
      */
@@ -174,7 +174,7 @@ int main(int argc, char *argv[])
     /* TODO: look at this - should use current 3dregion rather than
        region represented by original 3dgrid file */
     /*
-       Rast3d_getRegionStructMap (g3map, &g3reg);
+       Rast3d_get_region_struct_map (g3map, &g3reg);
      */
 
     /* DONT USE Headfax any more ?
@@ -227,7 +227,7 @@ int main(int argc, char *argv[])
 	fprintf(stderr, "\n");
 
     /* tries to write a header! */
-    Rast3d_closeCell(g3map);
+    Rast3d_close_cell(g3map);
 
     fclose(Headfax.dspfoutfp);
 

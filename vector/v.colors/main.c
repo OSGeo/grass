@@ -240,7 +240,7 @@ int main(int argc, char *argv[])
             if (!cmapset)
                 G_fatal_error(_("3D raster map <%s> not found"), cmap);
 
-            if (Rast3d_readColors(cmap, cmapset, &colors) < 0)
+            if (Rast3d_read_colors(cmap, cmapset, &colors) < 0)
                 G_fatal_error(_("Unable to read color table for 3D raster map <%s>"), cmap);
         }
     }

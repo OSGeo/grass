@@ -12,7 +12,7 @@
  * cache-mode used and must be either RASTER3D_NO_CACHE, RASTER3D_USE_CACHE_DEFAULT,
  * RASTER3D_USE_CACHE_X, RASTER3D_USE_CACHE_Y, RASTER3D_USE_CACHE_Z,
  * RASTER3D_USE_CACHE_XY, RASTER3D_USE_CACHE_XZ, RASTER3D_USE_CACHE_YZ,
- * RASTER3D_USE_CACHE_XYZ, the result of <tt>Rast3d_cacheSizeEncode ()</tt>
+ * RASTER3D_USE_CACHE_XYZ, the result of <tt>Rast3d_cache_size_encode ()</tt>
  * (cf.{g3d:G3d.cacheSizeEncode}), or any positive integer which
  * specifies the number of tiles buffered in the cache.  <em>region</em> specifies
  * the 3d region.  
@@ -38,7 +38,7 @@
  */
 
 
-void *Rast3d_openNewParam(const char *name, int typeIntern, int cache,
+void *Rast3d_open_new_param(const char *name, int typeIntern, int cache,
 		       RASTER3D_Region * region, int type, int doLzw, int doRle,
 		       int precision, int tileX, int tileY, int tileZ)
 {
@@ -47,22 +47,22 @@ void *Rast3d_openNewParam(const char *name, int typeIntern, int cache,
 	oldTileZ;
     int oldType;
 
-    Rast3d_initDefaults();
+    Rast3d_init_defaults();
 
-    Rast3d_getCompressionMode(&oldCompress, &oldLzw, &oldRle, &oldPrecision);
-    Rast3d_setCompressionMode(oldCompress, doLzw, doRle, precision);
+    Rast3d_get_compression_mode(&oldCompress, &oldLzw, &oldRle, &oldPrecision);
+    Rast3d_set_compression_mode(oldCompress, doLzw, doRle, precision);
 
-    Rast3d_getTileDimension(&oldTileX, &oldTileY, &oldTileZ);
-    Rast3d_setTileDimension(tileX, tileY, tileZ);
+    Rast3d_get_tile_dimension(&oldTileX, &oldTileY, &oldTileZ);
+    Rast3d_set_tile_dimension(tileX, tileY, tileZ);
 
-    oldType = Rast3d_getFileType();
-    Rast3d_setFileType(type);
+    oldType = Rast3d_get_file_type();
+    Rast3d_set_file_type(type);
 
-    map = Rast3d_openCellNew(name, typeIntern, cache, region);
+    map = Rast3d_open_cell_new(name, typeIntern, cache, region);
 
-    Rast3d_setCompressionMode(oldCompress, oldLzw, oldRle, oldPrecision);
-    Rast3d_setTileDimension(oldTileX, oldTileY, oldTileZ);
-    Rast3d_setFileType(oldType);
+    Rast3d_set_compression_mode(oldCompress, oldLzw, oldRle, oldPrecision);
+    Rast3d_set_tile_dimension(oldTileX, oldTileY, oldTileZ);
+    Rast3d_set_file_type(oldType);
 
     return map;
 }
@@ -78,7 +78,7 @@ void *Rast3d_openNewParam(const char *name, int typeIntern, int cache,
  * cache-mode used and must be either RASTER3D_NO_CACHE, RASTER3D_USE_CACHE_DEFAULT,
  * RASTER3D_USE_CACHE_X, RASTER3D_USE_CACHE_Y, RASTER3D_USE_CACHE_Z,
  * RASTER3D_USE_CACHE_XY, RASTER3D_USE_CACHE_XZ, RASTER3D_USE_CACHE_YZ,
- * RASTER3D_USE_CACHE_XYZ, the result of <tt>Rast3d_cacheSizeEncode ()</tt>
+ * RASTER3D_USE_CACHE_XYZ, the result of <tt>Rast3d_cache_size_encode ()</tt>
  * (cf.{g3d:G3d.cacheSizeEncode}), or any positive integer which
  * specifies the number of tiles buffered in the cache.  <em>region</em> specifies
  * the 3d region.  
@@ -95,28 +95,28 @@ void *Rast3d_openNewParam(const char *name, int typeIntern, int cache,
  */
 
 
-void *Rast3d_openNewOptTileSize(const char *name, int cache, RASTER3D_Region * region, int type, int maxSize)
+void *Rast3d_open_new_opt_tile_size(const char *name, int cache, RASTER3D_Region * region, int type, int maxSize)
 {
     void *map;
     int oldTileX, oldTileY, oldTileZ, oldType;
     int tileX, tileY, tileZ;
 
-    Rast3d_initDefaults();
+    Rast3d_init_defaults();
 
 
-    Rast3d_getTileDimension(&oldTileX, &oldTileY, &oldTileZ);
+    Rast3d_get_tile_dimension(&oldTileX, &oldTileY, &oldTileZ);
     
-    Rast3d_computeOptimalTileDimension(region, type, &tileX, &tileY, &tileZ, maxSize);
+    Rast3d_compute_optimal_tile_dimension(region, type, &tileX, &tileY, &tileZ, maxSize);
 
-    Rast3d_setTileDimension(tileX, tileY, tileZ);
+    Rast3d_set_tile_dimension(tileX, tileY, tileZ);
 
-    oldType = Rast3d_getFileType();
-    Rast3d_setFileType(type);
+    oldType = Rast3d_get_file_type();
+    Rast3d_set_file_type(type);
 
-    map = Rast3d_openCellNew(name, RASTER3D_TILE_SAME_AS_FILE, cache, region);
+    map = Rast3d_open_cell_new(name, RASTER3D_TILE_SAME_AS_FILE, cache, region);
 
-    Rast3d_setTileDimension(oldTileX, oldTileY, oldTileZ);
-    Rast3d_setFileType(oldType);
+    Rast3d_set_tile_dimension(oldTileX, oldTileY, oldTileZ);
+    Rast3d_set_file_type(oldType);
 
     return map;
 }

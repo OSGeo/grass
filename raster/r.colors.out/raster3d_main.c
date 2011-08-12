@@ -55,9 +55,9 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (Rast3d_readColors(opt.map->answer, "", &colors) < 0)
+    if (Rast3d_read_colors(opt.map->answer, "", &colors) < 0)
         G_fatal_error(_("Unable to read color table for raster3d map <%s>"), opt.map->answer);
-    Rast3d_readRange(opt.map->answer, "", &range);
+    Rast3d_read_range(opt.map->answer, "", &range);
 
     write_colors(&colors, &range, opt.file->answer, flag.p->answer ? 1 : 0);
 

@@ -77,10 +77,10 @@ void *Rast3d_cache_hash_new(int nofNames)
 void Rast3d_cache_hash_remove_name(Rast3d_cache_hash * h, int name)
 {
     if (name >= h->nofNames)
-	Rast3d_fatalError("Rast3d_cache_hash_remove_name: name out of range");
+	Rast3d_fatal_error("Rast3d_cache_hash_remove_name: name out of range");
 
     if (h->active[name] == 0)
-	Rast3d_fatalError("Rast3d_cache_hash_remove_name: name not in hashtable");
+	Rast3d_fatal_error("Rast3d_cache_hash_remove_name: name not in hashtable");
 
     h->active[name] = 0;
     if (name == h->lastName)
@@ -92,10 +92,10 @@ void Rast3d_cache_hash_remove_name(Rast3d_cache_hash * h, int name)
 void Rast3d_cache_hash_load_name(Rast3d_cache_hash * h, int name, int index)
 {
     if (name >= h->nofNames)
-	Rast3d_fatalError("Rast3d_cache_hash_load_name: name out of range");
+	Rast3d_fatal_error("Rast3d_cache_hash_load_name: name out of range");
 
     if (h->active[name] != 0)
-	Rast3d_fatalError("Rast3d_cache_hash_load_name: name already in hashtable");
+	Rast3d_fatal_error("Rast3d_cache_hash_load_name: name already in hashtable");
 
     h->index[name] = index;
     h->active[name] = 1;

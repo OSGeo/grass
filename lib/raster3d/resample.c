@@ -22,7 +22,7 @@
  */
 
 void
-Rast3d_nearestNeighbor(RASTER3D_Map * map, int x, int y, int z, void *value,
+Rast3d_nearest_neighbor(RASTER3D_Map * map, int x, int y, int z, void *value,
 		    int type)
 {
     double north, east, top;
@@ -38,12 +38,12 @@ Rast3d_nearestNeighbor(RASTER3D_Map * map, int x, int y, int z, void *value,
     if ((row < 0) || (row >= map->region.rows) ||
 	(col < 0) || (col >= map->region.cols) ||
 	(depth < 0) || (depth >= map->region.depths)) {
-	Rast3d_setNullValue(value, 1, type);
+	Rast3d_set_null_value(value, 1, type);
 	return;
     }
     
     /* Get the value from the map in map-region resolution */
-	Rast3d_getValueRegion(map, col, row, depth, value, type);
+	Rast3d_get_value_region(map, col, row, depth, value, type);
 }
 
 /*--------------------------------------------------------------------------*/
@@ -53,13 +53,13 @@ Rast3d_nearestNeighbor(RASTER3D_Map * map, int x, int y, int z, void *value,
  * \brief 
  *
  * Sets the resampling function to be used by
- * Rast3d_getValue () (cf.{g3d:G3d.getValue}). This function is defined
+ * Rast3d_get_value () (cf.{g3d:G3d.getValue}). This function is defined
  * as follows:
  *
  *  \return void
  */
 
-void Rast3d_setResamplingFun(RASTER3D_Map * map, void (*resampleFun) ())
+void Rast3d_set_resampling_fun(RASTER3D_Map * map, void (*resampleFun) ())
 {
     map->resampleFun = resampleFun;
 }
@@ -77,7 +77,7 @@ void Rast3d_setResamplingFun(RASTER3D_Map * map, void (*resampleFun) ())
  *  \return void
  */
 
-void Rast3d_getResamplingFun(RASTER3D_Map * map, void (**resampleFun) ())
+void Rast3d_get_resampling_fun(RASTER3D_Map * map, void (**resampleFun) ())
 {
     *resampleFun = map->resampleFun;
 }
@@ -89,12 +89,12 @@ void Rast3d_getResamplingFun(RASTER3D_Map * map, void (**resampleFun) ())
  * \brief 
  *
  *  Returns
- * in <em>nnFunPtr</em> a pointer to Rast3d_nearestNeighbor () (cf.{g3d:G3d.nearestNeighbor}).
+ * in <em>nnFunPtr</em> a pointer to Rast3d_nearest_neighbor () (cf.{g3d:G3d.nearestNeighbor}).
  *
  *  \return void
  */
 
-void Rast3d_getNearestNeighborFunPtr(void (**nnFunPtr) ())
+void Rast3d_get_nearest_neighbor_fun_ptr(void (**nnFunPtr) ())
 {
-    *nnFunPtr = Rast3d_nearestNeighbor;
+    *nnFunPtr = Rast3d_nearest_neighbor;
 }
