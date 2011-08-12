@@ -5,7 +5,7 @@
 
 static void scan_layer(int, const struct line_cats *, int *, int *);
 
-void scan_cats(const struct Map_info *Map, int field, int *min, int* max)
+void scan_cats(const struct Map_info *Map, int field, double *min, double* max)
 {
     int ltype, cmin, cmax;
     struct line_cats *Cats;
