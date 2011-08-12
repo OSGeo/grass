@@ -19,9 +19,9 @@
 #include <stdlib.h>
 
 #include <grass/gis.h>
+#include <grass/vector.h>
 #include <grass/raster.h>
 #include <grass/raster3d.h>
-#include <grass/vector.h>
 #include <grass/glocale.h>
 
 #include "local_proto.h"
@@ -34,14 +34,15 @@ int main(int argc, char *argv[])
     } flag; 
 
     struct {
-        struct Option *map, *field, *colr, *rast, *volume, *rules;
+	struct Option *map, *field, *colr, *rast, *volume, *rules, *attrcol, *rgbcol;
     } opt;
 
-    int min, max, layer;
-    int have_stats;
+    int layer;
+    double fmin, fmax;
+    int have_stats, is_fp;
     int overwrite, remove, is_from_stdin, stat, have_colors;
     const char *mapset, *cmapset;
-    const char *name, *style, *rules, *cmap;
+    const char *name, *style, *rules, *cmap, *attrcolumn;
 
     struct Map_info Map;
     struct Colors colors, colors_tmp;
@@ -58,8 +59,15 @@ int main(int argc, char *argv[])
     opt.map = G_define_standard_option(G_OPT_V_MAP);
 
     opt.field = G_define_standard_option(G_OPT_V_FIELD);
-    
+
+    opt.attrcol = G_define_standard_option(G_OPT_DB_COLUMN);
+    opt.attrcol->description = _("Name of column containing numeric data");
     opt.colr = G_define_standard_option(G_OPT_M_COLR);
+    
+    opt.rgbcol = G_define_standard_option(G_OPT_DB_COLUMN);
+    opt.rgbcol->key = "rgb_column";
+    opt.rgbcol->label = _("Name of color column to populate RGB values");
+    opt.rgbcol->description = _("If no column given, write color table instead");
 
     opt.rast = G_define_standard_option(G_OPT_R_INPUT);
     opt.rast->key = "raster";
@@ -131,6 +139,7 @@ int main(int argc, char *argv[])
     name = opt.map->answer;
     style = opt.colr->answer;
     rules = opt.rules->answer;
+    attrcolumn = opt.attrcol->answer;
     have_stats = FALSE;
     
     if (!name)
@@ -192,7 +201,13 @@ int main(int argc, char *argv[])
     if (layer < 1)
 	G_fatal_error(_("Layer <%s> not found"), opt.field->answer);
     
-    scan_cats(&Map, layer, &min, &max);
+    if (!attrcolumn) {
+	is_fp = FALSE;
+	scan_cats(&Map, layer, &fmin, &fmax);
+    }
+    else {
+	is_fp = scan_attr(&Map, layer, attrcolumn, &fmin, &fmax);
+    }
     
     if (is_from_stdin) {
 	/*
@@ -201,7 +216,11 @@ int main(int argc, char *argv[])
 	*/
     } else if (style) {
 	if (strcmp(style, "random") == 0) {
-	    Rast_make_random_colors(&colors, (CELL) min, (CELL) max);
+	    if (is_fp)
+		G_fatal_error(_("Color table 'random' is not supported for "
+				"floating point attributes"));
+	    else
+		Rast_make_random_colors(&colors, (CELL) fmin, (CELL) fmax);
 	} else if (strcmp(style, "grey.eq") == 0) {
 	    G_fatal_error(_("Color table <%s> not supported"), "grey.eq");
 	    /*
@@ -217,13 +236,17 @@ int main(int argc, char *argv[])
 	      Rast_make_histogram_log_colors(&colors, &statf, (CELL) min,
 	      (CELL) max);
 	    */
-	} else if (G_find_color_rule(style))
-	    Rast_make_colors(&colors, style, (CELL) min, (CELL) max);
+	} else if (G_find_color_rule(style)) {
+	    if (is_fp)
+		Rast_make_fp_colors(&colors, style, (CELL) fmin, (CELL) fmax);
+	    else
+		Rast_make_colors(&colors, style, (DCELL) fmin, (DCELL) fmax);
+	}
         else
             G_fatal_error(_("Unknown color request '%s'"), style);
     }
     else if (rules) {
-	if (!Rast_load_fp_colors(&colors, rules, min, max))
+	if (!Rast_load_fp_colors(&colors, rules, fmin, fmax))
 	    G_fatal_error(_("Unable to load rules file <%s>"), rules);
     }
     else {
