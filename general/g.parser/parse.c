@@ -5,6 +5,13 @@
 
 #include <grass/glocale.h>
 
+static char *xstrdup(const char *arg)
+{
+   G_debug(0,"arg: %s", arg);
+   return (G_strcasecmp(arg, "{NULL}") == 0)
+	? NULL : strdup(arg);
+}
+
 int parse_boolean(struct context *ctx, const char *arg)
 {
     if (G_strcasecmp(arg, "yes") == 0)
@@ -59,23 +66,22 @@ void parse_toplevel(struct context *ctx, const char *cmd)
     fprintf(stderr, _("Unknown command \"%s\" at line %d\n"), cmd, ctx->line);
 }
 
-void parse_module(struct context *ctx, const char *cmd,
-		  const char *arg)
+void parse_module(struct context *ctx, const char *cmd, const char *arg)
 {
 
     /* Label and description can be internationalized */
     if (G_strcasecmp(cmd, "label") == 0) {
-	ctx->module->label = translate(strdup(arg));
+	ctx->module->label = translate(xstrdup(arg));
 	return;
     }
 
     if (G_strcasecmp(cmd, "description") == 0) {
-	ctx->module->description = translate(strdup(arg));
+	ctx->module->description = translate(xstrdup(arg));
 	return;
     }
 
     if (G_strcasecmp(cmd, "keywords") == 0) {
-	G_add_keyword(translate(strdup(arg)));
+	G_add_keyword(translate(xstrdup(arg)));
 	return;
     }
 
@@ -107,17 +113,17 @@ void parse_flag(struct context *ctx, const char *cmd, const char *arg)
 
     /* Label, description, and guisection can all be internationalized */
     if (G_strcasecmp(cmd, "label") == 0) {
-	ctx->flag->label = translate(strdup(arg));
+	ctx->flag->label = translate(xstrdup(arg));
 	return;
     }
 
     if (G_strcasecmp(cmd, "description") == 0) {
-	ctx->flag->description = translate(strdup(arg));
+	ctx->flag->description = translate(xstrdup(arg));
 	return;
     }
 
     if (G_strcasecmp(cmd, "guisection") == 0) {
-	ctx->flag->guisection = translate(strdup(arg));
+	ctx->flag->guisection = translate(xstrdup(arg));
 	return;
     }
 
@@ -146,11 +152,10 @@ int parse_type(struct context *ctx, const char *arg)
     return TYPE_STRING;
 }
 
-void parse_option(struct context *ctx, const char *cmd,
-		  const char *arg)
+void parse_option(struct context *ctx, const char *cmd, const char *arg)
 {
     if (G_strcasecmp(cmd, "key") == 0) {
-	ctx->option->key = strdup(arg);
+	ctx->option->key = xstrdup(arg);
 	return;
     }
 
@@ -170,48 +175,48 @@ void parse_option(struct context *ctx, const char *cmd,
     }
 
     if (G_strcasecmp(cmd, "options") == 0) {
-	ctx->option->options = strdup(arg);
+	ctx->option->options = xstrdup(arg);
 	return;
     }
 
     if (G_strcasecmp(cmd, "key_desc") == 0) {
-	ctx->option->key_desc = strdup(arg);
+	ctx->option->key_desc = xstrdup(arg);
 	return;
     }
 
     /* Label, description, descriptions, and guisection can all be internationalized */
     if (G_strcasecmp(cmd, "label") == 0) {
-	ctx->option->label = translate(strdup(arg));
+	ctx->option->label = translate(xstrdup(arg));
 	return;
     }
 
     if (G_strcasecmp(cmd, "description") == 0) {
-	ctx->option->description = translate(strdup(arg));
+	ctx->option->description = translate(xstrdup(arg));
 	return;
     }
 
     if (G_strcasecmp(cmd, "descriptions") == 0) {
-	ctx->option->descriptions = translate(strdup(arg));
+	ctx->option->descriptions = translate(xstrdup(arg));
 	return;
     }
 
     if (G_strcasecmp(cmd, "answer") == 0) {
-	ctx->option->answer = strdup(arg);
+	ctx->option->answer = xstrdup(arg);
 	return;
     }
 
     if (G_strcasecmp(cmd, "gisprompt") == 0) {
-	ctx->option->gisprompt = strdup(arg);
+	ctx->option->gisprompt = xstrdup(arg);
 	return;
     }
 
     if (G_strcasecmp(cmd, "guisection") == 0) {
-	ctx->option->guisection = translate(strdup(arg));
+	ctx->option->guisection = translate(xstrdup(arg));
 	return;
     }
 
     if (G_strcasecmp(cmd, "guidependency") == 0) {
-	ctx->option->guidependency = translate(strdup(arg));
+	ctx->option->guidependency = translate(xstrdup(arg));
 	return;
     }
 

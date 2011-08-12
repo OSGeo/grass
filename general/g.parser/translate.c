@@ -10,6 +10,8 @@ char *translate(const char *arg)
 {
     static const char *domain;
 
+    if (arg == NULL)
+	return arg;
     if (*arg && translate_output) {
 	fputs(arg, stdout);
 	fputs("\n", stdout);
