@@ -1,15 +1,15 @@
 /*!
- * \file raster/color_rule.c
- *
- * \brief Raster Library - Color rules.
- *
- * (C) 2001-2009 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License 
- * (>=v2). Read the file COPYING that comes with GRASS for details.
- *
- * \author Original author CERL
- */
+  \file lib/raster/color_rule.c
+  
+  \brief Raster Library - Color rules.
+  
+  (C) 2001-2009 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License 
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Original author CERL
+*/
 
 #include <grass/gis.h>
 #include <grass/raster.h>
@@ -21,19 +21,17 @@ static void add_color_rule(const void *, int, int, int,
 			   struct _Color_Info_ *, int,
 			   DCELL *, DCELL *, RASTER_MAP_TYPE);
 
-
 /*!
- * \brief Adds the floating-point rule (DCELL version)
- *
- * See Rast_add_color_rule() for details.
- *
- *  \param v1 cell value
- *  \param r1,g1,b1 color value
- *  \param v2 cell value
- *  \param r2,g2,b2 color value
- *  \param[in,out] colors pointer to color table structure
- *  \return
- */
+  \brief Adds the floating-point color rule (DCELL version)
+  
+  See Rast_add_color_rule() for details.
+  
+  \param v1 cell value
+  \param r1,g1,b1 color value
+  \param v2 cell value
+  \param r2,g2,b2 color value
+  \param[in,out] colors pointer to color table structure
+*/
 void Rast_add_d_color_rule(const DCELL * val1, int r1, int g1, int b1,
 			   const DCELL * val2, int r2, int g2, int b2,
 			   struct Colors *colors)
@@ -44,17 +42,16 @@ void Rast_add_d_color_rule(const DCELL * val1, int r1, int g1, int b1,
 
 
 /*!
- * \brief Adds the floating-point rule (FCELL version)
- *
- * See Rast_add_color_rule() for details.
- *
- *  \param v1 cell value
- *  \param r1,g1,b1 color value
- *  \param v2 cell value
- *  \param r2,g2,b2 color value
- *  \param[in,out] colors pointer to color table structure
- *  \return
- */
+  \brief Adds the floating-point color rule (FCELL version)
+  
+  See Rast_add_color_rule() for details.
+  
+  \param v1 cell value
+  \param r1,g1,b1 color value
+  \param v2 cell value
+  \param r2,g2,b2 color value
+  \param[in,out] colors pointer to color table structure
+*/
 void Rast_add_f_color_rule(const FCELL * cat1, int r1, int g1, int b1,
 			   const FCELL * cat2, int r2, int g2, int b2,
 			   struct Colors *colors)
@@ -65,17 +62,16 @@ void Rast_add_f_color_rule(const FCELL * cat1, int r1, int g1, int b1,
 
 
 /*!
- * \brief Adds the floating-point rule (CCELL version)
- *
- * See Rast_add_color_rule() for details.
- *
- *  \param v1 cell value
- *  \param r1,g1,b1 color value
- *  \param v2 cell value
- *  \param r2,g2,b2 color value
- *  \param[in,out] colors pointer to color table structure
- *  \return
- */
+  \brief Adds the integer color rule (CELL version)
+  
+  See Rast_add_color_rule() for details.
+  
+  \param v1 cell value
+  \param r1,g1,b1 color value
+  \param v2 cell value
+  \param r2,g2,b2 color value
+  \param[in,out] colors pointer to color table structure
+*/
 void Rast_add_c_color_rule(const CELL * cat1, int r1, int g1, int b1,
 			   const CELL * cat2, int r2, int g2, int b2,
 			   struct Colors *colors)
@@ -86,27 +82,25 @@ void Rast_add_c_color_rule(const CELL * cat1, int r1, int g1, int b1,
 
 
 /*!
- * \brief Adds the floating-point rule
- *
- * Adds the floating-point rule that the range [<em>v1,v2</em>] gets a
- * linear ramp of colors from [<em>r1,g1,b1</em>] to
- * [<em>r2,g2,b2</em>].
- * If either <em>v1</em> or <em>v2</em> is the NULL-value, this call is converted into
- * <tt>Rast_set_null_value_color (r1, g1, b1, colors)</tt>
- *
- *  - If <em>map_type</em> is CELL_TYPE, calls Rast_add_c_color_rule()
- *  - If <em>map_type</em> is FCELL_TYPE, calls Rast_add_f_color_rule()
- *  - If <em>map_type</em> is DCELL_TYPE, calls Rast_add_d_color_rule()
- *
- *  \param v1 cell value
- *  \param r1,g1,b1 color value
- *  \param v2 cell value
- *  \param r2,g2,b2 color value
- *  \param[in,out] colors pointer to color table structure
- *  \param data_type raster data type (CELL, FCELL, DCELL)
- *  \return
- */
-
+  \brief Adds the color rule
+  
+  Adds the floating-point rule that the range [<em>v1,v2</em>] gets a
+  linear ramp of colors from [<em>r1,g1,b1</em>] to
+  [<em>r2,g2,b2</em>].
+  If either <em>v1</em> or <em>v2</em> is the NULL-value, this call is converted ino
+  <tt>Rast_set_null_value_color (r1, g1, b1, colors)</tt>
+  
+   - If <em>map_type</em> is CELL_TYPE, calls Rast_add_c_color_rule()
+   - If <em>map_type</em> is FCELL_TYPE, calls Rast_add_f_color_rule()
+   - If <em>map_type</em> is DCELL_TYPE, calls Rast_add_d_color_rule()
+   
+  \param v1 cell value
+  \param r1,g1,b1 color value
+  \param v2 cell value
+  \param r2,g2,b2 color value
+  \param[in,out] colors pointer to color table structure
+  \param data_type raster data type (CELL, FCELL, DCELL)
+*/
 void Rast_add_color_rule(const void *val1, int r1, int g1, int b1,
 			 const void *val2, int r2, int g2, int b2,
 			 struct Colors *colors, RASTER_MAP_TYPE data_type)
@@ -116,17 +110,17 @@ void Rast_add_color_rule(const void *val1, int r1, int g1, int b1,
 }
 
 /*!
- * \brief Add modular color rule (DCELL version)
- *
- * \param val1 cell value
- * \param r1,g1,b1 color value
- * \param val2 cell value
- * \param r2,g2,b2 color value
- * \param[in,out] colors pointer to color table structure
- *
- * \return -1 on failure
- * \return 1 on success
- */
+  \brief Add modular floating-point color rule (DCELL version)
+  
+  \param val1 cell value
+  \param r1,g1,b1 color value
+  \param val2 cell value
+  \param r2,g2,b2 color value
+  \param[in,out] colors pointer to color table structure
+  
+  \return -1 on failure
+  \return 1 on success
+*/
 int Rast_add_modular_d_color_rule(const DCELL * val1, int r1, int g1, int b1,
 				  const DCELL * val2, int r2, int g2, int b2,
 				  struct Colors *colors)
@@ -146,17 +140,17 @@ int Rast_add_modular_d_color_rule(const DCELL * val1, int r1, int g1, int b1,
 }
 
 /*!
- * \brief Add modular color rule (FCELL version)
- *
- * \param val1 cell value
- * \param r1,g1,b1 color value
- * \param val2 cell value
- * \param r2,g2,b2 color value
- * \param[in,out] colors pointer to color table structure
- *
- * \return -1 on failure
- * \return 1 on success
- */
+  \brief Add modular floating-point color rule (FCELL version)
+  
+  \param val1 cell value
+  \param r1,g1,b1 color value
+  \param val2 cell value
+  \param r2,g2,b2 color value
+  \param[in,out] colors pointer to color table structure
+  
+  \return -1 on failure
+  \return 1 on success
+*/
 int Rast_add_modular_f_color_rule(const FCELL * val1, int r1, int g1, int b1,
 				  const FCELL * val2, int r2, int g2, int b2,
 				  struct Colors *colors)
@@ -176,17 +170,17 @@ int Rast_add_modular_f_color_rule(const FCELL * val1, int r1, int g1, int b1,
 }
 
 /*!
- * \brief Add modular color rule (CELL version)
- *
- * \param val1 cell value
- * \param r1,g1,b1 color value
- * \param val2 cell value
- * \param r2,g2,b2 color value
- * \param[in,out] colors pointer to color table structure
- *
- * \return -1 on failure
- * \return 1 on success
- */
+  \brief Add modular integer color rule (CELL version)
+  
+  \param val1 cell value
+  \param r1,g1,b1 color value
+  \param val2 cell value
+  \param r2,g2,b2 color value
+  \param[in,out] colors pointer to color table structure
+  
+  \return -1 on failure
+  \return 1 on success
+*/
 int Rast_add_modular_c_color_rule(const CELL * val1, int r1, int g1, int b1,
 				  const CELL * val2, int r2, int g2, int b2,
 				  struct Colors *colors)
@@ -206,21 +200,21 @@ int Rast_add_modular_c_color_rule(const CELL * val1, int r1, int g1, int b1,
 }
 
 /*!
- * \brief Add modular color rule
- *
- * \todo Question: shouldn't this function call
- * G_add_modular_<data_type>_raster_color_rule() instead?
- *
- * \param val1 cell value
- * \param r1,g1,b1 color value
- * \param val2 cell value
- * \param r2,g2,b2 color value
- * \param[in,out] colors pointer to color table structure
- * \param data_type raster data type
- *
- * \return -1 on failure
- * \return 1 on success
- */
+  \brief Add modular color rule
+  
+  \todo Question: shouldn't this function call
+  G_add_modular_<data_type>_raster_color_rule() instead?
+  
+  \param val1 cell value
+  \param r1,g1,b1 color value
+  \param val2 cell value
+  \param r2,g2,b2 color value
+  \param[in,out] colors pointer to color table structure
+  \param data_type raster data type
+  
+  \return -1 on failure
+  \return 1 on success
+*/
 int Rast_add_modular_color_rule(const void *val1, int r1, int g1, int b1,
 				const void *val2, int r2, int g2, int b2,
 				struct Colors *colors,
