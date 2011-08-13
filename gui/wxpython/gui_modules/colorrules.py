@@ -75,12 +75,16 @@ class RulesPanel:
         if self.mapType == 'vector' and self.columnType == 'color':
             self.label = wx.StaticText(parent, id = wx.ID_ANY, label =  _("Set color for attribute values:"))
         elif self.mapType == 'vector' and self.columnType == 'size':
-            if self.parent.vectorType == 'points':
+            if self.parent.GetParent().vectorType == 'points':
                 label = label = _("Set size for attribute values:")
             else:
                 label = label = _("Set width for attribute values:")                
             self.label = wx.StaticText(parent, id = wx.ID_ANY, label = label)
-        
+        # (un)check all
+        self.checkAll = wx.CheckBox(parent, id = wx.ID_ANY, label = _("Check all"))
+        self.checkAll.SetValue(True)
+        # clear button
+        self.clearAll = wx.Button(parent, id = wx.ID_ANY, label = _("Clear all"))
         #  determines how many rules should be added
         self.numRules = wx.SpinCtrl(parent, id = wx.ID_ANY,
                                     min = 1, max = 1e6)
@@ -88,12 +92,28 @@ class RulesPanel:
         self.btnAdd = wx.Button(parent, id = wx.ID_ADD)
         
         self.btnAdd.Bind(wx.EVT_BUTTON, self.OnAddRules)
+        self.checkAll.Bind(wx.EVT_CHECKBOX, self.OnCheckAll)
+        self.clearAll.Bind(wx.EVT_BUTTON, self.OnClearAll)
+    
     
     def Clear(self):
         """!Clear and widgets and delete information"""
         self.ruleslines.clear()
         self.mainPanel.DestroyChildren()
     
+    def OnCheckAll(self, event):
+        """!(Un)check all rules"""
+        check = event.GetInt()
+        for child in self.mainPanel.GetChildren():
+            if child.GetName() == 'enable':
+                child.SetValue(check)
+            else:
+                child.Enable(check)
+                
+    def OnClearAll(self, event):
+        """!Delete all widgets in panel"""
+        self.Clear()
+        
     def OnAddRules(self, event):
         """!Add rules button pressed"""
         nrules = self.numRules.GetValue()
@@ -111,6 +131,7 @@ class RulesPanel:
             # enable
             enable = wx.CheckBox(parent = self.mainPanel, id = num)
             enable.SetValue(True)
+            enable.SetName('enable')
             enable.Bind(wx.EVT_CHECKBOX, self.OnRuleEnable)
             # value
             txt_ctrl = wx.TextCtrl(parent = self.mainPanel, id = 1000 + num,
@@ -120,11 +141,13 @@ class RulesPanel:
                 txt_ctrl.SetToolTipString(_("Enter vector attribute values (e.g. 5) "
                                             "or ranges (e.g. 5 to 10)"))
             txt_ctrl.Bind(wx.EVT_TEXT, self.OnRuleValue)
+            txt_ctrl.SetName('source')
             if self.columnType == 'color':
                 # color
                 columnCtrl = csel.ColourSelect(self.mainPanel, id = 2000 + num,
                                                size  =  globalvar.DIALOG_COLOR_SIZE)
                 columnCtrl.Bind(csel.EVT_COLOURSELECT, self.OnRuleColor)
+                columnCtrl.SetName('target')
                 if not start:
                     self.ruleslines[enable.GetId()] = { 'value' : '',
                                                         'color': "0:0:0" }
@@ -134,9 +157,10 @@ class RulesPanel:
                                          size = (50, -1), min = 1, max = 1e3,
                                          initial = 5)
                 columnCtrl.Bind(wx.EVT_SPINCTRL, self.OnRuleSize)
+                columnCtrl.SetName('target')
                 if not start:
                     self.ruleslines[enable.GetId()] = { 'value' : '',
-                                                        'size': 5 }
+                                                        'size': 100 }
             
             self.mainSizer.Add(item = enable, proportion = 0,
                               flag = wx.ALIGN_CENTER_VERTICAL)
@@ -243,6 +267,8 @@ class RulesPanel:
             child.Enable(enable)
         self.btnAdd.Enable(enable)
         self.numRules.Enable(enable)
+        self.checkAll.Enable(enable)
+        self.clearAll.Enable(enable)
         
         
     def LoadRules(self):
@@ -368,6 +394,7 @@ class ColorTable(wx.Frame):
         
         # layout
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
+        btnSizer.Add(wx.Size(-1, -1), proportion = 1)
         btnSizer.Add(self.btnHelp,
                      flag = wx.LEFT | wx.RIGHT, border = 5)
         btnSizer.Add(self.btnCancel,
@@ -406,15 +433,12 @@ class ColorTable(wx.Frame):
         # preview window
         self._createPreview(parent = parent)
         bodySizer.Add(item = self.preview, pos = (row, 2),
-                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT, border = 10)
-        bodySizer.AddGrowableRow(row)
-        bodySizer.AddGrowableCol(2)
+                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT, border = 5)
         row += 1
-        
-        # add rules button and spin to sizer
-        bodySizer.Add(item = self.colorRulesPanel.numRules, pos = (row, 0),
-                      flag = wx.ALIGN_CENTER_VERTICAL)
-        bodySizer.Add(item = self.colorRulesPanel.btnAdd, pos = (row, 1))
+        # add ckeck all and clear all
+        bodySizer.Add(item = self.colorRulesPanel.checkAll, flag = wx.ALIGN_CENTER_VERTICAL, 
+                      pos = (row, 0))
+        bodySizer.Add(item = self.colorRulesPanel.clearAll, pos = (row, 1))
         
         # preview button
         self.btnPreview = wx.Button(parent, id = wx.ID_ANY,
@@ -424,6 +448,14 @@ class ColorTable(wx.Frame):
         self.btnPreview.Enable(False)
         self.btnPreview.SetToolTipString(_("Show preview of map "
                                            "(current Map Display extent is used)."))
+        row +=1
+        # add rules button and spin to sizer
+        bodySizer.Add(item = self.colorRulesPanel.numRules, pos = (row, 0),
+                      flag = wx.ALIGN_CENTER_VERTICAL)
+        bodySizer.Add(item = self.colorRulesPanel.btnAdd, pos = (row, 1))
+        
+
+       
                 
         return bodySizer
     
@@ -835,12 +867,8 @@ class VectorColorTable(ColorTable):
                                              type = 'vector')
             
         # layout
-        inputSizer.Add(item = self.selectionInput,
+        inputSizer.Add(item = self.selectionInput, proportion = 1,
                        flag = wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND, border = 5)
-        replaceSizer = wx.BoxSizer(wx.HORIZONTAL)
-        
-        inputSizer.Add(item = replaceSizer, proportion = 1,
-                       flag = wx.ALL | wx.EXPAND, border = 0)
     
         return inputSizer
     
@@ -888,77 +916,49 @@ class VectorColorTable(ColorTable):
        
     def _doLayout(self):
         """!Do main layout"""
+        scrollPanel = scrolled.ScrolledPanel(self, id = wx.ID_ANY, size = (650, 500),
+                                             style = wx.TAB_TRAVERSAL)
+        scrollPanel.SetupScrolling()
         sizer = wx.BoxSizer(wx.VERTICAL)
         #
         # map selection
         #
-        mapSelection = self._createMapSelection(parent = self)
+        mapSelection = self._createMapSelection(parent = scrollPanel)
         sizer.Add(item = mapSelection, proportion = 0,
                   flag = wx.ALL | wx.EXPAND, border = 5)
         #
         # set vector attributes
         #
-        vectorAttrb = self._createVectorAttrb(parent = self)
+        vectorAttrb = self._createVectorAttrb(parent = scrollPanel)
         sizer.Add(item = vectorAttrb, proportion = 0,
                   flag = wx.ALL | wx.EXPAND, border = 5)
         #
         # body & preview
         #
-        bodySizer = self._createBody(parent = self)
-        sizer.Add(item = bodySizer, proportion = 1,
-                  flag = wx.ALL | wx.EXPAND, border = 5)
+        bodySizer = self._createBody(parent = scrollPanel)
+        sizer.Add(item = bodySizer, proportion = 0,
+                  flag = wx.ALL, border = 5)
+                
+                
+        scrollPanel.SetSizer(sizer)
+        scrollPanel.Fit()        
+        
         #
         # buttons
         #
         btnSizer = self._createButtons()
         
-        sizer.Add(item = wx.StaticLine(parent = self, id = wx.ID_ANY,
+        mainsizer = wx.BoxSizer(wx.VERTICAL)
+        mainsizer.Add(scrollPanel, proportion = 1, flag = wx.EXPAND | wx.ALL, border = 5)
+        mainsizer.Add(item = wx.StaticLine(parent = self, id = wx.ID_ANY,
                                        style = wx.LI_HORIZONTAL), proportion = 0,
                                        flag = wx.EXPAND | wx.ALL, border = 5) 
+        mainsizer.Add(item = btnSizer, proportion = 0,
+                  flag = wx.ALL | wx.ALIGN_RIGHT | wx.EXPAND, border = 5)
         
-        sizer.Add(item = btnSizer, proportion = 0,
-                  flag = wx.ALL | wx.ALIGN_RIGHT, border = 5)
-        
-        self.SetSizer(sizer)
-        sizer.Layout()
-        sizer.Fit(self)
-        self.Layout()
-                 
-    def SetInfoString(self):
-        """!Show information about vector map column type/range"""
-        driver, db = self.dbInfo.GetDbSettings(int(self.properties['layer']))
-        nrows = grass.db_describe(table = self.properties['table'], driver = driver, database = db)['nrows']
-        self.properties['min'] = self.properties['max'] = ''
-        type = self.dbInfo.GetTableDesc(self.properties['table'])\
-                                                    [self.properties['source_rgb']]['type']
-        ctype = self.dbInfo.GetTableDesc(self.properties['table'])\
-                                                    [self.properties['source_rgb']]['ctype']
-        if ctype == int or ctype == float:  
-            if nrows < 500: # not too large
-                ret = gcmd.RunCommand('v.db.select',
-                                      quiet = True,
-                                      read  = True,
-                                      flags = 'c',
-                                      map = self.inmap,
-                                      layer = self.properties['layer'],
-                                      columns = self.properties['source_rgb']).strip('\n')
-                records = ret.split('\n')
-                try:
-                    self.properties['min'] = min(map(float, records))
-                    self.properties['max'] = max(map(float, records))
-                except ValueError:
-                    self.properties['min'] = self.properties['max'] = ''
-                    
-        if self.properties['min'] or self.properties['max']:
-            if ctype == int:
-                self.cr_label.SetLabel(_("Enter vector attribute values or ranges (type: %s, range: %d - %d)")
-                            % (type, self.properties['min'], self.properties['max']))
-            elif ctype == float:
-                self.cr_label.SetLabel(_("Enter vector attribute values or ranges (type: %s, range: %.1f - %.1f )")
-                            % (type, self.properties['min'], self.properties['max']))
-        else:
-            self.cr_label.SetLabel(_("Enter vector attribute values or ranges (type: %s)") % type)
-               
+        self.SetSizer(mainsizer)
+        mainsizer.Layout()
+        mainsizer.Fit(self)       
     
     def CheckMapset(self):
         """!Check if current vector is in current mapset"""
@@ -1057,7 +1057,6 @@ class VectorColorTable(ColorTable):
             self.properties['rgb'] = self.cb_rgb_col.GetString(found)
         else:
             self.properties['rgb'] = ''
-##        self.SetInfoString()
         
         self.LoadTable(attColumn = self.properties['source_rgb'],
                        rgbColumn = self.properties['rgb'], rulesPanel = self.colorRulesPanel)
@@ -1144,16 +1143,17 @@ class VectorColorTable(ColorTable):
                 break
             rulesPanel.ruleslines[i] = {}
             
-            value = record.split(sep)[0]
+            col1, col2 = record.split(sep)
             if ctype not in (int, float):
-                value = "'" + value + "'"
+                col1 = "'" + col1 + "'"
             else:
-                if float(value) < minim:
-                    minim = float(value)
-                if float(value) > maxim:
-                    maxim = float(value)
-            rulesPanel.ruleslines[i]['value'] = value
-            rulesPanel.ruleslines[i][type] = record.split(sep)[1]
+                if float(col1) < minim:
+                    minim = float(col1)
+                if float(col1) > maxim:
+                    maxim = float(col1)
+                    
+            rulesPanel.ruleslines[i]['value'] = col1
+            rulesPanel.ruleslines[i][type] = col2
             i += 1
         
         rulesPanel.AddRules(i, start = True)
@@ -1244,15 +1244,6 @@ class VectorColorTable(ColorTable):
                         input = gtemp)
         return True
     
-    
-##    def ColorFromString(self, rgb):
-##        """!Convert color string '255:255:255' to tuple"""
-##        try:
-##            r, g, b = rgb.split(':')
-##            return (r, g, b)
-##        
-##        except ValueError:
-##            return False
         
 class ThematicVectorTable(VectorColorTable):
     def __init__(self, parent, vectorType, **kwargs):
@@ -1306,7 +1297,7 @@ class ThematicVectorTable(VectorColorTable):
                 self.properties['size'] = item
             else:
                 self.properties['size'] = ''
-##        self.SetInfoString()
+        
         self.LoadTable(attColumn = self.properties['source_size'], rgbColumn = self.properties['size'],
                        rulesPanel = self.sizeRulesPanel, type = 'size')
         self.Update()  
@@ -1320,7 +1311,6 @@ class ThematicVectorTable(VectorColorTable):
     def OnSizeSourceSelection(self, event):
         self.properties['source_size'] = event.GetString()
         
-##        self.SetInfoString()
         
         self.LoadTable(attColumn = self.properties['source_size'], rgbColumn = self.properties['size'],
                        rulesPanel = self.sizeRulesPanel, type = 'size') 
@@ -1333,41 +1323,50 @@ class ThematicVectorTable(VectorColorTable):
         
     def _doLayout(self):
         """!Do main layout"""
+        mainsizer = wx.BoxSizer(wx.VERTICAL)
+        # ? size (-1, ...) doesn't work
+        scrollPanel = scrolled.ScrolledPanel(self, id = wx.ID_ANY, size = (870, 600),
+                                             style = wx.TAB_TRAVERSAL)
+        scrollPanel.SetupScrolling()
+        
         sizer = wx.BoxSizer(wx.VERTICAL)
         #
         # map selection
         #
-        mapSelection = self._createMapSelection(parent = self)
+        mapSelection = self._createMapSelection(parent = scrollPanel)
         sizer.Add(item = mapSelection, proportion = 0,
                   flag = wx.ALL | wx.EXPAND, border = 5)
         #
         # set vector attributes
         #
-        vectorAttrb = self._createVectorAttrb(parent = self)
+        vectorAttrb = self._createVectorAttrb(parent = scrollPanel)
         sizer.Add(item = vectorAttrb, proportion = 0,
                   flag = wx.ALL | wx.EXPAND, border = 5)
         #
         # body & preview
         #
-        bodySizer = self._createBody(parent = self)
+        bodySizer = self._createBody(parent = scrollPanel)
         sizer.Add(item = bodySizer, proportion = 1,
                   flag = wx.ALL | wx.EXPAND, border = 5)
+                
+        scrollPanel.SetSizer(sizer)
+        scrollPanel.Fit()        
+        mainsizer.Add(scrollPanel, proportion = 1, flag = wx.EXPAND | wx.ALL, border = 5)
         #
         # buttons
         #
         btnSizer = self._createButtons()
         
-        sizer.Add(item = wx.StaticLine(parent = self, id = wx.ID_ANY,
+        mainsizer.Add(item = wx.StaticLine(parent = self, id = wx.ID_ANY,
                                        style = wx.LI_HORIZONTAL), proportion = 0,
                                        flag = wx.EXPAND | wx.ALL, border = 5) 
         
-        sizer.Add(item = btnSizer, proportion = 0,
+        mainsizer.Add(item = btnSizer, proportion = 0,
                   flag = wx.ALL | wx.ALIGN_RIGHT, border = 5)
         
-        self.SetSizer(sizer)
-        sizer.Layout()
-        sizer.Fit(self)
-        self.Layout()
+        self.SetSizer(mainsizer)
+        mainsizer.Layout()
+        mainsizer.Fit(self) 
     
     def _createBody(self, parent):
         """!Create dialog body consisting of rules and preview"""
@@ -1402,19 +1401,16 @@ class ThematicVectorTable(VectorColorTable):
         self._createPreview(parent = parent)
         bodySizer.Add(item = self.preview, pos = (row, 4),
                       flag = wx.EXPAND | wx.LEFT | wx.RIGHT, border = 10)
-        bodySizer.AddGrowableRow(row)
-        bodySizer.AddGrowableCol(4)
         row += 1
+        # add ckeck all and clear all
+        bodySizer.Add(item = self.colorRulesPanel.checkAll, flag = wx.ALIGN_CENTER_VERTICAL, 
+                      pos = (row, 0))
+        bodySizer.Add(item = self.colorRulesPanel.clearAll, pos = (row, 1))
         
-        # add rules button and spin to sizer
-        bodySizer.Add(item = self.colorRulesPanel.numRules, pos = (row, 0),
-                      flag = wx.ALIGN_CENTER_VERTICAL)
-        bodySizer.Add(item = self.colorRulesPanel.btnAdd, pos = (row, 1))
-        bodySizer.Add(item = self.sizeRulesPanel.numRules, pos = (row, 2),
-                      flag = wx.ALIGN_CENTER_VERTICAL)
-        bodySizer.Add(item = self.sizeRulesPanel.btnAdd, pos = (row, 3), 
-                        flag = wx.ALIGN_LEFT)
-
+        bodySizer.Add(item = self.sizeRulesPanel.checkAll, flag = wx.ALIGN_CENTER_VERTICAL, 
+                      pos = (row, 2))
+        bodySizer.Add(item = self.sizeRulesPanel.clearAll, pos = (row, 3))
+        
         # preview button
         self.btnPreview = wx.Button(parent, id = wx.ID_ANY,
                                     label = _("Preview"))
@@ -1423,6 +1419,15 @@ class ThematicVectorTable(VectorColorTable):
         self.btnPreview.Enable(False)
         self.btnPreview.SetToolTipString(_("Show preview of map "
                                            "(current Map Display extent is used)."))
+        row += 1
+        # add rules button and spin to sizer
+        bodySizer.Add(item = self.colorRulesPanel.numRules, pos = (row, 0),
+                      flag = wx.ALIGN_CENTER_VERTICAL)
+        bodySizer.Add(item = self.colorRulesPanel.btnAdd, pos = (row, 1))
+        bodySizer.Add(item = self.sizeRulesPanel.numRules, pos = (row, 2),
+                      flag = wx.ALIGN_CENTER_VERTICAL)
+        bodySizer.Add(item = self.sizeRulesPanel.btnAdd, pos = (row, 3), 
+                        flag = wx.ALIGN_LEFT)
                 
         return bodySizer
     
