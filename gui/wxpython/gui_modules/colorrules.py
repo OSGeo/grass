@@ -831,7 +831,11 @@ class VectorColorTable(ColorTable):
             # vector attribute column for assigning colors
             'source_rgb' : '', 
             # vector attribute column to use for storing colors
-            'rgb' : '',       
+            'rgb' : '',    
+            # vector attribute column for temporary storing colors   
+            'tmp_rgb' : '',
+            # vector attribute column for temporary storing size   
+            'tmp_size' : '',
             # vector attribute column for assigning size
             'source_size' : '', 
             # vector attribute column to use for storing size
@@ -996,7 +1000,7 @@ class VectorColorTable(ColorTable):
     def UpdateDialog(self):
         """!Update dialog after map selection"""    
         if not self.inmap:
-            self.colorRulesPanel.ruleslines.Clear()
+            self.colorRulesPanel.Clear()
             self.btnPreview.Enable(False)
             self.btnOK.Enable(False)
             self.btnApply.Enable(False)
@@ -1023,12 +1027,10 @@ class VectorColorTable(ColorTable):
             layer = int(self.properties['layer'])
             self.properties['table'] = self.dbInfo.layers[layer]['table']
             
-            # initialize column selection comboboxes 
-            self.OnLayerSelection(event = None)
-            
             if self.CheckMapset():
                 enable = True
                 self.btn_add_RGB.Enable(True)
+                self.AddTemporaryColumn(name = 'tmp_rgb', type = 'varchar(20)')
             else:
                 enable = False
                 wx.CallAfter(gcmd.GMessage, parent = self, 
@@ -1039,10 +1041,29 @@ class VectorColorTable(ColorTable):
                               
                 self.btn_add_RGB.Enable(False)
             
+            # initialize column selection comboboxes 
+            self.OnLayerSelection(event = None)
+            
         self.btnPreview.Enable(enable)
         self.btnOK.Enable(enable)
         self.btnApply.Enable(enable)   
+    
+    def AddTemporaryColumn(self, name, type):
+        """!Add temporary column to not overwrite the original values,
+            need to be deleted when closing dialog"""
+        ret = gcmd.RunCommand('v.db.addcolumn',
+                              map = self.inmap,
+                              layer = self.properties['layer'],
+                              columns = '%s %s' % (name, type))
+        self.properties[name] = name
         
+    def DeleteTemporaryColumn(self, name):
+        """!Delete temporary column"""
+        ret = gcmd.RunCommand('v.db.dropcolumn',
+                              map = self.inmap,
+                              layer = self.properties['layer'],
+                              column = name)
+                       
     def OnLayerSelection(self, event):
         # reset choices in column selection comboboxes if layer changes
         vlayer = int(self.cb_vlayer.GetStringSelection())
@@ -1195,14 +1216,14 @@ class VectorColorTable(ColorTable):
             
     def OnPreview(self, event = None):
         """!Update preview (based on computational region)"""
-        if not self.inmap or not self.properties["rgb"]:
+        if not self.inmap or not self.properties["rgb"] or not self.properties["tmp_rgb"]:
             self.preview.EraseMap()
             return
         
         cmdlist = ['d.vect',
                     '-a',
                    'map=%s' % self.inmap,
-                   'rgb_column=%s' % self.properties["rgb"],
+                   'rgb_column=%s' % self.properties['tmp_rgb'],
                    'type=point,line,boundary,area']
         ltype = 'vector'
         
@@ -1225,8 +1246,12 @@ class VectorColorTable(ColorTable):
             if not rule['value']: # skip empty rules
                 continue
             
+            if force:
+                rgb_col = self.properties['tmp_rgb']
+            else:
+                rgb_col = self.properties['rgb']
             rulestxt += "UPDATE %s SET %s='%s' WHERE %s ;\n" % (self.properties['table'],
-                                                                self.properties['rgb'],
+                                                                rgb_col,
                                                                 rule['color'],
                                                                 rule['value'])
         if not rulestxt:
@@ -1244,6 +1269,17 @@ class VectorColorTable(ColorTable):
                         input = gtemp)
         return True
     
+    def OnOK(self, event):
+        """!Apply selected color table, close the dialog
+            and delete temporary column"""
+        if self.OnApply(event):
+            self.Destroy()
+            self.DeleteTemporaryColumn(name = self.properties['tmp_rgb'])
+    
+    def OnCancel(self, event):
+        """!Do not apply any changes and close the dialog"""
+        self.Destroy()
+        self.DeleteTemporaryColumn(name = self.properties['tmp_rgb'])
         
 class ThematicVectorTable(VectorColorTable):
     def __init__(self, parent, vectorType, **kwargs):
@@ -1265,7 +1301,8 @@ class ThematicVectorTable(VectorColorTable):
     def UpdateDialog(self):
         """!Update dialog according to selected map"""
         VectorColorTable.UpdateDialog(self)
-                               
+        if not self.inmap:
+            self.sizeRulesPanel.Clear()                       
         if not len(self.dbInfo.layers):
             for combo in (self.cb_size_att, self.cb_size_col):
                 combo.SetValue("")
@@ -1279,6 +1316,7 @@ class ThematicVectorTable(VectorColorTable):
             
             if self.CheckMapset():
                 self.btn_add_size.Enable(True)
+                self.AddTemporaryColumn(name = 'tmp_size', type = 'integer')
             else:
                 self.btn_add_RGB.Enable(False)
                 
@@ -1561,7 +1599,7 @@ class ThematicVectorTable(VectorColorTable):
         
     def OnPreview(self, event = None):
         """!Update preview (based on computational region)"""
-        if not self.inmap:
+        if not self.inmap or not self.properties['size'] or not self.properties['tmp_size']:
             self.preview.EraseMap()
             return
         
@@ -1570,14 +1608,16 @@ class ThematicVectorTable(VectorColorTable):
                    'map=%s' % self.inmap,
                    'type=point,line,boundary,area']
                 
-        if self.size_check.IsChecked() and self.properties["size"]:
+        if self.size_check.IsChecked()\
+                and self.properties["size"] and self.properties["tmp_size"]:
             if self.vectorType == 'points':
-                cmdlist.append('size_column=%s' % self.properties["size"])
+                cmdlist.append('size_column=%s' % self.properties['tmp_size'])
             else:
-                cmdlist.append('width_column=%s' % self.properties["size"])
+                cmdlist.append('width_column=%s' % self.properties['tmp_size'])
             
-        if self.rgb_check.IsChecked() and self.properties["rgb"]:
-            cmdlist.append('rgb_column=%s' % self.properties["rgb"])
+        if self.rgb_check.IsChecked()\
+                and self.properties["rgb"] and self.properties['tmp_rgb']:
+            cmdlist.append('rgb_column=%s' % self.properties['tmp_rgb'])
         ltype = 'vector'
         ColorTable.DoPreview(self, ltype, cmdlist)
     
@@ -1614,6 +1654,11 @@ class ThematicVectorTable(VectorColorTable):
         
         return ret
     
+    def CreateColorTable(self, force = False):
+        """!Creates color and size table"""
+        VectorColorTable.CreateColorTable(self, force = True)
+        self.CreateSizeTable(force = True)
+        
     def CreateSizeTable(self, force = False):
         """!Creates size table
 
@@ -1627,8 +1672,12 @@ class ThematicVectorTable(VectorColorTable):
             if not rule['value']: # skip empty rules
                 continue
             
+            if force:
+                size_col = self.properties['tmp_size']
+            else:
+                size_col = self.properties['size']
             rulestxt += "UPDATE %s SET %s='%s' WHERE %s ;\n" % (self.properties['table'],
-                                                                self.properties['size'],
+                                                                size_col,
                                                                 rule['size'],
                                                                 rule['value'])
         if not rulestxt:
@@ -1645,7 +1694,21 @@ class ThematicVectorTable(VectorColorTable):
                         parent = self,
                         input = gtemp)
         return True
-        
+    
+    def OnOK(self, event):
+        """!Apply selected color table, close the dialog
+            and delete temporary column"""
+        if self.OnApply(event):
+            self.Destroy()
+            self.DeleteTemporaryColumn(name = 'tmp_size')
+            self.DeleteTemporaryColumn(name = 'tmp_rgb')
+    
+    def OnCancel(self, event):
+        """!Do not apply any changes and close the dialog"""
+        self.Destroy()
+        self.DeleteTemporaryColumn(name = 'tmp_size')    
+        self.DeleteTemporaryColumn(name = 'tmp_rgb') 
+           
 class BufferedWindow(wx.Window):
     """!A Buffered window class"""
     def __init__(self, parent, id,
