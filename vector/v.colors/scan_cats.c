@@ -1,17 +1,18 @@
 #include <grass/vector.h>
+#include <grass/raster.h>
 #include <grass/glocale.h>
 
 #include "local_proto.h"
 
 static void scan_layer(int, const struct line_cats *, int *, int *);
 
-void scan_cats(const struct Map_info *Map, int field, double *min, double* max)
+void scan_cats(const struct Map_info *Map, int field, const char *style,
+	       struct Colors *colors, int *cmin, int *cmax)
 {
-    int ltype, cmin, cmax;
+    int ltype, lmin, lmax;
     struct line_cats *Cats;
 
-    *min = *max = -1;
-    
+    *cmin = *cmax = -1;
     Cats = Vect_new_cats_struct();
 
     while(TRUE) {
@@ -21,13 +22,15 @@ void scan_cats(const struct Map_info *Map, int field, double *min, double* max)
 	if (ltype == -2)
 	    break; /* EOF */
 
-	scan_layer(field, Cats, &cmin, &cmax);
+	scan_layer(field, Cats, &lmin, &lmax);
 
-	if (*min == -1 || cmin <= *min)
-	    *min = cmin;
-	if (*max == -1 || cmax >= *max)
-	    *max = cmax;
+	if (*cmin == -1 || lmin <= *cmin)
+	    *cmin = lmin;
+	if (*cmax == -1 || lmax >= *cmax)
+	    *cmax = lmax;
     }
+
+    Rast_make_colors(colors, style, (CELL) *cmin, (CELL) *cmax);
 
     Vect_destroy_cats_struct(Cats);
 }

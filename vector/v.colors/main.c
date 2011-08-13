@@ -37,13 +37,13 @@ int main(int argc, char *argv[])
 	struct Option *map, *field, *colr, *rast, *volume, *rules, *attrcol, *rgbcol;
     } opt;
 
-    int layer;
-    double fmin, fmax;
-    int have_stats, is_fp;
+    int layer, cmin, cmax;
+    int have_stats;
     int overwrite, remove, is_from_stdin, stat, have_colors;
     const char *mapset, *cmapset;
-    const char *name, *style, *rules, *cmap, *attrcolumn, *rgbcolumn;
-
+    const char *style, *rules, *cmap, *attrcolumn, *rgbcolumn;
+    char *name;
+    
     struct Map_info Map;
     struct Colors colors, colors_tmp;
     /* struct Cell_stats statf; */
@@ -174,11 +174,10 @@ int main(int argc, char *argv[])
     if (is_from_stdin)
         rules = NULL;
 
-    /* open map and get min/max values */
-    Vect_open_old2(&Map, name, "", opt.field->answer);
-    name   = Vect_get_name(&Map);
-    mapset = Vect_get_mapset(&Map);
-
+    mapset = G_find_vector(name, "");
+    if (!mapset)
+	G_fatal_error(_("Vector map <%s> not found"), name);
+    
     if (strcmp(mapset, G_mapset()) != 0)
       G_fatal_error(_("Module currently allows to modify only vector maps from the current mapset"));
 
@@ -201,30 +200,32 @@ int main(int argc, char *argv[])
 
     G_suppress_warnings(FALSE);
 
+    /* open map and get min/max values */
+    Vect_open_old2(&Map, name, mapset, opt.field->answer);
+
     layer = Vect_get_field_number(&Map, opt.field->answer);
     if (layer < 1)
 	G_fatal_error(_("Layer <%s> not found"), opt.field->answer);
-    
-    if (!attrcolumn) {
-	is_fp = FALSE;
-	scan_cats(&Map, layer, &fmin, &fmax);
-    }
-    else {
-	is_fp = scan_attr(&Map, layer, attrcolumn, &fmin, &fmax);
-    }
     
     if (is_from_stdin) {
 	/*
         if (!read_color_rules(stdin, &colors, min, max, fp))
             exit(EXIT_FAILURE);
 	*/
-    } else if (style) {
+    } else if (style) {	
+	if (!G_find_color_rule(style))
+	    G_fatal_error(_("Color table <%s> not found"), style);
+	
+	if (!attrcolumn) {
+	    scan_cats(&Map, layer, style, &colors, &cmin, &cmax);
+	}
+	else {
+	    scan_attr(&Map, layer, attrcolumn, style,
+		      &colors, &cmin, &cmax);
+	}
+	
 	if (strcmp(style, "random") == 0) {
-	    if (is_fp)
-		G_fatal_error(_("Color table 'random' is not supported for "
-				"floating point attributes"));
-	    else
-		Rast_make_random_colors(&colors, (CELL) fmin, (CELL) fmax);
+	    Rast_make_random_colors(&colors, (CELL) cmin, (CELL) cmax);
 	} else if (strcmp(style, "grey.eq") == 0) {
 	    G_fatal_error(_("Color table <%s> not supported"), "grey.eq");
 	    /*
@@ -240,17 +241,10 @@ int main(int argc, char *argv[])
 	      Rast_make_histogram_log_colors(&colors, &statf, (CELL) min,
 	      (CELL) max);
 	    */
-	} else if (G_find_color_rule(style)) {
-	    if (is_fp)
-		Rast_make_fp_colors(&colors, style, (CELL) fmin, (CELL) fmax);
-	    else
-		Rast_make_colors(&colors, style, (DCELL) fmin, (DCELL) fmax);
 	}
-        else
-            G_fatal_error(_("Unknown color request '%s'"), style);
     }
     else if (rules) {
-	if (!Rast_load_fp_colors(&colors, rules, fmin, fmax))
+	if (!Rast_load_colors(&colors, rules, (CELL) cmin, (CELL) cmax))
 	    G_fatal_error(_("Unable to load rules file <%s>"), rules);
     }
     else {
@@ -300,6 +294,8 @@ int main(int argc, char *argv[])
     else
 	Vect_write_colors(name, mapset, &colors);
 
+    Vect_close(&Map);
+    
     G_message(_("Color table for vector map <%s> set to '%s'"), 
 	      G_fully_qualified_name(name, mapset), 
               is_from_stdin ? "rules" : style ? style : rules ? rules :
