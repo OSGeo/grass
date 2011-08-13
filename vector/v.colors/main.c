@@ -61,13 +61,14 @@ int main(int argc, char *argv[])
     opt.field = G_define_standard_option(G_OPT_V_FIELD);
 
     opt.attrcol = G_define_standard_option(G_OPT_DB_COLUMN);
-    opt.attrcol->description = _("Name of column containing numeric data");
+    opt.attrcol->label = _("Name of column containing numeric data");
+    opt.attrcol->description = _("If not given categories are used");
     opt.colr = G_define_standard_option(G_OPT_M_COLR);
     
     opt.rgbcol = G_define_standard_option(G_OPT_DB_COLUMN);
     opt.rgbcol->key = "rgb_column";
     opt.rgbcol->label = _("Name of color column to populate RGB values");
-    opt.rgbcol->description = _("If no column given, write color table instead");
+    opt.rgbcol->description = _("If not given writes color table");
 
     opt.rast = G_define_standard_option(G_OPT_R_INPUT);
     opt.rast->key = "raster";

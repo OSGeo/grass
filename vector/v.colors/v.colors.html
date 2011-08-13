@@ -2,7 +2,7 @@
 
 <em>v.colors</em> allows the user to create and/or modify the color
 table for a vector map. The vector map (specified on the command line
-by <b>map=</b>) must exist in the user's current mapset search path.
+by <b>map</b>) must exist in the user's current mapset search path.
 
 <p>
 The <b>rast</b> option allows user to specify a raster map <i>name</i>
@@ -47,6 +47,28 @@ For details see <em><a href="r.colors.html">r.colors</a></em> manual page.
 
 <h2>EXAMPLES</h2>
 
+Define color table <tt>wave</tt> based on categories from layer 1
+
+<div class="code"><pre>
+v.colors map=soils_general layer=1 color=wave
+</pre></div>
+
+Define color table <tt>ryg</tt> based on values from attribute
+column <tt>AREA</tt>. Attribute table is linked to layer 1.
+
+<div class="code"><pre>
+v.to.db map=soils_general layer=1 option=area column=AREA
+v.colors map=soils_general layer=1 color=wave column=AREA
+</pre></div>
+
+Write color values to the attribute table (column <tt>GRASSRGB</tt>)
+instead of creating color table.
+
+<div class="code"><pre>
+v.db.addcolumn map=soils_general column="GRASSRGB varchar(12)"
+v.colors map=soils_general layer=1 color=wave column=AREA rgb_column=GRASSRGB
+</pre></div>
+
 <h2>SEE ALSO</h2>
 
 <em>
@@ -62,8 +84,7 @@ tables</a> (from GRASS User Wiki)
 
 <h2>AUTHORS</h2>
 
-Adopted <a href="r.colors.html">r.colors</a> by Martin Landa, Czech
-Technical University in Prague, Czech Republic
+Martin Landa, Czech Technical University in Prague, Czech Republic
 
 <p>
 <i>Last changed: $Date$</i>
