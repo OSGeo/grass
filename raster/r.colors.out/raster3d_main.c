@@ -1,13 +1,13 @@
 
 /****************************************************************************
  *
- * MODULE:       r.colors.out
+ * MODULE:       r3.colors.out
  *
  * AUTHOR(S):    Glynn Clements
  *
- * PURPOSE:      Allows export of the color table for a raster map layer.
+ * PURPOSE:      Allows export of the color table for a 3D raster map.
  *
- * COPYRIGHT:    (C) 2008, 2010 Glynn Clements and the GRASS Development Team
+ * COPYRIGHT:    (C) 2008, 2010-2011 Glynn Clements and the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -15,7 +15,12 @@
  *
  ***************************************************************************/
 
-#include "local_proto.h"
+#include <stdlib.h>
+#include <string.h>
+#include <grass/gis.h>
+#include <grass/raster.h>
+#include <grass/raster3d.h>
+#include <grass/glocale.h>
 
 /* Run in raster3d mode */
 int main(int argc, char **argv)
@@ -29,6 +34,9 @@ int main(int argc, char **argv)
     {
 	struct Flag *p;
     } flag;
+
+    const char *file;
+    FILE * fp;
     struct Colors colors;
     struct FPRange range;
     
@@ -39,9 +47,10 @@ int main(int argc, char **argv)
     G_add_keyword(_("color table"));
     G_add_keyword(_("export"));
     module->description =
-    _("Exports the color table associated with a raster3d map layer.");
+	_("Exports the color table associated with a 3D raster map.");
 
     opt.map = G_define_standard_option(G_OPT_R3_MAP);
+    
     opt.file = G_define_standard_option(G_OPT_F_OUTPUT);
     opt.file->key = "rules";
     opt.file->label = _("Path to output rules file");
@@ -55,11 +64,24 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
+    file = opt.file->answer;
+    
     if (Rast3d_read_colors(opt.map->answer, "", &colors) < 0)
-        G_fatal_error(_("Unable to read color table for raster3d map <%s>"), opt.map->answer);
+        G_fatal_error(_("Unable to read color table for raster3d map <%s>"),
+		      opt.map->answer);
+    
     Rast3d_read_range(opt.map->answer, "", &range);
-
-    write_colors(&colors, &range, opt.file->answer, flag.p->answer ? 1 : 0);
-
+    
+    if (!file || strcmp(file, "-") == 0)
+	fp = stdout;
+    else {
+	fp = fopen(file, "w");
+	if (!fp)
+	    G_fatal_error(_("Unable to open output file <%s>"), file);
+    }
+    
+    Rast_print_colors(&colors, range.min, range.max, fp,
+		      flag.p->answer ? 1 : 0);
+    
     exit(EXIT_SUCCESS);
 }
