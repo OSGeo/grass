@@ -15,6 +15,7 @@ void scan_cats(const struct Map_info *Map, int field, const char *style,
     *cmin = *cmax = -1;
     Cats = Vect_new_cats_struct();
 
+    G_message(_("Reading features..."));
     while(TRUE) {
 	ltype = Vect_read_next_line(Map, NULL, Cats);
 	if (ltype == -1)
