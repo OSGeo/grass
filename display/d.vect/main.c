@@ -173,6 +173,7 @@ int main(int argc, char **argv)
     rgbcol_opt->key = "rgb_column";
     rgbcol_opt->guisection = _("Colors");
     rgbcol_opt->description = _("Name of color definition column (for use with -a flag)");
+    rgbcol_opt->answer = "GRASSRGB";
     
     zcol_opt = G_define_standard_option(G_OPT_M_COLR);
     zcol_opt->key = "zcolor";
@@ -335,7 +336,7 @@ int main(int argc, char **argv)
     table_acolors_flag->key = 'a';
     table_acolors_flag->guisection = _("Colors");
     table_acolors_flag->description =
-	_("Get colors from color table or attribute column (see 'rgb_column')");
+	_("Get colors from attribute table (see 'rgb_column' option)");
 
     cats_acolors_flag = G_define_flag();
     cats_acolors_flag->key = 'c';
