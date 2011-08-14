@@ -19,6 +19,7 @@
 
 #include <grass/gis.h>
 #include <grass/colors.h>
+#include <grass/raster.h>
 #include <grass/vector.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
@@ -296,11 +297,12 @@ void sub_Vectmem(int minus)
   \brief Load styles for geolines based on thematic mapping
 
   \param gv pointer to geovect structure
+  \param colors pointer to Colors structure or NULL
 
   \return number of features defined by thematic mapping
   \return -1 on error
 */
-int Gv_load_vect_thematic(geovect *gv)
+int Gv_load_vect_thematic(geovect *gv, struct Colors *colors)
 {
     geoline *gvt;
 
@@ -357,6 +359,15 @@ int Gv_load_vect_thematic(geovect *gv)
 	    continue;
 
 	/* color */
+	if (colors) {
+	    if (!Rast_get_c_color((const CELL *) &cat, &red, &grn, &blu, colors)) {
+		G_warning(_("No color rule defined for category %d"), cat);
+		gvt->style->color = gv->style->color;
+	    }
+	    gvt->style->color = (red & RED_MASK) + ((int)((grn) << 8) & GRN_MASK) +
+		((int)((blu) << 16) & BLU_MASK);
+	}
+	
 	if (gv->tstyle->color_column) {
 	    nvals = db_select_value(driver, Fi->table, Fi->key, cat, gv->tstyle->color_column, &value);
 	    if (nvals < 1)
