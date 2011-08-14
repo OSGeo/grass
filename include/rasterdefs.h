@@ -174,6 +174,9 @@ void Rast__interpolate_color_rule(DCELL, unsigned char *, unsigned char *,
 /* color_org.c */
 void Rast__organize_colors(struct Colors *);
 
+/* color_out.c */
+void Rast_print_colors(struct Colors *, DCELL, DCELL, FILE *, int);
+
 /* color_rand.c */
 void Rast_make_random_colors(struct Colors *, CELL, CELL);
 
