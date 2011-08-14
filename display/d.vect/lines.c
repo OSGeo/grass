@@ -39,7 +39,7 @@ struct rgb_color palette[16] = {
 int display_lines(struct Map_info *Map, int type, struct cat_list *Clist,
 		  const struct color_rgb *color, const struct color_rgb *fcolor, int chcat,
 		  const char *symbol_name, double size, int sqrt_flag,
-		  int id_flag, int table_colors_flag, int cats_color_flag, 
+		  int id_flag, int cats_color_flag, 
 		  int default_width, double width_scale,
 		  struct Colors* zcolors,
 		  dbCatValArray *cvarr_rgb, struct Colors *colors,
@@ -117,7 +117,7 @@ int display_lines(struct Map_info *Map, int type, struct cat_list *Clist,
     
     Vect_rewind(Map);
 
-    if (color && !table_colors_flag && !cats_color_flag)
+    if (color && !cvarr_rgb && !cats_color_flag)
 	D_RGB_color(color->r, color->g, color->b);
 
     if (Vect_level(Map) >= 2)
@@ -194,14 +194,15 @@ int display_lines(struct Map_info *Map, int type, struct cat_list *Clist,
 		custom_rgb = FALSE;
 	}
 
-	if (table_colors_flag || nrec_width > 0 || nrec_size > 0 || nrec_rot > 0)
+	if (colors || cvarr_rgb ||
+	    nrec_width > 0 || nrec_size > 0 || nrec_rot > 0)
 	    /* only first category */
 	    Vect_cat_get(Cats, 
 			 (Clist->field > 0 ? Clist->field : (Cats->n_cats > 0 ? Cats->field[0] : 1)),
 			 &cat);
 	
 	/* custom colors */
-	if (table_colors_flag) {
+	if (colors || cvarr_rgb) {
 	    custom_rgb = get_table_color(cat, line, colors, cvarr_rgb,
 					 &red, &grn, &blu, &nerror_rgb);
 	}
@@ -280,7 +281,7 @@ int display_lines(struct Map_info *Map, int type, struct cat_list *Clist,
 	    rotation = 0.0;
 	}
 	else if (color || custom_rgb || zcolors) {
-	    if (!table_colors_flag && !cats_color_flag && !zcolors)
+	    if (!cvarr_rgb && !cats_color_flag && !zcolors)
 		D_RGB_color(color->r, color->g, color->b);
 	    else {
 		if (custom_rgb)

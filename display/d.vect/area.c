@@ -15,7 +15,7 @@
 
 int display_area(struct Map_info *Map, struct cat_list *Clist, const struct Cell_head *window,
 		 const struct color_rgb *bcolor, const struct color_rgb *fcolor, int chcat,
-		 int id_flag, int table_colors_flag, int cats_color_flag, 
+		 int id_flag, int cats_color_flag, 
 		 int default_width, double width_scale,
 		 struct Colors *zcolors,
 		 dbCatValArray *cvarr_rgb, struct Colors *colors,
@@ -169,7 +169,7 @@ int display_area(struct Map_info *Map, struct cat_list *Clist, const struct Cell
 	}
 
         /* custom colors */
-	if (table_colors_flag) {
+	if (colors || cvarr_rgb) {
 	    custom_rgb = get_table_color(cat, area, colors, cvarr_rgb,
 					 &red, &grn, &blu, &nerror_rgb);
 	}
@@ -190,7 +190,7 @@ int display_area(struct Map_info *Map, struct cat_list *Clist, const struct Cell
 	}
 	
 	if (fcolor || zcolors) {
-	    if (!table_colors_flag && !cats_color_flag && !zcolors) {
+	    if (!cvarr_rgb && !cats_color_flag && !zcolors) {
 		D_RGB_color(fcolor->r, fcolor->g, fcolor->b);
 		D_polygon_abs(Points->x, Points->y, Points->n_points);
 	    }

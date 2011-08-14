@@ -13,8 +13,7 @@ int display_attr(struct Map_info *, int, char *, struct cat_list *, LATTR *, int
 /* area.c */
 int display_area(struct Map_info *, struct cat_list *, const struct Cell_head *,
 		 const struct color_rgb *, const struct color_rgb *, int, int,
-		 int, int,
-		 int, double,
+		 int, int, double,
 		 struct Colors *,
 		 dbCatValArray *, struct Colors *, dbCatValArray *, int);
 
@@ -30,8 +29,7 @@ void show_label_line(const struct line_pnts *, int, LATTR *, const char *);
 int display_lines(struct Map_info *, int, struct cat_list *,
 		  const struct color_rgb *, const struct color_rgb *, int,
 		  const char *, double, int,
-		  int, int, int, 
-		  int, double,
+		  int, int, int, double,
 		  struct Colors *,
 		  dbCatValArray *, struct Colors *, dbCatValArray *, int,
 		  dbCatValArray *, int, dbCatValArray *, int);
