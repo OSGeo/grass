@@ -33,6 +33,6 @@ $(BIN)/r.mapcalc$(EXE):
 
 .PHONY: thumbnails
 
-.INTERMEDIATE: r.colors.tmp.html
+.INTERMEDIATE: r.colors.tmp.html r3.colors.tmp.html
 
 
