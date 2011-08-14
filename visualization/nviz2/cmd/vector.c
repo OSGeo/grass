@@ -114,8 +114,11 @@ int vlines_set_attrb(const struct GParams *params)
 {
     int i, layer, color, width, flat, height;
     int *vect_list, nvects;
-    char *color_column, *width_column;
+    int have_colors;
 
+    char *color_column, *width_column;
+    struct Colors colors;
+    
     vect_list = GV_get_vect_list(&nvects);
 
     for (i = 0; i < nvects; i++) {
@@ -136,10 +139,14 @@ int vlines_set_attrb(const struct GParams *params)
 	/* style (mode -- use memory by default) */
 	if (GV_set_style(vect_list[i], TRUE, color, width, flat) < 0)
 	    return 0;
-
-	if (color_column || width_column)
+	
+	/* check for vector color table */
+	have_colors = Vect_read_colors(params->vlines->answers[i], "",
+				       &colors);
+	
+	if (have_colors || color_column || width_column)
 	    if (GV_set_style_thematic(vect_list[i], layer, color_column,
-				      width_column) < 0)
+				      width_column, have_colors ? &colors : NULL) < 0)
 		return 0;
 
 	/* height */
@@ -161,12 +168,14 @@ int vlines_set_attrb(const struct GParams *params)
 */
 int vpoints_set_attrb(const struct GParams *params)
 {
-    int i, layer;
+    int i, layer, have_colors;
     int *site_list, nsites;
     int marker, color, width;
     float size;
     char *marker_str, *color_column, *size_column, *width_column, *marker_column;
 
+    struct Colors colors;
+    
     site_list = GP_get_site_list(&nsites);
 
     for (i = 0; i < nsites; i++) {
@@ -187,10 +196,16 @@ int vpoints_set_attrb(const struct GParams *params)
 	
 	if (GP_set_style(site_list[i], color, width, size, marker) < 0)
 	    return 0;
+
+	/* check for vector color table */
+	have_colors = Vect_read_colors(params->vpoints->answers[i], "",
+				       &colors);
 	
-	if (color_column || width_column || size_column || marker_column) {
-	    if (GP_set_style_thematic(site_list[i], layer, color_column, width_column,
-				      size_column, marker_column) < 0)
+	if (have_colors || color_column || width_column ||
+	    size_column || marker_column) {
+	    if (GP_set_style_thematic(site_list[i], layer, color_column,
+				      width_column, size_column, marker_column,
+				      have_colors ? &colors : NULL) < 0)
 		return 0;
 	}
     }
