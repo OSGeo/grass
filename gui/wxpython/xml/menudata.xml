@@ -147,7 +147,7 @@
 	    <menuitem>
 	      <label>SPOT NDVI import</label>
 	      <help>Imports SPOT VGT NDVI data into a raster map.</help>
-	      <keywords>raster,imagery,import</keywords>
+	      <keywords>imagery,import</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>i.in.spotvgt</command>
 	    </menuitem>
@@ -207,7 +207,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>ASCII points as a vector lines</label>
-	      <help>Import ASCII x,y[,z] coordinates as a series of lines.</help>
+	      <help>Imports ASCII x,y[,z] coordinates as a series of lines.</help>
 	      <keywords>vector,import</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.in.lines</command>
@@ -237,7 +237,7 @@
 	    <separator />
 	    <menuitem>
 	      <label>WFS</label>
-	      <help>Import GetFeature from WFS.</help>
+	      <help>Imports GetFeature from WFS.</help>
 	      <keywords>vector,import,wfs</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.in.wfs</command>
@@ -245,7 +245,7 @@
 	    <separator />
 	    <menuitem>
 	      <label>ESRI e00 import</label>
-	      <help>Import E00 file into a vector map.</help>
+	      <help>Imports E00 file into a vector map.</help>
 	      <keywords>vector,import</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.in.e00</command>
@@ -259,7 +259,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Geonames import</label>
-	      <help>Imports geonames.org country files into a GRASS vector points map.</help>
+	      <help>Imports geonames.org country files into a vector points map.</help>
 	      <keywords>vector,import,gazetteer</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.in.geonames</command>
@@ -339,7 +339,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>ASCII x,y,z points export</label>
-	      <help>Export a raster map to a text file as x,y,z values based on cell centers.</help>
+	      <help>Exports a raster map to a text file as x,y,z values based on cell centers.</help>
 	      <keywords>raster,export</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.out.xyz</command>
@@ -1024,7 +1024,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Color tables (stddev)</label>
-	      <help>Set color rules based on stddev from a raster map's mean value.</help>
+	      <help>Sets color rules based on stddev from a raster map's mean value.</help>
 	      <keywords>raster,color table</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.colors.stddev</command>
@@ -1038,7 +1038,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Export color table</label>
-	      <help>Exports the color table associated with a raster map layer.</help>
+	      <help>Exports the color table associated with a raster map.</help>
 	      <keywords>raster,color table,export</keywords>
               <handler>OnMenuCmd</handler>
 	      <command>r.colors.out</command>
@@ -1222,7 +1222,7 @@
 	    <menuitem>
 	      <label>Shaded relief</label>
 	      <help>Creates shaded relief map from an elevation map (DEM).</help>
-	      <keywords>raster</keywords>
+	      <keywords>raster,elevation</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.shaded.relief</command>
 	    </menuitem>
@@ -1592,8 +1592,8 @@
 	  <items>
 	    <menuitem>
 	      <label>Interactively edit category values</label>
-	      <help>Interactively edit cell values in a raster map.</help>
-	      <keywords>display,raster</keywords>
+	      <help>Edits cell values in a raster map.</help>
+	      <keywords>display,raster,edit</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>d.rast.edit</command>
 	    </menuitem>
@@ -1772,14 +1772,14 @@
 	    <menuitem>
 	      <label>Ordinary or block kriging</label>
 	      <help>Performs ordinary or block kriging.</help>
-	      <keywords>vector,interpolation,kriging</keywords>
+	      <keywords>vector,raster,interpolation,kriging</keywords>
 	      <handler>RunMenuCmd</handler>
 	      <command>v.krige</command>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
 	      <label>Fill NULL cells</label>
-	      <help>Fills no-data areas in raster maps using v.surf.rst splines interpolation</help>
+	      <help>Fills no-data areas in raster maps using splines interpolation.</help>
 	      <keywords>raster,elevation,interpolation</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.fillnulls</command>
@@ -2062,7 +2062,7 @@
 	  <items>
 	    <menuitem>
 	      <label>Color tables</label>
-	      <help>Sets color rules for features in a vector map using a numeric attribute column.</help>
+	      <help>Creates/modifies the color table associated with a vector map.</help>
 	      <keywords>vector,color table</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.colors</command>
@@ -2073,6 +2073,13 @@
 	      <handler>RulesCmd</handler>
 	      <keywords>vector,color table</keywords>
 	      <command>v.colors</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>Export color table</label>
+	      <help>Exports the color table associated with a vector map.</help>
+	      <keywords>vector,color table,export</keywords>
+              <handler>OnMenuCmd</handler>
+	      <command>v.colors.out</command>
 	    </menuitem>
 	  </items>
 	</menu>
@@ -2545,7 +2552,7 @@
 	    <separator />
 	    <menuitem>
 	      <label>Mosaic images</label>
-	      <help>Mosaics several images and extends colormap</help>
+	      <help>Mosaics several images and extends colormap.</help>
 	      <keywords>raster,imagery,mosaicking</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>i.image.mosaic</command>
@@ -2769,8 +2776,8 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Tasseled cap vegetation index</label>
-	      <help>Tasseled Cap (Kauth Thomas) transformation for LANDSAT-TM data</help>
-	      <keywords>raster,imagery</keywords>
+	      <help>Performs Tasseled Cap (Kauth Thomas) transformation for LANDSAT-TM data.</help>
+	      <keywords>imagery,transformation</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>i.tasscap</command>
 	    </menuitem>
@@ -2929,7 +2936,7 @@
 	</menuitem>
 	<menuitem>
 	  <label>Export 3D color table</label>
-	  <help>Exports the color table associated with a raster3d map layer.</help>
+	  <help>Exports the color table associated with a 3D raster map.</help>
 	  <keywords>raster3d,color table,export</keywords>
 	  <handler>OnMenuCmd</handler>
 	  <command>r3.colors.out</command>
@@ -2983,7 +2990,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Voxel statistics</label>
-	      <help>Generates volume statistics for raster3d maps.</help>
+	      <help>Generates volume statistics for 3D raster maps.</help>
 	      <keywords>raster3d,statistics</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r3.stats</command>
@@ -3191,7 +3198,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Drop row</label>
-	      <help>Removes a vector object (point, line, area, face etc.) from a vector map through attribute selection.</help>
+	      <help>Removes a vector feature from a vector map through attribute selection.</help>
 	      <keywords>vector,database,attribute table</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.db.droprow</command>
