@@ -1,19 +1,16 @@
 /*!
-   \file GV2.c
+   \file lib/ogsf/GV2.c
 
    \brief OGSF library - loading and manipulating vector sets (higher level functions)
 
-   GRASS OpenGL gsurf OGSF Library 
+   (C) 1999-2008, 2011 by the GRASS Development Team
 
-   (C) 1999-2008 by the GRASS Development Team
-
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
 
    \author Bill Brown USACERL, GMSL/University of Illinois
-   \author Doxygenized by Martin Landa <landa.martin gmail.com>
+   \author Updated by Martin landa <landa.martin gmail.com>
+   (doxygenized in May 2008, thematic mapping in June 2011)
  */
 
 #include <stdlib.h>
@@ -280,13 +277,15 @@ int GV_get_style(int id, int *mem, int *color, int *width, int *flat)
    
    \param id vector set id
    \param layer layer number for thematic mapping
-   \param color color column
-   \param width width column
-   
+   \param color color column name
+   \param width width column name
+   \param colors pointer to Colors structure or NULL
+
    \return 1 on success
    \return -1 on error (point set not found)
  */
-int GV_set_style_thematic(int id, int layer, const char* color, const char* width)
+int GV_set_style_thematic(int id, int layer, const char* color, const char* width,
+			  struct Colors *color_rules)
 {
     geovect *gv;
 
@@ -305,7 +304,7 @@ int GV_set_style_thematic(int id, int layer, const char* color, const char* widt
     if (width)
 	gv->tstyle->width_column = G_store(width);
 
-    Gv_load_vect_thematic(gv);
+    Gv_load_vect_thematic(gv, color_rules);
 
     return 1;
 }

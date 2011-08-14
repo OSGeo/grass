@@ -63,7 +63,8 @@ int GP_load_site(int, const char *);
 int GP_get_sitename(int, char **);
 int GP_get_style(int, int *, int *, float *, int *);
 int GP_set_style(int, int, int, float, int);
-int GP_set_style_thematic(int, int, const char *, const char *, const char *, const char *);
+int GP_set_style_thematic(int, int, const char *, const char *, const char *,
+			  const char *, struct Colors *);
 int GP_unset_style_thematic(int);
 int GP_attmode_color(int, const char *);
 int GP_attmode_none(int);
@@ -244,7 +245,7 @@ int GV_load_vector(int, const char *);
 int GV_get_vectname(int, char **);
 int GV_set_style(int, int, int, int, int);
 int GV_get_style(int, int *, int *, int *, int *);
-int GV_set_style_thematic(int, int, const char*, const char*);
+int GV_set_style_thematic(int, int, const char *, const char *, struct Colors *);
 int GV_unset_style_thematic(int);
 void GV_set_trans(int, float, float, float);
 int GV_get_trans(int, float *, float *, float *);
@@ -317,7 +318,7 @@ int GVL_slice_set_pos(int, int, float, float, float, float, float, float,
 /* Gp3.c */
 int Gp_set_color(const char *, geopoint *);
 geopoint *Gp_load_sites(const char *, int *, int *);
-int Gp_load_sites_thematic(geosite *);
+int Gp_load_sites_thematic(geosite *, struct Colors *);
 
 /* Gs3.c */
 double Gs_distance(double *, double *);
@@ -343,7 +344,7 @@ int Gs_update_attrange(geosurf *, int);
 
 /* Gv3.c */
 geoline *Gv_load_vect(const char *, int *);
-int Gv_load_vect_thematic(geovect *);
+int Gv_load_vect_thematic(geovect *, struct Colors *);
 void sub_Vectmem(int);
 
 /* gk.c */

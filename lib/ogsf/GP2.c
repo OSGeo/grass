@@ -296,15 +296,17 @@ int GP_set_style(int id, int color, int width, float size, int symbol)
    
    \param id point set id
    \param layer layer number for thematic mapping
-   \param color icon color
-   \param width icon line width
-   \param size icon size
-   \param symbol icon symbol
+   \param color icon color column name
+   \param width icon line width column name
+   \param size icon size column name
+   \param symbol icon symbol column name
+   \param colors pointer to Colors structure or NULL
 
    \return 1 on success
    \return -1 on error (point set not found)
  */
-int GP_set_style_thematic(int id, int layer, const char* color, const char* width, const char* size, const char* symbol)
+int GP_set_style_thematic(int id, int layer, const char* color, const char* width,
+			  const char* size, const char* symbol, struct Colors *color_rules)
 {
     geosite *gp;
     
@@ -330,7 +332,7 @@ int GP_set_style_thematic(int id, int layer, const char* color, const char* widt
     if (width)
 	gp->tstyle->width_column = G_store(width);
 
-    Gp_load_sites_thematic(gp);
+    Gp_load_sites_thematic(gp, color_rules);
 
     return 1;
 }

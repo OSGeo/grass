@@ -159,11 +159,12 @@ geopoint *Gp_load_sites(const char *name, int *nsites, int *has_z)
   \brief Load styles for geopoints based on thematic mapping
 
   \param gp pointer to geosite structure
-
+  \param colors pointer to Colors structure or NULL
+  
   \return number of points defined by thematic mapping
   \return -1 on error
 */
-int Gp_load_sites_thematic(geosite *gp)
+int Gp_load_sites_thematic(geosite *gp, struct Colors *colors)
 {
     geopoint *gpt;
 
@@ -220,6 +221,14 @@ int Gp_load_sites_thematic(geosite *gp)
 	    continue;
 
 	/* color */
+	if (colors) {
+	    if (!Rast_get_c_color((const CELL *) &cat, &red, &grn, &blu, colors)) {
+		G_warning(_("No color rule defined for category %d"), cat);
+		gpt->style->color = gp->style->color;
+	    }
+	    gpt->style->color = (red & RED_MASK) + ((int)((grn) << 8) & GRN_MASK) +
+		((int)((blu) << 16) & BLU_MASK);
+	}
 	if (gp->tstyle->color_column) {
 	    nvals = db_select_value(driver, Fi->table, Fi->key, cat, gp->tstyle->color_column, &value);
 	    if (nvals < 1)
@@ -235,7 +244,7 @@ int Gp_load_sites_thematic(geosite *gp)
 		    ((int)((blu) << 16) & BLU_MASK);
 	    }
 	}
-
+	
 	/* size */
 	if (gp->tstyle->size_column) {
 	    nvals = db_select_value(driver, Fi->table, Fi->key, cat, gp->tstyle->size_column, &value);
