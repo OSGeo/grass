@@ -1,0 +1,12 @@
+MODULE_TOPDIR = ../..
+
+PGM = v.colors.out
+
+LIBES = $(VECTORLIB) $(GISLIB) $(RASTERLIB)
+DEPENDENCIES = $(VECTORDEP) $(GISDEP) $(RASTERDEP)
+EXTRA_INC = $(VECT_INC)
+EXTRA_CFLAGS = $(VECT_CFLAGS)
+
+include $(MODULE_TOPDIR)/include/Make/Module.make
+
+default: cmd
