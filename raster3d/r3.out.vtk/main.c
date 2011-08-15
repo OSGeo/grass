@@ -138,7 +138,7 @@ void check_input_maps(void)
     /*If input maps are provided, check them */
     if (param.input->answers != NULL) {
         for (i = 0; param.input->answers[i] != NULL; i++) {
-            if (NULL == G_find_grid3(param.input->answers[i], ""))
+            if (NULL == G_find_raster3d(param.input->answers[i], ""))
                 Rast3d_fatal_error(_("Requested 3d raster map <%s> not found"),
                                param.input->answers[i]);
         }
@@ -148,7 +148,7 @@ void check_input_maps(void)
     if (param.rgbmaps->answers != NULL) {
         for (i = 0; i < 3; i++) {
             if (param.rgbmaps->answers[i] != NULL) {
-                if (NULL == G_find_grid3(param.rgbmaps->answers[i], ""))
+                if (NULL == G_find_raster3d(param.rgbmaps->answers[i], ""))
                     Rast3d_fatal_error(_("Requested g3d RGB map <%s> not found"),
                                    param.rgbmaps->answers[i]);
             } else {
@@ -161,7 +161,7 @@ void check_input_maps(void)
     if (param.vectormaps->answers != NULL) {
         for (i = 0; i < 3; i++) {
             if (param.vectormaps->answers[i] != NULL) {
-                if (NULL == G_find_grid3(param.vectormaps->answers[i], ""))
+                if (NULL == G_find_raster3d(param.vectormaps->answers[i], ""))
                     Rast3d_fatal_error(_("Requested g3d vector map <%s> not found"),
                                    param.vectormaps->answers[i]);
             } else {
@@ -200,7 +200,7 @@ void open_write_rgb_maps(input_maps * in, RASTER3D_Region region, FILE * fp,
             /*Open the map */
             maprgb =
                 Rast3d_open_cell_old(param.rgbmaps->answers[i],
-                                G_find_grid3(param.rgbmaps->answers[i], ""),
+                                G_find_raster3d(param.rgbmaps->answers[i], ""),
                                 &region, RASTER3D_TILE_SAME_AS_FILE,
                                 RASTER3D_USE_CACHE_DEFAULT);
             if (maprgb == NULL) {
@@ -285,7 +285,7 @@ void open_write_vector_maps(input_maps * in, RASTER3D_Region region, FILE * fp,
             /*Open the map */
             mapvect =
                 Rast3d_open_cell_old(param.vectormaps->answers[i],
-                                G_find_grid3(param.vectormaps->answers[i],
+                                G_find_raster3d(param.vectormaps->answers[i],
                                              ""), &region,
                                 RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
             if (mapvect == NULL) {
@@ -504,7 +504,7 @@ int main(int argc, char *argv[])
             /*Open the map */
             in->map =
                 Rast3d_open_cell_old(param.input->answers[i],
-                                G_find_grid3(param.input->answers[i], ""),
+                                G_find_raster3d(param.input->answers[i], ""),
                                 &region, RASTER3D_TILE_SAME_AS_FILE,
                                 RASTER3D_USE_CACHE_DEFAULT);
             if (in->map == NULL) {

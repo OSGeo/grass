@@ -37,7 +37,7 @@ int load_rasters3d(const struct GParams *params, nv_data *data)
     nvol = opt_get_num_answers(params->volume);
 
     for (i = 0; i < nvol; i++) {
-	mapset = G_find_grid3(params->volume->answers[i], "");
+	mapset = G_find_raster3d(params->volume->answers[i], "");
 	if (mapset == NULL) {
 	    G_fatal_error(_("3d raster map <%s> not found"),
 			  params->volume->answers[i]);
@@ -119,7 +119,7 @@ int add_isosurfs(const struct GParams *params, nv_data *data)
 	ncolor_const = opt_get_num_answers(params->isosurf_color_const);
 
 	if (i < ncolor_map && strcmp(params->isosurf_color_map->answers[i], "")) {
-	    mapset = G_find_grid3(params->isosurf_color_map->answers[i], "");
+	    mapset = G_find_raster3d(params->isosurf_color_map->answers[i], "");
 
 	    if (mapset == NULL) {
 		G_fatal_error(_("3d raster map <%s> not found"),

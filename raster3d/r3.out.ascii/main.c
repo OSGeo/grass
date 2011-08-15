@@ -326,7 +326,7 @@ int main(int argc, char *argv[])
         param.row->answer = 0;
     }
 
-    if (NULL == G_find_grid3(input, ""))
+    if (NULL == G_find_raster3d(input, ""))
         Rast3d_fatal_error(_("Requested 3d raster map not found"));
 
     /* Initiate the default settings */
@@ -336,7 +336,7 @@ int main(int argc, char *argv[])
     Rast3d_get_window(&region);
 
     /* Open the map and use XY cache mode */
-    map = Rast3d_open_cell_old(input, G_find_grid3(input, ""), &region,
+    map = Rast3d_open_cell_old(input, G_find_raster3d(input, ""), &region,
                           RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
     if (map == NULL)

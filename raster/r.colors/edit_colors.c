@@ -174,7 +174,7 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
         rules = NULL;
     /* Switch between raster and volume */
     if (type == RASTER3D_TYPE) {
-        mapset = G_find_grid3(name, "");
+        mapset = G_find_raster3d(name, "");
     } else {
         mapset = G_find_raster2(name, "");
     }
@@ -270,7 +270,7 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
             if (Rast_read_colors(cmap, cmapset, &colors) < 0)
                 G_fatal_error(_("Unable to read color table for raster map <%s>"), cmap);
         } else {
-            cmapset = G_find_grid3(cmap, "");
+            cmapset = G_find_raster3d(cmap, "");
             if (cmapset == NULL)
                 G_fatal_error(_("Raster3d map <%s> not found"), cmap);
 

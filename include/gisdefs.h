@@ -221,10 +221,6 @@ char *G_file_name(char *, const char *, const char *, const char *);
 char *G_file_name_misc(char *, const char *, const char *, const char *,
 		       const char *);
 
-/* find_cell.c */
-const char *G_find_raster(char *, const char *);
-const char *G_find_raster2(const char *, const char *);
-
 /* find_file.c */
 const char *G_find_file(const char *, char *, const char *);
 const char *G_find_file2(const char *, const char *, const char *);
@@ -234,6 +230,13 @@ const char *G_find_file2_misc(const char *, const char *, const char *,
 
 /* find_etc.c */
 char *G_find_etc(const char *);
+
+/* find_rast.c */
+const char *G_find_raster(char *, const char *);
+const char *G_find_raster2(const char *, const char *);
+
+/* find_rast3d.c */
+const char *G_find_raster3d(const char *, const char *);
 
 /* find_vect.c */
 const char *G_find_vector(char *, const char *);

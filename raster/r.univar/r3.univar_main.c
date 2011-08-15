@@ -143,11 +143,11 @@ int main(int argc, char *argv[])
 
     /* open 3D zoning raster with default region */
     if ((zonemap = param.zonefile->answer) != NULL) {
-	if (NULL == (mapset = G_find_grid3(zonemap, "")))
+	if (NULL == (mapset = G_find_raster3d(zonemap, "")))
 	    Rast3d_fatal_error(_("Requested g3d map <%s> not found"), zonemap);
 
 	zmap =
-	    Rast3d_open_cell_old(zonemap, G_find_grid3(zonemap, ""), &region,
+	    Rast3d_open_cell_old(zonemap, G_find_raster3d(zonemap, ""), &region,
 			    RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
 	if (zmap == NULL)
@@ -182,11 +182,11 @@ int main(int argc, char *argv[])
     /* Open 3D input raster with default region */
     infile = param.inputfile->answer;
 
-    if (NULL == G_find_grid3(infile, ""))
+    if (NULL == G_find_raster3d(infile, ""))
 	Rast3d_fatal_error(_("Requested g3d map <%s> not found"), infile);
 
     map =
-	Rast3d_open_cell_old(infile, G_find_grid3(infile, ""), &region,
+	Rast3d_open_cell_old(infile, G_find_raster3d(infile, ""), &region,
 			RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
     if (map == NULL)

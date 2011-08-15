@@ -240,7 +240,7 @@ int main(int argc, char *argv[])
 
     G_debug(3, "Open 3D raster map %s", param.input->answer);
 
-    if (NULL == G_find_grid3(param.input->answer, ""))
+    if (NULL == G_find_raster3d(param.input->answer, ""))
         Rast3d_fatal_error(_("3d raster map <%s> not found"),
                        param.input->answer);
 
@@ -270,7 +270,7 @@ int main(int argc, char *argv[])
 
     /*******************/
     map = Rast3d_open_cell_old(param.input->answer,
-                          G_find_grid3(param.input->answer, ""),
+                          G_find_raster3d(param.input->answer, ""),
                           &region, RASTER3D_TILE_SAME_AS_FILE,
                           RASTER3D_USE_CACHE_DEFAULT);
 

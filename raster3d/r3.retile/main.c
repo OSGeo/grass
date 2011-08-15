@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
 
     G_debug(3, _("Open 3d raster map <%s>"), param.input->answer);
 
-    mapset = G_find_grid3(param.input->answer, "");
+    mapset = G_find_raster3d(param.input->answer, "");
     
     if (mapset == NULL)
         Rast3d_fatal_error(_("3d raster map <%s> not found"),

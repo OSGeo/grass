@@ -608,11 +608,11 @@ int main(int argc, char *argv[])
 
     infile = inputfile->answer;
 
-    if (NULL == G_find_grid3(infile, ""))
+    if (NULL == G_find_raster3d(infile, ""))
 	Rast3d_fatal_error(_("3D raster map <%s> not found"), infile);
 
     map =
-	Rast3d_open_cell_old(infile, G_find_grid3(infile, ""), &region,
+	Rast3d_open_cell_old(infile, G_find_raster3d(infile, ""), &region,
 			RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
     if (map == NULL)

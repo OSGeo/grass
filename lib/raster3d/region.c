@@ -223,7 +223,7 @@ Rast3d_read_region_map(const char *name, const char *mapset, RASTER3D_Region * r
 	Rast3d_filename(fullName, RASTER3D_HEADER_ELEMENT, xname, xmapset);
     else {
 	if (!mapset || !*mapset)
-	    mapset = G_find_grid3(name, "");
+	    mapset = G_find_raster3d(name, "");
 	Rast3d_filename(fullName, RASTER3D_HEADER_ELEMENT, name, mapset);
     }
     return Rast3d_read_window(region, fullName);

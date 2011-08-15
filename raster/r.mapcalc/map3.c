@@ -392,7 +392,7 @@ int map_type(const char *name, int mod)
     switch (mod) {
     case 'M':
 	tmpname = G_store((char *)name);
-	mapset = G_find_grid3(tmpname, "");
+	mapset = G_find_raster3d(tmpname, "");
 	if (mapset) {
 	    void *handle;
 
@@ -440,7 +440,7 @@ int open_map(const char *name, int mod, int row, int col)
 	max_col = col;
 
     tmpname = G_store((char *)name);
-    mapset = G_find_grid3(tmpname, "");
+    mapset = G_find_raster3d(tmpname, "");
     G_free(tmpname);
 
     if (!mapset)
@@ -571,7 +571,7 @@ void close_maps(void)
 
 int check_output_map(const char *name)
 {
-    return !!G_find_grid3(name, G_mapset());
+    return !!G_find_raster3d(name, G_mapset());
 }
 
 int open_output_map(const char *name, int res_type)

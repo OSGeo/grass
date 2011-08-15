@@ -421,7 +421,7 @@ class Nviz(object):
         @return object id
         @return -1 on failure
         """
-        mapset = G_find_grid3(name, "")
+        mapset = G_find_raster3d(name, "")
         if mapset is None:
             G_warning(_("3d raster map <%s> not found"),
                       name)
@@ -433,7 +433,7 @@ class Nviz(object):
                               self.data)
         
         if color_name:      # check for color map
-            mapset = G_find_grid3(color_name, "")
+            mapset = G_find_raster3d(color_name, "")
             if mapset is None:
                 G_warning(_("3d raster map <%s> not found"),
                           color_name)
