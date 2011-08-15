@@ -13,7 +13,8 @@ of <em>volume</em> data (3D raster data).
 
 <p>
 To start the wxGUI 3D view mode, choose '3D view' from the map
-toolbar.
+toolbar. You can switch between 2D and 3D view. The region in 
+3D view is updated according to displayed region in 2D view.
 <p>
 wxNviz is emphasized on the ease and speed of viewer positioning and
 provided flexibility for using a wide range of data. A low resolution
@@ -81,9 +82,10 @@ The 3D view toolbox is integrated in the Layer Manager. The toolbox
 has several tabs:
 
 <ul>
-  <li><b>View</b> for view controling,</li>
+  <li><b>View</b> for view controlling,</li>
   <li><b>Data</b> for data properties,</li>
   <li><b>Appearance</b> for appearance settings (lighting, fringes, ...).</li>
+  <li><b>Analysis</b> for various data analyses (only cutting planes so far).</li>
 </ul>
 
 <h3>View</h3>
@@ -92,15 +94,26 @@ You can use this panel to set the <em>position, direction, and
   perspective</em> of the view. The position box shows a puck with a
   direction line pointing to the center. The direction line indicates
   the look direction (azimuth). You click and drag the puck to change
-  the current eye position. The box annotations are North, South,
-  East, and West. You can also set exact position using <em>Look
-  at</em> choice control.
+  the current eye position. Another way to change eye position is
+  to press the buttons around the position box representing cardinal
+  and ordinal directions. 
+  
+<p>
+There are four other buttons for view control in the bottom of this panel
+(following label <em>Look:</em>):
+<ul>
+  <li><em>here</em> requires you to click on Map Display Window to determine
+   the point to look at.</li>
+   <li><em>center</em> changes the point you are looking at to the center.</li>
+   <li><em>top</em> moves the current eye position above the map center.</li>
+   <li><em>reset</em> returns all current view settings to their default values.</li>
+</ul>
 
 <center>
   <br><img src="wxGUI_nviz_tools_view.jpg" border="1"><br><br>
 </center>
 
-You can adjust the viewer's height above the scene, angle of view or
+You can adjust the viewer's height above the scene, perspective and
 twist value to rotate the scene about the horizontal axis. An angle of
 0 is flat. The scene rotates between -90 and 90 degrees.
 
@@ -109,43 +122,24 @@ You can also adjusts the vertical exaggeration of the surface. As an
 example, if the easting and northing are in meters and the elevation
 in feet, a vertical exaggeration of 0.305 would produce a true
 (unexaggerated) surface.
-  
 <p>
-<em>Reset</em> returns all current settings to their default values.
+View parameters can be controlled by sliders or edited directly in text box.
+It's possible to enter values which are out of slider's range (and it will 
+adjust then).
 
-<h3>Data properties - Surface</h3>
+<h3>Data properties</h3> 
+This tab allows to control parameters related to map layers. It consists
+of four collapsible panels - <em>Surface</em>, <em>Constant surface</em>, 
+<em>Vector</em> and <em>Volume</em>.
+
+<h4>Surface</h4>
 
 Each active raster map layer from the current layer tree is displayed
-as surface in the 3D space. Separate raster data or constants can be
-used for various attributes of the surface:
-
-<ul>
-  <li><b>topography</b> - raster map or constant values used as elevation (z
-    values) for the current surface.</li>
-  <li><b>color</b> - raster map or constant color to drape over the current
-    surface. This option is useful for draping imagery such as aerial
-    photography over a DEM.</li>
-  <li><b>mask</b> - raster map that controls the areas displayed from
-    the current surface.</li>
-  <li><b>transparency</b> - raster map or constant value that controls
-    the transparency of the current surface. The default is completely
-    opaque. Range from 0 (opaque) to 255 (transparent).</li>
-  <li><b>shininess</b> - raster map or constant value that controls
-    the shininess (reflectivity) of the current surface. Range from 0 to
-    255.</li>
-  <li><b>emission</b> - raster map or constant value that controls the
-    light emitted from the current surface. Range from 0 to 255.</li>
-</ul>
-
-This panel controls how loaded surfaces are drawn. The top half of the
-panel has options to set, unset or modify attributes of the current
-surface. The bottom half has drawing style options, masking or
-changing surface position in the space.
-
-<center>
-  <br><img src="wxGUI_nviz_tools_surface.jpg" border="1"><br><br>
-</center>
-
+as surface in the 3D space. This panel controls how loaded surfaces are drawn.
+To change parameters of a surface, it must be selected in the very top part of the
+panel.
+<p>
+The top half of the panel has drawing style options.
 Surface can be drawn as a wire mesh or using filled polygons (most
 realistic). You can set draw <b>mode</b> to <em>coarse</em> (fast
 display mode), <em>fine</em> (draws surface as filled polygons with
@@ -170,9 +164,42 @@ draws the surfaces with flat shading with one color for every two
 cells. The surface appears faceted.
 
 <p>
-To set given draw settings for all loaded surfaces press button "All".
+To set given draw settings for all loaded surfaces press button "Set to all".
 
-<h3>Data properties - Vector</h3>
+<p>
+The bottom half of the panel has options to set, unset or modify attributes
+of the current surface. Separate raster data or constants can be
+used for various attributes of the surface:
+<ul>
+  <li><b>color</b> - raster map or constant color to drape over the current
+    surface. This option is useful for draping imagery such as aerial
+    photography over a DEM.</li>
+  <li><b>mask</b> - raster map that controls the areas displayed from
+    the current surface.</li>
+  <li><b>transparency</b> - raster map or constant value that controls
+    the transparency of the current surface. The default is completely
+    opaque. Range from 0 (opaque) to 100 (transparent).</li>
+  <li><b>shininess</b> - raster map or constant value that controls
+    the shininess (reflectivity) of the current surface. Range from 0 to
+    100.</li>
+</ul>
+
+<p>
+In the very bottom part of the panel position of surface can be set.
+To move the surface right (looking from the south) choose <em>X</em> axis
+and set some positive value. To reset the surface position press
+<em>Reset</em> button.
+
+<center>
+  <br><img src="wxGUI_nviz_tools_surface.jpg" border="1"><br><br>
+</center>
+
+<h4>Constant surface</h4>
+It is possible to add constant surface and set its properties like 
+fine resolution, value (height), color and transparency. It behaves 
+similarly to surface but it has less options.
+
+<h4>Vector</h4>
 
 2D vector data can be draped on the selected surfaces with various
 markers to represent point data; you can use attribute of vector
@@ -186,14 +213,12 @@ This panel controls how loaded 2D or 3D vector data are drawn.
 You can define the width (in pixels) of the line features, the color
 used for lines or point markers.
 
-<center>
-  <br><img src="wxGUI_nviz_tools_vector.jpg" border="1"><br><br>
-</center>
-
+<p>
 If vector map is 2D you can display vector features as flat at a
 specified elevation or drape it over a surface(s) at a specified
 height. Use the height control to set the flat elevation or the drape
-height above the surface(s).
+height above the surface(s). In case of multiple surfaces it is possible
+to specify which surfaces is the vector map draped over.
 
 <p>
 For display purposes, it is better to set the height slightly above
@@ -201,10 +226,10 @@ the surface. If the height is set at zero, portions of the vector may
 disappear into the surface(s).
 
 <p>
-For 2D/3D vector points you can also set the size of the markers and
-the width (in pixels) of the line used to draw the point markers (only
-applies to wire-frame markers). Currently are implemented these
-markers:
+For 2D/3D vector points you can also set the size of the markers.
+<!-- and the width (in pixels) of the line used to draw the point markers (only
+applies to wire-frame markers). -->
+ Currently are implemented these markers:
 
 <ul>
   <li><b>x</b> sets the current points markers to a 2D "X",</li>
@@ -216,41 +241,17 @@ markers:
   <li><b>asterisk</b> - 3D line-star.</li>
 </ul>
  
-<h3>Data properties - Volume</h3>
-
-Volumes can be displayed either as isosurfaces or slices. Various
-attributes of the isosurface can be defined, similarly to surface
-attributes:
-
-<ul>
-  <li><b>level</b> - reference isosurface level (height in map
-  units).</li>
-  <li><b>color</b> - raster map or constant color to drape over the
-  current volume.</li>
-  <li><b>mask</b> - raster map that controls the areas displayed from
-    the current volume.</li>
-  <li><b>transparency</b> - raster map or constant value that controls
-    the transparency of the current volume. The default is completely
-    opaque. Range from 0 (opaque) to 255 (transparent).</li>
-  <li><b>shininess</b> - raster map or constant value that controls
-    the shininess (reflectivity) of the current volume. Range from 0 to
-    255.</li>
-  <li><b>emission</b> - raster map or constant value that controls the
-    light emitted from the current volume. Range from 0 to 255.</li>
-</ul>
-
 <p>
-This panel controls how loaded volumes are drawn. Volume can be drawn
-in two different modes: <b>isosurface</b> or <b>slice</b>. The top
-part of the panel has drawing style options. The middle part has
-controls to add, delete, move up/down selected isosurface or
-slices. The bottom part has options to set, unset or modify attributes
-of the current isosurface or slice.
+Thematic mapping can be used to determine marker color and size
+(and line color and width).
 
 <center>
-  <br><img src="wxGUI_nviz_tools_volume.jpg" border="1"><br><br>
+  <br><img src="wxGUI_nviz_tools_vector.jpg" border="1"><br><br>
 </center>
 
+<h4>Volume</h4>
+
+Volumes (3D raster maps) can be displayed either as isosurfaces or slices.
 Similarly to surface panel you can define draw <b>shading</b>
 - <em>gouraud</em> (draws the volumes with a smooth shading to blend
 individual cell colors together) and <em>flat</em> (draws the volumes
@@ -261,9 +262,87 @@ visualization modes:
 <ul>
   <li><b>isosurface</b> - the levels of values for drawing the
   volume(s) as isosurfaces,</li>
-  <li>and <b>slice</b> - the levels of values for drawing the volume
+  <li>and <b>slice</b> -  drawing the volume
   as cross-sections.</li>
 </ul>
+<p>
+The middle part of the panel has controls to add, delete, move up/down selected 
+isosurface or slice. The bottom part differs for isosurface and slice. 
+When choosing isosurface, this part the of panel has options to set, unset
+or modify attributes of the current isosurface. 
+Various attributes of the isosurface can be defined, similarly to surface
+attributes:
+
+<ul>
+  <li><b>isosurface value</b> - reference isosurface value (height in map
+  units).</li>
+  <li><b>color</b> - raster map or constant color to drape over the
+  current volume.</li>
+  <li><b>mask</b> - raster map that controls the areas displayed from
+    the current volume.</li>
+  <li><b>transparency</b> - raster map or constant value that controls
+    the transparency of the current volume. The default is completely
+    opaque. Range from 0 (opaque) to 100 (transparent).</li>
+  <li><b>shininess</b> - raster map or constant value that controls
+    the shininess (reflectivity) of the current volume. Range from 0 to
+    100.</li>
+</ul>
+
+In case of volume slice the bottom part of the panel controls the slice 
+attributes (which axis is slice parallel to, position of slice edges,
+transparency). Press button <em>Reset</em> to reset slice position
+attributes.
+<p>
+Volumes can be moved the same way like surfaces do.
+
+<center>
+  <br><img src="wxGUI_nviz_tools_volume.jpg" border="1"><br><br>
+</center>
+
+<h3>Analysis</h3>
+<em>Analysis</em> tab contains <em>Cutting planes</em> panel.
+
+<h4>Cutting planes</h4>
+Cutting planes allow to cut surfaces along a plane. You can switch 
+between six planes; to disable cutting planes switch to <em>None</em>.
+Initially the plane is vertical, you can change it to horizontal by setting
+<em>tilt</em> 90 degrees. The <em>X</em> and <em>Y</em> values specify
+the rotation center of plane. You can see better what <em>X</em> and <em>Y</em>
+do when changing <em>rotation</em>. 
+<em>Height</em> parameter has sense only when changing 
+<em>tilt</em> too. Press button <em>Reset</em> to reset current cutting plane.
+<p>
+In case of multiple surfaces you can visualize the cutting plane by
+<em>Shading</em>. Shading is visible only when more than one surface
+is loaded and these surfaces must have the same fine resolution set.
+
+
+
+<h3>Appearance</h3>
+Appearance tab consists of three collapsible panels:
+
+<ul>
+  <li><em>Lighting</em> for adjusting light source</li>
+  <li><em>Fringe</em> for drawing fringes
+  <li><em>Decorations</em> to display north arrow and scale bar</li>
+</ul>
+<p>
+The <em>lighting</em> panel enables to change the position of light
+source, light color, brightness and ambient. Light position is controlled 
+similarly to eye position. If option <em>Show light model</em> is enabled
+light model is displayed to visualize the light settings.
+
+<center>
+  <br><img src="wxGUI_nviz_tools_light.jpg" border="1"><br><br>
+</center>
+<p>
+The <em>Fringe</em> panel allows to draw fringes in different directions
+(North & East, South & East, South & West, North & West). It is possible
+to set fringe color and height of the bottom edge.
+<p>
+The <em>Decorations</em> panel enables to display north arrow and simple
+scale bar. North arrow and scale bar length is determined in map units. 
+You can display more than one scale bar.
 
 <h2>Settings</h2>
 
@@ -278,13 +357,9 @@ parameters, or to set the background color of the Map Display Window
 <ul>
   <li>Improve intuitive navigation (mouse, fly mode)</li>
   <li>Animation capabilities</li>
-  <li>Arbitrary cutting planes</li>
   <li>Labels, decoration, etc.</li>
-  <li>Scripting capabilities</li>
-  <li>Better workspace support (view settings, lighting)
   <li>Surface - mask by zero/elevation, more interactive positioning</li>
   <li>Vector points - implement display mode flat/surface for 2D points</li>
-  <li>Volume - slice draw mode</li>
   <li>...</li>
 </ul>
 
