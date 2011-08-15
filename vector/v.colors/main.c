@@ -15,7 +15,6 @@
  *
  **************************************************************/
 
-#include <string.h>
 #include <stdlib.h>
 
 #include <grass/gis.h>
@@ -245,25 +244,6 @@ int main(int argc, char *argv[])
 	else {
 	    scan_attr(&Map, layer, attrcolumn, style, opt.range->answer ? &range : NULL,
 		      &colors, &cmin, &cmax);
-	}
-	
-	if (strcmp(style, "random") == 0) {
-	    Rast_make_random_colors(&colors, (CELL) cmin, (CELL) cmax);
-	} else if (strcmp(style, "grey.eq") == 0) {
-	    G_fatal_error(_("Color table <%s> not supported"), "grey.eq");
-	    /*
-	      if (!have_stats)
-	      have_stats = get_stats(name, mapset, &statf);
-	      Rast_make_histogram_eq_colors(&colors, &statf);
-	    */
-        } else if (strcmp(style, "grey.log") == 0) {
-	    G_fatal_error(_("Color table <%s> not supported"), "grey.log");
-	    /*
-	      if (!have_stats)
-	      have_stats = get_stats(name, mapset, &statf);
-	      Rast_make_histogram_log_colors(&colors, &statf, (CELL) min,
-	      (CELL) max);
-	    */
 	}
     }
     else if (rules) {
