@@ -1,24 +1,16 @@
-
-/****************************************************************************
- *
- * MODULE:       gis library
- * AUTHOR(S):    Glynn Clements <glynn@gclements.plus.com>
- * COPYRIGHT:    (C) 2007 Glynn Clements and the GRASS Development Team
- *
- * NOTE:         Based upon r.colors/rules.c
- *               The colors are stored in ./colors/
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *****************************************************************************/
+/*!
+  \file lib/raster/color_read.c
+  
+  \brief Raster Library - Read and parse color rules file
+  
+  (C) 2007 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public
+  License (>=v2). Read the file COPYING that comes with GRASS
+  for details.
+  
+  \author Glynn Clements
+*/
 
 #include <stdio.h>
 
@@ -43,6 +35,20 @@ enum rule_error
     CR_ERROR_VALUE,
 };
 
+/*!
+  \brief Read color rule
+
+  \param min, max min & max values (used only when color rules are in percentage)
+  \param buf
+  \param val value
+  \param[out] r,g,b color values
+  \param norm
+  \param nval
+  \param dflt
+
+  \return 0 on failure
+  \return 1 on success
+*/
 int Rast_parse_color_rule(DCELL min, DCELL max, const char *buf,
 			  DCELL * val, int *r, int *g, int *b,
 			  int *norm, int *nval, int *dflt)
@@ -103,6 +109,13 @@ int Rast_parse_color_rule(DCELL min, DCELL max, const char *buf,
     return CR_ERROR_VALUE;
 }
 
+/*!
+  \brief Parse color rule
+
+  \param code
+  
+  \return pointer to buffer with error message
+*/
 const char *Rast_parse_color_rule_error(int code)
 {
     switch (code) {
@@ -123,6 +136,20 @@ const char *Rast_parse_color_rule_error(int code)
     }
 }
 
+/*!
+  \brief Read color rule
+
+  \param closure
+  \param min, max min & max values (used only when color rules are in percentage)
+  \param val value
+  \param[out] r,g,b color values
+  \param norm
+  \param nval
+  \param dflt
+
+  \return 0 on failure
+  \return 1 on success
+*/
 int Rast_read_color_rule(void *closure, DCELL min, DCELL max,
 			 DCELL * val, int *r, int *g, int *b,
 			 int *norm, int *nval, int *dflt)
@@ -158,6 +185,17 @@ int Rast_read_color_rule(void *closure, DCELL min, DCELL max,
     return 0;
 }
 
+/*!
+  \brief Read color rules from file
+  
+  \param[out] colors pointer to Colors structure
+  \param min, max min & max values (used only when color rules are in percentage)
+  \param read_rule pointer to read_rule_fn structure
+  \param closure 
+
+  \return 0 on failure
+  \return 1 on success
+*/
 int Rast_read_color_rules(struct Colors *colors, DCELL min, DCELL max,
 			  read_rule_fn * read_rule, void *closure)
 {
@@ -245,12 +283,32 @@ static int load_rules_file(struct Colors *colors, const char *path, DCELL min,
     return ret;
 }
 
+/*!
+  \brief Load color rules from file
+  
+  \param[out] colors pointer to Colors structure
+  \param path path to the color rules file
+  \param min, max min & max values (used only when color rules are in percentage)
+
+  \return 0 on failure
+  \return 1 on success
+*/
 int Rast_load_colors(struct Colors *colors, const char *path, CELL min,
 		     CELL max)
 {
     return load_rules_file(colors, path, (DCELL) min, (DCELL) max);
 }
 
+/*!
+  \brief Load color floating-point rules from file
+  
+  \param[out] colors pointer to Colors structure
+  \param path path to the color rules file
+  \param min, max min & max values (used only when color rules are in percentage)
+
+  \return 0 on failure
+  \return 1 on success
+*/
 int Rast_load_fp_colors(struct Colors *colors, const char *path, DCELL min,
 			DCELL max)
 {
@@ -268,12 +326,26 @@ static void load_rules_name(struct Colors *colors, const char *name,
 	G_fatal_error(_("Unable to load color rules <%s>"), name);
 }
 
+/*!
+  \brief Load color rules from predefined color table
+
+  \param[out] colors pointer to Colors structure
+  \param name name of color table to load
+  \param min, max min & max values (used only when color rules are in percentage)
+*/
 void Rast_make_colors(struct Colors *colors, const char *name, CELL min,
 		      CELL max)
 {
     return load_rules_name(colors, name, (DCELL) min, (DCELL) max);
 }
 
+/*!
+  \brief Load color rules from predefined floating-point color table
+
+  \param[out] colors pointer to Colors structure
+  \param name name of color table to load
+  \param min, max min & max values (used only when color rules are in percentage)
+*/
 void Rast_make_fp_colors(struct Colors *colors, const char *name, DCELL min,
 			 DCELL max)
 {
