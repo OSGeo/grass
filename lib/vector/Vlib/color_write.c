@@ -39,7 +39,7 @@
   overwritten by the new color table. But if <i>mapset</i> is not the
   current mapset, then the color table is actually written in the
   current mapset under the <tt>colr2</tt> element as:
-  <tt>vector/name/colr2/tt>.
+  <tt>vector/name/colr2</tt>.
   
   The rules are written out using floating-point format, removing
   trailing zeros (possibly producing integers). The flag marking the
