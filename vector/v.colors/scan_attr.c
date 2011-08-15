@@ -6,7 +6,8 @@
 #include "local_proto.h"
 
 int scan_attr(const struct Map_info *Map, int layer, const char *column_name,
-	      const char *style, struct Colors *colors, int *cmin, int *cmax)
+	      const char *style, const struct FPRange *range,
+	      struct Colors *colors, int *cmin, int *cmax)
 {
     int ctype, is_fp, nrec, i, cat;
     int red, grn, blu;
@@ -53,11 +54,43 @@ int scan_attr(const struct Map_info *Map, int layer, const char *column_name,
     if (is_fp) {
 	fmin = cvarr.value[0].val.d;
 	fmax = cvarr.value[cvarr.n_values-1].val.d;
+
+	if (range) {
+	    if (range->min >= fmin && range->min <= fmax)
+		fmin = range->min;
+	    else
+		G_warning(_("Min value (%f) is out of range %f,%f"),
+			  range->min, fmin, fmax);
+	    
+	    if (range->max <= fmax && range->max >= fmin)
+		fmax = range->max;
+	    else
+		G_warning(_("Max value (%f) is out of range %f,%f"),
+			  range->max, fmin, fmax);
+	}
+	
+	G_debug(3, "scan_attr(): range=%f,%f", fmin, fmax);
 	Rast_make_fp_colors(&vcolors, style, (DCELL) fmin, (DCELL) fmax);
     }
     else {
 	fmin = cvarr.value[0].val.i;
 	fmax = cvarr.value[cvarr.n_values-1].val.i;
+	
+	if (range) {
+	    if (range->min >= fmin && range->min <= fmax)
+		fmin = range->min;
+	    else
+		G_warning(_("Min value (%d) is out of range %d,%d"),
+			  (int) range->min, (int) fmin, (int) fmax);
+	    
+	    if (range->max <= fmax && range->max >= fmin)
+		fmax = range->max;
+	    else
+		G_warning(_("Max value (%d) is out of range %d,%d"),
+			  (int) range->max, (int) fmin, (int) fmax);
+	}
+	
+	G_debug(3, "scan_attr(): range=%d,%d", (int) fmin, (int) fmax);
 	Rast_make_colors(&vcolors, style, (CELL) fmin, (CELL) fmax);
     }
 
@@ -68,17 +101,21 @@ int scan_attr(const struct Map_info *Map, int layer, const char *column_name,
 	if (is_fp) {
 	    if (Rast_get_d_color((const DCELL *) &(cv->val.d), &red, &grn, &blu,
 				 &vcolors) == 0) {
-		G_warning(_("No color rule defined for value %f"), cv->val.d);
+		/* G_warning(_("No color rule defined for value %f"), cv->val.d); */
+		G_debug(3, "scan_attr(): cat=%d, val=%f -> no color rule", cat, cv->val.d);
 		continue;
 	    }
 	}
 	else {
 	    if (Rast_get_c_color((const CELL *) &(cv->val.i), &red, &grn, &blu,
 				 &vcolors) == 0) {
-		G_warning(_("No color rule defined for value %d"), cv->val.i);
+		/* G_warning(_("No color rule defined for value %d"), cv->val.i); */
+		G_debug(3, "scan_attr(): cat=%d, val=%d -> no color rule", cat, cv->val.i);
 		continue;
 	    }
 	}
+	G_debug(3, "scan_attr(): cat=%d, val=%f, r=%d, g=%d, b=%d",
+		cat, is_fp ? cv->val.d : cv->val.i, red, grn, blu);
 	Rast_add_c_color_rule((const CELL*) &cat, red, grn, blu,
 			      (const CELL*) &cat, red, grn, blu, colors);
 
