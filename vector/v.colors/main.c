@@ -272,7 +272,7 @@ int main(int argc, char *argv[])
         Rast_invert_colors(&colors);
 
     if (flag.e->answer) {
-	G_fatal_error(_("Flag -%c needs to be implemeneted"));
+	G_fatal_error(_("Flag -%c is not implemented"), flag.e->key);
 	/*
 	if (!have_stats)
 	    have_stats = get_stats(name, mapset, &statf);
