@@ -1,8 +1,11 @@
-/* scan_attr */
+/* make_colors.c */
+void make_colors(struct Colors *, const char *, DCELL, DCELL, int);
+
+/* scan_attr.c */
 int scan_attr(const struct Map_info *, int, const char *, const char *,
 	      const struct FPRange *, struct Colors *, int *, int *);
 
-/* scan_cats */
+/* scan_cats.c */
 void scan_cats(const struct Map_info *, int, const char *,
 	       const struct FPRange *, struct Colors *, int *, int *);
 

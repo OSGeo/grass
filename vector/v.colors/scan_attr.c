@@ -68,9 +68,6 @@ int scan_attr(const struct Map_info *Map, int layer, const char *column_name,
 		G_warning(_("Max value (%f) is out of range %f,%f"),
 			  range->max, fmin, fmax);
 	}
-	
-	G_debug(3, "scan_attr(): range=%f,%f", fmin, fmax);
-	Rast_make_fp_colors(&vcolors, style, (DCELL) fmin, (DCELL) fmax);
     }
     else {
 	fmin = cvarr.value[0].val.i;
@@ -89,10 +86,8 @@ int scan_attr(const struct Map_info *Map, int layer, const char *column_name,
 		G_warning(_("Max value (%d) is out of range %d,%d"),
 			  (int) range->max, (int) fmin, (int) fmax);
 	}
-	
-	G_debug(3, "scan_attr(): range=%d,%d", (int) fmin, (int) fmax);
-	Rast_make_colors(&vcolors, style, (CELL) fmin, (CELL) fmax);
     }
+    make_colors(&vcolors, style, (DCELL) fmin, (DCELL) fmax, is_fp);
 
     /* color table for categories */
     for (i = 0; i < cvarr.n_values; i++) {
@@ -129,7 +124,7 @@ int scan_attr(const struct Map_info *Map, int layer, const char *column_name,
 		*cmax = cat;
 	}
     }
-	
+    
     db_close_database(driver);
 
     return is_fp;

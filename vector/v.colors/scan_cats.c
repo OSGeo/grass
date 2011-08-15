@@ -45,8 +45,7 @@ void scan_cats(const struct Map_info *Map, int field, const char *style,
 		      (int) range->max, *cmin, *cmax);
     }
     
-    G_debug(3, "scan_cats(): range=%d,%d", *cmin, *cmax);
-    Rast_make_colors(colors, style, (CELL) *cmin, (CELL) *cmax);
+    make_colors(colors, style, (DCELL) *cmin, (DCELL) *cmax, FALSE);
 
     Vect_destroy_cats_struct(Cats);
 }
