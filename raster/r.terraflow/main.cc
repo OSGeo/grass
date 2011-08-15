@@ -319,7 +319,7 @@ void record_args(int argc, char **argv) {
   sprintf(buf, "D8CUT=%f", opt->d8cut);
   stats->comment(buf);
 
-  size_t mm_size = opt->mem  << 20; /* (in bytes) */
+  size_t mm_size = (size_t) opt->mem  << 20; /* (in bytes) */
   char tmp[100];
   formatNumber(tmp, mm_size);
   sprintf(buf, "Memory size: %s bytes", tmp);
@@ -506,7 +506,7 @@ main(int argc, char *argv[]) {
   }
 
   /* set up STREAM memory manager */
-  size_t mm_size = opt->mem << 20; /* opt->mem is in MB */
+  size_t mm_size = (size_t) opt->mem << 20; /* opt->mem is in MB */
   MM_manager.set_memory_limit(mm_size);
   if (opt->verbose) {
 	MM_manager.warn_memory_limit();
