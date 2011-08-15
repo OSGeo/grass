@@ -308,10 +308,10 @@ int main(int argc, char *argv[])
 
     trueCoords = coords->answer;
 
-    if (NULL == G_find_grid3(input, ""))
+    if (NULL == G_find_raster3d(input, ""))
 	Rast3d_fatal_error(_("Requested 3d raster map not found"));
 
-    map = Rast3d_open_cell_old(input, G_find_grid3(input, ""), RASTER3D_DEFAULT_WINDOW,
+    map = Rast3d_open_cell_old(input, G_find_raster3d(input, ""), RASTER3D_DEFAULT_WINDOW,
 			  RASTER3D_TILE_SAME_AS_FILE, RASTER3D_NO_CACHE);
     if (map == NULL)
 	Rast3d_fatal_error(_("Error opening 3d raster map"));

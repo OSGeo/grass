@@ -36,7 +36,7 @@ int Gvl_load_colors_data(void **color_data, const char *name)
     const char *mapset;
     struct Colors *colors;
 
-    if (NULL == (mapset = G_find_grid3(name, ""))) {
+    if (NULL == (mapset = G_find_raster3d(name, ""))) {
 	G_warning(_("3D raster map <%s> not found"), name);
 	return (-1);
     }

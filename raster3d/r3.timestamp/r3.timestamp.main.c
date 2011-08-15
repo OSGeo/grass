@@ -67,9 +67,9 @@ int main(int argc, char *argv[])
     modify = date->answer != NULL;
 
     if (modify)
-	mapset = G_find_grid3(name, G_mapset());
+	mapset = G_find_raster3d(name, G_mapset());
     else
-	mapset = G_find_grid3(name, "");
+	mapset = G_find_raster3d(name, "");
 
     if (mapset == NULL) {
 	G_fatal_error(_("Grid3 <%s> not found %s"), name,

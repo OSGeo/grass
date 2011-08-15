@@ -98,7 +98,7 @@ modifyNull(char *name, d_Mask * maskRules, int changeNull, double newNullVal)
 
     cacheSize = Rast3d_cache_size_encode(RASTER3D_USE_CACHE_XY, 1);
 
-    if (NULL == G_find_grid3(name, ""))
+    if (NULL == G_find_raster3d(name, ""))
 	Rast3d_fatal_error(_("3D raster map <%s> not found"), name);
 
     fprintf(stderr, "name %s Mapset %s \n", name, G_mapset());

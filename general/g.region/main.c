@@ -485,7 +485,7 @@ int main(int argc, char *argv[])
     if ((name = parm.raster3d->answer)) {
 	RASTER3D_Region win;
 
-	if ((mapset = G_find_grid3(name, "")) == NULL)
+	if ((mapset = G_find_raster3d(name, "")) == NULL)
 	    G_fatal_error(_("3D raster map <%s> not found"), name);
 
 	if (Rast3d_read_region_map(name, mapset, &win) < 0)

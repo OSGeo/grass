@@ -123,7 +123,7 @@ int main(int argc, char *argv[])
 
     name = G_store(opt1->answer);
 
-    if ((mapset = G_find_grid3(name, "")) == NULL)
+    if ((mapset = G_find_raster3d(name, "")) == NULL)
 	G_fatal_error(_("3D Raster map <%s> not found"), name);
 
     /*We need to open the map */

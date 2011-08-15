@@ -269,12 +269,12 @@ N_array_3d *N_read_rast3d_to_array_3d(char *name, N_array_3d * array,
     depths = region.depths;
 
 
-    if (NULL == G_find_grid3(name, ""))
+    if (NULL == G_find_raster3d(name, ""))
 	Rast3d_fatal_error(_("Requested g3d map <%s> not found"), name);
 
     /*Open all maps with default region */
     map =
-	Rast3d_open_cell_old(name, G_find_grid3(name, ""), RASTER3D_DEFAULT_WINDOW,
+	Rast3d_open_cell_old(name, G_find_raster3d(name, ""), RASTER3D_DEFAULT_WINDOW,
 			RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
     if (map == NULL)

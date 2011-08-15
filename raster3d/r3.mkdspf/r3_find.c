@@ -30,7 +30,7 @@ int g3_find_dsp_file(const char *cell, const char *file, const char *mset)
 /* return NULL on error: otherwise returns dspout */
 const char *check_get_any_dspname(const char *dspf, const char *g3f, const char *mset)
 {
-    if (!G_find_grid3(g3f, ""))
+    if (!G_find_raster3d(g3f, ""))
 	G_fatal_error("[%s] 3D raster map not found", g3f);
 
     if (mset) {			/* otherwise must be reading only  */

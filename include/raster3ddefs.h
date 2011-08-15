@@ -45,9 +45,6 @@ void Rast3d_compare_files(const char *, const char *, const char *, const char *
 /* filename.c */
 void Rast3d_filename(char *, const char *, const char *, const char *);
 
-/* find_grid3.c */
-char *G_find_grid3(const char *, const char *);
-
 /* fpcompress.c */
 void Rast3d_fpcompress_print_binary(char *, int);
 void Rast3d_fpcompress_dissect_xdr_double(unsigned char *);

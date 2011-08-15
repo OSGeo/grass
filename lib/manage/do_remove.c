@@ -74,7 +74,7 @@ int M_do_remove(int n, const char *old)
 	}
 
 	if (G_strcasecmp(list[n].alias, "rast3d") == 0) {
-	    if ((mapset = G_find_grid3(old, "")) == NULL)
+	    if ((mapset = G_find_raster3d(old, "")) == NULL)
 		G_warning(_("3D raster map <%s> not found"), old);
 	}
 
