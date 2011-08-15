@@ -34,7 +34,8 @@ int main(int argc, char *argv[])
     } flag; 
 
     struct {
-	struct Option *map, *field, *colr, *rast, *volume, *rules, *attrcol, *rgbcol;
+	struct Option *map, *field, *colr, *rast, *volume, *rules,
+	    *attrcol, *rgbcol, *range;
     } opt;
 
     int layer, cmin, cmax;
@@ -45,6 +46,7 @@ int main(int argc, char *argv[])
     char *name;
     
     struct Map_info Map;
+    struct FPRange range;
     struct Colors colors, colors_tmp;
     /* struct Cell_stats statf; */
     
@@ -63,12 +65,23 @@ int main(int argc, char *argv[])
     opt.attrcol = G_define_standard_option(G_OPT_DB_COLUMN);
     opt.attrcol->label = _("Name of column containing numeric data");
     opt.attrcol->description = _("If not given categories are used");
+    opt.attrcol->guisection = _("Define");
+
+    opt.range = G_define_option();
+    opt.range->key = "range";
+    opt.range->type = TYPE_DOUBLE;
+    opt.range->required = NO;
+    opt.range->description = _("Manually set range (refers to 'column' option)");
+    opt.range->key_desc = "min,max";
+
     opt.colr = G_define_standard_option(G_OPT_M_COLR);
-    
+    opt.colr->guisection = _("Define");
+
     opt.rgbcol = G_define_standard_option(G_OPT_DB_COLUMN);
     opt.rgbcol->key = "rgb_column";
     opt.rgbcol->label = _("Name of color column to populate RGB values");
     opt.rgbcol->description = _("If not given writes color table");
+    opt.rgbcol->guisection = _("Define");
 
     opt.rast = G_define_standard_option(G_OPT_R_INPUT);
     opt.rast->key = "raster";
@@ -208,6 +221,14 @@ int main(int argc, char *argv[])
     if (layer < 1)
 	G_fatal_error(_("Layer <%s> not found"), opt.field->answer);
     
+    if (opt.range->answer) {
+	range.min = atof(opt.range->answers[0]);
+	range.max = atof(opt.range->answers[1]);
+	if (range.min > range.max)
+	    G_fatal_error(_("Option <%s>: min must be greater or equal to max"),
+			  opt.range->key);
+    }
+
     if (is_from_stdin) {
 	/*
         if (!read_color_rules(stdin, &colors, min, max, fp))
@@ -218,10 +239,11 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Color table <%s> not found"), style);
 	
 	if (!attrcolumn) {
-	    scan_cats(&Map, layer, style, &colors, &cmin, &cmax);
+	    scan_cats(&Map, layer, style, opt.range->answer ? &range : NULL,
+		      &colors, &cmin, &cmax);
 	}
 	else {
-	    scan_attr(&Map, layer, attrcolumn, style,
+	    scan_attr(&Map, layer, attrcolumn, style, opt.range->answer ? &range : NULL,
 		      &colors, &cmin, &cmax);
 	}
 	
