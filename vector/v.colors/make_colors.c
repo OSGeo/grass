@@ -37,3 +37,16 @@ void make_colors(struct Colors *colors, const char *style, DCELL min, DCELL max,
 	    Rast_make_colors(colors, style, (CELL) min, (CELL) max);
     }
 }
+
+void load_colors(struct Colors *colors, const char *rules, DCELL min, DCELL max, int is_fp)
+{
+    int ret;
+    
+    if (is_fp)
+	ret = Rast_load_fp_colors(colors, rules, (DCELL) min, (DCELL) max);
+    else
+	ret = Rast_load_colors(colors, rules, (CELL) min, (CELL) max);
+
+    if (ret == 0)
+	G_fatal_error(_("Unable to load rules file <%s>"), rules);
+}

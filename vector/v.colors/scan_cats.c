@@ -6,13 +6,14 @@
 
 static void scan_layer(int, const struct line_cats *, int *, int *);
 
-void scan_cats(const struct Map_info *Map, int field, const char *style,
-	       const struct FPRange *range, struct Colors *colors, int *cmin, int *cmax)
+void scan_cats(const struct Map_info *Map, int field,
+	       const char *style, const char *rules,
+	       const struct FPRange *range, struct Colors *colors)
 {
-    int ltype, lmin, lmax;
+    int ltype, lmin, lmax, cmin, cmax;
     struct line_cats *Cats;
 
-    *cmin = *cmax = -1;
+    cmin = cmax = -1;
     Cats = Vect_new_cats_struct();
 
     G_message(_("Reading features..."));
@@ -25,27 +26,31 @@ void scan_cats(const struct Map_info *Map, int field, const char *style,
 
 	scan_layer(field, Cats, &lmin, &lmax);
 
-	if (*cmin == -1 || lmin <= *cmin)
-	    *cmin = lmin;
-	if (*cmax == -1 || lmax >= *cmax)
-	    *cmax = lmax;
+	if (cmin == -1 || lmin <= cmin)
+	    cmin = lmin;
+	if (cmax == -1 || lmax >= cmax)
+	    cmax = lmax;
     }
 
     if (range) {
-	if (range->min >= *cmin && range->min <= *cmax)
-	    *cmin = range->min;
+	if (range->min >= cmin && range->min <= cmax)
+	    cmin = range->min;
 	else
 	    G_warning(_("Min value (%d) is out of range %d,%d"),
-		      (int) range->min, *cmin, *cmax);
+		      (int) range->min, cmin, cmax);
 	
-	if (range->max <= *cmax && range->max >= *cmin)
-	    *cmax = range->max;
+	if (range->max <= cmax && range->max >= cmin)
+	    cmax = range->max;
 	else
 	    G_warning(_("Max value (%d) is out of range %d,%d"),
-		      (int) range->max, *cmin, *cmax);
+		      (int) range->max, cmin, cmax);
     }
-    
-    make_colors(colors, style, (DCELL) *cmin, (DCELL) *cmax, FALSE);
+
+    if (style)
+	make_colors(colors, style, (DCELL) cmin, (DCELL) cmax, FALSE);
+    else if (rules) {
+	load_colors(colors, rules, (DCELL) cmin, (DCELL) cmax, FALSE);
+    }
 
     Vect_destroy_cats_struct(Cats);
 }
