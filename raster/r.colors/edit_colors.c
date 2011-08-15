@@ -272,10 +272,10 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
         } else {
             cmapset = G_find_raster3d(cmap, "");
             if (cmapset == NULL)
-                G_fatal_error(_("Raster3d map <%s> not found"), cmap);
+                G_fatal_error(_("3D raster map <%s> not found"), cmap);
 
             if (Rast3d_read_colors(cmap, cmapset, &colors) < 0)
-                G_fatal_error(_("Unable to read color table for raster3d map <%s>"), cmap);
+                G_fatal_error(_("Unable to read color table for 3D raster map <%s>"), cmap);
         }
     }
 

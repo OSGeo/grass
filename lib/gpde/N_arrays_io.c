@@ -270,7 +270,7 @@ N_array_3d *N_read_rast3d_to_array_3d(char *name, N_array_3d * array,
 
 
     if (NULL == G_find_raster3d(name, ""))
-	Rast3d_fatal_error(_("Requested g3d map <%s> not found"), name);
+	Rast3d_fatal_error(_("3D raster map <%s> not found"), name);
 
     /*Open all maps with default region */
     map =
@@ -278,7 +278,7 @@ N_array_3d *N_read_rast3d_to_array_3d(char *name, N_array_3d * array,
 			RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
     if (map == NULL)
-	Rast3d_fatal_error(_("Error opening g3d map <%s>"), name);
+	Rast3d_fatal_error(_("Unable to open 3D raster map <%s>"), name);
 
     type = Rast3d_tile_type_map(map);
 
