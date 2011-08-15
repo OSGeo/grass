@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
 	    *attrcol, *rgbcol, *range;
     } opt;
 
-    int layer, cmin, cmax;
+    int layer;
     int have_stats;
     int overwrite, remove, is_from_stdin, stat, have_colors;
     const char *mapset, *cmapset;
@@ -70,7 +70,8 @@ int main(int argc, char *argv[])
     opt.range->key = "range";
     opt.range->type = TYPE_DOUBLE;
     opt.range->required = NO;
-    opt.range->description = _("Manually set range (refers to 'column' option)");
+    opt.range->label = _("Manually set range (refers to 'column' option)");
+    opt.range->description = _("Ignored when 'rules' given");
     opt.range->key_desc = "min,max";
 
     opt.colr = G_define_standard_option(G_OPT_M_COLR);
@@ -233,22 +234,20 @@ int main(int argc, char *argv[])
         if (!read_color_rules(stdin, &colors, min, max, fp))
             exit(EXIT_FAILURE);
 	*/
-    } else if (style) {	
-	if (!G_find_color_rule(style))
+    } else if (style || rules) {	
+	if (style && !G_find_color_rule(style))
 	    G_fatal_error(_("Color table <%s> not found"), style);
 	
 	if (!attrcolumn) {
-	    scan_cats(&Map, layer, style, opt.range->answer ? &range : NULL,
-		      &colors, &cmin, &cmax);
+	    scan_cats(&Map, layer, style, rules,
+		      opt.range->answer ? &range : NULL,
+		      &colors);
 	}
 	else {
-	    scan_attr(&Map, layer, attrcolumn, style, opt.range->answer ? &range : NULL,
-		      &colors, &cmin, &cmax);
+	    scan_attr(&Map, layer, attrcolumn, style, rules,
+		      opt.range->answer ? &range : NULL,
+		      &colors);
 	}
-    }
-    else if (rules) {
-	if (!Rast_load_colors(&colors, rules, (CELL) cmin, (CELL) cmax))
-	    G_fatal_error(_("Unable to load rules file <%s>"), rules);
     }
     else {
 	/* use color from another map (cmap) */

@@ -6,8 +6,8 @@
 #include "local_proto.h"
 
 int scan_attr(const struct Map_info *Map, int layer, const char *column_name,
-	      const char *style, const struct FPRange *range,
-	      struct Colors *colors, int *cmin, int *cmax)
+	      const char *style, const char *rules,
+	      const struct FPRange *range, struct Colors *colors)
 {
     int ctype, is_fp, nrec, i, cat;
     int red, grn, blu;
@@ -19,9 +19,7 @@ int scan_attr(const struct Map_info *Map, int layer, const char *column_name,
     dbCatVal *cv;
     dbCatValArray cvarr;
 
-    *cmin = *cmax = -1;
     Rast_init_colors(colors);
-    Rast_init_colors(&vcolors);
     
     fi = Vect_get_field(Map, layer);
     if (!fi)
@@ -87,7 +85,10 @@ int scan_attr(const struct Map_info *Map, int layer, const char *column_name,
 			  (int) range->max, (int) fmin, (int) fmax);
 	}
     }
-    make_colors(&vcolors, style, (DCELL) fmin, (DCELL) fmax, is_fp);
+    if (style)
+	make_colors(&vcolors, style, (DCELL) fmin, (DCELL) fmax, is_fp);
+    else if (rules)
+	load_colors(&vcolors, rules, (DCELL) fmin, (DCELL) fmax, is_fp);
 
     /* color table for categories */
     for (i = 0; i < cvarr.n_values; i++) {
@@ -113,16 +114,6 @@ int scan_attr(const struct Map_info *Map, int layer, const char *column_name,
 		cat, is_fp ? cv->val.d : cv->val.i, red, grn, blu);
 	Rast_add_c_color_rule((const CELL*) &cat, red, grn, blu,
 			      (const CELL*) &cat, red, grn, blu, colors);
-
-	if (i == 0) {
-	    *cmin = *cmax = cat;
-	}
-	else {
-	    if (cat <= *cmin)
-		*cmin = cat;
-	    if (cat >= *cmax)
-		*cmax = cat;
-	}
     }
     
     db_close_database(driver);
