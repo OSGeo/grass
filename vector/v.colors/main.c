@@ -215,6 +215,7 @@ int main(int argc, char *argv[])
     G_suppress_warnings(FALSE);
 
     /* open map and get min/max values */
+    Vect_set_open_level(1); /* no topology required */
     Vect_open_old2(&Map, name, mapset, opt.field->answer);
 
     layer = Vect_get_field_number(&Map, opt.field->answer);
