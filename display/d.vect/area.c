@@ -190,7 +190,7 @@ int display_area(struct Map_info *Map, struct cat_list *Clist, const struct Cell
 	}
 	
 	if (fcolor || zcolors) {
-	    if (!cvarr_rgb && !cats_color_flag && !zcolors) {
+	    if (!cvarr_rgb && !cats_color_flag && !zcolors && !colors) {
 		D_RGB_color(fcolor->r, fcolor->g, fcolor->b);
 		D_polygon_abs(Points->x, Points->y, Points->n_points);
 	    }
