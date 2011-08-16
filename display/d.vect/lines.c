@@ -281,7 +281,7 @@ int display_lines(struct Map_info *Map, int type, struct cat_list *Clist,
 	    rotation = 0.0;
 	}
 	else if (color || custom_rgb || zcolors) {
-	    if (!cvarr_rgb && !cats_color_flag && !zcolors)
+	    if (!cvarr_rgb && !cats_color_flag && !zcolors && !colors)
 		D_RGB_color(color->r, color->g, color->b);
 	    else {
 		if (custom_rgb)
