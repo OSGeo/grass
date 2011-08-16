@@ -14,4 +14,6 @@ else
  grep -l '\<_$' "$@" | \
      while read file ; do sed -i -e '/[( \t]_$/{;N;s/\n[ \t]*//;}' $file ; done
 
+ # restore original file with timestamp if indent did not change anything
+ cmp "$@"~ "$@" > /dev/null && mv -f "$@"~ "$@"
 fi
