@@ -39,6 +39,15 @@ if {[info exists env(MSYSCON)]} {
     set mingw "0"
 }
 
+# set correct devnull 
+if {![catch {set env(OS)}] && $env(OS) == "Windows_NT"} {
+        set mingw "1"
+        set devnull "NUL:"
+} else {
+        set mingw "0"
+        set devnull "/dev/null"
+}
+
 # Set up auto_path directories
 if {[catch {set env(Nviz_PanelPath)} user_path]} then {
     set user_path [list]
