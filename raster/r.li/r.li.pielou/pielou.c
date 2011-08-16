@@ -392,6 +392,7 @@ int calculateD(int fd, area_des ad, double *result)
 
     generic_cell cc;
     generic_cell cc_passage;	/*add to compute the number of class */
+
     cc.t = DCELL_TYPE;
 
     /* open mask if needed */
@@ -618,6 +619,7 @@ int calculateF(int fd, area_des ad, double *result)
 
     generic_cell cc;
     generic_cell cc_passage;
+
     cc.t = FCELL_TYPE;
 
     /* open mask if needed */

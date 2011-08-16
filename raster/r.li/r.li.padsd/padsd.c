@@ -55,6 +55,7 @@ int main(int argc, char *argv[])
     return calculateIndex(conf->answer, patchAreaDistributionSD, NULL,
 			  raster->answer, output->answer);
 }
+
 int patchAreaDistributionSD(int fd, char **par, area_des ad, double *result)
 {
     double indice = 0;
@@ -63,8 +64,7 @@ int patchAreaDistributionSD(int fd, char **par, area_des ad, double *result)
 
     Rast_get_cellhd(ad->raster, "", &hd);
 
-    switch (ad->data_type)
-    {
+    switch (ad->data_type) {
     case CELL_TYPE:
 
 	{
@@ -90,14 +90,14 @@ int patchAreaDistributionSD(int fd, char **par, area_des ad, double *result)
 	    return RLI_ERRORE;
 	}
     }
-    if (ris != RLI_OK)
-    {
+    if (ris != RLI_OK) {
 	*result = -1;
 	return RLI_ERRORE;
     }
     *result = indice;
     return RLI_OK;
 }
+
 int calculate(int fd, area_des ad, double *result)
 {
     CELL *buf;
@@ -132,45 +132,38 @@ int calculate(int fd, area_des ad, double *result)
     gc.t = CELL_TYPE;
 
     /* open mask if needed */
-    if (ad->mask == 1)
-    {
+    if (ad->mask == 1) {
 	if ((mask_fd = open(ad->mask_name, O_RDONLY, 0755)) < 0)
 	    return RLI_ERRORE;
 	mask_buf = G_malloc(ad->cl * sizeof(int));
-	if (mask_buf == NULL)
-	{
+	if (mask_buf == NULL) {
 	    G_fatal_error("malloc mask_buf failed");
 	    return RLI_ERRORE;
 	}
 	masked = TRUE;
     }
     mask_patch_sup = G_malloc(ad->cl * sizeof(long));
-    if (mask_patch_sup == NULL)
-    {
+    if (mask_patch_sup == NULL) {
 	G_fatal_error("malloc mask_patch_sup failed");
 	return RLI_ERRORE;
     }
     mask_patch_corr = G_malloc(ad->cl * sizeof(long));
-    if (mask_patch_corr == NULL)
-    {
+    if (mask_patch_corr == NULL) {
 	G_fatal_error("malloc mask_patch_corr failed");
 	return RLI_ERRORE;
     }
     buf_sup = Rast_allocate_c_buf();
-    if (buf_sup == NULL)
-    {
+    if (buf_sup == NULL) {
 	G_fatal_error("malloc buf_sup failed");
 	return RLI_ERRORE;
     }
     buf = Rast_allocate_c_buf();
-    if (buf == NULL)
-    {
+    if (buf == NULL) {
 	G_fatal_error("malloc buf failed");
 	return RLI_ERRORE;
     }
     Rast_set_c_null_value(buf_sup + ad->x, ad->cl);	/*the first time buf_sup is all null */
-    for (i = 0; i < ad->cl; i++)
-    {
+    for (i = 0; i < ad->cl; i++) {
 	mask_patch_sup[i] = 0;
 	mask_patch_corr[i] = 0;
     }
@@ -178,15 +171,12 @@ int calculate(int fd, area_des ad, double *result)
 	/*for each raster row */
 
     {
-	if (j > 0)
-	{
+	if (j > 0) {
 	    buf_sup = RLI_get_cell_raster_row(fd, j - 1 + ad->y, ad);
 	}
 	buf = RLI_get_cell_raster_row(fd, j + ad->y, ad);
-	if (masked)
-	{
-	    if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0)
-	    {
+	if (masked) {
+	    if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0) {
 		G_fatal_error("mask read failed");
 		return RLI_ERRORE;
 	    }
@@ -197,13 +187,11 @@ int calculate(int fd, area_des ad, double *result)
 	{
 	    area++;
 	    corrCell = buf[i + ad->x];
-	    if (masked && mask_buf[i + ad->x] == 0)
-	    {
+	    if (masked && mask_buf[i + ad->x] == 0) {
 		Rast_set_c_null_value(&corrCell, 1);
 		area--;
 	    }
-	    if (!(Rast_is_null_value(&corrCell, gc.t)))
-	    {
+	    if (!(Rast_is_null_value(&corrCell, gc.t))) {
 		areaPatch++;
 		if (i > 0)
 		    precCell = buf[i - 1 + ad->x];
@@ -218,8 +206,7 @@ int calculate(int fd, area_des ad, double *result)
 		     *      1 2
 		     * */
 		{
-		    if (corrCell != supCell)
-		    {
+		    if (corrCell != supCell) {
 			/*        3
 			 *      1 2
 			 * */
@@ -238,8 +225,7 @@ int calculate(int fd, area_des ad, double *result)
 			    /*not first patch */
 			    /* put in the tree the previous value */
 			{
-			    if (albero == NULL)
-			    {
+			    if (albero == NULL) {
 				albero = avlID_make(idCorr, totCorr);
 				if (albero == NULL) {
 				    G_fatal_error("avlID_make error");
@@ -252,8 +238,7 @@ int calculate(int fd, area_des ad, double *result)
 				/*tree not empty */
 			    {
 				ris = avlID_add(&albero, idCorr, totCorr);
-				switch (ris)
-				{
+				switch (ris) {
 				case AVL_ERR:
 
 				    {
@@ -336,8 +321,7 @@ int calculate(int fd, area_des ad, double *result)
 		     *      1 1
 		     */
 
-		    if (corrCell == supCell)
-		    {		/*current cell and upper cell are equal */
+		    if (corrCell == supCell) {	/*current cell and upper cell are equal */
 			/*        1
 			 *      1 1
 			 */
@@ -424,10 +408,8 @@ int calculate(int fd, area_des ad, double *result)
     }
 
 
-    if (areaPatch != 0)
-    {
-	if (albero == NULL)
-	{
+    if (areaPatch != 0) {
+	if (albero == NULL) {
 	    albero = avlID_make(idCorr, totCorr);
 	    if (albero == NULL) {
 		G_fatal_error("avlID_make error");
@@ -436,11 +418,9 @@ int calculate(int fd, area_des ad, double *result)
 	    npatch++;
 	}
 
-	else
-	{
+	else {
 	    ris = avlID_add(&albero, idCorr, totCorr);
-	    switch (ris)
-	    {
+	    switch (ris) {
 	    case AVL_ERR:
 
 		{
@@ -467,22 +447,18 @@ int calculate(int fd, area_des ad, double *result)
 	    }
 	}
 	array = G_malloc(npatch * sizeof(avlID_tableRow));
-	if (array == NULL)
-	{
+	if (array == NULL) {
 	    G_fatal_error("malloc array failed");
 	    return RLI_ERRORE;
 	}
 	tot = avlID_to_array(albero, zero, array);
-	if (tot != npatch)
-	{
+	if (tot != npatch) {
 	    G_warning
 		("avlID_to_array unaspected value. the result could be wrong");
 	    return RLI_ERRORE;
 	}
-	for (i = 0; i < npatch; i++)
-	{
-	    if (array[i]->tot == 0)
-	    {
+	for (i = 0; i < npatch; i++) {
+	    if (array[i]->tot == 0) {
 		doppi++;
 	    }
 	}
@@ -491,13 +467,11 @@ int calculate(int fd, area_des ad, double *result)
 	mn = areaPatch / npatch;
 
 	/* calculate summary */
-	for (i = 0; i < np; i++)
-	{
+	for (i = 0; i < np; i++) {
 	    long areaPi = 0;
 	    double diff;
 
-	    if (array[i]->tot != 0)
-	    {
+	    if (array[i]->tot != 0) {
 		ris = ris + array[i]->tot;
 		areaPi = (double)array[i]->tot;
 		diff = areaPi - mn;
@@ -557,45 +531,38 @@ int calculateD(int fd, area_des ad, double *result)
     gc.t = DCELL_TYPE;
 
     /* open mask if needed */
-    if (ad->mask == 1)
-    {
+    if (ad->mask == 1) {
 	if ((mask_fd = open(ad->mask_name, O_RDONLY, 0755)) < 0)
 	    return RLI_ERRORE;
 	mask_buf = G_malloc(ad->cl * sizeof(int));
-	if (mask_buf == NULL)
-	{
+	if (mask_buf == NULL) {
 	    G_fatal_error("malloc mask_buf failed");
 	    return RLI_ERRORE;
 	}
 	masked = TRUE;
     }
     mask_patch_sup = G_malloc(ad->cl * sizeof(long));
-    if (mask_patch_sup == NULL)
-    {
+    if (mask_patch_sup == NULL) {
 	G_fatal_error("malloc mask_patch_sup failed");
 	return RLI_ERRORE;
     }
     mask_patch_corr = G_malloc(ad->cl * sizeof(long));
-    if (mask_patch_corr == NULL)
-    {
+    if (mask_patch_corr == NULL) {
 	G_fatal_error("malloc mask_patch_corr failed");
 	return RLI_ERRORE;
     }
     buf_sup = Rast_allocate_d_buf();
-    if (buf_sup == NULL)
-    {
+    if (buf_sup == NULL) {
 	G_fatal_error("malloc buf_sup failed");
 	return RLI_ERRORE;
     }
     buf = Rast_allocate_d_buf();
-    if (buf == NULL)
-    {
+    if (buf == NULL) {
 	G_fatal_error("malloc buf failed");
 	return RLI_ERRORE;
     }
     Rast_set_d_null_value(buf_sup + ad->x, ad->cl);	/*the first time buf_sup is all null */
-    for (i = 0; i < ad->cl; i++)
-    {
+    for (i = 0; i < ad->cl; i++) {
 	mask_patch_sup[i] = 0;
 	mask_patch_corr[i] = 0;
     }
@@ -603,15 +570,12 @@ int calculateD(int fd, area_des ad, double *result)
 	/*for each raster row */
 
     {
-	if (j > 0)
-	{
+	if (j > 0) {
 	    buf_sup = RLI_get_dcell_raster_row(fd, j - 1 + ad->y, ad);
 	}
 	buf = RLI_get_dcell_raster_row(fd, j + ad->y, ad);
-	if (masked)
-	{
-	    if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0)
-	    {
+	if (masked) {
+	    if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0) {
 		G_fatal_error("mask read failed");
 		return RLI_ERRORE;
 	    }
@@ -622,13 +586,11 @@ int calculateD(int fd, area_des ad, double *result)
 	{
 	    area++;
 	    corrCell = buf[i + ad->x];
-	    if (masked && mask_buf[i + ad->x] == 0)
-	    {
+	    if (masked && mask_buf[i + ad->x] == 0) {
 		Rast_set_d_null_value(&corrCell, 1);
 		area--;
 	    }
-	    if (!(Rast_is_null_value(&corrCell, gc.t)))
-	    {
+	    if (!(Rast_is_null_value(&corrCell, gc.t))) {
 		areaPatch++;
 		if (i > 0)
 		    precCell = buf[i - 1 + ad->x];
@@ -642,14 +604,12 @@ int calculateD(int fd, area_des ad, double *result)
 		     *      1 2
 		     * */
 		{
-		    if (corrCell != supCell)
-		    {
+		    if (corrCell != supCell) {
 			/*        3
 			 *      1 2
 			 * */
 			/*new patch */
-			if (idCorr == 0)
-			{	/*first patch */
+			if (idCorr == 0) {	/*first patch */
 			    lastId = 1;
 			    idCorr = 1;
 			    totCorr = 1;
@@ -660,8 +620,7 @@ int calculateD(int fd, area_des ad, double *result)
 			    /*not first patch */
 			    /* put in the tree the previous value */
 			{
-			    if (albero == NULL)
-			    {
+			    if (albero == NULL) {
 				albero = avlID_make(idCorr, totCorr);
 				if (albero == NULL) {
 				    G_fatal_error("avlID_make error");
@@ -674,8 +633,7 @@ int calculateD(int fd, area_des ad, double *result)
 				/*tree not empty */
 			    {
 				ris = avlID_add(&albero, idCorr, totCorr);
-				switch (ris)
-				{
+				switch (ris) {
 				case AVL_ERR:
 
 				    {
@@ -759,8 +717,7 @@ int calculateD(int fd, area_des ad, double *result)
 		     *      1 1
 		     */
 
-		    if (corrCell == supCell)
-		    {		/*current cell and upper cell are equal */
+		    if (corrCell == supCell) {	/*current cell and upper cell are equal */
 			/*        1
 			 *      1 1
 			 */
@@ -848,10 +805,8 @@ int calculateD(int fd, area_des ad, double *result)
 
 
 
-    if (areaPatch != 0)
-    {
-	if (albero == NULL)
-	{
+    if (areaPatch != 0) {
+	if (albero == NULL) {
 	    albero = avlID_make(idCorr, totCorr);
 	    if (albero == NULL) {
 		G_fatal_error("avlID_make error");
@@ -860,11 +815,9 @@ int calculateD(int fd, area_des ad, double *result)
 	    npatch++;
 	}
 
-	else
-	{
+	else {
 	    ris = avlID_add(&albero, idCorr, totCorr);
-	    switch (ris)
-	    {
+	    switch (ris) {
 	    case AVL_ERR:
 
 		{
@@ -891,22 +844,18 @@ int calculateD(int fd, area_des ad, double *result)
 	    }
 	}
 	array = G_malloc(npatch * sizeof(avlID_tableRow));
-	if (array == NULL)
-	{
+	if (array == NULL) {
 	    G_fatal_error("malloc array failed");
 	    return RLI_ERRORE;
 	}
 	tot = avlID_to_array(albero, zero, array);
-	if (tot != npatch)
-	{
+	if (tot != npatch) {
 	    G_warning
 		("avlID_to_array unaspected value. the result could be wrong");
 	    return RLI_ERRORE;
 	}
-	for (i = 0; i < npatch; i++)
-	{
-	    if (array[i]->tot == 0)
-	    {
+	for (i = 0; i < npatch; i++) {
+	    if (array[i]->tot == 0) {
 		doppi++;
 	    }
 	}
@@ -915,13 +864,11 @@ int calculateD(int fd, area_des ad, double *result)
 	mn = areaPatch / npatch;
 
 	/* calculate summary */
-	for (i = 0; i < np; i++)
-	{
+	for (i = 0; i < np; i++) {
 	    long areaPi = 0;
 	    double diff;
 
-	    if (array[i]->tot != 0)
-	    {
+	    if (array[i]->tot != 0) {
 		ris = ris + array[i]->tot;
 		areaPi = (double)array[i]->tot;
 		diff = areaPi - mn;
@@ -941,6 +888,7 @@ int calculateD(int fd, area_des ad, double *result)
     *result = indice;
     return RLI_OK;
 }
+
 int calculateF(int fd, area_des ad, double *result)
 {
     FCELL *buf;
@@ -975,45 +923,38 @@ int calculateF(int fd, area_des ad, double *result)
     gc.t = FCELL_TYPE;
 
     /* open mask if needed */
-    if (ad->mask == 1)
-    {
+    if (ad->mask == 1) {
 	if ((mask_fd = open(ad->mask_name, O_RDONLY, 0755)) < 0)
 	    return RLI_ERRORE;
 	mask_buf = G_malloc(ad->cl * sizeof(int));
-	if (mask_buf == NULL)
-	{
+	if (mask_buf == NULL) {
 	    G_fatal_error("malloc mask_buf failed");
 	    return RLI_ERRORE;
 	}
 	masked = TRUE;
     }
     mask_patch_sup = G_malloc(ad->cl * sizeof(long));
-    if (mask_patch_sup == NULL)
-    {
+    if (mask_patch_sup == NULL) {
 	G_fatal_error("malloc mask_patch_sup failed");
 	return RLI_ERRORE;
     }
     mask_patch_corr = G_malloc(ad->cl * sizeof(long));
-    if (mask_patch_corr == NULL)
-    {
+    if (mask_patch_corr == NULL) {
 	G_fatal_error("malloc mask_patch_corr failed");
 	return RLI_ERRORE;
     }
     buf_sup = Rast_allocate_f_buf();
-    if (buf_sup == NULL)
-    {
+    if (buf_sup == NULL) {
 	G_fatal_error("malloc buf_sup failed");
 	return RLI_ERRORE;
     }
     buf = Rast_allocate_f_buf();
-    if (buf == NULL)
-    {
+    if (buf == NULL) {
 	G_fatal_error("malloc buf failed");
 	return RLI_ERRORE;
     }
     Rast_set_f_null_value(buf_sup + ad->x, ad->cl);	/*the first time buf_sup is all null */
-    for (i = 0; i < ad->cl; i++)
-    {
+    for (i = 0; i < ad->cl; i++) {
 	mask_patch_sup[i] = 0;
 	mask_patch_corr[i] = 0;
     }
@@ -1021,32 +962,26 @@ int calculateF(int fd, area_des ad, double *result)
 	/*for each raster row */
 
     {
-	if (j > 0)
-	{
+	if (j > 0) {
 	    buf_sup = RLI_get_fcell_raster_row(fd, j - 1 + ad->y, ad);
 	}
 	buf = RLI_get_fcell_raster_row(fd, j + ad->y, ad);
-	if (masked)
-	{
-	    if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0)
-	    {
+	if (masked) {
+	    if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0) {
 		G_fatal_error("mask read failed");
 		return RLI_ERRORE;
 	    }
 	}
 	Rast_set_f_null_value(&precCell, 1);
-	for (i = 0; i < ad->cl; i++)
-	{
+	for (i = 0; i < ad->cl; i++) {
 	    /* for each fcell in the row */
 	    area++;
 	    corrCell = buf[i + ad->x];
-	    if (masked && mask_buf[i + ad->x] == 0)
-	    {
+	    if (masked && mask_buf[i + ad->x] == 0) {
 		Rast_set_f_null_value(&corrCell, 1);
 		area--;
 	    }
-	    if (!(Rast_is_null_value(&corrCell, gc.t)))
-	    {
+	    if (!(Rast_is_null_value(&corrCell, gc.t))) {
 		areaPatch++;
 		if (i > 0)
 		    precCell = buf[i - 1 + ad->x];
@@ -1060,14 +995,12 @@ int calculateF(int fd, area_des ad, double *result)
 		     *      1 2
 		     * */
 		{
-		    if (corrCell != supCell)
-		    {
+		    if (corrCell != supCell) {
 			/*        3
 			 *      1 2
 			 * */
 			/*new patch */
-			if (idCorr == 0)
-			{	/*first patch */
+			if (idCorr == 0) {	/*first patch */
 			    lastId = 1;
 			    idCorr = 1;
 			    totCorr = 1;
@@ -1078,8 +1011,7 @@ int calculateF(int fd, area_des ad, double *result)
 			    /*not first patch */
 			    /* put in the tree the previous value */
 			{
-			    if (albero == NULL)
-			    {
+			    if (albero == NULL) {
 				albero = avlID_make(idCorr, totCorr);
 				if (albero == NULL) {
 				    G_fatal_error("avlID_make error");
@@ -1092,8 +1024,7 @@ int calculateF(int fd, area_des ad, double *result)
 				/*tree not empty */
 			    {
 				ris = avlID_add(&albero, idCorr, totCorr);
-				switch (ris)
-				{
+				switch (ris) {
 				case AVL_ERR:
 
 				    {
@@ -1177,8 +1108,7 @@ int calculateF(int fd, area_des ad, double *result)
 		     *      1 1
 		     */
 
-		    if (corrCell == supCell)
-		    {		/*current cell and upper cell are equal */
+		    if (corrCell == supCell) {	/*current cell and upper cell are equal */
 			/*        1
 			 *      1 1
 			 */
@@ -1266,10 +1196,8 @@ int calculateF(int fd, area_des ad, double *result)
 
 
 
-    if (areaPatch != 0)
-    {
-	if (albero == NULL)
-	{
+    if (areaPatch != 0) {
+	if (albero == NULL) {
 	    albero = avlID_make(idCorr, totCorr);
 	    if (albero == NULL) {
 		G_fatal_error("avlID_make error");
@@ -1278,11 +1206,9 @@ int calculateF(int fd, area_des ad, double *result)
 	    npatch++;
 	}
 
-	else
-	{
+	else {
 	    ris = avlID_add(&albero, idCorr, totCorr);
-	    switch (ris)
-	    {
+	    switch (ris) {
 	    case AVL_ERR:
 
 		{
@@ -1309,22 +1235,18 @@ int calculateF(int fd, area_des ad, double *result)
 	    }
 	}
 	array = G_malloc(npatch * sizeof(avlID_tableRow));
-	if (array == NULL)
-	{
+	if (array == NULL) {
 	    G_fatal_error("malloc array failed");
 	    return RLI_ERRORE;
 	}
 	tot = avlID_to_array(albero, zero, array);
-	if (tot != npatch)
-	{
+	if (tot != npatch) {
 	    G_warning
 		("avlID_to_array unaspected value. the result could be wrong");
 	    return RLI_ERRORE;
 	}
-	for (i = 0; i < npatch; i++)
-	{
-	    if (array[i]->tot == 0)
-	    {
+	for (i = 0; i < npatch; i++) {
+	    if (array[i]->tot == 0) {
 		doppi++;
 	    }
 	}
@@ -1333,13 +1255,11 @@ int calculateF(int fd, area_des ad, double *result)
 	mn = areaPatch / npatch;
 
 	/* calculate summary */
-	for (i = 0; i < np; i++)
-	{
+	for (i = 0; i < np; i++) {
 	    long areaPi = 0;
 	    double diff;
 
-	    if (array[i]->tot != 0)
-	    {
+	    if (array[i]->tot != 0) {
 		ris = ris + array[i]->tot;
 		areaPi = (double)array[i]->tot;
 		diff = areaPi - mn;

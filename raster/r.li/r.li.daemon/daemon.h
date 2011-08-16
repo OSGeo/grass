@@ -203,7 +203,7 @@ int error_Output(int out, msg m);
  */
 void worker_init(char *raster, int f(int, char **, area_des, double *),
 		 char **parameters);
-void worker_process(msg *ret, msg *m);
+void worker_process(msg * ret, msg * m);
 void worker_end(void);
 
  /**

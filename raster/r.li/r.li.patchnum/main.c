@@ -118,8 +118,8 @@ int patch_number(int fd, char **par, area_des ad, double *result)
 
 		if (buf[j + ad->x] != buf[j + 1 + ad->x]) {
 		    complete_line = 0;
-		    if (!Rast_is_null_value(&(buf[j + 1 + ad->x]), CELL_TYPE) &&
-			buf[j + 1 + ad->x] != complete_value)
+		    if (!Rast_is_null_value(&(buf[j + 1 + ad->x]), CELL_TYPE)
+			&& buf[j + 1 + ad->x] != complete_value)
 			count++;
 		}
 
@@ -162,7 +162,8 @@ int patch_number(int fd, char **par, area_des ad, double *result)
 	    }
 	    if (!connected &&
 		sup[ad->cl - 1 + ad->x] != buf[ad->cl - 1 + ad->x]) {
-		if (!Rast_is_null_value(&(buf[ad->cl - 1 + ad->x]), CELL_TYPE)) {
+		if (!Rast_is_null_value
+		    (&(buf[ad->cl - 1 + ad->x]), CELL_TYPE)) {
 		    count++;
 		    complete_line = 0;
 		}

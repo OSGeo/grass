@@ -169,6 +169,7 @@ int calculate(int fd, area_des ad, double *result)
     }
     return RLI_OK;
 }
+
 int calculateD(int fd, area_des ad, double *result)
 {
     DCELL *buf;

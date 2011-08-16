@@ -375,7 +375,7 @@ int calculate(int fd, area_des ad, char **valore, double *result)
 	G_free(mask_inf);
 	G_free(mask_corr);
     }
-    
+
     G_free(buf_sup);
     return RLI_OK;
 }

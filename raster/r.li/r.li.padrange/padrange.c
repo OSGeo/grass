@@ -57,6 +57,7 @@ int main(int argc, char *argv[])
     return calculateIndex(conf->answer, patchAreaDistributionRANGE, NULL,
 			  raster->answer, output->answer);
 }
+
 int patchAreaDistributionRANGE(int fd, char **par, area_des ad,
 			       double *result)
 {
@@ -66,8 +67,7 @@ int patchAreaDistributionRANGE(int fd, char **par, area_des ad,
 
     Rast_get_cellhd(ad->raster, "", &hd);
 
-    switch (ad->data_type)
-    {
+    switch (ad->data_type) {
     case CELL_TYPE:
 
 	{
@@ -92,8 +92,7 @@ int patchAreaDistributionRANGE(int fd, char **par, area_des ad,
 	    return RLI_ERRORE;
 	}
     }
-    if (ris != RLI_OK)
-    {
+    if (ris != RLI_OK) {
 	*result = -1;
 	return RLI_ERRORE;
     }
@@ -337,8 +336,7 @@ int calculate(int fd, area_des ad, double *result)
 		     *      1 1
 		     */
 
-		    if (corrCell == supCell)
-		    {		/*current cell and upper cell are equal */
+		    if (corrCell == supCell) {	/*current cell and upper cell are equal */
 			/*        1
 			 *      1 1
 			 */
@@ -543,45 +541,38 @@ int calculateD(int fd, area_des ad, double *result)
     gc.t = DCELL_TYPE;
 
     /* open mask if needed */
-    if (ad->mask == 1)
-    {
+    if (ad->mask == 1) {
 	if ((mask_fd = open(ad->mask_name, O_RDONLY, 0755)) < 0)
 	    return RLI_ERRORE;
 	mask_buf = G_malloc(ad->cl * sizeof(int));
-	if (mask_buf == NULL)
-	{
+	if (mask_buf == NULL) {
 	    G_fatal_error("malloc mask_buf failed");
 	    return RLI_ERRORE;
 	}
 	masked = TRUE;
     }
     mask_patch_sup = G_malloc(ad->cl * sizeof(long));
-    if (mask_patch_sup == NULL)
-    {
+    if (mask_patch_sup == NULL) {
 	G_fatal_error("malloc mask_patch_sup failed");
 	return RLI_ERRORE;
     }
     mask_patch_corr = G_malloc(ad->cl * sizeof(long));
-    if (mask_patch_corr == NULL)
-    {
+    if (mask_patch_corr == NULL) {
 	G_fatal_error("malloc mask_patch_corr failed");
 	return RLI_ERRORE;
     }
     buf_sup = Rast_allocate_d_buf();
-    if (buf_sup == NULL)
-    {
+    if (buf_sup == NULL) {
 	G_fatal_error("malloc buf_sup failed");
 	return RLI_ERRORE;
     }
     buf = Rast_allocate_d_buf();
-    if (buf == NULL)
-    {
+    if (buf == NULL) {
 	G_fatal_error("malloc buf failed");
 	return RLI_ERRORE;
     }
     Rast_set_d_null_value(buf_sup + ad->x, ad->cl);	/*the first time buf_sup is all null */
-    for (i = 0; i < ad->cl; i++)
-    {
+    for (i = 0; i < ad->cl; i++) {
 	mask_patch_sup[i] = 0;
 	mask_patch_corr[i] = 0;
     }
@@ -594,8 +585,7 @@ int calculateD(int fd, area_des ad, double *result)
 	}
 	buf = RLI_get_dcell_raster_row(fd, j + ad->y, ad);
 	if (masked) {
-	    if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0)
-	    {
+	    if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0) {
 		G_fatal_error("mask read failed");
 		return RLI_ERRORE;
 	    }
@@ -733,8 +723,7 @@ int calculateD(int fd, area_des ad, double *result)
 		     *      1 1
 		     */
 
-		    if (corrCell == supCell)
-		    {		/*current cell and upper cell are equal */
+		    if (corrCell == supCell) {	/*current cell and upper cell are equal */
 			/*        1
 			 *      1 1
 			 */
@@ -935,39 +924,33 @@ int calculateF(int fd, area_des ad, double *result)
     gc.t = FCELL_TYPE;
 
     /* open mask if needed */
-    if (ad->mask == 1)
-    {
+    if (ad->mask == 1) {
 	if ((mask_fd = open(ad->mask_name, O_RDONLY, 0755)) < 0)
 	    return RLI_ERRORE;
 	mask_buf = G_malloc(ad->cl * sizeof(int));
-	if (mask_buf == NULL)
-	{
+	if (mask_buf == NULL) {
 	    G_fatal_error("malloc mask_buf failed");
 	    return RLI_ERRORE;
 	}
 	masked = TRUE;
     }
     mask_patch_sup = G_malloc(ad->cl * sizeof(long));
-    if (mask_patch_sup == NULL)
-    {
+    if (mask_patch_sup == NULL) {
 	G_fatal_error("malloc mask_patch_sup failed");
 	return RLI_ERRORE;
     }
     mask_patch_corr = G_malloc(ad->cl * sizeof(long));
-    if (mask_patch_corr == NULL)
-    {
+    if (mask_patch_corr == NULL) {
 	G_fatal_error("malloc mask_patch_corr failed");
 	return RLI_ERRORE;
     }
     buf_sup = Rast_allocate_f_buf();
-    if (buf_sup == NULL)
-    {
+    if (buf_sup == NULL) {
 	G_fatal_error("malloc buf_sup failed");
 	return RLI_ERRORE;
     }
     buf = Rast_allocate_f_buf();
-    if (buf == NULL)
-    {
+    if (buf == NULL) {
 	G_fatal_error("malloc buf failed");
 	return RLI_ERRORE;
     }
@@ -981,15 +964,12 @@ int calculateF(int fd, area_des ad, double *result)
 	/*for each raster row */
 
     {
-	if (j > 0)
-	{
+	if (j > 0) {
 	    buf_sup = RLI_get_fcell_raster_row(fd, j - 1 + ad->y, ad);
 	}
 	buf = RLI_get_fcell_raster_row(fd, j + ad->y, ad);
-	if (masked)
-	{
-	    if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0)
-	    {
+	if (masked) {
+	    if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0) {
 		G_fatal_error("mask read failed");
 		return RLI_ERRORE;
 	    }
@@ -1128,8 +1108,7 @@ int calculateF(int fd, area_des ad, double *result)
 		     *      1 1
 		     */
 
-		    if (corrCell == supCell)
-		    {		/*current cell and upper cell are equal */
+		    if (corrCell == supCell) {	/*current cell and upper cell are equal */
 			/*        1
 			 *      1 1
 			 */

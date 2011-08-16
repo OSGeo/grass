@@ -430,7 +430,7 @@ int calculate(int fd, area_des ad, Coppie * cc, long totCoppie,
 	G_free(mask_corr);
 	G_free(mask_sup);
     }
-    
+
     G_free(buf_sup);
     return RLI_OK;
 }
