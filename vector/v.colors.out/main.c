@@ -29,16 +29,16 @@ int main(int argc, char **argv)
     struct GModule *module;
     struct
     {
-	struct Option *map, *field, *file;
+	struct Option *map, *field, *file, *col;
     } opt;
     struct
     {
 	struct Flag *p;
     } flag;
-    struct Colors colors;
+    struct Colors cat_colors, *colors;
     
     int min, max;
-    const char *file, *name, *layer;
+    const char *file, *name, *layer, *column;
     FILE *fp;
     
     G_gisinit(argv[0]);
@@ -60,9 +60,15 @@ int main(int argc, char **argv)
     opt.file->description = _("\"-\" to write to stdout");
     opt.file->answer = "-";
     
+    opt.col = G_define_standard_option(G_OPT_DB_COLUMN);
+    opt.col->label = _("Name of attribute (numeric) column to which refer color rules");
+    opt.col->description = _("If not given color rules are refered to categories");
+    opt.col->guisection = _("Settings");
+
     flag.p = G_define_flag();
     flag.p->key = 'p';
     flag.p->description = _("Output values as percentages");
+    flag.p->guisection = _("Settings");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -70,8 +76,9 @@ int main(int argc, char **argv)
     name = opt.map->answer;
     layer = opt.field->answer;
     file = opt.file->answer;
+    column = opt.col->answer;
     
-    if (Vect_read_colors(name, "", &colors) < 0)
+    if (Vect_read_colors(name, "", &cat_colors) < 0)
 	G_fatal_error(_("Unable to read color table for vector map <%s>"),
 		      opt.map->answer);
     
@@ -87,8 +94,13 @@ int main(int argc, char **argv)
 	if (!fp)
 	    G_fatal_error(_("Unable to open output file <%s>"), file);
     }
+
+    if (column)
+	colors = make_colors(name, layer, column, &cat_colors);
+    else
+	colors = &cat_colors;
     
-    Rast_print_colors(&colors, (DCELL) min, (DCELL) max, fp,
+    Rast_print_colors(colors, (DCELL) min, (DCELL) max, fp,
 		      flag.p->answer ? 1 : 0);
     
     exit(EXIT_SUCCESS);
