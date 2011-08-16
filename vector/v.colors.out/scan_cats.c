@@ -15,6 +15,7 @@ void scan_cats(const char *name, const char *layer,
 
     *cmin = *cmax = -1;
 
+    Vect_set_open_level(1); /* no topology required */
     Vect_open_old2(&Map, name, "", layer);
     ilayer = Vect_get_field_number(&Map, layer);
     if (ilayer < 1)
@@ -39,6 +40,8 @@ void scan_cats(const char *name, const char *layer,
     }
 
     Vect_destroy_cats_struct(Cats);
+
+    Vect_close(&Map);
 }
 
 void scan_layer(int field, const struct line_cats *Cats, int *cmin, int *cmax)
