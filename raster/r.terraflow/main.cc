@@ -168,7 +168,7 @@ parse_args(int argc, char *argv[]) {
   if (strcmp(d8cut->answer, "infinity") == 0) {
     opt->d8cut = MAX_ACCU;
   } else {
-    opt->d8cut = atoi(d8cut->answer);
+    opt->d8cut = atof(d8cut->answer);
   }
 
   opt->mem = atoi(mem->answer);
