@@ -5,7 +5,7 @@
  *  
  * \author Claudio Porta, Lucio Davide Spano, Serena Pallecchi students of Computer Science University of Pisa (Italy)
  *                      Commission from Faunalia Pontedera (PI) www.faunalia.it
-  *        Luca Delucchi and Duccio Rocchini, Fondazione Edmund Mach, Italy: r.li.pielou, r.li.renyi
+ *        Luca Delucchi and Duccio Rocchini, Fondazione Edmund Mach, Italy: r.li.pielou, r.li.renyi
  *
  *
  * This program is free software under the GPL (>=v2)

@@ -14,7 +14,7 @@
 
 typedef struct avl_node
 {
-    generic_cell key;	/* key field is a CELL or a DCELL or a FCELL */
+    generic_cell key;		/* key field is a CELL or a DCELL or a FCELL */
     long counter;		/* data */
     struct avl_node *father;
     struct avl_node *right_child;

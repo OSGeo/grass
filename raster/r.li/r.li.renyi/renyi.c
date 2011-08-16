@@ -159,6 +159,7 @@ double calculate(area_des ad, int fd, char **par, double *result)
 
     AVL_table *array;
     generic_cell uc;
+
     uc.t = CELL_TYPE;
 
     /* open mask if needed */
@@ -307,7 +308,7 @@ double calculate(area_des ad, int fd, char **par, double *result)
     for (i = 0; i < m; i++) {
 	t = (double)(array[i]->tot);
 	p = t / area;
-	G_debug(1,"Valore p: %g, valore pow: %g",p,pow(p,alpha_double));
+	G_debug(1, "Valore p: %g, valore pow: %g", p, pow(p, alpha_double));
 	somma = somma + pow(p, alpha_double);
     }
 
@@ -352,6 +353,7 @@ double calculateD(area_des ad, int fd, char **par, double *result)
     avl_tree albero = NULL;
     AVL_table *array;
     generic_cell uc;
+
     uc.t = DCELL_TYPE;
 
     /* open mask if needed */
@@ -501,7 +503,7 @@ double calculateD(area_des ad, int fd, char **par, double *result)
     for (i = 0; i < m; i++) {
 	t = (double)(array[i]->tot);
 	p = t / area;
-	G_debug(1,"Valore p: %g, valore pow: %g",p,pow(p,alpha_double));
+	G_debug(1, "Valore p: %g, valore pow: %g", p, pow(p, alpha_double));
 	somma = somma + pow(p, alpha_double);
     }
 
@@ -551,6 +553,7 @@ double calculateF(area_des ad, int fd, char **par, double *result)
 
     AVL_table *array;
     generic_cell uc;
+
     uc.t = FCELL_TYPE;
 
     /* open mask if needed */
@@ -702,7 +705,7 @@ double calculateF(area_des ad, int fd, char **par, double *result)
     for (i = 0; i < m; i++) {
 	t = (double)(array[i]->tot);
 	p = t / area;
-	G_debug(1,"Valore p: %g, valore pow: %g",p,pow(p,alpha_double));        
+	G_debug(1, "Valore p: %g, valore pow: %g", p, pow(p, alpha_double));
 	somma = somma + pow(p, alpha_double);
     }
 

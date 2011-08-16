@@ -69,8 +69,9 @@ int calculateIndex(char *file, int f(int, char **, area_des, double *),
 
     /* strip off leading path if present */
     char testpath[GPATH_MAX];
+
     sprintf(testpath, "%s%s", G_home(), "/.grass7/r.li/");
-    if(strncmp(file, testpath, strlen(testpath)) == 0)
+    if (strncmp(file, testpath, strlen(testpath)) == 0)
 	file += strlen(testpath);
 
     /* TODO: check if this path is portable */
@@ -100,8 +101,7 @@ int calculateIndex(char *file, int f(int, char **, area_des, double *),
 	sprintf(out, "%s/.grass7/", G_home());
 	doneDir = G_mkdir(out);
 	if (doneDir == -1 && errno != EEXIST)
-	    G_fatal_error(_("Cannot create %s/.grass7/ directory"),
-			  G_home());
+	    G_fatal_error(_("Cannot create %s/.grass7/ directory"), G_home());
 
 	/* check if ~/.grass7/r.li/ exists */
 	sprintf(out, "%s/.grass7/r.li/", G_home());
@@ -127,35 +127,35 @@ int calculateIndex(char *file, int f(int, char **, area_des, double *),
     /*first job scheduling */
     if (next_Area(parsed, l, g, &m) != 0)
 
-    /*body */
-    while (next_Area(parsed, l, g, &m) != 0) {
-	worker_process(&doneJob, &m);
+	/*body */
+	while (next_Area(parsed, l, g, &m) != 0) {
+	    worker_process(&doneJob, &m);
 
-	/*perc++; */
-	/*G_percent (perc, WORKERS, 1); */
-	if (doneJob.type == DONE) {
-	    double result;
+	    /*perc++; */
+	    /*G_percent (perc, WORKERS, 1); */
+	    if (doneJob.type == DONE) {
+		double result;
 
-	    result = doneJob.f.f_d.res;
-	    /*output */
-	    if (parsed != MVWIN) {
-		print_Output(res, doneJob);
+		result = doneJob.f.f_d.res;
+		/*output */
+		if (parsed != MVWIN) {
+		    print_Output(res, doneJob);
+		}
+		else {
+		    /*raster output */
+		    raster_Output(random_access, doneJob.f.f_d.aid, g,
+				  doneJob.f.f_d.res);
+		}
 	    }
 	    else {
-		/*raster output */
-		raster_Output(random_access, doneJob.f.f_d.aid, g,
-			      doneJob.f.f_d.res);
+		if (parsed != MVWIN) {
+		    error_Output(res, doneJob);
+		}
+		else {
+		    /*printf("todo ");fflush(stdout); *//* TODO scrivere su raster NULL ??? */
+		}
 	    }
 	}
-	else {
-	    if (parsed != MVWIN) {
-		error_Output(res, doneJob);
-	    }
-	    else {
-		/*printf("todo ");fflush(stdout); *//* TODO scrivere su raster NULL ??? */
-	    }
-	}
-    }
 
     worker_end();
 
@@ -277,7 +277,7 @@ int parseSetup(char *path, list l, g_areas g, char *raster)
 	    }
 
 	} while ((token = strtok(NULL, " ")) != NULL &&
-	       strcmp(token, "SAMPLEAREA") == 0);
+		 strcmp(token, "SAMPLEAREA") == 0);
 
 	close(setup);
 

@@ -49,7 +49,7 @@ static dcell_manager dm;
 static fcell_manager fm;
 static char *raster;
 static char **parameters;
-static int (*func)(int, char **, area_des, double *);
+static int (*func) (int, char **, area_des, double *);
 
 void worker_init(char *r, int f(int, char **, area_des, double *), char **p)
 {
@@ -71,26 +71,26 @@ void worker_init(char *r, int f(int, char **, area_des, double *), char **p)
     /* calculate rows in cache */
     switch (data_type) {
     case CELL_TYPE:{
-	cache_rows = CACHESIZE / (hd.cols * sizeof(CELL));
-	cm->cache = G_malloc(cache_rows * sizeof(CELL *));
-	cm->contents = G_malloc(cache_rows * sizeof(int));
-	cm->used = 0;
-	cm->contents[0] = -1;
-    } break;
+	    cache_rows = CACHESIZE / (hd.cols * sizeof(CELL));
+	    cm->cache = G_malloc(cache_rows * sizeof(CELL *));
+	    cm->contents = G_malloc(cache_rows * sizeof(int));
+	    cm->used = 0;
+	    cm->contents[0] = -1;
+	} break;
     case DCELL_TYPE:{
-	cache_rows = CACHESIZE / (hd.cols * sizeof(DCELL));
-	dm->cache = G_malloc(cache_rows * sizeof(DCELL *));
-	dm->contents = G_malloc(cache_rows * sizeof(int));
-	dm->used = 0;
-	dm->contents[0] = -1;
-    } break;
+	    cache_rows = CACHESIZE / (hd.cols * sizeof(DCELL));
+	    dm->cache = G_malloc(cache_rows * sizeof(DCELL *));
+	    dm->contents = G_malloc(cache_rows * sizeof(int));
+	    dm->used = 0;
+	    dm->contents[0] = -1;
+	} break;
     case FCELL_TYPE:{
-	cache_rows = CACHESIZE / (hd.cols * sizeof(FCELL));
-	fm->cache = G_malloc(cache_rows * sizeof(FCELL *));
-	fm->contents = G_malloc(cache_rows * sizeof(int));
-	fm->used = 0;
-	fm->contents[0] = -1;
-    } break;
+	    cache_rows = CACHESIZE / (hd.cols * sizeof(FCELL));
+	    fm->cache = G_malloc(cache_rows * sizeof(FCELL *));
+	    fm->contents = G_malloc(cache_rows * sizeof(int));
+	    fm->used = 0;
+	    fm->contents[0] = -1;
+	} break;
     }
     ad->data_type = data_type;
     ad->cm = cm;
@@ -98,7 +98,7 @@ void worker_init(char *r, int f(int, char **, area_des, double *), char **p)
     ad->dm = dm;
 }
 
-void worker_process(msg *ret, msg *m)
+void worker_process(msg * ret, msg * m)
 {
     switch (m->type) {
     case AREA:
@@ -149,22 +149,22 @@ void worker_process(msg *ret, msg *m)
 
 	switch (data_type) {
 	case CELL_TYPE:{
-	    for (i = 0; i < (ad->rl - used); i++) {
-		cm->cache[used + i] = Rast_allocate_c_buf();
+		for (i = 0; i < (ad->rl - used); i++) {
+		    cm->cache[used + i] = Rast_allocate_c_buf();
+		}
 	    }
-	}
 	    break;
 	case DCELL_TYPE:{
-	    for (i = 0; i < ad->rl - used; i++) {
-		dm->cache[used + i] = Rast_allocate_d_buf();
+		for (i = 0; i < ad->rl - used; i++) {
+		    dm->cache[used + i] = Rast_allocate_d_buf();
+		}
 	    }
-	}
 	    break;
 	case FCELL_TYPE:{
-	    for (i = 0; i < ad->rl - used; i++) {
-		fm->cache[used + i] = Rast_allocate_f_buf();
+		for (i = 0; i < ad->rl - used; i++) {
+		    fm->cache[used + i] = Rast_allocate_f_buf();
+		}
 	    }
-	}
 	    break;
 	}
 	cm->used = ad->rl;
