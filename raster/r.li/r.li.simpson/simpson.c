@@ -8,8 +8,6 @@
  *   This program is free software under the GPL (>=v2)
  *   Read the COPYING file that comes with GRASS for details.
  *       
- *       BUGS: please send bugs reports to pallecch@cli.di.unipi.it
- *
  */
 
 #include <grass/gis.h>
@@ -654,7 +652,7 @@ double calculateF(area_des ad, int fd, double *result)
 	return RLI_ERRORE;
     }
 
-    /* claculate index summary */
+    /* calculate index summary */
     for (i = 0; i < m; i++) {
 	t = (double)(array[i]->tot);
 	p = t / area;

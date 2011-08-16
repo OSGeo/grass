@@ -5,7 +5,6 @@
  *   This program is free software under the GPL (>=v2)
  *   Read the COPYING file that comes with GRASS for details.
  *       
- *       \BUGS: please send bugs reports to pallecch@cli.di.unipi.it
  */
 
 #ifndef AVL_H
@@ -15,7 +14,7 @@
 
 typedef struct avl_node
 {
-    generic_cell key;		/* key field is a CELL or a DCELL or a FCELL */
+    generic_cell key;	/* key field is a CELL or a DCELL or a FCELL */
     long counter;		/* data */
     struct avl_node *father;
     struct avl_node *right_child;
