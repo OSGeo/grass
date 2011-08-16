@@ -13,7 +13,6 @@
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
- * BUGS: please send bugs reports to  spano@cli.di.unipi.it, porta@cli.di.unipi.it
  *
  *****************************************************************************/
 
@@ -90,8 +89,6 @@ int shape_index(int fd, char **par, area_des ad, double *result)
 	}
     }
 
-
-
     /*calculate distance */
     G_begin_distance_calculations();
     /* EW Dist at North edge */
@@ -102,8 +99,6 @@ int shape_index(int fd, char **par, area_des ad, double *result)
     NS_DIST1 = G_distance(hd.east, hd.north, hd.east, hd.south);
     /* NS Dist at West edge */
     NS_DIST2 = G_distance(hd.west, hd.north, hd.west, hd.south);
-
-
 
 
     area = (((EW_DIST1 + EW_DIST2) / 2) / hd.cols) *

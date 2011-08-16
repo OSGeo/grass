@@ -6,12 +6,12 @@
  *   This program is free software under the GPL (>=v2)
  *   Read the COPYING file that comes with GRASS for details.
  *       
- *       BUGS: please send bugs reports to pallecch@cli.di.unipi.it
  */
+
 #ifndef _INDEXHEADER_H_
 #define _INDEXHEADER_H_
 
 #define RLI_ERRORE 0
 #define RLI_OK 1
 
-#endif //_INDEXHEADER_H_
+#endif /* _INDEXHEADER_H_ */

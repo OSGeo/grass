@@ -7,8 +7,6 @@
  *   This program is free software under the GPL (>=v2)
  *   Read the COPYING file that comes with GRASS for details.
  *       
- *       BUGS: please send bugs reports to pallecch@cli.di.unipi.it
- *
  */
 
 #include <grass/gis.h>

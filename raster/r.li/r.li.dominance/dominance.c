@@ -25,8 +25,6 @@
 #include "../r.li.daemon/daemon.h"
 
 
-
-
 int calculate(int fd, area_des ad, double *result);
 int calculateD(int fd, area_des ad, double *result);
 int calculateF(int fd, area_des ad, double *result);

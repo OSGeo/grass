@@ -6,8 +6,6 @@
  *
  *   This program is free software under the GPL (>=v2)
  *   Read the COPYING file that comes with GRASS for details.
- *       
- *       BUGS: please send bugs reports to pallecch@cli.di.unipi.it
  *
  */
 
@@ -24,9 +22,11 @@
 #include "../r.li.daemon/avlID.h"
 #include "../r.li.daemon/GenericCell.h"
 #include "../r.li.daemon/daemon.h"
+
 int calculate(int fd, area_des ad, double *result);
 int calculateD(int fd, area_des ad, double *result);
 int calculateF(int fd, area_des ad, double *result);
+
 int main(int argc, char *argv[])
 {
     struct Option *raster, *conf, *output;
