@@ -1,17 +1,17 @@
 <h2>DESCRIPTION</h2>
 
-<em>d.vect</em> displays GRASS vector data in the active frame on the graphics 
-monitor.
+<em>d.vect</em> displays vector maps in the active frame on the
+graphics monitor.
 
 <h2>NOTES</h2>
 
 <em>d.vect</em> can simply be used typing <tt>d.vect
-map=vector_map</tt>.  There are a large variety of optional parameters
+map=vector_map</tt>. There are a large variety of optional parameters
 which allow the user to specify vector type, colors, data fields, SQL
 queries, label size and justification, etc.
 
 <p>
-By default <em>d.vect</em> fills in holes in polygons (islands).  If
+By default <em>d.vect</em> fills in holes in polygons (islands). If
 you only want to show active areas limit the features with, e.g.,
 <div class="code"><pre>
 d.vect map=vector_map cats=1-999999
@@ -22,11 +22,13 @@ In order to display attributes in the map, <tt>display=attr</tt> must be
 specified in addition to the column name (<b>attrcolumn</b> parameter).
 
 <p>
-Colors may be specified in an attribute table column named 'GRASSRGB'
-(which is a <tt>varchar(11)</tt> column
-containing <tt>RRR:GGG:BBB</tt> values), see the flag <b>-a</b>.
+Colors may be specified
+by <em><a href="v.colors.html">v.colors</a></em> as a color table or
+in an attribute table column named 'GRASSRGB' (which is
+a <tt>varchar(11)</tt> column containing <tt>RRR:GGG:BBB</tt> values),
+see the flag <b>-a</b>.
 
-<P>
+<p>
 A table for a vector map might look like this:
 
 <div class="code"><pre>
@@ -109,19 +111,21 @@ d.vect -z map=random3d_del type=area zcolor=gyr
 <h2>SEE ALSO</h2>
 
 <em>
-<a HREF="d.erase.html">d.erase</a>,
-<a HREF="d.rast.html">d.rast</a>,
-<a HREF="v.colors.html">v.colors</a>,
-<a HREF="v.db.addcolumn.html">v.db.addcolumn</a>,
-<a HREF="v.db.update.html">v.db.update</a><br>
-<a HREF="sql.html">GRASS SQL interface</a>
+  <a href="v.colors.html">v.colors</a>,
+  <a href="d.erase.html">d.erase</a>,
+  <a href="d.rast.html">d.rast</a>,
+  <a href="v.colors.html">v.colors</a>,
+  <a href="v.db.addcolumn.html">v.db.addcolumn</a>,
+  <a href="v.db.update.html">v.db.update</a><br>
+  <a href="sql.html">GRASS SQL interface</a>
 </em>
 
 <h2>AUTHORS</h2>
 
 CERL<br>
 Radim Blazek, ITC-Irst, Trento, Italy<br>
-other GRASS developers
+Support for color tables by Martin Landa, Czech Technical University in Prague (8/2011)<br>
+and many other GRASS developers
 
 <p>
 <i>Last changed: $Date$</i>
