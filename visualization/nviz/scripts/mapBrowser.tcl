@@ -34,11 +34,12 @@ proc g.gisenv {name} {
 
 proc grass_mapset_list {} {
     global src_boot
+    global devnull
 
     set list {}
     set location [grass_location]
-
-    foreach name [exec $src_boot/bin/g.mapsets -p] {
+    
+    foreach name [exec $src_boot/bin/g.mapsets -p 2> $devnull] {
 	if {[file isdir $location/$name]} {
 	    lappend list $name
 	}

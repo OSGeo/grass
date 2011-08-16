@@ -261,8 +261,10 @@ if {$DEBUG} {puts "toplevel made"}
 		-background #FFFFFF -textvariable Nv_(text)
 	pack .bottom.entry -side left -fill both -expand yes
 
-	set cwidth [exec $src_boot/bin/g.gisenv X3D_WIDTH]
-	set cheight [exec $src_boot/bin/g.gisenv X3D_HEIGHT]
+	set cwidth {}
+	set cheight {}
+	catch { set cwidth [exec $src_boot/bin/g.gisenv X3D_WIDTH] }
+	catch { set cheight [exec $src_boot/bin/g.gisenv X3D_HEIGHT] }
 	
 	if {$cwidth > 0 && $cheight > 0} {
 		if { [catch {togl $Nv_(TOP).canvas -rgba true -double true -depth true \
