@@ -26,12 +26,15 @@ from math import sqrt
 from numpy import matrix
 
 from ctypes import *
-from grass.lib.gis   import *
-from grass.lib.raster3d   import *
-from grass.lib.ogsf  import *
-from grass.lib.nviz  import *
-from grass.lib.raster import *
-
+try:
+    from grass.lib.gis   import *
+    from grass.lib.raster3d   import *
+    from grass.lib.ogsf  import *
+    from grass.lib.nviz  import *
+    from grass.lib.raster import *
+except ImportError, e:
+    sys.stderr.write("3D view mode: %s\n" % e)
+    
 from debug import Debug
 
 log      = None
