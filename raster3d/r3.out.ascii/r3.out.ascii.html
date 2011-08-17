@@ -1,21 +1,24 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-Outputs <I>RASTER3D</I> maps in <I>ASCII</I> format.  <I>map</I> is
-a valid RASTER3D map in the current mapset.  <I>output</I> is the name of
-an ASCII file which will be written in the current working directory.
-If <I>output</I> is not specified then <B>stdout</B> is used.  The
-<I>-h</I> flag may be used to suppress header information. The module is
-sensitive to region settings (set with g.region). The <em>-c</em> flag will create grass6
-r3.in.ascii compatible output.
+Outputs 3D raster maps in ASCII format. The <em>map</em> parameter is
+a valid 3D raster map in the current mapset search path. The <em>output</em> 
+parameter is the name of an ASCII file which will be written in the 
+current working directory.
+<p>
+If <em>output</em> is not specified then standard output (stdout) is used. The
+<em>-h</em> flag may be used to suppress header information. The module is
+sensitive to region settings (set with <em>g.region</em>).
+<p>
+The <em>-c</em> flag will create GRASS 6 <em>r3.in.ascii</em> compatible
+output.
 
-
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 The default format for the ASCII file is equivalent to that required
-by <EM>r3.in.ascii</EM>.  In particular, files output by
-<EM>r3.out.ascii</EM> with header information may be converted back to
-RASTER3D maps with <EM>r3.in.ascii</EM>.
+by <em>r3.in.ascii</em>. In particular, files output by
+<em>r3.out.ascii</em> with header information may be converted back to
+3D raster maps with <em>r3.in.ascii</em>.
 
-<P>
+<p>
 The format for the ASCII file is:
 <pre>
 version: <i>"grass7"</i>
@@ -31,8 +34,8 @@ cols:    <i>integer</i>
 levels:  <i>integer</i>
 </pre>
 
-Ther <B>version</B> and <B>order</B> options are introduced in grass7 June 2011.
-The <B>order</B> option describes the order of rows and depths in the output. 
+The <b>version</b> and <b>order</b> options have been introduced in GRASS 7 in June 2011.
+The <b>order</b> option describes the order of rows and depths in the output. 
 It is possible to create output of different row order using the <em>-r</em> flag 
 and output of different depths order using the  <em>-d</em> flag. The default order is:
 <pre>
@@ -51,7 +54,7 @@ order can not be changed but the row and depth order. Supported orders are:
     <li><b>sntb</b>:   south -> north and top -> bottom ordering using <em>-rd</em> flag</li>
 </ul>
 
-The header is followed by cell values in <EM>floating point</EM> format.
+The header is followed by cell values in <em>floating point</em> format.
 Cell values are output as a series of horizontal slices in row-major
 order. That is in case of the default north -> south and bottom -> top (nsbt) ordering:
 
@@ -71,18 +74,18 @@ order. That is in case of the default north -> south and bottom -> top (nsbt) or
       .                 .                           .
 (x, y + rows, z + 1)   (x + 1, y + rows, z + 1) ... (x + cols, y + rows, z + 1)
 
-  and so on
-
+and so on.
 </pre>
-The data starts with the upper left corner (NW) at the bottom of the data set. 
+
+The data starts with the upper left corner (NW) at the bottom of the data set.
 
 <P>
-One level maps can be imported with r.in.ascii (Raster 2D) using the default <B>nsbt</B> order
+One level maps can be imported with <em>r.in.ascii</em> (2D raster) using the default <b>nsbt</b> order
 and removing the header lines "version", "order", "top", "bottom" and "levels".
 
-<H2>SEE ALSO</H2>
-<EM><A HREF="r3.in.ascii.html">r3.in.ascii</A></EM><br>
-<EM><A HREF="g.region.html">g.region</A></EM><br>
+<h2>SEE ALSO</h2>
+<em><a href="r3.in.ascii.html">r3.in.ascii</a></em>,
+<em><a href="g.region.html">g.region</a></em>
 
 <H2>AUTHORS</H2>
 Roman Waupotitsch, Michael Shapiro, 

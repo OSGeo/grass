@@ -59,7 +59,7 @@ void fatalError(char *errorMsg)
     if (map != NULL) {
         /* should unopen map here! */
         if (!Rast3d_close(map))
-            fatalError(_("Error closing 3d raster map"));
+            fatalError(_("Unable to close 3D raster map"));
 
     }
 
@@ -78,7 +78,7 @@ void setParams()
     param.input->required = YES;
     param.input->gisprompt = "old,grid3,3d-raster";
     param.input->multiple = NO;
-    param.input->description = _("3d raster map to be converted to ASCII");
+    param.input->description = _("3D raster map to be converted to ASCII");
 
     param.output = G_define_option();
     param.output->key = "output";
@@ -121,7 +121,7 @@ void setParams()
 
     param.mask = G_define_flag();
     param.mask->key = 'm';
-    param.mask->description = _("Use RASTER3D mask (if exists) with input map");
+    param.mask->description = _("Use 3D raster mask (if exists) with input map");
 }
 
 /*---------------------------------------------------------------------------*/
@@ -327,7 +327,7 @@ int main(int argc, char *argv[])
     }
 
     if (NULL == G_find_raster3d(input, ""))
-        Rast3d_fatal_error(_("Requested 3d raster map not found"));
+        Rast3d_fatal_error(_("3D raster map <%s> not found"), input);
 
     /* Initiate the default settings */
     Rast3d_init_defaults();
@@ -340,7 +340,7 @@ int main(int argc, char *argv[])
                           RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
     if (map == NULL)
-        Rast3d_fatal_error(_("Error opening 3d raster map"));
+        Rast3d_fatal_error(_("Error opening 3d raster map <%s>"), input);
 
     /* Open the output ascii file */
     fp = openAscii(output, region);
@@ -368,11 +368,11 @@ int main(int argc, char *argv[])
 
     /* Close files and exit */
     if (!Rast3d_close(map))
-        fatalError(_("Error closing 3d raster map"));
+        fatalError(_("Unable to close 3D raster map"));
 
     if (output)
         if (fclose(fp))
-            fatalError(_("Error closing new ASCII file"));
+            fatalError(_("Unable to close new ASCII file"));
 
     return 0;
 }
