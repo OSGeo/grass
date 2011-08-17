@@ -387,7 +387,20 @@ class ProcessWorkspaceFile:
                 # height
                 self.__processLayerNvizNode(node_vpoints, 'size', int,
                                             nviz['vector']['points'])
-            
+                
+                # thematic
+                node_thematic = node_vpoints.find('thematic')
+                thematic = nviz['vector']['points']['thematic'] = {}
+                thematic['rgbcolumn'] = self.__processLayerNvizNode(node_thematic, 'rgbcolumn', str)
+                thematic['sizecolumn'] = self.__processLayerNvizNode(node_thematic, 'sizecolumn', str)
+                for col in ('rgbcolumn', 'sizecolumn'):
+                    if thematic[col] == 'None':
+                        thematic[col] = None
+                thematic['layer'] = self.__processLayerNvizNode(node_thematic, 'layer', int)
+                for use in ('usecolor', 'usesize', 'usewidth'):
+                    if node_thematic.get(use, ''):
+                        thematic[use] = int(node_thematic.get(use, '0'))
+                
             # vlines
             node_vlines = node_nviz.find('vlines')
             if node_vlines is not None:
@@ -417,6 +430,19 @@ class ProcessWorkspaceFile:
                 # height
                 self.__processLayerNvizNode(node_vlines, 'height', int,
                                             nviz['vector']['lines'])
+                
+                # thematic
+                node_thematic = node_vlines.find('thematic')
+                thematic = nviz['vector']['lines']['thematic'] = {}
+                thematic['rgbcolumn'] = self.__processLayerNvizNode(node_thematic, 'rgbcolumn', str)
+                thematic['sizecolumn'] = self.__processLayerNvizNode(node_thematic, 'sizecolumn', str)
+                for col in ('rgbcolumn', 'sizecolumn'):
+                    if thematic[col] == 'None':
+                        thematic[col] = None
+                thematic['layer'] = self.__processLayerNvizNode(node_thematic, 'layer', int)
+                for use in ('usecolor', 'usesize', 'usewidth'):
+                    if node_thematic.get(use, ''):
+                        thematic[use] = int(node_thematic.get(use, '0'))
             
         return nviz
     
@@ -711,7 +737,8 @@ class Nviz:
                             'sizecolumn' : UserSettings.Get(group='nviz', key='vector',
                                                       subkey=['lines', 'sizecolumn']),
                             'layer': 1,
-                            'use' : False}
+                            'usecolor' : False,
+                            'usewidth' : False}
         if 'object' in data:
             for attrb in ('color', 'width', 'mode', 'height'):
                 data[attrb]['update'] = None
@@ -749,7 +776,8 @@ class Nviz:
                             'sizecolumn' : UserSettings.Get(group='nviz', key='vector',
                                                       subkey=['points', 'sizecolumn']),
                             'layer': 1,
-                            'use' : False}
+                            'usecolor' : False,
+                            'usesize' : False}
         if 'object' in data:
             for attrb in ('size', 'width', 'marker',
                           'color', 'surface', 'height', 'thematic'):
@@ -1123,7 +1151,7 @@ class WriteWorkspaceFile(object):
                                                            marker))
             self.indent += 4
             for name in data[attrb].iterkeys():
-                if name in ('object', 'marker', 'thematic'):
+                if name in ('object', 'marker'):
                     continue
                 if name == 'mode':
                     self.file.write('%s<%s type="%s">\n' % (' ' * self.indent, name,
@@ -1140,6 +1168,21 @@ class WriteWorkspaceFile(object):
                             self.file.write('%s</map>\n' % (' ' * self.indent))
                         self.indent -= 4
                     self.file.write('%s</%s>\n' % ((' ' * self.indent, name)))
+                elif name == 'thematic':
+                    self.file.write('%s<%s ' % (' ' * self.indent, name))
+                    for key in data[attrb][name].iterkeys():
+                        if key.startswith('use'):
+                            self.file.write('%s="%s" ' % (key, int(data[attrb][name][key])))
+                    self.file.write('>\n')
+                    self.indent += 4
+                    for key, value in data[attrb][name].iteritems():
+                        if key.startswith('use'):
+                            continue
+                        if value is None:
+                            value = ''
+                        self.file.write('%s<%s>%s</%s>\n' % (' ' * self.indent, key, value, key))
+                    self.indent -= 4
+                    self.file.write('%s</%s>\n' % (' ' * self.indent, name))
                 else:
                     self.file.write('%s<%s>\n' % (' ' * self.indent, name))
                     self.indent += 4
@@ -1219,7 +1262,7 @@ class WriteWorkspaceFile(object):
         self.indent -= 4
         self.file.write('%s</focus>\n' % (' ' * self.indent))
         # background
-        self.__writeTagWithValue('background_color', view['background']['color'], format = 'd:%d:%d')
+        self.__writeTagWithValue('background_color', view['background']['color'][:3], format = 'd:%d:%d')
         
         self.indent -= 4
         self.file.write('%s</view>\n' % (' ' * self.indent))

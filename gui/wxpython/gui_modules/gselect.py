@@ -800,12 +800,13 @@ class ColumnSelect(wx.ComboBox):
         if vector:
             self.InsertColumns(vector, layer)
     
-    def InsertColumns(self, vector, layer, excludeKey = False, type = None, dbInfo = None):
+    def InsertColumns(self, vector, layer, excludeKey = False, excludeCols = None, type = None, dbInfo = None):
         """!Insert columns for a vector attribute table into the columns combobox
 
         @param vector vector name
         @param layer vector layer number
         @param excludeKey exclude key column from the list?
+        @param excludeCols list of columns to be removed from the list
         @param type only columns of given type (given as list)
         """
         if not dbInfo:
@@ -820,13 +821,20 @@ class ColumnSelect(wx.ComboBox):
                 columns[val['index']] = key
             if excludeKey: # exclude key column
                 columns.remove(keyColumn)
+            if excludeCols: # exclude key column
+                for key in columnchoices.iterkeys():
+                    if key in excludeCols:
+                        columns.remove(key)
             if type: # only selected column types
                 for key, value in columnchoices.iteritems():
                     if value['type'] not in type:
-                        columns.remove(key)
+                        try:
+                            columns.remove(key)
+                        except ValueError:
+                            pass
         except (KeyError, ValueError):
             columns = list()
-        
+            
         self.SetItems(columns)
         self.SetValue(self.defaultValue)
         

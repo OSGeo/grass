@@ -46,17 +46,17 @@ from nviz_mapdisp import wxUpdateProperties
 
 
 class RulesPanel:
-    def __init__(self, parent, mapType, columnType, properties, panelWidth = 180):
+    def __init__(self, parent, mapType, attributeType, properties, panelWidth = 180):
         """!Create rules panel
         
         @param mapType raster/vector
-        @param columnType color/size for choosing widget type
-        @param properties properties of classes derived from ColorTabel
+        @param attributeType color/size for choosing widget type
+        @param properties properties of classes derived from ColorTable
         @param panelWidth width of scroll panel"""
         
         self.ruleslines = {}
         self.mapType = mapType
-        self.columnType = columnType
+        self.attributeType = attributeType
         self.properties = properties
         self.parent = parent
         
@@ -72,14 +72,6 @@ class RulesPanel:
         self.mainPanel.SetSizer(self.mainSizer)
         self.mainPanel.SetAutoLayout(True)
         
-        if self.mapType == 'vector' and self.columnType == 'color':
-            self.label = wx.StaticText(parent, id = wx.ID_ANY, label =  _("Set color for attribute values:"))
-        elif self.mapType == 'vector' and self.columnType == 'size':
-            if self.parent.GetParent().vectorType == 'points':
-                label = label = _("Set size for attribute values:")
-            else:
-                label = label = _("Set width for attribute values:")                
-            self.label = wx.StaticText(parent, id = wx.ID_ANY, label = label)
         # (un)check all
         self.checkAll = wx.CheckBox(parent, id = wx.ID_ANY, label = _("Check all"))
         self.checkAll.SetValue(True)
@@ -138,11 +130,10 @@ class RulesPanel:
                                    size = (80, -1),
                                    style = wx.TE_NOHIDESEL)
             if self.mapType == 'vector':
-                txt_ctrl.SetToolTipString(_("Enter vector attribute values (e.g. 5) "
-                                            "or ranges (e.g. 5 to 10)"))
+                txt_ctrl.SetToolTipString(_("Enter vector attribute values"))
             txt_ctrl.Bind(wx.EVT_TEXT, self.OnRuleValue)
             txt_ctrl.SetName('source')
-            if self.columnType == 'color':
+            if self.attributeType == 'color':
                 # color
                 columnCtrl = csel.ColourSelect(self.mainPanel, id = 2000 + num,
                                                size  =  globalvar.DIALOG_COLOR_SIZE)
@@ -151,16 +142,20 @@ class RulesPanel:
                 if not start:
                     self.ruleslines[enable.GetId()] = { 'value' : '',
                                                         'color': "0:0:0" }
-            if self.columnType == 'size':
-                # size
+            else:
+                # size or width
+                init = 2
+                if self.attributeType == 'size':
+                    init = 100
                 columnCtrl = wx.SpinCtrl(self.mainPanel, id = 2000 + num,
-                                         size = (50, -1), min = 1, max = 1e3,
-                                         initial = 5)
+                                         size = (50, -1), min = 1, max = 1e4,
+                                         initial = init)
                 columnCtrl.Bind(wx.EVT_SPINCTRL, self.OnRuleSize)
+                columnCtrl.Bind(wx.EVT_TEXT, self.OnRuleSize)
                 columnCtrl.SetName('target')
                 if not start:
                     self.ruleslines[enable.GetId()] = { 'value' : '',
-                                                        'size': 100 }
+                                                        self.attributeType: init }
             
             self.mainSizer.Add(item = enable, proportion = 0,
                               flag = wx.ALIGN_CENTER_VERTICAL)
@@ -180,13 +175,19 @@ class RulesPanel:
         if event.IsChecked():
             self.mainPanel.FindWindowById(id + 1000).Enable()
             self.mainPanel.FindWindowById(id + 2000).Enable()
-            if self.mapType == 'vector':
-                value = self.SQLConvert(self.mainPanel.FindWindowById(id + 1000).GetValue(), self.columnType)
+            if self.mapType == 'vector' and not self.parent.GetParent().colorTable:
+                vals = []
+                vals.append(self.mainPanel.FindWindowById(id + 1000).GetValue())
+                try:
+                    vals.append(self.mainPanel.FindWindowById(id + 1 + 1000).GetValue())
+                except AttributeError:
+                    vals.append(None)
+                value = self.SQLConvert(vals)
             else:
                 value = self.mainPanel.FindWindowById(id + 1000).GetValue()
             color = self.mainPanel.FindWindowById(id + 2000).GetValue()
             
-            if self.columnType == 'color':
+            if self.attributeType == 'color':
             # color
                 color_str = str(color[0]) + ':' \
                           + str(color[1]) + ':' \
@@ -195,9 +196,9 @@ class RulesPanel:
                                        'color' : color_str }
                 
             else:
-            # size
+            # size or width
                 self.ruleslines[id] = {'value' : value,
-                                       'size'  : float(color) }
+                                       self.attributeType  : float(color) }
         
         else:
             self.mainPanel.FindWindowById(id + 1000).Disable()
@@ -221,50 +222,56 @@ class RulesPanel:
         num = event.GetId()
         size = event.GetInt()
         
-        self.ruleslines[num - 2000]['size'] = size
+        self.ruleslines[num - 2000][self.attributeType] = size
         
     def OnRuleValue(self, event):
         """!Rule value changed"""
         num = event.GetId()
-        vals = event.GetString().strip()
+        val = event.GetString().strip()
         
-        if vals == '':
+        if val == '':
             return
-        
-        if self.mapType == 'vector':
-            self.SetVectorRule(num, vals)
+        try:
+            table = self.parent.colorTable
+        except AttributeError:
+            # due to scrollpanel in vector dialog
+            table = self.parent.GetParent().colorTable
+        if table:
+            self.SetRasterRule(num, val)
         else:
-            self.SetRasterRule(num, vals)
+            self.SetVectorRule(num, val)
 
-    def SetRasterRule(self, num, vals): 
+    def SetRasterRule(self, num, val): 
         """!Set raster rule"""       
-        self.ruleslines[num-1000]['value'] = vals
+        self.ruleslines[num - 1000]['value'] = val
 
-    def SetVectorRule(self, num, vals):
+    def SetVectorRule(self, num, val):
         """!Set vector rule"""
-        tc = self.mainPanel.FindWindowById(num)
-        if self.columnType == 'color':
-            source, target = 'source_rgb', 'rgb'
-        else:
-            source, target = 'source_size', 'size'
-        if self.properties[source] == '' or self.properties[target] == '':
-            tc.SetValue('')
-            gcmd.GMessage(parent = self,
-                          message = _("Please select attribute column "
-                                    "and RGB color column first"))
-        else:
-            try:
-                self.ruleslines[num-1000]['value'] = self.SQLConvert(vals, self.columnType)
-            except ValueError:
-                tc.SetValue('')
-                self.ruleslines[num-1000]['value'] = ''
-                
-                return
+##        tc = self.mainPanel.FindWindowById(num)
+##        source, target = 'sourceColumn', 'storeColumn'
+##        if self.properties[source] == '' or self.properties[target] == '':
+##            tc.SetValue('')
+##            gcmd.GMessage(parent = self.parent,
+##                          message = _("Please select attribute column "
+##                                    "and RGB color column first"))
+##        else:
+        vals = []
+        vals.append(val)
+        try:
+            vals.append(self.mainPanel.FindWindowById(num + 1).GetValue())
+        except AttributeError:
+            vals.append(None)
+        self.ruleslines[num - 1000]['value'] = self.SQLConvert(vals)
+##            except ValueError:
+##                tc.SetValue('')
+##                self.ruleslines[num - 1000]['value'] = ''
             
     def Enable(self, enable = True):
         """!Enable/Disable all widgets"""
         for child in self.mainPanel.GetChildren():
             child.Enable(enable)
+        sql = True
+        self.LoadRulesline(sql)# todo
         self.btnAdd.Enable(enable)
         self.numRules.Enable(enable)
         self.checkAll.Enable(enable)
@@ -272,48 +279,42 @@ class RulesPanel:
         
         
     def LoadRules(self):
-        """!Fill rule widgets from ruleslines"""
         message = ""
         for item in range(len(self.ruleslines)):
             self.mainPanel.FindWindowById(item + 1000).SetValue(self.ruleslines[item]['value'])
             r, g, b = (0, 0, 0) # default
-            if self.ruleslines[item][self.columnType] == '':
-                if self.columnType == 'color':
-                    self.ruleslines[item][self.columnType] = '%d:%d:%d' % (r, g, b)
-                elif self.columnType == 'size':
-                    self.ruleslines[item][self.columnType] = 100
+            if not self.ruleslines[item][self.attributeType]:
+                if self.attributeType == 'color':
+                    self.ruleslines[item][self.attributeType] = '%d:%d:%d' % (r, g, b)
+                elif self.attributeType == 'size':
+                    self.ruleslines[item][self.attributeType] = 100                
+                elif self.attributeType == 'width':
+                    self.ruleslines[item][self.attributeType] = 2
                 
-            if self.columnType == 'color':
+            if self.attributeType == 'color':
                 try:
-                    r, g, b = map(int, self.ruleslines[item][self.columnType].split(':'))
+                    r, g, b = map(int, self.ruleslines[item][self.attributeType].split(':'))
                 except ValueError, e:
                     message =  _("Bad color format. Use color format '0:0:0'")
                 self.mainPanel.FindWindowById(item + 2000).SetValue((r, g, b))
             else:
-                value = float(self.ruleslines[item][self.columnType])
+                value = float(self.ruleslines[item][self.attributeType])
                 self.mainPanel.FindWindowById(item + 2000).SetValue(value)
                 
         if message:
             gcmd.GMessage(parent = self.parent, message = message)
             return False
         
-        return True    
-    
-    def SQLConvert(self, vals, type = 'color'):
+        return True
+                
+    def SQLConvert(self, vals):
         """!Prepare value for SQL query"""
-        if type == 'color':
-            source = 'source_rgb'
-        elif type == 'size':
-            source = 'source_size'
-        valslist = []
-        valslist = vals.split('to')
-        if len(valslist) == 1:
-            sqlrule = '%s=%s' % (self.properties[source], valslist[0])
-        elif len(valslist) > 1:
-            sqlrule = '%s>=%s AND %s<=%s' % (self.properties[source], valslist[0],
-                                             self.properties[source], valslist[1])
+        if vals[0].isdigit():
+            sqlrule = '%s>=%s' % (self.properties['sourceColumn'], vals[0])
+            if vals[1]:
+                sqlrule += ' AND %s<%s' % (self.properties['sourceColumn'], vals[1])
         else:
-            return None
+            sqlrule = '%s=%s' % (self.properties['sourceColumn'], vals[0])
         
         return sqlrule  
 
@@ -339,8 +340,7 @@ class ColorTable(wx.Frame):
         # input map to change
         self.inmap = ''
         # reference to layer with preview
-        self.layer = None          
-           
+        self.layer = None     
         # layout
         self._doLayout()
         
@@ -360,10 +360,10 @@ class ColorTable(wx.Frame):
         # if not the right type, than select another
         try:
             sel = self.parent.curr_page.maptree.layer_selected
-            if sel and self.parent.curr_page.maptree.GetPyData(sel)[0]['type'] == self.type:
+            if sel and self.parent.curr_page.maptree.GetPyData(sel)[0]['type'] == self.mapType:
                 layer = sel
             else:
-                layer = self.parent.curr_page.maptree.FindItemByData(key = 'type', value = self.type)
+                layer = self.parent.curr_page.maptree.FindItemByData(key = 'type', value = self.mapType)
         except:
             layer = None
         if layer:
@@ -418,17 +418,13 @@ class ColorTable(wx.Frame):
         row += 1
         
         # color table
-        self.colorRulesPanel = RulesPanel(parent = parent, mapType = self.type,
-                                          columnType = 'color', properties = self.properties)
-        if self.type == 'vector':
-            bodySizer.Add(item = self.colorRulesPanel.label, pos = (row, 0), span = (1, 2),
-                          flag = wx.ALL, border = 5)
-            row += 1
+        self.rulesPanel = RulesPanel(parent = parent, mapType = self.mapType,
+                                          attributeType = self.attributeType, properties = self.properties)
         
-        bodySizer.Add(item = self.colorRulesPanel.mainPanel, pos = (row, 0), span = (1, 2),
+        bodySizer.Add(item = self.rulesPanel.mainPanel, pos = (row, 0), span = (1, 2),
                       flag = wx.ALL, border = 5)
         # add two rules as default
-        self.colorRulesPanel.AddRules(2)
+        self.rulesPanel.AddRules(2)
         
         # preview window
         self._createPreview(parent = parent)
@@ -436,9 +432,9 @@ class ColorTable(wx.Frame):
                       flag = wx.EXPAND | wx.LEFT | wx.RIGHT, border = 5)
         row += 1
         # add ckeck all and clear all
-        bodySizer.Add(item = self.colorRulesPanel.checkAll, flag = wx.ALIGN_CENTER_VERTICAL, 
+        bodySizer.Add(item = self.rulesPanel.checkAll, flag = wx.ALIGN_CENTER_VERTICAL, 
                       pos = (row, 0))
-        bodySizer.Add(item = self.colorRulesPanel.clearAll, pos = (row, 1))
+        bodySizer.Add(item = self.rulesPanel.clearAll, pos = (row, 1))
         
         # preview button
         self.btnPreview = wx.Button(parent, id = wx.ID_ANY,
@@ -450,9 +446,9 @@ class ColorTable(wx.Frame):
                                            "(current Map Display extent is used)."))
         row +=1
         # add rules button and spin to sizer
-        bodySizer.Add(item = self.colorRulesPanel.numRules, pos = (row, 0),
+        bodySizer.Add(item = self.rulesPanel.numRules, pos = (row, 0),
                       flag = wx.ALIGN_CENTER_VERTICAL)
-        bodySizer.Add(item = self.colorRulesPanel.btnAdd, pos = (row, 1))
+        bodySizer.Add(item = self.rulesPanel.btnAdd, pos = (row, 1))
         
 
        
@@ -479,12 +475,14 @@ class ColorTable(wx.Frame):
 
         @return True on success otherwise False
         """
-        ret = self.CreateColorTable()
+        ret = self.CreateColorTable(mapType = self.mapType)
+        if not self.colorTable:
+            self.UseAttrColumn()
         if ret:
             display = self.parent.GetLayerTree().GetMapDisplay()
             if display and display.IsAutoRendered():
                 display.GetWindow().UpdateMap(render = True)
-            
+           
         return ret
 
     def OnOK(self, event):
@@ -495,7 +493,105 @@ class ColorTable(wx.Frame):
     def OnCancel(self, event):
         """!Do not apply any changes and close the dialog"""
         self.Destroy()
+    
+    def LoadTable(self, mapType = 'raster'):
+        """!Load current color table (using `r.colors.out`)"""
         
+        self.rulesPanel.Clear()
+        if mapType == 'raster':
+            cmd = ['r.colors.out',
+                   'read=True',
+                   'map=%s' % self.inmap,
+                   'rules=-']
+        else:
+            cmd = ['v.colors.out',
+                   'read=True',
+                   'map=%s' % self.inmap,
+                   'rules=-']
+            
+            if self.properties['sourceColumn'] != 'cat':
+                cmd.append('column=%s' % self.properties['sourceColumn'])
+            
+        cmd = utils.CmdToTuple(cmd)
+        
+        if self.inmap:
+            ctable = gcmd.RunCommand(cmd[0], **cmd[1])
+        else:
+            self.OnPreview()
+            return
+        
+        rulesNumber = len(ctable.splitlines())
+        self.rulesPanel.AddRules(rulesNumber)
+        
+        count = 0
+        for line in ctable.splitlines():
+            value, color = map(lambda x: x.strip(), line.split(' '))
+            self.rulesPanel.ruleslines[count]['value'] = value
+            self.rulesPanel.ruleslines[count]['color'] = color
+            self.rulesPanel.mainPanel.FindWindowById(count + 1000).SetValue(value)
+            rgb = list()
+            for c in color.split(':'):
+                rgb.append(int(c))
+            self.rulesPanel.mainPanel.FindWindowById(count + 2000).SetColour(rgb)
+            count += 1
+        
+        self.OnPreview(tmp = True)    
+        
+    def CreateColorTable(self, force = False, mapType = 'raster'):
+        """!Creates color table
+
+        @return True on success
+        @return False on failure
+        """
+        rulestxt = ''
+        
+        for rule in self.rulesPanel.ruleslines.itervalues():
+            if not rule['value']: # skip empty rules
+                continue
+            
+            if rule['value'] not in ('nv', 'default') and \
+                    rule['value'][-1] != '%' and \
+                    not self._IsNumber(rule['value']):
+                gcmd.GError(_("Invalid rule value '%s'. Unable to apply color table.") % rule['value'],
+                            parent = self)
+                return False
+            
+            rulestxt += rule['value'] + ' ' + rule['color'] + '\n'
+           
+        if not rulestxt:
+            gcmd.GMessage(parent = self, message = _("No color rules given."))
+            return False
+        
+        gtemp = utils.GetTempfile()
+        output = open(gtemp, "w")
+        try:
+            output.write(rulestxt)
+        finally:
+            output.close()
+        
+        flags = ''
+        if mapType == 'raster':
+            if not force and not self.ovrwrtcheck.IsChecked():
+                flags = 'w'
+                
+        cmd = ['%s.colors' % mapType[0],#r.colors/v.colors
+                'flags=%s' % flags,
+                'map=%s' % self.inmap,
+                'rules=%s' % gtemp]
+        if mapType == 'vector' and self.properties['sourceColumn']:
+            cmd.append('column=%s' % self.properties['sourceColumn'])
+        cmd = utils.CmdToTuple(cmd)
+        ret = gcmd.RunCommand(cmd[0], **cmd[1])
+                        
+        if ret != 0 and mapType == 'raster':
+            gcmd.GMessage(_("Color table already exists. "
+                            "Check out 'replace existing color table' to "
+                            "overwrite it."),
+                          parent = self)
+            return False
+        
+        return True
+    
     def DoPreview(self, ltype, cmdlist):
         """!Update preview (based on computational region)"""
         
@@ -507,7 +603,7 @@ class ColorTable(wx.Frame):
             self.layer.SetCmd(cmdlist)
         
         # apply new color table and display preview
-        self.CreateColorTable(force = True)
+        self.CreateColorTable(force = True, mapType = self.mapType)
         self.preview.UpdatePreview()
         
     def RunHelp(self, cmd):
@@ -530,8 +626,9 @@ class RasterColorTable(ColorTable):
     def __init__(self, parent, **kwargs):
         """!Dialog for interactively entering color rules for raster maps"""
 
-        self.type = 'raster'
-        
+        self.mapType = 'raster'
+        self.attributeType = 'color' 
+        self.colorTable = True 
         # raster properties
         self.properties = {
             # min cat in raster map
@@ -630,7 +727,7 @@ class RasterColorTable(ColorTable):
             self.btnPreview.Enable(False)
             self.btnOK.Enable(False)
             self.btnApply.Enable(False)
-            self.OnLoadTable(event)
+            self.LoadTable()
             return
         
         info = grass.raster_info(map = self.inmap)
@@ -638,7 +735,7 @@ class RasterColorTable(ColorTable):
         if info:
             self.properties['min'] = info['min']
             self.properties['max'] = info['max']
-            self.OnLoadTable(event)
+            self.LoadTable()
         else:
             self.inmap = ''
             self.properties['min'] = self.properties['max'] = None
@@ -661,41 +758,9 @@ class RasterColorTable(ColorTable):
         self.btnPreview.Enable()
         self.btnOK.Enable()
         self.btnApply.Enable()
-    
-    def OnLoadTable(self, event):
-        """!Load current color table (using `r.colors.out`)"""
-        
-        self.colorRulesPanel.Clear()
-        
-        if self.inmap:
-            ctable = gcmd.RunCommand('r.colors.out',
-                                     parent = self,
-                                     read = True,
-                                     map = self.inmap,
-                                     rules = '-')
-        else:
-            self.OnPreview(event)
-            return
-        
-        rulesNumber = len(ctable.splitlines())
-        self.colorRulesPanel.AddRules(rulesNumber)
-        
-        count = 0
-        for line in ctable.splitlines():
-            value, color = map(lambda x: x.strip(), line.split(' '))
-            self.colorRulesPanel.ruleslines[count]['value'] = value
-            self.colorRulesPanel.ruleslines[count]['color'] = color
-            self.colorRulesPanel.mainPanel.FindWindowById(count + 1000).SetValue(value)
-            rgb = list()
-            for c in color.split(':'):
-                rgb.append(int(c))
-            self.colorRulesPanel.mainPanel.FindWindowById(count + 2000).SetColour(rgb)
-            count += 1
-        
-        self.OnPreview(tmp = False)
             
           
-    def OnPreview(self, event = None, tmp = True):
+    def OnPreview(self, tmp = True):
         """!Update preview (based on computational region)"""
         if not self.inmap:
             self.preview.EraseMap()
@@ -739,7 +804,7 @@ class RasterColorTable(ColorTable):
     def OnSaveTable(self, event):
         """!Save color table to file"""
         rulestxt = ''   
-        for rule in self.ruleslines.itervalues():
+        for rule in self.rulesPanel.ruleslines.itervalues():
             if not rule['value']:
                 continue
             rulestxt += rule['value'] + ' ' + rule['color'] + '\n'
@@ -763,97 +828,50 @@ class RasterColorTable(ColorTable):
         cmd = 'r.colors'
         ColorTable.RunHelp(self, cmd = cmd)
     
-    def CreateColorTable(self, force = False):
-        """!Creates color table
 
-        @return True on success
-        @return False on failure
-        """
-        rulestxt = ''
-        
-        for rule in self.colorRulesPanel.ruleslines.itervalues():
-            if not rule['value']: # skip empty rules
-                continue
-            
-            if rule['value'] not in ('nv', 'default') and \
-                    rule['value'][-1] != '%' and \
-                    not self._IsNumber(rule['value']):
-                gcmd.GError(_("Invalid rule value '%s'. Unable to apply color table.") % rule['value'],
-                            parent = self)
-                return False
-            
-            rulestxt += rule['value'] + ' ' + rule['color'] + '\n'
-           
-        if not rulestxt:
-            gcmd.GMessage(parent = self, message = _("No color rules given."))
-            return False
-        
-        gtemp = utils.GetTempfile()
-        output = open(gtemp, "w")
-        try:
-            output.write(rulestxt)
-        finally:
-            output.close()
-        
-        if not force and not self.ovrwrtcheck.IsChecked():
-            flags = 'w'
-        else:
-            flags = ''
-        
-        ret = gcmd.RunCommand('r.colors',
-                              flags = flags,
-                              map = self.inmap,
-                              rules = gtemp)
-        if ret != 0:
-            gcmd.GMessage(_("Color table already exists. "
-                            "Check out 'replace existing color table' to "
-                            "overwrite it."),
-                          parent = self)
-            return False
-        
-        return True
                       
 class VectorColorTable(ColorTable):
-    def __init__(self, parent, **kwargs):
+    def __init__(self, parent, attributeType, **kwargs):
         """!Dialog for interactively entering color rules for vector maps"""
-        
-        self.type = 'vector'
+        # dialog attributes
+        self.mapType = 'vector'
+        self.attributeType = attributeType # color, size, width
+        # in version 7 v.colors used, otherwise color column only
+        self.version7 = int(grass.version()['version'].split('.')[0]) >= 7
+        self.colorTable = False
         # vector properties
         self.properties = {
-            # list of database layers for vector (minimum of 1)
-            'layers' : [],
-            # list of database columns for vector
-            'columns' : [],
             # vector layer for attribute table to use for setting color
             'layer' : 1, 
             # vector attribute table used for setting color         
             'table' : '',
             # vector attribute column for assigning colors
-            'source_rgb' : '', 
+            'sourceColumn' : '', 
+            # vector attribute column to use for loading colors
+            'loadColumn' : '',
             # vector attribute column to use for storing colors
-            'rgb' : '',    
+            'storeColumn' : '',    
             # vector attribute column for temporary storing colors   
-            'tmp_rgb' : '',
-            # vector attribute column for temporary storing size   
-            'tmp_size' : '',
-            # vector attribute column for assigning size
-            'source_size' : '', 
-            # vector attribute column to use for storing size
-            'size' : '',
-            }         
-        
+            'tmpColumn' : ''
+            }     
+        self.columnsProp = {'color': {'name': 'GRASSRGB', 'type1': 'varchar(11)', 'type2': ['character']},
+                            'size' : {'name': 'GRASSSIZE', 'type1': 'integer', 'type2': ['integer']},
+                            'width': {'name': 'GRASSWIDTH', 'type1': 'integer', 'type2': ['integer']}}
         ColorTable.__init__(self, parent = parent,
-                            title = _('Create new color table for vector map'), **kwargs)   
+                            title = _('Create new color rules for vector map'), **kwargs)   
         
         # additional bindings for vector color management
-        self.Bind(wx.EVT_COMBOBOX, self.OnLayerSelection, self.cb_vlayer)
-        self.Bind(wx.EVT_COMBOBOX, self.OnColumnSelection, self.cb_color_att)
-        self.Bind(wx.EVT_COMBOBOX, self.OnRGBColSelection, self.cb_rgb_col)
-        self.Bind(wx.EVT_BUTTON, self.OnAddColumn, self.btn_add_RGB)    
+        self.Bind(wx.EVT_COMBOBOX, self.OnLayerSelection, self.layerSelect)
+        self.Bind(wx.EVT_COMBOBOX, self.OnSourceColumnSelection, self.sourceColumn)
+        self.Bind(wx.EVT_COMBOBOX, self.OnFromColSelection, self.fromColumn)
+        self.Bind(wx.EVT_COMBOBOX, self.OnToColSelection, self.toColumn)
+        self.Bind(wx.EVT_BUTTON, self.OnAddColumn, self.addColumn)    
         
         self._initLayer()
-        self.cr_label.SetLabel(_("Enter vector attribute values (e.g. 5) "
-                                            "or ranges (e.g. 5 to 10)"))
+        if self.colorTable:
+            self.cr_label.SetLabel(_("Enter vector attribute values or percents:"))
+        else:
+            self.cr_label.SetLabel(_("Enter vector attribute values:"))
         self.SetMinSize(self.GetSize()) 
         self.CentreOnScreen()
         self.Show()
@@ -869,11 +887,9 @@ class VectorColorTable(ColorTable):
         self.selectionInput = gselect.Select(parent, id = wx.ID_ANY,
                                              size = globalvar.DIALOG_GSELECT_SIZE,
                                              type = 'vector')
-            
-        # layout
         inputSizer.Add(item = self.selectionInput, proportion = 1,
                        flag = wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND, border = 5)
-    
+                    
         return inputSizer
     
     def _createVectorAttrb(self, parent):
@@ -884,38 +900,68 @@ class VectorColorTable(ColorTable):
                                              label = _('Layer:'))
         cb_vc_label = wx.StaticText(parent, id = wx.ID_ANY,
                                          label = _('Attribute column:'))
-        cb_vrgb_label = wx.StaticText(parent, id = wx.ID_ANY,
-                                           label = _('RGB color column:'))
+                                        
+        if self.attributeType == 'color':
+            labels =  [_("Load color from column:"), _("Save color to column:")]
+        elif self.attributeType == 'size':
+            labels =  [_("Load size from column:"), _("Save size to column:")]
+        elif self.attributeType == 'width':
+            labels =  [_("Load width from column:"), _("Save width to column:")]
+            
+        if self.version7 and self.attributeType == 'color':
+            self.useColumn = wx.CheckBox(parent, id = wx.ID_ANY,
+                                  label = _("Use color column instead of color table:"))
+            self.useColumn.Bind(wx.EVT_CHECKBOX, self.OnCheckColumn)
+        
+        fromColumnLabel = wx.StaticText(parent, id = wx.ID_ANY,
+                                            label = labels[0])
+        toColumnLabel = wx.StaticText(parent, id = wx.ID_ANY,
+                                            label = labels[1])
+                                                
         self.rgb_range_label = wx.StaticText(parent, id = wx.ID_ANY)
-        self.cb_vlayer = gselect.LayerSelect(parent)
-        self.cb_color_att = gselect.ColumnSelect(parent)
-        self.cb_rgb_col = gselect.ColumnSelect(parent)
-        self.btn_add_RGB = wx.Button(parent, id = wx.ID_ANY,
+        self.layerSelect = gselect.LayerSelect(parent)
+        self.sourceColumn = gselect.ColumnSelect(parent)
+        self.fromColumn = gselect.ColumnSelect(parent)
+        self.toColumn = gselect.ColumnSelect(parent)
+        self.addColumn = wx.Button(parent, id = wx.ID_ANY,
                                              label = _('Add column'))
-        self.btn_add_RGB.SetToolTipString(_("Add GRASSRGB column to current attribute table."))
+        self.addColumn.SetToolTipString(_("Add GRASSRGB column to current attribute table."))
         
         # layout
         inputSizer = wx.StaticBoxSizer(inputBox, wx.VERTICAL)
         vSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
-        vSizer.Add(cb_vl_label, pos = (0, 0),
+        row = 0
+        vSizer.Add(cb_vl_label, pos = (row, 0),
                    flag = wx.ALIGN_CENTER_VERTICAL)
-        vSizer.Add(self.cb_vlayer,  pos = (0, 1),
+        vSizer.Add(self.layerSelect,  pos = (row, 1),
                    flag = wx.ALIGN_CENTER_VERTICAL)
-        vSizer.Add(cb_vc_label, pos = (1, 0),
+        row += 1
+        vSizer.Add(cb_vc_label, pos = (row, 0),
                    flag = wx.ALIGN_CENTER_VERTICAL)
-        vSizer.Add(self.cb_color_att, pos = (1, 1),
+        vSizer.Add(self.sourceColumn, pos = (row, 1),
                    flag = wx.ALIGN_CENTER_VERTICAL)
-        vSizer.Add(self.rgb_range_label, pos = (1, 2),
+        vSizer.Add(self.rgb_range_label, pos = (row, 2),
                    flag = wx.ALIGN_CENTER_VERTICAL)
-        vSizer.Add(cb_vrgb_label, pos = (2, 0),
+        row += 1   
+        if self.version7 and self.attributeType == 'color':
+            vSizer.Add(self.useColumn, pos = (row, 0), span = (1, 2),
+                       flag = wx.ALIGN_CENTER_VERTICAL)
+            row += 1
+            
+        vSizer.Add(fromColumnLabel, pos = (row, 0),
                   flag = wx.ALIGN_CENTER_VERTICAL)
-        vSizer.Add(self.cb_rgb_col, pos = (2, 1),
+        vSizer.Add(self.fromColumn, pos = (row, 1),
                    flag = wx.ALIGN_CENTER_VERTICAL)
-        vSizer.Add(self.btn_add_RGB, pos = (2, 2),
+        row += 1
+        vSizer.Add(toColumnLabel, pos = (row, 0),
+                  flag = wx.ALIGN_CENTER_VERTICAL)
+        vSizer.Add(self.toColumn, pos = (row, 1),
+                   flag = wx.ALIGN_CENTER_VERTICAL)
+        vSizer.Add(self.addColumn, pos = (row, 2),
                    flag = wx.ALIGN_CENTER_VERTICAL)
         inputSizer.Add(item = vSizer,
                        flag = wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND, border = 5)
-                
+        self.colorColumnSizer = vSizer        
         return inputSizer 
        
     def _doLayout(self):
@@ -982,10 +1028,47 @@ class VectorColorTable(ColorTable):
         if dlg.ShowModal() == wx.ID_YES:
             dlg.Destroy()
             menuform.GUI(parent = self).ParseCommand(['v.db.addtable', 'map=' + self.inmap], 
-                                                      completed = (self.CreateTable, self.inmap, ''))
+                                                      completed = (self.CreateAttrTable, self.inmap, ''))
         else:
             dlg.Destroy()
+  
+    def OnCheckColumn(self, event):
+        """!Use color column instead of color table"""
+        if self.useColumn.GetValue():
+            self.properties['loadColumn'] = self.fromColumn.GetStringSelection()
+            self.properties['storeColumn'] = self.toColumn.GetStringSelection()
+            self.fromColumn.Enable(True)
+            self.toColumn.Enable(True)
+            self.colorTable = False
             
+            if self.properties['loadColumn']:
+                self.LoadTable()
+            else:
+                self.rulesPanel.Clear()
+        else:
+            self.properties['loadColumn'] = ''
+            self.properties['storeColumn'] = ''
+            self.fromColumn.Enable(False)
+            self.toColumn.Enable(False)
+            self.colorTable = True
+            
+            self.LoadTable()
+        
+            
+    def EnableVectorAttributes(self, enable):
+        """!Enable/disable part of dialog connected with db"""
+        for child in self.colorColumnSizer.GetChildren():
+            child.GetWindow().Enable(enable)
+    
+    def DisableClearAll(self):
+        """!Enable, disable the whole dialog"""
+        self.rulesPanel.Clear()
+        self.EnableVectorAttributes(False)
+        self.btnPreview.Enable(False)
+        self.btnOK.Enable(False)
+        self.btnApply.Enable(False)
+        self.preview.EraseMap()
+        
     def OnSelectionInput(self, event):
         """!Vector map selected"""
         if event:
@@ -998,51 +1081,60 @@ class VectorColorTable(ColorTable):
         self.UpdateDialog()
         
     def UpdateDialog(self):
-        """!Update dialog after map selection"""    
+        """!Update dialog after map selection"""  
         if not self.inmap:
-            self.colorRulesPanel.Clear()
-            self.btnPreview.Enable(False)
-            self.btnOK.Enable(False)
-            self.btnApply.Enable(False)
-            self.preview.EraseMap()
+            self.DisableClearAll()
             return
-                               
+        
+        if self.inmap and not self.CheckMapset():
+            # currently v.colors need the map to be in current mapset
+            if self.version7 and self.attributeType == 'color':
+                message = _("Selected map <%s> is not in current mapset <%s>. "
+                            "Color rules cannot be edited.") % \
+                            (self.inmap, grass.gisenv()['MAPSET'])
+            else:
+                message = _("Selected map <%s> is not in current mapset <%s>. "
+                            "Attribute table cannot be edited.") % \
+                            (self.inmap, grass.gisenv()['MAPSET'])
+            wx.CallAfter(gcmd.GMessage, parent = self, message = message)
+            self.DisableClearAll()
+            return
+              
         # check for db connection
         self.dbInfo = gselect.VectorDBInfo(self.inmap)
-        if not len(self.dbInfo.layers):
-            wx.CallAfter(self.NoConnection, self.inmap)
-            for combo in (self.cb_vlayer, self.cb_color_att, self.cb_rgb_col):
+        enable = True
+        if not len(self.dbInfo.layers): # no connection
+            if not (self.version7 and self.attributeType == 'color'): # otherwise it doesn't matter
+                wx.CallAfter(self.NoConnection, self.inmap)
+                enable = False
+            for combo in (self.layerSelect, self.sourceColumn, self.fromColumn, self.toColumn):
                 combo.SetValue("")
-                combo.Disable()
                 combo.Clear()
-            enable = False   
-        else:
+            self.EnableVectorAttributes(False)
+              
+        else: # db connection exist
         # initialize layer selection combobox
-            for combo in (self.cb_vlayer, self.cb_color_att, self.cb_rgb_col):
-                combo.Enable()
-            self.cb_vlayer.InsertLayers(self.inmap)
+            self.EnableVectorAttributes(True)
+            self.layerSelect.InsertLayers(self.inmap)
             # initialize attribute table for layer=1
-            self.properties['layer'] = self.cb_vlayer.GetString(0)
-            self.cb_vlayer.SetStringSelection(self.properties['layer'])
+            self.properties['layer'] = self.layerSelect.GetString(0)
+            self.layerSelect.SetStringSelection(self.properties['layer'])
             layer = int(self.properties['layer'])
             self.properties['table'] = self.dbInfo.layers[layer]['table']
             
-            if self.CheckMapset():
-                enable = True
-                self.btn_add_RGB.Enable(True)
-                self.AddTemporaryColumn(name = 'tmp_rgb', type = 'varchar(20)')
+            if self.attributeType == 'color':
+                self.AddTemporaryColumn(name = 'tmpColumn', type = 'varchar(20)')
             else:
-                enable = False
-                wx.CallAfter(gcmd.GMessage, parent = self, 
-                             message = _("Selected map <%s> is not in current mapset <%s>. "
-                                        "Attribute table cannot be edited. "
-                                        "Color rules will not be saved.") % 
-                                        (self.inmap, grass.gisenv()['MAPSET']))
-                              
-                self.btn_add_RGB.Enable(False)
+                self.AddTemporaryColumn(name = 'tmpColumn', type = 'integer')
             
             # initialize column selection comboboxes 
+            
             self.OnLayerSelection(event = None)
+        if self.version7 and self.attributeType == 'color':
+            self.useColumn.SetValue(False)
+            self.OnCheckColumn(event = None) 
+        
+        self.LoadTable()
             
         self.btnPreview.Enable(enable)
         self.btnOK.Enable(enable)
@@ -1054,7 +1146,7 @@ class VectorColorTable(ColorTable):
         ret = gcmd.RunCommand('v.db.addcolumn',
                               map = self.inmap,
                               layer = self.properties['layer'],
-                              columns = '%s %s' % (name, type))
+                              column = '%s %s' % (name, type))
         self.properties[name] = name
         
     def DeleteTemporaryColumn(self, name):
@@ -1066,47 +1158,61 @@ class VectorColorTable(ColorTable):
                        
     def OnLayerSelection(self, event):
         # reset choices in column selection comboboxes if layer changes
-        vlayer = int(self.cb_vlayer.GetStringSelection())
-        self.cb_color_att.InsertColumns(vector = self.inmap, layer = vlayer, dbInfo = self.dbInfo)
-        self.cb_color_att.SetSelection(0)
-        self.properties['source_rgb'] = self.cb_color_att.GetString(0)
-        self.cb_rgb_col.InsertColumns(vector = self.inmap, layer = vlayer, type = ["character"], dbInfo = self.dbInfo)
-#        self.cb_rgb_col.Delete(self.cb_rgb_col.FindString(self.properties['source_rgb']))
-        found = self.cb_rgb_col.FindString('GRASSRGB')
-        if found != wx.NOT_FOUND:
-            self.cb_rgb_col.SetSelection(found)
-            self.properties['rgb'] = self.cb_rgb_col.GetString(found)
-        else:
-            self.properties['rgb'] = ''
+        vlayer = int(self.layerSelect.GetStringSelection())
+        self.sourceColumn.InsertColumns(vector = self.inmap, layer = vlayer,
+                                        type = ['integer', 'double precision'], dbInfo = self.dbInfo,
+                                        excludeCols = ['tmpColumn'])
+        self.sourceColumn.SetStringSelection('cat')
+        self.properties['sourceColumn'] = self.sourceColumn.GetString(0)
         
-        self.LoadTable(attColumn = self.properties['source_rgb'],
-                       rgbColumn = self.properties['rgb'], rulesPanel = self.colorRulesPanel)
+        if self.attributeType == 'color':
+            type = ['character']
+        else:
+            type = ['integer']
+        self.fromColumn.InsertColumns(vector = self.inmap, layer = vlayer, type = type,
+                                      dbInfo = self.dbInfo, excludeCols = ['tmpColumn'])
+        self.toColumn.InsertColumns(vector = self.inmap, layer = vlayer, type = type,
+                                    dbInfo = self.dbInfo, excludeCols = ['tmpColumn'])
+        
+        found = self.fromColumn.FindString(self.columnsProp[self.attributeType]['name'])
+        if found != wx.NOT_FOUND:
+            self.fromColumn.SetSelection(found)
+            self.toColumn.SetSelection(found)
+            self.properties['loadColumn'] = self.fromColumn.GetString(found)
+            self.properties['storeColumn'] = self.toColumn.GetString(found)
+        else:
+            self.properties['loadColumn'] = ''
+            self.properties['storeColumn'] = ''
+        
+        if event:
+            self.LoadTable()
         self.Update()
         
-    def OnColumnSelection(self, event):
-        self.properties['source_rgb'] = event.GetString()
+    def OnSourceColumnSelection(self, event):
+        self.properties['sourceColumn'] = event.GetString()
         
-        self.LoadTable(attColumn = self.properties['source_rgb'],
-                       rgbColumn = self.properties['rgb'], rulesPanel = self.colorRulesPanel)
+        self.LoadTable()
     
     def OnAddColumn(self, event):
-        """!Add GRASSRGB column if it doesn't exist"""
-        if 'GRASSRGB' not in self.cb_rgb_col.GetItems():
+        """!Add GRASS(RGB,SIZE,WIDTH) column if it doesn't exist"""
+        if self.columnsProp[self.attributeType]['name'] not in self.fromColumn.GetItems():
             ret = gcmd.RunCommand('v.db.addcolumn',
-                                   map = self.inmap,
+                                  map = self.inmap,
                                   layer = self.properties['layer'],
-                                  columns = 'GRASSRGB varchar(20)')
-            self.cb_rgb_col.InsertColumns(self.inmap, self.properties['layer'], type = ["character"])
-            self.cb_rgb_col.SetStringSelection('GRASSRGB')
-            self.properties['rgb'] = self.cb_rgb_col.GetStringSelection()
+                                  columns = '%s %s' % (self.columnsProp[self.attributeType]['name'],
+                                            self.columnsProp[self.attributeType]['type1']))
+            self.toColumn.InsertColumns(self.inmap, self.properties['layer'],
+                                        type = self.columnsProp[self.attributeType]['type2'])
+            self.toColumn.SetStringSelection(self.columnsProp[self.attributeType]['name'])
+            self.properties['storeColumn'] = self.toColumn.GetStringSelection()
             
-            self.LoadTable(attColumn = self.properties['source_rgb'], rgbColumn = self.properties['rgb'],
-                       rulesPanel = self.colorRulesPanel, type = 'color')
+            self.LoadTable()
         else:
             gcmd.GMessage(parent = self,
-                          message = _("GRASSRGB column already exists."))
+                          message = _("%s column already exists.") % \
+                                    self.columnsProp[self.attributeType]['name'])
                         
-    def CreateTable(self, dcmd, layer, params, propwin):
+    def CreateAttrTable(self, dcmd, layer, params, propwin):
         """!Create attribute table"""
         if dcmd:
             cmd = utils.CmdToTuple(dcmd)
@@ -1115,63 +1221,79 @@ class VectorColorTable(ColorTable):
                 self.OnSelectionInput(None)
                 return True
             
-        for combo in (self.cb_vlayer, self.cb_color_att, self.cb_rgb_col):
+        for combo in (self.layerSelect, self.sourceColumn, self.fromColumn, self.toColumn):
             combo.SetValue("")
             combo.Disable()
         return False    
     
-    def LoadTable(self, attColumn, rgbColumn, rulesPanel, type = 'color'):
+    def LoadTable(self):
+        """!Load table"""
+        if self.colorTable:
+            ColorTable.LoadTable(self, mapType = 'vector')
+        else:
+            self.LoadRulesFromColumn(sourceColumn = self.properties['sourceColumn'],
+                                     loadColumn = self.properties['loadColumn'],
+                                     rulesPanel = self.rulesPanel, 
+                                     type = self.attributeType)
+            
+    def LoadRulesFromColumn(self, sourceColumn, loadColumn, rulesPanel, type):
         """!Load current column (GRASSRGB, size column)"""
         
         rulesPanel.Clear()
-        if not attColumn or not rgbColumn:
+        if not sourceColumn:
             self.preview.EraseMap()
             return
         
         busy = wx.BusyInfo(message = _("Please wait, loading data from attribute table..."),
                            parent = self)
         wx.Yield()
+        
+        columns = sourceColumn
+        if loadColumn:
+            columns += ',' + loadColumn
+            
         if self.inmap:
-            outFile = tempfile.NamedTemporaryFile(mode='w+b')
+            outFile = tempfile.NamedTemporaryFile(mode = 'w+b')
             sep = '|'
             ret = gcmd.RunCommand('v.db.select',
-                                      quiet = True,
-                                      flags = 'c',
-                                      map = self.inmap,
-                                      layer = self.properties['layer'],
-                                      columns = attColumn + ',' + rgbColumn,
-                                      fs = sep,
-                                      stdout = outFile)
-            
+                                  quiet = True,
+                                  flags = 'c',
+                                  map = self.inmap,
+                                  layer = self.properties['layer'],
+                                  columns = columns,
+                                  fs = sep,
+                                  stdout = outFile)
         else:
-            self.OnPreview(event)
+            self.preview.EraseMap()
             busy.Destroy()
             return
-        if type == 'color':
-            ctype = self.dbInfo.GetTableDesc(self.properties['table'])\
-                                            [self.properties['source_rgb']]['ctype']
-        elif type == 'size':
-            ctype = self.dbInfo.GetTableDesc(self.properties['table'])\
-                                            [self.properties['source_size']]['ctype']
+        
+##        if type == 'color':
+##            ctype = self.dbInfo.GetTableDesc(self.properties['table'])\
+##                                            [sourceColumn]['ctype']
         outFile.seek(0)
         i = 0
         minim = maxim = 0.0
         while True:
             # os.linesep doesn't work here (MSYS)
             record = outFile.readline().replace('\n', '')
-            
             if not record:
                 break
             rulesPanel.ruleslines[i] = {}
             
-            col1, col2 = record.split(sep)
-            if ctype not in (int, float):
-                col1 = "'" + col1 + "'"
+            if not loadColumn:
+                col1 = record
+                col2 = None
             else:
-                if float(col1) < minim:
-                    minim = float(col1)
-                if float(col1) > maxim:
-                    maxim = float(col1)
+                col1, col2 = record.split(sep)
+            
+##            if ctype not in (int, float):
+##                col1 = "'" + col1 + "'"
+##            else:
+            if float(col1) < minim:
+                minim = float(col1)
+            if float(col1) > maxim:
+                maxim = float(col1)
                     
             rulesPanel.ruleslines[i]['value'] = col1
             rulesPanel.ruleslines[i][type] = col2
@@ -1179,10 +1301,10 @@ class VectorColorTable(ColorTable):
         
         rulesPanel.AddRules(i, start = True)
         ret = rulesPanel.LoadRules()
-        self.SetRangeLabel(type, ctype, minim, maxim)
+##        self.SetRangeLabel(type, ctype, minim, maxim)
         
         if ret:
-            self.OnPreview()    
+            self.OnPreview()   
         else:
             rulesPanel.Clear()
     
@@ -1207,24 +1329,72 @@ class VectorColorTable(ColorTable):
             else:
                 self.size_range_label.SetLabel('')
                 
-                
-    def OnRGBColSelection(self, event):
-        self.properties['rgb'] = event.GetString()
+    def OnFromColSelection(self, event):
+        """!Selection in combobox (for loading values) changed"""
+        self.properties['loadColumn'] = event.GetString()
         
-        self.LoadTable(attColumn = self.properties['source_rgb'],
-                       rgbColumn = self.properties['rgb'], rulesPanel = self.colorRulesPanel)
-            
-    def OnPreview(self, event = None):
+        self.LoadTable()
+    
+    def OnToColSelection(self, event):
+        """!Selection in combobox (for storing values) changed"""
+        self.properties['storeColumn'] = event.GetString()
+    
+    def OnPreview(self, event = None, tmp = True):
         """!Update preview (based on computational region)"""
-        if not self.inmap or not self.properties["rgb"] or not self.properties["tmp_rgb"]:
+        if self.colorTable:
+            self.OnTablePreview(tmp)
+        else:
+            self.OnColumnPreview() 
+                                 
+    def OnTablePreview(self, tmp):
+        """!Update preview (based on computational region)"""
+        if not self.inmap:
+            self.preview.EraseMap()
+            return
+        
+        ltype = 'vector'
+        cmdlist = ['d.vect',
+                   'map=%s' % self.inmap]
+        
+        # find existing color table and copy to temp file
+        old_colrtable = None
+        path = grass.find_file(name = self.inmap, element = 'vector')['file']
+        
+        if os.path.exists(os.path.join(path, 'colr')):
+            old_colrtable = os.path.join(path, 'colr')
+            colrtemp = utils.GetTempfile()
+            shutil.copyfile(old_colrtable, colrtemp)
+            
+        ColorTable.DoPreview(self, ltype, cmdlist)  
+        
+        # restore previous color table
+        if tmp:
+            if old_colrtable:
+                shutil.copyfile(colrtemp, old_colrtable)
+                os.remove(colrtemp)
+            else:
+                gcmd.RunCommand('v.colors',
+                                parent = self,
+                                flags = 'r',
+                                map = self.inmap)
+    def OnColumnPreview(self):
+        """!Update preview (based on computational region)"""
+        if not self.inmap or not self.properties['tmpColumn']:
             self.preview.EraseMap()
             return
         
         cmdlist = ['d.vect',
                     '-a',
                    'map=%s' % self.inmap,
-                   'rgb_column=%s' % self.properties['tmp_rgb'],
                    'type=point,line,boundary,area']
+                
+        if self.attributeType == 'color':
+            cmdlist.append('rgb_column=%s' % self.properties['tmpColumn'])
+        elif self.attributeType == 'size':
+            cmdlist.append('size_column=%s' % self.properties['tmpColumn'])
+        elif self.attributeType == 'width':
+            cmdlist.append('width_column=%s' % self.properties['tmpColumn'])
+            
         ltype = 'vector'
         
         ColorTable.DoPreview(self, ltype, cmdlist)
@@ -1234,7 +1404,38 @@ class VectorColorTable(ColorTable):
         cmd = 'v.colors'
         ColorTable.RunHelp(self, cmd = cmd)
         
-    def CreateColorTable(self, force = False):
+    def UseAttrColumn(self, useAttrColumn = True):
+        """!Use attribute column to render map"""
+        # TODO switch back to table, not only selected map
+        layer = self.parent.curr_page.maptree.layer_selected
+        if layer and self.parent.curr_page.maptree.GetPyData(layer)[0]['maplayer'].GetName() == self.inmap:
+##            cmd = self.parent.curr_page.maptree.GetPyData(layer)[0]['maplayer'].GetCmd()
+##            if useAttrColumn:
+##                cmd[1].update({'flags': 'a', })
+            cmdlist = ['d.vect',
+                        '-a',
+                       'map=%s' % self.inmap,
+                       'type=point,line,boundary,area']
+                
+            if self.attributeType == 'color':
+                cmdlist.append('rgb_column=%s' % self.properties['storeColumn'])
+            elif self.attributeType == 'size':
+                cmdlist.append('size_column=%s' % self.properties['storeColumn'])
+            elif self.attributeType == 'width':
+                cmdlist.append('width_column=%s' % self.properties['storeColumn'])
+            
+            self.parent.curr_page.maptree.GetPyData(layer)[0]['maplayer'].SetCmd(cmdlist)
+        
+    def CreateColorTable(self, force = False, mapType = 'vector'):
+        """!Create color rules (color table or color column)"""
+        if self.colorTable:
+            ret = ColorTable.CreateColorTable(self, force, mapType)
+        else:
+            ret = self.UpdateColorColumn(force)
+            
+        return ret
+        
+    def UpdateColorColumn(self, force):
         """!Creates color table
 
         @return True on success
@@ -1242,17 +1443,19 @@ class VectorColorTable(ColorTable):
         """
         rulestxt = ''
         
-        for rule in self.colorRulesPanel.ruleslines.itervalues():
+        for rule in self.rulesPanel.ruleslines.itervalues():
             if not rule['value']: # skip empty rules
                 continue
-            
             if force:
-                rgb_col = self.properties['tmp_rgb']
+                rgb_col = self.properties['tmpColumn']
             else:
-                rgb_col = self.properties['rgb']
+                rgb_col = self.properties['storeColumn']
+                if not self.properties['storeColumn']:
+                    gcmd.GMessage(self.parent, message = _("Please select column to save values to."))
+                    
             rulestxt += "UPDATE %s SET %s='%s' WHERE %s ;\n" % (self.properties['table'],
                                                                 rgb_col,
-                                                                rule['color'],
+                                                                rule[self.attributeType],
                                                                 rule['value'])
         if not rulestxt:
             return False
@@ -1274,12 +1477,12 @@ class VectorColorTable(ColorTable):
             and delete temporary column"""
         if self.OnApply(event):
             self.Destroy()
-            self.DeleteTemporaryColumn(name = self.properties['tmp_rgb'])
+            self.DeleteTemporaryColumn(name = self.properties['tmpColumn'])
     
     def OnCancel(self, event):
         """!Do not apply any changes and close the dialog"""
         self.Destroy()
-        self.DeleteTemporaryColumn(name = self.properties['tmp_rgb'])
+        self.DeleteTemporaryColumn(name = self.properties['tmpColumn'])
         
 class ThematicVectorTable(VectorColorTable):
     def __init__(self, parent, vectorType, **kwargs):
@@ -1288,70 +1491,9 @@ class ThematicVectorTable(VectorColorTable):
         self.vectorType = vectorType
         VectorColorTable.__init__(self, parent = parent, **kwargs)
         
-        # additional bingings
-        self.Bind(wx.EVT_COMBOBOX, self.OnSizeSourceSelection, self.cb_size_att)
-        self.Bind(wx.EVT_COMBOBOX, self.OnSizeSelection, self.cb_size_col)
-        self.Bind(wx.EVT_BUTTON, self.OnAddSizeColumn, self.btn_add_size)
-        self.Bind(wx.EVT_CHECKBOX, self.OnColorChecked,  self.rgb_check)
-        self.Bind(wx.EVT_CHECKBOX, self.OnSizeChecked,  self.size_check)
         
         self.SetTitle(_("Thematic mapping for vector map in 3D view"))
         
-        
-    def UpdateDialog(self):
-        """!Update dialog according to selected map"""
-        VectorColorTable.UpdateDialog(self)
-        if not self.inmap:
-            self.sizeRulesPanel.Clear()                       
-        if not len(self.dbInfo.layers):
-            for combo in (self.cb_size_att, self.cb_size_col):
-                combo.SetValue("")
-                combo.Disable()
-                combo.Clear()
-            enable = False   
-        else:
-        # initialize layer selection combobox
-            for combo in (self.cb_vlayer, self.cb_size_att, self.cb_size_col):
-                combo.Enable()
-            
-            if self.CheckMapset():
-                self.btn_add_size.Enable(True)
-                self.AddTemporaryColumn(name = 'tmp_size', type = 'integer')
-            else:
-                self.btn_add_RGB.Enable(False)
-                
-    def OnLayerSelection(self, event):
-        VectorColorTable.OnLayerSelection(self, event)
-        # reset choices in column selection comboboxes if layer changes
-        vlayer = int(self.cb_vlayer.GetStringSelection())
-        self.cb_size_att.InsertColumns(vector = self.inmap, layer = vlayer, dbInfo = self.dbInfo)
-        self.cb_size_att.SetSelection(0)
-        self.properties['source_size'] = self.cb_size_att.GetString(0)
-        self.cb_size_col.InsertColumns(vector = self.inmap, layer = vlayer,
-                                       type = ["integer", "double precision"], dbInfo = self.dbInfo)
-        for item in self.cb_size_col.GetItems():
-            if item.lower().find('size') >= 0:
-                self.cb_size_col.SetStringSelection(item)
-                self.properties['size'] = item
-            else:
-                self.properties['size'] = ''
-        
-        self.LoadTable(attColumn = self.properties['source_size'], rgbColumn = self.properties['size'],
-                       rulesPanel = self.sizeRulesPanel, type = 'size')
-        self.Update()  
-        
-    def OnSizeSelection(self, event):
-        self.properties['size'] = event.GetString()
-        
-        self.LoadTable(attColumn = self.properties['source_size'], rgbColumn = self.properties['size'],
-                       rulesPanel = self.sizeRulesPanel, type = 'size')
-    
-    def OnSizeSourceSelection(self, event):
-        self.properties['source_size'] = event.GetString()
-        
-        
-        self.LoadTable(attColumn = self.properties['source_size'], rgbColumn = self.properties['size'],
-                       rulesPanel = self.sizeRulesPanel, type = 'size') 
                     
     def _initLayer(self):
         """!Set initial layer when opening dialog"""
@@ -1359,292 +1501,33 @@ class ThematicVectorTable(VectorColorTable):
         self.selectionInput.SetValue(self.inmap)
         self.selectionInput.Disable()
         
-    def _doLayout(self):
-        """!Do main layout"""
-        mainsizer = wx.BoxSizer(wx.VERTICAL)
-        # ? size (-1, ...) doesn't work
-        scrollPanel = scrolled.ScrolledPanel(self, id = wx.ID_ANY, size = (870, 600),
-                                             style = wx.TAB_TRAVERSAL)
-        scrollPanel.SetupScrolling()
-        
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        #
-        # map selection
-        #
-        mapSelection = self._createMapSelection(parent = scrollPanel)
-        sizer.Add(item = mapSelection, proportion = 0,
-                  flag = wx.ALL | wx.EXPAND, border = 5)
-        #
-        # set vector attributes
-        #
-        vectorAttrb = self._createVectorAttrb(parent = scrollPanel)
-        sizer.Add(item = vectorAttrb, proportion = 0,
-                  flag = wx.ALL | wx.EXPAND, border = 5)
-        #
-        # body & preview
-        #
-        bodySizer = self._createBody(parent = scrollPanel)
-        sizer.Add(item = bodySizer, proportion = 1,
-                  flag = wx.ALL | wx.EXPAND, border = 5)
-                
-        scrollPanel.SetSizer(sizer)
-        scrollPanel.Fit()        
-        mainsizer.Add(scrollPanel, proportion = 1, flag = wx.EXPAND | wx.ALL, border = 5)
-        #
-        # buttons
-        #
-        btnSizer = self._createButtons()
-        
-        mainsizer.Add(item = wx.StaticLine(parent = self, id = wx.ID_ANY,
-                                       style = wx.LI_HORIZONTAL), proportion = 0,
-                                       flag = wx.EXPAND | wx.ALL, border = 5) 
-        
-        mainsizer.Add(item = btnSizer, proportion = 0,
-                  flag = wx.ALL | wx.ALIGN_RIGHT, border = 5)
-        
-        self.SetSizer(mainsizer)
-        mainsizer.Layout()
-        mainsizer.Fit(self) 
-    
-    def _createBody(self, parent):
-        """!Create dialog body consisting of rules and preview"""
-        bodySizer =  wx.GridBagSizer(hgap = 5, vgap = 5)
-        row = 0
-        
-        # label with instructions - don't want it now
-        self.cr_label = wx.StaticText(parent, id = wx.ID_ANY)
-        self.cr_label.Hide()
-
-        # color table
-        self.colorRulesPanel = RulesPanel(parent = parent, mapType = self.type,
-                                          columnType = 'color', properties = self.properties,
-                                          panelWidth = 200)
-        # size table        
-        self.sizeRulesPanel = RulesPanel(parent = parent, mapType = self.type,
-                                         columnType = 'size', properties = self.properties,
-                                         panelWidth = 200)
-                                        
-        bodySizer.Add(item = self.colorRulesPanel.label, pos = (row, 0), span = (1, 2))
-        bodySizer.Add(item = self.sizeRulesPanel.label, pos = (row, 2), span = (1, 2))
-        row += 1
-        
-        bodySizer.Add(item = self.colorRulesPanel.mainPanel, pos = (row, 0), span = (1, 2))
-        # add two rules as default
-        self.colorRulesPanel.AddRules(2)
-        bodySizer.Add(item = self.sizeRulesPanel.mainPanel, pos = (row, 2), span = (1, 2))
-        # add two rules as default
-        self.sizeRulesPanel.AddRules(2)
-        
-        # preview window
-        self._createPreview(parent = parent)
-        bodySizer.Add(item = self.preview, pos = (row, 4),
-                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT, border = 10)
-        row += 1
-        # add ckeck all and clear all
-        bodySizer.Add(item = self.colorRulesPanel.checkAll, flag = wx.ALIGN_CENTER_VERTICAL, 
-                      pos = (row, 0))
-        bodySizer.Add(item = self.colorRulesPanel.clearAll, pos = (row, 1))
-        
-        bodySizer.Add(item = self.sizeRulesPanel.checkAll, flag = wx.ALIGN_CENTER_VERTICAL, 
-                      pos = (row, 2))
-        bodySizer.Add(item = self.sizeRulesPanel.clearAll, pos = (row, 3))
-        
-        # preview button
-        self.btnPreview = wx.Button(parent, id = wx.ID_ANY,
-                                    label = _("Preview"))
-        bodySizer.Add(item = self.btnPreview, pos = (row, 4),
-                      flag = wx.ALIGN_RIGHT)
-        self.btnPreview.Enable(False)
-        self.btnPreview.SetToolTipString(_("Show preview of map "
-                                           "(current Map Display extent is used)."))
-        row += 1
-        # add rules button and spin to sizer
-        bodySizer.Add(item = self.colorRulesPanel.numRules, pos = (row, 0),
-                      flag = wx.ALIGN_CENTER_VERTICAL)
-        bodySizer.Add(item = self.colorRulesPanel.btnAdd, pos = (row, 1))
-        bodySizer.Add(item = self.sizeRulesPanel.numRules, pos = (row, 2),
-                      flag = wx.ALIGN_CENTER_VERTICAL)
-        bodySizer.Add(item = self.sizeRulesPanel.btnAdd, pos = (row, 3), 
-                        flag = wx.ALIGN_LEFT)
-                
-        return bodySizer
-    
-    def _createVectorAttrb(self, parent):
-        """!Create part of dialog with layer/column selection"""
-        inputBox = wx.StaticBox(parent = parent, id = wx.ID_ANY,
-                                label = " %s " % _("Select vector columns"))
-        layer_label = wx.StaticText(parent, id = wx.ID_ANY, label = _('Layer:'))
-        self.rgb_check = wx.CheckBox(parent, id = wx.ID_ANY, label = _('Use color for thematic mapping:'))
-        if self.vectorType == 'points':
-            label = _('Use symbol size for thematic mapping:')
-        else:
-            label = _('Use line width for thematic mapping:')
-        self.size_check = wx.CheckBox(parent, id = wx.ID_ANY, label = label)
-        
-        self.rgb_check.SetValue(True)
-        self.size_check.SetValue(True)
-                                            
-        color_att_label = wx.StaticText(parent, id = wx.ID_ANY,
-                                         label = _('Attribute column:'))
-        size_att_label = wx.StaticText(parent, id = wx.ID_ANY,
-                                         label = _('Attribute column:'))
-        rgb_col_label = wx.StaticText(parent, id = wx.ID_ANY,
-                                           label = _('RGB color column:'))
-        if self.vectorType == 'points':
-            label = _('Symbol size column:')
-        else:
-            label = _('Line with column:')
-        size_col_label = wx.StaticText(parent, id = wx.ID_ANY, label = label)
-        
-        self.rgb_range_label = wx.StaticText(parent, id = wx.ID_ANY)                                        
-        self.size_range_label = wx.StaticText(parent, id = wx.ID_ANY)
-        cb_size = (150, -1)
-        self.cb_vlayer = gselect.LayerSelect(parent, size = cb_size)
-        self.cb_color_att = gselect.ColumnSelect(parent, size = cb_size)
-        self.cb_size_att = gselect.ColumnSelect(parent, size = cb_size)
-        self.cb_rgb_col = gselect.ColumnSelect(parent, size = cb_size)
-        self.cb_size_col = gselect.ColumnSelect(parent, size = cb_size)
-        self.btn_add_RGB = wx.Button(parent, id = wx.ID_ANY,
-                                             label = _('Add column'))
-        self.btn_add_size = wx.Button(parent, id = wx.ID_ANY,
-                                             label = _('Add column'))
-        self.btn_add_RGB.SetToolTipString(_("Add GRASSRGB column to current attribute table."))
-        
-        if self.vectorType == 'points':
-            label = _("Add size column to current attribute table.")
-        else:
-            label = _("Add width column to current attribute table.")
-        self.btn_add_size.SetToolTipString(label)
-        
-        # layout
-        inputSizer = wx.StaticBoxSizer(inputBox, wx.VERTICAL)
-        vSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
-        vSizer.AddGrowableCol(2)
-        
-        vSizer.Add(layer_label, pos = (0, 0),
-                   flag = wx.ALIGN_CENTER_VERTICAL)
-        vSizer.Add(self.cb_vlayer,  pos = (0, 1),
-                   flag = wx.ALIGN_CENTER_VERTICAL)
-                
-        vSizer.Add(self.rgb_check,  pos = (1, 0), span = (1, 3),
-                   flag = wx.ALIGN_CENTER_VERTICAL)
-        vSizer.Add(self.size_check,  pos = (1, 3), span = (1, 3),
-                   flag = wx.ALIGN_CENTER_VERTICAL)
-                
-        vSizer.Add(color_att_label, pos = (2, 0),
-                   flag = wx.ALIGN_CENTER_VERTICAL)
-        vSizer.Add(size_att_label, pos = (2, 3),
-                   flag = wx.ALIGN_CENTER_VERTICAL)
-                
-        vSizer.Add(rgb_col_label, pos = (4, 0),
-                  flag = wx.ALIGN_CENTER_VERTICAL)
-        vSizer.Add(size_col_label, pos = (4, 3),
-                  flag = wx.ALIGN_CENTER_VERTICAL)
-                
-        vSizer.Add(self.cb_color_att, pos = (2, 1),
-                   flag = wx.ALIGN_CENTER_VERTICAL)
-        vSizer.Add(self.cb_size_att, pos = (2, 4),
-                   flag = wx.ALIGN_CENTER_VERTICAL)
-                
-        vSizer.Add(self.rgb_range_label, pos = (3, 1),
-                   flag = wx.ALIGN_CENTER_VERTICAL)
-        vSizer.Add(self.size_range_label, pos = (3, 4),
-                   flag = wx.ALIGN_CENTER_VERTICAL)
-                
-        vSizer.Add(self.cb_rgb_col, pos = (4, 1),
-                   flag = wx.ALIGN_CENTER_VERTICAL)
-        vSizer.Add(self.cb_size_col, pos = (4, 4),
-                   flag = wx.ALIGN_CENTER_VERTICAL)
-                
-        vSizer.Add(self.btn_add_RGB, pos = (4, 2),
-                  flag = wx.ALIGN_CENTER_VERTICAL)
-        vSizer.Add(self.btn_add_size, pos = (4, 5),
-                  flag = wx.ALIGN_CENTER_VERTICAL)
-        inputSizer.Add(item = vSizer,
-                       flag = wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND, border = 5)
-                
-        return inputSizer 
-    
-    def OnAddSizeColumn(self, event):
-        """!Add size column if it doesn't exist"""
-        if self.vectorType == 'points':
-            name = 'GRASSSIZE'
-        else:
-            name = 'GRASSWIDTH'
-        
-        ret = gcmd.RunCommand('v.db.addcolumn',
-                               map = self.inmap,
-                              layer = self.properties['layer'],
-                              columns = '%s integer' % name)
-        self.cb_size_col.InsertColumns(self.inmap, self.properties['layer'], type = ["integer"])
-        self.cb_size_col.SetStringSelection(name)
-        self.properties['size'] = name
-        
-        self.LoadTable(attColumn = self.properties['source_size'], rgbColumn = self.properties['size'],
-                       rulesPanel = self.sizeRulesPanel, type = 'size')
-
-    def OnColorChecked(self, event):
-        """!Use color for thematic mapping"""
-        if self.rgb_check.IsChecked():
-            self.colorRulesPanel.Enable(True)
-        else:
-            self.colorRulesPanel.Enable(False)
-        
-    def OnSizeChecked(self, event):
-        """!Use size for thematic mapping"""
-        if self.size_check.IsChecked():
-            self.sizeRulesPanel.Enable(True)
-        else:
-            self.sizeRulesPanel.Enable(False)
-        
-    def OnPreview(self, event = None):
-        """!Update preview (based on computational region)"""
-        if not self.inmap or not self.properties['size'] or not self.properties['tmp_size']:
-            self.preview.EraseMap()
-            return
-        
-        cmdlist = ['d.vect',
-                    '-a',
-                   'map=%s' % self.inmap,
-                   'type=point,line,boundary,area']
-                
-        if self.size_check.IsChecked()\
-                and self.properties["size"] and self.properties["tmp_size"]:
-            if self.vectorType == 'points':
-                cmdlist.append('size_column=%s' % self.properties['tmp_size'])
-            else:
-                cmdlist.append('width_column=%s' % self.properties['tmp_size'])
-            
-        if self.rgb_check.IsChecked()\
-                and self.properties["rgb"] and self.properties['tmp_rgb']:
-            cmdlist.append('rgb_column=%s' % self.properties['tmp_rgb'])
-        ltype = 'vector'
-        ColorTable.DoPreview(self, ltype, cmdlist)
-    
     def OnApply(self, event):
         """!Apply selected color table
 
         @return True on success otherwise False
         """
-        ret = VectorColorTable.CreateColorTable(self)
+        
+        ret = self.CreateColorTable()
         if not ret:
-            gcmd.GMessage(parent = self, message = _("No color rules given."))
-        ret = self.CreateSizeTable()
-        if not ret:
-            gcmd.GMessage(parent = self, message = _("No size rules given."))
+            gcmd.GMessage(parent = self, message = _("No rules given."))
         
         data = self.parent.GetLayerData(nvizType = 'vector')
         data['vector']['points']['thematic']['layer'] = int(self.properties['layer'])
         
-        if self.size_check.IsChecked() and self.properties['size']:
-            data['vector'][self.vectorType]['thematic']['sizecolumn'] = self.properties['size']
-        else:
-            data['vector'][self.vectorType]['thematic']['sizecolumn'] = None
+        value = None
+        if self.properties['storeColumn']:
+            value = self.properties['storeColumn']
             
-        if self.rgb_check.IsChecked() and self.properties['rgb']:
-            data['vector'][self.vectorType]['thematic']['rgbcolumn'] = self.properties['rgb']
+        if not self.colorTable:
+            if self.attributeType == 'color':
+                data['vector'][self.vectorType]['thematic']['rgbcolumn'] = value
+            else:
+                data['vector'][self.vectorType]['thematic']['sizecolumn'] = value
         else:
-            data['vector'][self.vectorType]['thematic']['rgbcolumn'] = None
+            if self.attributeType == 'color':
+                data['vector'][self.vectorType]['thematic']['rgbcolumn'] = None
+            else:
+                data['vector'][self.vectorType]['thematic']['sizecolumn'] = None
         
         data['vector'][self.vectorType]['thematic']['update'] = None
         
@@ -1653,61 +1536,6 @@ class ThematicVectorTable(VectorColorTable):
         self.parent.mapWindow.Refresh(False)
         
         return ret
-    
-    def CreateColorTable(self, force = False):
-        """!Creates color and size table"""
-        VectorColorTable.CreateColorTable(self, force = True)
-        self.CreateSizeTable(force = True)
-        
-    def CreateSizeTable(self, force = False):
-        """!Creates size table
-
-        @return True on success
-        @return False on failure
-        """
-        VectorColorTable.CreateColorTable(self)
-        rulestxt = ''
-        
-        for rule in self.sizeRulesPanel.ruleslines.itervalues():
-            if not rule['value']: # skip empty rules
-                continue
-            
-            if force:
-                size_col = self.properties['tmp_size']
-            else:
-                size_col = self.properties['size']
-            rulestxt += "UPDATE %s SET %s='%s' WHERE %s ;\n" % (self.properties['table'],
-                                                                size_col,
-                                                                rule['size'],
-                                                                rule['value'])
-        if not rulestxt:
-            return False
-        
-        gtemp = utils.GetTempfile()
-        output = open(gtemp, "w")
-        try:
-            output.write(rulestxt)
-        finally:
-            output.close()
-        
-        gcmd.RunCommand('db.execute',
-                        parent = self,
-                        input = gtemp)
-        return True
-    
-    def OnOK(self, event):
-        """!Apply selected color table, close the dialog
-            and delete temporary column"""
-        if self.OnApply(event):
-            self.Destroy()
-            self.DeleteTemporaryColumn(name = 'tmp_size')
-            self.DeleteTemporaryColumn(name = 'tmp_rgb')
-    
-    def OnCancel(self, event):
-        """!Do not apply any changes and close the dialog"""
-        self.Destroy()
-        self.DeleteTemporaryColumn(name = 'tmp_size')    
-        self.DeleteTemporaryColumn(name = 'tmp_rgb') 
            
 class BufferedWindow(wx.Window):
     """!A Buffered window class"""
