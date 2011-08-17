@@ -166,7 +166,6 @@ int main(int argc, char *argv[])
     vector.x = vector.y = -1.0;
     ct.x = ct.y = -1.0;
     ct.width = -1.0;
-    hdr.color = BLACK;
     cmt.color = BLACK;
     m_info.font = G_store(def_font);
     vector.font = G_store(def_font);

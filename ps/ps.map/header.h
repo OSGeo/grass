@@ -4,13 +4,14 @@
  */
 
 #include <stdio.h>
+#include "clr.h"
 
 struct header
 {
     char *file;
     char *font;
     int fontsize;
-    int color;
+    PSCOLOR color;
     FILE *fp;
 };
 
