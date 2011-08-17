@@ -1,6 +1,6 @@
 /*
  * r3.in.v5d - program for data conversion from the V5D format 
- * of the VIS5D visualization software to RASTER3D GRASS
+ * of the VIS5D visualization software to 3D raster GRASS
  * data format.
  *
  * Copyright Jaroslav Hofierka
@@ -65,7 +65,7 @@ static void setParams()
     param.input->key = "input";
     param.input->type = TYPE_STRING;
     param.input->required = YES;
-    param.input->description = "v5d raster map to be imported";
+    param.input->description = "V5D raster map to be imported";
 
     param.output = G_define_option();
     param.output->key = "output";
@@ -73,7 +73,7 @@ static void setParams()
     param.output->required = YES;
     param.output->multiple = NO;
     param.output->gisprompt = "any,grid3,3d raster";
-    param.output->description = "Name for G3d raster map";
+    param.output->description = "Name for 3D raster map";
 
     param.nv = G_define_option();
     param.nv->key = "nv";
@@ -212,12 +212,12 @@ int main(int argc, char *argv[])
     Rast3d_get_window(&region);
     map = Rast3d_open_cell_new(output, FCELL_TYPE, RASTER3D_USE_CACHE_XY, &region);
     if (map == NULL)
-	fatalError(_("Error opening 3d raster map"));
+	fatalError(_("Unable to open 3D raster map"));
 
     convert(input, &region, convertNull, nullValue);
 
     if (!Rast3d_close(map))
-	fatalError(_("Error closing 3d raster map"));
+	fatalError(_("Unable to close 3D raster map"));
     map = NULL;
 
     return 0;
