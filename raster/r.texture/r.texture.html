@@ -75,8 +75,6 @@ The following are brief explanations of texture measures:
 <li> Sum Entropy (SE): ...</li>
 
 <li> Information Measures of Correlation (MOC): ...</li>
-
-<li> Maximal Correlation Coefficient (MCC): ...</li>
 </ul>
    
 <h2>NOTES</h2>
@@ -102,7 +100,7 @@ r.colors ortho_2001_t792_1m color=grey
 # extract grey levels
 r.mapcalc "ortho_2001_t792_1m.greylevel = #ortho_2001_t792_1m"
 # texture analysis
-r.texture ortho_2001_t792_1m.greylevel prefix=ortho_texture -a 
+r.texture ortho_2001_t792_1m.greylevel prefix=ortho_texture measure=asm -s 
 # display
 g.region n=221461 s=221094 w=638279 e=638694
 d.shadedmap drape=ortho_texture_ASM_0 rel=ortho_2001_t792_1m
@@ -113,11 +111,7 @@ ortho_texture_ASM_0, ortho_texture_ASM_45, ortho_texture_ASM_90, ortho_texture_A
 
 
 <h2>BUGS</h2>
-- The program can run incredibly slow for large raster maps.
-<p>
-- The method for finding the maximal correlation coefficient, which
-    requires finding the second largest eigenvalue of a matrix Q, does not
-    always converge.
+The program can run incredibly slow for large raster maps.
 
 <h2>REFERENCES</h2>
 <b>Haralick, R.M., K. Shanmugam, and I. Dinstein</b> (1973). Textural features for
