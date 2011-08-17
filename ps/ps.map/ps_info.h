@@ -50,7 +50,8 @@ struct PS_data
     int geogrid, geogrid_numbers, geogrid_fontsize;
     PSCOLOR geogrid_color, geogrid_numbers_color;
     double grid_width, geogrid_width;
-    int do_outline, outline_color;
+    int do_outline;
+    PSCOLOR outline_color;
     int cell_fd;
     int row_delta, col_delta;
     int cells_wide, cells_high;

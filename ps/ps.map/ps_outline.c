@@ -8,7 +8,9 @@
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
+#include <grass/colors.h>
 #include <grass/glocale.h>
+#include "clr.h"
 #include "local_proto.h"
 
 static int k, col, row, top, bottom;
@@ -42,7 +44,7 @@ int ps_outline(void)
 	      PS.cell_name, PS.cell_mapset);
 
     /* set the outline color and width */
-    set_rgb_color(PS.outline_color);
+    set_ps_color(&PS.outline_color);
     set_line_width(PS.outline_width);
 
     /* create temporary vector map containing outlines */
@@ -66,35 +68,43 @@ int read_outline(void)
 {
     char buf[1024];
     char ch, *key, *data;
-    int color;
+    PSCOLOR color;
+    int ret, r, g, b;
 
     PS.outline_width = 1.;
-    color = BLACK;
+    set_color(&color, 0, 0, 0);
+
     while (input(2, buf, help)) {
 	if (!key_data(buf, &key, &data))
 	    continue;
+
 	if (KEY("color")) {
-	    color = get_color_number(data);
-	    if (color < 0) {
-		color = BLACK;
-		error(key, data, "illegal color request");
-	    }
+	    ret = G_str_to_color(data, &r, &g, &b);
+	    if (ret == 1)
+		set_color(&color, r, g, b);
+	    else if (ret == 2)  /* i.e. "none" */
+		/* unset_color(&color); */
+		error(key, data, _("Unsupported color request"));
+	    else
+		error(key, data, _("illegal color request")); 
+
 	    continue;
 	}
+
 	if (KEY("width")) {
 	    PS.outline_width = -1.;
 	    ch = ' ';
 	    if (sscanf(data, "%lf%c", &(PS.outline_width), &ch) < 1
 		|| PS.outline_width < 0.) {
 		PS.outline_width = 1.;
-		error(key, data, "illegal width request");
+		error(key, data, _("illegal width request"));
 	    }
 	    if (ch == 'i')
 		PS.outline_width = PS.outline_width / 72.;
 	    continue;
 	}
-	error(key, data, "illegal outline sub-request");
-	error(key, data, "illegal outline sub-request");
+
+	error(key, data, _("illegal outline sub-request"));
     }
     PS.outline_color = color;
     PS.do_outline = 1;
