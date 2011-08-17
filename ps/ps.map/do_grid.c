@@ -27,7 +27,7 @@ int do_grid(void)
 	return 1;
 
     /* set color and set line width to 1 */
-    set_rgb_color(PS.grid_color);
+    set_ps_color(&PS.grid_color);
     set_line_width(PS.grid_width);
 
     /* draw horizontal lines in 3 pieces -- lat-lon lines must not
@@ -85,7 +85,7 @@ int do_grid_cross(void)
 	return 1;
 
     /* set color and set line width to 1 */
-    set_rgb_color(PS.grid_color);
+    set_ps_color(&PS.grid_color);
     set_line_width(PS.grid_width);
 
     g_north = floor(PS.w.north / PS.grid) * PS.grid;
@@ -139,7 +139,7 @@ int do_grid_numbers(void)
     /* initialize */
     set_font_name(PS.grid_font);
     set_font_size(PS.grid_fontsize);
-    set_rgb_color(PS.grid_numbers_color);
+    set_ps_color(&PS.grid_numbers_color);
     first = 1;
 
     /* horizontal grid numbers
@@ -172,7 +172,7 @@ int do_grid_numbers(void)
 	text_box_path(x, y, LEFT, CENTER, num_text, PS.grid_fontsize, 0);
 	set_rgb_color(WHITE);
 	fprintf(PS.fp, "F ");
-	set_rgb_color(PS.grid_numbers_color);
+	set_ps_color(&PS.grid_numbers_color);
 	fprintf(PS.fp, "TIB\n");
 	last_bottom = y - PS.grid_fontsize;
 	if (first) {
@@ -211,7 +211,7 @@ int do_grid_numbers(void)
 	fprintf(PS.fp, "%d bt bb sub D2 add mg sub neg TR TB\n", x);
 	set_rgb_color(WHITE);
 	fprintf(PS.fp, "F ");
-	set_rgb_color(PS.grid_numbers_color);
+	set_ps_color(&PS.grid_numbers_color);
 	fprintf(PS.fp, "TIB\n");
 	last_right = x + PS.grid_fontsize;
     }
