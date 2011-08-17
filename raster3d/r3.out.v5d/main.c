@@ -51,7 +51,7 @@ void fatalError(char *errorMsg)
     if (map != NULL) {
 	/* should unopen map here! */
 	if (!Rast3d_close(map))
-	    fatalError("Error closing 3d raster map");
+	    fatalError(_("Unable to close 3D raster map"));
     }
 
     Rast3d_fatal_error(errorMsg);
@@ -69,14 +69,14 @@ void setParams()
     param.input->gisprompt = "old,grid3,3d-raster";
     param.input->multiple = NO;
     param.input->description =
-	_("3d raster map to be converted to Vis5d (v5d) file");
+	_("3D raster map to be converted to Vis5D (V5D) file");
 
     param.output = G_define_option();
     param.output->key = "output";
     param.output->type = TYPE_STRING;
     param.output->gisprompt = "new_file,file,output";
     param.output->required = YES;
-    param.output->description = _("Name for v5d output file");
+    param.output->description = _("Name for V5D output file");
 
     /*  param.null_val = G_define_option();
        param.null_val->key = "null";
@@ -146,10 +146,10 @@ void convert(char *fileout, int rows, int cols, int depths, int trueCoords)
 
     /* see v5d.h */
     if (cols > MAXCOLUMNS)
-	G_fatal_error(_("Viz5D allows %d cols, you have %d cols"), MAXCOLUMNS,
+	G_fatal_error(_("Vis5D allows %d columns, %d columns found"), MAXCOLUMNS,
 		      cols);
     if (rows > MAXROWS)
-	G_fatal_error(_("Viz5D allows %d rows, you have %d rows"), MAXROWS,
+	G_fatal_error(_("Vis5D allows %d rows, %d rows found"), MAXROWS,
 		      rows);
 
     Nl[0] = depths;
@@ -198,9 +198,6 @@ void convert(char *fileout, int rows, int cols, int depths, int trueCoords)
 /****************/
 
     g = (float *)G_malloc(rows * cols * Nl[0] * sizeof(float));
-    if (!g)
-	G_fatal_error(_("Out of memory"));
-
     d1p = &d1;
     f1p = (float *)&d1;
     cnt = 0;
@@ -259,12 +256,12 @@ void convert(char *fileout, int rows, int cols, int depths, int trueCoords)
 	if (!v5dCreate(fileout, NumTimes, NumVars, rows, cols, Nl, (const char (*)[10])VarName,
 		       TimeStamp, DateStamp, CompressMode, Projection,
 		       ProjArgs, Vertical, VertArgs))
-	G_fatal_error(_("Error: couldn't create %s"), fileout);
+	G_fatal_error(_("Unable to create V5D file <%s>"), fileout);
 
 
     /* Write the v5d file */
     if (!v5dWrite(1, 1, g))
-	G_fatal_error(_("Error while writing grid. Disk full?"));
+	G_fatal_error(_("Error writing V5D file"));
 
     /* Close the v5d file */
     v5dClose();
@@ -290,7 +287,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("voxel"));
     G_add_keyword(_("export"));
     module->description =
-	_("Converts a 3D raster map into a 3-dimensional Vis5D file.");
+	_("Exports GRASS 3D raster map to 3-dimensional Vis5D file.");
 
     /* Get parameters from user */
     setParams();
@@ -309,12 +306,12 @@ int main(int argc, char *argv[])
     trueCoords = coords->answer;
 
     if (NULL == G_find_raster3d(input, ""))
-	Rast3d_fatal_error(_("Requested 3d raster map not found"));
+	Rast3d_fatal_error(_("3D raster map <%s> not found"), input);
 
     map = Rast3d_open_cell_old(input, G_find_raster3d(input, ""), RASTER3D_DEFAULT_WINDOW,
 			  RASTER3D_TILE_SAME_AS_FILE, RASTER3D_NO_CACHE);
     if (map == NULL)
-	Rast3d_fatal_error(_("Error opening 3d raster map"));
+	Rast3d_fatal_error(_("Unable to open 3D raster map <%s>"), input);
 
     /* Use default region */
     /*  Rast3d_get_region_struct_map(map, &region); */
@@ -328,7 +325,7 @@ int main(int argc, char *argv[])
 
     /* Close files and exit */
     if (!Rast3d_close(map))
-	fatalError(_("Error closing 3d raster map"));
+	fatalError(_("Unable to close 3D raster map"));
 
     map = NULL;
     return (0);
