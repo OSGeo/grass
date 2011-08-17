@@ -5,7 +5,10 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <grass/colors.h>
+#include <grass/glocale.h>
 #include "header.h"
+#include "clr.h"
 #include "local_proto.h"
 
 #define KEY(x) (strcmp(key,x)==0)
@@ -22,10 +25,13 @@ int read_header(void)
 {
     char buf[1024];
     char *key, *data;
-    int color, fontsize;
+    int fontsize;
+    PSCOLOR color;
+    int ret, r, g, b;
 
     fontsize = 0;
-    color = BLACK;
+    set_color(&color, 0, 0, 0);
+
     while (input(2, buf, help)) {
 	if (!key_data(buf, &key, &data))
 	    continue;
@@ -51,11 +57,15 @@ int read_header(void)
 	}
 
 	if (KEY("color")) {
-	    color = get_color_number(data);
-	    if (color < 0) {
-		color = BLACK;
-		error(key, data, "illegal color request");
-	    }
+	    ret = G_str_to_color(data, &r, &g, &b);
+            if (ret == 1)
+                set_color(&color, r, g, b);
+            else if (ret == 2)  /* i.e. "none" */
+                /* unset_color(&color); */
+                error(key, data, _("Unsupported color request"));
+            else
+                error(key, data, _("illegal color request")); 
+
 	    continue;
 	}
 
@@ -64,8 +74,9 @@ int read_header(void)
 	    hdr.font = G_store(data);
 	    continue;
 	}
-	error(key, data, "illegal header sub-request");
+	error(key, data, _("illegal header sub-request"));
     }
+
     hdr.color = color;
     if (fontsize)
 	hdr.fontsize = fontsize;
