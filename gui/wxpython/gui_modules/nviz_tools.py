@@ -1147,25 +1147,43 @@ class NvizToolWindow(FN.FlatNotebook):
         
         # thematic mapping
         self.win['vector']['lines']['thematic'] = {}
-        checkThematic = wx.CheckBox(parent = panel, id = wx.ID_ANY,
-                                         label = _("use thematic mapping for vector lines"))
-        self.win['vector']['lines']['thematic']['check'] = checkThematic.GetId()
-        checkThematic.Bind(wx.EVT_CHECKBOX, self.OnCheckThematic)
-        checkThematic.SetValue(False)
+        checkThematicColor = wx.CheckBox(parent = panel, id = wx.ID_ANY,
+                                         label = _("use color for thematic mapping"))
+        checkThematicWidth = wx.CheckBox(parent = panel, id = wx.ID_ANY,
+                                         label = _("use width for thematic mapping"))
+        self.win['vector']['lines']['thematic']['checkcolor'] = checkThematicColor.GetId()
+        self.win['vector']['lines']['thematic']['checkwidth'] = checkThematicWidth.GetId()
+        checkThematicColor.Bind(wx.EVT_CHECKBOX, self.OnCheckThematic)
+        checkThematicWidth.Bind(wx.EVT_CHECKBOX, self.OnCheckThematic)
+        checkThematicColor.SetValue(False)
+        checkThematicWidth.SetValue(False)
         
+        vSizer = wx.BoxSizer(wx.VERTICAL)
         hSizer = wx.BoxSizer(wx.HORIZONTAL)
-        hSizer.Add(item = checkThematic, flag = wx.ALIGN_CENTER_VERTICAL,
+        hSizer.Add(item = checkThematicColor, flag = wx.ALIGN_CENTER_VERTICAL,
                     border = 5)
-        
         setThematic = wx.Button(parent = panel, id = wx.ID_ANY,
                                          label = _("Set options..."))
-        self.win['vector']['lines']['thematic']['button'] = setThematic.GetId()
+        self.win['vector']['lines']['thematic']['buttoncolor'] = setThematic.GetId()
+        setThematic.Bind(wx.EVT_BUTTON, self.OnSetThematic)
+        hSizer.Add(item = wx.Size(-1, -1), proportion = 1)
+        hSizer.Add(item = setThematic, flag = wx.ALIGN_CENTER_VERTICAL|wx.LEFT,
+                    border = 5, proportion = 0)
+        vSizer.Add(hSizer, flag = wx.EXPAND)
+                    
+        hSizer = wx.BoxSizer(wx.HORIZONTAL)
+        hSizer.Add(item = checkThematicWidth, flag = wx.ALIGN_CENTER_VERTICAL,
+                    border = 5)
+        setThematic = wx.Button(parent = panel, id = wx.ID_ANY,
+                                         label = _("Set options..."))
+        self.win['vector']['lines']['thematic']['buttonwidth'] = setThematic.GetId()
         setThematic.Bind(wx.EVT_BUTTON, self.OnSetThematic)
         hSizer.Add(item = wx.Size(-1, -1), proportion = 1)
         hSizer.Add(item = setThematic, flag = wx.ALIGN_CENTER_VERTICAL|wx.LEFT,
                     border = 5, proportion = 0)
         
-        gridSizer.Add(item = hSizer, flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+        vSizer.Add(hSizer, flag = wx.EXPAND)
+        gridSizer.Add(item = vSizer, flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
                       pos = (1, 1), span = (1, 5))
         
         # display
@@ -1305,21 +1323,34 @@ class NvizToolWindow(FN.FlatNotebook):
                       pos = (0, 6))
         # thematic mapping
         self.win['vector']['points']['thematic'] = {}
-        checkThematic = wx.CheckBox(parent = panel, id = wx.ID_ANY,
-                                         label = _("use thematic mapping for vector points"))
-        self.win['vector']['points']['thematic']['check'] = checkThematic.GetId()
-        checkThematic.Bind(wx.EVT_CHECKBOX, self.OnCheckThematic)
-        checkThematic.SetValue(False)
+        checkThematicColor = wx.CheckBox(parent = panel, id = wx.ID_ANY,
+                                         label = _("use color for thematic mapping"))
+        checkThematicSize = wx.CheckBox(parent = panel, id = wx.ID_ANY,
+                                         label = _("use size for thematic mapping"))
+        self.win['vector']['points']['thematic']['checkcolor'] = checkThematicColor.GetId()
+        self.win['vector']['points']['thematic']['checksize'] = checkThematicSize.GetId()
+        checkThematicColor.Bind(wx.EVT_CHECKBOX, self.OnCheckThematic)
+        checkThematicSize.Bind(wx.EVT_CHECKBOX, self.OnCheckThematic)
+        checkThematicColor.SetValue(False)
+        checkThematicSize.SetValue(False)
         
-        gridSizer.Add(item = checkThematic, flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT,
+        gridSizer.Add(item = checkThematicColor, flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT,
                       pos = (1, 1), span = (1, 5))
         setThematic = wx.Button(parent = panel, id = wx.ID_ANY,
                                          label = _("Set options..."))
-        self.win['vector']['points']['thematic']['button'] = setThematic.GetId()
+        self.win['vector']['points']['thematic']['buttoncolor'] = setThematic.GetId()
         setThematic.Bind(wx.EVT_BUTTON, self.OnSetThematic)
         gridSizer.Add(item = setThematic, flag = wx.ALIGN_CENTER_VERTICAL,
                       pos = (1, 6))
-                           
+                    
+        gridSizer.Add(item = checkThematicSize, flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT,
+                      pos = (2, 1), span = (1, 5))
+        setThematic = wx.Button(parent = panel, id = wx.ID_ANY,
+                                         label = _("Set options..."))
+        self.win['vector']['points']['thematic']['buttonsize'] = setThematic.GetId()
+        setThematic.Bind(wx.EVT_BUTTON, self.OnSetThematic)
+        gridSizer.Add(item = setThematic, flag = wx.ALIGN_CENTER_VERTICAL,
+                      pos = (2, 6))                   
         vertSizer.Add(gridSizer, proportion = 0, flag = wx.EXPAND, border = 0)
         # high
         gridSizer = wx.GridBagSizer(vgap = 5, hgap = 5)
@@ -3211,17 +3242,28 @@ class NvizToolWindow(FN.FlatNotebook):
         """!Switch on/off thematic mapping"""
         # can be called with no event to enable/disable button
         if not event:
-            ids = (self.win['vector']['points']['thematic']['check'],
-                  self.win['vector']['lines']['thematic']['check'])
+            ids = (self.win['vector']['points']['thematic']['checkcolor'],
+                  self.win['vector']['lines']['thematic']['checkcolor'],
+                  self.win['vector']['points']['thematic']['checksize'],
+                  self.win['vector']['lines']['thematic']['checkwidth'])
         else:
             ids = (event.GetId(),)
         for id in ids:
-            if id == self.win['vector']['points']['thematic']['check']:
-                type = 'points'
+            if id in self.win['vector']['points']['thematic'].values():
+                vtype = 'points'
+                if id == self.win['vector'][vtype]['thematic']['checkcolor']:
+                    attrType = 'color'
+                else:
+                    attrType = 'size'
             else:
-                type = 'lines'
-            check = self.win['vector'][type]['thematic']['check']
-            button = self.win['vector'][type]['thematic']['button']
+                vtype = 'lines'
+                if id == self.win['vector'][vtype]['thematic']['checkcolor']:
+                    attrType = 'color'
+                else:
+                    attrType = 'width'
+                
+            check = self.win['vector'][vtype]['thematic']['check' + attrType]
+            button = self.win['vector'][vtype]['thematic']['button' + attrType]
             if self.FindWindowById(check).GetValue():
                 checked = True
             else:
@@ -3229,8 +3271,8 @@ class NvizToolWindow(FN.FlatNotebook):
             self.FindWindowById(button).Enable(checked)
             
             data = self.GetLayerData('vector')
-            data['vector'][type]['thematic']['use'] = checked
-            data['vector'][type]['thematic']['update'] = None
+            data['vector'][vtype]['thematic']['use' + attrType] = checked
+            data['vector'][vtype]['thematic']['update'] = None
         
         # update properties
         event = wxUpdateProperties(data = data)
@@ -3241,11 +3283,17 @@ class NvizToolWindow(FN.FlatNotebook):
             
     def OnSetThematic(self, event):
         """!Set options for thematic points"""
-        if event.GetId() == self.win['vector']['points']['thematic']['button']:
-            vectorType = 'points'
+        if event.GetId() in self.win['vector']['points']['thematic'].values():
+            vtype = 'points'
         else:
-            vectorType = 'lines'            
-        ctable = colorrules.ThematicVectorTable(self, vectorType)
+            vtype = 'lines'
+        if event.GetId() == self.win['vector'][vtype]['thematic']['buttoncolor']:
+            attrType = 'color'
+        elif vtype == 'points':
+            attrType = 'size'
+        else:
+            attrType = 'width'
+        ctable = colorrules.ThematicVectorTable(self, vtype, attributeType = attrType)
         ctable.CentreOnScreen()
         ctable.Show()
         
@@ -4269,6 +4317,16 @@ class NvizToolWindow(FN.FlatNotebook):
             self.FindWindowById(self.win['vector'][v]['height']['slider']).Enable(enable)
             self.FindWindowById(self.win['vector'][v]['height']['text']).Enable(enable)
             
+            if data[v]['thematic']['usecolor']:
+                check = self.FindWindowById(self.win['vector'][v]['thematic']['checkcolor'])
+                check.SetValue(data[v]['thematic']['usecolor'])
+            if 'usesize' in data[v]['thematic'] and data[v]['thematic']['usesize']:
+                check = self.FindWindowById(self.win['vector'][v]['thematic']['checksize'])
+                check.SetValue(data[v]['thematic']['usesize'])
+            elif 'usewidth' in data[v]['thematic'] and data[v]['thematic']['usewidth']:
+                check = self.FindWindowById(self.win['vector'][v]['thematic']['checkwidth'])
+                check.SetValue(data[v]['thematic']['usewidth'])
+            self.OnCheckThematic(None)
         #
         # lines
         #
@@ -4342,7 +4400,7 @@ class NvizToolWindow(FN.FlatNotebook):
                 win.SetValue(color)
             else:
                 win.SetValue(data['points'][prop]['value'])
-        self.OnCheckThematic(None)
+##        self.OnCheckThematic(None)
         # height
         for type in ('slider', 'text'):
             win = self.FindWindowById(self.win['vector']['points']['height'][type])

@@ -29,6 +29,7 @@ from ctypes import *
 try:
     from grass.lib.gis   import *
     from grass.lib.raster3d   import *
+    from grass.lib.vector  import *
     from grass.lib.ogsf  import *
     from grass.lib.nviz  import *
     from grass.lib.raster import *
@@ -84,6 +85,9 @@ class Nviz(object):
         
         self.data_obj = nv_data()
         self.data = pointer(self.data_obj)
+        self.color_obj = Colors()
+        self.color = pointer(self.color_obj)
+        
         self.width = self.height = -1
         self.showLight = False
         
@@ -943,21 +947,74 @@ class Nviz(object):
         
         return 1
 
-    def SetPointsStyleThematic(self, id, layer, color = None, width = None, size = None, symbol = None):
-        """!Set thematic style for vector points"""
-        GP_set_style_thematic(id, layer, color, width, size, symbol)
+    def ReadVectorColors(self, name, mapset):
+        """!Read vector colors
+        
+        @param name vector map name
+        @mapset mapset name ("" for search path)
+        
+        @return -1 on error 
+        @return 0 if color table missing 
+        @return 1 on success (color table found) 
+        """
+        return Vect_read_colors(name, mapset, self.color)
+        
+    def SetPointsStyleThematic(self, id, layer, color = None, colorTable = False, 
+                               width = None, size = None, symbol = None):
+        """!Set thematic style for vector points
+        
+        @param id vector set id
+        @param layer layer number for thematic mapping
+        @param colorTable use color table 
+        @param color color column name 
+        @param width width column name 
+        @param size size column name 
+        @param symbol symbol column name 
+        """
+        file = c_char_p()
+        ret = GP_get_sitename(id, byref(file))
+        if ret < 0:
+            return -1
+        
+        ret = self.ReadVectorColors(file, "")
+        if ret < 0:
+            return -1
+        
+        if colorTable:
+            GP_set_style_thematic(id, layer, color, width, size, symbol, self.color)
+        else:
+            GP_set_style_thematic(id, layer, color, width, size, symbol, None)
 
-    def SetLinesStyleThematic(self, id, layer, color = None, width = None):
-        """!Set thematic style for vector lines"""
-        GV_set_style_thematic(id, layer, color, width) 
+    def SetLinesStyleThematic(self, id, layer, color = None, colorTable = False, width = None):
+        """!Set thematic style for vector lines
+        
+        @param id vector set id
+        @param layer layer number for thematic mapping
+        @param color color column name 
+        @param colorTable use color table 
+        @param width width column name 
+        """
+        file = c_char_p()
+        ret = GV_get_vectname(id, byref(file))
+        if ret < 0:
+            return -1
+        
+        ret = self.ReadVectorColors(file, "")
+        if ret < 0:
+            return -1
+        
+        if colorTable:
+            GV_set_style_thematic(id, layer, color, width, self.color)
+        else:
+            GV_set_style_thematic(id, layer, color, width, None)
         
     def UnsetLinesStyleThematic(self, id):
         """!Unset thematic style for vector points"""
-        GP_unset_style_thematic(id)      
+        GV_unset_style_thematic(id)      
          
     def UnsetPointsStyleThematic(self, id):
         """!Unset thematic style for vector lines"""
-        GV_unset_style_thematic(id)
+        GP_unset_style_thematic(id)
         
     def UnsetVectorPointSurface(self, id, surf_id):
         """!Unset reference surface of vector set (points)
