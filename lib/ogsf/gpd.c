@@ -268,13 +268,6 @@ int gpd_2dsite(geosite * gp, geosurf * gs, int do_fast)
 	    continue;
 	}
 	
-	if (gpt->highlighted > 0)
-	    gpd_obj(gs, gp->hstyle, site);
-	else if (gp->tstyle && gp->tstyle->active)
-	    gpd_obj(gs, gpt->style, site);
-	else
-	    gpd_obj(gs, gp->style, site);
-	
 	if (src == MAP_ATT) {
 	    if (viewcell_tri_interp(gs, buf, site, 1)) {
 		/* returns 0 if outside or masked */
@@ -293,6 +286,13 @@ int gpd_2dsite(geosite * gp, geosurf * gs, int do_fast)
 		    continue;
 	    }
 	}
+	
+	if (gpt->highlighted > 0)
+	    gpd_obj(gs, gp->hstyle, site);
+	else if (gp->tstyle && gp->tstyle->active)
+	    gpd_obj(gs, gpt->style, site);
+	else
+	    gpd_obj(gs, gp->style, site);
     }
 
     gsd_linewidth(1);
