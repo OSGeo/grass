@@ -23,25 +23,9 @@
  *
  *****************************************************************************/
 
-float h_measure(int **, int, int, int, int);
-float f1_asm(float **, int);
-float f2_contrast(float **, int);
-float f3_corr(float **, int);
-float f4_var(float **, int);
-float f5_idm(float **, int);
-float f6_savg(float **, int);
-float f7_svar(float **, int, double);
-float f8_sentropy(float **, int);
-float f9_entropy(float **, int);
-float f10_dvar(float **, int);
-float f11_dentropy(float **, int);
-float f12_icorr(float **, int);
-float f13_icorr(float **, int);
-float f14_maxcorr(float **, int);
-float *vector(int, int);
-float **matrix(int, int, int, int);
-void results(char *, float *);
-void simplesrt(int, float[]);
-void mkbalanced(float **, int);
-void reduction(float **, int);
-void hessenberg(float **, int, float[], float[]);
+float h_measure(int);
+void alloc_vars(int, int);
+int set_vars(int **grays, int curr_rrow, int curr_col,
+                int size, int offset, int t_d);
+int set_angle_vars(int angle, int have_px, int have_py, int have_sentr,
+                   int have_pxpys, int have_pxpyd);
