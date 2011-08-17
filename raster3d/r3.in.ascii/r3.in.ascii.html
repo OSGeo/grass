@@ -3,6 +3,20 @@
 <em>r3.in.ascii</em> allows a user to create a (binary) GRASS 3D raster map
 layer from a 3D ASCII raster input file with (optional) TITLE.
 
+<p>
+Note that for compression the <em>none</em> option only specifies 
+that neither LZW nor RLE is used for compression. It 
+does not turn off the compression all together. 3D raster maps do
+not support non-compressed files.
+
+<p>
+The <em>tiledimension</em> parameter defines the dimension of the tiles 
+used in the output file. The format is: XxYxZ
+
+<p>
+The <em>nv</em> parameter specifies which value to convert to NULL-value.
+If the specified value is <em>none</em>, no conversion is performed.
+Default is <em>none</em>.
 
 <center>
 <img src="g3d_volume_layout.png" border=0><BR>
@@ -14,6 +28,7 @@ layer from a 3D ASCII raster input file with (optional) TITLE.
 </center>
 
 <h2>NOTES</h2>
+
 The format for the ASCII file is:
 <pre>
 version: <i>"grass7"</i>
@@ -46,7 +61,7 @@ This header is followed by the cell values in <em>floating point</em> format
 organized in rows with constant <em>col</em> and <em>level</em> coordinate.
 The rows are organized by constant <em>level</em> coordinate. Individual cell
 values are separated by <em>space</em> or <em>CR</em>.
-<P>
+<p>
 
 <h2>EXAMPLES</h2>
 

@@ -36,7 +36,7 @@ static void setParams(); /*Fill the paramType structure */
 
 /*Puts the userdefined parameters into easier handable variables */
 static void getParams(char **input, char **output, int *convertNull,
-                      char *nullValu);
+                      char *nullValue);
 
 /*reads a g3d ascii-file headerfile-string */
 static void readHeaderString(FILE * fp, char *valueString, double *value);
@@ -84,7 +84,7 @@ static void setParams()
     param.input->required = YES;
     param.input->key_desc = "name";
     param.input->gisprompt = "old_file,file,input";
-    param.input->description = _("Ascii raster map to be imported");
+    param.input->description = _("ASCII raster map to be imported");
 
     param.output = G_define_standard_option(G_OPT_R3_OUTPUT);
 
@@ -94,8 +94,8 @@ static void setParams()
     param.nv->required = NO;
     param.nv->multiple = NO;
     param.nv->answer = "*";
-    param.nv->description =
-        _("String representing NULL value data cell or 'none' if no null value present");
+    param.nv->description =  /* TODO: '*' or 'none' in the msg ?? */
+	_("String representing NULL value data cell (use 'none' if no such value)");
 }
 
 /*---------------------------------------------------------------------------*/
@@ -124,7 +124,7 @@ void readHeaderString(FILE * fp, char *valueString, double *value)
     G_snprintf(format, 100, "%s %%lf", valueString);
     G_getl2(line_buff, 1024, fp);
     if (sscanf(line_buff, format, value) != 1) {
-        G_debug(0, "bad value for [%s]", valueString);
+        G_debug(3, "bad value for [%s]", valueString);
         fatalError("readHeaderString: header value invalid");
     }
 }
@@ -185,7 +185,7 @@ FILE *openAscii(char *asciiFile, RASTER3D_Region * region)
                 G_message("Found south -> north, top -> bottom order (sntb)");
             }
         } else {
-            G_fatal_error(_("Unsupported grass version %s"), buff);
+            G_fatal_error(_("Unsupported GRASS version %s"), buff);
         }
     } else {
         /* Rewind the stream if no grass version info found */
@@ -232,7 +232,7 @@ asciiToG3d(FILE * fp, RASTER3D_Region * region, int convertNull, char *nullValue
               region->depths);
 
     G_debug(3,
-            "asciiToG3d: writing the 3d raster map, with rows %i cols %i depths %i",
+            "asciiToG3d: writing the 3D raster map, with rows %i cols %i depths %i",
             region->rows, region->cols, region->depths);
 
     for (z = 0; z < region->depths; z++) {
@@ -262,7 +262,7 @@ asciiToG3d(FILE * fp, RASTER3D_Region * region, int convertNull, char *nullValue
                 if (fscanf(fp, "%s", buff) != 1) {
                     if (feof(fp))
                         G_warning(_("End of file reached while still loading data."));
-                    G_debug(0,
+                    G_debug(3,
                             "missing data at col=%d row=%d depth=%d last_value=[%.4f]",
                             x + 1, y + 1, z + 1, value);
                     fatalError("asciiToG3d: read failed");
@@ -341,7 +341,7 @@ int main(int argc, char *argv[])
                                  &usePrecisionDefault, &precision,
                                  &useDimensionDefault, &tileX, &tileY,
                                  &tileZ))
-        fatalError("main: error getting standard parameters");
+        fatalError("Error getting standard parameters");
 
     Rast3d_init_defaults();
 
@@ -354,13 +354,13 @@ int main(int argc, char *argv[])
                            tileZ);
 
     if (map == NULL)
-        fatalError(_("Error opening 3d raster map"));
+        fatalError(_("Unable to open 3D raster map"));
 
     /*Create the new RASTER3D Map */
     asciiToG3d(fp, &region, convertNull, nullValue);
 
     if (!Rast3d_close(map))
-        fatalError(_("Error closing new 3d raster map"));
+        fatalError(_("Unable to close 3D raster map"));
 
     /* write input name to map history */
     Rast3d_read_history(output, G_mapset(), &history);
@@ -369,7 +369,7 @@ int main(int argc, char *argv[])
 
     map = NULL;
     if (fclose(fp))
-        fatalError(_("Error closing ascii file"));
+        fatalError(_("Unable to close ASCII file"));
 
     return EXIT_SUCCESS;
 }
