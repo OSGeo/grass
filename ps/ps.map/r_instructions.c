@@ -3,7 +3,6 @@
 #include <grass/colors.h>
 #include <grass/imagery.h>
 #include <grass/glocale.h>
-
 #include "local_proto.h"
 
 #define KEY(x) (strcmp(key,x)==0)
@@ -60,11 +59,11 @@ void read_instructions(FILE *inputfd, struct PS_data *PS,
 		fclose(inputfd);
 
 	    if (sscanf(data, "%s", name) != 1) {
-		error(key, data, "no file specified");
+		error(key, data, _("no file specified"));
 		inputfd = stdin;
 	    }
 	    else if ((inputfd = fopen(name, "r")) == NULL) {
-		error(key, data, "unable to open");
+		error(key, data, _("unable to open"));
 		inputfd = stdin;
 	    }
 	    else
@@ -95,7 +94,7 @@ void read_instructions(FILE *inputfd, struct PS_data *PS,
 		}
 	    }
 	    else {
-		error(key, data, "illegal maploc request");
+		error(key, data, _("illegal maploc request"));
 		gobble_input();
 	    }
 	    continue;
@@ -109,36 +108,27 @@ void read_instructions(FILE *inputfd, struct PS_data *PS,
 	    n = sscanf(data, "%d", &copies);
 	    if (n != 1 || copies < 1 || copies > 20) {
 		ps_copies = 1;
-		error(key, data, "illegal copies request");
+		error(key, data, _("illegal copies request"));
 	    }
 	    ps_copies = copies;
 	    continue;
 	}
 
 	if (KEY("setcolor")) {
-	    float R, G, B;
-	    int r, g, b;
-	    int color;
+	    int ret, r, g, b;
 	    int count;
 	    DCELL *val_list;
 	    DCELL dmin, dmax;
 	    char colorbuf[100];
 	    char catsbuf[100];
 
-	    if (PS->cell_fd < 0) {
-		error(key, data, "no raster map selected yet");
-		continue;
-	    }
+	    if (PS->cell_fd < 0)
+		error(key, data, _("no raster map selected yet"));
+
 	    if (sscanf(data, "%s %[^\n]", catsbuf, colorbuf) == 2) {
-		color = get_color_number(colorbuf);
-		if (color < 0) {
-		    error(key, data, "illegal color");
-		    continue;
-		}
-		get_color_rgb(color, &R, &G, &B);
-		r = 255.0 * R;
-		g = 255.0 * G;
-		b = 255.0 * B;
+		ret = G_str_to_color(colorbuf, &r, &g, &b);
+		if (ret != 1)
+		    error(key, colorbuf, _("illegal color request")); 
 
 		if (strncmp(catsbuf, "null", 4) == 0) {
 		    Rast_set_null_value_color(r, g, b, &(PS->colors));
@@ -148,10 +138,9 @@ void read_instructions(FILE *inputfd, struct PS_data *PS,
 		    Rast_set_default_color(r, g, b, &(PS->colors));
 		    continue;
 		}
-		if ((count = parse_val_list(catsbuf, &val_list)) < 0) {
-		    error(key, data, "illegal value list");
-		    continue;
-		}
+		if ((count = parse_val_list(catsbuf, &val_list)) < 0)
+		    error(key, data, _("illegal value list"));
+
 		for (i = 0; i < count; i += 2) {
 		    dmin = val_list[i];
 		    dmax = val_list[i + 1];
@@ -186,7 +175,7 @@ void read_instructions(FILE *inputfd, struct PS_data *PS,
 	if (KEY("scalebar")) {
 	    if (G_projection() == PROJECTION_LL) {
 		error(key, data,
-		      "scalebar is not appropriate for this projection");
+		      _("scalebar is not appropriate for this projection"));
 		gobble_input();
 	    }
 	    PS->do_scalebar = 1;
@@ -194,7 +183,7 @@ void read_instructions(FILE *inputfd, struct PS_data *PS,
 		strcpy(sb->type, "f");	/* default to fancy scalebar */
 	    read_scalebar();
 	    if (sb->length <= 0.) {
-		error(key, data, "Bad scalebar length");
+		error(key, data, _("Bad scalebar length"));
 		gobble_input();
 	    }
 	    continue;
@@ -210,7 +199,7 @@ void read_instructions(FILE *inputfd, struct PS_data *PS,
 		read_text(east, north, text);
 	    else {
 		gobble_input();
-		error(key, data, "illegal text request");
+		error(key, data, _("illegal text request"));
 	    }
 	    continue;
 	}
@@ -224,7 +213,7 @@ void read_instructions(FILE *inputfd, struct PS_data *PS,
 		read_point(e, n);
 	    else {
 		gobble_input();
-		error(key, data, "illegal point request");
+		error(key, data, _("illegal point request"));
 	    }
 	    continue;
 	}
@@ -238,7 +227,7 @@ void read_instructions(FILE *inputfd, struct PS_data *PS,
 		read_eps(e, n);
 	    else {
 		gobble_input();
-		error(key, data, "illegal eps request");
+		error(key, data, _("illegal eps request"));
 	    }
 	    continue;
 	}
@@ -255,7 +244,7 @@ void read_instructions(FILE *inputfd, struct PS_data *PS,
 		read_line(e1, n1, e2, n2);
 	    else {
 		gobble_input();
-		error(key, data, "illegal line request");
+		error(key, data, _("illegal line request"));
 	    }
 	    continue;
 	}
@@ -272,7 +261,7 @@ void read_instructions(FILE *inputfd, struct PS_data *PS,
 		read_rectangle(e1, n1, e2, n2);
 	    else {
 		gobble_input();
-		error(key, data, "illegal rectangle request");
+		error(key, data, _("illegal rectangle request"));
 	    }
 	    continue;
 	}
@@ -283,7 +272,7 @@ void read_instructions(FILE *inputfd, struct PS_data *PS,
 		read_comment(name);
 		break;
 	    case 2:
-		error(key, data, "illegal comments request");
+		error(key, data, _("illegal comments request"));
 		break;
 	    default:
 		read_comment("");
@@ -299,7 +288,7 @@ void read_instructions(FILE *inputfd, struct PS_data *PS,
 		strcpy(PS->scaletext, data);
 	    else {
 		PS->scaletext[0] = 0;
-		error(key, data, "illegal scale request");
+		error(key, data, _("illegal scale request"));
 	    }
 	    continue;
 	}
@@ -330,7 +319,7 @@ void read_instructions(FILE *inputfd, struct PS_data *PS,
 
 	if (KEY("outline")) {
 	    if (PS->cell_fd < 0) {
-		error(key, data, "no raster map selected yet");
+		error(key, data, _("no raster map selected yet"));
 		gobble_input();
 	    }
 	    else
@@ -359,7 +348,7 @@ void read_instructions(FILE *inputfd, struct PS_data *PS,
 		read_group();
 	    }
 	    else
-		error(key, data, "group not found");
+		error(key, data, _("group not found"));
 	    continue;
 	}
 
@@ -401,7 +390,7 @@ void read_instructions(FILE *inputfd, struct PS_data *PS,
 	    sscanf(data, "%d", &(PS->grid));
 	    if (PS->grid < 0) {
 		PS->grid = 0;
-		error(key, data, "illegal grid spacing");
+		error(key, data, _("illegal grid spacing"));
 		gobble_input();
 	    }
 	    else
@@ -412,7 +401,7 @@ void read_instructions(FILE *inputfd, struct PS_data *PS,
 	if (KEY("geogrid")) {
 	    if (G_projection() == PROJECTION_XY) {
 		error(key, data,
-		      "geogrid is not available for this projection");
+		      _("geogrid is not available for this projection"));
 		gobble_input();
 	    }
 	    /*          if (G_projection() == PROJECTION_LL)
@@ -422,7 +411,7 @@ void read_instructions(FILE *inputfd, struct PS_data *PS,
 	    sscanf(data, "%d %s", &(PS->geogrid), PS->geogridunit);
 	    if (PS->geogrid < 0) {
 		PS->geogrid = 0;
-		error(key, data, "illegal geo-grid spacing");
+		error(key, data, _("illegal geo-grid spacing"));
 		gobble_input();
 	    }
 	    else
@@ -454,11 +443,11 @@ void read_instructions(FILE *inputfd, struct PS_data *PS,
 		continue;
 	    }
 	    else {
-		error(key, data, "illegal color request");
+		error(key, data, _("illegal color request"));
 	    }
 	}
 
 	if (*key)
-	    error(key, "", "illegal request");
+	    error(key, "", _("illegal request"));
     }
 }
