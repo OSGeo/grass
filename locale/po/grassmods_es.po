@@ -32574,8 +32574,8 @@ msgid "Name of an existing raster map layer"
 msgstr "Nombre de una capa de mapa ráster existente"
 
 #: ../raster/r.out.arc/main.c:79
-msgid "Name of an output ARC-GID map (use out=- for stdout)"
-msgstr "Nombre de un mapa ARC-GID de salida (usar out=- para stdout)"
+msgid "Name of an output ARC-GRID map (use out=- for stdout)"
+msgstr "Nombre de un mapa ARC-GRID de salida (usar out=- para stdout)"
 
 #: ../raster/r.out.arc/main.c:86
 msgid "Number of decimal places"

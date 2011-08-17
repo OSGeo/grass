@@ -32440,9 +32440,9 @@ msgid "Name of an existing raster map layer"
 msgstr "Имя существующего растрового слоя"
 
 #: ../raster/r.out.arc/main.c:79
-msgid "Name of an output ARC-GID map (use out=- for stdout)"
+msgid "Name of an output ARC-GRID map (use out=- for stdout)"
 msgstr ""
-"Имя выходного слоя ARC-GID (используйте out=- для stdout (стандартного "
+"Имя выходного слоя ARC-GRID (используйте out=- для stdout (стандартного "
 "вывода))"
 
 #: ../raster/r.out.arc/main.c:86

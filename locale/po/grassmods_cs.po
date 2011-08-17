@@ -32307,7 +32307,7 @@ msgid "Name of an existing raster map layer"
 msgstr "Název existujícího rastru"
 
 #: ../raster/r.out.arc/main.c:79
-msgid "Name of an output ARC-GID map (use out=- for stdout)"
+msgid "Name of an output ARC-GRID map (use out=- for stdout)"
 msgstr ""
 "Název výstupního ARC-GRID souboru (pro standardní výstup pou¾ijte out=-)"
 

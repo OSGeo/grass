@@ -31710,8 +31710,8 @@ msgid "Name of an existing raster map layer"
 msgstr "既存のラスターマップ レイヤー名"
 
 #: ../raster/r.out.arc/main.c:79
-msgid "Name of an output ARC-GID map (use out=- for stdout)"
-msgstr "出力する ARC-GID マップ名 （標準出力には out= - を使用する）"
+msgid "Name of an output ARC-GRID map (use out=- for stdout)"
+msgstr "出力する ARC-GRID マップ名 （標準出力には out= - を使用する）"
 
 #: ../raster/r.out.arc/main.c:86
 msgid "Number of decimal places"
