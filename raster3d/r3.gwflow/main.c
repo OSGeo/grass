@@ -51,70 +51,70 @@ void set_params(void)
 {
     param.phead = G_define_standard_option(G_OPT_R3_INPUT);
     param.phead->key = "phead";
-    param.phead->description = _("Input 3d-raster map with initial piezometric heads in [m]");
+    param.phead->description = _("Input 3D raster map with initial piezometric heads in [m]");
 
     param.status = G_define_standard_option(G_OPT_R3_INPUT);
     param.status->key = "status";
     param.status->description =
 	_
-	("Input 3d-raster map providing the status for each cell, = 0 - inactive, 1 - active, 2 - dirichlet");
+	("Input 3D raster map providing the status for each cell, = 0 - inactive, 1 - active, 2 - dirichlet");
 
     param.hc_x = G_define_standard_option(G_OPT_R3_INPUT);
     param.hc_x->key = "hc_x";
     param.hc_x->description =
-	_("Input 3d-raster map with the x-part of the hydraulic conductivity tensor in [m/s]");
+	_("Input 3D raster map with the x-part of the hydraulic conductivity tensor in [m/s]");
 
     param.hc_y = G_define_standard_option(G_OPT_R3_INPUT);
     param.hc_y->key = "hc_y";
     param.hc_y->description =
-	_("Input 3d-raster map with the y-part of the hydraulic conductivity tensor in [m/s]");
+	_("Input 3D raster map with the y-part of the hydraulic conductivity tensor in [m/s]");
 
     param.hc_z = G_define_standard_option(G_OPT_R3_INPUT);
     param.hc_z->key = "hc_z";
     param.hc_z->description =
-	_("Input 3d-raster map with the z-part of the hydraulic conductivity tensor in [m/s]");
+	_("Input 3D raster map with the z-part of the hydraulic conductivity tensor in [m/s]");
 
     param.q = G_define_standard_option(G_OPT_R3_INPUT);
     param.q->key = "q";
     param.q->required = NO;
-    param.q->description = _("Input 3d-raster map with sources and sinks in [m^3/s]");
+    param.q->description = _("Input 3D raster map with sources and sinks in [m^3/s]");
 
     param.s = G_define_standard_option(G_OPT_R3_INPUT);
     param.s->key = "s";
-    param.s->description = _("Specific yield [1/m] input 3d-raster map");
+    param.s->description = _("Specific yield [1/m] input 3D raster map");
 
     param.r = G_define_standard_option(G_OPT_R3_INPUT);
     param.r->key = "r";
     param.r->required = NO;
-    param.r->description = _("Recharge input 3d-raster map in m^3/s");
+    param.r->description = _("Recharge input 3D raster map in m^3/s");
 
     param.output = G_define_standard_option(G_OPT_R3_OUTPUT);
     param.output->key = "output";
-    param.output->description = _("Output 3d-raster map storing the piezometric head result of the numerical calculation");
+    param.output->description = _("Output 3D raster map storing the piezometric head result of the numerical calculation");
 
     param.vector_x = G_define_standard_option(G_OPT_R3_OUTPUT);
     param.vector_x->key = "vx";
     param.vector_x->required = NO;
     param.vector_x->description =
-	_("Output 3d-raster map storing the groundwater filter velocity vector part in x direction [m/s]");
+	_("Output 3D raster map storing the groundwater filter velocity vector part in x direction [m/s]");
 
     param.vector_y = G_define_standard_option(G_OPT_R3_OUTPUT);
     param.vector_y->key = "vy";
     param.vector_y->required = NO;
     param.vector_y->description =
-	_("Output 3d-raster map storing the groundwater filter velocity vector part in y direction [m/s]");
+	_("Output 3D raster map storing the groundwater filter velocity vector part in y direction [m/s]");
 
     param.vector_z = G_define_standard_option(G_OPT_R3_OUTPUT);
     param.vector_z->key = "vz";
     param.vector_z->required = NO;
     param.vector_z->description =
-	_("Output 3d-raster map storing the groundwater filter velocity vector part in z direction [m/s]");
+	_("Output 3D raster map storing the groundwater filter velocity vector part in z direction [m/s]");
 
     param.budget = G_define_standard_option(G_OPT_R3_OUTPUT);
     param.budget->key = "budget";
     param.budget->required = NO;
     param.budget->description =
-	_("Output 3d-raster map Storing the groundwater budget for each cell [m^3/s]\n");
+	_("Output 3D raster map Storing the groundwater budget for each cell [m^3/s]\n");
 
     param.dt = N_define_standard_option(N_OPT_CALC_TIME);
     param.maxit = N_define_standard_option(N_OPT_MAX_ITERATIONS);
@@ -179,8 +179,8 @@ int main(int argc, char *argv[])
     solver = param.solver->answer;
 
     if (strcmp(solver, G_MATH_SOLVER_DIRECT_CHOLESKY) == 0 && !param.full_les->answer)
-	G_fatal_error(_("The cholesky solver dos not work with sparse matrices.\n"
-                "You may choose a full filled quadratic matrix, flag -f. "));
+	G_fatal_error(_("The cholesky solver does not work with sparse matrices.\n"
+                "Consider to choose a full filled quadratic matrix with flag -f "));
 
 
 
@@ -352,11 +352,8 @@ write_result(N_array_3d * status, N_array_3d * phead_start,
 	     char *name)
 {
     void *map = NULL;
-
     int changemask = 0;
-
     int z, y, x, rows, cols, depths, count, stat;
-
     double d1 = 0;
 
     rows = region->rows;
@@ -367,9 +364,7 @@ write_result(N_array_3d * status, N_array_3d * phead_start,
     map = Rast3d_open_new_opt_tile_size(name, RASTER3D_USE_CACHE_XY, region, DCELL_TYPE, 32);
 
     if (map == NULL)
-	Rast3d_fatal_error(_("Error opening g3d map <%s>"), name);
-
-    G_message(_("Write the result to g3d map <%s>"), name);
+	Rast3d_fatal_error(_("Unable to create 3D raster map <%s>"), name);
 
     /*if requested set the Mask on */
     if (param.mask->answer) {

@@ -1,26 +1,26 @@
-<H2>DESCRIPTION</H2>
-This numerical program calculates implicit transient and steady state,
-confined groundwater flow in three dimensions
-based on volume maps and the current 3d region settings.
+<h2>DESCRIPTION</h2>
+This numerical module calculates implicit transient and steady state,
+confined groundwater flow in three dimensions based on volume maps
+and the current 3D region settings.
 All initial- and boundary-conditions must be provided as volume maps.
 The unit in the location must be meters.
 <br>
 <p>
 This module is sensitive to mask settings. All cells which are outside the mask
 are ignored and handled as no flow boundaries.
-<br>
-This module calculates the piezometric head and optionally the water balance for each cell
+<p>
+The module calculates the piezometric head and optionally the water balance for each cell
 and the groundwater velocity field in 3 dimensions.
-The vector components can be visualized with paraview if they are exported
+The vector components can be visualized with ParaView if they are exported
 with <em>r3.out.vtk</em>.
-<br>
-<br>
+
+<p>
 The groundwater flow will always be calculated transient. 
-For stady state computation set the timestep
+For steady state computation set the timestep
 to a large number (billions of seconds) or set the
 specific yield raster map to zero.
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 The groundwater flow calculation is based on Darcy's law and a numerical implicit
 finite volume discretization. The discretization results in a symmetric and positive definit
@@ -45,8 +45,7 @@ In detail for 3 dimensions:
 <li>q - inner source/sinc in [1/s]</li>
 </ul>
 
-<br>
-<br>
+<p>
 Two different boundary conditions are implemented, 
 the Dirichlet and Neumann conditions. By default the calculation area
 is surrounded by homogeneous Neumann boundary conditions.
@@ -58,13 +57,13 @@ the following cell states are supportet:
 <li>1 == active - this cell is used for groundwater calculation, inner sources can be defined for those cells</li>
 <li>2 == Dirichlet - cells of this type will have a fixed piezometric head value which do not change over time </li>
 </ul>
-<br>
-<br>
+
+<p>
 Note that all required raster maps are read into main memory. Additionally the
 linear equation system will be allocated, so the memory consumption of this
 module rapidely grow with the size of the input maps.
-<br>
-<br>
+
+<p>
 The resulting linear equation system <i>Ax = b</i> can be solved with several solvers.
 An iterative solvers with sparse and quadratic matrices support is implemented.
 The conjugate gradients method with (pcg) and without (cg) precondition.
@@ -73,34 +72,34 @@ only work with normal quadratic matrices, so be careful using them with large ma
 (maps of size 10.000 cells will need more than one gigabyte of RAM).
 Always prefer a sparse matrix solver.
 
-<H2>EXAMPLE 1</H2>
-Use this small script to create a working
-groundwater flow area and data. Make sure you are not in a lat/lon projection.
+<h2>EXAMPLE 1</h2>
+Use this small script to create a working groundwater flow area and
+data. Make sure you are not in a lat/lon projection.
 
 <div class="code"><pre>
 # set the region accordingly
-g.region res=25 res3=25 t=100 b=0 n=1000 s=0 w=0 e=1000
+g.region res=25 res3=25 t=100 b=0 n=1000 s=0 w=0 e=1000 -p
 
 #now create the input raster maps for a confined aquifer
-r3.mapcalc --o expression="phead = if(row() == 1 && depth() == 4, 50, 40)"
-r3.mapcalc --o expression="status = if(row() == 1 && depth() == 4, 2, 1)"
-r3.mapcalc --o expression="well = if(row() == 20 && col() == 20 && depth() == 2, -0.25, 0)"
-r3.mapcalc --o expression="hydcond = 0.00025"
-r3.mapcalc --o expression="syield = 0.0001"
-r.mapcalc  --o expression="recharge = 0.0"
+r3.mapcalc expression="phead = if(row() == 1 && depth() == 4, 50, 40)"
+r3.mapcalc expression="status = if(row() == 1 && depth() == 4, 2, 1)"
+r3.mapcalc expression="well = if(row() == 20 && col() == 20 && depth() == 2, -0.25, 0)"
+r3.mapcalc expression="hydcond = 0.00025"
+r3.mapcalc expression="syield = 0.0001"
+r.mapcalc  expression="recharge = 0.0"
 
-r3.gwflow --o solver=cg phead=phead status=status hc_x=hydcond hc_y=hydcond  \
-hc_z=hydcond q=well s=syield r=recharge output=gwresult dt=8640000 vx=vx vy=vy vz=vz budget=budget
+r3.gwflow solver=cg phead=phead status=status hc_x=hydcond hc_y=hydcond  \
+   hc_z=hydcond q=well s=syield r=recharge output=gwresult dt=8640000 vx=vx vy=vy vz=vz budget=budget
 
-# The data can be visualized with paraview when exported with r3.out.vtk
+# The data can be visualized with ParaView when exported with r3.out.vtk
 r3.out.vtk -p in=gwresult,status,budget vector=vx,vy,vz out=/tmp/gwdata3d.vtk
 
-#now load the data into paraview
+#now load the data into ParaView
 paraview --data=/tmp/gwdata3d.vtk
 </pre></div>
 
 <H2>EXAMPLE 2</H2>
-This will create a nice 3d model with geological layer with different
+This will create a nice 3D model with geological layer with different
 hydraulic conductivities. Make sure you are not in a lat/lon projection.
 
 <div class="code"><pre>
@@ -108,18 +107,18 @@ hydraulic conductivities. Make sure you are not in a lat/lon projection.
 g.region res=15 res3=15 t=500 b=0 n=1000 s=0 w=0 e=1000
 
 #now create the input raster maps for a confined aquifer
-r3.mapcalc --o expression="phead = if(col() == 1 && depth() == 33, 50, 40)"
-r3.mapcalc --o expression="status = if(col() == 1 && depth() == 33, 2, 1)"
-r3.mapcalc --o expression="well = if(row() == 20 && col() == 20 && depth() == 3, -0.25, 0)"
-r3.mapcalc --o expression="well = if(row() == 50 && col() == 50 && depth() == 3, -0.25, well)"
-r3.mapcalc --o expression="hydcond = 0.0025"
-r3.mapcalc --o expression="hydcond = if(depth() < 30 && depth() > 23 && col() < 60, 0.000025, hydcond)"
-r3.mapcalc --o expression="hydcond = if(depth() < 20 && depth() > 13 && col() >  7, 0.000025, hydcond)"
-r3.mapcalc --o expression="hydcond = if(depth() < 10 && depth() >  7 && col() < 60, 0.000025, hydcond)"
-r3.mapcalc --o expression="syield = 0.0001"
+r3.mapcalc expression="phead = if(col() == 1 && depth() == 33, 50, 40)"
+r3.mapcalc expression="status = if(col() == 1 && depth() == 33, 2, 1)"
+r3.mapcalc expression="well = if(row() == 20 && col() == 20 && depth() == 3, -0.25, 0)"
+r3.mapcalc expression="well = if(row() == 50 && col() == 50 && depth() == 3, -0.25, well)"
+r3.mapcalc expression="hydcond = 0.0025"
+r3.mapcalc expression="hydcond = if(depth() < 30 && depth() > 23 && col() < 60, 0.000025, hydcond)"
+r3.mapcalc expression="hydcond = if(depth() < 20 && depth() > 13 && col() >  7, 0.000025, hydcond)"
+r3.mapcalc expression="hydcond = if(depth() < 10 && depth() >  7 && col() < 60, 0.000025, hydcond)"
+r3.mapcalc expression="syield = 0.0001"
 
-r3.gwflow --o solver=cg phead=phead status=status hc_x=hydcond hc_y=hydcond  \
-hc_z=hydcond q=well s=syield output=gwresult dt=8640000 vx=vx vy=vy vz=vz budget=budget
+r3.gwflow solver=cg phead=phead status=status hc_x=hydcond hc_y=hydcond  \
+   hc_z=hydcond q=well s=syield output=gwresult dt=8640000 vx=vx vy=vy vz=vz budget=budget
 
 # The data can be visualized with paraview when exported with r3.out.vtk
 r3.out.vtk -p in=gwresult,status,budget,hydcond,well vector=vx,vy,vz out=/tmp/gwdata3d.vtk
@@ -128,18 +127,18 @@ r3.out.vtk -p in=gwresult,status,budget,hydcond,well vector=vx,vy,vz out=/tmp/gw
 paraview --data=/tmp/gwdata3d.vtk
 </pre></div>
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM><A HREF="r.gwflow.html">r.gwflow</A></EM><br>
-<EM><A HREF="r.solute.transport.html">r.solute.transport</A></EM><br>
-<EM><A HREF="r3.out.vtk.html">r3.out.vtk</A></EM><br>
+<em><a href="r.gwflow.html">r.gwflow</a></em><br>
+<em><a href="r.solute.transport.html">r.solute.transport</a></em><br>
+<em><a href="r3.out.vtk.html">r3.out.vtk</a></em>
 
 <h2>AUTHOR</h2>
 S&ouml;ren Gebbert
 <p>
 This work is based on the Diploma Thesis of S&ouml;ren Gebbert available 
 <a href="http://www.hydrogeologie.tu-berlin.de/fileadmin/fg66/_hydro/Diplomarbeiten/2007_Diplomarbeit_Soeren_Gebbert.pdf">here</a>
-at Technical University Berlin in Germany.
+at Technical University Berlin, Germany.
 
 
 <p><i>Last changed: $Date$</i>
