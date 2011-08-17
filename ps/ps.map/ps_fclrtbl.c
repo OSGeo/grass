@@ -281,9 +281,9 @@ int PS_fcolortable(void)
 	case 2:
 	    /* directly above the tick numbers */
 	    if (ct.tickbar)
-		xu += x1 + 0.2 * fontsize;
+		xu = x1 + 0.2 * fontsize;
 	    else
-		xu += x2 + 0.2 * fontsize;
+		xu = x2 + 0.2 * fontsize;
 	    yu = t + 0.05*72;
 	    label_xref = LEFT;
 	    label_yref = LOWER;
@@ -302,9 +302,9 @@ int PS_fcolortable(void)
 	case 4:
 	    /* directly below the tick numbers */
 	    if (ct.tickbar)
-		xu += x1 + 0.2 * fontsize;
+		xu = x1 + 0.2 * fontsize;
 	    else
-		xu += x2 + 0.2 * fontsize;
+		xu = x2 + 0.2 * fontsize;
 	    yu = t - height - 0.05*72;
 	    label_xref = LEFT;
 	    label_yref = UPPER;
