@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
     input_TEMPKMAX->description = _("Name of input maximum air temperature raster map [C]");
 
     input_P = G_define_standard_option(G_OPT_R_INPUT);
-    input_p->required = NO;
+    input_P->required = NO;
     input_P->key = "precipitation";
     input_P->label =
 	_("Name of precipitation raster map [mm/month]");
