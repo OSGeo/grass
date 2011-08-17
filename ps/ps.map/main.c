@@ -188,8 +188,7 @@ int main(int argc, char *argv[])
     grp.do_group = 0;
     brd.R = brd.G = brd.B = 0.;
     brd.width = 1.;
-    
-    PS.grid_color = BLACK;
+
     PS.min_y = 72.0 * (PS.page_height - PS.top_marg);
     PS.set_y = 100.0 * PS.min_y;
     PS.cell_fd = -1;

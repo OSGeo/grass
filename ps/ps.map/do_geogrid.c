@@ -54,7 +54,7 @@ int do_geogrid(void)
 
 
     /* set color and set line width */
-    set_rgb_color(PS.geogrid_color);
+    set_ps_color(&PS.geogrid_color);
     set_line_width(PS.geogrid_width);
 
     /* draw horizontal lines in 3 pieces -- lat-lon lines must not
@@ -166,7 +166,7 @@ int do_geogrid_numbers(void)
     /* initialize */
     set_font_name(PS.geogrid_font);
     set_font_size(PS.geogrid_fontsize);
-    set_rgb_color(PS.geogrid_numbers_color);
+    set_ps_color(&PS.geogrid_numbers_color);
     first = 1;
 
     /* vertical grid numbers
@@ -204,7 +204,7 @@ int do_geogrid_numbers(void)
 	text_box_path(x, y, RIGHT, CENTER, num_text, PS.geogrid_fontsize, 0);
 	set_rgb_color(WHITE);
 	fprintf(PS.fp, "F ");
-	set_rgb_color(PS.geogrid_numbers_color);
+	set_ps_color(&PS.geogrid_numbers_color);
 	fprintf(PS.fp, "TIB\n");
 	last_bottom = y - PS.geogrid_fontsize;
 	if (first) {
@@ -248,7 +248,7 @@ int do_geogrid_numbers(void)
 	fprintf(PS.fp, "%d bt bb sub D2 add mg sub neg TR TB\n", x);
 	set_rgb_color(WHITE);
 	fprintf(PS.fp, "F ");
-	set_rgb_color(PS.geogrid_numbers_color);
+	set_ps_color(&PS.geogrid_numbers_color);
 	fprintf(PS.fp, "TIB\n");
 	last_right = x + PS.geogrid_fontsize;
     }
