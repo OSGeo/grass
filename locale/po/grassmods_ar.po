@@ -32031,7 +32031,7 @@ msgid "Name of an existing raster map layer"
 msgstr "اسم الملف الراسترى الموجود"
 
 #: ../raster/r.out.arc/main.c:79
-msgid "Name of an output ARC-GID map (use out=- for stdout)"
+msgid "Name of an output ARC-GRID map (use out=- for stdout)"
 msgstr "اسم الملف الراسترى الجديد"
 
 #: ../raster/r.out.arc/main.c:86

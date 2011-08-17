@@ -63,20 +63,12 @@ int main(int argc, char *argv[])
 	_("Converts a raster map layer into an ESRI ARCGRID file.");
 
     /* Define the different options */
-    parm.map = G_define_option();
-    parm.map->key = "input";
-    parm.map->type = TYPE_STRING;
-    parm.map->required = YES;
-    parm.map->gisprompt = "old,cell,raster";
-    parm.map->description = _("Name of an existing raster map layer");
+    parm.map = G_define_standard_option(G_OPT_R_INPUT);
 
-    parm.output = G_define_option();
-    parm.output->key = "output";
-    parm.output->type = TYPE_STRING;
-    parm.output->required = YES;
+    parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.output->gisprompt = "new_file,file,output";
     parm.output->description =
-	_("Name of an output ARC-GID map (use out=- for stdout)");
+	_("Name of an output ARC-GRID map (use out=- for stdout)");
 
     parm.dp = G_define_option();
     parm.dp->key = "dp";

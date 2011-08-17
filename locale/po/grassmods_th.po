@@ -31993,8 +31993,8 @@ msgid "Name of an existing raster map layer"
 msgstr "ชื่อของ ชั้นข้อมูลแผนที่เชิงภาพ ที่มีอยู่"
 
 #: ../raster/r.out.arc/main.c:79
-msgid "Name of an output ARC-GID map (use out=- for stdout)"
-msgstr "ชื่อของ แผนที่ผลลัพธ์  ARC-GID (ใช้ out=- สำหรับ stdout)"
+msgid "Name of an output ARC-GRID map (use out=- for stdout)"
+msgstr "ชื่อของ แผนที่ผลลัพธ์  ARC-GRID (ใช้ out=- สำหรับ stdout)"
 
 #: ../raster/r.out.arc/main.c:86
 msgid "Number of decimal places"

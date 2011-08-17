@@ -34414,7 +34414,7 @@ msgid "Name of an existing raster map layer"
 msgstr "Nom de la couche raster existante"
 
 #: ../raster/r.out.arc/main.c:79
-msgid "Name of an output ARC-GID map (use out=- for stdout)"
+msgid "Name of an output ARC-GRID map (use out=- for stdout)"
 msgstr "Nom de la couche ARC-GRID à créer (utiliser out=- pour stdout)"
 
 #: ../raster/r.out.arc/main.c:86

@@ -32429,8 +32429,8 @@ msgid "Name of an existing raster map layer"
 msgstr "Tên lớp bản đồ raster hiện có"
 
 #: ../raster/r.out.arc/main.c:79
-msgid "Name of an output ARC-GID map (use out=- for stdout)"
-msgstr "Tên bản đồ ARC-GID đầu ra (dùng out=- cho đầu ra tiêu chuẩn)"
+msgid "Name of an output ARC-GRID map (use out=- for stdout)"
+msgstr "Tên bản đồ ARC-GRID đầu ra (dùng out=- cho đầu ra tiêu chuẩn)"
 
 #: ../raster/r.out.arc/main.c:86
 msgid "Number of decimal places"

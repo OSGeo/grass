@@ -32511,7 +32511,7 @@ msgstr "का"
 
 #: ../raster/r.out.arc/main.c:79
 #, fuzzy
-msgid "Name of an output ARC-GID map (use out=- for stdout)"
+msgid "Name of an output ARC-GRID map (use out=- for stdout)"
 msgstr "का के लिए"
 
 #: ../raster/r.out.arc/main.c:86
