@@ -10,10 +10,10 @@ void list_formats(FILE *fd) {
     
     OGRSFDriverH Ogr_driver;
     
-    G_message(_("Supported formats:"));
+    G_message(_("Supported OGR formats for reading:"));
     for (i = 0; i < OGRGetDriverCount(); i++) {
 	Ogr_driver = OGRGetDriver(i);
-	fprintf(fd, " %s\n", OGR_Dr_GetName(Ogr_driver));
+	fprintf(fd, "%s\n", OGR_Dr_GetName(Ogr_driver));
     }
 }
 
@@ -40,7 +40,8 @@ int list_layers(FILE *fd, const char *dsn, const char *layer, int *is3D)
     nlayers = OGR_DS_GetLayerCount(Ogr_ds);
 
     if (fd)
-	G_message(_("Data source contains %d layers:"), nlayers);
+	G_message(_("Data source <%s> (format '%s') contains %d layers:"),
+		  dsn, OGR_Dr_GetName(OGR_DS_GetDriver(Ogr_ds)), nlayers);
 
     for (i = 0; i < nlayers; i++) {
 	Ogr_layer = OGR_DS_GetLayer(Ogr_ds, i);
