@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
     struct FPRange range;
     DCELL min, max, inscale;
     FCELL measure;		/* Containing measure done */
-    int dist, size;	/* dist = value of distance, size = s. of sliding window */
+    int dist, size;	/* dist = value of distance, size = s. of moving window */
     int offset;
     int have_px, have_py, have_sentr, have_pxpys, have_pxpyd;
     int infd, *outfd;
@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
     opt_size->key_desc = "value";
     opt_size->type = TYPE_INTEGER;
     opt_size->required = NO;
-    opt_size->description = _("The size of sliding window (odd and >= 3)");
+    opt_size->description = _("The size of moving window (odd and >= 3)");
     opt_size->answer = "3";
 
     /* Textural character is in direct relation of the spatial size of the texture primitives. */
@@ -312,7 +312,7 @@ int main(int argc, char *argv[])
     /* *************************************************************************************************
      *
      * Compute of the matrix S.G.L.D. (Spatial Gray-Level Dependence Matrices) or co-occurrence matrix.
-     * The image is analized for piece, every piece is naming sliding window (s.w.). The s.w. must be    
+     * The image is analized for piece, every piece is naming moving window (s.w.). The s.w. must be    
      * square with number of size's samples odd, that because we want the sample at the center of matrix. 
      *
      ***************************************************************************************************/
