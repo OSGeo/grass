@@ -2,10 +2,10 @@
 /****************************************************************************
  *
  * MODULE:       r3.cross.rast 
- *   	    	
+ *
  * AUTHOR(S):    Original author 
  *               Soeren Gebbert soerengebbert at gmx de
- * 		23 Feb 2006 Berlin
+ *               23 Feb 2006 Berlin
  * PURPOSE:      Creates a cross section 2D map from one RASTER3D raster map based on a 2D elevation map  
  *
  * COPYRIGHT:    (C) 2005 by the GRASS Development Team
@@ -52,7 +52,7 @@ void fatal_error(void *map, int elevfd, int outfd, char *errorMsg)
 
     if (map != NULL) {
         if (!Rast3d_close(map))
-            Rast3d_fatal_error(_("Could not close RASTER3D map"));
+            Rast3d_fatal_error(_("Unable to close 3D raster map"));
     }
 
     /*unopen the output map */
@@ -106,7 +106,7 @@ void set_params()
 
     param.mask = G_define_flag();
     param.mask->key = 'm';
-    param.mask->description = _("Use g3d mask (if exists) with input map");
+    param.mask->description = _("Use 3D raster mask (if exists) with input map");
 }
 
 
@@ -229,7 +229,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("voxel"));
     module->description =
-        _("Creates cross section 2D raster map from 3d raster map based on 2D elevation map");
+        _("Creates cross section 2D raster map from 3D raster map based on 2D elevation map");
 
     /* Get parameters from user */
     set_params();
@@ -241,7 +241,7 @@ int main(int argc, char *argv[])
     G_debug(3, "Open 3D raster map %s", param.input->answer);
 
     if (NULL == G_find_raster3d(param.input->answer, ""))
-        Rast3d_fatal_error(_("3d raster map <%s> not found"),
+        Rast3d_fatal_error(_("3D raster map <%s> not found"),
                        param.input->answer);
 
     /* Figure out the region from the map */
@@ -255,7 +255,7 @@ int main(int argc, char *argv[])
     /*If not equal, set the 2D windows correct */
     if (rows != region.rows || cols != region.cols) {
         G_message
-            (_("The 2d and 3d region settings are different. I will use the g3d settings to adjust the 2d region."));
+            (_("The 2D and 3D region settings are different. Using the 3D raster map settings to adjust the 2D region."));
         G_get_set_window(&window2d);
         window2d.ns_res = region.ns_res;
         window2d.ew_res = region.ew_res;
@@ -275,7 +275,7 @@ int main(int argc, char *argv[])
                           RASTER3D_USE_CACHE_DEFAULT);
 
     if (map == NULL)
-        Rast3d_fatal_error(_("Error opening 3d raster map <%s>"),
+        Rast3d_fatal_error(_("Unable to open 3D raster map <%s>"),
                        param.input->answer);
 
     /*Get the output type */
@@ -334,12 +334,12 @@ int main(int argc, char *argv[])
 
     } else {
         fatal_error(map, -1, -1,
-                    _("Wrong RASTER3D Datatype! Cannot create raster map."));
+                    _("Wrong 3D raster datatype! Cannot create raster map"));
     }
 
     /* Close files and exit */
     if (!Rast3d_close(map))
-        Rast3d_fatal_error(_("Could not close RASTER3D map <%s>"),
+        Rast3d_fatal_error(_("Unable to close 3D raster map <%s>"),
                        param.input->answer);
 
     return (EXIT_SUCCESS);
