@@ -412,7 +412,7 @@ class ColorTable(wx.Frame):
         row = 0
         
         # label with range
-        self.cr_label = wx.StaticText(parent, id = wx.ID_ANY, label = '')
+        self.cr_label = wx.StaticText(parent, id = wx.ID_ANY)
         bodySizer.Add(item = self.cr_label, pos = (row, 0), span = (1, 3),
                       flag = wx.ALL, border = 5)
         row += 1
@@ -465,10 +465,8 @@ class ColorTable(wx.Frame):
 
     def OnCloseWindow(self, event):
         """!Window closed
-        Also remove associated rendered images
         """
-        self.Map.Clean()
-        self.Destroy()
+        self.OnCancel(event)
           
     def OnApply(self, event):
         """!Apply selected color table
@@ -488,14 +486,18 @@ class ColorTable(wx.Frame):
     def OnOK(self, event):
         """!Apply selected color table and close the dialog"""
         if self.OnApply(event):
-            self.Destroy()
+            self.OnCancel(event)
     
     def OnCancel(self, event):
-        """!Do not apply any changes and close the dialog"""
+        """!Do not apply any changes, remove associated
+            rendered images and close the dialog"""
+        self.Map.Clean()
         self.Destroy()
-    
+        
     def LoadTable(self, mapType = 'raster'):
-        """!Load current color table (using `r.colors.out`)"""
+        """!Load current color table (using `r(v).colors.out`)
+        
+        @param mapType map type (raster or vector)"""
         
         self.rulesPanel.Clear()
         if mapType == 'raster':
@@ -509,7 +511,7 @@ class ColorTable(wx.Frame):
                    'map=%s' % self.inmap,
                    'rules=-']
             
-            if self.properties['sourceColumn'] != 'cat':
+            if self.properties['sourceColumn'] and self.properties['sourceColumn'] != 'cat':
                 cmd.append('column=%s' % self.properties['sourceColumn'])
             
         cmd = utils.CmdToTuple(cmd)
@@ -519,11 +521,11 @@ class ColorTable(wx.Frame):
         else:
             self.OnPreview()
             return
-        
+            
         rulesNumber = len(ctable.splitlines())
         self.rulesPanel.AddRules(rulesNumber)
         
-        count = 0
+        minim = maxim = count = 0
         for line in ctable.splitlines():
             value, color = map(lambda x: x.strip(), line.split(' '))
             self.rulesPanel.ruleslines[count]['value'] = value
@@ -533,10 +535,22 @@ class ColorTable(wx.Frame):
             for c in color.split(':'):
                 rgb.append(int(c))
             self.rulesPanel.mainPanel.FindWindowById(count + 2000).SetColour(rgb)
+            # range
+            try:
+                if float(value) < minim:
+                    minim = float(value)
+                if float(value) > maxim:
+                    maxim = float(value)
+            except ValueError: # nv, default
+                pass
             count += 1
         
+        if self.mapType == 'vector':
+            # raster min, max is known from r.info
+            self.properties['min'], self.properties['max'] = minim, maxim
+            self.SetRangeLabel()
         self.OnPreview(tmp = True)    
-        
+    
     def CreateColorTable(self, force = False, mapType = 'raster'):
         """!Creates color table
 
@@ -852,7 +866,11 @@ class VectorColorTable(ColorTable):
             # vector attribute column to use for storing colors
             'storeColumn' : '',    
             # vector attribute column for temporary storing colors   
-            'tmpColumn' : 'tmp_0'
+            'tmpColumn' : 'tmp_0',
+            # min value of attribute column/vector color table
+            'min': None,
+            # max value of attribute column/vector color table            
+            'max': None
             }     
         self.columnsProp = {'color': {'name': 'GRASSRGB', 'type1': 'varchar(11)', 'type2': ['character']},
                             'size' : {'name': 'GRASSSIZE', 'type1': 'integer', 'type2': ['integer']},
@@ -865,7 +883,7 @@ class VectorColorTable(ColorTable):
         self.Bind(wx.EVT_COMBOBOX, self.OnSourceColumnSelection, self.sourceColumn)
         self.Bind(wx.EVT_COMBOBOX, self.OnFromColSelection, self.fromColumn)
         self.Bind(wx.EVT_COMBOBOX, self.OnToColSelection, self.toColumn)
-        self.Bind(wx.EVT_BUTTON, self.OnAddColumn, self.addColumn)    
+        self.Bind(wx.EVT_BUTTON, self.OnAddColumn, self.addColumn)
         
         self._initLayer()
         if self.colorTable:
@@ -1113,6 +1131,8 @@ class VectorColorTable(ColorTable):
             for combo in (self.layerSelect, self.sourceColumn, self.fromColumn, self.toColumn):
                 combo.SetValue("")
                 combo.Clear()
+            for prop in ('sourceColumn', 'loadColumn', 'storeColumn'):
+                self.properties[prop] = ''
             self.EnableVectorAttributes(False)
               
         else: # db connection exist
@@ -1243,16 +1263,13 @@ class VectorColorTable(ColorTable):
         if self.colorTable:
             ColorTable.LoadTable(self, mapType = 'vector')
         else:
-            self.LoadRulesFromColumn(sourceColumn = self.properties['sourceColumn'],
-                                     loadColumn = self.properties['loadColumn'],
-                                     rulesPanel = self.rulesPanel, 
-                                     type = self.attributeType)
+            self.LoadRulesFromColumn()
             
-    def LoadRulesFromColumn(self, sourceColumn, loadColumn, rulesPanel, type):
+    def LoadRulesFromColumn(self):
         """!Load current column (GRASSRGB, size column)"""
         
-        rulesPanel.Clear()
-        if not sourceColumn:
+        self.rulesPanel.Clear()
+        if not self.properties['sourceColumn']:
             self.preview.EraseMap()
             return
         
@@ -1260,9 +1277,9 @@ class VectorColorTable(ColorTable):
                            parent = self)
         wx.Yield()
         
-        columns = sourceColumn
-        if loadColumn:
-            columns += ',' + loadColumn
+        columns = self.properties['sourceColumn']
+        if self.properties['loadColumn']:
+            columns += ',' + self.properties['loadColumn']
             
         if self.inmap:
             outFile = tempfile.NamedTemporaryFile(mode = 'w+b')
@@ -1280,9 +1297,6 @@ class VectorColorTable(ColorTable):
             busy.Destroy()
             return
         
-##        if type == 'color':
-##            ctype = self.dbInfo.GetTableDesc(self.properties['table'])\
-##                                            [sourceColumn]['ctype']
         outFile.seek(0)
         i = 0
         minim = maxim = 0.0
@@ -1291,55 +1305,60 @@ class VectorColorTable(ColorTable):
             record = outFile.readline().replace('\n', '')
             if not record:
                 break
-            rulesPanel.ruleslines[i] = {}
+            self.rulesPanel.ruleslines[i] = {}
             
-            if not loadColumn:
+            if not self.properties['loadColumn']:
                 col1 = record
                 col2 = None
             else:
                 col1, col2 = record.split(sep)
             
-##            if ctype not in (int, float):
-##                col1 = "'" + col1 + "'"
-##            else:
             if float(col1) < minim:
                 minim = float(col1)
             if float(col1) > maxim:
                 maxim = float(col1)
                     
-            rulesPanel.ruleslines[i]['value'] = col1
-            rulesPanel.ruleslines[i][type] = col2
+            self.rulesPanel.ruleslines[i]['value'] = col1
+            self.rulesPanel.ruleslines[i][self.attributeType] = col2
             i += 1
         
-        rulesPanel.AddRules(i, start = True)
-        ret = rulesPanel.LoadRules()
-##        self.SetRangeLabel(type, ctype, minim, maxim)
+        self.rulesPanel.AddRules(i, start = True)
+        ret = self.rulesPanel.LoadRules()
+        
+        self.properties['min'], self.properties['max'] = minim, maxim
+        self.SetRangeLabel()
         
         if ret:
             self.OnPreview()   
         else:
-            rulesPanel.Clear()
+            self.rulesPanel.Clear()
     
         busy.Destroy()
         
-    def SetRangeLabel(self, type, ctype, minim, maxim):
+    def SetRangeLabel(self):
         """!Set labels with info about attribute column range"""
-        if type == 'color':
-            if minim or maxim:
-                if ctype == int:
-                    self.rgb_range_label.SetLabel(_("range: %.1f to %.1f") % (minim, maxim))
-                elif ctype == float:
-                    self.rgb_range_label.SetLabel(_("range: %d to %d") % (minim, maxim))
+        
+        if self.properties['sourceColumn']:
+            ctype = self.dbInfo.GetTableDesc(self.properties['table'])[self.properties['sourceColumn']]['ctype']
+        else:
+            ctype = int
+        
+        range = ''
+        if self.properties['min'] or self.properties['max']:
+            if ctype == float:
+                range = _("(range: %.1f to %.1f)") % (self.properties['min'], self.properties['max'])
+            elif ctype == int:
+                range = _("(range: %d to %d)") % (self.properties['min'], self.properties['max'])
+        if range:
+            if self.colorTable:
+                self.cr_label.SetLabel(_("Enter vector attribute values or percents %s:") % range)
             else:
-                self.rgb_range_label.SetLabel('')
-        elif type == 'size':
-            if minim or maxim:
-                if ctype == int:
-                    self.size_range_label.SetLabel(_("range: %.1f to %.1f") % (minim, maxim))
-                elif ctype == float:
-                    self.size_range_label.SetLabel(_("range: %d to %d") % (minim, maxim))
+                self.cr_label.SetLabel(_("Enter vector attribute values %s:") % range)
+        else:
+            if self.colorTable:
+                self.cr_label.SetLabel(_("Enter vector attribute values or percents:"))
             else:
-                self.size_range_label.SetLabel('')
+                self.cr_label.SetLabel(_("Enter vector attribute values:"))
                 
     def OnFromColSelection(self, event):
         """!Selection in combobox (for loading values) changed"""
@@ -1484,16 +1503,10 @@ class VectorColorTable(ColorTable):
                         input = gtemp)
         return True
     
-    def OnOK(self, event):
-        """!Apply selected color table, close the dialog
-            and delete temporary column"""
-        if self.OnApply(event):
-            self.DeleteTemporaryColumn()
-            self.Destroy()
-    
     def OnCancel(self, event):
         """!Do not apply any changes and close the dialog"""
         self.DeleteTemporaryColumn()
+        self.Map.Clean()
         self.Destroy()
         
 class ThematicVectorTable(VectorColorTable):
