@@ -151,9 +151,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
         self.Bind(wx.EVT_SIZE,             self.OnSize)
         self.Bind(wx.EVT_PAINT,            self.OnPaint)
-        self.Bind(wx.EVT_MOUSE_EVENTS,     self.OnMouseAction)
-        self.Bind(wx.EVT_MOTION,           self.OnMotion)
         self.Bind(wx.EVT_IDLE,             self.OnIdle)
+        self._bindMouseEvents()
         
         self.Bind(EVT_UPDATE_PROP,   self.UpdateMapObjProperties)
         self.Bind(EVT_UPDATE_VIEW,   self.UpdateView)
@@ -167,6 +166,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
 
     def __del__(self):
         self.UnloadDataLayers(force = True)
+        
+    def _bindMouseEvents(self):
+        self.Bind(wx.EVT_MOUSE_EVENTS,     self.OnMouseAction)
+        self.Bind(wx.EVT_MOTION,           self.OnMotion)
         
     def InitCPlanes(self):
         """!Initialize cutting planes list"""
