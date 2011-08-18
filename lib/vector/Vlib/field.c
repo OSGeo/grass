@@ -9,14 +9,14 @@
   OGR_L_GetFIDColumn() is working or solution found if FID not
   available
   
-  (C) 2001-2009 by the GRASS Development Team
+  (C) 2001-2009, 2011 by the GRASS Development Team
   
   This program is free software under the GNU General Public License
   (>=v2). Read the file COPYING that comes with GRASS for details.
   
   \author Original author CERL, probably Dave Gerdes or Mike Higgins.
   \author Update to GRASS 5.7 by Radim Blazek and David D. Gray.
-  \author Various updates by Martin Landa <landa.martin gmail.com>, 2009
+  \author Various updates by Martin Landa <landa.martin gmail.com>, 2009-2011
 */
 
 #include <stdlib.h>
@@ -278,28 +278,32 @@ int Vect_add_dblink(struct dblinks *p, int number, const char *name,
   \param field_name layer name
   \param type how many tables are linked to map: GV_1TABLE / GV_MTABLE 
 
-  \return pointer to new field_info structure
+  \return pointer to allocated field_info structure
  */
 struct field_info *Vect_default_field_info(struct Map_info *Map,
 					   int field, const char *field_name, int type)
 {
     struct field_info *fi;
-    char buf[1000], buf2[1000];
+    char buf[GNAME_MAX], buf2[GNAME_MAX];
     const char *schema;
-    const char *drv, *db;
     dbConnection connection;
 
     G_debug(1, "Vect_default_field_info(): map = %s field = %d", Map->name,
 	    field);
-
-    db_get_connection(&connection);
-    drv = G__getenv2("DB_DRIVER", G_VAR_MAPSET);
-    db = G__getenv2("DB_DATABASE", G_VAR_MAPSET);
-
-    G_debug(2, "drv = %s db = %s", drv, db);
+    
+    if (Map->format == GV_FORMAT_OGR_DIRECT) {
+	G_zero(&connection, sizeof(dbConnection));
+	connection.driverName = G_store("ogr");
+	connection.databaseName = G_store(Map->fInfo.ogr.dsn);
+    }
+    else {
+	db_get_connection(&connection);
+    }
+    
+    G_debug(2, "drv = %s db = %s", connection.driverName, connection.databaseName);
     
     if (!connection.driverName && !connection.databaseName) {
-	/* Set default values and create dbf db dir */
+	/* Set default values */
 	db_set_default_connection();
 	db_get_connection(&connection);
 
@@ -316,16 +320,9 @@ struct field_info *Vect_default_field_info(struct Map_info *Map,
 	G_fatal_error(_("Default database is not set"));
     }
 
-    drv = connection.driverName;
-    db = connection.databaseName;
-
     fi = (struct field_info *)G_malloc(sizeof(struct field_info));
 
     fi->number = field;
-    if (field_name != NULL)
-	fi->name = G_store(field_name);
-    else
-	fi->name = NULL;
 
     /* Table name */
     if (type == GV_1TABLE) {
@@ -337,7 +334,6 @@ struct field_info *Vect_default_field_info(struct Map_info *Map,
 	else
 	    sprintf(buf, "%s_%d", Map->name, field);
     }
-
     schema = connection.schemaName;
     if (schema && strlen(schema) > 0) {
 	sprintf(buf2, "%s.%s", schema, buf);
@@ -347,11 +343,17 @@ struct field_info *Vect_default_field_info(struct Map_info *Map,
 	fi->table = G_store(buf);
     }
 
-    fi->key = G_store(GV_KEY_COLUMN);	/* Should be: id/fid/gfid/... ? */
-    fi->database = G_store(db);
-    fi->driver = G_store(drv);
+    /* Field name */
+    if (field_name)
+	fi->name = G_store(field_name);
+    else
+	fi->name = G_store(buf);
 
-    return (fi);
+    fi->key = G_store(GV_KEY_COLUMN);	/* Should be: id/fid/gfid/... ? */
+    fi->database = G_store(connection.databaseName);
+    fi->driver = G_store(connection.driverName);
+
+    return fi;
 }
 
 /*!
@@ -542,7 +544,7 @@ int Vect_read_dblinks(struct Map_info *Map)
 			" compiled in"));
 #else
 #if GDAL_VERSION_NUM > 1320 && HAVE_OGR /* seems to be fixed after 1320 release */
-	int layer, nLayers;
+	int nLayers;
 	char *ogr_fid_col;
 
 	G_debug(3, "GDAL_VERSION_NUM: %d", GDAL_VERSION_NUM);
@@ -559,7 +561,6 @@ int Vect_read_dblinks(struct Map_info *Map)
 	}
 	if (Map->fInfo.ogr.layer == NULL) {
 	    /* get layer number */
-	    layer = -1;
 	    nLayers = OGR_DS_GetLayerCount(Map->fInfo.ogr.ds);	/* Layers = Maps in OGR DB */
 	    
 	    G_debug(3, "%d layers (maps) found in data source", nLayers);
