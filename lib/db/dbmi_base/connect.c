@@ -69,10 +69,12 @@ int db_get_connection(dbConnection * connection)
 {
   /* TODO: add checks and return DB_* error code if needed */
 
-    connection->driverName = G__getenv2("DB_DRIVER", G_VAR_MAPSET);
-    connection->databaseName = G__getenv2("DB_DATABASE", G_VAR_MAPSET);
-    connection->schemaName = G__getenv2("DB_SCHEMA", G_VAR_MAPSET);
-    connection->group = G__getenv2("DB_GROUP", G_VAR_MAPSET);
+    G_zero(connection, sizeof(dbConnection));
+    
+    connection->driverName = (char *)G__getenv2("DB_DRIVER", G_VAR_MAPSET);
+    connection->databaseName = (char *)G__getenv2("DB_DATABASE", G_VAR_MAPSET);
+    connection->schemaName = (char *)G__getenv2("DB_SCHEMA", G_VAR_MAPSET);
+    connection->group = (char *)G__getenv2("DB_GROUP", G_VAR_MAPSET);
 
     /* below commented due to new mechanism:
        connection->hostName = G__getenv("DB_HOST");
