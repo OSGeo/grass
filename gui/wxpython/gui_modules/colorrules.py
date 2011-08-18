@@ -1176,8 +1176,12 @@ class VectorColorTable(ColorTable):
             idx = int(idx)
             idx += 1
             self.properties['tmpColumn'] = name + '_' + str(idx)
-            
-        ret = gcmd.RunCommand('v.db.addcolumn',
+        
+        if self.version7:
+            modul = 'v.db.addcolumn'
+        else:
+            modul = 'v.db.addcol'
+        ret = gcmd.RunCommand(modul,
                               parent = self,
                               map = self.inmap,
                               layer = self.properties['layer'],
@@ -1186,11 +1190,14 @@ class VectorColorTable(ColorTable):
     def DeleteTemporaryColumn(self):
         """!Delete temporary column"""
         if self.inmap:
-            gcmd.RunCommand('v.db.dropcolumn',
-                            parent = self,
-                            map = self.inmap,
-                            layer = self.properties['layer'],
-                            column = self.properties['tmpColumn'])
+            if self.version7:
+                modul = 'v.db.dropcolumn'
+            else:
+                modul = 'v.db.dropcol'
+            ret = gcmd.RunCommand(modul,
+                                  map = self.inmap,
+                                  layer = self.properties['layer'],
+                                  column = self.properties['tmpColumn'])
         
     def OnLayerSelection(self, event):
         # reset choices in column selection comboboxes if layer changes
@@ -1232,7 +1239,11 @@ class VectorColorTable(ColorTable):
     def OnAddColumn(self, event):
         """!Add GRASS(RGB,SIZE,WIDTH) column if it doesn't exist"""
         if self.columnsProp[self.attributeType]['name'] not in self.fromColumn.GetItems():
-            ret = gcmd.RunCommand('v.db.addcolumn',
+            if self.version7:
+                modul = 'v.db.addcolumn'
+            else:
+                modul = 'v.db.addcol'
+            ret = gcmd.RunCommand(modul,
                                   map = self.inmap,
                                   layer = self.properties['layer'],
                                   columns = '%s %s' % (self.columnsProp[self.attributeType]['name'],
