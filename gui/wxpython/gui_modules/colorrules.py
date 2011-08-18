@@ -1365,6 +1365,7 @@ class VectorColorTable(ColorTable):
         outFile.seek(0)
         i = 0
         minim = maxim = 0.0
+        limit = 1000
         while True:
             # os.linesep doesn't work here (MSYS)
             record = outFile.readline().replace('\n', '')
@@ -1385,7 +1386,24 @@ class VectorColorTable(ColorTable):
                     
             self.rulesPanel.ruleslines[i]['value'] = col1
             self.rulesPanel.ruleslines[i][self.attributeType] = col2
+            
             i += 1
+            
+        if i > limit:
+            dlg = wx.MessageDialog (parent = self, message = _(
+                                    "Number of loaded records reached %d, "
+                                    "displaying all the records will be time-consuming "
+                                    "and may lead to computer freezing, "
+                                    "do you still want to continue?") % i,
+                                    caption = _("Too many records"),
+                                    style  =  wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION)
+            if dlg.ShowModal() == wx.ID_YES:
+                dlg.Destroy()
+            else:
+                busy.Destroy()
+                dlg.Destroy()
+                return
+            
         
         self.rulesPanel.AddRules(i, start = True)
         ret = self.rulesPanel.LoadRules()
