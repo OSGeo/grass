@@ -669,16 +669,16 @@ class AboutWindow(wx.Frame):
         contribfile = os.path.join(os.getenv("GISBASE"), "contributors.csv")
         if os.path.exists(contribfile):
             contribFile = codecs.open(contribfile, encoding = 'utf-8', mode = 'r')
-            contribs = dict()
+            contribs = list()
             errLines = list()
-            for line in contribFile.readlines():
+            for line in contribFile.readlines()[1:]:
                 line = line.rstrip('\n')
                 try:
                     cvs_id, name, email, country, osgeo_id, rfc2_agreed = line.split(',')
                 except ValueError:
                     errLines.append(line)
                     continue
-                contribs[osgeo_id] = [name, email, country]
+                contribs.append((name, email, country, osgeo_id))
             contribFile.close()
             
             if errLines:
@@ -705,8 +705,8 @@ class AboutWindow(wx.Frame):
             for item in (_('Name'), _('E-mail'), _('Country'), _('OSGeo_ID')):
                 contribBox.Add(item = wx.StaticText(parent = contribwin, id = wx.ID_ANY,
                                                     label = item))
-            for osgeo_id in sorted(contribs.keys()):
-                for item in contribs[osgeo_id] + [osgeo_id]:
+            for vals in contribs:
+                for item in vals:
                     contribBox.Add(item = wx.StaticText(parent = contribwin, id = wx.ID_ANY,
                                                         label = item))
             contribwin.sizer.Add(item = contribBox, proportion = 1,
