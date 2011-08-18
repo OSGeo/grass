@@ -852,7 +852,7 @@ class VectorColorTable(ColorTable):
             # vector attribute column to use for storing colors
             'storeColumn' : '',    
             # vector attribute column for temporary storing colors   
-            'tmpColumn' : ''
+            'tmpColumn' : 'tmp_0'
             }     
         self.columnsProp = {'color': {'name': 'GRASSRGB', 'type1': 'varchar(11)', 'type2': ['character']},
                             'size' : {'name': 'GRASSSIZE', 'type1': 'integer', 'type2': ['integer']},
@@ -1072,6 +1072,9 @@ class VectorColorTable(ColorTable):
     def OnSelectionInput(self, event):
         """!Vector map selected"""
         if event:
+            if self.inmap:
+                # switch to another map -> delete temporary column
+                self.DeleteTemporaryColumn()
             self.inmap = event.GetString()
 
         if self.inmap:
@@ -1123,9 +1126,9 @@ class VectorColorTable(ColorTable):
             self.properties['table'] = self.dbInfo.layers[layer]['table']
             
             if self.attributeType == 'color':
-                self.AddTemporaryColumn(name = 'tmpColumn', type = 'varchar(20)')
+                self.AddTemporaryColumn(type = 'varchar(11)')
             else:
-                self.AddTemporaryColumn(name = 'tmpColumn', type = 'integer')
+                self.AddTemporaryColumn(type = 'integer')
             
             # initialize column selection comboboxes 
             
@@ -1140,22 +1143,31 @@ class VectorColorTable(ColorTable):
         self.btnOK.Enable(enable)
         self.btnApply.Enable(enable)   
     
-    def AddTemporaryColumn(self, name, type):
+    def AddTemporaryColumn(self, type):
         """!Add temporary column to not overwrite the original values,
-            need to be deleted when closing dialog"""
+            need to be deleted when closing dialog and unloading map
+            
+            @param type type of column (e.g. vachar(11))"""
+        # because more than one dialog with the same map can be opened we must test column name and
+        # create another one
+        while self.properties['tmpColumn'] in self.dbInfo.GetTableDesc(self.properties['table']).keys():
+            name, idx = self.properties['tmpColumn'].split('_')
+            idx = int(idx)
+            idx += 1
+            self.properties['tmpColumn'] = name + '_' + str(idx)
+            
         ret = gcmd.RunCommand('v.db.addcolumn',
                               map = self.inmap,
                               layer = self.properties['layer'],
-                              column = '%s %s' % (name, type))
-        self.properties[name] = name
+                              column = '%s %s' % (self.properties['tmpColumn'], type))
         
-    def DeleteTemporaryColumn(self, name):
+    def DeleteTemporaryColumn(self):
         """!Delete temporary column"""
         ret = gcmd.RunCommand('v.db.dropcolumn',
                               map = self.inmap,
                               layer = self.properties['layer'],
-                              column = name)
-                       
+                              column = self.properties['tmpColumn'])
+        
     def OnLayerSelection(self, event):
         # reset choices in column selection comboboxes if layer changes
         vlayer = int(self.layerSelect.GetStringSelection())
@@ -1476,13 +1488,13 @@ class VectorColorTable(ColorTable):
         """!Apply selected color table, close the dialog
             and delete temporary column"""
         if self.OnApply(event):
+            self.DeleteTemporaryColumn()
             self.Destroy()
-            self.DeleteTemporaryColumn(name = self.properties['tmpColumn'])
     
     def OnCancel(self, event):
         """!Do not apply any changes and close the dialog"""
+        self.DeleteTemporaryColumn()
         self.Destroy()
-        self.DeleteTemporaryColumn(name = self.properties['tmpColumn'])
         
 class ThematicVectorTable(VectorColorTable):
     def __init__(self, parent, vectorType, **kwargs):
