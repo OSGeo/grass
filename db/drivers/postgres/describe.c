@@ -51,7 +51,6 @@ int describe_table(PGresult * res, dbTable ** table, cursor * c)
 
     ncols = PQnfields(res);
 
-
     /* Count columns of known type */
     kcols = 0;
     for (i = 0; i < ncols; i++) {
@@ -100,13 +99,14 @@ int describe_table(PGresult * res, dbTable ** table, cursor * c)
 	/* PG types defined in globals.h (and pg_type.h) */
 	if (sqltype == DB_SQL_TYPE_UNKNOWN) {
 	    if (gpgtype == PG_TYPE_POSTGIS_GEOM) {
-		G_warning(_("pg driver: PostGIS column '%s', type 'geometry'  will not be converted"),
+		G_warning(_("PostgreSQL driver: PostGIS column '%s', type 'geometry' "
+			    "will not be converted"),
 			  fname);
 		continue;
 	    }
 	    else {
 		/* Warn, ignore and continue */
-		G_warning(_("pg driver: column '%s', type %d  is not supported"),
+		G_warning(_("PostgreSQL driver: column '%s', type %d is not supported"),
 			  fname, pgtype);
 		continue;
 	    }
@@ -171,7 +171,8 @@ int get_column_info(PGresult * res, int col, int *pgtype, int *gpgtype,
 
     /* Convert internal type to PG_TYPE_* */
 
-    /* TODO: we should load field names from pg_type table instead of using copy of #defines */
+    /* TODO: we should load field names from pg_type table
+       instead of using copy of #defines */
     switch (*gpgtype) {
     case PG_TYPE_BIT:
     case PG_TYPE_INT2:
