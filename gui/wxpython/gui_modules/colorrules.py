@@ -587,7 +587,13 @@ class ColorTable(wx.Frame):
         
         minim = maxim = count = 0
         for line in ctable.splitlines():
-            value, color = map(lambda x: x.strip(), line.split(' '))
+            try:
+                value, color = map(lambda x: x.strip(), line.split(' '))
+            except ValueError:
+                gcmd.GMessage(parent = self, message = _("Invalid color table format"))
+                self.rulesPanel.Clear()
+                return
+            
             self.rulesPanel.ruleslines[count]['value'] = value
             self.rulesPanel.ruleslines[count]['color'] = color
             self.rulesPanel.mainPanel.FindWindowById(count + 1000).SetValue(value)
