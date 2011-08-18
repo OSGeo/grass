@@ -1,16 +1,16 @@
 /*!
- * \file db/dbmi_client/copy_tab.c
- * 
- * \brief DBMI Library (client) - copy table
- *
- * (C) 1999-2008 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public
- * License (>=v2). Read the file COPYING that comes with GRASS
- * for details.
- *
- * \author Joel Jones (CERL/UIUC), Radim Blazek
- */
+  \file db/dbmi_client/copy_tab.c
+  
+  \brief DBMI Library (client) - copy table
+  
+  (C) 1999-2008 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public
+  License (>=v2). Read the file COPYING that comes with GRASS
+  for details.
+  
+  \author Joel Jones (CERL/UIUC), Radim Blazek
+*/
 
 #include <stdlib.h>
 #include <string.h>
@@ -54,12 +54,11 @@ static int cmp(const void *pa, const void *pb)
   \return DB_OK on success
   \return DB_FAILED on failure
  */
-
-int db__copy_table(const char *from_drvname, const char *from_dbname,
-		   const char *from_tblname, const char *to_drvname,
-		   const char *to_dbname, const char *to_tblname,
-		   const char *where, const char *select, const char *selcol,
-		   int *ivals, int nvals)
+static int copy_table(const char *from_drvname, const char *from_dbname,
+		      const char *from_tblname, const char *to_drvname,
+		      const char *to_dbname, const char *to_tblname,
+		      const char *where, const char *select, const char *selcol,
+		      int *ivals, int nvals)
 {
     int col, ncols, sqltype, ctype, more, selcol_found;
     char buf[1000];
@@ -424,9 +423,9 @@ int db_copy_table(const char *from_drvname, const char *from_dbname,
 		  const char *from_tblname, const char *to_drvname,
 		  const char *to_dbname, const char *to_tblname)
 {
-    return db__copy_table(from_drvname, from_dbname, from_tblname,
-			  to_drvname, to_dbname, to_tblname,
-			  NULL, NULL, NULL, NULL, 0);
+    return copy_table(from_drvname, from_dbname, from_tblname,
+		      to_drvname, to_dbname, to_tblname,
+		      NULL, NULL, NULL, NULL, 0);
 }
 
 /*!
@@ -448,9 +447,9 @@ int db_copy_table_where(const char *from_drvname, const char *from_dbname,
 			const char *to_dbname, const char *to_tblname,
 			const char *where)
 {
-    return db__copy_table(from_drvname, from_dbname, from_tblname,
-			  to_drvname, to_dbname, to_tblname,
-			  where, NULL, NULL, NULL, 0);
+    return copy_table(from_drvname, from_dbname, from_tblname,
+		      to_drvname, to_dbname, to_tblname,
+		      where, NULL, NULL, NULL, 0);
 }
 
 /*!
@@ -472,9 +471,9 @@ int db_copy_table_select(const char *from_drvname, const char *from_dbname,
 			 const char *to_dbname, const char *to_tblname,
 			 const char *select)
 {
-    return db__copy_table(from_drvname, from_dbname, from_tblname,
-			  to_drvname, to_dbname, to_tblname,
-			  NULL, select, NULL, NULL, 0);
+    return copy_table(from_drvname, from_dbname, from_tblname,
+		      to_drvname, to_dbname, to_tblname,
+		      NULL, select, NULL, NULL, 0);
 }
 
 /*!
@@ -498,7 +497,7 @@ int db_copy_table_by_ints(const char *from_drvname, const char *from_dbname,
 			  const char *to_dbname, const char *to_tblname,
 			  const char *selcol, int *ivals, int nvals)
 {
-    return db__copy_table(from_drvname, from_dbname, from_tblname,
-			  to_drvname, to_dbname, to_tblname,
-			  NULL, NULL, selcol, ivals, nvals);
+    return copy_table(from_drvname, from_dbname, from_tblname,
+		      to_drvname, to_dbname, to_tblname,
+		      NULL, NULL, selcol, ivals, nvals);
 }
