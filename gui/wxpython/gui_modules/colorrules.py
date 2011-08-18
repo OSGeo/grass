@@ -30,6 +30,7 @@ import tempfile
 import wx
 import wx.lib.colourselect as csel
 import wx.lib.scrolledpanel as scrolled
+import wx.lib.filebrowsebutton as filebrowse
 
 import grass.script as grass
 
@@ -247,14 +248,6 @@ class RulesPanel:
 
     def SetVectorRule(self, num, val):
         """!Set vector rule"""
-##        tc = self.mainPanel.FindWindowById(num)
-##        source, target = 'sourceColumn', 'storeColumn'
-##        if self.properties[source] == '' or self.properties[target] == '':
-##            tc.SetValue('')
-##            gcmd.GMessage(parent = self.parent,
-##                          message = _("Please select attribute column "
-##                                    "and RGB color column first"))
-##        else:
         vals = []
         vals.append(val)
         try:
@@ -262,9 +255,6 @@ class RulesPanel:
         except AttributeError:
             vals.append(None)
         self.ruleslines[num - 1000]['value'] = self.SQLConvert(vals)
-##            except ValueError:
-##                tc.SetValue('')
-##                self.ruleslines[num - 1000]['value'] = ''
             
     def Enable(self, enable = True):
         """!Enable/Disable all widgets"""
@@ -371,7 +361,69 @@ class ColorTable(wx.Frame):
             type = mapLayer.GetType()
             self.selectionInput.SetValue(name)
             self.inmap = name
-            
+    
+    def _createMapSelection(self, parent):
+        """!Create map selection part of dialog"""
+        # top controls
+        if self.mapType == 'raster':
+            maplabel = _('Select raster map:')
+        else:
+            maplabel = _('Select vector map:')
+        inputBox = wx.StaticBox(parent, id = wx.ID_ANY,
+                                label = " %s " % maplabel)
+        inputSizer = wx.StaticBoxSizer(inputBox, wx.VERTICAL)
+
+        self.selectionInput = gselect.Select(parent, id = wx.ID_ANY,
+                                             size = globalvar.DIALOG_GSELECT_SIZE,
+                                             type = self.mapType)
+        # layout
+        inputSizer.Add(item = self.selectionInput,
+                       flag = wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND, border = 5)
+        return inputSizer
+    
+    def _createFileSelection(self, parent):
+        """!Create file (open/save rules) selection part of dialog"""
+        inputBox = wx.StaticBox(parent, id = wx.ID_ANY,
+                                label = " %s " % _("Import or export color table:"))
+        inputSizer = wx.StaticBoxSizer(inputBox, wx.VERTICAL)
+        
+        self.loadRules = filebrowse.FileBrowseButton(parent = parent, id = wx.ID_ANY, fileMask = '*',
+                                                size = globalvar.DIALOG_GSELECT_SIZE,
+                                                labelText = _('Load color table from file:'),
+                                                dialogTitle = _('Choose file to load color table'),
+                                                buttonText = _('Load'),
+                                                toolTip = _("Type filename or click to choose "
+                                                            "file and load color table"),
+                                                startDirectory = os.getcwd(), fileMode = wx.OPEN,
+                                                changeCallback = self.OnLoadRulesFile)
+        self.saveRules = filebrowse.FileBrowseButton(parent = parent, id = wx.ID_ANY, fileMask = '*',
+                                                size = globalvar.DIALOG_GSELECT_SIZE,
+                                                labelText = _('Save color table to file:'),
+                                                dialogTitle = _('Choose file to save color table'),
+                                                toolTip = _("Type filename or click to choose "
+                                                            "file and save color table"),
+                                                buttonText = _('Save'),
+                                                startDirectory = os.getcwd(), fileMode = wx.SAVE,
+                                                changeCallback = self.OnSaveRulesFile)
+                                
+        default = wx.Button(parent = parent, id = wx.ID_ANY, label = _("Reload default table"))   
+        # layout
+        sizer = wx.BoxSizer(wx.HORIZONTAL)
+        sizer.Add(item = self.loadRules, flag = wx.RIGHT, border = 10)
+        sizer.Add(item = default, flag = wx.ALIGN_CENTER_VERTICAL)
+        inputSizer.Add(item = sizer, flag = wx.TOP|wx.LEFT, border = 5)
+        sizer = wx.BoxSizer(wx.HORIZONTAL)
+        sizer.Add(item = self.saveRules, flag = wx.ALIGN_CENTER_VERTICAL)
+        inputSizer.Add(item = sizer, flag = wx.ALL, border = 5)
+        
+        default.Bind(wx.EVT_BUTTON, self.OnLoadDefaultTable)
+        
+        if self.mapType == 'vector':
+            # parent is collapsible pane
+            parent.SetSizer(inputSizer)
+        
+        return inputSizer   
+         
     def _createPreview(self, parent):
         """!Create preview"""
         # initialize preview display
@@ -472,7 +524,7 @@ class ColorTable(wx.Frame):
 
         @return True on success otherwise False
         """
-        ret = self.CreateColorTable(mapType = self.mapType)
+        ret = self.CreateColorTable()
         if not self.colorTable:
             self.UseAttrColumn()
         if ret:
@@ -492,6 +544,77 @@ class ColorTable(wx.Frame):
             rendered images and close the dialog"""
         self.Map.Clean()
         self.Destroy()
+        
+    def OnSaveRulesFile(self, event):
+        """!Save color table to file"""
+        path = event.GetString()
+        if not os.path.exists(path):
+            return
+        
+        rulestxt = ''   
+        for rule in self.rulesPanel.ruleslines.itervalues():
+            if not rule['value']:
+                continue
+            rulestxt += rule['value'] + ' ' + rule['color'] + '\n'
+        if not rulestxt:
+            gcmd.GMessage(message = _("Nothing to save."),
+                          parent = self)
+            return
+        
+        fd = open(path, 'w')
+        fd.write(rulestxt)
+        fd.close()            
+         
+    def OnLoadRulesFile(self, event):
+        """!Load color table from file"""
+        path = event.GetString()
+        if not os.path.exists(path):
+            return
+        
+        self.rulesPanel.Clear()
+        
+        file = open(path, 'r')
+        ctable = file.read()
+        self.ReadColorTable(ctable = ctable)
+        
+    def ReadColorTable(self, ctable):
+        """!Read color table
+        
+        @param table color table in format coming from r.colors.out"""
+        
+        rulesNumber = len(ctable.splitlines())
+        self.rulesPanel.AddRules(rulesNumber)
+        
+        minim = maxim = count = 0
+        for line in ctable.splitlines():
+            value, color = map(lambda x: x.strip(), line.split(' '))
+            self.rulesPanel.ruleslines[count]['value'] = value
+            self.rulesPanel.ruleslines[count]['color'] = color
+            self.rulesPanel.mainPanel.FindWindowById(count + 1000).SetValue(value)
+            rgb = list()
+            for c in color.split(':'):
+                rgb.append(int(c))
+            self.rulesPanel.mainPanel.FindWindowById(count + 2000).SetColour(rgb)
+            # range
+            try:
+                if float(value) < minim:
+                    minim = float(value)
+                if float(value) > maxim:
+                    maxim = float(value)
+            except ValueError: # nv, default
+                pass
+            count += 1
+        
+        if self.mapType == 'vector':
+            # raster min, max is known from r.info
+            self.properties['min'], self.properties['max'] = minim, maxim
+            self.SetRangeLabel()
+            
+        self.OnPreview(tmp = True)  
+         
+    def OnLoadDefaultTable(self, event):
+        """!Load internal color table"""
+        self.LoadTable()
         
     def LoadTable(self, mapType = 'raster'):
         """!Load current color table (using `r(v).colors.out`)
@@ -520,37 +643,10 @@ class ColorTable(wx.Frame):
         else:
             self.OnPreview()
             return
-            
-        rulesNumber = len(ctable.splitlines())
-        self.rulesPanel.AddRules(rulesNumber)
         
-        minim = maxim = count = 0
-        for line in ctable.splitlines():
-            value, color = map(lambda x: x.strip(), line.split(' '))
-            self.rulesPanel.ruleslines[count]['value'] = value
-            self.rulesPanel.ruleslines[count]['color'] = color
-            self.rulesPanel.mainPanel.FindWindowById(count + 1000).SetValue(value)
-            rgb = list()
-            for c in color.split(':'):
-                rgb.append(int(c))
-            self.rulesPanel.mainPanel.FindWindowById(count + 2000).SetColour(rgb)
-            # range
-            try:
-                if float(value) < minim:
-                    minim = float(value)
-                if float(value) > maxim:
-                    maxim = float(value)
-            except ValueError: # nv, default
-                pass
-            count += 1
-        
-        if self.mapType == 'vector':
-            # raster min, max is known from r.info
-            self.properties['min'], self.properties['max'] = minim, maxim
-            self.SetRangeLabel()
-        self.OnPreview(tmp = True)    
+        self.ReadColorTable(ctable = ctable)    
     
-    def CreateColorTable(self, force = False, mapType = 'raster'):
+    def CreateColorTable(self, tmp = False):
         """!Creates color table
 
         @return True on success
@@ -581,26 +677,16 @@ class ColorTable(wx.Frame):
             output.write(rulestxt)
         finally:
             output.close()
-        
-        flags = ''
-        if mapType == 'raster':
-            if not force and not self.ovrwrtcheck.IsChecked():
-                flags = 'w'
                 
-        cmd = ['%s.colors' % mapType[0],#r.colors/v.colors
-                'flags=%s' % flags,
+        cmd = ['%s.colors' % self.mapType[0],#r.colors/v.colors
                 'map=%s' % self.inmap,
                 'rules=%s' % gtemp]
-        if mapType == 'vector' and self.properties['sourceColumn']:
+        if self.mapType == 'vector' and self.properties['sourceColumn']\
+                                    and self.properties['sourceColumn'] != 'cat':
             cmd.append('column=%s' % self.properties['sourceColumn'])
         cmd = utils.CmdToTuple(cmd)
-        ret = gcmd.RunCommand(cmd[0], **cmd[1])
-                        
-        if ret != 0 and mapType == 'raster':
-            gcmd.GMessage(_("Color table already exists. "
-                            "Check out 'replace existing color table' to "
-                            "overwrite it."),
-                          parent = self)
+        ret = gcmd.RunCommand(cmd[0], **cmd[1])               
+        if ret != 0:
             return False
         
         return True
@@ -616,7 +702,7 @@ class ColorTable(wx.Frame):
             self.layer.SetCmd(cmdlist)
         
         # apply new color table and display preview
-        self.CreateColorTable(force = True, mapType = self.mapType)
+        self.CreateColorTable(tmp = True)
         self.preview.UpdatePreview()
         
     def RunHelp(self, cmd):
@@ -652,49 +738,12 @@ class RasterColorTable(ColorTable):
         
         ColorTable.__init__(self, parent,
                             title = _('Create new color table for raster map'), **kwargs)
-       
-       
-        # additional bindings for raster color management
-        self.Bind(wx.EVT_BUTTON, self.OnSaveTable, self.btnSave)
         
         self._initLayer()
         
         self.SetMinSize(self.GetSize()) 
         self.CentreOnScreen()
         self.Show()
-    
-    def _createMapSelection(self, parent):
-        """!Create map selection part of dialog"""
-        # top controls
-        maplabel = _('Select raster map:')
-        inputBox = wx.StaticBox(parent, id = wx.ID_ANY,
-                                label = " %s " % maplabel)
-        inputSizer = wx.StaticBoxSizer(inputBox, wx.VERTICAL)
-
-        self.selectionInput = gselect.Select(parent, id = wx.ID_ANY,
-                                             size = globalvar.DIALOG_GSELECT_SIZE,
-                                             type = 'cell')
-        self.ovrwrtcheck = wx.CheckBox(parent, id = wx.ID_ANY,
-                                       label = _('replace existing color table'))
-        self.ovrwrtcheck.SetValue(UserSettings.Get(group = 'cmd', key = 'overwrite', subkey = 'enabled'))
-        
-        self.btnSave = wx.Button(parent, id = wx.ID_SAVE)
-        self.btnSave.SetToolTipString(_('Save color table to file'))
-            
-        # layout
-        inputSizer.Add(item = self.selectionInput,
-                       flag = wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND, border = 5)
-        replaceSizer = wx.BoxSizer(wx.HORIZONTAL)
-        replaceSizer.Add(item = self.ovrwrtcheck, proportion = 1,
-                         flag = wx.ALL | wx.ALIGN_CENTER_VERTICAL, border = 1)
-    
-        replaceSizer.Add(item = self.btnSave, proportion = 0,
-                        flag = wx.ALIGN_RIGHT | wx.ALL, border = 5)
-        
-        inputSizer.Add(item = replaceSizer, proportion = 1,
-                       flag = wx.ALL | wx.EXPAND, border = 0)
-    
-        return inputSizer
     
     def _doLayout(self):
         """!Do main layout"""
@@ -704,6 +753,12 @@ class RasterColorTable(ColorTable):
         #
         mapSelection = self._createMapSelection(parent = self)
         sizer.Add(item = mapSelection, proportion = 0,
+                  flag = wx.ALL | wx.EXPAND, border = 5)
+        #
+        # manage extern tables
+        #
+        fileSelection = self._createFileSelection(parent = self)
+        sizer.Add(item = fileSelection, proportion = 0,
                   flag = wx.ALL | wx.EXPAND, border = 5)
         #
         # body & preview
@@ -731,7 +786,9 @@ class RasterColorTable(ColorTable):
         """!Raster map selected"""
         if event:
             self.inmap = event.GetString()
-
+    
+        self.loadRules.SetValue('')
+        self.saveRules.SetValue('')
         if self.inmap:
             if not grass.find_file(name = self.inmap, element = 'cell')['file']:
                 self.inmap = None
@@ -813,28 +870,6 @@ class RasterColorTable(ColorTable):
                                 parent = self,
                                 flags = 'r',
                                 map = self.inmap)
-    
-    def OnSaveTable(self, event):
-        """!Save color table to file"""
-        rulestxt = ''   
-        for rule in self.rulesPanel.ruleslines.itervalues():
-            if not rule['value']:
-                continue
-            rulestxt += rule['value'] + ' ' + rule['color'] + '\n'
-        if not rulestxt:
-            gcmd.GMessage(message = _("Nothing to save."),
-                          parent = self)
-            return
-        
-        dlg = wx.FileDialog(parent = self,
-                            message = _("Save color table to file"),
-                            defaultDir = os.getcwd(), style = wx.SAVE | wx.OVERWRITE_PROMPT)
-        if dlg.ShowModal() == wx.ID_OK:
-            path = dlg.GetPath()
-            fd = open(path, 'w')
-            fd.write(rulestxt)
-            fd.close()            
-        dlg.Destroy()
         
     def OnHelp(self, event):
         """!Show GRASS manual page"""
@@ -894,22 +929,6 @@ class VectorColorTable(ColorTable):
 
         self.SetSize((-1, 735))
         self.Show()
-
-    def _createMapSelection(self, parent):
-        """!Create map selection part of dialog"""
-        # top controls
-        maplabel = _('Select vector map:')
-        inputBox = wx.StaticBox(parent, id = wx.ID_ANY,
-                                label = " %s " % maplabel)
-        inputSizer = wx.StaticBoxSizer(inputBox, wx.VERTICAL)
-        
-        self.selectionInput = gselect.Select(parent, id = wx.ID_ANY,
-                                             size = globalvar.DIALOG_GSELECT_SIZE,
-                                             type = 'vector')
-        inputSizer.Add(item = self.selectionInput, proportion = 1,
-                       flag = wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND, border = 5)
-                    
-        return inputSizer
     
     def _createVectorAttrb(self, parent):
         """!Create part of dialog with layer/column selection"""
@@ -996,6 +1015,18 @@ class VectorColorTable(ColorTable):
         sizer.Add(item = mapSelection, proportion = 0,
                   flag = wx.ALL | wx.EXPAND, border = 5)
         #
+        # manage extern tables
+        #
+        if self.version7 and self.attributeType == 'color':
+            self.cp = wx.CollapsiblePane(scrollPanel, label = _("Import or export color table"),
+                                         winid = wx.ID_ANY,
+                                        style = wx.CP_DEFAULT_STYLE|wx.CP_NO_TLW_RESIZE)
+            self.Bind(wx.EVT_COLLAPSIBLEPANE_CHANGED, self.OnPaneChanged, self.cp)
+        
+            self._createFileSelection(parent = self.cp.GetPane())
+            sizer.Add(item = self.cp, proportion = 0,
+                      flag = wx.ALL | wx.EXPAND, border = 5)
+        #
         # set vector attributes
         #
         vectorAttrb = self._createVectorAttrb(parent = scrollPanel)
@@ -1027,8 +1058,17 @@ class VectorColorTable(ColorTable):
         
         self.SetSizer(mainsizer)
         mainsizer.Layout()
-        mainsizer.Fit(self)       
-    
+        mainsizer.Fit(self)     
+          
+    def OnPaneChanged(self, event = None):
+        # redo the layout
+        self.Layout()
+        # and also change the labels
+        if self.cp.IsExpanded():
+            self.cp.SetLabel('')
+        else:
+            self.cp.SetLabel(_("Import or export color table"))
+        
     def CheckMapset(self):
         """!Check if current vector is in current mapset"""
         if grass.find_file(name = self.inmap,
@@ -1095,7 +1135,11 @@ class VectorColorTable(ColorTable):
                 # switch to another map -> delete temporary column
                 self.DeleteTemporaryColumn()
             self.inmap = event.GetString()
-
+            
+        if self.version7 and self.attributeType == 'color': 
+            self.loadRules.SetValue('')
+            self.saveRules.SetValue('')
+        
         if self.inmap:
             if not grass.find_file(name = self.inmap, element = 'vector')['file']:
                 self.inmap = None
@@ -1472,16 +1516,16 @@ class VectorColorTable(ColorTable):
             
             self.parent.curr_page.maptree.GetPyData(layer)[0]['maplayer'].SetCmd(cmdlist)
         
-    def CreateColorTable(self, force = False, mapType = 'vector'):
+    def CreateColorTable(self, tmp = False):
         """!Create color rules (color table or color column)"""
         if self.colorTable:
-            ret = ColorTable.CreateColorTable(self, force, mapType)
+            ret = ColorTable.CreateColorTable(self)
         else:
-            ret = self.UpdateColorColumn(force)
+            ret = self.UpdateColorColumn(tmp)
             
         return ret
         
-    def UpdateColorColumn(self, force):
+    def UpdateColorColumn(self, tmp):
         """!Creates color table
 
         @return True on success
@@ -1492,7 +1536,7 @@ class VectorColorTable(ColorTable):
         for rule in self.rulesPanel.ruleslines.itervalues():
             if not rule['value']: # skip empty rules
                 continue
-            if force:
+            if tmp:
                 rgb_col = self.properties['tmpColumn']
             else:
                 rgb_col = self.properties['storeColumn']
