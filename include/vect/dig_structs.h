@@ -1048,7 +1048,7 @@ struct Map_info
       
       - GV_FORMAT_NATIVE
       - GV_FORMAT_OGR
-      - GV_FORMAT_DIRECT
+      - GV_FORMAT_OGR_DIRECT
     */
     int format;
     /*!
