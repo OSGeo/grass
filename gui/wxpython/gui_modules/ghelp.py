@@ -705,7 +705,7 @@ class AboutWindow(wx.Frame):
             for item in (_('Name'), _('E-mail'), _('Country'), _('OSGeo_ID')):
                 contribBox.Add(item = wx.StaticText(parent = contribwin, id = wx.ID_ANY,
                                                     label = item))
-            for vals in contribs:
+            for vals in sorted(contribs, key = lambda x: x[0]):
                 for item in vals:
                     contribBox.Add(item = wx.StaticText(parent = contribwin, id = wx.ID_ANY,
                                                         label = item))
