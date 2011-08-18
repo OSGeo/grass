@@ -329,7 +329,6 @@ class ColorTable(wx.Frame):
         @param nviz True if ColorTable is called from nviz thematic mapping
         """
         self.parent = parent # GMFrame
-        
         wx.Frame.__init__(self, parent, id, title, style = style, **kwargs)
         
         self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
@@ -876,7 +875,7 @@ class VectorColorTable(ColorTable):
                             'size' : {'name': 'GRASSSIZE', 'type1': 'integer', 'type2': ['integer']},
                             'width': {'name': 'GRASSWIDTH', 'type1': 'integer', 'type2': ['integer']}}
         ColorTable.__init__(self, parent = parent,
-                            title = _('Create new color rules for vector map'), **kwargs)   
+                            title = _('Create new color rules for vector map'), **kwargs)
         
         # additional bindings for vector color management
         self.Bind(wx.EVT_COMBOBOX, self.OnLayerSelection, self.layerSelect)
@@ -892,6 +891,8 @@ class VectorColorTable(ColorTable):
             self.cr_label.SetLabel(_("Enter vector attribute values:"))
         self.SetMinSize(self.GetSize()) 
         self.CentreOnScreen()
+
+        self.SetSize((-1, 735))
         self.Show()
 
     def _createMapSelection(self, parent):
@@ -1177,16 +1178,19 @@ class VectorColorTable(ColorTable):
             self.properties['tmpColumn'] = name + '_' + str(idx)
             
         ret = gcmd.RunCommand('v.db.addcolumn',
+                              parent = self,
                               map = self.inmap,
                               layer = self.properties['layer'],
                               column = '%s %s' % (self.properties['tmpColumn'], type))
         
     def DeleteTemporaryColumn(self):
         """!Delete temporary column"""
-        ret = gcmd.RunCommand('v.db.dropcolumn',
-                              map = self.inmap,
-                              layer = self.properties['layer'],
-                              column = self.properties['tmpColumn'])
+        if self.inmap:
+            gcmd.RunCommand('v.db.dropcolumn',
+                            parent = self,
+                            map = self.inmap,
+                            layer = self.properties['layer'],
+                            column = self.properties['tmpColumn'])
         
     def OnLayerSelection(self, event):
         # reset choices in column selection comboboxes if layer changes
