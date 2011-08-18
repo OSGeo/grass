@@ -49,6 +49,9 @@ class MapWindow(object):
     
     Superclass for BufferedWindow class (2D display mode), and GLWindow
     (3D display mode).
+    
+    Subclasses have to define _bindMouseEvents() method which binds
+    MouseEvent handlers.
     """
     def __init__(self, parent, id = wx.ID_ANY,
                  Map = None, tree = None, lmgr = None, **kwargs):
@@ -65,6 +68,88 @@ class MapWindow(object):
             'use'  : "pointer",
             'box'  : "point"
             }
+        
+        # stores overriden cursor
+        self._overridenCursor = None
+
+    def RegisterMouseEventHandler(self, event, handler, cursor = None):
+        """!Binds event handler
+        
+        Call event.Skip() in handler to allow default processing in MapWindow.
+        
+        \code
+        # your class methods
+        def OnButton(self, event):
+            # current map display's map window
+            # expects LayerManager to be the parent
+            self.mapwin = self.parent.GetLayerTree().GetMapDisplay().GetWindow()
+            if self.mapwin.RegisterMouseEventHandler(wx.EVT_LEFT_DOWN, self.OnMouseAction,
+                                                     wx.StockCursor(wx.CURSOR_CROSS)):
+                self.mapwin.Raise()
+            else:
+                # handle that you cannot get coordinates
+        
+        def OnMouseAction(self, event):
+            # get real world coordinates of mouse click
+            coor = self.mapwin.Pixel2Cell(event.GetPositionTuple()[:])
+            self.text.SetLabel('Coor: ' + str(coor))
+            self.mapwin.UnregisterMouseEventHandler(wx.EVT_LEFT_DOWN)
+            event.Skip()
+        \endcode
+        
+        @param event one of mouse events
+        @param handler function to handle event
+        @param cursor cursor which temporary overrides current cursor
+        
+        @return True if successfull
+        @return False if event cannot be bind
+        """
+        
+        # if it is a VDigitWindow it cannot be used
+        # hasattr is ugly
+        if hasattr(self, "digit"):
+            return False
+        
+        self.Bind(event, handler)
+        self.mouse['useBeforeGenericEvent'] = self.mouse['use']
+        self.mouse['use'] = 'genericEvent'
+        
+        if cursor:
+            self._overridenCursor = self.GetCursor()
+            self.SetCursor(cursor)
+        
+        return True
+
+
+    def UnregisterMouseEventHandler(self, event):
+        """!Unbinds event handler a restores previous state
+        
+        You should unbind to restore normal MapWindow behaviour.
+        Note that this operation will unbind any other external (non-MapWindow) handlers.
+        
+        @param event event to unbind
+        
+        @return True if successfull
+        @return False if event cannot be unbind
+        """
+        if hasattr(self, "digit"):
+            return False
+        
+        # it is not yet posible in wxPython to unbind exact event
+        ret = self.Unbind(event)
+        
+        # restore bind state
+        self._bindMouseEvents()
+        
+        # restore mouse use (previous state)
+        self.mouse['use'] = self.mouse['useBeforeGenericEvent']
+        
+        # restore overriden cursor
+        if self._overridenCursor:
+            self.SetCursor(self._overridenCursor)
+        
+        return ret
+
 
     def OnMotion(self, event):
         """!Track mouse motion and update statusbar
@@ -223,8 +308,7 @@ class BufferedWindow(MapWindow, wx.Window):
         self.Bind(wx.EVT_PAINT,        self.OnPaint)
         self.Bind(wx.EVT_SIZE,         self.OnSize)
         self.Bind(wx.EVT_IDLE,         self.OnIdle)
-        self.Bind(wx.EVT_MOUSE_EVENTS, self.MouseActions)
-        self.Bind(wx.EVT_MOTION,       self.OnMotion)
+        self._bindMouseEvents()
         
         self.processMouse = True
         
@@ -275,6 +359,10 @@ class BufferedWindow(MapWindow, wx.Window):
         self.pdcDec = wx.PseudoDC()
         # pseudoDC for temporal objects (select box, measurement tool, etc.)
         self.pdcTmp = wx.PseudoDC()
+        
+    def _bindMouseEvents(self):
+        self.Bind(wx.EVT_MOUSE_EVENTS, self.MouseActions)
+        self.Bind(wx.EVT_MOTION,       self.OnMotion)
         
     def Draw(self, pdc, img = None, drawid = None, pdctype = 'image', coords = [0, 0, 0, 0]):
         """!Draws map and overlay decorations
