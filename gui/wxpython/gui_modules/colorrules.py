@@ -1498,11 +1498,11 @@ class VectorColorTable(ColorTable):
             return
         
         cmdlist = ['d.vect',
-                    '-a',
                    'map=%s' % self.inmap,
                    'type=point,line,boundary,area']
                 
         if self.attributeType == 'color':
+            cmdlist.append('flags=a')
             cmdlist.append('rgb_column=%s' % self.properties['tmpColumn'])
         elif self.attributeType == 'size':
             cmdlist.append('size_column=%s' % self.properties['tmpColumn'])
