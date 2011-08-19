@@ -27,14 +27,14 @@ void db_init_handle(dbHandle * handle)
 }
 
 /*!
-  \brief Set handle
+  \brief Set handle (database and schema name)
 
   \param handle pointer to dbHandle
   \param dbName database name
   \param dbSchema schema name
 
   \return DB_OK on success
-  \return error code on failure
+  \return DB_FAILED on failure
 */
 int db_set_handle(dbHandle * handle, const char *dbName, const char *dbSchema)
 {
