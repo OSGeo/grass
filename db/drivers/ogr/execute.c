@@ -41,17 +41,16 @@ int db__driver_execute_immediate(dbString * sql)
     
     G_debug(3, "\tSQL: '%s'", db_get_string(sql));
     
+    /* try RDBMS SQL */
+    OGR_DS_ExecuteSQL(hDs, db_get_string(sql), NULL, NULL);
+    if (CPLGetLastErrorType() == CE_None)
+	return DB_OK;
+    
     /* parse UPDATE statement */
     res = parse_sql_update(db_get_string(sql), &table, &cols, &ncols, &where);
     G_debug(3, "\tUPDATE: table=%s, where=%s, ncols=%d", table, where ? where : "", ncols);
-    if (res != 0) {
-	/* try RDBMS SQL */
-	hLayer = OGR_DS_ExecuteSQL(hDs, db_get_string(sql), NULL, NULL);
-	if (CPLGetLastErrorType() != CE_None)
-	    return DB_FAILED;
-
-	return DB_OK;
-    }
+    if (res != 0)
+	return DB_FAILED;
     
     /* get OGR layer */
     hLayer = OGR_DS_GetLayerByName(hDs, table);
@@ -179,10 +178,10 @@ int parse_sql_update(const char *sql, char **table, column_info **cols, int *nco
     strncpy(c, p, n);
     c[n] = '\0';
     
-    token = G_tokenize(c, ",");
+    token = G_tokenize2(c, ",", "'");
     *ncols = G_number_of_tokens(token);
     *cols = (column_info *)G_malloc(sizeof(column_info) * (*ncols));
-
+    
     for (n = 0; n < (*ncols); n++) {
 	itoken = G_tokenize(token[n], "=");
 	if (G_number_of_tokens(itoken) != 2)
