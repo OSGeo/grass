@@ -793,6 +793,10 @@ int Vect_write_dblinks(struct Map_info *Map)
     char file[GPATH_MAX], buf[GPATH_MAX];
     struct dblinks *dbl;
 
+    if (Map->format != GV_FORMAT_NATIVE)
+	/* nothing to write for non-native formats */
+	return 0;
+    
     G_debug(1, "Vect_write_dblinks(): map = %s, mapset = %s", Map->name,
 	    Map->mapset);
 
@@ -826,6 +830,7 @@ int Vect_write_dblinks(struct Map_info *Map)
     fclose(fd);
 
     G_debug(1, "Dblinks written");
+    
     return 0;
 }
 
