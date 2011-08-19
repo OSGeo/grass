@@ -625,6 +625,7 @@ int G_write_grid3_timestamp(const char *, const struct TimeStamp *);
 
 /* token.c */
 char **G_tokenize(const char *, const char *);
+char **G_tokenize2(const char *, const char *, const char *);
 int G_number_of_tokens(char **);
 void G_free_tokens(char **);
 
