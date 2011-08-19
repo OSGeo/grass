@@ -73,6 +73,8 @@ geopoint *Gp_load_sites(const char *name, int *nsites, int *has_z)
     }
 
     G_get_set_window(&wind);
+    Vect_set_constraint_region(&map, wind.north, wind.south, wind.east,
+			       wind.west, PORT_DOUBLE_MAX, -PORT_DOUBLE_MAX);
 
     /* get ndim */
     *has_z = 0;
