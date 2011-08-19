@@ -473,13 +473,13 @@ class MenuTree(ItemTree):
                     self.SetPyData(itemNew, data)
         
 class AboutWindow(wx.Frame):
-    def __init__(self, parent):
-        """!Create custom About Window
+    """!Create custom About Window
 
-        @todo improve styling
-        """
-        wx.Frame.__init__(self, parent = parent, id = wx.ID_ANY, size = (550,400), 
-                          title = _('About GRASS GIS'))
+    @todo improve styling
+    """
+    def __init__(self, parent, size = (750, 400), 
+                 title = _('About GRASS GIS'), **kwargs):
+        wx.Frame.__init__(self, parent = parent, id = wx.ID_ANY, size = size, **kwargs)
         
         panel = wx.Panel(parent = self, id = wx.ID_ANY)
         
@@ -518,12 +518,6 @@ class AboutWindow(wx.Frame):
                                                label = 'http://grass.osgeo.org'),
                           pos = (0, 1),
                           flag = wx.ALIGN_LEFT)
-
-        # infoGridSizer.Add(item = hl.HyperLinkCtrl(parent = self, id = wx.ID_ANY,
-        #                                           label = 'http://grass.osgeo.org',
-        #                                           URL = 'http://grass.osgeo.org'),
-        #                   pos = (0, 1),
-        #                   flag = wx.LEFT)
         
         infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
                                                label = _('GIS Library Revision:')),
@@ -541,35 +535,18 @@ class AboutWindow(wx.Frame):
                       flag = wx.EXPAND | wx.ALL | wx.ALIGN_CENTER | wx.ALIGN_CENTER_VERTICAL,
                       border = 25)
         
-        #
-        # create pages
-        #
-        copyrightwin = self.PageCopyright()
-        licensewin   = self.PageLicense()
-        authorwin    = self.PageCredit()
-        contribwin   = self.PageContributors()
-        transwin     = self.PageTranslators()
-
         # create a flat notebook for displaying information about GRASS
-        nbstyle = FN.FNB_VC8 | \
-                FN.FNB_BACKGROUND_GRADIENT | \
-                FN.FNB_TABS_BORDER_SIMPLE | \
-                FN.FNB_NO_X_BUTTON
-        
-        if globalvar.hasAgw:
-            aboutNotebook = FN.FlatNotebook(panel, id = wx.ID_ANY, agwStyle = nbstyle)
-        else:
-            aboutNotebook = FN.FlatNotebook(panel, id = wx.ID_ANY, style = nbstyle)
+        aboutNotebook = menuform.GNotebook(panel, style = globalvar.FNPageStyle | FN.FNB_NO_X_BUTTON) 
         aboutNotebook.SetTabAreaColour(globalvar.FNPageColor)
         
-        # make pages for About GRASS notebook
-        pg1 = aboutNotebook.AddPage(infoTxt,      text = _("Info"))
-        pg2 = aboutNotebook.AddPage(copyrightwin, text = _("Copyright"))
-        pg3 = aboutNotebook.AddPage(licensewin,   text = _("License"))
-        pg4 = aboutNotebook.AddPage(authorwin,    text = _("Authors"))
-        pg5 = aboutNotebook.AddPage(contribwin,   text = _("Contributors"))
-        pg5 = aboutNotebook.AddPage(transwin,     text = _("Translators"))
-        
+        for title, win in ((_("Info"), infoTxt),
+                           (_("Copyright"), self._pageCopyright()),
+                           (_("License"), self._pageLicense()),
+                           (_("Authors"), self._pageCredit()),
+                           (_("Contributors"), self._pageContributors()),
+                           (_("Extra contributors"), self._pageContributors(extra = True)),
+                           (_("Translators"), self._pageTranslators())):
+            aboutNotebook.AddPage(page = win, text = title)
         wx.CallAfter(aboutNotebook.SetSelection, 0)
         
         # buttons
@@ -579,9 +556,8 @@ class AboutWindow(wx.Frame):
                      flag = wx.ALL | wx.ALIGN_RIGHT,
                      border = 5)
         # bindings
-        # self.aboutNotebook.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnAGPageChanged)
         btnClose.Bind(wx.EVT_BUTTON, self.OnCloseWindow)
-
+        
         infoTxt.SetSizer(infoSizer)
         infoSizer.Fit(infoTxt)
         
@@ -593,7 +569,7 @@ class AboutWindow(wx.Frame):
         panel.SetSizer(sizer)
         self.Layout()
     
-    def PageCopyright(self):
+    def _pageCopyright(self):
         """Copyright information"""
         copyfile = os.path.join(os.getenv("GISBASE"), "COPYING")
         if os.path.exists(copyfile):
@@ -618,7 +594,7 @@ class AboutWindow(wx.Frame):
         
         return copyrightwin
     
-    def PageLicense(self):
+    def _pageLicense(self):
         """Licence about"""
         licfile = os.path.join(os.getenv("GISBASE"), "GPL.TXT")
         if os.path.exists(licfile):
@@ -641,7 +617,7 @@ class AboutWindow(wx.Frame):
         
         return licensewin
     
-    def PageCredit(self):
+    def _pageCredit(self):
         """Credit about"""
                 # credits
         authfile = os.path.join(os.getenv("GISBASE"), "AUTHORS")
@@ -664,9 +640,12 @@ class AboutWindow(wx.Frame):
         
         return authorwin
 
-    def PageContributors(self):
+    def _pageContributors(self, extra = False):
         """Contributors info"""
-        contribfile = os.path.join(os.getenv("GISBASE"), "contributors.csv")
+        if extra:
+            contribfile = os.path.join(os.getenv("GISBASE"), "contributors_extra.csv")
+        else:
+            contribfile = os.path.join(os.getenv("GISBASE"), "contributors.csv")
         if os.path.exists(contribfile):
             contribFile = codecs.open(contribfile, encoding = 'utf-8', mode = 'r')
             contribs = list()
@@ -674,35 +653,46 @@ class AboutWindow(wx.Frame):
             for line in contribFile.readlines()[1:]:
                 line = line.rstrip('\n')
                 try:
-                    cvs_id, name, email, country, osgeo_id, rfc2_agreed = line.split(',')
+                    if extra:
+                        name, email, rfc2_agreed = line.split(',')
+                    else:
+                        cvs_id, name, email, country, osgeo_id, rfc2_agreed = line.split(',')
                 except ValueError:
                     errLines.append(line)
                     continue
-                contribs.append((name, email, country, osgeo_id))
+                if extra:
+                    contribs.append((name, email))
+                else:
+                    contribs.append((name, email, country, osgeo_id))
+            
             contribFile.close()
             
             if errLines:
                 gcmd.GError(parent = self,
-                            message = _("Error when reading file '%s'.") % translatorsfile + \
+                            message = _("Error when reading file '%s'.") % contribfile + \
                                 "\n\n" + _("Lines:") + " %s" % \
                                 os.linesep.join(map(utils.DecodeString, errLines)))
         else:
             contribs = None
         
         contribwin = scrolled.ScrolledPanel(self, id = wx.ID_ANY, 
-                                           style = wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER)
-        contribwin.SetAutoLayout(1)
+                                           style = wx.TAB_TRAVERSAL | wx.SUNKEN_BORDER)
+        contribwin.SetAutoLayout(True)
         contribwin.SetupScrolling()
         contribwin.sizer = wx.BoxSizer(wx.VERTICAL)
         
         if not contribs:
             contribtxt = wx.StaticText(contribwin, id = wx.ID_ANY,
-                                       label = _('%s file missing') % 'contibutors.csv')
+                                       label = _('%s file missing') % contribfile)
             contribwin.sizer.Add(item = contribtxt, proportion = 1,
                                  flag = wx.EXPAND | wx.ALL, border = 3)
         else:
-            contribBox = wx.FlexGridSizer(cols = 4, vgap = 5, hgap = 5)
-            for item in (_('Name'), _('E-mail'), _('Country'), _('OSGeo_ID')):
+            if extra:
+                items = (_('Name'), _('E-mail'))
+            else:
+                items = (_('Name'), _('E-mail'), _('Country'), _('OSGeo_ID'))
+            contribBox = wx.FlexGridSizer(cols = len(items), vgap = 5, hgap = 5)
+            for item in items:
                 contribBox.Add(item = wx.StaticText(parent = contribwin, id = wx.ID_ANY,
                                                     label = item))
             for vals in sorted(contribs, key = lambda x: x[0]):
@@ -717,7 +707,7 @@ class AboutWindow(wx.Frame):
         
         return contribwin
 
-    def PageTranslators(self):
+    def _pageTranslators(self):
         """Translators info"""
         translatorsfile = os.path.join(os.getenv("GISBASE"), "translators.csv")
         if os.path.exists(translatorsfile):
