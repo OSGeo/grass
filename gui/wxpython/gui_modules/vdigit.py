@@ -830,7 +830,8 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         """
         # parent
         self.parent = parent # mapdisplay.BufferedWindow class instance
-
+        self.digit = parent.digit
+        
         # map name
         self.map = map
 
@@ -848,7 +849,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
                     self.cats[line][layer] = list(cats[line][layer])
             
             layers = []
-            for layer in self.parent.parent.digit.GetLayers():
+            for layer in self.digit.GetLayers():
                 layers.append(str(layer))
         
         # make copy of cats (used for 'reload')
@@ -1158,8 +1159,8 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         """!Cancel button pressed
         """
         self.parent.parent.dialogs['category'] = None
-        if self.parent.parent.digit:
-            self.parent.parent.digit.GetDisplay().SetSelected([])
+        if self.digit:
+            self.digit.GetDisplay().SetSelected([])
             self.parent.UpdateMap(render = False)
         else:
             self.parent.parent.OnRender(None)
@@ -1202,8 +1203,8 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
                     else:
                         add = False
                         
-                    newfid = self.parent.parent.digit.SetLineCats(fid, layer,
-                                                                      catList, add)
+                    newfid = self.digit.SetLineCats(fid, layer,
+                                                    catList, add)
                     if len(self.cats.keys()) == 1:
                         self.fidText.SetLabel("%d" % newfid)
                     else:
