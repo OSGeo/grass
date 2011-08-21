@@ -417,7 +417,8 @@ dbDriver *create_table(OGRLayerH hLayer, const struct field_info *Fi)
 	sqltype = db_get_column_sqltype(column);
 	ogrtype = sqltype_to_ogrtype(sqltype);
 		
-	if (OGR_FD_GetFieldIndex(hFeatureDefn, colname) > -1) {
+	if (strcmp(OGR_L_GetFIDColumn(hLayer), colname) == 0 ||
+	    OGR_FD_GetFieldIndex(hFeatureDefn, colname) > -1) {
 	    /* field already exists */
 	    continue;
 	}
@@ -425,7 +426,7 @@ dbDriver *create_table(OGRLayerH hLayer, const struct field_info *Fi)
 	hFieldDefn = OGR_Fld_Create(colname, ogrtype);
 	/* OGR_Fld_SetWidth(hFieldDefn, length); */
 	if (OGR_L_CreateField(hLayer, hFieldDefn, TRUE) != OGRERR_NONE) {
-	    G_warning(_("Creating field <%s> failed\n"), colname);
+	    G_warning(_("Creating field <%s> failed"), colname);
 	    db_close_database_shutdown_driver(driver);
 	    return NULL;
 	}
