@@ -351,7 +351,6 @@ int extract_line(int num_index, int *num_array, struct Map_info *In,
 	}
 
     }				/* end lines section */
-    G_percent(1, 1, 1);
     
     return 0;
 }
