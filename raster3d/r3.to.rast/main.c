@@ -52,7 +52,7 @@ void fatal_error(void *map, int *fd, int depths, char *errorMsg)
     /* Close files and exit */
     if (map != NULL) {
         if (!Rast3d_close(map))
-            Rast3d_fatal_error(_("Unable to close 3Draster map"));
+            Rast3d_fatal_error(_("Unable to close 3D raster map"));
     }
 
     if (fd != NULL) {
@@ -233,13 +233,13 @@ int main(int argc, char *argv[])
                               RASTER3D_DEFAULT_WINDOW, RASTER3D_TILE_SAME_AS_FILE,
                               RASTER3D_USE_CACHE_DEFAULT);
         if (map == NULL)
-            Rast3d_fatal_error(_("Error opening 3d raster map <%s>"),
+            Rast3d_fatal_error(_("Error opening 3D raster map <%s>"),
                            param.input->answer);
 
 
         /*Get the region of the map */
         Rast3d_get_region_struct_map(map, &region);
-        /*set this region as current 3d window for map */
+        /*set this region as current 3D window for map */
         Rast3d_set_window_map(map, &region);
         /*Set the 2d region appropriate */
         Rast3d_extract2d_region(&region, &region2d);
@@ -261,7 +261,7 @@ int main(int argc, char *argv[])
                            param.input->answer);
     }
 
-    /*Check if the g3d-region is equal to the 2d rows and cols */
+    /*Check if the g3d-region is equal to the 2D rows and cols */
     rows = Rast_window_rows();
     cols = Rast_window_cols();
 
@@ -379,7 +379,7 @@ int main(int argc, char *argv[])
 
     /* Close files and exit */
     if (!Rast3d_close(map))
-        fatal_error(map, NULL, 0, _("Error closing 3d raster map"));
+        fatal_error(map, NULL, 0, _("Unable to close 3D raster map"));
 
     map = NULL;
 
