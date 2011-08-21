@@ -269,27 +269,30 @@ class RulesPanel:
         
         
     def LoadRules(self):
-        message = ""
+        message = ""        
         for item in range(len(self.ruleslines)):
-            self.mainPanel.FindWindowById(item + 1000).SetValue(self.ruleslines[item]['value'])
-            r, g, b = (0, 0, 0) # default
-            if not self.ruleslines[item][self.attributeType]:
+            try:
+                self.mainPanel.FindWindowById(item + 1000).SetValue(self.ruleslines[item]['value'])
+                r, g, b = (0, 0, 0) # default
+                if not self.ruleslines[item][self.attributeType]:
+                    if self.attributeType == 'color':
+                        self.ruleslines[item][self.attributeType] = '%d:%d:%d' % (r, g, b)
+                    elif self.attributeType == 'size':
+                        self.ruleslines[item][self.attributeType] = 100                
+                    elif self.attributeType == 'width':
+                        self.ruleslines[item][self.attributeType] = 2
+                    
                 if self.attributeType == 'color':
-                    self.ruleslines[item][self.attributeType] = '%d:%d:%d' % (r, g, b)
-                elif self.attributeType == 'size':
-                    self.ruleslines[item][self.attributeType] = 100                
-                elif self.attributeType == 'width':
-                    self.ruleslines[item][self.attributeType] = 2
-                
-            if self.attributeType == 'color':
-                try:
-                    r, g, b = map(int, self.ruleslines[item][self.attributeType].split(':'))
-                except ValueError, e:
-                    message =  _("Bad color format. Use color format '0:0:0'")
-                self.mainPanel.FindWindowById(item + 2000).SetValue((r, g, b))
-            else:
-                value = float(self.ruleslines[item][self.attributeType])
-                self.mainPanel.FindWindowById(item + 2000).SetValue(value)
+                    try:
+                        r, g, b = map(int, self.ruleslines[item][self.attributeType].split(':'))
+                    except ValueError, e:
+                        message =  _("Bad color format. Use color format '0:0:0'")
+                    self.mainPanel.FindWindowById(item + 2000).SetValue((r, g, b))
+                else:
+                    value = float(self.ruleslines[item][self.attributeType])
+                    self.mainPanel.FindWindowById(item + 2000).SetValue(value)
+            except:
+                continue
                 
         if message:
             gcmd.GMessage(parent = self.parent, message = message)
@@ -300,7 +303,7 @@ class RulesPanel:
     def SQLConvert(self, vals):
         """!Prepare value for SQL query"""
         if vals[0].isdigit():
-            sqlrule = '%s>=%s' % (self.properties['sourceColumn'], vals[0])
+            sqlrule = '%s=%s' % (self.properties['sourceColumn'], vals[0])
             if vals[1]:
                 sqlrule += ' AND %s<%s' % (self.properties['sourceColumn'], vals[1])
         else:
@@ -553,7 +556,7 @@ class ColorTable(wx.Frame):
         
         rulestxt = ''   
         for rule in self.rulesPanel.ruleslines.itervalues():
-            if not rule['value']:
+            if 'value' not in rule:
                 continue
             rulestxt += rule['value'] + ' ' + rule['color'] + '\n'
         if not rulestxt:
@@ -661,7 +664,7 @@ class ColorTable(wx.Frame):
         rulestxt = ''
         
         for rule in self.rulesPanel.ruleslines.itervalues():
-            if not rule['value']: # skip empty rules
+            if 'value' not in rule: # skip empty rules
                 continue
             
             if rule['value'] not in ('nv', 'default') and \
@@ -1366,6 +1369,10 @@ class VectorColorTable(ColorTable):
         i = 0
         minim = maxim = 0.0
         limit = 1000
+        
+        colvallist = []
+        readvals = False
+        
         while True:
             # os.linesep doesn't work here (MSYS)
             record = outFile.readline().replace('\n', '')
@@ -1383,28 +1390,32 @@ class VectorColorTable(ColorTable):
                 minim = float(col1)
             if float(col1) > maxim:
                 maxim = float(col1)
-                    
-            self.rulesPanel.ruleslines[i]['value'] = col1
-            self.rulesPanel.ruleslines[i][self.attributeType] = col2
+
+                
+            # color rules list should only have unique values of col1, not all records
+            if col1 not in colvallist:                
+                self.rulesPanel.ruleslines[i]['value'] = col1
+                self.rulesPanel.ruleslines[i][self.attributeType] = col2
+
+                colvallist.append(col1)            
+                i += 1
             
-            i += 1
+            if i > limit and readvals == False:
+                dlg = wx.MessageDialog (parent = self, message = _(
+                                        "Number of loaded records reached %d, "
+                                        "displaying all the records will be time-consuming "
+                                        "and may lead to computer freezing, "
+                                        "do you still want to continue?") % i,
+                                        caption = _("Too many records"),
+                                        style  =  wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION)
+                if dlg.ShowModal() == wx.ID_YES:
+                    readvals = True
+                    dlg.Destroy()
+                else:
+                    busy.Destroy()
+                    dlg.Destroy()
+                    return
             
-        if i > limit:
-            dlg = wx.MessageDialog (parent = self, message = _(
-                                    "Number of loaded records reached %d, "
-                                    "displaying all the records will be time-consuming "
-                                    "and may lead to computer freezing, "
-                                    "do you still want to continue?") % i,
-                                    caption = _("Too many records"),
-                                    style  =  wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION)
-            if dlg.ShowModal() == wx.ID_YES:
-                dlg.Destroy()
-            else:
-                busy.Destroy()
-                dlg.Destroy()
-                return
-            
-        
         self.rulesPanel.AddRules(i, start = True)
         ret = self.rulesPanel.LoadRules()
         
@@ -1558,8 +1569,9 @@ class VectorColorTable(ColorTable):
         rulestxt = ''
         
         for rule in self.rulesPanel.ruleslines.itervalues():
-            if not rule['value']: # skip empty rules
-                continue
+            if 'value' not in rule: # skip empty rules
+                break
+            
             if tmp:
                 rgb_col = self.properties['tmpColumn']
             else:
