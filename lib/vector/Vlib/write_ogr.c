@@ -7,7 +7,12 @@
 
    Inspired by v.out.ogr's code.
 
-   (C) 2009-2010 by the GRASS Development Team
+   \todo OGR version of V2__delete_area_cats_from_cidx_nat()
+   \todo function to delete corresponding entry in fidx
+   \todo OGR version of V2__add_area_cats_to_cidx_nat
+   \todo OGR version of V2__add_line_to_topo_nat
+
+   (C) 2009-2011 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -22,20 +27,16 @@
 #ifdef HAVE_OGR
 #include <ogr_api.h>
 
-static int write_attributes(int, const struct field_info *,
+static int sqltype_to_ogrtype(int);
+static dbDriver *create_table(OGRLayerH, const struct field_info *);
+static int write_attributes(dbDriver *, int, const struct field_info *,
 			    OGRLayerH, OGRFeatureH);
 
-/* TODO:
- * OGR version of V2__delete_area_cats_from_cidx_nat()
- * function to delete corresponding entry in fidx
- * OGR version of V2__add_area_cats_to_cidx_nat
- * OGR version of V2__add_line_to_topo_nat
- */
-
 void V2__add_line_to_topo_ogr(struct Map_info *Map, int line,
-			    const struct line_pnts *points, const struct line_cats *cats)
+			      const struct line_pnts *points,
+			      const struct line_cats *cats)
 {
-   /* recycle code from build_ogr */
+    /* recycle code from build_ogr */
     G_warning("feature not yet implemented, coming soon...");
 
     return;
@@ -52,12 +53,15 @@ void V2__add_line_to_topo_ogr(struct Map_info *Map, int line,
   \return feature offset into file
   \return -1 on error
 */
-off_t V1_write_line_ogr(struct Map_info *Map,
-			int type, const struct line_pnts *points, const struct line_cats *cats)
+off_t V1_write_line_ogr(struct Map_info *Map, int type,
+			const struct line_pnts *points,
+			const struct line_cats *cats)
 {
     int i, cat, ret;
 
     struct field_info *Fi;
+    
+    dbDriver *driver;
     
     OGRGeometryH       Ogr_geometry;
     OGRFeatureH        Ogr_feature;
@@ -69,6 +73,20 @@ off_t V1_write_line_ogr(struct Map_info *Map,
 	    return -1;
     }
 
+    /* check for attributes */
+    Fi = Vect_get_field(Map, cats->field[0]);
+    driver = NULL;
+    cat = -1;      /* no attributes to be written */
+    if (Fi && cats->n_cats > 0) {
+	cat = cats->cat[0];
+	if (cats->n_cats > 1) {
+	    G_warning(_("Feature has more categories, using "
+			"category %d (from layer %d)"),
+		      cat, cats->field[0]);
+	}
+	driver = create_table(Map->fInfo.ogr.layer, Fi);
+    }
+    
     Ogr_featuredefn = OGR_L_GetLayerDefn(Map->fInfo.ogr.layer);
     Ogr_geom_type = OGR_FD_GetGeomType(Ogr_featuredefn);
     
@@ -120,15 +138,9 @@ off_t V1_write_line_ogr(struct Map_info *Map,
     OGR_F_SetGeometry(Ogr_feature, Ogr_geometry);
 
     /* write attributes */
-    Fi = Vect_get_field(Map, cats->field[0]);
-    if (Fi && cats->n_cats > 0) {
-	cat = cats->cat[0];
-	if (cats->n_cats > 1) {
-	    G_warning(_("Feature has more categories, using "
-			"category %d (from layer %d)"),
-		      cat, cats->field[0]);
-	}
-	write_attributes(cat, Fi, Map->fInfo.ogr.layer, Ogr_feature);
+    if (driver && cat > -1) {
+	write_attributes(driver, cat, Fi, Map->fInfo.ogr.layer, Ogr_feature);
+	db_close_database_shutdown_driver(driver);
     }
     
     /* write feature into layer */
@@ -348,20 +360,97 @@ int V2_delete_line_ogr(struct Map_info *Map, off_t line)
     return ret;
 }
 
-int write_attributes(int cat, const struct field_info *Fi,
+dbDriver *create_table(OGRLayerH hLayer, const struct field_info *Fi)
+{
+    int col, ncols;
+    int sqltype, ogrtype;
+    
+    const char *colname;
+    
+    dbDriver *driver;
+    dbHandle handle;
+    dbCursor cursor;
+    dbTable *table;
+    dbColumn *column;
+    dbString sql;
+    
+    OGRFieldDefnH hFieldDefn;
+    OGRFeatureDefnH hFeatureDefn;
+
+    db_init_string(&sql);
+    db_init_handle(&handle);
+    
+    driver = db_start_driver(Fi->driver);
+    if (!driver) {
+	G_warning(_("Unable to start driver <%s>"), Fi->driver);
+	return NULL;
+    }
+    db_set_handle(&handle, Fi->database, NULL);
+    if (db_open_database(driver, &handle) != DB_OK) {
+	G_warning(_("Unable to open database <%s> by driver <%s>"),
+		  Fi->database, Fi->driver);
+	db_close_database_shutdown_driver(driver);
+	return NULL;
+    }
+    
+    /* to get no data */
+    db_set_string(&sql, "select * from ");
+    db_append_string(&sql, Fi->table);
+    db_append_string(&sql, " where 0 = 1");	
+    
+    if (db_open_select_cursor(driver, &sql, &cursor, DB_SEQUENTIAL) !=
+	DB_OK) {
+	G_warning(_("Unable to open select cursor: '%s'"),
+		  db_get_string(&sql));
+	db_close_database_shutdown_driver(driver);
+	return NULL;
+    }
+
+    table = db_get_cursor_table(&cursor);
+    ncols = db_get_table_number_of_columns(table);
+
+    hFeatureDefn = OGR_L_GetLayerDefn(hLayer);
+    
+    for (col = 0; col < ncols; col++) {
+	column = db_get_table_column(table, col);
+	colname = db_get_column_name(column);	
+	sqltype = db_get_column_sqltype(column);
+	ogrtype = sqltype_to_ogrtype(sqltype);
+		
+	if (OGR_FD_GetFieldIndex(hFeatureDefn, colname) > -1) {
+	    /* field already exists */
+	    continue;
+	}
+
+	hFieldDefn = OGR_Fld_Create(colname, ogrtype);
+	/* OGR_Fld_SetWidth(hFieldDefn, length); */
+	if (OGR_L_CreateField(hLayer, hFieldDefn, TRUE) != OGRERR_NONE) {
+	    G_warning(_("Creating field <%s> failed\n"), colname);
+	    db_close_database_shutdown_driver(driver);
+	    return NULL;
+	}
+	
+	OGR_Fld_Destroy(hFieldDefn);
+    }
+
+    return driver;
+}
+
+int write_attributes(dbDriver *driver, int cat, const struct field_info *Fi,
 		     OGRLayerH Ogr_layer, OGRFeatureH Ogr_feature)
 {
     int j, ogrfieldnum;
     char buf[2000];
     int ncol, colsqltype, colctype, more;
-    const char *fidcol;
-    dbDriver *Driver;
-    dbTable *Table;
+    const char *fidcol, *colname;
+    dbTable *table;
     dbString dbstring;
-    dbColumn *Column;
+    dbColumn *column;
     dbCursor cursor;
-    dbValue *Value;
+    dbValue *value;
 
+    OGRFieldDefnH hFieldDefn;
+    
     G_debug(3, "write_attributes(): cat = %d", cat);
 
     if (cat < 0) {
@@ -377,12 +466,8 @@ int write_attributes(int cat, const struct field_info *Fi,
     G_debug(4, "SQL: %s", buf);
     db_set_string(&dbstring, buf);
 
-    /* open driver & select data */
-    Driver = db_start_driver_open_database(Fi->driver, Fi->database);
-    if (!Driver)
-	G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
-		      Fi->database, Fi->driver);
-    if (db_open_select_cursor(Driver, &dbstring, &cursor, DB_SEQUENTIAL) != DB_OK) {
+    /* select data */
+    if (db_open_select_cursor(driver, &dbstring, &cursor, DB_SEQUENTIAL) != DB_OK) {
 	G_fatal_error(_("Unable to select attributes for category %d"),
 		      cat);
     }
@@ -393,57 +478,63 @@ int write_attributes(int cat, const struct field_info *Fi,
     }
     
     if (!more) {
-	G_warning (_("No database record for category %d - export of 'cat' disabled"),
-		   cat);
+	G_warning(_("No database record for category %d, "
+		    "no attributes will be written"),
+		  cat);
 	return -1;
     }
 
     fidcol = OGR_L_GetFIDColumn(Ogr_layer); 
 
-    Table = db_get_cursor_table(&cursor);
-    ncol = db_get_table_number_of_columns(Table);
+    table = db_get_cursor_table(&cursor);
+    ncol = db_get_table_number_of_columns(table);
     for (j = 0; j < ncol; j++) {
-	Column = db_get_table_column(Table, j);
-	if (fidcol && strcmp(db_get_column_name(Column), fidcol) == 0) {
+	column = db_get_table_column(table, j);
+	colname = db_get_column_name(column);
+	if (fidcol && *fidcol && strcmp(colname, fidcol) == 0) {
 	    /* skip fid column */
 	    continue;
 	}
-	Value = db_get_column_value(Column);
-	db_convert_column_value_to_string(Column, &dbstring);	/* for debug only */
+	value = db_get_column_value(column);
+	/* for debug only */
+	db_convert_column_value_to_string(column, &dbstring);	
 	G_debug(2, "col %d : val = %s", j,
 		db_get_string(&dbstring));
 	
-	colsqltype = db_get_column_sqltype(Column);
+	colsqltype = db_get_column_sqltype(column);
 	colctype = db_sqltype_to_Ctype(colsqltype);
 	G_debug(2, "  colctype = %d", colctype);
 	
-	ogrfieldnum = OGR_F_GetFieldIndex(Ogr_feature,
-					  db_get_column_name(Column));
+	ogrfieldnum = OGR_F_GetFieldIndex(Ogr_feature, colname);
 	if (ogrfieldnum < 0) {
-	    G_warning(_("Uknown column <%s>"),
-		      db_get_column_name(Column));
-	    continue;
+	    /* create field if not exists */
+	    hFieldDefn = OGR_Fld_Create(colname, 
+					sqltype_to_ogrtype(colsqltype));
+	    if (OGR_L_CreateField(Ogr_layer, hFieldDefn, TRUE) != OGRERR_NONE)
+		G_warning(_("Unable to create field <%s>"), colname);
+	    ogrfieldnum = OGR_F_GetFieldIndex(Ogr_feature, colname);
 	}
+	    
 	/* Reset */
 	OGR_F_UnsetField(Ogr_feature, ogrfieldnum);
 	
 	/* prevent writing NULL values */
-	if (!db_test_value_isnull(Value)) {
+	if (!db_test_value_isnull(value)) {
 	    switch (colctype) {
 	    case DB_C_TYPE_INT:
 		OGR_F_SetFieldInteger(Ogr_feature, ogrfieldnum,
-				      db_get_value_int(Value));
+				      db_get_value_int(value));
 		break;
 	    case DB_C_TYPE_DOUBLE:
 		OGR_F_SetFieldDouble(Ogr_feature, ogrfieldnum,
-				     db_get_value_double(Value));
+				     db_get_value_double(value));
 		break;
 	    case DB_C_TYPE_STRING:
 		OGR_F_SetFieldString(Ogr_feature, ogrfieldnum,
-				     db_get_value_string(Value));
+				     db_get_value_string(value));
 		break;
 	    case DB_C_TYPE_DATETIME:
-		db_convert_column_value_to_string(Column,
+		db_convert_column_value_to_string(column,
 						  &dbstring);
 		OGR_F_SetFieldString(Ogr_feature, ogrfieldnum,
 				     db_get_string(&dbstring));
@@ -453,12 +544,38 @@ int write_attributes(int cat, const struct field_info *Fi,
     }
 
     db_close_cursor (&cursor);
-    db_close_database(Driver);
-    db_shutdown_driver(Driver);
     
     db_free_string(&dbstring);
     
     return 1;
+}
+
+int sqltype_to_ogrtype(int sqltype)
+{
+    switch(sqltype) {
+    case DB_SQL_TYPE_CHARACTER:
+    case DB_SQL_TYPE_TEXT:
+	return OFTString;
+    case DB_SQL_TYPE_SMALLINT:
+    case DB_SQL_TYPE_INTEGER:
+    case DB_SQL_TYPE_SERIAL:
+	return OFTInteger;
+    case DB_SQL_TYPE_REAL:
+    case DB_SQL_TYPE_DOUBLE_PRECISION:
+    case DB_SQL_TYPE_DECIMAL:
+    case DB_SQL_TYPE_NUMERIC:
+	return OFTReal;
+    case DB_SQL_TYPE_DATE:
+	return OFTDate;
+    case DB_SQL_TYPE_TIME:	
+	return OFTTime;
+    case DB_SQL_TYPE_TIMESTAMP:
+	return OFTDateTime;
+    case DB_SQL_TYPE_INTERVAL:
+	return OFTString; /* ??? */
+    }
+
+    return OFTString;
 }
 
 #endif /* HAVE_OGR */
