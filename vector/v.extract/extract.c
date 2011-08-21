@@ -29,7 +29,7 @@ int cmp(const void *pa, const void *pb)
 }
 
 /* check if cat is in list */
-int in_list(int cat)
+static int in_list(int cat)
 {
     if (bsearch(&cat, cats_array, ncats_array, sizeof(int), cmp))
 	return 1;
@@ -38,8 +38,8 @@ int in_list(int cat)
 }
 
 /* output reclass cats */
-void extract_cats(struct line_cats *Cats, int type_only, int field, int new,
-		  int reverse)
+static void extract_cats(struct line_cats *Cats, int type_only, int field, int new,
+			 int reverse)
 {
     int i, tmp;
     static struct line_cats *TCats = NULL;
@@ -105,8 +105,8 @@ void extract_cats(struct line_cats *Cats, int type_only, int field, int new,
 }
 
 /* check if output cats of left and right area match */
-int areas_new_cats_match(struct Map_info *In, int area1, int area2,
-			 int type_only, int field, int new, int reverse)
+static int areas_new_cats_match(struct Map_info *In, int area1, int area2,
+				int type_only, int field, int new, int reverse)
 {
     int i, j, found;
     int centroid1, centroid2;
@@ -157,10 +157,9 @@ int areas_new_cats_match(struct Map_info *In, int area1, int area2,
     return 1;
 }
 
-int
-xtract_line(int num_index, int *num_array, struct Map_info *In,
-	    struct Map_info *Out, int new, int select_type, int dissolve,
-	    int field, int type_only, int reverse)
+int extract_line(int num_index, int *num_array, struct Map_info *In,
+		 struct Map_info *Out, int new, int select_type, int dissolve,
+		 int field, int type_only, int reverse)
 {
     int line, nlines;
     struct line_pnts *Points;
@@ -352,6 +351,7 @@ xtract_line(int num_index, int *num_array, struct Map_info *In,
 	}
 
     }				/* end lines section */
-
-    return (0);
+    G_percent(1, 1, 1);
+    
+    return 0;
 }
