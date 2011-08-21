@@ -315,6 +315,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                       id = self.popupID['export'])
             
             self.popupMenu.AppendSeparator()
+
+            self.popupMenu.Append(self.popupID['color'], _("Set color table"))
+            self.Bind (wx.EVT_MENU, self.OnVectorColorTable, id = self.popupID['color'])
+
             self.popupMenu.Append(self.popupID['attr'], text = _("Show attribute data"))
             self.Bind(wx.EVT_MENU, self.lmgr.OnShowAttributeTable, id = self.popupID['attr'])
 
@@ -397,7 +401,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             
             self.popupMenu.AppendSeparator()
             self.popupMenu.Append(self.popupID['color'], _("Set color table"))
-            self.Bind (wx.EVT_MENU, self.OnColorTable, id = self.popupID['color'])
+            self.Bind (wx.EVT_MENU, self.OnRasterColorTable, id = self.popupID['color'])
             self.popupMenu.Append(self.popupID['hist'], _("Histogram"))
             self.Bind (wx.EVT_MENU, self.OnHistogram, id = self.popupID['hist'])
             self.popupMenu.Append(self.popupID['univar'], _("Univariate raster statistics"))
@@ -518,10 +522,16 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             # show new display
             self.profileFrame.Show()
         
-    def OnColorTable(self, event):
+    def OnRasterColorTable(self, event):
         """!Set color table for raster map"""
         name = self.GetPyData(self.layer_selected)[0]['maplayer'].GetName()
         menuform.GUI(parent = self, centreOnParent = False).ParseCommand(['r.colors',
+                                                                          'map=%s' % name])
+
+    def OnVectorColorTable(self, event):
+        """!Set color table for vector map"""
+        name = self.GetPyData(self.layer_selected)[0]['maplayer'].GetName()
+        menuform.GUI(parent = self, centreOnParent = False).ParseCommand(['v.colors',
                                                                           'map=%s' % name])
         
     def OnHistogram(self, event):
