@@ -252,7 +252,7 @@ class MapFrame(wx.Frame):
         # Update fancy gui style
         #
         self._mgr.AddPane(self.MapWindow, wx.aui.AuiPaneInfo().CentrePane().
-                          Dockable(False).BestSize((-1,-1)).
+                          Dockable(False).BestSize((-1,-1)).Name('2d').
                           CloseButton(False).DestroyOnClose(True).
                           Layer(0))
         self._mgr.Update()
@@ -317,21 +317,23 @@ class MapFrame(wx.Frame):
                                                 Map = self.Map, tree = self.tree,
                                                 lmgr = self._layerManager)
             self.MapWindowVDigit.Show()
+            self._mgr.AddPane(self.MapWindowVDigit, wx.aui.AuiPaneInfo().CentrePane().
+                          Dockable(False).BestSize((-1,-1)).Name('vdigit').
+                          CloseButton(False).DestroyOnClose(True).
+                          Layer(0))
         
         self.MapWindow = self.MapWindowVDigit
         
-        self._mgr.DetachPane(self.MapWindow2D)
-        self.MapWindow2D.Hide()
-        
+        if self._mgr.GetPane('2d').IsShown():
+            self._mgr.GetPane('2d').Hide()
+        elif self._mgr.GetPane('3d').IsShown():
+            self._mgr.GetPane('3d').Hide()
+        self._mgr.GetPane('vdigit').Show()
         self.toolbars['vdigit'] = toolbars.VDigitToolbar(parent = self, mapcontent = self.Map,
                                                          layerTree = self.tree,
                                                          log = log)
         self.MapWindowVDigit.SetToolbar(self.toolbars['vdigit'])
         
-        self._mgr.AddPane(self.MapWindowVDigit, wx.aui.AuiPaneInfo().CentrePane().
-                          Dockable(False).BestSize((-1,-1)).
-                          CloseButton(False).DestroyOnClose(True).
-                          Layer(0))
         self._mgr.AddPane(self.toolbars['vdigit'],
                           wx.aui.AuiPaneInfo().
                           Name("vdigittoolbar").Caption(_("Vector Digitizer Toolbar")).
@@ -346,8 +348,8 @@ class MapFrame(wx.Frame):
         self.MapWindow.pen          = wx.Pen(colour = 'red',   width = 2, style = wx.SOLID)
         self.MapWindow.polypen      = wx.Pen(colour = 'green', width = 2, style = wx.SOLID)
 
-    def _addToolbarNviz(self):
-        """!Add 3D view mode toolbar
+    def AddNviz(self):
+        """!Add 3D view mode window
         """
         import nviz
         
@@ -360,8 +362,6 @@ class MapFrame(wx.Frame):
                                     "Switching back to 2D display mode.\n\nDetails: %s" % nviz.errorMsg))
             return
         
-        # add Nviz toolbar and disable 2D display mode tools
-        self.toolbars['nviz'] = toolbars.NvizToolbar(self, self.Map)
         # disable 3D mode for other displays
         for page in range(0, self._layerManager.gm_cb.GetPageCount()):
             if self._layerManager.gm_cb.GetPage(page) != self._layerManager.curr_page:
@@ -379,7 +379,7 @@ class MapFrame(wx.Frame):
                                                switchPage = False)
         self.statusbar.SetStatusText(_("Please wait, loading data..."), 0)
         
-        # create GL window & NVIZ toolbar
+        # create GL window
         if not self.MapWindow3D:
             self.MapWindow3D = nviz.GLWindow(self, id = wx.ID_ANY,
                                              Map = self.Map, tree = self.tree, lmgr = self._layerManager)
@@ -390,7 +390,14 @@ class MapFrame(wx.Frame):
             self.MapWindow3D.UpdateOverlays()
             
             # add Nviz notebookpage
-            self._layerManager.AddNviz()
+            self._layerManager.AddNvizTools()
+            
+            # switch from MapWindow to MapWindowGL
+            self._mgr.GetPane('2d').Hide()
+            self._mgr.AddPane(self.MapWindow3D, wx.aui.AuiPaneInfo().CentrePane().
+                              Dockable(False).BestSize((-1,-1)).Name('3d').
+                              CloseButton(False).DestroyOnClose(True).
+                              Layer(0))
             
             self.MapWindow3D.OnPaint(None) # -> LoadData
             self.MapWindow3D.Show()
@@ -402,29 +409,36 @@ class MapFrame(wx.Frame):
             del os.environ['GRASS_REGION']
             
             self.MapWindow3D.UpdateOverlays()
+            
+            # switch from MapWindow to MapWindowGL
+            self._mgr.GetPane('2d').Hide()
+            self._mgr.GetPane('3d').Show()
+            
             # add Nviz notebookpage
-            self._layerManager.AddNviz()
+            self._layerManager.AddNvizTools()
+            
             for page in ('view', 'light', 'fringe', 'constant', 'cplane'):
                 self._layerManager.nviz.UpdatePage(page)
-
-        # switch from MapWindow to MapWindowGL
-        # add nviz toolbar
-        self._mgr.DetachPane(self.MapWindow2D)
-        self.MapWindow2D.Hide()
-        self._mgr.AddPane(self.MapWindow3D, wx.aui.AuiPaneInfo().CentrePane().
-                          Dockable(False).BestSize((-1,-1)).
-                          CloseButton(False).DestroyOnClose(True).
-                          Layer(0))
-        self._mgr.AddPane(self.toolbars['nviz'],
-                          wx.aui.AuiPaneInfo().
-                          Name("nviztoolbar").Caption(_("3D View Toolbar")).
-                          ToolbarPane().Top().Row(1).
-                          LeftDockable(False).RightDockable(False).
-                          BottomDockable(False).TopDockable(True).
-                          CloseButton(False).Layer(2).
-                          BestSize((self.toolbars['nviz'].GetBestSize())))
         
         self.SetStatusText("", 0)
+        self._mgr.Update()
+    
+    def RemoveNviz(self):
+        """!Restore 2D view"""
+        self.statusbar.SetStatusText(_("Please wait, unloading data..."), 0)
+        self._layerManager.goutput.WriteCmdLog(_("Switching back to 2D view mode..."),
+                                               switchPage = False)
+        self.MapWindow3D.UnloadDataLayers(force = True)
+        # switch from MapWindowGL to MapWindow
+        self._mgr.GetPane('2d').Show()
+        self._mgr.GetPane('3d').Hide()
+
+        self.MapWindow = self.MapWindow2D
+        # remove nviz notebook page
+        self._layerManager.RemoveNvizTools()
+        
+        self.MapWindow.UpdateMap()
+        self._mgr.Update()
         
     def AddToolbar(self, name):
         """!Add defined toolbar to the window
@@ -434,7 +448,6 @@ class MapFrame(wx.Frame):
          - 'vdigit'  - vector digitizer
          - 'gcpdisp' - GCP Manager Display
          - 'georect' - georectifier
-         - 'nviz'    - 3D view mode
         """
         # default toolbar
         if name == "map":
@@ -486,40 +499,20 @@ class MapFrame(wx.Frame):
         self.toolbars[name] = None
         
         if name == 'vdigit':
-            self._mgr.DetachPane(self.MapWindowVDigit)
-            self.MapWindowVDigit.Hide()
-            self.MapWindow2D.Show()
-            self._mgr.AddPane(self.MapWindow2D, wx.aui.AuiPaneInfo().CentrePane().
-                              Dockable(False).BestSize((-1,-1)).
-                              CloseButton(False).DestroyOnClose(True).
-                              Layer(0))
+            self._mgr.GetPane('vdigit').Hide()
+            self._mgr.GetPane('2d').Show()
             self.MapWindow = self.MapWindow2D
-        
-        elif name == 'nviz':
-            self.statusbar.SetStatusText(_("Please wait, unloading data..."), 0)
-            self._layerManager.goutput.WriteCmdLog(_("Switching back to 2D view mode..."),
-                                                   switchPage = False)
-            self.MapWindow3D.UnloadDataLayers(force = True)
-            # switch from MapWindowGL to MapWindow
-            self._mgr.DetachPane(self.MapWindow3D)
-            self.MapWindow3D.Hide()
-            self.MapWindow2D.Show()
-            self._mgr.AddPane(self.MapWindow2D, wx.aui.AuiPaneInfo().CentrePane().
-                              Dockable(False).BestSize((-1,-1)).
-                              CloseButton(False).DestroyOnClose(True).
-                              Layer(0))
-            self.MapWindow = self.MapWindow2D
-            # remove nviz notebook page
-            self._layerManager.RemoveNviz()
             
-            self.MapWindow.UpdateMap()
-        
         self.toolbars['map'].combo.SetValue(_("2D view"))
         self.toolbars['map'].Enable2D(True)
         self.statusbarWin['toggle'].Enable(True)
         
         self._mgr.Update()
-
+    
+    def IsPaneShown(self, name):
+        """!Check if pane (toolbar, mapWindow ...) of given name is currently shown"""
+        return self._mgr.GetPane(name).IsShown()
+    
     def _initDisplay(self):
         """!Initialize map display, set dimensions and map region
         """

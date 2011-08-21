@@ -32,7 +32,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
                  settings = UserSettings):
         PreferencesBaseDialog.__init__(self, parent = parent, title = title,
                                        settings = settings)
-        self.toolWin = self.parent.GetLayerManager().nviz
+        self.toolWin = self.parent.nviz
         self.win = dict()
         
         # create notebook pages
