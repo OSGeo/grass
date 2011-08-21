@@ -10,7 +10,7 @@ Classes:
  - GCPDisplayToolbar
  - VDigitToolbar
  - ProfileToolbar
- - NvizToolbar
+ - LMNvizToolbar
  - ModelToolbar
  - HistogramToolbar
  - LMWorkspaceToolbar
@@ -148,10 +148,10 @@ class AbstractToolbar(wx.ToolBar):
                         'desc' : self.defaultAction.get('desc', '') }
         
     def FixSize(self, width):
-	"""!Fix toolbar width on Windows
-        
-	@todo Determine why combobox causes problems here
-	"""
+        """!Fix toolbar width on Windows
+            
+        @todo Determine why combobox causes problems here
+        """
         if platform.system() == 'Windows':
             size = self.GetBestSize()
             self.SetSize((size[0] + width, size[1]))
@@ -318,9 +318,9 @@ class MapToolbar(AbstractToolbar):
             self.Enable2D(True)
         
         elif tool == self.toolId['3d'] and \
-                not self.parent.toolbars['nviz']:
+                not (self.parent.MapWindow3D and self.parent.IsPaneShown('3d')):
             self.ExitToolbars()
-            self.parent.AddToolbar("nviz")
+            self.parent.AddNviz()
             
         elif tool == self.toolId['vdigit'] and \
                 not self.parent.toolbars['vdigit']:
@@ -331,8 +331,8 @@ class MapToolbar(AbstractToolbar):
     def ExitToolbars(self):
         if self.parent.toolbars['vdigit']:
             self.parent.toolbars['vdigit'].OnExit()
-        if self.parent.toolbars['nviz']:       
-            self.parent.toolbars['nviz'].OnExit()
+        if self.parent.GetLayerManager().IsPaneShown('toolbarNviz'):
+            self.parent.RemoveNviz()
         
     def Enable2D(self, enabled):
         """!Enable/Disable 2D display mode specific tools"""
@@ -1212,12 +1212,11 @@ class ProfileToolbar(AbstractToolbar):
                                       self.parent.OnQuit),
                                      ))
     
-class NvizToolbar(AbstractToolbar):
+class LMNvizToolbar(AbstractToolbar):
     """!Nviz toolbar
     """
-    def __init__(self, parent, mapcontent):
-        self.mapcontent = mapcontent
-        self.lmgr = parent.GetLayerManager()
+    def __init__(self, parent):
+        self.lmgr = parent
         
         AbstractToolbar.__init__(self, parent)
         
@@ -1232,60 +1231,18 @@ class NvizToolbar(AbstractToolbar):
     def _toolbarData(self):
         """!Toolbar data"""
         icons = Icons['nviz']
-        return self._getToolbarData((("view", icons["view"],
-                                      self.OnShowPage),
-                                     (None, ),
-                                     ("surface", icons["surface"],
-                                      self.OnShowPage),
-                                     ("vector", icons["vector"],
-                                      self.OnShowPage),
-                                     ("volume", icons["volume"],
-                                      self.OnShowPage),
-                                     (None, ),
-                                     ("light", icons["light"],
-                                      self.OnShowPage),
-                                     ("fringe", icons["fringe"],
-                                      self.OnShowPage),
-                                     (None, ),
-                                     ("nviz_cmd", icons['nviz_cmd'],
+        return self._getToolbarData((("nviz_cmd", icons['nviz_cmd'],
                                       self.OnNvizCmd),
+                                     (None, ),
                                      ("settings", icons["settings"],
                                       self.OnSettings),
-                                     ("help", Icons['misc']["help"],
-                                      self.OnHelp),
-                                     (None, ),
-                                     ('quit', icons["quit"],
-                                      self.OnExit))
+                                     ("help", icons["help"],
+                                      self.OnHelp))
                                     )
-    
-    def OnShowPage(self, event):
-        """!Go to the selected page"""
-        if not self.lmgr or not hasattr(self.lmgr, "nviz"):
-            event.Skip()
-            return
-        
-        self.lmgr.notebook.SetSelectionByName('nviz')
-        eId = event.GetId()
-        if eId == self.view:
-            self.lmgr.nviz.SetPage('view')
-        elif eId == self.surface:
-            self.lmgr.nviz.SetPage('surface')
-        elif eId == self.surface:
-            self.lmgr.nviz.SetPage('surface')
-        elif eId == self.vector:
-            self.lmgr.nviz.SetPage('vector')
-        elif eId == self.volume:
-            self.lmgr.nviz.SetPage('volume')
-        elif eId == self.light:
-            self.lmgr.nviz.SetPage('light')
-        elif eId == self.fringe:
-            self.lmgr.nviz.SetPage('fringe')
-        
-        self.lmgr.Raise()
         
     def OnNvizCmd(self, event):
         """!Show nviz_cmd command"""
-        self.parent.MapWindow.OnNvizCmd()
+        self.lmgr.GetLayerTree().GetMapDisplay().GetWindow().OnNvizCmd()
         
     def OnHelp(self, event):
         """!Show 3D view mode help"""
@@ -1302,19 +1259,6 @@ class NvizToolbar(AbstractToolbar):
         if not self.settingsDialog:
             self.settingsDialog = NvizPreferencesDialog(parent = self.parent)
         self.settingsDialog.Show()
-            
-    def OnExit (self, event = None):
-        """!Quit nviz tool (swith to 2D mode)"""
-        # set default mouse settings
-        self.parent.MapWindow.mouse['use'] = "pointer"
-        self.parent.MapWindow.mouse['box'] = "point"
-        self.parent.MapWindow.polycoords = []
-        
-        # return to map layer page (gets rid of ugly exit bug)
-        self.lmgr.notebook.SetSelectionByName('layers')
-
-        # disable the toolbar
-        self.parent.RemoveToolbar("nviz")
         
 class ModelToolbar(AbstractToolbar):
     """!Graphical modeler toolbar (see gmodeler.py)
