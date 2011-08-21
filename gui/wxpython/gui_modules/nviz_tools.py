@@ -297,8 +297,9 @@ class NvizToolWindow(FN.FlatNotebook):
                   
         # perspective
         # set initial defaults here (or perhaps in a default values file), not in user settings
+        #todo: consider setting an absolute max at 360 instead of undefined. (leave the default max value at pi)
         self._createControl(panel, data = self.win['view'], name = 'persp',
-                            range = (1,100),
+                            range = (1,180),
                             bind = (self.OnViewChange, self.OnViewChanged, self.OnViewChangedText))
         
         gridSizer.Add(item = wx.StaticText(panel, id = wx.ID_ANY, label = _("Perspective:")),

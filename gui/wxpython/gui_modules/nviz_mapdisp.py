@@ -363,8 +363,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.view['persp']['value'] +=  value
         if self.view['persp']['value'] < 1:
             self.view['persp']['value'] = 1
-        elif self.view['persp']['value'] > 100:
-            self.view['persp']['value'] = 100
+        elif self.view['persp']['value'] > 180:
+            self.view['persp']['value'] = 180
         
         if prev_value !=  self.view['persp']['value']:
             if hasattr(self.lmgr, "nviz"):
