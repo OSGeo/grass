@@ -50,10 +50,10 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("vector"));
     G_add_keyword(_("raster3d"));
-    module->label = _("Allows rendering GIS data is a 3D space.");
+    module->label = _("Creates a 3D rendering of GIS data.");
     module->description = _("Renders surfaces (raster data), "
 			    "2D/3D vector data, and "
-			    "volumes (3D raster data) in a 3D space.");
+			    "volumes (3D raster data) in 3D.");
 
     params = (struct GParams *)G_malloc(sizeof(struct GParams));
 
