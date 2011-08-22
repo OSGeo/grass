@@ -58,7 +58,6 @@ from debug import Debug
 from icon  import Icons
 from preferences import globalSettings as UserSettings
 
-from mapdisp_command import Command
 from mapdisp_window import BufferedWindow
 
 # for standalone app
