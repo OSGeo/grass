@@ -705,8 +705,7 @@ class Map(object):
         if windres:
             compRegion = self.GetRegion()
             region = copy.copy(self.region)
-            for key in ('nsres', 'ewres',
-                        'rows', 'cols', 'cells'):
+            for key in ('nsres', 'ewres', 'cells'):
                 region[key] = compRegion[key]
         else:
             # adjust region settings to match monitor
@@ -740,10 +739,14 @@ class Map(object):
                         (region['nsres'])
                     continue
                 elif key == "cols":
+                    if windres:
+                        continue
                     grass_region += 'cols: %d; ' % \
                         region['cols']
                     continue
                 elif key == "rows":
+                    if windres:
+                        continue
                     grass_region += 'rows: %d; ' % \
                         region['rows']
                     continue
