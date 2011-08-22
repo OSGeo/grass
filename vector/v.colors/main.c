@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 {
     struct GModule *module;
     struct {
-        struct Flag *r, *w, *l, *g, *a, *n, *e;
+	struct Flag *r, *w, *l, *g, *a, *n;
     } flag; 
 
     struct {
@@ -38,7 +38,6 @@ int main(int argc, char *argv[])
     } opt;
 
     int layer;
-    int have_stats;
     int overwrite, remove, is_from_stdin, stat, have_colors;
     const char *mapset, *cmapset;
     const char *style, *rules, *cmap, *attrcolumn, *rgbcolumn;
@@ -77,12 +76,6 @@ int main(int argc, char *argv[])
     opt.colr = G_define_standard_option(G_OPT_M_COLR);
     opt.colr->guisection = _("Define");
 
-    opt.rgbcol = G_define_standard_option(G_OPT_DB_COLUMN);
-    opt.rgbcol->key = "rgb_column";
-    opt.rgbcol->label = _("Name of color column to populate RGB values");
-    opt.rgbcol->description = _("If not given writes color table");
-    opt.rgbcol->guisection = _("Define");
-
     opt.rast = G_define_standard_option(G_OPT_R_INPUT);
     opt.rast->key = "raster";
     opt.rast->required = NO;
@@ -104,6 +97,11 @@ int main(int argc, char *argv[])
     opt.rules->description = _("\"-\" to read rules from stdin");
     opt.rules->guisection = _("Define");
 
+    opt.rgbcol = G_define_standard_option(G_OPT_DB_COLUMN);
+    opt.rgbcol->key = "rgb_column";
+    opt.rgbcol->label = _("Name of color column to populate RGB values");
+    opt.rgbcol->description = _("If not given writes color table");
+    
     flag.r = G_define_flag();
     flag.r->key = 'r';
     flag.r->description = _("Remove existing color table");
@@ -135,11 +133,12 @@ int main(int argc, char *argv[])
     flag.a->description = _("Logarithmic-absolute scaling");
     flag.a->guisection = _("Define");
 
+    /* TODO ?
     flag.e = G_define_flag();
     flag.e->key = 'e';
     flag.e->description = _("Histogram equalization");
     flag.e->guisection = _("Define");
-    
+    */
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -155,8 +154,7 @@ int main(int argc, char *argv[])
     rules = opt.rules->answer;
     attrcolumn = opt.attrcol->answer;
     rgbcolumn = opt.rgbcol->answer;
-    have_stats = FALSE;
-    
+        
     if (!name)
         G_fatal_error(_("No vector map specified"));
 
@@ -272,16 +270,14 @@ int main(int argc, char *argv[])
     if (flag.n->answer)
         Rast_invert_colors(&colors);
 
+    /* TODO ?
     if (flag.e->answer) {
-	G_fatal_error(_("Flag -%c is not implemented"), flag.e->key);
-	/*
-	if (!have_stats)
-	    have_stats = get_stats(name, mapset, &statf);
-	Rast_histogram_eq_colors(&colors_tmp, &colors, &statf);
-	colors = colors_tmp;
-	*/
+    if (!have_stats)
+    have_stats = get_stats(name, mapset, &statf);
+    Rast_histogram_eq_colors(&colors_tmp, &colors, &statf);
+    colors = colors_tmp;
     }
-
+    */
     if (flag.g->answer) {
         Rast_log_colors(&colors_tmp, &colors, 100);
         colors = colors_tmp;
