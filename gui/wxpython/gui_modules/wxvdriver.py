@@ -18,6 +18,7 @@ This program is free software under the GNU General Public License
 """
 
 import math
+import locale
 
 import wx
 
@@ -71,7 +72,8 @@ class DisplayDriver:
         log = glog
         progress = gprogress
         
-        G_gisinit('')             # initialize GRASS libs
+        G_gisinit('wxvdigit')
+        locale.setlocale(locale.LC_NUMERIC, 'C')
         G_set_error_routine(errfunc) 
         G_set_percent_routine(perfunc)
         
