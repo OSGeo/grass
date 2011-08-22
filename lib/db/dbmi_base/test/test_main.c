@@ -80,7 +80,7 @@ int main(int argc, char *argv[]) {
 
     module = G_define_module();
     module->description
-            = _("Performs benchmarks, unit and integration tests for the gmath library");
+            = _("Performs unit and integration tests for the dbmi base library");
 
     /* Get parameters from user */
     set_params();
