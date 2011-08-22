@@ -1,7 +1,16 @@
-/* read cell header, or window.
-   returns NULL if ok, error message otherwise
-   note:  the error message can be freed using G_free ().
- */
+/*!
+  \file lib/gis/rd_cellhd.c
+  
+  \brief GIS Library - Read cell header or window
+  
+  (C) 1999-2011 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author USACERL and others
+*/
+
 #include <string.h>
 
 #include <grass/gis.h>
@@ -36,6 +45,13 @@ static double scan_double(const char *, double *);
 #define SET(x) flags|=(1<<x)
 #define TEST(x) (flags&(1<<x))
 
+/*!
+  \bried Read cell header (for internal use only)
+  
+  \param fp file descriptor
+  \param[out] cellhd pointer to Cell_head structure
+  \param is_cellhd ? (unused)
+*/
 void G__read_Cell_head(FILE * fd, struct Cell_head *cellhd, int is_cellhd)
 {
     int count;
@@ -69,7 +85,13 @@ void G__read_Cell_head(FILE * fd, struct Cell_head *cellhd, int is_cellhd)
     G_free(array);
 }
 
-/* Read window from NULL terminated array of strings */
+/*!
+  \brief Read window from NULL terminated array of strings (for internal use only)
+
+  \param array array of strings
+  \param[out] cellhd pointer to Cell_head structure
+  \param is_cellhd ? (unused)
+*/
 void G__read_Cell_head_array(char **array,
 			     struct Cell_head *cellhd, int is_cellhd)
 {
@@ -114,7 +136,7 @@ void G__read_Cell_head_array(char **array,
 
 	switch (scan_item(buf, label, value)) {
 	case -1:
-	    G_fatal_error(_("Syntax error"));
+	    G_fatal_error(_("Syntax error in cell header"));
 	case 0:
 	    continue;
 	case 1:
@@ -122,29 +144,29 @@ void G__read_Cell_head_array(char **array,
 	}
 	if (strncmp(label, "proj", 4) == 0) {
 	    if (TEST(F_PROJ))
-		G_fatal_error(_("duplicate projection field"));
+		G_fatal_error(_("Duplicate projection field"));
 
 	    if (!scan_int(value, &cellhd->proj))
-		G_fatal_error(_("Syntax error"));
+		G_fatal_error(_("Syntax error in cell header"));
 
 	    SET(F_PROJ);
 	    continue;
 	}
 	if (strncmp(label, "zone", 4) == 0) {
 	    if (TEST(F_ZONE))
-		G_fatal_error(_("duplicate zone field"));
+		G_fatal_error(_("Duplicate zone field"));
 
 	    if (!scan_int(value, &cellhd->zone))
-		G_fatal_error(_("Syntax error"));
+		G_fatal_error(_("Syntax error in cell header"));
 
 	    SET(F_ZONE);
 	    continue;
 	}
     }
     if (!TEST(F_PROJ))
-	G_fatal_error(_("projection field missing"));
+	G_fatal_error(_("Field <%s> missing"), "projection");
     if (!TEST(F_ZONE))
-	G_fatal_error(_("zone field missing"));
+	G_fatal_error(_("Field <%s> missing"), "zone");
 
     /* read the other info */
     i = 0;
@@ -152,7 +174,7 @@ void G__read_Cell_head_array(char **array,
 	G_debug(3, "region item: %s", buf);
 	switch (scan_item(buf, label, value)) {
 	case -1:
-	    G_fatal_error(_("Syntax error"));
+	    G_fatal_error(_("Syntax error in cell header"));
 	case 0:
 	    continue;
 	case 1:
@@ -166,184 +188,184 @@ void G__read_Cell_head_array(char **array,
 
 	if (strncmp(label, "nort", 4) == 0) {
 	    if (TEST(F_NORTH))
-		G_fatal_error(_("duplicate north field"));
+		G_fatal_error(_("Duplicate north field"));
 	    if (!G_scan_northing(value, &cellhd->north, cellhd->proj))
-		G_fatal_error(_("Syntax error"));
+		G_fatal_error(_("Syntax error in cell header"));
 	    SET(F_NORTH);
 	    continue;
 	}
 	if (strncmp(label, "sout", 4) == 0) {
 	    if (TEST(F_SOUTH))
-		G_fatal_error(_("duplicate south field"));
+		G_fatal_error(_("Duplicate south field"));
 	    if (!G_scan_northing(value, &cellhd->south, cellhd->proj))
-		G_fatal_error(_("Syntax error"));
+		G_fatal_error(_("Syntax error in cell header"));
 	    SET(F_SOUTH);
 	    continue;
 	}
 	if (strncmp(label, "east", 4) == 0) {
 	    if (TEST(F_EAST))
-		G_fatal_error(_("duplicate east field"));
+		G_fatal_error(_("Duplicate east field"));
 	    if (!G_scan_easting(value, &cellhd->east, cellhd->proj))
-		G_fatal_error(_("Syntax error"));
+		G_fatal_error(_("Syntax error in cell header"));
 	    SET(F_EAST);
 	    continue;
 	}
 	if (strncmp(label, "west", 4) == 0) {
 	    if (TEST(F_WEST))
-		G_fatal_error(_("duplicate west field"));
+		G_fatal_error(_("Duplicate west field"));
 	    if (!G_scan_easting(value, &cellhd->west, cellhd->proj))
-		G_fatal_error(_("Syntax error"));
+		G_fatal_error(_("Syntax error in cell header"));
 	    SET(F_WEST);
 	    continue;
 	}
 	if (strncmp(label, "top", 3) == 0) {
 	    if (TEST(F_TOP))
-		G_fatal_error(_("duplicate top field"));
+		G_fatal_error(_("Duplicate top field"));
 	    if (!scan_double(value, &cellhd->top))
-		G_fatal_error(_("Syntax error"));
+		G_fatal_error(_("Syntax error in cell header"));
 	    SET(F_TOP);
 	    continue;
 	}
 	if (strncmp(label, "bottom", 6) == 0) {
 	    if (TEST(F_BOTTOM))
-		G_fatal_error(_("duplicate bottom field"));
+		G_fatal_error(_("Duplicate bottom field"));
 	    if (!scan_double(value, &cellhd->bottom))
-		G_fatal_error(_("Syntax error"));
+		G_fatal_error(_("Syntax error in cell header"));
 	    SET(F_BOTTOM);
 	    continue;
 	}
 	if (strncmp(label, "e-w ", 4) == 0 && strlen(label) == 9) {
 	    if (TEST(F_EWRES))
-		G_fatal_error(_("duplicate e-w resolution field"));
+		G_fatal_error(_("Duplicate e-w resolution field"));
 	    if (!G_scan_resolution(value, &cellhd->ew_res, cellhd->proj))
-		G_fatal_error(_("Syntax error"));
+		G_fatal_error(_("Syntax error in cell header"));
 	    if (cellhd->ew_res <= 0.0)
-		G_fatal_error(_("Syntax error"));
+		G_fatal_error(_("Syntax error in cell header"));
 	    SET(F_EWRES);
 	    continue;
 	}
 	if (strncmp(label, "e-w resol3", 10) == 0) {
 	    if (TEST(F_EWRES3))
-		G_fatal_error(_("duplicate 3D e-w resolution field"));
+		G_fatal_error(_("Duplicate 3D e-w resolution field"));
 	    if (!G_scan_resolution(value, &cellhd->ew_res3, cellhd->proj))
-		G_fatal_error(_("Syntax error"));
+		G_fatal_error(_("Syntax error in cell header"));
 	    if (cellhd->ew_res3 <= 0.0)
-		G_fatal_error(_("Syntax error"));
+		G_fatal_error(_("Syntax error in cell header"));
 	    SET(F_EWRES3);
 	    continue;
 	}
 	if (strncmp(label, "n-s ", 4) == 0 && strlen(label) == 9) {
 	    if (TEST(F_NSRES))
-		G_fatal_error(_("duplicate n-s resolution field"));
+		G_fatal_error(_("Duplicate n-s resolution field"));
 	    if (!G_scan_resolution(value, &cellhd->ns_res, cellhd->proj))
-		G_fatal_error(_("Syntax error"));
+		G_fatal_error(_("Syntax error in cell header"));
 	    if (cellhd->ns_res <= 0.0)
-		G_fatal_error(_("Syntax error"));
+		G_fatal_error(_("Syntax error in cell header"));
 	    SET(F_NSRES);
 	    continue;
 	}
 	if (strncmp(label, "n-s resol3", 10) == 0) {
 	    if (TEST(F_NSRES3))
-		G_fatal_error(_("duplicate 3D n-s resolution field"));
+		G_fatal_error(_("Duplicate 3D n-s resolution field"));
 	    if (!G_scan_resolution(value, &cellhd->ns_res3, cellhd->proj))
-		G_fatal_error(_("Syntax error"));
+		G_fatal_error(_("Syntax error in cell header"));
 	    if (cellhd->ns_res3 <= 0.0)
-		G_fatal_error(_("Syntax error"));
+		G_fatal_error(_("Syntax error in cell header"));
 	    SET(F_NSRES3);
 	    continue;
 	}
 	if (strncmp(label, "t-b ", 4) == 0) {
 	    if (TEST(F_TBRES))
-		G_fatal_error(_("duplicate t-b resolution field"));
+		G_fatal_error(_("Duplicate t-b resolution field"));
 	    if (!scan_double(value, &cellhd->tb_res))
-		G_fatal_error(_("Syntax error"));
+		G_fatal_error(_("Syntax error in cell header"));
 	    if (cellhd->tb_res <= 0.0)
-		G_fatal_error(_("Syntax error"));
+		G_fatal_error(_("Syntax error in cell header"));
 	    SET(F_TBRES);
 	    continue;
 	}
 	if (strncmp(label, "rows", 4) == 0 && strlen(label) == 4) {
 	    if (TEST(F_ROWS))
-		G_fatal_error(_("duplicate rows field"));
+		G_fatal_error(_("Duplicate rows field"));
 	    if (!scan_int(value, &cellhd->rows))
-		G_fatal_error(_("Syntax error"));
+		G_fatal_error(_("Syntax error in cell header"));
 	    if (cellhd->rows <= 0)
-		G_fatal_error(_("Syntax error"));
+		G_fatal_error(_("Syntax error in cell header"));
 	    SET(F_ROWS);
 	    continue;
 	}
 	if (strncmp(label, "rows3", 5) == 0) {
 	    if (TEST(F_ROWS3))
-		G_fatal_error(_("duplicate 3D rows field"));
+		G_fatal_error(_("Duplicate 3D rows field"));
 	    if (!scan_int(value, &cellhd->rows3))
-		G_fatal_error(_("Syntax error"));
+		G_fatal_error(_("Syntax error in cell header"));
 	    if (cellhd->rows3 <= 0)
-		G_fatal_error(_("Syntax error"));
+		G_fatal_error(_("Syntax error in cell header"));
 	    SET(F_ROWS3);
 	    continue;
 	}
 	if (strncmp(label, "cols", 4) == 0 && strlen(label) == 4) {
 	    if (TEST(F_COLS))
-		G_fatal_error(_("duplicate cols field"));
+		G_fatal_error(_("Duplicate cols field"));
 	    if (!scan_int(value, &cellhd->cols))
-		G_fatal_error(_("Syntax error"));
+		G_fatal_error(_("Syntax error in cell header"));
 	    if (cellhd->cols <= 0)
-		G_fatal_error(_("Syntax error"));
+		G_fatal_error(_("Syntax error in cell header"));
 	    SET(F_COLS);
 	    continue;
 	}
 	if (strncmp(label, "cols3", 5) == 0) {
 	    if (TEST(F_COLS3))
-		G_fatal_error(_("duplicate 3D cols field"));
+		G_fatal_error(_("Duplicate 3D cols field"));
 	    if (!scan_int(value, &cellhd->cols3))
-		G_fatal_error(_("Syntax error"));
+		G_fatal_error(_("Syntax error in cell header"));
 	    if (cellhd->cols3 <= 0)
-		G_fatal_error(_("Syntax error"));
+		G_fatal_error(_("Syntax error in cell header"));
 	    SET(F_COLS3);
 	    continue;
 	}
 	if (strncmp(label, "depths", 6) == 0) {
 	    if (TEST(F_DEPTHS))
-		G_fatal_error(_("duplicate depths field"));
+		G_fatal_error(_("Duplicate depths field"));
 	    if (!scan_int(value, &cellhd->depths))
-		G_fatal_error(_("Syntax error"));
+		G_fatal_error(_("Syntax error in cell header"));
 	    if (cellhd->depths <= 0)
-		G_fatal_error(_("Syntax error"));
+		G_fatal_error(_("Syntax error in cell header"));
 	    SET(F_DEPTHS);
 	    continue;
 	}
 	if (strncmp(label, "form", 4) == 0) {
 	    if (TEST(F_FORMAT))
-		G_fatal_error(_("duplicate format field"));
+		G_fatal_error(_("Duplicate format field"));
 	    if (!scan_int(value, &cellhd->format))
-		G_fatal_error(_("Syntax error"));
+		G_fatal_error(_("Syntax error in cell header"));
 	    SET(F_FORMAT);
 	    continue;
 	}
 	if (strncmp(label, "comp", 4) == 0) {
 	    if (TEST(F_COMP))
-		G_fatal_error(_("duplicate compressed field"));
+		G_fatal_error(_("Duplicate compressed field"));
 	    if (!scan_int(value, &cellhd->compressed))
-		G_fatal_error(_("Syntax error"));
+		G_fatal_error(_("Syntax error in cell header"));
 	    SET(F_COMP);
 	    continue;
 	}
-	G_fatal_error(_("Syntax error"));
+	G_fatal_error(_("Syntax error in cell header"));
     }
 
     /* check some of the fields */
     if (!TEST(F_NORTH))
-	G_fatal_error(_("north field missing"));
+	G_fatal_error(_("Field <%s> missing"), "north");
     if (!TEST(F_SOUTH))
-	G_fatal_error(_("south field missing"));
+	G_fatal_error(_("Field <%s> missing"), "south");
     if (!TEST(F_WEST))
-	G_fatal_error(_("west field missing"));
+	G_fatal_error(_("Field <%s> missing"), "west");
     if (!TEST(F_EAST))
-	G_fatal_error(_("east field missing"));
+	G_fatal_error(_("Field <%s> missing"), "east");
     if (!TEST(F_EWRES) && !TEST(F_COLS))
-	G_fatal_error(_("cols field missing"));
+	G_fatal_error(_("Field <%s> missing"), "cols");
     if (!TEST(F_NSRES) && !TEST(F_ROWS))
-	G_fatal_error(_("rows field missing"));
+	G_fatal_error(_("Field <%s> missing"), "rows");
     /* This next stmt is commented out to allow wr_cellhd.c to write
      * headers that will be readable by GRASS 3.1
      if ((TEST(F_ROWS) && TEST(F_NSRES))
@@ -354,13 +376,13 @@ void G__read_Cell_head_array(char **array,
     /* 3D defined? */
     if (TEST(F_EWRES3) || TEST(F_NSRES3) || TEST(F_COLS3) || TEST(F_ROWS3)) {
 	if (!TEST(F_EWRES3))
-	    G_fatal_error(_("ewres3 field missing"));
+	    G_fatal_error(_("Field <%s> missing"), "ewres3");
 	if (!TEST(F_NSRES3))
-	    G_fatal_error(_("nsres3 field missing"));
+	    G_fatal_error(_("Field <%s> missing"), "nsres3");
 	if (!TEST(F_COLS3))
-	    G_fatal_error(_("cols3 field missing"));
+	    G_fatal_error(_("Field <%s> missing"), "cols3");
 	if (!TEST(F_ROWS3))
-	    G_fatal_error(_("rows3 field missing"));
+	    G_fatal_error(_("Field <%s> missing"), "rows3");
     }
     else {			/* use 2D */
 	cellhd->ew_res3 = cellhd->ew_res;
