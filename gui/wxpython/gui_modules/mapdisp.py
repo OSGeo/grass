@@ -425,6 +425,8 @@ class MapFrame(wx.Frame):
     
     def RemoveNviz(self):
         """!Restore 2D view"""
+        # update status bar
+        self.statusbarWin['toggle'].Enable(True)
         self.statusbar.SetStatusText(_("Please wait, unloading data..."), 0)
         self._layerManager.goutput.WriteCmdLog(_("Switching back to 2D view mode..."),
                                                switchPage = False)
