@@ -44,6 +44,7 @@ int main(int argc, char *argv[])
     module->description =
 	_("Copies available data files in the current mapset "
 	  "search path to the user's current mapset.");
+    module->overwrite = 1;
 
     parm = (struct Option **) G_calloc(nlist, sizeof(struct Option *));
 
