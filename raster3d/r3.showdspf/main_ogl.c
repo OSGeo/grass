@@ -16,6 +16,7 @@
  *
  *****************************************************************************/
 
+#include <stdlib.h>
 #include <grass/raster3d.h>
 #include <grass/config.h>
 
@@ -120,7 +121,7 @@ int main(int argc, char **argv)
     g3->type = TYPE_STRING;
     g3->required = YES;
     g3->gisprompt = "old,grid3,3dcell";
-    g3->description = "Name of an existing 3d raster map";
+    g3->description = "Name of an existing 3D raster map";
 
     dspf = G_define_option();
     dspf->key = "dspf";
@@ -139,7 +140,7 @@ int main(int argc, char **argv)
 
     /* set-up for select() */
     if (pipe(fdes))
-	G_fatal_error("Couldn't open pipe");
+	G_fatal_error("Unable to open pipe");
     pid = fork();
     if (pid == (pid_t) 0) {	/* child */
 	close(fdes[1]);
@@ -167,7 +168,7 @@ int main(int argc, char **argv)
 
 	/* open g3 file for reading */
 	if (NULL == (mapset = G_find_file2("grid3", g3->answer, ""))) {
-	    sprintf(buff, "Not able to find grid3 file for [%s]", g3->answer);
+	    sprintf(buff, "Unable to find 3D raster map for <%s>", g3->answer);
 	    G_fatal_error(buff);
 	}
 
@@ -175,12 +176,12 @@ int main(int argc, char **argv)
 				RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
 	if (NULL == g3map) {
-	    sprintf(buff, "Error opening grid3 file [%s]", g3->answer);
+	    sprintf(buff, "Unable to open 3D raster map <%s>", g3->answer);
 	    G_fatal_error(buff);
 	}
 
 	if (0 == Rast3d_range_load(g3map)) {
-	    sprintf(buff, "Error reading range for [%s]", g3->answer);
+	    sprintf(buff, "Unable to read range of 3D raster map <%s>", g3->answer);
 	    G_fatal_error(buff);
 	}
 	Rast3d_range_min_max(g3map, &dmin, &dmax);
@@ -200,18 +201,18 @@ int main(int argc, char **argv)
 	    wname[i] = (char)NULL;
 	sprintf(buff, "grid3/%s/dsp", wname);
 	if (NULL == (mapset = G_find_file2(buff, dsp, mapset))) {
-	    sprintf(buff, "Not able to find display file for [%s]", dsp);
+	    sprintf(buff, "Unable to find display file for <%s>", dsp);
 	    G_fatal_error(buff);
 	}
 	if ((Headfax.dspfinfp = G_fopen_old(buff, dsp, mapset)) == NULL) {
-	    fprintf(stderr, "ERROR: unable to open %s for reading\n",
+	    fprintf(stderr, "Unable to open <%s> for reading\n",
 		    Headfax.dspfinfp);
 	    exit(EXIT_FAILURE);
 	}
 
 	/* read header info from dspf file into GLOBAL variable Headfax */
 	if (dfread_header(&Headfax) < 0) {
-	    fprintf(stderr, "ERROR:  while reading dspf file header\n");
+	    fprintf(stderr, "Unable to read display file header\n");
 	    exit(EXIT_FAILURE);
 	}
 

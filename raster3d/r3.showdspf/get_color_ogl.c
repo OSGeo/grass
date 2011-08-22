@@ -35,7 +35,7 @@ int get_color_table(file, ctable)
 
     fp = fopen(file, "r");
     if (!fp) {
-	fprintf(stderr, "Could not open color file for reading\n");
+	fprintf(stderr, "Unable to open color file for reading\n");
 	return (-1);
     }
 
@@ -46,7 +46,7 @@ int get_color_table(file, ctable)
 		     &(ctable[i].color[1]), &(ctable[i].color[2]));
 	if (tmp != EOF && tmp != 4) {
 	    fclose(fp);
-	    fprintf(stderr, "Can't read colortable file %s\n", file);
+	    fprintf(stderr, "Unable to read colortable file <%s>\n", file);
 	    return (-1);
 	}
 
@@ -148,7 +148,7 @@ int new_color_file(file, cfile, D_spec)
 	fclose(D_spec->cfile);
     D_spec->cfile = fopen(file, "r");
     if (D_spec->cfile == NULL) {
-	fprintf(stderr, "Unable to open %s\n", file);
+	fprintf(stderr, "Unable to open <%s>\n", file);
 	return (-1);
     }
     else if (0 > get_color_table(cfile, D_spec->ctable)) {

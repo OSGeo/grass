@@ -1,19 +1,19 @@
-<H2>DESCRIPTION</H2>
-
+<h2>DESCRIPTION</h2>
 
 Visualization program which loads the isosurfaces previously calculated
-using r3.mkdspf and displays them according to commands given at the prompt.
-r3.mkdspf creates a dspf file from the 3D raster and r3.showdspf uses this
+using <em>r3.mkdspf</em> and displays them according to commands given at the prompt.
+<em>r3.mkdspf</em> creates a dspf file from the 3D raster and <em>r3.showdspf</em> uses this
 dspf file to draw isosurfaces and 3D raster map to draw planes and everything
-related (boxes, etc).<br>
+related (boxes, etc).
 
+<p>
 Upon initialization of the program, two graphics windows are
-opened, one for the color table and the other for data display.  The
-display window initially contains a red bounding box.  Command options
+opened, one for the color table and the other for data display. The
+display window initially contains a red bounding box. Command options
 are then printed to the terminal and user is prompted for drawing 
 instructions:
 
-<BR>
+<p>
 <pre>
 THE INTERACTIVE OPTIONS ARE:
 
@@ -23,45 +23,45 @@ THE INTERACTIVE OPTIONS ARE:
 
  USAGE AND MEANING:
 
- <B>?</B>         lists available thresholds
- <B>l index# [index#...]</B>  add threshold to display list 
- <B>L</B>         Draw current display list
- <B>t index#</B>  reset so only this threshold is displayed
- <B>T index# index#</B>   show thresholds between hi &amp; lo 
- <B>I</B>         toggle thresholds INSIDE hi/lo or OUTSIDE hi/lo
- <B>+(+++)</B>    display thresholds with consecutively increasing index#
- <B>-(---)</B>    display thresholds with consecutively decreasing index#
+ <b>?</b>         lists available thresholds
+ <b>l index# [index#...]</b>  add threshold to display list 
+ <b>L</b>         draw current display list
+ <b>t index#</b>  reset so only this threshold is displayed
+ <b>T index# index#</b>   show thresholds between hi &amp; lo 
+ <b>I</b>         toggle thresholds INSIDE hi/lo or OUTSIDE hi/lo
+ <b>+(+++)</b>    display thresholds with consecutively increasing index#
+ <b>-(---)</b>    display thresholds with consecutively decreasing index#
 
- <B>x int#</B>  absolute rotation around x-axis in degrees(int) 
- <B>y int#</B>  absolute rotation around y-axis in degrees(int) 
- <B>z int#</B>  absolute rotation around z-axis in degrees(int) 
- <B>r</B>       rotate_model
- <B>X int#</B>  scale model in x
- <B>Y int#</B>  scale model in y
- <B>Z int#</B>  scale model in z
+ <b>x int#</b>  absolute rotation around x-axis in degrees(int) 
+ <b>y int#</b>  absolute rotation around y-axis in degrees(int) 
+ <b>z int#</b>  absolute rotation around z-axis in degrees(int) 
+ <b>r</b>       rotate_model
+ <b>X int#</b>  scale model in x
+ <b>Y int#</b>  scale model in y
+ <b>Z int#</b>  scale model in z
 
- <B>B(x,y,z)int#</B>  begin display along (x,y,z) axis at #
- <B>E(x,y,z)int#</B>  end display along (x,y,z)axis #
- <B>S int#</B>        specular highlight control
- <B>R</B>   resets display along axis to show all data
- <B>F <I>grid3name colortablename</I></B> load new color file
+ <b>B(x,y,z)int#</b>  begin display along (x,y,z) axis at #
+ <b>E(x,y,z)int#</b>  end display along (x,y,z)axis #
+ <b>S int#</b>        specular highlight control
+ <b>R</b>   resets display along axis to show all data
+ <b>F <I>grid3name colortablename</I></b> load new color file
 
- <B>C</B>   toggles the clear flag
- <B>c</B>   clears the display (no thresholds)
- <B>s</B>   swap buffers
- <B>b</B>   toggles draw a box
- <B>g</B>   toggles grid
- <B>n</B>   toggle surface normal direction
+ <b>C</b>   toggles the clear flag
+ <b>c</b>   clears the display (no thresholds)
+ <b>s</b>   swaps buffers
+ <b>b</b>   toggles draw a box
+ <b>g</b>   toggles grid
+ <b>n</b>   toggles surface normal direction
 
- <B>p</B>   draw all walls
- <B>p#</B>  draw a wall: 1-top, 2-bottom, 3-east, 4-west, 5-north, 6-south
+ <b>p</b>   draw all walls
+ <b>p#</b>  draw a wall: 1-top, 2-bottom, 3-east, 4-west, 5-north, 6-south
 
- <B>d</B>   draw (implement the option)
- <B>D</B>   draw a solid defined by T(isosurface + parts of walls)
+ <b>d</b>   draw (implement the option)
+ <b>D</b>   draw a solid defined by T(isosurface + parts of walls)
 
- <B>w</B>   dump image to a file
- <B>Q</B>   QUIT
- <B>h</B>   help
+ <b>w</b>   dump image to a file
+ <b>Q</b>   QUIT
+ <b>h</b>   help
 
  enter desired manipulations then press return
  &gt;&gt;
@@ -69,56 +69,64 @@ THE INTERACTIVE OPTIONS ARE:
 </pre>
 <p>
 
-<H3>Hints:</H3>
-<UL>
-<LI>To navigate around the data, use the <B>r</B> command, then place
+<h3>Hints:</h3>
+<ul>
+<li>To navigate around the data, use the <em>r</em> command, then place
 the mouse pointer in the graphics window and drag with the left mouse 
 to rotate the bounding box.  To zoom in and out, drag right or left
 with the middle mouse. When satisfied with the new viewing
 position, click with the right mouse.
 
-<LI>To quickly view a series of isosurfaces, enter a series of + or -
-characters, i.e. <B>+++++++</B>
+<li>To quickly view a series of isosurfaces, enter a series of <em>+</em> or <em>-</em>
+characters, i.e. <em>+++++++</em>
 
-<LI>Scripts using above commands on separate lines may be 
-directed to r3.showdspf as standard input. 
-Use the <B>#</B> sign as the first character on a line to indicate a comment.
-</UL>
+<li>Scripts using above commands on separate lines may be 
+directed to <em>r3.showdspf</em> as standard input. 
+Use the <em>#</em> sign as the first character on a line to indicate a comment.
+</ul>
 
-<H2>EXAMPLE</H2>
+<h2>EXAMPLE</h2>
 
 After generating a "dspf" control file with <em>r3.mkdspf</em> start
-<em>r3.showdspf</em>. Display/add the layers using "+".<br>
+<em>r3.showdspf</em>. Display/add the layers using <em>+</em>.
 
-List available thresholds with "?". Use "l" to select isosurfaces (available
-number can be adjusted with <em>r3.mkdspf</em>) and "L" to display:<br>
-<tt>l 1 2 3 4 5<br> L </tt> <p>
+<p>
+List available thresholds with <em>?</em>. Use <em>l</em> to select isosurfaces (available
+number can be adjusted with <em>r3.mkdspf</em>) and <em>L</em> to display:
+<br>
+<tt>l 1 2 3 4 5<br> L </tt> 
 
+<p>
 To select and display a single threshold (here: 2), use:<br>
-<tt>t 2</tt> <p>
+<tt>t 2</tt>
 
+<p>
 To select and display a range of thresholds (here: 3-5), use:<br>
 <tt>T 3 5<br>
-D</tt> <p>
+D</tt>
 
+<p>
 To draw a box, enter<br>
 <tt>p</tt><br>
 the p# to plot a selected wall (here top wall):<br>
-<tt>p1</tt><p>
+<tt>p1</tt>
 
+<p>
 Tp draw a cut-off box, define it's position<br>
 <tt>Ex20</tt><br>
 <tt>p</tt><br>
-Here Ex20 defines the x coordinate of the end of the box.<p>
+Here Ex20 defines the x coordinate of the end of the box.
 
-In general - p draws a side of a box, E, B, define where that box starts or
+<p>
+In general - <em>p</em> draws a side of a box, <em>E</em>, <em>B</em>, define where that box starts or
 ends, so to make a fence diagram, the user draws sides of a series of boxes
 which have their starting (or ending) side shifting by a given interval.
 (this way the user can draw even more complex fence diagrams which have
-perpendicular fences, by using Ey or By). It is sufficient to use only E or
-B depending whether fence are drawn by using the end side or front side of a
-box).<br>
+perpendicular fences, by using Ey or By). It is sufficient to use only <em>E</em> or
+<em>B</em> depending whether fence are drawn by using the end side or front side of a
+box).
 
+<p>
 To draw a fence, a sequence like this would be needed<br>
 <tt>Ex10<br>
 p5<br>
@@ -129,7 +137,7 @@ p5<br>
 Ex25<br>
 p5<br>
 </tt>
-                                                                                
+
 or the same would be<br>
 <tt>Bx10<br>
 p6<br>
@@ -137,15 +145,15 @@ Bx15<br>
 p6<br>
 Bx20<br>
 p6</tt> 
-<p>
 
+<p>
 The <em>p</em> is needed for the fence diagram, solids and boxes.
 
-<H2>SEE ALSO</H2>
-<EM><A HREF="r3.mkdspf.html">r3.mkdspf</A></EM>
-<H2>AUTHORS</H2>
-<SIGNATURE>Bill Brown,
-<A HREF="mailto:brown@gis.uiuc.edu">brown@gis.uiuc.edu</A>
-</SIGNATURE>
+<h2>SEE ALSO</h2>
+<em><a href="r3.mkdspf.html">r3.mkdspf</a></em>
+<h2>AUTHORS</h2>
+<signature>Bill Brown,
+<a href="mailto:brown@gis.uiuc.edu">brown@gis.uiuc.edu</a>
+</signature>
 
 <p><i>Last changed: $Date$</i>
