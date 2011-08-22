@@ -222,7 +222,7 @@ int loadrect(char *name)
     winset_main();
     fp = fopen(name, "r");
     if (!fp) {
-	fprintf(stderr, " Error: Could not open file %s for reading\n", name);
+	fprintf(stderr, "Unable to open file <%s>\n", name);
 	G_free(buffer);
 	return 0;
     }
@@ -235,7 +235,7 @@ int loadrect(char *name)
     }
 
     if (ysiz != fread(buffer, xsiz * sizeof(long), ysiz, fp))
-	fprintf(stderr, "Write failed file '%s'\n", name);
+	fprintf(stderr, "Unable to write file <%s>\n", name);
 
     clear_screen();
     glMatrixMode(GL_PROJECTION);
@@ -305,7 +305,7 @@ int dumprect(char *name)
 
     fp = fopen(name, "w");
     if (!fp) {
-	fprintf(stderr, " Error: Could not open file %s for writing\n", name);
+	fprintf(stderr, "Unable to open file <%s>\n", name);
 	G_free(buffer);
 	return 0;
     }
@@ -318,7 +318,7 @@ int dumprect(char *name)
 
     glReadPixels(0, 0, xsiz, ysiz, GL_RGBA, GL_BYTE, buffer);
     if (ysiz != fwrite(buffer, xsiz * sizeof(long), ysiz, fp))
-	fprintf(stderr, "Write failed file '%s'\n", name);
+	fprintf(stderr, "Unable to write file <%s>\n", name);
 
     fclose(fp);
     G_free(buffer);
@@ -369,7 +369,7 @@ int dumpgif(char *name)
 
     fp = fopen(name, "wb");
     if (!fp) {
-	fprintf(stderr, " Error: Could not open file %s for writing\n", name);
+	fprintf(stderr, "Unable to open file <%s>\n", name);
 	G_free(pixels);
 	return 0;
     }

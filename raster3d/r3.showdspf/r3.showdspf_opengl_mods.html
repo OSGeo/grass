@@ -1,61 +1,63 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
-<HTML>
-<HEAD>
- <META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
- <TITLE>modifications made to r3.showdspf</TITLE>
+<html>
+<head>
+ <meta http-equiv="content-type" content="text/html;charset=iso-8859-1">
+ <title>modifications made to <em>r3.showdspf</em></title>
  <link rel="stylesheet" href="grassdocs.css" type="text/css">
-</HEAD>
+</head>
 
-<BODY BGCOLOR="#FFFFFF">
+<body bgcolor="#ffffff">
 
-<P><FONT SIZE="4"><B>Description of modifications made to r3.showdspf directory during conversion of code from
-IrisGL (running only on SGI workstations) to OpenGL (running on any OpenGL-capable UNIX workstation)<BR>
-</B><BR>
-The following files were changed (and perhaps renamed during conversion)<BR>
-</FONT><TT>do_color.c -&gt; do_color_ogl.c<BR>
-draw_cap.c -&gt; draw_cap_ogl.c<BR>
-draw_polys.c -&gt; draw_polys_ogl.c<BR>
-draw_cappolys.c -&gt; draw_cappolys_ogl.c<BR>
-main.c -&gt; main_ogl.c<BR>
-init_caps.c -&gt; init_caps.c<BR>
-vizual.h -&gt; vizual.h<BR>
-Gmakefile -&gt; Gmakefile<BR>
-</TT><BR>
-<FONT SIZE="4">The following files are new files<BR>
-</FONT><TT>new_init_graphics.c<BR>
-kns_defines.h<BR>
-kns_globals.h<BR>
-togif.c<BR>
-togif.h<BR>
-</TT><BR>
-<FONT SIZE="4">The following files are unchanged:<BR>
-</FONT><TT>cap_data.c<BR>
-init_caps.c<BR>
-debugf.c<BR>
-thresh_array.c<BR>
-make_header.c<BR>
-r3_data.c<BR>
-r3_find.c<BR>
-</TT><BR>
-<FONT SIZE="4">The following files removed since they were made unnecessary<BR>
-</FONT><TT>init_graphics.c<BR>
-dump_rect.c -&gt; functions moved to new_init_graphics.c<BR>
-</TT>axes2.c<BR>
-<BR>
-<FONT SIZE="4" COLOR="#FF0000"><B>*** Disclaimer ***</B></FONT><FONT SIZE="4"><BR>
-</FONT>The porting effort from IrisGL to OpenGL was performed with the goal of just getting things to run with
-OpenGL with some user-interface improvements.  Only a small attempt was made to correct for sloppy/dangerous coding
-practices found in the <B>original</B> code.  Sloppy/dangerous coding practices were modified only when they resulted
-in serious code errors (causing core dumps).  Certain files, such as new_init_graphics.c, which were totally new
-files, were coded to higher standards.  In general, this effort was only a porting effort, <B>not</B> a re-architecting
-effort.<BR>
-<BR>
-<FONT SIZE="4">Above modifications made by:<BR>
-</FONT>Ken Sakai<BR>
-Lockheed Martin Space Systems<BR>
-Sunnyale, California<BR>
+<p>
+<font size="4"><b>Description of modifications made to r3.showdspf directory during conversion of code from
+IrisGL (running only on SGI workstations) to OpenGL (running on any OpenGL-capable UNIX workstation)</b>
+
+<p>
+The following files were changed (and perhaps renamed during conversion)<br>
+</font><tt>do_color.c -&gt; do_color_ogl.c<br>
+draw_cap.c -&gt; draw_cap_ogl.c<br>
+draw_polys.c -&gt; draw_polys_ogl.c<br>
+draw_cappolys.c -&gt; draw_cappolys_ogl.c<br>
+main.c -&gt; main_ogl.c<br>
+init_caps.c -&gt; init_caps.c<br>
+vizual.h -&gt; vizual.h<br>
+Gmakefile -&gt; Gmakefile<br>
+</tt><br>
+<font size="4">The following files are new files<br>
+</font><tt>new_init_graphics.c<br>
+kns_defines.h<br>
+kns_globals.h<br>
+togif.c<br>
+togif.h<br>
+</tt><br>
+<font size="4">The following files are unchanged:<br>
+</font><tt>cap_data.c<br>
+init_caps.c<br>
+debugf.c<br>
+thresh_array.c<br>
+make_header.c<br>
+r3_data.c<br>
+r3_find.c<br>
+</tt><br>
+<font size="4">The following files removed since they were made unnecessary<br>
+</font><tt>init_graphics.c<br>
+dump_rect.c -&gt; functions moved to new_init_graphics.c<br>
+</tt>axes2.c<br>
+<br>
+<font size="4" color="#ff0000"><b>*** Disclaimer ***</b></font><font size="4"><br>
+</font>The porting effort from IrisGL to OpenGL was performed with the goal of just getting things to run with
+OpenGL with some user-interface improvements. Only a small attempt was made to correct for sloppy/dangerous coding
+practices found in the <b>original</b> code. Sloppy/dangerous coding practices were modified only when they resulted
+in serious code errors (causing core dumps). Certain files, such as new_init_graphics.c, which were totally new
+files, were coded to higher standards. In general, this effort was only a porting effort, <b>not</b> a re-architecting
+effort.<br>
+<br>
+<font size="4">Above modifications made by:<br>
+</font>Ken Sakai<br>
+Lockheed Martin Space Systems<br>
+Sunnyale, California<br>
 Modification date: March 2000
 
-</BODY>
+</body>
 
-</HTML>
+</html>
