@@ -21,20 +21,21 @@ for details.
 """
 
 import sys
+import locale
 from threading import Thread
 from math import sqrt
 from numpy import matrix
 
 from ctypes import *
 try:
-    from grass.lib.gis   import *
-    from grass.lib.raster3d   import *
-    from grass.lib.vector  import *
-    from grass.lib.ogsf  import *
-    from grass.lib.nviz  import *
-    from grass.lib.raster import *
+    from grass.lib.gis      import *
+    from grass.lib.raster3d import *
+    from grass.lib.vector   import *
+    from grass.lib.ogsf     import *
+    from grass.lib.nviz     import *
+    from grass.lib.raster   import *
 except ImportError, e:
-    sys.stderr.write("3D view mode: %s\n" % e)
+    sys.stderr.write(_("3D view mode: %s\n") % e)
     
 from debug import Debug
 
@@ -77,7 +78,9 @@ class Nviz(object):
         log = glog
         progress = gprogress
         
-        G_gisinit("")
+        G_gisinit("wxnviz")
+        # gislib is already initialized (where?)
+        locale.setlocale(locale.LC_NUMERIC, 'C')
         G_set_error_routine(errfunc) 
         G_set_percent_routine(perfunc)
         
