@@ -45,6 +45,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("rename"));
     module->description =
 	_("Renames data base element files in the user's current mapset.");
+    module->overwrite = 1;
 
     parm = (struct Option **)G_calloc(nlist, sizeof(struct Option *));
 
