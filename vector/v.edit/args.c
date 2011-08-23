@@ -1,23 +1,3 @@
-
-/****************************************************************
- *
- * MODULE:     v.edit
- *
- * PURPOSE:    Editing vector map.
- *
- * AUTHOR(S):  GRASS Development Team
- *             Wolf Bergenheim, Jachym Cepicky, Martin Landa
- *
- * COPYRIGHT:  (C) 2006-2008 by the GRASS Development Team
- *
- *             This program is free software under the
- *             GNU General Public License (>=v2).
- *             Read the file COPYING that comes with GRASS
- *             for details.
- *
- * TODO:       3D support (done for move and vertexmove)
- ****************************************************************/
-
 #include "global.h"
 
 /**
@@ -42,8 +22,6 @@ int parser(int argc, char *argv[], struct GParams *params,
     params->fld->guisection = _("Selection");
 
     params->type = G_define_standard_option(G_OPT_V_TYPE);
-    params->type->answer = "point,line,boundary,centroid";
-    params->type->options = "point,line,boundary,centroid";
     params->type->guisection = _("Selection");
 
     params->tool = G_define_option();
