@@ -189,7 +189,7 @@ def main():
     # second, optionally process the SM quality map:
     
     #SM Status Map
-    # http://www.vgt.vito.be/faq/FAQS/faq15.html
+    # http://nieuw.vgt.vito.be/faq/FAQS/faq22.html
     #Data about
     # Bit NR 7: Radiometric quality for B0 coded as 0 if bad and 1 if good
     # Bit NR 6: Radiometric quality for B2 coded as 0 if bad and 1 if good
