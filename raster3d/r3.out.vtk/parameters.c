@@ -79,7 +79,7 @@ void set_params()
     param.rgbmaps->multiple = YES;
     param.rgbmaps->guisection = "Advanced options";
     param.rgbmaps->description =
-	_("Three (r,g,b) 3d raster maps to create rgb values [redmap,greenmap,bluemap]");
+	_("Three (R,G,B) 3D raster maps to create RGB values [redmap,greenmap,bluemap]");
 
     param.vectormaps = G_define_option();
     param.vectormaps->key = "vectormaps";
@@ -89,7 +89,7 @@ void set_params()
     param.vectormaps->multiple = YES;
     param.vectormaps->guisection = "Advanced options";
     param.vectormaps->description =
-	_("Three (x,y,z) 3d raster maps to create vector values [xmap,ymap,zmap]");
+	_("Three (x,y,z) 3D raster maps to create vector values [xmap,ymap,zmap]");
 
 
     param.elevscale = G_define_option();
@@ -114,7 +114,7 @@ void set_params()
     param.mask = G_define_flag();
     param.mask->key = 'm';
     param.mask->guisection = "Advanced options";
-    param.mask->description = _("Use g3d mask (if exists) with input maps");
+    param.mask->description = _("Use 3D raster mask (if exists) with input maps");
 
     param.origin = G_define_flag();
     param.origin->key = 'o';
