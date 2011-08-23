@@ -481,10 +481,6 @@ class MapFrame(wx.Frame):
                               CloseButton(False).Layer(2).
                               BestSize((self.toolbars['georect'].GetBestSize())))
         
-        # nviz
-        elif name == "nviz":
-            self._addToolbarNviz()
-        
         self._mgr.Update()
         
     def RemoveToolbar (self, name):

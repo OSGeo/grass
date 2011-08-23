@@ -491,24 +491,20 @@ class ProcessWorkspaceFile:
         iview['persp']['min'] = self.__processLayerNvizNode(node_persp, 'min', int)
         iview['persp']['max'] = self.__processLayerNvizNode(node_persp, 'max', int)
         node_height = node_view.find('v_height')
-        view['height'] = {}
         iview['height'] = {}
         iview['height']['value'] = self.__processLayerNvizNode(node_height, 'value', int)
-        view['height']['step'] = self.__processLayerNvizNode(node_height, 'step', int)
         iview['height']['min'] = self.__processLayerNvizNode(node_height, 'min', int)
         iview['height']['max'] = self.__processLayerNvizNode(node_height, 'max', int)
         node_twist = node_view.find('twist')
         view['twist'] = {}
         iview['twist'] = {}
         view['twist']['value'] = self.__processLayerNvizNode(node_twist, 'value', int)
-        view['twist']['step'] = self.__processLayerNvizNode(node_twist, 'step', int)
         iview['twist']['min'] = self.__processLayerNvizNode(node_twist, 'min', int)
         iview['twist']['max'] = self.__processLayerNvizNode(node_twist, 'max', int)
         node_zexag = node_view.find('z-exag')
         view['z-exag'] = {}
         iview['z-exag'] = {}
         view['z-exag']['value'] = self.__processLayerNvizNode(node_zexag, 'value', int)
-        view['z-exag']['step'] = self.__processLayerNvizNode(node_zexag, 'step', int)
         view['z-exag']['min'] = self.__processLayerNvizNode(node_zexag, 'min', int)
         view['z-exag']['max'] = self.__processLayerNvizNode(node_zexag, 'max', int)
         iview['z-exag']['original'] = self.__processLayerNvizNode(node_zexag, 'original', float)
@@ -559,6 +555,7 @@ class Nviz:
     def __init__(self):
         """Default 3D settings"""
         UserSettings.Reset('nviz')
+        UserSettings.ReadSettingsFile()
         
     def SetConstantDefaultProp(self):
         """Set default constant data properties"""
@@ -570,9 +567,10 @@ class Nviz:
 
         return data
     
-    def SetSurfaceDefaultProp(self):
+    def SetSurfaceDefaultProp(self, data = None):
         """Set default surface data properties"""
-        data = dict()
+        if not data:
+            data = dict()
         for sec in ('attribute', 'draw', 'mask', 'position'):
             data[sec] = {}
         
@@ -693,9 +691,10 @@ class Nviz:
                                                subkey = 'transp'))
         return data
     
-    def SetVectorDefaultProp(self):
+    def SetVectorDefaultProp(self, data = None):
         """Set default vector data properties"""
-        data = dict()
+        if not data:
+            data = dict()
         for sec in ('lines', 'points'):
             data[sec] = {}
         
@@ -740,7 +739,7 @@ class Nviz:
                             'usecolor' : False,
                             'usewidth' : False}
         if 'object' in data:
-            for attrb in ('color', 'width', 'mode', 'height'):
+            for attrb in ('color', 'width', 'mode', 'height', 'thematic'):
                 data[attrb]['update'] = None
         
     def SetVectorPointsDefaultProp(self, data):
@@ -780,7 +779,7 @@ class Nviz:
                             'usesize' : False}
         if 'object' in data:
             for attrb in ('size', 'width', 'marker',
-                          'color', 'surface', 'height', 'thematic'):
+                          'color', 'height', 'thematic'):
                 data[attrb]['update'] = None
         
     def GetDrawMode(self, mode=None, style=None, shade=None, string=False):
@@ -1229,7 +1228,6 @@ class WriteWorkspaceFile(object):
         self.file.write('%s<v_height>\n' % (' ' * self.indent))
         self.indent += 4
         self.file.write('%s<value>%d</value>\n' % (' ' * self.indent, iview['height']['value']))
-        self.file.write('%s<step>%d</step>\n' % (' ' * self.indent, view['height']['step']))
         self.file.write('%s<min>%d</min>\n' % (' ' * self.indent, iview['height']['min']))
         self.file.write('%s<max>%d</max>\n' % (' ' * self.indent, iview['height']['max']))
         self.indent -= 4
@@ -1238,7 +1236,6 @@ class WriteWorkspaceFile(object):
         self.file.write('%s<twist>\n' % (' ' * self.indent))
         self.indent += 4
         self.file.write('%s<value>%d</value>\n' % (' ' * self.indent, view['twist']['value']))
-        self.file.write('%s<step>%d</step>\n' % (' ' * self.indent, view['twist']['step']))
         self.file.write('%s<min>%d</min>\n' % (' ' * self.indent, iview['twist']['min']))
         self.file.write('%s<max>%d</max>\n' % (' ' * self.indent, iview['twist']['max']))
         self.indent -= 4
@@ -1247,7 +1244,6 @@ class WriteWorkspaceFile(object):
         self.file.write('%s<z-exag>\n' % (' ' * self.indent))
         self.indent += 4
         self.file.write('%s<value>%d</value>\n' % (' ' * self.indent, view['z-exag']['value']))
-        self.file.write('%s<step>%d</step>\n' % (' ' * self.indent, view['z-exag']['step']))
         self.file.write('%s<min>%d</min>\n' % (' ' * self.indent, view['z-exag']['min']))
         self.file.write('%s<max>%d</max>\n' % (' ' * self.indent, view['z-exag']['max']))
         self.file.write('%s<original>%d</original>\n' % (' ' * self.indent, iview['z-exag']['original']))
