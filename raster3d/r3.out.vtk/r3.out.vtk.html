@@ -87,7 +87,7 @@ r3.out.vtk -s input=map3d top=elevation.10m bottom=bottom output=/tmp/out.vtk
 paraview --data=/tmp/out.vtk
 </pre></div>
 
-<H3>Spearfish example with RGB data</H3>
+<h3>Spearfish example with RGB data</h3>
 
 <div class="code"><pre>
 #set the region
@@ -111,13 +111,14 @@ r.to.rast3 input=SatLandsatTM_IR1 output=SatLandsatTM_IR1
 r.to.rast3 input=SatLandsatTM_IR2 output=SatLandsatTM_IR2
 
 #export of volume to VTK:
-r3.out.vtk -s rgbmaps=SatLandsatTM_IR1,SatLandsatTM_IR2,SatLandsatTM_Red input=map3d top=elevation.10m bottom=bottom output=/tmp/out.vtk
+r3.out.vtk -s rgbmaps=SatLandsatTM_IR1,SatLandsatTM_IR2,SatLandsatTM_Red
+input=map3d top=elevation.10m bottom=bottom output=/tmp/out.vtk
 
 # visualize in paraview or other VTK viewer:
 paraview --data=/tmp/out.vtk 
 </pre></div>
 
-<H3>Spearfish example with vector data</H3>
+<h3>Spearfish example with vector data</h3>
 
 <div class="code"><pre>
 # set the region
@@ -137,7 +138,8 @@ r3.mapcalc "z_part = sin(depth())"
 
 
 # export the stuff data to VTK:
-r3.out.vtk -s vectormaps=x_part,y_part,z_part input=map3d top=elevation.10m bottom=bottom output=/tmp/out.vtk
+r3.out.vtk -s vectormaps=x_part,y_part,z_part input=map3d top=elevation.10m
+bottom=bottom output=/tmp/out.vtk
 
 # visualize in paraview or other VTK viewer:
 paraview --data=/tmp/out.vtk 
@@ -145,7 +147,7 @@ paraview --data=/tmp/out.vtk
 </pre></div>
 
 
-<H3>Slovakia3d example</H3>
+<h3>Slovakia3d example</h3>
 
 <div class="code"><pre>
 #reduce resolution:
@@ -153,7 +155,8 @@ g.region -dp3 res=1000 res3=1000
 r.mapcalc "bottom = 100"
 
 #export of volume to VTK:
-r3.out.vtk -s in=precip3d.500z50 top=dem500 bottom=bottom out=/tmp/slovakia3d.vtk
+r3.out.vtk -s in=precip3d.500z50 top=dem500 bottom=bottom
+out=/tmp/slovakia3d.vtk
 
 # visualize in paraview or other VTK viewer:
 paraview --data=/tmp/slovakia3d.vtk
@@ -161,14 +164,13 @@ paraview --data=/tmp/slovakia3d.vtk
 # set Actor Control z to 10
 </pre></div>
 
+<h2>SEE ALSO</h2>
 
-<H2>SEE ALSO</H2>
+<em><A HREF="r.out.vtk.html">r.out.vtk</a></em>,
+<em><A HREF="r3.out.ascii.html">r3.out.ascii</a></em>,
+<em><A HREF="g.region.html">g.region</a></em>
 
-<EM><A HREF="r.out.vtk.html">r.out.vtk</A></EM><br>
-<EM><A HREF="r3.out.ascii.html">r3.out.ascii</A></EM><br>
-<EM><A HREF="g.region.html">g.region</A></EM><br>
-
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 Soeren Gebbert
 
 <p><i>Last changed: $Date$</i>

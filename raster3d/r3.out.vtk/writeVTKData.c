@@ -392,7 +392,7 @@ void write_vtk_rgb_data(void *map_r, void *map_g, void *map_b,
     int typeIntern[3];
     void *maprgb = NULL;
 
-    G_debug(3, _("write_vtk_rgb_data: writing rgb data"));
+    G_debug(3, "write_vtk_rgb_data: Writing RGB data");
 
     rows = region.rows;
     cols = region.cols;
@@ -467,7 +467,7 @@ void write_vtk_vector_data(void *map_x, void *map_y, void *map_z,
     int typeIntern[3];
     void *mapvect = NULL;
 
-    G_debug(3, _("write_vtk_vector_data: writing vector data"));
+    G_debug(3, "write_vtk_vector_data: Writing vector data");
 
     rows = region.rows;
     cols = region.cols;
