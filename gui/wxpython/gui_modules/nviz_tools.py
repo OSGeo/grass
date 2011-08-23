@@ -232,12 +232,29 @@ class NvizToolWindow(FN.FlatNotebook):
         if 'view' in kwargs:
             self.mapWindow.view = kwargs['view']
             self.FindWindowById(self.win['view']['position']).data = kwargs['view']
+            self.FindWindowById(self.win['view']['position']).PostDraw()
         if 'iview' in kwargs:
             self.mapWindow.iview = kwargs['iview']
         if 'light' in kwargs:
             self.mapWindow.light = kwargs['light']  
             self.FindWindowById(self.win['light']['position']).data = kwargs['light']  
-            
+            self.FindWindowById(self.win['light']['position']).PostDraw()
+    
+    def LoadSettings(self):
+        """!Load Nviz settings and apply to current session"""
+        view = copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'view')) # copy
+        light = copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'light')) # copy
+        self.UpdateState(view = view, light = light)
+        self.PostViewEvent(zExag = True)
+        self.PostLightEvent()
+        self.UpdatePage('view')
+        self.UpdatePage('light')
+        
+        self.mapWindow.ReloadLayersData()
+        self.UpdatePage('surface')
+        self.UpdatePage('vector')
+        self.UpdateSettings()
+               
     def OnPageChanged(self, event):
         new = event.GetSelection()
         # self.ChangeSelection(new)
@@ -245,6 +262,11 @@ class NvizToolWindow(FN.FlatNotebook):
     def PostViewEvent(self, zExag = False):
         """!Change view settings"""
         event = wxUpdateView(zExag = zExag)
+        wx.PostEvent(self.mapWindow, event)
+        
+    def PostLightEvent(self, refresh = False): 
+        """!Change light settings"""   
+        event = wxUpdateLight(refresh = refresh)
         wx.PostEvent(self.mapWindow, event)
         
     def OnSize(self, event):
@@ -2374,8 +2396,7 @@ class NvizToolWindow(FN.FlatNotebook):
         for win in self.win['light'][winName].itervalues():
             self.FindWindowById(win).SetValue(value)
             
-        event = wxUpdateLight()
-        wx.PostEvent(self.mapWindow, event)
+        self.PostLightEvent(refresh = False)
         
         event.Skip()
         
@@ -2387,8 +2408,7 @@ class NvizToolWindow(FN.FlatNotebook):
         """!Color of the light changed"""
         self.mapWindow.light['color'] = tuple(event.GetValue())
         
-        event = wxUpdateLight(refresh = True)
-        wx.PostEvent(self.mapWindow, event)
+        self.PostLightEvent()
         
         event.Skip()
         
@@ -2397,8 +2417,7 @@ class NvizToolWindow(FN.FlatNotebook):
         data = self.mapWindow.light
         self.OnScroll(event, self.win['light'], data)
         
-        event = wxUpdateLight()
-        wx.PostEvent(self.mapWindow, event)
+        self.PostLightEvent()
         event.Skip()
         
     def OnBgColor(self, event):
@@ -2608,8 +2627,7 @@ class NvizToolWindow(FN.FlatNotebook):
             
             self.UpdateSettings()
         else:
-            event = wxUpdateLight()
-            wx.PostEvent(self.mapWindow, event)
+            self.PostLightEvent()
             lightWin = self.FindWindowById(self.win['light']['position'])
             x, y = lightWin.UpdatePos(self.mapWindow.light['position']['x'],
                                      self.mapWindow.light['position']['y'])
@@ -3996,6 +4014,7 @@ class NvizToolWindow(FN.FlatNotebook):
         else: return
         
         if event.GetInt():
+            self.mapWindow.parent.Raise()
             self.mapWindow.mouse['use'] = type
             self.mapWindow.SetCursor(self.mapWindow.cursors["cross"])
         else:

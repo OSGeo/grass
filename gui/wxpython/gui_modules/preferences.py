@@ -473,17 +473,13 @@ class Settings:
                         'x' : 0.84,
                         'y' : 0.16,
                         },
-                    'height' : {
-                        'step' : 100,
-                        },
                     'twist' : {
                         'value' : 0,
-                        'step' : 5,
                         },
                     'z-exag' : {
-                        'step' : 1,
                         'min' : 0,
                         'max' : 10,
+                        'value': 1,
                         },
                     'background' : {
                         'color' : (255, 255, 255, 255), # white

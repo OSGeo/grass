@@ -139,10 +139,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.size = (0, 0)
         
         # default values
+        self.nvizDefault = NvizDefault()
         self.view = copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'view')) # copy
         self.iview = UserSettings.Get(group = 'nviz', key = 'view', internal = True)
-        
-        self.nvizDefault = NvizDefault()
         self.light = copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'light')) # copy
         self.decoration = self.nvizDefault.SetDecorDefaultProp(type = 'arrow')
         self.decoration['scalebar'] = []
@@ -1626,7 +1625,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             data['thematic'].pop('update')
             
         # surface
-        if 'update' in data['mode']:
+        if 'update' in data['mode'] and 'surface' in data['mode']:
             for item in range(len(data['mode']['surface']['value'])):
                 for type in ('raster', 'constant'):
                     sid = self.GetLayerId(type = type,
@@ -1687,6 +1686,22 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 return data['volume']['object']['id']
         return -1
     
+    def ReloadLayersData(self):
+        """!Delete nviz data of all loaded layers and reload them from current settings"""
+        for item in self.layers:
+            type = self.tree.GetPyData(item)[0]['type']
+            layer = self.tree.GetPyData(item)[0]['maplayer']
+            data = self.tree.GetPyData(item)[0]['nviz']
+            
+            if type == 'raster':
+                self.nvizDefault.SetSurfaceDefaultProp(data['surface'])
+            if type == 'vector':
+                npoints, nlines, nfeatures, mapIs3D = self.lmgr.nviz.VectorInfo(layer)
+                if npoints > 0:
+                    self.nvizDefault.SetVectorPointsDefaultProp(data['vector']['points'])
+                if nlines > 0:
+                    self.nvizDefault.SetVectorLinesDefaultProp(data['vector']['lines'])
+            
     def NvizCmdCommand(self):
         """!Generate command for nviz_cmd according to current state"""
         cmd = 'nviz_cmd '
@@ -2004,5 +2019,3 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         @param textinfo text metadata (text, font, color, rotation)
         """
         return self.parent.MapWindow2D.TextBounds(textinfo, relcoords = True)
-    
-

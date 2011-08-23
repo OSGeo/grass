@@ -897,7 +897,7 @@ class GMFrame(wx.Frame):
             mdisp.MapWindow2D.UpdateMap()
             #nviz
             if gxwXml.displays[idx]['viewMode'] == '3d':
-                mdisp.AddToolbar(name = 'nviz')
+                mdisp.AddNviz()
                 self.nviz.UpdateState(view = gxwXml.nviz_state['view'],
                                               iview = gxwXml.nviz_state['iview'],
                                               light = gxwXml.nviz_state['light'])
