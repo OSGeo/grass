@@ -80,7 +80,6 @@ class Nviz(object):
         
         G_gisinit("wxnviz")
         # gislib is already initialized (where?)
-        locale.setlocale(locale.LC_NUMERIC, 'C')
         G_set_error_routine(errfunc) 
         G_set_percent_routine(perfunc)
         
@@ -106,6 +105,7 @@ class Nviz(object):
 
     def Init(self):
         """!Initialize window"""
+        locale.setlocale(locale.LC_NUMERIC, 'C')
         G_unset_window()
         Rast_unset_window()
         Rast__init_window()
