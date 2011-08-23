@@ -85,7 +85,7 @@ class MapWindow(object):
             self.mapwin = self.parent.GetLayerTree().GetMapDisplay().GetWindow()
             if self.mapwin.RegisterMouseEventHandler(wx.EVT_LEFT_DOWN, self.OnMouseAction,
                                                      wx.StockCursor(wx.CURSOR_CROSS)):
-                self.mapwin.Raise()
+                self.parent.GetLayerTree().GetMapDisplay().Raise()
             else:
                 # handle that you cannot get coordinates
         
