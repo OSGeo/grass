@@ -6,13 +6,15 @@
  * PURPOSE:    Editing vector map.
  *
  * AUTHOR(S):  GRASS Development Team
- *             Wolf Bergenheim, Jachym Cepicky, Martin Landa
+ *             Wolf Bergenheim
+ *             Jachym Cepicky
+ *             Update for GRASS 7 by Martin Landa <landa.martin gmail.com>
  *
- * COPYRIGHT:  (C) 2006-2010 by the GRASS Development Team
+ * COPYRIGHT:  (C) 2006-2011 by the GRASS Development Team
  *
  *             This program is free software under the GNU General
- *             Public License (>=v2).  Read the file COPYING that
- *             comes with GRASS for details.
+ *             Public License (>=v2). Read the file COPYING that comes
+ *             with GRASS for details.
  *
  * TODO:       3D support (done for move and vertexmove)
  ****************************************************************/
@@ -31,7 +33,7 @@ int main(int argc, char *argv[])
 
     int i;
     int move_first, snap;
-    int ret, print, layer;
+    int ret, layer;
     double move_x, move_y, move_z, thresh[3];
 
     struct line_pnts *coord;
@@ -91,6 +93,15 @@ int main(int argc, char *argv[])
 
 	/* 3D vector maps? */
 	ret = Vect_open_new(&Map, params.map->answer, WITHOUT_Z);
+	if (Vect_maptype(&Map) == GV_FORMAT_OGR_DIRECT) {
+	    int type;
+	    type = Vect_option_to_types(params.type);
+	    if (type != GV_POINT && type != GV_LINE &&
+		type != GV_AREA)
+		G_fatal_error(_("Supported feature type for OGR layer: "
+				"%s, %s or %s"), "point", "line", "area");
+	    V2_open_new_ogr(&Map, type);
+	}
 	if (ret == -1) {
 	    G_fatal_error(_("Unable to create vector map <%s>"),
 			  params.map->answer);
@@ -227,10 +238,8 @@ int main(int argc, char *argv[])
     /* perform requested editation */
     switch (action_mode) {
     case MODE_CREATE:
-	print = 0;		/* do not print id's */
 	break;
     case MODE_ADD:
-	print = 0;
 	if (!params.header->answer)
 	    Vect_read_ascii_head(ascii, &Map);
 	int num_lines;
@@ -311,7 +320,6 @@ int main(int argc, char *argv[])
 	G_message(_("%d lines merged"), ret);
 	break;
     case MODE_SELECT:
-	print = 1;
 	ret = print_selected(List);
 	break;
     case MODE_CATADD:
@@ -347,7 +355,6 @@ int main(int argc, char *argv[])
 	G_message(_("%d lines flipped"), ret);
 	break;
     case MODE_NONE:
-	print = 0;
 	break;
     case MODE_ZBULK:{
 	    double start, step;
