@@ -363,7 +363,7 @@ int V2_delete_line_ogr(struct Map_info *Map, off_t line)
 dbDriver *create_table(OGRLayerH hLayer, const struct field_info *Fi)
 {
     int col, ncols;
-    int sqltype, ogrtype;
+    int sqltype, ogrtype, length;
     
     const char *colname;
     
@@ -416,7 +416,8 @@ dbDriver *create_table(OGRLayerH hLayer, const struct field_info *Fi)
 	colname = db_get_column_name(column);	
 	sqltype = db_get_column_sqltype(column);
 	ogrtype = sqltype_to_ogrtype(sqltype);
-		
+	length = db_get_column_length(column);
+	
 	if (strcmp(OGR_L_GetFIDColumn(hLayer), colname) == 0 ||
 	    OGR_FD_GetFieldIndex(hFeatureDefn, colname) > -1) {
 	    /* field already exists */
@@ -424,7 +425,9 @@ dbDriver *create_table(OGRLayerH hLayer, const struct field_info *Fi)
 	}
 
 	hFieldDefn = OGR_Fld_Create(colname, ogrtype);
-	/* OGR_Fld_SetWidth(hFieldDefn, length); */
+	/* GDAL 1.9.0 (r22968) uses VARCHAR instead of CHAR */
+	if (ogrtype == OFTString && length > 0)
+	    OGR_Fld_SetWidth(hFieldDefn, length);
 	if (OGR_L_CreateField(hLayer, hFieldDefn, TRUE) != OGRERR_NONE) {
 	    G_warning(_("Creating field <%s> failed"), colname);
 	    db_close_database_shutdown_driver(driver);
@@ -442,7 +445,7 @@ int write_attributes(dbDriver *driver, int cat, const struct field_info *Fi,
 {
     int j, ogrfieldnum;
     char buf[2000];
-    int ncol, colsqltype, colctype, more;
+    int ncol, sqltype, ctype, ogrtype, more;
     const char *fidcol, *colname;
     dbTable *table;
     dbString dbstring;
@@ -502,15 +505,15 @@ int write_attributes(dbDriver *driver, int cat, const struct field_info *Fi,
 	G_debug(2, "col %d : val = %s", j,
 		db_get_string(&dbstring));
 	
-	colsqltype = db_get_column_sqltype(column);
-	colctype = db_sqltype_to_Ctype(colsqltype);
-	G_debug(2, "  colctype = %d", colctype);
+	sqltype = db_get_column_sqltype(column);
+	ctype = db_sqltype_to_Ctype(sqltype);
+	ogrtype = sqltype_to_ogrtype(sqltype);
+	G_debug(2, "  colctype = %d", ctype);
 	
 	ogrfieldnum = OGR_F_GetFieldIndex(Ogr_feature, colname);
 	if (ogrfieldnum < 0) {
 	    /* create field if not exists */
-	    hFieldDefn = OGR_Fld_Create(colname, 
-					sqltype_to_ogrtype(colsqltype));
+	    hFieldDefn = OGR_Fld_Create(colname, ogrtype);
 	    if (OGR_L_CreateField(Ogr_layer, hFieldDefn, TRUE) != OGRERR_NONE)
 		G_warning(_("Unable to create field <%s>"), colname);
 	    ogrfieldnum = OGR_F_GetFieldIndex(Ogr_feature, colname);
@@ -521,7 +524,7 @@ int write_attributes(dbDriver *driver, int cat, const struct field_info *Fi,
 	
 	/* prevent writing NULL values */
 	if (!db_test_value_isnull(value)) {
-	    switch (colctype) {
+	    switch (ctype) {
 	    case DB_C_TYPE_INT:
 		OGR_F_SetFieldInteger(Ogr_feature, ogrfieldnum,
 				      db_get_value_int(value));
@@ -553,30 +556,29 @@ int write_attributes(dbDriver *driver, int cat, const struct field_info *Fi,
 
 int sqltype_to_ogrtype(int sqltype)
 {
-    switch(sqltype) {
-    case DB_SQL_TYPE_CHARACTER:
-    case DB_SQL_TYPE_TEXT:
-	return OFTString;
-    case DB_SQL_TYPE_SMALLINT:
-    case DB_SQL_TYPE_INTEGER:
-    case DB_SQL_TYPE_SERIAL:
-	return OFTInteger;
-    case DB_SQL_TYPE_REAL:
-    case DB_SQL_TYPE_DOUBLE_PRECISION:
-    case DB_SQL_TYPE_DECIMAL:
-    case DB_SQL_TYPE_NUMERIC:
-	return OFTReal;
-    case DB_SQL_TYPE_DATE:
-	return OFTDate;
-    case DB_SQL_TYPE_TIME:	
-	return OFTTime;
-    case DB_SQL_TYPE_TIMESTAMP:
-	return OFTDateTime;
-    case DB_SQL_TYPE_INTERVAL:
-	return OFTString; /* ??? */
-    }
+    int ctype, ogrtype;
 
-    return OFTString;
+    ctype = db_sqltype_to_Ctype(sqltype);
+    
+    switch(ctype) {
+    case DB_C_TYPE_INT:
+	ogrtype = OFTInteger;
+	break;
+    case DB_C_TYPE_DOUBLE:
+	ogrtype = OFTReal;
+	break;
+    case DB_C_TYPE_STRING:
+	ogrtype = OFTString;
+	break;
+    case DB_C_TYPE_DATETIME:
+	ogrtype = OFTString;
+	break;
+    default:
+	ogrtype = OFTString;
+	break;
+    }
+    
+    return ogrtype;
 }
 
 #endif /* HAVE_OGR */
