@@ -179,6 +179,9 @@ def main():
     grass.run_command('g.remove', rast = name, quiet = True)
     grass.run_command('g.rename', rast = (tmpname, name), quiet = True)
 
+    # write cmd history:
+    grass.raster_history(name)
+
     #apply color table:
     grass.run_command('r.colors', map = name, color = 'ndvi', quiet = True)
 
@@ -213,45 +216,45 @@ def main():
     if also:
 	grass.message(_("Importing SPOT VGT NDVI quality map..."))
 	grass.try_remove(vrtfile)
-	qfile = infile.replace('NDV','SM')
+	qname = spotname.replace('NDV','SM')
+	qfile = os.path.join(spotdir, qname)
 	create_VRT_file(projfile, vrtfile, qfile)
 
-    ## let's import the SM quality map...
-    smfile = name + '.sm'
-    if grass.run_command('r.in.gdal', input = vrtfile, output = smfile) != 0:
-	grass.fatal(_("An error occurred. Stop."))
+	## let's import the SM quality map...
+	smfile = name + '.sm'
+	if grass.run_command('r.in.gdal', input = vrtfile, output = smfile) != 0:
+	    grass.fatal(_("An error occurred. Stop."))
 
-    # some of the possible values:
-    rules = [r + '\n' for r in [
-	'8 50 50 50',
-	'11 70 70 70',
-	'12 90 90 90',
-	'60 grey',
-	'155 blue',
-	'232 violet',
-	'235 red',
-	'236 brown',
-	'248 orange',
-	'251 yellow',
-	'252 green'
-	]]
-    grass.write_command('r.colors', map = smfile, rules = '-', stdin = rules)
+	# some of the possible values:
+	rules = [r + '\n' for r in [
+	    '8 50 50 50',
+	    '11 70 70 70',
+	    '12 90 90 90',
+	    '60 grey',
+	    '155 blue',
+	    '232 violet',
+	    '235 red',
+	    '236 brown',
+	    '248 orange',
+	    '251 yellow',
+	    '252 green'
+	    ]]
+	grass.write_command('r.colors', map = smfile, rules = '-', stdin = rules)
 
-    grass.message(_("Imported SPOT VEGETATION SM quality map <%s>.") % smfile)
-    grass.message(_("Note: A snow map can be extracted by category 252 (d.rast %s cat=252)") % smfile)
-    grass.message("")
-    grass.message(_("Filtering NDVI map by Status Map quality layer..."))
+	grass.message(_("Imported SPOT VEGETATION SM quality map <%s>.") % smfile)
+	grass.message(_("Note: A snow map can be extracted by category 252 (d.rast %s cat=252)") % smfile)
+	grass.message("")
+	grass.message(_("Filtering NDVI map by Status Map quality layer..."))
 
-    filtfile = "%s_filt" % name
-    grass.mapcalc("$filtfile = if($smfile >= 248, $name, null())",
-		  filtfile = filtfile, smfile = smfile, name = name)
-    grass.run_command('r.colors', map = filtfile, color = 'ndvi', quiet = True)
-    grass.message(_("Filtered SPOT VEGETATION NDVI map <%s>.") % filtfile)
+	filtfile = "%s_filt" % name
+	grass.mapcalc("$filtfile = if($smfile % 4 == 3 || ($smfile / 16) % 16 == 0, null(), $name)",
+		      filtfile = filtfile, smfile = smfile, name = name)
+	grass.run_command('r.colors', map = filtfile, color = 'ndvi', quiet = True)
+	grass.message(_("Filtered SPOT VEGETATION NDVI map <%s>.") % filtfile)
 
-    # write cmd history:
-    grass.raster_history(name)
-    grass.raster_history(smfile)
-    grass.raster_history(filtfile)
+	# write cmd history:
+	grass.raster_history(smfile)
+	grass.raster_history(filtfile)
 
     grass.message(_("Done."))
 
