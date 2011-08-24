@@ -6,7 +6,7 @@ struct _options {
 };
 
 struct _flags {
-    struct Flag *f, *p, *r;
+    struct Flag *f, *p, *r, *g;
 };
 
 /* args.c */
@@ -25,6 +25,6 @@ char *format_list(void);
 void list_formats(void);
 
 /* status.c */
-void print_status(void);
+void print_status(int);
 
 #endif
