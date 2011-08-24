@@ -59,8 +59,8 @@ int main(int argc, char *argv[])
 	make_link(options.dsn->answer,
 		  options.format->answer, options.opts->answers);
     
-    if (flags.p->answer) {
-	print_status();
+    if (flags.p->answer || flags.g->answer) {
+	print_status(flags.g->answer ? 1 : 0);
     }
 
     exit(EXIT_SUCCESS);

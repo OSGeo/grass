@@ -46,6 +46,12 @@ void parse_args(int argc, char **argv,
     flags->p->guisection = _("Print");
     flags->p->suppress_required = YES;
 
+    flags->g = G_define_flag();
+    flags->g->key = 'g';
+    flags->g->description = _("Print current status in shell script style");
+    flags->g->guisection = _("Print");
+    flags->g->suppress_required = YES;
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 }
