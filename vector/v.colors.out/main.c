@@ -37,6 +37,7 @@ int main(int argc, char **argv)
     } flag;
     struct Colors cat_colors, *colors;
     
+    int ret;
     int min, max;
     const char *file, *name, *layer, *column;
     FILE *fp;
@@ -78,10 +79,16 @@ int main(int argc, char **argv)
     file = opt.file->answer;
     column = opt.col->answer;
     
-    if (Vect_read_colors(name, "", &cat_colors) < 0)
+    ret = Vect_read_colors(name, "", &cat_colors);
+    if (ret < 0)
 	G_fatal_error(_("Unable to read color table for vector map <%s>"),
 		      opt.map->answer);
-    
+    if (ret == 0) {
+	G_warning(_("No color table defined for vector map <%s>"),
+		  opt.map->answer);
+	exit(EXIT_SUCCESS);
+    }
+
     min = max = -1;
     if (flag.p->answer) {
 	scan_cats(name, layer, &min, &max);
