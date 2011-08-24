@@ -14,6 +14,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/vector.h>
+#include <grass/glocale.h>
 
 /*!
   \brief Read color table of vector map
@@ -39,6 +40,7 @@
 int Vect_read_colors(const char *name, const char *mapset,
 		     struct Colors *colors)
 {
+    int ret;
     char buf[GPATH_MAX];
     char xname[GNAME_MAX];
     
@@ -51,15 +53,18 @@ int Vect_read_colors(const char *name, const char *mapset,
     
     name = xname;
 
-    if (strcmp(mapset, G_mapset()) == 0)
-	/* look for the regular color table */
-	sprintf(buf, "vector/%s/colr", name);
-    else	
+    if (strcmp(mapset, G_mapset()) == 0) {
+        /* look for the regular color table */
+	sprintf(buf, "%s/%s/%s", GV_DIRECTORY, name, GV_COLR_ELEMENT);
+        ret = Rast__read_colors(buf, "", mapset, colors);
+    }
+    else {
 	/* look for secondary color table in current mapset */
-	sprintf(buf, "vector/%s/colr2", name);
-    
-    if (Rast__read_colors(buf, "", mapset, colors) >= 0)
-	return 1;
-    
-    return 0;
+	sprintf(buf, "%s/%s/%s", GV_COLR2_DIRECTORY, mapset, name);
+        ret = Rast__read_colors(buf, "", G_mapset(), colors);
+    }
+    if (ret == -2)
+	return 0;
+
+    return ret;
 }
