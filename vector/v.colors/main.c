@@ -190,9 +190,6 @@ int main(int argc, char *argv[])
     if (!mapset)
 	G_fatal_error(_("Vector map <%s> not found"), name);
     
-    if (strcmp(mapset, G_mapset()) != 0)
-      G_fatal_error(_("Module currently allows to modify only vector maps from the current mapset"));
-
     stat = -1;
     if (remove) {
 	stat = Vect_remove_colors(name, mapset);

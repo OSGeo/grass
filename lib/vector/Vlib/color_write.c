@@ -59,32 +59,32 @@
 void Vect_write_colors(const char *name, const char *mapset,
 		       struct Colors *colors)
 {
-    char element[GPATH_MAX], *cname;
+    char element[GPATH_MAX];
+    const char *cname;
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
     FILE *fd;
-	
+    
     if (G_name_is_fully_qualified(name, xname, xmapset)) {
 	if (strcmp(xmapset, mapset) != 0)
 	    G_fatal_error(_("Qualified name <%s> doesn't match mapset <%s>"),
 			  name, mapset);
 	name = xname;
+	mapset = xmapset;
     }
-
+    
     /*
-      if mapset is current mapset, remove colr2 file (created by pre 3.0 grass)
-      and then write original color table
+      if mapset is current mapset, write original color table
       else write secondary color table
     */
     if (strcmp(mapset, G_mapset()) == 0) {
-	/* get rid of existing colr2, if any */
-	sprintf(element, "vector/%s/colr2", name);
-	G_remove(element, name); 
-	cname = "colr";
+	cname = GV_COLR_ELEMENT;
+	sprintf(element, "%s/%s", GV_DIRECTORY, name);
     }
     else {
-	cname = "colr2";
+	cname = name;
+	sprintf(element, "%s/%s", GV_COLR2_DIRECTORY, mapset);
     }
-    sprintf(element, "vector/%s", name);
+
     if (!(fd = G_fopen_new(element, cname)))
 	G_fatal_error(_("Unable to create <%s> file for map <%s>"),
 		      element, name);

@@ -12,7 +12,6 @@
 #define GV_FATAL_PRINT   1
 #define GV_FATAL_RETURN  2
 
-/*! \brief Vector directory layout, element names */
 /*! \brief Name of vector directory */
 #define GV_DIRECTORY    "vector"	
 /*! \brief Format description, data location (OGR) */
@@ -33,6 +32,10 @@
 #define GV_CIDX_ELEMENT "cidx"
 /*! \brief External format (OGR), feature index */
 #define GV_FIDX_ELEMENT "fidx"
+/*! \brief Color table */
+#define GV_COLR_ELEMENT "colr"
+/*! \brief Name of directory for alternative color tables */
+#define GV_COLR2_DIRECTORY "vcolr2"
 
 /*! \brief Endian check
 
