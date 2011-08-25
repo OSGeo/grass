@@ -12,9 +12,6 @@
 #include <grass/glocale.h>
 #include <grass/dbmi.h>
 
-#define RENDER_POLYLINE 0
-#define RENDER_POLYGON  1
-
 int palette_ncolors = 16;
 
 struct rgb_color palette[16] = {
