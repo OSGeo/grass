@@ -5,7 +5,7 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2009 by the GRASS Development Team
+   (C) 2001-2009, 2011 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2).  Read the file COPYING that comes with GRASS for details.
@@ -55,7 +55,7 @@ static int (*Rewind_array[][3]) () = {
 /*!
    \brief Rewind vector data file to cause reads to start at beginning
 
-   \param Map vector map
+   \param Map pointer to Map_info structure
 
    \return 0 on success
    \return -1 on error

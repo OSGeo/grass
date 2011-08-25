@@ -22,9 +22,8 @@
   \brief Rewind vector data file to cause reads to start at beginning (level 1)
 
   \param Map vector map
-  
-  \return 0 on success
-  \return -1 on error
+
+  \return 0
  */
 int V1_rewind_ogr(struct Map_info *Map)
 {
@@ -41,16 +40,17 @@ int V1_rewind_ogr(struct Map_info *Map)
 /*!
   \brief Rewind vector data file to cause reads to start at beginning (level 2)
 
-  \param Map vector map
+  \param Map pointer to Map_info structure
 
-  \return 0 on success
-  \return -1 on error
+  \return 0
  */
 int V2_rewind_ogr(struct Map_info *Map)
 {
     G_debug(2, "V2_rewind_ogr(): name = %s", Map->name);
 
     Map->next_line = 1;
+
+    V1_rewind_ogr(Map);
 
     return 0;
 }

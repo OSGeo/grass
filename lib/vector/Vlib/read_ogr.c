@@ -5,7 +5,7 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2010 by the GRASS Development Team
+   (C) 2001-2011 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -21,17 +21,17 @@
 #include <ogr_api.h>
 
 /*!
- * \brief Recursively read feature and add all elements to points_cache and types_cache.
- *
- * ftype: if > 0 use this type (because parts of Polygon are read as wkbLineString)
- *
- * \param Map pointer to Map_info structure
- * \param[out] hGeom OGR geometry
- * \param ftype feature type
- * 
- * \return 0 on success
- * \return 1 on error
- */
+  \brief Recursively read feature and add all elements to points_cache and types_cache.
+  
+  ftype: if > 0 use this type (because parts of Polygon are read as wkbLineString)
+  
+  \param Map pointer to Map_info structure
+  \param[out] hGeom OGR geometry
+  \param ftype feature type
+  
+  \return 0 on success
+  \return 1 on error
+*/
 static int cache_feature(struct Map_info *Map, OGRGeometryH hGeom, int ftype)
 {
     int line, i, np, ng, tp;
@@ -119,21 +119,23 @@ static int cache_feature(struct Map_info *Map, OGRGeometryH hGeom, int ftype)
 }
 
 /*!
- * \brief Read next feature from OGR layer. Skip empty features. (level 1)
- *
- *  The action of this routine can be modified by:
- *   - Vect_read_constraint_region()
- *   - Vect_read_constraint_type()
- *   - Vect_remove_constraints()
- *
- * \param Map pointer to Map_info structure
- * \param[out] line_p container used to store line points within
- * \param[out] line_c container used to store line categories within
- *
- * \return feature type
- * \return -2 no more features (EOF)
- * \return -1 out of memory
- */
+  \brief Read next feature from OGR layer. Skip empty features (level 1)
+  
+  This function implements sequential access.
+  
+  The action of this routine can be modified by:
+   - Vect_read_constraint_region()
+   - Vect_read_constraint_type()
+   - Vect_remove_constraints()
+  
+  \param Map pointer to Map_info structure
+  \param[out] line_p container used to store line points within
+  \param[out] line_c container used to store line categories within
+  
+  \return feature type
+  \return -2 no more features (EOF)
+  \return -1 out of memory
+*/
 int V1_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 			  struct line_cats *line_c)
 {
@@ -152,7 +154,7 @@ int V1_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
     if (Map->Constraint_region_flag)
 	Vect_get_constraint_box(Map, &mbox);
 
-    while (1) {
+    while (TRUE) {
 	/* Read feature to cache if necessary */
 	while (Map->fInfo.ogr.lines_next == Map->fInfo.ogr.lines_num) {
 	    hFeature = OGR_L_GetNextFeature(Map->fInfo.ogr.layer);
@@ -223,42 +225,45 @@ int V1_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 }
 
 /*!
- * \brief Read next feature from OGR layer (topology level).
- *
- * \param Map pointer to Map_info structure
- * \param[out] line_p container used to store line points within
- * \param[out] line_c container used to store line categories within
- *
- * \return feature type
- * \return -2 no more features (EOF)
- * \return -1 out of memory
- */
-int
-V2_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
-		      struct line_cats *line_c)
+  \brief Read next feature from OGR layer (topology level).
+
+  This function implements sequential access.
+
+  \param Map pointer to Map_info structure
+  \param[out] line_p container used to store line points within
+  \param[out] line_c container used to store line categories within
+  
+  \return feature type
+  \return -2 no more features (EOF)
+  \return -1 out of memory
+*/
+int V2_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
+			  struct line_cats *line_c)
 {
     if (Map->next_line > Map->plus.n_lines)
 	return -2;
 
-    return V2_read_line_ogr(Map, line_p, line_c, Map->next_line++);
+    Map->next_line++;
+
+    return V1_read_next_line_ogr(Map, line_p, line_c);
 }
 
 /*!
- * \brief Recursively descend to feature and read the part
- *
- * \param Map pointer to Map_info structure
- * \param hGeom OGR geometry
- * \param offset given offset
- * \param[out] Points container used to store line pointes within
- *
- * \return feature type
- * \return -1 on error
- */
+  \brief Recursively descend to feature and read the part
+  
+  \param Map pointer to Map_info structure
+  \param hGeom OGR geometry
+  \param offset given offset
+  \param[out] Points container used to store line pointes within
+  
+  \return feature type
+  \return -1 on error
+*/
 static int read_line(const struct Map_info *Map, OGRGeometryH hGeom, long offset,
 		     struct line_pnts *Points)
 {
     int i, nPoints;
-    int eType;
+    int eType, line;
     OGRGeometryH hGeom2;
 
     /* Read coors if hGeom is a simple element (wkbPoint, wkbLineString) otherwise
@@ -298,11 +303,19 @@ static int read_line(const struct Map_info *Map, OGRGeometryH hGeom, long offset
     case wkbGeometryCollection:
 	G_debug(4, " more geoms -> part %d", Map->fInfo.ogr.offset[offset]);
 	hGeom2 = OGR_G_GetGeometryRef(hGeom, Map->fInfo.ogr.offset[offset]);
-	return (read_line(Map, hGeom2, offset + 1, Points));
+	line = read_line(Map, hGeom2, offset + 1, Points);
+	if (eType == wkbPolygon || wkbMultiPolygon)
+	    return GV_BOUNDARY;
+	if (eType == wkbMultiPoint)
+	    return GV_POINT;
+	if (eType == wkbMultiLineString)
+	    return GV_LINE;
+	return line;
 	break;
 
     default:
-	G_warning(_("OGR feature type %d not supported"), eType);
+	G_warning(_("OGR feature type '%s' not supported"),
+		  OGRGeometryTypeToName(eType));
 	break;
     }
 
@@ -310,16 +323,16 @@ static int read_line(const struct Map_info *Map, OGRGeometryH hGeom, long offset
 }
 
 /*!
- * \brief Recursively descend to feature and read the part
- *
- * \param Map pointer to Map_info structure
- * \param hGeom OGR geometry
- * \param offset given offset
- * \param[out] Points container used to store line pointes within
- *
- * \return feature type
- * \return -1 on error
- */
+  \brief Recursively descend to feature and read the part
+  
+  \param Map pointer to Map_info structure
+  \param hGeom OGR geometry
+  \param offset given offset
+  \param[out] Points container used to store line pointes within
+  
+  \return feature type
+  \return -1 on error
+*/
 static int get_line_type(const struct Map_info *Map, long FID)
 {
     int eType;
@@ -368,18 +381,20 @@ static int get_line_type(const struct Map_info *Map, long FID)
 }
 
 /*!
- * \brief Read feature from OGR layer at given offset (level 1)
- *
- * \param Map pointer to Map_info structure 
- * \param[out] line_p container used to store line points within
- * \param[out] line_c container used to store line categories within
- * \param offset given offset 
- *
- * \return line type
- * \return 0 dead line
- * \return -2 no more features
- * \return -1 out of memory
- */
+  \brief Read feature from OGR layer at given offset (level 1)
+  
+  This function implements random access on level 1.
+
+  \param Map pointer to Map_info structure 
+  \param[out] line_p container used to store line points within
+  \param[out] line_c container used to store line categories within
+  \param offset given offset 
+  
+  \return line type
+  \return 0 dead line
+  \return -2 no more features
+  \return -1 out of memory
+*/
 int V1_read_line_ogr(struct Map_info *Map,
 		     struct line_pnts *line_p, struct line_cats *line_c, off_t offset)
 {
@@ -438,17 +453,19 @@ int V1_read_line_ogr(struct Map_info *Map,
 }
 
 /*!
- * \brief Reads feature from OGR layer (topology level)
- *
- * \param Map pointer to Map_info structure
- * \param[out] line_p container used to store line points within
- * \param[out] line_c container used to store line categories within
- * \param line feature id
- *
- * \return feature type
- * \return -2 no more features
- * \return -1 out of memory
- */
+  \brief Reads feature from OGR layer (topology level)
+ 
+  This function implements random access on level 2.
+  
+  \param Map pointer to Map_info structure
+  \param[out] line_p container used to store line points within
+  \param[out] line_c container used to store line categories within
+  \param line feature id
+  
+  \return feature type
+  \return -2 no more features
+  \return -1 out of memory
+*/
 int V2_read_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 		     struct line_cats *line_c, int line)
 {
@@ -458,8 +475,7 @@ int V2_read_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
     Line = Map->plus.Line[line];
     
     if (Line == NULL)
-	G_fatal_error("V2_read_line_ogr(): %s %d",
-		      _("Attempt to read dead line"), line);
+	G_fatal_error(_("Attempt to read dead feature %d"), line);
 
     if (Line->type == GV_CENTROID) {
 	G_debug(4, "Centroid");
@@ -484,6 +500,7 @@ int V2_read_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 		}
 	    }
 
+	    Vect_reset_line(line_p);
 	    Vect_append_point(line_p, list.box[found].E, list.box[found].N, 0.0);
 	}
 
