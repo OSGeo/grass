@@ -1133,7 +1133,9 @@ struct Map_info
     */
     int support_updated;
     /*!
-      \brief Sequential read (level 1)
+      \brief Sequential read (level 1) - see Vect_read_next_line()
+
+      Note: Line id starts with 1
     */
     plus_t next_line;
 
