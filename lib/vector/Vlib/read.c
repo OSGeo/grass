@@ -5,7 +5,7 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2009 by the GRASS Development Team
+   (C) 2001-2009, 2011 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2).  Read the file COPYING that comes with GRASS for details.
@@ -61,6 +61,8 @@ static int (*V2_read_line_array[]) () = {
 /*!
    \brief Read next vector feature (level 1 and 2)
 
+   This function implements sequential access.
+     
    \param Map pointer vector map
    \param[out] line_p feature geometry
    \param[out] line_c feature categories
@@ -83,7 +85,9 @@ int Vect_read_next_line(const struct Map_info *Map,
 }
 
 /*!
-   \brief Read vector feature
+   \brief Read vector feature  (level 2 only)
+
+   This function implements random access.
 
    \param Map pointer to vector map
    \param[out] line_p feature geometry

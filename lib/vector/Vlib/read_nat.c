@@ -10,7 +10,7 @@
    - Vect_read_constraint_type()
    - Vect_remove_constraints()
 
-   (C) 2001-2009 by the GRASS Development Team
+   (C) 2001-2009, 2011 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2).  Read the file COPYING that comes with GRASS for details.
@@ -23,46 +23,47 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
-static int
-Vect__Read_line_nat(struct Map_info *,
-		    struct line_pnts *, struct line_cats *, off_t);
+static int read_line_nat(struct Map_info *,
+			 struct line_pnts *, struct line_cats *, off_t);
 
 /*!
- * \brief Read line from coor file on given offset.
- *
- * \param Map vector map 
- * \param[out] Points container used to store line points within
- * \param[out] Cats container used to store line categories within
- * \param offset given offset 
- *
- * \return line type
- * \return 0 dead line
- * \return -2 end of table (last row)
- * \return -1 out of memory
- */
-int
-V1_read_line_nat(struct Map_info *Map,
-		 struct line_pnts *Points,
-		 struct line_cats *Cats, off_t offset)
+  \brief Read line from coor file on given offset (level 1)
+  
+  This function implements random access on level 1.
+
+  \param Map vector map 
+  \param[out] Points container used to store line points within
+  \param[out] Cats container used to store line categories within
+  \param offset given offset 
+  
+  \return line type
+  \return 0 dead line
+  \return -2 end of table (last row)
+  \return -1 out of memory
+*/
+int V1_read_line_nat(struct Map_info *Map,
+		     struct line_pnts *Points,
+		     struct line_cats *Cats, off_t offset)
 {
-    return Vect__Read_line_nat(Map, Points, Cats, offset);
+    return read_line_nat(Map, Points, Cats, offset);
 }
 
 /*!
- * \brief Read next line from coor file.
- *
- * \param Map vector map layer
- * \param[out] line_p container used to store line points within
- * \param[out] line_c container used to store line categories within
- *
- * \return line type
- * \return 0 dead line
- * \return -2 end of table (last row)
- * \return -1 out of memory
- */
-int
-V1_read_next_line_nat(struct Map_info *Map,
-		      struct line_pnts *line_p, struct line_cats *line_c)
+  \brief Read next line from coor file.
+  
+  This function implements sequential access on level 1.
+    
+  \param Map vector map layer
+  \param[out] line_p container used to store line points within
+  \param[out] line_c container used to store line categories within
+  
+  \return line type
+  \return 0 dead line
+  \return -2 end of table (last row)
+  \return -1 out of memory
+*/
+int V1_read_next_line_nat(struct Map_info *Map,
+			  struct line_pnts *line_p, struct line_cats *line_c)
 {
     int itype;
     off_t offset;
@@ -75,7 +76,7 @@ V1_read_next_line_nat(struct Map_info *Map,
 
     while (1) {
 	offset = dig_ftell(&(Map->dig_fp));
-	itype = Vect__Read_line_nat(Map, line_p, line_c, offset);
+	itype = read_line_nat(Map, line_p, line_c, offset);
 	if (itype < 0)
 	    return (itype);
 
@@ -104,21 +105,22 @@ V1_read_next_line_nat(struct Map_info *Map,
 }
 
 /*!
- * \brief Reads any specified line, this is NOT affected by constraints
- *
- * \param Map vector map layer
- * \param[out] line_p container used to store line points within
- * \param[out] line_c container used to store line categories within
- * \param line line id
- *
- * \return line type ( > 0 )
- * \return 0 dead line
- * \return -1 out of memory
- * \return -2 end of file
- */
-int
-V2_read_line_nat(struct Map_info *Map,
-		 struct line_pnts *line_p, struct line_cats *line_c, int line)
+  \brief Reads any specified line, this is NOT affected by constraints
+ 
+  This function implements random access on level 2.
+ 
+  \param Map vector map layer
+  \param[out] line_p container used to store line points within
+  \param[out] line_c container used to store line categories within
+  \param line line id
+  
+  \return line type ( > 0 )
+  \return 0 dead line
+  \return -1 out of memory
+  \return -2 end of file
+*/
+int V2_read_line_nat(struct Map_info *Map,
+		     struct line_pnts *line_p, struct line_cats *line_c, int line)
 {
     struct P_line *Line;
 
@@ -131,24 +133,25 @@ V2_read_line_nat(struct Map_info *Map,
 	G_fatal_error("V2_read_line_nat(): %s %d",
 		      _("Attempt to read dead line"), line);
 
-    return Vect__Read_line_nat(Map, line_p, line_c, Line->offset);
+    return read_line_nat(Map, line_p, line_c, Line->offset);
 }
 
 /*!
- * \brief Reads next unread line each time called.  Use Vect_rewind to reset.
- *
- * \param Map vector map layer
- * \param[out] line_p container used to store line points within
- * \param[out] line_c container used to store line categories within
- * 
- * \return line type ( > 0 )
- * \return 0 dead line
- * \return -1 out of memory
- * \return -2 end of file
- */
-int
-V2_read_next_line_nat(struct Map_info *Map,
-		      struct line_pnts *line_p, struct line_cats *line_c)
+  \brief Reads next unread line each time called.  Use Vect_rewind to reset.
+  
+  This function implements sequential access on level 2.
+
+  \param Map vector map layer
+  \param[out] line_p container used to store line points within
+  \param[out] line_c container used to store line categories within
+  
+  \return line type ( > 0 )
+  \return 0 dead line
+  \return -1 out of memory
+  \return -2 end of file
+*/
+int V2_read_next_line_nat(struct Map_info *Map,
+			  struct line_pnts *line_p, struct line_cats *line_c)
 {
     register int line, ret;
     register struct P_line *Line;
@@ -192,21 +195,20 @@ V2_read_next_line_nat(struct Map_info *Map,
 
 
 /*!  
- * \brief Read line from coor file 
- *
- * \param Map vector map layer
- * \param[out] p container used to store line points within
- * \param[out] c container used to store line categories within
- * \param offset given offset
- *
- * \return line type ( > 0 )
- * \return 0 dead line
- * \return -1 out of memory
- * \return -2 end of file
- */
-int
-Vect__Read_line_nat(struct Map_info *Map,
-		    struct line_pnts *p, struct line_cats *c, off_t offset)
+  \brief Read line from coor file 
+  
+  \param Map vector map layer
+  \param[out] p container used to store line points within
+  \param[out] c container used to store line categories within
+  \param offset given offset
+  
+  \return line type ( > 0 )
+  \return 0 dead line
+  \return -1 out of memory
+  \return -2 end of file
+*/
+int read_line_nat(struct Map_info *Map,
+		  struct line_pnts *p, struct line_cats *c, off_t offset)
 {
     register int i, dead = 0;
     int n_points;
@@ -334,5 +336,5 @@ Vect__Read_line_nat(struct Map_info *Map,
     if (dead)
 	return 0;
 
-    return (type);
+    return type;
 }

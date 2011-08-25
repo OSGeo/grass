@@ -5,12 +5,10 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2009 by the GRASS Development Team
+   (C) 2001-2009, 2011 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
    \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
@@ -21,18 +19,17 @@
 #include <grass/glocale.h>
 
 /*!
-   \brief Returns polygon array of points of given area
+   \brief Returns polygon array of points (outer ring) of given area
 
-   \param Map vector map
+   \param Map pointer to Map_info structure
    \param area area id
    \param[out] BPoints points array
 
    \return number of points
    \return -1 on error
  */
-int
-Vect_get_area_points(const struct Map_info *Map,
-		     int area, struct line_pnts *BPoints)
+int Vect_get_area_points(const struct Map_info *Map,
+			 int area, struct line_pnts *BPoints)
 {
     int i, line, aline, dir;
     const struct Plus_head *Plus;
@@ -63,7 +60,7 @@ Vect_get_area_points(const struct Map_info *Map,
 	G_debug(3, "  append line(%d) = %d", i, line);
 
 	if (0 > Vect_read_line(Map, Points, NULL, aline)) {
-	    G_fatal_error("Cannot read line %d", aline);
+	    G_fatal_error(_("Unable to read read line %d"), aline);
 	}
 
 	G_debug(3, "  line n_points = %d", Points->n_points);
@@ -79,7 +76,7 @@ Vect_get_area_points(const struct Map_info *Map,
 	G_debug(3, "  area n_points = %d", BPoints->n_points);
     }
 
-    return (BPoints->n_points);
+    return BPoints->n_points;
 }
 
 /*!
@@ -145,7 +142,7 @@ Vect_get_isle_points(const struct Map_info *Map,
    \param Map vector map
    \param area area id
 
-   \return centroid number of area
+   \return centroid id of area
    \return 0 if no centroid found
  */
 int Vect_get_area_centroid(const struct Map_info *Map, int area)
