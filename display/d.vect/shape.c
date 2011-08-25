@@ -189,7 +189,6 @@ int display_shape(struct Map_info *Map, int type, struct cat_list *Clist, const 
 			     table_colors_flag ? &cvarr_rgb : NULL,
 			     have_colors ? &colors : NULL,
 			     &cvarr_width, nrec_width);
-			     
     
     stat += display_lines(Map, type, Clist,
 			  bcolor, fcolor, chcat,
@@ -208,14 +207,13 @@ int display_shape(struct Map_info *Map, int type, struct cat_list *Clist, const 
 
 int get_table_color(int cat, int line,
 		    struct Colors *colors, dbCatValArray *cvarr,
-		    int *red, int *grn, int *blu, int *nerror)
+		    int *red, int *grn, int *blu)
 {
-    int custom_rgb, nerror_rgb;
+    int custom_rgb;
     char colorstring[12];	/* RRR:GGG:BBB */
     
     dbCatVal *cv;
 
-    *nerror = nerror_rgb = 0;
     custom_rgb = FALSE;
     cv = NULL;
 
@@ -245,18 +243,14 @@ int get_table_color(int cat, int line,
 	    else {
 		G_important_message(_("Error in color definition (%s) - feature %d with category %d"),
 				    colorstring, line, cat);
-		nerror_rgb++;
 		}
 	}
 	else {
 	    G_important_message(_("Error in color definition (%s) - feature %d with category %d"),
 				colorstring, line, cat);
-	    nerror_rgb++;
 	}
     }
 
-    *nerror = nerror_rgb;
-    
     return custom_rgb;
 }
 

@@ -29,7 +29,7 @@ int display_area(struct Map_info *Map, struct cat_list *Clist, const struct Cell
     int cat, centroid;
     int red, grn, blu;
 
-    int i, custom_rgb, found, nerror_rgb;
+    int i, custom_rgb, found;
     int width;
     struct bound_box box;
     
@@ -42,7 +42,6 @@ int display_area(struct Map_info *Map, struct cat_list *Clist, const struct Cell
 
     G_debug(1, "display areas:");
     
-    nerror_rgb = 0;
     centroid = 0;
     Points = Vect_new_line_struct();
     APoints = Vect_new_line_struct();
@@ -171,7 +170,7 @@ int display_area(struct Map_info *Map, struct cat_list *Clist, const struct Cell
         /* custom colors */
 	if (colors || cvarr_rgb) {
 	    custom_rgb = get_table_color(cat, area, colors, cvarr_rgb,
-					 &red, &grn, &blu, &nerror_rgb);
+					 &red, &grn, &blu);
 	}
 	
 	/* random colors */

@@ -42,7 +42,7 @@ int display_shape(struct Map_info *, int, struct cat_list *, const struct Cell_h
 		  int, char *, double,
 		  int, char *);
 int get_table_color(int, int, struct Colors *, dbCatValArray *,
-		    int *, int *, int *, int *);
+		    int *, int *, int *);
 int get_cat_color(int, const struct line_cats *, const struct cat_list *,
 		  int *, int *, int *);
 double get_property(int, int, dbCatValArray *, double, double);
