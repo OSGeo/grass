@@ -4,16 +4,15 @@
  * MODULE:       v.external
  * 
  * AUTHOR(S):    Radim Blazek
- *               Updated by Martin Landa <landa.martin gmail.com> (2009)
+ *               Updated to GRASS 7 by Martin Landa <landa.martin gmail.com>
  *               
- * PURPOSE:      Create a new vector as a link to OGR layer (read-only)
+ * PURPOSE:      Create a new vector as a link to OGR layer
  *               
  * COPYRIGHT:    (C) 2003-2011 by the GRASS Development Team
  *
- *               This program is free software under the 
- *               GNU General Public License (>=v2). 
- *               Read the file COPYING that comes with GRASS
- *               for details.
+ *               This program is free software under the GNU General
+ *               Public License (>=v2). Read the file COPYING that
+ *               comes with GRASS for details.
  *
  **************************************************************/
 
@@ -25,7 +24,8 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
-#include "ogr_api.h"
+#include <ogr_api.h>
+
 #include "local_proto.h"
 
 int main(int argc, char *argv[])
@@ -89,9 +89,10 @@ int main(int argc, char *argv[])
     Vect_hist_command(&Map);
     Vect_close(&Map);
     
-    /* Vect_open_new created 'head', 'coor', 'hist' -> delete 'coor' and create 'frmt' */
-    sprintf(buf, "%s/%s/vector/%s/coor", G_location_path(), G_mapset(),
-	    output);
+    /* Vect_open_new created 'head', 'coor', 'hist'
+       -> delete 'coor' and create 'frmt' */
+    sprintf(buf, "%s/%s/%s/%s/coor", G_location_path(), G_mapset(),
+	    GV_DIRECTORY, output);
     G_debug(2, "Delete '%s'", buf);
     if (unlink(buf) == -1) {
 	Vect_delete(output);
@@ -103,7 +104,7 @@ int main(int argc, char *argv[])
     fd = G_fopen_new(buf, GV_FRMT_ELEMENT);
     if (fd == NULL) {
 	Vect_delete(output);
-	G_fatal_error("Unable to open file '%s'", buf);
+	G_fatal_error("Unable to create file '%s'", buf);
     }
     
     fprintf(fd, "FORMAT: ogr\n");
