@@ -18,7 +18,7 @@
 #include <sys/types.h>
 #include <string.h>
 #include <grass/vector.h>
-
+#include <grass/glocale.h>
 /*
  * Routines for reading and writing Dig+ structures.
  * return 0 on success, -1 on failure of whatever kind
@@ -517,17 +517,15 @@ int dig_Rd_Plus_head(struct gvfile * fp, struct Plus_head *ptr)
 	if (ptr->Back_Major > GV_TOPO_VER_MAJOR ||
 	    ptr->Back_Minor > GV_TOPO_VER_MINOR) {
 	    /* This version of GRASS lib is lower than the oldest which can read this format */
-	    G_fatal_error
-		("Topology format version %d.%d is not supported by this release."
-		 " Try to rebuild topology or upgrade GRASS.",
-		 ptr->Version_Major, ptr->Version_Minor);
+	    G_fatal_error(_("Topology format version %d.%d is not supported by this release."
+			    " Try to rebuild topology or upgrade GRASS."),
+			  ptr->Version_Major, ptr->Version_Minor);
 	    return (-1);
 	}
 
-	G_warning
-	    ("Your GRASS version does not fully support topology format %d.%d of the vector."
-	     " Consider to rebuild topology or upgrade GRASS.",
-	     ptr->Version_Major, ptr->Version_Minor);
+	G_warning(_("Your GRASS version does not fully support topology format %d.%d of the vector."
+		    " Consider to rebuild topology or upgrade GRASS."),
+		  ptr->Version_Major, ptr->Version_Minor);
     }
     if (ptr->Version_Major < GV_TOPO_VER_MAJOR ||
 	(ptr->Version_Major == GV_TOPO_VER_MAJOR &&
@@ -535,10 +533,9 @@ int dig_Rd_Plus_head(struct gvfile * fp, struct Plus_head *ptr)
 	/* The file was created by GRASS library with lower version than this one */
 
 	/* This version of GRASS lib can not read this old format */
-	G_warning
-	    ("Old topology format version %d.%d is not supported by this release."
-	     " Try to rebuild topology.",
-	     ptr->Version_Major, ptr->Version_Minor);
+	G_warning(_("Old topology format version %d.%d is not supported by this release."
+		    " Try to rebuild topology."),
+		  ptr->Version_Major, ptr->Version_Minor);
 	return (-1);
     }
 
@@ -560,7 +557,7 @@ int dig_Rd_Plus_head(struct gvfile * fp, struct Plus_head *ptr)
 	ptr->off_t_size = 4;
 
     if (sizeof(off_t) < ptr->off_t_size) {
-	G_warning("Vector exceeds supported file size limit");
+	G_warning(_("Vector exceeds supported file size limit"));
 	return (-1);
     }
 
