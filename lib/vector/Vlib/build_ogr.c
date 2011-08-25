@@ -52,8 +52,7 @@ static void init_parts(GEOM_PARTS * parts)
 }
 
 /*!
-  \brief 
-  Reset parts
+  \brief Reset parts
 */
 static void reset_parts(GEOM_PARTS * parts)
 {
@@ -240,7 +239,7 @@ static int add_geometry(struct Map_info *Map, OGRGeometryH hGeom, int FID,
 				  OGR_G_GetZ(hRing, i));
 	    }
 
-	    /* register line */
+	    /* register boundary */
 	    add_part(parts, iPart);
 	    line = add_line(Map, GV_BOUNDARY, Points[iPart], FID, parts);
 	    del_part(parts);
@@ -275,10 +274,9 @@ static int add_geometry(struct Map_info *Map, OGRGeometryH hGeom, int FID,
 	}
 
 	/* create virtual centroid */
-	ret =
-	    Vect_get_point_in_poly_isl((const struct line_pnts *) Points[0],
-				       (const struct line_pnts **) Points + 1, nRings - 1,
-				       &x, &y);
+	ret = Vect_get_point_in_poly_isl((const struct line_pnts *) Points[0],
+					 (const struct line_pnts **) Points + 1,
+					 nRings - 1, &x, &y);
 	if (ret < -1) {
 	    G_warning(_("Unable to calculate centroid for area %d"),
 		      outer_area);
