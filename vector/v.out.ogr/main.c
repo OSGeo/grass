@@ -50,7 +50,8 @@ int main(int argc, char *argv[])
     int type, cat;
 
     /* Attributes */
-    int doatt = 0, ncol = 0, colsqltype, colctype, keycol = -1;
+    int doatt = 0, ncol = 0, colsqltype, colctype, colwidth, keycol = -1;
+    const char *colname;
     struct field_info *Fi = NULL;
     dbDriver *Driver = NULL;
     dbTable *Table;
@@ -578,11 +579,13 @@ int main(int argc, char *argv[])
 	     keycol = -1;
 	     for (i = 0; i < ncol; i++) {
 		 Column = db_get_table_column(Table, i);
+		 colname =  db_get_column_name(Column);
 		 colsqltype = db_get_column_sqltype(Column);
-		 G_debug(2, "col %d: %s (%s)", i, db_get_column_name(Column),
-			 db_sqltype_name(colsqltype));
 		 colctype = db_sqltype_to_Ctype(colsqltype);
-
+		 colwidth = db_get_column_length(Column);
+		 G_debug(3, "col %d: %s sqltype=%d ctype=%d width=%d",
+			 i, colname, colsqltype, colctype, colwidth);
+		 
 		 switch (colctype) {
 		 case DB_C_TYPE_INT:
 		     ogr_ftype = OFTInteger;
@@ -601,40 +604,40 @@ int main(int argc, char *argv[])
 
 		 strcpy(key1, Fi->key);
 		 G_tolcase(key1);
-		 strcpy(key2, db_get_column_name(Column));
+		 strcpy(key2, colname);
 		 G_tolcase(key2);
 		 if (strcmp(key1, key2) == 0)
 		     keycol = i;
 		 G_debug(2, "%s x %s -> %s x %s -> keycol = %d", Fi->key,
-			 db_get_column_name(Column), key1, key2, keycol);
+			 colname, key1, key2, keycol);
 
 		 if (flags.nocat->answer &&
-		     strcmp(Fi->key, db_get_column_name(Column)) == 0)
+		     strcmp(Fi->key, colname) == 0)
 		     /* skip export of 'cat' field */
 		     continue;
 
 		 if (flags.append->answer) {
 		     Ogr_field = OGR_L_GetLayerDefn(Ogr_layer);
-		     if (OGR_FD_GetFieldIndex(Ogr_field, db_get_column_name(Column)) > -1)
+		     if (OGR_FD_GetFieldIndex(Ogr_field, colname) > -1)
 			 /* skip existing fields */
 			 continue;
 		     else
 			 G_warning(_("New attribute column <%s> added to the table"),
-				   db_get_column_name(Column));
-		}
-		    
-		Ogr_field =
-		    OGR_Fld_Create(db_get_column_name(Column),
-				   ogr_ftype);
-		OGR_L_CreateField(Ogr_layer, Ogr_field, 0);
-
-		OGR_Fld_Destroy(Ogr_field);
-	    }
-	    if (keycol == -1)
-		G_fatal_error(_("Key column <%s> not found"), Fi->key);
-	}
+				   colname);
+		 }
+		 
+		 Ogr_field = OGR_Fld_Create(colname, ogr_ftype);
+		 if (ogr_ftype == OFTString && colwidth > 0)
+		     OGR_Fld_SetWidth(Ogr_field, colwidth);
+		 OGR_L_CreateField(Ogr_layer, Ogr_field, 0);
+		 
+		 OGR_Fld_Destroy(Ogr_field);
+	     }
+	     if (keycol == -1)
+		 G_fatal_error(_("Key column <%s> not found"), Fi->key);
+	 }
     }
-
+    
     Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
 
     fout = fskip = nocat = noatt = nocatskip = 0;
