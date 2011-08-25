@@ -529,6 +529,18 @@ int dig_Rd_Plus_head(struct gvfile * fp, struct Plus_head *ptr)
 	     " Consider to rebuild topology or upgrade GRASS.",
 	     ptr->Version_Major, ptr->Version_Minor);
     }
+    if (ptr->Version_Major < GV_TOPO_VER_MAJOR ||
+	(ptr->Version_Major == GV_TOPO_VER_MAJOR &&
+	 ptr->Version_Minor < GV_TOPO_VER_MINOR)) {
+	/* The file was created by GRASS library with lower version than this one */
+
+	/* This version of GRASS lib can not read this old format */
+	G_warning
+	    ("Old topology format version %d.%d is not supported by this release."
+	     " Try to rebuild topology.",
+	     ptr->Version_Major, ptr->Version_Minor);
+	return (-1);
+    }
 
     /* init Port_info structure and set as default */
     dig_init_portable(&(ptr->port), byte_order);
