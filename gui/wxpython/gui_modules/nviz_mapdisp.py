@@ -471,7 +471,6 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         return (x, y)
     
     def OnLeftUp(self, event):
-        self.ReleaseMouse()
         if self.mouse["use"] == "query":
             layers = self.GetSelectedLayer(multi = True)
             
