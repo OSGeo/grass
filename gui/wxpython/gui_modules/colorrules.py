@@ -528,8 +528,10 @@ class ColorTable(wx.Frame):
         @return True on success otherwise False
         """
         ret = self.CreateColorTable()
-        if not self.colorTable:
-            self.UseAttrColumn()
+        if self.colorTable:
+            self.UseAttrColumn(False)
+        else:
+            self.UseAttrColumn(True)            
         if ret:
             display = self.parent.GetLayerTree().GetMapDisplay()
             if display and display.IsAutoRendered():
@@ -1529,27 +1531,29 @@ class VectorColorTable(ColorTable):
         cmd = 'v.colors'
         ColorTable.RunHelp(self, cmd = cmd)
         
-    def UseAttrColumn(self, useAttrColumn = True):
-        """!Use attribute column to render map"""
-        # TODO switch back to table, not only selected map
-        layer = self.parent.curr_page.maptree.layer_selected
-        if layer and self.parent.curr_page.maptree.GetPyData(layer)[0]['maplayer'].GetName() == self.inmap:
-##            cmd = self.parent.curr_page.maptree.GetPyData(layer)[0]['maplayer'].GetCmd()
-##            if useAttrColumn:
-##                cmd[1].update({'flags': 'a', })
-            cmdlist = ['d.vect',
-                        '-a',
-                       'map=%s' % self.inmap,
-                       'type=point,line,boundary,area']
-                
-            if self.attributeType == 'color':
-                cmdlist.append('rgb_column=%s' % self.properties['storeColumn'])
-            elif self.attributeType == 'size':
-                cmdlist.append('size_column=%s' % self.properties['storeColumn'])
-            elif self.attributeType == 'width':
-                cmdlist.append('width_column=%s' % self.properties['storeColumn'])
+    def UseAttrColumn(self, useAttrColumn):
+        """!Find layers and apply the changes in d.vect command"""
+        layers = self.parent.curr_page.maptree.FindItemByData(key = 'name', value = self.inmap)
+        if not layers:
+            return
+        for layer in layers:
+            if self.parent.curr_page.maptree.GetPyData(layer)[0]['type'] != 'vector':
+                continue
+            cmdlist = self.parent.curr_page.maptree.GetPyData(layer)[0]['maplayer'].GetCmd()
             
-            self.parent.curr_page.maptree.GetPyData(layer)[0]['maplayer'].SetCmd(cmdlist)
+            if self.attributeType == 'color':
+                if useAttrColumn:
+                    cmdlist[1].update({'flags': 'a'})
+                    cmdlist[1].update({'rgb_column': self.properties['storeColumn']})
+                else:
+                    if 'flags' in cmdlist[1]:
+                        cmdlist[1]['flags'] = cmdlist[1]['flags'].replace('a', '')
+                    cmdlist[1].pop('rgb_column', None)
+            elif self.attributeType == 'size':
+                cmdlist[1].update({'size_column': self.properties['storeColumn']})
+            elif self.attributeType == 'width':
+                cmdlist[1].update({'width_column' :self.properties['storeColumn']})
+            self.parent.curr_page.maptree.GetPyData(layer)[0]['cmd'] = cmdlist
         
     def CreateColorTable(self, tmp = False):
         """!Create color rules (color table or color column)"""
