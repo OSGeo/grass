@@ -1561,13 +1561,18 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # self.Map.Clean()
 
     def FindItemByData(self, key, value):
-        """!Find item based on key and value (see PyData[0])
+        """!Find item based on key and value (see PyData[0]).
+        
+        If key is 'name', finds item(s) of given maplayer name.
         
         @return item instance
         @return None not found
         """
         item = self.GetFirstChild(self.root)[0]
-        return self.__FindSubItemByData(item, key, value)
+        if key == 'name':
+            return self.__FindSubItemByName(item, value)
+        else:
+            return self.__FindSubItemByData(item, key, value)
 
     def FindItemByIndex(self, index):
         """!Find item by index (starting at 0)
@@ -1597,7 +1602,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             item = self.GetNextSibling(item)
         
     def __FindSubItemByData(self, item, key, value):
-        """!Support method for FindItemByValue"""
+        """!Support method for FindItemByData"""
         while item and item.IsOk():
             try:
                 itemValue = self.GetPyData(item)[0][key]
@@ -1615,3 +1620,24 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         return None
 
+    def __FindSubItemByName(self, item, value):
+        """!Support method for FindItemByData for searching by name"""
+        items = []
+        while item and item.IsOk():
+            try:
+                itemLayer = self.GetPyData(item)[0]['maplayer']
+            except KeyError:
+                return None
+            
+            if value == itemLayer.GetName():
+                items.append(item)
+            if self.GetPyData(item)[0]['type'] == 'group':
+                subItem = self.GetFirstChild(item)[0]
+                found = self.__FindSubItemByName(subItem, name)
+                if found:
+                    items.extend(found)
+            item = self.GetNextSibling(item)
+        
+        if items:
+            return items
+        return None
