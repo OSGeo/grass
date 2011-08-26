@@ -2553,6 +2553,7 @@ class NvizToolWindow(FN.FlatNotebook):
             self.mapWindow.Refresh(False)
         else: # here
             if self.FindWindowById(event.GetId()).GetValue():
+                self.mapDisplay.Raise()
                 self.mapWindow.mouse['use'] = 'lookHere'
                 self.mapWindow.SetCursor(self.mapWindow.cursors["cross"])
             else:
@@ -4014,7 +4015,7 @@ class NvizToolWindow(FN.FlatNotebook):
         else: return
         
         if event.GetInt():
-            self.mapWindow.parent.Raise()
+            self.mapDisplay.Raise()
             self.mapWindow.mouse['use'] = type
             self.mapWindow.SetCursor(self.mapWindow.cursors["cross"])
         else:
