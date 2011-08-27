@@ -6,11 +6,12 @@
 #include <grass/raster.h>
 #include <grass/vector.h>
 #include <grass/display.h>
-#include "plot.h"
-#include "local_proto.h"
 #include <grass/symbol.h>
 #include <grass/glocale.h>
 #include <grass/dbmi.h>
+
+#include "plot.h"
+#include "local_proto.h"
 
 int palette_ncolors = 16;
 
@@ -157,13 +158,14 @@ int display_lines(struct Map_info *Map, int type, struct cat_list *Clist,
     if (Vect_maptype(Map) == GV_FORMAT_OGR) {
 	/* centroids are stored in topology for OGR layers */
 	if (Vect_level(Map) >= 2) {
-	    if (Vect_get_num_primitives(Map, GV_CENTROID) > 0) {
+	    if (type & GV_CENTROID &&
+		Vect_get_num_primitives(Map, GV_CENTROID) > 0) {
 		int nlines;
 		struct bound_box box;
 		struct boxlist *list;
 
 		list = Vect_new_boxlist(FALSE); /* bboxes not needed */
-		Vect_get_map_box(Map, &box);
+		Vect_get_constraint_box(Map, &box);
 		nlines = Vect_select_lines_by_box(Map, &box, GV_CENTROID, list);
 		G_debug(3, "ncentroids (ogr) = %d", nlines);
 			    
