@@ -315,7 +315,14 @@ class VDigitWindow(BufferedWindow):
         
         # select feature by point
         cats = {}
-        if self.digit.GetDisplay().SelectLineByPoint(coords) is None:
+        self.digit.GetDisplay().SelectLineByPoint(coords) 
+        
+        if not self.digit.GetDisplay().GetSelected():
+            for key in ('attributes', 'category'):
+                if self.parent.dialogs[key] and \
+                        self.parent.dialogs[key].IsShown():
+                    self.parent.dialogs[key].Hide()
+            self.UpdateMap(render = False, renderVector = True)
             return
         
         if UserSettings.Get(group = 'vdigit', key = 'checkForDupl',
