@@ -458,7 +458,7 @@ class MapFrame(wx.Frame):
             self._mgr.AddPane(self.toolbars['map'],
                               wx.aui.AuiPaneInfo().
                               Name("maptoolbar").Caption(_("Map Toolbar")).
-                              ToolbarPane().Top().
+                              ToolbarPane().Top().Name('mapToolbar').
                               LeftDockable(False).RightDockable(False).
                               BottomDockable(False).TopDockable(True).
                               CloseButton(False).Layer(2).
@@ -666,7 +666,18 @@ class MapFrame(wx.Frame):
         
         # change the cursor
         self.MapWindow.SetCursor(self.cursors["hand"])
-
+    
+    def OnRotate(self, event):
+        """!Rotate 3D view
+        """
+        if self.toolbars['map']:
+            self.toolbars['map'].OnTool(event)
+            self.toolbars['map'].action['desc'] = ''
+        
+        self.MapWindow.mouse['use'] = "rotate"
+        
+        # change the cursor
+        self.MapWindow.SetCursor(self.cursors["hand"])
     def OnErase(self, event):
         """!Erase the canvas
         """

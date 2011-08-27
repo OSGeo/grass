@@ -417,9 +417,6 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             size = self.GetClientSize()
             self.SetDrawScalebar((pos[0], size[1] - pos[1]))
         
-        if self.mouse['use'] == 'pan':
-            pass
-                
         if self.mouse['use'] == 'pointer':
             # get decoration or text id
             self.dragid = None
@@ -443,7 +440,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         if self.mouse['use'] == 'pointer':
             self.DragItem(self.dragid, event)
             
-        if self.mouse['use'] == 'pan':    
+        if self.mouse['use'] == 'rotate':    
             dx, dy = event.GetX() - self.mouse['tmp'][0], event.GetY() - self.mouse['tmp'][1]
             self.mouse['tmp'] = event.GetPositionTuple()
             angle, x, y, z = self._display.GetRotationParameters(dx, dy)
@@ -501,10 +498,12 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 self.dragid = None
                 self.Refresh(False)
             
-        elif self.mouse['use'] == 'pan':
+        elif self.mouse['use'] == 'rotate':
             self._display.UnsetRotation()
             self.render['quick'] = False
             self.Refresh(False)
+            
+        event.Skip()
             
     def OnDClick(self, event):
         """!On mouse double click"""
@@ -624,7 +623,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                                bright = data['bright'] / 100.,
                                ambient = data['ambient'] / 100.)
         self._display.DrawLightingModel()
-        if hasattr(event, 'refresh'):
+        if event.refresh:
             self.Refresh(False)
         
     def UpdateMap(self, render = True):

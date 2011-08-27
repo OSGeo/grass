@@ -2385,7 +2385,7 @@ class NvizToolWindow(FN.FlatNotebook):
         self._display.DrawLightingModel()
         
     def OnLightChange(self, event):
-        """!Position of the light changed"""
+        """!Position of the light changing"""
         winName = self.__GetWindowName(self.win['light'], event.GetId())
         if not winName:
             return
@@ -2396,24 +2396,24 @@ class NvizToolWindow(FN.FlatNotebook):
         for win in self.win['light'][winName].itervalues():
             self.FindWindowById(win).SetValue(value)
             
-        self.PostLightEvent(refresh = False)
+        self.PostLightEvent()
         
         event.Skip()
         
     def OnLightChanged(self, event):
-        """!Light"""
-        self.mapWindow.Refresh(False)
+        """!Light changed"""
+        self.PostLightEvent(refresh = True)
         
     def OnLightColor(self, event):
         """!Color of the light changed"""
         self.mapWindow.light['color'] = tuple(event.GetValue())
         
-        self.PostLightEvent()
+        self.PostLightEvent(refresh = True)
         
         event.Skip()
         
     def OnLightValue(self, event):
-        """!Light brightness changed"""
+        """!Light brightness/ambient changing"""
         data = self.mapWindow.light
         self.OnScroll(event, self.win['light'], data)
         
@@ -4730,7 +4730,7 @@ class LightPositionWindow(PositionWindow):
     def UpdatePos(self, xcoord, ycoord):
         x, y = PositionWindow.UpdatePos(self, xcoord, ycoord)
         
-        event = wxUpdateLight()
+        event = wxUpdateLight(refresh = False)
         wx.PostEvent(self.mapWindow, event)
         
         return x, y
