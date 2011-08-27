@@ -12,6 +12,7 @@
 #include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/dbmi.h>
+#include <grass/glocale.h>
 
 static int *cats_array;
 static int ncats_array;
@@ -157,11 +158,43 @@ static int areas_new_cats_match(struct Map_info *In, int area1, int area2,
     return 1;
 }
 
+/* extract areas, used only for OGR output */
+static int extract_area(struct Map_info *In, struct Map_info *Out,
+			int area, struct line_pnts *Points,
+			const struct line_cats *Cats, int field)
+{
+    int cat, ret;
+    struct line_cats *cCats;
+    
+    ret = Vect_cat_get(Cats, field, &cat);
+    if (ret == 0) {
+	G_warning(_("No category found for area %d. Skipping."), area);
+	return 0;
+    }
+    if (ret > 1) {
+	G_warning(_("More categories (%d) found for area %d. "
+		    "Using first found category %d"), ret, area, cat);
+    }
+
+    cCats = Vect_new_cats_struct();
+
+    G_debug(3, "extract_area(): area = %d, cat = %d", area, cat);
+
+    /* get exterior ring */
+    Vect_get_area_points(In, area, Points);
+    Vect_cat_set(cCats, 1, cat); /* field for OGR always '1' */
+    Vect_write_line(Out, GV_BOUNDARY, Points, cCats);
+
+    Vect_destroy_cats_struct(cCats);
+
+    return 1;
+}
+
 int extract_line(int num_index, int *num_array, struct Map_info *In,
 		 struct Map_info *Out, int new, int select_type, int dissolve,
 		 int field, int type_only, int reverse)
 {
-    int line, nlines;
+    int line, nlines, is_ogr;
     struct line_pnts *Points;
     struct line_cats *Line_Cats_Old, *CCats;
 
@@ -173,7 +206,7 @@ int extract_line(int num_index, int *num_array, struct Map_info *In,
     int cat_match;		/* category found in list */
     int centroid_in_area;	/* centroid is in area */
     int type;
-    int i, tmp, write;
+    int i, tmp, write, area;
 
     /* Initialize the Point structure, ONCE */
     Points = Vect_new_line_struct();
@@ -186,6 +219,12 @@ int extract_line(int num_index, int *num_array, struct Map_info *In,
     /* sort list */
     qsort(cats_array, ncats_array, sizeof(int), cmp);
 
+    /* writting OGR layers directly */
+    is_ogr = Vect_maptype(Out) == GV_FORMAT_OGR_DIRECT;
+    if (is_ogr && Vect_level(In) < 2)
+	G_warning(_("Topology level required for extracting areas "
+		    "for OGR layers"));
+    
     /* Cycle through all lines */
     nlines = Vect_get_num_lines(In);
     for (line = 1; line <= nlines; line++) {
@@ -198,17 +237,21 @@ int extract_line(int num_index, int *num_array, struct Map_info *In,
 	write = 0;
 
 	G_percent(line, nlines, 2);
-	G_debug(3, "Line = %d", line);
+	G_debug(3, "line = %d", line);
 
 	/* Get data */
 	type = Vect_read_line(In, Points, Line_Cats_Old, line);
 	G_debug(3, "type = %d ncats = %d", type, Line_Cats_Old->n_cats);
 
+	if (is_ogr && type == GV_BOUNDARY)
+	    /* OGR layers writes areas as polygons */
+	    continue;
+	    
 	if (type & select_type)
 	    type_match = 1;
 
 	if (field > 0)
-	    field_match = Vect_cat_get(Line_Cats_Old, field, &tmp);
+	    field_match = Vect_cat_get(Line_Cats_Old, field, &tmp) > 0 ? TRUE : FALSE;
 
 	for (i = 0; i < Line_Cats_Old->n_cats; i++) {
 	    G_debug(3, "field = %d cat = %d", Line_Cats_Old->field[i],
@@ -233,7 +276,7 @@ int extract_line(int num_index, int *num_array, struct Map_info *In,
 		centroid = Vect_get_area_centroid(In, left_area);
 		if (centroid > 0) {
 		    Vect_read_line(In, NULL, CCats, centroid);
-		    left_field_match = Vect_cat_get(CCats, field, &tmp);
+		    left_field_match = Vect_cat_get(CCats, field, &tmp) > 0 ? TRUE : FALSE;
 		    for (i = 0; i < CCats->n_cats; i++) {
 			if (CCats->field[i] == field) {
 			    if ((!reverse && in_list(CCats->cat[i])) ||
@@ -252,7 +295,7 @@ int extract_line(int num_index, int *num_array, struct Map_info *In,
 		centroid = Vect_get_area_centroid(In, right_area);
 		if (centroid > 0) {
 		    Vect_read_line(In, NULL, CCats, centroid);
-		    right_field_match = Vect_cat_get(CCats, field, &tmp);
+		    right_field_match = Vect_cat_get(CCats, field, &tmp) > 0 ? TRUE : FALSE;
 		    for (i = 0; i < CCats->n_cats; i++) {
 			if (CCats->field[i] == field) {
 			    if ((!reverse && in_list(CCats->cat[i])) ||
@@ -267,8 +310,6 @@ int extract_line(int num_index, int *num_array, struct Map_info *In,
 	}
 
 	if (type == GV_CENTROID) {
-	    int area;
-
 	    area = Vect_get_centroid_area(In, line);
 	    if (area > 0)
 		centroid_in_area = 1;
@@ -347,7 +388,10 @@ int extract_line(int num_index, int *num_array, struct Map_info *In,
 	if (write) {
 	    extract_cats(Line_Cats_Old, type_only, field, new, reverse);
 
-	    Vect_write_line(Out, type, Points, Line_Cats_Old);
+	    if (is_ogr && type == GV_CENTROID && area > 0)
+		extract_area(In, Out, area, Points, Line_Cats_Old, field);
+	    else
+		Vect_write_line(Out, type, Points, Line_Cats_Old);
 	}
 
     }				/* end lines section */
