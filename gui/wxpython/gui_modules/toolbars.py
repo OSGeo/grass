@@ -75,9 +75,10 @@ class AbstractToolbar(wx.ToolBar):
         return None
     
     def CreateTool(self, label, bitmap, kind,
-                   shortHelp, longHelp, handler):
+                   shortHelp, longHelp, handler, pos = -1):
         """!Add tool to the toolbar
         
+        @param pos if -1 add tool, if > 0 insert at given pos
         @return id of tool
         """
         bmpDisabled = wx.NullBitmap
@@ -86,9 +87,14 @@ class AbstractToolbar(wx.ToolBar):
             tool = vars(self)[label] = wx.NewId()
             Debug.msg(3, "CreateTool(): tool=%d, label=%s bitmap=%s" % \
                           (tool, label, bitmap))
-            toolWin = self.AddLabelTool(tool, label, bitmap,
-                                        bmpDisabled, kind,
-                                        shortHelp, longHelp)
+            if pos < 0:
+                toolWin = self.AddLabelTool(tool, label, bitmap,
+                                            bmpDisabled, kind,
+                                            shortHelp, longHelp)
+            else:
+                toolWin = self.InsertLabelTool(pos, tool, label, bitmap,
+                                            bmpDisabled, kind,
+                                            shortHelp, longHelp)
             self.Bind(wx.EVT_TOOL, handler, toolWin)
         else: # separator
             self.AddSeparator()
@@ -175,16 +181,15 @@ class AbstractToolbar(wx.ToolBar):
         retData = list()
         for args in data:
             retData.append(self._defineTool(*args))
-        
         return retData
 
-    def _defineTool(self, name = None, icon = None, handler = None, item = wx.ITEM_NORMAL):
+    def _defineTool(self, name = None, icon = None, handler = None, item = wx.ITEM_NORMAL, pos = -1):
         """!Define tool
         """
         if name:
             return (name, icon.GetBitmap(),
                     item, icon.GetLabel(), icon.GetDesc(),
-                    handler)
+                    handler, pos)
         return ("", "", "", "", "", "") # separator
     
 class MapToolbar(AbstractToolbar):
@@ -307,7 +312,27 @@ class MapToolbar(AbstractToolbar):
                                       self.parent.PrintMenu),
                                      (None, ))
                                     )
-    
+    def InsertTool(self, data):
+        """!Insert tool to toolbar
+        
+        @param data toolbar data"""
+        data = self._getToolbarData(data)
+        for tool in data:
+            self.CreateTool(*tool)
+        self.Realize()
+        
+        self.parent._mgr.GetPane('mapToolbar').BestSize(self.GetBestSize())
+        self.parent._mgr.Update()
+        
+    def RemoveTool(self, tool):
+        """!Remove tool from toolbar
+        
+        @param tool tool id"""
+        self.DeleteTool(tool)
+        
+        self.parent._mgr.GetPane('mapToolbar').BestSize(self.GetBestSize())
+        self.parent._mgr.Update()
+        
     def OnSelectTool(self, event):
         """!Select / enable tool available in tools list
         """
@@ -319,6 +344,10 @@ class MapToolbar(AbstractToolbar):
         
         elif tool == self.toolId['3d'] and \
                 not (self.parent.MapWindow3D and self.parent.IsPaneShown('3d')):
+            self.InsertTool((('rotate', Icons['nviz']['rotate'],
+                              self.parent.OnRotate,
+                              wx.ITEM_CHECK,7),)) # 7 is position
+                                              
             self.ExitToolbars()
             self.parent.AddNviz()
             
@@ -332,11 +361,13 @@ class MapToolbar(AbstractToolbar):
         if self.parent.toolbars['vdigit']:
             self.parent.toolbars['vdigit'].OnExit()
         if self.parent.GetLayerManager().IsPaneShown('toolbarNviz'):
+            self.RemoveTool(self.rotate)
             self.parent.RemoveNviz()
         
     def Enable2D(self, enabled):
         """!Enable/Disable 2D display mode specific tools"""
-        for tool in (self.zoomin,
+        for tool in (self.pan,
+                     self.zoomin,
                      self.zoomout,
                      self.zoomback,
                      self.zoommenu,

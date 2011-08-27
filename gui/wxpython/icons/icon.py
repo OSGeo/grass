@@ -333,6 +333,9 @@ Icons = {
                                desc = _('Settings dialog for georectification tool')),
         },
     'nviz' : {
+        'rotate': MetaIcon(img = iconSet.get('3d-rotate', wx.ART_ERROR),
+                             label = _('Rotate 3D scene'),
+                             desc = _('Drag with mouse to rotate 3D scene')),                            
         'nviz_cmd': MetaIcon(img = iconSet.get('script-save', wx.ART_ERROR),
                              label = _('Generate command for nviz_cmd'),
                              desc = _('Generate command for nviz_cmd based on current state')),
