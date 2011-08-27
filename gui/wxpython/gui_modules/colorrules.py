@@ -528,6 +528,8 @@ class ColorTable(wx.Frame):
         @return True on success otherwise False
         """
         ret = self.CreateColorTable()
+        if not ret:
+            gcmd.GMessage(parent = self, message = _("No valid color rules given."))
         if self.colorTable:
             self.UseAttrColumn(False)
         else:
@@ -679,7 +681,6 @@ class ColorTable(wx.Frame):
             rulestxt += rule['value'] + ' ' + rule['color'] + '\n'
            
         if not rulestxt:
-            gcmd.GMessage(parent = self, message = _("No color rules given."))
             return False
         
         gtemp = utils.GetTempfile()
@@ -1633,7 +1634,7 @@ class ThematicVectorTable(VectorColorTable):
         
         ret = self.CreateColorTable()
         if not ret:
-            gcmd.GMessage(parent = self, message = _("No rules given."))
+            gcmd.GMessage(parent = self, message = _("No valid color rules given."))
         
         data = self.parent.GetLayerData(nvizType = 'vector')
         data['vector']['points']['thematic']['layer'] = int(self.properties['layer'])
