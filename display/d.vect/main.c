@@ -153,7 +153,7 @@ int main(int argc, char **argv)
     color_opt->key = "color";
     color_opt->type = TYPE_STRING;
     color_opt->answer = DEFAULT_FG_COLOR;
-    color_opt->label = _("Line color");
+    color_opt->label = _("Feature color");
     color_opt->guisection = _("Colors");
     color_opt->gisprompt = "old_color,color,color_none";
     color_opt->description =
