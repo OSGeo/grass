@@ -1225,7 +1225,7 @@ class BufferedWindow(MapWindow, wx.Window):
             if (event.LeftIsDown() and 
                 not (digitToolbar and 
                     digitToolbar.GetAction() in ("moveLine",) and 
-                    self.display.GetSelected() > 0)):
+                     self.digit.GetDisplay().GetSelected() > 0)):
                 # draw box only when left mouse button is pressed
                 self.MouseDraw(pdc = self.pdcTmp)
         
@@ -1759,7 +1759,7 @@ class BufferedWindow(MapWindow, wx.Window):
             elif l.type == 'vector':
                 if hasattr(self, "digit") and \
                         self.toolbar.GetLayer() == l:
-                    w, s, b, e, n, t = self.display.GetMapBoundingBox()
+                    w, s, b, e, n, t = self.digit.GetDisplay().GetMapBoundingBox()
                     self.Map.GetRegion(n = n, s = s, w = w, e = e,
                                        update = True)
                     updated = True
