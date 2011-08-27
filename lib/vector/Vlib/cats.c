@@ -140,39 +140,42 @@ int Vect_cat_set(struct line_cats *Cats, int field, int cat)
 /*!
    \brief Get first found category of given field.
 
-   <em>cat</em> is set to first category found or -1 if field was not found
+   <em>cat</em> is set to first category found or -1 if field was not
+   found
 
-   \param Cats line_cats structure
+   \param Cats pointer line_cats structure
    \param field layer number
    \param[out] cat pointer to variable where cat will be written (can be NULL)
 
-   \return 1 found
+   \return number of found cats for given field (first reported)
    \return 0 layer does not exist
  */
 int Vect_cat_get(const struct line_cats *Cats, int field, int *cat)
 {
-    int n;
+    int n, ret;
 
     /* check input value */
     /*
-       if (field < 1 || field > GV_FIELD_MAX)
-       return (0);
-     */
+      if (field < 1 || field > GV_FIELD_MAX)
+      return (0);
+    */
     
+    /* field was not found */    
+    ret = 0;
     if (cat)
 	*cat = -1;
-
+    
     /* go through cats and find if field exist */
     for (n = 0; n < Cats->n_cats; n++) {
 	if (Cats->field[n] == field) {
-	    if (cat)
+	    if (cat && ret == 0) {
 		*cat = Cats->cat[n];
-	    return 1;
+	    }
+	    ret++;
 	}
     }
-
-    /* field was not found */
-    return 0;
+    
+    return ret;
 }
 
 /*!
