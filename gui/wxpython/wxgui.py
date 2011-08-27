@@ -286,7 +286,7 @@ class GMFrame(wx.Frame):
         # show toolbar
         self._auimgr.GetPane('toolbarNviz').Show()
         # reorder other toolbars
-        for pos, toolbar in enumerate(('toolbarNviz', 'toolbarVector', 'toolbarTools', 'toolbarMisc')):
+        for pos, toolbar in enumerate(('toolbarVector', 'toolbarTools', 'toolbarMisc','toolbarNviz')):
             self._auimgr.GetPane(toolbar).Row(2).Position(pos)
         self._auimgr.Update()
         
