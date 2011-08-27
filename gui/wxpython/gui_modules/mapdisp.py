@@ -1892,7 +1892,7 @@ class MapFrame(wx.Frame):
         zoommenu.AppendItem(zoomsaved)
         self.Bind(wx.EVT_MENU, self.OnZoomToSaved, zoomsaved)
 
-        savewind = wx.MenuItem(zoommenu, wx.ID_ANY, _('Set computational region from display'))
+        savewind = wx.MenuItem(zoommenu, wx.ID_ANY, _('Set computational region from display extent'))
         zoommenu.AppendItem(savewind)
         self.Bind(wx.EVT_MENU, self.OnDisplayToWind, savewind)
 
