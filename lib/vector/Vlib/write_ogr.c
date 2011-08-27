@@ -107,10 +107,17 @@ off_t V1_write_line_ogr(struct Map_info *Map, int type,
     else if (type & GV_LINE) {
 	if (Ogr_geom_type != wkbLineString &&
 	    Ogr_geom_type != wkbLineString25D) {
-	    G_warning(_("Feature is not a line Skipping."));
+	    G_warning(_("Feature is not a line. Skipping."));
 	    return -1;
 	}
 	Ogr_geometry = OGR_G_CreateGeometry(wkbLineString);
+    }
+    else if (type & GV_BOUNDARY) {
+	if (Ogr_geom_type != wkbPolygon) {
+	    G_warning(_("Feature is not a polygon. Skipping."));
+	    return -1;
+	}
+	Ogr_geometry = OGR_G_CreateGeometry(wkbPolygon);
     }
     else if (type & GV_FACE) {
 	if (Ogr_geom_type != wkbPolygon25D) {
@@ -126,9 +133,32 @@ off_t V1_write_line_ogr(struct Map_info *Map, int type,
 
     G_debug(3, "V1_write_line_ogr(): type = %d", type);
 
-    for (i = 0; i < points->n_points; i++) {
-	OGR_G_AddPoint(Ogr_geometry, points->x[i], points->y[i],
-		       points->z[i]);
+    if (Ogr_geom_type == wkbPolygon || Ogr_geom_type == wkbPolygon25D) {
+	/* create exterior ring */
+	OGRGeometryH Ogr_ring;
+	int npoints;
+	
+	npoints = points->n_points - 1;
+	Ogr_ring = OGR_G_CreateGeometry(wkbLinearRing);
+	if (points->x[0] != points->x[npoints] ||
+	    points->y[0] != points->y[npoints] ||
+	    points->z[0] != points->z[npoints]) {
+	    G_warning(_("Boundary is not closed. Skipping."));
+	    return -1;
+	}
+	
+	/* add points */
+	for (i = 0; i < points->n_points; i++) {
+	    OGR_G_AddPoint(Ogr_ring, points->x[i], points->y[i],
+			   points->z[i]);
+	}
+	OGR_G_AddGeometry(Ogr_geometry, Ogr_ring);
+    }
+    else {
+	for (i = 0; i < points->n_points; i++) {
+	    OGR_G_AddPoint(Ogr_geometry, points->x[i], points->y[i],
+			   points->z[i]);
+	}
     }
     
     G_debug(4, "   n_points = %d", points->n_points);

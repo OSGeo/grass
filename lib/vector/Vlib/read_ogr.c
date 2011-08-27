@@ -506,6 +506,7 @@ int V2_read_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 
 	if (line_c != NULL) {
 	  /* cat = FID and offset = FID for centroid */
+	  Vect_reset_cats(line_c);
 	  Vect_cat_set(line_c, 1, (int) Line->offset);
 	}
 	
