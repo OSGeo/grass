@@ -279,6 +279,10 @@ int V1_open_new_ogr(struct Map_info *Map, const char *name, int with_z)
 
    V1_open_new_ogr() is required to be called before this function.
 
+   List of currently supported types:
+    - GV_POINT     (wkbPoint)
+    - GV_LINE      (wkbLineString)
+    - GV_BOUNDARY  (wkb_Polygon)
    \param[in,out] Map pointer to Map_info structure
    \param type feature type (GV_POINT, GV_LINE, ...)
 
@@ -312,7 +316,7 @@ int V2_open_new_ogr(struct Map_info *Map, int type)
     case GV_LINE:
 	Ogr_geom_type = wkbLineString;
 	break;
-    case GV_AREA:
+    case GV_BOUNDARY:
 	Ogr_geom_type = wkbPolygon;
 	break;
     default:
