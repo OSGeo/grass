@@ -103,6 +103,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.cplanes = list()
         # list of query points
         self.qpoints = list()
+        # list of past views
+        self.viewhistory  = []
+        self.saveHistory = False
         # overlays
         self.overlays = {}
         self.imagedict = {}
@@ -352,46 +355,24 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
     def OnMouseWheel(self, event):
         """!Change perspective"""
         wheel = event.GetWheelRotation()
-        current  = event.GetPositionTuple()[:]
         Debug.msg (5, "GLWindow.OnMouseMotion(): wheel = %d" % wheel)
-        prev_value = self.view['persp']['value']
-        if wheel > 0:
-            value = -1 * self.view['persp']['step']
-        else:
-            value = self.view['persp']['step']
-        self.view['persp']['value'] +=  value
-        if self.view['persp']['value'] < 1:
-            self.view['persp']['value'] = 1
-        elif self.view['persp']['value'] > 180:
-            self.view['persp']['value'] = 180
-        
-        if prev_value !=  self.view['persp']['value']:
-            if hasattr(self.lmgr, "nviz"):
-                self.lmgr.nviz.UpdateSettings()
-                
-                self._display.SetView(self.view['position']['x'], self.view['position']['y'],
-                                      self.iview['height']['value'],
-                                      self.view['persp']['value'],
-                                      self.view['twist']['value'])
+        self.DoZoom(zoomtype = wheel, pos = event.GetPositionTuple())
             
-            # redraw map
-            self.DoPaint()
-            
-            # update statusbar
-            ### self.parent.StatusbarUpdate()
+        # update statusbar
+        ### self.parent.StatusbarUpdate()
             
     def OnLeftDown(self, event):
         """!On left mouse down"""
         self.mouse['begin'] = event.GetPositionTuple()
         self.mouse['tmp'] = event.GetPositionTuple()
         if self.mouse['use'] == "lookHere":
-            pos = event.GetPosition()
             size = self.GetClientSize()
-            self._display.LookHere(pos[0], size[1] - pos[1])
-            self.Refresh(False)
+            self._display.LookHere(self.mouse['begin'][0], size[1] - self.mouse['begin'][1])
             focus = self._display.GetFocus()
             for i, coord in enumerate(('x', 'y', 'z')):
                 self.iview['focus'][coord] = focus[i]
+            self.saveHistory = True
+            self.Refresh(False)
             toggle = self.lmgr.nviz.FindWindowByName('here')
             toggle.SetValue(False)
             self.mouse['use'] = 'pointer'
@@ -467,7 +448,40 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         return (x, y)
     
+    def DoZoom(self, zoomtype, pos):
+        """!Change perspective and focus"""
+        
+        prev_value = self.view['persp']['value']
+        if zoomtype > 0:
+            value = -1 * self.view['persp']['step']
+        else:
+            value = self.view['persp']['step']
+        self.view['persp']['value'] +=  value
+        if self.view['persp']['value'] < 1:
+            self.view['persp']['value'] = 1
+        elif self.view['persp']['value'] > 180:
+            self.view['persp']['value'] = 180
+        
+        if prev_value !=  self.view['persp']['value']:
+            if hasattr(self.lmgr, "nviz"):
+                self.lmgr.nviz.UpdateSettings()
+                x, y = pos[0], self.GetClientSize()[1] - pos[1]
+                result = self._display.GetPointOnSurface(x, y)
+                if result[0]:
+                    self._display.LookHere(x, y)
+                    focus = self._display.GetFocus()
+                    for i, coord in enumerate(('x', 'y', 'z')):
+                        self.iview['focus'][coord] = focus[i]
+                self._display.SetView(self.view['position']['x'], self.view['position']['y'],
+                                      self.iview['height']['value'],
+                                      self.view['persp']['value'],
+                                      self.view['twist']['value'])
+                self.saveHistory = True
+            # redraw map
+            self.DoPaint()
+            
     def OnLeftUp(self, event):
+        self.mouse['end'] = event.GetPositionTuple()
         if self.mouse["use"] == "query":
             layers = self.GetSelectedLayer(multi = True)
             
@@ -500,9 +514,13 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             
         elif self.mouse['use'] == 'rotate':
             self._display.UnsetRotation()
+            self.iview['rotation'] = self._display.GetRotationMatrix()
+            self.saveHistory = True
             self.render['quick'] = False
             self.Refresh(False)
-            
+        
+        elif self.mouse['use'] == 'zoom':
+            self.DoZoom(zoomtype = self.zoomtype, pos = self.mouse['end'])
         event.Skip()
             
     def OnDClick(self, event):
@@ -547,7 +565,66 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.pdc.DrawToDC(dc)
         del odc
         self.mouse['tmp'] = (event.GetX(), event.GetY()) 
-                       
+        
+    def ZoomBack(self):
+        """!Set previous view in history list
+        """
+        view = {}
+        if len(self.viewhistory) > 1:
+            self.viewhistory.pop()
+            view = copy.deepcopy(self.viewhistory[-1])
+        
+        # disable tool if stack is empty
+        if len(self.viewhistory) < 2: # disable tool
+            toolbar = self.parent.toolbars['map']
+            toolbar.Enable('zoomback', enable = False)
+            
+        # set view and update nviz view page
+        self.lmgr.nviz.UpdateState(view = view[0], iview = view[1])
+        self.lmgr.nviz.UpdatePage('view')
+        # update map
+        self.Refresh(False)
+
+    def ViewHistory(self, view, iview):
+        """!Manages a list of last 10 views
+        
+        @param view view dictionary
+        @param iview view dictionary (internal)
+        
+        @return removed history item if exists (or None)
+        """
+        removed = None
+        hview = copy.deepcopy(view)
+        hiview = copy.deepcopy(iview)
+        
+        if not (self.viewhistory and self.viewhistory[-1] == (hview, hiview)):  
+            self.viewhistory.append((hview, hiview))
+            
+        if len(self.viewhistory) > 10:
+            removed = self.viewhistory.pop(0)
+        
+        if removed:
+            Debug.msg(4, "GLWindow.ViewHistory(): hist=%s, removed=%s" %
+                      (self.viewhistory, removed))
+        else:
+            Debug.msg(4, "GLWindow.ViewHistory(): hist=%s" %
+                      (self.viewhistory))
+        
+        # update toolbar
+        if len(self.viewhistory) > 1:
+            enable = True
+        else:
+            enable = False
+        
+        toolbar = self.parent.toolbars['map']
+        toolbar.Enable('zoomback', enable)
+        
+        return removed     
+    
+    def ResetViewHistory(self):
+        """!Reset view history"""
+        self.viewhistory = list()
+        
     def OnQuerySurface(self, event):
         """!Query surface on given position"""
         size = self.GetClientSizeTuple()
@@ -599,19 +676,27 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
     def UpdateView(self, event):
         """!Change view settings"""
         data = self.view
-        self._display.SetView(data['position']['x'], data['position']['y'],
-                              self.iview['height']['value'],
-                              data['persp']['value'],
-                              data['twist']['value'])
         
         ## multiple z-exag value from slider by original value computed in ogsf so it scales
         ## correctly with maps of different height ranges        
         if event and event.zExag and 'value' in data['z-exag']:
             self._display.SetZExag(self.iview['z-exag']['original'] * data['z-exag']['value'])
+            
+        self._display.SetView(data['position']['x'], data['position']['y'],
+                              self.iview['height']['value'],
+                              data['persp']['value'],
+                              data['twist']['value'])
+        
         if self.iview['focus']['x'] != -1:
             self._display.SetFocus(self.iview['focus']['x'], self.iview['focus']['y'],
                                    self.iview['focus']['z'])
+        if 'rotation' in self.iview:
+            if self.iview['rotation']:
+                self._display.SetRotationMatrix(self.iview['rotation'])
+            else:
+                self._display.ResetRotation()
         
+        self.saveHistory = True
         if event:
             event.Skip()
 
@@ -644,6 +729,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         if self.render['quick'] is False:
             self.parent.statusbarWin['progress'].SetValue(1)
             self._display.Draw(False, -1)
+            if self.saveHistory:
+                self.ViewHistory(view = self.view, iview = self.iview)
+                self.saveHistory = False
         elif self.render['quick'] is True:
             # quick
             mode = wxnviz.DRAW_QUICK_SURFACE | wxnviz.DRAW_QUICK_VOLUME
@@ -1281,6 +1369,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.view['twist']['value'] = UserSettings.Get(group = 'nviz', key = 'view',
                                                        subkey = ('twist', 'value'))
         self._display.ResetRotation()
+        self.iview['rotation'] = None
         self._display.LookAtCenter()
         focus = self.iview['focus']
         focus['x'], focus['y'], focus['z'] = self._display.GetFocus()

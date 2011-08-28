@@ -2928,6 +2928,30 @@ void GS_init_rotation(void)
     
 }
 /*!
+ * \brief Get rotation matrix
+ */ 
+void GS_get_rotation_matrix(double *matrix)
+{
+    int i;
+
+    for (i = 0; i < 16; i++) {
+	matrix[i] = Gv.rotate.rotMatrix[i];
+    }
+}
+
+/*!
+ * \brief Set rotation matrix
+ */ 
+void GS_set_rotation_matrix(double *matrix)
+{
+    int i;
+
+    for (i = 0; i < 16; i++) {
+	Gv.rotate.rotMatrix[i] = matrix[i];
+    }
+}
+
+/*!
    \brief Unset focus
  */
 void GS_set_nofocus(void)
