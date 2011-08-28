@@ -2374,6 +2374,13 @@ class LayerBook(wx.Notebook):
             maxLayer = max(self.mapDBInfo.layers.keys())
         except ValueError:
             maxLayer = 0
+
+        # layer description
+        
+        layerBox = wx.StaticBox (parent=self.addPanel, id=wx.ID_ANY,
+                                 label=" %s " % (_("Layer description")))
+        layerSizer = wx.StaticBoxSizer(layerBox, wx.VERTICAL)
+        
         #
         # list of layer widgets (label, value)
         #
@@ -2457,12 +2464,6 @@ class LayerBook(wx.Notebook):
         
         pageSizer = wx.BoxSizer(wx.HORIZONTAL)
                 
-        # layer description
-        
-        layerBox = wx.StaticBox (parent=self.addPanel, id=wx.ID_ANY,
-                                 label=" %s " % (_("Layer description")))
-        layerSizer = wx.StaticBoxSizer(layerBox, wx.VERTICAL)
-        
         # data area
         dataSizer = wx.GridBagSizer(hgap=5, vgap=5)
         dataSizer.AddGrowableCol(1)
