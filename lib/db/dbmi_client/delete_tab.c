@@ -29,31 +29,22 @@
 int db_delete_table(const char *drvname, const char *dbname, const char *tblname)
 {
     dbDriver *driver;
-    dbHandle handle;
     dbString sql;
 
     G_debug(3, "db_delete_table(): driver = %s, db = %s, table = %s\n",
 	    drvname, dbname, tblname);
 
-    db_init_handle(&handle);
-    db_init_string(&sql);
-
     /* Open driver and database */
-    driver = db_start_driver(drvname);
+    driver = db_start_driver_open_database(drvname, dbname);
     if (driver == NULL) {
-	G_warning(_("Unable to open driver <%s>"), drvname);
-	return DB_FAILED;
-    }
-    db_set_handle(&handle, dbname, NULL);
-    if (db_open_database(driver, &handle) != DB_OK) {
-	G_warning(_("Unable to open database <%s> by driver <%s>"),
-		  dbname, drvname);
-	db_shutdown_driver(driver);
+	G_warning(_("Unable open database <%s> by driver <%s>"), dbname,
+		  drvname);
 	return DB_FAILED;
     }
 
     /* Delete table */
     /* TODO test if the tables exist */
+    db_init_string(&sql);
     db_set_string(&sql, "drop table ");
     db_append_string(&sql, tblname);
     G_debug(3, db_get_string(&sql));
@@ -61,13 +52,11 @@ int db_delete_table(const char *drvname, const char *dbname, const char *tblname
     if (db_execute_immediate(driver, &sql) != DB_OK) {
 	G_warning(_("Unable to drop table: '%s'"),
 		  db_get_string(&sql));
-	db_close_database(driver);
-	db_shutdown_driver(driver);
+	db_close_database_shutdown_driver(driver);
 	return DB_FAILED;
     }
 
-    db_close_database(driver);
-    db_shutdown_driver(driver);
+    db_close_database_shutdown_driver(driver);
 
     return DB_OK;
 }
