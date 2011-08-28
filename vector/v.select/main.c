@@ -420,13 +420,11 @@ int main(int argc, char *argv[])
     is_ogr = Vect_maptype(&Out) == GV_FORMAT_OGR_DIRECT;
     if (!flag.table->answer && is_ogr) {
 	/* Copy attributes for OGR output */
-	struct field_info *Fi;
-	Fi = Vect_get_field2(&(In[0]), parm.field[0]->answer);
-	if (!Fi)
+	if (!IFi)
 	    G_fatal_error(_("Database connection not defined for layer <%s>"),
 			  parm.field[0]->answer);
-	Vect_map_add_dblink(&Out, Fi->number, Fi->name, Fi->table, Fi->key,
-			    Fi->database, Fi->driver);
+	Vect_map_add_dblink(&Out, IFi->number, IFi->name, IFi->table, IFi->key,
+			    IFi->database, IFi->driver);
     }
     
     nfields = Vect_cidx_get_num_fields(&(In[0]));
