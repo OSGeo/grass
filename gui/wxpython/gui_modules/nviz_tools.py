@@ -2544,6 +2544,7 @@ class NvizToolWindow(FN.FlatNotebook):
             self._display.LookAtCenter()
             focus = self.mapWindow.iview['focus']
             focus['x'], focus['y'], focus['z'] = self._display.GetFocus()
+            self.mapWindow.saveHistory = True
             self.mapWindow.Refresh(False)
         elif name == 'top':
             self.mapWindow.view['position']['x'] = 0.5
@@ -2559,7 +2560,7 @@ class NvizToolWindow(FN.FlatNotebook):
             else:
                 self.mapWindow.mouse['use'] = 'default'
                 self.mapWindow.SetCursor(self.mapWindow.cursors['default'])
-          
+            
     def OnResetView(self, event):
         """!Reset to default view (view page)"""
         self.mapWindow.ResetView()

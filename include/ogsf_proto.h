@@ -173,6 +173,8 @@ void GS_get_viewdir(float *);
 void GS_set_viewdir(float *);
 void GS_set_fov(int);
 void GS_set_rotation(double, double, double, double);
+void GS_get_rotation_matrix(double *);
+void GS_set_rotation_matrix(double *);
 void GS_init_rotation(void);
 void GS_unset_rotation(void);
 int GS_get_fov(void);

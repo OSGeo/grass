@@ -368,7 +368,10 @@ class MapFrame(wx.Frame):
                 if '3D' in self._layerManager.gm_cb.GetPage(page).maptree.mapdisplay.toolbars['map'].combo.GetString(1):
                     self._layerManager.gm_cb.GetPage(page).maptree.mapdisplay.toolbars['map'].combo.Delete(1)
         self.toolbars['map'].Enable2D(False)
-        
+        # add rotate tool to map toolbar
+        self.toolbars['map'].InsertTool((('rotate', Icons['nviz']['rotate'],
+                                          self.OnRotate, wx.ITEM_CHECK,7),)) # 7 is position
+        self.toolbars['map'].ChangeToolsDesc(mode2d = False)
         # update status bar
         self.statusbarWin['toggle'].Enable(False)
         
@@ -401,6 +404,7 @@ class MapFrame(wx.Frame):
             
             self.MapWindow3D.OnPaint(None) # -> LoadData
             self.MapWindow3D.Show()
+            self.MapWindow3D.ResetViewHistory()            
             self.MapWindow3D.UpdateView(None)
         else:
             self.MapWindow = self.MapWindow3D
@@ -416,7 +420,7 @@ class MapFrame(wx.Frame):
             
             # add Nviz notebookpage
             self._layerManager.AddNvizTools()
-            
+            self.MapWindow3D.ResetViewHistory()
             for page in ('view', 'light', 'fringe', 'constant', 'cplane'):
                 self._layerManager.nviz.UpdatePage(page)
         

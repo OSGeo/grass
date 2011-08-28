@@ -333,6 +333,19 @@ class MapToolbar(AbstractToolbar):
         self.parent._mgr.GetPane('mapToolbar').BestSize(self.GetBestSize())
         self.parent._mgr.Update()
         
+    def ChangeToolsDesc(self, mode2d):
+        """!Change description of zoom tools for 2D/3D view"""
+        if mode2d:
+            set = 'displayWindow'
+        else:
+            set = 'nviz'
+        for i, data in enumerate(self._data):
+            for tool, toolname in (('zoomin', 'zoomIn'),('zoomout', 'zoomOut')):
+                if data[0] == tool:
+                    tmp = list(data)
+                    tmp[4] = Icons[set][toolname].GetDesc()
+                    self._data[i] = tuple(tmp)
+                
     def OnSelectTool(self, event):
         """!Select / enable tool available in tools list
         """
@@ -341,13 +354,10 @@ class MapToolbar(AbstractToolbar):
         if tool == self.toolId['2d']:
             self.ExitToolbars()
             self.Enable2D(True)
+            self.ChangeToolsDesc(mode2d = True)            
         
         elif tool == self.toolId['3d'] and \
                 not (self.parent.MapWindow3D and self.parent.IsPaneShown('3d')):
-            self.InsertTool((('rotate', Icons['nviz']['rotate'],
-                              self.parent.OnRotate,
-                              wx.ITEM_CHECK,7),)) # 7 is position
-                                              
             self.ExitToolbars()
             self.parent.AddNviz()
             
@@ -367,9 +377,6 @@ class MapToolbar(AbstractToolbar):
     def Enable2D(self, enabled):
         """!Enable/Disable 2D display mode specific tools"""
         for tool in (self.pan,
-                     self.zoomin,
-                     self.zoomout,
-                     self.zoomback,
                      self.zoommenu,
                      self.analyze,
                      self.printmap):

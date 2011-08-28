@@ -1835,3 +1835,19 @@ class Nviz(object):
     def ResetRotation(self):
         """!Reset scene rotation"""
         Nviz_init_rotation()
+        
+    def GetRotationMatrix(self):
+        """!Get rotation matrix"""
+        matrix = (c_double * 16)()
+        GS_get_rotation_matrix(byref(matrix))
+        returnMatrix = []
+        for item in matrix:
+            returnMatrix.append(item)
+        return returnMatrix
+        
+    def SetRotationMatrix(self, matrix):
+        """!Set rotation matrix"""
+        mtrx = (c_double * 16)()
+        for i in range(len(matrix)):
+            mtrx[i] = matrix[i]
+        GS_set_rotation_matrix(byref(mtrx))
