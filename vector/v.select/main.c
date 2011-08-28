@@ -3,7 +3,8 @@
  *
  * MODULE:       v.select - select features from one map by features in another map.
  * AUTHOR(S):    Radim Blazek <radim.blazek gmail.com> (original contributor)
- *               Glynn Clements <glynn gclements.plus.com>, Markus Neteler <neteler itc.it>
+ *               Glynn Clements <glynn gclements.plus.com>
+ *               Markus Neteler <neteler itc.it>
  *               Martin Landa <landa.martin gmail.com> (GEOS support)
  * PURPOSE:      
  * COPYRIGHT:    (C) 2003-2011 by the GRASS Development Team
@@ -28,7 +29,7 @@ int main(int argc, char *argv[])
 {
     int i, iopt;
     int operator;
-    int aline, nalines, nskipped;
+    int aline, nalines, nskipped, is_ogr;
     int ltype, itype[2], ifield[2];
     int **cats, *ncats, nfields, *fields;
     struct GModule *module;
@@ -416,6 +417,18 @@ int main(int argc, char *argv[])
 #endif
 
     /* Write lines */
+    is_ogr = Vect_maptype(&Out) == GV_FORMAT_OGR_DIRECT;
+    if (!flag.table->answer && is_ogr) {
+	/* Copy attributes for OGR output */
+	struct field_info *Fi;
+	Fi = Vect_get_field2(&(In[0]), parm.field[0]->answer);
+	if (!Fi)
+	    G_fatal_error(_("Database connection not defined for layer <%s>"),
+			  parm.field[0]->answer);
+	Vect_map_add_dblink(&Out, Fi->number, Fi->name, Fi->table, Fi->key,
+			    Fi->database, Fi->driver);
+    }
+    
     nfields = Vect_cidx_get_num_fields(&(In[0]));
     cats = (int **)G_malloc(nfields * sizeof(int *));
     ncats = (int *)G_malloc(nfields * sizeof(int));
@@ -459,7 +472,7 @@ int main(int argc, char *argv[])
     }
 
     /* Copy tables */
-    if (!(flag.table->answer)) {
+    if (!flag.table->answer && !is_ogr) {
 	int ttype, ntabs = 0;
 
 	G_message(_("Writing attributes..."));
