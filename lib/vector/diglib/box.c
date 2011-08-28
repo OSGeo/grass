@@ -26,12 +26,7 @@ int dig_line_box(const struct line_pnts *Points, struct bound_box * Box)
     int i;
 
     if (Points->n_points <= 0) {
-	Box->N = 0;
-	Box->S = 0;
-	Box->E = 0;
-	Box->W = 0;
-	Box->T = 0;
-	Box->B = 0;
+	G_zero(Box, sizeof(struct bound_box));
 	return 0;
     }
 

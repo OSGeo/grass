@@ -213,12 +213,7 @@ int Vect_get_line_box(const struct Map_info *Map, int line, struct bound_box * B
     Line = Plus->Line[line];
 
     if (Line == NULL) {		/* dead */
-	Box->N = 0;
-	Box->S = 0;
-	Box->E = 0;
-	Box->W = 0;
-	Box->T = 0;
-	Box->B = 0;
+	G_zero(Box, sizeof(struct bound_box));
 	return 0;
     }
     else {
@@ -263,7 +258,7 @@ int Vect_get_line_box(const struct Map_info *Map, int line, struct bound_box * B
 	    dig_boxlist_add(list, line, bbox);
 	    
 	    if (dig_find_line_box(Plus, list) == 0)
-		G_fatal_error(_("Could not find line box"));
+		G_fatal_error(_("Unable to find bbox for featured %d"), line);
 
 	    Box->N = list->box[0].N;
 	    Box->S = list->box[0].S;
@@ -272,6 +267,11 @@ int Vect_get_line_box(const struct Map_info *Map, int line, struct bound_box * B
 	    Box->T = list->box[0].T;
 	    Box->B = list->box[0].B;
 	}
+    }
+
+    if (!Vect_is_3d(Map)) {
+	Box->T =  PORT_DOUBLE_MAX;
+	Box->B = -PORT_DOUBLE_MAX;
     }
 
     return 1;
