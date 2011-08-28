@@ -6,11 +6,11 @@
  *               Glynn Clements <glynn gclements.plus.com>, Markus Neteler <neteler itc.it>
  *               Martin Landa <landa.martin gmail.com> (GEOS support)
  * PURPOSE:      
- * COPYRIGHT:    (C) 2003-2010 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003-2011 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ *               This program is free software under the GNU General
+ *               Public License (>=v2). Read the file COPYING that
+ *               comes with GRASS for details.
  *
  *****************************************************************************/
 
@@ -31,22 +31,18 @@ int main(int argc, char *argv[])
     int aline, nalines, nskipped;
     int ltype, itype[2], ifield[2];
     int **cats, *ncats, nfields, *fields;
-    char *pre[2];
     struct GModule *module;
     struct GParm parm;
     struct GFlag flag;
     struct Map_info In[2], Out;
     struct field_info *IFi, *OFi;
     struct line_pnts *APoints, *BPoints;
-    struct line_cats *ACats, *BCats;
+    struct line_cats *ACats;
     int *ALines;		/* List of lines: 0 do not output, 1 - write to output */
     struct ilist *BoundList, *LList;
     struct boxlist *List, *TmpList;
 
     G_gisinit(argv[0]);
-
-    pre[0] = "a";
-    pre[1] = "b";
 
     module = G_define_module();
     G_add_keyword(_("vector"));
@@ -109,8 +105,7 @@ int main(int argc, char *argv[])
     APoints = Vect_new_line_struct();
     BPoints = Vect_new_line_struct();
     ACats = Vect_new_cats_struct();
-    BCats = Vect_new_cats_struct();
-    List = Vect_new_boxlist(0);
+    List = Vect_new_boxlist(1);
     TmpList = Vect_new_boxlist(1);
     BoundList = Vect_new_list();
     LList = Vect_new_list();
@@ -172,8 +167,6 @@ int main(int argc, char *argv[])
 		continue;
 	    
 	    Vect_get_line_box(&(In[0]), aline, &abox);
-	    abox.T = PORT_DOUBLE_MAX;
-	    abox.B = -PORT_DOUBLE_MAX;
 
 	    /* Check if this line overlaps any feature in B */
 	    /* x Lines in B */
