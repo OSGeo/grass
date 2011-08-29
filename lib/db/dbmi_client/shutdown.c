@@ -20,6 +20,7 @@
 #include <sys/wait.h>
 #endif
 #include <grass/dbmi.h>
+#include <grass/spawn.h>
 #include "macros.h"
 
 /*!
@@ -38,9 +39,6 @@
 */
 int db_shutdown_driver(dbDriver * driver)
 {
-#ifndef __MINGW32__
-    int pid;
-#endif
     int status;
 
 #ifdef __MINGW32__
