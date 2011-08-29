@@ -9,7 +9,7 @@
  * PURPOSE:      Change current mapset, optionally adding it
  *               if the mapset does not exist.
  *               
- * COPYRIGHT:    (C) 2004, 2010 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2004, 2010-2011 by the GRASS Development Team
  *
  *               This program is free software under the 
  *               GNU General Public License (>=v2). 
@@ -29,8 +29,12 @@ int main(int argc, char *argv[])
 {
     int ret;
     struct GModule *module;
-    struct Option *gisdbase_opt, *location_opt, *mapset_opt;
-    struct Flag *f_add, *f_list;
+    struct {
+	struct Option *gisdbase, *location, *mapset;
+    } opt;
+    struct {
+	struct Flag *add, *list, *curr;
+    } flag;
     const char *gisdbase_old, *location_old, *mapset_old;
     const char *gisdbase_new, *location_new, *mapset_new;
     const char *gis_lock;
@@ -44,74 +48,79 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("general"));
     G_add_keyword(_("settings"));
-    module->label = _("Changes current mapset.");
+    module->label = _("Changes/reports current mapset.");
     module->description = _("Optionally create new mapset or list available mapsets in given location.");
     
-    mapset_opt = G_define_option();
-    mapset_opt->key = "mapset";
-    mapset_opt->type = TYPE_STRING;
-    mapset_opt->required = YES;
-    mapset_opt->multiple = NO;
-    mapset_opt->key_desc = "name";
-    mapset_opt->description = _("Name of mapset where to switch");
-    mapset_opt->guisection = _("Settings");
+    opt.mapset = G_define_standard_option(G_OPT_M_MAPSET);
+    opt.mapset->required = YES;
+    opt.mapset->description = _("Name of mapset where to switch");
+    opt.mapset->guisection = _("Settings");
 
-    location_opt = G_define_option();
-    location_opt->key = "location";
-    location_opt->type = TYPE_STRING;
-    location_opt->required = NO;
-    location_opt->multiple = NO;
-    location_opt->key_desc = "name";
-    location_opt->description = _("Location name (not location path)");
-    location_opt->guisection = _("Settings");
+    opt.location = G_define_option();
+    opt.location->key = "location";
+    opt.location->type = TYPE_STRING;
+    opt.location->required = NO;
+    opt.location->multiple = NO;
+    opt.location->key_desc = "name";
+    opt.location->description = _("Location name (not location path)");
+    opt.location->guisection = _("Settings");
 
-    gisdbase_opt = G_define_option();
-    gisdbase_opt->key = "gisdbase";
-    gisdbase_opt->type = TYPE_STRING;
-    gisdbase_opt->required = NO;
-    gisdbase_opt->multiple = NO;
-    gisdbase_opt->key_desc = "path";
-    gisdbase_opt->label = _("GIS data directory");
-    gisdbase_opt->description = _("Full path to the directory where the new location is");
-    gisdbase_opt->guisection = _("Settings");
+    opt.gisdbase = G_define_option();
+    opt.gisdbase->key = "gisdbase";
+    opt.gisdbase->type = TYPE_STRING;
+    opt.gisdbase->required = NO;
+    opt.gisdbase->multiple = NO;
+    opt.gisdbase->key_desc = "path";
+    opt.gisdbase->label = _("GIS data directory");
+    opt.gisdbase->description = _("Full path to the directory where the new location is");
+    opt.gisdbase->guisection = _("Settings");
 
-    f_add = G_define_flag();
-    f_add->key = 'c';
-    f_add->description = _("Create mapset if it doesn't exist");
-    f_add->answer = FALSE;
-    f_add->guisection = _("Create");
+    flag.add = G_define_flag();
+    flag.add->key = 'c';
+    flag.add->description = _("Create mapset if it doesn't exist");
+    flag.add->answer = FALSE;
+    flag.add->guisection = _("Create");
 
-    f_list = G_define_flag();
-    f_list->key = 'l';
-    f_list->suppress_required = YES;
-    f_list->description = _("List available mapsets");
-    f_list->guisection = _("Print");
-    
+    flag.list = G_define_flag();
+    flag.list->key = 'l';
+    flag.list->suppress_required = YES;
+    flag.list->description = _("List available mapsets and exit");
+    flag.list->guisection = _("Print");
+ 
+    flag.curr = G_define_flag();
+    flag.curr->key = 'p';
+    flag.curr->suppress_required = YES;
+    flag.curr->description = _("Print current mapset and exit");
+    flag.curr->guisection = _("Print");
+   
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
-
-    if (!mapset_opt->answer && !f_list->answer)
-	G_fatal_error(_("Either mapset= or -l must be used"));
 
     /* Store original values */
     gisdbase_old = G__getenv("GISDBASE");
     location_old = G__getenv("LOCATION_NAME");
     mapset_old = G__getenv("MAPSET");
+
+    if (flag.curr->answer) {
+	fprintf(stdout, "%s\n", mapset_old);
+	exit(EXIT_SUCCESS);
+    }
+    
     G_asprintf(&mapset_old_path, "%s/%s/%s", gisdbase_old, location_old,
 	       mapset_old);
 
     /* New values */
-    if (gisdbase_opt->answer)
-	gisdbase_new = gisdbase_opt->answer;
+    if (opt.gisdbase->answer)
+	gisdbase_new = opt.gisdbase->answer;
     else
 	gisdbase_new = gisdbase_old;
 
-    if (location_opt->answer)
-	location_new = location_opt->answer;
+    if (opt.location->answer)
+	location_new = opt.location->answer;
     else
 	location_new = location_old;
 
-    if (f_list->answer) {
+    if (flag.list->answer) {
 	char **ms;
 	int nmapsets;
 
@@ -130,7 +139,7 @@ int main(int argc, char *argv[])
 	exit(EXIT_SUCCESS);
     }
 
-    mapset_new = mapset_opt->answer;
+    mapset_new = opt.mapset->answer;
     G_asprintf(&mapset_new_path, "%s/%s/%s", gisdbase_new, location_new,
 	       mapset_new);
 
@@ -147,7 +156,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("You don't have permission to use this mapset"));
 	break;
     case -1:
-	if (f_add->answer == TRUE) {
+	if (flag.add->answer == TRUE) {
 	    G_debug(2, "Mapset %s doesn't exist, attempting to create it",
 		    mapset_new);
 	    G_make_mapset(gisdbase_new, location_new, mapset_new);
@@ -176,7 +185,8 @@ int main(int argc, char *argv[])
     /* Warning: the value returned by system() is not that returned by exit() in executed program
      *          e.g. exit(1) -> 256 (multiplied by 256) */
     if (ret != 0)
-	G_fatal_error(_("%s is currently running GRASS in selected mapset or lock file cannot be checked"),
+	G_fatal_error(_("<%s> is currently running GRASS in selected mapset "
+			"or lock file cannot be checked"),
 		      G_whoami());
 
     /* Clean temporary directory */
@@ -195,7 +205,8 @@ int main(int argc, char *argv[])
 
     G_free(mapset_old_path);
 
-    G_important_message(_("Your shell continues to use the history for the old mapset"));
+    G_important_message(_("Your shell continues to use the history "
+			  "for the old mapset"));
 
     if ((shell = getenv("SHELL"))) {
 	if (strstr(shell, "bash")) {
@@ -210,7 +221,7 @@ int main(int argc, char *argv[])
 	}
     }
 
-    G_message(_("Your current mapset is <%s>"), mapset_new);
+    G_verbose_message(_("Your current mapset is <%s>"), mapset_new);
     
     G_free(mapset_new_path);
 
