@@ -1,6 +1,4 @@
 /*
- * $Id: r.in.png.c,v 1.11 2002/05/08 10:42:01 glynn Exp $
- *
  ****************************************************************************
  *
  * MODULE:       r.in.png
@@ -8,7 +6,7 @@
  *               Alex Shevlakov - sixote@yahoo.com
  *               Glynn Clements
  * PURPOSE:      Import non-georeferenced Images in PNG format. 
- * COPYRIGHT:    (C) 2000-2002,2010 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2000-2002, 2010-2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *   	    	 License (>=v2). Read the file COPYING that comes with GRASS
@@ -109,7 +107,7 @@ static void init_channel(channel *c)
 
 static void write_row_int(png_bytep p)
 {
-    int x, c;
+    unsigned int x, c;
     channel *ch;
 
     for (x = 0; x < width; x++)
@@ -140,7 +138,7 @@ static void write_row_int(png_bytep p)
 
 static void write_row_float(png_bytep p)
 {
-    int x, c;
+    unsigned int x, c;
     channel *ch;
 
     for (x = 0; x < width; x++)
@@ -287,7 +285,7 @@ static void read_png(void)
     png_bytep *png_rows;
     int linesize;
     struct Cell_head cellhd;
-    int y, c;
+    unsigned int y, c;
     png_color_8p sig_bit;
     int sbit, interlace;
     FILE *ifp;
@@ -296,24 +294,24 @@ static void read_png(void)
 
     ifp = fopen(input, "rb");
     if (!ifp)
-	G_fatal_error("unable to open PNG file %s", input);
+	G_fatal_error(_("Unable to open PNG file '%s'"), input);
 
     if (fread(sig_buf, sizeof(sig_buf), 1, ifp) != 1)
-	G_fatal_error("input file empty or too short");
+	G_fatal_error(_("Input file empty or too short"));
 
     if (png_sig_cmp(sig_buf, 0, sizeof(sig_buf)) != 0)
-	G_fatal_error("input file not a PNG file");
+	G_fatal_error(_("Input file not a PNG file"));
 
     png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
     if (!png_ptr)
-	G_fatal_error("cannot allocate PNG structure");
+	G_fatal_error(_("Unable to allocate PNG structure"));
 
     info_ptr = png_create_info_struct(png_ptr);
     if (!info_ptr)
-	G_fatal_error("cannot allocate PNG structures");
+	G_fatal_error(_("Unable to allocate PNG structure"));
 
     if (setjmp(png_jmpbuf(png_ptr)))
-	G_fatal_error("PNG error");
+	G_fatal_error(_("PNG error"));
 
     png_init_io(png_ptr, ifp);
     png_set_sig_bytes(png_ptr, sizeof(sig_buf));
@@ -484,7 +482,7 @@ static void read_png(void)
 
     /* write title and color table */
 
-    G_verbose_message(_("Creating support files for <%s>"), output);
+    G_verbose_message(_("Creating support files for <%s>..."), output);
 
     for (c = 0; c < 6; c++)
     {
@@ -520,7 +518,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("import"));
-    module->description = "Import non-georeferenced PNG format image.";
+    module->description = _("Imports non-georeferenced PNG format image.");
 
     inopt = G_define_standard_option(G_OPT_F_INPUT);
 
@@ -530,30 +528,30 @@ int main(int argc, char *argv[])
     titleopt->key	= "title";
     titleopt->type	= TYPE_STRING;
     titleopt->required	= NO;
-    titleopt->description = _("Title for new raster file.");
+    titleopt->description = _("Title for created raster map");
 
     gammaopt = G_define_option();
     gammaopt->key	= "gamma";
     gammaopt->type	= TYPE_DOUBLE;
     gammaopt->required	= NO;
-    gammaopt->description = _("Display gamma.");
+    gammaopt->description = _("Display gamma");
 
     alphaopt = G_define_option();
     alphaopt->key	= "alpha";
     alphaopt->type	= TYPE_DOUBLE;
     alphaopt->required	= NO;
-    alphaopt->description = _("Alpha threshold.");
+    alphaopt->description = _("Alpha threshold");
 
     fflag = G_define_flag();
     fflag->key		= 'f';
-    fflag->description	= _("Create floating-point maps (0.0 - 1.0).");
+    fflag->description	= _("Create floating-point map (0.0 - 1.0)");
 
     hflag = G_define_flag();
     hflag->key		= 'h';
-    hflag->description	= _("Output image file header only.");
+    hflag->description	= _("Output image file header only and exit");
 
     if(G_parser(argc, argv))
-	exit(1);
+	exit(EXIT_FAILURE);
 
     input   = inopt->answer;
     output  = outopt->answer;
@@ -566,6 +564,6 @@ int main(int argc, char *argv[])
 
     read_png();
 
-    return 0;
+    exit(EXIT_SUCCESS);
 }
 
