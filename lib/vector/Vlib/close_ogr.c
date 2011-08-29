@@ -33,28 +33,35 @@ int V1_close_ogr(struct Map_info *Map)
 {
     int i;
 
+    struct Format_info_ogr *fInfo;
+    
     if (!VECT_OPEN(Map))
 	return -1;
 
+    fInfo = &(Map->fInfo.ogr);
     if (Map->format != GV_FORMAT_OGR_DIRECT &&
 	(Map->mode == GV_MODE_WRITE || Map->mode == GV_MODE_RW))
 	Vect__write_head(Map);
 
-    if (Map->fInfo.ogr.feature_cache)
-	OGR_F_Destroy(Map->fInfo.ogr.feature_cache);
+    if (fInfo->feature_cache)
+	OGR_F_Destroy(fInfo->feature_cache);
 
-    OGR_DS_Destroy(Map->fInfo.ogr.ds);
+    OGR_DS_Destroy(fInfo->ds);
     
-    for (i = 0; i < Map->fInfo.ogr.lines_alloc; i++) {
-	Vect_destroy_line_struct(Map->fInfo.ogr.lines[i]);
+    for (i = 0; i < fInfo->lines_alloc; i++) {
+	Vect_destroy_line_struct(fInfo->lines[i]);
     }
 
-    G_free(Map->fInfo.ogr.lines);
-    G_free(Map->fInfo.ogr.lines_types);
+    if (fInfo->dbdriver) {
+	db_close_database_shutdown_driver(fInfo->dbdriver);
+    }
 
-    G_free(Map->fInfo.ogr.driver_name);
-    G_free(Map->fInfo.ogr.dsn);
-    G_free(Map->fInfo.ogr.layer_name);
+    G_free(fInfo->lines);
+    G_free(fInfo->lines_types);
+
+    G_free(fInfo->driver_name);
+    G_free(fInfo->dsn);
+    G_free(fInfo->layer_name);
 
     return 0;
 }

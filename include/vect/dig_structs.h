@@ -24,9 +24,10 @@
 #include <grass/shapefil.h>
 #include <grass/rbtree.h>
 #include <grass/rtree.h>
+#include <grass/dbmi.h>
 
 #ifdef HAVE_OGR
-#include "ogr_api.h"
+#include <ogr_api.h>
 #endif
 
 /*!
@@ -427,6 +428,14 @@ struct Format_info_ogr
     void *ds;
     void *layer;
 #endif
+    
+    /*!
+      \brief Open DB driver when writing attributes
+
+      This driver is open by V2_open_new_ogr() and closed by
+      V1_close_ogr().
+    */
+    dbDriver *dbdriver;
     
     /*!
       \brief Array of OGR DSN options

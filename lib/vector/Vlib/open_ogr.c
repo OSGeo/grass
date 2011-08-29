@@ -30,7 +30,7 @@
 #include <cpl_string.h>
 
 static int sqltype_to_ogrtype(int);
-static int create_table(OGRLayerH, const struct field_info *);
+static dbDriver *create_table(OGRLayerH, const struct field_info *);
 
 /*!
    \brief Open existing OGR layer (level 1 - without feature index file)
@@ -314,7 +314,9 @@ int V2_open_new_ogr(struct Map_info *Map, int type)
     projinfo  = G_get_projinfo();
     projunits = G_get_projunits();
     Ogr_spatial_ref = GPJ_grass_to_osr(projinfo, projunits);
-
+    G_free_key_value(projinfo);
+    G_free_key_value(projunits);
+    
     switch(type) {
     case GV_POINT:
 	Ogr_geom_type = wkbPoint;
@@ -359,7 +361,7 @@ int V2_open_new_ogr(struct Map_info *Map, int type)
 	    if (ndblinks > 1)
 		G_warning(_("More layers defined, using driver <%s> and "
 			    "database <%s>"), Fi->driver, Fi->database);
-	    create_table(Map->fInfo.ogr.layer, Fi);
+	    Map->fInfo.ogr.dbdriver = create_table(Map->fInfo.ogr.layer, Fi);
 	    G_free(Fi);
 	}
 	else
@@ -373,7 +375,7 @@ int V2_open_new_ogr(struct Map_info *Map, int type)
     return 0;
 }
 
-int create_table(OGRLayerH hLayer, const struct field_info *Fi)
+dbDriver *create_table(OGRLayerH hLayer, const struct field_info *Fi)
 {
     int col, ncols;
     int sqltype, ogrtype, length;
@@ -396,14 +398,14 @@ int create_table(OGRLayerH hLayer, const struct field_info *Fi)
     driver = db_start_driver(Fi->driver);
     if (!driver) {
 	G_warning(_("Unable to start driver <%s>"), Fi->driver);
-	return -1;
+	return NULL;
     }
     db_set_handle(&handle, Fi->database, NULL);
     if (db_open_database(driver, &handle) != DB_OK) {
 	G_warning(_("Unable to open database <%s> by driver <%s>"),
 		  Fi->database, Fi->driver);
 	db_close_database_shutdown_driver(driver);
-	return -1;
+	return NULL;
     }
  
     /* to get no data */
@@ -416,7 +418,7 @@ int create_table(OGRLayerH hLayer, const struct field_info *Fi)
 	G_warning(_("Unable to open select cursor: '%s'"),
 		  db_get_string(&sql));
 	db_close_database_shutdown_driver(driver);
-	return -1;
+	return NULL;
     }
 
     table = db_get_cursor_table(&cursor);
@@ -444,15 +446,13 @@ int create_table(OGRLayerH hLayer, const struct field_info *Fi)
 	if (OGR_L_CreateField(hLayer, hFieldDefn, TRUE) != OGRERR_NONE) {
 	    G_warning(_("Creating field <%s> failed"), colname);
 	    db_close_database_shutdown_driver(driver);
-	    return -1;
+	    return NULL;
 	}
 	
 	OGR_Fld_Destroy(hFieldDefn);
     }
 
-    db_close_database_shutdown_driver(driver);
-
-    return 0;
+    return driver;
 }
 
 int sqltype_to_ogrtype(int sqltype)
