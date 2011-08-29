@@ -880,17 +880,17 @@ Section "GRASS" SecGRASS
 	;replace \ with / in $GIS_DATABASE
 	${StrReplace} "$UNIX_LIKE_GIS_DATABASE_PATH" "\" "/" "$GIS_DATABASE"
   
-	;create $APPDATA\GRASS7\rc
+	;create $APPDATA\grass7\rc
 	SetShellVarContext current
 	ClearErrors
-	CreateDirectory	$APPDATA\GRASS7
-	FileOpen $0 $APPDATA\GRASS7\rc w
-	IfErrors done_create_GRASS7\rc
+	CreateDirectory	$APPDATA\grass7
+	FileOpen $0 $APPDATA\grass7\rc w
+	IfErrors done_create_grass7\rc
 	FileWrite $0 'GISDBASE: $UNIX_LIKE_GIS_DATABASE_PATH$\r$\n'
 	FileWrite $0 'LOCATION_NAME: demolocation$\r$\n'
 	FileWrite $0 'MAPSET: PERMANENT$\r$\n'
 	FileClose $0	
-	done_create_GRASS7\rc:
+	done_create_grass7\rc:
 	
 	;replace gisbase = "/c/OSGeo4W/apps/grass/grass-7.0.svn" in grass70.py with $INSTDIR
 	Push "$INSTDIR\grass70.py" ; file to modify
@@ -902,12 +902,6 @@ Section "GRASS" SecGRASS
 	Push "$INSTDIR\grass70.py" ; file to modify
 	Push 'config_projshare = "/c/OSGeo4W/share/proj"' ; string that a line must begin with *WS Sensitive*
 	Push 'config_projshare = "$INSTDIR\proj"' ; string to replace whole line with
-	Call ReplaceLineStr
-
-	;replace grass_config_dirname = ".grass7" i n grass70.py with GRASS7
-	Push "$INSTDIR\grass70.py" ; file to modify
-	Push 'grass_config_dirname = ".grass7"' ; string that a line must begin with *WS Sensitive*
-	Push 'grass_config_dirname = "GRASS7"' ; string to replace whole line with
 	Call ReplaceLineStr
                  
 SectionEnd
