@@ -43,7 +43,13 @@ if os.environ.has_key('GRASS_PROJSHARE'):
     config_projshare = os.environ['GRASS_PROJSHARE']
 else:
     config_projshare = "@CONFIG_PROJSHARE@"
-grass_config_dirname = "@GRASS_CONFIG_DIR@"
+
+if sys.platform == 'win32':
+    grass_config_dirname = "grass7"
+    grass_config_dir = os.path.join(os.getenv('APPDATA'), grass_config_dirname)
+else:
+    grass_config_dirname = ".grass7"
+    grass_config_dir = os.path.join(os.getenv('HOME'), grass_config_dirname)
 
 gisbase = os.path.normpath(gisbase)
 
@@ -957,8 +963,6 @@ if windows:
         os.environ['SHELL'] = os.getenv('GRASS_SH')
     if not os.getenv('SHELL'):
         os.environ['SHELL'] = os.getenv('COMSPEC', 'cmd.exe')
-
-grass_config_dir = os.path.join(os.getenv('HOME'), grass_config_dirname)
 
 atexit.register(cleanup)
 
