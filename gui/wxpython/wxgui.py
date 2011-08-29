@@ -240,7 +240,9 @@ class GMFrame(wx.Frame):
     
     def IsPaneShown(self, name):
         """!Check if pane (toolbar, ...) of given name is currently shown"""
-        return self._auimgr.GetPane(name).IsShown()
+        if self._auimgr.GetPane(name).IsOk():
+            return self._auimgr.GetPane(name).IsShown()
+        return False
     
     def _createNoteBook(self):
         """!Creates notebook widgets"""

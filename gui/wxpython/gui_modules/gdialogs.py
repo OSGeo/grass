@@ -496,7 +496,7 @@ class DecorationDialog(wx.Dialog):
             resize.SetToolTipString(_("Click and drag on the map display to set legend"
                                         " size and position and then press OK"))
             resize.SetName('resize')
-            if self.parent.toolbars['nviz']:
+            if self.parent.IsPaneShown('3d'):
                 resize.Disable()
             box.Add(item=resize, proportion=0, flag=wx.ALIGN_CENTRE|wx.ALL, border=5)
             sizer.Add(item=box, proportion=0,
@@ -626,7 +626,7 @@ class DecorationDialog(wx.Dialog):
         self.parent.Map.GetOverlay(self.ovlId).SetActive(self.chkbox.IsChecked())
 
         # update map
-        if self.parent.MapWindow.parent.toolbars['nviz']:
+        if self.parent.IsPaneShown('3d'):
             self.parent.MapWindow.UpdateOverlays()
         
         self.parent.MapWindow.UpdateMap()
