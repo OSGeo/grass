@@ -1010,9 +1010,9 @@ Section "Uninstall"
 	SetShellVarContext all
 	RMDir /r "$SMPROGRAMS\${GRASS_BASE}"
 	
-	;remove the $APPDATA\GRASS7\rc file
+	;remove the $APPDATA\grass7\rc file
 	SetShellVarContext current
-	RMDir /r "$APPDATA\GRASS7"
+	RMDir /r "$APPDATA\grass7"
 
 	;remove the Registry Entries
 	DeleteRegKey HKLM "Software\${GRASS_BASE}"
