@@ -29,13 +29,14 @@
   <b>Note:</b> the management of the memory for the driver structure
   probably should be handled differently.
  
-  db_start_driver() could take a pointer to driver structure as
-  an argument, instead of returning the pointer to allocated
-  then there would be no hidden free required
+  db_start_driver() could take a pointer to driver structure as an
+  argument, instead of returning the pointer to allocated then there
+  would be no hidden free required
 
-  \param driver db driver
+  \param driver pointer to dbDriver to be freed
 
-  \return status (?)
+  \return 0 on sucess
+  \return -1 on error
 */
 int db_shutdown_driver(dbDriver * driver)
 {
