@@ -33,6 +33,7 @@ for details.
 import os
 import sys
 import re
+from bisect import bisect
 
 import wx
 import wx.lib.filebrowsebutton as filebrowse
@@ -1456,9 +1457,9 @@ class LayersList(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin,
         listmix.ListCtrlAutoWidthMixin.__init__(self)
         listmix.TextEditMixin.__init__(self)
 
-        self.InsertColumn(0, _('Layer'))
+        self.InsertColumn(0, _('Layer id'))
         self.InsertColumn(1, _('Layer name'))
-        self.InsertColumn(2, _('Name for GRASS map'))
+        self.InsertColumn(2, _('Name for GRASS map (editable)'))
         
         self.Bind(wx.EVT_COMMAND_RIGHT_CLICK, self.OnPopupMenu) #wxMSW
         self.Bind(wx.EVT_RIGHT_UP,            self.OnPopupMenu) #wxGTK
@@ -1475,9 +1476,9 @@ class LayersList(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin,
             self.SetStringItem(index, 1, "%s" % str(name))
             self.SetStringItem(index, 2, "%s" % str(grassName))
             # check by default
-            self.CheckItem(index, True)
+            ### self.CheckItem(index, True)
         
-        self.SetColumnWidth(col=0, width=wx.LIST_AUTOSIZE_USEHEADER)
+        self.SetColumnWidth(col = 0, width = wx.LIST_AUTOSIZE_USEHEADER)
 
     def OnPopupMenu(self, event):
         """!Show popup menu"""
@@ -1522,6 +1523,26 @@ class LayersList(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin,
             self.CheckItem(item, False)
 
         event.Skip()
+        
+    def OnLeftDown(self, event):
+        """!Allow editing only output name
+
+        Code taken from TextEditMixin class.
+        """
+        x, y = event.GetPosition()
+        
+        colLocs = [0]
+        loc = 0
+        for n in range(self.GetColumnCount()):
+            loc = loc + self.GetColumnWidth(n)
+            colLocs.append(loc)
+        
+        col = bisect(colLocs, x + self.GetScrollPos(wx.HORIZONTAL)) - 1
+        
+        if col == 2:
+            listmix.TextEditMixin.OnLeftDown(self, event)
+        else:
+            event.Skip()
         
     def GetLayers(self):
         """!Get list of layers (layer name, output name)"""
