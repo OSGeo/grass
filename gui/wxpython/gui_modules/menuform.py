@@ -1149,48 +1149,48 @@ class cmdPanel(wx.Panel):
                     if p.get('prompt', '') ==  'vector':
                         selection.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
                         
-                        if formatSelector and p.get('age', 'old') ==  'old':
-                            # OGR supported (read-only)
-                            self.hsizer = wx.BoxSizer(wx.HORIZONTAL)
+                        # if formatSelector and p.get('age', 'old') ==  'old':
+                        #     # OGR supported (read-only)
+                        #     self.hsizer = wx.BoxSizer(wx.HORIZONTAL)
                             
-                            self.hsizer.Add(item = selection,
-                                            flag = wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_TOP,
-                                            border = 5)
+                        #     self.hsizer.Add(item = selection,
+                        #                     flag = wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_TOP,
+                        #                     border = 5)
                             
-                            # format (native / ogr)
-                            rbox = wx.RadioBox(parent = which_panel, id = wx.ID_ANY,
-                                               label = " %s " % _("Format"),
-                                               style = wx.RA_SPECIFY_ROWS,
-                                               choices = [_("Native / Linked OGR"), _("Direct OGR")])
-                            if p.get('value', '').lower().rfind('@ogr') > -1:
-                                rbox.SetSelection(1)
-                            rbox.SetName('VectorFormat')
-                            rbox.Bind(wx.EVT_RADIOBOX, self.OnVectorFormat)
+                        #     # format (native / ogr)
+                        #     rbox = wx.RadioBox(parent = which_panel, id = wx.ID_ANY,
+                        #                        label = " %s " % _("Format"),
+                        #                        style = wx.RA_SPECIFY_ROWS,
+                        #                        choices = [_("Native / Linked OGR"), _("Direct OGR")])
+                        #     if p.get('value', '').lower().rfind('@ogr') > -1:
+                        #         rbox.SetSelection(1)
+                        #     rbox.SetName('VectorFormat')
+                        #     rbox.Bind(wx.EVT_RADIOBOX, self.OnVectorFormat)
                             
-                            self.hsizer.Add(item = rbox,
-                                            flag = wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT |
-                                            wx.RIGHT | wx.ALIGN_TOP,
-                                            border = 5)
+                        #     self.hsizer.Add(item = rbox,
+                        #                     flag = wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT |
+                        #                     wx.RIGHT | wx.ALIGN_TOP,
+                        #                     border = 5)
                             
-                            ogrSelection = gselect.GdalSelect(parent = self, panel = which_panel, ogr = True,
-                                                              default = 'dir',
-                                                              exclude = ['file'])
-                            self.Bind(gselect.EVT_GDALSELECT, self.OnUpdateSelection)
-                            self.Bind(gselect.EVT_GDALSELECT, self.OnSetValue)
+                        #     ogrSelection = gselect.GdalSelect(parent = self, panel = which_panel, ogr = True,
+                        #                                       default = 'dir',
+                        #                                       exclude = ['file'])
+                        #     self.Bind(gselect.EVT_GDALSELECT, self.OnUpdateSelection)
+                        #     self.Bind(gselect.EVT_GDALSELECT, self.OnSetValue)
                             
-                            ogrSelection.SetName('OgrSelect')
-                            ogrSelection.Hide()
+                        #     ogrSelection.SetName('OgrSelect')
+                        #     ogrSelection.Hide()
                             
-                            which_sizer.Add(item = self.hsizer, proportion = 0)
+                        #     which_sizer.Add(item = self.hsizer, proportion = 0)
                             
-                            p['wxId'].append(rbox.GetId())
-                            p['wxId'].append(ogrSelection.GetId())
-                            for win in ogrSelection.GetDsnWin():
-                                p['wxId'].append(win.GetId())
-                        else:
-                            which_sizer.Add(item = selection, proportion = 0,
-                                            flag = wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_CENTER_VERTICAL,
-                                            border = 5)
+                        #     p['wxId'].append(rbox.GetId())
+                        #     p['wxId'].append(ogrSelection.GetId())
+                        #     for win in ogrSelection.GetDsnWin():
+                        #         p['wxId'].append(win.GetId())
+                        # else:
+                        which_sizer.Add(item = selection, proportion = 0,
+                                        flag = wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_CENTER_VERTICAL,
+                                        border = 5)
                     elif p.get('prompt', '') ==  'group':
                         selection.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
                         which_sizer.Add(item = selection, proportion = 0,
