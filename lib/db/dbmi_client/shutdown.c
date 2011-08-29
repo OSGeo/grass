@@ -58,14 +58,8 @@ int db_shutdown_driver(dbDriver * driver)
     /* wait for the driver to finish */
     status = -1;
 
-#ifdef __MINGW32__
     /* convert status according to return code of G_wait() */
     status = G_wait(driver->pid) == -1 ? -1 : 0;
-#else
-    /* TODO: Should not be here waitpid() ? */
-    while ((pid = wait(&status)) > 0 && pid != driver->pid) {
-    }
-#endif
 
     driver->pid = 0;
 
