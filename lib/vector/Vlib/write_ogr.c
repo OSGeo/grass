@@ -28,7 +28,7 @@
 #include <ogr_api.h>
 
 static int sqltype_to_ogrtype(int);
-static int write_attributes(int, const struct field_info *,
+static int write_attributes(dbDriver *, int, const struct field_info *,
 			    OGRLayerH, OGRFeatureH);
 
 void V2__add_line_to_topo_ogr(struct Map_info *Map, int line,
@@ -73,9 +73,10 @@ off_t V1_write_line_ogr(struct Map_info *Map, int type,
     cat = -1; /* no attributes to be written */
     if (cats->n_cats > 0) {
 	/* check for attributes */
-	Fi = Vect_get_field(Map, cats->field[0]);
+	Fi = Vect_get_dblink(Map, 0);
 	if (Fi) {
-	    cat = cats->cat[0];
+	    if (!Vect_cat_get(cats, Fi->number, &cat))
+		G_warning(_("No category defined for layer %d"), Fi->number);
 	    if (cats->n_cats > 1) {
 		G_warning(_("Feature has more categories, using "
 			    "category %d (from layer %d)"),
@@ -165,9 +166,11 @@ off_t V1_write_line_ogr(struct Map_info *Map, int type,
     OGR_F_SetGeometry(Ogr_feature, Ogr_geometry);
 
     /* write attributes */
-    if (cat > -1)
-	write_attributes(cat, Fi, Map->fInfo.ogr.layer, Ogr_feature);
-    
+    if (cat > -1 && Map->fInfo.ogr.dbdriver) {
+	write_attributes(Map->fInfo.ogr.dbdriver,
+			 cat, Fi, Map->fInfo.ogr.layer, Ogr_feature);
+	G_free(Fi);
+    }
     /* write feature into layer */
     ret = OGR_L_CreateFeature(Map->fInfo.ogr.layer, Ogr_feature);
 
@@ -385,17 +388,15 @@ int V2_delete_line_ogr(struct Map_info *Map, off_t line)
     return ret;
 }
 
-int write_attributes(int cat, const struct field_info *Fi,
+int write_attributes(dbDriver *driver, int cat, const struct field_info *Fi,
 		     OGRLayerH Ogr_layer, OGRFeatureH Ogr_feature)
 {
     int j, ogrfieldnum;
     char buf[2000];
     int ncol, sqltype, ctype, ogrtype, more;
     const char *fidcol, *colname;
-    dbDriver *driver;
     dbTable *table;
     dbString dbstring;
-    dbHandle handle;
     dbColumn *column;
     dbCursor cursor;
     dbValue *value;
@@ -410,21 +411,7 @@ int write_attributes(int cat, const struct field_info *Fi,
     }
 
     db_init_string(&dbstring);
-    db_init_handle(&handle);
     
-    driver = db_start_driver(Fi->driver);
-    if (!driver) {
-	G_warning(_("Unable to start driver <%s>"), Fi->driver);
-	return -1;
-    }
-    db_set_handle(&handle, Fi->database, NULL);
-    if (db_open_database(driver, &handle) != DB_OK) {
-	G_warning(_("Unable to open database <%s> by driver <%s>"),
-		  Fi->database, Fi->driver);
-	db_close_database_shutdown_driver(driver);
-	return -1;
-    }
-
     /* read & set attributes */
     sprintf(buf, "SELECT * FROM %s WHERE %s = %d", Fi->table, Fi->key,
 	    cat);
@@ -509,7 +496,6 @@ int write_attributes(int cat, const struct field_info *Fi,
     }
 
     db_close_cursor (&cursor);
-    db_close_database_shutdown_driver(driver);
     
     db_free_string(&dbstring);
     
