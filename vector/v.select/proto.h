@@ -23,6 +23,10 @@ struct GFlag {
 /* args.c */
 void parse_options(struct GParm *, struct GFlag *);
 
+/* copy_tabs.c */
+void copy_tabs(struct Map_info *, struct Map_info *,
+	       int, int *, int *, int **);
+
 #ifdef HAVE_GEOS
 /* geos.c */
 int line_relate_geos(struct Map_info *, const GEOSGeometry *,
@@ -31,8 +35,17 @@ int area_relate_geos(struct Map_info *, const GEOSGeometry *,
 		     int, int, const char *);
 #endif
 
+/* select.c */
+int select_lines(struct Map_info *, int, int,
+		 struct Map_info *, int, int,
+		 int, int, const char *, int *);
+
 /* overlap.c */
 void add_aarea(struct Map_info *, int, int *);
 int line_overlap_area(struct Map_info *, int, struct Map_info *, int, struct bound_box);
 
+/* write.c */
+void write_lines(struct Map_info *, struct field_info *, int *,
+		 struct Map_info *, int, int,
+		 int, int *, int *, int **);
 #endif /* PROTO_H */
