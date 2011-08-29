@@ -87,7 +87,7 @@
 	  <label>Import raster data</label>
 	  <items>
 	    <menuitem>
-	      <label>Common import formats</label>
+	      <label>Common formats import</label>
 	      <help>Import raster data into a GRASS map layer using GDAL.</help>
 	      <keywords>raster,import</keywords>
 	      <handler>OnImportGdalLayers</handler>
@@ -143,6 +143,13 @@
 	      <keywords>raster,import</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.in.mat</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>PNG import</label>
+	      <help>Import non-georeferenced PNG format image.</help>
+	      <keywords>raster,import</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>r.in.png</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>SPOT NDVI import</label>
@@ -507,7 +514,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Vis5D export</label>
-	      <help>Converts a 3D raster map into a 3-dimensional Vis5D file.</help>
+	      <help>Exports GRASS 3D raster map to 3-dimensional Vis5D file.</help>
 	      <keywords>raster3d,voxel,export</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r3.out.v5d</command>
@@ -709,7 +716,7 @@
 	</menuitem>
 	<menuitem>
 	  <label>NVIZ (non-interactive)</label>
-	  <help>Allows rendering GIS data is a 3D space.</help>
+	  <help>Creates a 3D rendering of GIS data.</help>
 	  <keywords>visualization,raster,vector,raster3d</keywords>
 	  <handler>OnMenuCmd</handler>
 	  <command>nviz_cmd</command>
@@ -1244,7 +1251,7 @@
 	    <menuitem>
 	      <label>Textural features</label>
 	      <help>Generate images with textural features from a raster map.</help>
-	      <keywords>raster,algebra,statistics</keywords>
+	      <keywords>raster,algebra,statistics,texture</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.texture</command>
 	    </menuitem>
@@ -2086,7 +2093,7 @@
 	<separator />
 	<menuitem>
 	  <label>Attribute query</label>
-	  <help>Selects vector objects from an existing vector map and creates a new map containing only the selected objects.</help>
+	  <help>Selects vector features from an existing vector map and creates a new vector map containing only the selected features.</help>
 	  <keywords>vector,extract</keywords>
 	  <handler>OnMenuCmd</handler>
 	  <command>v.extract</command>
@@ -2951,7 +2958,7 @@
 	</menuitem>
 	<menuitem>
 	  <label>Cross section</label>
-	  <help>Creates cross section 2D raster map from 3d raster map based on 2D elevation map</help>
+	  <help>Creates cross section 2D raster map from 3D raster map based on 2D elevation map</help>
 	  <keywords>raster3d,raster,voxel</keywords>
 	  <handler>OnMenuCmd</handler>
 	  <command>r3.cross.rast</command>
