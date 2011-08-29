@@ -2085,21 +2085,14 @@
 	</menu>
 	<separator />
 	<menuitem>
-	  <label>Query with attributes</label>
+	  <label>Attribute query</label>
 	  <help>Selects vector objects from an existing vector map and creates a new map containing only the selected objects.</help>
 	  <keywords>vector,extract</keywords>
 	  <handler>OnMenuCmd</handler>
 	  <command>v.extract</command>
 	</menuitem>
 	<menuitem>
-	  <label>Query with coordinate(s)</label>
-	  <help>Queries a vector map at given locations.</help>
-	  <keywords>vector,position,querying</keywords>
-	  <handler>OnMenuCmd</handler>
-	  <command>v.what</command>
-	</menuitem>
-	<menuitem>
-	  <label>Query with another vector map</label>
+	  <label>Spatial query</label>
 	  <help>Selects features from vector map (A) by features from other vector map (B).</help>
 	  <keywords>vector,spatial query</keywords>
 	  <handler>OnMenuCmd</handler>
