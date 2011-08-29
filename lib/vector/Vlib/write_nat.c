@@ -101,7 +101,7 @@ static void V2__add_area_cats_to_cidx_nat(struct Map_info *Map, int area)
 }
 
 /*!
-  \brief Add line to topo file
+  \brief Add line to topo file (internal use only)
 
   Update areas. Areas are modified if: 
    
@@ -130,9 +130,14 @@ static void V2__add_area_cats_to_cidx_nat(struct Map_info *Map, int area)
     - attach new isle to area outside
     
     Note that 1) and 2) is done by the same code.
+
+    \param Map pointer to Map_info structure
+    \param line line id
+    \param points pointer to line_pnts structure (feature's geometry)
+    \param cats pointer to line_cats structure (feature's categories)
 */
 static void V2__add_line_to_topo_nat(struct Map_info *Map, int line,
-			    const struct line_pnts *points, const struct line_cats *cats)
+				     const struct line_pnts *points, const struct line_cats *cats)
 {
     int first, s, n, i;
     int type, node, next_line, area, side, sel_area, new_area[2];
