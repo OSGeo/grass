@@ -21,12 +21,16 @@
 #include <sys/stat.h>
 
 #include <grass/vector.h>
+#include <grass/dbmi.h>
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
 
 #ifdef HAVE_OGR
 #include <ogr_api.h>
 #include <cpl_string.h>
+
+static int sqltype_to_ogrtype(int);
+static int create_table(OGRLayerH, const struct field_info *);
 
 /*!
    \brief Open existing OGR layer (level 1 - without feature index file)
@@ -291,9 +295,11 @@ int V1_open_new_ogr(struct Map_info *Map, const char *name, int with_z)
 */
 int V2_open_new_ogr(struct Map_info *Map, int type)
 {
+    int ndblinks;
     OGRLayerH            Ogr_layer;
     OGRSpatialReferenceH Ogr_spatial_ref;
     
+    struct field_info *Fi;
     struct Key_Value *projinfo, *projunits;
     
     OGRwkbGeometryType Ogr_geom_type;
@@ -345,9 +351,135 @@ int V2_open_new_ogr(struct Map_info *Map, int type)
     }
     Map->fInfo.ogr.layer = Ogr_layer;
 
+    ndblinks = Vect_get_num_dblinks(Map);
+    if (ndblinks > 0) {
+	/* write also attributes */
+	Fi = Vect_get_dblink(Map, 0);
+	if (Fi) {
+	    if (ndblinks > 1)
+		G_warning(_("More layers defined, using driver <%s> and "
+			    "database <%s>"), Fi->driver, Fi->database);
+	    create_table(Map->fInfo.ogr.layer, Fi);
+	    G_free(Fi);
+	}
+	else
+	G_warning(_("Database connection not defined. "
+		    "Unable to write attributes."));
+    }
+    
     if (OGR_L_TestCapability(Map->fInfo.ogr.layer, OLCTransactions))
 	OGR_L_StartTransaction(Map->fInfo.ogr.layer);
 
     return 0;
 }
+
+int create_table(OGRLayerH hLayer, const struct field_info *Fi)
+{
+    int col, ncols;
+    int sqltype, ogrtype, length;
+    
+    const char *colname;
+    
+    dbDriver *driver;
+    dbHandle handle;
+    dbCursor cursor;
+    dbTable *table;
+    dbColumn *column;
+    dbString sql;
+    
+    OGRFieldDefnH hFieldDefn;
+    OGRFeatureDefnH hFeatureDefn;
+
+    db_init_string(&sql);
+    db_init_handle(&handle);
+    
+    driver = db_start_driver(Fi->driver);
+    if (!driver) {
+	G_warning(_("Unable to start driver <%s>"), Fi->driver);
+	return -1;
+    }
+    db_set_handle(&handle, Fi->database, NULL);
+    if (db_open_database(driver, &handle) != DB_OK) {
+	G_warning(_("Unable to open database <%s> by driver <%s>"),
+		  Fi->database, Fi->driver);
+	db_close_database_shutdown_driver(driver);
+	return -1;
+    }
+ 
+    /* to get no data */
+    db_set_string(&sql, "select * from ");
+    db_append_string(&sql, Fi->table);
+    db_append_string(&sql, " where 0 = 1");	
+    
+    if (db_open_select_cursor(driver, &sql, &cursor, DB_SEQUENTIAL) !=
+	DB_OK) {
+	G_warning(_("Unable to open select cursor: '%s'"),
+		  db_get_string(&sql));
+	db_close_database_shutdown_driver(driver);
+	return -1;
+    }
+
+    table = db_get_cursor_table(&cursor);
+    ncols = db_get_table_number_of_columns(table);
+
+    hFeatureDefn = OGR_L_GetLayerDefn(hLayer);
+    
+    for (col = 0; col < ncols; col++) {
+	column = db_get_table_column(table, col);
+	colname = db_get_column_name(column);	
+	sqltype = db_get_column_sqltype(column);
+	ogrtype = sqltype_to_ogrtype(sqltype);
+	length = db_get_column_length(column);
+	
+	if (strcmp(OGR_L_GetFIDColumn(hLayer), colname) == 0 ||
+	    OGR_FD_GetFieldIndex(hFeatureDefn, colname) > -1) {
+	    /* field already exists */
+	    continue;
+	}
+
+	hFieldDefn = OGR_Fld_Create(colname, ogrtype);
+	/* GDAL 1.9.0 (r22968) uses VARCHAR instead of CHAR */
+	if (ogrtype == OFTString && length > 0)
+	    OGR_Fld_SetWidth(hFieldDefn, length);
+	if (OGR_L_CreateField(hLayer, hFieldDefn, TRUE) != OGRERR_NONE) {
+	    G_warning(_("Creating field <%s> failed"), colname);
+	    db_close_database_shutdown_driver(driver);
+	    return -1;
+	}
+	
+	OGR_Fld_Destroy(hFieldDefn);
+    }
+
+    db_close_database_shutdown_driver(driver);
+
+    return 0;
+}
+
+int sqltype_to_ogrtype(int sqltype)
+{
+    int ctype, ogrtype;
+
+    ctype = db_sqltype_to_Ctype(sqltype);
+    
+    switch(ctype) {
+    case DB_C_TYPE_INT:
+	ogrtype = OFTInteger;
+	break;
+    case DB_C_TYPE_DOUBLE:
+	ogrtype = OFTReal;
+	break;
+    case DB_C_TYPE_STRING:
+	ogrtype = OFTString;
+	break;
+    case DB_C_TYPE_DATETIME:
+	ogrtype = OFTString;
+	break;
+    default:
+	ogrtype = OFTString;
+	break;
+    }
+    
+    return ogrtype;
+}
+
 #endif
