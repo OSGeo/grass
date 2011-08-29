@@ -1010,7 +1010,7 @@ Section "Uninstall"
 	SetShellVarContext all
 	RMDir /r "$SMPROGRAMS\${GRASS_BASE}"
 	
-	;remove the $APPDATA\grass7\rc file
+	;remove the $APPDATA\grass7 folder
 	SetShellVarContext current
 	RMDir /r "$APPDATA\grass7"
 
