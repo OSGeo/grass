@@ -429,6 +429,7 @@ class MapFrame(wx.Frame):
     
     def RemoveNviz(self):
         """!Restore 2D view"""
+        self.toolbars['map'].RemoveTool(self.toolbars['map'].rotate)
         # update status bar
         self.statusbarWin['toggle'].Enable(True)
         self.statusbar.SetStatusText(_("Please wait, unloading data..."), 0)
@@ -513,7 +514,9 @@ class MapFrame(wx.Frame):
     
     def IsPaneShown(self, name):
         """!Check if pane (toolbar, mapWindow ...) of given name is currently shown"""
-        return self._mgr.GetPane(name).IsShown()
+        if self._mgr.GetPane(name).IsOk():
+            return self._mgr.GetPane(name).IsShown()
+        return False
     
     def _initDisplay(self):
         """!Initialize map display, set dimensions and map region
@@ -1126,7 +1129,7 @@ class MapFrame(wx.Frame):
     def SaveToFile(self, event):
         """!Save map to image
         """
-        if self.toolbars['nviz']:
+        if self.IsPaneShown('3d'):
             filetype = "PPM file (*.ppm)|*.ppm|TIF file (*.tif)|*.tif"
             ltype = [{ 'ext' : 'ppm', 'type' : 'ppm' },
                      { 'ext' : 'tif', 'type' : 'tif' }]
@@ -1207,9 +1210,8 @@ class MapFrame(wx.Frame):
             maplayer = self.toolbars['vdigit'].GetLayer()
             if maplayer:
                 self.toolbars['vdigit'].OnExit()
-        
-        if self.toolbars['nviz']:
-            self.toolbars['nviz'].OnExit()
+        if self.IsPaneShown('3d'):
+            self.RemoveNviz()
         
         if not self._layerManager:
             self.Destroy()
@@ -1690,7 +1692,7 @@ class MapFrame(wx.Frame):
         decmenu.AppendItem(AddScale)
         self.Bind(wx.EVT_MENU, self.OnAddBarscale, AddScale)
         # temporary
-        if self.toolbars['nviz']:
+        if self.IsPaneShown('3d'):
             AddScale.Enable(False)
             AddArrow = wx.MenuItem(decmenu, wx.ID_ANY, _("Add north arrow"))
             AddArrow.SetBitmap(icons["addBarscale"].GetBitmap(self.iconsize))

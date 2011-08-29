@@ -371,7 +371,6 @@ class MapToolbar(AbstractToolbar):
         if self.parent.toolbars['vdigit']:
             self.parent.toolbars['vdigit'].OnExit()
         if self.parent.GetLayerManager().IsPaneShown('toolbarNviz'):
-            self.RemoveTool(self.rotate)
             self.parent.RemoveNviz()
         
     def Enable2D(self, enabled):

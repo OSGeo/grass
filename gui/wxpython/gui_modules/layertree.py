@@ -290,7 +290,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 self.popupMenu.Enable(self.popupID['opacity'], False)
                 self.popupMenu.Enable(self.popupID['properties'], False)
             
-            if ltype in ('raster', 'vector', '3d-raster') and self.mapdisplay.toolbars['nviz']:
+            if ltype in ('raster', 'vector', '3d-raster') and self.lmgr.IsPaneShown('toolbarNviz'):
                 self.popupMenu.Append(self.popupID['nviz'], _("3D view properties"))
                 self.Bind (wx.EVT_MENU, self.OnNvizProperties, id = self.popupID['nviz'])
             
@@ -1081,7 +1081,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         #
         # nviz
         #
-        if self.mapdisplay.toolbars['nviz'] and \
+        if self.lmgr.IsPaneShown('toolbarNviz') and \
                 self.GetPyData(item) is not None:
             # nviz - load/unload data layer
             mapLayer = self.GetPyData(item)[0]['maplayer']
@@ -1131,7 +1131,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         #
         # nviz
         #
-        if self.mapdisplay.toolbars['nviz'] and \
+        if self.lmgr.IsPaneShown('toolbarNviz') and \
                 self.GetPyData(item) is not None:
             # nviz - load/unload data layer
             mapLayer = self.GetPyData(item)[0]['maplayer']
@@ -1242,7 +1242,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                                     render = render)
         
         # update nviz tools
-        if self.mapdisplay.toolbars['nviz'] and \
+        if self.lmgr.IsPaneShown('toolbarNviz') and \
                 self.GetPyData(self.layer_selected) is not None:
             if self.layer_selected.IsChecked():
                 # update Nviz tool window
@@ -1282,7 +1282,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.OnDrop(dropTarget, self._dragItem)
         elif dropTarget == None:
             self.OnDrop(dropTarget, self._dragItem)
-
+            
     def OnDrop(self, dropTarget, dragItem):
         # save everthing associated with item to drag
         try:
@@ -1454,7 +1454,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                                     render = render)
         
         # update nviz session        
-        if self.mapdisplay.toolbars['nviz'] and dcmd:
+        if self.lmgr.IsPaneShown('toolbarNviz') and dcmd:
             mapLayer = self.GetPyData(layer)[0]['maplayer']
             mapWin = self.mapdisplay.MapWindow
             if len(mapLayer.GetCmd()) > 0:
