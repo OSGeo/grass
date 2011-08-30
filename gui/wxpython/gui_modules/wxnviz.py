@@ -356,16 +356,17 @@ class Nviz(object):
         @param name vector map name
         @param points if true load 2d points rather then 2d lines
         
-        @return object id
+        @return object id, id of base surface (or -1 if it is not loaded)
         @return -1 on failure
         """
+        baseId = -1
         if GS_num_surfs() == 0:     # load base surface if no loaded
-            Nviz_new_map_obj(MAP_OBJ_SURF, None, 0.0, self.data)
+            baseId = Nviz_new_map_obj(MAP_OBJ_SURF, None, 0.0, self.data)
             
             nsurf = c_int()
             surf_list = GS_get_surf_list(byref(nsurf))
             GS_set_att_const(surf_list[0], ATT_TRANSP, 255)
-        
+            
         mapset = G_find_vector2 (name, "")
         if mapset is None:
             G_warning(_("Vector map <%s> not found"),
@@ -382,7 +383,7 @@ class Nviz(object):
         
         Debug.msg(1, "Nviz::LoadVector(): name=%s -> id=%d", name, id)
         
-        return id
+        return id, baseId
     
     def UnloadVector(self, id, points):
         """!Unload vector set
