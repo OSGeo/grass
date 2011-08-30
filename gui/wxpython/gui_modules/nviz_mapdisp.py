@@ -99,6 +99,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.layers  = list()
         # list of constant surfaces
         self.constants = list()
+        # id of base surface (when vector is loaded and no surface exist)
+        self.baseId = -1
         # list of cutting planes
         self.cplanes = list()
         # list of query points
@@ -926,13 +928,20 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 elif ltype ==  '3d-raster':
                     self.UnloadRaster3d(layer) 
                 elif ltype ==  'vector':
-                    self.UnloadVector(layer, True)
-                    self.UnloadVector(layer, False)
-
+                    maplayer = self.tree.GetPyData(layer)[0]['maplayer']
+                    npoints, nlines, nfeatures, mapIs3D = self.lmgr.nviz.VectorInfo(maplayer)
+                    if npoints > 0:
+                        self.UnloadVector(layer, points = True)
+                    if nlines > 0:
+                        self.UnloadVector(layer, points = False)
+                        
             except gcmd.GException, e:
                 gcmd.GError(parent = self,
                             message = e.value)
         
+        if force and self.baseId > 0: # unload base surface when quitting
+            ret = self._display.UnloadSurface(self.baseId)
+            self.baseId = -1
         if update:
             self.lmgr.nviz.UpdateSettings()        
             self.UpdateView(None)
@@ -1040,7 +1049,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         # set id
         if id > 0:
             if mapType in ('raster', '3d-raster'):
-               data[nvizType]['object'] = { 'id' : id,
+                data[nvizType]['object'] = { 'id' : id,
                                             'init' : False }
             elif mapType ==  'vector':
                 data['vector'][nvizType]['object'] = { 'id' : id,
@@ -1232,12 +1241,13 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 win = toolWin.FindWindowById(toolWin.win['vector']['map'])
                 win.SetValue('')
         
-    def LoadVector(self, item, points = None):
+    def LoadVector(self, item, points = None, append = True):
         """!Load 2D or 3D vector map overlay
         
         @param item layer item
         @param points True to load points, False to load lines, None
         to load both
+        @param append append vector to layer list
         """
         layer = self.tree.GetPyData(item)[0]['maplayer']
         if layer.type !=  'vector':
@@ -1258,16 +1268,18 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         id = -1
         for vecType in vecTypes:
             if vecType == 'lines':
-                id = self._display.LoadVector(str(layer.GetName()), False)
+                id, baseId = self._display.LoadVector(str(layer.GetName()), False)
             else:
-                id = self._display.LoadVector(str(layer.GetName()), True)
+                id, baseId = self._display.LoadVector(str(layer.GetName()), True)
             if id < 0:
                 self.log.WriteError(_("Loading vector map <%(name)s> (%(type)s) failed") % \
                     { 'name' : layer.name, 'type' : vecType })
             # update layer properties
             self.SetMapObjProperties(item, id, vecType)
-        
-        self.layers.append(item)
+        if baseId > 0:
+            self.baseId = baseId # id of base surface (when no surface is loaded)
+        if append:
+            self.layers.append(item)
         
         # update properties
         data = self.tree.GetPyData(item)[0]['nviz']
@@ -1284,11 +1296,12 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         return id
 
-    def UnloadVector(self, item, points = None):
+    def UnloadVector(self, item, points = None, remove = True):
         """!Unload vector map overlay
         
         @param item layer item
         @param points,lines True to unload given feature type
+        @param remove remove layer from list
         """
         layer = self.tree.GetPyData(item)[0]['maplayer']
         data = self.tree.GetPyData(item)[0]['nviz']['vector']
@@ -1326,7 +1339,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             
             data[vecType].pop('object')
             
-            ### self.layers.remove(id)
+        if remove:
+            self.layers.remove(item)
         
     def OnZoomToMap(self, event):
         """!Set display extents to match selected raster or vector
@@ -1385,7 +1399,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             try:
                 id = data['surface']['object']['id']
             except KeyError:
-                pass
+                return
             self.UpdateSurfaceProperties(id, data['surface'])
             # -> initialized
             data['surface']['object']['init'] = True
@@ -1752,7 +1766,6 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 if _("constant#") + str(item['constant']['object']['name']) == name:
                     return item['constant']['object']['id']
                 
-            return self.constants
         
         for item in self.layers:
             mapLayer = self.tree.GetPyData(item)[0]['maplayer']

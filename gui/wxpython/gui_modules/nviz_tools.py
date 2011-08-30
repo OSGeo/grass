@@ -1423,7 +1423,6 @@ class NvizToolWindow(FN.FlatNotebook):
         maps = list()
         for layer in self.mapWindow.Map.GetListOfLayers(l_type = ltype, l_active = True):
             maps.append(layer.GetName())
-        maps.append('aaaaaaaa')
         return maps, exclude
     
     def _createVolumePage(self, parent):
@@ -3066,9 +3065,9 @@ class NvizToolWindow(FN.FlatNotebook):
         data = self.GetLayerData('vector')['vector']
         
         if checked:
-            self.mapWindow.LoadVector(item, points = points)
+            self.mapWindow.LoadVector(item, points = points, append = False)
         else:
-            self.mapWindow.UnloadVector(item, points = points)
+            self.mapWindow.UnloadVector(item, points = points, remove = False)
         
         self.UpdateVectorShow(vecType, checked)
         

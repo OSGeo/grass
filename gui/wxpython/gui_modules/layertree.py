@@ -230,7 +230,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         """
         if self.rerender:
             if self.mapdisplay.statusbarWin['render'].GetValue():
-                self.mapdisplay.MapWindow.UpdateMap(render = True)
+                self.mapdisplay.MapWindow2D.UpdateMap(render = True)
+                if self.lmgr.IsPaneShown('toolbarNviz'): # nviz
+                    self.mapdisplay.MapWindow3D.UpdateMap(render = True)
             self.rerender = False
         
         event.Skip()
@@ -1082,7 +1084,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # nviz
         #
         if self.lmgr.IsPaneShown('toolbarNviz') and \
-                self.GetPyData(item) is not None:
+                self.GetPyData(item) is not None and not self.rerender:
             # nviz - load/unload data layer
             mapLayer = self.GetPyData(item)[0]['maplayer']
             self.mapdisplay.SetStatusText(_("Please wait, updating data..."), 0)
@@ -1275,6 +1277,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.StopDragging()
         dropTarget = event.GetItem()
         self.flag = self.HitTest(event.GetPoint())[1]
+        if self.lmgr.IsPaneShown('toolbarNviz'):
+            self.mapdisplay.MapWindow.UnloadDataLayers(True)
         if self.IsValidDropTarget(dropTarget):
             self.UnselectAll()
             if dropTarget != None:
