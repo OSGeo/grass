@@ -930,7 +930,7 @@ class WriteWorkspaceFile(object):
                                               region['e'],
                                               region['n'],
                                               viewmode
-                                                    ))
+                                              ))
             # projection statusbar info
             if mapTree.mapdisplay.statusbarWin['projection'].IsChecked() and \
                     UserSettings.Get(group='display', key='projection', subkey='proj4'):

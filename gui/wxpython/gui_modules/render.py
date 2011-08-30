@@ -499,8 +499,9 @@ class Map(object):
         nwres = ewres = 0.0
         
         # Get current values for region and display
-        nsres = self.GetRegion()['nsres']
-        ewres = self.GetRegion()['ewres']
+        reg = self.GetRegion()
+        nsres = reg['nsres']
+        ewres = reg['ewres']
         
         n = float(self.region['n'])
         s = float(self.region['s'])
@@ -512,15 +513,16 @@ class Map(object):
         new['cols'] = math.fabs(round((e-w)/ewres))
         
         # Calculate new extents
-        new['s'] = nsres * round(s/nsres)
-        new['w'] = ewres * round(w/ewres)
+        new['s'] = nsres * round(s / nsres)
+        new['w'] = ewres * round(w / ewres)
         new['n'] = new['s'] + (new['rows'] * nsres)
         new['e'] = new['w'] + (new['cols'] * ewres)
         
         return new
 
     def AlignExtentFromDisplay(self):
-        """!Align region extent based on display size from center point"""
+        """!Align region extent based on display size from center
+        point"""
         # calculate new bounding box based on center of display
         if self.region["ewres"] > self.region["nsres"]:
             res = self.region["ewres"]
@@ -541,10 +543,8 @@ class Map(object):
         
         # LL locations
         if self.projinfo['proj'] == 'll':
-            if self.region['n'] > 90.0:
-                self.region['n'] = 90.0
-            if self.region['s'] < -90.0:
-                self.region['s'] = -90.0
+            self.region['n'] = min(self.region['n'], 90.0)
+            self.region['s'] = max(self.region['s'], -90.0)
         
     def _writeEnvFile(self, data):
         """!Write display-related variable to the file (used for
