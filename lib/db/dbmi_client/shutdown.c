@@ -14,11 +14,6 @@
 
 #include <stdlib.h>
 
-#ifdef __MINGW32__
-#include <process.h>
-#else
-#include <sys/wait.h>
-#endif
 #include <grass/dbmi.h>
 #include <grass/spawn.h>
 #include "macros.h"
