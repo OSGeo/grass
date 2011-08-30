@@ -167,10 +167,19 @@ class MapFrame(wx.Frame):
                                                              "computational region, "
                                                              "computational region inside a display region "
                                                              "as a red box).")))
+        # set mode
+        self.statusbarWin['alignExtent'] = wx.CheckBox(parent = self.statusbar, id = wx.ID_ANY,
+                                                       label = _("Align region extent based on display size"))
+        self.statusbarWin['alignExtent'].SetValue(UserSettings.Get(group = 'display', key = 'alignExtent', subkey = 'enabled'))
+        self.statusbarWin['alignExtent'].Hide()
+        self.statusbarWin['alignExtent'].SetToolTip(wx.ToolTip (_("Align region extent based on display "
+                                                                  "size from center point. "
+                                                                  "Default value for new map displays can "
+                                                                  "be set up in 'User GUI settings' dialog.")))
         # set resolution
         self.statusbarWin['resolution'] = wx.CheckBox(parent = self.statusbar, id = wx.ID_ANY,
                                                       label = _("Constrain display resolution to computational settings"))
-        self.statusbar.Bind(wx.EVT_CHECKBOX, self.OnToggleResolution, self.statusbarWin['resolution'])
+        self.statusbar.Bind(wx.EVT_CHECKBOX, self.OnToggleUpdateMap, self.statusbarWin['resolution'])
         self.statusbarWin['resolution'].SetValue(UserSettings.Get(group = 'display', key = 'compResolution', subkey = 'enabled'))
         self.statusbarWin['resolution'].Hide()
         self.statusbarWin['resolution'].SetToolTip(wx.ToolTip (_("Constrain display resolution "
@@ -730,24 +739,20 @@ class MapFrame(wx.Frame):
         if self.statusbarWin['render'].GetValue():
             self.OnRender(None)
 
-    def OnToggleResolution(self, event):
-        """
-        Use resolution of computation region settings
-        for redering image instead of display resolution
+    def OnToggleUpdateMap(self, event):
+        """!Update display when toggle display mode
         """
         # redraw map if auto-rendering is enabled
         if self.statusbarWin['render'].GetValue():
             self.OnRender(None)
         
     def OnToggleStatus(self, event):
-        """
-        Toggle status text
+        """!Toggle status text
         """
         self.StatusbarUpdate()
 
     def OnChangeMapScale(self, event):
-        """
-        Map scale changed by user
+        """!Map scale changed by user
         """
         scale = event.GetString()
 
@@ -859,6 +864,7 @@ class MapFrame(wx.Frame):
         """!Update statusbar content"""
 
         self.statusbarWin['region'].Hide()
+        self.statusbarWin['alignExtent'].Hide()
         self.statusbarWin['resolution'].Hide()
         self.statusbarWin['mapscale'].Hide()
         self.statusbarWin['goto'].Hide()
@@ -965,20 +971,26 @@ class MapFrame(wx.Frame):
             # disable long help
             self.StatusbarEnableLongHelp(False)
 
-        elif self.statusbarWin['toggle'].GetSelection() == 4: # Display mode
+        elif self.statusbarWin['toggle'].GetSelection() == 4: # Align extent
+            self.statusbar.SetStatusText("", 0)
+            self.statusbarWin['alignExtent'].Show()
+            # disable long help
+            self.StatusbarEnableLongHelp(False)
+
+        elif self.statusbarWin['toggle'].GetSelection() == 5: # Display resolution
             self.statusbar.SetStatusText("", 0)
             self.statusbarWin['resolution'].Show()
             # disable long help
             self.StatusbarEnableLongHelp(False)
 
-        elif self.statusbarWin['toggle'].GetSelection() == 5: # Display geometry
+        elif self.statusbarWin['toggle'].GetSelection() == 6: # Display geometry
             self.statusbar.SetStatusText("rows=%d; cols=%d; nsres=%.2f; ewres=%.2f" %
                                          (self.Map.region["rows"], self.Map.region["cols"],
                                           self.Map.region["nsres"], self.Map.region["ewres"]), 0)
             # enable long help
             self.StatusbarEnableLongHelp()
 
-        elif self.statusbarWin['toggle'].GetSelection() == 6: # Map scale
+        elif self.statusbarWin['toggle'].GetSelection() == 7: # Map scale
             # TODO: need to be fixed...
             ### screen X region problem
             ### user should specify ppm
@@ -1027,7 +1039,7 @@ class MapFrame(wx.Frame):
             # disable long help
             self.StatusbarEnableLongHelp(False)
 
-        elif self.statusbarWin['toggle'].GetSelection() == 7: # go to
+        elif self.statusbarWin['toggle'].GetSelection() == 8: # go to
             self.statusbar.SetStatusText("")
             region = self.Map.GetCurrentRegion()
             precision = int(UserSettings.Get(group = 'projection', key = 'format',
@@ -1068,7 +1080,7 @@ class MapFrame(wx.Frame):
             # disable long help
             self.StatusbarEnableLongHelp(False)
         
-        elif self.statusbarWin['toggle'].GetSelection() == 8: # projection
+        elif self.statusbarWin['toggle'].GetSelection() == 9: # projection
             self.statusbar.SetStatusText("")
             epsg = UserSettings.Get(group = 'projection', key = 'statusbar', subkey = 'epsg')
             if epsg:
@@ -1094,6 +1106,7 @@ class MapFrame(wx.Frame):
         """!Reposition checkbox in statusbar"""
         # reposition checkbox
         widgets = [(0, self.statusbarWin['region']),
+                   (0, self.statusbarWin['alignExtent']),
                    (0, self.statusbarWin['resolution']),
                    (0, self.statusbarWin['mapscale']),
                    (0, self.statusbarWin['progress']),
@@ -1912,12 +1925,13 @@ class MapFrame(wx.Frame):
         zoommenu.Destroy()
         
     def SetProperties(self, render = False, mode = 0, showCompExtent = False,
-                      constrainRes = False, projection = False):
+                      constrainRes = False, projection = False, alignExtent = True):
         """!Set properies of map display window"""
         self.statusbarWin['render'].SetValue(render)
         self.statusbarWin['toggle'].SetSelection(mode)
         self.StatusbarUpdate()
         self.statusbarWin['region'].SetValue(showCompExtent)
+        self.statusbarWin['alignExtent'].SetValue(alignExtent)
         self.statusbarWin['resolution'].SetValue(constrainRes)
         self.statusbarWin['projection'].SetValue(projection)
         if showCompExtent:

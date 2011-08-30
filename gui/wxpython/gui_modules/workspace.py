@@ -155,6 +155,7 @@ class ProcessWorkspaceFile:
                     "pos"            : pos,
                     "size"           : size,
                     "extent"         : extent,
+                    "alignExtent"    : bool(int(display.get('alignExtent', "0"))),
                     "constrainRes"   : bool(int(display.get('constrainRes', "0"))),
                     "projection"     : projection,
                     "viewMode"       : display.get('viewMode', '2d')} )
@@ -910,23 +911,25 @@ class WriteWorkspaceFile(object):
             
             file.write('%s<display render="%d" '
                        'mode="%d" showCompExtent="%d" '
+                       'alignExtent="%d" '
                        'constrainRes="%d" '
                        'dim="%d,%d,%d,%d" '
                        'extent="%f,%f,%f,%f" '
                        'viewMode="%s" >\n' % (' ' * self.indent,
-                                                    int(mapTree.mapdisplay.statusbarWin['render'].IsChecked()),
-                                                    mapTree.mapdisplay.statusbarWin['toggle'].GetSelection(),
-                                                    int(mapTree.mapdisplay.statusbarWin['region'].IsChecked()),
-                                                    int(mapTree.mapdisplay.statusbarWin['resolution'].IsChecked()),
-                                                    displayPos[0],
-                                                    displayPos[1],
-                                                    displaySize[0],
-                                                    displaySize[1],
-                                                    region['w'],
-                                                    region['s'],
-                                                    region['e'],
-                                                    region['n'],
-                                                    viewmode
+                                              int(mapTree.mapdisplay.statusbarWin['render'].IsChecked()),
+                                              mapTree.mapdisplay.statusbarWin['toggle'].GetSelection(),
+                                              int(mapTree.mapdisplay.statusbarWin['region'].IsChecked()),
+                                              int(mapTree.mapdisplay.statusbarWin['alignExtent'].IsChecked()),
+                                              int(mapTree.mapdisplay.statusbarWin['resolution'].IsChecked()),
+                                              displayPos[0],
+                                              displayPos[1],
+                                              displaySize[0],
+                                              displaySize[1],
+                                              region['w'],
+                                              region['s'],
+                                              region['e'],
+                                              region['n'],
+                                              viewmode
                                                     ))
             # projection statusbar info
             if mapTree.mapdisplay.statusbarWin['projection'].IsChecked() and \

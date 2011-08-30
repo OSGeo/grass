@@ -150,6 +150,9 @@ class Settings:
                 'driver': {
                     'type': 'cairo'
                     },
+                'alignExtent' : {
+                    'enabled' : True
+                    },
                 'compResolution' : {
                     'enabled' : False
                     },
@@ -1560,12 +1563,25 @@ class PreferencesDialog(PreferencesBaseDialog):
                       pos = (row, 1))
         
         #
+        # Align extent to display size
+        #
+        row += 1
+        alignExtent = wx.CheckBox(parent = panel, id = wx.ID_ANY,
+                                  label = _("Align region extent based on display size"),
+                                  name = "IsChecked")
+        alignExtent.SetValue(self.settings.Get(group = 'display', key = 'alignExtent', subkey = 'enabled'))
+        self.winId['display:alignExtent:enabled'] = alignExtent.GetId()
+
+        gridSizer.Add(item = alignExtent,
+                      pos = (row, 0), span = (1, 2))
+        
+        #
         # Use computation resolution
         #
         row += 1
         compResolution = wx.CheckBox(parent = panel, id = wx.ID_ANY,
-                                    label = _("Constrain display resolution to computational settings"),
-                                    name = "IsChecked")
+                                     label = _("Constrain display resolution to computational settings"),
+                                     name = "IsChecked")
         compResolution.SetValue(self.settings.Get(group = 'display', key = 'compResolution', subkey = 'enabled'))
         self.winId['display:compResolution:enabled'] = compResolution.GetId()
 
