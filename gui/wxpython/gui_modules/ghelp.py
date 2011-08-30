@@ -35,6 +35,7 @@ except ImportError:
 import wx.lib.flatnotebook as FN
 import  wx.lib.scrolledpanel as scrolled
 
+import grass.script as grass
 from grass.script import task as gtask
 
 import menudata
@@ -487,9 +488,7 @@ class AboutWindow(wx.Frame):
         self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
 
         # get version and web site
-        version, svn_gis_h_rev, svn_gis_h_date = gcmd.RunCommand('g.version',
-                                                                 flags = 'r',
-                                                                 read = True).splitlines()
+        vInfo = grass.version()
         
         infoTxt = wx.Panel(parent = panel, id = wx.ID_ANY)
         infoSizer = wx.BoxSizer(wx.VERTICAL)
@@ -504,30 +503,43 @@ class AboutWindow(wx.Frame):
                       flag = wx.ALL | wx.ALIGN_CENTER, border = 25)
         
         info = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
-                             label = version.replace('GRASS', 'GRASS GIS').strip() + '\n\n')
+                             label = 'GRASS GIS ' + vInfo['version'] + '\n\n')
         info.SetFont(wx.Font(13, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
         infoSizer.Add(item = info, proportion = 0,
                           flag = wx.BOTTOM | wx.ALIGN_CENTER, border = 15)
 
+        row = 0
         infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
                                                label = _('Official GRASS site:')),
-                          pos = (0, 0),
+                          pos = (row, 0),
                           flag = wx.ALIGN_RIGHT)
 
         infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
                                                label = 'http://grass.osgeo.org'),
-                          pos = (0, 1),
+                          pos = (row, 1),
                           flag = wx.ALIGN_LEFT)
-        
+
+        row += 2
         infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
-                                               label = _('GIS Library Revision:')),
-                          pos = (2, 0),
+                                               label = _('SVN Revision:')),
+                          pos = (row, 0),
                           flag = wx.ALIGN_RIGHT)
         
         infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
-                                               label = svn_gis_h_rev.split(' ')[2] + ' (' +
-                                               svn_gis_h_date.split(' ')[2] + ')'),
-                          pos = (2, 1),
+                                               label = vInfo['revision']),
+                          pos = (row, 1),
+                          flag = wx.ALIGN_LEFT)
+        
+        row += 1
+        infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
+                                               label = _('GIS Library Revision:')),
+                          pos = (row, 0),
+                          flag = wx.ALIGN_RIGHT)
+        
+        infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
+                                               label = vInfo['libgis_revision'] + ' (' +
+                                               vInfo['libgis_date'].split(' ')[0] + ')'),
+                          pos = (row, 1),
                           flag = wx.ALIGN_LEFT)
 
         infoSizer.Add(item = infoGridSizer,
