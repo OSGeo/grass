@@ -1637,10 +1637,8 @@ class BufferedWindow(MapWindow, wx.Window):
         if newreg != {}:
             # LL locations
             if self.parent.Map.projinfo['proj'] == 'll':
-                if newreg['n'] > 90.0:
-                    newreg['n'] = 90.0
-                if newreg['s'] < -90.0:
-                    newreg['s'] = -90.0
+                self.region['n'] = min(self.region['n'], 90.0)
+                self.region['s'] = max(self.region['s'], -90.0)
             
             ce = newreg['w'] + (newreg['e'] - newreg['w']) / 2
             cn = newreg['s'] + (newreg['n'] - newreg['s']) / 2
@@ -1648,9 +1646,13 @@ class BufferedWindow(MapWindow, wx.Window):
             # calculate new center point and display resolution
             self.Map.region['center_easting'] = ce
             self.Map.region['center_northing'] = cn
-            self.Map.region["ewres"] = (newreg['e'] - newreg['w']) / self.Map.width
-            self.Map.region["nsres"] = (newreg['n'] - newreg['s']) / self.Map.height
-            self.Map.AlignExtentFromDisplay()
+            self.Map.region['ewres'] = (newreg['e'] - newreg['w']) / self.Map.width
+            self.Map.region['nsres'] = (newreg['n'] - newreg['s']) / self.Map.height
+            if self.parent.statusbarWin['alignExtent'].IsChecked():
+                self.Map.AlignExtentFromDisplay()
+            else:
+                for k in ('n', 's', 'e', 'w'):
+                    self.Map.region[k] = newreg[k]
             
             if hasattr(self, "digit") and \
                     hasattr(self, "moveInfo"):
