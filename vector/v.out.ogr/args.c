@@ -16,10 +16,10 @@ void parse_args(int argc, char **argv,
     options->type->description =
 	_("Combination of types is not supported "
 	  "by all output formats. Default is to use first type found in input vector map.");
-    options->type->guisection = _("Input");
+    options->type->guisection = _("Selection");
 
     options->field = G_define_standard_option(G_OPT_V_FIELD);
-    options->field->guisection = _("Input");
+    options->field->guisection = _("Selection");
 
     options->dsn = G_define_option();
     options->dsn->key = "dsn";
@@ -86,7 +86,7 @@ void parse_args(int argc, char **argv,
     flags->cat->description =
 	_("Also export features without category (not labeled). "
 	  "Otherwise only features with category are exported.");
-    flags->cat->guisection = _("Input");
+    flags->cat->guisection = _("Selection");
 
     flags->esristyle = G_define_flag();
     flags->esristyle->key = 'e';
