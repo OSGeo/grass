@@ -1075,7 +1075,7 @@ class GdalSelect(wx.Panel):
                                         label=" %s " % _("Settings"))
         
         self.inputBox = wx.StaticBox(parent = self, id=wx.ID_ANY,
-                                     label=" %s " % _("Source name"))
+                                     label=" %s " % _("Source"))
         
         # source type
         sources = list()
@@ -1173,6 +1173,9 @@ class GdalSelect(wx.Panel):
         self.format = FormatSelect(parent = self,
                                    ogr = ogr)
         self.format.Bind(wx.EVT_CHOICE, self.OnSetFormat)
+        self.extension = wx.TextCtrl(parent = self, id = wx.ID_ANY)
+        self.extension.Bind(wx.EVT_TEXT, self.OnSetExtension)
+        self.extension.Hide()
         
         if ogr:
             fType = 'ogr'
@@ -1199,18 +1202,20 @@ class GdalSelect(wx.Panel):
         self.input[self.dsnType][1].Show()
         self.format.SetItems(self.input[self.dsnType][2])
         
-        if not ogr:
-            self.format.SetStringSelection('GeoTIFF')
-        else:
-            self.format.SetStringSelection('ESRI Shapefile')
-        
         self.dsnText = wx.StaticText(parent = self, id = wx.ID_ANY,
                                      label = self.input[self.dsnType][0],
                                      size = (75, -1))
-        self.formatText = wx.StaticText(parent = self, id = wx.ID_ANY,
-                                        label = _("Format:"))
+        self.extensionText = wx.StaticText(parent = self, id = wx.ID_ANY,
+                                           label = _("Extension:"))
+        self.extensionText.Hide()
+        
         self._layout()
 
+        if not ogr:
+            self.OnSetFormat(event = None, format = 'GeoTIFF')
+        else:
+            self.OnSetFormat(event = None, format = 'ESRI Shapefile')
+        
     def _layout(self):
         """!Layout"""
         mainSizer = wx.BoxSizer(wx.VERTICAL)
@@ -1230,23 +1235,30 @@ class GdalSelect(wx.Panel):
         
         inputSizer = wx.StaticBoxSizer(self.inputBox, wx.HORIZONTAL)
         
-        self.dsnSizer = wx.GridBagSizer(vgap=3, hgap=3)
+        self.dsnSizer = wx.GridBagSizer(vgap = 3, hgap = 3)
         self.dsnSizer.AddGrowableRow(1)
-        self.dsnSizer.AddGrowableCol(1)
+        self.dsnSizer.AddGrowableCol(3)
         
         self.dsnSizer.Add(item=self.dsnText,
                           flag=wx.ALIGN_CENTER_VERTICAL,
                           pos = (0, 0))
         self.dsnSizer.Add(item=self.input[self.dsnType][1],
                           flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-                          pos = (0, 1))
+                          pos = (0, 1), span = (1, 3))
         
-        self.dsnSizer.Add(item=self.formatText,
-                          flag=wx.ALIGN_CENTER_VERTICAL,
+        self.dsnSizer.Add(item = wx.StaticText(parent = self, id = wx.ID_ANY,
+                                               label = _("Format:")),
+                          flag = wx.ALIGN_CENTER_VERTICAL,
                           pos = (1, 0))
         self.dsnSizer.Add(item=self.format,
                           flag = wx.ALIGN_CENTER_VERTICAL,
                           pos = (1, 1))
+        self.dsnSizer.Add(item = self.extensionText,
+                          flag=wx.ALIGN_CENTER_VERTICAL,
+                          pos = (1, 2))
+        self.dsnSizer.Add(item=self.extension,
+                          flag = wx.ALIGN_CENTER_VERTICAL,
+                          pos = (1, 3))
         
         inputSizer.Add(item=self.dsnSizer, proportion=1,
                        flag=wx.EXPAND | wx.ALL)
@@ -1373,6 +1385,7 @@ class GdalSelect(wx.Panel):
                                               changeCallback=self.OnSetDsn,
                                               fileMask = format)
             self.input[self.dsnType][1] = win
+        
         elif sel == self.sourceMap['dir']: # directory
             self.dsnType = 'dir'
         elif sel == self.sourceMap['db']: # database
@@ -1398,14 +1411,24 @@ class GdalSelect(wx.Panel):
                 self.OnSetFormat(event = None, format = 'GeoTIFF')
             else:
                 self.OnSetFormat(event = None, format = 'ESRI Shapefile')
-        elif sel == self.sourceMap['pro']:
-            win = self.input[self.dsnType][1]
-            self.dsnSizer.Add(item=self.input[self.dsnType][1],
-                              flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-                              pos = (0, 1))
-            win.SetValue('')
-            win.Show()
+        else:
+            if sel == self.sourceMap['pro']:
+                win = self.input[self.dsnType][1]
+                self.dsnSizer.Add(item=self.input[self.dsnType][1],
+                                  flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+                                  pos = (0, 1))
+                win.SetValue('')
+                win.Show()
         
+        if sel == self.sourceMap['dir']:
+            if not self.extension.IsShown():
+                self.extensionText.Show()
+                self.extension.Show()
+        else:
+            if self.extension.IsShown():
+                self.extensionText.Hide()
+                self.extension.Hide()
+            
         self.dsnSizer.Layout()
         
     def _getDsn(self):
@@ -1432,11 +1455,20 @@ class GdalSelect(wx.Panel):
         
         if not path:
             return 
+
+        self._reloadLayers()
+        
+        if event:
+            event.Skip()
+        
+    def _reloadLayers(self):
+        """!Reload list of layers"""
+        dsn = self._getDsn()
+        if not dsn:
+            return
         
         data = list()        
-        
         layerId = 1
-        dsn = self._getDsn()
         
         if self.ogr:
             ret = gcmd.RunCommand('v.in.ogr',
@@ -1463,10 +1495,7 @@ class GdalSelect(wx.Panel):
                 grassName = utils.GetValidLayerName(baseName.split('.', -1)[0])
                 data.append((layerId, baseName, grassName))
             elif self.dsnType == 'dir':
-                try:
-                    ext = self.format.GetExtension(self.format.GetStringSelection())
-                except KeyError:
-                    ext = ''
+                ext = self.extension.GetValue()
                 for filename in glob.glob(os.path.join(dsn, "%s") % self._getExtPatternGlob(ext)):
                     baseName = os.path.basename(filename)
                     grassName = utils.GetValidLayerName(baseName.split('.', -1)[0])
@@ -1486,8 +1515,10 @@ class GdalSelect(wx.Panel):
             else:
                 self.parent.btn_run.Enable(False)
         
-        if event:
-            event.Skip()
+    def OnSetExtension(self, event):
+        """!Extension changed"""
+        # reload layers
+        self._reloadLayers()
         
     def OnSetFormat(self, event, format = None):
         """!Format changed"""
@@ -1524,8 +1555,10 @@ class GdalSelect(wx.Panel):
                                               startDirectory=os.getcwd(),
                                               changeCallback=self.OnSetDsn,
                                               fileMask = format)
+            
         elif self.dsnType == 'dir':
             pass
+        
         else: # database
             if format == 'SQLite' or format == 'Rasterlite':
                 win = self.input['db-win']['file']
@@ -1549,15 +1582,21 @@ class GdalSelect(wx.Panel):
                     win = self.input['db-win']['text']
             else:
                 win = self.input['db-win']['text']
-        
+            
         self.input[self.dsnType][1] = win
         if not win.IsShown():
             win.Show()
-        self.dsnSizer.Add(item=self.input[self.dsnType][1],
+        self.dsnSizer.Add(item = self.input[self.dsnType][1],
                           flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
-                          pos = (0, 1))
+                          pos = (0, 1), span = (1, 3))
         self.dsnSizer.Layout()
+        
+        # update extension
+        self.extension.SetValue(self.GetFormatExt())
 
+        # reload layers
+        self._reloadLayers()
+        
     def GetType(self):
         """!Get source type"""
         return self.dsnType
