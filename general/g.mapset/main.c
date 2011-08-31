@@ -55,6 +55,7 @@ int main(int argc, char *argv[])
     opt.mapset->required = YES;
     opt.mapset->description = _("Name of mapset where to switch");
     opt.mapset->guisection = _("Settings");
+    opt.mapset->gisprompt = "new,mapset,mapset";
 
     opt.location = G_define_option();
     opt.location->key = "location";
