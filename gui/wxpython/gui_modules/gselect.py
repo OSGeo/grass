@@ -1416,7 +1416,8 @@ class GdalSelect(wx.Panel):
         return self.input[self.dsnType][1].GetValue()
     
     def OnSetDsn(self, event, path = None):
-        """!Input DXF file/OGR dsn defined, update list of layer widget"""
+        """!Input DXF file/OGR dsn defined, update list of layer
+        widget"""
         if event:
             path = event.GetString()
         else:
@@ -1437,25 +1438,44 @@ class GdalSelect(wx.Panel):
         layerId = 1
         dsn = self._getDsn()
         
-        if self.dsnType in ('file', 'dir', 'db'):
+        if self.ogr:
             ret = gcmd.RunCommand('v.in.ogr',
                                   quiet = True,
                                   read = True,
                                   flags = 't',
                                   dsn = dsn)
+                
             if not ret:
                 self.parent.list.LoadData()
                 if hasattr(self, "btn_run"):
                     self.btn_run.Enable(False)
                 return
+            
             layerId = 1
             for line in ret.splitlines():
                 layerName, featureType = map(lambda x: x.strip(), line.split(' ', 1))
                 grassName = utils.GetValidLayerName(layerName)
                 data.append((layerId, layerName, featureType, grassName))
                 layerId += 1
+        else:
+            if self.dsnType == 'file':
+                baseName = os.path.basename(dsn)
+                grassName = utils.GetValidLayerName(baseName.split('.', -1)[0])
+                data.append((layerId, baseName, grassName))
+            elif self.dsnType == 'dir':
+                try:
+                    ext = self.format.GetExtension(self.format.GetStringSelection())
+                except KeyError:
+                    ext = ''
+                for filename in glob.glob(os.path.join(dsn, "%s") % self._getExtPatternGlob(ext)):
+                    baseName = os.path.basename(filename)
+                    grassName = utils.GetValidLayerName(baseName.split('.', -1)[0])
+                    data.append((layerId, baseName, grassName))
+                    layerId += 1
+        if self.ogr:
+            dsn += '@OGR'
         
-        evt = wxGdalSelect(dsn = dsn + '@OGR')
+        evt = wxGdalSelect(dsn = dsn)
         evt.SetId(self.input[self.dsnType][1].GetId())
         wx.PostEvent(self.parent, evt)
         
