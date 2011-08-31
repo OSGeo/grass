@@ -408,6 +408,7 @@ def CreateNewVector(parent, cmd, title = _('Create new vector map'),
         # create link for OGR layers
         if not isNative:
             gcmd.RunCommand('v.external',
+                            overwrite = overwrite,
                             parent = parent,
                             dsn = vExternalOut['dsn'],
                             layer = outmap)
