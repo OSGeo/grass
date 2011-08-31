@@ -1,0 +1,95 @@
+<H2>DESCRIPTION</H2>
+
+<EM>v.vect.stats</EM> counts the number of points in vector map
+<em>points</em> falling into each area in vector map <em>areas</em>.
+Optionally statistics on point attributes in <em>points</em> are
+calculated for each area. The results are either uploaded to the
+attribute table of the vector map <em>areas</em> or printed to stdout.
+
+<h3>OPTIONS</h3>
+
+<em>Statistical Methods:</em>
+Using numeric attribute values of all points falling into a given area,
+a new value is detmined with the selected method.
+<em>v.vect.stats</em> can perform the following operations:
+
+<p>
+<dl>
+
+<dt><b>sum</b> 
+
+<dd>The sum of values.
+
+<dt><b>average</b> 
+
+<dd>The average value of all point attributes (sum / count).
+
+<dt><b>median</b> 
+
+<dd>The value found half-way through a list of the
+attribute values, when these are ranged in numerical order.
+
+<dt><b>mode</b> 
+
+<dd>The most frequently occurring value.
+
+<dt><b>minimum</b> 
+
+<dd>The minimum observed value.
+
+<dt><b>min_cat</b> 
+
+<dd>The point category corresponding to the minimum observed value.
+
+<dt><b>maximum</b> 
+
+<dd>The maximum observed value.
+
+<dt><b>max_cat</b> 
+
+<dd>The point category corresponding to the maximum observed value.
+
+<dt><b>range</b> 
+
+<dd>The range of the observed values.
+
+<dt><b>stddev</b> 
+
+<dd>The statistical standard deviation of the attribute values.
+
+<dt><b>variance</b> 
+
+<dd>The statistical variance of the attribute values.
+
+<dt><b>diversity</b> 
+
+<dd>The number of different attribute values.
+
+</dl>
+
+
+<H2>NOTES</H2>
+
+Points not falling into any area are ignored. Areas without category
+(no centroid attached or centroid without category) are ignored. 
+If no points are falling into a given area, the point count is set to 0
+(zero) and the statistics result to "null".
+<p>
+The columns <em>count_column</em> and <em>stats_column</em> are created if not
+existing. If they do already exist, the <em>count_column</em> must be of
+type integer and the <em>stats_column</em> of type double.
+
+<H2>SEE ALSO</H2>
+
+<EM>
+<a href="v.distance.html">v.distance</a>,
+<a href="r.distance.html">r.distance</a>,
+<a href="v.what.vect.html">v.what.vect</a>
+</EM>
+
+
+<H2>AUTHOR</H2>
+
+Markus Metz
+
+<p><i>Last changed: $Date: 2008-08-13 21:52:37 +0200 (Wed, 13 Aug 2008) $</i>
