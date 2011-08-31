@@ -128,7 +128,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("vector"));
     G_add_keyword(_("database"));
     G_add_keyword(_("attribute table"));
-    module->description = _("Count points in areas, calculate statistics.");
+    module->description = _("Count points in areas, calculate statistics from point attributes.");
 
     point_opt = G_define_standard_option(G_OPT_V_INPUT);
     point_opt->key = "points";
