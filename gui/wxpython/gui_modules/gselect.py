@@ -20,6 +20,7 @@ Classes:
  - GdalSelect
  - ProjSelect
  - ElementSelect
+ - OgrTypeSelect
 
 (C) 2007-2011 by the GRASS Development Team This program is free
 software under the GNU General Public License (>=v2). Read the file
@@ -1060,9 +1061,7 @@ class FormatSelect(wx.Choice):
         
 class GdalSelect(wx.Panel):
     def __init__(self, parent, panel, ogr = False,
-                 default = 'file',
-                 exclude = [],
-                 envHandler = None):
+                 default = 'file', exclude = [], envHandler = None):
         """!Widget for selecting GDAL/OGR datasource, format
         
         @param parent parent window
@@ -1211,7 +1210,7 @@ class GdalSelect(wx.Panel):
         self.formatText = wx.StaticText(parent = self, id = wx.ID_ANY,
                                         label = _("Format:"))
         self._layout()
-        
+
     def _layout(self):
         """!Layout"""
         mainSizer = wx.BoxSizer(wx.VERTICAL)
@@ -1634,3 +1633,46 @@ class ElementSelect(wx.Choice):
         if idx > -1:
             return self.values[idx]
         return ''
+
+class OgrTypeSelect(wx.Panel):
+    def __init__(self, parent, panel, **kwargs):
+        """!Widget to choose OGR feature type
+
+        @param parent parent window
+        @param panel wx.Panel instance used as parent window
+        """
+        wx.Panel.__init__(self, parent = panel, id = wx.ID_ANY)
+        
+        self.ftype = wx.Choice(parent = self, id = wx.ID_ANY,
+                               size = (200, -1),
+                               choices = (_("Point"), _("LineString"), _("Polygon")))
+        self._layout()
+
+    def _layout(self):
+        """!Do layout"""
+        sizer = wx.BoxSizer(wx.HORIZONTAL)
+        sizer.Add(item = wx.StaticText(parent = self,
+                                       id = wx.ID_ANY,
+                                       label = _("Feature type:")),
+                  proportion = 1,
+                  flag = wx.ALIGN_CENTER_VERTICAL,
+                  border  = 5)
+        sizer.Add(item = self.ftype,
+                  proportion = 0,
+                  flag = wx.EXPAND | wx.ALIGN_RIGHT)
+        
+        self.SetSizer(sizer)
+        sizer.Fit(self)
+
+    def GetType(self):
+        """!Get selected type as string
+
+        @return feature type as string
+        """
+        sel = self.ftype.GetSelection()
+        if sel == 0:
+            return 'point'
+        elif sel == 1:
+            return 'line'
+        elif sel == 2:
+            return 'area'
