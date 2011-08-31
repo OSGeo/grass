@@ -905,9 +905,12 @@ class LocationSelect(wx.ComboBox):
 class MapsetSelect(wx.ComboBox):
     """!Widget for selecting GRASS mapset"""
     def __init__(self, parent, id = wx.ID_ANY, size = globalvar.DIALOG_COMBOBOX_SIZE, 
-                 gisdbase = None, location = None, setItems = True, **kwargs):
+                 gisdbase = None, location = None, setItems = True, new = False, **kwargs):
+        style = 0
+        if not new:
+            style = wx.CB_READONLY
         super(MapsetSelect, self).__init__(parent, id, size = size, 
-                                           style = wx.CB_READONLY, **kwargs)
+                                           style = style, **kwargs)
         
         self.SetName("MapsetSelect")
         if not gisdbase:

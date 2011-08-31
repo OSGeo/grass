@@ -1280,11 +1280,16 @@ class cmdPanel(wx.Panel):
                             win.Bind(wx.EVT_COMBOBOX,     self.OnUpdateSelection)
                             win.Bind(wx.EVT_COMBOBOX,     self.OnSetValue)
                         
-                        elif p.get('prompt', '') ==  'mapset':
+                        elif p.get('prompt', '') == 'mapset':
+                            if p.get('age', 'old') == 'old':
+                                new = False
+                            else:
+                                new = True
                             win = gselect.MapsetSelect(parent = which_panel,
-                                                       value = value)
+                                                       value = value, new = new)
                             win.Bind(wx.EVT_COMBOBOX,     self.OnUpdateSelection)
-                            win.Bind(wx.EVT_COMBOBOX,     self.OnSetValue)
+                            win.Bind(wx.EVT_COMBOBOX,     self.OnSetValue) 
+                            win.Bind(wx.EVT_TEXT,         self.OnSetValue)
                             
                         elif p.get('prompt', '') ==  'dbase':
                             win = gselect.DbaseSelect(parent = which_panel,
@@ -1761,18 +1766,13 @@ class cmdPanel(wx.Panel):
         if not found:
             return
         
-        if name in ('DriverSelect', 'TableSelect',
-                    'LocationSelect', 'MapsetSelect', 'ProjSelect'):
-            porf['value'] = me.GetStringSelection()
-        elif name ==  'GdalSelect':
+        if name ==  'GdalSelect':
             porf['value'] = event.dsn
         elif name ==  'ModelParam':
             porf['parameterized'] = me.IsChecked()
-        elif name ==  'LayerSelect':
-            porf['value'] = me.GetValue()
         else:
             porf['value'] = me.GetValue()
-        
+
         self.OnUpdateValues(event)
         
         event.Skip()
