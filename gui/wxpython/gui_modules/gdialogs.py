@@ -218,8 +218,8 @@ class MapsetDialog(ElementDialog):
     
 class NewVectorDialog(ElementDialog):
     def __init__(self, parent, id = wx.ID_ANY, title = _('Create new vector map'),
-                 disableAdd = False, disableTable = False,
-                 style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, *kwargs):
+                 disableAdd = False, disableTable = False, showType = False,
+                 style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, *kwargs):
         """!Dialog for creating new vector map
 
         @param parent parent window
@@ -227,6 +227,7 @@ class NewVectorDialog(ElementDialog):
         @param title window title
         @param disableAdd disable 'add layer' checkbox
         @param disableTable disable 'create table' checkbox
+        @param showType True to show feature type selector (used for creating new empty OGR layers)
         @param style window style
         @param kwargs other argumentes for ElementDialog
         
@@ -236,6 +237,12 @@ class NewVectorDialog(ElementDialog):
         
         self.element = gselect.Select(parent = self.panel, id = wx.ID_ANY, size = globalvar.DIALOG_GSELECT_SIZE,
                                       type = 'vector', mapsets = [grass.gisenv()['MAPSET'],])
+        
+        # determine output format
+        if showType:
+            self.ftype = gselect.OgrTypeSelect(parent = self, panel = self.panel)
+        else:
+            self.ftype = None
         
         self.table = wx.CheckBox(parent = self.panel, id = wx.ID_ANY,
                                  label = _("Create attribute table"))
@@ -262,10 +269,14 @@ class NewVectorDialog(ElementDialog):
         
     def _layout(self):
         """!Do layout"""
-        self.dataSizer.Add(self.element, proportion = 0,
+        self.dataSizer.Add(item = self.element, proportion = 0,
                       flag = wx.EXPAND | wx.ALL, border = 1)
+        if self.ftype:
+            self.dataSizer.AddSpacer(1)
+            self.dataSizer.Add(item = self.ftype, proportion = 0,
+                               flag = wx.EXPAND | wx.ALL, border = 1)
         
-        self.dataSizer.Add(self.table, proportion = 0,
+        self.dataSizer.Add(item = self.table, proportion = 0,
                       flag = wx.EXPAND | wx.ALL, border = 1)
         
         self.dataSizer.AddSpacer(5)
@@ -305,8 +316,20 @@ class NewVectorDialog(ElementDialog):
         
         return None
     
+    def GetFeatureType(self):
+        """!Get feature type for OGR
+
+        @return feature type as string
+        @return None for native format
+        """
+        if self.ftype:
+            return self.ftype.GetType()
+        
+        return None
+
 def CreateNewVector(parent, cmd, title = _('Create new vector map'),
-                    exceptMap = None, log = None, disableAdd = False, disableTable = False):
+                    exceptMap = None, log = None,
+                    disableAdd = False, disableTable = False):
     """!Create new vector map layer
     
     @param cmd (prog, **kwargs)
@@ -315,12 +338,19 @@ def CreateNewVector(parent, cmd, title = _('Create new vector map'),
     @param log
     @param disableAdd disable 'add layer' checkbox
     @param disableTable disable 'create table' checkbox
-
+    
     @return dialog instance
     @return None on error
     """
+    vExternalOut = grass.parse_command('v.external.out', flags = 'g')
+    isNative = vExternalOut['format'] == 'native'
+    if cmd[0] == 'v.edit' and not isNative:
+        showType = True
+    else:
+        showType = False
     dlg = NewVectorDialog(parent, title = title,
-                          disableAdd = disableAdd, disableTable = disableTable)
+                          disableAdd = disableAdd, disableTable = disableTable,
+                          showType = showType)
     
     if dlg.ShowModal() == wx.ID_OK:
         outmap = dlg.GetName()
@@ -333,13 +363,21 @@ def CreateNewVector(parent, cmd, title = _('Create new vector map'),
         if outmap == '': # should not happen
             dlg.Destroy()
             return None
-        
+
+        # update cmd -> output name defined
         cmd[1][cmd[2]] = outmap
+        if showType:
+            cmd[1]['type'] = dlg.GetFeatureType()
         
-        try:
+        if isNative:
             listOfVectors = grass.list_grouped('vect')[grass.gisenv()['MAPSET']]
-        except KeyError:
-            listOfVectors = []
+        else:
+            listOfVectors = gcmd.RunCommand('v.external',
+                                            quiet = True,
+                                            parent = parent,
+                                            read = True,
+                                            flags = 'l',
+                                            dsn = vExternalOut['dsn'])
         
         overwrite = False
         if not UserSettings.Get(group = 'cmd', key = 'overwrite', subkey = 'enabled') and \
@@ -359,15 +397,20 @@ def CreateNewVector(parent, cmd, title = _('Create new vector map'),
         if UserSettings.Get(group = 'cmd', key = 'overwrite', subkey = 'enabled'):
             overwrite = True
         
-        try:
-            gcmd.RunCommand(prog = cmd[0],
-                            overwrite = overwrite,
-                            **cmd[1])
-        except gcmd.GException, e:
-            gcmd.GError(parent = self,
-                        message = e.value)
+        ret = gcmd.RunCommand(prog = cmd[0],
+                              parent = parent,
+                              overwrite = overwrite,
+                              **cmd[1])
+        if ret != 0:
             dlg.Destroy()
             return None
+        
+        # create link for OGR layers
+        if not isNative:
+            gcmd.RunCommand('v.external',
+                            parent = parent,
+                            dsn = vExternalOut['dsn'],
+                            layer = outmap)
         
         # create attribute table
         if dlg.table.IsEnabled() and dlg.table.IsChecked():
