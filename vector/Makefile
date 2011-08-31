@@ -87,7 +87,8 @@ SUBDIRS = \
 	v.univar \
 	v.voronoi \
 	v.what \
-	v.what.rast\
+	v.what.rast \
+	v.vect.stats \
 	v.vol.rst \
 	v.out.ogr \
 	v.in.ogr \
