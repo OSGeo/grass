@@ -17,7 +17,7 @@ void list_formats(FILE *fd) {
     }
 }
 
-int list_layers(FILE *fd, const char *dsn, const char *layer, int *is3D)
+int list_layers(FILE *fd, const char *dsn, const char *layer, int print_types, int *is3D)
 {
     int i, ret;
     int nlayers;
@@ -46,15 +46,18 @@ int list_layers(FILE *fd, const char *dsn, const char *layer, int *is3D)
     for (i = 0; i < nlayers; i++) {
 	Ogr_layer = OGR_DS_GetLayer(Ogr_ds, i);
 	Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
+	Ogr_geom_type = OGR_FD_GetGeomType(Ogr_featuredefn);
 	layer_name = (char *) OGR_FD_GetName(Ogr_featuredefn);
 
-	if (fd)
-	    fprintf(fd, "%s\n", layer_name);
-	
+	if (fd) {
+	    if (print_types)
+		fprintf(fd, "%s (%s)\n", layer_name, OGRGeometryTypeToName(Ogr_geom_type));
+	    else
+		fprintf(fd, "%s\n", layer_name);
+	}
 	if (layer)
 	    if (strcmp(layer_name, layer) == 0) {
 		if (is3D) {
-		    Ogr_geom_type = OGR_FD_GetGeomType(Ogr_featuredefn);
 		    switch(Ogr_geom_type) {
 		    case wkbPoint25D: case wkbLineString25D: case wkbPolygon25D:
 		    case wkbMultiPoint25D: case wkbMultiLineString25D: case wkbMultiPolygon25D:
