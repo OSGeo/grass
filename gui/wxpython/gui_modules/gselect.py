@@ -1438,25 +1438,11 @@ class GdalSelect(wx.Panel):
         layerId = 1
         dsn = self._getDsn()
         
-        if self.dsnType == 'file':
-            baseName = os.path.basename(dsn)
-            grassName = utils.GetValidLayerName(baseName.split('.', -1)[0])
-            data.append((layerId, baseName, grassName))
-        elif self.dsnType == 'dir':
-            try:
-                ext = self.format.GetExtension(self.format.GetStringSelection())
-            except KeyError:
-                ext = ''
-            for file in glob.glob(os.path.join(dsn, "%s") % self._getExtPatternGlob(ext)):
-                baseName = os.path.basename(file)
-                grassName = utils.GetValidLayerName(baseName.split('.', -1)[0])
-                data.append((layerId, baseName, grassName))
-                layerId += 1
-        elif self.dsnType == 'db':
+        if self.dsnType in ('file', 'dir', 'db'):
             ret = gcmd.RunCommand('v.in.ogr',
                                   quiet = True,
                                   read = True,
-                                  flags = 'l',
+                                  flags = 't',
                                   dsn = dsn)
             if not ret:
                 self.parent.list.LoadData()
@@ -1465,9 +1451,9 @@ class GdalSelect(wx.Panel):
                 return
             layerId = 1
             for line in ret.splitlines():
-                layerName = line.strip()
+                layerName, featureType = map(lambda x: x.strip(), line.split(' ', 1))
                 grassName = utils.GetValidLayerName(layerName)
-                data.append((layerId, layerName.strip(), grassName.strip()))
+                data.append((layerId, layerName, featureType, grassName))
                 layerId += 1
         
         evt = wxGdalSelect(dsn = dsn + '@OGR')
