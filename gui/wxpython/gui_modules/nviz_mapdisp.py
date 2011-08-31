@@ -1215,7 +1215,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             errorMsg = _("Unable to unload 3d raster map")
             successMsg = _("3d raster map")
         
-        id = data[nvizType]['object']['id']
+        if 'object' not in data[nvizType]:
+            return
+        else:
+            id = data[nvizType]['object']['id']
         
         if unloadFn(id) ==  0:
             self.log.WriteError("%s <%s>" % (errorMsg, layer.name))
@@ -1323,7 +1326,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         for vecType in vecTypes:
             if 'object' not in data[vecType]:
                 continue
-            
+
             id = data[vecType]['object']['id']
             
             if vecType ==  'lines':
@@ -1339,7 +1342,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             
             data[vecType].pop('object')
             
-        if remove:
+        if remove and item in self.layers:
             self.layers.remove(item)
         
     def OnZoomToMap(self, event):
@@ -1774,6 +1777,13 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 continue
             
             data = self.tree.GetPyData(item)[0]['nviz']
+            
+            for datatype in ['surface', 'volume']:
+                if 'object' not in data[datatype]:
+                    return -1
+            for datatype in ['points', 'lines']:
+                if 'object' not in data['vector'][datatype]:
+                    return -1
             
             if type ==  'raster':
                 return data['surface']['object']['id']
