@@ -431,6 +431,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             
             self.render['quick'] = True
             self.Refresh(False)
+            
+        if self.mouse['use'] == 'pan':
+            self.FocusPanning(event)
+                
         event.Skip()
             
     def Pixel2Cell(self, (x, y)):
@@ -520,7 +524,11 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self.saveHistory = True
             self.render['quick'] = False
             self.Refresh(False)
-        
+        elif self.mouse['use'] == 'pan':
+            self.saveHistory = True
+            self.render['quick'] = False
+            self.Refresh(False)
+            
         elif self.mouse['use'] == 'zoom':
             self.DoZoom(zoomtype = self.zoomtype, pos = self.mouse['end'])
         event.Skip()
@@ -538,6 +546,75 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self.parent.OnAddLegend(None)
         elif self.dragid > 100:
             self.parent.OnAddText(None)
+    
+    def FocusPanning(self, event):
+        """!Simulation of panning using focus"""
+        size = self.GetClientSizeTuple()
+        id1, x1, y1, z1 = self._display.GetPointOnSurface(
+                      self.mouse['tmp'][0], size[1] - self.mouse['tmp'][1])
+        id2, x2, y2, z2 = self._display.GetPointOnSurface(
+                      event.GetX(), size[1] - event.GetY())
+        if id1 and id1 == id2:
+            dx, dy, dz = x2 - x1, y2 - y1, z2 - z1
+            focus = self.iview['focus']
+            focus['x'], focus['y'], focus['z'] = self._display.GetFocus()
+            focus['x'] -= dx
+            focus['y'] -= dy
+            focus['z'] -= dz
+            
+            #update properties
+            evt = wxUpdateView(zExag = False)
+            wx.PostEvent(self, evt)
+            
+            self.mouse['tmp'] = event.GetPositionTuple()
+            self.render['quick'] = True
+            self.Refresh(False)
+            
+    def HorizontalPanning(self, event):
+        """!Move all layers in horizontal (x, y) direction.
+        Currently not used.
+        """
+        size = self.GetClientSizeTuple()
+        id1, x1, y1, z1 = self._display.GetPointOnSurface(
+                      self.mouse['tmp'][0], size[1] - self.mouse['tmp'][1])
+        id2, x2, y2, z2 = self._display.GetPointOnSurface(
+                      event.GetX(), size[1] - event.GetY())
+        
+        if id1 and id1 == id2:
+            dx, dy = x2 - x1, y2 - y1
+            # find raster and volume
+            for item in self.layers:
+                mapLayer = self.tree.GetPyData(item)[0]['maplayer']
+                  
+                data = self.tree.GetPyData(item)[0]['nviz']
+                if mapLayer.GetType() == 'raster':
+                    data['surface']['position']['x'] += dx
+                    data['surface']['position']['y'] += dy
+                    data['surface']['position']['update'] = None
+                    
+                    #update properties
+                    evt = wxUpdateProperties(data = data)
+                    wx.PostEvent(self, evt)
+                    
+                    if event.CmdDown() and id1 == data['surface']['object']['id']:
+                        break
+                    
+                elif mapLayer.GetType() == '3d-raster':
+                    if 'x' not in data['volume']['position']:
+                        data['volume']['position']['x'] = 0
+                        data['volume']['position']['y'] = 0
+                        data['volume']['position']['z'] = 0
+                    data['volume']['position']['x'] += dx
+                    data['volume']['position']['y'] += dy
+                    data['volume']['position']['update'] = None
+                    
+                    #update properties
+                    evt = wxUpdateProperties(data = data)
+                    wx.PostEvent(self, evt)
+                
+            self.mouse['tmp'] = event.GetPositionTuple()
+            self.render['quick'] = True
+            self.Refresh(False)
             
     def DragItem(self, id, event):
         """!Drag an overlay decoration item
@@ -1215,10 +1292,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             errorMsg = _("Unable to unload 3d raster map")
             successMsg = _("3d raster map")
         
-        if 'object' not in data[nvizType]:
-            return
-        else:
+        try:
             id = data[nvizType]['object']['id']
+        except KeyError:
+            return
         
         if unloadFn(id) ==  0:
             self.log.WriteError("%s <%s>" % (errorMsg, layer.name))
@@ -1778,22 +1855,18 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             
             data = self.tree.GetPyData(item)[0]['nviz']
             
-            for datatype in ['surface', 'volume']:
-                if 'object' not in data[datatype]:
-                    return -1
-            for datatype in ['points', 'lines']:
-                if 'object' not in data['vector'][datatype]:
-                    return -1
-            
-            if type ==  'raster':
-                return data['surface']['object']['id']
-            elif type ==  'vector':
-                if vsubtyp == 'vpoint':
-                    return data['vector']['points']['object']['id']
-                elif vsubtyp ==  'vline':
-                    return data['vector']['lines']['object']['id']
-            elif type ==  '3d-raster':
-                return data['volume']['object']['id']
+            try:
+                if type ==  'raster':
+                    return data['surface']['object']['id']
+                elif type ==  'vector':
+                    if vsubtyp == 'vpoint':
+                        return data['vector']['points']['object']['id']
+                    elif vsubtyp ==  'vline':
+                        return data['vector']['lines']['object']['id']
+                elif type ==  '3d-raster':
+                    return data['volume']['object']['id']
+            except KeyError:
+                return -1
         return -1
     
     def ReloadLayersData(self):
