@@ -10,6 +10,13 @@ List of classes:
  - VDigitError
  - IVDigit
 
+@todo Read large amounts of data from Vlib into arrays, which could
+then be processed using NumPy and rendered using glDrawArrays or
+glDrawElements, so no per-line/per-vertex processing in Python. Bulk
+data processing with NumPy is much faster than iterating in Python
+(and NumPy would be an excellent candidate for acceleration via
+e.g. OpenCL or CUDA; I'm surprised it hasn't happened already).
+
 (C) 2007-2011 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
