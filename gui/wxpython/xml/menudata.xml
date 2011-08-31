@@ -2437,6 +2437,13 @@
 	  <command>v.rast.stats</command>
 	</menuitem>
 	<menuitem>
+	  <label>Update area attributes from vector</label>
+	  <help>Calculates points in polygons and univariate statistics from points based on vector polygon map and uploads statistics to new attribute columns.</help>
+	  <keywords>vector,statistics</keywords>
+	  <handler>OnMenuCmd</handler>
+	  <command>v.vect.stats</command>
+	</menuitem>
+	<menuitem>
 	  <label>Update point attributes from areas</label>
 	  <help>Uploads vector values at positions of vector points to the table.</help>
 	  <keywords>vector,database,attribute table</keywords>
