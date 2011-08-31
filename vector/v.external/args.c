@@ -42,11 +42,18 @@ void parse_args(int argc, char **argv,
     flags->format->guisection = _("Print");
     flags->format->suppress_required = YES;
 
-    flags->layer = G_define_flag();
-    flags->layer->key = 'l';
-    flags->layer->description = _("List available OGR layers in given data source and exit");
-    flags->layer->guisection = _("Print");
-    flags->layer->suppress_required = YES;
+    flags->list = G_define_flag();
+    flags->list->key = 'l';
+    flags->list->description = _("List available OGR layers in data source and exit");
+    flags->list->guisection = _("Print");
+    flags->list->suppress_required = YES;
+
+    flags->tlist = G_define_flag();
+    flags->tlist->key = 't';
+    flags->tlist->description = _("List available OGR layers including feature types "
+				  "in datatsource and exit");
+    flags->tlist->guisection = _("Print");
+    flags->tlist->suppress_required = YES;
 
     flags->topo = G_define_flag();
     flags->topo->key = 'b';
@@ -54,16 +61,4 @@ void parse_args(int argc, char **argv,
     
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
-}
-
-void get_args(const struct _options *options, const struct _flags *flags,
-	      char **dsn, char **layer, char **output,
-	      int *list_format, int *list_layers, int *topo)
-{
-    *dsn    = options->dsn->answer;
-    *layer  = options->layer->answer;
-    *output = options->output->answer;
-    *list_format = flags->format->answer ? 1 : 0;
-    *list_layers = flags->layer->answer ? 1 : 0;
-    *topo        = flags->topo-> answer ? 1 : 0;
 }

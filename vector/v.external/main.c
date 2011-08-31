@@ -61,10 +61,12 @@ int main(int argc, char *argv[])
 	exit(EXIT_SUCCESS);
     }
 
-    if (flags.layer->answer) {
+    if (flags.list->answer || flags.tlist->answer) {
 	if (!options.dsn->answer)
 	    G_fatal_error(_("Required parameter <%s> not set"), options.dsn->key);
-	list_layers(stdout, options.dsn->answer, NULL, NULL);
+	list_layers(stdout, options.dsn->answer, NULL,
+		    flags.tlist->answer ? TRUE : FALSE,
+		    NULL);
 	exit(EXIT_SUCCESS);
     }
 
@@ -73,7 +75,8 @@ int main(int argc, char *argv[])
     else
 	output = options.output->answer;
     
-    ilayer = list_layers(NULL, options.dsn->answer, options.layer->answer, &is3D);
+    ilayer = list_layers(NULL, options.dsn->answer, options.layer->answer,
+			 FALSE, &is3D);
     if (ilayer == -1) {
 	G_fatal_error(_("Layer <%s> not available"), options.layer->answer);
     }
