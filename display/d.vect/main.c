@@ -458,9 +458,8 @@ int main(int argc, char **argv)
     if (level >= 2 && (window.north < box.S || window.south > box.N ||
 		       window.east < box.W ||
 		       window.west > G_adjust_easting(box.E, &window))) {
-	G_message(_("The bounding box of the map is outside the current region, "
+	G_warning(_("The bounding box of the map is outside the current region, "
 		    "nothing drawn"));
-	exit(EXIT_SUCCESS);
     }
     else {
 	overlap = G_window_percentage_overlap(&window, box.N, box.S,
