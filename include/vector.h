@@ -436,7 +436,8 @@ int Vect_read_ascii(FILE *, struct Map_info *);
 int Vect_read_ascii_head(FILE *, struct Map_info *);
 int Vect_write_ascii(FILE *, FILE *, struct Map_info *, int,
 		     int, int, char *, int,
-		     int, char*, char **, int);
+		     int, const struct cat_list *, const char*,
+		     const char **, int);
 void Vect_write_ascii_head(FILE *, struct Map_info *);
 
 /* Simple Features */

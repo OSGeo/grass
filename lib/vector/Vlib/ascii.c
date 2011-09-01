@@ -5,10 +5,10 @@
  
   Higher level functions for reading/writing/manipulating vectors.
   
-  (C) 2001-2009 by the GRASS Development Team
+  (C) 2001-2009, 2011 by the GRASS Development Team
   
   This program is free software under the GNU General Public License
-  (>=v2).  Read the file COPYING that comes with GRASS for details.
+  (>=v2). Read the file COPYING that comes with GRASS for details.
   
   \author Original author CERL
   \author Updated for GRASS 7 (SF support) by Martin Landa <landa.martin gmail.com>
@@ -46,7 +46,6 @@ int Vect_read_ascii(FILE *ascii, struct Map_info *Map)
     int i, n_points, n_coors, n_cats, n_lines;
     int type;
     int alloc_points;
-    int end_of_file;
     struct line_pnts *Points;
     struct line_cats *Cats;
     int catn, cat;
@@ -55,7 +54,6 @@ int Vect_read_ascii(FILE *ascii, struct Map_info *Map)
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
-    end_of_file = 0;
     /*alloc_points     = 1000 ; */
     alloc_points = 1;
     xarray = (double *)G_calloc(alloc_points, sizeof(double));
@@ -278,6 +276,16 @@ int Vect_read_ascii_head(FILE *dascii, struct Map_info *Map)
 
   \param dascii pointer to the ASCII file
   \param Map    pointer to Map_info structure
+  \param ver    version number 4 or 5
+  \param format format GV_ASCII_FORMAT_POINT or GV_ASCII_FORMAT_STD
+  \param dp     number of significant digits
+  \param fs     field separator
+  \param region_flag check region
+  \param field  field number
+  \param Clist  list of categories to filter features or NULL
+  \param where  SQL select where statement to filter features or NULL
+  \param columns array of columns to be included to the output or NULL
+  \param header non-zero to print also header
 
   \return number of written features
   \return -1 on error
@@ -285,16 +293,17 @@ int Vect_read_ascii_head(FILE *dascii, struct Map_info *Map)
 int Vect_write_ascii(FILE *ascii,
 		     FILE *att, struct Map_info *Map, int ver,
 		     int format, int dp, char *fs, int region_flag,
-		     int field, char* where, char **columns, int header)
+		     int field, const struct cat_list *Clist, const char* where,
+		     const char **columns, int header)
 {
-    int type, ctype, i, cat, proj, n_lines;
+    int type, ctype, i, cat, n_lines;
     double *xptr, *yptr, *zptr, x, y;
     static struct line_pnts *Points;
     struct line_cats *Cats;
-    char *xstring = NULL, *ystring = NULL, *zstring = NULL;
+    char *xstring, *ystring, *zstring;
     struct Cell_head window;
     struct ilist *fcats;
-    int count = 0;
+    int count;
 
     /* where */
     struct field_info *Fi;
@@ -306,8 +315,8 @@ int Vect_write_ascii(FILE *ascii,
     /* get the region */
     G_get_window(&window);
 
-    n_lines = 0;
-    ncats = 0;
+    count = n_lines = ncats = 0;
+    xstring = ystring = zstring = NULL;
     cats = NULL;
     
     if (where || columns) {
@@ -338,11 +347,9 @@ int Vect_write_ascii(FILE *ascii,
 	}
     }
     
-    Points = Vect_new_line_struct();	/* init line_pnts struct */
+    Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
     fcats = Vect_new_list();
-
-    proj = Vect_get_proj(Map);
 
     /* by default, read_next_line will NOT read Dead lines */
     /* but we can override that (in Level I only) by specifying */
@@ -350,8 +357,9 @@ int Vect_write_ascii(FILE *ascii,
 
     Vect_rewind(Map);
 
-    while (1) {
-	if (-1 == (type = Vect_read_next_line(Map, Points, Cats))) {
+    while (TRUE) {
+	type = Vect_read_next_line(Map, Points, Cats);
+	if (type == -1 ) {      /* failure */
 	    if (columns) {
 		db_close_database(driver);
 		db_shutdown_driver(driver);
@@ -371,8 +379,14 @@ int Vect_write_ascii(FILE *ascii,
 	if (format == GV_ASCII_FORMAT_POINT && !(type & GV_POINTS))
 	    continue;
 
+	/* check category */
+	if (Clist) {
+	    Vect_cat_get(Cats, Clist->field, &cat);
+	    if (!Vect_cat_in_cat_list(cat, Clist))
+		continue;
+	}
 	if (cats) {
-	    /* check category */
+	    
 	    for (i = 0; i < Cats->n_cats; i++) {
 		if ((int *)bsearch((void *) &(Cats->cat[i]), cats, ncats, sizeof(int),
 				   srch)) {
@@ -652,6 +666,9 @@ int Vect_write_ascii(FILE *ascii,
 	}
     }
 
+    Vect_destroy_line_struct(Points);
+    Vect_destroy_cats_struct(Cats);
+    
     return n_lines;
 }
 
