@@ -9,7 +9,7 @@
  * PURPOSE:      Imports many GIS/image formats into GRASS utilizing the GDAL
  *               library.
  *
- * COPYRIGHT:    (C) 2001-2010 by Frank Warmerdam
+ * COPYRIGHT:    (C) 2001-2011 by Frank Warmerdam, and the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
     /*      Setup and fetch parameters.                                     */
     /* -------------------------------------------------------------------- */
     parm.input = G_define_standard_option(G_OPT_F_INPUT);
-    parm.input->description = _("Raster file to be imported");
+    parm.input->description = _("Name of raster file to be imported");
     
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
 
