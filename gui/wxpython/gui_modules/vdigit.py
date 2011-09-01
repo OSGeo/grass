@@ -816,25 +816,22 @@ class VDigitSettingsDialog(wx.Dialog):
 
 class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
     def __init__(self, parent, title,
-                 map, query = None, cats = None,
-                 pos = wx.DefaultPosition,
-                 style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
+                 vectorName, query = None, cats = None,
+                 style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
         """!Dialog used to display/modify categories of vector objects
         
         @param parent
         @param title dialog title
         @param query {coordinates, qdist} - used by v.edit/v.what
         @param cats  directory of lines (layer/categories) - used by vdigit
-        @param pos
-        @param style
+        @param style dialog style
         """
-        # parent
-        self.parent = parent # mapdisplay.BufferedWindow class instance
+        self.parent = parent       # mapdisplay.BufferedWindow class instance
         self.digit = parent.digit
         
         # map name
-        self.map = map
-
+        self.vectorName = vectorName
+        
         # line : {layer: [categories]}
         self.cats = {}
         
@@ -856,7 +853,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         self.cats_orig = copy.deepcopy(self.cats)
         
         wx.Dialog.__init__(self, parent = self.parent, id = wx.ID_ANY, title = title,
-                          style = style, pos = pos)
+                           style = style, **kwargs)
         
         # list of categories
         box = wx.StaticBox(parent = self, id = wx.ID_ANY,
@@ -1122,7 +1119,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         ret = gcmd.RunCommand('v.what',
                               parent = self,
                               quiet = True,
-                              map = self.map,
+                              map = self.vectorName,
                               east_north = '%f,%f' % \
                                   (float(coords[0]), float(coords[1])),
                               distance = qdist)
@@ -1172,7 +1169,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         """
         for fid in self.cats.keys():
             newfid = self.ApplyChanges(fid)
-            if fid == self.fid:
+            if fid == self.fid and newfid > 0:
                 self.fid = newfid
             
     def ApplyChanges(self, fid):
@@ -1240,28 +1237,26 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
             if layer <= 0:
                 raise ValueError
         except ValueError:
-            dlg = wx.MessageDialog(self, _("Unable to add new layer/category <%(layer)s/%(category)s>.\n"
-                                           "Layer and category number must be integer.\n"
-                                           "Layer number must be greater then zero.") %
-                                   {'layer' : str(self.layerNew.GetValue()),
-                                    'category' : str(self.catNew.GetValue())},
-                                   _("Error"), wx.OK | wx.ICON_ERROR)
-            dlg.ShowModal()
-            dlg.Destroy()
+            gcmd.GError(parent = self,
+                        message = _("Unable to add new layer/category <%(layer)s/%(category)s>.\n"
+                                    "Layer and category number must be integer.\n"
+                                    "Layer number must be greater then zero.") %
+                        {'layer' : str(self.layerNew.GetValue()),
+                         'category' : str(self.catNew.GetValue())})
             return False
-
+        
         if layer not in self.cats[self.fid].keys():
             self.cats[self.fid][layer] = []
-
+        
         self.cats[self.fid][layer].append(cat)
-
+        
         # reload list
         self.itemDataMap = self.list.Populate(self.cats[self.fid],
                                               update = True)
-
+        
         # update category number for add
         self.catNew.SetValue(cat + 1)
-
+        
         event.Skip()
 
         return True

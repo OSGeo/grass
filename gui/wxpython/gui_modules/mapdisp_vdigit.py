@@ -363,7 +363,7 @@ class VDigitWindow(BufferedWindow):
             if self.parent.dialogs['category'] is None:
                 # open new dialog
                 dlg = VDigitCategoryDialog(parent = self,
-                                           map = mapLayer,
+                                           vectorName = mapLayer,
                                            cats = cats,
                                            pos = posWindow,
                                            title = _("Update categories"))
