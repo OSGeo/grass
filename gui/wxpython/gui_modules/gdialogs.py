@@ -48,6 +48,7 @@ import gselect
 import menuform
 import utils
 from preferences import globalSettings as UserSettings
+from debug       import Debug
 
 class ElementDialog(wx.Dialog):
     def __init__(self, parent, title, label, id = wx.ID_ANY,
@@ -405,36 +406,39 @@ def CreateNewVector(parent, cmd, title = _('Create new vector map'),
             dlg.Destroy()
             return None
         
-        # create link for OGR layers
         if not isNative:
+            # create link for OGR layers
             gcmd.RunCommand('v.external',
                             overwrite = overwrite,
                             parent = parent,
                             dsn = vExternalOut['dsn'],
                             layer = outmap)
-        
+            
         # create attribute table
         if dlg.table.IsEnabled() and dlg.table.IsChecked():
             key = UserSettings.Get(group = 'atm', key = 'keycolumn', subkey = 'value')
-            sql = 'CREATE TABLE %s (%s INTEGER)' % (outmap, key)
+            if isNative:
+                sql = 'CREATE TABLE %s (%s INTEGER)' % (outmap, key)
+                
+                gcmd.RunCommand('db.connect',
+                                flags = 'c')
+                
+                Debug.msg(1, "SQL: %s" % sql)
+                gcmd.RunCommand('db.execute',
+                                quiet = True,
+                                parent = parent,
+                                input = '-',
+                                stdin = sql)
+                
+                gcmd.RunCommand('v.db.connect',
+                                quiet = True,
+                                parent = parent,
+                                map = outmap,
+                                table = outmap,
+                                key = key,
+                                layer = '1')
+            # TODO: how to deal with attribute tables for OGR layers?
             
-            gcmd.RunCommand('db.connect',
-                            flags = 'c')
-            
-            gcmd.RunCommand('db.execute',
-                            quiet = True,
-                            parent = parent,
-                            input = '-',
-                            stdin = sql)
-            
-            gcmd.RunCommand('v.db.connect',
-                            quiet = True,
-                            parent = parent,
-                            map = outmap,
-                            table = outmap,
-                            key = key,
-                            layer = '1')
-        
         # return fully qualified map name
         if '@' not in outmap:
             outmap += '@' + grass.gisenv()['MAPSET']
