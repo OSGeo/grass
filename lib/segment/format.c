@@ -148,7 +148,7 @@ static int _segment_format(int fd,
     }
 
     if (lseek(fd, 0L, SEEK_SET) == (off_t) -1) {
-	G_warning("Segment_format: %s", strerror(errno));
+	G_warning("segment_format(): Unable to seek (%s)", strerror(errno));
 	return -1;
     }
 
@@ -186,7 +186,7 @@ static int _segment_format(int fd,
 static int write_int(int fd, int n)
 {
     if (write(fd, &n, sizeof(int)) != sizeof(int)) {
-	G_warning("%s", strerror(errno));
+	G_warning("segment_format(): Unable to write (%s)", strerror(errno));
 	return 0;
     }
 
@@ -210,7 +210,7 @@ static int zero_fill(int fd, off_t nbytes)
     while (nbytes > 0) {
 	n = nbytes > sizeof(buf) ? sizeof(buf) : nbytes;
 	if (write(fd, buf, n) != n) {
-	    G_warning("%s", strerror(errno));
+	    G_warning("segment zero_fill(): Unable to write (%s)", strerror(errno));
 	    return -1;
 	}
 	nbytes -= n;
@@ -228,11 +228,11 @@ static int zero_fill(int fd, off_t nbytes)
 
     G_debug(3, "Using new segmentation code...");
     if (lseek(fd, nbytes - 1, SEEK_CUR) < 0) {
-	G_warning("%s", strerror(errno));
+	G_warning("segment zero_fill(): Unable to seek (%s)", strerror(errno));
 	return -1;
     }
     if (write(fd, buf, 1) != 1) {
-	G_warning("%s", strerror(errno));
+	G_warning("segment zero_fill(): Unable to write (%s)", strerror(errno));
 	return -1;
     }
 
