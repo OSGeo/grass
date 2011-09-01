@@ -292,8 +292,8 @@ class VDigitWindow(BufferedWindow):
         # list of ids to modify    
         self.moveInfo['id'] = list()
         
+        # set pen
         if self.toolbar.GetAction() in ["moveVertex", "editLine"]:
-            # set pen
             pcolor = UserSettings.Get(group = 'vdigit', key = "symbol",
                                       subkey = ["highlight", "color"])
             self.pen = self.polypen = wx.Pen(colour = pcolor,
@@ -510,10 +510,10 @@ class VDigitWindow(BufferedWindow):
                       "splitLines"):
             # unselect
             self.digit.GetDisplay().SetSelected([])
-
+        
         if action == "addLine":
             self.OnLeftDownAddLine(event)
-            
+        
         elif action == "editLine" and \
                 hasattr(self, "moveInfo"):
             self.OnLeftDownEditLine(event)
@@ -836,9 +836,8 @@ class VDigitWindow(BufferedWindow):
             del self.moveInfo
         
     def _onRightUp(self, event):
-        """!Right mouse button released
+        """!Right mouse button released (confirm action)
         """
-        # digitization tool (confirm action)
         action = self.toolbar.GetAction()
         if action == "addLine" and \
                 self.toolbar.GetAction('type') in ["line", "boundary", "area"]:
@@ -869,7 +868,7 @@ class VDigitWindow(BufferedWindow):
                 self.redrawAll = True
                 self.Refresh()
                 
-            # add new record into atribute table
+                # add new record into atribute table
                 if UserSettings.Get(group = 'vdigit', key = "addRecord", subkey = 'enabled') and \
                         (line is True or \
                              (not line and nfeat > 0)):
@@ -948,7 +947,7 @@ class VDigitWindow(BufferedWindow):
                 
         elif action == "editLine" and \
                 hasattr(self, "moveInfo"):
-            line = self.digit.GetDisplay().GetSelected()
+            line = self.digit.GetDisplay().GetSelected()[0]
             if self.digit.EditLine(line, self.polycoords) < 0:
                 return
                 
@@ -990,7 +989,7 @@ class VDigitWindow(BufferedWindow):
                 if self.digit.ZBulkLines(pos1, pos2, dlg.value.GetValue(),
                                          dlg.step.GetValue()) < 0:
                     return
-            self.UpdateMap(render = False, renderVector = True)
+            self.UpdateMap(render = False)
         elif action == "typeConv":
             # -> feature type conversion
             # - point <-> centroid
@@ -1020,45 +1019,40 @@ class VDigitWindow(BufferedWindow):
                 and hasattr(self, "moveInfo"):
             dx = self.mouse['end'][0] - self.mouse['begin'][0]
             dy = self.mouse['end'][1] - self.mouse['begin'][1]
-            
-            if len(self.moveInfo['id']) > 0:
-                # draw lines on new position
-                if action == "moveLine":
-                    # move line
-                    for id in self.moveInfo['id']:
-                        self.pdcTmp.TranslateId(id, dx, dy)
-                elif action in ["moveVertex", "editLine"]:
-                    # move vertex ->
-                    # (vertex, left vertex, left line,
-                    # right vertex, right line)
+        
+            # draw lines on new position
+            if action == "moveLine" and \
+                    len(self.moveInfo['id']) > 0:
+                # move line
+                for id in self.moveInfo['id']:
+                    self.pdcTmp.TranslateId(id, dx, dy)
+            elif action in ["moveVertex", "editLine"]:
+                # move vertex ->
+                # (vertex, left vertex, left line,
+                # right vertex, right line)
+                
+                # do not draw static lines
+                if action == "moveVertex" and \
+                        len(self.moveInfo['id']) > 0:
+                    self.polycoords = []
+                    self.pdcTmp.RemoveId(self.moveInfo['id'][0])
+                    if self.moveInfo['id'][1] > 0: # previous vertex
+                        x, y = self.Pixel2Cell(self.pdcTmp.GetIdBounds(self.moveInfo['id'][1])[0:2])
+                        self.pdcTmp.RemoveId(self.moveInfo['id'][1] + 1)
+                        self.polycoords.append((x, y))
+                    self.polycoords.append(self.Pixel2Cell(self.mouse['end']))
+
+                    if self.moveInfo['id'][2] > 0: # next vertex
+                        x, y = self.Pixel2Cell(self.pdcTmp.GetIdBounds(self.moveInfo['id'][2])[0:2])
+                        self.pdcTmp.RemoveId(self.moveInfo['id'][2]-1)
+                        self.polycoords.append((x, y))
                     
-                    # do not draw static lines
-                    if action == "moveVertex":
-                        self.polycoords = []
-                        ### self.pdcTmp.TranslateId(self.moveInfo['id'][0], dx, dy)
-                        self.pdcTmp.RemoveId(self.moveInfo['id'][0])
-                        if self.moveInfo['id'][1] > 0: # previous vertex
-                            x, y = self.Pixel2Cell(self.pdcTmp.GetIdBounds(self.moveInfo['id'][1])[0:2])
-                            self.pdcTmp.RemoveId(self.moveInfo['id'][1] + 1)
-                            self.polycoords.append((x, y))
-                        ### x, y = self.Pixel2Cell(self.pdcTmp.GetIdBounds(self.moveInfo['id'][0])[0:2])
-                        self.polycoords.append(self.Pixel2Cell(self.mouse['end']))
-                        if self.moveInfo['id'][2] > 0: # next vertex
-                            x, y = self.Pixel2Cell(self.pdcTmp.GetIdBounds(self.moveInfo['id'][2])[0:2])
-                            self.pdcTmp.RemoveId(self.moveInfo['id'][2]-1)
-                            self.polycoords.append((x, y))
+                    self.ClearLines(pdc = self.pdcTmp)
+                    self.DrawLines(pdc = self.pdcTmp)
                         
-                        self.ClearLines(pdc = self.pdcTmp)
-                        self.DrawLines(pdc = self.pdcTmp)
-                        
-                    else: # edit line
-                        try:
-                            if self.moveInfo['id'][-1] > 0: # previous vertex
-                                self.MouseDraw(pdc = self.pdcTmp,
-                                               begin = self.Cell2Pixel(self.polycoords[-1]))
-                        except: # no line
-                            self.moveInfo['id'] = []
-                            self.polycoords = []
+                if action == "editLine":
+                    self.MouseDraw(pdc = self.pdcTmp,
+                                   begin = self.Cell2Pixel(self.polycoords[-1]))
                 
             self.Refresh() # TODO: use RefreshRect()
             self.mouse['begin'] = self.mouse['end']

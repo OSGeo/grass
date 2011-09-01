@@ -716,32 +716,57 @@ class IVDigit:
     def EditLine(self, line, coords):
         """!Edit existing line/boundary
 
-        @param line id of line to be modified
+        @param line feature id to be modified
         @param coords list of coordinates of modified line
 
         @return feature id of new line
         @return -1 on error
         """
-        if self._checkMap():
+        if not self._checkMap():
             return -1
-        
-        try:
-            lineid = line[0]
-        except:
-            lineid = -1
         
         if len(coords) < 2:
             self.DeleteSelectedLines()
             return 0
         
-        ret = self.digit.RewriteLine(lineid, listCoords,
-                                     bgmap, self._getSnapMode(),
-                                     self._display.GetThreshold())
+        if not Vect_line_alive(self.poMapInfo, line):
+            self._error.DeadLine(line)
+            return -1
         
-        if ret > 0:
+        # read original feature
+        ltype = Vect_read_line(self.poMapInfo, None, self.poCats, line)
+        if ltype < 0:
+            self._error.ReadLine(line)
+            return -1
+        
+        # build feature geometry
+        Vect_reset_line(self.poPoints)
+        for p in coords:
+            Vect_append_point(self.poPoints, p[0], p[1], 0.0)
+
+        # apply snapping (node or vertex)
+        snap = self._getSnapMode()
+        if snap != NO_SNAP:
+            modeSnap = not (snap == SNAP)
+            Vedit_snap_line(self.poMapInfo, self.popoBgMapInfo,
+                            int(self.poBgMapInfo is not None),
+                           -1, self.poPoints, self._display.GetThreshold(), modeSnap)
+
+        nlines = Vect_get_num_lines(self.poMapInfo)
+        
+        changeset = self._addActionsBefore()
+        newline = Vect_rewrite_line(self.poMapInfo, line, ltype,
+                                    self.poPoints, self.poCats)
+        if newline > 0:
+            self._addActionsAfter(changeset, nlines)
             self.toolbar.EnableUndo()
+        else:
+            del self.changesets[changeset]
         
-        return ret
+        if newline > 0 and self._settings['breakLines']:
+            self._breakLineAtIntersection(newline, None, changeset)
+        
+        return newline
 
     def FlipLine(self):
         """!Flip selected lines/boundaries
@@ -1000,13 +1025,6 @@ class IVDigit:
         
         return Vect_is_3d(self.poMapInfo)
     
-    def GetLineCats(self, line=-1):
-        """!Get layer/category pairs from given (selected) line
-        
-        @param line feature id (-1 for first selected line)
-        """
-        return dict(self.digit.GetLineCats(line))
-
     def GetLineLength(self, line):
         """!Get line length
 
@@ -1108,10 +1126,6 @@ class IVDigit:
             self.toolbar.EnableUndo()
 
         return ret
-
-    def GetLayers(self):
-        """!Get list of layers"""
-        return self.digit.GetLayers()
 
     def TypeConvForSelectedLines(self):
         """!Feature type conversion for selected objects.
