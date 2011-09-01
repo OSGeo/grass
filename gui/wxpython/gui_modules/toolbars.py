@@ -1129,15 +1129,15 @@ class VDigitToolbar(AbstractToolbar):
                                                   "closing and rebuilding topology of "
                                                   "vector map <%s>...") % self.mapLayer.GetName(),
                                                 0)
+            self.digit.CloseMap()
+            
             lmgr = self.parent.GetLayerManager()
             if lmgr:
                 lmgr.toolbars['tools'].Enable('vdigit', enable = True)
-                lmgr.notebook.SetSelectionByName('output')
-            self.digit.CloseMap()
-            if lmgr:
                 lmgr.GetLogWindow().GetProgressBar().SetValue(0)
                 lmgr.GetLogWindow().WriteCmdLog(_("Editing of vector map <%s> successfully finished") % \
-                                                    self.mapLayer.GetName())
+                                                    self.mapLayer.GetName(),
+                                                switchPage = False)
             # re-active layer 
             item = self.parent.tree.FindItemByData('maplayer', self.mapLayer)
             if item and self.parent.tree.IsItemChecked(item):
@@ -1163,8 +1163,7 @@ class VDigitToolbar(AbstractToolbar):
         return True
     
     def UpdateListOfLayers (self, updateTool = False):
-        """!
-        Update list of available vector map layers.
+        """!Update list of available vector map layers.
         This list consists only editable layers (in the current mapset)
 
         @param updateTool True to update also toolbar
