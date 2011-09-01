@@ -1221,12 +1221,12 @@ class BufferedWindow(MapWindow, wx.Window):
             if (self.mouse['use'] == 'pointer' and 
                 not digitToolbar):
                 return
+            
             self.mouse['end'] = event.GetPositionTuple()[:]
             if (event.LeftIsDown() and 
                 not (digitToolbar and 
                     digitToolbar.GetAction() in ("moveLine",) and 
                      self.digit.GetDisplay().GetSelected() > 0)):
-                # draw box only when left mouse button is pressed
                 self.MouseDraw(pdc = self.pdcTmp)
         
     def OnLeftDown(self, event):
@@ -1656,7 +1656,7 @@ class BufferedWindow(MapWindow, wx.Window):
             
             if hasattr(self, "digit") and \
                     hasattr(self, "moveInfo"):
-                self._zoom(event)
+                self._zoom(None)
             
             self.ZoomHistory(self.Map.region['n'], self.Map.region['s'],
                              self.Map.region['e'], self.Map.region['w'])
