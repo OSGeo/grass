@@ -145,9 +145,10 @@ int main(int argc, char *argv[])
 	       mapset_new);
 
     /* TODO: this should be checked better (repeated '/' etc.) */
-    if (strcmp(mapset_old_path, mapset_new_path) == 0)
-	G_fatal_error(_("<%s> is already the current mapset"), mapset_new);
-
+    if (strcmp(mapset_old_path, mapset_new_path) == 0) {
+	G_warning(_("<%s> is already the current mapset"), mapset_new);
+	exit(EXIT_SUCCESS);
+    }
     /* Check if the mapset exists and user is owner */
     G_debug(2, "check : %s", mapset_new_path);
 
