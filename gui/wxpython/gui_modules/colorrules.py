@@ -1160,20 +1160,16 @@ class VectorColorTable(ColorTable):
             self.DisableClearAll()
             return
         
-        if self.inmap and not self.CheckMapset():
-            # currently v.colors need the map to be in current mapset
-            if self.version7 and self.attributeType == 'color':
-                message = _("Selected map <%s> is not in current mapset <%s>. "
-                            "Color rules cannot be edited.") % \
-                            (self.inmap, grass.gisenv()['MAPSET'])
-            else:
+        if not self.CheckMapset():
+            # v.colors doesn't need the map to be in current mapset
+            if not (self.version7 and self.attributeType == 'color'):
                 message = _("Selected map <%s> is not in current mapset <%s>. "
                             "Attribute table cannot be edited.") % \
                             (self.inmap, grass.gisenv()['MAPSET'])
-            wx.CallAfter(gcmd.GMessage, parent = self, message = message)
-            self.DisableClearAll()
-            return
-              
+                wx.CallAfter(gcmd.GMessage, parent = self, message = message)
+                self.DisableClearAll()
+                return
+                
         # check for db connection
         self.dbInfo = gselect.VectorDBInfo(self.inmap)
         enable = True
@@ -1209,6 +1205,7 @@ class VectorColorTable(ColorTable):
         if self.version7 and self.attributeType == 'color':
             self.useColumn.SetValue(False)
             self.OnCheckColumn(event = None) 
+            self.useColumn.Enable(self.CheckMapset())
                     
         self.LoadTable()
             
@@ -1221,6 +1218,8 @@ class VectorColorTable(ColorTable):
             need to be deleted when closing dialog and unloading map
             
             @param type type of column (e.g. vachar(11))"""
+        if not self.CheckMapset():
+            return
         # because more than one dialog with the same map can be opened we must test column name and
         # create another one
         while self.properties['tmpColumn'] in self.dbInfo.GetTableDesc(self.properties['table']).keys():
@@ -1241,6 +1240,9 @@ class VectorColorTable(ColorTable):
         
     def DeleteTemporaryColumn(self):
         """!Delete temporary column"""
+        if not self.CheckMapset():
+            return
+        
         if self.inmap:
             if self.version7:
                 modul = 'v.db.dropcolumn'
@@ -1481,11 +1483,21 @@ class VectorColorTable(ColorTable):
                    'map=%s' % self.inmap]
         
         # find existing color table and copy to temp file
+        try:
+            name, mapset = self.inmap.split('@')
+        except ValueError:
+            name = self.inmap
+            mapset = grass.find_file(self.inmap, element = 'cell')['mapset']
+            if not mapset:
+                return
+            
         old_colrtable = None
-        path = grass.find_file(name = self.inmap, element = 'vector')['file']
-        
-        if os.path.exists(os.path.join(path, 'colr')):
-            old_colrtable = os.path.join(path, 'colr')
+        if mapset == grass.gisenv()['MAPSET']:
+            old_colrtable = grass.find_file(name = 'colr', element = os.path.join('vector', name))['file']
+        else:
+            old_colrtable = grass.find_file(name = name, element = os.path.join('vcolr2', mapset))['file']
+            
+        if old_colrtable:
             colrtemp = utils.GetTempfile()
             shutil.copyfile(old_colrtable, colrtemp)
             
