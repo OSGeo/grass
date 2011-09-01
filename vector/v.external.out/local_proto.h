@@ -14,7 +14,7 @@ void parse_args(int, char **,
 		struct _options *, struct _flags*);
 
 /* format.c */
-void check_format(const char *);
+void check_format(char *);
 
 /* link.c */
 void make_link(const char *,
