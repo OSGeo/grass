@@ -205,6 +205,10 @@ int Vect_read_ascii(FILE *ascii, struct Map_info *Map)
 	
 	Vect_reset_cats(Cats);
     }
+
+    Vect_destroy_line_struct(Points);
+    Vect_destroy_cats_struct(Cats);
+
     return n_lines;
 }
 
