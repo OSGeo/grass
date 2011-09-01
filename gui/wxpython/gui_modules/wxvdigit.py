@@ -1109,7 +1109,7 @@ class IVDigit:
         
         return perimeter
     
-    def SetLineCats(self, line, layer, cats, add=True):
+    def SetLineCats(self, line, layer, cats, add = True):
         """!Set categories for given line and layer
 
         @param line feature id
@@ -1120,12 +1120,45 @@ class IVDigit:
         @return new feature id (feature need to be rewritten)
         @return -1 on error
         """
-        ret = self.digit.SetLineCats(line, layer, cats, add)
-
-        if ret > 0:
+        if not self._checkMap():
+            return -1
+        
+        if line < 1 and len(self._display.selected['ids']) < 1:
+            return -1
+        
+        update = False
+        if line == -1:
+            update = True
+            line = self._display.selected['ids'][0]
+	
+        if not Vect_line_alive(self.poMapInfo, line):
+            return -1
+        
+        ltype = Vect_read_line(self.poMapInfo, self.poPoints, self.poCats, line)
+        if ltype < 0:
+            self._error.ReadLine(line)
+            return -1
+        
+        for c in cats:
+            if add:
+                Vect_cat_set(self.poCats, layer, c)
+            else:
+                Vect_field_cat_del(self.poCats, layer, c)
+        
+        nlines = Vect_get_num_lines(self.poMapInfo)
+        changeset = self._addActionsBefore()
+        newline = Vect_rewrite_line(self.poMapInfo, line, ltype,
+                                    self.poPoints, self.poCats)
+        
+        if newline > 0:
+            self._addActionsAfter(changeset, nlines)
             self.toolbar.EnableUndo()
-
-        return ret
+        
+        if update:
+            # update line id since the line was rewritten
+            self._display.selected['ids'][0] =  newline
+        
+        return newline
 
     def TypeConvForSelectedLines(self):
         """!Feature type conversion for selected objects.
