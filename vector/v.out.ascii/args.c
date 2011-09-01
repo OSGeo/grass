@@ -9,10 +9,11 @@
 
 void parse_args(int argc, char **argv,
 		char **input, char**output, int *format, int *dp, char **delim,
-		char **field, char ***columns, char **where, int *region, int *old_format, int *header)
+		char **field, char ***columns, char **where, int *region,
+		int *old_format, int *header, struct cat_list **clist)
 {
     struct Option *input_opt, *output_opt, *format_opt, *dp_opt, *delim_opt,
-	*field_opt, *column_opt, *where_opt;
+	*field_opt, *column_opt, *where_opt, *cats_opt;
     struct Flag *old_flag, *header_flag, *region_flag;
     
     input_opt = G_define_standard_option(G_OPT_V_INPUT);
@@ -21,15 +22,18 @@ void parse_args(int argc, char **argv,
     field_opt->guisection = _("Selection");
     
     output_opt = G_define_standard_option(G_OPT_F_OUTPUT);
-    output_opt->description =
-	_("Path to resulting ASCII file ('-' for standard output) "
-	  "or ASCII vector name if '-o' is defined");
+    output_opt->label = _("Name for output ASCII file "
+			  "or ASCII vector name if '-o' is defined");
+    output_opt->description = _("'-' for standard output");
     output_opt->required = NO;
     output_opt->answer = "-";
 
     column_opt = G_define_standard_option(G_OPT_DB_COLUMNS);
     column_opt->description = _("Name of attribute column(s) to be exported (point mode)");
     column_opt->guisection = _("Points");
+    
+    cats_opt = G_define_standard_option(G_OPT_V_CATS);
+    cats_opt->guisection = _("Selection");
     
     where_opt = G_define_standard_option(G_OPT_DB_WHERE);
     where_opt->guisection = _("Selection");
@@ -112,6 +116,18 @@ void parse_args(int argc, char **argv,
     *where = NULL;
     if (where_opt->answer) {
 	*where = G_store(where_opt->answer);
+    }
+    *clist = NULL;
+    if (cats_opt->answer) {
+	int ret;
+	
+	*clist = Vect_new_cat_list();
+	(*clist)->field = atoi(field_opt->answer);
+	if ((*clist)->field < 1)
+	    G_fatal_error(_("Option <%s> must be > 0"), field_opt->key);
+	ret = Vect_str_to_cat_list(cats_opt->answer, *clist);
+	if (ret > 0)
+	    G_fatal_error(_("%d errors in cat option"), ret);
     }
     *region = region_flag->answer ? 1 : 0;
     *old_format = old_flag->answer ? 1 : 0;
