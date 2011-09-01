@@ -532,7 +532,7 @@ class VDigitWindow(BufferedWindow):
         elif self.toolbar.GetAction() == "zbulkLine":
             self.OnLeftDownBulkLine(event)
         
-    def _onLeftUp(self, event):
+    def OnLeftUpVarious(self, event):
         """!Left mouse button released - vector digitizer various
         actions
         """
@@ -762,7 +762,8 @@ class VDigitWindow(BufferedWindow):
         if len(self.digit.GetDisplay().GetSelected()) > 0:
             self.UpdateMap(render = False)
         
-    def OnLeftUp(self, event):
+    def _onLeftUp(self, event):
+        """!Left mouse button released"""
         if hasattr(self, "moveInfo"):
             if len(self.digit.GetDisplay().GetSelected()) == 0:
                 self.moveInfo['begin'] = self.Pixel2Cell(self.mouse['begin']) # left down
@@ -783,7 +784,7 @@ class VDigitWindow(BufferedWindow):
                                         "breakLine",
                                         "typeConv",
                                         "connectLine"):
-            self._onLeftUp(event)
+            self.OnLeftUpVarious(event)
         
         elif self.toolbar.GetAction() in ("splitLine",
                                           "addVertex",
