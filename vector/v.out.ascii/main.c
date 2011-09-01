@@ -8,7 +8,7 @@
  *             Martin Landa, CTU in Prague, Czech Republic (v.out.ascii.db merged & update (OGR) for GRASS7)
  *
  * PURPOSE:    Writes GRASS vector data as ASCII files
- * COPYRIGHT:  (C) 2000-2009 by the GRASS Development Team
+ * COPYRIGHT:  (C) 2000-2009, 2011 by the GRASS Development Team
  *
  *             This program is free software under the GNU General
  *             Public License (>=v2). Read the file COPYING that comes
@@ -37,6 +37,8 @@ int main(int argc, char *argv[])
     int format, dp, field, ret, region, old_format, header;
     int ver, pnt;
 
+    struct cat_list *clist;
+    
     G_gisinit(argv[0]);
 
     module = G_define_module();
@@ -47,7 +49,8 @@ int main(int argc, char *argv[])
 	_("Exports a vector map to a GRASS ASCII vector representation.");
 
     parse_args(argc, argv, &input, &output, &format, &dp, &delim,
-	       &field_name, &columns, &where, &region, &old_format, &header);
+	       &field_name, &columns, &where, &region, &old_format, &header,
+	       &clist);
     
     if (format == GV_ASCII_FORMAT_STD && columns) {
 	G_warning(_("Parameter 'column' ignored in standard mode"));
@@ -116,11 +119,11 @@ int main(int argc, char *argv[])
 			  output);
     }
 
-    if (where || columns)
+    if (where || columns || clist)
 	G_message(_("Fetching data..."));
     ret = Vect_write_ascii(ascii, att, &Map, ver, format, dp, delim,
-			   region, field, where,
-			   columns, header);
+			   region, field, clist, (const char *)where,
+			   (const char **)columns, header);
 
     if (ret < 1) {
 	if (format == GV_ASCII_FORMAT_POINT) {
