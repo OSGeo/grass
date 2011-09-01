@@ -1636,7 +1636,7 @@ class BufferedWindow(MapWindow, wx.Window):
         # if new region has been calculated, set the values
         if newreg != {}:
             # LL locations
-            if self.parent.Map.projinfo['proj'] == 'll':
+            if self.Map.projinfo['proj'] == 'll':
                 self.Map.region['n'] = min(self.Map.region['n'], 90.0)
                 self.Map.region['s'] = max(self.Map.region['s'], -90.0)
             
