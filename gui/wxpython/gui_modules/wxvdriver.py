@@ -882,7 +882,8 @@ class DisplayDriver:
                              UserSettings.Get(group = 'vdigit', key = 'symbol',
                                               subkey = [key, 'color'])[1],
                              UserSettings.Get(group = 'vdigit', key = 'symbol',
-                                              subkey = [key, 'color'])[2])
+                                              subkey = [key, 'color'])[2],
+                             alpha)
             
             if key == 'highlight':
                 self.settings[key] = color

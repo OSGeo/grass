@@ -1091,10 +1091,11 @@ class VDigitToolbar(AbstractToolbar):
         if not self.parent.MapWindow.resize:
             self.parent.MapWindow.UpdateMap(render = True)
         
+        # respect opacity
         opacity = mapLayer.GetOpacity(float = True)
         if opacity < 1.0:
             alpha = int(opacity * 255)
-            self.digit.UpdateSettings(alpha)
+            self.digit.GetDisplay().UpdateSettings(alpha = alpha)
         
         return True
 

@@ -39,7 +39,7 @@ class VDigitWindow(BufferedWindow):
         
         self.pdcVector = wx.PseudoDC()
         self.toolbar   = self.parent.toolbars['vdigit']
-        self.digit     = None
+        self.digit     = None # wxvdigit.IVDigit
         
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
         
