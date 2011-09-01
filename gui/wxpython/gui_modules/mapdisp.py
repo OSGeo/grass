@@ -217,7 +217,7 @@ class MapFrame(wx.Frame):
         self.statusbarWin['projection'].SetToolTip(wx.ToolTip (_("Reproject coordinates displayed "
                                                                  "in the statusbar. Projection can be "
                                                                  "defined in GUI preferences dialog "
-                                                                 "(tab 'Display')")))
+                                                                 "(tab 'Projection')")))
         self.statusbarWin['projection'].Hide()
         
         # mask
@@ -382,7 +382,10 @@ class MapFrame(wx.Frame):
                                           self.OnRotate, wx.ITEM_CHECK,7),)) # 7 is position
         self.toolbars['map'].ChangeToolsDesc(mode2d = False)
         # update status bar
-        self.statusbarWin['toggle'].Enable(False)
+        choice = globalvar.MAP_DISPLAY_STATUSBAR_MODE
+        self.statusbarWin['toggle'].SetItems((choice[0], choice[1], choice[2],
+                                              choice[8], choice[9]))
+        self.statusbarWin['toggle'].SetSelection(0)
         
         # erase map window
         self.MapWindow.EraseMap()
@@ -440,7 +443,10 @@ class MapFrame(wx.Frame):
         """!Restore 2D view"""
         self.toolbars['map'].RemoveTool(self.toolbars['map'].rotate)
         # update status bar
-        self.statusbarWin['toggle'].Enable(True)
+        self.statusbarWin['toggle'].SetItems(globalvar.MAP_DISPLAY_STATUSBAR_MODE)
+        self.statusbarWin['toggle'].SetSelection(UserSettings.Get(group = 'display',
+                                                                  key = 'statusbarMode',
+                                                                  subkey = 'selection'))
         self.statusbar.SetStatusText(_("Please wait, unloading data..."), 0)
         self._layerManager.goutput.WriteCmdLog(_("Switching back to 2D view mode..."),
                                                switchPage = False)
@@ -842,6 +848,9 @@ class MapFrame(wx.Frame):
                                                         precision, region['center_northing']))
             return
         
+        if self.IsPaneShown('3d'):
+            self.MapWindow.GoTo(e, n)
+            return
         
         dn = (region['nsres'] * region['rows']) / 2.
         region['n'] = region['center_northing'] + dn
@@ -870,15 +879,16 @@ class MapFrame(wx.Frame):
         self.statusbarWin['goto'].Hide()
         self.statusbarWin['projection'].Hide()
         self.mapScaleValue = self.ppm = None
-
-        if self.statusbarWin['toggle'].GetSelection() == 0: # Coordinates
+        choice = globalvar.MAP_DISPLAY_STATUSBAR_MODE
+        
+        if self.statusbarWin['toggle'].GetStringSelection() == choice[0]: # Coordinates
             self.statusbar.SetStatusText("", 0)
             # enable long help
             self.StatusbarEnableLongHelp()
 
-        elif self.statusbarWin['toggle'].GetSelection() in (1, 2): # Extent
-            sel = self.statusbarWin['toggle'].GetSelection()
-            if sel == 1:
+        elif self.statusbarWin['toggle'].GetStringSelection() in (choice[1], choice[2]): # Extent
+            sel = self.statusbarWin['toggle'].GetStringSelection()
+            if sel == choice[1]:
                 region = self.Map.region
             else:
                 region = self.Map.GetRegion() # computation region
@@ -910,7 +920,7 @@ class MapFrame(wx.Frame):
                                                  precision = precision)
                             e, n = utils.Deg2DMS(coord2[0], coord2[1], string = False,
                                                  precision = precision)
-                            if sel == 1:
+                            if sel == choice[1]:
                                 self.statusbar.SetStatusText("%s - %s, %s - %s" %
                                                              (w, e, s, n), 0)
                             else:
@@ -923,7 +933,7 @@ class MapFrame(wx.Frame):
                         else:
                             w, s = coord1
                             e, n = coord2
-                            if sel == 1:
+                            if sel == choice[1]:
                                 self.statusbar.SetStatusText("%.*f - %.*f, %.*f - %.*f" %
                                                          (precision, w, precision, e,
                                                           precision, s, precision, n), 0)
@@ -941,7 +951,7 @@ class MapFrame(wx.Frame):
                                          string = False, precision = precision)
                     e, n = utils.Deg2DMS(region["e"], region["n"],
                                          string = False, precision = precision)
-                    if sel == 1:
+                    if sel == choice[1]:
                         self.statusbar.SetStatusText("%s - %s, %s - %s" %
                                                      (w, e, s, n), 0)
                     else:
@@ -952,7 +962,7 @@ class MapFrame(wx.Frame):
                 else:
                     w, s = region["w"], region["s"]
                     e, n = region["e"], region["n"]
-                    if sel == 1:
+                    if sel == choice[1]:
                         self.statusbar.SetStatusText("%.*f - %.*f, %.*f - %.*f" %
                                                      (precision, w, precision, e,
                                                       precision, s, precision, n), 0)
@@ -965,32 +975,32 @@ class MapFrame(wx.Frame):
             # enable long help
             self.StatusbarEnableLongHelp()
 
-        elif self.statusbarWin['toggle'].GetSelection() == 3: # Show comp. extent
+        elif self.statusbarWin['toggle'].GetStringSelection() == choice[3]: # Show comp. extent
             self.statusbar.SetStatusText("", 0)
             self.statusbarWin['region'].Show()
             # disable long help
             self.StatusbarEnableLongHelp(False)
 
-        elif self.statusbarWin['toggle'].GetSelection() == 4: # Align extent
+        elif self.statusbarWin['toggle'].GetStringSelection() == choice[4]: # Align extent
             self.statusbar.SetStatusText("", 0)
             self.statusbarWin['alignExtent'].Show()
             # disable long help
             self.StatusbarEnableLongHelp(False)
 
-        elif self.statusbarWin['toggle'].GetSelection() == 5: # Display resolution
+        elif self.statusbarWin['toggle'].GetStringSelection() == choice[5]: # Display resolution
             self.statusbar.SetStatusText("", 0)
             self.statusbarWin['resolution'].Show()
             # disable long help
             self.StatusbarEnableLongHelp(False)
 
-        elif self.statusbarWin['toggle'].GetSelection() == 6: # Display geometry
+        elif self.statusbarWin['toggle'].GetStringSelection() == choice[6]: # Display geometry
             self.statusbar.SetStatusText("rows=%d; cols=%d; nsres=%.2f; ewres=%.2f" %
                                          (self.Map.region["rows"], self.Map.region["cols"],
                                           self.Map.region["nsres"], self.Map.region["ewres"]), 0)
             # enable long help
             self.StatusbarEnableLongHelp()
 
-        elif self.statusbarWin['toggle'].GetSelection() == 7: # Map scale
+        elif self.statusbarWin['toggle'].GetStringSelection() == choice[7]: # Map scale
             # TODO: need to be fixed...
             ### screen X region problem
             ### user should specify ppm
@@ -1039,7 +1049,7 @@ class MapFrame(wx.Frame):
             # disable long help
             self.StatusbarEnableLongHelp(False)
 
-        elif self.statusbarWin['toggle'].GetSelection() == 8: # go to
+        elif self.statusbarWin['toggle'].GetStringSelection() == choice[8]: # go to
             self.statusbar.SetStatusText("")
             region = self.Map.GetCurrentRegion()
             precision = int(UserSettings.Get(group = 'projection', key = 'format',
@@ -1080,7 +1090,7 @@ class MapFrame(wx.Frame):
             # disable long help
             self.StatusbarEnableLongHelp(False)
         
-        elif self.statusbarWin['toggle'].GetSelection() == 9: # projection
+        elif self.statusbarWin['toggle'].GetStringSelection() == choice[9]: # projection
             self.statusbar.SetStatusText("")
             epsg = UserSettings.Get(group = 'projection', key = 'statusbar', subkey = 'epsg')
             if epsg:

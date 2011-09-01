@@ -703,6 +703,22 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
     def ResetViewHistory(self):
         """!Reset view history"""
         self.viewhistory = list()
+    
+    def GoTo(self, e, n):
+        """!Focus on given point"""
+        w = self.Map.region['w']
+        s = self.Map.region['s']
+        e -= w
+        n -= s
+        focus = self.iview['focus']
+        focus['x'], focus['y'] = e, n
+        self.saveHistory = True
+        #update properties
+        evt = wxUpdateView(zExag = False)
+        wx.PostEvent(self, evt)
+        
+        self.render['quick'] = False
+        self.Refresh(False)
         
     def OnQuerySurface(self, event):
         """!Query surface on given position"""
