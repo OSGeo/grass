@@ -20,6 +20,7 @@ import wx
 
 import dbm_dialogs
 
+import gcmd
 from debug import Debug
 from mapdisp_window import BufferedWindow
 from preferences import globalSettings as UserSettings
@@ -486,50 +487,52 @@ class VDigitWindow(BufferedWindow):
         try:
             mapLayer = self.toolbar.GetLayer().GetName()
         except:
-            wx.MessageBox(parent = self,
-                          message = _("No vector map selected for editing."),
-                          caption = _("Vector digitizer"),
-                          style = wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
+            gcmd.GMessage(parent = self,
+                          message = _("No vector map selected for editing."))
             event.Skip()
             return
-    
-        if self.toolbar.GetAction() not in ("moveVertex",
-                                            "addVertex",
-                                            "removeVertex",
-                                            "editLine"):
+        
+        action = self.toolbar.GetAction()
+        if not action:
+            return
+        
+        if action not in ("moveVertex",
+                          "addVertex",
+                          "removeVertex",
+                          "editLine"):
             # set pen
             self.pen = wx.Pen(colour = 'Red', width = 2, style = wx.SHORT_DASH)
             self.polypen = wx.Pen(colour = 'dark green', width = 2, style = wx.SOLID)
             
-        if self.toolbar.GetAction() in ("addVertex",
-                                        "removeVertex",
-                                        "splitLines"):
+        if action in ("addVertex",
+                      "removeVertex",
+                      "splitLines"):
             # unselect
             self.digit.GetDisplay().SetSelected([])
 
-        if self.toolbar.GetAction() == "addLine":
+        if action == "addLine":
             self.OnLeftDownAddLine(event)
             
-        elif self.toolbar.GetAction() == "editLine" and \
+        elif action == "editLine" and \
                 hasattr(self, "moveInfo"):
             self.OnLeftDownEditLine(event)
 
-        elif self.toolbar.GetAction() in ("moveLine", "moveVertex", "editLine") and \
+        elif action in ("moveLine", "moveVertex", "editLine") and \
                 not hasattr(self, "moveInfo"):
             self.OnLeftDownMoveLine(event)
         
-        elif self.toolbar.GetAction() in ("displayAttrs"
-                                          "displayCats"):
+        elif action in ("displayAttrs"
+                        "displayCats"):
             self.OnLeftDownDisplayCA(event)
             
-        elif self.toolbar.GetAction() in ("copyCats",
-                                          "copyAttrs"):
+        elif action in ("copyCats",
+                        "copyAttrs"):
             self.OnLeftDownCopyCA(event)
             
-        elif self.toolbar.GetAction() == "copyLine":
+        elif action == "copyLine":
             self.OnLeftDownCopyLine(event)
             
-        elif self.toolbar.GetAction() == "zbulkLine":
+        elif action == "zbulkLine":
             self.OnLeftDownBulkLine(event)
         
     def OnLeftUpVarious(self, event):
