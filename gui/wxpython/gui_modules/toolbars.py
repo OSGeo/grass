@@ -506,9 +506,9 @@ class VDigitToolbar(AbstractToolbar):
         self.Bind(wx.EVT_TOOL, self.OnTool)
         
         # default action (digitize new point, line, etc.)
-        self.action = { 'desc' : 'addLine',
-                        'type' : 'point',
-                        'id'   : self.addPoint }
+        self.action = { 'desc' : '',
+                        'type' : '',
+                        'id'   : -1 }
         
         # list of available vector maps
         self.UpdateListOfLayers(updateTool = True)
@@ -534,7 +534,8 @@ class VDigitToolbar(AbstractToolbar):
         icons = Icons['vdigit']
         return self._getToolbarData(((None, ),
                                      ("addPoint", icons["addPoint"],
-                                      self.OnAddPoint),
+                                      self.OnAddPoint,
+                                      wx.ITEM_CHECK),
                                      ("addLine", icons["addLine"],
                                       self.OnAddLine,
                                       wx.ITEM_CHECK),
@@ -585,8 +586,8 @@ class VDigitToolbar(AbstractToolbar):
     
     def OnTool(self, event):
         """!Tool selected -> disable selected tool in map toolbar"""
-        id = self.parent.toolbars['map'].GetAction(type = 'id')
-        self.parent.toolbars['map'].ToggleTool(id, False)
+        aId = self.parent.toolbars['map'].GetAction(type = 'id')
+        self.parent.toolbars['map'].ToggleTool(aId, False)
         
         # set cursor
         cursor = self.parent.cursors["cross"]
@@ -597,8 +598,9 @@ class VDigitToolbar(AbstractToolbar):
         
         if event:
             # deselect previously selected tool
-            id = self.action.get('id', -1)
-            if id != event.GetId():
+            aId = self.action.get('id', -1)
+            if aId != event.GetId() and \
+                    self.action['id'] != -1:
                 self.ToggleTool(self.action['id'], False)
             else:
                 self.ToggleTool(self.action['id'], True)
@@ -607,10 +609,11 @@ class VDigitToolbar(AbstractToolbar):
             
             event.Skip()
         
-        self.ToggleTool(self.action['id'], True)
+        if self.action['id'] != -1:
+            self.ToggleTool(self.action['id'], True)
         
         # clear tmp canvas
-        if self.action['id'] != id:
+        if self.action['id'] != aId:
             self.parent.MapWindow.ClearLines(pdc = self.parent.MapWindow.pdcTmp)
             if self.digit and \
                     len(self.parent.MapWindow.digit.GetDisplay().GetSelected()) > 0:
