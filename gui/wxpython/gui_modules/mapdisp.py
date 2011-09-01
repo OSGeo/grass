@@ -1296,7 +1296,9 @@ class MapFrame(wx.Frame):
                         rast.append(iname)
                 elif ltype in ('vector', 'thememap', 'themechart'):
                     vect.append(name)
-        
+        # rasters are not queried this way in 3D, we don't want them now
+        if self.IsPaneShown('3d'):
+            rast = list()
         # use display region settings instead of computation region settings
         self.tmpreg = os.getenv("GRASS_REGION")
         os.environ["GRASS_REGION"] = self.Map.SetRegion(windres = False)
@@ -1412,25 +1414,28 @@ class MapFrame(wx.Frame):
         
         cats = self.dialogs['attributes'].GetCats()
         
-        try:
-            qlayer = self.Map.GetListOfLayers(l_name = globalvar.QUERYLAYER)[0]
-        except IndexError:
-            qlayer = None
+        qlayer = None
+        if not self.IsPaneShown('3d'):
+            try:
+                qlayer = self.Map.GetListOfLayers(l_name = globalvar.QUERYLAYER)[0]
+            except IndexError:
+                pass
         
         if self.dialogs['attributes'].mapDBInfo and cats:
-            # highlight feature & re-draw map
-            if qlayer:
-                qlayer.SetCmd(self.AddTmpVectorMapLayer(mapName, cats,
-                                                        useId = False,
-                                                        addLayer = False))
-            else:
-                qlayer = self.AddTmpVectorMapLayer(mapName, cats, useId = False)
-            
-            # set opacity based on queried layer
-            opacity = self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer'].GetOpacity(float = True)
-            qlayer.SetOpacity(opacity)
-            
-            self.MapWindow.UpdateMap(render = False, renderVector = False)
+            if not self.IsPaneShown('3d'):
+                # highlight feature & re-draw map
+                if qlayer:
+                    qlayer.SetCmd(self.AddTmpVectorMapLayer(mapName, cats,
+                                                            useId = False,
+                                                            addLayer = False))
+                else:
+                    qlayer = self.AddTmpVectorMapLayer(mapName, cats, useId = False)
+                
+                # set opacity based on queried layer
+                opacity = self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer'].GetOpacity(float = True)
+                qlayer.SetOpacity(opacity)
+                
+                self.MapWindow.UpdateMap(render = False, renderVector = False)
             if not self.dialogs['attributes'].IsShown():
                 self.dialogs['attributes'].Show()
         else:

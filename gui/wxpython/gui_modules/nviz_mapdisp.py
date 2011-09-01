@@ -108,6 +108,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         # list of past views
         self.viewhistory  = []
         self.saveHistory = False
+        # offset for dialog (e.g. DisplayAttributesDialog)
+        self.dialogOffset = 5
         # overlays
         self.overlays = {}
         self.imagedict = {}
@@ -489,13 +491,21 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
     def OnLeftUp(self, event):
         self.mouse['end'] = event.GetPositionTuple()
         if self.mouse["use"] == "query":
+            # querying
             layers = self.GetSelectedLayer(multi = True)
-            
+            isRaster = False
+            nVectors = 0
             for l in layers:
                 if l.GetType() == 'raster':
-                    self.OnQuerySurface(event)
+                    isRaster = True
+                    break
                 if l.GetType() == 'vector':
-                    self.OnQueryVector(event)
+                    nVectors += 1
+            
+            if isRaster or nVectors > 1:
+                self.OnQueryMap(event)
+            else:
+                self.OnQueryVector(event)
                     
         elif self.mouse["use"] == 'cplane':
             self.lmgr.nviz.OnCPlaneChangeDone(None)
@@ -719,6 +729,11 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         self.render['quick'] = False
         self.Refresh(False)
+    
+    def OnQueryMap(self, event):
+        """!Query raster and vector maps"""
+        self.OnQuerySurface(event)
+        self.parent.QueryMap(event.GetX(), event.GetY())
         
     def OnQuerySurface(self, event):
         """!Query surface on given position"""
@@ -765,8 +780,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
     
     def OnQueryVector(self, event):
         """!Query vector on given position"""
-        self.log.WriteWarning(_("Vector querying is not implemented yet"))
-        self.log.WriteCmdLog('-' * 80)
+        self.parent.QueryVector(*event.GetPosition())
         
     def UpdateView(self, event):
         """!Change view settings"""
