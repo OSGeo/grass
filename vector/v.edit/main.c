@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
     }
 
     /* open input file */
-    if (G_strcasecmp(params.in->answer, "-") == 0 ||
+    if (strcmp(params.in->answer, "-") == 0 ||
 	(action_mode != MODE_CREATE && params.in->answer == NULL)) {
 	ascii = stdin;
     }
