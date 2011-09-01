@@ -10,8 +10,10 @@ char *format_list(void)
     char first = TRUE;
     int i;
 
+    OGRSFDriverH driver;
+    
     for (i = 0; i < OGRGetDriverCount(); i++) {
-	OGRSFDriverH driver = OGRGetDriver(i);
+	driver = OGRGetDriver(i);
 
 	if (!OGR_Dr_TestCapability(driver, ODrCCreateDataSource))
 	    continue;
@@ -23,9 +25,9 @@ char *format_list(void)
     p = buf;
 
     for (i = 0; i < OGRGetDriverCount(); i++) {
-	OGRSFDriverH driver = OGRGetDriver(i);
 	const char *name;
 
+	driver = OGRGetDriver(i);
 	if (!OGR_Dr_TestCapability(driver, ODrCCreateDataSource))
 	    continue;
 
@@ -35,6 +37,7 @@ char *format_list(void)
 	    *p++ = ',';
 
 	name = OGR_Dr_GetName(driver);
+	G_strchg(buf, ' ', '_');
 	strcpy(p, name);
 	p += strlen(name);
     }
@@ -51,10 +54,11 @@ void list_formats(void)
     /*         Copyright (c) 1999, Frank Warmerdam                          */
     /* -------------------------------------------------------------------- */
     int iDr;
+    OGRSFDriverH driver;
 
     G_message(_("Supported Formats:"));
     for (iDr = 0; iDr < OGRGetDriverCount(); iDr++) {
-	OGRSFDriverH driver = OGRGetDriver(iDr);
+	driver = OGRGetDriver(iDr);
 
 	if (!OGR_Dr_TestCapability(driver, ODrCCreateDataSource))
 	    continue;
