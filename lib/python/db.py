@@ -66,6 +66,20 @@ def db_describe(table, **args):
 
 # run "db.connect -p" and parse output
 
+def db_table_exist(table, **args):
+    """!Return True if database table exists, False otherwise
+
+    @param table table name
+    @param args
+
+    @return True for success, False otherwise
+    """
+    result = run_command('db.describe', flags = 'c', table = table, **args)
+    if result == 0:
+	    return True
+    else:
+	    return False
+
 def db_connection():
     """!Return the current database connection parameters
     (interface to `db.connect -p'). Example:
