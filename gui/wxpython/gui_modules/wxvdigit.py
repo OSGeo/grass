@@ -929,7 +929,7 @@ class IVDigit:
         
         return ret
 
-    def CopyCats(self, fromId, toId, copyAttrb=False):
+    def CopyCats(self, fromId, toId, copyAttrb = False):
         """!Copy given categories to objects with id listed in ids
 
         @param cats ids of 'from' feature
@@ -938,15 +938,130 @@ class IVDigit:
         @return number of modified features
         @return -1 on error
         """
-        if len(fromId) == 0 or len(toId) == 0:
+        if len(fromId) < 1 or len(toId) < 1:
             return 0
         
-        ret = self.digit.CopyCats(fromId, toId, copyAttrb)
-
-        if ret > 0:
+        poCatsFrom = self.poCats
+        poCatsTo = Vect_new_cats_struct();
+        
+        nlines = 0
+        
+        for fline in fromId:
+            if not Vect_line_alive(self.poMapInfo, fline):
+                continue
+            
+            if Vect_read_line(self.poMapInfo, None, poCatsFrom, fline) < 0:
+                self._error.ReadLine(fline)
+                return -1
+            
+            for tline in toId:
+                if not Vect_line_alive(self.poMapInfo, tline):
+                    continue
+                
+                ltype = Vect_read_line(self.poMapInfo, self.poPoints, poCatsTo, tline)
+                if ltype < 0:
+                    self._error.ReadLine(fline)
+                    return -1
+                
+                catsFrom = poCatsFrom.contents
+                for i in range(catsFrom.n_cats):
+                    if not copyAttrb:
+                        # duplicate category
+                        cat = catsFrom.cat[i]
+                    else:
+                        # duplicate attributes
+                        cat = self.cats[catsFrom.field[i]] + 1
+                        self.cats[catsFrom.field[i]] = cat
+                        poFi = Vect_get_field(self.poMapInfo, catsFrom.field[i])
+                        if not poFi:
+                            self._error.DbLink(i)
+                            return -1
+                        
+                        fi = poFi.contents
+                        driver = db_start_driver(fi.driver)
+                        if not driver:
+                            self._error.Driver(fi.driver)
+                            return -1
+                        
+                        handle = dbHandle()
+                        db_init_handle(byref(handle))
+                        db_set_handle(byref(handle), fi.database, None)
+                        if db_open_database(driver, byref(handle)) != DB_OK:
+                            db_shutdown_driver(driver)
+                            self._error.Database(fi.driver, fi.database)
+                            return -1
+                        
+                        stmt = dbString()
+                        db_init_string(byref(stmt))
+                        db_set_string(byref(stmt),
+                                      "SELECT * FROM %s WHERE %s=%d" % (fi.table, fi.key,
+                                                                        catsFrom.cat[i]))
+                        
+                        cursor = dbCursor()
+                        if db_open_select_cursor(driver, byref(stmt), byref(cursor),
+                                                 DB_SEQUENTIAL) != DB_OK:
+                                db_close_database_shutdown_driver(driver)
+                                return -1
+                        
+                        table = db_get_cursor_table(byref(cursor))
+                        ncols = db_get_table_number_of_columns(table)
+                        
+                        sql = "INSERT INTO %s VALUES (" % fi.table
+                        # fetch the data
+                        more = c_int()
+                        while True:
+                            if db_fetch(byref(cursor), DB_NEXT, byref(more)) != DB_OK:
+                                db_close_database_shutdown_driver(driver)
+                                return -1
+                            if not more.value:
+                                break
+                            
+                            value_string = dbString()
+                            for col in range(ncols):
+                                if col > 0:
+                                    sql += ","
+                                    
+                                column = db_get_table_column(table, col)
+                                if db_get_column_name(column) == fi.key:
+                                    sql += "%d" % cat
+                                    continue
+                                
+                                value = db_get_column_value(column)
+                                db_convert_column_value_to_string(column, byref(value_string))
+                                if db_test_value_isnull(value):
+                                    sql += "NULL"
+                                else:
+                                    ctype = db_sqltype_to_Ctype(db_get_column_sqltype(column))
+                                    if ctype != DB_C_TYPE_STRING:
+                                        sql += db_get_string(byref(value_string))
+                                    else:
+                                        sql += "'%s'" % db_get_string(byref(value_string))
+                        
+                        sql += ")"
+                        db_set_string(byref(stmt), sql)
+                        print db_get_string(byref(stmt))
+                        if db_execute_immediate(driver, byref(stmt)) != DB_OK:
+                            db_close_database_shutdown_driver(driver)
+                            return -1
+                        
+                        db_close_database_shutdown_driver(driver)
+                        G_free(poFi)
+                
+                if Vect_cat_set(poCatsTo, catsFrom.field[i], cat) < 1:
+                    continue
+                
+                if Vect_rewrite_line(self.poMapInfo, tline, ltype, self.poPoints, poCatsTo) < 0:
+                    self._error.WriteLine()
+                    return -1
+                
+                nlines +=1
+        
+        Vect_destroy_cats_struct(poCatsTo)
+        
+        if nlines > 0:
             self.toolbar.EnableUndo()
-
-        return ret
+        
+        return nlines
 
     def _selectLinesByQueryThresh(self):
         """!Generic method used for SelectLinesByQuery() -- to get
@@ -1460,7 +1575,7 @@ class IVDigit:
                 if Vect_get_point_in_area(self.poMapInfo, left, byref(x), byref(y)) == 0:
                     Vect_reset_line(bpoints)
                     Vect_append_point(bpoints, x.value, y.value, 0.0)
-                    newline =  Vect_write_line(byref(self.poMapInfo), GV_CENTROID,
+                    newline =  Vect_write_line(self.poMapInfo, GV_CENTROID,
                                                bpoints, self.poCats)
                     if newline < 0:
                         self._error.WriteLine()
