@@ -30,9 +30,10 @@ int main(int argc, char *argv[])
     struct line_cats *Cats;
     struct GModule *module;	/* GRASS module for parsing arguments */
     struct Option *map_in, *map_out;
-    struct Option *field_opt, *method_opt;
+    struct Option *afield_opt, *nfield_opt, *abcol, *afcol, *ncol,
+                  *method_opt;
     int with_z;
-    int layer, mask_type;
+    int afield, nfield, mask_type;
     dglGraph_s *graph;
     int i, bridges, articulations;
     struct ilist *bridge_list, *articulation_list;
@@ -52,7 +53,37 @@ int main(int argc, char *argv[])
     map_in = G_define_standard_option(G_OPT_V_INPUT);
     map_out = G_define_standard_option(G_OPT_V_OUTPUT);
 
-    field_opt = G_define_standard_option(G_OPT_V_FIELD);
+    afield_opt = G_define_standard_option(G_OPT_V_FIELD);
+    afield_opt->key = "alayer";
+    afield_opt->answer = "1";
+    afield_opt->description = _("Arc layer");
+    afield_opt->guisection = _("Cost");
+
+    nfield_opt = G_define_standard_option(G_OPT_V_FIELD);
+    nfield_opt->key = "nlayer";
+    nfield_opt->answer = "2";
+    nfield_opt->description = _("Node layer");
+    nfield_opt->guisection = _("Cost");
+
+    afcol = G_define_standard_option(G_OPT_DB_COLUMN);
+    afcol->key = "afcolumn";
+    afcol->required = NO;
+    afcol->description =
+	_("Arc forward/both direction(s) cost column (number)");
+    afcol->guisection = _("Cost");
+
+    abcol = G_define_standard_option(G_OPT_DB_COLUMN);
+    abcol->key = "abcolumn";
+    abcol->required = NO;
+    abcol->description = _("Arc backward direction cost column (number)");
+    abcol->guisection = _("Cost");
+
+    ncol = G_define_option();
+    ncol->key = "ncolumn";
+    ncol->type = TYPE_STRING;
+    ncol->required = NO;
+    ncol->description = _("Node cost column (number)");
+    ncol->guisection = _("Cost");
 
     method_opt = G_define_option();
     method_opt->key = "method";
@@ -90,9 +121,11 @@ int main(int argc, char *argv[])
 
 
     /* parse filter option and select appropriate lines */
-    layer = atoi(field_opt->answer);
+    afield = Vect_get_field_number(&In, afield_opt->answer);
+    nfield = Vect_get_field_number(&In, nfield_opt->answer);
 
-    Vect_net_build_graph(&In, mask_type, 0, 0, NULL, NULL, NULL, 0, 0);
+    Vect_net_build_graph(&In, mask_type, afield, nfield, afcol->answer,
+                         abcol->answer, ncol->answer, 0, 0);
     graph = &(In.graph);
 
     Vect_copy_head_data(&In, &Out);

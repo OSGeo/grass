@@ -162,7 +162,7 @@ void insert_line(dbDriver * driver, char *table, int cat, int path,
 int get_nearest_stop(double x, double y, double z, int with_z)
 {
     int i, mini = -1;
-    double mind, d;
+    double mind = -1., d;
 
     for (i = 0; i < timetable.stops; i++) {
 	if (!found[i])
@@ -231,10 +231,16 @@ int main(int argc, char *argv[])
     struct line_cats *Counter_Cats, *Cats;
     struct GModule *module;	/* GRASS module for parsing arguments */
     struct Option *map_in, *map_out;
-    struct Option *field_opt, *walk_layer_opt, *path_layer_opt, *route_id_opt,
-	*stop_time_opt, *to_stop_opt, *walk_length_opt;
+    struct Option *tfield_opt,		  /* Input map: layer with existing timetable */
+                  *walk_layer_opt;	  /* Input map: layer with existing walking routes between stops */
+
+    struct Option *afield_opt,		  /* Input map: layer with arc costs */
+                  *nfield_opt,		  /* Input map: layer with node costs */
+		  *afcol, *abcol, *ncol;  /* Input map: cost columns */
+	          	
+    struct Option *route_id_opt, *stop_time_opt, *to_stop_opt, *walk_length_opt;
     int with_z;
-    int layer, mask_type, path_layer;
+    int tfield, mask_type, afield, nfield;
     int from_stop, to_stop, start_time, min_change, max_changes,
 	walking_change, ret;
     int *stop_pnt, i, nlines, point_counter, *route_pnt;
@@ -258,9 +264,43 @@ int main(int argc, char *argv[])
 
     /* Define the different options as defined in gis.h */
     map_in = G_define_standard_option(G_OPT_V_INPUT);
-    field_opt = G_define_standard_option(G_OPT_V_FIELD);
+    tfield_opt = G_define_standard_option(G_OPT_V_FIELD);
 
     map_out = G_define_standard_option(G_OPT_V_OUTPUT);
+
+    afield_opt = G_define_standard_option(G_OPT_V_FIELD);
+    afield_opt->key = "alayer";
+    afield_opt->answer = "1";
+    afield_opt->description = _("Arc layer");
+    afield_opt->guisection = _("Cost");
+
+    nfield_opt = G_define_standard_option(G_OPT_V_FIELD);
+    nfield_opt->key = "nlayer";
+    nfield_opt->answer = "2";
+    nfield_opt->description = _("Node layer");
+    nfield_opt->guisection = _("Cost");
+
+    afcol = G_define_option();
+    afcol->key = "afcolumn";
+    afcol->type = TYPE_STRING;
+    afcol->required = NO;
+    afcol->description =
+	_("Arc forward/both direction(s) cost column (number)");
+    afcol->guisection = _("Cost");
+
+    abcol = G_define_option();
+    abcol->key = "abcolumn";
+    abcol->type = TYPE_STRING;
+    abcol->required = NO;
+    abcol->description = _("Arc backward direction cost column (number)");
+    abcol->guisection = _("Cost");
+
+    ncol = G_define_option();
+    ncol->key = "ncolumn";
+    ncol->type = TYPE_STRING;
+    ncol->required = NO;
+    ncol->description = _("Node cost column (number)");
+    ncol->guisection = _("Cost");
 
     walk_layer_opt = G_define_standard_option(G_OPT_V_FIELD_ALL);
     walk_layer_opt->key = "walk_layer";
@@ -268,35 +308,30 @@ int main(int argc, char *argv[])
     walk_layer_opt->label =
 	_("Layer number or name with walking connections or -1");
 
-    path_layer_opt = G_define_standard_option(G_OPT_V_FIELD_ALL);
-    path_layer_opt->key = "path_layer";
-    path_layer_opt->answer = "-1";
-    path_layer_opt->label = _("Layer number or name with route paths or -1");
-
     route_id_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     route_id_opt->key = "route_id";
     route_id_opt->required = YES;
     route_id_opt->answer = "route_id";
-    route_id_opt->description = _("Name of column name with route ids");
+    route_id_opt->description = _("Name of column with route ids");
 
     stop_time_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     stop_time_opt->key = "stop_time";
     stop_time_opt->required = YES;
     stop_time_opt->answer = "stop_time";
     stop_time_opt->description =
-	_("Name of column name with stop timestamps");
+	_("Name of column with stop timestamps");
 
     to_stop_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     to_stop_opt->key = "to_stop";
     to_stop_opt->required = YES;
     to_stop_opt->answer = "to_stop";
-    to_stop_opt->description = _("Name of column name with stop ids");
+    to_stop_opt->description = _("Name of column with stop ids");
 
     walk_length_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     walk_length_opt->key = "walk_length";
     walk_length_opt->required = YES;
     walk_length_opt->answer = "length";
-    walk_length_opt->description = _("Name of column name with walk lengths");
+    walk_length_opt->description = _("Name of column with walk lengths");
 
     /* options and flags parser */
     if (G_parser(argc, argv))
@@ -327,9 +362,9 @@ int main(int argc, char *argv[])
 
 
     /* parse filter option and select appropriate lines */
-    layer = atoi(field_opt->answer);
-    path_layer = atoi(path_layer_opt->answer);
-
+    tfield = atoi(tfield_opt->answer);
+    afield = atoi(afield_opt->answer);
+    nfield = atoi(nfield_opt->answer);
 
     init_database(&Out, &point_driver, &point_Fi, 1,
 		  "cat integer, path_id integer, stop_id integer, index integer, arr_time integer, dep_time integer");
@@ -341,7 +376,7 @@ int main(int argc, char *argv[])
     Vect_hist_command(&Out);
 
     if (NetA_init_timetable_from_db
-	(&In, layer, atoi(walk_layer_opt->answer), route_id_opt->answer,
+	(&In, tfield, atoi(walk_layer_opt->answer), route_id_opt->answer,
 	 stop_time_opt->answer, to_stop_opt->answer, walk_length_opt->answer,
 	 &timetable, &route_ids, &stop_ids) != 0)
 	G_fatal_error(_("Could not initialize the timetables"));
@@ -354,7 +389,7 @@ int main(int argc, char *argv[])
     if (!stop_x || !stop_y || !stop_z || !found)
 	G_fatal_error(_("Out of memory"));
 
-    if (path_layer > 0) {
+    if (afield > 0) {
 	nnodes = Vect_get_num_nodes(&In);
 	stop_node = (int *)G_calloc(timetable.stops, sizeof(int));
 	lines =
@@ -366,8 +401,8 @@ int main(int argc, char *argv[])
 	for (i = 0; i < timetable.routes; i++)
 	    lines[i] = Vect_new_list();
 
-	Vect_net_build_graph(&In, mask_type, path_layer, 0, NULL, NULL, NULL,
-			     0, 0);
+	Vect_net_build_graph(&In, mask_type, afield, nfield, afcol->answer,
+			     abcol->answer, ncol->answer, 0, 0);
 	graph = &(In.graph);
     }
 
@@ -380,7 +415,7 @@ int main(int argc, char *argv[])
 	    int cat, stop, node;
 
 	    for (j = 0; j < Cats->n_cats; j++) {
-		if (Cats->field[j] != layer)
+		if (Cats->field[j] != tfield)
 		    continue;
 		cat = Cats->cat[j];
 		stop_pnt =
@@ -393,19 +428,19 @@ int main(int argc, char *argv[])
 		stop_x[stop] = Points->x[0];
 		stop_y[stop] = Points->y[0];
 		stop_z[stop] = Points->z[0];
-		if (path_layer > 0) {
-		    Vect_get_line_nodes(&In, i, &node, NULL);
-		    if (!stop_node[stop])
+		if (afield > 0) {
+		    node = Vect_find_node(&In, Points->x[0], Points->y[0], Points->z[0], 0, 0);
+		    if (!stop_node[stop] && node > 0)
 			stop_node[stop] = node;
 		}
 		found[stop] = 1;
 	    }
 	}
-	else if (type == GV_LINE && path_layer > 0) {
+	else if (type == GV_LINE && afield > 0) {
 	    int cat;
 
 	    for (j = 0; j < Cats->n_cats; j++) {
-		if (Cats->field[j] != path_layer)
+		if (Cats->field[j] != afield)
 		    continue;
 		cat = Cats->cat[j];
 		route_pnt =
@@ -533,7 +568,7 @@ int main(int argc, char *argv[])
 	    Vect_append_points(Points, Cur, GV_FORWARD);
 	    Vect_reset_cats(Cats);
 	    Vect_cat_set(Cats, 2, line_counter);
-	    if (path_layer <= 0)
+	    if (afield <= 0)
 		Vect_write_line(&Out, GV_LINE, Points, Cats);
 	    else
 		write_subroute(cur, Points, line_counter);

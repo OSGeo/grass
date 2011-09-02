@@ -43,7 +43,7 @@ typedef struct
 
 int main(int argc, char **argv)
 {
-    int i, j, ret, centre, line, centre1, centre2;
+    int i, ret, centre, line, centre1, centre2;
     int nlines, nnodes, type, ltype, afield, nfield, geo, cat;
     int node, node1, node2;
     double cost, e1cost, e2cost, n1cost, n2cost, s1cost, s2cost, l, l1;
@@ -220,39 +220,6 @@ int main(int argc, char **argv)
 	    }
 	}
     }
-
-#if 0
-    for (node = 1; node <= nnodes; node++) {
-	nlines = Vect_get_node_n_lines(&Map, node);
-	for (j = 0; j < nlines; j++) {
-	    line = abs(Vect_get_node_line(&Map, node, j));
-	    ltype = Vect_read_line(&Map, NULL, Cats, line);
-	    if (!(ltype & GV_POINT))
-		continue;
-	    if (!(Vect_cat_get(Cats, nfield, &cat)))
-		continue;
-	    if (Vect_cat_in_cat_list(cat, catlist)) {
-		Vect_net_get_node_cost(&Map, node, &n1cost);
-		if (n1cost == -1) {	/* closed */
-		    G_warning(_("Centre at closed node (costs = -1) ignored"));
-		}
-		else {
-		    if (acentres == ncentres) {
-			acentres += 1;
-			Centers =
-			    (CENTER *) G_realloc(Centers,
-						 acentres * sizeof(CENTER));
-		    }
-		    Centers[ncentres].cat = cat;
-		    Centers[ncentres].node = node;
-		    G_debug(2, "centre = %d node = %d cat = %d", ncentres,
-			    node, cat);
-		    ncentres++;
-		}
-	    }
-	}
-    }
-#endif
 
     G_message(_("Number of centres: %d (nlayer %d)"), ncentres, nfield);
 

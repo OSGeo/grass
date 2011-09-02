@@ -32,11 +32,11 @@ int main(int argc, char *argv[])
     struct line_cats *Cats;
     struct GModule *module;	/* GRASS module for parsing arguments */
     struct Option *map_in, *map_out;
-    struct Option *field_opt, *ncol;
-    struct Option *catset1_opt, *fieldset1_opt, *whereset1_opt;
-    struct Option *catset2_opt, *fieldset2_opt, *whereset2_opt;
+    struct Option *afield_opt, *nfield_opt, *abcol, *afcol, *ncol;
+    struct Option *catset1_opt, *whereset1_opt;
+    struct Option *catset2_opt, *whereset2_opt;
     int with_z;
-    int layer, mask_type;
+    int afield, nfield, mask_type;
     struct varray *varray_set1, *varray_set2;
     dglGraph_s *graph;
     int i, nnodes, nlines, *flow, total_flow, nedges;
@@ -58,19 +58,39 @@ int main(int argc, char *argv[])
 
     /* Define the different options as defined in gis.h */
     map_in = G_define_standard_option(G_OPT_V_INPUT);
-    field_opt = G_define_standard_option(G_OPT_V_FIELD);
+
+    afield_opt = G_define_standard_option(G_OPT_V_FIELD);
+    afield_opt->key = "alayer";
+    afield_opt->answer = "1";
+    afield_opt->description = _("Arc layer");
+    afield_opt->guisection = _("Cost");
+
+    nfield_opt = G_define_standard_option(G_OPT_V_FIELD);
+    nfield_opt->key = "nlayer";
+    nfield_opt->answer = "2";
+    nfield_opt->description = _("Node layer");
+    nfield_opt->guisection = _("Cost");
+
+    afcol = G_define_standard_option(G_OPT_DB_COLUMN);
+    afcol->key = "afcolumn";
+    afcol->required = NO;
+    afcol->description =
+	_("Arc forward/both direction(s) cost column (number)");
+    afcol->guisection = _("Cost");
+
+    abcol = G_define_standard_option(G_OPT_DB_COLUMN);
+    abcol->key = "abcolumn";
+    abcol->required = NO;
+    abcol->description = _("Arc backward direction cost column (number)");
+    abcol->guisection = _("Cost");
 
     map_out = G_define_standard_option(G_OPT_V_OUTPUT);
 
     ncol = G_define_standard_option(G_OPT_DB_COLUMN);
     ncol->key = "ncolumn";
     ncol->required = NO;
-    ncol->description = _("Name of node capacity column");
-
-    fieldset1_opt = G_define_standard_option(G_OPT_V_FIELD);
-    fieldset1_opt->key = "set1_layer";
-    fieldset1_opt->label = _("Set1 layer number or name");
-    fieldset1_opt->guisection = _("Set1");
+    ncol->description = _("Node cost column (number)");
+    ncol->guisection = _("Cost");
 
     catset1_opt = G_define_standard_option(G_OPT_V_CATS);
     catset1_opt->key = "set1_cats";
@@ -82,11 +102,6 @@ int main(int argc, char *argv[])
     whereset1_opt->label =
 	_("Set1 WHERE conditions of SQL statement without 'where' keyword");
     whereset1_opt->guisection = _("Set1");
-
-    fieldset2_opt = G_define_standard_option(G_OPT_V_FIELD);
-    fieldset2_opt->key = "set2_layer";
-    fieldset2_opt->description = _("Set2 layer number or name");
-    fieldset2_opt->guisection = _("Set2");
 
     catset2_opt = G_define_standard_option(G_OPT_V_CATS);
     catset2_opt->key = "set2_cats";
@@ -124,15 +139,16 @@ int main(int argc, char *argv[])
     }
 
     /* parse filter option and select appropriate lines */
-    layer = atoi(field_opt->answer);
+    afield = Vect_get_field_number(&In, afield_opt->answer);
+    nfield = Vect_get_field_number(&In, nfield_opt->answer);
 
     if (NetA_initialise_varray
-	(&In, atoi(fieldset1_opt->answer), GV_POINT, whereset1_opt->answer,
+	(&In, nfield, GV_POINT, whereset1_opt->answer,
 	 catset1_opt->answer, &varray_set1) == 2)
 	G_fatal_error(_("Neither %s nor %s was given"), catset1_opt->key,
 		      whereset1_opt->key);
     if (NetA_initialise_varray
-	(&In, atoi(fieldset2_opt->answer), GV_POINT, whereset2_opt->answer,
+	(&In, nfield, GV_POINT, whereset2_opt->answer,
 	 catset2_opt->answer, &varray_set2) == 2)
 	G_fatal_error(_("Neither %s nor %s was given"), catset2_opt->key,
 		      whereset2_opt->key);
@@ -156,8 +172,9 @@ int main(int argc, char *argv[])
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
 
-    Vect_net_build_graph(&In, mask_type, 0, atoi(field_opt->answer),
-			 NULL, NULL, NULL, 0, 0);
+    Vect_net_build_graph(&In, mask_type, afield, nfield, afcol->answer,
+                         abcol->answer, ncol->answer, 0, 0);
+
     graph = &(In.graph);
 
     /*build new graph */
@@ -165,7 +182,7 @@ int main(int argc, char *argv[])
 	node_costs = (int *)G_calloc(nnodes + 1, sizeof(int));
 	if (!node_costs)
 	    G_fatal_error(_("Out of memory"));
-	NetA_get_node_costs(&In, layer, ncol->answer, node_costs);
+	NetA_get_node_costs(&In, nfield, ncol->answer, node_costs);
 	nedges = NetA_split_vertices(graph, &vg, node_costs);
 	G_free(node_costs);
     }
