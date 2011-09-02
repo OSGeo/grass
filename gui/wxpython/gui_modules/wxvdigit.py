@@ -1039,7 +1039,6 @@ class IVDigit:
                         
                         sql += ")"
                         db_set_string(byref(stmt), sql)
-                        print db_get_string(byref(stmt))
                         if db_execute_immediate(driver, byref(stmt)) != DB_OK:
                             db_close_database_shutdown_driver(driver)
                             return -1
