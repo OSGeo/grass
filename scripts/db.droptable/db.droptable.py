@@ -59,7 +59,7 @@ def main():
     used = []
     vects = grass.list_strings('vect')
     for vect in vects:
-	for f in vector_db(vect, stderr = nuldev).itervalues():
+	for f in grass.vector_db(vect, stderr = nuldev).itervalues():
 	    if not f:
 		continue
 	    if f['table'] == table:
