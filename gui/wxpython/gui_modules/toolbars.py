@@ -786,7 +786,7 @@ class VDigitToolbar(AbstractToolbar):
              wx.ITEM_CHECK, self.OnCopyCats, "copyCats"),
             (_('Copy features from (background) vector map'),
              wx.ITEM_CHECK, self.OnCopy, "copyLine"),
-            (_('Duplicate attributes'),
+            (_('Copy attributes'),
              wx.ITEM_CHECK, self.OnCopyAttrb, "copyAttrs"),
             (_('Feature type conversion'),
              wx.ITEM_CHECK, self.OnTypeConversion, "typeConv"),
