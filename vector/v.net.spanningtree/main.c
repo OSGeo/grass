@@ -30,10 +30,10 @@ int main(int argc, char *argv[])
     struct line_cats *Cats;
     struct GModule *module;	/* GRASS module for parsing arguments */
     struct Option *map_in, *map_out;
-    struct Option *field_opt, *accol;
+    struct Option *afield_opt, *nfield_opt, *afcol, *ncol;
     struct Flag *geo_f;
     int with_z;
-    int layer, mask_type;
+    int afield, nfield, mask_type;
     dglGraph_s *graph;
     int i, edges, geo;
     struct ilist *tree_list;
@@ -53,12 +53,30 @@ int main(int argc, char *argv[])
     map_in = G_define_standard_option(G_OPT_V_INPUT);
     map_out = G_define_standard_option(G_OPT_V_OUTPUT);
 
-    field_opt = G_define_standard_option(G_OPT_V_FIELD);
+    afield_opt = G_define_standard_option(G_OPT_V_FIELD);
+    afield_opt->key = "alayer";
+    afield_opt->answer = "1";
+    afield_opt->description = _("Arc layer");
+    afield_opt->guisection = _("Cost");
 
-    accol = G_define_standard_option(G_OPT_DB_COLUMN);
-    accol->key = "accol";
-    accol->required = NO;
-    accol->description = _("Name of Arc cost column");
+    nfield_opt = G_define_standard_option(G_OPT_V_FIELD);
+    nfield_opt->key = "nlayer";
+    nfield_opt->answer = "2";
+    nfield_opt->description = _("Node layer");
+    nfield_opt->guisection = _("Cost");
+
+    afcol = G_define_standard_option(G_OPT_DB_COLUMN);
+    afcol->key = "afcolumn";
+    afcol->required = NO;
+    afcol->description =
+	_("Arc forward/both direction(s) cost column (number)");
+    afcol->guisection = _("Cost");
+
+    ncol = G_define_standard_option(G_OPT_DB_COLUMN);
+    ncol->key = "ncolumn";
+    ncol->required = NO;
+    ncol->description = _("Node cost column (number)");
+    ncol->guisection = _("Cost");
 
     geo_f = G_define_flag();
     geo_f->key = 'g';
@@ -98,10 +116,12 @@ int main(int argc, char *argv[])
 	geo = 0;
 
     /* parse filter option and select appropriate lines */
-    layer = atoi(field_opt->answer);
+    afield = Vect_get_field_number(&In, afield_opt->answer);
+    nfield = Vect_get_field_number(&In, nfield_opt->answer);
 
-    Vect_net_build_graph(&In, mask_type, layer, 0,
-			 accol->answer, NULL, NULL, geo, 0);
+    Vect_net_build_graph(&In, mask_type, afield, nfield, afcol->answer, NULL,
+			 ncol->answer, geo, 0);
+
     graph = &(In.graph);
 
     Vect_copy_head_data(&In, &Out);

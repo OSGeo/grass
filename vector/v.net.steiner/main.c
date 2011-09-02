@@ -441,29 +441,13 @@ int main(int argc, char **argv)
 	    G_warning(_("Point is not connected to the network"));
 	    continue;
 	}
-	    if (!(Vect_cat_get(Cats, tfield, &cat)))
-		continue;
-	    if (Vect_cat_in_cat_list(cat, Clist)) {
-		Vect_list_append(TList, i);
-	    }
-    }
-
-#if 0
-    for (i = 1; i <= nnodes; i++) {
-	nlines = Vect_get_node_n_lines(&Map, i);
-	for (j = 0; j < nlines; j++) {
-	    line = abs(Vect_get_node_line(&Map, i, j));
-	    ltype = Vect_read_line(&Map, NULL, Cats, line);
-	    if (!(ltype & GV_POINT))
-		continue;
-	    if (!(Vect_cat_get(Cats, tfield, &cat)))
-		continue;
-	    if (Vect_cat_in_cat_list(cat, Clist)) {
-		Vect_list_append(TList, i);
-	    }
+	if (!(Vect_cat_get(Cats, tfield, &cat)))
+	    continue;
+	if (Vect_cat_in_cat_list(cat, Clist)) {
+	    Vect_list_append(TList, i);
 	}
     }
-#endif
+
     nterms = TList->n_values;
     fprintf(stdout, "Number of terminals: %d\n", nterms);
 

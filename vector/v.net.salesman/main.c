@@ -216,24 +216,6 @@ int main(int argc, char **argv)
 	
     }
 
-
-#if 0
-    for (i = 1; i <= nnodes; i++) {
-	nlines = Vect_get_node_n_lines(&Map, i);
-	for (j = 0; j < nlines; j++) {
-	    line = abs(Vect_get_node_line(&Map, i, j));
-	    ltype = Vect_read_line(&Map, NULL, Cats, line);
-	    if (!(ltype & GV_POINT))
-		continue;
-	    if (!(Vect_cat_get(Cats, tfield, &cat)))
-		continue;
-	    if (Vect_cat_in_cat_list(cat, Clist)) {
-		Vect_list_append(TList, i);
-	    }
-	}
-    }
-#endif
-
     ncities = TList->n_values;
     G_message(_("Number of cities: [%d]"), ncities);
     if (ncities < 2)
@@ -343,6 +325,7 @@ int main(int argc, char **argv)
      *  into cycle between 2 nearest nodes */
     /* for a large number of cities this will become very slow, can be fixed */
     for (i = 0; i < ncities - 2; i++) {
+	G_percent(i, ncities - 3, 1);
 	cost = -1;
 	G_debug(2, "---- city %d ----", i);
 	for (j = 0; j < ncities; j++) {

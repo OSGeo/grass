@@ -31,14 +31,15 @@ int main(int argc, char *argv[])
     static struct line_pnts *Points;
     struct line_cats *Cats;
     struct GModule *module;	/* GRASS module for parsing arguments */
-    struct Option *map_in, *map_out, *abcol, *afcol;
-    struct Option *catf_opt, *fieldf_opt, *wheref_opt;
-    struct Option *catt_opt, *fieldt_opt, *wheret_opt, *to_type_opt;
+    struct Option *map_in, *map_out;
+    struct Option *catf_opt, *wheref_opt;
+    struct Option *catt_opt, *wheret_opt, *to_type_opt;
+    struct Option *afield_opt, *nfield_opt, *abcol, *afcol, *ncol;
     struct Flag *geo_f;
     int with_z, geo;
     int mask_type;
     struct varray *varrayf, *varrayt;
-    int flayer, tlayer;
+    int afield, nfield;
     dglGraph_s *graph;
     struct ilist *nodest;
     int i, nnodes, nlines;
@@ -70,10 +71,17 @@ int main(int argc, char *argv[])
     map_in = G_define_standard_option(G_OPT_V_INPUT);
     map_out = G_define_standard_option(G_OPT_V_OUTPUT);
 
-    fieldf_opt = G_define_standard_option(G_OPT_V_FIELD);
-    fieldf_opt->key = "from_layer";
-    fieldf_opt->label = _("From layer number or name");
-    fieldf_opt->guisection = _("From");
+    afield_opt = G_define_standard_option(G_OPT_V_FIELD);
+    afield_opt->key = "alayer";
+    afield_opt->answer = "1";
+    afield_opt->description = _("Arc layer");
+    afield_opt->guisection = _("Cost");
+
+    nfield_opt = G_define_standard_option(G_OPT_V_FIELD);
+    nfield_opt->key = "nlayer";
+    nfield_opt->answer = "2";
+    nfield_opt->description = _("Node layer");
+    nfield_opt->guisection = _("Cost");
 
     catf_opt = G_define_standard_option(G_OPT_V_CATS);
     catf_opt->key = "from_cats";
@@ -85,11 +93,6 @@ int main(int argc, char *argv[])
     wheref_opt->label =
 	_("From WHERE conditions of SQL statement without 'where' keyword");
     wheref_opt->guisection = _("From");
-
-    fieldt_opt = G_define_standard_option(G_OPT_V_FIELD);
-    fieldt_opt->key = "to_layer";
-    fieldt_opt->description = _("To layer number or name");
-    fieldt_opt->guisection = _("To");
 
     catt_opt = G_define_standard_option(G_OPT_V_CATS);
     catt_opt->key = "to_cats";
@@ -111,13 +114,24 @@ int main(int argc, char *argv[])
 
     afcol = G_define_standard_option(G_OPT_DB_COLUMN);
     afcol->key = "afcolumn";
-    afcol->required = YES;
-    afcol->description = _("Arc forward/both direction(s) cost column");
+    afcol->required = NO;
+    afcol->description =
+	_("Arc forward/both direction(s) cost column (number)");
+    afcol->guisection = _("Cost");
 
     abcol = G_define_standard_option(G_OPT_DB_COLUMN);
     abcol->key = "abcolumn";
     abcol->required = NO;
-    abcol->description = _("Arc backward direction cost column");
+    abcol->description = _("Arc backward direction cost column (number)");
+    abcol->guisection = _("Cost");
+
+    ncol = G_define_standard_option(G_OPT_DB_COLUMN);
+    ncol->key = "ncolumn";
+    ncol->required = NO;
+    ncol->description = _("Node cost column (number)");
+    ncol->guisection = _("Cost");
+
+    map_out = G_define_standard_option(G_OPT_V_OUTPUT);
 
     geo_f = G_define_flag();
     geo_f->key = 'g';
@@ -173,18 +187,19 @@ int main(int argc, char *argv[])
 	on_path[i] = Vect_new_cats_struct();
 
     /*initialise varrays and nodes list appropriatelly */
-    flayer = atoi(fieldf_opt->answer);
-    tlayer = atoi(fieldt_opt->answer);
-    NetA_initialise_varray(&In, flayer, GV_POINT, wheref_opt->answer,
+    afield = Vect_get_field_number(&In, afield_opt->answer);
+    nfield = Vect_get_field_number(&In, nfield_opt->answer);
+
+    NetA_initialise_varray(&In, nfield, GV_POINT, wheref_opt->answer,
 			   catf_opt->answer, &varrayf);
-    NetA_initialise_varray(&In, tlayer, mask_type, wheret_opt->answer,
+    NetA_initialise_varray(&In, nfield, mask_type, wheret_opt->answer,
 			   catt_opt->answer, &varrayt);
 
     nodest = Vect_new_list();
     NetA_varray_to_nodes(&In, varrayt, nodest, nodes_to_features);
 
     Vect_net_build_graph(&In, mask_type, 1, 0, afcol->answer, abcol->answer,
-			 NULL, geo, 0);
+			 ncol->answer, geo, 0);
     graph = &(In.graph);
     NetA_distance_from_points(graph, nodest, dst, prev);
 
@@ -223,7 +238,6 @@ int main(int argc, char *argv[])
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
 
-
     for (i = 1; i <= nlines; i++)
 	if (varrayf->c[i]) {
 	    int type = Vect_read_line(&In, Points, Cats, i);
@@ -231,7 +245,7 @@ int main(int argc, char *argv[])
 	    double cost;
 	    dglInt32_t *vertex, vertex_id;
 
-	    if (!Vect_cat_get(Cats, flayer, &cat))
+	    if (!Vect_cat_get(Cats, nfield, &cat))
 		continue;
 		
 	    if (type & GV_POINTS) {
@@ -254,7 +268,7 @@ int main(int argc, char *argv[])
 		vertex_id = dglNodeGet_Id(graph, vertex);
 	    }
 	    Vect_read_line(&In, NULL, Cats, nodes_to_features[vertex_id]);
-	    if (!Vect_cat_get(Cats, tlayer, &tcat))
+	    if (!Vect_cat_get(Cats, nfield, &tcat))
 		continue;
 	    sprintf(buf, "insert into %s values (%d, %d, %f)", Fi->table, cat,
 		    tcat, cost);

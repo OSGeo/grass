@@ -31,10 +31,12 @@ int main(int argc, char *argv[])
     struct line_cats *Cats;
     struct GModule *module;	/* GRASS module for parsing arguments */
     struct Option *map_in, *map_out;
-    struct Option *cat_opt, *field_opt, *where_opt, *abcol, *afcol;
+    struct Option *cat_opt, *afield_opt, *nfield_opt, *where_opt, *abcol,
+                  *afcol, *ncol;
     struct Flag *geo_f, *newpoints_f;
+    int afield, nfield;
     int chcat, with_z;
-    int layer, mask_type;
+    int mask_type;
     struct varray *varray;
     dglGraph_s *graph;
     int i, j, geo, nnodes, nlines, max_cat, *cats;
@@ -61,8 +63,18 @@ int main(int argc, char *argv[])
     map_in = G_define_standard_option(G_OPT_V_INPUT);
     map_out = G_define_standard_option(G_OPT_V_OUTPUT);
 
-    field_opt = G_define_standard_option(G_OPT_V_FIELD);
-    field_opt->guisection = _("Selection");
+    afield_opt = G_define_standard_option(G_OPT_V_FIELD);
+    afield_opt->key = "alayer";
+    afield_opt->answer = "1";
+    afield_opt->description = _("Arc layer");
+    afield_opt->guisection = _("Selection");
+
+    nfield_opt = G_define_standard_option(G_OPT_V_FIELD);
+    nfield_opt->key = "nlayer";
+    nfield_opt->answer = "2";
+    nfield_opt->description = _("Node layer");
+    nfield_opt->guisection = _("Selection");
+
     cat_opt = G_define_standard_option(G_OPT_V_CATS);
     cat_opt->guisection = _("Selection");
     where_opt = G_define_standard_option(G_OPT_DB_WHERE);
@@ -72,14 +84,21 @@ int main(int argc, char *argv[])
     afcol->key = "afcolumn";
     afcol->required = NO;
     afcol->description =
-	_("Name of arc forward/both direction(s) cost column");
+	_("Arc forward/both direction(s) cost column (number)");
     afcol->guisection = _("Cost");
 
     abcol = G_define_standard_option(G_OPT_DB_COLUMN);
     abcol->key = "abcolumn";
     abcol->required = NO;
-    abcol->description = _("Name of arc backward direction cost column");
+    abcol->description = _("Arc backward direction cost column (number)");
     abcol->guisection = _("Cost");
+
+    ncol = G_define_option();
+    ncol->key = "ncolumn";
+    ncol->type = TYPE_STRING;
+    ncol->required = NO;
+    ncol->description = _("Node cost column (number)");
+    ncol->guisection = _("Cost");
 
     geo_f = G_define_flag();
     geo_f->key = 'g';
@@ -123,10 +142,12 @@ int main(int argc, char *argv[])
 	geo = 0;
 
     /* parse filter option and select appropriate lines */
-    layer = atoi(field_opt->answer);
+    afield = Vect_get_field_number(&In, afield_opt->answer);
+    nfield = Vect_get_field_number(&In, nfield_opt->answer);
+
     chcat =
 	(NetA_initialise_varray
-	 (&In, layer, GV_POINT, where_opt->answer, cat_opt->answer,
+	 (&In, afield, GV_POINT, where_opt->answer, cat_opt->answer,
 	  &varray) == 1);
 
     /* Create table */
@@ -161,8 +182,8 @@ int main(int argc, char *argv[])
     db_begin_transaction(driver);
 
 
-    Vect_net_build_graph(&In, mask_type, atoi(field_opt->answer), 0,
-			 afcol->answer, abcol->answer, NULL, geo, 0);
+    Vect_net_build_graph(&In, mask_type, afield, nfield,
+			 afcol->answer, abcol->answer, ncol->answer, geo, 0);
     graph = &(In.graph);
     nnodes = dglGet_NodeCount(graph);
     dist = (dglInt32_t **) G_calloc(nnodes + 1, sizeof(dglInt32_t *));
@@ -196,7 +217,7 @@ int main(int argc, char *argv[])
 
 	    /* Vect_get_line_nodes(&In, i, &node, NULL); */
 	    node = Vect_find_node(&In, Points->x[0], Points->y[0], Points->z[0], 0, 0);
-	    Vect_cat_get(Cats, layer, &cats[node]);
+	    Vect_cat_get(Cats, afield, &cats[node]);
 	    if (cats[node] != -1) {
 		Vect_write_line(&Out, GV_POINT, Points, Cats);
 		if (!chcat || varray->c[i])

@@ -37,9 +37,9 @@ typedef struct
 
 int main(int argc, char **argv)
 {
-    int i, j, ret, center, line, center1, center2;
+    int i, ret, center, line, center1, center2;
     int nlines, nnodes, type, ltype, afield, nfield, geo, cat;
-    int node, node1, node2;
+    int node1, node2;
     double cost, e1cost, e2cost, n1cost, n2cost, s1cost, s2cost, l, l1, l2;
     struct Option *map, *output;
     struct Option *afield_opt, *nfield_opt, *afcol, *abcol, *ncol, *type_opt,
@@ -127,8 +127,6 @@ int main(int argc, char **argv)
     SPoints = Vect_new_line_struct();
 
     type = Vect_option_to_types(type_opt);
-    afield = atoi(afield_opt->answer);
-    nfield = atoi(nfield_opt->answer);
 
     catlist = Vect_new_cat_list();
     Vect_str_to_cat_list(term_opt->answer, catlist);
@@ -140,6 +138,9 @@ int main(int argc, char **argv)
 
     Vect_set_open_level(2);
     Vect_open_old(&Map, map->answer, "");
+
+    afield = Vect_get_field_number(&Map, afield_opt->answer);
+    nfield = Vect_get_field_number(&Map, nfield_opt->answer);
 
     /* Build graph */
     Vect_net_build_graph(&Map, type, afield, nfield, afcol->answer,
@@ -184,39 +185,6 @@ int main(int argc, char **argv)
 	    }
 	}
     }
-
-#if 0
-    for (node = 1; node <= nnodes; node++) {
-	nlines = Vect_get_node_n_lines(&Map, node);
-	for (j = 0; j < nlines; j++) {
-	    line = abs(Vect_get_node_line(&Map, node, j));
-	    ltype = Vect_read_line(&Map, NULL, Cats, line);
-	    if (!(ltype & GV_POINT))
-		continue;
-	    if (!(Vect_cat_get(Cats, nfield, &cat)))
-		continue;
-	    if (Vect_cat_in_cat_list(cat, catlist)) {
-		Vect_net_get_node_cost(&Map, node, &n1cost);
-		if (n1cost == -1) {	/* closed */
-		    G_warning("center at closed node (costs = -1) ignored");
-		}
-		else {
-		    if (acenters == ncenters) {
-			acenters += 1;
-			Centers =
-			    (CENTER *) G_realloc(Centers,
-						 acenters * sizeof(CENTER));
-		    }
-		    Centers[ncenters].cat = cat;
-		    Centers[ncenters].node = node;
-		    G_debug(2, "center = %d node = %d cat = %d", ncenters,
-			    node, cat);
-		    ncenters++;
-		}
-	    }
-	}
-    }
-#endif
 
     G_message(_("Number of centers: [%d] (nlayer: [%d])"), ncenters, nfield);
 

@@ -26,7 +26,7 @@ int cmp(const void *, const void *);
 int path(struct Map_info *In, struct Map_info *Out, char *filename,
 	 int nfield, double maxdist, int segments)
 {
-    FILE *in_file;
+    FILE *in_file = NULL;
     int i, nlines, line, npoints, type, cat, id, fcat, tcat, fline, tline,
 	fnode, tnode, count;
     int ret, sp, input_mode, unreachable, nopoint, formaterr;
@@ -173,8 +173,8 @@ int path(struct Map_info *In, struct Map_info *Out, char *filename,
 	    }
 	    else {
 		fline = Citem->line;
-		type = Vect_read_line(&In, Points, NULL, fline);
-		fnode = Vect_find_node(&In, Points->x[0], Points->y[0], Points->z[0], 0, 0);
+		type = Vect_read_line(In, Points, NULL, fline);
+		fnode = Vect_find_node(In, Points->x[0], Points->y[0], Points->z[0], 0, 0);
 		/* Vect_get_line_nodes(In, fline, &fnode, NULL); */
 	    }
 	    G_debug(3, "from: cat = %5d point(line) = %5d node = %5d", fcat,
@@ -193,8 +193,8 @@ int path(struct Map_info *In, struct Map_info *Out, char *filename,
 	    }
 	    else {
 		tline = Citem->line;
-		type = Vect_read_line(&In, Points, NULL, tline);
-		tnode = Vect_find_node(&In, Points->x[0], Points->y[0], Points->z[0], 0, 0);
+		type = Vect_read_line(In, Points, NULL, tline);
+		tnode = Vect_find_node(In, Points->x[0], Points->y[0], Points->z[0], 0, 0);
 		/* Vect_get_line_nodes(In, tline, &tnode, NULL); */
 	    }
 	    G_debug(3, "to  : cat = %5d point(line) = %5d node = %5d", tcat,
