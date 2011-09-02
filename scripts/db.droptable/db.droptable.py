@@ -52,7 +52,7 @@ def main():
 
     # check if table exists
     nuldev = file(os.devnull, 'w')
-    if not grass.db_describe(table, stdout = nuldev, stderr = nuldev):
+    if not grass.db_table_exist(table, stdout = nuldev, stderr = nuldev):
 	grass.fatal(_("Table <%s> not found in current mapset") % table)
 
     # check if table is used somewhere (connected to vector map)
