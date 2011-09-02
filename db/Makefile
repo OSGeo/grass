@@ -10,7 +10,6 @@ SUBDIRS = \
 	db.describe \
 	db.drivers \
 	db.dropdb \
-	db.droptable \
 	db.execute \
 	db.login \
 	db.select \
