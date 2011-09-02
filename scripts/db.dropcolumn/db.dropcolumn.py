@@ -75,7 +75,7 @@ def main():
 	# http://www.sqlite.org/faq.html#q13
 	colnames = []
 	coltypes = []
-	for f in grass.db_describe()['cols']:
+	for f in grass.db_describe(table)['cols']:
 	    if f[0] == column:
 		continue
 	    colnames.append(f[0])
