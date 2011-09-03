@@ -1,17 +1,15 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>i.oif</EM> calculates the Optimum Index Factor for LANDSAT TM bands 1,2,3,4,5 and 7.
-<P>
+<em>i.oif</em> calculates the Optimum Index Factor for LANDSAT TM bands 1,2,3,4,5 and 7.
+<p>
 The Optimum Index Factor is calculated to determine the band combination which
 shows the maximum information when combined into a composite image. The bands
-comprising the highest scoring combination from <EM>i.oif</EM> are used as the 
-three color channels required for <EM><A HREF="d.rgb.html">d.rgb</A></EM> or
-<EM><A HREF="r.composite.html">r.composite</A></EM>.
-<P>
+comprising the highest scoring combination from <em>i.oif</em> are used as the 
+three color channels required for <em>d.rgb</em> or <em>r.composite</em>.
+<p>
 The analysis is saved to a file in the current directory called "i.oif.result".
 
-
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 Colour Composites in BGR order: important band combinations (example: 
 234 in BGR order means: B=2, G=3, R=4):
@@ -40,21 +38,30 @@ vegetational stress and mortality. Roads are less evident as band 3 is blue.
 <li> 457: shows soil texture classes (clay, loam, sandy).
 </ul>
 
+<h2>EXAMPLE</h2>
 
-<H2>REFERENCES</H2>
-
-Jensen, 1996. Introductory digital image processing, p.98. ISBN 0-13-205840-5
-
-
-<H2>SEE ALSO</H2>
-<EM><A HREF="d.rgb.html">d.rgb</A></EM><BR>
-<EM><A HREF="r.composite.html">r.composite</A></EM><BR>
-<EM><A HREF="r.covar.html">r.covar</A></EM><BR>
-<EM><A HREF="r.univar.html">r.univar</A></EM><BR>
-<BR>
+North Carolina sample dataset:
+<div class="code"><pre>
+g.region rast=lsat7_2002_10 -p
+i.oif image1=lsat7_2002_10 image2=lsat7_2002_20 image3=lsat7_2002_30 \
+      image4=lsat7_2002_40 image5=lsat7_2002_50 image7=lsat7_2002_70
+</pre></div>
 
 
-<H2>AUTHOR</H2>
+<h2>REFERENCE</h2>
+
+Jensen, 1996. Introductory digital image processing. Prentice Hall, p.98. ISBN 0-13-205840-5
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="d.rgb.html">d.rgb</a>,
+<a href="r.composite.html">r.composite</a>,
+<a href="r.covar.html">r.covar</a>,
+<a href="r.univar.html">r.univar</a>
+</em>
+
+<h2>AUTHOR</h2>
 
 Markus Neteler, ITC-Irst, Trento, Italy<br>
 Updated to GRASS 5.7 by Michael Barton, Arizona State University
