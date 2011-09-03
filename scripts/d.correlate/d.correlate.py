@@ -30,7 +30,7 @@ import os
 from grass.script import core as grass
 
 def main():
-    layers = options['layers'].split(',')
+    layers = options['map'].split(',')
 
     if len(layers) < 2:
 	grass.error("At least 2 layers are required")
