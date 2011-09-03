@@ -50,7 +50,7 @@ import grass.script as grass
 def main():
     first = options['first']
     second = options['second']
-    output = options['output']
+    output = options['output_prefix']
     percent = options['percent']
 
     mapset = grass.gisenv()['MAPSET']
