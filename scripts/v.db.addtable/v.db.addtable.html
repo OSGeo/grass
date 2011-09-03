@@ -13,47 +13,51 @@ usage.
 v.db.addtable will only insert category values into the table for those features 
 which actually have a category value in the relevant layer. The use can add 
 category values automatically by using <em>v.category</em> or manually with 
-<em><a href="wxGUI.Vector_Digitizing_Tool.html">wxGUI vector digitizer</a></em> before running v.db.addtable. Or one can run v.db.addtable first
+<em><a href="wxGUI.Vector_Digitizing_Tool.html">wxGUI vector digitizer</a></em>
+before running v.db.addtable. Or one can run v.db.addtable first
 and then use either a combinatino of <em>v.category</em> + <em>v.to.db</em> or 
-<em><a href="wxGUI.Vector_Digitizing_Tool.html">wxGUI vector digitizer</a></em> to add the relevant lines to the table.
+<em><a href="wxGUI.Vector_Digitizing_Tool.html">wxGUI vector digitizer</a></em>
+to add the relevant lines to the table.
 
 The supported types of columns depend on the database backend. However, all
 backends should support VARCHAR, INT, DOUBLE PRECISION and DATE.
-The dbf backend supports only these types.
-
+<p>
 The existing database connection(s) can be verified with <em>v.db.connect</em>.
 
 <h2>EXAMPLE</h2>
 
 Adding a new attribute table with a single column to default layer 1:<br>
 <div class="code"><pre>
-v.db.addtable sentiero_brenta_points columns="slope double precision"
-v.db.connect -p sentiero_brenta_points
-v.info -c sentiero_brenta_points
+g.copy vect=roadsmajor,myroads
+v.db.addtable myroads columns="slope double precision"
+v.db.connect -p myroads
+v.info -c myroads
 </pre></div>
 
 <p>
 Adding a new attribute table with two columns to layer 2:<br>
 <div class="code"><pre>
-v.db.addtable sentiero_brenta_points columns="slope double precision,myname varchar(15)" layer=2
-v.db.connect -p sentiero_brenta_points
-v.info -c sentiero_brenta_points
+g.copy vect=roadsmajor,myroads
+v.db.addtable myroads columns="slope double precision, roadname varchar(15)" layer=2
+v.db.connect -p myroads
+v.info -c myroads
+v.info -c myroads layer=2
 </pre></div>
 
 <h2>SEE ALSO</h2>
 
-<em><a HREF="db.connect.html">db.connect</a></em>,
-<em><a HREF="db.droptable.html">db.droptable</a></em>,
-<em><a HREF="db.execute.html">db.execute</a></em>,
-<em><a HREF="v.category.html">v.category</a></em>,
-<em><a HREF="v.db.addcolumn.html">v.db.addcolumn</a></em>,
-<em><a HREF="v.db.connect.html">v.db.connect</a></em>,
-<em><a HREF="v.db.dropcolumn.html">v.db.dropcolumn</a></em>,
-<em><a HREF="v.db.droptable.html">v.db.droptable</a></em>,
-<em><a HREF="v.db.select.html">v.db.select</a></em>,
-<em><a HREF="v.db.update.html">v.db.update</a></em><br>
-<em><a href="sql.html">GRASS SQL interface</a></em>
-
+<em>
+<a href="db.connect.html">db.connect</a>,
+<a href="db.droptable.html">db.droptable</a>,
+<a href="db.execute.html">db.execute</a>,
+<a href="v.db.addtable.html">v.db.addtable</a>,
+<a href="v.db.connect.html">v.db.connect</a>,
+<a href="v.db.dropcolumn.html">v.db.dropcolumn</a>,
+<a href="v.db.droptable.html">v.db.droptable</a>,
+<a href="v.db.select.html">v.db.select</a>,
+<a href="v.db.update.html">v.db.update</a><br>
+<a href="sql.html">GRASS SQL interface</a>
+</em>
 
 <h2>AUTHOR</h2>
 
