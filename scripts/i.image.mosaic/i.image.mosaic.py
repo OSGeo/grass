@@ -59,7 +59,7 @@ def make_expression(i, count):
 	return "if(isnull($image%d),%s,$image%d+$offset%d)" % (i, e, i, i)
 
 def main():
-    images = options['images'].split(',')
+    images = options['input'].split(',')
     output = options['output']
 
     count = len(images)
