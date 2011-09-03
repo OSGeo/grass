@@ -31,6 +31,7 @@
 #% required : no
 #%end
 #%option G_OPT_R_INPUTS
+#% key: raster
 #% required : no
 #%end
 #%option G_OPT_F_OUTPUT
@@ -154,7 +155,7 @@ def main():
     group = options['group']
     raster = options['raster']
     output = options['output']
-    coords = options['coords']
+    coords = options['east_north']
     label = flags['c']
     gnuplot = flags['g']
 

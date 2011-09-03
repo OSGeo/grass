@@ -7,22 +7,18 @@ locations in images.
 
 This script needs gnuplot to be installed.
 
-
 <H2>EXAMPLE</H2>
 
-To analyze a time series of maps, run:
+North Carolina sample dataset:
 
 <div class="code"><pre>
-d.rast map_1
-LIST=`g.mlist type=rast mapset=timeseries pat="map_*" | sort -t '_' -k 2 -n | tr '\n' ','| sed 's+,$++g'`
-i.spectral -i rast=$LIST
+g.region rast=lsat7_2002_10 -p
+LIST=`g.mlist type=rast pat="lsat7_2002_[1-5,7]0" fs=","`
+i.spectral raster=$LIST east_north=637502.25,221744.25
 </pre></div>
 
-This will search all maps in the mapset 'timeseries' which match have
-the 'map_' prefix and order by a number following this prefix (day of the
-year etc). The user is then asked to click into a map position and the
-resulting pixel values of all matching maps are drawn in the gnuplot
-output.
+This will search all LANDSAT map for 2002 but select only the B, G, R, 
+NIR, and MIR channels.
 
 <h2>SEE ALSO</h2>
 
