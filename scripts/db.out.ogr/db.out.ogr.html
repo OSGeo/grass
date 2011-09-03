@@ -9,22 +9,23 @@ PostgreSQL, SQLite, MySQL, ODBC, etc.).
 Export of GRASS table to a DBF table (default format):
 <p>
 <div class="code"><pre>
-db.out.ogr points_tab dsn=/tmp/points_tab.dbf
+db.out.ogr precip_30ynormals dsn=/tmp/precip_30ynormals.dbf
 </pre></div>
 
 <p>
 Export of GRASS table to a CSV table file:<br>
 <p>
 <div class="code"><pre>
-db.out.ogr points_tab dsn=points.csv format=CSV
+db.out.ogr precip_30ynormals dsn=precip_30ynormals.csv format=CSV
 </pre></div>
 
 <p>
 Export of GRASS table into a PostgreSQL table:
 <p>
 <div class="code"><pre>
-db.out.ogr points_tab dsn="PG:host=localhost dbname=postgres user=neteler" format=PostgreSQL
-echo "SELECT * FROM points_tab" | psql postgres
+db.out.ogr precip_30ynormals dsn="PG:host=localhost dbname=meteo user=neteler" \
+           format=PostgreSQL
+echo "SELECT * FROM precip_30ynormals" | psql meteo
 </pre></div>
 
 

@@ -1,58 +1,61 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>i.landsat.rgb</EM> auto-balances and enhances the color channels of a
+<em>i.landsat.rgb</em> auto-balances and enhances the color channels of a
 LANDSAT RGB image to provide a more natural color mixture. Only the color
 table of each image band is modified, the base data remains untouched.
-<P>
+<p>
 The module works by calculating a histogram for each color channel and 
 removing an adjustable amount of outliers from either end before recalibrating
 the color scale with <em>r.colors</em>.
-<P>
+<p>
 It will work with any 8-bit RGB imagery set and the script is easily modified
 to work with other datasets of greater band-depth.
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
-Depending on the image, it may or may not be advantageous to use the <B>-p</B>
+Depending on the image, it may or may not be advantageous to use the <b>-p</b>
 flag to preserve the relative color scaling. You will have to experiment
 with the different options to find a setting that works best for your
 particular imagery.
-<P>
+<p>
 The <b>strength</b> option should generally be set in the 90-99 range. The
 lower the number, the more saturated the image becomes. It represents the
 percentage cut-off for the top end of the color histogram curve. The lower
 end is fixed at 2% of the area under the curve.
-<P>
+<p>
 For quicker execution of this module on large images you can achieve largely
 similar results by switching to a coarser resolution before the running of
-the module (using <EM>g.region</EM>) and then back to the original resolution
+the module (using <em>g.region</em>) and then back to the original resolution
 afterwards.
 
 
 <H2>EXAMPLE</H2>
 
+North Carolina sample dataset:
 <div class="code"><pre>
-i.landsat.rgb red=tm.3 green=tm.2 blue=tm.1
+g.region rast=lsat7_2002_10
+i.landsat.rgb blue=lsat7_2002_10 green=lsat7_2002_20 red=lsat7_2002_30
 </pre></div>
 
-<H2>TODO</H2>
+<h2>TODO</h2>
 
 The <b>strength</b> option requires further refinement.
 
+<h2>SEE ALSO</h2>
 
-<H2>SEE ALSO</H2>
+<em>
+<a href="d.rgb.html">d.rgb</a>,
+<a href="g.region.html">g.region</a>,
+<a href="i.oif.html">i.oif</a>,
+<a href="r.colors.html">r.colors</a>,
+<a href="r.composite.html">r.composite</a>,
+<a href="r.univar.html">r.univar</a>
+</em>
 
-<EM><A HREF="d.rgb.html">d.rgb</A></EM>,
-<EM><A HREF="g.region.html">g.region</A></EM>,
-<EM><A HREF="i.oif.html">i.oif</A></EM>,
-<EM><A HREF="r.colors.html">r.colors</A></EM>,
-<EM><A HREF="r.composite.html">r.composite</A></EM>,
-<EM><A HREF="r.univar.html">r.univar</A></EM>,
 
+<h2>AUTHORS</h2>
 
-<H2>AUTHORS</H2>
-
-Markus Neteler<BR>
+Markus Neteler<br>
 M. Hamish Bowman, Dept. Marine Science, Otago University, New Zealand
 
 <p><i>Last changed: $Date$</i>

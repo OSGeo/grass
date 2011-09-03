@@ -1,41 +1,52 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>d.rast.leg</EM>
-is a GRASS script which clears the entire screen, divides it 
-into a main (left) and a minor (right) frames, and then displays a raster 
+<em>d.rast.leg</em> shows a raster map along with its legend.
+It first clears the entire screen, then divides it 
+into a main (left) and a minor (right) frames, and displays a raster 
 map in the main frame and the map legend in the minor frame. The main
-frame remains active when the program finishs.
+frame remains active when the program finishes.
 
+<h2>NOTES</h2>
 
-<H2>NOTES</H2>
-
-The legend may be flipped with the <B>-f</B> flag.
-<P>
-If the <B>num_of_lines</B> parameter is not given then the legend frame will 
+The legend may be flipped with the <b>-f</b> flag.
+<p>
+If the <b>num_of_lines</b> parameter is not given then the legend frame will 
 display as many lines as number of categories in the map, otherwise, it 
-will display the first <B>num_of_lines</B> minus 1 categories with the
+will display the first <b>num_of_lines</b> minus 1 categories with the
 rest being truncated.
-<P>
-The user may adjust the <B>num_of_lines</B> parameter or
+<p>
+The user may adjust the <b>num_of_lines</b> parameter or
 the size of graphics window to get an appropriate result.
 
-<P>
+<p>
 The user may specify a second raster map with the <b>rast</b> parameter from
 which the legend is generated. This is useful to visualize (time) series of
 raster maps with a common static legend instead of the default dynamic legend.
-<P>
+<p>
 To remove all frames when clearing the display, use
 "<em><tt>d.erase -f</tt></em>".
 
-<H2>SEE ALSO</H2>
+<h2>EXAMPLE</h2>
 
-<EM><A HREF="d.legend.html">d.legend</A></EM><BR>
-<EM><A HREF="d.erase.html">d.erase</A></EM><BR>
-<EM><A HREF="d.rast.html">d.rast</A></EM>
+In this example, the polar diagram of the 'aspect' angle map in the
+North Carolina sample dataset location is generated:
 
-<H2>AUTHORS</H2>
+<div class="code"><pre>
+g.region rast=landclass96 -p
+d.rast.leg landclass96
+</pre></div>
 
-Jianping Xu, Scott Madry, Rutgers University<BR>
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="d.legend.html">d.legend</a>,
+<a href="d.erase.html">d.erase</a>,
+<a href="d.rast.html">d.rast</a>
+</em>
+
+<h2>AUTHORS</h2>
+
+Jianping Xu, Scott Madry, Rutgers University<br>
 Markus Neteler
 
 <p><i>Last changed: $Date$</i>

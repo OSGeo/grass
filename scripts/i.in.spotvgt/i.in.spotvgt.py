@@ -11,7 +11,7 @@
 #               SPOT Vegetation (1km, global) data:
 #               http://free.vgt.vito.be/
 #
-# COPYRIGHT:    (c) 2004-2008 GRASS Development Team
+# COPYRIGHT:    (c) 2004-2011 GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
@@ -106,8 +106,8 @@ def cleanup():
 def main():
     global vrtfile, tmpfile
 
-    infile  = options['file']
-    rast = options['rast']
+    infile  = options['input']
+    rast = options['output']
     also = flags['a']
 
     #### check for gdalinfo (just to check if installation is complete)
