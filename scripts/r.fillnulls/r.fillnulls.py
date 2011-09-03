@@ -60,13 +60,13 @@ def cleanup():
     #delete internal mask and any TMP files:
     if tmp1:
 	rasts = [tmp1 + ext for ext in ['', '.buf', '_filled']]
-	grass.run_command('g.remove', flags = 'f', rast = rasts)
+	grass.run_command('g.remove', quiet = True, flags = 'f', rast = rasts)
     if vecttmp:
-	grass.run_command('g.remove', flags = 'f', vect = vecttmp)
-    grass.run_command('g.remove', rast = 'MASK')
+	grass.run_command('g.remove', quiet = True, flags = 'f', vect = vecttmp)
+    grass.run_command('g.remove', quiet = True, rast = 'MASK')
     if usermask and mapset:
 	if grass.find_file(usermask, mapset = mapset)['file']:
-	    grass.run_command('g.rename', rast = (usermask, 'MASK'))
+	    grass.run_command('g.rename', quiet = True, rast = (usermask, 'MASK'))
 
 def main():
     global vecttmp, tmp1, usermask, mapset
@@ -87,7 +87,7 @@ def main():
     usermask = "usermask_mask." + unique
     if grass.find_file('MASK', mapset = mapset)['file']:
 	grass.message(_("A user raster mask (MASK) is present. Saving it..."))
-	grass.run_command('g.rename', rast = ('MASK',usermask))
+	grass.run_command('g.rename', quiet = True, rast = ('MASK',usermask))
 
     #make a mask of NULL cells
     tmp1 = "r_fillnulls_" + unique
@@ -138,7 +138,7 @@ def main():
     grass.message(_("Note: The following warnings may be ignored."))
 
     # remove internal MASK first -- WHY???? MN 10/2005
-    grass.run_command('g.remove', rast = 'MASK')
+    grass.run_command('g.remove', quiet = True, rast = 'MASK')
 
     if grass.find_file(usermask, mapset = mapset)['file']:
 	grass.message(_("Using user mask while interpolating"))
@@ -162,7 +162,7 @@ def main():
     # restoring user's mask, if present:
     if grass.find_file(usermask, mapset = mapset)['file']:
 	grass.message(_("Restoring user mask (MASK)..."))
-	grass.run_command('g.rename', rast = (usermask, 'MASK'))
+	grass.run_command('g.rename', quiet = True, rast = (usermask, 'MASK'))
 
     # patch orig and fill map
     grass.message(_("Patching fill data into NULL areas..."))
