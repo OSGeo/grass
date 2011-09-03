@@ -1,73 +1,44 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>d.correlate</EM> is a shell (sh(1)) script that
-graphically displays the results of an
-
-<EM><A HREF="r.stats.html">r.stats</A></EM> 
-
-run on two raster map layers.  This shell script is useful
-for highlighting the correlation (or lack of it) among data
+<em>d.correlate</em> displays graphically the results of a
+<em>r.stats</em> analysis run on two raster map layers. This module
+highlights the correlation (or lack of it) among data
 layers (scattergram).
 
-<P>
-
+<p>
 The results are displayed in the active display frame on
-the user's graphics monitor.  <EM>d.correlate</EM> erases
+the user's graphics monitor.  <em>d.correlate</em> erases
 the active frame before displaying results.
 
-<H2>OPTIONS</H2>
-
-<H3>Parameters:</H3>
-
-<DL>
-
-<DT><EM>layer1 layer2 </EM>[<EM>layer3</EM> [<EM>layer4</EM>]]
-
-<DD>The names of from two to four existing raster map layers
-to be included in the correlation.
-</DL>
-
-<H2>NOTES</H2>
-
-This is a shell script that uses 
-<EM><A HREF="r.stats.html">r.stats</A></EM> 
-and the UNIX <EM>awk</EM> command
-to calculate the correlation among data layers,
-and uses 
-<EM><A HREF="d.text.html">d.text</A></EM> and 
-<EM><A HREF="d.graph.html">d.graph</A></EM> to display the results.
-
-<P>
+<h2>NOTES</h2>
 
 If three or four map layers are specified, the correlation
 among each combination of two data layers is displayed.
 
-<H2>FILES</H2>
+<h2>EXAMPLE</h2>
 
-This program is simply a shell script.  Users are
-encouraged to make their own shell script programs using
-similar techniques.  See <KBD>$GISBASE/scripts/d.correlate</KBD>.
+Scatterplot of two LANDSAT TM7 channels (North Carolina sample dataset):
+<p>
+<div class="code"><pre>
+g.region rast=lsat7_2002_30 -p
+d.correlate map=lsat7_2002_30,lsat7_2002_40
+</pre></div>
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-The UNIX <EM>awk</EM> command.
+<em>
+<a HREF="d.text.html">d.text</a>,
+<a HREF="d.graph.html">d.graph</a>,
+<a HREF="r.coin.html">r.coin</a>,
+<a HREF="r.regression.line.html">r.regression.line</a>,
+<a HREF="r.stats.html">r.stats</a>
+</em>
 
-
-<P>
-
-<EM>
-<A HREF="d.text.html">d.text</A>,
-<A HREF="d.graph.html">d.graph</A>,
-<A HREF="r.coin.html">r.coin</A>,
-<A HREF="r.regression.line.html">r.regression.line</A>,
-<A HREF="r.stats.html">r.stats</A>
-</EM>
-
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 Michael Shapiro,
-<A HREF="http://www.cecer.army.mil/">U.S.Army Construction Engineering 
-Research Laboratory</A>
+<a HREF="http://www.cecer.army.mil/">U.S.Army Construction Engineering Research Laboratory</a>
 <p>
-Rewritten to GRASS 6 (from csh to sh) by Markus Neteler
+Rewritten to GRASS 6 (from csh to sh) by Markus Neteler; from sh to Python by Glynn Clements
+
 <p><i>Last changed: $Date$</i>
