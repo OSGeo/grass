@@ -19,29 +19,29 @@ case, i.e., upper-to-lowercase, or lower-to-uppercase. The SQLite protocol consi
 and "name" to be identical column names. In cases like these, the user should rename the original
 column to an intermediary name, then rename the intermediary to the final name.
 
-<p>
-
-
 <h2>EXAMPLES</h2>
 
 Renaming a column:<br>
 <div class="code"><pre>
+g.copy vect=roadsmajor,myroads
 v.info -c myroads
-v.db.renamecolumn myroads column=label,roadtype
+v.db.renamecolumn myroads column=ROAD_NAME,roadname
 v.info -c myroads
 </pre></div>
 
 <h2>SEE ALSO</h2>
 
-<em><a HREF="db.execute.html">db.execute</a></em>,
-<em><a HREF="v.db.addcolumn.html">v.db.addcolumn</a></em>,
-<em><a HREF="v.db.addtable.html">v.db.addtable</a></em>,
-<em><a HREF="v.db.connect.html">v.db.connect</a></em>,
-<em><a HREF="v.db.dropcolumn.html">v.db.dropcolumn</a></em>,
-<em><a HREF="v.db.droptable.html">v.db.droptable</a></em>,
-<em><a HREF="v.db.select.html">v.db.select</a></em>,
-<em><a HREF="v.db.update.html">v.db.update</a></em>
-
+<em>
+<a href="db.execute.html">db.execute</a>,
+<a href="v.db.addcolumn.html">v.db.addcolumn</a>,
+<a href="v.db.addtable.html">v.db.addtable</a>,
+<a href="v.db.connect.html">v.db.connect</a>,
+<a href="v.db.dropcolumn.html">v.db.dropcolumn</a>,
+<a href="v.db.droptable.html">v.db.droptable</a>,
+<a href="v.db.select.html">v.db.select</a>,
+<a href="v.db.update.html">v.db.update</a><br>
+<a href="sql.html">GRASS SQL interface</a>
+</em>
 
 <h2>AUTHOR</h2>
 

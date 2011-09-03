@@ -6,39 +6,43 @@ specified layer.
 
 <h2>NOTES</h2>
 
-v.db.addcolumn is a front-end to <em>db.execute</em> to allow easier usage.
+<em>v.db.addcolumn</em> is a front-end to <em>db.execute</em> to allow easier usage.
 
 The supported types of columns depend on the database backend. However, all
-backends should support VARCHAR, INT, DOUBLE PRECISION and DATE. The default
-dbf backend supports only these types.
-
+backends should support VARCHAR, INT, DOUBLE PRECISION and DATE.
+<p>
 The existing database connection(s) can be verified with <em>v.db.connect</em>.
 
 <h2>EXAMPLES</h2>
 
 Adding a single column:<br>
 <div class="code"><pre>
-v.db.addcolumn sentiero_brenta_points columns="slope double precision"
-v.info -c sentiero_brenta_points
+g.copy vect=roadsmajor,myroads
+v.db.addcolumn myroads columns="slope double precision"
+v.info -c myroads
 </pre></div>
 
 <p>
 Adding two columns:<br>
 <div class="code"><pre>
-v.db.addcolumn sentiero_brenta_points columns="slope double precision,myname varchar(15)"
-v.info -c sentiero_brenta_points
+g.copy vect=roadsmajor,myroads
+v.db.addcolumn myroads columns="slope double precision,myname varchar(15)"
+v.info -c myroads
 </pre></div>
 
 <h2>SEE ALSO</h2>
 
-<em><a href="db.execute.html">db.execute</a></em>,
-<em><a href="v.db.addtable.html">v.db.addtable</a></em>,
-<em><a href="v.db.connect.html">v.db.connect</a></em>,
-<em><a href="v.db.dropcolumn.html">v.db.dropcolumn</a></em>,
-<em><a href="v.db.droptable.html">v.db.droptable</a></em>,
-<em><a href="v.db.select.html">v.db.select</a></em>,
-<em><a href="v.db.update.html">v.db.update</a></em>,<br>
-<em><a href="sql.html">GRASS SQL interface</a></em>
+<em>
+<a href="db.connect.html">db.connect</a>,
+<a href="db.execute.html">db.execute</a>,
+<a href="v.db.addtable.html">v.db.addtable</a>,
+<a href="v.db.connect.html">v.db.connect</a>,
+<a href="v.db.dropcolumn.html">v.db.dropcolumn</a>,
+<a href="v.db.droptable.html">v.db.droptable</a>,
+<a href="v.db.select.html">v.db.select</a>,
+<a href="v.db.update.html">v.db.update</a><br>
+<a href="sql.html">GRASS SQL interface</a>
+</em>
 
 
 <h2>AUTHOR</h2>

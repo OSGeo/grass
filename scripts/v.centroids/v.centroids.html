@@ -1,37 +1,34 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
 GRASS defines vector areas as composite entities consisting of a set of
 closed boundaries and a centroid. The attribute information associated
-with that area is linked to the centroid. The <EM>v.centroids</EM> module
+with that area is linked to the centroid. The <em>v.centroids</em> module
 adds centroids to closed boundaries in the <b>input</b> file and assigns a
 category number to them. The starting value as well as the increment size
 may be set using optional parameters. 
-<P>
+<p>
 Multiple attributes may be linked to a single vector entity through
 numbered fields referred to as layers. Refer to <em>v.category</em>
-for more details, as <EM>v.centroids</EM> is simply a frontend to that
+for more details, as <em>v.centroids</em> is simply a frontend to that
 module.
-<P>
+<p>
 The boundary itself is often stored without any category reference as it
 can mark the border between two adjacent areas. Thus it would be ambiguous
 as to which feature the attribute would belong. In some cases it may, for
 example, represent a road between two parcels of land. In this case it
 is entirely appropriate for the boundary to contain category information.
-<p>
-
-<EM>(GRASS Shell Script)</EM>
 
 <H2>SEE ALSO</H2>
 
 <em>
-<A HREF="v.category.html">v.category</A>
+<a href="v.category.html">v.category</a>
 </em>
 
-<H2>AUTHORS</H2>
+<h2>AUTHORS</h2>
 
 module: M. Hamish Bowman, Dept. Marine Science, Otago University, New Zealand
-<BR>
+<br>
 help page: Trevor Wiens
 
-<P>
+<p>
 <i>Last changed: $Date$</i>

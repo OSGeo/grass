@@ -7,29 +7,33 @@ relevant to keep the connection between vector map and table.
 
 <h2>NOTES</h2>
 
-v.db.dropcolumn is a front-end to <em>db.execute</em> to allow easier usage.
-
+<em>v.db.dropcolumn</em> is a front-end to <em>db.execute</em> to allow easier usage.
+<p>
 The existing database connection(s) can be verified with <em>v.db.connect</em>.
 
 <h2>EXAMPLES</h2>
 
 Dropping a column:<br>
 <div class="code"><pre>
-v.db.dropcolumn sentiero_brenta_points column=slope
-v.info -c sentiero_brenta_points
+g.copy vect=roadsmajor,myroads
+v.info -c myroads
+v.db.dropcolumn myroads column=SHAPE_LEN
+v.info -c myroads
 </pre></div>
 
 <h2>SEE ALSO</h2>
 
-<em><a HREF="db.droptable.html">db.droptable</a></em>,
-<em><a HREF="db.execute.html">db.execute</a></em>,
-<em><a HREF="v.db.addcolumn.html">v.db.addcolumn</a></em>,
-<em><a HREF="v.db.addtable.html">v.db.addtable</a></em>,
-<em><a HREF="v.db.connect.html">v.db.connect</a></em>,
-<em><a HREF="v.db.droptable.html">v.db.droptable</a></em>,
-<em><a HREF="v.db.select.html">v.db.select</a></em>,
-<em><a HREF="v.db.update.html">v.db.update</a></em>
-
+<em>
+<a href="db.connect.html">db.connect</a>,
+<a href="db.dropcolumn.html">db.dropcolumn</a>,
+<a href="db.execute.html">db.execute</a>,
+<a href="v.db.addcolumn.html">v.db.addcolumn</a>,
+<a href="v.db.connect.html">v.db.connect</a>,
+<a href="v.db.droptable.html">v.db.droptable</a>,
+<a href="v.db.select.html">v.db.select</a>,
+<a href="v.db.update.html">v.db.update</a><br>
+<a href="sql.html">GRASS SQL interface</a>
+</em>
 
 <h2>AUTHOR</h2>
 

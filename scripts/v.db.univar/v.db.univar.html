@@ -1,42 +1,43 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-
-<EM><b>v.db.univar</b></EM>  - Calculates basic univariate statistics for numeric
+<em>v.db.univar</em> calculates basic univariate statistics for numeric
 attributes in a data table. It will calculate minimum, maximum, range, mean,
 standard deviation, variance, coefficient of variation, quartiles, median, and
 90th percentile.
 It uses <em>db.select</em> to create list values for statistical calculations.
 
-<EM>(GRASS Shell Script)</EM>
-
-<H2>NOTES</H2>
+<em>NOTES</em>
 
 If the database and driver are not specified, the default values set in
 <em>db.connect</em> will be used.
 
-<H2>EXAMPLE</H2>
+<h2>EXAMPLE</h2>
 
+In this example, random points are sampled from the elevation map
+(North Carolina sample dataset) and univariate statistics performed:
 <div class="code"><pre>
-g.region rast=elevation.10m -p
-v.random out=samples n=100
-v.db.addtable samples col="heights double precision"
-v.what.rast samples rast=elevation.10m col=heights
+g.region rast=elevation -p
+v.random output=samples n=100
+v.db.addtable samples column="heights double precision"
+v.what.rast samples raster=elevation colum=heights
 v.db.select samples
 
-v.db.univar samples col=heights
+v.db.univar samples colum=heights
 </pre></div>
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM>
-<A HREF="r.univar.html">r.univar</A>,
-<A HREF="v.univar.html">v.univar,</A>,
-<A HREF="db.select.html">db.select</A>,
-<A HREF="d.vect.thematic.html">d.vect.thematic</A></EM>
+<em>
+<a href="r.univar.html">r.univar</a>,
+<a href="v.univar.html">v.univar,</a>,
+<a href="db.select.html">db.select</a>,
+<a href="d.vect.thematic.html">d.vect.thematic</a>
+</em>
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
  Michael Barton, Arizona State University
 <p>
 and authors of <em>r.univar.sh</em>
+
 <p>
 <i>Last changed: $Date$</i>
