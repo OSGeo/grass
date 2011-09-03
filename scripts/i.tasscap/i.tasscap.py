@@ -105,7 +105,7 @@ def calc1(out, bands, k1, k2, k3, k4, k5, k7, k0 = 0):
     grass.run_command('r.colors', map = out, color = 'grey')
 
 def calcN(options, i, n):
-    outpre = options['outprefix']
+    outpre = options['output_prefix']
     grass.message(_("LANDSAT-%d...") % n)
     for j, p in enumerate(parms[i]):
 	out = "%s.%d" % (outpre, j + 1)
