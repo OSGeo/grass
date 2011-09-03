@@ -529,14 +529,13 @@ class DisplayAttributesDialog(wx.Dialog):
                 break
         
 class ModifyTableRecord(wx.Dialog):
-    def __init__(self, parent, id, title, data, keyEditable = (-1, True),
-                style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
+    def __init__(self, parent, title, data, keyEditable = (-1, True),
+                 id = wx.ID_ANY, style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
         """!Dialog for inserting/updating table record
-
-        Notes:
-        'Data' is a list: [(column, value)]
-        'KeyEditable' (id, editable?) indicates if textarea for key column
-        is editable(True) or not.
+        
+        @param data a list: [(column, value)]
+        @param KeyEditable (id, editable?) indicates if textarea for key column
+        is editable(True) or not
         """
         # parent -> VDigitWindow
         wx.Dialog.__init__(self, parent, id, title, style = style)
@@ -546,35 +545,32 @@ class ModifyTableRecord(wx.Dialog):
         self.keyId = keyEditable[0]
         
         self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
-
-        box = wx.StaticBox(parent = self.panel, id = wx.ID_ANY, label = '')
-
+        
+        box = wx.StaticBox(parent = self.panel, id = wx.ID_ANY)
+        box.Hide()
         self.dataPanel = scrolled.ScrolledPanel(parent = self.panel, id = wx.ID_ANY,
-                                            style = wx.TAB_TRAVERSAL)
+                                                style = wx.TAB_TRAVERSAL)
         self.dataPanel.SetupScrolling(scroll_x = False)
         
-        #
         # buttons
-        #
         self.btnCancel = wx.Button(self.panel, wx.ID_CANCEL)
         self.btnSubmit = wx.Button(self.panel, wx.ID_OK, _("&Submit"))
         self.btnSubmit.SetDefault()
-
-        #
+        
         # data area
-        #
         self.widgets = []
-        id = 0
+        cId = 0
         self.usebox = False
         self.cat = None
         for column, value in data:
-            if keyEditable[0] == id:
+            if self.keyId == cId:
                 self.cat = int(value)
-                if keyEditable[1] == False:
+                if not keyEditable[1]:
                     self.usebox = True
-                    box.SetLabel =" %s %d " % (_("Category"), self.cat)
+                    box.SetLabel(" %s %d " % (_("Category"), self.cat))
+                    box.Show()
                     self.boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
-                    id += 1
+                    cId += 1
                     continue
                 else:
                     valueWin = wx.SpinCtrl(parent = self.dataPanel, id = wx.ID_ANY,
@@ -582,38 +578,37 @@ class ModifyTableRecord(wx.Dialog):
             else:
                 valueWin = wx.TextCtrl(parent = self.dataPanel, id = wx.ID_ANY,
                                        value = value, size = (250, -1))
-                                
+            
             label = wx.StaticText(parent = self.dataPanel, id = wx.ID_ANY,
                                   label = column + ":")
-
-            self.widgets.append((label.GetId(),
-                                 valueWin.GetId()))
-
-            id += 1
             
-        self.__Layout()
+            self.widgets.append((label.GetId(), valueWin.GetId()))
+            
+            cId += 1
         
-    def __Layout(self):
+        self._layout()
+        
+    def _layout(self):
         """!Do layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
-
+        
         # data area
         dataSizer = wx.FlexGridSizer (cols = 2, hgap = 3, vgap = 3)
         dataSizer.AddGrowableCol(1)
-
+        
         for labelId, valueId in self.widgets:
             label = self.FindWindowById(labelId)
             value = self.FindWindowById(valueId)
-
+            
             dataSizer.Add(label, proportion = 0,
                           flag = wx.ALIGN_CENTER_VERTICAL)
             dataSizer.Add(value, proportion = 0,
                           flag = wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
-
+        
         self.dataPanel.SetAutoLayout(True)
         self.dataPanel.SetSizer(dataSizer)
         dataSizer.Fit(self.dataPanel)
-
+        
         if self.usebox:
             self.boxSizer.Add(item = self.dataPanel, proportion = 1,
                               flag = wx.EXPAND | wx.ALL, border = 5)
@@ -623,32 +618,31 @@ class ModifyTableRecord(wx.Dialog):
         btnSizer.AddButton(self.btnCancel)
         btnSizer.AddButton(self.btnSubmit)
         btnSizer.Realize()
-
+        
         if not self.usebox:
             sizer.Add(item = self.dataPanel, proportion = 1,
                       flag = wx.EXPAND | wx.ALL, border = 5)
         else:
             sizer.Add(item = self.boxSizer, proportion = 1,
                       flag = wx.EXPAND | wx.ALL, border = 5)
-            
-
+        
         sizer.Add(item = btnSizer, proportion = 0,
-                 flag = wx.EXPAND | wx.ALL, border = 5)
-
+                  flag = wx.EXPAND | wx.ALL, border = 5)
+        
         framewidth = self.GetSize()[0]
         self.SetMinSize((framewidth,150))
         self.SetMaxSize((framewidth,300))
         
-        #sizer.SetSizeHints(self.panel)
+        # sizer.SetSizeHints(self.panel)
         self.panel.SetAutoLayout(True)
         self.panel.SetSizer(sizer)
         sizer.Fit(self.panel)
-
+        
         self.Layout()
         
     def GetValues(self, columns = None):
         """!Return list of values (casted to string).
-
+        
         If columns is given (list), return only values of given columns.
         """
         valueList = []
@@ -657,7 +651,7 @@ class ModifyTableRecord(wx.Dialog):
             if columns is None or column in columns:
                 value = str(self.FindWindowById(valueId).GetValue())
                 valueList.append(value)
-
+        
         # add key value
         if self.usebox:
             valueList.insert(self.keyId, str(self.cat))
