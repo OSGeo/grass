@@ -59,7 +59,7 @@ def main():
     input = options['input']
     format = options['format']
     dsn = options['dsn']
-    table = options['db_table']
+    table = options['table']
 
     if format.lower() == 'dbf':
 	format = "ESRI_Shapefile"
@@ -83,11 +83,11 @@ def main():
 	if dsn.endswith('.dbf'):
 	    outname = grass.basename(dsn, 'dbf')
 	    for ext in exts:
-		try_remove("%s.%s" % (outname, ext))
+		grass.try_remove("%s.%s" % (outname, ext))
 	    outname += '.dbf'
 	else:
 	    for ext in exts:
-		try_remove(os.path.join(dsn, "%s.%s" % (input, ext)))
+		grass.try_remove(os.path.join(dsn, "%s.%s" % (input, ext)))
 	    outname = os.path.join(dsn, input + ".dbf")
     elif format.lower() == 'csv':
 	outname = dsn + '.csv'
