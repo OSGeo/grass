@@ -86,7 +86,7 @@ def main():
     ms2 = options['ms2']
     ms3 = options['ms3']
     pan = options['pan']
-    out = options['outputprefix']
+    out = options['output_prefix']
 
     tmp = str(os.getpid())
 
