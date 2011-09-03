@@ -31,6 +31,7 @@
 #% description: Calculate extended statistics
 #%end
 #%option G_OPT_V_MAP
+#% key: vector
 #%end
 #%option G_OPT_V_FIELD
 #%end
@@ -62,7 +63,8 @@ def has_column(vector, col):
     return 
 
 def cleanup():
-    grass.run_command('g.remove', rast = rastertmp, quiet = True)
+    if rastertmp:
+	grass.run_command('g.remove', rast = rastertmp, quiet = True)
     grass.run_command('g.remove', rast = 'MASK', quiet = True, stderr = nuldev)
     if mask_found:
 	grass.message(_("Restoring previous MASK..."))
@@ -73,6 +75,7 @@ def cleanup():
 def main():
     global tmp, sqltmp, tmpname, nuldev, vector, mask_found, rastertmp
     mask_found = False
+    rastertmp = False
     #### setup temporary files
     tmp = grass.tempfile()
     sqltmp = tmp + ".sql"
