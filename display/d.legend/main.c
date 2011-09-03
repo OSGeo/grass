@@ -58,8 +58,8 @@ int main(int argc, char **argv)
     struct Categories cats;
     struct Colors colors;
     struct GModule *module;
-    struct Option *opt1, *opt2, *opt4, *opt5, *opt6, *opt7, *opt8, *opt9;
-    struct Flag *hidestr, *hidenum, *hidenodata, *smooth, *flipit;
+    struct Option *opt1, *opt2, *opt4, *opt5, *opt6, *opt7, *opt8, *opt9, *opt10, *opt11, *opt12;
+    struct Flag *hidestr, *hidenum, *hidenodata, *smooth, *flipit, *size;
     struct Range range;
     struct FPRange fprange;
     CELL min_ind, max_ind, null_cell;
@@ -153,6 +153,28 @@ int main(int argc, char **argv)
 	_("Use a subset of the map range for the legend (min,max)");
     opt9->guisection = _("Advanced");
 
+    opt10 = G_define_option();
+    opt10->key = "font";
+    opt10->type = TYPE_STRING;
+    opt10->required = NO;
+    opt10->description = _("Font name");
+    opt10->guisection = _("Advanced");
+
+    opt11 = G_define_option();
+    opt11->key = "path";
+    opt11->type = TYPE_STRING;
+    opt11->required = NO;
+    opt11->description = _("Path to font file");
+    opt11->gisprompt = "old_file,file,font";
+    opt11->guisection = _("Advanced");
+
+    opt12 = G_define_option();
+    opt12->key = "charset";
+    opt12->type = TYPE_STRING;
+    opt12->required = NO;
+    opt12->description =
+	_("Text encoding (only applicable to TrueType fonts)");
+    opt12->guisection = _("Advanced");
 
     hidestr = G_define_flag();
     hidestr->key = 'v';
@@ -179,6 +201,9 @@ int main(int argc, char **argv)
     flipit->description = _("Flip legend");
     flipit->guisection = _("Advanced");
 
+    size = G_define_flag();
+    size->key = 's';
+    size->description = _("Font size is height in pixels");
 
     /* Check command line */
     if (G_parser(argc, argv))
@@ -265,6 +290,14 @@ int main(int argc, char **argv)
     
     white = D_translate_color(DEFAULT_FG_COLOR);
     black = D_translate_color(DEFAULT_BG_COLOR);
+    
+    if (opt10->answer)
+	D_font(opt10->answer);
+    else if (opt11->answer)
+	D_font(opt11->answer);
+
+    if (opt12->answer)
+	D_encoding(opt12->answer);
 
     /* Figure out where to put text */
     D_setup_unity(0);
