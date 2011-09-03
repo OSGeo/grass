@@ -1,42 +1,51 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-The <EM>r.out.xyz</EM> module will export a raster map as a list of x,y,z
+The <em>r.out.xyz</em> module exports a raster map as a list of x,y,z
 values into an ASCII text file.
-<P>
-<EM>(GRASS Shell Script)</EM>
+<p>
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 This module will not export x,y coordinates for raster cells containing
 a NULL value. This includes cells masked by a raster MASK.
-<P>
+<p>
 This module, as all GRASS raster modules, will export cells based on the
-current region settings. See the <EM>g.region</EM> module for details.
-<P>
-The <EM>r.out.ascii</EM> module should be used to export an array (of
+current region settings. See the <em>g.region</em> module for details.
+<p>
+The <em>r.out.ascii</em> module should be used to export an array (of
 size row x column) containing z values.
-<P>
-<EM>r.out.xyz</EM> is simply a front-end to "<tt>r.stats -1gn</tt>".
+<p>
+<em>r.out.xyz</em> is simply a front-end to "<tt>r.stats -1gn</tt>".
 
-<H2>TODO</H2>
+<h2>EXAMPLE</h2>
+
+In this example, a LiDAR elevation map in the
+North Carolina sample dataset location is exported to CSV format.
+
+<div class="code"><pre>
+g.region rast=elev_lid792_1m -p
+r.out.xyz input=elev_lid792_1m output=elev_lid792_1m.csv fs=","
+</pre></div>
+
+<h2>TODO</h2>
 
 Implement this script as a <EM>r.out.ascii</EM> option?
 
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM>
-<A HREF="g.region.html">g.region</A>,
-<A HREF="r.mask.html">r.mask</A>
-<A HREF="r.out.ascii.html">r.out.ascii</A>,
-<A HREF="r.stats.html">r.stats</A>
-</EM>
+<em>
+<a href="g.region.html">g.region</a>,
+<a href="r.mask.html">r.mask</a>
+<a href="r.out.ascii.html">r.out.ascii</a>,
+<a href="r.stats.html">r.stats</a>
+</em>
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
-M. Hamish Bowman<BR>
-<i>Dept. Marine Science<BR>
+M. Hamish Bowman<br>
+<i>Dept. Marine Science<br>
 Otago University, New Zealand</i>
 
-<P>
+<p>
 <i>Last changed: $Date$</i>

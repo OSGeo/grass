@@ -60,38 +60,32 @@ http services.
 
 <h2>EXAMPLES</h2>
 
-<dl>
-<dt>
-<span class="code"><tt>
-r.tileset sourceproj=+init=epsg:4326 maxrows=1024 maxcols=2048
-</tt></span>
-
-<dd>Generates tiles in latitude longitude that cover the current
+Generates tiles in latitude longitude that cover the current
 region, each tile will be less than 1024 cells high and 2048 cells
-across. The bounds and sizes of tiles in the output are separated by |
+across. The bounds and sizes of tiles in the output are separated by | (pipe):
+<p></p>
+<div class="code"><pre>
+r.tileset sourceproj=+init=epsg:4326 maxrows=1024 maxcols=2048
+</pre></div>
 
-<dt>
-<span class="code"><tt>
-r.tileset sourceproj=+init=epsg:4326 overlap=2 -w region=ne-rio
-</tt></span>
-
-<dd>Generates tiles in latitude longitude projection that cover the
+Generates tiles in latitude longitude projection that cover the
 named region "ne-rio". The tiles will have 2 cells of overlap. The
-output format will be strings like the bbox requests for WMS servers.
+output format will be strings like the bbox requests for WMS servers:
+<p>
+<div class="code"><pre>
+r.tileset sourceproj=+init=epsg:4326 overlap=2 -w region=ne-rio
+</pre></div>
 
-<dt>
-<span class="code"><tt>
-r.tileset sourceproj=`g.proj -j location=IrishGrid` maxrows=400 maxcols=300 overlap=3 -g
-</tt></span>
-
-<dd>Generates tiles in the projection of the location
+Generates tiles in the projection of the location
 "IrishGrid". Each tile will be less than 300x400 cells in size, with 3
 cells of overlap in the top and right sides of each tile. The output
 is in a format where each line is in shell script style. The
 substitution <code>`g.proj -j location=IrishGrid`</code> will only
-work in a unix style shell.
-</dl>
-
+work in a unix style shell:
+<p>
+<div class="code"><pre>
+r.tileset sourceproj=`g.proj -j location=IrishGrid` maxrows=400 maxcols=300 overlap=3 -g
+</pre></div>
 
 <h2>BUGS</h2>
 

@@ -1,20 +1,17 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-
-<EM><b>r.fillnulls</b></EM>  - Fills NULL (no data areas) in input map and
+<em>r.fillnulls</em> fills NULL pixels (no data areas) in input map and
 stores filled map to a new output map. The fill data are interpolated 
-from the no data area boundaries buffer using <EM>v.surf.rst</EM>
-spline interpolation.<br>
+from the no data area boundaries buffer using <em>v.surf.rst</em>
+spline interpolation.
 
-<EM>(GRASS Shell Script)</EM>
-
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 Each area boundary buffer is set to three times the map resolution to get nominally
 three points around the edge. This way the algorithm interpolates into the hole with
 a trained slope and curvature at the edges, in order to avoid that such a flat plane
 is generated in a hole.
-<P>
+<p>
 During the interpolation following warning may occur:<p>
 
 <tt>
@@ -28,30 +25,54 @@ As the idea of <em>r.fillnulls</em> is to fill such holes, the user may
 ignore the warning. The interpolation will be continued. However, the user
 may pay attention to below notes.
 
-<H2>ATTENTION</H2>
+<h2>NOTES</h2>
 
-The algorithm is based on <EM><A HREF="v.surf.rst.html">v.surf.rst</A></EM>
+The algorithm is based on <em>v.surf.rst</em>
 regularized splines with tension interpolation module which interpolates the
 raster cell values for NULL data areas from the boundary values of the NULL
 data area. An eventual raster MASK is respected during the NULL data area(s)
 filling. The interpolated values are patched into the NULL data area(s) of
 the input map and saved into a new raster map.
 
-<H2>WARNING</H2>
+<h2>WARNING</h2>
 
 Depending on the shape of the NULL data area(s) problems may occur due to an
 insufficient number of input cell values for the interpolation process. Most
 problems will occur if a NULL data area reaches a large amount of the map
 boundary. The user will have to carefully check the result using
-<EM><a href="r.mapcalc.html">r.mapcalc</A></EM> (generating a difference map to the
-input map) and/or <EM><A HREF="d.what.rast.html">d.what.rast</A></EM> to
-query individual cell values.<p>
+<em>r.mapcalc</em> (generating a difference map to the
+input map) and/or <em>d.what.rast</em> to query individual cell values.
 
-<H2>SEE ALSO</H2>
+<h2>EXAMPLE</h2>
 
-<EM><A HREF="r.fill.dir.html">r.fill.dir</A>, 
-<A HREF="v.surf.rst.html">v.surf.rst</A></EM>
+In this example, the SRTM elevation map in the
+North Carolina sample dataset location is filtered for outlier
+elevation values; missing pixels are then re-interpolated to obtain
+a complete elevation map:
 
+<div class="code"><pre>
+g.region rast=elev_srtm_30m -p
+d.mon wx0
+d.histogram elev_srtm_30m
+# remove too low elevations (esp. lakes)
+r.mapcalc "elev_srtm_30m_filt = if(elev_srtm_30m &lt; 50.0, null(), elev_srtm_30m)"
+d.histogram elev_srtm_30m_filt
+d.rast elev_srtm_30m_filt
+r.fillnulls input=elev_srtm_30m_filt output=elev_srtm_30m_complete tension=20
+d.histogram elev_srtm_30m_complete
+d.rast elev_srtm_30m_complete
+</pre></div>
+
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r.fill.dir.html">r.fill.dir</a>, 
+<a href="r.mapcalc.html">r.mapcalc</a>, 
+<a href="v.surf.rst.html">v.surf.rst</a>
+</em>
+
+<h2>REFERENCES</h2>
 <P> Mitas, L., Mitasova, H., 1999, Spatial Interpolation. In: P.Longley,
 M.F. Goodchild, D.J. Maguire, D.W.Rhind (Eds.), Geographical Information
 Systems: Principles, Techniques, Management and Applications, Wiley,
