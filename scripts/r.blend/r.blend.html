@@ -1,18 +1,30 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>r.blend</EM> blends color components of 2 raster maps by a
+<em>r.blend</em> blends color components of 2 raster maps by a
 specificed percentage of the first map.
 
-<H2>SEE ALSO</H2>
+<h2>EXAMPLE</h2>
 
-<EM>
-<A HREF="g.region.html">g.region</A>,
-<A HREF="r.mapcalc.html">r.mapcalc</A>,
-<A HREF="r.colors.html">r.colors</A>,
-<A HREF="r.support.html">r.support</A>,
-</EM>
+Blending the aspect map with the elevation map for a shaded map
+(North Carolina sample dataset):
+<p>
+<div class="code"><pre>
+g.region rast=aspect -p
+r.blend first=aspect second=elevation output_prefix=elev_shade_blend
+d.mon wx0
+d.rgb blue=elev_shade_blend.b green=elev_shade_blend.g red=elev_shade_blend.r
 
-<H2>AUTHOR</H2>
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="d.shadedmap.html">d.shadedmap</a>,
+<a href="g.region.html">g.region</a>,
+<a href="r.mapcalc.html">r.mapcalc</a>,
+<a href="r.colors.html">r.colors</a>,
+<a href="r.support.html">r.support</a>
+</em>
+
+<h2>AUTHOR</h2>
 
 Unknown: probably CERL<br>
 Updated to GRASS 5.7 by Michael Barton, Arizona State University
