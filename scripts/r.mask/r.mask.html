@@ -7,16 +7,16 @@ control raster operations.
 The MASK is only applied when <em>reading</em> an existing GRASS raster map,
 for example when used in a module as an input map.
 
-The MASK will block out certain areas of a raster map from analysis and/or display, by
-"hiding" them from sight of other GRASS modules. Data falling within the bounaries of the MASK 
-can be modified and operated upon by other GRASS raster modules; data
-falling outside the MASK is treated as if it were NULL.
+The MASK will block out certain areas of a raster map from analysis and/or
+display, by "hiding" them from sight of other GRASS modules. Data falling
+within the bounaries of the MASK can be modified and operated upon by other
+GRASS raster modules; data falling outside the MASK is treated as if it were NULL.
 <p>
 Because the MASK is actually only a reclass map named "MASK", it can be
 copied, renamed, removed, and used in analyses, just like other GRASS
 raster map layers.  The user should be aware that a MASK remains in
 place until a user renames it to something other than "MASK", or removes
-it using "<tt>r.mask -r</tt>" or <em><a HREF="g.remove.html">g.remove</a></em>.
+it using "<tt>r.mask -r</tt>" or <em>g.remove</em>.
 
 <p>
 Grid cells in the MASK map containing <tt>0</tt> or <tt>NULL</tt>
@@ -27,8 +27,8 @@ data to pass through unaltered.
 To restore raster operations to normal (i.e., all cells of the current region),
 remove the MASK file by setting the <b>-r</b> remove MASK flag. In this case, a
 dummy value must also be given for the input parameter.
-A MASK also can&nbsp;be removed by using <em><a href="g.remove.html">g.remove</a></em>
-or by renaming it to any other name with <em><a href="g.rename.html">g.rename</a></em>.
+A MASK also can be removed by using <em>g.remove</em>
+or by renaming it to any other name with <em>g.rename</em>.
 
 
 <h2>NOTES</h2>
@@ -47,55 +47,49 @@ be changed with r.quant).
 
 <em>r.mask</em> uses <em>r.reclass</em> to create a reclassification of an
 existing raster map and name it MASK. A reclass map takes up less space, but
-is affected by any changes to the underlying map from which it was created. The user 
-can select category values from the input raster to use in the MASK with the <em>maskcats</em> parameter; 
-if <em>r.mask</em> is run from the command line, the category values listed in <em>maskcats</em> 
-must be quoted (see example below).
+is affected by any changes to the underlying map from which it was created.
+The user can select category values from the input raster to use in the MASK
+with the <em>maskcats</em> parameter; if <em>r.mask</em> is run from the
+command line, the category values listed in <em>maskcats</em> must be quoted
+(see example below).
 <p>
 
 Somewhat similar program functions to those performed by
-<em>r.mask</em> can be done using
-<em><a HREF="r.mapcalc.html">r.mapcalc</a></em>, 
-<em><a HREF="g.region.html">g.region</a></em>,
-and other programs.
-
-<p>
-<em>(GRASS Shell Script)</em>
+<em>r.mask</em> can be done using <em>r.mapcalc</em>, 
+<em>g.region</em>, and other commands.
 
 <h2>EXAMPLES</h2>
-Creating a raster mask:
+
+Creating a raster mask, for showing only elevations of lakes:
 <div class="code"><pre>
-<b>r.mask input=</b>geology
-MASK created. All subsequent raster operations
-will be limited to MASK area
-Removing or renaming raster file named MASK will
-restore raster operations to normal
-[Raster MASK present]
+r.mask input=lakes
+# statistics only for elevation pixels in the lakes:
+r.univar elevation
 </pre></div>
 
 Removing a raster mask with the -r flag:
 <div class="code"><pre>
-<b>r.mask -r input=</b>anything_you_wish
-Removing raster &lt;MASK&gt;
-Raster MASK removed
+r.mask -r
 </pre></div>
 
-Creating a mask from categories 3 through 6 in the spearfish 'geology' raster map:
+Creating a mask from categories 3 through 6 in the North Carolina
+'geology_30m' raster map:
 <div class="code"><pre>
-<b>r.mask input=</b>geology <b>maskcats=</b>"3 thru 6"
-MASK created. All subsequent raster operations
-will be limited to MASK area
-Removing or renaming raster file named MASK will
-restore raster operations to normal
-[Raster MASK present]
+g.region rast=geology_30m -p
+r.category geology_30m
+d.mon wx0
+d.rast geology_30m
+r.mask input=geology_30m maskcats="217 thru 720"
+d.erase
+d.rast geology_30m
 </pre></div>
 
 <h2>SEE ALSO</h2>
 <em>
 <a HREF="g.region.html">g.region</a>,
 <a HREF="r.mapcalc.html">r.mapcalc</a>,
-<a href="r.reclass.html">r.reclass</a>
-<a href="g.remove.html">g.remove</a>
+<a href="r.reclass.html">r.reclass</a>,
+<a href="g.remove.html">g.remove</a>,
 <a href="g.rename.html">g.rename</a>
 </em>
 

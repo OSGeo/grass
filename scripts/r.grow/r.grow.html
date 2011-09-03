@@ -1,6 +1,5 @@
 <h2>DESCRIPTION</h2>
 
-
 <em>r.grow</em> adds cells around the perimeters of all areas
 in a user-specified raster map layer and stores the output in
 a new raster map layer. The user can use it to grow by one or
@@ -16,7 +15,6 @@ the <b>metric</b> parameter): <i>Euclidean</i>, <i>Manhattan</i>, and
 <i>Maximum</i>. 
 
 <p>
-
 The <i>Euclidean distance</i> or <i>Euclidean metric</i> is the "ordinary" distance 
 between two points that one would measure with a ruler, which can be 
 proven by repeated application of the Pythagorean theorem. 
@@ -28,7 +26,6 @@ Cells grown using this metric would form isolines of distance that are
 circular from a given point, with the distance given by the <b>radius</b>.
 
 <p>
-
 The <i>Manhattan metric</i>, or <i>Taxicab geometry</i>, is a form of geometry in 
 which the usual metric of Euclidean geometry is replaced by a new 
 metric in which the distance between two points is the sum of the (absolute) 
@@ -44,7 +41,6 @@ where cells grown using this metric would form isolines of distance that are
 rhombus-shaped from a given point. 
 
 <p>
-
 The <i>Maximum metric</i> is given by the formula
 
 <div class="code"><pre>d(dx,dy) = max(abs(dx),abs(dy))</pre></div>
@@ -52,18 +48,28 @@ The <i>Maximum metric</i> is given by the formula
 where the isolines of distance from a point are squares.
 
 <p>
-
 If there are two cells which are equal candidates to grow into an empty space, 
 <em>r.grow</em> will choose the northernmost candidate; if there are multiple 
 candidates with the same northing, the westernmost is chosen. 
 
+<h2>EXAMPLE</h2>
+
+In this example, the lakes map in the
+North Carolina sample dataset location is buffered:
+
+<div class="code"><pre>
+g.region rast=lakes -p
+r.grow input=lakes output=lakes_grown_50m radius=10
+</pre></div>
+
 <h2>SEE ALSO</h2>
 
-<em><a href="r.buffer.html">r.buffer</a></em><br>
-<em><a href="r.patch.html">r.patch</a></em>
+<em>
+<a href="r.buffer.html">r.buffer</a>,
+<a href="r.patch.html">r.patch</a>
+</em>
 
 <p>
-
 <em><a href="http://en.wikipedia.org/wiki/Euclidean_metric">Wikipedia Entry: Euclidean Metric</a></em><br>
 <em><a href="http://en.wikipedia.org/wiki/Manhattan_metric">Wikipedia Entry: Manhattan Metric</a></em>
 

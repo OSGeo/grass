@@ -3,6 +3,18 @@
 <em>r.reclass.area</em> reclasses a raster map greater or
 less than a user specified area size (in hectares).
 
+<h2>EXAMPLE</h2>
+
+In this example, the ZIP code map in the
+North Carolina sample dataset location is filtered for large areas:
+
+<div class="code"><pre>
+g.region rast=zipcodes -p
+r.report zipcodes unit=h
+# extract only areas &gt; 2000 ha:
+r.reclass.area input=zipcodes output=zipcodes_larger2000ha greater=2000
+</pre></div>
+
 <h2>SEE ALSO</h2>
 
 <em><a HREF="r.reclass.html">r.reclass</a></em><br>
