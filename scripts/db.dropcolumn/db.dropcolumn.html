@@ -8,32 +8,35 @@ a preview of the action to be taken is printed.
 
 <em>db.dropcolumn</em> is a front-end to <em>db.execute</em> to allow easier
 usage with a special workaround for the SQLite driver to support column
-drop.
+drop also for SQLite tables.
 
-<h2>EXAMPLES</h2>
+<h2>EXAMPLE</h2>
 
-Dropping a column (Spearfish):
+Dropping a column (North Carolina sample dataset):
 <p>
 <div class="code"><pre>
 # work on own copy
-g.copy vect=roads,myroads
+g.copy vect=roadsmajor,myroads
 db.describe -c myroads
 
 # only shows what would happen:
-db.dropcolumn myroads column=label
+db.dropcolumn myroads column=SHAPE_LEN
 
 # actually drops the column
-db.dropcolumn -f myroads column=label
+db.dropcolumn -f myroads column=SHAPE_LEN
 
 db.describe -c myroads
 </pre></div>
 
 <h2>SEE ALSO</h2>
 
-<em><a HREF="db.droptable.html">db.droptable</a></em>,
-<em><a HREF="db.execute.html">db.execute</a></em>,
-<em><a HREF="v.db.dropcolumn.html">v.db.dropcolumn</a></em>
-
+<em>
+<a HREF="db.describe.html">db.describe</a>,
+<a HREF="db.droptable.html">db.droptable</a>,
+<a HREF="db.execute.html">db.execute</a>,
+<a HREF="v.db.dropcolumn.html">v.db.dropcolumn</a>,
+<a HREF="sql.html">GRASS SQL interface</a>
+</em>
 
 <h2>AUTHOR</h2>
 
