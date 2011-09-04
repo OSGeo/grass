@@ -1,6 +1,6 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-The <EM>v.dissolve</EM> module is used to merge adjacent areas in a vector
+The <em>v.dissolve</em> module is used to merge adjacent areas in a vector
 map which share the same category value. The resulting merged area(s) retains
 this category value. Alternatively an integer or string column can be defined
 which is used to find adjacent polygons with identical attribute for common
@@ -13,19 +13,19 @@ values of the new key column. See the <em>v.reclass</em> help page for details.
 GRASS defines a vector area as composite entity consisting of a set of
 closed boundaries and a centroid. The centroids must contain a
 category number
-(see <em><a href="v.centroids.html">v.centroids</a></em>), this number
-is linked to area attributes and database links.
-<P>
+(see <em>v.centroids</em>), this number is linked to area attributes and
+database links.
+<p>
 Multiple attributes may be linked to a single vector entity through
-numbered fields referred to as layers. Refer
-to <em><a href="v.category.html">v.category</a></em> for more details.
+numbered fields referred to as layers. Refer to <em>v.category</em> for
+more details.
 
-<P>
+<p>
 Merging of areas can also be accomplished using
-"<em>v.extract <b>-d</b></em>" which provides some additional options.
-In fact, <a href="v.dissolve.html">v.dissolve</a> is simply a
-front-end to that module. The use of the <EM>column</EM> parameter
-adds a call to <em><a href="v.reclass.html">v.reclass</a></em> before.
+<tt>v.extract -d</tt> which provides some additional options.
+In fact, <em>v.dissolve</em> is simply a
+front-end to that module. The use of the <em>column</em> parameter
+adds a call to <em>v.reclass</em> before.
 
 
 <h2>EXAMPLES</h2>
@@ -36,12 +36,12 @@ v.dissolve input=undissolved output=dissolved
 </pre></div>
 
 <h3>Dissolving based on column attributes</h3>
-<div class="code"><pre>
-# check column names:
-v.info -c polbnda_italy
 
-# dissolve based on column attributes:
-v.dissolve input=polbnda_italy output=pol_italy_regions col=vmap_nam
+North Carolina data set:
+
+<div class="code"><pre>
+g.copy vect=soils_general,mysoils_general
+v.dissolve mysoils_general output=mysoils_general_families column=GSL_NAME
 </pre></div>
 
 <h3>Dissolving adjacent SHAPE files to remove tile boundaries</h3>
@@ -52,7 +52,7 @@ boundaries:
 
 <div class="code"><pre>
 # patch tiles after import:
-v.patch -e `g.mlist type=vect pat="clc2000_*" sep=,` out=clc2000_patched
+v.patch -e `g.mlist type=vect pat="clc2000_*" fs=","` out=clc2000_patched
 
 # remove duplicated tile boundaries:
 v.clean clc2000_patched out=clc2000_clean tool=snap,break,rmdupl thresh=.01
@@ -62,21 +62,21 @@ v.dissolve input=clc2000_clean output=clc2000_final col=CODE_00
 </pre></div>
 
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM>
-<A HREF="v.category.html">v.category</A>,
-<A HREF="v.centroids.html">v.centroids</A>,
-<A HREF="v.extract.html">v.extract</A>,
-<A HREF="v.reclass.html">v.reclass</A>
-</EM>
+<em>
+<a href="v.category.html">v.category</a>,
+<a href="v.centroids.html">v.centroids</a>,
+<a href="v.extract.html">v.extract</a>,
+<a href="v.reclass.html">v.reclass</a>
+</em>
 
 
-<H2>AUTHORS</H2>
+<h2>AUTHORS</h2>
 
 module: M. Hamish Bowman, Dept. Marine Science, Otago University, New Zealand<br>
-Markus Neteler for column support<BR>
+Markus Neteler for column support<br>
 help page: Trevor Wiens
 
-<P>
+<p>
 <i>Last changed: $Date$</i>

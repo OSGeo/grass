@@ -7,20 +7,33 @@ be copied from another column in the table.
 <h2>NOTES</h2>
 
 <em>v.db.update</em> is just a front-end to <em>db.execute</em> to allow easier usage.
+<p>
 For complex SQL UPDATE statements, <em>db.execute</em> should be used.
 
 <h2>EXAMPLES</h2>
 
-Spearfish: adding new column, inserting selectively a specified value:
-<div class="code"><pre>
-g.copy vect=fields,myfields
-v.db.addcolumn myfields col="polynum integer"
-v.db.update myfields col=polynum val=42 where="label='V. White#1'"
-v.db.select myfields
-</pre></div>
+In this example, selectively display lakes without (blue) and with NULL (red)
+are shown to find out which type is undefined. In the original map there are
+lakes missing FTYPE attribute which are wetlands along streams. These NULL
+attributes are replaced with the landuse type WETLAND:
 
+<div class="code"><pre>
+g.copy vect=lakes,mylakes
+v.db.select mylakes
+v.db.select mylakes where="FTYPE IS NULL"
+
+# display the lakes, show undefined FTYPE lakes in red
+g.region vect=mylakes
+d.mon wx0
+d.vect mylakes where="FTYPE NOT NULL" type=area col=blue
+d.vect mylakes where="FTYPE IS NULL" type=area col=red
+
+# replace NULL with FTYPE WETLAND
+v.db.update mylakes col=FTYPE value=WETLAND \
+            where="FTYPE IS NULL"
+v.db.select mylakes
 <p>
-Spearfish: adding new column, copying values from other table column with
+Spearfish example: adding new column, copying values from other table column with
 on the fly calculation:
 <div class="code"><pre>
 g.copy vect=fields,myfields
@@ -32,20 +45,23 @@ v.db.select myfields
 <p>
 Type cast (type conversion) of strings to double precision (unsupported by DBF driver):
 <div class="code"><pre>
+g.copy vect=geodetic_pts,mygeodetic_pts
 v.db.update mygeodetic_pts col=zval qcol="CAST(z_value AS double precision)" \
             where="z_value &lt;&gt; 'N/A'"
 </pre></div>
 
 <h2>SEE ALSO</h2>
 
-<em><a HREF="db.execute.html">db.execute</a></em>,
-<em><a HREF="v.db.addcolumn.html">v.db.addcolumn</a></em>,
-<em><a HREF="v.db.addtable.html">v.db.addtable</a></em>,
-<em><a HREF="v.db.connect.html">v.db.connect</a></em>,
-<em><a HREF="v.db.droptable.html">v.db.droptable</a></em>,
-<em><a HREF="v.db.join.html">v.db.join</a></em>,
-<em><a HREF="v.db.select.html">v.db.select</a></em><br>
-<em><a href="sql.html">GRASS SQL interface</a></em>
+<em>
+<a HREF="db.execute.html">db.execute</a>,
+<a HREF="v.db.addcolumn.html">v.db.addcolumn</a>,
+<a HREF="v.db.addtable.html">v.db.addtable</a>,
+<a HREF="v.db.connect.html">v.db.connect</a>,
+<a HREF="v.db.droptable.html">v.db.droptable</a>,
+<a HREF="v.db.join.html">v.db.join</a>,
+<a HREF="v.db.select.html">v.db.select</a><br>
+<a href="sql.html">GRASS SQL interface</a>
+</em>
 
 
 <h2>AUTHOR</h2>

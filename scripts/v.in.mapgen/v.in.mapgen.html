@@ -1,37 +1,34 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>v.in.mapgen</EM> allows the user to import Mapgen or Matlab vector maps 
+<em>v.in.mapgen</em> allows the user to import Mapgen or Matlab vector maps 
 into GRASS.
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 This module only imports data into vector lines.
-<P>
-You can get coastline data in Mapgen or Matlab format from NOAA's Coastline 
+<p>
+The user can get coastline data in Mapgen or Matlab format from NOAA's Coastline 
 Extractor at <a href="http://www.ngdc.noaa.gov/mgg/shorelines/shorelines.html">http://www.ngdc.noaa.gov/mgg/shorelines/shorelines.html</a>.
-<P>
+<p>
 Matlab vector line maps are simply a series of "x y" data points. Lines
 are separated by a row containing <tt>NaN NaN</tt>.
 
 Output from Matlab with this command:
-<BR>
+<br>
 <div class="code"><pre>
     save filename.txt arrayname -ASCII
 </pre></div>
-<P>
-You can import 3D lines from Matlab by exporting a 3 column array and
+<p>
+The user can import 3D lines from Matlab by exporting a 3 column array and
 using the <B>-z</B> flag.
 
 
-<H2>SEE ALSO</H2>
-<EM><A HREF="v.in.ascii.html">v.in.ascii</A></EM><BR>
-<BR>
+<h2>SEE ALSO</h2>
+<em><a href="v.in.ascii.html">v.in.ascii</a></em>
 
-<P>
-<H2>AUTHORS</H2>
+<h2>AUTHORS</h2>
 Based on <em>v.in.mapgen.sh</em> for GRASS 5.0 by Andreas Lange
-<BR>Rewritten for GRASS 6 by Hamish Bowman
-<BR>
+<br>Rewritten for GRASS 6 by Hamish Bowman
 
 <p>
 <i>Last changed: $Date$</i>
