@@ -121,7 +121,7 @@ class Layer(object):
         layertypes = ('raster', 'rgb', 'his', 'shaded', 'rastarrow', 'rastnum',
                       'vector','thememap','themechart',
                       'grid', 'geodesic', 'rhumb', 'labels',
-                      'command', 'rastleg',
+                      'command', 'rastleg','maplegend',
                       'overlay')
         
         if self.type not in layertypes:
@@ -244,7 +244,7 @@ class Layer(object):
         """!Set layer type"""
         if type not in ('raster', '3d-raster', 'vector',
                         'overlay', 'command',
-                        'shaded', 'rgb', 'his', 'rastarrow', 'rastnum',
+                        'shaded', 'rgb', 'his', 'rastarrow', 'rastnum','maplegend',
                         'thememap', 'themechart', 'grid', 'labels',
                         'geodesic','rhumb'):
             raise gcmd.GException(_("Unsupported map layer type '%s'") % type)
