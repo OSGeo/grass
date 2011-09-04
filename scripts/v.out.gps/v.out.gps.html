@@ -1,18 +1,18 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>v.out.gps</EM> allows the user to export waypoint, route, and track
+<em>v.out.gps</em> allows the user to export waypoint, route, and track
 data from a vector map into a locally connected GPS receiver or as a file in
 many common GPS data formats. Translation is done via the 
-<EM><A HREF="http://www.gpsbabel.org">GpsBabel</a></EM> program. 
+<em><a href="http://www.gpsbabel.org">GPSBabel</a></em> program. 
 
-<P>
+<p>
 Do not use as a primary means of navigation.
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License (GPL) for more details.
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 <em>v.out.gps</em> automatically reprojects data from the 
 projection settings of the current location to Lat/Lon WGS84.
@@ -26,7 +26,7 @@ attribute will be placed within the <tt>&lt;extensions&gt;</tt> metadata
 section of the record. Not all fields names are used with all feature
 types (e.g. DOP fix error is not meaningful for route lines). You can
 use the <em>v.db.renamecolumn</em> module to rename columns.
-<P>
+<p>
 These are the standard GPX data fields known to OGR:
 <div class="code"><pre>
 ageofdgpsdata
@@ -59,7 +59,7 @@ vdop:	 Vertical dillution of precision (estimated fix error)
 </pre></div>
 
 
-<H2>EXAMPLES</H2>
+<h2>EXAMPLES</h2>
 
 <h3>GPX Export</h3>
 

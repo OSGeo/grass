@@ -5,7 +5,7 @@
 # MODULE:	v.out.gps
 #
 # PURPOSE:	Exports a GRASS vector map to a GPS receiver
-#		or data file using GpsBabel
+#		or data file using GPSBabel
 #
 # COPYRIGHT:	(c) 2008-2009 Hamish Bowman, and the GRASS Development Team
 #		This program is free software under the GNU General Public
@@ -18,10 +18,10 @@
 #############################################################################
 #
 # REQUIREMENTS:
-#      -  GpsBabel from 	http://gpsbabel.sourceforge.net
+#      -  GPSBabel from 	http://gpsbabel.sourceforge.net
 #      -  cs2cs from PROJ.4 (for m.proj)	http://proj.osgeo.org
 #
-#      - report supported GpsBabel formats:
+#      - report supported GPSBabel formats:
 #	 gpsbabel -^2 | tr '\t' ';' | sort -t';' -k3
 #
 #############################################################################
@@ -33,7 +33,7 @@
 #############################################################################
 
 #%Module
-#%  description: Exports a vector map to a GPS receiver or file format supported by GpsBabel.
+#%  description: Exports a vector map to a GPS receiver or file format supported by GPSBabel.
 #%  keywords: vector
 #%  keywords: export
 #%  keywords: GPS
@@ -60,6 +60,7 @@
 #%end
 #%option G_OPT_V_TYPE
 #% options: point,centroid,line,boundary
+#% answer: point,centroid,line,boundary
 #%end
 #%option G_OPT_F_OUTPUT
 #% description: Name for output file or GPS device
@@ -67,7 +68,7 @@
 #%option
 #% key: format
 #% type: string
-#% description: GpsBabel supported output format
+#% description: GPSBabel supported output format
 #% answer: gpx
 #%end
 #%option G_OPT_V_FIELD
@@ -295,7 +296,7 @@ def main():
     else:
 	gtype = ''
 
-    grass.verbose("Running GpsBabel ...")
+    grass.verbose("Running GPSBabel ...")
 
     ret = grass.call(['gpsbabel',
 		      gtype,
@@ -305,7 +306,7 @@ def main():
 		      '-F', output])
 
     if ret != 0:
-	grass.fatal(_("Error running GpsBabel"))
+	grass.fatal(_("Error running GPSBabel"))
 
     grass.verbose("Done.")
 
