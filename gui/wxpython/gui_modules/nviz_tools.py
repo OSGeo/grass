@@ -892,17 +892,12 @@ class NvizToolWindow(FN.FlatNotebook):
         boxSizer.Add(item = horSizer, flag = wx.EXPAND)
         
         gridSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
-        # XYZ position
+        
+        # cutting plane horizontal position
         self.win['cplane']['position'] = {}
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                         label = _("X:")),
+                                         label = _("Horizontal:")),
                       pos = (0, 0), flag = wx.ALIGN_CENTER_VERTICAL)
-        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                         label = _("Y:")),
-                      pos = (1, 0), flag = wx.ALIGN_CENTER_VERTICAL)
-        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                         label = _("Height:")),
-                      pos = (2, 0), flag = wx.ALIGN_CENTER_VERTICAL)
         self._createControl(panel, data = self.win['cplane']['position'], name = 'x', size = 250,
                             range = (-1000, 1000), sliderHor = True, floatSlider = True,
                             bind = (self.OnCPlaneChanging, self.OnCPlaneChangeDone, self.OnCPlaneChangeText))
@@ -912,8 +907,12 @@ class NvizToolWindow(FN.FlatNotebook):
                       pos = (0, 1),  flag = wx.EXPAND|wx.ALIGN_RIGHT)
         gridSizer.Add(item = self.FindWindowById(self.win['cplane']['position']['x']['text']),
                       pos = (0, 2),
-                      flag = wx.ALIGN_CENTER)
-                    
+                      flag = wx.ALIGN_CENTER)   
+        
+        # cutting plane rotation point
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("Rotation pt.:")),
+                      pos = (1, 0), flag = wx.ALIGN_CENTER_VERTICAL)
         self._createControl(panel, data = self.win['cplane']['position'], name = 'y', size = 250,
                             range = (-1000, 1000), sliderHor = True, floatSlider = True,
                             bind = (self.OnCPlaneChanging, self.OnCPlaneChangeDone, self.OnCPlaneChangeText))
@@ -923,58 +922,65 @@ class NvizToolWindow(FN.FlatNotebook):
                       pos = (1, 1),  flag = wx.EXPAND|wx.ALIGN_RIGHT)
         gridSizer.Add(item = self.FindWindowById(self.win['cplane']['position']['y']['text']),
                       pos = (1, 2),
-                      flag = wx.ALIGN_CENTER)
-        posButton = wx.ToggleButton(parent = panel, id = wx.ID_ANY, label = _("On display"))
-        posButton.Bind(wx.EVT_TOGGLEBUTTON, self.OnCPlanePos)
-        posButton.SetName('cplaneHere')
-        self.win['cplane']['cplaneHere'] = posButton.GetId()
+                      flag = wx.ALIGN_CENTER)                         
         
-        gridSizer.Add(item = posButton, pos = (0, 3), span = (2, 1), flag = wx.EXPAND)
-                 
-        self._createControl(panel, data = self.win['cplane']['position'], name = 'z', size = 250,
-                            range = (-1000, 1000), sliderHor = True,
-                            bind = (self.OnCPlaneChanging, self.OnCPlaneChangeDone, self.OnCPlaneChangeText))
-        self.FindWindowById(self.win['cplane']['position']['z']['slider']).SetValue(0)
-        self.FindWindowById(self.win['cplane']['position']['z']['text']).SetValue(0)
-        gridSizer.Add(item = self.FindWindowById(self.win['cplane']['position']['z']['slider']),
-                      pos = (2, 1),  flag = wx.EXPAND|wx.ALIGN_RIGHT)
-        gridSizer.Add(item = self.FindWindowById(self.win['cplane']['position']['z']['text']),
-                      pos = (2, 2),
-                      flag = wx.ALIGN_CENTER)
-        
-        # rotation
+        # cutting plane rotation
         self.win['cplane']['rotation'] = {}
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
                                          label = _("Rotation:")),
-                      pos = (3, 0), flag = wx.ALIGN_CENTER_VERTICAL)
-        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                         label = _("Tilt:")),
-                      pos = (4, 0), flag = wx.ALIGN_CENTER_VERTICAL)
+                      pos = (2, 0), flag = wx.ALIGN_CENTER_VERTICAL)
         self._createControl(panel, data = self.win['cplane']['rotation'], name = 'rot', size = 250,
                             range = (0, 360), sliderHor = True,
                             bind = (self.OnCPlaneChanging, self.OnCPlaneChangeDone, self.OnCPlaneChangeText))
         self.FindWindowById(self.win['cplane']['rotation']['rot']['slider']).SetValue(0)
         self.FindWindowById(self.win['cplane']['rotation']['rot']['text']).SetValue(0)
         gridSizer.Add(item = self.FindWindowById(self.win['cplane']['rotation']['rot']['slider']),
-                      pos = (3, 1),  flag = wx.EXPAND|wx.ALIGN_RIGHT)
+                      pos = (2, 1),  flag = wx.EXPAND|wx.ALIGN_RIGHT)
         gridSizer.Add(item = self.FindWindowById(self.win['cplane']['rotation']['rot']['text']),
-                      pos = (3, 2),
+                      pos = (2, 2),
                       flag = wx.ALIGN_CENTER)
-                    
+
+        # cutting plane tilt        
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("Tilt:")),
+                      pos = (3, 0), flag = wx.ALIGN_CENTER_VERTICAL)                    
         self._createControl(panel, data = self.win['cplane']['rotation'], name = 'tilt', size = 250,
                             range = (0, 360), sliderHor = True,
                             bind = (self.OnCPlaneChanging, self.OnCPlaneChangeDone, self.OnCPlaneChangeText))
         self.FindWindowById(self.win['cplane']['rotation']['tilt']['slider']).SetValue(0)
         self.FindWindowById(self.win['cplane']['rotation']['tilt']['text']).SetValue(0)
         gridSizer.Add(item = self.FindWindowById(self.win['cplane']['rotation']['tilt']['slider']),
-                      pos = (4, 1),  flag = wx.EXPAND|wx.ALIGN_RIGHT)
+                      pos = (3, 1),  flag = wx.EXPAND|wx.ALIGN_RIGHT)
         gridSizer.Add(item = self.FindWindowById(self.win['cplane']['rotation']['tilt']['text']),
-                      pos = (4, 2),
+                      pos = (3, 2),
                       flag = wx.ALIGN_CENTER)
         boxSizer.Add(gridSizer, proportion = 0, flag = wx.EXPAND|wx.ALL, border = 5)
                     
         horSizer = wx.BoxSizer(wx.HORIZONTAL)
         horSizer.Add(item = wx.Size(-1, -1), proportion = 1, flag = wx.ALL, border = 5)            
+        
+        # cutting pland height
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("Height:")),
+                      pos = (4, 0), flag = wx.ALIGN_CENTER_VERTICAL)        
+        self._createControl(panel, data = self.win['cplane']['position'], name = 'z', size = 250,
+                            range = (-1000, 1000), sliderHor = True,
+                            bind = (self.OnCPlaneChanging, self.OnCPlaneChangeDone, self.OnCPlaneChangeText))
+        self.FindWindowById(self.win['cplane']['position']['z']['slider']).SetValue(0)
+        self.FindWindowById(self.win['cplane']['position']['z']['text']).SetValue(0)
+        gridSizer.Add(item = self.FindWindowById(self.win['cplane']['position']['z']['slider']),
+                      pos = (4, 1),  flag = wx.EXPAND|wx.ALIGN_RIGHT)
+        gridSizer.Add(item = self.FindWindowById(self.win['cplane']['position']['z']['text']),
+                      pos = (4, 2),
+                      flag = wx.ALIGN_CENTER)
+           
+        # 'on display' button
+        posButton = wx.ToggleButton(parent = panel, id = wx.ID_ANY, label = _("On display"))
+        posButton.Bind(wx.EVT_TOGGLEBUTTON, self.OnCPlanePos)
+        posButton.SetName('cplaneHere')
+        self.win['cplane']['cplaneHere'] = posButton.GetId()
+        
+        gridSizer.Add(item = posButton, pos = (0, 3), span = (2, 1), flag = wx.EXPAND)
 
         # reset
         reset = wx.Button(parent = panel, id = wx.ID_ANY, label = _("Reset"))
