@@ -1,17 +1,13 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>v.in.garmin</EM> allows the user to import waypoint, route, and track
+<em>v.in.garmin</em> allows the user to import waypoint, route, and track
  data from a locally connected Garmin GPS receiver via the 
-<EM><A HREF="http://gpstrans.sourceforge.net">gpstrans</a></EM>
+<em><a href="http://gpstrans.sourceforge.net">gpstrans</a></em>
  program by Carsten Tschach or the
-<EM><A HREF="http://www.snafu.org">gardump</a></EM>
+<em><a href="http://www.snafu.org">gardump</a></em>
  program by Marc Hyman. 
 
-<P>
-Use at your own risk. This software comes with absolutely no warranty.
-
-<P>
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 If the GPS is set up to output WGS84 Lat/Lon, <em>v.in.garmin</em> will
 attempt to automatically transform the coordinates to the current projection.
 In all other cases, no checks are performed for datum, projection and format of data.
@@ -19,13 +15,13 @@ You must check for yourself that your receiver, gpstrans and GRASS
 use the same map datum and projection.
 The automatic transform may be skipped by using the <b>-k</b> flag.
 
-<P>
-Route and Track data may be uploaded as points by using the <B>-p</B> flag, 
-otherwise they will be imported as a line. You can run <EM>v.in.garmin</EM>
-multiple times and merge the line and point vectors with the <EM>v.patch</EM>
+<p>
+Route and Track data may be uploaded as points by using the <em>-p</em> flag, 
+otherwise they will be imported as a line. You can run <em>v.in.garmin</em>
+multiple times and merge the line and point vectors with the <em>v.patch</em>
 command if you want, but take care when merging dissimilar attribute tables.
 
-<P>
+<p>
 Future versions of GRASS will use <em>gardump</em> as the default download
 program. It can talk to newer Garmin GPSs, while <em>gpstrans</em> seems to
 be mostly abandoned these days and only works with older GPSs. The current
@@ -34,43 +30,41 @@ you can try the <em>v.in.gpsbabel</em> module for those. The <em>gardump</em>
 code has been tested with an older Garmin GPS 45 and a newer GPS V and is
 expected to work with everything in between.
 
-<P>
-Before running <EM>v.in.garmin</EM>, <em>gpstrans</em> should be set up 
-to output WGS84 latitude-longitude, as follows: <BR>
+<p>
+Before running <em>v.in.garmin</em>, <em>gpstrans</em> should be set up 
+to output WGS84 latitude-longitude, as follows: <br>
 <tt>
-$ <B>gpstrans -s</B><BR>
-datum:  100 (WGS84)<BR>
-format: 2 - lat/lon  ddd.ddddd<BR>
+$ <b>gpstrans -s</b><br>
+datum:  100 (WGS84)<br>
+format: 2 - lat/lon  ddd.ddddd<br>
 </tt>
 
-<P>
-<H2>SEE ALSO</H2>
-<EM>
-<A HREF="db.execute.html">db.execute</A><BR>
-<A HREF="v.in.ascii.html">v.in.ascii</A><BR>
-<A HREF="v.in.gpsbabel.html">v.in.gpsbabel</A><BR>
-<A HREF="v.db.connect.html">v.db.connect</A><BR>
-<A HREF="v.patch.html">v.patch</A>
-</EM>
-<BR>
-<BR>
+<h2>SEE ALSO</h2>
 
-<A HREF="http://gpstrans.sourceforge.net">gpstrans</a> manual<BR>
-<A HREF="http://www.snafu.org">gardump</a> from the "garmin-utils" package<BR>
-cs2cs from <A HREF="http://proj.maptools.org">PROJ.4</a><BR>
+<em>
+<a href="db.execute.html">db.execute</a>,
+<a href="v.in.ascii.html">v.in.ascii</a>,
+<a href="v.in.gpsbabel.html">v.in.gpsbabel</a>,
+<a href="v.db.connect.html">v.db.connect</a>,
+<a href="v.patch.html">v.patch</A>
+</em>
+
+<p>
+<a href="http://gpstrans.sourceforge.net">gpstrans</a> manual<br>
+<a href="http://www.snafu.org">gardump</a> from the "garmin-utils" package<br>
+cs2cs from <a href="http://trac.osgeo.org/proj/">PROJ.4</a><br>
 The <tt>awk</tt> user manual
 
-<P>
-<H2>AUTHORS</H2>
+<p>
+<h2>AUTHORS</h2>
 Based on <em>v.in.garmin.sh</em> for GRASS 5.0 by Andreas Lange
-<BR>&nbsp;&nbsp;&nbsp;&nbsp;
+<br>&nbsp;&nbsp;&nbsp;&nbsp;
 with bug fixes by Glynn Clements and Markus Neteler
-<BR>Rewritten for GRASS 5.3 and 5.7 by Hamish Bowman
-<BR><tt>gardump</tt> and 3D track support by Hamish Bowman
-<P>
-gpstrans was written by Carsten Tschach<BR>
-gardump was written by Marc Hyman<BR>
-<BR>
+<br>Rewritten for GRASS 5.3 and 5.7 by Hamish Bowman
+<br><tt>gardump</tt> and 3D track support by Hamish Bowman
+<p>
+gpstrans was written by Carsten Tschach<br>
+gardump was written by Marc Hyman<br>
 
 <p>
 <i>Last changed: $Date$</i>

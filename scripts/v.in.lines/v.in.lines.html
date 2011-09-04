@@ -1,21 +1,21 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
 Imports a stream of ASCII x,y[,z] coordinates as a line or series of lines.
 
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 Input ASCII coordinates are simply a series of "x&nbsp;y" data points.
 Lines are separated by a row containing "<tt>NaN&nbsp;NaN</tt>".
 <!-- TODO:? Line categories start at 1 and increase sequentially. -->
-<P>
-You can import 3D lines by providing 3 columns of data in the input
-stream and using the <B>-z</B> flag.
-<P>
+<p>
+The user can import 3D lines by providing 3 columns of data in the input
+stream and using the <b>-z</b> flag.
+<p>
 This script is a simple wrapper around the <em>v.in.mapgen</em> module.
 
 
-<H2>EXAMPLE</H2>
+<h2>EXAMPLE</h2>
 
 <div class="code"><pre>
 v.in.lines in=- out=two_lines fs=, &lt;&lt;EOF
@@ -37,19 +37,20 @@ v.category in=two_lines out=lines_with_cats option=add
 </pre></div>
 
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
+
 <em>
-<A HREF="v.in.ascii.html">v.in.ascii</A><br>
-<A HREF="v.in.mapgen.html">v.in.mapgen</A><br>
-<A HREF="v.out.ascii.html">v.out.ascii</A><br>
-<A HREF="d.graph.html">d.graph</a><br>
-<A HREF="r.in.poly.html">r.in.poly</A>
+<a href="v.in.ascii.html">v.in.ascii</a>,
+<a href="v.in.mapgen.html">v.in.mapgen</a>,
+<a href="v.out.ascii.html">v.out.ascii</a>,
+<a href="d.graph.html">d.graph</a>,
+<a href="r.in.poly.html">r.in.poly</a>
 </em>
 
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
-Hamish Bowman<BR>
+Hamish Bowman<br>
 Dunedin, New Zealand
 
 <p>
