@@ -55,8 +55,8 @@ from grass.script import core as grass
 def main():
     grass.exec_command(
 	"v.distance",
-	_from = options['vector'],
-	to = options['qvector'],
+	_from = options['map'],
+	to = options['qmap'],
 	column = options['column'],
 	to_column = options['qcolumn'],
 	upload = "to_attr",
