@@ -209,7 +209,7 @@ def create_tmp():
     try:
 	os.mkdir(tmpdir, 0700)
     except:
-	fatal(_("Unable to create temporary directory! Exiting."))
+	fatal(_("Unable to create temporary directory <%s>! Exiting.") % tmpdir)
 
 def create_gisrc():
     global gisrc, gisrcrc
