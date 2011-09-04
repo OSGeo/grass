@@ -1,37 +1,38 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-
-<EM>r.plane</EM> creates a tilted plane raster map given user-specified
+<em>r.plane</em> creates a tilted plane raster map given user-specified
 parameters for inclination, azimuth, and the geographic location of a
-point on the plane.<BR>
+point on the plane.<br>
 The angle orientations of the <em>azimuth</em> parameter increase counter-clockwise,
 i.e., 0 degree = N, 45 degree = NW, 90 degree = W etc.
-<P>
+<p>
 Increasing values of the <em>dip</em> parameter progressively lower (or dip) the northern
 half of the plane, and incline the southern half, assuming the <em>azimuth</em> parameter 
 is held constant at 0 degrees.
 
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 <tt>g.region -c</tt> provides the easting and northing coordinates for
 the center of the current region.
-<P>
+<p>
 <em>int</em> maps take less disk space than <em>float</em>s, which in turn
 take up less space than <em>double</em>s (but can be less exact).
 
 
-<H2>EXAMPLE</H2>
+<h2>EXAMPLE</h2>
 
-A tilted plane in the Spearfish region:
+A tilted plane in the North Carolina sample dataset region:
 
 <div class="code"><pre>
-r.plane myplane45 dip=45 az=90 east=599490 north=4920855 \
+g.region -d
+g.region -c
+r.plane myplane45 dip=45 az=90 east=527500.0 north=165000.0 \
         elev=1000 type=float
 </pre></div>
 
-
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 Unknown<br>
 Updated to GRASS 5.7 by Michael Barton, Arizona State University
-<p><i>Last changed: $Date$</i></p>
+
+<p><i>Last changed: $Date$</i>
