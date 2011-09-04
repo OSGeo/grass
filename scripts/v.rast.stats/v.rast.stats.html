@@ -1,6 +1,6 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM><b>v.rast.stats</b></EM> - Calculates basic univariate statistics from
+<em>v.rast.stats</em> calculates basic univariate statistics from
 a raster map only for the parts covered by the specified vector map.
 The vector map will be rasterized according to the raster map resolution.
 Then univariate statistics are calculated per vector category (cat) from
@@ -9,14 +9,14 @@ New columns are generated in the attribute table if not already present.
 <p>
 Nine columns are generated (n, min, max, range, mean, stddev, variance, 
 coeff_var, sum) according to the output of <em>r.univar</em>.
-If the <B>-e</B> extended statistics flag is given the 1st quartile,
+If the <b>-e</b> extended statistics flag is given the 1st quartile,
 median, 3rd quartile, and given percentile are also calculated.
 
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 The module may take a long time to run if the raster region contains a large
-number of cells. In this case the <B>--verbose</B> flag may be used to track
+number of cells. In this case the <b>--verbose</b> flag may be used to track
 progress.
 <p>
 The script stops if a (prefixed) upload column is already present in the
@@ -24,7 +24,7 @@ vector map attribute table, unless otherwise instructed with the <B>-c</B>
 continue flag. The column prefix will be separated from the statistic name
 with an underscore. For example with a prefix of "<tt>elev</tt>" the sum
 column will be named <tt>elev_sum</tt>.
-<P>
+<p>
 If a DBF database is being used, note that column names are restricted by the
 DBF specification to 10 characters. Therefore it is advised to be economical
 in the use of the column prefix when using DBF as any additional characters
@@ -32,7 +32,7 @@ will be chopped off.
 <p>
 If a MASK is present, it will be restored after the script finished.
 The script changes temporarily to the resolution of the given raster map.
-<P>
+<p>
 <!-- r.univar limitation -->
 Large amounts of system memory can be used when the <B>-e</B> extended
 statistics flag is used with a very large region setting. If the region
@@ -40,36 +40,36 @@ is too large the module should display memory allocation errors.
 Basic statistics can be calculated using any size input region.
 
 
-<H2>EXAMPLES</H2>
+<h2>EXAMPLES</h2>
 
-Example to upload DEM statistics to vector field patches:
+Example to upload DEM statistics to ZIP codes vector map
+(North Carolina sample dataset):
 
 <div class="code"><pre>
-# work on copy of original map:
-g.copy vect=fields,myfields
-# if needed, zoom to raster map:
-g.region rast=elevation.dem -p
+g.copy vect=zipcodes_wake,myzipcodes_wake
+# set computational region to DEM:
+g.region rast=elevation -p
 # calculate DEM statistics, upload to vector map table:
-v.rast.stats myfields raster=elevation.dem colprefix=dem
+v.rast.stats myzipcodes_wake raster=elevation colprefix=elev
 # verify results:
-v.info -c myfields
-v.db.select myfields
-v.univar myfields column=dem_range type=centroid
+v.info -c myzipcodes_wake
+v.db.select myzipcodes_wake
+v.univar myzipcodes_wake column=elev_range type=centroid
 </pre></div>
 
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM>
-<A HREF="r.univar.html">r.univar</A>, 
-<A HREF="v.univar.html">v.univar</A>,
-<a HREF="v.what.rast.html">v.what.rast</a>,
+<em>
+<a href="r.univar.html">r.univar</a>, 
+<a href="v.univar.html">v.univar</a>,
+<a href="v.what.rast.html">v.what.rast</a>,
 <a href="v.what.vect.html">v.what.vect</a>
-</EM>
+</em>
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
-Markus Neteler, CEA (<a href="http://www.eden-fp6project.net/">EDEN Project</a>)
+Markus Neteler, CEA (for the <a href="http://www.eden-fp6project.net/">EDEN EU/FP6 Project</a>)
 
 <p>
 <i>Last changed: $Date$</i>
