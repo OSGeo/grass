@@ -489,6 +489,7 @@ class GMConsole(wx.SplitterWindow):
                                  'd.legend'       : 'rastleg',
                                  'd.rast.arrow'   : 'rastarrow',
                                  'd.rast.num'     : 'rastnum',
+                                 'd.rast.leg'     : 'maplegend',
                                  'd.vect'         : 'vector',
                                  'd.thematic.area': 'thememap',
                                  'd.vect.chart'   : 'themechart',
