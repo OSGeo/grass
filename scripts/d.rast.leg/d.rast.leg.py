@@ -81,8 +81,6 @@ def make_frame(f, b, t, l, r):
     rl = fl + l * (fr - fl)
     rr = fl + r * (fr - fl)
     s = '%f,%f,%f,%f' % (rt, rb, rl, rr)
-    print "f = " + str(f)
-    print "s = " + str(s)
     os.environ['GRASS_FRAME'] = s
 
 def main():
