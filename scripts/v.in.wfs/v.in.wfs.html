@@ -10,7 +10,7 @@ Import of GRASS user map:
 <div class="code"><pre>
 # run in LatLong location:
 v.in.wfs \
- url="http://mapserver.gdf-hannover.de/cgi-bin/grassuserwfs?REQUEST=GetFeature&amp;SERVICE=WFS&amp;VERSION=1.0.0" out=grass_users
+ url="http://mapserver.gdf-hannover.de/cgi-bin/grassuserwfs?REQUEST=GetFeature&SERVICE=WFS&VERSION=1.0.0" out=grass_users
 
 v.db.select grass_users where="name ~ 'Markus'"
 </pre></div>

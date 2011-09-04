@@ -46,14 +46,14 @@ beforehand to have metric distances support:
 
 <div class="code"><pre>
 # extract populated places from geonames
-v.extract geonames_IT where="featurecla='P'" out=geonames_IT_cities
+v.extract geonames_IT where="featurecla='P'" output=geonames_IT_cities
 # add new column 
 v.db.addcol corine_code111_112_cities column="gnameid double precision"
 # transfer geonameid (3000m maximal distance between points and centroids)
 v.what.vect corine_code111_112_cities qmap=geonames_IT_cities column=gnameid \
             qcolumn=geonameid dmax=3000
 # now gnameid can be used for v.db.join to join further
-# attributes in from Geonames.org
+# attributes in from geonames.org
 </pre></div>
 
 <h2>SEE ALSO</h2>
