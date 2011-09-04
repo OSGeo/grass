@@ -34,6 +34,7 @@
 # Markus Neteler 10/2003: added g.parser
 # Michael Barton 12/2004: remove reference to (null)
 # Glynn Clements 10/2008: converted to Python
+# Michael Barton 9/2011: fix formatting in Python
 ##############################################################################
 
 #%module
@@ -68,7 +69,7 @@ import os
 import grass.script as grass
 
 def make_frame(f, b, t, l, r):
-    (ft, fb, fl, fr) = f
+    (fl, fr, ft, fb) = f
 
     t /= 100.0
     b /= 100.0
@@ -80,6 +81,8 @@ def make_frame(f, b, t, l, r):
     rl = fl + l * (fr - fl)
     rr = fl + r * (fr - fl)
     s = '%f,%f,%f,%f' % (rt, rb, rl, rr)
+    print "f = " + str(f)
+    print "s = " + str(s)
     os.environ['GRASS_FRAME'] = s
 
 def main():
@@ -91,11 +94,11 @@ def main():
 
     #for -n flag of d.legend
     if not grass.find_file(map)['file']:
-	grass.fatal(_("Raster map <%s> not found in mapset search path") % map)
+        grass.fatal(_("Raster map <%s> not found in mapset search path") % map)
 
     # for rast=
     if rast and not grass.find_file(rast)['file']:
-	grass.fatal(_("Raster map <%s> not found in mapset search path") % rast)
+        grass.fatal(_("Raster map <%s> not found in mapset search path") % rast)
 
     s = grass.read_command('d.info', flags = 'f')
     f = tuple([float(x) for x in s.split()[1:5]])
@@ -105,32 +108,32 @@ def main():
 
     #draw title
     # set vertical divide at 65 instead of 80 if real labels in cats/ file??
-    make_frame(f, 90, 100, 80, 100)
-    grass.write_command('d.text', color = 'black', size = 30, stdin = map)
+    make_frame(f, 90, 100,65, 100)
+    grass.write_command('d.text', color = 'black', size = 50, stdin = map)
 
     #draw legend
     if not nlines:
-	nlines = None
+        nlines = None
 
     if rast:
-	lmap = rast
+        lmap = rast
     else:
-	lmap = map
+        lmap = map
 
     kv = grass.raster_info(map = lmap)
     if kv['datatype'] is 'CELL':
-	leg_at = None
+        leg_at = None
     else:
-	leg_at = '7,93,3,18'	
+        leg_at = '10,90,5,15'	
 
     histfiledir = grass.find_file(lmap, 'cell_misc')['file']
     has_hist = os.path.isfile(os.path.join(histfiledir, 'histogram'))
 
     lflags = ''
     if flip:
-	lflags += 'f'
+        lflags += 'f'
     if has_hist or omit:
-	lflags += 'n'
+        lflags += 'n'
 
     make_frame(f, 0, 90, 65, 100)
     grass.run_command('d.legend', flags = lflags, map = lmap, lines = nlines, at = leg_at)
