@@ -48,6 +48,7 @@
 import sys
 import os
 import atexit
+import string
 import grass.script as grass
 
 vrt = """<VRTDataset rasterXSize="$XSIZE" rasterYSize="$YSIZE">
