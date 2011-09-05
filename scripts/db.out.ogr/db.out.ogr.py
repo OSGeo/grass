@@ -74,9 +74,14 @@ def main():
     if os.path.exists(dbffile) and not grass.overwrite():
 	grass.fatal(_("File <%s> already exists") % dbffile)
 
-    if grass.run_command('v.out.ogr', quiet = True, input = input, dsn = dsn,
-			 format = format, type = 'point', olayer = olayer) != 0:
-	sys.exit(1)
+    if olayer:
+	if grass.run_command('v.out.ogr', quiet = True, input = input, dsn = dsn,
+			     format = format, type = 'point', olayer = olayer) != 0:
+	    sys.exit(1)
+    else:
+	if grass.run_command('v.out.ogr', quiet = True, input = input, dsn = dsn,
+			     format = format, type = 'point') != 0:
+	    sys.exit(1)
 
     if format == "ESRI_Shapefile":
 	exts = ['shp', 'shx', 'prj']

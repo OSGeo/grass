@@ -36,11 +36,8 @@ from grass.script import core as grass
 def main():
     # if no output filename, output to stdout
     output = options['output']
-    if output == "" or output == "-":
-	outf = sys.stdout
-    else:
-	outf = file(output)
-    ret = grass.run_command("r.stats", flags = "1gn", input = options['input'], fs = options['fs'], stdout = outf)
+
+    ret = grass.run_command("r.stats", flags = "1gn", input = options['input'], fs = options['fs'], output = output)
     sys.exit(ret)
 
 if __name__ == "__main__":

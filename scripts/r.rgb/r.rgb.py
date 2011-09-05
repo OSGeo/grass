@@ -34,7 +34,7 @@ import grass.script as grass
 
 def main():
     input = options['input']
-    output = options['output']
+    output = options['output_prefix']
 
     if not grass.find_file(input)['file']:
 	grass.fatal(_("Raster map <%s> not found") % input)

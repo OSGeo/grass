@@ -99,9 +99,9 @@ def main():
 	s = grass.read_command('r.univar', flags = 'eg', map = map, percentile = [95.45,68.2689,99.7300])
 	kv = grass.parse_key_val(s)
 
-	stddev1 = float(kv['percentile_68'])
-	stddev2 = float(kv['percentile_95'])
-	stddev3 = float(kv['percentile_99'])
+	stddev1 = float(kv['percentile_68_2689'])
+	stddev2 = float(kv['percentile_95_45'])
+	stddev3 = float(kv['percentile_99_73'])
 
 	if not bands:
 	    # zero centered smooth blue/white/red

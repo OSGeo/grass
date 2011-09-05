@@ -138,7 +138,7 @@ def plot_dgraph():
 	# draw compass text
         "color black",
         "width 2",
-        "size 3 3",
+        "size 10 10",
         "move 51 97",
         "text N",
         "move 51 1",
@@ -150,15 +150,15 @@ def plot_dgraph():
 
 	# draw legend text
         "width 0",
-        "size 2",
+        "size 10",
         "color 0:180:0",
-        "move 1.5 96.5",
+        "move 0.5 96.5",
         "text All data (incl. NULLs)",
         "color red",
-        "move 1.5 93.5",
+        "move 0.5 93.5",
         "text Real data angles",
         "color blue",
-        "move 1.5 90.5",
+        "move 0.5 90.5",
         "text Avg. direction"
 	]
 

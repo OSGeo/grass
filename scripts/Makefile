@@ -69,6 +69,7 @@ SUBDIRS = \
 
 #	d.out.gpsdrive \
 #	r.mapcalculator \
+#	r.rgb \
 #	r3.mapcalculator \
 #	v.in.gps \
 

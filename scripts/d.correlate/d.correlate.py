@@ -33,7 +33,7 @@ def main():
     layers = options['map'].split(',')
 
     if len(layers) < 2:
-	grass.error("At least 2 layers are required")
+	grass.error("At least 2 maps are required")
 
     tmpfile = grass.tempfile()
 

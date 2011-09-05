@@ -83,8 +83,8 @@ def main():
 	oldcollength = f[2]
 
     # old col there?
-    if not oldcol:
-	grass.fatal(_("Column <%s> not found in table <%s>") % (coldcol, table))
+    if not oldcoltype:
+	grass.fatal(_("Column <%s> not found in table <%s>") % (oldcol, table))
 
     # some tricks
     if driver in ['sqlite', 'dbf']:
