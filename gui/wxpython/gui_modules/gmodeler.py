@@ -136,10 +136,17 @@ class Model(object):
         return len(self.GetItems())
 
     def GetNextId(self):
-        """!Get next id (data ignored)"""
+        """!Get next id (data ignored)
+
+        @return next id to be used (default: 1)
+        """
+        if len(self.items) < 1:
+            return 1
+        
         currId = self.items[-1].GetId()
         if currId > 0:
             return currId + 1
+        
         return 1
 
     def GetProperties(self):
@@ -2383,7 +2390,7 @@ class ModelSearchDialog(wx.Dialog):
         self.btnOk.SetDefault()
         self.btnOk.Enable(False)
 
-        self.cmd_prompt.Bind(wx.EVT_CHAR, self.OnText)
+        self.cmd_prompt.Bind(wx.EVT_KEY_UP, self.OnText)
         self.search.searchChoice.Bind(wx.EVT_CHOICE, self.OnText)
         self.Bind(wx.EVT_BUTTON, self.OnOk, self.btnOk)
         
@@ -2432,6 +2439,7 @@ class ModelSearchDialog(wx.Dialog):
         return cmd
     
     def OnOk(self, event):
+        """!Button 'OK' pressed"""
         self.btnOk.SetFocus()
         cmd = self.GetCmd()
         
@@ -2450,13 +2458,15 @@ class ModelSearchDialog(wx.Dialog):
         self.EndModal(wx.ID_OK)
         
     def OnText(self, event):
-        """!Text entered"""
+        """!Text in prompt changed"""
         if self.cmd_prompt.AutoCompActive():
             event.Skip()
             return
         
         if isinstance(event, wx.KeyEvent):
-            entry = self.cmd_prompt.GetTextLeft() # FIXME
+            entry = self.cmd_prompt.GetTextLeft()
+        elif isinstance(event, wx.stc.StyledTextEvent):
+            entry = event.GetText()
         else:
             entry = event.GetString()
         
