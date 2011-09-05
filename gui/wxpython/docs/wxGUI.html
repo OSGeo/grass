@@ -3,44 +3,45 @@
 wxGUI is native <em>Graphical User Interface</em> (GUI) for GRASS GIS.
 
 <p>
-If wxGUI is not your default UI, you can define it as default by
-typing at GRASS command line prompt
+If the wxGUI is not the default user interface, it can defined as default by
+typing at the GRASS command line prompt:
 
 <div class="code"><pre>
-   g.gui -u wxpython 
+g.gui -u wxpython
 </pre></div>
 
-Alternatively define in your <tt>.grass7/rc</tt> file 'GUI' variable
+Alternatively it may be defined in the settings file
+<tt>$HOME/.grass7/rc</tt> with the 'GUI' variable:
 
 <div class="code"><pre>
-    GUI: wxpython
+GUI: wxpython
 </pre></div>
 
-or set up shell environmental variable <tt>GRASS_GUI</tt>.
-
-The GUI can be quit by selecting the 'File->Exit' menu item. The GUI
+or it can be set with the shell environmental variable <tt>GRASS_GUI</tt>.
+<p>
+The GUI can be quit by selecting the 'File -&gt; Exit' menu item. The GUI
 can be restarted from the GRASS command line prompt by typing
 
 <div class="code"><pre>
-    g.gui wxpython
+g.gui wxpython
 </pre></div>
 
-or  to restart with previously saved workspace type:
+or, to restart with previously saved workspace type:
 
 <div class="code"><pre>
-    g.gui wxpython workspace=file.gxw
+g.gui wxpython workspace=file.gxw
 </pre></div>
 
 <p>
-You can also start GRASS from the shell command line with wxGUI
-defined by the <tt>-wxpython</tt> switch:
+The user can also start GRASS from the shell command line with the wxGUI
+specifying the <tt>-gui</tt> (or, <tt>-wxpython</tt>) switch:
 
 <div class="code"><pre>
-    grass70 -wxpython
+grass70 -gui
 </pre></div>
 
 <p>
-The GUI is composed by <em>two</em> main components:
+The GUI is composed of <em>two</em> main components:
 
 <ul>
   <li>The <b>Layer Manager</b> includes map layer management, integrated
