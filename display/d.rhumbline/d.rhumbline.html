@@ -12,27 +12,28 @@ active frame on the user's graphics monitor.  The named
 coordinate locations must fall within the boundaries of the
 user's current geographic region.
 
-<P>
-
-The user can run this program either interactively or
-non-interactively.  If the user simply types
-<B>d.rhumbline</B> on the command line and runs it without specifying
-parameter values, the mouse will be activated and the user
-will be asked to use the mouse to indicate the two
-endpoints of the rhumbline.  The rhumbline is then drawn in
-the default color (black). <!-- The program also outputs the
-coordinate locations of the two endpoints on the user's
-terminal and the number associated with the mouse button
-depressed by the user in a format useful for input to other
-programs. -->
-
-<P>
-
-Alternately, the user can specify the starting and ending
+<p>
+The user has to specify the starting and ending
 longitude/latitude coordinates of the rhumbline and
 (optionally) the color in which the rhumbline will be
 displayed; in this case, the program will run
 non-interactively.
+
+<h2>EXAMPLE</h2>
+
+<div class="code"><pre>
+g.region vect=world_political -p
+d.mon wx0
+d.vect world_political type=area
+d.rhumbline coor=55:58W,33:18S,26:43E,60:37N lcolor=yellow tcolor=red
+</pre></div>
+
+<p>
+<center>
+<img src="d_rhumbline.png" border=1><BR>
+<i>Rhumbline (loxodrome)</i>
+</center>
+
 
 <H2>NOTES</H2>
 
