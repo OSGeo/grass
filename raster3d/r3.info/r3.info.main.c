@@ -409,7 +409,7 @@ int main(int argc, char *argv[])
 	    fprintf(out, "max=%f\n", dmax);
 
 	}			/*Region */
-	else if (gflag->answer) {
+	if (gflag->answer) {
 	    sprintf(tmp1, "%f", cellhd.north);
 	    sprintf(tmp2, "%f", cellhd.south);
 	    G_trim_decimal(tmp1);
@@ -427,7 +427,7 @@ int main(int argc, char *argv[])
 	    fprintf(out, "bottom=%g\n", cellhd.bottom);
 	    fprintf(out, "top=%g\n", cellhd.top);
 	}			/*Resolution */
-	else if (sflag->answer) {
+	if (sflag->answer) {
 	    G_format_resolution(cellhd.ns_res, tmp3, cellhd.proj);
 	    fprintf(out, "nsres=%s\n", tmp3);
 
@@ -436,14 +436,14 @@ int main(int argc, char *argv[])
 
 	    fprintf(out, "tbres=%g\n", cellhd.tb_res);
 	}			/*Datatype */
-	else if (tflag->answer) {
+	if (tflag->answer) {
 	    fprintf(out, "datatype=\"%s\"\n",
 		    data_type == FCELL_TYPE ? "FCELL" :
 		    data_type == DCELL_TYPE ? "DCELL" :
 		    "??");
 
 	}			/*Resolution */
-	else if (iflag->answer) {
+	if (iflag->answer) {
 	    fprintf(out, "tilenumx=%d\n", ((RASTER3D_Map* )g3map)->nx);
 	    fprintf(out, "tilenumy=%d\n", ((RASTER3D_Map* )g3map)->ny);
 	    fprintf(out, "tilenumz=%d\n", ((RASTER3D_Map* )g3map)->nz);
@@ -451,7 +451,7 @@ int main(int argc, char *argv[])
 	    fprintf(out, "tiledimy=%d\n", ((RASTER3D_Map* )g3map)->tileY);
 	    fprintf(out, "tiledimz=%d\n", ((RASTER3D_Map* )g3map)->tileZ);
 	}			/*History output */
-	else if (hflag->answer) {
+	if (hflag->answer) {
 	    if (hist_ok) {
 		fprintf(out, "Data Source:\n");
 		fprintf(out, "   %s\n", Rast_get_history(&hist, HIST_DATSRC_1));
@@ -468,7 +468,7 @@ int main(int argc, char *argv[])
 		G_fatal_error(_("Error while reading history file"));
 	    }
 	}			/*Timestamp */
-	else if (timestampflag->answer) {
+	if (timestampflag->answer) {
 	    if (time_ok && (first_time_ok || second_time_ok)) {
 
 		G_format_timestamp(&ts, timebuff);
