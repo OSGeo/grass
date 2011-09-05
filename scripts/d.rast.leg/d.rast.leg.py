@@ -34,7 +34,6 @@
 # Markus Neteler 10/2003: added g.parser
 # Michael Barton 12/2004: remove reference to (null)
 # Glynn Clements 10/2008: converted to Python
-# Michael Barton 9/2011: fix formatting in Python
 ##############################################################################
 
 #%module
@@ -100,16 +99,30 @@ def main():
 
     s = grass.read_command('d.info', flags = 'f')
     f = tuple([float(x) for x in s.split()[1:5]])
-
+    
     grass.run_command('d.erase')
     os.environ['GRASS_PNG_READ'] = 'TRUE'
 
     #draw title
+    
     # set vertical divide at 65 instead of 80 if real labels in cats/ file??
-    make_frame(f, 90, 100,65, 100)
-    grass.write_command('d.text', color = 'black', size = 50, stdin = map)
+    make_frame(f, 90, 100, 70, 100)
+    # use map name without mapset suffix
+    mapname = map.split('@')[0]
+    grass.run_command('d.text', color='black', size=50, at='5,50', align='cl', text=mapname)
 
     #draw legend
+    
+    # set legend vertical position and size based on number of categories
+    cats = grass.read_command('r.describe', map=map, flags = '1n')
+    ncats = len(cats.strip().split('\n'))
+    
+    # Only need to adjust legend size if number of categories is between 1 and 10
+    if ncats < 2: ncats = 2
+    if ncats > 10: ncats = 10
+    
+    VSpacing = (100 - (ncats * 10) + 10)
+    
     if not nlines:
         nlines = None
 
@@ -122,22 +135,26 @@ def main():
     if kv['datatype'] is 'CELL':
         leg_at = None
     else:
-        leg_at = '10,90,5,15'	
+        leg_at = '%f,95,5,15' %VSpacing	
 
-    histfiledir = grass.find_file(lmap, 'cell_misc')['file']
-    has_hist = os.path.isfile(os.path.join(histfiledir, 'histogram'))
+# checking for histogram causes more problems than it solves
+#    histfiledir = grass.find_file(lmap, 'cell_misc')['file']
+#    has_hist = os.path.isfile(os.path.join(histfiledir, 'histogram'))
 
     lflags = ''
     if flip:
         lflags += 'f'
-    if has_hist or omit:
+    if omit:
         lflags += 'n'
 
-    make_frame(f, 0, 90, 65, 100)
+#    if has_hist or omit:
+#        lflags += 'n'
+
+    make_frame(f, 0, 90, 70, 100)
     grass.run_command('d.legend', flags = lflags, map = lmap, lines = nlines, at = leg_at)
 
     #draw map
-    make_frame(f, 0, 100, 0, 65)
+    make_frame(f, 0, 100, 0, 70)
     grass.run_command('d.rast', map = map)
 
 if __name__ == "__main__":
