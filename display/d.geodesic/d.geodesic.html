@@ -26,6 +26,21 @@ of the geodesic, the line and its length (in miles) are displayed to
 the user's graphics monitor. If the text color is set to <em>none</em>,
 the great circle distance is not displayed.
 
+<h2>EXAMPLE</h2>
+
+<div class="code"><pre>
+g.region vect=world_political -p
+d.mon wx0
+d.vect world_political type=area
+d.geodesic coor=55:58W,33:18S,26:43E,60:37N lcolor=yellow tcolor=red
+</pre></div>
+
+<p>
+<center>
+<img src="d_geodesic.png" border=1><BR>
+<i>Geodesic line (great circle line)</i>
+</center>
+
 <H2>NOTES</H2>
 
 This program works only with GRASS locations using a longitude/latitude 
