@@ -110,7 +110,8 @@ def main():
 	grass.fatal(_("Something went wrong. Should not happen"))
     else:
 	# remove the vector part
-	grass.try_remove(vectfile)
+	grass.run_command('v.db.connect', quiet = True, map = output, layer = '1', flags = 'd')
+	grass.run_command('g.remove', quiet = True, vect = output)
 
     # get rid of superfluous auto-added cat column (and cat_ if present)
     grass.run_command('db.dropcolumn', quiet = True, flags = 'f', table = output,
