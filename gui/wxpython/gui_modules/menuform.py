@@ -219,6 +219,9 @@ class UpdateThread(Thread):
         # update reference widgets
         for uid in p['wxId-bind']:
             win = self.parent.FindWindowById(uid)
+            if not win:
+                continue
+            
             name = win.GetName()
             
             map = layer = None
