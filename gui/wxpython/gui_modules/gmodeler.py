@@ -211,12 +211,14 @@ class Model(object):
         """!Get list of data items"""
         result = list()
         dataItems = self.GetItems(objType = ModelData)
+        
         for action in self.GetItems(objType = ModelAction):
             for rel in action.GetRelations():
                 dataItem = rel.GetData()
                 if dataItem not in result:
                     result.append(dataItem)
-                dataItems.remove(dataItem)
+                if dataItem in dataItems:
+                    dataItems.remove(dataItem)
         
         # standalone data
         if dataItems:
