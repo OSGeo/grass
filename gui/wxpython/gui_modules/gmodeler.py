@@ -2481,6 +2481,7 @@ class ModelSearchDialog(wx.Dialog):
         """!Reset dialog"""
         self.search.Reset()
         self.cmd_prompt.OnCmdErase(None)
+        self.btnOk.Enable(False)
 
 class ModelRelation(ogl.LineShape):
     """!Data - action relation"""
