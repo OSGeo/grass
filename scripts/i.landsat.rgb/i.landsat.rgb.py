@@ -124,8 +124,10 @@ def main():
 	    set_colors(i, v0, v1)
 
     # write cmd history:
+    mapset = grass.gisenv()['MAPSET']
     for i in [red, green, blue]:
-	grass.raster_history(i)
+        if grass.find_file(i)['mapset'] == mapset:
+            grass.raster_history(i)
 
 if __name__ == "__main__":
     options, flags = grass.parser()
