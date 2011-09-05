@@ -1,6 +1,6 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.in.gpsbabel</em> allows the user to import waypoint, route, and track
+<em>v.in.gps</em> allows the user to import waypoint, route, and track
 data from a locally connected GPS receiver or a text file containing 
 GPS data of many common formats. Translation is done via the 
 <em><a href="http://www.gpsbabel.org">GPSBabel</a></em> program. 
@@ -10,14 +10,14 @@ This software is not intended as a primary means of navigation.
 
 <h2>NOTES</h2>
 
-<em>v.in.gpsbabel</em> automatically reprojects data using the 
+<em>v.in.gps</em> automatically reprojects data using the 
 projection settings of the current location.
 
 The default input data projection is lat/lon WGS84. If your GPS outputs data
 using another projection or map datum, you may include the 
 <em><a href="http://trac.osgeo.org/proj/">PROJ.4</a></em>
 parameters defining your projection in the <b>proj</b> option and 
-<em>v.in.gpsbabel</em> will reproject your data accordingly.
+<em>v.in.gps</em> will reproject your data accordingly.
 Great care must be taken to get these parameters correct!
 
 The automatic transform may be skipped by using the <b>-k</b> flag in which 
@@ -25,7 +25,7 @@ case the data will be imported unprojected, as it appears in the <b>input</b>.
 
 <p>
 Route and Track data may be uploaded as a series of points by using the <b>-p</b> 
-flag, otherwise they will be imported as lines. You can run <em>v.in.gpsbabel</em>
+flag, otherwise they will be imported as lines. You can run <em>v.in.gps</em>
 multiple times and merge the line and point vectors with the <em>v.patch</em>
 command if you want, but take care when merging dissimilar attribute tables.
 
@@ -36,9 +36,9 @@ command if you want, but take care when merging dissimilar attribute tables.
 Import waypoints, tracks, routes from /dev/ttyUSB0 and save
 to a GRASS vector map:
 <div class="code"><pre>
-v.in.gpsbabel -w input=/dev/ttyUSB0 format=garmin output=waypoints
-v.in.gpsbabel -t input=/dev/ttyUSB0 format=garmin output=tracks
-v.in.gpsbabel -r input=/dev/ttyUSB0 format=garmin output=routes
+v.in.gps -w input=/dev/ttyUSB0 format=garmin output=waypoints
+v.in.gps -t input=/dev/ttyUSB0 format=garmin output=tracks
+v.in.gps -r input=/dev/ttyUSB0 format=garmin output=routes
 </pre></div>
 
 <h3>GPS device connected via serial adapter</h3>
@@ -46,7 +46,7 @@ v.in.gpsbabel -r input=/dev/ttyUSB0 format=garmin output=routes
 Import waypoint data from a Garmin GPS connected at /dev/ttyS0 and save
 to a GRASS vector map named <i>waypoints</i>:
 <div class="code"><pre>
-v.in.gpsbabel -w input=/dev/ttyS0 format=garmin output=waypoints
+v.in.gps -w input=/dev/ttyS0 format=garmin output=waypoints
 </pre></div>
 
 <h3>Import track data from a GPX</h3>
@@ -57,7 +57,7 @@ named <i>tracks</i>.
 <a href="http://gpsd.berlios.de/">GPSd</a> >2.30 is a good program for 
 creating these logs. -->
 <div class="code"><pre>
-v.in.gpsbabel -t input=gpslog.gpx format=gpx output=tracks
+v.in.gps -t input=gpslog.gpx format=gpx output=tracks
 </pre></div>
 
 <h3>Import route data from GPS connected at /dev/gps</h3>
@@ -65,7 +65,7 @@ v.in.gpsbabel -t input=gpslog.gpx format=gpx output=tracks
 Import route data as a series of points from a Garmin GPS connected at 
 /dev/gps and save to a GRASS vector map named <i>routePoints</i>:
 <div class="code"><pre>
-v.in.gpsbabel -r -p file=/dev/gps format=garmin output=routePoints
+v.in.gps -r -p file=/dev/gps format=garmin output=routePoints
 </pre></div>
 
 
