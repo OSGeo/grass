@@ -206,6 +206,8 @@ class SearchModuleWindow(wx.Panel):
         """!Reset widget"""
         self.searchBy.SetSelection(0)
         self.search.SetValue('')
+        if self.showTip:
+            self.searchTip.SetLabel('')
         
 class MenuTreeWindow(wx.Panel):
     """!Show menu tree"""
