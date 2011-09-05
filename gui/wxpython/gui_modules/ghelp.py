@@ -162,7 +162,7 @@ class SearchModuleWindow(wx.Panel):
                 if text in data['desc']:
                     found = True
             elif sel == 1: # keywords
-                if self.cmdPrompt.CheckKey(text, data['keywords']):
+                if text in ','.join(data['keywords']):
                     found = True
             else: # command
                 if module[:len(text)] == text:
