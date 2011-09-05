@@ -114,7 +114,7 @@ def main():
 
     # get rid of superfluous auto-added cat column (and cat_ if present)
     grass.run_command('db.dropcolumn', quiet = True, flags = 'f', table = output,
-		      colum = 'cat', stdout = nuldev, stderr = nuldev)
+		      column = 'cat', stdout = nuldev, stderr = nuldev)
 
     records = grass.db_describe(output)['nrows']
     grass.message(_("Imported table <%s> with %d rows") % (output, records))

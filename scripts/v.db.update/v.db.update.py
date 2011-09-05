@@ -38,7 +38,7 @@
 #%end
 #%option G_OPT_DB_COLUMN
 #% key: qcolumn
-#% description: Name of attrubute column to query
+#% description: Name of attribute column to query
 #%end
 #%option G_OPT_DB_WHERE
 #%end
