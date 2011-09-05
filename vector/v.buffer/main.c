@@ -18,6 +18,7 @@
  **************************************************************/
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include <math.h>
 
 #include <grass/gis.h>
@@ -72,19 +73,29 @@ int db_CatValArray_get_value_di(dbCatValArray * cvarr, int cat, double *value)
 struct buf_contours
 {
     int inner_count;
+    int outer;
+    int *inner;
+};
+
+struct buf_contours_pts
+{
+    int inner_count;
     struct line_pnts *oPoints;
     struct line_pnts **iPoints;
 };
 
 int point_in_buffer(struct buf_contours *arr_bc, struct spatial_index *si,
-		    double x, double y)
+		    struct Map_info *Buf, double x, double y)
 {
     int i, j, ret, flag;
     struct bound_box bbox;
     static struct ilist *List = NULL;
+    static struct line_pnts *Points = NULL;
 
     if (List == NULL)
 	List = Vect_new_list();
+    if (Points == NULL)
+	Points = Vect_new_line_struct();
 
     /* select outer contours overlapping with centroid (x, y) */
     bbox.W = bbox.E = x;
@@ -95,13 +106,18 @@ int point_in_buffer(struct buf_contours *arr_bc, struct spatial_index *si,
     Vect_spatial_index_select(si, &bbox, List);
 
     for (i = 0; i < List->n_values; i++) {
-	ret = Vect_point_in_poly(x, y, arr_bc[List->value[i]].oPoints);
+	Vect_read_line(Buf, Points, NULL, arr_bc[List->value[i]].outer);
+	ret = Vect_point_in_poly(x, y, Points);
 	if (ret == 0)
 	    continue;
 
 	flag = 1;
 	for (j = 0; j < arr_bc[List->value[i]].inner_count; j++) {
-	    ret = Vect_point_in_poly(x, y, arr_bc[List->value[i]].iPoints[j]);
+	    if (arr_bc[List->value[i]].inner[j] < 1)
+		continue;
+
+	    Vect_read_line(Buf, Points, NULL, arr_bc[List->value[i]].inner[j]);
+	    ret = Vect_point_in_poly(x, y, Points);
 	    if (ret != 0) {	/* inside inner contour */
 		flag = 0;
 		break;
@@ -160,9 +176,10 @@ int get_line_box(const struct line_pnts *Points, struct bound_box *Box)
 
 int main(int argc, char *argv[])
 {
-    struct Map_info In, Out;
+    struct Map_info In, Out, Buf;
     struct line_pnts *Points;
     struct line_cats *Cats, *BCats;
+    char bufname[GNAME_MAX];
     struct GModule *module;
     struct Option *in_opt, *out_opt, *type_opt, *dista_opt, *distb_opt,
 	*angle_opt;
@@ -172,11 +189,12 @@ int main(int argc, char *argv[])
     int verbose;
     double da, db, dalpha, tolerance, unit_tolerance;
     int type;
-    int i, j, ret, nareas, area, nlines, line;
+    int i, ret, nareas, area, nlines, line;
     char *Areas, *Lines;
     int field;
     struct buf_contours *arr_bc;
-    int buffers_count;
+    struct buf_contours_pts arr_bc_pts;
+    int buffers_count = 0, line_id;
     struct spatial_index si;
     struct bound_box bbox;
 
@@ -334,6 +352,16 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Unable to create vector map <%s>"), out_opt->answer);
     }
 
+    /* open tmp vector for buffers, needed for cleaning */
+    sprintf(bufname, "%s_tmp_%d", out_opt->answer, getpid());
+    if (0 > Vect_open_new(&Buf, bufname, 0)) {
+	Vect_close(&In);
+	Vect_close(&Out);
+	Vect_delete(out_opt->answer);
+	exit(EXIT_FAILURE);
+    }
+    Vect_build_partial(&Buf, GV_BUILD_BASE);
+
     /* check and load attribute column data */
     if (bufcol_opt->answer) {
 	db_CatValArray_init(&cvarr);
@@ -454,9 +482,17 @@ int main(int argc, char *argv[])
 	    if (ltype & GV_POINTS || Points->n_points == 1) {
 		Vect_point_buffer2(Points->x[0], Points->y[0], da, db, dalpha,
 				   !(straight_flag->answer), unit_tolerance,
-				   &(arr_bc[buffers_count].oPoints));
-		arr_bc[buffers_count].iPoints = NULL;
+				   &(arr_bc_pts.oPoints));
+
+		Vect_write_line(&Out, GV_BOUNDARY, arr_bc_pts.oPoints, BCats);
+		line_id = Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.oPoints, Cats);
+		Vect_destroy_line_struct(arr_bc_pts.oPoints);
+		/* add buffer to spatial index */
+		Vect_get_line_box(&Buf, line_id, &bbox);
+		Vect_spatial_index_add_item(&si, buffers_count, &bbox);
+		arr_bc[buffers_count].outer = line_id;
 		arr_bc[buffers_count].inner_count = 0;
+		arr_bc[buffers_count].inner = NULL;
 		buffers_count++;
 
 	    }
@@ -464,9 +500,32 @@ int main(int argc, char *argv[])
 		Vect_line_buffer2(Points, da, db, dalpha,
 				  !(straight_flag->answer),
 				  !(nocaps_flag->answer), unit_tolerance,
-				  &(arr_bc[buffers_count].oPoints),
-				  &(arr_bc[buffers_count].iPoints),
-				  &(arr_bc[buffers_count].inner_count));
+				  &(arr_bc_pts.oPoints),
+				  &(arr_bc_pts.iPoints),
+				  &(arr_bc_pts.inner_count));
+
+		Vect_write_line(&Out, GV_BOUNDARY, arr_bc_pts.oPoints, BCats);
+		line_id = Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.oPoints, Cats);
+		Vect_destroy_line_struct(arr_bc_pts.oPoints);
+		/* add buffer to spatial index */
+		Vect_get_line_box(&Buf, line_id, &bbox);
+		Vect_spatial_index_add_item(&si, buffers_count, &bbox);
+		arr_bc[buffers_count].outer = line_id;
+
+		arr_bc[buffers_count].inner_count = arr_bc_pts.inner_count;
+		if (arr_bc_pts.inner_count > 0) {
+		    arr_bc[buffers_count].inner = G_malloc(arr_bc_pts.inner_count * sizeof(int));
+		    for (i = 0; i < arr_bc_pts.inner_count; i++) {
+			Vect_write_line(&Out, GV_BOUNDARY, arr_bc_pts.iPoints[i], BCats);
+			line_id = Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.iPoints[i], Cats);
+			Vect_destroy_line_struct(arr_bc_pts.iPoints[i]);
+			/* add buffer to spatial index */
+			Vect_get_line_box(&Buf, line_id, &bbox);
+			Vect_spatial_index_add_item(&si, buffers_count, &bbox);
+			arr_bc[buffers_count].inner[i] = line_id;
+		    }
+		    G_free(arr_bc_pts.iPoints);
+		}
 		buffers_count++;
 	    }
 	}
@@ -524,27 +583,36 @@ int main(int argc, char *argv[])
 	    Vect_area_buffer2(&In, area, da, db, dalpha,
 			      !(straight_flag->answer),
 			      !(nocaps_flag->answer), unit_tolerance,
-			      &(arr_bc[buffers_count].oPoints),
-			      &(arr_bc[buffers_count].iPoints),
-			      &(arr_bc[buffers_count].inner_count));
+			      &(arr_bc_pts.oPoints),
+			      &(arr_bc_pts.iPoints),
+			      &(arr_bc_pts.inner_count));
+
+	    Vect_write_line(&Out, GV_BOUNDARY, arr_bc_pts.oPoints, BCats);
+	    line_id = Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.oPoints, Cats);
+	    Vect_destroy_line_struct(arr_bc_pts.oPoints);
+	    /* add buffer to spatial index */
+	    Vect_get_line_box(&Buf, line_id, &bbox);
+	    Vect_spatial_index_add_item(&si, buffers_count, &bbox);
+	    arr_bc[buffers_count].outer = line_id;
+
+	    arr_bc[buffers_count].inner_count = arr_bc_pts.inner_count;
+	    if (arr_bc_pts.inner_count > 0) {
+		arr_bc[buffers_count].inner = G_malloc(arr_bc_pts.inner_count * sizeof(int));
+		for (i = 0; i < arr_bc_pts.inner_count; i++) {
+		    Vect_write_line(&Out, GV_BOUNDARY, arr_bc_pts.iPoints[i], BCats);
+		    line_id = Vect_write_line(&Buf, GV_BOUNDARY, arr_bc_pts.iPoints[i], Cats);
+		    Vect_destroy_line_struct(arr_bc_pts.iPoints[i]);
+		    /* add buffer to spatial index */
+		    Vect_get_line_box(&Buf, line_id, &bbox);
+		    Vect_spatial_index_add_item(&si, buffers_count, &bbox);
+		    arr_bc[buffers_count].inner[i] = line_id;
+		}
+		G_free(arr_bc_pts.iPoints);
+	    }
 	    buffers_count++;
 	}
     }
 
-    /* write all buffer contours */
-    G_message(_("Writting buffers..."));
-    for (i = 1; i < buffers_count; i++) {
-	G_percent(i, buffers_count, 2);
-	Vect_write_line(&Out, GV_BOUNDARY, arr_bc[i].oPoints, BCats);
-
-	get_line_box(arr_bc[i].oPoints, &bbox);
-	Vect_spatial_index_add_item(&si, i, &bbox);
-	
-	for (j = 0; j < arr_bc[i].inner_count; j++)
-	    Vect_write_line(&Out, GV_BOUNDARY, arr_bc[i].iPoints[j], BCats);
-    }
-    G_percent(1, 1, 1);
-    
     verbose = G_verbose();
 
     G_message(_("Cleaning buffers..."));
@@ -608,7 +676,7 @@ int main(int argc, char *argv[])
 	    continue;
 	}
 
-	ret = point_in_buffer(arr_bc, &si, x, y);
+	ret = point_in_buffer(arr_bc, &si, &Buf, x, y);
 
 	if (ret) {
 	    G_debug(3, "  -> in buffer");
@@ -700,7 +768,7 @@ int main(int argc, char *argv[])
 	    continue;
 	}
 
-	ret = point_in_buffer(arr_bc, &si, x, y);
+	ret = point_in_buffer(arr_bc, &si, &Buf, x, y);
 
 	if (ret) {
 	    Vect_reset_line(Points);
@@ -719,6 +787,9 @@ int main(int argc, char *argv[])
        } */
 
     Vect_spatial_index_destroy(&si);
+    Vect_close(&Buf);
+    Vect_delete(bufname);
+
     G_set_verbose(verbose);
 
     Vect_close(&In);
