@@ -7,7 +7,7 @@
 #               Converted to Python by Glynn Clements
 # PURPOSE:      prints a graph of the correlation between data layers (in pairs)
 #               derived from <grass5>/src.local/d.correlate.sh
-# COPYRIGHT:    (C) 2005, 2008 by the GRASS Development Team
+# COPYRIGHT:    (C) 2005, 2008, 2011 by the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
@@ -33,13 +33,13 @@ def main():
     layers = options['map'].split(',')
 
     if len(layers) < 2:
-	grass.error("At least 2 maps are required")
+	grass.error(_("At least 2 maps are required"))
 
     tmpfile = grass.tempfile()
 
     for map in layers:
 	if not grass.find_file(map, element = 'cell')['file']:
-	    grass.fatal(_("Input map <%s> not found") % map)
+	    grass.fatal(_("Raster map <%s> not found") % map)
 
     grass.write_command('d.text', color = 'black', size = 4, line = 1, stdin = "CORRELATION")
 
