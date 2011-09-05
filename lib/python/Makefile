@@ -8,7 +8,7 @@ PYDIR = $(ETC)/python
 GDIR = $(PYDIR)/grass
 DSTDIR = $(GDIR)/script
 
-MODULES = core db raster vector array setup task
+MODULES = core db raster raster3d vector array setup task
 
 PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
 PYCFILES := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__)
