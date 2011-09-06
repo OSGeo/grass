@@ -547,7 +547,8 @@ class GPrompt(object):
         for prefix in prefixes:
             for command in mList[prefix]:
                 name = prefix + '.' + command
-                items.append(name)
+                if name not in items:
+                    items.append(name)
                 
         items.sort()
         
