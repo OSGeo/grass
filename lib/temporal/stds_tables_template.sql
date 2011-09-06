@@ -16,8 +16,8 @@ CREATE TABLE  STDS_base (
   creator VARCHAR NOT NULL,            -- Name of the creator
   temporal_type VARCHAR NOT NULL,      -- The temporal type of the dataset "absolute" or "relative" 
   semantic_type VARCHAR NOT NULL,      -- The semantic data description used for aggregation/decomposition algorithm selection
-  creation_time TIMESTAMP NOT NULL,     -- The time of creation of the space-time dataset
-  modification_time TIMESTAMP NOT NULL, -- The time of the last modification of the space-time dataset
+  creation_time TIMESTAMP NOT NULL,    -- The time of creation of the space-time dataset
+  modification_time TIMESTAMP NOT NULL,-- The time of the last modification of the space-time dataset
   revision SMALLINT NOT NULL,          -- The revision number
   PRIMARY KEY (id)
 );
@@ -32,8 +32,8 @@ CREATE TABLE  STDS_relative_time (
 
 CREATE TABLE  STDS_absolute_time (
   id VARCHAR NOT NULL,            -- Id of the space-time dataset, this is the primary foreign key
-  start_time TIMESTAMP,            -- Start of the valid time, can be NULL if no map is registered
-  end_time TIMESTAMP,              -- End of the valid time, can be NULL if no map is registered
+  start_time TIMESTAMP,           -- Start of the valid time, can be NULL if no map is registered
+  end_time TIMESTAMP,             -- End of the valid time, can be NULL if no map is registered
   granularity VARCHAR,            -- The granularity "NNN seconds, NNN minutes, NNN hours, NNN days, NNN weeks, NNN months, NNN years"
   timezone SMALLINT,              -- The time zone number
   PRIMARY KEY (id),  

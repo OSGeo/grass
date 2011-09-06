@@ -13,7 +13,7 @@ PRAGMA foreign_keys = ON;
 CREATE TABLE  raster3d_metadata (
   id VARCHAR NOT NULL,                  -- The id (PFK) is the unique identifier for all tables, it is based on name and mapset (name@mapset) and is used as primary foreign key
   str3ds_register VARCHAR, -- The name of the table storing all space-time raster3d datasets in which this map is registered
-  maptype VARCHAR NOT NULL,
+  datatype VARCHAR NOT NULL,
   cols INTEGER NOT NULL,
   rows INTEGER NOT NULL,
   depths INTEGER NOT NULL,
@@ -36,7 +36,7 @@ CREATE VIEW raster3d_view_abs_time AS SELECT
             A1.revision, A1.creator, 
 	    A2.start_time, A2.end_time, 
             A3.north, A3.south, A3.east, A3.west,
-	    A4.maptype, A4.cols, A4.rows, A4.depths,
+	    A4.datatype, A4.cols, A4.rows, A4.depths,
             A4.nsres, A4.ewres, A4.tbres,
             A4.min, A4.max,
 	    A4.str3ds_register,
@@ -52,7 +52,7 @@ CREATE VIEW raster3d_view_rel_time AS SELECT
             A1.revision, A1.creator, 
 	    A2.interval,
             A3.north, A3.south, A3.east, A3.west,
-	    A4.maptype, A4.cols, A4.rows, A4.depths,
+	    A4.datatype, A4.cols, A4.rows, A4.depths,
             A4.nsres, A4.ewres, A4.tbres,
             A4.min, A4.max,
 	    A4.str3ds_register,
