@@ -92,6 +92,9 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 	    make distclean
 	fi
 
+	log remove old logs
+	rm mswindows/osgeo4w/package.log.[0-9][0-9][0-9]
+
 	log configure
 	./configure \
 		--with-libs="$OSGEO4W_ROOT_MSYS/lib $PWD/mswindows/osgeo4w/lib" \
@@ -134,7 +137,7 @@ mv $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/include/grass/config.h \
     $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/include/grass/config.h.mingw
 cp mswindows/osgeo4w/config.h.switch $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/include/grass/config.h
 cp mswindows/osgeo4w/config.h.vc $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/include/grass
-sed -e "s#@VERSION@#$VERSION#g" -e "s#@osgeo4w@#$OSGEO4W_ROOT#g" -e "s#@POSTFIX@#$MAJOR$MINOR#g" \
+sed -e "s#@VERSION@#$VERSION#g" -e "s#@OSGEO4W_ROOT@#$OSGEO4W_ROOT#g" -e "s#@POSTFIX@#$MAJOR$MINOR#g" \
     mswindows/osgeo4w/grass.bat.tmpl >$OSGEO4W_ROOT_MSYS/bin/grass$MAJOR$MINOR.bat
 sed -e "s#@VERSION@#$VERSION#g" -e "s#@OSGEO4W_ROOT_MSYS@#$OSGEO4W_ROOT_MSYS#g" -e "s#@POSTFIX@#$MAJOR$MINOR#g" \
     mswindows/osgeo4w/grass.tmpl >$OSGEO4W_ROOT_MSYS/bin/grass$MAJOR$MINOR
@@ -151,14 +154,7 @@ if [ -f /c/mingw/bin/libgnurx-0.dll ]; then
     cp /c/mingw/bin/libintl-8.dll $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/bin
 fi
 
-# P="$(pwd -W)"
-# P="${P//\//\\\\}\\\\dist.i686-pc-mingw32"
-
-# sed -e "s#$P#@osgeo4w@#g" $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/etc/fontcap >$OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/etc/fontcap.tmpl
-# rm "$OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/etc/fontcap"
-
-if [ -n "$1" ]; then
-    PACKAGE="$1"
+if [ -n "$PACKAGE" ]; then
     log building vc libraries 
     sh mswindows/osgeo4w/mklibs.sh $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/lib/*.$VERSION.dll 
     mv mswindows/osgeo4w/vc/grass*.lib $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/lib
@@ -173,11 +169,11 @@ if [ -n "$1" ]; then
     PDIR=$PWD/package
     SRC=$PWD
     cd $OSGEO4W_ROOT_MSYS 
-    
-    sed -e "s#GISBASE_VALUE#@osgeo4w@\\\apps\\\grass\\\grass-$VERSION#g" \
-	$SRC/lib/init/grass.src >$OSGEO4W_ROOT_MSYS/bin/grass$MAJOR$MINOR.tmpl
-    sed -e "s#@VERSION@#$VERSION#g" \
+
+    sed -e "s#@VERSION@#$VERSION#g" -e "s#@POSTFIX@#$MAJOR$MINOR#g" \
 	$SRC/mswindows/osgeo4w/grass.bat.tmpl >$OSGEO4W_ROOT_MSYS/bin/grass$MAJOR$MINOR.bat.tmpl
+    sed -e "s#@VERSION@#$VERSION#g" -e "s#@OSGEO4W_ROOT_MSYS@#@OSGEO4W_ROOT@#g" -e "s#@POSTFIX@#$MAJOR$MINOR#g" \
+	$SRC/mswindows/osgeo4w/grass.tmpl >$OSGEO4W_ROOT_MSYS/bin/grass$MAJOR$MINOR.tmpl
     
     tar -cjf $PDIR/grass$MAJOR$MINOR/grass-$VERSION-$PACKAGE.tar.bz2 \
     apps/grass/grass-$VERSION \
@@ -194,7 +190,7 @@ if [ -n "$1" ]; then
     
     cd $PDIR/.. 
     svn diff >/tmp/grass-$VERSION.diff
-    tar -C /tmp -cjf $PDIR/grass$MAJOR$MINOR/grass-$VERSION-$PACKAGE-src.tar.bz2 grass-$VERSION.diff 
+    tar -C /tmp -cjf $PDIR/grass$MAJOR$MINOR/grass-$VERSION-$PACKAGE-src.tar.bz2 grass-$VERSION.diff
 fi
 
 log 
