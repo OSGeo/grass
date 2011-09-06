@@ -235,7 +235,7 @@ def main():
     #   cs2cs | sed -e 's/d/:/g' -e "s/'/:/g"  -e 's/"//g'
 
     cmd = ['cs2cs'] + copyinp + outfmt + in_proj.split() + ['+to'] + out_proj.split()
-    p = grass.Popen(cmd, stdin = grass.PIPE, stdout = grass.PIPE)
+    p = grass.Popen(cmd, stdin = grass.PIPE)
 
     while True:
 	line = inf.readline()
