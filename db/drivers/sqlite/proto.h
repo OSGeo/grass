@@ -15,4 +15,7 @@ void free_cursor(cursor *);
 /* describe.c */
 int describe_table(sqlite3_stmt *, dbTable **, cursor *);
 
+/* main.c */
+int sqlite_busy_callback(void *, int);
+
 #endif /* __SQLITE_PROTO_H__ */

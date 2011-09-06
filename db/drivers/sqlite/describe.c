@@ -8,8 +8,9 @@
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author Radim Blazek
+ * \author Support for multiple connections by Markus Metz
  *
- * \date 2005-2007
+ * \date 2005-2011
  */
 
 #include <string.h>
@@ -49,6 +50,9 @@ int db__driver_describe_table(dbString * table_name, dbTable ** table)
     db_append_string(&sql, " where oid < 0");
 
     ret = sqlite3_prepare(sqlite, db_get_string(&sql), -1, &statement, &rest);
+    while (ret == SQLITE_BUSY || ret == SQLITE_IOERR_BLOCKED) {
+	ret = sqlite3_busy_handler(sqlite, sqlite_busy_callback, NULL);
+    }
 
     if (ret != SQLITE_OK) {
 	append_error("Error in sqlite3_prepare():");
@@ -90,7 +94,7 @@ int db__driver_describe_table(dbString * table_name, dbTable ** table)
 
 int describe_table(sqlite3_stmt * statement, dbTable ** table, cursor * c)
 {
-    int i, ncols, nkcols;
+    int i, ncols, nkcols, ret;
 
     G_debug(3, "describe_table()");
 
@@ -98,7 +102,10 @@ int describe_table(sqlite3_stmt * statement, dbTable ** table, cursor * c)
     G_debug(3, "ncols = %d", ncols);
 
     /* Try to get first row */
-    sqlite3_step(statement);
+    ret = sqlite3_step(statement);
+    while (ret == SQLITE_BUSY || ret == SQLITE_IOERR_BLOCKED) {
+	ret = sqlite3_busy_handler(sqlite, sqlite_busy_callback, NULL);
+    }
 
     /* Count columns of known type */
     nkcols = 0;
@@ -442,5 +449,6 @@ static int parse_type(const char *declared, int *length)
 #undef streq
 
     G_warning("SQLite driver: unable to parse decltype: %s", declared);
+
     return DB_SQL_TYPE_UNKNOWN;
 }

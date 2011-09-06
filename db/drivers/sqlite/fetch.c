@@ -8,8 +8,9 @@
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author Radim Blazek
+ * \author Support for multiple connections by Markus Metz
  *
- * \date 2005-2007
+ * \date 2005-2011
  */
 
 #include <stdlib.h>
@@ -63,6 +64,9 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
 	    c->row = -1;
 
 	ret = sqlite3_step(c->statement);
+	while (ret == SQLITE_BUSY || ret == SQLITE_IOERR_BLOCKED) {
+	    ret = sqlite3_busy_handler(sqlite, sqlite_busy_callback, NULL);
+	}
 	if (ret != SQLITE_ROW) {
 	    if (ret != SQLITE_DONE) {
 		append_error("Cannot step:\n");
@@ -248,7 +252,7 @@ int db__driver_get_num_rows(dbCursor * cn)
 {
     cursor *c;
     dbToken token;
-    int row;
+    int row, ret;
 
     /* get cursor token */
     token = db_get_cursor_token(cn);
@@ -264,14 +268,17 @@ int db__driver_get_num_rows(dbCursor * cn)
 	return (c->nrows);
     }
 
-    sqlite3_reset(c->statement);
+    ret = sqlite3_reset(c->statement);
+    while (ret == SQLITE_BUSY || ret == SQLITE_IOERR_BLOCKED) {
+	ret = sqlite3_busy_handler(sqlite, sqlite_busy_callback, NULL);
+    }
 
     c->nrows = 0;
     while (sqlite3_step(c->statement) == SQLITE_ROW) {
 	c->nrows++;
     }
 
-    sqlite3_reset(c->statement);
+    ret = sqlite3_reset(c->statement);
 
     /* Reset cursor position */
     row = -1;
