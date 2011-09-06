@@ -5,8 +5,7 @@
  *
  * PURPOSE:    Editing vector map.
  *
- * AUTHOR(S):  GRASS Development Team
- *             Wolf Bergenheim
+ * AUTHOR(S):  Wolf Bergenheim
  *             Jachym Cepicky
  *             Update for GRASS 7 by Martin Landa <landa.martin gmail.com>
  *
@@ -186,7 +185,11 @@ int main(int argc, char *argv[])
 	snap = SNAP;
     else if (strcmp(params.snap->answer, "vertex") == 0)
 	snap = SNAPVERTEX;
-
+    if (snap != NO_SNAP && thresh[THRESH_SNAP] <= 0) {
+	G_warning(_("Threshold for snapping must be > 0. No snapping applied."));
+	snap = NO_SNAP;
+    }
+    
     if (action_mode != MODE_CREATE && action_mode != MODE_ADD) {
 	/* select lines */
 	List = Vect_new_list();
