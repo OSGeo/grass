@@ -13,6 +13,7 @@ Classes:
  - ModelData
  - ModelDataDialog
  - ModelRelation
+ - ModelRelationDialog
  - ProcessModelFile
  - WriteModelFile
  - PreferencesDialog
@@ -71,7 +72,7 @@ import utils
 import goutput
 import gselect
 from debug        import Debug
-from gcmd         import GMessage, GException, GWarning, GError
+from gcmd         import GMessage, GException, GWarning, GError, RunCommand
 from gdialogs     import ElementDialog, GetImageHandlers
 from preferences  import PreferencesBaseDialog, globalSettings as UserSettings
 from ghelp        import SearchModuleWindow
@@ -727,9 +728,9 @@ class ModelFrame(wx.Frame):
             log.RunCmd(['g.manual',
                         'entry=wxGUI.Modeler'])
         else:
-            gcmd.RunCommand('g.manual',
-                            quiet = True,
-                            entry = 'wxGUI.Modeler')
+            RunCommand('g.manual',
+                       quiet = True,
+                       entry = 'wxGUI.Modeler')
         
     def OnModelProperties(self, event):
         """!Model properties dialog"""
@@ -1227,7 +1228,16 @@ class ModelFrame(wx.Frame):
         # add action to canvas
         width, height = self.canvas.GetSize()
         data = ModelData(self, x = width/2, y = height/2)
+       
+        dlg = ModelDataDialog(parent = self, shape = data)
+        data.SetPropDialog(dlg)
+        dlg.CentreOnParent()
+        ret = dlg.ShowModal()
+        dlg.Destroy()
+        if ret != wx.ID_OK:
+            return
         
+        data.Update()
         self.canvas.diagram.AddShape(data)
         data.Show(True)
         
@@ -1238,11 +1248,6 @@ class ModelFrame(wx.Frame):
         
         self.canvas.Refresh()
         
-        # show data properties dialog
-        dlg = ModelDataDialog(parent = self, shape = data)
-        data.SetPropDialog(dlg)
-        dlg.CentreOnParent()
-        dlg.Show()
         
     def OnHelp(self, event):
         """!Display manual page"""
@@ -1882,7 +1887,7 @@ class ModelData(ModelObject, ogl.EllipseShape):
         @param fname, tname list of parameter names from / to
         @param value  value
         @param prompt type of GIS element
-        @param width, height dimension of the shape
+        @param width,height dimension of the shape
         """
         ModelObject.__init__(self)
         
@@ -1977,13 +1982,6 @@ class ModelData(ModelObject, ogl.EllipseShape):
                 task.set_param(rel.GetName(), self.value)
                 action.SetParams(params = task.get_options())
         
-    def AddName(self, name, direction):
-        """!Record new name (parameter)
-
-        @param direction direction - 'from' or 'to'
-        """
-        self.name[direction].append(name)
-        
     def GetPropDialog(self):
         """!Get properties dialog"""
         return self.propWin
@@ -1995,17 +1993,17 @@ class ModelData(ModelObject, ogl.EllipseShape):
     def _setBrush(self):
         """!Set brush"""
         if self.prompt == 'raster':
-            color = UserSettings.Get(group='modeler', key='data',
-                                     subkey=('color', 'raster'))
+            color = UserSettings.Get(group = 'modeler', key = 'data',
+                                     subkey = ('color', 'raster'))
         elif self.prompt == 'raster3d':
-            color = UserSettings.Get(group='modeler', key='data',
-                                     subkey=('color', 'raster3d'))
+            color = UserSettings.Get(group = 'modeler', key = 'data',
+                                     subkey = ('color', 'raster3d'))
         elif self.prompt == 'vector':
-            color = UserSettings.Get(group='modeler', key='data',
-                                     subkey=('color', 'vector'))
+            color = UserSettings.Get(group = 'modeler', key = 'data',
+                                     subkey = ('color', 'vector'))
         else:
-            color = UserSettings.Get(group='modeler', key='action',
-                                     subkey=('color', 'invalid'))
+            color = UserSettings.Get(group = 'modeler', key = 'action',
+                                     subkey = ('color', 'invalid'))
         wxColor = wx.Color(color[0], color[1], color[2])
         self.SetBrush(wx.Brush(wxColor))
         
@@ -2023,11 +2021,11 @@ class ModelData(ModelObject, ogl.EllipseShape):
                     break
 
         if isParameterized:
-            width = int(UserSettings.Get(group='modeler', key='action',
-                                         subkey=('width', 'parameterized')))
+            width = int(UserSettings.Get(group = 'modeler', key = 'action',
+                                         subkey = ('width', 'parameterized')))
         else:
-            width = int(UserSettings.Get(group='modeler', key='action',
-                                         subkey=('width', 'default')))
+            width = int(UserSettings.Get(group = 'modeler', key = 'action',
+                                         subkey = ('width', 'default')))
         pen = self.GetPen()
         pen.SetWidth(width)
         self.SetPen(pen)
@@ -2108,12 +2106,20 @@ class ModelDataDialog(ElementDialog):
         
         self.parent.canvas.Refresh()
         self.parent.SetStatusText('', 0)
-        self.OnCancel(event)
+        self.shape.SetPropDialog(None)
         
+        if self.IsModal():
+            event.Skip() 
+        else:
+            self.Destroy()
+    
     def OnCancel(self, event):
         """!Cancel pressed"""
         self.shape.SetPropDialog(None)
-        self.Destroy()
+        if self.IsModal():
+            event.Skip()
+        else:
+            self.Destroy()
         
 class ModelEvtHandler(ogl.ShapeEvtHandler):
     """!Model event handler class"""
@@ -2137,8 +2143,22 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             elif drel['to'] is None:
                 drel['to'] = shape
                 rel = ModelRelation(drel['from'], drel['to'])
-                drel['from'].AddRelation(rel)
-                self.frame.AddLine(rel)
+                dlg = ModelRelationDialog(parent = self.frame,
+                                          shape = rel)
+                if dlg.IsValid():
+                    ret = dlg.ShowModal()
+                    if ret == wx.ID_OK:
+                        option = dlg.GetOption()
+                        rel.SetName(option)
+                        drel['from'].AddRelation(rel)
+                        drel['to'].AddRelation(rel)
+                        drel['from'].Update()
+                        params = { 'params' : [{ 'name' : option,
+                                                 'value' : drel['from'].GetValue()}] }
+                        drel['to'].MergeParams(params)
+                        self.frame.AddLine(rel)
+                
+                    dlg.Destroy()
                 del self.frame.defineRelation
         
         if shape.Selected():
@@ -2551,6 +2571,138 @@ class ModelRelation(ogl.LineShape):
         """!Draw relation"""
         self._setPen()
         ogl.LineShape.OnDraw(self, dc)
+    
+    def SetName(self, param):
+        self.param = param
+        
+class ModelRelationDialog(wx.Dialog):
+    """!Relation properties dialog"""
+    def __init__(self, parent, shape, id = wx.ID_ANY, title = _("Relation properties"),
+                 style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
+        self.parent = parent
+        self.shape = shape
+        
+        options = self._getOptions()
+        if not options:
+            self.valid = False
+            return
+        
+        self.valid = True
+        wx.Dialog.__init__(self, parent, id, title, style = style, **kwargs)
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
+        
+        self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
+        
+        self.fromBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
+                                    label = " %s " % _("From"))
+        self.toBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
+                                  label = " %s " % _("To"))
+        
+        self.option = wx.ComboBox(parent = self.panel, id = wx.ID_ANY,
+                                  style = wx.CB_READONLY,
+                                  choices = options)
+        self.option.Bind(wx.EVT_COMBOBOX, self.OnOption)
+        
+        self.btnCancel = wx.Button(self.panel, wx.ID_CANCEL)
+        self.btnOk     = wx.Button(self.panel, wx.ID_OK)
+        self.btnOk.Enable(False)
+        
+        self._layout()
+
+    def _layout(self):
+        mainSizer = wx.BoxSizer(wx.VERTICAL)
+
+        fromSizer = wx.StaticBoxSizer(self.fromBox, wx.VERTICAL)
+        self._layoutShape(shape = self.shape.GetFrom(), sizer = fromSizer)
+        toSizer = wx.StaticBoxSizer(self.toBox, wx.VERTICAL)
+        self._layoutShape(shape = self.shape.GetTo(), sizer = toSizer)
+
+        btnSizer = wx.StdDialogButtonSizer()
+        btnSizer.AddButton(self.btnCancel)
+        btnSizer.AddButton(self.btnOk)
+        btnSizer.Realize()
+        
+        mainSizer.Add(item = fromSizer, proportion = 0,
+                      flag = wx.EXPAND | wx.ALL, border = 5)
+        mainSizer.Add(item = toSizer, proportion = 0,
+                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, border = 5)
+        mainSizer.Add(item = btnSizer, proportion = 0,
+                      flag = wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border = 5)
+        
+        self.panel.SetSizer(mainSizer)
+        mainSizer.Fit(self.panel)
+        
+        self.Layout()
+        self.SetSize(self.GetBestSize())
+        
+    def _layoutShape(self, shape, sizer):
+        if isinstance(shape, ModelData):
+            sizer.Add(item = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
+                                           label = _("Data: %s") % shape.GetLog()),
+                      proportion = 1, flag = wx.EXPAND | wx.ALL,
+                      border = 5)
+        elif isinstance(shape, ModelAction):
+            gridSizer = wx.GridBagSizer (hgap = 5, vgap = 5)
+            gridSizer.Add(item = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
+                                               label = _("Command:")),
+                          pos = (0, 0))
+            gridSizer.Add(item = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
+                                               label = shape.GetName()),
+                          pos = (0, 1))
+            gridSizer.Add(item = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
+                                               label = _("Option:")),
+                          flag = wx.ALIGN_CENTER_VERTICAL,
+                          pos = (1, 0))
+            gridSizer.Add(item = self.option,
+                          pos = (1, 1))
+            sizer.Add(item = gridSizer,
+                      proportion = 1, flag = wx.EXPAND | wx.ALL,
+                      border = 5)
+            
+    def _getOptions(self):
+        """!Get relevant options"""
+        items = []
+        fromShape = self.shape.GetFrom()
+        if not isinstance(fromShape, ModelData):
+            GError(parent = self.parent,
+                   message = _("Relation doesn't start with data item.\n"
+                               "Unable to add relation."))
+            return items
+        
+        toShape = self.shape.GetTo()
+        if not isinstance(toShape, ModelAction):
+            GError(parent = self.parent,
+                   message = _("Relation doesn't point to GRASS command.\n"
+                               "Unable to add relation."))
+            return items
+        
+        prompt = fromShape.GetPrompt()
+        task = toShape.GetTask()
+        for p in task.get_options()['params']:
+            if p.get('prompt', '') == prompt and \
+                    'name' in p:
+                items.append(p['name'])
+        
+        if not items:
+            GError(parent = self.parent,
+                   message = _("No relevant option found.\n"
+                               "Unable to add relation."))
+        return items
+    
+    def GetOption(self):
+        """!Get selected option"""
+        return self.option.GetStringSelection()
+    
+    def IsValid(self):
+        """!Check if relation is valid"""
+        return self.valid
+    
+    def OnOption(self, event):
+        """!Set option"""
+        if event.GetString():
+            self.btnOk.Enable()
+        else:
+            self.btnOk.Enable(False)
         
 class ProcessModelFile:
     """!Process GRASS model file (gxm)"""
