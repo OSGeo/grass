@@ -9,6 +9,7 @@ Usage:
 @code
 from grass.script import temporal as grass
 
+grass.create_temporal_database()
 ...
 @endcode
 
@@ -19,32 +20,36 @@ for details.
 
 @author Soeren Gebbert
 """
-
+import os
 import sqlite3
 import os
 from datetime import datetime, date, time
+import getpass
 import core
 import raster
+import vector
 import raster3d
-import getpass
 
 def get_grass_location_db_path():
     grassenv = core.gisenv()
     dbpath = os.path.join(grassenv["GISDBASE"], grassenv["LOCATION_NAME"])
-    print os.path.join(dbpath, "grass.db")
     return os.path.join(dbpath, "grass.db")
 
 def get_sql_template_path():
-    return "./"
+    base = os.getenv("GISBASE")
+    base_etc  = os.path.join(base, "etc")
+    return os.path.join(base_etc, "sql")
 
 ###############################################################################
 
 def create_temporal_database():
     """This function creates the grass location database structure for raster, vector and raster3d maps
     as well as for the space-time datasets strds, str3ds and stvds"""
+    
+    database = get_grass_location_db_path()
 
     # Check if it already exists
-    if os.path.exists(get_grass_location_db_path()):
+    if os.path.exists(database):
         return False
 
     # Read all SQL scripts and templates
@@ -82,7 +87,7 @@ def create_temporal_database():
     sqlite3.complete_statement(str3ds_metadata_sql)
 
     # Connect to database
-    connection = sqlite3.connect(get_grass_location_db_path())
+    connection = sqlite3.connect(database)
     cursor = connection.cursor()
 
     # Execute the SQL statements
@@ -212,12 +217,15 @@ class dict_sql_serializer():
 
 class sql_database_interface(dict_sql_serializer):
     """This is the sql database interface to sqlite3"""
-    def __init__(self, table=None, ident=None):
+    def __init__(self, table=None, ident=None, database=None):
 
         dict_sql_serializer.__init__(self)
 
         self.table = table # Name of the table, set in the subclass
-	self.database = get_grass_location_db_path()
+        if database == None:
+            self.database = get_grass_location_db_path()
+        else:
+            self.database = database
         self.ident = ident
 
     def connect(self):
@@ -450,6 +458,48 @@ class vector_base(dataset_identifer):
     def __init__(self, ident=None, name=None, mapset=None, creator=None, creation_time=None,\
 		    modification_time=None, temporal_type=None, revision=1):
         dataset_identifer.__init__(self, "vector_base", ident, name, mapset, creator, creation_time,\
+	            modification_time, temporal_type, revision)
+
+###############################################################################
+
+class stds_base(dataset_identifer):
+    def __init__(self, table=None, ident=None, name=None, mapset=None, semantic_type=None, creator=None, creation_time=None,\
+		    modification_time=None, temporal_type=None, revision=1):
+        dataset_identifer.__init__(self, table, ident, name, mapset, creator, creation_time,\
+	            modification_time, temporal_type, revision)
+
+	self.set_semantic_type(semantic_type)
+
+    def set_semantic_type(self, semantic_type):
+	"""Set the sematnic type of the space time dataset"""
+	self.D["semantic_type"] = semantic_type
+
+    def get_semantic_type(self):
+	"""Get the semantic_type of the space time dataset
+	   @return None if not found"""
+	if self.D.has_key("semantic_type"):
+	    return self.D["semantic_type"]
+        else:
+	    return None
+
+###############################################################################
+
+class strds_base(stds_base):
+    def __init__(self, ident=None, name=None, mapset=None,semantic_type=None,  creator=None, creation_time=None,\
+		    modification_time=None, temporal_type=None, revision=1):
+        stds_base.__init__(self, "strds_base", ident, name, mapset, semantic_type, creator, creation_time,\
+	            modification_time, temporal_type, revision)
+
+class str3ds_base(stds_base):
+    def __init__(self, ident=None, name=None, mapset=None,semantic_type=None,  creator=None, creation_time=None,\
+		    modification_time=None, temporal_type=None, revision=1):
+        stds_base.__init__(self, "str3ds_base", ident, name, mapset, semantic_type, creator, creation_time,\
+	            modification_time, temporal_type, revision)
+
+class stvds_base(stds_base):
+    def __init__(self, ident=None, name=None, mapset=None, semantic_type=None,  creator=None, creation_time=None,\
+		    modification_time=None, temporal_type=None, revision=1):
+        stds_base.__init__(self, "stvds_base", ident, name, mapset, semantic_type, creator, creation_time,\
 	            modification_time, temporal_type, revision)
 
 ###############################################################################
@@ -709,6 +759,40 @@ class vector_absolute_time(absolute_timestamp):
 
 ###############################################################################
 
+class stds_absolute_time(absolute_timestamp):
+    def __init__(self, table=None, ident=None, start_time=None, end_time=None, granularity=None, timezone=None):
+        absolute_timestamp.__init__(self, table, ident, start_time, end_time, timezone)
+
+	self.set_granularity(granularity)
+
+    def set_granularity(self, granularity):
+	"""Set the granularity of the space time dataset"""
+	self.D["granularity"] = granularity
+
+    def get_granularity(self):
+	"""Get the granularity of the space time dataset
+	   @return None if not found"""
+	if self.D.has_key("granularity"):
+	    return self.D["granularity"]
+        else:
+	    return None
+
+###############################################################################
+
+class strds_absolute_time(stds_absolute_time):
+    def __init__(self, ident=None, start_time=None, end_time=None, granularity=None, timezone=None):
+        stds_absolute_time.__init__(self, "strds_absolute_time", ident, start_time, end_time, granularity, timezone)
+
+class str3ds_absolute_time(stds_absolute_time):
+    def __init__(self, ident=None, start_time=None, end_time=None, granularity=None, timezone=None):
+        stds_absolute_time.__init__(self, "str3ds_absolute_time", ident, start_time, end_time, granularity, timezone)
+
+class stvds_absolute_time(stds_absolute_time):
+    def __init__(self, ident=None, start_time=None, end_time=None, granularity=None, timezone=None):
+        stds_absolute_time.__init__(self, "stvds_absolute_time", ident, start_time, end_time, granularity, timezone)
+
+###############################################################################
+
 class relative_timestamp(sql_database_interface):
     """This is the relative time base class for all maps and spacetime datasets"""
     def __init__(self, table=None, ident=None, interval=None):
@@ -799,6 +883,40 @@ class raster3d_relative_time(relative_timestamp):
 class vector_relative_time(relative_timestamp):
     def __init__(self, ident=None, interval=None):
         relative_timestamp.__init__(self, "vector_relative_time", ident, interval)
+        
+###############################################################################
+
+class stds_relative_time(relative_timestamp):
+    def __init__(self, table=None, ident=None, interval=None, granularity=None):
+        relative_timestamp.__init__(self, table, ident, interval)
+
+	self.set_granularity(granularity)
+
+    def set_granularity(self, granularity):
+	"""Set the granularity of the space time dataset"""
+	self.D["granularity"] = granularity
+
+    def get_granularity(self):
+	"""Get the granularity of the space time dataset
+	   @return None if not found"""
+	if self.D.has_key("granularity"):
+	    return self.D["granularity"]
+        else:
+	    return None
+
+###############################################################################
+
+class strds_relative_time(stds_relative_time):
+    def __init__(self, ident=None, interval=None, granularity=None):
+        stds_relative_time.__init__(self, "strds_relative_time", ident, interval, granularity)
+
+class str3ds_relative_time(stds_relative_time):
+    def __init__(self, ident=None, interval=None, granularity=None):
+        stds_relative_time.__init__(self, "str3ds_relative_time", ident, interval, granularity)
+
+class stvds_relative_time(stds_relative_time):
+    def __init__(self, ident=None, interval=None, granularity=None):
+        stds_relative_time.__init__(self, "stvds_relative_time", ident, interval, granularity)
 
 ###############################################################################
 
@@ -914,16 +1032,28 @@ class spatial_extent(sql_database_interface):
 ###############################################################################
 
 class raster_spatial_extent(spatial_extent):
-    def __init__(self, ident=None, interval=None, north=None, south=None, east=None, west=None, top=None, bottom=None):
+    def __init__(self, ident=None, north=None, south=None, east=None, west=None, top=None, bottom=None):
         spatial_extent.__init__(self, "raster_spatial_extent", ident, north, south, east, west, top, bottom)
 
 class raster3d_spatial_extent(spatial_extent):
-    def __init__(self, ident=None, interval=None, north=None, south=None, east=None, west=None, top=None, bottom=None):
+    def __init__(self, ident=None, north=None, south=None, east=None, west=None, top=None, bottom=None):
         spatial_extent.__init__(self, "raster3d_spatial_extent", ident, north, south, east, west, top, bottom)
 
 class vector_spatial_extent(spatial_extent):
-    def __init__(self, ident=None, interval=None, north=None, south=None, east=None, west=None, top=None, bottom=None):
+    def __init__(self, ident=None, north=None, south=None, east=None, west=None, top=None, bottom=None):
         spatial_extent.__init__(self, "vector_spatial_extent", ident, north, south, east, west, top, bottom)
+
+class strds_spatial_extent(spatial_extent):
+    def __init__(self, ident=None, north=None, south=None, east=None, west=None, top=None, bottom=None):
+        spatial_extent.__init__(self, "strds_spatial_extent", ident, north, south, east, west, top, bottom)
+
+class str3ds_spatial_extent(spatial_extent):
+    def __init__(self, ident=None, north=None, south=None, east=None, west=None, top=None, bottom=None):
+        spatial_extent.__init__(self, "str3ds_spatial_extent", ident, north, south, east, west, top, bottom)
+
+class stvds_spatial_extent(spatial_extent):
+    def __init__(self, ident=None, north=None, south=None, east=None, west=None, top=None, bottom=None):
+        spatial_extent.__init__(self, "stvds_spatial_extent", ident, north, south, east, west, top, bottom)
 
 ###############################################################################
 
@@ -1218,9 +1348,6 @@ class abstract_dataset():
 	    self.relative_time.print_self()
 	self.spatial_extent.print_self()
 	self.metadata.print_self()
-
-    def load_from_file(self):
-        raise IOError("This method must be implemented in the subclasses")
     
     def is_time_absolute(self):
 	if self.base.D.has_key("temporal_type"):
@@ -1258,7 +1385,8 @@ class raster_dataset(abstract_dataset):
 	self.spatial_extent = raster_spatial_extent(ident=ident)
 	self.metadata = raster_metadata(ident=ident)
 
-    def load_from_file(self):
+    def load(self):
+        """Load all info from an existing raster map into the internal structure"""
         
         # Get the data from an existing raster map
         kvp = raster.raster_info(self.ident)
@@ -1294,7 +1422,6 @@ class raster_dataset(abstract_dataset):
         self.metadata.set_cols(cols)
         self.metadata.set_rows(rows)
         self.metadata.set_number_of_cells(ncells)
-        
 
 ###############################################################################
 
@@ -1312,7 +1439,8 @@ class raster3d_dataset(abstract_dataset):
 	self.spatial_extent = raster3d_spatial_extent(ident=ident)
 	self.metadata = raster3d_metadata(ident=ident)
 
-    def load_from_file(self):
+    def load(self):
+        """Load all info from an existing raster3d map into the internal structure"""
         
         # Get the data from an existing raster map
         kvp = raster3d.raster3d_info(self.ident)
@@ -1336,7 +1464,7 @@ class raster3d_dataset(abstract_dataset):
         
         self.metadata.set_nsres(kvp["nsres"])
         self.metadata.set_ewres(kvp["ewres"])
-        self.metadata.set_ewres(kvp["tbres"])
+        self.metadata.set_tbres(kvp["tbres"])
         self.metadata.set_datatype(kvp["datatype"])
         self.metadata.set_min(kvp["min"])
         self.metadata.set_max(kvp["max"])
@@ -1351,4 +1479,44 @@ class raster3d_dataset(abstract_dataset):
         self.metadata.set_rows(depths)
         self.metadata.set_depths(rows)
         self.metadata.set_number_of_cells(ncells)
+        
+
+###############################################################################
+
+class vector_dataset(abstract_dataset):
+    def __init__(self, ident):
+	self.reset(ident)
+        
+    def reset(self, ident):
+	"""Reset the internal structure and set the identifier"""
+	self.ident = ident
+
+	self.base = vector_base(ident=ident)
+	self.absolute_time = vector_absolute_time(ident=ident)
+	self.relative_time = vector_relative_time(ident=ident)
+	self.spatial_extent = vector_spatial_extent(ident=ident)
+	self.metadata = vector_metadata(ident=ident)
+
+    def load(self):
+        """Load all info from an existing vector map into the internal structure"""
+        
+        # Get the data from an existing raster map
+        kvp = vector.vector_info(self.ident)
+        
+        # Fill base information
+        
+        self.base.set_name(self.ident.split("@")[0])
+        self.base.set_mapset(self.ident.split("@")[1])
+        self.base.set_creator(str(getpass.getuser()))
+        
+        # Fill spatial extent
+                
+        self.spatial_extent.set_north(kvp["north"])
+        self.spatial_extent.set_south(kvp["south"])
+        self.spatial_extent.set_west(kvp["west"])
+        self.spatial_extent.set_east(kvp["east"])
+        self.spatial_extent.set_top(kvp["top"])
+        self.spatial_extent.set_bottom(kvp["bottom"])
+        
+        # Fill metadata .. no metadata yet
         

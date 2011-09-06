@@ -33,7 +33,7 @@ from core import *
 # run "r3.info -rstgip ..." and parse output
 
 def raster3d_info(map):
-    """!Return information about a raster map (interface to
+    """!Return information about a raster3d map (interface to
     `r3.info'). Example:
 
     \code

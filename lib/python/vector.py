@@ -163,6 +163,48 @@ def vector_info_topo(map):
     
     return ret
 
+
+# run "v.info -get ..." and parse output
+
+def vector_info(map):
+    """!Return information about a vector map (interface to
+    `v.info'). Example:
+
+    \code
+    >>> grass.vector_info('random_points')
+    {'comment': '', 'projection': 'x,y', 'creator': 'soeren', 'holes': 0, 
+     'primitives': 20, 'kernels': 0, 'scale': '1:1', 'title': '', 
+     'west': 0.046125489999999998, 'top': 2376.133159, 'boundaries': 0, 
+     'location': 'XYLocation', 'nodes': 0, 'east': 0.97305646000000001, 
+     'source_date': 'Mon Aug 29 10:55:57 2011', 'north': 0.9589993, 
+     'format': 'native', 'faces': 0, 'centroids': 0, 
+     'digitization_threshold': '0.000000', 'islands': 0, 'level': 2, 
+     'mapset': 'test', 'areas': 0, 'name': 'random_points', 
+     'database': '/home/soeren/grassdata', 'bottom': 22.186596999999999, 
+     'lines': 0, 'points': 20, 'map3d': True, 'volumes': 0, 'num_dblinks': 0, 
+     'organization': '', 'south': 0.066047099999999997}
+    
+    \endcode
+    @param map map name
+    
+    @return parsed vector info
+    """
+
+    s = read_command('v.info', flags = 'get', map = map)
+    
+    kv = parse_key_val(s)
+    for k in ['north', 'south', 'east', 'west', 'top', 'bottom']:
+	kv[k] = float(kv[k])
+    for k in ['level', 'num_dblinks']:
+	kv[k] = int(kv[k])
+    for k in ['nodes', 'points', 'lines', 'boundaries', 'centroids', 'areas', 'islands', \
+              'faces', 'kernels', 'volumes', 'holes', 'primitives']:
+	kv[k] = int(kv[k])
+    if 'map3d' in kv:
+        kv['map3d'] = bool(kv['map3d'])
+    return kv
+
+
 # interface for v.db.select
 
 def vector_db_select(map, layer = 1, **kwargs):
