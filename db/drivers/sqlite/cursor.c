@@ -3,9 +3,9 @@
 *
 * MODULE:       SQLite driver 
 *   	    	
-* AUTHOR(S):    Radim Blazek
+* AUTHOR(S):    Radim Blazek, Markus Metz
 *
-* COPYRIGHT:    (C) 2005 by the GRASS Development Team
+* COPYRIGHT:    (C) 2011 by the GRASS Development Team
 *
 * This program is free software under the GNU General Public
 * License (>=v2). Read the file COPYING that comes with GRASS
@@ -21,6 +21,7 @@
 int db__driver_close_cursor(dbCursor * dbc)
 {
     cursor *c;
+    int ret;
 
     init_error();
 
@@ -29,7 +30,10 @@ int db__driver_close_cursor(dbCursor * dbc)
     if (c == NULL)
 	return DB_FAILED;
 
-    sqlite3_finalize(c->statement);
+    ret = sqlite3_finalize(c->statement);
+    while (ret == SQLITE_BUSY || ret == SQLITE_IOERR_BLOCKED) {
+	ret = sqlite3_busy_handler(sqlite, sqlite_busy_callback, NULL);
+    }
 
     /* free_cursor(cursor) */
     free_cursor(c);

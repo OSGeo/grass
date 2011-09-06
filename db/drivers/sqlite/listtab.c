@@ -8,8 +8,9 @@
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author Radim Blazek
+ * \author Support for multiple connections by Markus Metz
  *
- * \date 2005-2007
+ * \date 2005-2011
  */
 
 #include <stdlib.h>
@@ -43,6 +44,10 @@ int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
     ret = sqlite3_prepare(sqlite,
 			  "select name from sqlite_master where type = 'table' or type = 'view'",
 			  -1, &statement, &rest);
+
+    while (ret == SQLITE_BUSY || ret == SQLITE_IOERR_BLOCKED) {
+	ret = sqlite3_busy_handler(sqlite, sqlite_busy_callback, NULL);
+    }
 
     if (ret != SQLITE_OK) {
 	append_error("Cannot list tables\n");

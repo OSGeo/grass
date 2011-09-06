@@ -8,8 +8,9 @@
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author Radim Blazek
+ * \author Support for multiple connections by Markus Metz
  *
- * \date 2005-2007
+ * \date 2005-2011
  */
 
 #include <grass/dbmi.h>
@@ -65,6 +66,9 @@ int db__driver_create_index(dbIndex * index)
     G_debug(3, " SQL: %s", db_get_string(&sql));
 
     ret = sqlite3_prepare(sqlite, db_get_string(&sql), -1, &statement, &rest);
+    while (ret == SQLITE_BUSY || ret == SQLITE_IOERR_BLOCKED) {
+	ret = sqlite3_busy_handler(sqlite, sqlite_busy_callback, NULL);
+    }
 
     if (ret != SQLITE_OK) {
 	append_error("Cannot create index:\n");
@@ -86,6 +90,7 @@ int db__driver_create_index(dbIndex * index)
 	return DB_FAILED;
     }
 
+    sqlite3_reset(statement);
     sqlite3_finalize(statement);
     db_free_string(&sql);
 

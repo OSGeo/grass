@@ -3,9 +3,9 @@
 *
 * MODULE:       SQLite driver 
 *   	    	
-* AUTHOR(S):    Radim Blazek
+* AUTHOR(S):    Radim Blazek, Markus Metz
 *
-* COPYRIGHT:    (C) 2005 by the GRASS Development Team
+* COPYRIGHT:    (C) 2011 by the GRASS Development Team
 *
 * This program is free software under the GNU General Public
 * License (>=v2). Read the file COPYING that comes with GRASS
