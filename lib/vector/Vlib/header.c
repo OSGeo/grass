@@ -309,43 +309,9 @@ const char *Vect_get_ogr_geometry_type(const struct Map_info *Map)
 	return NULL;
 
     Ogr_feature_defn = OGR_L_GetLayerDefn(Map->fInfo.ogr.layer);
-    Ogr_geom_type = OGR_FD_GetGeomType(Ogr_feature_defn);
-    switch(Ogr_geom_type) {
-    case wkbPoint:
-	return G_store(_("Point"));
-    case wkbMultiPoint:
-	return G_store(_("MultiPoint"));
-    case wkbLineString:
-	return G_store(_("LineString"));
-    case wkbMultiLineString:
-	return G_store(_("MultiLineString"));
-    case wkbPolygon:
-	return G_store(_("Polygon"));
-    case wkbMultiPolygon:
-	return G_store(_("MultiPolygon"));
-    case wkbGeometryCollection:
-	return G_store(_("GeometryCollection"));
-    case wkbNone:
-	return G_store(_("None"));
-    case wkbLinearRing:
-	return G_store(_("LinearRing"));
-    case wkbPoint25D:
-	return G_store(_("3D Point"));
-    case wkbMultiPoint25D:
-	return G_store(_("3D MultiPoint"));
-    case wkbLineString25D:
-	return G_store(_("3D LineString"));
-    case wkbMultiLineString25D:
-	return G_store(_("3D MultiLineString"));
-    case wkbPolygon25D:
-	return G_store(_("3D Polygon"));
-    case wkbMultiPolygon25D:
-	return G_store(_("3D MultiPolygon"));
-    case wkbGeometryCollection25D:
-	return G_store(_("3D GeometryCollection"));
-    default:
-	return G_store(_("Unknown"));
-    }
+    Ogr_geom_type = wkbFlatten(OGR_FD_GetGeomType(Ogr_feature_defn));
+    
+    return OGRGeometryTypeToName(Ogr_geom_type);
 #endif
     return NULL;
 }
