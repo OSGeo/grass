@@ -42,6 +42,33 @@ chooses an outlet point on a hill slope, the resulting map
 will be a thin silver of land representing the overland
 slope uphill of the point.
 
+<h2>EXAMPLE</h2>
+
+A watershed in the North Carolina sample dataset region:
+
+<div class="code"><pre>
+g.region rast=elev_lid792_1m -p
+# the watershed outlet position should be placed on a stream (from
+# accumulation map):
+r.watershed elev_lid792_1m thresh=5000 accum=accum_5K \
+  drain=draindir_5K basin=basin_5K
+r.water.outlet drainage=draindir_5K basin=basin_A30 \
+  east=638741.43125 north=220269.7
+d.mon x0
+d.rast accum_5K
+d.rast -o basin_A30
+
+# overlay with transparency
+r.colors basin_A30 color=grey
+d.his h=accum_5K i=basin_A30
+</pre></div>
+
+<p>
+<center>
+<img src="r_water_outlet.png" border=0><BR>
+<i>Watershed draped over flow accumulation</i>
+</center>
+
 <h2>SEE ALSO</h2>
 
 <em>

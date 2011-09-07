@@ -145,6 +145,8 @@ int main(int argc, char *argv[])
     for (row = 0; row < nrows; row++) {
 	for (col = 0; col < ncols; col++) {
 	    cell_buf[col] = bas[SEG_INDEX(ba_seg, row, col)];
+	    if (cell_buf[col] == 0)
+		Rast_set_null_value(&cell_buf[col], 1, CELL_TYPE);
 	}
 	Rast_put_row(basin_fd, cell_buf, CELL_TYPE);
     }
