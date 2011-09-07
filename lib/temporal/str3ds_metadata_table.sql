@@ -8,21 +8,21 @@
 PRAGMA foreign_keys = ON;
 
 CREATE TABLE  str3ds_metadata (
-  id VARCHAR NOT NULL,               -- Id of the space-time raster3d dataset, this is the primary foreign key
-  raster3d_register VARCHAR,         -- The id of the table in which the raster3d maps are registered for this dataset
-  number_of_registered_maps INTEGER, -- The number of registered raster3d maps
-  max_min DOUBLE PRECISION,          -- The minimal maximum of the registered raster3d maps
-  min_min DOUBLE PRECISION,          -- The minimal minimum of the registered raster3d maps
-  max_max DOUBLE PRECISION,          -- The maximal maximum of the registered raster3d maps
-  min_max DOUBLE PRECISION,          -- The maximal minimum of the registered raster3d maps
-  nsres_min DOUBLE PRECISION,        -- The lowest north-south resolution of the registered raster3d maps
-  nsres_max DOUBLE PRECISION,        -- The highest north-south resolution of the registered raster3d maps
-  ewres_min DOUBLE PRECISION,        -- The lowest east-west resolution of the registered raster3d maps
-  ewres_max DOUBLE PRECISION,        -- The highest east-west resolution of the registered raster3d maps
-  tbres_min DOUBLE PRECISION,        -- The lowest top-bottom resolution of the registered raster3d maps
-  tbres_max DOUBLE PRECISION,        -- The highest top-bottom resolution of the registered raster3d maps
-  title VARCHAR,                     -- Title of the space-time raster3d dataset
-  description VARCHAR,               -- Detailed description of the space-time raster3d dataset
+  id VARCHAR NOT NULL,          -- Id of the space-time raster3d dataset, this is the primary foreign key
+  raster3d_register VARCHAR,    -- The id of the table in which the raster3d maps are registered for this dataset
+  number_of_maps INTEGER,       -- The number of registered raster3d maps
+  max_min DOUBLE PRECISION,     -- The minimal maximum of the registered raster3d maps
+  min_min DOUBLE PRECISION,     -- The minimal minimum of the registered raster3d maps
+  max_max DOUBLE PRECISION,     -- The maximal maximum of the registered raster3d maps
+  min_max DOUBLE PRECISION,     -- The maximal minimum of the registered raster3d maps
+  nsres_min DOUBLE PRECISION,   -- The lowest north-south resolution of the registered raster3d maps
+  nsres_max DOUBLE PRECISION,   -- The highest north-south resolution of the registered raster3d maps
+  ewres_min DOUBLE PRECISION,   -- The lowest east-west resolution of the registered raster3d maps
+  ewres_max DOUBLE PRECISION,   -- The highest east-west resolution of the registered raster3d maps
+  tbres_min DOUBLE PRECISION,   -- The lowest top-bottom resolution of the registered raster3d maps
+  tbres_max DOUBLE PRECISION,   -- The highest top-bottom resolution of the registered raster3d maps
+  title VARCHAR,                -- Title of the space-time raster3d dataset
+  description VARCHAR,          -- Detailed description of the space-time raster3d dataset
   PRIMARY KEY (id),  
   FOREIGN KEY (id) REFERENCES  str3ds_base (id) ON DELETE CASCADE
 );
@@ -36,7 +36,7 @@ CREATE VIEW str3ds_view_abs_time AS SELECT
 	    A2.end_time, A2.granularity,
 	    A3.north, A3.south, A3.east, A3.west,
 	    A4.raster3d_register,
-	    A4.number_of_registered_maps, 
+	    A4.number_of_maps, 
             A4.nsres_min, A4.ewres_min, 
             A4.nsres_max, A4.ewres_max, 
             A4.tbres_min, A4.tbres_max, 
@@ -55,7 +55,7 @@ CREATE VIEW str3ds_view_rel_time AS SELECT
 	    A2.interval, A2.granularity,
 	    A3.north, A3.south, A3.east, A3.west,
 	    A4.raster3d_register,
-	    A4.number_of_registered_maps, 
+	    A4.number_of_maps, 
             A4.nsres_min, A4.ewres_min, 
             A4.nsres_max, A4.ewres_max, 
             A4.tbres_min, A4.tbres_max, 
