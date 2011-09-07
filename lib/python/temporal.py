@@ -243,7 +243,7 @@ class sql_database_interface(dict_sql_serializer):
     def delete(self):
 	self.connect()
 	sql = self.get_delete_statement()
-        print sql
+        #print sql
         self.cursor.execute(sql)
 	self.close()
 
@@ -253,7 +253,7 @@ class sql_database_interface(dict_sql_serializer):
     def is_in_db(self):
 	self.connect()
 	sql = self.get_is_in_db_statement()
-        print sql
+        #print sql
         self.cursor.execute(sql)
 	row = self.cursor.fetchone()
 	self.close()
@@ -485,13 +485,13 @@ class stds_base(dataset_identifer):
 ###############################################################################
 
 class strds_base(stds_base):
-    def __init__(self, ident=None, name=None, mapset=None,semantic_type=None,  creator=None, creation_time=None,\
+    def __init__(self, ident=None, name=None, mapset=None, semantic_type=None,  creator=None, creation_time=None,\
 		    modification_time=None, temporal_type=None, revision=1):
         stds_base.__init__(self, "strds_base", ident, name, mapset, semantic_type, creator, creation_time,\
 	            modification_time, temporal_type, revision)
 
 class str3ds_base(stds_base):
-    def __init__(self, ident=None, name=None, mapset=None,semantic_type=None,  creator=None, creation_time=None,\
+    def __init__(self, ident=None, name=None, mapset=None, semantic_type=None,  creator=None, creation_time=None,\
 		    modification_time=None, temporal_type=None, revision=1):
         stds_base.__init__(self, "str3ds_base", ident, name, mapset, semantic_type, creator, creation_time,\
 	            modification_time, temporal_type, revision)
@@ -1290,16 +1290,294 @@ class vector_metadata(sql_database_interface):
         else:
 	    return None
 
+
+###############################################################################
+
+class stds_metadata_base(sql_database_interface):
+    """This is the space time dataset metadata base class for strds, stvds and str3ds datasets
+       setting/getting the id, the title and the description
+    """
+    def __init__(self, table=None, ident=None, title=None, description=None):
+
+	sql_database_interface.__init__(self, table, ident)
+
+	self.set_id(ident)
+	self.set_title(title)
+	self.set_description(description)
+        # No setter for this
+        self.D["number_of_maps"] = None
+
+    def set_id(self, ident):
+	"""Convenient method to set the unique identifier (primary key)"""
+	self.ident = ident
+	self.D["id"] = ident
+
+    def set_title(self, title):
+	"""Set the title"""
+	self.D["title"] = title
+
+    def set_description(self, description):
+	"""Set the number of cols"""
+	self.D["description"] = description
+
+    def get_id(self):
+	"""Convenient method to get the unique identifier (primary key)
+	   @return None if not found
+	"""
+	if self.D.has_key("id"):
+	    return self.D["id"]
+        else:
+	    return None
+
+    def get_title(self):
+	"""Get the title 
+	   @return None if not found"""
+	if self.D.has_key("title"):
+	    return self.D["title"]
+        else:
+	    return None
+
+    def get_description(self):
+	"""Get description 
+	   @return None if not found"""
+	if self.D.has_key("description"):
+	    return self.D["description"]
+        else:
+	    return None
+
+    def get_number_of_maps(self):
+	"""Get the number of registered maps, this value is set in the database
+           automatically via SQL trigger, so no setter exists
+	   @return None if not found"""
+	if self.D.has_key("number_of_maps"):
+	    return self.D["number_of_maps"]
+        else:
+	    return None
+    
+###############################################################################
+    
+class stds_raster_metadata_base(stds_metadata_base):
+    """This is the space time dataset metadata base class for strds and str3ds datasets
+       
+       Most of the metadata values are set by triggers in the database when 
+       new raster of voxel maps are added. Therefor only some set- an many get-functions 
+       are available.
+    """
+    def __init__(self, table=None, ident=None, title=None, description=None):
+
+	stds_metadata_base.__init__(self, table, ident, title, description)
+        
+        # Initialize the dict to select all values from the db
+        self.D["min_max"] = None
+        self.D["max_max"] = None
+        self.D["min_min"] = None
+        self.D["max_min"] = None
+        self.D["nsres_min"] = None
+        self.D["nsres_max"] = None
+        self.D["ewres_min"] = None
+        self.D["ewres_max"] = None
+
+    def get_max_min(self):
+	"""Get the minimal maximum of all registered maps, this value is set in the database
+           automatically via SQL trigger, so no setter exists
+	   @return None if not found"""
+	if self.D.has_key("max_min"):
+	    return self.D["max_min"]
+        else:
+	    return None
+
+    def get_min_min(self):
+	"""Get the minimal minimum of all registered maps, this value is set in the database
+           automatically via SQL trigger, so no setter exists
+	   @return None if not found"""
+	if self.D.has_key("min_min"):
+	    return self.D["min_min"]
+        else:
+	    return None
+
+    def get_max_max(self):
+	"""Get the maximal maximum of all registered maps, this value is set in the database
+           automatically via SQL trigger, so no setter exists
+	   @return None if not found"""
+	if self.D.has_key("max_max"):
+	    return self.D["max_max"]
+        else:
+	    return None
+
+    def get_min_max(self):
+	"""Get the maximal minimum of all registered maps, this value is set in the database
+           automatically via SQL trigger, so no setter exists
+	   @return None if not found"""
+	if self.D.has_key("min_max"):
+	    return self.D["min_max"]
+        else:
+	    return None
+
+    def get_min_max(self):
+	"""Get the minimal maximum of all registered maps, this value is set in the database
+           automatically via SQL trigger, so no setter exists
+	   @return None if not found"""
+	if self.D.has_key("min_max"):
+	    return self.D["min_max"]
+        else:
+	    return None
+
+    def get_nsres_min(self):
+	"""Get the minimal north-south resolution of all registered maps, this value is set in the database
+           automatically via SQL trigger, so no setter exists
+	   @return None if not found"""
+	if self.D.has_key("nsres_min"):
+	    return self.D["nsres_min"]
+        else:
+	    return None
+
+    def get_nsres_max(self):
+	"""Get the maximal north-south resolution of all registered maps, this value is set in the database
+           automatically via SQL trigger, so no setter exists
+	   @return None if not found"""
+	if self.D.has_key("nsres_max"):
+	    return self.D["nsres_max"]
+        else:
+	    return None
+
+    def get_ewres_min(self):
+	"""Get the minimal east-west resolution of all registered maps, this value is set in the database
+           automatically via SQL trigger, so no setter exists
+	   @return None if not found"""
+	if self.D.has_key("ewres_min"):
+	    return self.D["ewres_min"]
+        else:
+	    return None
+
+    def get_ewres_max(self):
+	"""Get the maximal east-west resolution of all registered maps, this value is set in the database
+           automatically via SQL trigger, so no setter exists
+	   @return None if not found"""
+	if self.D.has_key("ewres_max"):
+	    return self.D["ewres_max"]
+        else:
+	    return None
+
+
+###############################################################################
+
+class strds_metadata(stds_raster_metadata_base):
+    """This is the raster metadata class"""
+    def __init__(self, ident=None, raster_register=None,  title=None, description=None):
+
+	stds_raster_metadata_base.__init__(self, "strds_metadata", ident, title, description)
+
+	self.set_raster_register(raster_register)
+
+    def set_raster_register(self, raster_register):
+	"""Set the raster map register table name"""
+	self.D["raster_register"] = raster_register
+
+    def get_raster_register(self):
+	"""Get the raster map register table name
+	   @return None if not found"""
+	if self.D.has_key("raster_register"):
+	    return self.D["raster_register"]
+        else:
+	    return None
+        
+###############################################################################
+
+class str3ds_metadata(stds_raster_metadata_base):
+    """This is the space time raster3d metadata class"""
+    def __init__(self, ident=None, raster3d_register=None,  title=None, description=None):
+
+	stds_raster_metadata_base.__init__(self, "str3ds_metadata", ident, title, description)
+
+	self.set_raster3d_register(raster3d_register)
+        self.D["tbres_min"] = None
+        self.D["tbres_max"] = None
+
+    def set_raster3d_register(self, raster3d_register):
+	"""Set the raster map register table name"""
+	self.D["raster3d_register"] = raster3d_register
+
+    def get_raster3d_register(self):
+	"""Get the raster3d map register table name
+	   @return None if not found"""
+	if self.D.has_key("raster3d_register"):
+	    return self.D["raster3d_register"]
+        else:
+	    return None
+
+    def get_tbres_min(self):
+	"""Get the minimal top-bottom resolution of all registered maps, this value is set in the database
+           automatically via SQL trigger, so no setter exists
+	   @return None if not found"""
+	if self.D.has_key("tbres_min"):
+	    return self.D["tbres_min"]
+        else:
+	    return None
+
+    def get_tbres_max(self):
+	"""Get the maximal top-bottom resolution of all registered maps, this value is set in the database
+           automatically via SQL trigger, so no setter exists
+	   @return None if not found"""
+	if self.D.has_key("tbres_max"):
+	    return self.D["tbres_max"]
+        else:
+	    return None
+
+###############################################################################
+
+class stvds_metadata(stds_metadata_base):
+    """This is the raster metadata class"""
+    def __init__(self, ident=None, vector_register=None,  title=None, description=None):
+
+	stds_metadata_base.__init__(self, "stvds_metadata", ident, title, description)
+
+	self.set_vector_register(vector_register)
+
+    def set_vector_register(self, vector_register):
+	"""Set the vector map register table name"""
+	self.D["vector_register"] = vector_register
+
+    def get_vector_register(self):
+	"""Get the vector map register table name
+	   @return None if not found"""
+	if self.D.has_key("vector_register"):
+	    return self.D["vector_register"]
+        else:
+	    return None
+
 ###############################################################################
 
 class abstract_dataset():
-    def __init__(self, ident):
-	self.reset(ident)
-
-    def reset(self, ident):
-	"""Reset the internal structure and set the identifier"""
-        raise IOError("This method must be implemented in the subclasses")
-
+    """This is the base class for all datasets (raster, vector, raster3d, strds, stvds, str3ds)"""
+        
+    def get_absolute_time(self):
+        """Returns a tuple of the start, the end valid time and the timezone of the map
+           @return A tuple of (start_time, end_time, timezone)
+        """
+               
+        start = self.absolute_time.get_start_time()
+        end = self.absolute_time.get_end_time()
+        tz = self.absolute_time.get_timezone()
+        
+        return (start, end, tz)
+    
+    def get_relative_time(self):
+        """Returns the relative time interval or None if not present"""
+        return self.relative_time.get_interval()
+    
+    
+    def get_spatial_extent(self):
+        """Return a tuple of spatial extent (north, south, east, west, top, bottom) """
+        
+        north = self.spatial_extent.get_north()
+        south = self.spatial_extent.get_south()
+        east = self.spatial_extent.get_east()
+        west = self.spatial_extent.get_west()
+        top = self.spatial_extent.get_top()
+        bottom = self.spatial_extent.get_bottom()
+        
+        return (north, south, east, west, top, bottom)
+        
     def select(self):
 	"""Select temporal dataset entry from database and fill up the internal structure"""
 	self.base.select()
@@ -1349,6 +1627,12 @@ class abstract_dataset():
 	self.spatial_extent.print_self()
 	self.metadata.print_self()
     
+    def set_time_to_absolute(self):
+	self.base.set_ttype("absolute")
+
+    def set_time_to_relative(self):
+	self.base.Dset_ttype("relative")
+
     def is_time_absolute(self):
 	if self.base.D.has_key("temporal_type"):
 	    return self.base.get_ttype() == "absolute"
@@ -1371,7 +1655,54 @@ class abstract_dataset():
 
 ###############################################################################
 
-class raster_dataset(abstract_dataset):
+class abstract_map_dataset(abstract_dataset):
+    """This is the base class for all maps (raster, vector, raster3d) 
+       providing additional function to set the valid time and the spatial extent.
+       
+       Valid time and spatial extent will be set automatically in the space-time datasets
+    """
+    
+    def set_absolute_time(self, start_time, end_time=None, timezone=None):
+        """Set the absolute time interval with start time and end time
+        
+           @start_time a datetime object specifying the start time of the map
+           @end_time a datetime object specifying the end time of the map
+           @timezone Thee timezone of the map
+        
+        """
+        self.base.set_ttype("absolute")
+        
+        self.absolute_time.set_start_time(start_time)
+        self.absolute_time.set_end_time(end_time)
+        self.absolute_time.set_timezone(timezone)
+    
+    def set_relative_time(self, interval):
+        """Set the relative time interval 
+        
+           @interval A double value in days
+        
+        """
+        self.base.set_ttype("relative")
+        
+        self.absolute_time.set_interval(interval)
+        
+    def set_spatial_extent(self, north, south, east, west, top=0, bottom=0):
+        """Set the spatial extent of the map"""
+        self.spatial_extent.set_north(north)
+        self.spatial_extent.set_south(south)
+        self.spatial_extent.set_east(east)
+        self.spatial_extent.set_west(west)
+        self.spatial_extent.set_top(top)
+        self.spatial_extent.set_bottom(bottom)
+        
+###############################################################################
+
+class raster_dataset(abstract_map_dataset):
+    """Raster dataset class
+    
+       This class provides functions to select, update, insert or delete raster 
+       map informations and valid time stamps into the SQL temporal database.
+    """
     def __init__(self, ident):
 	self.reset(ident)
         
@@ -1398,13 +1729,9 @@ class raster_dataset(abstract_dataset):
         self.base.set_creator(str(getpass.getuser()))
         
         # Fill spatial extent
-                
-        self.spatial_extent.set_north(kvp["north"])
-        self.spatial_extent.set_south(kvp["south"])
-        self.spatial_extent.set_west(kvp["west"])
-        self.spatial_extent.set_east(kvp["east"])
-        self.spatial_extent.set_top(0)
-        self.spatial_extent.set_bottom(0)
+        
+        self.set_spatial_extent(north=kvp["north"], south=kvp["south"], \
+                                east=kvp["east"],   west=kvp["west"])
         
         # Fill metadata
         
@@ -1414,8 +1741,8 @@ class raster_dataset(abstract_dataset):
         self.metadata.set_min(kvp["min"])
         self.metadata.set_max(kvp["max"])
         
-        rows = (kvp["north"] - kvp["south"])/kvp["nsres"]
-        cols = (kvp["east"] - kvp["west"])/kvp["ewres"]
+        rows = int((kvp["north"] - kvp["south"])/kvp["nsres"] + 0.5)
+        cols = int((kvp["east"] - kvp["west"])/kvp["ewres"] + 0.5)
         
         ncells = cols * rows
         
@@ -1423,9 +1750,53 @@ class raster_dataset(abstract_dataset):
         self.metadata.set_rows(rows)
         self.metadata.set_number_of_cells(ncells)
 
+    def delete(self):
+	"""Delete raster dataset entry from database if it exists
+        
+            Remove dependent entries:
+            * Remove the raster entry in each space time raster dataset in which this map is registered
+            * Remove the space time raster dataset register table
+        """
+        if self.is_in_db():
+            # Get all data
+            self.select()
+            # Remove the raster map from all registered space time raster datasets
+            if self.metadata.get_strds_register() != None:
+                # Select all strds tables in which this map is registered
+                sql = "SELECT id FROM " + self.metadata.get_strds_register()
+                #print sql
+                self.base.connect()
+                self.base.cursor.execute(sql)
+                rows = self.base.cursor.fetchall()
+                self.base.close()
+        
+                # For each strds in which the raster map is registered
+                if rows:
+                    for row in rows:
+                        # Create a space time raster dataset object to remove the raster map
+                        # from its raster register
+                        strds = space_time_raster_dataset(row["id"])
+                        strds.select()
+                        strds.unregister_map(self)
+                
+                # Remove the strds register table
+                sql = "DROP TABLE " + self.metadata.get_strds_register()
+                #print sql
+                self.base.connect()
+                self.base.cursor.execute(sql)
+                self.base.close()
+            
+            # Delete yourself from the database, trigger functions will take care of dependencies
+            self.base.delete()
+
 ###############################################################################
 
-class raster3d_dataset(abstract_dataset):
+class raster3d_dataset(abstract_map_dataset):
+    """Raster3d dataset class
+    
+       This class provides functions to select, update, insert or delete raster3d 
+       map informations and valid time stamps into the SQL temporal database.
+    """
     def __init__(self, ident):
 	self.reset(ident)
         
@@ -1453,12 +1824,9 @@ class raster3d_dataset(abstract_dataset):
         
         # Fill spatial extent
                 
-        self.spatial_extent.set_north(kvp["north"])
-        self.spatial_extent.set_south(kvp["south"])
-        self.spatial_extent.set_west(kvp["west"])
-        self.spatial_extent.set_east(kvp["east"])
-        self.spatial_extent.set_top(kvp["top"])
-        self.spatial_extent.set_bottom(kvp["bottom"])
+        self.set_spatial_extent(north=kvp["north"], south=kvp["south"], \
+                                east=kvp["east"],   west=kvp["west"],\
+                                top=kvp["top"], bottom=kvp["bottom"])
         
         # Fill metadata
         
@@ -1469,21 +1837,64 @@ class raster3d_dataset(abstract_dataset):
         self.metadata.set_min(kvp["min"])
         self.metadata.set_max(kvp["max"])
         
-        rows = (kvp["north"] - kvp["south"])/kvp["nsres"]
-        cols = (kvp["east"] - kvp["west"])/kvp["ewres"]
-        depths = (kvp["top"] - kvp["bottom"])/kvp["tbres"]
+        rows = int((kvp["north"] - kvp["south"])/kvp["nsres"] + 0.5)
+        cols = int((kvp["east"] - kvp["west"])/kvp["ewres"] + 0.5)
+        depths = int((kvp["top"] - kvp["bottom"])/kvp["tbres"] + 0.5)
         
         ncells = cols * rows * depths
         
         self.metadata.set_cols(cols)
-        self.metadata.set_rows(depths)
-        self.metadata.set_depths(rows)
+        self.metadata.set_rows(rows)
+        self.metadata.set_depths(depths)
         self.metadata.set_number_of_cells(ncells)
         
+    def delete(self):
+	"""Delete raster3d dataset entry from database if it exists
+        
+            Remove dependent entries:
+            * Remove the raster3d entry in each space time raster3d dataset in which this map is registered
+            * Remove the space time raster3d dataset register table
+        """
+        if self.is_in_db():
+            # Get all data
+            self.select()
+            # Remove the raster3d map from all registered space time raster3d datasets
+            if self.metadata.get_str3ds_register() != None:
+                # Select all str3ds tables in which this map is registered
+                sql = "SELECT id FROM " + self.metadata.get_str3ds_register()
+                #print sql
+                self.base.connect()
+                self.base.cursor.execute(sql)
+                rows = self.base.cursor.fetchall()
+                self.base.close()
+        
+                # For each str3ds in which the raster3d map is registered
+                if rows:
+                    for row in rows:
+                        # Create a space time raster3d dataset object to remove the raster3d map
+                        # from its raster3d register
+                        str3ds = space_time_raster3d_dataset(row["id"])
+                        str3ds.select()
+                        str3ds.unregister_map(self)
+                
+                # Remove the str3ds register table
+                sql = "DROP TABLE " + self.metadata.get_str3ds_register()
+                #print sql
+                self.base.connect()
+                self.base.cursor.execute(sql)
+                self.base.close()
+            
+            # Delete yourself from the database, trigger functions will take care of dependencies
+            self.base.delete()
 
 ###############################################################################
 
-class vector_dataset(abstract_dataset):
+class vector_dataset(abstract_map_dataset):
+    """Vector dataset class
+    
+       This class provides functions to select, update, insert or delete vector 
+       map informations and valid time stamps into the SQL temporal database.
+    """
     def __init__(self, ident):
 	self.reset(ident)
         
@@ -1511,12 +1922,249 @@ class vector_dataset(abstract_dataset):
         
         # Fill spatial extent
                 
-        self.spatial_extent.set_north(kvp["north"])
-        self.spatial_extent.set_south(kvp["south"])
-        self.spatial_extent.set_west(kvp["west"])
-        self.spatial_extent.set_east(kvp["east"])
-        self.spatial_extent.set_top(kvp["top"])
-        self.spatial_extent.set_bottom(kvp["bottom"])
+        self.set_spatial_extent(north=kvp["north"], south=kvp["south"], \
+                                east=kvp["east"],   west=kvp["west"],\
+                                top=kvp["top"], bottom=kvp["bottom"])
         
         # Fill metadata .. no metadata yet
         
+    def delete(self):
+	"""Delete vector dataset entry from database if it exists
+        
+            Remove dependent entries:
+            * Remove the vector entry in each space time vector dataset in which this map is registered
+            * Remove the space time vector dataset register table
+        """
+        if self.is_in_db():
+            # Get all data
+            self.select()
+            # Remove the vector map from all registered space time vector datasets
+            if self.metadata.get_stvds_register() != None:
+                # Select all stvds tables in which this map is registered
+                sql = "SELECT id FROM " + self.metadata.get_stvds_register()
+                #print sql
+                self.base.connect()
+                self.base.cursor.execute(sql)
+                rows = self.base.cursor.fetchall()
+                self.base.close()
+        
+                # For each stvds in which the vector map is registered
+                if rows:
+                    for row in rows:
+                        # Create a space time vector dataset object to remove the vector map
+                        # from its vector register
+                        stvds = space_time_vector_dataset(row["id"])
+                        stvds.select()
+                        stvds.unregister_map(self)
+                
+                # Remove the stvds register table
+                sql = "DROP TABLE " + self.metadata.get_stvds_register()
+                #print sql
+                self.base.connect()
+                self.base.cursor.execute(sql)
+                self.base.close()
+            
+            # Delete yourself from the database, trigger functions will take care of dependencies
+            self.base.delete()
+
+###############################################################################
+
+class space_time_raster_dataset(abstract_dataset):
+    """Space time raster dataset class
+    
+       This class represents a space time raster dataset. Convenient functions 
+       to select, update, insert or delete objects of this type int the SQL 
+       temporal database exists as well as functions to register or deregister 
+       raster maps.
+       
+       Parts of the temporal logic are implemented in the SQL temporal database,
+       like the computation of the temporal and spatial extent as well as the
+       collecting of metadata.
+    """
+    def __init__(self, ident):
+	self.reset(ident)
+        
+    def reset(self, ident):
+        
+	"""Reset the internal structure and set the identifier"""
+	self.ident = ident
+
+	self.base = strds_base(ident=ident)
+        
+        self.base.set_name(self.ident.split("@")[0])
+        self.base.set_mapset(self.ident.split("@")[1])
+        self.base.set_creator(str(getpass.getuser()))
+        self.absolute_time = strds_absolute_time(ident=ident)
+        self.relative_time = strds_relative_time(ident=ident)
+	self.spatial_extent = strds_spatial_extent(ident=ident)
+	self.metadata = strds_metadata(ident=ident)
+    
+    def set_initial_values(self, granularity, temporal_type, semantic_type, \
+                           title=None, description=None):
+        
+        if temporal_type == "absolute":
+            self.set_time_to_absolute()
+            self.absolute_time.set_granularity(granularity)
+        elif temporal_type == "relative":
+            self.set_time_to_relative()
+            self.relative_time.set_granularity(granularity)
+        else:
+            core.error("Unkown temporal type \"" + temporal_type + "\"")
+            
+        self.base.set_semantic_type(semantic_type)
+        self.metadata.set_title(title)
+        self.metadata.set_description(description)
+        
+    def register_map(self, rds):
+        """Register a raster map in the space time raster dataset.
+        
+            This method takes care of the registration of a raster map
+            in a space time raster dataset. 
+        """
+        
+        if rds.is_in_db() == False:
+            core.error("Only maps with absolute or relative valid time can be registered")
+        
+        # First select all data from the database
+        rds.select()
+        rds_id = rds.base.get_id()
+        rds_name = rds.base.get_name()
+        rds_mapset = rds.base.get_mapset()
+        rds_register_table = rds.metadata.get_strds_register()
+        
+        # Get basic info
+        strds_name = self.base.get_name()
+        strds_mapset = self.base.get_mapset()
+        strds_register_table = self.metadata.get_raster_register()
+        
+        if strds_mapset != rds_mapset:
+            core.error("You can only register raster maps from the same mapset")
+            
+        # Check if map is already registred
+        if strds_register_table:
+            sql = "SELECT id FROM " + strds_register_table + " WHERE id = (?)" 
+            self.base.connect()
+            self.base.cursor.execute(sql, (rds_id,))
+            row = self.base.cursor.fetchone()
+            # In case of no entry make a new one
+            if row and row[0] == rds_id:
+                core.error("Map is already registered")
+            self.base.close()
+        
+        # Create tables
+        sql_path = get_sql_template_path()
+        
+        # We need to create the strds raster register table bevor we can register the map
+        if rds_register_table == None:
+            # Read the SQL template
+            sql = open(os.path.join(sql_path, "map_stds_register_table_template.sql"), 'r').read()
+            # Create the raster, raster3d and vector tables
+            sql = sql.replace("GRASS_MAP", "raster")
+            sql = sql.replace("MAP_NAME", rds_name + "_" + rds_mapset )
+            sql = sql.replace("MAP_ID", rds_id)
+            sql = sql.replace("STDS", "strds")
+            
+            self.base.connect()
+            self.base.cursor.executescript(sql)
+            self.base.close()
+            
+            rds_register_table = rds_name + "_" + rds_mapset + "_" + "strds" + "_register"
+            
+            rds.metadata.set_strds_register(rds_register_table)
+            rds.metadata.update()
+            
+        # We need to create the table and register it
+        if strds_register_table == None:
+            # Read the SQL template
+            sql = open(os.path.join(sql_path, "stds_map_register_table_template.sql"), 'r').read()
+            # Create the raster, raster3d and vector tables
+            sql = sql.replace("GRASS_MAP", "raster")
+            sql = sql.replace("SPACETIME_NAME", strds_name + "_" + strds_mapset )
+            sql = sql.replace("SPACETIME_ID", self.base.get_id())
+            sql = sql.replace("STDS", "strds")
+            
+            self.base.connect()
+            self.base.cursor.executescript(sql)
+            self.base.close()
+            
+            # We need raster specific trigger
+            sql = open(os.path.join(sql_path, "stds_raster_register_trigger_template.sql"), 'r').read()
+            # Create the raster, raster3d and vector tables
+            sql = sql.replace("GRASS_MAP", "raster")
+            sql = sql.replace("SPACETIME_NAME", strds_name + "_" + strds_mapset )
+            sql = sql.replace("SPACETIME_ID", self.base.get_id())
+            sql = sql.replace("STDS", "strds")
+            
+            self.base.connect()
+            self.base.cursor.executescript(sql)
+            self.base.close()
+            
+            strds_register_table = strds_name + "_" + strds_mapset + "_" + "raster" + "_register"
+            
+            # Set the raster register name
+            self.metadata.set_raster_register(strds_register_table)
+            self.metadata.update()
+            
+        # Register the strds in the raster strds register table
+        # Check if the entry is already there 
+        sql = "SELECT id FROM " + rds_register_table + " WHERE id = ?"
+        self.base.connect()
+        self.base.cursor.execute(sql, (self.base.get_id(),))
+      	row = self.base.cursor.fetchone()
+	self.base.close()
+        
+        # In case of no entry make a new one
+        if row == None:
+            sql = "INSERT INTO " + rds_register_table + " (id) " + "VALUES (?)" 
+            self.base.connect()
+            self.base.cursor.execute(sql, (self.base.get_id(),))
+            self.base.close()
+        
+        # Now put the raster name in the strds raster register table
+        sql = "INSERT INTO " + strds_register_table + " (id) " + "VALUES (?)" 
+        self.base.connect()
+        self.base.cursor.execute(sql, (rds_id,))
+        self.base.close()
+        
+    def unregister_map(self, rds):
+        """Remove a register a raster map from the space time raster dataset.
+        
+            This method takes care of the unregistration of a raster map
+            in a space time raster dataset. 
+        """
+        
+        if rds.is_in_db() == False:
+            core.error("Only maps with absolute or relative valid time can be registered")
+        
+        # First select all data from the database
+        rds.select()
+        rds_id = rds.base.get_id()
+        rds_register_table = rds.metadata.get_strds_register()
+        
+        # Get basic info
+        strds_register_table = self.metadata.get_raster_register()
+        
+        # Check if the map is registered in the space time raster dataset
+        sql = "SELECT id FROM " + rds_register_table + " WHERE id = ?"
+        self.base.connect()
+        self.base.cursor.execute(sql, (self.base.get_id(),))
+      	row = self.base.cursor.fetchone()
+	self.base.close()
+        
+        # Break if the map is not registered
+        if row == None:
+            core.error("Map " + rds_id + " is not registered in space time raster dataset " + self.base.get_id())
+            
+        # Remove the space time raster dataset from the raster dataset register
+        if rds_register_table != None:
+            sql = "DELETE FROM " + rds_register_table + " WHERE id = ?" 
+            self.base.connect()
+            self.base.cursor.execute(sql, (self.base.get_id(),))
+            self.base.close()
+            
+        # Remove the raster map from the space time raster dataset register
+        if strds_register_table != None:
+            sql = "DELETE FROM " + strds_register_table + " WHERE id = ?" 
+            self.base.connect()
+            self.base.cursor.execute(sql, (rds_id,))
+            self.base.close()
