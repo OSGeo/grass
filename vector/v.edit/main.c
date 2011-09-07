@@ -96,9 +96,9 @@ int main(int argc, char *argv[])
 	    int type;
 	    type = Vect_option_to_types(params.type);
 	    if (type != GV_POINT && type != GV_LINE &&
-		type != GV_AREA)
+		type != GV_BOUNDARY)
 		G_fatal_error(_("Supported feature type for OGR layer: "
-				"%s, %s or %s"), "point", "line", "area");
+				"%s, %s or %s"), "point", "line", "boundary");
 	    V2_open_new_ogr(&Map, type);
 	}
 	if (ret == -1) {
@@ -260,8 +260,11 @@ int main(int argc, char *argv[])
 	    
 	    G_verbose_message(_("Threshold value for snapping is %.2f"),
 			      thresh[THRESH_SNAP]);
-	    if (snap != NO_SNAP) {	/* apply snapping */
-		Vedit_snap_lines(&Map, BgMap, nbgmaps, List_added, thresh[THRESH_SNAP], snap == SNAP ? 0 : 1);	/* snap to vertex ? */
+	    if (snap != NO_SNAP) { /* apply snapping */
+		/* snap to vertex ? */
+		Vedit_snap_lines(&Map, BgMap, nbgmaps, List_added,
+				 thresh[THRESH_SNAP],
+				 snap == SNAP ? FALSE : TRUE); 
 	    }
 	    if (params.close->answer) {	/* close boundaries */
 		int nclosed;
