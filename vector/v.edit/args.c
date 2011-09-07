@@ -22,6 +22,7 @@ int parser(int argc, char *argv[], struct GParams *params,
     params->fld->guisection = _("Selection");
 
     params->type = G_define_standard_option(G_OPT_V_TYPE);
+    params->type->options = "point,line,boundary,centroid";
     params->type->guisection = _("Selection");
 
     params->tool = G_define_option();
