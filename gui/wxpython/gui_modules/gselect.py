@@ -1737,4 +1737,4 @@ class OgrTypeSelect(wx.Panel):
         elif sel == 1:
             return 'line'
         elif sel == 2:
-            return 'area'
+            return 'boundary'
