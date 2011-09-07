@@ -26,8 +26,8 @@ CREATE TRIGGER SPACETIME_NAME_GRASS_MAP_register_insert_trigger AFTER INSERT ON 
     UPDATE STDS_base SET modification_time = datetime("NOW") WHERE id = "SPACETIME_ID";
     UPDATE STDS_base SET revision = (revision + 1) WHERE id = "SPACETIME_ID";
     -- Number of registered maps
-    UPDATE STDS_metadata SET number_of_registered_maps = 
-           (SELECT count.id) FROM  SPACETIME_NAME_GRASS_MAP_register)
+    UPDATE STDS_metadata SET number_of_maps = 
+           (SELECT count(id) FROM SPACETIME_NAME_GRASS_MAP_register)
            WHERE id = "SPACETIME_ID";
     -- Update the temporal extent
     UPDATE STDS_absolute_time SET start_time = 
@@ -70,8 +70,8 @@ CREATE TRIGGER SPACETIME_NAME_GRASS_MAP_register_delete_trigger AFTER DELETE ON 
     UPDATE STDS_base SET modification_time = datetime("NOW") WHERE id = "SPACETIME_ID";
     UPDATE STDS_base SET revision = (revision + 1) WHERE id = "SPACETIME_ID";
     -- Number of registered maps
-    UPDATE STDS_metadata SET number_of_registered_maps = 
-           (SELECT count.id) FROM  SPACETIME_NAME_GRASS_MAP_register)
+    UPDATE STDS_metadata SET number_of_maps = 
+           (SELECT count(id) FROM  SPACETIME_NAME_GRASS_MAP_register)
            WHERE id = "SPACETIME_ID";
     -- Update the temporal extent
     UPDATE STDS_absolute_time SET start_time = 

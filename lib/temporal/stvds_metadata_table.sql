@@ -10,7 +10,7 @@ PRAGMA foreign_keys = ON;
 CREATE TABLE  stvds_metadata (
   id VARCHAR NOT NULL,                -- Name of the space-time vector dataset, this is the primary foreign key
   vector_register VARCHAR,                    -- The id of the table in which the vector maps are registered for this dataset
-  number_of_registered_maps INTEGER,          -- The number of registered vector maps
+  number_of_maps INTEGER,          -- The number of registered vector maps
   title VARCHAR,                              -- Title of the space-time vector dataset
   description VARCHAR,                        -- Detailed description of the space-time vector dataset
   PRIMARY KEY (id),  
@@ -26,7 +26,7 @@ CREATE VIEW stvds_view_abs_time AS SELECT
 	    A2.end_time, A2.granularity,
 	    A3.north, A3.south, A3.east, A3.west,
 	    A4.vector_register,
-	    A4.number_of_registered_maps, 
+	    A4.number_of_maps, 
             A4.title, A4.description	
 	    FROM stvds_base A1, stvds_absolute_time A2,  
             stvds_spatial_extent A3, stvds_metadata A4 WHERE A1.id = A2.id AND 
@@ -40,7 +40,7 @@ CREATE VIEW stvds_view_rel_time AS SELECT
 	    A2.interval, A2.granularity,
 	    A3.north, A3.south, A3.east, A3.west,
 	    A4.vector_register,
-	    A4.number_of_registered_maps, 
+	    A4.number_of_maps, 
             A4.title, A4.description	
 	    FROM stvds_base A1, stvds_relative_time A2,  
             stvds_spatial_extent A3, stvds_metadata A4 WHERE A1.id = A2.id AND 
