@@ -21,7 +21,6 @@
 int db__driver_close_cursor(dbCursor * dbc)
 {
     cursor *c;
-    int ret;
 
     init_error();
 
@@ -30,10 +29,7 @@ int db__driver_close_cursor(dbCursor * dbc)
     if (c == NULL)
 	return DB_FAILED;
 
-    ret = sqlite3_finalize(c->statement);
-    while (ret == SQLITE_BUSY || ret == SQLITE_IOERR_BLOCKED) {
-	ret = sqlite3_busy_handler(sqlite, sqlite_busy_callback, NULL);
-    }
+    sqlite3_finalize(c->statement);
 
     /* free_cursor(cursor) */
     free_cursor(c);

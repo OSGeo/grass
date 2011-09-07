@@ -66,9 +66,6 @@ int db__driver_create_index(dbIndex * index)
     G_debug(3, " SQL: %s", db_get_string(&sql));
 
     ret = sqlite3_prepare(sqlite, db_get_string(&sql), -1, &statement, &rest);
-    while (ret == SQLITE_BUSY || ret == SQLITE_IOERR_BLOCKED) {
-	ret = sqlite3_busy_handler(sqlite, sqlite_busy_callback, NULL);
-    }
 
     if (ret != SQLITE_OK) {
 	append_error("Cannot create index:\n");
