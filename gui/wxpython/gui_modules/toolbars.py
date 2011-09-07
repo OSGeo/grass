@@ -39,12 +39,12 @@ from grass.script import core as grass
 import wx
 
 import globalvar
-import gcmd
-import gdialogs
-from vdigit import VDigitSettingsDialog, haveVDigit, VDigit
-from debug import Debug
+from gdialogs    import CreateNewVector
+from vdigit      import VDigitSettingsDialog, haveVDigit, VDigit
+from debug       import Debug
 from preferences import globalSettings as UserSettings
-from nviz import haveNviz
+from gcmd        import RunCommand, GError
+from nviz        import haveNviz
 from nviz_preferences import NvizPreferencesDialog
 
 sys.path.append(os.path.join(globalvar.ETCWXDIR, "icons"))
@@ -163,7 +163,7 @@ class AbstractToolbar(wx.ToolBar):
             self.SetSize((size[0] + width, size[1]))
 
     def Enable(self, tool, enable = True):
-        """!Enable defined tool
+        """!Enable/Disable defined tool
         
         @param tool name
         @param enable True to enable otherwise disable tool
@@ -174,6 +174,16 @@ class AbstractToolbar(wx.ToolBar):
             return
         
         self.EnableTool(id, enable)
+
+    def EnableAll(self, enable = True):
+        """!Enable/Disable all tools
+        
+        @param enable True to enable otherwise disable tool
+        """
+        for item in self._toolbarData():
+            if not item[0]:
+                continue
+            self.Enable(item[0], enable)
         
     def _getToolbarData(self, data):
         """!Define tool
@@ -747,7 +757,7 @@ class VDigitToolbar(AbstractToolbar):
         
         event.Skip()
 
-    def EnableUndo(self, enable=True):
+    def EnableUndo(self, enable = True):
         """!Enable 'Undo' in toolbar
         
         @param enable False for disable
@@ -955,8 +965,8 @@ class VDigitToolbar(AbstractToolbar):
     def OnZBulk(self, event):
         """!Z bulk-labeling selected lines/boundaries"""
         if not self.digit.IsVector3D():
-            gcmd.GError(parent = self.parent,
-                        message = _("Vector map is not 3D. Operation canceled."))
+            GError(parent = self.parent,
+                   message = _("Vector map is not 3D. Operation canceled."))
             return
         
         if self.action['desc'] == 'zbulkLine': # select previous action
@@ -1000,12 +1010,12 @@ class VDigitToolbar(AbstractToolbar):
                 openVectorMap = self.mapLayer.GetName(fullyQualified = False)['name']
             else:
                 openVectorMap = None
-            dlg = gdialogs.CreateNewVector(self.parent,
-                                           exceptMap = openVectorMap, log = self.log,
-                                           cmd = (('v.edit',
-                                                   { 'tool' : 'create' },
-                                                   'map')),
-                                           disableAdd = True)
+            dlg = CreateNewVector(self.parent,
+                                  exceptMap = openVectorMap, log = self.log,
+                                  cmd = (('v.edit',
+                                          { 'tool' : 'create' },
+                                          'map')),
+                                  disableAdd = True)
             
             if dlg and dlg.GetName():
                 # add layer to map layer tree
@@ -1074,6 +1084,31 @@ class VDigitToolbar(AbstractToolbar):
         
         # open vector map
         if self.digit.OpenMap(mapLayer.GetName()) is None:
+            self.mapLayer = None
+            self.StopEditing()
+            return False
+        
+        # check feature type (only for OGR layers)
+        fType = self.digit.GetFeatureType()
+        self.EnableAll()
+        self.EnableUndo(False)
+        if fType == 'Point':
+            for tool in (self.addLine, self.addBoundary, self.addCentroid,
+                         self.addArea, self.moveVertex, self.addVertex,
+                         self.removeVertex, self.editLine):
+                self.EnableTool(tool, False)
+        elif fType == 'Line String':
+            for tool in (self.addPoint, self.addBoundary, self.addCentroid,
+                         self.addArea):
+                self.EnableTool(tool, False)
+        elif fType == 'Polygon':
+            for tool in (self.addPoint, self.addLine):
+                self.EnableTool(tool, False)
+        elif fType:
+            GError(parent = self,
+                   message = _("Unsupported feature type '%s'. Unable to edit "
+                               "OGR layer <%s>.") % (fType, mapLayer.GetName()))
+            self.digit.CloseMap()
             self.mapLayer = None
             self.StopEditing()
             return False
@@ -1286,8 +1321,8 @@ class LMNvizToolbar(AbstractToolbar):
     def OnHelp(self, event):
         """!Show 3D view mode help"""
         if not self.lmgr:
-            gcmd.RunCommand('g.manual',
-                            entry = 'wxGUI.Nviz')
+            RunCommand('g.manual',
+                       entry = 'wxGUI.Nviz')
         else:
             log = self.lmgr.GetLogWindow()
             log.RunCmd(['g.manual',

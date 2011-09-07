@@ -1745,3 +1745,11 @@ class IVDigit:
         """
         return self.changesetCurrent
     
+    def GetFeatureType(self):
+        """!Get feature type for OGR layers
+
+        @return feature type as string (Point, Line String, Polygon)
+        @return None for native format
+        """
+        return Vect_get_ogr_geometry_type(self.poMapInfo)
+        
