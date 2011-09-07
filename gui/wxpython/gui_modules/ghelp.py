@@ -950,9 +950,11 @@ class InstallExtensionWindow(wx.Frame):
 
     def OnFetch(self, event):
         """!Fetch list of available extensions"""
+        wx.BeginBusyCursor()
         self.SetStatusText(_("Fetching list of modules from GRASS-Addons SVN (be patient)..."), 0)
         self.tree.Load(url = self.repo.GetValue().strip(), full = self.fullDesc.IsChecked())
         self.SetStatusText("", 0)
+        wx.EndBusyCursor()
 
     def OnItemActivated(self, event):
         item = event.GetItem()
