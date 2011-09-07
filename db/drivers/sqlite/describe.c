@@ -94,7 +94,7 @@ int db__driver_describe_table(dbString * table_name, dbTable ** table)
 
 int describe_table(sqlite3_stmt * statement, dbTable ** table, cursor * c)
 {
-    int i, ncols, nkcols, ret;
+    int i, ncols, nkcols;
 
     G_debug(3, "describe_table()");
 
@@ -102,10 +102,7 @@ int describe_table(sqlite3_stmt * statement, dbTable ** table, cursor * c)
     G_debug(3, "ncols = %d", ncols);
 
     /* Try to get first row */
-    ret = sqlite3_step(statement);
-    while (ret == SQLITE_BUSY || ret == SQLITE_IOERR_BLOCKED) {
-	ret = sqlite3_busy_handler(sqlite, sqlite_busy_callback, NULL);
-    }
+    sqlite3_step(statement);
 
     /* Count columns of known type */
     nkcols = 0;

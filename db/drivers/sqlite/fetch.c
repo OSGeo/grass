@@ -64,12 +64,9 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
 	    c->row = -1;
 
 	ret = sqlite3_step(c->statement);
-	while (ret == SQLITE_BUSY || ret == SQLITE_IOERR_BLOCKED) {
-	    ret = sqlite3_busy_handler(sqlite, sqlite_busy_callback, NULL);
-	}
 	if (ret != SQLITE_ROW) {
 	    if (ret != SQLITE_DONE) {
-		append_error("Cannot step:\n");
+		append_error("Cannot fetch:\n");
 		append_error((char *)sqlite3_errmsg(sqlite));
 		report_error();
 		return DB_FAILED;
@@ -252,7 +249,7 @@ int db__driver_get_num_rows(dbCursor * cn)
 {
     cursor *c;
     dbToken token;
-    int row, ret;
+    int row;
 
     /* get cursor token */
     token = db_get_cursor_token(cn);
@@ -268,17 +265,14 @@ int db__driver_get_num_rows(dbCursor * cn)
 	return (c->nrows);
     }
 
-    ret = sqlite3_reset(c->statement);
-    while (ret == SQLITE_BUSY || ret == SQLITE_IOERR_BLOCKED) {
-	ret = sqlite3_busy_handler(sqlite, sqlite_busy_callback, NULL);
-    }
+    sqlite3_reset(c->statement);
 
     c->nrows = 0;
     while (sqlite3_step(c->statement) == SQLITE_ROW) {
 	c->nrows++;
     }
 
-    ret = sqlite3_reset(c->statement);
+    sqlite3_reset(c->statement);
 
     /* Reset cursor position */
     row = -1;

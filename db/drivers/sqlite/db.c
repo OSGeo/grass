@@ -88,6 +88,9 @@ int db__driver_open_database(dbHandle * handle)
 	return DB_FAILED;
     }
 
+    /* set the sqlite busy handler */
+    sqlite3_busy_handler(sqlite, sqlite_busy_callback, NULL);
+
     return DB_OK;
 }
 

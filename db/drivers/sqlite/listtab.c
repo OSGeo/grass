@@ -45,10 +45,6 @@ int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
 			  "select name from sqlite_master where type = 'table' or type = 'view'",
 			  -1, &statement, &rest);
 
-    while (ret == SQLITE_BUSY || ret == SQLITE_IOERR_BLOCKED) {
-	ret = sqlite3_busy_handler(sqlite, sqlite_busy_callback, NULL);
-    }
-
     if (ret != SQLITE_OK) {
 	append_error("Cannot list tables\n");
 	append_error((char *)sqlite3_errmsg(sqlite));

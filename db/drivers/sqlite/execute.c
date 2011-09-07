@@ -42,9 +42,6 @@ int db__driver_execute_immediate(dbString * sql)
     G_debug(3, "execute: %s", s);
 
     ret = sqlite3_prepare(sqlite, s, -1, &stmt, &rest);
-    while (ret == SQLITE_BUSY || ret == SQLITE_IOERR_BLOCKED) {
-	ret = sqlite3_busy_handler(sqlite, sqlite_busy_callback, NULL);
-    }
 
     if (ret != SQLITE_OK) {
 	append_error("Error in sqlite3_prepare():\n");
@@ -96,9 +93,7 @@ int db__driver_begin_transaction(void)
     G_debug(3, "execute: BEGIN");
 
     ret = sqlite3_exec(sqlite, "BEGIN", NULL, NULL, NULL);
-    while (ret == SQLITE_BUSY || ret == SQLITE_IOERR_BLOCKED) {
-	ret = sqlite3_busy_handler(sqlite, sqlite_busy_callback, NULL);
-    }
+
     if (ret != SQLITE_OK) {
 	append_error("Cannot 'BEGIN' transaction:\n");
 	append_error((char *)sqlite3_errmsg(sqlite));
@@ -125,9 +120,7 @@ int db__driver_commit_transaction(void)
     G_debug(3, "execute: COMMIT");
 
     ret = sqlite3_exec(sqlite, "COMMIT", NULL, NULL, NULL);
-    while (ret == SQLITE_BUSY || ret == SQLITE_IOERR_BLOCKED) {
-	ret = sqlite3_busy_handler(sqlite, sqlite_busy_callback, NULL);
-    }
+
     if (ret != SQLITE_OK) {
 	append_error("Cannot 'COMMIT' transaction:\n");
 	append_error((char *)sqlite3_errmsg(sqlite));
