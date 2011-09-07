@@ -445,10 +445,13 @@ class DisplayDriver:
         if not self.poMapInfo or not self.dc or not self.dcTmp:
             return -1
         
-        rlist = Vedit_render_map(self.poMapInfo, byref(self._getRegionBox()), self._getDrawFlag(),
-                                 self.region['center_easting'], self.region['center_northing'],
-                                 self.mapObj.width, self.mapObj.height,
-                                 max(self.region['nsres'], self.region['ewres'])).contents
+        try:
+            rlist = Vedit_render_map(self.poMapInfo, byref(self._getRegionBox()), self._getDrawFlag(),
+                                     self.region['center_easting'], self.region['center_northing'],
+                                     self.mapObj.width, self.mapObj.height,
+                                     max(self.region['nsres'], self.region['ewres'])).contents
+        except SystemExit:
+            pass
         
         self._resetTopology()
         
