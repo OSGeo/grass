@@ -146,7 +146,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>PNG import</label>
-	      <help>Import non-georeferenced PNG format image.</help>
+	      <help>Imports non-georeferenced PNG format image.</help>
 	      <keywords>raster,import</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.in.png</command>
@@ -474,7 +474,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Multiple GPS export formats using GPSBabel</label>
-	      <help>Exports a vector map to a GPS receiver or file format supported by GpsBabel.</help>
+	      <help>Exports a vector map to a GPS receiver or file format supported by GPSBabel.</help>
 	      <keywords>vector,export,GPS</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.out.gps</command>
@@ -812,7 +812,7 @@
 	    <separator />
 	    <menuitem>
 	      <label>Change working environment</label>
-	      <help>Changes current mapset.</help>
+	      <help>Changes/reports current mapset.</help>
 	      <keywords>general,settings</keywords>
               <handler>OnMenuCmd</handler>
 	      <command>g.mapset</command>
@@ -2438,8 +2438,8 @@
 	</menuitem>
 	<menuitem>
 	  <label>Update area attributes from vector</label>
-	  <help>Calculates points in polygons and univariate statistics from points based on vector polygon map and uploads statistics to new attribute columns.</help>
-	  <keywords>vector,statistics</keywords>
+	  <help>Count points in areas, calculate statistics from point attributes.</help>
+	  <keywords>vector,database,attribute table</keywords>
 	  <handler>OnMenuCmd</handler>
 	  <command>v.vect.stats</command>
 	</menuitem>
