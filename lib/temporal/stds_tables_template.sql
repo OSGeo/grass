@@ -48,6 +48,7 @@ CREATE TABLE  STDS_spatial_extent (
   west DOUBLE PRECISION,    -- The spatial west extent, derived from the registered maps
   top DOUBLE PRECISION,     -- The spatial top extent, derived from the registered maps
   bottom DOUBLE PRECISION,  -- The spatial bottom extent, derived from the registered maps
+  proj DOUBLE VARCHAR,      -- The projection of the space time dataset (XY of LL)
   PRIMARY KEY (id),  
   FOREIGN KEY (id) REFERENCES  STDS_base (id) ON DELETE CASCADE
 );
