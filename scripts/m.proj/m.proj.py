@@ -235,7 +235,7 @@ def main():
     #   cs2cs | sed -e 's/d/:/g' -e "s/'/:/g"  -e 's/"//g'
 
     cmd = ['cs2cs'] + copyinp + outfmt + in_proj.split() + ['+to'] + out_proj.split()
-    p = grass.Popen(cmd, stdin = grass.PIPE)
+    p = grass.Popen(cmd, stdin = grass.PIPE, stdout = grass.PIPE)
 
     while True:
 	line = inf.readline()
@@ -247,12 +247,6 @@ def main():
 
     p.stdin.close()
     p.stdin = None
-    
-    exitcode = p.wait()
-
-    if exitcode != 0:
-	grass.warning(_("Projection transform probably failed, please investigate"))
-
 
     if not copy_input:
 	if include_header:
@@ -272,6 +266,8 @@ def main():
                        (inX.strip(), ofs, inY.strip(), ofs, x.strip(), \
 		        ofs, y.strip(), ofs, z.strip()))
 
+    if p.returncode != 0:
+	grass.warning(_("Projection transform probably failed, please investigate"))
 
 if __name__ == "__main__":
     options, flags = grass.parser()
