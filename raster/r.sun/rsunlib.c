@@ -1,13 +1,13 @@
+/****************************************************************************
+ r.sun: rsunlib.c. This program was writen by Jaro Hofierka in Summer 1993
+   and re-engineered in 1996-1999. In cooperation with Marcel Suri and
+   Thomas Huld from JRC in Ispra a new version of r.sun was prepared using
+   ESRA solar radiation formulas.  See the manual page for details.
 
-/*******************************************************************************
-r.sun: rsunlib.c. This program was writen by Jaro Hofierka in Summer 1993 and re-engineered
-in 1996-1999. In cooperation with Marcel Suri and Thomas Huld from JRC in Ispra
-a new version of r.sun was prepared using ESRA solar radiation formulas.
-See manual pages for details.
-(C) 2002 Copyright Jaro Hofierka, Gresaka 22, 085 01 Bardejov, Slovakia, 
-              and GeoModel, s.r.o., Bratislava, Slovakia
-email: hofierka@geomodel.sk, marcel.suri@jrc.it, suri@geomodel.sk
-*******************************************************************************/
+  (C) 2002 Copyright Jaro Hofierka, Gresaka 22, 085 01 Bardejov, Slovakia, 
+               and GeoModel, s.r.o., Bratislava, Slovakia
+  email: hofierka at geomodel.sk, marcel.suri at jrc.it, suri at geomodel.sk
+****************************************************************************/
 /*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -187,10 +187,8 @@ void com_par(struct SunGeometryConstDay *sungeom,
 	     struct GridGeometry *gridGeom, double latitude, double longitude)
 {
     double pom, xpom, ypom;
-
     double costimeAngle;
     double lum_Lx, lum_Ly;
-
     double newLatitude, newLongitude;
     double inputAngle;
     double delt_lat, delt_lon;
@@ -246,7 +244,6 @@ void com_par(struct SunGeometryConstDay *sungeom,
     }
 
 
-
     if (sunVarGeom->solarAzimuth < 0.5 * M_PI)
 	sunVarGeom->sunAzimuthAngle = 0.5 * M_PI - sunVarGeom->solarAzimuth;
     else
@@ -256,7 +253,7 @@ void com_par(struct SunGeometryConstDay *sungeom,
     inputAngle = sunVarGeom->sunAzimuthAngle + pihalf;
     inputAngle = (inputAngle >= pi2) ? inputAngle - pi2 : inputAngle;
 
-
+    /* 1852m * 60 * 0.0001rad * 180/pi= 636.67m */
     delt_lat = -0.0001 * cos(inputAngle);  /* Arbitrary small distance in latitude */
     delt_lon = 0.0001 * sin(inputAngle) / cos(latitude);
 
