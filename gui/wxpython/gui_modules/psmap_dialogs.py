@@ -2788,13 +2788,13 @@ class VectorPanel(wx.Panel):
     def updateListBox(self, selected = None):
         mapList = ["%s - %s" % (item[0], item[1]) for item in self.vectorList]
         self.listbox.Set(mapList)
-        if selected is not None:
-            self.listbox.SetSelection(selected)  
-            self.listbox.EnsureVisible(selected)  
         if self.listbox.IsEmpty():
             self.enableButtons(False)
         else:
             self.enableButtons(True)
+            if selected is not None:
+                self.listbox.SetSelection(selected)  
+                self.listbox.EnsureVisible(selected)  
               
     def reposition(self):
         """!Update position in legend, used only if there is no vlegend yet"""
