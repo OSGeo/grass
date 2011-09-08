@@ -673,13 +673,62 @@ class PsMapFrame(wx.Frame):
             return wx.Rect(x,y, *textExtent)
         else:
             return wx.Rect(X, Y, abs(W), abs(H)).Inflate(h,h) 
+
+    def makePSFont(self, textDict):
+        fontsize = textDict['fontsize'] * self.canvas.currScale
+        fontface = textDict['font'].split('-')[0]
+        try:
+            fontstyle = textDict['font'].split('-')[1]
+        except:
+            fontstyle = 'normal'
         
+        if fontface == "Times":
+            family = wx.FONTFAMILY_ROMAN
+            face = "times"
+        elif fontface == "Helvetica":
+            family = wx.FONTFAMILY_SWISS
+            face = 'helvetica'
+        elif fontface == "Courier":
+            family = wx.FONTFAMILY_TELETYPE
+            face = 'courier'
+        else:
+            family = wx.FONTFAMILY_DEFAULT
+            face = ''
+            
+        if fontstyle == 'normal':
+            style = wx.FONTSTYLE_NORMAL
+            weight = wx.FONTWEIGHT_NORMAL
+            
+        if 'oblique' in fontstyle:
+            style =  wx.FONTSTYLE_SLANT
+            
+        if 'italic' in fontstyle:
+            style =  wx.FONTSTYLE_ITALIC
+            
+        if 'bold' in fontstyle:
+            weight = wx.FONTWEIGHT_BOLD
+        else:
+            weight = wx.FONTWEIGHT_NORMAL
+        
+        try:
+            fn = wx.Font(pointSize=fontsize, family=family, style=style, weight=weight, face=face)
+            return fn
+        except:
+            return False
+       
     def getTextExtent(self, textDict):
-        fontsize = str(textDict['fontsize'] * self.canvas.currScale)
         #fontsize = str(fontsize if fontsize >= 4 else 4)
         dc = wx.PaintDC(self) # dc created because of method GetTextExtent, which pseudoDC lacks
-        dc.SetFont(wx.FontFromNativeInfoString(textDict['font'] + " " + fontsize))
-        return dc.GetTextExtent(textDict['text'])
+       
+        fn = self.makePSFont(textDict)
+
+        if fn:
+            dc.SetFont(fn)
+            w,h,lh = dc.GetMultiLineTextExtent(textDict['text'])
+            return (w,h)
+#            return dc.GetTextExtent(textDict['text'])
+        else:
+            return (0,0)
     
     def getInitMap(self):
         """!Create default map frame when no map is selected, needed for coordinates in map units"""
@@ -717,8 +766,7 @@ class PsMapFrame(wx.Frame):
                 self.getInitMap()
                 self.canvas.RecalculateEN()
             else:
-                self.deleteObject(self.canvas.dragId)
-            
+                self.deleteObject(self.canvas.dragId)   
     
     def deleteObject(self, id):
         """!Deletes object, his id and redraws"""
@@ -731,12 +779,6 @@ class PsMapFrame(wx.Frame):
         
         # delete from instructions
         del self.instruction[id]
-
-        
-
-        
-
-        
 
     def DialogDataChanged(self, id):
         ids = id
@@ -751,7 +793,6 @@ class PsMapFrame(wx.Frame):
                                  pdc = self.canvas.pdcObj, drawid = id, pdctype = 'rectText', bb = drawRectangle)
                 self.canvas.RedrawSelectBox(id)
                 
-                
             if itype == 'text':
                 
                 if self.instruction[id]['rotate']:
@@ -759,7 +800,6 @@ class PsMapFrame(wx.Frame):
                 else:
                     rot = 0
 
-                
                 extent = self.getTextExtent(textDict = self.instruction[id].GetInstruction())
                 rect = wx.Rect2D(self.instruction[id]['where'][0], self.instruction[id]['where'][1], 0, 0)
                 self.instruction[id]['coords'] = list(self.canvas.CanvasPaperCoordinates(rect = rect, canvasToPaper = False)[:2])
@@ -1434,8 +1474,6 @@ class PsMapBufferedWindow(wx.Window):
             imageRect.OffsetXY(-view[0], -view[1])
             imageRect = self.ScaleRect(rect = imageRect, scale = zoomFactor)
             self.DrawImage(imageRect)
-            
-            
         
     def ZoomAll(self):
         """! Zoom to full extent"""  
@@ -1468,7 +1506,8 @@ class PsMapBufferedWindow(wx.Window):
             dc.SetFont(font)
             pdc.SetFont(font)
             text = '\n'.join(self.itemLabels[self.instruction[drawid].type])
-            textExtent = dc.GetTextExtent(text)
+            w,h,lh = dc.GetMultiLineTextExtent(text)
+            textExtent = (w,h)
             textRect = wx.Rect(0, 0, *textExtent).CenterIn(bb)
             r = map(int, bb)
             while not wx.Rect(*r).ContainsRect(textRect) and size >= 8:
@@ -1476,11 +1515,11 @@ class PsMapBufferedWindow(wx.Window):
                 font.SetPointSize(size)
                 dc.SetFont(font)
                 pdc.SetFont(font)
-                textExtent = dc.GetTextExtent(text)
+                w,h,lh = dc.GetMutiLineTextExtent(text)
+                textExtent = (w,h)
                 textRect = wx.Rect(0, 0, *textExtent).CenterIn(bb)
             pdc.SetTextForeground(wx.Color(100,100,100,200)) 
             pdc.SetBackgroundMode(wx.TRANSPARENT)
-
             pdc.DrawText(text = text, x = textRect.x, y = textRect.y)
             
         pdc.SetIdBounds(drawid, bb)
@@ -1495,13 +1534,12 @@ class PsMapBufferedWindow(wx.Window):
         else:
             rot = 0
 
-        fontsize = str(textDict['fontsize'] * self.currScale)
+        fontsize = textDict['fontsize'] * self.currScale
         if textDict['background'] != 'none':
             background = textDict['background'] 
         else:
             background = None
 
-        
         pdc.RemoveId(drawId)
         pdc.SetId(drawId)
         pdc.BeginDrawing()
@@ -1512,11 +1550,12 @@ class PsMapBufferedWindow(wx.Window):
         else:
             pdc.SetBackground(wx.TRANSPARENT_BRUSH)
             pdc.SetBackgroundMode(wx.TRANSPARENT)
-        
-        pdc.SetFont(wx.FontFromNativeInfoString(textDict['font'] + " " + fontsize))    
+ 
+        fn = self.parent.makePSFont(textDict)
+
+        pdc.SetFont(fn)
         pdc.SetTextForeground(convertRGB(textDict['color']))        
         pdc.DrawRotatedText(textDict['text'], coords[0], coords[1], rot)
-
         pdc.SetIdBounds(drawId, wx.Rect(*bounds))
         self.Refresh()
         pdc.EndDrawing()
