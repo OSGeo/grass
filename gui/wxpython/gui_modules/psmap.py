@@ -675,6 +675,9 @@ class PsMapFrame(wx.Frame):
             return wx.Rect(X, Y, abs(W), abs(H)).Inflate(h,h) 
 
     def makePSFont(self, textDict):
+        """!creates a wx.Font object from selected postscript font. To be
+        used for estimating bounding rectangle of text"""
+        
         fontsize = textDict['fontsize'] * self.canvas.currScale
         fontface = textDict['font'].split('-')[0]
         try:
@@ -720,6 +723,7 @@ class PsMapFrame(wx.Frame):
        
        
     def getTextExtent(self, textDict):
+        """!Estimates bounding rectangle of text"""
         #fontsize = str(fontsize if fontsize >= 4 else 4)
         dc = wx.PaintDC(self) # dc created because of method GetTextExtent, which pseudoDC lacks
        
