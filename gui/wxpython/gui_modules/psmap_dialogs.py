@@ -2644,7 +2644,7 @@ class VectorPanel(wx.Panel):
         self.btnDel = wx.Button(self, id = wx.ID_ANY, label = _("Delete"))
         self.btnProp = wx.Button(self, id = wx.ID_ANY, label = _("Properties..."))
         
-        self.updateListBox(selected = 0)
+        self.updateListBox(selected=0)
         
         
         gridBagSizer.Add(text, pos = (0,0), flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
@@ -4579,17 +4579,14 @@ class MapinfoDialog(PsmapDialog):
         self.panel = self._mapinfoPanel()
         
         self._layout(self.panel)
-        self.OnIsBackground(None)
-        self.OnIsBorder(None)
-
-        
+#        self.OnIsBackground(None)
+#        self.OnIsBorder(None)
 
     def _mapinfoPanel(self):
         panel = wx.Panel(parent = self, id = wx.ID_ANY, size = (-1, -1), style = wx.TAB_TRAVERSAL)
         #panel.SetupScrolling(scroll_x = False, scroll_y = True)
         border = wx.BoxSizer(wx.VERTICAL)
-        
-        
+                
         # position
         
         box   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = " %s " % _("Position"))
@@ -4645,28 +4642,23 @@ class MapinfoDialog(PsmapDialog):
         self.colors['borderColor'] = wx.ColourPickerCtrl(panel, id = wx.ID_ANY)
         self.colors['backgroundColor'] = wx.ColourPickerCtrl(panel, id = wx.ID_ANY)
         
-        if self.mapinfoDict['border'] != 'none':
+        if self.mapinfoDict['border'] == None:
+            self.mapinfoDict['border'] = 'none'
+        elif self.mapinfoDict['border'] != 'none':
             self.colors['borderCtrl'].SetValue(True) 
+            self.colors['borderColor'].SetColour(convertRGB(self.mapinfoDict['border']))
         else:
             self.colors['borderCtrl'].SetValue(False)
+            self.colors['borderColor'].SetColour('white')
 
-        if self.mapinfoDict['background'] != 'none':
+        if self.mapinfoDict['background'] == None:
+            self.mapinfoDict['background'] == 'none'
+        elif self.mapinfoDict['background'] != 'none':
             self.colors['backgroundCtrl'].SetValue(True) 
-        else:
-            self.colors['backgroundCtrl'].SetValue(False)
-        
-        if self.mapinfoDict['border'] != 'none':
-            self.colors['borderColor'].SetColour(convertRGB(self.mapinfoDict['border']))
-                                       
-        else:
-            self.colors['borderColor'].SetColour('black')
-
-        if self.mapinfoDict['background'] != 'none':
             self.colors['backgroundColor'].SetColour(convertRGB(self.mapinfoDict['background']))
         else:
-            self.colors['backgroundColor'].SetColour('black')
-
-
+            self.colors['backgroundCtrl'].SetValue(False)
+            self.colors['backgroundColor'].SetColour('white')
         
         flexSizer.Add(self.colors['borderCtrl'], proportion = 0, flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
         flexSizer.Add(self.colors['borderColor'], proportion = 0, flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
@@ -4687,12 +4679,14 @@ class MapinfoDialog(PsmapDialog):
     def OnIsBackground(self, event):
         if self.colors['backgroundCtrl'].GetValue():
             self.colors['backgroundColor'].Enable()
+            self.update()
         else:
             self.colors['backgroundColor'].Disable()
                         
     def OnIsBorder(self, event):
         if self.colors['borderCtrl'].GetValue():
             self.colors['borderColor'].Enable()
+            self.update()
         else:
             self.colors['borderColor'].Disable() 
                            
@@ -5352,6 +5346,7 @@ class TextDialog(PsmapDialog):
     def OnBackground(self, event):
         if self.effect['backgroundCtrl'].GetValue():
             self.effect['backgroundColor'].Enable()
+            self.update()
         else:
             self.effect['backgroundColor'].Disable()
     
@@ -5360,6 +5355,7 @@ class TextDialog(PsmapDialog):
             self.effect['highlightColor'].Enable()
             self.effect['highlightWidth'].Enable()
             self.effect['highlightWidthLabel'].Enable()
+            self.update()
         else:
             self.effect['highlightColor'].Disable()
             self.effect['highlightWidth'].Disable()
@@ -5370,6 +5366,7 @@ class TextDialog(PsmapDialog):
             self.effect['borderColor'].Enable()
             self.effect['borderWidth'].Enable()
             self.effect['borderWidthLabel'].Enable()
+            self.update()
         else:
             self.effect['borderColor'].Disable()
             self.effect['borderWidth'].Disable()
@@ -5489,42 +5486,26 @@ class TextDialog(PsmapDialog):
 
         
 def convertRGB(rgb):
-    """!Converts wx.Colour(255,255,255,255) and string '255:255:255',
-            depends on input""" 
-    psmapColors = { "white" : (1.00, 1.00, 1.00),
-                    "black" : (0.00, 0.00, 0.00),
-                    "red" : (1.00, 0.00, 0.00),
-                    "green" : (0.00, 1.00, 0.00),
-                    "blue" : (0.00, 0.00, 1.00),
-                    "yellow" : (1.00, 1.00, 0.00),
-                    "magenta" : (1.00, 0.00, 1.00),
-                    "cyan" : (0.00, 1.00, 1.00),
-                    "aqua" : (0.00, 0.75, 0.75),
-                    "grey" : (0.75, 0.75, 0.75),
-                    "gray" : (0.75, 0.75, 0.75),
-                    "orange" : (1.00, 0.50, 0.00),
-                    "brown" : (0.75, 0.50, 0.25),
-                    "purple" : (0.50, 0.00, 1.00),
-                    "violet" : (0.50, 0.00, 1.00),
-                    "indigo" : (0.00, 0.50, 1.00)}
-    
+    """!Converts wx.Colour(r,g,b,a) to string 'r:g:b' or named color,
+            or named color/r:g:b string to wx.Colour, depending on input""" 
+    # transform a wx.Colour tuple into an r:g:b string    
     if type(rgb) == wx.Colour:
-        for name, color in psmapColors.items(): 
+        for name, color in grass.named_colors.items(): 
             if  rgb.Red() == int(color[0] * 255) and\
                 rgb.Green() == int(color[1] * 255) and\
                 rgb.Blue() == int(color[2] * 255):
                 return name
         return str(rgb.Red()) + ':' + str(rgb.Green()) + ':' + str(rgb.Blue())
-    elif type(rgb) == str or type(rgb) == unicode:
-        if ':' in rgb:
-            return wx.Colour(*map(int, rgb.split(':')))
-        else:
-            color = map(lambda x: int(x * 255), psmapColors[rgb])
-            color = wx.Color(*color)
-            if color.IsOk():
-                return color  
+    # transform a GRASS named color or an r:g:b string into a wx.Colour tuple
+    else:
+        color = (grass.parse_color(rgb)[0]*255,
+                 grass.parse_color(rgb)[1]*255,
+                 grass.parse_color(rgb)[2]*255)
+        color = wx.Color(*color)
+        if color.IsOk():
+            return color
+        else:  
             return None
-        
         
 def PaperMapCoordinates(map, x, y, paperToMap = True):
     """!Converts paper (inch) coordinates -> map coordinates"""
