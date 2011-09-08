@@ -164,9 +164,9 @@ if [ -n "$PACKAGE" ]; then
     # $COMSPEC /c "mswindows\\osgeo4w\\gdalplugins.cmd $VERSION" 
     
     log CREATING PACKAGES 
-    mkdir -p package/grass$MAJOR$MINOR 
+    mkdir -p mswindows/osgeo4w/package
     
-    PDIR=$PWD/package
+    PDIR=$PWD/mswindows/osgeo4w/package
     SRC=$PWD
     cd $OSGEO4W_ROOT_MSYS 
 
@@ -175,7 +175,7 @@ if [ -n "$PACKAGE" ]; then
     sed -e "s#@VERSION@#$VERSION#g" -e "s#@OSGEO4W_ROOT_MSYS@#@OSGEO4W_ROOT@#g" -e "s#@POSTFIX@#$MAJOR$MINOR#g" \
 	$SRC/mswindows/osgeo4w/grass.tmpl >$OSGEO4W_ROOT_MSYS/bin/grass$MAJOR$MINOR.tmpl
     
-    tar -cjf $PDIR/grass$MAJOR$MINOR/grass-$VERSION-$PACKAGE.tar.bz2 \
+    tar -cjf $PDIR/grass-$VERSION-$PACKAGE.tar.bz2 \
     apps/grass/grass-$VERSION \
     bin/grass$MAJOR$MINOR.bat.tmpl \
     bin/grass$MAJOR$MINOR.tmpl \
@@ -190,7 +190,7 @@ if [ -n "$PACKAGE" ]; then
     
     cd $PDIR/.. 
     svn diff >/tmp/grass-$VERSION.diff
-    tar -C /tmp -cjf $PDIR/grass$MAJOR$MINOR/grass-$VERSION-$PACKAGE-src.tar.bz2 grass-$VERSION.diff
+    tar -C /tmp -cjf $PDIR/grass-$VERSION-$PACKAGE-src.tar.bz2 grass-$VERSION.diff
 fi
 
 log 
