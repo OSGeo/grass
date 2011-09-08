@@ -672,6 +672,71 @@ def test_strds_dataset():
     # Print self info
     strds.print_self()
 
+
+def test_str3ds_dataset():
+    
+    name = "str3ds_test_1"
+    mapset =  grass.gisenv()["MAPSET"]
+
+    print "Create a str3ds object"
+
+    # We need to specify the name and the mapset as identifier
+    str3ds = space_time_raster3d_dataset(ident = name + "@" + mapset)
+    # Check if in db
+    print "Is str3ds in db: ", str3ds.is_in_db()
+    # Create a new entry if not in db
+    if str3ds.is_in_db() == False:
+        str3ds.set_initial_values(temporal_type = "absolute", granularity="1 day",\
+        semantic_type="event", title="This is a test space time raster3d dataset", description="A space time raster3d dataset for testing")
+        str3ds.insert()
+    
+    # Reread the data from the db
+    str3ds.select()
+    # Print self info
+    str3ds.print_self()
+
+    # Create a test maps
+    for i in range(11):
+        i = i + 1
+        grass.raster3d.mapcalc3d("test" + str(i) + " = sin(x()) + cos(y()) + z()", overwrite = True)
+    
+        name = "test" + str(i)
+        mapset =  grass.gisenv()["MAPSET"]
+        ident = name + "@" + mapset
+
+        print "Create a raster3d object"
+
+        # We need to specify the name and the mapset as identifier
+        r3ds = raster3d_dataset(ident)
+
+        # Load data from the raster map in the mapset
+        r3ds.load()
+
+        print "Is raster in db: ", r3ds.is_in_db()
+
+        if r3ds.is_in_db():      
+            r3ds.select()
+            r3ds.print_self()
+            # Remove the entry if it is in the db
+            r3ds.delete()
+            r3ds.reset(ident)
+            r3ds.load()
+
+        # Set the absolute valid time
+        r3ds.set_absolute_time(start_time= datetime(year=2000, month=i, day=1), \
+                                end_time= datetime(year=2000, month=i + 1, day=1))
+        # Insert the map data into the SQL database
+        r3ds.insert()
+        # Register the map in the space time raster dataset
+        str3ds.register_map(r3ds)
+        # Print self info
+        r3ds.print_self()
+    
+    str3ds.select()
+    # Print self info
+    str3ds.print_self()
+
+
 #test_dict_sql_serializer()
 create_temporal_database()
 #test_dataset_identifer()
@@ -685,4 +750,5 @@ create_temporal_database()
 #test_raster3d_dataset()
 #test_vector_dataset()
 
-test_strds_dataset()
+#test_strds_dataset()
+test_str3ds_dataset()

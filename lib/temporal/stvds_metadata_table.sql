@@ -24,7 +24,7 @@ CREATE VIEW stvds_view_abs_time AS SELECT
             A1.creation_time, A1.modification_time,
             A1.revision, A2.start_time,
 	    A2.end_time, A2.granularity,
-	    A3.north, A3.south, A3.east, A3.west,
+	    A3.north, A3.south, A3.east, A3.west, A3.proj,
 	    A4.vector_register,
 	    A4.number_of_maps, 
             A4.title, A4.description	
@@ -38,7 +38,7 @@ CREATE VIEW stvds_view_rel_time AS SELECT
             A1.creation_time, A1.modification_time,
             A1.revision, 
 	    A2.interval, A2.granularity,
-	    A3.north, A3.south, A3.east, A3.west,
+	    A3.north, A3.south, A3.east, A3.west, A3.proj,
 	    A4.vector_register,
 	    A4.number_of_maps, 
             A4.title, A4.description	

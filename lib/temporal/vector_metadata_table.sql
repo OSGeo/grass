@@ -24,7 +24,7 @@ CREATE VIEW vector_view_abs_time AS SELECT
             A1.creation_time, A1.modification_time,
             A1.revision, A1.creator, 
 	    A2.start_time, A2.end_time, 
-            A3.north, A3.south, A3.east, A3.west,
+            A3.north, A3.south, A3.east, A3.west, A3.proj,
 	    A4.stvds_register
 	    FROM vector_base A1, vector_absolute_time A2, 
             vector_spatial_extent A3, vector_metadata A4 
@@ -36,7 +36,7 @@ CREATE VIEW vector_view_rel_time AS SELECT
             A1.creation_time, A1.modification_time,
             A1.revision, A1.creator, 
 	    A2.interval,
-            A3.north, A3.south, A3.east, A3.west,
+            A3.north, A3.south, A3.east, A3.west, A3.proj,
 	    A4.stvds_register
 	    FROM vector_base A1, vector_relative_time A2, 
             vector_spatial_extent A3, vector_metadata A4 
