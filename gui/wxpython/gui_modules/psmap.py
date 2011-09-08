@@ -711,10 +711,13 @@ class PsMapFrame(wx.Frame):
             weight = wx.FONTWEIGHT_NORMAL
         
         try:
-            fn = wx.Font(pointSize=fontsize, family=family, style=style, weight=weight, face=face)
-            return fn
+            fn = wx.Font(pointSize=fontsize, family=wx.FONTFAMILY_DEFAULT, 
+                         style=wx.FONTSTYLE_NORMAL, weight=wx.FONTWEIGHT_NORMAL)
         except:
-            return False
+            fn = wx.Font(pointSize=10, family=family, style=style, weight=weight, face=face)
+
+        return fn
+       
        
     def getTextExtent(self, textDict):
         #fontsize = str(fontsize if fontsize >= 4 else 4)
@@ -722,12 +725,11 @@ class PsMapFrame(wx.Frame):
        
         fn = self.makePSFont(textDict)
 
-        if fn:
+        try:
             dc.SetFont(fn)
             w,h,lh = dc.GetMultiLineTextExtent(textDict['text'])
             return (w,h)
-#            return dc.GetTextExtent(textDict['text'])
-        else:
+        except:
             return (0,0)
     
     def getInitMap(self):
