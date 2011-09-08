@@ -7,6 +7,8 @@
   (C) 2002 Copyright Jaro Hofierka, Gresaka 22, 085 01 Bardejov, Slovakia, 
                and GeoModel, s.r.o., Bratislava, Slovakia
   email: hofierka at geomodel.sk, marcel.suri at jrc.it, suri at geomodel.sk
+  
+  (C) 2011 by Hamish Bowman, and the GRASS Development Team
 ****************************************************************************/
 /*
  * This program is free software; you can redistribute it and/or
@@ -31,7 +33,6 @@
 #include <stdio.h>
 #include <math.h>
 #include <grass/gis.h>
-#include <grass/gprojects.h>
 #include <grass/glocale.h>
 #include "sunradstruct.h"
 #include "local_proto.h"
@@ -189,10 +190,9 @@ void com_par(struct SunGeometryConstDay *sungeom,
     double pom, xpom, ypom;
     double costimeAngle;
     double lum_Lx, lum_Ly;
-    double newLatitude, newLongitude;
     double inputAngle;
     double delt_lat, delt_lon;
-    double delt_east, delt_nor;
+    double delt_lat_m, delt_lon_m;
     double delt_dist;
 
 
@@ -257,29 +257,18 @@ void com_par(struct SunGeometryConstDay *sungeom,
     delt_lat = -0.0001 * cos(inputAngle);  /* Arbitrary small distance in latitude */
     delt_lon = 0.0001 * sin(inputAngle) / cos(latitude);
 
-    newLatitude = (latitude + delt_lat) * rad2deg;
-    newLongitude = (longitude + delt_lon) * rad2deg;
+    delt_lat_m = delt_lat * (180/M_PI) * 1852*60;
+    delt_lon_m = delt_lon * (180/M_PI) * 1852*60 * cos(latitude);
+    delt_dist = sqrt(delt_lat_m * delt_lat_m  +  delt_lon_m * delt_lon_m);
+
+/*
+    sunVarGeom->stepsinangle = gridGeom->stepxy * sin(sunVarGeom->sunAzimuthAngle);
+    sunVarGeom->stepcosangle = gridGeom->stepxy * cos(sunVarGeom->sunAzimuthAngle);
+*/
+    sunVarGeom->stepsinangle = gridGeom->stepxy * delt_lat_m / delt_dist;
+    sunVarGeom->stepcosangle = gridGeom->stepxy * delt_lon_m / delt_dist;
 
 
-    if ((G_projection() != PROJECTION_LL)) {
-	if (pj_do_proj(&newLongitude, &newLatitude, &oproj, &iproj) < 0) {
-	    G_fatal_error("Error in pj_do_proj");
-	}
-    }
-
-    delt_east = newLongitude - gridGeom->xp;
-    delt_nor = newLatitude - gridGeom->yp;
-
-    delt_dist = sqrt(delt_east * delt_east + delt_nor * delt_nor);
-
-
-    sunVarGeom->stepsinangle = gridGeom->stepxy * delt_nor / delt_dist;
-    sunVarGeom->stepcosangle = gridGeom->stepxy * delt_east / delt_dist;
-
-    /*
-       sunVarGeom->stepsinangle = stepxy * sin(sunVarGeom->sunAzimuthAngle);
-       sunVarGeom->stepcosangle = stepxy * cos(sunVarGeom->sunAzimuthAngle);
-     */
     sunVarGeom->tanSolarAltitude = tan(sunVarGeom->solarAltitude);
 
     return;
