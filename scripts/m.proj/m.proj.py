@@ -88,7 +88,26 @@
 
 import sys
 import os
+import threading
 from grass.script import core as grass
+
+class TrThread(threading.Thread):
+    def __init__(self, ifs, inf, outf):
+        threading.Thread.__init__(self)
+        self.ifs = ifs
+        self.inf = inf
+        self.outf = outf
+
+    def run(self):
+        while True:
+            line = self.inf.readline()
+            if not line:
+                break
+            line = line.replace(self.ifs, ' ')
+            self.outf.write(line)
+            self.outf.flush()
+
+        self.outf.close()
 
 def main():
     input = options['input']
@@ -237,21 +256,13 @@ def main():
     cmd = ['cs2cs'] + copyinp + outfmt + in_proj.split() + ['+to'] + out_proj.split()
     p = grass.Popen(cmd, stdin = grass.PIPE, stdout = grass.PIPE)
 
-    while True:
-	line = inf.readline()
-	if not line:
-	    break
-	line = line.replace(ifs, ' ')
-	p.stdin.write(line)
-	p.stdin.flush()
-
-    p.stdin.close()
-    p.stdin = None
+    tr = TrThread(ifs, inf, p.stdin)
+    tr.start()
 
     if not copy_input:
 	if include_header:
 	    outf.write("x%sy%sz\n" % (ofs, ofs))
-	for line in p.communicate()[0].splitlines():
+	for line in p.stdout:
 	    x, yz = line.split('\t')
 	    y, z = yz.split(' ')
 	    outf.write('%s%s%s%s%s\n' % \
@@ -259,12 +270,14 @@ def main():
     else:
 	if include_header:
 	    outf.write("input_x%sinput_y%sx%sy%sz\n" % (ofs, ofs, ofs, ofs))
-	for line in p.communicate()[0].splitlines():
+	for line in p.stdout:
 	    inX, therest, z = line.split(' ')
 	    inY, x, y = therest.split('\t')
 	    outf.write('%s%s%s%s%s%s%s%s%s\n' % \
                        (inX.strip(), ofs, inY.strip(), ofs, x.strip(), \
 		        ofs, y.strip(), ofs, z.strip()))
+
+    p.wait()
 
     if p.returncode != 0:
 	grass.warning(_("Projection transform probably failed, please investigate"))
