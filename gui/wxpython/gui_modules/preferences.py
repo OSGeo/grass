@@ -575,7 +575,7 @@ class Settings:
                         }
                     },
                 'cplane' : {
-                    'shading': 0,
+                    'shading': 4,
                     'rotation':{
                         'rot': 0, 
                         'tilt': 0
