@@ -682,8 +682,8 @@ class PsMapFrame(wx.Frame):
         fontface = textDict['font'].split('-')[0]
         try:
             fontstyle = textDict['font'].split('-')[1]
-        except:
-            fontstyle = 'normal'
+        except IndexError:
+            fontstyle = ''
         
         if fontface == "Times":
             family = wx.FONTFAMILY_ROMAN
@@ -698,26 +698,24 @@ class PsMapFrame(wx.Frame):
             family = wx.FONTFAMILY_DEFAULT
             face = ''
             
-        if fontstyle == 'normal':
-            style = wx.FONTSTYLE_NORMAL
-            weight = wx.FONTWEIGHT_NORMAL
+        style = wx.FONTSTYLE_NORMAL
+        weight = wx.FONTWEIGHT_NORMAL
             
-        if 'oblique' in fontstyle:
+        if 'Oblique' in fontstyle:
             style =  wx.FONTSTYLE_SLANT
             
-        if 'italic' in fontstyle:
+        if 'Italic' in fontstyle:
             style =  wx.FONTSTYLE_ITALIC
             
-        if 'bold' in fontstyle:
+        if 'Bold' in fontstyle:
             weight = wx.FONTWEIGHT_BOLD
-        else:
-            weight = wx.FONTWEIGHT_NORMAL
         
         try:
-            fn = wx.Font(pointSize=fontsize, family=wx.FONTFAMILY_DEFAULT, 
-                         style=wx.FONTSTYLE_NORMAL, weight=wx.FONTWEIGHT_NORMAL)
+            fn = wx.Font(pointSize = fontsize, family = family, style = style,
+                         weight = weight, face = face)
         except:
-            fn = wx.Font(pointSize=10, family=family, style=style, weight=weight, face=face)
+            fn = wx.Font(pointSize = fontsize, family = wx.FONTFAMILY_DEFAULT, 
+                         style = wx.FONTSTYLE_NORMAL, weight = wx.FONTWEIGHT_NORMAL)
 
         return fn
        
