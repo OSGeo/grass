@@ -1536,7 +1536,7 @@ class PsMapBufferedWindow(wx.Window):
             rot = float(textDict['rotate']) 
         else:
             rot = 0
-
+        
         fontsize = textDict['fontsize'] * self.currScale
         if textDict['background'] != 'none':
             background = textDict['background'] 
@@ -1546,19 +1546,27 @@ class PsMapBufferedWindow(wx.Window):
         pdc.RemoveId(drawId)
         pdc.SetId(drawId)
         pdc.BeginDrawing()
-        # doesn't work
+        
+        # border is not redrawn when zoom changes, why?
+##        if textDict['border'] != 'none' and not rot:
+##            units = UnitConversion(self)
+##            borderWidth = units.convert(value = textDict['width'],
+##                                        fromUnit = 'point', toUnit = 'pixel' ) * self.currScale
+##            pdc.SetPen(wx.Pen(colour = convertRGB(textDict['border']), width = borderWidth))
+##            pdc.DrawRectangle(*bounds)
+            
         if background:
-            pdc.SetBackground(wx.Brush(convertRGB(background)))
+            pdc.SetTextBackground(convertRGB(background))
             pdc.SetBackgroundMode(wx.SOLID)
         else:
-            pdc.SetBackground(wx.TRANSPARENT_BRUSH)
             pdc.SetBackgroundMode(wx.TRANSPARENT)
- 
+        
         fn = self.parent.makePSFont(textDict)
-
+        
         pdc.SetFont(fn)
         pdc.SetTextForeground(convertRGB(textDict['color']))        
         pdc.DrawRotatedText(textDict['text'], coords[0], coords[1], rot)
+        
         pdc.SetIdBounds(drawId, wx.Rect(*bounds))
         self.Refresh()
         pdc.EndDrawing()
