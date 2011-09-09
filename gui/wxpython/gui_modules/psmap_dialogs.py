@@ -903,21 +903,40 @@ class Text(InstructionObject):
     def __str__(self):
         text = self.instruction['text'].replace('\n','\\n')
         instr = "text %s %s" % (self.instruction['east'], self.instruction['north'])
-        instr += " %s\n" % text
-        instr += string.Template("    font $font\n    fontsize $fontsize\n    color $color\n").substitute(self.instruction)
-        instr += string.Template("    hcolor $hcolor\n").substitute(self.instruction)
+        try:
+            instr += " %s\n" % text.encode('latin_1')
+        except UnicodeEncodeError, err:
+            try:
+                pos = str(err).split('position')[1].split(':')[0].strip()
+            except IndexError:
+                pos = ''
+            if pos:
+                message = _("Characters on position %s are not supported "
+                            "by ISO-8859-1 (Latin 1) encoding "
+                            "which is required by module ps.map.") % pos
+            else:
+                message = _("Not all characters are supported "
+                            "by ISO-8859-1 (Latin 1) encoding "
+                            "which is required by module ps.map.")
+            GMessage(message = message)
+            return ''
+        instr += (string.Template("    font $font\n    fontsize $fontsize\n    color $color\n").
+                                                                   substitute(self.instruction).
+                                                                   encode('latin_1'))
+        instr += string.Template("    hcolor $hcolor\n").substitute(self.instruction).encode('latin_1')
         if self.instruction['hcolor'] != 'none':
-            instr += string.Template("    hwidth $hwidth\n").substitute(self.instruction)
-        instr += string.Template("    border $border\n").substitute(self.instruction)
+            instr += string.Template("    hwidth $hwidth\n").substitute(self.instruction).encode('latin_1')
+        instr += string.Template("    border $border\n").substitute(self.instruction).encode('latin_1')
         if self.instruction['border'] != 'none':
-            instr += string.Template("    width $width\n").substitute(self.instruction)
-        instr += string.Template("    background $background\n").substitute(self.instruction)
+            instr += string.Template("    width $width\n").substitute(self.instruction).encode('latin_1')
+        instr += string.Template("    background $background\n").substitute(self.instruction).encode('latin_1')
         if self.instruction["ref"] != '0':
-            instr += string.Template("    ref $ref\n").substitute(self.instruction)
+            instr += string.Template("    ref $ref\n").substitute(self.instruction).encode('latin_1')
         if self.instruction["rotate"]:
-            instr += string.Template("    rotate $rotate\n").substitute(self.instruction)
+            instr += string.Template("    rotate $rotate\n").substitute(self.instruction).encode('latin_1')
         if float(self.instruction["xoffset"]) or float(self.instruction["yoffset"]):
-            instr += string.Template("    xoffset $xoffset\n    yoffset $yoffset\n").substitute(self.instruction)
+            instr += (string.Template("    xoffset $xoffset\n    yoffset $yoffset\n").
+                                                            substitute(self.instruction).encode('latin_1'))
         instr += "    end"
         return instr
     
