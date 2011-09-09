@@ -953,11 +953,7 @@ class NvizToolWindow(FN.FlatNotebook):
                       pos = (3, 1),  flag = wx.EXPAND|wx.ALIGN_RIGHT)
         gridSizer.Add(item = self.FindWindowById(self.win['cplane']['rotation']['tilt']['text']),
                       pos = (3, 2),
-                      flag = wx.ALIGN_CENTER)
-        boxSizer.Add(gridSizer, proportion = 0, flag = wx.EXPAND|wx.ALL, border = 5)
-                    
-        horSizer = wx.BoxSizer(wx.HORIZONTAL)
-        horSizer.Add(item = wx.Size(-1, -1), proportion = 1, flag = wx.ALL, border = 5)            
+                      flag = wx.ALIGN_CENTER)          
         
         # cutting pland height
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
@@ -973,15 +969,11 @@ class NvizToolWindow(FN.FlatNotebook):
         gridSizer.Add(item = self.FindWindowById(self.win['cplane']['position']['z']['text']),
                       pos = (4, 2),
                       flag = wx.ALIGN_CENTER)
-           
-        # 'on display' button
-        posButton = wx.ToggleButton(parent = panel, id = wx.ID_ANY, label = _("On display"))
-        posButton.Bind(wx.EVT_TOGGLEBUTTON, self.OnCPlanePos)
-        posButton.SetName('cplaneHere')
-        self.win['cplane']['cplaneHere'] = posButton.GetId()
         
-        gridSizer.Add(item = posButton, pos = (0, 3), span = (2, 1), flag = wx.EXPAND)
-
+        boxSizer.Add(gridSizer, proportion = 0, flag = wx.EXPAND|wx.ALL, border = 5)
+                    
+        horSizer = wx.BoxSizer(wx.HORIZONTAL)
+        horSizer.Add(item = wx.Size(-1, -1), proportion = 1, flag = wx.ALL, border = 5)  
         # reset
         reset = wx.Button(parent = panel, id = wx.ID_ANY, label = _("Reset"))
         self.win['cplane']['reset'] = reset.GetId()
@@ -3926,7 +3918,7 @@ class NvizToolWindow(FN.FlatNotebook):
         """!Cutting plane selected"""
         plane = self.FindWindowById(self.win['cplane']['planes']).GetStringSelection()
         try:
-            planeIndex = int(plane.split()[1])
+            planeIndex = int(plane.split()[-1]) - 1
             self.EnablePage("cplane", enabled = True)
         except:
             planeIndex = -1
@@ -3940,7 +3932,7 @@ class NvizToolWindow(FN.FlatNotebook):
         """!Cutting plane is changing"""
         plane = self.FindWindowById(self.win['cplane']['planes']).GetStringSelection()
         try:
-            planeIndex = int(plane.split()[1])
+            planeIndex = int(plane.split()[-1]) - 1
         except:#TODO disabled page
             planeIndex = -1
     
@@ -3980,7 +3972,7 @@ class NvizToolWindow(FN.FlatNotebook):
         shading = self.FindWindowById(self.win['cplane']['shading']).GetSelection()
         plane = self.FindWindowById(self.win['cplane']['planes']).GetStringSelection()
         try:
-            planeIndex = int(plane.split()[1])
+            planeIndex = int(plane.split()[-1]) - 1
         except:#TODO disabled page
             planeIndex = -1
             
@@ -3995,7 +3987,7 @@ class NvizToolWindow(FN.FlatNotebook):
         """!Reset current cutting plane"""
         plane = self.FindWindowById(self.win['cplane']['planes']).GetStringSelection()
         try:
-            planeIndex = int(plane.split()[1])
+            planeIndex = int(plane.split()[-1]) - 1
         except:#TODO disabled page
             planeIndex = -1
         self.mapWindow.cplanes[planeIndex] = copy.deepcopy(UserSettings.Get(group = 'nviz',
@@ -4004,13 +3996,6 @@ class NvizToolWindow(FN.FlatNotebook):
         wx.PostEvent(self.mapWindow, event)
         self.OnCPlaneChangeDone(None)
         self.UpdateCPlanePage(planeIndex)
-        
-    def OnCPlanePos(self, event): 
-        """!Place cutting plane rotation center interactively"""
-        self.mapWindow.mouse['use'] = 'cplane'
-        self.mapWindow.SetCursor(self.mapWindow.cursors["cross"])
-        self.parent.curr_page.maptree.mapdisplay.SetFocus()
-        self.parent.curr_page.maptree.mapdisplay.Raise()
     
     def OnDecorationPlacement(self, event):
         """!Place an arrow/scalebar by clicking on display"""

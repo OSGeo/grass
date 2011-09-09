@@ -183,7 +183,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             cplane = copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'cplane'))
             cplane['on'] = False
             self.cplanes.append(cplane)
-        
+            
     def GetOverlay(self):
         """!Converts rendered overlay files to wx.Image
         
@@ -381,16 +381,6 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             toggle.SetValue(False)
             self.mouse['use'] = 'pointer'
             self.SetCursor(self.cursors['default'])
-            
-        if self.mouse['use'] == "cplane":   
-            pos = event.GetPosition()
-            size = self.GetClientSize()
-            x, y, z = self._display.SetCPlaneInteractively(pos[0], size[1] - pos[1])
-            if x is not None: 
-                idx = self._display.GetCPlaneCurrent()
-                self.cplanes[idx]['position']['x'] = x
-                self.cplanes[idx]['position']['y'] = y
-                self.render['quick'] = True
                 
         if self.mouse['use'] == 'arrow':
             pos = event.GetPosition()
@@ -413,14 +403,6 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         event.Skip()    
         
     def OnDragging(self, event):
-        if self.mouse['use'] == "cplane":  
-            idx = self._display.GetCPlaneCurrent() 
-            pos = event.GetPosition()
-            size = self.GetClientSize()
-            x, y, z = self._display.SetCPlaneInteractively(pos[0], size[1] - pos[1])
-            if x is not None: 
-                self.cplanes[idx]['position']['x'] = x
-                self.cplanes[idx]['position']['y'] = y 
                 
         if self.mouse['use'] == 'pointer':
             self.DragItem(self.dragid, event)
@@ -507,13 +489,6 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             else:
                 self.OnQueryVector(event)
                     
-        elif self.mouse["use"] == 'cplane':
-            self.lmgr.nviz.OnCPlaneChangeDone(None)
-            idx = self._display.GetCPlaneCurrent() 
-            self.lmgr.nviz.UpdateCPlanePage(idx)
-            self.lmgr.nviz.FindWindowByName('cplaneHere').SetValue(False)
-            self.mouse['use'] = 'pointer'
-            self.SetCursor(self.cursors['default'])
         elif self.mouse["use"] in ('arrow', 'scalebar'):
             self.lmgr.nviz.FindWindowById(
                     self.lmgr.nviz.win['decoration'][self.mouse["use"]]['place']).SetValue(False)
@@ -1264,6 +1239,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             if plane == index:
                 self._display.SelectCPlane(plane)
                 self.cplanes[plane]['on'] = True
+                self._display.SetFenceColor(self.cplanes[plane]['shading'])
             else:
                 self._display.UnselectCPlane(plane)
                 try:
@@ -2126,7 +2102,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         #
         cplane = self.lmgr.nviz.FindWindowById(self.lmgr.nviz.win['cplane']['planes']).GetStringSelection()
         try:
-            planeIndex = int(cplane.split()[1])
+            planeIndex = int(cplane.split()[-1]) - 1
         except IndexError:
             planeIndex = None
         if planeIndex is not None:
