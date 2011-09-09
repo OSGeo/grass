@@ -470,7 +470,7 @@ class Settings:
                 'view' : {
                     'persp' : {
                         'value' : 20,
-                        'step' : 5,
+                        'step' : 2,
                         },
                     'position' : {
                         'x' : 0.84,
