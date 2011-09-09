@@ -1325,7 +1325,7 @@ class PsMapBufferedWindow(wx.Window):
                     
                     self.RecalculatePosition(ids = [self.dragId])
                     if self.instruction[self.dragId].type in self.openDialogs:
-                        self.openDialogs[self.instruction[self.dragId].type].updateDialog()
+                        self.openDialogs[self.instruction[self.dragId].type].update()
 
         # double click launches dialogs
         elif event.LeftDClick():
@@ -1536,7 +1536,7 @@ class PsMapBufferedWindow(wx.Window):
             rot = float(textDict['rotate']) 
         else:
             rot = 0
-        
+
         fontsize = textDict['fontsize'] * self.currScale
         if textDict['background'] != 'none':
             background = textDict['background'] 
@@ -1562,7 +1562,7 @@ class PsMapBufferedWindow(wx.Window):
             pdc.SetBackgroundMode(wx.TRANSPARENT)
         
         fn = self.parent.makePSFont(textDict)
-        
+
         pdc.SetFont(fn)
         pdc.SetTextForeground(convertRGB(textDict['color']))        
         pdc.DrawRotatedText(textDict['text'], coords[0], coords[1], rot)
@@ -1689,7 +1689,6 @@ class PsMapBufferedWindow(wx.Window):
         self._buffer = wx.EmptyBitmap(width, height)
         # re-render image on idle
         self.resize = True
-
         
     def ScaleRect(self, rect, scale):
         """! Scale rectangle"""
