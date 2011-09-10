@@ -200,6 +200,10 @@ class MapFrame(wx.Frame):
                                                 '1:100000',
                                                 '1:1000000'])
         self.statusbarWin['mapscale'].Hide()
+        self.statusbarWin['mapscale'].SetToolTip(wx.ToolTip (_("As everyone's monitors and resolutions "
+                                                              "are set differently these values are not "
+                                                              "true map scales, but should get you into "
+                                                              "the right neighborhood.")))
         self.statusbar.Bind(wx.EVT_TEXT_ENTER, self.OnChangeMapScale, self.statusbarWin['mapscale'])
         self.statusbar.Bind(wx.EVT_COMBOBOX, self.OnChangeMapScale, self.statusbarWin['mapscale'])
 
