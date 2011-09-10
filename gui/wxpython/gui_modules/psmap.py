@@ -1325,7 +1325,7 @@ class PsMapBufferedWindow(wx.Window):
                     
                     self.RecalculatePosition(ids = [self.dragId])
                     if self.instruction[self.dragId].type in self.openDialogs:
-                        self.openDialogs[self.instruction[self.dragId].type].update()
+                        self.openDialogs[self.instruction[self.dragId].type].updateDialog()
 
         # double click launches dialogs
         elif event.LeftDClick():
