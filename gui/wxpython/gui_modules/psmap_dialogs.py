@@ -4579,8 +4579,8 @@ class MapinfoDialog(PsmapDialog):
         self.panel = self._mapinfoPanel()
         
         self._layout(self.panel)
-#        self.OnIsBackground(None)
-#        self.OnIsBorder(None)
+        self.OnIsBackground(None)
+        self.OnIsBorder(None)
 
     def _mapinfoPanel(self):
         panel = wx.Panel(parent = self, id = wx.ID_ANY, size = (-1, -1), style = wx.TAB_TRAVERSAL)
