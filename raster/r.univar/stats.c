@@ -141,15 +141,15 @@ int print_stats(univar_stat * stats)
 	}
 
 	if (!param.shell_style->answer) {
-	    fprintf(stdout, "total null and non-null cells: %d\n", stats[z].size);
-	    fprintf(stdout, "total null cells: %d\n\n", stats[z].size - stats[z].n);
+	    fprintf(stdout, "total null and non-null cells: %lu\n", stats[z].size);
+	    fprintf(stdout, "total null cells: %lu\n\n", stats[z].size - stats[z].n);
 	    fprintf(stdout, "Of the non-null cells:\n----------------------\n");
 	}
 
 	if (param.shell_style->answer) {
-	    fprintf(stdout, "n=%d\n", stats[z].n);
-	    fprintf(stdout, "null_cells=%d\n", stats[z].size - stats[z].n);
-	    fprintf(stdout, "cells=%d\n", stats->size);
+	    fprintf(stdout, "n=%lu\n", stats[z].n);
+	    fprintf(stdout, "null_cells=%lu\n", stats[z].size - stats[z].n);
+	    fprintf(stdout, "cells=%lu\n", stats->size);
 	    fprintf(stdout, "min=%.15g\n", stats[z].min);
 	    fprintf(stdout, "max=%.15g\n", stats[z].max);
 	    fprintf(stdout, "range=%.15g\n", stats[z].max - stats[z].min);
@@ -161,7 +161,7 @@ int print_stats(univar_stat * stats)
 	    fprintf(stdout, "sum=%s\n", sum_str);
 	}
 	else {
-	    fprintf(stdout, "n: %d\n", stats[z].n);
+	    fprintf(stdout, "n: %lu\n", stats[z].n);
 	    fprintf(stdout, "minimum: %g\n", stats[z].min);
 	    fprintf(stdout, "maximum: %g\n", stats[z].max);
 	    fprintf(stdout, "range: %g\n", stats[z].max - stats[z].min);
@@ -377,9 +377,9 @@ int print_stats_table(univar_stat * stats)
 	}
 
 	/* non-null cells cells */
-	fprintf(stdout, "%d%s", stats[z].n, zone_info.sep);
+	fprintf(stdout, "%lu%s", stats[z].n, zone_info.sep);
 	/* null cells */
-	fprintf(stdout, "%d%s", stats[z].size - stats[z].n, zone_info.sep);
+	fprintf(stdout, "%lu%s", stats[z].size - stats[z].n, zone_info.sep);
 	/* min */
 	fprintf(stdout, "%.15g%s", stats[z].min, zone_info.sep);
 	/* max */
