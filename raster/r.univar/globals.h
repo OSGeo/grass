@@ -34,14 +34,14 @@ typedef struct
     unsigned int n_perc;
     double *perc;
     double sum_abs;
-    int n;
-    int size;
+    unsigned long n;
+    unsigned long size;
     DCELL *dcell_array;
     FCELL *fcell_array;
     CELL *cell_array;
     int map_type;
     void *nextp;
-    int n_alloc;
+    off_t n_alloc;
     int first;
 } univar_stat;
 
