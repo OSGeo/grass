@@ -4639,19 +4639,21 @@ class MapinfoDialog(PsmapDialog):
         
         if self.mapinfoDict['border'] == None:
             self.mapinfoDict['border'] = 'none'
-        elif self.mapinfoDict['border'] != 'none':
+        if self.mapinfoDict['border'] != 'none':
             self.colors['borderCtrl'].SetValue(True) 
             self.colors['borderColor'].SetColour(convertRGB(self.mapinfoDict['border']))
         else:
             self.colors['borderCtrl'].SetValue(False)
-
+            self.colors['borderColor'].SetColour(convertRGB('black'))
+            
         if self.mapinfoDict['background'] == None:
             self.mapinfoDict['background'] == 'none'
-        elif self.mapinfoDict['background'] != 'none':
+        if self.mapinfoDict['background'] != 'none':
             self.colors['backgroundCtrl'].SetValue(True) 
             self.colors['backgroundColor'].SetColour(convertRGB(self.mapinfoDict['background']))
         else:
             self.colors['backgroundCtrl'].SetValue(False)
+            self.colors['backgroundColor'].SetColour(convertRGB('white'))
                     
         flexSizer.Add(self.colors['borderCtrl'], proportion = 0, flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
         flexSizer.Add(self.colors['borderColor'], proportion = 0, flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
@@ -5110,34 +5112,32 @@ class TextDialog(PsmapDialog):
         #set values
         if self.textDict['background'] == None:
             self.textDict['background'] = 'none'
-        elif self.textDict['background'] != 'none':
+        if self.textDict['background'] != 'none':
             self.effect['backgroundCtrl'].SetValue(True) 
             self.effect['backgroundColor'].SetColour(convertRGB(self.textDict['background']))
         else:
             self.effect['backgroundCtrl'].SetValue(False)
+            self.effect['backgroundColor'].SetColour(convertRGB('white'))
 
         if self.textDict['hcolor'] == None:
              self.textDict['hcolor'] = 'none'
-        elif self.textDict['hcolor'] != 'none':
+        if self.textDict['hcolor'] != 'none':
             self.effect['highlightCtrl'].SetValue(True) 
             self.effect['highlightColor'].SetColour(convertRGB(self.textDict['hcolor']))
         else:
             self.effect['highlightCtrl'].SetValue(False)
-
-        if self.textDict['hcolor'] != 'none':
-            self.effect['highlightColor'].SetColour(convertRGB(self.textDict['hcolor']))
-        else:
             self.effect['highlightColor'].SetColour(convertRGB('grey'))
 
         self.effect['highlightWidth'].SetValue(float(self.textDict['hwidth']))
         
         if self.textDict['border'] == None:
             self.textDict['border'] = 'none'
-        elif self.textDict['border'] != 'none':
+        if self.textDict['border'] != 'none':
             self.effect['borderCtrl'].SetValue(True) 
             self.effect['borderColor'].SetColour(convertRGB(self.textDict['border'])) 
         else:
             self.effect['borderCtrl'].SetValue(False)
+            self.effect['borderColor'].SetColour(convertRGB('black'))
 
         self.effect['borderWidth'].SetValue(float(self.textDict['width']))
         
@@ -5352,7 +5352,6 @@ class TextDialog(PsmapDialog):
             self.effect['borderWidthLabel'].Disable()
             
     def update(self): 
-
         #text
         self.textDict['text'] = self.textCtrl.GetValue()
         if not self.textDict['text']:
