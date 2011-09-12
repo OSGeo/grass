@@ -271,9 +271,7 @@ def main():
 	if include_header:
 	    outf.write("input_x%sinput_y%sx%sy%sz\n" % (ofs, ofs, ofs, ofs))
 	for line in p.stdout:
-            print line
             inXYZ, x, rest = line.split('\t')
-            print inXYZ
             inX, inY = inXYZ.split(' ')[:2]
 	    y, z = rest.split(' ', 1)
 	    outf.write('%s%s%s%s%s%s%s%s%s\n' % \
