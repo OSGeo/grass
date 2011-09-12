@@ -27,6 +27,7 @@ FILES = \
 	$(ETC)/license \
 	$(ETC)/welcome \
 	$(ETC)/VERSIONNUMBER \
+	$(ETC)/prompt.py \
 	$(HTMLDIR)/variables.html \
 	$(HTMLDIR)/grass7.html \
 	$(HTMLDIR)/helptext.html \
