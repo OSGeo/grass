@@ -14,8 +14,23 @@ mv debiangis/* .
 dpkg-buildpackage -rfakeroot
 #  or
 debuild binary
+#  or
+debuild -i -uc -us -b -j2
 
 # in main GRASS source directory. After the packages are generated, you can
 # install them with
 
 dpkg -i ../*grass*deb
+
+
+
+=====
+
+fixme: DebianGIS has moved to git,
+
+ sudo apt-get install git-core
+ mkdir git && cd git
+ git clone git://git.debian.org/git/pkg-grass/grass.git
+ ln -s grass/debian debiangis
+
+how to download just the grass/debian/ directory from that?
