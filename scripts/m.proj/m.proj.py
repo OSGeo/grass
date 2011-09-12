@@ -263,16 +263,19 @@ def main():
 	if include_header:
 	    outf.write("x%sy%sz\n" % (ofs, ofs))
 	for line in p.stdout:
-	    x, yz = line.split('\t')
-	    y, z = yz.split(' ')
+	    xy, z = line.split(' ', 1)
+	    x, y = xy.split('\t')
 	    outf.write('%s%s%s%s%s\n' % \
                        (x.strip(), ofs, y.strip(), ofs, z.strip()))
     else:
 	if include_header:
 	    outf.write("input_x%sinput_y%sx%sy%sz\n" % (ofs, ofs, ofs, ofs))
 	for line in p.stdout:
-	    inX, therest, z = line.split(' ')
-	    inY, x, y = therest.split('\t')
+            print line
+            inXYZ, x, rest = line.split('\t')
+            print inXYZ
+            inX, inY = inXYZ.split(' ')[:2]
+	    y, z = rest.split(' ', 1)
 	    outf.write('%s%s%s%s%s%s%s%s%s\n' % \
                        (inX.strip(), ofs, inY.strip(), ofs, x.strip(), \
 		        ofs, y.strip(), ofs, z.strip()))
