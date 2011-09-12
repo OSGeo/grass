@@ -3122,7 +3122,7 @@ class VPropertiesDialog(PsmapDialog):
         if self.vPropertiesDict['color'] != 'none':
             self.colorPicker.SetColour(convertRGB(self.vPropertiesDict['color'])) 
         else:
-            self.colorPicker.SetColour('black')
+            self.colorPicker.SetColour(convertRGB('black'))
 
         
         
@@ -3157,7 +3157,7 @@ class VPropertiesDialog(PsmapDialog):
         if self.vPropertiesDict['fcolor'] != 'none':
             self.fillColorPicker.SetColour(convertRGB(self.vPropertiesDict['fcolor'])) 
         else:
-            self.fillColorPicker.SetColour('red')
+            self.fillColorPicker.SetColour(convertRGB('red'))
 
         
         
