@@ -188,13 +188,9 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         return self.seltree
 
     def GetStringValue(self):
-        str = ""
-        for value in self.value:
-            str += value + ","
-        str = str.rstrip(',')
-        
-        return str
-
+        """!Get value as a string separated by commas"""
+        return ','.join(self.value)
+    
     def SetFilter(self, filter):
         """!Set filter for GIS elements, see e.g. VectorSelect"""
         self.filterElements = filter
@@ -246,11 +242,15 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         if not root:
             return
         found = self.FindItem(root, value)
-        self.value = self.GetCombo().GetValue().strip(',').split(',')
+        winValue = self.GetCombo().GetValue().strip(',')
+        self.value = []
+        if winValue:
+            self.value = winValue.split(',')
+        
         if found:
             self.value.append(found)
             self.seltree.SelectItem(found)
-
+        
     def GetAdjustedSize(self, minWidth, prefHeight, maxHeight):
         """!Reads UserSettings to get height (which was 200 in old implementation).
         """
@@ -338,7 +338,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         
         first_mapset = None
         for mapset in mapsets:
-            mapset_node = self.AddItem('Mapset: ' + mapset)
+            mapset_node = self.AddItem(_('Mapset:') + ' ' + mapset)
             if not first_mapset:
                 first_mapset = mapset_node
             
@@ -358,9 +358,9 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                         
                         if self.filterElements:
                             if self.filterElements(fullqElem):
-                                self.AddItem(elem, parent=mapset_node)
+                                self.AddItem(elem, parent = mapset_node)
                         else:
-                            self.AddItem(elem, parent=mapset_node)
+                            self.AddItem(elem, parent = mapset_node)
             except StandardError, e:
                 sys.stderr.write(_("GSelect: invalid item: %s") % e)
                 continue
@@ -477,10 +477,10 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                     # text item should be unique
                     self.value.append(fullName)
                 else:
-                    self.value = [fullName, ]
+                    self.value = [fullName]
             
             self.Dismiss()
-
+        
     def OnMotion(self, evt):
         """!Have the selection follow the mouse, like in a real combobox
         """
@@ -503,11 +503,12 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                 mapsetItem = self.seltree.GetItemParent(item)
                 fullName = self.seltree.GetItemText(item) + '@' + \
                     self.seltree.GetItemText(mapsetItem).split(' ', 1)[1]
+                
                 if self.multiple is True:
                     # text item should be unique
                     self.value.append(fullName)
                 else:
-                    self.value = [fullName, ]
+                    self.value = [fullName]
             
             self.Dismiss()
         
