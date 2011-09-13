@@ -21,10 +21,11 @@ import wx
 import dbm_dialogs
 
 import gcmd
-from debug import Debug
+from debug          import Debug
 from mapdisp_window import BufferedWindow
-from preferences import globalSettings as UserSettings
-
+from preferences    import globalSettings as UserSettings
+from utils          import ListOfCatsToRange
+from globalvar      import QUERYLAYER
 from vdigit import VDigitCategoryDialog
 from vdigit import VDigitZBulkDialog
 from vdigit import VDigitDuplicatesDialog
@@ -705,7 +706,7 @@ class VDigitWindow(BufferedWindow):
         if UserSettings.Get(group = 'vdigit', key = 'bgmap',
                             subkey = 'value', internal = True) == '':
             # no background map -> copy from current vector map layer
-            nselected = self.digit.GetDisplay().SelectLinesByBox((pos1, pos2))
+            nselected = self.bdigit.GetDisplay().SelectLinesByBox((pos1, pos2))
             
             if nselected > 0:
                 # highlight selected features
@@ -714,17 +715,15 @@ class VDigitWindow(BufferedWindow):
                 self.UpdateMap(render = False, renderVector = False)
         else:
             # copy features from background map
-            self.copyIds += self.digit.SelectLinesFromBackgroundMap(bbox = (pos1, pos2))
+            self.copyIds = self.digit.SelectLinesFromBackgroundMap(bbox = (pos1, pos2))
             if len(self.copyIds) > 0:
                 color = UserSettings.Get(group = 'vdigit', key = 'symbol',
                                          subkey = ['highlight', 'color'])
-                colorStr = str(color[0]) + ":" + \
-                    str(color[1]) + ":" + \
-                    str(color[2])
+                colorStr = str(color[0]) + ":" + str(color[1]) + ":" + str(color[2])
                 dVectTmp = ['d.vect',
                             'map=%s' % UserSettings.Get(group = 'vdigit', key = 'bgmap',
                                                         subkey = 'value', internal = True),
-                            'cats=%s' % utils.ListOfCatsToRange(self.copyIds),
+                            'cats=%s' % ListOfCatsToRange(self.copyIds),
                             '-i',
                             'color=%s' % colorStr,
                             'fcolor=%s' % colorStr,
@@ -733,16 +732,16 @@ class VDigitWindow(BufferedWindow):
                 
                 if not self.layerTmp:
                     self.layerTmp = self.Map.AddLayer(type = 'vector',
-                                                      name = globalvar.QUERYLAYER,
+                                                      name = QUERYLAYER,
                                                       command = dVectTmp)
                 else:
                     self.layerTmp.SetCmd(dVectTmp)
-                
-                self.UpdateMap(render = True, renderVector = False)
             else:
-                self.UpdateMap(render = False, renderVector = False)
+                if self.layerTmp:
+                    self.Map.DeleteLayer(self.layerTmp)
+                    self.layerTmp = None
             
-            self.redrawAll = None
+            self.UpdateMap(render = True, renderVector = True)
             
     def OnLeftUpBulkLine(self, event):
         """!Left mouse button released - vector digitizer z-bulk line

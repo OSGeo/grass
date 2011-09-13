@@ -1729,15 +1729,12 @@ class IVDigit:
         
         @return list of selected feature ids
         """
-        ret = list()
+        # try select features by box first
+        if self._display.SelectLinesByBox(bbox, poMapInfo = self.poBgMapInfo) < 1:
+            self._display.SelectLineByPoint(bbox[0], poMapInfo = self.poBgMapInfo)['line']
+            
+        return self._display.selected['ids']
         
-        # try select features by Box
-        ids = self._display.SelectLinesByBox(bbox, poMapInfo = self.poBgMapInfo)
-        if not ids:
-            ids = [self._display.SelectLineByPoint(bbox[0], poMapInfo = self.poBgMapInfo)['line'], ]
-        
-        return ids
-
     def GetUndoLevel(self):
         """!Get undo level (number of active changesets)
         

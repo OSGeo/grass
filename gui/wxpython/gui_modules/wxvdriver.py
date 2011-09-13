@@ -527,11 +527,6 @@ class DisplayDriver:
             # select by ids
             self.selected['cats'] = list()
         
-        if thisMapInfo:
-            selected = self.selected['ids']
-        else:
-            selected = list()
-        
         poList = Vect_new_list()
         x1, y1 = bbox[0]
         x2, y2 = bbox[1]
@@ -568,9 +563,9 @@ class DisplayDriver:
                     continue # skip lines just overlapping bbox
             
             if not self._isSelected(line):
-                selected.append(line)
+                self.selected['ids'].append(line)
             else:
-                selected.remove(line)
+                self.selected['ids'].remove(line)
         
         Vect_destroy_line_struct(poBbox)
         Vect_destroy_list(poList)
@@ -601,11 +596,6 @@ class DisplayDriver:
             # select by ids 
             self.selected['cats'] = list()
         
-        if thisMapInfo:
-            selected = self.selected['ids']
-        else:
-            selected = list()
-        
         poFound = Vect_new_list()
         
         lineNearest = Vect_find_line_list(poMapInfo, point[0], point[1], 0,
@@ -615,9 +605,9 @@ class DisplayDriver:
         
         if lineNearest > 0:
             if not self._isSelected(lineNearest):
-                selected.append(lineNearest)
+                self.selected['ids'].append(lineNearest)
             else:
-                selected.remove(lineNearest)
+                self.selected['ids'].remove(lineNearest)
         
         px = c_double()
         py = c_double()
@@ -635,14 +625,14 @@ class DisplayDriver:
 	    for i in range(found.n_values):
 		line = found.value[i]
 		if line != lineNearest:
-                    selected.append(line)
+                    self.selected['ids'].append(line)
 	    
             self.GetDuplicates()
 	    
 	    for i in range(found.n_values):
 		line = found.value[i]
 		if line != lineNearest and not self._isDuplicated(line):
-                    selected.remove(line)
+                    self.selected['ids'].remove(line)
         
         Vect_destroy_list(poFound)
         
