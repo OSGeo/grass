@@ -157,12 +157,11 @@ static void V2__add_line_to_topo_nat(struct Map_info *Map, int line,
 
     if (plus->built >= GV_BUILD_AREAS) {
 	if (type == GV_BOUNDARY) {
-
+	    struct P_topo_b *topo = (struct P_topo_b *)Line->topo;
+	    
 	    /* Delete neighbour areas/isles */
-	    first = 1;
+	    first = TRUE;
 	    for (s = 0; s < 2; s++) {	/* for each node */
-		struct P_topo_b *topo = (struct P_topo_b *)Line->topo;
-
 		node = (s == 0 ? topo->N1 : topo->N2);
 		G_debug(3,
 			"  delete neighbour areas/isles: %s node = %d",
@@ -176,9 +175,11 @@ static void V2__add_line_to_topo_nat(struct Map_info *Map, int line,
 		}
 
 		G_debug(3, "  number of boundaries at node = %d", n);
-		if (n > 2) {	/* more than 2 boundaries at node ( >= 2 old + 1 new ) */
-		    /* Line above (to the right), it is enough to check to the right, because if area/isle
-		     *  exists it is the same to the left */
+		if (n > 2) {
+		    /* more than 2 boundaries at node ( >= 2 old + 1 new ) */
+		    /* Line above (to the right), it is enough to check to
+		       the right, because if area/isle
+		       exists it is the same to the left */
 		    if (!s)
 			next_line =
 			    dig_angle_next_line(plus, line, GV_RIGHT,
@@ -192,7 +193,8 @@ static void V2__add_line_to_topo_nat(struct Map_info *Map, int line,
 			NLine = plus->Line[abs(next_line)];
 			topo = (struct P_topo_b *)NLine->topo;
 			if (next_line > 0)	/* the boundary is connected by 1. node */
-			    area = topo->right;	/* we are interested just in this side (close to our line) */
+			    /* we are interested just in this side (close to our line) */
+			    area = topo->right;	
 			else if (next_line < 0)	/* the boundary is connected by 2. node */
 			    area = topo->left;
 
@@ -202,7 +204,7 @@ static void V2__add_line_to_topo_nat(struct Map_info *Map, int line,
 			    Vect_get_area_box(Map, area, &box);
 			    if (first) {
 				Vect_box_copy(&abox, &box);
-				first = 0;
+				first = FALSE;
 			    }
 			    else
 				Vect_box_extend(&abox, &box);
@@ -219,9 +221,9 @@ static void V2__add_line_to_topo_nat(struct Map_info *Map, int line,
 		}
 	    }
 	    /* Build new areas/isles.
-	     *  It's true that we deleted also adjacent areas/isles, but
-	     *  if they form new one our boundary must participate, so
-	     *  we need to build areas/isles just for our boundary */
+	     * It's true that we deleted also adjacent areas/isles, but
+	     * if they form new one our boundary must participate, so
+	     * we need to build areas/isles just for our boundary */
 	    for (s = 0; s < 2; s++) {
 		side = (s == 0 ? GV_LEFT : GV_RIGHT);
 		G_debug(3, "  build area/isle on side = %d", side);
@@ -233,7 +235,7 @@ static void V2__add_line_to_topo_nat(struct Map_info *Map, int line,
 		    Vect_get_area_box(Map, area, &box);
 		    if (first) {
 			Vect_box_copy(&abox, &box);
-			first = 0;
+			first = FALSE;
 		    }
 		    else
 			Vect_box_extend(&abox, &box);
@@ -243,7 +245,7 @@ static void V2__add_line_to_topo_nat(struct Map_info *Map, int line,
 		    Vect_get_isle_box(Map, -area, &box);
 		    if (first) {
 			Vect_box_copy(&abox, &box);
-			first = 0;
+			first = FALSE;
 		    }
 		    else
 			Vect_box_extend(&abox, &box);
@@ -251,8 +253,9 @@ static void V2__add_line_to_topo_nat(struct Map_info *Map, int line,
 		new_area[s] = area;
 	    }
 	    /* Reattach all centroids/isles in deleted areas + new area.
-	     *  Because isles are selected by box it covers also possible new isle created above */
-	    if (!first) {	/* i.e. old area/isle was deleted or new one created */
+	     * Because isles are selected by box it covers also possible
+	     * new isle created above */
+	    if (!first) { /* i.e. old area/isle was deleted or new one created */
 		/* Reattach isles */
 		if (plus->built >= GV_BUILD_ATTACH_ISLES)
 		    Vect_attach_isles(Map, &abox);
@@ -325,7 +328,7 @@ off_t V1_write_line_nat(struct Map_info *Map,
 {
     off_t offset;
 
-    if (dig_fseek(&(Map->dig_fp), 0L, SEEK_END) == -1)	/* set to  end of file */
+    if (dig_fseek(&(Map->dig_fp), 0L, SEEK_END) == -1)	/* set to end of file */
 	return -1;
 
     offset = dig_ftell(&(Map->dig_fp));

@@ -266,17 +266,16 @@ static int read_line(const struct Map_info *Map, OGRGeometryH hGeom, long offset
     int eType, line;
     OGRGeometryH hGeom2;
 
-    /* Read coors if hGeom is a simple element (wkbPoint, wkbLineString) otherwise
-     * descend to geometry specified by offset[offset] */
-
-    G_debug(4, "read_line() offset = %ld", offset);
+    /* Read coors if hGeom is a simple element (wkbPoint,
+     * wkbLineString) otherwise descend to geometry specified by
+     * offset[offset] */
 
     eType = wkbFlatten(OGR_G_GetGeometryType(hGeom));
-    G_debug(4, "OGR Geometry of type: %d", eType);
+    G_debug(4, "OGR geometry type: %d", eType);
 
     switch (eType) {
     case wkbPoint:
-	G_debug(4, "Point");
+	G_debug(4, "\t->Point");
 	if (Points) {
 	    Vect_append_point(Points, OGR_G_GetX(hGeom, 0), OGR_G_GetY(hGeom, 0),
 			      OGR_G_GetZ(hGeom, 0));
@@ -285,7 +284,7 @@ static int read_line(const struct Map_info *Map, OGRGeometryH hGeom, long offset
 	break;
 
     case wkbLineString:
-	G_debug(4, "LineString");	
+	G_debug(4, "\t->LineString");	
 	if (Points) {
 	    nPoints = OGR_G_GetPointCount(hGeom);
 	    for (i = 0; i < nPoints; i++) {
@@ -301,7 +300,7 @@ static int read_line(const struct Map_info *Map, OGRGeometryH hGeom, long offset
     case wkbMultiLineString:
     case wkbMultiPolygon:
     case wkbGeometryCollection:
-	G_debug(4, " more geoms -> part %d", Map->fInfo.ogr.offset[offset]);
+	G_debug(4, " \t->more geoms -> part %d", Map->fInfo.ogr.offset[offset]);
 	hGeom2 = OGR_G_GetGeometryRef(hGeom, Map->fInfo.ogr.offset[offset]);
 	line = read_line(Map, hGeom2, offset + 1, Points);
 	if (eType == wkbPolygon || wkbMultiPolygon)
@@ -402,7 +401,8 @@ int V1_read_line_ogr(struct Map_info *Map,
     int type;
     OGRGeometryH hGeom;
 
-    G_debug(4, "V1_read_line_ogr() offset = %lu", (long) offset);
+    G_debug(4, "V1_read_line_ogr() offset = %lu offset_num = %lu",
+	    (long) offset, (long) Map->fInfo.ogr.offset_num);
 
     if (offset >= Map->fInfo.ogr.offset_num)
 	return -2;
@@ -419,7 +419,7 @@ int V1_read_line_ogr(struct Map_info *Map,
     if (line_p != NULL) {
 	/* Read feature to cache if necessary */
 	if (Map->fInfo.ogr.feature_cache_id != FID) {
-	    G_debug(4, "Read feature (FID = %ld) to cache.", FID);
+	    G_debug(4, "Read feature (FID = %ld) to cache", FID);
 	    if (Map->fInfo.ogr.feature_cache) {
 		OGR_F_Destroy(Map->fInfo.ogr.feature_cache);
 	    }

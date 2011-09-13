@@ -102,7 +102,7 @@ int Vect_read_line(const struct Map_info *Map,
 		   struct line_pnts *line_p, struct line_cats *line_c, int line)
 {
 
-    G_debug(3, "Vect_read_line() line=%d", line);
+    G_debug(3, "Vect_read_line() line = %d", line);
 
     if (!VECT_OPEN(Map))
 	G_fatal_error("Vect_read_line(): %s", _("vector map is not opened"));
