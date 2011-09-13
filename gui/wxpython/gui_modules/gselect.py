@@ -1477,7 +1477,7 @@ class GdalSelect(wx.Panel):
             ret = gcmd.RunCommand('v.in.ogr',
                                   quiet = True,
                                   read = True,
-                                  flags = 't',
+                                  flags = 'a',
                                   dsn = dsn)
                 
             if not ret:
