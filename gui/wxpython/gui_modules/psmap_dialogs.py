@@ -240,6 +240,7 @@ class Instruction:
         env = grass.gisenv()
         comment += "# location: %s\n" % env['LOCATION_NAME']
         comment += "# mapset: %s\n" % env['MAPSET']
+        comment += "# page orientation: %s\n" % self.FindInstructionByType('page')['Orientation']
         border = ''
         if not self.FindInstructionByType('map'):
             border = 'border n\n'
@@ -313,11 +314,15 @@ class Instruction:
             return
         # first read file to get information about region and scaletype
         isRegionComment = False
+        orientation = 'Portrait'
         for line in file:
             if '# g.region' in line:
                 self.SetRegion(regionInstruction = line)
                 isRegionComment = True
                 break
+            if '# page orientation' in line:
+                orientation = line.split(':')[-1].strip()
+                
         if not isRegionComment:
             self.SetRegion(regionInstruction = None)
         # then run ps.map -b to get information for maploc
@@ -325,7 +330,7 @@ class Instruction:
         map = self.FindInstructionByType('map')
         region = grass.region()
         map['center'] = (region['n'] + region['s']) / 2, (region['w'] + region['e']) / 2
-        mapRect = GetMapBounds(self.filename)
+        mapRect = GetMapBounds(self.filename, portrait = (orientation == 'Portrait'))
         map['rect'] = mapRect
         proj = projInfo()
         toM = 1.0
@@ -360,6 +365,9 @@ class Instruction:
                         kwargs['id'] = wx.NewId()
                         kwargs['vectorMapNumber'] = vectorMapNumber
                         vectorMapNumber += 1
+                    elif instruction == 'paper':
+                        kwargs['Orientation'] = orientation
+                        
                     ok = self.SendToRead(instruction, buffer, **kwargs)
                     if not ok: return False
                     buffer = []
@@ -499,13 +507,14 @@ class Instruction:
         if not page:
             page = PageSetup(wx.NewId())
             self.AddInstruction(page)
+        else:
+            page['Orientation'] = orientation
 
 
         #
         return True
     
     def SendToRead(self, instruction, text, **kwargs):
-        #print 'send to read', instruction, text
         psmapInstrDict = dict(paper = ['page'],
                               maploc = ['map'],
                               scale = ['map'],
@@ -667,7 +676,7 @@ class MapFrame(InstructionObject):
         if self.instruction['scaleType'] == 0: #match map
             map = self.instruction['map']
             if self.instruction['mapType'] == 'raster':
-                comment = "# g.region rast=%s cols=%s rows=%s\n" % (map, region['cols'], region['rows'])
+                comment = "# g.region rast=%s nsres=%s ewres=%s\n" % (map, region['nsres'], region['ewres'])
             else:
                 comment = "# g.region vect=%s\n" % (map)
         elif self.instruction['scaleType'] == 1:# saved region
@@ -784,12 +793,12 @@ class PageSetup(InstructionObject):
 
         return instr
     
-    def Read(self, instruction, text):
+    def Read(self, instruction, text, **kwargs):
         """!Read instruction and save information"""
         instr = {}
         self.cats = ['Width', 'Height', 'Left', 'Right', 'Top', 'Bottom']
         self.subInstr = dict(zip(['width', 'height', 'left', 'right', 'top', 'bottom'], self.cats))
-
+        
         if instruction == 'paper': # just for sure
             for line in text:
                 if line.startswith('paper'): 
@@ -807,7 +816,6 @@ class PageSetup(InstructionObject):
                             GError(_("Failed to read instruction %(file)s.\nUnknown format %(for)s") % \
                                        { 'file' : instruction, 'for' : format })
                             return False
-                        
                     else:
                         # paper
                         # width ...
@@ -820,7 +828,10 @@ class PageSetup(InstructionObject):
                     except  (IndexError, KeyError):
                         GError(_("Failed to read instruction %s.") % instruction)
                         return False
-
+                    
+            if 'Orientation' in kwargs and kwargs['Orientation'] == 'Landscape':
+                instr['Width'], instr['Height'] = instr['Height'], instr['Width']
+                
             self.instruction.update(instr)
         return True  
     
@@ -1800,9 +1811,9 @@ class PageSetupDialog(PsmapDialog):
         size = (110,-1)
         #sizers
         mainSizer = wx.BoxSizer(wx.VERTICAL)
-        pageBox = wx.StaticBox(self, id = wx.ID_ANY, label ="  Page size ")
+        pageBox = wx.StaticBox(self, id = wx.ID_ANY, label = " %s " % _("Page size"))
         pageSizer = wx.StaticBoxSizer(pageBox, wx.VERTICAL)
-        marginBox = wx.StaticBox(self, id = wx.ID_ANY, label = " Margins ")
+        marginBox = wx.StaticBox(self, id = wx.ID_ANY, label = " %s " % _("Margins"))
         marginSizer = wx.StaticBoxSizer(marginBox, wx.VERTICAL)
         horSizer = wx.BoxSizer(wx.HORIZONTAL) 
         #staticText + choice
@@ -3225,7 +3236,8 @@ class VPropertiesDialog(PsmapDialog):
         if self.vPropertiesDict['hcolor'] != 'none':
             self.colorPicker.SetColour(convertRGB(self.vPropertiesDict['hcolor']) )
         else:
-            self.colorPicker.SetColour('black')        
+            self.colorPicker.SetColour(convertRGB('black'))
+
         
         self.gridBagSizerO.Add(self.outlineCheck, pos = (0, 0), span = (1,2), flag = wx.ALIGN_CENTER_VERTICAL, border = 0)        
         self.gridBagSizerO.Add(widthText, pos = (1, 1), flag = wx.ALIGN_CENTER_VERTICAL, border = 0)        
@@ -3256,7 +3268,7 @@ class VPropertiesDialog(PsmapDialog):
         if self.vPropertiesDict['color'] != 'none':
             self.fillColorPicker.SetColour(convertRGB(self.vPropertiesDict['color']) )
         else:
-            self.fillColorPicker.SetColour('black')
+            self.fillColorPicker.SetColour(convertRGB('black'))
         
         self.colorColRadio = wx.RadioButton(panel, id = wx.ID_ANY, label = _("color from map table column:"))
         self.colorColChoice = self.getColsChoice(parent = panel)
@@ -5622,11 +5634,17 @@ def projInfo():
     
     return projinfo
 
-def GetMapBounds(filename):
-    """!Run ps.map -b to get information about map bounding box"""
+def GetMapBounds(filename, portrait = True):
+    """!Run ps.map -b to get information about map bounding box
+    
+        @param filename psmap input file
+        @param portrait page orientation"""
+    orient = ''
+    if not portrait:
+        orient = 'r'
     try:
         bb = map(float, grass.read_command('ps.map',
-                                           flags = 'b',
+                                           flags = 'b' + orient,
                                            quiet = True,
                                            input = filename).strip().split('=')[1].split(','))
     except (grass.ScriptError, IndexError):

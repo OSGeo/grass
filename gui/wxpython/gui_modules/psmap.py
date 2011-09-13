@@ -389,7 +389,6 @@ class PsMapFrame(wx.Frame):
         if not filename:
             return
         # load instructions
-        #filename = '/home/anna/Desktop/reading.txt'
         readObjectId = []
         readInstruction = Instruction(parent = self, objectsToDraw = readObjectId)
         ok = readInstruction.Read(filename)
@@ -402,6 +401,7 @@ class PsMapFrame(wx.Frame):
             self.canvas.UpdateMapLabel()
             self.canvas.dragId = -1
             self.canvas.Clear()
+            self.canvas.SetPage()
             #self.canvas.ZoomAll()
             
             self.DialogDataChanged(self.objectId)
@@ -414,6 +414,7 @@ class PsMapFrame(wx.Frame):
         val = dlg.ShowModal()
         if val == wx.ID_OK:
             self.canvas.SetPage()
+            self.getInitMap()
             self.canvas.RecalculatePosition(ids = self.objectId)
         dlg.Destroy()
         
@@ -446,6 +447,7 @@ class PsMapFrame(wx.Frame):
         if self.currentPage == 0:
             self.cursorOld = self.canvas.GetCursor() 
         else:
+            self.cursorOld = self.previewCanvas.GetCursor()
             self.previewCanvas.GetCursor()
         self.mouse["use"] = "zoomin"
         if self.currentPage == 0:
@@ -742,7 +744,8 @@ class PsMapFrame(wx.Frame):
         instrFileFd.flush()
         instrFileFd.close()
         
-        mapInitRect = GetMapBounds(instrFile)
+        page = self.instruction.FindInstructionByType('page')
+        mapInitRect = GetMapBounds(instrFile, portrait = (page['Orientation'] == 'Portrait'))
         grass.try_remove(instrFile)
         
         region = grass.region()
