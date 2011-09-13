@@ -62,7 +62,7 @@ int display_lines(struct Map_info *Map, int type, struct cat_list *Clist,
 		  dbCatValArray *cvarr_rot, int nrec_rot)
 
 {
-    int ltype, line;
+    int ltype, line, nlines;
     struct line_pnts *Points;
     struct line_cats *Cats;
 
@@ -73,12 +73,6 @@ int display_lines(struct Map_info *Map, int type, struct cat_list *Clist,
     
     Symb = NULL;
     
-    if (id_flag && Vect_level(Map) < 2) {
-	G_warning(_("Unable to display lines by id, topology not available. "
-		    "Please try to rebuild topology using "
-		    "v.build or v.build.all."));
-    }
-  
     line_color = G_malloc(sizeof(RGBA_Color));
     fill_color = G_malloc(sizeof(RGBA_Color));
     primary_color = G_malloc(sizeof(RGBA_Color));
@@ -121,6 +115,15 @@ int display_lines(struct Map_info *Map, int type, struct cat_list *Clist,
     if (color && !cvarr_rgb && !cats_color_flag)
 	D_RGB_color(color->r, color->g, color->b);
     
+    nlines = -1;
+    if (id_flag) {
+	if (Vect_level(Map) < 2)
+	    G_fatal_error(_("Unable to display features by id, topology not available. "
+			    "Please try to rebuild topology using "
+			    "v.build or v.build.all."));
+	nlines = Vect_get_num_lines(Map);
+    }
+
     line = 0;
     n_points = n_lines = 0;
     n_centroids = n_boundaries = 0;
@@ -128,15 +131,22 @@ int display_lines(struct Map_info *Map, int type, struct cat_list *Clist,
     while (TRUE) {
 	line++;
 	
-	ltype = Vect_read_next_line(Map, Points, Cats);
-
-	if (ltype == -1) {
-	    G_fatal_error(_("Unable to read vector map"));
+	if (nlines > -1) {
+	    if (line > nlines)
+		break;
+	    ltype = Vect_read_line(Map, Points, Cats, line);
 	}
-	else if (ltype == -2) { /* EOF */
-	    break;
-	}
+	else {
+	    ltype = Vect_read_next_line(Map, Points, Cats);
 
+	    if (ltype == -1) {
+		G_fatal_error(_("Unable to read vector map"));
+	    }
+	    else if (ltype == -2) { /* EOF */
+		break;
+	    }
+	}
+	
 	draw_line(type, ltype, line,
 		  Points, Cats,
 		  color, fcolor, chcat,
