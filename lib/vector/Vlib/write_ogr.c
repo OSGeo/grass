@@ -31,9 +31,9 @@ static int sqltype_to_ogrtype(int);
 static int write_attributes(dbDriver *, int, const struct field_info *,
 			    OGRLayerH, OGRFeatureH);
 
-void V2__add_line_to_topo_ogr(struct Map_info *Map, int line,
-			      const struct line_pnts *points,
-			      const struct line_cats *cats)
+static void V2__add_line_to_topo_ogr(struct Map_info *Map, int line,
+				     const struct line_pnts *points,
+				     const struct line_cats *cats)
 {
     /* recycle code from build_ogr */
     G_warning("feature not yet implemented, coming soon...");
@@ -59,6 +59,7 @@ off_t V1_write_line_ogr(struct Map_info *Map, int type,
     int i, cat, ret;
 
     struct field_info *Fi;
+    struct Format_info_ogr *fInfo;
     
     OGRGeometryH       Ogr_geometry;
     OGRFeatureH        Ogr_feature;
@@ -85,7 +86,8 @@ off_t V1_write_line_ogr(struct Map_info *Map, int type,
 	}
     }
     
-    Ogr_featuredefn = OGR_L_GetLayerDefn(Map->fInfo.ogr.layer);
+    fInfo = &(Map->fInfo.ogr);
+    Ogr_featuredefn = OGR_L_GetLayerDefn(fInfo->layer);
     Ogr_geom_type = OGR_FD_GetGeomType(Ogr_featuredefn);
     
     /* determine matching OGR feature geometry type */
@@ -166,14 +168,24 @@ off_t V1_write_line_ogr(struct Map_info *Map, int type,
     OGR_F_SetGeometry(Ogr_feature, Ogr_geometry);
 
     /* write attributes */
-    if (cat > -1 && Map->fInfo.ogr.dbdriver) {
-	write_attributes(Map->fInfo.ogr.dbdriver,
-			 cat, Fi, Map->fInfo.ogr.layer, Ogr_feature);
+    if (cat > -1 && fInfo->dbdriver) {
+	write_attributes(fInfo->dbdriver,
+			 cat, Fi, fInfo->layer, Ogr_feature);
 	G_free(Fi);
     }
     /* write feature into layer */
-    ret = OGR_L_CreateFeature(Map->fInfo.ogr.layer, Ogr_feature);
+    ret = OGR_L_CreateFeature(fInfo->layer, Ogr_feature);
 
+    /* update offset array */
+    if (fInfo->offset_num >= fInfo->offset_alloc) {
+	fInfo->offset_alloc += 1000;
+	fInfo->offset = (int *) G_realloc(fInfo->offset,
+					  fInfo->offset_alloc *
+					  sizeof(int));
+    }
+    /* how to deal with OGRNullFID ? */
+    fInfo->offset[fInfo->offset_num] = (int)OGR_F_GetFID(Ogr_feature);
+    
     /* destroy */
     OGR_G_DestroyGeometry(Ogr_geometry);
     OGR_F_Destroy(Ogr_feature);
@@ -181,7 +193,7 @@ off_t V1_write_line_ogr(struct Map_info *Map, int type,
     if (ret != OGRERR_NONE)
 	return -1;
     
-    return Map->fInfo.ogr.offset_num++;
+    return fInfo->offset_num++;
 }
 
 /*!
@@ -206,6 +218,7 @@ off_t V2_write_line_ogr(struct Map_info *Map, int type,
     line = 0;
     
     G_debug(3, "V2_write_line_ogr()");
+    
     offset = V1_write_line_ogr(Map, type, points, cats);
     if (offset < 0)
 	return -1;
@@ -269,8 +282,9 @@ off_t V1_rewrite_line_ogr(struct Map_info *Map,
   \brief Rewrites feature to 'coor' file (topology level) - internal use only
   
   \param Map pointer to Map_info structure
-  \param type feature type
   \param line feature id
+  \param type feature type
+  \param offset unused
   \param points feature geometry
   \param cats feature categories
   
@@ -280,9 +294,14 @@ off_t V1_rewrite_line_ogr(struct Map_info *Map,
 off_t V2_rewrite_line_ogr(struct Map_info *Map, int line, int type, off_t offset,
 			  const struct line_pnts *points, const struct line_cats *cats)
 {
+    if (type != V2_read_line_ogr(Map, NULL, NULL, line)) {
+	G_warning(_("Unable to rewrite feature (incompatible feature types)"));
+	return -1;
+    }
+
     V2_delete_line_ogr(Map, line);
 
-    return (V2_write_line_ogr(Map, type, points, cats));
+    return V2_write_line_ogr(Map, type, points, cats);
 }
 
 /*!
@@ -329,7 +348,7 @@ int V2_delete_line_ogr(struct Map_info *Map, off_t line)
     static struct line_cats *Cats = NULL;
     static struct line_pnts *Points = NULL;
 
-    G_debug(3, "V2_delete_line_nat(), line = %d", (int) line);
+    G_debug(3, "V2_delete_line_ogr(), line = %d", (int) line);
 
     type = first = 0;
     Line = NULL;
@@ -350,7 +369,7 @@ int V2_delete_line_ogr(struct Map_info *Map, off_t line)
 	Points = Vect_new_line_struct();
     }
 
-    type = V2_read_line_nat(Map, Points, Cats, line);
+    type = V2_read_line_ogr(Map, Points, Cats, line);
 
     /* Update category index */
     if (plus->update_cidx) {

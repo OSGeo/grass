@@ -82,13 +82,12 @@ static int add_line(struct Plus_head *plus, int lineid, int type, const struct l
 
     lp = Points->n_points - 1;
     G_debug(3, "Register node %f,%f", Points->x[lp], Points->y[lp]);
-    node =
-	dig_find_node(plus, Points->x[lp], Points->y[lp], Points->z[lp]);
+    node = dig_find_node(plus, Points->x[lp], Points->y[lp],
+			 Points->z[lp]);
     G_debug(3, "node = %d", node);
     if (node == 0) {
-	node =
-	    dig_add_node(plus, Points->x[lp], Points->y[lp],
-			 Points->z[lp]);
+	node = dig_add_node(plus, Points->x[lp], Points->y[lp],
+			    Points->z[lp]);
 	G_debug(3, "Add new node: %d", node);
     }
     else {
