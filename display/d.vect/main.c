@@ -424,12 +424,12 @@ int main(int argc, char **argv)
     chcat = 0;
     if (where_opt->answer) {
 	if (Clist->field < 1)
-	    G_fatal_error(_("Option <%s> requires option <%s> > 0"), where_opt->key, field_opt->key);
+	    G_fatal_error(_("Option <%s> must be > 0"), field_opt->key);
 	chcat = 1;
 	option_to_where(&Map, Clist, where_opt->answer);
     }
     else if (cat_opt->answer) {
-	if (Clist->field < 1)
+	if (Clist->field < 1 && !id_flag->answer)
 	    G_fatal_error(_("Option <%s> must be > 0"), field_opt->key);
 	chcat = 1;
 	ret = Vect_str_to_cat_list(cat_opt->answer, Clist);
