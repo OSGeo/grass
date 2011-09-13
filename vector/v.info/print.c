@@ -27,14 +27,15 @@ void print_region(const struct Map_info *Map)
     
     struct bound_box box;
 
+    /*Print the spatial extent as double values*/
     Vect_get_map_box(Map, &box);
-    G_format_northing(box.N, tmp1, Vect_get_proj(Map));
-    G_format_northing(box.S, tmp2, Vect_get_proj(Map));
+    G_format_northing(box.N, tmp1, -1);
+    G_format_northing(box.S, tmp2, -1);
     fprintf(stdout, "north=%s\n", tmp1);
     fprintf(stdout, "south=%s\n", tmp2);
     
-    G_format_easting(box.E, tmp1, Vect_get_proj(Map));
-    G_format_easting(box.W, tmp2, Vect_get_proj(Map));
+    G_format_easting(box.E, tmp1, -1);
+    G_format_easting(box.W, tmp2, -1);
     fprintf(stdout, "east=%s\n", tmp1);
     fprintf(stdout, "west=%s\n", tmp2);
     fprintf(stdout, "top=%f\n", box.T);
