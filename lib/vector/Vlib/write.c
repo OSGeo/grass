@@ -96,9 +96,9 @@ static int (*Vect_delete_line_array[][3]) () = {
     delete_dummy, V1_delete_line_nat, V2_delete_line_nat}
 #ifdef HAVE_OGR
     , {
-    delete_dummy, V1_delete_line_ogr, V2_delete_line_nat}
+    delete_dummy, V1_delete_line_ogr, V2_delete_line_ogr}
     , {
-    delete_dummy, V1_delete_line_ogr, V2_delete_line_nat}
+    delete_dummy, V1_delete_line_ogr, V2_delete_line_ogr}
 #else
     , {
     delete_dummy, format, format}
