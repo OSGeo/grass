@@ -1,40 +1,37 @@
-<H2>DESCRIPTION</H2>
-
+<h2>DESCRIPTION</h2>
 
 This command has 2 modes of operation. If no date argument
-     is supplied, then the current timestamp for the grid3d map
-     is printed. If a date argument is specified, then the
-     timestamp for the grid3d map is set to the specified
-     date(s).  See EXAMPLES below.
+is supplied, then the current timestamp for the 3D raster map
+is printed. If a date argument is specified, then the
+timestamp for the 3D raster map is set to the specified
+date(s). See EXAMPLES below.
 
+<h2>EXAMPLES</h2>
 
-
-<H2>EXAMPLES</H2>
-
- <b>r3.timestamp map=soils</b><br>
-	  Prints the timestamp for the "soils" grid3d map. If
+<b>r3.timestamp map=soils</b><br>
+	  Prints the timestamp for the "soils" 3D raster map. If
 	  there is no timestamp for soils, nothing is printed. If
 	  there is a timestamp, one or two lines are printed,
 	  depending on if the timestamp for the map consists of a
 	  single date or two dates (ie start and end dates).
 <p>
-<b>     r3.timestamp map=soils date='15 sep 1987'</b><br>
+<b>r3.timestamp map=soils date='15 sep 1987'</b><br>
 	  Sets the timestamp for "soils" to the single date<br>
 	  "15 sep 1987"
 <p>
-<b>     r3.timestamp map=soils date='15 sep 1987/20 feb 1988'</b><br>
+<b>r3.timestamp map=soils date='15 sep 1987/20 feb 1988'</b><br>
 	  Sets the timestamp for "soils" to have the start date<br>
 	  "15 sep 1987" and the end date "20 feb 1988"
 <p>
-<b>     r3.timestamp map=soils date='18 feb 2005 10:30:00/20 jul 2007 20:30:00'</b><br>
+<b>r3.timestamp map=soils date='18 feb 2005 10:30:00/20 jul 2007 20:30:00'</b><br>
 	  Sets the timestamp for "soils" to have the start date<br>
 	  "18 aug 2005 10:30:00" and the end date "20 jul 2007 20:30:00"
 <p>
 
-<b>     r3.timestamp map=soils date=none</b><br>
-	  Removes the timestamp for the "soils" grid3d map
+<b>r3.timestamp map=soils date=none</b><br>
+	  Removes the timestamp for the "soils" 3D raster map
 
-<H2>TIMESTAMP FORMAT</H2>
+<h2>TIMESTAMP FORMAT</h2>
      The timestamp values must use the format as described in the
      GRASS datetime library.  The source tree for this library
      should have a description of the format. For convience, the
@@ -45,7 +42,7 @@ This command has 2 modes of operation. If no date argument
      Relative values specify a span of time. Some examples will
      help clarify:
 <p>
-   <b>  Absolute</b><p>
+<b>Absolute</b><p>
 	  The general format for absolute values is
 <p><tt>
 	     day month year [bc] hour:minute:seconds timezone
@@ -95,12 +92,14 @@ This command has 2 modes of operation. If no date argument
 	     3 months 15 days<br>
 	     3 years 10 days
 </tt>
-<H2>BUGS</H2>
+
+<h2>BUGS</h2>
 Spaces in the timestamp value are required.
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 Michael Pelizzari<br>
 Lockheed Martin Space Systems<br>
 based on r.timestamp by Michael Shapiro, <br>
-U.S.Army Construction Engineering Research Laboratory
+U.S. Army Construction Engineering Research Laboratory
+
 <p><i>Last changed: $Date$</i>

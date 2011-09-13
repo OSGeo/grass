@@ -11,13 +11,14 @@ If the flag <em>-e</em> is set, the number of subranges will be ignored.
 
 As with most GRASS 3D raster map modules, <em>r3.stats</em> operates on the cell
 array defined by the current 3D region settings, not the original extent and
-resolution of the input map. See <em><a href="g.region.html">g.region</a></em>.
+resolution of the input map. See <em>g.region</em>.
 <p>
 The region setting will not effect the memory consumption of this module.
 The number of subranges in case of value range calculation or the number of 
 equal value groups effect the memory consumption and the calculation time.
-The user can expect a huge time consumption to calculate the equal value groups (flag <em>-e</em>)
-if large region settings occur for maps which have many equal value groups (> 100000).
+The user can expect a huge time consumption to calculate the equal value
+groups (flag <em>-e</em>) if large region settings occur for maps which
+have many equal value groups (> 100000).
 
 <h2>EXAMPLES</h2>
 <h3>Lausanne FOSS4G 2006 3D demo dataset example</h3>
@@ -83,8 +84,6 @@ Sum of all cells:
         Volume = 600000000.000
         Percentage = 100.000
         Cell count = 600
-
-
 </pre></div>
 
 <h2>SEE ALSO</h2>
@@ -99,8 +98,7 @@ Sum of all cells:
 
 
 <h2>AUTHOR</h2>
-
-Soeren Gebbert<br>
+S&ouml;ren Gebbert
 
 <p>
 <i>Last changed: $Date$</i>

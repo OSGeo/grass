@@ -1,76 +1,80 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-Outputs <I>3D raster</I> maps into <I>VTK-ASCII</I> format.  <I>Maps</I> are
-valid 3D raster maps in the current mapset.  <I>output</I> is the name of
-a VTK-ASCII file which will be written in the current working directory.
-If <I>output</I> is not specified then <B>stdout</B> is used.  
-The module is sensitive to region settings (set with <em>g.region</em>).
+The module <em>r3.out.vtk</em> outputs 3D raster maps into VTK-ASCII format.
+Maps are valid 3D raster maps in the current mapset search path. The
+<em>output</em> parameter is the name of a VTK-ASCII file which will be
+written in the current working directory. If <em>output</em> is not
+specified then standard output (stdout) is used. The module is sensitive
+to region settings (set with <em>g.region</em>).
 
-<H2>NOTES</H2>
-This filter generates <I>structured points</I>  with <I>celldata</I> 
-(default) or <I>pointdata</I>. If top and bottom surfaces are requested
-a <I>unstructured grid</I> with <I>celldata</I>  or a <I>structured grid</I>
-with <I>pointdata</I> is generated.
+<h2>NOTES</h2>
+
+This module generates <i>structured points</i> with <i>celldata</i> 
+(default) or <i>pointdata</i>. If top and bottom surfaces are requested
+an <i>unstructured grid</i> with <i>celldata</i> or a <i>structured grid</i>
+with <i>pointdata</i> is generated.
 This data is put in a simple VTK-ASCII file. Neither XML nor 
-binary output are supported. It is possible to choose more then one RASTER3D map
-to be written in the VTK-ASCII file. Each <I>celldata</I> is named as the
-3D raster map it represents. You can visualize this file with the 
-<EM><A HREF="http://www.vtk.org">VTK Toolkit</A></EM>, 
-<EM><A HREF="http://www.paraview.org">Paraview</A></EM> and 
-<EM><A HREF="http://mayavi.sourceforge.net">MayaVi</A></EM> which are based on VTK.
-If you have a 3D raster map with partly no data, use the threshold filter in paraview to 
-visualize the valid data. Just filter all data which is greater/lesser than the 
-chosen null value in the VTK-ASCII file.
+binary output are supported. It is possible to choose more then one 3D raster
+map
+to be written in the VTK-ASCII file. Each <i>celldata</i> is named as the
+3D raster map it represents. The user can visualize this file with the 
+<em><a href="http://www.vtk.org">VTK Toolkit</a></em>, 
+<em><a href="http://www.paraview.org">ParaView</a></em> and 
+<em><a href="http://mayavi.sourceforge.net">MayaVi</a></em> which are based on
+VTK. In case of 3D raster map with partially no data, the threshold filter in
+ParaView can be used to visualize the valid data. Just filter all data which is
+greater/lesser than the chosen null value in the VTK-ASCII file.
 
-<BR><BR>
-The top and bottom region settings are expected in meters. 
-If a Latitude-Longitude (LL) coordinates are used, the elevation value for each voxel
-will be converted into degree.
-<BR><BR>
-The <I>input</I>, <I>rgbmaps</I> and <I>vectormaps</I> are optional, 
-so only the geometry can be exported.
-<BR><BR>
-If you use <I>top</I> and <I>bottom</I> and the 2D and 3D region settings are different,
-the 2D resolution will be adjust to the 3D resolution. The elevation maps are expected
-in meters. If LL coordinates are used, the elevation will automatically converted into degree.
-If the surface and bottom maps are in a different unit than meters, use the scale parameter
-to convert them into meters.
-<BR><BR>
+<p>
+The top and bottom region values are expected in meters. 
+If a Latitude-Longitude (LL) coordinates are used, the elevation value for each
+voxel will be converted into degrees.
+
+<p>
+The <em>input</em>, <em>rgbmaps</em> and <em>vectormaps</em> parameters are
+optional, so only the geometry can be exported.
+
+<p>
+If the user defines <em>top</em> and <em>bottom</em> and the 2D and 3D region
+values differ, the 2D resolution will be adjusted to the 3D resolution. The
+elevation maps are expected in meters. If Lat/Long coordinates are used, the
+elevation will automatically converted into degree.
+If the surface and bottom maps are in a different unit than meters, use the
+scale parameter to convert them into meters.
+
+<p>
 The RGB voxel data can be created from 2D raster maps (Landsat TM images) 
-with <EM><A HREF="r.to.rast3.html">r.to.rast3</A></EM>. The values of the RGB maps
+with <em><a href="r.to.rast3.html">r.to.rast3</a></em>. The values of the RGB maps
 must be within 0 and 255. If not, the values are automatically set
 to 0 and warnings will be printed to stderr.
-<BR><BR>
+
+<p>
 The vector data is created from three 3D raster maps. Each map represents a vector component.
 So x, y and z components are required in this order. This data can be visualized with Glyph3d or 
 StreamTracer filters within Paraview.
-<br>
-<br>
-If the <em>-c</em> flag is used and the data should be visualised together with other
-data exported via <em>*.out.vtk</em> modules, be sure the <em>-c</em> flag was also
-set in these modules. But this will only work with data from the SAME location (the
-reference point for the coordinates transformation is based on the center point of
-the default region).
 
-<H3>Difference between point- and celldata</H3>
+<p>
+If the <em>-c</em> flag is used and the data should be visualised together with
+other data exported via <em>*.out.vtk</em> modules, be sure the <em>-c</em> flag
+was also set in these modules. But this will only work with data from the SAME
+location (the reference point for the coordinates transformation is based on the
+center point of the default region).
+
+<h3>Difference between point- and celldata</h3>
 
 <em>r3.out.vtk</em> can export 3D raster maps with different representations.
 <ul>
-   <li>
-      <I>pointdata</I> -- the cells/values are represented by the center of the cell. 
-      Instead of cells, points are created. Each point can hold different values, 
-      but the user can only visualize one value at a time. 
-   </li>
-   <li>
-       <I>celldata</I>  
-       The cells are created with the same hight, width and depth as in GRASS. Each cell 
-       can hold different values, but the user can only visualize one value at a time. 
-   </li>
+<li> <em>pointdata</em> -- the cells/values are represented by the center of the
+cell. Instead of cells, points are created. Each point can hold different
+values, but the user can only visualize one value at a time.</li>
+<li> <em>celldata</em> The cells are created with the same hight, width and depth
+as in GRASS. Each cell can hold different values, but the user can only
+visualize one value at a time.</li>
 </ul>
 
-<H2>EXAMPLE</H2>
+<h2>EXAMPLE</h2>
 
-<H3>Simple Spearfish example</H3>
+<h3>Simple Spearfish example</h3>
 
 <div class="code"><pre>
 g.region -d
@@ -166,11 +170,13 @@ paraview --data=/tmp/slovakia3d.vtk
 
 <h2>SEE ALSO</h2>
 
-<em><A HREF="r.out.vtk.html">r.out.vtk</a></em>,
-<em><A HREF="r3.out.ascii.html">r3.out.ascii</a></em>,
-<em><A HREF="g.region.html">g.region</a></em>
+<em>
+<a href="r.out.vtk.html">r.out.vtk</a>,
+<a href="r3.out.ascii.html">r3.out.ascii</a>,
+<a href="g.region.html">g.region</a>
+</em>
 
 <h2>AUTHOR</h2>
-Soeren Gebbert
+S&ouml;ren Gebbert
 
 <p><i>Last changed: $Date$</i>
