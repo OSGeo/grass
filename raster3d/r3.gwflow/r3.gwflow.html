@@ -1,30 +1,31 @@
 <h2>DESCRIPTION</h2>
+
 This numerical module calculates implicit transient and steady state,
 confined groundwater flow in three dimensions based on volume maps
 and the current 3D region settings.
 All initial- and boundary-conditions must be provided as volume maps.
 The unit in the location must be meters.
-<br>
 <p>
-This module is sensitive to mask settings. All cells which are outside the mask
-are ignored and handled as no flow boundaries.
+This module is sensitive to mask settings. All cells which are outside
+the mask are ignored and handled as no flow boundaries.
 <p>
-The module calculates the piezometric head and optionally the water balance for each cell
-and the groundwater velocity field in 3 dimensions.
+The module calculates the piezometric head and optionally the water
+balance for each cell and the groundwater velocity field in 3 dimensions.
 The vector components can be visualized with ParaView if they are exported
 with <em>r3.out.vtk</em>.
 
 <p>
 The groundwater flow will always be calculated transient. 
-For steady state computation set the timestep
+For steady state computation the user should set the timestep
 to a large number (billions of seconds) or set the
 specific yield raster map to zero.
 
 <h2>NOTES</h2>
 
-The groundwater flow calculation is based on Darcy's law and a numerical implicit
-finite volume discretization. The discretization results in a symmetric and positive definit
-linear equation system in form of <i>Ax = b</i>, which must be solved. The groundwater flow partial
+The groundwater flow calculation is based on Darcy's law and a numerical
+implicit finite volume discretization. The discretization results in a
+symmetric and positive definit linear equation system in form of
+<i>Ax = b</i>, which must be solved. The groundwater flow partial
 differential equation is of the following form:
 
 <p>
@@ -46,35 +47,39 @@ In detail for 3 dimensions:
 </ul>
 
 <p>
-Two different boundary conditions are implemented, 
-the Dirichlet and Neumann conditions. By default the calculation area
-is surrounded by homogeneous Neumann boundary conditions.
-The calculation and boundary status of single cells can be set with the status map, 
-the following cell states are supportet:
+Two different boundary conditions are implemented, the Dirichlet and
+Neumann conditions. By default the calculation area is surrounded by
+homogeneous Neumann boundary conditions. The calculation and boundary
+status of single cells can be set with the status map, the following
+cell states are supported:
 
 <ul>
-<li>0 == inactive - the cell with status 0 will not be calulated, active cells will have a no flow boundary to an inactive cell</li>
-<li>1 == active - this cell is used for groundwater calculation, inner sources can be defined for those cells</li>
-<li>2 == Dirichlet - cells of this type will have a fixed piezometric head value which do not change over time </li>
+<li>0 == inactive - the cell with status 0 will not be calulated,
+ active cells will have a no flow boundary to an inactive cell</li>
+<li>1 == active - this cell is used for groundwater calculation,
+ inner sources can be defined for those cells</li>
+<li>2 == Dirichlet - cells of this type will have a fixed piezometric
+ head value which do not change over time </li>
 </ul>
 
 <p>
-Note that all required raster maps are read into main memory. Additionally the
-linear equation system will be allocated, so the memory consumption of this
-module rapidely grow with the size of the input maps.
+Note that all required raster maps are read into main memory. Additionally
+the linear equation system will be allocated, so the memory consumption of
+this module rapidely grow with the size of the input maps.
 
 <p>
-The resulting linear equation system <i>Ax = b</i> can be solved with several solvers.
-An iterative solvers with sparse and quadratic matrices support is implemented.
+The resulting linear equation system <i>Ax = b</i> can be solved with
+several solvers. An iterative solvers with sparse and quadratic matrices
+support is implemented.
 The conjugate gradients method with (pcg) and without (cg) precondition.
 Aditionally a direct Cholesky solver is available. This direct solver
-only work with normal quadratic matrices, so be careful using them with large maps
-(maps of size 10.000 cells will need more than one gigabyte of RAM).
-Always prefer a sparse matrix solver.
+only work with normal quadratic matrices, so be careful using them with
+large maps (maps of size 10.000 cells will need more than one Gigabyte
+of RAM). The user should always prefer to use a sparse matrix solver.
 
 <h2>EXAMPLE 1</h2>
-Use this small script to create a working groundwater flow area and
-data. Make sure you are not in a lat/lon projection.
+This small script creates a working groundwater flow area and
+data. It cannot be run in a lat/lon location.
 
 <div class="code"><pre>
 # set the region accordingly
@@ -98,7 +103,7 @@ r3.out.vtk -p in=gwresult,status,budget vector=vx,vy,vz out=/tmp/gwdata3d.vtk
 paraview --data=/tmp/gwdata3d.vtk
 </pre></div>
 
-<H2>EXAMPLE 2</H2>
+<h2>EXAMPLE 2</h2>
 This will create a nice 3D model with geological layer with different
 hydraulic conductivities. Make sure you are not in a lat/lon projection.
 
@@ -129,16 +134,17 @@ paraview --data=/tmp/gwdata3d.vtk
 
 <h2>SEE ALSO</h2>
 
-<em><a href="r.gwflow.html">r.gwflow</a></em><br>
-<em><a href="r.solute.transport.html">r.solute.transport</a></em><br>
-<em><a href="r3.out.vtk.html">r3.out.vtk</a></em>
+<em>
+<a href="r.gwflow.html">r.gwflow</a>,
+<a href="r.solute.transport.html">r.solute.transport</a>,
+<a href="r3.out.vtk.html">r3.out.vtk</a>
+</em>
 
 <h2>AUTHOR</h2>
 S&ouml;ren Gebbert
 <p>
-This work is based on the Diploma Thesis of S&ouml;ren Gebbert available 
-<a href="http://www.hydrogeologie.tu-berlin.de/fileadmin/fg66/_hydro/Diplomarbeiten/2007_Diplomarbeit_Soeren_Gebbert.pdf">here</a>
+This work is based on the Diploma Thesis of S&ouml;ren Gebbert available
+<a href="http://www.hydrogeologie.tu-berlin.de/fileadmin/fg66/_hydro/Diplomarbeiten/2007_Diplomarbeit_S&ouml;ren_Gebbert.pdf">here</a>
 at Technical University Berlin, Germany.
-
 
 <p><i>Last changed: $Date$</i>

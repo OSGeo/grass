@@ -5,9 +5,9 @@ a valid 3D raster map in the current mapset search path. The <em>output</em>
 parameter is the name of an ASCII file which will be written in the 
 current working directory.
 <p>
-If <em>output</em> is not specified then standard output (stdout) is used. The
-<em>-h</em> flag may be used to suppress header information. The module is
-sensitive to region settings (set with <em>g.region</em>).
+If <em>output</em> is not specified then standard output (stdout) is used.
+The <em>-h</em> flag may be used to suppress header information. The
+module is sensitive to region settings (set with <em>g.region</em>).
 <p>
 The <em>-c</em> flag will create GRASS 6 <em>r3.in.ascii</em> compatible
 output.
@@ -19,8 +19,8 @@ by <em>r3.in.ascii</em>. In particular, files output by
 3D raster maps with <em>r3.in.ascii</em>.
 
 <p>
-The format for the ASCII file is:
-<pre>
+The format of the ASCII file is:
+<div class="code"><pre>
 version: <i>"grass7"</i>
 order:   <i>"nsbt" or "nstb" or "snbt" or "sntb"</i>
 north:   <i>floating point</i>
@@ -32,33 +32,34 @@ bottom:  <i>floating point</i>
 rows:    <i>integer</i>
 cols:    <i>integer</i>
 levels:  <i>integer</i>
-</pre>
+</pre></div>
 
 The <b>version</b> and <b>order</b> options have been introduced in GRASS 7 in June 2011.
 The <b>order</b> option describes the order of rows and depths in the output. 
 It is possible to create output of different row order using the <em>-r</em> flag 
 and output of different depths order using the  <em>-d</em> flag. The default order is:
-<pre>
-west -> east for columns
-north -> south for rows
-bottom -> top for depths
-</pre>
+<p>
+<div class="code"><pre>
+west -&gt; east for columns
+north -&gt; south for rows
+bottom -&gt; top for depths
+</pre></div>
 
-This order is compatible with the r.in.ascii row -> column ordering. The column 
+This order is compatible with the <em>r.in.ascii</em> row -&gt; column ordering. The column 
 order can not be changed but the row and depth order. Supported orders are:
 
 <ul>
-    <li><b>nsbt</b>:   north -> south and bottom -> top ordering which is the default (no flags)</li>
-    <li><b>snbt</b>:   south -> north and bottom -> top ordering using <em>-r</em> flag</li>
-    <li><b>nstb</b>:   north -> south and top -> bottom ordering using <em>-d</em> flag</li>
-    <li><b>sntb</b>:   south -> north and top -> bottom ordering using <em>-rd</em> flag</li>
+<li><b>nsbt</b>: north -&gt; south and bottom -&gt; top ordering which is the default (no flags)</li>
+<li><b>snbt</b>: south -&gt; north and bottom -&gt; top ordering using <em>-r</em> flag</li>
+<li><b>nstb</b>: north -&gt; south and top -&gt; bottom ordering using <em>-d</em> flag</li>
+<li><b>sntb</b>: south -&gt; north and top -&gt; bottom ordering using <em>-rd</em> flag</li>
 </ul>
 
 The header is followed by cell values in <em>floating point</em> format.
 Cell values are output as a series of horizontal slices in row-major
-order. That is in case of the default north -> south and bottom -> top (nsbt) ordering:
+order. That is in case of the default north -&gt; south and bottom -&gt; top (nsbt) ordering:
 
-<pre>
+<div class="code"><pre>
   (x, y, z)       (x + 1, y, z)     ...     (x + cols, y, z)
 (x, y + 1, z)   (x + 1, y + 1, z)   ...   (x + cols, y + 1, z)
       .                 .                           .
@@ -75,20 +76,24 @@ order. That is in case of the default north -> south and bottom -> top (nsbt) or
 (x, y + rows, z + 1)   (x + 1, y + rows, z + 1) ... (x + cols, y + rows, z + 1)
 
 and so on.
-</pre>
+</pre></div>
 
 The data starts with the upper left corner (NW) at the bottom of the data set.
 
-<P>
-One level maps can be imported with <em>r.in.ascii</em> (2D raster) using the default <b>nsbt</b> order
-and removing the header lines "version", "order", "top", "bottom" and "levels".
+<p>
+One level maps can be imported with <em>r.in.ascii</em> (2D raster) using
+the default <b>nsbt</b> order and removing the header lines "version",
+"order", "top", "bottom" and "levels".
 
 <h2>SEE ALSO</h2>
-<em><a href="r3.in.ascii.html">r3.in.ascii</a></em>,
-<em><a href="g.region.html">g.region</a></em>
 
-<H2>AUTHORS</H2>
+<em>
+<a href="r3.in.ascii.html">r3.in.ascii</a>,
+<a href="g.region.html">g.region</a>
+</em>
+
+<h2>AUTHORS</h2>
 Roman Waupotitsch, Michael Shapiro, 
-Helena Mitasova, Bill Brown, Lubos Mitas, Jaro Hofierka, Soeren Gebbert
+Helena Mitasova, Bill Brown, Lubos Mitas, Jaro Hofierka, S&ouml;ren Gebbert
 
 <p><i>Last changed: $Date$</i>
