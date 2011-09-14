@@ -15,29 +15,33 @@
 #############################################################################
 
 #%module
-#% description: Remove a space-time dataset
+#% description: List informtion about space time and map datasets
 #% keywords: spacetime dataset
 #% keywords: remove
 #%end
 
 #%option
-#% key: name
+#% key: dataset
 #% type: string
-#% description: Name of the new space-time dataset
+#% description: Name of an existing space time or map dataset
 #% required: yes
 #% multiple: no
 #%end
+
 #%option
 #% key: type
 #% type: string
-#% description: Type of the space time dataset, default is strds
+#% description: Type of the dataset, default is strds (space time raster dataset)
 #% required: no
-#% options: strds
+#% options: strds, str3ds, stvds, raster, raster3d, vector
 #% answer: strds
 #%end
 
-import sys
-import os
+#%flag
+#% key: g
+#% description: Print information in shell style
+#%end
+
 import grass.script as grass
 
 ############################################################################
@@ -45,8 +49,44 @@ import grass.script as grass
 def main():
 
     # Get the options
-    name = options["name"]
+    name = options["dataset"]
     type = options["type"]
+    shellstyle = flags['g']
+
+  # Make sure the temporal database exists
+    grass.create_temporal_database()
+
+    #Get the current mapset to create the id of the space time dataset
+
+    if name.find("@") >= 0:
+        id = name
+    else:
+        mapset =  grass.gisenv()["MAPSET"]
+        id = name + "@" + mapset
+
+    if type == "strds":
+        sp = grass.space_time_raster_dataset(id)
+    if type == "str3ds":
+        sp = grass.space_time_raster3d_dataset(id)
+    if type == "stvds":
+        sp = grass.space_time_vector_dataset(id)
+    if type == "raster":
+        sp = grass.raster_dataset(id)
+    if type == "raster3d":
+        sp = grass.raster3d_dataset(id)
+    if type == "vector":
+        sp = grass.vector_dataset(id)
+
+    if sp.is_in_db() == False:
+        grass.fatal("Dataset <" + name + "> not found in temporal database")
+        
+    # Insert content from db
+    sp.select()
+
+    if shellstyle == True:
+        sp.print_shell_info()
+    else:
+        sp.print_info()
 
 if __name__ == "__main__":
     options, flags = grass.core.parser()
