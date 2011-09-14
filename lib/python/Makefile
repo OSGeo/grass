@@ -8,7 +8,7 @@ PYDIR = $(ETC)/python
 GDIR = $(PYDIR)/grass
 DSTDIR = $(GDIR)/script
 
-MODULES = core db raster raster3d vector array setup task temporal
+MODULES = core db raster raster3d vector array setup task tgis_base tgis_core tgis_abstract_datasets tgis_space_time_datasets tgis_metadata tgis_spatial_extent tgis_temporal_extent
 
 PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
 PYCFILES := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__)
