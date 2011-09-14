@@ -36,11 +36,6 @@
 #% multiple: yes
 #%end
 
-
-import sys
-import os
-import getpass
-import subprocess
 import grass.script as grass
 ############################################################################
 

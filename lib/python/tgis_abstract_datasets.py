@@ -1,19 +1,13 @@
-"""!@package grass.script.tgis_map_datasets
+"""!@package grass.script.tgis_abstract_datasets
 
 @brief GRASS Python scripting module (temporal GIS functions)
 
-Temporal GIS related functions to be used in Python scripts.
+Temporal GIS related functions to be used in temporal GIS Python library package.
 
 Usage:
 
 @code
-from grass.script import tgis_map_datasets as grass
-
-raster_ds = grass.raster_database("soil")
-if raster_ds.is_in_db():
-    raster_ds.select()
-else:
-    raster_ds.load()
+from grass.script import tgis_abstract_datasets as grass
 
 ...
 @endcode

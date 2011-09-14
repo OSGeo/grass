@@ -88,55 +88,63 @@ def main():
             inc_unit = increment.split(" ")[1]
         else:
             inc_value = float(increment)
-
+                    
     count = 0
     for mapname in maplist:
         mapid = mapname + "@" + mapset
         map = grass.raster_dataset(mapid)
-        map.load()
 
         # In case the map is already registered print a message and continue to the next map
-
         
         # Put the map into the database
         if map.is_in_db() == False:
+            map.load()
 
-            # Set the time interval
-            if start:
-                grass.info("Set time interval for map " + mapname)
-                if sp.is_time_absolute():
-                    
-                    if start.find(":") > 0:
-                        time_format = "%Y-%m-%d %H:%M:%S"
-                    else:
-                        time_format = "%Y-%m-%d"
-
-                    start_time = datetime.datetime.fromtimestamp(time.mktime(time.strptime(start, time_format)))
-                    end_time = None
-
-                    if increment:
-                        if inc_unit.find("seconds") >= 0:
-                            tdelta = timedelta(seconds=inc_value)
-                        elif inc_unit.find("minutes") >= 0:
-                            tdelta = timedelta(minutes=inc_value)
-                        elif inc_unit.find("hours") >= 0:
-                            tdelta = timedelta(hours=inc_value)
-                        elif inc_unit.find("days") >= 0:
-                            tdelta = timedelta(days=inc_value)
-                        elif inc_unit.find("weeks") >= 0:
-                            tdelta = timedelta(weeks=inc_value)
-                        else:
-                            grass.fatal("Wrong increment format: " + increment)
-
-                        start_time += count * tdelta
-                        end_time = start_time + tdelta
-
-                    map.set_absolute_time(start_time, end_time)
-                else:
-                    interval = float(start) + count * inc_value
-                    map.set_relative_time(interval)
             # Put map with time interval in the database
             map.insert()
+        else:
+            map.select()
+            
+        if map.get_temporal_type() != sp.get_temporal_type():
+            grass.fatal("Unable to register map. The map has a different temporal types.")
+
+        # Set the time interval
+        if start:
+            grass.info("Set/overwrite time interval for map " + mapname)
+            
+            if sp.is_time_absolute():
+
+                if start.find(":") > 0:
+                    time_format = "%Y-%m-%d %H:%M:%S"
+                else:
+                    time_format = "%Y-%m-%d"
+
+                start_time = datetime.datetime.fromtimestamp(time.mktime(time.strptime(start, time_format)))
+                end_time = None
+
+                if increment:
+                    if inc_unit.find("seconds") >= 0:
+                        tdelta = timedelta(seconds=inc_value)
+                    elif inc_unit.find("minutes") >= 0:
+                        tdelta = timedelta(minutes=inc_value)
+                    elif inc_unit.find("hours") >= 0:
+                        tdelta = timedelta(hours=inc_value)
+                    elif inc_unit.find("days") >= 0:
+                        tdelta = timedelta(days=inc_value)
+                    elif inc_unit.find("weeks") >= 0:
+                        tdelta = timedelta(weeks=inc_value)
+                    else:
+                        grass.fatal("Wrong increment format: " + increment)
+
+                    start_time += count * tdelta
+                    end_time = start_time + tdelta
+
+                map.set_absolute_time(start_time, end_time)
+                map.absolute_time.update()
+            else:
+                interval = float(start) + count * inc_value
+                map.set_relative_time(interval)
+                map.arelative_time.update()                            
             
         # Register map
         sp.register_map(map)
