@@ -5,7 +5,7 @@
 * AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
 * 		soerengebbert <at> googlemail <dot> com
 *               
-* PURPOSE:      gras blas implementation
+* PURPOSE:      grass blas implementation
 * 		part of the gmath library
 *               
 * COPYRIGHT:    (C) 2010 by the GRASS Development Team
