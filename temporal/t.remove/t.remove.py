@@ -5,7 +5,7 @@
 # MODULE:	t.remove
 # AUTHOR(S):	Soeren Gebbert
 #               
-# PURPOSE:	Remove a space-time raster dataset
+# PURPOSE:	Remove a space time raster dataset
 # COPYRIGHT:	(C) 2011 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
@@ -15,38 +15,64 @@
 #############################################################################
 
 #%module
-#% description: Remove a space-time dataset
-#% keywords: spacetime dataset
+#% description: Remove a space time and map datasets from temporal database
+#% keywords: spacetime
+#% keywords: dataset
 #% keywords: remove
 #%end
 
 #%option
-#% key: name
+#% key: dataset
 #% type: string
-#% description: Name of the new space-time dataset
+#% description: Name of the new space time or map dataset
 #% required: yes
 #% multiple: no
 #%end
+
 #%option
 #% key: type
 #% type: string
 #% description: Type of the space time dataset, default is strds
 #% required: no
-#% options: strds
+#% options: strds, str3ds, stvds, raster, raster3d, vector
 #% answer: strds
 #%end
 
-import sys
-import os
 import grass.script as grass
 
 ############################################################################
 
 def main():
-
+    
     # Get the options
-    name = options["name"]
+    name = options["dataset"]
     type = options["type"]
+
+    # Make sure the temporal database exists
+    grass.create_temporal_database()
+    
+    mapset =  grass.gisenv()["MAPSET"]
+    id = name + "@" + mapset
+
+    if type == "strds":
+        sp = grass.space_time_raster_dataset(id)
+    if type == "str3ds":
+        sp = grass.space_time_raster3d_dataset(id)
+    if type == "stvds":
+        sp = grass.space_time_vector_dataset(id)
+    if type == "raster":
+        sp = grass.raster_dataset(id)
+    if type == "raster3d":
+        sp = grass.raster3d_dataset(id)
+    if type == "vector":
+        sp = grass.vector_dataset(id)
+
+    if sp.is_in_db() == False:
+        grass.fatal("Dataset <" + name + "> not found in temporal database")
+
+    # Insert content from db
+    sp.select()
+    sp.delete()
 
 if __name__ == "__main__":
     options, flags = grass.core.parser()
