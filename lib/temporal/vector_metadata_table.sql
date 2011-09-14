@@ -10,7 +10,7 @@ PRAGMA foreign_keys = ON;
 -- The metadata table 
 
 CREATE TABLE  vector_metadata (
-  id VARCHAR NOT NULL,                  -- The id (PFK) is the unique identifier for all tables, it is based on name and mapset (name@mapset) and is used as primary foreign key
+  id VARCHAR NOT NULL,    -- The id (PFK) is the unique identifier for all tables, it is based on name and mapset (name@mapset) and is used as primary foreign key
   stvds_register VARCHAR, -- The name of the table storing all space-time vector datasets in which this map is registered
   PRIMARY KEY (id),
   FOREIGN KEY (id) REFERENCES  vector_base (id) ON DELETE CASCADE

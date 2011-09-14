@@ -4,7 +4,7 @@ from grass.script.tgis_base import *
 from grass.script.tgis_temporal_extent import *
 from grass.script.tgis_spatial_extent import *
 from grass.script.tgis_metadata import *
-from grass.script.tgis_map_datasets import *
+from grass.script.tgis_abstract_datasets import *
 from grass.script.tgis_space_time_datasets import *
 import grass.script as grass
 ###############################################################################
@@ -716,10 +716,10 @@ def test_str3ds_dataset():
         # We need to specify the name and the mapset as identifier
         r3ds = raster3d_dataset(ident)
 
-        # Load data from the raster map in the mapset
+        # Load data from the raster3d map in the mapset
         r3ds.load()
 
-        print "Is raster in db: ", r3ds.is_in_db()
+        print "Is raster3d in db: ", r3ds.is_in_db()
 
         if r3ds.is_in_db():      
             r3ds.select()
@@ -734,7 +734,7 @@ def test_str3ds_dataset():
                                 end_time= datetime(year=2000, month=i + 1, day=1))
         # Insert the map data into the SQL database
         r3ds.insert()
-        # Register the map in the space time raster dataset
+        # Register the map in the space time raster3d dataset
         str3ds.register_map(r3ds)
         # Print self info
         #r3ds.print_self()
