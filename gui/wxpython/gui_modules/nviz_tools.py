@@ -893,10 +893,10 @@ class NvizToolWindow(FN.FlatNotebook):
         
         gridSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
         
-        # cutting plane horizontal position
+        # cutting plane horizontal x position
         self.win['cplane']['position'] = {}
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                         label = _("Horizontal:")),
+                                         label = _("Horizontal X:")),
                       pos = (0, 0), flag = wx.ALIGN_CENTER_VERTICAL)
         self._createControl(panel, data = self.win['cplane']['position'], name = 'x', size = 250,
                             range = (-1000, 1000), sliderHor = True, floatSlider = True,
@@ -909,9 +909,9 @@ class NvizToolWindow(FN.FlatNotebook):
                       pos = (0, 2),
                       flag = wx.ALIGN_CENTER)   
         
-        # cutting plane rotation point
+        # cutting plane horizontal y position
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                         label = _("Rotation pt.:")),
+                                         label = _("Horizontal Y:")),
                       pos = (1, 0), flag = wx.ALIGN_CENTER_VERTICAL)
         self._createControl(panel, data = self.win['cplane']['position'], name = 'y', size = 250,
                             range = (-1000, 1000), sliderHor = True, floatSlider = True,
