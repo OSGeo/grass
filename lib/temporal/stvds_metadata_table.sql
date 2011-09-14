@@ -61,7 +61,7 @@ CREATE TRIGGER delete_stvds_base AFTER DELETE ON stvds_base
   BEGIN
     DELETE FROM stvds_absolute_time WHERE id = old.id;
     DELETE FROM stvds_relative_time WHERE id = old.id;
-    DELETE FROM stvds_spatial_exntent WHERE id = old.id;
+    DELETE FROM stvds_spatial_extent WHERE id = old.id;
     DELETE FROM stvds_metadata WHERE id = old.id;
   END;
 
