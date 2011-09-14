@@ -5,7 +5,7 @@
 # MODULE:	t.create
 # AUTHOR(S):	Soeren Gebbert
 #               
-# PURPOSE:	Create a space-time dataset
+# PURPOSE:	Create a space time dataset
 # COPYRIGHT:	(C) 2011 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
@@ -15,15 +15,16 @@
 #############################################################################
 
 #%module
-#% description: Create a space-time dataset
-#% keywords: spacetime dataset
+#% description: Create a space time dataset
+#% keywords: spacetime
+#% keywords: dataset
 #% keywords: create
 #%end
 
 #%option
-#% key: name
+#% key: dataset
 #% type: string
-#% description: Name of the new space-time dataset
+#% description: Name of the new space time dataset
 #% required: yes
 #% multiple: no
 #%end
@@ -31,7 +32,7 @@
 #%option
 #% key: granularity
 #% type: string
-#% description: The granularity of the new space-time dataset (NNN day, NNN week, NNN month)
+#% description: The granularity of the new space time dataset (NNN day, NNN week, NNN month)
 #% required: yes
 #% multiple: no
 #%end
@@ -39,7 +40,7 @@
 #%option
 #% key: semantictype
 #% type: string
-#% description: The semantic type of the space-time dataset
+#% description: The semantic type of the space time dataset
 #% required: yes
 #% multiple: no
 #% options: event, const, continuous
@@ -51,9 +52,10 @@
 #% type: string
 #% description: Type of the space time dataset, default is strds
 #% required: no
-#% options: strds
+#% options: strds, str3ds, stvds
 #% answer: strds
 #%end
+
 #%option
 #% key: temporaltype
 #% type: string
@@ -66,7 +68,7 @@
 #%option
 #% key: title
 #% type: string
-#% description: Title of the new space-time dataset
+#% description: Title of the new space time dataset
 #% required: yes
 #% multiple: no
 #%end
@@ -74,28 +76,52 @@
 #%option
 #% key: description
 #% type: string
-#% description: Description of the new space-time dataset
+#% description: Description of the new space time dataset
 #% required: yes
 #% multiple: no
 #%end
 
-import sys
-import os
-import getpass
-import subprocess
 import grass.script as grass
+
 ############################################################################
 
 def main():
 
     # Get the options
-    name = options["name"]
+    name = options["dataset"]
     type = options["type"]
     temporaltype = options["temporaltype"]
     title = options["title"]
     descr = options["description"]
     semantic = options["semantictype"]
     gran = options["granularity"]
+
+    # Make sure the temporal database exists
+    grass.create_temporal_database()
+
+    #Get the current mapset to create the id of the space time dataset
+
+    mapset =  grass.gisenv()["MAPSET"]
+    id = name + "@" + mapset
+
+    if type == "strds":
+        sp = grass.space_time_raster_dataset(id)
+    if type == "str3ds":
+        sp = grass.space_time_raster3d_dataset(id)
+    if type == "stvds":
+        sp = grass.space_time_vector_dataset(id)
+
+    if sp.is_in_db() and grass.overwrite() == False:
+        grass.fatal("Space time " + sp.get_new_map_instance(None).get_type() + " dataset <" + name + "> is already in the database. Use the overwrite flag.")
+
+    if sp.is_in_db() and grass.overwrite() == True:
+        grass.info("Overwrite space time " + sp.get_new_map_instance(None).get_type() + " dataset <" + name + "> and unregister all maps.")
+        sp.delete()
+
+    grass.info("Create space time " + sp.get_new_map_instance(None).get_type() + " dataset.")
+
+    sp.set_initial_values(granularity=gran, temporal_type=temporaltype, semantic_type=semantic, title=title, description=descr)
+    sp.insert()
 
 if __name__ == "__main__":
     options, flags = grass.core.parser()
