@@ -29,7 +29,7 @@ CREATE TABLE  str3ds_metadata (
 -- Create the views to access all cols for absolute or relative time
 
 CREATE VIEW str3ds_view_abs_time AS SELECT 
-            A1.id, A1.temporal_type,
+            A1.id, A1.name, A1.mapset, A1.temporal_type,
             A1.creator, A1.semantic_type,  
             A1.creation_time, A1.modification_time,
             A1.revision, A2.start_time,
@@ -48,7 +48,7 @@ CREATE VIEW str3ds_view_abs_time AS SELECT
 	    A1.id = A3.id AND A1.id = A4.id;
 
 CREATE VIEW str3ds_view_rel_time AS SELECT 
-            A1.id, A1.temporal_type,
+            A1.id, A1.name, A1.mapset, A1.temporal_type,
             A1.creator, A1.semantic_type,  
             A1.creation_time, A1.modification_time,
             A1.revision, 

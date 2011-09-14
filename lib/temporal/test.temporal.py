@@ -1,7 +1,12 @@
 import os
-from grass.script.temporal import *
+from grass.script.tgis_core import *
+from grass.script.tgis_base import *
+from grass.script.tgis_temporal_extent import *
+from grass.script.tgis_spatial_extent import *
+from grass.script.tgis_metadata import *
+from grass.script.tgis_map_datasets import *
+from grass.script.tgis_space_time_datasets import *
 import grass.script as grass
-
 ###############################################################################
 
 def test_dict_sql_serializer():
@@ -629,7 +634,7 @@ def test_strds_dataset():
     # Reread the data from the db
     strds.select()
     # Print self info
-    strds.print_self()
+    #strds.print_self()
 
     # Create a test maps
     for i in range(11):
@@ -666,11 +671,13 @@ def test_strds_dataset():
         # Register the map in the space time raster dataset
         strds.register_map(rds)
         # Print self info
-        rds.print_self()
+        #rds.print_self()
     
     strds.select()
     # Print self info
     strds.print_self()
+    # Delete the dataset
+    strds.delete()
 
 
 def test_str3ds_dataset():
@@ -693,7 +700,7 @@ def test_str3ds_dataset():
     # Reread the data from the db
     str3ds.select()
     # Print self info
-    str3ds.print_self()
+    #str3ds.print_self()
 
     # Create a test maps
     for i in range(11):
@@ -730,25 +737,96 @@ def test_str3ds_dataset():
         # Register the map in the space time raster dataset
         str3ds.register_map(r3ds)
         # Print self info
-        r3ds.print_self()
+        #r3ds.print_self()
     
     str3ds.select()
     # Print self info
     str3ds.print_self()
+    # Delete the dataset
+    str3ds.delete()
 
 
-#test_dict_sql_serializer()
+def test_stvds_dataset():
+
+    name = "stvds_test_1"
+    mapset =  grass.gisenv()["MAPSET"]
+
+    print "Create a stvds object"
+
+    # We need to specify the name and the mapset as identifier
+    stvds = space_time_vector_dataset(ident = name + "@" + mapset)
+    # Check if in db
+    print "Is stvds in db: ", stvds.is_in_db()
+    # Create a new entry if not in db
+    if stvds.is_in_db() == False:
+        stvds.set_initial_values(temporal_type = "absolute", granularity="1 day",\
+        semantic_type="event", title="This is a test space time vector dataset", description="A space time vector dataset for testing")
+        stvds.insert()
+
+    # Reread the data from the db
+    stvds.select()
+    # Print self info
+    #stvds.print_self()
+
+    # Create a test maps
+    for i in range(11):
+        name = "test" + str(i)
+        mapset =  grass.gisenv()["MAPSET"]
+        ident = name + "@" + mapset
+
+        i = i + 1
+        grass.run_command("v.random", output=name, n=100, zmin=0, zmax=100, column="height" ,flags="z" , overwrite = True)
+
+
+        print "Create a vector object"
+
+        # We need to specify the name and the mapset as identifier
+        vds = vector_dataset(ident)
+
+        # Load data from the raster map in the mapset
+        vds.load()
+
+        print "Is vector in db: ", vds.is_in_db()
+
+        if vds.is_in_db():
+            vds.select()
+            vds.print_self()
+            # Remove the entry if it is in the db
+            vds.delete()
+            vds.reset(ident)
+            vds.load()
+
+        # Set the absolute valid time
+        vds.set_absolute_time(start_time= datetime(year=2000, month=i, day=1), \
+                                end_time= datetime(year=2000, month=i + 1, day=1))
+        # Insert the map data into the SQL database
+        vds.insert()
+        # Register the map in the space time raster dataset
+        stvds.register_map(vds)
+        # Print self info
+        #vds.print_self()
+
+    stvds.select()
+    # Print self info
+    stvds.print_self()
+    # Delete the dataset
+    stvds.delete()
+
+
+test_dict_sql_serializer()
 create_temporal_database()
-#test_dataset_identifer()
-#test_absolute_timestamp()
-#test_relative_timestamp()
-#test_spatial_extent()
-#test_map_metadata()
-#test_base_absolute_time_extent_metadata()
-#test_absolut_time_temporal_relations()
-#test_raster_dataset()
-#test_raster3d_dataset()
-#test_vector_dataset()
+test_dataset_identifer()
+test_absolute_timestamp()
+test_relative_timestamp()
+test_spatial_extent()
+test_map_metadata()
+test_base_absolute_time_extent_metadata()
+test_absolut_time_temporal_relations()
 
-#test_strds_dataset()
+test_raster_dataset()
+test_raster3d_dataset()
+test_vector_dataset()
+
+test_strds_dataset()
 test_str3ds_dataset()
+test_stvds_dataset()
