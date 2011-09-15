@@ -24,7 +24,7 @@
 #%option
 #% key: dataset
 #% type: string
-#% description: Name of the new space time or map dataset
+#% description: Name(s) of the space time or map dataset to be removed from the temporal database
 #% required: yes
 #% multiple: no
 #%end
@@ -45,34 +45,41 @@ import grass.script as grass
 def main():
     
     # Get the options
-    name = options["dataset"]
+    names = options["dataset"]
     type = options["type"]
 
     # Make sure the temporal database exists
     grass.create_temporal_database()
     
     mapset =  grass.gisenv()["MAPSET"]
-    id = name + "@" + mapset
+    
+    for name in names.split(","):
+        name = name.strip()
+        # Check for the mapset in name
+        if name.find("@") < 0:
+            id = name + "@" + mapset
+        else:
+            id = name
 
-    if type == "strds":
-        sp = grass.space_time_raster_dataset(id)
-    if type == "str3ds":
-        sp = grass.space_time_raster3d_dataset(id)
-    if type == "stvds":
-        sp = grass.space_time_vector_dataset(id)
-    if type == "raster":
-        sp = grass.raster_dataset(id)
-    if type == "raster3d":
-        sp = grass.raster3d_dataset(id)
-    if type == "vector":
-        sp = grass.vector_dataset(id)
+        if type == "strds":
+            sp = grass.space_time_raster_dataset(id)
+        if type == "str3ds":
+            sp = grass.space_time_raster3d_dataset(id)
+        if type == "stvds":
+            sp = grass.space_time_vector_dataset(id)
+        if type == "raster":
+            sp = grass.raster_dataset(id)
+        if type == "raster3d":
+            sp = grass.raster3d_dataset(id)
+        if type == "vector":
+            sp = grass.vector_dataset(id)
 
-    if sp.is_in_db() == False:
-        grass.fatal("Dataset <" + name + "> not found in temporal database")
+        if sp.is_in_db() == False:
+            grass.fatal("Dataset <" + name + "> not found in temporal database")
 
-    # Insert content from db
-    sp.select()
-    sp.delete()
+        # We need to read some data from the temporal database
+        sp.select()
+        sp.delete()
 
 if __name__ == "__main__":
     options, flags = grass.core.parser()

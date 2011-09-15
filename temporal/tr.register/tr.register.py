@@ -39,7 +39,7 @@
 #%option
 #% key: start
 #% type: string
-#% description: The start date and time of the first raster map, in case the map has no date (format absolute: "yyyy-mm-dd HH:MM:SS", relative 5.0)
+#% description: The start date and time of the first raster map, in case the map has no date (format absolute: "yyyy-mm-dd HH:MM:SS", format relative 5.0)
 #% required: no
 #% multiple: no
 #%end
@@ -47,15 +47,14 @@
 #%option
 #% key: increment
 #% type: string
-#% description: Time increment between maps for time stamp creation (NNN seconds, minutes, hours, days, weeks)
+#% description: Time increment between maps for time stamp creation (format absolute: NNN seconds, minutes, hours, days, weeks, months, years; format relative: 1.0)
 #% required: no
 #% multiple: no
 #%end
 
 import datetime
-from datetime import timedelta
-import time
 import grass.script as grass
+from copy import *
 #######################
 #####################################################
 
@@ -66,6 +65,9 @@ def main():
     maps = options["maps"]
     start = options["start"]
     increment = options["increment"]
+
+    # Make sure the temporal database exists
+    grass.create_temporal_database()
 
     mapset =  grass.gisenv()["MAPSET"]
     id = name + "@" + mapset
@@ -81,13 +83,6 @@ def main():
         maplist = (maps,)
     else:
         maplist = tuple(maps.split(","))
-
-    if increment:
-        if sp.is_time_absolute():
-            inc_value = float(increment.split(" ")[0])
-            inc_unit = increment.split(" ")[1]
-        else:
-            inc_value = float(increment)
                     
     count = 0
     for mapname in maplist:
@@ -99,52 +94,39 @@ def main():
         # Put the map into the database
         if map.is_in_db() == False:
             map.load()
-
-            # Put map with time interval in the database
             map.insert()
         else:
             map.select()
-            
-        if map.get_temporal_type() != sp.get_temporal_type():
-            grass.fatal("Unable to register map. The map has a different temporal types.")
+            if map.get_temporal_type() != sp.get_temporal_type():
+                grass.fatal("Unable to register map <" + map.get_id() + ">. The temporal types are different.")
 
         # Set the time interval
         if start:
-            grass.info("Set/overwrite time interval for map " + mapname)
             
             if sp.is_time_absolute():
-
+                # Create the start time object
                 if start.find(":") > 0:
                     time_format = "%Y-%m-%d %H:%M:%S"
                 else:
                     time_format = "%Y-%m-%d"
-
-                start_time = datetime.datetime.fromtimestamp(time.mktime(time.strptime(start, time_format)))
+                
+                start_time = datetime.datetime.strptime(start, time_format)
                 end_time = None
 
+                # Add the increment
                 if increment:
-                    if inc_unit.find("seconds") >= 0:
-                        tdelta = timedelta(seconds=inc_value)
-                    elif inc_unit.find("minutes") >= 0:
-                        tdelta = timedelta(minutes=inc_value)
-                    elif inc_unit.find("hours") >= 0:
-                        tdelta = timedelta(hours=inc_value)
-                    elif inc_unit.find("days") >= 0:
-                        tdelta = timedelta(days=inc_value)
-                    elif inc_unit.find("weeks") >= 0:
-                        tdelta = timedelta(weeks=inc_value)
-                    else:
-                        grass.fatal("Wrong increment format: " + increment)
+                    start_time = grass.increment_datetime_by_string(start_time, increment, count)
+                    end_time = grass.increment_datetime_by_string(start_time, increment, 1)
 
-                    start_time += count * tdelta
-                    end_time = start_time + tdelta
-
-                map.set_absolute_time(start_time, end_time)
-                map.absolute_time.update()
+                grass.verbose("Set absolute time interval for map <" + mapid + "> to " + str(start_time) + " - " + str(end_time))
+                map.update_absolute_time(start_time, end_time)
             else:
-                interval = float(start) + count * inc_value
-                map.set_relative_time(interval)
-                map.arelative_time.update()                            
+                if increment:
+                    interval = float(start) + count * float(increment)
+                else:
+                    interval = float(start)
+                grass.verbose("Set relative time interval for map <" + mapid + "> to " + str(interval))
+                map.update_relative_time(interval)
             
         # Register map
         sp.register_map(map)
