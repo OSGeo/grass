@@ -1102,7 +1102,7 @@ class VDigitToolbar(AbstractToolbar):
                          self.addArea):
                 self.EnableTool(tool, False)
         elif fType == 'Polygon':
-            for tool in (self.addPoint, self.addLine):
+            for tool in (self.addPoint, self.addLine, self.addBoundary, self.addCentroid):
                 self.EnableTool(tool, False)
         elif fType:
             GError(parent = self,
