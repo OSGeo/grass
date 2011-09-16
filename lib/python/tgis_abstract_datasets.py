@@ -331,7 +331,7 @@ class abstract_space_time_dataset(abstract_dataset):
             self.set_time_to_relative()
             self.relative_time.set_granularity(granularity)
         else:
-            core.fatal("Unkown temporal type \"" + temporal_type + "\"")
+            core.fatal("Unknown temporal type \"" + temporal_type + "\"")
 
         self.base.set_semantic_type(semantic_type)
         self.metadata.set_title(title)
@@ -397,7 +397,7 @@ class abstract_space_time_dataset(abstract_dataset):
         #print "STDS register table", stds_register_table
 
         if stds_mapset != map_mapset:
-            core.fatal("You can only register maps from the same mapset")
+            core.fatal("Only maps from the same mapset can be registered")
 
         # Check if map is already registred
         if stds_register_table:
@@ -508,7 +508,7 @@ class abstract_space_time_dataset(abstract_dataset):
         if map.is_in_db() == False:
             core.fatal("Unable to find map <" + map.get_id() + "> in temporal database")
 
-        core.verbose("Unregister " + map.get_type() + " map: " + map.get_id() + " from space time " + map.get_type() + " dataset <" + self.get_id() + ">")
+        core.info("Unregister " + map.get_type() + " map: " + map.get_id())
 
         # First select all data from the database
         map.select()
@@ -543,5 +543,3 @@ class abstract_space_time_dataset(abstract_dataset):
             self.base.connect()
             self.base.cursor.execute(sql, (map_id,))
             self.base.close()
-
-        return True
