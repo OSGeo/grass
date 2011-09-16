@@ -34,7 +34,7 @@
 
 extern int errno;
 
-#define SLEEP 30		/* 30 minutes */
+#define SLEEP 30		/* 30 seconds */
 
 /* Recursively scan the directory pathname, removing directory and files */
 
