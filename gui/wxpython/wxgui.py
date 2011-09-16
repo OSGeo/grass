@@ -367,7 +367,7 @@ class GMFrame(wx.Frame):
         win.Show()
         
     def OnPsMap(self, event):
-        """!Launch Hardcopy Map Output Utility
+        """!Launch Cartographic Composer
         """
         win = psmap.PsMapFrame(parent = self)
         win.CentreOnScreen()

@@ -43,7 +43,7 @@
 	<separator/>
 	<menuitem>
 	  <label>Quit</label>
-	  <help>Close Hardcopy Map Output Utility</help>
+	  <help>Close Cartographic Composer</help>
 	  <handler>OnCloseWindow</handler>
 	  <shortcut>Ctrl+W</shortcut>
 	</menuitem>
@@ -108,13 +108,13 @@
       <items>
 	<menuitem>
 	  <label>Help</label>
-	  <help>Display the HTML man pages of Hardcopy Map Output Utility</help>
+	  <help>Display the HTML man pages of Cartographic Composer</help>
 	  <handler>OnHelp</handler>
 	</menuitem>
 	<separator />
 	<menuitem>
-	  <label>About Hardcopy Map Output Utility</label>
-	  <help>Display information about Hardcopy Map Output Utility</help>
+	  <label>About Cartographic Composer</label>
+	  <help>Display information about Cartographic Composer</help>
 	  <handler>OnAbout</handler>
 	</menuitem>
       </items>

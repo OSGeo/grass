@@ -731,8 +731,8 @@
 	</menuitem>
 	<separator />
 	<menuitem>
-	  <label>Hardcopy Map Output Utility</label>
-	  <help>Launch Hardcopy Map Output Utility</help>
+	  <label>Cartographic Composer</label>
+	  <help>Launch Cartographic Composer</help>
 	  <keywords>postscript,map,printing</keywords>
 	  <handler>OnPsMap</handler>
 	  <command>ps.map</command>
