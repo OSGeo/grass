@@ -44,6 +44,7 @@ SUBDIRS = \
 	nviz \
 	python \
 	iostream \
+	temporal \
 	manage
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make

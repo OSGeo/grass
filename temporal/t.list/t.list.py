@@ -5,7 +5,7 @@
 # MODULE:	t.list
 # AUTHOR(S):	Soeren Gebbert
 #               
-# PURPOSE:	List space time datasets
+# PURPOSE:	List space time and map datasets
 # COPYRIGHT:	(C) 2011 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
@@ -33,7 +33,7 @@
 #%option
 #% key: sort
 #% type: string
-#% description: Sort the space time dataset by category
+#% description: Sort the space time dataset by category. Columns number_of_maps and granularity only available fpr space time datasets
 #% required: no
 #% multiple: yes
 #% options: id, name, creator, mapset, number_of_maps, creation_time, modification_time, start_time, end_time, interval, north, south, west, east, granularity
@@ -43,10 +43,10 @@
 #%option
 #% key: columns
 #% type: string
-#% description: Which columns should be printed to stdout
+#% description: Which columns should be printed to stdout. Columns number_of_maps and granularity only available fpr space time datasets
 #% required: no
 #% multiple: yes
-#% options: id, name, creator, mapset, number_of_maps, creation_time, modification_time, start_time, end_time, interval, north, south, west, east, granularity, all
+#% options: id, name, creator, mapset, number_of_maps, creation_time, modification_time, revision, start_time, end_time, interval, north, south, west, east, granularity, all
 #% answer: id
 #%end
 

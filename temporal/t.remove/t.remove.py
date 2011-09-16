@@ -5,7 +5,7 @@
 # MODULE:	t.remove
 # AUTHOR(S):	Soeren Gebbert
 #               
-# PURPOSE:	Remove a space time raster dataset
+# PURPOSE:	Remove space time or map dataset
 # COPYRIGHT:	(C) 2011 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Remove a space time and map datasets from temporal database
+#% description: Remove space time or map datasets from temporal database
 #% keywords: spacetime
 #% keywords: dataset
 #% keywords: remove
@@ -62,24 +62,24 @@ def main():
             id = name
 
         if type == "strds":
-            sp = grass.space_time_raster_dataset(id)
+            ds = grass.space_time_raster_dataset(id)
         if type == "str3ds":
-            sp = grass.space_time_raster3d_dataset(id)
+            ds = grass.space_time_raster3d_dataset(id)
         if type == "stvds":
-            sp = grass.space_time_vector_dataset(id)
+            ds = grass.space_time_vector_dataset(id)
         if type == "raster":
-            sp = grass.raster_dataset(id)
+            ds = grass.raster_dataset(id)
         if type == "raster3d":
-            sp = grass.raster3d_dataset(id)
+            ds = grass.raster3d_dataset(id)
         if type == "vector":
-            sp = grass.vector_dataset(id)
+            ds = grass.vector_dataset(id)
 
-        if sp.is_in_db() == False:
-            grass.fatal("Dataset <" + name + "> not found in temporal database")
+        if ds.is_in_db() == False:
+            grass.fatal(ds.get_type() + " dataset <" + name + "> not found in temporal database")
 
         # We need to read some data from the temporal database
-        sp.select()
-        sp.delete()
+        ds.select()
+        ds.delete()
 
 if __name__ == "__main__":
     options, flags = grass.core.parser()

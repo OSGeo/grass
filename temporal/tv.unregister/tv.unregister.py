@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# MODULE:	tr.unregister
+# MODULE:	tv.unregister
 # AUTHOR(S):	Soeren Gebbert
 #               
-# PURPOSE:	Unregister raster maps from space time raster datasets
+# PURPOSE:	Unregister vector maps from space time vector datasets
 # COPYRIGHT:	(C) 2011 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
@@ -15,15 +15,15 @@
 #############################################################################
 
 #%module
-#% description: Unregister raster map(s) from a specific or from all space time raster dataset in which it is registered
-#% keywords: spacetime raster dataset
-#% keywords: raster
+#% description: Unregister vector map(s) from a specific or from all space time vector datasets in which it is registered
+#% keywords: spacetime vector dataset
+#% keywords: vector
 #%end
 
 #%option
 #% key: dataset
 #% type: string
-#% description: Name of an existing space time raster dataset. If no name is provided the raster map(s) are unregistered from all space time datasets in which they are registered.
+#% description: Name of an existing space time vector dataset. If no name is provided the vector map(s) are unregistered from all space time datasets in which they are registered.
 #% required: no
 #% multiple: no
 #%end
@@ -31,7 +31,7 @@
 #%option
 #% key: maps
 #% type: string
-#% description: Name(s) of existing raster map(s) to unregister
+#% description: Name(s) of existing vector map(s) to unregister
 #% required: yes
 #% multiple: yes
 #%end
@@ -48,7 +48,7 @@ def main():
     # Make sure the temporal database exists
     grass.create_temporal_database()
     # Unregister maps
-    grass.unregister_maps_from_space_time_datasets("raster", name, maps)
+    grass.unregister_maps_from_space_time_datasets("vector", name, maps)
 
 if __name__ == "__main__":
     options, flags = grass.core.parser()

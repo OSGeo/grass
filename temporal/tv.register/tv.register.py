@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# MODULE:	tr.register
+# MODULE:	tv.register
 # AUTHOR(S):	Soeren Gebbert
 #
-# PURPOSE:	Register raster maps in a space time raster dataset
+# PURPOSE:	Register vector maps in a space time vector dataset
 # COPYRIGHT:	(C) 2011 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
@@ -15,15 +15,15 @@
 #############################################################################
 
 #%module
-#% description: Register raster maps in a space time raster dataset
-#% keywords: spacetime raster dataset
-#% keywords: raster
+#% description: Register vector maps in a space time vector dataset
+#% keywords: spacetime vector dataset
+#% keywords: vector
 #%end
 
 #%option
 #% key: dataset
 #% type: string
-#% description: Name of an existing space time raster dataset
+#% description: Name of an existing space time vector dataset
 #% required: yes
 #% multiple: no
 #%end
@@ -31,7 +31,7 @@
 #%option
 #% key: maps
 #% type: string
-#% description: Name(s) of existing raster map(s), multiple maps must be provided in temporal order in case datetime should be attached
+#% description: Name(s) of existing vector map(s), multiple maps must be provided in temporal order in case datetime should be attached
 #% required: yes
 #% multiple: yes
 #%end
@@ -39,7 +39,7 @@
 #%option
 #% key: start
 #% type: string
-#% description: The valid start date and time of the first raster map, in case the map has no valid time (format absolute: "yyyy-mm-dd HH:MM:SS", format relative 5.0)
+#% description: The valid start date and time of the first vector map, in case the map has no valid time (format absolute: "yyyy-mm-dd HH:MM:SS", format relative 5.0)
 #% required: no
 #% multiple: no
 #%end
@@ -67,7 +67,7 @@ def main():
     # Make sure the temporal database exists
     grass.create_temporal_database()
     # Register maps
-    grass.register_maps_in_space_time_dataset("raster", name, maps, start, increment)
+    grass.register_maps_in_space_time_dataset("vector", name, maps, start, increment)
     
 if __name__ == "__main__":
     options, flags = grass.core.parser()

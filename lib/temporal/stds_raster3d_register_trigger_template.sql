@@ -10,95 +10,104 @@
 
 PRAGMA foreign_keys = ON;
 
-CREATE TRIGGER SPACETIME_NAME_raster3d_metadata_register_insert_trigger AFTER INSERT ON SPACETIME_NAME_raster3d_register 
-  BEGIN
-    -- Update the min and max values
-    UPDATE str3ds_metadata SET min_min = 
-           (SELECT min(min) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
-			(SELECT id FROM SPACETIME_NAME_raster3d_register)
-           ) WHERE id = "SPACETIME_ID";
-    UPDATE str3ds_metadata SET min_max = 
-           (SELECT max(min) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
-			(SELECT id FROM SPACETIME_NAME_raster3d_register)
-           ) WHERE id = "SPACETIME_ID";
-    UPDATE str3ds_metadata SET max_min = 
-           (SELECT min(max) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
-			(SELECT id FROM SPACETIME_NAME_raster3d_register)
-           ) WHERE id = "SPACETIME_ID";
-    UPDATE str3ds_metadata SET max_max = 
-           (SELECT max(max) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
-			(SELECT id FROM SPACETIME_NAME_raster3d_register)
-           ) WHERE id = "SPACETIME_ID";
-    -- Update the resolution
-    UPDATE str3ds_metadata SET nsres_min = 
-           (SELECT min(nsres) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
-			(SELECT id FROM SPACETIME_NAME_raster3d_register)
-           ) WHERE id = "SPACETIME_ID";
-    UPDATE str3ds_metadata SET nsres_max = 
-           (SELECT max(nsres) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
-			(SELECT id FROM SPACETIME_NAME_raster3d_register)
-           ) WHERE id = "SPACETIME_ID";
-    UPDATE str3ds_metadata SET ewres_min = 
-           (SELECT min(ewres) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
-			(SELECT id FROM SPACETIME_NAME_raster3d_register)
-           ) WHERE id = "SPACETIME_ID";
-    UPDATE str3ds_metadata SET ewres_max = 
-           (SELECT max(ewres) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
-			(SELECT id FROM SPACETIME_NAME_raster3d_register)
-           ) WHERE id = "SPACETIME_ID";
-    UPDATE str3ds_metadata SET tbres_min = 
-           (SELECT min(tbres) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
-			(SELECT id FROM SPACETIME_NAME_raster3d_register)
-           ) WHERE id = "SPACETIME_ID";
-    UPDATE str3ds_metadata SET tbres_max = 
-           (SELECT max(tbres) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
-			(SELECT id FROM SPACETIME_NAME_raster3d_register)
-           ) WHERE id = "SPACETIME_ID";
-  END;
-
-CREATE TRIGGER SPACETIME_NAME_raster3d_metadata_register_delete_trigger AFTER DELETE ON SPACETIME_NAME_raster3d_register 
-  BEGIN
-    -- Update the min and max values
-    UPDATE str3ds_metadata SET min_min = 
-           (SELECT min(min) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
-			(SELECT id FROM SPACETIME_NAME_raster3d_register)
-           ) WHERE id = "SPACETIME_ID";
-    UPDATE str3ds_metadata SET min_max = 
-           (SELECT max(min) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
-			(SELECT id FROM SPACETIME_NAME_raster3d_register)
-           ) WHERE id = "SPACETIME_ID";
-    UPDATE str3ds_metadata SET max_min = 
-           (SELECT min(max) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
-			(SELECT id FROM SPACETIME_NAME_raster3d_register)
-           ) WHERE id = "SPACETIME_ID";
-    UPDATE str3ds_metadata SET max_max = 
-           (SELECT max(max) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
-			(SELECT id FROM SPACETIME_NAME_raster3d_register)
-           ) WHERE id = "SPACETIME_ID";
-    -- Update the resolution
-    UPDATE str3ds_metadata SET nsres_min = 
-           (SELECT min(nsres) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
-			(SELECT id FROM SPACETIME_NAME_raster3d_register)
-           ) WHERE id = "SPACETIME_ID";
-    UPDATE str3ds_metadata SET nsres_max = 
-           (SELECT max(nsres) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
-			(SELECT id FROM SPACETIME_NAME_raster3d_register)
-           ) WHERE id = "SPACETIME_ID";
-    UPDATE str3ds_metadata SET ewres_min = 
-           (SELECT min(ewres) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
-			(SELECT id FROM SPACETIME_NAME_raster3d_register)
-           ) WHERE id = "SPACETIME_ID";
-    UPDATE str3ds_metadata SET ewres_max = 
-           (SELECT max(ewres) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
-			(SELECT id FROM SPACETIME_NAME_raster3d_register)
-           ) WHERE id = "SPACETIME_ID";
-    UPDATE str3ds_metadata SET tbres_min = 
-           (SELECT min(tbres) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
-			(SELECT id FROM SPACETIME_NAME_raster3d_register)
-           ) WHERE id = "SPACETIME_ID";
-    UPDATE str3ds_metadata SET tbres_max = 
-           (SELECT max(tbres) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
-			(SELECT id FROM SPACETIME_NAME_raster3d_register)
-           ) WHERE id = "SPACETIME_ID";
-  END;
-
+-- Triggers are disabled due to huge performance issues
+--CREATE TRIGGER SPACETIME_NAME_raster3d_metadata_register_insert_trigger AFTER INSERT ON SPACETIME_NAME_raster3d_register 
+--  BEGIN
+--    -- Update the min and max values
+--    UPDATE str3ds_metadata SET min_min = 
+--           (SELECT min(min) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
+--			(SELECT id FROM SPACETIME_NAME_raster3d_register)
+--           ) WHERE id = "SPACETIME_ID";
+--    UPDATE str3ds_metadata SET min_max = 
+--           (SELECT max(min) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
+--			(SELECT id FROM SPACETIME_NAME_raster3d_register)
+--           ) WHERE id = "SPACETIME_ID";
+--    UPDATE str3ds_metadata SET max_min = 
+--           (SELECT min(max) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
+--			(SELECT id FROM SPACETIME_NAME_raster3d_register)
+--           ) WHERE id = "SPACETIME_ID";
+--    UPDATE str3ds_metadata SET max_max = 
+--           (SELECT max(max) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
+--			(SELECT id FROM SPACETIME_NAME_raster3d_register)
+--           ) WHERE id = "SPACETIME_ID";
+--    -- Update the resolution
+--    UPDATE str3ds_metadata SET nsres_min = 
+--           (SELECT min(nsres) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
+--			(SELECT id FROM SPACETIME_NAME_raster3d_register)
+--           ) WHERE id = "SPACETIME_ID";
+--    UPDATE str3ds_metadata SET nsres_max = 
+--           (SELECT max(nsres) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
+--			(SELECT id FROM SPACETIME_NAME_raster3d_register)
+--           ) WHERE id = "SPACETIME_ID";
+--    UPDATE str3ds_metadata SET ewres_min = 
+--           (SELECT min(ewres) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
+--			(SELECT id FROM SPACETIME_NAME_raster3d_register)
+--           ) WHERE id = "SPACETIME_ID";
+--    UPDATE str3ds_metadata SET ewres_max = 
+--           (SELECT max(ewres) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
+--			(SELECT id FROM SPACETIME_NAME_raster3d_register)
+--           ) WHERE id = "SPACETIME_ID";
+--    UPDATE str3ds_metadata SET tbres_min = 
+--           (SELECT min(tbres) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
+--			(SELECT id FROM SPACETIME_NAME_raster3d_register)
+--           ) WHERE id = "SPACETIME_ID";
+--    UPDATE str3ds_metadata SET tbres_max = 
+--           (SELECT max(tbres) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
+--			(SELECT id FROM SPACETIME_NAME_raster3d_register)
+--           ) WHERE id = "SPACETIME_ID";
+--  END;
+--
+--CREATE TRIGGER SPACETIME_NAME_raster3d_metadata_register_delete_trigger AFTER DELETE ON SPACETIME_NAME_raster3d_register 
+--  BEGIN
+--    -- Update the min and max values
+--    UPDATE str3ds_metadata SET min_min = 
+--           (SELECT min(min) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
+--			(SELECT id FROM SPACETIME_NAME_raster3d_register)
+--           ) WHERE id = "SPACETIME_ID";
+--    UPDATE str3ds_metadata SET min_max = 
+--           (SELECT max(min) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
+--			(SELECT id FROM SPACETIME_NAME_raster3d_register)
+--           ) WHERE id = "SPACETIME_ID";
+--    UPDATE str3ds_metadata SET max_min = 
+--           (SELECT min(max) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
+--			(SELECT id FROM SPACETIME_NAME_raster3d_register)
+--           ) WHERE id = "SPACETIME_ID";
+--    UPDATE str3ds_metadata SET max_max = 
+--           (SELECT max(max) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
+--			(SELECT id FROM SPACETIME_NAME_raster3d_register)
+--           ) WHERE id = "SPACETIME_ID";
+--    -- Update the resolution
+--    UPDATE str3ds_metadata SET nsres_min = 
+--           (SELECT min(nsres) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
+--			(SELECT id FROM SPACETIME_NAME_raster3d_register)
+--           ) WHERE id = "SPACETIME_ID";
+--    UPDATE str3ds_metadata SET nsres_max = 
+--           (SELECT max(nsres) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
+--			(SELECT id FROM SPACETIME_NAME_raster3d_register)
+--           ) WHERE id = "SPACETIME_ID";
+--    UPDATE str3ds_metadata SET ewres_min = 
+--           (SELECT min(ewres) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
+--			(SELECT id FROM SPACETIME_NAME_raster3d_register)
+--           ) WHERE id = "SPACETIME_ID";
+--    UPDATE str3ds_metadata SET ewres_max = 
+--           (SELECT max(ewres) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
+--			(SELECT id FROM SPACETIME_NAME_raster3d_register)
+--           ) WHERE id = "SPACETIME_ID";
+--    UPDATE str3ds_metadata SET tbres_min = 
+--           (SELECT min(tbres) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
+--			(SELECT id FROM SPACETIME_NAME_raster3d_register)
+--           ) WHERE id = "SPACETIME_ID";
+--    UPDATE str3ds_metadata SET tbres_max = 
+--           (SELECT max(tbres) FROM raster3d_metadata WHERE raster3d_metadata.id IN 
+--			(SELECT id FROM SPACETIME_NAME_raster3d_register)
+--           ) WHERE id = "SPACETIME_ID";
+--  END;
+--
+--
+--
+--
+--
+--
+--
+--
+--

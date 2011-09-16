@@ -318,8 +318,9 @@ class space_time_raster3d_dataset(abstract_space_time_dataset):
 
 	self.base = str3ds_base(ident=ident)
 
-        self.base.set_name(self.ident.split("@")[0])
-        self.base.set_mapset(self.ident.split("@")[1])
+        if ident != None:
+            self.base.set_name(self.ident.split("@")[0])
+            self.base.set_mapset(self.ident.split("@")[1])
         self.base.set_creator(str(getpass.getuser()))
         self.absolute_time = str3ds_absolute_time(ident=ident)
         self.relative_time = str3ds_relative_time(ident=ident)
@@ -361,11 +362,193 @@ class space_time_vector_dataset(abstract_space_time_dataset):
 
 	self.base = stvds_base(ident=ident)
 
-        self.base.set_name(self.ident.split("@")[0])
-        self.base.set_mapset(self.ident.split("@")[1])
+        if ident != None:
+            self.base.set_name(self.ident.split("@")[0])
+            self.base.set_mapset(self.ident.split("@")[1])
         self.base.set_creator(str(getpass.getuser()))
         self.absolute_time = stvds_absolute_time(ident=ident)
         self.relative_time = stvds_relative_time(ident=ident)
 	self.spatial_extent = stvds_spatial_extent(ident=ident)
 	self.metadata = stvds_metadata(ident=ident)
-        
+
+###############################################################################
+
+def register_maps_in_space_time_dataset(type, name, maps, start=None, increment=None):
+    """Use this method to register maps in space time datasets. This function is generic and
+       can handle raster, vector and raster3d maps as well as there space time datasets.
+
+       Additionally a start time string and an increment string can be specified
+       to assign a time interval automatically to the maps.
+
+       It takes care of the correct update of the space time datasets from all
+       registered maps.
+
+       @type The type of the maps raster, raster3d or vector
+       @name The name of the space time dataset
+       @maps A comma separated list of map names
+       @start The start date and time of the first raster map, in case the map has no date (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd", format relative 5.0)
+       @increment Time increment between maps for time stamp creation (format absolute: NNN seconds, minutes, hours, days, weeks, months, years; format relative: 1.0)
+    """
+
+    # We may need the mapset
+    mapset =  core.gisenv()["MAPSET"]
+
+    # Check if the dataset name contains the mapset as well
+    if name.find("@") < 0:
+        id = name + "@" + mapset
+    else:
+        id = name
+
+    if type == "raster":
+        sp = space_time_raster_dataset(id)
+    if type == "raster3d":
+        sp = space_time_raster3d_dataset(id)
+    if type == "vector":
+        sp = space_time_vector_dataset(id)
+
+    # Read content from temporal database
+    sp.select()
+
+    if sp.is_in_db() == False:
+        core.fatal("Space time " + sp.get_new_map_instance(None).get_type() + " dataset <" + name + "> not found")
+
+    if maps.find(",") == -1:
+        maplist = (maps,)
+    else:
+        maplist = tuple(maps.split(","))
+
+    count = 0
+    for mapname in maplist:
+        mapname = mapname.strip()
+        # Check if the map name contains the mapset as well
+        if mapname.find("@") < 0:
+            mapid = mapname + "@" + mapset
+        else:
+            mapid = mapname
+        # Get a new instance of the space time dataset map type
+        map = sp.get_new_map_instance(mapid)
+
+        # In case the map is already registered print a message and continue to the next map
+
+        # Put the map into the database
+        if map.is_in_db() == False:
+            # Break in case no valid time is provided
+            if start == "" or start == None:
+                core.fatal("Unable to register " + map.get_type() + " map <" + map.get_id() + ">. The map has no valid time and the start time is not set.")
+            # Load the data from the grass file database
+            map.load()
+            #  Put it into the temporal database
+            map.insert()
+        else:
+            map.select()
+            if map.get_temporal_type() != sp.get_temporal_type():
+                core.fatal("Unable to register " + map.get_type() + " map <" + map.get_id() + ">. The temporal types are different.")
+
+        # Set the valid time
+        if start:
+            assign_valid_time_to_map(sp.get_temporal_type(), map, start, increment, count)
+
+        # Finally Register map in the space time dataset
+        sp.register_map(map)
+        count += 1
+
+    # Update the space time tables
+    sp.update_from_registered_maps()
+
+###############################################################################
+
+def unregister_maps_from_space_time_datasets(type, name, maps):
+    """Unregister maps from a single space time dataset or, in case no dataset name is provided,
+       unregister from all datasets within the maps are registered.
+
+       @type The type of the maps raster, vector or raster3d
+       @name Name of an existing space time raster dataset. If no name is provided the raster map(s) are unregistered from all space time datasets in which they are registered.
+       @maps Name(s) of existing map(s) to unregister
+    """
+    mapset =  core.gisenv()["MAPSET"]
+
+    # In case a space time dataset is specified
+    if name:
+        # Check if the dataset name contains the mapset as well
+        if name.find("@") < 0:
+            id = name + "@" + mapset
+        else:
+            id = name
+
+        if type == "raster":
+            sp = space_time_raster_dataset(id)
+        if type == "raster3d":
+            sp = space_time_raster3d_dataset(id)
+        if type == "vector":
+            sp = space_time_vector_dataset(id)
+
+        if sp.is_in_db() == False:
+            core.fatal("Space time " + sp.get_new_map_instance(None).get_type() + " dataset <" + name + "> not found")
+
+    # Build the list of maps
+    if maps.find(",") == -1:
+        maplist = (maps,)
+    else:
+        maplist = tuple(maps.split(","))
+
+    for mapname in maplist:
+        mapname = mapname.strip()
+        # Check if the map name contains the mapset as well
+        if mapname.find("@") < 0:
+            mapid = mapname + "@" + mapset
+        else:
+            mapid = mapname
+            
+        # Create a new instance with the map type
+        if type == "raster":
+            map = raster_dataset(mapid)
+        if type == "raster3d":
+            map = raster3d_dataset(mapid)
+        if type == "vector":
+            map = vector_dataset(mapid)
+
+        # Unregister map if in database
+        if map.is_in_db() == True:
+            if name:
+                sp.select()
+                sp.unregister_map(map)
+            else:
+                map.select()
+                map.unregister()
+
+    if name:
+        sp.update_from_registered_maps()
+
+def assign_valid_time_to_map(ttype, map, start, increment=None, mult=1):
+    """Assign the valid time to a map dataset
+
+       @ttype The temporal type which should be assigned and which the time format is of
+       @map A map dataset object derived from abstract_map_dataset
+       @start The start date and time of the first raster map, in case the map has no date (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd", format relative 5.0)
+       @increment Time increment between maps for time stamp creation (format absolute: NNN seconds, minutes, hours, days, weeks, months, years; format relative: 1.0)
+       @multi A multiplier for the increment
+    """
+    if ttype == "absolute":
+        # Create the start time object
+        if start.find(":") > 0:
+            time_format = "%Y-%m-%d %H:%M:%S"
+        else:
+            time_format = "%Y-%m-%d"
+
+        start_time = datetime.strptime(start, time_format)
+        end_time = None
+
+        # Add the increment
+        if increment:
+            start_time = increment_datetime_by_string(start_time, increment, mult)
+            end_time = increment_datetime_by_string(start_time, increment, 1)
+
+        core.verbose("Set absolute valid time for map <" + map.get_id() + "> to " + str(start_time) + " - " + str(end_time))
+        map.update_absolute_time(start_time, end_time)
+    else:
+        if increment:
+            interval = float(start) + mult * float(increment)
+        else:
+            interval = float(start)
+        core.verbose("Set relative valid time for map <" + map.get_id() + "> to " + str(interval))
+        map.update_relative_time(interval)
