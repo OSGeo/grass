@@ -204,11 +204,11 @@ class stds_base(dataset_base):
 	self.set_semantic_type(semantic_type)
 
     def set_semantic_type(self, semantic_type):
-	"""Set the sematnic type of the space time dataset"""
+	"""Set the semantic type of the space time dataset"""
 	self.D["semantic_type"] = semantic_type
 
     def get_semantic_type(self):
-	"""Get the semantic_type of the space time dataset
+	"""Get the semantic type of the space time dataset
 	   @return None if not found"""
 	if self.D.has_key("semantic_type"):
 	    return self.D["semantic_type"]
