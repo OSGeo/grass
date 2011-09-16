@@ -1549,7 +1549,7 @@ class LMVectorToolbar(AbstractToolbar):
     
 class PsMapToolbar(AbstractToolbar):
     def __init__(self, parent):
-        """!Toolbar Hardcopy Map Output Utility (psmap.py)
+        """!Toolbar Cartographic Composer (psmap.py)
         
         @param parent parent window
         """

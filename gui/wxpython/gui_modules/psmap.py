@@ -52,7 +52,7 @@ except ImportError:
     
 class PsMapFrame(wx.Frame):
     def __init__(self, parent = None, id = wx.ID_ANY,
-                 title = _("GRASS GIS Hardcopy Map Output Utility"), **kwargs):
+                 title = _("GRASS GIS Cartographic Composer"), **kwargs):
         """!Main window of ps.map GUI
         
         @param parent parent window
@@ -909,7 +909,7 @@ class PsMapFrame(wx.Frame):
         info = wx.AboutDialogInfo()
         
         info.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
-        info.SetName(_('wxGUI Hardcopy Map Utility'))
+        info.SetName(_('wxGUI Cartographic Composer'))
         info.SetWebSite('http://grass.osgeo.org')
         info.SetDescription(_('(C) 2011 by the GRASS Development Team\n\n') + 
                             '\n'.join(textwrap.wrap(_('This program is free software under the GNU General Public License'
