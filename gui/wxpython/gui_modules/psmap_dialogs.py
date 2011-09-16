@@ -86,34 +86,49 @@ class UnitConversion:
             ppi = wx.PaintDC(self.parent).GetPPI()
         else: 
             ppi = (72, 72)
-        self._unitsPage = { 'inch' : 1.0,
-                            'point' : 72.0,
-                            'centimeter' : 2.54,
-                            'milimeter' : 25.4}
-        self._unitsMap = {  'meters' : 0.0254,
-                            'kilometers' : 2.54e-5,
-                            'feet' : 1./12,
-                            'miles' : 1./63360,
-                            'nautical miles' : 1/72913.44}
+        self._unitsPage = { 'inch'          : {'val': 1.0, 'tr' : _("inch")},
+                            'point'         : {'val': 72.0, 'tr' : _("point")},
+                            'centimeter'    : {'val': 2.54, 'tr' : _("centimeter")},
+                            'milimeter'     : {'val': 25.4, 'tr' : _("milimeter")}}
+        self._unitsMap = {  'meters'        : {'val': 0.0254, 'tr' : _("meters")},
+                            'kilometers'    : {'val': 2.54e-5, 'tr' : _("kilometers")},
+                            'feet'          : {'val': 1./12, 'tr' : _("feet")},
+                            'miles'         : {'val': 1./63360, 'tr' : _("miles")},
+                            'nautical miles': {'val': 1/72913.44, 'tr' : _("nautical miles")}}
 
-        self._units = { 'pixel': ppi[0],
-                        'meter': 0.0254,
-                        'degrees' : 0.0254  #like 1 meter, incorrect
+        self._units = { 'pixel'     : {'val': ppi[0], 'tr' : _("pixel")},
+                        'meter'     : {'val': 0.0254, 'tr' : _("meter")},
+                        'nautmiles' : {'val': 1/72913.44, 'tr' :_("nautical miles")},
+                        'degrees'   : {'val': 0.0254 , 'tr' : _("degree")} #like 1 meter, incorrect
                         }
         self._units.update(self._unitsPage)
         self._units.update(self._unitsMap)
 
-    def getPageUnits(self):
-        return sorted(self._unitsPage.keys())
+    def getPageUnitsNames(self):
+        return sorted(self._unitsPage[unit]['tr'] for unit in self._unitsPage.keys())
     
-    def getMapUnits(self):
-        return sorted(self._unitsMap.keys())
+    def getMapUnitsNames(self):
+        return sorted(self._unitsMap[unit]['tr'] for unit in self._unitsMap.keys())
     
     def getAllUnits(self):
         return sorted(self._units.keys())
     
+    def findUnit(self, name):
+        """!Returns unit by its tr. string"""
+        for unit in self._units.keys():
+            if self._units[unit]['tr'] == name:
+                return unit
+        return None
+    
+    def findName(self, unit):
+        """!Returns tr. string of a unit"""
+        try:
+            return self._units[unit]['tr']
+        except KeyError:
+            return None
+    
     def convert(self, value, fromUnit = None, toUnit = None):
-        return float(value)/self._units[fromUnit]*self._units[toUnit]
+        return float(value)/self._units[fromUnit]['val']*self._units[toUnit]['val']
     
     
 class TCValidator(wx.PyValidator):
@@ -1635,9 +1650,9 @@ class PsmapDialog(wx.Dialog):
     def AddUnits(self, parent, dialogDict):
         parent.units = dict()
         parent.units['unitsLabel'] = wx.StaticText(parent, id = wx.ID_ANY, label = _("Units:"))
-        choices = self.unitConv.getPageUnits()
+        choices = self.unitConv.getPageUnitsNames()
         parent.units['unitsCtrl'] = wx.Choice(parent, id = wx.ID_ANY, choices = choices)  
-        parent.units['unitsCtrl'].SetStringSelection(dialogDict['unit'])
+        parent.units['unitsCtrl'].SetStringSelection(self.unitConv.findName(dialogDict['unit']))
           
     def AddPosition(self, parent, dialogDict):
         parent.position = dict()
@@ -1762,21 +1777,34 @@ class PageSetupDialog(PsmapDialog):
         PsmapDialog.__init__(self, parent = parent, id = id, title = "Page setup",  settings = settings)
         
         self.cat = ['Units', 'Format', 'Orientation', 'Width', 'Height', 'Left', 'Right', 'Top', 'Bottom']
+        labels = [_('Units'), _('Format'), _('Orientation'), _('Width'), _('Height'),
+                  _('Left'), _('Right'), _('Top'), _('Bottom')]
+        self.catsLabels = dict(zip(self.cat, labels))
         paperString = RunCommand('ps.map', flags = 'p', read = True, quiet = True)
         self.paperTable = self._toList(paperString) 
-        self.unitsList = self.unitConv.getPageUnits()
+        self.unitsList = self.unitConv.getPageUnitsNames()
         self.pageSetupDict = settings[id].GetInstruction()
 
         self._layout()
         
         if self.pageSetupDict:
-            for item in self.cat[:3]:
-                self.getCtrl(item).SetSelection(self.getCtrl(item).FindString(self.pageSetupDict[item]))
+            self.getCtrl('Units').SetStringSelection(self.unitConv.findName(self.pageSetupDict['Units']))
+            if self.pageSetupDict['Format'] == 'custom':
+                self.getCtrl('Format').SetSelection(self.getCtrl('Format').GetCount() - 1)
+            else:
+                self.getCtrl('Format').SetStringSelection(self.pageSetupDict['Format'])
+            if self.pageSetupDict['Orientation'] == 'Portrait':
+                self.getCtrl('Orientation').SetSelection(0)
+            else:
+                self.getCtrl('Orientation').SetSelection(1)
+                
             for item in self.cat[3:]:
-                self.getCtrl(item).SetValue("%4.3f" % self.pageSetupDict[item])
+                val = self.unitConv.convert(value = self.pageSetupDict[item],
+                                            fromUnit = 'inch', toUnit = self.pageSetupDict['Units'])
+                self.getCtrl(item).SetValue("%4.3f" % val)
 
        
-        if self.getCtrl('Format').GetString(self.getCtrl('Format').GetSelection()) != 'custom':
+        if self.getCtrl('Format').GetSelection() != self.getCtrl('Format').GetCount() - 1: # custom
             self.getCtrl('Width').Disable()
             self.getCtrl('Height').Disable()
         else:
@@ -1789,9 +1817,12 @@ class PageSetupDialog(PsmapDialog):
 
     
     def update(self):
-        self.pageSetupDict['Units'] = self.getCtrl('Units').GetString(self.getCtrl('Units').GetSelection())
+        self.pageSetupDict['Units'] = self.unitConv.findUnit(self.getCtrl('Units').GetStringSelection())
         self.pageSetupDict['Format'] = self.paperTable[self.getCtrl('Format').GetSelection()]['Format']
-        self.pageSetupDict['Orientation'] = self.getCtrl('Orientation').GetString(self.getCtrl('Orientation').GetSelection())
+        if self.getCtrl('Orientation').GetSelection() == 0:
+            self.pageSetupDict['Orientation'] = 'Portrait'
+        else:
+            self.pageSetupDict['Orientation'] = 'Landscape'
         for item in self.cat[3:]:
             self.pageSetupDict[item] = self.unitConv.convert(value = float(self.getCtrl(item).GetValue()),
                                         fromUnit = self.pageSetupDict['Units'], toUnit = 'inch')
@@ -1817,13 +1848,13 @@ class PageSetupDialog(PsmapDialog):
         marginSizer = wx.StaticBoxSizer(marginBox, wx.VERTICAL)
         horSizer = wx.BoxSizer(wx.HORIZONTAL) 
         #staticText + choice
-        choices = [self.unitsList, [item['Format'] for item in self.paperTable], ['Portrait', 'Landscape']]
+        choices = [self.unitsList, [item['Format'] for item in self.paperTable], [_('Portrait'), _('Landscape')]]
         propor = [0,1,1]
         border = [5,3,3]
         self.hBoxDict={}
         for i, item in enumerate(self.cat[:3]):
             hBox = wx.BoxSizer(wx.HORIZONTAL)
-            stText = wx.StaticText(self, id = wx.ID_ANY, label = item + ':')
+            stText = wx.StaticText(self, id = wx.ID_ANY, label = self.catsLabels[item] + ':')
             choice = wx.Choice(self, id = wx.ID_ANY, choices = choices[i], size = size)
             hBox.Add(stText, proportion = propor[i], flag = wx.ALIGN_CENTER_VERTICAL|wx.ALL, border = border[i])
             hBox.Add(choice, proportion = 0, flag = wx.ALL, border = border[i])
@@ -1834,7 +1865,7 @@ class PageSetupDialog(PsmapDialog):
         #staticText + TextCtrl
         for item in self.cat[3:]:
             hBox = wx.BoxSizer(wx.HORIZONTAL)
-            label = wx.StaticText(self, id = wx.ID_ANY, label = item + ':')
+            label = wx.StaticText(self, id = wx.ID_ANY, label = self.catsLabels[item] + ':')
             textctrl = wx.TextCtrl(self, id = wx.ID_ANY, size = size, value = '')
             hBox.Add(label, proportion = 1, flag = wx.ALIGN_CENTER_VERTICAL|wx.ALL, border = 3)
             hBox.Add(textctrl, proportion = 0, flag = wx.ALIGN_CENTRE|wx.ALL, border = 3)
@@ -1862,15 +1893,15 @@ class PageSetupDialog(PsmapDialog):
     
     def OnChoice(self, event):
         currPaper = self.paperTable[self.getCtrl('Format').GetSelection()]
-        currUnit = self.getCtrl('Units').GetString(self.getCtrl('Units').GetSelection())
-        currOrient = self.getCtrl('Orientation').GetString(self.getCtrl('Orientation').GetSelection())
+        currUnit = self.unitConv.findUnit(self.getCtrl('Units').GetStringSelection())
+        currOrientIdx = self.getCtrl('Orientation').GetSelection()
         newSize = dict()
         for item in self.cat[3:]:
             newSize[item] = self.unitConv.convert(float(currPaper[item]), fromUnit = 'inch', toUnit = currUnit)
 
         enable = True
-        if currPaper['Format'] != 'custom':
-            if currOrient == 'Landscape':
+        if currPaper['Format'] != _('custom'):
+            if currOrientIdx == 1: # portrait
                 newSize['Width'], newSize['Height'] = newSize['Height'], newSize['Width']
             for item in self.cat[3:]:
                 self.getCtrl(item).ChangeValue("%4.3f" % newSize[item])
@@ -1890,7 +1921,7 @@ class PageSetupDialog(PsmapDialog):
             d = dict(zip([self.cat[1]]+ self.cat[3:],line.split()))
             sizeList.append(d)
         d = {}.fromkeys([self.cat[1]]+ self.cat[3:], 100)
-        d.update(Format = 'custom')
+        d.update(Format = _('custom'))
         sizeList.append(d)
         return sizeList
     
@@ -4285,7 +4316,7 @@ class LegendDialog(PsmapDialog):
         """!Changes default width according to fontsize, width [inch] = fontsize[pt]/24"""   
 ##        fontsize = self.panelVector.font['fontCtrl'].GetSelectedFont().GetPointSize() 
         fontsize = self.panelVector.font['fontSizeCtrl'].GetValue()
-        unit = self.panelVector.units['unitsCtrl'].GetStringSelection()
+        unit = self.unitConv.findUnit(self.panelVector.units['unitsCtrl'].GetStringSelection())
         w = fontsize/24.
         width = self.unitConv.convert(value = w, fromUnit = 'inch', toUnit = unit)
         self.panelVector.widthCtrl.SetValue("%3.2f" % width)
@@ -4303,7 +4334,7 @@ class LegendDialog(PsmapDialog):
         else:
             self.rLegendDict['rLegend'] = True
         #units
-        currUnit = self.panelRaster.units['unitsCtrl'].GetStringSelection()
+        currUnit = self.unitConv.findUnit(self.panelRaster.units['unitsCtrl'].GetStringSelection())
         self.rLegendDict['unit'] = currUnit
         # raster
         if self.rasterDefault.GetValue():
@@ -4434,7 +4465,7 @@ class LegendDialog(PsmapDialog):
                     self.instruction[vmap.id]['lpos'] = vector[3]
                     self.instruction[vmap.id]['label'] = vector[4]
                 #units
-                currUnit = self.panelVector.units['unitsCtrl'].GetStringSelection()
+                currUnit = self.unitConv.findUnit(self.panelVector.units['unitsCtrl'].GetStringSelection())
                 self.vLegendDict['unit'] = currUnit
                 # position
                 x = self.unitConv.convert(value = float(self.panelVector.position['xCtrl'].GetValue()),
@@ -4500,7 +4531,7 @@ class LegendDialog(PsmapDialog):
         # raster legend    
         if 'rect' in self.rLegendDict:
             x, y = self.rLegendDict['rect'][:2]
-            currUnit = self.panelRaster.units['unitsCtrl'].GetStringSelection()
+            currUnit = self.unitConv.findUnit(self.panelRaster.units['unitsCtrl'].GetStringSelection())
             x = self.unitConv.convert(value = x, fromUnit = 'inch', toUnit = currUnit)
             y = self.unitConv.convert(value = y, fromUnit = 'inch', toUnit = currUnit)
             self.panelRaster.position['xCtrl'].SetValue("%5.3f" % x)
@@ -4524,7 +4555,7 @@ class LegendDialog(PsmapDialog):
         # vector legend       
         if 'rect' in self.vLegendDict:
             x, y = self.vLegendDict['rect'][:2]
-            currUnit = self.panelVector.units['unitsCtrl'].GetStringSelection()
+            currUnit = self.unitConv.findUnit(self.panelVector.units['unitsCtrl'].GetStringSelection())
             x = self.unitConv.convert(value = x, fromUnit = 'inch', toUnit = currUnit)
             y = self.unitConv.convert(value = y, fromUnit = 'inch', toUnit = currUnit)
             self.panelVector.position['xCtrl'].SetValue("%5.3f" % x)
@@ -4672,7 +4703,7 @@ class MapinfoDialog(PsmapDialog):
     def update(self):
 
         #units
-        currUnit = self.panel.units['unitsCtrl'].GetStringSelection()
+        currUnit = self.unitConv.findUnit(self.panel.units['unitsCtrl'].GetStringSelection())
         self.mapinfoDict['unit'] = currUnit
         
         # position
@@ -4729,7 +4760,7 @@ class MapinfoDialog(PsmapDialog):
     def updateDialog(self):
         """!Update mapinfo coordinates, after moving"""
         x, y = self.mapinfoDict['where']
-        currUnit = self.panel.units['unitsCtrl'].GetStringSelection()
+        currUnit = self.unitConv.findUnit(self.panel.units['unitsCtrl'].GetStringSelection())
         x = self.unitConv.convert(value = x, fromUnit = 'inch', toUnit = currUnit)
         y = self.unitConv.convert(value = y, fromUnit = 'inch', toUnit = currUnit)
         self.panel.position['xCtrl'].SetValue("%5.3f" % x)
@@ -4813,19 +4844,21 @@ class ScalebarDialog(PsmapDialog):
         self.heightTextCtrl = wx.TextCtrl(panel, id = wx.ID_ANY, validator = TCValidator('DIGIT_ONLY'))
         self.heightTextCtrl.SetToolTipString(_("Scalebar height is real height on paper"))
         
-        choices = ['default'] + self.unitConv.getMapUnits()
+        choices = [_('default')] + self.unitConv.getMapUnitsNames()
         self.unitsLength = wx.Choice(panel, id = wx.ID_ANY, choices = choices)
-        choices = self.unitConv.getPageUnits()
+        choices = self.unitConv.getPageUnitsNames()
         self.unitsHeight = wx.Choice(panel, id = wx.ID_ANY, choices = choices)
         
         # set values
-        ok = self.unitsLength.SetStringSelection(self.scalebarDict['unitsLength'])
-        if not ok:
+        unitName = self.unitConv.findName(self.scalebarDict['unitsLength'])
+        if unitName:
+            self.unitsLength.SetStringSelection(unitName)
+        else:
             if self.scalebarDict['unitsLength'] == 'auto':
                  self.unitsLength.SetSelection(0)
             elif self.scalebarDict['unitsLength'] == 'nautmiles':
-                 self.unitsLength.SetStringSelection("nautical miles")                
-        self.unitsHeight.SetStringSelection(self.scalebarDict['unitsHeight'])
+                 self.unitsLength.SetStringSelection(self.unitConv.findName("nautical miles"))
+        self.unitsHeight.SetStringSelection(self.unitConv.findName(self.scalebarDict['unitsHeight']))
         if self.scalebarDict['length']:
             self.lengthTextCtrl.SetValue(str(self.scalebarDict['length']))
         else: #estimate default
@@ -4913,7 +4946,7 @@ class ScalebarDialog(PsmapDialog):
         """!Save information from dialog"""
 
         #units
-        currUnit = self.panel.units['unitsCtrl'].GetStringSelection()
+        currUnit = self.unitConv.findUnit(self.panel.units['unitsCtrl'].GetStringSelection())
         self.scalebarDict['unit'] = currUnit
         # position
         if self.panel.position['xCtrl'].GetValue():
@@ -4943,7 +4976,7 @@ class ScalebarDialog(PsmapDialog):
         # size
         
         # height
-        self.scalebarDict['unitsHeight'] = self.unitsHeight.GetStringSelection()
+        self.scalebarDict['unitsHeight'] = self.unitConv.findUnit(self.unitsHeight.GetStringSelection())
         try:
             height = float(self.heightTextCtrl.GetValue())  
             height = self.unitConv.convert(value = height, fromUnit = self.scalebarDict['unitsHeight'], toUnit = 'inch') 
@@ -4952,11 +4985,12 @@ class ScalebarDialog(PsmapDialog):
         self.scalebarDict['height'] = height    
         
         #length
-        selected = self.unitsLength.GetStringSelection()
-        if selected == 'default':
+        if self.unitsLength.GetSelection() == 0:
             selected = 'auto'
-        elif selected == 'nautical miles':
-            selected = 'nautmiles'
+        else:
+            selected = self.unitConv.findUnit(self.unitsLength.GetStringSelection())
+            if selected == 'nautical miles':
+                selected = 'nautmiles'
         self.scalebarDict['unitsLength'] = selected
         try:
             length = float(self.lengthTextCtrl.GetValue())
@@ -4989,7 +5023,7 @@ class ScalebarDialog(PsmapDialog):
     def updateDialog(self):
         """!Update scalebar coordinates, after moving"""
         x, y = self.scalebarDict['rect'][:2]
-        currUnit = self.panel.units['unitsCtrl'].GetStringSelection()
+        currUnit = self.unitConv.findUnit(self.panel.units['unitsCtrl'].GetStringSelection())
         x = self.unitConv.convert(value = x, fromUnit = 'inch', toUnit = currUnit)
         y = self.unitConv.convert(value = y, fromUnit = 'inch', toUnit = currUnit)
         self.panel.position['xCtrl'].SetValue("%5.3f" % x)
@@ -5367,7 +5401,7 @@ class TextDialog(PsmapDialog):
         #position
         if self.paperPositionCtrl.GetValue():
             self.textDict['XY'] = True
-            currUnit = self.positionPanel.units['unitsCtrl'].GetStringSelection()
+            currUnit = self.unitConv.findUnit(self.positionPanel.units['unitsCtrl'].GetStringSelection())
             self.textDict['unit'] = currUnit
             if self.positionPanel.position['xCtrl'].GetValue():
                 x = self.positionPanel.position['xCtrl'].GetValue() 
@@ -5423,7 +5457,7 @@ class TextDialog(PsmapDialog):
         """!Update text coordinates, after moving"""
         # XY coordinates
         x, y = self.textDict['where'][:2]
-        currUnit = self.positionPanel.units['unitsCtrl'].GetStringSelection()
+        currUnit = self.unitConv.findUnit(self.positionPanel.units['unitsCtrl'].GetStringSelection())
         x = self.unitConv.convert(value = x, fromUnit = 'inch', toUnit = currUnit)
         y = self.unitConv.convert(value = y, fromUnit = 'inch', toUnit = currUnit)
         self.positionPanel.position['xCtrl'].SetValue("%5.3f" % x)
