@@ -156,7 +156,7 @@ class abstract_dataset(object):
 	    return None
 
     def temporal_relation(self, map):
-	"""Return the temporal relation of this and the provided temporal raster map"""
+	"""Return the temporal relation of this and the provided temporal map"""
 	if self.is_time_absolute() and map.is_time_absolute():
 	    return self.absolute_time.temporal_relation(map.absolute_time)
         if self.is_time_relative() and map.is_time_relative():
@@ -168,8 +168,6 @@ class abstract_dataset(object):
 class abstract_map_dataset(abstract_dataset):
     """This is the base class for all maps (raster, vector, raster3d) 
        providing additional function to set the valid time and the spatial extent.
-       
-       Valid time and spatial extent will be set automatically in the space-time datasets
     """
       
     def get_new_stds_instance(self, ident):
@@ -280,9 +278,12 @@ class abstract_map_dataset(abstract_dataset):
                 for row in rows:
                     # Create a space time dataset object to remove the map
                     # from its register
-                    strds = self.get_new_stds_instance(row["id"])
-                    strds.select()
-                    strds.unregister_map(self)
+                    stds = self.get_new_stds_instance(row["id"])
+                    stds.select()
+                    stds.unregister_map(self)
+                    # Take care to update the space time dataset after
+                    # the map has been unregistred
+                    stds.update_from_registered_maps()
 
 ###############################################################################
 
@@ -372,7 +373,8 @@ class abstract_space_time_dataset(abstract_dataset):
             This method takes care of the registration of a map
             in a space time dataset.
 
-            Break with a warning in case the map is already registered.
+            In case the map is already registered this function will break with a warning
+            and return False
         """
 
         if map.is_in_db() == False:
@@ -408,8 +410,8 @@ class abstract_space_time_dataset(abstract_dataset):
             self.base.close()
             # In case of no entry make a new one
             if row and row[0] == map_id:
-                core.warning("Map " + map_id + "is already registered. Will unregister map and register again.")
-                self.unregister_map(map)
+                core.warning("Map " + map_id + "is already registered.")
+                return False
 
         # Create tables
         sql_path = get_sql_template_path()
@@ -449,21 +451,33 @@ class abstract_space_time_dataset(abstract_dataset):
             sql = sql.replace("SPACETIME_ID", self.base.get_id())
             sql = sql.replace("STDS", self.get_type())
 
-            self.base.connect()
-            self.base.cursor.executescript(sql)
-            self.base.close()
-
-            # We need raster specific trigger
-            sql = open(os.path.join(sql_path, "stds_" + map.get_type() + "_register_trigger_template.sql"), 'r').read()
-            # Create the raster, raster3d and vector tables
-            sql = sql.replace("GRASS_MAP", map.get_type())
-            sql = sql.replace("SPACETIME_NAME", stds_name + "_" + stds_mapset )
-            sql = sql.replace("SPACETIME_ID", self.base.get_id())
-            sql = sql.replace("STDS", self.get_type())
+            sql_script = ""
+            sql_script += "BEGIN TRANSACTION;\n"
+            sql_script += sql
+            sql_script += "\n"
+            sql_script += "END TRANSACTION;"
 
             self.base.connect()
-            self.base.cursor.executescript(sql)
+            self.base.cursor.executescript(sql_script)
             self.base.close()
+
+            # Trigger have been disabled due to peformance issues while registration
+            ## We need raster specific trigger
+            #sql = open(os.path.join(sql_path, "stds_" + map.get_type() + "_register_trigger_template.sql"), 'r').read()
+            #sql = sql.replace("GRASS_MAP", map.get_type())
+            #sql = sql.replace("SPACETIME_NAME", stds_name + "_" + stds_mapset )
+            #sql = sql.replace("SPACETIME_ID", self.base.get_id())
+            #sql = sql.replace("STDS", self.get_type())
+
+            #sql_script = ""
+            #sql_script += "BEGIN TRANSACTION;\n"
+            #sql_script += sql
+            #sql_script += "\n"
+            #sql_script += "END TRANSACTION;"
+
+            #self.base.connect()
+            #self.base.cursor.executescript(sql_script)
+            #self.base.close()
 
             stds_register_table = stds_name + "_" + stds_mapset + "_" + map.get_type() + "_register"
 
@@ -499,10 +513,10 @@ class abstract_space_time_dataset(abstract_dataset):
         return True
 
     def unregister_map(self, map):
-        """Remove a register a map from the space time dataset.
+        """Unregister a map from the space time dataset.
 
             This method takes care of the unregistration of a map
-            in a space time dataset.
+            from a space time dataset.
         """
 
         if map.is_in_db() == False:
@@ -543,3 +557,50 @@ class abstract_space_time_dataset(abstract_dataset):
             self.base.connect()
             self.base.cursor.execute(sql, (map_id,))
             self.base.close()
+
+    def update_from_registered_maps(self):
+        """This methods updates the spatial and temporal extent as well as
+           type specific metadata. It should always been called after maps are registered
+           or unregistered/deleted from the space time dataset.
+
+           An other solution to automate this is to use the diactivated trigger
+           in the SQL files. But this will result in a huge performance issue
+           in case many maps are registred (>1000).
+        """
+        core.info("Update metadata, spatial and temporal extent from all registered maps of <" + self.get_id() + ">")
+
+        # Get basic info
+        stds_name = self.base.get_name()
+        stds_mapset = self.base.get_mapset()
+        sql_path = get_sql_template_path()
+
+        #We create a transaction
+        sql_script = ""
+        sql_script += "BEGIN TRANSACTION;\n"
+        
+        # Update the spatial and temporal extent from registered maps
+        # Read the SQL template
+        sql = open(os.path.join(sql_path, "update_stds_spatial_temporal_extent_template.sql"), 'r').read()
+        sql = sql.replace("GRASS_MAP", self.get_new_map_instance(None).get_type())
+        sql = sql.replace("SPACETIME_NAME", stds_name + "_" + stds_mapset )
+        sql = sql.replace("SPACETIME_ID", self.base.get_id())
+        sql = sql.replace("STDS", self.get_type())
+
+        sql_script += sql
+        sql_script += "\n"
+
+        # Update type specific metadata
+        sql = open(os.path.join(sql_path, "update_" + self.get_type() + "_metadata_template.sql"), 'r').read()
+        sql = sql.replace("GRASS_MAP", self.get_new_map_instance(None).get_type())
+        sql = sql.replace("SPACETIME_NAME", stds_name + "_" + stds_mapset )
+        sql = sql.replace("SPACETIME_ID", self.base.get_id())
+        sql = sql.replace("STDS", self.get_type())
+
+        sql_script += sql
+        sql_script += "\n"
+
+        sql_script += "END TRANSACTION;"
+
+        self.base.connect()
+        self.base.cursor.executescript(sql_script)
+        self.base.close()

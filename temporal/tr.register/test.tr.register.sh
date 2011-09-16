@@ -17,7 +17,6 @@ r.mapcalc --o expr="prec_4 = rand(0, 510)"
 r.mapcalc --o expr="prec_5 = rand(0, 300)"
 r.mapcalc --o expr="prec_6 = rand(0, 650)"
 
-
 # The first @test
 # We create the space time raster datasets and register the raster maps with absolute time interval
 
@@ -52,6 +51,9 @@ tr.register dataset=precip_abs6 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 s
 t.info type=strds dataset=precip_abs6
 
 tr.register dataset=precip_abs7 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="20 years, 3 months, 1 days, 4 hours"
+t.info type=strds dataset=precip_abs7
+# Register with different valid time again
+tr.register dataset=precip_abs7 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="99 years, 9 months, 9 days, 9 hours"
 t.info type=strds dataset=precip_abs7
 
 t.remove --v type=raster dataset=prec_1,prec_2,prec_3
