@@ -177,7 +177,7 @@ help_text = r"""
        _("use $DEFAULT_GUI graphical user interface"),
        _("and set as default"),
        _("print GRASS configuration parameters"),
-       _("options: arch,build,compiler,path"),
+       _("options: arch,build,compiler,path,revision"),
        _("Parameters"),
        _("initial database (path to GIS data)"),
        _("initial location"),
@@ -874,7 +874,7 @@ def print_params():
     
     params = sys.argv[2:]
     if not params:
-        params = ['arch', 'build', 'compiler', 'path']
+        params = ['arch', 'build', 'compiler', 'path', 'revision']
         
     for arg in params:
         if arg == 'path':
@@ -886,10 +886,18 @@ def print_params():
             build = os.path.join(gisbase,'include','grass','confparms.h')
             filebuild = open(build)
             val = filebuild.readline()
+            filebuild.close()
             sys.stdout.write("%s\n" % val.strip().strip('"').strip())
         elif arg == 'compiler':
             val = grep('CC',linesplat)
             sys.stdout.write("%s\n" % val[0].split('=')[1].strip())
+        elif arg == 'revision':
+            rev = os.path.join(gisbase,'include','grass','gis.h')
+            filerev = open(rev)
+            linesrev = filerev.readlines()
+            val = grep('#define GIS_H_VERSION', linesrev)
+            filerev.close()
+            sys.stdout.write("%s\n" % val[0].split(':')[1].rstrip('$"\n').strip())
         else:
             message(_("Parameter <%s> not supported") % arg)
     
