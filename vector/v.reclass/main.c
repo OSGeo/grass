@@ -148,7 +148,7 @@ int main(int argc, char *argv[])
 	    G_debug(3, "nrec = %d", nrec);
 	}
 	else if (ctype == DB_C_TYPE_STRING) {
-	    int i, more, nrows, newval, len;
+	    int i, more, nrows, ncols, newval, len;
 	    dbString stmt, stmt2;
 	    dbString lastval;
 	    dbCursor cursor;
@@ -171,7 +171,44 @@ int main(int argc, char *argv[])
 								   database,
 								   &Out));
 
+	    /* get string column length */
+	    db_set_string(&stmt, Fi->table);
+	    if (db_describe_table(Driver, &stmt, &table) != DB_OK) {
+		G_fatal_error(_("Unable to describe table <%s>"), Fi->table);
+	    }
 
+	    column = NULL;
+
+	    ncols = db_get_table_number_of_columns(table);
+	    G_debug(3, "ncol = %d", ncols);
+
+	    len = 0;
+	    for (i = 0; i < ncols; i++) {
+		column = db_get_table_column(table, i);
+		if (G_strcasecmp(db_get_column_name(column), col_opt->answer) == 0) {
+		    /* String column length */
+		    len = db_get_column_length(column);
+		    break;
+		}
+	    }
+	    db_free_table(table);
+
+	    /* Create table */
+	    sprintf(buf, "create table %s (cat integer, %s varchar(%d))",
+		    NewFi->table, col_opt->answer, len);
+
+	    db_set_string(&stmt2, buf);
+
+	    if (db_execute_immediate(Driver2, &stmt2) != DB_OK) {
+		Vect_close(&Out);
+		db_close_database_shutdown_driver(Driver);
+		db_close_database_shutdown_driver(Driver2);
+		G_fatal_error("Unable to create table: '%s'",
+			      db_get_string(&stmt2));
+	    }
+	    db_begin_transaction(Driver2);
+
+	    /* select values */
 	    sprintf(buf, "SELECT %s, %s FROM %s ORDER BY %s", Fi->key,
 		    col_opt->answer, Fi->table, col_opt->answer);
 	    db_set_string(&stmt, buf);
@@ -186,7 +223,7 @@ int main(int argc, char *argv[])
 	    nrows = db_get_num_rows(&cursor);
 
 	    G_debug(3, "  %d rows selected", nrows);
-	    if (nrows < 0)
+	    if (nrows <= 0)
 		G_fatal_error(_("No records selected from table <%s>"),
 			      Fi->table);
 
@@ -204,34 +241,6 @@ int main(int argc, char *argv[])
 	    }
 
 	    cvarr.ctype = DB_C_TYPE_INT;
-
-	    /* String column length */
-	    column = db_get_table_column(table, 1);
-	    len = db_get_column_length(column);
-
-	    /* Create table */
-	    sprintf(buf, "create table %s (cat integer, %s varchar(%d))",
-		    NewFi->table, col_opt->answer, len);
-
-	    db_set_string(&stmt2, buf);
-
-	    if (db_execute_immediate(Driver2, &stmt2) != DB_OK) {
-		Vect_close(&Out);
-		db_close_database_shutdown_driver(Driver);
-		db_close_database_shutdown_driver(Driver2);
-		G_fatal_error("Unable to create table: '%s'",
-			      db_get_string(&stmt2));
-	    }
-
-	    if (db_create_index2(Driver2, NewFi->table, NewFi->key) != DB_OK)
-		G_warning(_("Unable to create index for table <%s>, key <%s>"),
-			  NewFi->table, NewFi->key);
-
-	    if (db_grant_on_table(Driver2, NewFi->table, DB_PRIV_SELECT,
-				  DB_GROUP | DB_PUBLIC) != DB_OK) {
-		G_fatal_error(_("Unable to grant privileges on table <%s>"),
-			      NewFi->table);
-	    }
 
 	    newval = 0;
 
@@ -281,11 +290,22 @@ int main(int argc, char *argv[])
 
 	    cvarr.n_values = nrows;
 
-	    db_close_database_shutdown_driver(Driver2);
-
 	    db_close_cursor(&cursor);
 	    db_free_string(&stmt);
 	    db_free_string(&lastval);
+
+	    db_commit_transaction(Driver2);
+
+	    if (db_create_index2(Driver2, NewFi->table, NewFi->key) != DB_OK)
+		G_warning(_("Unable to create index for table <%s>, key <%s>"),
+			  NewFi->table, NewFi->key);
+
+	    if (db_grant_on_table(Driver2, NewFi->table, DB_PRIV_SELECT,
+				  DB_GROUP | DB_PUBLIC) != DB_OK) {
+		G_fatal_error(_("Unable to grant privileges on table <%s>"),
+			      NewFi->table);
+	    }
+	    db_close_database_shutdown_driver(Driver2);
 
 	    qsort((void *)cvarr.value, nrows, sizeof(dbCatVal), cmpcat);
 	}
