@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *in_opt, *field_opt, *out_opt, *type_opt, *tool_opt, *thresh_opt,
 	*err_opt;
-    struct Flag *no_build_flag;
+    struct Flag *no_build_flag, *combine_flag;
     int *tools, ntools, atools;
     double *threshs;
     int level;
@@ -118,6 +118,11 @@ int main(int argc, char *argv[])
     no_build_flag->key = 'b';
     no_build_flag->description =
 	_("Don't build topology for the output vector");
+
+    combine_flag = G_define_flag();
+    combine_flag->key = 'c';
+    combine_flag->description =
+	_("Combine tools with recommended follow-up tools.");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -329,6 +334,10 @@ int main(int argc, char *argv[])
 	case TOOL_BREAK:
 	    G_message(_("Tool: Break lines at intersections"));
 	    Vect_break_lines(&Out, otype, pErr);
+	    if (combine_flag->answer) {
+		G_message(_("Tool: Remove duplicates"));
+		Vect_remove_duplicates(&Out, otype, pErr);
+	    }
 	    break;
 	case TOOL_RMDUPL:
 	    G_message(_("Tool: Remove duplicates"));
@@ -357,10 +366,27 @@ int main(int argc, char *argv[])
 	case TOOL_SNAP:
 	    G_message(_("Tool: Snap line to vertex in threshold"));
 	    Vect_snap_lines(&Out, otype, threshs[i], pErr);
+	    if (combine_flag->answer) {
+		int nmod;
+
+		do {
+		    G_message(_("Tool: Break lines at intersections"));
+		    Vect_break_lines(&Out, otype, pErr);
+		    G_message(_("Tool: Remove duplicates"));
+		    Vect_remove_duplicates(&Out, otype, pErr);
+		    G_message(_("Tool: Remove small angles at nodes"));
+		    nmod =
+			Vect_clean_small_angles_at_nodes(&Out, otype, pErr);
+		} while (nmod > 0);
+	    }
 	    break;
 	case TOOL_BPOL:
 	    G_message(_("Tool: Break polygons"));
 	    Vect_break_polygons(&Out, otype, pErr);
+	    if (combine_flag->answer) {
+		G_message(_("Tool: Remove duplicates"));
+		Vect_remove_duplicates(&Out, otype, pErr);
+	    }
 	    break;
 	case TOOL_PRUNE:
 	    G_message(_("Tool: Prune lines/boundaries"));
@@ -373,8 +399,23 @@ int main(int argc, char *argv[])
 	    break;
 	case TOOL_RMSA:
 	    G_message(_("Tool: Remove small angles at nodes"));
-	    count =
-		Vect_clean_small_angles_at_nodes(&Out, otype, pErr);
+	    if (!combine_flag->answer) {
+		count =
+		    Vect_clean_small_angles_at_nodes(&Out, otype, pErr);
+	    }
+	    else {
+		int nmod;
+
+		while ((nmod =
+		          Vect_clean_small_angles_at_nodes(&Out, otype, pErr)) > 0) {
+		    count += nmod;
+		    G_message(_("Tool: Break lines at intersections"));
+		    Vect_break_lines(&Out, otype, pErr);
+		    G_message(_("Tool: Remove duplicates"));
+		    Vect_remove_duplicates(&Out, otype, pErr);
+		    G_message(_("Tool: Remove small angles at nodes"));
+		}
+	    }
 	    break;
 	case TOOL_RMLINE:
 	    G_message(_("Tool: Remove all lines and boundaries of zero length"));
