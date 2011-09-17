@@ -1,7 +1,0 @@
-New module to print informations about temporal datasets.
--- Diese und die folgenden Zeilen werden ignoriert --
-
-A    temporal/t.info
-A    temporal/t.info/t.info.html
-AM   temporal/t.info/t.info.py
-A    temporal/t.info/Makefile
