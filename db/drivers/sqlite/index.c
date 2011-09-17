@@ -65,26 +65,37 @@ int db__driver_create_index(dbIndex * index)
 
     G_debug(3, " SQL: %s", db_get_string(&sql));
 
-    ret = sqlite3_prepare(sqlite, db_get_string(&sql), -1, &statement, &rest);
+    /* SQLITE bug?
+     * If the database schema has changed, sqlite can prepare a statement,
+     * but sqlite can not step, the statement needs to be prepared anew again */
+    while (1) {
+	ret = sqlite3_prepare(sqlite, db_get_string(&sql), -1, &statement, &rest);
 
-    if (ret != SQLITE_OK) {
-	append_error("Cannot create index:\n");
-	append_error(db_get_string(&sql));
-	append_error("\n");
-	append_error((char *)sqlite3_errmsg(sqlite));
-	report_error();
-	sqlite3_finalize(statement);
-	db_free_string(&sql);
-	return DB_FAILED;
-    }
+	if (ret != SQLITE_OK) {
+	    append_error("Cannot create index:\n");
+	    append_error(db_get_string(&sql));
+	    append_error("\n");
+	    append_error((char *)sqlite3_errmsg(sqlite));
+	    report_error();
+	    sqlite3_finalize(statement);
+	    db_free_string(&sql);
+	    return DB_FAILED;
+	}
 
-    ret = sqlite3_step(statement);
+	ret = sqlite3_step(statement);
 
-    if (ret != SQLITE_DONE) {
-	append_error("Error in sqlite3_step():\n");
-	append_error((char *)sqlite3_errmsg(sqlite));
-	report_error();
-	return DB_FAILED;
+	if (ret == SQLITE_SCHEMA) {
+	    sqlite3_finalize(statement);
+	    /* try again */
+	}
+	else if (ret != SQLITE_DONE) {
+	    append_error("Error in sqlite3_step():\n");
+	    append_error((char *)sqlite3_errmsg(sqlite));
+	    report_error();
+	    return DB_FAILED;
+	}
+	else
+	    break;
     }
 
     sqlite3_reset(statement);

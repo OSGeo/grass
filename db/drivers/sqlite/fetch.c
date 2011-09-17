@@ -249,7 +249,7 @@ int db__driver_get_num_rows(dbCursor * cn)
 {
     cursor *c;
     dbToken token;
-    int row;
+    int row, ret;
 
     /* get cursor token */
     token = db_get_cursor_token(cn);
@@ -268,8 +268,16 @@ int db__driver_get_num_rows(dbCursor * cn)
     sqlite3_reset(c->statement);
 
     c->nrows = 0;
-    while (sqlite3_step(c->statement) == SQLITE_ROW) {
+    while ((ret = sqlite3_step(c->statement)) == SQLITE_ROW) {
 	c->nrows++;
+    }
+
+    if (ret != SQLITE_DONE) {
+	ret = sqlite3_reset(c->statement);
+	append_error("Cannot get number of rows\n");
+	append_error((char *)sqlite3_errmsg(sqlite));
+	report_error();
+	return DB_FAILED;
     }
 
     sqlite3_reset(c->statement);

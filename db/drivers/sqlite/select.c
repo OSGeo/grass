@@ -53,25 +53,40 @@ int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
     str = G_str_replace(db_get_string(sel), "\\", "\\\\");
     G_debug(3, "Escaped SQL: %s", str);
 
-    ret = sqlite3_prepare(sqlite, str, -1, &(c->statement), &rest);
+    /* SQLITE bug?
+     * If the database schema has changed, sqlite can prepare a statement,
+     * but sqlite can not step, the statement needs to be prepared anew again */
+    while (1) {
+	ret = sqlite3_prepare(sqlite, str, -1, &(c->statement), &rest);
 
+	if (ret != SQLITE_OK) {
+	    append_error("Error in sqlite3_prepare():");
+	    append_error(db_get_string(sel));
+	    append_error("\n");
+	    append_error((char *)sqlite3_errmsg(sqlite));
+	    report_error();
+	    return DB_FAILED;
+	}
+
+	if (describe_table(c->statement, &table, c) == DB_FAILED) {
+	    ret = sqlite3_errcode(sqlite);
+	    if (ret == SQLITE_SCHEMA) {
+		sqlite3_finalize(c->statement);
+		/* try again */
+	    }
+	    else {
+		append_error("Cannot describe table\n");
+		append_error((char *)sqlite3_errmsg(sqlite));
+		report_error();
+		return DB_FAILED;
+	    }
+	}
+	else
+	    break;
+    }
+    
     if (str)
 	G_free(str);
-
-    if (ret != SQLITE_OK) {
-	append_error("Error in sqlite3_prepare():");
-	append_error(db_get_string(sel));
-	append_error("\n");
-	append_error((char *)sqlite3_errmsg(sqlite));
-	report_error();
-	return DB_FAILED;
-    }
-
-    if (describe_table(c->statement, &table, c) == DB_FAILED) {
-	append_error("Cannot describe table\n");
-	report_error();
-	return DB_FAILED;
-    }
 
     c->nrows = -1;
     c->row = -1;
