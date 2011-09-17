@@ -365,15 +365,16 @@ class dataset_base(sql_database_interface):
     def print_info(self):
         """Print information about this class in human readable style"""
         #      0123456789012345678901234567890
-        print "  Id: ........................ " + str(self.get_id())
-        print "  Name: ...................... " + str(self.get_name())
-        print "  Mapset: .................... " + str(self.get_mapset())
-        print "  Creator: ................... " + str(self.get_creator())
-        print "  Creation time: ............. " + str(self.get_ctime())
-        print "  Modification time: ......... " + str(self.get_mtime())
-        print "  Temporal type: ............. " + str(self.get_ttype())
-        print "  Revision in database: ...... " + str(self.get_revision())
-
+        print " +-------------------- Basic information -------------------------------------+"
+        print " | Id: ........................ " + str(self.get_id())
+        print " | Name: ...................... " + str(self.get_name())
+        print " | Mapset: .................... " + str(self.get_mapset())
+        print " | Creator: ................... " + str(self.get_creator())
+        print " | Creation time: ............. " + str(self.get_ctime())
+        print " | Modification time: ......... " + str(self.get_mtime())
+        print " | Temporal type: ............. " + str(self.get_ttype())
+        print " | Revision in database: ...... " + str(self.get_revision())
+        
     def print_shell_info(self):
         """Print information about this class in shell style"""
         print "id=" + str(self.get_id())

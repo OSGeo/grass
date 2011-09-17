@@ -266,9 +266,10 @@ class absolute_temporal_extent(sql_database_interface):
     def print_info(self):
         """Print information about this class in human readable style"""
         #      0123456789012345678901234567890
-        print "  Start time:................. " + str(self.get_start_time())
-        print "  End time:................... " + str(self.get_end_time())
-        print "  Timezone:................... " + str(self.get_timezone())
+        print " +-------------------- Absolute time -----------------------------------------+"
+        print " | Start time:................. " + str(self.get_start_time())
+        print " | End time:................... " + str(self.get_end_time())
+        print " | Timezone:................... " + str(self.get_timezone())
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
@@ -314,7 +315,7 @@ class stds_absolute_time(absolute_temporal_extent):
         """Print information about this class in human readable style"""
         absolute_temporal_extent.print_info(self)
         #      0123456789012345678901234567890
-        print "  Granularity:................ " + str(self.get_granularity())
+        print " | Granularity:................ " + str(self.get_granularity())
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
@@ -417,7 +418,8 @@ class relative_temporal_extent(sql_database_interface):
     def print_info(self):
         """Print information about this class in human readable style"""
         #      0123456789012345678901234567890
-        print "  Interval:................... " + str(self.get_interval())
+        print " +-------------------- Relative time -----------------------------------------+"
+        print " |  Interval:................... " + str(self.get_interval())
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
@@ -462,7 +464,7 @@ class stds_relative_time(relative_temporal_extent):
         """Print information about this class in human readable style"""
         relative_temporal_extent.print_info(self)
         #      0123456789012345678901234567890
-        print "  Granularity:................ " + str(self.get_granularity())
+        print " | Granularity:................ " + str(self.get_granularity())
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
