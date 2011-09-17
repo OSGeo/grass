@@ -32,8 +32,7 @@
 #%option G_OPT_V_FIELD
 #%end
 
-#%option G_OPT_DB_COLUMN
-#% description: Name of attribute column to drop
+#%option G_OPT_DB_COLUMNS
 #% required: yes
 #%end
 
@@ -45,7 +44,7 @@ import grass.script as grass
 def main():
     map    = options['map']
     layer  = options['layer']
-    column = options['column']
+    columns = options['columns'].split(',')
     
     mapset = grass.gisenv()['MAPSET']
     
@@ -64,47 +63,49 @@ def main():
 	grass.fatal(_("There is no table connected to the input vector map. "
                       "Unable to delete any column. Exiting."))
     
-    if column == keycol:
+    if keycol in columns:
 	grass.fatal(_("Unable to delete <%s> column as it is needed to keep table <%s> "
                       "connected to the input vector map <%s>") % \
-                        (column, table, map))
+                        (keycol, table, map))
     
-    if not grass.vector_columns(map, layer).has_key(column):
-	grass.fatal(_("Column <%s> not found in table <%s>") % (column, table))
-    
-    if driver == "sqlite":
-	# echo "Using special trick for SQLite"
-	# http://www.sqlite.org/faq.html#q13
-	colnames = []
-	coltypes = []
-	for f in grass.db_describe(table)['cols']:
-	    if f[0] == column:
-		continue
-	    colnames.append(f[0])
-	    coltypes.append("%s %s" % (f[0], f[1]))
+    for column in columns:
+        if not grass.vector_columns(map, layer).has_key(column):
+            grass.warning(_("Column <%s> not found in table <%s>. Skipped") % (column, table))
+            continue
+        
+        if driver == "sqlite":
+            # echo "Using special trick for SQLite"
+            # http://www.sqlite.org/faq.html#q13
+            colnames = []
+            coltypes = []
+            for f in grass.db_describe(table)['cols']:
+                if f[0] == column:
+                    continue
+                colnames.append(f[0])
+                coltypes.append("%s %s" % (f[0], f[1]))
 
-	colnames = ", ".join(colnames)
-	coltypes = ", ".join(coltypes)
+            colnames = ", ".join(colnames)
+            coltypes = ", ".join(coltypes)
 
-	cmds = [
-	    "BEGIN TRANSACTION",
-	    "CREATE TEMPORARY TABLE ${table}_backup(${coldef})",
-	    "INSERT INTO ${table}_backup SELECT ${colnames} FROM ${table}",
-	    "DROP TABLE ${table}",
-	    "CREATE TABLE ${table}(${coldef})",
-	    "INSERT INTO ${table} SELECT ${colnames} FROM ${table}_backup",
-	    "CREATE UNIQUE INDEX ${table}_cat ON ${table} (${keycol} )",
-	    "DROP TABLE ${table}_backup",
-	    "COMMIT"
-	    ]
-	tmpl = string.Template(';\n'.join(cmds))
-	sql = tmpl.substitute(table = table, coldef = coltypes, colnames = colnames, keycol = keycol)
-    else:
-	sql = "ALTER TABLE %s DROP COLUMN %s" % (table, column)
-    
-    if grass.write_command('db.execute', input = '-', database = database, driver = driver,
-			   stdin = sql) != 0:
-	grass.fatal(_("Deleting column failed"))
+            cmds = [
+                "BEGIN TRANSACTION",
+                "CREATE TEMPORARY TABLE ${table}_backup(${coldef})",
+                "INSERT INTO ${table}_backup SELECT ${colnames} FROM ${table}",
+                "DROP TABLE ${table}",
+                "CREATE TABLE ${table}(${coldef})",
+                "INSERT INTO ${table} SELECT ${colnames} FROM ${table}_backup",
+                "CREATE UNIQUE INDEX ${table}_cat ON ${table} (${keycol} )",
+                "DROP TABLE ${table}_backup",
+                "COMMIT"
+                ]
+            tmpl = string.Template(';\n'.join(cmds))
+            sql = tmpl.substitute(table = table, coldef = coltypes, colnames = colnames, keycol = keycol)
+        else:
+            sql = "ALTER TABLE %s DROP COLUMN %s" % (table, column)
+        
+        if grass.write_command('db.execute', input = '-', database = database, driver = driver,
+                              stdin = sql) != 0:
+            grass.fatal(_("Deleting column failed"))
     
     # write cmd history:
     grass.vector_history(map)
