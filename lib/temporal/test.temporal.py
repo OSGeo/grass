@@ -672,7 +672,8 @@ def test_strds_dataset():
         strds.register_map(rds)
         # Print self info
         #rds.print_self()
-    
+
+    strds.update_from_registered_maps()
     strds.select()
     # Print self info
     strds.print_self()
@@ -738,7 +739,8 @@ def test_str3ds_dataset():
         str3ds.register_map(r3ds)
         # Print self info
         #r3ds.print_self()
-    
+
+    str3ds.update_from_registered_maps()
     str3ds.select()
     # Print self info
     str3ds.print_self()
@@ -806,6 +808,7 @@ def test_stvds_dataset():
         # Print self info
         #vds.print_self()
 
+    stvds.update_from_registered_maps()
     stvds.select()
     # Print self info
     stvds.print_self()

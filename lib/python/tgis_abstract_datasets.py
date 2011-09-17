@@ -119,6 +119,38 @@ class abstract_dataset(object):
 
     def print_info(self):
         """Print information about this class in human readable style"""
+        
+        if self.get_type() == "raster":
+            #                1         2         3         4         5         6         7
+            #      0123456789012345678901234567890123456789012345678901234567890123456789012345678
+            print ""
+            print " +-------------------- Raster Dataset ----------------------------------------+"
+        if self.get_type() == "raster3d":
+            #                1         2         3         4         5         6         7
+            #      0123456789012345678901234567890123456789012345678901234567890123456789012345678
+            print ""
+            print " +-------------------- Raster3d Dataset --------------------------------------+"
+        if self.get_type() == "vector":
+            #                1         2         3         4         5         6         7
+            #      0123456789012345678901234567890123456789012345678901234567890123456789012345678
+            print ""
+            print " +-------------------- Vector Dataset ----------------------------------------+"
+        if self.get_type() == "strds":
+            #                1         2         3         4         5         6         7
+            #      0123456789012345678901234567890123456789012345678901234567890123456789012345678
+            print ""
+            print " +-------------------- Space Time Raster Dataset -----------------------------+"
+        if self.get_type() == "str3ds":
+            #                1         2         3         4         5         6         7
+            #      0123456789012345678901234567890123456789012345678901234567890123456789012345678
+            print ""
+            print " +-------------------- Space Time Raster3d Dataset ---------------------------+"
+        if self.get_type() == "stvds":
+            #                1         2         3         4         5         6         7
+            #      0123456789012345678901234567890123456789012345678901234567890123456789012345678
+            print ""
+            print " +-------------------- Space Time Vector Dataset -----------------------------+"
+        print " |                                                                            |"
 	self.base.print_info()
 	if self.is_time_absolute():
 	    self.absolute_time.print_info()
@@ -126,6 +158,7 @@ class abstract_dataset(object):
 	    self.relative_time.print_info()
 	self.spatial_extent.print_info()
 	self.metadata.print_info()
+        print " +----------------------------------------------------------------------------+"
 
     def print_shell_info(self):
         """Print information about this class in shell style"""

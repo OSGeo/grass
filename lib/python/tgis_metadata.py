@@ -153,14 +153,14 @@ class raster_metadata_base(sql_database_interface):
     def print_info(self):
         """Print information about this class in human readable style"""
         #      0123456789012345678901234567890
-        print "  Datatype:................... " + str(self.get_datatype())
-        print "  Number of columns:.......... " + str(self.get_cols())
-        print "  Number of rows:............. " + str(self.get_rows())
-        print "  Number of cells:............ " + str(self.get_number_of_cells())
-        print "  North-South resolution:..... " + str(self.get_nsres())
-        print "  East-west resolution:....... " + str(self.get_ewres())
-        print "  Minimum value:.............. " + str(self.get_min())
-        print "  Maximum value:.............. " + str(self.get_max())
+        print " | Datatype:................... " + str(self.get_datatype())
+        print " | Number of columns:.......... " + str(self.get_cols())
+        print " | Number of rows:............. " + str(self.get_rows())
+        print " | Number of cells:............ " + str(self.get_number_of_cells())
+        print " | North-South resolution:..... " + str(self.get_nsres())
+        print " | East-west resolution:....... " + str(self.get_ewres())
+        print " | Minimum value:.............. " + str(self.get_min())
+        print " | Maximum value:.............. " + str(self.get_max())
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
@@ -197,6 +197,9 @@ class raster_metadata(raster_metadata_base):
 
     def print_info(self):
         """Print information about this class in human readable style"""
+        print " +-------------------- Metadata information ----------------------------------+"
+        #      0123456789012345678901234567890
+        print " | STRDS register table ....... " + str(self.get_strds_register())
         raster_metadata_base.print_info(self)
 
     def print_shell_info(self):
@@ -253,11 +256,19 @@ class raster3d_metadata(raster_metadata_base):
 
     def print_info(self):
         """Print information about this class in human readable style"""
+        print " +-------------------- Metadata information ----------------------------------+"
+        #      0123456789012345678901234567890
+        print " | STR3DS register table ...... " + str(self.get_str3ds_register())
         raster_metadata_base.print_info(self)
+        #      0123456789012345678901234567890
+        print " | Number of depths:........... " + str(self.get_depths())
+        print " | Top-Bottom resolution:...... " + str(self.get_tbres())
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
         raster_metadata_base.print_shell_info(self)
+        print "depths=" + str(self.get_depths())
+        print "tbres=" + str(self.get_tbres())
         
 ###############################################################################
 
@@ -300,7 +311,8 @@ class vector_metadata(sql_database_interface):
     def print_info(self):
         """Print information about this class in human readable style"""
         #      0123456789012345678901234567890
-        print "  STVDS register table ....... " + str(self.get_stvds_register())
+        print " +-------------------- Metadata information ----------------------------------+"
+        print " | STVDS register table ....... " + str(self.get_stvds_register())
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
@@ -372,11 +384,11 @@ class stds_metadata_base(sql_database_interface):
     def print_info(self):
         """Print information about this class in human readable style"""
         #      0123456789012345678901234567890
-        print "  Number of registered maps:.. " + str(self.get_number_of_maps())
-        print "  Title:"
-        print "  " + str(self.get_title())
-        print "  Description:"
-        print "  " + str(self.get_description())
+        print " | Number of registered maps:.. " + str(self.get_number_of_maps())
+        print " | Title:"
+        print " | " + str(self.get_title())
+        print " | Description:"
+        print " | " + str(self.get_description())
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
@@ -441,15 +453,6 @@ class stds_raster_metadata_base(stds_metadata_base):
         else:
 	    return None
 
-    def get_min_max(self):
-	"""Get the minimal maximum of all registered maps, this value is set in the database
-           automatically via SQL trigger, so no setter exists
-	   @return None if not found"""
-	if self.D.has_key("min_max"):
-	    return self.D["min_max"]
-        else:
-	    return None
-
     def get_nsres_min(self):
 	"""Get the minimal north-south resolution of all registered maps, this value is set in the database
            automatically via SQL trigger, so no setter exists
@@ -489,10 +492,27 @@ class stds_raster_metadata_base(stds_metadata_base):
     def print_info(self):
         """Print information about this class in human readable style"""
         stds_metadata_base.print_info(self)
+        #      0123456789012345678901234567890
+        print " | North-South resolution min:. " + str(self.get_nsres_min())
+        print " | North-South resolution max:. " + str(self.get_nsres_max())
+        print " | East-west resolution min:... " + str(self.get_ewres_min())
+        print " | East-west resolution max:... " + str(self.get_ewres_max())
+        print " | Minimum value min:.......... " + str(self.get_min_min())
+        print " | Minimum value max:.......... " + str(self.get_min_max())
+        print " | Maximum value min:.......... " + str(self.get_max_min())
+        print " | Maximum value max:.......... " + str(self.get_max_max())
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
         stds_metadata_base.print_shell_info(self)
+        print "nsres_min=" + str(self.get_nsres_min())
+        print "nsres_max=" + str(self.get_nsres_max())
+        print "ewres_min=" + str(self.get_ewres_min())
+        print "ewres_max=" + str(self.get_ewres_max())
+        print "min_min=" + str(self.get_min_min())
+        print "min_max=" + str(self.get_min_max())
+        print "max_min=" + str(self.get_max_min())
+        print "max_max=" + str(self.get_max_max())
 
 
 ###############################################################################
@@ -519,6 +539,9 @@ class strds_metadata(stds_raster_metadata_base):
 
     def print_info(self):
         """Print information about this class in human readable style"""
+        print " +-------------------- Metadata information ----------------------------------+"
+        #      0123456789012345678901234567890
+        print " | Raster register table:...... " + str(self.get_raster_register())
         stds_raster_metadata_base.print_info(self)
 
     def print_shell_info(self):
@@ -569,11 +592,19 @@ class str3ds_metadata(stds_raster_metadata_base):
 
     def print_info(self):
         """Print information about this class in human readable style"""
+        print " +-------------------- Metadata information ----------------------------------+"
+        #      0123456789012345678901234567890
+        print " | Raster3d register table:.... " + str(self.get_raster3d_register())
         stds_raster_metadata_base.print_info(self)
+        #      0123456789012345678901234567890
+        print " | Top-bottom resolution min:.. " + str(self.get_ewres_min())
+        print " | Top-bottom resolution max:.. " + str(self.get_ewres_max())
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
         stds_raster_metadata_base.print_shell_info(self)
+        print "tbres_min=" + str(self.get_tbres_min())
+        print "tbres_max=" + str(self.get_tbres_max())
 
 ###############################################################################
 
@@ -599,6 +630,9 @@ class stvds_metadata(stds_metadata_base):
 
     def print_info(self):
         """Print information about this class in human readable style"""
+        print " +-------------------- Metadata information ----------------------------------+"
+        #      0123456789012345678901234567890
+        print " | Vector register table:...... " + str(self.get_vector_register())
         stds_metadata_base.print_info(self)
 
     def print_shell_info(self):
