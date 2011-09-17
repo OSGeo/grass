@@ -14,7 +14,8 @@ breaks lines/boundaries forming a collapsed loop, for example 0.0;1.0;0.0
 is broken at 1.0.
 <p>
 Breaking lines should be followed by removing duplicates, e.g. 
-<em>v.clean tool=break,rmdupl</em>.
+<em>v.clean tool=break,rmdupl</em>. If the <em>-c</em> flag is used with 
+<em>v.clean tool=break</em>, duplicates are automatically removed.
 
 <h3>Remove duplicate geometry features</h3>
 <em>tool=rmdupl</em>
@@ -97,12 +98,16 @@ The <em>snap</em> tool snaps vertices to another vertex not farther away
 than <em>thresh</em>. If there is no other vertex within <em>thresh</em>, 
 no snapping will be done. The <em>type</em> option can have a strong 
 influence on the result. A too large threshold and <em>type=boundary</em>
-can severely damage area topology.
+can severely damage area topology, beyond repair.
 <p>
-Snapped boundaries may need to be cleaned with <em>rmdangle,break,rmdupl</em>.
+Snapped boundaries may need to be cleaned with <em>break,rmdupl,rmsa</em>. 
+If the <em>-c</em> flag is used with <em>v.clean tool=snap</em>, the 
+sequence of <em>break,rmdupl,rmsa</em> is automatically repeated after 
+snapping until no more small angles a left. Additional cleaning with e.g.
+<em>tool=rmdangle</em>may be necessary.
 
 <h3>Remove duplicate area centroids</h3>
-<em>tool=rmdupl</em>
+<em>tool=rmdac</em>
 <p>
 Threshold does not apply, use dummy value if <em>v.clean</em> is 
 run with several tools.
@@ -124,7 +129,9 @@ all boundary nodes (start and end points of each boundary). The
 does not break collapsed loops. The <em>bpol</em> tool is faster than 
 the <em>break</em> tool but needs more memory.
 <p>
-The <em>bpol</em> tool should be followed by <em>rmdupl</em>.
+The <em>bpol</em> tool should be followed by <em>rmdupl</em>. If the 
+<em>-c</em> flag is used with <em>v.clean tool=bpol</em>, duplicates are 
+automatically removed.
 
 <h3>Remove vertices in threshold from lines and boundaries</h3>
 <em>tool=prune</em>
@@ -174,7 +181,12 @@ the tool does.
 </td></tr>
 </table>
 <p>
-The <em>rmsa</em> tool should be followed by <em>break,rmdupl</em>.
+The <em>rmsa</em> tool should be followed by <em>break,rmdupl</em>. The 
+<em>rmsa</em> tool followed by <em>break,rmdupl</em> may need to be run 
+more than once to remove all small angles. If the <em>-c</em> flag is 
+used with <em>v.clean tool=rmsa</em>, the sequence of 
+<em>rmsa,break,rmdupl</em> is automatically repeated until no more small 
+angles a left.
 
 <h2>NOTES</h2>
 
