@@ -49,29 +49,42 @@ int db__driver_describe_table(dbString * table_name, dbTable ** table)
     db_append_string(&sql, db_get_string(table_name));
     db_append_string(&sql, " where oid < 0");
 
-    ret = sqlite3_prepare(sqlite, db_get_string(&sql), -1, &statement, &rest);
-    while (ret == SQLITE_BUSY || ret == SQLITE_IOERR_BLOCKED) {
-	ret = sqlite3_busy_handler(sqlite, sqlite_busy_callback, NULL);
-    }
+    /* SQLITE bug?
+     * If the database schema has changed, sqlite can prepare a statement,
+     * but sqlite can not step, the statement needs to be prepared anew again */
+    while (1) {
+	ret = sqlite3_prepare(sqlite, db_get_string(&sql), -1, &statement, &rest);
 
-    if (ret != SQLITE_OK) {
-	append_error("Error in sqlite3_prepare():");
-	append_error(db_get_string(&sql));
-	append_error("\n");
-	append_error((char *)sqlite3_errmsg(sqlite));
-	report_error();
-	db_free_string(&sql);
-	return DB_FAILED;
+	if (ret != SQLITE_OK) {
+	    append_error("Error in sqlite3_prepare():");
+	    append_error(db_get_string(&sql));
+	    append_error("\n");
+	    append_error((char *)sqlite3_errmsg(sqlite));
+	    report_error();
+	    db_free_string(&sql);
+	    return DB_FAILED;
+	}
+
+	if (describe_table(statement, table, NULL) == DB_FAILED) {
+
+	    ret = sqlite3_errcode(sqlite);
+	    if (ret == SQLITE_SCHEMA) {
+		sqlite3_finalize(statement);
+		/* try again */
+	    }
+	    else {
+		append_error("Cannot describe table:\n");
+		append_error((char *)sqlite3_errmsg(sqlite));
+		report_error();
+		sqlite3_finalize(statement);
+		return DB_FAILED;
+	    }
+	}
+	else
+	    break;
     }
 
     db_free_string(&sql);
-
-    if (describe_table(statement, table, NULL) == DB_FAILED) {
-	append_error("Cannot describe table\n");
-	report_error();
-	sqlite3_finalize(statement);
-	return DB_FAILED;
-    }
 
     sqlite3_finalize(statement);
 
@@ -94,15 +107,19 @@ int db__driver_describe_table(dbString * table_name, dbTable ** table)
 
 int describe_table(sqlite3_stmt * statement, dbTable ** table, cursor * c)
 {
-    int i, ncols, nkcols;
+    int i, ncols, nkcols, ret;
 
     G_debug(3, "describe_table()");
 
     ncols = sqlite3_column_count(statement);
-    G_debug(3, "ncols = %d", ncols);
 
     /* Try to get first row */
-    sqlite3_step(statement);
+    ret = sqlite3_step(statement);
+    if (ret != SQLITE_DONE && ret != SQLITE_ROW) {
+	ret = sqlite3_reset(statement);
+	G_warning(_("SQLite driver: %s"), sqlite3_errmsg(sqlite));
+	return DB_FAILED;
+    }
 
     /* Count columns of known type */
     nkcols = 0;

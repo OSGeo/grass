@@ -15,7 +15,9 @@
 
 #include <stdlib.h>
 #include <time.h>
+#include <grass/gis.h>
 #include <grass/dbmi.h>
+#include <grass/glocale.h>
 #include "globals.h"
 #include "dbdriver.h"
 
@@ -31,21 +33,23 @@ int sqlite_busy_callback(void *arg, int n_calls)
 {
     static time_t start_time = 0;
     time_t curr_time;
-    int min;
-    static int last_min = -1;
+    int sec;
+    static int last_sec = -1;
+
+    G_debug(4, "sqlite_busy_callback()");
 
     /* do something here while waiting? */
-    if (n_calls > 0 && last_min > -1) {
+    if (n_calls > 0 && last_sec > -1) {
 	time(&curr_time);
-	min = (curr_time - start_time) / 60;
-	if (min > 1 && min > last_min) {
-	    last_min = min;
-	    G_debug(3, "Already waiting for %d minutes...", min);
+	sec = (curr_time - start_time);
+	if (sec > 1 && sec > last_sec && sec % 10 == 0) {
+	    last_sec = sec;
+	    G_warning(_("Busy SQLITE db, already waiting for %d seconds..."), sec);
 	}
     }
     else {
 	time(&start_time);
-	last_min = 0;
+	last_sec = 0;
     }
 
     return 1;

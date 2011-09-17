@@ -41,23 +41,34 @@ int db__driver_execute_immediate(dbString * sql)
 
     G_debug(3, "execute: %s", s);
 
-    ret = sqlite3_prepare(sqlite, s, -1, &stmt, &rest);
+    /* SQLITE bug?
+     * If the database schema has changed, sqlite can prepare a statement,
+     * but sqlite can not step, the statement needs to be prepared anew again */
+    while (1) {
+	ret = sqlite3_prepare(sqlite, s, -1, &stmt, &rest);
 
-    if (ret != SQLITE_OK) {
-	append_error("Error in sqlite3_prepare():\n");
-	append_error((char *)sqlite3_errmsg(sqlite));
-	report_error();
-	return DB_FAILED;
-    }
+	if (ret != SQLITE_OK) {
+	    append_error("Error in sqlite3_prepare():\n");
+	    append_error((char *)sqlite3_errmsg(sqlite));
+	    report_error();
+	    return DB_FAILED;
+	}
 
-    ret = sqlite3_step(stmt);
-    /* check if sqlite is still busy preparing the statement? */
+	ret = sqlite3_step(stmt);
 
-    if (ret != SQLITE_DONE) {
-	append_error("Error in sqlite3_step():\n");
-	append_error((char *)sqlite3_errmsg(sqlite));
-	report_error();
-	return DB_FAILED;
+	if (ret == SQLITE_SCHEMA) {
+	    sqlite3_finalize(stmt);
+	    /* try again */
+	}
+	else if (ret != SQLITE_DONE) {
+	    append_error("Error in sqlite3_step():\n");
+	    append_error((char *)sqlite3_errmsg(sqlite));
+	    report_error();
+	    ret = sqlite3_finalize(stmt);
+	    return DB_FAILED;
+	}
+	else
+	    break;
     }
 
     ret = sqlite3_finalize(stmt);
@@ -68,11 +79,6 @@ int db__driver_execute_immediate(dbString * sql)
 	report_error();
 	return DB_FAILED;
     }
-
-    /*
-       if ( rest )
-       G_free ( rest );
-     */
 
     return DB_OK;
 }
