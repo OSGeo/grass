@@ -65,13 +65,14 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
 
 	ret = sqlite3_step(c->statement);
 	if (ret != SQLITE_ROW) {
-	    if (ret != SQLITE_DONE) {
+	    /* get real result code */
+	    ret = sqlite3_reset(c->statement);
+	    if (ret != SQLITE_OK) {
 		append_error("Cannot fetch:\n");
 		append_error((char *)sqlite3_errmsg(sqlite));
 		report_error();
 		return DB_FAILED;
 	    }
-	    sqlite3_reset(c->statement);
 	    *more = 0;
 	    return DB_OK;
 	}
@@ -272,15 +273,15 @@ int db__driver_get_num_rows(dbCursor * cn)
 	c->nrows++;
     }
 
-    if (ret != SQLITE_DONE) {
-	ret = sqlite3_reset(c->statement);
+    /* get real result code */
+    ret = sqlite3_reset(c->statement);
+
+    if (ret != SQLITE_OK) {
 	append_error("Cannot get number of rows\n");
 	append_error((char *)sqlite3_errmsg(sqlite));
 	report_error();
 	return DB_FAILED;
     }
-
-    sqlite3_reset(c->statement);
 
     /* Reset cursor position */
     row = -1;

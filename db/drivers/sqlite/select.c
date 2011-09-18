@@ -68,18 +68,20 @@ int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
 	    return DB_FAILED;
 	}
 
-	if (describe_table(c->statement, &table, c) == DB_FAILED) {
-	    ret = sqlite3_errcode(sqlite);
-	    if (ret == SQLITE_SCHEMA) {
-		sqlite3_finalize(c->statement);
-		/* try again */
-	    }
-	    else {
-		append_error("Cannot describe table\n");
-		append_error((char *)sqlite3_errmsg(sqlite));
-		report_error();
-		return DB_FAILED;
-	    }
+	ret = sqlite3_step(c->statement);
+	/* get real result code */
+	ret = sqlite3_reset(c->statement);
+
+	if (ret == SQLITE_SCHEMA) {
+	    sqlite3_finalize(c->statement);
+	    /* try again */
+	}
+	else if (ret != SQLITE_OK) {
+	    append_error("Error in sqlite3_step():\n");
+	    append_error((char *)sqlite3_errmsg(sqlite));
+	    report_error();
+	    sqlite3_finalize(c->statement);
+	    return DB_FAILED;
 	}
 	else
 	    break;
@@ -87,6 +89,13 @@ int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
     
     if (str)
 	G_free(str);
+
+    if (describe_table(c->statement, &table, c) == DB_FAILED) {
+	append_error("Cannot describe table\n");
+	append_error((char *)sqlite3_errmsg(sqlite));
+	report_error();
+	return DB_FAILED;
+    }
 
     c->nrows = -1;
     c->row = -1;

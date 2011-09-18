@@ -57,7 +57,16 @@ int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
     while (sqlite3_step(statement) == SQLITE_ROW) {
 	nrows++;
     }
-    sqlite3_reset(statement);
+    /* get real result code */
+    ret = sqlite3_reset(statement);
+    
+    if (ret != SQLITE_OK) {
+	append_error("Cannot list tables\n");
+	append_error((char *)sqlite3_errmsg(sqlite));
+	report_error();
+	sqlite3_finalize(statement);
+	return DB_FAILED;
+    }
 
     G_debug(3, "nrows = %d", nrows);
 
@@ -66,6 +75,7 @@ int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
     if (list == NULL) {
 	append_error("Cannot db_alloc_string_array()");
 	report_error();
+	sqlite3_finalize(statement);
 	return DB_FAILED;
     }
 
