@@ -408,13 +408,108 @@ class Model(object):
         
         return errList
 
-    def Run(self, log, onDone):
-        """!Run model"""
-        for action in self.GetItems(objType = ModelAction):
-            if not action.IsEnabled():
+    def RunAction(self, item, params, log, onDone, statusbar = None):
+        """!Run given action
+
+        @param item action item
+        @param params parameters dict
+        @param log logging window
+        @param onDone on-done method
+        @param statusbar wx.StatusBar instance or None
+        """
+        name = item.GetName()
+        if name in params:
+            paramsOrig = item.GetParams(dcopy = True)
+            item.MergeParams(params[name])
+        
+        if statusbar:
+            statusbar.SetStatusText(_('Running model...'), 0)
+        log.RunCmd(command = item.GetLog(string = False),
+                   onDone = onDone)
+        
+        if name in params:
+            item.SetParams(paramsOrig)
+        
+    def Run(self, log, onDone, parent = None):
+        """!Run model
+
+        @param log logging window (see goutput.GMConsole)
+        @param onDone on-done method
+        @param parent window for messages or None
+        """
+        if self.GetNumItems() < 1:
+            GMessage(parent = parent,
+                     message = _('Model is empty. Nothing to run.'))
+            return
+        
+        statusbar = None
+        if isinstance(parent, wx.Frame):
+            statusbar = parent.GetStatusBar()
+        
+        # validation
+        if statusbar:
+            statusbar.SetStatusText(_('Validating model...'), 0)
+        errList = self.Validate()
+        if statusbar:
+            statusbar.SetStatusText('', 0)
+        if errList:
+            dlg = wx.MessageDialog(parent = parent,
+                                   message = _('Model is not valid. Do you want to '
+                                               'run the model anyway?\n\n%s') % '\n'.join(errList),
+                                   caption = _("Run model?"),
+                                   style = wx.YES_NO | wx.NO_DEFAULT |
+                                   wx.ICON_QUESTION | wx.CENTRE)
+            ret = dlg.ShowModal()
+            if ret != wx.ID_YES:
+                return
+        
+        # parametrization
+        params = self.Parameterize()
+        if params:
+            dlg = ModelParamDialog(parent = parent,
+                                   params = params)
+            dlg.CenterOnParent()
+            
+            ret = dlg.ShowModal()
+            if ret != wx.ID_OK:
+                dlg.Destroy()
+                return
+            
+            err = dlg.GetErrors()
+            if err:
+                GError(parent = self, message = unicode('\n'.join(err)))
+                return
+        
+        log.cmdThread.SetId(-1)
+        for item in self.GetItems():
+            if not item.IsEnabled():
                 continue
-            log.RunCmd(command = action.GetLog(string = False),
-                       onDone = onDone)
+            if isinstance(item, ModelAction):
+                if item.GetBlockId():
+                    continue
+                self.RunAction(item, params, log, onDone)
+            elif isinstance(item, ModelLoop):
+                cond = item.GetText()
+                # substitute variables in condition
+                variables = self.GetVariables()
+                for variable in variables:
+                    pattern = re.compile('%' + variable)
+                    if pattern.search(cond):
+                        value = variables[variable].get('value', '')
+                        vtype = variables[variable].get('type', 'string')
+                        if vtype == 'string':
+                            value = '"' + value + '"'
+                        cond = pattern.sub(value, cond)
+                # split condition
+                condVar, condText = re.split('\s*in\s*', cond)
+                
+                for action in item.GetItems():
+                    for vars()[condVar] in eval(condText):
+                        if isinstance(action, ModelAction):
+                            self.RunAction(action, params, log, onDone)
+        
+        if params:
+            dlg.Destroy()
         
     def DeleteIntermediateData(self, log):
         """!Detele intermediate data"""
@@ -928,86 +1023,7 @@ class ModelFrame(wx.Frame):
         
     def OnRunModel(self, event):
         """!Run entire model"""
-        if self.model.GetNumItems() < 1:
-            GMessage(parent = self, 
-                     message = _('Model is empty. Nothing to run.'))
-            return
-        
-        # validation
-        errList = self._validateModel()
-        if errList:
-            dlg = wx.MessageDialog(parent = self,
-                                   message = _('Model is not valid. Do you want to '
-                                               'run the model anyway?\n\n%s') % '\n'.join(errList),
-                                   caption=_("Run model?"),
-                                   style = wx.YES_NO | wx.NO_DEFAULT |
-                                   wx.ICON_QUESTION | wx.CENTRE)
-            ret = dlg.ShowModal()
-            if ret != wx.ID_YES:
-                return
-        
-        # parametrization
-        params = self.model.Parameterize()
-        if params:
-            dlg = ModelParamDialog(parent = self,
-                                   params = params)
-            dlg.CenterOnParent()
-            
-            ret = dlg.ShowModal()
-            if ret != wx.ID_OK:
-                dlg.Destroy()
-                return
-        
-            err = dlg.GetErrors()
-            if err:
-                GError(parent = self,
-                       message = unicode('\n'.join(err)))
-                return
-        
-        self.goutput.cmdThread.SetId(-1)
-        for item in self.model.GetItems():
-            if not item.IsEnabled():
-                continue
-            if isinstance(item, ModelAction):
-                if item.GetBlockId():
-                    continue
-                self._runAction(item, params)
-            elif isinstance(item, ModelLoop):
-                cond = item.GetText()
-                # substitute variables in condition
-                variables = self.model.GetVariables()
-                for variable in variables:
-                    pattern = re.compile('%' + variable)
-                    if pattern.search(cond):
-                        value = variables[variable].get('value', '')
-                        vtype = variables[variable].get('type', 'string')
-                        if vtype == 'string':
-                            value = '"' + value + '"'
-                        cond = pattern.sub(value, cond)
-                # split condition
-                condVar, condText = re.split('\s*in\s*', cond)
-                
-                for action in item.GetItems():
-                    for vars()[condVar] in eval(condText):
-                        if isinstance(action, ModelAction):
-                            self._runAction(action, params)
-        
-        if params:
-            dlg.Destroy()
-        
-    def _runAction(self, item, params):
-        """!Run given action"""
-        name = item.GetName()
-        if name in params:
-            paramsOrig = item.GetParams(dcopy = True)
-            item.MergeParams(params[name])
-            
-        self.SetStatusText(_('Running model...'), 0)
-        self.goutput.RunCmd(command = item.GetLog(string = False),
-                            onDone = self.OnDone)
-            
-        if name in params:
-            item.SetParams(paramsOrig)
+        self.model.Run(self.goutput, self.OnDone, parent = self)
         
     def OnDone(self, cmd, returncode):
         """!Computation finished"""
@@ -1020,7 +1036,10 @@ class ModelFrame(wx.Frame):
                      message = _('Model is empty. Nothing to validate.'))
             return
         
-        errList = self._validateModel()
+        
+        self.SetStatusText(_('Validating model...'), 0)
+        errList = self.model.Validate()
+        self.SetStatusText('', 0)
         
         if errList:
             GWarning(parent = self,
@@ -1133,16 +1152,6 @@ class ModelFrame(wx.Frame):
         
         self.SetStatusText(_("Model exported to <%s>") % filename)
 
-    def _validateModel(self):
-        """!Validate model"""
-        self.SetStatusText(_('Validating model...'), 0)
-        
-        errList = self.model.Validate()
-        
-        self.SetStatusText('', 0)
-        
-        return errList
-    
     def OnDefineRelation(self, event):
         """!Define relation between data and action items"""
         self.canvas.SetCursor(self.cursors["cross"])
