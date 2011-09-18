@@ -33,6 +33,7 @@
 #%end
 
 #%option G_OPT_DB_COLUMNS
+#% description: Name of attribute column(s) to drop
 #% required: yes
 #%end
 
