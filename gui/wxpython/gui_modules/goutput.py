@@ -4,10 +4,10 @@
 @brief Command output log widget
 
 Classes:
- - GMConsole
- - GMStc
- - GMStdout
- - GMStderr
+- GMConsole
+- GMStc
+- GMStdout
+- GMStderr
 
 (C) 2007-2011 by the GRASS Development Team
 This program is free software under the GNU General Public
@@ -127,9 +127,9 @@ class CmdThread(threading.Thread):
             time.sleep(.1)
 
             # set default color table for raster data
-            if UserSettings.Get(group='cmd', key='rasterColorTable', subkey='enabled') and \
+            if UserSettings.Get(group = 'cmd', key = 'rasterColorTable', subkey = 'enabled') and \
                     args[0][0][:2] == 'r.':
-                colorTable = UserSettings.Get(group='cmd', key='rasterColorTable', subkey='selection')
+                colorTable = UserSettings.Get(group = 'cmd', key = 'rasterColorTable', subkey = 'selection')
                 mapName = None
                 if args[0][0] == 'r.mapcalc':
                     try:
@@ -160,7 +160,7 @@ class CmdThread(threading.Thread):
             
             # send event
             wx.PostEvent(self.parent, event)
-                
+            
     def abort(self, abortall = True):
         """!Abort command(s)"""
         if abortall:
@@ -193,37 +193,31 @@ class GMConsole(wx.SplitterWindow):
         # remember position of line begining (used for '\r')
         self.linePos         = -1
         
-        #
         # create queues
-        #
         self.requestQ = Queue.Queue()
         self.resultQ = Queue.Queue()
         
-        #
         # progress bar
-        #
-        self.console_progressbar = wx.Gauge(parent=self.panelOutput, id=wx.ID_ANY,
-                                            range=100, pos=(110, 50), size=(-1, 25),
-                                            style=wx.GA_HORIZONTAL)
-        self.console_progressbar.Bind(EVT_CMD_PROGRESS, self.OnCmdProgress)
+        self.progressbar = wx.Gauge(parent = self.panelOutput, id = wx.ID_ANY,
+                                    range = 100, pos = (110, 50), size = (-1, 25),
+                                    style = wx.GA_HORIZONTAL)
+        self.progressbar.Bind(EVT_CMD_PROGRESS, self.OnCmdProgress)
         
-        #
         # text control for command output
-        #
-        self.cmd_output = GMStc(parent=self.panelOutput, id=wx.ID_ANY, margin=margin,
-                                wrap=None) 
-        self.cmd_output_timer = wx.Timer(self.cmd_output, id=wx.ID_ANY)
-        self.cmd_output.Bind(EVT_CMD_OUTPUT, self.OnCmdOutput)
-        self.cmd_output.Bind(wx.EVT_TIMER, self.OnProcessPendingOutputWindowEvents)
+        self.cmdOutput = GMStc(parent = self.panelOutput, id = wx.ID_ANY, margin = margin,
+                               wrap = None) 
+        self.cmdOutputTimer = wx.Timer(self.cmdOutput, id = wx.ID_ANY)
+        self.cmdOutput.Bind(EVT_CMD_OUTPUT, self.OnCmdOutput)
+        self.cmdOutput.Bind(wx.EVT_TIMER, self.OnProcessPendingOutputWindowEvents)
         self.Bind(EVT_CMD_RUN, self.OnCmdRun)
         self.Bind(EVT_CMD_DONE, self.OnCmdDone)
         
         # search & command prompt
-        self.cmd_prompt = prompt.GPromptSTC(parent = self)
+        self.cmdPrompt = prompt.GPromptSTC(parent = self)
         
         if self.parent.GetName() != 'LayerManager':
             self.search = None
-            self.cmd_prompt.Hide()
+            self.cmdPrompt.Hide()
         else:
             self.infoCollapseLabelExp = _("Click here to show search module engine")
             self.infoCollapseLabelCol = _("Click here to hide search module engine")
@@ -236,86 +230,91 @@ class GMConsole(wx.SplitterWindow):
             self.Bind(wx.EVT_COLLAPSIBLEPANE_CHANGED, self.OnSearchPaneChanged, self.searchPane) 
             self.search.Bind(wx.EVT_TEXT,             self.OnUpdateStatusBar)
         
-        #
         # stream redirection
-        #
-        self.cmd_stdout = GMStdout(self)
-        self.cmd_stderr = GMStderr(self)
+        self.cmdStdOut = GMStdout(self)
+        self.cmdStrErr = GMStderr(self)
         
-        #
         # thread
-        #
         self.cmdThread = CmdThread(self, self.requestQ, self.resultQ)
         
-        #
+        self.outputBox = wx.StaticBox(parent = self.panelPrompt, id = wx.ID_ANY,
+                                      label = " %s " % _("Output window"))
+        self.cmdBox = wx.StaticBox(parent = self.panelPrompt, id = wx.ID_ANY,
+                                   label = " %s " % _("Command prompt"))
+        
         # buttons
-        #
-        self.btn_console_clear = wx.Button(parent = self.panelPrompt, id = wx.ID_ANY,
-                                           label = _("&Clear output"), size=(100,-1))
-        self.btn_cmd_clear = wx.Button(parent = self.panelPrompt, id = wx.ID_ANY,
-                                       label = _("C&lear cmd"), size=(100,-1))
+        self.btnOutputClear = wx.Button(parent = self.panelPrompt, id = wx.ID_CLEAR)
+        self.btnOutputClear.SetToolTipString(_("Clear output window content"))
+        self.btnCmdClear = wx.Button(parent = self.panelPrompt, id = wx.ID_CLEAR)
+        self.btnCmdClear.SetToolTipString(_("Clear command prompt content"))
         if self.parent.GetName() != 'LayerManager':
-            self.btn_cmd_clear.Hide()
-        self.btn_console_save  = wx.Button(parent = self.panelPrompt, id = wx.ID_ANY,
-                                           label = _("&Save output"), size=(100,-1))
+            self.btnCmdClear.Hide()
+        self.btnOutputSave  = wx.Button(parent = self.panelPrompt, id = wx.ID_SAVE)
+        self.btnOutputSave.SetToolTipString(_("Save output window content to the file"))
         # abort
-        self.btn_abort = wx.Button(parent = self.panelPrompt, id = wx.ID_ANY, label = _("&Abort cmd"),
-                                   size=(100,-1))
-        self.btn_abort.SetToolTipString(_("Abort the running command"))
-        self.btn_abort.Enable(False)
+        self.btnCmdAbort = wx.Button(parent = self.panelPrompt, id = wx.ID_ANY, label = _("&Abort"))
+        self.btnCmdAbort.SetToolTipString(_("Abort running command"))
+        self.btnCmdAbort.Enable(False)
         
-        self.btn_cmd_clear.Bind(wx.EVT_BUTTON,     self.cmd_prompt.OnCmdErase)
-        self.btn_console_clear.Bind(wx.EVT_BUTTON, self.ClearHistory)
-        self.btn_console_save.Bind(wx.EVT_BUTTON,  self.SaveHistory)
-        self.btn_abort.Bind(wx.EVT_BUTTON,         self.OnCmdAbort)
-        self.btn_abort.Bind(EVT_CMD_ABORT,         self.OnCmdAbort)
+        self.btnCmdClear.Bind(wx.EVT_BUTTON,     self.cmdPrompt.OnCmdErase)
+        self.btnOutputClear.Bind(wx.EVT_BUTTON,  self.ClearHistory)
+        self.btnOutputSave.Bind(wx.EVT_BUTTON,   self.SaveHistory)
+        self.btnCmdAbort.Bind(wx.EVT_BUTTON,     self.OnCmdAbort)
+        self.btnCmdAbort.Bind(EVT_CMD_ABORT,     self.OnCmdAbort)
         
-        self.__layout()
+        self._layout()
         
-    def __layout(self):
+    def _layout(self):
         """!Do layout"""
-        OutputSizer = wx.BoxSizer(wx.VERTICAL)
-        PromptSizer = wx.BoxSizer(wx.VERTICAL)
-        ButtonSizer = wx.BoxSizer(wx.HORIZONTAL)
-
+        outputSizer = wx.BoxSizer(wx.VERTICAL)
+        promptSizer = wx.BoxSizer(wx.VERTICAL)
+        btnSizer = wx.BoxSizer(wx.HORIZONTAL)
+        outBtnSizer = wx.StaticBoxSizer(self.outputBox, wx.HORIZONTAL)
+        cmdBtnSizer = wx.StaticBoxSizer(self.cmdBox, wx.HORIZONTAL)
+        
         if self.search and self.search.IsShown():
-            OutputSizer.Add(item=self.searchPane, proportion=0,
-                            flag=wx.EXPAND | wx.ALL, border=3)
-        OutputSizer.Add(item=self.cmd_output, proportion=1,
-                        flag=wx.EXPAND | wx.ALL, border=3)
-        OutputSizer.Add(item=self.console_progressbar, proportion=0,
-                        flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=3)
+            outputSizer.Add(item = self.searchPane, proportion = 0,
+                            flag = wx.EXPAND | wx.ALL, border = 3)
+        outputSizer.Add(item = self.cmdOutput, proportion = 1,
+                        flag = wx.EXPAND | wx.ALL, border = 3)
+        outputSizer.Add(item = self.progressbar, proportion = 0,
+                        flag = wx.EXPAND | wx.LEFT | wx.RIGHT, border = 3)
         
-        PromptSizer.Add(item=self.cmd_prompt, proportion=1,
-                        flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, border=3)
+        promptSizer.Add(item = self.cmdPrompt, proportion = 1,
+                        flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, border = 3)
         
-        ButtonSizer.Add(item=self.btn_console_clear, proportion=0,
-                        flag=wx.ALIGN_CENTER | wx.FIXED_MINSIZE | wx.ALL, border=5)
-        ButtonSizer.Add(item=self.btn_console_save, proportion=0,
-                        flag=wx.ALIGN_CENTER | wx.FIXED_MINSIZE | wx.ALL, border=5)
-        ButtonSizer.Add(item=self.btn_cmd_clear, proportion=0,
-                        flag=wx.ALIGN_CENTER | wx.FIXED_MINSIZE | wx.ALL, border=5)
-        ButtonSizer.Add(item=self.btn_abort, proportion=0,
-                        flag=wx.ALIGN_CENTER | wx.FIXED_MINSIZE | wx.ALL, border=5)
-        PromptSizer.Add(item=ButtonSizer, proportion=0,
-                        flag=wx.ALIGN_CENTER)
+        outBtnSizer.Add(item = self.btnOutputClear, proportion = 1,
+                        flag = wx.ALIGN_LEFT | wx.LEFT | wx.RIGHT, border = 5)
+        outBtnSizer.Add(item = self.btnOutputSave, proportion = 1,
+                        flag = wx.ALIGN_RIGHT | wx.RIGHT, border = 5)
+        cmdBtnSizer.Add(item = self.btnCmdClear, proportion = 1,
+                        flag = wx.ALIGN_CENTER | wx.LEFT | wx.RIGHT, border = 5)
+        cmdBtnSizer.Add(item = self.btnCmdAbort, proportion = 1,
+                        flag = wx.ALIGN_CENTER | wx.RIGHT, border = 5)
         
-        OutputSizer.Fit(self)
-        OutputSizer.SetSizeHints(self)
+        btnSizer.Add(item = outBtnSizer, proportion = 1,
+                     flag = wx.ALL | wx.ALIGN_CENTER, border = 5)
+        btnSizer.Add(item = cmdBtnSizer, proportion = 1,
+                     flag = wx.ALIGN_CENTER | wx.TOP | wx.BOTTOM | wx.RIGHT, border = 5)
+        promptSizer.Add(item = btnSizer, proportion = 1,
+                        flag = wx.EXPAND)
         
-        PromptSizer.Fit(self)
-        PromptSizer.SetSizeHints(self)
+        outputSizer.Fit(self)
+        outputSizer.SetSizeHints(self)
         
-        self.panelOutput.SetSizer(OutputSizer)
-        self.panelPrompt.SetSizer(PromptSizer)
+        promptSizer.Fit(self)
+        promptSizer.SetSizeHints(self)
+        
+        self.panelOutput.SetSizer(outputSizer)
+        self.panelPrompt.SetSizer(promptSizer)
         
         # split window
         if self.parent.GetName() == 'LayerManager':
             self.SplitHorizontally(self.panelOutput, self.panelPrompt, -50)
-            self.SetMinimumPaneSize(self.btn_cmd_clear.GetSize()[1] + 50)
+            self.SetMinimumPaneSize(self.btnCmdClear.GetSize()[1] + 85)
         else:
             self.SplitHorizontally(self.panelOutput, self.panelPrompt, -45)
-            self.SetMinimumPaneSize(self.btn_cmd_clear.GetSize()[1] + 10)
+            self.SetMinimumPaneSize(self.btnCmdClear.GetSize()[1] +25)
         
         self.SetSashGravity(1.0)
         
@@ -327,7 +326,7 @@ class GMConsole(wx.SplitterWindow):
         """!Create search pane"""
         border = wx.BoxSizer(wx.VERTICAL)
         
-        self.search = SearchModuleWindow(parent = pane, cmdPrompt = self.cmd_prompt)
+        self.search = SearchModuleWindow(parent = pane, cmdPrompt = self.cmdPrompt)
         
         border.Add(item = self.search, proportion = 0,
                    flag = wx.EXPAND | wx.ALL, border = 1)
@@ -362,8 +361,8 @@ class GMConsole(wx.SplitterWindow):
         """
         if Debug.GetLevel() == 0 and int(grass.gisenv().get('DEBUG', 0)) == 0:
             # don't redirect when debugging is enabled
-            sys.stdout = self.cmd_stdout
-            sys.stderr = self.cmd_stderr
+            sys.stdout = self.cmdStdOut
+            sys.stderr = self.cmdStrErr
         else:
             enc = locale.getdefaultlocale()[1]
             if enc:
@@ -383,18 +382,18 @@ class GMConsole(wx.SplitterWindow):
         @param stdout write to stdout or stderr
         """
 
-        self.cmd_output.SetStyle()
+        self.cmdOutput.SetStyle()
 
         if switchPage:
             self._notebook.SetSelectionByName('output')
         
         if not style:
-            style = self.cmd_output.StyleDefault
+            style = self.cmdOutput.StyleDefault
         
-        # p1 = self.cmd_output.GetCurrentPos()
-        p1 = self.cmd_output.GetEndStyled()
-        # self.cmd_output.GotoPos(p1)
-        self.cmd_output.DocumentEnd()
+        # p1 = self.cmdOutput.GetCurrentPos()
+        p1 = self.cmdOutput.GetEndStyled()
+        # self.cmdOutput.GotoPos(p1)
+        self.cmdOutput.DocumentEnd()
         
         for line in text.splitlines():
             # fill space
@@ -402,14 +401,14 @@ class GMConsole(wx.SplitterWindow):
                 diff = self.lineWidth - len(line) 
                 line += diff * ' '
             
-            self.cmd_output.AddTextWrapped(line, wrap=wrap) # adds '\n'
+            self.cmdOutput.AddTextWrapped(line, wrap = wrap) # adds '\n'
             
-            p2 = self.cmd_output.GetCurrentPos()
+            p2 = self.cmdOutput.GetCurrentPos()
             
-            self.cmd_output.StartStyling(p1, 0xff)
-            self.cmd_output.SetStyling(p2 - p1, style)
+            self.cmdOutput.StartStyling(p1, 0xff)
+            self.cmdOutput.SetStyling(p2 - p1, style)
         
-        self.cmd_output.EnsureCaretVisible()
+        self.cmdOutput.EnsureCaretVisible()
         
     def WriteCmdLog(self, line, pid = None, switchPage = True):
         """!Write message in selected style
@@ -420,15 +419,15 @@ class GMConsole(wx.SplitterWindow):
         """
         if pid:
             line = '(' + str(pid) + ') ' + line
-        self.WriteLog(line, style = self.cmd_output.StyleCommand, switchPage = switchPage)
+        self.WriteLog(line, style = self.cmdOutput.StyleCommand, switchPage = switchPage)
 
     def WriteWarning(self, line):
         """!Write message in warning style"""
-        self.WriteLog(line, style=self.cmd_output.StyleWarning, switchPage = True)
+        self.WriteLog(line, style = self.cmdOutput.StyleWarning, switchPage = True)
 
     def WriteError(self, line):
         """!Write message in error style"""
-        self.WriteLog(line, style = self.cmd_output.StyleError, switchPage = True)
+        self.WriteLog(line, style = self.cmdOutput.StyleError, switchPage = True)
 
     def RunCmd(self, command, compReg = True, switchPage = False,
                onDone = None):
@@ -546,9 +545,9 @@ class GMConsole(wx.SplitterWindow):
                     menuform.GUI(parent = self).ParseCommand(command)
                 else:
                     # process GRASS command with argument
-                    self.cmdThread.RunCmd(command, stdout = self.cmd_stdout, stderr = self.cmd_stderr,
+                    self.cmdThread.RunCmd(command, stdout = self.cmdStdOut, stderr = self.cmdStrErr,
                                           onDone = onDone)
-                    self.cmd_output_timer.Start(50)
+                    self.cmdOutputTimer.Start(50)
                     
                     return None
                 
@@ -571,22 +570,22 @@ class GMConsole(wx.SplitterWindow):
                 # process GRASS command without argument
                 menuform.GUI(parent = self).ParseCommand(command)
             else:
-                self.cmdThread.RunCmd(command, stdout = self.cmd_stdout, stderr = self.cmd_stderr,
+                self.cmdThread.RunCmd(command, stdout = self.cmdStdOut, stderr = self.cmdStrErr,
                                       onDone = onDone)
-            self.cmd_output_timer.Start(50)
+            self.cmdOutputTimer.Start(50)
         
         return None
 
     def ClearHistory(self, event):
         """!Clear history of commands"""
-        self.cmd_output.SetReadOnly(False)
-        self.cmd_output.ClearAll()
-        self.cmd_output.SetReadOnly(True)
-        self.console_progressbar.SetValue(0)
+        self.cmdOutput.SetReadOnly(False)
+        self.cmdOutput.ClearAll()
+        self.cmdOutput.SetReadOnly(True)
+        self.progressbar.SetValue(0)
 
     def GetProgressBar(self):
         """!Return progress bar widget"""
-        return self.console_progressbar
+        return self.progressbar
     
     def GetLog(self, err = False):
         """!Get widget used for logging
@@ -594,15 +593,15 @@ class GMConsole(wx.SplitterWindow):
         @param err True to get stderr widget
         """
         if err:
-            return self.cmd_stderr
+            return self.cmdStrErr
         
-        return self.cmd_stdout
+        return self.cmdStdOut
     
     def SaveHistory(self, event):
         """!Save history of commands"""
-        self.history = self.cmd_output.GetSelectedText()
+        self.history = self.cmdOutput.GetSelectedText()
         if self.history == '':
-            self.history = self.cmd_output.GetText()
+            self.history = self.cmdOutput.GetText()
 
         # add newline if needed
         if len(self.history) > 0 and self.history[-1] != '\n':
@@ -610,8 +609,8 @@ class GMConsole(wx.SplitterWindow):
 
         wildcard = "Text file (*.txt)|*.txt"
         dlg = wx.FileDialog(self, message = _("Save file as..."), defaultDir = os.getcwd(),
-            defaultFile = "grass_cmd_history.txt", wildcard = wildcard,
-            style = wx.SAVE | wx.FD_OVERWRITE_PROMPT)
+                            defaultFile = "grass_cmd_history.txt", wildcard = wildcard,
+                            style = wx.SAVE | wx.FD_OVERWRITE_PROMPT)
 
         # Show the dialog and retrieve the user response. If it is the OK response,
         # process the data.
@@ -635,16 +634,16 @@ class GMConsole(wx.SplitterWindow):
         @param copy True for enable, False for disable
         """
         if copy:
-            self.cmd_prompt.Bind(wx.stc.EVT_STC_PAINTED, self.cmd_prompt.OnTextSelectionChanged)
-            self.cmd_output.Bind(wx.stc.EVT_STC_PAINTED, self.cmd_output.OnTextSelectionChanged)
+            self.cmdPrompt.Bind(wx.stc.EVT_STC_PAINTED, self.cmdPrompt.OnTextSelectionChanged)
+            self.cmdOutput.Bind(wx.stc.EVT_STC_PAINTED, self.cmdOutput.OnTextSelectionChanged)
         else:
-            self.cmd_prompt.Unbind(wx.stc.EVT_STC_PAINTED)
-            self.cmd_output.Unbind(wx.stc.EVT_STC_PAINTED)
+            self.cmdPrompt.Unbind(wx.stc.EVT_STC_PAINTED)
+            self.cmdOutput.Unbind(wx.stc.EVT_STC_PAINTED)
         
     def OnUpdateStatusBar(self, event):
         """!Update statusbar text"""
         if event.GetString():
-            nItems = len(self.cmd_prompt.GetCommandItems())
+            nItems = len(self.cmdPrompt.GetCommandItems())
             self.parent.SetStatusText(_('%d modules match') % nItems, 0)
         else:
             self.parent.SetStatusText('', 0)
@@ -668,8 +667,8 @@ class GMConsole(wx.SplitterWindow):
         elif type == 'error':
             message = 'ERROR: ' + message
         
-        p1 = self.cmd_output.GetEndStyled()
-        self.cmd_output.GotoPos(p1)
+        p1 = self.cmdOutput.GetEndStyled()
+        self.cmdOutput.GotoPos(p1)
         
         if '\b' in message:
             if self.linepos < 0:
@@ -677,46 +676,46 @@ class GMConsole(wx.SplitterWindow):
             last_c = ''
             for c in message:
                 if c == '\b':
-                   self.linepos -= 1
+                    self.linepos -= 1
                 else:
                     if c == '\r':
-                        pos = self.cmd_output.GetCurLine()[1]
-                        # self.cmd_output.SetCurrentPos(pos)
+                        pos = self.cmdOutput.GetCurLine()[1]
+                        # self.cmdOutput.SetCurrentPos(pos)
                     else:
-                        self.cmd_output.SetCurrentPos(self.linepos)
-                    self.cmd_output.ReplaceSelection(c)
-                    self.linepos = self.cmd_output.GetCurrentPos()
+                        self.cmdOutput.SetCurrentPos(self.linepos)
+                    self.cmdOutput.ReplaceSelection(c)
+                    self.linepos = self.cmdOutput.GetCurrentPos()
                     if c != ' ':
                         last_c = c
             if last_c not in ('0123456789'):
-                self.cmd_output.AddTextWrapped('\n', wrap=None)
+                self.cmdOutput.AddTextWrapped('\n', wrap = None)
                 self.linepos = -1
         else:
             self.linepos = -1 # don't force position
             if '\n' not in message:
-                self.cmd_output.AddTextWrapped(message, wrap=60)
+                self.cmdOutput.AddTextWrapped(message, wrap = 60)
             else:
-                self.cmd_output.AddTextWrapped(message, wrap=None)
+                self.cmdOutput.AddTextWrapped(message, wrap = None)
 
-        p2 = self.cmd_output.GetCurrentPos()
+        p2 = self.cmdOutput.GetCurrentPos()
         
         if p2 >= p1:
-            self.cmd_output.StartStyling(p1, 0xff)
+            self.cmdOutput.StartStyling(p1, 0xff)
         
             if type == 'error':
-                self.cmd_output.SetStyling(p2 - p1, self.cmd_output.StyleError)
+                self.cmdOutput.SetStyling(p2 - p1, self.cmdOutput.StyleError)
             elif type == 'warning':
-                self.cmd_output.SetStyling(p2 - p1, self.cmd_output.StyleWarning)
+                self.cmdOutput.SetStyling(p2 - p1, self.cmdOutput.StyleWarning)
             elif type == 'message':
-                self.cmd_output.SetStyling(p2 - p1, self.cmd_output.StyleMessage)
+                self.cmdOutput.SetStyling(p2 - p1, self.cmdOutput.StyleMessage)
             else: # unknown
-                self.cmd_output.SetStyling(p2 - p1, self.cmd_output.StyleUnknown)
+                self.cmdOutput.SetStyling(p2 - p1, self.cmdOutput.StyleUnknown)
         
-        self.cmd_output.EnsureCaretVisible()
+        self.cmdOutput.EnsureCaretVisible()
         
     def OnCmdProgress(self, event):
         """!Update progress message info"""
-        self.console_progressbar.SetValue(event.value)
+        self.progressbar.SetValue(event.value)
 
     def OnCmdAbort(self, event):
         """!Abort running command"""
@@ -728,7 +727,7 @@ class GMConsole(wx.SplitterWindow):
             self.parent.OnCmdRun(event)
         
         self.WriteCmdLog('(%s)\n%s' % (str(time.ctime()), ' '.join(event.cmd)))
-        self.btn_abort.Enable()
+        self.btnCmdAbort.Enable()
 
     def OnCmdDone(self, event):
         """!Command done (or aborted)"""
@@ -738,12 +737,12 @@ class GMConsole(wx.SplitterWindow):
         if event.aborted:
             # Thread aborted (using our convention of None return)
             self.WriteLog(_('Please note that the data are left in inconsistent state '
-                            'and may be corrupted'), self.cmd_output.StyleWarning)
+                            'and may be corrupted'), self.cmdOutput.StyleWarning)
             self.WriteCmdLog('(%s) %s (%d sec)' % (str(time.ctime()),
                                                    _('Command aborted'),
                                                    (time.time() - event.time)))
             # pid=self.cmdThread.requestId)
-            self.btn_abort.Enable(False)
+            self.btnCmdAbort.Enable(False)
         else:
             try:
                 # Process results here
@@ -754,21 +753,21 @@ class GMConsole(wx.SplitterWindow):
                 # stopped deamon
                 pass
 
-            self.btn_abort.Enable(False)
+            self.btnCmdAbort.Enable(False)
         
         if event.onDone:
             event.onDone(cmd = event.cmd, returncode = event.returncode)
         
-        self.console_progressbar.SetValue(0) # reset progress bar on '0%'
+        self.progressbar.SetValue(0) # reset progress bar on '0%'
 
-        self.cmd_output_timer.Stop()
+        self.cmdOutputTimer.Stop()
 
         if event.cmd[0] == 'g.gisenv':
             Debug.SetLevel()
             self.Redirect()
         
         if self.parent.GetName() == "LayerManager":
-            self.btn_abort.Enable(False)
+            self.btnCmdAbort.Enable(False)
             if event.cmd[0] not in globalvar.grassCmd['all'] or \
                     event.cmd[0] == 'r.mapcalc':
                 return
@@ -858,13 +857,17 @@ class GMConsole(wx.SplitterWindow):
                     hasattr(dialog, "closebox") and \
                     dialog.closebox.IsChecked() and \
                     (event.returncode == 0 or event.aborted):
-                self.cmd_output.Update()
+                self.cmdOutput.Update()
                 time.sleep(2)
                 dialog.Close()
         
     def OnProcessPendingOutputWindowEvents(self, event):
         self.ProcessPendingEvents()
 
+    def ResetFocus(self):
+        """!Reset focus"""
+        self.cmdPrompt.SetFocus()
+        
 class GMStdout:
     """!GMConsole standard output
 
@@ -887,9 +890,9 @@ class GMStdout:
             if len(line) == 0:
                 continue
             
-            evt = wxCmdOutput(text=line + '\n',
-                              type='')
-            wx.PostEvent(self.parent.cmd_output, evt)
+            evt = wxCmdOutput(text = line + '\n',
+                              type = '')
+            wx.PostEvent(self.parent.cmdOutput, evt)
         
 class GMStderr:
     """!GMConsole standard error output
@@ -904,7 +907,7 @@ class GMStderr:
     """
     def __init__(self, parent):
         self.parent = parent # GMConsole
- 
+        
         self.type = ''
         self.message = ''
         self.printMessage = False
@@ -943,16 +946,16 @@ class GMStderr:
             elif self.type == '':
                 if len(line) == 0:
                     continue
-                evt = wxCmdOutput(text=line,
-                                  type='')
-                wx.PostEvent(self.parent.cmd_output, evt)
+                evt = wxCmdOutput(text = line,
+                                  type = '')
+                wx.PostEvent(self.parent.cmdOutput, evt)
             elif len(line) > 0:
                 self.message += line.strip() + '\n'
 
             if self.printMessage and len(self.message) > 0:
-                evt = wxCmdOutput(text=self.message,
-                                  type=self.type)
-                wx.PostEvent(self.parent.cmd_output, evt)
+                evt = wxCmdOutput(text = self.message,
+                                  type = self.type)
+                wx.PostEvent(self.parent.cmdOutput, evt)
 
                 self.type = ''
                 self.message = ''
@@ -961,8 +964,8 @@ class GMStderr:
         # update progress message
         if progressValue > -1:
             # self.gmgauge.SetValue(progressValue)
-            evt = wxCmdProgress(value=progressValue)
-            wx.PostEvent(self.parent.console_progressbar, evt)
+            evt = wxCmdProgress(value = progressValue)
+            wx.PostEvent(self.parent.progressbar, evt)
             
 class GMStc(wx.stc.StyledTextCtrl):
     """!Styled GMConsole
@@ -975,7 +978,7 @@ class GMStc(wx.stc.StyledTextCtrl):
     Copyright: (c) 2005-2007 Jean-Michel Fauth
     Licence:   GPL
     """    
-    def __init__(self, parent, id, margin=False, wrap=None):
+    def __init__(self, parent, id, margin = False, wrap = None):
         wx.stc.StyledTextCtrl.__init__(self, parent, id)
         self.parent = parent
         self.SetUndoCollection(True)
@@ -1026,11 +1029,11 @@ class GMStc(wx.stc.StyledTextCtrl):
 
         settings = preferences.Settings()
         
-        typeface = settings.Get(group='appearance', key='outputfont', subkey='type')   
+        typeface = settings.Get(group = 'appearance', key = 'outputfont', subkey = 'type')   
         if typeface == "":
             typeface = "Courier New"
         
-        typesize = settings.Get(group='appearance', key='outputfont', subkey='size')
+        typesize = settings.Get(group = 'appearance', key = 'outputfont', subkey = 'size')
         if typesize == None or typesize <= 0:
             typesize = 10
         typesize = float(typesize)
@@ -1071,7 +1074,7 @@ class GMStc(wx.stc.StyledTextCtrl):
         wx.TheClipboard.Flush()
         evt.Skip()
 
-    def AddTextWrapped(self, txt, wrap=None):
+    def AddTextWrapped(self, txt, wrap = None):
         """!Add string to text area.
 
         String is wrapped and linesep is also added to the end
@@ -1099,7 +1102,7 @@ class GMStc(wx.stc.StyledTextCtrl):
             try:
                 self.AddText(txt)
             except UnicodeDecodeError:
-                enc = UserSettings.Get(group='atm', key='encoding', subkey='value')
+                enc = UserSettings.Get(group = 'atm', key = 'encoding', subkey = 'value')
                 if enc:
                     txt = unicode(txt, enc)
                 elif 'GRASS_DB_ENCODING' in os.environ:
