@@ -52,7 +52,10 @@ def main():
     grass.create_temporal_database()
     
     mapset =  grass.gisenv()["MAPSET"]
-    
+
+    dbif = grass.sql_database_interface()
+    dbif.connect()
+
     for name in names.split(","):
         name = name.strip()
         # Check for the mapset in name
@@ -74,12 +77,14 @@ def main():
         if type == "vector":
             ds = grass.vector_dataset(id)
 
-        if ds.is_in_db() == False:
+        if ds.is_in_db(dbif) == False:
             grass.fatal(ds.get_type() + " dataset <" + name + "> not found in temporal database")
 
         # We need to read some data from the temporal database
-        ds.select()
-        ds.delete()
+        ds.select(dbif)
+        ds.delete(dbif)
+
+    dbif.close()
 
 if __name__ == "__main__":
     options, flags = grass.core.parser()
