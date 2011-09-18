@@ -111,17 +111,22 @@ def main():
     if type == "stvds":
         sp = grass.space_time_vector_dataset(id)
 
-    if sp.is_in_db() and grass.overwrite() == False:
+    dbif = grass.sql_database_interface()
+    dbif.connect()
+
+    if sp.is_in_db(dbif) and grass.overwrite() == False:
         grass.fatal("Space time " + sp.get_new_map_instance(None).get_type() + " dataset <" + name + "> is already in the database. Use the overwrite flag.")
 
-    if sp.is_in_db() and grass.overwrite() == True:
+    if sp.is_in_db(dbif) and grass.overwrite() == True:
         grass.info("Overwrite space time " + sp.get_new_map_instance(None).get_type() + " dataset <" + name + "> and unregister all maps.")
-        sp.delete()
+        sp.delete(dbif)
 
     grass.info("Create space time " + sp.get_new_map_instance(None).get_type() + " dataset.")
 
     sp.set_initial_values(granularity=gran, temporal_type=temporaltype, semantic_type=semantic, title=title, description=descr)
-    sp.insert()
+    sp.insert(dbif)
+
+    dbif.close()
 
 if __name__ == "__main__":
     options, flags = grass.core.parser()

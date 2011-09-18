@@ -111,9 +111,12 @@ def main():
         sp = grass.raster3d_dataset(id)
     if type == "vector":
         sp = grass.vector_dataset(id)
-        
+
+    dbif = grass.sql_database_interface()
+    dbif.connect()
+
     # Insert content from db
-    sp.select()
+    sp.select(dbif)
 
     # Create the sql selection statement
     # Table name
@@ -133,10 +136,9 @@ def main():
     if where:
         sql += " WHERE " + where
 
-    sp.base.connect()
-    sp.base.cursor.execute(sql)
-    rows = sp.base.cursor.fetchall()
-    sp.base.close()
+    dbif.cursor.execute(sql)
+    rows = dbif.cursor.fetchall()
+    dbif.close()
 
     # Print the query result to stout
     if rows:
