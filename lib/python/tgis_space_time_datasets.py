@@ -373,7 +373,7 @@ class space_time_vector_dataset(abstract_space_time_dataset):
 
 ###############################################################################
 
-def register_maps_in_space_time_dataset(type, name, maps, start=None, increment=None):
+def register_maps_in_space_time_dataset(type, name, maps, start=None, increment=None, dbif = None):
     """Use this method to register maps in space time datasets. This function is generic and
        can handle raster, vector and raster3d maps as well as there space time datasets.
 
@@ -406,10 +406,15 @@ def register_maps_in_space_time_dataset(type, name, maps, start=None, increment=
     if type == "vector":
         sp = space_time_vector_dataset(id)
 
-    # Read content from temporal database
-    sp.select()
+    if dbif == None:
+        dbif = sql_database_interface()
+        dbif.connect()
+        connect = True
 
-    if sp.is_in_db() == False:
+    # Read content from temporal database
+    sp.select(dbif)
+
+    if sp.is_in_db(dbif) == False:
         core.fatal("Space time " + sp.get_new_map_instance(None).get_type() + " dataset <" + name + "> not found")
 
     if maps.find(",") == -1:
@@ -431,33 +436,36 @@ def register_maps_in_space_time_dataset(type, name, maps, start=None, increment=
         # In case the map is already registered print a message and continue to the next map
 
         # Put the map into the database
-        if map.is_in_db() == False:
+        if map.is_in_db(dbif) == False:
             # Break in case no valid time is provided
             if start == "" or start == None:
                 core.fatal("Unable to register " + map.get_type() + " map <" + map.get_id() + ">. The map has no valid time and the start time is not set.")
             # Load the data from the grass file database
             map.load()
             #  Put it into the temporal database
-            map.insert()
+            map.insert(dbif)
         else:
-            map.select()
+            map.select(dbif)
             if map.get_temporal_type() != sp.get_temporal_type():
                 core.fatal("Unable to register " + map.get_type() + " map <" + map.get_id() + ">. The temporal types are different.")
 
         # Set the valid time
         if start:
-            assign_valid_time_to_map(sp.get_temporal_type(), map, start, increment, count)
+            assign_valid_time_to_map(sp.get_temporal_type(), map, start, increment, count, dbif)
 
         # Finally Register map in the space time dataset
-        sp.register_map(map)
+        sp.register_map(map, dbif)
         count += 1
 
     # Update the space time tables
-    sp.update_from_registered_maps()
+    sp.update_from_registered_maps(dbif)
 
+    if connect == True:
+        dbif.close()
+        
 ###############################################################################
 
-def unregister_maps_from_space_time_datasets(type, name, maps):
+def unregister_maps_from_space_time_datasets(type, name, maps, dbif = None):
     """Unregister maps from a single space time dataset or, in case no dataset name is provided,
        unregister from all datasets within the maps are registered.
 
@@ -466,6 +474,11 @@ def unregister_maps_from_space_time_datasets(type, name, maps):
        @maps Name(s) of existing map(s) to unregister
     """
     mapset =  core.gisenv()["MAPSET"]
+
+    if dbif == None:
+        dbif = sql_database_interface()
+        dbif.connect()
+        connect = True
 
     # In case a space time dataset is specified
     if name:
@@ -482,7 +495,7 @@ def unregister_maps_from_space_time_datasets(type, name, maps):
         if type == "vector":
             sp = space_time_vector_dataset(id)
 
-        if sp.is_in_db() == False:
+        if sp.is_in_db(dbif) == False:
             core.fatal("Space time " + sp.get_new_map_instance(None).get_type() + " dataset <" + name + "> not found")
 
     # Build the list of maps
@@ -508,18 +521,21 @@ def unregister_maps_from_space_time_datasets(type, name, maps):
             map = vector_dataset(mapid)
 
         # Unregister map if in database
-        if map.is_in_db() == True:
+        if map.is_in_db(dbif) == True:
             if name:
-                sp.select()
-                sp.unregister_map(map)
+                sp.select(dbif)
+                sp.unregister_map(map, dbif)
             else:
-                map.select()
-                map.unregister()
+                map.select(dbif)
+                map.unregister(dbif)
 
     if name:
-        sp.update_from_registered_maps()
+        sp.update_from_registered_maps(dbif)
 
-def assign_valid_time_to_map(ttype, map, start, increment=None, mult=1):
+    if connect == True:
+        dbif.close()
+        
+def assign_valid_time_to_map(ttype, map, start, increment=None, mult=1, dbif = None):
     """Assign the valid time to a map dataset
 
        @ttype The temporal type which should be assigned and which the time format is of
@@ -528,6 +544,14 @@ def assign_valid_time_to_map(ttype, map, start, increment=None, mult=1):
        @increment Time increment between maps for time stamp creation (format absolute: NNN seconds, minutes, hours, days, weeks, months, years; format relative: 1.0)
        @multi A multiplier for the increment
     """
+
+    connect = False
+
+    if dbif == None:
+        dbif = sql_database_interface()
+        dbif.connect()
+        connect = True
+
     if ttype == "absolute":
         # Create the start time object
         if start.find(":") > 0:
@@ -544,11 +568,14 @@ def assign_valid_time_to_map(ttype, map, start, increment=None, mult=1):
             end_time = increment_datetime_by_string(start_time, increment, 1)
 
         core.verbose("Set absolute valid time for map <" + map.get_id() + "> to " + str(start_time) + " - " + str(end_time))
-        map.update_absolute_time(start_time, end_time)
+        map.update_absolute_time(start_time, end_time, None, dbif)
     else:
         if increment:
             interval = float(start) + mult * float(increment)
         else:
             interval = float(start)
         core.verbose("Set relative valid time for map <" + map.get_id() + "> to " + str(interval))
-        map.update_relative_time(interval)
+        map.update_relative_time(interval, dbif)
+
+    if connect == True:
+        dbif.close()
