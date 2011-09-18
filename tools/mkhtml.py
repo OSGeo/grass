@@ -3,13 +3,16 @@
 ############################################################################
 #
 # MODULE:       mkhtml.py
-# AUTHOR(S):    Markus Neteler, Glynn Clements
-# PURPOSE:      create HTML manual page snippets
-# COPYRIGHT:    (C) 2007,2009,2011 by Glynn Clements and the GRASS Development Team
+# AUTHOR(S):    Markus Neteler
+#               Glynn Clements
+#               Martin Landa <landa.martin gmail.com>
+# PURPOSE:      Create HTML manual page snippets
+# COPYRIGHT:    (C) 2007, 2009, 2011 by Glynn Clements
+#                and the GRASS Development Team
 #
-#               This program is free software under the GNU General Public
-#               License (>=v2). Read the file COPYING that comes with GRASS
-#               for details.
+#               This program is free software under the GNU General
+#               Public License (>=v2). Read the file COPYING that
+#               comes with GRASS for details.
 #
 #############################################################################
 
@@ -19,12 +22,15 @@ import string
 import re
 
 pgm = sys.argv[1]
+if len(sys.argv) > 1:
+    year = sys.argv[2]
+else:
+    year = "2011"
 
 src_file = "%s.html" % pgm
 tmp_file = "%s.tmp.html" % pgm
 
-header_tmpl = string.Template(\
-"""<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+header_base = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
 <title>GRASS GIS Manual: ${PGM}</title>
@@ -33,14 +39,27 @@ header_tmpl = string.Template(\
 </head>
 <body bgcolor="white">
 <img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
-<h2>NAME</h2>
+"""
+
+header_nopgm = """<h2>${PGM}</h2>
+"""
+
+header_pgm = """<h2>NAME</h2>
 <em><b>${PGM}</b></em>
+"""
+
+footer_index = string.Template(\
+"""<hr>
+<p><a href="index.html">Main index</a> - <a href="${INDEXNAME}.html">${INDEXNAME} index</a> - <a href="full_index.html">Full index</a></p>
+<p>&copy; 2003-${YEAR} <a href="http://grass.osgeo.org">GRASS Development Team</a></p>
+</body>
+</html>
 """)
 
-footer_tmpl = string.Template(\
+footer_noindex = string.Template(\
 """<hr>
-<p><a href="index.html">Main index</a> - <a href="$INDEXNAME.html">$INDEXNAME index</a> - <a href="full_index.html">Full index</a></p>
-<p>&copy; 2003-2011 <a href="http://grass.osgeo.org">GRASS Development Team</a></p>
+<p><a href="index.html">Main index</a> - <a href="full_index.html">Full index</a></p>
+<p>&copy; 2003-${YEAR} <a href="http://grass.osgeo.org">GRASS Development Team</a></p>
 </body>
 </html>
 """)
@@ -55,6 +74,13 @@ def read_file(name):
 	return ""
 
 src_data = read_file(src_file)
+
+desc = re.search('(<!-- meta page description:)(.*)(-->)', src_data, re.IGNORECASE)
+if desc:
+    pgm = desc.group(2).strip()
+    header_tmpl = string.Template(header_base + header_nopgm)
+else:
+    header_tmpl = string.Template(header_base + header_pgm)
 
 if not re.search('<html>', src_data, re.IGNORECASE):
     tmp_data = read_file(tmp_file)
@@ -78,7 +104,6 @@ index_names = {
     'g': 'general',
     'i': 'imagery',
     'm': 'misc',
-    'pg': 'postGRASS',
     'ps': 'postscript',
     'p': 'paint',
     'r': 'raster',
@@ -87,8 +112,14 @@ index_names = {
     'v': 'vector'
     }
 
-mod_class = pgm.split('.', 1)[0]
-index_name = index_names.get(mod_class, mod_class)
+index = re.search('(<!-- meta page index:)(.*)(-->)', src_data, re.IGNORECASE)
+if index:
+    index_name = index.group(2).strip()
+else:
+    mod_class = pgm.split('.', 1)[0]
+    index_name = index_names.get(mod_class, '')
 
-sys.stdout.write(footer_tmpl.substitute(INDEXNAME = index_name))
-
+if index_name:
+    sys.stdout.write(footer_index.substitute(INDEXNAME = index_name, YEAR = year))
+else:
+    sys.stdout.write(footer_noindex.substitute(YEAR = year))

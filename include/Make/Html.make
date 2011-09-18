@@ -12,7 +12,7 @@ htmldesc = $(call run_grass,$(1) --html-description < /dev/null | grep -v '</bod
 IMGSRC := $(wildcard *.png) $(wildcard *.jpg)
 
 $(HTMLDIR)/%.html: %.html %.tmp.html $(HTMLSRC) | $(HTMLDIR)
-	$(PYTHON) $(GISBASE)/tools/mkhtml.py $* > $@
+	$(PYTHON) $(GISBASE)/tools/mkhtml.py $* $(GRASS_VERSION_DATE) > $@
 ifneq ($(strip $(IMGSRC)),)
 	if test -n "$(IMGSRC)" ; then \
 		$(MAKE) $(patsubst %,$(HTMLDIR)/%,$(IMGSRC)) ; \
