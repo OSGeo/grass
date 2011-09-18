@@ -65,26 +65,34 @@ int db__driver_describe_table(dbString * table_name, dbTable ** table)
 	    return DB_FAILED;
 	}
 
-	if (describe_table(statement, table, NULL) == DB_FAILED) {
+	ret = sqlite3_step(statement);
+	/* get real result code */
+	ret = sqlite3_reset(statement);
 
-	    ret = sqlite3_errcode(sqlite);
-	    if (ret == SQLITE_SCHEMA) {
-		sqlite3_finalize(statement);
-		/* try again */
-	    }
-	    else {
-		append_error("Cannot describe table:\n");
-		append_error((char *)sqlite3_errmsg(sqlite));
-		report_error();
-		sqlite3_finalize(statement);
-		return DB_FAILED;
-	    }
+	if (ret == SQLITE_SCHEMA) {
+	    sqlite3_finalize(statement);
+	    /* try again */
+	}
+	else if (ret != SQLITE_OK) {
+	    append_error("Error in sqlite3_step():\n");
+	    append_error((char *)sqlite3_errmsg(sqlite));
+	    report_error();
+	    sqlite3_finalize(statement);
+	    return DB_FAILED;
 	}
 	else
 	    break;
     }
 
     db_free_string(&sql);
+
+    if (describe_table(statement, table, NULL) == DB_FAILED) {
+	append_error("Cannot describe table:\n");
+	append_error((char *)sqlite3_errmsg(sqlite));
+	report_error();
+	sqlite3_finalize(statement);
+	return DB_FAILED;
+    }
 
     sqlite3_finalize(statement);
 
@@ -116,8 +124,11 @@ int describe_table(sqlite3_stmt * statement, dbTable ** table, cursor * c)
     /* Try to get first row */
     ret = sqlite3_step(statement);
     if (ret != SQLITE_DONE && ret != SQLITE_ROW) {
+	/* get real result code */
 	ret = sqlite3_reset(statement);
-	G_warning(_("SQLite driver: %s"), sqlite3_errmsg(sqlite));
+	append_error("Error in sqlite3_step():\n");
+	append_error((char *)sqlite3_errmsg(sqlite));
+	report_error();
 	return DB_FAILED;
     }
 

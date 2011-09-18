@@ -55,16 +55,18 @@ int db__driver_execute_immediate(dbString * sql)
 	}
 
 	ret = sqlite3_step(stmt);
+	/* get real result code */
+	ret = sqlite3_reset(stmt);
 
 	if (ret == SQLITE_SCHEMA) {
 	    sqlite3_finalize(stmt);
 	    /* try again */
 	}
-	else if (ret != SQLITE_DONE) {
+	else if (ret != SQLITE_OK) {
 	    append_error("Error in sqlite3_step():\n");
 	    append_error((char *)sqlite3_errmsg(sqlite));
 	    report_error();
-	    ret = sqlite3_finalize(stmt);
+	    sqlite3_finalize(stmt);
 	    return DB_FAILED;
 	}
 	else

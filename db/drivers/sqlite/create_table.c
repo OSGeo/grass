@@ -130,12 +130,14 @@ int db__driver_create_table(dbTable * table)
 	}
 
 	ret = sqlite3_step(statement);
+	/* get real result code */
+	ret = sqlite3_reset(statement);
 
 	if (ret == SQLITE_SCHEMA) {
 	    sqlite3_finalize(statement);
 	    /* try again */
 	}
-	else if (ret != SQLITE_DONE) {
+	else if (ret != SQLITE_OK) {
 	    append_error("Error in sqlite3_step():\n");
 	    append_error((char *)sqlite3_errmsg(sqlite));
 	    report_error();
