@@ -1273,7 +1273,8 @@ class ModelFrame(wx.Frame):
         info.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
         info.SetName(_('wxGUI Graphical Modeler'))
         info.SetWebSite('http://grass.osgeo.org')
-        info.SetDescription(_('(C) 2010 by the GRASS Development Team\n\n') + 
+        year = grass.version()['date']
+        info.SetDescription(_('(C) 2010-%s by the GRASS Development Team\n\n') % year + 
                             '\n'.join(textwrap.wrap(_('This program is free software under the GNU General Public License'
                                                       '(>=v2). Read the file COPYING that comes with GRASS for details.'), 75)))
         
