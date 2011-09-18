@@ -137,7 +137,6 @@ class dict_sql_serializer(object):
 class sql_database_interface(dict_sql_serializer):
     """This is the sql database interface to sqlite3"""
     def __init__(self, table=None, ident=None, database=None):
-
         dict_sql_serializer.__init__(self)
 
         self.table = table # Name of the table, set in the subclass
@@ -151,34 +150,46 @@ class sql_database_interface(dict_sql_serializer):
         return self.table
 
     def connect(self):
+        #print "Connect to",  self.database
 	self.connection = sqlite3.connect(self.database, detect_types=sqlite3.PARSE_DECLTYPES|sqlite3.PARSE_COLNAMES)
 	self.connection.row_factory = sqlite3.Row
         self.cursor = self.connection.cursor()
 
     def close(self):
+        #print "Close connection to",  self.database
 	self.connection.commit()
         self.cursor.close()
 
     def get_delete_statement(self):
 	return "DELETE FROM " + self.get_table_name() + " WHERE id = \"" + str(self.ident) + "\""
 
-    def delete(self):
-	self.connect()
+    def delete(self, dbif=None):
 	sql = self.get_delete_statement()
         #print sql
-        self.cursor.execute(sql)
-	self.close()
+        
+        if dbif:
+            dbif.cursor.execute(sql)
+        else:
+            self.connect()
+            self.cursor.execute(sql)
+            self.close()
 
     def get_is_in_db_statement(self):
 	return "SELECT id FROM " + self.get_table_name() + " WHERE id = \"" + str(self.ident) + "\""
 
-    def is_in_db(self):
-	self.connect()
+    def is_in_db(self, dbif=None):
+
 	sql = self.get_is_in_db_statement()
         #print sql
-        self.cursor.execute(sql)
-	row = self.cursor.fetchone()
-	self.close()
+
+        if dbif:
+            dbif.cursor.execute(sql)
+            row = dbif.cursor.fetchone()
+        else:
+            self.connect()
+            self.cursor.execute(sql)
+            row = self.cursor.fetchone()
+            self.close()
 
 	# Nothing found
 	if row == None:
@@ -189,16 +200,25 @@ class sql_database_interface(dict_sql_serializer):
     def get_select_statement(self):
 	return self.serialize("SELECT", self.get_table_name(), "WHERE id = \"" + str(self.ident) + "\"")
 
-    def select(self):
-	self.connect()
+    def select(self, dbif=None):
 	sql, args = self.get_select_statement()
 	#print sql
 	#print args
-	if len(args) == 0:
-            self.cursor.execute(sql)
-	else:
-            self.cursor.execute(sql, args)
-	row = self.cursor.fetchone()
+
+        if dbif:
+            if len(args) == 0:
+                dbif.cursor.execute(sql)
+            else:
+                dbif.cursor.execute(sql, args)
+            row = dbif.cursor.fetchone()
+        else:
+            self.connect()
+            if len(args) == 0:
+                self.cursor.execute(sql)
+            else:
+                self.cursor.execute(sql, args)
+            row = self.cursor.fetchone()
+            self.close()
 
 	# Nothing found
 	if row == None:
@@ -208,34 +228,41 @@ class sql_database_interface(dict_sql_serializer):
 	    self.deserialize(row)
 	else:
 	    raise IOError
-	self.close()
 
 	return True
 
     def get_insert_statement(self):
 	return self.serialize("INSERT", self.get_table_name())
 
-    def insert(self):
-	self.connect()
+    def insert(self, dbif=None):
 	sql, args = self.get_insert_statement()
 	#print sql
 	#print args
-        self.cursor.execute(sql, args)
-	self.close()
+
+        if dbif:
+            dbif.cursor.execute(sql, args)
+        else:
+            self.connect()
+            self.cursor.execute(sql, args)
+            self.close()
 
     def get_update_statement(self):
 	return self.serialize("UPDATE", self.get_table_name(), "WHERE id = \"" + str(self.ident) + "\"")
 
-    def update(self):
+    def update(self, dbif=None):
 	if self.ident == None:
 	    raise IOError("Missing identifer");
 
 	sql, args = self.get_update_statement()
 	#print sql
 	#print args
-	self.connect()
-        self.cursor.execute(sql, args)
-	self.close()
+
+        if dbif:
+            dbif.cursor.execute(sql, args)
+        else:
+            self.connect()
+            self.cursor.execute(sql, args)
+            self.close()
 
 ###############################################################################
 

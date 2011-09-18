@@ -69,43 +69,43 @@ class abstract_dataset(object):
         
         return (north, south, east, west, top, bottom)
         
-    def select(self):
+    def select(self, dbif=None):
 	"""Select temporal dataset entry from database and fill up the internal structure"""
-	self.base.select()
+	self.base.select(dbif)
 	if self.is_time_absolute():
-	    self.absolute_time.select()
+	    self.absolute_time.select(dbif)
         if self.is_time_relative():
-	    self.relative_time.select()
-	self.spatial_extent.select()
-	self.metadata.select()
+	    self.relative_time.select(dbif)
+	self.spatial_extent.select(dbif)
+	self.metadata.select(dbif)
         
-    def is_in_db(self):
+    def is_in_db(self, dbif=None):
 	"""Check if the temporal dataset entry is in the database"""
-	return self.base.is_in_db()
+	return self.base.is_in_db(dbif)
 
     def delete(self):
 	"""Delete temporal dataset entry from database if it exists"""
         raise IOError("This method must be implemented in the subclasses")
 
-    def insert(self):
+    def insert(self, dbif=None):
 	"""Insert temporal dataset entry into database from the internal structure"""
-	self.base.insert()
+	self.base.insert(dbif)
 	if self.is_time_absolute():
-	    self.absolute_time.insert()
+	    self.absolute_time.insert(dbif)
         if self.is_time_relative():
-	    self.relative_time.insert()
-	self.spatial_extent.insert()
-	self.metadata.insert()
+	    self.relative_time.insert(dbif)
+	self.spatial_extent.insert(dbif)
+	self.metadata.insert(dbif)
 
-    def update(self):
+    def update(self, dbif=None):
 	"""Update temporal dataset entry of database from the internal structure"""
-	self.base.update()
+	self.base.update(dbif)
 	if self.is_time_absolute():
-	    self.absolute_time.update()
+	    self.absolute_time.update(dbif)
         if self.is_time_relative():
-	    self.relative_time.update()
-	self.spatial_extent.update()
-	self.metadata.update()
+	    self.relative_time.update(dbif)
+	self.spatial_extent.update(dbif)
+	self.metadata.update(dbif)
 
     def print_self(self):
 	"""Print the content of the internal structure to stdout"""
@@ -229,17 +229,27 @@ class abstract_map_dataset(abstract_dataset):
         self.absolute_time.set_end_time(end_time)
         self.absolute_time.set_timezone(timezone)
 
-    def update_absolute_time(self, start_time, end_time=None, timezone=None):
+    def update_absolute_time(self, start_time, end_time=None, timezone=None, dbif = None):
         """Update the absolute time
 
            @start_time a datetime object specifying the start time of the map
            @end_time a datetime object specifying the end time of the map
            @timezone Thee timezone of the map
         """
+        connect = False
+
+        if dbif == None:
+            dbif = sql_database_interface()
+            dbif.connect()
+            connect = True
+
         self.set_absolute_time(start_time, end_time, timezone)
-        self.absolute_time.update()
-        self.base.update()
-    
+        self.absolute_time.update(dbif)
+        self.base.update(dbif)
+
+        if connect == True:
+            dbif.close()
+
     def set_relative_time(self, interval):
         """Set the relative time interval 
         
@@ -250,73 +260,123 @@ class abstract_map_dataset(abstract_dataset):
         
         self.relative_time.set_interval(interval)
 
-    def update_relative_time(self, interval):
+    def update_relative_time(self, interval, dbif = None):
         """Set the relative time interval
 
            @interval A double value in days
 
         """
+        connect = False
+
+        if dbif == None:
+            dbif = sql_database_interface()
+            dbif.connect()
+            connect = True
+
         self.set_relative_time(interval)
-        self.relative_time.update()
-        self.base.update()
+        self.relative_time.update(dbif)
+        self.base.update(dbif)
+
+        if connect == True:
+            dbif.close()
 
     def set_spatial_extent(self, north, south, east, west, top=0, bottom=0):
         """Set the spatial extent of the map"""
         self.spatial_extent.set_spatial_extent(north, south, east, west, top, bottom)
         
-    def delete(self):
+    def delete(self, dbif=None):
 	"""Delete a map entry from database if it exists
         
             Remove dependent entries:
             * Remove the map entry in each space time dataset in which this map is registered
             * Remove the space time dataset register table
         """
-        if self.is_in_db():
+
+        connect = False
+
+        if dbif == None:
+            dbif = sql_database_interface()
+            dbif.connect()
+            connect = True
+
+        if self.is_in_db(dbif):
             
             # First we unregister from all dependent space time datasets
-            self.unregister()
+            self.unregister(dbif)
 
             # Remove the strds register table
             sql = "DROP TABLE " + self.get_stds_register()
             #print sql
-            self.base.connect()
-            self.base.cursor.execute(sql)
-            self.base.close()
+            dbif.cursor.execute(sql)
 
             core.verbose("Delete " + self.get_type() + " dataset <" + self.get_id() + "> from temporal database")
 
             # Delete yourself from the database, trigger functions will take care of dependencies
-            self.base.delete()
+            self.base.delete(dbif)
 
-    def unregister(self):
+        if connect == True:
+            dbif.close()
+
+    def unregister(self, dbif=None):
 	""" Remove the map entry in each space time dataset in which this map is registered
         """
 
         core.verbose("Unregister " + self.get_type() + " dataset <" + self.get_id() + "> from space time datasets")
+        
+        connect = False
+
+        if dbif == None:
+            dbif = sql_database_interface()
+            dbif.connect()
+            connect = True
+
+        # Get all datasets in which this map is registered
+        rows = self.get_registered_datasets(dbif)
+
+        # For each stds in which the map is registered
+        if rows:
+            for row in rows:
+                # Create a space time dataset object to remove the map
+                # from its register
+                stds = self.get_new_stds_instance(row["id"])
+                stds.select(dbif)
+                stds.unregister_map(self, dbif)
+                # Take care to update the space time dataset after
+                # the map has been unregistred
+                stds.update_from_registered_maps(dbif)
+
+        if connect == True:
+            dbif.close()
+            
+    def get_registered_datasets(self, dbif=None):
+        """Return all space time dataset ids in which this map is registered as
+          sqlite3 rows with column "id" or None if this map is not registered in any
+          space time dataset.
+        """
+        connect = False
+
+        if dbif == None:
+            dbif = sql_database_interface()
+            dbif.connect()
+            connect = True
 
         # Select all data from the database
-        self.select()
+        self.select(dbif)
+
+        rows = None
+
         # Remove the map from all registered space time datasets
         if self.get_stds_register() != None:
             # Select all stds tables in which this map is registered
             sql = "SELECT id FROM " + self.get_stds_register()
             #print sql
-            self.base.connect()
-            self.base.cursor.execute(sql)
-            rows = self.base.cursor.fetchall()
-            self.base.close()
+            dbif.cursor.execute(sql)
+            rows = dbif.cursor.fetchall()
 
-            # For each stds in which the map is registered
-            if rows:
-                for row in rows:
-                    # Create a space time dataset object to remove the map
-                    # from its register
-                    stds = self.get_new_stds_instance(row["id"])
-                    stds.select()
-                    stds.unregister_map(self)
-                    # Take care to update the space time dataset after
-                    # the map has been unregistred
-                    stds.update_from_registered_maps()
+        if connect == True:
+            dbif.close()
+            
+        return rows
 
 ###############################################################################
 
@@ -371,36 +431,42 @@ class abstract_space_time_dataset(abstract_dataset):
         self.metadata.set_title(title)
         self.metadata.set_description(description)
 
-    def delete(self):
+    def delete(self, dbif=None):
         """Delete a space time dataset from the database"""
         # First we need to check if maps are registered in this dataset and
         # unregister them
 
         core.verbose("Delete space time " + self.get_new_map_instance(ident=None).get_type() + " dataset <" + self.get_id() + "> from temporal database")
 
+        connect = False
+
+        if dbif == None:
+            dbif = sql_database_interface()
+            dbif.connect()
+            connect = True
+
         if self.get_map_register():
             sql = "SELECT id FROM " + self.get_map_register()
-            self.base.connect()
-            self.base.cursor.execute(sql)
-            rows = self.base.cursor.fetchall()
-            self.base.close()
+            dbif.cursor.execute(sql)
+            rows = dbif.cursor.fetchall()
             # Unregister each registered map in the table
             if rows:
                 for row in rows:
                     # Unregister map
                     map = self.get_new_map_instance(row["id"])
-                    self.unregister_map(map)
+                    self.unregister_map(map, dbif)
 
             # Drop remove the map register table
             sql = "DROP TABLE " + self.get_map_register()
-            self.base.connect()
-            self.base.cursor.execute(sql)
-            self.base.close()
+            dbif.cursor.execute(sql)
 
         # Remove the primary key, the foreign keys will be removed by trigger
-        self.base.delete()
+        self.base.delete(dbif)
 
-    def register_map(self, map):
+        if connect == True:
+            dbif.close()
+            
+    def register_map(self, map, dbif=None):
         """Register a map in the space time dataset.
 
             This method takes care of the registration of a map
@@ -410,13 +476,20 @@ class abstract_space_time_dataset(abstract_dataset):
             and return False
         """
 
-        if map.is_in_db() == False:
+        connect = False
+
+        if dbif == None:
+            dbif = sql_database_interface()
+            dbif.connect()
+            connect = True
+
+        if map.is_in_db(dbif) == False:
             core.fatal("Only maps with absolute or relative valid time can be registered")
 
         core.verbose("Register " + map.get_type() + " map: " + map.get_id() + " in space time " + map.get_type() + " dataset <" + self.get_id() + ">")
 
         # First select all data from the database
-        map.select()
+        map.select(dbif)
         map_id = map.base.get_id()
         map_name = map.base.get_name()
         map_mapset = map.base.get_mapset()
@@ -437,10 +510,8 @@ class abstract_space_time_dataset(abstract_dataset):
         # Check if map is already registred
         if stds_register_table:
             sql = "SELECT id FROM " + stds_register_table + " WHERE id = (?)"
-            self.base.connect()
-            self.base.cursor.execute(sql, (map_id,))
-            row = self.base.cursor.fetchone()
-            self.base.close()
+            dbif.cursor.execute(sql, (map_id,))
+            row = dbif.cursor.fetchone()
             # In case of no entry make a new one
             if row and row[0] == map_id:
                 core.warning("Map " + map_id + "is already registered.")
@@ -462,15 +533,12 @@ class abstract_space_time_dataset(abstract_dataset):
             sql = sql.replace("TABLE_NAME", uuid_rand )
             sql = sql.replace("MAP_ID", map_id)
             sql = sql.replace("STDS", self.get_type())
-
-            self.base.connect()
-            self.base.cursor.executescript(sql)
-            self.base.close()
+            dbif.cursor.executescript(sql)
 
             map_register_table = uuid_rand + "_" + self.get_type() + "_register"
             # Set the stds register table name and put it into the DB
             map.set_stds_register(map_register_table)
-            map.metadata.update()
+            map.metadata.update(dbif)
             
             core.verbose("Created register table <" +  map_register_table + "> for " + map.get_type() + " map <" + map.get_id() + ">")
 
@@ -489,10 +557,7 @@ class abstract_space_time_dataset(abstract_dataset):
             sql_script += sql
             sql_script += "\n"
             sql_script += "END TRANSACTION;"
-
-            self.base.connect()
-            self.base.cursor.executescript(sql_script)
-            self.base.close()
+            dbif.cursor.executescript(sql_script)
 
             # Trigger have been disabled due to peformance issues while registration
             ## We need raster specific trigger
@@ -508,57 +573,58 @@ class abstract_space_time_dataset(abstract_dataset):
             #sql_script += "\n"
             #sql_script += "END TRANSACTION;"
 
-            #self.base.connect()
-            #self.base.cursor.executescript(sql_script)
-            #self.base.close()
+            #dbif.cursor.executescript(sql_script)
 
             stds_register_table = stds_name + "_" + stds_mapset + "_" + map.get_type() + "_register"
 
             # Set the map register table name and put it into the DB
             self.set_map_register(stds_register_table)
-            self.metadata.update()
+            self.metadata.update(dbif)
 
             core.verbose("Created register table <" +  stds_register_table + "> for space time " + map.get_type() + " dataset <" + self.get_id() + ">")
 
         # Register the stds in the map stds register table
         # Check if the entry is already there
         sql = "SELECT id FROM " + map_register_table + " WHERE id = ?"
-        self.base.connect()
-        self.base.cursor.execute(sql, (self.base.get_id(),))
-      	row = self.base.cursor.fetchone()
-	self.base.close()
+        dbif.cursor.execute(sql, (self.base.get_id(),))
+      	row = dbif.cursor.fetchone()
 
         # In case of no entry make a new one
         if row == None:
             sql = "INSERT INTO " + map_register_table + " (id) " + "VALUES (?)"
             #print sql
-            self.base.connect()
-            self.base.cursor.execute(sql, (self.base.get_id(),))
-            self.base.close()
+            dbif.cursor.execute(sql, (self.base.get_id(),))
 
         # Now put the raster name in the stds map register table
         sql = "INSERT INTO " + stds_register_table + " (id) " + "VALUES (?)"
         #print sql
-        self.base.connect()
-        self.base.cursor.execute(sql, (map_id,))
-        self.base.close()
+        dbif.cursor.execute(sql, (map_id,))
 
+        if connect == True:
+            dbif.close()
+            
         return True
 
-    def unregister_map(self, map):
+    def unregister_map(self, map, dbif = None):
         """Unregister a map from the space time dataset.
 
             This method takes care of the unregistration of a map
             from a space time dataset.
         """
+        connect = False
 
-        if map.is_in_db() == False:
+        if dbif == None:
+            dbif = sql_database_interface()
+            dbif.connect()
+            connect = True
+
+        if map.is_in_db(dbif) == False:
             core.fatal("Unable to find map <" + map.get_id() + "> in temporal database")
 
         core.info("Unregister " + map.get_type() + " map: " + map.get_id())
 
         # First select all data from the database
-        map.select()
+        map.select(dbif)
         map_id = map.base.get_id()
         map_register_table = map.get_stds_register()
 
@@ -567,10 +633,8 @@ class abstract_space_time_dataset(abstract_dataset):
 
         # Check if the map is registered in the space time raster dataset
         sql = "SELECT id FROM " + map_register_table + " WHERE id = ?"
-        self.base.connect()
-        self.base.cursor.execute(sql, (self.base.get_id(),))
-      	row = self.base.cursor.fetchone()
-	self.base.close()
+        dbif.cursor.execute(sql, (self.base.get_id(),))
+      	row = dbif.cursor.fetchone()
 
         # Break if the map is not registered
         if row == None:
@@ -580,18 +644,17 @@ class abstract_space_time_dataset(abstract_dataset):
         # Remove the space time raster dataset from the raster dataset register
         if map_register_table != None:
             sql = "DELETE FROM " + map_register_table + " WHERE id = ?"
-            self.base.connect()
-            self.base.cursor.execute(sql, (self.base.get_id(),))
-            self.base.close()
+            dbif.cursor.execute(sql, (self.base.get_id(),))
 
         # Remove the raster map from the space time raster dataset register
         if stds_register_table != None:
             sql = "DELETE FROM " + stds_register_table + " WHERE id = ?"
-            self.base.connect()
-            self.base.cursor.execute(sql, (map_id,))
-            self.base.close()
+            dbif.cursor.execute(sql, (map_id,))
 
-    def update_from_registered_maps(self):
+        if connect == True:
+            dbif.close()
+            
+    def update_from_registered_maps(self, dbif = None):
         """This methods updates the spatial and temporal extent as well as
            type specific metadata. It should always been called after maps are registered
            or unregistered/deleted from the space time dataset.
@@ -601,6 +664,13 @@ class abstract_space_time_dataset(abstract_dataset):
            in case many maps are registred (>1000).
         """
         core.info("Update metadata, spatial and temporal extent from all registered maps of <" + self.get_id() + ">")
+
+        connect = False
+
+        if dbif == None:
+            dbif = sql_database_interface()
+            dbif.connect()
+            connect = True
 
         # Get basic info
         stds_name = self.base.get_name()
@@ -634,6 +704,7 @@ class abstract_space_time_dataset(abstract_dataset):
 
         sql_script += "END TRANSACTION;"
 
-        self.base.connect()
-        self.base.cursor.executescript(sql_script)
-        self.base.close()
+        dbif.cursor.executescript(sql_script)
+
+        if connect == True:
+            dbif.close()
