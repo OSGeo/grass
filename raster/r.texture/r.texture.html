@@ -1,6 +1,6 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.texture</em> - Creates map raster with textural features for
+<em>r.texture</em> creates raster maps with textural features from a
 user-specified raster map layer. The module calculates textural features 
 based on spatial dependence matrices at 0, 45, 90, and 135 
 degrees for a <em>distance</em> (default = 1).
@@ -11,17 +11,16 @@ The input is rescaled to 0 to 255 if needed.
 In general, several variables constitute texture: differences in grey level values,
 coarseness as scale of grey level differences, presence or lack of directionality
 and regular patterns.
-
 <p>
 <em>r.texture</em> reads a GRASS raster map as input and calculates textural 
 features based on spatial
 dependence matrices for north-south, east-west, northwest, and southwest
-directions using a side by side neighborhood (i.e., a distance of 1). Be
-sure to carefully set your resolution (using 
-<a href="g.region.html">g.region</a>) before running this program, or else your
-computer could run out of memory.  Also, make sure that your raster map has
-no more than 255 categories.  The output consists into four images for each
-textural feature, one for every direction.</p>
+directions using a side by side neighborhood (i.e., a distance of 1). The user
+should be sure to carefully set the resolution (using <em>g.region</em>) before
+running this program, or the computer may run out of memory. 
+The output consists into four images for each textural feature, one for every
+direction.
+
 <p>
 A commonly used texture model is based on the so-called grey level co-occurrence
 matrix. This matrix is a two-dimensional histogram of grey levels
@@ -78,16 +77,8 @@ The following are brief explanations of texture measures:
 </ul>
    
 <h2>NOTES</h2>
-Algorithm taken from:<br>
 
-Haralick, R.M., K. Shanmugam, and I. Dinstein. 1973. Textural features for
-    image classification. <em>IEEE Transactions on Systems, Man, and
-    Cybernetics</em>, SMC-3(6):610-621.
-
-<p>The code was taken by permission from <em>pgmtexture</em>, part of
-    PBMPLUS (Copyright 1991, Jef Poskanser and Texas Agricultural Experiment
-    Station, employer for hire of James Darrell McCauley). <br>
-    Man page of <a href="http://netpbm.sourceforge.net/doc/pgmtexture.html">pgmtexture</a></p>
+Importantly, the input raster map cannot have more than 255 categories.
 
 <h2>EXAMPLE</h2>
 
@@ -109,36 +100,43 @@ d.shadedmap drape=ortho_texture_ASM_0 rel=ortho_2001_t792_1m
 This calculates four maps (requested texture at four orientations):
 ortho_texture_ASM_0, ortho_texture_ASM_45, ortho_texture_ASM_90, ortho_texture_ASM_135.
 
-
 <h2>BUGS</h2>
 The program can run incredibly slow for large raster maps.
 
 <h2>REFERENCES</h2>
-<b>Haralick, R.M., K. Shanmugam, and I. Dinstein</b> (1973). Textural features for
+
+The algorithm was implemented after Haralick et al., 1973.
+
+<p>
+The code was taken by permission from <em>pgmtexture</em>, part of
+PBMPLUS (Copyright 1991, Jef Poskanser and Texas Agricultural Experiment
+Station, employer for hire of James Darrell McCauley). <br>
+Manual page of <a href="http://netpbm.sourceforge.net/doc/pgmtexture.html">pgmtexture</a></p>
+
+<ul> 
+<li>Haralick, R.M., K. Shanmugam, and I. Dinstein (1973). Textural features for
     image classification. <em>IEEE Transactions on Systems, Man, and
-    Cybernetics</em>, SMC-3(6):610-621.
-<p>
-<b>Bouman, C. A., Shapiro, M.</b>,(March
-    1994).A Multiscale Random Field Model for Bayesian Image
-    Segmentation, IEEE Trans. on Image Processing, vol. 3, no.2.
-<p>
-<b>Haralick, R.</b>, (May 1979). <i>Statistical and structural approaches to texture</i>,
-   Proceedings of the IEEE, vol. 67, No.5, pp. 786-804</p>
-<p>
-<b>Hall-Beyer, M.</b> (2007). <a href="http://www.fp.ucalgary.ca/mhallbey/tutorial.htm">The GLCM Tutorial Home Page</a>
+    Cybernetics</em>, SMC-3(6):610-621.</li>
+<li>Bouman, C. A., Shapiro, M. (1994). A Multiscale Random Field Model for
+ Bayesian Image Segmentation, IEEE Trans. on Image Processing, vol. 3, no. 2.</li>
+<li>Haralick, R. (May 1979). <i>Statistical and structural approaches to texture</i>,
+   Proceedings of the IEEE, vol. 67, No.5, pp. 786-804</li>
+<li>Hall-Beyer, M. (2007). <a href="http://www.fp.ucalgary.ca/mhallbey/tutorial.htm">The GLCM Tutorial Home Page</a>
   (Grey-Level Co-occurrence Matrix texture measurements). University of Calgary, Canada
-     
+</ul>
+
 <h2>SEE ALSO</h2>
 
-<em><a href="i.smap.html">i.smap</a></em>,
-<em><a href="i.gensigset.html">i.gensigset</a></em>,
-<em><a href="i.pca.html">i.pca</a></em>,
-<em><a href="r.digit.html">r.digit</a></em>,
-<em><a href="i.group.html">i.group</a></em>
+<em>
+<a href="i.smap.html">i.smap</a>,
+<a href="i.gensigset.html">i.gensigset</a>,
+<a href="i.pca.html">i.pca</a>,
+<a href="r.rescale.html">r.rescale</a>
+</em>
 
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 <a href="mailto:antoniol@ieee.org">G. Antoniol</a> - RCOST (Research Centre on Software Technology - Viale Traiano - 82100 Benevento)<br>
-<a href="mailto:basco@unisannio.it">C. Basco</a> -  RCOST (Research Centre on Software Technology - Viale Traiano - 82100 Benevento)<br>
-<a href="mailto:ceccarelli@unisannio.it">M. Ceccarelli</a> - Facolta di Scienze, Universita del Sannio, Benevento
+C. Basco -  RCOST (Research Centre on Software Technology - Viale Traiano - 82100 Benevento)<br>
+M. Ceccarelli - Facolta di Scienze, Universita del Sannio, Benevento
 
-<p><i>Last changed: $Date$</i></p>
+<p><i>Last changed: $Date$</i>
