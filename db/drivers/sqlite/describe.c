@@ -404,7 +404,8 @@ static int parse_type(const char *declared, int *length)
     if (streq(buf, "time") || streq(buf, "timetz"))
 	return DB_SQL_TYPE_TIME;
 
-    if (streq(buf, "timestamp") || streq(buf, "timestamptz"))
+    if (streq(buf, "timestamp") || streq(buf, "timestamptz") || 
+	streq(buf, "datetime"))
 	return DB_SQL_TYPE_TIMESTAMP;
 
     if (streq(buf, "interval"))
@@ -433,7 +434,7 @@ static int parse_type(const char *declared, int *length)
 	streq(word[2], "time") && streq(word[3], "zone")) {
 	if (streq(word[0], "time"))
 	    return DB_SQL_TYPE_TIME;
-	if (streq(word[0], "timestamp"))
+	if (streq(word[0], "timestamp") || streq(word[0], "datetime"))
 	    return DB_SQL_TYPE_TIMESTAMP;
     }
 
@@ -457,7 +458,8 @@ static int parse_type(const char *declared, int *length)
 	return DB_SQL_TYPE_TIME;
 
     if (sscanf(buf, "timestamp ( %d )", length) == 1 ||
-	sscanf(buf, "timestamptz ( %d )", length) == 1)
+	sscanf(buf, "timestamptz ( %d )", length) == 1 ||
+	sscanf(buf, "datetime ( %d )", length) == 1 )
 	return DB_SQL_TYPE_TIMESTAMP;
 
     if (sscanf
@@ -467,7 +469,7 @@ static int parse_type(const char *declared, int *length)
 	streq(word[2], "time") && streq(word[3], "zone")) {
 	if (streq(word[0], "time"))
 	    return DB_SQL_TYPE_TIME;
-	if (streq(word[0], "timestamp"))
+	if (streq(word[0], "timestamp") || streq(word[0], "datetime"))
 	    return DB_SQL_TYPE_TIMESTAMP;
     }
 
