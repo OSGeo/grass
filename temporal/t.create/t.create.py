@@ -120,6 +120,7 @@ def main():
     if sp.is_in_db(dbif) and grass.overwrite() == True:
         grass.info("Overwrite space time " + sp.get_new_map_instance(None).get_type() + " dataset <" + name + "> and unregister all maps.")
         sp.delete(dbif)
+        sp = sp.get_new_instance(id)
 
     grass.info("Create space time " + sp.get_new_map_instance(None).get_type() + " dataset.")
 

@@ -26,7 +26,11 @@ from tgis_metadata import *
 
 class abstract_dataset(object):
     """This is the base class for all datasets (raster, vector, raster3d, strds, stvds, str3ds)"""
-    
+
+    def reset(self, ident):
+	"""Reset the internal structure and set the identifier"""
+	raise IOError("This method must be implemented in the subclasses")
+
     def get_type(self):
         """Return the type of this class"""
         raise IOError("This method must be implemented in the subclasses")
@@ -305,14 +309,20 @@ class abstract_map_dataset(abstract_dataset):
             self.unregister(dbif)
 
             # Remove the strds register table
-            sql = "DROP TABLE " + self.get_stds_register()
-            #print sql
-            dbif.cursor.execute(sql)
+            if self.get_stds_register():
+                sql = "DROP TABLE " + self.get_stds_register()
+                #print sql
+                try:
+                    dbif.cursor.execute(sql)
+                except:
+                    core.error("Unable to remove space time dataset register table " + self.get_stds_register())
 
             core.verbose("Delete " + self.get_type() + " dataset <" + self.get_id() + "> from temporal database")
 
             # Delete yourself from the database, trigger functions will take care of dependencies
             self.base.delete(dbif)
+
+        self.reset(None)
 
         if connect == True:
             dbif.close()
@@ -360,18 +370,16 @@ class abstract_map_dataset(abstract_dataset):
             dbif.connect()
             connect = True
 
-        # Select all data from the database
-        self.select(dbif)
-
         rows = None
 
-        # Remove the map from all registered space time datasets
-        if self.get_stds_register() != None:
-            # Select all stds tables in which this map is registered
-            sql = "SELECT id FROM " + self.get_stds_register()
-            #print sql
-            dbif.cursor.execute(sql)
-            rows = dbif.cursor.fetchall()
+        try:
+            if self.get_stds_register() != None:
+                # Select all stds tables in which this map is registered
+                sql = "SELECT id FROM " + self.get_stds_register()
+                dbif.cursor.execute(sql)
+                rows = dbif.cursor.fetchall()
+        except:
+            core.error("Unable to select space time dataset register table " + self.get_stds_register())
 
         if connect == True:
             dbif.close()
@@ -411,10 +419,6 @@ class abstract_space_time_dataset(abstract_dataset):
         """Set the name of the map register table"""
         raise IOError("This method must be implemented in the subclasses")
 
-    def reset(self, ident):
-	"""Reset the internal structure and set the identifier"""
-	raise IOError("This method must be implemented in the subclasses")
-
     def set_initial_values(self, granularity, temporal_type, semantic_type, \
                            title=None, description=None):
 
@@ -447,21 +451,26 @@ class abstract_space_time_dataset(abstract_dataset):
 
         if self.get_map_register():
             sql = "SELECT id FROM " + self.get_map_register()
-            dbif.cursor.execute(sql)
-            rows = dbif.cursor.fetchall()
-            # Unregister each registered map in the table
-            if rows:
-                for row in rows:
-                    # Unregister map
-                    map = self.get_new_map_instance(row["id"])
-                    self.unregister_map(map, dbif)
+            try:
+                dbif.cursor.execute(sql)
+                rows = dbif.cursor.fetchall()
+                # Unregister each registered map in the table
+                if rows:
+                    for row in rows:
+                        # Unregister map
+                        map = self.get_new_map_instance(row["id"])
+                        self.unregister_map(map, dbif)
 
-            # Drop remove the map register table
-            sql = "DROP TABLE " + self.get_map_register()
-            dbif.cursor.execute(sql)
+                # Drop remove the map register table
+                sql = "DROP TABLE " + self.get_map_register()
+                dbif.cursor.execute(sql)
+            except:
+                core.error("Unable to unregister maps from register table <" + self.get_map_register() + ">")
+                raise
 
         # Remove the primary key, the foreign keys will be removed by trigger
         self.base.delete(dbif)
+        self.reset(None)
 
         if connect == True:
             dbif.close()
@@ -533,7 +542,12 @@ class abstract_space_time_dataset(abstract_dataset):
             sql = sql.replace("TABLE_NAME", uuid_rand )
             sql = sql.replace("MAP_ID", map_id)
             sql = sql.replace("STDS", self.get_type())
-            dbif.cursor.executescript(sql)
+            try:
+                dbif.cursor.executescript(sql)
+            except:
+                core.error("Unable to create the space time " + map.get_type() +\
+                " dataset register table for " + map.get_type() + " map <" + map.get_id())
+                raise
 
             map_register_table = uuid_rand + "_" + self.get_type() + "_register"
             # Set the stds register table name and put it into the DB
@@ -553,11 +567,16 @@ class abstract_space_time_dataset(abstract_dataset):
             sql = sql.replace("STDS", self.get_type())
 
             sql_script = ""
-            sql_script += "BEGIN TRANSACTION;\n"
+            #sql_script += "BEGIN TRANSACTION;\n"
             sql_script += sql
-            sql_script += "\n"
-            sql_script += "END TRANSACTION;"
-            dbif.cursor.executescript(sql_script)
+            #sql_script += "\n"
+            #sql_script += "END TRANSACTION;"
+            try:
+                dbif.cursor.executescript(sql_script)
+            except:
+                core.error("Unable to create the " + map.get_type() +\
+                " map register table for space time " + map.get_type() + " dataset <" + map.get_id())
+                raise
 
             # Trigger have been disabled due to peformance issues while registration
             ## We need raster specific trigger

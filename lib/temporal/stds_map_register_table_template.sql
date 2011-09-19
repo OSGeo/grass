@@ -39,6 +39,11 @@ CREATE TABLE  SPACETIME_NAME_GRASS_MAP_register (
 --           (SELECT max(end_time) FROM GRASS_MAP_absolute_time WHERE GRASS_MAP_absolute_time.id IN 
 --			(SELECT id FROM SPACETIME_NAME_GRASS_MAP_register)
 --           ) WHERE id = "SPACETIME_ID";
+
+--    UPDATE STDS_relative_time SET interval =
+--           (SELECT max(interval) FROM GRASS_MAP_relative_time WHERE GRASS_MAP_relative_time.id IN
+--       		(SELECT id FROM SPACETIME_NAME_GRASS_MAP_register)
+--           ) WHERE id = "SPACETIME_ID";
 --    -- Update the spatial extent
 --    UPDATE STDS_spatial_extent SET north = 
 --           (SELECT max(north) FROM GRASS_MAP_spatial_extent WHERE GRASS_MAP_spatial_extent.id IN 
