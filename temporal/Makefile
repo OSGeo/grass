@@ -5,6 +5,8 @@ SUBDIRS = \
 	t.list \
 	t.info \
 	t.remove \
+	t.time.abs \
+	t.time.rel \
 	tr.register \
 	tr3.register \
 	tv.register \

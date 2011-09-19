@@ -419,7 +419,7 @@ class relative_temporal_extent(sql_database_interface):
         """Print information about this class in human readable style"""
         #      0123456789012345678901234567890
         print " +-------------------- Relative time -----------------------------------------+"
-        print " |  Interval:................... " + str(self.get_interval())
+        print " | Interval:................... " + str(self.get_interval())
 
     def print_shell_info(self):
         """Print information about this class in shell style"""

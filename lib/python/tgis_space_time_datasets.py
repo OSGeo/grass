@@ -442,6 +442,11 @@ def register_maps_in_space_time_dataset(type, name, maps, start=None, increment=
                 core.fatal("Unable to register " + map.get_type() + " map <" + map.get_id() + ">. The map has no valid time and the start time is not set.")
             # Load the data from the grass file database
             map.load()
+
+            if sp.get_temporal_type() == "absolute":
+                map.set_time_to_absolute()
+            else:
+                map.set_time_to_relative()
             #  Put it into the temporal database
             map.insert(dbif)
         else:
@@ -451,7 +456,7 @@ def register_maps_in_space_time_dataset(type, name, maps, start=None, increment=
 
         # Set the valid time
         if start:
-            assign_valid_time_to_map(sp.get_temporal_type(), map, start, increment, count, dbif)
+            assign_valid_time_to_map(ttype=sp.get_temporal_type(), map=map, start=start, end=None, increment=increment, mult=count, dbif=dbif)
 
         # Finally Register map in the space time dataset
         sp.register_map(map, dbif)
@@ -534,8 +539,96 @@ def unregister_maps_from_space_time_datasets(type, name, maps, dbif = None):
 
     if connect == True:
         dbif.close()
-        
-def assign_valid_time_to_map(ttype, map, start, increment=None, mult=1, dbif = None):
+
+###############################################################################
+
+def assign_valid_time_to_maps(type, maps, ttype, start, end=None, increment=None, dbif = None):
+    """Use this method to assign valid time (absolute or relative) to raster,
+       raster3d and vector datasets.
+
+       It takes care of the correct update of the space time datasets from all
+       registered maps.
+
+       Valid end time and increment are mutual exclusive.
+
+       @type The type of the maps raster, raster3d or vector
+       @maps A comma separated list of map names
+       @start The start date and time of the first raster map (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd", format relative 5.0)
+       @start The end date and time of the first raster map (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd", format relative 5.0)
+       @increment Time increment between maps for time stamp creation (format absolute: NNN seconds, minutes, hours, days, weeks, months, years; format relative: 1.0)
+    """
+
+    if end and increment:
+        core.fatal("Valid end time and increment are mutual exclusive")
+
+    # List of space time datasets to be updated
+    splist = {}
+
+    # We may need the mapset
+    mapset =  core.gisenv()["MAPSET"]
+
+    if dbif == None:
+        dbif = sql_database_interface()
+        dbif.connect()
+        connect = True
+
+    if maps.find(",") == -1:
+        maplist = (maps,)
+    else:
+        maplist = tuple(maps.split(","))
+
+    count = 0
+    for mapname in maplist:
+        mapname = mapname.strip()
+        # Check if the map name contains the mapset as well
+        if mapname.find("@") < 0:
+            mapid = mapname + "@" + mapset
+        else:
+            mapid = mapname
+            
+        if type == "raster":
+            map = raster_dataset(mapid)
+        if type == "raster3d":
+            map = raster3d_dataset(mapid)
+        if type == "vector":
+            map = vector_dataset(mapid)
+
+        if map.is_in_db(dbif) == False:
+            # Load the data from the grass file database
+            map.load()
+            if ttype == "absolute":
+                map.set_time_to_absolute()
+            else:
+                map.set_time_to_relative()
+            #  Put it into the temporal database
+            map.insert(dbif)
+        else:
+            map.select(dbif)
+            sprows = map.get_registered_datasets(dbif)
+            # Make an entry in the dataset list, using a dict make sure that
+            # each dataset is listed only once
+            if sprows != None:
+                for dataset in sprows:
+                    splist[dataset["id"]] = True
+            
+        # Set the valid time
+        assign_valid_time_to_map(ttype=ttype, map=map, start=start, end=end, increment=increment, mult=count, dbif=dbif)
+
+        count += 1
+
+    # Update all the space time datasets in which registered maps are changed there valid time
+    for name in splist.keys():
+        sp = map.get_new_stds_instance(name)
+        sp.select(dbif)
+        sp.update_from_registered_maps(dbif)
+
+    if connect == True:
+        dbif.close()
+
+
+###############################################################################
+
+def assign_valid_time_to_map(ttype, map, start, end, increment=None, mult=1, dbif = None):
     """Assign the valid time to a map dataset
 
        @ttype The temporal type which should be assigned and which the time format is of
@@ -544,7 +637,7 @@ def assign_valid_time_to_map(ttype, map, start, increment=None, mult=1, dbif = N
        @increment Time increment between maps for time stamp creation (format absolute: NNN seconds, minutes, hours, days, weeks, months, years; format relative: 1.0)
        @multi A multiplier for the increment
     """
-
+    
     connect = False
 
     if dbif == None:
@@ -560,7 +653,10 @@ def assign_valid_time_to_map(ttype, map, start, increment=None, mult=1, dbif = N
             time_format = "%Y-%m-%d"
 
         start_time = datetime.strptime(start, time_format)
-        end_time = None
+        if end:
+            end_time = datetime.strptime(end, time_format)
+        else:
+            end_time = None
 
         # Add the increment
         if increment:
