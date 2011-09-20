@@ -78,7 +78,6 @@ int main(int argc, char *argv[])
     out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
     
     feature_opt = G_define_standard_option(G_OPT_V_TYPE);
-    feature_opt->key = "feature";
     feature_opt->required = YES;
     feature_opt->multiple = NO;
     feature_opt->options = "point,line,area";
