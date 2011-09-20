@@ -59,7 +59,7 @@ dbString sql, label;
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct Option *in_opt, *out_opt, *feature_opt;
+    struct Option *in_opt, *out_opt, *feature_opt, *column_name;
     struct Flag *smooth_flg, *value_flg, *z_flg, *no_topol;
     int feature;
 
@@ -85,6 +85,14 @@ int main(int argc, char *argv[])
     feature_opt->options = "point,line,area";
     feature_opt->answer = "line";
     feature_opt->description = _("Feature type");
+
+    column_name = G_define_option();
+    column_name->key = "column";
+    column_name->type = TYPE_STRING;
+    column_name->required = NO;
+    column_name->multiple = NO;
+    column_name->answer = "value";
+    column_name->description = _("The name of the column in the vector table. The name must be SQL compliant.");
 
     smooth_flg = G_define_flag();
     smooth_flg->key = 's';
@@ -172,10 +180,15 @@ int main(int argc, char *argv[])
 	db_append_string(&sql, buf);
 
 	if (!value_flag) {	/* add value to the table */
-	    if (data_type == CELL_TYPE)
-		db_append_string(&sql, ", value integer");
-	    else
-		db_append_string(&sql, ", value double precision");
+	    if (data_type == CELL_TYPE) {
+		db_append_string(&sql, ", ");
+		db_append_string(&sql, column_name->answer);
+		db_append_string(&sql, " integer");
+	    } else {
+		db_append_string(&sql, ",");
+		db_append_string(&sql, column_name->answer);
+		db_append_string(&sql, " double precision");
+	    }
 	}
 
 	if (has_cats) {
