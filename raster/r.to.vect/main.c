@@ -8,7 +8,7 @@
  *
  * PURPOSE:      Converts a raster map into a vector map layer
  *
- * COPYRIGHT:    (C) 2007 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2007, 2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -76,23 +76,18 @@ int main(int argc, char *argv[])
     in_opt = G_define_standard_option(G_OPT_R_INPUT);
 
     out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
-
-    feature_opt = G_define_option();
+    
+    feature_opt = G_define_standard_option(G_OPT_V_TYPE);
     feature_opt->key = "feature";
-    feature_opt->type = TYPE_STRING;
     feature_opt->required = YES;
     feature_opt->multiple = NO;
     feature_opt->options = "point,line,area";
-    feature_opt->answer = "line";
-    feature_opt->description = _("Feature type");
+    feature_opt->answer = NULL;
 
-    column_name = G_define_option();
-    column_name->key = "column";
-    column_name->type = TYPE_STRING;
-    column_name->required = NO;
-    column_name->multiple = NO;
+    column_name = G_define_standard_option(G_OPT_DB_COLUMN);
+    column_name->label = _("Name of attribute column to store value");
+    column_name->description = _("The name must be SQL compliant");
     column_name->answer = "value";
-    column_name->description = _("The name of the column in the vector table. The name must be SQL compliant.");
 
     smooth_flg = G_define_flag();
     smooth_flg->key = 's';
@@ -106,15 +101,15 @@ int main(int argc, char *argv[])
 
     z_flg = G_define_flag();
     z_flg->key = 'z';
-    z_flg->description =
-	_("Write raster values as z coordinate. Table is not created. "
-	  "Currently supported only for points.");
+    z_flg->label = _("Write raster values as z coordinate");
+    z_flg->description = _("Table is not created. "
+			   "Currently supported only for points.");
     z_flg->guisection = _("Attributes");
 
     no_topol = G_define_flag();
     no_topol->key = 'b';
-    no_topol->description =
-	_("Do not build vector topology (recommended for massive point conversion)");
+    no_topol->label = _("Do not build vector topology");
+    no_topol->description = _("Recommended for massive point conversion");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
