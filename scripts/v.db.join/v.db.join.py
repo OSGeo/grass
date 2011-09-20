@@ -68,13 +68,13 @@ def main():
     driver = f['driver']
 
     if driver == 'dbf':
-	grass.fatal(_("JOIN is not supported for tables stored in DBF format."))
+	grass.fatal(_("JOIN is not supported for tables stored in DBF format"))
 
     if not maptable:
-	grass.fatal(_("There is no table connected to this map. Cannot join any column."))
+	grass.fatal(_("There is no table connected to this map. Unable to join any column."))
 
     if not grass.vector_columns(map, layer).has_key(column):
-	grass.fatal(_("Column <%> not found in table <%s> at layer <%s>") % (column, map, layer))
+	grass.fatal(_("Column <%s> not found in table <%s> at layer <%s>") % (column, map, layer))
 
     all_cols_ot = grass.db_describe(otable, driver = driver, database = database)['cols']
     all_cols_tt = grass.vector_columns(map, int(layer)).keys()
@@ -98,15 +98,15 @@ def main():
 	# Add only the new column to the table
 	if colname not in all_cols_tt:
 	    if grass.run_command('v.db.addcolumn', map = map, columns = colspec, layer = layer) != 0:
-	        grass.fatal(_("Error creating column <%s>.") % colname)
+	        grass.fatal(_("Error creating column <%s>") % colname)
 
 	stmt = template.substitute(table = maptable, column = column,
 				   otable = otable, ocolumn = ocolumn,
 				   colname = colname)
 
-        grass.verbose("Update column <" + colname + "> of vector map <" + map + ">")
+        grass.verbose(_("Updating column <%s> of vector map <%s>...") % (colname, map))
 	if grass.write_command('db.execute', stdin = stmt, input = '-', database = database, driver = driver) != 0:
-	    grass.fatal(_("Error filling column <%s>.") % colname)
+	    grass.fatal(_("Error filling column <%s>") % colname)
 
     # write cmd history:
     grass.vector_history(map)
