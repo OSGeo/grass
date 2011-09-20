@@ -109,6 +109,8 @@ int main(int argc, char **argv)
     int node, nnodes;
     COOR *coor;
     int ncoor, acoor;
+    int line, nlines, type, ctype, area, nareas;
+    int err_boundaries, err_centr_out, err_centr_dupl, err_nocentr;
 
     G_gisinit(argv[0]);
 
@@ -164,6 +166,8 @@ int main(int argc, char **argv)
     /* initialize working region */
     G_get_window(&Window);
     Vect_region_box(&Window, &Box);
+    Box.T = 0.5;
+    Box.B = -0.5;
 
     freeinit(&sfl, sizeof(struct Site));
 
@@ -252,46 +256,44 @@ int main(int argc, char **argv)
 	fields[i] = Vect_cidx_get_field_number(&In, i);
     }
 
-    if (1) {
-	int line, nlines, type, ctype;
+    if (line_flag->answer)
+	ctype = GV_POINT;
+    else
+	ctype = GV_CENTROID;
 
-	if (line_flag->answer)
-	    ctype = GV_POINT;
-	else
-	    ctype = GV_CENTROID;
+    nlines = Vect_get_num_lines(&In);
 
-	nlines = Vect_get_num_lines(&In);
+    G_message(_("Writing sites to output..."));
 
-	G_message(_("Writing sites to output..."));
+    for (line = 1; line <= nlines; line++) {
 
-	for (line = 1; line <= nlines; line++) {
+	G_percent(line, nlines, 2);
 
-	    G_percent(line, nlines, 2);
+	type = Vect_read_line(&In, Points, Cats, line);
+	if (!(type & GV_POINTS))
+	    continue;
 
-	    type = Vect_read_line(&In, Points, Cats, line);
-	    if (!(type & GV_POINTS))
-		continue;
+	if (!Vect_point_in_box(Points->x[0], Points->y[0], 0.0, &Box))
+	    continue;
 
-	    if (!Vect_point_in_box(Points->x[0], Points->y[0], 0.0, &Box))
-		continue;
-
-	    Vect_write_line(&Out, ctype, Points, Cats);
+	Vect_write_line(&Out, ctype, Points, Cats);
 
 
-	    for (i = 0; i < Cats->n_cats; i++) {
-		int f, j;
+	for (i = 0; i < Cats->n_cats; i++) {
+	    int f, j;
 
-		for (j = 0; j < nfields; j++) {	/* find field */
-		    if (fields[j] == Cats->field[i]) {
-			f = j;
-			break;
-		    }
+	    f = -1;
+	    for (j = 0; j < nfields; j++) {	/* find field */
+		if (fields[j] == Cats->field[i]) {
+		    f = j;
+		    break;
 		}
+	    }
+	    if (f > -1) {
 		cats[f][ncats[f]] = Cats->cat[i];
 		ncats[f]++;
 	    }
 	}
-
     }
 
     /* Copy tables */
@@ -305,14 +307,17 @@ int main(int argc, char **argv)
 
 	    IFi = Vect_get_dblink(&In, i);
 
+	    f = -1;
 	    for (j = 0; j < nfields; j++) {	/* find field */
 		if (fields[j] == IFi->number) {
 		    f = j;
 		    break;
 		}
 	    }
-	    if (ncats[f] > 0)
-		ntabs++;
+	    if (f > -1) {
+		if (ncats[f] > 0)
+		    ntabs++;
+	    }
 	}
 
 	if (ntabs > 1)
@@ -357,6 +362,101 @@ int main(int argc, char **argv)
 
 
     Vect_close(&In);
+
+    /* cleaning */
+    Vect_build_partial(&Out, GV_BUILD_CENTROIDS);
+    err_boundaries = err_centr_out = err_centr_dupl = err_nocentr = 0;
+    nlines = Vect_get_num_lines(&Out);
+    for (line = 1; line <= nlines; line++) {
+
+	if (!Vect_line_alive(&Out, line))
+	    continue;
+
+	type = Vect_get_line_type(&Out, line);
+	if (type == GV_BOUNDARY) {
+	    int left, right;
+
+	    Vect_get_line_areas(&Out, line, &left, &right);
+
+	    if (left == 0 || right == 0) {
+		G_debug(3, "line = %d left = %d right = %d", line, 
+			left, right);
+		err_boundaries++;
+	    }
+	}
+	if (type == GV_CENTROID) {
+	    area = Vect_get_centroid_area(&Out, line);
+	    if (area == 0)
+		err_centr_out++;
+	    else if (area < 0)
+		err_centr_dupl++;
+	}
+    }
+
+    err_nocentr = 0;
+    nareas = Vect_get_num_areas(&Out);
+    for (area = 1; area <= nareas; area++) {
+	if (!Vect_area_alive(&Out, area))
+	    continue;
+	line = Vect_get_area_centroid(&Out, area);
+	if (line == 0)
+	    err_nocentr++;
+    }
+
+    if (err_nocentr || err_centr_dupl || err_centr_out) {
+	int nmod;
+
+	Vect_snap_lines(&Out, GV_BOUNDARY, 1e-7, NULL);
+	do {
+	    Vect_break_lines(&Out, GV_BOUNDARY, NULL);
+	    Vect_remove_duplicates(&Out, GV_BOUNDARY, NULL);
+	    nmod =
+		Vect_clean_small_angles_at_nodes(&Out, GV_BOUNDARY, NULL);
+	} while (nmod > 0);
+
+	err_boundaries = 0;
+	nlines = Vect_get_num_lines(&Out);
+	for (line = 1; line <= nlines; line++) {
+
+	    if (!Vect_line_alive(&Out, line))
+		continue;
+
+	    type = Vect_get_line_type(&Out, line);
+	    if (type == GV_BOUNDARY) {
+		int left, right;
+
+		Vect_get_line_areas(&Out, line, &left, &right);
+
+		if (left == 0 || right == 0) {
+		    G_debug(3, "line = %d left = %d right = %d", line, 
+			    left, right);
+		    err_boundaries++;
+		}
+	    }
+	}
+    }
+    if (err_boundaries) {
+	nlines = Vect_get_num_lines(&Out);
+	for (line = 1; line <= nlines; line++) {
+
+	    if (!Vect_line_alive(&Out, line))
+		continue;
+
+	    type = Vect_get_line_type(&Out, line);
+	    if (type == GV_BOUNDARY) {
+		int left, right;
+
+		Vect_get_line_areas(&Out, line, &left, &right);
+
+		/* &&, not ||, no typo */
+		if (left == 0 && right == 0) {
+		    G_debug(3, "line = %d left = %d right = %d", line, 
+			    left, right);
+		    Vect_delete_line(&Out, line);
+		}
+	    }
+	}
+    }
 
     Vect_build_partial(&Out, GV_BUILD_NONE);
     Vect_build(&Out);
