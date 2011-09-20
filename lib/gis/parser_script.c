@@ -1,16 +1,16 @@
 /*!
- * \file gis/parser_script.c
- *
- * \brief GIS Library - Argument parsing functions (script)
- *
- * (C) 2001-2009 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
- *
- * \author Original author CERL
- * \author Soeren Gebbert added Dec. 2009 WPS process_description document
- */
+  \file lib/gis/parser_script.c
+  
+  \brief GIS Library - Argument parsing functions (script)
+  
+  (C) 2001-2009, 2011 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Original author CERL
+  \author Soeren Gebbert added Dec. 2009 WPS process_description document
+*/
 
 #include <stdio.h>
 
@@ -18,6 +18,9 @@
 
 #include "parser_local_proto.h"
 
+/*!
+  \brief Generate script-like output
+*/
 void G__script(void)
 {
     FILE *fp = stdout;
@@ -29,8 +32,8 @@ void G__script(void)
     fprintf(fp, "# MODULE:       %s_wrapper\n", G_program_name());
     fprintf(fp, "# AUTHOR(S):    %s\n", G_whoami());
     fprintf(fp, "# PURPOSE:      \n");
-    fprintf(fp, "# COPYRIGHT:    (C) 2009 by %s, and The GRASS Development Team\n",
-	    G_whoami());
+    fprintf(fp, "# COPYRIGHT:    (C) %s by %s, and The GRASS Development Team\n",
+	    GRASS_VERSION_DATE, G_whoami());
     fprintf(fp, "#\n");
     fprintf(fp,
 	    "#  This program is free software; you can redistribute it and/or modify\n");
