@@ -24,16 +24,15 @@ from tgis_base import *
 
 ###############################################################################
 
-class absolute_temporal_extent(sql_database_interface):
-    """This is the absolute time base class for all maps and spacetime datasets"""
-    def __init__(self, table=None, ident=None, start_time=None, end_time=None, timezone=None):
+class abstract_temporal_extent(sql_database_interface):
+    """This is the abstract time base class for relative and absolute time objects"""
+    def __init__(self, table=None, ident=None, start_time=None, end_time=None):
 
 	sql_database_interface.__init__(self, table, ident)
 
 	self.set_id(ident)
 	self.set_start_time(start_time)
 	self.set_end_time(end_time)
-	self.set_timezone(timezone)
 
     def starts(self, map):
 	"""Return True if this absolute time object starts at the start of the provided absolute time object and finishes within it
@@ -219,16 +218,12 @@ class absolute_temporal_extent(sql_database_interface):
 	self.D["id"] = ident
 
     def set_start_time(self, start_time):
-	"""Set the valid start time of the map, this should be of type datetime"""
+	"""Set the valid start time of the map"""
 	self.D["start_time"] = start_time
 
     def set_end_time(self, end_time):
-	"""Set the valid end time of the map, this should be of type datetime"""
+	"""Set the valid end time of the map"""
 	self.D["end_time"] = end_time
-
-    def set_timezone(self, timezone):
-	"""Set the timezone of the map, integer from 1 - 24"""
-	self.D["timezone"] = timezone
 
     def get_id(self):
 	"""Convenient method to get the unique identifier (primary key)
@@ -255,6 +250,34 @@ class absolute_temporal_extent(sql_database_interface):
         else:
 	    return None
 
+    def print_info(self):
+        """Print information about this class in human readable style"""
+        #      0123456789012345678901234567890
+        print " | Start time:................. " + str(self.get_start_time())
+        print " | End time:................... " + str(self.get_end_time())
+
+    def print_shell_info(self):
+        """Print information about this class in shell style"""
+        print "start_time=" + str(self.get_start_time())
+        print "end_time=" + str(self.get_end_time())
+
+###############################################################################
+
+class absolute_temporal_extent(abstract_temporal_extent):
+    """This is the absolute time class for all maps and spacetime datasets
+
+       start_time and end_time must be of type datetime
+    """
+    def __init__(self, table=None, ident=None, start_time=None, end_time=None, timezone=None):
+
+	abstract_temporal_extent.__init__(self, table, ident, start_time, end_time)
+
+	self.set_timezone(timezone)
+
+    def set_timezone(self, timezone):
+	"""Set the timezone of the map, integer from 1 - 24"""
+	self.D["timezone"] = timezone
+
     def get_timezone(self):
 	"""Get the timezone of the map
 	   @return None if not found"""
@@ -267,14 +290,12 @@ class absolute_temporal_extent(sql_database_interface):
         """Print information about this class in human readable style"""
         #      0123456789012345678901234567890
         print " +-------------------- Absolute time -----------------------------------------+"
-        print " | Start time:................. " + str(self.get_start_time())
-        print " | End time:................... " + str(self.get_end_time())
+        abstract_temporal_extent.print_info(self)
         print " | Timezone:................... " + str(self.get_timezone())
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
-        print "start_time=" + str(self.get_start_time())
-        print "end_time=" + str(self.get_end_time())
+        abstract_temporal_extent.print_shell_info(self)
         print "timezone=" + str(self.get_timezone())
 
 ###############################################################################
@@ -338,113 +359,43 @@ class stvds_absolute_time(stds_absolute_time):
 
 ###############################################################################
 
-class relative_temporal_extent(sql_database_interface):
-    """This is the relative time base class for all maps and spacetime datasets"""
-    def __init__(self, table=None, ident=None, interval=None):
 
-	sql_database_interface.__init__(self, table, ident)
+class relative_temporal_extent(abstract_temporal_extent):
+    """This is the relative time class for all maps and spacetime datasets
 
-	self.set_id(ident)
-	self.set_interval(interval)
+       start_time and end_time must be of type datetime
+    """
+    def __init__(self, table=None, ident=None, start_time=None, end_time=None):
 
-    def after(self, map):
-	"""Return True if this relative time object is temporal located after the provided relative time object
-	   A   |
-	   B  |
-	"""
-	if self.D["interval"] > map.D["interval"]:
-	    return True
-        else:
-	    return False
+	abstract_temporal_extent.__init__(self, table, ident, start_time, end_time)
 
-
-    def before(self, map):
-	"""Return True if this relative time object is temporal located bevor the provided relative time object
-	   A  |
-	   B   |
-	"""
-	if self.D["interval"] < map.D["interval"]:
-	    return True
-        else:
-	    return False
-
-    def equivalent(self, map):
-	"""Return True if this relative time object is equivalent to the provided relative time object
-	   A  |
-	   B  |
-	"""
-	if self.D["interval"] == map.D["interval"]:
-	    return True
-        else:
-	    return False
-
-    def temporal_relation(self, map):
-	"""Returns the temporal relation between relative time temporal objects
-	"""
-	if self.equivalent(map):
-	    return "equivalent"
-	if self.after(map):
-	    return "after"
-	if self.before(map):
-	    return "before"
-        return None
-
-    def set_id(self, ident):
-	"""Convenient method to set the unique identifier (primary key)"""
-	self.ident = ident
-	self.D["id"] = ident
-
-    def set_interval(self, interval):
-	"""Set the valid interval time of the map, this should be of type datetime"""
-	self.D["interval"] = interval
-
-    def get_id(self):
-	"""Convenient method to get the unique identifier (primary key)
-	   @return None if not found
-	"""
-	if self.D.has_key("id"):
-	    return self.D["id"]
-        else:
-	    return None
-
-    def get_interval(self):
-	"""Get the valid interval time of the map
-	   @return None if not found"""
-	if self.D.has_key("interval"):
-	    return self.D["interval"]
-        else:
-	    return None
 
     def print_info(self):
         """Print information about this class in human readable style"""
         #      0123456789012345678901234567890
-        print " +-------------------- Relative time -----------------------------------------+"
-        print " | Interval:................... " + str(self.get_interval())
-
-    def print_shell_info(self):
-        """Print information about this class in shell style"""
-        print "interval=" + str(self.get_interval())
+        print " +-------------------- Reltive time ------------------------------------------+"
+        abstract_temporal_extent.print_info(self)
 
 
 ###############################################################################
 
 class raster_relative_time(relative_temporal_extent):
-    def __init__(self, ident=None, interval=None):
-        relative_temporal_extent.__init__(self, "raster_relative_time", ident, interval)
+    def __init__(self, ident=None, start_time=None, end_time=None):
+        relative_temporal_extent.__init__(self, "raster_relative_time", ident, start_time, end_time)
 
 class raster3d_relative_time(relative_temporal_extent):
-    def __init__(self, ident=None, interval=None):
-        relative_temporal_extent.__init__(self, "raster3d_relative_time", ident, interval)
+    def __init__(self, ident=None, start_time=None, end_time=None):
+        relative_temporal_extent.__init__(self, "raster3d_relative_time", ident, start_time, end_time)
 
 class vector_relative_time(relative_temporal_extent):
-    def __init__(self, ident=None, interval=None):
-        relative_temporal_extent.__init__(self, "vector_relative_time", ident, interval)
+    def __init__(self, ident=None, start_time=None, end_time=None):
+        relative_temporal_extent.__init__(self, "vector_relative_time", ident, start_time, end_time)
         
 ###############################################################################
 
 class stds_relative_time(relative_temporal_extent):
-    def __init__(self, table=None, ident=None, interval=None, granularity=None):
-        relative_temporal_extent.__init__(self, table, ident, interval)
+    def __init__(self, table=None, ident=None, start_time=None, end_time=None, granularity=None):
+        relative_temporal_extent.__init__(self, table, ident, start_time, end_time)
 
 	self.set_granularity(granularity)
 
@@ -474,14 +425,14 @@ class stds_relative_time(relative_temporal_extent):
 ###############################################################################
 
 class strds_relative_time(stds_relative_time):
-    def __init__(self, ident=None, interval=None, granularity=None):
-        stds_relative_time.__init__(self, "strds_relative_time", ident, interval, granularity)
+    def __init__(self, ident=None, start_time=None, end_time=None, granularity=None):
+        stds_relative_time.__init__(self, "strds_relative_time", ident, start_time, end_time, granularity)
 
 class str3ds_relative_time(stds_relative_time):
-    def __init__(self, ident=None, interval=None, granularity=None):
-        stds_relative_time.__init__(self, "str3ds_relative_time", ident, interval, granularity)
+    def __init__(self, ident=None, start_time=None, end_time=None, granularity=None):
+        stds_relative_time.__init__(self, "str3ds_relative_time", ident, start_time, end_time, granularity)
 
 class stvds_relative_time(stds_relative_time):
-    def __init__(self, ident=None, interval=None, granularity=None):
-        stds_relative_time.__init__(self, "stvds_relative_time", ident, interval, granularity)
+    def __init__(self, ident=None, start_time=None, end_time=None, granularity=None):
+        stds_relative_time.__init__(self, "stvds_relative_time", ident, start_time, end_time, granularity)
 

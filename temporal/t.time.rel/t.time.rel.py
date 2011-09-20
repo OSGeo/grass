@@ -34,7 +34,15 @@
 #%option
 #% key: start
 #% type: double
-#% description: The valid time value in [days]
+#% description: The valid start time value in [days]
+#% required: yes
+#% multiple: no
+#%end
+
+#%option
+#% key: end
+#% type: double
+#% description: The valid end time value in [days]
 #% required: no
 #% multiple: no
 #%end
@@ -56,13 +64,14 @@ def main():
     # Get the options
     maps = options["maps"]
     start = options["start"]
+    end = options["end"]
     increment = options["increment"]
 
     # Make sure the temporal database exists
     grass.create_temporal_database()
     # Set valid relative time to maps
     grass.assign_valid_time_to_maps(type="raster", maps=maps, ttype="relative", \
-                                    start=start, end=None, increment=increment, dbif=None)
+                                    start=start, end=end, increment=increment, dbif=None)
 
 if __name__ == "__main__":
     options, flags = grass.core.parser()

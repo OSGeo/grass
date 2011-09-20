@@ -24,7 +24,8 @@ CREATE TABLE  STDS_base (
 
 CREATE TABLE  STDS_relative_time (
   id VARCHAR NOT NULL,            -- Id of the space-time dataset, this is the primary foreign key
-  interval DOUBLE,                -- The relative time interval in [days], this interval starts always at 0 days 
+  start_time DOUBLE PRECISION,    -- The relative valid start time in [days]
+  end_time DOUBLE PRECISION,      -- The relative valid end time in [days]
   granularity DOUBLE,             -- The granularity in [days]
   PRIMARY KEY (id),  
   FOREIGN KEY (id) REFERENCES  STDS_base (id) ON DELETE CASCADE
