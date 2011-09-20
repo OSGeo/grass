@@ -161,6 +161,16 @@ int readsites(void)
 	    (struct Site *)G_realloc(sites,
 				     (nsites) * sizeof(struct Site));
 
+    if (xmin == Box.W)
+	Box.W -= GRASS_EPSILON;
+    if (xmax == Box.E)
+	Box.E += GRASS_EPSILON;
+    if (ymin == Box.S)
+	Box.S -= GRASS_EPSILON;
+    if (ymax == Box.N)
+	Box.N += GRASS_EPSILON;
+
+
     qsort(sites, nsites, sizeof(struct Site), scomp);
     removeDuplicates();
     return 0;
