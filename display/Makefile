@@ -1,6 +1,8 @@
 
 MODULE_TOPDIR = ..
 
+PGM = displaydrivers
+
 SUBDIRS = \
 	d.barscale \
 	d.colorlist \
@@ -41,4 +43,6 @@ SUBDIRS = \
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 
-default: parsubdirs
+default: htmldir
+
+htmldir: parsubdirs
