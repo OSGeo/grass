@@ -363,7 +363,7 @@ int main(int argc, char **argv)
 
     Vect_close(&In);
 
-    /* cleaning */
+    /* cleaning part 1: count errors */
     Vect_build_partial(&Out, GV_BUILD_CENTROIDS);
     err_boundaries = err_centr_out = err_centr_dupl = err_nocentr = 0;
     nlines = Vect_get_num_lines(&Out);
@@ -403,9 +403,11 @@ int main(int argc, char **argv)
 	    err_nocentr++;
     }
 
+    /* cleaning part 2: snap */
     if (err_nocentr || err_centr_dupl || err_centr_out) {
 	int nmod;
 
+	G_important_message(_("Output needs topological cleaning"));
 	Vect_snap_lines(&Out, GV_BOUNDARY, 1e-7, NULL);
 	do {
 	    Vect_break_lines(&Out, GV_BOUNDARY, NULL);
@@ -435,7 +437,9 @@ int main(int argc, char **argv)
 	    }
 	}
     }
+    /* cleaning part 3: remove remaining incorrect boundaries */
     if (err_boundaries) {
+	G_important_message(_("Removing incorrect boundaries from output"));
 	nlines = Vect_get_num_lines(&Out);
 	for (line = 1; line <= nlines; line++) {
 
@@ -458,6 +462,7 @@ int main(int argc, char **argv)
 	}
     }
 
+    /* build clean topology */
     Vect_build_partial(&Out, GV_BUILD_NONE);
     Vect_build(&Out);
     Vect_close(&Out);
