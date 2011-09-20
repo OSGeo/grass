@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
 
     column_name = G_define_standard_option(G_OPT_DB_COLUMN);
     column_name->label = _("Name of attribute column to store value");
-    column_name->description = _("The name must be SQL compliant");
+    column_name->description = _("Name must be SQL compliant");
     column_name->answer = "value";
 
     smooth_flg = G_define_flag();
