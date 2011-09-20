@@ -54,8 +54,12 @@ class abstract_dataset(object):
         return (start, end, tz)
     
     def get_relative_time(self):
-        """Returns the relative time interval or None if not present"""
-        return self.relative_time.get_interval()
+        """Returns the relative time interval (start_time, end_time) or None if not present"""
+
+        start = self.relative_time.get_start_time()
+        end = self.relative_time.get_end_time()
+
+        return (start, end)
 
     def get_temporal_type(self):
         """Return the temporal type of this dataset"""
@@ -197,7 +201,7 @@ class abstract_dataset(object):
 	if self.is_time_absolute() and map.is_time_absolute():
 	    return self.absolute_time.temporal_relation(map.absolute_time)
         if self.is_time_relative() and map.is_time_relative():
-	    return self.relative_time.temporal_relation(map.absolute_time)
+	    return self.relative_time.temporal_relation(map.relative_time)
     	return None
 
 ###############################################################################
@@ -227,11 +231,24 @@ class abstract_map_dataset(abstract_dataset):
            @timezone Thee timezone of the map
         
         """
+        if start_time != None and not isinstance(start_time, datetime) :
+            core.fatal(_("Start time must be of type datetime"))
+
+        if end_time != None and not isinstance(end_time, datetime) :
+            core.fatal(_("End time must be of type datetime"))
+
+        if start_time != None and end_time != None:
+            if start_time >= end_time:
+                core.error(_("End time must be later than start time"))
+                return False
+
         self.base.set_ttype("absolute")
         
         self.absolute_time.set_start_time(start_time)
         self.absolute_time.set_end_time(end_time)
         self.absolute_time.set_timezone(timezone)
+
+        return True
 
     def update_absolute_time(self, start_time, end_time=None, timezone=None, dbif = None):
         """Update the absolute time
@@ -254,17 +271,29 @@ class abstract_map_dataset(abstract_dataset):
         if connect == True:
             dbif.close()
 
-    def set_relative_time(self, interval):
+    def set_relative_time(self, start_time, end_time=None):
         """Set the relative time interval 
         
-           @interval A double value in days
-        
+           @start_time A double value in days
+           @end_time A double value in days
+
         """
+        if start_time != None and end_time != None:
+            if abs(float(start_time)) >= abs(float(end_time)):
+                core.error(_("End time must be greater than start time"))
+                return False
+
         self.base.set_ttype("relative")
         
-        self.relative_time.set_interval(interval)
+        self.relative_time.set_start_time(float(start_time))
+        if end_time != None:
+            self.relative_time.set_end_time(float(end_time))
+        else:
+            self.relative_time.set_end_time(None)
 
-    def update_relative_time(self, interval, dbif = None):
+        return True
+
+    def update_relative_time(self, start_time, end_time=None, dbif = None):
         """Set the relative time interval
 
            @interval A double value in days
@@ -277,7 +306,7 @@ class abstract_map_dataset(abstract_dataset):
             dbif.connect()
             connect = True
 
-        self.set_relative_time(interval)
+        self.set_relative_time(start_time, end_time)
         self.relative_time.update(dbif)
         self.base.update(dbif)
 

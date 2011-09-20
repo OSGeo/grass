@@ -26,18 +26,20 @@ CREATE TABLE  GRASS_MAP_base (
   PRIMARY KEY (id)
 );
 
+-- Relative valid time interval with start and end time
 CREATE TABLE  GRASS_MAP_relative_time (
-  id VARCHAR NOT NULL,                  -- The id (PFK) is the unique identifier for all tables, it is based on name and mapset (name@mapset) and is used as primary foreign key
-  interval DOUBLE PRECISION,  -- The relative time interval in [days], this interval starts always from 0 or the event befor this event
+  id VARCHAR NOT NULL,          -- The id (PFK) is the unique identifier for all tables, it is based on name and mapset (name@mapset) and is used as primary foreign key
+  start_time DOUBLE PRECISION,  -- The relative valid start time in [days]
+  end_time DOUBLE PRECISION,    -- The relative valid end time in [days]
   PRIMARY KEY (id),
   FOREIGN KEY (id) REFERENCES  GRASS_MAP_base (id) ON DELETE CASCADE
 );
 
 CREATE TABLE  GRASS_MAP_absolute_time (
-  id VARCHAR NOT NULL,                  -- The id (PFK) is the unique identifier for all tables, it is based on name and mapset (name@mapset) and is used as primary foreign key
-  start_time TIMESTAMP,    --  Start of the valid time, can be NULL if no time information is available
-  end_time TIMESTAMP,      --  End of the valid time, can be NULL if no time information is available or valid time is a single point in time
-  timezone SMALLINT,      -- The timezone of the valid time
+  id VARCHAR NOT NULL,   -- The id (PFK) is the unique identifier for all tables, it is based on name and mapset (name@mapset) and is used as primary foreign key
+  start_time TIMESTAMP,  --  Start of the valid time, can be NULL if no time information is available
+  end_time TIMESTAMP,    --  End of the valid time, can be NULL if no time information is available or valid time is a single point in time
+  timezone SMALLINT,     -- The timezone of the valid time
   PRIMARY KEY (id),
   FOREIGN KEY (id) REFERENCES  GRASS_MAP_base (id) ON DELETE CASCADE
 );
