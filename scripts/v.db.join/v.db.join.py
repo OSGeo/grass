@@ -32,7 +32,7 @@
 #%end
 
 #%option G_OPT_DB_COLUMN
-#% description: Join column in table
+#% description: Identifier column (e.g.: cat) in the vector table to be used for join
 #% required : yes
 #%end
 
@@ -45,7 +45,7 @@
 
 #%option G_OPT_DB_COLUMN
 #% key: ocolumn
-#% description: Join column in other table
+#% description: Identifier column (e.g.: id) in the other table used for join
 #% required: yes
 #%end
 
@@ -76,26 +76,35 @@ def main():
     if not grass.vector_columns(map, layer).has_key(column):
 	grass.fatal(_("Column <%> not found in table <%s> at layer <%s>") % (column, map, layer))
 
-    cols = grass.db_describe(otable, driver = driver, database = database)['cols']
+    all_cols_ot = grass.db_describe(otable, driver = driver, database = database)['cols']
+    all_cols_tt = grass.vector_columns(map, int(layer)).keys()
 
     select = "SELECT $colname FROM $otable WHERE $otable.$ocolumn=$table.$column"
     template = string.Template("UPDATE $table SET $colname=(%s);" % select)
 
-    for col in cols:
+    for col in all_cols_ot:
+	# Skip the vector column which is used for join
 	colname = col[0]
-	if len(col) > 2:
+	if colname == column:
+	    continue
+	# Sqlite 3 does not support the precision number any more
+	if len(col) > 2 and driver != "sqlite":
 	    coltype = "%s(%s)" % (col[1], col[2])
 	else:
 	    coltype = "%s" % col[1]
+
 	colspec = "%s %s" % (colname, coltype)
 
-	if grass.run_command('v.db.addcolumn', map = map, columns = colspec, layer = layer) != 0:
-	    grass.fatal(_("Error creating column <%s>.") % colname)
+	# Add only the new column to the table
+	if colname not in all_cols_tt:
+	    if grass.run_command('v.db.addcolumn', map = map, columns = colspec, layer = layer) != 0:
+	        grass.fatal(_("Error creating column <%s>.") % colname)
 
 	stmt = template.substitute(table = maptable, column = column,
 				   otable = otable, ocolumn = ocolumn,
 				   colname = colname)
 
+        grass.verbose("Update column <" + colname + "> of vector map <" + map + ">")
 	if grass.write_command('db.execute', stdin = stmt, input = '-', database = database, driver = driver) != 0:
 	    grass.fatal(_("Error filling column <%s>.") % colname)
 
