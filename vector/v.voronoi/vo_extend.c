@@ -31,19 +31,21 @@ int extend_line(double s, double n, double w, double e,
 		double a, double b, double c, double x, double y,
 		double *c_x, double *c_y, int knownPointAtLeft)
 {
-    double nx, ny;		/* intesection coordinates */
+    double nx, ny;		/* intersection coordinates */
 
     if (x > w && x < e && y > s && y < n) {
 	/* vertical line? */
 	if (a == 0) {
-	    *c_y = c / b;
-	    *c_x = knownPointAtLeft ? s : n;
+	    *c_x = knownPointAtLeft ? e : w;
+	    *c_y =  y;
+	    return 1;
 	}
 
 	/* horizontal line? */
 	if (b == 0) {
-	    *c_x = c / a;
-	    *c_y = knownPointAtLeft ? e : w;
+	    *c_x = x;
+	    *c_y = knownPointAtLeft ? s : n;
+	    return 1;
 	}
 
 	/* south */
