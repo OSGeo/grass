@@ -20,7 +20,7 @@ for details.
 
 @author Soeren Gebbert
 """
-from tgis_base import *
+from base import *
 
 class spatial_extent(sql_database_interface):
     """This is the spatial extent base class for all maps and spacetime datasets"""

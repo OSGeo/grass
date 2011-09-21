@@ -80,6 +80,7 @@
 #%end
 
 import grass.script as grass
+import grass.temporal as tgis
 
 ############################################################################
 
@@ -95,24 +96,24 @@ def main():
     colhead = flags['c']
 
     # Make sure the temporal database exists
-    grass.create_temporal_database()
+    tgis.create_temporal_database()
 
     id = None
 
     if type == "strds":
-        sp = grass.space_time_raster_dataset(id)
+        sp = tgis.space_time_raster_dataset(id)
     if type == "str3ds":
-        sp = grass.space_time_raster3d_dataset(id)
+        sp = tgis.space_time_raster3d_dataset(id)
     if type == "stvds":
-        sp = grass.space_time_vector_dataset(id)
+        sp = tgis.space_time_vector_dataset(id)
     if type == "raster":
-        sp = grass.raster_dataset(id)
+        sp = tgis.raster_dataset(id)
     if type == "raster3d":
-        sp = grass.raster3d_dataset(id)
+        sp = tgis.raster3d_dataset(id)
     if type == "vector":
-        sp = grass.vector_dataset(id)
+        sp = tgis.vector_dataset(id)
 
-    dbif = grass.sql_database_interface()
+    dbif = tgis.sql_database_interface()
     dbif.connect()
 
     # Insert content from db
@@ -170,5 +171,5 @@ def main():
             print output
 
 if __name__ == "__main__":
-    options, flags = grass.core.parser()
+    options, flags = grass.parser()
     main()

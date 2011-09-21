@@ -20,9 +20,9 @@ for details.
 @author Soeren Gebbert
 """
 import uuid
-from tgis_temporal_extent import *
-from tgis_spatial_extent import *
-from tgis_metadata import *
+from temporal_extent import *
+from spatial_extent import *
+from metadata import *
 
 class abstract_dataset(object):
     """This is the base class for all datasets (raster, vector, raster3d, strds, stvds, str3ds)"""

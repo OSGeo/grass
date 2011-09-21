@@ -53,6 +53,7 @@
 #%end
 
 import grass.script as grass
+import grass.temporal as tgis
 
 ############################################################################
 
@@ -65,11 +66,11 @@ def main():
     increment = options["increment"]
 
     # Make sure the temporal database exists
-    grass.create_temporal_database()
+    tgis.create_temporal_database()
     # Register maps
-    grass.register_maps_in_space_time_dataset("raster", name, maps, start, increment)
+    tgis.register_maps_in_space_time_dataset("raster", name, maps, start, increment)
     
 if __name__ == "__main__":
-    options, flags = grass.core.parser()
+    options, flags = grass.parser()
     main()
 

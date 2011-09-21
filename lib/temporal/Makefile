@@ -6,10 +6,9 @@ SQLDIR = $(ETC)/sql
 
 SQLFILES:= $(wildcard *.sql)
 
-default: copy_sql_files
+DSTFILES := $(patsubst %.sql,$(SQLDIR)/%.sql,$(SQLFILES))
 
-copy_sql_files: $(SQLDIR)
-	for i in $(SQLFILES); do $(INSTALL_DATA) $$i $(SQLDIR)/; done
+default: $(DSTFILES)
 
-$(SQLDIR): 
-	$(MKDIR) $@
+$(SQLDIR)/%.sql: %.sql | $(SQLDIR)
+	$(INSTALL_DATA) $< $@

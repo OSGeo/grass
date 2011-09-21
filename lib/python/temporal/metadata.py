@@ -20,7 +20,7 @@ for details.
 
 @author Soeren Gebbert
 """
-from tgis_base import *
+from base import *
 
 ###############################################################################
 
