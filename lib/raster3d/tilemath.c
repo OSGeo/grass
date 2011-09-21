@@ -331,13 +331,13 @@ Rast3d_compute_clipped_tile_dimensions(RASTER3D_Map * map, int tileIndex, int *r
 void
 Rast3d_compute_optimal_tile_dimension(RASTER3D_Region *region, int type, int *tileX, int *tileY, int *tileZ, int maxSize)
 {
-   int size = 0;
-   int x, y, z;
-   int i = 0;
-   int tileSize;
-   int divx = 2;
-   int divy = 2;
-   int divz = 2;
+   unsigned long size = 0;
+   unsigned long x, y, z;
+   unsigned long i = 0;
+   unsigned long tileSize;
+   unsigned long divx = 2;
+   unsigned long divy = 2;
+   unsigned long divz = 2;
 
    if(type == FCELL_TYPE)
       size = sizeof(FCELL);
@@ -352,9 +352,7 @@ Rast3d_compute_optimal_tile_dimension(RASTER3D_Region *region, int type, int *ti
    while(1) {
        tileSize = size * x * y * z;
 
-       /*
-       printf("Tilesize %i x %i y %i z %i\n", tileSize, x, y, z);
-       */
+       G_debug(2, "Rast3d_compute_optimal_tile_dimension: tilesize %li x %li y %li z %li\n", tileSize, x, y, z);
 
        if(tileSize <= maxSize * 1024)
           break;
@@ -391,9 +389,9 @@ Rast3d_compute_optimal_tile_dimension(RASTER3D_Region *region, int type, int *ti
          break;
    }
 
-   *tileX = x;
-   *tileY = y;
-   *tileZ = z;
+   *tileX = (int)x;
+   *tileY = (int)y;
+   *tileZ = (int)z;
 }
 
 
