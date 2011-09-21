@@ -22,7 +22,7 @@ for details.
 """
 import os
 import sqlite3
-import core
+import grass.script.core as core
 import copy
 from datetime import datetime, date, time, timedelta
 

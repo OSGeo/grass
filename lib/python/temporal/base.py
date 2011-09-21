@@ -26,7 +26,7 @@ for details.
 @author Soeren Gebbert
 """
 
-from tgis_core import *
+from core import *
 
 ###############################################################################
 

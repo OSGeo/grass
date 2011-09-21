@@ -22,10 +22,10 @@ for details.
 @author Soeren Gebbert
 """
 import getpass
-import raster
-import vector
-import raster3d
-from tgis_abstract_datasets import *
+import grass.script.raster as raster
+import grass.script.vector as vector
+import grass.script.raster3d as raster3d
+from abstract_datasets import *
 
 
 ###############################################################################

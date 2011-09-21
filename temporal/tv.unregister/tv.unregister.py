@@ -37,6 +37,8 @@
 #%end
 
 import grass.script as grass
+import grass.temporal as tgis
+
 ############################################################################
 
 def main():
@@ -46,11 +48,11 @@ def main():
     maps = options["maps"]
 
     # Make sure the temporal database exists
-    grass.create_temporal_database()
+    tgis.create_temporal_database()
     # Unregister maps
-    grass.unregister_maps_from_space_time_datasets("vector", name, maps)
+    tgis.unregister_maps_from_space_time_datasets("vector", name, maps)
 
 if __name__ == "__main__":
-    options, flags = grass.core.parser()
+    options, flags = grass.parser()
     main()
 

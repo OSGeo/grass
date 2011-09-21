@@ -8,16 +8,17 @@ PYDIR = $(ETC)/python
 GDIR = $(PYDIR)/grass
 DSTDIR = $(GDIR)/script
 
-MODULES = core db raster raster3d vector array setup task tgis_base tgis_core tgis_abstract_datasets tgis_space_time_datasets tgis_metadata tgis_spatial_extent tgis_temporal_extent
+MODULES = core db raster raster3d vector array setup task 
 
 PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
 PYCFILES := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__)
 
-CLEAN_SUBDIRS = ctypes
+CLEAN_SUBDIRS = ctypes temporal
 EXTRA_CLEAN_FILES = setup.py
 
 default: $(PYFILES) $(PYCFILES) $(GDIR)/__init__.py $(GDIR)/__init__.pyc
 	-$(MAKE) -C ctypes || echo $(CURDIR)/ctypes >> $(ERRORLOG)
+	-$(MAKE) -C temporal || echo $(CURDIR)/temporal >> $(ERRORLOG)
 
 $(PYDIR):
 	$(MKDIR) $@

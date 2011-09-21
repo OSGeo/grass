@@ -56,6 +56,7 @@
 #%end
 
 import grass.script as grass
+import grass.temporal as tgis
 
 ############################################################################
 
@@ -68,12 +69,12 @@ def main():
     increment = options["increment"]
 
     # Make sure the temporal database exists
-    grass.create_temporal_database()
+    tgis.create_temporal_database()
     # Set valid absolute time to maps
-    grass.assign_valid_time_to_maps(type="raster", maps=maps, ttype="absolute", \
-                                    start=start, end=end, increment=increment, dbif=None)
+    tgis.assign_valid_time_to_maps(type="raster", maps=maps, ttype="absolute", \
+                                   start=start, end=end, increment=increment, dbif=None)
     
 if __name__ == "__main__":
-    options, flags = grass.core.parser()
+    options, flags = grass.parser()
     main()
 

@@ -81,6 +81,7 @@
 #% multiple: no
 #%end
 
+import grass.temporal as tgis
 import grass.script as grass
 
 ############################################################################
@@ -97,7 +98,7 @@ def main():
     gran = options["granularity"]
 
     # Make sure the temporal database exists
-    grass.create_temporal_database()
+    tgis.create_temporal_database()
 
     #Get the current mapset to create the id of the space time dataset
 
@@ -105,13 +106,13 @@ def main():
     id = name + "@" + mapset
 
     if type == "strds":
-        sp = grass.space_time_raster_dataset(id)
+        sp = tgis.space_time_raster_dataset(id)
     if type == "str3ds":
-        sp = grass.space_time_raster3d_dataset(id)
+        sp = tgis.space_time_raster3d_dataset(id)
     if type == "stvds":
-        sp = grass.space_time_vector_dataset(id)
+        sp = tgis.space_time_vector_dataset(id)
 
-    dbif = grass.sql_database_interface()
+    dbif = tgis.sql_database_interface()
     dbif.connect()
 
     if sp.is_in_db(dbif) and grass.overwrite() == False:
@@ -130,6 +131,6 @@ def main():
     dbif.close()
 
 if __name__ == "__main__":
-    options, flags = grass.core.parser()
+    options, flags = grass.parser()
     main()
 

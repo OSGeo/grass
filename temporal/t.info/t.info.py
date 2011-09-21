@@ -43,6 +43,7 @@
 #%end
 
 import grass.script as grass
+import grass.temporal as tgis
 
 ############################################################################
 
@@ -54,7 +55,7 @@ def main():
     shellstyle = flags['g']
 
   # Make sure the temporal database exists
-    grass.create_temporal_database()
+    tgis.create_temporal_database()
 
     #Get the current mapset to create the id of the space time dataset
 
@@ -65,17 +66,17 @@ def main():
         id = name + "@" + mapset
 
     if type == "strds":
-        sp = grass.space_time_raster_dataset(id)
+        sp = tgis.space_time_raster_dataset(id)
     if type == "str3ds":
-        sp = grass.space_time_raster3d_dataset(id)
+        sp = tgis.space_time_raster3d_dataset(id)
     if type == "stvds":
-        sp = grass.space_time_vector_dataset(id)
+        sp = tgis.space_time_vector_dataset(id)
     if type == "raster":
-        sp = grass.raster_dataset(id)
+        sp = tgis.raster_dataset(id)
     if type == "raster3d":
-        sp = grass.raster3d_dataset(id)
+        sp = tgis.raster3d_dataset(id)
     if type == "vector":
-        sp = grass.vector_dataset(id)
+        sp = tgis.vector_dataset(id)
 
     if sp.is_in_db() == False:
         grass.fatal("Dataset <" + name + "> not found in temporal database")
@@ -89,6 +90,6 @@ def main():
         sp.print_info()
 
 if __name__ == "__main__":
-    options, flags = grass.core.parser()
+    options, flags = grass.parser()
     main()
 

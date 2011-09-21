@@ -39,6 +39,7 @@
 #%end
 
 import grass.script as grass
+import grass.temporal as tgis
 
 ############################################################################
 
@@ -49,11 +50,11 @@ def main():
     type = options["type"]
 
     # Make sure the temporal database exists
-    grass.create_temporal_database()
+    tgis.create_temporal_database()
     
     mapset =  grass.gisenv()["MAPSET"]
 
-    dbif = grass.sql_database_interface()
+    dbif = tgis.sql_database_interface()
     dbif.connect()
 
     for name in names.split(","):
@@ -65,17 +66,17 @@ def main():
             id = name
 
         if type == "strds":
-            ds = grass.space_time_raster_dataset(id)
+            ds = tgis.space_time_raster_dataset(id)
         if type == "str3ds":
-            ds = grass.space_time_raster3d_dataset(id)
+            ds = tgis.space_time_raster3d_dataset(id)
         if type == "stvds":
-            ds = grass.space_time_vector_dataset(id)
+            ds = tgis.space_time_vector_dataset(id)
         if type == "raster":
-            ds = grass.raster_dataset(id)
+            ds = tgis.raster_dataset(id)
         if type == "raster3d":
-            ds = grass.raster3d_dataset(id)
+            ds = tgis.raster3d_dataset(id)
         if type == "vector":
-            ds = grass.vector_dataset(id)
+            ds = tgis.vector_dataset(id)
 
         if ds.is_in_db(dbif) == False:
             grass.fatal(ds.get_type() + " dataset <" + name + "> not found in temporal database")
@@ -87,6 +88,6 @@ def main():
     dbif.close()
 
 if __name__ == "__main__":
-    options, flags = grass.core.parser()
+    options, flags = grass.parser()
     main()
 
