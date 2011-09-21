@@ -14,6 +14,7 @@ List of classes:
  - AddMapLayersDialog
  - ImportDialog
  - GdalImportDialog
+ - GdalOutputDialog
  - DxfImportDialog
  - LayersList (used by MultiImport) 
  - SetOpacityDialog
@@ -1288,8 +1289,13 @@ class ImportDialog(wx.Dialog):
         pass
 
 class GdalImportDialog(ImportDialog):
-    """!Dialog for bulk import of various raster/vector data"""
     def __init__(self, parent, ogr = False, link = False):
+        """!Dialog for bulk import of various raster/vector data
+
+        @param parent parent window
+        @param ogr True for OGR (vector) otherwise GDAL (raster)
+        @param link True for linking data otherwise importing data
+        """
         self.link = link
         self.ogr  = ogr
         
@@ -1305,9 +1311,9 @@ class GdalImportDialog(ImportDialog):
                 self.SetTitle(_("Link external raster data"))
             else:
                 self.SetTitle(_("Import raster data"))
-       
+        
         self.dsnInput = gselect.GdalSelect(parent = self, panel = self.panel, ogr = ogr)
-
+        
         if link:
             self.add.SetLabel(_("Add linked layers into layer tree"))
         else:
@@ -1406,7 +1412,88 @@ class GdalImportDialog(ImportDialog):
         """!Show command dialog"""
         name = self._getCommand()
         menuform.GUI(parent = self, modal = True).ParseCommand(cmd = [name])
-                
+
+class GdalOutputDialog(wx.Dialog):
+    def __init__(self, parent, id = wx.ID_ANY, ogr = False,
+                 style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, *kwargs):
+        """!Dialog for setting output format for rasters/vectors
+
+        @param parent parent window
+        @param id window id
+        @param ogr True for OGR (vector) otherwise GDAL (raster)
+        @param style window style
+        @param *kwargs other wx.Dialog's arguments
+        """
+        self.parent = parent # GMFrame 
+        self.ogr = ogr
+        wx.Dialog.__init__(self, parent, id = id, style = style, *kwargs)
+        if self.ogr:
+            self.SetTitle(_("Define output format for vector data"))
+        else:
+            self.SetTitle(_("Define output format for raster data"))
+        
+        self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
+
+        # buttons
+        self.btnCancel = wx.Button(parent = self.panel, id = wx.ID_CANCEL)
+        self.btnCancel.SetToolTipString(_("Close dialog"))
+        self.btnOk = wx.Button(parent = self.panel, id = wx.ID_OK)
+        self.btnOk.SetToolTipString(_("Set external format and close dialog"))
+        self.btnOk.SetDefault()
+        self.btnOk.Enable(False)
+        
+        self.dsnInput = gselect.GdalSelect(parent = self, panel = self.panel,
+                                           ogr = ogr,
+                                           exclude = ['file', 'protocol'], dest = True)
+        
+        self.Bind(wx.EVT_BUTTON, self.OnCancel, self.btnCancel)
+        self.Bind(wx.EVT_BUTTON, self.OnOK, self.btnOk)
+        
+        self._layout()
+
+    def _layout(self):
+        dialogSizer = wx.BoxSizer(wx.VERTICAL)
+        
+        dialogSizer.Add(item = self.dsnInput, proportion = 0,
+                        flag = wx.EXPAND)
+
+        btnSizer = wx.StdDialogButtonSizer()
+        btnSizer.AddButton(self.btnOk)
+        btnSizer.AddButton(self.btnCancel)
+        btnSizer.Realize()
+        
+        dialogSizer.Add(item = btnSizer, proportion = 0,
+                        flag = wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+                        border = 5)
+        
+        self.panel.SetAutoLayout(True)
+        self.panel.SetSizer(dialogSizer)
+        dialogSizer.Fit(self.panel)
+
+        size = wx.Size(globalvar.DIALOG_GSELECT_SIZE[0] + 225, self.GetBestSize()[1])
+        self.SetMinSize(size)
+        self.SetSize((size.width, size.height))
+        self.Layout()
+        
+    def OnCancel(self, event):
+        self.Destroy()
+        
+    def OnOK(self, event):
+        if self.dsnInput.GetType() == 'native':
+            gcmd.RunCommand('v.external.out',
+                            parent = self,
+                            flags = 'r')
+        else:
+            dsn = self.dsnInput.GetDsn()
+            frmt = self.dsnInput.GetFormat()
+            options = self.dsnInput.GetOptions()
+            
+            gcmd.RunCommand('v.external.out',
+                            parent = self,
+                            dsn = dsn, format = frmt,
+                            options = options)
+        self.Close()
+        
 class DxfImportDialog(ImportDialog):
     """!Dialog for bulk import of DXF layers""" 
     def __init__(self, parent):
