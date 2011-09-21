@@ -566,7 +566,7 @@ def _formatMsg(text):
     return message
 
 def RunCommand(prog, flags = "", overwrite = False, quiet = False, verbose = False,
-               parent = None, read = False, stdin = None, getErrorMsg = False, **kwargs):
+               parent = None, read = False, parse = None, stdin = None, getErrorMsg = False, **kwargs):
     """!Run GRASS command
 
     @param prog program to run
@@ -574,6 +574,7 @@ def RunCommand(prog, flags = "", overwrite = False, quiet = False, verbose = Fal
     @param overwrite, quiet, verbose flags
     @param parent parent window for error messages
     @param read fetch stdout
+    @param parse fn to parse stdout (e.g. grass.parse_key_val) or None
     @param stdin stdin or None
     @param getErrorMsg get error messages on failure
     @param kwargs program parameters
@@ -632,6 +633,10 @@ def RunCommand(prog, flags = "", overwrite = False, quiet = False, verbose = Fal
         Debug.msg(2, "gcmd.RunCommand(): return stdout\n'%s'" % stdout)
     else:
         Debug.msg(2, "gcmd.RunCommand(): return stdout = None")
+    
+    if parse:
+        stdout = parse(stdout)
+    
     if not getErrorMsg:
         return stdout
     

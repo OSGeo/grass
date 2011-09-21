@@ -19,6 +19,7 @@ import string
 import glob
 import locale
 import shlex
+import re
 
 import globalvar
 sys.path.append(os.path.join(globalvar.ETCDIR, "python"))
@@ -52,7 +53,7 @@ def GetTempfile(pref=None):
     @return Path to file name (string) or None
     """
     import gcmd
-
+    
     ret = gcmd.RunCommand('g.tempfile',
                           read = True,
                           pid = os.getpid())
@@ -689,7 +690,7 @@ def _getGDALFormats():
                              quiet = True,
                              flags = 'f')
     
-    return _parseFormats(ret)
+    return _parseFormats(ret), _parseFormats(ret, writableOnly = True)
 
 def _getOGRFormats():
     """!Get dictionary of avaialble OGR drivers"""
@@ -697,9 +698,9 @@ def _getOGRFormats():
                              quiet = True,
                              flags = 'f')
     
-    return _parseFormats(ret)
+    return _parseFormats(ret), _parseFormats(ret, writableOnly = True)
 
-def _parseFormats(output):
+def _parseFormats(output, writableOnly = False):
     """!Parse r.in.gdal/v.in.ogr -f output"""
     formats = { 'file'     : list(),
                 'database' : list(),
@@ -709,22 +710,30 @@ def _parseFormats(output):
     if not output:
         return formats
     
+    patt = None
+    if writableOnly:
+        patt = re.compile('\(rw\+?\)$', re.IGNORECASE)
+    
     for line in output.splitlines():
-        format = line.strip().rsplit(':', -1)[1].strip()
-        if format in ('Memory', 'Virtual Raster', 'In Memory Raster'):
+        key, name = map(lambda x: x.strip(), line.strip().rsplit(':', -1))
+        
+        if writableOnly and not patt.search(key):
             continue
-        if format in ('PostgreSQL', 'SQLite',
-                      'ODBC', 'ESRI Personal GeoDatabase',
-                      'Rasterlite',
-                      'PostGIS WKT Raster driver'):
-            formats['database'].append(format)
-        elif format in ('GeoJSON',
-                        'OGC Web Coverage Service',
-                        'OGC Web Map Service',
-                        'HTTP Fetching Wrapper'):
-            formats['protocol'].append(format)
+        
+        if name in ('Memory', 'Virtual Raster', 'In Memory Raster'):
+            continue
+        if name in ('PostgreSQL', 'SQLite',
+                    'ODBC', 'ESRI Personal GeoDatabase',
+                    'Rasterlite',
+                    'PostGIS WKT Raster driver'):
+            formats['database'].append(name)
+        elif name in ('GeoJSON',
+                      'OGC Web Coverage Service',
+                      'OGC Web Map Service',
+                      'HTTP Fetching Wrapper'):
+            formats['protocol'].append(name)
         else:
-            formats['file'].append(format)
+            formats['file'].append(name)
     
     for items in formats.itervalues():
         items.sort()
@@ -733,16 +742,27 @@ def _parseFormats(output):
 
 formats = None
 
-def GetFormats():
+def GetFormats(writableOnly = False):
     """!Get GDAL/OGR formats"""
     global formats
     if not formats:
+        gdalAll, gdalWritable = _getGDALFormats()
+        ogrAll,  ogrWritable  = _getOGRFormats()
         formats = {
-            'gdal' : _getGDALFormats(),
-            'ogr' : _getOGRFormats()
+            'all' : {
+                'gdal' : gdalAll,
+                'ogr'  : ogrAll,
+                },
+            'writable' : {
+                'gdal' : gdalWritable,
+                'ogr'  : ogrWritable,
+                },
             }
     
-    return formats
+    if writableOnly:
+        return formats['writable']
+    
+    return formats['all']
 
 def GetSettingsPath():
     """!Get full path to the settings directory

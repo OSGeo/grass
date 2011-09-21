@@ -697,9 +697,11 @@ class GMFrame(wx.Frame):
         """
         self._popupMenu((('rastImport',    self.OnImportGdalLayers),
                          ('rastLink',      self.OnLinkGdalLayers),
+                         ('rastOut',       self.OnRasterOutputFormat),
                          (None, None),
                          ('vectImport',    self.OnImportOgrLayers),
-                         ('vectLink',      self.OnLinkOgrLayers)))
+                         ('vectLink',      self.OnLinkOgrLayers),
+                         ('vectOut',       self.OnVectorOutputFormat)))
         
     def OnWorkspaceNew(self, event = None):
         """!Create new workspace file
@@ -1128,7 +1130,17 @@ class GMFrame(wx.Frame):
         win = vclean.VectorCleaningFrame(parent = self, cmd = cmd[0])
         win.CentreOnScreen()
         win.Show()
-        
+
+    def OnRasterOutputFormat(self, event):
+        """!Set raster output format handler"""
+        self.OnMenuCmd(cmd = ['r.external.out'])
+
+    def OnVectorOutputFormat(self, event):
+        """!Set vector output format handler"""
+        dlg = gdialogs.GdalOutputDialog(parent = self, ogr = True)
+        dlg.CentreOnScreen()
+        dlg.Show()
+    
     def OnImportDxfFile(self, event, cmd = None):
         """!Convert multiple DXF layers to GRASS vector map layers"""
         dlg = gdialogs.DxfImportDialog(parent = self)
