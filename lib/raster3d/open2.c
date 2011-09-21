@@ -105,8 +105,10 @@ void *Rast3d_open_new_opt_tile_size(const char *name, int cache, RASTER3D_Region
 
 
     Rast3d_get_tile_dimension(&oldTileX, &oldTileY, &oldTileZ);
-    
+
     Rast3d_compute_optimal_tile_dimension(region, type, &tileX, &tileY, &tileZ, maxSize);
+
+    G_debug(1, "New tile dimension X %i Y %i Z %i\n", tileX, tileY, tileZ);
 
     Rast3d_set_tile_dimension(tileX, tileY, tileZ);
 
