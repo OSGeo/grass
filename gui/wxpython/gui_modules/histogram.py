@@ -259,11 +259,11 @@ class BufferedWindow(wx.Window):
         self.Draw(self.pdc, pdctype = 'clear')
         
 class HistFrame(wx.Frame):
-    """!Main frame for hisgram display window.  Uses d.histogram
+    """!Main frame for hisgram display window. Uses d.histogram
     rendered onto canvas
     """
     def __init__(self, parent = None, id = wx.ID_ANY,
-                 title = _("GRASS GIS Histogram of image or raster map"),
+                 title = _("GRASS GIS Histogram of raster map"),
                  style = wx.DEFAULT_FRAME_STYLE, **kwargs):
         wx.Frame.__init__(self, parent, id, title, style = style, **kwargs)
         self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
