@@ -1416,6 +1416,45 @@ class HistogramToolbar(AbstractToolbar):
                                       self.parent.OnQuit))
                                     )
 
+class Histogram2Toolbar(AbstractToolbar):
+    """!Toolbar for histogramming raster map
+    """ 
+    def __init__(self, parent):
+        AbstractToolbar.__init__(self, parent)
+        
+        self.InitToolbar(self._toolbarData())
+        
+        # realize the toolbar
+        self.Realize()
+        
+    def _toolbarData(self):
+        """!Toolbar data"""
+        icons = Icons['profile']
+        return self._getToolbarData((('addraster', Icons['layerManager']["addRast"],
+                                      self.parent.OnSelectRaster),
+                                     (None, ),
+                                     ('draw', icons["draw"],
+                                      self.parent.OnCreateHist),
+                                     ('erase', Icons['displayWindow']["erase"],
+                                      self.parent.OnErase),
+                                     ('drag', Icons['displayWindow']['pan'],
+                                      self.parent.OnDrag),
+                                     ('zoom', Icons['displayWindow']['zoomIn'],
+                                      self.parent.OnZoom),
+                                     ('unzoom', Icons['displayWindow']['zoomBack'],
+                                      self.parent.OnRedraw),
+                                     (None, ),
+                                     ('image', Icons['displayWindow']["saveFile"],
+                                      self.parent.SaveToFile),
+                                     ('print', Icons['displayWindow']["print"],
+                                      self.parent.PrintMenu),
+                                     (None, ),
+                                     ('settings', icons["options"],
+                                      self.parent.HistOptionsMenu),
+                                     ('quit', icons["quit"],
+                                      self.parent.OnQuit),
+                                     ))
+
 class LMWorkspaceToolbar(AbstractToolbar):
     """!Layer Manager `workspace` toolbar
     """
