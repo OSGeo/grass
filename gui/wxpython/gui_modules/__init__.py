@@ -15,6 +15,7 @@ all = [
     "goutput.py",
     "gselect.py",
     "histogram.py",
+    "histogram2.py",
     "layertree.py",
     "location_wizard.py",
     "mapdisp_window.py",
