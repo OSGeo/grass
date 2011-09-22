@@ -445,6 +445,38 @@ class Settings:
                     'enabled' : True
                     },
                 },
+             'histogram': {
+                'raster' : {
+                    'pcolor'        : (0, 0, 0, 255), # line color
+                    'pwidth'        : 1, # line width
+                    'pstyle'        : 'solid', # line pen style
+                    'datatype'      : 'cell', # raster type
+                    },
+                'font' : {
+                    'titleSize'     : 12,
+                    'axisSize'      : 11,
+                    'legendSize'    : 10,
+                    },
+                'grid' : {
+                    'color'         : (200, 200, 200, 255),
+                    'enabled'       : True,
+                    },
+                'x-axis' : {
+                    'type'          : 'auto', # axis format
+                    'min'           : 0, # axis min for custom axis range
+                    'max'           : 0, # axis max for custom axis range
+                    'log'           : False,
+                    },
+                'y-axis' : {
+                    'type'          : 'auto', # axis format
+                    'min'           : 0, # axis min for custom axis range
+                    'max'           : 0, # axis max for custom axis range
+                    'log'           : False,
+                    },
+                'legend' : {
+                    'enabled'       : True
+                    },
+                },
             'gcpman' : {
                 'rms' : {
                     'highestonly' : True,

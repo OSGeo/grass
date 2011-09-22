@@ -46,6 +46,7 @@ import gcmd
 import dbm
 import dbm_dialogs
 import histogram
+import histogram2
 import profile
 import globalvar
 import utils
@@ -1540,6 +1541,11 @@ class MapFrame(wx.Frame):
         toolsmenu.AppendItem(profile)
         self.Bind(wx.EVT_MENU, self.Profile, profile)
 
+        histogram2 = wx.MenuItem(toolsmenu, wx.ID_ANY, _("Create histogram with PyPlot"))
+        histogram2.SetBitmap(icons["histogram"].GetBitmap(self.iconsize))
+        toolsmenu.AppendItem(histogram2)
+        self.Bind(wx.EVT_MENU, self.Histogram2, histogram2)
+
         histogram = wx.MenuItem(toolsmenu, wx.ID_ANY, icons["histogram"].GetLabel())
         histogram.SetBitmap(icons["histogram"].GetBitmap(self.iconsize))
         toolsmenu.AppendItem(histogram)
@@ -1710,6 +1716,16 @@ class MapFrame(wx.Frame):
         self.histogram.Refresh()
         self.histogram.Update()
 
+    def Histogram2(self, event):
+        """!Init histogram display canvas and tools
+        """
+        self.histogram2 = histogram2.HistFrame(self,
+                                             id = wx.ID_ANY, size = globalvar.HIST_WINDOW_SIZE,
+                                             style = wx.DEFAULT_FRAME_STYLE)
+
+        #show new display
+        self.histogram2.Show()
+        self.histogram2.Refresh()
 
     def OnDecoration(self, event):
         """!Decorations overlay menu
