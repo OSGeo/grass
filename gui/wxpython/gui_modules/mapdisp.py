@@ -1705,16 +1705,20 @@ class MapFrame(wx.Frame):
         return (outdist, outunits)
     
     def Histogram(self, event):
-        """!Init histogram display canvas and tools
+        """!Init PyPlot histogram display canvas and tools
         """
-        self.histogram = histogram.HistFrame(self,
-                                             id = wx.ID_ANY, size = globalvar.HIST_WINDOW_SIZE,
-                                             style = wx.DEFAULT_FRAME_STYLE)
+        raster = []
+        if self.tree.layer_selected and \
+                self.tree.GetPyData(self.tree.layer_selected)[0]['type'] == 'raster':
+            raster.append(self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer'].name)
 
-        #show new display
-        self.histogram.Show()
-        self.histogram.Refresh()
-        self.histogram.Update()
+        self.histogram2 = histogram2.HistFrame(self,
+                                            id = wx.ID_ANY, pos = wx.DefaultPosition, size = (700,300),
+                                            style = wx.DEFAULT_FRAME_STYLE, rasterList = raster)
+        self.histogram2.Show()
+        # Open raster select dialog to make sure that a raster (and the desired raster)
+        # is selected to be histogrammed
+        self.histogram2.OnSelectRaster(None)
 
     def Histogram2(self, event):
         """!Init histogram display canvas and tools

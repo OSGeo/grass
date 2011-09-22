@@ -617,17 +617,10 @@ class HistFrame(wx.Frame):
 
     def OnCloseWindow(self, event):
         """
-        Close profile window and clean up
+        Close histogram window and clean up
         """
-        self.mapwin.ClearLines()
-        self.mapwin.mouse['begin'] = self.mapwin.mouse['end'] = (0.0, 0.0)
-        self.mapwin.mouse['use'] = 'pointer'
-        self.mapwin.mouse['box'] = 'point'
-        self.mapwin.polycoords = []
+
         self.mapwin.SetCursor(self.Parent.cursors["default"])
-
-        self.mapwin.UpdateMap(render=False, renderVector=False)
-
         self.Destroy()
 
 class SetRasterDialog(wx.Dialog):

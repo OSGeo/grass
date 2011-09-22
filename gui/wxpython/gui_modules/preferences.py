@@ -447,7 +447,7 @@ class Settings:
                 },
              'histogram': {
                 'raster' : {
-                    'pcolor'        : (0, 0, 0, 255), # line color
+                    'pcolor'        : (0, 0, 255, 255), # line color
                     'pwidth'        : 1, # line width
                     'pstyle'        : 'solid', # line pen style
                     'datatype'      : 'cell', # raster type
