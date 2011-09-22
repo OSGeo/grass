@@ -639,6 +639,7 @@ class SetRasterDialog(wx.Dialog):
         self.bins = self.parent.bins
         self.histtype = self.parent.histtype
         self.maptype = self.parent.maptype
+        self.spinbins = ''
         
         self._do_layout()
         
@@ -698,11 +699,11 @@ class SetRasterDialog(wx.Dialog):
                               label=_("Number of bins (for FP maps)"))
         box.Add(item=label,
                 flag=wx.ALIGN_CENTER_VERTICAL, pos=(3, 0))
-        bins = wx.SpinCtrl(parent=self, id=wx.ID_ANY, value="", pos=(30, 50),
+        self.spinbins = wx.SpinCtrl(parent=self, id=wx.ID_ANY, value="", pos=(30, 50),
                                       size=(100,-1), style=wx.SP_ARROW_KEYS)
-        bins.SetRange(1,1000)
-        bins.SetValue(self.bins)
-        box.Add(item=bins,
+        self.spinbins.SetRange(1,1000)
+        self.spinbins.SetValue(self.bins)
+        box.Add(item=self.spinbins,
                 flag=wx.ALIGN_CENTER_VERTICAL, pos=(3, 1))
 
         label = wx.StaticText(parent=self, id=wx.ID_ANY, 
@@ -742,8 +743,8 @@ class SetRasterDialog(wx.Dialog):
         self.Bind(wx.EVT_RADIOBUTTON, self.OnHistMap, self.groupRadio)
         self.rselection.Bind(wx.EVT_TEXT, self.OnRasterSelection)
         self.gselection.Bind(wx.EVT_TEXT, self.OnGroupSelection)
-        bins.Bind(wx.EVT_TEXT, self.OnSetBins)
-        bins.Bind(wx.EVT_SPINCTRL, self.OnSetBins)
+        self.spinbins.Bind(wx.EVT_TEXT, self.OnSetBins)
+        self.spinbins.Bind(wx.EVT_SPINCTRL, self.OnSetBins)
         histtype.Bind(wx.EVT_TEXT, self.OnSetHisttypes)
 
         self.SetSizer(sizer)
@@ -785,10 +786,7 @@ class SetRasterDialog(wx.Dialog):
     def OnSetBins(self, event):
         """!Bins for histogramming FP maps (=nsteps in r.stats)
         """
-        if event.GetValue() != None:
-            self.bins = event.GetValue()
-        elif event.GetString() != None and int(event.GetString()) > 0:
-            self.bins = int(event.GetString())
+        self.bins = self.spinbins.GetValue()
         
     def OnSetHisttypes(self, event):
         self.histtype = event.GetString()
