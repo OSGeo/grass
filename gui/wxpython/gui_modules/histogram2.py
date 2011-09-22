@@ -57,7 +57,7 @@ except ImportError:
            "standard Python distribution). See the Numeric Python site "
            "(http://numpy.scipy.org) for information on downloading source or "
            "binaries.")
-    print >> sys.stderr, "profile.py: " + msg
+    print >> sys.stderr, "histogram2.py: " + msg
 
 class HistFrame(wx.Frame):
     """!Mainframe for displaying profile of raster map. Uses wx.lib.plot.
@@ -377,15 +377,16 @@ class HistFrame(wx.Frame):
                 
         try:
             ret = gcmd.RunCommand("r.stats",
-                             input=raster,
-                             flags=freqflag,
-                             nsteps=self.bins,
-                             fs=',',
-                             quiet=True,
-                             read = True)
+                                  parent = self,
+                                  input=raster,
+                                  flags=freqflag,
+                                  nsteps=self.bins,
+                                  fs=',',
+                                  quiet = True,
+                                  read = True)
             
             if not ret:
-                return dataset
+                return datalist
             
             for line in ret.splitlines():
                 cellval, histval = line.strip().split(',')
