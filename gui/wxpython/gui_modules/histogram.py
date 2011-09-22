@@ -7,7 +7,7 @@ Classes:
  - BufferedWindow
  - HistFrame
 
-COPYRIGHT: (C) 2007, 2010-2011 by the GRASS Development Team
+(C) 2007, 2010-2011 by the GRASS Development Team
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
@@ -26,11 +26,12 @@ import disp_print
 import utils
 import gdialogs
 import globalvar
-from toolbars import HistogramToolbar
+
+from toolbars    import HistogramToolbar
 from preferences import DefaultFontDialog
-from debug import Debug
-from icon import Icons
-from gcmd import GError
+from debug       import Debug
+from icon        import Icons
+from gcmd        import GError
 
 class BufferedWindow(wx.Window):
     """!A Buffered window class.
@@ -40,7 +41,7 @@ class BufferedWindow(wx.Window):
     can also save the drawing to file by calling the
     SaveToFile(self,file_name,file_type) method.
     """
-    def __init__(self, parent, id =  wx.ID_ANY,
+    def __init__(self, parent, id = wx.ID_ANY,
                  style = wx.NO_FULL_REPAINT_ON_RESIZE,
                  Map = None, **kwargs):
         
