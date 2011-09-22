@@ -160,7 +160,7 @@ Icons = {
         'addText'    : MetaIcon(img = iconSet.get('text-add', wx.ART_ERROR),
                                 label = _('Add text layer')),
         'histogram'  : MetaIcon(img = iconSet.get('layer-raster-histogram', wx.ART_ERROR),
-                                label = _('Create histogram of image or raster file')),
+                                label = _('Create histogram of raster map')),
         },
     'layerManager' : {
         'newdisplay'   : MetaIcon(img = iconSet.get('monitor-create', wx.ART_ERROR),
