@@ -1,20 +1,23 @@
 <!-- meta page description: Display drivers -->
-<!-- meta page index: display -->
-This reference manual details the use of modules distributed with
-<b>Geographic Resources Analysis Support System</b> (GRASS), an open source
-(GNU GPL'ed), image processing and geographic information system
-(GIS).
+<!-- meta page index: display --> 
 
-<p>
 The current command line rendering mechanism is direct rendering into
 a file. The driver is selected by setting
-the <em>GRASS_RENDER_IMMEDIATE</em> variable.
+the <tt>GRASS_RENDER_IMMEDIATE</tt> variable or by
+running <em><a href="d.mon.html">d.mon</a></em> module.
 
 <p>
-<b>Display drivers:</b>
+<b>List of available display drivers:</b>
 <ul>
-<li><a href="cairodriver.html">Cairo driver</a>
-<li><a href="pngdriver.html">PNG driver</a>
-<li><a href="psdriver.html">PS driver (Postscript)</a>
-<li><a href="htmldriver.html">HTMLMAP driver</a>
+  <li><a href="cairodriver.html">Cairo driver</a>
+  <li><a href="pngdriver.html">PNG driver</a>
+  <li><a href="psdriver.html">PS driver (Postscript)</a>
+  <li><a href="htmldriver.html">HTMLMAP driver</a>
 </ul>
+
+<h2>SEE ALSO</h2>
+
+<em>
+  <a href="d.mon.html">d.mon</a>,
+  <a href="variables.html#rendering">variables</a>
+</em>
