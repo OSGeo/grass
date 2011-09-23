@@ -1148,25 +1148,25 @@ class AttributeManager(wx.Frame):
 
     def OnDataItemDelete(self, event):
         """!Delete selected item(s) from the list (layer/category pair)"""
-        list = self.FindWindowById(self.layerPage[self.layer]['data'])
-        item = list.GetFirstSelected()
-
+        dlist = self.FindWindowById(self.layerPage[self.layer]['data'])
+        item = dlist.GetFirstSelected()
+        
         table    = self.mapDBInfo.layers[self.layer]["table"]
         key      = self.mapDBInfo.layers[self.layer]["key"]
-
+        
         indeces = []
         # collect SQL statements
         while item != -1:
-            index = list.itemIndexMap[item]
+            index = dlist.itemIndexMap[item]
             indeces.append(index)
-
-            cat = list.itemCatsMap[index]
+            
+            cat = dlist.itemCatsMap[index]
             
             self.listOfSQLStatements.append('DELETE FROM %s WHERE %s=%d' % \
                                                 (table, key, cat))
-
-            item = list.GetNextSelected(item)
-
+            
+            item = dlist.GetNextSelected(item)
+        
         if UserSettings.Get(group='atm', key='askOnDeleteRec', subkey='enabled'):
             deleteDialog = wx.MessageBox(parent=self,
                                          message=_("Selected data records (%d) will permanently deleted "
@@ -1177,33 +1177,33 @@ class AttributeManager(wx.Frame):
             if deleteDialog != wx.YES:
                 self.listOfSQLStatements = []
                 return False
-
+        
         # restore maps
         i = 0
-        indexTemp = copy.copy(list.itemIndexMap)
-        list.itemIndexMap = []
-        dataTemp = copy.deepcopy(list.itemDataMap)
-        list.itemDataMap = {}
-        catsTemp = copy.deepcopy(list.itemCatsMap)
-        list.itemCatsMap = {}
-
+        indexTemp = copy.copy(dlist.itemIndexMap)
+        dlist.itemIndexMap = []
+        dataTemp = copy.deepcopy(dlist.itemDataMap)
+        dlist.itemDataMap = {}
+        catsTemp = copy.deepcopy(dlist.itemCatsMap)
+        dlist.itemCatsMap = {}
+        
         i = 0
         for index in indexTemp:
             if index in indeces:
                 continue
-            list.itemIndexMap.append(i)
-            list.itemDataMap[i] = dataTemp[index]
-            list.itemCatsMap[i] = catsTemp[index]
-
+            dlist.itemIndexMap.append(i)
+            dlist.itemDataMap[i] = dataTemp[index]
+            dlist.itemCatsMap[i] = catsTemp[index]
+            
             i += 1
             
-        list.SetItemCount(len(list.itemIndexMap))
-
+        dlist.SetItemCount(len(dlist.itemIndexMap))
+        
         # deselect items
-        item = list.GetFirstSelected()
+        item = dlist.GetFirstSelected()
         while item != -1:
-            list.SetItemState(item, 0, wx.LIST_STATE_SELECTED | wx.LIST_STATE_FOCUSED)
-            item = list.GetNextSelected(item)
+            dlist.SetItemState(item, 0, wx.LIST_STATE_SELECTED | wx.LIST_STATE_FOCUSED)
+            item = dlist.GetNextSelected(item)
         
         # submit SQL statements
         self.ApplyCommands()
@@ -1212,21 +1212,21 @@ class AttributeManager(wx.Frame):
 
     def OnDataItemDeleteAll(self, event):
         """!Delete all items from the list"""
-        list = self.FindWindowById(self.layerPage[self.layer]['data'])
+        dlist = self.FindWindowById(self.layerPage[self.layer]['data'])
         if UserSettings.Get(group='atm', key='askOnDeleteRec', subkey='enabled'):
             deleteDialog = wx.MessageBox(parent=self,
                                          message=_("All data records (%d) will permanently deleted "
                                                    "from table. Do you want to delete them?") % \
-                                             (len(list.itemIndexMap)),
+                                             (len(dlist.itemIndexMap)),
                                          caption=_("Delete records"),
                                          style=wx.YES_NO | wx.CENTRE)
             if deleteDialog != wx.YES:
                 return
 
-        list.DeleteAllItems()
-        list.itemDataMap  = {}
-        list.itemIndexMap = []
-        list.SetItemCount(0)
+        dlist.DeleteAllItems()
+        dlist.itemDataMap  = {}
+        dlist.itemIndexMap = []
+        dlist.SetItemCount(0)
 
         table = self.mapDBInfo.layers[self.layer]["table"]
         self.listOfSQLStatements.append('DELETE FROM %s' % table)
