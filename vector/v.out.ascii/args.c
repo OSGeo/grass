@@ -46,7 +46,10 @@ void parse_args(int argc, char **argv,
     format_opt->options = "point,standard,wkt";
     format_opt->answer = "point";
     format_opt->description = _("Output format");
-    
+    format_opt->descriptions = _("point;Simple point format (point per row);"
+				 "standard;GRASS ASCII vector format;"
+				 "wkt;OGC well-known text;");
+
     delim_opt = G_define_standard_option(G_OPT_F_SEP);
     delim_opt->description = _("Field separator (points mode)");
     delim_opt->guisection = _("Points");
