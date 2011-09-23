@@ -18,7 +18,7 @@ List of classes:
  - VirtualAttributeList
  - AttributeManager
 
-(C) 2007-2009 by the GRASS Development Team
+(C) 2007-2009, 2011 by the GRASS Development Team
 
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
@@ -1735,47 +1735,46 @@ class AttributeManager(wx.Frame):
         """!Add new column to the table"""
 	table = self.mapDBInfo.layers[self.layer]['table']
         name = self.FindWindowById(self.layerPage[self.layer]['addColName']).GetValue()
-
+        
         if not name:
-            wx.MessageBox(parent=self,
-                          message=_("Unable to add column to the table. "
-                                    "No column name defined."),
-                          caption=_("Error"), style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
+            gcmd.GError(parent = self,
+                        message = _("Unable to add column to the table. "
+                                    "No column name defined."))
             return
-
-        type = self.FindWindowById(self.layerPage[self.layer]['addColType']). \
+        
+        ctype = self.FindWindowById(self.layerPage[self.layer]['addColType']). \
             GetStringSelection()
         
         # cast type if needed
-        if type == 'double':
-            type = 'double precision'
-        if type == 'varchar':
+        if ctype == 'double':
+            ctype = 'double precision'
+        if ctype == 'varchar':
             length = int(self.FindWindowById(self.layerPage[self.layer]['addColLength']). \
                              GetValue())
         else:
             length = '' # FIXME
-
+        
         # add item to the list of table columns
-        list = self.FindWindowById(self.layerPage[self.layer]['tableData'])
+        tlist = self.FindWindowById(self.layerPage[self.layer]['tableData'])
         # check for duplicate items
-        if list.FindItem(start=-1, str=name) > -1:
-            wx.MessageBox(parent=self,
-                          message=_("Column <%(column)s> already exists in table <%(table)s>.") % \
-                              {'column' : name, 'table' : self.mapDBInfo.layers[self.layer]["table"]},
-                          caption=_("Error"), style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
+        if tlist.FindItem(start=-1, str=name) > -1:
+            gcmd.GError(parent = self,
+                        message = _("Column <%(column)s> already exists in table <%(table)s>.") % \
+                            {'column' : name, 'table' : self.mapDBInfo.layers[self.layer]["table"]}
+                        )
             return
-        index = list.InsertStringItem(sys.maxint, str(name))
-        list.SetStringItem(index, 0, str(name))
-        list.SetStringItem(index, 1, str(type))
-        list.SetStringItem(index, 2, str(length))
+        index = tlist.InsertStringItem(sys.maxint, str(name))
+        tlist.SetStringItem(index, 0, str(name))
+        tlist.SetStringItem(index, 1, str(ctype))
+        tlist.SetStringItem(index, 2, str(length))
         
         # add v.db.addcolumn command to the list
-        if type == 'varchar':
-            type += ' (%d)' % length
+        if ctype == 'varchar':
+            ctype += ' (%d)' % length
         self.listOfCommands.append(('v.db.addcolumn',
-                                    { 'map' : self.vectorName,
-                                      'layer' : self.layer,
-                                      'columns' : '%s %s' % (name, type) }
+                                    { 'map'     : self.vectorName,
+                                      'layer'   : self.layer,
+                                      'columns' : '%s %s' % (name, ctype) }
                                     ))
         # apply changes
         self.ApplyCommands()
@@ -1850,6 +1849,8 @@ class AttributeManager(wx.Frame):
     def ApplyCommands(self):
         """!Apply changes"""
         # perform GRASS commands (e.g. v.db.addcolumn)
+        wx.BeginBusyCursor()
+        
         if len(self.listOfCommands) > 0:
             for cmd in self.listOfCommands:
                 gcmd.RunCommand(prog = cmd[0],
@@ -1872,7 +1873,7 @@ class AttributeManager(wx.Frame):
 
             # reset list of commands
             self.listOfCommands = []
-
+        
         # perform SQL non-select statements (e.g. 'delete from table where cat=1')
         if len(self.listOfSQLStatements) > 0:
             sqlFile = tempfile.NamedTemporaryFile(mode="wt")
@@ -1889,10 +1890,10 @@ class AttributeManager(wx.Frame):
 
             driver   = self.mapDBInfo.layers[self.layer]["driver"]
             database = self.mapDBInfo.layers[self.layer]["database"]
-
+            
             Debug.msg(3, 'AttributeManger.ApplyCommands(): %s' %
                       ';'.join(["%s" % s for s in self.listOfSQLStatements]))
-
+            
             gcmd.RunCommand('db.execute',
                             parent = self,
                             input = sqlFile.name,
@@ -1901,12 +1902,16 @@ class AttributeManager(wx.Frame):
             
             # reset list of statements
             self.listOfSQLStatements = []
-
+            
+        wx.EndBusyCursor()
+        
     def OnApplySqlStatement(self, event):
         """!Apply simple/advanced sql statement"""
         keyColumn = -1 # index of key column
         listWin = self.FindWindowById(self.layerPage[self.layer]['data'])
         sql = None
+        
+        wx.BeginBusyCursor()
         
         if self.FindWindowById(self.layerPage[self.layer]['simple']).GetValue():
             # simple sql statement
@@ -1954,6 +1959,8 @@ class AttributeManager(wx.Frame):
                 listWin.SortListItems(col=keyColumn, ascending=True)
             else:
                 listWin.SortListItems(col=0, ascending=True) 
+        
+        wx.EndBusyCursor()
         
         # update statusbar
         self.log.write(_("Number of loaded records: %d") % \
