@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # utilities for generating HTML indices
-# (c) The GRASS Development Team, Markus Neteler, Glynn Clements 2003, 2004, 2005, 2006, 2009, 2010, 2011
+# (c) 2003-2006, 2009-2011 by the GRASS Development Team, Markus Neteler, Glynn Clements
 
 import sys
 import os
@@ -121,6 +121,7 @@ r"""<!-- the files grass7.html & helptext.html file live in lib/init/ -->
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Vector processing</h3>
        <ul>
         <li><a href="vector.html">Vector commands manual</a></li>
+        <li><a href="vectorascii.html">GRASS ASCII vector format specification</a></li>
       </ul></td>
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Database</h3>
        <ul>
