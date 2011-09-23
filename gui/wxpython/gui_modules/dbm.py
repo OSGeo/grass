@@ -822,9 +822,11 @@ class AttributeManager(wx.Frame):
             
             panel = wx.Panel(parent=self.manageTablePage, id=wx.ID_ANY)
             self.layerPage[layer]['tablePage'] = panel.GetId()
+            label = _("Table")
+            if not self.editable:
+                label += _(" (readonly)")
             self.manageTablePage.AddPage(page=panel,
-                                         text=" %d / %s %s" % (layer,
-                                                               _("Table"),
+                                         text=" %d / %s %s" % (layer, label,
                                                                self.mapDBInfo.layers[layer]['table']))
             
             pageSizer = wx.BoxSizer(wx.VERTICAL)
@@ -998,8 +1000,11 @@ class AttributeManager(wx.Frame):
         splitterWin = wx.SplitterWindow(parent=self.manageLayerPage, id=wx.ID_ANY)
         splitterWin.SetMinimumPaneSize(100)
         
+        label = _("Layers of vector map")
+        if not self.editable:
+            label += _(" (readonly)")
         self.manageLayerPage.AddPage(page=splitterWin,
-                                     text=_("Layers of vector map")) # dummy page
+                                     text=label) # dummy page
         
         #
         # list of layers
