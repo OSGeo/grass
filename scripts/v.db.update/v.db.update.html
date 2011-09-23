@@ -1,21 +1,23 @@
 <h2>DESCRIPTION</h2>
 
 <em>v.db.update</em> allows to assign a new value to a column in the
-attribute table connected to a given map. Alternatively, values can
-be copied from another column in the table.
+attribute table connected to a given map. Alternatively, values can be
+copied from another column in the table.
 
 <h2>NOTES</h2>
 
-<em>v.db.update</em> is just a front-end to <em>db.execute</em> to allow easier usage.
+<em>v.db.update</em> is just a front-end to <em>db.execute</em> to
+allow easier usage.
 <p>
 For complex SQL UPDATE statements, <em>db.execute</em> should be used.
 
 <h2>EXAMPLES</h2>
 
-In this example, selectively display lakes without (blue) and with NULL (red)
-are shown to find out which type is undefined. In the original map there are
-lakes missing FTYPE attribute which are wetlands along streams. These NULL
-attributes are replaced with the landuse type WETLAND:
+In this example, selectively display lakes without (blue) and with
+NULL (red) are shown to find out which type is undefined. In the
+original map there are lakes missing FTYPE attribute which are
+wetlands along streams. These NULL attributes are replaced with the
+landuse type WETLAND:
 
 <div class="code"><pre>
 g.copy vect=lakes,mylakes
@@ -32,9 +34,10 @@ d.vect mylakes where="FTYPE IS NULL" type=area col=red
 v.db.update mylakes col=FTYPE value=WETLAND \
             where="FTYPE IS NULL"
 v.db.select mylakes
-<p>
-Spearfish example: adding new column, copying values from other table column with
-on the fly calculation:
+</pre></div>
+
+Spearfish example: adding new column, copying values from other table
+column with on the fly calculation:
 <div class="code"><pre>
 g.copy vect=fields,myfields
 v.db.addcolumn myfields col="polynum integer"
@@ -42,8 +45,8 @@ v.db.update myfields col=polynum qcol="cat*2"
 v.db.select myfields
 </pre></div>
 
-<p>
-Type cast (type conversion) of strings to double precision (unsupported by DBF driver):
+Type cast (type conversion) of strings to double precision
+(unsupported by DBF driver):
 <div class="code"><pre>
 g.copy vect=geodetic_pts,mygeodetic_pts
 v.db.update mygeodetic_pts col=zval qcol="CAST(z_value AS double precision)" \
@@ -53,14 +56,14 @@ v.db.update mygeodetic_pts col=zval qcol="CAST(z_value AS double precision)" \
 <h2>SEE ALSO</h2>
 
 <em>
-<a HREF="db.execute.html">db.execute</a>,
-<a HREF="v.db.addcolumn.html">v.db.addcolumn</a>,
-<a HREF="v.db.addtable.html">v.db.addtable</a>,
-<a HREF="v.db.connect.html">v.db.connect</a>,
-<a HREF="v.db.droptable.html">v.db.droptable</a>,
-<a HREF="v.db.join.html">v.db.join</a>,
-<a HREF="v.db.select.html">v.db.select</a><br>
-<a href="sql.html">GRASS SQL interface</a>
+  <a href="db.execute.html">db.execute</a>,
+  <a href="v.db.addcolumn.html">v.db.addcolumn</a>,
+  <a href="v.db.addtable.html">v.db.addtable</a>,
+  <a href="v.db.connect.html">v.db.connect</a>,
+  <a href="v.db.droptable.html">v.db.droptable</a>,
+  <a href="v.db.join.html">v.db.join</a>,
+  <a href="v.db.select.html">v.db.select</a><br>
+  <a href="sql.html">GRASS SQL interface</a>
 </em>
 
 
@@ -68,4 +71,5 @@ v.db.update mygeodetic_pts col=zval qcol="CAST(z_value AS double precision)" \
 
 Moritz Lennert (mlennert@club.worldonline.be)
 
-<p><i>Last changed: $Date$</i></p>
+<p>
+<i>Last changed: $Date$</i>
