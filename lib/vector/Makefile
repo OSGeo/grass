@@ -1,5 +1,7 @@
 MODULE_TOPDIR = ../..
 
+PGM = vectorascii
+
 SUBDIRS = rtree \
 	dglib \
 	diglib \
@@ -11,9 +13,11 @@ SUBDIRS = rtree \
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 
-DOXNAME=vector
+DOXNAME = vector
 
-default: parsubdirs
+default: htmldir
+
+htmldir: parsubdirs
 
 diglib: rtree
 
