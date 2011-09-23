@@ -8,6 +8,8 @@ SUBDIRS = \
 	t.time.abs \
 	t.time.rel \
 	tr.register \
+	tr.series \
+	tr.extract \
 	tr3.register \
 	tv.register \
 	tr.unregister \
