@@ -180,18 +180,23 @@ cat roads.txt | v.edit tool=create map=vectmap input=-
 
 <h3>Add new features to existing vector map</h3>
 
-Add point to the vector map (without header):
+Add a new point to the vector map (without header):
 
 <div class="code"><pre>
 echo "P 1 1
  640794 214874
- 1 1" | v.edit -n tool=add map=vectmap
+ 1 1" | v.edit -n tool=add map=vectmap input=-
 </pre></div>
+
+The input must be in <a href="vectorascii.html">GRASS ASCII vector
+format</a>.
+
+<p>
 
 Add new features read from standard input:
 
 <div class="code"><pre>
-v.out.ascii in=railroads format=standard | v.edit tool=add map=vectmap
+v.out.ascii in=railroads format=standard | v.edit tool=add map=vectmap input=-
 </pre></div>
 
 <h3>Delete selected features from vector map layer</h3>

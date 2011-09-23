@@ -1,7 +1,8 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.in.ascii</em> converts a vector map in ASCII format to a vector map in 
-binary format. The module may import two formats:
+<em>v.in.ascii</em> converts a vector map
+in <a href="vectorascii.html">GRASS ASCII vector format</a> to a
+vector map in binary format. The module may import two formats:
 <ul>
 <li><b>standard</b> contains all data types, each coordinate on one row</li>
 <li><b>point</b> (default) reads only points, each point defined on
@@ -12,12 +13,11 @@ binary format. The module may import two formats:
 </ul>
 
 <p>
-The <a href="v.out.ascii.html">v.out.ascii</a> GRASS module performs
-the function of <em>v.in.ascii</em> in reverse; i.e., it converts
-vector maps in binary format to ASCII format. These two companion
-programs are useful both for importing and exporting vector maps
-between GRASS and other software, and for transferring data between
-machines.
+<em><a href="v.out.ascii.html">v.out.ascii</a></em> performs the
+function of <em>v.in.ascii</em> in reverse; i.e., it converts vector
+maps in binary format to GRASS ASCII vector format. These two companion programs
+are useful both for importing and exporting vector maps between GRASS
+and other software, and for transferring data between machines.
 
 <h2>NOTES</h2>
  
@@ -37,133 +37,45 @@ may be explicitly declared along with the geometry columns using the
 <b>columns</b> parameter.
 
 <p>
-Latitude/Longitude data may be given in a number of ways.
-Decimal degrees must be positive or negative instead of using a hemisphere
-letter. Mixed coordinates must use a hemisphere letter. Whole minutes and
-seconds must always contain two digits (example: use <tt>167:03:04.567</tt>;
-and not <tt>167:3:4.567</tt>). 
-<br><br>
-Acceptable formats:<br>
-<i>key: D=Degrees; M=Minutes; S=Seconds; h=Hemisphere (N,S,E,W)</i>
-<ul>
-  <li><tt>(+/-)DDD.DDDDD</tt>
-  <li><tt>DDDh</tt>
-  <li><tt>DDD:MMh</tt>
-  <li><tt>DDD:MM.MMMMMh</tt>
-  <li><tt>DDD:MM:SSh</tt>
-  <li><tt>DDD:MM:SS.SSSSSh</tt>
-</ul>
-
-<p>
 Use the <b>-z</b> flag to convert ASCII data into a 3D vector map.
 
 <p>
-In special cases of data import, such as the import of large LIDAR datasets
-(millions of data points), it may be necessary to disable topology support
-(creating a GRASS vector level 1 vector map) due to memory constraints.
-This is done with the <b>-b</b> flag. As only very few vector modules
-support points data processing at vector level 1, usually topology is
-required (vector level 2). Therefore it is recommened that the user first
-try to import the data without creating a database (the <b>-t</b> flag)
-or within a subregion (the <b>-r</b> flag) before resorting the to
+In special cases of data import, such as the import of large LIDAR
+datasets (millions of data points), it may be necessary to disable
+topology support (vector level 1) due to memory constraints.  This is
+done with the <b>-b</b> flag. As only very few vector modules support
+points data processing at vector level 1, usually topology is required
+(vector level 2). Therefore it is recommened that the user first try
+to import the data without creating a database (the <b>-t</b> flag) or
+within a subregion (the <b>-r</b> flag) before resorting the to
 disabling of topology.
 
 <p>
-A GRASS ASCII vector map (in <b>standard format</b> mode) may contain a mix
-of primitives including points, lines, boundaries, centroids, areas,
-faces, and kernels. The GRASS ASCII vector format
-may contain a header with various metadata (see example below). 
-The header is not required if the <b>-n</b> flag is used.
+If old version is requested, the <b>output</b> files
+from <em><a href="v.out.ascii.html">v.out.ascii</a></em> is placed in
+the <tt>$LOCATION/$MAPSET/dig_ascii/</tt>
+and <tt>$LOCATION/$MAPSET/dig_att</tt> directory.
 
-<p>The header is similar as the head file of vector binary format but
-contains bounding box also. Key words are:
+<h3>Import of files without category column</h3>
 
-<pre>
-ORGANIZATION
-DIGIT DATE
-DIGIT NAME
-MAP NAME
-MAP DATE
-MAP SCALE
-OTHER INFO
-ZONE
-WEST EDGE
-EAST EDGE
-SOUTH EDGE
-NORTH EDGE
-MAP THRESH
-</pre>
-
-<p>The body begins with the row:
-
-<pre>
-VERTI:
-</pre>
-
-followed by records of primitives:
-
-<pre>
-TYPE NUMBER_OF_COORDINATES [NUMBER_OF_CATEGORIES]
- X Y [Z]
-....
- X Y [Z]
-[ LAYER CATEGORY]
-....
-[ LAYER CATEGORY]
-</pre>
-
-Everything above in <tt>[&nbsp;]</tt> is optional. 
-
-<p>
-The primitive codes are as follows:
-<ul>
-<li>'P': point</li>
-<li>'L': line</li>
-<li>'B': boundary</li>
-<li>'C': centroid</li>
-<li>'F': face (3D boundary)</li>
-<li>'K': kernel (3D centroid)</li>
-<li>'A': area (boundary) - better use 'B'; kept only for backward compatibility</li>
-</ul>
-
-The coordinates are listed following the initial line containing the
-primitive code, the total number of vectors in the series, and (optionally)
-the number of categories (1 for a single layer, higher for multiple layers).
-Below that 1 or several lines follow to indicate the layer number and
-the category number (ID).
-<br>
-The order of coordinates is
-<div class="code"><pre>
-  X Y [Z]
-</pre></div>
-
-In pre-GRASS 6 versions of the ASCII file, the order of coordinates is:
-<div class="code"><pre>
-Y X
-</pre></div>
-
-If old version is requested, the <b>output</b> files from <em>v.out.ascii</em> is placed 
-in the <tt>$LOCATION/$MAPSET/dig_ascii/</tt> and <tt>$LOCATION/$MAPSET/dig_att</tt> directory.
-
-<h3>Import of files without category ID column</h3>
-
-If the input file does not contain a vector ID column,
-there is the possibility to auto-generate these IDs (categories). 
-To automatically add an additional column named 'cat', the 
-<b>cat</b> parameter must be set to the virtual column number 0 
-(<tt>cat=0</tt>). This is the default action if the <b>cat</b> parameter
-is not set.
+If the input file does not contain a category column, there is the
+possibility to auto-generate these IDs (categories). To automatically
+add an additional column named 'cat', the <b>cat</b> parameter must be
+set to the virtual column number 0 (<tt>cat=0</tt>). This is the
+default action if the <b>cat</b> parameter is not set.
 
 <h3>Importing from a spreadsheet</h3>
 
-Data may be imported from many spreadsheet programs by saving the 
-spreadsheet as a comma separated variable (.csv) text file, and then 
-using the <b>fs=','</b> option with <em>v.in.ascii</em> in <b>points</b> mode.
-If the input file contains any header lines, such as column headings, the
-<b>skip</b> parameter should be used. These skipped header lines will be
-written to the map's history file for later reference (read with
-<tt>v.info&nbsp;-h</tt>). The skip option only works in <tt>points</tt> mode.
-<P>
+Data may be imported from many spreadsheet programs by saving the
+spreadsheet as a comma separated variable (.csv) text file, and then
+using the <b>fs=','</b> or <b>fs=comma</b> option
+with <em>v.in.ascii</em> in <b>points</b> mode.  If the input file
+contains any header lines, such as column headings, the
+<b>skip</b> parameter should be used. These skipped header lines will
+be written to the map's history file for later reference (read with
+<tt>v.info&nbsp;-h</tt>). The skip option only works in <b>points</b> mode.
+
+<p>
 Any line starting with the hash character ('<tt>#</tt>') will be treated as
 a comment and skipped completely if located in the main data file. If located
 in the header, as defined by the <b>skip</b> parameter, it will be treated as
@@ -171,13 +83,14 @@ a header line and written to the history file.
 
 <h3>Import of sexagesimal degree (degree, minutes, seconds, DMS)</h3>
 
-The import of DMS formatted degrees is supported (in this case no
-sign but N/S, E/W characters are used to indicate the hemispheres).
-While the positions are internally translated into decimal degrees
-during the import, the original DMS values are maintained in the
-attribute table. This requires both the latitude and
-the longitude columns to be defined as varchars(), not as numbers.
-A warning will be issued which can be ignored.
+The import of DMS formatted degrees is supported (in this case no sign
+but N/S, E/W characters are used to indicate the hemispheres).  While
+the positions are internally translated into decimal degrees during
+the import, the original DMS values are maintained in the attribute
+table. This requires both the latitude and the longitude columns to be
+defined as <tt>varchar()</tt>, not as numbers.  A warning will be
+issued which can be ignored. See <a href="vectorascii.html">GRASS
+ASCII vector format specification</a> for details.
 
 <h3>Importing only selected columns</h3>
 Although <em>v.in.ascii</em> doesn't have an option to specify which columns
@@ -198,7 +111,6 @@ cut -d&lt;the_field_separator_character&gt; -f&lt;comma-separated_list_of_column
 <h3>Example 1a) - standard format mode</h3>
 Sample ASCII polygon vector map for 'standard' format mode. 
 The two areas will be assigned categories 20 and 21. 
-The example can be tested in the Spearfish sample dataset:
 <p>
 <div class="code"><pre>
 echo "ORGANIZATION: GRASS Development Team
@@ -232,11 +144,11 @@ C  1 1
 </pre></div>
 
 <h3>Example 1b) - standard format mode</h3>
+
 Sample ASCII 3D line vector map for 'standard' format mode with simplified input
 (note the space field separator).
 Note the <b>-z</b> flag indicating 3D vector input, and the <b>-n</b> flag
 indicating no vector header should be expected from the input file.
-The example can be tested in the Spearfish sample dataset:
 
 <div class="code"><pre>
 echo "L 5 1
@@ -268,7 +180,7 @@ Import into GRASS:
 v.in.ascii input=coords.txt output=mymap
 </pre></div>
 As the <b>cat</b> option is set to 0 by default, an extra column 'cat'
-containing the IDs will be auto-generated.
+containing the category numbers will be auto-generated.
 
 <h3>Example 3 - point format mode</h3>
 
@@ -356,6 +268,8 @@ cat $MAPSET/group/$GROUP/POINTS | v.in.ascii out=$GROUP_gcp fs=space skip=3 \
 <h2>REFERENCES</h2>
 
 <a href="sql.html">SQL command notes</a> for creating databases
+<br>
+<a href="vectorascii.html">GRASS ASCII vector format</a> specification
 
 <h2>SEE ALSO</h2>
 

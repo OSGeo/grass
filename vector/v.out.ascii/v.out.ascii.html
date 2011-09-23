@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 
 <em>v.out.ascii</em> converts a GRASS vector map in binary format to a
-GRASS vector map in ASCII format. Using
+GRASS vector map in <a href="vectorascii.html">ASCII format</a>. Using
 flag <b>-o</b> <em>v.out.ascii</em> output will be in old (version 4)
 ASCII format.
 
@@ -19,100 +19,27 @@ maps between GRASS and other software, and for transferring data
 between machines.
 
 <p>
-If the <b>format</b> parameter is set to <b>standard</b>, a GRASS
-ASCII vector map will be exported, which may contain a mix of
-primitives including points, lines, boundaries, centroids, areas,
-faces, and kernels. The beginning of the output ascii file will
-contain a header listing any metadata for the input vector map, if
-such metadata exists. An example of the <b>standard</b> format is
-given below.
-
-<p>The header is similar as the head file of vector binary format but
-contains bounding box also. Key words are:
-
-<pre>
-ORGANIZATION
-DIGIT DATE
-DIGIT NAME
-MAP NAME
-MAP DATE
-MAP SCALE
-OTHER INFO
-ZONE
-WEST EDGE
-EAST EDGE
-SOUTH EDGE
-NORTH EDGE
-MAP THRESH
-</pre>
-
-<p>The body begins with the row:
-
-<pre>
-VERTI:
-</pre>
-
-followed by records of primitives:
-
-<pre>
-TYPE NUMBER_OF_COORDINATES [NUMBER_OF_CATEGORIES]
- X Y [Z]
-....
- X Y [Z]
-[ LAYER CATEGORY]
-....
-[ LAYER CATEGORY]
-</pre>
-
-Everything above in <tt>[&nbsp;]</tt> is optional. 
-
-<p>
-The primitive codes are as follows:
-<ul>
-<li>'P': point</li>
-<li>'L': line</li>
-<li>'B': boundary</li>
-<li>'C': centroid</li>
-<li>'F': face (3D boundary)</li>
-<li>'K': kernel (3D centroid)</li>
-<li>'A': area (boundary) - better use 'B'; kept only for backward compatibility</li>
-</ul>
-
-The coordinates are listed following the initial line containing the
-primitive code, the total number of vectors in the series, and (optionally)
-the number of categories (1 for a single layer, higher for multiple layers).
-Below that 1 or several lines follow to indicate the layer number and
-the category number (ID).
-<br>
-The order of coordinates is
-<div class="code"><pre>
-  X Y [Z]
-</pre></div>
-
-In pre-GRASS 6 versions of the ASCII file, the order of coordinates is:
-<div class="code"><pre>
-Y X
-</pre></div>
-
 If old version is requested, the <b>output</b> files from <em>v.out.ascii</em> is placed 
 in the <tt>$LOCATION/$MAPSET/dig_ascii/</tt> and <tt>$LOCATION/$MAPSET/dig_att</tt> directory.
 
 <p>
 Only features with a category number will be
-exported. Use <em>v.category</em> to add them if needed.
+exported. Use <em><a href="v.category.html">v.category</a></em> to add
+them if needed.
 
 <p>
-<em>v.out.ascii</em> does not copy the <em>dig_cats</em> file
-associated with the binary vector <em>input</em> map to the
-new <em>output</em> file name. The user must copy
-the <em>dig_cats</em> file to the new <em>output</em> name if this is
-desired (e.g. using the UNIX <em>cp</em> command).
+<em>v.out.ascii</em> does not copy the <tt>dig_cats</tt> file
+associated with the binary vector <b>input</b> map to the
+new <b>output</b> file name. The user must copy the <tt>dig_cats</tt>
+file to the new <b>output</b> name if this is desired (e.g. using the
+UNIX <em>cp</em> command).
 
 <p>
 It is possible to output the coordinates of vertices in a non-points vector
 feature by first converting the vector feature to a points map with 
-<em>v.to.points</em> and then exporting with <em>v.out.ascii</em> in 
-<em>points</em> mode.
+<em><a href="v.to.points.html">v.to.points</a></em> and then exporting
+with <em>v.out.ascii</em> in
+<b>points</b> mode.
 
 <h2>EXAMPLES</h2>
 
@@ -170,13 +97,31 @@ v.out.ascii input=archsites format=point where="cat > 5 and cat <= 8" columns=st
 595755|4925300|8|No Name
 </pre></div>
 
+<h3>WKT mode</h3>
+
+WKT is abbreviation
+for <a href="http://en.wikipedia.org/wiki/Well-known_text">Well-known
+text</a>.
+
+<div class="code"><pre>
+v.out.ascii input=quads format=wkt
+
+POLYGON((599587.18209620 4914067.53414294, 589639.15126831 4913922.56873010,
+         589440.96838162 4927803.62500018, 599375.87959179 4927959.83330436,
+         599587.18209620 4914067.53414294))
+POLYGON((599587.18209620 4914067.53414294, 599375.87959179 4927959.83330436,
+         609316.10665227 4928116.84905550, 609541.55082390 4914236.05974820,
+         599587.18209620 4914067.53414294))
+</pre></div>
+
 <h2>SEE ALSO</h2>
 
 <em>
 <a href="v.category.html">v.category</a>,
 <a href="v.in.ascii.html">v.in.ascii</a>,
 <a href="v.to.points.html">v.to.points</a><br>
-<a HREF="sql.html">GRASS SQL interface</a>
+<a href="vectorascii.html">GRASS ASCII vector format</a> specification<br>
+<a href="sql.html">GRASS SQL interface</a>
 </em>
 
 <h2>AUTHORS</h2>
@@ -191,7 +136,8 @@ Research Laboratory
 <br>
 Radim Blazek, ITC-Irst, Trento, Italy
 <br>
-Attribute selection added by Martin Landa, CTU in Prague, Czech Republic (2008/12)
+Attribute selection added by Martin Landa, Czech Technical University
+in Prague, Czech Republic (2008/12)
 
 <p>
 <i>Last changed: $Date$</i>
