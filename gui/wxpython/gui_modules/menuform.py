@@ -205,12 +205,12 @@ class UpdateThread(Thread):
         
         if not pMap:
             pMap = self.task.get_param('input', raiseError = False)
-
+        
         if pMap:
             map = pMap.get('value', '')
         else:
             map = None
-
+        
         # avoid running db.describe several times
         cparams = dict()
         cparams[map] = { 'dbInfo' : None,
@@ -254,9 +254,9 @@ class UpdateThread(Thread):
                         layer = p.get('default', '')
                     
                     # get map name
-                    pMap = self.task.get_param(p['wxId'][0], element = 'wxId-bind', raiseError = False)
-                    if pMap:
-                        map = pMap.get('value', '')
+                    pMapL = self.task.get_param(p['wxId'][0], element = 'wxId-bind', raiseError = False)
+                    if pMapL:
+                        map = pMapL.get('value', '')
             
             if name == 'TableSelect' or \
                     (name == 'ColumnSelect' and not map):
@@ -274,6 +274,7 @@ class UpdateThread(Thread):
             if name == 'LayerSelect':
                 # determine format
                 native = True
+                
                 for id in pMap['wxId']:
                     winVec  = self.parent.FindWindowById(id)
                     if winVec.GetName() == 'VectorFormat' and \
