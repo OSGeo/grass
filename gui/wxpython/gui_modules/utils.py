@@ -116,7 +116,7 @@ def GetLayerNameFromCmd(dcmd, fullyQualified = False, param = None,
             if p in ('map', 'input', 'layer',
                      'red', 'blue', 'green',
                      'h_map', 's_map', 'i_map',
-                     'reliefmap'):
+                     'reliefmap', 'labels'):
                 params.append((idx, p, v))
         
         if len(params) < 1:
