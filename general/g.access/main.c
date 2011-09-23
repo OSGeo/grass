@@ -8,7 +8,7 @@
  *               Glynn Clements <glynn gclements.plus.com>,
  *               Hamish Bowman <hamish_b yahoo.com>, Radim Blazek <radim.blazek gmail.com>
  * PURPOSE:      Controls access to the current mapset for other users on the system
- * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2006, 2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -36,15 +36,18 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("general"));
     G_add_keyword(_("map management"));
-    module->description =
+    G_add_keyword(_("permission"));
+    module->label =
 	_("Controls access to the current mapset for other users on the system.");
-
+    module->description = _("If no option given, prints current status.");
+    
     group_opt = G_define_option();
     group_opt->key = "group";
     group_opt->type = TYPE_STRING;
     group_opt->required = NO;
     group_opt->options = "grant,revoke";
     group_opt->description = _("Access for group");
+    group_opt->guisection = _("Settings");
 
     other_opt = G_define_option();
     other_opt->key = "other";
@@ -52,7 +55,8 @@ int main(int argc, char *argv[])
     other_opt->required = NO;
     other_opt->options = "grant,revoke";
     other_opt->description = _("Access for others");
-
+    other_opt->guisection = _("Settings");
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
