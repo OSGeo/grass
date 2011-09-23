@@ -77,9 +77,9 @@ int parser(int argc, char *argv[], struct GParams *params,
 
     params->in = G_define_standard_option(G_OPT_F_INPUT);
     params->in->required = NO;
-    params->in->label = _("ASCII file to be converted to binary vector map");
+    params->in->label = _("Name of file containing data in GRASS ASCII vector format");
     params->in->description =
-	_("If not given (or \"-\") reads from standard input");
+	_("\"-\" reads from standard input");
     params->in->guisection = _("Input");
 
     params->move = G_define_option();

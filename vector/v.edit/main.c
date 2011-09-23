@@ -68,17 +68,19 @@ int main(int argc, char *argv[])
     }
 
     /* open input file */
-    if (params.in->answer &&
-	strcmp(params.in->answer, "-") != 0) {
-	ascii = fopen(params.in->answer, "r");
-	if (ascii == NULL) {
-	    G_fatal_error(_("Unable to open file <%s>"),
-			  params.in->answer);
+    if (params.in->answer) {
+	if (strcmp(params.in->answer, "-") != 0) {
+	    ascii = fopen(params.in->answer, "r");
+	    if (ascii == NULL)
+		G_fatal_error(_("Unable to open file <%s>"),
+			      params.in->answer);
+	}
+	else {
+	    ascii = stdin;
 	}
     }
-    else if (action_mode != MODE_CREATE) {
-	ascii = stdin;
-    }
+    if (!ascii && action_mode == MODE_ADD)
+	G_fatal_error(_("Required parameter <%s> not set"), params.in->key);
     
     if (action_mode == MODE_CREATE) {
 	int overwrite;
