@@ -7,10 +7,10 @@
 
 int display_topo(struct Map_info *Map, int type, LATTR *lattr)
 {
-    int ltype, num, el;
+    int ltype, num, el, left, right;
     struct line_pnts *Points;
     struct line_cats *Cats;
-    char text[50];
+    char text[100];
     LATTR lattr2 = *lattr;
 
     if (Vect_level(Map) < 2) {
@@ -21,7 +21,7 @@ int display_topo(struct Map_info *Map, int type, LATTR *lattr)
     }
     
     lattr2.xref = lattr->xref == LRIGHT ? LLEFT : LRIGHT;
-
+        
     G_debug(1, "display topo:");
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
@@ -54,7 +54,16 @@ int display_topo(struct Map_info *Map, int type, LATTR *lattr)
 	if (!(type & ltype))
 	    continue;		/* used for both lines and labels */
 
-	sprintf(text, "%d", el);
+	if (ltype == GV_BOUNDARY) {
+	    Vect_get_line_areas(Map, el, &left, &right);
+	    sprintf(text, "%d (L%d/R%d)", el, left, right);
+	}
+	else if (ltype == GV_CENTROID) {
+	    sprintf(text, "%d (A%d)", el, Vect_get_centroid_area(Map, el));
+	}
+	else {
+	    sprintf(text, "%d", el);
+	}
 	show_label_line(Points, ltype, lattr, text);
     }
 
@@ -69,7 +78,7 @@ int display_topo(struct Map_info *Map, int type, LATTR *lattr)
 	Vect_get_node_coor(Map, el, &X, &Y, NULL);
 	G_debug(3, "node = %d", el);
 	sprintf(text, "n%d", el);
-
+	
 	show_label(&X, &Y, &lattr2, text);
 
 	D_plot_icon(X, Y, G_ICON_BOX, 0, 10);
