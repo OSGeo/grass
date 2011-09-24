@@ -531,6 +531,7 @@ class GMConsole(wx.SplitterWindow):
                     # check for <input>=-
                     for p in task.get_options()['params']:
                         if p.get('prompt', '') == 'input' and \
+                                p.get('element', '') == 'file' and \
                                 p.get('age', 'new') == 'old' and \
                                 p.get('value', '') == '-':
                             gcmd.GError(parent = self,
