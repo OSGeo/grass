@@ -296,7 +296,7 @@ class GMConsole(wx.SplitterWindow):
                      flag = wx.ALL | wx.ALIGN_CENTER, border = 5)
         btnSizer.Add(item = cmdBtnSizer, proportion = 1,
                      flag = wx.ALIGN_CENTER | wx.TOP | wx.BOTTOM | wx.RIGHT, border = 5)
-        promptSizer.Add(item = btnSizer, proportion = 1,
+        promptSizer.Add(item = btnSizer, proportion = 0,
                         flag = wx.EXPAND)
         
         outputSizer.Fit(self)
