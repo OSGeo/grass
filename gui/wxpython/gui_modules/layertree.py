@@ -700,9 +700,13 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         
     def OnRenamed(self, event):
         """!Layer renamed"""
+        if not event.GetLabel():
+            event.Skip()
+            return
+        
         item = self.layer_selected
         self.GetPyData(item)[0]['label'] = event.GetLabel()
-        self.SetItemText(item, self._getLayerName(item)) # not working, why?
+        self.SetItemText(item, self._getLayerName(item))
         
         event.Skip()
 
@@ -924,9 +928,12 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 ctrl.SetValue(lname)
             else:
                 self.SetItemText(layer, self._getLayerName(layer, lname))
+        else:
+            if ltype == 'group':
+                self.OnRenameLayer(None)
         
         # updated progress bar range (mapwindow statusbar)
-        if checked is True:
+        if checked:
             self.mapdisplay.statusbarWin['progress'].SetRange(len(self.Map.GetListOfLayers(l_active = True)))
             
         return layer
@@ -1413,6 +1420,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         @param lname optional layer name
         """
         mapLayer = self.GetPyData(item)[0]['maplayer']
+        if not mapLayer:
+            return lname
+        
         if not lname:
             lname  = self.GetPyData(item)[0]['label']
         opacity  = int(mapLayer.GetOpacity(float = True) * 100)
