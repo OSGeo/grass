@@ -3,7 +3,7 @@
 
    \brief Vector library - topology level functions
 
-   (C) 2001-2009 by the GRASS Development Team
+   (C) 2001-2009, 2011 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2).  Read the file COPYING that comes with GRASS for details.
@@ -392,7 +392,7 @@ float Vect_get_node_line_angle(const struct Map_info *Map, int node, int line)
 
    \return area id the centroid is within
    \return 0 for not in area
-   \return negative id if area/centroid (?) is duplicate
+   \return negative id if centroid is duplicated in the area
  */
 int Vect_get_centroid_area(const struct Map_info *Map, int centroid)
 {
