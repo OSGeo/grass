@@ -30,7 +30,7 @@ v.edit map=roads tool=select \
 selects all features (and prints their id's to standard output)
 covered by two bounding boxes (center at 599505,4921010 and
 603389.0625,4918292.1875, size 2*10000) with attribute
-label='interstate'.
+<tt>label='interstate'</tt>.
 
 <h2>NOTES</h2>
 
@@ -64,19 +64,19 @@ Additional parameters for vector feature specification are:
 <h3>Tool description</h3>
 
 <ul>
-    <li><b>create</b> - Create new (empty) vector map
-    (see <em><a href="v.in.ascii.html">v.in.ascii</a></em>). Optionally vector
-    features (in GRASS ASCII standard format) can be read from
-    standard input (<b>input=-</b>) or from the text file given by
-    the <b>input</b> option.</li>
+    <li><b>create</b> - Create new (empty) vector map (see
+    also <em><a href="v.in.ascii.html">v.in.ascii</a></em>). Optionally
+    vector features (in <a href="vectorascii.html">GRASS ASCII vector
+    format</a>) can be read from standard input (<b>input=-</b>) or
+    from the text file given by the <b>input</b> option.</li>
 
-    <li><b>add</b> - Add new vector features (defined in GRASS ASCII
-    standard format) to existing vector map. Features can be read from
-    standard input or from the given text file (<b>input</b>
-    option). If no header is given, the <b>-n</b> flag must be
-    used. Added features can be snapped (defined by <b>snap</b>
-    parameter) to nodes or vertices based on threshold
-    distance <b>thresh</b>.</li>
+    <li><b>add</b> - Add new vector features (defined
+    in <a href="vectorascii.html">GRASS ASCII vector format</a>) to
+    existing vector map. Features can be read from standard input or
+    from the given text file (<b>input</b> option). If no header is
+    given, the <b>-n</b> flag must be used. Added features can be
+    snapped (defined by <b>snap</b> parameter) to nodes or vertices
+    based on threshold distance <b>thresh</b>.</li>
 
     <li><b>delete</b> - Delete selected vector features from existing
     vector map.</li>
@@ -111,7 +111,7 @@ Additional parameters for vector feature specification are:
     <li><b>break</b> - Split given vector line or boundary into two
     lines on location given by <b>coords</b>. If <b>coords</b> not
     given, breaks all selected lines at each intersection (based
-    on <em><a href="v.clean.html">v.clean</a></em>, tool=break).</li>
+    on <em><a href="v.clean.html">v.clean</a></em>, <tt>tool=break</tt>).</li>
     
     <li><b>snap</b> - Snap vector features in given threshold. See
     also module <em><a href="v.clean.html">v.clean</a></em>. Note that this
@@ -130,16 +130,16 @@ Additional parameters for vector feature specification are:
 
     <li><b>vertexadd</b> - Add vertex(ces) to the given vector lines
     or boundaries. Location of the new vertex is given by <b>coord</b>
-    option. If <b>-1</b> is given only first found line or boundary in bounding
+    option. If -1 is given only first found line or boundary in bounding
     box is modified.</li>
 
     <li><b>vertexdel</b> - Remove vertex(ces) specified by
-    <b>coords</b> option. If <b>-1</b> is given only first found line or
+    <b>coords</b> option. If -1 is given only first found line or
     boundary in bounding box is modified.</li>
 
     <li><b>vertexmove</b> - Move vertex(ces) specified
     by <b>coords</b> option. Direction of the movement is specified by
-    the <b>move</b> option. If <b>-1</b> is given only first found
+    the <b>move</b> option. If -1 is given only first found
     line or boundary in bounding box is modified. Moved vertex can be
     snapped (defined <b>snap</b>) to nodes or vertices based on
     threshold distance <b>thresh</b>.</li>
@@ -419,11 +419,11 @@ v.edit a2 tool=zbulk bbox=586121.25049368,4911970.21547109,603092.60466035,49270
 <h2>SEE ALSO</h2>
 
 <em>
-<a HREF="v.in.ascii.html">v.in.ascii</a>,
-<a HREF="v.info.html">v.info</a>,
-<a HREF="v.build.html">v.build</a>,
-<a HREF="v.clean.html">v.clean</a>,
-<a HREF="v.extrude.html">v.extrude</a>
+  <a href="v.in.ascii.html">v.in.ascii</a>,
+  <a href="v.info.html">v.info</a>,
+  <a href="v.build.html">v.build</a>,
+  <a href="v.clean.html">v.clean</a>,
+  <a href="v.extrude.html">v.extrude</a>
 </em>
 
 <p>
@@ -432,8 +432,8 @@ See also <em><a href="wxGUI.Vector_Digitizer.html">wxGUI vector digitizer</a></e
 <h2>AUTHOR</h2>
 
 Original author: Wolf Bergenheim - independent developer<br>
-Various updates: Jachym Cepicky, Mendel University of Agriculture and Forestry in Brno, Czech Republic<br>
-Martin Landa, FBK-irst (formerly ITC-irst), Trento, Italy
+Initial updates: Jachym Cepicky, Mendel University of Agriculture and Forestry in Brno, Czech Republic<br>
+Major update by Martin Landa, FBK-irst (formerly ITC-irst), Trento, Italy
 
 <p>
 <i>Last changed: $Date$</i>
