@@ -521,20 +521,25 @@ class GMConsole(wx.SplitterWindow):
             
             else:
                 # other GRASS commands (r|v|g|...)
-                # check for <input>=-
-                # gtask.parse_command() is probably overkill here, use brute force instead
-                for opt in command[1:]:
-                    if opt[0] == '-':
-                        # skip flags
-                        continue
-                    key, value = map(lambda x: x.strip(), opt.split('=', 1))
-                    if value == '-':
-                        gcmd.GError(parent = self,
-                                    message = _("Unable to run command:\n%(cmd)s\n\n"
-                                                "Option <%(opt)s>: read from standard input is not "
-                                                "supported by wxGUI") % { 'cmd': ' '.join(command),
-                                                                          'opt': key })
-                        return 1
+                if len(command) == 1 and command[0] != 'v.krige':
+                    # no arguments given
+                    menuform.GUI(parent = self).ParseCommand(command)
+                    return 0
+                
+                task = menuform.GUI(show = None).ParseCommand(command)
+                if task:
+                    # check for <input>=-
+                    for p in task.get_options()['params']:
+                        if p.get('prompt', '') == 'input' and \
+                                p.get('age', 'new') == 'old' and \
+                                p.get('value', '') == '-':
+                            gcmd.GError(parent = self,
+                                        message = _("Unable to run command:\n%(cmd)s\n\n"
+                                                    "Option <%(opt)s>: read from standard input is not "
+                                                    "supported by wxGUI") % { 'cmd': ' '.join(command),
+                                                                          'opt': p.get('name', '') }
+                                        )
+                            return 1
                 
                 # switch to 'Command output' if required
                 if switchPage:
@@ -549,20 +554,11 @@ class GMConsole(wx.SplitterWindow):
                     tmpreg = os.getenv("GRASS_REGION")
                     if "GRASS_REGION" in os.environ:
                         del os.environ["GRASS_REGION"]
-                
-                if len(command) == 1:
-                    task = gtask.parse_interface(command[0])
-                else:
-                    task = None
-                
-                if task and command[0] not in ('v.krige'):
-                    # process GRASS command without argument
-                    menuform.GUI(parent = self).ParseCommand(command)
-                else:
-                    # process GRASS command with argument
-                    self.cmdThread.RunCmd(command, stdout = self.cmdStdOut, stderr = self.cmdStrErr,
-                                          onDone = onDone)
-                    self.cmdOutputTimer.Start(50)
+                    
+                # process GRASS command with argument
+                self.cmdThread.RunCmd(command, stdout = self.cmdStdOut, stderr = self.cmdStrErr,
+                                      onDone = onDone)
+                self.cmdOutputTimer.Start(50)
                 
                 # deactivate computational region and return to display settings
                 if compReg and tmpreg:
