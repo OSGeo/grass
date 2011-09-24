@@ -219,6 +219,9 @@ class GMFrame(wx.Frame):
         # redirect stderr to log area    
         self.goutput.Redirect()
         
+        # fix goutput's pane size (required for Mac OSX)
+        self.goutput.SetSashPosition(int(self.GetSize()[1] * .45))
+        
         self.workspaceChanged = False
         
         # start with layer manager on top
