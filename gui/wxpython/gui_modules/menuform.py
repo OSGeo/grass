@@ -593,6 +593,10 @@ class mainFrame(wx.Frame):
         self.SetSize(wx.Size(min(width, 650),
                              min(height, 500)))
         
+        # fix goutput's pane size (required for Mac OSX)
+        if self.goutput:  	 	 
+            self.goutput.SetSashPosition(int(self.GetSize()[1] * .75))
+        
     def updateValuesHook(self, event = None):
         """!Update status bar data"""
         self.SetStatusText(' '.join(self.notebookpanel.createCmd(ignoreErrors = True)))
