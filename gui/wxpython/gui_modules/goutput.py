@@ -442,10 +442,13 @@ class GMConsole(wx.SplitterWindow):
         @param compReg True use computation region
         @param switchPage switch to output page
         @param onDone function to be called when command is finished
+
+        @return 0 on success
+        @return 1 on failure
         """
         if len(command) == 0:
             Debug.msg(2, "GPrompt:RunCmd(): empty command")
-            return
+            return 0
         
         # update history file
         env = grass.gisenv()
@@ -501,7 +504,7 @@ class GMConsole(wx.SplitterWindow):
                     gcmd.GMessage(parent = self.parent,
                                   message = _("Command '%s' not yet implemented in the WxGUI. "
                                               "Try adding it as a command layer instead.") % command[0])
-                    return None
+                    return 1
                 
                 if layertype == 'barscale':
                     self.parent.curr_page.maptree.GetMapDisplay().OnAddBarscale(None)
@@ -518,6 +521,21 @@ class GMConsole(wx.SplitterWindow):
             
             else:
                 # other GRASS commands (r|v|g|...)
+                # check for <input>=-
+                # gtask.parse_command() is probably overkill here, use brute force instead
+                for opt in command[1:]:
+                    if opt[0] == '-':
+                        # skip flags
+                        continue
+                    key, value = map(lambda x: x.strip(), opt.split('=', 1))
+                    if value == '-':
+                        gcmd.GError(parent = self,
+                                    message = _("Unable to run command:\n%(cmd)s\n\n"
+                                                "Option <%(opt)s>: read from standard input is not "
+                                                "supported by wxGUI") % { 'cmd': ' '.join(command),
+                                                                          'opt': key })
+                        return 1
+                
                 # switch to 'Command output' if required
                 if switchPage:
                     self._notebook.SetSelectionByName('output')
@@ -533,10 +551,7 @@ class GMConsole(wx.SplitterWindow):
                         del os.environ["GRASS_REGION"]
                 
                 if len(command) == 1:
-                    import menuform
                     task = gtask.parse_interface(command[0])
-                    # if not task.has_required():
-                    # task = None # run command
                 else:
                     task = None
                 
@@ -548,8 +563,6 @@ class GMConsole(wx.SplitterWindow):
                     self.cmdThread.RunCmd(command, stdout = self.cmdStdOut, stderr = self.cmdStrErr,
                                           onDone = onDone)
                     self.cmdOutputTimer.Start(50)
-                    
-                    return None
                 
                 # deactivate computational region and return to display settings
                 if compReg and tmpreg:
@@ -558,7 +571,6 @@ class GMConsole(wx.SplitterWindow):
             # Send any other command to the shell. Send output to
             # console output window
             if len(command) == 1:
-                import menuform
                 try:
                     task = gtask.parse_interface(command[0])
                 except:
@@ -574,7 +586,7 @@ class GMConsole(wx.SplitterWindow):
                                       onDone = onDone)
             self.cmdOutputTimer.Start(50)
         
-        return None
+        return 0
 
     def ClearHistory(self, event):
         """!Clear history of commands"""

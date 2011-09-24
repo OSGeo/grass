@@ -688,6 +688,7 @@ class mainFrame(wx.Frame):
         if not cmd or len(cmd) < 1:
             return
         
+        ret = 0
         if self.standalone or cmd[0][0:2] !=  "d.":
             # Send any non-display command to parent window (probably wxgui.py)
             # put to parents switch to 'Command output'
@@ -697,12 +698,16 @@ class mainFrame(wx.Frame):
                 if self.task.path:
                     cmd[0] = self.task.path # full path
                 
-                self.goutput.RunCmd(cmd, onDone = self.OnDone)
+                ret = self.goutput.RunCmd(cmd, onDone = self.OnDone)
             except AttributeError, e:
                 print >> sys.stderr, "%s: Probably not running in wxgui.py session?" % (e)
                 print >> sys.stderr, "parent window is: %s" % (str(self.parent))
         else:
             gcmd.Command(cmd)
+        
+        if ret != 0:
+            self.notebookpanel.notebook.SetSelection(0)
+            return
         
         # update buttons status
         for btn in (self.btn_run,
