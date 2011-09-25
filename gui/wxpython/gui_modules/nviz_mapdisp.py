@@ -121,8 +121,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
     
         if self.lmgr:
             self.log = self.lmgr.goutput
-            logerr = self.lmgr.goutput.cmd_stderr
-            logmsg = self.lmgr.goutput.cmd_output
+            logerr = self.lmgr.goutput.cmdStrErr
+            logmsg = self.lmgr.goutput.cmdOutput
         else:
             self.log = logmsg = sys.stdout
             logerr = sys.stderr
@@ -2103,7 +2103,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         cplane = self.lmgr.nviz.FindWindowById(self.lmgr.nviz.win['cplane']['planes']).GetStringSelection()
         try:
             planeIndex = int(cplane.split()[-1]) - 1
-        except IndexError:
+        except (IndexError, ValueError):
             planeIndex = None
         if planeIndex is not None:
             shading = ['clear', 'top', 'bottom', 'blend', 'shaded']
