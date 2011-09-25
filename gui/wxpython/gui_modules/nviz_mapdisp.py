@@ -121,8 +121,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
     
         if self.lmgr:
             self.log = self.lmgr.goutput
-            logerr = self.lmgr.goutput.cmdStrErr
-            logmsg = self.lmgr.goutput.cmdOutput
+            logerr = self.lmgr.goutput.GetLog(err = True)
+            logmsg = self.lmgr.goutput.GetLog()
         else:
             self.log = logmsg = sys.stdout
             logerr = sys.stderr
