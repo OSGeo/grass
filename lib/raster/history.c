@@ -245,8 +245,6 @@ void Rast_short_history(const char *name, const char *type,
  * structure and adds the command line to the end of the comments
  * array, as cleaned & expanded by the parser.
  *
- * History file is limited to [80]x[50], as defined in include/gis.h
- *
  *  - First version had for loops of [i][j] character assignments and ending
  *    nulls, but using the string libraries is cleaner and less bug prone.
  *  - Second version had white space detection, intelligent wrapping, and
