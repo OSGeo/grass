@@ -65,6 +65,8 @@ int do_recode(void)
     if (nrules > 50)
 	Rast_append_history(&hist, "...");
     Rast_format_history(&hist, HIST_DATSRC_1, "raster map %s", name);
+
+    Rast_command_history(&hist);
     Rast_write_history(result, &hist);
 
     return 0;
