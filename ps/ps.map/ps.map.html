@@ -649,18 +649,20 @@ USAGE:	<B>line</B> east north east north
 The beginning and ending points of the line are entered on the main
 instruction.  These points can be defined either by map coordinates or
 by using percentages of the geographic region.
-The user may also specify line
-<B>color</B>,
-<B>width</B>
-in pixels (accepts decimal points [floating points] as well as integers),
+The user may also specify line <B>color</B>, <B>width</B>
+in points (1/72"; accepts decimal values as well as integers),
 and if the line is to be <B>masked</B> by the current mask.
 (See manual entry for <EM><A HREF="r.mask.html">r.mask</A>
 </EM> for more information on the mask.)
+The line <B>width</B> (if given) is measured in points; an <i>i</i>
+directly following the number indicates that the width is given in
+inches instead.
 <P>
 
 This example would draw a yellow line from the point x=10% y=80%
-to the point x=30% y=70%. This line
-would be 2 pixels wide and would appear even if there is a mask.
+to the point x=30% y=70%.
+This line would be 2 points wide (2/72") and would appear even if
+there is a mask.
 <PRE>
 EXAMPLE:
 	<B>line</B> 10% 80% 30% 70%
@@ -754,7 +756,7 @@ Outlines the areas of a raster map layer with a specified color.
 <PRE>
 USAGE:	<B>outline</B>
 	<B>color</B>  color
-	<B>width</B>  width of line in pixels
+	<B>width</B>  width of line in points
 	<B>end</B>
 </PRE>
 Distinct areas of the raster map will be separated from each other visually
@@ -839,20 +841,24 @@ USAGE:	<B>point</B> east north
 	<B>fcolor</B> color
 	<B>symbol</B> symbol group/name
 	<B>size</B> #
+	<B>width</B> #
 	<B>rotate</B> #
 	<B>masked</B> [y|n]
 	<B>end</B>	
 </PRE>
-The point location is entered in the main instruction line by giving either the map 
-coordinates or by using percentages of the geographic region.
+The point location is entered in the main instruction line by giving either
+the map coordinates or by using percentages of the geographic region.
 The user may also specify the point <B>color</B>,
 the <B>size</B> of symbol in points,
 the rotation angle (in degrees CCW), 
 and whether the point is to be <B>masked</B> by the current mask.
 (See manual entry for <EM> <A HREF="r.mask.html">r.mask</A>
 </EM> for more information on the mask.)
+The symbol line <B>width</B> (if given) is measured in points; an <i>i</i>
+directly following the number indicates that the width is given in inches
+instead. If a <B>width</B> is not given it will be set proportional to the
+symbol size.
 <P>
-
 This example would place a purple diamond (from icon file
 <EM>diamond</EM>) at the point (E456000 N7890000).  This diamond would be the 
 the size of a 15 points and would not be masked by the current mask.
@@ -978,23 +984,26 @@ instruction.  These points can be defined either by map coordinates or
 by using percentages of the geographic region.
 The user may also specify line
 <B>color</B>, fill color <B>fcolor</B>, <B>width</B>
-in pixels (accepts decimal points [floating points] as well as integers),
+in points (accepts decimal points [floating points] as well as integers),
 and if the rectangle is to be <B>masked</B> by the current mask.
 (See manual entry for <EM><A HREF="r.mask.html">r.mask</A></EM>
 for more information on the mask.)
+The border line <B>width</B> (if given) is measured in points; an <i>i</i>
+directly following the number indicates that the width is given in inches
+instead.
 <BR>
 Multiple rectangles may be drawn by using multiple <EM>rectangle</EM> instructions.
 <P>
 
 This example would draw a yellow rectangle filled by green from the point x=10% y=80%
-to the point x=30% y=70%. This line
-would be 2 pixels wide and would appear even if there is a mask.
+to the point x=30% y=70%.
+The border line would be 1/16" wide and would appear even if there is a mask.
 <PRE>
 EXAMPLE:
 	<B>rectangle</B> 10% 80% 30% 70%
 	<B>color</B> yellow
 	<B>fcolor</B> green	
-	<B>width</B> 2
+	<B>width</B> 0.0625i
 	<B>masked</B> n
 	<B>end</B>
 </PRE>
@@ -1019,11 +1028,11 @@ a smaller region which was printed on a separate run of <EM>ps.map</EM>
 on other user-created maps.
 <P>
 The user can specify the <B>color</B>
-and the <B>width</B> in pixel units (accepts decimal points
+and the <B>width</B> in point units (accepts decimal points
 [floating points] as well as integers) of the outline.
-The default is a black border of one pixel width.
+The default is a black border of one point width (1/72").
 <P>
-This example would place a white outline, 2 pixels wide, of the
+This example would place a white outline, 2 points wide, of the
 geographic region called <EM>fire.zones</EM> onto the output map.
 This geographic region would have been created and saved using 
 <EM><A HREF="g.region.html">g.region</A></EM>.
@@ -1237,11 +1246,12 @@ sets the text rotation angle, measured in degrees counter-clockwise.
 <P>
 <B>yoffset</B>,
 which provides finer placement of text by shifting the
-text a vertical distance in pixels from the specified north.  The vertical 
-offset will shift the location to the south if positive, north if negative;
+text a vertical distance in points (1/72") from the specified north.
+The vertical offset will shift the location to the south if positive,
+north if negative;
 <P>
 <B>xoffset</B>,
-which shifts the text a horizontal distance in pixels from
+which shifts the text a horizontal distance in points from
 the specified east The horizontal offset will shift the location east if 
 positive, west if negative;
 <P>
@@ -1253,7 +1263,7 @@ through the text's background box.  Otherwise, they will end at the box's edge.
 <BR>
 The following example would place the text <EM>SPEARFISH LAND COVER</EM>
 at the coordinates E650000 N7365000. The text would be a total of
-3 pixels wide (2 pixels of red text and 1 pixel black highlight), have a white
+3 points wide (2 pixels of red text and 1 pixel black highlight), have a white
 background enclosed in a red box, and be 500 meters in size.  The lower right
 corner of the text would be centered over the coordinates provided.  All
 vectors on the map would stop at the border of this text.
@@ -1304,7 +1314,7 @@ The user can specify:
 <P>
 <B>rgbcolumn</B> - name of color definition column used for the area fill color;
 <P>
-<B>width</B> - width of the vectors lines or area boundaries in pixels
+<B>width</B> - width of the vectors lines or area boundaries in points
 (accepts decimal points [floating points] as well as integers);
 <P>
 <B>masked</B> - whether or not the raster map layer is to be masked
@@ -1404,7 +1414,7 @@ The user can specify:
 <B>rgbcolumn</B> - name of color definition column used for the vector lines
 or area boundaries;
 <P>
-<B>width</B> - width of the vectors lines or area boundaries in pixels
+<B>width</B> - width of the vectors lines or area boundaries in points
 (accepts decimal points [floating points] as well as integers);
 <P>
 <B>cwidth</B> - width of the vectors lines. If cwidth is used then 
@@ -1413,10 +1423,10 @@ used in legend;
 <P>
 <B>hcolor</B> - the highlight color for the vector lines;
 <P>
-<B>hwidth</B> - the width of the highlight color in pixels;
+<B>hwidth</B> - the width of the highlight color in points;
 <P>
-<B>offset</B> (experimental) - offset for the vectors lines in pixels for
-plotting parallel lines in distance equal to offset (accepts positive or 
+<B>offset</B> (experimental) - offset for the vectors lines in points (1/72")
+for plotting parallel lines in distance equal to offset (accepts positive or 
 negative decimal points). Useful to print streets with several parallel lanes;
 <P>
 <B>coffset</B> (experimental) - offset for the vectors lines. If coffset

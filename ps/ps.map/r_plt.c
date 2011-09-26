@@ -13,8 +13,9 @@ int read_point(double e, double n)
     int color_R, color_G, color_B;
     int fcolor_R, fcolor_G, fcolor_B;
     int ret;
-    double size, rotate;
+    double size, width, rotate;
     int have_icon;
+    char ch;
     char *key, *data;
     int masked;
 
@@ -23,12 +24,14 @@ int read_point(double e, double n)
 	"fcolor fill color",
 	"symbol group/symbol",
 	"size   #",
+	"width  #",
 	"rotate #",
 	"masked [y|n]",
 	""
     };
 
     size = 6.0;
+    width = -1.0;  /* default is proportionate to symbol size */
     rotate = 0.0;
     have_icon = 0;
     masked = 0;
@@ -86,6 +89,18 @@ int read_point(double e, double n)
 	    }
 	    continue;
 	}
+
+	if (KEY("width")) {
+	   ch = ' ';
+	   if (sscanf(data, "%lf%c", &width, &ch) < 1 || width < 0.) {
+		width = 1.;
+		error(key, data, "illegal width request");
+	   }
+	   if (ch == 'i')
+	       width = width * 72.;
+	   continue;
+	}
+
 	if (KEY("rotate")) {
 	    if (sscanf(data, "%lf", &rotate) != 1) {
 		rotate = 0.0;
@@ -97,9 +112,9 @@ int read_point(double e, double n)
 	error(key, data, "illegal point request");
     }
 
-    sprintf(buf, "P %d %f %f %d %d %d %d %d %d %f %f %s", masked, e, n,
+    sprintf(buf, "P %d %f %f %d %d %d %d %d %d %f %f %s %.2f", masked, e, n,
 	    color_R, color_G, color_B, fcolor_R, fcolor_G, fcolor_B, size,
-	    rotate, symb);
+	    rotate, symb, width);
 
     add_to_plfile(buf);
 
@@ -243,14 +258,14 @@ int read_line(double e1, double n1, double e2, double n2)
 		error(key, data, "illegal width request");
 	    }
 	    if (ch == 'i')
-		width = width / 72.;
+		width = width * 72.;
 	    continue;
 	}
 
 	error(key, data, "illegal line request");
     }
 
-    sprintf(buf, "L %d %f %f %f %f %d %d %d %.8f",
+    sprintf(buf, "L %d %f %f %f %f %d %d %d %.2f",
 	    masked, e1, n1, e2, n2, color_R, color_G, color_B, width);
 
     add_to_plfile(buf);
@@ -280,7 +295,7 @@ int read_rectangle(double e1, double n1, double e2, double n2)
     width = 1.;
     masked = 0;
     color_R = color_G = color_B = 0;
-    fcolor_R = fcolor_G = fcolor_B = -1;	/* not filled by default */
+    fcolor_R = fcolor_G = fcolor_B = -1;  /* not filled by default */
 
     while (input(2, buf, help)) {
 	if (!key_data(buf, &key, &data))
@@ -330,14 +345,14 @@ int read_rectangle(double e1, double n1, double e2, double n2)
 		error(key, data, "illegal width request");
 	    }
 	    if (ch == 'i')
-		width = width / 72.;
+		width = width * 72.;
 	    continue;
 	}
 
 	error(key, data, "illegal rectangle request");
     }
 
-    sprintf(buf, "R %d %f %f %f %f %d %d %d %d %d %d %.8f",
+    sprintf(buf, "R %d %f %f %f %f %d %d %d %d %d %d %.2f",
 	    masked, e1, n1, e2, n2, color_R, color_G, color_B,
 	    fcolor_R, fcolor_G, fcolor_B, width);
 
