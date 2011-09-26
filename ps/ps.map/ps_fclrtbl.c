@@ -121,7 +121,7 @@ int PS_fcolortable(void)
     cwidth = 0.1;
     ncols = (int)height / cwidth;
     step = (dmax - dmin) / (ncols - 1);
-    lwidth = 0.02 * width;
+    lwidth = width > 72 ? 0.02 * 72 : 0.02 * width;
 
     /* Print color band */
     y = t;
@@ -201,8 +201,11 @@ int PS_fcolortable(void)
     x1 = l + width + 0.1;
     if (ct.tickbar)		/* switch to draw tic all the way through bar */
 	x2 = x1 - width;
-    else
+    else {
 	x2 = x1 + 0.37 * width;
+	if (width > 36)
+	    x2 = x1 + 0.37 * 36;
+    }    
 
     /* do nice label: we need so many decimal places to hold all step decimal digits */
     if (step > 100) {		/* nice steps do not have > 2 digits, important separate, otherwise */
