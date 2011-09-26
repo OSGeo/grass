@@ -103,10 +103,11 @@ int do_plt(int after_masking)
 	    break;
 
 	case 'P':
-	    i = sscanf(buf, "P %d %lf %lf %d %d %d %d %d %d %lf %lf %s",
+	    i = sscanf(buf, "P %d %lf %lf %d %d %d %d %d %d %lf %lf %s %lf",
 		       &masked, &e1, &n1, &color_R, &color_G, &color_B,
-		       &fcolor_R, &fcolor_G, &fcolor_B, &size, &rotate, symb);
-	    if (i == 12) {
+		       &fcolor_R, &fcolor_G, &fcolor_B, &size, &rotate, symb,
+		       &width);
+	    if (i == 13) {
 		if (masked && after_masking)
 		    continue;
 		if (!masked && !after_masking)
@@ -136,8 +137,8 @@ int do_plt(int after_masking)
 		else
 		    set_color(&pfcolor, fcolor_R, fcolor_G, fcolor_B);
 
-
-		width = 0.05 * size;	/* TODO: Something better */
+		if (width < 0) /* default: autoscale relative to size */
+		    width = 0.05 * size;
 
 		/* Read symbol */
 		sprintf(sname, "POINTSYMBOL%d", snum);
