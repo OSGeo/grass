@@ -249,6 +249,8 @@ int reclass(const char *old_name, const char *old_mapset,
     Rast_set_history(&hist, HIST_DATSRC_1, "Reclassified map based on:");
     Rast_format_history(&hist, HIST_DATSRC_2, "  Map [%s] in mapset [%s]",
 			new.name, new.mapset);
+
+    Rast_command_history(&hist);
     Rast_write_history(new_name, &hist);
 
     new_range(new_name, &new);

@@ -49,8 +49,9 @@ int make_support(struct rr_state *theState, int percent, double percentage)
 		&hist, HIST_DATSRC_2,
 		"%ld random points on the base map <%s>",
 		theState->nRand, theState->inraster);
-	Rast_write_history(theState->outraster, &hist);
 
+	Rast_command_history(&hist);
+	Rast_write_history(theState->outraster, &hist);
     }
 
     /* write commandline to output vector */

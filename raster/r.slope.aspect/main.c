@@ -15,7 +15,7 @@
  * PURPOSE:      generates raster maps of slope, aspect, curvatures and
  *               first and second order partial derivatives from a raster map
  *               of true elevation values
- * COPYRIGHT:    (C) 1999-2006, 2010 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -1045,6 +1045,7 @@ int main(int argc, char *argv[])
 	Rast_append_format_history(&hist, "zfactor = %.2f", zfactor);
 	Rast_append_format_history(&hist, "min_slp_allowed = %f", min_slp_allowed);
 	Rast_format_history(&hist, HIST_DATSRC_1, "raster elevation file %s", elev_name);
+	Rast_command_history(&hist);
 	Rast_write_history(aspect_name, &hist);
 
 	G_message(_("Aspect raster map <%s> complete"), aspect_name);
@@ -1154,6 +1155,7 @@ int main(int argc, char *argv[])
 		parm.slope_fmt->answer);
 	Rast_append_format_history(&hist, "min_slp_allowed = %f", min_slp_allowed);
 	Rast_format_history(&hist, HIST_DATSRC_1, "raster elevation file %s", elev_name);
+	Rast_command_history(&hist);
 	Rast_write_history(slope_name, &hist);
 
 	G_message(_("Slope raster map <%s> complete"), slope_name);
@@ -1225,6 +1227,7 @@ int main(int argc, char *argv[])
 	Rast_append_format_history(&hist, "zfactor = %.2f", zfactor);
 	Rast_append_format_history(&hist, "min_slp_allowed = %f", min_slp_allowed);
 	Rast_format_history(&hist, HIST_DATSRC_1, "raster elevation file %s", elev_name);
+	Rast_command_history(&hist);
 	Rast_write_history(pcurv_name, &hist);
 
 	G_message(_("Profile curve raster map <%s> complete"), pcurv_name);
@@ -1251,6 +1254,7 @@ int main(int argc, char *argv[])
 	Rast_append_format_history(&hist, "zfactor = %.2f", zfactor);
 	Rast_append_format_history(&hist, "min_slp_allowed = %f", min_slp_allowed);
 	Rast_format_history(&hist, HIST_DATSRC_1, "raster elevation file %s", elev_name);
+	Rast_command_history(&hist);
 	Rast_write_history(tcurv_name, &hist);
 
 	G_message(_("Tangential curve raster map <%s> complete"), tcurv_name);
@@ -1275,6 +1279,7 @@ int main(int argc, char *argv[])
 	Rast_append_format_history(&hist, "zfactor = %.2f", zfactor);
 	Rast_append_format_history(&hist, "min_slp_allowed = %f", min_slp_allowed);
 	Rast_format_history(&hist, HIST_DATSRC_1, "raster elevation file %s", elev_name);
+	Rast_command_history(&hist);
 	Rast_write_history(dx_name, &hist);
 
 	G_message(_("E-W slope raster map <%s> complete"), dx_name);
@@ -1299,6 +1304,7 @@ int main(int argc, char *argv[])
 	Rast_append_format_history(&hist, "zfactor = %.2f", zfactor);
 	Rast_append_format_history(&hist, "min_slp_allowed = %f", min_slp_allowed);
 	Rast_format_history(&hist, HIST_DATSRC_1, "raster elevation file %s", elev_name);
+	Rast_command_history(&hist);
 	Rast_write_history(dy_name, &hist);
 
 	G_message(_("N-S slope raster map <%s> complete"), dy_name);
@@ -1323,6 +1329,7 @@ int main(int argc, char *argv[])
 	Rast_append_format_history(&hist, "zfactor = %.2f", zfactor);
 	Rast_append_format_history(&hist, "min_slp_allowed = %f", min_slp_allowed);
 	Rast_format_history(&hist, HIST_DATSRC_1, "raster elevation file %s", elev_name);
+	Rast_command_history(&hist);
 	Rast_write_history(dxx_name, &hist);
 
 	G_message(_("Dxx raster map <%s> complete"), dxx_name);
@@ -1347,6 +1354,7 @@ int main(int argc, char *argv[])
 	Rast_append_format_history(&hist, "zfactor = %.2f", zfactor);
 	Rast_append_format_history(&hist, "min_slp_allowed = %f", min_slp_allowed);
 	Rast_format_history(&hist, HIST_DATSRC_1, "raster elevation file %s", elev_name);
+	Rast_command_history(&hist);
 	Rast_write_history(dyy_name, &hist);
 
 	G_message(_("Dyy raster map <%s> complete"), dyy_name);
@@ -1371,6 +1379,7 @@ int main(int argc, char *argv[])
 	Rast_append_format_history(&hist, "zfactor = %.2f", zfactor);
 	Rast_append_format_history(&hist, "min_slp_allowed = %f", min_slp_allowed);
 	Rast_format_history(&hist, HIST_DATSRC_1, "raster elevation file %s", elev_name);
+	Rast_command_history(&hist);
 	Rast_write_history(dxy_name, &hist);
 
 	G_message(_("Dxy raster map <%s> complete"), dxy_name);

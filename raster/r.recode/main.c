@@ -6,7 +6,7 @@
  *               Bob Covill <bcovill tekmap.ns.ca>, Hamish Bowman <hamish_b yahoo.com>,
  *               Jan-Oliver Wagner <jan intevation.de>
  * PURPOSE:      Recode categorical raster maps
- * COPYRIGHT:    (C) 1999-2006, 2010 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -101,6 +101,9 @@ int main(int argc, char *argv[])
     no_mask = 0;
 
     do_recode();
+
+    if(title)
+	Rast_put_cell_title(result, title);
 
     exit(EXIT_SUCCESS);
 }

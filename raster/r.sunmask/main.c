@@ -526,9 +526,8 @@ int main(int argc, char *argv[])
 
     /* writing history file */
     Rast_short_history(outname, "raster", &hist);
-    Rast_append_history(&hist, argv[0]);
-    Rast_format_history(&hist, HIST_DATSRC_1, "raster elevation file %s", name);
-    Rast_set_history(&hist, HIST_DATSRC_2, G_recreate_command());
+    Rast_format_history(&hist, HIST_DATSRC_1, "raster elevation map %s", name);
+    Rast_command_history(&hist);
     Rast_write_history(outname, &hist);
 
     exit(EXIT_SUCCESS);
