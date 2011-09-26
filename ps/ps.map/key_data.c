@@ -7,6 +7,8 @@ int key_data(char *buf, char **k, char **d)
 	    break;
     if (*key == 0)
 	return 0;
+    if (*key == '#')
+	return 0;
     for (data = key + 1; *data; data++)
 	if (*data == ' ' || *data == '\t')
 	    break;
