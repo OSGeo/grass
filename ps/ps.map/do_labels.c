@@ -309,7 +309,7 @@ int do_label(FILE * fd, int font_override)
 	    ch = ' ';
 	    sscanf(value, "%lf%c", &width, &ch);
 	    if (ch == 'i')
-		width = width / 72.0;
+		width = width * 72.0;
 	    if (width < 0.)
 		width = 1.;
 	    if (width > 25.)
@@ -321,7 +321,7 @@ int do_label(FILE * fd, int font_override)
 	    ch = ' ';
 	    sscanf(value, "%lf%c", &hwidth, &ch);
 	    if (ch == 'i')
-		hwidth = hwidth / 72.0;
+		hwidth = hwidth * 72.0;
 	    if (hwidth < 0.)
 		hwidth = 0.;
 	    if (hwidth > 5.)

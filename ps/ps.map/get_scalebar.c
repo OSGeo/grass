@@ -18,6 +18,7 @@ static char *help[] = {
     "numbers	no_labels",
     "fontsize   fontsize",
     "background [Y|n]",
+    "width      #"
     ""
 };
 
@@ -140,7 +141,7 @@ int read_scalebar(void)
 		error(key, data, "illegal grid width request");
 	    }
 	    if (ch == 'i')
-		sb.width = sb.width / 72.0;
+		sb.width = sb.width * 72.0;
 	    continue;
 	}
 
