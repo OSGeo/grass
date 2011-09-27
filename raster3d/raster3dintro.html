@@ -1,8 +1,8 @@
-<!-- meta page description: 3D raster data (volume) processing in GRASS GIS -->
+<!-- meta page description: 3D raster data (voxel) processing in GRASS GIS -->
 <!-- meta page index: raster3D -->
 GRASS GIS 3D raster maps use the same coordinate system as
 2D raster maps (row count from north to south) with an additional z dimension (depth)
-counting from bottom to top. The upper left corner (NW) is the origin of the volume. 
+counting from bottom to top. The upper left corner (NW) is the origin of the voxel. 
 Volumes are stored using a tile cache based approach. This allows abritrary read 
 and write operations in the created volume. The size of the tiles can be specified at import time
 with <a href="r3.in.ascii.html">r3.in.ascii</a> or the data can be retiled using
@@ -13,7 +13,7 @@ with <a href="r3.in.ascii.html">r3.in.ascii</a> or the data can be retiled using
 <i>The volume coordinate system and tile layout of the RASTER3D library</i>
 </div>
 
-<h3>3D Raster (volume) import</h3>
+<h3>3D Raster (voxel) import</h3>
 
 The module <a href="r3.in.ascii.html">r3.in.ascii</a> supports
 generic x,y,z import. Alternatively, volumes can be generated
@@ -22,9 +22,9 @@ Always the full map is imported.
 Volumes can also be created based on 2D elevation map(s) and value raster map(s)
 (<a href="r.to.rast3elev.html">r.to.rast3elev</a>). Alternatively,
 a volume can be composed of several 2D raster map slices which are
-merged into one 3D raster volume map (<a href="r.to.rast3.html">r.to.rast3</a>).
+merged into one 3D raster (voxel) map (<a href="r.to.rast3.html">r.to.rast3</a>).
 
-<h3>Volume region settings and 3D MASK</h3>
+<h3>3D region settings and 3D MASK</h3>
 
 GRASS 3D raster map processing is always performed in the current 3D region
 settings (see <a href="g.region.html">g.region</a>, <em>-p3</em> flags), i.e.
@@ -39,7 +39,7 @@ Masks can be set (<a href="r3.mask.html">r3.mask</a>).
 
 Powerful 3D map algebra is implemented in <a href="r3.mapcalc.html">r3.mapcalc</a>.
 
-<h3>Volume conversion to vector or 2D raster maps</h3>
+<h3>3D raster conversion to vector or 2D raster maps</h3>
 
 3D vector point data can be converted to a GRASS 3D raster map
 (<a href="v.to.rast3.html">v.to.rast3</a>).
@@ -48,18 +48,18 @@ Layers from a 3D raster map can be converted to a 2D raster map
 Cross sectional 2D raster map can be extracted from 3D raster map based
 on a 2D elevation map (<a href="r3.cross.rast.html">r3.cross.rast</a>).
 
-<h3>Volume statistics</h3>
+<h3>3D raster statistics</h3>
 
 Volume statistics can be calculated with <a href="r3.stats.html">r3.stats</a>
 and <a href="r3.univar.html">r3.univar</a>.
 
-<h3>Volume interpolation</h3>
+<h3>3D rasterinterpolation</h3>
 
 From 3D vector points, GRASS 3D raster maps can be interpolated
 (<a href="v.vol.rst.html">v.vol.rst</a>). Results are volumes,
 or 2D raster maps can be also extracted.
 
-<h3>Volume export</h3>
+<h3>3D raster export</h3>
 
 GRASS 3D raster maps can be exported to VTK (<a href="r3.out.vtk.html">r3.out.vtk</a>).
 VTK files can be visualized with the 
