@@ -935,13 +935,13 @@ def parse_cmdline():
 	    help_message()
 	    sys.exit()
 	# Check if the -text flag was given
-	elif i == "-text":
+	elif i in ["-text", "--text"]:
 	    grass_gui = 'text'
 	# Check if the -gui flag was given
-	elif i == "-gui":
+	elif i in ["-gui", "--gui"]:
 	    grass_gui = default_gui
 	# Check if the -wxpython flag was given
-	elif i in ["-wxpython", "-wx"]:
+	elif i in ["-wxpython", "-wx", "--wxpython", "--wx"]:
 	    grass_gui = 'wxpython'
 	# Check if the user wants to create a new mapset
 	elif i == "-c":
