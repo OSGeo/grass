@@ -25,52 +25,8 @@
 #include "plot.h"
 #include "local_proto.h"
 
-/* adopted from r.colors */
-static char *icon_files(void)
-{
-    char *list = NULL, path[4096], path_i[4096];
-    size_t len = 0, l;
-    DIR *dir, *dir_i;
-    struct dirent *d, *d_i;
-
-    sprintf(path, "%s/etc/symbol", G_gisbase());
-
-    dir = opendir(path);
-    if (!dir)
-	return NULL;
-
-    /*loop over etc/symbol */
-    while ((d = readdir(dir))) {
-	if (d->d_name[0] == '.')
-	    continue;
-
-	sprintf(path_i, "%s/etc/symbol/%s", G_gisbase(), d->d_name);
-	dir_i = opendir(path_i);
-
-	if (!dir_i)
-	    continue;
-
-	/*loop over each directory in etc/symbols */
-	while ((d_i = readdir(dir_i))) {
-	    if (d_i->d_name[0] == '.')
-		continue;
-
-	    l = strlen(d->d_name) + strlen(d_i->d_name) + 3;
-	    list = G_realloc(list, len + l);
-	    sprintf(list + len, "%s/%s,", d->d_name, d_i->d_name);
-	    len += l - 1;
-	}
-
-	closedir(dir_i);
-    }
-
-    closedir(dir);
-
-    if (len)
-	list[len - 1] = 0;
-
-    return list;
-}
+static int cmp(const void *, const void *);
+static char *icon_files(void);
 
 int main(int argc, char **argv)
 {
@@ -527,3 +483,78 @@ int main(int argc, char **argv)
     G_done_msg(" ");
     exit(EXIT_SUCCESS);
 }
+
+int cmp(const void *a, const void *b) 
+{
+    return (strcmp(*(char **)a, *(char **)b));
+}
+
+/* adopted from r.colors */
+char *icon_files(void)
+{
+    char **list, *ret;
+    char buf[GNAME_MAX], path[GPATH_MAX], path_i[GPATH_MAX];
+    int i, count;
+    size_t len;
+    DIR *dir, *dir_i;
+    struct dirent *d, *d_i;
+
+    list = NULL;
+    len = 0;
+    sprintf(path, "%s/etc/symbol", G_gisbase());
+
+    dir = opendir(path);
+    if (!dir)
+	return NULL;
+
+    count = 0;
+    
+    /* loop over etc/symbol */
+    while ((d = readdir(dir))) {
+	if (d->d_name[0] == '.')
+	    continue;
+
+	sprintf(path_i, "%s/etc/symbol/%s", G_gisbase(), d->d_name);
+	dir_i = opendir(path_i);
+
+	if (!dir_i)
+	    continue;
+
+	/* loop over each directory in etc/symbols */
+	while ((d_i = readdir(dir_i))) {
+	    if (d_i->d_name[0] == '.')
+		continue;
+	    
+	    list = G_realloc(list, (count + 1) * sizeof(char *));
+	    
+	    sprintf(buf, "%s/%s", d->d_name, d_i->d_name);
+	    list[count++] = G_store(buf);
+	    
+	    len += strlen(d->d_name) + strlen(d_i->d_name) + 2; /* '/' + ',' */
+	}
+
+	closedir(dir_i);
+    }
+
+    closedir(dir);
+
+    qsort(list, count, sizeof(char *), cmp);
+    
+    if (len > 0) {
+	ret = G_malloc((len + 1) * sizeof(char)); /* \0 */
+	*ret = '\0';
+	for (i = 0; i < count; i++) {
+	    if (i > 0)
+		strcat(ret, ",");
+	    strcat(ret, list[i]);
+	    G_free(list[i]);
+	}
+	G_free(list);
+    }
+    else {
+	ret = G_store("");
+    }
+    
+    return ret;
+}
+
