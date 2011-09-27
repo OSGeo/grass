@@ -1,66 +1,83 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.surf.area</em> Calculates area of regular 3D triangulated points 
-(centers of cells) in current region by adding areas of triangles.  
-Therefore, area of a flat surface will be reported as 
-(rows + cols -1)*(area of cell) less than area of 
-flat region due to a half row and half column missing around the 
-perimeter.
-
-<h2>NOTE</h2>
-
-This calculation is heavily dependent on
-data resolution (think of it as a fractal shoreline problem, the more
-resolution the more detail, the more area, etc).  This program uses the
-<em>CURRENT GRASS REGION</em>, not the resolution of the map.  This is
-especially important for surfaces with <tt>NULL</tt> values and highly
-irregular edges.  The program does not [currently] attempt to correct for
-the error introduced by this <em>edge effect</em>.
-
-<p>
-
-This version actually calculates area twice for each triangle pair,
-keeping a running minimum and maximum area depending on the
-direction of the diagonal used.
-
-<p>
-
-Reported totals are:
-<ol>
-<li>"Plan" area of <tt>NULL</tt> values within the current GRASS region 
-<li>"Plan" area within calculation region (rows-1 * cols-1 * cellarea)
-<li>Average of the minimum and maximum calculated 3d triangle area 
-within this region
-<li>"Plan" area within current GRASS region (rows * cols * cellarea)
-<li>Scaling of calculated area to current GRASS region (see 
-<a href="#note">NOTE</a>)
-</ol> 
+<em>r.surf.area</em> calculates area of regular 3D triangulated points
+(centers of cells) in current region by adding areas of triangles.
+Therefore, area of a flat surface will be reported as (<tt>rows + cols
+-1) * (area of cell)</tt> less than area of flat region due to a half
+row and half column missing around the perimeter.
 
 <h2>NOTES</h2>
 
-<em>r.surf.area</em> works best when the surface being evaluated extends
-to the edges of the current GRASS region and the cell resolution is small.
-Surfaces which are especially long and thin and have highly irregular
-boudaries will tend to have underestimated surface areas.  Setting a
-high cell resolution (small area) will greatly reduce this impact, but will
-cause longer processing times.
+This calculation is heavily dependent on data resolution (think of it
+as a fractal shoreline problem, the more resolution the more detail,
+the more area, etc). This module uses the <b>current region
+settings</b>, not the resolution of the raster map. This is especially
+important for surfaces with <tt>NULL</tt> values and highly irregular
+edges. The module does not [currently] attempt to correct for the
+error introduced by this <em>edge effect</em>.
+
+<p>
+This version actually calculates area twice for each triangle pair,
+keeping a running minimum and maximum area depending on the direction
+of the diagonal used.
+
+<p>
+Reported totals are:
+<ol>
+<li>"Plan" area of <tt>NULL</tt> values within the current GRASS
+region</li>
+<li>"Plan" area within calculation region (<tt>rows-1 * cols-1 *
+cellarea</tt>)</li>
+<li>Average of the minimum and maximum calculated 3d triangle area
+within this region</li>
+<li>"Plan" area within current computational region (<tt>rows * cols *
+cellarea</tt>)</li>
+<li>Scaling of calculated area to current region</li>
+</ol> 
+
+<p>
+<em>r.surf.area</em> works best when the surface being evaluated
+extends to the edges of the current region and the cell resolution is
+small. Surfaces which are especially long and thin and have highly
+irregular boudaries will tend to have underestimated surface areas.
+Setting a high cell resolution (small area) will greatly reduce this
+impact, but will cause longer processing times.
+
+<h2>EXAMPLES</h2>
+
+<div class="code"><pre>
+g.region rast=elevation
+
+r.surf.area map=elevation units=hectares
+Null value area ignored in calculation: 0.000000
+Plan area used in calculation: 20221.510000
+Surface area calculation(low, high, avg):
+        20294.310421 20320.936368 20307.623395
+Current region plan area: 20250.000000
+Estimated region Surface Area: 20336.234719
+</pre></div>
 
 <h2>SEE ALSO</h2>
 
-<em><a href="r.sum.html">r.sum</a></em>,
-<em><a href="r.surf.idw.html">r.surf.idw</a></em>,
-<em><a href="r.surf.idw2.html">r.surf.idw2</a></em>,
-<em><a href="r.surf.fractal.html">r.surf.fractal</a></em>,
-<em><a href="r.surf.gauss.html">r.surf.gauss</a></em>,
-<em><a href="r.volume.html">r.volume</a></em>,
-<em><a href="v.to.rast.html">v.to.rast</a></em>,
-<em><a href="r.slope.aspect.html">r.slope.aspect</a></em>,
-<em><a href="g.region.html">g.region</a></em>
+<em>
+  <a href="r.surf.idw.html">r.surf.idw</a>,
+  <a href="r.surf.idw2.html">r.surf.idw2</a>,
+  <a href="r.surf.fractal.html">r.surf.fractal</a>,
+  <a href="r.surf.gauss.html">r.surf.gauss</a>,
+  <a href="r.volume.html">r.volume</a>,
+  <a href="v.to.rast.html">v.to.rast</a>,
+  <a href="r.slope.aspect.html">r.slope.aspect</a>,
+  <a href="g.region.html">g.region</a>
+</em>
 
 <h2>AUTHOR</h2>
 Bill Brown, USACERL December 21, 1994
-<p>
-Modified for floating point rasters and <tt>NULL</tt> values by 
-Eric G. Miller (October 17, 2000)
+<br>
+Modified for floating point rasters and <tt>NULL</tt> values by Eric
+G. Miller (October 17, 2000)
+<br>
+Updated for GRASS 7, and units option by Martin Landa, Czech Technical
+University in Prague, Czech Republic (October 2011)
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
