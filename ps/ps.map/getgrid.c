@@ -18,7 +18,7 @@ static char *help[] = {
     "cross	cross_size",
     "color      color",
     "numbers    # [color]",
-    "width      #"
+    "width      #",
     ""
 };
 

@@ -18,7 +18,7 @@ static char *help[] = {
     "numbers	no_labels",
     "fontsize   fontsize",
     "background [Y|n]",
-    "width      #"
+    "width      #",
     ""
 };
 
