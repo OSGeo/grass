@@ -2068,7 +2068,7 @@ class AttributeManager(wx.Frame):
                                            log = self.cmdLog,
                                            cmd = (('v.extract',
                                                    { 'input' : self.vectorName,
-                                                     'list' : utils.ListOfCatsToRange(cats) },
+                                                     'cats' : utils.ListOfCatsToRange(cats) },
                                                    'output')),
                                            disableTable = True)
             if not dlg:
