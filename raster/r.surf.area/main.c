@@ -52,32 +52,22 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <math.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-
-#define X 0
-#define Y 1
-#define Z 2
-
-
-void add_row_area(DCELL *, DCELL *, double, struct Cell_head *,
-		  double *, double *);
-void v3cross(double v1[3], double v2[3], double v3[3]);
-void v3mag(double v1[3], double *mag);
-void add_null_area(DCELL *, struct Cell_head *, double *);
-
+#include "local_proto.h"
 
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct Option *surf, *vscale;
+    struct {
+	struct Option *surf, *vscale, *units;
+    } opt;
     DCELL *cell_buf[2];
     int row;
     struct Cell_head w;
-    int cellfile = -1;
+    int cellfile, units;
     double minarea, maxarea, sz, nullarea;
 
     G_gisinit(argv[0]);
@@ -86,40 +76,44 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("surface"));
     G_add_keyword(_("statistics"));
-    module->description = _("Surface area estimation for rasters.");
+    G_add_keyword(_("area estimation"));
+    module->description = _("Prints estimation of surface area for raster map.");
 
-    surf = G_define_option();
-    surf->key = "input";
-    surf->type = TYPE_STRING;
-    surf->required = YES;
-    surf->multiple = NO;
-    surf->gisprompt = "old,cell,Raster";
-    surf->description = _("Raster file for surface");
-
-    vscale = G_define_option();
-    vscale->key = "vscale";
-    vscale->type = TYPE_DOUBLE;
-    vscale->required = NO;
-    vscale->multiple = NO;
-    vscale->description = _("Vertical scale");
-
+    opt.surf = G_define_standard_option(G_OPT_R_MAP);
+    
+    opt.vscale = G_define_option();
+    opt.vscale->key = "vscale";
+    opt.vscale->type = TYPE_DOUBLE;
+    opt.vscale->required = NO;
+    opt.vscale->multiple = NO;
+    opt.vscale->description = _("Vertical scale");
+    opt.vscale->answer = "1.0";
+    
+    opt.units = G_define_standard_option(G_OPT_M_UNITS);
+    opt.units->label = _("Output units");
+    opt.units->description = _("Default: square map units");
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (vscale->answer)
-	sz = atof(vscale->answer);
-    else
-	sz = 1.0;
-
+    sz = atof(opt.vscale->answer);
+    if (opt.units->answer) {
+	units = G_units(opt.units->answer);
+	G_verbose_message(_("Output in '%s'"), G_get_units_name(units, TRUE, TRUE));
+    }
+    else {
+	units = U_UNDEFINED;
+	G_verbose_message(_("Output in 'square map units'"));
+    }
+    
     G_get_set_window(&w);
 
     /* open raster map for reading */
-    cellfile = Rast_open_old(surf->answer, "");
+    cellfile = Rast_open_old(opt.surf->answer, "");
 
     cell_buf[0] = (DCELL *) G_malloc(w.cols * Rast_cell_size(DCELL_TYPE));
     cell_buf[1] = (DCELL *) G_malloc(w.cols * Rast_cell_size(DCELL_TYPE));
 
-    fprintf(stdout, "\n");
     {
 	DCELL *top, *bottom;
 
@@ -146,144 +140,29 @@ int main(int argc, char *argv[])
     G_free(cell_buf[1]);
     Rast_close(cellfile);
 
-    {				/* report */
+    {	/* report */
 	double reg_area, flat_area, estavg;
 
 	flat_area = (w.cols - 1) * (w.rows - 1) * w.ns_res * w.ew_res;
 	reg_area = w.cols * w.rows * w.ns_res * w.ew_res;
 	estavg = (minarea + maxarea) / 2.0;
 
-	fprintf(stdout, "Null value area ignored in calculation %e\n",
-		nullarea);
-	fprintf(stdout, "Plan area used in calculation: %e\n", flat_area);
-	fprintf(stdout,
-		"Surface Area Calculation(low, high, avg):\n\t%e %e %e\n",
-		minarea, maxarea, estavg);
+	fprintf(stdout, "%s %f\n",
+		_("Null value area ignored in calculation:"),
+		conv_value(nullarea, units));
+	fprintf(stdout, "%s %f\n", _("Plan area used in calculation:"),
+		conv_value(flat_area, units));
+	fprintf(stdout, "%s\n\t%f %f %f\n",
+		_("Surface area calculation(low, high, avg):"),
+		conv_value(minarea, units),
+		conv_value(maxarea, units),
+		conv_value(estavg, units));
 
-	fprintf(stdout, "Current Region plan area: %e\n", reg_area);
-	fprintf(stdout, "Estimated Region Surface Area: %e\n",
-		reg_area * estavg / flat_area);
-	fprintf(stdout, "\nDone.\n");
+	fprintf(stdout, "%s %f\n", _("Current region plan area:"),
+		conv_value(reg_area, units));
+	fprintf(stdout, "%s %f\n", _("Estimated region Surface Area:"),
+		conv_value(reg_area * estavg / flat_area, units));
     }
 
-    return (0);			/* Zero means success */
+    exit(EXIT_SUCCESS);
 }
-
-/************************************************************************/
-
-void
-add_row_area(DCELL * top, DCELL * bottom, double sz, struct Cell_head *w,
-	     double *low, double *high)
-{
-    double guess1, guess2, mag, tedge1[3], tedge2[3], crossp[3];
-    int col;
-
-    for (col = 0; col < w->cols - 1; col++) {
-
-	/* 
-	   For each cell**, we triangulate the four corners in
-	   two different ways, 1) UppperLeft to LowerRight diagonal
-	   and 2) LowerLeft to UpperRight diagonal.  Then we add the 
-	   smaller of the two areas to "low" and the greater of
-	   the two areas to "high". 
-
-	   ** here, the "cell" is actually the quadrangle formed by
-	   the center point of four cells, since these are the 
-	   known elevation points.
-	 */
-
-	/* If NAN go to next or we get NAN for everything */
-	if (Rast_is_d_null_value(&(bottom[col + 1])) ||
-	    Rast_is_d_null_value(&(top[col])) ||
-	    Rast_is_d_null_value(&(top[col + 1])) ||
-	    Rast_is_d_null_value(&(bottom[col]))
-	    )
-	    continue;
-
-	/* guess1 --- ul to lr diag */
-	{
-	    tedge1[X] = w->ew_res;
-	    tedge1[Y] = -w->ns_res;
-	    tedge1[Z] = sz * (bottom[col + 1] - top[col]);
-
-	    /* upper */
-	    tedge2[X] = 0.0;
-	    tedge2[Y] = w->ns_res;
-	    tedge2[Z] = sz * (top[col + 1] - bottom[col + 1]);
-
-	    v3cross(tedge1, tedge2, crossp);
-	    v3mag(crossp, &mag);
-	    guess1 = .5 * mag;
-
-	    /* lower */
-	    tedge2[X] = -w->ew_res;
-	    tedge2[Y] = 0.0;
-	    tedge2[Z] = sz * (bottom[col] - bottom[col + 1]);
-
-	    v3cross(tedge1, tedge2, crossp);
-	    v3mag(crossp, &mag);
-	    guess1 += .5 * mag;
-	}
-
-	/* guess2 --- ll to ur diag */
-	{
-	    tedge1[X] = w->ew_res;
-	    tedge1[Y] = w->ns_res;
-	    tedge1[Z] = sz * (top[col + 1] - bottom[col]);
-
-	    /* upper */
-	    tedge2[X] = -w->ew_res;
-	    tedge2[Y] = 0.0;
-	    tedge2[Z] = sz * (top[col + 1] - top[col + 1]);
-
-	    v3cross(tedge1, tedge2, crossp);
-	    v3mag(crossp, &mag);
-	    guess2 = .5 * mag;
-
-	    /* lower */
-	    tedge2[X] = 0.0;
-	    tedge2[Y] = -w->ns_res;
-	    tedge2[Z] = sz * (bottom[col + 1] - top[col + 1]);
-
-	    v3cross(tedge1, tedge2, crossp);
-	    v3mag(crossp, &mag);
-	    guess2 += .5 * mag;
-	}
-	*low += (guess1 < guess2) ? guess1 : guess2;
-	*high += (guess1 < guess2) ? guess2 : guess1;
-
-    }				/* ea col */
-
-}
-
-/************************************************************************/
-/* calculate the running area of null data cells */
-void add_null_area(DCELL * rast, struct Cell_head *region, double *area)
-{
-    int col;
-
-    for (col = 0; col < region->cols; col++) {
-	if (Rast_is_d_null_value(&(rast[col]))) {
-	    *area += region->ew_res * region->ns_res;
-	}
-    }
-}
-
-/************************************************************************/
-/* return the cross product v3 = v1 cross v2 */
-void v3cross(double v1[3], double v2[3], double v3[3])
-{
-    v3[X] = (v1[Y] * v2[Z]) - (v1[Z] * v2[Y]);
-    v3[Y] = (v1[Z] * v2[X]) - (v1[X] * v2[Z]);
-    v3[Z] = (v1[X] * v2[Y]) - (v1[Y] * v2[X]);
-}
-
-/************************************************************************/
-/* magnitude of vector */
-void v3mag(double v1[3], double *mag)
-{
-    *mag = sqrt(v1[X] * v1[X] + v1[Y] * v1[Y] + v1[Z] * v1[Z]);
-}
-
-/************************************************************************/
-/* vim: set softtabstop=4 shiftwidth=4 expandtab: */
