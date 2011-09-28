@@ -636,21 +636,45 @@ class GMFrame(wx.Frame):
                                       { 'loc' : location, 'mapset' : mapset },
                                   caption = _("Info"), style = wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
                     
+    def OnCreateMapset(self, event):
+        """!Create new mapset"""
+        dlg = wx.TextEntryDialog(parent = self,
+                                 message = _('Enter name for new mapset:'),
+                                 caption = _('Create new mapset'))
+        
+        if dlg.ShowModal() ==  wx.ID_OK:
+            mapset = dlg.GetValue()
+            if not mapset:
+                gcmd.GError(parent = self,
+                            message = _("No mapset provided. Operation canceled."))
+                return
+            
+            ret = gcmd.RunCommand('g.mapset',
+                                  parent = self,
+                                  flags = 'c',
+                                  mapset = mapset)
+            if ret == 0:
+                gcmd.GMessage(parent = self,
+                              message = _("Current mapset is <%s>.") % mapset)
+            
     def OnChangeMapset(self, event):
         """Change current mapset"""
         dlg = gdialogs.MapsetDialog(parent = self)
+        
         if dlg.ShowModal() == wx.ID_OK:
             mapset = dlg.GetMapset()
-            if mapset:
-                if gcmd.RunCommand("g.gisenv",
-                                   set = "MAPSET=%s" % mapset) != 0:
-                    wx.MessageBox(parent = self,
-                                  message = _("Unable to switch to mapset <%s>.") % mapset,
-                                  caption = _("Error"), style = wx.OK | wx.ICON_ERROR | wx.CENTRE)
-                else:
-                    wx.MessageBox(parent = self,
-                                  message = _("Current mapset is <%s>.") % mapset,
-                                  caption = _("Info"), style = wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
+            if not mapset:
+                gcmd.GError(parent = self,
+                            message = _("No mapset provided. Operation canceled."))
+                return
+            
+            ret = gcmd.RunCommand('g.mapset',
+                                  parent = self,
+                                  mapset = mapset)
+            
+            if ret == 0:
+                gcmd.GMessage(parent = self,
+                              message = _("Current mapset is <%s>.") % mapset)
         
     def OnNewVector(self, event):
         """!Create new vector map layer"""

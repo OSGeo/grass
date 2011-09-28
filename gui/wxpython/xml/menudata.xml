@@ -820,11 +820,13 @@
 	    <menuitem>
 	      <label>Change location and mapset</label>
 	      <help>Change current location and mapset.</help>
+	      <keywords>general,location,current</keywords>
               <handler>OnChangeLocation</handler>
 	    </menuitem>
 	    <menuitem>
 	      <label>Change mapset</label>
 	      <help>Change current mapset.</help>
+	      <keywords>general,mapset,current</keywords>
               <handler>OnChangeMapset</handler>
 	    </menuitem>
 	    <separator />
@@ -846,8 +848,14 @@
 	    <menuitem>
 	      <label>Create new location</label>
 	      <help>Launches location wizard to create new GRASS location.</help>
-	      <keywords>location, wizard</keywords>
+	      <keywords>general,location,wizard</keywords>
               <handler>OnLocationWizard</handler>
+	    </menuitem>
+	    <menuitem>
+	      <label>Create new mapset</label>
+	      <help>Creates new mapset in the current location, changes current mapset.</help>
+	      <keywords>general,mapset,create</keywords>
+              <handler>OnCreateMapset</handler>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
