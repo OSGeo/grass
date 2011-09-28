@@ -1577,7 +1577,7 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
     
     def RMSError(self, xygroup, order):
         """
-        Uses g.transform to calculate forward and backward error for each used GCP
+        Uses m.transform to calculate forward and backward error for each used GCP
         in POINTS file and insert error values into GCP list.
         Calculates total forward and backward RMS error for all used points
         """
@@ -1591,7 +1591,7 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
         # get list of forward and reverse rms error values for each point
         self.grwiz.SwitchEnv('source')
         
-        ret = gcmd.RunCommand('g.transform',
+        ret = gcmd.RunCommand('m.transform',
                               parent = self,
                               read = True,
                               group = xygroup,
@@ -1604,7 +1604,7 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
         else:
             gcmd.GError(parent = self,
                         message=_('Could not calculate RMS Error.\n'
-                                  'Possible error with g.transform.'))
+                                  'Possible error with m.transform.'))
             return
         
         # insert error values into GCP list for checked items
@@ -1702,7 +1702,7 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
         self.grwiz.SwitchEnv('source')
         
         if map == 'source':
-            ret = gcmd.RunCommand('g.transform',
+            ret = gcmd.RunCommand('m.transform',
                                   parent = self,
                                   read = True,
                                   group = self.xygroup,
@@ -1711,7 +1711,7 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
                                   coords = coord_file)
 
         elif map == 'target':
-            ret = gcmd.RunCommand('g.transform',
+            ret = gcmd.RunCommand('m.transform',
                                   parent = self,
                                   read = True,
                                   group = self.xygroup,
@@ -1729,7 +1729,7 @@ class GCP(MapFrame, wx.Frame, ColumnSorterMixin):
         else:
             gcmd.GError(parent = self,
                         message=_('Could not calculate new extends.\n'
-                                  'Possible error with g.transform.'))
+                                  'Possible error with m.transform.'))
             return
 
         # fist corner

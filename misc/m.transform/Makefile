@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ../..
 
-PGM = g.transform
+PGM = m.transform
 
 LIBES = $(IMAGERYLIB) $(GISLIB) $(MATHLIB)
 DEPENDENCIES = $(IMAGERYDEP) $(GISDEP)

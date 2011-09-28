@@ -1,7 +1,7 @@
 
 /****************************************************************************
  *
- * MODULE:       g.transform
+ * MODULE:       m.transform   (nee g.transform)
  * AUTHOR(S):    Brian J. Buckley
  *               Glynn Clements
  *               Hamish Bowman
