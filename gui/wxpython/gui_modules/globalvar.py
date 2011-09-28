@@ -154,12 +154,16 @@ def GetGRASSCmds(bin = True, scripts = True, gui_scripts = True, addons = True):
     
     if addons and os.getenv('GRASS_ADDON_PATH'):
         path = os.getenv('GRASS_ADDON_PATH')
-        for executable in os.listdir(os.path.join(path, 'bin')):
-            ext = os.path.splitext(executable)[1]
-            if not EXT_BIN or \
-                    ext in (EXT_BIN, EXT_SCT):
-                cmd.append(executable)
-        cmd += os.listdir(os.path.join(path, 'scripts'))
+        bpath = os.path.join(path, 'bin')
+        spath = os.path.join(path, 'scripts')
+        if os.path.exists(bpath) and os.path.isdir(bpath):
+            for executable in os.listdir(bpath):
+                ext = os.path.splitext(executable)[1]
+                if not EXT_BIN or \
+                        ext in (EXT_BIN, EXT_SCT):
+                    cmd.append(executable)
+        if os.path.exists(spath) and os.path.isdir(spath):
+            cmd += os.listdir(spath)
     
     if sys.platform == 'win32':
         for idx in range(len(cmd)):
