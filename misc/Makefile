@@ -3,6 +3,7 @@ MODULE_TOPDIR = ..
 SUBDIRS = \
 	m.cogo \
 	m.measure \
+	m.nviz.image \
 	m.nviz.script \
 	m.transform
 
