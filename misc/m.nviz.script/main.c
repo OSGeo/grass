@@ -1,7 +1,7 @@
 
 /****************************************************************************
  *
- * MODULE:       d.nviz
+ * MODULE:       m.nviz.script  (nee d.nviz)
  * AUTHOR(S):    Bob Covill <bcovill@tekmap.ns.ca>
  * PURPOSE:      interactively create fly-through script for NVIZ
  * Functions:
