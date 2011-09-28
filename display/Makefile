@@ -20,7 +20,6 @@ SUBDIRS = \
 	d.legend \
 	d.linegraph \
 	d.mon \
-	d.nviz \
 	d.path \
 	d.profile \
 	d.rast \
