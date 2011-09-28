@@ -1,4 +1,4 @@
-MODULE_TOPDIR = ../../..
+MODULE_TOPDIR = ../..
 
 PGM = m.nviz.image
 
