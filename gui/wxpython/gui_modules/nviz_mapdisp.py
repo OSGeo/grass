@@ -1892,8 +1892,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                     self.nvizDefault.SetVectorLinesDefaultProp(data['vector']['lines'])
             
     def NvizCmdCommand(self):
-        """!Generate command for nviz_cmd according to current state"""
-        cmd = 'nviz_cmd '
+        """!Generate command for m.nviz.image according to current state"""
+        cmd = 'm.nviz.image '
         
         rasters = []
         vectors = []

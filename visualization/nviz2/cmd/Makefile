@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ../../..
 
-PGM = nviz_cmd
+PGM = m.nviz.image
 
 ifeq ($(OPENGL_X11),1)
 OGL_LIBS := $(OPENGLULIB) $(OPENGLLIB) $(XLIBPATH) $(XLIB) -lXmu -lXext $(XEXTRALIBS) $(MATHLIB)
