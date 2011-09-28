@@ -26,7 +26,6 @@ SUBDIRS = \
 	g.remove \
 	g.rename \
 	g.tempfile \
-	g.transform \
 	g.version \
 	manage
 
