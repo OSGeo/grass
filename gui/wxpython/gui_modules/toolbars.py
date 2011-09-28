@@ -1305,7 +1305,7 @@ class LMNvizToolbar(AbstractToolbar):
     def _toolbarData(self):
         """!Toolbar data"""
         icons = Icons['nviz']
-        return self._getToolbarData((("nviz_cmd", icons['nviz_cmd'],
+        return self._getToolbarData((("nvizCmd", icons['nvizCmd'],
                                       self.OnNvizCmd),
                                      (None, ),
                                      ("settings", icons["settings"],
@@ -1315,7 +1315,7 @@ class LMNvizToolbar(AbstractToolbar):
                                     )
         
     def OnNvizCmd(self, event):
-        """!Show nviz_cmd command"""
+        """!Show m.nviz.image command"""
         self.lmgr.GetLayerTree().GetMapDisplay().GetWindow().OnNvizCmd()
         
     def OnHelp(self, event):

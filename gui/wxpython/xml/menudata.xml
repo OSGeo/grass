@@ -715,11 +715,11 @@
 	  <command>nviz</command>
 	</menuitem>
 	<menuitem>
-	  <label>NVIZ (non-interactive)</label>
+	  <label>3D image rendering</label>
 	  <help>Creates a 3D rendering of GIS data.</help>
 	  <keywords>visualization,raster,vector,raster3d</keywords>
 	  <handler>OnMenuCmd</handler>
-	  <command>nviz_cmd</command>
+	  <command>m.nviz.image</command>
 	</menuitem>
 	<separator />
 	<menuitem>
