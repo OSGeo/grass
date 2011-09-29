@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Display the HTML man pages of GRASS GIS
+#% description: Display the HTML manual pages of GRASS modules
 #% keywords: general
 #% keywords: manual
 #% keywords: help
@@ -45,15 +45,22 @@ def start_browser(entry):
         grass.fatal(_("Browser <%s> not found") % browser)
     
     path = os.path.join(gisbase, 'docs', 'html', entry + '.html')
+    if not os.path.exists(path) and os.getenv('GRASS_ADDON_PATH'):
+        path = os.path.join(os.getenv('GRASS_ADDON_PATH'), 'docs', 'html', entry + '.html')
+    
     if not os.path.exists(path):
-	grass.fatal(_("No HTML manual page entry for <%s>") % entry)
+        grass.fatal(_("No HTML manual page entry for <%s>") % entry)
+    
     grass.verbose(_("Starting browser <%s> for module %s...") % (browser_name, entry))
     
-    os.execlp(browser, browser_name, "file://%s/docs/html/%s.html" % (gisbase, entry))
+    os.execlp(browser, browser_name, "file://%s" % (path))
     grass.fatal(_("Error starting browser <%s> for HTML file <%s>") % (browser, entry))
     
 def start_man(entry):
     path = os.path.join(gisbase, 'man', 'man1', entry + '.1')
+    if not os.path.exists(path) and os.getenv('GRASS_ADDON_PATH'):
+        path = os.path.join(os.getenv('GRASS_ADDON_PATH'), 'man', 'man1', entry + '.1')
+    
     for ext in ['', '.gz', '.bz2']:
 	if os.path.exists(path + ext):
 	    os.execlp('man', 'man', path + ext)
