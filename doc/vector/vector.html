@@ -30,7 +30,7 @@ File is saved in old dig_ascii directory but the name will be probably changed.
 <H3>Head</H3>
 The head of the file is similar as the head file of vector binary
 format but contains bounding box also. Key words are:<br>
-<PRE>
+<pre>
 ORGANIZATION
 DIGIT DATE
 DIGIT NAME
@@ -44,15 +44,15 @@ EAST EDGE
 SOUTH EDGE
 NORTH EDGE
 MAP THRESH
-</PRE>
+</pre>
 
 <H3>Body</H3>
 The body begins with the row:
-<PRE>
+<pre>
 VERTI:
-</PRE>
+</pre>
 followed by records of lines:
-<PRE>
+<pre>
 TYPE NUMBER_OF_COORDINATES [NUMBER_OF_CATEGORIES]
  X Y [Z]
 ....
@@ -60,7 +60,7 @@ TYPE NUMBER_OF_COORDINATES [NUMBER_OF_CATEGORIES]
 [ FIELD CATEGORY]
 ....
 [ FIELD CATEGORY]
-</PRE>
+</pre>
 
 Everything above in <b>[ ]</b> is optional.
 Note the coordinate order in the old version (Y X) has been changed
@@ -83,7 +83,7 @@ TYPE may be:<br>
 
 <br>
 Example of records:
-<PRE>
+<pre>
 P 1 1
  1234 3435
  1 354
@@ -92,7 +92,7 @@ L 3 1
  1453 1454
  1453 4543
  1 355
-</PRE>
+</pre>
 
 <HR>
 <h2><A NAME="example">Vector module programming example</A></h2>
