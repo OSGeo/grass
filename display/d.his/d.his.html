@@ -1,25 +1,25 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>his</EM> stands for hue, intensity, and saturation.
+<em>his</em> stands for hue, intensity, and saturation.
 This program produces a raster map layer providing a
 visually pleasing combination of hue, intensity, and
 saturation values from two or three user-specified raster
 map layers.
 
-<P>
+<p>
 
 The human brain automatically interprets the vast amount of
 visual information available according to basic rules. 
-Color, or <EM>hue</EM>, is used to categorize objects. 
-Shading, or <EM>intensity</EM>, is interpreted as
+Color, or <em>hue</em>, is used to categorize objects. 
+Shading, or <em>intensity</em>, is interpreted as
 three-dimensional texturing. Finally, the degree of
-haziness, or <EM>saturation</EM>, is associated with
+haziness, or <em>saturation</em>, is associated with
 distance or depth. This program allows data from up to
 three raster map layers to be combined into an image which
-retains the original information in terms of <EM>hue</EM>,
-<EM>intensity</EM>, and <EM>saturation</EM>.
+retains the original information in terms of <em>hue</em>,
+<em>intensity</em>, and <em>saturation</em>.
 
-<H2>OPTIONS</H2>
+<h2>OPTIONS</h2>
 
 This program can be run non-interactively or
 interactively.  It will run non-interactively if the user
@@ -30,7 +30,7 @@ saturation values (<B>s_map</B>).  The resulting image will
 be displayed in the active display frame on the graphics
 monitor.
 
-<P>
+<p>
 
 Alternately, the user can run the program interactively by
 typing <B>d.his</B> without naming parameter values on the
@@ -38,7 +38,7 @@ command line.  In this case, the program will prompt the
 user for parameter values using the standard GRASS 
 GUI interface.
 
-<P>
+<p>
 
 While any raster map layer can be used to represent the hue
 information, map layers with a few very distinct colors
@@ -47,42 +47,42 @@ continuously varying data like elevation, aspect, weights,
 intensities, or amounts can suitably be used to provide
 intensity and saturation information.
 
-<P>
+<p>
 
 For example, a visually pleasing image can be
-made by using a watershed map for the <EM>hue</EM> factor,
-an aspect map for the <EM>intensity</EM> factor, and an
-elevation map for <EM>saturation</EM>.  (The user may wish
+made by using a watershed map for the <em>hue</em> factor,
+an aspect map for the <em>intensity</em> factor, and an
+elevation map for <em>saturation</em>.  (The user may wish
 to leave out the elevation information for a first try.)
 Ideally, the resulting image should resemble the view from
 an aircraft looking at a terrain on a sunny day with a bit
 of haze in the valleys.
 
-<P>
+<p>
 The <b>brighten</b> option does not truly represent a percentage,
 but calling it that makes the option easy to understand, and it
 sounds better than <i>Normalized Scaling Factor</i>.
 
 
-<H2>THE PROCESS</H2>
+<h2>THE PROCESS</h2>
 
 Each map cell is processed individually. First, the working
 color is set to the color of the corresponding cell in the
-map layer chosen to represent <EM>HUE</EM>.  Second, this
-color is multiplied by the <EM>red</EM> intensity of that
-cell in the <EM>INTENSITY</EM> map layer.  This map layer
+map layer chosen to represent <em>HUE</em>.  Second, this
+color is multiplied by the <em>red</em> intensity of that
+cell in the <em>INTENSITY</em> map layer.  This map layer
 should have an appropriate gray-scale color table
 associated with it. You can ensure this by using the color
 manipulation capabilities of
-<EM><A HREF="d.colors.html">d.colors</A></EM> or
-<EM><A HREF="r.colors.html">r.colors</A></EM>.
+<em><a href="d.colors.html">d.colors</A></em> or
+<em><a href="r.colors.html">r.colors</A></em>.
 
 Finally, the color is made somewhat gray-based on the
-<EM>red</EM> intensity of that cell in the
-<EM>SATURATION</EM> map layer.  Again, this map layer
+<em>red</em> intensity of that cell in the
+<em>SATURATION</em> map layer.  Again, this map layer
 should have a gray-scale color table associated with it.
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 The name is misleading. The actual conversion used is
 
@@ -98,20 +98,20 @@ where
 
 </PRE>
 
-<P>
+<p>
 
 Either (but not both) of the intensity or the saturation
 map layers may be omitted. This means that it is possible
 to produce output images that represent combinations of
-<EM>his, hi,</EM> or <EM>hs</EM>.
+<em>his, hi,</em> or <em>hs</em>.
 
-<P>
+<p>
 Users wishing to store the result in new raster map layers
 instead of displaying it on the monitor should use the
-program <EM><A HREF="r.his.html">r.his</A></EM>.
+program <em><a href="r.his.html">r.his</A></em>.
 
 
-<H2>EXAMPLE</H2>
+<h2>EXAMPLE</h2>
 <h3>Spearfish dataset</h3>
 
 <div class="code"><pre>
@@ -120,22 +120,22 @@ program <EM><A HREF="r.his.html">r.his</A></EM>.
   d.mon x1
   d.his h=elevation.dem i=elev.shad_relf brighten=50
 </pre></div>
-<BR>
+<br>
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM>
-<A HREF="d.colors.html">d.colors</A>,
-<A HREF="d.colortable.html">d.colortable</A>,
-<A HREF="d.frame.html">d.frame</A>,
-<A HREF="d.rgb.html">d.rgb</A>,
-<A HREF="r.colors.html">r.colors</A>,
-<A HREF="r.his.html">r.his</A>,
-<A HREF="i.his.rgb.html">i.his.rgb</A>,
-<A HREF="i.rgb.his.html">i.rgb.his</A>
-</EM>
+<em>
+<a href="d.colors.html">d.colors</A>,
+<a href="d.colortable.html">d.colortable</A>,
+<a href="d.frame.html">d.frame</A>,
+<a href="d.rgb.html">d.rgb</A>,
+<a href="r.colors.html">r.colors</A>,
+<a href="r.his.html">r.his</A>,
+<a href="i.his.rgb.html">i.his.rgb</A>,
+<a href="i.rgb.his.html">i.rgb.his</A>
+</em>
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 James Westervelt, U.S. Army Construction Engineering Research Laboratory
 

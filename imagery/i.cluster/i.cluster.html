@@ -1,17 +1,17 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
 
-<EM>i.cluster</EM>
+<em>i.cluster</em>
 performs the first pass in the GRASS two-pass unsupervised 
-classification of imagery, while the GRASS program <EM>
-<A HREF="i.maxlik.html">i.maxlik</A></EM> executes 
+classification of imagery, while the GRASS program <em>
+<a href="i.maxlik.html">i.maxlik</A></em> executes 
 the second pass. Both programs must be run to complete the unsupervised 
 classification.
 
 
-<P>
+<p>
 
-<EM>i.cluster</EM> is a clustering algorithm that reads
+<em>i.cluster</em> is a clustering algorithm that reads
 through the (raster) imagery data and builds pixel clusters
 based on the spectral reflectances of the pixels (see Figure).
 The pixel clusters are imagery categories that can be related
@@ -23,7 +23,7 @@ initial number of clusters to be discriminated.
 
 <p>
 <center>
-<img src="landsat_cluster.png" border=1><BR>
+<img src="landsat_cluster.png" border=1><br>
 <table border=0 width=590>
 <tr><td><center>
 <i>Fig.: Land use/land cover clustering of LANDSAT scene (simplified)</i>
@@ -32,7 +32,7 @@ initial number of clusters to be discriminated.
 </center>
 <p>
 
-<EM>i.cluster</EM> starts by generating spectral signatures
+<em>i.cluster</em> starts by generating spectral signatures
 for this number of clusters and "attempts" to end up with
 this number of clusters during the clustering process.  The
 resulting number of clusters and their spectral
@@ -44,12 +44,12 @@ the percent convergence, the maximum number of iterations,
 and the row and column sampling intervals.
 
 
-<P>
+<p>
 
 The cluster spectral signatures that result are composed of
 cluster means and covariance matrices.  These cluster means
 and covariance matrices are used in the second pass 
-(<EM><A HREF="i.maxlik.html">i.maxlik</A></EM>) to
+(<em><a href="i.maxlik.html">i.maxlik</A></em>) to
 classify the image.  The clusters or spectral classes
 result can be related to land cover types on the ground.
 
@@ -57,22 +57,22 @@ The user has to specify the name of group file, the name of subgroup
 file, the name of a file to contain result signatures, the
 initial number of clusters to be discriminated, and
 optionally other parameters (see below)
-where the <EM>group</EM> should contain the imagery files
-that the user wishes to classify.  The <EM>subgroup</EM> is
+where the <em>group</em> should contain the imagery files
+that the user wishes to classify.  The <em>subgroup</em> is
 a subset of this group.  The user must create a group and
 subgroup by running the GRASS program
 
-<EM><A HREF="i.group.html">i.group</A></EM> 
+<em><a href="i.group.html">i.group</A></em> 
 
-before running <EM>i.cluster</EM>.  The subgroup should
+before running <em>i.cluster</em>.  The subgroup should
 contain only the imagery band files that the user wishes to
 classify.  Note that this subgroup must contain more than
 one band file.  The purpose of the group and subgroup is to
 collect map layers for classification or analysis. The
-<EM>sigfile</EM> is the file to contain result signatures
+<em>sigfile</em> is the file to contain result signatures
 which can be used as input for
 
-<EM><A HREF="i.maxlik.html">i.maxlik</A></EM>. 
+<em><a href="i.maxlik.html">i.maxlik</A></em>. 
 
 The classes value is the initial number of clusters to be
 discriminated; any parameter values left unspecified are
@@ -96,75 +96,75 @@ messages are printed out.
 <DL>
 
 
-<DT><B>group=</B><EM>name</EM> 
+<DT><B>group=</B><em>name</em> 
 
 <DD>The name of the group file which contains the imagery
 files that the user wishes to classify.
 
-<DT><B>subgroup=</B><EM>name</EM> 
+<DT><B>subgroup=</B><em>name</em> 
 
 <DD>The name of the subset of the group specified in group
 option, which must contain only imagery band files and more
 than one band file. The user must create a group and a
 subgroup by running the GRASS program 
 
-<EM><A HREF="i.group.html">i.group</A></EM> 
+<em><a href="i.group.html">i.group</A></em> 
 
 before
-running <EM>i.cluster</EM>.
+running <em>i.cluster</em>.
 
-<DT><B>sigfile=</B><EM>name</EM> 
+<DT><B>sigfile=</B><em>name</em> 
 
 <DD>The name assigned to output signature file which
 contains signatures of classes and can be used as the input
 file for the GRASS program 
-<EM><A HREF="i.maxlik.html">i.maxlik</A></EM> 
+<em><a href="i.maxlik.html">i.maxlik</A></em> 
 for an unsupervised classification.
 
-<DT><B>classes=</B><EM>value</EM> 
+<DT><B>classes=</B><em>value</em> 
 
 <DD>The number of clusters that will initially be
 identified in the clustering process before the iterations
 begin.
 
-<DT><B>seed=</B><EM>name</EM> 
+<DT><B>seed=</B><em>name</em> 
 
 <DD>The name of a seed signature file is optional. The seed
 signatures are signatures that contain cluster means and
 covariance matrices which were calculated prior to the
-current run of <EM>i.cluster</EM>. They may be acquired
-from a previously run of <EM>i.cluster</EM> or from a
+current run of <em>i.cluster</em>. They may be acquired
+from a previously run of <em>i.cluster</em> or from a
 supervised classification signature training site section
 (e.g., using the signature file output by
 
-<EM><A HREF="i.class.html">i.class</A></EM>). 
+<em><a href="i.class.html">i.class</A></em>). 
 
 The purpose of seed signatures is to optimize the cluster
 decision boundaries (means) for the number of clusters
 specified.
 
-<DT><B>sample=</B><EM>row_interval,col_interval</EM> 
+<DT><B>sample=</B><em>row_interval,col_interval</em> 
 
 <DD>These numbers are optional with default values based on
 the size of the data set such that the total pixels to be
 processed is approximately 10,000 (consider round up).
 
-<DT><B>iterations=</B><EM>value</EM> 
+<DT><B>iterations=</B><em>value</em> 
 
 <DD>This parameter determines the maximum number of
 iterations which is greater than the number of iterations
 predicted to achieve the optimum percent convergence. The
 default value is 30. If the number of iterations reaches
 the maximum designated by the user; the user may want to
-rerun <EM>i.cluster</EM> with a higher number of iterations
-(see <A HREF="#reportfile"><EM>reportfile</EM></A>).
+rerun <em>i.cluster</em> with a higher number of iterations
+(see <a href="#reportfile"><em>reportfile</em></A>).
 
-<BR>
+<br>
 
 Default: 30
 
 <A NAME="convergence"></a>
-<DT><B>convergence=</B><EM>value</EM>
+<DT><B>convergence=</B><em>value</em>
 
 <DD>A high percent convergence is the point at which
 cluster means become stable during the iteration process.
@@ -172,7 +172,7 @@ The default value is 98.0 percent.  When clusters are being
 created, their means constantly change as pixels are
 assigned to them and the means are recalculated to include
 the new pixel.  After all clusters have been created,
-<EM>i.cluster</EM> begins iterations that change cluster
+<em>i.cluster</em> begins iterations that change cluster
 means by maximizing the distances between them.  As these
 means shift, a higher and higher convergence is
 approached.  Because means will never become totally
@@ -183,13 +183,13 @@ number of iterations. If the maximum number of iterations
 is reached, it is probable that the desired percent
 convergence was not reached. The number of iterations is
 reported in the cluster statistics in the report file
-(see <A HREF="#reportfile"><EM>reportfile</EM></A>).
+(see <a href="#reportfile"><em>reportfile</em></A>).
 
-<BR>
+<br>
 
 Default: 98.0
 
-<DT><B>separation=</B><EM>value</EM> 
+<DT><B>separation=</B><em>value</em> 
 
 <DD>This is the minimum separation below which clusters
 will be merged in the iteration process. The default value
@@ -201,25 +201,25 @@ minimum class (or cluster) separation is increased, the
 maximum number of iterations should also be increased to
 achieve this separation with a high percentage of
 convergence
-(see <A HREF="#convergence"><EM>convergence</EM></A>).
+(see <a href="#convergence"><em>convergence</em></A>).
 
-<BR>
+<br>
 
 Default: 0.0
 
-<DT><B>min_size=</B><EM>value</EM> 
+<DT><B>min_size=</B><em>value</em> 
 
 <DD>This is the minimum number of pixels that will be used
 to define a cluster, and is therefore the minimum number of
 pixels for which means and covariance matrices will be
 calculated.
 
-<BR>
+<br>
 
 Default: 17
 
 <A NAME="reportfile"></A>
-<DT><B>reportfile=</B><EM>name</EM>
+<DT><B>reportfile=</B><em>name</em>
 
 <DD>The reportfile is an optional parameter which contains
 the result, i.e., the statistics for each cluster. Also
@@ -230,35 +230,35 @@ achieve the convergence, and the separability matrix.
 </DL>
 
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
-Running in command line mode, <EM>i.cluster</EM> will
+Running in command line mode, <em>i.cluster</em> will
 overwrite the output signature file and reportfile (if
 required by the user) without prompting if the files
 existed.
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
 The GRASS 4 <em>
-<A HREF="http://grass.itc.it/gdp/imagery/grass4_image_processing.pdf">Image
-Processing manual</A></EM>
+<a href="http://grass.itc.it/gdp/imagery/grass4_image_processing.pdf">Image
+Processing manual</A></em>
 
-<P>
+<p>
 
-<EM>
-<A HREF="i.class.html">i.class</A><br>
-<A HREF="i.group.html">i.group</A><br>
-<A HREF="i.gensig.html">i.gensig</A><br>
-<A HREF="i.maxlik.html">i.maxlik</A>
-</EM>
+<em>
+<a href="i.class.html">i.class</A><br>
+<a href="i.group.html">i.group</A><br>
+<a href="i.gensig.html">i.gensig</A><br>
+<a href="i.maxlik.html">i.maxlik</A>
+</em>
 
-<H2>AUTHORS</H2>
+<h2>AUTHORS</h2>
 
 Michael Shapiro,
 U.S.Army Construction Engineering 
 Research Laboratory
 
-<BR>
+<br>
 
 Tao Wen, 
 University of Illinois at 

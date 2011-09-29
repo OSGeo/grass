@@ -1,40 +1,40 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>v.sample</EM> samples a GRASS raster map at the point
+<em>v.sample</em> samples a GRASS raster map at the point
 locations in the input file by either cubic convolution
 interpolation, bilinear interpolation, or nearest neighbor
 sampling (default).
 
-<P>
+<p>
 
 This program may be especially useful when sampling for
 cross validation of interpolations whose output is a raster
 map.
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 The output points will have the easting and northing of the input points.
 The input category value is used. The input attribute, raster value 
 and difference is written to output.
 
-<P>
+<p>
 When NULL values are encountered for a cell, zero value is used
 instead.  In these cases, more acurrate results may be obtained
 by using the default nearest neighbor comparisons.
 
-<P>
+<p>
 
 This program may not work properly with lat-long data when
 the <B>-BC</B> flags are used.
 
-<P>
+<p>
 
 When interpolation is done (i.e., the <B>-BC</B> flags are
 used), values are assumed to be located at the centroid of
 grid cells.  Therefore, current resolution settings are
 important.
 
-<H2>EXAMPLE</H2>
+<h2>EXAMPLE</h2>
 
 Comparison of "elevation.dem" and "elevation.10m" Spearfish maps
 at random places:
@@ -60,28 +60,28 @@ at random places:
 </pre></div>
 
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM>
-<A HREF="v.random.html">v.random</A>,
-<A HREF="g.region.html">g.region</A>
-</EM>
+<em>
+<a href="v.random.html">v.random</A>,
+<a href="g.region.html">g.region</A>
+</em>
 
 
-<EM>Image Sampling Methods</EM> - GRASS Tutorial on <EM>s.sample</EM>
+<em>Image Sampling Methods</em> - GRASS Tutorial on <em>s.sample</em>
 (available as 
-<A HREF="http://grass.itc.it/gdp/sites/">s.sample-tutorial.ps.gz</A>) 
+<a href="http://grass.itc.it/gdp/sites/">s.sample-tutorial.ps.gz</A>) 
 
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
-<A HREF="http://mccauley-usa.com/">James Darrell McCauley</A>
+<a href="http://mccauley-usa.com/">James Darrell McCauley</A>
 <br>when he was at: 
-<A HREF="http://ABE.www.ecn.purdue.edu/ABE/">Agricultural Engineering</A>
-<A HREF="http://www.purdue.edu/">Purdue University</A>
-<P>
+<a href="http://ABE.www.ecn.purdue.edu/ABE/">Agricultural Engineering</A>
+<a href="http://www.purdue.edu/">Purdue University</A>
+<p>
 Updated for GRASS 5.0 by Eric G. Miller
-<BR>
+<br>
 Updated for GRASS 5.7 by Radim Blazek
 
 <p><i>Last changed: $Date$</i>

@@ -1,4 +1,4 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 This numerical program calculates numerical implicit transient and steady state
 solute transport in porous media in the saturated zone of an aquifer. The computation is based on
 raster maps and the current region settings. All initial- and boundary-conditions must be provided as
@@ -15,7 +15,7 @@ The vector components can be visualized with paraview if they are exported
 with r.out.vtk.
 <br>
 <br>
-Use <A HREF="r.gwflow.html">r.gwflow</A> to compute the piezometric heights
+Use <a href="r.gwflow.html">r.gwflow</A> to compute the piezometric heights
 of the aquifer. The piezometric heights and the hydraulic conductivity
 are used to compute the flow direction and the mean velocity of the groundwater.
 This is the base of the solute transport computation.
@@ -31,7 +31,7 @@ To reduce the numerical dispersion, which is a consequence of the convection ter
 the finite volume discretization, you can use small time steps and choose between full
 and exponential upwinding.
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 The solute transport calculation is based on a diffusion/convection partial differential equation and
 a numerical implicit finite volume discretization. Specific for this kind of differential
 equation is the combination of a diffusion/dispersion term and a convection term.
@@ -84,7 +84,7 @@ only work with quadratic matrices, so be careful using them with large maps
 (maps of size 10.000 cells will need more than one gigabyte of ram).
 Always prefer a sparse matrix solver.
 
-<H2>EXAMPLE</H2>
+<h2>EXAMPLE</h2>
 Use this small python script to create a working
 groundwater flow / solute transport area and data. 
 Make sure you are not in a lat/lon projection.
@@ -145,11 +145,11 @@ for dt in range(30):
 
 </pre></div>
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM><A HREF="r.gwflow.html">r.gwflow</A></EM><br>
-<EM><A HREF="r3.gwflow.html">r3.gwflow</A></EM><br>
-<EM><A HREF="r.out.vtk.html">r.out.vtk</A></EM><br>
+<em><a href="r.gwflow.html">r.gwflow</A></em><br>
+<em><a href="r3.gwflow.html">r3.gwflow</A></em><br>
+<em><a href="r.out.vtk.html">r.out.vtk</A></em><br>
 
 <h2>AUTHOR</h2>
 S&ouml;ren Gebbert

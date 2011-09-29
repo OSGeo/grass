@@ -1,42 +1,42 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
 A color table file associates specific colors with the categories of a
 raster map layer. The user can change these map category color assignments
 (i.e., change the map's color table) interactively, by first displaying the
 raster map to the graphics monitor and then running the program
-<EM>d.colors</EM>.
+<em>d.colors</em>.
 
-<P>
-Any color changes made using <EM>d.colors</EM> will not immediately be
+<p>
+Any color changes made using <em>d.colors</em> will not immediately be
 shown on the graphics display; however, any color changes saved will
 still alter the map's color table and will appear next time the raster
-map layer is redisplayed (see <EM><A HREF="d.colortable.html">d.colortable</A></EM>).
+map layer is redisplayed (see <em><a href="d.colortable.html">d.colortable</A></em>).
 
-<P>
+<p>
 The user must first display the relevant raster map layer to the
 active frame on the graphics monitor (e.g., using
-<EM><A HREF="d.rast.html">d.rast</A></EM>) before running
-<EM>d.colors</EM>. The user can then either enter the name of the
+<em><a href="d.rast.html">d.rast</A></em>) before running
+<em>d.colors</em>. The user can then either enter the name of the
 raster map layer whose color table is to be changed on the command
 line (e.g., by typing: <tt>d.colors map=soils</tt>), or type
 <tt>d.colors</tt> without program arguments. If the user simply types
 <tt>d.colors</tt> without program arguments on the command line,
-<EM>d.colors</EM> will ask the user to enter the name of an existing
+<em>d.colors</em> will ask the user to enter the name of an existing
 raster map layer using the standard GRASS interface.
 
-<P>
-In either case, the user is then presented with the <EM>d.colors</EM>
+<p>
+In either case, the user is then presented with the <em>d.colors</em>
 command menu, shown below.
 <!-- This menu is the same as the category and color
-changing portion of the <EM><A HREF="d.display.html">d.display</A></EM>
+changing portion of the <em><a href="d.display.html">d.display</A></em>
 menu. -->
-The <EM>d.colors</EM> commands are listed beneath the Category
+The <em>d.colors</em> commands are listed beneath the Category
 Pointer Movement, Color Modification, Replotting Screen, and Quitting
 sections below.  Commands are invoked by typing in the single-key response
 shown to the left below. (Longer descriptions of these commands appear to
 the right.) Results from invoking these commands will be reflected in the
-Category and Category Number sections of the <EM>d.colors</EM> screen. On
-the <EM>d.colors</EM> screen menu, commands appear in the right half of the
+Category and Category Number sections of the <em>d.colors</em> screen. On
+the <em>d.colors</em> screen menu, commands appear in the right half of the
 screen, and the current status of categories appears in the left half of the
 screen.
 
@@ -85,7 +85,7 @@ first and last categories. The current category is noted on the text screen
 with an arrow, and is indicated on the graphics screen by a box around the 
 current color. 
 
-<P>
+<p>
 
 Changing colors - The color associated with the current category can be 
 changed with the 
@@ -106,16 +106,16 @@ accustomed to red, yellow, and blue being the primary colors, this can
 be confusing. For starters, yellow is made by mixing red and green. The 
 intensities are listed on the text screen in as percentages. 
 
-<P>
+<p>
 
 Keys <B>I</B> and <B>i</B> increase and decrease the
 percentage change that each keystroke of one of the color
-keys (<EM>R, r, G, g, B, b</EM>) causes in its respective
+keys (<em>R, r, G, g, B, b</em>) causes in its respective
 color. The increase increment is initially set to 10%.
-Thus, pressing the <EM>R</EM> key would will increase the
+Thus, pressing the <em>R</em> key would will increase the
 red component of the current category by 10%.
 
-<P>
+<p>
 
 Highlight - The 
 <B>h</B>
@@ -129,14 +129,14 @@ described above, while in highlight mode the category colors will be
 always left showing their actual colors. Only one category is highlighted 
 at any one time. 
 
-<P>
+<p>
 
 Saving the current color table - 
 Pressing the <B>c</B> key will save the current color table as you have 
 modified it. This table will then be used next time you 
 display or paint this raster map layer. 
 
-<P>
+<p>
 
 Color table toggle - Different types of color tables are suitable for 
 different raster map layers. 
@@ -145,7 +145,7 @@ The key
 flips between the following color tables: red, green, blue color ramp; gray 
 scale; smooth changing color wave; random colors; and the saved color table. 
 
-<P>
+<p>
 
 Color table shift - The entire table is shifted up and down using the 
 <B>+</B>
@@ -153,12 +153,12 @@ and
 <B>-</B>
 keys. 
 
-<P>
+<p>
 
-Quitting the <EM>d.colors</EM> program - Pressing the
-<B>Q</B> key will cause you to quit the <EM>d.colors</EM>
+Quitting the <em>d.colors</em> program - Pressing the
+<B>Q</B> key will cause you to quit the <em>d.colors</em>
 program.  If colors have been modified but not saved,
-<EM>d.colors</EM> will ask:
+<em>d.colors</em> will ask:
 <PRE>
          Colors changed
          Save the changes? (y/n)
@@ -169,33 +169,33 @@ If the user types <B>n</B>, the program will ask:
 <PRE>
          Quit anyway? (y/n) 
 </PRE>
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
-<P>
+<p>
 
 The map whose color table is to be altered with
-<EM>d.colors</EM> must already be on display in the active
+<em>d.colors</em> must already be on display in the active
 display frame on the graphics monitor before
-<EM>d.colors</EM> is run. This can be done using the
-command <em><A HREF="d.rast.html">d.rast</a> map=name</EM> (where <EM>name</EM> is a raster map
+<em>d.colors</em> is run. This can be done using the
+command <em><a href="d.rast.html">d.rast</a> map=name</em> (where <em>name</em> is a raster map
 layer whose color table the user wishes to alter).
 
-<P>
+<p>
 Some color monitors may not support the full range of colors required 
 to display all of the map's categories listed in the map's color table. 
 However, regardless of whether the user can see the color changes he is 
 effecting to a map's color table, any changes to a map's color table 
-made with <EM>d.colors</EM> that are saved will appear in the map's color table. 
+made with <em>d.colors</em> that are saved will appear in the map's color table. 
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM>
-<A HREF="d.colortable.html">d.colortable</A>,
-<A HREF="d.rast.html">d.rast</A>,
-<A HREF="r.colors.html">r.colors</A>
-</EM>
+<em>
+<a href="d.colortable.html">d.colortable</A>,
+<a href="d.rast.html">d.rast</A>,
+<a href="r.colors.html">r.colors</A>
+</em>
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 James Westervelt, U.S. Army Construction Engineering 
 Research Laboratory

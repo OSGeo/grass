@@ -1,27 +1,27 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>d.out.gpsdrive</EM> exports the current GRASS display monitor to a 
-<A HREF="http://www.gpsdrive.de">GpsDrive</a> compatible backdrop 
+<em>d.out.gpsdrive</em> exports the current GRASS display monitor to a 
+<a href="http://www.gpsdrive.de">GpsDrive</a> compatible backdrop 
 image and updates the GpsDrive image list with the appropriate geo-referencing
 information.
 
-<P>
+<p>
 <b><em>Use at your own risk. Do not use as a primary means of navigation.
 This software comes with absolutely no warranty.</em></b>
 
 
-<P>
-<H2>NOTES</H2>
+<p>
+<h2>NOTES</h2>
 
 Maps are saved in the user's <tt>~/.gpsdrive/maps/</tt> directory.
 Geo-referencing information is added to the user's
 <tt>~/.gpsdrive/maps/map_koord.txt</tt> file.
 
-<P>
+<p>
 JPEG output requires the <tt>pngtopnm</tt> and <tt>pnmtojpeg</tt> programs
 from the <a href="http://netpbm.sourceforge.net">NetPBM tools</a>.
 
-<P>
+<p>
 GpsDrive assumes northings are not rotated compared to true-geographic north.
 If you are using a projection with significant curvature away from the central
 meridian, or a map datum with a significant rotational component, then you will 
@@ -31,15 +31,15 @@ necessary you could reproject the map into a custom projection (such as tmerc)
 centered directly on the center of your map. You can check the local
 convergence angle (difference between grid north and true north) with
 "<tt>g.region -n</tt>".
-<P>
+<p>
 To avoid distortion, anything more global than 1:150k to 1:500k
 should come from a lat/lon location. Anything more local than that
 will look better coming from a projected system such as UTM.
-<P>
+<p>
 The extent of a map given a target scale can be calculated with 
 <tt>x_ext=scale*(1280/2817.95)</tt>. e.g. 1:50,000 translates to approx
 a 22.7km x 18.2km image window in the GIS.
-<P>
+<p>
 For your convenience (calculations are rough, but nominal):
 <div class="code"><pre>
 1:50,000 uses a region 22.7km x 18.2km.
@@ -47,26 +47,26 @@ For your convenience (calculations are rough, but nominal):
 1:100,000 uses a region  45.4km x 36.3km.
 1:175,000 uses a region  79.5km x 63.6km.
 </pre></div>
-<BR>
+<br>
 
 
 Maps exported from lat-lon locations will be given a "<tt>top_</tt>" prefix.
 Maps exported from locations of other projections will be given a 
 "<tt>map_</tt>" prefix. This is done so GpsDrive knows how to scale the 
 image correctly.
-<P>
+<p>
 GpsDrive requires backdrop images to be 1280x1024 pixels in size. While this
 script takes care of that automatically, to avoid annoying bands on the sides
 of your image you may want to set up your display monitor at half-scale (same
 aspect ratio) and use d.zoom to select the full frame. For example:
-<P>
+<p>
 <div class="code"><pre>
 export GRASS_WIDTH=640
 export GRASS_HEIGHT=512
 d.mon wx0
 </pre></div>
 
-<BR>
+<br>
 Map scaling is set from the region settings so should work correctly even 
 when the display's aspect ratio does not match that of the output image.
 
@@ -76,7 +76,7 @@ when the display's aspect ratio does not match that of the output image.
 It may be desirable to create a series of image tiles covering a large area.
 An easy way to do this is to run <em>d.out.gpsdrive</em> in a shell loop.
 Here is an example Bash script contributed by Manuel Morales:
-<P>
+<p>
 <div class="code"><pre>
 #!/bin/bash
 
@@ -115,35 +115,35 @@ do
 done
 </pre></div>
 
-<BR>
+<br>
 Note that to get a smoother transition between backdrop maps this script
 creates overlapping tiles. For best results at least 1/3rd overlap should
 be maintained.
 
 
-<BR><BR>
-<H2>SEE ALSO</H2>
+<br><br>
+<h2>SEE ALSO</h2>
 
-<EM><A HREF="d.info.html">d.info</A></EM>,
-<EM><A HREF="d.grid.html">d.grid</A></EM>,
-<EM><A HREF="d.out.file.html">d.out.file</A></EM>,
-<EM><A HREF="d.out.png.html">d.out.png</A></EM>,
-<EM><A HREF="d.save.html">d.save</A></EM>,
-<EM><A HREF="g.region.html">g.region</A></EM>,
-<EM><A HREF="v.in.garmin.html">v.in.garmin</A></EM>
-<BR><BR>
-The GRASS <A HREF="pngdriver.html">PNG driver</A><BR>
+<em><a href="d.info.html">d.info</A></em>,
+<em><a href="d.grid.html">d.grid</A></em>,
+<em><a href="d.out.file.html">d.out.file</A></em>,
+<em><a href="d.out.png.html">d.out.png</A></em>,
+<em><a href="d.save.html">d.save</A></em>,
+<em><a href="g.region.html">g.region</A></em>,
+<em><a href="v.in.garmin.html">v.in.garmin</A></em>
+<br><br>
+The GRASS <a href="pngdriver.html">PNG driver</A><br>
 
-The <A HREF="http://www.gpsdrive.de">GpsDrive</a> project<BR>
-The <A HREF="http://gpsd.berlios.de">gpsd</a> personal GPS server project
-<BR><BR>
+The <a href="http://www.gpsdrive.de">GpsDrive</a> project<br>
+The <a href="http://gpsd.berlios.de">gpsd</a> personal GPS server project
+<br><br>
 
-<H2>AUTHOR</H2>
-Hamish Bowman<BR> <i>
-Department of Marine Science<BR>
-University of Otago<BR>
-New Zealand</i><BR>
-<BR>
+<h2>AUTHOR</h2>
+Hamish Bowman<br> <i>
+Department of Marine Science<br>
+University of Otago<br>
+New Zealand</i><br>
+<br>
 
 <p>
 <i>Last changed: $Date$</i>

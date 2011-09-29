@@ -1,7 +1,7 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
 
-The <EM>i.smap</EM> program is used to segment
+The <em>i.smap</em> program is used to segment
 multispectral images using a spectral class model known as
 a Gaussian mixture distribution.  Since Gaussian mixture
 distributions include conventional multivariate Gaussian
@@ -9,25 +9,25 @@ distributions, this program may also be used to segment
 multispectral images based on simple spectral mean and
 covariance parameters.
 
-<P>
+<p>
 
-<EM>i.smap</EM> has two modes of operation.  The first mode
+<em>i.smap</em> has two modes of operation.  The first mode
 is the sequential maximum a posteriori (SMAP) mode
-[<A HREF="#ref1">1</A>,<A HREF="#ref2">2</A>].  The SMAP
+[<a href="#ref1">1</A>,<a href="#ref2">2</A>].  The SMAP
 segmentation algorithm attempts to improve segmentation
 accuracy by segmenting the image into regions rather than
 segmenting each pixel separately 
-(see <A HREF="#notes">NOTES</A>).
+(see <a href="#notes">NOTES</A>).
 
 
-<P>
+<p>
 
 The second mode is the more conventional maximum likelihood (ML)
 classification which classifies each pixel separately,
 but requires somewhat less computation. This mode is selected with
-the <B>-m</B> flag (see <A HREF="#mflag.html">below</A>).
+the <B>-m</B> flag (see <a href="#mflag.html">below</A>).
 
-<H2>OPTIONS</H2>
+<h2>OPTIONS</h2>
 
 <H3>Flags:</H3>
 
@@ -37,7 +37,7 @@ the <B>-m</B> flag (see <A HREF="#mflag.html">below</A>).
 
 <DD>Use maximum likelihood estimation (instead of smap).
 Normal operation is to use SMAP estimation (see
-<A HREF="#notes">NOTES</A>).
+<a href="#notes">NOTES</A>).
 
 <DT><B>-q</B> 
 
@@ -51,35 +51,35 @@ stderr) as the program progresses.
 <H3>Parameters:</H3>
 
 <DL>
-<DT><B>group=</B><EM>name</EM> 
+<DT><B>group=</B><em>name</em> 
 
-<DD>imagery group<BR>
+<DD>imagery group<br>
 The imagery group that defines the image to be classified.
 
-<DT><B>subgroup=</B><EM>name</EM> 
+<DT><B>subgroup=</B><em>name</em> 
 
-<DD>imagery subgroup<BR>
+<DD>imagery subgroup<br>
 The subgroup within the group specified that specifies the
 subset of the band files that are to be used as image data
 to be classified.
 
-<DT><B>signaturefile=</B><EM>name</EM> 
+<DT><B>signaturefile=</B><em>name</em> 
 
-<DD>imagery signaturefile<BR>
+<DD>imagery signaturefile<br>
 The signature file that contains the spectral signatures (i.e., the
 statistics) for the classes to be identified in the image.
 This signature file is produced by the program
-<EM><A HREF="i.gensigset.html">i.gensigset</A></EM>
-(see <A HREF="#notes">NOTES</A>).
+<em><a href="i.gensigset.html">i.gensigset</A></em>
+(see <a href="#notes">NOTES</A>).
 
-<DT><B>blocksize=</B><EM>value</EM> 
+<DT><B>blocksize=</B><em>value</em> 
 
-<DD>size of submatrix to process at one time<BR>
-default: 128<BR>
+<DD>size of submatrix to process at one time<br>
+default: 128<br>
 This option specifies the size of the "window" to be used when
 reading the image data. 
 
-<P>
+<p>
 
 This program was written to be nice about memory usage
 without influencing the resultant classification. This
@@ -88,7 +88,7 @@ More memory may mean faster (or slower) operation depending
 on how much real memory your machine has and how much
 virtual memory the program uses.
 
-<P>
+<p>
 
 The size of the submatrix used in segmenting the image has
 a principle function of controlling memory usage; however,
@@ -102,14 +102,14 @@ submatrix small enough so that different smoothing
 parameters may be used for each distinctive region of the
 image.
 
-<P>
+<p>
 
 The submatrix size has no effect on the performance of the
 ML segmentation method.
 
-<DT><B>output=</B><EM>name</EM>
+<DT><B>output=</B><em>name</em>
 
-<DD>output raster map.<BR>
+<DD>output raster map.<br>
 The name of a raster map that will contain the
 classification results.  This new raster map layer will
 contain categories that can be related to landcover
@@ -117,13 +117,13 @@ categories on the ground.
 
 </DL>
 
-<H2>INTERACTIVE MODE</H2>
+<h2>INTERACTIVE MODE</h2>
 
 If none of the arguments are specified on the command line,
-<EM>i.smap</EM> will interactively prompt for the names of
+<em>i.smap</em> will interactively prompt for the names of
 the maps and files.
 
-<A NAME="notes"></A><H2>NOTES</H2>
+<A NAME="notes"></A><h2>NOTES</h2>
 
 The SMAP algorithm exploits the fact that nearby pixels in
 an image are likely to have the same class.  It works by
@@ -134,7 +134,7 @@ misclassifications, the SMAP algorithm generally produces
 segmentations with larger connected regions of a fixed
 class which may be useful in some applications.
 
-<P>
+<p>
 
 The amount of smoothing that is performed in the
 segmentation is dependent of the behavior of the data in
@@ -143,7 +143,7 @@ often change class, then the algorithm will adaptively
 reduce the amount of smoothing.  This ensures that
 excessively large regions are not formed.
 
-<P>
+<p>
 
 The module i.smap does not support MASKed or NULL cells. Therefore 
 it might be necessary to create a copy of the classification results 
@@ -151,7 +151,7 @@ using e.g. r.mapcalc.
 <p>
 r.mapcalc  MASKed_map=classification results 
 
-<H2>REFERENCES</H2>
+<h2>REFERENCES</h2>
 
 <ul>
 <li>C. Bouman and M. Shapiro,
@@ -169,27 +169,27 @@ pp. III-565 - III-568, San Francisco, California, March 23-26, 1992.
 <em>IEEE Trans. on Geoscience and Remote Sensing, 33(6): 1313-1316.</em>
 </ul>
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM><A HREF="i.group.html">i.group</A></EM>
+<em><a href="i.group.html">i.group</A></em>
 for creating groups and subgroups
 
-<P>
+<p>
 
-<EM><A HREF="r.mapcalc.html">r.mapcalc</A></EM>
+<em><a href="r.mapcalc.html">r.mapcalc</A></em>
 to copy classification result in order to cut out MASKed subareas
 
-<P>
+<p>
 
-<EM><A HREF="i.gensigset.html">i.gensigset</A></EM>
+<em><a href="i.gensigset.html">i.gensigset</A></em>
 to generate the signature file required by this program
 
-<H2>AUTHORS</H2>
+<h2>AUTHORS</h2>
 
 <a href="http://dynamo.ecn.purdue.edu/~bouman/software/segmentation/">Charles Bouman, 
 School of Electrical Engineering, Purdue University</a>
 
-<BR>
+<br>
 Michael Shapiro,
 U.S.Army Construction Engineering 
 Research Laboratory

@@ -5,12 +5,12 @@
 OGR (Simple Features Library) is part of the 
 <a href="http://www.gdal.org">GDAL</a> library, so you need to
 install GDAL to use <em>v.in.ogr</em>. 
-<P>
+<p>
 If the <b>layer</b> parameter is not given, all available layers 
 are imported as separate GRASS layers into one GRASS vector map. If
 several OGR layer names are given, all these layers are imported as
 separate GRASS layers into one GRASS vector map.
-<P>
+<p>
 The optional <b>spatial</b> parameter defines spatial query extents.
 This parameter allows the user to restrict the region to a spatial subset
 while importing the data. All vector features completely or partially
@@ -38,7 +38,7 @@ installation (OGR library), for details see
 <a href="http://www.gdal.org/ogr/ogr_formats.html">OGR web site</a>.
 
 
-<H2>Location Creation</H2>
+<h2>Location Creation</h2>
 
 <em>v.in.ogr</em> attempts to preserve projection information when importing
 datasets if the source format includes projection information, and if
@@ -48,12 +48,12 @@ report an error message ("<tt>Projection of dataset does not appear to
 match current location</tt>") and then report the PROJ_INFO parameters of
 the source dataset.
 
-<P>
+<p>
 If the user wishes to ignore the difference between the apparent coordinate
 system of the source data and the current location, they may pass the 
 <b>-o</b> flag to override the projection check.
 
-<P>
+<p>
 If the user wishes to import the data with the full projection definition,
 it is possible to have <em>v.in.ogr</em> automatically create a new location based
 on the projection and extents of the file being read.  This is accomplished
@@ -77,23 +77,23 @@ Alternate method:
 <div class="code"><pre>
 v.in.ogr dsn=/home/user/shape_data layer=test_shape output=grass_map 
 </pre></div>
-<BR>
+<br>
 
 <li><B>MapInfo files</B>
 <div class="code"><pre>
 v.in.ogr dsn=./ layer=mapinfo_test output=grass_map
 </pre></div>
-<BR>
+<br>
 
-<li><B>Arc Coverage</B><BR>
+<li><B>Arc Coverage</B><br>
  We import the Arcs and Label points, the module takes care to
  build areas:<br>
 <div class="code"><pre>
 v.in.ogr dsn=gemeinden layer=LAB,ARC type=centroid,boundary output=mymap
 </pre></div>
-<BR>
+<br>
 
-<li><B>E00 file</B> (see also <em><a href="v.in.e00.html">v.in.e00</a></em>)<BR>
+<li><B>E00 file</B> (see also <em><a href="v.in.e00.html">v.in.e00</a></em>)<br>
  First we have to convert the E00 file to an Arc Coverage with 'avcimport' 
  (<a href="http://avce00.maptools.org/avce00/index.html">AVCE00 tools</a>,
  use <em>e00conv</em> first in case that <em>avcimport</em> fails):<br>
@@ -101,29 +101,29 @@ v.in.ogr dsn=gemeinden layer=LAB,ARC type=centroid,boundary output=mymap
 avcimport e00file coverage
 v.in.ogr dsn=coverage layer=LAB,ARC type=centroid,boundary output=mymap
 </pre></div>
-<BR>
+<br>
 
-<li><B>SDTS files</B> (you have to select the CATD file)<BR>
+<li><B>SDTS files</B> (you have to select the CATD file)<br>
 <div class="code"><pre>
 v.in.ogr dsn=CITXCATD.DDF output=cities
 </pre></div>
-<BR>
+<br>
 
-<li><B>TIGER files</B><BR>
+<li><B>TIGER files</B><br>
 <div class="code"><pre>
 v.in.ogr dsn=input/2000/56015/ layer=CompleteChain,PIP output=t56015_all \
 type=boundary,centroid snap=-1
 </pre></div>
-<BR>
+<br>
 
-<li><B>PostGIS maps</B> (area example)<BR>
+<li><B>PostGIS maps</B> (area example)<br>
 <div class="code"><pre>
 v.in.ogr dsn="PG:host=localhost dbname=postgis user=postgres" layer=polymap \
 output=polygons type=boundary,centroid
 </pre></div>
-<BR>
+<br>
 
-<li><B>Oracle Spatial maps </B><BR>
+<li><B>Oracle Spatial maps </B><br>
 Note that you have to set the environment-variables <tt>ORACLE_BASE,
 ORACLE_SID, ORACLE_HOME</tt> and <tt>TNS_ADMIN</tt> accordingly.
 <div class="code"><pre>
@@ -133,11 +133,11 @@ v.in.ogr dsn=OCI:username/password@database_instance output=grasslayer layer=roa
 
 <h3>Support of database schema:</h3>
 
-<P>
+<p>
 For schema support, first set a default schema with 
 <em><a href="db.connect.html">db.connect</a></em>. If schema support is
 used the schema name must be specified whenever a db.* module is called.
-<P>
+<p>
 Example:
 <div class="code"><pre>
 db.connect driver=pg database=test schema=user1 group=group1
@@ -171,7 +171,7 @@ a convenience for SQL usage (lowercase column names avoid the need to quote them
 if the attribute table is stored in a SQL DBMS such as PostgreSQL).
 The <b>cnames</b> parameter is used to define new column names during import.
 
-<P>
+<p>
 The DBF database specification limits column names to 10 characters.
 If the default DB is set to DBF and the input data contains longer
 column/field names, they will be truncated. If this results in multiple
@@ -207,7 +207,7 @@ wish to import. Try using <em>location</em> parameter to create a new location b
 upon the projection information in the file. If desired, you can then re-project
 it to another location with <em>v.proj</em>.
 
-<H2>REFERENCES</H2>
+<h2>REFERENCES</h2>
 
 <a href="http://www.gdal.org/ogr/">OGR vector library</a> <br>
 <a href="http://www.gdal.org/ogr/ogr__api_8h.html">OGR vector library C API</a> documentation
@@ -216,15 +216,15 @@ it to another location with <em>v.proj</em>.
 <h2>SEE ALSO</h2>
 
 <em>
-<a HREF="db.connect.html">db.connect</a>,
-<a HREF="v.clean.html">v.clean</a>,
-<a HREF="v.build.polylines.html">v.build.polylines</a>,
-<a HREF="v.edit.html">v.edit</a>,
-<a HREF="v.external.html">v.external</a>,
+<a href="db.connect.html">db.connect</a>,
+<a href="v.clean.html">v.clean</a>,
+<a href="v.build.polylines.html">v.build.polylines</a>,
+<a href="v.edit.html">v.edit</a>,
+<a href="v.external.html">v.external</a>,
 <a href="v.in.db.html">v.in.db</a>,
 <a href="v.in.e00.html">v.in.e00</a>,
-<a HREF="v.out.ogr.html">v.out.ogr</a>,<br>
-<a HREF="grass-pg.html">PostGIS driver</a>
+<a href="v.out.ogr.html">v.out.ogr</a>,<br>
+<a href="grass-pg.html">PostGIS driver</a>
 </em>
 
 

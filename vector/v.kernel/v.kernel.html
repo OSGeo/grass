@@ -1,4 +1,4 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
 <em>v.kernel</em> generates a raster density map from vector points data using
 a moving kernel. Available <a href="http://en.wikipedia.org/wiki/Kernel_(statistics)#Kernel_functions_in_common_use">kernel density functions</a> are <em>uniform, 
@@ -12,36 +12,36 @@ Okabe et al. (2009) produces unbiased density estimates. The equal split
 method uses the kernel function selected with the <em>kernel</em> option 
 and can be enabled with <em>node=split</em>.
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 The <em>mult</em> option is needed to overcome the limitation that
 the resulting density in case of a vector map output is stored as category
 (Integer). The density result stored as category may be multiplied by this number.
-<P>
+<p>
 With the <em>-o</em> flag (experimental) the command tries to calculate an 
 optimal standard deviation. The value of <em>stddeviation</em> is taken 
 as maximum value. Standard deviation is calculated using ALL points, 
 not just those in the current region.
 
 
-<H2>LIMITATIONS</H2>
+<h2>LIMITATIONS</h2>
 The module only considers the presence of points, but not 
 (yet) any attribute values.
 
-<H2>SEE ALSO</H2>
-<A HREF="v.surf.rst.html">v.surf.rst</A>
+<h2>SEE ALSO</h2>
+<a href="v.surf.rst.html">v.surf.rst</A>
 
-<H2>REFERENCES</H2>
+<h2>REFERENCES</h2>
 Okabe, A., Satoh, T., Sugihara, K. (2009). <i>A kernel density estimation 
 method for networks, its computational method and a GIS-based tool</i>.
 <b>International Journal of Geographical Information Science</b>, Vol 23(1), 
 pp. 7-32.<br>
 DOI: <a href="http://dx.doi.org/10.1080/13658810802475491">10.1080/13658810802475491</a>
 
-<H2>AUTHORS</H2>
+<h2>AUTHORS</h2>
 
 Stefano Menegon, <a href="http://mpa.itc.it/">ITC-irst</a>, Trento, Italy
-<BR>
+<br>
 Radim Blazek (additional kernel density functions and network part)
 
 <p><i>Last changed: $Date$</i>

@@ -1,26 +1,26 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>v.label</EM> makes a label-file from a GRASS vector map
+<em>v.label</em> makes a label-file from a GRASS vector map
 with labels created from attributes in the attached table.
 If no label file name is given, the name of the source map is used.
 
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 If the <em>fontsize</em> option is given then the <em>space</em> option
 is determined automatically <em>from the current display window</em>, 
 otherwise the <em>space</em> option should be set roughly the same
 as the <em>size</em> option.
-<P>
+<p>
 
-<BR>
-A description of the labels file follows.<P> 
+<br>
+A description of the labels file follows.<p> 
 The file is located in <tt>$MAPSET/paint/labels/</tt>.
 The file is a plain-text ASCII file containing the following fields:
-<BR>
+<br>
 <h4>Caution: The following information may be incomplete, out of date, 
 and wrong!</h4>
-<P>
+<p>
 The label information that must be provided in the <em>labels</em> file is:
 
 <DL>
@@ -29,15 +29,15 @@ The label information that must be provided in the <em>labels</em> file is:
 <DD><!--Up to four lines of text.-->
 Lines in multiple line labels will appear one above the next.
 More than one line of text can be specified by notating the end of a 
-line with a '<b><tt>\n</tt></b>'.<BR>
+line with a '<b><tt>\n</tt></b>'.<br>
 (e.g. <tt>SPEARFISH<b>\n</b>SOUTH DAKOTA)</tt>.
 
 
 <!-- I don't think it exists. -HB 6/2005
 <DT><B>SKIP</B>:
 
-<DD>yes|no. If <EM>no</EM>, label will be printed.  If
-<EM>yes</EM>, the label will be retained in the file but
+<DD>yes|no. If <em>no</em>, label will be printed.  If
+<em>yes</em>, the label will be retained in the file but
 not printed.
 -->
 
@@ -58,7 +58,7 @@ the offset is measured in PostScript points (i.e. 1/72" steps).
 
 <DD>Determines which part of the label to which the
 location refers.  If placement is unspecified, the label is
-centered (<EM>center</EM>), by default.  Label placement
+centered (<em>center</em>), by default.  Label placement
 may be specified as:
 
 <PRE>
@@ -78,21 +78,21 @@ may be specified as:
 <DT><B>FONT</B>:
 
 <DD>This specifies the font to use.
-<P>
+<p>
 The following fonts are available for use with
   <a href="d.labels.html"><i>d.labels</i></a>:
-<P><pre>
+<p><pre>
   cyrilc gothgbt gothgrt gothitt greekc greekcs greekp greeks
   italicc italiccs italict romanc romancs romand romans romant
   scriptc scripts
 </pre>
-<P>
+<p>
 Alternatively the path to a FreeType (.ttf) font may be given.
 (for <em>d.labels</em> only)
-<P>
-The word <EM>standard</EM> can be used to specify the default font 
-(which is <EM>romans</EM>).
-<P>
+<p>
+The word <em>standard</em> can be used to specify the default font 
+(which is <em>romans</em>).
+<p>
 Note <a href="ps.map.html"><em>ps.map</em></a> can override this setting
 to use other fonts. Its default font is Helvetica.
 
@@ -109,30 +109,30 @@ Alternatively <em>fontsize</em> can set the font size in normal font points.
 <DT><A NAME="textcolor"><B>TEXT COLOR</B></A>:
 
 <DD>This selects the text color.  If unspecified, the
-label's text is drawn in <EM>black</EM>, by default.  The
+label's text is drawn in <em>black</em>, by default.  The
 text color can be specified in one of several ways:
 
 <OL>
 <LI>By color name:
 
-<BR>
+<br>
 <tt>aqua black blue brown cyan gray green grey indigo
 magenta orange purple red violet white yellow</tt>
 
-<LI>As red, green, blue component values. (0-255)<BR>
+<LI>As red, green, blue component values. (0-255)<br>
 for example: <tt>128:100:200</tt>
 
 <!-- eh?
 <LI>As red, green, blue percentages.
 for example: .5 .4 .7
-<BR>
+<br>
 (This form is not supported by 
-<EM><A HREF="d.labels.html">d.labels</A></EM>.)
+<em><a href="d.labels.html">d.labels</A></em>.)
 
 <LI>By printer color number to get the exact printer color.
-<BR>
+<br>
 (This form is not supported by 
-<EM><A HREF="d.labels.html">d.labels</A></EM>.)
+<em><a href="d.labels.html">d.labels</A></em>.)
 -->
 
 <LI>Specify "<tt>none</tt>" to suppress the lettering.
@@ -141,7 +141,7 @@ for example: .5 .4 .7
 
 <DT><B>WIDTH</B>:
 
-<DD>This determines the line thickness of the border box.<BR>
+<DD>This determines the line thickness of the border box.<br>
 The maximum value is 25.0.
 
 <DT><B>HIGHLIGHT COLOR</B>:
@@ -153,7 +153,7 @@ text color at the regular line width.  No highlight color
 ("<tt>none</tt>") is used by default, if unspecified by the
 user.  To specify use of no highlight color, specify
 "<tt>none</tt>".
-(See <A HREF="#textcolor">TEXT COLOR</A>
+(See <a href="#textcolor">TEXT COLOR</A>
 above for a list of permissible color names.)
 
 
@@ -161,7 +161,7 @@ above for a list of permissible color names.)
 
 <DD>Specifies how far from the text lines (in units of
 pixels) the highlight color should extend.  The default
-highlight width is set to <EM>0</EM> (i.e., no highlight
+highlight width is set to <em>0</em> (i.e., no highlight
 color).
 
 
@@ -169,8 +169,8 @@ color).
 
 <DD>Text may be boxed in a solid color by specifying a background color.
 Specify "<tt>none</tt>" for no background.  The default background color
-setting, if unspecified by the user, is <EM>white</EM>.
-(See <A HREF="#textcolor">TEXT COLOR</A>
+setting, if unspecified by the user, is <em>white</em>.
+(See <a href="#textcolor">TEXT COLOR</A>
 above for a list of permissible color names.)
 
 
@@ -178,25 +178,25 @@ above for a list of permissible color names.)
 
 <DD>Select a color for the border around the background.
 Specify "<tt>none</tt>" to suppress the border.
-The default border color used, if unspecified, is <EM>black</EM>.
-(See <A HREF="#textcolor">TEXT COLOR</A>
+The default border color used, if unspecified, is <em>black</em>.
+(See <a href="#textcolor">TEXT COLOR</A>
 above for a list of permissible color names.)
 
 
 <DT><B>OPAQUE TO VECTORS</B>:
 
-<DD><EM>yes|no</EM>.  This field only has meaning if a
-background color is selected.  <EM>yes</EM> will prevent
-vector lines from entering the background.  <EM>no</EM>
+<DD><em>yes|no</em>.  This field only has meaning if a
+background color is selected.  <em>yes</em> will prevent
+vector lines from entering the background.  <em>no</em>
 will allow vector lines to enter the background.  The
 default setting, if unspecified by the user, is
-<EM>yes</EM>.
+<em>yes</em>.
 
 </DL>
-<BR>
+<br>
 
 
-<H2>EXAMPLE</H2>
+<h2>EXAMPLE</h2>
 
 Spearfish example with TrueType font (path may differ):
 
@@ -219,19 +219,19 @@ cat file1 file2 file3 file4 > file_all
 
 
 
-<H2>SEE ALSO</H2>
-<EM>
-<A HREF="d.labels.html">d.labels</A><br>
-<A HREF="ps.map.html">ps.map</A>
-</EM>
+<h2>SEE ALSO</h2>
+<em>
+<a href="d.labels.html">d.labels</A><br>
+<a href="ps.map.html">ps.map</A>
+</em>
 <br>
 
 
-<H2>AUTHORS</H2>
+<h2>AUTHORS</h2>
 
 Philip Verhagen (original s.label)<br>
 Radim Blazek (GRASS 6 port)<br>
-Hamish Bowman (enhancements)<BR>
+Hamish Bowman (enhancements)<br>
 
 <p>
 <i>Last changed: $Date$</i>

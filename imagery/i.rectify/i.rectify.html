@@ -1,11 +1,11 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
 
-<EM>i.rectify</EM> uses the control
+<em>i.rectify</em> uses the control
 points identified in 
-<EM><A HREF="i.points.html">i.points</A></EM>
+<em><a href="i.points.html">i.points</A></em>
 or
-<EM><A HREF="i.vpoints.html">i.vpoints</A></EM>
+<em><a href="i.vpoints.html">i.vpoints</A></em>
 
 to calculate a transformation matrix based on a first,
 second, or third order polynomial and then converts x,y
@@ -14,22 +14,22 @@ in the image. The result is a planimetric image with a
 transformed coordinate system (i.e., a different coordinate
 system than before it was rectified).
 
-<P>
+<p>
 
-<EM><A HREF="i.points.html">i.points</A></EM>
+<em><a href="i.points.html">i.points</A></em>
 or
-<EM><A HREF="i.vpoints.html">i.vpoints</A></EM>
+<em><a href="i.vpoints.html">i.vpoints</A></em>
 
-must be run before <EM>i.rectify</EM>, and both programs
+must be run before <em>i.rectify</em>, and both programs
 are required to rectify an image. An image must be
 rectified before it can reside in a standard coordinate
 LOCATION, and therefore be analyzed with the other map
 layers in the standard coordinate LOCATION. Upon
-completion of <EM>i.rectify</EM>, the rectified image is
+completion of <em>i.rectify</em>, the rectified image is
 deposited in the target standard coordinate LOCATION. This
 LOCATION is selected using
 
-<EM><A HREF="i.target.html">i.target</A></EM>.
+<em><a href="i.target.html">i.target</A></em>.
 
 <p>More than one raster map may be rectified at a time. Each cell file
 should be given a unique output file name. The rectified image or
@@ -38,14 +38,14 @@ program is completed. The original unrectified files are not modified
 or removed.
 
 <p>
-If the <b>-c</b> flag is used, <EM>i.rectify</EM> will only rectify that
+If the <b>-c</b> flag is used, <em>i.rectify</em> will only rectify that
 portion of the image or raster map that occurs within the chosen window
 region in the target location, and only that portion of the cell
 file will be relocated in the target database. It is
 important therefore, to check the current mapset window in
 the target LOCATION if the <b>-c</b> flag is used.
 
-<P>
+<p>
 
 If you are rectifying a file with plans to patch it to
 another file using the GRASS program <em>r.patch</em>,
@@ -63,7 +63,7 @@ patched, rectify all of the files using the same default
 window.
 
 <h3>Coordinate transformation</h3>
-<P>
+<p>
 The desired order of transformation (1, 2, or 3) is selected with the
 <b>order</b> option.
 
@@ -87,7 +87,7 @@ be ignored.
 
 <H4>Polynomial Transformation Matrix (2nd, 3d order transformation)</H4>
 
-<EM>i.rectify</EM> uses a first, second, or third order transformation
+<em>i.rectify</em> uses a first, second, or third order transformation
 matrix to calculate the registration coefficients. The number
 of control points required for a selected order of transformation
 (represented by n) is
@@ -139,7 +139,7 @@ If nearest neighbor assignment is used, the output map has the same raster
 format as the input map. If any of the other interpolations is used, the
 output map is written as floating point.
 
-<P>
+<p>
 <!--
 Note: In interactive mode it is possible to define a new file name
 for the target images. This is (currently) not provided in command line
@@ -156,38 +156,38 @@ the user may try the <b>-c</b> flag or the module needs more free space
 on the hard drive.
 
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
 The GRASS 4 <em>
-<A HREF="http://grass.itc.it/gdp/imagery/grass4_image_processing.pdf">Image
-Processing manual</A></EM>
+<a href="http://grass.itc.it/gdp/imagery/grass4_image_processing.pdf">Image
+Processing manual</A></em>
 
-<P>
-<EM>
-  <A HREF="m.transform.html">m.transform</A>,
-  <A HREF="r.proj.html">r.proj</A>,
-  <A HREF="v.proj.html">v.proj</A>,
-  <A HREF="i.group.html">i.group</A>,
-  <A HREF="i.points.html">i.points</A>,
-  <A HREF="i.vpoints.html">i.vpoints</A>,
-  <A HREF="i.target.html">i.target</A>
+<p>
+<em>
+  <a href="m.transform.html">m.transform</A>,
+  <a href="r.proj.html">r.proj</A>,
+  <a href="v.proj.html">v.proj</A>,
+  <a href="i.group.html">i.group</A>,
+  <a href="i.points.html">i.points</A>,
+  <a href="i.vpoints.html">i.vpoints</A>,
+  <a href="i.target.html">i.target</A>
   <br>
   <a href="wxGUI.GCP_Manager.html">Manage Ground Control Points</a>
 </em>
 
 
-<H2>AUTHORS</H2>
+<h2>AUTHORS</h2>
 
 William R. Enslin, 
 Michigan State University,
 Center for Remote Sensing
 
 <p>
-Modified for GRASS 5.0 by:<BR>
-Luca Palmeri (palmeri@ux1.unipd.it)<BR>
-Bill Hughes<BR>
+Modified for GRASS 5.0 by:<br>
+Luca Palmeri (palmeri@ux1.unipd.it)<br>
+Bill Hughes<br>
 Pierre de Mouveaux (pmx@audiovu.com)
-<BR>
+<br>
 CMD mode by Bob Covill
 
 <p>

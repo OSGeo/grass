@@ -1,41 +1,41 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
 This program enables the user to identify coordinate pairs of points from a
 vector map or keyboard entry and corresponding points in an image to be
 rectified. The map coordinate values of each point are used to calculate a
 transformation matrix.  The operator may then use the 
-<EM><a href="i.rectify.html">i.rectify</A></EM> program to rectify the image using
+<em><a href="i.rectify.html">i.rectify</A></em> program to rectify the image using
 the transformation matrix coefficients calculated from the control point
-file created in <EM>i.vpoints</EM>.  The
-<EM> <a href="i.rectify.html">i.rectify</A></EM> program performs a first, second or
+file created in <em>i.vpoints</em>.  The
+<em> <a href="i.rectify.html">i.rectify</A></em> program performs a first, second or
 third order transformation of the image.
 
-<P>
+<p>
 The first step is to display the unrectified image and
 corresponding vector map data.  The operator would then
 mark corresponding control point locations on the image and
 map. To identify the precise location of a point to be
-marked, <EM>i.vpoints</EM> has a zoom option.  In addition to
+marked, <em>i.vpoints</em> has a zoom option.  In addition to
 marking control points on an image to be rectified and
 inputting their world coordinate values using the
-keyboard,  <EM>i.vpoints</EM> has the option to simultaneously
+keyboard,  <em>i.vpoints</em> has the option to simultaneously
 display vector map data available in the targeted database,
 and identify on the vector map the location of the
 corresponding marked points.  When this option is chosen,
 the coordinate values are input automatically.  Any GRASS
 map layer or vector map in the targeted database LOCATION
-can be displayed using <EM>i.vpoints</EM>.  The <EM>i.vpoints</EM> program
+can be displayed using <em>i.vpoints</em>.  The <em>i.vpoints</em> program
 also has the capability of overlaying (i.e., warping) the
 vector data onto the raster image to visually check the
 accuracy of the registration based on the current set of
 active control points.  During the process of marking
 points and entering map coordinates, the user can compute
 the RMS (root mean square) error for each point entered.
-The <EM>i.vpoints</EM>  program does this by calculating a
+The <em>i.vpoints</em>  program does this by calculating a
 transformation equation (the same one that is calculated in
 the GRASS program
 
-<A HREF="i.rectify.html">i.rectify</A>
+<a href="i.rectify.html">i.rectify</A>
 2).  Coefficients are
 computed for the equation.  The coefficients are then used in the
 equation along with the x,y coordinates of the marked points.  The
@@ -43,16 +43,16 @@ results are plugged into an equation for RMS error.  The
 interpretation of RMS error is described in the ANALYZE subsection.
 
 
-<P>
+<p>
 The procedures for marking control points (registration
 points), displaying vector map layers,  overlaying vector maps onto
 the raster image, and calculating RMS error are described in the
 following sections .
 
 
-<P>
-To enter the program (the <EM>i.vpoints</EM> program requires the use of a
-graphics monitor) type <EM>i.vpoints</EM>:
+<p>
+To enter the program (the <em>i.vpoints</em> program requires the use of a
+graphics monitor) type <em>i.vpoints</em>:
 
 
 <DL>
@@ -115,38 +115,38 @@ registered, the terminal screen displays the message:
 And the color graphics monitor displays the following
 screen:
 
-<P>
+<p>
      Any single file in the imagery group may be used to mark
 points, and points can be marked on more than one file in the
 imagery group to accumulate the suggested minimum number of points
 (3 for a 1st order transformation, 6 for a 2nd order, and 10 for a
 3rd order).  Any file in the imagery group can be subsequently
-rectified (using <EM><A HREF="i.rectify.html">i.rectify</A></EM>)
+rectified (using <em><a href="i.rectify.html">i.rectify</A></em>)
 based on the transformation matrix computed from these points.
 
-<P>
+<p>
      The chosen file is displayed in the upper left quadrant of the
 monitor at a default magnification based on the extent of the
 current active window.
 
-<P>
+<p>
 
 <B>RASTER IMAGE</B>
 
-<P>
+<p>
      The raster image option on the menu at the bottom of the
 window allows the user to display any single file in the imagery
 group in the upper right quadrant of the window screen.  The option
 provides the same file selection pick list as is presented when you
-first enter the <EM>i.vpoints</EM> program.  When you select this option,
+first enter the <em>i.vpoints</em> program.  When you select this option,
 the program will erase the data contained in all of the four
 quadrant windows and will reinitialize all program values.
 
 
-<P>
+<p>
 
 <B>VECTOR MAPS</B>
-<P>
+<p>
      The vector maps option on the menu at the bottom of the screen
 allows the user to display vector map data in the upper right
 quadrant of the screen.  After selecting the vector map layer to
@@ -154,9 +154,9 @@ display, a menu selection bar appears along the bottom on the
 screen. This pick list is used to select the line color (blue,
 gray, green, red, white, or yellow) for the selected vector data
 layer.
-<P>
+<p>
 <B>Refresh</B>
-<P>
+<p>
      The refresh option on the main menu allows the user to
 "refresh" or re-draw the displayed vector data. This function will
 erase all outlines showing the limits of previously zoomed areas. 
@@ -164,9 +164,9 @@ A "yes/no" roompt will appear:
 <PRE>
      Refresh Map ?       NO   YES
 </PRE>
-<P>
+<p>
 <B>Zoom</B>
-<P>
+<p>
      To enlarge a raster or vector image, place the mouse cross
 hairs on the word zoom on the main menu and press the left button. 
 The following menu will be displayed at the bottom. of the screen:
@@ -190,23 +190,23 @@ shape of the rubber band box.  After defining the area to be
 enlarged, press the right button  to accept it.
 
 
-<P>
+<p>
 
 The point method for enlarging an image will display a mouse menu
 to guide you in selecting the appropriate enlargement.  To enlarge
 or reduce the magnification factor, place the cursor on the "+" or
 "-" box and press the left button on the mouse.
-<P>
-<P>
+<p>
+<p>
 You may zoom either the raster or the vector display.
-<P>
+<p>
 Upon accepting the new region limits, the raster or vector data are
 redisplayed in either the lower left (raster) or lower right
 (vector) windows.
-<P>
+<p>
 The extent of the zoomed area is outlined on the unzoomed image in
 the main window area.
-<P>
+<p>
      While the main menu is displayed,  you can mark
 corrosponding control points on the raster and vector
 images or enter map coordinates from the keyboard.  If you
@@ -218,7 +218,7 @@ especially <a href="wxGUI.Vector_Digitizing_Tool.html">wxGUI vector digitizer</a
 determined the standard coordinates (for example, UTM's) of
 each circled point, you are ready to mark the points on the
 displayed image.
-<P>
+<p>
      To mark the points on the image, that correspond to the points
 on the standard coordinate map, place the mouse cross hairs on the
 point on the image to be marked (you will probably have to ZOOM to
@@ -233,7 +233,7 @@ monitor will display the following screen:
           Enter coordinates as east north:
 </PRE>
 <B>Analyze</B>
-<P>
+<p>
 
      After a number of points have been marked (a minimum of 4 for
 a 1st order transformation, 7 for a 2nd order, and 11 for a 3rd
@@ -278,9 +278,9 @@ point is displayed) and then pressing the left button on the mouse
 twice.  When a point is excluded, it is not included in the
 calculation of the RMS error, or included in the final
 transformation matrix.  However, it can be retrieved within
-<EM>i.vpoints</EM> at any time by double clicking with the mouse as
+<em>i.vpoints</em> at any time by double clicking with the mouse as
 described above.
-<P>
+<p>
 The following menu appears at the bottom of the monitor:
 <PRE>
    DONE   PRINT   FILE   OVERLAY   DELETE ON       Transformation -
@@ -290,9 +290,9 @@ Selecting DELETE ON will toggle the option to DELETE OFF, the
 toggle option is used to allow the user to physically remove a
 control point from the POINTS file instead of just flagging it as
 an non-active reference point.
-<P>
+<p>
 <B>Overlay</B>
-<P>
+<p>
 Overlay allows the user to overlay the vector map(s) onto the
 raster image.  Overlay can be used to warp (register) and display
 the selected vector map data on top of the raster image contained
@@ -309,34 +309,34 @@ transformation desired:
 </PRE>
 The program will immediately recalculate the RMSE and the number of
 points required.
-<P>
+<p>
 <B>Quit</B>
-<P>
-     To exit the <EM>i.vpoints</EM> program, place the mouse cross hairs on
+<p>
+     To exit the <em>i.vpoints</em> program, place the mouse cross hairs on
 the word QUIT at the bottom of the monitor and all of the marked
 points (including coordinates) will be saved.
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
 The GRASS 4 <em>
-<A HREF="http://grass.itc.it/gdp/imagery/grass4_image_processing.pdf">Image
-Processing manual</A></EM>
+<a href="http://grass.itc.it/gdp/imagery/grass4_image_processing.pdf">Image
+Processing manual</A></em>
 
-<P>
-<EM>
-<A HREF="g.mapsets.html">g.mapsets</A><BR>
-<A HREF="i.group.html">i.group</A><BR>
-<A HREF="i.points.html">i.points</A><BR>
-<A HREF="i.rectify.html">i.rectify</A><BR>
-<A HREF="i.target.html">i.target</A>
-</EM><br>
+<p>
+<em>
+<a href="g.mapsets.html">g.mapsets</A><br>
+<a href="i.group.html">i.group</A><br>
+<a href="i.points.html">i.points</A><br>
+<a href="i.rectify.html">i.rectify</A><br>
+<a href="i.target.html">i.target</A>
+</em><br>
 <em><a href="gm_georect.html">gis.m: GEORECTIFY TOOL</a></em>
 
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 William R. Enslin, Michigan State University Center for Remote Sensing<br>
-Radim Blazek (update to GRASS 5.7)<BR>
+Radim Blazek (update to GRASS 5.7)<br>
 Hamish Bowman (finish GRASS 6 porting)
 <p>
-<i>Last changed: $Date$</i></p>
+<i>Last changed: $Date$</i>

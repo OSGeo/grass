@@ -9,68 +9,68 @@
 
 <img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
 
-<H2>NAME</H2>
+<h2>NAME</h2>
 
-<EM><b>g.setproj</b></EM>  - Allows the user to create the PROJ_INFO and the 
+<em><b>g.setproj</b></em>  - Allows the user to create the PROJ_INFO and the 
 PROJ_UNITS files to record the projection information associated with a 
 current location. 
-<BR>
+<br>
 
-<H2>SYNOPSIS</H2>
+<h2>SYNOPSIS</h2>
 
 <B>g.setproj</B> 
 
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
 Allows a user to create a PROJ_INFO file in the PERMANENT mapset of the 
 current location. PROJ_INFO file is used to record the projection information 
 associated with the specified mapset. 
 
-<H2>NOTES</H2> 
+<h2>NOTES</h2> 
 
-The user running <EM>g.setproj</EM> must own the PERMANENT 
+The user running <em>g.setproj</em> must own the PERMANENT 
 mapset and it must be currently selected.
-It is highly recommended to run <EM>g.setproj</EM> after
+It is highly recommended to run <em>g.setproj</em> after
 creating a new location so that conversion programs (such
-as <EM>v.proj</EM>) can be run.
+as <em>v.proj</em>) can be run.
 
-<P>The user will be prompted for the projection name. 
+<p>The user will be prompted for the projection name. 
 Most projections are supported. The 
-<A HREF="http://proj.maptools.org/">PROJ.4</A> abbreviations for the names are
+<a href="http://proj.maptools.org/">PROJ.4</A> abbreviations for the names are
 used with two exceptions, viz. 'll', for latitude / longitude geographic
 co-ordinates, and 'stp', for the State Plane Co-ordinate system (used in the
-USA).</P>
+USA).
 
-<P>After the projection name, the user will be asked for a geodetic datum. If 
+<p>After the projection name, the user will be asked for a geodetic datum. If 
 no datum transformation support is needed, the question may be answered with no,
 and no datum will be specified in the PROJ_INFO file. If this is the case
 the user must specify the ellipsoid (model of the curvature of the earth) to
-be used, otherwise it is determined by the datum being used.</P>
+be used, otherwise it is determined by the datum being used.
 
-<P>If the datum or ellipsoid required are not 
+<p>If the datum or ellipsoid required are not 
 listed within this program, the user/administrator may add the definition 
 to the files datum.table, datumtransform.table and ellipse.table in the
-$GISBASE/etc/ directory.</P>
+$GISBASE/etc/ directory.
 
-<P>Depending on the projection selected, the user will then be prompted for
-the various other parameters required to define it.</P>
+<p>Depending on the projection selected, the user will then be prompted for
+the various other parameters required to define it.
 
-<P>
+<p>
 
 The projections of aea, lcc, merc, leae, leac, and 
 tmerc will generate a request to the user for the prime meridian and standard 
 parallel for the output map. 
 
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM><A HREF="g.proj.html">g.proj</A></EM>,
-<EM><A HREF="m.proj.html">m.proj</A></EM>,
-<EM><A HREF="r.proj.html">r.proj</A></EM>,
-<EM><A HREF="v.proj.html">v.proj</A></EM>,
-<EM><A HREF="http://proj.maptools.org">PROJ.4</A></EM>
+<em><a href="g.proj.html">g.proj</A></em>,
+<em><a href="m.proj.html">m.proj</A></em>,
+<em><a href="r.proj.html">r.proj</A></em>,
+<em><a href="v.proj.html">v.proj</A></em>,
+<em><a href="http://proj.maptools.org">PROJ.4</A></em>
 
-<P>
+<p>
 <B>Further reading</B>
 <ul>
 <li> A guide to <a href="http://erg.usgs.gov/isb/pubs/MapProjections/projections.html">Map Projections</a> by USGS
@@ -79,17 +79,17 @@ parallel for the output map.
 <li> <a href="http://www.remotesensing.org/geotiff/proj_list/">Projections Transform List</a> (PROJ4)
 </ul>
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 Irina Kosinovsky, 
 U.S. Army Construction Engineering 
-Research Laboratory<BR>
-Morten Hulden, morten at untamo.net - rewrote module and added 121 projections <BR>
+Research Laboratory<br>
+Morten Hulden, morten at untamo.net - rewrote module and added 121 projections <br>
 Andreas Lange, andreas.lange at rhein-main.de - added prelimnary map datum support
 
 <p>
 <i>Last changed: $Date$</i>
-</p>
+
 
 </body>
 </html>

@@ -1,7 +1,7 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
 
-<EM>i.pca</EM> is an image processing program based on the
+<em>i.pca</em> is an image processing program based on the
 algorithm provided by Vali (1990), that processes n
 (n&nbsp;&gt;=&nbsp;2) input raster map layers and produces n output
 raster map layers containing the principal components of
@@ -13,20 +13,20 @@ reading the input raster map layers. When the rescale
 option is used, the output files are rescaled to fit the
 min,max range.
 
-<H2>OPTIONS</H2>
+<h2>OPTIONS</h2>
 
 <H3>Parameters:</H3>
 <DL>
-<DT><B>input=</B><EM>name,name</EM>[<EM>,name,name</EM>,...] 
+<DT><B>input=</B><em>name,name</em>[<em>,name,name</em>,...] 
 <DD>Name of two or more input raster map layers.
 
-<DT><B>output=</B><EM>name</EM> 
+<DT><B>output=</B><em>name</em> 
 <DD>The output raster map layer name to which suffixes are
 added.  Each output raster map layer is assigned this
-user-specified <EM>name</EM> with a numerical (.1, .2, ...
+user-specified <em>name</em> with a numerical (.1, .2, ...
 .n) suffix.
 
-<DT><B>rescale=</B><EM>min,max</EM> 
+<DT><B>rescale=</B><em>min,max</em> 
 <DD>The optional output category range. (Default: 0,255) If
 rescale=0,0,  no rescaling is performed on output files.
 
@@ -35,17 +35,17 @@ the output is not rescaled, the output raster will be of type DCELL.
 </DL>
 
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 Richards (1986) gives a good example of the application of principal
 components analysis (pca) to a time series of LANDSAT images of a burned
 region in Australia.
-<P>
+<p>
 Eigenvalue and eigenvector information is stored in the output maps'
 history files. View with <em>r.info</em>.
 
 
-<H2>EXAMPLE</H2>
+<h2>EXAMPLE</h2>
 
 Using the Spearfish Imagery sample dataset
 
@@ -60,33 +60,33 @@ r.info -h spot_pca.1
 </pre></div>
 
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
 Richards, John A.,
 <B>Remote Sensing Digital Image Analysis</B>,
 Springer-Verlag, 1986.
 
-<P>
+<p>
 
 Vali, Ali R.,
 Personal communication,
 Space Research Center, 
 University of Texas, Austin, 1990.
 
-<P>
+<p>
 
-<EM>
-<A HREF="i.cca.html">i.cca</A><br>
-<A HREF="i.class.html">i.class</A><br>
-<A HREF="i.fft.html">i.fft</A><br>
-<A HREF="i.ifft.html">i.ifft</A><br>
-<A HREF="m.eigensystem.html">m.eigensystem</A><br>
-<A HREF="r.covar.html">r.covar</A><br>
-<A HREF="r.mapcalc.html">r.mapcalc</A>
-</EM>
+<em>
+<a href="i.cca.html">i.cca</A><br>
+<a href="i.class.html">i.class</A><br>
+<a href="i.fft.html">i.fft</A><br>
+<a href="i.ifft.html">i.ifft</A><br>
+<a href="m.eigensystem.html">m.eigensystem</A><br>
+<a href="r.covar.html">r.covar</A><br>
+<a href="r.mapcalc.html">r.mapcalc</A>
+</em>
 
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 David Satnik, GIS Laboratory
 <p>

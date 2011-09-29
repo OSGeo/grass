@@ -1,27 +1,27 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>d.legend</EM> displays a legend for a user-specified
+<em>d.legend</em> displays a legend for a user-specified
 raster map layer in the active frame on the graphics
 monitor.  
-<P>
+<p>
 
-The user can run <EM>d.legend</EM> either non-interactively
+The user can run <em>d.legend</em> either non-interactively
 or interactively.  If the user specifies the name of a
 raster <B>map</B> layer on the command line, the program
 will run non-interactively.  Default legend text
 <B>color</B> and position will be used unless
 the user specifies other values on the command line.
 
-<P>
+<p>
 
 Alternately, the user can simply type <B>d.legend</B> on the command line; 
 in this case, the program will prompt the user for parameter values 
 using the standard GRASS GUI interface.
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 The legend's default size is based on the dimensions of the
-active frame, specifically its height.  <EM>d.legend</EM> will only
+active frame, specifically its height.  <em>d.legend</em> will only
 obscure those portions of the active frame that directly underlie the legend.
 <p>
 When using the mouse or <B>at</B> to size &amp; place the legend, a user may
@@ -41,31 +41,31 @@ and/or <B>-n</B> options to reduce the number of categories to be displayed,
 or the <B>-s</B> flag to force a smooth gradient legend.
 <p>
 The <B>lines</B> option will display the first number of categories, as defined
-by <EM>value</EM>, contained in the raster map. When used with the <B>-n</B> flag,
+by <em>value</em>, contained in the raster map. When used with the <B>-n</B> flag,
 it takes on a new meaning: "up to category #". When used with both
 <B>thin</B> and the <B>-n</B> flag, its meaning becomes more obscure. When
 using <B>lines</B>, auto-scaled text similar to "4 of 16 categories" will be placed at 
 the bottom of the legend.
 <p>
 The <B>thin</B> option sets the thinning factor. For raster maps with a 0th
-category, <B>thin=</B><EM>10</EM> gives cats [0,10,20,...]. For raster maps 
-starting at category 1, <B>thin=</B><EM>10</EM> gives cats [1,11,21,...].
+category, <B>thin=</B><em>10</em> gives cats [0,10,20,...]. For raster maps 
+starting at category 1, <B>thin=</B><em>10</em> gives cats [1,11,21,...].
 <p>
 The <B>use</B> option lets the user create a legend made up of arbitrary category
-values. e.g.&nbsp;<B>use=</B><EM>1000,100,10,0,-10,-100,-1000</EM>
+values. e.g.&nbsp;<B>use=</B><em>1000,100,10,0,-10,-100,-1000</em>
 <p>
 The <B>range</B> option lets the user define the minimum and maximum categories
 to be used in the legend. It may also be used to define the limits of a smooth
 gradient legend created from a raster containing floating point values. Note
 the color scale will remain faithful to the category values as defined with
-<EM><A HREF="r.colors.html">r.colors</A></EM>, and the <B>range</B> may be
-extended to the limits defined by the <EM><A HREF="r.colors.html">r.colors</A></EM>
+<em><a href="r.colors.html">r.colors</A></em>, and the <B>range</B> may be
+extended to the limits defined by the <em><a href="r.colors.html">r.colors</A></em>
 color map.
 <p>
 The flag <B>-n</B> is useful for categorial maps, as it suppresses the
 drawing of non-existing categories (otherwise the full range is shown).
 <p>
-Vertical legends produced with <EM>d.legend</EM> will place text labels to the
+Vertical legends produced with <em>d.legend</em> will place text labels to the
 right of the legend box, horizontal legends will place text below. This text
 will be auto-scaled to fit within the frame, reducing the size of the legend
 if necessary. Legends positioned with the mouse or with the <B>at</B> option
@@ -81,7 +81,7 @@ numbers will be expressed in scientific notation, e.g.&nbsp;"1.7e-9".
 <p>
 Legends placed with the mouse are not saved to the display window's history
 for automatic redraw. By setting the Debug level to 1 (see 
-<EM><A HREF="g.gisenv.html">g.gisenv</A></EM>) the corresponding <b>at</b>
+<em><a href="g.gisenv.html">g.gisenv</A></em>) the corresponding <b>at</b>
 setting can be determined.
 <p>
 Note that old scripts which relied on setting <B>lines</B> greater than the
@@ -90,28 +90,28 @@ output, although the auto-scaling should still produce something that looks
 good in this case.
 
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM><A HREF="d.barscale.html">d.barscale</A></EM><BR>
-<EM><A HREF="d.colors.html">d.colors</A></EM><BR>
-<EM><A HREF="d.colortable.html">d.colortable</A></EM><BR>
-<EM><A HREF="d.erase.html">d.erase</A></EM><BR>
-<EM><A HREF="d.font.html">d.font</A></EM><BR>
-<EM><A HREF="d.grid.html">d.grid</A></EM><BR>
-<EM><A HREF="d.rast.html">d.rast</A></EM><BR>
-<!-- <EM><A HREF="d.rast.labels.html">d.rast.labels</A></EM><BR> -->
-<EM><A HREF="d.rast.leg.html">d.rast.leg</A></EM><BR>
-<EM><A HREF="d.text.html">d.text</A></EM><BR>
-<EM><A HREF="d.vect.thematic.html">d.vect.thematic</A></EM><BR>
-<EM><A HREF="d.what.rast.html">d.what.rast</A></EM><BR>
-<EM><A HREF="g.gisenv.html">g.gisenv</A></EM><BR>
-<EM><A HREF="r.reclass.html">r.reclass</A></EM><BR>
+<em><a href="d.barscale.html">d.barscale</A></em><br>
+<em><a href="d.colors.html">d.colors</A></em><br>
+<em><a href="d.colortable.html">d.colortable</A></em><br>
+<em><a href="d.erase.html">d.erase</A></em><br>
+<em><a href="d.font.html">d.font</A></em><br>
+<em><a href="d.grid.html">d.grid</A></em><br>
+<em><a href="d.rast.html">d.rast</A></em><br>
+<!-- <em><a href="d.rast.labels.html">d.rast.labels</A></em><br> -->
+<em><a href="d.rast.leg.html">d.rast.leg</A></em><br>
+<em><a href="d.text.html">d.text</A></em><br>
+<em><a href="d.vect.thematic.html">d.vect.thematic</A></em><br>
+<em><a href="d.what.rast.html">d.what.rast</A></em><br>
+<em><a href="g.gisenv.html">g.gisenv</A></em><br>
+<em><a href="r.reclass.html">r.reclass</A></em><br>
 
 
-<H2>AUTHORS</H2>
+<h2>AUTHORS</h2>
 Bill Brown, U.S. Army Construction Engineering Research Laboratories
-<BR>Late 2002: Rewrite of much of the code. Hamish Bowman,
+<br>Late 2002: Rewrite of much of the code. Hamish Bowman,
  Otago University, New Zealand
-<BR>Additional improvements from various authors
+<br>Additional improvements from various authors
 
 <p><i>Last changed: $Date$</i>

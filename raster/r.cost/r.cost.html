@@ -14,7 +14,7 @@ the cell) and 2) a second raster map layer showing the movement
 direction to the next cell on the path back to the start point (see 
 <a href="#move">Movement Direction</a>). This program uses the current geographic region settings.
 The <b>output</b> map will be of the same data format as the <b>input</b>
-map, integer or floating point.</p>
+map, integer or floating point.
 
 <h2>OPTIONS</h2>
 
@@ -53,7 +53,7 @@ point) cost with the <b>null_cost</b> option.
 When input map null cells are given a cost with the <b>null_cost</b>
 option, the corresponding cells in the output map are no longer null
 cells. By using the <b>-n</b> flag, the null cells of the input map are
-retained as null cells in the output map.</p>
+retained as null cells in the output map.
 
 <p>
 As <em>r.cost</em> can run for a very long time, it can be useful to 
@@ -66,7 +66,7 @@ grid cell from which cumulative distances are calculated. Those
 neighbors marked with an <tt>X</tt> are always considered for cumulative cost
 updates. With the <b>-k</b> option, the neighbors marked with a <tt>K</tt> are
 also considered. 
-</p>
+
 <div class="code"><pre>
  . . . . . . . . . . . . . . .
  .   .   . K .   . K .   .   .
@@ -157,7 +157,7 @@ to a lower value.
 <h2>EXAMPLES</h2>
 
 <p>Consider the following example: 
-</p>
+
 <div class="code"><pre>
        Input:
          COST SURFACE
@@ -278,6 +278,6 @@ U.S.Army Construction Engineering Research Laboratory
 
 <p>Updated for Grass 5<br>
 Pierre de Mouveaux (pmx@audiovu.com) 
-</p>
+
 
 <p><i>Last changed: $Date$</i>

@@ -1,100 +1,100 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
 
-<EM>i.gensig</EM>
+<em>i.gensig</em>
 is a non-interactive method for generating input into 
-<EM><A HREF="i.maxlik.html">i.maxlik</A></EM>.
+<em><a href="i.maxlik.html">i.maxlik</A></em>.
 It can be used as the first pass in the GRASS two-pass 
 classification process (instead of 
-<EM><A HREF="i.cluster.html">i.cluster</A></EM>
+<em><a href="i.cluster.html">i.cluster</A></em>
  or 
-<EM><A HREF="i.class.html">i.class</A></EM>).
+<em><a href="i.class.html">i.class</A></em>).
 
 It reads a raster map layer, called the training map, which
 has some of the pixels or regions already classified.
-<EM>i.gensig</EM> will then extract spectral signatures
+<em>i.gensig</em> will then extract spectral signatures
 from an image based on the classification of the pixels in
 the training map and make these signatures available to
 
-<EM><A HREF="i.maxlik.html">i.maxlik</A></EM>.
+<em><a href="i.maxlik.html">i.maxlik</A></em>.
 
 
-<P>
+<p>
 
 The user would then execute the GRASS program 
-<EM><A HREF="i.maxlik.html">i.maxlik</A></EM>
+<em><a href="i.maxlik.html">i.maxlik</A></em>
 to actually create the final classified map.
 
 
-<H2>OPTIONS</H2>
+<h2>OPTIONS</h2>
 
 <H3>Parameters</H3>
 
 <DL>
 
-<DT><B>trainingmap=</B><EM>name</EM>
+<DT><B>trainingmap=</B><em>name</em>
 
 <DD>ground truth training map
 
-<P>
+<p>
 
 This map must be prepared by the user in advance using vector or
 raster digitizer. Of course other methods could be devised by the user
-for creating this training map - <EM>i.gensig</EM> makes no assumption
+for creating this training map - <em>i.gensig</em> makes no assumption
 about the origin of this map layer. It simply creates signatures for
 the classes defined in the training map for the image to be classified
 (the image is specified in other options - see below).
 
-<DT><B>group=</B><EM>name</EM> 
+<DT><B>group=</B><em>name</em> 
 
 <DD>imagery group
 
-<P>
+<p>
 
 This is the name of the group that contains the band files
-which comprise the image to be analyzed. The <EM>
-<A HREF="i.group.html">i.group</A> </EM> command is
+which comprise the image to be analyzed. The <em>
+<a href="i.group.html">i.group</A> </em> command is
 used to construct groups of raster layers which comprise an
 image.
 
 
-<P>
+<p>
 
-<DT><A NAME="subgroup"></A><B>subgroup=</B><EM>name</EM>
+<DT><A NAME="subgroup"></A><B>subgroup=</B><em>name</em>
 
 <DD>subgroup containing image files
 
-<P>
+<p>
 
 This names the subgroup within the group that selects a
-subset of the bands to be analyzed. The <EM>
-<A HREF="i.group.html">i.group</A> </EM> command is
+subset of the bands to be analyzed. The <em>
+<a href="i.group.html">i.group</A> </em> command is
 also used to prepare this subgroup.  The subgroup mechanism
 allows the user to select a subset of all the band files
 that form an image.
 
 
-<DT><B>signaturefile=</B><EM>name</EM> 
+<DT><B>signaturefile=</B><em>name</em> 
 
 <DD>resultant signature file
 
-<P>
+<p>
 
 This is the resultant signature file (containing the means
 and covariance matrices) for each class in the training map
 that is associated with the band files in the subgroup
-select (see <A HREF="#subgroup">above</A>).
+select (see <a href="#subgroup">above</A>).
 
 </DL>
 
-<H2>INTERACTIVE MODE</H2>
+<h2>INTERACTIVE MODE</h2>
 
 If none of the arguments are specified on the command line, 
-<EM>i.gensig</EM>
+<em>i.gensig</em>
 will interactively prompt for the names of these maps and files.
 
 
-<P>
+<p>
 
 It should be noted that interactive mode here only means
 interactive prompting for maps and files.
@@ -102,32 +102,32 @@ It does not mean visualization of the signatures that
 result from the process.
 
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM><A HREF="i.group.html">i.group</A></EM>
+<em><a href="i.group.html">i.group</A></em>
 for creating groups and subgroups.
 
-<P>
+<p>
 
-<EM><A HREF="wxGUI.Vector_Digitizing_Tool.html">wxGUI vector digitizer</A></EM>
+<em><a href="wxGUI.Vector_Digitizing_Tool.html">wxGUI vector digitizer</A></em>
 and
-<EM><A HREF="r.digit.html">r.digit</A></EM>
+<em><a href="r.digit.html">r.digit</A></em>
 for interactively  creating the training map.
 
-<P>
+<p>
 
-<EM><A HREF="i.cluster.html">i.cluster</A></EM>
+<em><a href="i.cluster.html">i.cluster</A></em>
 for unsupervised clustering as an alternative to 
-<EM>i.gensig</EM> to create signatures.
+<em>i.gensig</em> to create signatures.
 
 
-<P>
+<p>
 
-<EM><A HREF="i.class.html">i.class</A></EM>
+<em><a href="i.class.html">i.class</A></em>
 for a graphic/interactive as an alternative to 
-<EM>i.gensig</EM> to create signatures.
+<em>i.gensig</em> to create signatures.
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 Michael Shapiro,
 U.S.Army Construction Engineering Research Laboratory

@@ -1,9 +1,9 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
 <em>v.in.db</em> 
 creates new vector (points) map from database table containing coordinates. 
 
-<H2>EXAMPLE</H2>
+<h2>EXAMPLE</h2>
 
 <h3>1) Creating a map from PostgreSQL table:</h3>
 
@@ -11,7 +11,7 @@ creates new vector (points) map from database table containing coordinates.
 v.in.db driver=pg database="host=myserver.itc.it,dbname=mydb" \
         table=pat_stazioni x=east y=north z=quota key=id output=pat_stazioni
 </pre></div>
-<P>
+<p>
 If an ID column is not not present in the PostgreSQL table,
 a new column should be added. See <a href="grass-pg.html">pg</a> driver
 page for detail.
@@ -23,7 +23,7 @@ To extract coordinate values from PostGIS, functions have to be used:
 v.in.db driver=pg database="host=myserver.itc.it,dbname=mydb" \
         table=station x="x(geom)" y="y(geom)" z="z(geom)" key=id out=meteostations
 </pre></div>
-<P>
+<p>
 If an ID column is not not present in the PostgreSQL table,
 a new column should be added. See <a href="grass-pg.html">pg</a> driver 
 page for detail.
@@ -40,7 +40,7 @@ v.in.db driver=dbf database=/home/user/tables/ table=pointsfile x=x y=y z=z \
 v.info dtmpoints
 v.info -c dtmpoints
 </pre></div>
-<P>
+<p>
 If an ID column is missing in the DBF file, it has to be added beforehand, e.g. with OpenOffice.
 Alternatively, import the table with <em>db.in.ogr</em> into GRASS and then with <em>v.in.db</em>
 from the imported table (<em>db.in.ogr</em> optionally adds an unique ID column).
@@ -57,15 +57,15 @@ v.in.db driver=sqlite database=/home/user/tables/mysqlite.db table=pointsfile x=
 v.info dtmpoints
 v.info -c dtmpoints
 </pre></div>
-<P>
+<p>
 If an ID column is missing in the table, it has to be added beforehand with 'sqlite3' or
 <em>db.execute</em>.
 
 
 <h3>5) Import of a points table (x, y, z) from DBF file to vector points map for selected points only:</h3>
-<P>
+<p>
 The user can import only selected vector points from a table using the <em>where</em> parameter
-(see above for general DBF handling):<P>
+(see above for general DBF handling):<p>
 <div class="code"><pre>
 v.in.db driver=dbf  database=/home/user/tables/ table=pointsfile x=x y=y z=z \
         key=idcol out=dtmpoints where="x NOT NULL and z > 100"
@@ -79,11 +79,11 @@ v.in.db driver=dbf  database=/home/user/tables/ table=pointsfile x=x y=y z=z \
 <a href="v.info.html">v.info</a>,
 <a href="v.in.ogr.html">v.in.ogr</a>,
 <a href="v.to.db.html">v.to.db</a>,<br>
-<a HREF="sql.html">SQL support in GRASS GIS</a>
+<a href="sql.html">SQL support in GRASS GIS</a>
 </em>
 
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 Radim Blazek
 

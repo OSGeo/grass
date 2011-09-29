@@ -3,18 +3,18 @@
 <p>
 <em>r.resamp.stats</em> fills a grid cell (raster) matrix with
 aggregated values generated from a set of input layer data points.
-</p>
+
 
 <p>
 Without the <em>-w</em> switch, the aggregate is computed over all of
 the input cells whose centers lie within the output cell.
-</p>
+
 <p>
 With the <em>-w</em> switch, the aggregate uses the values from all
 input cells which intersect the output cell, weighted according to the
 proportion of the source cell which lies inside the output cell. This
 is slower, but produces a more accurate result.
-</p>
+
 
 
 <h2>NOTES</h2>
@@ -22,7 +22,7 @@ is slower, but produces a more accurate result.
 <p>
 Resampling modules (<em>r.resample, r.resamp.stats, r.resamp.interp,
 r.resamp.rst</em>) resample the map to match the current region settings.
-</p>
+
 <p>
 The notion of weighting doesn't make any sense for the min and max
 aggregates. However, the <em>-w</em> flag still has significance in
@@ -35,7 +35,7 @@ cells.
 <p>
 Resample elevation raster map to a lower resolution (from 6m to 20m;
 North Carolina sample dataset):
-</p>
+
 
 <div class="code"><pre>
 g.region rast=el_D782_6m -p

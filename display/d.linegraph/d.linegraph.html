@@ -1,9 +1,9 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>d.linegraph</EM> is a primitive program to draw simple x,y line graphs
+<em>d.linegraph</em> is a primitive program to draw simple x,y line graphs
 based on numerical data contained in separate files.
-<P>
-Data file format<BR>
+<p>
+Data file format<br>
 The X and Y data files for the graph are essentially a column of numbers in
 each file, with one input number per line.  The program expects that each X
 value will have a corresponding Y value, therefore the number of lines in
@@ -17,11 +17,11 @@ according to that Y scale. Therefore, if multiple Y data inputs are used
 with dissimilar units, the graph produced comparing the two will be
 deceptive.
 
-<P>
+<p>
 <DL>
 <DT><B>directoryname</B>
 <DD>Path to the directory where the input files are located. If this option
-is not used, the <EM>d.linegraph</EM> looks for files in the current directory.
+is not used, the <em>d.linegraph</em> looks for files in the current directory.
 <DD>Example format: directory/usr/grass/data/graph
 
 <DT><B>ycoloroption[,option,...]]</B>
@@ -52,7 +52,7 @@ Default is no title unless the need for a unit descriptor is computed by
 the program (i.e. Y: ttiittllee in thousands). Also, see NOTES section
 (below) for a format caveat for multi-word titles. In the case of graphs
 with multiple lines, one may wish to use more specific title placement by
-using the <EM>d.text</EM> or <EM>v.label</EM> programs.
+using the <em>d.text</em> or <em>v.label</em> programs.
 
 <DT><B>titlevalue</B>
 <DD>Title to describe the graph. Will be centered over the top of graph.
@@ -60,35 +60,35 @@ Default is no title. See NOTES section (below) for a format caveat for
 multi-word titles.
 </DL>
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 Since the command line parser is not amiable to multiple word inputs, to
 input titles of more than one word, use the underscore character ("") to
 represent spaces (" ").
-<P>
+<p>
 Example: "titleCensusdata1990" would be printed over the graph as "Census
 data 1990".
-<P>
+<p>
 The way the program locates and labels tic marks is less than perfect: 1)
 although distances between Y tics is proportional to the value, they are
 not proportional on the X axis; 2) decimal values between -1 and 1 can be
 printed on the X axis, but not on Y. (With respect to the later, the input
 for Y values can all be multiplied by a factor of 10 before graphing).
 
-<P>
+<p>
 It might be easier to use a 3rd party tool such as xgraph or GNUplot instead
 of <em>d.linegraph</em>.
 .
 (You can make GNUplot output pretty by using its SVG or PostScript output
 driver and converting that back into a rasterized image in a paint program)
 
-<H2>SEE ALSO</H2>
-<EM>
-<A HREF="d.frame.html">d.frame</A>,
-<A HREF="d.text.html">d.text</A>,
-<A HREF="v.label.html">v.label</A>
-</EM>
+<h2>SEE ALSO</h2>
+<em>
+<a href="d.frame.html">d.frame</A>,
+<a href="d.text.html">d.text</A>,
+<a href="v.label.html">v.label</A>
+</em>
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 Chris Rewerts, Agricultural Engineering, Purdue University
 
 <p>

@@ -1,6 +1,6 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>g.tempfile</EM>
+<em>g.tempfile</em>
 is designed for shell scripts that need to use large temporary files. 
 GRASS provides a mechanism for temporary files that does not depend on 
 /tmp. GRASS temporary files are created in the data base with the assumption 
@@ -8,17 +8,17 @@ that there will be enough space under the data base for large files.
 GRASS periodically removes temporary files that have been left behind 
 by programs that failed to remove them before terminating. 
 
-<P>
+<p>
 
-<EM>g.tempfile</EM>
+<em>g.tempfile</em>
 creates an unique file and prints the name. The user is required to provide 
 a process-id which will be used as part of the name of the file. 
 Most Unix shells provide a way to get the process id of the current shell. 
 For /bin/sh and /bin/csh this is $$. 
 It is recommended that $$ be specified as the process-id for 
-<EM>g.tempfile</EM>.
+<em>g.tempfile</em>.
 
-<H2>EXAMPLE</H2>
+<h2>EXAMPLE</h2>
 
 For /bin/sh scripts the following syntax should be used: 
 <div class="code"><PRE>
@@ -31,20 +31,20 @@ set temp1=`g.tempfile pid=$$`
 set temp2=`g.tempfile pid=$$`
 </PRE></div>
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
-Each call to <EM>g.tempfile</EM>
+Each call to <em>g.tempfile</em>
 creates a different (i.e. unique) name. 
 
 Although GRASS does eventually get around to removing
 tempfiles that have been left behind, the programmer should
 make every effort to remove these files. They often get
 large and take up disk space. If you write /bin/sh scripts,
-learn to use the /bin/sh <EM>trap</EM> command. If you
+learn to use the /bin/sh <em>trap</em> command. If you
 write /bin/csh scripts, learn to use the /bin/csh
-<EM>onintr</EM> command.
+<em>onintr</em> command.
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 Michael Shapiro, 
 U.S. Army Construction Engineering 

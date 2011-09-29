@@ -10,7 +10,7 @@ topography is optionally incorporated. This can be done either by calculating
 the shadowing effect directly from the digital elevation model or using rasters
 of the horizon height which is much faster. The horizon rasters can be
 constructed using  <a href="r.horizon.html">r.horizon</a>.
-<P>
+<p>
 For latitude-longitude coordinates it requires that the elevation map is in meters.
 The rules are:
 <ul>
@@ -43,7 +43,7 @@ in a combination to provide estimates for any desired time interval. The
 model accounts for sky obstruction by local relief features. Several solar
 parameters are saved in the resultant maps' history files, which may be viewed
 with the <a href="r.info.html">r.info</a> command.
-</p>
+
 <p>
 The solar incidence angle raster map <i>incidout</i> is computed specifying 
 elevation raster map <i>elevin</i>, aspect raster map <i>aspin</i>, slope 
@@ -62,7 +62,7 @@ user can use <a href="r.null.html">r.null</a>
 The specified day <i>day</i> is the number of the day of the general year
 where January 1 is day no.1 and December 31 is 365. Time <i>time</i> must
 be a local (solar) time (i.e. NOT a zone time, e.g. GMT, CET) in decimal system,
-e.g. 7.5 (= 7h 30m A.M.), 16.1 = 4h 6m P.M.. </p>
+e.g. 7.5 (= 7h 30m A.M.), 16.1 = 4h 6m P.M.. 
 <p>
 Setting the solar declination <i>declin</i> by user is an option to override
 the value computed by the internal routine for the day of the year. The value
@@ -71,7 +71,7 @@ region or, as an option, a grid representing spatially distributed values
 over a large region. The geographical latitude must be also in decimal system
 with positive values for northern hemisphere and negative for southern one.
 In similar principle the Linke turbidity factor (<i>linkein</i>, <i>lin</i>
-) and ground albedo (<i>albedo</i>, <i>alb</i>) can be set. </p>
+) and ground albedo (<i>albedo</i>, <i>alb</i>) can be set. 
 <p>
 Besides clear-sky radiations, the user can compute a real-sky radiation (beam,
 diffuse) using <i>coefbh</i> and <i>coefdh </i>input raster maps defining
@@ -91,7 +91,7 @@ is near the annual average for rural-city areas. The Linke
 factor for an absolutely clear atmosphere is <i>lin</i>=1.0. See notes below
 to learn more about this factor. The incidence solar angle is the angle between
 horizon and solar beam vector. 
-<P>
+<p>
 The solar radiation maps for a given day are computed by integrating the
 relevant irradiance between sunrise and sunset times for that day. The
 user can set a finer or coarser time step used for all-day radiation
@@ -104,7 +104,7 @@ sun placed for every degree of movement in the sky you should set the
 <i>step</i> to 4 minutes or less. <i>step</i><tt>=0.05</tt> is equivalent
 to every 3 minutes. Of course setting the time step to be very fine
 proportionally increases the module's running time.
-<P>
+<p>
 The output units are in Wh per squared meter per given
 day [Wh/(m*m)/day]. The incidence angle and irradiance/irradiation maps can
 be computed without shadowing influence of relief by default or they can
@@ -128,7 +128,7 @@ below 0.5 will decrease and values above 1.0 will increase the computing
 speed. Values greater than 2.0 may produce estimates with lower accuracy
 in highly dissected relief. The fully shadowed areas are written to the ouput
 maps as zero values. Areas with NULL data are considered as no barrier with
-shadowing effect .</p>
+shadowing effect .
 <p>The maps' history files are generated containing the following listed 
 parameters used in the computation: <br>
 - Solar constant 1367 W.m-2 <br>
@@ -140,18 +140,18 @@ parameters used in the computation: <br>
 - Daylight lengths <br>
 - Geographical latitude (min-max) <br>
 - Linke turbidity factor (min-max) <br>
-- Ground albedo (min-max) </p>
+- Ground albedo (min-max) 
 <p>The user can use a nice shellcript with variable
 day to compute radiation for some time interval within the year (e.g. vegetation
 or winter period). Elevation, aspect and slope input values should not be
 reclassified into coarser categories. This could lead to incorrect results. 
-</p>
+
 
 <h2> OPTIONS</h2>
-<P>Currently, there are two modes of r.sun.
+<p>Currently, there are two modes of r.sun.
 In the first mode it calculates solar incidence angle and solar irradiance
 raster maps using the set local time. In the second mode daily sums of solar
-irradiation [Wh.m-2.day-1] are computed for a specified day. </p>
+irradiation [Wh.m-2.day-1] are computed for a specified day. 
 
 <h2>
 NOTES</h2>
@@ -171,12 +171,12 @@ in Europe is the treatment of the diffuse component. In the European climate
 this component is often the largest source of estimation error. Taking into
 consideration the existing models and their limitation the European Solar
 Radiation Atlas team selected the Muneer (1990) model as it has a sound theoretical
-basis and thus more potential for later improvement. </p>
+basis and thus more potential for later improvement. 
 <p>
 Details of underlying equations used in this program can be found in the
 reference literature cited below or book published by Neteler and Mitasova: 
 Open Source GIS: A GRASS GIS Approach (published in Kluwer Academic Publishers 
-in 2002). </p>
+in 2002). 
 <p>
 Average monthly values of the Linke turbidity coefficient for a mild climate
 in the northern hemisphere (see reference literature for your study area):
@@ -189,7 +189,7 @@ in the northern hemisphere (see reference literature for your study area):
 <tr><td>industrial</td><td>4.1</td><td>4.3</td><td>4.7</td><td>5.3</td><td>5.5</td><td>5.7</td><td>5.8</td><td>5.7</td><td>5.3</td><td>4.9</td><td>4.5</td><td>4.2</td><td>5.00</td></tr>
 </table>
 
-<P>
+<p>
 Planned improvements include the use of the SOLPOS algorithm for solar 
 geometry calculations and internal computation of aspect and slope.
 
@@ -260,48 +260,48 @@ GRASS users conference in Trento, Italy, September 2002.
 <p>
 Hofierka, J. (1997). Direct solar radiation modelling within an open GIS
 environment. Proceedings of JEC-GI'97 conference in Vienna, Austria, IOS
-Press Amsterdam, 575-584. </p>
+Press Amsterdam, 575-584. 
 <p>
 Jenco, M. (1992). Distribution of direct solar radiation on georelief and
 its modelling by means of complex digital model of terrain (in Slovak). Geograficky
-casopis, 44, 342-355. </p>
+casopis, 44, 342-355. 
 <p>
 Kasten, F. (1996). The Linke turbidity factor based on improved values of
-the integral Rayleigh optical thickness. Solar Energy, 56 (3), 239-244. </p>
+the integral Rayleigh optical thickness. Solar Energy, 56 (3), 239-244. 
 <p>
 Kasten, F., Young, A. T. (1989). Revised optical air mass tables and approximation
-formula. Applied Optics, 28, 4735-4738. </p>
+formula. Applied Optics, 28, 4735-4738. 
 <p>
 Kittler, R., Mikler, J. (1986): Basis of the utilization of solar radiation 
-(in Slovak). VEDA, Bratislava, p. 150. </p>
+(in Slovak). VEDA, Bratislava, p. 150. 
 <p>
 Krcho, J. (1990). Morfometrická analza a digitálne modely georeliéfu
 (Morphometric analysis and digital models of georelief). VEDA,
-Bratislava (in Slovak). </p>
+Bratislava (in Slovak). 
 <p>
 Muneer, T. (1990). Solar radiation model for Europe. Building services engineering
-research and technology, 11, 4, 153-163. </p>
+research and technology, 11, 4, 153-163. 
 <p>
 Neteler, M., Mitasova, H. (2002): Open Source GIS: A GRASS GIS Approach, Kluwer
-Academic Publishers/Springer. </p>
+Academic Publishers/Springer. 
 <p>
 Page, J. ed. (1986). Prediction of solar radiation on inclined surfaces. Solar
 energy R&amp;D in the European Community, series F -- Solar radiation data,
-Dordrecht (D. Reidel), 3, 71, 81-83. </p>
+Dordrecht (D. Reidel), 3, 71, 81-83. 
 <p>
 Page, J., Albuisson, M., Wald, L. (2001). The European solar radiation atlas:
-a valuable digital tool. Solar Energy, 71, 81-83. </p>
+a valuable digital tool. Solar Energy, 71, 81-83. 
 <p>
 Rigollier, Ch., Bauer, O., Wald, L. (2000). On the clear sky model of the
 ESRA - European Solar radiation Atlas - with respect to the Heliosat method.
-Solar energy, 68, 33-48. </p>
+Solar energy, 68, 33-48. 
 <p>
 Scharmer, K., Greif, J., eds., (2000). The European solar radiation atlas,
 Vol. 2: Database and exploitation software. Paris (Les Presses de l'École
-des Mines). </p>
+des Mines). 
 <p>
 Suri, M., Hofierka, J. (2004): A new GIS-based solar radiation model and its
-application to photovoltaic assessments. Transactions in GIS 8, pp. 175-190.</p>
+application to photovoltaic assessments. Transactions in GIS 8, pp. 175-190.
 
 <p>Joint Research Centre: <a href="http://re.jrc.ec.europa.eu/pvgis/">GIS solar radiation database for Europe</a> and
 <a href="http://re.jrc.ec.europa.eu/pvgis/solres/solmod3.htm">Solar radiation and GIS</a>
@@ -320,4 +320,4 @@ Thomas Huld, JRC, Italy <br>
 <a href="MAILTO:suri@geomodel.sk">suri@geomodel.sk</a>
 </address>
 
-<p><i>Last changed: $Date$</i> </p>
+<p><i>Last changed: $Date$</i> 

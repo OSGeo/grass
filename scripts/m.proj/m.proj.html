@@ -1,4 +1,4 @@
-<H2>DESCRIPTION</H2> 
+<h2>DESCRIPTION</h2> 
 
 This program allows a user to convert coordinates from one projection to
 another. Coordinates can be read from one file, converted, and results
@@ -10,59 +10,59 @@ frontend to the <tt><a href="http://proj.maptools.org">PROJ.4</a></tt>
 <em>cs2cs</em> utility. The <b>-i</b> or <b>-o</b> flags make the task
 especially easy for the common problem of converting to or from lat/long
 WGS84.
-<P>
+<p>
 <i>Note</i>: This program does not transform GRASS maps, it is designed to determine
 the equivalent coordinate values of an individual position or list of
 positions. Use <em>v.proj</em> or <em>r.proj</em> to reproject GRASS maps.
 
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 <em>cs2cs</em> expects input data to formatted as "<tt>x y</tt>", so if working
 with latitude-longitude data be sure to send the <tt>x</tt> value first,
 i.e., "<tt>longitude&nbsp;latitude</tt>". Output data will be exported using
 the same convention.
-<P>
+<p>
 <em>cs2cs</em> will treat a third data column as a <tt>z</tt> value (elevation)
 and will modify the value accordingly. This usually translates into small but
 real differences in that data column.
-<P>
+<p>
 <em>cs2cs</em> does not expect the input stream to contain column headings,
 only numbers. If your data file has lines you wish to have passed through
 without being processed, they must start with the '<tt>#</tt>' character.
-<P>
+<p>
 If sending <em>m.proj</em> data from <tt>stdin</tt>, be aware that the data is
 first stored to a temporary file before being processed with <em>cs2cs</em>.
 It is therefore not advisable to send <em>m.proj</em> data from an open data
 stream. The module will stop listening for incoming data after 2 seconds of
 inactivity. You may use the projection parameters gleaned from <em>m.proj</em>'s
 verbose mode (<b>-v</b>) with <em>cs2cs</em> directly in this case.
-<P>
+<p>
 Custom projection parameters can be used via the <b>proj_in</b> and
 <b>proj_out</b> options. Full documentation of the projection parameter
 format may be found on the <tt><a href="http://proj.maptools.org">PROJ.4</a></tt>
 website. Using these options will fully override the default parameters the
 module would normally use.
-<P>
+<p>
 By using the <b>-v</b> verbose flag, the user can see exactly what projection
 parameters will be used in the conversion as well as some other informative
 messages.
-<P>
+<p>
 If output is to lat/long, it will be formatted using <tt>PROJ.4</tt>'s 
 Degree:Minute:Second (DMS) convention of <tt>DDDdMM'SSS.SS"H</tt>. This can be handy
 if you wish to quickly convert lat/long decimal degree data into its DMS
-equivalent.<BR>
+equivalent.<br>
 Alternatively, to have <em>m.proj</em> output data in decimal degrees, use the
 <b>-d</b> flag. This flag can also be used with non-lat/long data to force a
 higher number of decimal places (the <em>cs2cs</em> default is 2).
-<P>
+<p>
 Lat/long output can be converted to GRASS's DMS convention (<tt>DDD:MM:SSS.SSSH</tt>)
 by piping the results of <em>m.proj</em> through the <em>sed</em> stream
 editor as follows.
 <div class="code"><pre>
 m.proj -o | sed -e 's/d/:/g' -e "s/'/:/g"  -e 's/"//g'
 </pre></div>
-<P>
+<p>
 The <em>m.proj</em> module is designed to work seamlessly with point data 
 exported from the GIS with <em>v.out.ascii</em>, as the following example
 shows.
@@ -71,7 +71,7 @@ v.out.ascii bugsites | m.proj -o
 </pre></div>
 
 
-<H2>EXAMPLES</H2>
+<h2>EXAMPLES</h2>
 
 To convert a WGS84 long/lat coordinate to the current map projection using
 the <b>-i</b> flag to set projection parameters automaticlly:
@@ -80,7 +80,7 @@ GRASS> echo "170.510125 -45.868537" | m.proj -i
 2316541.70      5479193.51 1.23
 </pre></div>
 
-<P><BR>
+<p><br>
 The same, but load points from a file named "<tt>waypoints.txt</tt>" and
 continue on to import the results into a GRASS vector points map in the
 current map projection:
@@ -90,14 +90,14 @@ m.proj -i in=waypoints.txt | cut -f1 -d' ' | v.in.ascii out=test_pt fs=tab
 Here the standard UNIX <em>cut</em> tool is used to discard the <tt>z</tt>
 residual.
 
-<P><BR>
+<p><br>
 To convert all coordinates from a vector points map in the current projection
 to WGS84 long/lat, with output in decimal form:
 <div class="code"><pre>
 v.out.ascii bugsites | m.proj -od
 </pre></div>
 
-<P><BR>
+<p><br>
 To transform points from a UTM projection into the Gauss-Kr&uuml;ger Grid
 System, importing and exporting to files:
 
@@ -108,7 +108,7 @@ m.proj <b>proj_in</b>="+proj=utm +name=utm +a=6378137.0 +es=0.006694380 \
     +x_0=3500000.0" <b>input</b>=utm.coord.txt <b>output</b>=new.gk.coord.txt
 </pre></div>
 
-<P>
+<p>
 Projection parameters provided in the above case: "<tt>+proj</tt>" (projection
 type), "<tt>+name</tt>" (projection name), "<tt>+a</tt>" (ellipsoid: equatorial
 radius), "<tt>+es</tt>" (ellipsoid: eccentricity squared), "<tt>+zone</tt>"
@@ -120,13 +120,13 @@ Internally, the underlying
 <a href="http://www.remotesensing.org/proj/"><tt>PROJ.4</tt> projection library</a>
 performs an inverse projection to latitude-longitude and then projects the 
 coordinate list to the target projection.
-<P><BR>
+<p><br>
 <!-- HB 4/2006: I'm leaving this in from the GRASS 5 help page, but is it accurate? -->
 Datum conversions are automatically handled by the <tt>PROJ.4</tt> library if
 "<tt>+datum</tt>" setings are specified on <b>both</b> the input <b>and</b> output
 projections on the command line. The "<tt>+towgs84</tt>" parameter can be used to 
 define either 3 or 7 term datum transform coefficients, satisfying this requirement.
-<P>
+<p>
 If a datum is specified there is no need for the '<tt>+ellps=</tt>' or underlying
 parameters, '<tt>+a=</tt>', '<tt>+es=</tt>', etc.
 <p>
@@ -144,46 +144,46 @@ m.proj <B>proj_in</B>="+proj=tmerc +ellps=modif_airy +lat_0=53.5 +lon_0=-8 +x_0=
     +y_0=250000 +k=1.000035" <B>proj_out</B>="+proj=ll +datum=wgs84" <B>input</B>=wpt.txt
 </pre></div>
 
-<P>
+<p>
 In this example no datum transformation will take place as a datum was not
 specified for the input projection. The datum specified for the output
 projection will thus be silently ignored and may be left out; all that is
 achieved a simple conversion from projected to geodetic co-ordinates,
-keeping the same datum (and thus also the same ellipsoid).</p>
+keeping the same datum (and thus also the same ellipsoid).
 
 <p>
 For more usage examples, see the documentation for the 
 <tt><a href="http://proj.maptools.org">PROJ.4</a></tt> <em>cs2cs</em> program.
 
 
-<H2>REFERENCES</H2>
+<h2>REFERENCES</h2>
 
 [1] Evenden, G.I.  (1990) <a href="http://proj.maptools.org/">Cartographic projection procedures for
 the UNIX environment - a user's manual.</a>  USGS Open-File Report 90-284 (OF90-284.pdf)
 See also there: Interim Report and 2nd Interim Report on Release 4, Evenden 1994).
-<P>
+<p>
 [2] <tt><a href="http://proj.maptools.org">PROJ.4</a></tt> Cartographic Projection Library
 
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM>
-<A HREF="v.proj.html">v.proj</A>,
-<A HREF="r.proj.html">r.proj</A>,
-<A HREF="g.proj.html">g.proj</A>,
-<A HREF="g.setproj.html">g.setproj</A>,
-<A HREF="i.rectify.html">i.rectify</A>,
-<!-- <A HREF="i.rectify3.html">i.rectify3</A> -->
-<A HREF="v.in.ascii.html">v.in.ascii</A>,
-<A HREF="v.out.ascii.html">v.out.ascii</A>
-</EM>
+<em>
+<a href="v.proj.html">v.proj</A>,
+<a href="r.proj.html">r.proj</A>,
+<a href="g.proj.html">g.proj</A>,
+<a href="g.setproj.html">g.setproj</A>,
+<a href="i.rectify.html">i.rectify</A>,
+<!-- <a href="i.rectify3.html">i.rectify3</A> -->
+<a href="v.in.ascii.html">v.in.ascii</A>,
+<a href="v.out.ascii.html">v.out.ascii</A>
+</em>
 
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
-M. Hamish Bowman, Dept. Marine Science, Otago University, New Zealand<BR>
+M. Hamish Bowman, Dept. Marine Science, Otago University, New Zealand<br>
 Functionality inspired by the <em>m.proj</em> and <em>m.proj2</em> modules for
 GRASS GIS 5.
 
-<p><i>Last changed: $Date$</i></p>
+<p><i>Last changed: $Date$</i>
 

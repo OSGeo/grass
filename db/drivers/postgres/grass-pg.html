@@ -15,12 +15,12 @@
 
 The driver name is 'pg'.
 
-<H2>Creating a PostgreSQL database</H2>
+<h2>Creating a PostgreSQL database</h2>
 
 A new database is created with 'createdb', see the PostgreSQL manual
 for details.
 
-<H2>Connecting GRASS to PostgreSQL</H2>
+<h2>Connecting GRASS to PostgreSQL</h2>
 
 <div class="code"><pre>
 # example for connecting to a PostgreSQL server:
@@ -32,19 +32,19 @@ db.tables -p
 </pre></div>
 
 
-<H2>Supported SQL commands</H2>
+<h2>Supported SQL commands</h2>
 
 All SQL commands supported by PostgreSQL.
 
 It's not possible to use C-like escapes (with backslash
 like \n etc) within SQL syntax. 
 
-<H2>Operators available in conditions</H2>
+<h2>Operators available in conditions</h2>
 
 All SQL operators supported by PostgreSQL.
 
 
-<H2>Adding an unique ID column</H2>
+<h2>Adding an unique ID column</h2>
 
 Import vector module require an unique ID column which can
 be generated as follows in a PostgreSQL table:
@@ -69,7 +69,7 @@ COPY t1 FROM 'filename' USING DELIMITERS ',';
 
 <a href="http://www.klaban.torun.pl/prog/pg2xbase/">pg2xbase</a>: 
 DBF to PostgreSQL converter.
-<BR>
+<br>
 
 <h2>Geometry import from PostgreSQL table</h2>
 
@@ -118,43 +118,43 @@ v.info -t test
 <ul>
 <li><a href="http://postgis.refractions.net/download/">PostGIS with shp2pgsql</a>:<br>
  <tt>shp2pgsql -D lakespy2 lakespy2 test > lakespy2.sql</tt>
-<BR><BR>
+<br><br>
 <li><a href="http://e00pg.sourceforge.net/">e00pg</a>: E00 to PostGIS filter,
 see also <em><a href="v.in.e00.html">v.in.e00</a></em>.
-<BR><BR>
+<br><br>
 <li>GDAL/OGR <a href="http://www.gdal.org/ogr/">ogrinfo and ogr2ogr</a>:
 GIS vector format converter and library, e.g. ArcInfo or SHAPE to PostGIS.<br>
   <tt>ogr2ogr -f "PostgreSQL" shapefile ??</tt>
-<BR><BR>
+<br><br>
 </ul>
 
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
 <em>
-<a HREF="db.connect.html">db.connect</a>,
-<a HREF="db.execute.html">db.execute</a>,<BR>
-<a HREF="databaseintro.html">Database management in GRASS GIS</a>,<BR>
-<a HREF="database.html">Help pages for database modules</a>,<BR>
-<a HREF="sql.html">SQL support in GRASS GIS</a>
+<a href="db.connect.html">db.connect</a>,
+<a href="db.execute.html">db.execute</a>,<br>
+<a href="databaseintro.html">Database management in GRASS GIS</a>,<br>
+<a href="database.html">Help pages for database modules</a>,<br>
+<a href="sql.html">SQL support in GRASS GIS</a>
 </em>
-<BR><BR>
+<br><br>
 <em>
-<a href="http://www.PostgreSQL.org">PostgreSQL web site</a>,<BR>
+<a href="http://www.PostgreSQL.org">PostgreSQL web site</a>,<br>
 <a href="http://www.pgadmin.org/">pgAdmin graphical user interface</a>
 </em>
 <p>
 Book: <a href="http://www.postgresql.org/docs/books/awbook.html">PostgreSQL:
-  Introduction and Concepts</a> by Bruce Momjian<BR>
+  Introduction and Concepts</a> by Bruce Momjian<br>
 <em>
-<a href="http://www.postgresql.org/docs/">PostgreSQL Documentation</a><BR>
-<a href="http://techdocs.postgresql.org/">PostgreSQL Technical Documentation</a><BR>
-<a href="http://www.gdal.org/ogr/drv_pg.html">GDAL/OGR PostgreSQL driver documentation</a><BR>
+<a href="http://www.postgresql.org/docs/">PostgreSQL Documentation</a><br>
+<a href="http://techdocs.postgresql.org/">PostgreSQL Technical Documentation</a><br>
+<a href="http://www.gdal.org/ogr/drv_pg.html">GDAL/OGR PostgreSQL driver documentation</a><br>
 <a href="http://mapserver.gis.umn.edu/cgi-bin/wiki.pl?MapServerWiki">MapServer Wiki</a>
 </em>
 
-<p><i>Last changed: $Date$</i></p>
+<p><i>Last changed: $Date$</i>
 <HR>
-<BR><a href=index.html>Help Index</a>
+<br><a href=index.html>Help Index</a>
 </body>
 </html>

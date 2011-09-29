@@ -13,11 +13,11 @@ Before running <em>v.to.rast</em>, the user should
 therefore ensure that the current geographic region is
 correctly set and that the region resolution is at the
 desired level.
-<P>
+<p>
 Either the <em><b>column</b></em> parameter or the <em><b>value</b></em>
 parameter must be specified.  The <em><b>use</b></em> option may be 
 specified alone when using the <em>dir</em> option.
-<P>
+<p>
 <em><b>use</b></em> options are:
 <ul>
 <LI>
@@ -31,22 +31,22 @@ specified alone when using the <em>dir</em> option.
 <LI>
 <em>dir</em>  - output as flow direction in degrees (lines only)
 </ul>
-<P>
+<p>
 The <em><b>column</b></em> parameter uses an existing column from the vector map
 database table as the category value in the output raster map. Existing table 
 columns can be shown by using <em><a href="db.describe.html">db.describe</a></em>.
-<P>
+<p>
 An empty raster map layer will be created if the vector map layer has not
 been assigned category/attribute labels (e.g., through use of 
 <a href="v.category.html">v.category option=add</a>). 
-<P>
+<p>
 Otherwise:
 <ul>
 <LI>
 Labeled areas and/or centroids will produce filled raster coverages with edges 
 that straddle the original area boundary <b>as long as the boundary is NOT 
 labeled</b>.
-<BR>(Use <tt>v.category option=del type=boundary</tt> to remove.)
+<br>(Use <tt>v.category option=del type=boundary</tt> to remove.)
 <LI>
 Labeled lines and boundaries will produce lines of raster cells which touch the 
 original vector line. This tends to be more aggressive than area-only conversions.
@@ -54,11 +54,11 @@ original vector line. This tends to be more aggressive than area-only conversion
 Points and orphaned centroids will be converted into single cells on the
 resultant raster map.
 </ul>
-<P>
-<P>
+<p>
+<p>
 <b>Flow directions</b> are given in degrees counterclockwise from east.
-<P>
-<P>
+<p>
+<p>
 Raster category labels are supported for all of <em>use=</em> except <em>use=z</em>.
 
 <h2>EXAMPLES</h2>
@@ -77,15 +77,15 @@ Column 3: WIDTH
 v.to.rast in=vect_map out=raster_map col=SPEED
 </pre></div>
 
-<P>
-<P>
+<p>
+<p>
 <em>2. Calculate stream directions from a river vector map (Spearfish)</em><br>
 <div class="code"><pre>
 v.to.rast in=streams out=streamsdir use=dir
 </pre></div>
 
-<P>
-<P>
+<p>
+<p>
 <em>3. Convert a vector polygon map to raster including descriptive labels (Spearfish)</em><br>
 <div class="code"><pre>
 v.to.rast in=fields out=myfields use=attr col=cat labelcol=label
@@ -94,8 +94,8 @@ r.category myfields
 
 <h2>SEE ALSO</h2>
 <em>
-<a HREF="db.describe.html">db.describe</a>,
-<a HREF="v.category.html">v.category</a>
+<a href="db.describe.html">db.describe</a>,
+<a href="v.category.html">v.category</a>
 </em>
 <br>
 
@@ -111,5 +111,5 @@ GRASS 6.3 code cleanup and label support: Brad Douglas
 <p>
 <p>
 <i>Last changed: $Date$</i>
-</p>
+
 

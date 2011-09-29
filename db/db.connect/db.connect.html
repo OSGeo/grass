@@ -5,17 +5,17 @@ These parameters are then taken as default values by modules so that the
 user does not need to enter the parameters each time.
 
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 Values are stored in the mapset's <tt>VAR</tt> file;
 the connection is not tested for validity.
-<P>
+<p>
 The <b>-p</b> flag will display the current connection parameters. 
-<P>
+<p>
 The <b>-c</b> flag will silently check if the connection parameters have
 been set, and if not will set them to use GRASS's default values.
 (useful in scripts before you attempt to create a new database table)
-<P>
+<p>
 To connect a vector map to a database table, use <em>v.db.connect</em>
 or <em>v.db.addtable</em>.
 
@@ -42,7 +42,7 @@ db.connect driver=sqlite database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db'
 db.connect -p
 db.tables -p
 </pre></div>
-<P>
+<p>
 The SQLite database is created automatically when used the first time.
 
 
@@ -109,13 +109,13 @@ db.tables -p
 <h2>SEE ALSO</h2>
 
 <em>
-<a HREF="db.columns.html">db.columns</a>,
-<a HREF="db.drivers.html">db.drivers</a>,
-<a HREF="db.login.html">db.login</a>,
-<a HREF="db.tables.html">db.tables</a>,
-<a HREF="v.db.addtable.html">v.db.addtable</a>,
-<a HREF="v.db.connect.html">v.db.connect</a>,
-<a HREF="sql.html">GRASS SQL interface</a></em>
+<a href="db.columns.html">db.columns</a>,
+<a href="db.drivers.html">db.drivers</a>,
+<a href="db.login.html">db.login</a>,
+<a href="db.tables.html">db.tables</a>,
+<a href="v.db.addtable.html">v.db.addtable</a>,
+<a href="v.db.connect.html">v.db.connect</a>,
+<a href="sql.html">GRASS SQL interface</a></em>
 
 
 <h2>AUTHOR</h2>

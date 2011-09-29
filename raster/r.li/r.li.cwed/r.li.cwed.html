@@ -1,65 +1,65 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>r.li.cwed</EM> (contrast weighted edge density) calculates the edge density
+<em>r.li.cwed</em> (contrast weighted edge density) calculates the edge density
 between patch types specified:
-<P><img src="rlicwed_formula.png"> </P>
-<P>with:
+<p><img src="rlicwed_formula.png"> 
+<p>with:
 
 <ul>
-<li> <B>k</B>: attribute<BR>
-<li> <B>m</B>: number of non-null attributes in the sampling area<BR>
-<li> <B>e<small><small>ik</small></small></B>: total length of edge in landscape between patch types i and k<BR>
-<li><B> d<small><small>ik</small></small></B>: dissimilarity (edge contrast weight) between patch types i and k<BR>
-<li> <B>Area</B>: total landscape area<BR>
-</ul><BR>
+<li> <B>k</B>: attribute<br>
+<li> <B>m</B>: number of non-null attributes in the sampling area<br>
+<li> <B>e<small><small>ik</small></small></B>: total length of edge in landscape between patch types i and k<br>
+<li><B> d<small><small>ik</small></small></B>: dissimilarity (edge contrast weight) between patch types i and k<br>
+<li> <B>Area</B>: total landscape area<br>
+</ul><br>
 
 The input file have a row for each couple of patch type that we want to
-consider in the calculation. Each row must to have this syntax:<BR>
-<small>patchType1,patchType2,dissimilarityBetweenPatchType1andPatchType2</small><BR>
+consider in the calculation. Each row must to have this syntax:<br>
+<small>patchType1,patchType2,dissimilarityBetweenPatchType1andPatchType2</small><br>
 
-<H2>EXAMPLES</H2>
+<h2>EXAMPLES</h2>
 To calculate mean pixel attribute index on map my_map, using
 my_conf configuration file and saving results in
-my_out file run:<BR>
+my_out file run:<br>
 <div class="code"><pre>
 r.li.cwed input=my_map conf=my_conf path=my_file output=my_out
 </pre></div>
 
-<BR>Example of input file:<BR>
-12,16,0.65<BR>
-44,123,0.32<BR>
-56,12,0.54<BR>
-23,66,0.99<BR>
+<br>Example of input file:<br>
+12,16,0.65<br>
+44,123,0.32<br>
+56,12,0.54<br>
+23,66,0.99<br>
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 Do not use absolute path names for output files. They are raster if
 moving window disposition was selected, otherwise they are in
 ~/.r.li/output folder.
-<BR>
+<br>
 If the raster is full of null value it is considered to have 0 patch and CWED=0.
 If Area is 0 r.li.cwed returns -1. This is possible
-only if the map is masked.<BR>
-If you want to have null values instead run <BR>
+only if the map is masked.<br>
+If you want to have null values instead run <br>
 <div class="code"><pre>
 r.null setnull=-1 map=my_map
 </pre></div>
-after index calculation.<BR>
-<BR>
+after index calculation.<br>
+<br>
 
-<H2>REFERENCES</H2>
+<h2>REFERENCES</h2>
 McGarigal, K., and B. J. Marks. 1995. FRAGSTATS: spatial pattern
 analysis program for quantifying landscape structure. USDA For. Serv.
 Gen. Tech. Rep. PNW-351.
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM><A HREF="r.li.html">r.li</A></EM> package overview <BR>
-<EM><A HREF="r.li.daemon.html">r.li.daemon</A></EM><BR>
-<EM><A HREF="r.li.setup.html">r.li.setup</A></EM>
+<em><a href="r.li.html">r.li</A></em> package overview <br>
+<em><a href="r.li.daemon.html">r.li.daemon</A></em><br>
+<em><a href="r.li.setup.html">r.li.setup</A></em>
 
-<H2>AUTHORS</H2>
-Serena Pallecchi student of Computer Science University of Pisa (Italy).<BR>
+<h2>AUTHORS</h2>
+Serena Pallecchi student of Computer Science University of Pisa (Italy).<br>
 Commission from Faunalia Pontedera (PI), Italy (www.faunalia.it)
 
-<p><i>Last changed: $Date$</i></p>
+<p><i>Last changed: $Date$</i>
 

@@ -24,7 +24,7 @@ with positive values on a background of 0's in the
 
 <h2>NOTE</h2>
 
-<em>r.thin</em> only creates raster map layers.  You will need to run 
+<em>r.thin</em> only creates raster map layers.  The user will need to run 
 <em><a href="r.to.vect.html">r.to.vect</a></em>
 on the resultant raster map to create a vector 
 (<em><a href="wxGUI.Vector_Digitizing_Tool.html">wxGUI vector digitizer</a></em>) map layer.
@@ -51,9 +51,7 @@ definition Jang and Chin give of the thinning process is
 object while retaining any pixels whose removal would alter
 the connectivity or shorten the legs of the sceleton."
 
-
 <p>
-
 The sceleton is finally thinned when the thinning process
 converges; i.e., "no further pixels can be removed without
 altering the connectivity or shortening the sceleton legs"

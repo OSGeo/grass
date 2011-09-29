@@ -1,25 +1,25 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
 
-<EM>s.in.ascii</EM> converts an ASCII listing of site
+<em>s.in.ascii</em> converts an ASCII listing of site
 locations and category labels into GRASS vector format.
 
-<P>
+<p>
 
 Input can be entered via standard input or from the file
-<B>input=</B><EM>name</EM>. Each line of input should
+<B>input=</B><em>name</em>. Each line of input should
 contain the easting, northing, and either the category value
 or category label associated with a site.  The
-<B>fs=</B><EM>name</EM> option (where <EM>name</EM> is
+<B>fs=</B><em>name</em> option (where <em>name</em> is
 either a character, a space, or a tab) can be used to
 specify the use of a particular field separator between
 these three input fields. This is useful when input is
 obtained from other programs (see NOTES, below).  Output is
-stored in the vector map <B>output=</B><EM>name</EM>.
+stored in the vector map <B>output=</B><em>name</em>.
 
-<P>
+<p>
 
-The GRASS program <EM><a href="s.out.ascii.html">s.out.ascii</a></EM>
+The GRASS program <em><a href="s.out.ascii.html">s.out.ascii</a></em>
 can be used to perform the reverse function, converting a file in GRASS
 vector sites format into an ASCII listing of eastings, northings, and 
 category labels associated with site locations.
@@ -28,38 +28,38 @@ category labels associated with site locations.
 <H3>Parameters:</H3>
 
 <DL>
-<DT><B>output=</B><EM>name</EM>
+<DT><B>output=</B><em>name</em>
 <DD>Name of the new GRASS site list file to be output. 
-<DT><B>input=</B><EM>name</EM>
+<DT><B>input=</B><em>name</em>
 <DD>Name of an existing ASCII file containing site locations and labels. 
-<DT><B>d=</B><EM>value</EM>
+<DT><B>d=</B><em>value</em>
 <DD>number of dimensions (default=2)
-<DT><B>fs=</B><EM>character|space|tab</EM>
+<DT><B>fs=</B><em>character|space|tab</em>
 <DD>The field separator separating the easting, northing, and category label 
-    in each line of the <EM>input</EM> file. 
+    in each line of the <em>input</em> file. 
     The field separator can be a character, a space, or a tab. 
-<BR>
+<br>
     Default: space 
-<DT><B>date=</B><EM>timestamp</EM>[/<EM>timestamp</EM>]
+<DT><B>date=</B><em>timestamp</em>[/<em>timestamp</em>]
 <DD>String specifying timestamp or timestamp range.
 </DL>
 
-<P>
+<p>
 
-<EM>s.in.ascii</EM> can be run either non-interactively or
+<em>s.in.ascii</em> can be run either non-interactively or
 interactively.  The program will be run non-interactively
 if the user specifies a name to be assigned to the
 <B>sites</B> file output, the name of an existing ASCII
 file containing <B>input</B>, and (optionally) a field
 separator <B>fs</B> appearing in the <B>input</B> file.
 
-<P>
+<p>
 
 Alternately, the user can simply type <B>s.in.ascii</B> on
 the command line, without program arguments. In this case,
 the user will be prompted for parameter values using the
 standard GRASS parser interface described in the manual
-entry for <EM><a href="parser.html">parser</a></EM>. If 
+entry for <em><a href="parser.html">parser</a></em>. If 
 the user does not specify the name of an <B>input</B> 
 file containing site locations and category attributes,
 these should be entered to the program via standard input. 
@@ -67,27 +67,27 @@ The <B>d</B> parameter allows the user to specify that more
 than 2 dimensions will be imported. Otherwise the third (or 
 further) column in the <B>input</B> file will be treated as an attribute.
 
-<P>To define a <B>date</B> (timestamp), several date strings are accepted.
-Please see <EM><A HREF="r.timestamp.html">r.timestamp</A></EM> for details.
+<p>To define a <B>date</B> (timestamp), several date strings are accepted.
+Please see <em><a href="r.timestamp.html">r.timestamp</A></em> for details.
 
 <p>
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 <B>Importing from other GRASS programs</B>
 <p>
 Other GRASS programs can be used to produce output in a
-format suitable for input to <EM>s.in.ascii</EM>. For
+format suitable for input to <em>s.in.ascii</em>. For
 example, the user might pipe output produced by
-<EM><a href="d.where.html">d.where</a></EM> into 
-<EM>s.in.ascii</EM> to create a site
-list file called <EM>my.sites</EM> containing site
+<em><a href="d.where.html">d.where</a></em> into 
+<em>s.in.ascii</em> to create a site
+list file called <em>my.sites</em> containing site
 locations pointed to with the mouse, as illustrated below.
 In this example it is unnecessary to specify the field
-separator used in the input, since <EM>d.where</EM> output
+separator used in the input, since <em>d.where</em> output
 separates the easting and northing values with spaces, and
 spaces are the default field separator assumed by
-<EM>s.in.ascii</EM>.
-<P>
+<em>s.in.ascii</em>.
+<p>
 <DL>
 <DD><B>d.where</B> | <B>s.in.ascii output=</B>my.sites
 </DL>
@@ -96,7 +96,7 @@ spaces are the default field separator assumed by
 <p>
 Data may be imported from many spreadsheet programs by saving the spreadsheet
 as a comma separated variable (.csv) text file, and then using 
-the "<b>fs=</b><EM>,</EM>" command line parameter with <EM>s.in.ascii</EM>.
+the "<b>fs=</b><em>,</em>" command line parameter with <em>s.in.ascii</em>.
 <p>
 <b>Importing latitude/longitude data</b>
 <p>
@@ -131,15 +131,15 @@ In this example, we will work with the following site list:
 This data has three dimensions (assume easting, northing, and
 elevation),  five string attributes, and one decimal attribute.
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM><A HREF="d.vect.html">d.sites</A></EM>,
-<EM><A HREF="d.what.vect.html">d.what.vect</A></EM>,
-<EM><A HREF="d.where.html">d.where</A></EM>,
-<EM><A HREF="r.timestamp.html">r.timestamp</A></EM>,
-<EM><A HREF="s.out.ascii.html">s.out.ascii</A></EM>
+<em><a href="d.vect.html">d.sites</A></em>,
+<em><a href="d.what.vect.html">d.what.vect</A></em>,
+<em><a href="d.where.html">d.where</A></em>,
+<em><a href="r.timestamp.html">r.timestamp</A></em>,
+<em><a href="s.out.ascii.html">s.out.ascii</A></em>
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 Michael Shapiro,  
 U.S. Army Construction Engineering 

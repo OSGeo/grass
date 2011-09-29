@@ -1,7 +1,7 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
 <p>
-<EM>v.surf.idw</EM> fills a raster matrix with interpolated
+<em>v.surf.idw</em> fills a raster matrix with interpolated
 values generated from a set of irregularly spaced data
 points using numerical approximation (weighted averaging)
 techniques. The interpolated value of a cell is determined
@@ -11,14 +11,14 @@ methods, numerical approximation allows representation of
 more complex surfaces (particularly those with anomalous
 features), restricts the spatial influence of any errors,
 and generates the interpolated surface from the data
-points.</p>
+points.
 
-<P>
+<p>
 This program allows the user to use a GRASS vector point map file,
-rather than a raster map layer, as input.</p>
+rather than a raster map layer, as input.
 
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 <p>
 The amount of memory used by this program is related to the number
@@ -27,14 +27,14 @@ very dense (i.e., contains many data points), the program may
 not be able to get all the memory it needs from the
 system.  The time required to execute is related to the 
 resolution of the current region, after an initial delay 
-determined by the time taken to read the input vector points map.</p>
+determined by the time taken to read the input vector points map.
 
 <p>
 To read and interpolate from the elevation co-ordinates as 3rd dimension
 of the vector geometry, use the <em>-z</em> flag. In this case no <em>column</em>
-parameter has to be specified.</p>
+parameter has to be specified.
 
-<P>
+<p>
 If the user has a mask set, then interpolation is only done
 for those cells that fall within the mask. However, all
 vector points in the current region are used even
@@ -43,37 +43,37 @@ region are not used in the interpolation. A larger region may
 be set and a mask used to limit interpolation to a smaller area
 if it is desired to use vector points from outside the region in the
 interpolation. The <em>-n</em> flag may also be used to
-achieve a similar result.</p>
+achieve a similar result.
 
 <p>
-If more than <EM>count</EM> points fall into one target raster cell, 
+If more than <em>count</em> points fall into one target raster cell, 
 the mean of all the site values will determine the cell value (unless
-the -n flag is specified, in which case only the <EM>count</EM> 
-points closest to the centre of the cell will be interpolated).</p>
+the -n flag is specified, in which case only the <em>count</em> 
+points closest to the centre of the cell will be interpolated).
 
-<P>
-By setting <EM>npoints=1</EM>, the module can be used 
-to calculate raster Voronoi diagrams (Thiessen polygons).</p>
+<p>
+By setting <em>npoints=1</em>, the module can be used 
+to calculate raster Voronoi diagrams (Thiessen polygons).
 
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM><A HREF="d.vect.html">d.vect</A></EM><br>
-<EM><A HREF="g.region.html">g.region</A></EM><br>
-<EM><A HREF="r.surf.contour.html">r.surf.contour</A></EM><br>
-<EM><A HREF="r.surf.idw.html">r.surf.idw</A></EM><br>
-<EM><A HREF="r.surf.idw2.html">r.surf.idw2</A></EM><br>
-<EM><A HREF="r.surf.gauss.html">r.surf.gauss</A></EM><br>
-<EM><A HREF="r.surf.fractal.html">r.surf.fractal</A></EM><br>
-<EM><A HREF="r.surf.random.html">r.surf.random</A></EM><br>
-<EM><A HREF="v.surf.rst.html">v.surf.rst</A></EM>
+<em><a href="d.vect.html">d.vect</A></em><br>
+<em><a href="g.region.html">g.region</A></em><br>
+<em><a href="r.surf.contour.html">r.surf.contour</A></em><br>
+<em><a href="r.surf.idw.html">r.surf.idw</A></em><br>
+<em><a href="r.surf.idw2.html">r.surf.idw2</A></em><br>
+<em><a href="r.surf.gauss.html">r.surf.gauss</A></em><br>
+<em><a href="r.surf.fractal.html">r.surf.fractal</A></em><br>
+<em><a href="r.surf.random.html">r.surf.random</A></em><br>
+<em><a href="v.surf.rst.html">v.surf.rst</A></em>
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 Michael Shapiro,  
 U.S. Army Construction Engineering 
 Research Laboratory
-<BR>
+<br>
 Improved algorithm (indexes points according to cell and ignores
 points outside current region) by Paul Kelly
 
