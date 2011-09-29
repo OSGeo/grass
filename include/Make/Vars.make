@@ -8,14 +8,12 @@ endif
 endif
 
 C_SOURCES    := $(wildcard *.c)
-CC_SOURCES   := $(wildcard *.cc)
 CPP_SOURCES  := $(wildcard *.cpp)
 LEX_SOURCES  := $(wildcard *.l)
 YACC_SOURCES := $(wildcard *.y)
 
 AUTO_OBJS := \
 	$(subst .c,.o,$(C_SOURCES)) \
-	$(subst .cc,.o,$(CC_SOURCES)) \
 	$(subst .cpp,.o,$(CPP_SOURCES)) \
 	$(subst .l,.yy.o,$(LEX_SOURCES)) \
 	$(subst .y,.tab.o,$(YACC_SOURCES))
