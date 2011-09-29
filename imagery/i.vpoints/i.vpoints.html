@@ -63,13 +63,13 @@ The first prompt in the program asks for the imagery group to
 be registered . . .
 
 
-<PRE>
+<pre>
      Enter imagery group to be registered
      Enter 'list' for a list of existing imagery groups
      Enter 'list -f' for a verbose listing
      Hit RETURN to cancel request
      &gt;
-</PRE>
+</pre>
 
 For example,   
 
@@ -79,14 +79,14 @@ For example,
 
 might produce the following response:
 
-<PRE>
+<pre>
      &lt;list&gt;
      Available groups
      - - - - - - - - - - - - - - - - - - - - - - - - - -
      test
      - - - - - - - - - - - - - - - - - - - - - - - - - -
      hit RETURN to continue --&gt;
-</PRE>
+</pre>
 whereas,  
 <dl>
 <dd>&gt;<b>list -f</b>       
@@ -94,7 +94,7 @@ whereas,
 
 might produce the following response
 
-<PRE>
+<pre>
      Available groups
      - - - - - - - - - - - - - - - - - - - - - - - - - -
      test
@@ -102,16 +102,16 @@ might produce the following response
          res2 in tifftest
      - - - - - - - - - - - - - - - - - - - - - - - - - -
      hit RETURN to continue --&gt;
-</PRE>
+</pre>
 
 The imagery group entered above should contain the files
 that you wish to rectify.  After entering the group to be
 registered, the terminal screen displays the message:
-<PRE>
+<pre>
      &gt;test
      &lt;test&gt;
      Use mouse now . . .
-</PRE>
+</pre>
 And the color graphics monitor displays the following
 screen:
 
@@ -161,29 +161,29 @@ layer.
 "refresh" or re-draw the displayed vector data. This function will
 erase all outlines showing the limits of previously zoomed areas. 
 A "yes/no" roompt will appear:
-<PRE>
+<pre>
      Refresh Map ?       NO   YES
-</PRE>
+</pre>
 <p>
 <b>Zoom</b>
 <p>
      To enlarge a raster or vector image, place the mouse cross
 hairs on the word zoom on the main menu and press the left button. 
 The following menu will be displayed at the bottom. of the screen:
-<PRE>
+<pre>
      CANCEL   BOX   POINT      Select type of zoom
-</PRE>
+</pre>
 You have the option to identify the map extent of the zoom window
 using either the mouse to define a box, or the mouse to mark a
 center point from which to enlarge the image.  The box option first
 prompts you to identify a starting corner for the zoom region and
 then allows you to define the area to be zoomed using a rubber band
 box.  The prompts appear as follows...
-<PRE>
+<pre>
      CANCEL    Mark the first corner of region
 
      CANCEL     Define the region
-</PRE>
+</pre>
 After marking the first corner of the region to be enlarged, hold
 down the left button and move the mouse to change the size and
 shape of the rubber band box.  After defining the area to be
@@ -225,13 +225,13 @@ point on the image to be marked (you will probably have to ZOOM to
 find the exact spot) and press the left hand button on the mouse. 
 A diamond shaped symbol will be marked on the image.  The text
 monitor will display the following screen:
-<PRE>
+<pre>
           Point 1 marked on the image at
           East:  1023.77
           North:  -164.41
 
           Enter coordinates as east north:
-</PRE>
+</pre>
 <b>Analyze</b>
 <p>
 
@@ -241,7 +241,7 @@ order), the RMS error of the points marked on the image can be
 checked.  This is done by placing the cross hairs on the word
 ANALYZE on the main menu at the bottom of the monitor.  The
 following error report is superimposed on the monitor:
-<PRE>
+<pre>
 
    error                      image                target
   #    col  row target   east      north       east      north 
@@ -252,7 +252,7 @@ following error report is superimposed on the monitor:
   .
   .
           Overall rms error  76.85
-</PRE>
+</pre>
 
      The RMS error for the image being rectified is recorded under
 the column "error" and subTITLEd "row' and "col".  In the above
@@ -282,10 +282,10 @@ transformation matrix.  However, it can be retrieved within
 described above.
 <p>
 The following menu appears at the bottom of the monitor:
-<PRE>
+<pre>
    DONE   PRINT   FILE   OVERLAY   DELETE ON       Transformation -
 -&gt;   1st ORDER   Double click on point to be DELETED
-</PRE>
+</pre>
 Selecting DELETE ON will toggle the option to DELETE OFF, the
 toggle option is used to allow the user to physically remove a
 control point from the POINTS file instead of just flagging it as
@@ -299,14 +299,14 @@ the selected vector map data on top of the raster image contained
 in the upper left window of the color screen.  An inverse
 coordinate transformation is performed using the currently active
 order of transformation (i.e., first, second, or third).
-<PRE>
+<pre>
      Overlay vectors on raster image   NO   YES
-</PRE>
+</pre>
 By selecting the 1st ORDER option, the user may select the order of
 transformation desired:
-<PRE>
+<pre>
      Select order of transformation --&gt; 1st Order 2nd Order 3rd Order
-</PRE>
+</pre>
 The program will immediately recalculate the RMSE and the number of
 points required.
 <p>
