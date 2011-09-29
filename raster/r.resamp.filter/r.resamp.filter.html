@@ -3,12 +3,12 @@
 <p>
 <em>r.resamp.filter</em> resamples an input raster, filtering the
 input with an analytic kernel.
-</p>
+
 <p>
 All of the kernels specified by the filter= option are multiplied
 together. Typical usage will use either a single kernel or an infinite
 kernel along with a finite window.
-</p>
+
 
 <h2>NOTES</h2>
 
@@ -16,26 +16,26 @@ kernel along with a finite window.
 Resampling modules (<em>r.resample, r.resamp.stats, r.resamp.interp,
 r.resamp.rst, r.resamp.filter</em>) resample the map to match the
 current region settings.
-</p>
+
  
 <p>
 When using a kernel which can have negative values (sinc, Lanczos),
 the <em>-n</em> flag should be used. Otherwise, extreme values can
 arise due to the total weight being close (or even equal) to zero.
-</p>
+
  
 <p>
 Kernels with infinite extent (Gauss, normal, sinc, Hann, Hamming,
 Blackman) must be used in conjunction with a finite windowing function
 (box, Bartlett, Hermite, Lanczos)
-</p>
+
 
 <p>
 For longitude-latitude locations, the interpolation algorithm is based on
 degree fractions, not on the absolute distances between cell centers.  Any
 attempt to implement the latter would violate the integrity of the
 interpolation method.
-</p>
+
 
 
 <h2>SEE ALSO</h2>

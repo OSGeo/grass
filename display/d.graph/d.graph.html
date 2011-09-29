@@ -1,35 +1,35 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>d.graph</EM>
+<em>d.graph</em>
 draws graphics that are described either from standard input (default), 
 or within a file (if an <b>input</b> file name is identified on the 
 command line). If graphics commands are entered from standard input, 
-a <EM>CTRL-d</EM> is used to signal the end of input to <EM>d.graph</EM>.
+a <em>CTRL-d</em> is used to signal the end of input to <em>d.graph</em>.
 Coordinates are given either as a percentage of frame height and width
 (default) or in geographic coordinates (with the <B>-m</B> flag).
-<P>
+<p>
 
 The program can be run interactively or non-interactively. 
 The user can run the program completely non-interactively 
 by specifying the name of a graphics file containing the 
-<EM>d.graph</EM> graphics commands. If run non-interactively the
-<EM>d.graph</EM> command is saved to the display's dedraw history.
+<em>d.graph</em> graphics commands. If run non-interactively the
+<em>d.graph</em> command is saved to the display's dedraw history.
 
 The user can also elect to run the program partially interactively, 
-by specifying any/all of the parameters <EM>except</EM> 
-the graphics file <B>input=</B><EM>name</EM> parameter on the command line. 
-In this case, <EM>d.graph</EM> will expect the user to input <EM>d.graph</EM> 
+by specifying any/all of the parameters <em>except</em> 
+the graphics file <B>input=</B><em>name</em> parameter on the command line. 
+In this case, <em>d.graph</em> will expect the user to input <em>d.graph</em> 
 graphics commands from standard input (i.e., the keyboard) and 
 will (silently) prompt the user for these graphics commands. 
 
-<P>
+<p>
 Alternately, the user can simply type <B>d.graph</B> on the command line, 
 and be prompted for the values of all parameters<!-- (the user can still 
 input graphics commands from either an input file or standard input 
 using this form)-->. In this case, the user is presented with the standard 
 GRASS GUI interface.
 
-<P>
+<p>
 The default coordinate system used is 0-100 percent of the active frame 
 in x and similarly 0-100 in y,
 regardless of the graphics monitor display frame size and aspect. 
@@ -38,11 +38,11 @@ monitor display frame. All values may be floating point.
 If the <B>-m</B> flag is given, geographic coordinates will be used instead.
 
 
-<H2>COMMANDS</H2>
+<h2>COMMANDS</h2>
 
-<P>
+<p>
 The graphics language is simple, and uses the following commands: 
-<BR>
+<br>
 <DL>
 <DD>[
 <a href="#comment">#</a>&nbsp;|
@@ -62,117 +62,117 @@ The graphics language is simple, and uses the following commands:
 
 
 <DL>
-<DT><a name="comment"></a><B>#</B> <EM>comment</EM> 
+<DT><a name="comment"></a><B>#</B> <em>comment</em> 
 <DD>A line of comment which is ignored in the processing. 
 
-<DT><a name="move"></a><B>move</B> <EM>xpos ypos</EM> 
-<DD>The current location is updated to <EM>xpos ypos</EM>. 
+<DT><a name="move"></a><B>move</B> <em>xpos ypos</em> 
+<DD>The current location is updated to <em>xpos ypos</em>. 
 
 Unless the <B>-m</B> flag is used,
 values are stated as a percent of the active display frame's 
-horizontal (<EM>xpos</EM>) and vertical (<EM>ypos</EM>) size, 
+horizontal (<em>xpos</em>) and vertical (<em>ypos</em>) size, 
 and may be floating point values. Values are between 0-100. 
-<B>Note.</B> A space must separate <EM>xpos</EM> and <EM>ypos</EM>.
+<B>Note.</B> A space must separate <em>xpos</em> and <em>ypos</em>.
 
-<DT><a name="draw"></a><B>draw</B> <EM>xpos ypos</EM> 
+<DT><a name="draw"></a><B>draw</B> <em>xpos ypos</em> 
 <DD>A line is drawn in the current color from the current location to the new 
-location <EM>xpos ypos</EM>, which then becomes the current location. 
+location <em>xpos ypos</em>, which then becomes the current location. 
 Unless the <B>-m</B> flag is used,
 values are stated as a percent of the active display frame's 
-horizontal (<EM>xpos</EM>) and vertical (<EM>ypos</EM>) size, 
+horizontal (<em>xpos</em>) and vertical (<em>ypos</em>) size, 
 and may be floating point values. Values are between 0-100. 
-<B>Note.</B> A space must separate <EM>xpos</EM> and <EM>ypos</EM>. 
+<B>Note.</B> A space must separate <em>xpos</em> and <em>ypos</em>. 
 
 <DT><a name="polygon"></a><B>polygon</B> 
-<BR>&nbsp;&nbsp;<EM> xpos ypos</EM> 
-<BR>&nbsp;&nbsp;<EM> xpos ypos</EM> 
-<BR>&nbsp;&nbsp;... 
+<br>&nbsp;&nbsp;<em> xpos ypos</em> 
+<br>&nbsp;&nbsp;<em> xpos ypos</em> 
+<br>&nbsp;&nbsp;... 
 
-<DD>The coordinates appearing beneath the word <EM>polygon</EM>, 
+<DD>The coordinates appearing beneath the word <em>polygon</em>, 
 one pair per line, 
 circumscribe a polygon that is to be filled with the current color. 
 
 <DT><a name="polyline"></a><B>polyline</B> 
-<BR>&nbsp;&nbsp;<EM> xpos ypos</EM> 
-<BR>&nbsp;&nbsp;<EM> xpos ypos</EM> 
-<BR>&nbsp;&nbsp;... 
+<br>&nbsp;&nbsp;<em> xpos ypos</em> 
+<br>&nbsp;&nbsp;<em> xpos ypos</em> 
+<br>&nbsp;&nbsp;... 
 
-<DD>The coordinates appearing beneath the word <EM>polyline</EM>, 
+<DD>The coordinates appearing beneath the word <em>polyline</em>, 
 one pair per line, 
 circumscribe a polygon that is not to be filled with color. 
 
-<DT><a name="color"></a><B>color</B> <EM>color</EM> 
+<DT><a name="color"></a><B>color</B> <em>color</em> 
 <DD>Sets the current color to that stated; subsequent graphics will be drawn 
 in the stated color, until the current color is set to a different color. 
-Options are <EM>red</EM>, 
-<EM>orange</EM>,
-<EM>yellow</EM>,
-<EM>green</EM>,
-<EM>blue</EM>,
-<EM>indigo</EM>,
-<EM>violet</EM>,
-<EM>brown</EM>,
-<EM>magenta</EM>,
-<EM>gray</EM>,
-<EM>white</EM>,
-<EM>black</EM>,
+Options are <em>red</em>, 
+<em>orange</em>,
+<em>yellow</em>,
+<em>green</em>,
+<em>blue</em>,
+<em>indigo</em>,
+<em>violet</em>,
+<em>brown</em>,
+<em>magenta</em>,
+<em>gray</em>,
+<em>white</em>,
+<em>black</em>,
 an R:G:B triplet (separated by colons),
 or the word "none" (draws in the default background color).
 
-<DT><a name="text"></a><B>text</B> <EM>line-of-text</EM> 
+<DT><a name="text"></a><B>text</B> <em>line-of-text</em> 
 <DD>The stated text is drawn at the current location using the current color, 
 and the new current location is then positioned at the end of the text string. 
 
 <a name="size"></a>
-<DT><B>size</B> <EM>xper yper</EM> 
+<DT><B>size</B> <em>xper yper</em> 
 <DD>Subsequent text will be drawn such that the text is 
-<EM>xper</EM> percent of the graphics monitor display frame wide and 
-<EM>yper</EM> percent of the frame high. By default, the text size is set to
+<em>xper</em> percent of the graphics monitor display frame wide and 
+<em>yper</em> percent of the frame high. By default, the text size is set to
 5 percent of the active frame's width and 5 percent of the frame's height.
 If only one value is given, then that value will be used for both x and y 
 scaling.
-<BR>
-<B>Note.</B> A space must separate <EM>xper</EM> and <EM>yper</EM>.
+<br>
+<B>Note.</B> A space must separate <em>xper</em> and <em>yper</em>.
 
-<DT><a name="symbol"></a><B>symbol</B> <EM>type size xper yper [line_color [fill_color]]</EM>
+<DT><a name="symbol"></a><B>symbol</B> <em>type size xper yper [line_color [fill_color]]</em>
 <DD>A symbol is drawn at the given size on the display monitor. The
-<EM>xper</EM> and <EM>yper</EM> options define the center of the icon and
+<em>xper</em> and <em>yper</em> options define the center of the icon and
 are given as a percentage of the display frame (<tt>0,0</tt> is lower left).
 The symbol can be any of those stored in <tt>$GISBASE/etc/symbol/</tt>
 (e.g. <i>basic/circle</i>) or stored in the user's mapset directory in the
 form <tt>$MAPSET/symbol/</tt><em>type/name</em>.
 The colors may be either a standard color name, an R:G:B triplet,
 or "none". If using an R:G:B triplet, each color value can range from 0-255.
-If not specified the default <EM>line_color</EM> is black and the default 
-<EM>fill_color</EM> is grey.
+If not specified the default <em>line_color</em> is black and the default 
+<em>fill_color</em> is grey.
 
-<DT><a name="rotation"></a><B>rotation</B> <EM>angle</EM> 
+<DT><a name="rotation"></a><B>rotation</B> <em>angle</em> 
 <DD>Subsequent text and symbols will be drawn such that they are rotated 
 <em>angle</em> degrees counter-clockwise from east.
 
-<DT><a name="icon"></a><B>icon</B> <EM>type size x y</EM> 
-<DD>Draws an icon of types <EM>o</EM>, <EM>x</EM>, or <EM>+</EM> 
-with specified <EM>size</EM> (in %) at location <EM>x,y</EM>. 
-Note: type <EM>o</EM> designates a square.
-<BR>
+<DT><a name="icon"></a><B>icon</B> <em>type size x y</em> 
+<DD>Draws an icon of types <em>o</em>, <em>x</em>, or <em>+</em> 
+with specified <em>size</em> (in %) at location <em>x,y</em>. 
+Note: type <em>o</em> designates a square.
+<br>
 
-<DT><a name="width"></a><B>width</B> <EM>value</EM> 
+<DT><a name="width"></a><B>width</B> <em>value</em> 
 <DD>Subsequent lines (including non-FreeType text) will be drawn with
 the given pixel thickness.
-<BR>The default value is 0.
+<br>The default value is 0.
 
 </DL>
 
-<H2>EXAMPLES</H2>
+<h2>EXAMPLES</h2>
 
-For an example use of <EM>d.graph</EM>, examine the contents of the  
-command file <EM><a href="grass_logo.txt">grass_logo.txt</a></EM>
-located in the <EM>d.graph</EM> source code directory. It will draw the
-CERL GRASS logo using the <EM>d.graph</EM> graphing commands stored in the file. 
-Note that the coordinates in the <EM><a href="grass_logo.txt">grass_logo.txt</a></EM> file were 
+For an example use of <em>d.graph</em>, examine the contents of the  
+command file <em><a href="grass_logo.txt">grass_logo.txt</a></em>
+located in the <em>d.graph</em> source code directory. It will draw the
+CERL GRASS logo using the <em>d.graph</em> graphing commands stored in the file. 
+Note that the coordinates in the <em><a href="grass_logo.txt">grass_logo.txt</a></em> file were 
 taken directly off an image drawn by hand on graph paper. 
 <!-- formerly names "grass.logo.sh" in GRASS 5 code. -->
-<P>
+<p>
 A dynamic example can be found in the <em>d.polar</em> shell script.
 
 
@@ -204,34 +204,34 @@ EOF
 </pre></div>
 
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
-<EM>d.graph</EM> remembers the last screen location (<EM>xpos ypos</EM>) to which 
+<em>d.graph</em> remembers the last screen location (<em>xpos ypos</em>) to which 
 the user moved, even after the user erases the display frame. 
-If the user runs <EM>d.graph</EM> repeatedly, and wishes to start anew with 
-the default (xpos ypos) screen location, the user should <EM>clear</EM> the 
-display frame between runs of <EM>d.graph</EM>.
+If the user runs <em>d.graph</em> repeatedly, and wishes to start anew with 
+the default (xpos ypos) screen location, the user should <em>clear</em> the 
+display frame between runs of <em>d.graph</em>.
 
-<H2>LIMITATIONS</H2>
+<h2>LIMITATIONS</h2>
 
 There are no automated ways of generating graphic images. It is anticipated 
 that GRASS user sites will write programs to convert output from a resident 
-graphics editor into GRASS <EM>d.graph</EM> format.
+graphics editor into GRASS <em>d.graph</em> format.
 (e.g. EPS -> <em>d.graph</em>, perhaps with the help of a
 <a href="http://www.pstoedit.net/">pstoedit</a> plugin)
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM><A HREF="d.font.html">d.font</A></EM><br>
-<EM><A HREF="d.frame.html">d.frame</A></EM><br>
-<EM><A HREF="d.labels.html">d.labels</A></EM><br>
-<!-- <EM><A HREF="d.mapgraph.html">d.mapgraph</A></EM><br> superseded by -m -->
-<EM><A HREF="d.polar.html">d.polar</A></EM><br>
-<EM><A HREF="d.text.html">d.text</A></EM><br>
-<EM><A HREF="d.where.html">d.where</A></EM><br>
-<!-- <EM><A HREF="grass.logo.sh.html">grass.logo.sh</A></EM><br> -->
+<em><a href="d.font.html">d.font</A></em><br>
+<em><a href="d.frame.html">d.frame</A></em><br>
+<em><a href="d.labels.html">d.labels</A></em><br>
+<!-- <em><a href="d.mapgraph.html">d.mapgraph</A></em><br> superseded by -m -->
+<em><a href="d.polar.html">d.polar</A></em><br>
+<em><a href="d.text.html">d.text</A></em><br>
+<em><a href="d.where.html">d.where</A></em><br>
+<!-- <em><a href="grass.logo.sh.html">grass.logo.sh</A></em><br> -->
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 James Westervelt, U.S. Army Construction Engineering Research Laboratory
 <br><i>Last changed: $Date$</i>

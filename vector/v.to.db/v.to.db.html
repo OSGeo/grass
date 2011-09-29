@@ -1,4 +1,4 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
 <em>v.to.db</em> loads vector map features or metrics into a database
 table, or prints them (or the SQL queries used to obtain them) in a
@@ -7,10 +7,10 @@ form of a human-readable report. For uploaded/printed category values
 found or multiple categories were found. For line azimuths '-1' is used
 for closed lines (start equals end).
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 The units <em>miles</em>, <em>feet</em>, <em>meters</em> and
 <em>kilometers</em> are square for <em>option=area</em>.
-<P>
+<p>
 Feet and acre units are always reported in their common versions
 (i.e. the International Foot, exactly 5280 feet in a mile), even
 when the location's standard map unit is the US Survey foot.
@@ -44,7 +44,7 @@ mode. Use <em><a href="db.execute.html">db.execute</a></em> or
 <em><a href="v.db.addcolumn.html">v.db.addcolumn</a></em> to add new columns if
 needed.
 
-<H2>EXAMPLES</H2>
+<h2>EXAMPLES</h2>
 
 <h3>Updating attribute tables</h3>
 
@@ -86,7 +86,7 @@ v.db.addcolumn usa_income_employment2002 col="FIPS_NUM integer"
 v.to.db usa_income_employment2002 option=query col=FIPS_NUM qcol=STATE_FIPS
 </pre></div>
 
-<P>
+<p>
 Upload category numbers of left and right area, to an attribute table of
 boundaries common for the areas:<br>
 <div class="code"><pre>
@@ -176,7 +176,7 @@ v.to.db -p roads option=count type=line
 </ul>
 
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 Radim Blazek, ITC-irst, Trento, Italy<br>
 Line sinuousity implemented by Wolf Bergenheim

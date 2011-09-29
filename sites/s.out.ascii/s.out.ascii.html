@@ -1,30 +1,30 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>s.out.ascii</EM> converts an existing site list file
-(<B>input=</B><EM>name</EM>) into an ASCII listing of site
+<em>s.out.ascii</em> converts an existing site list file
+(<B>input=</B><em>name</em>) into an ASCII listing of site
 locations and (optionally) their category labels, in a
 format suitable for input to other program). 
 
-<P>
+<p>
 
 Each line of output consists of the easting, northing, and
 category label for a site listed in the named <B>vector points</B> (sites)
-file.  The <B>fs=</B><EM>name</EM> option (where
-<EM>name</EM> is either a character, a space, or a tab) can
+file.  The <B>fs=</B><em>name</em> option (where
+<em>name</em> is either a character, a space, or a tab) can
 be used to place a particular field separator between these
 three output fields. This is useful when output is to be
-manipulated by other programs, like <EM>awk</EM> or
-<EM>sed</EM>.
+manipulated by other programs, like <em>awk</em> or
+<em>sed</em>.
 
-<P>
+<p>
 
-The GRASS program <EM>s.in.ascii</EM> can be used to
+The GRASS program <em>s.in.ascii</em> can be used to
 perform the reverse function, converting a UNIX file
 containing eastings, northings, and category labels
 associated with site locations into GRASS site list file
 format.
 
-<H2>OPTIONS</H2>
+<h2>OPTIONS</h2>
 
 <H3>Flags:</H3>
 
@@ -46,7 +46,7 @@ the current geographic region.
 
 <DL>
 
-<DT><B>input=</B><EM>name</EM>
+<DT><B>input=</B><em>name</em>
 
 <DD>Name of an existing site list file. 
 
@@ -57,26 +57,26 @@ northing, and (optionally) category label on each line of
 output.  The field separator can be a character, a space,
 or a tab.
 
-<BR>
+<br>
 Default: space 
 </DL>
 
-<EM>s.out.ascii</EM> can be run either non-interactively or
+<em>s.out.ascii</em> can be run either non-interactively or
 interactively.  The program will be run non-interactively
 if the user specifies the name of an existing site list
 file and (optionally) a value for <B>fs</B>, using the form
 
-<P>
+<p>
 <DL>
 <DD>
 <B>s.out.ascii</B> 
 [<B>-adi</B>] 
-<B>input=</B><EM>name</EM> 
+<B>input=</B><em>name</em> 
 [<B>fs=</B>character|space|tab] 
 </DL>
 
 
-where <EM>name</EM> is the name of an existing site list
+where <em>name</em> is the name of an existing site list
 file to be converted to a brief ASCII listing, and
 <B>fs</B> is the field separator to be placed between
 output fields. The user can also the <B>-a</B> and
@@ -84,18 +84,18 @@ output fields. The user can also the <B>-a</B> and
 <B>sites</B> file and to include site descriptions in the
 output.
 
-<P>
+<p>
 
 Alternately, the user can simply type <B>s.out.ascii</B> on
 the command line, without program arguments. In this case,
 the user will be prompted for parameter values using the
 standard GRASS 
 
-<A HREF="parser.html">parser</A>
+<a href="parser.html">parser</A>
 
 interface.
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 To output GRASS data in x,y,z ASCII style, the s.out.ascii may be used:
 <p>
@@ -118,32 +118,32 @@ converted to sites format using <em>r.to.sites</em> and <em>s.out.ascii</em>
 subsequently as described above.
 
 <p>
-The output from <EM>s.out.ascii</EM> may be placed into a
+The output from <em>s.out.ascii</em> may be placed into a
 file by using the UNIX redirection mechanism; e.g.:
 
-<P>
+<p>
 <DL>
 <DD>
 <B>s.out.ascii input=</B>archsites &gt; out.file
 </DL>
 
-<EM>s.out.ascii</EM> output may also be redirected into
+<em>s.out.ascii</em> output may also be redirected into
 other programs; e.g.:
 
-<P>
+<p>
 <DL>
 <DD>
 <B>s.out.ascii input=</B>archsites | d.points <B>color=</B>red <B>size=</B>10 <B>type=</B>diamond
 </DL>
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM><A HREF="d.points.html">d.points</A></EM><br>
-<EM><A HREF="d.vect.html">d.vect</A></EM><br>
-<EM><A HREF="s.in.ascii.html">s.in.ascii</A></EM><br>
-<EM><A HREF="r.to.vect.html">r.to.vect</A></EM>
+<em><a href="d.points.html">d.points</A></em><br>
+<em><a href="d.vect.html">d.vect</A></em><br>
+<em><a href="s.in.ascii.html">s.in.ascii</A></em><br>
+<em><a href="r.to.vect.html">r.to.vect</A></em>
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 Michael Shapiro,  
 U.S. Army Construction Engineering 

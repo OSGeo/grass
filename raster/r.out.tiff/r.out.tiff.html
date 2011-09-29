@@ -2,29 +2,29 @@
 
 <p>This program converts a GRASS raster map to a TIFF raster map. Output may
 be 8 or 24 bit (TrueColor).  Optionally, a TIFF World file compatible with
-ESRI's and other's products may be output.</p>
+ESRI's and other's products may be output.
 
 <p>
 The program prompts the user for the name of a GRASS raster map, an output
 TIFF file, whether an 8 or 24 bit format is desired, and whether or not to
 create a TIFF world file.  Currently only uncompressed, packpit, or deflate
 TIFF files are written.  These output formats are known to be compatible
-with r.in.tiff.</p>
+with r.in.tiff.
 
 <p>
 The output filename will always have the suffix <code>.tif</code>, and the Tiff World
 file (if requested) <code>.tfw</code>. Any <code>.tif</code> or
 <code>.tiff</code> suffix (case insensitive) specified in the output filename 
-will be discarded.</p>
+will be discarded.
 
 <p>
 When writing with "-l" option, tiles are written at 128x128 pixels.  For
 programs that can utilize tiles, it can help speed up some drawing
-operations.</p>
+operations.
 
 <p>
 The user may adjust region and resolution before export using
-<a href="g.region.html">g.region</a>.</p>
+<a href="g.region.html">g.region</a>.
 
 <p>
 A better choice to export GRASS raster data might be

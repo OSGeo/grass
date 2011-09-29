@@ -1,12 +1,12 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>v.perturb</EM>
+<em>v.perturb</em>
 reads a vector map of points and writes the same points but
-<EM>perturbs</EM> the eastings and northings by
+<em>perturbs</em> the eastings and northings by
 adding either a uniform or normal delta value. Perturbation means that
 a variating spatial deviation is added to the coordinates.
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 The uniform distribution is always centered about zero.
 The associated <em>parameter</em> is constrained to be positive and
@@ -14,31 +14,31 @@ specifies the maximum of the distribution; the minimum is
 the negation of that parameter. Do perturb into a ring around the
 center, the <em>minimum</em> parameter can be used.
 
-<P>
+<p>
 
 Usually, the mean (first parameter) of the normal
 distribution is zero (i.e., the distribution is centered at
 zero). The standard deviation (second parameter) is
 naturally constrained to be positive.
 
-<P>
+<p>
 
 Output vector points are not guaranteed to be contained within the
 current geographic region.
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM><A HREF="v.random.html">v.random</A></EM><br>
-<EM><A HREF="v.univar.html">v.univar</A></EM><br>
+<em><a href="v.random.html">v.random</A></em><br>
+<em><a href="v.univar.html">v.univar</A></em><br>
 
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
-<A HREF="http://mccauley-usa.com/">James Darrell McCauley</A>
+<a href="http://mccauley-usa.com/">James Darrell McCauley</A>
 <br>when he was at: 
-<A HREF="http://ABE.www.ecn.purdue.edu/ABE/">Agricultural Engineering</A>
-<A HREF="http://www.purdue.edu/">Purdue University</A>
-<P>
+<a href="http://ABE.www.ecn.purdue.edu/ABE/">Agricultural Engineering</A>
+<a href="http://www.purdue.edu/">Purdue University</A>
+<p>
 Random number generators originally written in FORTRAN by Wes Peterson and
 translated to C using <i>f2c</i>.
 

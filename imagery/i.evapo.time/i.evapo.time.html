@@ -1,6 +1,6 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>i.evapo.time_integration</EM> integrates ETa in time following a reference ET (typically) from a set of meteorological stations dataset.
+<em>i.evapo.time_integration</em> integrates ETa in time following a reference ET (typically) from a set of meteorological stations dataset.
 
 Inputs:
 - ETa images
@@ -20,7 +20,7 @@ DOYbeforeETa[i] = ( DOYofETa[i] - DOYofETa[i-1] ) / 2
 DOYafterETa[i] = ( DOYofETa[i+1] - DOYofETa[i] ) / 2
 
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 ETo images preparation:
 If you only have one meteorological station data, the easiest way is:
@@ -38,21 +38,21 @@ If you have several meteorological stations data, then you need to grid them, Th
 
 For multi-year calculations, just continue incrementing DOY values above 366, it will continue working, up to maximum input of 400 satellite images.
 
-<H2>TODO</H2>
+<h2>TODO</h2>
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
 <em>
-<A HREF="i.eb.eta.html">i.eb.eta</A><br>
-<A HREF="i.evapo.potrad.html">i.evapo.potrad</A><br>
-<A HREF="i.evapo.SENAY.html">i.evapo.SENAY</A><br>
-<A HREF="r.surf.idw.html">r.surf.idw</A><br>
-<A HREF="r.surf.idw2.html">r.surf.idw2</A><br>
-<A HREF="r.bilinear.html">r.bilinear</A><br>
+<a href="i.eb.eta.html">i.eb.eta</A><br>
+<a href="i.evapo.potrad.html">i.evapo.potrad</A><br>
+<a href="i.evapo.SENAY.html">i.evapo.SENAY</A><br>
+<a href="r.surf.idw.html">r.surf.idw</A><br>
+<a href="r.surf.idw2.html">r.surf.idw2</A><br>
+<a href="r.bilinear.html">r.bilinear</A><br>
 </em>
 
 
-<H2>AUTHORS</H2>
-Yann Chemin, International Rice Research Institute, The Philippines<BR>
+<h2>AUTHORS</h2>
+Yann Chemin, International Rice Research Institute, The Philippines<br>
 <p>
 <i>Last changed: $Date$</i>

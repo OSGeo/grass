@@ -1,6 +1,6 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>d.measure</EM> provides the user with an interactive
+<em>d.measure</em> provides the user with an interactive
 way to measure the lengths and areas of lines and polygons
 drawn by the user in the active frame on the graphics
 monitor.  Lines and polygons are drawn using a pointing
@@ -8,54 +8,54 @@ device (mouse).  Each line segment is drawn in colors
 <b>c1</b> and <b>c2</b>.  A mouse button menu indicates
 that the user can find out the geographic coordinates of
 the cursor location, draw line segments between
-user-specified vertices, and quit <EM>d.measure</EM>. Lines
+user-specified vertices, and quit <em>d.measure</em>. Lines
 and polygons are defined by the series of vertices marked
 by the user. If more than two successive vertices are
-drawn, <EM>d.measure</EM> prints the area encompassed
-(<EM>d.measure</EM> will assume the area is closed even if
+drawn, <em>d.measure</em> prints the area encompassed
+(<em>d.measure</em> will assume the area is closed even if
 the user has not joined the first and last vertices).
 <!-- (not [currently] true!)  Line lengths are stated in the same units
 as those of the current LOCATION. In a XY-LOCATION, where no units are
-available, <EM>d.measure</EM> prints a warning and gives results without
+available, <em>d.measure</em> prints a warning and gives results without
 units. -->
 Areas can be stated in hectares, square miles, square meters and
 square kilometers.
 
-Lines and polygons drawn using <EM>d.measure</EM> will
+Lines and polygons drawn using <em>d.measure</em> will
 overlay (not overwrite) whatever display currently appears
 in the active frame on the graphics monitor.  The user can,
 for example, run 
-<EM><A HREF="d.rast.html">d.rast</A></EM> or 
-<EM><A HREF="d.vect.html">d.vect</A></EM> prior to running
-<EM>d.measure</EM>, and use raster and/or vector maps as a backdrop.
+<em><a href="d.rast.html">d.rast</A></em> or 
+<em><a href="d.vect.html">d.vect</A></em> prior to running
+<em>d.measure</em>, and use raster and/or vector maps as a backdrop.
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
-<EM>d.measure</EM> uses all segments drawn by the user when computing area. 
+<em>d.measure</em> uses all segments drawn by the user when computing area. 
 If the user draws an area within another area, the combined 
 area of both regions will be output. 
 
-<H2>TODO</H2>
+<h2>TODO</h2>
 
 Output lengths in the same units as those of the current LOCATION as
-found in the <tt>PROJ_UNITS</tt> file (see <EM>g.proj</EM>).
+found in the <tt>PROJ_UNITS</tt> file (see <em>g.proj</em>).
 Volunteers are welcome for this task.
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM><A HREF="d.frame.html">d.frame</A></EM><br>
-<EM><A HREF="d.graph.html">d.graph</A></EM><br>
-<EM><A HREF="d.rast.html">d.rast</A></EM><br>
-<EM><A HREF="d.vect.html">d.vect</A></EM><br>
-<EM><A HREF="d.where.html">d.where</A></EM><br>
-<EM><A HREF="g.proj.html">g.proj</A></EM>
+<em><a href="d.frame.html">d.frame</A></em><br>
+<em><a href="d.graph.html">d.graph</A></em><br>
+<em><a href="d.rast.html">d.rast</A></em><br>
+<em><a href="d.vect.html">d.vect</A></em><br>
+<em><a href="d.where.html">d.where</A></em><br>
+<em><a href="g.proj.html">g.proj</A></em>
 
 
-<H2>AUTHORS</H2>
+<h2>AUTHORS</h2>
 
 James Westervelt, 
-<BR>
-Michael Shapiro, <BR>
+<br>
+Michael Shapiro, <br>
 U.S. Army Construction Engineering 
 Research Laboratory
 

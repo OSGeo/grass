@@ -1,16 +1,16 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>v.voronoi</EM> uses an existing vector points map (<B>input</B>) to create
+<em>v.voronoi</em> uses an existing vector points map (<B>input</B>) to create
 a Voronoi diagram (Thiessen polygons) in a new vector map (<B>output</B>).
-<P>
+<p>
 The bounds of the output map are limited by the current region.
 (see <em>g.region</em>)
-<P>
+<p>
 
-<BR>
+<br>
 Voronoi diagram and Delaunay triangulation example:
 <center>
-<img src=v_voronoi_delaunay.png border=1><BR>
+<img src=v_voronoi_delaunay.png border=1><br>
 <table border=0 width=590>
 <tr><td><center>
 <i>Delaunay Triangulation (left pane), Voronoi diagram (center pane),
@@ -20,16 +20,16 @@ and both (right pane)</i>
 </center>
 
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 Voronoi diagrams may be used for nearest-neighbor flood filling.
 Give the centroids attributes (start with
-<em><A HREF="v.db.addcolumn.html">v.db.addcolumn</A></em>),
+<em><a href="v.db.addcolumn.html">v.db.addcolumn</A></em>),
 then optionally convert to a raster map with
-<em><A HREF="v.to.rast.html">v.to.rast</A></em>.
+<em><a href="v.to.rast.html">v.to.rast</A></em>.
 
 
-<H2>EXAMPLE</H2>
+<h2>EXAMPLE</h2>
 
 Commands used with the Spearfish dataset to create the above figure.
 <div class="code"><pre>
@@ -55,27 +55,27 @@ Commands used with the Spearfish dataset to create the above figure.
 </pre></div>
 
 
-<H2>BUGS</H2>
+<h2>BUGS</h2>
 Only attribute table of field 1 is copied. 
 
 
-<H2>REFERENCES</H2>
-<EM>Steve J. Fortune,  (1987).  A Sweepline Algorithm for
-    Voronoi Diagrams, Algorithmica 2, 153-174.</EM>
+<h2>REFERENCES</h2>
+<em>Steve J. Fortune,  (1987).  A Sweepline Algorithm for
+    Voronoi Diagrams, Algorithmica 2, 153-174.</em>
 
 
-<H2>SEE ALSO</H2>
-<EM>
-<A HREF="g.region.html">g.region</A>,
-<A HREF="v.delaunay.html">v.delaunay</A>, 
-<A HREF="v.hull.html">v.hull</A>
-</EM>
+<h2>SEE ALSO</h2>
+<em>
+<a href="g.region.html">g.region</A>,
+<a href="v.delaunay.html">v.delaunay</A>, 
+<a href="v.hull.html">v.hull</A>
+</em>
 
 
-<H2>AUTHORS</H2>
+<h2>AUTHORS</h2>
 James Darrell McCauley, Purdue University<br>
 GRASS 5 update, improvements: <a href="mailto:aaime@libero.it">Andrea Aime</a>, Modena, Italy<br>
 GRASS 5.7 update: Radim Blazek
 
 <p>
-<i>Last changed: $Date$</i></p>
+<i>Last changed: $Date$</i>

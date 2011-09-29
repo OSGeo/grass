@@ -7,7 +7,7 @@ to standard output.
 <h2>NOTE</h2>
 
 If parameters for database connection are already set with 
-<a HREF="db.connect.html">db.connect</a>, they are taken as default values and
+<a href="db.connect.html">db.connect</a>, they are taken as default values and
 do not need to be spcified each time. Output will be displayed to stdout or can
 be directed to a file.
 
@@ -28,21 +28,21 @@ or
 db.select -c driver=odbc database=g51test table=roads input=file.sql > result.csv
 </pre></div>
 
-<P>
+<p>
 
 <em>Select some string attribute, exclude others:</em><br>
 <div class="code"><pre>
 echo "SELECT * FROM archsites WHERE str1 &lt;&gt; 'No Name'" | db.select
 </pre></div>
 
-<P>
+<p>
 
 <em>Select some string attribute with ZERO length:</em><br>
 <div class="code"><pre>
 echo "SELECT * FROM archsites WHERE str1 IS NULL" | db.select
 </pre></div>
 
-<P>
+<p>
 
 <em>Select coordinates from PostGIS table:</em><br>
 <div class="code"><pre>
@@ -51,14 +51,14 @@ echo "SELECT x(geo),y(geo) FROM localizzazione" | db.select
 
 <h2>SEE ALSO</h2>
 
-<em><a HREF="sql.html">GRASS SQL interface</a>,
-<a HREF="db.connect.html">db.connect</a>,
-<a HREF="db.describe.html">db.describe</a>,
-<a HREF="db.drivers.html">db.drivers</a>,
-<a HREF="db.droptable.html">db.droptable</a>,
-<a HREF="db.execute.html">db.execute</a>,
-<a HREF="db.login.html">db.login</a>,
-<a HREF="db.tables.html">db.tables</a></em>
+<em><a href="sql.html">GRASS SQL interface</a>,
+<a href="db.connect.html">db.connect</a>,
+<a href="db.describe.html">db.describe</a>,
+<a href="db.drivers.html">db.drivers</a>,
+<a href="db.droptable.html">db.droptable</a>,
+<a href="db.execute.html">db.execute</a>,
+<a href="db.login.html">db.login</a>,
+<a href="db.tables.html">db.tables</a></em>
 
 
 <h2>AUTHOR</h2>

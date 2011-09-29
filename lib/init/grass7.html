@@ -10,22 +10,22 @@
 
 <img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
 
-<H2>NAME</H2>
+<h2>NAME</h2>
 
-<EM><B>grass70</B></EM>  - The GRASS startup program<BR>
+<em><B>grass70</B></em>  - The GRASS startup program<br>
 
-<H2>SYNOPSIS</H2>
+<h2>SYNOPSIS</h2>
 
 <B>grass70</B> [<B>-</B>] [<B>-v</B>] [<B>-h | -help | --help</B>]
     [<B>-text | -gui | -wxpython | -wx]</B>]
     [[[<B>&lt;GISDBASE&gt;/</B>]<B>&lt;LOCATION_NAME&gt;/</B>]
     	<B>&lt;MAPSET&gt;</B>]
 
-<BR>
+<br>
 
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<P>
+<p>
 This command is used to launch GRASS GIS. It will parse the command line
 arguments and then initialize GRASS for the user. Since GRASS programs
 require a specific environment, this program must be called before any other
@@ -34,24 +34,24 @@ the user with a method to indicate the desired user interface, as well as the
 desired mapset to work on.
 
 
-<H2>FEATURES</H2>
+<h2>FEATURES</h2>
 
-<P>
+<p>
 The <em>grass70</em> startup program will remember both the desired user
 interface and mapset. Thus, the next time the user runs GRASS, typing
-<EM>grass70</EM> (without any options) will start GRASS with the previous
+<em>grass70</em> (without any options) will start GRASS with the previous
 settings for the user interface and mapset selected.
 
-<P>
-If you specify a graphical user interface (wxPython) the <EM>grass70</EM>
+<p>
+If you specify a graphical user interface (wxPython) the <em>grass70</em>
 program will try to verify that the system you specified exists and that you
-can access it successfully. If any of these checks fail then <EM>grass70</EM>
+can access it successfully. If any of these checks fail then <em>grass70</em>
 will automatically switch back to the text user interface mode.
 
 
-<H2>OPTIONS</H2>
+<h2>OPTIONS</h2>
 
-<P>
+<p>
 All command line options are optional.
 
 <H3>Flags:</H3>
@@ -89,24 +89,24 @@ All command line options are optional.
 <DD> Initial mapset directory which is a subdirectory of LOCATION_NAME
 </DL>
 
-<BR>
+<br>
 <B><i>Note</i></B>- These parameters must be specified in one of the
 following ways:
 <DL><DD>
-    MAPSET<BR>
-    LOCATION_NAME/MAPSET<BR>
-    GISDBASE/LOCATION_NAME/MAPSET<BR>
+    MAPSET<br>
+    LOCATION_NAME/MAPSET<br>
+    GISDBASE/LOCATION_NAME/MAPSET<br>
     
 </DL>
 
 
-<H2>ENVIRONMENT VARIABLES</H2>
+<h2>ENVIRONMENT VARIABLES</h2>
 
 A number of environment variables are available at GRASS startup to assist
 with automation and customization. Most users will not need to bother with
 these.
 
-<P>
+<p>
 In addition to these shell environment variables GRASS maintains a number of
 GIS environment variables in the <tt>$HOME/.grass7/rc</tt> file. User changes
 to this file will be read during the next startup of GRASS. If this file
@@ -118,29 +118,29 @@ The rest of this help page will only consider shell environment variables.
 
 <H3>User Interface Environment Variable</H3>
 
-<P>
-The <EM>grass70</EM> program will check for the existence of an environment
+<p>
+The <em>grass70</em> program will check for the existence of an environment
 variable called GRASS_GUI which indicates the type of user interface for
-GRASS to use. If this variable is not set when <EM>grass70</EM> is run, then
+GRASS to use. If this variable is not set when <em>grass70</em> is run, then
 it will be created and then saved in the <tt>$HOME/.grass7/rc</tt> file for
 the next time GRASS is run. It can be set to "text" or "wxpython".
 
-<P>
-There is an order of precedence in the way <EM>grass70</EM> determines the user
+<p>
+There is an order of precedence in the way <em>grass70</em> determines the user
 interface to use. The following is the hierarchy from highest precedence to
 lowest.
 
 <DL>
  <DT><B>Interface precedence</B>
- <DD>&bull; Command line argument<BR>
-     &bull; Environment variable GRASS_GUI<BR>
-     &bull; Value set in <tt>$HOME/.grass7/rc</tt><BR>
+ <DD>&bull; Command line argument<br>
+     &bull; Environment variable GRASS_GUI<br>
+     &bull; Value set in <tt>$HOME/.grass7/rc</tt><br>
      &bull; Default value - wxpython
 </DL>
 
 <H3>Python Environment Variables</H3>
 
-<P>
+<p>
 If you choose to use the wxPython interface, then
 the following environment variables can be used to override your
 system default <tt>python</tt> command.
@@ -153,14 +153,14 @@ system default <tt>python</tt> command.
 
 <H4>Example Use of GRASS Python Environment Variable</H4>
 
-<P>
+<p>
 Suppose your system has Python 2.4 installed and you install a personal
 version of the Python 2.5 binaries under <tt>$HOME/bin</tt>. You can use
 the above variables to have GRASS use the Python 2.5 binaries instead.
 
 
 <H4>Example Use of the GRASS Python Environment Variable</H4>
-<P>
+<p>
 <pre>
    GRASS_PYTHON=python2.5
 </pre>
@@ -172,13 +172,13 @@ the above variables to have GRASS use the Python 2.5 binaries instead.
 This environment variable allows the user to extend the GRASS program search
 paths to include locally developed/installed addon modules which are not
 distributed with the standard GRASS release.
-<P>
+<p>
 <pre>
    GRASS_ADDON_PATH=/usr/mytools
    GRASS_ADDON_PATH=/usr/mytools:/usr/local/othertools
 </pre>
 
-<P>
+<p>
 In this example above path(s) would be added to the standard GRASS path
 environment.
 
@@ -191,7 +191,7 @@ web browser to use for dispalying help pages.
 
 <H3>Location Environment Variables</H3>
 
-<P>
+<p>
 The Synopsis and Options sections above describe options that can be used to
 set the location and mapset that GRASS will use. These values can also be set
 with environment variables. However, specifying the location and mapset
@@ -230,15 +230,15 @@ The script file must have its executable bit set.
 
 <H3>Note</H3>
 
-<P>
+<p>
 Note that you will need to set these variables using the appropriate method
 required for the UNIX shell that you use. (e.g. in a Bash shell you must
 "export" the variables for them to propogate)
 
 
-<H2>EXAMPLES</H2>
+<h2>EXAMPLES</h2>
 
-<P>
+<p>
 The following are some examples of how you could start GRASS
 
 <DL>
@@ -275,85 +275,85 @@ The following are some possible examples.
 <DL>
 
 <DT><B>Example 1</B>
-<DD> The environment variables are defined as follows:<BR><BR>
+<DD> The environment variables are defined as follows:<br><br>
     
-    LOCATION = /usr/local/share/grassdata/spearfish60/PERMANENT<BR>
-    GISDBASE = /usr/local/share/grassdata<BR>
-    LOCATION_NAME = spearfish60<BR>
-    MAPSET = PERMANENT<BR><BR>
+    LOCATION = /usr/local/share/grassdata/spearfish60/PERMANENT<br>
+    GISDBASE = /usr/local/share/grassdata<br>
+    LOCATION_NAME = spearfish60<br>
+    MAPSET = PERMANENT<br><br>
     
-    Start GRASS with the following command:<BR><BR>
+    Start GRASS with the following command:<br><br>
     
-    grass70 -<BR><BR>
+    grass70 -<br><br>
     
     GRASS will start with the mapset defined by LOCATION since the LOCATION
-    variable overrides the other variables.<BR><BR>
+    variable overrides the other variables.<br><br>
 
 <DT><B>Example 2</B>
-<DD> The environment variables are defined as follows:<BR><BR>
+<DD> The environment variables are defined as follows:<br><br>
     
-    GISDBASE = /usr/local/share/grassdata<BR>
-    LOCATION_NAME = spearfish60<BR>
-    MAPSET = PERMANENT<BR><BR>
+    GISDBASE = /usr/local/share/grassdata<br>
+    LOCATION_NAME = spearfish60<br>
+    MAPSET = PERMANENT<br><br>
     
-    Start GRASS with the following command:<BR><BR>
+    Start GRASS with the following command:<br><br>
     
-    grass70 -<BR><BR>
+    grass70 -<br><br>
     
     GRASS will start with the mapset defined by
-    GISDBASE/LOCATION_NAME/MAPSET.<BR><BR>
+    GISDBASE/LOCATION_NAME/MAPSET.<br><br>
 
 <DT><B>Example 3</B>
-<DD> The environment variables are defined as follows:<BR><BR>
+<DD> The environment variables are defined as follows:<br><br>
     
-    LOCATION = /usr/local/share/grassdata/spearfish60/PERMANENT<BR>
-    GISDBASE = /usr/local/share/grassdata<BR>
-    LOCATION_NAME = spearfish60<BR>
-    MAPSET = PERMANENT<BR><BR>
+    LOCATION = /usr/local/share/grassdata/spearfish60/PERMANENT<br>
+    GISDBASE = /usr/local/share/grassdata<br>
+    LOCATION_NAME = spearfish60<br>
+    MAPSET = PERMANENT<br><br>
     
-    Start GRASS with the following command:<BR><BR>
+    Start GRASS with the following command:<br><br>
     
-    grass70 /usr/home/grass/data/thailand/forests<BR><BR>
+    grass70 /usr/home/grass/data/thailand/forests<br><br>
     
     GRASS will start with the mapset /home/grass/data/thailand/forests which
-    overrides the environment variables.<BR><BR>
+    overrides the environment variables.<br><br>
 
 <DT><B>Example 4</B>
-<DD> The environment variables are defined as follows:<BR><BR>
+<DD> The environment variables are defined as follows:<br><br>
     
-    LOCATION = /usr/local/share/grassdata/spearfish60/PERMANENT<BR>
-    GISDBASE = /usr/local/share/grassdata<BR>
-    LOCATION_NAME = spearfish60<BR>
-    MAPSET = PERMANENT<BR><BR>
+    LOCATION = /usr/local/share/grassdata/spearfish60/PERMANENT<br>
+    GISDBASE = /usr/local/share/grassdata<br>
+    LOCATION_NAME = spearfish60<br>
+    MAPSET = PERMANENT<br><br>
     
-    Start GRASS with the following command:<BR><BR>
+    Start GRASS with the following command:<br><br>
     
-    grass70 swamps<BR><BR>
+    grass70 swamps<br><br>
     
     GRASS will start with the mapset defined by GISDBASE/LOCATION_NAME/swamps
     since the command line argument for the mapset overrides the environment
-    variable MAPSET.<BR><BR>
+    variable MAPSET.<br><br>
 
 <DT><B>Example 5</B>
-<DD> The environment variables are defined as follows:<BR><BR>
+<DD> The environment variables are defined as follows:<br><br>
     
-    LOCATION = /usr/local/share/grassdata/spearfish60/PERMANENT<BR>
-    GISDBASE = /usr/local/share/grassdata<BR>
-    LOCATION_NAME = spearfish60<BR>
-    MAPSET = PERMANENT<BR><BR>
+    LOCATION = /usr/local/share/grassdata/spearfish60/PERMANENT<br>
+    GISDBASE = /usr/local/share/grassdata<br>
+    LOCATION_NAME = spearfish60<br>
+    MAPSET = PERMANENT<br><br>
     
-    Start GRASS with the following command:<BR><BR>
+    Start GRASS with the following command:<br><br>
     
-    grass70 thailand/forests<BR><BR>
+    grass70 thailand/forests<br><br>
     
     GRASS will start with the mapset defined by GISDBASE/thailand/forests
     since the command line arguments for the location and mapset overrides
-    the environment variables LOCATION_NAME and MAPSET.<BR><BR>
+    the environment variables LOCATION_NAME and MAPSET.<br><br>
 
 </DL>
 
 
-<H2>CAVEAT</H2>
+<h2>CAVEAT</h2>
 
 If you start GRASS using the wxPython interface you must have a <tt>python</tt>
 command in your $PATH variable. That is, the command must be named
@@ -362,23 +362,23 @@ installations do not create a <tt>python</tt> command. In these cases the system
 administrator must create an appropriate link to the actual <tt>python</tt>
 program.
 
-<P>
+<p>
 Furthermore, if you have more than one version of Python installed, make sure
 that the version you want to use with GRASS is the first version found in
 your <tt>$PATH</tt> variable. GRASS searches your <tt>$PATH</tt> variable
 until it finds the first version of <tt>python</tt>.
 
 
-<H2>FILES</H2>
+<h2>FILES</h2>
 
-<EM>$UNIX_BIN/grass70</EM> - GRASS startup program (Linux, MacOSX etc.)<BR>
-<EM>$WINDOWS_BIN/grass70.bat</EM> - GRASS startup program (MS-Windows)<BR>
-<EM>$GISBASE/etc/Init.sh</EM> - GRASS initialization script called by
-    <EM>grass70</EM><BR>
-<EM>$GISBASE/etc/wxpython/gis_set.py</EM> - Python script to set the
-    location and mapset to use. Called by <EM>Init.sh</EM><BR><BR>
+<em>$UNIX_BIN/grass70</em> - GRASS startup program (Linux, MacOSX etc.)<br>
+<em>$WINDOWS_BIN/grass70.bat</em> - GRASS startup program (MS-Windows)<br>
+<em>$GISBASE/etc/Init.sh</em> - GRASS initialization script called by
+    <em>grass70</em><br>
+<em>$GISBASE/etc/wxpython/gis_set.py</em> - Python script to set the
+    location and mapset to use. Called by <em>Init.sh</em><br><br>
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
 List of <a href=variables.html>implemented GRASS environment variables</a>.
 <p>
@@ -386,7 +386,7 @@ List of <a href=variables.html>implemented GRASS environment variables</a>.
 <p>
 <a href="http://download.osgeo.org/grass/grass7_progman/">GRASS 7 Programmer's Manual</a>
 
-<H2>AUTHORS (of this page)</H2>
+<h2>AUTHORS (of this page)</h2>
 
 Justin Hickey<br>
 Markus Neteler<br>
@@ -395,7 +395,7 @@ Hamish Bowman
 <p>
 <i>Last changed: $Date$</i>
 <HR>
-<P>
+<p>
 <a href=index.html>Help Index</a>
 
 </body>

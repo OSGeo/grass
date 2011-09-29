@@ -1,47 +1,47 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>r.spreadpath</EM> recursively traces the least cost path backwards to
+<em>r.spreadpath</em> recursively traces the least cost path backwards to
 the origin, given backlink information input map layers and target locations
 from where paths are to be traced. The backlink information map layers
 record each cell's backlink UTM northing (the y_input) and easting (the
 x_input) coordinates from which the cell's cumulative cost was determined.
 
-<P>
+<p>
 
 The backlink inputs can be generated from another GRASS raster program
-<EM>r.spread</EM>. One of the major applications of <EM>r.spreadpath</EM>
-along with <EM>r.spread</EM> is to accurately find the least cost corridors
-and/or paths on a raster setting. More information on <EM>r.spread</EM> and
-<EM>r.spreadpath</EM> can be found in Xu (1994).
+<em>r.spread</em>. One of the major applications of <em>r.spreadpath</em>
+along with <em>r.spread</em> is to accurately find the least cost corridors
+and/or paths on a raster setting. More information on <em>r.spread</em> and
+<em>r.spreadpath</em> can be found in Xu (1994).
 
-<H2>Parameters:</H2>
+<h2>Parameters:</h2>
 <DL>
-<DT><B>x_input=</B><EM>name</EM>
+<DT><B>x_input=</B><em>name</em>
 <DD>Name of input raster map layer containing backlink UTM easting
 coordinates.
 
-<DT><B>y_input=</B><EM>name</EM>
+<DT><B>y_input=</B><em>name</em>
 <DD>Name of input raster map layer containing backlink UTM northing coordinates.
 
-<DT><B>coordinate=</B><EM>x,y[,x,y,x,y, ...]</EM>
+<DT><B>coordinate=</B><em>x,y[,x,y,x,y, ...]</em>
 <DD>Each x,y coordinate pair gives the easting and northing (respectively) geographic coordinates of a target point from which to backwards trace the least cost path. As many
 points as desired can be entered by the user.
 
-<DT><B>output=</B><EM>name</EM>
+<DT><B>output=</B><em>name</em>
 <DD>Name of raster map layer to contain output. Also can be used as the map layer of the input target points. If so used, the input target point map will be overwritten by the output.
 </DL>
 
-<H2>SEE ALSO</H2>
-<EM><A HREF="r.spread.html">r.spread</A></EM>,
-<EM><A HREF="r.ros.html">r.ros</A></EM>
+<h2>SEE ALSO</h2>
+<em><a href="r.spread.html">r.spread</A></em>,
+<em><a href="r.ros.html">r.ros</A></em>
 
 
-<H2>REFERENCES</H2>
+<h2>REFERENCES</h2>
 Xu, Jianping, 1994, Simulating the spread of wildfires using a geographic
 information system and remote sensing, Ph. D. Dissertation, Rutgers University,
 New Brunswick, New Jersey.
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 Jianping Xu and Richard G. Lathrop, Jr., Center for Remote Sensing and
 Spatial Analysis, Rutgers University.
 

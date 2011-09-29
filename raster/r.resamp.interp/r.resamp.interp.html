@@ -18,7 +18,7 @@ cell in the output map as follows:
 This module is intended for reinterpolation of continuous data
 to a different resolution rather than for interpolation from scattered data
 (use the <em>v.surf.*</em> modules for that purpose).
-</p>
+
 
 
 <h2>NOTES</h2>
@@ -26,21 +26,21 @@ to a different resolution rather than for interpolation from scattered data
 <p>
 Resampling modules (<em>r.resample, r.resamp.stats, r.resamp.interp,
 r.resamp.rst</em>) resample the map to match the current region settings.
-</p>
+
  
 <p>
 Note that for bilinear, bicubic and lanczos interpolation,
 cells of the output raster that cannot be bounded by the appropriate number
 of input cell centers are set to NULL (NULL propagation). This could occur
 due to the input cells being outside the current region, being NULL or MASKed.
-</p>
+
 
 <p>
 For longitude-latitude locations, the interpolation algorithm is based on
 degree fractions, not on the absolute distances between cell centers.  Any
 attempt to implement the latter would violate the integrity of the
 interpolation method.
-</p>
+
 
 <h2>EXAMPLE</h2>
 

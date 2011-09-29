@@ -19,7 +19,7 @@ Gauss-Kronecker curvature, or mean curvature). These geometric
 parameteres are saved as
 3d raster maps <b>gradient, aspect1, aspect2, ncurv, gcurv, mcurv</b>,
 respectively.
-</p>
+
 <p>At first, data points are checked for identical positions and points
 that are closer to each other than given <b>dmin</b> are removed.
 Parameters <b>wmult</b> and <b>zmult</b> allow the user to re-scale 
@@ -31,7 +31,7 @@ in vertical direction are much smaller than the horizontal
 distances; if that is the case, the value of <b>zmult</b>
 should be selected so that the vertical and horizontal distances
 have about the same magnitude.
-</p>
+
 <p>Regularized spline with tension method is used in the interpolation.
 The <b>tension</b> parameter controls the distance over which 
 each given point influences the resulting volume (with very high tension, 
@@ -44,11 +44,11 @@ With the
 smoothing parameter set to zero (<b>smooth=0</b>) the resulting volume
 passes exactly through the data points. 
 When smoothing is used, it is possible to output a vector map <b>devi</b>
-containing deviations of the resulting volume from the given data. </p>
+containing deviations of the resulting volume from the given data. 
 <p>The user can define a 2D raster map named <b>maskmap</b>, which will
 be used as a mask. The interpolation is skipped for 3-dimensional cells
 whose 2-dimensional projection has a zero value in the mask. Zero values will
-be assigned to these cells in all output 3d raster maps. </p>
+be assigned to these cells in all output 3d raster maps. 
 <p>If the number of given points is greater than 700, segmented
 processing is used. The region is split into 3-dimensional "box"
 segments, each having less than <b>segmax</b> points and interpolation
@@ -60,7 +60,7 @@ for interpolation is controlled by <b>npmin</b> , the value of which
 must
 be larger than <b>segmax</b> and less than 700. This limit of 700 was
 selected to ensure the numerical stability and efficiency of the
-algorithm. </p>
+algorithm. 
 
 <h2>EXAMPLES</h2>
 
@@ -138,10 +138,10 @@ simultanuously computed.  The procedure for larger datasets may take a
 very long time, so it might be worth to use just a sample data
 representing the whole dataset.
 
-<P>
+<p>
 <i>Example 
  (based on <a href="http://www.grassbook.org/data_menu2nd.phtml">Slovakia3d dataset</a>):</i>
-<P>
+<p>
 <div class="code"><pre>
 v.info -c precip3d
 v.vol.rst -c input=precip3d wcolumn=precip zmult=50 segmax=700 cvdev=cvdevmap tension=10
@@ -152,7 +152,7 @@ v.univar cvdevmap col=flt1 type=point
 Based on these results, the parameters will have to be optimized. It is
 recommended to plot the CV error as curve while modifying
 the parameters.
-<P>
+<p>
 The best approach is to start with <b>tension</b>, <b>smooth</b>
 and <b>zmult</b> with rough steps, or to set <b>zmult</b> to a
 constant somewhere between 30-60. This helps to find minimal RMSE
@@ -179,7 +179,7 @@ geographic (Lat/Long) coordinates as of May 2009.
 <p><em>v.vol.rst</em> uses regularized spline with tension for
 interpolation from point data (as described in Mitasova and Mitas,
 1993). The implementation has an improved segmentation procedure based
-on Oct-trees which enhances the efficiency for large data sets. </p>
+on Oct-trees which enhances the efficiency for large data sets. 
 
 <p>Geometric parameters - magnitude of gradient (<b>gradient</b>),
 horizontal (<b>aspect1</b>) and vertical (<b>aspect2) </b>aspects,
@@ -187,7 +187,7 @@ change of gradient (<b>ncurv</b>), Gauss-Kronecker (<b>gcurv</b>) and
 mean curvatures (<b>mcurv</b>) are computed directly from the
 interpolation function so that the important relationships between
 these parameters are preserved. More information on these parameters
-can be found in Mitasova et al., 1995 or Thorpe, 1979.</p>
+can be found in Mitasova et al., 1995 or Thorpe, 1979.
 
 <p>The program gives warning when significant overshoots appear and
 higher tension should be used. However, with tension too high the
@@ -195,27 +195,27 @@ resulting volume will have local maximum in each given point
 and everywhere else the volume goes rapidly to trend. With a smoothing
 parameter greater than zero, the volume will not pass through the data 
 points and the higher the parameter the closer the volume will be to the 
-trend. For theory on smoothing with splines see Talmi and Gilat, 1977 or Wahba, 1990. </p>
+trend. For theory on smoothing with splines see Talmi and Gilat, 1977 or Wahba, 1990. 
 
 <p>If a visible connection of segments appears, the program should be
 rerun with higher <b>npmin</b> to get more points from the
-neighborhood of given segment. </p>
+neighborhood of given segment. 
 
 <p>If the number of points in a vector map is less than 400, <b>segmax</b>
 should be set to 400 so that segmentation is not performed when it is
-not necessary. </p>
+not necessary. 
 
 <p>The program gives a warning when the user wants to interpolate outside the
 "box" given by minimum and maximum coordinates in the input vector map. 
 To remedy this, zoom into the area encompassing the input vector data points.
-</p>
+
 
 <p>For large data sets (thousands of data points), it is suggested to
 zoom into a smaller representative area and test whether the parameters
-chosen (e.g. defaults) are appropriate. </p>
+chosen (e.g. defaults) are appropriate. 
 
 <p>The user must run <em>g.region</em> before the program to set the
-3D region for interpolation. </p>
+3D region for interpolation. 
 
 <h2>BUGS</h2>
 <b>devi</b> file is written as 2D and deviations are not written as attributes.
@@ -224,49 +224,49 @@ chosen (e.g. defaults) are appropriate. </p>
 <p>Hofierka J., Parajka J., Mitasova H., Mitas L., 2002, Multivariate
 Interpolation of Precipitation Using Regularized Spline with Tension.
 Transactions in
-GIS&nbsp; 6, pp. 135-150. </p>
+GIS&nbsp; 6, pp. 135-150. 
 <p><a href="http://skagit.meas.ncsu.edu/%7Ehelena/gmslab/">Mitas, L.,
 Mitasova, H.</a>, 1999, Spatial Interpolation. In: P.Longley, M.F.
 Goodchild, D.J. Maguire, D.W.Rhind (Eds.), Geographical Information
 Systems: Principles, Techniques, Management and Applications, Wiley,
-pp.481-492 </p>
+pp.481-492 
 <p>Mitas L., Brown W. M., Mitasova H., 1997, <a
  href="http://skagit.meas.ncsu.edu/%7Ehelena/gmslab/lcgfin/cg-mitas.html">Role
 of dynamic cartography in simulations of landscape processes based on
 multi-variate fields.</a> Computers and Geosciences, Vol. 23, No. 4,
-pp. 437-446 (includes CDROM and WWW: www.elsevier.nl/locate/cgvis) </p>
+pp. 437-446 (includes CDROM and WWW: www.elsevier.nl/locate/cgvis) 
 <p>Mitasova H., Mitas L.,&nbsp; Brown W.M.,&nbsp; D.P. Gerdes, I.
 Kosinovsky, Baker, T.1995, Modeling spatially and temporally
 distributed phenomena:
 New methods and tools for GRASS GIS. International Journal of GIS, 9
 (4),
-special issue on Integrating GIS and Environmental modeling, 433-446. </p>
+special issue on Integrating GIS and Environmental modeling, 433-446. 
 <p> Mitasova, H., Mitas, L., Brown, B., Kosinovsky, I., Baker, T.,
 Gerdes, D. (1994): <a
  href="http://skagit.meas.ncsu.edu/%7Ehelena/gmslab/viz/ches.html">Multidimensional
-interpolation and visualization in GRASS GIS</a> </p>
+interpolation and visualization in GRASS GIS</a> 
 <p><a
  href="http://skagit.meas.ncsu.edu/%7Ehelena/gmslab/papers/lmg.rev1.ps">Mitasova
 H. and Mitas L. 1993</a>: Interpolation by Regularized Spline with
 Tension: I. Theory and Implementation, <i>Mathematical Geology</i> 25,
-641-655. </p>
+641-655. 
 <p><a
  href="http://skagit.meas.ncsu.edu/%7Ehelena/gmslab/papers/hmg.rev1.ps">Mitasova
 H. and Hofierka J. 1993</a>: Interpolation by Regularized Spline with
 Tension: II. Application to Terrain Modeling and Surface Geometry
-Analysis, <i>Mathematical Geology</i> 25, 657-667. </p>
+Analysis, <i>Mathematical Geology</i> 25, 657-667. 
 <p>Mitasova, H., 1992 : New capabilities for interpolation and
-topographic analysis in GRASS, GRASSclippings 6, No.2 (summer), p.13. </p>
+topographic analysis in GRASS, GRASSclippings 6, No.2 (summer), p.13. 
 <p>Wahba, G., 1990 : Spline Models for Observational Data, CNMS-NSF
 Regional Conference series in applied mathematics, 59, SIAM,
-Philadelphia, Pennsylvania. </p>
+Philadelphia, Pennsylvania. 
 <p>Mitas, L., Mitasova H., 1988 : General variational approach to the
 interpolation problem, Computers and Mathematics with Applications 16,
-p. 983 </p>
+p. 983 
 <p>Talmi, A. and Gilat, G., 1977 : Method for Smooth Approximation of
-Data, Journal of Computational Physics, 23, p.93-123. </p>
+Data, Journal of Computational Physics, 23, p.93-123. 
 <p>Thorpe, J. A. (1979): Elementary Topics in Differential Geometry.
-Springer-Verlag, New York, pp. 6-94.</p>
+Springer-Verlag, New York, pp. 6-94.
 
 <h2>SEE ALSO</h2>
 <a href="g.region.html">g.region</a>,
@@ -284,18 +284,18 @@ North Carolina State University, Raleigh, USA
 <a href="mailto:lubos_mitas@ncsu.edu">lubos_mitas@ncsu.edu</a><br>
 Helena Mitasova, Department of Marine, Earth and Atmospheric Sciences,
 North Carolina State University, Raleigh, USA, <a
- href="mailto:hmitaso@unity.ncsu.edu">hmitaso@unity.ncsu.edu</a></p>
+ href="mailto:hmitaso@unity.ncsu.edu">hmitaso@unity.ncsu.edu</a>
 <p>Modified program (translated to C, adapted for GRASS, new
 segmentation procedure): <br>
 Irina Kosinovsky, US Army CERL, Champaign, Illinois, USA <br>
-Dave Gerdes, US Army CERL, Champaign, Illinois, USA </p>
+Dave Gerdes, US Army CERL, Champaign, Illinois, USA 
 <p>Modifications for g3d library, geometric parameters,
 cross-validation, deviations: <br>
 Jaro Hofierka, Department of Geography and Regional Development,
 University of Presov, Presov, Slovakia, <a
  href="MAILTO:hofierka@fhpv.unipo.sk">hofierka@fhpv.unipo.sk</a>, <a
  href="http://www.geomodel.sk">http://www.geomodel.sk</a> <br>
-&nbsp; </p>
+&nbsp; 
 
 
-<p><i>Last changed: $Date$</i> </p>
+<p><i>Last changed: $Date$</i> 

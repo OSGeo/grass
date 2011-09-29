@@ -1,11 +1,11 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-The <EM>d.rast.edit</EM> program allows users to interactively
+The <em>d.rast.edit</em> program allows users to interactively
 edit cell category values in a raster map layer displayed to the
 graphics monitor using a mouse cursor.
 
 
-<H2>USAGE</H2>
+<h2>USAGE</h2>
 
 <B><I>Note: this help page refers to the old Tcl/Tk version of this
 program. Parts of it may be out of date or wrong.</I></B>
@@ -23,14 +23,14 @@ Moving the editing view can take a while.
 Cell editing is done using a mouse cursor to choose menu selections
 and indicate areas on the displayed raster map that are to be edited.
 
-<P>
+<p>
 Selections available at the top of the edit window are <b>Save</b> and
 <b>Exit</b>.
-<P>
+<p>
 
 As the mouse travels over the cells in the edit window you are shown the
 current coordinates and current cell values under the cursor.
-<P>
+<p>
 To change the value of a cell put the new value to use in the "New value"
 box at the bottom left of the edit window under the coordinate information
 bar. A value of "*" indicates a NULL value should be used.
@@ -39,31 +39,31 @@ bar. A value of "*" indicates a NULL value should be used.
 <H3>Arrows</H3>
 
 This function is available for users editing aspect maps.  The
-<EM><A HREF="d.rast.arrow.html">d.rast.arrow</A></EM> program is
+<em><a href="d.rast.arrow.html">d.rast.arrow</A></em> program is
 called, which draws arrows over the displayed
 cells to indicate the downslope direction of the cell.
 You can set the aspect map to use on the command line.
 Aspect maps are expected to be in regular "GRASS" format, as produced by
-<EM><A HREF="r.slope.aspect.html">r.slope.aspect</A></EM>; i.e. degrees
+<em><a href="r.slope.aspect.html">r.slope.aspect</A></em>; i.e. degrees
 counter-clockwise from east.
 
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 There is no "undo" command or way to exit edit mode without saving
 changes.
-<P>
+<p>
 Any MASK in place will be respected when writing the new raster map layer,
 including any edits to the MASKed areas.
 
 <H3>Geographic Region Concerns</H3>
 
-<EM>d.rast.edit</EM> reads the region definition for the raster map layer
+<em>d.rast.edit</em> reads the region definition for the raster map layer
 being edited from its internal cell header file. The new, edited copy of
 the raster layer will be created with the same resolution and region
 dimensions.
-<P>
-The primary bane of the <EM>d.rast.edit</EM> program involves large map
+<p>
+The primary bane of the <em>d.rast.edit</em> program involves large map
 layers with lots of rows and columns) and/or slow computers,
 since the program must read and write raster map layers row by row for
 the full size of the map layer as dictated by its region size and resolution.
@@ -73,49 +73,49 @@ since by use of the overview selection these values may change several
 times during the editing session).
 
 
-<H2>TODO</H2>
+<h2>TODO</h2>
 
 <!-- not true, but it would be nice
-<EM>d.rast.edit</EM> will not create a new raster map layer if
+<em>d.rast.edit</em> will not create a new raster map layer if
 the user makes no cell edits while running the program.
-<P>
+<p>
 -->
 
-It would be nice to incorporate a scrollable version of <EM>
-<A HREF="d.legend.html">d.legend</A>
-</EM>
+It would be nice to incorporate a scrollable version of <em>
+<a href="d.legend.html">d.legend</A>
+</em>
 (such that one could see a label legend for files with many categories on
 a standard size sub-frame).  It would be even nicer to be able
 to select the category values from a graphical legend when editing
 cell values (thereby saving a trip to the text frame to type in the
 new value).
 
-<P>
+<p>
 Perhaps method(s) for multiple  or mass cell edits would be useful.
-This could be done by providing modes in which the user may:<BR>
-1) edit a block of cells to a given value by drawing a box;<BR>
+This could be done by providing modes in which the user may:<br>
+1) edit a block of cells to a given value by drawing a box;<br>
 2) be able to choose a given value which is automatically used as
 the new value on each cell chosen until a different value is desired.
 
-<P>
+<p>
 There is no interrupt handling. <!-- ?? --> This could leave files in .tmp
 or (rarely) result in half-baked raster maps.  The original file
 would survive unscathed by an interrupt at most any point in execution.
 Beware of exiting the program
-by means other than using <EM>exit</EM> on the <EM>Main Menu</EM>.
+by means other than using <em>exit</em> on the <em>Main Menu</em>.
 
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
 <em>
 <a href="d.rast.arrow.html">d.rast.arrow</a>,
 <a href="d.rast.num.html">d.rast.num</a>
 </em>
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
-Tcl/Tk and wxPython versions: Glynn Clements<BR>
-<BR>
+Tcl/Tk and wxPython versions: Glynn Clements<br>
+<br>
 Replaces Xdriver version in C by Chris Rewerts,
 Agricultural Engineering,
 Purdue University

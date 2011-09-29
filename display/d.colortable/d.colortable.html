@@ -1,20 +1,20 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-The GRASS program <EM>d.colortable</EM> 
+The GRASS program <em>d.colortable</em> 
 is used to display the color table associated with a raster map layer in the 
-active frame on the graphics monitor. The <EM>map</EM> name should be 
+active frame on the graphics monitor. The <em>map</em> name should be 
 an available raster map layer in the user's current mapset search path 
 and location. 
 
-<P>
-If the <EM>values</EM> of both <EM>lines</EM> and <EM>cols</EM> are
-not specified by the user, <EM>d.colortable</EM> 
+<p>
+If the <em>values</em> of both <em>lines</em> and <em>cols</em> are
+not specified by the user, <em>d.colortable</em> 
 divides the active frame equally among the number of categories 
 present in the named raster map layer. If one option is specified, 
 the other is automatically set to accommodate all categories. 
 If both are specified, as many categories as possible are displayed. 
 
-<P>
+<p>
 If the user specifies the name of a map on the command line but does not 
 specify the values of other parameters, parameter default values will be used. 
 Alternately, if the user types simply <em>d.colortable</em> on the command line 
@@ -22,32 +22,32 @@ without any program arguments, the program will prompt the user for parameter
 settings using the standard GRASS parser interface.
 
 
-<H2>EXAMPLE</H2>
+<h2>EXAMPLE</h2>
 
 The user running the command: 
 <DL>
 <DD>
-<B>d.colortable map=</B><EM>soils</EM> 
-  <B>color=</B><EM>red</EM>
-  <B>lines=</B><EM>1</EM>
-  <B>cols=</B><EM>3</EM>
+<B>d.colortable map=</B><em>soils</em> 
+  <B>color=</B><em>red</em>
+  <B>lines=</B><em>1</em>
+  <B>cols=</B><em>3</em>
 </DL>
 would see the active graphics frame divided into three columns 
 extending the full frame height. The lines dividing the color table 
-associated with the <EM>soils</EM> map would be displayed in red. 
-The user would see, at most, only three of the colors from the <EM>soils</EM> 
+associated with the <em>soils</em> map would be displayed in red. 
+The user would see, at most, only three of the colors from the <em>soils</em> 
 color table displayed in the active frame (because the user requested 
 that this frame be divided into three sections).
 
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 If the user wishes to display the entire color table associated with 
 a map, the user should either stipulate a number of lines (rows) and 
 columns (cols) sufficient to accommodate the number of categories 
 in the map's color table, or fail to assign values to one or both of 
-<EM>lines</EM> and/or <EM>cols</EM>.
-If the user runs <EM>d.colortable</EM> using the default number of 
+<em>lines</em> and/or <em>cols</em>.
+If the user runs <em>d.colortable</em> using the default number of 
 lines and columns (the full graphics frame), all categories from the 
 map's color table will be displayed. However, if the user requests 
 that the color table associated with a map which has 10 data categories 
@@ -55,22 +55,22 @@ be displayed in a graphics frame with only 3 lines (rows) and 2 columns
 (a total of six cells), 
 only six of the ten map categories will be displayed. 
 
-<P>
+<p>
 The user should run the GRASS program 
-<EM><A HREF="d.erase.html">d.erase</A></EM> between 
-runs of <EM>d.colortable</EM> to avoid confusion. 
+<em><a href="d.erase.html">d.erase</A></em> between 
+runs of <em>d.colortable</em> to avoid confusion. 
 
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM>
-<A HREF="d.colors.html">d.colors</A><br>
-<A HREF="d.erase.html">d.erase</A><br>
-<A HREF="d.legend.html">d.legend</A><br>
-<A HREF="d.rast.html">d.rast</A>
-</EM>
+<em>
+<a href="d.colors.html">d.colors</A><br>
+<a href="d.erase.html">d.erase</A><br>
+<a href="d.legend.html">d.legend</A><br>
+<a href="d.rast.html">d.rast</A>
+</em>
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 James Westervelt, U.S. Army Construction Engineering Research Laboratory
 

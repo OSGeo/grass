@@ -1,4 +1,4 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
 <em>g.filename</em> is designed for Bourne shell scripts that need to know 
 the full file name, including it's path, for mapset elements, like raster,
@@ -13,41 +13,41 @@ g.remove/g.rename/g.copy use to determine which files need to be
 deleted/renamed/copied for a given entity type.
 
 <!-- unused
-<H2>OPTIONS</H2>
+<h2>OPTIONS</h2>
 
 <H3>Parameters:</H3>
 
 <DL>
-<DT><B>element=</B><EM>name</EM> 
+<DT><B>element=</B><em>name</em> 
 
 <DD>The name of a GRASS data base element (i.e., directory
 within the GRASS mapset location).
 
-<DT><B>mapset=</B><EM>name</EM> 
+<DT><B>mapset=</B><em>name</em> 
 
 <DD>The name of a GRASS data base mapset.  As a
 convenience, a single dot (.) can be used to designate the
 current mapset.
 
-<DT><B>file=</B><EM>name</EM> 
+<DT><B>file=</B><em>name</em> 
 
 <DD>The name of a GRASS data base file.
 </DL>
 -->
-<H2>OUTPUT</H2>
+<h2>OUTPUT</h2>
 
-<EM>g.filename</EM>
+<em>g.filename</em>
 writes one line to standard output:
 
 <DL>
 <DD>
-file='<EM>full_file_pathname'</EM>
+file='<em>full_file_pathname'</em>
 </DL>
 
-The output is a <EM>/bin/sh</EM> command to set the
-variable specified by the file <EM>name</EM> to the full
+The output is a <em>/bin/sh</em> command to set the
+variable specified by the file <em>name</em> to the full
 UNIX path name for the data base file.  This variable may
-be set in the <EM>/bin/sh</EM> as follows:
+be set in the <em>/bin/sh</em> as follows:
 
 <DL>
 <DD>
@@ -57,35 +57,35 @@ eval `g.filename element=<em>name</em> mapset=<em>name</em> file=<em>name</em>`
 </DL>
 
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 This routine generates the filename, but does not care if the file (or mapset
 or element) exists or not. This feature allows shell scripts to create new data
 base files as well as use existing ones.
 
-<P>
+<p>
 
-If the mapset is the current mapset, <EM>g.filename</EM>
-automatically creates the <EM>element</EM> specified if it
+If the mapset is the current mapset, <em>g.filename</em>
+automatically creates the <em>element</em> specified if it
 doesn't already exist.  This makes it easy to add new files
 to the data base without having to worry about the
 existence of the required data base directories.  (This
 program will not create a new mapset, however, if that
 specified does not currently exist.)
 
-<P>
+<p>
 The program exits with a 0 if everything is ok;  it exits
 with a non-zero value if there is an error, in which case
-file=<EM>'full_file_pathname'</EM> is not output.
+file=<em>'full_file_pathname'</em> is not output.
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM><A HREF="g.ask.html">g.ask</A></EM><br>
-<EM><A HREF="g.findfile.html">g.findfile</A></EM><br>
-<EM><A HREF="g.gisenv.html">g.gisenv</A></EM><br>
-<EM><A HREF="parser.html">parser</A></EM>
+<em><a href="g.ask.html">g.ask</A></em><br>
+<em><a href="g.findfile.html">g.findfile</A></em><br>
+<em><a href="g.gisenv.html">g.gisenv</A></em><br>
+<em><a href="parser.html">parser</A></em>
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 Michael Shapiro,
 U.S.Army Construction Engineering Research Laboratory

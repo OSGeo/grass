@@ -1,17 +1,17 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>v.distance</EM> finds the nearest element in vector map
+<em>v.distance</em> finds the nearest element in vector map
 (<em>to</em>) for elements in vector map (<em>from</em>). Various
 information about the vectors' relationships (distance, category, etc.) may be uploaded
 to the attribute table attached to the first vector map, or printed to
 'stdout'.  A new vector map may be created where lines connecting
 nearest points on features are written. <em>dmin</em> and/or <em>dmax</em> can be used to limit the search radius.
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 If a nearest feature does not have a category, the attribute column is updated
 to <em>null</em>.  This is true also for areas, which means for example,
-that if a point is in an island (area WITHOUT category), <EM>v.distance</EM> 
+that if a point is in an island (area WITHOUT category), <em>v.distance</em> 
 does not search for the nearest area WITH category; the island is identified 
 as the nearest and category updated to null.
 <p>
@@ -21,11 +21,11 @@ In lat-long locations <em>v.distance</em> gives distances (<em>dist</em>
 and <em>to_along</em>) in meters not in degrees calculated as geodesic
 distances on a sphere.
 
-<h2>EXAMPLES</H2>
+<h2>EXAMPLES</h2>
 
 <H3>Find nearest lines</H3>
 
-Find <EM>nearest lines</EM> in vector map <B>ln</B> for points from
+Find <em>nearest lines</em> in vector map <B>ln</B> for points from
 vector map <B>pnt</B> within the given threshold and write related
 line categories to column <B>linecat</B> in an attribute table attached
 to vector map <B>pnt</B>:
@@ -36,7 +36,7 @@ v.distance from=pnt to=ln upload=cat column=linecat
 
 <H3>Find nearest area</H3>
 
-For each point from vector map <B>pnt</B>, find the <EM>nearest area</EM>
+For each point from vector map <B>pnt</B>, find the <em>nearest area</em>
 from map <B>ar</B> within the given threshold and write the related
 area categories to column <B>areacat</B> in an attribute table attached
 to vector map <B>pnt</B> (in the case that a point falls into a polygon area,
@@ -48,8 +48,8 @@ v.distance from=pnt to=ar upload=cat column=areacat
 
 <H3>Create a new vector map</H3>
 
-Create a new vector map which contains <EM>lines connecting nearest
-features</EM> of maps <B>pnt</B> and map <B>ln</B>. The resulting
+Create a new vector map which contains <em>lines connecting nearest
+features</em> of maps <B>pnt</B> and map <B>ln</B>. The resulting
 vector map can be used for example to connect points to a network as
 needed for network analysis:
 
@@ -59,7 +59,7 @@ v.distance -p from=pnt to=ln out=connections upload=dist column=dist
 
 <H3>Query information</H3>
 
-Query information from selected point(s). <EM>v.distance</EM> takes
+Query information from selected point(s). <em>v.distance</em> takes
 points from a vector map as input instead of stdin. A new vector map
 with query points has to be created before the map can be analysed.
 <p>
@@ -82,7 +82,7 @@ The option <em>dmax=0</em> is here important because otherwise for
 points not falling into any area, the category of the nearest area is
 recorded.
 <br>
-For each point from vector map <B>pnt</B>, find the <EM>area</EM> from
+For each point from vector map <B>pnt</B>, find the <em>area</em> from
 vector map <B>ar</B> in which the individual point falls, and
 write the related area categories to column <B>areacat</B> into
 the attribute table attached to vector map <B>pnt</B>:
@@ -128,24 +128,24 @@ v.univar vdistance_vectors column=length
 v.distance -pa from=archsites to=archsites upload=dist col=dist
 </pre></div>
 
-Note: Matrix-like output is enabled only for flag <EM>-a</EM> and one
+Note: Matrix-like output is enabled only for flag <em>-a</em> and one
 given upload option.
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM>
+<em>
 <a href="r.distance.html">r.distance</a>,
 <a href="v.db.addcolumn.html">v.db.addcolumn</a>,
 <a href="v.what.vect.html">v.what.vect</a>
-</EM>
+</em>
 
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
-Janne Soimasuo 1994, University of Joensuu, Faculty of Forestry, Finland<BR>
-Cmd line coordinates support: Markus Neteler, ITC-irst, Trento, Italy<BR>
-Updated for 5.1: Radim Blazek, ITC-irst, Trento, Italy<BR>
-Matrix-like output by Martin Landa, FBK-irst, Trento, Italy<BR>
+Janne Soimasuo 1994, University of Joensuu, Faculty of Forestry, Finland<br>
+Cmd line coordinates support: Markus Neteler, ITC-irst, Trento, Italy<br>
+Updated for 5.1: Radim Blazek, ITC-irst, Trento, Italy<br>
+Matrix-like output by Martin Landa, FBK-irst, Trento, Italy<br>
 Improved processing speed: Markus Metz
 
 <p><i>Last changed: $Date$</i>

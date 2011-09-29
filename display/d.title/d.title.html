@@ -1,59 +1,59 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>d.title</EM> generates to standard output a string which can be used by
-<EM><A HREF="d.text.html">d.text</A></EM> to draw a TITLE for the raster map
-layer <EM>name</EM> in the active display frame on the graphics monitor. 
-Output created by <EM>d.title</EM> can be redirected into a file, or piped
-directly into <EM><A HREF="d.text.html">d.text</A></EM> to display the map
-TITLE created by <EM>d.title</EM>.  The map TITLE created will include the
+<em>d.title</em> generates to standard output a string which can be used by
+<em><a href="d.text.html">d.text</A></em> to draw a TITLE for the raster map
+layer <em>name</em> in the active display frame on the graphics monitor. 
+Output created by <em>d.title</em> can be redirected into a file, or piped
+directly into <em><a href="d.text.html">d.text</A></em> to display the map
+TITLE created by <em>d.title</em>.  The map TITLE created will include the
 map layer's name, TITLE, MAPSET, LOCATION_NAME, geographic region boundary
 coordinates, and cell resolution.
-If the <b>-d</b> draw flag is used, then <EM>d.title</EM> will call
-<EM>d.text</EM> for you and the title will be automatically rendered
+If the <b>-d</b> draw flag is used, then <em>d.title</em> will call
+<em>d.text</em> for you and the title will be automatically rendered
 to the display.
 
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 The text created with 
-<EM><A HREF="d.text.html">d.text</A></EM> 
+<em><a href="d.text.html">d.text</A></em> 
 will not necessarily fit within the 
 active display frame on the graphics monitor; 
 the user should choose a text size appropriate to this frame. 
 
 
-<H2>EXAMPLES</H2>
+<h2>EXAMPLES</h2>
 
 For example, a user wishing to create a suitable TITLE for the 
-Spearfish, SD <EM>soils</EM> map layer and to display this TITLE in the 
+Spearfish, SD <em>soils</em> map layer and to display this TITLE in the 
 active display frame on the graphics monitor might type the following: 
 <DL>
-<DD> <B>d.title map=</B><EM>soils</EM> <B>color=</B><EM>red</EM> <B>size=</B><EM>5</EM> <B>&gt; TITLE.file</B>
-<DD> <B><A HREF="d.text.html">d.text</A> &lt; TITLE.file</B> 
+<DD> <B>d.title map=</B><em>soils</em> <B>color=</B><em>red</em> <B>size=</B><em>5</em> <B>&gt; TITLE.file</B>
+<DD> <B><a href="d.text.html">d.text</A> &lt; TITLE.file</B> 
 </DL>
-Alternately, the user might pipe <EM>d.title</EM> output directly 
-into <EM><A HREF="d.text.html">d.text</A>:</EM> 
+Alternately, the user might pipe <em>d.title</em> output directly 
+into <em><a href="d.text.html">d.text</A>:</em> 
 <DL>
 <DD>
-<B>d.title map=</B><EM>soils</EM> <B>color=</B><EM>red</EM> <B>size=</B><EM>5</EM> | 
-<A HREF="d.text.html">d.text</A>
+<B>d.title map=</B><em>soils</em> <B>color=</B><em>red</em> <B>size=</B><em>5</em> | 
+<a href="d.text.html">d.text</A>
 </DL>
 
-<P>
-A file created by <EM>d.title</EM> can be displayed 
-with <EM><A HREF="d.text.html">d.text</A></EM>.
+<p>
+A file created by <em>d.title</em> can be displayed 
+with <em><a href="d.text.html">d.text</A></em>.
 Information contained in this file takes precedence over the 
-<EM>color</EM> and <EM>size</EM> parameters for 
-<EM><A HREF="d.text.html">d.text</A></EM>.
+<em>color</em> and <em>size</em> parameters for 
+<em><a href="d.text.html">d.text</A></em>.
 
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM><A HREF="d.font.html">d.font</A></EM><br>
-<EM><A HREF="d.text.html">d.text</A></EM><br>
+<em><a href="d.font.html">d.font</A></em><br>
+<em><a href="d.text.html">d.text</A></em><br>
 
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 James Westervelt, 
 U.S. Army Construction Engineering 
 Research Laboratory

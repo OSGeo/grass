@@ -1,44 +1,44 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
 This program allows the user to control access to the
 current mapset.  Normally, any user can read data from any
 GRASS mapset. But sometimes it is desirable to prohibit
-access to certain sensitive data. The <EM>g.access</EM>
+access to certain sensitive data. The <em>g.access</em>
 command allows a user to restrict read and execute access
-to the current mapset (see UNIX <EM>chmod</EM> command).
-<EM>g.access</EM> will not modify write access to the
+to the current mapset (see UNIX <em>chmod</em> command).
+<em>g.access</em> will not modify write access to the
 current mapset.
 
-<P>
+<p>
 
 The user may, for example, allow only users in the same
 UNIX group to read data files in the mapset, or restrict
 the mapset to personal use only.
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 
-<P> Under GRASS, access to the mapset PERMANENT must be open to
+<p> Under GRASS, access to the mapset PERMANENT must be open to
 all users.  This is because GRASS looks for the user's default geographic
 region definition settings and the location TITLE in files that are stored
-under the PERMANENT mapset directory.  The <EM>g.access</EM> command,
+under the PERMANENT mapset directory.  The <em>g.access</em> command,
 therefore, will not allow you to restrict access to the PERMANENT mapset.
 
-<P>
-The <EM><A HREF="g.mapsets.html">g.mapsets</A></EM> command isn't smart
+<p>
+The <em><a href="g.mapsets.html">g.mapsets</A></em> command isn't smart
 enough to tell if access to a specified mapset is restricted, and the user
 is therefore allowed to include the names of restricted mapsets in his
 search path.  However, the data in a restricted mapset is still protected;
 any attempts to look for or use data in a restricted mapset will fail.  The
 user will simply not see any data listed for a restricted mapset.
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-UNIX manual entries for <EM>chmod</EM> and <EM>group</EM> 
-<BR>
-<EM><A HREF="g.mapsets.html">g.mapsets</A></EM> 
+UNIX manual entries for <em>chmod</em> and <em>group</em> 
+<br>
+<em><a href="g.mapsets.html">g.mapsets</A></em> 
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 Michael Shapiro, 
 U.S. Army Construction Engineering Research Laboratory

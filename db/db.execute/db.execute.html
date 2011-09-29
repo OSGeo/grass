@@ -6,11 +6,11 @@
 
 <em>db.execute</em> only executes SQL statements and does not return 
 any data. If you need data returned from the database, use <em>db.select</em>.
-<P>
+<p>
 If parameters for database connection are already set with 
-<a HREF="db.connect.html">db.connect</a>, they are taken as default values and
+<a href="db.connect.html">db.connect</a>, they are taken as default values and
 do not need to be specified each time.
-<P>
+<p>
 If you have a large number of SQL commands to process, it is much much faster
 to place all the SQL statements into a text file and use <em>db.execute</em>'s
 <b>input</b> file parameter than it is to process each statement individually
@@ -33,50 +33,50 @@ echo 'create table soils (cat integer, soiltype varchar(10) )' | db.execute
 db.execute driver=odbc database=g60test input=file.sql
 </pre></div>
 
-<P>
+<p>
 <em>Insert new row into attribute table:</em><br>
 <div class="code"><pre>
 echo "INSERT INTO nobugs (id,name,east_gb,north_gb) values (30,'Ala',1657340,5072301)" | db.execute
 </pre></div>
 
-<P>
+<p>
 <em>Update attribute entries to new value based on SQL rule:</em><br>
 <div class="code"><pre>
 echo "UPDATE roads SET travelcost=5 WHERE cat=1" | db.execute
 </pre></div>
 
-<P>
+<p>
 <em>Update attribute entries to new value based on SQL rule:</em><br>
 <div class="code"><pre>
 echo "UPDATE dourokukan SET testc=50 WHERE testc is NULL" | db.execute
 </pre></div>
 
-<P>
+<p>
 <em>Delete selected rows from attribute table:</em><br>
 <div class="code"><pre>
 echo "DELETE FROM gsod_stationlist WHERE latitude < -91" | db.execute
 </pre></div>
 
-<P>
+<p>
 <em>Add new column to attribute table:</em><br>
 <div class="code"><pre>
 echo "ALTER TABLE roads ADD COLUMN length double" | db.execute
 </pre></div>
 
-<P>
+<p>
 <em>Column type conversion - update new column from existing column (all drivers except for DBF):</em><br>
 <div class="code"><pre>
 # 'z_value' is varchar and 'z' is double precision:
 echo "update geodetic_pts SET z = CAST(z_value AS numeric)" | db.execute
 </pre></div>
 
-<P>
+<p>
 <em>Drop column from attribute table:</em><br>
 <div class="code"><pre>
 echo "ALTER TABLE roads DROP COLUMN length" | db.execute
 </pre></div>
 
-<P>
+<p>
 <em>Drop table (not supported by all drivers)</em><br>
 <div class="code"><pre>
 echo "DROP TABLE fmacopy" | db.execute
@@ -92,24 +92,24 @@ UPDATE roads SET travelcost=2 WHERE cat=2;
 cat file.sql | db.execute
 </pre></div>
 
-<P>
+<p>
 <em>Join table 'myroads' into table 'extratab' based on common 'cat' column values (not supported by DBF driver):</em><br>
 <div class="code"><pre>
 echo "UPDATE extratab SET names=(SELECT label FROM myroads WHERE extratab.cat=myroads.cat);" | db.execute
 </pre></div>
 
 <h2>SEE ALSO</h2>
-<em><a HREF="db.columns.html">db.columns</a>,
-<a HREF="db.describe.html">db.describe</a>,
-<a HREF="db.drivers.html">db.drivers</a>,
-<a HREF="db.droptable.html">db.droptable</a>,
-<a HREF="db.login.html">db.login</a>,
-<a HREF="db.select.html">db.select</a>,
-<a HREF="db.tables.html">db.tables</a>,
-<a HREF="sql.html">GRASS SQL interface</a></em>
+<em><a href="db.columns.html">db.columns</a>,
+<a href="db.describe.html">db.describe</a>,
+<a href="db.drivers.html">db.drivers</a>,
+<a href="db.droptable.html">db.droptable</a>,
+<a href="db.login.html">db.login</a>,
+<a href="db.select.html">db.select</a>,
+<a href="db.tables.html">db.tables</a>,
+<a href="sql.html">GRASS SQL interface</a></em>
 
 <h2>AUTHOR</h2>
 
 CERL
 
-<p><i>Last changed: $Date$</i></p>
+<p><i>Last changed: $Date$</i>

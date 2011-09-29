@@ -12,11 +12,11 @@ present in the <b>vector</b> map. Use <em>v.db.addcolumn</em> to add one if need
 Use dmax parameter to control query distance tolerance (how far points/centroids
 can be from <b>qvector</b> features). For more options, use
 <em>v.distance</em> instead.
-<P>
+<p>
 In case of a multipoint input <b>vector</b> map, with several points having the
 same category number, it can happen, that the query result is NULL, if the same
 category number falls into different <b>qvector</b> polygons.
-<P>
+<p>
 When transferring attributes from a point map to a polygon map, usually <b>dmax</b>
 has to be larger than zero (determined by distance between query points and
 polygon centroids).
@@ -35,7 +35,7 @@ v.what.vect myhospitals qmap=urbanarea column=urb_name qcolumn=NAME
 # verification:
 v.db.select myhospitals
 </pre></div>
-<P>
+<p>
 
 In this example, city names, population data and more from
 <a href="http://download.geonames.org/export/dump/">Geonames.org country files</a> are
@@ -59,11 +59,11 @@ v.what.vect corine_code111_112_cities qmap=geonames_IT_cities column=gnameid \
 <h2>SEE ALSO</h2>
 
 <em>
-<a HREF="v.db.addcolumn.html">v.db.addcolumn</a>,
-<a HREF="v.db.select.html">v.db.select</a>,
-<a HREF="v.distance.html">v.distance</a>,
-<a HREF="v.rast.stats.html">v.rast.stats</a>,
-<a HREF="v.what.rast.html">v.what.rast</a>
+<a href="v.db.addcolumn.html">v.db.addcolumn</a>,
+<a href="v.db.select.html">v.db.select</a>,
+<a href="v.distance.html">v.distance</a>,
+<a href="v.rast.stats.html">v.rast.stats</a>,
+<a href="v.what.rast.html">v.what.rast</a>
 </em>
 
 
@@ -72,4 +72,4 @@ v.what.vect corine_code111_112_cities qmap=geonames_IT_cities column=gnameid \
 Markus Neteler
 
 <p>
-<i>Last changed: $Date$</i></p>
+<i>Last changed: $Date$</i>

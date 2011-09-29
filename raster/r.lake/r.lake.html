@@ -3,11 +3,11 @@
 <p>The module fills a lake to a target water level from a given start point. The user
 can think of it as <em>r.grow</em> with additional checks for elevation.  The resulting
 raster map contains cells with values representing lake depth and NULL for all other 
-cells beyond the lake.</p>
+cells beyond the lake.
 
 <p>This module uses a 3x3 moving window approach to find all cells that
 match three criteria and to define the lake:
-</p>
+
 
 <ul>
  <li>cells are below the specified elevation (i.e., water level);</li>
@@ -15,7 +15,7 @@ match three criteria and to define the lake:
  <li>cells are not NULL or masked.</li>
 </ul>
 
-<p>The water level must be in DEM units.</p>
+<p>The water level must be in DEM units.
 
 <h2>NOTES</h2>
 <p>
@@ -26,7 +26,7 @@ check is done to make sure that the target water level is above the level of
 the DEM. When a raster map is used as a seed, however, no such checks are done. 
 Specifying a target water level below surface represented by DEM will result in an 
 empty map. Note: a raster lake map created in a previous run can also be used
-as a seed map for a new run to simulate rising water levels.</p>
+as a seed map for a new run to simulate rising water levels.
 
 <p>
 
@@ -35,12 +35,12 @@ the input (<b>seed=bar</b>) map if the <b>-o</b> flag is used.  The user can use
 <b>-o</b> flag to create animations of rising water level without
 producing a separate map for each frame.  An initial seed map must be created 
 to start the sequence, and will be overwritten during subsequent runs with resulting
-water levels maps (i.e., a single file serves for both input and output).</p>
+water levels maps (i.e., a single file serves for both input and output).
 
 <p>
 
 Negative output (the <b>-n</b> flag) is useful for visualisations in NVIZ. 
-It equals the mapcalc's expression <em>"negative = 0 - positive"</em>.</p>
+It equals the mapcalc's expression <em>"negative = 0 - positive"</em>.
 
 <h3>MAPCALC EQUIVALENT - FOR GRASS HACKERS</h3>
 
@@ -67,7 +67,7 @@ if( if( isnull(${seedmap}),0,${seedmap}>0), ${wlevel}-${dem}, \
 The ${seedmap} variable is replaced by seed map names, ${dem} with DEM map name, and
 ${wlevel} with target water level.  To get single water level, this code block is
 called with same level numerous times (in a loop) as the lake grows by single cells
-during single run.</p>
+during single run.
 
 <h2>BUGS/KNOWN ISSUES</h2>
 
@@ -87,4 +87,4 @@ during single run.</p>
 <h2>AUTHOR</h2>
 Maris Nartiss (maris.nartiss gmail.com)
 
-<p><i>Last changed: $Date$</i></p>
+<p><i>Last changed: $Date$</i>

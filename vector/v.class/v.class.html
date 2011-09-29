@@ -1,4 +1,4 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
 <em>v.class</em> classifies vector attribute data into classes, for example for thematic mapping. Classification can be on a column or on an expression including several columns, all in the table linked to the vector map. The user indicates the number of classes desired and the algorithm to use for classification.
 
@@ -6,19 +6,19 @@ Several algorithms are implemented for classification: equal interval, standard 
 
 It can be used to pipe class breaks into thematic mapping modules such as d.thematic.area (see example below);
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
-<P>The <em>equal interval</em> algorithm simply divides the range max-min by the number of breaks to determine the interval between class breaks.</P>
+<p>The <em>equal interval</em> algorithm simply divides the range max-min by the number of breaks to determine the interval between class breaks.
 
-<P>The <em>quantiles</em> algorithm creates classes which all contain approximately the same number of observations.</P>
+<p>The <em>quantiles</em> algorithm creates classes which all contain approximately the same number of observations.
 
-<P>The <em>standard deviations</em> algorithm creates class breaks which are a combination of the mean +/- the standard deviation. It calculates a scale factor (<1) by which to multiply the standard deviation in order for all of the class breaks to fall into the range min-max of the data values.</P>
+<p>The <em>standard deviations</em> algorithm creates class breaks which are a combination of the mean +/- the standard deviation. It calculates a scale factor (<1) by which to multiply the standard deviation in order for all of the class breaks to fall into the range min-max of the data values.
 
-<P>The <em>equiprobabilites</em> algorithm creates classes that would be equiprobable if the distribution was normal. If some of the class breaks fall outside the range min-max of the data values, the algorithm prints a warning and reduces the number of breaks, but the probabilities used are those of the number of breaks asked for.</P>
+<p>The <em>equiprobabilites</em> algorithm creates classes that would be equiprobable if the distribution was normal. If some of the class breaks fall outside the range min-max of the data values, the algorithm prints a warning and reduces the number of breaks, but the probabilities used are those of the number of breaks asked for.
 
-<P>The <em>discont</em> algorithm systematically searches discontinuities in the slope of the cumulated frequencies curve, by approximating this curve through straight line segments whose vertices define the class breaks. The first approximation is a straight line which links the two end nodes of the curve. This line is then replaced by a two-segmented polyline whose central node is the point on the curve which is farthest from the preceding straight line. The point on the curve furthest from this new polyline is then chosen as a new node to create break up one of the two preceding segments, and so forth. The problem of the difference in terms of units between the two axes is solved by rescaling both amplitudes to an interval between 0 and 1. In the original algorithm, the process is stopped when the difference between the slopes of the two new segments is no longer significant (alpha = 0.05). As the slope is the ratio between the frequency and the amplitude of the corresponding interval, i.e. its density, this effectively tests whether the frequencies of the two newly proposed classes are different from those obtained by simply distributing the sum of their frequencies amongst them in proportion to the class amplitudes. In the GRASS implementation, the algorithm continues, but a warning is printed.</P>
+<p>The <em>discont</em> algorithm systematically searches discontinuities in the slope of the cumulated frequencies curve, by approximating this curve through straight line segments whose vertices define the class breaks. The first approximation is a straight line which links the two end nodes of the curve. This line is then replaced by a two-segmented polyline whose central node is the point on the curve which is farthest from the preceding straight line. The point on the curve furthest from this new polyline is then chosen as a new node to create break up one of the two preceding segments, and so forth. The problem of the difference in terms of units between the two axes is solved by rescaling both amplitudes to an interval between 0 and 1. In the original algorithm, the process is stopped when the difference between the slopes of the two new segments is no longer significant (alpha = 0.05). As the slope is the ratio between the frequency and the amplitude of the corresponding interval, i.e. its density, this effectively tests whether the frequencies of the two newly proposed classes are different from those obtained by simply distributing the sum of their frequencies amongst them in proportion to the class amplitudes. In the GRASS implementation, the algorithm continues, but a warning is printed.
 
-<H2>EXAMPLE</H2>
+<h2>EXAMPLE</h2>
 
 Classify column pop of map communes into 5 classes using quantiles:
 
@@ -38,13 +38,13 @@ The following example uses the output of d.class and feeds it directly into d.ar
 d.thematic.area -l map=communes2 data=pop/area breaks=`v.class -g map=communes2 column=pop/area algo=std nbcla=5` colors=0:0:255,50:100:255,255:100:50,255:0:0,156:0:0
 </pre></div>
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM><A HREF="v.univar.html">v.univar</A></EM>
-<EM><A HREF="d.thematic.area.html">d.area.thematic</A></EM>
+<em><a href="v.univar.html">v.univar</A></em>
+<em><a href="d.thematic.area.html">d.area.thematic</A></em>
 
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 Moritz Lennert
 

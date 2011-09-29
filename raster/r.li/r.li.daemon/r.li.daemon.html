@@ -9,12 +9,12 @@
 
 <img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
 
-<H2>NAME</H2>
-<EM><B>libgrass_rli</B></EM> - r.li landscape index support library
+<h2>NAME</h2>
+<em><B>libgrass_rli</B></em> - r.li landscape index support library
 
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>r.li.daemon</EM> provides support for landscape index calculations on raster
+<em>r.li.daemon</em> provides support for landscape index calculations on raster
 maps. It hides the managment of areas, defined using <a href="r.li.setup.html">r.li.setup</a>
 command. It is not used like a standalone program, but its functions are 
 a library used by all <em>r.li.[index]</em> commands.<br>
@@ -56,7 +56,7 @@ To write a new index only two steps are needed:
 </ol>
 Compile it using a changed Makefile based on the file for <em>r.li.patchdensity</em>.
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 Using GRASS library function to access raster rows can slow down moving windows 
 execution. It is recommended to use 
 <br><div class="code"><pre>
@@ -67,14 +67,14 @@ RLI_get_dcell_row(int, int, area_des)
 to use an ad hoc build memory managment developed to speed up the system.
 The documentation is in doxygen files.
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM><A HREF="http://grass.osgeo.org/gdp/landscape/r_le_manual5.pdf">old r.le manual</A></EM><BR>
-<EM><A HREF="r.li.html">r.li</A></EM> package overview <BR>
-<EM><A HREF="r.li.patchdensity.html">r.li.patchdensity</A></EM>,
-<EM><A HREF="r.li.setup.html">r.li.setup</A></EM>
+<em><a href="http://grass.osgeo.org/gdp/landscape/r_le_manual5.pdf">old r.le manual</A></em><br>
+<em><a href="r.li.html">r.li</A></em> package overview <br>
+<em><a href="r.li.patchdensity.html">r.li.patchdensity</A></em>,
+<em><a href="r.li.setup.html">r.li.setup</A></em>
 
-<H2>AUTHORS</H2>
+<h2>AUTHORS</h2>
 Claudio Porta and Lucio Davide Spano, students of Computer Science 
 University of Pisa (Italy).<br>
 Commission from Faunalia Pontedera (PI)<br>
@@ -86,6 +86,6 @@ Read the COPYING file that comes with GRASS for details.
 <i>Last changed: $Date$</i>
 
 <HR>
-<P><a href="index.html">Main index</a> - <a href="raster.html">raster index</a> - <a href="full_index.html">Full index</a>
+<p><a href="index.html">Main index</a> - <a href="raster.html">raster index</a> - <a href="full_index.html">Full index</a>
 </body>
 </html>

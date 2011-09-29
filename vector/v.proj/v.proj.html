@@ -1,4 +1,4 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
 <em>v.proj</em> allows a user to convert a vector map in a specified mapset
 of a specified location (different from current) with projection of input
@@ -7,35 +7,35 @@ projection of current location (both projections are defined by
 corresponding PROJ_INFO files).
 
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 If <B>out</B> is not specified it is set to be the same as input map name.
 
-<BR>
+<br>
 If <B>dbase</B> is not specified it is assumed to be the current database.
 The user only has to specify <B>dbase</B> if the source location is stored
 in another separate GRASS database.
 
-<BR>
+<br>
 If <B>set</B> is not specified, its name is assumed to be the same as the current
  mapset's name. 
 
-<P>
-<EM>v.proj</EM> supports general datum transformations, making use of the
-<EM>PROJ.4</EM> co-ordinate system translation library.
-</P>
+<p>
+<em>v.proj</em> supports general datum transformations, making use of the
+<em>PROJ.4</em> co-ordinate system translation library.
 
-<H2>EXAMPLES</H2>
+
+<h2>EXAMPLES</h2>
 
 <div class="code"><pre>
 v.proj in=mymap location=latlong mapset=user1
 </pre></div>
 
-<H2>REFERENCES</H2>
+<h2>REFERENCES</h2>
 
 <a href="http://proj.maptools.org/">PROJ 4</a>: Projection/datum support library.
 
-<P>
+<p>
 <B>Further reading</B>
 <ul>
 <li> <a href="http://www.asprs.org/resources/grids/">ASPRS Grids and Datum</a>
@@ -43,25 +43,25 @@ v.proj in=mymap location=latlong mapset=user1
 <li> <a href="http://www.remotesensing.org/geotiff/proj_list/">Projections Transform List</a> (PROJ4)
 </ul>
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM>
-<A HREF="r.proj.html">r.proj</A>,
-<A HREF="g.proj.html">g.proj</A>,
-<A HREF="g.setproj.html">g.setproj</A>,
-<A HREF="i.rectify.html">i.rectify</A>,  
-<A HREF="r.stats.html">r.stats</A>,  
-<A HREF="v.sample.html">v.sample</A>,
-<A HREF="v.surf.idw.html">v.surf.idw</A>,
-<A HREF="v.surf.rst.html">v.surf.rst</A>
-</EM>
+<em>
+<a href="r.proj.html">r.proj</A>,
+<a href="g.proj.html">g.proj</A>,
+<a href="g.setproj.html">g.setproj</A>,
+<a href="i.rectify.html">i.rectify</A>,  
+<a href="r.stats.html">r.stats</A>,  
+<a href="v.sample.html">v.sample</A>,
+<a href="v.surf.idw.html">v.surf.idw</A>,
+<a href="v.surf.rst.html">v.surf.rst</A>
+</em>
 
-<H2>AUTHORS</H2>
+<h2>AUTHORS</h2>
 
 Irina Kosinovsky, US ARMY CERL
-<BR>
+<br>
 M.L. Holko, USDA, SCS, NHQ-CGIS
-<BR>
+<br>
 R.L. Glenn, USDA, SCS, NHQ-CGIS
 
 <p><i>Last changed: $Date$</i>

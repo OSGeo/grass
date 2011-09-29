@@ -1,55 +1,55 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>d.grid</EM> overlays a grid of user-defined size and
+<em>d.grid</em> overlays a grid of user-defined size and
 color in the active display frame on the graphics monitor.
 The grid can be created as a standard rectangular grid or
 a geographic grid. The grid will overlay, not overwrite,
 the contents of the active display frame.
 
-<P>
+<p>
 
-<EM>d.grid</EM> can be run non-interactively or
+<em>d.grid</em> can be run non-interactively or
 interactively.  If the user specifies the grid
-<EM>size</EM> and (optionally) the grid <EM>color</EM> on
+<em>size</em> and (optionally) the grid <em>color</em> on
 the command line the program will run non-interactively; if
-no grid <EM>color</EM> is given the default will be used.
+no grid <em>color</em> is given the default will be used.
 Alternately, the user may simply type <B>d.grid</B> on the
 command line; in this case, the program will prompt the
 user for parameter values using the standard GRASS graphical 
 user interface.
 
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
-<EM>d.grid</EM> will not erase grids already displayed in
+<em>d.grid</em> will not erase grids already displayed in
 the active graphics display frame by previous invocations
-of <EM>d.grid</EM>; multiple invocations of <EM>d.grid</EM>
+of <em>d.grid</em>; multiple invocations of <em>d.grid</em>
 will therefore result in the drawing of multiple grids
 inside the active graphics frame.  (A command like 
-<EM><A HREF="d.erase.html">d.erase</A></EM>, which erases the
+<em><a href="d.erase.html">d.erase</A></em>, which erases the
 entire contents of the active display frame, must be run to
 erase previously drawn grids from the display frame.)
 
-<P>
+<p>
 If the user provides a 
-<EM>-g</EM> flag a geographic (projected) grid 
-will be drawn. With the <EM>-g</EM> flag the <EM>size</EM> 
+<em>-g</em> flag a geographic (projected) grid 
+will be drawn. With the <em>-g</em> flag the <em>size</em> 
 argument accepts both decimal degrees and colon separated 
 ddd:mm:ss coordinates (eg. <tt>00:30:00</tt> for half of a degree).
 
 <p>
-A geographic grid cannot be drawn for a <EM>latitude/longitude</EM> 
-or <EM>XY</EM> projection.
+A geographic grid cannot be drawn for a <em>latitude/longitude</em> 
+or <em>XY</em> projection.
 <p>
 Colors may be standard named GRASS colors (red, green, aqua, etc.) or
-a numerical R:G:B triplet, where component values range from 0-255.<BR>
+a numerical R:G:B triplet, where component values range from 0-255.<br>
 <p>
-The grid drawing may be turned off by using the <em>-n</em> flag.<BR>
-The border drawing may be turned off by using the <em>-b</em> flag.<BR>
-The coordinate text may be turned off by using the <em>-t</em> flag.<BR>
+The grid drawing may be turned off by using the <em>-n</em> flag.<br>
+The border drawing may be turned off by using the <em>-b</em> flag.<br>
+The coordinate text may be turned off by using the <em>-t</em> flag.<br>
 
 
-<H2>EXAMPLES</H2>
+<h2>EXAMPLES</h2>
 To draw a red geographic grid with 30 minute grid spacing run 
 either of the following:
 <PRE>
@@ -63,25 +63,25 @@ To draw a blue standard rectangular grid at a 500 (meter) spacing run the follow
 <PRE>
   d.grid size=500 color=blue
 </PRE>
-<BR>
+<br>
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM><A HREF="d.barscale.html">d.barscale</A></EM><br>
-<EM><A HREF="d.legend.html">d.legend</A></EM><br>
-<EM><A HREF="d.geodesic.html">d.geodesic</A></EM><br>
-<EM><A HREF="d.rhumbline.html">d.rhumbline</A></EM><br>
-<EM><A HREF="d.erase.html">d.erase</A></EM><br>
-<EM><A HREF="d.frame.html">d.frame</A></EM><br>
-<EM><A HREF="d.rast.html">d.rast</A></EM><br>
+<em><a href="d.barscale.html">d.barscale</A></em><br>
+<em><a href="d.legend.html">d.legend</A></em><br>
+<em><a href="d.geodesic.html">d.geodesic</A></em><br>
+<em><a href="d.rhumbline.html">d.rhumbline</A></em><br>
+<em><a href="d.erase.html">d.erase</A></em><br>
+<em><a href="d.frame.html">d.frame</A></em><br>
+<em><a href="d.rast.html">d.rast</A></em><br>
 
 
 
-<H2>AUTHORS</H2>
+<h2>AUTHORS</h2>
 
-James Westervelt, U.S. Army Construction Engineering Research Laboratory<BR>
-Geogrid support: Bob Covill<BR>
-Border support: Markus Neteler<BR>
-Text and RGB support: Hamish Bowman<BR>
+James Westervelt, U.S. Army Construction Engineering Research Laboratory<br>
+Geogrid support: Bob Covill<br>
+Border support: Markus Neteler<br>
+Text and RGB support: Hamish Bowman<br>
 
 <p><i>Last changed: $Date$</i>

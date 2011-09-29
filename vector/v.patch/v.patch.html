@@ -11,18 +11,18 @@ Any vectors that are duplicated among the maps being
 patched together (e.g., border lines) will have to be
 edited or removed after <em>v.patch</em> is run. Such
 editing can be done automatically using
-<em><a HREF="v.clean.html">v.clean</a></em>.
+<em><a href="v.clean.html">v.clean</a></em>.
 <p>
 Lines may need to be
-snapped with <em><a HREF="v.clean.html">v.clean</a>
+snapped with <em><a href="v.clean.html">v.clean</a>
 tool=snap,break,rmdupl</em>.
 <p>
 Boundaries may need to be cleaned with
-<em><a HREF="v.clean.html">v.clean</a> tool=break,rmdupl,rmsa</em>
+<em><a href="v.clean.html">v.clean</a> tool=break,rmdupl,rmsa</em>
 repeatedly until the <em>rmsa</em> tool (Remove small angles at nodes)
 no longer modifies any boundaries. If vector topology is still not
 clean, boundaries may also need to be snapped with
-<em><a HREF="v.clean.html">v.clean</a> tool=snap,break,rmdupl</em>.
+<em><a href="v.clean.html">v.clean</a> tool=snap,break,rmdupl</em>.
 <p>
 When using the <em>-a</em> flag, the user has to make sure that the
 features in the different maps added to the output map do not have
@@ -39,7 +39,7 @@ Patch together two maps with mixed feature types:
    v.patch input=geology,streams out=geol_streams
 </pre></div>
 
-<BR>
+<br>
 Append one map to another:
 <div class="code"><pre>
    g.copy vect=roads,transport
@@ -49,10 +49,10 @@ Append one map to another:
 
 <h2>SEE ALSO</h2>
 
-<em><a HREF="v.clean.html">v.clean</a></em>,
-<em><a HREF="v.build.html">v.build</a></em>,
-<em><a HREF="v.select.html">v.select</a></em>,
-<em><a HREF="v.overlay.html">v.overlay</a></em>
+<em><a href="v.clean.html">v.clean</a></em>,
+<em><a href="v.build.html">v.build</a></em>,
+<em><a href="v.select.html">v.select</a></em>,
+<em><a href="v.overlay.html">v.overlay</a></em>
 
 
 <h2>AUTHORS</h2>

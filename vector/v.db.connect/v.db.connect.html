@@ -7,7 +7,7 @@ layer.
 <h2>NOTE</h2>
 
 If parameters for database connection are already set with 
-<a HREF="db.connect.html">db.connect</a>, they are taken as default values and
+<a href="db.connect.html">db.connect</a>, they are taken as default values and
 do not need to be spcified each time.
 
 <p>
@@ -17,10 +17,10 @@ output.
 
 <p>
 <b>Attention:</b> Removing a vector map will also delete all tables
-linked to it! If you use <a HREF="db.connect.html">v.db.connect </a>to
+linked to it! If you use <a href="db.connect.html">v.db.connect </a>to
 link further tables to your map, it is advisable to make a copy from
 those tables first and connect the copied tables to the vector map
-(see also <a HREF="v.overlay.html">v.overlay</a>).
+(see also <a href="v.overlay.html">v.overlay</a>).
 
 <h2>EXAMPLE</h2>
 
@@ -147,7 +147,7 @@ v.db.connect map=mytable driver=pg database="host=localhost,dbname=meteo" \
 </pre></div>
 
 An alternative is to create a "view" of only ID, x, y [,z] columns and
-to use <a HREF="v.in.db.html">v.in.db</a> on this view, then connect the original
+to use <a href="v.in.db.html">v.in.db</a> on this view, then connect the original
 table to the geometry. This will be faster if the original table
 is very large.
 
@@ -190,16 +190,16 @@ v.db.connect map=mytable driver=pg database="host=localhost,dbname=meteo" \
 <h2>SEE ALSO</h2>
 
 <em>
-<a HREF="db.connect.html">db.connect</a>,
-<a HREF="db.copy.html">db.copy</a>,
-<a HREF="db.tables.html">db.tables</a>,
-<a HREF="v.db.addtable.html">v.db.addtable</a>,
-<a HREF="v.db.droptable.html">v.db.droptable</a>,
-<a HREF="v.db.addcolumn.html">v.db.addcolumn</a>,
-<a HREF="v.db.dropcolumn.html">v.db.dropcolumn</a>,
-<a HREF="v.external.html">v.external</a>,
-<a HREF="v.in.db.html">v.in.db</a>,
-<a HREF="v.overlay.html">v.overlay</a>
+<a href="db.connect.html">db.connect</a>,
+<a href="db.copy.html">db.copy</a>,
+<a href="db.tables.html">db.tables</a>,
+<a href="v.db.addtable.html">v.db.addtable</a>,
+<a href="v.db.droptable.html">v.db.droptable</a>,
+<a href="v.db.addcolumn.html">v.db.addcolumn</a>,
+<a href="v.db.dropcolumn.html">v.db.dropcolumn</a>,
+<a href="v.external.html">v.external</a>,
+<a href="v.in.db.html">v.in.db</a>,
+<a href="v.overlay.html">v.overlay</a>
 </em>
 
 <h2>AUTHOR</h2>

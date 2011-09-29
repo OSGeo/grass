@@ -14,7 +14,7 @@ grid cells at the edge of the map, but along the edge of the map itself.
 i.e. the geographic extent of the map is described by the outer bounds of
 all cells within the map.
 
-<P>
+<p>
 As a general rule in GRASS:
 <ol>
 <li> Raster output maps have their bounds and resolution equal to those
@@ -32,11 +32,11 @@ There are a few exceptions to this:
 reading non-georeferenced data, the imported map will usually have its
 lower-left corner at (0,0) in the location's coordinate system; the user
 needs to use <a href="r.region.html">r.region</a> to "place" the imported map.
-<P>
+<p>
 Some programs which need to perform specific types of resampling (e.g.
 <a href="r.resamp.rst.html">r.resamp.rst</a>) read the input maps at
 their original resolution then do the resampling themselves.
-<P>
+<p>
 <a href="r.proj.html">r.proj</a> has to deal with two regions (source
 and destination) simultaneously; both will have an impact upon the
 final result.
@@ -49,14 +49,14 @@ offers options such as on-the-fly location creation or extension of
 the default region to match the extent of the imported raster map.
 For special cases, other import modules are available. The full map
 is always imported.
-<P>
+<p>
 For importing scanned maps, the user will need to create a
 x,y-location, scan the map in the desired resolution and save it into
 an appropriate raster format (e.g. tiff, jpeg, png, pbm) and then use
 <a href="r.in.gdal.html">r.in.gdal</a> to import it. Based on
 reference points the scanned map can be recified to obtain geocoded
 data.
-<P>
+<p>
 Raster maps are exported with <a href="r.out.gdal.html">r.out.gdal</a>
 into common formats. Also <a href="r.out.bin.html">r.out.bin</a>,
 <a href="r.out.vtk.html">r.out.vtk</a>, <a href="r.out.ascii.html">r.out.ascii</a>
@@ -165,7 +165,7 @@ and binning of ungridded x,y,z ASCII data into a new raster map. The user may ch
 a variety of statistical methods in creating the new raster.
 <p>
 
-Otherwise, for interpolation of scattered data, use the <EM>v.surf.*</EM> set of
+Otherwise, for interpolation of scattered data, use the <em>v.surf.*</em> set of
 modules.
 
 <h4>Raster MASKs</h4>
@@ -179,7 +179,7 @@ The mask is read as an integer map. If MASK is actually a
 floating-point map, the values will be converted to integers using the
 map's quantisation rules (this defaults to round-to-nearest, but can
 be changed with r.quant).
-<P>
+<p>
 (see <a href="r.mask.html">r.mask</a>)
 
 <h3>Raster map statistics</h3>

@@ -2,26 +2,26 @@
 <TITLE>GRASS 5.7/6 Vector Format and API</TITLE>
 </HEAD>
 <BODY>
-<P>
+<p>
 <H1>GRASS 5.7/6 Vector Format and API</H1>
 
 The API is described in
-<P>
+<p>
 <a href="http://grass.itc.it/devel/index.php#prog">GRASS 6 Programmer's Manual</a>
-<P>
+<p>
 
 source code file:<br>
 lib/vector/vectorlib.dox
 
 <HR>
 
-<H2><A NAME="ascii">Vector ASCII Format Specification</A></H2>
-<P>
+<h2><A NAME="ascii">Vector ASCII Format Specification</A></h2>
+<p>
 
 <i>format notes here are outdated and to be merged into<br>
 vector/v.in.ascii/description.html</i>
 
-<P>
+<p>
 The ASCII format in the new version contains support for categories,
 z-coordinates, and the new types centroid, face, and kernel.
 Points and centroids are saved as one coordinate pair instead of two.
@@ -29,7 +29,7 @@ File is saved in old dig_ascii directory but the name will be probably changed.
 
 <H3>Head</H3>
 The head of the file is similar as the head file of vector binary
-format but contains bounding box also. Key words are:<BR>
+format but contains bounding box also. Key words are:<br>
 <PRE>
 ORGANIZATION
 DIGIT DATE
@@ -65,23 +65,23 @@ TYPE NUMBER_OF_COORDINATES [NUMBER_OF_CATEGORIES]
 Everything above in <B>[ ]</B> is optional.
 Note the coordinate order in the old version (Y X) has been changed
 to (X Y [Z]).
-<BR><BR>
+<br><br>
 
-TYPE may be:<BR>
+TYPE may be:<br>
 <ul>
-<li><B>P</B> point (dot) <BR> 
-<li><B>p</B> dead point (dead dot) <BR> 
-<li><B>L</B> line  <BR>
-<li><B>l</B> dead line <BR> 
-<li><B>B(A)</B> boundary  <BR>
-<li><B>b(a)</B> dead boundary  <BR>
-<li><B>C</B> centroid  <BR>
-<li><B>c</B> dead centroid  <BR>
-<li><B>F</B> face (3D boundary) <BR>
-<li><B>K</B> kernel (3D centroid) <BR>
+<li><B>P</B> point (dot) <br> 
+<li><B>p</B> dead point (dead dot) <br> 
+<li><B>L</B> line  <br>
+<li><B>l</B> dead line <br> 
+<li><B>B(A)</B> boundary  <br>
+<li><B>b(a)</B> dead boundary  <br>
+<li><B>C</B> centroid  <br>
+<li><B>c</B> dead centroid  <br>
+<li><B>F</B> face (3D boundary) <br>
+<li><B>K</B> kernel (3D centroid) <br>
 </ul>
 
-<BR>
+<br>
 Example of records:
 <PRE>
 P 1 1
@@ -95,11 +95,11 @@ L 3 1
 </PRE>
 
 <HR>
-<H2><A NAME="example">Vector module programming example</A></H2>
+<h2><A NAME="example">Vector module programming example</A></h2>
 
 <a href=v.example/>Vector module C programming example</a>
 
-<H2><A NAME="status">Vector module upgrade status</A></H2>
+<h2><A NAME="status">Vector module upgrade status</A></h2>
 
 <a href=v.modules.html>Vector upgrade status</a> (partially outdated)
 

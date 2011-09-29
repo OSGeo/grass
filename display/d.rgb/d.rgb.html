@@ -1,13 +1,13 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>RGB</EM> stands for red, green, and blue. This program
+<em>RGB</em> stands for red, green, and blue. This program
 visually combines three raster map layers to form a color
 image. For each layer, the corresponding component from
 the layer's color table is used (e.g. for the red layer,
 the red component is used, and so on). In general, the
 layers should use a grey-scale color table.
 
-<H2>OPTIONS</H2>
+<h2>OPTIONS</h2>
 
 <H3>Flags:</H3> 
 
@@ -20,7 +20,7 @@ displayed in the active graphics frame. Any no-data areas in any of
 the named raster maps will seem transparent, and reveal the underlying
 image previously displayed in the graphics frame. If the <B>-o</B>
 flag is set, only cells containing non-null values will be displayed
-from the <EM>overlaid</EM> raster map. All other areas (i.e., the
+from the <em>overlaid</em> raster map. All other areas (i.e., the
 portions of the overlaid map that contain null values) will leave the
 underlying display untouched.
 
@@ -29,15 +29,15 @@ underlying display untouched.
 <H3>Parameters:</H3>
 
 <DL>
-<DT><B>red=</B><EM>name</EM>
+<DT><B>red=</B><em>name</em>
 <DD>Name of raster map layer to be used for RED component. 
-<DT><B>green=</B><EM>name</EM>
+<DT><B>green=</B><em>name</em>
 <DD>Name of raster map layer to be used for GREEN component. 
-<DT><B>blue=</B><EM>name</EM>
+<DT><B>blue=</B><em>name</em>
 <DD>Name of raster map layer to be used for BLUE component. 
 </DL>
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 This is a new version of <B>d.rgb</B>, which sends the
 data to the graphics monitor in true-color RGB format.
@@ -49,45 +49,45 @@ Nor does it have an option to generate a composite layer.
 The image and raster map layers will not display properly
 if the graphics device does not have a reasonable sampling
 of the RGB color-space.
-<P>
+<p>
 
 If color quality of satellite image color composites seems to appear poor,
-run <EM><a href="r.colors.html">r.colors</A></EM> on the selected satellite 
-channels.<P>
+run <em><a href="r.colors.html">r.colors</A></em> on the selected satellite 
+channels.<p>
 Example:
 <dl>
-<dd><B>r.info -r</B> <EM>image.1</EM><BR>
-<tt>min=0<BR>
-max=255</tt><BR>
+<dd><B>r.info -r</B> <em>image.1</em><br>
+<tt>min=0<br>
+max=255</tt><br>
 
-<dd><B>r.colors map=</B><EM>image.1</EM> <B>color=</B><EM>rules</EM> 
-<< EOF<BR>
-0 black<BR>
-255 white<BR>
-EOF<BR>
+<dd><B>r.colors map=</B><em>image.1</em> <B>color=</B><em>rules</em> 
+<< EOF<br>
+0 black<br>
+255 white<br>
+EOF<br>
 
-<dd><B>r.colors map=</B><EM>image.2</EM> <B>rast=</B><EM>image.1</EM>
-<dd><B>r.colors map=</B><EM>image.3</EM> <B>rast=</B><EM>image.1</EM>
+<dd><B>r.colors map=</B><em>image.2</em> <B>rast=</B><em>image.1</em>
+<dd><B>r.colors map=</B><em>image.3</em> <B>rast=</B><em>image.1</em>
 </dl>
 
-<EM>Note: Future GRASS versions may do this for you automatically.</EM>
-<BR><BR><BR>
+<em>Note: Future GRASS versions may do this for you automatically.</em>
+<br><br><br>
 
 To write out the color composite to a R/G/B raster maps, use 
-<EM><a href="r.composite.html">r.composite</A></EM>.
+<em><a href="r.composite.html">r.composite</A></em>.
 
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM><A HREF="d.colors.html">d.colors</A></EM><br>
-<EM><A HREF="d.colortable.html">d.colortable</A></EM><br>
-<EM><A HREF="d.his.html">d.his</A></EM><br>
-<EM><A HREF="r.blend.html">r.blend</A></EM><br>
-<EM><A HREF="r.mapcalc.html">r.mapcalc</A></EM><br>
-<EM><A HREF="r.colors.html">r.colors</A></EM><br>
-<EM><A HREF="r.composite.html">r.composite</A></EM>
+<em><a href="d.colors.html">d.colors</A></em><br>
+<em><a href="d.colortable.html">d.colortable</A></em><br>
+<em><a href="d.his.html">d.his</A></em><br>
+<em><a href="r.blend.html">r.blend</A></em><br>
+<em><a href="r.mapcalc.html">r.mapcalc</A></em><br>
+<em><a href="r.colors.html">r.colors</A></em><br>
+<em><a href="r.composite.html">r.composite</A></em>
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 Glynn Clements
 

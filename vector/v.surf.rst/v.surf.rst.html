@@ -59,7 +59,7 @@ User can choose to output vector maps <em>treefile</em> and <em>overfile</em>
 which represent the quad tree used for segmentation and overlapping neighborhoods
 from which additional points for approximation on each segment were taken.
 
-<P>
+<p>
 
 Predictive error of surface approximation for given parameters can be computed using the 
 <b>-c</b> flag. A crossvalidation procedure is then performed using the data given in the vector map 
@@ -99,7 +99,7 @@ downslope and is 90 to the North, 180 to the West, 270 to the South and
 360 to the East, the values increase counterclockwise. Curvatures are positive
 for convex and negative for concave areas. Singular points with undefined
 curvatures have assigned zero values.
-</p><p><em>Tension</em> and <em>smooth</em>ing allow user to tune the surface character.
+<p><em>Tension</em> and <em>smooth</em>ing allow user to tune the surface character.
 For most landscape scale applications the default values should provide adequate results.
 The program gives warning when significant overshoots appear in the resulting
 surface and higher tension or smoothing should be used.
@@ -128,7 +128,7 @@ and segmentation can be visible. Increase in tension should solve the problems.
 to <em>dnorm</em> (dnorm rescales the coordinates depending on the average
 data density so that the size of segments with <em>segmax=</em>40 points
 is around 1 - this ensures the numerical stability of the computation):
-</p><p>1. Default: the given <em>tension</em>
+<p>1. Default: the given <em>tension</em>
 is applied to normalized data (x/<em>dnorm</em>..), that means that
 the distances are multiplied (rescaled) by <em>tension/dnorm</em>. If density
 of points is changed, e.g., by using higher <em>dmin</em>, the <em>dnorm</em>
@@ -152,9 +152,9 @@ beginning of the program run. This rescaled <em>tension</em> should be around
 20-30. If it is lower or higher, the given <em>tension</em> parameter
 should be changed accordingly.
 
-</p><p>The default is a recommended choice, however for the applications where
+<p>The default is a recommended choice, however for the applications where
 the user needs to change density of data and preserve the approximation
-character the <b>-t</b> flag can be helpful.</p>
+character the <b>-t</b> flag can be helpful.
 <p>Anisotropic data (e.g. geologic phenomena) can be interpolated using <em>theta</em> 
 and <em>scalex</em> defining orientation 
 and ratio of the perpendicular axes put on the longest/shortest side of the feature, respectively.
@@ -168,7 +168,7 @@ option has not been extensively tested and may include bugs (for example , topog
 parameters may not be computed correctly) - if there are
 problems, please report to GRASS bugtracker 
 (accessible from <a href="http://grass.osgeo.org/">http://grass.osgeo.org/</a>).<br>
-</p>
+
 
 <!--
 <p>The program gives warning when significant overshoots appear and higher
@@ -182,7 +182,7 @@ the overshoots.
 <p>For data with values changing over several magnitudes (sometimes the
 concentration or density data) it is suggested to interpolate the log of
 the values rather than the original ones.
-</p>
+
 
 <p>The program checks the numerical stability of the algorithm by computing
 the values in given points, and prints the root mean square deviation (rms)
@@ -194,14 +194,14 @@ data points and the higher the parameter the closer the surface will be
 to the trend. The rms then represents a measure of smoothing effect on
 data. More detailed analysis of smoothing effects can be performed using
 the output deviations option.
-</p>
+
 
 <h3>SQL support</h3>
 
 Using the <em>where</em> parameter, the interpolation can be limited to use
 only a subset of the input vectors.
 
-<P>
+<p>
 Spearfish example (we simulate randomly distributed elevation measures):
 
 <div class="code"><pre>
@@ -249,7 +249,7 @@ phenomena and when minimizing the predictive error is the goal.
 The parameters found by minimizing the predictive (CV) error may not not be the best for
 for poorly sampled phenomena (result could be strongly smoothed with lost details and fluctuations)
 or when significant noise is present that needs to be smoothed out.
-</p>
+
 
 <p>The program writes the values of parameters used in computation into
 the comment part of history file <em>elev</em> as well as the following values
@@ -257,29 +257,29 @@ which help to evaluate the results and choose the suitable parameters:
 minimum and maximum z values in the data file (zmin_data, zmax_data) and
 in the interpolated raster map (zmin_int, zmax_int), rescaling parameter
 used for normalization (dnorm), which influences the tension.
-</p><p>If visible connection of segments appears, the program should be rerun
+<p>If visible connection of segments appears, the program should be rerun
 with higher <em>npmin</em> to get more points from the neighborhood of given
 segment and/or with higher tension.
 
-</p><p>When the number of points in a vector map is not too large (less than
+<p>When the number of points in a vector map is not too large (less than
 800), the user can skip segmentation by setting <em>segmax</em> to the number
 of data points or <em>segmax=700</em>.
-</p><p>The program gives warning when user wants to interpolate outside the
+<p>The program gives warning when user wants to interpolate outside the
 rectangle given by minimum and maximum coordinates in the vector map,
 zoom into the area where the given data are is suggested in this case.
-</p><p>When a mask is used, the program takes all points in the given region
+<p>When a mask is used, the program takes all points in the given region
 for approximation, including those in the area which is masked out, to
 ensure proper approximation along the border of the mask. It therefore
 does not mask out the data points, if this is desirable, it must be done
 outside <em>v.surf.rst</em>.
-</p>
+
 
 <p>For examples of applications see
 <a href="http://skagit.meas.ncsu.edu/~helena/gmslab/">GRASS4 implementation</a> and
 <a href="http://skagit.meas.ncsu.edu/~helena/">GRASS5 and GRASS6 implementation</a>.
-</p><p>The user must run <a href="g.region.html">g.region</a> before the program
+<p>The user must run <a href="g.region.html">g.region</a> before the program
 to set the region and resolution for approximation.
-</p>
+
 
 <h2>SEE ALSO</h2>
 
@@ -292,64 +292,64 @@ to set the region and resolution for approximation.
 USA (1990-2000); Department of Physics, North Carolina State University, Raleigh
 <br>Helena Mitasova, USA CERL, Department of Geography, University of Illinois at
 Urbana-Champaign, USA (1990-2001); MEAS, North Carolina State University, Raleigh 
-</p><p><em>Modified program (translated to C, adapted for GRASS, new segmentation
+<p><em>Modified program (translated to C, adapted for GRASS, new segmentation
 procedure):</em>
 <br>Irina Kosinovsky, US Army CERL, Dave Gerdes, US Army CERL
-</p><p><em>Modifications for new sites format and timestamping:</em>
+<p><em>Modifications for new sites format and timestamping:</em>
 <br>Darrel McCauley, Purdue University, Bill Brown, US Army CERL
-</p><p><em>Update for GRASS5.7, GRASS6 and addition of crossvalidation:</em>
+<p><em>Update for GRASS5.7, GRASS6 and addition of crossvalidation:</em>
 Jaroslav Hofierka, University of Presov; Radim Blazek, ITC-irst
-</p>
+
 
 <h2> REFERENCES</h2>
-<P>
+<p>
 <a href="http://skagit.meas.ncsu.edu/~helena/gmslab/papers/IEEEGRSL2005.pdf">
 Mitasova, H., Mitas, L. and Harmon, R.S., 2005,</a> 
 Simultaneous spline approximation and topographic analysis for
 lidar elevation data in open source GIS, IEEE GRSL 2 (4), 375- 379.
-<P>
+<p>
 Hofierka, J., 2005, Interpolation of Radioactivity Data Using Regularized Spline with Tension. Applied GIS, Vol. 1, No. 2, 
 pp. 16-01 to 16-13. DOI: 10.2104/ag050016
-</P>
-<P>
+
+<p>
 <a href="http://skagit.meas.ncsu.edu/~helena/gmslab/papers/TGIS2002_Hofierka_et_al.pdf">
 Hofierka J., Parajka J.,  Mitasova H., Mitas L., 2002,</a>
 Multivariate Interpolation of Precipitation Using Regularized Spline with Tension.
 Transactions in GIS 6(2), pp. 135-150.
-</P>
-<P>
+
+<p>
 H. Mitasova, L. Mitas, B.M. Brown, D.P. Gerdes, I. Kosinovsky, 1995, Modeling
 spatially and temporally distributed phenomena: New methods and tools for
 GRASS GIS. International Journal of GIS, 9 (4), special issue on Integrating
 GIS and Environmental modeling, 433-446.
-</P>
+
 <p>
 <a href="http://skagit.meas.ncsu.edu/~helena/gmslab/papers/MG-I-93.pdf">
 Mitasova, H. and Mitas, L., 1993</a>: 
 Interpolation by Regularized Spline with Tension: 
 I. Theory and Implementation, Mathematical Geology ,25, 641-655.
-</p>
+
 <p>
 <a href="http://skagit.meas.ncsu.edu/~helena/gmslab/papers/MG-II-93.pdf">
 Mitasova, H. and Hofierka, J., 1993</a>: Interpolation
 by Regularized Spline with Tension: II. Application to Terrain Modeling
 and Surface Geometry Analysis, Mathematical Geology 25, 657-667.
-</p>
+
 <p>
 <a href="http://skagit.meas.ncsu.edu/~helena/gmslab/papers/CMA1988.pdf">
 Mitas, L., and Mitasova H., 1988, </a> General variational approach to the approximation
 problem, Computers and Mathematics with Applications, v.16, p. 983-992.
-</p>
+
 
 <p>
 <a href="http://www.grassbook.org">
 Neteler, M. and Mitasova, H., 2008, Open Source GIS: A GRASS GIS Approach, 3rd Edition, </a> 
 Springer, New York, 406 pages.
-</p>
+
 
 <p>Talmi, A. and Gilat, G., 1977 : Method for Smooth Approximation of Data,
 Journal of Computational Physics, 23, p.93-123.
-</p>
+
 <p>Wahba, G., 1990, : Spline Models for Observational Data, CNMS-NSF Regional
 Conference series in applied mathematics, 59, SIAM, Philadelphia, Pennsylvania.
 

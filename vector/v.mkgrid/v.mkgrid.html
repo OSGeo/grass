@@ -1,27 +1,27 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>v.mkgrid</EM> will create a vector map representation of a regular coordinate grid.
+<em>v.mkgrid</em> will create a vector map representation of a regular coordinate grid.
 Both point and area vector grids can be created.
 
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 Grid points created with the <b>-p</b> flag will be placed at the
 <i>center</i> of each grid cell, not at the grid line nodes.
-<P>
+<p>
 This is NOT to be used to generate a vector map of USGS quadrangles,
 because USGS quads are not exact rectangles.
 
 
-<H2>EXAMPLES</H2>
+<h2>EXAMPLES</h2>
 
 Make a 4x3 grid, cells 20km a side, with lower left corner at 2716500,6447000:
 <div class="code"><pre>
 v.mkgrid map=coro_grid grid=4,3 position=coor coor=2716500,6447000 box=20000,20000
 </pre></div>
-<BR>
+<br>
 
-<P>
+<p>
 Make a 10x12 lat/lon grid, cells 2 arc-min a side, with lower left corner
 at 167deg 52min east, 47deg 6min south. For use with e.g. QGIS you can then
 pull this grid into a projected location with <em>v.proj</em> before
@@ -32,18 +32,18 @@ v.mkgrid map=p2min_grid grid=10,12 position=coor coor=167:52E,47:06S box=0:02,0:
 </pre></div>
 
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<A HREF="v.patch.html">v.patch</A>,
-<A HREF="d.grid.html">d.grid</A>
+<a href="v.patch.html">v.patch</A>,
+<a href="d.grid.html">d.grid</A>
 
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 Michael Higgins,
 U.S.Army Construction Engineering 
 Research Laboratory
-<P>
+<p>
 Update for new vectors Radim Blazek 10/2004 
 
 <p>

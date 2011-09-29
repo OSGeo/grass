@@ -1,7 +1,7 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
 
-<EM>i.zc</EM> is an image processing program used for edge
+<em>i.zc</em> is an image processing program used for edge
 detection.  The raster map produced shows the location of
 "boundaries" on the input map.  Boundaries tend to be found
 in regions of changing cell values and tend to run
@@ -9,21 +9,21 @@ perpendicular to the direction of the slope.  The algorithm
 used for edge detection is one of the "zero-crossing"
 algorithms and is discussed briefly below.
 
-<H2>OPTIONS</H2>
+<h2>OPTIONS</h2>
 
 <H3>Parameters:</H3>
 
 <DL>
 
-<DT><B>input_map=</B><EM>name</EM> 
+<DT><B>input_map=</B><em>name</em> 
 
 <DD>Name of input raster map layer.
 
-<DT><B>zc_map=</B><EM>name</EM> 
+<DT><B>zc_map=</B><em>name</em> 
 
 <DD>Name of raster map layer to be used for zero-crossing values.
 
-<DT><B>width=</B><EM>value</EM> 
+<DT><B>width=</B><em>value</em> 
 
 <DD>This parameter determines the x-y extent of the
 Gaussian filter.  The default value is 9;  higher and lower
@@ -31,34 +31,34 @@ values can be tested by the user.  Increasing the width
 will result in finding "edges" representing more gradual
 changes in cell values.
 
-<BR>
+<br>
 
 Default:  9
 
-<DT><B>threshold=</B><EM>value</EM> 
+<DT><B>threshold=</B><em>value</em> 
 
 <DD>This parameter determines the "sensitivity" of the
 Gaussian filter.  The default value is 10;  higher and
 lower values can be tested by the user.  Increasing the
 threshold value will result in fewer edges being found.
 
-<BR>
+<br>
 
 Default:  10
 
-<DT><B>orientations=</B><EM>value</EM> 
+<DT><B>orientations=</B><em>value</em> 
 
 <DD>This value is the number of azimuth directions the
 cells on the output raster map layer are categorized into
 (similar to the aspect raster map layer produced by the
 
-<EM><A HREF="r.slope.aspect.html">r.slope.aspect</A></EM>
+<em><a href="r.slope.aspect.html">r.slope.aspect</A></em>
 
 program).  For example, a value of 16 would result in
 detected edges being categorized into one of 16 bins
 depending on the direction of the edge at that point.
 
-<BR>
+<br>
 
 Default:  1
 
@@ -67,7 +67,7 @@ Default:  1
 The current region definition and mask settings are respected
 when reading the input map.
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 The procedure to find the "edges" in the image is as follows:
 
@@ -84,15 +84,15 @@ is marked as an edge and an orientation is assigned to it.
 The resulting raster map layer is output.
 </OL>
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM><A HREF="i.fft.html">i.fft</A></EM>,
-<EM><A HREF="i.ifft.html">i.ifft</A></EM>,
-<EM><A HREF="r.mapcalc.html">r.mapcalc</A></EM>,
-<EM><A HREF="r.mfilter.html">r.mfilter</A></EM>,
-<EM><A HREF="r.slope.aspect.html">r.slope.aspect</A></EM>
+<em><a href="i.fft.html">i.fft</A></em>,
+<em><a href="i.ifft.html">i.ifft</A></em>,
+<em><a href="r.mapcalc.html">r.mapcalc</A></em>,
+<em><a href="r.mfilter.html">r.mfilter</A></em>,
+<em><a href="r.slope.aspect.html">r.slope.aspect</A></em>
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 David Satnik, GIS Laboratory, 
 Central Washington University

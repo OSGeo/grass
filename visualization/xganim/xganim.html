@@ -1,6 +1,6 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>xganim</EM> is a tool for animating a series of GRASS raster
+<em>xganim</em> is a tool for animating a series of GRASS raster
 files. At startup, a graphics window is opened containing VCR-like
 button controls for: rewind, reverse play, step back, stop, step
 forward, forward play, loop, swing, slower, faster, show filenames,
@@ -8,14 +8,14 @@ current frame number, and Exit. The image is displayed above or to the
 left of the controls. Each raster map is read into memory, then the
 animation is played once beginning to end. The user may then replay
 the series or play continuous animation by using the buttons.
-<P>
+<p>
 The user may define up to four "views", or sub-windows, to animate
 simultaneously. e.g., View 1 could be rainfall, View 2 flooded areas,
 View 3 damage to bridges or levees, View 4 other economic damage, all
 animated as a time series. There is an arbitrary limit of 400 files
 per view (400 animation frames), but the practical limit may be less
 depending on the window size and amount of available RAM.
-<P>
+<p>
 The environment variable XGANIM_SIZE is checked for a value to use as
 the dimension, in pixels, of the longest dimension of the animation
 window. If XGANIM_SIZE is not set, the animation size defaults to the
@@ -24,23 +24,23 @@ to a default minimum size of 600 and maximum of 900. The resolution of
 the current GRASS region is maintained, independent of window size. 
 Resizing the window after the program is running will have no effect
 on the animation size.
-<P>
+<p>
 UNIX - style wild cards may be used with the command line version in
 place of a raster map name, but it must be quoted.
-<P>
+<p>
 If the number of files differs for each view, the view with the fewest
 files will determine the number of frames in the animation.
 
-<H2>EXAMPLE</H2>
+<h2>EXAMPLE</h2>
 
 <div class="code"><pre>
 export XGANIM_SIZE=800
 xganim view1="rain[1-9]","rain1[0-2]" view2="temp*"
 </pre></div>
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
-For wildcard matching, <EM>xganim</EM> understands whatever the shell 
+For wildcard matching, <em>xganim</em> understands whatever the shell 
 understands (as it invokes "ls" via the shell to expand wildcards). 
 E.g., a user can use "rast[0-9][0-9]" to match "rast00" through "rast99" inclusive.
 If the maps if interest have varying numbers of digits, multiple patterns
@@ -54,21 +54,21 @@ xganim view1=rast[0-9],rast[1-9][0-9]
 to match rast0 through rast99 inclusive.
 
 
-<H2>BUGS</H2>
+<h2>BUGS</h2>
 On some displays that need to use private colormaps, the interface
 buttons may become difficult to see.
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
 <em><a href="d.slide.show.html">d.slide.show</a></em>,
 <em><a href="gm_animate.html">gis.m: ANIMATE TOOL</a></em>
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 Bill Brown, U.S. Army Construction Engineering Research Laboratories
 
 <!-- left in for historical purposes :)
-<H2>NOTICE</H2>
+<h2>NOTICE</h2>
 This program is part of the contrib section of the GRASS distribution. 
 As such, it is externally contributed code that has not been examined
 or tested by the Office of GRASS Integration.

@@ -1,6 +1,6 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<p><EM>i.evapo.PM</EM> given the vegetation height (hc), humidity (RU), 
+<p><em>i.evapo.PM</em> given the vegetation height (hc), humidity (RU), 
 wind speed at two meters height (WS), temperature (T), digital terrain model (DEM), 
 and net radiation (NSR) raster input maps, 
 calculates the potential evapotranspiration map (EPo).
@@ -21,7 +21,7 @@ and the appropriate soil heat flux is calculated.
 
 <p>For more details on the algorithms see [1,2,3].
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 <p>Net solar radiation map in MJ/(m2*h) can be computed from the combination of the r.sun , 
 run in mode 1, and the r.mapcalc commands.
@@ -29,13 +29,13 @@ run in mode 1, and the r.mapcalc commands.
 <p>The sum of the three radiation components outputted by r.sun (beam, diffuse, and reflected) 
 multiplied by the Wh to Mj conversion factor (0.0036) and optionally by a 
 clear sky factor [0-1] allows the generation of a map to be used as 
-an NSR input for the <EM>i.evapo.PM</EM> command.<br>
+an NSR input for the <em>i.evapo.PM</em> command.<br>
 example:<br>
 <br>r.sun -s elevin=dem aspin=aspect slopein=slope lin=2 albedo=alb_Mar incidout=out beam_rad=beam diff_rad=diffuse refl_rad=reflected day=73 time=13:00 dist=100;
 <br>r.mapcalc 'NSR=0.0036*(beam+diffuse+reflected)';
 
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 <ul>
   <li>The <a href="http://istgis.ist.supsi.ch:8001/geomatica/">HydroFOSS</a> 
 project at IST-SUPSI (Institute of Earth Sciences - University school of applied science for the Southern Switzerland)
@@ -46,7 +46,7 @@ project at IST-SUPSI (Institute of Earth Sciences - University school of applied
 
 
 
-<H2>AUTHORS</H2>
+<h2>AUTHORS</h2>
   
   <p>Original version of program: The <a href="http://istgis.ist.supsi.ch:8001/geomatica/index.php?id=1">HydroFOSS</a> project, 2006, IST-SUPSI. (http://istgis.ist.supsi.ch:8001/geomatica/index.php?id=1)
   <i>
@@ -57,9 +57,9 @@ project at IST-SUPSI (Institute of Earth Sciences - University school of applied
   <p>Contact: <a href="mailto:massimiliano.cannata@supsi.ch"> Massimiliano Cannata</a>
 
 
-<H2>REFERENCES</H2>
+<h2>REFERENCES</h2>
 
-  <p>[1] Cannata M., 2006. <A HREF="http://istgis.ist.supsi.ch:8001/geomatica/index.php?id=1">
+  <p>[1] Cannata M., 2006. <a href="http://istgis.ist.supsi.ch:8001/geomatica/index.php?id=1">
   GIS embedded approach for Free & Open Source Hydrological Modelling</A>. PhD thesis, Department of Geodesy and Geomatics, Polytechnic of Milan, Italy.
 
   <p>[2] Allen, R.G., L.S. Pereira, D. Raes, and M. Smith. 1998. 

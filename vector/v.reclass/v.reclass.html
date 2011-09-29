@@ -1,6 +1,6 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>v.reclass</EM> allows user to create a new vector map based on
+<em>v.reclass</em> allows user to create a new vector map based on
 the reclassification of an existing vector map. It also allows the user
 to change the <i>key column</i> away from the default of "<b>cat</b>" with
 the <b>column</b> option.
@@ -17,7 +17,7 @@ Keyword <I>where</I> specifies SQL where condition.
 
 
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 No table is created for the reclassed map if the <B>column</B> option is
 used and the column type is integer (as the result could contain ambiguities).
@@ -27,13 +27,13 @@ table is created containing the newly generated cat numbers and a single
 column containing the unique string column values, sorted in alphabetical
 order.
 
-<P>
+<p>
 For dissolving common boundaries, see 
 <em><a href="v.dissolve.html">v.dissolve</a></em>.
 
 
 
-<H2>EXAMPLES</H2>
+<h2>EXAMPLES</h2>
 
 
 <H3>Example 1: Reclass by rules</H3>
@@ -52,8 +52,8 @@ cat 2
 where use = 'E14'
 </pre></div>
 
-Produces a new vector area map <EM>land_u</EM> containing boundaries from
-<EM>land</EM> with area category values selected from database by SQL
+Produces a new vector area map <em>land_u</em> containing boundaries from
+<em>land</em> with area category values selected from database by SQL
 select statement:
 <br>
 <tt>select id from tland where use = 'E13' and owner = 'Jara Cimrman'</tt>
@@ -78,24 +78,24 @@ cat|I_vs_P
 </pre></div>
 
 
-<H2>BUGS</H2>
+<h2>BUGS</h2>
 
 No table is created for reclassed layer if <B>rules</B> option is used.
 
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
 <em>
-<a HREF="v.dissolve.html">v.dissolve</a>,
-<A HREF="v.extract.html">v.extract</A>
+<a href="v.dissolve.html">v.dissolve</a>,
+<a href="v.extract.html">v.extract</A>
 </em>
 <p>
-<em><a HREF="sql.html">GRASS SQL interface</a></em>
+<em><a href="sql.html">GRASS SQL interface</a></em>
 
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
-R.L. Glenn, USDA, SCS, NHQ-CGIS<BR>
+R.L. Glenn, USDA, SCS, NHQ-CGIS<br>
 from v.reclass to v.db.reclass and later to v.reclass in 5.7 rewritten
 by Radim Blazek
 

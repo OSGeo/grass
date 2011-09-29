@@ -1,40 +1,40 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
 
-<EM>i.gensigset</EM>
+<em>i.gensigset</em>
 is a non-interactive method for generating input into
 
-<EM><A HREF="i.smap.html">i.smap</A>.</EM>
+<em><a href="i.smap.html">i.smap</A>.</em>
 
 It is used as the first pass in the a two-pass
 classification process.  It reads a raster map layer,
 called the training map, which has some of the pixels or
-regions already classified.  <EM>i.gensigset</EM> will then
+regions already classified.  <em>i.gensigset</em> will then
 extract spectral signatures from an image based on the
 classification of the pixels in the training map and make
 these signatures available to
 
-<EM><A HREF="i.smap.html">i.smap</A>.</EM>
+<em><a href="i.smap.html">i.smap</A>.</em>
 
 
-<P>
+<p>
 
-The user would then execute the GRASS program <EM>
-<A HREF="i.smap.html">i.smap</A></EM> to create the
+The user would then execute the GRASS program <em>
+<a href="i.smap.html">i.smap</A></em> to create the
 final classified map.
 
-<H2>OPTIONS</H2>
+<h2>OPTIONS</h2>
 
 <H3>Parameters</H3>
 
 <DL>
 
-<DT><B>trainingmap=</B><EM>name</EM> 
+<DT><B>trainingmap=</B><em>name</em> 
 
 <DD>ground truth training map
 
 
-<P>
+<p>
 
 This raster layer, supplied as input by the user, has some
 of its pixels already classified, and the rest (probably
@@ -42,88 +42,88 @@ most) of the pixels unclassified.  Classified means that
 the pixel has a non-zero value and unclassified means that
 the pixel has a zero value.
 
-<P>
+<p>
 
 This map must be prepared by the user in advance.
 The user must use
 
-<EM><A HREF="r.digit.html">r.digit</A></EM>,
+<em><a href="r.digit.html">r.digit</A></em>,
 
 a combination of
-<EM><A HREF="wxGUI.Vector_Digitizing_Tool.html">wxGUI vector digitizer</A></EM>
+<em><a href="wxGUI.Vector_Digitizing_Tool.html">wxGUI vector digitizer</A></em>
 and 
-<EM><A HREF="v.to.rast.html">v.to.rast</A></EM>,
+<em><a href="v.to.rast.html">v.to.rast</A></em>,
 or some other import/developement process (e.g.,
-<EM><A HREF="v.in.transects.html">v.in.transects</A>)</EM>
+<em><a href="v.in.transects.html">v.in.transects</A>)</em>
 to define the areas
 representative
 of the classes in the image.
 
 
-<P>
+<p>
 
 At present, there is no fully-interactive tool specifically
 designed for producing this layer.
 
-<DT><B>group=</B><EM>name</EM> 
+<DT><B>group=</B><em>name</em> 
 
 <DD>imagery group
 
-<P>
+<p>
 
 This is the name of the group that contains the band files
 which comprise the image to be analyzed. The
 
-<EM><A HREF="i.group.html">i.group</A></EM>
+<em><a href="i.group.html">i.group</A></em>
 
 command is used to construct groups of raster layers which
 comprise an image.
 
-<P>
+<p>
 
-<DT><B>subgroup=</B><EM>name</EM> 
+<DT><B>subgroup=</B><em>name</em> 
 
 <DD>subgroup containing image files
 
 
-<P>
+<p>
 
 This names the subgroup within the group that selects a
 subset of the bands to be analyzed. The
 
-<EM><A HREF="i.group.html">i.group</A></EM>
+<em><a href="i.group.html">i.group</A></em>
 
 command is also used to prepare this subgroup.  The
 subgroup mechanism allows the user to select a subset of
 all the band files that form an image.
 
 
-<DT><B>signaturefile=</B><EM>name</EM>
+<DT><B>signaturefile=</B><em>name</em>
 
 <DD>resultant signature file
 
-<P>
+<p>
 
 This is the resultant signature file (containing the means
 and covariance matrices) for each class in the training map
 that is associated with the band files in the subgroup
 selected.
 
-<P>
+<p>
 
 
-<DT><B>maxsig=</B><EM>value</EM> 
+<DT><B>maxsig=</B><em>value</em> 
 
 <DD>maximum number of sub-signatures in any class
 
-<BR>
+<br>
 
 default: 10
 
-<P>
+<p>
 
 The spectral signatures which are produced by this program
-are "mixed" signatures (see <A HREF="#notes">NOTES</A>).
+are "mixed" signatures (see <a href="#notes">NOTES</A>).
 Each signature contains one or more subsignatures
 (represeting subclasses).  The algorithm in this program
 starts with a maximum number of subclasses and reduces this
@@ -134,25 +134,25 @@ starting value with this option.
 </DL>
 
 
-<H2>INTERACTIVE MODE</H2>
+<h2>INTERACTIVE MODE</h2>
 
 If none of the arguments are specified on the command line,
-<EM>i.gensigset</EM> will interactively prompt for the
+<em>i.gensigset</em> will interactively prompt for the
 names of these maps and files.
 
-<P>
+<p>
 
 It should be noted that interactive mode here only means
 interactive prompting for maps and files.  It does not mean
 visualization of the signatures that result from the
 process.
 
-<P>
+<p>
 
 
-<A NAME="notes"></A><H2>NOTES</H2>
+<A NAME="notes"></A><h2>NOTES</h2>
 
-The algorithm in <EM>i.gensigset</EM> determines the
+The algorithm in <em>i.gensigset</em> determines the
 parameters of a spectral class model known as a Gaussian
 mixture distribution.  The parameters are estimated using
 multispectral image data and a training map which labels
@@ -161,7 +161,7 @@ class parameters are stored as a class signature which can
 be used for subsequent segmentation (i.e., classification)
 of the multispectral image.
 
-<P>
+<p>
 
 The Gaussian mixture class is a useful model because it can
 be used to describe the behavior of an information class
@@ -175,7 +175,7 @@ forest may contain a variety of different tree species each
 with its own spectral behavior.
 
 
-<P>
+<p>
 
 The objective of mixture classes is to improve segmentation
 performance by modeling each information class as a
@@ -189,73 +189,73 @@ Therefore, care should be taken to provided accurate
 training data.
 
 
-<P>
+<p>
 
 This clustering algorithm estimates both the number of
 distinct subclasses in each class, and the spectral mean
 and covariance for each subclass.  The number of subclasses
 is estimated using Rissanen's minimum description length
 (MDL) criteria 
-[<A HREF="#rissanen83">1</A>].  
+[<a href="#rissanen83">1</A>].  
 This criteria attempts to determine
 the number of subclasses which "best" describe the data.
 The approximate maximum likelihood estimates of the mean
 and covariance of the subclasses are computed using the
 expectation maximization (EM) algorithm 
-[<A HREF="#dempster77">2</A>,<A HREF="#redner84">3</A>].  
+[<a href="#dempster77">2</A>,<a href="#redner84">3</A>].  
 
 
-<H2>REFERENCES</H2>
+<h2>REFERENCES</h2>
 
 <OL>
 
 <LI><A NAME="rissanen83">J. Rissanen,</A>
 "A Universal Prior for Integers and Estimation by Minimum
 Description Length,"
-<EM>Annals of Statistics,</EM>
+<em>Annals of Statistics,</em>
 vol. 11, no. 2, pp. 417-431, 1983.
 
 
 <LI><A NAME="dempster77">A. Dempster, N. Laird and D. Rubin,</A>
 "Maximum Likelihood from Incomplete Data via the EM Algorithm,"
-<EM>J. Roy. Statist. Soc. B,</EM>
+<em>J. Roy. Statist. Soc. B,</em>
 vol. 39, no. 1, pp. 1-38, 1977.
 
 <LI><A NAME="redner84">E. Redner and H. Walker,</A>
 "Mixture Densities, Maximum Likelihood and the EM Algorithm,"
-<EM>SIAM Review,</EM>
+<em>SIAM Review,</em>
 vol. 26, no. 2, April 1984.
 
 </OL>
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM><A HREF="i.group.html">i.group</A></EM>
+<em><a href="i.group.html">i.group</A></em>
 for creating groups and subgroups
 
 
-<P>
+<p>
 
-<EM><A HREF="wxGUI.Vector_Digitizing_Tool.html">wxGUI vector digitizer</A></EM>
+<em><a href="wxGUI.Vector_Digitizing_Tool.html">wxGUI vector digitizer</A></em>
 and
-<EM><A HREF="r.digit.html">r.digit</A></EM>
+<em><a href="r.digit.html">r.digit</A></em>
 for interactively creating the training map.
 
 
-<P>
+<p>
 
-<EM><A HREF="i.smap.html">i.smap</A></EM>
+<em><a href="i.smap.html">i.smap</A></em>
 for creating a final classification layer from the signatures
-generated by <EM>i.gensigset.</EM>
+generated by <em>i.gensigset.</em>
 
 
-<H2>AUTHORS</H2>
+<h2>AUTHORS</h2>
 
 Charles Bouman, 
 School of 
 Electrical Engineering, 
 Purdue University
-<BR>
+<br>
 
 Michael Shapiro,
 U.S.Army Construction Engineering 

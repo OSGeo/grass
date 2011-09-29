@@ -1,19 +1,19 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>m.cogo</EM> converts data points between bearing and distance
+<em>m.cogo</em> converts data points between bearing and distance
 and X,Y coordinates.  Only simple bearing/distance or coordinate
 pairs are handled. It assumes a cartesian coordinate system.
 
-<P>
+<p>
 Input can be entered via standard input (default) or from the file
-<B>input=</B><EM>name</EM>. Specifying the input as "-" also
+<B>input=</B><em>name</em>. Specifying the input as "-" also
 specifies standard input, and is useful for using the program in
 a pipeline.  Output will be to standard output unless a file
 name other than "-" is specified.  The input file must
 closely adhere to the following format, where up to a 10 character
 label is allowed but not required (see <B>-l</B> flag).
 
-<P>
+<p>
 <B>Example COGO input:</B>
 <div class="code"><pre>
    P23 N 23:14:12 W 340
@@ -21,47 +21,47 @@ label is allowed but not required (see <B>-l</B> flag).
    ...
 </pre></div>
 
-<P>
+<p>
 The first column may contain a label and you must use the <B>-l</B>
 flag so the program knows.  This is followed by a space, and then
 either the character 'N' or 'S' to indicate whether the bearing is
 relative to the north or south directions.  After another space,
 the angle begins in degrees, minutes, and seconds in
 "DDD:MM:SS.SSSS" format. Generally, the angle can be of the form
-<EM>digits + separator + digits + separator + digits [+ '.' + digits]</EM>.
+<em>digits + separator + digits + separator + digits [+ '.' + digits]</em>.
 A space follows the angle, and is then followed by either the 'E' or 'W'
 characters. A space separates the bearing from the distance (which should
 be in appropriate linear units).
 
-<P>
+<p>
 <B>Output of the above input:</B>
 <div class="code"><pre>
    -134.140211 312.420236 P23
    -116.832837 83.072345 P24
    ...
 </pre></div>
-<P>
+<p>
 Unless specified with the <B>coord</B> option, calculations begin from (0,0).
 
-<P>
+<p>
 For those unfamiliar with the notation for bearings: Picture yourself in the
 center of a circle.  The first hemispere notation tell you whether you should
 face north or south.  Then you read the angle and either turn that many
 degrees to the east or west, depending on the second hemisphere notation.  
 Finally, you move &lt;distance&gt; units in that direction to get to the 
 next station.
-</P>
 
-<EM>m.cogo</EM> can be run either non-interactively or
+
+<em>m.cogo</em> can be run either non-interactively or
 interactively.  The program will be run non-interactively
 if the user specifies any parameter or flag. Use "m.cogo -",
 to run the program in a pipeline.  Without any flags or
-parameters, <EM>m.cogo</EM> will prompt for each value
+parameters, <em>m.cogo</em> will prompt for each value
 using the familiar GRASS parser interface.
 
-<P>
+<p>
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 This program is very simplistic, and will not handle deviations
 from the input format explained above.  Currently, the
@@ -71,7 +71,7 @@ will be extended to provide the capability to generate
 vector and/or sites layers.
 
 
-<H2>EXAMPLE</H2>
+<h2>EXAMPLE</h2>
 
 <div class="code"><pre>
    m.cogo -l in=cogo.dat
@@ -125,19 +125,19 @@ boundaries with <em>v.type</em>, and closed boundaries may be
 converted to areas with <em>v.centroids</em>.
 
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
 <em>
-<a HREF="v.centroids.html">v.centroids</a>,
-<a HREF="v.clean.html">v.clean</a>,
+<a href="v.centroids.html">v.centroids</a>,
+<a href="v.clean.html">v.clean</a>,
 <a href="wxGUI.Vector_Digitizing_Tool.html">wxGUI vector digitizer</a>,
-<a HREF="v.in.ascii.html">v.in.ascii</a>,
-<a HREF="v.type.html">v.type</a>
+<a href="v.in.ascii.html">v.in.ascii</a>,
+<a href="v.type.html">v.type</a>
 </em>
 
 
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 Eric G. Miller
 

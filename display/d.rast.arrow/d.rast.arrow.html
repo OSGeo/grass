@@ -1,20 +1,20 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>d.rast.arrow</EM>
+<em>d.rast.arrow</em>
 is designed to help users better visualize surface water flow direction,
 as indicated in an aspect raster map layer.  There are two ways to specify
 the aspect layer the program is to use.  The first is to display the aspect
-map layer on the graphics monitor before running <EM>d.rast.arrow</EM>.
-The second method involves setting the <EM>map</EM> parameter
+map layer on the graphics monitor before running <em>d.rast.arrow</em>.
+The second method involves setting the <em>map</em> parameter
 to the name of the desired aspect map.
 This allows the arrows to be drawn over any other maps already displayed
 on the graphics monitor.
-<P>
+<p>
 
-<EM>d.rast.arrow</EM> will draw an arrow over each displayed cell
+<em>d.rast.arrow</em> will draw an arrow over each displayed cell
 to indicate in which direction the cell slopes. If the aspect
 layer has a category value denoting locations of "unknown" aspect,
-<EM>d.rast.arrow</EM> draws a question mark over the displayed cells
+<em>d.rast.arrow</em> draws a question mark over the displayed cells
 of that category.
 Cells containing null data will be marked with an "X".
 <p>
@@ -29,19 +29,19 @@ the magnitude map to suit your needs (absolute value, inverted direction and
 so on). 
 
 <p>
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 By default, arrows are drawn at the size of a cell and cannot be seen if 
 the raster map is relatively close in scale. You can use the <em>skip</em> 
 option to draw arrows every n-th cell in both directions if you are working 
 with relatively high resolutions. It may be useful to disable the grid in
 this case, which is accomplished by setting its color to "<tt>none</tt>".
-<P>
+<p>
 For GRASS and Compass type aspect maps, the cell values of the aspect map
 will determine the corresponding direction in 360 degrees. ANSWERS type
 aspect maps will be plotted in multiples of 15 degrees, and AGNPS type
 aspect maps will be displayed in D8 representation, i.e. the eight multiples 
 of 45 degrees.
-<P>
+<p>
 GRASS aspect maps are measured using Cartesian conventions, i.e. in degrees 
 counterclockwise from east. e.g.:
 
@@ -53,14 +53,14 @@ counterclockwise from east. e.g.:
 </pre></div>
 
 They can be created from a raster elevation map with <em>r.slope.aspect</em>.
-<P>
+<p>
 Compass type aspect maps are measured in degrees clockwise from north.
-<P>
+<p>
 This module uses oceanographic conventions, i.e. arrows point downslope or 
 direction "to", as opposed to atmospheric conventions (direction "from").
 
 
-<H2>EXAMPLE</H2>
+<h2>EXAMPLE</h2>
 
 Convert U,V velocity component maps into magnitide,direction maps for use 
 with <em>d.rast.arrow</em>:
@@ -71,25 +71,25 @@ r.mapcalc "direction = atan(U_map, V_map)"
 d.rast.arrow map=direction type=grass magnitude_map=magnitude skip=3 grid=none
 </pre></div>
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM><A HREF="d.frame.html">d.frame</A></EM><BR>
-<EM><A HREF="d.rast.html">d.rast</A></EM><BR>
-<EM><A HREF="d.rast.edit.html">d.rast.edit</A></EM><BR>
-<EM><A HREF="d.rast.num.html">d.rast.num</A></EM><BR>
-<EM><A HREF="g.region.html">g.region</A></EM><BR>
-<EM><A HREF="r.slope.aspect.html">r.slope.aspect</A></EM><BR>
-<BR>
+<em><a href="d.frame.html">d.frame</A></em><br>
+<em><a href="d.rast.html">d.rast</A></em><br>
+<em><a href="d.rast.edit.html">d.rast.edit</A></em><br>
+<em><a href="d.rast.num.html">d.rast.num</A></em><br>
+<em><a href="g.region.html">g.region</A></em><br>
+<em><a href="r.slope.aspect.html">r.slope.aspect</A></em><br>
+<br>
 
-<H2>AUTHORS</H2>
+<h2>AUTHORS</h2>
 
-<u>Original author</u><BR>
-Chris Rewerts<BR>
-<em>Agricultural Engineering,<BR>
-Purdue University</em><BR><BR>
-<u>Magnitude and 360 arrow code</u><BR>
-Hamish Bowman<BR>
-<em>Department of Marine Science, <BR>
+<u>Original author</u><br>
+Chris Rewerts<br>
+<em>Agricultural Engineering,<br>
+Purdue University</em><br><br>
+<u>Magnitude and 360 arrow code</u><br>
+Hamish Bowman<br>
+<em>Department of Marine Science, <br>
 University of Otago, New Zealand</em>
 
 <p><i>Last changed: $Date$</i>
