@@ -19,7 +19,7 @@ ac_help="$ac_help
 ac_help="$ac_help
   --enable-w11            use W11 library for Windows X11 emulation"
 ac_help="$ac_help
-  --with-cxx              support C++ functionality (default: no)"
+  --with-cxx              support C++ functionality (default: yes)"
 ac_help="$ac_help
   --with-macosx-archs[=arch list]
                           compile multiple architectures on MacOSX, ie.
@@ -1590,7 +1590,7 @@ if test "${with_cxx+set}" = set; then
   withval="$with_cxx"
   :
 else
-  with_cxx=no
+  with_cxx=yes
 fi
 
 
