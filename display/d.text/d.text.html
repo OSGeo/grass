@@ -14,21 +14,21 @@ within the standard input).
 
 <H3>Commands:</H3> 
 
-<DL>
+<dl>
 
-<DT><B>.C</B> <em>color</em> 
-<DD>
+<dt><b>.C</b> <em>color</em> 
+<dd>
 (where <em>color</em> is one of the available colors) causes text appearing on 
 subsequent lines to be drawn in that color. 
 
 
-<DT><B>.G</B> <em>color</em>
-<DD>
+<dt><b>.G</b> <em>color</em>
+<dd>
 (where <em>color</em> is one of the available colors) causes the background of text
 appearing on subsequent lines to be drawn in that color.
 
-<DT><B>.S </B> <em>size</em>
-<DD>
+<dt><b>.S </b> <em>size</em>
+<dd>
 (where <em>size</em> is a percentage within the range 0 to
 100) adjusts text size.  Note that a size of 10 would allow
 10 lines to be drawn in the active display frame, 5 would
@@ -36,8 +36,8 @@ allow the drawing of 20 lines, and 50 would allow the
 drawing of 2 lines.
 
 <p>
-<DT><B>.F</B> <em>font</em>
-<DD>
+<dt><b>.F</b> <em>font</em>
+<dd>
 (where <em>font</em> is one of the fonts known by the GRASS program 
 <em><a href="d.font.html">d.font</A></em>) manipulates
 the font type. Available fonts are listed in the GRASS manual entry for 
@@ -48,20 +48,20 @@ is <em>romans</em>.
 <em><A  HREF="show.fonts.sh.html">show.fonts.sh</A></em> 
 to see what these fonts look like. -->
 
-<DT><B>.R </B> <em>rotation</em>
-<DD>
+<dt><b>.R </b> <em>rotation</em>
+<dd>
 (where <em>rotation</em> is an angle in degrees, counter-clockwise)
 to rotate the text.
 
-<DT><B>.B 1</B>
-<DD>stipulates that following text be printed in <B>bold</B>.
+<dt><b>.B 1</b>
+<dd>stipulates that following text be printed in <b>bold</b>.
 This command means <em>bold on</em>.
 
-<DT><B>.B 0</B>
-<DD> turns <em>bold off</em> of all text appearing on lines beneath 
+<dt><b>.B 0</b>
+<dd> turns <em>bold off</em> of all text appearing on lines beneath 
      it. (<em>Bold off</em> is used by default, if unspecified by the user.) 
 
-</DL>
+</dl>
 
 <h2>EXAMPLE</h2>
 
@@ -73,7 +73,7 @@ active frame's vertical space per line:
 
 
 <pre>
-<B>d.text</B> << EOF
+<b>d.text</b> << EOF
 .C yellow
 .G grey
 .S 4 

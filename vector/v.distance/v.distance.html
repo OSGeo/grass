@@ -25,10 +25,10 @@ distances on a sphere.
 
 <H3>Find nearest lines</H3>
 
-Find <em>nearest lines</em> in vector map <B>ln</B> for points from
-vector map <B>pnt</B> within the given threshold and write related
-line categories to column <B>linecat</B> in an attribute table attached
-to vector map <B>pnt</B>:
+Find <em>nearest lines</em> in vector map <b>ln</b> for points from
+vector map <b>pnt</b> within the given threshold and write related
+line categories to column <b>linecat</b> in an attribute table attached
+to vector map <b>pnt</b>:
 
 <div class="code"><pre>
 v.distance from=pnt to=ln upload=cat column=linecat
@@ -36,10 +36,10 @@ v.distance from=pnt to=ln upload=cat column=linecat
 
 <H3>Find nearest area</H3>
 
-For each point from vector map <B>pnt</B>, find the <em>nearest area</em>
-from map <B>ar</B> within the given threshold and write the related
-area categories to column <B>areacat</B> in an attribute table attached
-to vector map <B>pnt</B> (in the case that a point falls into a polygon area,
+For each point from vector map <b>pnt</b>, find the <em>nearest area</em>
+from map <b>ar</b> within the given threshold and write the related
+area categories to column <b>areacat</b> in an attribute table attached
+to vector map <b>pnt</b> (in the case that a point falls into a polygon area,
 the distance is zero):
 
 <div class="code"><pre>
@@ -49,7 +49,7 @@ v.distance from=pnt to=ar upload=cat column=areacat
 <H3>Create a new vector map</H3>
 
 Create a new vector map which contains <em>lines connecting nearest
-features</em> of maps <B>pnt</B> and map <B>ln</B>. The resulting
+features</em> of maps <b>pnt</b> and map <b>ln</b>. The resulting
 vector map can be used for example to connect points to a network as
 needed for network analysis:
 
@@ -82,10 +82,10 @@ The option <em>dmax=0</em> is here important because otherwise for
 points not falling into any area, the category of the nearest area is
 recorded.
 <br>
-For each point from vector map <B>pnt</B>, find the <em>area</em> from
-vector map <B>ar</B> in which the individual point falls, and
-write the related area categories to column <B>areacat</B> into
-the attribute table attached to vector map <B>pnt</B>:
+For each point from vector map <b>pnt</b>, find the <em>area</em> from
+vector map <b>ar</b> in which the individual point falls, and
+write the related area categories to column <b>areacat</b> into
+the attribute table attached to vector map <b>pnt</b>:
 
 <div class="code"><pre>
 v.distance from=pnt to=ar dmax=0 upload=cat column=areacat

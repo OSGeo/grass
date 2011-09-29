@@ -25,56 +25,56 @@ segmenting each pixel separately
 The second mode is the more conventional maximum likelihood (ML)
 classification which classifies each pixel separately,
 but requires somewhat less computation. This mode is selected with
-the <B>-m</B> flag (see <a href="#mflag.html">below</A>).
+the <b>-m</b> flag (see <a href="#mflag.html">below</A>).
 
 <h2>OPTIONS</h2>
 
 <H3>Flags:</H3>
 
-<DL>
+<dl>
 
-<DT><B>-m</B>
+<dt><b>-m</b>
 
-<DD>Use maximum likelihood estimation (instead of smap).
+<dd>Use maximum likelihood estimation (instead of smap).
 Normal operation is to use SMAP estimation (see
 <a href="#notes">NOTES</A>).
 
-<DT><B>-q</B> 
+<dt><b>-q</b> 
 
-<DD>Run quietly, without printing messages about program
+<dd>Run quietly, without printing messages about program
 progress.  Without this flag, messages will be printed (to
 stderr) as the program progresses.
 
-</DL>
+</dl>
 
 
 <H3>Parameters:</H3>
 
-<DL>
-<DT><B>group=</B><em>name</em> 
+<dl>
+<dt><b>group=</b><em>name</em> 
 
-<DD>imagery group<br>
+<dd>imagery group<br>
 The imagery group that defines the image to be classified.
 
-<DT><B>subgroup=</B><em>name</em> 
+<dt><b>subgroup=</b><em>name</em> 
 
-<DD>imagery subgroup<br>
+<dd>imagery subgroup<br>
 The subgroup within the group specified that specifies the
 subset of the band files that are to be used as image data
 to be classified.
 
-<DT><B>signaturefile=</B><em>name</em> 
+<dt><b>signaturefile=</b><em>name</em> 
 
-<DD>imagery signaturefile<br>
+<dd>imagery signaturefile<br>
 The signature file that contains the spectral signatures (i.e., the
 statistics) for the classes to be identified in the image.
 This signature file is produced by the program
 <em><a href="i.gensigset.html">i.gensigset</A></em>
 (see <a href="#notes">NOTES</A>).
 
-<DT><B>blocksize=</B><em>value</em> 
+<dt><b>blocksize=</b><em>value</em> 
 
-<DD>size of submatrix to process at one time<br>
+<dd>size of submatrix to process at one time<br>
 default: 128<br>
 This option specifies the size of the "window" to be used when
 reading the image data. 
@@ -107,15 +107,15 @@ image.
 The submatrix size has no effect on the performance of the
 ML segmentation method.
 
-<DT><B>output=</B><em>name</em>
+<dt><b>output=</b><em>name</em>
 
-<DD>output raster map.<br>
+<dd>output raster map.<br>
 The name of a raster map that will contain the
 classification results.  This new raster map layer will
 contain categories that can be related to landcover
 categories on the ground.
 
-</DL>
+</dl>
 
 <h2>INTERACTIVE MODE</h2>
 

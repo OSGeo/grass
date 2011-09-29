@@ -23,10 +23,10 @@ and wrong!</h4>
 <p>
 The label information that must be provided in the <em>labels</em> file is:
 
-<DL>
-<DT><B>TEXT</B>:
+<dl>
+<dt><b>TEXT</b>:
 
-<DD><!--Up to four lines of text.-->
+<dd><!--Up to four lines of text.-->
 Lines in multiple line labels will appear one above the next.
 More than one line of text can be specified by notating the end of a 
 line with a '<b><tt>\n</tt></b>'.<br>
@@ -34,16 +34,16 @@ line with a '<b><tt>\n</tt></b>'.<br>
 
 
 <!-- I don't think it exists. -HB 6/2005
-<DT><B>SKIP</B>:
+<dt><b>SKIP</b>:
 
-<DD>yes|no. If <em>no</em>, label will be printed.  If
+<dd>yes|no. If <em>no</em>, label will be printed.  If
 <em>yes</em>, the label will be retained in the file but
 not printed.
 -->
 
-<DT><B>LOCATION</B>:
+<dt><b>LOCATION</b>:
 
-<DD>Determines where the text will be located on the
+<dd>Determines where the text will be located on the
 image.  The user specifies the easting and northing, and
 (optionally) specifies a vertical and horizontal 
 offset from the specified easting/northing. 
@@ -54,9 +54,9 @@ measured in screen pixels, and in <a href="ps.map.html"><i>ps.map</i></a>
 the offset is measured in PostScript points (i.e. 1/72" steps).
 
 
-<DT><B>PLACEMENT</B>:
+<dt><b>PLACEMENT</b>:
 
-<DD>Determines which part of the label to which the
+<dd>Determines which part of the label to which the
 location refers.  If placement is unspecified, the label is
 centered (<em>center</em>), by default.  Label placement
 may be specified as:
@@ -75,9 +75,9 @@ may be specified as:
 </PRE>
 
 
-<DT><B>FONT</B>:
+<dt><b>FONT</b>:
 
-<DD>This specifies the font to use.
+<dd>This specifies the font to use.
 <p>
 The following fonts are available for use with
   <a href="d.labels.html"><i>d.labels</i></a>:
@@ -97,18 +97,18 @@ Note <a href="ps.map.html"><em>ps.map</em></a> can override this setting
 to use other fonts. Its default font is Helvetica.
 
 
-<DT><B>TEXT SIZE</B>:
+<dt><b>TEXT SIZE</b>:
 
-<DD>This determines the size of the letters. The <em>size</em>
+<dd>This determines the size of the letters. The <em>size</em>
 specifies the vertical height of the letters in meters on
 the ground. Thus text will grow or shrink depending on the
 scale at which the map is drawn.
 Alternatively <em>fontsize</em> can set the font size in normal font points.
 
 
-<DT><A NAME="textcolor"><B>TEXT COLOR</B></A>:
+<dt><A NAME="textcolor"><b>TEXT COLOR</b></A>:
 
-<DD>This selects the text color.  If unspecified, the
+<dd>This selects the text color.  If unspecified, the
 label's text is drawn in <em>black</em>, by default.  The
 text color can be specified in one of several ways:
 
@@ -139,14 +139,14 @@ for example: .5 .4 .7
 </OL>
 
 
-<DT><B>WIDTH</B>:
+<dt><b>WIDTH</b>:
 
-<DD>This determines the line thickness of the border box.<br>
+<dd>This determines the line thickness of the border box.<br>
 The maximum value is 25.0.
 
-<DT><B>HIGHLIGHT COLOR</B>:
+<dt><b>HIGHLIGHT COLOR</b>:
 
-<DD>The text can be highlighted in another color so that it
+<dd>The text can be highlighted in another color so that it
 appears to be in two colors. The text is drawn first in
 this color at a wider line width, and then redrawn in the
 text color at the regular line width.  No highlight color
@@ -157,42 +157,42 @@ user.  To specify use of no highlight color, specify
 above for a list of permissible color names.)
 
 
-<DT><B>HIGHLIGHT WIDTH</B>:
+<dt><b>HIGHLIGHT WIDTH</b>:
 
-<DD>Specifies how far from the text lines (in units of
+<dd>Specifies how far from the text lines (in units of
 pixels) the highlight color should extend.  The default
 highlight width is set to <em>0</em> (i.e., no highlight
 color).
 
 
-<DT><B>BACKGROUND COLOR</B>:
+<dt><b>BACKGROUND COLOR</b>:
 
-<DD>Text may be boxed in a solid color by specifying a background color.
+<dd>Text may be boxed in a solid color by specifying a background color.
 Specify "<tt>none</tt>" for no background.  The default background color
 setting, if unspecified by the user, is <em>white</em>.
 (See <a href="#textcolor">TEXT COLOR</A>
 above for a list of permissible color names.)
 
 
-<DT><B>BORDER COLOR</B>:
+<dt><b>BORDER COLOR</b>:
 
-<DD>Select a color for the border around the background.
+<dd>Select a color for the border around the background.
 Specify "<tt>none</tt>" to suppress the border.
 The default border color used, if unspecified, is <em>black</em>.
 (See <a href="#textcolor">TEXT COLOR</A>
 above for a list of permissible color names.)
 
 
-<DT><B>OPAQUE TO VECTORS</B>:
+<dt><b>OPAQUE TO VECTORS</b>:
 
-<DD><em>yes|no</em>.  This field only has meaning if a
+<dd><em>yes|no</em>.  This field only has meaning if a
 background color is selected.  <em>yes</em> will prevent
 vector lines from entering the background.  <em>no</em>
 will allow vector lines to enter the background.  The
 default setting, if unspecified by the user, is
 <em>yes</em>.
 
-</DL>
+</dl>
 <br>
 
 

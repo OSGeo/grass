@@ -13,8 +13,8 @@ information to be printed must be prepared prior to running <em>ps.map</em>.
 
 <p>
 The order of commands is generally unimportant but may affect how some layers
-are drawn. For example to plot <B>vpoints</B> above <B>vareas</B> list the
-<B>vpoints</B> entry first. Raster maps are always drawn first, and only a
+are drawn. For example to plot <b>vpoints</b> above <b>vareas</b> list the
+<b>vpoints</b> entry first. Raster maps are always drawn first, and only a
 single raster map (or 3 if part of a RGB group) may be used.
 
 <p>
@@ -115,18 +115,18 @@ additional instructions and are terminated with an <i>end</i> instruction.
 Instructions that may be included in the subsection under several
 different main instructions are:
 
-<DL>
-<DT><B>where</B> <em>x y</em>
+<dl>
+<dt><b>where</b> <em>x y</em>
 
-<DD>The top left corner of the bounding box of the item to be plotted
+<dd>The top left corner of the bounding box of the item to be plotted
 is located <em>x</em> inches from the left edge of the paper and
 <em>y</em> inches from the top edge of the paper. If <em>x</em> is less than
 or equal to zero, the default horizontal location is used.  If <em>y</em>
 is less than or equal to zero, the default vertical location is used.
 
-<DT><B>font</B> <em>font name</em> 
+<dt><b>font</b> <em>font name</em> 
 
-<DD>The name of the PostScript font.
+<dd>The name of the PostScript font.
 Fonts present in all PostScript implementations are:
 <tt>
 Times-Roman,
@@ -144,19 +144,19 @@ and
 Courier-BoldOblique</tt>.
 <br>
 The default is Helvetica.
-</DD>
+</dd>
 
 
-<DT><B>fontsize</B> <em>font size</em> 
+<dt><b>fontsize</b> <em>font size</em> 
 
-<DD>The size of the PostScript font (in 1/72nds of an inch).
+<dd>The size of the PostScript font (in 1/72nds of an inch).
 The default is 10 point.
-</DD>
+</dd>
 
 
-<DT><a name="NAMED_COLORS"></a><B>color</B> <em>name</em>
+<dt><a name="NAMED_COLORS"></a><b>color</b> <em>name</em>
 
-<DD>The following colors names are accepted by <em>ps.map</em>:
+<dd>The following colors names are accepted by <em>ps.map</em>:
 <tt>
 aqua,
 black,
@@ -178,18 +178,18 @@ yellow
 <br><br>
 For vectors and some plotting commands you can also specify
 '<tt>none</tt>' or '<tt>R:G:B</tt>' (e.g '<tt>255:0:0</tt>').
-</DD>
+</dd>
 
-<DT><B>yes|no</B>
-<DD>For options that take a yes or no answer, you can simply use the
+<dt><b>yes|no</b>
+<dd>For options that take a yes or no answer, you can simply use the
 letters "y" or "n", or type out the full words "Yes" or "No" if you
 prefer. It is not case-sensitive. Typically the option with have a
 default answer and you only need to specify one if you wish to
 override it.
-</DD>
+</dd>
 
 
-</DL>
+</dl>
 <p>
 <br>
 
@@ -201,29 +201,29 @@ override it.
 
 Controls the border which is drawn around the map area.
 <PRE>
-USAGE:  <B>border</B> [y|n]
-	<B>color</B> color
-	<B>width</B> #
-	<B>end</B>
+USAGE:  <b>border</b> [y|n]
+	<b>color</b> color
+	<b>width</b> #
+	<b>end</b>
 </PRE>
-The <B>color</B> may be either a standard GRASS color, a R:G:B triplet,
+The <b>color</b> may be either a standard GRASS color, a R:G:B triplet,
 or "none". The width is specified in points, unless followed by an "i"
 in which case it is measured in inches.
 The default is a black border box of width 1 point.
 <p>
 The border can be turned off completely with the
 &quot;<tt>border&nbsp;n</tt>&quot; instruction. In this case
-the <B>end</B> command should not be given as the
+the <b>end</b> command should not be given as the
 main command will be treated as a single line instruction.
 <p>
 
 This example would create a grey border 0.1&quot; wide.
 <PRE>
 EXAMPLE:
-	<B>border</B>  
-	<B>color</B> grey
-	<B>width</B> 0.1i
-	<B>end</B>
+	<b>border</b>  
+	<b>color</b> grey
+	<b>width</b> 0.1i
+	<b>end</b>
 </PRE>
 <p>
 
@@ -233,20 +233,20 @@ EXAMPLE:
 
 Prints the color table legend for the raster map layer anywhere on the page.
 <PRE>
-USAGE:	<B>colortable</B> [y|n]
-	<B>where</B> x y
-	<B>raster</B> raster map
-	<B>range</B> minimum maximum
-	<B>width</B> table width
-	<B>height</B> table height (FP legend only)
-	<B>cols</B> table columns
-	<B>font</B> font name
-	<B>fontsize</B> font size
-	<B>color</B> text color
-	<B>nodata</B> [Y|n]
-	<B>tickbar</B> [y|N]
-	<B>discrete</B> [y|n]
-	<B>end</B>
+USAGE:	<b>colortable</b> [y|n]
+	<b>where</b> x y
+	<b>raster</b> raster map
+	<b>range</b> minimum maximum
+	<b>width</b> table width
+	<b>height</b> table height (FP legend only)
+	<b>cols</b> table columns
+	<b>font</b> font name
+	<b>fontsize</b> font size
+	<b>color</b> text color
+	<b>nodata</b> [Y|n]
+	<b>tickbar</b> [y|N]
+	<b>discrete</b> [y|n]
+	<b>end</b>
 </PRE>
 
 For a categorical (CELL) map the color table will create a legend displaying
@@ -254,18 +254,18 @@ the colors for each of a raster map's category values along with its
 associated category label. For a floating point (FCELL or DCELL) map a
 continuous gradient legend will be created.
 <p>
-If <B>raster</B> is omitted, the colortable defaults to the previously
+If <b>raster</b> is omitted, the colortable defaults to the previously
 registered raster layer.
 
 The default location for the colortable is immediately below any other
 map legend information, starting at the left margin.
 The default text color is black.
 
-Omitting the <B>colortable</B> instruction would result in
+Omitting the <b>colortable</b> instruction would result in
 no color table.
 <p>
 If the colortable is turned off with a &quot;<tt>colortable&nbsp;N</tt>&quot;
-instruction the <B>end</B> command should not be given as the  
+instruction the <b>end</b> command should not be given as the  
 main command will be treated as a single line instruction.
 <p>
 See also the <a href="#vlegend">vlegend</a> command for creating vector map
@@ -274,14 +274,14 @@ legends.
 
 <h3>Categorical (CELL) Maps</h3>
 
-Adding the <B>nodata N</B> instruction will prevent the "no data" box 
+Adding the <b>nodata N</b> instruction will prevent the "no data" box 
 from being drawn (category based legends only). If you have manually
 added a "no data" label to the cats/ file it will be shown regardless.
 <p> 
-<B>Note</B>:  Be careful about asking for color tables for integer
+<b>Note</b>:  Be careful about asking for color tables for integer
 raster map layers which have many categories, such as elevation.
 This could result in the printing of an extremely long color table!
-In this situation it is useful to use the <B>discrete N</B> instruction
+In this situation it is useful to use the <b>discrete N</b> instruction
 to force a continuous color gradient legend.
 <p>
 Be aware that the color table only includes categories which
@@ -290,7 +290,7 @@ have a label. You can use the <em>r.category</em> module to add labels.
 
 <h3>Floating point (FCELL and DCELL) Maps</h3>
 
-The legend's <B>range</B> can be adjusted for floating point rasters, but if
+The legend's <b>range</b> can be adjusted for floating point rasters, but if
 set beyond the extent of the map's range be sure that you have set up color 
 rules with <em>r.colors</em> which cover this range.
 
@@ -299,14 +299,14 @@ then this label will be displayed.
 <!-- bonus prize for code explorers: you can switch the label placement by
     editing the label_posn variable in ps.map/ps_fclrtbl.c -->
 
-For floating point legends <B>width</B> is width of color
-band only. <B>height</B> is used only for floating point legend.
+For floating point legends <b>width</b> is width of color
+band only. <b>height</b> is used only for floating point legend.
 
-Adding the <B>tickbar Y</B> instruction will change the tick mark style
+Adding the <b>tickbar Y</b> instruction will change the tick mark style
 so that ticks are drawn across the color table instead of protruding out 
 to the right (floating point legends only).
 
-Adding the <B>discrete Y</B> instruction will command the program to treat
+Adding the <b>discrete Y</b> instruction will command the program to treat
 the map as a categorical map. In this way the legend can be created with
 discrete range bands instead of a continuous gradient. You must use the
 <em>r.category</em> or <em>r.support</em> module to set up the range labels
@@ -318,10 +318,10 @@ This example would print a color table immediately below any other map legend
 information, starting at the left margin, with 4 columns:
 <PRE>
 EXAMPLE:
-	<B>colortable</B> y
-        <B>cols</B> 4
-        <B>width</B> 4
-        <B>end</B>
+	<b>colortable</b> y
+        <b>cols</b> 4
+        <b>width</b> 4
+        <b>end</b>
 </PRE>
 <p>
 
@@ -331,19 +331,19 @@ EXAMPLE:
 
 Prints comments anywhere on the page.
 <PRE>
-USAGE:	<B>comments</B> commentfile
-	<B>where</B> x y
-	<B>font</B> font name
-	<B>fontsize</B> font size
-	<B>color</B> text color
-	<B>end</B>
+USAGE:	<b>comments</b> commentfile
+	<b>where</b> x y
+	<b>font</b> font name
+	<b>fontsize</b> font size
+	<b>color</b> text color
+	<b>end</b>
 </PRE>
 The default location is immediately below the last item item printed,
 starting at the left margin. The default text color is black.
 <p>
 If you wish to use parentheses spanning multiple lines you will need to
 quote them with a backslash to prevent the PostScript interpreter from 
-getting confused. e.g. '<B><TT>\(</TT></B>' and '<B><TT>\)</TT></B>'
+getting confused. e.g. '<b><TT>\(</TT></b>' and '<b><TT>\)</TT></b>'
 
 <p>
 
@@ -353,13 +353,13 @@ whatever is in the file <em>veg.comments</em> starting at
 the page, using a 15/72 inch Helvetica Bold font.
 <PRE>
 EXAMPLE:	
-	<B>raster</B> vegetation
-	<B>comments</B> veg.comments
-	<B>where</B> 1.5 7.25
-	<B>font</B> Helvetica Bold
-	<B>fontsize</B> 15
-	<B>color</B> blue
-	<B>end</B>
+	<b>raster</b> vegetation
+	<b>comments</b> veg.comments
+	<b>where</b> 1.5 7.25
+	<b>font</b> Helvetica Bold
+	<b>fontsize</b> 15
+	<b>color</b> blue
+	<b>end</b>
 </PRE>
 Presumably, the file
 <em>veg.comments</em>
@@ -374,7 +374,7 @@ such as "This map was created by classifying a LANDSAT TM image".
 
 Specifies the number of copies to be printed.
 <PRE>
-USAGE:	<B>copies</B> n
+USAGE:	<b>copies</b> n
 </PRE>
 Each page will be printed n times.
 <p>
@@ -387,23 +387,23 @@ This instruction is identical to the <em>copies</em> command line parameter.
 
 Places EPS (Encapsulated PostScript) pictures on the output map.
 <PRE>
-USAGE:	<B>eps</B> east north
-	<B>eps</B> x% y%
-	<B>epsfile</B> EPS file
-	<B>scale</B> #
-	<B>rotate</B> #	
-	<B>masked</B> [y|n]
-	<B>end</B>	
+USAGE:	<b>eps</b> east north
+	<b>eps</b> x% y%
+	<b>epsfile</b> EPS file
+	<b>scale</b> #
+	<b>rotate</b> #	
+	<b>masked</b> [y|n]
+	<b>end</b>	
 </PRE>
 The EPS picture location is entered in the main 
 instruction line by giving either the map 
 coordinates or by using percentages of the geographic region.
 The EPS picture will be <i>centered</i> at the given position.
-The user must specify full EPS file path <B>epsfile</B>.
-The user may also specify the <B>scale</B> of the icon
-(default is 1.0), the <B>rotate</B> i.e. rotation in degrees
+The user must specify full EPS file path <b>epsfile</b>.
+The user may also specify the <b>scale</b> of the icon
+(default is 1.0), the <b>rotate</b> i.e. rotation in degrees
 (default is 0)
-and whether the point is to be <B>masked</B>
+and whether the point is to be <b>masked</b>
 by the current mask.
 (See manual entry for <em><a href="r.mask.html">r.mask</A></em> 
 for more information on the mask.)
@@ -415,12 +415,12 @@ rotated 20 degrees clockwise, 3 times bigger than
 in original file and would not be masked by the current mask.
 <PRE>
 EXAMPLE:
-	<B>eps</B> 456000 7890000
-	<B>epsfile</B> ./epsf/logo.eps     
-	<B>scale</B> 3
-	<B>rotate</B> 20	
-	<B>masked</B> n
-	<B>end</B>	
+	<b>eps</b> 456000 7890000
+	<b>epsfile</b> ./epsf/logo.eps     
+	<b>scale</b> 3
+	<b>rotate</b> 20	
+	<b>masked</b> n
+	<b>end</b>	
 </PRE>
 Of course, multiple EPS pictures may be drawn with multiple
 <em>eps</em>
@@ -433,21 +433,21 @@ instructions.
 
 Overlays a geographic grid onto the output map.
 <PRE>
-USAGE:	<B>geogrid</B> spacing unit
-	<B>color</B> color
-	<B>numbers</B> # [color]
-	<B>font</B> font name
-	<B>fontsize</B> font size
-	<B>width</B> #
-	<B>end</B>
+USAGE:	<b>geogrid</b> spacing unit
+	<b>color</b> color
+	<b>numbers</b> # [color]
+	<b>font</b> font name
+	<b>fontsize</b> font size
+	<b>width</b> #
+	<b>end</b>
 </PRE>
-The <B>spacing</B> and spacing unit of the geographic grid is given 
-on the main instruction line.  The <B>spacing</B> unit is given as one of <B>d</B> for
-degrees, <B>m</B> for minutes, and <B>s</B> for seconds. 
+The <b>spacing</b> and spacing unit of the geographic grid is given 
+on the main instruction line.  The <b>spacing</b> unit is given as one of <b>d</b> for
+degrees, <b>m</b> for minutes, and <b>s</b> for seconds. 
 The subsection instructions allow the user to specify
-the <B>color</B> of the geographic grid lines,
-whether coordinate <B>numbers</B> should appear
-on the geographic grid lines, the <B>width</B>
+the <b>color</b> of the geographic grid lines,
+whether coordinate <b>numbers</b> should appear
+on the geographic grid lines, the <b>width</b>
 of the lines (accepts decimal points [floating points] 
 as well as integers), and
 if they should appear every grid line (1), every other grid line 
@@ -456,7 +456,7 @@ black grid lines, unnumbered.
 
 <p>
 
-NOTE: The <B>geogrid</B> draws grid numbers on the east and south borders of the map.
+NOTE: The <b>geogrid</b> draws grid numbers on the east and south borders of the map.
 
 <p>
 
@@ -465,10 +465,10 @@ onto the output map.  Alternate grid
 lines would be numbered with yellow numbers.
 <PRE>
 EXAMPLE:
-	<B>geogrid</B> 30 m   
-	<B>color</B> blue
-	<B>numbers</B> 2 yellow
-	<B>end</B>
+	<b>geogrid</b> 30 m   
+	<b>color</b> blue
+	<b>numbers</b> 2 yellow
+	<b>end</b>
 </PRE>
 <p>
 
@@ -478,7 +478,7 @@ EXAMPLE:
 
 Selects a raster map layer for output in shades of grey.
 <PRE>
-USAGE:	<B>greyrast</B> mapname
+USAGE:	<b>greyrast</b> mapname
 </PRE>
 For each 
 <em>ps.map</em>
@@ -492,24 +492,24 @@ run, only one raster map layer can be requested (using either the
 
 Overlays a coordinate grid onto the output map.
 <PRE>
-USAGE:	<B>grid</B> spacing
-	<B>color</B> color
-	<B>numbers</B> # [color]
-	<B>cross</B> cross size
-	<B>font</B> font name
-	<B>fontsize</B> font size
-	<B>width</B> #
-	<B>end</B>
+USAGE:	<b>grid</b> spacing
+	<b>color</b> color
+	<b>numbers</b> # [color]
+	<b>cross</b> cross size
+	<b>font</b> font name
+	<b>fontsize</b> font size
+	<b>width</b> #
+	<b>end</b>
 </PRE>
-The <B>spacing</B> of the grid is given (in the geographic coordinate
+The <b>spacing</b> of the grid is given (in the geographic coordinate
 system units) on the main instruction line.  The subsection instructions
 allow the user to specify
-the <B>color</B> of the grid lines,
-whether coordinate <B>numbers</B> should appear
+the <b>color</b> of the grid lines,
+whether coordinate <b>numbers</b> should appear
 on the grid lines, and if they
 should appear every grid line (1), every other grid line 
 (2), etc., and what color the numbers should be.  
-The <B>cross</B> argument draws grid intersection crosses instead of grid lines, 
+The <b>cross</b> argument draws grid intersection crosses instead of grid lines, 
 with cross size given in geographic coordinate system units.
 The defaults are black grid lines, unnumbered.
 
@@ -520,10 +520,10 @@ This example would overlay a green grid with a spacing of 10000 meters
 lines would be numbered with red numbers.
 <PRE>
 EXAMPLE:
-	<B>grid</B> 10000   
-	<B>color</B> green
-	<B>numbers</B> 2 red
-	<B>end</B>
+	<b>grid</b> 10000   
+	<b>color</b> green
+	<b>numbers</b> 2 red
+	<b>end</b>
 </PRE>
 <p>
 
@@ -533,7 +533,7 @@ EXAMPLE:
 
 Selects an RGB imagery group for output.
 <PRE>
-USAGE:	<B>group</B> <em>groupname</em>
+USAGE:	<b>group</b> <em>groupname</em>
 </PRE>
 This is similar to <em>raster</em>, except that it uses an imagery group
 instead of a raster map layer. The group must contain three raster map
@@ -546,12 +546,12 @@ layers, comprising the red, green and blue bands of the image.
 
 Prints the map header above the map.
 <PRE>
-USAGE:	<B>header</B>
-	<B>file</B> header file
-	<B>font</B> font name
-	<B>fontsize</B> font size
-	<B>color</B> text color
-	<B>end</B>
+USAGE:	<b>header</b>
+	<b>file</b> header file
+	<b>font</b> font name
+	<b>fontsize</b> font size
+	<b>color</b> text color
+	<b>end</b>
 </PRE>
 If the <em>file</em> sub-instruction is absent the header will consist
 of the map's title <!-- from hist file -->
@@ -597,12 +597,12 @@ This example prints (in red) whatever is in the file <em>soils.hdr</em> above
 the map, using a 20/72 inch <tt>Courier</tt> font.
 <PRE>
 EXAMPLE:	
-	<B>header</B>
-	<B>file</B> soils.hdr
-	<B>font</B> Courier
-	<B>fontsize</B> 20
-	<B>color</B> red
-	<B>end</B>
+	<b>header</b>
+	<b>file</b> soils.hdr
+	<b>font</b> Courier
+	<b>fontsize</b> 20
+	<b>color</b> red
+	<b>end</b>
 </PRE>
 <p>
 
@@ -615,9 +615,9 @@ Selects a labels file for output (see manual entry for
 <a href="v.label.html">v.label</A>
 ).</em>
 <PRE>
-USAGE:	<B>labels</B>  labelfile
-	<B>font</B> font name
-	<B>end</B>
+USAGE:	<b>labels</b>  labelfile
+	<b>font</b> font name
+	<b>end</b>
 </PRE>
 <p>
 NOTE: ps.map can read new option 'ROTATE:' from labels file, which
@@ -628,8 +628,8 @@ This example would paint labels from the labels file called
 towns on the map.
 <PRE>
 EXAMPLE:	
-	<B>labels</B> town.names
-	<B>end</B>
+	<b>labels</b> town.names
+	<b>end</b>
 </PRE>
 <p>
 
@@ -639,22 +639,22 @@ EXAMPLE:
 
 Draws lines on the output map.
 <PRE>
-USAGE:	<B>line</B> east north east north
-	<B>line</B> x% y% x% y%
-	<B>color</B> color
-	<B>width</B> #
-	<B>masked</B> [y|n]
-	<B>end</B>
+USAGE:	<b>line</b> east north east north
+	<b>line</b> x% y% x% y%
+	<b>color</b> color
+	<b>width</b> #
+	<b>masked</b> [y|n]
+	<b>end</b>
 </PRE>
 The beginning and ending points of the line are entered on the main
 instruction.  These points can be defined either by map coordinates or
 by using percentages of the geographic region.
-The user may also specify line <B>color</B>, <B>width</B>
+The user may also specify line <b>color</b>, <b>width</b>
 in points (1/72"; accepts decimal values as well as integers),
-and if the line is to be <B>masked</B> by the current mask.
+and if the line is to be <b>masked</b> by the current mask.
 (See manual entry for <em><a href="r.mask.html">r.mask</A>
 </em> for more information on the mask.)
-The line <B>width</B> (if given) is measured in points; an <i>i</i>
+The line <b>width</b> (if given) is measured in points; an <i>i</i>
 directly following the number indicates that the width is given in
 inches instead.
 <p>
@@ -665,11 +665,11 @@ This line would be 2 points wide (2/72") and would appear even if
 there is a mask.
 <PRE>
 EXAMPLE:
-	<B>line</B> 10% 80% 30% 70%
-	<B>color</B> yellow
-	<B>width</B> 2
-	<B>masked</B> n
-	<B>end</B>
+	<b>line</b> 10% 80% 30% 70%
+	<b>color</b> yellow
+	<b>width</b> 2
+	<b>masked</b> n
+	<b>end</b>
 </PRE>
 Of course, multiple lines may be drawn with multiple
 <em>line</em>
@@ -683,14 +683,14 @@ instructions.
 Prints the portion of the map legend containing the scale, grid and
 region information, on or below the map.
 <PRE>
-USAGE:	<B>mapinfo</B>
-	<B>where</B> x y
-	<B>font</B> font name
-	<B>fontsize</B> font size
-	<B>color</B> text color
-	<B>background</B> box color|none
-	<B>border</B> color|none
-	<B>end</B>
+USAGE:	<b>mapinfo</b>
+	<b>where</b> x y
+	<b>font</b> font name
+	<b>fontsize</b> font size
+	<b>color</b> text color
+	<b>background</b> box color|none
+	<b>border</b> color|none
+	<b>end</b>
 </PRE>
 The default location is immediately below the map,
 starting at the left edge of the map.
@@ -707,12 +707,12 @@ of the page, using a 12/72 inch <tt>Courier</tt> font.
 
 <PRE>
 EXAMPLE:
-	<B>mapinfo</B>
-	<B>where</B> 1.5 0
-	<B>font</B> Courier
-	<B>fontsize</B> 12
-	<B>color</B> brown
-	<B>end</B>
+	<b>mapinfo</b>
+	<b>where</b> 1.5 0
+	<b>font</b> Courier
+	<b>fontsize</b> 12
+	<b>color</b> brown
+	<b>end</b>
 </PRE>
 <p>
 
@@ -722,7 +722,7 @@ EXAMPLE:
 
 Positions the map on the page.
 <PRE>
-USAGE:	<B>maploc</B>  x y [width height]
+USAGE:	<b>maploc</b>  x y [width height]
 </PRE>
 The upper left corner of the map will be positioned <em>x</em> inches from
 the left edge of the page and <em>y</em> inches from the top of the page.
@@ -735,7 +735,7 @@ This example positions the upper left corner of the map 2.0 inches from
 the left edge and 3.5 inches from the top edge of the map.
 <PRE>
 EXAMPLE:
-	<B>maploc</B> 2.0 3.5
+	<b>maploc</b> 2.0 3.5
 </PRE>
 <p>
 
@@ -745,7 +745,7 @@ EXAMPLE:
 
 Color to be used for mask.
 <PRE>
-USAGE:	<B>maskcolor</B>  color
+USAGE:	<b>maskcolor</b>  color
 </PRE>
 
 
@@ -754,19 +754,19 @@ USAGE:	<B>maskcolor</B>  color
 
 Outlines the areas of a raster map layer with a specified color.
 <PRE>
-USAGE:	<B>outline</B>
-	<B>color</B>  color
-	<B>width</B>  width of line in points
-	<B>end</B>
+USAGE:	<b>outline</b>
+	<b>color</b>  color
+	<b>width</b>  width of line in points
+	<b>end</b>
 </PRE>
 Distinct areas of the raster map will be separated from each other visually
 by drawing a border (or outline) in the specified
-<B>color</B>
+<b>color</b>
 (default: black). For 
-<B>width</B>
+<b>width</b>
 the program accepts decimal points [floating points] as well as integers.
 Note: it is
-important the user enter the instruction <B>end</B> even if a color is not
+important the user enter the instruction <b>end</b> even if a color is not
 chosen.
 (It is hoped that in the future the outline of a different raster map
 layer other than the one currently being painted may be placed on the map.)
@@ -779,11 +779,11 @@ raster map layer
 in grey.
 <PRE>
 EXAMPLE:	
-	<B>raster</B> soils
-	<B>outline</B>   
-	<B>color</B> grey
-	<B>width</B> 2
-	<B>end</B>
+	<b>raster</b> soils
+	<b>outline</b>   
+	<b>color</b> grey
+	<b>width</b> 2
+	<b>end</b>
 </PRE>
 <p>
 
@@ -793,39 +793,39 @@ EXAMPLE:
 
 Specifies paper size and margins.
 <PRE>
-USAGE:	<B>paper</B> paper name
-	<B>height</B> #
-	<B>width</B> #
-	<B>left</B> #
-	<B>right</B> #
-	<B>bottom</B> #
-	<B>top</B> #
-	<B>end</B>	
+USAGE:	<b>paper</b> paper name
+	<b>height</b> #
+	<b>width</b> #
+	<b>left</b> #
+	<b>right</b> #
+	<b>bottom</b> #
+	<b>top</b> #
+	<b>end</b>	
 </PRE>
-<B>paper</B> may select predefined paper name
+<b>paper</b> may select predefined paper name
  (a4,a3,a2,a1,a0,us-legal,us-letter,us-tabloid).
  Default paper size is a4. The measures are defined in <em>inches</em>.
-<B>left</B>, <B>right</B>, <B>bottom</B> and <B>top</B> are paper margins.
+<b>left</b>, <b>right</b>, <b>bottom</b> and <b>top</b> are paper margins.
 If the plot is rotated with the <b>-r</b> command line flag, measures
 are applied to the <em>rotated</em> page.
 <p>
 
 <PRE>
 EXAMPLE:
-	<B>paper</B> a3
-	<B>end</B>	
+	<b>paper</b> a3
+	<b>end</b>	
 </PRE>
 <p>
 <PRE>
 EXAMPLE:
-	<B>paper</B>
-	<B>width</B> 10
-	<B>height</B> 10
-	<B>left</B> 2
-	<B>right</B> 2
-	<B>bottom</B> 2
-	<B>top</B> 2
-	<B>end</B>	
+	<b>paper</b>
+	<b>width</b> 10
+	<b>height</b> 10
+	<b>left</b> 2
+	<b>right</b> 2
+	<b>bottom</b> 2
+	<b>top</b> 2
+	<b>end</b>	
 </PRE>
 <p>
 
@@ -835,28 +835,28 @@ EXAMPLE:
 
 Places additional points or icons on the output map.
 <PRE>
-USAGE:	<B>point</B> east north
-	<B>point</B> x% y%
-	<B>color</B> color
-	<B>fcolor</B> color
-	<B>symbol</B> symbol group/name
-	<B>size</B> #
-	<B>width</B> #
-	<B>rotate</B> #
-	<B>masked</B> [y|n]
-	<B>end</B>	
+USAGE:	<b>point</b> east north
+	<b>point</b> x% y%
+	<b>color</b> color
+	<b>fcolor</b> color
+	<b>symbol</b> symbol group/name
+	<b>size</b> #
+	<b>width</b> #
+	<b>rotate</b> #
+	<b>masked</b> [y|n]
+	<b>end</b>	
 </PRE>
 The point location is entered in the main instruction line by giving either
 the map coordinates or by using percentages of the geographic region.
-The user may also specify the point <B>color</B>,
-the <B>size</B> of symbol in points,
+The user may also specify the point <b>color</b>,
+the <b>size</b> of symbol in points,
 the rotation angle (in degrees CCW), 
-and whether the point is to be <B>masked</B> by the current mask.
+and whether the point is to be <b>masked</b> by the current mask.
 (See manual entry for <em> <a href="r.mask.html">r.mask</A>
 </em> for more information on the mask.)
-The symbol line <B>width</B> (if given) is measured in points; an <i>i</i>
+The symbol line <b>width</b> (if given) is measured in points; an <i>i</i>
 directly following the number indicates that the width is given in inches
-instead. If a <B>width</B> is not given it will be set proportional to the
+instead. If a <b>width</b> is not given it will be set proportional to the
 symbol size.
 <p>
 This example would place a purple diamond (from icon file
@@ -864,13 +864,13 @@ This example would place a purple diamond (from icon file
 the size of a 15 points and would not be masked by the current mask.
 <PRE>
 EXAMPLE:
-	<B>point</B> 456000 7890000
-	<B>fcolor</B> purple     
-	<B>color</B> black     
-	<B>symbol</B> basic/diamond
-	<B>size</B> 15
-	<B>masked</B> n
-	<B>end</B>	
+	<b>point</b> 456000 7890000
+	<b>fcolor</b> purple     
+	<b>color</b> black     
+	<b>symbol</b> basic/diamond
+	<b>size</b> 15
+	<b>masked</b> n
+	<b>end</b>	
 </PRE>
 Of course, multiple points may be drawn with multiple
 <em>point</em>
@@ -885,18 +885,18 @@ Copies a file containing PostScript commands into the output file.
 
 <p>
 
-<B>Note:</B>
+<b>Note:</b>
 <em>ps.map</em>
 will not search for this file.  The user must be in the
-correct directory or specify the full path on the <B>psfile</B> instruction.
+correct directory or specify the full path on the <b>psfile</b> instruction.
 (Note to /bin/csh users: ~ won't work with this instruction).
 <PRE>
-USAGE:	<B>psfile</B> filename
+USAGE:	<b>psfile</b> filename
 </PRE>
 This example copies the file "logo.ps" into the output file.
 <PRE>
 EXAMPLE:	
-	<B>psfile</B> logo.ps
+	<b>psfile</b> logo.ps
 </PRE>
 <p>
 
@@ -906,7 +906,7 @@ EXAMPLE:
 
 Selects a raster map layer for output.
 <PRE>
-USAGE:	<B>raster</B> mapname
+USAGE:	<b>raster</b> mapname
 </PRE>
 For each <em>ps.map</em> run, only one raster map layer (or set
 of layers or imagery group; see below) can be requested. If no
@@ -926,7 +926,7 @@ This example would paint a map of the raster map layer <em>soils</em>.
 
 <PRE>
 EXAMPLE:	
-	<B>raster</B> soils
+	<b>raster</b> soils
 </PRE>
 <p>
 
@@ -936,17 +936,17 @@ EXAMPLE:
 
 Provides <em>ps.map</em> with a previously prepared input stream.
 <PRE>
-USAGE:	<B>read</B> previously prepared UNIX file
+USAGE:	<b>read</b> previously prepared UNIX file
 </PRE>
 Mapping instructions can be placed into a file and read into
 <em>ps.map.</em>
 
 <p>
 
-<B>Note:</B>
+<b>Note:</b>
 <em>ps.map</em>
 will not search for this file.  The user must be in the
-correct directory or specify the full path on the <B>read</B> instruction.
+correct directory or specify the full path on the <b>read</b> instruction.
 (Note to /bin/csh users: ~ won't work with this instruction).
 
 <p>
@@ -956,12 +956,12 @@ This file may contain all the <em>ps.map</em> instructions for placing
 the vector map layer <em>roads</em> onto the output map.
 <PRE>
 EXAMPLE: 
-	<B>read</B> pmap.roads
+	<b>read</b> pmap.roads
 </PRE>
 The user may have created this file because this vector map layer
 is particularly useful for many <em>ps.map</em>
-outputs.  By using the <B>read</B> option, the user need not enter all the input
-for the <B>vector</B> instruction, but simply <B>read</B> the previously prepared
+outputs.  By using the <b>read</b> option, the user need not enter all the input
+for the <b>vector</b> instruction, but simply <b>read</b> the previously prepared
 file with the correct instructions.
 <p>
 
@@ -971,24 +971,24 @@ file with the correct instructions.
 
 Draws rectangle on the output map.
 <PRE>
-USAGE:	<B>rectangle</B> east north east north
-	<B>rectangle</B> x% y% x% y%
-	<B>color</B> color
-	<B>fcolor</B> fill color	
-	<B>width</B> #
-	<B>masked</B> [y|n]
-	<B>end</B>
+USAGE:	<b>rectangle</b> east north east north
+	<b>rectangle</b> x% y% x% y%
+	<b>color</b> color
+	<b>fcolor</b> fill color	
+	<b>width</b> #
+	<b>masked</b> [y|n]
+	<b>end</b>
 </PRE>
 The two corners of the rectangle are entered on the main
 instruction.  These points can be defined either by map coordinates or
 by using percentages of the geographic region.
 The user may also specify line
-<B>color</B>, fill color <B>fcolor</B>, <B>width</B>
+<b>color</b>, fill color <b>fcolor</b>, <b>width</b>
 in points (accepts decimal points [floating points] as well as integers),
-and if the rectangle is to be <B>masked</B> by the current mask.
+and if the rectangle is to be <b>masked</b> by the current mask.
 (See manual entry for <em><a href="r.mask.html">r.mask</A></em>
 for more information on the mask.)
-The border line <B>width</B> (if given) is measured in points; an <i>i</i>
+The border line <b>width</b> (if given) is measured in points; an <i>i</i>
 directly following the number indicates that the width is given in inches
 instead.
 <br>
@@ -1000,12 +1000,12 @@ to the point x=30% y=70%.
 The border line would be 1/16" wide and would appear even if there is a mask.
 <PRE>
 EXAMPLE:
-	<B>rectangle</B> 10% 80% 30% 70%
-	<B>color</B> yellow
-	<B>fcolor</B> green	
-	<B>width</B> 0.0625i
-	<B>masked</B> n
-	<B>end</B>
+	<b>rectangle</b> 10% 80% 30% 70%
+	<b>color</b> yellow
+	<b>fcolor</b> green	
+	<b>width</b> 0.0625i
+	<b>masked</b> n
+	<b>end</b>
 </PRE>
 <p>
 
@@ -1016,10 +1016,10 @@ EXAMPLE:
 Places the outline of a smaller geographic region
 on the output.
 <PRE>
-USAGE:	<B>region</B> regionfile
-	<B>color</B> color
-	<B>width</B> #
-	<B>end</B>
+USAGE:	<b>region</b> regionfile
+	<b>color</b> color
+	<b>width</b> #
+	<b>end</b>
 </PRE>
 Geographic region settings are created and saved using <em> the 
 <a href="g.region.html">g.region</A></em> module.
@@ -1027,8 +1027,8 @@ The <em>ps.map</em> <em>region</em> option can be used to show an outline of
 a smaller region which was printed on a separate run of <em>ps.map</em>
 on other user-created maps.
 <p>
-The user can specify the <B>color</B>
-and the <B>width</B> in point units (accepts decimal points
+The user can specify the <b>color</b>
+and the <b>width</b> in point units (accepts decimal points
 [floating points] as well as integers) of the outline.
 The default is a black border of one point width (1/72").
 <p>
@@ -1038,10 +1038,10 @@ This geographic region would have been created and saved using
 <em><a href="g.region.html">g.region</A></em>.
 <PRE>
 EXAMPLE:
-	<B>region</B> fire.zones
-	<B>color</B> white
-	<B>width</B> 2
-	<B>end</B>
+	<b>region</b> fire.zones
+	<b>color</b> white
+	<b>width</b> 2
+	<b>end</b>
 </PRE>
 <p>
 
@@ -1051,7 +1051,7 @@ EXAMPLE:
 
 Selects three raster map layers for output as an RGB color image.
 <PRE>
-USAGE:	<B>rgb</B> <em>red</em> <em>green</em> <em>blue</em>
+USAGE:	<b>rgb</b> <em>red</em> <em>green</em> <em>blue</em>
 </PRE>
 This is similar to <em>raster</em>, except that it uses three
 raster map layers instead of a single layer. The three layers
@@ -1071,29 +1071,29 @@ hue appropriate to the layer.
 
 Selects a scale for the output map.
 <PRE>
-USAGE:	<B>scale</B> <em>scale</em>
+USAGE:	<b>scale</b> <em>scale</em>
 </PRE>
 The scale can be selected either as:
-<DL>
-<DT> 
-<DD>a relative ratio, e.g. 1:25000;
-<DT> 
-<DD>an absolute width of the printed map, e.g. 10 inches;
-<DT> 
-<DD>the number of printed paper panels, e.g. 3 panels
+<dl>
+<dt> 
+<dd>a relative ratio, e.g. 1:25000;
+<dt> 
+<dd>an absolute width of the printed map, e.g. 10 inches;
+<dt> 
+<dd>the number of printed paper panels, e.g. 3 panels
 <em>.I</em>
 (at the present time, only 1 panel is supported);
-<DT> 
-<DD>the number of miles per inch, e.g. 1 inch equals 4 miles.
-</DD>
-</DL>
+<dt> 
+<dd>the number of miles per inch, e.g. 1 inch equals 4 miles.
+</dd>
+</dl>
 <p>
 
 This example would set the scale of the map to 1 unit = 25000
 units.
 <PRE>
 EXAMPLE:	
-	<B>scale</B> 1:25000
+	<b>scale</b> 1:25000
 </PRE>
 <p>
 
@@ -1103,33 +1103,33 @@ EXAMPLE:
 
 Draws a scalebar on the map.
 <PRE>
-USAGE:	<B>scalebar</B> [f|s]
-	<B>where</B> x y
-	<B>length</B> overall distance in map units
-	<B>units</B> [auto|meters|kilometers|feet|miles|nautmiles]
-	<B>height</B> scale height in inches
-	<B>segment</B> number of segments
-	<B>numbers</B> #
-	<B>fontsize</B> font size
-	<B>background</B> [Y|n]
-	<B>end</B>
+USAGE:	<b>scalebar</b> [f|s]
+	<b>where</b> x y
+	<b>length</b> overall distance in map units
+	<b>units</b> [auto|meters|kilometers|feet|miles|nautmiles]
+	<b>height</b> scale height in inches
+	<b>segment</b> number of segments
+	<b>numbers</b> #
+	<b>fontsize</b> font size
+	<b>background</b> [Y|n]
+	<b>end</b>
 </PRE>
 Draw one of two types of scale bar.
 Fancy (f) draws alternating black and white scale boxes.
 Simple (s) draws a plain line scale. The default type is fancy.
 
-The subsection instructions allow the user to set <B>where</B> the scalebar
-is placed, the <B>length</B> of the scalebar (in geographic coordinate
-system units, or those given by <B>units</B>),
+The subsection instructions allow the user to set <b>where</b> the scalebar
+is placed, the <b>length</b> of the scalebar (in geographic coordinate
+system units, or those given by <b>units</b>),
 <!-- bonus prize for code explorers: you can use km and nm abbreviations
      for kilometers and nautmiles units -->
-the <B>height</B> of the scalebar in inches, and the number of
-<B>segments</B> (or tics for simple). The <B>number</B> of annotations
+the <b>height</b> of the scalebar in inches, and the number of
+<b>segments</b> (or tics for simple). The <b>number</b> of annotations
 numbers every n-th segment.
 
-The <B>background</B> command can turn off the background box for the text.
+The <b>background</b> command can turn off the background box for the text.
 <p>
-The scalebar <B>length</B> is the only required argument. The defaults are a
+The scalebar <b>length</b> is the only required argument. The defaults are a
 fancy scalebar with 4 segments, each segment labeled, and a height of 0.1
 inches. The default location is 2 inches from the top of the page and
 halfway across.
@@ -1142,13 +1142,13 @@ The scalebar is drawn 5 inches from the top and 4 inches from the left
 and is 0.25 inches high.
 <PRE>
 EXAMPLE:
-	<B>scalebar</B> s
-	<B>where</B> 4 5
-	<B>length</B> 1000
-	<B>height</B> 0.25
-	<B>segment</B> 5
-	<B>numbers</B> 2
-	<B>end</B>
+	<b>scalebar</b> s
+	<b>where</b> 4 5
+	<b>length</b> 1000
+	<b>height</b> 0.25
+	<b>segment</b> 5
+	<b>numbers</b> 2
+	<b>end</b>
 </PRE>
 
 
@@ -1158,16 +1158,16 @@ EXAMPLE:
 Overrides the color assigned to one or more categories
 of the raster map layer.
 <PRE>
-USAGE:	<B>setcolor</B> cat(s) color
+USAGE:	<b>setcolor</b> cat(s) color
 </PRE>
 This example would set the color for categories 2,5 and 8 of the raster
 map layer <em>watersheds</em> to white and category 10 to green.
-(<B>NOTE</B>: no spaces are inserted between the category values.)
+(<b>NOTE</b>: no spaces are inserted between the category values.)
 <PRE>
 EXAMPLE:	
-	<B>raster</B> watersheds
-	<B>setcolor</B> 2,5,8 white
-	<B>setcolor</B> 10 green
+	<b>raster</b> watersheds
+	<b>setcolor</b> 2,5,8 white
+	<b>setcolor</b> 10 green
 </PRE>
 Of course, <em>setcolor</em>
 can be requested more than once to override the default color for additional
@@ -1183,80 +1183,80 @@ can be included, for example "1,2,6-10,12". Colors for "<tt>null</tt>" and the
 
 Places text on the map.
 <PRE>
-USAGE:	<B>text</B>  east north text
-	<B>text</B>  x% y% text
-	<B>font</B> fontname
-	<B>color</B> color|none
-	<B>width</B> #
-	<B>hcolor</B> color|none
-	<B>hwidth</B> #
-	<B>background</B> color|none
-	<B>border</B> color|none
-	<B>fontsize</B> font size
-	<B>size</B> #
-	<B>ref</B> reference point
-	<B>rotate</B> degrees CCW
-	<B>xoffset</B> #
-	<B>yoffset</B> #
-	<B>opaque</B> [y|n]
-	<B>end</B>
+USAGE:	<b>text</b>  east north text
+	<b>text</b>  x% y% text
+	<b>font</b> fontname
+	<b>color</b> color|none
+	<b>width</b> #
+	<b>hcolor</b> color|none
+	<b>hwidth</b> #
+	<b>background</b> color|none
+	<b>border</b> color|none
+	<b>fontsize</b> font size
+	<b>size</b> #
+	<b>ref</b> reference point
+	<b>rotate</b> degrees CCW
+	<b>xoffset</b> #
+	<b>yoffset</b> #
+	<b>opaque</b> [y|n]
+	<b>end</b>
 </PRE>
 The user specifies where the text will be placed by
 providing map coordinates or percentages of the geographic region.
 The text follows these coordinates on the same instruction line.
 More than one line of text can be specified by notating the end of a line with
-<B>\n</B>
-(e.g. USA<B>\n</B>CERL).
+<b>\n</b>
+(e.g. USA<b>\n</b>CERL).
 <p>
 The user can then specify various text features:
 <p>
-<B>font:</B>
+<b>font:</b>
 the PostScript font. Common possibilities are listed at the start of this
 help page. The default is <tt>Helvetica</tt>.
 <p>
-<B>color</B>
+<b>color</b>
 (see <a href="#NAMED_COLORS">NAMED COLORS</a>);
 <p>
-<B>width</B>
+<b>width</b>
 of the lines used to draw the text to make thicker letters
 (accepts decimal points [floating points] as well as integers);
 <p>
-<B>size</B> and <B>fontsize.</B>&nbsp;
-<B>size</B> gives the vertical height of the letters in meters on the
+<b>size</b> and <b>fontsize.</b>&nbsp;
+<b>size</b> gives the vertical height of the letters in meters on the
 ground (text size will grow or shrink depending on the scale at which
-the map is painted). Alternatively <B>fontsize</B> can set the font
-size directly. If neither <B>size</B> or <B>fontsize</B> is given, a 
+the map is painted). Alternatively <b>fontsize</b> can set the font
+size directly. If neither <b>size</b> or <b>fontsize</b> is given, a 
 default font size of 10 will be used;
 <p>
-the highlight color (<B>hcolor</B>) and
-the width of the highlight color (<B>hwidth</B>);
+the highlight color (<b>hcolor</b>) and
+the width of the highlight color (<b>hwidth</b>);
 <p>
-the text-enclosing-box <B>background</B> color;
-the text box <B>border</B> color;
+the text-enclosing-box <b>background</b> color;
+the text box <b>border</b> color;
 <p>
-<B>ref.</B>
+<b>ref.</b>
 This reference point specifies the text handle - what
 part of the text should be placed on the location specified by the map
 coordinates.  Reference points can refer to:
 [lower|upper|center] [left|right|center] of the text to be printed;
 The default is center center, i.e. the text is centered on the reference point.
 <p>
-<B>rotate</B>
+<b>rotate</b>
 sets the text rotation angle, measured in degrees counter-clockwise.
 <p>
-<B>yoffset</B>,
+<b>yoffset</b>,
 which provides finer placement of text by shifting the
 text a vertical distance in points (1/72") from the specified north.
 The vertical offset will shift the location to the south if positive,
 north if negative;
 <p>
-<B>xoffset</B>,
+<b>xoffset</b>,
 which shifts the text a horizontal distance in points from
 the specified east The horizontal offset will shift the location east if 
 positive, west if negative;
 <p>
-<B>opaque</B>,
-whether or not the text should be <B>opaque</B> to vectors.  Entering <B>no</B>
+<b>opaque</b>,
+whether or not the text should be <b>opaque</b> to vectors.  Entering <b>no</b>
 to the opaque option will allow the user to see any vectors which go
 through the text's background box.  Otherwise, they will end at the box's edge.
 <p>
@@ -1269,18 +1269,18 @@ corner of the text would be centered over the coordinates provided.  All
 vectors on the map would stop at the border of this text.
 <PRE>
 EXAMPLE:	
-	<B>text</B> 650000 7365000 SPEARFISH LAND COVER
-	<B>font</B> romand
-	<B>color</B> red
-	<B>width</B> 2
-	<B>hcolor</B> black
-	<B>hwidth</B> 1
-	<B>background</B> white
-	<B>border</B> red
-	<B>size</B> 500
-	<B>ref</B> lower left 
-	<B>opaque</B> y
-	<B>end</B>
+	<b>text</b> 650000 7365000 SPEARFISH LAND COVER
+	<b>font</b> romand
+	<b>color</b> red
+	<b>width</b> 2
+	<b>hcolor</b> black
+	<b>hwidth</b> 1
+	<b>background</b> white
+	<b>border</b> red
+	<b>size</b> 500
+	<b>ref</b> lower left 
+	<b>opaque</b> y
+	<b>end</b>
 </PRE>
 <p>
 
@@ -1290,58 +1290,58 @@ EXAMPLE:
 
 Selects a vector map layer for output and plots areas.
 <PRE>
-USAGE:	<B>vareas</B> vectormap
-	<B>layer</B> # (layer number used with cats/where option)
-	<B>cats</B> list of categories (e.g. 1,3,5-7)
-	<B>where</B> SQL where statement
-	<B>masked</B> [y|n]
-	<B>color</B> color
-	<B>fcolor</B> color
-	<B>rgbcolumn</B> column
-	<B>width</B> #
-	<B>label</B> label to use in legend
-	<B>lpos</B> position in legend
-	<B>pat</B> pattern file
-	<B>pwidth</B> #
-	<B>scale</B> #
-	<B>end</B>
+USAGE:	<b>vareas</b> vectormap
+	<b>layer</b> # (layer number used with cats/where option)
+	<b>cats</b> list of categories (e.g. 1,3,5-7)
+	<b>where</b> SQL where statement
+	<b>masked</b> [y|n]
+	<b>color</b> color
+	<b>fcolor</b> color
+	<b>rgbcolumn</b> column
+	<b>width</b> #
+	<b>label</b> label to use in legend
+	<b>lpos</b> position in legend
+	<b>pat</b> pattern file
+	<b>pwidth</b> #
+	<b>scale</b> #
+	<b>end</b>
 </PRE>
 The user can specify:
 <p>
-<B>color</B> - color of the vector lines or area boundaries;
+<b>color</b> - color of the vector lines or area boundaries;
 <p>
-<B>fcolor</B> - the area fill color;
+<b>fcolor</b> - the area fill color;
 <p>
-<B>rgbcolumn</B> - name of color definition column used for the area fill color;
+<b>rgbcolumn</b> - name of color definition column used for the area fill color;
 <p>
-<B>width</B> - width of the vectors lines or area boundaries in points
+<b>width</b> - width of the vectors lines or area boundaries in points
 (accepts decimal points [floating points] as well as integers);
 <p>
-<B>masked</B> - whether or not the raster map layer is to be masked
+<b>masked</b> - whether or not the raster map layer is to be masked
 by the current mask;
 (see manual entry <em><a href="r.mask.html">r.mask</A></em>
 for more information on the mask)
 <p>
-<B>cats</B> - which categories should be plotted (default is all);
+<b>cats</b> - which categories should be plotted (default is all);
 <p>
-<B>where</B> - select features using a SQL where statement.
+<b>where</b> - select features using a SQL where statement.
 For example: <tt>vlastnik = 'Cimrman'</tt>;
 <p>
-<B>label</B> - for description in <a href="#vlegend">vlegend</a>.
+<b>label</b> - for description in <a href="#vlegend">vlegend</a>.
 Default is: map(mapset);
 <p>
-<B>lpos</B> - position vector is plotted in legend. If lpos is
+<b>lpos</b> - position vector is plotted in legend. If lpos is
 0 then this vector is omitted in legend. If more vectors used the 
 same lpos then their symbols in legend are merged and label for
 first vector is used.
 <p>
-<B>pat</B> - full path to pattern file. The pattern file contains header and
+<b>pat</b> - full path to pattern file. The pattern file contains header and
 simple PostScript commands. It is similar to EPS but more limited, meaning that
 while each pattern file is a true EPS file, most EPS files are not useful as pattern
 files because they contain restricted commands. Color <!-- and width --> of patterns
-are set by <B>fcolor</B> (red, green, ..., none, R:G:B)<!-- no?  and <B>width</B>
+are set by <b>fcolor</b> (red, green, ..., none, R:G:B)<!-- no?  and <b>width</b>
 until overwritten in the pattern file -->. Color of the boundaries remain set
-by the <B>color</B> instruction.
+by the <b>color</b> instruction.
 Pattern may be scaled with the <b>scale</b> command. Several standard hatching
 patterns are provided in <tt>$GISBASE/etc/paint/patterns/</tt>.
 Demonstrative images can be found on the
@@ -1361,20 +1361,20 @@ stroke
 
 
 <p>
-<B>scale</B> - pattern scale
+<b>scale</b> - pattern scale
 <p>
-<B>pwidth</B> - pattern line width, width is used by pattern until the width is overwritten
+<b>pwidth</b> - pattern line width, width is used by pattern until the width is overwritten
 in pattern file.
 <p>
 
 <PRE>
 EXAMPLE:	
-	<B>vareas</B> forest
-	<B>color</B> blue
-	<B>width</B> 1
-	<B>masked</B> y
-	<B>cats</B> 2,5-7	
-	<B>end</B>
+	<b>vareas</b> forest
+	<b>color</b> blue
+	<b>width</b> 1
+	<b>masked</b> y
+	<b>cats</b> 2,5-7	
+	<b>end</b>
 </PRE>
 <p>
 
@@ -1384,63 +1384,63 @@ EXAMPLE:
 
 Selects a vector map layer for output and plots lines.
 <PRE>
-USAGE:	<B>vlines</B> vectormap
-	<B>type</B> line and/or boundary
-	<B>layer</B> # (layer number used with cats/where option)
-	<B>cats</B> list of categories (e.g. 1,3,5-7)
-	<B>where</B> SQL where statement like: vlastnik = 'Cimrman'
-	<B>masked</B> [y|n]
-	<B>color</B> color
-	<B>rgbcolumn</B> column
-	<B>width</B> #
-	<B>cwidth</B> #
-	<B>hcolor</B> color
-	<B>hwidth</B> #
-	<B>offset</B> #
-	<B>coffset</B> #
-	<B>ref</B> left|right
-	<B>style</B> 00001111
-	<B>linecap</B> style
-	<B>label</B> label
-	<B>lpos</B> #
-	<B>end</B>
+USAGE:	<b>vlines</b> vectormap
+	<b>type</b> line and/or boundary
+	<b>layer</b> # (layer number used with cats/where option)
+	<b>cats</b> list of categories (e.g. 1,3,5-7)
+	<b>where</b> SQL where statement like: vlastnik = 'Cimrman'
+	<b>masked</b> [y|n]
+	<b>color</b> color
+	<b>rgbcolumn</b> column
+	<b>width</b> #
+	<b>cwidth</b> #
+	<b>hcolor</b> color
+	<b>hwidth</b> #
+	<b>offset</b> #
+	<b>coffset</b> #
+	<b>ref</b> left|right
+	<b>style</b> 00001111
+	<b>linecap</b> style
+	<b>label</b> label
+	<b>lpos</b> #
+	<b>end</b>
 </PRE>
 The user can specify:
 <p>
-<B>type</B> - the default is lines only;
+<b>type</b> - the default is lines only;
 <p>
-<B>color</B> - color of the vector lines or area boundaries;
+<b>color</b> - color of the vector lines or area boundaries;
 <p>
-<B>rgbcolumn</B> - name of color definition column used for the vector lines
+<b>rgbcolumn</b> - name of color definition column used for the vector lines
 or area boundaries;
 <p>
-<B>width</B> - width of the vectors lines or area boundaries in points
+<b>width</b> - width of the vectors lines or area boundaries in points
 (accepts decimal points [floating points] as well as integers);
 <p>
-<B>cwidth</B> - width of the vectors lines. If cwidth is used then 
+<b>cwidth</b> - width of the vectors lines. If cwidth is used then 
 width of line is equal to cwidth * category value and width is 
 used in legend;
 <p>
-<B>hcolor</B> - the highlight color for the vector lines;
+<b>hcolor</b> - the highlight color for the vector lines;
 <p>
-<B>hwidth</B> - the width of the highlight color in points;
+<b>hwidth</b> - the width of the highlight color in points;
 <p>
-<B>offset</B> (experimental) - offset for the vectors lines in points (1/72")
+<b>offset</b> (experimental) - offset for the vectors lines in points (1/72")
 for plotting parallel lines in distance equal to offset (accepts positive or 
 negative decimal points). Useful to print streets with several parallel lanes;
 <p>
-<B>coffset</B> (experimental) - offset for the vectors lines. If coffset
+<b>coffset</b> (experimental) - offset for the vectors lines. If coffset
 is used then  offset of line is equal to coffset * category value and offset
 is used in legend;
 <p>
-<B>ref</B> (experimental) - line justification. 
+<b>ref</b> (experimental) - line justification. 
 <p>
-<B>masked</B> - whether or not the raster map layer is to be masked
+<b>masked</b> - whether or not the raster map layer is to be masked
 by the current mask;
 (see manual entry <em><a href="r.mask.html">r.mask</A></em>
 for more information on the mask);
 <p>
-<B>style</B> - the line style allows the vectors to be dashed in different
+<b>style</b> - the line style allows the vectors to be dashed in different
 patterns.  This is done by either typing "solid", "dashed", "dotted", or
 "dashdotted", or as a series of 0's and 1's in a desired sequence or pattern.
 The first block of repeated zeros or ones represents "draw", the second
@@ -1449,19 +1449,19 @@ An even number of blocks will repeat the pattern, an odd number of blocks
 will alternate the pattern.
 The default is "solid";
 <p>
-<B>linecap</B> - the linecap specifies the look of the ends of the line,
+<b>linecap</b> - the linecap specifies the look of the ends of the line,
 or the end of the dashes in a dashed line. The parameters are:
 'butt' for butt caps (default), 'round' for round caps and 'extended_butt'
 for extended butt caps. The shape of the round and the extended butt caps
 is related to the line thickness: for round butts the radius is half the
 linewidth, while for extended butt the line will extend for half the linewidth.  
 <p>
-<B>cats</B> - which categories should be plotted (default is all);
+<b>cats</b> - which categories should be plotted (default is all);
 <p>
-<B>label</B> - for description in <a href="#vlegend">vlegend</a>.
+<b>label</b> - for description in <a href="#vlegend">vlegend</a>.
 Default is: map(mapset);
 <p>
-<B>lpos</B> - position vector is plotted in legend. If lpos is
+<b>lpos</b> - position vector is plotted in legend. If lpos is
 0 then this vector is omitted in legend. If more vectors used the 
 same lpos then their symbols in legend are merged and label for
 first vector is used.
@@ -1469,15 +1469,15 @@ first vector is used.
 
 <PRE>
 EXAMPLE:	
-	<B>vlines</B> streams
-	<B>color</B> blue
-	<B>width</B> 2
-	<B>hcolor</B> white
-	<B>hwidth</B> 1
-	<B>masked</B> y
-	<B>cats</B> 2	
-	<B>label</B> Streams - category 2
-	<B>end</B>
+	<b>vlines</b> streams
+	<b>color</b> blue
+	<b>width</b> 2
+	<b>hcolor</b> white
+	<b>hwidth</b> 1
+	<b>masked</b> y
+	<b>cats</b> 2	
+	<b>label</b> Streams - category 2
+	<b>end</b>
 </PRE>
 <p>
 
@@ -1487,49 +1487,49 @@ EXAMPLE:
 
 Selects vector point data to be placed on the output map
 <PRE>
-USAGE:	<B>vpoints</B> vectormap
-	<B>type</B> point and/or centroid
-	<B>layer</B> # (layer number used with cats/where/sizecol options)
-	<B>cats</B> list of categories (e.g. 1,3,5-7)
-	<B>where</B> SQL where statement like: vlastnik = 'Cimrman'
-	<B>masked</B> [y|n]
-	<B>color</B> color
-	<B>fcolor</B> color
-	<B>rgbcolumn</B> column
-	<B>width</B> #
-	<B>eps</B> epsfile	
-	<B>symbol</B> symbol group/name	
-	<B>size</B> #
-	<B>sizecolumn</B> attribute column used for symbol sizing
-	<B>scale</B> scaling factor for sizecolumn values
-	<B>rotate</B> #
-	<B>rotatecolumn</B> column
-	<B>label</B> legend label
-	<B>lpos</B> position in legend
-	<B>end</B>
+USAGE:	<b>vpoints</b> vectormap
+	<b>type</b> point and/or centroid
+	<b>layer</b> # (layer number used with cats/where/sizecol options)
+	<b>cats</b> list of categories (e.g. 1,3,5-7)
+	<b>where</b> SQL where statement like: vlastnik = 'Cimrman'
+	<b>masked</b> [y|n]
+	<b>color</b> color
+	<b>fcolor</b> color
+	<b>rgbcolumn</b> column
+	<b>width</b> #
+	<b>eps</b> epsfile	
+	<b>symbol</b> symbol group/name	
+	<b>size</b> #
+	<b>sizecolumn</b> attribute column used for symbol sizing
+	<b>scale</b> scaling factor for sizecolumn values
+	<b>rotate</b> #
+	<b>rotatecolumn</b> column
+	<b>label</b> legend label
+	<b>lpos</b> position in legend
+	<b>end</b>
 </PRE>
 The user may specify the
-the <B>color</B> of the sites (see section on <a href="#NAMED_COLORS">NAMED COLORS</a>);
-either the GRASS <B>symbol</B> or
-the <B>eps</B> Encapsulated Postscript file to be used to represent the presence of a site
-(if '<B>$</B>' is used in the EPS file path it will be replaced by category number); 
-and <B>rotate</B> (in degrees) for counter-clockwise rotation.
+the <b>color</b> of the sites (see section on <a href="#NAMED_COLORS">NAMED COLORS</a>);
+either the GRASS <b>symbol</b> or
+the <b>eps</b> Encapsulated Postscript file to be used to represent the presence of a site
+(if '<b>$</b>' is used in the EPS file path it will be replaced by category number); 
+and <b>rotate</b> (in degrees) for counter-clockwise rotation.
 <br>
 The size of the icon (number of times larger than the size it is in
-the icon file) is typically given by the <B>size</B> option. Alternatively
+the icon file) is typically given by the <b>size</b> option. Alternatively
 the size of the symbol or EPS graphic can be taken from an attribute column 
-by using the <B>sizecolumn</B> command. The value given by <B>sizecolumn</B> may be
-scaled by using the <B>scale</B> factor setting (default scaling is 1.0).
-In a similar manner symbol color can be read from <B>rgbcolumn</B>
-and the rotation angle read from <B>rotatecolumn</B>.
+by using the <b>sizecolumn</b> command. The value given by <b>sizecolumn</b> may be
+scaled by using the <b>scale</b> factor setting (default scaling is 1.0).
+In a similar manner symbol color can be read from <b>rgbcolumn</b>
+and the rotation angle read from <b>rotatecolumn</b>.
 
 <PRE>
 EXAMPLE:
-	<B>vpoints</B> windmills
-	<B>color</B> blue
-	<B>symbol</B> mills/windmill
-	<B>size</B> 10
-	<B>end</B>
+	<b>vpoints</b> windmills
+	<b>color</b> blue
+	<b>symbol</b> mills/windmill
+	<b>size</b> 10
+	<b>end</b>
 </PRE>
 <p>
 
@@ -1540,15 +1540,15 @@ Prints the portion of the map legend containing the
 vector information, on or below the map.
 
 <PRE>
-USAGE:	<B>vlegend</B>
-	<B>where</B> x y
-	<B>font</B> font name
-	<B>fontsize</B> font size
-	<B>width</B> width of color symbol
-	<B>cols</B> number of columns to print
-	<B>span</B> column separation
-	<B>border</B> color|none
-	<B>end</B>
+USAGE:	<b>vlegend</b>
+	<b>where</b> x y
+	<b>font</b> font name
+	<b>fontsize</b> font size
+	<b>width</b> width of color symbol
+	<b>cols</b> number of columns to print
+	<b>span</b> column separation
+	<b>border</b> color|none
+	<b>end</b>
 </PRE>
 The default location is immediately below the legend containing the
 scale, grid and region information, starting at the left edge of the map.
@@ -1584,11 +1584,11 @@ of the page, using a 12/72 inch Helvetica font.
 
 <PRE>
 EXAMPLE:	
-	<B>vlegend</B>
-	<B>where</B> 4.5 0
-	<B>font</B> Courier
-	<B>fontsize</B> 12
-	<B>end</B>
+	<b>vlegend</b>
+	<b>where</b> 4.5 0
+	<b>font</b> Courier
+	<b>fontsize</b> 12
+	<b>end</b>
 </PRE>
 <p>
 
@@ -1599,7 +1599,7 @@ EXAMPLE:
 Terminates input and begin painting the map.
 
 <PRE>
-USAGE:	<B>end</B>
+USAGE:	<b>end</b>
 </PRE>
 <br>
 <p>
@@ -1615,13 +1615,13 @@ The file has been named <em>spear.basic</em>:
 
 <PRE>
 # this ps.map example draws a map of Spearfish, SD
-<B>raster</B> elevation.dem
-<B>header</B>
-  <B>end</B>
-<B>vlines</B> roads
-  <B>color</B> brown
-  <B>end</B>
-<B>end</B>
+<b>raster</b> elevation.dem
+<b>header</b>
+  <b>end</b>
+<b>vlines</b> roads
+  <b>color</b> brown
+  <b>end</b>
+<b>end</b>
 </PRE>
 
 Generate map as Postsript file:
@@ -1635,69 +1635,69 @@ The file has been named <em>spear.soils</em>:
 
 <PRE>
 # this ps.map example draws a map of Spearfish, SD
-<B>raster</B> soils
-<B>outline</B>
-   <B>color</B> black
-   <B>width</B> 1
-   <B>end</B>
-<B>comments</B> soil.cmt
-   <B>where</B> 1 6
-   <B>font</B> Helvetica
-   <B>end</B>
-<B>colortable</B> y
-   <B>where</B> 1 6.5
-   <B>cols</B> 4
-   <B>width</B> 4
-   <B>font</B> Helvetica
-   <B>end</B>
-<B>setcolor</B> 6,8,9 white
-<B>setcolor</B> 10 green
-<B>vlines</B> roads
-   <B>width</B> 2
-   <B>style</B> 0111
-   <B>color</B> grey
-   <B>masked</B> n
-   <B>end</B>
-<B>vlegend</B>
-   <B>where</B> 4.5 0
-   <B>font</B> Courier
-   <B>fontsize</B> 8
-   <B>end</B>
-<B>text</B> 30% 100% SPEARFISH SOILS MAP
-   <B>color</B> red
-   <B>width</B> 1
-   <B>hcolor</B> black
-   <B>hwidth</B> 1
-   <B>background</B> white
-   <B>border</B> red
-   <B>size</B> 500
-   <B>ref</B> lower left
-   <B>end</B>
-<B>line</B> 606969.73 3423092.91 616969.73 3423092.91
-   <B>color</B> yellow
-   <B>width</B> 2
-   <B>end</B>
-<B>point</B> 40% 60%
-   <B>color</B> purple
-   <B>symbol</B> basic/diamond
-   <B>size</B> 25
-   <B>masked</B> n
-   <B>end</B>
-<B>scale</B> 1:125000
-<B>scalebar</B> f
-   <B>where</B> 4.5 6.5
-   <B>length</B> 5000
-   <B>height</B> 0.05
-   <B>segment</B> 5
-   <B>numbers</B> 5
-   <B>end</B>
-<B>geogrid</B> 60 s
-   <B>color</B> blue
-   <B>numbers</B> 2 yellow
-   <B>end</B>
-<B>paper</B> a4
-    <B>end</B>
-<B>end</B>
+<b>raster</b> soils
+<b>outline</b>
+   <b>color</b> black
+   <b>width</b> 1
+   <b>end</b>
+<b>comments</b> soil.cmt
+   <b>where</b> 1 6
+   <b>font</b> Helvetica
+   <b>end</b>
+<b>colortable</b> y
+   <b>where</b> 1 6.5
+   <b>cols</b> 4
+   <b>width</b> 4
+   <b>font</b> Helvetica
+   <b>end</b>
+<b>setcolor</b> 6,8,9 white
+<b>setcolor</b> 10 green
+<b>vlines</b> roads
+   <b>width</b> 2
+   <b>style</b> 0111
+   <b>color</b> grey
+   <b>masked</b> n
+   <b>end</b>
+<b>vlegend</b>
+   <b>where</b> 4.5 0
+   <b>font</b> Courier
+   <b>fontsize</b> 8
+   <b>end</b>
+<b>text</b> 30% 100% SPEARFISH SOILS MAP
+   <b>color</b> red
+   <b>width</b> 1
+   <b>hcolor</b> black
+   <b>hwidth</b> 1
+   <b>background</b> white
+   <b>border</b> red
+   <b>size</b> 500
+   <b>ref</b> lower left
+   <b>end</b>
+<b>line</b> 606969.73 3423092.91 616969.73 3423092.91
+   <b>color</b> yellow
+   <b>width</b> 2
+   <b>end</b>
+<b>point</b> 40% 60%
+   <b>color</b> purple
+   <b>symbol</b> basic/diamond
+   <b>size</b> 25
+   <b>masked</b> n
+   <b>end</b>
+<b>scale</b> 1:125000
+<b>scalebar</b> f
+   <b>where</b> 4.5 6.5
+   <b>length</b> 5000
+   <b>height</b> 0.05
+   <b>segment</b> 5
+   <b>numbers</b> 5
+   <b>end</b>
+<b>geogrid</b> 60 s
+   <b>color</b> blue
+   <b>numbers</b> 2 yellow
+   <b>end</b>
+<b>paper</b> a4
+    <b>end</b>
+<b>end</b>
 </PRE>
 
 This script file can be entered at the command line:

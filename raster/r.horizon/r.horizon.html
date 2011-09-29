@@ -1,6 +1,6 @@
 <h2>DESCRIPTION</h2>
 
-<B>r.horizon</B> computes the angular height of terrain horizon in
+<b>r.horizon</b> computes the angular height of terrain horizon in
 radians. It reads a raster of elevation data and outputs the horizon
 outline in one of two modes:
 
@@ -29,7 +29,7 @@ not applied.
 
 <H3>Flags:</H3>
 <dl>
-  <dt><B>-d</B>
+  <dt><b>-d</b>
   <dd>Output horizon height in degrees (the default is radians)</dd>
 </dl>
 
@@ -87,7 +87,7 @@ area specified by the current region definition.
 <p>The <I>horizon </I>parameter gives the prefix of the output
 horizon raster maps. The raster name of each horizon direction
 raster will be constructed as <I>horizon_</I>NNN , where NNN counts
-upwards from 0 to total number of directions. If you use <B>r.horizon</B>
+upwards from 0 to total number of directions. If you use <b>r.horizon</b>
 in the single point mode this option will be ignored. 
 
 
@@ -101,7 +101,7 @@ raster coordinates.
 
 
 <h2>METHOD</h2>
-<p>The calculation method is based on the method used in <B>r.sun</B>
+<p>The calculation method is based on the method used in <b>r.sun</b>
 to calculate shadows. It starts at a very shallow angle and walks
 along the line of sight and asks at each step whether the line of
 sight &quot;hits&quot; the terrain. If so, the angle is increased to

@@ -17,44 +17,44 @@ deleted/renamed/copied for a given entity type.
 
 <H3>Parameters:</H3>
 
-<DL>
-<DT><B>element=</B><em>name</em> 
+<dl>
+<dt><b>element=</b><em>name</em> 
 
-<DD>The name of a GRASS data base element (i.e., directory
+<dd>The name of a GRASS data base element (i.e., directory
 within the GRASS mapset location).
 
-<DT><B>mapset=</B><em>name</em> 
+<dt><b>mapset=</b><em>name</em> 
 
-<DD>The name of a GRASS data base mapset.  As a
+<dd>The name of a GRASS data base mapset.  As a
 convenience, a single dot (.) can be used to designate the
 current mapset.
 
-<DT><B>file=</B><em>name</em> 
+<dt><b>file=</b><em>name</em> 
 
-<DD>The name of a GRASS data base file.
-</DL>
+<dd>The name of a GRASS data base file.
+</dl>
 -->
 <h2>OUTPUT</h2>
 
 <em>g.filename</em>
 writes one line to standard output:
 
-<DL>
-<DD>
+<dl>
+<dd>
 file='<em>full_file_pathname'</em>
-</DL>
+</dl>
 
 The output is a <em>/bin/sh</em> command to set the
 variable specified by the file <em>name</em> to the full
 UNIX path name for the data base file.  This variable may
 be set in the <em>/bin/sh</em> as follows:
 
-<DL>
-<DD>
+<dl>
+<dd>
 <div class="code"><pre>
 eval `g.filename element=<em>name</em> mapset=<em>name</em> file=<em>name</em>`
 </pre></div>
-</DL>
+</dl>
 
 
 <h2>NOTES</h2>

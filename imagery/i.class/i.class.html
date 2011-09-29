@@ -160,11 +160,11 @@ following paragraphs.
 
 The Command Menu includes the following selections:
 
-<DL>
+<dl>
 
-<DT><em>Zoom</em> 
+<dt><em>Zoom</em> 
 
-<DD>This command allows the user to outline a rectangular
+<dd>This command allows the user to outline a rectangular
 region in either the Map or Zoom Display Frames and the
 region is displayed, magnified, to fit in the Zoom Display
 Frame.  A red rectangle is drawn in the Map Display Frame,
@@ -178,26 +178,26 @@ other corner.
 
 
 
-<DT><em>Define region</em>  
+<dt><em>Define region</em>  
 
-<DD>This selection takes the user to the
+<dd>This selection takes the user to the
 <a href="#regionmenu">Region Menu</A>.
 This menu includes the
 options that allow the user to outline a region of interest
 on the displayed raster map.
 
 
-<DT><em>Redisplay map</em> 
+<dt><em>Redisplay map</em> 
 
-<DD>This selection takes the user to the Redisplay Menu.
+<dd>This selection takes the user to the Redisplay Menu.
 The 
 <a href="#redisplaymenu">Redisplay Menu</A> 
 allows the user to redraw map display
 frames.
 
-<DT><em>Analyze region</em>  
+<dt><em>Analyze region</em>  
 
-<DD>This selection starts the process of analyzing the
+<dd>This selection starts the process of analyzing the
 currently defined region.  A histogram of the defined
 region will be displayed for each band.  On the histogram
 for each band, the mean, standard deviation, minimum cell
@@ -210,25 +210,25 @@ After the histograms are displayed, the user will be given
 the 
 <a href="#signaturemenu">Signature Menu</A>.
 
-<DT><em>Quit</em> 
-<DD>The user should make this selection 
+<dt><em>Quit</em> 
+<dd>The user should make this selection 
 to end the session with <em>i.class</em>.
 
-</DL>
+</dl>
 
 <A NAME="regionmenu"></a>
 <H3>The Region Menu</H3>
 
 The Region Menu contains the following selections:
 
-<DL>
+<dl>
 
-<DT><em>Erase region</em>  
-<DD>This selection erases any currently defined
+<dt><em>Erase region</em>  
+<dd>This selection erases any currently defined
 region.
 
-<DT><em>Draw region</em>  
-<DD>This selection allows the user to use the mouse to
+<dt><em>Draw region</em>  
+<dd>This selection allows the user to use the mouse to
 draw a region on either the Map or Zoom Display Frame.  An
 explanation of which mouse buttons to use is displayed in the Menu
 Frame.  The user does not need to try to complete the region boundary.  The
@@ -236,23 +236,23 @@ last line of the region will be added when the user selects the
 Complete region option on the Region Menu.
 
 
-<DT><em>Restore last region</em> 
-<DD>This selection restores the last region
+<dt><em>Restore last region</em> 
+<dd>This selection restores the last region
 that was drawn.  After a region is completed, it will be saved to be
 restored later.  Only one previous region is saved.
 
-<DT><em>Complete region</em> 
-<DD>This selection completes the region that is
+<dt><em>Complete region</em> 
+<dd>This selection completes the region that is
 currently being drawn.  As noted above, it saves the complete
 region to be restored later, if needed.  Once the user has made a
 complete region, it can be analyzed with the Analyze Region
 selection on the <a href="#commandmenu">Command Menu</A>.
 
-<DT><em>Done</em> 
-<DD>Use this selection to return to the 
+<dt><em>Done</em> 
+<dd>Use this selection to return to the 
 <a href="#commandmenu">Command Menu</A>.
 
-</DL>
+</dl>
 
 <A NAME="redisplaymenu"></a>
 <H3>The Redisplay Map Menu</H3>
@@ -260,27 +260,27 @@ selection on the <a href="#commandmenu">Command Menu</A>.
 The Redisplay Map Menu has the following selections, which are useful
 to redraw the raster maps displayed in the Map and Zoom Display Frames.
 
-<DL>
+<dl>
 
-<DT><em>Map geographic region</em> 
-<DD>This selection causes the raster map in the Map
+<dt><em>Map geographic region</em> 
+<dd>This selection causes the raster map in the Map
 Display Frame to be redrawn.
 
-<DT><em>Zoom region</em> 
-<DD>This selection causes the Zoom Display Frame to
+<dt><em>Zoom region</em> 
+<dd>This selection causes the Zoom Display Frame to
 be redrawn.
 
 
-<DT><em>Both</em> 
-<DD>This selection causes both the Map and Zoom Display
+<dt><em>Both</em> 
+<dd>This selection causes both the Map and Zoom Display
 Frames to be redrawn.
 
-<DT><em>Cancel</em> 
-<DD>Use this selection if you do not want to redisplay
+<dt><em>Cancel</em> 
+<dd>Use this selection if you do not want to redisplay
 either of the above regions.  The user will be returned to the 
 <a href="#commandmenu">Command Menu</A>.
 
-</DL>
+</dl>
 
 <A NAME="signaturemenu"></a>
 <H3>The Analyze Region Menu</H3>
@@ -295,11 +295,11 @@ redisplayed to see only the original raster map again.  The
 following selections are available on the Signature Menu:
 
 
-<DL>
+<dl>
 
-<DT><em>Set std dev's</em> 
+<dt><em>Set std dev's</em> 
 
-<DD>This selection allows the user to set the number of
+<dd>This selection allows the user to set the number of
 standard deviations from the mean for the maximum and
 minimum range.  The maximum and minimum range is used when
 finding the cells that "match" the signature.  The user is
@@ -318,9 +318,9 @@ Note that the number in parentheses on this
 selection is the current number of standard deviations.
 
 
-<DT><em>Set color</em> 
+<dt><em>Set color</em> 
 
-<DD>This selection allows the user to set the color for the
+<dd>This selection allows the user to set the color for the
 display of cells that "match" the current signature.  The
 user is presented with a menu of color choices.  The color
 selected will be used when the Display Matches Menu
@@ -331,18 +331,18 @@ selection is made.
 Note that the color in parentheses on this selection is the current
 color for display.
 
-<DT><em>Display matches</em> 
+<dt><em>Display matches</em> 
 
-<DD>This selection displays the cells that "match" the
+<dd>This selection displays the cells that "match" the
 current signature in the current color.  A cell "matches"
 the current signature if the cell value in each band is
 between the minimum range and maximum range for that band
 defined by the number of standard deviations currently
 set.
 
-<DT><em>Done</em> 
+<dt><em>Done</em> 
 
-<DD>When this selection is chosen, the user will be asked
+<dd>When this selection is chosen, the user will be asked
 whether or not he/she would like to save the current
 signature.  If the user answers with the "Yes" selection,
 he/she will be asked to enter a description for the
@@ -353,7 +353,7 @@ category that is created from the current signature.  After
 either a "No" answer or the signature description is
 entered, the user is returned to the Command Menu.
 
-</DL>
+</dl>
 
 
 <h2>NOTES</h2>

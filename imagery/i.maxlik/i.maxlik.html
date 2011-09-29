@@ -50,13 +50,13 @@ classification file name, and any combination of
 non-required options in the command line, using the form
 
 
-<DL>
-<DD>
-<B>i.maxlik</B>[<B>-q</B>] <B>group=</B><em>name</em> 
-<B>subgroup=</B><em>name</em>
-<B>sigfile=</B><em>name</em> <B>class=</B><em>name</em> 
-[<B>reject=</B><em>name</em>]
-</DL>
+<dl>
+<dd>
+<b>i.maxlik</b>[<b>-q</b>] <b>group=</b><em>name</em> 
+<b>subgroup=</b><em>name</em>
+<b>sigfile=</b><em>name</em> <b>class=</b><em>name</em> 
+[<b>reject=</b><em>name</em>]
+</dl>
 
 where each flag and options have the meanings stated below.
 
@@ -73,34 +73,34 @@ settings; the program will run foreground.
 
 <H3>Flags:</H3>
 
-<DL>
+<dl>
 
-<DT><B>-q</B> 
+<dt><b>-q</b> 
 
-<DD>Run quietly, without printing program messages to standard output.
+<dd>Run quietly, without printing program messages to standard output.
 
-</DL>
+</dl>
 
 <H3>Parameters:</H3>
 
-<DL>
+<dl>
 
-<DT><B>group=</B><em>name</em> 
+<dt><b>group=</b><em>name</em> 
 
-<DD>The <a href="i.group.html">imagery</A> group 
+<dd>The <a href="i.group.html">imagery</A> group 
 contains the subgroup to be classified.
 
-<DT><B>subgroup=</B><em>name</em> 
+<dt><b>subgroup=</b><em>name</em> 
 
-<DD>The subgroup contains image files, which were used to create 
+<dd>The subgroup contains image files, which were used to create 
 the signature file
 in the program <em><a href="i.cluster.html">i.cluster</A></em>, 
 <em><a href="i.class.html">i.class</A></em>, or 
 <em><a href="i.gensig.html">i.gensig</A></em> to be classified.
 
-<DT><B>sigfile=</B><em>name</em> 
+<dt><b>sigfile=</b><em>name</em> 
 
-<DD>The name of the signatures to be used for the
+<dd>The name of the signatures to be used for the
 classification. The signature file contains the cluster and
 covariance matrices that were calculated by the GRASS
 program <em><a href="i.cluster.html">i.cluster</A></em>
@@ -111,16 +111,16 @@ signatures are what determine the categories (classes) to
 which image pixels will be assigned during the
 classification process.
 
-<DT><B>class=</B><em>name</em> 
+<dt><b>class=</b><em>name</em> 
 
-<DD>The name of a raster map holds the classification
+<dd>The name of a raster map holds the classification
 results. This new raster map layer will contain categories
 that can be related to land cover categories on the
 ground.
 
-<DT><B>reject=</B><em>name</em> 
+<dt><b>reject=</b><em>name</em> 
 
-<DD>The optional name of a raster map holds the reject
+<dd>The optional name of a raster map holds the reject
 threshold results. This is the result of a chi square test
 on each discriminant result at various threshold levels of
 confidence to determine at what confidence level each cell
@@ -131,7 +131,7 @@ possible uses for this map layer is as a mask, to identify
 cells in the classified image that have the lowest
 probability of being assigned to the correct class.
 
-</DL>
+</dl>
 
 
 <h2>NOTES</h2>

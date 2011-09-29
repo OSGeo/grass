@@ -80,30 +80,30 @@ set to their default values.
 
 <H3>Flags:</H3>
 
-<DL>
+<dl>
 
-<DT><B>-q</B> 
+<dt><b>-q</b> 
 
-<DD>Run quietly.  Suppresses output of program
+<dd>Run quietly.  Suppresses output of program
 percent-complete messages and the time elapsed from the
 beginning of the program. If this flag is not used, these
 messages are printed out.
 
-</DL>
+</dl>
 
 <H3>Parameters:</H3>
 
-<DL>
+<dl>
 
 
-<DT><B>group=</B><em>name</em> 
+<dt><b>group=</b><em>name</em> 
 
-<DD>The name of the group file which contains the imagery
+<dd>The name of the group file which contains the imagery
 files that the user wishes to classify.
 
-<DT><B>subgroup=</B><em>name</em> 
+<dt><b>subgroup=</b><em>name</em> 
 
-<DD>The name of the subset of the group specified in group
+<dd>The name of the subset of the group specified in group
 option, which must contain only imagery band files and more
 than one band file. The user must create a group and a
 subgroup by running the GRASS program 
@@ -113,23 +113,23 @@ subgroup by running the GRASS program
 before
 running <em>i.cluster</em>.
 
-<DT><B>sigfile=</B><em>name</em> 
+<dt><b>sigfile=</b><em>name</em> 
 
-<DD>The name assigned to output signature file which
+<dd>The name assigned to output signature file which
 contains signatures of classes and can be used as the input
 file for the GRASS program 
 <em><a href="i.maxlik.html">i.maxlik</A></em> 
 for an unsupervised classification.
 
-<DT><B>classes=</B><em>value</em> 
+<dt><b>classes=</b><em>value</em> 
 
-<DD>The number of clusters that will initially be
+<dd>The number of clusters that will initially be
 identified in the clustering process before the iterations
 begin.
 
-<DT><B>seed=</B><em>name</em> 
+<dt><b>seed=</b><em>name</em> 
 
-<DD>The name of a seed signature file is optional. The seed
+<dd>The name of a seed signature file is optional. The seed
 signatures are signatures that contain cluster means and
 covariance matrices which were calculated prior to the
 current run of <em>i.cluster</em>. They may be acquired
@@ -143,15 +143,15 @@ The purpose of seed signatures is to optimize the cluster
 decision boundaries (means) for the number of clusters
 specified.
 
-<DT><B>sample=</B><em>row_interval,col_interval</em> 
+<dt><b>sample=</b><em>row_interval,col_interval</em> 
 
-<DD>These numbers are optional with default values based on
+<dd>These numbers are optional with default values based on
 the size of the data set such that the total pixels to be
 processed is approximately 10,000 (consider round up).
 
-<DT><B>iterations=</B><em>value</em> 
+<dt><b>iterations=</b><em>value</em> 
 
-<DD>This parameter determines the maximum number of
+<dd>This parameter determines the maximum number of
 iterations which is greater than the number of iterations
 predicted to achieve the optimum percent convergence. The
 default value is 30. If the number of iterations reaches
@@ -164,9 +164,9 @@ rerun <em>i.cluster</em> with a higher number of iterations
 Default: 30
 
 <A NAME="convergence"></a>
-<DT><B>convergence=</B><em>value</em>
+<dt><b>convergence=</b><em>value</em>
 
-<DD>A high percent convergence is the point at which
+<dd>A high percent convergence is the point at which
 cluster means become stable during the iteration process.
 The default value is 98.0 percent.  When clusters are being
 created, their means constantly change as pixels are
@@ -189,9 +189,9 @@ reported in the cluster statistics in the report file
 
 Default: 98.0
 
-<DT><B>separation=</B><em>value</em> 
+<dt><b>separation=</b><em>value</em> 
 
-<DD>This is the minimum separation below which clusters
+<dd>This is the minimum separation below which clusters
 will be merged in the iteration process. The default value
 is 0.0. This is an image-specific number (a "magic" number)
 that depends on the image data being classified and the
@@ -207,9 +207,9 @@ convergence
 
 Default: 0.0
 
-<DT><B>min_size=</B><em>value</em> 
+<dt><b>min_size=</b><em>value</em> 
 
-<DD>This is the minimum number of pixels that will be used
+<dd>This is the minimum number of pixels that will be used
 to define a cluster, and is therefore the minimum number of
 pixels for which means and covariance matrices will be
 calculated.
@@ -219,15 +219,15 @@ calculated.
 Default: 17
 
 <A NAME="reportfile"></A>
-<DT><B>reportfile=</B><em>name</em>
+<dt><b>reportfile=</b><em>name</em>
 
-<DD>The reportfile is an optional parameter which contains
+<dd>The reportfile is an optional parameter which contains
 the result, i.e., the statistics for each cluster. Also
 included are the resulting percent convergence for the
 clusters, the number of iterations that was required to
 achieve the convergence, and the separability matrix.
 
-</DL>
+</dl>
 
 
 <h2>NOTES</h2>

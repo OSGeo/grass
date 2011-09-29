@@ -37,96 +37,96 @@ and <I><a href="r.spreadpath.html">r.spreadpath</A></I> can be found in
 Xu (1994).
 
 <h2>Flags:</h2>
-<DL>
+<dl>
 
-<DT>-d
-<DD> Display the "live" simulation on screen. A graphics window
+<dt>-d
+<dd> Display the "live" simulation on screen. A graphics window
 must be opened and selected before using this option.
 
-<DT>-s
-<DD> For wildfires, also consider spotting.
-</DL>
+<dt>-s
+<dd> For wildfires, also consider spotting.
+</dl>
 
 <h2>Parameters</h2>
-<DL>
+<dl>
  
-<DT><B>max=</B>name
-<DD>Name of an existing raster map layer in the user's current
+<dt><b>max=</b>name
+<dd>Name of an existing raster map layer in the user's current
 mapset search path containing the maximum ROS values (cm/minute).
 
-<DT><B>dir=</B>name 
-<DD>Name of an existing raster map layer in the user's
+<dt><b>dir=</b>name 
+<dd>Name of an existing raster map layer in the user's
 current mapset search path containing directions of the maximum ROSes,
 clockwise from north (degree).
 
-<DT><B>base=</B>name 
-<DD>Name of an existing raster map layer in the user's
+<dt><b>base=</b>name 
+<dd>Name of an existing raster map layer in the user's
 current mapset search path containing the ROS values in the directions
 perpendicular to maximum ROSes' (cm/minute). These ROSes are also the ones
 without the effect of directional factors.
 
-<DT><B>start=</B>name 
-<DD>Name of an existing raster map layer in the
+<dt><b>start=</b>name 
+<dd>Name of an existing raster map layer in the
 user's current mapset search path containing starting locations of the
 spread phenomenon. Any positive integers in this map are recognized as
 starting sources.
 
-<DT><B>spot_dist=</B>name 
-<DD>Name of an existing raster map layer in
+<dt><b>spot_dist=</b>name 
+<dd>Name of an existing raster map layer in
 the user's current mapset search path containing the maximum potential
 spotting distances (meters).
 
-<DT><B>w_speed=</B>name 
-<DD>Name of an existing raster map layer in the
+<dt><b>w_speed=</b>name 
+<dd>Name of an existing raster map layer in the
 user's current mapset search path containing wind velocities at half of
 the average flame height (feet/minute).
 
-<DT><B>f_mois</B>=name 
-<DD>Name of an existing raster map layer in the
+<dt><b>f_mois</b>=name 
+<dd>Name of an existing raster map layer in the
 user's current mapset search path containing the 1-hour (&lt;.25") fuel
 moisture (percentage content multiplied by 100).
 
-<DT><B>least_size=</B>odd int An odd integer ranging 3 - 15 indicating
+<dt><b>least_size=</b>odd int An odd integer ranging 3 - 15 indicating
 the basic sampling window size within which all cells will be considered
 to see whether they will be reached by the current spread cell. The default
 number is 3 which means a 3x3 window.
 
-<DT><B>comp_dens=</B>decimal A decimal number ranging 0.0 - 1.0 indicating
+<dt><b>comp_dens=</b>decimal A decimal number ranging 0.0 - 1.0 indicating
 additional sampling cells will be considered to see whether they will be
 reached by the current spread cell. The closer to 1.0 the decimal number
 is, the longer the program will run and the higher the simulation accuracy
 will be. The default number is 0.5.
 
-<DT><B>init_time=</B>int A non-negative number specifying the initial
+<dt><b>init_time=</b>int A non-negative number specifying the initial
 time for the current spread simulation (minutes). This is useful when multiple
 phase simulation is conducted. The default time is 0.
 
-<DT><B>lag=</B>int A non-negative integer specifying the simulating
+<dt><b>lag=</b>int A non-negative integer specifying the simulating
 duration time lag (minutes). The default is infinite, but the program will
 terminate when the current geographic region/mask has been filled. It also
 controls the computational time, the shorter the time lag, the faster the
 program will run.
 
-<DT><B>backdrop=</B>name 
-<DD>Name of an existing raster map layer in the
+<dt><b>backdrop=</b>name 
+<dd>Name of an existing raster map layer in the
 user's current mapset search path to be used as the background on which
 the "live" movement will be shown.
 
-<DT><B>output=</B>name 
-<DD>Name of the new raster map layer to contain
+<dt><b>output=</b>name 
+<dd>Name of the new raster map layer to contain
 the results of the cumulative spread time needed for a phenomenon to reach
 each cell from the starting sources (minutes).
 
-<DT><B>x_output=</B>name 
-<DD>Name of the new raster map layer to contain
+<dt><b>x_output=</b>name 
+<dd>Name of the new raster map layer to contain
 the results of backlink information in UTM easting coordinates for each
 cell.
 
-<DT><B>y_output</B>=name 
-<DD>Name of the new raster map layer to contain
+<dt><b>y_output</b>=name 
+<dd>Name of the new raster map layer to contain
 the results of backlink information in UTM northing coordinates for each
 cell.
-</DL>
+</dl>
 
 <h2>OPTIONS</h2>
 The user can run r.spread either interactively or non- interactively. The
