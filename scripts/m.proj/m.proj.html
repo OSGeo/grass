@@ -133,15 +133,15 @@ parameters, '<tt>+a=</tt>', '<tt>+es=</tt>', etc.
 <h3>Another custom parameter usage example:</h3>
 
 <div class="code"><pre>
-m.proj <B>proj_in</B>="+proj=tmerc +datum=ire65 +lat_0=53.5 +lon_0=-8 +x_0=200000 \
-    +y_0=250000 +k=1.000035" <B>proj_out</B>="+proj=ll +datum=wgs84" <B>input</B>=wpt.txt
+m.proj <b>proj_in</b>="+proj=tmerc +datum=ire65 +lat_0=53.5 +lon_0=-8 +x_0=200000 \
+    +y_0=250000 +k=1.000035" <b>proj_out</b>="+proj=ll +datum=wgs84" <b>input</b>=wpt.txt
 </pre></div>
 
 or without datum transformation:
 
 <div class="code"><pre>
-m.proj <B>proj_in</B>="+proj=tmerc +ellps=modif_airy +lat_0=53.5 +lon_0=-8 +x_0=200000 \
-    +y_0=250000 +k=1.000035" <B>proj_out</B>="+proj=ll +datum=wgs84" <B>input</B>=wpt.txt
+m.proj <b>proj_in</b>="+proj=tmerc +ellps=modif_airy +lat_0=53.5 +lon_0=-8 +x_0=200000 \
+    +y_0=250000 +k=1.000035" <b>proj_out</b>="+proj=ll +datum=wgs84" <b>input</b>=wpt.txt
 </pre></div>
 
 <p>

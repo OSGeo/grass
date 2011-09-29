@@ -18,47 +18,47 @@ with dissimilar units, the graph produced comparing the two will be
 deceptive.
 
 <p>
-<DL>
-<DT><B>directoryname</B>
-<DD>Path to the directory where the input files are located. If this option
+<dl>
+<dt><b>directoryname</b>
+<dd>Path to the directory where the input files are located. If this option
 is not used, the <em>d.linegraph</em> looks for files in the current directory.
-<DD>Example format: directory/usr/grass/data/graph
+<dd>Example format: directory/usr/grass/data/graph
 
-<DT><B>ycoloroption[,option,...]]</B>
-<DD>Color to be used for drawing the lines in the graph. If multiple Y data
+<dt><b>ycoloroption[,option,...]]</b>
+<dd>Color to be used for drawing the lines in the graph. If multiple Y data
 files are used, an equal number of colors may be used to control the colors
 of the lines. Colors will be assigned to Y data in respect to the sequence
 of instantiation on the command  line.  Options are listed below.  By
 default, a series of colors will be chosen by the program if none are
 provided upon invocation.
-<DD>Order of default colors: yellow, red, green, violet, blue, orange, gray,
+<dd>Order of default colors: yellow, red, green, violet, blue, orange, gray,
 brown, magenta, white, indigo).
 
-<DT><B>titlecoloroption</B>
-<DD>The color to be used for titles, axis lines, tics, and scale numbers.  
-<DD>Default: "white"
-<DD>Color options: red, orange, yellow, green, blue, indigo, violet,
+<dt><b>titlecoloroption</b>
+<dd>The color to be used for titles, axis lines, tics, and scale numbers.  
+<dd>Default: "white"
+<dd>Color options: red, orange, yellow, green, blue, indigo, violet,
 magenta, brown, gray, white, and black.
 
-<DT><B>xtitlevalue</B>
-<DD>Title to describe X data. Will be centered beneath the graph. Default
+<dt><b>xtitlevalue</b>
+<dd>Title to describe X data. Will be centered beneath the graph. Default
 is no title unless the need for a unit descriptor is computed by the program
 (i.e. X: title in hundreds).  Also, see NOTES section (below) for a format
 caveat for multi-word titles.
 
-<DT><B>ytitlevalue</B>
-<DD>Title to describe Y data. Will be centered beneath the X data title.
+<dt><b>ytitlevalue</b>
+<dd>Title to describe Y data. Will be centered beneath the X data title.
 Default is no title unless the need for a unit descriptor is computed by
 the program (i.e. Y: ttiittllee in thousands). Also, see NOTES section
 (below) for a format caveat for multi-word titles. In the case of graphs
 with multiple lines, one may wish to use more specific title placement by
 using the <em>d.text</em> or <em>v.label</em> programs.
 
-<DT><B>titlevalue</B>
-<DD>Title to describe the graph. Will be centered over the top of graph.
+<dt><b>titlevalue</b>
+<dd>Title to describe the graph. Will be centered over the top of graph.
 Default is no title. See NOTES section (below) for a format caveat for
 multi-word titles.
-</DL>
+</dl>
 
 <h2>NOTES</h2>
 Since the command line parser is not amiable to multiple word inputs, to

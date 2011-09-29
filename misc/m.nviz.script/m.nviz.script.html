@@ -18,67 +18,67 @@ selecting <em>Scripting->Play Script</em>.
 <h2>OPTIONS</h2>
 
 <H3>Flags:</H3>
-<DL>
-<DT><B>-i</B>
-<DD>Intercative mode
-<DD>The user selects the camera path from the GRASS monitor by
+<dl>
+<dt><b>-i</b>
+<dd>Intercative mode
+<dd>The user selects the camera path from the GRASS monitor by
 	clicking the left mouse button along the route. Click the
 	right mouse button to finish.
-<DT><B>-f</B>
-<DD>Full render
-<DD>The script will draw all loaded NVIZ data and save scene to PPM image.
-<DT><B>-c</B>
-<DD>Flay at constant elevation
-<DD>With this flag the camera will be set to an elevation given by the
+<dt><b>-f</b>
+<dd>Full render
+<dd>The script will draw all loaded NVIZ data and save scene to PPM image.
+<dt><b>-c</b>
+<dd>Flay at constant elevation
+<dd>With this flag the camera will be set to an elevation given by the
 	<em>ht=</em> parameter. The default is to fly at <em>ht=</em>
 	above the topography (i.e. camera height = elevation + ht)
-<DT><B>-k</B>
-<DD>Output KeyFrame file
-<DD>Generate a KeyFrame file that can be loaded from the NVIZ
+<dt><b>-k</b>
+<dd>Output KeyFrame file
+<dd>Generate a KeyFrame file that can be loaded from the NVIZ
 	<em>Keyframe Animation</em> panel. The KeyFrame file is
 	automatically assigned the script name with a
 	<em>.kanimator</em> extension.
-<DT><B>-o</B>
-<DD>Render the animation in an off-screen context
-<DT><B>-e</B>
-<DD>Enable vector and sites drawing
-</DL>
+<dt><b>-o</b>
+<dd>Render the animation in an off-screen context
+<dt><b>-e</b>
+<dd>Enable vector and sites drawing
+</dl>
 
 
 <H3>Parameters:</H3>
-<DL>
-<DT><B>input</B>
-<DD>The name of the GRASS raster map with elevation data. 
-<DD>This should be the same file that will be loaded in NVIZ.
+<dl>
+<dt><b>input</b>
+<dd>The name of the GRASS raster map with elevation data. 
+<dd>This should be the same file that will be loaded in NVIZ.
 
-<DT><B>output</B>
-<DD>The name of the NVIZ script to create.
+<dt><b>output</b>
+<dd>The name of the NVIZ script to create.
 
-<DT><B>name</B>
-<DD>The prefix for output images if running in full render mode (<em>-f</em>).
-<DD>The defulat preifix is NVIZ (eg. NVIZ0000.ppm).
+<dt><b>name</b>
+<dd>The prefix for output images if running in full render mode (<em>-f</em>).
+<dd>The defulat preifix is NVIZ (eg. NVIZ0000.ppm).
 
-<DT><B>dist</B>
-<DD>The distance of the camera behind the center of view.
+<dt><b>dist</b>
+<dd>The distance of the camera behind the center of view.
 
-<DT><B>ht</B>
-<DD>The height of the camera above the center of view.
-<DD>If the the <em>-c</em> flag is set, the height represents the actual camera height.
+<dt><b>ht</b>
+<dd>The height of the camera above the center of view.
+<dd>If the the <em>-c</em> flag is set, the height represents the actual camera height.
 
-<DT><B>frames</B>
-<DD>The number of frames in the animation.
+<dt><b>frames</b>
+<dd>The number of frames in the animation.
 
-<DT><B>start</B>
-<DD>The starting frame number (default = 0).
-<DD> This option may be useful in full render mode when creating an
+<dt><b>start</b>
+<dd>The starting frame number (default = 0).
+<dd> This option may be useful in full render mode when creating an
 animation in sections. For example the user may wish to start at frame
 number 2000.
 
-<DT><B>route</B>
-<DD>The comma separated geographic coordinates for keyframe locations.
-<DD>The interactive flag (<em>-i</em>) overrides this option.
+<dt><b>route</b>
+<dd>The comma separated geographic coordinates for keyframe locations.
+<dd>The interactive flag (<em>-i</em>) overrides this option.
 
-</DL>
+</dl>
 
 <h2>EXAMPLE</h2>
 To interactively create an NVIZ animation from raster elev.rast with

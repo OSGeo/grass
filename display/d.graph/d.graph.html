@@ -6,7 +6,7 @@ or within a file (if an <b>input</b> file name is identified on the
 command line). If graphics commands are entered from standard input, 
 a <em>CTRL-d</em> is used to signal the end of input to <em>d.graph</em>.
 Coordinates are given either as a percentage of frame height and width
-(default) or in geographic coordinates (with the <B>-m</B> flag).
+(default) or in geographic coordinates (with the <b>-m</b> flag).
 <p>
 
 The program can be run interactively or non-interactively. 
@@ -17,13 +17,13 @@ by specifying the name of a graphics file containing the
 
 The user can also elect to run the program partially interactively, 
 by specifying any/all of the parameters <em>except</em> 
-the graphics file <B>input=</B><em>name</em> parameter on the command line. 
+the graphics file <b>input=</b><em>name</em> parameter on the command line. 
 In this case, <em>d.graph</em> will expect the user to input <em>d.graph</em> 
 graphics commands from standard input (i.e., the keyboard) and 
 will (silently) prompt the user for these graphics commands. 
 
 <p>
-Alternately, the user can simply type <B>d.graph</B> on the command line, 
+Alternately, the user can simply type <b>d.graph</b> on the command line, 
 and be prompted for the values of all parameters<!-- (the user can still 
 input graphics commands from either an input file or standard input 
 using this form)-->. In this case, the user is presented with the standard 
@@ -35,7 +35,7 @@ in x and similarly 0-100 in y,
 regardless of the graphics monitor display frame size and aspect. 
 The (0,0) location is the lower left corner of the active graphics 
 monitor display frame. All values may be floating point.
-If the <B>-m</B> flag is given, geographic coordinates will be used instead.
+If the <b>-m</b> flag is given, geographic coordinates will be used instead.
 
 
 <h2>COMMANDS</h2>
@@ -43,8 +43,8 @@ If the <B>-m</B> flag is given, geographic coordinates will be used instead.
 <p>
 The graphics language is simple, and uses the following commands: 
 <br>
-<DL>
-<DD>[
+<dl>
+<dd>[
 <a href="#comment">#</a>&nbsp;|
 <a href="#move">move</a>&nbsp;|
 <a href="#draw">draw</a>&nbsp;|
@@ -57,52 +57,52 @@ The graphics language is simple, and uses the following commands:
 <a href="#rotation">rotation</a>&nbsp;|
 <a href="#icon">icon</a>&nbsp;|
 <a href="#width">width</a>
-]</DD>
-</DL>
+]</dd>
+</dl>
 
 
-<DL>
-<DT><a name="comment"></a><B>#</B> <em>comment</em> 
-<DD>A line of comment which is ignored in the processing. 
+<dl>
+<dt><a name="comment"></a><b>#</b> <em>comment</em> 
+<dd>A line of comment which is ignored in the processing. 
 
-<DT><a name="move"></a><B>move</B> <em>xpos ypos</em> 
-<DD>The current location is updated to <em>xpos ypos</em>. 
+<dt><a name="move"></a><b>move</b> <em>xpos ypos</em> 
+<dd>The current location is updated to <em>xpos ypos</em>. 
 
-Unless the <B>-m</B> flag is used,
+Unless the <b>-m</b> flag is used,
 values are stated as a percent of the active display frame's 
 horizontal (<em>xpos</em>) and vertical (<em>ypos</em>) size, 
 and may be floating point values. Values are between 0-100. 
-<B>Note.</B> A space must separate <em>xpos</em> and <em>ypos</em>.
+<b>Note.</b> A space must separate <em>xpos</em> and <em>ypos</em>.
 
-<DT><a name="draw"></a><B>draw</B> <em>xpos ypos</em> 
-<DD>A line is drawn in the current color from the current location to the new 
+<dt><a name="draw"></a><b>draw</b> <em>xpos ypos</em> 
+<dd>A line is drawn in the current color from the current location to the new 
 location <em>xpos ypos</em>, which then becomes the current location. 
-Unless the <B>-m</B> flag is used,
+Unless the <b>-m</b> flag is used,
 values are stated as a percent of the active display frame's 
 horizontal (<em>xpos</em>) and vertical (<em>ypos</em>) size, 
 and may be floating point values. Values are between 0-100. 
-<B>Note.</B> A space must separate <em>xpos</em> and <em>ypos</em>. 
+<b>Note.</b> A space must separate <em>xpos</em> and <em>ypos</em>. 
 
-<DT><a name="polygon"></a><B>polygon</B> 
+<dt><a name="polygon"></a><b>polygon</b> 
 <br>&nbsp;&nbsp;<em> xpos ypos</em> 
 <br>&nbsp;&nbsp;<em> xpos ypos</em> 
 <br>&nbsp;&nbsp;... 
 
-<DD>The coordinates appearing beneath the word <em>polygon</em>, 
+<dd>The coordinates appearing beneath the word <em>polygon</em>, 
 one pair per line, 
 circumscribe a polygon that is to be filled with the current color. 
 
-<DT><a name="polyline"></a><B>polyline</B> 
+<dt><a name="polyline"></a><b>polyline</b> 
 <br>&nbsp;&nbsp;<em> xpos ypos</em> 
 <br>&nbsp;&nbsp;<em> xpos ypos</em> 
 <br>&nbsp;&nbsp;... 
 
-<DD>The coordinates appearing beneath the word <em>polyline</em>, 
+<dd>The coordinates appearing beneath the word <em>polyline</em>, 
 one pair per line, 
 circumscribe a polygon that is not to be filled with color. 
 
-<DT><a name="color"></a><B>color</B> <em>color</em> 
-<DD>Sets the current color to that stated; subsequent graphics will be drawn 
+<dt><a name="color"></a><b>color</b> <em>color</em> 
+<dd>Sets the current color to that stated; subsequent graphics will be drawn 
 in the stated color, until the current color is set to a different color. 
 Options are <em>red</em>, 
 <em>orange</em>,
@@ -119,23 +119,23 @@ Options are <em>red</em>,
 an R:G:B triplet (separated by colons),
 or the word "none" (draws in the default background color).
 
-<DT><a name="text"></a><B>text</B> <em>line-of-text</em> 
-<DD>The stated text is drawn at the current location using the current color, 
+<dt><a name="text"></a><b>text</b> <em>line-of-text</em> 
+<dd>The stated text is drawn at the current location using the current color, 
 and the new current location is then positioned at the end of the text string. 
 
 <a name="size"></a>
-<DT><B>size</B> <em>xper yper</em> 
-<DD>Subsequent text will be drawn such that the text is 
+<dt><b>size</b> <em>xper yper</em> 
+<dd>Subsequent text will be drawn such that the text is 
 <em>xper</em> percent of the graphics monitor display frame wide and 
 <em>yper</em> percent of the frame high. By default, the text size is set to
 5 percent of the active frame's width and 5 percent of the frame's height.
 If only one value is given, then that value will be used for both x and y 
 scaling.
 <br>
-<B>Note.</B> A space must separate <em>xper</em> and <em>yper</em>.
+<b>Note.</b> A space must separate <em>xper</em> and <em>yper</em>.
 
-<DT><a name="symbol"></a><B>symbol</B> <em>type size xper yper [line_color [fill_color]]</em>
-<DD>A symbol is drawn at the given size on the display monitor. The
+<dt><a name="symbol"></a><b>symbol</b> <em>type size xper yper [line_color [fill_color]]</em>
+<dd>A symbol is drawn at the given size on the display monitor. The
 <em>xper</em> and <em>yper</em> options define the center of the icon and
 are given as a percentage of the display frame (<tt>0,0</tt> is lower left).
 The symbol can be any of those stored in <tt>$GISBASE/etc/symbol/</tt>
@@ -146,22 +146,22 @@ or "none". If using an R:G:B triplet, each color value can range from 0-255.
 If not specified the default <em>line_color</em> is black and the default 
 <em>fill_color</em> is grey.
 
-<DT><a name="rotation"></a><B>rotation</B> <em>angle</em> 
-<DD>Subsequent text and symbols will be drawn such that they are rotated 
+<dt><a name="rotation"></a><b>rotation</b> <em>angle</em> 
+<dd>Subsequent text and symbols will be drawn such that they are rotated 
 <em>angle</em> degrees counter-clockwise from east.
 
-<DT><a name="icon"></a><B>icon</B> <em>type size x y</em> 
-<DD>Draws an icon of types <em>o</em>, <em>x</em>, or <em>+</em> 
+<dt><a name="icon"></a><b>icon</b> <em>type size x y</em> 
+<dd>Draws an icon of types <em>o</em>, <em>x</em>, or <em>+</em> 
 with specified <em>size</em> (in %) at location <em>x,y</em>. 
 Note: type <em>o</em> designates a square.
 <br>
 
-<DT><a name="width"></a><B>width</B> <em>value</em> 
-<DD>Subsequent lines (including non-FreeType text) will be drawn with
+<dt><a name="width"></a><b>width</b> <em>value</em> 
+<dd>Subsequent lines (including non-FreeType text) will be drawn with
 the given pixel thickness.
 <br>The default value is 0.
 
-</DL>
+</dl>
 
 <h2>EXAMPLES</h2>
 

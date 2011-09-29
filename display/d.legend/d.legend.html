@@ -7,14 +7,14 @@ monitor.
 
 The user can run <em>d.legend</em> either non-interactively
 or interactively.  If the user specifies the name of a
-raster <B>map</B> layer on the command line, the program
+raster <b>map</b> layer on the command line, the program
 will run non-interactively.  Default legend text
-<B>color</B> and position will be used unless
+<b>color</b> and position will be used unless
 the user specifies other values on the command line.
 
 <p>
 
-Alternately, the user can simply type <B>d.legend</B> on the command line; 
+Alternately, the user can simply type <b>d.legend</b> on the command line; 
 in this case, the program will prompt the user for parameter values 
 using the standard GRASS GUI interface.
 
@@ -24,54 +24,54 @@ The legend's default size is based on the dimensions of the
 active frame, specifically its height.  <em>d.legend</em> will only
 obscure those portions of the active frame that directly underlie the legend.
 <p>
-When using the mouse or <B>at</B> to size &amp; place the legend, a user may
+When using the mouse or <b>at</b> to size &amp; place the legend, a user may
 create a horizontal legend by making the box wider than it is tall.
 <p>
 Raster maps based on floating point values will display smoothed, from greatest
 to smallest value, while categorial raster maps will display in order, from
 top to bottom. Horizontal legends will always be smoothed. If the box is defined
-with inverted y-values or an inverted <B>range</B>, the legend will automatically
-flip. If this is not the desired result, the <B>-f</B> flag may be used to flip
+with inverted y-values or an inverted <b>range</b>, the legend will automatically
+flip. If this is not the desired result, the <b>-f</b> flag may be used to flip
 it back.
 <p>
 If the user attempts to display a very long legend in a relatively short 
 display frame, the legend may appear in unreadably small text, or even revert
-to a smooth gradient legend. Use the <B>lines</B>, <B>thin</B>, <B>use</B>, <B>range</B>,
-and/or <B>-n</B> options to reduce the number of categories to be displayed,
-or the <B>-s</B> flag to force a smooth gradient legend.
+to a smooth gradient legend. Use the <b>lines</b>, <b>thin</b>, <b>use</b>, <b>range</b>,
+and/or <b>-n</b> options to reduce the number of categories to be displayed,
+or the <b>-s</b> flag to force a smooth gradient legend.
 <p>
-The <B>lines</B> option will display the first number of categories, as defined
-by <em>value</em>, contained in the raster map. When used with the <B>-n</B> flag,
+The <b>lines</b> option will display the first number of categories, as defined
+by <em>value</em>, contained in the raster map. When used with the <b>-n</b> flag,
 it takes on a new meaning: "up to category #". When used with both
-<B>thin</B> and the <B>-n</B> flag, its meaning becomes more obscure. When
-using <B>lines</B>, auto-scaled text similar to "4 of 16 categories" will be placed at 
+<b>thin</b> and the <b>-n</b> flag, its meaning becomes more obscure. When
+using <b>lines</b>, auto-scaled text similar to "4 of 16 categories" will be placed at 
 the bottom of the legend.
 <p>
-The <B>thin</B> option sets the thinning factor. For raster maps with a 0th
-category, <B>thin=</B><em>10</em> gives cats [0,10,20,...]. For raster maps 
-starting at category 1, <B>thin=</B><em>10</em> gives cats [1,11,21,...].
+The <b>thin</b> option sets the thinning factor. For raster maps with a 0th
+category, <b>thin=</b><em>10</em> gives cats [0,10,20,...]. For raster maps 
+starting at category 1, <b>thin=</b><em>10</em> gives cats [1,11,21,...].
 <p>
-The <B>use</B> option lets the user create a legend made up of arbitrary category
-values. e.g.&nbsp;<B>use=</B><em>1000,100,10,0,-10,-100,-1000</em>
+The <b>use</b> option lets the user create a legend made up of arbitrary category
+values. e.g.&nbsp;<b>use=</b><em>1000,100,10,0,-10,-100,-1000</em>
 <p>
-The <B>range</B> option lets the user define the minimum and maximum categories
+The <b>range</b> option lets the user define the minimum and maximum categories
 to be used in the legend. It may also be used to define the limits of a smooth
 gradient legend created from a raster containing floating point values. Note
 the color scale will remain faithful to the category values as defined with
-<em><a href="r.colors.html">r.colors</A></em>, and the <B>range</B> may be
+<em><a href="r.colors.html">r.colors</A></em>, and the <b>range</b> may be
 extended to the limits defined by the <em><a href="r.colors.html">r.colors</A></em>
 color map.
 <p>
-The flag <B>-n</B> is useful for categorial maps, as it suppresses the
+The flag <b>-n</b> is useful for categorial maps, as it suppresses the
 drawing of non-existing categories (otherwise the full range is shown).
 <p>
 Vertical legends produced with <em>d.legend</em> will place text labels to the
 right of the legend box, horizontal legends will place text below. This text
 will be auto-scaled to fit within the frame, reducing the size of the legend
-if necessary. Legends positioned with the mouse or with the <B>at</B> option
+if necessary. Legends positioned with the mouse or with the <b>at</b> option
 will not auto-scale text, in order to provide more control to the user.
 Smaller text may be obtained in this case by reducing the
-height of the box. The <B>-c</B> and <B>-v</B> flags may be used to suppress the
+height of the box. The <b>-c</b> and <b>-v</b> flags may be used to suppress the
 display of category numbers and labels respectively, or used together to 
 suppress all text of categorial raster maps.
 <p>
@@ -84,7 +84,7 @@ for automatic redraw. By setting the Debug level to 1 (see
 <em><a href="g.gisenv.html">g.gisenv</A></em>) the corresponding <b>at</b>
 setting can be determined.
 <p>
-Note that old scripts which relied on setting <B>lines</B> greater than the
+Note that old scripts which relied on setting <b>lines</b> greater than the
 number of categories to scale the legend may no longer produce the desired
 output, although the auto-scaling should still produce something that looks 
 good in this case.

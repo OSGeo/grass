@@ -6,15 +6,15 @@ pairs are handled. It assumes a cartesian coordinate system.
 
 <p>
 Input can be entered via standard input (default) or from the file
-<B>input=</B><em>name</em>. Specifying the input as "-" also
+<b>input=</b><em>name</em>. Specifying the input as "-" also
 specifies standard input, and is useful for using the program in
 a pipeline.  Output will be to standard output unless a file
 name other than "-" is specified.  The input file must
 closely adhere to the following format, where up to a 10 character
-label is allowed but not required (see <B>-l</B> flag).
+label is allowed but not required (see <b>-l</b> flag).
 
 <p>
-<B>Example COGO input:</B>
+<b>Example COGO input:</b>
 <div class="code"><pre>
    P23 N 23:14:12 W 340
    P24 S 04:18:56 E 230
@@ -22,7 +22,7 @@ label is allowed but not required (see <B>-l</B> flag).
 </pre></div>
 
 <p>
-The first column may contain a label and you must use the <B>-l</B>
+The first column may contain a label and you must use the <b>-l</b>
 flag so the program knows.  This is followed by a space, and then
 either the character 'N' or 'S' to indicate whether the bearing is
 relative to the north or south directions.  After another space,
@@ -34,14 +34,14 @@ characters. A space separates the bearing from the distance (which should
 be in appropriate linear units).
 
 <p>
-<B>Output of the above input:</B>
+<b>Output of the above input:</b>
 <div class="code"><pre>
    -134.140211 312.420236 P23
    -116.832837 83.072345 P24
    ...
 </pre></div>
 <p>
-Unless specified with the <B>coord</B> option, calculations begin from (0,0).
+Unless specified with the <b>coord</b> option, calculations begin from (0,0).
 
 <p>
 For those unfamiliar with the notation for bearings: Picture yourself in the

@@ -12,14 +12,14 @@
 
 <h2>NAME</h2>
 
-<em><B>grass70</B></em>  - The GRASS startup program<br>
+<em><b>grass70</b></em>  - The GRASS startup program<br>
 
 <h2>SYNOPSIS</h2>
 
-<B>grass70</B> [<B>-</B>] [<B>-v</B>] [<B>-h | -help | --help</B>]
-    [<B>-text | -gui | -wxpython | -wx]</B>]
-    [[[<B>&lt;GISDBASE&gt;/</B>]<B>&lt;LOCATION_NAME&gt;/</B>]
-    	<B>&lt;MAPSET&gt;</B>]
+<b>grass70</b> [<b>-</b>] [<b>-v</b>] [<b>-h | -help | --help</b>]
+    [<b>-text | -gui | -wxpython | -wx]</b>]
+    [[[<b>&lt;GISDBASE&gt;/</b>]<b>&lt;LOCATION_NAME&gt;/</b>]
+    	<b>&lt;MAPSET&gt;</b>]
 
 <br>
 
@@ -56,48 +56,48 @@ All command line options are optional.
 
 <H3>Flags:</H3>
 
-<DL>
+<dl>
 
-<DT><B>-</B>
-<DD> Tries to start GRASS using location environment variables (see below)
+<dt><b>-</b>
+<dd> Tries to start GRASS using location environment variables (see below)
 
-<DT><B>-h</B> <B>-help</B> <B>--help</B>
-<DD> Prints a brief usage message
+<dt><b>-h</b> <b>-help</b> <b>--help</b>
+<dd> Prints a brief usage message
 
-<DT><B>-text</B>
-<DD> Indicates that the text based user interface should be used
+<dt><b>-text</b>
+<dd> Indicates that the text based user interface should be used
 
-<DT><B>-gui</B> (or <B>-wxpython</B>, or <B>-wx</B>)
-<DD> Indicates that the new Python based graphical user interface should be used
+<dt><b>-gui</b> (or <b>-wxpython</b>, or <b>-wx</b>)
+<dd> Indicates that the new Python based graphical user interface should be used
 
-<DT><B>-v</B> <B>--version</B>
-<DD> Prints the version of GRASS and exits
+<dt><b>-v</b> <b>--version</b>
+<dd> Prints the version of GRASS and exits
 
-</DL>
+</dl>
 
 <H3>Parameters:</H3>
 
-<DL>
-<DT><B>GISDBASE</B>
-<DD> Initial database directory which should be a fully qualified path
+<dl>
+<dt><b>GISDBASE</b>
+<dd> Initial database directory which should be a fully qualified path
     (e.g., /usr/local/share/grassdata)
 
-<DT><B>LOCATION_NAME</B>
-<DD> Initial location directory which is a subdirectory of GISDBASE
+<dt><b>LOCATION_NAME</b>
+<dd> Initial location directory which is a subdirectory of GISDBASE
 
-<DT><B>MAPSET</B>
-<DD> Initial mapset directory which is a subdirectory of LOCATION_NAME
-</DL>
+<dt><b>MAPSET</b>
+<dd> Initial mapset directory which is a subdirectory of LOCATION_NAME
+</dl>
 
 <br>
-<B><i>Note</i></B>- These parameters must be specified in one of the
+<b><i>Note</i></b>- These parameters must be specified in one of the
 following ways:
-<DL><DD>
+<dl><dd>
     MAPSET<br>
     LOCATION_NAME/MAPSET<br>
     GISDBASE/LOCATION_NAME/MAPSET<br>
     
-</DL>
+</dl>
 
 
 <h2>ENVIRONMENT VARIABLES</h2>
@@ -130,13 +130,13 @@ There is an order of precedence in the way <em>grass70</em> determines the user
 interface to use. The following is the hierarchy from highest precedence to
 lowest.
 
-<DL>
- <DT><B>Interface precedence</B>
- <DD>&bull; Command line argument<br>
+<dl>
+ <dt><b>Interface precedence</b>
+ <dd>&bull; Command line argument<br>
      &bull; Environment variable GRASS_GUI<br>
      &bull; Value set in <tt>$HOME/.grass7/rc</tt><br>
      &bull; Default value - wxpython
-</DL>
+</dl>
 
 <H3>Python Environment Variables</H3>
 
@@ -145,10 +145,10 @@ If you choose to use the wxPython interface, then
 the following environment variables can be used to override your
 system default <tt>python</tt> command.
 
-<DL>
-<DT><B>GRASS_PYTHON</B>
-<DD> Command to use to override <tt>python</tt>
-</DL>
+<dl>
+<dt><b>GRASS_PYTHON</b>
+<dd> Command to use to override <tt>python</tt>
+</dl>
 
 
 <H4>Example Use of GRASS Python Environment Variable</H4>
@@ -198,24 +198,24 @@ with environment variables. However, specifying the location and mapset
 variables on the command line will override these environment variables. The
 available variables are as follows:
 
-<DL>
+<dl>
 
-<DT><B>LOCATION</B>
-<DD> A fully qualified path to a mapset 
+<dt><b>LOCATION</b>
+<dd> A fully qualified path to a mapset 
     (eg /usr/local/share/grassdata/spearfish60/PERMANENT). This environment variable
     overrides the GISDBASE, LOCATION_NAME, and MAPSET variables.
 
-<DT><B>GISDBASE</B>
-<DD> Initial database directory which should be a fully qualified path
+<dt><b>GISDBASE</b>
+<dd> Initial database directory which should be a fully qualified path
     (eg /usr/local/share/grassdata)
 
-<DT><B>LOCATION_NAME</B>
-<DD> Initial location directory which is a subdirectory of GISDBASE
+<dt><b>LOCATION_NAME</b>
+<dd> Initial location directory which is a subdirectory of GISDBASE
 
-<DT><B>MAPSET</B>
-<DD> Initial mapset directory which is a subdirectory of LOCATION_NAME
+<dt><b>MAPSET</b>
+<dd> Initial mapset directory which is a subdirectory of LOCATION_NAME
 
-</DL>
+</dl>
 
 
 <H3>Running non-interactive batch jobs</H3>
@@ -241,29 +241,29 @@ required for the UNIX shell that you use. (e.g. in a Bash shell you must
 <p>
 The following are some examples of how you could start GRASS
 
-<DL>
+<dl>
 
-<DT><B>grass70</B>
-<DD> Start GRASS using the default user interface. The user will be prompted
+<dt><b>grass70</b>
+<dd> Start GRASS using the default user interface. The user will be prompted
     to choose the appropriate location and mapset.
 
-<DT><B>grass70 -gui</B>
-<DD> Start GRASS using the wxPython based user interface. The user will be
+<dt><b>grass70 -gui</b>
+<dd> Start GRASS using the wxPython based user interface. The user will be
     prompted to choose the appropriate location and mapset.
 
-<DT><B>grass70 -text</B>
-<DD> Start GRASS using the text based user interface. The user will be
+<dt><b>grass70 -text</b>
+<dd> Start GRASS using the text based user interface. The user will be
     prompted to choose the appropriate location and mapset.
 
-<DT><B>grass70 ~/grassdata/spearfish60/user1</B>
-<DD> Start GRASS using the default user interface and automatically launch
+<dt><b>grass70 ~/grassdata/spearfish60/user1</b>
+<dd> Start GRASS using the default user interface and automatically launch
    into the given mapset, bypassing the mapset selection menu.
 
-<DT><B>grass70 -gui -</B>
-<DD> Start GRASS using the wxPython based user interface and try to obtain
+<dt><b>grass70 -gui -</b>
+<dd> Start GRASS using the wxPython based user interface and try to obtain
     the location and mapset from environment variables.
 
-</DL>
+</dl>
 
 
 <H3>Other examples</H3>
@@ -272,10 +272,10 @@ There are a variety of ways in which the <i>location environment
 variables</i> (see above) can be used to specify the mapset to use.
 The following are some possible examples.
 
-<DL>
+<dl>
 
-<DT><B>Example 1</B>
-<DD> The environment variables are defined as follows:<br><br>
+<dt><b>Example 1</b>
+<dd> The environment variables are defined as follows:<br><br>
     
     LOCATION = /usr/local/share/grassdata/spearfish60/PERMANENT<br>
     GISDBASE = /usr/local/share/grassdata<br>
@@ -289,8 +289,8 @@ The following are some possible examples.
     GRASS will start with the mapset defined by LOCATION since the LOCATION
     variable overrides the other variables.<br><br>
 
-<DT><B>Example 2</B>
-<DD> The environment variables are defined as follows:<br><br>
+<dt><b>Example 2</b>
+<dd> The environment variables are defined as follows:<br><br>
     
     GISDBASE = /usr/local/share/grassdata<br>
     LOCATION_NAME = spearfish60<br>
@@ -303,8 +303,8 @@ The following are some possible examples.
     GRASS will start with the mapset defined by
     GISDBASE/LOCATION_NAME/MAPSET.<br><br>
 
-<DT><B>Example 3</B>
-<DD> The environment variables are defined as follows:<br><br>
+<dt><b>Example 3</b>
+<dd> The environment variables are defined as follows:<br><br>
     
     LOCATION = /usr/local/share/grassdata/spearfish60/PERMANENT<br>
     GISDBASE = /usr/local/share/grassdata<br>
@@ -318,8 +318,8 @@ The following are some possible examples.
     GRASS will start with the mapset /home/grass/data/thailand/forests which
     overrides the environment variables.<br><br>
 
-<DT><B>Example 4</B>
-<DD> The environment variables are defined as follows:<br><br>
+<dt><b>Example 4</b>
+<dd> The environment variables are defined as follows:<br><br>
     
     LOCATION = /usr/local/share/grassdata/spearfish60/PERMANENT<br>
     GISDBASE = /usr/local/share/grassdata<br>
@@ -334,8 +334,8 @@ The following are some possible examples.
     since the command line argument for the mapset overrides the environment
     variable MAPSET.<br><br>
 
-<DT><B>Example 5</B>
-<DD> The environment variables are defined as follows:<br><br>
+<dt><b>Example 5</b>
+<dd> The environment variables are defined as follows:<br><br>
     
     LOCATION = /usr/local/share/grassdata/spearfish60/PERMANENT<br>
     GISDBASE = /usr/local/share/grassdata<br>
@@ -350,7 +350,7 @@ The following are some possible examples.
     since the command line arguments for the location and mapset overrides
     the environment variables LOCATION_NAME and MAPSET.<br><br>
 
-</DL>
+</dl>
 
 
 <h2>CAVEAT</h2>

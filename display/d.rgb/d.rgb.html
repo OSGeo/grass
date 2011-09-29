@@ -11,35 +11,35 @@ layers should use a grey-scale color table.
 
 <H3>Flags:</H3> 
 
-<DL>
+<dl>
 
-<DT><B>-o</B>
+<dt><b>-o</b>
 
-<DD>Overlay the resulting raster map layer onto whatever is already
+<dd>Overlay the resulting raster map layer onto whatever is already
 displayed in the active graphics frame. Any no-data areas in any of
 the named raster maps will seem transparent, and reveal the underlying
-image previously displayed in the graphics frame. If the <B>-o</B>
+image previously displayed in the graphics frame. If the <b>-o</b>
 flag is set, only cells containing non-null values will be displayed
 from the <em>overlaid</em> raster map. All other areas (i.e., the
 portions of the overlaid map that contain null values) will leave the
 underlying display untouched.
 
-</DL>
+</dl>
 
 <H3>Parameters:</H3>
 
-<DL>
-<DT><B>red=</B><em>name</em>
-<DD>Name of raster map layer to be used for RED component. 
-<DT><B>green=</B><em>name</em>
-<DD>Name of raster map layer to be used for GREEN component. 
-<DT><B>blue=</B><em>name</em>
-<DD>Name of raster map layer to be used for BLUE component. 
-</DL>
+<dl>
+<dt><b>red=</b><em>name</em>
+<dd>Name of raster map layer to be used for RED component. 
+<dt><b>green=</b><em>name</em>
+<dd>Name of raster map layer to be used for GREEN component. 
+<dt><b>blue=</b><em>name</em>
+<dd>Name of raster map layer to be used for BLUE component. 
+</dl>
 
 <h2>NOTES</h2>
 
-This is a new version of <B>d.rgb</B>, which sends the
+This is a new version of <b>d.rgb</b>, which sends the
 data to the graphics monitor in true-color RGB format.
 
 Unlike the previous version, it does not attempt to
@@ -56,18 +56,18 @@ run <em><a href="r.colors.html">r.colors</A></em> on the selected satellite
 channels.<p>
 Example:
 <dl>
-<dd><B>r.info -r</B> <em>image.1</em><br>
+<dd><b>r.info -r</b> <em>image.1</em><br>
 <tt>min=0<br>
 max=255</tt><br>
 
-<dd><B>r.colors map=</B><em>image.1</em> <B>color=</B><em>rules</em> 
+<dd><b>r.colors map=</b><em>image.1</em> <b>color=</b><em>rules</em> 
 << EOF<br>
 0 black<br>
 255 white<br>
 EOF<br>
 
-<dd><B>r.colors map=</B><em>image.2</em> <B>rast=</B><em>image.1</em>
-<dd><B>r.colors map=</B><em>image.3</em> <B>rast=</B><em>image.1</em>
+<dd><b>r.colors map=</b><em>image.2</em> <b>rast=</b><em>image.1</em>
+<dd><b>r.colors map=</b><em>image.3</em> <b>rast=</b><em>image.1</em>
 </dl>
 
 <em>Note: Future GRASS versions may do this for you automatically.</em>

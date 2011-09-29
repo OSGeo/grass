@@ -1,15 +1,15 @@
 <h2>DESCRIPTION</h2>
 
 <em>s.out.ascii</em> converts an existing site list file
-(<B>input=</B><em>name</em>) into an ASCII listing of site
+(<b>input=</b><em>name</em>) into an ASCII listing of site
 locations and (optionally) their category labels, in a
 format suitable for input to other program). 
 
 <p>
 
 Each line of output consists of the easting, northing, and
-category label for a site listed in the named <B>vector points</B> (sites)
-file.  The <B>fs=</B><em>name</em> option (where
+category label for a site listed in the named <b>vector points</b> (sites)
+file.  The <b>fs=</b><em>name</em> option (where
 <em>name</em> is either a character, a space, or a tab) can
 be used to place a particular field separator between these
 three output fields. This is useful when output is to be
@@ -28,65 +28,65 @@ format.
 
 <H3>Flags:</H3>
 
-<DL>
-<DT><B>-a</B>
-<DD>Output all sites found in the named <B>vector points</B>
+<dl>
+<dt><b>-a</b>
+<dd>Output all sites found in the named <b>vector points</b>
 file, rather than limiting output to sites falling within
 the current geographic region.
 
-<DT><B>-d</B>
-<DD>Include site descriptions (category labels) in the output. 
+<dt><b>-d</b>
+<dd>Include site descriptions (category labels) in the output. 
 
-<DT><B>-i</B>
-<DD>Include site attribute identifiers in the output
+<dt><b>-i</b>
+<dd>Include site attribute identifiers in the output
 
-</DL>
+</dl>
 
 <H3>Parameters:</H3>
 
-<DL>
+<dl>
 
-<DT><B>input=</B><em>name</em>
+<dt><b>input=</b><em>name</em>
 
-<DD>Name of an existing site list file. 
+<dd>Name of an existing site list file. 
 
-<DT><B>fs=</B>character|space|tab
+<dt><b>fs=</b>character|space|tab
 
-<DD>The field separator to be placed between the easting,
+<dd>The field separator to be placed between the easting,
 northing, and (optionally) category label on each line of
 output.  The field separator can be a character, a space,
 or a tab.
 
 <br>
 Default: space 
-</DL>
+</dl>
 
 <em>s.out.ascii</em> can be run either non-interactively or
 interactively.  The program will be run non-interactively
 if the user specifies the name of an existing site list
-file and (optionally) a value for <B>fs</B>, using the form
+file and (optionally) a value for <b>fs</b>, using the form
 
 <p>
-<DL>
-<DD>
-<B>s.out.ascii</B> 
-[<B>-adi</B>] 
-<B>input=</B><em>name</em> 
-[<B>fs=</B>character|space|tab] 
-</DL>
+<dl>
+<dd>
+<b>s.out.ascii</b> 
+[<b>-adi</b>] 
+<b>input=</b><em>name</em> 
+[<b>fs=</b>character|space|tab] 
+</dl>
 
 
 where <em>name</em> is the name of an existing site list
 file to be converted to a brief ASCII listing, and
-<B>fs</B> is the field separator to be placed between
-output fields. The user can also the <B>-a</B> and
-<B>-d</B> options to use all sites in the named
-<B>sites</B> file and to include site descriptions in the
+<b>fs</b> is the field separator to be placed between
+output fields. The user can also the <b>-a</b> and
+<b>-d</b> options to use all sites in the named
+<b>sites</b> file and to include site descriptions in the
 output.
 
 <p>
 
-Alternately, the user can simply type <B>s.out.ascii</B> on
+Alternately, the user can simply type <b>s.out.ascii</b> on
 the command line, without program arguments. In this case,
 the user will be prompted for parameter values using the
 standard GRASS 
@@ -99,10 +99,10 @@ interface.
 
 To output GRASS data in x,y,z ASCII style, the s.out.ascii may be used:
 <p>
-<DL>
-<DD>
-<B>s.out.ascii -d input=</B>sitesmap
-</DL>
+<dl>
+<dd>
+<b>s.out.ascii -d input=</b>sitesmap
+</dl>
 Resulting to:
 
 <pre>
@@ -122,19 +122,19 @@ The output from <em>s.out.ascii</em> may be placed into a
 file by using the UNIX redirection mechanism; e.g.:
 
 <p>
-<DL>
-<DD>
-<B>s.out.ascii input=</B>archsites &gt; out.file
-</DL>
+<dl>
+<dd>
+<b>s.out.ascii input=</b>archsites &gt; out.file
+</dl>
 
 <em>s.out.ascii</em> output may also be redirected into
 other programs; e.g.:
 
 <p>
-<DL>
-<DD>
-<B>s.out.ascii input=</B>archsites | d.points <B>color=</B>red <B>size=</B>10 <B>type=</B>diamond
-</DL>
+<dl>
+<dd>
+<b>s.out.ascii input=</b>archsites | d.points <b>color=</b>red <b>size=</b>10 <b>type=</b>diamond
+</dl>
 
 <h2>SEE ALSO</h2>
 

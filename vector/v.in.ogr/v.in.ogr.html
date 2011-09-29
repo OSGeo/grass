@@ -68,7 +68,7 @@ imported with the indicated <b>output</b> name into the PERMANENT mapset.
 The command imports various vector formats:
 
 <ul>
-<li><B>SHAPE files</B>
+<li><b>SHAPE files</b>
 <div class="code"><pre>
 v.in.ogr dsn=/home/user/shape_data/test_shape.shp output=grass_map 
 </pre></div>
@@ -79,13 +79,13 @@ v.in.ogr dsn=/home/user/shape_data layer=test_shape output=grass_map
 </pre></div>
 <br>
 
-<li><B>MapInfo files</B>
+<li><b>MapInfo files</b>
 <div class="code"><pre>
 v.in.ogr dsn=./ layer=mapinfo_test output=grass_map
 </pre></div>
 <br>
 
-<li><B>Arc Coverage</B><br>
+<li><b>Arc Coverage</b><br>
  We import the Arcs and Label points, the module takes care to
  build areas:<br>
 <div class="code"><pre>
@@ -93,7 +93,7 @@ v.in.ogr dsn=gemeinden layer=LAB,ARC type=centroid,boundary output=mymap
 </pre></div>
 <br>
 
-<li><B>E00 file</B> (see also <em><a href="v.in.e00.html">v.in.e00</a></em>)<br>
+<li><b>E00 file</b> (see also <em><a href="v.in.e00.html">v.in.e00</a></em>)<br>
  First we have to convert the E00 file to an Arc Coverage with 'avcimport' 
  (<a href="http://avce00.maptools.org/avce00/index.html">AVCE00 tools</a>,
  use <em>e00conv</em> first in case that <em>avcimport</em> fails):<br>
@@ -103,27 +103,27 @@ v.in.ogr dsn=coverage layer=LAB,ARC type=centroid,boundary output=mymap
 </pre></div>
 <br>
 
-<li><B>SDTS files</B> (you have to select the CATD file)<br>
+<li><b>SDTS files</b> (you have to select the CATD file)<br>
 <div class="code"><pre>
 v.in.ogr dsn=CITXCATD.DDF output=cities
 </pre></div>
 <br>
 
-<li><B>TIGER files</B><br>
+<li><b>TIGER files</b><br>
 <div class="code"><pre>
 v.in.ogr dsn=input/2000/56015/ layer=CompleteChain,PIP output=t56015_all \
 type=boundary,centroid snap=-1
 </pre></div>
 <br>
 
-<li><B>PostGIS maps</B> (area example)<br>
+<li><b>PostGIS maps</b> (area example)<br>
 <div class="code"><pre>
 v.in.ogr dsn="PG:host=localhost dbname=postgis user=postgres" layer=polymap \
 output=polygons type=boundary,centroid
 </pre></div>
 <br>
 
-<li><B>Oracle Spatial maps </B><br>
+<li><b>Oracle Spatial maps </b><br>
 Note that you have to set the environment-variables <tt>ORACLE_BASE,
 ORACLE_SID, ORACLE_HOME</tt> and <tt>TNS_ADMIN</tt> accordingly.
 <div class="code"><pre>
