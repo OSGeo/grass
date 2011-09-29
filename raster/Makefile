@@ -137,3 +137,9 @@ default:
 	$(MAKE) htmldir 
 
 htmldir: parsubdirs
+
+$(HTMLDIR)/r.in.png:
+	# no-op - override Html.make rule for .png image files
+
+$(HTMLDIR)/r.out.png:
+	# no-op - override Html.make rule for .png image files
