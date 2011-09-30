@@ -433,9 +433,9 @@ def get_interface_description(cmd):
         raise ScriptError, _("Unable to fetch interface description for command '%(cmd)s'."
                              "\n\nDetails: %(det)s") % { 'cmd' : cmd, 'det' : e }
     
-    if cmderr and cmderr[:7] != 'WARNING':
-        raise ScriptError, _("Unable to fetch interface description for command '%(cmd)s'."
-                             "\n\nDetails: %(det)s") % { 'cmd': cmd, 'det' : decode(cmderr) }
+    # if cmderr and cmderr[:7] != 'WARNING':
+    # raise ScriptError, _("Unable to fetch interface description for command '%(cmd)s'."
+    # "\n\nDetails: %(det)s") % { 'cmd': cmd, 'det' : decode(cmderr) }
     
     return cmdout.replace('grass-interface.dtd', os.path.join(os.getenv('GISBASE'), 'etc', 'grass-interface.dtd'))
 
