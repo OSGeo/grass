@@ -748,12 +748,27 @@ class GRASSStartup(wx.Frame):
                                    wx.ICON_QUESTION | wx.CENTRE)
             
             ret = dlg.ShowModal()
+            dlg.Destroy()
             if ret == wx.ID_YES:
-                try:
-                    os.remove(lockfile)
-                except IOError, e:
-                    GError(_("Unable to remove '%(lock)s'.\n\n"
-                             "Details: %(reason)s") % { 'lock' : lockfile, 'reason' : e})
+                dlg1 = wx.MessageDialog(parent = self,
+                                        message = _("ARE YOU REALLY SURE?\n\n"
+                                                    "If you really are running another GRASS session doing this "
+                                                    "could corrupt your data. Have another look in the processor "
+                                                    "manager just to be sure..."),
+                                        caption = _("Lock file found"),
+                                        style = wx.YES_NO | wx.NO_DEFAULT |
+                                        wx.ICON_QUESTION | wx.CENTRE)
+                
+                ret = dlg1.ShowModal()
+                dlg1.Destroy()
+                
+                if ret == wx.ID_YES:
+                    try:
+                        os.remove(lockfile)
+                    except IOError, e:
+                        GError(_("Unable to remove '%(lock)s'.\n\n"
+                                 "Details: %(reason)s") % { 'lock' : lockfile, 'reason' : e})
+                else:
                     return
             else:
                 return
