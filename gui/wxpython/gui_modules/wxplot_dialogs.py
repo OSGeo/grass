@@ -1,8 +1,8 @@
 """!
 @package wxplot_dialogs.py
 
-GRASS interactive plotting using PyPlot (wx.lib.plot.py). Dialogs for different
-    plotting routines
+Iinteractive plotting using PyPlot (wx.lib.plot.py). Dialogs for
+different plotting routines.
 
 Classes:
  - ProfileRasterDialog
@@ -27,13 +27,9 @@ import wx.lib.colourselect as  csel
 import globalvar
 import gcmd
 from gselect     import Select
-from render      import Map
-from toolbars    import Histogram2Toolbar
-from debug       import Debug
 from preferences import globalSettings as UserSettings
 
 from grass.script import core   as grass
-from grass.script import raster as raster
 
 class ProfileRasterDialog(wx.Dialog):
     def __init__(self, parent, id = wx.ID_ANY, 
