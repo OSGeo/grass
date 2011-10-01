@@ -1722,7 +1722,7 @@ class MapFrame(wx.Frame):
         self.histogramPyPlot.Show()
         # Open raster select dialog to make sure that a raster (and the desired raster)
         # is selected to be histogrammed
-        self.histogram2.OnSelectRaster(None)
+        self.histogramPyPlot.OnSelectRaster(None)
         
     def OnHistogram(self, event):
         """!Init histogram display canvas and tools

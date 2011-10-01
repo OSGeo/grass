@@ -61,7 +61,6 @@ from gui_modules import mapdisp
 from gui_modules import menudata
 from gui_modules import menuform
 from gui_modules import histogram
-from gui_modules import profile
 from gui_modules import mcalc_builder as mapcalculator
 from gui_modules import gcmd
 from gui_modules import dbm
