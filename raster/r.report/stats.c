@@ -28,7 +28,7 @@ int get_stats(void)
 	argv[argc++] = "-acr";
 
 	/* if (!masking) argv[argc++] = "-m"; */
-	if (!verbose)
+	if (G_verbose() == G_verbose_min())
 	    argv[argc++] = "--quiet";
 
 	if (no_nulls)

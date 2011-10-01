@@ -54,7 +54,6 @@ extern int masking;
 extern int use_formfeed;
 extern int nlines;
 extern int with_headers;
-extern int verbose;
 extern int e_format;
 extern int no_nulls;
 extern int no_nulls_all;
