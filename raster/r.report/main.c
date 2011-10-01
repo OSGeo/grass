@@ -3,14 +3,15 @@
  *
  * MODULE:       r.report
  * AUTHOR(S):    Michael Shapiro, CERL (original contributor)
- *               Roberto Flor <flor itc.it>, Jachym Cepicky <jachym les-ejk.cz>, 
+ *               Roberto Flor <flor itc.it>
+ *               Jachym Cepicky <jachym les-ejk.cz>, 
  *               Jan-Oliver Wagner <jan intevation.de>
- * PURPOSE:      
- * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
+ * PURPOSE:      Reports statistics for raster map(s).
+ * COPYRIGHT:    (C) 1999-2006, 2011 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ *               This program is free software under the GNU General
+ *               Public License (>=v2). Read the file COPYING that
+ *               comes with GRASS for details.
  *
  *****************************************************************************/
 

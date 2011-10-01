@@ -155,7 +155,6 @@ int parse_command_line(int argc, char *argv[])
 
     use_formfeed = flags.f->answer;
     with_headers = !flags.h->answer;
-    verbose = !flags.q->answer;
     e_format = flags.e->answer;
     no_nulls = flags.n->answer;
     no_nulls_all = flags.N->answer;
