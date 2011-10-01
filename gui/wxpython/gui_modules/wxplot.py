@@ -823,9 +823,9 @@ class ProfileFrame(AbstractPlotFrame):
             self.raster[r]['datalist'] = self.CreateDatalist(r, self.coordstr)
 
             # update title
-            self.ptitle += ' %s and' % r
+            self.ptitle += ' %s ,' % r.split('@')[0]
 
-        self.ptitle = self.ptitle.rstrip('and')
+        self.ptitle = self.ptitle.rstrip(',')
 
         #
         # set ylabel to match units if they exist
