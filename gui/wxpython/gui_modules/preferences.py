@@ -397,21 +397,15 @@ class Settings:
                     'enabled' : False,
                     },
                 },
+             # 
+             # plots for profiles, histograms, and scatterplots
+             #
             'profile': {
-                'raster0' : {
-                    'pcolor' : (0, 0, 255, 255), # profile line color
-                    'pwidth' : 1, # profile line width
-                    'pstyle' : 'solid', # profile line pen style
-                    },
-                'raster1' : {
-                    'pcolor' : (255, 0, 0, 255), 
-                    'pwidth' : 1, 
-                    'pstyle' : 'solid', 
-                    },
-                'raster2' : {
-                    'pcolor' : (0, 255, 0, 255), 
-                    'pwidth' : 1, 
-                    'pstyle' : 'solid', 
+                'raster' : {
+                    'pcolor'        : (0, 0, 255, 255), # line color
+                    'pwidth'        : 1, # line width
+                    'pstyle'        : 'solid', # line pen style
+                    'datatype'      : 'cell', # raster type
                     },
                 'font' : {
                     'titleSize' : 12,
@@ -451,6 +445,39 @@ class Settings:
                     'pwidth'        : 1, # line width
                     'pstyle'        : 'solid', # line pen style
                     'datatype'      : 'cell', # raster type
+                    },
+                'font' : {
+                    'titleSize'     : 12,
+                    'axisSize'      : 11,
+                    'legendSize'    : 10,
+                    },
+                'grid' : {
+                    'color'         : (200, 200, 200, 255),
+                    'enabled'       : True,
+                    },
+                'x-axis' : {
+                    'type'          : 'auto', # axis format
+                    'min'           : 0, # axis min for custom axis range
+                    'max'           : 0, # axis max for custom axis range
+                    'log'           : False,
+                    },
+                'y-axis' : {
+                    'type'          : 'auto', # axis format
+                    'min'           : 0, # axis min for custom axis range
+                    'max'           : 0, # axis max for custom axis range
+                    'log'           : False,
+                    },
+                'legend' : {
+                    'enabled'       : True
+                    },
+                },
+             'scatter': {
+                'marker' : {
+                    'color' : (0, 0, 0, 255),
+                    'fill' : 'solid',
+                    'size' : 1,
+                    'type' : 'dot',
+                    'legend' : _('Data point'),
                     },
                 'font' : {
                     'titleSize'     : 12,
