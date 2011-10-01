@@ -1,14 +1,12 @@
 """!
-@package histogram2.py
+@package wxplot.py
 
-Raster histogramming using PyPlot (wx.lib.plot.py); replacement for
-d.hist
+Iinteractive plotting using PyPlot (wx.lib.plot.py). 
 
 Classes:
+ - AbstractPlotFrame
  - HistFrame
- - SetupHistogramDialog
- - TextDialog
- - OptDialog
+ - ProfileFrame
 
 (C) 2011 by the GRASS Development Team
 
@@ -27,11 +25,9 @@ import wx.lib.colourselect as  csel
 
 import globalvar
 import gcmd
-from gselect     import Select
 from render      import Map
 from toolbars    import Histogram2Toolbar
 from toolbars    import ProfileToolbar
-from debug       import Debug
 from preferences import globalSettings as UserSettings
 
 import wxplot_dialogs as dialogs
@@ -52,7 +48,7 @@ except ImportError:
 
 class AbstractPlotFrame(wx.Frame):
     """!Abstract PyPlot display frame class"""
-    def __init__(self, parent = None, id = wx.ID_ANY, title='', size = (700,300),
+    def __init__(self, parent = None, id = wx.ID_ANY, title='', size = (700, 300),
                  style = wx.DEFAULT_FRAME_STYLE, rasterList = [],  **kwargs):
 
         wx.Frame.__init__(self, parent, id, title, size = size, style = style, **kwargs)
