@@ -95,10 +95,6 @@ int parse_command_line(int argc, char *argv[])
 	_("Number of fp subranges to collect stats from");
     parms.nsteps->guisection = _("FP maps");
 
-    flags.q = G_define_flag();
-    flags.q->key = 'q';
-    flags.q->description = _("Quiet");
-
     flags.h = G_define_flag();
     flags.h->key = 'h';
     flags.h->description = _("Suppress page headers");
@@ -279,7 +275,7 @@ int match(char *s, char *key, int min)
     size_t len;
 
     len = strlen(s);
-    if (len < min)
+    if ((int) len < min)
 	return 0;
     return strncmp(s, key, len) == 0;
 }
