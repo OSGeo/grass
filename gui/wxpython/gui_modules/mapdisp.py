@@ -1645,10 +1645,8 @@ class MapFrame(wx.Frame):
                 self.tree.GetPyData(self.tree.layer_selected)[0]['type'] == 'raster':
             raster.append(self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer'].name)
 
-        self.profile = ProfileFrame(self,
-                                            id = wx.ID_ANY, pos = wx.DefaultPosition, size = (700,300),
-                                            style = wx.DEFAULT_FRAME_STYLE, 
-                                            rasterList = raster)
+        self.profile = ProfileFrame(parent = self,
+                                    rasterList = raster)
         self.profile.Show()
         # Open raster select dialog to make sure that a raster (and the desired raster)
         # is selected to be profiled
@@ -1715,10 +1713,8 @@ class MapFrame(wx.Frame):
                 continue
             raster.append(self.tree.GetPyData(layer)[0]['maplayer'].GetName())
 
-        self.histogramPyPlot = HistFramePyPlot(self, id = wx.ID_ANY, 
-                                                pos = wx.DefaultPosition, size = (700,300),
-                                                style = wx.DEFAULT_FRAME_STYLE, 
-                                                rasterList = raster)
+        self.histogramPyPlot = HistFramePyPlot(parent = self,
+                                               rasterList = raster)
         self.histogramPyPlot.Show()
         # Open raster select dialog to make sure that a raster (and the desired raster)
         # is selected to be histogrammed
