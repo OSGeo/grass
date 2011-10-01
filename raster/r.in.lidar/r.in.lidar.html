@@ -82,8 +82,6 @@ for use with arbitrarily large input files<!-- without a small value for percent
 
 The default map <b>type</b>=<tt>FCELL</tt> is intended as compromise between
 preserving data precision and limiting system resource consumption.
-If reading data from a <tt>stdin</tt> stream, the program can only run using
-a single pass.
 
 <h3>Setting region bounds and resolution</h3>
 
@@ -176,33 +174,32 @@ Typical commands to create a DEM using bsplines:
 
 <h2>EXAMPLE</h2>
 
-Import the <a href="http://www.grassbook.org/data_menu2nd.phtml">Jockey's
-Ridge, NC, LIDAR dataset</a>, and process into a clean DEM:
+This example is analogous to the example used in the GRASS wiki page for
+<a href="http://grass.osgeo.org/wiki/LIDAR#Import_LAS_as_raster_DEM">importing LAS as raster DEM</a>.
+<p>
+The sample LAS data are in the file "Serpent Mound Model LAS Data.las", 
+available at 
+<a href="http://www.appliedimagery.com/downloads/sampledata/Serpent%20Mound%20Model%20LAS%20Data.las">appliedimagery.com</a>
 
 <div class="code"><pre>
-    # scan and set region bounds
-  r.in.xyz -s fs=, in=lidaratm2.txt out=test
-  g.region n=35.969493 s=35.949693 e=-75.620999 w=-75.639999
-  g.region res=0:00:00.075 -a
-    # create "n" map containing count of points per cell for checking density
-  r.in.xyz in=lidaratm2.txt out=lidar_n fs=, method=n zrange=-2,50
-    # check point density [rho = n_sum / (rows*cols)]
-  r.univar lidar_n | grep sum
-    # create "min" map (elevation filtered for premature hits)
-  r.in.xyz in=lidaratm2.txt out=lidar_min fs=, method=min zrange=-2,50
-    # zoom to area of interest
-  g.region n=35:57:56.25N s=35:57:13.575N w=75:38:23.7W e=75:37:15.675W
-    # check number of non-null cells (try and keep under a few million)
-  r.univar lidar_min | grep '^n:'
-    # convert to points 
-  r.to.vect -z feature=point in=lidar_min out=lidar_min_pt
-    # interpolate using a regularized spline fit
-  v.surf.rst layer=0 in=lidar_min_pt elev=lidar_min.rst
-    # set color scale to something interesting
-  r.colors lidar_min.rst rule=bcyr -n -e
-    # prepare a 1:1:1 scaled version for NVIZ visualization (for lat/lon input)
-  r.mapcalc "lidar_min.rst_scaled = lidar_min.rst / (1852*60)"
-  r.colors lidar_min.rst_scaled rule=bcyr -n -e
+  # using v.in.lidar to print file info and to create a new location
+
+  # print LAS file info
+  v.in.lidar -p input="Serpent Mound Model LAS Data.las"
+
+  # create location with projection information of the LAS data
+  v.in.lidar -i input="Serpent Mound Model LAS Data.las" location=Serpent_Mound
+
+  # quit and restart GRASS in the newly created location "Serpent_Mound"
+
+  # scan the extents of the LAS data
+  r.in.lidar -sg input="Serpent Mound Model LAS Data.las"
+
+  # set the region to the extents of the LAS data, align to resolution
+  g.region n=4323641.57 s=4320942.61 w=289020.90 e=290106.02 res=1 -ap
+
+  # import as raster DEM
+  r.in.lidar input="Serpent Mound Model LAS Data.las" output=Serpent_Mound_Model_LAS_Data method=mean
 </pre></div>
 <br>
 
@@ -250,6 +247,7 @@ Development Team.
 <a href="r.to.rast3.html">r.to.rast3</a><br>
 <a href="r.to.vect.html">r.to.vect</a><br>
 <a href="r.univar.html">r.univar</a><br>
+<a href="v.in.lidar.html">v.in.lidar</a><br>
 <a href="v.in.ascii.html">v.in.ascii</a><br>
 <a href="v.surf.rst.html">v.surf.rst</a><br>
 <br>
