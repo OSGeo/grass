@@ -237,6 +237,7 @@ int main(int argc, char *argv[])
     scan_flag = G_define_flag();
     scan_flag->key = 's';
     scan_flag->description = _("Scan data file for extent then exit");
+    scan_flag->suppress_required = YES;
 
     shell_style = G_define_flag();
     shell_style->key = 'g';
@@ -375,7 +376,7 @@ int main(int argc, char *argv[])
 		    " from input data set.\n"));
 	    G_fatal_error(error_msg);
 	}
-	else {
+	else if (!shell_style->answer) {
 	    G_message(_("Projection of input dataset and current location "
 			"appear to match"));
 	}
