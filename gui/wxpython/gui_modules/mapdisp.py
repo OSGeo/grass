@@ -1645,7 +1645,7 @@ class MapFrame(wx.Frame):
                 self.tree.GetPyData(self.tree.layer_selected)[0]['type'] == 'raster':
             raster.append(self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer'].name)
 
-        self.profile = wxplot.ProfileFrame(self,
+        self.profile = ProfileFrame(self,
                                             id = wx.ID_ANY, pos = wx.DefaultPosition, size = (700,300),
                                             style = wx.DEFAULT_FRAME_STYLE, 
                                             rasterList = raster)

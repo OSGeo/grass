@@ -1281,7 +1281,7 @@ class ProfileToolbar(AbstractToolbar):
                                       self.parent.PrintMenu),
                                      (None, ),
                                      ('settings', icons["options"],
-                                      self.parent.ProfileOptionsMenu),
+                                      self.parent.PlotOptionsMenu),
                                      ('quit', icons["quit"],
                                       self.parent.OnQuit),
                                      ))
@@ -1450,7 +1450,7 @@ class Histogram2Toolbar(AbstractToolbar):
                                       self.parent.PrintMenu),
                                      (None, ),
                                      ('settings', icons["options"],
-                                      self.parent.HistOptionsMenu),
+                                      self.parent.PlotOptionsMenu),
                                      ('quit', icons["quit"],
                                       self.parent.OnQuit),
                                      ))
