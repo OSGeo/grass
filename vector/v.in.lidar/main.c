@@ -217,6 +217,7 @@ int main(int argc, char *argv[])
     no_import_flag->description =
 	_("Create the location specified by the \"location\" parameter and exit."
           " Do not import the vector file.");
+    no_import_flag->suppress_required = YES;
 
     notopo_flag = G_define_flag();
     notopo_flag->key = 'b';
@@ -264,17 +265,6 @@ int main(int argc, char *argv[])
 	LASReader_Destroy(LAS_reader);
 
 	exit(EXIT_SUCCESS);
-    }
-
-    if (!outloc_opt->answer) {	/* Check if the map exists */
-	if (G_find_vector2(out_opt->answer, G_mapset())) {
-	    if (overwrite)
-		G_warning(_("Vector map <%s> already exists and will be overwritten"),
-			  out_opt->answer);
-	    else
-		G_fatal_error(_("Vector map <%s> already exists"),
-			      out_opt->answer);
-	}
     }
 
     return_filter = LAS_ALL;
@@ -477,6 +467,17 @@ int main(int argc, char *argv[])
 
     db_init_string(&sql);
     db_init_string(&strval);
+
+    if (!outloc_opt->answer) {	/* Check if the map exists */
+	if (G_find_vector2(out_opt->answer, G_mapset())) {
+	    if (overwrite)
+		G_warning(_("Vector map <%s> already exists and will be overwritten"),
+			  out_opt->answer);
+	    else
+		G_fatal_error(_("Vector map <%s> already exists"),
+			      out_opt->answer);
+	}
+    }
 
     /* open output vector */
     sprintf(buf, "%s", out_opt->answer);
