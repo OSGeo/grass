@@ -8,7 +8,7 @@ The typical file extensions for the LAS format are .las and .laz (compressed).
 The compressed LAS format can be imported only if libLAS has been compiled 
 with laszip support. It is also recommended to compile libLAS with GDAL, 
 needed to text for matching projections.
-<p>
+<P>
 For larger datasets, it is recommended to not build topology (-b flag).
 Also, creating a table with attributes can take some time for larger datasets.
 
@@ -43,6 +43,27 @@ by passing the name to be used for the new location via the <b>location</b>
 parameter.  Upon completion of the command, a new location will have been
 created (with only a PERMANENT mapset), and the vector map will have been
 imported with the indicated <b>output</b> name into the PERMANENT mapset.
+
+<h2>EXAMPLE</h2>
+
+This example is analogous to the example used in the GRASS wiki page for
+<a href="http://grass.osgeo.org/wiki/LIDAR#Import_LAS_as_vector_points">importing LAS as vector points</a>.
+<p>
+The sample LAS data are in the file "Serpent Mound Model LAS Data.las", 
+available at 
+<a href="http://www.appliedimagery.com/downloads/sampledata/Serpent%20Mound%20Model%20LAS%20Data.las">appliedimagery.com</a>
+
+<div class="code"><pre>
+  # print LAS file info
+  v.in.lidar -p input="Serpent Mound Model LAS Data.las"
+
+  # create location with projection information of the LAS data
+  v.in.lidar -i input="Serpent Mound Model LAS Data.las" location=Serpent_Mound
+
+  # quit and restart GRASS in the newly created location "Serpent_Mound"
+  # real import of LiDAR LAS data, without topology and without attribute table
+  v.in.lidar -tb input="Serpent Mound Model LAS Data.las" output=Serpent_Mound_Model_pts
+</pre></div>
 
 
 <h2>REFERENCES</h2>
