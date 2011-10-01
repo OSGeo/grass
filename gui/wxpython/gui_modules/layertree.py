@@ -46,12 +46,12 @@ import mapdisp
 import render
 import histogram
 import utils
-import profile
-from debug import Debug as Debug
-from icon import Icons as Icons
+from wxplot      import ProfileFrame
+from debug       import Debug
+from icon        import Icons
 from preferences import globalSettings as UserSettings
-from vdigit import haveVDigit
-from gcmd import GWarning
+from vdigit      import haveVDigit
+from gcmd        import GWarning
 
 TREE_ITEM_HEIGHT = 25
 
@@ -521,9 +521,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.profileFrame = self.mapdisplay.profile
 
         if not self.profileFrame:
-            self.profileFrame = profile.ProfileFrame(self.mapdisplay,
-                                                     id = wx.ID_ANY, pos = wx.DefaultPosition, size = (700,300),
-                                                     style = wx.DEFAULT_FRAME_STYLE, rasterList = [mapLayer.GetName()])
+            self.profileFrame = ProfileFrame(parent = self.mapdisplay,
+                                             rasterList = [mapLayer.GetName()])
             # show new display
             self.profileFrame.Show()
         

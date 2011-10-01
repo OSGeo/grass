@@ -48,7 +48,7 @@ except ImportError:
 
 class AbstractPlotFrame(wx.Frame):
     """!Abstract PyPlot display frame class"""
-    def __init__(self, parent = None, id = wx.ID_ANY, title='', size = (700, 300),
+    def __init__(self, parent, id = wx.ID_ANY, title = '', size = (700, 400),
                  style = wx.DEFAULT_FRAME_STYLE, rasterList = [],  **kwargs):
 
         wx.Frame.__init__(self, parent, id, title, size = size, style = style, **kwargs)
@@ -497,11 +497,12 @@ class AbstractPlotFrame(wx.Frame):
         self.Destroy()
         
 class HistFrame(AbstractPlotFrame):
-    def __init__(self, parent, id, pos, style, size,
-                 title = _("GRASS Histogramming Tool"), rasterList = []):
+    def __init__(self, parent, title = _("GRASS Histogramming Tool"),
+                 rasterList = [], **kwargs):
         """!Mainframe for displaying histogram of raster map. Uses wx.lib.plot.
         """
-        AbstractPlotFrame.__init__(self, parent)
+        AbstractPlotFrame.__init__(self, parent, title = title,
+                                   rasterList = rasterList, **kwargs)
         
         self.toolbar = Histogram2Toolbar(parent = self)
         self.SetToolBar(self.toolbar)
@@ -678,10 +679,11 @@ class HistFrame(AbstractPlotFrame):
 class ProfileFrame(AbstractPlotFrame):
     """!Mainframe for displaying profile of one or more raster maps. Uses wx.lib.plot.
     """
-    def __init__(self, parent, id, pos, style, size,
-                 title = _("GRASS Profile Analysis Tool"), rasterList = []):
+    def __init__(self, parent, title = _("GRASS Profile Analysis Tool"),
+                 rasterList = [], **kwargs):
 
-        AbstractPlotFrame.__init__(self, parent)
+        AbstractPlotFrame.__init__(self, parent, title = title,
+                                   rasterList = rasterList, **kwargs)
 
         self.toolbar = ProfileToolbar(parent = self)
         self.SetToolBar(self.toolbar)
