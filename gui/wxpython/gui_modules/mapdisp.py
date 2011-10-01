@@ -45,7 +45,6 @@ import disp_print
 import gcmd
 import dbm
 import dbm_dialogs
-import profile
 import globalvar
 import utils
 import gdialogs
@@ -55,7 +54,8 @@ from preferences import globalSettings as UserSettings
 
 from mapdisp_window  import BufferedWindow
 from histogram       import HistFrame
-from histogram2      import HistFrame as HistFramePyPlot
+from wxplot          import HistFrame as HistFramePyPlot
+from wxplot          import ProfileFrame
 from grass.script import core as grass
 
 # for standalone app
@@ -1645,9 +1645,10 @@ class MapFrame(wx.Frame):
                 self.tree.GetPyData(self.tree.layer_selected)[0]['type'] == 'raster':
             raster.append(self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer'].name)
 
-        self.profile = profile.ProfileFrame(self,
+        self.profile = wxplot.ProfileFrame(self,
                                             id = wx.ID_ANY, pos = wx.DefaultPosition, size = (700,300),
-                                            style = wx.DEFAULT_FRAME_STYLE, rasterList = raster)
+                                            style = wx.DEFAULT_FRAME_STYLE, 
+                                            rasterList = raster)
         self.profile.Show()
         # Open raster select dialog to make sure that a raster (and the desired raster)
         # is selected to be profiled
@@ -1703,24 +1704,25 @@ class MapFrame(wx.Frame):
         
         return (outdist, outunits)
     
+
     def OnHistogramPyPlot(self, event):
         """!Init PyPlot histogram display canvas and tools
         """
         raster = []
+
         for layer in self.tree.GetSelections():
             if self.tree.GetPyData(layer)[0]['maplayer'].GetType() != 'raster':
                 continue
             raster.append(self.tree.GetPyData(layer)[0]['maplayer'].GetName())
-        print raster
-        self.histogramPyPlot = HistFramePyPlot(parent = self, id = wx.ID_ANY, size = globalvar.HIST_WINDOW_SIZE,
-                                               style = wx.DEFAULT_FRAME_STYLE, rasterList = raster)
+
+        self.histogramPyPlot = HistFramePyPlot(self, id = wx.ID_ANY, 
+                                                pos = wx.DefaultPosition, size = (700,300),
+                                                style = wx.DEFAULT_FRAME_STYLE, 
+                                                rasterList = raster)
         self.histogramPyPlot.Show()
-        # Open raster select dialog to make sure that a raster (and
-        # the desired raster) is selected to be histogrammed
-        if not raster:
-            self.histogramPyPlot.OnSelectRaster(None)
-        else:
-            self.histogramPyPlot.OnCreateHist(None)
+        # Open raster select dialog to make sure that a raster (and the desired raster)
+        # is selected to be histogrammed
+        self.histogram2.OnSelectRaster(None)
         
     def OnHistogram(self, event):
         """!Init histogram display canvas and tools
@@ -1731,7 +1733,8 @@ class MapFrame(wx.Frame):
         # show new display
         self.histogram.Show()
         self.histogram.Refresh()
-        
+        self.histogram.Update()
+       
     def OnDecoration(self, event):
         """!Decorations overlay menu
         """
