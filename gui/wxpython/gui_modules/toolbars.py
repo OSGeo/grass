@@ -13,6 +13,7 @@ Classes:
  - LMNvizToolbar
  - ModelToolbar
  - HistogramToolbar
+ - Histogram2Toolbar
  - LMWorkspaceToolbar
  - LMDataToolbar
  - LMToolsToolbar
