@@ -35,132 +35,197 @@ class abstract_temporal_extent(sql_database_interface):
 	self.set_end_time(end_time)
 
     def starts(self, map):
-	"""Return True if this absolute time object starts at the start of the provided absolute time object and finishes within it
+	"""Return True if this time object starts at the start of the provided time object and finishes within it
 	   A  |-----|
 	   B  |---------|
 	"""
+        if  self.D["end_time"] == None or map.D["end_time"] == None :
+            return False
+            
 	if self.D["start_time"] == map.D["start_time"] and self.D["end_time"] < map.D["end_time"]:
 	    return True
         else:
 	    return False
 
     def started(self, map):
-	"""Return True if this absolute time object is started at the start of the provided absolute time object
+	"""Return True if this time object is started at the start of the provided time object
 	   A  |---------|
 	   B  |-----|
 	"""
+        if  self.D["end_time"] == None or map.D["end_time"] == None :
+            return False
+
 	if self.D["start_time"] == map.D["start_time"] and self.D["end_time"] > map.D["end_time"]:
 	    return True
         else:
 	    return False
 
     def finishes(self, map):
-	"""Return True if this absolute time object finishes at the end and within of the provided absolute time object
+	"""Return True if this time object finishes at the end and within of the provided time object
 	   A      |-----|
 	   B  |---------|
 	"""
+        if  self.D["end_time"] == None or map.D["end_time"] == None :
+            return False
+
 	if self.D["end_time"] == map.D["end_time"] and  self.D["start_time"] > map.D["start_time"] :
 	    return True
         else:
 	    return False
 
     def finished(self, map):
-	"""Return True if this absolute time object finished at the end of the provided absolute time object
+	"""Return True if this time object finished at the end of the provided time object
 	   A  |---------|
 	   B      |-----|
 	"""
+        if  self.D["end_time"] == None or map.D["end_time"] == None :
+            return False
+
 	if self.D["end_time"] == map.D["end_time"] and  self.D["start_time"] < map.D["start_time"] :
 	    return True
         else:
 	    return False
 
     def after(self, map):
-	"""Return True if this absolute time object is temporal located after the provided absolute time object
+	"""Return True if this time object is temporal located after the provided time object
 	   A             |---------|
 	   B  |---------|
 	"""
+        if map.D["end_time"] == None:
+            if self.D["start_time"] > map.D["start_time"]:
+                return True
+            else:
+                return False
+
 	if self.D["start_time"] > map.D["end_time"]:
 	    return True
         else:
 	    return False
 
     def before(self, map):
-	"""Return True if this absolute time object is temporal located bevor the provided absolute time object
+	"""Return True if this time object is temporal located bevor the provided time object
 	   A  |---------|
 	   B             |---------|
 	"""
+        if self.D["end_time"] == None:
+            if self.D["start_time"] < map.D["start_time"]:
+                return True
+            else:
+                return False
+
 	if self.D["end_time"] < map.D["start_time"]:
 	    return True
         else:
 	    return False
 
     def adjacent(self, map):
-	"""Return True if this absolute time object is a meeting neighbour the provided absolute time object
+	"""Return True if this time object is a meeting neighbour the provided time object
 	   A            |---------|
 	   B  |---------|
 	   A  |---------|
 	   B            |---------|
 	"""
+        if  self.D["end_time"] == None and map.D["end_time"] == None :
+            return False
+        
 	if (self.D["start_time"] == map.D["end_time"]) or (self.D["end_time"] == map.D["start_time"]):
 	    return True
         else:
 	    return False
 
     def follows(self, map):
-	"""Return True if this absolute time object is temporal follows the provided absolute time object
+	"""Return True if this time object is temporal follows the provided time object
 	   A            |---------|
 	   B  |---------|
 	"""
+        if  map.D["end_time"] == None :
+            return False
+
 	if self.D["start_time"] == map.D["end_time"]:
 	    return True
         else:
 	    return False
 
     def precedes(self, map):
-	"""Return True if this absolute time object is temporal precedes the provided absolute time object
+	"""Return True if this time object is temporal precedes the provided time object
 	   A  |---------|
 	   B            |---------|
 	"""
+        if  self.D["end_time"] == None:
+            return False
+
 	if self.D["end_time"] == map.D["start_time"]:
 	    return True
         else:
 	    return False
 
     def during(self, map):
-	"""Return True if this absolute time object is temporal located during the provided absolute time object
+	"""Return True if this time object is temporal located during the provided time object
 	   A   |-------|
 	   B  |---------|
 	"""
+        if  self.D["end_time"] == None and map.D["end_time"] == None :
+            return False
+
+        # Check single point of time in interval
+        if  self.D["end_time"] == None:
+            if self.D["start_time"] > map.D["start_time"] and self.D["start_time"] < map.D["end_time"]:
+                return True
+            else:
+                return False
+
 	if self.D["start_time"] > map.D["start_time"] and self.D["end_time"] < map.D["end_time"]:
 	    return True
         else:
 	    return False
 
     def contains(self, map):
-	"""Return True if this absolute time object is temporal located during the provided absolute time object
+	"""Return True if this time object contains the provided time object
 	   A  |---------|
 	   B   |-------|
 	"""
+        if  self.D["end_time"] == None and map.D["end_time"] == None :
+            return False
+
+        # Check single point of time in interval
+        if  map.D["end_time"] == None:
+            if self.D["start_time"] < map.D["start_time"] and self.D["end_time"] > map.D["start_time"]:
+                return True
+            else:
+                return False
+
 	if self.D["start_time"] < map.D["start_time"] and self.D["end_time"] > map.D["end_time"]:
 	    return True
         else:
 	    return False
 
     def equivalent(self, map):
-	"""Return True if this absolute time object is temporal located equivalent the provided absolute time object
+	"""Return True if this time object is temporal located equivalent the provided time object
 	   A  |---------|
 	   B  |---------|
 	"""
+        if  self.D["end_time"] == None and map.D["end_time"] == None :
+            if self.D["start_time"] == map.D["start_time"]:
+                return True
+            else:
+                return False
+
+        if  self.D["end_time"] == None or map.D["end_time"] == None :
+            return False
+
 	if self.D["start_time"] == map.D["start_time"] and self.D["end_time"] == map.D["end_time"]:
 	    return True
         else:
 	    return False
 
     def overlaps(self, map):
-	"""Return True if this absolute time object is temporal overlaps the provided absolute time object
+	"""Return True if this time object is temporal overlaps the provided time object
            A  |---------|
 	   B    |---------|
 	"""
+        if  self.D["end_time"] == None or map.D["end_time"] == None :
+            return False
+
 	if self.D["start_time"] < map.D["start_time"] and self.D["end_time"] < map.D["end_time"] and\
 	   self.D["end_time"] > map.D["start_time"]:
 	    return True
@@ -168,10 +233,13 @@ class abstract_temporal_extent(sql_database_interface):
 	    return False
 
     def overlapped(self, map):
-	"""Return True if this absolute time object is temporal overlaped by the provided absolute time object
+	"""Return True if this time object is temporal overlaped by the provided time object
 	   A    |---------|
            B  |---------|
 	"""
+        if  self.D["end_time"] == None or map.D["end_time"] == None :
+            return False
+            
 	if self.D["start_time"] > map.D["start_time"] and self.D["end_time"] > map.D["end_time"] and\
 	   self.D["start_time"] < map.D["end_time"]:
 	    return True
@@ -179,7 +247,7 @@ class abstract_temporal_extent(sql_database_interface):
 	    return False
 
     def temporal_relation(self, map):
-	"""Returns the temporal relation between absolute time temporal objects
+	"""Returns the temporal relation between temporal objects
 	   Temporal relationsships are implemented after [Allen and Ferguson 1994 Actions and Events in Interval Temporal Logic]
 	"""
 	if self.equivalent(map):

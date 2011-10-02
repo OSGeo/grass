@@ -28,15 +28,15 @@ t.create --v --o type=stvds temporaltype=absolute dataset=lidar_abs_ds5 gran="1 
 t.create --v --o type=stvds temporaltype=absolute dataset=lidar_abs_ds6 gran="1 months" title="A test" descr="A test"
 t.create --v --o type=stvds temporaltype=absolute dataset=lidar_abs_ds7 gran="1 years" title="A test" descr="A test"
 
-tv.register --v dataset=lidar_abs_ds1 maps=lidar_abs_1,lidar_abs_2,lidar_abs_3,lidar_abs_4,lidar_abs_5,lidar_abs_6 start="2001-01-01" increment="1 seconds"
+tv.register --v -i dataset=lidar_abs_ds1 maps=lidar_abs_1,lidar_abs_2,lidar_abs_3,lidar_abs_4,lidar_abs_5,lidar_abs_6 start="2001-01-01" increment="1 seconds"
 t.info type=stvds dataset=lidar_abs_ds1
 tv.unregister --v dataset=lidar_abs_ds1 maps=lidar_abs_1,lidar_abs_2,lidar_abs_3,lidar_abs_4,lidar_abs_5,lidar_abs_6
 t.info type=stvds dataset=lidar_abs_ds1
 
-tv.register --v dataset=lidar_abs_ds2 maps=lidar_abs_1,lidar_abs_2,lidar_abs_3,lidar_abs_4,lidar_abs_5,lidar_abs_6 start="2001-01-01" increment="20 seconds, 5 minutes"
+tv.register --v -i dataset=lidar_abs_ds2 maps=lidar_abs_1,lidar_abs_2,lidar_abs_3,lidar_abs_4,lidar_abs_5,lidar_abs_6 start="2001-01-01" increment="20 seconds, 5 minutes"
 t.info type=stvds dataset=lidar_abs_ds2
 
-tv.register --v dataset=lidar_abs_ds3 maps=lidar_abs_1,lidar_abs_2,lidar_abs_3,lidar_abs_4,lidar_abs_5,lidar_abs_6 start="2001-01-01" increment="8 hours"
+tv.register --v -i dataset=lidar_abs_ds3 maps=lidar_abs_1,lidar_abs_2,lidar_abs_3,lidar_abs_4,lidar_abs_5,lidar_abs_6 start="2001-01-01" increment="8 hours"
 t.info type=stvds dataset=lidar_abs_ds3
 tv.unregister --v maps=lidar_abs_1,lidar_abs_2,lidar_abs_3,lidar_abs_4,lidar_abs_5,lidar_abs_6
 t.info type=stvds dataset=lidar_abs_ds3
@@ -54,6 +54,9 @@ tv.register dataset=lidar_abs_ds7 maps=lidar_abs_1,lidar_abs_2,lidar_abs_3,lidar
 t.info type=stvds dataset=lidar_abs_ds7
 # Register with different valid time again
 tv.register dataset=lidar_abs_ds7 maps=lidar_abs_1,lidar_abs_2,lidar_abs_3,lidar_abs_4,lidar_abs_5,lidar_abs_6 start="2001-01-01" increment="99 years, 9 months, 9 days, 9 hours"
+t.info type=stvds dataset=lidar_abs_ds7
+# Register with different valid time again creating an interval
+tv.register -i dataset=lidar_abs_ds7 maps=lidar_abs_1,lidar_abs_2,lidar_abs_3,lidar_abs_4,lidar_abs_5,lidar_abs_6 start="2001-01-01" increment="99 years, 9 months, 9 days, 9 hours"
 t.info type=stvds dataset=lidar_abs_ds7
 
 t.remove --v type=vector dataset=lidar_abs_1,lidar_abs_2,lidar_abs_3

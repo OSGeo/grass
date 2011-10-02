@@ -29,6 +29,10 @@ tr.register --v dataset=precip_abs3 maps=prec_1,prec_2,prec_3
 t.time.abs --v maps=prec_1,prec_2,prec_3 start="2011-01-01" increment="1 months"
 t.info type=strds dataset=precip_abs1
 
+# Check if the space time datasets are updated correctly
+t.time.abs --v -i maps=prec_1,prec_2,prec_3 start="2011-01-01" increment="1 months"
+t.info type=strds dataset=precip_abs1
+
 t.time.abs --v maps=prec_4,prec_5 start="2001-01-01" end="2002-01-01"
 t.info type=raster dataset=prec_4
 t.info type=raster dataset=prec_5

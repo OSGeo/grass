@@ -20,6 +20,7 @@ for details.
 @author Soeren Gebbert
 """
 import uuid
+import copy
 from temporal_extent import *
 from spatial_extent import *
 from metadata import *
@@ -265,7 +266,7 @@ class abstract_map_dataset(abstract_dataset):
             connect = True
 
         self.set_absolute_time(start_time, end_time, timezone)
-        self.absolute_time.update(dbif)
+        self.absolute_time.update_all(dbif)
         self.base.update(dbif)
 
         if connect == True:
@@ -307,7 +308,7 @@ class abstract_map_dataset(abstract_dataset):
             connect = True
 
         self.set_relative_time(start_time, end_time)
-        self.relative_time.update(dbif)
+        self.relative_time.update_all(dbif)
         self.base.update(dbif)
 
         if connect == True:
@@ -464,8 +465,76 @@ class abstract_space_time_dataset(abstract_dataset):
         self.metadata.set_title(title)
         self.metadata.set_description(description)
 
-    def get_registered_maps(self, dbif=None, where = None):
-        """Return sqlite rows with ids of all registered maps. In case nothing found None is returned"""
+    def get_temporal_relation_matrix(self, dbif=None):
+        """Return the temporal relation matrix between all registered maps
+        """
+
+        connect = False
+
+        if dbif == None:
+            dbif = sql_database_interface()
+            dbif.connect()
+            connect = True
+
+        matrix = []
+
+        maps = self.get_registered_maps_as_objects(dbif=dbif, where=None, order="start_time")
+
+        # Create the temporal relation matrix
+        # Add the map names first
+        row = []
+        for map in maps:
+            row.append(map.get_id())
+        matrix.append(row)
+
+        for mapA in maps:
+            row = []
+            for mapB in maps:
+                row.append(mapA.temporal_relation(mapB))
+            matrix.append(row)
+
+        if connect == True:
+            dbif.close()
+
+        return matrix
+
+    def get_registered_maps_as_objects(self, dbif=None, where = None, order = None):
+        """Return all registered maps as ordered object list
+
+           Each row includes all columns specified in the datatype specific view
+
+           In case nothing found None is returned
+        """
+
+        connect = False
+
+        if dbif == None:
+            dbif = sql_database_interface()
+            dbif.connect()
+            connect = True
+
+        obj_list = []
+        
+        rows = self.get_registered_maps(dbif, where, order)
+
+        if rows:
+            for row in rows:
+                map = self.get_new_map_instance(row["id"])
+                map.select(dbif)
+                obj_list.append(copy.copy(map))
+
+        if connect == True:
+            dbif.close()
+
+        return obj_list
+
+    def get_registered_maps(self, dbif=None, where = None, order = None):
+        """Return sqlite rows of all registered maps.
+        
+           Each row includes all columns specified in the datatype specific view
+        
+           In case nothing found None is returned
+        """
 
         connect = False
 
@@ -477,14 +546,26 @@ class abstract_space_time_dataset(abstract_dataset):
         rows = None
 
         if self.get_map_register():
-            sql = "SELECT id FROM " + self.get_map_register()
+            # Use the correct temporal table
+            if self.get_temporal_type() == "absolute":
+                map_view = self.get_new_map_instance(None).get_type() + "_view_abs_time"
+            else:
+                map_view = self.get_new_map_instance(None).get_type() + "_view_rel_time"
+
+            sql = "SELECT * FROM %s  WHERE %s.id IN (SELECT id FROM %s)" % (map_view, map_view, self.get_map_register())
+
             if where:
-                sql += " WHERE %s" % (where)
+                sql += " AND %s" % (where)
+            if order:
+                sql += " ORDER BY %s" % (order)
+
+            print sql
+
             try:
                 dbif.cursor.execute(sql)
                 rows = dbif.cursor.fetchall()
             except:
-                core.error("Unable to get map ids from register table <" + self.get_map_register() + ">")
+                core.error(_("Unable to get map ids from register table <%s>") % (self.get_map_register()))
                 raise
 
         if connect == True:
@@ -497,7 +578,7 @@ class abstract_space_time_dataset(abstract_dataset):
         # First we need to check if maps are registered in this dataset and
         # unregister them
 
-        core.verbose("Delete space time " + self.get_new_map_instance(ident=None).get_type() + " dataset <" + self.get_id() + "> from temporal database")
+        core.verbose(_("Delete space time %s  dataset <%s> from temporal database") % (self.get_new_map_instance(ident=None).get_type(), self.get_id()))
 
         connect = False
 
@@ -519,7 +600,7 @@ class abstract_space_time_dataset(abstract_dataset):
                 sql = "DROP TABLE " + self.get_map_register()
                 dbif.cursor.execute(sql)
             except:
-                core.error("Unable to drop table <" + self.get_map_register() + ">")
+                core.error(_("Unable to drop table <%s>") % (self.get_map_register()))
                 raise
 
         # Remove the primary key, the foreign keys will be removed by trigger

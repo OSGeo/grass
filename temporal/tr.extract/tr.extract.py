@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Register raster maps in a space time raster dataset
+#% description: Extract a subset of a space time raster dataset
 #% keywords: spacetime raster dataset
 #% keywords: raster
 #% keywords: extract
@@ -48,6 +48,14 @@
 #% multiple: no
 #%end
 
+#%option
+#% key: base
+#% type: string
+#% description: Base name  of the new created raster maps
+#% required: yes
+#% multiple: no
+#%end
+
 
 import grass.script as grass
 import grass.temporal as tgis
@@ -64,6 +72,41 @@ def main():
 
     # Make sure the temporal database exists
     tgis.create_temporal_database()
+
+    if input.find("@") >= 0:
+        id = input
+    else:
+        mapset =  grass.gisenv()["MAPSET"]
+        id = input + "@" + mapset
+
+    sp = tgis.space_time_raster_dataset(id)
+
+    if sp.is_in_db() == False:
+        grass.fatal(_("Dataset <%s> not found in temporal database") % (id))
+
+    sp.select()
+
+    rows = sp.get_registered_maps(None, where, sort)
+
+    if rows:
+        inputs = ""
+
+        count = 0
+        for row in rows:
+            if count == 0:
+                inputs += row["id"]
+            else:
+                inputs += "," + row["id"]
+            count += 1
+
+        print inputs
+
+        if grass.overwrite() == True:
+            grass.run_command("r.mapcalc", expression=expression, overwrite=True)
+        else:
+            grass.run_command("r.mapcalc", expression=expression, overwrite=False)
+
+
 if __name__ == "__main__":
     options, flags = grass.parser()
     main()

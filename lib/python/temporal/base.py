@@ -85,7 +85,7 @@ class dict_sql_serializer(object):
 	    if where:
 	        sql += where
 
-	# Create update statement
+	# Create update statement for existing entries
 	if type =="UPDATE":
 	    count = 0
 	    sql += 'UPDATE ' + table + ' SET '
@@ -98,6 +98,20 @@ class dict_sql_serializer(object):
                         sql += ' ,%s = ? ' % key
 		    count += 1
 	            args.append(self.D[key])
+	    if where:
+	        sql += where
+
+	# Create update statement
+	if type =="UPDATE ALL":
+	    count = 0
+	    sql += 'UPDATE ' + table + ' SET '
+            for key in self.D.keys():
+                if count == 0:
+                    sql += ' %s = ? ' % key
+                else:
+                    sql += ' ,%s = ? ' % key
+                count += 1
+                args.append(self.D[key])
 	    if where:
 	        sql += where
 
@@ -254,6 +268,24 @@ class sql_database_interface(dict_sql_serializer):
 	    raise IOError("Missing identifer");
 
 	sql, args = self.get_update_statement()
+	#print sql
+	#print args
+
+        if dbif:
+            dbif.cursor.execute(sql, args)
+        else:
+            self.connect()
+            self.cursor.execute(sql, args)
+            self.close()
+
+    def get_update_all_statement(self):
+	return self.serialize("UPDATE ALL", self.get_table_name(), "WHERE id = \"" + str(self.ident) + "\"")
+
+    def update_all(self, dbif=None):
+	if self.ident == None:
+	    raise IOError("Missing identifer");
+
+	sql, args = self.get_update_all_statement()
 	#print sql
 	#print args
 
