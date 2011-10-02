@@ -519,22 +519,18 @@ class ColorTable(wx.Frame):
           
     def OnApply(self, event):
         """!Apply selected color table
-
+        
         @return True on success otherwise False
         """
         ret = self.CreateColorTable()
         if not ret:
             gcmd.GMessage(parent = self, message = _("No valid color rules given."))
-
-        if self.colorTable:
-            self.UseAttrColumn(False)
-        else:
-            self.UseAttrColumn(True)            
+        
         if ret:
             display = self.parent.GetLayerTree().GetMapDisplay()
             if display and display.IsAutoRendered():
                 display.GetWindow().UpdateMap(render = True)
-           
+        
         return ret
 
     def OnOK(self, event):
@@ -1616,6 +1612,18 @@ class VectorColorTable(ColorTable):
         self.DeleteTemporaryColumn()
         self.Map.Clean()
         self.Destroy()
+
+    def OnApply(self, event):
+        """!Apply selected color table
+        
+        @return True on success otherwise False
+        """
+        if self.colorTable:
+            self.UseAttrColumn(False)
+        else:
+            self.UseAttrColumn(True)
+        
+        return ColorTable.OnApply()
         
 class ThematicVectorTable(VectorColorTable):
     def __init__(self, parent, vectorType, **kwargs):
@@ -1637,7 +1645,6 @@ class ThematicVectorTable(VectorColorTable):
 
         @return True on success otherwise False
         """
-        
         ret = self.CreateColorTable()
         if not ret:
             gcmd.GMessage(parent = self, message = _("No valid color rules given."))
