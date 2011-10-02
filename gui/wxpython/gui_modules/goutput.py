@@ -480,7 +480,7 @@ class GMConsole(wx.SplitterWindow):
             # except display commands (they are handled differently)
             if self.parent.GetName() == "LayerManager" and \
                     command[0][0:2] == "d." and \
-                    (len(command) > 1 and 'help' not in ' '.join(command[1:])):
+                    'help' not in ' '.join(command[1:]):
                 # display GRASS commands
                 try:
                     layertype = {'d.rast'         : 'raster',
@@ -499,7 +499,8 @@ class GMConsole(wx.SplitterWindow):
                                  'd.geodesic'     : 'geodesic',
                                  'd.rhumbline'    : 'rhumb',
                                  'd.labels'       : 'labels',
-                                 'd.barscale'     : 'barscale'}[command[0]]
+                                 'd.barscale'     : 'barscale',
+                                 'd.redraw'       : 'redraw'}[command[0]]
                 except KeyError:
                     gcmd.GMessage(parent = self.parent,
                                   message = _("Command '%s' not yet implemented in the WxGUI. "
@@ -510,6 +511,8 @@ class GMConsole(wx.SplitterWindow):
                     self.parent.curr_page.maptree.GetMapDisplay().OnAddBarscale(None)
                 elif layertype == 'rastleg':
                     self.parent.curr_page.maptree.GetMapDisplay().OnAddLegend(None)
+                elif layertype == 'redraw':
+                    self.parent.curr_page.maptree.GetMapDisplay().OnRender(None)
                 else:
                     # add layer into layer tree
                     lname, found = utils.GetLayerNameFromCmd(command, fullyQualified = True,
