@@ -52,6 +52,12 @@
 #% multiple: no
 #%end
 
+#%flag
+#% key: i
+#% description: Create an interval (start and end time) in case an increment is provided
+#%end
+
+
 import grass.script as grass
 import grass.temporal as tgis
 
@@ -64,11 +70,12 @@ def main():
     maps = options["maps"]
     start = options["start"]
     increment = options["increment"]
+    interval = flags["i"]
 
     # Make sure the temporal database exists
     tgis.create_temporal_database()
     # Register maps
-    tgis.register_maps_in_space_time_dataset("vector", name, maps, start, increment)
+    tgis.register_maps_in_space_time_dataset("vector", name, maps, start, increment, None, interval)
     
 if __name__ == "__main__":
     options, flags = grass.parser()

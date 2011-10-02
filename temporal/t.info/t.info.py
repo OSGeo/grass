@@ -42,6 +42,11 @@
 #% description: Print information in shell style
 #%end
 
+#%flag
+#% key: t
+#% description: Print temporal relation matrix for space time datasets
+#%end
+
 import grass.script as grass
 import grass.temporal as tgis
 
@@ -53,6 +58,7 @@ def main():
     name = options["dataset"]
     type = options["type"]
     shellstyle = flags['g']
+    tmatrix = flags['t']
 
   # Make sure the temporal database exists
     tgis.create_temporal_database()
@@ -73,16 +79,28 @@ def main():
         sp = tgis.space_time_vector_dataset(id)
     if type == "raster":
         sp = tgis.raster_dataset(id)
+        tmatrix = False
     if type == "raster3d":
         sp = tgis.raster3d_dataset(id)
+        tmatrix = False
     if type == "vector":
         sp = tgis.vector_dataset(id)
+        tmatrix = False
 
     if sp.is_in_db() == False:
         grass.fatal("Dataset <" + name + "> not found in temporal database")
         
     # Insert content from db
     sp.select()
+
+    if tmatrix:
+        matrix = sp.get_temporal_relation_matrix()
+
+        for row in matrix:
+            for col in row:
+                print col,
+            print " "
+        print " "
 
     if shellstyle == True:
         sp.print_shell_info()

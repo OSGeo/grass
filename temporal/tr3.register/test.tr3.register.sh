@@ -28,15 +28,15 @@ t.create --v --o type=str3ds temporaltype=absolute dataset=volume_abs5 gran="1 w
 t.create --v --o type=str3ds temporaltype=absolute dataset=volume_abs6 gran="1 months" title="A test" descr="A test"
 t.create --v --o type=str3ds temporaltype=absolute dataset=volume_abs7 gran="1 years" title="A test" descr="A test"
 
-tr3.register --v dataset=volume_abs1 maps=volume_1,volume_2,volume_3,volume_4,volume_5,volume_6 start="2001-01-01" increment="1 seconds"
+tr3.register --v -i dataset=volume_abs1 maps=volume_1,volume_2,volume_3,volume_4,volume_5,volume_6 start="2001-01-01" increment="1 seconds"
 t.info type=str3ds dataset=volume_abs1
 tr3.unregister --v dataset=volume_abs1 maps=volume_1,volume_2,volume_3,volume_4,volume_5,volume_6
 t.info type=str3ds dataset=volume_abs1
 
-tr3.register --v dataset=volume_abs2 maps=volume_1,volume_2,volume_3,volume_4,volume_5,volume_6 start="2001-01-01" increment="20 seconds, 5 minutes"
+tr3.register --v -i dataset=volume_abs2 maps=volume_1,volume_2,volume_3,volume_4,volume_5,volume_6 start="2001-01-01" increment="20 seconds, 5 minutes"
 t.info type=str3ds dataset=volume_abs2
 
-tr3.register --v dataset=volume_abs3 maps=volume_1,volume_2,volume_3,volume_4,volume_5,volume_6 start="2001-01-01" increment="8 hours"
+tr3.register --v -i dataset=volume_abs3 maps=volume_1,volume_2,volume_3,volume_4,volume_5,volume_6 start="2001-01-01" increment="8 hours"
 t.info type=str3ds dataset=volume_abs3
 tr3.unregister --v maps=volume_1,volume_2,volume_3,volume_4,volume_5,volume_6
 t.info type=str3ds dataset=volume_abs3
@@ -54,6 +54,9 @@ tr3.register dataset=volume_abs7 maps=volume_1,volume_2,volume_3,volume_4,volume
 t.info type=str3ds dataset=volume_abs7
 # Register with different valid time again
 tr3.register dataset=volume_abs7 maps=volume_1,volume_2,volume_3,volume_4,volume_5,volume_6 start="2001-01-01" increment="99 years, 9 months, 9 days, 9 hours"
+t.info type=str3ds dataset=volume_abs7
+# Register with different valid time again creating intervals
+tr3.register -i dataset=volume_abs7 maps=volume_1,volume_2,volume_3,volume_4,volume_5,volume_6 start="2001-01-01" increment="99 years, 9 months, 9 days, 9 hours"
 t.info type=str3ds dataset=volume_abs7
 
 t.remove --v type=raster3d dataset=volume_1,volume_2,volume_3

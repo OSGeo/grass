@@ -55,6 +55,11 @@
 #% multiple: no
 #%end
 
+#%flag
+#% key: i
+#% description: Create an interval (start and end time) in case an increment is provided
+#%end
+
 import grass.script as grass
 import grass.temporal as tgis
 
@@ -67,12 +72,14 @@ def main():
     start = options["start"]
     end = options["end"]
     increment = options["increment"]
+    interval = flags["i"]
 
     # Make sure the temporal database exists
     tgis.create_temporal_database()
     # Set valid relative time to maps
     tgis.assign_valid_time_to_maps(type="raster", maps=maps, ttype="relative", \
-                                    start=start, end=end, increment=increment, dbif=None)
+                                    start=start, end=end, increment=increment, \
+                                    dbif=None, interval=interval)
 
 if __name__ == "__main__":
     options, flags = grass.parser()

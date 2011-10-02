@@ -29,6 +29,9 @@ tr.register --v dataset=precip_rel3 maps=prec_1,prec_2,prec_3
 t.time.rel --v maps=prec_1,prec_2,prec_3 start=0 increment=1000
 t.info type=strds dataset=precip_rel1
 
+t.time.rel --v maps=prec_1,prec_2,prec_3 start=0 increment=1000 -i
+t.info type=strds dataset=precip_rel1
+
 t.time.rel --v maps=prec_4,prec_5 start=5000 end=6000
 t.info type=raster dataset=prec_4
 t.info type=raster dataset=prec_5
