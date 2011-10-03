@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-09-04 19:10+0200\n"
-"PO-Revision-Date: 2011-09-08 17:24+0100\n"
+"PO-Revision-Date: 2011-09-30 17:01+0100\n"
 "Last-Translator: Sylvain Maillard <sylvain.maillard@gmail.com>\n"
 "Language-Team: français <grass-translations@lists.osgeo.org>\n"
 "MIME-Version: 1.0\n"
@@ -1609,9 +1609,8 @@ msgid "Import waypoints, routes, and tracks from a GPS receiver or many common G
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:79
-#, fuzzy
 msgid "Geonames import"
-msgstr "Renommer le jeu de cartes"
+msgstr "Importer depuis Geonames"
 
 #: ../gui/wxpython/menustrings.py:80
 #, fuzzy
@@ -1619,24 +1618,20 @@ msgid "Imports geonames.org country files into a vector points map."
 msgstr "Importe des cartes vectorielles au format d'anciennes versions de GRASS."
 
 #: ../gui/wxpython/menustrings.py:81
-#, fuzzy
 msgid "GEOnet import"
-msgstr "Renommer le jeu de cartes"
+msgstr "Importer depuis GEOnet"
 
 #: ../gui/wxpython/menustrings.py:82
-#, fuzzy
 msgid "Imports US-NGA GEOnet Names Server (GNS) country files into a GRASS vector points map."
-msgstr "Importe des cartes vectorielles au format d'anciennes versions de GRASS."
+msgstr "Importer un fichier de pays US-NGA GEOnet Names Server (GNS) vers une carte vectorielle de points."
 
 #: ../gui/wxpython/menustrings.py:83
-#, fuzzy
 msgid "Matlab array or Mapgen format import"
-msgstr "Importer un grid ASCII"
+msgstr "Importer depuis le format Mapgen ou un champ Matlab"
 
 #: ../gui/wxpython/menustrings.py:84
-#, fuzzy
 msgid "Imports Mapgen or Matlab-ASCII vector maps into GRASS."
-msgstr "Importer des fichiers SRTM HGT dans GRASS"
+msgstr "Importer des cartes vectorielles Mapgen ou Matlab-ASCII."
 
 #: ../gui/wxpython/menustrings.py:86
 #, fuzzy
@@ -1644,14 +1639,12 @@ msgid "Converts LAS LiDAR point clouds to a GRASS vector map with libLAS."
 msgstr "Convertir des couches vectorielles OGR en carte vectorielle GRASS."
 
 #: ../gui/wxpython/menustrings.py:87
-#, fuzzy
 msgid "Import 3D raster data"
-msgstr "Importer une couche &matricielle"
+msgstr "Importer des données matricielles 3D"
 
 #: ../gui/wxpython/menustrings.py:88
-#, fuzzy
 msgid "ASCII 3D import"
-msgstr "Importer un grid ASCII"
+msgstr "Importer un ASCII 3D"
 
 #: ../gui/wxpython/menustrings.py:89
 #, fuzzy
@@ -1659,23 +1652,20 @@ msgid "Converts a 3D ASCII raster text file into a (binary) 3D raster map."
 msgstr "Convertit un fichier 'raster' ASCII en une carte 'raster' binaire"
 
 #: ../gui/wxpython/menustrings.py:90
-#, fuzzy
 msgid "Vis5D import"
-msgstr "Importer un DXF"
+msgstr "Importer en Vis5D"
 
 #: ../gui/wxpython/menustrings.py:91
 msgid "Import 3-dimensional Vis5D files."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:92
-#, fuzzy
 msgid "Import database table"
-msgstr "Créer la table d'attributs"
+msgstr "Importer une table d'une base de données"
 
 #: ../gui/wxpython/menustrings.py:93
-#, fuzzy
 msgid "Multiple import formats using OGR"
-msgstr "Importer de multiples donénes vectorielles en utilisant OGR"
+msgstr "Importer depuis de multiples formats avec OGR"
 
 #: ../gui/wxpython/menustrings.py:94
 msgid "Imports attribute tables in various formats."
@@ -1686,19 +1676,16 @@ msgid "Export raster map"
 msgstr "Exporter une couche mat&ricielle"
 
 #: ../gui/wxpython/menustrings.py:96 ../gui/wxpython/menustrings.py:129
-#, fuzzy
 msgid "Common export formats"
-msgstr "Convertir des coordonnées"
+msgstr "Formats standards d'export"
 
 #: ../gui/wxpython/menustrings.py:97
-#, fuzzy
 msgid "Exports GRASS raster maps into GDAL supported formats."
-msgstr "Convertir des couches vectorielles OGR en carte vectorielle GRASS."
+msgstr "Exporter une carte matricielle vers des formats supportés par GDAL."
 
 #: ../gui/wxpython/menustrings.py:98
-#, fuzzy
 msgid "ASCII grid export"
-msgstr "Importer un grid ASCII"
+msgstr "Export en grille ASCII"
 
 #: ../gui/wxpython/menustrings.py:99
 #, fuzzy
@@ -1706,27 +1693,24 @@ msgid "Converts a raster map layer into a GRASS ASCII text file."
 msgstr "Convertit un fichier 'raster' ASCII en une carte 'raster' binaire"
 
 #: ../gui/wxpython/menustrings.py:100
-#, fuzzy
 msgid "ASCII x,y,z points export"
-msgstr "Importer des données ASCII xyz"
+msgstr "Export en points ASCII x,y,z"
 
 #: ../gui/wxpython/menustrings.py:101
 msgid "Exports a raster map to a text file as x,y,z values based on cell centers."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:102
-#, fuzzy
 msgid "ESRI ASCII grid export"
-msgstr "Importation d'un grid ESRI ASCII"
+msgstr "Export en grille ASCII ESRI"
 
 #: ../gui/wxpython/menustrings.py:103
 msgid "Converts a raster map layer into an ESRI ARCGRID file."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:104
-#, fuzzy
 msgid "GRIDATB.FOR export"
-msgstr "Importer un GRIDATB.FOR"
+msgstr "Export en GRIDATB.FOR"
 
 #: ../gui/wxpython/menustrings.py:105
 #, fuzzy
@@ -1744,7 +1728,7 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:108
 #, fuzzy
 msgid "Raw binary array export"
-msgstr "Importer des fichiers binaires"
+msgstr "Exporter en champ binaire brut"
 
 #: ../gui/wxpython/menustrings.py:109
 #, fuzzy
@@ -1861,9 +1845,8 @@ msgid "Exports vector map to DXF file format."
 msgstr "Convertir des couches vectorielles OGR en carte vectorielle GRASS."
 
 #: ../gui/wxpython/menustrings.py:135
-#, fuzzy
 msgid "Multiple GPS export formats using GPSBabel"
-msgstr "Importer de multiples donénes vectorielles en utilisant OGR"
+msgstr "Exporter vers des formats GPS avec GPSBABEL"
 
 #: ../gui/wxpython/menustrings.py:136
 msgid "Exports a vector map to a GPS receiver or file format supported by GpsBabel."
@@ -2030,9 +2013,8 @@ msgid "Raster series to volume"
 msgstr "Matricielle vers volume"
 
 #: ../gui/wxpython/menustrings.py:179
-#, fuzzy
 msgid "Converts 2D raster map slices to one 3D raster volume map."
-msgstr "Convertit un fichier 'raster' ASCII en une carte 'raster' binaire"
+msgstr "Convertir un empillement de cartes matricielles 2D en une carte matricielle 3D. "
 
 #: ../gui/wxpython/menustrings.py:180
 msgid "Raster 2.5D to volume"
@@ -2047,7 +2029,6 @@ msgid "Vector to raster"
 msgstr "Vectorielle vers matricielle"
 
 #: ../gui/wxpython/menustrings.py:183
-#, fuzzy
 msgid "Converts (rasterize) a vector map into a raster map."
 msgstr "Convertir une carte vectorielle en carte matricielle."
 
@@ -2073,7 +2054,6 @@ msgid "Sites to vector"
 msgstr "GRASS Sites vers vectorielle"
 
 #: ../gui/wxpython/menustrings.py:189
-#, fuzzy
 msgid "Converts a GRASS site_lists file into a vector map."
 msgstr "Convertir un fichier \"site_list\" GRASS en carte vectorielle."
 
@@ -4554,7 +4534,6 @@ msgid "Generates volume statistics for 3D raster maps."
 msgstr "Convertit un fichier 'raster' ASCII en une carte 'raster' binaire"
 
 #: ../gui/wxpython/menustrings.py:813
-#, fuzzy
 msgid "Univariate statistics for volumes"
 msgstr "Statistiques univariées pour les volumes"
 
@@ -6193,9 +6172,8 @@ msgid "No map layer selected for querying."
 msgstr "Aucune carte vectorielle sélectionnée pour interrogation."
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1413
-#, fuzzy
 msgid "Nothing found."
-msgstr "Nord"
+msgstr "Aucun résultat."
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1570
 #, python-format
@@ -11387,7 +11365,7 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/nviz_mapdisp.py:755
 #, fuzzy
 msgid "Surface map color"
-msgstr "&Gérer les couleurs d'image"
+msgstr "Carte de couleur pour la surface"
 
 #: ../gui/wxpython/gui_modules/nviz_mapdisp.py:764
 msgid "XY distance from previous"
@@ -12378,36 +12356,30 @@ msgstr "Creuser des chenaux d'écoulement"
 #~ msgid "Import GetFeature from WFS"
 #~ msgstr "Téklécharge et importe des données depuis un serveur WMS."
 
-#, fuzzy
 #~ msgid "Garmin GPS import"
-#~ msgstr "Renommer le jeu de cartes"
+#~ msgstr "Importer depuis un GPS Garmin"
 
-#, fuzzy
 #~ msgid "Convert a 3D ASCII raster text file into a (binary) 3D raster map layer"
-#~ msgstr "Convertit un fichier 'raster' ASCII en une carte 'raster' binaire"
+#~ msgstr "Convertit un fichier matriciel ASCII 3D en carte matricielle 3D (binaire)"
 
-#, fuzzy
 #~ msgid "Exports GRASS raster map to GRIDATB.FOR map file (TOPMODEL)"
-#~ msgstr "Importer un fichier carte GRIDATB.FOR (TOPMODEL) dans un carte 'rater' GRASS"
+#~ msgstr "Exporter une carte matricielle vers un fichier GRIDTB.FOR pour TOPMODEL"
 
 #, fuzzy
 #~ msgid "Exports a GRASS raster map to a binary array."
-#~ msgstr "Convertit un fichier 'raster' ASCII en une carte 'raster' binaire"
+#~ msgstr "Exporter une carte matricielle vers un champ binaire."
 
-#, fuzzy
 #~ msgid "Converts GRASS vector map to one of the supported OGR vector formats."
-#~ msgstr "Convertit des fichiers DXF en carte vectorielle GRASS."
+#~ msgstr "Convertir une carte vectorielle dans un des formats supportés par oGR."
 
 #~ msgid "ASCII points/GRASS ASCII vector export"
 #~ msgstr "Exporter format points ASCII ou vecteur GRASS ASCII"
 
-#, fuzzy
 #~ msgid "Converts a GRASS binary vector map to a GRASS ASCII vector map."
-#~ msgstr "Convertir des couches vectorielles OGR en carte vectorielle GRASS."
+#~ msgstr "Convertir une carte vectorielles binaire en carte vectorielle GRASS ASCII."
 
-#, fuzzy
 #~ msgid "Exports GRASS vector map layers to DXF file format."
-#~ msgstr "Convertir des couches vectorielles OGR en carte vectorielle GRASS."
+#~ msgstr "Exporter une carte vactorielle vers un fichier DXF."
 
 #~ msgid "Exports a GRASS vector map to SVG."
 #~ msgstr "Exporter une carte vectorielle en SVG/"
@@ -12415,7 +12387,6 @@ msgstr "Creuser des chenaux d'écoulement"
 #~ msgid "Converts a raster map into a vector map layer."
 #~ msgstr "Convertit une carte matricielle en carte vectorielle."
 
-#, fuzzy
 #~ msgid "Converts a binary GRASS vector map (only points) layer into a 3D GRASS raster map layer."
 #~ msgstr "Convertir une carte vectorielle binaire (uniquement des points) en carte matricielle 3D."
 
@@ -12449,7 +12420,6 @@ msgstr "Creuser des chenaux d'écoulement"
 #~ msgid "Upload or report topology"
 #~ msgstr "Envoyer ou charger la topologie"
 
-#, fuzzy
 #~ msgid "Map calculator for 3D raster map algebra."
 #~ msgstr "Calculatrice de carte pour les cartes matricielles 3D."
 
@@ -13092,20 +13062,17 @@ msgstr "Creuser des chenaux d'écoulement"
 #~ msgid "Import E00 file into a vector map."
 #~ msgstr "Importer des cartes vectorielles"
 
-#, fuzzy
 #~ msgid "Imports geonames.org country files into a GRASS vector points map."
-#~ msgstr "Importe des cartes vectorielles au format d'anciennes versions de GRASS."
+#~ msgstr "Importer un fichier de pays geonames.org vers une carte vectorielle de points."
 
-#, fuzzy
 #~ msgid "Export GRASS raster as non-georeferenced PNG image."
-#~ msgstr "Convertir des couches vectorielles OGR en carte vectorielle GRASS."
+#~ msgstr "Exporter une carte vers une image PNG non-géoréférencée."
 
 #~ msgid "Exports the color table associated with a raster map layer."
 #~ msgstr "Exporter la table de couleur associée à une carte mamtricielle."
 
-#, fuzzy
 #~ msgid "Generates volume statistics for raster3d maps."
-#~ msgstr "Générer les statitstiques volumiques pour les cartes matricielles 3D."
+#~ msgstr "Générer les statitstiques de volumies pour les cartes matricielles 3D."
 
 #~ msgid "Save color table to file"
 #~ msgstr "Enregistrer la table de couleur dans un fichier"
