@@ -180,6 +180,11 @@ int Nviz_draw_all_site();
 int Nviz_draw_all_vol();
 int Nviz_draw_all(nv_data *);
 int Nviz_draw_quick(nv_data *, int);
+int Nviz_load_image(GLubyte *, int, int, int);
+void Nviz_draw_image(int, int, int, int, int);
+void Nviz_set_2D(int, int);
+void Nviz_del_texture(int);
+void Nviz_get_max_texture(int *);
 
 /* exag.c */
 int Nviz_get_exag_height(double *, double *, double *);

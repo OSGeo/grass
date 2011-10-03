@@ -26,6 +26,7 @@ import time
 import copy
 import math
 import types
+import tempfile
 
 from threading import Thread
 
@@ -36,6 +37,7 @@ from wx import glcanvas
 
 import gcmd
 import globalvar
+import grass.script as grass
 from debug          import Debug
 from mapdisp_window import MapWindow
 from goutput        import wxCmdOutput
@@ -112,11 +114,11 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.dialogOffset = 5
         # overlays
         self.overlays = {}
-        self.imagedict = {}
+        self.imagelist = []
         self.overlay = wx.Overlay()
-        self.pdc = wx.PseudoDC()
+        #self.pdc = wx.PseudoDC()
         self.textdict = {}
-        self.dragid = None
+        self.dragid = -1
         self.hitradius = 5
     
         if self.lmgr:
@@ -157,7 +159,6 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
         self.Bind(wx.EVT_SIZE,             self.OnSize)
         self.Bind(wx.EVT_PAINT,            self.OnPaint)
-        self.Bind(wx.EVT_IDLE,             self.OnIdle)
         self._bindMouseEvents()
         
         self.Bind(EVT_UPDATE_PROP,   self.UpdateMapObjProperties)
@@ -184,23 +185,6 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             cplane['on'] = False
             self.cplanes.append(cplane)
             
-    def GetOverlay(self):
-        """!Converts rendered overlay files to wx.Image
-        
-        Updates self.imagedict
-        
-        @return list of images
-        """
-        imgs = []
-        for overlay in self.Map.GetListOfLayers(l_type = "overlay", l_active = True):
-            if os.path.isfile(overlay.mapfile) and os.path.getsize(overlay.mapfile):
-                img = wx.Image(overlay.mapfile, wx.BITMAP_TYPE_ANY)
-                self.imagedict[img] = { 'id' : overlay.id,
-                                        'layer' : overlay }
-                imgs.append(img)
-
-        return imgs        
-    
     def OnClose(self, event):
         # cleanup when window actually closes (on quit) and not just is hidden
         self.UnloadDataLayers(force = True)
@@ -219,12 +203,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                                        size.height)
         self.size = size
         event.Skip()
-    
-    def OnIdle(self, event):
-        if self.render['overlays']:
-            self.DrawOverlays()
-            self.render['overlays'] = False
-            
+       
     def OnPaint(self, event):
         Debug.msg(1, "GLCanvas.OnPaint()")
         
@@ -269,68 +248,125 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self.init = True
         
         self.UpdateMap()
-    
-    def DrawOverlays(self):
-        """!Draw overlays with wx.Overlay"""
-        dc = wx.ClientDC(self)
-        odc = wx.DCOverlay(self.overlay, dc)
-        self.pdc.Clear()
-        self.pdc.RemoveAll()
-        for img in self.GetOverlay():
-            # draw any active and defined overlays
-            if self.imagedict[img]['layer'].IsActive():
-                id = self.imagedict[img]['id']
-                self.DrawImage(img = img, drawid = id, coords = self.overlays[id]['coords'])
-            
-        for textId in self.textdict.keys():
-            # create a bitmap the same size as our text
-            self.DrawText(drawid = textId)
-            
-        self.pdc.DrawToDC(dc)
-        del odc
-        self.overlay.Reset()
         
-    def DrawImage(self, img, drawid, coords):
+    def DrawImages(self):
         """!Draw overlay image"""
-        bitmap = wx.BitmapFromImage(img)
-        w,h = bitmap.GetSize()
+        for texture in self.imagelist:
+            texture.Draw()
+            
+    def GetLegendRect(self):
+        """!Estimates legend size for dragging"""
+        size = None
+        if 1 in self.overlays:
+            for param in self.overlays[1]['cmd'][1:]:
+                if param.startswith("at="):
+                    size = map(int, param.split("=")[-1].split(','))
+                    break
+        if size:
+            wSize = self.GetClientSizeTuple()
+            x, y = size[2]/100. * wSize[0], wSize[1] - (size[1]/100. * wSize[1])
+            w = (size[3] - size[2])/100. * wSize[0]
+            h = (size[1] - size[0])/100. * wSize[1]
+            
+            rect = wx.Rect(x, y, w, h)
+            return rect
         
-        self.pdc.BeginDrawing()
-        self.pdc.SetBackground(wx.TRANSPARENT_BRUSH)
-        self.pdc.RemoveId(drawid)
-        self.pdc.SetId(drawid)
-        self.pdc.DrawBitmap(bitmap, coords[0], coords[1], True)
-        self.pdc.SetIdBounds(drawid, wx.Rect(coords[0],coords[1], w, h))
-        self.pdc.EndDrawing()
+        return wx.Rect()        
         
-    def DrawText(self, drawid):
+    def DrawTextImage(self, textDict, relCoords):
         """!Draw overlay text"""
-        self.pdc.BeginDrawing()
-        self.pdc.SetBackground(wx.TRANSPARENT_BRUSH)
-        self.pdc.RemoveId(drawid)
-        self.pdc.SetId(drawid)
-        self.pdc.SetFont(self.textdict[drawid]['font'])
-        self.pdc.SetTextForeground(self.textdict[drawid]['color'])
-        if self.textdict[drawid]['rotation'] == 0:
-            self.pdc.DrawText(self.textdict[drawid]['text'], self.textdict[drawid]['coords'][0],
-                                                             self.textdict[drawid]['coords'][1])
+        bmp = wx.EmptyBitmap(textDict['bbox'][2], textDict['bbox'][3])
+        memDC = wx.MemoryDC()
+        memDC.SelectObject(bmp)
+        
+        mask = self.view['background']['color']
+        if mask == textDict['color']:
+            mask = wx.WHITE
+        memDC.SetBackground(wx.Brush(mask))
+        memDC.Clear()
+        memDC.SetFont(textDict['font'])
+        memDC.SetTextForeground(textDict['color'])
+        if textDict['rotation'] == 0:
+            memDC.DrawText(textDict['text'], 0, 0)
         else:
-            self.pdc.DrawRotatedText(self.textdict[drawid]['text'], self.textdict[drawid]['coords'][0],
-                                                                    self.textdict[drawid]['coords'][1],
-                                                                    self.textdict[drawid]['rotation'])
-        self.pdc.SetIdBounds(drawid, self.textdict[drawid]['bbox'])
-        self.pdc.EndDrawing()
+            memDC.DrawRotatedText(textDict['text'], relCoords[0], relCoords[1],
+                                  textDict['rotation'])
+        bmp.SetMaskColour(mask)
+        memDC.DrawBitmap(bmp, 0, 0, 1)
+        
+        filename = grass.tempfile(create = False) + '.png'
+        bmp.SaveFile(filename, wx.BITMAP_TYPE_PNG)
+        memDC.SelectObject(wx.NullBitmap)
+        
+        return filename
         
     def UpdateOverlays(self):
+        """!Converts rendered overlay files and text labels to wx.Image
+            and then to textures so that they can be rendered by OpenGL.
+            Updates self.imagelist"""
         self.Map.ChangeMapSize(self.GetClientSize())
         self.Map.RenderOverlays(force = True)
-
+        
+        # delete textures
+        overlays = self.Map.GetListOfLayers(l_type = "overlay", l_active = True)
+        for texture in self.imagelist:
+            if texture.id not in [o.id for o in overlays] + self.textdict.keys():
+                self.imagelist.remove(texture)
+        # update images (legend)
+        for overlay in overlays:
+            if os.path.isfile(overlay.mapfile) and os.path.getsize(overlay.mapfile):
+                if overlay.id not in [t.id for t in self.imagelist]: # new
+                    self.CreateTexture(overlay)
+                else:
+                    for t in self.imagelist: # check if it is the same
+                        if t.id == overlay.id and sorted(t.cmd) != sorted(self.overlays[overlay.id]['cmd']):
+                            self.imagelist.remove(t)
+                            self.CreateTexture(overlay)
+        # update text labels
         for textId in self.textdict.keys():
+            if textId not in [t.id for t in self.imagelist]:# new
+                self.CreateTexture(textId = textId)
+            else:
+                for t in self.imagelist:# check if it is the same
+                    if not t.textDict:
+                        continue
+                    self.textdict[textId]['bbox'] = t.textDict['bbox'] # compare without bbox
+                    if t.id == textId and t.textDict and t.textDict != self.textdict[textId]:
+                        self.imagelist.remove(t)
+                        self.CreateTexture(textId = textId)
+            
+    def CreateTexture(self, overlay = None, textId = None):
+        """!Create texture from overlay image or from textdict"""
+        if overlay: # legend  
+            texture = wxnviz.Texture(filepath = overlay.mapfile, overlayId = overlay.id,
+                                     coords = list(self.overlays[overlay.id]['coords']),
+                                     cmd = self.overlays[overlay.id]['cmd'])
+            if overlay.id == 1: # legend
+                texture.SetBounds(self.GetLegendRect())
+        else: # text
             coords, bbox, relCoords = self.TextBounds(self.textdict[textId])
             self.textdict[textId]['coords'] = coords
             self.textdict[textId]['bbox'] = bbox
-        # rerender OnIdle
-        self.render['overlays'] = True
+            file = self.DrawTextImage(self.textdict[textId], relCoords)
+            texture = wxnviz.Texture(filepath = file, overlayId = textId,
+                                     coords = coords, textDict = self.textdict[textId])
+            bbox.OffsetXY(*relCoords)
+            texture.SetBounds(bbox)
+            
+        if not texture.textureId: # texture too big
+            gcmd.GMessage(parent = self, message = 
+                          _("Image is too large, your OpenGL implementation "
+                            "supports maximum texture size %d px.") % texture.maxSize)
+            return
+        self.imagelist.append(texture)
+        
+    def FindObjects(self, mouseX, mouseY, radius):
+        """Find object which was clicked on"""
+        for texture in self.imagelist:
+            if texture.HitTest(mouseX, mouseY, radius):
+                return texture.id
+        return -1
+                
                     
     def OnMouseAction(self, event):
         """!Handle mouse events"""
@@ -394,18 +430,16 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         if self.mouse['use'] == 'pointer':
             # get decoration or text id
-            self.dragid = None
-            idlist = self.pdc.FindObjects(self.mouse['tmp'][0], self.mouse['tmp'][1],
-                                          self.hitradius)                            
-            if idlist != []:
-                self.dragid = idlist[0] #drag whatever is on top
+            self.dragid = self.FindObjects(self.mouse['tmp'][0], self.mouse['tmp'][1],
+                                          self.hitradius)   
                 
         event.Skip()    
         
     def OnDragging(self, event):
                 
         if self.mouse['use'] == 'pointer':
-            self.DragItem(self.dragid, event)
+            if self.dragid > 0:
+                self.DragItem(self.dragid, event)
             
         if self.mouse['use'] == 'rotate':    
             dx, dy = event.GetX() - self.mouse['tmp'][0], event.GetY() - self.mouse['tmp'][1]
@@ -495,12 +529,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self.mouse['use'] = 'pointer'
             self.SetCursor(self.cursors['default'])
         elif self.mouse['use'] == 'pointer':
-            if self.dragid < 99 and self.dragid in self.overlays:
-                self.overlays[self.dragid]['coords'] = self.pdc.GetIdBounds(self.dragid)
-            elif self.dragid > 100 and self.dragid in self.textdict:
-                self.textdict[self.dragid]['bbox'] = self.pdc.GetIdBounds(self.dragid)
-            if self.dragid:    
-                self.dragid = None
+            if self.dragid > 0:    
+                self.dragid = -1
+                self.render['quick'] = False
                 self.Refresh(False)
             
         elif self.mouse['use'] == 'rotate':
@@ -522,15 +553,14 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         """!On mouse double click"""
         if self.mouse['use'] != 'pointer': return
         pos = event.GetPositionTuple()
-        idlist  = self.pdc.FindObjects(pos[0], pos[1], self.hitradius)
-        if idlist == []:
-            return
-        self.dragid = idlist[0]
+        self.dragid = self.FindObjects(pos[0], pos[1], self.hitradius)
         
         if self.dragid == 1:
             self.parent.OnAddLegend(None)
         elif self.dragid > 100:
             self.parent.OnAddText(None)
+        else:
+            return
     
     def FocusPanning(self, event):
         """!Simulation of panning using focus"""
@@ -606,28 +636,16 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         """
         if not id: return
         Debug.msg (5, "GLWindow.DragItem(): id=%d" % id)
-    
         x, y = self.mouse['tmp']
         dx = event.GetX() - x
         dy = event.GetY() - y
-        self.pdc.SetBackground(wx.TRANSPARENT_BRUSH)
-        self.pdc.TranslateId(id, dx, dy)
+        for texture in self.imagelist:
+            if texture.id == id:
+                texture.MoveTexture(dx, dy)
+
+        self.render['quick'] = True
+        self.Refresh(False)
         
-        r2 = self.pdc.GetIdBounds(id)
-        if type(r2) is list:
-            r2 = wx.Rect(r[0], r[1], r[2], r[3])
-        if id > 100: # text
-            self.textdict[id]['bbox'] = r2
-            self.textdict[id]['coords'][0] += dx
-            self.textdict[id]['coords'][1] += dy
-        else:
-            self.overlays[id]['coords'] = r2
-        
-        dc = wx.ClientDC(self)
-        odc = wx.DCOverlay(self.overlay, dc)
-        odc.Clear()
-        self.pdc.DrawToDC(dc)
-        del odc
         self.mouse['tmp'] = (event.GetX(), event.GetY()) 
         
     def ZoomBack(self):
@@ -836,7 +854,14 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 self._display.DrawArrow()
             if self.decoration['scalebar']:
                 self._display.DrawScalebar()
-        
+        if self.imagelist:
+            if ((self.render['quick'] and self.dragid > -1) or # during dragging
+                (not self.render['quick'] and self.dragid < 0)): # redraw
+                self._display.Start2D()
+                self.DrawImages()
+                
+            
+            
         stop = time.clock()
         
         if self.render['quick'] is False:
