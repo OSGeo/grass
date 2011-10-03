@@ -345,9 +345,9 @@ class abstract_map_dataset(abstract_dataset):
                 try:
                     dbif.cursor.execute(sql)
                 except:
-                    core.error("Unable to remove space time dataset register table " + self.get_stds_register())
+                    core.error(_("Unable to remove space time dataset register table <%s>") % (self.get_stds_register()))
 
-            core.verbose("Delete " + self.get_type() + " dataset <" + self.get_id() + "> from temporal database")
+            core.verbose(_("Delete %s dataset <%s> from temporal database") % (self.get_type(), self.get_id()))
 
             # Delete yourself from the database, trigger functions will take care of dependencies
             self.base.delete(dbif)
@@ -361,7 +361,7 @@ class abstract_map_dataset(abstract_dataset):
 	""" Remove the map entry in each space time dataset in which this map is registered
         """
 
-        core.verbose("Unregister " + self.get_type() + " dataset <" + self.get_id() + "> from space time datasets")
+        core.verbose(_("Unregister %s dataset <%s> from space time datasets") % (self.get_type(), self.get_id()))
         
         connect = False
 
@@ -409,7 +409,7 @@ class abstract_map_dataset(abstract_dataset):
                 dbif.cursor.execute(sql)
                 rows = dbif.cursor.fetchall()
         except:
-            core.error("Unable to select space time dataset register table " + self.get_stds_register())
+            core.error(_("Unable to select space time dataset register table <%s>") % (self.get_stds_register()))
 
         if connect == True:
             dbif.close()
@@ -459,7 +459,7 @@ class abstract_space_time_dataset(abstract_dataset):
             self.set_time_to_relative()
             self.relative_time.set_granularity(granularity)
         else:
-            core.fatal("Unknown temporal type \"" + temporal_type + "\"")
+            core.fatal(_("Unknown temporal type \"%s\"") % (temporal_type))
 
         self.base.set_semantic_type(semantic_type)
         self.metadata.set_title(title)
@@ -627,9 +627,9 @@ class abstract_space_time_dataset(abstract_dataset):
             connect = True
 
         if map.is_in_db(dbif) == False:
-            core.fatal("Only maps with absolute or relative valid time can be registered")
+            core.fatal(_("Only maps with absolute or relative valid time can be registered"))
 
-        core.verbose("Register " + map.get_type() + " map: " + map.get_id() + " in space time " + map.get_type() + " dataset <" + self.get_id() + ">")
+        core.verbose(_("Register %s map <%s> in space time %s dataset <%s>") %  (map.get_type(), map.get_id(), map.get_type(), self.get_id()))
 
         # First select all data from the database
         map.select(dbif)
@@ -648,7 +648,7 @@ class abstract_space_time_dataset(abstract_dataset):
         #print "STDS register table", stds_register_table
 
         if stds_mapset != map_mapset:
-            core.fatal("Only maps from the same mapset can be registered")
+            core.fatal(_("Only maps from the same mapset can be registered"))
 
         # Check if map is already registred
         if stds_register_table:
@@ -657,7 +657,7 @@ class abstract_space_time_dataset(abstract_dataset):
             row = dbif.cursor.fetchone()
             # In case of no entry make a new one
             if row and row[0] == map_id:
-                core.warning("Map " + map_id + "is already registered.")
+                core.warning(_("Map <%s> is already registered.") % (map_id))
                 return False
 
         # Create tables
@@ -691,15 +691,14 @@ class abstract_space_time_dataset(abstract_dataset):
                 try:
                     dbif.cursor.executescript(sql_script)
                 except:
-                    core.error("Unable to create the space time " + map.get_type() +\
-                    " dataset register table for " + map.get_type() + " map <" + map.get_id())
+                    core.error(_("Unable to create the space time %s dataset register table for <%s>") % (map.get_type(), map.get_id()))
                     raise
 
             # Set the stds register table name and put it into the DB
             map.set_stds_register(map_register_table)
             map.metadata.update(dbif)
             
-            core.verbose("Created register table <" +  map_register_table + "> for " + map.get_type() + " map <" + map.get_id() + ">")
+            core.verbose(_("Created register table <%s> for %s map <%s>") % (map_register_table, map.get_type(), map.get_id()))
 
         # We need to create the table and register it
         if stds_register_table == None:
@@ -731,8 +730,7 @@ class abstract_space_time_dataset(abstract_dataset):
                 try:
                     dbif.cursor.executescript(sql_script)
                 except:
-                    core.error("Unable to create the " + map.get_type() +\
-                    " map register table for space time " + map.get_type() + " dataset <" + map.get_id())
+                    core.error(_("Unable to create the space time %s dataset register table for <%s>") % (map.get_type(), map.get_id()))
                     raise
 
             # Trigger have been disabled due to peformance issues while registration
@@ -755,7 +753,7 @@ class abstract_space_time_dataset(abstract_dataset):
             self.set_map_register(stds_register_table)
             self.metadata.update(dbif)
 
-            core.verbose("Created register table <" +  stds_register_table + "> for space time " + map.get_type() + " dataset <" + self.get_id() + ">")
+            core.verbose(_("Created register table <%s> for space time %s  dataset <%s>") % (stds_register_table, map.get_type(), self.get_id()))
 
         # Register the stds in the map stds register table
         # Check if the entry is already there
@@ -793,9 +791,9 @@ class abstract_space_time_dataset(abstract_dataset):
             connect = True
 
         if map.is_in_db(dbif) == False:
-            core.fatal("Unable to find map <" + map.get_id() + "> in temporal database")
+            core.fatal(_("Unable to find map <%s> in temporal database") % (map.get_id()))
 
-        core.info("Unregister " + map.get_type() + " map: " + map.get_id())
+        core.verbose(_("Unregister %s map <%s>") % (map.get_type(), map.get_id()))
 
         # First select all data from the database
         map.select(dbif)
@@ -812,7 +810,7 @@ class abstract_space_time_dataset(abstract_dataset):
 
         # Break if the map is not registered
         if row == None:
-            core.warning("Map " + map_id + " is not registered in space time dataset " + self.base.get_id())
+            core.warning(_("Map <%s> is not registered in space time dataset") %(map_id, self.base.get_id()))
             return False
 
         # Remove the space time raster dataset from the raster dataset register
@@ -833,11 +831,16 @@ class abstract_space_time_dataset(abstract_dataset):
            type specific metadata. It should always been called after maps are registered
            or unregistered/deleted from the space time dataset.
 
+           The update of the temporal extent checks if the end time is set correctly.
+           In case the registered maps have no valid end time (None) the maximum start time
+           will be used. If the end time is smaller than the maximum start time, it will
+           be replaced by the maximum start time.
+
            An other solution to automate this is to use the diactivated trigger
            in the SQL files. But this will result in a huge performance issue
            in case many maps are registred (>1000).
         """
-        core.info("Update metadata, spatial and temporal extent from all registered maps of <" + self.get_id() + ">")
+        core.verbose(_("Update metadata, spatial and temporal extent from all registered maps of <%s>") % (self.get_id()))
 
         connect = False
 
@@ -845,6 +848,8 @@ class abstract_space_time_dataset(abstract_dataset):
             dbif = sql_database_interface()
             dbif.connect()
             connect = True
+
+        use_start_time = False
 
         # Get basic info
         stds_name = self.base.get_name()
@@ -879,6 +884,68 @@ class abstract_space_time_dataset(abstract_dataset):
         sql_script += "END TRANSACTION;"
 
         dbif.cursor.executescript(sql_script)
+
+        # Read and validate the selected end time
+        self.select()
+
+        if self.is_time_absolute():
+            start_time, end_time, tz = self.get_absolute_time()
+        else:
+            start_time, end_time = self.get_relative_time()
+
+        # In case no end time is set, use the maximum start time of all registered maps as end time
+        if end_time == None:
+            use_start_time = True
+        else:
+            # Check if the end time is smaller than the maximum start time
+            if self.is_time_absolute():
+                sql = """SELECT max(start_time) FROM GRASS_MAP_absolute_time WHERE GRASS_MAP_absolute_time.id IN
+                        (SELECT id FROM SPACETIME_NAME_GRASS_MAP_register);"""
+                sql = sql.replace("GRASS_MAP", self.get_new_map_instance(None).get_type())
+                sql = sql.replace("SPACETIME_NAME", stds_name + "_" + stds_mapset )
+            else:
+                sql = """SELECT max(start_time) FROM GRASS_MAP_relative_time WHERE GRASS_MAP_relative_time.id IN
+                        (SELECT id FROM SPACETIME_NAME_GRASS_MAP_register);"""
+                sql = sql.replace("GRASS_MAP", self.get_new_map_instance(None).get_type())
+                sql = sql.replace("SPACETIME_NAME", stds_name + "_" + stds_mapset )
+
+            dbif.cursor.execute(sql)
+            row = dbif.cursor.fetchone()
+
+            if row != None:
+                tstring = row[0]
+                # Convert the unicode string into the datetime format
+                if tstring.find(":") > 0:
+                    time_format = "%Y-%m-%d %H:%M:%S"
+                else:
+                    time_format = "%Y-%m-%d"
+
+                max_start_time = datetime.strptime(tstring, time_format)
+                if end_time < max_start_time:
+                    use_start_time = True
+
+        # Set the maximum start time as end time
+        if use_start_time:
+            if self.is_time_absolute():
+                sql = """UPDATE STDS_absolute_time SET end_time =
+               (SELECT max(start_time) FROM GRASS_MAP_absolute_time WHERE GRASS_MAP_absolute_time.id IN
+                        (SELECT id FROM SPACETIME_NAME_GRASS_MAP_register)
+               ) WHERE id = "SPACETIME_ID";"""
+                sql = sql.replace("GRASS_MAP", self.get_new_map_instance(None).get_type())
+                sql = sql.replace("SPACETIME_NAME", stds_name + "_" + stds_mapset )
+                sql = sql.replace("SPACETIME_ID", self.base.get_id())
+                sql = sql.replace("STDS", self.get_type())
+            elif self.is_time_relative():
+                sql = """UPDATE STDS_relative_time SET end_time =
+               (SELECT max(start_time) FROM GRASS_MAP_relative_time WHERE GRASS_MAP_relative_time.id IN
+                        (SELECT id FROM SPACETIME_NAME_GRASS_MAP_register)
+               ) WHERE id = "SPACETIME_ID";"""
+                sql = sql.replace("GRASS_MAP", self.get_new_map_instance(None).get_type())
+                sql = sql.replace("SPACETIME_NAME", stds_name + "_" + stds_mapset )
+                sql = sql.replace("SPACETIME_ID", self.base.get_id())
+                sql = sql.replace("STDS", self.get_type())
+
+            dbif.cursor.executescript(sql)
 
         if connect == True:
             dbif.close()

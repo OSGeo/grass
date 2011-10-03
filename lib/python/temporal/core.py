@@ -97,7 +97,7 @@ def increment_datetime_by_string(mydate, increment, mult = 1):
             elif inc[1].find("years") >= 0:
                 years = mult * int(inc[0])
             else:
-                core.fatal("Wrong increment format: " + increment)
+                core.fatal(_("Wrong increment format: %s") % (increment))
 
         return increment_datetime(mydate, years, months, weeks, days, hours, minutes, seconds)
     
