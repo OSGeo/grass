@@ -35,7 +35,7 @@ class spatial_extent(sql_database_interface):
         """Return True if the 2d extents overlap. Code is lend from wind_overlap.c in lib/gis"""  
         
         if self.get_projection() != extent.get_projection():
-            core.error("Projections are different. Unable to compute overlap_2d for spatial extents")
+            core.error(_("Projections are different. Unable to compute overlap_2d for spatial extents"))
         
         N = extent.get_north()
         S = extent.get_south()
@@ -158,7 +158,7 @@ class spatial_extent(sql_database_interface):
         """Compute the volume of the extent, in case z is zero (top == bottom or top - bottom = 1) the area is returned"""
 
         if self.get_projection() == "LL":
-            core.error("Volume computation is not supported for LL projections")
+            core.error(_("Volume computation is not supported for LL projections"))
         
         area = self.get_area()
         
@@ -175,7 +175,7 @@ class spatial_extent(sql_database_interface):
         """Compute the area of the extent, extent in z direction is ignored"""
         
         if self.get_projection() == "LL":
-            core.error("Area computation is not supported for LL projections")
+            core.error(_("Area computation is not supported for LL projections"))
         
         bbox = self.get_spatial_extent()
         

@@ -565,7 +565,7 @@ def assign_valid_time_to_maps(type, maps, ttype, start, end=None, increment=None
     """
 
     if end and increment:
-        core.fatal("Valid end time and increment are mutual exclusive")
+        core.fatal(_("Valid end time and increment are mutual exclusive"))
 
     # List of space time datasets to be updated
     splist = {}
