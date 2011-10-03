@@ -404,9 +404,6 @@ class MapFrame(wx.Frame):
                                              Map = self.Map, tree = self.tree, lmgr = self._layerManager)
             self.MapWindow = self.MapWindow3D
             self.MapWindow.SetCursor(self.cursors["default"])
-            self.MapWindow3D.overlays = self.MapWindow2D.overlays
-            self.MapWindow3D.textdict = self.MapWindow2D.textdict
-            self.MapWindow3D.UpdateOverlays()
             
             # add Nviz notebookpage
             self._layerManager.AddNvizTools()
@@ -428,7 +425,6 @@ class MapFrame(wx.Frame):
             self.MapWindow3D.GetDisplay().Init()
             del os.environ['GRASS_REGION']
             
-            self.MapWindow3D.UpdateOverlays()
             
             # switch from MapWindow to MapWindowGL
             self._mgr.GetPane('2d').Hide()
@@ -1833,6 +1829,7 @@ class MapFrame(wx.Frame):
         """
         if self.MapWindow.dragid > -1:
             id = self.MapWindow.dragid
+            self.MapWindow.dragid = -1
         else:
             # index for overlay layer in render
             if len(self.MapWindow.textdict.keys()) > 0:
@@ -1853,23 +1850,28 @@ class MapFrame(wx.Frame):
             # delete object if it has no text or is not active
             if text == '' or active == False:
                 try:
-                    self.MapWindow.pdc.ClearId(id)
-                    self.MapWindow.pdc.RemoveId(id)
+                    self.MapWindow2D.pdc.ClearId(id)
+                    self.MapWindow2D.pdc.RemoveId(id)
                     del self.MapWindow.textdict[id]
+                    if self.IsPaneShown('3d'):
+                        self.MapWindow3D.UpdateOverlays()
+                        self.MapWindow.UpdateMap()
+                    else:
+                        self.MapWindow2D.UpdateMap(render = False, renderVector = False)
                 except:
                     pass
                 return
 
-            self.MapWindow.pdc.ClearId(id)
-            self.MapWindow.pdc.SetId(id)
-            self.MapWindow.textdict[id] = self.dialogs['text'].GetValues()
-##            if self.MapWindow3D:
-##                self.MapWindow3D.textdict[id] = self.dialogs['text'].GetValues()
-                
             
-            self.MapWindow2D.UpdateMap(render = False, renderVector = False)
-            if self.MapWindow3D:
+            self.MapWindow.textdict[id] = self.dialogs['text'].GetValues()
+            
+            if self.IsPaneShown('3d'):
                 self.MapWindow3D.UpdateOverlays()
+                self.MapWindow3D.UpdateMap()
+            else:
+                self.MapWindow2D.pdc.ClearId(id)
+                self.MapWindow2D.pdc.SetId(id)
+                self.MapWindow2D.UpdateMap(render = False, renderVector = False)
             
         self.MapWindow.mouse['use'] = 'pointer'
     

@@ -8,6 +8,7 @@ required).
 
 List of classes:
  - Nviz
+ - Texture
 
 (C) 2008-2011 by the GRASS Development Team
 
@@ -20,8 +21,10 @@ for details.
 @author Anna Kratochvilova <KratochAnna seznam.cz> (Google SoC 2011)
 """
 
+import wx
 import sys
 import locale
+import struct
 from threading import Thread
 from math import sqrt
 from numpy import matrix
@@ -38,6 +41,7 @@ except ImportError, e:
     sys.stderr.write(_("3D view mode: %s\n") % e)
     
 from debug import Debug
+import grass.script as grass
 
 log      = None
 progress = None
@@ -1852,3 +1856,112 @@ class Nviz(object):
         for i in range(len(matrix)):
             mtrx[i] = matrix[i]
         GS_set_rotation_matrix(byref(mtrx))
+    
+    def Start2D(self):
+        Nviz_set_2D(self.width, self.height)
+        
+        
+class Texture(object):
+    """!Class representing OpenGL texture"""
+    def __init__(self, filepath, overlayId, coords, cmd = None, textDict = None):
+        """!Load image to texture
+
+        @param filepath path to image file
+        @param overlayId id of overlay (1 for legend, 101 and more for text)
+        @param coords image coordinates
+        @param cmd d.legend command (or None)
+        @param textDict text info (or None)      
+        """
+        self.path = filepath
+        self.image = wx.Image(filepath, wx.BITMAP_TYPE_ANY)
+        self.width = self.image.GetWidth()
+        self.height = self.image.GetHeight()
+        self.id = overlayId
+        self.coords = list(coords)
+        self.bounds = wx.Rect()
+        self.cmd = cmd
+        self.textDict = textDict
+        
+        # alpha needs to be initialized
+        self.image.InitAlpha()
+    
+        # resize image to match 2^n
+        self.Resize()
+        
+        # check max texture size
+        maxSize = c_int()
+        Nviz_get_max_texture(byref(maxSize))
+        self.maxSize = maxSize.value
+        if self.maxSize < self.width or self.maxSize < self.height:
+            # TODO: split up image 
+            self.textureId = None
+        else:
+            self.textureId = self.Load()
+            
+    def __del__(self):
+        """!Delete texture"""
+        if self.textureId:
+            Nviz_del_texture(self.textureId)
+        grass.try_remove(self.path)
+            
+    def Resize(self):    
+        """!Resize image to match 2^n"""
+        n = m = 1
+        while self.width > pow(2,n):
+            n += 1
+        while self.height > pow(2,m):
+            m += 1
+        self.image.Resize(size = (pow(2,n), pow(2,m)), pos = (0, 0))
+        self.width = self.image.GetWidth()
+        self.height = self.image.GetHeight()
+        
+    def Load(self):
+        """!Load image to texture"""  
+        if self.image.HasAlpha():
+            bytesPerPixel = 4
+        else:
+            bytesPerPixel = 3
+        bytes = bytesPerPixel * self.width * self.height
+        rev_val = self.height - 1
+        im = (c_ubyte * bytes)()
+        bytes3 = 3 * self.width * self.height
+        bytes1 = self.width * self.height
+        imageData = struct.unpack(str(bytes3) + 'B', self.image.GetData())
+        if self.image.HasAlpha():
+            alphaData = struct.unpack(str(bytes1) + 'B', self.image.GetAlphaData())
+        
+        # this takes too much time
+        wx.BeginBusyCursor()
+        for i in range(self.height):
+            for j in range(self.width):
+                im[(j + i * self.width) * bytesPerPixel + 0] = imageData[( j + (rev_val - i) * self.width) * 3 + 0]
+                im[(j + i * self.width) * bytesPerPixel + 1] = imageData[( j + (rev_val - i) * self.width) * 3 + 1]
+                im[(j + i * self.width) * bytesPerPixel + 2] = imageData[( j + (rev_val - i) * self.width) * 3 + 2]
+                if self.image.HasAlpha():
+                    im[(j + i * self.width) * bytesPerPixel + 3] = alphaData[( j + (rev_val - i) * self.width)]
+        wx.EndBusyCursor()
+        
+        id = Nviz_load_image(im, self.width, self.height, self.image.HasAlpha())
+        
+        return id
+        
+    def Draw(self):
+        """!Draw texture as an image"""
+        Nviz_draw_image(self.coords[0], self.coords[1], self.width, self.height, self.textureId)
+    
+        
+    def SetBounds(self, rect):
+        """!Set Bounding Rectangle"""
+        self.bounds = rect
+        
+    def HitTest(self, x, y, radius):
+        copy = wx.Rect(*self.bounds)
+        copy.Inflate(radius, radius)
+        return copy.ContainsXY(x, y)
+    
+    def MoveTexture(self, dx, dy):
+        """!Move texture on the screen"""
+        self.coords[0] += dx
+        self.coords[1] += dy
+        self.bounds.OffsetXY(dx, dy)
+        
