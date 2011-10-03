@@ -8,7 +8,6 @@ This module implements 3D visualization mode for map display.
 List of classes:
  - NvizThread
  - GLWindow
- - DragShape
 
 (C) 2008-2011 by the GRASS Development Team
 
