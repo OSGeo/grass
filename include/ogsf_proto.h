@@ -514,6 +514,7 @@ int gsd_arrow(float *, unsigned long, float, float *, float, geosurf *);
 int gsd_arrow_onsurf(float *, float *, unsigned long, int, geosurf *);
 void gsd_3darrow(float *, unsigned long, float, float, float *, float);
 int gsd_scalebar(float *, float, GLuint, unsigned long, unsigned long);
+int gsd_scalebar_v2(float *, float, GLuint, unsigned long, unsigned long);
 void primitive_cone(unsigned long);
 void primitive_cylinder(unsigned long, int);
 

@@ -417,7 +417,7 @@ void Nviz_draw_scalebar(nv_data *data)
     for (i = 0; i < data->num_scalebars; i++) {
 	struct scalebar_data *s = data->scalebar[i];
 
-	gsd_scalebar(s->where, s->size, FontBase, s->color, s->color);
+	gsd_scalebar_v2(s->where, s->size, FontBase, s->color, s->color);
     }
 }
 
