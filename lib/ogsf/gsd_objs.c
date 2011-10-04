@@ -1236,6 +1236,74 @@ int gsd_scalebar(float *pos2, float len, GLuint fontbase,
 }
 
 /*!
+   \brief Draw Scalebar (as lines)
+
+   Adapted from gsd_scalebar A.Kratochvilova 2011
+
+   \param pos2 scalebar position
+   \param fontbase font-base (unused)
+   \param bar_clr barscale color
+   \param text_clr text color (unused)
+
+   \return 1
+ */
+int gsd_scalebar_v2(float *pos, float len, GLuint fontbase,
+		 unsigned long bar_clr, unsigned long text_clr)
+{
+    float base[6][3];
+    float Ntop[] = { 0.0, 0.0, 1.0 };
+
+    base[0][Z] = base[1][Z] = base[2][Z] = pos[Z];
+    base[3][Z] = base[4][Z] = base[5][Z] = pos[Z];
+
+    /* simple scalebar: |------| */
+    base[0][X] = base[2][X] = base[3][X] = pos[X] - len / 2.;
+    base[1][X] = base[4][X] = base[5][X] = pos[X] + len / 2.;
+    base[0][Y] = base[1][Y] = pos[Y];
+    base[2][Y] = base[4][Y] = pos[Y] - len / 12;
+    base[3][Y] = base[5][Y] = pos[Y] + len / 12;
+
+    /* make sure we are drawing in front buffer */
+    GS_set_draw(GSD_FRONT);
+
+    gsd_pushmatrix();
+    gsd_do_scale(1);		/* get map scale factor */
+
+    glNormal3fv(Ntop);
+
+    gsd_color_func(bar_clr);
+
+    gsd_linewidth(3); /* could be optional */
+
+    /* ------- */
+    gsd_bgnline();
+    gsd_vert_func(base[0]);
+    gsd_vert_func(base[1]);
+    gsd_endline();
+
+    /* |------- */
+    gsd_bgnline();
+    gsd_vert_func(base[2]);
+    gsd_vert_func(base[3]);
+    gsd_endline();
+
+    /* |-------| */
+    gsd_bgnline();
+    gsd_vert_func(base[4]);
+    gsd_vert_func(base[5]);
+    gsd_endline();
+
+    /* TODO -- draw units */
+
+    GS_done_draw();
+
+    gsd_popmatrix();
+    gsd_flush();
+
+    return 1;
+}
+
+/*!
    \brief Primitives only called after transforms
 
    Center is actually center at base of 8 sided cone

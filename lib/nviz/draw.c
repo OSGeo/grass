@@ -248,7 +248,7 @@ int Nviz_draw_all(nv_data * data)
     /* scale bar */
     for (i = 0; i < data->num_scalebars; i++) {
 	struct scalebar_data *s = data->scalebar[i];
-	gsd_scalebar(s->where, s->size, 0, s->color, s->color);
+	gsd_scalebar_v2(s->where, s->size, 0, s->color, s->color);
     }
     
     GS_done_draw();
