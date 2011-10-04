@@ -6,11 +6,12 @@
    Based on visualization/nviz/src/draw.c and
    visualization/nviz/src/togl_flythrough.c
    
-   (C) 2008, 2010 by the GRASS Development Team
+   (C) 2008, 2010-2011 by the GRASS Development Team
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
    \author Updated/modified by Martin Landa <landa.martin gmail.com> (Google SoC 2008/2010)
+   \author Textures by Anna Kratochvilova 
  */
 
 #include <grass/nviz.h>
@@ -379,10 +380,14 @@ void Nviz_draw_image(int x, int y, int width, int height, int texture_id)
 
     glBegin(GL_QUADS);
 
-    glTexCoord2d(0.0,1.0);glVertex2d(x, y);
-    glTexCoord2d(0.0,0.0);glVertex2d(x, y + height);
-    glTexCoord2d(1.0,0.0);glVertex2d(x + width, y + height);
-    glTexCoord2d(1.0,1.0);glVertex2d(x + width, y);
+    glTexCoord2d(0.0,1.0);
+    glVertex2d(x, y);
+    glTexCoord2d(0.0,0.0);
+    glVertex2d(x, y + height);
+    glTexCoord2d(1.0,0.0);
+    glVertex2d(x + width, y + height);
+    glTexCoord2d(1.0,1.0);
+    glVertex2d(x + width, y);
 
     glEnd();
 
