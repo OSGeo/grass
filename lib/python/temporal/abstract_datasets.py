@@ -465,6 +465,22 @@ class abstract_space_time_dataset(abstract_dataset):
         self.metadata.set_title(title)
         self.metadata.set_description(description)
 
+    def get_initial_values(self):
+        """Return the initial values: granularity, temporal_type, semantic_type, title, description"""
+        
+        temporal_type = self.get_temporal_type()
+
+        if temporal_type == "absolute":
+            granularity   = self.absolute_time.get_granularity()
+        elif temporal_type == "relative":
+            granularity = self.relative_time.get_granularity()
+
+        semantic_type = self.base.get_semantic_type()
+        title = self.metadata.get_title()
+        description = self.metadata.get_description()
+
+        return granularity, temporal_type, semantic_type, title, description
+
     def get_temporal_relation_matrix(self, dbif=None):
         """Return the temporal relation matrix between all registered maps
         """
@@ -842,12 +858,17 @@ class abstract_space_time_dataset(abstract_dataset):
         """
         core.verbose(_("Update metadata, spatial and temporal extent from all registered maps of <%s>") % (self.get_id()))
 
+        # Nothing to do if the register is not present
+        if not self.get_map_register():
+            return
+
         connect = False
 
         if dbif == None:
             dbif = sql_database_interface()
             dbif.connect()
             connect = True
+
 
         use_start_time = False
 
