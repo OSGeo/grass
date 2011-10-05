@@ -11,7 +11,7 @@
  *               Hamish Bowman <hamish_b yahoo.com>
  * PURPOSE:      collect raster map layers into an imagery group by assigning 
  *               them to user-named subgroups or other groups
- * COPYRIGHT:    (C) 2001-2007 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2001-2007, 2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("imagery"));
     G_add_keyword(_("map management"));
     module->description =
-	_("Creates, edits, and lists groups and subgroups of imagery files.");
+	_("Creates, edits, and lists groups and subgroups of imagery data.");
 
     /* Get Args */
     grp = G_define_standard_option(G_OPT_I_GROUP);
@@ -67,11 +67,13 @@ int main(int argc, char *argv[])
     rast = G_define_standard_option(G_OPT_R_INPUTS);
     rast->required = NO;	/* -l flag */
     rast->description = _("Name of raster map(s) to include in group");
+    rast->guisection = _("Maps");
 
     r = G_define_flag();
     r->key = 'r';
     r->description = _("Remove selected files from specified group");
-
+    r->guisection = _("Maps");
+    
     l = G_define_flag();
     l->key = 'l';
     l->description = _("List files from specified (sub)group (fancy)");
