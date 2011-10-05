@@ -56,6 +56,7 @@ from mapdisp_window  import BufferedWindow
 from histogram       import HistFrame
 from wxplot          import HistFrame as HistFramePyPlot
 from wxplot          import ProfileFrame
+from wxplot          import ScatterFrame
 from grass.script import core as grass
 
 # for standalone app
@@ -404,6 +405,9 @@ class MapFrame(wx.Frame):
                                              Map = self.Map, tree = self.tree, lmgr = self._layerManager)
             self.MapWindow = self.MapWindow3D
             self.MapWindow.SetCursor(self.cursors["default"])
+            self.MapWindow3D.overlays = self.MapWindow2D.overlays
+            self.MapWindow3D.textdict = self.MapWindow2D.textdict
+            self.MapWindow3D.UpdateOverlays()
             
             # add Nviz notebookpage
             self._layerManager.AddNvizTools()
@@ -425,6 +429,7 @@ class MapFrame(wx.Frame):
             self.MapWindow3D.GetDisplay().Init()
             del os.environ['GRASS_REGION']
             
+            self.MapWindow3D.UpdateOverlays()
             
             # switch from MapWindow to MapWindowGL
             self._mgr.GetPane('2d').Hide()
@@ -1534,14 +1539,19 @@ class MapFrame(wx.Frame):
         profile = wx.MenuItem(toolsmenu, wx.ID_ANY, icons["profile"].GetLabel())
         profile.SetBitmap(icons["profile"].GetBitmap(self.iconsize))
         toolsmenu.AppendItem(profile)
-        self.Bind(wx.EVT_MENU, self.Profile, profile)
+        self.Bind(wx.EVT_MENU, self.OnProfile, profile)
 
-        histogram2 = wx.MenuItem(toolsmenu, wx.ID_ANY, _("Create histogram with PyPlot"))
+        scatterplot = wx.MenuItem(toolsmenu, wx.ID_ANY, _("Create bivariate scatterplot of raster maps"))
+        scatterplot.SetBitmap(icons["profile"].GetBitmap(self.iconsize))
+        toolsmenu.AppendItem(scatterplot)
+        self.Bind(wx.EVT_MENU, self.OnScatterplot, scatterplot)
+
+        histogram2 = wx.MenuItem(toolsmenu, wx.ID_ANY, icons["histogram"].GetLabel())
         histogram2.SetBitmap(icons["histogram"].GetBitmap(self.iconsize))
         toolsmenu.AppendItem(histogram2)
         self.Bind(wx.EVT_MENU, self.OnHistogramPyPlot, histogram2)
 
-        histogram = wx.MenuItem(toolsmenu, wx.ID_ANY, icons["histogram"].GetLabel())
+        histogram = wx.MenuItem(toolsmenu, wx.ID_ANY, _("Create histogram with d.histogram"))
         histogram.SetBitmap(icons["histogram"].GetBitmap(self.iconsize))
         toolsmenu.AppendItem(histogram)
         self.Bind(wx.EVT_MENU, self.OnHistogram, histogram)
@@ -1633,7 +1643,7 @@ class MapFrame(wx.Frame):
         
         return dist
 
-    def Profile(self, event):
+    def OnProfile(self, event):
         """!Init profile canvas and tools
         """
         raster = []
@@ -1641,8 +1651,10 @@ class MapFrame(wx.Frame):
                 self.tree.GetPyData(self.tree.layer_selected)[0]['type'] == 'raster':
             raster.append(self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer'].name)
 
-        self.profile = ProfileFrame(parent = self,
-                                    rasterList = raster)
+        self.profile = ProfileFrame(self,
+                                            id = wx.ID_ANY, pos = wx.DefaultPosition, size = (700,300),
+                                            style = wx.DEFAULT_FRAME_STYLE, 
+                                            rasterList = raster)
         self.profile.Show()
         # Open raster select dialog to make sure that a raster (and the desired raster)
         # is selected to be profiled
@@ -1709,13 +1721,34 @@ class MapFrame(wx.Frame):
                 continue
             raster.append(self.tree.GetPyData(layer)[0]['maplayer'].GetName())
 
-        self.histogramPyPlot = HistFramePyPlot(parent = self,
-                                               rasterList = raster)
+        self.histogramPyPlot = HistFramePyPlot(self, id = wx.ID_ANY, 
+                                                pos = wx.DefaultPosition, size = (700,300),
+                                                style = wx.DEFAULT_FRAME_STYLE, 
+                                                rasterList = raster)
         self.histogramPyPlot.Show()
         # Open raster select dialog to make sure that a raster (and the desired raster)
         # is selected to be histogrammed
         self.histogramPyPlot.OnSelectRaster(None)
         
+    def OnScatterplot(self, event):
+        """!Init PyPlot scatterplot display canvas and tools
+        """
+        raster = []
+
+        for layer in self.tree.GetSelections():
+            if self.tree.GetPyData(layer)[0]['maplayer'].GetType() != 'raster':
+                continue
+            raster.append(self.tree.GetPyData(layer)[0]['maplayer'].GetName())
+
+        self.scatterplot = ScatterFrame(self, id = wx.ID_ANY, 
+                                                pos = wx.DefaultPosition, size = (700,300),
+                                                style = wx.DEFAULT_FRAME_STYLE, 
+                                                rasterList = raster)
+        self.scatterplot.Show()
+        # Open raster select dialog to make sure that at least 2 rasters (and the desired rasters)
+        # are selected to be plotted
+        self.scatterplot.OnSelectRaster(None)
+
     def OnHistogram(self, event):
         """!Init histogram display canvas and tools
         """
@@ -1829,7 +1862,6 @@ class MapFrame(wx.Frame):
         """
         if self.MapWindow.dragid > -1:
             id = self.MapWindow.dragid
-            self.MapWindow.dragid = -1
         else:
             # index for overlay layer in render
             if len(self.MapWindow.textdict.keys()) > 0:
@@ -1850,28 +1882,23 @@ class MapFrame(wx.Frame):
             # delete object if it has no text or is not active
             if text == '' or active == False:
                 try:
-                    self.MapWindow2D.pdc.ClearId(id)
-                    self.MapWindow2D.pdc.RemoveId(id)
+                    self.MapWindow.pdc.ClearId(id)
+                    self.MapWindow.pdc.RemoveId(id)
                     del self.MapWindow.textdict[id]
-                    if self.IsPaneShown('3d'):
-                        self.MapWindow3D.UpdateOverlays()
-                        self.MapWindow.UpdateMap()
-                    else:
-                        self.MapWindow2D.UpdateMap(render = False, renderVector = False)
                 except:
                     pass
                 return
 
-            
+            self.MapWindow.pdc.ClearId(id)
+            self.MapWindow.pdc.SetId(id)
             self.MapWindow.textdict[id] = self.dialogs['text'].GetValues()
+##            if self.MapWindow3D:
+##                self.MapWindow3D.textdict[id] = self.dialogs['text'].GetValues()
+                
             
-            if self.IsPaneShown('3d'):
+            self.MapWindow2D.UpdateMap(render = False, renderVector = False)
+            if self.MapWindow3D:
                 self.MapWindow3D.UpdateOverlays()
-                self.MapWindow3D.UpdateMap()
-            else:
-                self.MapWindow2D.pdc.ClearId(id)
-                self.MapWindow2D.pdc.SetId(id)
-                self.MapWindow2D.UpdateMap(render = False, renderVector = False)
             
         self.MapWindow.mouse['use'] = 'pointer'
     

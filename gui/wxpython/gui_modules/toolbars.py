@@ -14,6 +14,7 @@ Classes:
  - ModelToolbar
  - HistogramToolbar
  - Histogram2Toolbar
+ - ScatterplotToolbar
  - LMWorkspaceToolbar
  - LMDataToolbar
  - LMToolsToolbar
@@ -1456,6 +1457,45 @@ class Histogram2Toolbar(AbstractToolbar):
                                       self.parent.OnQuit),
                                      ))
 
+class ScatterplotToolbar(AbstractToolbar):
+    """!Toolbar for bivariate scatterplots of raster map pairs
+    """ 
+    def __init__(self, parent):
+        AbstractToolbar.__init__(self, parent)
+        
+        self.InitToolbar(self._toolbarData())
+        
+        # realize the toolbar
+        self.Realize()
+        
+    def _toolbarData(self):
+        """!Toolbar data"""
+        icons = Icons['profile']
+        return self._getToolbarData((('addraster', Icons['layerManager']["addRast"],
+                                      self.parent.OnSelectRaster),
+                                     (None, ),
+                                     ('draw', icons["draw"],
+                                      self.parent.OnCreateScatter),
+                                     ('erase', Icons['displayWindow']["erase"],
+                                      self.parent.OnErase),
+                                     ('drag', Icons['displayWindow']['pan'],
+                                      self.parent.OnDrag),
+                                     ('zoom', Icons['displayWindow']['zoomIn'],
+                                      self.parent.OnZoom),
+                                     ('unzoom', Icons['displayWindow']['zoomBack'],
+                                      self.parent.OnRedraw),
+                                     (None, ),
+                                     ('image', Icons['displayWindow']["saveFile"],
+                                      self.parent.SaveToFile),
+                                     ('print', Icons['displayWindow']["print"],
+                                      self.parent.PrintMenu),
+                                     (None, ),
+                                     ('settings', icons["options"],
+                                      self.parent.PlotOptionsMenu),
+                                     ('quit', icons["quit"],
+                                      self.parent.OnQuit),
+                                     ))
+
 class LMWorkspaceToolbar(AbstractToolbar):
     """!Layer Manager `workspace` toolbar
     """
@@ -1473,6 +1513,8 @@ class LMWorkspaceToolbar(AbstractToolbar):
         icons = Icons['layerManager']
         return self._getToolbarData((('newdisplay', icons["newdisplay"],
                                       self.parent.OnNewDisplay),
+                                     ('newdisplay', icons["newdisplayWMS"],
+                                      self.parent.OnNewDisplayWMS),
                                      (None, ),
                                      ('workspaceNew', icons["workspaceNew"],
                                       self.parent.OnWorkspaceNew),
