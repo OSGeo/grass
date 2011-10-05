@@ -472,12 +472,14 @@ class Settings:
                     },
                 },
              'scatter': {
-                'marker' : {
-                    'color' : (0, 0, 0, 255),
-                    'fill' : 'solid',
-                    'size' : 1,
-                    'type' : 'dot',
-                    'legend' : _('Data point'),
+                'rasters' : {
+                    'pcolor' : (0, 0, 255, 255),
+                    'pfill' : 'solid',
+                    'psize' : 1,
+                    'ptype' : 'dot',
+                    'plegend' : _('Data point'),
+                    0 : {'datatype' : 'CELL'},
+                    1 : {'datatype' : 'CELL'},
                     },
                 'font' : {
                     'titleSize'     : 12,
