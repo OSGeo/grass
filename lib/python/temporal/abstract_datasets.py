@@ -107,7 +107,9 @@ class abstract_dataset(object):
 	self.metadata.insert(dbif)
 
     def update(self, dbif=None):
-	"""Update temporal dataset entry of database from the internal structure"""
+	"""Update temporal dataset entry of database from the internal structure
+	   excluding None variables
+	"""
 	self.base.update(dbif)
 	if self.is_time_absolute():
 	    self.absolute_time.update(dbif)
@@ -115,6 +117,18 @@ class abstract_dataset(object):
 	    self.relative_time.update(dbif)
 	self.spatial_extent.update(dbif)
 	self.metadata.update(dbif)
+
+    def update_all(self, dbif=None):
+	"""Update temporal dataset entry of database from the internal structure
+	   and include None varuables.
+	"""
+	self.base.update_all(dbif)
+	if self.is_time_absolute():
+	    self.absolute_time.update_all(dbif)
+        if self.is_time_relative():
+	    self.relative_time.update_all(dbif)
+	self.spatial_extent.update_all(dbif)
+	self.metadata.update_all(dbif)
 
     def print_self(self):
 	"""Print the content of the internal structure to stdout"""

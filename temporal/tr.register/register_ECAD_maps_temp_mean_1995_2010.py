@@ -11,7 +11,7 @@ grass.run_command("t.create", type="strds", dataset=dataset, granularity="1 days
 name = "temp_mean."
 maps=""
 #for i in range(6025):
-for i in range(365):
+for i in range(5844):
     inc = i + 1
     map_name = name + str(inc)
     if i == 0:
@@ -20,4 +20,4 @@ for i in range(365):
         maps += "," + map_name
     
 # Register all maps at once
-grass.run_command("tr.register", dataset=dataset, maps=maps, start="1995-01-01", increment="1 days")
+grass.run_command("tr.register", flags="i", dataset=dataset, maps=maps, start="1995-01-01", increment="1 days")

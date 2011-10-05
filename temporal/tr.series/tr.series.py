@@ -55,6 +55,11 @@
 #%option G_OPT_R_OUTPUT
 #%end
 
+#%flag
+#% key: t
+#% description: Assign the space time raster dataset time interval to the output map
+#%end
+
 import grass.script as grass
 import grass.temporal as tgis
 
@@ -68,6 +73,7 @@ def main():
     method = options["method"]
     sort = options["sort"]
     where = options["where"]
+    add_time = flags["t"]
 
     # Make sure the temporal database exists
     tgis.create_temporal_database()
@@ -84,27 +90,51 @@ def main():
         grass.fatal(_("Dataset <%s> not found in temporal database") % (id))
 
     sp.select()
+    
+    if add_time:
+	if sp.is_time_absolute():
+	    start_time, end_time, tz = sp.get_absolute_time()
+	else:
+	    start_time, end_time = sp.get_relative_time()
 
     rows = sp.get_registered_maps(None, where, sort)
 
     if rows:
-        inputs = ""
+        filename = grass.tempfile(True)
+        file = open(filename, 'w')
 
-        count = 0
         for row in rows:
-            if count == 0:
-                inputs += row["id"]
-            else:
-                inputs += "," + row["id"]
-            count += 1
-
-        print inputs
+            string = "%s\n" % (row["id"])
+            file.write(string)
+        
+        file.close()
 
         if grass.overwrite() == True:
-            grass.run_command("r.series", input=inputs, output=output, overwrite=True, method=method)
+            grass.run_command("r.series", file=filename, output=output, overwrite=True, method=method)
         else:
-            grass.run_command("r.series", input=inputs, output=output, overwrite=False, method=method)
+            grass.run_command("r.series", file=filename, output=output, overwrite=False, method=method)
 
+    if add_time:
+	# Create the time range for the output map
+	if output.find("@") >= 0:
+	    id = output
+	else:
+	    mapset =  grass.gisenv()["MAPSET"]
+	    id = output + "@" + mapset
+
+	map = sp.get_new_map_instance(id)
+
+	map.load()
+	if sp.is_time_absolute():
+	    map.set_absolute_time(start_time, end_time, tz)
+	else:
+	    map.set_relative_time(start_time, end_time)
+
+	# Register the map in the temporal database
+	if map.is_in_db():
+	    map.update()
+	else:
+	    map.insert()    
 
 if __name__ == "__main__":
     options, flags = grass.parser()

@@ -69,6 +69,15 @@ your_username  hard    nofile          1500
 This would raise the hard limit to 1500 file. Be warned that more
 files open need more RAM.
 
+<p>
+Use the <em>file</em> option to analyze large amount of raster maps without 
+hitting open files limit and the size limit of command line arguments. 
+The computation is slower than the <em>input</em> option method. 
+For every sinlge row in the output map(s) 
+all input maps are opened and closed. The amount of RAM will rise linear
+with the number of specified input maps. The input and file options are mutual exclusive.
+Input is a text file with a new line separatetd list of raster map names. 
+
 <h2>EXAMPLES</h2>
 
 Using <em>r.series</em> with wildcards:
@@ -93,6 +102,18 @@ r.series in=map2001,map2002,dummy,dummy,map2005,map2006,dummy,map2008 \
 Example for multiple aggregates to be computed in one run (3 resulting aggregates from two input maps):
 <div class="code"><pre>
 r.series in=one,two out=result_avg,res_slope,result_count meth=sum,slope,count
+</pre></div>
+
+<p>
+Example to use the file option of r.series:
+<div class="code"><pre>
+cat > input.txt << EOF
+map1
+map2
+map3
+EOF
+
+r.series2 file=input.txt out=result_sum meth=sum
 </pre></div>
 
 <h2>SEE ALSO</h2>
