@@ -111,21 +111,18 @@ int main(int argc, char *argv[])
     } parm;
     struct
     {
-	struct Flag *nulls;
+	struct Flag *nulls, *lazy;
     } flag;
-    FILE *in = NULL;
     int i;
     int num_inputs;
-    int num_lines;
     struct input *inputs;
     int num_outputs;
     struct output *outputs;
     struct History history;
     DCELL *values, *values_tmp;
     int nrows, ncols;
-    int row, col, count;
+    int row, col;
     double lo, hi;
-    char buf[GNAME_MAX];
 
     G_gisinit(argv[0]);
 
@@ -142,7 +139,7 @@ int main(int argc, char *argv[])
 
     parm.file = G_define_standard_option(G_OPT_F_INPUT);
     parm.file->key = "file";
-    parm.file->description = _("Input file with raster map names, separated by new lines");
+    parm.file->description = _("Input file with raster map names, one per line");
     parm.file->required = NO;
 
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
@@ -174,6 +171,10 @@ int main(int argc, char *argv[])
     flag.nulls->key = 'n';
     flag.nulls->description = _("Propagate NULLs");
 
+    flag.lazy = G_define_flag();
+    flag.lazy->key = 'z';
+    flag.lazy->description = _("Don't keep files open");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -191,67 +192,49 @@ int main(int argc, char *argv[])
 
     /* process the input maps from the file */
     if (parm.file->answer) {
-   
-	/* Open the input file with raster map names and count the lines */
-	in = fopen(parm.file->answer, "r");
+	FILE *in;
+	int max_inputs;
     
-	if(in == NULL)
+	in = fopen(parm.file->answer, "r");
+	if (!in)
 	    G_fatal_error(_("Unable to open input file <%s>"), parm.file->answer);
     
 	num_inputs = 0;
-	num_lines = 0;
-    
-	/* Count lines in file and check the input */
-	while (fgets(buf, sizeof buf, in)) {
-	    num_lines++;
-	    /* Jump over invlaid files and empty new lines */
-	    if (strlen(buf) < 2 || G_check_input_output_name(G_chop(buf), 
-			       parm.output->answer, GR_FATAL_RETURN)) {
-		G_warning(_("Raster map <%s> is not valid"), G_chop(buf));
-		continue;
-	    }
-	    /* Count number of valid input names */
-	    num_inputs++;
-	}
+	max_inputs = 0;
 
-	fclose(in);
+	for (;;) {
+	    char buf[GNAME_MAX];
+	    char *name;
+	    struct input *p;
+
+	    if (!G_getl2(buf, sizeof(buf), in))
+		break;
+
+	    name = G_chop(buf);
+
+	    /* Ignore empty lines */
+	    if (!*name)
+		continue;
+
+	    if (num_inputs >= max_inputs) {
+		max_inputs += 100;
+		inputs = G_realloc(inputs, max_inputs * sizeof(struct input));
+	    }
+	    p = &inputs[num_inputs++];
+
+	    G_verbose_message(_("Reading raster map <%s>..."), p->name);
+	    p->name = G_store(name);
+	    p->buf = Rast_allocate_d_buf();
+	    if (!flag.lazy->answer)
+		p->fd = Rast_open_old(p->name, "");
+	}
 
 	if (num_inputs < 1)
 	    G_fatal_error(_("No raster map name found in input file"));
 
-	inputs = G_malloc(num_inputs * sizeof(struct input));
-
-	/* Reopen the input file and read the map names */
-	in = fopen(parm.file->answer, "r");
-
-	count = 0;
-	for (i = 0; i < num_lines; i++) {
-	    fgets(buf, sizeof buf, in); 
-
-	    char *name = G_calloc(strlen(buf) + 1, sizeof(char));
-	    G_snprintf(name, strlen(buf), "%s", buf);
-
-	    /* Jump over invlaid files and empty new lines */
-	    if (strlen(buf) < 2 || G_check_input_output_name(G_chop(buf), 
-			       parm.output->answer, GR_FATAL_RETURN)) {
-	    G_free(name);
-	    continue;
-	    }
-
-	    struct input *p = &inputs[count];
-	    p->name = G_chop(name);
-	    G_message(_("Reading raster map <%s>..."), p->name);
-	    p->buf = Rast_allocate_d_buf();
-	    count++;
-	}
-    
-	if(count != num_inputs)
-	    G_fatal_error(_("An internal error occured"));
-
 	fclose(in);
-	 
-    } else {
-    
+    }
+    else {
     	for (i = 0; parm.input->answers[i]; i++)
 	    ;
     	num_inputs = i;
@@ -264,10 +247,11 @@ int main(int argc, char *argv[])
     	for (i = 0; i < num_inputs; i++) {
 	    struct input *p = &inputs[i];
 
+	    G_verbose_message(_("Reading raster map <%s>..."), p->name);
 	    p->name = parm.input->answers[i];
-	    G_message(_("Reading raster map <%s>..."), p->name);
-	    p->fd = Rast_open_old(p->name, "");
 	    p->buf = Rast_allocate_d_buf();
+	    if (!flag.lazy->answer)
+		p->fd = Rast_open_old(p->name, "");
     	}
     }
 
@@ -312,14 +296,15 @@ int main(int argc, char *argv[])
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
 
-	if (parm.file->answer) {
+	if (flag.lazy->answer) {
 	    /* Open the files only on run time */
 	    for (i = 0; i < num_inputs; i++) {
 		inputs[i].fd = Rast_open_old(inputs[i].name, "");
 		Rast_get_d_row(inputs[i].fd, inputs[i].buf, row);
 		Rast_close(inputs[i].fd);
 	    }
-	} else {
+	}
+	else {
 	    for (i = 0; i < num_inputs; i++)
 	        Rast_get_d_row(inputs[i].fd, inputs[i].buf, row);
 	}
@@ -370,7 +355,7 @@ int main(int argc, char *argv[])
     }
 
     /* Close input maps */
-    if (!parm.file->answer) {
+    if (!flag.lazy->answer) {
     	for (i = 0; i < num_inputs; i++)
 	    Rast_close(inputs[i].fd);
     }
