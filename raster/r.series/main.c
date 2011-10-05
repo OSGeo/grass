@@ -183,10 +183,10 @@ int main(int argc, char *argv[])
     }
     
     if (parm.input->answer && parm.file->answer)
-        G_fatal_error("The parameter <input> and <file> are mutual exclusive");
+        G_fatal_error(_("Options <input> and <file> are mutual exclusive"));
  
     if (!parm.input->answer && !parm.file->answer)
-        G_fatal_error("You need to specify input or file option");
+        G_fatal_error(_("You need to specify <input> or <file> option"));
 
 
     /* process the input maps from the file */
