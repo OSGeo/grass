@@ -138,7 +138,10 @@ class ScatterRasterDialog(wx.Dialog):
         rastText = ''
         if len(self.rasterList) > 0:
             for r in self.rasterList:
-                rastText += '%s,%s,' % r
+                if isinstance(r, tuple):
+                    rastText += '%s,%s,' % r
+                else:
+                    rastText += '%s,' % r
             rastText = rastText.rstrip(',')
         
         # select rasters
@@ -1140,5 +1143,4 @@ class OptDialog(wx.Dialog):
     def OnCancel(self, event):
         """!Button 'Cancel' pressed"""
         self.Close()
-
-#### merge with generic options dialog        
+     
