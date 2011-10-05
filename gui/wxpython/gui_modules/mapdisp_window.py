@@ -1648,7 +1648,8 @@ class BufferedWindow(MapWindow, wx.Window):
             self.Map.region['center_northing'] = cn
             self.Map.region['ewres'] = (newreg['e'] - newreg['w']) / self.Map.width
             self.Map.region['nsres'] = (newreg['n'] - newreg['s']) / self.Map.height
-            if self.parent.statusbarWin['alignExtent'].IsChecked():
+            if 'alignExtent' not in self.parent.statusbarWin or \
+                    self.parent.statusbarWin['alignExtent'].IsChecked():
                 self.Map.AlignExtentFromDisplay()
             else:
                 for k in ('n', 's', 'e', 'w'):
