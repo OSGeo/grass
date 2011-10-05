@@ -183,10 +183,10 @@ int main(int argc, char *argv[])
     }
     
     if (parm.input->answer && parm.file->answer)
-        G_fatal_error(_("Options <input> and <file> are mutual exclusive"));
+        G_fatal_error(_("input= and file= are mutually exclusive"));
  
     if (!parm.input->answer && !parm.file->answer)
-        G_fatal_error(_("You need to specify <input> or <file> option"));
+        G_fatal_error(_("Please specify input= or file="));
 
 
     /* process the input maps from the file */
@@ -217,7 +217,7 @@ int main(int argc, char *argv[])
 	fclose(in);
 
 	if (num_inputs < 1)
-	    G_fatal_error(_("No raster map found in input file"));
+	    G_fatal_error(_("No raster map name found in input file"));
 
 	inputs = G_malloc(num_inputs * sizeof(struct input));
 
