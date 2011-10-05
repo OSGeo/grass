@@ -1225,7 +1225,7 @@ class ModelFrame(wx.Frame):
         
         # show properties dialog
         win = action.GetPropDialog()
-        if not win and action.GetLog(string = False):
+        if not win and len(action.GetLog(string = False)) == 1:
             module = menuform.GUI(parent = self, show = True).ParseCommand(action.GetLog(string = False),
                                                                            completed = (self.GetOptData, action, action.GetParams()))
         elif win and not win.IsShown():
