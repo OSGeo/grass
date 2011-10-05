@@ -1052,7 +1052,7 @@ class ScatterFrame(AbstractPlotFrame):
                     "aqua", "grey", "orange", "brown", "purple", "violet", \
                     "indigo"]
         
-        if len(self.rasterList) > 0: # set raster name(s) from layer manager if a map is selected
+        if len(self.rasterList) > 1: # set raster name(s) from layer manager if a map is selected
             self.InitRasterOpts(self.rasterList, 'scatter')
 
         self._initOpts()
@@ -1080,7 +1080,10 @@ class ScatterFrame(AbstractPlotFrame):
 
         if dlg.ShowModal() == wx.ID_OK:
             rlist = dlg.rasterList
-            if rlist < 2: return                        # need at least 2 rasters for scatterplot
+            if rlist < 2: 
+                dlg.Destroy()
+                return                        # need at least 2 rasters for scatterplot
+
             self.bins = dlg.bins                        # bins for r.stats with float and dcell maps
             self.scattertype = dlg.scattertype          # scatterplot or bubbleplot
             self.rasterList = self.CreatePairs(rlist)   # list of raster pairs (tuples)
