@@ -56,6 +56,7 @@ from mapdisp_window  import BufferedWindow
 from histogram       import HistFrame
 from wxplot          import HistFrame as HistFramePyPlot
 from wxplot          import ProfileFrame
+from wxplot          import ScatterFrame
 from grass.script import core as grass
 
 # for standalone app
@@ -1534,14 +1535,19 @@ class MapFrame(wx.Frame):
         profile = wx.MenuItem(toolsmenu, wx.ID_ANY, icons["profile"].GetLabel())
         profile.SetBitmap(icons["profile"].GetBitmap(self.iconsize))
         toolsmenu.AppendItem(profile)
-        self.Bind(wx.EVT_MENU, self.Profile, profile)
+        self.Bind(wx.EVT_MENU, self.OnProfile, profile)
 
-        histogram2 = wx.MenuItem(toolsmenu, wx.ID_ANY, _("Create histogram with PyPlot"))
+        scatterplot = wx.MenuItem(toolsmenu, wx.ID_ANY, _("Create bivariate scatterplot of raster maps"))
+        scatterplot.SetBitmap(icons["profile"].GetBitmap(self.iconsize))
+        toolsmenu.AppendItem(scatterplot)
+        self.Bind(wx.EVT_MENU, self.OnScatterplot, scatterplot)
+
+        histogram2 = wx.MenuItem(toolsmenu, wx.ID_ANY, icons["histogram"].GetLabel())
         histogram2.SetBitmap(icons["histogram"].GetBitmap(self.iconsize))
         toolsmenu.AppendItem(histogram2)
         self.Bind(wx.EVT_MENU, self.OnHistogramPyPlot, histogram2)
 
-        histogram = wx.MenuItem(toolsmenu, wx.ID_ANY, icons["histogram"].GetLabel())
+        histogram = wx.MenuItem(toolsmenu, wx.ID_ANY, _("Create histogram with d.histogram"))
         histogram.SetBitmap(icons["histogram"].GetBitmap(self.iconsize))
         toolsmenu.AppendItem(histogram)
         self.Bind(wx.EVT_MENU, self.OnHistogram, histogram)
@@ -1633,7 +1639,7 @@ class MapFrame(wx.Frame):
         
         return dist
 
-    def Profile(self, event):
+    def OnProfile(self, event):
         """!Init profile canvas and tools
         """
         raster = []
@@ -1716,6 +1722,25 @@ class MapFrame(wx.Frame):
         # is selected to be histogrammed
         self.histogramPyPlot.OnSelectRaster(None)
         
+    def OnScatterplot(self, event):
+        """!Init PyPlot scatterplot display canvas and tools
+        """
+        raster = []
+
+        for layer in self.tree.GetSelections():
+            if self.tree.GetPyData(layer)[0]['maplayer'].GetType() != 'raster':
+                continue
+            raster.append(self.tree.GetPyData(layer)[0]['maplayer'].GetName())
+
+        self.scatterplot = ScatterFrame(self, id = wx.ID_ANY, 
+                                                pos = wx.DefaultPosition, size = (700,300),
+                                                style = wx.DEFAULT_FRAME_STYLE, 
+                                                rasterList = raster)
+        self.scatterplot.Show()
+        # Open raster select dialog to make sure that at least 2 rasters (and the desired rasters)
+        # are selected to be plotted
+        self.scatterplot.OnSelectRaster(None)
+
     def OnHistogram(self, event):
         """!Init histogram display canvas and tools
         """
