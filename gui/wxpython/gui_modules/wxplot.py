@@ -45,7 +45,7 @@ except ImportError:
             "standard Python distribution). See the Numeric Python site "
             "(http://numpy.scipy.org) for information on downloading source or "
             "binaries.")
-    print >> sys.stderr, "histogram2.py: " + msg
+    print >> sys.stderr, "wxplot.py: " + msg
 
 class AbstractPlotFrame(wx.Frame):
     """!Abstract PyPlot display frame class"""
@@ -841,7 +841,7 @@ class ProfileFrame(AbstractPlotFrame):
                                       input = self.rasterList[0],
                                       east_north = '%d,%d' % (point[0],point[1]))
                 
-                val = ret.splitlines()[0].split('|')[3]
+                val = float(ret.splitlines()[0].split('|')[3])
                 
                 # calculate distance between coordinate points
                 if lasteast and lastnorth:
