@@ -54,9 +54,8 @@ from preferences import globalSettings as UserSettings
 
 from mapdisp_window  import BufferedWindow
 from histogram       import HistFrame
-from wxplot          import HistFrame as HistFramePyPlot
-from wxplot          import ProfileFrame
-from wxplot          import ScatterFrame
+from wxplot          import HistFrame as HistFramePyPlot, ProfileFrame, ScatterFrame
+
 from grass.script import core as grass
 
 # for standalone app
