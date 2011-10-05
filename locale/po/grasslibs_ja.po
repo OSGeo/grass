@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_ja\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-04 19:10+0200\n"
+"POT-Creation-Date: 2011-10-05 23:30+0200\n"
 "PO-Revision-Date: 2010-09-08 17:33+0100\n"
 "Last-Translator: Akira Taniguchi <taniguti@apptec.co.jp>\n"
 "Language-Team: Japanese <grass-translations@lists.osgeo.org>\n"
@@ -1624,36 +1624,41 @@ msgstr " --quiet --verboseのいずれかを使用します。 --verboseと仮�
 msgid "Use either --quiet or --verbose flag, not both. Assuming --quiet."
 msgstr " --quiet --verboseのいずれかを使用します。 --quietと仮定します"
 
-#: ../lib/gis/parser.c:528
+#: ../lib/gis/parser.c:529
 #, fuzzy, c-format
 msgid "Sorry <%s> is not a valid option"
 msgstr "<%s> オプションは無効です\n"
 
-#: ../lib/gis/parser.c:560
+#: ../lib/gis/parser.c:561
 #, fuzzy
 msgid "ERROR"
 msgstr "エラー:  "
 
-#: ../lib/gis/parser.c:787
+#: ../lib/gis/parser.c:788
 msgid "Unable to determine program name"
 msgstr "プログラム名を決定できません"
 
-#: ../lib/gis/parser.c:803 ../lib/gis/parser.c:820
+#: ../lib/gis/parser.c:804 ../lib/gis/parser.c:821
 #, fuzzy, c-format
 msgid "Sorry, <%c> is not a valid flag"
 msgstr "<%c> フラッグは無効です\n"
 
-#: ../lib/gis/parser.c:919
+#: ../lib/gis/parser.c:920
 #, fuzzy, c-format
 msgid "Sorry, <%s=> is ambiguous"
 msgstr "<%s=>は不明瞭です\n"
 
-#: ../lib/gis/parser.c:926
+#: ../lib/gis/parser.c:927
 #, fuzzy, c-format
 msgid "Sorry, <%s> is not a valid parameter"
 msgstr "<%s> パラメータは無効です\n"
 
-#: ../lib/gis/parser.c:1001
+#: ../lib/gis/parser.c:935
+#, c-format
+msgid "Option <%s> does not accept multiple answers"
+msgstr ""
+
+#: ../lib/gis/parser.c:1006
 #, fuzzy, c-format
 msgid ""
 "Illegal range syntax for parameter <%s>\n"
@@ -1662,7 +1667,7 @@ msgstr ""
 "\n"
 "エラー: パラメータの無効な範囲の構文 <%s>\n"
 
-#: ../lib/gis/parser.c:1007
+#: ../lib/gis/parser.c:1012
 #, fuzzy, c-format
 msgid ""
 "Value <%s> out of range for parameter <%s>\n"
@@ -1671,21 +1676,21 @@ msgstr ""
 "\n"
 "エラー: 値<%s>はパラメーターの範囲外です<%s>\n"
 
-#: ../lib/gis/parser.c:1013
+#: ../lib/gis/parser.c:1018
 #, fuzzy, c-format
 msgid "Missing value for parameter <%s>"
 msgstr ""
 "\n"
 "エラー: パラメータ値が見つかりません <%s>\n"
 
-#: ../lib/gis/parser.c:1019
+#: ../lib/gis/parser.c:1024
 #, c-format
 msgid ""
 "Value <%s> ambiguous for parameter <%s>\n"
 "\tValid options: %s"
 msgstr ""
 
-#: ../lib/gis/parser.c:1155
+#: ../lib/gis/parser.c:1160
 #, fuzzy, c-format
 msgid ""
 "Required parameter <%s> not set:\n"
@@ -1695,7 +1700,7 @@ msgstr ""
 "エラー: 必要なパラメータ <%s> が設定されていません:\n"
 "    (%s).\n"
 
-#: ../lib/gis/parser.c:1246
+#: ../lib/gis/parser.c:1251
 #, fuzzy, c-format
 msgid ""
 "Option <%s> must be provided in multiples of %d\n"
@@ -1704,7 +1709,7 @@ msgstr ""
 "\n"
 "エラー: オプション <%s> は%dの倍数でなければなりません\n"
 
-#: ../lib/gis/parser.c:1320
+#: ../lib/gis/parser.c:1325
 #, c-format
 msgid "ERROR: option <%s>: <%s> exists.\n"
 msgstr "エラー: オプション <%s>: <%s> 存在します.\n"
@@ -2473,7 +2478,7 @@ msgstr " ファイル %s内の無効な es:フィールド '%s' in <%s>"
 msgid "No ellipsoid info given in file %s in <%s>"
 msgstr "ファイル %sに楕円体のデータがありません in <%s>"
 
-#: ../lib/gis/proj3.c:105 ../lib/vector/Vlib/header.c:654
+#: ../lib/gis/proj3.c:105 ../lib/vector/Vlib/header.c:620
 msgid "Unknown projection"
 msgstr "不明な投影法"
 
@@ -2967,11 +2972,11 @@ msgstr ""
 msgid "%s: Area %d does not exist"
 msgstr "%s: エリア %d は存在しません"
 
-#: ../lib/vector/Vlib/write_nat.c:679 ../lib/vector/Vlib/write_ogr.c:342
+#: ../lib/vector/Vlib/write_nat.c:682 ../lib/vector/Vlib/write_ogr.c:361
 msgid "Attempt to delete dead feature"
 msgstr "不要なフィーチャを削除しようとしています"
 
-#: ../lib/vector/Vlib/write_nat.c:927
+#: ../lib/vector/Vlib/write_nat.c:930
 msgid "Attempt to restore alive feature"
 msgstr "有効なフィーチャを修復しようとしています"
 
@@ -3009,7 +3014,7 @@ msgstr "出力するベクトルマップ名　<%s>　は無効です"
 msgid "Output vector map <%s> is used as input"
 msgstr "出力したベクトルマップ <%s> は入力として使われます"
 
-#: ../lib/vector/Vlib/read_ogr.c:115 ../lib/vector/Vlib/read_ogr.c:376
+#: ../lib/vector/Vlib/read_ogr.c:115 ../lib/vector/Vlib/read_ogr.c:375
 #: ../lib/vector/Vlib/build_ogr.c:318
 #, c-format
 msgid "OGR feature type %d not supported"
@@ -3019,7 +3024,7 @@ msgstr "OGRフィーチャタイプ %d はサポートされません"
 msgid "OGR feature without ID"
 msgstr "IDなしのOGRフィーチャ"
 
-#: ../lib/vector/Vlib/read_ogr.c:317
+#: ../lib/vector/Vlib/read_ogr.c:316
 #, fuzzy, c-format
 msgid "OGR feature type '%s' not supported"
 msgstr "OGRフィーチャタイプ %d はサポートされません"
@@ -3512,76 +3517,6 @@ msgstr "ヘッドにおいて破損した行: %s"
 #, fuzzy, c-format
 msgid "Unknown keyword '%s' in vector head"
 msgstr "ベクトルヘッドにおける不明なキーワード %s"
-
-#: ../lib/vector/Vlib/header.c:315
-msgid "Point"
-msgstr ""
-
-#: ../lib/vector/Vlib/header.c:317
-msgid "MultiPoint"
-msgstr ""
-
-#: ../lib/vector/Vlib/header.c:319
-msgid "LineString"
-msgstr ""
-
-#: ../lib/vector/Vlib/header.c:321
-msgid "MultiLineString"
-msgstr ""
-
-#: ../lib/vector/Vlib/header.c:323
-msgid "Polygon"
-msgstr ""
-
-#: ../lib/vector/Vlib/header.c:325
-msgid "MultiPolygon"
-msgstr ""
-
-#: ../lib/vector/Vlib/header.c:327
-msgid "GeometryCollection"
-msgstr ""
-
-#: ../lib/vector/Vlib/header.c:329
-#, fuzzy
-msgid "None"
-msgstr "無し"
-
-#: ../lib/vector/Vlib/header.c:331
-msgid "LinearRing"
-msgstr ""
-
-#: ../lib/vector/Vlib/header.c:333
-msgid "3D Point"
-msgstr ""
-
-#: ../lib/vector/Vlib/header.c:335
-msgid "3D MultiPoint"
-msgstr ""
-
-#: ../lib/vector/Vlib/header.c:337
-msgid "3D LineString"
-msgstr ""
-
-#: ../lib/vector/Vlib/header.c:339
-msgid "3D MultiLineString"
-msgstr ""
-
-#: ../lib/vector/Vlib/header.c:341
-msgid "3D Polygon"
-msgstr ""
-
-#: ../lib/vector/Vlib/header.c:343
-msgid "3D MultiPolygon"
-msgstr ""
-
-#: ../lib/vector/Vlib/header.c:345
-msgid "3D GeometryCollection"
-msgstr ""
-
-#: ../lib/vector/Vlib/header.c:347
-#, fuzzy
-msgid "Unknown"
-msgstr "不明"
 
 #: ../lib/vector/Vlib/read.c:111
 #, c-format
@@ -4139,7 +4074,7 @@ msgstr ""
 msgid "OGR datasource not defined"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_ogr.c:64 ../lib/vector/Vlib/write_ogr.c:302
+#: ../lib/vector/Vlib/open_ogr.c:64 ../lib/vector/Vlib/write_ogr.c:321
 msgid "OGR layer not defined"
 msgstr ""
 
@@ -4412,67 +4347,67 @@ msgstr "配列されていないフィーチャー %d は無視されました"
 msgid "OGR feature %d without ID ignored"
 msgstr ""
 
-#: ../lib/vector/Vlib/write_ogr.c:79
+#: ../lib/vector/Vlib/write_ogr.c:80
 #, fuzzy, c-format
 msgid "No category defined for layer %d"
 msgstr "データベース接続はレイヤー %d に定義されていません"
 
-#: ../lib/vector/Vlib/write_ogr.c:81
+#: ../lib/vector/Vlib/write_ogr.c:82
 #, c-format
 msgid "Feature has more categories, using category %d (from layer %d)"
 msgstr ""
 
-#: ../lib/vector/Vlib/write_ogr.c:100
+#: ../lib/vector/Vlib/write_ogr.c:102
 msgid "Feature is not a point. Skipping."
 msgstr ""
 
-#: ../lib/vector/Vlib/write_ogr.c:108
+#: ../lib/vector/Vlib/write_ogr.c:110
 msgid "Feature is not a line. Skipping."
 msgstr ""
 
-#: ../lib/vector/Vlib/write_ogr.c:115
+#: ../lib/vector/Vlib/write_ogr.c:117
 msgid "Feature is not a polygon. Skipping."
 msgstr ""
 
-#: ../lib/vector/Vlib/write_ogr.c:122
+#: ../lib/vector/Vlib/write_ogr.c:124
 msgid "Feature is not a face. Skipping."
 msgstr ""
 
-#: ../lib/vector/Vlib/write_ogr.c:128
+#: ../lib/vector/Vlib/write_ogr.c:130
 #, fuzzy, c-format
 msgid "Unsupported feature type (%d)"
 msgstr "���"
 
-#: ../lib/vector/Vlib/write_ogr.c:144
+#: ../lib/vector/Vlib/write_ogr.c:146
 msgid "Boundary is not closed. Skipping."
 msgstr ""
 
-#: ../lib/vector/Vlib/write_ogr.c:258
+#: ../lib/vector/Vlib/write_ogr.c:271 ../lib/vector/Vlib/write_ogr.c:298
 #, fuzzy
 msgid "Unable to rewrite feature (incompatible feature types)"
 msgstr "�������: ����� �����������n"
 
-#: ../lib/vector/Vlib/write_ogr.c:409
+#: ../lib/vector/Vlib/write_ogr.c:428
 #, fuzzy, c-format
 msgid "Feature without category of layer %d"
 msgstr "配列されていないフィーチャー %d は無視されました"
 
-#: ../lib/vector/Vlib/write_ogr.c:423
+#: ../lib/vector/Vlib/write_ogr.c:442
 #, fuzzy, c-format
 msgid "Unable to select attributes for category %d"
 msgstr "����� ���� ���\n"
 
-#: ../lib/vector/Vlib/write_ogr.c:428 ../lib/db/dbmi_client/copy_tab.c:314
+#: ../lib/vector/Vlib/write_ogr.c:447 ../lib/db/dbmi_client/copy_tab.c:314
 #, c-format
 msgid "Unable to fetch data from table <%s>"
 msgstr "テーブル <%s> からデータをフェッチできません"
 
-#: ../lib/vector/Vlib/write_ogr.c:433
+#: ../lib/vector/Vlib/write_ogr.c:452
 #, fuzzy, c-format
 msgid "No database record for category %d, no attributes will be written"
 msgstr "cat %d のデータベースレコードは見つかりませんでした"
 
-#: ../lib/vector/Vlib/write_ogr.c:466
+#: ../lib/vector/Vlib/write_ogr.c:485
 #, fuzzy, c-format
 msgid "Unable to create field <%s>"
 msgstr "テーブル <%s> を作成できません"
@@ -4921,6 +4856,18 @@ msgstr ""
 msgid "Please recompile with Large File Support (LFS)"
 msgstr ""
 
+#: ../lib/init/prompt.py:20
+msgid "[Raster and Volume MASKs present]"
+msgstr ""
+
+#: ../lib/init/prompt.py:22
+msgid "[Raster MASK present]"
+msgstr ""
+
+#: ../lib/init/prompt.py:24
+msgid "[Volume MASK present]"
+msgstr ""
+
 #: ../lib/init/lock.c:38
 #, c-format
 msgid "Usage: %s file pid"
@@ -4978,7 +4925,7 @@ msgid "print GRASS configuration parameters"
 msgstr ""
 
 #: ../lib/init/grass.py:180
-msgid "options: arch,build,compiler,path"
+msgid "options: arch,build,compiler,path,revision"
 msgstr ""
 
 #: ../lib/init/grass.py:182
@@ -5217,36 +5164,36 @@ msgstr ""
 msgid "When ready to quit enter:"
 msgstr ""
 
-#: ../lib/init/grass.py:845
+#: ../lib/init/grass.py:846
 #, fuzzy, python-format
 msgid "Failed to start shell '%s'"
 msgstr "ドライバー <%s> をスタートできません"
 
-#: ../lib/init/grass.py:849
+#: ../lib/init/grass.py:850
 #, python-format
 msgid "Batch job '%s' (defined in GRASS_BATCH_JOB variable) was executed."
 msgstr ""
 
-#: ../lib/init/grass.py:850 ../lib/init/grass.py:855
+#: ../lib/init/grass.py:851 ../lib/init/grass.py:856
 msgid "Goodbye from GRASS GIS"
 msgstr ""
 
-#: ../lib/init/grass.py:853
+#: ../lib/init/grass.py:854
 #, fuzzy
 msgid "Done."
 msgstr "無し"
 
-#: ../lib/init/grass.py:859
+#: ../lib/init/grass.py:860
 #, fuzzy
 msgid "Cleaning up temporary files..."
 msgstr "一時ファイルが開けません"
 
-#: ../lib/init/grass.py:893
+#: ../lib/init/grass.py:902
 #, fuzzy, python-format
 msgid "Parameter <%s> not supported"
 msgstr "OGRフィーチャタイプ %d はサポートされません"
 
-#: ../lib/init/grass.py:1031
+#: ../lib/init/grass.py:1040
 #, python-format
 msgid ""
 "Unable to start GRASS. You can:\n"
@@ -5256,11 +5203,11 @@ msgid ""
 "path/to/location/mapset`)"
 msgstr ""
 
-#: ../lib/init/grass.py:1040
+#: ../lib/init/grass.py:1049
 msgid "Starting GRASS GIS..."
 msgstr ""
 
-#: ../lib/init/grass.py:1097
+#: ../lib/init/grass.py:1106
 #, python-format
 msgid "Launching '%s' GUI in the background, please wait..."
 msgstr ""
@@ -5733,6 +5680,153 @@ msgstr ""
 msgid "html: type '%s'"
 msgstr ""
 
+#: ../lib/python/temporal/core.py:100
+#, fuzzy, python-format
+msgid "Wrong increment format: %s"
+msgstr "  フォーマット: %s\n"
+
+#: ../lib/python/temporal/space_time_datasets.py:568
+msgid "Valid end time and increment are mutual exclusive"
+msgstr ""
+
+#: ../lib/python/temporal/space_time_datasets.py:676
+#, python-format
+msgid "Set absolute valid time for map <%s> to %s - %s"
+msgstr ""
+
+#: ../lib/python/temporal/space_time_datasets.py:690
+#, fuzzy, python-format
+msgid "Set relative valid time for map <%s> to %f - %s"
+msgstr "ベクトルマップ <%s> を <%s> にコピーできません"
+
+#: ../lib/python/temporal/abstract_datasets.py:250
+msgid "Start time must be of type datetime"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_datasets.py:253
+msgid "End time must be of type datetime"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_datasets.py:257
+#, fuzzy
+msgid "End time must be later than start time"
+msgstr "東は西より大きくないといけません"
+
+#: ../lib/python/temporal/abstract_datasets.py:298
+#, fuzzy
+msgid "End time must be greater than start time"
+msgstr "東は西より大きくないといけません"
+
+#: ../lib/python/temporal/abstract_datasets.py:362
+#, fuzzy, python-format
+msgid "Unable to remove space time dataset register table <%s>"
+msgstr "テーブル <%s> からデータをフェッチできません"
+
+#: ../lib/python/temporal/abstract_datasets.py:364
+#, python-format
+msgid "Delete %s dataset <%s> from temporal database"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_datasets.py:378
+#, python-format
+msgid "Unregister %s dataset <%s> from space time datasets"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_datasets.py:426
+#, fuzzy, python-format
+msgid "Unable to select space time dataset register table <%s>"
+msgstr "テーブル <%s> からデータをフェッチできません"
+
+#: ../lib/python/temporal/abstract_datasets.py:476
+#, fuzzy, python-format
+msgid "Unknown temporal type \"%s\""
+msgstr "不明なベクトルタイプ"
+
+#: ../lib/python/temporal/abstract_datasets.py:598
+#, fuzzy, python-format
+msgid "Unable to get map ids from register table <%s>"
+msgstr "テーブル <%s> からデータをフェッチできません"
+
+#: ../lib/python/temporal/abstract_datasets.py:611
+#, python-format
+msgid "Delete space time %s  dataset <%s> from temporal database"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_datasets.py:633
+#: ../lib/python/temporal/abstract_datasets.py:719
+#: ../lib/python/temporal/abstract_datasets.py:758
+#, fuzzy, python-format
+msgid "Unable to drop table <%s>"
+msgstr "テーブル <%s> をコピーできません"
+
+#: ../lib/python/temporal/abstract_datasets.py:660
+msgid "Only maps with absolute or relative valid time can be registered"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_datasets.py:662
+#, fuzzy, python-format
+msgid "Register %s map <%s> in space time %s dataset <%s>"
+msgstr "ラスターマップ <%s> マップセット内に見つかりません <%s>"
+
+#: ../lib/python/temporal/abstract_datasets.py:681
+msgid "Only maps from the same mapset can be registered"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_datasets.py:690
+#, python-format
+msgid "Map <%s> is already registered."
+msgstr ""
+
+#: ../lib/python/temporal/abstract_datasets.py:724
+#: ../lib/python/temporal/abstract_datasets.py:763
+#, fuzzy, python-format
+msgid "Unable to create the space time %s dataset register table for <%s>"
+msgstr "���"
+
+#: ../lib/python/temporal/abstract_datasets.py:731
+#, fuzzy, python-format
+msgid "Created register table <%s> for %s map <%s>"
+msgstr "マップに量子化ルールを書き込めません %s"
+
+#: ../lib/python/temporal/abstract_datasets.py:786
+#, python-format
+msgid "Created register table <%s> for space time %s  dataset <%s>"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_datasets.py:824
+#, fuzzy, python-format
+msgid "Unable to find map <%s> in temporal database"
+msgstr "<%s> にベクトルマップ <%s> を見つけられません"
+
+#: ../lib/python/temporal/abstract_datasets.py:826
+#, fuzzy, python-format
+msgid "Unregister %s map <%s>"
+msgstr "ラスターマップ <%s> をロードしています..."
+
+#: ../lib/python/temporal/abstract_datasets.py:843
+#, fuzzy, python-format
+msgid "Map <%s> is not registered in space time dataset"
+msgstr "���"
+
+#: ../lib/python/temporal/abstract_datasets.py:873
+#, python-format
+msgid ""
+"Update metadata, spatial and temporal extent from all registered maps of <%s>"
+msgstr ""
+
+#: ../lib/python/temporal/spatial_extent.py:38
+msgid ""
+"Projections are different. Unable to compute overlap_2d for spatial extents"
+msgstr ""
+
+#: ../lib/python/temporal/spatial_extent.py:161
+msgid "Volume computation is not supported for LL projections"
+msgstr ""
+
+#: ../lib/python/temporal/spatial_extent.py:178
+msgid "Area computation is not supported for LL projections"
+msgstr ""
+
 #: ../lib/python/task.py:52
 #, fuzzy
 msgid "unknown"
@@ -5758,7 +5852,7 @@ msgstr ""
 msgid "<required>"
 msgstr "要求: %s\n"
 
-#: ../lib/python/task.py:433 ../lib/python/task.py:437
+#: ../lib/python/task.py:433
 #, python-format
 msgid ""
 "Unable to fetch interface description for command '%(cmd)s'.\n"
@@ -5771,13 +5865,17 @@ msgstr ""
 msgid "Database connection not defined for layer %s"
 msgstr "データベース接続はレイヤー %d に定義されていません"
 
-#: ../lib/python/vector.py:188
+#: ../lib/python/vector.py:230
 #, fuzzy, python-format
 msgid "Missing layer %(layer)d in vector map <%(map)s>"
 msgstr "ベクトルマップ <%s> をロードできません"
 
-#: ../lib/python/vector.py:204
+#: ../lib/python/vector.py:246
 msgid "vector_select() failed"
+msgstr ""
+
+#: ../lib/python/raster3d.py:86
+msgid "An error occurred while running r3.mapcalc"
 msgstr ""
 
 #: ../lib/python/core.py:724
@@ -6562,6 +6660,14 @@ msgstr "グループ <%s> のサブグループ <%s> は空です\n"
 msgid "subgroup <%s> of group <%s> references the following raster maps\n"
 msgstr "グループ <%s> のサブグループ <%s> は次のラスターマップを参照します\n"
 
+#, fuzzy
+#~ msgid "None"
+#~ msgstr "無し"
+
+#, fuzzy
+#~ msgid "Unknown"
+#~ msgstr "不明"
+
 #~ msgid "projection field missing"
 #~ msgstr "投影フィールドが見つかりません"
 
@@ -7017,9 +7123,6 @@ msgstr "グループ <%s> のサブグループ <%s> は次のラスターマッ
 #~ msgid "Cannot write quant rules: map %s is integer"
 #~ msgstr "量子化ルールを書き込めません: マップ %s は整数です"
 
-#~ msgid "Cannot write quant rules for map %s"
-#~ msgstr "マップに量子化ルールを書き込めません %s"
-
 #~ msgid "G_put_map_row: %s is not integer! Use G_put_[f/d]_raster_row()!"
 #~ msgstr ""
 #~ "G_put_map_row: %s は整数ではありません!  G_put_[f/d]_raster_row()を使用し"
@@ -7107,9 +7210,6 @@ msgstr "グループ <%s> のサブグループ <%s> は次のラスターマッ
 
 #~ msgid "     key: %s\n"
 #~ msgstr "     キー: %s\n"
-
-#~ msgid "  format: %s\n"
-#~ msgstr "  フォーマット: %s\n"
 
 #~ msgid " default: %s\n"
 #~ msgstr " デフォルト: %s\n"

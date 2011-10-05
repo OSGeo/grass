@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Grass 6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-04 19:10+0200\n"
+"POT-Creation-Date: 2011-10-05 23:30+0200\n"
 "PO-Revision-Date: 2005-06-02 18:00+0530\n"
 "Last-Translator: Swapnil Hajare <dreamil@gmail.com>\n"
 "Language-Team: Marathi <www.janabhaaratii.org.in>\n"
@@ -75,9 +75,11 @@ msgstr ""
 #: ../raster3d/r3.in.v5d/main.c:192 ../raster3d/r3.stats/main.c:568
 #: ../raster3d/r3.out.v5d/main.c:286 ../raster/r.colors.out/raster3d_main.c:46
 #: ../raster/r.to.rast3elev/main.c:362 ../raster/r.univar/r3.univar_main.c:99
-#: ../raster/r.colors/edit_colors.c:56 ../display/d.nviz/main.c:71
-#: ../visualization/nviz/src/nvizMain.c:73
-#: ../visualization/nviz2/cmd/main.c:52
+#: ../raster/r.colors/edit_colors.c:56 ../misc/m.nviz.image/main.c:53
+#: ../misc/m.nviz.script/main.c:71 ../visualization/nviz/src/nvizMain.c:73
+#: ../locale/scriptstrings/t.time.abs_to_translate.c:6
+#: ../locale/scriptstrings/tr3.unregister_to_translate.c:3
+#: ../locale/scriptstrings/t.time.rel_to_translate.c:6
 #, fuzzy
 msgid "raster3d"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
@@ -374,10 +376,10 @@ msgstr ""
 #: ../raster/r.random/main.c:51 ../raster/r.los/main.c:93
 #: ../raster/r.gwflow/main.c:205 ../raster/r.statistics2/main.c:101
 #: ../raster/r.profile/main.c:50 ../raster/r.buffer/main.c:66
-#: ../raster/r.series/main.c:130 ../raster/r.usler/main.c:51
+#: ../raster/r.series/main.c:133 ../raster/r.usler/main.c:51
 #: ../raster/r.spread/main.c:102 ../raster/r.surf.idw2/main.c:61
 #: ../raster/r.in.png/main.c:519 ../raster/r.watershed/front/main.c:71
-#: ../raster/r.info/main.c:70 ../raster/r.surf.area/main.c:86
+#: ../raster/r.info/main.c:70 ../raster/r.surf.area/main.c:76
 #: ../raster/r.surf.fractal/main.c:38 ../raster/r.covar/main.c:51
 #: ../raster/r.statistics3/main.c:389 ../raster/r.rescale/main.c:48
 #: ../raster/r.solute.transport/main.c:229 ../raster/r.in.lidar/main.c:161
@@ -414,7 +416,7 @@ msgstr ""
 #: ../raster/r.external/main.c:55 ../raster/r.recode/main.c:48
 #: ../raster/r.volume/main.c:58 ../raster/r.distance/main.c:38
 #: ../raster/r.carve/main.c:74 ../raster/r.mode/main.c:54
-#: ../raster/r.report/main.c:65 ../raster/r.composite/main.c:72
+#: ../raster/r.report/main.c:66 ../raster/r.composite/main.c:72
 #: ../raster/r.spreadpath/main.c:89 ../raster/r.to.rast3/main.c:197
 #: ../raster/r.flow/main.c:421 ../raster/r.what.color/main.c:88
 #: ../raster/r.in.ascii/main.c:69 ../raster/r.what/main.c:91
@@ -428,28 +430,33 @@ msgstr ""
 #: ../display/d.rast.arrow/main.c:96 ../display/d.rgb/main.c:54
 #: ../display/d.colors/main.c:41 ../display/d.what.rast/main.c:49
 #: ../display/d.colortable/main.c:61 ../display/d.rast/main.c:54
-#: ../display/d.rast.num/main.c:72 ../display/d.nviz/main.c:70
-#: ../vector/v.sample/main.c:76 ../vector/v.to.rast/main.c:41
-#: ../vector/v.neighbors/main.c:50 ../vector/v.what.rast/main.c:81
-#: ../visualization/nviz/src/nvizMain.c:72
-#: ../visualization/nviz2/cmd/main.c:50 ../visualization/ximgview/main.c:291
-#: ../doc/raster/r.example/main.c:83
+#: ../display/d.rast.num/main.c:72 ../vector/v.sample/main.c:76
+#: ../vector/v.to.rast/main.c:41 ../vector/v.neighbors/main.c:50
+#: ../vector/v.what.rast/main.c:81 ../misc/m.nviz.image/main.c:51
+#: ../misc/m.nviz.script/main.c:70 ../visualization/nviz/src/nvizMain.c:72
+#: ../visualization/ximgview/main.c:291 ../doc/raster/r.example/main.c:83
 #: ../locale/scriptstrings/i.spectral_to_translate.c:3
 #: ../locale/scriptstrings/r.buffer_to_translate.c:2
+#: ../locale/scriptstrings/tr.extract_to_translate.c:3
 #: ../locale/scriptstrings/r.plane_to_translate.c:2
+#: ../locale/scriptstrings/tr.register_to_translate.c:3
 #: ../locale/scriptstrings/v.krige_to_translate.c:3
 #: ../locale/scriptstrings/r.tileset_to_translate.c:2
+#: ../locale/scriptstrings/tr3.register_to_translate.c:3
 #: ../locale/scriptstrings/d.correlate_to_translate.c:3
 #: ../locale/scriptstrings/i.image.mosaic_to_translate.c:2
 #: ../locale/scriptstrings/r.blend_to_translate.c:2
 #: ../locale/scriptstrings/r.reclass.area_to_translate.c:2
 #: ../locale/scriptstrings/r.in.srtm_to_translate.c:2
+#: ../locale/scriptstrings/tr.series_to_translate.c:3
 #: ../locale/scriptstrings/r.mask_to_translate.c:2
 #: ../locale/scriptstrings/r.in.aster_to_translate.c:2
+#: ../locale/scriptstrings/t.time.abs_to_translate.c:4
 #: ../locale/scriptstrings/r.grow_to_translate.c:2
 #: ../locale/scriptstrings/v.rast.stats_to_translate.c:3
 #: ../locale/scriptstrings/r.out.xyz_to_translate.c:2
 #: ../locale/scriptstrings/i.landsat.rgb_to_translate.c:2
+#: ../locale/scriptstrings/tr.unregister_to_translate.c:3
 #: ../locale/scriptstrings/r.unpack_to_translate.c:2
 #: ../locale/scriptstrings/r.in.wms_to_translate.c:2
 #: ../locale/scriptstrings/r.colors.stddev_to_translate.c:2
@@ -458,6 +465,7 @@ msgstr ""
 #: ../locale/scriptstrings/r.shaded.relief_to_translate.c:2
 #: ../locale/scriptstrings/i.oif_to_translate.c:2
 #: ../locale/scriptstrings/wxpyimgview_to_translate.c:3
+#: ../locale/scriptstrings/t.time.rel_to_translate.c:4
 #: ../locale/scriptstrings/d.rast.edit_to_translate.c:3
 msgid "raster"
 msgstr ""
@@ -506,8 +514,8 @@ msgstr ""
 msgid "Open 3d raster map <%s>"
 msgstr ""
 
-#: ../raster3d/r3.retile/main.c:118 ../visualization/nviz2/cmd/volume.c:42
-#: ../visualization/nviz2/cmd/volume.c:125
+#: ../raster3d/r3.retile/main.c:118 ../misc/m.nviz.image/volume.c:42
+#: ../misc/m.nviz.image/volume.c:125
 #, fuzzy, c-format
 msgid "3d raster map <%s> not found"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
@@ -574,7 +582,7 @@ msgstr ""
 msgid "List of cell values to be set to NULL"
 msgstr ""
 
-#: ../raster3d/r3.null/main.c:69 ../raster/r.null/main.c:79
+#: ../raster3d/r3.null/main.c:69 ../raster/r.null/main.c:80
 msgid "The value to replace the null value by"
 msgstr ""
 
@@ -826,7 +834,7 @@ msgstr ""
 
 #: ../raster3d/r3.out.vtk/parameters.c:112 ../raster/r.out.ascii/main.c:86
 #: ../raster/r.out.vtk/parameters.c:108 ../display/d.rast.num/main.c:104
-#: ../vector/v.out.vtk/main.c:71 ../vector/v.out.ascii/args.c:61
+#: ../vector/v.out.vtk/main.c:71 ../vector/v.out.ascii/args.c:64
 msgid "Number of significant digits (floating point only)"
 msgstr ""
 
@@ -1084,14 +1092,14 @@ msgstr ""
 
 #: ../raster3d/r3.stats/main.c:569 ../raster/r.stats/main.c:103
 #: ../raster/r.quant/main.c:49 ../raster/r.mfilter/main.c:58
-#: ../raster/r.statistics2/main.c:102 ../raster/r.surf.area/main.c:88
+#: ../raster/r.statistics2/main.c:102 ../raster/r.surf.area/main.c:78
 #: ../raster/r.covar/main.c:52 ../raster/r.statistics3/main.c:390
 #: ../raster/r.univar/r.univar_main.c:97
 #: ../raster/r.univar/r3.univar_main.c:100 ../raster/r.cross/main.c:74
 #: ../raster/r.clump/main.c:47 ../raster/r.texture/main.c:103
 #: ../raster/r.statistics/main.c:56 ../raster/r.kappa/main.c:69
 #: ../raster/r.coin/main.c:67 ../raster/r.mode/main.c:56
-#: ../raster/r.report/main.c:66 ../raster/r.regression.line/main.c:44
+#: ../raster/r.report/main.c:67 ../raster/r.regression.line/main.c:44
 #: ../raster/r.support.stats/main.c:39 ../raster/r.neighbors/main.c:119
 #: ../raster/r.quantile/main.c:257 ../display/d.histogram/main.c:86
 #: ../vector/v.perturb/main.c:62 ../vector/v.random/main.c:86
@@ -1282,7 +1290,7 @@ msgstr ""
 #: ../locale/scriptstrings/g.extension_to_translate.c:11
 #: ../locale/scriptstrings/g.extension_to_translate.c:13
 #: ../locale/scriptstrings/g.extension_to_translate.c:15
-#: ../imagery/i.group/main.c:78 ../imagery/i.group/main.c:84
+#: ../imagery/i.group/main.c:80 ../imagery/i.group/main.c:86
 msgid "Print"
 msgstr ""
 
@@ -1646,7 +1654,7 @@ msgstr "तक्त्याचे नाव"
 msgid "Illegal east coordinate <%s>, skipping."
 msgstr "तक्त्याचे नाव"
 
-#: ../raster/r.in.poly/poly2rast.c:55 ../raster/r.in.lidar/main.c:591
+#: ../raster/r.in.poly/poly2rast.c:55 ../raster/r.in.lidar/main.c:592
 #: ../raster/r.in.xyz/main.c:531
 #, c-format
 msgid "Pass #%d (of %d) ..."
@@ -1668,23 +1676,23 @@ msgstr ""
 
 #: ../raster/r.contour/main.c:89 ../raster/r.random/main.c:53
 #: ../display/d.extract/main.c:50 ../display/d.what.vect/main.c:57
-#: ../display/d.nviz/main.c:72 ../display/d.vect/main.c:115
-#: ../vector/v.sample/main.c:75 ../vector/v.db.select/main.c:52
-#: ../vector/v.net.alloc/main.c:60 ../vector/v.net/main.c:45
-#: ../vector/v.out.svg/main.c:73 ../vector/v.net.visibility/main.c:45
-#: ../vector/v.to.db/main.c:36 ../vector/v.generalize/main.c:76
-#: ../vector/v.build/main.c:36 ../vector/v.in.ogr/main.c:121
-#: ../vector/v.to.rast3/main.c:48 ../vector/v.extract/main.c:78
-#: ../vector/v.in.db/main.c:52 ../vector/v.net.iso/main.c:72
-#: ../vector/v.net.salesman/main.c:104 ../vector/v.perturb/main.c:60
-#: ../vector/v.in.region/main.c:38 ../vector/v.net.distance/main.c:61
-#: ../vector/v.distance/main.c:118 ../vector/v.in.sites/main.c:57
-#: ../vector/v.random/main.c:85 ../vector/v.out.vtk/main.c:47
-#: ../vector/v.out.ascii/main.c:45 ../vector/v.net.allpairs/main.c:56
-#: ../vector/v.outlier/main.c:68 ../vector/v.label.sa/main.c:38
-#: ../vector/v.type/main.c:39 ../vector/v.in.dxf/main.c:64
-#: ../vector/v.qcount/main.c:60 ../vector/v.mkgrid/main.c:64
-#: ../vector/v.delaunay/main.c:85 ../vector/v.lrs/v.lrs.where/main.c:57
+#: ../display/d.vect/main.c:71 ../vector/v.sample/main.c:75
+#: ../vector/v.db.select/main.c:52 ../vector/v.net.alloc/main.c:60
+#: ../vector/v.net/main.c:45 ../vector/v.out.svg/main.c:73
+#: ../vector/v.net.visibility/main.c:45 ../vector/v.to.db/main.c:36
+#: ../vector/v.generalize/main.c:76 ../vector/v.build/main.c:36
+#: ../vector/v.in.ogr/main.c:121 ../vector/v.to.rast3/main.c:48
+#: ../vector/v.extract/main.c:78 ../vector/v.in.db/main.c:52
+#: ../vector/v.net.iso/main.c:72 ../vector/v.net.salesman/main.c:104
+#: ../vector/v.perturb/main.c:60 ../vector/v.in.region/main.c:38
+#: ../vector/v.net.distance/main.c:61 ../vector/v.distance/main.c:118
+#: ../vector/v.in.sites/main.c:57 ../vector/v.random/main.c:85
+#: ../vector/v.out.vtk/main.c:47 ../vector/v.out.ascii/main.c:45
+#: ../vector/v.net.allpairs/main.c:56 ../vector/v.outlier/main.c:68
+#: ../vector/v.label.sa/main.c:38 ../vector/v.type/main.c:39
+#: ../vector/v.in.dxf/main.c:64 ../vector/v.qcount/main.c:60
+#: ../vector/v.mkgrid/main.c:64 ../vector/v.delaunay/main.c:85
+#: ../vector/v.lrs/v.lrs.where/main.c:57
 #: ../vector/v.lrs/v.lrs.create/main.c:121
 #: ../vector/v.lrs/v.lrs.label/main.c:102
 #: ../vector/v.lrs/v.lrs.segment/main.c:70 ../vector/v.reclass/main.c:67
@@ -1696,7 +1704,7 @@ msgstr ""
 #: ../vector/v.net.timetable/main.c:260 ../vector/v.net.bridge/main.c:46
 #: ../vector/v.patch/main.c:68 ../vector/v.net.connectivity/main.c:53
 #: ../vector/v.kcv/main.c:67 ../vector/v.support/main.c:39
-#: ../vector/v.select/main.c:46 ../vector/v.voronoi/main.c:116
+#: ../vector/v.select/main.c:46 ../vector/v.voronoi/main.c:118
 #: ../vector/v.lidar.growing/main.c:75 ../vector/v.net.steiner/main.c:345
 #: ../vector/v.what/main.c:54 ../vector/v.transform/main.c:82
 #: ../vector/v.overlay/main.c:58 ../vector/v.class/main.c:44
@@ -1709,9 +1717,9 @@ msgstr ""
 #: ../vector/v.to.points/main.c:172 ../vector/v.in.ascii/main.c:48
 #: ../vector/v.external/main.c:48 ../vector/v.clean/main.c:46
 #: ../vector/v.clean/test/topocheck.c:42 ../vector/v.surf.idw/main.c:85
-#: ../vector/v.parallel/main.c:47 ../vector/v.buffer/main.c:192
+#: ../vector/v.parallel/main.c:47 ../vector/v.buffer/main.c:210
 #: ../vector/v.edit/main.c:55 ../vector/v.info/main.c:37
-#: ../vector/v.info/print.c:289 ../vector/v.extrude/main.c:69
+#: ../vector/v.info/print.c:290 ../vector/v.extrude/main.c:69
 #: ../vector/v.category/main.c:71 ../vector/v.surf.rst/main.c:142
 #: ../vector/v.lidar.correction/main.c:68 ../vector/v.net.centrality/main.c:96
 #: ../vector/v.db.connect/main.c:51 ../vector/v.out.pov/main.c:46
@@ -1719,21 +1727,22 @@ msgstr ""
 #: ../vector/v.neighbors/main.c:49 ../vector/v.colors/main.c:54
 #: ../vector/v.split/main.c:52 ../vector/v.what.rast/main.c:80
 #: ../vector/v.to.3d/main.c:37 ../vector/v.out.dxf/main.c:56
-#: ../vector/v.net.spanningtree/main.c:46
-#: ../visualization/nviz/src/nvizMain.c:74
-#: ../visualization/nviz2/cmd/main.c:51 ../visualization/ximgview/main.c:292
-#: ../doc/vector/v.example/main.c:50
+#: ../vector/v.net.spanningtree/main.c:46 ../misc/m.nviz.image/main.c:52
+#: ../misc/m.nviz.script/main.c:72 ../visualization/nviz/src/nvizMain.c:74
+#: ../visualization/ximgview/main.c:292 ../doc/vector/v.example/main.c:50
 #: ../locale/scriptstrings/v.convert.all_to_translate.c:2
 #: ../locale/scriptstrings/v.in.e00_to_translate.c:2
 #: ../locale/scriptstrings/v.krige_to_translate.c:2
 #: ../locale/scriptstrings/v.what.vect_to_translate.c:2
 #: ../locale/scriptstrings/v.report_to_translate.c:2
 #: ../locale/scriptstrings/v.db.update_to_translate.c:2
+#: ../locale/scriptstrings/tv.register_to_translate.c:3
 #: ../locale/scriptstrings/v.db.droprow_to_translate.c:2
 #: ../locale/scriptstrings/v.in.sites.all_to_translate.c:3
 #: ../locale/scriptstrings/v.db.reconnect.all_to_translate.c:2
 #: ../locale/scriptstrings/v.db.renamecolumn_to_translate.c:2
 #: ../locale/scriptstrings/v.in.lines_to_translate.c:2
+#: ../locale/scriptstrings/t.time.abs_to_translate.c:5
 #: ../locale/scriptstrings/v.out.gps_to_translate.c:2
 #: ../locale/scriptstrings/d.vect.thematic_to_translate.c:3
 #: ../locale/scriptstrings/v.in.gns_to_translate.c:2
@@ -1744,11 +1753,13 @@ msgstr ""
 #: ../locale/scriptstrings/v.db.addcolumn_to_translate.c:2
 #: ../locale/scriptstrings/v.dissolve_to_translate.c:2
 #: ../locale/scriptstrings/v.centroids_to_translate.c:2
+#: ../locale/scriptstrings/tv.unregister_to_translate.c:3
 #: ../locale/scriptstrings/v.db.droptable_to_translate.c:2
 #: ../locale/scriptstrings/v.db.join_to_translate.c:2
 #: ../locale/scriptstrings/v.db.dropcolumn_to_translate.c:2
 #: ../locale/scriptstrings/v.db.addtable_to_translate.c:2
 #: ../locale/scriptstrings/v.in.wfs_to_translate.c:2
+#: ../locale/scriptstrings/t.time.rel_to_translate.c:5
 #: ../locale/scriptstrings/v.db.univar_to_translate.c:2
 msgid "vector"
 msgstr ""
@@ -1787,18 +1798,18 @@ msgid "Unable to read fp range of raster map <%s>"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
 #: ../raster/r.contour/main.c:161 ../raster/r.random/random.c:73
-#: ../raster/r.to.vect/main.c:166 ../display/d.vect.chart/plot.c:43
+#: ../raster/r.to.vect/main.c:168 ../display/d.vect.chart/plot.c:43
 #: ../display/d.thematic.area/plot1.c:111 ../display/d.vect/shape.c:37
 #: ../display/d.vect/attr.c:43 ../vector/v.sample/main.c:180
-#: ../vector/v.db.select/main.c:148 ../vector/v.db.select/main.c:279
-#: ../vector/v.out.svg/main.c:144 ../vector/v.to.db/update.c:46
-#: ../vector/v.to.db/query.c:89 ../vector/v.to.rast3/main.c:82
-#: ../vector/v.extract/main.c:259 ../vector/v.in.db/main.c:122
-#: ../vector/v.net.distance/main.c:213 ../vector/v.distance/main.c:419
-#: ../vector/v.distance/main.c:455 ../vector/v.in.sites/main.c:165
-#: ../vector/v.random/main.c:177 ../vector/v.net.allpairs/main.c:160
-#: ../vector/v.label.sa/labels.c:77 ../vector/v.in.dxf/write_vect.c:211
-#: ../vector/v.mkgrid/main.c:225 ../vector/v.lrs/v.lrs.create/main.c:288
+#: ../vector/v.db.select/main.c:148 ../vector/v.out.svg/main.c:144
+#: ../vector/v.to.db/update.c:46 ../vector/v.to.db/query.c:89
+#: ../vector/v.to.rast3/main.c:82 ../vector/v.extract/main.c:259
+#: ../vector/v.in.db/main.c:122 ../vector/v.net.distance/main.c:213
+#: ../vector/v.distance/main.c:419 ../vector/v.distance/main.c:455
+#: ../vector/v.in.sites/main.c:165 ../vector/v.random/main.c:177
+#: ../vector/v.net.allpairs/main.c:160 ../vector/v.label.sa/labels.c:77
+#: ../vector/v.in.dxf/write_vect.c:211 ../vector/v.mkgrid/main.c:225
+#: ../vector/v.lrs/v.lrs.create/main.c:288
 #: ../vector/v.lrs/v.lrs.create/main.c:296 ../vector/v.reclass/main.c:130
 #: ../vector/v.out.ogr/main.c:570 ../vector/v.surf.bspline/main.c:362
 #: ../vector/v.surf.bspline/crosscorr.c:118 ../vector/v.in.dwg/main.c:212
@@ -1813,15 +1824,15 @@ msgstr "'%s'. ड्राइवर चालू होत नाही"
 #: ../vector/v.label/main.c:277 ../vector/v.to.rast/vect2rast.c:53
 #: ../vector/v.to.rast/support.c:132 ../vector/v.to.rast/support.c:284
 #: ../vector/v.to.points/main.c:283 ../vector/v.in.ascii/main.c:316
-#: ../vector/v.surf.idw/read_sites.c:41 ../vector/v.buffer/main.c:348
-#: ../vector/v.edit/select.c:521 ../vector/v.info/print.c:146
+#: ../vector/v.surf.idw/read_sites.c:41 ../vector/v.buffer/main.c:376
+#: ../vector/v.edit/select.c:521 ../vector/v.info/print.c:147
 #: ../vector/v.extrude/main.c:171 ../vector/v.surf.rst/main.c:573
 #: ../vector/v.net.centrality/main.c:243 ../vector/v.db.connect/main.c:221
 #: ../vector/v.db.connect/main.c:329 ../vector/v.net.components/main.c:173
 #: ../vector/v.drape/main.c:250 ../vector/v.colors/scan_attr.c:31
 #: ../vector/v.colors/write_rgb.c:25 ../vector/v.what.rast/main.c:133
 #: ../vector/v.to.3d/trans3.c:56 ../vector/v.to.3d/trans2.c:54
-#: ../visualization/nviz2/cmd/vector.c:252 ../doc/vector/v.example/main.c:131
+#: ../misc/m.nviz.image/vector.c:252 ../doc/vector/v.example/main.c:131
 #: ../ps/ps.map/catval.c:54 ../ps/ps.map/catval.c:116
 #: ../ps/ps.map/catval.c:182
 #, fuzzy, c-format
@@ -1832,7 +1843,7 @@ msgstr "'%s'. ड्राइवर चालू होत नाही"
 #: ../vector/v.net.distance/main.c:225 ../vector/v.distance/main.c:981
 #: ../vector/v.net.allpairs/main.c:172 ../vector/v.in.dwg/main.c:237
 #: ../vector/v.net.timetable/main.c:103 ../vector/v.overlay/main.c:462
-#: ../vector/v.convert/att.c:81 ../vector/v.in.lidar/main.c:596
+#: ../vector/v.convert/att.c:81 ../vector/v.in.lidar/main.c:597
 #: ../vector/v.net.flow/main.c:180 ../vector/v.net.path/path.c:109
 #: ../vector/v.to.points/main.c:293 ../vector/v.surf.rst/main.c:579
 #: ../vector/v.net.centrality/main.c:263 ../vector/v.net.components/main.c:183
@@ -1842,20 +1853,20 @@ msgstr "'%s'. ड्राइवर चालू होत नाही"
 
 #: ../raster/r.contour/main.c:177 ../vector/v.in.ogr/main.c:878
 #: ../vector/v.in.sites/main.c:176 ../vector/v.in.dxf/write_vect.c:240
-#: ../vector/v.reclass/main.c:227 ../vector/v.in.dwg/main.c:241
-#: ../vector/v.convert/att.c:86 ../vector/v.in.lidar/main.c:601
+#: ../vector/v.reclass/main.c:300 ../vector/v.in.dwg/main.c:241
+#: ../vector/v.convert/att.c:86 ../vector/v.in.lidar/main.c:602
 #: ../vector/v.to.points/main.c:298 ../vector/v.in.ascii/main.c:504
 #, fuzzy, c-format
 msgid "Unable to create index for table <%s>, key <%s>"
 msgstr "डेटाबेसची यादी दाखवता येणार नाही"
 
-#: ../raster/r.contour/main.c:182 ../raster/r.to.vect/main.c:211
+#: ../raster/r.contour/main.c:182 ../raster/r.to.vect/main.c:218
 #: ../vector/v.sample/main.c:196 ../vector/v.in.ogr/main.c:884
 #: ../vector/v.distance/main.c:986 ../vector/v.in.sites/main.c:181
 #: ../vector/v.random/main.c:206 ../vector/v.in.dxf/write_vect.c:237
-#: ../vector/v.mkgrid/main.c:251 ../vector/v.reclass/main.c:232
+#: ../vector/v.mkgrid/main.c:251 ../vector/v.reclass/main.c:305
 #: ../vector/v.in.dwg/main.c:246 ../vector/v.overlay/main.c:472
-#: ../vector/v.convert/att.c:91 ../vector/v.in.lidar/main.c:607
+#: ../vector/v.convert/att.c:91 ../vector/v.in.lidar/main.c:608
 #: ../vector/v.to.points/main.c:304 ../vector/v.in.ascii/main.c:394
 #, fuzzy, c-format
 msgid "Unable to grant privileges on table <%s>"
@@ -2133,9 +2144,9 @@ msgstr ""
 #: ../raster/r.profile/main.c:146 ../raster/r.category/main.c:178
 #: ../raster/r.out.arc/main.c:129 ../raster/r.recode/main.c:89
 #: ../general/g.pnmcomp/main.c:241 ../general/g.pnmcomp/main.c:258
-#: ../general/g.transform/main.c:281 ../display/d.nviz/main.c:201
 #: ../vector/v.net/main.c:98 ../vector/v.out.vtk/main.c:167
 #: ../vector/v.out.ascii/main.c:99 ../vector/v.edit/main.c:76
+#: ../misc/m.nviz.script/main.c:201 ../misc/m.transform/main.c:281
 #, fuzzy, c-format
 msgid "Unable to open file <%s>"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
@@ -2152,7 +2163,7 @@ msgstr "'%s'. ड्राइवर चालू होत नाही"
 
 #: ../raster/r.surf.gauss/main.c:39 ../raster/r.resamp.bspline/main.c:82
 #: ../raster/r.surf.idw/main.c:104 ../raster/r.surf.idw2/main.c:62
-#: ../raster/r.surf.area/main.c:87 ../raster/r.surf.fractal/main.c:39
+#: ../raster/r.surf.area/main.c:77 ../raster/r.surf.fractal/main.c:39
 #: ../raster/r.surf.random/main.c:37 ../raster/r.surf.contour/main.c:61
 #: ../raster/r.random.surface/main.c:59 ../vector/v.surf.bspline/main.c:91
 #: ../vector/v.vol.rst/main.c:241 ../vector/v.surf.idw/main.c:86
@@ -2409,9 +2420,9 @@ msgstr ""
 #: ../vector/v.lidar.edgedetection/main.c:213
 #: ../vector/v.lidar.growing/main.c:126 ../vector/v.convert/old2new.c:26
 #: ../vector/v.convert/att.c:31 ../vector/v.vect.stats/main.c:254
-#: ../vector/v.vect.stats/main.c:261 ../vector/v.edit/main.c:138
+#: ../vector/v.vect.stats/main.c:261 ../vector/v.edit/main.c:140
 #: ../vector/v.lidar.correction/main.c:178 ../vector/v.colors/main.c:191
-#: ../visualization/nviz2/cmd/vector.c:83 ../doc/vector/v.example/main.c:75
+#: ../misc/m.nviz.image/vector.c:83 ../doc/vector/v.example/main.c:75
 #, c-format
 msgid "Vector map <%s> not found"
 msgstr ""
@@ -2422,7 +2433,12 @@ msgstr ""
 
 #: ../raster/r.walk/main.c:447 ../raster/r.walk/main.c:452
 #: ../raster/r.walk/main.c:817 ../raster/r.cost/main.c:356
-#: ../raster/r.cost/main.c:673 ../raster/r.los/main.c:174
+#: ../raster/r.cost/main.c:673 ../raster/simwe/simlib/output.c:346
+#: ../raster/simwe/simlib/output.c:355 ../raster/simwe/simlib/output.c:386
+#: ../raster/simwe/simlib/output.c:395 ../raster/simwe/simlib/output.c:441
+#: ../raster/simwe/simlib/output.c:458 ../raster/simwe/simlib/output.c:480
+#: ../raster/simwe/simlib/output.c:519 ../raster/simwe/simlib/output.c:556
+#: ../raster/simwe/simlib/output.c:723 ../raster/r.los/main.c:174
 #: ../raster/r.los/main.c:180 ../raster/r.buffer/main.c:112
 #: ../raster/r.spread/main.c:358 ../raster/r.spread/main.c:361
 #: ../raster/r.spread/main.c:364 ../raster/r.spread/main.c:368
@@ -2430,12 +2446,12 @@ msgstr ""
 #: ../raster/r.info/main.c:120 ../raster/r.univar/r.univar_main.c:215
 #: ../raster/r.cross/main.c:110 ../raster/r.category/main.c:127
 #: ../raster/r.category/main.c:148 ../raster/r.colors/edit_colors.c:268
-#: ../raster/r.null/main.c:115 ../raster/r.mapcalc/map.c:506
+#: ../raster/r.null/main.c:121 ../raster/r.mapcalc/map.c:506
 #: ../raster/r.reclass/main.c:79 ../raster/r.kappa/main.c:144
 #: ../raster/r.kappa/stats.c:33 ../raster/r.kappa/stats.c:38
 #: ../raster/r.coin/main.c:127 ../raster/r.coin/main.c:129
 #: ../raster/r.distance/parse.c:64 ../raster/r.distance/parse.c:71
-#: ../raster/r.carve/main.c:164 ../raster/r.report/parse.c:244
+#: ../raster/r.carve/main.c:164 ../raster/r.report/parse.c:245
 #: ../raster/r.flow/io.c:65 ../raster/r.ros/main.c:291
 #: ../raster/r.ros/main.c:302 ../raster/r.ros/main.c:307
 #: ../raster/r.ros/main.c:312 ../raster/r.ros/main.c:317
@@ -2445,10 +2461,10 @@ msgstr ""
 #: ../general/g.region/main.c:787 ../general/g.region/main.c:795
 #: ../display/d.what.rast/main.c:118 ../display/d.what.rast/opencell.c:13
 #: ../vector/v.vol.rst/main.c:649 ../vector/v.colors/main.c:253
-#: ../visualization/nviz2/cmd/surface.c:50
-#: ../visualization/nviz2/cmd/surface.c:107 ../doc/raster/r.example/main.c:105
-#: ../imagery/i.gensigset/parse.c:42 ../imagery/i.gensig/parse.c:36
-#: ../imagery/i.group/main.c:202 ../imagery/i.group/main.c:241
+#: ../misc/m.nviz.image/surface.c:50 ../misc/m.nviz.image/surface.c:107
+#: ../doc/raster/r.example/main.c:105 ../imagery/i.gensigset/parse.c:42
+#: ../imagery/i.gensig/parse.c:36 ../imagery/i.group/main.c:204
+#: ../imagery/i.group/main.c:243
 #, c-format
 msgid "Raster map <%s> not found"
 msgstr ""
@@ -2663,14 +2679,14 @@ msgid ""
 msgstr ""
 
 #: ../raster/r.in.gdal/main.c:335 ../vector/v.in.ogr/main.c:515
-#: ../vector/v.in.lidar/main.c:351
+#: ../vector/v.in.lidar/main.c:341
 msgid ""
 "Unable to convert input map projection to GRASS format; cannot create new "
 "location."
 msgstr ""
 
 #: ../raster/r.in.gdal/main.c:341 ../general/g.proj/create.c:15
-#: ../vector/v.in.ogr/main.c:521 ../vector/v.in.lidar/main.c:357
+#: ../vector/v.in.ogr/main.c:521 ../vector/v.in.lidar/main.c:347
 #, fuzzy, c-format
 msgid "Location <%s> created"
 msgstr "तक्त्याचे नाव"
@@ -2681,16 +2697,16 @@ msgid ""
 "for checking"
 msgstr ""
 
-#: ../raster/r.in.gdal/main.c:370 ../raster/r.in.lidar/main.c:296
+#: ../raster/r.in.gdal/main.c:370 ../raster/r.in.lidar/main.c:297
 #: ../raster/r.external/proj.c:34 ../vector/v.in.ogr/main.c:551
-#: ../vector/v.in.lidar/main.c:390
+#: ../vector/v.in.lidar/main.c:380
 #, fuzzy
 msgid "Over-riding projection check"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../raster/r.in.gdal/main.c:381 ../raster/r.in.lidar/main.c:305
+#: ../raster/r.in.gdal/main.c:381 ../raster/r.in.lidar/main.c:306
 #: ../raster/r.external/proj.c:42 ../vector/v.in.ogr/main.c:560
-#: ../vector/v.in.lidar/main.c:399
+#: ../vector/v.in.lidar/main.c:389
 msgid ""
 "Projection of dataset does not appear to match current location.\n"
 "\n"
@@ -2704,10 +2720,10 @@ msgstr ""
 msgid "Dataset PROJ_INFO is:\n"
 msgstr ""
 
-#: ../raster/r.in.gdal/main.c:424 ../raster/r.in.lidar/main.c:321
-#: ../raster/r.in.lidar/main.c:328 ../raster/r.external/proj.c:85
+#: ../raster/r.in.gdal/main.c:424 ../raster/r.in.lidar/main.c:322
+#: ../raster/r.in.lidar/main.c:329 ../raster/r.external/proj.c:85
 #: ../vector/v.in.ogr/main.c:576 ../vector/v.in.ogr/main.c:583
-#: ../vector/v.in.lidar/main.c:415 ../vector/v.in.lidar/main.c:422
+#: ../vector/v.in.lidar/main.c:405 ../vector/v.in.lidar/main.c:412
 msgid "Import dataset PROJ_INFO is:\n"
 msgstr ""
 
@@ -2724,9 +2740,9 @@ msgid ""
 "'location' parameter.\n"
 msgstr ""
 
-#: ../raster/r.in.gdal/main.c:454 ../raster/r.in.lidar/main.c:379
+#: ../raster/r.in.gdal/main.c:454 ../raster/r.in.lidar/main.c:380
 #: ../raster/r.external/proj.c:115 ../vector/v.in.ogr/main.c:634
-#: ../vector/v.in.lidar/main.c:473
+#: ../vector/v.in.lidar/main.c:463
 msgid "Projection of input dataset and current location appear to match"
 msgstr ""
 
@@ -2851,7 +2867,8 @@ msgstr ""
 #: ../raster/r.slope.aspect/main.c:256 ../raster/r.slope.aspect/main.c:262
 #: ../raster/r.resamp.rst/main.c:224 ../raster/r.resamp.rst/main.c:232
 #: ../raster/r.resamp.rst/main.c:240 ../raster/r.resamp.rst/main.c:248
-#: ../raster/r.resamp.rst/main.c:256 ../general/g.mapset/main.c:57
+#: ../raster/r.resamp.rst/main.c:256 ../general/g.access/main.c:50
+#: ../general/g.access/main.c:58 ../general/g.mapset/main.c:57
 #: ../general/g.mapset/main.c:67 ../general/g.mapset/main.c:77
 #: ../display/d.mon/main.c:69 ../display/d.mon/main.c:76
 #: ../display/d.mon/main.c:79 ../display/d.mon/main.c:85
@@ -3216,10 +3233,10 @@ msgstr "'%s'. ड्राइवर चालू होत नाही"
 #: ../vector/v.delaunay/main.c:125 ../vector/v.surf.bspline/main.c:322
 #: ../vector/v.hull/main.c:106 ../vector/v.lidar.edgedetection/main.c:241
 #: ../vector/v.net.timetable/main.c:360 ../vector/v.net.bridge/main.c:119
-#: ../vector/v.net.connectivity/main.c:138 ../vector/v.voronoi/main.c:159
+#: ../vector/v.net.connectivity/main.c:138 ../vector/v.voronoi/main.c:161
 #: ../vector/v.net.flow/main.c:149 ../vector/v.net.flow/main.c:155
-#: ../vector/v.net.path/main.c:135 ../vector/v.buffer/main.c:334
-#: ../vector/v.edit/main.c:106 ../vector/v.surf.rst/main.c:712
+#: ../vector/v.net.path/main.c:135 ../vector/v.buffer/main.c:352
+#: ../vector/v.edit/main.c:108 ../vector/v.surf.rst/main.c:712
 #: ../vector/v.lidar.correction/main.c:205
 #: ../vector/v.lidar.correction/main.c:211
 #: ../vector/v.net.centrality/main.c:215 ../vector/v.net.components/main.c:148
@@ -3516,13 +3533,14 @@ msgstr "'%s'. ड्राइवर चालू होत नाही"
 msgid "Raster map <%s> not found in current mapset"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../raster/r.support/main.c:180 ../raster/r.in.xyz/main.c:475
-#: ../raster/r.mapcalc/main.c:91 ../raster/r.in.mat/main.c:130
-#: ../raster/r.in.arc/main.c:125 ../general/g.cairocomp/main.c:45
-#: ../display/d.where/main.c:162 ../display/d.linegraph/main.c:200
-#: ../display/d.linegraph/main.c:211 ../display/d.linegraph/main.c:346
-#: ../display/d.text/main.c:371 ../vector/v.lrs/v.lrs.segment/main.c:132
-#: ../vector/v.segment/main.c:87 ../vector/v.net.path/path.c:49
+#: ../raster/r.support/main.c:180 ../raster/r.series/main.c:199
+#: ../raster/r.in.xyz/main.c:475 ../raster/r.mapcalc/main.c:91
+#: ../raster/r.in.mat/main.c:130 ../raster/r.in.arc/main.c:125
+#: ../general/g.cairocomp/main.c:45 ../display/d.where/main.c:162
+#: ../display/d.linegraph/main.c:200 ../display/d.linegraph/main.c:211
+#: ../display/d.linegraph/main.c:346 ../display/d.text/main.c:371
+#: ../vector/v.lrs/v.lrs.segment/main.c:132 ../vector/v.segment/main.c:87
+#: ../vector/v.net.path/path.c:49
 #, fuzzy, c-format
 msgid "Unable to open input file <%s>"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
@@ -3680,10 +3698,10 @@ msgstr "तक्त्याचे नाव"
 msgid "Interpolating raster map <%s> (%d rows)..."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../raster/r.surf.idw/main.c:707 ../raster/r.series/main.c:190
-#: ../raster/r.surf.idw2/read_cell.c:27 ../raster/r.out.mpeg/main.c:285
-#: ../raster/r.colors/stats.c:36 ../raster/r.grow.distance/main.c:250
-#: ../ps/ps.map/ps_raster.c:102
+#: ../raster/r.surf.idw/main.c:707 ../raster/r.series/main.c:243
+#: ../raster/r.series/main.c:268 ../raster/r.surf.idw2/read_cell.c:27
+#: ../raster/r.out.mpeg/main.c:285 ../raster/r.colors/stats.c:36
+#: ../raster/r.grow.distance/main.c:250 ../ps/ps.map/ps_raster.c:102
 #, fuzzy, c-format
 msgid "Reading raster map <%s>..."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
@@ -3755,7 +3773,7 @@ msgstr ""
 msgid "Output field separator"
 msgstr ""
 
-#: ../raster/r.stats/main.c:136 ../raster/r.report/parse.c:92
+#: ../raster/r.stats/main.c:136 ../raster/r.report/parse.c:95
 msgid "Number of fp subranges to collect stats from"
 msgstr ""
 
@@ -3803,7 +3821,7 @@ msgstr ""
 msgid "Report for cats fp ranges (fp maps only)"
 msgstr ""
 
-#: ../raster/r.stats/main.c:200 ../raster/r.report/parse.c:128
+#: ../raster/r.stats/main.c:200 ../raster/r.report/parse.c:129
 msgid "Read fp map as integer (use map's quant rules)"
 msgstr ""
 
@@ -3820,7 +3838,7 @@ msgstr "'%s'. ड्राइवर चालू होत नाही"
 msgid "'%s' must be greater than zero; using %s=255"
 msgstr ""
 
-#: ../raster/r.stats/main.c:261 ../raster/r.series/main.c:182
+#: ../raster/r.stats/main.c:261 ../raster/r.series/main.c:260
 #, fuzzy
 msgid "Raster map not found"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
@@ -3932,10 +3950,10 @@ msgstr ""
 #: ../vector/v.perturb/main.c:61 ../vector/v.in.region/main.c:39
 #: ../vector/v.type/main.c:40 ../vector/v.mkgrid/main.c:65
 #: ../vector/v.delaunay/main.c:86 ../vector/v.hull/main.c:51
-#: ../vector/v.patch/main.c:69 ../vector/v.voronoi/main.c:117
+#: ../vector/v.patch/main.c:69 ../vector/v.voronoi/main.c:119
 #: ../vector/v.overlay/main.c:59 ../vector/v.build.polylines/main.c:112
 #: ../vector/v.segment/main.c:55 ../vector/v.to.points/main.c:173
-#: ../vector/v.parallel/main.c:48 ../vector/v.buffer/main.c:193
+#: ../vector/v.parallel/main.c:48 ../vector/v.buffer/main.c:211
 #: ../vector/v.edit/main.c:57 ../vector/v.extrude/main.c:70
 #: ../vector/v.drape/main.c:141 ../vector/v.split/main.c:53
 #: ../vector/v.to.3d/main.c:38
@@ -4660,7 +4678,7 @@ msgid "Converting units to meters, factor=%.6f"
 msgstr ""
 
 #: ../raster/r.slope.aspect/main.c:544 ../raster/r.patch/main.c:119
-#: ../raster/r.series/main.c:231
+#: ../raster/r.series/main.c:310
 msgid "Percent complete..."
 msgstr ""
 
@@ -4674,52 +4692,52 @@ msgstr "'%s'. ड्राइवर चालू होत नाही"
 msgid "Min computed aspect %.4f, max computed aspect %.4f"
 msgstr ""
 
-#: ../raster/r.slope.aspect/main.c:1050
+#: ../raster/r.slope.aspect/main.c:1051
 #, fuzzy, c-format
 msgid "Aspect raster map <%s> complete"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../raster/r.slope.aspect/main.c:1107
+#: ../raster/r.slope.aspect/main.c:1108
 #, c-format
 msgid "Min computed slope %.4f, max computed slope %.4f"
 msgstr ""
 
-#: ../raster/r.slope.aspect/main.c:1159
+#: ../raster/r.slope.aspect/main.c:1161
 #, fuzzy, c-format
 msgid "Slope raster map <%s> complete"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../raster/r.slope.aspect/main.c:1230
+#: ../raster/r.slope.aspect/main.c:1233
 #, fuzzy, c-format
 msgid "Profile curve raster map <%s> complete"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../raster/r.slope.aspect/main.c:1256
+#: ../raster/r.slope.aspect/main.c:1260
 #, fuzzy, c-format
 msgid "Tangential curve raster map <%s> complete"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../raster/r.slope.aspect/main.c:1280
+#: ../raster/r.slope.aspect/main.c:1285
 #, fuzzy, c-format
 msgid "E-W slope raster map <%s> complete"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../raster/r.slope.aspect/main.c:1304
+#: ../raster/r.slope.aspect/main.c:1310
 #, fuzzy, c-format
 msgid "N-S slope raster map <%s> complete"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../raster/r.slope.aspect/main.c:1328
+#: ../raster/r.slope.aspect/main.c:1335
 #, fuzzy, c-format
 msgid "Dxx raster map <%s> complete"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../raster/r.slope.aspect/main.c:1352
+#: ../raster/r.slope.aspect/main.c:1360
 #, fuzzy, c-format
 msgid "Dyy raster map <%s> complete"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../raster/r.slope.aspect/main.c:1376
+#: ../raster/r.slope.aspect/main.c:1385
 #, fuzzy, c-format
 msgid "Dxy raster map <%s> complete"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
@@ -4801,20 +4819,20 @@ msgstr "'%s'. ड्राइवर चालू होत नाही"
 #: ../vector/v.net.timetable/main.c:354 ../vector/v.net.bridge/main.c:113
 #: ../vector/v.net.connectivity/main.c:132 ../vector/v.support/main.c:130
 #: ../vector/v.lidar.growing/main.c:138 ../vector/v.lidar.growing/main.c:142
-#: ../vector/v.net.flow/main.c:143 ../vector/v.buffer/main.c:330
-#: ../vector/v.edit/main.c:153 ../vector/v.info/main.c:60
+#: ../vector/v.net.flow/main.c:143 ../vector/v.buffer/main.c:348
+#: ../vector/v.edit/main.c:155 ../vector/v.info/main.c:60
 #: ../vector/v.surf.rst/main.c:535 ../vector/v.surf.rst/main.c:618
 #: ../vector/v.lidar.correction/main.c:182
 #: ../vector/v.net.centrality/main.c:209 ../vector/v.net.components/main.c:142
 #: ../vector/v.to.3d/main.c:73 ../vector/v.net.spanningtree/main.c:101
-#: ../visualization/nviz2/cmd/vector.c:244 ../doc/vector/v.example/main.c:87
+#: ../misc/m.nviz.image/vector.c:244 ../doc/vector/v.example/main.c:87
 #, fuzzy, c-format
 msgid "Unable to open vector map <%s>"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
 #: ../raster/r.cost/main.c:558 ../raster/r.cost/main.c:626
 #: ../display/d.vect/label.c:39 ../display/d.vect/dir.c:27
-#: ../display/d.vect/lines.c:134 ../display/d.vect/topo.c:49
+#: ../display/d.vect/lines.c:143 ../display/d.vect/topo.c:49
 #: ../display/d.vect/attr.c:52 ../vector/v.label.sa/labels.c:139
 #: ../vector/v.colors.out/scan_cats.c:30 ../vector/v.label/main.c:292
 #: ../vector/v.info/level1.c:37 ../vector/v.colors/scan_cats.c:23
@@ -5099,7 +5117,7 @@ msgstr "'%s'. ड्राइवर चालू होत नाही"
 #: ../raster/r.in.xyz/main.c:216 ../raster/r.topmodel/main.c:70
 #: ../raster/r.topmodel/main.c:78 ../raster/r.external/main.c:65
 #: ../raster/r.external/main.c:73 ../raster/r.external/main.c:82
-#: ../vector/v.edit/args.c:81 ../vector/v.edit/args.c:190
+#: ../vector/v.edit/args.c:83 ../vector/v.edit/args.c:192
 #, fuzzy
 msgid "Input"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
@@ -5418,6 +5436,11 @@ msgstr "'%s'. ड्राइवर चालू होत नाही"
 msgid "Unable to open observation logfile %s for writing"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
+#: ../raster/simwe/simlib/output.c:304 ../raster/simwe/simlib/output.c:312
+#, fuzzy, c-format
+msgid "FP raster map <%s> not found"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
 #: ../raster/r.to.rast3elev/main.c:99
 msgid "The number of input and elevation maps is not equal"
 msgstr ""
@@ -5550,7 +5573,7 @@ msgstr ""
 msgid "Filter radius (vertical)"
 msgstr ""
 
-#: ../raster/r.resamp.filter/main.c:424 ../raster/r.series/main.c:166
+#: ../raster/r.resamp.filter/main.c:424 ../raster/r.series/main.c:175
 #: ../raster/r.resamp.stats/main.c:283
 msgid "Propagate NULLs"
 msgstr ""
@@ -5668,8 +5691,8 @@ msgid "Do not build topology in points mode"
 msgstr ""
 
 #: ../raster/r.random/main.c:97 ../vector/v.out.ascii/args.c:33
-#: ../vector/v.out.ascii/args.c:52 ../vector/v.out.ascii/args.c:62
-#: ../vector/v.out.ascii/args.c:71 ../vector/v.out.ascii/args.c:77
+#: ../vector/v.out.ascii/args.c:55 ../vector/v.out.ascii/args.c:65
+#: ../vector/v.out.ascii/args.c:74 ../vector/v.out.ascii/args.c:80
 #: ../vector/v.in.ascii/main.c:83 ../vector/v.in.ascii/main.c:90
 #: ../vector/v.in.ascii/main.c:102 ../vector/v.in.ascii/main.c:112
 #: ../vector/v.in.ascii/main.c:122 ../vector/v.in.ascii/main.c:132
@@ -6108,7 +6131,7 @@ msgstr ""
 msgid "Endpoint coordinates are outside of current region settings"
 msgstr ""
 
-#: ../raster/r.buffer/main.c:67 ../vector/v.buffer/main.c:194
+#: ../raster/r.buffer/main.c:67 ../vector/v.buffer/main.c:212
 #: ../locale/scriptstrings/r.buffer_to_translate.c:3
 #, fuzzy
 msgid "buffer"
@@ -6168,32 +6191,59 @@ msgstr ""
 msgid "Unknown method <%s>"
 msgstr ""
 
-#: ../raster/r.series/main.c:131
+#: ../raster/r.series/main.c:134
 #, fuzzy
 msgid "series"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../raster/r.series/main.c:133
+#: ../raster/r.series/main.c:136
 msgid ""
 "Makes each output cell value a function of the values assigned to the "
 "corresponding cells in the input raster map layers."
 msgstr ""
 
-#: ../raster/r.series/main.c:147
+#: ../raster/r.series/main.c:145
+msgid "Input file with raster map names, separated by new lines"
+msgstr ""
+
+#: ../raster/r.series/main.c:156
 msgid "Aggregate operation"
 msgstr ""
 
-#: ../raster/r.series/main.c:154 ../raster/r.resamp.stats/main.c:277
+#: ../raster/r.series/main.c:163 ../raster/r.resamp.stats/main.c:277
 #: ../raster/r.neighbors/main.c:182
 #, fuzzy
 msgid "Quantile to calculate for method=quantile"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../raster/r.series/main.c:162
+#: ../raster/r.series/main.c:171
 msgid "Ignore values outside this range"
 msgstr ""
 
-#: ../raster/r.series/main.c:203
+#: ../raster/r.series/main.c:186
+msgid "input= and file= are mutually exclusive"
+msgstr ""
+
+#: ../raster/r.series/main.c:189
+#, fuzzy
+msgid "Please specify input= or file="
+msgstr "तक्त्याचे नाव"
+
+#: ../raster/r.series/main.c:210
+#, fuzzy, c-format
+msgid "Raster map <%s> is not valid"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../raster/r.series/main.c:220
+#, fuzzy
+msgid "No raster map name found in input file"
+msgstr "तक्त्याचे नाव"
+
+#: ../raster/r.series/main.c:249
+msgid "An internal error occured"
+msgstr ""
+
+#: ../raster/r.series/main.c:282
 msgid "output= and method= must have the same number of values"
 msgstr ""
 
@@ -7345,16 +7395,57 @@ msgstr ""
 msgid "Unable to read range file"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
+#: ../raster/r.surf.area/main.c:79
+#, fuzzy
+msgid "area estimation"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../raster/r.surf.area/main.c:80
+#, fuzzy
+msgid "Prints estimation of surface area for raster map."
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
 #: ../raster/r.surf.area/main.c:89
-msgid "Surface area estimation for rasters."
-msgstr ""
-
-#: ../raster/r.surf.area/main.c:97
-msgid "Raster file for surface"
-msgstr ""
-
-#: ../raster/r.surf.area/main.c:104
 msgid "Vertical scale"
+msgstr ""
+
+#: ../raster/r.surf.area/main.c:93
+#, fuzzy
+msgid "Output units"
+msgstr "पूर्ण तपशिल"
+
+#: ../raster/r.surf.area/main.c:94
+msgid "Default: square map units"
+msgstr ""
+
+#: ../raster/r.surf.area/main.c:102
+#, fuzzy, c-format
+msgid "Output in '%s'"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../raster/r.surf.area/main.c:106
+msgid "Output in 'square map units'"
+msgstr ""
+
+#: ../raster/r.surf.area/main.c:151
+msgid "Null value area ignored in calculation:"
+msgstr ""
+
+#: ../raster/r.surf.area/main.c:153
+#, fuzzy
+msgid "Plan area used in calculation:"
+msgstr "डेटाबेसचे स्थान"
+
+#: ../raster/r.surf.area/main.c:156
+msgid "Surface area calculation(low, high, avg):"
+msgstr ""
+
+#: ../raster/r.surf.area/main.c:161
+msgid "Current region plan area:"
+msgstr ""
+
+#: ../raster/r.surf.area/main.c:163
+msgid "Estimated region Surface Area:"
 msgstr ""
 
 #: ../raster/r.surf.fractal/main.c:40
@@ -7728,83 +7819,83 @@ msgstr ""
 msgid "Scan data file for extent then exit"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:244 ../raster/r.in.xyz/main.c:266
+#: ../raster/r.in.lidar/main.c:245 ../raster/r.in.xyz/main.c:266
 msgid "In scan mode, print using shell script style"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:263 ../vector/v.in.lidar/main.c:238
+#: ../raster/r.in.lidar/main.c:264 ../vector/v.in.lidar/main.c:239
 #, c-format
 msgid "Input file <%s> is not a LAS LiDAR point cloud"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:281 ../vector/v.in.ogr/main.c:536
-#: ../vector/v.in.lidar/main.c:372
+#: ../raster/r.in.lidar/main.c:282 ../vector/v.in.ogr/main.c:536
+#: ../vector/v.in.lidar/main.c:362
 msgid ""
 "Unable to convert input map projection information to GRASS format for "
 "checking"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:311 ../vector/v.in.ogr/main.c:566
-#: ../vector/v.in.lidar/main.c:405
+#: ../raster/r.in.lidar/main.c:312 ../vector/v.in.ogr/main.c:566
+#: ../vector/v.in.lidar/main.c:395
 msgid "GRASS LOCATION PROJ_INFO is:\n"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:371 ../vector/v.in.ogr/main.c:626
-#: ../vector/v.in.lidar/main.c:465
+#: ../raster/r.in.lidar/main.c:372 ../vector/v.in.ogr/main.c:626
+#: ../vector/v.in.lidar/main.c:455
 #, c-format
 msgid ""
 "\n"
 "You can use the -o flag to %s to override this projection check.\n"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:374 ../vector/v.in.ogr/main.c:629
-#: ../vector/v.in.lidar/main.c:468
+#: ../raster/r.in.lidar/main.c:375 ../vector/v.in.ogr/main.c:629
+#: ../vector/v.in.lidar/main.c:458
 msgid ""
 "Consider generating a new location with 'location' parameter from input data "
 "set.\n"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:391 ../raster/r.in.xyz/main.c:307
+#: ../raster/r.in.lidar/main.c:392 ../raster/r.in.xyz/main.c:307
 #, fuzzy
 msgid "Invalid zrange"
 msgstr "तक्त्याचे नाव"
 
-#: ../raster/r.in.lidar/main.c:485 ../raster/r.in.xyz/main.c:394
+#: ../raster/r.in.lidar/main.c:486 ../raster/r.in.xyz/main.c:394
 msgid "Unable to calculate percentile without the pth option specified!"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:497 ../raster/r.in.xyz/main.c:406
+#: ../raster/r.in.lidar/main.c:498 ../raster/r.in.xyz/main.c:406
 msgid "Unable to calculate trimmed mean without the trim option specified!"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:560 ../raster/r.in.xyz/main.c:488
+#: ../raster/r.in.lidar/main.c:561 ../raster/r.in.xyz/main.c:488
 msgid "zrange will not be taken into account during scan"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:579 ../raster/r.in.xyz/main.c:524
+#: ../raster/r.in.lidar/main.c:580 ../raster/r.in.xyz/main.c:524
 #, fuzzy
 msgid "Reading data ..."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../raster/r.in.lidar/main.c:596
+#: ../raster/r.in.lidar/main.c:597
 #, fuzzy
 msgid "Could not rewind input file"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../raster/r.in.lidar/main.c:757 ../raster/r.in.xyz/main.c:721
+#: ../raster/r.in.lidar/main.c:758 ../raster/r.in.xyz/main.c:721
 msgid "Writing to map ..."
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:1103 ../raster/r.in.xyz/main.c:1059
+#: ../raster/r.in.lidar/main.c:1104 ../raster/r.in.xyz/main.c:1059
 #, fuzzy, c-format
 msgid "%lu points found in region."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../raster/r.in.lidar/main.c:1127 ../raster/r.in.xyz/main.c:1086
+#: ../raster/r.in.lidar/main.c:1128 ../raster/r.in.xyz/main.c:1086
 msgid "Scanning data ..."
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:1178 ../raster/r.in.xyz/main.c:1174
+#: ../raster/r.in.lidar/main.c:1179 ../raster/r.in.xyz/main.c:1174
 #, c-format
 msgid "Range:     min         max\n"
 msgstr ""
@@ -7817,8 +7908,8 @@ msgstr ""
 msgid "projection"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../raster/r.proj/main.c:148 ../general/g.transform/main.c:321
-#: ../vector/v.proj/main.c:65 ../vector/v.transform/main.c:83
+#: ../raster/r.proj/main.c:148 ../vector/v.proj/main.c:65
+#: ../vector/v.transform/main.c:83 ../misc/m.transform/main.c:321
 #: ../locale/scriptstrings/i.tasscap_to_translate.c:3
 #, fuzzy
 msgid "transformation"
@@ -7944,6 +8035,7 @@ msgstr "'%s'. ड्राइवर चालू होत नाही"
 #: ../vector/v.net/args.c:127 ../vector/v.net/args.c:137
 #: ../vector/v.in.ogr/main.c:308 ../vector/v.proj/main.c:183
 #: ../vector/v.select/main.c:85 ../vector/v.external/main.c:66
+#: ../vector/v.edit/main.c:84
 #, c-format
 msgid "Required parameter <%s> not set"
 msgstr ""
@@ -8547,7 +8639,7 @@ msgstr ""
 
 #: ../raster/r.category/main.c:156 ../raster/r.category/main.c:212
 #: ../raster/r.mapcalc/map3.c:188 ../raster/r.mapcalc/map.c:216
-#: ../raster/r.report/parse.c:265
+#: ../raster/r.report/parse.c:266
 #, fuzzy, c-format
 msgid "Unable to read category file of raster map <%s@%s>"
 msgstr "डेटाबेसची यादी दाखवता येणार नाही"
@@ -8971,7 +9063,8 @@ msgstr "'%s'. ड्राइवर चालू होत नाही"
 msgid "Remove existing color table"
 msgstr ""
 
-#: ../raster/r.colors/edit_colors.c:99 ../vector/v.colors/main.c:108
+#: ../raster/r.colors/edit_colors.c:99 ../raster/r.null/main.c:107
+#: ../vector/v.colors/main.c:108
 #: ../locale/scriptstrings/r.mask_to_translate.c:10
 msgid "Remove"
 msgstr ""
@@ -9341,10 +9434,10 @@ msgstr ""
 #: ../raster/r.out.gdal/main.c:142 ../raster/r.out.gdal/main.c:184
 #: ../raster/r.out.gdal/main.c:195 ../raster/r.out.gdal/main.c:206
 #: ../raster/r.out.gdal/main.c:215 ../vector/v.out.ogr/args.c:40
-#: ../vector/v.out.ogr/args.c:58 ../vector/v.out.ogr/args.c:68
-#: ../vector/v.out.ogr/args.c:82 ../vector/v.out.ogr/args.c:95
-#: ../vector/v.out.ogr/args.c:101 ../vector/v.out.ogr/args.c:106
-#: ../vector/v.out.ogr/args.c:113
+#: ../vector/v.out.ogr/args.c:59 ../vector/v.out.ogr/args.c:69
+#: ../vector/v.out.ogr/args.c:83 ../vector/v.out.ogr/args.c:96
+#: ../vector/v.out.ogr/args.c:102 ../vector/v.out.ogr/args.c:107
+#: ../vector/v.out.ogr/args.c:114
 msgid "Creation"
 msgstr ""
 
@@ -9669,92 +9762,103 @@ msgid "Manages NULL-values of given raster map."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
 #: ../raster/r.null/main.c:64
-msgid "Raster map for which to edit null file"
+#, fuzzy
+msgid "Name of raster map for which to edit null values"
+msgstr "डेटाबेसची यादी दाखवता येणार नाही"
+
+#: ../raster/r.null/main.c:73 ../raster/r.null/main.c:81
+#: ../general/g.proj/main.c:178
+msgid "Modify"
 msgstr ""
 
-#: ../raster/r.null/main.c:83
+#: ../raster/r.null/main.c:85
 msgid "Only do the work if the map is floating-point"
 msgstr ""
 
-#: ../raster/r.null/main.c:87
+#: ../raster/r.null/main.c:86 ../raster/r.null/main.c:91
+#: ../raster/r.null/main.c:97
+msgid "Check"
+msgstr ""
+
+#: ../raster/r.null/main.c:90
 msgid "Only do the work if the map is integer"
 msgstr ""
 
-#: ../raster/r.null/main.c:92
+#: ../raster/r.null/main.c:96
 msgid "Only do the work if the map doesn't have a NULL-value bitmap file"
 msgstr ""
 
-#: ../raster/r.null/main.c:97
+#: ../raster/r.null/main.c:102
 msgid "Create NULL-value bitmap file validating all data cells"
 msgstr ""
 
-#: ../raster/r.null/main.c:101
+#: ../raster/r.null/main.c:106
 msgid "Remove NULL-value bitmap file"
 msgstr ""
 
-#: ../raster/r.null/main.c:119
+#: ../raster/r.null/main.c:125
 #, c-format
 msgid ""
 "Raster map <%s> is a reclass of map <%s@%s>. Consider to generate a copy "
 "with r.mapcalc. Exiting."
 msgstr ""
 
-#: ../raster/r.null/main.c:125
+#: ../raster/r.null/main.c:131
 #, fuzzy, c-format
 msgid "Raster map <%s> is not in your mapset <%s>"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../raster/r.null/main.c:132
+#: ../raster/r.null/main.c:138
 #, c-format
 msgid "%s is illegal entry for null"
 msgstr ""
 
-#: ../raster/r.null/main.c:139
+#: ../raster/r.null/main.c:145
 #, fuzzy, c-format
 msgid "Raster map <%s> already has a null bitmap file"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../raster/r.null/main.c:143
+#: ../raster/r.null/main.c:149
 #, fuzzy, c-format
 msgid "<%s> is integer raster map (CELL)"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../raster/r.null/main.c:147
+#: ../raster/r.null/main.c:153
 #, fuzzy, c-format
 msgid "<%s> is integer raster map (CELL). Using null=%d."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../raster/r.null/main.c:153
+#: ../raster/r.null/main.c:159
 #, fuzzy, c-format
 msgid "<%s> is floating pointing raster map"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../raster/r.null/main.c:169
+#: ../raster/r.null/main.c:175
 #, fuzzy, c-format
 msgid "Writing new null file for raster map <%s>..."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../raster/r.null/main.c:179 ../raster/r.null/main.c:192
+#: ../raster/r.null/main.c:185 ../raster/r.null/main.c:198
 #, fuzzy, c-format
 msgid "Raster map <%s> modified."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../raster/r.null/main.c:186
+#: ../raster/r.null/main.c:192
 #, fuzzy, c-format
 msgid "Removing null file for raster map <%s>..."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../raster/r.null/main.c:256
+#: ../raster/r.null/main.c:262
 #, fuzzy, c-format
 msgid "%s: %s: illegal value spec"
 msgstr "तक्त्याचे नाव"
 
-#: ../raster/r.null/main.c:258
+#: ../raster/r.null/main.c:264
 #, c-format
 msgid "%s: illegal value spec"
 msgstr ""
 
-#: ../raster/r.null/main.c:319
+#: ../raster/r.null/main.c:325
 #, fuzzy, c-format
 msgid "Writing new data for raster map <%s>..."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
@@ -9812,7 +9916,7 @@ msgstr "'%s'. ड्राइवर चालू होत नाही"
 msgid "Name of color file"
 msgstr ""
 
-#: ../raster/r.out.vrml/main.c:72 ../visualization/nviz2/cmd/args.c:552
+#: ../raster/r.out.vrml/main.c:72 ../misc/m.nviz.image/args.c:552
 msgid "Vertical exaggeration"
 msgstr ""
 
@@ -10780,20 +10884,24 @@ msgstr "'%s'. ड्राइवर चालू होत नाही"
 msgid "Converts a raster map into a vector map."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../raster/r.to.vect/main.c:87 ../vector/v.to.db/parse.c:39
-#: ../vector/v.net.bridge/main.c:96 ../vector/v.vect.stats/main.c:147
-msgid "Feature type"
+#: ../raster/r.to.vect/main.c:87
+#, fuzzy
+msgid "Name of attribute column to store value"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../raster/r.to.vect/main.c:88
+msgid "Name must be SQL compliant"
 msgstr ""
 
-#: ../raster/r.to.vect/main.c:91
+#: ../raster/r.to.vect/main.c:93
 msgid "Smooth corners of area features"
 msgstr ""
 
-#: ../raster/r.to.vect/main.c:96
+#: ../raster/r.to.vect/main.c:98
 msgid "Use raster values as categories instead of unique sequence (CELL only)"
 msgstr ""
 
-#: ../raster/r.to.vect/main.c:97 ../raster/r.to.vect/main.c:104
+#: ../raster/r.to.vect/main.c:99 ../raster/r.to.vect/main.c:106
 #: ../vector/v.in.ogr/main.c:209 ../vector/v.in.ogr/main.c:244
 #: ../vector/v.in.ogr/main.c:265 ../vector/v.extract/main.c:91
 #: ../vector/v.extract/main.c:143 ../vector/v.in.lidar/main.c:198
@@ -10803,27 +10911,35 @@ msgstr ""
 msgid "Attributes"
 msgstr "डेटाबेसची यादी दाखवता येणार नाही"
 
-#: ../raster/r.to.vect/main.c:102
-msgid ""
-"Write raster values as z coordinate. Table is not created. Currently "
-"supported only for points."
+#: ../raster/r.to.vect/main.c:103
+#, fuzzy
+msgid "Write raster values as z coordinate"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../raster/r.to.vect/main.c:104
+msgid "Table is not created. Currently supported only for points."
 msgstr ""
 
-#: ../raster/r.to.vect/main.c:109
-msgid "Do not build vector topology (recommended for massive point conversion)"
+#: ../raster/r.to.vect/main.c:110
+#, fuzzy
+msgid "Do not build vector topology"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../raster/r.to.vect/main.c:111
+msgid "Recommended for massive point conversion"
 msgstr ""
 
-#: ../raster/r.to.vect/main.c:119
+#: ../raster/r.to.vect/main.c:121
 msgid "z flag is supported only for points"
 msgstr ""
 
-#: ../raster/r.to.vect/main.c:129
+#: ../raster/r.to.vect/main.c:131
 msgid ""
 "Raster is not CELL, '-v' flag ignored, raster values will be written to the "
 "table."
 msgstr ""
 
-#: ../raster/r.to.vect/main.c:202 ../vector/v.in.sites/main.c:172
+#: ../raster/r.to.vect/main.c:209 ../vector/v.in.sites/main.c:172
 #: ../vector/v.random/main.c:195 ../vector/v.in.dxf/write_vect.c:232
 #: ../vector/v.mkgrid/main.c:243 ../vector/v.lrs/v.lrs.create/main.c:327
 #: ../vector/v.in.ascii/main.c:385
@@ -10831,20 +10947,20 @@ msgstr ""
 msgid "Unable to create table: %s"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../raster/r.to.vect/main.c:206 ../vector/v.mkgrid/main.c:247
+#: ../raster/r.to.vect/main.c:213 ../vector/v.mkgrid/main.c:247
 #: ../vector/v.overlay/main.c:467
 #, fuzzy
 msgid "Unable to create index"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../raster/r.to.vect/main.c:281
+#: ../raster/r.to.vect/main.c:288
 #, fuzzy, c-format
 msgid "Unable to insert into table: %s"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
 #: ../raster/r.to.vect/util.c:157 ../raster/r.to.vect/areas_io.c:370
 #: ../vector/v.in.ogr/main.c:978 ../vector/v.random/main.c:305
-#: ../vector/v.in.lidar/main.c:755
+#: ../vector/v.in.lidar/main.c:756
 #, c-format
 msgid "Cannot insert new row: %s"
 msgstr ""
@@ -11672,9 +11788,10 @@ msgstr "'%s'. ड्राइवर चालू होत नाही"
 msgid "reading r.stats output"
 msgstr ""
 
-#: ../raster/r.report/main.c:67
-msgid "Reports statistics for raster map layers."
-msgstr ""
+#: ../raster/r.report/main.c:68
+#, fuzzy
+msgid "Reports statistics for raster maps."
+msgstr "'%s'. ड्राइवर चालू होत नाही"
 
 #: ../raster/r.report/parse.c:38
 msgid "Raster map(s) to report on"
@@ -11690,32 +11807,45 @@ msgid ""
 "cover"
 msgstr ""
 
-#: ../raster/r.report/parse.c:57
+#: ../raster/r.report/parse.c:50 ../raster/r.report/parse.c:86
+#: ../ps/ps.map/main.c:101 ../ps/ps.map/main.c:114 ../ps/ps.map/main.c:136
+#, fuzzy
+msgid "Output settings"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../raster/r.report/parse.c:58
 msgid "Character representing no data cell value"
 msgstr ""
 
-#: ../raster/r.report/parse.c:58 ../raster/r.report/parse.c:67
-#: ../raster/r.report/parse.c:76 ../raster/r.report/parse.c:101
+#: ../raster/r.report/parse.c:59 ../raster/r.report/parse.c:68
+#: ../raster/r.report/parse.c:77 ../raster/r.report/parse.c:101
 #: ../raster/r.report/parse.c:106 ../raster/r.report/parse.c:111
 msgid "Formatting"
 msgstr ""
 
-#: ../raster/r.report/parse.c:64
+#: ../raster/r.report/parse.c:65
 #, c-format
 msgid "Page length (default: %d lines)"
 msgstr ""
 
-#: ../raster/r.report/parse.c:73
+#: ../raster/r.report/parse.c:74
 #, c-format
 msgid "Page width (default: %d characters)"
 msgstr ""
 
 #: ../raster/r.report/parse.c:83
-msgid "Name of an output file to hold the report"
-msgstr ""
+#, fuzzy
+msgid "Name for output file to hold the report"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../raster/r.report/parse.c:96 ../raster/r.bitpattern/main.c:89
-msgid "Quiet"
+#: ../raster/r.report/parse.c:85
+#, fuzzy
+msgid "If no output given report is printed to standard output"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../raster/r.report/parse.c:96 ../raster/r.report/parse.c:124
+#: ../raster/r.report/parse.c:130
+msgid "FP maps"
 msgstr ""
 
 #: ../raster/r.report/parse.c:100
@@ -11738,24 +11868,24 @@ msgstr ""
 msgid "Filter out cells where all maps have no data"
 msgstr ""
 
-#: ../raster/r.report/parse.c:171
+#: ../raster/r.report/parse.c:172
 msgid "nsteps has to be > 0; using nsteps=255"
 msgstr ""
 
-#: ../raster/r.report/parse.c:178
+#: ../raster/r.report/parse.c:179
 msgid "Illegal page length"
 msgstr ""
 
-#: ../raster/r.report/parse.c:185
+#: ../raster/r.report/parse.c:186
 msgid "Illegal page width"
 msgstr ""
 
-#: ../raster/r.report/parse.c:224
+#: ../raster/r.report/parse.c:225
 #, c-format
 msgid "Only %d unit%s allowed"
 msgstr ""
 
-#: ../raster/r.report/parse.c:257
+#: ../raster/r.report/parse.c:258
 #, fuzzy, c-format
 msgid "Unable to read fp range for raster map <%s>"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
@@ -12817,6 +12947,10 @@ msgstr ""
 msgid "Bit pattern value"
 msgstr ""
 
+#: ../raster/r.bitpattern/main.c:89
+msgid "Quiet"
+msgstr ""
+
 #: ../raster/r.quantile/main.c:63
 msgid "Computing histogram"
 msgstr ""
@@ -12834,15 +12968,15 @@ msgstr ""
 #: ../general/g.pnmcomp/main.c:281 ../general/g.message/main.c:33
 #: ../general/g.tempfile/main.c:38 ../general/g.pnmcat/main.c:121
 #: ../general/g.setproj/main.c:78 ../general/g.list/main.c:44
-#: ../general/g.transform/main.c:320 ../general/g.mapset/main.c:49
-#: ../general/g.mapsets/main.c:59 ../general/g.copy/main.c:41
-#: ../general/g.mremove/main.c:61 ../general/g.findetc/main.c:28
-#: ../general/g.ppmtopng/main.c:117 ../general/g.gisenv/main.c:38
-#: ../general/g.rename/main.c:43 ../general/g.filename/main.c:39
-#: ../general/g.mlist/main.c:62 ../general/g.region/main.c:63
-#: ../general/g.cairocomp/main.c:193 ../general/g.mkfontcap/main.c:70
-#: ../general/g.gui/main.c:36 ../general/g.remove/main.c:101
-#: ../general/g.findfile/main.c:38
+#: ../general/g.mapset/main.c:49 ../general/g.mapsets/main.c:59
+#: ../general/g.copy/main.c:41 ../general/g.mremove/main.c:61
+#: ../general/g.findetc/main.c:28 ../general/g.ppmtopng/main.c:117
+#: ../general/g.gisenv/main.c:38 ../general/g.rename/main.c:43
+#: ../general/g.filename/main.c:39 ../general/g.mlist/main.c:62
+#: ../general/g.region/main.c:63 ../general/g.cairocomp/main.c:193
+#: ../general/g.mkfontcap/main.c:70 ../general/g.gui/main.c:36
+#: ../general/g.remove/main.c:101 ../general/g.findfile/main.c:38
+#: ../misc/m.transform/main.c:320
 #: ../locale/scriptstrings/g.extension_to_translate.c:3
 #: ../locale/scriptstrings/g.manual_to_translate.c:2
 msgid "general"
@@ -12873,27 +13007,37 @@ msgstr ""
 msgid "Print info in shell script style"
 msgstr ""
 
-#: ../general/g.access/main.c:40
+#: ../general/g.access/main.c:39
+#, fuzzy
+msgid "permission"
+msgstr "डेटाबेसची यादी दाखवता येणार नाही"
+
+#: ../general/g.access/main.c:41
 msgid "Controls access to the current mapset for other users on the system."
 msgstr ""
 
-#: ../general/g.access/main.c:47
+#: ../general/g.access/main.c:42
+#, fuzzy
+msgid "If no option given, prints current status."
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../general/g.access/main.c:49
 msgid "Access for group"
 msgstr ""
 
-#: ../general/g.access/main.c:54
+#: ../general/g.access/main.c:57
 msgid "Access for others"
 msgstr ""
 
-#: ../general/g.access/main.c:60
+#: ../general/g.access/main.c:64
 msgid "UNIX filesystem access controls are not supported by MS-Windows"
 msgstr ""
 
-#: ../general/g.access/main.c:68
+#: ../general/g.access/main.c:72
 msgid "Access to the PERMANENT mapset must be open, nothing changed"
 msgstr ""
 
-#: ../general/g.access/main.c:72
+#: ../general/g.access/main.c:76
 #, fuzzy
 msgid "Unable to determine mapset permissions"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
@@ -13082,10 +13226,6 @@ msgstr ""
 msgid ""
 "Force override of datum transformation information in input co-ordinate "
 "system"
-msgstr ""
-
-#: ../general/g.proj/main.c:178
-msgid "Modify"
 msgstr ""
 
 #: ../general/g.proj/main.c:179
@@ -13592,6 +13732,7 @@ msgid "Unrecognized default value in proj-parms.table: %s"
 msgstr ""
 
 #: ../general/g.list/main.c:46 ../general/g.mlist/main.c:64
+#: ../locale/scriptstrings/t.list_to_translate.c:4
 msgid "list"
 msgstr ""
 
@@ -13601,87 +13742,6 @@ msgstr ""
 
 #: ../general/g.list/main.c:59 ../general/g.mlist/main.c:128
 msgid "Verbose listing (also list map titles)"
-msgstr ""
-
-#: ../general/g.transform/main.c:97
-#, c-format
-msgid "Not enough points, %d are required"
-msgstr ""
-
-#: ../general/g.transform/main.c:101
-#, fuzzy, c-format
-msgid "Error conducting transform (%d)"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../general/g.transform/main.c:199
-msgid "Poorly placed control points"
-msgstr ""
-
-#: ../general/g.transform/main.c:201
-msgid "Insufficient memory"
-msgstr ""
-
-#: ../general/g.transform/main.c:203
-msgid "Parameter error"
-msgstr ""
-
-#: ../general/g.transform/main.c:205
-msgid "No active control points"
-msgstr ""
-
-#: ../general/g.transform/main.c:300
-#, fuzzy, c-format
-msgid "Invalid coordinates: [%s]"
-msgstr "तक्त्याचे नाव"
-
-#: ../general/g.transform/main.c:322
-msgid "GCP"
-msgstr ""
-
-#: ../general/g.transform/main.c:324
-msgid "Computes a coordinate transformation based on the control points."
-msgstr ""
-
-#: ../general/g.transform/main.c:333
-msgid "Rectification polynomial order"
-msgstr ""
-
-#: ../general/g.transform/main.c:341
-msgid ""
-"idx;point index;src;source coordinates;dst;destination coordinates;fwd;"
-"forward coordinates (destination);rev;reverse coordinates (source);fxy;"
-"forward coordinates difference (destination);rxy;reverse coordinates "
-"difference (source);fd;forward error (destination);rd;reverse error (source)"
-msgstr ""
-
-#: ../general/g.transform/main.c:351 ../vector/v.out.ascii/args.c:48
-msgid "Output format"
-msgstr ""
-
-#: ../general/g.transform/main.c:355
-msgid "Display summary information"
-msgstr ""
-
-#: ../general/g.transform/main.c:361
-#, fuzzy
-msgid "File containing coordinates to transform (\"-\" to read from stdin)"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../general/g.transform/main.c:362
-msgid "Local x,y coordinates to target east,north"
-msgstr ""
-
-#: ../general/g.transform/main.c:366
-msgid "Reverse transform of coords file or coeff. dump"
-msgstr ""
-
-#: ../general/g.transform/main.c:367
-#, fuzzy
-msgid "Target east,north coordinates to local x,y"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../general/g.transform/main.c:371
-msgid "Display transform matrix coefficients"
 msgstr ""
 
 #: ../general/g.mapset/main.c:50 ../general/g.mapsets/main.c:60
@@ -13887,6 +13947,8 @@ msgid "<%s> already exists"
 msgstr ""
 
 #: ../general/g.mremove/main.c:63 ../general/g.remove/main.c:103
+#: ../locale/scriptstrings/t.info_to_translate.c:3
+#: ../locale/scriptstrings/t.remove_to_translate.c:4
 #, fuzzy
 msgid "remove"
 msgstr "डेटाबेसची यादी दाखवता येणार नाही"
@@ -14667,8 +14729,8 @@ msgstr "'%s'. ड्राइवर चालू होत नाही"
 #: ../display/d.graph/main.c:58 ../display/d.mon/main.c:37
 #: ../display/d.what.vect/main.c:56 ../display/d.text/main.c:139
 #: ../display/d.labels/main.c:43 ../display/d.rast/main.c:53
-#: ../display/d.rast.num/main.c:71 ../display/d.nviz/main.c:69
-#: ../display/d.zoom/main.c:61 ../display/d.vect/main.c:114
+#: ../display/d.rast.num/main.c:71 ../display/d.zoom/main.c:61
+#: ../display/d.vect/main.c:70 ../misc/m.nviz.script/main.c:69
 #: ../visualization/nviz/src/nvizMain.c:75
 #: ../visualization/ximgview/main.c:290
 #: ../locale/scriptstrings/d.correlate_to_translate.c:2
@@ -14711,7 +14773,7 @@ msgstr "'%s'. ड्राइवर चालू होत नाही"
 #: ../display/d.histogram/main.c:190 ../display/d.linegraph/main.c:258
 #: ../display/d.graph/main.c:101 ../display/d.text/main.c:291
 #: ../display/d.labels/main.c:117 ../display/d.rast/main.c:96
-#: ../display/d.rast.num/main.c:193 ../display/d.vect/main.c:372
+#: ../display/d.rast.num/main.c:193 ../display/d.vect/main.c:328
 msgid "No graphics device selected. Use d.mon to select graphics device."
 msgstr ""
 
@@ -14782,10 +14844,10 @@ msgstr ""
 
 #: ../display/d.rast.arrow/main.c:119 ../display/d.rast.arrow/main.c:128
 #: ../display/d.rast.arrow/main.c:137 ../display/d.rast.arrow/main.c:146
-#: ../display/d.vect/main.c:157 ../display/d.vect/main.c:167
-#: ../display/d.vect/main.c:174 ../display/d.vect/main.c:182
-#: ../display/d.vect/main.c:337 ../display/d.vect/main.c:343
-#: ../display/d.vect/main.c:357 ../vector/v.label.sa/main.c:103
+#: ../display/d.vect/main.c:113 ../display/d.vect/main.c:123
+#: ../display/d.vect/main.c:130 ../display/d.vect/main.c:138
+#: ../display/d.vect/main.c:293 ../display/d.vect/main.c:299
+#: ../display/d.vect/main.c:313 ../vector/v.label.sa/main.c:103
 #: ../vector/v.label.sa/main.c:113 ../vector/v.label.sa/main.c:120
 #: ../vector/v.label.sa/main.c:130 ../vector/v.label.sa/main.c:140
 #: ../vector/v.label.sa/main.c:150 ../vector/v.label.sa/main.c:157
@@ -15257,7 +15319,7 @@ msgid "Use a subset of the map range for the legend (min,max)"
 msgstr ""
 
 #: ../display/d.legend/main.c:160 ../display/d.text/main.c:219
-#: ../display/d.vect/main.c:294 ../vector/v.label/main.c:122
+#: ../display/d.vect/main.c:250 ../vector/v.label/main.c:122
 #, fuzzy
 msgid "Font name"
 msgstr "तक्त्याचे नाव"
@@ -15418,7 +15480,7 @@ msgstr ""
 #: ../vector/v.surf.bspline/crosscorr.c:109 ../vector/v.overlay/main.c:285
 #: ../vector/v.vect.stats/main.c:305 ../vector/v.vect.stats/main.c:381
 #: ../vector/v.to.rast/support.c:127 ../vector/v.to.rast/support.c:278
-#: ../vector/v.buffer/main.c:343 ../vector/v.edit/select.c:507
+#: ../vector/v.buffer/main.c:371 ../vector/v.edit/select.c:507
 #: ../vector/v.extrude/main.c:166 ../vector/v.drape/main.c:228
 #: ../vector/v.colors/scan_attr.c:26 ../vector/v.colors/write_rgb.c:20
 #: ../vector/v.what.rast/main.c:127 ../doc/vector/v.example/main.c:105
@@ -15657,8 +15719,8 @@ msgstr ""
 
 #: ../display/d.thematic.area/main.c:130 ../display/d.thematic.area/main.c:133
 #: ../display/d.rast/main.c:69 ../display/d.rast/main.c:86
-#: ../display/d.vect/main.c:142 ../display/d.vect/main.c:145
-#: ../display/d.vect/main.c:148 ../display/d.vect/main.c:351
+#: ../display/d.vect/main.c:98 ../display/d.vect/main.c:101
+#: ../display/d.vect/main.c:104 ../display/d.vect/main.c:307
 #: ../vector/v.in.ogr/main.c:144 ../vector/v.in.ogr/main.c:157
 #: ../vector/v.in.ogr/main.c:162 ../vector/v.in.ogr/main.c:171
 #: ../vector/v.in.ogr/main.c:184 ../vector/v.in.ogr/main.c:253
@@ -15671,18 +15733,18 @@ msgstr ""
 #: ../vector/v.net.allpairs/main.c:79 ../vector/v.net.allpairs/main.c:81
 #: ../vector/v.reclass/main.c:77 ../vector/v.reclass/main.c:82
 #: ../vector/v.out.ogr/args.c:19 ../vector/v.out.ogr/args.c:22
-#: ../vector/v.out.ogr/args.c:89 ../vector/v.select/args.c:16
+#: ../vector/v.out.ogr/args.c:90 ../vector/v.select/args.c:16
 #: ../vector/v.select/args.c:21 ../vector/v.select/args.c:30
 #: ../vector/v.select/args.c:35 ../vector/v.select/args.c:88
 #: ../vector/v.to.rast/main.c:53 ../vector/v.to.points/main.c:184
 #: ../vector/v.to.points/main.c:188 ../vector/v.clean/main.c:53
-#: ../vector/v.clean/main.c:55 ../vector/v.buffer/main.c:201
-#: ../vector/v.buffer/main.c:206 ../vector/v.edit/args.c:22
-#: ../vector/v.edit/args.c:25 ../vector/v.edit/args.c:103
-#: ../vector/v.edit/args.c:107 ../vector/v.edit/args.c:116
-#: ../vector/v.edit/args.c:125 ../vector/v.edit/args.c:134
-#: ../vector/v.edit/args.c:137 ../vector/v.edit/args.c:151
-#: ../vector/v.edit/args.c:180 ../vector/v.category/main.c:80
+#: ../vector/v.clean/main.c:55 ../vector/v.buffer/main.c:219
+#: ../vector/v.buffer/main.c:224 ../vector/v.edit/args.c:22
+#: ../vector/v.edit/args.c:27 ../vector/v.edit/args.c:105
+#: ../vector/v.edit/args.c:109 ../vector/v.edit/args.c:118
+#: ../vector/v.edit/args.c:127 ../vector/v.edit/args.c:136
+#: ../vector/v.edit/args.c:139 ../vector/v.edit/args.c:153
+#: ../vector/v.edit/args.c:182 ../vector/v.category/main.c:80
 #: ../vector/v.category/main.c:83 ../vector/v.category/main.c:87
 #: ../vector/v.surf.rst/main.c:177 ../vector/v.surf.rst/main.c:187
 #: ../vector/v.net.centrality/main.c:121 ../vector/v.net.centrality/main.c:123
@@ -16627,7 +16689,7 @@ msgstr "'%s'. ड्राइवर चालू होत नाही"
 msgid "Background color (for null)"
 msgstr ""
 
-#: ../display/d.rast/main.c:75 ../display/d.vect/main.c:261
+#: ../display/d.rast/main.c:75 ../display/d.vect/main.c:217
 msgid "Either a standard color name or R:G:B triplet"
 msgstr ""
 
@@ -16691,88 +16753,6 @@ msgstr ""
 
 #: ../display/d.rast.num/main.c:187
 msgid "Aborting."
-msgstr ""
-
-#: ../display/d.nviz/main.c:73 ../visualization/nviz/src/nvizMain.c:71
-#: ../visualization/nviz2/cmd/main.c:49 ../visualization/ximgview/main.c:293
-#, fuzzy
-msgid "visualization"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../display/d.nviz/main.c:74
-msgid "Creates fly-through script to run in NVIZ."
-msgstr ""
-
-#: ../display/d.nviz/main.c:79
-msgid "Name of output script"
-msgstr ""
-
-#: ../display/d.nviz/main.c:85
-msgid "Prefix of output images (default = NVIZ)"
-msgstr ""
-
-#: ../display/d.nviz/main.c:93
-msgid "Route coordinates (east,north)"
-msgstr ""
-
-#: ../display/d.nviz/main.c:99
-msgid "Camera layback distance (in map units)"
-msgstr ""
-
-#: ../display/d.nviz/main.c:105
-msgid "Camera height above terrain"
-msgstr ""
-
-#: ../display/d.nviz/main.c:111
-msgid "Number of frames"
-msgstr ""
-
-#: ../display/d.nviz/main.c:117
-msgid "Start frame number (default=0)"
-msgstr ""
-
-#: ../display/d.nviz/main.c:122
-msgid "Full render -- Save images"
-msgstr ""
-
-#: ../display/d.nviz/main.c:126
-msgid "Fly at constant elevation (ht)"
-msgstr ""
-
-#: ../display/d.nviz/main.c:131
-msgid "Include command in the script to output a KeyFrame file"
-msgstr ""
-
-#: ../display/d.nviz/main.c:135
-msgid "Render images off-screen"
-msgstr ""
-
-#: ../display/d.nviz/main.c:139
-msgid "Enable vector and sites drawing"
-msgstr ""
-
-#: ../display/d.nviz/main.c:147
-msgid "Either -i flag and/or route parameter must be used"
-msgstr ""
-
-#: ../display/d.nviz/main.c:171
-msgid "Off-screen only available with full render mode"
-msgstr ""
-
-#: ../display/d.nviz/main.c:249
-#, c-format
-msgid "You must provide at least four points %d"
-msgstr ""
-
-#: ../display/d.nviz/main.c:323
-#, c-format
-msgid "Created NVIZ script <%s>."
-msgstr ""
-
-#: ../display/d.nviz/main.c:439
-msgid ""
-"Skipping this point, selected point is outside region. Perhaps the camera "
-"setback distance puts it beyond the edge?"
 msgstr ""
 
 #: ../display/d.zoom/main.c:62
@@ -16875,20 +16855,20 @@ msgstr ""
 msgid "Right:  Quit\n"
 msgstr ""
 
-#: ../display/d.vect/label.c:28 ../display/d.vect/lines.c:196
+#: ../display/d.vect/label.c:28 ../display/d.vect/lines.c:206
 #, fuzzy
 msgid "Topology level required for drawing centroids for OGR layers"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../display/d.vect/main.c:116
+#: ../display/d.vect/main.c:72
 msgid "Displays user-specified vector map in the active graphics frame."
 msgstr ""
 
-#: ../display/d.vect/main.c:130
+#: ../display/d.vect/main.c:86
 msgid "Display"
 msgstr ""
 
-#: ../display/d.vect/main.c:131
+#: ../display/d.vect/main.c:87
 msgid ""
 "shape;Display geometry of features;cat;Display category numbers of features;"
 "topo;Display topology information (nodes, edges);dir;Display direction of "
@@ -16896,202 +16876,202 @@ msgid ""
 "Display z-coordinate of features (only for 3D vector maps)"
 msgstr ""
 
-#: ../display/d.vect/main.c:156
+#: ../display/d.vect/main.c:112
 #, fuzzy
 msgid "Feature color"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../display/d.vect/main.c:160 ../display/d.vect/main.c:170
-#: ../display/d.vect/main.c:271 ../display/d.vect/main.c:281
+#: ../display/d.vect/main.c:116 ../display/d.vect/main.c:126
+#: ../display/d.vect/main.c:227 ../display/d.vect/main.c:237
 msgid "Either a standard GRASS color, R:G:B triplet, or \"none\""
 msgstr ""
 
-#: ../display/d.vect/main.c:166
+#: ../display/d.vect/main.c:122
 msgid "Area fill color"
 msgstr ""
 
-#: ../display/d.vect/main.c:175
+#: ../display/d.vect/main.c:131
 msgid "Name of color definition column (for use with -a flag)"
 msgstr ""
 
-#: ../display/d.vect/main.c:180
+#: ../display/d.vect/main.c:136
 #, fuzzy
 msgid "Name of color table (for use with -z flag)"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../display/d.vect/main.c:189 ../display/d.vect/main.c:194
-#: ../display/d.vect/main.c:202
+#: ../display/d.vect/main.c:145 ../display/d.vect/main.c:150
+#: ../display/d.vect/main.c:158
 msgid "Lines"
 msgstr ""
 
-#: ../display/d.vect/main.c:190
+#: ../display/d.vect/main.c:146
 msgid "Line width"
 msgstr ""
 
-#: ../display/d.vect/main.c:195
+#: ../display/d.vect/main.c:151
 #, fuzzy
 msgid "Name of numeric column containing line width"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../display/d.vect/main.c:196
+#: ../display/d.vect/main.c:152
 msgid "These values will be scaled by width_scale"
 msgstr ""
 
-#: ../display/d.vect/main.c:203
+#: ../display/d.vect/main.c:159
 msgid "Scale factor for width_column"
 msgstr ""
 
-#: ../display/d.vect/main.c:211 ../display/d.vect/main.c:221
-#: ../display/d.vect/main.c:228 ../display/d.vect/main.c:234
-#: ../display/d.vect/main.c:365
+#: ../display/d.vect/main.c:167 ../display/d.vect/main.c:177
+#: ../display/d.vect/main.c:184 ../display/d.vect/main.c:190
+#: ../display/d.vect/main.c:321
 msgid "Symbols"
 msgstr ""
 
-#: ../display/d.vect/main.c:215
+#: ../display/d.vect/main.c:171
 msgid "Point and centroid symbol"
 msgstr ""
 
-#: ../display/d.vect/main.c:222
+#: ../display/d.vect/main.c:178
 msgid "Symbol size"
 msgstr ""
 
-#: ../display/d.vect/main.c:224
+#: ../display/d.vect/main.c:180
 msgid "When used with the size_column option this becomes the scale factor"
 msgstr ""
 
-#: ../display/d.vect/main.c:230
+#: ../display/d.vect/main.c:186
 #, fuzzy
 msgid "Name of numeric column containing symbol size"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../display/d.vect/main.c:236
+#: ../display/d.vect/main.c:192
 #, fuzzy
 msgid "Name of numeric column containing symbol rotation angle"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../display/d.vect/main.c:238
+#: ../display/d.vect/main.c:194
 msgid "Measured in degrees CCW from east"
 msgstr ""
 
-#: ../display/d.vect/main.c:244 ../display/d.vect/main.c:251
-#: ../display/d.vect/main.c:259 ../display/d.vect/main.c:267
-#: ../display/d.vect/main.c:277 ../display/d.vect/main.c:287
-#: ../display/d.vect/main.c:293 ../display/d.vect/main.c:299
-#: ../display/d.vect/main.c:305 ../display/d.vect/main.c:313
+#: ../display/d.vect/main.c:200 ../display/d.vect/main.c:207
+#: ../display/d.vect/main.c:215 ../display/d.vect/main.c:223
+#: ../display/d.vect/main.c:233 ../display/d.vect/main.c:243
+#: ../display/d.vect/main.c:249 ../display/d.vect/main.c:255
+#: ../display/d.vect/main.c:261 ../display/d.vect/main.c:269
 msgid "Labels"
 msgstr ""
 
-#: ../display/d.vect/main.c:246
+#: ../display/d.vect/main.c:202
 msgid "Layer number for labels (default: the given layer number)"
 msgstr ""
 
-#: ../display/d.vect/main.c:252
+#: ../display/d.vect/main.c:208
 msgid "Name of column to be displayed"
 msgstr ""
 
-#: ../display/d.vect/main.c:258
+#: ../display/d.vect/main.c:214
 msgid "Label color"
 msgstr ""
 
-#: ../display/d.vect/main.c:268
+#: ../display/d.vect/main.c:224
 msgid "Label background color"
 msgstr ""
 
-#: ../display/d.vect/main.c:278
+#: ../display/d.vect/main.c:234
 msgid "Label border color"
 msgstr ""
 
-#: ../display/d.vect/main.c:288
+#: ../display/d.vect/main.c:244
 msgid "Label size (pixels)"
 msgstr ""
 
-#: ../display/d.vect/main.c:300
+#: ../display/d.vect/main.c:256
 msgid "Text encoding"
 msgstr ""
 
-#: ../display/d.vect/main.c:308
+#: ../display/d.vect/main.c:264
 msgid "Label horizontal justification"
 msgstr ""
 
-#: ../display/d.vect/main.c:316
+#: ../display/d.vect/main.c:272
 msgid "Label vertical justification"
 msgstr ""
 
-#: ../display/d.vect/main.c:323
+#: ../display/d.vect/main.c:279
 msgid ""
 "Minimum region size (average from height and width) when map is displayed"
 msgstr ""
 
-#: ../display/d.vect/main.c:331
+#: ../display/d.vect/main.c:287
 msgid ""
 "Maximum region size (average from height and width) when map is displayed"
 msgstr ""
 
-#: ../display/d.vect/main.c:339
+#: ../display/d.vect/main.c:295
 msgid "Get colors from attribute table (see 'rgb_column' option)"
 msgstr ""
 
-#: ../display/d.vect/main.c:345
+#: ../display/d.vect/main.c:301
 msgid ""
 "Random colors according to category number (or layer number if 'layer=-1' is "
 "given)"
 msgstr ""
 
-#: ../display/d.vect/main.c:352
+#: ../display/d.vect/main.c:308
 msgid "Use values from 'cats' option as feature id"
 msgstr ""
 
-#: ../display/d.vect/main.c:356
+#: ../display/d.vect/main.c:312
 msgid "Colorize features according to z-coordinate (only for 3D vector maps)"
 msgstr ""
 
-#: ../display/d.vect/main.c:361
+#: ../display/d.vect/main.c:317
 msgid "Use square root of the value of size_column"
 msgstr ""
 
-#: ../display/d.vect/main.c:363
+#: ../display/d.vect/main.c:319
 msgid ""
 "This makes circle areas proportionate to the size_column values instead of "
 "circle radius"
 msgstr ""
 
-#: ../display/d.vect/main.c:383
+#: ../display/d.vect/main.c:339
 msgid "Region size is lower than minreg, nothing displayed"
 msgstr ""
 
-#: ../display/d.vect/main.c:391
+#: ../display/d.vect/main.c:347
 msgid "Region size is greater than maxreg, nothing displayed"
 msgstr ""
 
-#: ../display/d.vect/main.c:405
+#: ../display/d.vect/main.c:361
 msgid ""
 "The '-c' and '-a' flags cannot be used together, the '-c' flag will be "
 "ignored!"
 msgstr ""
 
-#: ../display/d.vect/main.c:427 ../display/d.vect/main.c:433
-#: ../vector/v.out.ascii/args.c:127
+#: ../display/d.vect/main.c:383 ../display/d.vect/main.c:389
+#: ../vector/v.out.ascii/args.c:130
 #, fuzzy, c-format
 msgid "Option <%s> must be > 0"
 msgstr "तक्त्याचे नाव"
 
-#: ../display/d.vect/main.c:437 ../vector/v.out.ascii/args.c:130
+#: ../display/d.vect/main.c:393 ../vector/v.out.ascii/args.c:133
 #, c-format
 msgid "%d errors in cat option"
 msgstr ""
 
-#: ../display/d.vect/main.c:453
+#: ../display/d.vect/main.c:409
 #, fuzzy
 msgid "Plotting..."
 msgstr "डेटाबेसची यादी दाखवता येणार नाही"
 
-#: ../display/d.vect/main.c:461
+#: ../display/d.vect/main.c:417
 #, fuzzy
 msgid ""
 "The bounding box of the map is outside the current region, nothing drawn"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../display/d.vect/main.c:524
+#: ../display/d.vect/main.c:480
 #, fuzzy
 msgid "Rendering failed"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
@@ -17108,39 +17088,39 @@ msgid ""
 "topology using v.build or v.build.all."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../display/d.vect/lines.c:77
-#, fuzzy
-msgid ""
-"Unable to display lines by id, topology not available. Please try to rebuild "
-"topology using v.build or v.build.all."
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../display/d.vect/lines.c:113 ../display/d.vect/lines.c:363
+#: ../display/d.vect/lines.c:107 ../display/d.vect/lines.c:373
 #, fuzzy, c-format
 msgid "Unable to read symbol <%s>, unable to display points"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../display/d.vect/lines.c:203
+#: ../display/d.vect/lines.c:121
+#, fuzzy
+msgid ""
+"Unable to display features by id, topology not available. Please try to "
+"rebuild topology using v.build or v.build.all."
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../display/d.vect/lines.c:213
 #, fuzzy, c-format
 msgid "%d points plotted"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../display/d.vect/lines.c:205
+#: ../display/d.vect/lines.c:215
 #, fuzzy, c-format
 msgid "%d lines plotted"
 msgstr "डेटाबेसची यादी दाखवता येणार नाही"
 
-#: ../display/d.vect/lines.c:207
+#: ../display/d.vect/lines.c:217
 #, fuzzy, c-format
 msgid "%d centroids plotted"
 msgstr "डेटाबेसची यादी दाखवता येणार नाही"
 
-#: ../display/d.vect/lines.c:209
+#: ../display/d.vect/lines.c:219
 #, fuzzy, c-format
 msgid "%d boundaries plotted"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../display/d.vect/lines.c:211
+#: ../display/d.vect/lines.c:221
 #, fuzzy, c-format
 msgid "%d faces plotted"
 msgstr "डेटाबेसची यादी दाखवता येणार नाही"
@@ -17251,8 +17231,7 @@ msgid "Sampled values will be multiplied by this factor"
 msgstr ""
 
 #: ../vector/v.sample/main.c:140 ../vector/v.reclass/main.c:125
-#: ../vector/v.surf.idw/read_sites.c:36
-#: ../visualization/nviz2/cmd/vector.c:247
+#: ../vector/v.surf.idw/read_sites.c:36 ../misc/m.nviz.image/vector.c:247
 #, c-format
 msgid "Database connection not defined for layer %s"
 msgstr ""
@@ -17296,8 +17275,8 @@ msgstr "'%s'. ड्राइवर चालू होत नाही"
 
 #: ../vector/v.sample/main.c:225 ../vector/v.sample/main.c:233
 #: ../vector/v.label.sa/labels.c:164 ../vector/v.vol.rst/user1.c:172
-#: ../vector/v.label/main.c:324 ../vector/v.buffer/main.c:429
-#: ../vector/v.buffer/main.c:500 ../vector/v.what.rast/main.c:304
+#: ../vector/v.label/main.c:324 ../vector/v.buffer/main.c:457
+#: ../vector/v.buffer/main.c:559 ../vector/v.what.rast/main.c:304
 #, fuzzy, c-format
 msgid "No record for category %d in table <%s>"
 msgstr "डेटाबेसची यादी दाखवता येणार नाही"
@@ -17306,7 +17285,7 @@ msgstr "डेटाबेसची यादी दाखवता येणा
 #: ../vector/v.surf.bspline/main.c:372
 #: ../vector/v.surf.bspline/crosscorr.c:128 ../vector/v.class/main.c:118
 #: ../vector/v.univar/main.c:151 ../vector/v.surf.idw/read_sites.c:51
-#: ../vector/v.buffer/main.c:364 ../vector/v.what.rast/main.c:155
+#: ../vector/v.buffer/main.c:392 ../vector/v.what.rast/main.c:155
 msgid "Column type not supported"
 msgstr ""
 
@@ -17405,7 +17384,7 @@ msgstr "'%s'. ड्राइवर चालू होत नाही"
 #: ../vector/v.db.select/main.c:142 ../vector/v.to.rast3/main.c:78
 #: ../vector/v.extract/main.c:251 ../vector/v.extract/main.c:358
 #: ../vector/v.select/main.c:138 ../vector/v.colors.out/make_colors.c:30
-#: ../vector/v.to.rast/vect2rast.c:48 ../vector/v.info/print.c:137
+#: ../vector/v.to.rast/vect2rast.c:48 ../vector/v.info/print.c:138
 #: ../vector/v.db.connect/main.c:211 ../vector/v.to.3d/trans3.c:49
 #: ../vector/v.to.3d/trans2.c:47
 #, c-format
@@ -17417,7 +17396,7 @@ msgstr ""
 msgid "Unable to open select cursor"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.db.select/main.c:190 ../vector/v.reclass/main.c:241
+#: ../vector/v.db.select/main.c:190 ../vector/v.reclass/main.c:250
 #, fuzzy, c-format
 msgid "Unable to fetch data from table <%s>"
 msgstr "डेटाबेसची यादी दाखवता येणार नाही"
@@ -17550,7 +17529,7 @@ msgstr "डेटाबेसची यादी दाखवता येणा
 #: ../vector/v.net/main.c:151 ../vector/v.type/main.c:149
 #: ../vector/v.proj/main.c:299 ../vector/v.kcv/main.c:147
 #: ../vector/v.transform/main.c:321 ../vector/v.build.polylines/main.c:225
-#: ../vector/v.clean/main.c:296 ../vector/v.category/main.c:550
+#: ../vector/v.clean/main.c:301 ../vector/v.category/main.c:550
 #, fuzzy
 msgid "Failed to copy attribute table to output map"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
@@ -17697,11 +17676,11 @@ msgid "Precision must not be higher than 15"
 msgstr ""
 
 #: ../vector/v.out.svg/main.c:150 ../vector/v.random/main.c:216
-#: ../vector/v.out.ogr/main.c:575 ../vector/v.patch/main.c:145
-#: ../vector/v.patch/main.c:183 ../vector/v.in.ascii/main.c:407
-#: ../vector/v.info/print.c:151 ../vector/v.db.connect/main.c:226
-#: ../vector/v.drape/main.c:256 ../doc/vector/v.example/main.c:137
-#: ../db/db.describe/main.c:63
+#: ../vector/v.reclass/main.c:177 ../vector/v.out.ogr/main.c:575
+#: ../vector/v.patch/main.c:145 ../vector/v.patch/main.c:183
+#: ../vector/v.in.ascii/main.c:407 ../vector/v.info/print.c:152
+#: ../vector/v.db.connect/main.c:226 ../vector/v.drape/main.c:256
+#: ../doc/vector/v.example/main.c:137 ../db/db.describe/main.c:63
 #, fuzzy, c-format
 msgid "Unable to describe table <%s>"
 msgstr "डेटाबेसची यादी दाखवता येणार नाही"
@@ -17819,6 +17798,11 @@ msgstr ""
 #, fuzzy
 msgid "Layer number or name (write to)"
 msgstr "डेटाबेसची यादी दाखवता येणार नाही"
+
+#: ../vector/v.to.db/parse.c:39 ../vector/v.net.bridge/main.c:96
+#: ../vector/v.vect.stats/main.c:147
+msgid "Feature type"
+msgstr ""
 
 #: ../vector/v.to.db/parse.c:41
 msgid "For coor valid point/centroid, for length valid line/boundary"
@@ -17964,7 +17948,7 @@ msgstr ""
 msgid "Writing attributes..."
 msgstr "डेटाबेसची यादी दाखवता येणार नाही"
 
-#: ../vector/v.generalize/misc.c:158 ../vector/v.voronoi/main.c:329
+#: ../vector/v.generalize/misc.c:158 ../vector/v.voronoi/main.c:334
 #, c-format
 msgid "Layer %d"
 msgstr ""
@@ -18300,7 +18284,7 @@ msgid "Create 3D output"
 msgstr ""
 
 #: ../vector/v.in.ogr/main.c:243 ../vector/v.select/args.c:79
-#: ../vector/v.voronoi/main.c:138 ../vector/v.overlay/main.c:123
+#: ../vector/v.voronoi/main.c:140 ../vector/v.overlay/main.c:123
 #: ../vector/v.in.lidar/main.c:197 ../vector/v.to.points/main.c:215
 msgid "Do not create attribute table"
 msgstr ""
@@ -18349,17 +18333,17 @@ msgstr "'%s'. ड्राइवर चालू होत नाही"
 msgid "All available OGR layers will be imported into vector map <%s>"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.in.ogr/main.c:402 ../vector/v.in.lidar/main.c:275
-#: ../vector/v.edit/main.c:90
+#: ../vector/v.in.ogr/main.c:402 ../vector/v.in.lidar/main.c:477
+#: ../vector/v.edit/main.c:92
 #, fuzzy, c-format
 msgid "Vector map <%s> already exists"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.in.ogr/main.c:411 ../vector/v.in.lidar/main.c:294
+#: ../vector/v.in.ogr/main.c:411 ../vector/v.in.lidar/main.c:284
 msgid "Select either the current region flag or the spatial option, not both"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:439 ../vector/v.in.lidar/main.c:322
+#: ../vector/v.in.ogr/main.c:439 ../vector/v.in.lidar/main.c:312
 msgid "4 parameters required for 'spatial' parameter"
 msgstr ""
 
@@ -18405,7 +18389,7 @@ msgstr ""
 msgid "Column type not supported (%s)"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:866 ../vector/v.in.lidar/main.c:589
+#: ../vector/v.in.ogr/main.c:866 ../vector/v.in.lidar/main.c:590
 #, fuzzy, c-format
 msgid "Unable open database <%s> by driver <%s>"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
@@ -18429,19 +18413,19 @@ msgstr ""
 msgid "Snapping boundaries (threshold = %.3e)..."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.in.ogr/main.c:1040 ../vector/v.buffer/main.c:559
+#: ../vector/v.in.ogr/main.c:1040 ../vector/v.buffer/main.c:627
 #, fuzzy
 msgid "Breaking polygons..."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
 #: ../vector/v.in.ogr/main.c:1045 ../vector/v.in.ogr/main.c:1059
 #: ../vector/v.delaunay/main.c:143 ../vector/v.overlay/area_area.c:43
-#: ../vector/v.buffer/main.c:562 ../vector/v.buffer/main.c:569
+#: ../vector/v.buffer/main.c:630 ../vector/v.buffer/main.c:637
 #, fuzzy
 msgid "Removing duplicates..."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.in.ogr/main.c:1055 ../vector/v.buffer/main.c:566
+#: ../vector/v.in.ogr/main.c:1055 ../vector/v.buffer/main.c:634
 #, fuzzy
 msgid "Breaking boundaries..."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
@@ -18611,6 +18595,8 @@ msgid "Unable to close new 3d raster map"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
 #: ../vector/v.extract/main.c:79
+#: ../locale/scriptstrings/tr.extract_to_translate.c:4
+#: ../locale/scriptstrings/tr.series_to_translate.c:4
 #, fuzzy
 msgid "extract"
 msgstr "डेटाबेसची यादी दाखवता येणार नाही"
@@ -18630,7 +18616,7 @@ msgid "Do not copy attributes (see also 'new' parameter)"
 msgstr ""
 
 #: ../vector/v.extract/main.c:95 ../vector/v.select/args.c:87
-#: ../vector/v.edit/args.c:179
+#: ../vector/v.edit/args.c:181
 msgid "Reverse selection"
 msgstr ""
 
@@ -19445,8 +19431,8 @@ msgid "Use drand48() function instead of rand()"
 msgstr ""
 
 #: ../vector/v.random/main.c:150 ../vector/v.in.dxf/main.c:80
-#: ../vector/v.in.lidar/main.c:223 ../vector/v.external/args.c:60
-#: ../vector/v.edit/args.c:194
+#: ../vector/v.in.lidar/main.c:224 ../vector/v.external/args.c:60
+#: ../vector/v.edit/args.c:196
 msgid "Do not build topology"
 msgstr ""
 
@@ -19484,7 +19470,7 @@ msgstr "तक्त्याचे नाव"
 msgid "Layer number"
 msgstr ""
 
-#: ../vector/v.out.vtk/main.c:177 ../vector/v.out.ascii/args.c:91
+#: ../vector/v.out.vtk/main.c:177 ../vector/v.out.ascii/args.c:94
 msgid "Failed to interpret 'dp' parameter as an integer"
 msgstr ""
 
@@ -19572,20 +19558,30 @@ msgstr "'%s'. ड्राइवर चालू होत नाही"
 msgid "Name of attribute column(s) to be exported (point mode)"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.out.ascii/args.c:51
+#: ../vector/v.out.ascii/args.c:48 ../misc/m.transform/main.c:351
+msgid "Output format"
+msgstr ""
+
+#: ../vector/v.out.ascii/args.c:49
+msgid ""
+"point;Simple point format (point per row);standard;GRASS ASCII vector format;"
+"wkt;OGC well-known text;"
+msgstr ""
+
+#: ../vector/v.out.ascii/args.c:54
 msgid "Field separator (points mode)"
 msgstr ""
 
-#: ../vector/v.out.ascii/args.c:66
+#: ../vector/v.out.ascii/args.c:69
 msgid "Create old (version 4) ASCII file"
 msgstr ""
 
-#: ../vector/v.out.ascii/args.c:70
+#: ../vector/v.out.ascii/args.c:73
 #, fuzzy
 msgid "Include column names in output (points mode)"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.out.ascii/args.c:76
+#: ../vector/v.out.ascii/args.c:79
 msgid "Only export points falling within current 3D region (points mode)"
 msgstr ""
 
@@ -20088,7 +20084,7 @@ msgstr "'%s'. ड्राइवर चालू होत नाही"
 msgid "Writing out vector columns..."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.delaunay/main.c:87 ../vector/v.voronoi/main.c:118
+#: ../vector/v.delaunay/main.c:87 ../vector/v.voronoi/main.c:120
 #, fuzzy
 msgid "triangulation"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
@@ -20631,70 +20627,70 @@ msgstr "'%s'. ड्राइवर चालू होत नाही"
 msgid "Either '%s' or '%s' must be specified"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.reclass/main.c:190 ../vector/v.to.rast/vect2rast.c:70
+#: ../vector/v.reclass/main.c:227 ../vector/v.to.rast/vect2rast.c:70
 #: ../vector/v.to.rast/support.c:143 ../vector/v.to.rast/support.c:295
 #, fuzzy, c-format
 msgid "No records selected from table <%s>"
 msgstr "डेटाबेसची यादी दाखवता येणार नाही"
 
-#: ../vector/v.reclass/main.c:203
+#: ../vector/v.reclass/main.c:240
 msgid "Key column type is not integer"
 msgstr ""
 
-#: ../vector/v.reclass/main.c:267
+#: ../vector/v.reclass/main.c:276
 #, fuzzy, c-format
 msgid "Cannot insert data: [%s]"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.reclass/main.c:293
+#: ../vector/v.reclass/main.c:313
 msgid "Column type must be integer or string"
 msgstr ""
 
-#: ../vector/v.reclass/main.c:305
+#: ../vector/v.reclass/main.c:325
 #, fuzzy, c-format
 msgid "Unable to open rule file <%s>"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.reclass/main.c:321
+#: ../vector/v.reclass/main.c:341
 #, fuzzy, c-format
 msgid "Category %d overwritten by '%s'"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.reclass/main.c:325
+#: ../vector/v.reclass/main.c:345
 #, c-format
 msgid "Category '%s' invalid"
 msgstr ""
 
-#: ../vector/v.reclass/main.c:329
+#: ../vector/v.reclass/main.c:349
 #, fuzzy, c-format
 msgid "Label '%s' overwritten by '%s'"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.reclass/main.c:335
+#: ../vector/v.reclass/main.c:355
 #, c-format
 msgid "Condition '%s' overwritten by '%s'"
 msgstr ""
 
-#: ../vector/v.reclass/main.c:340
+#: ../vector/v.reclass/main.c:360
 #, fuzzy, c-format
 msgid "Unknown rule option: '%s'"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.reclass/main.c:354
+#: ../vector/v.reclass/main.c:374
 #, fuzzy
 msgid "Cannot select values from database"
 msgstr "डेटाबेसची यादी दाखवता येणार नाही"
 
-#: ../vector/v.reclass/main.c:370
+#: ../vector/v.reclass/main.c:390
 #, c-format
 msgid "%d previously set categories overwritten by new category %d"
 msgstr ""
 
-#: ../vector/v.reclass/main.c:396
+#: ../vector/v.reclass/main.c:416
 msgid "Incomplete rule"
 msgstr ""
 
-#: ../vector/v.reclass/main.c:432
+#: ../vector/v.reclass/main.c:452
 #, fuzzy, c-format
 msgid "%d features reclassed."
 msgstr "डेटाबेसची यादी दाखवता येणार नाही"
@@ -21160,50 +21156,50 @@ msgstr ""
 msgid "For example: ESRI Shapefile: shapefile name"
 msgstr ""
 
-#: ../vector/v.out.ogr/args.c:48
+#: ../vector/v.out.ogr/args.c:49
 #, fuzzy
 msgid "Data format to write"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.out.ogr/args.c:57
+#: ../vector/v.out.ogr/args.c:58
 msgid "OGR dataset creation option (format specific, NAME=VALUE)"
 msgstr ""
 
-#: ../vector/v.out.ogr/args.c:67
+#: ../vector/v.out.ogr/args.c:68
 msgid "OGR layer creation option (format specific, NAME=VALUE)"
 msgstr ""
 
-#: ../vector/v.out.ogr/args.c:72
+#: ../vector/v.out.ogr/args.c:73
 msgid "Open an existing datasource for update"
 msgstr ""
 
-#: ../vector/v.out.ogr/args.c:76
+#: ../vector/v.out.ogr/args.c:77
 msgid "Append to existing layer instead of creating new if it exists"
 msgstr ""
 
-#: ../vector/v.out.ogr/args.c:81
+#: ../vector/v.out.ogr/args.c:82
 msgid "Skip export of GRASS category ID ('cat') attribute"
 msgstr ""
 
-#: ../vector/v.out.ogr/args.c:87
+#: ../vector/v.out.ogr/args.c:88
 msgid ""
 "Also export features without category (not labeled). Otherwise only features "
 "with category are exported."
 msgstr ""
 
-#: ../vector/v.out.ogr/args.c:93
+#: ../vector/v.out.ogr/args.c:94
 msgid "Use ESRI-style .prj file format (applies to Shapefile output only)"
 msgstr ""
 
-#: ../vector/v.out.ogr/args.c:99
+#: ../vector/v.out.ogr/args.c:100
 msgid "Create 3D output if input is 3D (applies to Shapefile output only)"
 msgstr ""
 
-#: ../vector/v.out.ogr/args.c:105
+#: ../vector/v.out.ogr/args.c:106
 msgid "Export lines as polygons"
 msgstr ""
 
-#: ../vector/v.out.ogr/args.c:111
+#: ../vector/v.out.ogr/args.c:112
 msgid ""
 "Create a new empty OGR layer in defined OGR datasource and exit. Nothing is "
 "read from input."
@@ -22069,7 +22065,7 @@ msgstr ""
 msgid "Use drand48()"
 msgstr ""
 
-#: ../vector/v.kcv/main.c:123 ../vector/v.edit/main.c:124
+#: ../vector/v.kcv/main.c:123 ../vector/v.edit/main.c:126
 #, fuzzy, c-format
 msgid "Unable to open vector map <%s> at topological level %d"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
@@ -22277,38 +22273,47 @@ msgstr "डेटाबेसची यादी दाखवता येणा
 msgid "Unable to copy table for layer %d"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.voronoi/main.c:119
+#: ../vector/v.voronoi/main.c:121
 msgid ""
 "Creates a Voronoi diagram from an input vector map containing points or "
 "centroids."
 msgstr ""
 
-#: ../vector/v.voronoi/main.c:134
+#: ../vector/v.voronoi/main.c:136
 msgid "Output tessellation as a graph (lines), not areas"
 msgstr ""
 
-#: ../vector/v.voronoi/main.c:170
+#: ../vector/v.voronoi/main.c:174
 #, fuzzy
 msgid "Reading sites..."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.voronoi/main.c:180
+#: ../vector/v.voronoi/main.c:184
 msgid "Voronoi triangulation..."
 msgstr ""
 
-#: ../vector/v.voronoi/main.c:265
+#: ../vector/v.voronoi/main.c:266
 #, fuzzy
 msgid "Writing sites to output..."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.voronoi/main.c:334
+#: ../vector/v.voronoi/main.c:339
 #, fuzzy
 msgid "No table"
 msgstr "तक्त्याचे नाव"
 
-#: ../vector/v.voronoi/main.c:349
+#: ../vector/v.voronoi/main.c:354
 msgid "Cannot copy table"
 msgstr ""
+
+#: ../vector/v.voronoi/main.c:410
+msgid "Output needs topological cleaning"
+msgstr ""
+
+#: ../vector/v.voronoi/main.c:442
+#, fuzzy
+msgid "Removing incorrect boundaries from output"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
 
 #: ../vector/v.lidar.growing/main.c:78
 msgid ""
@@ -22842,13 +22847,13 @@ msgstr "'%s'. ड्राइवर चालू होत नाही"
 msgid "Attribute not found"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.overlay/area_area.c:55 ../vector/v.buffer/main.c:587
+#: ../vector/v.overlay/area_area.c:55 ../vector/v.buffer/main.c:655
 #, fuzzy
 msgid "Attaching islands..."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.overlay/area_area.c:68 ../vector/v.buffer/main.c:607
-#: ../vector/v.buffer/main.c:699
+#: ../vector/v.overlay/area_area.c:68 ../vector/v.buffer/main.c:675
+#: ../vector/v.buffer/main.c:767
 msgid "Cannot calculate area centroid"
 msgstr ""
 
@@ -23008,7 +23013,7 @@ msgstr ""
 msgid "Unable to open dig_cats file"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.convert/att.c:68 ../vector/v.info/print.c:141
+#: ../vector/v.convert/att.c:68 ../vector/v.info/print.c:142
 #, fuzzy, c-format
 msgid "Unable to open driver <%s>"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
@@ -23180,37 +23185,37 @@ msgid ""
 "import the vector file."
 msgstr ""
 
-#: ../vector/v.in.lidar/main.c:272
-#, c-format
-msgid "Vector map <%s> already exists and will be overwritten"
-msgstr ""
-
-#: ../vector/v.in.lidar/main.c:289
+#: ../vector/v.in.lidar/main.c:279
 #, fuzzy, c-format
 msgid "Unknown filter option <%s>"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.in.lidar/main.c:623
+#: ../vector/v.in.lidar/main.c:474
+#, c-format
+msgid "Vector map <%s> already exists and will be overwritten"
+msgstr ""
+
+#: ../vector/v.in.lidar/main.c:624
 #, fuzzy, c-format
 msgid "Importing %d points..."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.in.lidar/main.c:778
+#: ../vector/v.in.lidar/main.c:779
 #, fuzzy, c-format
 msgid "%d points imported"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.in.lidar/main.c:780
+#: ../vector/v.in.lidar/main.c:781
 #, c-format
 msgid "%d input points were not valid"
 msgstr ""
 
-#: ../vector/v.in.lidar/main.c:782
+#: ../vector/v.in.lidar/main.c:783
 #, fuzzy, c-format
 msgid "%d input points were outside of the selected area"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.in.lidar/main.c:784
+#: ../vector/v.in.lidar/main.c:785
 #, fuzzy, c-format
 msgid "%d input points were filtered by return number"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
@@ -24393,142 +24398,150 @@ msgstr ""
 msgid "Don't build topology for the output vector"
 msgstr ""
 
-#: ../vector/v.clean/main.c:141
+#: ../vector/v.clean/main.c:125
+msgid "Combine tools with recommended follow-up tools."
+msgstr ""
+
+#: ../vector/v.clean/main.c:146
 msgid "You must select at least one tool"
 msgstr ""
 
-#: ../vector/v.clean/main.c:176
+#: ../vector/v.clean/main.c:181
 msgid "Tool doesn't exist"
 msgstr ""
 
-#: ../vector/v.clean/main.c:196
+#: ../vector/v.clean/main.c:201
 #, c-format
 msgid "Threshold for tool %d may not be > 0, set to 0"
 msgstr ""
 
-#: ../vector/v.clean/main.c:205
+#: ../vector/v.clean/main.c:210
 msgid "Tool: Threshold"
 msgstr ""
 
-#: ../vector/v.clean/main.c:210
+#: ../vector/v.clean/main.c:215
 msgid "Break"
 msgstr ""
 
-#: ../vector/v.clean/main.c:213
+#: ../vector/v.clean/main.c:218
 msgid "Remove duplicates"
 msgstr ""
 
-#: ../vector/v.clean/main.c:216
+#: ../vector/v.clean/main.c:221
 msgid "Remove dangles"
 msgstr ""
 
-#: ../vector/v.clean/main.c:219
+#: ../vector/v.clean/main.c:224
 msgid "Change type of boundary dangles"
 msgstr ""
 
-#: ../vector/v.clean/main.c:223
+#: ../vector/v.clean/main.c:228
 msgid "Remove bridges"
 msgstr ""
 
-#: ../vector/v.clean/main.c:226
+#: ../vector/v.clean/main.c:231
 msgid "Change type of boundary bridges"
 msgstr ""
 
-#: ../vector/v.clean/main.c:230
+#: ../vector/v.clean/main.c:235
 msgid "Snap vertices"
 msgstr ""
 
-#: ../vector/v.clean/main.c:233
+#: ../vector/v.clean/main.c:238
 msgid "Remove duplicate area centroids"
 msgstr ""
 
-#: ../vector/v.clean/main.c:237
+#: ../vector/v.clean/main.c:242
 msgid "Break polygons"
 msgstr ""
 
-#: ../vector/v.clean/main.c:240
+#: ../vector/v.clean/main.c:245
 msgid "Prune"
 msgstr ""
 
-#: ../vector/v.clean/main.c:243
+#: ../vector/v.clean/main.c:248
 msgid "Remove small areas"
 msgstr ""
 
-#: ../vector/v.clean/main.c:246
+#: ../vector/v.clean/main.c:251
 msgid "Remove small angles at nodes"
 msgstr ""
 
-#: ../vector/v.clean/main.c:251
+#: ../vector/v.clean/main.c:256
 msgid "Remove all lines or boundaries of zero length"
 msgstr ""
 
-#: ../vector/v.clean/main.c:288
+#: ../vector/v.clean/main.c:293
 #, fuzzy
 msgid "Copying vector features..."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.clean/main.c:311 ../vector/v.clean/main.c:322
+#: ../vector/v.clean/main.c:316 ../vector/v.clean/main.c:327
 msgid "Rebuilding parts of topology..."
 msgstr ""
 
-#: ../vector/v.clean/main.c:330
+#: ../vector/v.clean/main.c:335 ../vector/v.clean/main.c:373
+#: ../vector/v.clean/main.c:412
 msgid "Tool: Break lines at intersections"
 msgstr ""
 
-#: ../vector/v.clean/main.c:334
+#: ../vector/v.clean/main.c:338 ../vector/v.clean/main.c:343
+#: ../vector/v.clean/main.c:375 ../vector/v.clean/main.c:387
+#: ../vector/v.clean/main.c:414
 msgid "Tool: Remove duplicates"
 msgstr ""
 
-#: ../vector/v.clean/main.c:338
+#: ../vector/v.clean/main.c:347
 msgid "Tool: Remove dangles"
 msgstr ""
 
-#: ../vector/v.clean/main.c:342
+#: ../vector/v.clean/main.c:351
 msgid "Tool: Change type of boundary dangles"
 msgstr ""
 
-#: ../vector/v.clean/main.c:346
+#: ../vector/v.clean/main.c:355
 msgid "Tool: Remove bridges"
 msgstr ""
 
-#: ../vector/v.clean/main.c:350
+#: ../vector/v.clean/main.c:359
 msgid "Tool: Change type of boundary bridges"
 msgstr ""
 
-#: ../vector/v.clean/main.c:354
+#: ../vector/v.clean/main.c:363
 msgid "Tool: Remove duplicate area centroids"
 msgstr ""
 
-#: ../vector/v.clean/main.c:358
+#: ../vector/v.clean/main.c:367
 msgid "Tool: Snap line to vertex in threshold"
 msgstr ""
 
-#: ../vector/v.clean/main.c:362
-msgid "Tool: Break polygons"
-msgstr ""
-
-#: ../vector/v.clean/main.c:366
-msgid "Tool: Prune lines/boundaries"
-msgstr ""
-
-#: ../vector/v.clean/main.c:370
-msgid "Tool: Remove small areas"
-msgstr ""
-
-#: ../vector/v.clean/main.c:375
+#: ../vector/v.clean/main.c:377 ../vector/v.clean/main.c:401
+#: ../vector/v.clean/main.c:416
 msgid "Tool: Remove small angles at nodes"
 msgstr ""
 
-#: ../vector/v.clean/main.c:380
+#: ../vector/v.clean/main.c:384
+msgid "Tool: Break polygons"
+msgstr ""
+
+#: ../vector/v.clean/main.c:392
+msgid "Tool: Prune lines/boundaries"
+msgstr ""
+
+#: ../vector/v.clean/main.c:396
+msgid "Tool: Remove small areas"
+msgstr ""
+
+#: ../vector/v.clean/main.c:421
 msgid "Tool: Remove all lines and boundaries of zero length"
 msgstr ""
 
-#: ../vector/v.clean/main.c:389
+#: ../vector/v.clean/main.c:430
 #, fuzzy
 msgid "Rebuilding topology for output vector map..."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.clean/main.c:400
+#: ../vector/v.clean/main.c:441
 #, fuzzy
 msgid "Building topology for error vector map..."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
@@ -24610,7 +24623,7 @@ msgstr ""
 msgid "Offset along minor axis in map units"
 msgstr ""
 
-#: ../vector/v.parallel/main.c:80 ../vector/v.buffer/main.c:231
+#: ../vector/v.parallel/main.c:80 ../vector/v.buffer/main.c:249
 msgid "Angle of major axis in degrees"
 msgstr ""
 
@@ -24636,143 +24649,138 @@ msgstr ""
 msgid "Create buffer-like parallel lines"
 msgstr ""
 
-#: ../vector/v.buffer/main.c:196
+#: ../vector/v.buffer/main.c:214
 msgid "Creates a buffer around vector features of given type."
 msgstr ""
 
-#: ../vector/v.buffer/main.c:215
+#: ../vector/v.buffer/main.c:233
 msgid "Buffer distance along major axis in map units"
 msgstr ""
 
-#: ../vector/v.buffer/main.c:216 ../vector/v.buffer/main.c:224
-#: ../vector/v.buffer/main.c:232 ../vector/v.buffer/main.c:238
-#: ../vector/v.buffer/main.c:246 ../vector/v.buffer/main.c:255
+#: ../vector/v.buffer/main.c:234 ../vector/v.buffer/main.c:242
+#: ../vector/v.buffer/main.c:250 ../vector/v.buffer/main.c:256
+#: ../vector/v.buffer/main.c:264 ../vector/v.buffer/main.c:273
 msgid "Distance"
 msgstr ""
 
-#: ../vector/v.buffer/main.c:223
+#: ../vector/v.buffer/main.c:241
 msgid "Buffer distance along minor axis in map units"
 msgstr ""
 
-#: ../vector/v.buffer/main.c:237
+#: ../vector/v.buffer/main.c:255
 #, fuzzy
 msgid "Name of column to use for buffer distances"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.buffer/main.c:245
+#: ../vector/v.buffer/main.c:263
 msgid "Scaling factor for attribute column values"
 msgstr ""
 
-#: ../vector/v.buffer/main.c:254
+#: ../vector/v.buffer/main.c:272
 msgid ""
 "Maximum distance between theoretical arc and polygon segments as multiple of "
 "buffer"
 msgstr ""
 
-#: ../vector/v.buffer/main.c:259
+#: ../vector/v.buffer/main.c:277
 msgid "Make outside corners straight"
 msgstr ""
 
-#: ../vector/v.buffer/main.c:263
+#: ../vector/v.buffer/main.c:281
 msgid "Don't make caps at the ends of polylines"
 msgstr ""
 
-#: ../vector/v.buffer/main.c:274
+#: ../vector/v.buffer/main.c:292
 msgid "Select a buffer distance/minordistance/angle or column, but not both."
 msgstr ""
 
-#: ../vector/v.buffer/main.c:278
+#: ../vector/v.buffer/main.c:296
 msgid ""
 "The bufcol option may contain bugs during the cleaning step. If you "
 "encounter problems, use the debug option or clean manually with v.clean "
 "tool=break; v.category step=0; v.extract -d type=area"
 msgstr ""
 
-#: ../vector/v.buffer/main.c:289
+#: ../vector/v.buffer/main.c:307
 msgid "The bufcol option requires a valid layer."
 msgstr ""
 
-#: ../vector/v.buffer/main.c:293
+#: ../vector/v.buffer/main.c:311
 msgid "The tolerance must be > 0."
 msgstr ""
 
-#: ../vector/v.buffer/main.c:296
+#: ../vector/v.buffer/main.c:314
 #, c-format
 msgid "The tolerance was reset to %g"
 msgstr ""
 
-#: ../vector/v.buffer/main.c:317
+#: ../vector/v.buffer/main.c:335
 #, c-format
 msgid "The tolerance in map units = %g"
 msgstr ""
 
-#: ../vector/v.buffer/main.c:358
+#: ../vector/v.buffer/main.c:386
 #, fuzzy, c-format
 msgid "Unable to select data from table <%s>"
 msgstr "डेटाबेसची यादी दाखवता येणार नाही"
 
-#: ../vector/v.buffer/main.c:394
+#: ../vector/v.buffer/main.c:422
 msgid ""
 "No features available for buffering. Check type option and features "
 "available in the input vector."
 msgstr ""
 
-#: ../vector/v.buffer/main.c:409
+#: ../vector/v.buffer/main.c:437
 #, fuzzy
 msgid "Buffering lines..."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.buffer/main.c:435 ../vector/v.buffer/main.c:506
+#: ../vector/v.buffer/main.c:463 ../vector/v.buffer/main.c:565
 #, c-format
 msgid "Attribute is of invalid size (%.3f) for category %d"
 msgstr ""
 
-#: ../vector/v.buffer/main.c:449 ../vector/v.buffer/main.c:520
+#: ../vector/v.buffer/main.c:477 ../vector/v.buffer/main.c:579
 #, c-format
 msgid "The tolerance in map units: %g"
 msgstr ""
 
-#: ../vector/v.buffer/main.c:480
+#: ../vector/v.buffer/main.c:539
 #, fuzzy
 msgid "Buffering areas..."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.buffer/main.c:535
-#, fuzzy
-msgid "Writting buffers..."
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../vector/v.buffer/main.c:550
+#: ../vector/v.buffer/main.c:618
 #, fuzzy
 msgid "Cleaning buffers..."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.buffer/main.c:553
+#: ../vector/v.buffer/main.c:621
 #, fuzzy
 msgid "Building parts of topology..."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.buffer/main.c:556
+#: ../vector/v.buffer/main.c:624
 #, fuzzy
 msgid "Snapping boundaries..."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.buffer/main.c:572
+#: ../vector/v.buffer/main.c:640
 #, fuzzy
 msgid "Cleaning boundaries at nodes"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.buffer/main.c:593 ../vector/v.buffer/main.c:686
+#: ../vector/v.buffer/main.c:661 ../vector/v.buffer/main.c:754
 #, fuzzy
 msgid "Calculating centroids for areas..."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.buffer/main.c:624
+#: ../vector/v.buffer/main.c:692
 #, fuzzy
 msgid "Generating list of boundaries to be deleted..."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.buffer/main.c:657
+#: ../vector/v.buffer/main.c:725
 #, fuzzy
 msgid "Deleting boundaries..."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
@@ -24792,134 +24800,138 @@ msgstr ""
 msgid "Unable to get category list <%s>"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.edit/main.c:101
+#: ../vector/v.edit/main.c:103
 #, c-format
 msgid "Supported feature type for OGR layer: %s, %s or %s"
 msgstr ""
 
-#: ../vector/v.edit/main.c:143
+#: ../vector/v.edit/main.c:145
 #, fuzzy, c-format
 msgid ""
 "Unable to open vector map <%s> as the background map. It is given as vector "
 "map to be edited."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.edit/main.c:154
+#: ../vector/v.edit/main.c:156
 #, fuzzy, c-format
 msgid "Background vector map <%s> registered"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.edit/main.c:193
+#: ../vector/v.edit/main.c:192
+msgid "Threshold for snapping must be > 0. No snapping applied."
+msgstr ""
+
+#: ../vector/v.edit/main.c:199
 #, fuzzy
 msgid "Selecting features..."
 msgstr "डेटाबेसची यादी दाखवता येणार नाही"
 
-#: ../vector/v.edit/main.c:205
+#: ../vector/v.edit/main.c:211
 msgid "No features selected, nothing to edit"
 msgstr ""
 
-#: ../vector/v.edit/main.c:213
+#: ../vector/v.edit/main.c:219
 #, c-format
 msgid ""
 "Vector map <%s> is not 3D. Tool '%s' requires 3D vector map. Please convert "
 "the vector map to 3D using e.g. %s."
 msgstr ""
 
-#: ../vector/v.edit/main.c:249
+#: ../vector/v.edit/main.c:255
 #, fuzzy, c-format
 msgid "%d features added"
 msgstr "डेटाबेसची यादी दाखवता येणार नाही"
 
-#: ../vector/v.edit/main.c:258 ../vector/v.edit/main.c:280
-#: ../vector/v.edit/main.c:289 ../vector/v.edit/main.c:313
-#: ../vector/v.edit/main.c:349
+#: ../vector/v.edit/main.c:264 ../vector/v.edit/main.c:289
+#: ../vector/v.edit/main.c:298 ../vector/v.edit/main.c:322
+#: ../vector/v.edit/main.c:358
 #, c-format
 msgid "Threshold value for snapping is %.2f"
 msgstr ""
 
-#: ../vector/v.edit/main.c:267
+#: ../vector/v.edit/main.c:276
 #, fuzzy, c-format
 msgid "%d boundaries closed"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.edit/main.c:274
+#: ../vector/v.edit/main.c:283
 #, fuzzy, c-format
 msgid "%d features deleted"
 msgstr "डेटाबेसची यादी दाखवता येणार नाही"
 
-#: ../vector/v.edit/main.c:283
+#: ../vector/v.edit/main.c:292
 #, fuzzy, c-format
 msgid "%d features moved"
 msgstr "डेटाबेसची यादी दाखवता येणार नाही"
 
-#: ../vector/v.edit/main.c:292
+#: ../vector/v.edit/main.c:301
 #, fuzzy, c-format
 msgid "%d vertices moved"
 msgstr "डेटाबेसची यादी दाखवता येणार नाही"
 
-#: ../vector/v.edit/main.c:296
+#: ../vector/v.edit/main.c:305
 #, fuzzy, c-format
 msgid "%d vertices added"
 msgstr "डेटाबेसची यादी दाखवता येणार नाही"
 
-#: ../vector/v.edit/main.c:300
+#: ../vector/v.edit/main.c:309
 #, fuzzy, c-format
 msgid "%d vertices removed"
 msgstr "डेटाबेसची यादी दाखवता येणार नाही"
 
-#: ../vector/v.edit/main.c:310
+#: ../vector/v.edit/main.c:319
 #, fuzzy, c-format
 msgid "%d lines broken"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.edit/main.c:316
+#: ../vector/v.edit/main.c:325
 #, fuzzy, c-format
 msgid "%d lines connected"
 msgstr "डेटाबेसची यादी दाखवता येणार नाही"
 
-#: ../vector/v.edit/main.c:320
+#: ../vector/v.edit/main.c:329
 #, fuzzy, c-format
 msgid "%d lines merged"
 msgstr "डेटाबेसची यादी दाखवता येणार नाही"
 
-#: ../vector/v.edit/main.c:327 ../vector/v.edit/main.c:331
+#: ../vector/v.edit/main.c:336 ../vector/v.edit/main.c:340
 #, fuzzy, c-format
 msgid "%d features modified"
 msgstr "डेटाबेसची यादी दाखवता येणार नाही"
 
-#: ../vector/v.edit/main.c:336
+#: ../vector/v.edit/main.c:345
 #, c-format
 msgid ""
 "Multiple background maps were given. Selected features will be copied only "
 "from vector map <%s>."
 msgstr ""
 
-#: ../vector/v.edit/main.c:346
+#: ../vector/v.edit/main.c:355
 #, fuzzy, c-format
 msgid "%d features copied"
 msgstr "डेटाबेसची यादी दाखवता येणार नाही"
 
-#: ../vector/v.edit/main.c:355
+#: ../vector/v.edit/main.c:364
 #, fuzzy, c-format
 msgid "%d lines flipped"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.edit/main.c:374
+#: ../vector/v.edit/main.c:383
 #, fuzzy, c-format
 msgid "%d lines labeled"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.edit/main.c:381
+#: ../vector/v.edit/main.c:390
 #, fuzzy, c-format
 msgid "%d features converted"
 msgstr "डेटाबेसची यादी दाखवता येणार नाही"
 
-#: ../vector/v.edit/main.c:384
+#: ../vector/v.edit/main.c:393
 #, fuzzy
 msgid "No feature modified"
 msgstr "डेटाबेसची यादी दाखवता येणार नाही"
 
-#: ../vector/v.edit/main.c:389
+#: ../vector/v.edit/main.c:398
 msgid "Operation not implemented"
 msgstr ""
 
@@ -24928,11 +24940,11 @@ msgstr ""
 msgid "Name of vector map to edit"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.edit/args.c:32
+#: ../vector/v.edit/args.c:34
 msgid "Tool"
 msgstr ""
 
-#: ../vector/v.edit/args.c:33
+#: ../vector/v.edit/args.c:35
 msgid ""
 "create;Create new (empty) vector map;add;Add new features to existing vector "
 "map;delete;Delete selected features from vector map;move;Move selected "
@@ -24948,109 +24960,111 @@ msgid ""
 "Change feature type (point<->centroid, line<->boundary)"
 msgstr ""
 
-#: ../vector/v.edit/args.c:78
-msgid "ASCII file to be converted to binary vector map"
-msgstr ""
-
 #: ../vector/v.edit/args.c:80
-msgid "If not given (or \"-\") reads from standard input"
-msgstr ""
+#, fuzzy
+msgid "Name of file containing data in GRASS ASCII vector format"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.edit/args.c:90
+#: ../vector/v.edit/args.c:82
+#, fuzzy
+msgid "\"-\" reads from standard input"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../vector/v.edit/args.c:92
 msgid "Difference in x,y,z direction for moving feature or vertex"
 msgstr ""
 
-#: ../vector/v.edit/args.c:97
+#: ../vector/v.edit/args.c:99
 msgid "Threshold distance (coords,snap,query)"
 msgstr ""
 
-#: ../vector/v.edit/args.c:99
+#: ../vector/v.edit/args.c:101
 #, fuzzy
 msgid "'-1' for threshold based on the current resolution settings"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.edit/args.c:115
+#: ../vector/v.edit/args.c:117
 msgid "List of point coordinates"
 msgstr ""
 
-#: ../vector/v.edit/args.c:124
+#: ../vector/v.edit/args.c:126
 msgid "Bounding box for selecting features"
 msgstr ""
 
-#: ../vector/v.edit/args.c:133
+#: ../vector/v.edit/args.c:135
 msgid "Polygon for selecting features"
 msgstr ""
 
-#: ../vector/v.edit/args.c:143
+#: ../vector/v.edit/args.c:145
 msgid "Query tool"
 msgstr ""
 
-#: ../vector/v.edit/args.c:145
+#: ../vector/v.edit/args.c:147
 msgid "For 'shorter' use negative threshold value, positive value for 'longer'"
 msgstr ""
 
-#: ../vector/v.edit/args.c:148
+#: ../vector/v.edit/args.c:150
 msgid ""
 "length;Select only lines or boundaries shorter/longer than threshold "
 "distance;dangle;Select dangles shorter/longer than threshold distance"
 msgstr ""
 
-#: ../vector/v.edit/args.c:156
+#: ../vector/v.edit/args.c:158
 #, fuzzy
 msgid "Name of background vector map(s)"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.edit/args.c:163
+#: ../vector/v.edit/args.c:165
 msgid ""
 "Snap added or modified features in the given threshold to the nearest "
 "existing feature"
 msgstr ""
 
-#: ../vector/v.edit/args.c:165
+#: ../vector/v.edit/args.c:167
 msgid ""
 "no;Not apply snapping;node;Snap only to node;vertex;Allow snapping also to "
 "vertex"
 msgstr ""
 
-#: ../vector/v.edit/args.c:173
+#: ../vector/v.edit/args.c:175
 msgid "Starting value and step for z bulk-labeling"
 msgstr ""
 
-#: ../vector/v.edit/args.c:174
+#: ../vector/v.edit/args.c:176
 msgid "Pair: value,step (e.g. 1100,10)"
 msgstr ""
 
-#: ../vector/v.edit/args.c:185
+#: ../vector/v.edit/args.c:187
 msgid "Close added boundaries (using threshold distance)"
 msgstr ""
 
-#: ../vector/v.edit/args.c:189
+#: ../vector/v.edit/args.c:191
 #, fuzzy
 msgid "Do not expect header of input data"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.edit/args.c:199
+#: ../vector/v.edit/args.c:201
 msgid "Modify only first found feature in bounding box"
 msgstr ""
 
-#: ../vector/v.edit/args.c:211
+#: ../vector/v.edit/args.c:213
 #, fuzzy
 msgid "Polygon must have at least 3 coordinate pairs"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.edit/args.c:272
+#: ../vector/v.edit/args.c:274
 #, c-format
 msgid "Operation '%s' not implemented"
 msgstr ""
 
-#: ../vector/v.edit/args.c:281
+#: ../vector/v.edit/args.c:283
 #, fuzzy, c-format
 msgid "At least one option from %s must be specified"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.edit/args.c:287 ../vector/v.edit/args.c:296
-#: ../vector/v.edit/args.c:303 ../vector/v.edit/args.c:310
-#: ../vector/v.edit/args.c:314
+#: ../vector/v.edit/args.c:289 ../vector/v.edit/args.c:298
+#: ../vector/v.edit/args.c:305 ../vector/v.edit/args.c:312
+#: ../vector/v.edit/args.c:316
 #, c-format
 msgid "Tool %s requires option %s"
 msgstr ""
@@ -25123,165 +25137,165 @@ msgstr "'%s'. ड्राइवर चालू होत नाही"
 msgid "Print also topology info in shell script style"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.info/print.c:129
+#: ../vector/v.info/print.c:130
 #, c-format
 msgid "Database connection for map <%s> is not defined in DB file"
 msgstr ""
 
-#: ../vector/v.info/print.c:133
+#: ../vector/v.info/print.c:134
 #, c-format
 msgid "Displaying column types/names for database connection of layer <%s>:"
 msgstr ""
 
-#: ../vector/v.info/print.c:237
+#: ../vector/v.info/print.c:238
 #, fuzzy
 msgid "OGR layer:"
 msgstr "तक्त्याचे नाव"
 
-#: ../vector/v.info/print.c:240
+#: ../vector/v.info/print.c:241
 #, fuzzy
 msgid "OGR datasource:"
 msgstr "डाटाबेसचे नाव"
 
-#: ../vector/v.info/print.c:245
+#: ../vector/v.info/print.c:246
 msgid "Name:"
 msgstr ""
 
-#: ../vector/v.info/print.c:248
+#: ../vector/v.info/print.c:249
 msgid "Mapset:"
 msgstr ""
 
-#: ../vector/v.info/print.c:253
+#: ../vector/v.info/print.c:254
 #, fuzzy
 msgid "Location:"
 msgstr "तक्त्याचे नाव"
 
-#: ../vector/v.info/print.c:256
+#: ../vector/v.info/print.c:257
 #, fuzzy
 msgid "Database:"
 msgstr "डाटाबेसचे नाव:"
 
-#: ../vector/v.info/print.c:259
+#: ../vector/v.info/print.c:260
 msgid "Title:"
 msgstr ""
 
-#: ../vector/v.info/print.c:262
+#: ../vector/v.info/print.c:263
 msgid "Map scale:"
 msgstr ""
 
-#: ../vector/v.info/print.c:267 ../vector/v.info/print.c:271
+#: ../vector/v.info/print.c:268 ../vector/v.info/print.c:272
 #, fuzzy
 msgid "Map format:"
 msgstr "तक्त्याचे नाव"
 
-#: ../vector/v.info/print.c:276
+#: ../vector/v.info/print.c:277
 #, fuzzy
 msgid "Name of creator:"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.info/print.c:279
+#: ../vector/v.info/print.c:280
 msgid "Organization:"
 msgstr ""
 
-#: ../vector/v.info/print.c:282
+#: ../vector/v.info/print.c:283
 msgid "Source date:"
 msgstr ""
 
-#: ../vector/v.info/print.c:289
+#: ../vector/v.info/print.c:290
 #, fuzzy
 msgid "Type of map"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.info/print.c:289
+#: ../vector/v.info/print.c:290
 msgid "level"
 msgstr ""
 
-#: ../vector/v.info/print.c:297
+#: ../vector/v.info/print.c:298
 #, fuzzy
 msgid "Number of points:"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.info/print.c:299
+#: ../vector/v.info/print.c:300
 #, fuzzy
 msgid "Number of centroids:"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.info/print.c:304
+#: ../vector/v.info/print.c:305
 #, fuzzy
 msgid "Number of lines:"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.info/print.c:306
+#: ../vector/v.info/print.c:307
 #, fuzzy
 msgid "Number of boundaries:"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.info/print.c:311
+#: ../vector/v.info/print.c:312
 #, fuzzy
 msgid "Number of areas:"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.info/print.c:313
+#: ../vector/v.info/print.c:314
 #, fuzzy
 msgid "Number of islands:"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.info/print.c:319
+#: ../vector/v.info/print.c:320
 #, fuzzy
 msgid "Number of faces:"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.info/print.c:321
+#: ../vector/v.info/print.c:322
 #, fuzzy
 msgid "Number of kernels:"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.info/print.c:326
+#: ../vector/v.info/print.c:327
 #, fuzzy
 msgid "Number of volumes:"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.info/print.c:328
+#: ../vector/v.info/print.c:329
 #, fuzzy
 msgid "Number of holes:"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.info/print.c:335
+#: ../vector/v.info/print.c:336
 msgid "Map is 3D:"
 msgstr ""
 
-#: ../vector/v.info/print.c:336
+#: ../vector/v.info/print.c:337
 msgid "Yes"
 msgstr ""
 
-#: ../vector/v.info/print.c:336
+#: ../vector/v.info/print.c:337
 msgid "No"
 msgstr ""
 
-#: ../vector/v.info/print.c:339
+#: ../vector/v.info/print.c:340
 #, fuzzy
 msgid "Number of dblinks:"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../vector/v.info/print.c:349
+#: ../vector/v.info/print.c:350
 #, fuzzy
 msgid "Projection:"
 msgstr "डेटाबेसची यादी दाखवता येणार नाही"
 
-#: ../vector/v.info/print.c:351
+#: ../vector/v.info/print.c:352
 msgid "zone"
 msgstr ""
 
-#: ../vector/v.info/print.c:354
+#: ../vector/v.info/print.c:355
 #, fuzzy
 msgid "Projection"
 msgstr "डेटाबेसची यादी दाखवता येणार नाही"
 
-#: ../vector/v.info/print.c:384
+#: ../vector/v.info/print.c:385
 msgid "Digitization threshold"
 msgstr ""
 
-#: ../vector/v.info/print.c:386
+#: ../vector/v.info/print.c:387
 msgid "Comment"
 msgstr ""
 
@@ -26456,6 +26470,675 @@ msgstr ""
 msgid "Area:"
 msgstr ""
 
+#: ../misc/m.nviz.image/main.c:50 ../misc/m.nviz.script/main.c:73
+#: ../visualization/nviz/src/nvizMain.c:71
+#: ../visualization/ximgview/main.c:293
+#, fuzzy
+msgid "visualization"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.image/main.c:54
+msgid "Creates a 3D rendering of GIS data."
+msgstr ""
+
+#: ../misc/m.nviz.image/main.c:55
+msgid ""
+"Renders surfaces (raster data), 2D/3D vector data, and volumes (3D raster "
+"data) in 3D."
+msgstr ""
+
+#: ../misc/m.nviz.image/main.c:138
+#, c-format
+msgid "Vertical exaggeration not given, using calculated value %.0f"
+msgstr ""
+
+#: ../misc/m.nviz.image/main.c:150
+#, c-format
+msgid "Viewpoint height not given, using calculated value %.0f"
+msgstr ""
+
+#: ../misc/m.nviz.image/main.c:232
+#, fuzzy
+msgid "Unsupported output format"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.image/main.c:234 ../imagery/i.cluster/main.c:335
+#, fuzzy, c-format
+msgid "File <%s> created."
+msgstr "तक्त्याचे नाव"
+
+#: ../misc/m.nviz.image/args.c:51
+msgid "Use draw mode for all loaded surfaces"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:52 ../misc/m.nviz.image/args.c:130
+#: ../misc/m.nviz.image/args.c:139 ../misc/m.nviz.image/args.c:146
+#: ../misc/m.nviz.image/args.c:152 ../misc/m.nviz.image/args.c:160
+#: ../misc/m.nviz.image/args.c:169 ../misc/m.nviz.image/args.c:179
+#: ../misc/m.nviz.image/args.c:187 ../misc/m.nviz.image/args.c:197
+#: ../misc/m.nviz.image/args.c:205 ../misc/m.nviz.image/args.c:215
+msgid "Surfaces"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:89
+#, fuzzy
+msgid "Name for output image file (without extension)"
+msgstr "तक्त्याचे नाव"
+
+#: ../misc/m.nviz.image/args.c:90 ../misc/m.nviz.image/args.c:104
+#: ../misc/m.nviz.image/args.c:114
+msgid "Image"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:102
+#, fuzzy
+msgid "Graphics file format"
+msgstr "तक्त्याचे नाव"
+
+#: ../misc/m.nviz.image/args.c:112
+msgid "Size (width, height) of output image"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:129
+#, fuzzy
+msgid "Name of raster map(s) for elevation"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.image/args.c:138
+#, fuzzy
+msgid "Elevation value(s)"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.image/args.c:145
+#, fuzzy
+msgid "Name of raster map(s) for color"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.image/args.c:151
+msgid "Color value(s)"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:159
+#, fuzzy
+msgid "Name of raster map(s) for mask"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.image/args.c:168
+#, fuzzy
+msgid "Name of raster map(s) for transparency"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.image/args.c:178
+msgid "Transparency value(s)"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:186
+#, fuzzy
+msgid "Name of raster map(s) for shininess"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.image/args.c:196
+msgid "Shininess value(s)"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:204
+#, fuzzy
+msgid "Name of raster map(s) for emission"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.image/args.c:214
+msgid "Emission value(s)"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:228
+msgid "Draw mode"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:231 ../misc/m.nviz.image/args.c:242
+#: ../misc/m.nviz.image/args.c:253 ../misc/m.nviz.image/args.c:265
+#: ../misc/m.nviz.image/args.c:277 ../misc/m.nviz.image/args.c:286
+#: ../misc/m.nviz.image/args.c:296 ../misc/m.nviz.image/args.c:584
+#: ../misc/m.nviz.image/args.c:596
+msgid "Draw"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:240
+msgid "Fine resolution"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:251
+msgid "Coarse resolution"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:262
+msgid "Draw style"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:274
+msgid "Shading"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:283
+msgid "Wire color"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:295
+#, fuzzy
+msgid "Surface position"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.image/args.c:307
+#, fuzzy
+msgid "Name of line vector overlay map(s)"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.image/args.c:308 ../misc/m.nviz.image/args.c:315
+#: ../misc/m.nviz.image/args.c:327 ../misc/m.nviz.image/args.c:336
+#: ../misc/m.nviz.image/args.c:345 ../misc/m.nviz.image/args.c:352
+#: ../misc/m.nviz.image/args.c:364 ../misc/m.nviz.image/args.c:374
+#: ../misc/m.nviz.image/args.c:386
+#, fuzzy
+msgid "Vector lines"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.image/args.c:314 ../misc/m.nviz.image/args.c:404
+#, fuzzy
+msgid "Layer number or name for thematic mapping"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.image/args.c:326
+#, fuzzy
+msgid "Vector line width"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.image/args.c:334 ../misc/m.nviz.image/args.c:443
+#, fuzzy
+msgid "Name of width definition column"
+msgstr "डेटाबेसची यादी दाखवता येणार नाही"
+
+#: ../misc/m.nviz.image/args.c:342
+#, fuzzy
+msgid "Vector line color"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.image/args.c:350 ../misc/m.nviz.image/args.c:459
+#, fuzzy
+msgid "Name of color definition column"
+msgstr "डेटाबेसची यादी दाखवता येणार नाही"
+
+#: ../misc/m.nviz.image/args.c:361
+msgid "Vector line display mode"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:373
+msgid "Vector line height"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:385
+#, fuzzy
+msgid "Vector lines position"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.image/args.c:397
+#, fuzzy
+msgid "Name of point vector overlay map(s)"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.image/args.c:398 ../misc/m.nviz.image/args.c:405
+#: ../misc/m.nviz.image/args.c:417 ../misc/m.nviz.image/args.c:426
+#: ../misc/m.nviz.image/args.c:436 ../misc/m.nviz.image/args.c:445
+#: ../misc/m.nviz.image/args.c:454 ../misc/m.nviz.image/args.c:461
+#: ../misc/m.nviz.image/args.c:474 ../misc/m.nviz.image/args.c:481
+#: ../misc/m.nviz.image/args.c:491
+#, fuzzy
+msgid "Vector points"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.image/args.c:416
+msgid "Icon size"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:424
+#, fuzzy
+msgid "Name of size definition column"
+msgstr "डेटाबेसची यादी दाखवता येणार नाही"
+
+#: ../misc/m.nviz.image/args.c:435
+msgid "Icon width"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:451
+msgid "Icon color"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:470
+msgid "Icon marker"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:479
+#, fuzzy
+msgid "Name of marker definition column"
+msgstr "डेटाबेसची यादी दाखवता येणार नाही"
+
+#: ../misc/m.nviz.image/args.c:490
+#, fuzzy
+msgid "Vector points position"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.image/args.c:507
+msgid "Viewpoint position (x,y model coordinates)"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:508 ../misc/m.nviz.image/args.c:519
+#: ../misc/m.nviz.image/args.c:529 ../misc/m.nviz.image/args.c:541
+#: ../misc/m.nviz.image/args.c:562
+msgid "Viewpoint"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:518
+msgid "Viewpoint height (in map units)"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:528
+msgid "Viewpoint field of view (in degrees)"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:540
+msgid "Viewpoint twist angle (in degrees)"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:561
+msgid "Focus to point on surface (from SW corner in map units)"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:571 ../misc/m.nviz.image/args.c:606
+#: ../misc/m.nviz.image/args.c:618 ../misc/m.nviz.image/args.c:628
+#: ../misc/m.nviz.image/args.c:636 ../misc/m.nviz.image/args.c:644
+#: ../misc/m.nviz.image/args.c:653 ../misc/m.nviz.image/args.c:663
+#: ../misc/m.nviz.image/args.c:671 ../misc/m.nviz.image/args.c:681
+#: ../misc/m.nviz.image/args.c:693 ../misc/m.nviz.image/args.c:703
+#: ../misc/m.nviz.image/args.c:714
+msgid "Volumes"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:581
+msgid "Volume draw mode"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:593
+msgid "Volume shading"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:605
+msgid "Volume position"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:616
+msgid "Volume resolution"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:627
+msgid "Isosurface level"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:635
+#, fuzzy
+msgid "Name of volume for isosurface color"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.image/args.c:643
+msgid "Isosurface color"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:652
+#, fuzzy
+msgid "Name of 3D raster map(s) for isosurface transparency"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.image/args.c:662
+msgid "Transparency value(s)for isosurfaces"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:670
+#, fuzzy
+msgid "Name of 3D raster map(s) for shininess"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.image/args.c:680
+msgid "Shininess value(s) for isosurfaces"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:692
+msgid "Volume slice parallel to given axis (x, y, z)"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:702
+#, fuzzy
+msgid "Volume slice position"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.image/args.c:713
+msgid "Volume slice transparency"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:730
+msgid "Light position (x,y,z model coordinates)"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:731 ../misc/m.nviz.image/args.c:737
+#: ../misc/m.nviz.image/args.c:746 ../misc/m.nviz.image/args.c:756
+msgid "Lighting"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:736
+msgid "Light color"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:745
+msgid "Light brightness"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:755
+msgid "Light ambient"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:769
+msgid "Cutting plane index (0-5)"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:770 ../misc/m.nviz.image/args.c:779
+#: ../misc/m.nviz.image/args.c:788 ../misc/m.nviz.image/args.c:799
+#: ../misc/m.nviz.image/args.c:810
+#, fuzzy
+msgid "Cutting planes"
+msgstr "डेटाबेसची यादी दाखवता येणार नाही"
+
+#: ../misc/m.nviz.image/args.c:778
+#, fuzzy
+msgid "Cutting plane x,y,z coordinates"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.image/args.c:789
+msgid "Cutting plane rotation along the vertical axis"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:800
+#, fuzzy
+msgid "Cutting plane tilt"
+msgstr "डेटाबेसची यादी दाखवता येणार नाही"
+
+#: ../misc/m.nviz.image/args.c:811
+msgid "Cutting plane color (between two surfaces)"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:822
+msgid ""
+"nw;North-West edge;ne;North-East edge;sw;South-West edge;se;South-East edge"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:826
+#, fuzzy
+msgid "Fringe edges"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.image/args.c:827 ../misc/m.nviz.image/args.c:833
+#: ../misc/m.nviz.image/args.c:842
+msgid "Fringe"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:832
+#, fuzzy
+msgid "Fringe color"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.image/args.c:841
+#, fuzzy
+msgid "Fringe elevation"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.image/args.c:854
+msgid ""
+"Place north arrow at given position \t(in screen coordinates from bottom "
+"left corner)"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:856 ../misc/m.nviz.image/args.c:865
+#: ../misc/m.nviz.image/args.c:872
+#, fuzzy
+msgid "Decoration"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.image/args.c:864
+msgid "North arrow size (in map units)"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:871
+msgid "North arrow color"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:921
+#, c-format
+msgid "At least one <%s> or <%s> required"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:935 ../misc/m.nviz.image/args.c:965
+#: ../misc/m.nviz.image/args.c:977 ../misc/m.nviz.image/args.c:983
+#: ../misc/m.nviz.image/args.c:989 ../misc/m.nviz.image/args.c:995
+#, c-format
+msgid "Inconsistent number of attributes (<%s/%s> %d: <%s> %d)"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:971
+#, c-format
+msgid "Inconsistent number of attributes (<%s/%s> %d: <%s> %d"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:1005
+#, c-format
+msgid "Inconsistent number of attributes (<%s> %d: <%s> %d x 3)"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:1010 ../misc/m.nviz.image/args.c:1015
+#: ../misc/m.nviz.image/args.c:1026 ../misc/m.nviz.image/args.c:1040
+#: ../misc/m.nviz.image/args.c:1047 ../misc/m.nviz.image/args.c:1054
+#: ../misc/m.nviz.image/args.c:1093
+#, c-format
+msgid "Inconsistent number of attributes (<%s> %d: <%s> %d)"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:1033
+#, c-format
+msgid "Inconsistent number of attributes (<%s> %d: <%s> %d"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:1077 ../misc/m.nviz.image/args.c:1086
+#, c-format
+msgid "Inconsistent number of attributes (<%s> %d: <%s> %d, <%s> %d"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:1099
+#, c-format
+msgid "Inconsistent number of attributes (<%s> %d: <%s> %d x 6)"
+msgstr ""
+
+#: ../misc/m.nviz.image/args.c:1110
+#, c-format
+msgid "Inconsistent number of attributes (<%s/%s> %d: <%s> %d, <%s> %d"
+msgstr ""
+
+#: ../misc/m.nviz.image/vector.c:258 ../misc/m.nviz.image/vector.c:267
+#: ../misc/m.nviz.image/vector.c:277 ../misc/m.nviz.image/vector.c:287
+#, fuzzy, c-format
+msgid "Column <%s> in table <%s> not found"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.image/vector.c:262
+msgid "Data type of color column must be character"
+msgstr ""
+
+#: ../misc/m.nviz.image/vector.c:272
+#, fuzzy
+msgid "Data type of size column must be numeric"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.image/vector.c:282
+#, fuzzy
+msgid "Data type of width column must be numeric"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.image/vector.c:292
+msgid "Data type of marker column must be character"
+msgstr ""
+
+#: ../misc/m.nviz.image/surface.c:67
+#, c-format
+msgid "Missing topography attribute for surface %d"
+msgstr ""
+
+#: ../misc/m.nviz.image/surface.c:128 ../misc/m.nviz.image/volume.c:144
+#, c-format
+msgid "Color attribute not defined, using default <%s>"
+msgstr ""
+
+#: ../misc/m.nviz.image/surface.c:133
+#, fuzzy, c-format
+msgid "Missing color attribute for surface %d"
+msgstr "डेटाबेसची यादी दाखवता येणार नाही"
+
+#: ../misc/m.nviz.image/surface.c:210
+#, fuzzy, c-format
+msgid "Surface id %d doesn't exist"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.image/surface.c:257 ../misc/m.nviz.image/surface.c:264
+#, fuzzy, c-format
+msgid "Unable to set draw mode for surface id %d"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.image/volume.c:92 ../misc/m.nviz.image/volume.c:231
+#, fuzzy, c-format
+msgid "Error tokenize '%s'"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.image/volume.c:99 ../misc/m.nviz.image/volume.c:247
+#, fuzzy, c-format
+msgid "Volume set number %d is not available"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.image/volume.c:105
+#, fuzzy, c-format
+msgid "Unable to add isosurface (volume set %d)"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.image/volume.c:113 ../misc/m.nviz.image/volume.c:131
+#: ../misc/m.nviz.image/volume.c:139 ../misc/m.nviz.image/volume.c:155
+#: ../misc/m.nviz.image/volume.c:162 ../misc/m.nviz.image/volume.c:173
+#: ../misc/m.nviz.image/volume.c:180
+#, fuzzy, c-format
+msgid "Unable to set isosurface (%d) attribute (%d) of volume %d"
+msgstr "डेटाबेसची यादी दाखवता येणार नाही"
+
+#: ../misc/m.nviz.image/volume.c:242
+#, fuzzy, c-format
+msgid "Wrong name for axis: %s"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.image/volume.c:253
+#, fuzzy, c-format
+msgid "Unable to add slice (volume set %d)"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.image/volume.c:266
+#, fuzzy, c-format
+msgid "Unable to set slice (%d) position of volume %d"
+msgstr "डेटाबेसची यादी दाखवता येणार नाही"
+
+#: ../misc/m.nviz.image/volume.c:271
+#, fuzzy, c-format
+msgid "Unable to set slice (%d) transparency of volume %d"
+msgstr "डेटाबेसची यादी दाखवता येणार नाही"
+
+#: ../misc/m.nviz.image/cplane.c:40
+#, fuzzy, c-format
+msgid "Cutting plane number <%d> not found"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.nviz.script/main.c:74
+msgid "Creates fly-through script to run in NVIZ."
+msgstr ""
+
+#: ../misc/m.nviz.script/main.c:79
+msgid "Name of output script"
+msgstr ""
+
+#: ../misc/m.nviz.script/main.c:85
+msgid "Prefix of output images (default = NVIZ)"
+msgstr ""
+
+#: ../misc/m.nviz.script/main.c:93
+msgid "Route coordinates (east,north)"
+msgstr ""
+
+#: ../misc/m.nviz.script/main.c:99
+msgid "Camera layback distance (in map units)"
+msgstr ""
+
+#: ../misc/m.nviz.script/main.c:105
+msgid "Camera height above terrain"
+msgstr ""
+
+#: ../misc/m.nviz.script/main.c:111
+msgid "Number of frames"
+msgstr ""
+
+#: ../misc/m.nviz.script/main.c:117
+msgid "Start frame number (default=0)"
+msgstr ""
+
+#: ../misc/m.nviz.script/main.c:122
+msgid "Full render -- Save images"
+msgstr ""
+
+#: ../misc/m.nviz.script/main.c:126
+msgid "Fly at constant elevation (ht)"
+msgstr ""
+
+#: ../misc/m.nviz.script/main.c:131
+msgid "Include command in the script to output a KeyFrame file"
+msgstr ""
+
+#: ../misc/m.nviz.script/main.c:135
+msgid "Render images off-screen"
+msgstr ""
+
+#: ../misc/m.nviz.script/main.c:139
+msgid "Enable vector and sites drawing"
+msgstr ""
+
+#: ../misc/m.nviz.script/main.c:147
+msgid "Either -i flag and/or route parameter must be used"
+msgstr ""
+
+#: ../misc/m.nviz.script/main.c:171
+msgid "Off-screen only available with full render mode"
+msgstr ""
+
+#: ../misc/m.nviz.script/main.c:249
+#, c-format
+msgid "You must provide at least four points %d"
+msgstr ""
+
+#: ../misc/m.nviz.script/main.c:323
+#, c-format
+msgid "Created NVIZ script <%s>."
+msgstr ""
+
+#: ../misc/m.nviz.script/main.c:439
+msgid ""
+"Skipping this point, selected point is outside region. Perhaps the camera "
+"setback distance puts it beyond the edge?"
+msgstr ""
+
 #: ../misc/m.cogo/main.c:227
 msgid ""
 "A simple utility for converting bearing and distance measurements to "
@@ -26500,6 +27183,83 @@ msgstr "'%s'. ड्राइवर चालू होत नाही"
 #: ../misc/m.cogo/main.c:325
 #, c-format
 msgid "Input parse error on line %d"
+msgstr ""
+
+#: ../misc/m.transform/main.c:97
+#, c-format
+msgid "Not enough points, %d are required"
+msgstr ""
+
+#: ../misc/m.transform/main.c:101
+#, fuzzy, c-format
+msgid "Error conducting transform (%d)"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.transform/main.c:199
+msgid "Poorly placed control points"
+msgstr ""
+
+#: ../misc/m.transform/main.c:201
+msgid "Insufficient memory"
+msgstr ""
+
+#: ../misc/m.transform/main.c:203
+msgid "Parameter error"
+msgstr ""
+
+#: ../misc/m.transform/main.c:205
+msgid "No active control points"
+msgstr ""
+
+#: ../misc/m.transform/main.c:300
+#, fuzzy, c-format
+msgid "Invalid coordinates: [%s]"
+msgstr "तक्त्याचे नाव"
+
+#: ../misc/m.transform/main.c:322
+msgid "GCP"
+msgstr ""
+
+#: ../misc/m.transform/main.c:324
+msgid "Computes a coordinate transformation based on the control points."
+msgstr ""
+
+#: ../misc/m.transform/main.c:333
+msgid "Rectification polynomial order"
+msgstr ""
+
+#: ../misc/m.transform/main.c:341
+msgid ""
+"idx;point index;src;source coordinates;dst;destination coordinates;fwd;"
+"forward coordinates (destination);rev;reverse coordinates (source);fxy;"
+"forward coordinates difference (destination);rxy;reverse coordinates "
+"difference (source);fd;forward error (destination);rd;reverse error (source)"
+msgstr ""
+
+#: ../misc/m.transform/main.c:355
+msgid "Display summary information"
+msgstr ""
+
+#: ../misc/m.transform/main.c:361
+#, fuzzy
+msgid "File containing coordinates to transform (\"-\" to read from stdin)"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.transform/main.c:362
+msgid "Local x,y coordinates to target east,north"
+msgstr ""
+
+#: ../misc/m.transform/main.c:366
+msgid "Reverse transform of coords file or coeff. dump"
+msgstr ""
+
+#: ../misc/m.transform/main.c:367
+#, fuzzy
+msgid "Target east,north coordinates to local x,y"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../misc/m.transform/main.c:371
+msgid "Display transform matrix coefficients"
 msgstr ""
 
 #: ../visualization/nviz/src/nvizMain.c:77
@@ -26567,605 +27327,6 @@ msgstr ""
 #: ../visualization/nviz/src/nviz_init.c:159
 #, fuzzy
 msgid "Loading data failed"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../visualization/nviz2/cmd/main.c:53
-msgid "Creates a 3D rendering of GIS data."
-msgstr ""
-
-#: ../visualization/nviz2/cmd/main.c:54
-msgid ""
-"Renders surfaces (raster data), 2D/3D vector data, and volumes (3D raster "
-"data) in 3D."
-msgstr ""
-
-#: ../visualization/nviz2/cmd/main.c:137
-#, c-format
-msgid "Vertical exaggeration not given, using calculated value %.0f"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/main.c:149
-#, c-format
-msgid "Viewpoint height not given, using calculated value %.0f"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/main.c:231
-#, fuzzy
-msgid "Unsupported output format"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../visualization/nviz2/cmd/main.c:233 ../imagery/i.cluster/main.c:335
-#, fuzzy, c-format
-msgid "File <%s> created."
-msgstr "तक्त्याचे नाव"
-
-#: ../visualization/nviz2/cmd/args.c:51
-msgid "Use draw mode for all loaded surfaces"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:52 ../visualization/nviz2/cmd/args.c:130
-#: ../visualization/nviz2/cmd/args.c:139 ../visualization/nviz2/cmd/args.c:146
-#: ../visualization/nviz2/cmd/args.c:152 ../visualization/nviz2/cmd/args.c:160
-#: ../visualization/nviz2/cmd/args.c:169 ../visualization/nviz2/cmd/args.c:179
-#: ../visualization/nviz2/cmd/args.c:187 ../visualization/nviz2/cmd/args.c:197
-#: ../visualization/nviz2/cmd/args.c:205 ../visualization/nviz2/cmd/args.c:215
-msgid "Surfaces"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:89
-#, fuzzy
-msgid "Name for output image file (without extension)"
-msgstr "तक्त्याचे नाव"
-
-#: ../visualization/nviz2/cmd/args.c:90 ../visualization/nviz2/cmd/args.c:104
-#: ../visualization/nviz2/cmd/args.c:114
-msgid "Image"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:102
-#, fuzzy
-msgid "Graphics file format"
-msgstr "तक्त्याचे नाव"
-
-#: ../visualization/nviz2/cmd/args.c:112
-msgid "Size (width, height) of output image"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:129
-#, fuzzy
-msgid "Name of raster map(s) for elevation"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../visualization/nviz2/cmd/args.c:138
-#, fuzzy
-msgid "Elevation value(s)"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../visualization/nviz2/cmd/args.c:145
-#, fuzzy
-msgid "Name of raster map(s) for color"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../visualization/nviz2/cmd/args.c:151
-msgid "Color value(s)"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:159
-#, fuzzy
-msgid "Name of raster map(s) for mask"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../visualization/nviz2/cmd/args.c:168
-#, fuzzy
-msgid "Name of raster map(s) for transparency"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../visualization/nviz2/cmd/args.c:178
-msgid "Transparency value(s)"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:186
-#, fuzzy
-msgid "Name of raster map(s) for shininess"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../visualization/nviz2/cmd/args.c:196
-msgid "Shininess value(s)"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:204
-#, fuzzy
-msgid "Name of raster map(s) for emission"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../visualization/nviz2/cmd/args.c:214
-msgid "Emission value(s)"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:228
-msgid "Draw mode"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:231 ../visualization/nviz2/cmd/args.c:242
-#: ../visualization/nviz2/cmd/args.c:253 ../visualization/nviz2/cmd/args.c:265
-#: ../visualization/nviz2/cmd/args.c:277 ../visualization/nviz2/cmd/args.c:286
-#: ../visualization/nviz2/cmd/args.c:296 ../visualization/nviz2/cmd/args.c:584
-#: ../visualization/nviz2/cmd/args.c:596
-msgid "Draw"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:240
-msgid "Fine resolution"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:251
-msgid "Coarse resolution"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:262
-msgid "Draw style"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:274
-msgid "Shading"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:283
-msgid "Wire color"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:295
-#, fuzzy
-msgid "Surface position"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../visualization/nviz2/cmd/args.c:307
-#, fuzzy
-msgid "Name of line vector overlay map(s)"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../visualization/nviz2/cmd/args.c:308 ../visualization/nviz2/cmd/args.c:315
-#: ../visualization/nviz2/cmd/args.c:327 ../visualization/nviz2/cmd/args.c:336
-#: ../visualization/nviz2/cmd/args.c:345 ../visualization/nviz2/cmd/args.c:352
-#: ../visualization/nviz2/cmd/args.c:364 ../visualization/nviz2/cmd/args.c:374
-#: ../visualization/nviz2/cmd/args.c:386
-#, fuzzy
-msgid "Vector lines"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../visualization/nviz2/cmd/args.c:314 ../visualization/nviz2/cmd/args.c:404
-#, fuzzy
-msgid "Layer number or name for thematic mapping"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../visualization/nviz2/cmd/args.c:326
-#, fuzzy
-msgid "Vector line width"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../visualization/nviz2/cmd/args.c:334 ../visualization/nviz2/cmd/args.c:443
-#, fuzzy
-msgid "Name of width definition column"
-msgstr "डेटाबेसची यादी दाखवता येणार नाही"
-
-#: ../visualization/nviz2/cmd/args.c:342
-#, fuzzy
-msgid "Vector line color"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../visualization/nviz2/cmd/args.c:350 ../visualization/nviz2/cmd/args.c:459
-#, fuzzy
-msgid "Name of color definition column"
-msgstr "डेटाबेसची यादी दाखवता येणार नाही"
-
-#: ../visualization/nviz2/cmd/args.c:361
-msgid "Vector line display mode"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:373
-msgid "Vector line height"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:385
-#, fuzzy
-msgid "Vector lines position"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../visualization/nviz2/cmd/args.c:397
-#, fuzzy
-msgid "Name of point vector overlay map(s)"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../visualization/nviz2/cmd/args.c:398 ../visualization/nviz2/cmd/args.c:405
-#: ../visualization/nviz2/cmd/args.c:417 ../visualization/nviz2/cmd/args.c:426
-#: ../visualization/nviz2/cmd/args.c:436 ../visualization/nviz2/cmd/args.c:445
-#: ../visualization/nviz2/cmd/args.c:454 ../visualization/nviz2/cmd/args.c:461
-#: ../visualization/nviz2/cmd/args.c:474 ../visualization/nviz2/cmd/args.c:481
-#: ../visualization/nviz2/cmd/args.c:491
-#, fuzzy
-msgid "Vector points"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../visualization/nviz2/cmd/args.c:416
-msgid "Icon size"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:424
-#, fuzzy
-msgid "Name of size definition column"
-msgstr "डेटाबेसची यादी दाखवता येणार नाही"
-
-#: ../visualization/nviz2/cmd/args.c:435
-msgid "Icon width"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:451
-msgid "Icon color"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:470
-msgid "Icon marker"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:479
-#, fuzzy
-msgid "Name of marker definition column"
-msgstr "डेटाबेसची यादी दाखवता येणार नाही"
-
-#: ../visualization/nviz2/cmd/args.c:490
-#, fuzzy
-msgid "Vector points position"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../visualization/nviz2/cmd/args.c:507
-msgid "Viewpoint position (x,y model coordinates)"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:508 ../visualization/nviz2/cmd/args.c:519
-#: ../visualization/nviz2/cmd/args.c:529 ../visualization/nviz2/cmd/args.c:541
-#: ../visualization/nviz2/cmd/args.c:562
-msgid "Viewpoint"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:518
-msgid "Viewpoint height (in map units)"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:528
-msgid "Viewpoint field of view (in degrees)"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:540
-msgid "Viewpoint twist angle (in degrees)"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:561
-msgid "Focus to point on surface (from SW corner in map units)"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:571 ../visualization/nviz2/cmd/args.c:606
-#: ../visualization/nviz2/cmd/args.c:618 ../visualization/nviz2/cmd/args.c:628
-#: ../visualization/nviz2/cmd/args.c:636 ../visualization/nviz2/cmd/args.c:644
-#: ../visualization/nviz2/cmd/args.c:653 ../visualization/nviz2/cmd/args.c:663
-#: ../visualization/nviz2/cmd/args.c:671 ../visualization/nviz2/cmd/args.c:681
-#: ../visualization/nviz2/cmd/args.c:693 ../visualization/nviz2/cmd/args.c:703
-#: ../visualization/nviz2/cmd/args.c:714
-msgid "Volumes"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:581
-msgid "Volume draw mode"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:593
-msgid "Volume shading"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:605
-msgid "Volume position"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:616
-msgid "Volume resolution"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:627
-msgid "Isosurface level"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:635
-#, fuzzy
-msgid "Name of volume for isosurface color"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../visualization/nviz2/cmd/args.c:643
-msgid "Isosurface color"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:652
-#, fuzzy
-msgid "Name of 3D raster map(s) for isosurface transparency"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../visualization/nviz2/cmd/args.c:662
-msgid "Transparency value(s)for isosurfaces"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:670
-#, fuzzy
-msgid "Name of 3D raster map(s) for shininess"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../visualization/nviz2/cmd/args.c:680
-msgid "Shininess value(s) for isosurfaces"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:692
-msgid "Volume slice parallel to given axis (x, y, z)"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:702
-#, fuzzy
-msgid "Volume slice position"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../visualization/nviz2/cmd/args.c:713
-msgid "Volume slice transparency"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:730
-msgid "Light position (x,y,z model coordinates)"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:731 ../visualization/nviz2/cmd/args.c:737
-#: ../visualization/nviz2/cmd/args.c:746 ../visualization/nviz2/cmd/args.c:756
-msgid "Lighting"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:736
-msgid "Light color"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:745
-msgid "Light brightness"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:755
-msgid "Light ambient"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:769
-msgid "Cutting plane index (0-5)"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:770 ../visualization/nviz2/cmd/args.c:779
-#: ../visualization/nviz2/cmd/args.c:788 ../visualization/nviz2/cmd/args.c:799
-#: ../visualization/nviz2/cmd/args.c:810
-#, fuzzy
-msgid "Cutting planes"
-msgstr "डेटाबेसची यादी दाखवता येणार नाही"
-
-#: ../visualization/nviz2/cmd/args.c:778
-#, fuzzy
-msgid "Cutting plane x,y,z coordinates"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../visualization/nviz2/cmd/args.c:789
-msgid "Cutting plane rotation along the vertical axis"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:800
-#, fuzzy
-msgid "Cutting plane tilt"
-msgstr "डेटाबेसची यादी दाखवता येणार नाही"
-
-#: ../visualization/nviz2/cmd/args.c:811
-msgid "Cutting plane color (between two surfaces)"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:822
-msgid ""
-"nw;North-West edge;ne;North-East edge;sw;South-West edge;se;South-East edge"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:826
-#, fuzzy
-msgid "Fringe edges"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../visualization/nviz2/cmd/args.c:827 ../visualization/nviz2/cmd/args.c:833
-#: ../visualization/nviz2/cmd/args.c:842
-msgid "Fringe"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:832
-#, fuzzy
-msgid "Fringe color"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../visualization/nviz2/cmd/args.c:841
-#, fuzzy
-msgid "Fringe elevation"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../visualization/nviz2/cmd/args.c:854
-msgid ""
-"Place north arrow at given position \t(in screen coordinates from bottom "
-"left corner)"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:856 ../visualization/nviz2/cmd/args.c:865
-#: ../visualization/nviz2/cmd/args.c:872
-#, fuzzy
-msgid "Decoration"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../visualization/nviz2/cmd/args.c:864
-msgid "North arrow size (in map units)"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:871
-msgid "North arrow color"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:921
-#, c-format
-msgid "At least one <%s> or <%s> required"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:935 ../visualization/nviz2/cmd/args.c:965
-#: ../visualization/nviz2/cmd/args.c:977 ../visualization/nviz2/cmd/args.c:983
-#: ../visualization/nviz2/cmd/args.c:989 ../visualization/nviz2/cmd/args.c:995
-#, c-format
-msgid "Inconsistent number of attributes (<%s/%s> %d: <%s> %d)"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:971
-#, c-format
-msgid "Inconsistent number of attributes (<%s/%s> %d: <%s> %d"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:1005
-#, c-format
-msgid "Inconsistent number of attributes (<%s> %d: <%s> %d x 3)"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:1010
-#: ../visualization/nviz2/cmd/args.c:1015
-#: ../visualization/nviz2/cmd/args.c:1026
-#: ../visualization/nviz2/cmd/args.c:1040
-#: ../visualization/nviz2/cmd/args.c:1047
-#: ../visualization/nviz2/cmd/args.c:1054
-#: ../visualization/nviz2/cmd/args.c:1093
-#, c-format
-msgid "Inconsistent number of attributes (<%s> %d: <%s> %d)"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:1033
-#, c-format
-msgid "Inconsistent number of attributes (<%s> %d: <%s> %d"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:1077
-#: ../visualization/nviz2/cmd/args.c:1086
-#, c-format
-msgid "Inconsistent number of attributes (<%s> %d: <%s> %d, <%s> %d"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:1099
-#, c-format
-msgid "Inconsistent number of attributes (<%s> %d: <%s> %d x 6)"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/args.c:1110
-#, c-format
-msgid "Inconsistent number of attributes (<%s/%s> %d: <%s> %d, <%s> %d"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/vector.c:258
-#: ../visualization/nviz2/cmd/vector.c:267
-#: ../visualization/nviz2/cmd/vector.c:277
-#: ../visualization/nviz2/cmd/vector.c:287
-#, fuzzy, c-format
-msgid "Column <%s> in table <%s> not found"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../visualization/nviz2/cmd/vector.c:262
-msgid "Data type of color column must be character"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/vector.c:272
-#, fuzzy
-msgid "Data type of size column must be numeric"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../visualization/nviz2/cmd/vector.c:282
-#, fuzzy
-msgid "Data type of width column must be numeric"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../visualization/nviz2/cmd/vector.c:292
-msgid "Data type of marker column must be character"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/surface.c:67
-#, c-format
-msgid "Missing topography attribute for surface %d"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/surface.c:128
-#: ../visualization/nviz2/cmd/volume.c:144
-#, c-format
-msgid "Color attribute not defined, using default <%s>"
-msgstr ""
-
-#: ../visualization/nviz2/cmd/surface.c:133
-#, fuzzy, c-format
-msgid "Missing color attribute for surface %d"
-msgstr "डेटाबेसची यादी दाखवता येणार नाही"
-
-#: ../visualization/nviz2/cmd/surface.c:210
-#, fuzzy, c-format
-msgid "Surface id %d doesn't exist"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../visualization/nviz2/cmd/surface.c:257
-#: ../visualization/nviz2/cmd/surface.c:264
-#, fuzzy, c-format
-msgid "Unable to set draw mode for surface id %d"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../visualization/nviz2/cmd/volume.c:92
-#: ../visualization/nviz2/cmd/volume.c:231
-#, fuzzy, c-format
-msgid "Error tokenize '%s'"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../visualization/nviz2/cmd/volume.c:99
-#: ../visualization/nviz2/cmd/volume.c:247
-#, fuzzy, c-format
-msgid "Volume set number %d is not available"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../visualization/nviz2/cmd/volume.c:105
-#, fuzzy, c-format
-msgid "Unable to add isosurface (volume set %d)"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../visualization/nviz2/cmd/volume.c:113
-#: ../visualization/nviz2/cmd/volume.c:131
-#: ../visualization/nviz2/cmd/volume.c:139
-#: ../visualization/nviz2/cmd/volume.c:155
-#: ../visualization/nviz2/cmd/volume.c:162
-#: ../visualization/nviz2/cmd/volume.c:173
-#: ../visualization/nviz2/cmd/volume.c:180
-#, fuzzy, c-format
-msgid "Unable to set isosurface (%d) attribute (%d) of volume %d"
-msgstr "डेटाबेसची यादी दाखवता येणार नाही"
-
-#: ../visualization/nviz2/cmd/volume.c:242
-#, fuzzy, c-format
-msgid "Wrong name for axis: %s"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../visualization/nviz2/cmd/volume.c:253
-#, fuzzy, c-format
-msgid "Unable to add slice (volume set %d)"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../visualization/nviz2/cmd/volume.c:266
-#, fuzzy, c-format
-msgid "Unable to set slice (%d) position of volume %d"
-msgstr "डेटाबेसची यादी दाखवता येणार नाही"
-
-#: ../visualization/nviz2/cmd/volume.c:271
-#, fuzzy, c-format
-msgid "Unable to set slice (%d) transparency of volume %d"
-msgstr "डेटाबेसची यादी दाखवता येणार नाही"
-
-#: ../visualization/nviz2/cmd/cplane.c:40
-#, fuzzy, c-format
-msgid "Cutting plane number <%d> not found"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
 #: ../visualization/ximgview/main.c:84
@@ -27305,11 +27466,6 @@ msgstr ""
 msgid "Rotate plot 90 degrees"
 msgstr ""
 
-#: ../ps/ps.map/main.c:101 ../ps/ps.map/main.c:114 ../ps/ps.map/main.c:136
-#, fuzzy
-msgid "Output settings"
-msgstr "'%s'. ड्राइवर चालू होत नाही"
-
 #: ../ps/ps.map/main.c:106
 msgid "List paper formats (name width height left right top bottom(margin))"
 msgstr ""
@@ -27415,17 +27571,17 @@ msgid ""
 "GRASS. Please use <%s> instead."
 msgstr ""
 
-#: ../ps/ps.map/r_header.c:65 ../ps/ps.map/getgrid.c:60
-#: ../ps/ps.map/getgrid.c:84 ../ps/ps.map/getgrid.c:170
-#: ../ps/ps.map/getgrid.c:194 ../ps/ps.map/r_info.c:67
+#: ../ps/ps.map/r_header.c:65 ../ps/ps.map/getgrid.c:61
+#: ../ps/ps.map/getgrid.c:85 ../ps/ps.map/getgrid.c:171
+#: ../ps/ps.map/getgrid.c:195 ../ps/ps.map/r_info.c:67
 #: ../ps/ps.map/ps_outline.c:87
 #, fuzzy
 msgid "Unsupported color request"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../ps/ps.map/r_header.c:67 ../ps/ps.map/getgrid.c:62
-#: ../ps/ps.map/getgrid.c:86 ../ps/ps.map/getgrid.c:172
-#: ../ps/ps.map/getgrid.c:196 ../ps/ps.map/r_instructions.c:131
+#: ../ps/ps.map/r_header.c:67 ../ps/ps.map/getgrid.c:63
+#: ../ps/ps.map/getgrid.c:87 ../ps/ps.map/getgrid.c:173
+#: ../ps/ps.map/getgrid.c:197 ../ps/ps.map/r_instructions.c:131
 #: ../ps/ps.map/r_instructions.c:446 ../ps/ps.map/r_info.c:69
 #: ../ps/ps.map/ps_outline.c:89
 msgid "illegal color request"
@@ -27511,22 +27667,22 @@ msgstr ""
 msgid "Can't open temporary PostScript mask file."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../ps/ps.map/getgrid.c:94 ../ps/ps.map/getgrid.c:205
+#: ../ps/ps.map/getgrid.c:95 ../ps/ps.map/getgrid.c:206
 #, fuzzy
 msgid "illegal numbers request"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../ps/ps.map/getgrid.c:125 ../ps/ps.map/getgrid.c:233
+#: ../ps/ps.map/getgrid.c:126 ../ps/ps.map/getgrid.c:234
 #, fuzzy
 msgid "illegal grid width request"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../ps/ps.map/getgrid.c:131
+#: ../ps/ps.map/getgrid.c:132
 #, fuzzy
 msgid "illegal request (grid)"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../ps/ps.map/getgrid.c:239
+#: ../ps/ps.map/getgrid.c:240
 #, fuzzy
 msgid "illegal request (geogrid)"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
@@ -27575,7 +27731,7 @@ msgstr ""
 msgid "Reading point/line file ..."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../ps/ps.map/do_plt.c:146 ../ps/ps.map/ps_vpoints.c:88
+#: ../ps/ps.map/do_plt.c:147 ../ps/ps.map/ps_vpoints.c:88
 msgid "Cannot read symbol, using default icon"
 msgstr ""
 
@@ -27724,7 +27880,7 @@ msgstr "'%s'. ड्राइवर चालू होत नाही"
 msgid "Reading vector points file <%s in %s> ..."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../ps/ps.map/r_plt.c:159
+#: ../ps/ps.map/r_plt.c:174
 #, fuzzy
 msgid "Can't open eps file"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
@@ -27835,6 +27991,21 @@ msgid ""
 "column '%s' : type bool (boolean) is stored as char(1), values: 0 (false), 1 "
 "(true)"
 msgstr ""
+
+#: ../db/drivers/postgres/execute.c:44
+#, fuzzy
+msgid "Unable to execute:\n"
+msgstr "डेटाबेसची यादी दाखवता येणार नाही"
+
+#: ../db/drivers/postgres/execute.c:72
+#, fuzzy
+msgid "Unable to 'BEGIN' transaction"
+msgstr "डेटाबेसची यादी दाखवता येणार नाही"
+
+#: ../db/drivers/postgres/execute.c:93
+#, fuzzy
+msgid "Unable to 'COMMIT' transaction"
+msgstr "डेटाबेसची यादी दाखवता येणार नाही"
 
 #: ../db/drivers/postgres/parse.c:55 ../db/drivers/mysql/parse.c:71
 msgid "'user' in database definition is not supported, use db.login"
@@ -28003,15 +28174,24 @@ msgstr "डेटाबेसची यादी दाखवता येणा
 msgid "Unable to db_alloc_string_array()"
 msgstr ""
 
-#: ../db/drivers/sqlite/describe.c:159
+#: ../db/drivers/sqlite/main.c:47
+#, c-format
+msgid "Busy SQLITE db, already waiting for %d seconds..."
+msgstr ""
+
+#: ../db/drivers/sqlite/describe.c:191
 #, c-format
 msgid "SQLite driver: column '%s', SQLite type %d  is not supported"
 msgstr ""
 
-#: ../db/drivers/sqlite/db.c:84
+#: ../db/drivers/sqlite/db.c:85
 #, fuzzy
 msgid "Unable to open database: "
 msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../db/drivers/sqlite/db.c:110
+msgid "SQLite database connection is still busy"
+msgstr ""
 
 #: ../db/db.execute/main.c:56
 #, fuzzy, c-format
@@ -28319,6 +28499,42 @@ msgstr "'%s'. ड्राइवर चालू होत नाही"
 msgid "Name of input E00 file"
 msgstr "तक्त्याचे नाव"
 
+#: ../locale/scriptstrings/tr.extract_to_translate.c:1
+msgid "Extract a subset of a space time raster dataset"
+msgstr ""
+
+#: ../locale/scriptstrings/tr.extract_to_translate.c:2
+#: ../locale/scriptstrings/tr.register_to_translate.c:2
+#: ../locale/scriptstrings/tr3.register_to_translate.c:2
+#: ../locale/scriptstrings/tr.series_to_translate.c:2
+#: ../locale/scriptstrings/tr.unregister_to_translate.c:2
+msgid "spacetime raster dataset"
+msgstr ""
+
+#: ../locale/scriptstrings/tr.extract_to_translate.c:5
+#, fuzzy
+msgid "Name of a space time raster dataset"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../locale/scriptstrings/tr.extract_to_translate.c:6
+msgid "The r.mapcalc expression assigned to all extracted raster maps"
+msgstr ""
+
+#: ../locale/scriptstrings/tr.extract_to_translate.c:7
+#, fuzzy
+msgid "Name of the output space time raster dataset"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../locale/scriptstrings/tr.extract_to_translate.c:8
+#, fuzzy
+msgid "Base name of the new created raster maps"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../locale/scriptstrings/tr.extract_to_translate.c:9
+#, fuzzy
+msgid "Register Null maps"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
 #: ../locale/scriptstrings/r.plane_to_translate.c:1
 #, fuzzy
 msgid ""
@@ -28357,6 +28573,46 @@ msgstr ""
 #, fuzzy
 msgid "Type of the raster map to be created"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../locale/scriptstrings/tr.register_to_translate.c:1
+msgid "Register raster maps in a space time raster dataset"
+msgstr ""
+
+#: ../locale/scriptstrings/tr.register_to_translate.c:4
+#: ../locale/scriptstrings/tr.series_to_translate.c:5
+#, fuzzy
+msgid "Name of an existing space time raster dataset"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../locale/scriptstrings/tr.register_to_translate.c:5
+msgid ""
+"Name(s) of existing raster map(s), multiple maps must be provided in "
+"temporal order in case datetime should be attached"
+msgstr ""
+
+#: ../locale/scriptstrings/tr.register_to_translate.c:6
+msgid ""
+"The valid start date and time of the first raster map, in case the map has "
+"no valid time (format absolute: \"yyyy-mm-dd HH:MM:SS\", format relative 5.0)"
+msgstr ""
+
+#: ../locale/scriptstrings/tr.register_to_translate.c:7
+#: ../locale/scriptstrings/tr3.register_to_translate.c:7
+#: ../locale/scriptstrings/tv.register_to_translate.c:7
+msgid ""
+"Time increment between maps for valid time interval creation (format "
+"absolute: NNN seconds, minutes, hours, days, weeks, months, years; format "
+"relative: 1.0)"
+msgstr ""
+
+#: ../locale/scriptstrings/tr.register_to_translate.c:8
+#: ../locale/scriptstrings/tr3.register_to_translate.c:8
+#: ../locale/scriptstrings/tv.register_to_translate.c:8
+#: ../locale/scriptstrings/t.time.abs_to_translate.c:11
+#: ../locale/scriptstrings/t.time.rel_to_translate.c:11
+msgid ""
+"Create an interval (start and end time) in case an increment is provided"
+msgstr ""
 
 #: ../locale/scriptstrings/m.proj_to_translate.c:1
 msgid "Converts coordinates from one projection to another (cs2cs frontend)."
@@ -28498,6 +28754,63 @@ msgstr "'%s'. ड्राइवर चालू होत नाही"
 
 #: ../locale/scriptstrings/v.krige_to_translate.c:22
 msgid "If omitted, will be <input name>_kriging_var"
+msgstr ""
+
+#: ../locale/scriptstrings/t.create_to_translate.c:1
+#, fuzzy
+msgid "Create a space time dataset"
+msgstr "डेटाबेसची यादी दाखवता येणार नाही"
+
+#: ../locale/scriptstrings/t.create_to_translate.c:2
+#: ../locale/scriptstrings/t.list_to_translate.c:3
+#: ../locale/scriptstrings/t.remove_to_translate.c:2
+#, fuzzy
+msgid "spacetime"
+msgstr "तक्त्याचे नाव"
+
+#: ../locale/scriptstrings/t.create_to_translate.c:3
+#: ../locale/scriptstrings/t.list_to_translate.c:2
+#: ../locale/scriptstrings/t.remove_to_translate.c:3
+#, fuzzy
+msgid "dataset"
+msgstr "डाटाबेसचे नाव"
+
+#: ../locale/scriptstrings/t.create_to_translate.c:4
+#, fuzzy
+msgid "create"
+msgstr "तक्त्याचे नाव"
+
+#: ../locale/scriptstrings/t.create_to_translate.c:5
+#, fuzzy
+msgid "Name of the new space time dataset"
+msgstr "तक्त्याचे नाव"
+
+#: ../locale/scriptstrings/t.create_to_translate.c:6
+msgid ""
+"The granularity of the new space time dataset (NNN day, NNN week, NNN month)"
+msgstr ""
+
+#: ../locale/scriptstrings/t.create_to_translate.c:7
+msgid "The semantic type of the space time dataset"
+msgstr ""
+
+#: ../locale/scriptstrings/t.create_to_translate.c:8
+#: ../locale/scriptstrings/t.list_to_translate.c:5
+#: ../locale/scriptstrings/t.remove_to_translate.c:6
+msgid "Type of the space time dataset, default is strds"
+msgstr ""
+
+#: ../locale/scriptstrings/t.create_to_translate.c:9
+#: ../locale/scriptstrings/t.list_to_translate.c:9
+msgid "The temporal type of the space time dataset, default is absolute"
+msgstr ""
+
+#: ../locale/scriptstrings/t.create_to_translate.c:10
+msgid "Title of the new space time dataset"
+msgstr ""
+
+#: ../locale/scriptstrings/t.create_to_translate.c:11
+msgid "Description of the new space time dataset"
 msgstr ""
 
 #: ../locale/scriptstrings/db.test_to_translate.c:1
@@ -28677,6 +28990,27 @@ msgstr ""
 msgid "Don't install new extension, just compile it"
 msgstr ""
 
+#: ../locale/scriptstrings/tr3.register_to_translate.c:1
+msgid "Register raster3d maps in a space time raster3d dataset"
+msgstr ""
+
+#: ../locale/scriptstrings/tr3.register_to_translate.c:4
+#, fuzzy
+msgid "Name of an existing space time raster3d dataset"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../locale/scriptstrings/tr3.register_to_translate.c:5
+msgid ""
+"Name(s) of existing raster3d map(s), multiple maps must be provided in "
+"temporal order in case datetime should be attached"
+msgstr ""
+
+#: ../locale/scriptstrings/tr3.register_to_translate.c:6
+msgid ""
+"The valid start date and time of the first raster3d map, in case the map has "
+"no valid time (format absolute: \"yyyy-mm-dd HH:MM:SS\", format relative 5.0)"
+msgstr ""
+
 #: ../locale/scriptstrings/d.correlate_to_translate.c:1
 msgid "Prints a graph of the correlation between raster maps (in pairs)."
 msgstr ""
@@ -28815,7 +29149,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/v.db.update_to_translate.c:7
 #, fuzzy
-msgid "Name of attrubute column to query"
+msgid "Name of attribute column to query"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
 #: ../locale/scriptstrings/d.rast.leg_to_translate.c:1
@@ -28841,12 +29175,39 @@ msgstr "'%s'. ड्राइवर चालू होत नाही"
 msgid "Name of input raster map to generate legend from"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
+#: ../locale/scriptstrings/tv.register_to_translate.c:1
+msgid "Register vector maps in a space time vector dataset"
+msgstr ""
+
+#: ../locale/scriptstrings/tv.register_to_translate.c:2
+#: ../locale/scriptstrings/tv.unregister_to_translate.c:2
+#, fuzzy
+msgid "spacetime vector dataset"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../locale/scriptstrings/tv.register_to_translate.c:4
+#, fuzzy
+msgid "Name of an existing space time vector dataset"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../locale/scriptstrings/tv.register_to_translate.c:5
+msgid ""
+"Name(s) of existing vector map(s), multiple maps must be provided in "
+"temporal order in case datetime should be attached"
+msgstr ""
+
+#: ../locale/scriptstrings/tv.register_to_translate.c:6
+msgid ""
+"The valid start date and time of the first vector map, in case the map has "
+"no valid time (format absolute: \"yyyy-mm-dd HH:MM:SS\", format relative 5.0)"
+msgstr ""
+
 #: ../locale/scriptstrings/v.db.droprow_to_translate.c:1
 msgid "Removes a vector feature from a vector map through attribute selection."
 msgstr ""
 
 #: ../locale/scriptstrings/g.manual_to_translate.c:1
-msgid "Display the HTML man pages of GRASS GIS"
+msgid "Display the HTML manual pages of GRASS modules"
 msgstr ""
 
 #: ../locale/scriptstrings/g.manual_to_translate.c:3
@@ -28869,6 +29230,24 @@ msgstr ""
 #, fuzzy
 msgid "Manual entry to be displayed"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../locale/scriptstrings/tr.series_to_translate.c:1
+msgid ""
+"Performe different aggregation algorithms from r.series on all raster maps "
+"of a space time raster dataset"
+msgstr ""
+
+#: ../locale/scriptstrings/tr.series_to_translate.c:6
+msgid "Aggregate operation on all raster maps of a space time raster dataset"
+msgstr ""
+
+#: ../locale/scriptstrings/tr.series_to_translate.c:7
+msgid "Sort the maps by category."
+msgstr ""
+
+#: ../locale/scriptstrings/tr.series_to_translate.c:8
+msgid "Assign the space time raster dataset time interval to the output map"
+msgstr ""
 
 #: ../locale/scriptstrings/v.in.sites.all_to_translate.c:1
 #, fuzzy
@@ -28899,6 +29278,37 @@ msgstr ""
 
 #: ../locale/scriptstrings/r.mask_to_translate.c:9
 msgid "Remove existing mask (overrides other options)"
+msgstr ""
+
+#: ../locale/scriptstrings/t.list_to_translate.c:1
+msgid "List space time and map datasets"
+msgstr ""
+
+#: ../locale/scriptstrings/t.list_to_translate.c:6
+msgid ""
+"Sort the space time dataset by category. Columns number_of_maps and "
+"granularity only available fpr space time datasets"
+msgstr ""
+
+#: ../locale/scriptstrings/t.list_to_translate.c:7
+msgid ""
+"Which columns should be printed to stdout. Columns number_of_maps and "
+"granularity only available fpr space time datasets"
+msgstr ""
+
+#: ../locale/scriptstrings/t.list_to_translate.c:8
+msgid ""
+"A where statement for selected listing e.g: start_time < \"2001-01-01\" and "
+"end_time > \"2001-01-01\""
+msgstr ""
+
+#: ../locale/scriptstrings/t.list_to_translate.c:10
+msgid ""
+"The field separator character between the columns, default is tabular \"\t\""
+msgstr ""
+
+#: ../locale/scriptstrings/t.list_to_translate.c:11
+msgid "Print the column names as first row"
 msgstr ""
 
 #: ../locale/scriptstrings/v.db.reconnect.all_to_translate.c:1
@@ -28993,6 +29403,48 @@ msgstr ""
 #, fuzzy
 msgid "Name of input file (or \"-\" to read from stdin)"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../locale/scriptstrings/t.time.abs_to_translate.c:1
+msgid ""
+"Set the absolute valid time interval for maps of type raster, vector and "
+"raster3d"
+msgstr ""
+
+#: ../locale/scriptstrings/t.time.abs_to_translate.c:2
+#: ../locale/scriptstrings/t.time.rel_to_translate.c:2
+#: ../imagery/i.eb.netrad/main.c:84
+#, fuzzy
+msgid "time"
+msgstr "तक्त्याचे नाव"
+
+#: ../locale/scriptstrings/t.time.abs_to_translate.c:3
+msgid "absolute"
+msgstr ""
+
+#: ../locale/scriptstrings/t.time.abs_to_translate.c:7
+#: ../locale/scriptstrings/t.time.rel_to_translate.c:7
+#, fuzzy
+msgid "Name(s) of existing raster map(s)"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../locale/scriptstrings/t.time.abs_to_translate.c:8
+msgid ""
+"The valid start date and time of the first raster map. Time format is \"yyyy-"
+"mm-dd HH:MM:SS\" or only \"yyyy-mm-dd\""
+msgstr ""
+
+#: ../locale/scriptstrings/t.time.abs_to_translate.c:9
+msgid ""
+"The valid end date and time of the first raster map. Time format is \"yyyy-"
+"mm-dd HH:MM:SS\" or only \"yyyy-mm-dd\". End time and increment are mutual "
+"exclusive."
+msgstr ""
+
+#: ../locale/scriptstrings/t.time.abs_to_translate.c:10
+msgid ""
+"Time increment between maps for valid time interval creation. Interval "
+"format: NNN seconds, minutes, hours, days, weeks, months, years"
+msgstr ""
 
 #: ../locale/scriptstrings/v.out.gps_to_translate.c:1
 #, fuzzy
@@ -29203,6 +29655,33 @@ msgstr "डेटाबेसची यादी दाखवता येणा
 msgid "Table name to drop"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
+#: ../locale/scriptstrings/t.info_to_translate.c:1
+#, fuzzy
+msgid "List informtion about space time and map datasets"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../locale/scriptstrings/t.info_to_translate.c:2
+msgid "spacetime dataset"
+msgstr ""
+
+#: ../locale/scriptstrings/t.info_to_translate.c:4
+#, fuzzy
+msgid "Name of an existing space time or map dataset"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../locale/scriptstrings/t.info_to_translate.c:5
+msgid "Type of the dataset, default is strds (space time raster dataset)"
+msgstr ""
+
+#: ../locale/scriptstrings/t.info_to_translate.c:6
+#, fuzzy
+msgid "Print information in shell style"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../locale/scriptstrings/t.info_to_translate.c:7
+msgid "Print temporal relation matrix for space time datasets"
+msgstr ""
+
 #: ../locale/scriptstrings/r.grow_to_translate.c:3
 msgid "Radius is in map units rather than cells"
 msgstr ""
@@ -29255,10 +29734,44 @@ msgstr "'%s'. ड्राइवर चालू होत नाही"
 msgid "Name of uncompressed geonames file (with .txt extension)"
 msgstr "तक्त्याचे नाव"
 
+#: ../locale/scriptstrings/t.remove_to_translate.c:1
+#, fuzzy
+msgid "Remove space time or map datasets from temporal database"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../locale/scriptstrings/t.remove_to_translate.c:5
+#, fuzzy
+msgid ""
+"Name(s) of the space time or map dataset to be removed from the temporal "
+"database"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
 #: ../locale/scriptstrings/r.out.xyz_to_translate.c:1
 msgid ""
 "Exports a raster map to a text file as x,y,z values based on cell centers."
 msgstr ""
+
+#: ../locale/scriptstrings/tr3.unregister_to_translate.c:1
+msgid ""
+"Unregister raster3d map(s) from a specific or from all space time raster3d "
+"dataset in which it is registered"
+msgstr ""
+
+#: ../locale/scriptstrings/tr3.unregister_to_translate.c:2
+msgid "spacetime raster3d dataset"
+msgstr ""
+
+#: ../locale/scriptstrings/tr3.unregister_to_translate.c:4
+msgid ""
+"Name of an existing space time raster3d dataset. If no name is provided the "
+"raster3d map(s) are unregistered from all space time datasets in which they "
+"are registered."
+msgstr ""
+
+#: ../locale/scriptstrings/tr3.unregister_to_translate.c:5
+#, fuzzy
+msgid "Name(s) of existing raster3d map(s) to unregister"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
 
 #: ../locale/scriptstrings/v.in.mapgen_to_translate.c:1
 msgid "Imports Mapgen or Matlab-ASCII vector maps into GRASS."
@@ -29366,6 +29879,24 @@ msgid ""
 "Data types depend on database backend, but all support VARCHAR(), INT, "
 "DOUBLE PRECISION and DATE"
 msgstr ""
+
+#: ../locale/scriptstrings/tr.unregister_to_translate.c:1
+msgid ""
+"Unregister raster map(s) from a specific or from all space time raster "
+"dataset in which it is registered"
+msgstr ""
+
+#: ../locale/scriptstrings/tr.unregister_to_translate.c:4
+msgid ""
+"Name of an existing space time raster dataset. If no name is provided the "
+"raster map(s) are unregistered from all space time datasets in which they "
+"are registered."
+msgstr ""
+
+#: ../locale/scriptstrings/tr.unregister_to_translate.c:5
+#, fuzzy
+msgid "Name(s) of existing raster map(s) to unregister"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
 
 #: ../locale/scriptstrings/db.dropcolumn_to_translate.c:1
 #, fuzzy
@@ -29579,6 +30110,24 @@ msgstr ""
 msgid "Category number starting value"
 msgstr ""
 
+#: ../locale/scriptstrings/tv.unregister_to_translate.c:1
+msgid ""
+"Unregister vector map(s) from a specific or from all space time vector "
+"datasets in which it is registered"
+msgstr ""
+
+#: ../locale/scriptstrings/tv.unregister_to_translate.c:4
+msgid ""
+"Name of an existing space time vector dataset. If no name is provided the "
+"vector map(s) are unregistered from all space time datasets in which they "
+"are registered."
+msgstr ""
+
+#: ../locale/scriptstrings/tv.unregister_to_translate.c:5
+#, fuzzy
+msgid "Name(s) of existing vector map(s) to unregister"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
 #: ../locale/scriptstrings/v.db.droptable_to_translate.c:1
 #, fuzzy
 msgid "Removes existing attribute table of a vector map."
@@ -29617,9 +30166,8 @@ msgid "column"
 msgstr ""
 
 #: ../locale/scriptstrings/v.db.join_to_translate.c:9
-#, fuzzy
-msgid "Join column in table"
-msgstr "डेटाबेसची यादी दाखवता येणार नाही"
+msgid "Identifier column (e.g.: cat) in the vector table to be used for join"
+msgstr ""
 
 #: ../locale/scriptstrings/v.db.join_to_translate.c:10
 #, fuzzy
@@ -29631,9 +30179,8 @@ msgid "ocolumn"
 msgstr ""
 
 #: ../locale/scriptstrings/v.db.join_to_translate.c:12
-#, fuzzy
-msgid "Join column in other table"
-msgstr "डेटाबेसची यादी दाखवता येणार नाही"
+msgid "Identifier column (e.g.: id) in the other table used for join"
+msgstr ""
 
 #: ../locale/scriptstrings/v.db.dropcolumn_to_translate.c:1
 #, fuzzy
@@ -29643,7 +30190,7 @@ msgstr "डेटाबेसची यादी दाखवता येणा
 
 #: ../locale/scriptstrings/v.db.dropcolumn_to_translate.c:5
 #, fuzzy
-msgid "Name of attribute column to drop"
+msgid "Name of attribute column(s) to drop"
 msgstr "डेटाबेसची यादी दाखवता येणार नाही"
 
 #: ../locale/scriptstrings/r.pack_to_translate.c:1
@@ -29826,6 +30373,29 @@ msgstr ""
 #, fuzzy
 msgid "Name of input image file"
 msgstr "तक्त्याचे नाव"
+
+#: ../locale/scriptstrings/t.time.rel_to_translate.c:1
+msgid ""
+"Set the relative valid time interval for maps of type raster, vector and "
+"raster3d"
+msgstr ""
+
+#: ../locale/scriptstrings/t.time.rel_to_translate.c:3
+#, fuzzy
+msgid "relative"
+msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#: ../locale/scriptstrings/t.time.rel_to_translate.c:8
+msgid "The valid start time value in [days]"
+msgstr ""
+
+#: ../locale/scriptstrings/t.time.rel_to_translate.c:9
+msgid "The valid end time value in [days]"
+msgstr ""
+
+#: ../locale/scriptstrings/t.time.rel_to_translate.c:10
+msgid "Time increment between maps for valid time interval creation [days]"
+msgstr ""
 
 #: ../locale/scriptstrings/db.in.ogr_to_translate.c:1
 #, fuzzy
@@ -31156,11 +31726,6 @@ msgstr ""
 #, fuzzy
 msgid "Name of the map of local UTC time of satellite overpass [hh.hhh]"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#: ../imagery/i.eb.netrad/main.c:84
-#, fuzzy
-msgid "time"
-msgstr "तक्त्याचे नाव"
 
 #: ../imagery/i.eb.netrad/main.c:87
 msgid "temperaturedifference2m"
@@ -32513,7 +33078,7 @@ msgid "  stddev"
 msgstr ""
 
 #: ../imagery/i.group/main.c:55
-msgid "Creates, edits, and lists groups and subgroups of imagery files."
+msgid "Creates, edits, and lists groups and subgroups of imagery data."
 msgstr ""
 
 #: ../imagery/i.group/main.c:59
@@ -32529,90 +33094,94 @@ msgstr ""
 msgid "Name of raster map(s) to include in group"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../imagery/i.group/main.c:73
+#: ../imagery/i.group/main.c:70 ../imagery/i.group/main.c:75
+msgid "Maps"
+msgstr ""
+
+#: ../imagery/i.group/main.c:74
 msgid "Remove selected files from specified group"
 msgstr ""
 
-#: ../imagery/i.group/main.c:77
+#: ../imagery/i.group/main.c:79
 msgid "List files from specified (sub)group (fancy)"
 msgstr ""
 
-#: ../imagery/i.group/main.c:83
+#: ../imagery/i.group/main.c:85
 msgid "List files from specified (sub)group (shell script style)"
 msgstr ""
 
-#: ../imagery/i.group/main.c:103
+#: ../imagery/i.group/main.c:105
 #, fuzzy
 msgid "No input raster map(s) specified"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../imagery/i.group/main.c:111 ../imagery/i.target/main.c:80
+#: ../imagery/i.group/main.c:113 ../imagery/i.target/main.c:80
 #: ../imagery/i.class/main.c:142
 #, fuzzy
 msgid "Group must exist in the current mapset"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../imagery/i.group/main.c:121 ../imagery/i.group/main.c:142
+#: ../imagery/i.group/main.c:123 ../imagery/i.group/main.c:144
 #, fuzzy
 msgid "Specified group does not exist in current mapset"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../imagery/i.group/main.c:125
+#: ../imagery/i.group/main.c:127
 #, fuzzy, c-format
 msgid "Removing raster maps from subgroup <%s>..."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../imagery/i.group/main.c:130
+#: ../imagery/i.group/main.c:132
 #, fuzzy, c-format
 msgid "Removing raster maps from group <%s>..."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../imagery/i.group/main.c:165
+#: ../imagery/i.group/main.c:167
 #, fuzzy, c-format
 msgid "Group <%s> does not yet exist. Creating..."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../imagery/i.group/main.c:169 ../imagery/i.group/main.c:178
+#: ../imagery/i.group/main.c:171 ../imagery/i.group/main.c:180
 #, fuzzy, c-format
 msgid "Adding raster maps to group <%s>..."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../imagery/i.group/main.c:173
+#: ../imagery/i.group/main.c:175
 #, fuzzy, c-format
 msgid "Adding raster maps to subgroup <%s>..."
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../imagery/i.group/main.c:204
+#: ../imagery/i.group/main.c:206
 #, fuzzy, c-format
 msgid "Adding raster map <%s> to group"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../imagery/i.group/main.c:210
+#: ../imagery/i.group/main.c:212
 #, c-format
 msgid "Raster map <%s> exists in group. Skipping..."
 msgstr ""
 
-#: ../imagery/i.group/main.c:244
+#: ../imagery/i.group/main.c:246
 #, fuzzy, c-format
 msgid "Adding raster map <%s> to subgroup"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../imagery/i.group/main.c:250
+#: ../imagery/i.group/main.c:252
 #, c-format
 msgid "Raster map <%s> exists in subgroup. Skipping..."
 msgstr ""
 
-#: ../imagery/i.group/main.c:299
+#: ../imagery/i.group/main.c:301
 #, fuzzy, c-format
 msgid "Removing raster map <%s> from group"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../imagery/i.group/main.c:316 ../imagery/i.group/main.c:375
+#: ../imagery/i.group/main.c:318 ../imagery/i.group/main.c:377
 #, fuzzy
 msgid "No raster map removed"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
 
-#: ../imagery/i.group/main.c:358
+#: ../imagery/i.group/main.c:360
 #, fuzzy, c-format
 msgid "Removing raster map <%s> from subgroup"
 msgstr "'%s'. ड्राइवर चालू होत नाही"
@@ -32924,6 +33493,18 @@ msgid "Can't mark another point.  Only %d points allowed.  Sorry."
 msgstr ""
 
 #, fuzzy
+#~ msgid "Writting buffers..."
+#~ msgstr "'%s'. ड्राइवर चालू होत नाही"
+
+#, fuzzy
+#~ msgid "Join column in table"
+#~ msgstr "डेटाबेसची यादी दाखवता येणार नाही"
+
+#, fuzzy
+#~ msgid "Join column in other table"
+#~ msgstr "डेटाबेसची यादी दाखवता येणार नाही"
+
+#, fuzzy
 #~ msgid "Layer number or name with route paths or -1"
 #~ msgstr "डेटाबेसची यादी दाखवता येणार नाही"
 
@@ -32976,10 +33557,6 @@ msgstr ""
 #~ msgstr "'%s'. ड्राइवर चालू होत नाही"
 
 #, fuzzy
-#~ msgid "Removes a table from database."
-#~ msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#, fuzzy
 #~ msgid "Unable to parse '%s'\n"
 #~ msgstr "डेटाबेसची यादी दाखवता येणार नाही"
 
@@ -32990,10 +33567,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Unable to add new field <%s>"
 #~ msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#, fuzzy
-#~ msgid "Name of raster map from which to copy color table"
-#~ msgstr "डेटाबेसची यादी दाखवता येणार नाही"
 
 #, fuzzy
 #~ msgid "Name of file containing rules"
@@ -33025,10 +33598,6 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Unable it load G3d range"
-#~ msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#, fuzzy
-#~ msgid "Raster3d map <%s> not found"
 #~ msgstr "'%s'. ड्राइवर चालू होत नाही"
 
 #, fuzzy
@@ -33077,10 +33646,6 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Unknown icon marker"
-#~ msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#, fuzzy
-#~ msgid "Raster input maps"
 #~ msgstr "'%s'. ड्राइवर चालू होत नाही"
 
 #, fuzzy
@@ -33225,10 +33790,6 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Name for output shaded relief map"
-#~ msgstr "'%s'. ड्राइवर चालू होत नाही"
-
-#, fuzzy
-#~ msgid "Name of aspect raster map"
 #~ msgstr "'%s'. ड्राइवर चालू होत नाही"
 
 #, fuzzy
