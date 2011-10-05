@@ -1348,7 +1348,7 @@ class ModelFrame(wx.Frame):
             # valid ?
             valid = True
             for p in params['params']:
-                if p.get('required', 'no') != 'no' and \
+                if p.get('required', False) and \
                         p.get('value', '') == '' and \
                         p.get('default', '') == '':
                     valid = False
