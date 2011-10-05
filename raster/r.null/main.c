@@ -3,11 +3,11 @@
  * MODULE:       r.null
  * AUTHOR(S):    U.S.Army Construction Engineering Research Laboratory
  * PURPOSE:      Manages NULL-values of given raster map.
- * COPYRIGHT:    (C) 2008 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2008, 2011 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ *               This program is free software under the GNU General
+ *               Public License (>=v2). Read the file COPYING that
+ *               comes with GRASS for details.
  *
  *****************************************************************************/
 
@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
     module->description = _("Manages NULL-values of given raster map.");
 
     parms.map = G_define_standard_option(G_OPT_R_MAP);
-    parms.map->description = _("Raster map for which to edit null file");
+    parms.map->description = _("Name of raster map for which to edit null values");
 
     parms.setnull = G_define_option();
     parms.setnull->key = "setnull";
@@ -70,26 +70,31 @@ int main(int argc, char *argv[])
     parms.setnull->required = NO;
     parms.setnull->multiple = YES;
     parms.setnull->description = _("List of cell values to be set to NULL");
-
+    parms.setnull->guisection = _("Modify");
+    
     parms.null = G_define_option();
     parms.null->key = "null";
     parms.null->type = TYPE_DOUBLE;
     parms.null->required = NO;
     parms.null->multiple = NO;
     parms.null->description = _("The value to replace the null value by");
+    parms.null->guisection = _("Modify");
 
     flags.f = G_define_flag();
     flags.f->key = 'f';
     flags.f->description = _("Only do the work if the map is floating-point");
+    flags.f->guisection = _("Check");
 
     flags.i = G_define_flag();
     flags.i->key = 'i';
     flags.i->description = _("Only do the work if the map is integer");
+    flags.i->guisection = _("Check");
 
     flags.n = G_define_flag();
     flags.n->key = 'n';
     flags.n->description =
 	_("Only do the work if the map doesn't have a NULL-value bitmap file");
+    flags.n->guisection = _("Check");
 
     flags.c = G_define_flag();
     flags.c->key = 'c';
@@ -99,6 +104,7 @@ int main(int argc, char *argv[])
     flags.r = G_define_flag();
     flags.r->key = 'r';
     flags.r->description = _("Remove NULL-value bitmap file");
+    flags.r->guisection = _("Remove");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
