@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-04 19:10+0200\n"
+"POT-Creation-Date: 2011-10-05 23:30+0200\n"
 "PO-Revision-Date: 2010-08-24 11:31+0530\n"
 "Last-Translator: Mohammed Rashad <rashadkm@gmail.com>\n"
 "Language-Team: GRASS Malayalam Translation Team <rashadkm@gmail.com>\n"
@@ -1563,75 +1563,80 @@ msgstr ""
 msgid "Use either --quiet or --verbose flag, not both. Assuming --quiet."
 msgstr ""
 
-#: ../lib/gis/parser.c:528
+#: ../lib/gis/parser.c:529
 #, c-format
 msgid "Sorry <%s> is not a valid option"
 msgstr ""
 
-#: ../lib/gis/parser.c:560
+#: ../lib/gis/parser.c:561
 msgid "ERROR"
 msgstr ""
 
-#: ../lib/gis/parser.c:787
+#: ../lib/gis/parser.c:788
 msgid "Unable to determine program name"
 msgstr ""
 
-#: ../lib/gis/parser.c:803 ../lib/gis/parser.c:820
+#: ../lib/gis/parser.c:804 ../lib/gis/parser.c:821
 #, c-format
 msgid "Sorry, <%c> is not a valid flag"
 msgstr ""
 
-#: ../lib/gis/parser.c:919
+#: ../lib/gis/parser.c:920
 #, c-format
 msgid "Sorry, <%s=> is ambiguous"
 msgstr ""
 
-#: ../lib/gis/parser.c:926
+#: ../lib/gis/parser.c:927
 #, c-format
 msgid "Sorry, <%s> is not a valid parameter"
 msgstr ""
 
-#: ../lib/gis/parser.c:1001
+#: ../lib/gis/parser.c:935
+#, c-format
+msgid "Option <%s> does not accept multiple answers"
+msgstr ""
+
+#: ../lib/gis/parser.c:1006
 #, c-format
 msgid ""
 "Illegal range syntax for parameter <%s>\n"
 "\tPresented as: %s"
 msgstr ""
 
-#: ../lib/gis/parser.c:1007
+#: ../lib/gis/parser.c:1012
 #, c-format
 msgid ""
 "Value <%s> out of range for parameter <%s>\n"
 "\tLegal range: %s"
 msgstr ""
 
-#: ../lib/gis/parser.c:1013
+#: ../lib/gis/parser.c:1018
 #, c-format
 msgid "Missing value for parameter <%s>"
 msgstr ""
 
-#: ../lib/gis/parser.c:1019
+#: ../lib/gis/parser.c:1024
 #, c-format
 msgid ""
 "Value <%s> ambiguous for parameter <%s>\n"
 "\tValid options: %s"
 msgstr ""
 
-#: ../lib/gis/parser.c:1155
+#: ../lib/gis/parser.c:1160
 #, c-format
 msgid ""
 "Required parameter <%s> not set:\n"
 "\t(%s)"
 msgstr ""
 
-#: ../lib/gis/parser.c:1246
+#: ../lib/gis/parser.c:1251
 #, c-format
 msgid ""
 "Option <%s> must be provided in multiples of %d\n"
 "\tYou provided %d item(s): %s"
 msgstr ""
 
-#: ../lib/gis/parser.c:1320
+#: ../lib/gis/parser.c:1325
 #, c-format
 msgid "ERROR: option <%s>: <%s> exists.\n"
 msgstr ""
@@ -2368,7 +2373,7 @@ msgstr ""
 msgid "No ellipsoid info given in file %s in <%s>"
 msgstr ""
 
-#: ../lib/gis/proj3.c:105 ../lib/vector/Vlib/header.c:654
+#: ../lib/gis/proj3.c:105 ../lib/vector/Vlib/header.c:620
 msgid "Unknown projection"
 msgstr ""
 
@@ -2822,11 +2827,11 @@ msgstr ""
 msgid "%s: Area %d does not exist"
 msgstr ""
 
-#: ../lib/vector/Vlib/write_nat.c:679 ../lib/vector/Vlib/write_ogr.c:342
+#: ../lib/vector/Vlib/write_nat.c:682 ../lib/vector/Vlib/write_ogr.c:361
 msgid "Attempt to delete dead feature"
 msgstr ""
 
-#: ../lib/vector/Vlib/write_nat.c:927
+#: ../lib/vector/Vlib/write_nat.c:930
 msgid "Attempt to restore alive feature"
 msgstr ""
 
@@ -2861,7 +2866,7 @@ msgstr "ഉത്പന്ന മാപ്പിന്റെ പേർ <%s> അ�
 msgid "Output vector map <%s> is used as input"
 msgstr ""
 
-#: ../lib/vector/Vlib/read_ogr.c:115 ../lib/vector/Vlib/read_ogr.c:376
+#: ../lib/vector/Vlib/read_ogr.c:115 ../lib/vector/Vlib/read_ogr.c:375
 #: ../lib/vector/Vlib/build_ogr.c:318
 #, c-format
 msgid "OGR feature type %d not supported"
@@ -2871,7 +2876,7 @@ msgstr ""
 msgid "OGR feature without ID"
 msgstr ""
 
-#: ../lib/vector/Vlib/read_ogr.c:317
+#: ../lib/vector/Vlib/read_ogr.c:316
 #, c-format
 msgid "OGR feature type '%s' not supported"
 msgstr ""
@@ -3350,74 +3355,6 @@ msgstr ""
 #: ../lib/vector/Vlib/header.c:179
 #, c-format
 msgid "Unknown keyword '%s' in vector head"
-msgstr ""
-
-#: ../lib/vector/Vlib/header.c:315
-msgid "Point"
-msgstr ""
-
-#: ../lib/vector/Vlib/header.c:317
-msgid "MultiPoint"
-msgstr ""
-
-#: ../lib/vector/Vlib/header.c:319
-msgid "LineString"
-msgstr ""
-
-#: ../lib/vector/Vlib/header.c:321
-msgid "MultiLineString"
-msgstr ""
-
-#: ../lib/vector/Vlib/header.c:323
-msgid "Polygon"
-msgstr ""
-
-#: ../lib/vector/Vlib/header.c:325
-msgid "MultiPolygon"
-msgstr ""
-
-#: ../lib/vector/Vlib/header.c:327
-msgid "GeometryCollection"
-msgstr ""
-
-#: ../lib/vector/Vlib/header.c:329
-msgid "None"
-msgstr ""
-
-#: ../lib/vector/Vlib/header.c:331
-msgid "LinearRing"
-msgstr ""
-
-#: ../lib/vector/Vlib/header.c:333
-msgid "3D Point"
-msgstr ""
-
-#: ../lib/vector/Vlib/header.c:335
-msgid "3D MultiPoint"
-msgstr ""
-
-#: ../lib/vector/Vlib/header.c:337
-msgid "3D LineString"
-msgstr ""
-
-#: ../lib/vector/Vlib/header.c:339
-msgid "3D MultiLineString"
-msgstr ""
-
-#: ../lib/vector/Vlib/header.c:341
-msgid "3D Polygon"
-msgstr ""
-
-#: ../lib/vector/Vlib/header.c:343
-msgid "3D MultiPolygon"
-msgstr ""
-
-#: ../lib/vector/Vlib/header.c:345
-msgid "3D GeometryCollection"
-msgstr ""
-
-#: ../lib/vector/Vlib/header.c:347
-msgid "Unknown"
 msgstr ""
 
 #: ../lib/vector/Vlib/read.c:111
@@ -3944,7 +3881,7 @@ msgstr ""
 msgid "OGR datasource not defined"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_ogr.c:64 ../lib/vector/Vlib/write_ogr.c:302
+#: ../lib/vector/Vlib/open_ogr.c:64 ../lib/vector/Vlib/write_ogr.c:321
 msgid "OGR layer not defined"
 msgstr ""
 
@@ -4210,66 +4147,66 @@ msgstr ""
 msgid "OGR feature %d without ID ignored"
 msgstr ""
 
-#: ../lib/vector/Vlib/write_ogr.c:79
+#: ../lib/vector/Vlib/write_ogr.c:80
 #, c-format
 msgid "No category defined for layer %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/write_ogr.c:81
+#: ../lib/vector/Vlib/write_ogr.c:82
 #, c-format
 msgid "Feature has more categories, using category %d (from layer %d)"
 msgstr ""
 
-#: ../lib/vector/Vlib/write_ogr.c:100
+#: ../lib/vector/Vlib/write_ogr.c:102
 msgid "Feature is not a point. Skipping."
 msgstr ""
 
-#: ../lib/vector/Vlib/write_ogr.c:108
+#: ../lib/vector/Vlib/write_ogr.c:110
 msgid "Feature is not a line. Skipping."
 msgstr ""
 
-#: ../lib/vector/Vlib/write_ogr.c:115
+#: ../lib/vector/Vlib/write_ogr.c:117
 msgid "Feature is not a polygon. Skipping."
 msgstr ""
 
-#: ../lib/vector/Vlib/write_ogr.c:122
+#: ../lib/vector/Vlib/write_ogr.c:124
 msgid "Feature is not a face. Skipping."
 msgstr ""
 
-#: ../lib/vector/Vlib/write_ogr.c:128
+#: ../lib/vector/Vlib/write_ogr.c:130
 #, fuzzy, c-format
 msgid "Unsupported feature type (%d)"
 msgstr "വെക്റ്റർ മാപ്പ് വായിക്കാൻ പട്ടുന്നില്ല"
 
-#: ../lib/vector/Vlib/write_ogr.c:144
+#: ../lib/vector/Vlib/write_ogr.c:146
 msgid "Boundary is not closed. Skipping."
 msgstr ""
 
-#: ../lib/vector/Vlib/write_ogr.c:258
+#: ../lib/vector/Vlib/write_ogr.c:271 ../lib/vector/Vlib/write_ogr.c:298
 msgid "Unable to rewrite feature (incompatible feature types)"
 msgstr ""
 
-#: ../lib/vector/Vlib/write_ogr.c:409
+#: ../lib/vector/Vlib/write_ogr.c:428
 #, c-format
 msgid "Feature without category of layer %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/write_ogr.c:423
+#: ../lib/vector/Vlib/write_ogr.c:442
 #, fuzzy, c-format
 msgid "Unable to select attributes for category %d"
 msgstr "തിരഞ്ഞെടുത്ത രേഖകൾ ടേബിളിൽ നിന്ന് എടുക്കാൻ സധികുനില്ല <%s>"
 
-#: ../lib/vector/Vlib/write_ogr.c:428 ../lib/db/dbmi_client/copy_tab.c:314
+#: ../lib/vector/Vlib/write_ogr.c:447 ../lib/db/dbmi_client/copy_tab.c:314
 #, c-format
 msgid "Unable to fetch data from table <%s>"
 msgstr "ടേബിൾ നിന്ന് ഡേറ്റ എടുക്കാൻ പറ്റുന്നില്ല <%s>"
 
-#: ../lib/vector/Vlib/write_ogr.c:433
+#: ../lib/vector/Vlib/write_ogr.c:452
 #, c-format
 msgid "No database record for category %d, no attributes will be written"
 msgstr ""
 
-#: ../lib/vector/Vlib/write_ogr.c:466
+#: ../lib/vector/Vlib/write_ogr.c:485
 #, fuzzy, c-format
 msgid "Unable to create field <%s>"
 msgstr "ടേബിൾ ഉണ്ടാക്കാൻ പറ്റുന്നില്ല <%s>"
@@ -4664,6 +4601,18 @@ msgstr ""
 msgid "Please recompile with Large File Support (LFS)"
 msgstr ""
 
+#: ../lib/init/prompt.py:20
+msgid "[Raster and Volume MASKs present]"
+msgstr ""
+
+#: ../lib/init/prompt.py:22
+msgid "[Raster MASK present]"
+msgstr ""
+
+#: ../lib/init/prompt.py:24
+msgid "[Volume MASK present]"
+msgstr ""
+
 #: ../lib/init/lock.c:38
 #, c-format
 msgid "Usage: %s file pid"
@@ -4715,7 +4664,7 @@ msgid "print GRASS configuration parameters"
 msgstr ""
 
 #: ../lib/init/grass.py:180
-msgid "options: arch,build,compiler,path"
+msgid "options: arch,build,compiler,path,revision"
 msgstr ""
 
 #: ../lib/init/grass.py:182
@@ -4947,34 +4896,34 @@ msgstr ""
 msgid "When ready to quit enter:"
 msgstr ""
 
-#: ../lib/init/grass.py:845
+#: ../lib/init/grass.py:846
 #, fuzzy, python-format
 msgid "Failed to start shell '%s'"
 msgstr "ഡ്രയ്വ്വർ തുടങ്ങാൻ സാധിക്കുന്നില്ല <%s>"
 
-#: ../lib/init/grass.py:849
+#: ../lib/init/grass.py:850
 #, python-format
 msgid "Batch job '%s' (defined in GRASS_BATCH_JOB variable) was executed."
 msgstr ""
 
-#: ../lib/init/grass.py:850 ../lib/init/grass.py:855
+#: ../lib/init/grass.py:851 ../lib/init/grass.py:856
 msgid "Goodbye from GRASS GIS"
 msgstr ""
 
-#: ../lib/init/grass.py:853
+#: ../lib/init/grass.py:854
 msgid "Done."
 msgstr ""
 
-#: ../lib/init/grass.py:859
+#: ../lib/init/grass.py:860
 msgid "Cleaning up temporary files..."
 msgstr ""
 
-#: ../lib/init/grass.py:893
+#: ../lib/init/grass.py:902
 #, fuzzy, python-format
 msgid "Parameter <%s> not supported"
 msgstr "റാസ്റ്റെർ മാപ്പ് <%s> കണ്മാനില്ല"
 
-#: ../lib/init/grass.py:1031
+#: ../lib/init/grass.py:1040
 #, python-format
 msgid ""
 "Unable to start GRASS. You can:\n"
@@ -4984,11 +4933,11 @@ msgid ""
 "path/to/location/mapset`)"
 msgstr ""
 
-#: ../lib/init/grass.py:1040
+#: ../lib/init/grass.py:1049
 msgid "Starting GRASS GIS..."
 msgstr ""
 
-#: ../lib/init/grass.py:1097
+#: ../lib/init/grass.py:1106
 #, python-format
 msgid "Launching '%s' GUI in the background, please wait..."
 msgstr ""
@@ -5445,6 +5394,151 @@ msgstr ""
 msgid "html: type '%s'"
 msgstr ""
 
+#: ../lib/python/temporal/core.py:100
+#, python-format
+msgid "Wrong increment format: %s"
+msgstr ""
+
+#: ../lib/python/temporal/space_time_datasets.py:568
+msgid "Valid end time and increment are mutual exclusive"
+msgstr ""
+
+#: ../lib/python/temporal/space_time_datasets.py:676
+#, python-format
+msgid "Set absolute valid time for map <%s> to %s - %s"
+msgstr ""
+
+#: ../lib/python/temporal/space_time_datasets.py:690
+#, fuzzy, python-format
+msgid "Set relative valid time for map <%s> to %f - %s"
+msgstr "റാസ്റ്റെർ മാപ്പ് തുറക്കാൻ പറ്റുനില്ല <%s>"
+
+#: ../lib/python/temporal/abstract_datasets.py:250
+msgid "Start time must be of type datetime"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_datasets.py:253
+msgid "End time must be of type datetime"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_datasets.py:257
+msgid "End time must be later than start time"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_datasets.py:298
+msgid "End time must be greater than start time"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_datasets.py:362
+#, fuzzy, python-format
+msgid "Unable to remove space time dataset register table <%s>"
+msgstr "ടേബിൾ നിന്ന് ഡേറ്റ എടുക്കാൻ പറ്റുന്നില്ല <%s>"
+
+#: ../lib/python/temporal/abstract_datasets.py:364
+#, python-format
+msgid "Delete %s dataset <%s> from temporal database"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_datasets.py:378
+#, python-format
+msgid "Unregister %s dataset <%s> from space time datasets"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_datasets.py:426
+#, fuzzy, python-format
+msgid "Unable to select space time dataset register table <%s>"
+msgstr "ടേബിൾ നിന്ന് ഡേറ്റ എടുക്കാൻ പറ്റുന്നില്ല <%s>"
+
+#: ../lib/python/temporal/abstract_datasets.py:476
+#, fuzzy, python-format
+msgid "Unknown temporal type \"%s\""
+msgstr "വെക്റ്റർ മാപ്പ് വായിക്കാൻ പട്ടുന്നില്ല"
+
+#: ../lib/python/temporal/abstract_datasets.py:598
+#, fuzzy, python-format
+msgid "Unable to get map ids from register table <%s>"
+msgstr "ടേബിൾ നിന്ന് ഡേറ്റ എടുക്കാൻ പറ്റുന്നില്ല <%s>"
+
+#: ../lib/python/temporal/abstract_datasets.py:611
+#, python-format
+msgid "Delete space time %s  dataset <%s> from temporal database"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_datasets.py:633
+#: ../lib/python/temporal/abstract_datasets.py:719
+#: ../lib/python/temporal/abstract_datasets.py:758
+#, fuzzy, python-format
+msgid "Unable to drop table <%s>"
+msgstr "ടേബിൾ കളയാൻ പറ്റുന്നില്ല: '%s'"
+
+#: ../lib/python/temporal/abstract_datasets.py:660
+msgid "Only maps with absolute or relative valid time can be registered"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_datasets.py:662
+#, python-format
+msgid "Register %s map <%s> in space time %s dataset <%s>"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_datasets.py:681
+msgid "Only maps from the same mapset can be registered"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_datasets.py:690
+#, python-format
+msgid "Map <%s> is already registered."
+msgstr ""
+
+#: ../lib/python/temporal/abstract_datasets.py:724
+#: ../lib/python/temporal/abstract_datasets.py:763
+#, fuzzy, python-format
+msgid "Unable to create the space time %s dataset register table for <%s>"
+msgstr "ടേബിൾ ഉണ്ടാക്കാൻ പറ്റുന്നില്ല <%s>"
+
+#: ../lib/python/temporal/abstract_datasets.py:731
+#, fuzzy, python-format
+msgid "Created register table <%s> for %s map <%s>"
+msgstr "റാസ്റ്റെർ മാപ്പ് തുറക്കാൻ പറ്റുനില്ല <%s>"
+
+#: ../lib/python/temporal/abstract_datasets.py:786
+#, python-format
+msgid "Created register table <%s> for space time %s  dataset <%s>"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_datasets.py:824
+#, fuzzy, python-format
+msgid "Unable to find map <%s> in temporal database"
+msgstr "ഫയൽ തുറക്കൻ പറ്റുന്നില്ല %s"
+
+#: ../lib/python/temporal/abstract_datasets.py:826
+#, python-format
+msgid "Unregister %s map <%s>"
+msgstr ""
+
+#: ../lib/python/temporal/abstract_datasets.py:843
+#, fuzzy, python-format
+msgid "Map <%s> is not registered in space time dataset"
+msgstr "തെറ്റ്: നിലവിലുള്ള മാപ്പ്സെറ്റിലില്ലാത്ത മാപ്പിനെ മാറ്റം വരുത്താൻ ശ്രമിക്കുന്നു"
+
+#: ../lib/python/temporal/abstract_datasets.py:873
+#, python-format
+msgid ""
+"Update metadata, spatial and temporal extent from all registered maps of <%s>"
+msgstr ""
+
+#: ../lib/python/temporal/spatial_extent.py:38
+msgid ""
+"Projections are different. Unable to compute overlap_2d for spatial extents"
+msgstr ""
+
+#: ../lib/python/temporal/spatial_extent.py:161
+msgid "Volume computation is not supported for LL projections"
+msgstr ""
+
+#: ../lib/python/temporal/spatial_extent.py:178
+msgid "Area computation is not supported for LL projections"
+msgstr ""
+
 #: ../lib/python/task.py:52
 msgid "unknown"
 msgstr ""
@@ -5468,7 +5562,7 @@ msgstr ""
 msgid "<required>"
 msgstr ""
 
-#: ../lib/python/task.py:433 ../lib/python/task.py:437
+#: ../lib/python/task.py:433
 #, python-format
 msgid ""
 "Unable to fetch interface description for command '%(cmd)s'.\n"
@@ -5481,13 +5575,17 @@ msgstr ""
 msgid "Database connection not defined for layer %s"
 msgstr ""
 
-#: ../lib/python/vector.py:188
+#: ../lib/python/vector.py:230
 #, python-format
 msgid "Missing layer %(layer)d in vector map <%(map)s>"
 msgstr ""
 
-#: ../lib/python/vector.py:204
+#: ../lib/python/vector.py:246
 msgid "vector_select() failed"
+msgstr ""
+
+#: ../lib/python/raster3d.py:86
+msgid "An error occurred while running r3.mapcalc"
 msgstr ""
 
 #: ../lib/python/core.py:724
