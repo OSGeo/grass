@@ -28,6 +28,7 @@ import gcmd
 from render      import Map
 from toolbars    import Histogram2Toolbar
 from toolbars    import ProfileToolbar
+from toolbars    import ScatterplotToolbar
 from preferences import globalSettings as UserSettings
 
 import wxplot_dialogs as dialogs
@@ -48,10 +49,10 @@ except ImportError:
 
 class AbstractPlotFrame(wx.Frame):
     """!Abstract PyPlot display frame class"""
-    def __init__(self, parent, id = wx.ID_ANY, title = '', size = (700, 400),
+    def __init__(self, parent = None, id = wx.ID_ANY, size = (700, 300),
                  style = wx.DEFAULT_FRAME_STYLE, rasterList = [],  **kwargs):
 
-        wx.Frame.__init__(self, parent, id, title, size = size, style = style, **kwargs)
+        wx.Frame.__init__(self, parent, id, size = size, style = style, **kwargs)
         
         self.parent = parent            # MapFrame
         self.mapwin = self.parent.MapWindow
@@ -60,7 +61,7 @@ class AbstractPlotFrame(wx.Frame):
         self.raster = {}    # dictionary of raster maps and their plotting parameters
         self.plottype = ''
         
-        self.pstyledict = { 'solid' : wx.SOLID,
+        self.linestyledict = { 'solid' : wx.SOLID,
                             'dot' : wx.DOT,
                             'long-dash' : wx.LONG_DASH,
                             'short-dash' : wx.SHORT_DASH,
@@ -136,7 +137,7 @@ class AbstractPlotFrame(wx.Frame):
                                                     wx.FONTSTYLE_NORMAL,
                                                     wx.FONTWEIGHT_NORMAL)
         
-        if self.plottype != 'histogram':
+        if self.plottype == 'profile':
             self.properties['marker'] = UserSettings.Get(group = self.plottype, key = 'marker')
             # changing color string to tuple for markers/points
             colstr = str(self.properties['marker']['color'])
@@ -172,7 +173,7 @@ class AbstractPlotFrame(wx.Frame):
         else:
             self.client.SetYSpec('auto')
         
-    def InitRasterOpts(self, rasterList):
+    def InitRasterOpts(self, rasterList, plottype):
         """!Initialize or update raster dictionary for plotting
         """
 
@@ -186,8 +187,8 @@ class AbstractPlotFrame(wx.Frame):
             except:
                 continue
                 # if r.info cannot parse map, skip it
-
-#            self.raster[r] = UserSettings.Get(group = 'plot', key = 'raster') # some default settings
+                
+            self.raster[r] = UserSettings.Get(group = plottype, key = 'raster') # some default settings
             rdict[r] = {} # initialize sub-dictionaries for each raster in the list
 
             if ret['units'] == '(none)' or ret['units'] == '' or ret['units'] == None:
@@ -213,6 +214,58 @@ class AbstractPlotFrame(wx.Frame):
             
         return rdict
             
+    def InitRasterPairs(self, rasterList, plottype):
+        """!Initialize or update raster dictionary with raster pairs for
+            bivariate scatterplots
+        """
+        
+        if len(rasterList) == 0: return
+
+        rdict = {} # initialize a dictionary
+        for rpair in rasterList:
+            idx = rasterList.index(rpair)
+            
+            try:
+                ret0 = raster.raster_info(rpair[0])
+                ret1 = raster.raster_info(rpair[1])
+
+            except:
+                continue
+                # if r.info cannot parse map, skip it
+
+            self.raster[rpair] = UserSettings.Get(group = plottype, key = 'rasters') # some default settings
+            rdict[rpair] = {} # initialize sub-dictionaries for each raster in the list
+            rdict[rpair][0] = {}
+            rdict[rpair][1] = {}
+
+            if ret0['units'] == '(none)' or ret['units'] == '' or ret['units'] == None:
+                rdict[rpair][0]['units'] = ''
+            else:
+                self.raster[rpair][0]['units'] = ret0['units']
+
+            if ret1['units'] == '(none)' or ret['units'] == '' or ret['units'] == None:
+                rdict[rpair][1]['units'] = ''
+            else:
+                self.raster[rpair][1]['units'] = ret1['units']
+
+            rdict[rpair]['plegend'] = rpair[0].split('@')[0] + ' vs ' + rpair[1].split('@')[0]
+            rdict[rpair]['datalist'] = [] # list of cell value,frequency pairs for plotting histogram
+            rdict[rpair]['ptype'] = 'dot'
+            rdict[rpair][0]['datatype'] = ret0['datatype']
+            rdict[rpair][1]['datatype'] = ret1['datatype']
+            rdict[rpair]['psize'] = 1
+            rdict[rpair]['pfill'] = 'solid'
+            
+            if idx <= len(self.colorList):
+                rdict[rpair]['pcolor'] = self.colorDict[self.colorList[idx]]
+            else:
+                r = randint(0, 255)
+                b = randint(0, 255)
+                g = randint(0, 255)
+                rdict[rpair]['pcolor'] = ((r,g,b,255))
+            
+        return rdict
+
     def SetGraphStyle(self):
         """!Set plot and text options
         """
@@ -234,7 +287,7 @@ class AbstractPlotFrame(wx.Frame):
         if self.properties['y-axis']['prop']['type'] == 'custom':
             self.client.SetYSpec('min')
         else:
-            self.client.SetYSpec(self.properties['y-axis']['prop']['type'])
+            self.client.SetYSpec(self.properties['y-axis']['prop'])
 
         if self.properties['x-axis']['prop']['type'] == 'custom' and \
                self.properties['x-axis']['prop']['min'] < self.properties['x-axis']['prop']['max']:
@@ -273,7 +326,6 @@ class AbstractPlotFrame(wx.Frame):
     def DrawPlot(self, plotlist):
         """!Draw line and point plot from list plot elements.
         """
-
         self.plot = plot.PlotGraphics(plotlist,
                                          self.ptitle,
                                          self.xlabel,
@@ -497,15 +549,14 @@ class AbstractPlotFrame(wx.Frame):
         self.Destroy()
         
 class HistFrame(AbstractPlotFrame):
-    def __init__(self, parent, title = _("GRASS Histogramming Tool"),
-                 rasterList = [], **kwargs):
+    def __init__(self, parent, id, pos, style, size, rasterList = []):
         """!Mainframe for displaying histogram of raster map. Uses wx.lib.plot.
         """
-        AbstractPlotFrame.__init__(self, parent, title = title,
-                                   rasterList = rasterList, **kwargs)
+        AbstractPlotFrame.__init__(self, parent, rasterList = rasterList, **kwargs)
         
         self.toolbar = Histogram2Toolbar(parent = self)
         self.SetToolBar(self.toolbar)
+        self.SetLabel(_("GRASS Histogramming Tool"))
 
         #
         # Init variables
@@ -524,7 +575,7 @@ class HistFrame(AbstractPlotFrame):
                     "indigo"]
         
         if len(self.rasterList) > 0: # set raster name(s) from layer manager if a map is selected
-            self.InitRasterOpts(self.rasterList)
+            self.InitRasterOpts(self.rasterList, self.plottype)
 
         self._initOpts()
 
@@ -555,14 +606,11 @@ class HistFrame(AbstractPlotFrame):
             self.bins = dlg.bins
             self.histtype = dlg.histtype
             self.maptype = dlg.maptype
-            self.raster = self.InitRasterOpts(self.rasterList)
+            self.raster = self.InitRasterOpts(self.rasterList, self.plottype)
 
             # plot histogram
             if len(self.rasterList) > 0:
                 self.OnCreateHist(event = None)
-                self.SetupHistogram()
-                p = self.CreatePlotList()
-                self.DrawPlot(p)
 
         dlg.Destroy()
 
@@ -658,7 +706,7 @@ class HistFrame(AbstractPlotFrame):
                 self.raster[r]['pline'] = plot.PolyLine(self.raster[r]['datalist'],
                                                         colour = col,
                                                         width = self.raster[r]['pwidth'],
-                                                        style = self.pstyledict[self.raster[r]['pstyle']],
+                                                        style = self.linestyledict[self.raster[r]['pstyle']],
                                                         legend = self.raster[r]['plegend'])
 
                 self.plotlist.append(self.raster[r]['pline'])
@@ -679,14 +727,13 @@ class HistFrame(AbstractPlotFrame):
 class ProfileFrame(AbstractPlotFrame):
     """!Mainframe for displaying profile of one or more raster maps. Uses wx.lib.plot.
     """
-    def __init__(self, parent, title = _("GRASS Profile Analysis Tool"),
-                 rasterList = [], **kwargs):
+    def __init__(self, parent, id, pos, style, size, rasterList = []):
 
-        AbstractPlotFrame.__init__(self, parent, title = title,
-                                   rasterList = rasterList, **kwargs)
+        AbstractPlotFrame.__init__(self, parent, rasterList = rasterList, **kwargs)
 
         self.toolbar = ProfileToolbar(parent = self)
         self.SetToolBar(self.toolbar)
+        self.SetLabel(_("GRASS Profile Analysis Tool"))
 
         #
         # Init variables
@@ -705,7 +752,7 @@ class ProfileFrame(AbstractPlotFrame):
                     "indigo"]
 
         if len(self.rasterList) > 0: # set raster name(s) from layer manager if a map is selected
-            self.InitRasterOpts(self.rasterList)
+            self.InitRasterOpts(self.rasterList, self.plottype)
             
         
         self._initOpts()
@@ -746,7 +793,7 @@ class ProfileFrame(AbstractPlotFrame):
 
         if dlg.ShowModal() == wx.ID_OK:
             self.rasterList = dlg.rasterList
-            self.raster = self.InitRasterOpts(self.rasterList)
+            self.raster = self.InitRasterOpts(self.rasterList, self.plottype)
             
             # plot profile
             if len(self.mapwin.polycoords) > 0 and len(self.rasterList) > 0:
@@ -934,7 +981,7 @@ class ProfileFrame(AbstractPlotFrame):
             self.raster[r]['pline'] = plot.PolyLine(self.raster[r]['datalist'],
                                                     colour = col,
                                                     width = self.raster[r]['pwidth'],
-                                                    style = self.pstyledict[self.raster[r]['pstyle']],
+                                                    style = self.linestyledict[self.raster[r]['pstyle']],
                                                     legend = self.raster[r]['plegend'])
 
             self.plotlist.append(self.raster[r]['pline'])
@@ -978,3 +1025,203 @@ class ProfileFrame(AbstractPlotFrame):
                 file.close()
 
         dlg.Destroy()
+        
+class ScatterFrame(AbstractPlotFrame):
+    """!Mainframe for displaying bivariate scatter plot of two raster maps. Uses wx.lib.plot.
+    """
+    def __init__(self, parent, id, pos, style, size, rasterList = []):
+
+        AbstractPlotFrame.__init__(self, parent)
+        
+        self.toolbar = ScatterplotToolbar(parent = self)
+        self.SetToolBar(self.toolbar)
+        self.SetLabel(_("GRASS Bivariate Scatterplot Tool"))
+
+        #
+        # Init variables
+        #
+        self.rasterList = rasterList
+        self.plottype = 'scatter'
+        self.ptitle = _('Bivariate Scatterplot')     # title of window
+        self.xlabel = _("Raster cell values")           # default X-axis label
+        self.ylabel = _("Raster cell values")           # default Y-axis label
+        self.maptype = 'raster'                         # default type of scatterplot
+        self.scattertype = 'normal' 
+        self.bins = 255
+        self.colorList = ["blue", "red", "black", "green", "yellow", "magenta", "cyan", \
+                    "aqua", "grey", "orange", "brown", "purple", "violet", \
+                    "indigo"]
+        
+        if len(self.rasterList) > 0: # set raster name(s) from layer manager if a map is selected
+            self.InitRasterOpts(self.rasterList, 'scatter')
+
+        self._initOpts()
+
+    def _initOpts(self):
+        """!Initialize plot options
+        """
+        self.InitPlotOpts('scatter')            
+
+    def OnCreateScatter(self, event):
+        """!Main routine for creating a scatterplot. Uses r.stats to
+        create a list of cell value pairs. This is passed to
+        plot to create a scatterplot.
+        """
+        self.SetCursor(self.parent.cursors["default"])
+        self.SetGraphStyle()
+        self.SetupScatterplot()
+        p = self.CreatePlotList()
+        self.DrawPlot(p)
+
+    def OnSelectRaster(self, event):
+        """!Select raster map(s) to profile
+        """
+        dlg = dialogs.ScatterRasterDialog(parent = self)
+
+        if dlg.ShowModal() == wx.ID_OK:
+            rlist = dlg.rasterList
+            if rlist < 2: return                        # need at least 2 rasters for scatterplot
+            self.bins = dlg.bins                        # bins for r.stats with float and dcell maps
+            self.scattertype = dlg.scattertype          # scatterplot or bubbleplot
+            self.rasterList = self.CreatePairs(rlist)   # list of raster pairs (tuples)
+            self.raster = self.InitRasterPairs(self.rasterList, 'scatter') # dictionary of raster pairs
+
+            # plot histogram
+            if len(self.rasterList) > 0:
+                self.OnCreateScatter(event = None)
+
+        dlg.Destroy()
+        
+    def CreatePairs(self, rlist):
+        """!Transforms list of rasters into tuples of raster pairs
+        """
+        rasterList = []
+        next = 'first'
+        for r in rlist:
+            if next == 'first':
+                first = r
+                next = 'second'
+            else:
+                second = r
+                t = (first, second)
+                rasterList.append(t)
+                next = 'first'
+                first = second = ''
+                
+        return rasterList
+
+    def SetupScatterplot(self):
+        """!Build data list for ploting each raster
+        """
+
+        #
+        # initialize title string
+        #
+        self.ptitle = _('Bivariate Scatterplot of ')        
+
+        #
+        # create a datalist for plotting for each raster pair
+        #
+        if len(self.rasterList) == 0: return  # at least 1 pair of maps needed to plot        
+        
+        for rpair in self.rasterList:
+            self.raster[rpair]['datalist'] = self.CreateDatalist(rpair)
+            
+            # update title
+            self.ptitle += '%s vs %s, ' % (rpair[0].split('@')[0], rpair[1].split('@')[0])
+
+        self.ptitle = self.ptitle.strip(', ')
+        
+        #
+        # set xlabel & ylabel based on raster maps of first pair to be plotted
+        #
+        units = self.raster[self.rasterList[0]][0]['units']
+        if units != '' and units != '(none)' and units != None:
+            self.xlabel = _('Raster cell values %s') % units
+        else:
+            self.xlabel = _('Raster cell values') 
+
+        units = self.raster[self.rasterList[0]][1]['units']
+        if units != '' and units != '(none)' and units != None:
+            self.ylabel = _('Raster cell values %s') % units
+        else:
+            self.ylabel = _('Raster cell values') 
+
+    def CreateDatalist(self, rpair):
+        """!Build a list of cell value, frequency pairs for histogram
+            frequency can be in cell counts, percents, or area
+        """
+        datalist = []
+        
+        if self.scattertype == 'bubble': 
+            freqflag = 'cn'
+        else:
+            freqflag = 'n'
+                
+        try:
+            ret = gcmd.RunCommand("r.stats",
+                                  parent = self,
+                                  input = '%s,%s' % rpair,
+                                  flags = freqflag,
+                                  nsteps = self.bins,
+                                  fs = ',',
+                                  quiet = True,
+                                  read = True)
+            
+            
+            if not ret:
+                return datalist
+            
+            for line in ret.splitlines():
+                rast1, rast2 = line.strip().split(',')
+                rast1 = rast1.strip()
+                if '-' in rast1: rast1 = rast1.split('-')[0]
+                rast2 = rast2.strip()
+                if '-' in rast2: rast2 = rast2.split('-')[0]
+                
+                rast1 = rast1.encode('ascii', 'ignore')
+                rast2 = rast2.encode('ascii', 'ignore')
+                    
+                datalist.append((rast1,rast2))
+
+            return datalist
+        except gcmd.GException, e:
+            gcmd.GError(parent = self,
+                        message = e.value)
+            return None
+        
+    def CreatePlotList(self):
+        """!Make list of elements to plot
+        """
+        # graph the cell value, frequency pairs for the histogram
+        self.plotlist = []
+
+        for rpair in self.rasterList:
+            if 'datalist' not in self.raster[rpair] or \
+                self.raster[rpair]['datalist'] == None: return
+            
+            if len(self.raster[rpair]['datalist']) > 0:
+                col = wx.Color(self.raster[rpair]['pcolor'][0],
+                               self.raster[rpair]['pcolor'][1],
+                               self.raster[rpair]['pcolor'][2],
+                               255)
+                scatterpoints = plot.PolyMarker(self.raster[rpair]['datalist'],
+                                                legend = ' ' + self.raster[rpair]['plegend'],
+                                                colour = col,size = self.raster[rpair]['psize'],
+                                                fillstyle = self.ptfilldict[self.raster[rpair]['pfill']],
+                                                marker = self.raster[rpair]['ptype'])
+
+                self.plotlist.append(scatterpoints)
+          
+        if len(self.plotlist) > 0:        
+            return self.plotlist
+        else:
+            return None
+
+    def Update(self):
+        """!Update histogram after changing options
+        """
+        self.SetGraphStyle()
+        p = self.CreatePlotList()
+        self.DrawPlot(p)
+        
