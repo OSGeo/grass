@@ -833,6 +833,7 @@ class ProfileFrame(AbstractPlotFrame):
         # create list of coordinates for transect segment markers
         #
         if len(self.mapwin.polycoords) > 0:
+            self.seglist = []
             for point in self.mapwin.polycoords:
                 # get value of raster cell at coordinate point
                 ret = gcmd.RunCommand('r.what',
@@ -841,7 +842,9 @@ class ProfileFrame(AbstractPlotFrame):
                                       input = self.rasterList[0],
                                       east_north = '%d,%d' % (point[0],point[1]))
                 
-                val = float(ret.splitlines()[0].split('|')[3])
+                val = ret.splitlines()[0].split('|')[3]
+                if val == None or val == '*': continue
+                val = float(val)
                 
                 # calculate distance between coordinate points
                 if lasteast and lastnorth:
@@ -862,7 +865,6 @@ class ProfileFrame(AbstractPlotFrame):
                 self.seglist.pop()
             except:
                 pass
-
 
         #
         # create datalist for each raster map
@@ -959,6 +961,7 @@ class ProfileFrame(AbstractPlotFrame):
         """
         # graph the distance, value pairs for the transect
         self.plotlist = []
+
         # Add segment marker points to plot data list
         if len(self.seglist) > 0 :
             self.ppoints = plot.PolyMarker(self.seglist,

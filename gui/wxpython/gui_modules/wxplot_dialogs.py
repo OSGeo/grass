@@ -99,13 +99,10 @@ class ProfileRasterDialog(wx.Dialog):
         sizer.Fit(self)
 
     def OnSelection(self, event):
-        # for now this is limited to 14 rasters (number of colors in colorList), but it could be increased
-        rstring = event.GetString()
-        rList = rstring.split(',')
-        n = min(len(rList), len(self.colorList))
+        """!Choose maps to profile. Convert these into a list
+        """
         self.rasterList = []
-        for idx in range(0,n):
-            self.rasterList.append(rList[idx])
+        self.rasterList = event.GetString().split(',')
 
 class ScatterRasterDialog(wx.Dialog):
     def __init__(self, parent, id = wx.ID_ANY, 
