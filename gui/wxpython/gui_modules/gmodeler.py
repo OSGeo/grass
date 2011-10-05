@@ -1225,9 +1225,13 @@ class ModelFrame(wx.Frame):
         
         # show properties dialog
         win = action.GetPropDialog()
-        if not win and len(action.GetLog(string = False)) == 1:
-            module = menuform.GUI(parent = self, show = True).ParseCommand(action.GetLog(string = False),
-                                                                           completed = (self.GetOptData, action, action.GetParams()))
+        if not win:
+            if len(action.GetLog(string = False)) > 1:
+                self.GetOptData(dcmd = action.GetLog(string = False), layer = action,
+                                params = action.GetParams(), propwin = None)
+            else:
+                menuform.GUI(parent = self, show = True).ParseCommand(action.GetLog(string = False),
+                                                                      completed = (self.GetOptData, action, action.GetParams()))
         elif win and not win.IsShown():
             win.Show()
         
@@ -1283,23 +1287,6 @@ class ModelFrame(wx.Frame):
     def GetOptData(self, dcmd, layer, params, propwin):
         """!Process action data"""
         if params: # add data items
-            # for p in params['params']:
-            #     if p.get('prompt', '') in ('raster', 'vector', 'raster3d'):
-            #         try:
-            #             name, mapset = p.get('value', '').split('@', 1)
-            #         except (ValueError, IndexError):
-            #             continue
-                    
-            #         if mapset != grass.gisenv()['MAPSET']:
-            #             continue
-                    
-            #         # don't use fully qualified names
-            #         p['value'] = p.get('value', '').split('@')[0]
-            #         for idx in range(1, len(dcmd)):
-            #             if p.get('name', '') in dcmd[idx]:
-            #                 dcmd[idx] = p.get('name', '') + '=' + p.get('value', '')
-            #                 break
-            
             width, height = self.canvas.GetSize()
             x = [width/2 + 200, width/2 - 200]
             for p in params['params']:
