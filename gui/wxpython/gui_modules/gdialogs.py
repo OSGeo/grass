@@ -919,6 +919,10 @@ class MapLayersDialog(wx.Dialog):
         self.LoadMapLayers(self.layerType.GetStringSelection()[:4],
                            self.mapset.GetStringSelection())
         
+        self.fullyQualified = wx.CheckBox(parent = self, id = wx.ID_ANY,
+                                          label = _("Use fully-qualified map names"))
+        self.fullyQualified.SetValue(True)
+        
         # buttons
         btnCancel = wx.Button(parent = self, id = wx.ID_CANCEL)
         btnOk = wx.Button(parent = self, id = wx.ID_OK)
@@ -933,6 +937,8 @@ class MapLayersDialog(wx.Dialog):
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         mainSizer.Add(item = self.bodySizer, proportion = 1,
                       flag = wx.EXPAND | wx.ALL, border = 5)
+        mainSizer.Add(item = self.fullyQualified, proportion = 0,
+                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT, border = 5)
         mainSizer.Add(item = btnSizer, proportion = 0,
                       flag = wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border = 5)
 
@@ -1005,6 +1011,7 @@ class MapLayersDialog(wx.Dialog):
         self.layers.Bind(wx.EVT_RIGHT_DOWN, self.OnMenu)
         self.filter.Bind(wx.EVT_TEXT, self.OnFilter)
         self.toggle.Bind(wx.EVT_CHECKBOX, self.OnToggle)
+        
         return bodySizer
 
     def LoadMapLayers(self, type, mapset):
@@ -1099,13 +1106,16 @@ class MapLayersDialog(wx.Dialog):
         for indx in self.layers.GetSelections():
             # layers.append(self.layers.GetStringSelec(indx))
             pass
-        
-        # return fully qualified map names
+
+        fullyQualified = self.fullyQualified.IsChecked()
         mapset = self.mapset.GetStringSelection()
         for item in range(self.layers.GetCount()):
             if not self.layers.IsChecked(item):
                 continue
-            layerNames.append(self.layers.GetString(item) + '@' + mapset)
+            if fullyQualified:
+                layerNames.append(self.layers.GetString(item) + '@' + mapset)
+            else:
+                layerNames.append(self.layers.GetString(item))
         
         return layerNames
     
