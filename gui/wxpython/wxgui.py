@@ -1346,32 +1346,31 @@ class GMFrame(wx.Frame):
     
     def OnAddMaps(self, event = None):
         """!Add selected map layers into layer tree"""
-        dialog = gdialogs.AddMapLayersDialog(parent = self, title = _("Add selected map layers into layer tree"))
+        dialog = gdialogs.MapLayersDialog(parent = self, title = _("Add selected map layers into layer tree"))
+        
+        if dialog.ShowModal() != wx.ID_OK:
+            dialog.Destroy()
+            return
 
-        if dialog.ShowModal() == wx.ID_OK:
-            # start new map display if no display is available
-            if not self.curr_page:
-                self.NewDisplay()
-
-            maptree = self.curr_page.maptree
-            busy = wx.BusyInfo(message = _("Please wait, loading workspace..."),
-                               parent = self)
-            wx.Yield()
+        # start new map display if no display is available
+        if not self.curr_page:
+            self.NewDisplay()
             
-            for layerName in dialog.GetMapLayers():
-                if dialog.GetLayerType() == 'raster':
-                    cmd = ['d.rast', 'map=%s' % layerName]
-                elif dialog.GetLayerType() == 'vector':
-                    cmd = ['d.vect', 'map=%s' % layerName]
-                newItem = maptree.AddLayer(ltype = dialog.GetLayerType(),
-                                           lname = layerName,
-                                           lchecked = False,
-                                           lopacity = 1.0,
-                                           lcmd = cmd,
-                                           lgroup = None)
-
-            busy.Destroy()
-    
+        maptree = self.curr_page.maptree
+        
+        for layerName in dialog.GetMapLayers():
+            if dialog.GetLayerType() == 'raster':
+                cmd = ['d.rast', 'map=%s' % layerName]
+            elif dialog.GetLayerType() == 'vector':
+                cmd = ['d.vect', 'map=%s' % layerName]
+            newItem = maptree.AddLayer(ltype = dialog.GetLayerType(),
+                                       lname = layerName,
+                                       lchecked = False,
+                                       lopacity = 1.0,
+                                       lcmd = cmd,
+                                       lgroup = None)
+        dialog.Destroy()
+        
     def OnAddRaster(self, event):
         """!Add raster map layer"""
         # start new map display if no display is available
