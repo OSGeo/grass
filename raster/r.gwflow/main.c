@@ -78,7 +78,7 @@ void set_params(void)
 
     param.s = G_define_standard_option(G_OPT_R_INPUT);
     param.s->key = "s";
-    param.s->description = _("Input raster map with specific yield in [1/m]");
+    param.s->description = _("Input raster map with storativity for confined or effective porosity for unconfined groundwater flow booth in [-] ");
 
     param.r = G_define_standard_option(G_OPT_R_INPUT);
     param.r->key = "recharge";
@@ -103,19 +103,19 @@ void set_params(void)
     param.vector_x->key = "vx";
     param.vector_x->required = NO;
     param.vector_x->description =
-	_("Output raster map storing the groundwater filter velocity vector part in x direction [m/s]\n");
+	_("Output raster map to store the groundwater filter velocity vector part in x direction [m/s]\n");
 
     param.vector_y = G_define_standard_option(G_OPT_R_OUTPUT);
     param.vector_y->key = "vy";
     param.vector_y->required = NO;
     param.vector_y->description =
-	_("Output raster map storing the groundwater filter velocity vector part in y direction [m/s]\n");
+	_("Output raster map to store the groundwater filter velocity vector part in y direction [m/s]\n");
 
     param.budget = G_define_standard_option(G_OPT_R_OUTPUT);
     param.budget->key = "budget";
     param.budget->required = NO;
     param.budget->description =
-	_("Output raster map storing the groundwater budget for each cell [m^3/s]\n");
+	_("Output raster map to store the groundwater budget for each cell [m^3/s]\n");
 
     param.type = G_define_option();
     param.type->key = "type";
