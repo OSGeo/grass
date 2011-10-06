@@ -1883,7 +1883,8 @@ class Texture(object):
         self.textDict = textDict
         
         # alpha needs to be initialized
-        self.image.InitAlpha()
+        if not self.image.HasAlpha():
+            self.image.InitAlpha()
     
         # resize image to match 2^n
         self.Resize()
