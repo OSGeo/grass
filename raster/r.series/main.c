@@ -223,10 +223,10 @@ int main(int argc, char *argv[])
 	    p = &inputs[num_inputs++];
 
 	    p->name = G_store(name);
+	    G_verbose_message(_("Reading raster map <%s>..."), p->name);
 	    p->buf = Rast_allocate_d_buf();
 	    if (!flag.lazy->answer)
 		p->fd = Rast_open_old(p->name, "");
-	    G_verbose_message(_("Reading raster map <%s>..."), p->name);
 	}
 
 	if (num_inputs < 1)
@@ -248,10 +248,10 @@ int main(int argc, char *argv[])
 	    struct input *p = &inputs[i];
 
 	    p->name = parm.input->answers[i];
+	    G_verbose_message(_("Reading raster map <%s>..."), p->name);
 	    p->buf = Rast_allocate_d_buf();
 	    if (!flag.lazy->answer)
 		p->fd = Rast_open_old(p->name, "");
-	    G_verbose_message(_("Reading raster map <%s>..."), p->name);
     	}
     }
 
