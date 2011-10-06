@@ -307,7 +307,7 @@ N_data_star *N_callback_gwflow_3d(void *gwdata, N_geom_data * geom, int col,
 
     /*inner sources */
     q = N_get_array_3d_d_value(data->q, col, row, depth);
-    /*specific yield */
+    /*storativity */
     Ss = N_get_array_3d_d_value(data->s, col, row, depth);
     /*porosity */
     nf = N_get_array_3d_d_value(data->nf, col, row, depth);
@@ -325,7 +325,7 @@ N_data_star *N_callback_gwflow_3d(void *gwdata, N_geom_data * geom, int col,
     /*mass balance center cell to bottom cell */
     B = -1 * Az * hc_b / dz;
 
-    /*specific yield */
+    /*storativity */
     Ss = Az * dz * Ss;
 
     /*the diagonal entry of the matrix */
@@ -474,7 +474,7 @@ N_data_star *N_callback_gwflow_2d(void *gwdata, N_geom_data * geom, int col,
     double hc_xe, hc_ys;
     double z_xe, z_ys;
     double hc, hc_start;
-    double Ss, r, nf, q;
+    double Ss, r, q;
     double C, W, E, N, S, V;
     N_gwflow_data2d *data;
     N_data_star *mat_pos;
@@ -494,6 +494,14 @@ N_data_star *N_callback_gwflow_2d(void *gwdata, N_geom_data * geom, int col,
     hc_start = N_get_array_2d_d_value(data->phead_start, col, row);
     hc = N_get_array_2d_d_value(data->phead, col, row);
     top = N_get_array_2d_d_value(data->top, col, row);
+
+    /* Inner sources */
+    q = N_get_array_2d_d_value(data->q, col, row);
+
+    /* storativity or porosity of current cell face [-]*/
+    Ss = N_get_array_2d_d_value(data->s, col, row);
+    /* recharge */
+    r = N_get_array_2d_d_value(data->r, col, row) * Az;
 
 
     if (hc > top) {		/*If the aquifer is confined */
@@ -551,15 +559,6 @@ N_data_star *N_callback_gwflow_2d(void *gwdata, N_geom_data * geom, int col,
     else
 	z_s = z;
 
-    /* Inner sources */
-    q = N_get_array_2d_d_value(data->q, col, row);
-    nf = N_get_array_2d_d_value(data->nf, col, row);
-
-    /* specific yield  of current cell face */
-    Ss = N_get_array_2d_d_value(data->s, col, row) * Az;
-    /* recharge */
-    r = N_get_array_2d_d_value(data->r, col, row) * Az;
-
     /*get the surrounding permeabilities */
     hc_x = N_get_array_2d_d_value(data->hc_x, col, row);
     hc_y = N_get_array_2d_d_value(data->hc_y, col, row);
@@ -575,16 +574,17 @@ N_data_star *N_callback_gwflow_2d(void *gwdata, N_geom_data * geom, int col,
     T_s = N_calc_harmonic_mean(hc_ys, hc_y) * z_s;
 
     /* Compute the river leakage, this is an explicit method
-     * Rivers are only enabled, if the river bed is lower or equal to the surface
+     * Influent and effluent flow is computed.
      */
     if (data->river_leak &&
 	(N_get_array_2d_d_value(data->river_leak, col, row) != 0) &&
             N_get_array_2d_d_value(data->river_bed, col, row) <= top) {
+        /* Groundwater surface is above the river bed*/
 	if (hc > N_get_array_2d_d_value(data->river_bed, col, row)) {
 	    river_vect = N_get_array_2d_d_value(data->river_head, col, row) *
 		N_get_array_2d_d_value(data->river_leak, col, row);
 	    river_mat = N_get_array_2d_d_value(data->river_leak, col, row);
-	}
+	} /* Groundwater surface is below the river bed */
 	else if (hc < N_get_array_2d_d_value(data->river_bed, col, row)) {
 	    river_vect = (N_get_array_2d_d_value(data->river_head, col, row) -
 			  N_get_array_2d_d_value(data->river_bed, col, row))
@@ -594,7 +594,7 @@ N_data_star *N_callback_gwflow_2d(void *gwdata, N_geom_data * geom, int col,
     }
 
     /* compute the drainage, this is an explicit method
-     * Drainage is only enabled, if the drain bed is lower or equal to the surface
+     * Drainage is only enabled, if the drain bed is lower the groundwater surface
      */
     if (data->drain_leak &&
 	(N_get_array_2d_d_value(data->drain_leak, col, row) != 0) &&
@@ -620,11 +620,11 @@ N_data_star *N_callback_gwflow_2d(void *gwdata, N_geom_data * geom, int col,
     S = -1 * T_s * dx / dy;
 
     /*the diagonal entry of the matrix */
-    C = -1 * (W + E + N + S - Ss / data->dt - river_mat * Az -
+    C = -1 * (W + E + N + S -  Az *Ss / data->dt - river_mat * Az -
 	      drain_mat * Az);
 
     /*the entry in the right side b of Ax = b */
-    V = (q + hc_start * Ss / data->dt) + r + river_vect * Az +
+    V = (q + hc_start * Az * Ss / data->dt) + r + river_vect * Az +
 	drain_vect * Az;
 
     G_debug(5, "N_callback_gwflow_2d: called [%i][%i]", row, col);

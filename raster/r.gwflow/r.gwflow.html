@@ -28,7 +28,7 @@ with <em>r.out.vtk</em>.
 The groundwater flow will always be calculated transient. 
 For stady state computation set the timestep
 to a large number (billions of seconds) or set the 
-specific yield/ effective porosity raster map to zero.
+storativity/ effective porosity raster map to zero.
 <br>
 <br>
 The water budget is calculated for each non inactive cell. The
@@ -52,14 +52,19 @@ In detail for 2 dimensions:
 <ul>
 <li>h -- the piezometric head im [m]</li>
 <li>dt -- the time step for transient calculation in [s]</li>
-<li>S -- the specific yield [1/m]</li>
+<li>S -- the specific storage [1/m]</li>
 <li>Kxx -- the hydraulic conductivity tensor part in x direction in [m/s]</li>
 <li>Kyy -- the hydraulic conductivity tensor part in y direction in [m/s]</li>
 <li>q - inner source/sink in meter per second [1/s]</li>
 </ul>
 
-<br>
-<br>
+<p>
+Confined and unconfined groundwater flow is supported. Be aware that the storativity input parameter
+is handled differently in case of unconfined flow. Instead of the storativity, the effective porosity is expected.
+<p>
+To compute unconfined groundwater flow, a simple Picard based linearization scheme is used to
+solve the resulting non-linear equation system.
+<p>
 Two different boundary conditions are implemented, 
 the Dirichlet and Neumann conditions. By default the calculation area is surrounded by homogeneous Neumann boundary conditions.
 The calculation and boundary status of single cells must be set with a status map, 
@@ -105,7 +110,7 @@ r.mapcalc --o expression="top_unconf=70.0"
 r.mapcalc --o expression="bottom=0.0"
 r.mapcalc --o expression="null=0.0"
 r.mapcalc --o expression="poros=0.15"
-r.mapcalc --o expression="syield=0.0001"
+r.mapcalc --o expression="s=0.0001"
 
 # The maps of the river
 r.mapcalc --o expression="river_bed=if(col() == 35 , 48, null())"
@@ -119,10 +124,11 @@ r.mapcalc --o expression="drain_leak=if(col() == 5 , 0.01, null())"
 #confined groundwater flow with cg solver and sparse matrix, river and drain
 #do not work with this confined aquifer (top == 20m)
 r.gwflow --o solver=cg top=top_conf bottom=bottom phead=phead status=status \
-hc_x=hydcond hc_y=hydcond q=well s=syield recharge=recharge output=gwresult_conf \
+hc_x=hydcond hc_y=hydcond q=well s=s recharge=recharge output=gwresult_conf \
 dt=8640000 type=confined vx=gwresult_conf_velocity_x vy=gwresult_conf_velocity_y budget=budget_conf
 
 #unconfined groundwater flow with cg solver and sparse matrix, river and drain are enabled
+# We use the effective porosity as storativity parameter
 r.gwflow --o solver=cg top=top_unconf bottom=bottom phead=phead \
 status=status hc_x=hydcond hc_y=hydcond q=well s=poros recharge=recharge \
 river_bed=river_bed river_head=river_head river_leak=river_leak \

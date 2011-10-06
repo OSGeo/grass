@@ -25,19 +25,19 @@ grass.run_command("r.mapcalc", expression="hydcond=0.0005")
 grass.run_command("r.mapcalc", expression="recharge=0")
 grass.run_command("r.mapcalc", expression="top_conf=20")
 grass.run_command("r.mapcalc", expression="bottom=0")
-grass.run_command("r.mapcalc", expression="syield=0.0001")
+grass.run_command("r.mapcalc", expression="s=0.0001")
 grass.run_command("r.mapcalc", expression="null=0.0")
 
-#First compute the initial groundwater flow
+#First compute the groundwater flow
 grass.run_command("r.gwflow", "f", solver="cholesky", top="top_conf", bottom="bottom", phead="phead",\
- status="status", hc_x="hydcond", hc_y="hydcond", q="well", s="syield",\
+ status="status", hc_x="hydcond", hc_y="hydcond", q="well", s="s",\
  recharge="recharge", output="gwresult_conf", dt=500, type="confined", budget="water_budget")
 
 count=500
 # loop over the timesteps
 for i in range(20):
     grass.run_command("r.gwflow", "f", solver="cholesky", top="top_conf", bottom="bottom", phead="gwresult_conf",\
-     status="status", hc_x="hydcond", hc_y="hydcond", q="well", s="syield",\
+     status="status", hc_x="hydcond", hc_y="hydcond", q="well", s="s",\
      recharge="recharge", output="gwresult_conf", dt=500, type="confined", budget="water_budget")
     count += 500
 
