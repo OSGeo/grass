@@ -91,8 +91,8 @@ def main():
     if sp.is_in_db() == False:
         grass.fatal(_("Dataset <%s> not found in temporal database") % (id))
 
-    if expression and base == None:
-        grass.fatal(_("A raster map base name must be provided"))
+    if expression and not base:
+        grass.fatal(_("Please specify base="))
 
     dbif = tgis.sql_database_interface()
     dbif.connect()
@@ -109,6 +109,7 @@ def main():
     if new_sp.is_in_db():
         if grass.overwrite() == True:
             new_sp.delete(dbif)
+	    new_sp = tgis.space_time_raster_dataset(out_id)
         else:
             grass.fatal(_("Space time raster dataset <%s> is already in database, use overwrite flag to overwrite") % out_id)
 
@@ -119,9 +120,15 @@ def main():
     rows = sp.get_registered_maps(dbif, where, "start_time")
 
     if rows:
+	num_rows = len(rows)
+	
+	grass.percent(0, num_rows, 1)
+	
         count = 0
         for row in rows:
             count += 1
+	    
+	    grass.percent(count, num_rows, 1)
 
             old_map = sp.get_new_map_instance(row["id"])
             old_map.select(dbif)
@@ -150,9 +157,9 @@ def main():
                 grass.verbose(_("Apply r.mapcalc expression: \"%s\"") % expr)
 
                 if grass.overwrite() == True:
-                    ret = grass.run_command("r.mapcalc", expression=expr, overwrite=True)
+                    ret = grass.run_command("r.mapcalc", expression=expr, overwrite=True, quiet=True)
                 else:
-                    ret = grass.run_command("r.mapcalc", expression=expr, overwrite=False)
+                    ret = grass.run_command("r.mapcalc", expression=expr, overwrite=False, quiet=True)
 
                 if ret != 0:
                     grass.error(_("Error while r.mapcalc computation, continue with next map"))
@@ -183,6 +190,8 @@ def main():
 
         # Update the spatio-temporal extent and the raster metadata table entries
         new_sp.update_from_registered_maps(dbif)
+	
+	grass.percent(num_rows, num_rows, 1)
         
     dbif.close()
 

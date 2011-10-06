@@ -110,9 +110,9 @@ def main():
         file.close()
 
         if grass.overwrite() == True:
-            grass.run_command("r.series", file=filename, output=output, overwrite=True, method=method)
+            grass.run_command("r.series", flags="z", file=filename, output=output, overwrite=True, method=method)
         else:
-            grass.run_command("r.series", file=filename, output=output, overwrite=False, method=method)
+            grass.run_command("r.series", flags="z", file=filename, output=output, overwrite=False, method=method)
 
     if add_time:
 	# Create the time range for the output map

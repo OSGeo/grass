@@ -7,7 +7,7 @@ Python temporal gis packages.
 
 This packages includes all base classes to stor basic information like id, name,
 mapset creation and modification time as well as sql serialization and deserialization
-and the sqlite3 database interface.
+and the sql database interface.
 
 Usage:
 
@@ -75,9 +75,15 @@ class dict_sql_serializer(object):
 	    sql += ') VALUES ('
             for key in self.D.keys():
 		if count == 0:
-                    sql += '?'
+		    if dbmi.paramstyle == "qmark":
+			sql += '?'
+		    else:
+			sql += '%s'
 		else:
-                    sql += ',?'
+		    if dbmi.paramstyle == "qmark":
+			sql += ' ,?'
+		    else:
+			sql += ' ,%s'
 		count += 1
 		args.append(self.D[key])
 	    sql += ') '
@@ -93,9 +99,17 @@ class dict_sql_serializer(object):
 		# Update only entries which are not None
 		if self.D[key] != None:
 		    if count == 0:
-                        sql += ' %s = ? ' % key
+			if dbmi.paramstyle == "qmark":
+			    sql += ' %s = ? ' % key
+			else:
+			    sql += ' %s ' % key
+			    sql += '= %s '
 		    else:
-                        sql += ' ,%s = ? ' % key
+			if dbmi.paramstyle == "qmark":
+			    sql += ' ,%s = ? ' % key
+			else:
+			    sql += ' ,%s ' % key
+			    sql += '= %s '
 		    count += 1
 	            args.append(self.D[key])
 	    if where:
@@ -107,9 +121,17 @@ class dict_sql_serializer(object):
 	    sql += 'UPDATE ' + table + ' SET '
             for key in self.D.keys():
                 if count == 0:
-                    sql += ' %s = ? ' % key
+		    if dbmi.paramstyle == "qmark":
+			sql += ' %s = ? ' % key
+		    else:
+			sql += ' %s ' % key
+			sql += '= %s '
                 else:
-                    sql += ' ,%s = ? ' % key
+		    if dbmi.paramstyle == "qmark":
+	                sql += ' ,%s = ? ' % key
+		    else:
+			sql += ' ,%s ' % key
+			sql += '= %s '
                 count += 1
                 args.append(self.D[key])
 	    if where:
@@ -118,7 +140,7 @@ class dict_sql_serializer(object):
     	return sql, tuple(args)
 
     def deserialize(self, row):
-	"""Convert the content of the sqlite row into the internal dictionary"""
+	"""Convert the content of the dbmi row into the internal dictionary"""
 	self.D = {}
 	for key in row.keys():
 	    self.D[key] = row[key]
@@ -149,7 +171,7 @@ class dict_sql_serializer(object):
 ###############################################################################
 
 class sql_database_interface(dict_sql_serializer):
-    """This is the sql database interface to sqlite3"""
+    """This is the sql database interface"""
     def __init__(self, table=None, ident=None, database=None):
         dict_sql_serializer.__init__(self)
 
@@ -165,9 +187,14 @@ class sql_database_interface(dict_sql_serializer):
 
     def connect(self):
         #print "Connect to",  self.database
-	self.connection = sqlite3.connect(self.database, detect_types=sqlite3.PARSE_DECLTYPES|sqlite3.PARSE_COLNAMES)
-	self.connection.row_factory = sqlite3.Row
-        self.cursor = self.connection.cursor()
+	if dbmi.paramstyle == "qmark":
+	    self.connection = dbmi.connect(self.database, detect_types=dbmi.PARSE_DECLTYPES|dbmi.PARSE_COLNAMES)
+	    self.connection.row_factory = dbmi.Row
+	    self.cursor = self.connection.cursor()
+	else:
+	    self.connection = dbmi.connect(self.database)
+	    self.connection.set_isolation_level(dbmi.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
+	    self.cursor = self.connection.cursor(cursor_factory=dbmi.extras.DictCursor)
 
     def close(self):
         #print "Close connection to",  self.database
@@ -175,7 +202,7 @@ class sql_database_interface(dict_sql_serializer):
         self.cursor.close()
 
     def get_delete_statement(self):
-	return "DELETE FROM " + self.get_table_name() + " WHERE id = \"" + str(self.ident) + "\""
+	return "DELETE FROM " + self.get_table_name() + " WHERE id = \'" + str(self.ident) + "\'"
 
     def delete(self, dbif=None):
 	sql = self.get_delete_statement()
@@ -189,7 +216,7 @@ class sql_database_interface(dict_sql_serializer):
             self.close()
 
     def get_is_in_db_statement(self):
-	return "SELECT id FROM " + self.get_table_name() + " WHERE id = \"" + str(self.ident) + "\""
+	return "SELECT id FROM " + self.get_table_name() + " WHERE id = \'" + str(self.ident) + "\'"
 
     def is_in_db(self, dbif=None):
 
@@ -212,7 +239,7 @@ class sql_database_interface(dict_sql_serializer):
 	return True
 
     def get_select_statement(self):
-	return self.serialize("SELECT", self.get_table_name(), "WHERE id = \"" + str(self.ident) + "\"")
+	return self.serialize("SELECT", self.get_table_name(), "WHERE id = \'" + str(self.ident) + "\'")
 
     def select(self, dbif=None):
 	sql, args = self.get_select_statement()
@@ -261,7 +288,7 @@ class sql_database_interface(dict_sql_serializer):
             self.close()
 
     def get_update_statement(self):
-	return self.serialize("UPDATE", self.get_table_name(), "WHERE id = \"" + str(self.ident) + "\"")
+	return self.serialize("UPDATE", self.get_table_name(), "WHERE id = \'" + str(self.ident) + "\'")
 
     def update(self, dbif=None):
 	if self.ident == None:
@@ -279,7 +306,7 @@ class sql_database_interface(dict_sql_serializer):
             self.close()
 
     def get_update_all_statement(self):
-	return self.serialize("UPDATE ALL", self.get_table_name(), "WHERE id = \"" + str(self.ident) + "\"")
+	return self.serialize("UPDATE ALL", self.get_table_name(), "WHERE id = \'" + str(self.ident) + "\'")
 
     def update_all(self, dbif=None):
 	if self.ident == None:
@@ -310,9 +337,9 @@ class dataset_base(sql_database_interface):
 	self.set_mapset(mapset)
 	self.set_creator(creator)
 	self.set_ctime(ctime)
-	self.set_mtime(mtime)
 	self.set_ttype(ttype)
-	self.set_revision(revision)
+	#self.set_mtime(mtime)
+	#self.set_revision(revision)
 
     def set_id(self, ident):
 	"""Convenient method to set the unique identifier (primary key)"""
@@ -338,13 +365,6 @@ class dataset_base(sql_database_interface):
 	else:
             self.D["creation_time"] = ctime
 
-    def set_mtime(self, mtime=None):
-	"""Set the modification time of the map, if nothing set the current time is used"""
-	if mtime == None:
-            self.D["modification_time"] = datetime.now()
-	else:
-            self.D["modification_time"] = mtime
-
     def set_ttype(self, ttype):
 	"""Set the temporal type of the map: absolute or relative, if nothing set absolute time will assumed"""
 	if ttype == None or (ttype != "absolute" and ttype != "relative"):
@@ -352,9 +372,16 @@ class dataset_base(sql_database_interface):
         else:
 	    self.D["temporal_type"] = ttype
 
-    def set_revision(self, revision=1):
-	"""Set the revision of the map: if nothing set revision 1 will assumed"""
-	self.D["revision"] = revision
+#    def set_mtime(self, mtime=None):
+#	"""Set the modification time of the map, if nothing set the current time is used"""
+#	if mtime == None:
+#            self.D["modification_time"] = datetime.now()
+#	else:
+#            self.D["modification_time"] = mtime
+
+#    def set_revision(self, revision=1):
+#	"""Set the revision of the map: if nothing set revision 1 will assumed"""
+#	self.D["revision"] = revision
 
     def get_id(self):
 	"""Convenient method to get the unique identifier (primary key)
@@ -397,14 +424,6 @@ class dataset_base(sql_database_interface):
         else:
 	    return None
 
-    def get_mtime(self):
-	"""Get the modification time of the map, datatype is datetime
-	   @return None if not found"""
-	if self.D.has_key("modification_time"):
-	    return self.D["modification_time"]
-        else:
-	    return None
-
     def get_ttype(self):
 	"""Get the temporal type of the map
 	   @return None if not found"""
@@ -413,13 +432,21 @@ class dataset_base(sql_database_interface):
         else:
 	    return None
 
-    def get_revision(self):
-	"""Get the revision of the map
-	   @return None if not found"""
-	if self.D.has_key("revision"):
-	    return self.D["revision"]
-        else:
-	    return None
+#    def get_mtime(self):
+#	"""Get the modification time of the map, datatype is datetime
+#	   @return None if not found"""
+#	if self.D.has_key("modification_time"):
+#	    return self.D["modification_time"]
+#       else:
+#	    return None
+
+#    def get_revision(self):
+#	"""Get the revision of the map
+#	   @return None if not found"""
+#	if self.D.has_key("revision"):
+#	    return self.D["revision"]
+#       else:
+#	    return None
 
     def print_info(self):
         """Print information about this class in human readable style"""
@@ -430,9 +457,9 @@ class dataset_base(sql_database_interface):
         print " | Mapset: .................... " + str(self.get_mapset())
         print " | Creator: ................... " + str(self.get_creator())
         print " | Creation time: ............. " + str(self.get_ctime())
-        print " | Modification time: ......... " + str(self.get_mtime())
+#        print " | Modification time: ......... " + str(self.get_mtime())
         print " | Temporal type: ............. " + str(self.get_ttype())
-        print " | Revision in database: ...... " + str(self.get_revision())
+#        print " | Revision in database: ...... " + str(self.get_revision())
         
     def print_shell_info(self):
         """Print information about this class in shell style"""
@@ -441,9 +468,9 @@ class dataset_base(sql_database_interface):
         print "mapset=" + str(self.get_mapset())
         print "creator=" + str(self.get_creator())
         print "creation_time=" + str(self.get_ctime())
-        print "modification_time=" + str(self.get_mtime())
+#        print "modification_time=" + str(self.get_mtime())
         print "temporal_type=" + str(self.get_ttype())
-        print "revision=" + str(self.get_revision())
+#        print "revision=" + str(self.get_revision())
 
 ###############################################################################
 

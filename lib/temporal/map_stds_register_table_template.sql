@@ -9,7 +9,7 @@
 -- Author: Soeren Gebbert soerengebbert <at> googlemail <dot> com
 --#############################################################################
 
-PRAGMA foreign_keys = ON;
+--PRAGMA foreign_keys = ON;
 
 -- TABLE_NAME is a placeholder for specific table name (SQL compliant)
 -- MAP_ID is a placeholder for specific map id: name@mapset
@@ -23,16 +23,16 @@ CREATE TABLE  TABLE_NAME_STDS_register (
   FOREIGN KEY (id) REFERENCES  STDS_base (id) ON DELETE CASCADE
 );
 
-CREATE TRIGGER TABLE_NAME_STDS_register_insert AFTER INSERT ON TABLE_NAME_STDS_register
-  BEGIN
-    UPDATE GRASS_MAP_base SET modification_time = datetime("NOW") WHERE GRASS_MAP_base.id = "MAP_ID";
-    UPDATE GRASS_MAP_base SET revision = (revision + 1) WHERE GRASS_MAP_base.id = "MAP_ID";
-  END;
+--CREATE TRIGGER TABLE_NAME_STDS_register_insert AFTER INSERT ON TABLE_NAME_STDS_register
+--  BEGIN
+--    UPDATE GRASS_MAP_base SET modification_time = datetime("NOW") WHERE GRASS_MAP_base.id = 'MAP_ID';
+--    UPDATE GRASS_MAP_base SET revision = (revision + 1) WHERE GRASS_MAP_base.id = 'MAP_ID';
+--  END;
 
-CREATE TRIGGER TABLE_NAME_STDS_register_delete AFTER DELETE ON TABLE_NAME_STDS_register
-  BEGIN
-    UPDATE GRASS_MAP_base SET modification_time = datetime("NOW") WHERE GRASS_MAP_base.id = "MAP_ID";
-    UPDATE GRASS_MAP_base SET revision = (revision + 1) WHERE GRASS_MAP_base.id = "MAP_ID";
-  END;
+--CREATE TRIGGER TABLE_NAME_STDS_register_delete AFTER DELETE ON TABLE_NAME_STDS_register
+--  BEGIN
+--    UPDATE GRASS_MAP_base SET modification_time = datetime("NOW") WHERE GRASS_MAP_base.id = 'MAP_ID';
+--    UPDATE GRASS_MAP_base SET revision = (revision + 1) WHERE GRASS_MAP_base.id = 'MAP_ID';
+--  END;
 
 

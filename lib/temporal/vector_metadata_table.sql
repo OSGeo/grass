@@ -5,7 +5,7 @@
 -- Author: Soeren Gebbert soerengebbert <at> googlemail <dot> com
 --#############################################################################
 
-PRAGMA foreign_keys = ON;
+--PRAGMA foreign_keys = ON;
 
 -- The metadata table 
 
@@ -21,8 +21,10 @@ CREATE TABLE  vector_metadata (
 CREATE VIEW vector_view_abs_time AS SELECT 
             A1.id, A1.mapset,
             A1.name, A1.temporal_type,
-            A1.creation_time, A1.modification_time,
-            A1.revision, A1.creator,
+            A1.creation_time, 
+-- Uncommented due to performance issues
+--            A1.modification_time, A1.revision, 
+            A1.creator, 
 	    A2.start_time, A2.end_time, A2.timezone,
             A3.north, A3.south, A3.east, A3.west, A3.proj,
 	    A4.stvds_register
@@ -33,8 +35,10 @@ CREATE VIEW vector_view_abs_time AS SELECT
 CREATE VIEW vector_view_rel_time AS SELECT 
             A1.id, A1.mapset,
             A1.name, A1.temporal_type,
-            A1.creation_time, A1.modification_time,
-            A1.revision, A1.creator,
+            A1.creation_time, 
+-- Uncommented due to performance issues
+--            A1.modification_time, A1.revision, 
+            A1.creator, 
 	    A2.start_time, A2.end_time,
             A3.north, A3.south, A3.east, A3.west, A3.proj,
 	    A4.stvds_register
@@ -43,20 +47,9 @@ CREATE VIEW vector_view_rel_time AS SELECT
 	    WHERE A1.id = A2.id AND A1.id = A3.id AND A1.id = A4.id;
 
 -- Create a trigger to update the modification time and revision number in case the metadata or timestanps have been updated 
-
-CREATE TRIGGER update_vector_metadata AFTER UPDATE ON vector_metadata 
-  BEGIN
-    UPDATE vector_base SET modification_time = datetime("NOW") WHERE id = old.id;
-    UPDATE vector_base SET revision = (revision + 1) WHERE id = old.id;
-  END;
-
--- Create trigger for automated deletion of dependent rows, this should normally be done using foreign keys 
-
-CREATE TRIGGER delete_vector_base AFTER DELETE ON vector_base
-  BEGIN
-    DELETE FROM vector_absolute_time WHERE id = old.id;
-    DELETE FROM vector_relative_time WHERE id = old.id;
-    DELETE FROM vector_spatial_extent WHERE id = old.id;
-    DELETE FROM vector_metadata WHERE id = old.id;
-  END;
-
+-- Uncommented due to performance issues
+--CREATE TRIGGER update_vector_metadata AFTER UPDATE ON vector_metadata 
+--  BEGIN
+--    UPDATE vector_base SET modification_time = datetime("NOW") WHERE id = old.id;
+--    UPDATE vector_base SET revision = (revision + 1) WHERE id = old.id;
+--  END;

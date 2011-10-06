@@ -426,8 +426,10 @@ def register_maps_in_space_time_dataset(type, name, maps, start=None, increment=
     else:
         maplist = tuple(maps.split(","))
 
+    num_maps = len(maplist)
     count = 0
     for mapname in maplist:
+	core.percent(count, num_maps, 1)
         mapname = mapname.strip()
         # Check if the map name contains the mapset as well
         if mapname.find("@") < 0:
@@ -471,6 +473,8 @@ def register_maps_in_space_time_dataset(type, name, maps, start=None, increment=
 
     if connect == True:
         dbif.close()
+
+    core.percent(num_maps, num_maps, 1)
         
 ###############################################################################
 
@@ -513,7 +517,10 @@ def unregister_maps_from_space_time_datasets(type, name, maps, dbif = None):
     else:
         maplist = tuple(maps.split(","))
 
+    num_maps = len(maplist)
+    count = 0
     for mapname in maplist:
+	core.percent(count, num_maps, 1)
         mapname = mapname.strip()
         # Check if the map name contains the mapset as well
         if mapname.find("@") < 0:
@@ -537,12 +544,16 @@ def unregister_maps_from_space_time_datasets(type, name, maps, dbif = None):
             else:
                 map.select(dbif)
                 map.unregister(dbif)
+		
+	count += 1
 
     if name:
         sp.update_from_registered_maps(dbif)
 
     if connect == True:
         dbif.close()
+	
+    core.percent(num_maps, num_maps, 1)
 
 ###############################################################################
 
@@ -583,8 +594,11 @@ def assign_valid_time_to_maps(type, maps, ttype, start, end=None, increment=None
     else:
         maplist = tuple(maps.split(","))
 
+    num_maps = len(maplist)
     count = 0
+    
     for mapname in maplist:
+	core.percent(count, num_maps, 1)
         mapname = mapname.strip()
         # Check if the map name contains the mapset as well
         if mapname.find("@") < 0:
@@ -631,6 +645,8 @@ def assign_valid_time_to_maps(type, maps, ttype, start, end=None, increment=None
     if connect == True:
         dbif.close()
 
+    core.percent(num_maps, num_maps, 1)
+    
 
 ###############################################################################
 

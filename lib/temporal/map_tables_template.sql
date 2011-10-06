@@ -12,7 +12,7 @@
 
 -- GRASS_MAP is a placeholder for specific map type: raster, raster3d or vector
 
-PRAGMA foreign_keys = ON;
+--PRAGMA foreign_keys = ON;
 
 CREATE TABLE  GRASS_MAP_base (
   id VARCHAR NOT NULL,                  -- The id (PK) is the unique identifier for all tables, it is based on name and mapset (name@mapset) and is used as primary key
@@ -21,8 +21,9 @@ CREATE TABLE  GRASS_MAP_base (
   creator VARCHAR NOT NULL,
   temporal_type VARCHAR,                -- The temporal type of the grass map "absolute" or "relative" or NULL in case no time stamp is available
   creation_time TIMESTAMP NOT NULL,      -- The time of creation of the grass map
-  modification_time TIMESTAMP NOT NULL,  -- The time of the last modification of the grass map
-  revision SMALLINT NOT NULL,           -- The revision number
+-- Uncommented due to performance issues
+--  modification_time TIMESTAMP NOT NULL,  -- The time of the last modification of the grass map
+--  revision SMALLINT NOT NULL,           -- The revision number
   PRIMARY KEY (id)
 );
 
@@ -55,28 +56,28 @@ CREATE TABLE  GRASS_MAP_spatial_extent (
   west DOUBLE PRECISION NOT NULL,
   top DOUBLE PRECISION NOT NULL,
   bottom DOUBLE PRECISION NOT NULL,
-  proj DOUBLE VARCHAR,
+  proj VARCHAR,
   PRIMARY KEY (id),
   FOREIGN KEY (id) REFERENCES  GRASS_MAP_base (id) ON DELETE CASCADE
 );
 
 -- Create a trigger to update the modification time and revision number in case the metadata or timestanps have been updated 
 
-CREATE TRIGGER update_GRASS_MAP_absolute_time AFTER UPDATE ON GRASS_MAP_absolute_time 
-  BEGIN
-    UPDATE GRASS_MAP_base SET modification_time = datetime("NOW") WHERE id = old.id;
-    UPDATE GRASS_MAP_base SET revision = (revision + 1) WHERE id = old.id;
-  END;
+--CREATE TRIGGER update_GRASS_MAP_absolute_time AFTER UPDATE ON GRASS_MAP_absolute_time 
+--  BEGIN
+--    UPDATE GRASS_MAP_base SET modification_time = datetime("NOW") WHERE id = old.id;
+--    UPDATE GRASS_MAP_base SET revision = (revision + 1) WHERE id = old.id;
+-- END;
 
-CREATE TRIGGER update_GRASS_MAP_relative_time AFTER UPDATE ON GRASS_MAP_relative_time 
-  BEGIN
-    UPDATE GRASS_MAP_base SET modification_time = datetime("NOW") WHERE id = old.id;
-    UPDATE GRASS_MAP_base SET revision = (revision + 1) WHERE id = old.id;
-  END;
+--CREATE TRIGGER update_GRASS_MAP_relative_time AFTER UPDATE ON GRASS_MAP_relative_time 
+--  BEGIN
+--    UPDATE GRASS_MAP_base SET modification_time = datetime("NOW") WHERE id = old.id;
+--    UPDATE GRASS_MAP_base SET revision = (revision + 1) WHERE id = old.id;
+--  END;
 
 
-CREATE TRIGGER update_GRASS_MAP_spatial_extent AFTER UPDATE ON GRASS_MAP_spatial_extent 
-  BEGIN
-    UPDATE GRASS_MAP_base SET modification_time = datetime("NOW") WHERE id = old.id;
-    UPDATE GRASS_MAP_base SET revision = (revision + 1) WHERE id = old.id;
-  END;
+--CREATE TRIGGER update_GRASS_MAP_spatial_extent AFTER UPDATE ON GRASS_MAP_spatial_extent 
+--  BEGIN
+--    UPDATE GRASS_MAP_base SET modification_time = datetime("NOW") WHERE id = old.id;
+--    UPDATE GRASS_MAP_base SET revision = (revision + 1) WHERE id = old.id;
+--  END;
