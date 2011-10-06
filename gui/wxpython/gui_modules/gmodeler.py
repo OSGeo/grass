@@ -73,7 +73,7 @@ import goutput
 import gselect
 from debug        import Debug
 from gcmd         import GMessage, GException, GWarning, GError, RunCommand
-from gdialogs     import ElementDialog, GetImageHandlers
+from gdialogs     import ElementDialog, GetImageHandlers, MapLayersDialog
 from preferences  import PreferencesBaseDialog, globalSettings as UserSettings
 from ghelp        import SearchModuleWindow
 
@@ -500,13 +500,36 @@ class Model(object):
                         if vtype == 'string':
                             value = '"' + value + '"'
                         cond = pattern.sub(value, cond)
-                # split condition
-                condVar, condText = re.split('\s*in\s*', cond)
                 
-                for action in item.GetItems():
-                    for vars()[condVar] in eval(condText):
-                        if isinstance(action, ModelAction):
-                            self.RunAction(action, params, log, onDone)
+                # split condition
+                condVar, condText = map(lambda x: x.strip(), re.split('\s*in\s*', cond))
+                pattern = re.compile('%' + condVar)
+                ### for vars()[condVar] in eval(condText): ?
+                if condText[0] == '`' and condText[-1] == '`':
+                    # run command
+                    cmd, dcmd = utils.CmdToTuple(condText[1:-1].split(' '))
+                    ret = RunCommand(cmd,
+                                     read = True,
+                                     **dcmd)
+                    if ret:
+                        vlist = ret.splitlines()
+                else:
+                    vlist = eval(condText)
+                
+                for var in vlist:
+                    for action in item.GetItems():
+                        if not isinstance(action, ModelAction):
+                            continue
+                        
+                        par = action.GetParams(dcopy = True)['params']
+                        for idx in range(len(par)):
+                            if not par[idx].get('value', None):
+                                continue
+                            
+                            if pattern.search(par[idx]['value']):
+                                par[idx]['value'] = pattern.sub(par[idx]['value'], var)
+                            
+                        self.RunAction(action, { action.GetName(): {'params': par } }, log, onDone)
         
         if params:
             dlg.Destroy()
@@ -2226,6 +2249,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
                         alist.append(action)
                 shape.SetItems(alist)
                 self.frame.DefineLoop(shape)
+                self.frame.SetStatusText(shape.GetLog(), 0)
             self.frame.GetCanvas().Refresh()
             
             dlg.Destroy()
@@ -4124,6 +4148,11 @@ class ModelLoopDialog(ModelItemDialog):
         self.listBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
                                     label=" %s " % _("List of items in loop"))
         
+        self.btnSeries = wx.Button(parent = self.panel, id = wx.ID_ANY,
+                                   label = _("Series"))
+        self.btnSeries.SetToolTipString(_("Define map series as condition for the loop"))
+        self.btnSeries.Bind(wx.EVT_BUTTON, self.OnSeries)
+        
         self._layout()
         self.SetMinSize(self.GetSize())
         self.SetSize((500, 400))
@@ -4132,13 +4161,15 @@ class ModelLoopDialog(ModelItemDialog):
         """!Do layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
         
-        condSizer = wx.StaticBoxSizer(self.condBox, wx.VERTICAL)
+        condSizer = wx.StaticBoxSizer(self.condBox, wx.HORIZONTAL)
         condSizer.Add(item = self.condText, proportion = 1,
+                      flag = wx.ALL, border = 3)
+        condSizer.Add(item = self.btnSeries, proportion = 0,
                       flag = wx.EXPAND)
-        
+
         listSizer = wx.StaticBoxSizer(self.listBox, wx.VERTICAL)
         listSizer.Add(item = self.itemList, proportion = 1,
-                      flag = wx.EXPAND)
+                      flag = wx.EXPAND | wx.ALL, border = 3)
         
         btnSizer = wx.StdDialogButtonSizer()
         btnSizer.AddButton(self.btnCancel)
@@ -4160,6 +4191,17 @@ class ModelLoopDialog(ModelItemDialog):
     def GetItems(self):
         """!Get list of selected actions"""
         return self.itemList.GetItems()
+
+    def OnSeries(self, event):
+        """!Define map series as condition"""
+        dialog = MapLayersDialog(parent = self, title = _("Define series of maps"))
+        if dialog.ShowModal() != wx.ID_OK:
+            dialog.Destroy()
+            return
+        
+        self.condText.SetValue('map in %s' % map(lambda x: str(x), dialog.GetMapLayers()))
+                               
+        dialog.Destroy()
 
 class ItemPanel(wx.Panel):
     def __init__(self, parent, id = wx.ID_ANY,
@@ -4227,11 +4269,13 @@ class ItemListCtrl(ModelListCtrl):
                 shapeItems = map(lambda x: x.GetId(), self.shape.GetItems())
         else:
             shapeItems = list()
+        
         i = 0
         if len(self.columns) == 3: # ItemCheckList
             checked = list()
         for action in data:
-            if isinstance(action, ModelData):
+            if isinstance(action, ModelData) or \
+                    action == self.shape:
                 continue
             
             if len(self.columns) == 3:
@@ -4663,7 +4707,15 @@ if __name__ == "__main__":
                         value = '"' + value + '"'
                     cond = pattern.sub(value, cond)
             if isinstance(item, ModelLoop):
-                self.fd.write('%sfor %s:\n' % (' ' * self.indent, cond))
+                condVar, condText = map(lambda x: x.strip(), re.split('\s*in\s*', cond))
+                cond = "%sfor %s in " % (' ' * self.indent, condVar)
+                if condText[0] == '`' and condText[-1] == '`':
+                    task = menuform.GUI(show = None).ParseCommand(cmd = utils.split(condText[1:-1]))
+                    cond += "grass.read_command("
+                    cond += self._getPythonActionCmd(task, len(cond)) + ".splitlines()"
+                else:
+                    cond += condText
+                self.fd.write('%s:\n' % cond)
                 self.indent += 4
                 for action in item.GetItems():
                     self._writePythonItem(action, ignoreBlock = False)
@@ -4685,13 +4737,18 @@ if __name__ == "__main__":
     def _writePythonAction(self, item):
         """!Write model action to Python file"""
         task = menuform.GUI(show = None).ParseCommand(cmd = item.GetLog(string = False))
+        strcmd = "%sgrass.run_command(" % (' ' * self.indent)
+        self.fd.write(strcmd + self._getPythonActionCmd(task, len(strcmd)) + '\n')
+        
+    def _getPythonActionCmd(self, task, cmdIndent):
         opts = task.get_options()
+        
+        ret = ''
         flags = ''
         params = list()
-        strcmd = "%sgrass.run_command(" % (' ' * self.indent)
-        cmdIndent = len(strcmd)
+        
         for f in opts['flags']:
-            if f.get('value', False) == True:
+            if f.get('value', False):
                 name = f.get('name', '')
                 if len(name) > 1:
                     params.append('%s = True' % name)
@@ -4703,23 +4760,26 @@ if __name__ == "__main__":
             value = p.get('value', None)
             if name and value:
                 ptype = p.get('type', 'string')
-                if ptype == 'string':
+                if value[0] == '%':
+                    params.append("%s = %s" % (name, value[1:]))
+                elif ptype == 'string':
                     params.append('%s = "%s"' % (name, value))
                 else:
                     params.append("%s = %s" % (name, value))
         
-        self.fd.write(strcmd + '"%s"' % task.get_name())
+        ret += '"%s"' % task.get_name()
         if flags:
-            self.fd.write(",\n%sflags = '%s'" % (' ' * cmdIndent, flags))
+            ret += ",\n%sflags = '%s'" % (' ' * cmdIndent, flags)
         if len(params) > 0:
-            self.fd.write(",\n")
+            ret += ",\n"
             for opt in params[:-1]:
-                self.fd.write("%s%s,\n" % (' ' * cmdIndent, opt))
-            self.fd.write("%s%s)\n" % (' ' * cmdIndent, params[-1]))
+                ret += "%s%s,\n" % (' ' * cmdIndent, opt)
+            ret += "%s%s)" % (' ' * cmdIndent, params[-1])
         else:
-            self.fd.write(")\n")
-
+            ret += ")"
         
+        return ret
+
 def main():
     import gettext
     gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)

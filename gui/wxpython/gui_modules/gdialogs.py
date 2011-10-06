@@ -11,7 +11,7 @@ List of classes:
  - SavedRegion
  - DecorationDialog
  - TextLayerDialog 
- - AddMapLayersDialog
+ - MapLayersDialog
  - ImportDialog
  - GdalImportDialog
  - GdalOutputDialog
@@ -903,32 +903,28 @@ class TextLayerDialog(wx.Dialog):
                  'coords' : self.currCoords,
                  'active' : self.chkbox.IsChecked() }
 
-class AddMapLayersDialog(wx.Dialog):
-    """!Add selected map layers (raster, vector) into layer tree"""
-    def __init__(self, parent, title, style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
-        wx.Dialog.__init__(self, parent = parent, id = wx.ID_ANY, title = title, style = style)
-
-        self.parent = parent # GMFrame
+class MapLayersDialog(wx.Dialog):
+    def __init__(self, parent, title,
+                 style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
+        """!Dialog for selecting map layers (raster, vector)"""
+        wx.Dialog.__init__(self, parent = parent, id = wx.ID_ANY, title = title,
+                           style = style, **kwargs)
         
-        #
+        self.parent = parent # GMFrame or ?
+        
         # dialog body
-        #
-        self.bodySizer = self.__createDialogBody()
+        self.bodySizer = self._createDialogBody()
         # update list of layer to be loaded
         self.map_layers = [] # list of map layers (full list type/mapset)
         self.LoadMapLayers(self.layerType.GetStringSelection()[:4],
                            self.mapset.GetStringSelection())
-        #
+        
         # buttons
-        #
         btnCancel = wx.Button(parent = self, id = wx.ID_CANCEL)
-        btnOk = wx.Button(parent = self, id = wx.ID_OK, label = _("&Add"))
+        btnOk = wx.Button(parent = self, id = wx.ID_OK)
         btnOk.SetDefault()
-        btnOk.SetToolTipString(_("Add selected map layers to current display"))
-
-        #
+        
         # sizers & do layout
-        #
         btnSizer = wx.StdDialogButtonSizer()
         btnSizer.AddButton(btnCancel)
         btnSizer.AddButton(btnOk)
@@ -946,7 +942,7 @@ class AddMapLayersDialog(wx.Dialog):
         # set dialog min size
         self.SetMinSize(self.GetSize())
         
-    def __createDialogBody(self):
+    def _createDialogBody(self):
         bodySizer = wx.GridBagSizer(vgap = 3, hgap = 3)
         bodySizer.AddGrowableCol(1)
         bodySizer.AddGrowableRow(3)
@@ -955,13 +951,13 @@ class AddMapLayersDialog(wx.Dialog):
         bodySizer.Add(item = wx.StaticText(parent = self, label = _("Map layer type:")),
                       flag = wx.ALIGN_CENTER_VERTICAL,
                       pos = (0,0))
-
+        
         self.layerType = wx.Choice(parent = self, id = wx.ID_ANY,
                                    choices = ['raster', 'vector'], size = (100,-1))
         self.layerType.SetSelection(0)
         bodySizer.Add(item = self.layerType,
                       pos = (0,1))
-
+        
         # select toggle
         self.toggle = wx.CheckBox(parent = self, id = wx.ID_ANY,
                                   label = _("Select toggle"))
@@ -974,24 +970,24 @@ class AddMapLayersDialog(wx.Dialog):
         bodySizer.Add(item = wx.StaticText(parent = self, label = _("Mapset:")),
                       flag = wx.ALIGN_CENTER_VERTICAL,
                       pos = (1,0))
-
+        
         self.mapset = gselect.MapsetSelect(parent = self)
         self.mapset.SetStringSelection(grass.gisenv()['MAPSET'])
         bodySizer.Add(item = self.mapset,
                       pos = (1,1), span = (1, 2))
-
+        
         # map name filter
         bodySizer.Add(item = wx.StaticText(parent = self, label = _("Filter:")),
                       flag = wx.ALIGN_CENTER_VERTICAL,
                       pos = (2,0))
-
+        
         self.filter = wx.TextCtrl(parent = self, id = wx.ID_ANY,
                                   value = "",
                                   size = (250,-1))
         bodySizer.Add(item = self.filter,
                       flag = wx.EXPAND,
                       pos = (2,1), span = (1, 2))
-
+        
         # layer list 
         bodySizer.Add(item = wx.StaticText(parent = self, label = _("List of maps:")),
                       flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_TOP,
@@ -1002,7 +998,7 @@ class AddMapLayersDialog(wx.Dialog):
         bodySizer.Add(item = self.layers,
                       flag = wx.EXPAND,
                       pos = (3,1), span = (1, 2))
-
+        
         # bindings
         self.layerType.Bind(wx.EVT_CHOICE, self.OnChangeParams)
         self.mapset.Bind(wx.EVT_COMBOBOX, self.OnChangeParams)
@@ -1023,15 +1019,15 @@ class AddMapLayersDialog(wx.Dialog):
         # check all items by default
         for item in range(self.layers.GetCount()):
             self.layers.Check(item)
-
+        
     def OnChangeParams(self, event):
         """!Filter parameters changed by user"""
         # update list of layer to be loaded
         self.LoadMapLayers(self.layerType.GetStringSelection()[:4],
                            self.mapset.GetStringSelection())
-    
+        
         event.Skip()
-
+        
     def OnMenu(self, event):
         """!Table description area, context menu"""
         if not hasattr(self, "popupID1"):
@@ -1042,21 +1038,21 @@ class AddMapLayersDialog(wx.Dialog):
             self.Bind(wx.EVT_MENU, self.OnSelectAll,    id = self.popupDataID1)
             self.Bind(wx.EVT_MENU, self.OnSelectInvert, id = self.popupDataID2)
             self.Bind(wx.EVT_MENU, self.OnDeselectAll,  id = self.popupDataID3)
-
+        
         # generate popup-menu
         menu = wx.Menu()
         menu.Append(self.popupDataID1, _("Select all"))
         menu.Append(self.popupDataID2, _("Invert selection"))
         menu.Append(self.popupDataID3, _("Deselect all"))
-
+        
         self.PopupMenu(menu)
         menu.Destroy()
-
+        
     def OnSelectAll(self, event):
         """!Select all map layer from list"""
         for item in range(self.layers.GetCount()):
             self.layers.Check(item, True)
-
+        
     def OnSelectInvert(self, event):
         """!Invert current selection"""
         for item in range(self.layers.GetCount()):
@@ -1069,13 +1065,13 @@ class AddMapLayersDialog(wx.Dialog):
         """!Select all map layer from list"""
         for item in range(self.layers.GetCount()):
             self.layers.Check(item, False)
-
+        
     def OnFilter(self, event):
         """!Apply filter for map names"""
         if len(event.GetString()) == 0:
            self.layers.Set(self.map_layers) 
            return 
-
+        
         list = []
         for layer in self.map_layers:
             try:
@@ -1083,18 +1079,18 @@ class AddMapLayersDialog(wx.Dialog):
                     list.append(layer)
             except:
                 pass
-
+        
         self.layers.Set(list)
         self.OnSelectAll(None)
         
         event.Skip()
-
+        
     def OnToggle(self, event):
         """!Select toggle (check or uncheck all layers)"""
         check = event.Checked()
         for item in range(self.layers.GetCount()):
             self.layers.Check(item, check)
-
+        
         event.Skip()
         
     def GetMapLayers(self):
@@ -1103,14 +1099,14 @@ class AddMapLayersDialog(wx.Dialog):
         for indx in self.layers.GetSelections():
             # layers.append(self.layers.GetStringSelec(indx))
             pass
-
+        
         # return fully qualified map names
         mapset = self.mapset.GetStringSelection()
         for item in range(self.layers.GetCount()):
             if not self.layers.IsChecked(item):
                 continue
             layerNames.append(self.layers.GetString(item) + '@' + mapset)
-
+        
         return layerNames
     
     def GetLayerType(self):
