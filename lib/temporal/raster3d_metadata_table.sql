@@ -6,7 +6,7 @@
 -- Author: Soeren Gebbert soerengebbert <at> googlemail <dot> com
 --#############################################################################
 
-PRAGMA foreign_keys = ON;
+--PRAGMA foreign_keys = ON;
 
 -- The metadata table reflects most of the raster3d metadata available in grass
 
@@ -32,8 +32,10 @@ CREATE TABLE  raster3d_metadata (
 CREATE VIEW raster3d_view_abs_time AS SELECT 
             A1.id, A1.mapset,
             A1.name, A1.temporal_type,
-            A1.creation_time, A1.modification_time,
-            A1.revision, A1.creator,
+            A1.creation_time, 
+-- Uncommented due to performance issues
+--            A1.modification_time, A1.revision, 
+            A1.creator,
 	    A2.start_time, A2.end_time, A2.timezone,
             A3.north, A3.south, A3.east, A3.west, A3.proj,
 	    A4.datatype, A4.cols, A4.rows, A4.depths,
@@ -48,8 +50,10 @@ CREATE VIEW raster3d_view_abs_time AS SELECT
 CREATE VIEW raster3d_view_rel_time AS SELECT 
             A1.id, A1.mapset,
             A1.name, A1.temporal_type,
-            A1.creation_time, A1.modification_time,
-            A1.revision, A1.creator,
+            A1.creation_time, 
+-- Uncommented due to performance issues
+--            A1.modification_time, A1.revision, 
+            A1.creator,
 	    A2.start_time, A2.end_time,
             A3.north, A3.south, A3.east, A3.west, A3.proj,
 	    A4.datatype, A4.cols, A4.rows, A4.depths,
@@ -63,19 +67,8 @@ CREATE VIEW raster3d_view_rel_time AS SELECT
 
 -- Create a trigger to update the modification time and revision number in case the metadata have been updated 
 
-CREATE TRIGGER update_raster3d_metadata AFTER UPDATE ON raster3d_metadata 
-  BEGIN
-    UPDATE raster3d_base SET modification_time = datetime("NOW") WHERE id = old.id;
-    UPDATE raster3d_base SET revision = (revision + 1) WHERE id = old.id;
-  END;
-
--- Create trigger for automated deletion of dependent rows, this should normally be done using foreign keys 
-
-CREATE TRIGGER delete_raster3d_base AFTER DELETE ON raster3d_base
-  BEGIN
-    DELETE FROM raster3d_absolute_time WHERE id = old.id;
-    DELETE FROM raster3d_relative_time WHERE id = old.id;
-    DELETE FROM raster3d_spatial_extent WHERE id = old.id;
-    DELETE FROM raster3d_metadata WHERE id = old.id;
-  END;
-
+--CREATE TRIGGER update_raster3d_metadata AFTER UPDATE ON raster3d_metadata 
+--  BEGIN
+--    UPDATE raster3d_base SET modification_time = datetime("NOW") WHERE id = old.id;
+--    UPDATE raster3d_base SET revision = (revision + 1) WHERE id = old.id;
+--  END;

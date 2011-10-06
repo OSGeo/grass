@@ -116,9 +116,6 @@ def main():
     dbif = tgis.sql_database_interface()
     dbif.connect()
 
-    # Insert content from db
-    sp.select(dbif)
-
     # Create the sql selection statement
     # Table name
     if temporaltype == "absolute":

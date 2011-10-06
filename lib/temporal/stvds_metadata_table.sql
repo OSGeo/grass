@@ -5,7 +5,7 @@
 -- Author: Soeren Gebbert soerengebbert <at> googlemail <dot> com
 --#############################################################################
 
-PRAGMA foreign_keys = ON;
+--PRAGMA foreign_keys = ON;
 
 CREATE TABLE  stvds_metadata (
   id VARCHAR NOT NULL,                -- Name of the space-time vector dataset, this is the primary foreign key
@@ -20,9 +20,11 @@ CREATE TABLE  stvds_metadata (
 
 CREATE VIEW stvds_view_abs_time AS SELECT 
             A1.id, A1.name, A1.mapset, A1.temporal_type,
-            A1.creator, A1.semantic_type,  
-            A1.creation_time, A1.modification_time,
-            A1.revision,
+            A1.semantic_type, 
+            A1.creation_time, 
+-- Uncommented due to performance issues
+--            A1.modification_time, A1.revision, 
+            A1.creator, 
 	    A2.start_time, A2.end_time, A2.timezone,
             A2.granularity,
 	    A3.north, A3.south, A3.east, A3.west, A3.proj,
@@ -35,9 +37,11 @@ CREATE VIEW stvds_view_abs_time AS SELECT
 
 CREATE VIEW stvds_view_rel_time AS SELECT 
             A1.id, A1.name, A1.mapset, A1.temporal_type,
-            A1.creator, A1.semantic_type,  
-            A1.creation_time, A1.modification_time,
-            A1.revision,
+            A1.semantic_type, 
+            A1.creation_time, 
+-- Uncommented due to performance issues
+--            A1.modification_time, A1.revision, 
+            A1.creator, 
 	    A2.start_time, A2.end_time, A2.granularity,
 	    A3.north, A3.south, A3.east, A3.west, A3.proj,
 	    A4.vector_register,
@@ -49,20 +53,9 @@ CREATE VIEW stvds_view_rel_time AS SELECT
 
 
 -- Create a trigger to update the modification time and revision number in case the metadata or timestanps have been updated 
-
-CREATE TRIGGER update_stvds_metadata AFTER UPDATE ON stvds_metadata 
-  BEGIN
-    UPDATE stvds_base SET modification_time = datetime("NOW") WHERE id = old.id;
-    UPDATE stvds_base SET revision = (revision + 1) WHERE id = old.id;
-  END;
-
--- Create trigger for automated deletion of dependent rows, this should normally be done using foreign keys 
-
-CREATE TRIGGER delete_stvds_base AFTER DELETE ON stvds_base
-  BEGIN
-    DELETE FROM stvds_absolute_time WHERE id = old.id;
-    DELETE FROM stvds_relative_time WHERE id = old.id;
-    DELETE FROM stvds_spatial_extent WHERE id = old.id;
-    DELETE FROM stvds_metadata WHERE id = old.id;
-  END;
-
+-- Uncommented due to performance issues
+--CREATE TRIGGER update_stvds_metadata AFTER UPDATE ON stvds_metadata 
+--  BEGIN
+--    UPDATE stvds_base SET modification_time = datetime("NOW") WHERE id = old.id;
+--    UPDATE stvds_base SET revision = (revision + 1) WHERE id = old.id;
+--  END;

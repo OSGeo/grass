@@ -21,7 +21,10 @@ for details.
 @author Soeren Gebbert
 """
 import os
-import sqlite3
+import sqlite3 as dbmi
+#import psycopg2 as dbmi
+# Needed for dictionary like cursors
+#import psycopg2.extras
 import grass.script.core as core
 import copy
 from datetime import datetime, date, time, timedelta
@@ -29,9 +32,12 @@ from datetime import datetime, date, time, timedelta
 ###############################################################################
 
 def get_grass_location_db_path():
-    grassenv = core.gisenv()
-    dbpath = os.path.join(grassenv["GISDBASE"], grassenv["LOCATION_NAME"])
-    return os.path.join(dbpath, "grass.db")
+    if dbmi.paramstyle == "qmark":
+	grassenv = core.gisenv()
+	dbpath = os.path.join(grassenv["GISDBASE"], grassenv["LOCATION_NAME"])
+	return os.path.join(dbpath, "grass.db")
+    else:
+	return "dbname=grass_test user=soeren password=abcdefgh"
 
 ###############################################################################
 
@@ -154,10 +160,17 @@ def create_temporal_database():
     
     database = get_grass_location_db_path()
 
-    # Check if it already exists
-    if os.path.exists(database):
-        return False
+    build_db = False
 
+    # Check if it already exists
+    if dbmi.paramstyle == "qmark":
+	# Check path of the sqlite database
+	if not os.path.exists(database):
+	    build_db = True
+    
+    if build_db == False:
+	return
+    
     # Read all SQL scripts and templates
     map_tables_template_sql = open(os.path.join(get_sql_template_path(), "map_tables_template.sql"), 'r').read()
     raster_metadata_sql = open(os.path.join(get_sql_template_path(), "raster_metadata_table.sql"), 'r').read()
@@ -167,6 +180,7 @@ def create_temporal_database():
     strds_metadata_sql = open(os.path.join(get_sql_template_path(), "strds_metadata_table.sql"), 'r').read()
     str3ds_metadata_sql = open(os.path.join(get_sql_template_path(), "str3ds_metadata_table.sql"), 'r').read()
     stvds_metadata_sql = open(os.path.join(get_sql_template_path(), "stvds_metadata_table.sql"), 'r').read()
+    
 
     # Create the raster, raster3d and vector tables
     raster_tables_sql = map_tables_template_sql.replace("GRASS_MAP", "raster")
@@ -178,39 +192,47 @@ def create_temporal_database():
     stvds_tables_sql = stds_tables_template_sql.replace("STDS", "stvds")
     str3ds_tables_sql = stds_tables_template_sql.replace("STDS", "str3ds")
 
-    # Check for completion
-    sqlite3.complete_statement(raster_tables_sql)
-    sqlite3.complete_statement(vector_tables_sql)
-    sqlite3.complete_statement(raster3d_tables_sql)
-    sqlite3.complete_statement(raster_metadata_sql)
-    sqlite3.complete_statement(vector_metadata_sql)
-    sqlite3.complete_statement(raster3d_metadata_sql)
-    sqlite3.complete_statement(strds_tables_sql)
-    sqlite3.complete_statement(stvds_tables_sql)
-    sqlite3.complete_statement(str3ds_tables_sql)
-    sqlite3.complete_statement(strds_metadata_sql)
-    sqlite3.complete_statement(stvds_metadata_sql)
-    sqlite3.complete_statement(str3ds_metadata_sql)
-
     # Connect to database
-    connection = sqlite3.connect(database)
+    connection = dbmi.connect(database)
     cursor = connection.cursor()
 
-    # Execute the SQL statements
-    # Create the global tables for the native grass datatypes
-    cursor.executescript(raster_tables_sql)
-    cursor.executescript(raster_metadata_sql)
-    cursor.executescript(vector_tables_sql)
-    cursor.executescript(vector_metadata_sql)
-    cursor.executescript(raster3d_tables_sql)
-    cursor.executescript(raster3d_metadata_sql)
-    # Create the tables for the new space-time datatypes
-    cursor.executescript(strds_tables_sql)
-    cursor.executescript(strds_metadata_sql)
-    cursor.executescript(stvds_tables_sql)
-    cursor.executescript(stvds_metadata_sql)
-    cursor.executescript(str3ds_tables_sql)
-    cursor.executescript(str3ds_metadata_sql)
+    
+    if dbmi.paramstyle == "qmark":
+	
+	sqlite3_delete_trigger_sql = open(os.path.join(get_sql_template_path(), "sqlite3_delete_trigger.sql"), 'r').read()
+	
+	# Execute the SQL statements for sqlite
+	# Create the global tables for the native grass datatypes
+	cursor.executescript(raster_tables_sql)
+	cursor.executescript(raster_metadata_sql)
+	cursor.executescript(vector_tables_sql)
+	cursor.executescript(vector_metadata_sql)
+	cursor.executescript(raster3d_tables_sql)
+	cursor.executescript(raster3d_metadata_sql)
+	# Create the tables for the new space-time datatypes
+	cursor.executescript(strds_tables_sql)
+	cursor.executescript(strds_metadata_sql)
+	cursor.executescript(stvds_tables_sql)
+	cursor.executescript(stvds_metadata_sql)
+	cursor.executescript(str3ds_tables_sql)
+	cursor.executescript(str3ds_metadata_sql)
+	cursor.executescript(sqlite3_delete_trigger_sql)
+    else:
+	# Execute the SQL statements for postgresql
+	# Create the global tables for the native grass datatypes
+	cursor.execute(raster_tables_sql)
+	cursor.execute(raster_metadata_sql)
+	cursor.execute(vector_tables_sql)
+	cursor.execute(vector_metadata_sql)
+	cursor.execute(raster3d_tables_sql)
+	cursor.execute(raster3d_metadata_sql)
+	# Create the tables for the new space-time datatypes
+	cursor.execute(strds_tables_sql)
+	cursor.execute(strds_metadata_sql)
+	cursor.execute(stvds_tables_sql)
+	cursor.execute(stvds_metadata_sql)
+	cursor.execute(str3ds_tables_sql)
+	cursor.execute(str3ds_metadata_sql)
 
     connection.commit()
     cursor.close()

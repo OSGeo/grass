@@ -24,7 +24,7 @@ t.create --v --o type=strds temporaltype=absolute dataset=precip_abs gran="1 mon
 
 tr.register --v dataset=precip_abs maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="1 months"
 
-tr.series --o input=precip_abs method=average output=prec_average where='start_time > "2001-03-01"'
+tr.series --o input=precip_abs method=average output=prec_average where="start_time > '2001-03-01'"
 tr.series --o -t input=precip_abs method=maximum output=prec_max sort=start_time
 tr.series --o -t input=precip_abs method=sum output=prec_sum
 

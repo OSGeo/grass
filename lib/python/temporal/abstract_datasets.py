@@ -589,8 +589,6 @@ class abstract_space_time_dataset(abstract_dataset):
             if order:
                 sql += " ORDER BY %s" % (order)
 
-            print sql
-
             try:
                 dbif.cursor.execute(sql)
                 rows = dbif.cursor.fetchall()
@@ -682,7 +680,10 @@ class abstract_space_time_dataset(abstract_dataset):
 
         # Check if map is already registred
         if stds_register_table:
-            sql = "SELECT id FROM " + stds_register_table + " WHERE id = (?)"
+	    if dbmi.paramstyle == "qmark":
+		sql = "SELECT id FROM " + stds_register_table + " WHERE id = (?)"
+	    else:
+		sql = "SELECT id FROM " + stds_register_table + " WHERE id = (%s)"
             dbif.cursor.execute(sql, (map_id,))
             row = dbif.cursor.fetchone()
             # In case of no entry make a new one
@@ -709,7 +710,10 @@ class abstract_space_time_dataset(abstract_dataset):
             sql = sql.replace("MAP_ID", map_id)
             sql = sql.replace("STDS", self.get_type())
             try:
-                dbif.cursor.executescript(sql)
+		if dbmi.paramstyle == "qmark":
+		    dbif.cursor.executescript(sql)
+		else:
+		    dbif.cursor.execute(sql)
             except:
                 try:
                     # Drop stds register table
@@ -719,7 +723,10 @@ class abstract_space_time_dataset(abstract_dataset):
                     core.error(_("Unable to drop table <%s>" % (map_register_table)))
                     raise
                 try:
-                    dbif.cursor.executescript(sql_script)
+		    if dbmi.paramstyle == "qmark":
+			dbif.cursor.executescript(sql_script)
+		    else:
+			dbif.cursor.execute(sql_script)
                 except:
                     core.error(_("Unable to create the space time %s dataset register table for <%s>") % (map.get_type(), map.get_id()))
                     raise
@@ -748,17 +755,24 @@ class abstract_space_time_dataset(abstract_dataset):
             #sql_script += "\n"
             #sql_script += "END TRANSACTION;"
             try:
-                dbif.cursor.executescript(sql_script)
+		if dbmi.paramstyle == "qmark":
+		    dbif.cursor.executescript(sql_script)
+		else:
+		    dbif.cursor.execute(sql_script)
             except:
                 try:
                     # Drop map register table
                     sql = "DROP TABLE " + stds_register_table
+		    print sql
                     dbif.cursor.execute(sql)
                 except:
                     core.error(_("Unable to drop table <%s>" % (stds_register_table)))
                     raise
                 try:
-                    dbif.cursor.executescript(sql_script)
+		    if dbmi.paramstyle == "qmark":
+			dbif.cursor.executescript(sql_script)
+		    else:
+			dbif.cursor.execute(sql_script)
                 except:
                     core.error(_("Unable to create the space time %s dataset register table for <%s>") % (map.get_type(), map.get_id()))
                     raise
@@ -787,18 +801,27 @@ class abstract_space_time_dataset(abstract_dataset):
 
         # Register the stds in the map stds register table
         # Check if the entry is already there
-        sql = "SELECT id FROM " + map_register_table + " WHERE id = ?"
+	if dbmi.paramstyle == "qmark":
+	    sql = "SELECT id FROM " + map_register_table + " WHERE id = ?"
+	else:
+	    sql = "SELECT id FROM " + map_register_table + " WHERE id = %s"
         dbif.cursor.execute(sql, (self.base.get_id(),))
       	row = dbif.cursor.fetchone()
 
         # In case of no entry make a new one
         if row == None:
-            sql = "INSERT INTO " + map_register_table + " (id) " + "VALUES (?)"
+	    if dbmi.paramstyle == "qmark":
+		sql = "INSERT INTO " + map_register_table + " (id) " + "VALUES (?)"
+	    else:
+		sql = "INSERT INTO " + map_register_table + " (id) " + "VALUES (%s)"
             #print sql
             dbif.cursor.execute(sql, (self.base.get_id(),))
 
         # Now put the raster name in the stds map register table
-        sql = "INSERT INTO " + stds_register_table + " (id) " + "VALUES (?)"
+	if dbmi.paramstyle == "qmark":
+	    sql = "INSERT INTO " + stds_register_table + " (id) " + "VALUES (?)"
+	else:
+	    sql = "INSERT INTO " + stds_register_table + " (id) " + "VALUES (%s)"
         #print sql
         dbif.cursor.execute(sql, (map_id,))
 
@@ -834,7 +857,10 @@ class abstract_space_time_dataset(abstract_dataset):
         stds_register_table = self.get_map_register()
 
         # Check if the map is registered in the space time raster dataset
-        sql = "SELECT id FROM " + map_register_table + " WHERE id = ?"
+	if dbmi.paramstyle == "qmark":
+	    sql = "SELECT id FROM " + map_register_table + " WHERE id = ?"
+	else:
+	    sql = "SELECT id FROM " + map_register_table + " WHERE id = %s"
         dbif.cursor.execute(sql, (self.base.get_id(),))
       	row = dbif.cursor.fetchone()
 
@@ -845,12 +871,18 @@ class abstract_space_time_dataset(abstract_dataset):
 
         # Remove the space time raster dataset from the raster dataset register
         if map_register_table != None:
-            sql = "DELETE FROM " + map_register_table + " WHERE id = ?"
+	    if dbmi.paramstyle == "qmark":
+		sql = "DELETE FROM " + map_register_table + " WHERE id = ?"
+	    else:
+		sql = "DELETE FROM " + map_register_table + " WHERE id = %s"
             dbif.cursor.execute(sql, (self.base.get_id(),))
 
         # Remove the raster map from the space time raster dataset register
         if stds_register_table != None:
-            sql = "DELETE FROM " + stds_register_table + " WHERE id = ?"
+	    if dbmi.paramstyle == "qmark":
+		sql = "DELETE FROM " + stds_register_table + " WHERE id = ?"
+	    else:
+		sql = "DELETE FROM " + stds_register_table + " WHERE id = %s"
             dbif.cursor.execute(sql, (map_id,))
 
         if connect == True:
@@ -918,7 +950,11 @@ class abstract_space_time_dataset(abstract_dataset):
 
         sql_script += "END TRANSACTION;"
 
-        dbif.cursor.executescript(sql_script)
+	if dbmi.paramstyle == "qmark":
+	    dbif.cursor.executescript(sql_script)
+	else:
+	    dbif.cursor.execute(sql_script)
+	    
 
         # Read and validate the selected end time
         self.select()
@@ -948,16 +984,20 @@ class abstract_space_time_dataset(abstract_dataset):
             row = dbif.cursor.fetchone()
 
             if row != None:
-                tstring = row[0]
-                # Convert the unicode string into the datetime format
-                if tstring.find(":") > 0:
-                    time_format = "%Y-%m-%d %H:%M:%S"
-                else:
-                    time_format = "%Y-%m-%d"
+		if dbmi.paramstyle == "qmark":
+		    tstring = row[0]
+		    # Convert the unicode string into the datetime format
+		    if tstring.find(":") > 0:
+			time_format = "%Y-%m-%d %H:%M:%S"
+		    else:
+			time_format = "%Y-%m-%d"
 
-                max_start_time = datetime.strptime(tstring, time_format)
-                if end_time < max_start_time:
-                    use_start_time = True
+		    max_start_time = datetime.strptime(tstring, time_format)
+		else:
+		    max_start_time = row[0]
+		    
+		if end_time < max_start_time:
+		    use_start_time = True
 
         # Set the maximum start time as end time
         if use_start_time:
@@ -965,7 +1005,7 @@ class abstract_space_time_dataset(abstract_dataset):
                 sql = """UPDATE STDS_absolute_time SET end_time =
                (SELECT max(start_time) FROM GRASS_MAP_absolute_time WHERE GRASS_MAP_absolute_time.id IN
                         (SELECT id FROM SPACETIME_NAME_GRASS_MAP_register)
-               ) WHERE id = "SPACETIME_ID";"""
+               ) WHERE id = 'SPACETIME_ID';"""
                 sql = sql.replace("GRASS_MAP", self.get_new_map_instance(None).get_type())
                 sql = sql.replace("SPACETIME_NAME", stds_name + "_" + stds_mapset )
                 sql = sql.replace("SPACETIME_ID", self.base.get_id())
@@ -974,13 +1014,16 @@ class abstract_space_time_dataset(abstract_dataset):
                 sql = """UPDATE STDS_relative_time SET end_time =
                (SELECT max(start_time) FROM GRASS_MAP_relative_time WHERE GRASS_MAP_relative_time.id IN
                         (SELECT id FROM SPACETIME_NAME_GRASS_MAP_register)
-               ) WHERE id = "SPACETIME_ID";"""
+               ) WHERE id = 'SPACETIME_ID';"""
                 sql = sql.replace("GRASS_MAP", self.get_new_map_instance(None).get_type())
                 sql = sql.replace("SPACETIME_NAME", stds_name + "_" + stds_mapset )
                 sql = sql.replace("SPACETIME_ID", self.base.get_id())
                 sql = sql.replace("STDS", self.get_type())
 
-            dbif.cursor.executescript(sql)
+	    if dbmi.paramstyle == "qmark":
+		dbif.cursor.executescript(sql)
+	    else:
+		dbif.cursor.execute(sql)
 
         if connect == True:
             dbif.close()

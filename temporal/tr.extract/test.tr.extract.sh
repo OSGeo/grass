@@ -20,7 +20,7 @@ tr.register -i dataset=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_
 # The first @test
 # We create the space time raster datasets and register the raster maps with absolute time interval
 
-tr.extract --o input=precip_abs1 output=precip_abs2 where='start_time > "2001-06-01"' expression=" if(precip_abs1 > 400, precip_abs1, null())" base=new_prec
+tr.extract --o input=precip_abs1 output=precip_abs2 where="start_time > '2001-06-01'" expression=" if(precip_abs1 > 400, precip_abs1, null())" base=new_prec
 
 t.info type=strds dataset=precip_abs2
 
