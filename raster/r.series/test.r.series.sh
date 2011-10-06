@@ -17,45 +17,46 @@ TMP_FILE=`g.tempfile pid=1`
 # valid raster maps listed in this file.
 cat > $TMP_FILE << EOF
 prec_1
+
 prec_2
 prec_3
 
-invalid_name
-
 prec_4
-prec_5
-prec_6
 
+prec_5
+
+
+prec_6
 
 
 EOF
 
 # The first @test with map input and @precision=3
-r.series --o input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 output=test_1_prec_mean method=average
-r.series --o input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 output=test_1_prec_max method=maximum
-r.series --o input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 output=test_1_prec_min method=minimum
-r.series --o input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 output=test_1_prec_count method=count
-r.series --o input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 output=test_1_prec_range method=range
-r.series --o input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 output=test_1_prec_sum method=sum
+r.series -z --o --v input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 output=test_1_prec_mean method=average
+r.series    --o --v input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 output=test_1_prec_max method=maximum
+r.series -z --o --v input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 output=test_1_prec_min method=minimum
+r.series    --o --v input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 output=test_1_prec_count method=count
+r.series -z --o --v input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 output=test_1_prec_range method=range
+r.series    --o --v input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 output=test_1_prec_sum method=sum
 
-#r.out.ascii --o input=test_1_prec_mean output=test_1_prec_mean.ref dp=3
-#r.out.ascii --o input=test_1_prec_max output=test_1_prec_max.ref dp=3
-#r.out.ascii --o input=test_1_prec_min output=test_1_prec_min.ref dp=3
-#r.out.ascii --o input=test_1_prec_count output=test_1_prec_count.ref dp=3
-#r.out.ascii --o input=test_1_prec_range output=test_1_prec_range.ref dp=3
-#r.out.ascii --o input=test_1_prec_sum output=test_1_prec_sum.ref dp=3
+r.out.ascii --o input=test_1_prec_mean output=test_1_prec_mean.ref dp=3
+r.out.ascii --o input=test_1_prec_max output=test_1_prec_max.ref dp=3
+r.out.ascii --o input=test_1_prec_min output=test_1_prec_min.ref dp=3
+r.out.ascii --o input=test_1_prec_count output=test_1_prec_count.ref dp=3
+r.out.ascii --o input=test_1_prec_range output=test_1_prec_range.ref dp=3
+r.out.ascii --o input=test_1_prec_sum output=test_1_prec_sum.ref dp=3
 
 # The second @test with file input and @precision=3
-r.series --o file=$TMP_FILE output=test_2_prec_mean method=average
-r.series --o file=$TMP_FILE output=test_2_prec_max method=maximum
-r.series --o file=$TMP_FILE output=test_2_prec_min method=minimum
-r.series --o file=$TMP_FILE output=test_2_prec_count method=count
-r.series --o file=$TMP_FILE output=test_2_prec_range method=range
-r.series --o file=$TMP_FILE output=test_2_prec_sum method=sum
+r.series -z --o --v file=$TMP_FILE output=test_2_prec_mean method=average
+r.series    --o --v file=$TMP_FILE output=test_2_prec_max method=maximum
+r.series -z --o --v file=$TMP_FILE output=test_2_prec_min method=minimum
+r.series    --o --v file=$TMP_FILE output=test_2_prec_count method=count
+r.series -z --o --v file=$TMP_FILE output=test_2_prec_range method=range
+r.series    --o --v file=$TMP_FILE output=test_2_prec_sum method=sum
 
-#r.out.ascii --o input=test_2_prec_mean output=test_2_prec_mean.ref dp=3
-#r.out.ascii --o input=test_2_prec_max output=test_2_prec_max.ref dp=3
-#r.out.ascii --o input=test_2_prec_min output=test_2_prec_min.ref dp=3
-#r.out.ascii --o input=test_2_prec_count output=test_2_prec_count.ref dp=3
-#r.out.ascii --o input=test_2_prec_range output=test_2_prec_range.ref dp=3
-#r.out.ascii --o input=test_2_prec_sum output=test_2_prec_sum.ref dp=3
+r.out.ascii --o input=test_2_prec_mean output=test_2_prec_mean.ref dp=3
+r.out.ascii --o input=test_2_prec_max output=test_2_prec_max.ref dp=3
+r.out.ascii --o input=test_2_prec_min output=test_2_prec_min.ref dp=3
+r.out.ascii --o input=test_2_prec_count output=test_2_prec_count.ref dp=3
+r.out.ascii --o input=test_2_prec_range output=test_2_prec_range.ref dp=3
+r.out.ascii --o input=test_2_prec_sum output=test_2_prec_sum.ref dp=3
