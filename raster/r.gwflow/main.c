@@ -54,31 +54,31 @@ void set_params(void)
 {
     param.phead = G_define_standard_option(G_OPT_R_INPUT);
     param.phead->key = "phead";
-    param.phead->description = _("Input raster map with initial piezometric head in [m]");
+    param.phead->description = _("Name of input raster map with initial piezometric head in [m]");
 
     param.status = G_define_standard_option(G_OPT_R_INPUT);
     param.status->key = "status";
     param.status->description =
-	_("Input raster map providing Boundary condition status: 0-inactive, 1-active, 2-dirichlet");
+	_("Name of input raster map providing Boundary condition status: 0-inactive, 1-active, 2-dirichlet");
 
     param.hc_x =G_define_standard_option(G_OPT_R_INPUT);
     param.hc_x->key = "hc_x";
     param.hc_x->description =
-	_("Input raster map with x-part of the hydraulic conductivity tensor in [m/s]");
+	_("Name of input raster map with x-part of the hydraulic conductivity tensor in [m/s]");
 
     param.hc_y = G_define_standard_option(G_OPT_R_INPUT);
     param.hc_y->key = "hc_y";
     param.hc_y->description =
-	_("Input raster map with y-part of the hydraulic conductivity tensor in [m/s]");
+	_("Name of input raster map with y-part of the hydraulic conductivity tensor in [m/s]");
 
     param.q = G_define_standard_option(G_OPT_R_INPUT);
     param.q->key = "q";
     param.q->required = NO;
-    param.q->description = _("Input raster map with water sources and sinks in [m^3/s]");
+    param.q->description = _("Name of input raster map with water sources and sinks in [m^3/s]");
 
     param.s = G_define_standard_option(G_OPT_R_INPUT);
     param.s->key = "s";
-    param.s->description = _("Input raster map with storativity for confined or effective porosity for unconfined groundwater flow booth in [-] ");
+    param.s->description = _("Name of input raster map with storativity for confined or effective porosity for unconfined groundwater flow booth in [-] ");
 
     param.r = G_define_standard_option(G_OPT_R_INPUT);
     param.r->key = "recharge";
@@ -89,11 +89,11 @@ void set_params(void)
 
     param.top = G_define_standard_option(G_OPT_R_INPUT);
     param.top->key = "top";
-    param.top->description = _("Input raster map describing the top surface of the aquifer in [m]");
+    param.top->description = _("Name of input raster map describing the top surface of the aquifer in [m]");
 
     param.bottom = G_define_standard_option(G_OPT_R_INPUT);
     param.bottom->key = "bottom";
-    param.bottom->description = _("Input raster map describing the bottom surface of the aquifer in [m]");
+    param.bottom->description = _("Name of input raster map describing the bottom surface of the aquifer in [m]");
 
     param.output = G_define_standard_option(G_OPT_R_OUTPUT);
     param.output->key = "output";
@@ -103,19 +103,19 @@ void set_params(void)
     param.vector_x->key = "vx";
     param.vector_x->required = NO;
     param.vector_x->description =
-	_("Output raster map to store the groundwater filter velocity vector part in x direction [m/s]\n");
+	_("Output raster map to store the groundwater filter velocity vector part in x direction [m/s]");
 
     param.vector_y = G_define_standard_option(G_OPT_R_OUTPUT);
     param.vector_y->key = "vy";
     param.vector_y->required = NO;
     param.vector_y->description =
-	_("Output raster map to store the groundwater filter velocity vector part in y direction [m/s]\n");
+	_("Output raster map to store the groundwater filter velocity vector part in y direction [m/s]");
 
     param.budget = G_define_standard_option(G_OPT_R_OUTPUT);
     param.budget->key = "budget";
     param.budget->required = NO;
     param.budget->description =
-	_("Output raster map to store the groundwater budget for each cell [m^3/s]\n");
+	_("Output raster map to store the groundwater budget for each cell [m^3/s]");
 
     param.type = G_define_option();
     param.type->key = "type";
@@ -129,7 +129,7 @@ void set_params(void)
     param.river_bed = G_define_standard_option(G_OPT_R_INPUT);
     param.river_bed->key = "river_bed";
     param.river_bed->required = NO;
-    param.river_bed->description = _("Input raster map providing the height of the river bed in [m]");
+    param.river_bed->description = _("Name of input raster map providing the height of the river bed in [m]");
     param.river_bed->guisection = "River";
 
     param.river_head = G_define_standard_option(G_OPT_R_INPUT);
@@ -137,14 +137,14 @@ void set_params(void)
     param.river_head->required = NO;
     param.river_head->guisection = "River";
     param.river_head->description =
-	_("Input raster map providing the water level (head) of the river with leakage connection in [m]");
+	_("Name of input raster map providing the water level (head) of the river with leakage connection in [m]");
 
     param.river_leak = G_define_standard_option(G_OPT_R_INPUT);
     param.river_leak->key = "river_leak";
     param.river_leak->required = NO;
     param.river_leak->guisection = "River";
     param.river_leak->description =
-	_("Input raster map providing the leakage coefficient of the river bed in [1/s].");
+	_("Name of input raster map providing the leakage coefficient of the river bed in [1/s].");
 
     param.drain_bed = G_define_standard_option(G_OPT_R_INPUT);
     param.drain_bed->key = "drain_bed";
@@ -152,14 +152,14 @@ void set_params(void)
     param.drain_bed->required = NO;
     param.drain_bed->gisprompt = "old,raster,raster";
     param.drain_bed->guisection = "Drainage";
-    param.drain_bed->description = _("Input raster map providing the height of the drainage bed in [m]");
+    param.drain_bed->description = _("Name of input raster map providing the height of the drainage bed in [m]");
 
     param.drain_leak = G_define_standard_option(G_OPT_R_INPUT);
     param.drain_leak->key = "drain_leak";
     param.drain_leak->required = NO;
     param.drain_leak->guisection = "Drainage";
     param.drain_leak->description =
-	_("Input raster map providing the leakage coefficient of the drainage bed in [1/s]");
+	_("Name of input raster map providing the leakage coefficient of the drainage bed in [1/s]");
 
     param.dt = N_define_standard_option(N_OPT_CALC_TIME);
     param.maxit = N_define_standard_option(N_OPT_MAX_ITERATIONS);
@@ -171,7 +171,7 @@ void set_params(void)
     param.full_les->key = 'f';
     param.full_les->guisection = "Solver";
     param.full_les->description = _("Allocate a full quadratic linear equation system,"
-            " default is a sparse linear equation system.");
+				    " default is a sparse linear equation system.");
 
 }
 
@@ -254,8 +254,8 @@ int main(int argc, char *argv[])
     solver = param.solver->answer;
 
     if (strcmp(solver, G_MATH_SOLVER_DIRECT_CHOLESKY) == 0 && !param.full_les->answer)
-	G_fatal_error(_("The cholesky solver dos not work with sparse matrices.\n"
-                "You may choose a full filled quadratic matrix, flag -f. "));
+	G_fatal_error(_("The cholesky solver dos not work with sparse matrices. "
+			"You may choose a full filled quadratic matrix, flag -f."));
 
 
     /*get the current region */
@@ -373,7 +373,7 @@ int main(int argc, char *argv[])
 	inner_count = 0;
 
 	do {
-	    G_message(_("Calculation of unconfined groundwater flow loop %i\n"),
+	    G_message(_("Calculation of unconfined groundwater flow loop %i"),
 		      inner_count + 1);
 
 	    /* we will allocate a new les for each loop */
