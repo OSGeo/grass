@@ -66,8 +66,8 @@
       <label>&amp;Model</label>
       <items>
 	<menuitem>
-	  <label>Add action</label>
-	  <help>Add action (GRASS module) to model</help>
+	  <label>Add command</label>
+	  <help>Add action (GRASS command) to model</help>
 	  <handler>OnAddAction</handler>
 	  <shortcut>Ctrl+A</shortcut>
 	</menuitem>
@@ -83,8 +83,8 @@
 	  <handler>OnDefineRelation</handler>
 	</menuitem>
 	<menuitem>
-	  <label>Add loop</label>
-	  <help>Adds loop (for) to model</help>
+	  <label>Add loop / series</label>
+	  <help>Adds loop (series) to model</help>
 	  <handler>OnDefineLoop</handler>
 	  <shortcut>Ctrl+L</shortcut>
 	</menuitem>

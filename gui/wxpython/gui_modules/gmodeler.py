@@ -527,8 +527,7 @@ class Model(object):
                                 continue
                             
                             if pattern.search(par[idx]['value']):
-                                par[idx]['value'] = pattern.sub(par[idx]['value'], var)
-                            
+                                par[idx]['value'] = pattern.sub(var, par[idx]['value'])
                         self.RunAction(action, { action.GetName(): {'params': par } }, log, onDone)
         
         if params:
@@ -4689,12 +4688,12 @@ if __name__ == "__main__":
     sys.exit(main())
 """)
         
-    def _writePythonItem(self, item, ignoreBlock = True):
+    def _writePythonItem(self, item, ignoreBlock = True, variables = []):
         """!Write model object to Python file"""
         if isinstance(item, ModelAction):
             if ignoreBlock and item.GetBlockId(): # ignore items in loops of conditions
                 return
-            self._writePythonAction(item)
+            self._writePythonAction(item, variables = variables)
         elif isinstance(item, ModelLoop) or isinstance(item, ModelCondition):
             # substitute condition
             variables = self.model.GetVariables()
@@ -4712,13 +4711,13 @@ if __name__ == "__main__":
                 if condText[0] == '`' and condText[-1] == '`':
                     task = menuform.GUI(show = None).ParseCommand(cmd = utils.split(condText[1:-1]))
                     cond += "grass.read_command("
-                    cond += self._getPythonActionCmd(task, len(cond)) + ".splitlines()"
+                    cond += self._getPythonActionCmd(task, len(cond), variables = [condVar]) + ".splitlines()"
                 else:
                     cond += condText
                 self.fd.write('%s:\n' % cond)
                 self.indent += 4
                 for action in item.GetItems():
-                    self._writePythonItem(action, ignoreBlock = False)
+                    self._writePythonItem(action, ignoreBlock = False, variables = [condVar])
                 self.indent -= 4
             else: # ModelCondition
                 self.fd.write('%sif %s:\n' % (' ' * self.indent, cond))
@@ -4734,13 +4733,13 @@ if __name__ == "__main__":
                         self._writePythonItem(action, ignoreBlock = False)
                 self.indent += 4
         
-    def _writePythonAction(self, item):
+    def _writePythonAction(self, item, variables = []):
         """!Write model action to Python file"""
         task = menuform.GUI(show = None).ParseCommand(cmd = item.GetLog(string = False))
         strcmd = "%sgrass.run_command(" % (' ' * self.indent)
-        self.fd.write(strcmd + self._getPythonActionCmd(task, len(strcmd)) + '\n')
+        self.fd.write(strcmd + self._getPythonActionCmd(task, len(strcmd), variables) + '\n')
         
-    def _getPythonActionCmd(self, task, cmdIndent):
+    def _getPythonActionCmd(self, task, cmdIndent, variables = []):
         opts = task.get_options()
         
         ret = ''
