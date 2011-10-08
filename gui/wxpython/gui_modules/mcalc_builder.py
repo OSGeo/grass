@@ -438,12 +438,11 @@ class MapCalcFrame(wx.Frame):
         except:
             pass
         
-        newmcalcstr += what
+        newmcalcstr += what + ' ' + mcalcstr[position:]
         position_offset += len(what)
-        newmcalcstr += ' ' + mcalcstr[position:]
         
         self.text_mcalc.SetValue(newmcalcstr)
-        if what == '()':
+        if len(what) > 1 and what[-2:] == '()':
             position_offset -= 1
         self.text_mcalc.SetInsertionPoint(position + position_offset)
         self.text_mcalc.Update()
