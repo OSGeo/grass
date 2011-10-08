@@ -7,9 +7,9 @@ Temporal GIS core functions to be used in Python sripts.
 Usage:
 
 @code
-from grass.script import tgis_core as grass
+import grass.temporal as tgis
 
-grass.create_temporal_database()
+tgis.create_temporal_database()
 ...
 @endcode
 
@@ -21,22 +21,23 @@ for details.
 @author Soeren Gebbert
 """
 import os
+import copy
+from datetime import datetime, date, time, timedelta
+import grass.script.core as core
+
 import sqlite3 as dbmi
 #import psycopg2 as dbmi
 # Needed for dictionary like cursors
 #import psycopg2.extras
-import grass.script.core as core
-import copy
-from datetime import datetime, date, time, timedelta
 
 ###############################################################################
 
 def get_grass_location_db_path():
-    if dbmi.paramstyle == "qmark":
+    if dbmi.__name__ == "sqlite3":
 	grassenv = core.gisenv()
 	dbpath = os.path.join(grassenv["GISDBASE"], grassenv["LOCATION_NAME"])
 	return os.path.join(dbpath, "grass.db")
-    else:
+    elif dbmi.__name__ == "psycopg2":
 	return "dbname=grass_test user=soeren password=abcdefgh"
 
 ###############################################################################
@@ -45,6 +46,8 @@ def get_sql_template_path():
     base = os.getenv("GISBASE")
     base_etc  = os.path.join(base, "etc")
     return os.path.join(base_etc, "sql")
+
+###############################################################################
 
 def test_increment_datetime_by_string():
 
@@ -59,16 +62,18 @@ def test_increment_datetime_by_string():
     if delta.days != 0 or delta.seconds != 0:
         core.fatal("increment computation is wrong")
 
+###############################################################################
+
 def increment_datetime_by_string(mydate, increment, mult = 1):
     """Return a new datetime object incremented with the provided relative dates specified as string.
        Additional a multiplier can be specified to multiply the increment bevor adding to the provided datetime object.
 
-       @mydate A datetime object to incremented
-       @increment A string providing increment information:
+       @param mydate A datetime object to incremented
+       @param increment A string providing increment information:
                   The string may include comma separated values of type seconds, minutes, hours, days, weeks, months and years
                   Example: Increment the datetime 2001-01-01 00:00:00 with "60 seconds, 4 minutes, 12 hours, 10 days, 1 weeks, 5 months, 1 years"
                   will result in the datetime 2003-02-18 12:05:00
-        @mult A multiplier, default is 1
+       @param mult A multiplier, default is 1
     """
 
     if increment:
@@ -103,7 +108,8 @@ def increment_datetime_by_string(mydate, increment, mult = 1):
             elif inc[1].find("years") >= 0:
                 years = mult * int(inc[0])
             else:
-                core.fatal(_("Wrong increment format: %s") % (increment))
+                core.error(_("Wrong increment format: %s") % (increment))
+                return None
 
         return increment_datetime(mydate, years, months, weeks, days, hours, minutes, seconds)
     
@@ -160,15 +166,24 @@ def create_temporal_database():
     
     database = get_grass_location_db_path()
 
-    build_db = False
+    db_exists = False
 
-    # Check if it already exists
-    if dbmi.paramstyle == "qmark":
+    # Check if the database already exists
+    if dbmi.__name__ == "sqlite3":
 	# Check path of the sqlite database
-	if not os.path.exists(database):
-	    build_db = True
-    
-    if build_db == False:
+	if os.path.exists(database):
+	    db_exists = True
+    elif dbmi.__name__ == "psycopg2":
+        # Connect to database
+        connection = dbmi.connect(database)
+        cursor = connection.cursor()
+        # Check for raster_base table
+        cursor.execute("SELECT EXISTS(SELECT * FROM information_schema.tables WHERE table_name=%s)", ('raster_base',))
+        db_exists = cursor.fetchone()[0]
+        connection.commit()
+        cursor.close()
+
+    if db_exists == True:
 	return
     
     # Read all SQL scripts and templates
@@ -181,7 +196,6 @@ def create_temporal_database():
     str3ds_metadata_sql = open(os.path.join(get_sql_template_path(), "str3ds_metadata_table.sql"), 'r').read()
     stvds_metadata_sql = open(os.path.join(get_sql_template_path(), "stvds_metadata_table.sql"), 'r').read()
     
-
     # Create the raster, raster3d and vector tables
     raster_tables_sql = map_tables_template_sql.replace("GRASS_MAP", "raster")
     vector_tables_sql = map_tables_template_sql.replace("GRASS_MAP", "vector")
@@ -196,8 +210,7 @@ def create_temporal_database():
     connection = dbmi.connect(database)
     cursor = connection.cursor()
 
-    
-    if dbmi.paramstyle == "qmark":
+    if dbmi.__name__ == "sqlite3":
 	
 	sqlite3_delete_trigger_sql = open(os.path.join(get_sql_template_path(), "sqlite3_delete_trigger.sql"), 'r').read()
 	
@@ -217,7 +230,7 @@ def create_temporal_database():
 	cursor.executescript(str3ds_tables_sql)
 	cursor.executescript(str3ds_metadata_sql)
 	cursor.executescript(sqlite3_delete_trigger_sql)
-    else:
+    elif dbmi.__name__ == "psycopg2":
 	# Execute the SQL statements for postgresql
 	# Create the global tables for the native grass datatypes
 	cursor.execute(raster_tables_sql)

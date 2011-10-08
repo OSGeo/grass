@@ -7,7 +7,7 @@ Temporal GIS related functions to be used in temporal GIS Python library package
 Usage:
 
 @code
-from grass.script import tgis_abstract_datasets as grass
+import grass.temporal as tgis
 
 ...
 @endcode
@@ -496,7 +496,7 @@ class abstract_space_time_dataset(abstract_dataset):
         return granularity, temporal_type, semantic_type, title, description
 
     def get_temporal_relation_matrix(self, dbif=None):
-        """Return the temporal relation matrix between all registered maps
+        """Return the temporal relation matrix of all registered maps as list
         """
 
         connect = False
@@ -593,6 +593,8 @@ class abstract_space_time_dataset(abstract_dataset):
                 dbif.cursor.execute(sql)
                 rows = dbif.cursor.fetchall()
             except:
+                if connect == True:
+                    dbif.close()
                 core.error(_("Unable to get map ids from register table <%s>") % (self.get_map_register()))
                 raise
 
@@ -628,6 +630,8 @@ class abstract_space_time_dataset(abstract_dataset):
                 sql = "DROP TABLE " + self.get_map_register()
                 dbif.cursor.execute(sql)
             except:
+                if connect == True:
+                    dbif.close()
                 core.error(_("Unable to drop table <%s>") % (self.get_map_register()))
                 raise
 
@@ -655,6 +659,7 @@ class abstract_space_time_dataset(abstract_dataset):
             connect = True
 
         if map.is_in_db(dbif) == False:
+            dbif.close()
             core.fatal(_("Only maps with absolute or relative valid time can be registered"))
 
         core.verbose(_("Register %s map <%s> in space time %s dataset <%s>") %  (map.get_type(), map.get_id(), map.get_type(), self.get_id()))
@@ -676,6 +681,7 @@ class abstract_space_time_dataset(abstract_dataset):
         #print "STDS register table", stds_register_table
 
         if stds_mapset != map_mapset:
+            dbif.close()
             core.fatal(_("Only maps from the same mapset can be registered"))
 
         # Check if map is already registred
@@ -688,6 +694,8 @@ class abstract_space_time_dataset(abstract_dataset):
             row = dbif.cursor.fetchone()
             # In case of no entry make a new one
             if row and row[0] == map_id:
+                if connect == True:
+                    dbif.close()
                 core.warning(_("Map <%s> is already registered.") % (map_id))
                 return False
 
@@ -710,7 +718,7 @@ class abstract_space_time_dataset(abstract_dataset):
             sql = sql.replace("MAP_ID", map_id)
             sql = sql.replace("STDS", self.get_type())
             try:
-		if dbmi.paramstyle == "qmark":
+		if dbmi.__name__ == "sqlite3":
 		    dbif.cursor.executescript(sql)
 		else:
 		    dbif.cursor.execute(sql)
@@ -720,14 +728,18 @@ class abstract_space_time_dataset(abstract_dataset):
                     sql = "DROP TABLE " + map_register_table
                     dbif.cursor.execute(sql)
                 except:
+                    if connect == True:
+                        dbif.close()
                     core.error(_("Unable to drop table <%s>" % (map_register_table)))
                     raise
                 try:
-		    if dbmi.paramstyle == "qmark":
+		    if dbmi.__name__ == "sqlite3":
 			dbif.cursor.executescript(sql_script)
 		    else:
 			dbif.cursor.execute(sql_script)
                 except:
+                    if connect == True:
+                        dbif.close()
                     core.error(_("Unable to create the space time %s dataset register table for <%s>") % (map.get_type(), map.get_id()))
                     raise
 
@@ -750,12 +762,12 @@ class abstract_space_time_dataset(abstract_dataset):
             sql = sql.replace("STDS", self.get_type())
 
             sql_script = ""
-            #sql_script += "BEGIN TRANSACTION;\n"
+            sql_script += "BEGIN TRANSACTION;\n"
             sql_script += sql
-            #sql_script += "\n"
-            #sql_script += "END TRANSACTION;"
+            sql_script += "\n"
+            sql_script += "END TRANSACTION;"
             try:
-		if dbmi.paramstyle == "qmark":
+		if dbmi.__name__ == "sqlite3":
 		    dbif.cursor.executescript(sql_script)
 		else:
 		    dbif.cursor.execute(sql_script)
@@ -766,14 +778,18 @@ class abstract_space_time_dataset(abstract_dataset):
 		    print sql
                     dbif.cursor.execute(sql)
                 except:
+                    if connect == True:
+                        dbif.close()
                     core.error(_("Unable to drop table <%s>" % (stds_register_table)))
                     raise
                 try:
-		    if dbmi.paramstyle == "qmark":
+		    if dbmi.__name__ == "sqlite3":
 			dbif.cursor.executescript(sql_script)
 		    else:
 			dbif.cursor.execute(sql_script)
                 except:
+                    if connect == True:
+                        dbif.close()
                     core.error(_("Unable to create the space time %s dataset register table for <%s>") % (map.get_type(), map.get_id()))
                     raise
 
@@ -844,6 +860,7 @@ class abstract_space_time_dataset(abstract_dataset):
             connect = True
 
         if map.is_in_db(dbif) == False:
+            dbif.close()
             core.fatal(_("Unable to find map <%s> in temporal database") % (map.get_id()))
 
         core.verbose(_("Unregister %s map <%s>") % (map.get_type(), map.get_id()))
@@ -852,8 +869,6 @@ class abstract_space_time_dataset(abstract_dataset):
         map.select(dbif)
         map_id = map.base.get_id()
         map_register_table = map.get_stds_register()
-
-        # Get basic info
         stds_register_table = self.get_map_register()
 
         # Check if the map is registered in the space time raster dataset
@@ -867,6 +882,8 @@ class abstract_space_time_dataset(abstract_dataset):
         # Break if the map is not registered
         if row == None:
             core.warning(_("Map <%s> is not registered in space time dataset") %(map_id, self.base.get_id()))
+            if connect == True:
+                dbif.close()
             return False
 
         # Remove the space time raster dataset from the raster dataset register
@@ -915,6 +932,7 @@ class abstract_space_time_dataset(abstract_dataset):
             dbif.connect()
             connect = True
 
+        map_time = None
 
         use_start_time = False
 
@@ -950,12 +968,11 @@ class abstract_space_time_dataset(abstract_dataset):
 
         sql_script += "END TRANSACTION;"
 
-	if dbmi.paramstyle == "qmark":
+	if dbmi.__name__ == "sqlite3":
 	    dbif.cursor.executescript(sql_script)
 	else:
 	    dbif.cursor.execute(sql_script)
 	    
-
         # Read and validate the selected end time
         self.select()
 
@@ -984,7 +1001,8 @@ class abstract_space_time_dataset(abstract_dataset):
             row = dbif.cursor.fetchone()
 
             if row != None:
-		if dbmi.paramstyle == "qmark":
+                # This seems to be a bug in sqlite3 Python driver
+		if dbmi.__name__ == "sqlite3":
 		    tstring = row[0]
 		    # Convert the unicode string into the datetime format
 		    if tstring.find(":") > 0:
@@ -995,10 +1013,13 @@ class abstract_space_time_dataset(abstract_dataset):
 		    max_start_time = datetime.strptime(tstring, time_format)
 		else:
 		    max_start_time = row[0]
-		    
-		if end_time < max_start_time:
-		    use_start_time = True
 
+		if end_time < max_start_time:
+                    map_time = "mixed"
+		    use_start_time = True
+                else:
+                    map_time = "interval"
+		    
         # Set the maximum start time as end time
         if use_start_time:
             if self.is_time_absolute():
@@ -1020,10 +1041,31 @@ class abstract_space_time_dataset(abstract_dataset):
                 sql = sql.replace("SPACETIME_ID", self.base.get_id())
                 sql = sql.replace("STDS", self.get_type())
 
-	    if dbmi.paramstyle == "qmark":
+	    if dbmi.__name__ == "sqlite3":
 		dbif.cursor.executescript(sql)
 	    else:
 		dbif.cursor.execute(sql)
+
+            if end_time == None:
+                map_time = "point"
+
+        # Set the map time type
+        if self.is_time_absolute():
+            self.absolute_time.select(dbif)
+            self.metadata.select(dbif)
+            if self.metadata.get_number_of_maps() > 0:
+                self.absolute_time.set_map_time(map_time)
+            else:
+                self.absolute_time.set_map_time(None)
+            self.absolute_time.update_all(dbif)
+        else:
+            self.relative_time.select(dbif)
+            self.metadata.select(dbif)
+            if self.metadata.get_number_of_maps() > 0:
+                self.relative_time.set_map_time(map_time)
+            else:
+                self.relative_time.set_map_time(None)
+            self.relative_time.update_all(dbif)
 
         if connect == True:
             dbif.close()

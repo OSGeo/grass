@@ -116,6 +116,7 @@ def main():
     dbif.connect()
 
     if sp.is_in_db(dbif) and grass.overwrite() == False:
+        dbif.close()
         grass.fatal("Space time " + sp.get_new_map_instance(None).get_type() + " dataset <" + name + "> is already in the database. Use the overwrite flag.")
 
     if sp.is_in_db(dbif) and grass.overwrite() == True:

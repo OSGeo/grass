@@ -89,7 +89,7 @@ def main():
     sp = tgis.space_time_raster_dataset(id)
     
     if sp.is_in_db() == False:
-        grass.fatal(_("Dataset <%s> not found in temporal database") % (id))
+        grass.fatal(_("Space time arster dataset <%s> not found in temporal database") % (id))
 
     if expression and not base:
         grass.fatal(_("Please specify base="))
@@ -156,14 +156,11 @@ def main():
 
                 grass.verbose(_("Apply r.mapcalc expression: \"%s\"") % expr)
 
-                if grass.overwrite() == True:
-                    ret = grass.run_command("r.mapcalc", expression=expr, overwrite=True, quiet=True)
-                else:
-                    ret = grass.run_command("r.mapcalc", expression=expr, overwrite=False, quiet=True)
+                ret = grass.run_command("r.mapcalc", expression=expr, overwrite=grass.overwrite(), quiet=True)
 
                 if ret != 0:
                     grass.error(_("Error while r.mapcalc computation, continue with next map"))
-                    continue
+                    break
 
                 # Read the raster map data
                 new_map.load()

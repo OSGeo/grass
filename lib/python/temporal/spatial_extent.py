@@ -7,9 +7,9 @@ Temporal GIS related spatial extent functions to be used in Python scripts and t
 Usage:
 
 @code
-from grass.script import tgis_spatial_extent as grass
+import grass.temporal as tgis
 
-extent = grass.raster_spatial_extent()
+extent = tgis.raster_spatial_extent()
 ...
 @endcode
 

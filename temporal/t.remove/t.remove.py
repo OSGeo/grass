@@ -79,6 +79,7 @@ def main():
             ds = tgis.vector_dataset(id)
 
         if ds.is_in_db(dbif) == False:
+            dbif.close()
             grass.fatal(ds.get_type() + " dataset <" + name + "> not found in temporal database")
 
         # We need to read some data from the temporal database
