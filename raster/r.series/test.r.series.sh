@@ -38,7 +38,6 @@ r.series -z --o --v input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 output=test_
 r.series    --o --v input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 output=test_1_prec_count method=count
 r.series -z --o --v input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 output=test_1_prec_range method=range
 r.series    --o --v input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 output=test_1_prec_sum method=sum
-
 #r.out.ascii --o input=test_1_prec_mean output=test_1_prec_mean.ref dp=3
 #r.out.ascii --o input=test_1_prec_max output=test_1_prec_max.ref dp=3
 #r.out.ascii --o input=test_1_prec_min output=test_1_prec_min.ref dp=3
@@ -60,3 +59,15 @@ r.series    --o --v file=$TMP_FILE output=test_2_prec_sum method=sum
 #r.out.ascii --o input=test_2_prec_count output=test_2_prec_count.ref dp=3
 #r.out.ascii --o input=test_2_prec_range output=test_2_prec_range.ref dp=3
 #r.out.ascii --o input=test_2_prec_sum output=test_2_prec_sum.ref dp=3
+
+
+# The third @test with multiple methods and outputs
+r.series    --o --v input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 output=test_3_prec_mean,test_3_prec_max,test_3_prec_min method=average,maximum,minimum
+r.series -z --o --v file=$TMP_FILE output=test_4_prec_mean,test_4_prec_max,test_4_prec_min method=average,maximum,minimum
+
+#r.out.ascii --o input=test_1_prec_mean output=test_3_prec_mean.ref dp=3
+#r.out.ascii --o input=test_1_prec_max output=test_3_prec_max.ref dp=3
+#r.out.ascii --o input=test_1_prec_min output=test_3_prec_min.ref dp=3
+#r.out.ascii --o input=test_2_prec_mean output=test_4_prec_mean.ref dp=3
+#r.out.ascii --o input=test_2_prec_max output=test_4_prec_max.ref dp=3
+#r.out.ascii --o input=test_2_prec_min output=test_4_prec_min.ref dp=3

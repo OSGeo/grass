@@ -12,9 +12,9 @@ and the sql database interface.
 Usage:
 
 @code
-from grass.script import tgis_core as grass
+import grass.temporal as tgis
 
-rbase = grass.raster_base(ident="soil")
+rbase = tgis.raster_base(ident="soil")
 ...
 @endcode
 
@@ -187,11 +187,12 @@ class sql_database_interface(dict_sql_serializer):
 
     def connect(self):
         #print "Connect to",  self.database
-	if dbmi.paramstyle == "qmark":
+        if dbmi.__name__ == "sqlite3":
 	    self.connection = dbmi.connect(self.database, detect_types=dbmi.PARSE_DECLTYPES|dbmi.PARSE_COLNAMES)
 	    self.connection.row_factory = dbmi.Row
+            self.connection.isolation_level = None
 	    self.cursor = self.connection.cursor()
-	else:
+        elif dbmi.__name__ == "psycopg2":
 	    self.connection = dbmi.connect(self.database)
 	    self.connection.set_isolation_level(dbmi.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
 	    self.cursor = self.connection.cursor(cursor_factory=dbmi.extras.DictCursor)

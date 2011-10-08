@@ -19,7 +19,7 @@ CREATE TABLE  STDS_base (
   creation_time TIMESTAMP NOT NULL,    -- The time of creation of the space-time dataset
 -- Uncommented due to performance issues
 --  modification_time TIMESTAMP NOT NULL,  -- The time of the last modification of the grass map
---  revision SMALLINT NOT NULL,           -- The revision number        -- The revision number
+--  revision SMALLINT NOT NULL,            -- The revision number        -- The revision number
   PRIMARY KEY (id)
 );
 
@@ -27,7 +27,8 @@ CREATE TABLE  STDS_relative_time (
   id VARCHAR NOT NULL,            -- Id of the space-time dataset, this is the primary foreign key
   start_time DOUBLE PRECISION,    -- The relative valid start time in [days]
   end_time DOUBLE PRECISION,      -- The relative valid end time in [days]
-  granularity DOUBLE PRECISION,             -- The granularity in [days]
+  granularity DOUBLE PRECISION,   -- The granularity in [days]
+  map_time VARCHAR,               -- The temporal type of the registered maps, may be interval, point or mixed
   PRIMARY KEY (id),  
   FOREIGN KEY (id) REFERENCES  STDS_base (id) ON DELETE CASCADE
 );
@@ -38,6 +39,7 @@ CREATE TABLE  STDS_absolute_time (
   end_time TIMESTAMP,             -- End of the valid time, can be NULL if no map is registered
   granularity VARCHAR,            -- The granularity "NNN seconds, NNN minutes, NNN hours, NNN days, NNN weeks, NNN months, NNN years"
   timezone SMALLINT,              -- The time zone number
+  map_time VARCHAR,               -- The temporal type of the registered maps, may be interval, point or mixed
   PRIMARY KEY (id),  
   FOREIGN KEY (id) REFERENCES  STDS_base (id) ON DELETE CASCADE
 );

@@ -7,9 +7,9 @@ Temporal GIS related metadata functions to be used in Python scripts and tgis pa
 Usage:
 
 @code
-from grass.script import tgis_metadata as grass
+import grass.temporal as tgis
 
-meta = grass.raster_metadata()
+meta = tgis.raster_metadata()
 ...
 @endcode
 

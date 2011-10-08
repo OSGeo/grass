@@ -7,9 +7,9 @@ Temporal GIS related temporal extent functions to be used in Python scripts and 
 Usage:
 
 @code
-from grass.script import tgis_temporal_extent as grass
+import grass.temporal as tgis
 
-grass.raster_temporal_extent()
+tgis.raster_temporal_extent()
 ...
 @endcode
 
@@ -383,14 +383,27 @@ class vector_absolute_time(absolute_temporal_extent):
 ###############################################################################
 
 class stds_absolute_time(absolute_temporal_extent):
-    def __init__(self, table=None, ident=None, start_time=None, end_time=None, granularity=None, timezone=None):
+    def __init__(self, table=None, ident=None, start_time=None, end_time=None, granularity=None, timezone=None, map_time=None):
         absolute_temporal_extent.__init__(self, table, ident, start_time, end_time, timezone)
 
 	self.set_granularity(granularity)
+        self.set_map_time(map_time)
 
     def set_granularity(self, granularity):
 	"""Set the granularity of the space time dataset"""
 	self.D["granularity"] = granularity
+
+    def set_map_time(self, map_time):
+	"""Set the type of the map time
+
+           Registered maps may have different types of time:
+           Single point of time "point"
+           Time intervals "interval"
+           Or single point and interval time "mixed"
+
+           This variable will be set automatically when maps are registered.
+        """
+	self.D["map_time"] = map_time
 
     def get_granularity(self):
 	"""Get the granularity of the space time dataset
@@ -400,16 +413,33 @@ class stds_absolute_time(absolute_temporal_extent):
         else:
 	    return None
 
+    def get_map_time(self):
+	"""Get the type of the map time
+
+           Registered maps may have different types of time:
+           Single point of time "point"
+           Time intervals "interval"
+           Or single point and interval time "mixed"
+
+           This variable will be set automatically when maps are registered.
+        """
+	if self.D.has_key("map_time"):
+	    return self.D["map_time"]
+        else:
+	    return None
+
     def print_info(self):
         """Print information about this class in human readable style"""
         absolute_temporal_extent.print_info(self)
         #      0123456789012345678901234567890
         print " | Granularity:................ " + str(self.get_granularity())
+        print " | Temporal type of maps:...... " + str(self.get_map_time())
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
         absolute_temporal_extent.print_shell_info(self)
         print "granularity=" + str(self.get_granularity())
+        print "map_time=" + str(self.get_map_time())
 
 ###############################################################################
 
@@ -427,7 +457,6 @@ class stvds_absolute_time(stds_absolute_time):
 
 ###############################################################################
 
-
 class relative_temporal_extent(abstract_temporal_extent):
     """This is the relative time class for all maps and spacetime datasets
 
@@ -437,13 +466,11 @@ class relative_temporal_extent(abstract_temporal_extent):
 
 	abstract_temporal_extent.__init__(self, table, ident, start_time, end_time)
 
-
     def print_info(self):
         """Print information about this class in human readable style"""
         #      0123456789012345678901234567890
         print " +-------------------- Reltive time ------------------------------------------+"
         abstract_temporal_extent.print_info(self)
-
 
 ###############################################################################
 
@@ -462,14 +489,27 @@ class vector_relative_time(relative_temporal_extent):
 ###############################################################################
 
 class stds_relative_time(relative_temporal_extent):
-    def __init__(self, table=None, ident=None, start_time=None, end_time=None, granularity=None):
+    def __init__(self, table=None, ident=None, start_time=None, end_time=None, granularity=None, map_time=None):
         relative_temporal_extent.__init__(self, table, ident, start_time, end_time)
 
 	self.set_granularity(granularity)
+        self.set_map_time(map_time)
 
     def set_granularity(self, granularity):
 	"""Set the granularity of the space time dataset"""
 	self.D["granularity"] = granularity
+
+    def set_map_time(self, map_time):
+	"""Set the type of the map time
+
+           Registered maps may have different types of time:
+           Single point of time "point"
+           Time intervals "interval"
+           Or single point and interval time "mixed"
+
+           This variable will be set automatically when maps are registered.
+        """
+	self.D["map_time"] = map_time
 
     def get_granularity(self):
 	"""Get the granularity of the space time dataset
@@ -479,16 +519,33 @@ class stds_relative_time(relative_temporal_extent):
         else:
 	    return None
 
+    def get_map_time(self):
+	"""Get the type of the map time
+
+           Registered maps may have different types of time:
+           Single point of time "point"
+           Time intervals "interval"
+           Or single point and interval time "mixed"
+
+           This variable will be set automatically when maps are registered.
+        """
+	if self.D.has_key("map_time"):
+	    return self.D["map_time"]
+        else:
+	    return None
+
     def print_info(self):
         """Print information about this class in human readable style"""
         relative_temporal_extent.print_info(self)
         #      0123456789012345678901234567890
         print " | Granularity:................ " + str(self.get_granularity())
+        print " | Temporal type of maps:...... " + str(self.get_map_time())
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
         relative_temporal_extent.print_shell_info(self)
         print "granularity=" + str(self.get_granularity())
+        print "map_time=" + str(self.get_map_time())
 
 ###############################################################################
 
@@ -503,4 +560,3 @@ class str3ds_relative_time(stds_relative_time):
 class stvds_relative_time(stds_relative_time):
     def __init__(self, ident=None, start_time=None, end_time=None, granularity=None):
         stds_relative_time.__init__(self, "stvds_relative_time", ident, start_time, end_time, granularity)
-

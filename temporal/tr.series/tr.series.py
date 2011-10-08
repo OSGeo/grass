@@ -5,7 +5,7 @@
 # MODULE:	tr.series
 # AUTHOR(S):	Soeren Gebbert
 #
-# PURPOSE:	Performe different aggregation algorithms from r.series on all raster maps of a space time raster dataset
+# PURPOSE:	Performe different aggregation algorithms from r.series on all or a selected subset of raster maps in a space time raster dataset
 # COPYRIGHT:	(C) 2011 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Performe different aggregation algorithms from r.series on all raster maps of a space time raster dataset
+#% description: Performe different aggregation algorithms from r.series on all or a subset of raster maps in a space time raster dataset
 #% keywords: spacetime raster dataset
 #% keywords: raster
 #% keywords: extract
@@ -32,7 +32,7 @@
 #%option
 #% key: method
 #% type: string
-#% description: Aggregate operation on all raster maps of a space time raster dataset
+#% description: Aggregate operation to be peformed on the raster maps
 #% required: yes
 #% multiple: no
 #% options: average,count,median,mode,minimum,min_raster,maximum,max_raster,stddev,range,sum,variance,diversity,slope,offset,detcoeff,quart1,quart3,perc90,quantile,skewness,kurtosis
@@ -57,7 +57,7 @@
 
 #%flag
 #% key: t
-#% description: Assign the space time raster dataset time interval to the output map
+#% description: Assign the space time raster dataset start and end time to the output map
 #%end
 
 import grass.script as grass
@@ -87,19 +87,14 @@ def main():
     sp = tgis.space_time_raster_dataset(id)
 
     if sp.is_in_db() == False:
-        grass.fatal(_("Dataset <%s> not found in temporal database") % (id))
+        grass.fatal(_("Space time raster dataset <%s> not found in temporal database") % (id))
 
     sp.select()
-    
-    if add_time:
-	if sp.is_time_absolute():
-	    start_time, end_time, tz = sp.get_absolute_time()
-	else:
-	    start_time, end_time = sp.get_relative_time()
 
     rows = sp.get_registered_maps(None, where, sort)
 
     if rows:
+        # Create the r.series input file
         filename = grass.tempfile(True)
         file = open(filename, 'w')
 
@@ -109,32 +104,34 @@ def main():
         
         file.close()
 
-        if grass.overwrite() == True:
-            grass.run_command("r.series", flags="z", file=filename, output=output, overwrite=True, method=method)
-        else:
-            grass.run_command("r.series", flags="z", file=filename, output=output, overwrite=False, method=method)
+        ret = grass.run_command("r.series", flags="z", file=filename, output=output, overwrite=grass.overwrite(), method=method)
 
-    if add_time:
-	# Create the time range for the output map
-	if output.find("@") >= 0:
-	    id = output
-	else:
-	    mapset =  grass.gisenv()["MAPSET"]
-	    id = output + "@" + mapset
+        if ret == 0 and add_time:
+            if sp.is_time_absolute():
+                start_time, end_time, tz = sp.get_absolute_time()
+            else:
+                start_time, end_time = sp.get_relative_time()
+                
+            # Create the time range for the output map
+            if output.find("@") >= 0:
+                id = output
+            else:
+                mapset =  grass.gisenv()["MAPSET"]
+                id = output + "@" + mapset
 
-	map = sp.get_new_map_instance(id)
+            map = sp.get_new_map_instance(id)
 
-	map.load()
-	if sp.is_time_absolute():
-	    map.set_absolute_time(start_time, end_time, tz)
-	else:
-	    map.set_relative_time(start_time, end_time)
+            map.load()
+            if sp.is_time_absolute():
+                map.set_absolute_time(start_time, end_time, tz)
+            else:
+                map.set_relative_time(start_time, end_time)
 
-	# Register the map in the temporal database
-	if map.is_in_db():
-	    map.update()
-	else:
-	    map.insert()    
+            # Register the map in the temporal database
+            if map.is_in_db():
+                map.update()
+            else:
+                map.insert()
 
 if __name__ == "__main__":
     options, flags = grass.parser()

@@ -7,9 +7,9 @@ Temporal GIS related functions to be used in Python scripts.
 Usage:
 
 @code
-from grass.script import tgis_space_time_dataset as grass
+import grass.temporal as tgis
 
-strds = grass.space_time_raster_dataset("soils_1950_2010")
+strds = tgis.space_time_raster_dataset("soils_1950_2010")
 
 ...
 @endcode
@@ -419,6 +419,7 @@ def register_maps_in_space_time_dataset(type, name, maps, start=None, increment=
     sp.select(dbif)
 
     if sp.is_in_db(dbif) == False:
+        dbif.close()
         core.fatal("Space time " + sp.get_new_map_instance(None).get_type() + " dataset <" + name + "> not found")
 
     if maps.find(",") == -1:
@@ -445,6 +446,7 @@ def register_maps_in_space_time_dataset(type, name, maps, start=None, increment=
         if map.is_in_db(dbif) == False:
             # Break in case no valid time is provided
             if start == "" or start == None:
+                dbif.close()
                 core.fatal("Unable to register " + map.get_type() + " map <" + map.get_id() + ">. The map has no valid time and the start time is not set.")
             # Load the data from the grass file database
             map.load()
@@ -458,6 +460,7 @@ def register_maps_in_space_time_dataset(type, name, maps, start=None, increment=
         else:
             map.select(dbif)
             if map.get_temporal_type() != sp.get_temporal_type():
+                dbif.close()
                 core.fatal("Unable to register " + map.get_type() + " map <" + map.get_id() + ">. The temporal types are different.")
 
         # Set the valid time
@@ -509,6 +512,7 @@ def unregister_maps_from_space_time_datasets(type, name, maps, dbif = None):
             sp = space_time_vector_dataset(id)
 
         if sp.is_in_db(dbif) == False:
+            dbif.close()
             core.fatal("Space time " + sp.get_new_map_instance(None).get_type() + " dataset <" + name + "> not found")
 
     # Build the list of maps
@@ -576,6 +580,8 @@ def assign_valid_time_to_maps(type, maps, ttype, start, end=None, increment=None
     """
 
     if end and increment:
+        if dbif:
+            dbif.close()
         core.fatal(_("Valid end time and increment are mutual exclusive"))
 
     # List of space time datasets to be updated
