@@ -6,8 +6,6 @@
 Classes:
  - SQLFrame
 
-@todo Various updates are required...
-
 Usage:
 @code
 python sqlbuilder.py vector_map
@@ -20,7 +18,7 @@ License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 @author Jachym Cepicky <jachym.cepicky gmail.com> (original author)
-@author Martin Landa <landa.martin gmail.com>,
+@author Martin Landa <landa.martin gmail.com>
 @author Hamish Bowman <hamish_b yahoo com>
 """
 
@@ -55,7 +53,7 @@ class SQLFrame(wx.Frame):
         self.vectmap = vectmap # fullname
         if not "@" in self.vectmap:
             self.vectmap = grass.find_file(self.vectmap, element = 'vector')['fullname']
-        self.mapname, self.mapset = self.vectmap.split("@")
+        self.mapname, self.mapset = self.vectmap.split("@", 1)
         
         # db info
         self.layer = layer
@@ -84,9 +82,6 @@ class SQLFrame(wx.Frame):
         self.btn_verify = wx.Button(parent = self.panel, id = wx.ID_ANY,
                                     label = _("Verify"))
         self.btn_verify.SetToolTipString(_("Verify SQL statement"))
-        # self.btn_help = wx.Button(self.panel, -1, "Help")
-        # self.btn_load = wx.Button(self.panel, -1, "Load")
-        # self.btn_save = wx.Button(self.panel, -1, "Save")
         self.btn_apply  = wx.Button(parent = self.panel, id = wx.ID_APPLY)
         self.btn_apply.SetToolTipString(_("Apply SQL statement and close the dialog"))
         self.btn_close  = wx.Button(parent = self.panel, id = wx.ID_CLOSE)
@@ -120,7 +115,7 @@ class SQLFrame(wx.Frame):
         # text areas
         #
         self.text_sql = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY,
-                                    value = '', size = (-1, 75),
+                                    value = '', size = (-1, 50),
                                     style=wx.TE_MULTILINE)
         if self.qtype.lower() == "select":
             self.text_sql.SetValue("SELECT * FROM %s" % self.tablename)
@@ -166,11 +161,9 @@ class SQLFrame(wx.Frame):
         
         self.text_sql.Bind(wx.EVT_TEXT,          self.OnText)
         
-        self.Bind(wx.EVT_CLOSE,                  self.OnClose)
+        self._doLayout()
 
-        self.__doLayout()
-
-    def __doLayout(self):
+    def _doLayout(self):
         """!Do dialog layout"""
       
         # dbInfo
@@ -194,9 +187,6 @@ class SQLFrame(wx.Frame):
         buttonsizer = wx.FlexGridSizer(cols = 4, hgap = 5, vgap = 5)
         buttonsizer.Add(item = self.btn_clear)
         buttonsizer.Add(item = self.btn_verify)
-        # buttonsizer1.Add(self.btn_help,  (0,2))
-        # buttonsizer1.Add(self.btn_load,  (0,2))
-        # buttonsizer1.Add(self.btn_save,  (0,3))
         buttonsizer.Add(item = self.btn_apply)
         buttonsizer.Add(item = self.btn_close)
         
@@ -258,13 +248,13 @@ class SQLFrame(wx.Frame):
         # pagesizer.Add(self.btn_uniqe,0,wx.ALIGN_LEFT|wx.TOP,border=5)
         # pagesizer.Add(self.btn_uniqesample,0,wx.ALIGN_LEFT|wx.TOP,border=5)
         pagesizer.Add(item = buttonsizer2, proportion = 0,
-                      flag = wx.ALIGN_CENTER_HORIZONTAL | wx.BOTTOM, border = 5)
+                      flag = wx.ALIGN_CENTER_HORIZONTAL)
         pagesizer.Add(item = sqlboxsizer, proportion = 0,
-                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, border = 5)
+                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT, border = 5)
         pagesizer.Add(item = buttonsizer, proportion = 0,
                       flag = wx.ALIGN_RIGHT | wx.ALL, border = 5)
         pagesizer.Add(item = self.close_onapply, proportion = 0,
-                      flag = wx.LEFT | wx.RIGHT | wx.BOTTOM, border = 5)
+                      flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 5)
         
         self.panel.SetAutoLayout(True)
         self.panel.SetSizer(pagesizer)
@@ -291,11 +281,18 @@ class SQLFrame(wx.Frame):
                                sql = querystring,
                                database = self.database,
                                driver = self.driver)
+        if not data:
+            return
+
+        desc = self.dbInfo.GetTableDesc(self.dbInfo.GetTable(self.layer))[column]
+        
         i = 0
-        for line in data:
+        for item in sorted(map(desc['ctype'], data)):
             if justsample and i < 256 or \
                not justsample:
-                self.list_values.Append(line.strip())
+                if desc['type'] != 'character':
+                    item = str(item)
+                self.list_values.Append(item)
             else:
                 break
             i += 1
@@ -309,7 +306,7 @@ class SQLFrame(wx.Frame):
         idx = self.list_columns.GetSelections()
         for i in idx:
             column = self.list_columns.GetString(i)
-            self.__Add(element = 'column', value = column)
+            self._add(element = 'column', value = column)
         
         if not self.btn_uniquesample.IsEnabled():
             self.btn_uniquesample.Enable(True)
@@ -317,7 +314,12 @@ class SQLFrame(wx.Frame):
         
     def OnAddValue(self, event):
         """!Add value"""
-        idx = self.list_values.GetSelections()[0]
+        selection = self.list_values.GetSelections()
+        if not selection:
+            event.Skip()
+            return
+
+        idx = selection[0]
         value = self.list_values.GetString(idx)
         idx = self.list_columns.GetSelections()[0]
         column = self.list_columns.GetString(idx)
@@ -327,7 +329,7 @@ class SQLFrame(wx.Frame):
         if ctype == 'character':
             value = "'%s'" % value
         
-        self.__Add(element = 'value', value = value)
+        self._add(element = 'value', value = value)
 
     def OnAddMark(self, event):
         """!Add mark"""
@@ -337,9 +339,9 @@ class SQLFrame(wx.Frame):
                 mark = value[0]
                 break
         
-        self.__Add(element = 'mark', value = mark)
+        self._add(element = 'mark', value = mark)
 
-    def __Add(self, element, value):
+    def _add(self, element, value):
         """!Add element to the query
 
         @param element element to add (column, value)
@@ -413,15 +415,14 @@ class SQLFrame(wx.Frame):
                                    flags = 't',
                                    driver = self.driver,
                                    database = self.database)
-
+        
         if ret != 0 and msg:
             self.statusbar.SetStatusText(_("SQL statement is not valid"), 0)
-            wx.MessageBox(parent=self,
-                          message=_("SQL statement is not valid.\n\n%s") % msg,
-                          caption=_("Warning"), style=wx.OK | wx.ICON_WARNING | wx.CENTRE)
+            gcmd.GError(parent = self,
+                        message = _("SQL statement is not valid.\n\n%s") % msg)
         else:
             self.statusbar.SetStatusText(_("SQL statement is valid"), 0)
-
+                        
     def OnClear(self, event):
         """!Clear button pressed"""
         if self.qtype.lower() == "select":
@@ -433,8 +434,9 @@ class SQLFrame(wx.Frame):
         """!Close button pressed"""
         if self.evtHeader:
             self.evtHeader(event = 'close')
+        
         self.Destroy()
-
+        
         event.Skip()
         
 if __name__ == "__main__":
