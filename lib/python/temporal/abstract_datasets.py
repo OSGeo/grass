@@ -1,4 +1,4 @@
-"""!@package grass.script.tgis_abstract_datasets
+"""!@package grass.temporal
 
 @brief GRASS Python scripting module (temporal GIS functions)
 
@@ -29,7 +29,10 @@ class abstract_dataset(object):
     """This is the base class for all datasets (raster, vector, raster3d, strds, stvds, str3ds)"""
 
     def reset(self, ident):
-	"""Reset the internal structure and set the identifier"""
+	"""Reset the internal structure and set the identifier
+
+           @param ident: The identifier of the dataset
+        """
 	raise IOError("This method must be implemented in the subclasses")
 
     def get_type(self):
@@ -37,7 +40,10 @@ class abstract_dataset(object):
         raise IOError("This method must be implemented in the subclasses")
     
     def get_new_instance(self, ident):
-        """Return a new instance with the type of this class"""
+        """Return a new instance with the type of this class
+
+           @param ident: The identifier of the dataset
+        """
         raise IOError("This method must be implemented in the subclasses")
 
     def get_id(self):
@@ -121,6 +127,8 @@ class abstract_dataset(object):
     def update_all(self, dbif=None):
 	"""Update temporal dataset entry of database from the internal structure
 	   and include None varuables.
+
+           @param dbif: The database interface to be used
 	"""
 	self.base.update_all(dbif)
 	if self.is_time_absolute():
@@ -227,7 +235,10 @@ class abstract_map_dataset(abstract_dataset):
     """
       
     def get_new_stds_instance(self, ident):
-        """Return a new space time dataset instance in which maps are stored with the type of this class"""
+        """Return a new space time dataset instance in which maps are stored with the type of this class
+
+           @param ident: The identifier of the dataset
+        """
         raise IOError("This method must be implemented in the subclasses")
     
     def get_stds_register(self):
@@ -235,15 +246,20 @@ class abstract_map_dataset(abstract_dataset):
         raise IOError("This method must be implemented in the subclasses")
         
     def set_stds_register(self, name):
-        """Set the space time dataset register table name in which stds are listed in which this map is registered"""
+        """Set the space time dataset register table name.
+        
+           This table stores all space time datasets in which this map is registered.
+
+           @param ident: The name of the register table
+        """
         raise IOError("This method must be implemented in the subclasses")
         
     def set_absolute_time(self, start_time, end_time=None, timezone=None):
         """Set the absolute time interval with start time and end time
         
-           @start_time a datetime object specifying the start time of the map
-           @end_time a datetime object specifying the end time of the map
-           @timezone Thee timezone of the map
+           @param start_time: a datetime object specifying the start time of the map
+           @param end_time: a datetime object specifying the end time of the map
+           @param timezone: Thee timezone of the map
         
         """
         if start_time != None and not isinstance(start_time, datetime) :
@@ -268,9 +284,9 @@ class abstract_map_dataset(abstract_dataset):
     def update_absolute_time(self, start_time, end_time=None, timezone=None, dbif = None):
         """Update the absolute time
 
-           @start_time a datetime object specifying the start time of the map
-           @end_time a datetime object specifying the end time of the map
-           @timezone Thee timezone of the map
+           @param start_time: a datetime object specifying the start time of the map
+           @param end_time: a datetime object specifying the end time of the map
+           @param timezone: Thee timezone of the map
         """
         connect = False
 
@@ -289,8 +305,8 @@ class abstract_map_dataset(abstract_dataset):
     def set_relative_time(self, start_time, end_time=None):
         """Set the relative time interval 
         
-           @start_time A double value in days
-           @end_time A double value in days
+           @param start_time: A double value in days
+           @param end_time: A double value in days
 
         """
         if start_time != None and end_time != None:
@@ -309,10 +325,11 @@ class abstract_map_dataset(abstract_dataset):
         return True
 
     def update_relative_time(self, start_time, end_time=None, dbif = None):
-        """Set the relative time interval
+        """Update the relative time interval
 
-           @interval A double value in days
-
+           @param start_time: A double value in days
+           @param end_time: A double value in days
+           @param dbif: The database interface to be used
         """
         connect = False
 
@@ -329,7 +346,15 @@ class abstract_map_dataset(abstract_dataset):
             dbif.close()
 
     def set_spatial_extent(self, north, south, east, west, top=0, bottom=0):
-        """Set the spatial extent of the map"""
+        """Set the spatial extent of the map
+
+           @param north: The northern edge
+           @param south: The southern edge
+           @param east: The eastern edge
+           @param west: The western edge
+           @param top: The top edge
+           @param bottom: The bottom ege
+        """
         self.spatial_extent.set_spatial_extent(north, south, east, west, top, bottom)
         
     def delete(self, dbif=None):
@@ -338,6 +363,8 @@ class abstract_map_dataset(abstract_dataset):
             Remove dependent entries:
             * Remove the map entry in each space time dataset in which this map is registered
             * Remove the space time dataset register table
+            
+           @param dbif: The database interface to be used
         """
 
         connect = False
@@ -373,6 +400,8 @@ class abstract_map_dataset(abstract_dataset):
 
     def unregister(self, dbif=None):
 	""" Remove the map entry in each space time dataset in which this map is registered
+
+           @param dbif: The database interface to be used
         """
 
         core.verbose(_("Unregister %s dataset <%s> from space time datasets") % (self.get_type(), self.get_id()))
@@ -404,8 +433,10 @@ class abstract_map_dataset(abstract_dataset):
             
     def get_registered_datasets(self, dbif=None):
         """Return all space time dataset ids in which this map is registered as
-          sqlite3 rows with column "id" or None if this map is not registered in any
-          space time dataset.
+           dictionary like rows with column "id" or None if this map is not registered in any
+           space time dataset.
+
+           @param dbif: The database interface to be used
         """
         connect = False
 
@@ -436,7 +467,7 @@ class abstract_space_time_dataset(abstract_dataset):
     """Abstract space time dataset class
 
        This class represents a space time dataset. Convenient functions
-       to select, update, insert or delete objects of this type int the SQL
+       to select, update, insert or delete objects of this type in the SQL
        temporal database exists as well as functions to register or unregister
        raster maps.
 
@@ -447,12 +478,18 @@ class abstract_space_time_dataset(abstract_dataset):
     def __init__(self, ident):
 	self.reset(ident)
 
-    def get_new_instance(self, ident):
-        """Return a new instance with the type of this class"""
+    def get_new_instance(self, ident=None):
+        """Return a new instance with the type of this class
+
+           @param ident: The unique identifier of the new object
+        """
         raise IOError("This method must be implemented in the subclasses")
 
-    def get_new_map_instance(self, ident):
-        """Return a new instance of a map dataset which is associated with the type of this class"""
+    def get_new_map_instance(self, ident=None):
+        """Return a new instance of a map dataset which is associated with the type of this class
+
+           @param ident: The unique identifier of the new object
+        """
         raise IOError("This method must be implemented in the subclasses")
 
     def get_map_register(self):
@@ -460,11 +497,26 @@ class abstract_space_time_dataset(abstract_dataset):
         raise IOError("This method must be implemented in the subclasses")
 
     def set_map_register(self, name):
-        """Set the name of the map register table"""
+        """Set the name of the map register table
+
+        This table stores all map names which are registered in this space time dataset.
+
+           @param name: The name of the register table
+        """
         raise IOError("This method must be implemented in the subclasses")
 
     def set_initial_values(self, granularity, temporal_type, semantic_type, \
                            title=None, description=None):
+        """Set the initial values of the space time dataset
+
+           @param granularity: The temporal granularity of this dataset. This value
+                               should be computed by the space time dataset itself,
+                               based on the granularity of the registered maps
+           @param temporal_type: The temporal type of this space time dataset (absolute or relative)
+           @param semantic_type: The semantic type of this dataset
+           @param title: The title
+           @param description: The description of this dataset
+        """
 
         if temporal_type == "absolute":
             self.set_time_to_absolute()
@@ -496,7 +548,12 @@ class abstract_space_time_dataset(abstract_dataset):
         return granularity, temporal_type, semantic_type, title, description
 
     def get_temporal_relation_matrix(self, dbif=None):
-        """Return the temporal relation matrix of all registered maps as list
+        """Return the temporal relation matrix of all registered maps as listof lists
+
+           The temproal relation matrix includes the temporal relations between
+           all registered maps. The relations are strings stored in a list of lists.
+           
+           @param dbif: The database interface to be used
         """
 
         connect = False
@@ -508,7 +565,7 @@ class abstract_space_time_dataset(abstract_dataset):
 
         matrix = []
 
-        maps = self.get_registered_maps_as_objects(dbif=dbif, where=None, order="start_time")
+        maps = self.get_registered_maps_as_objects(where=None, order="start_time", dbif=dbif)
 
         # Create the temporal relation matrix
         # Add the map names first
@@ -528,10 +585,12 @@ class abstract_space_time_dataset(abstract_dataset):
 
         return matrix
 
-    def get_registered_maps_as_objects(self, dbif=None, where = None, order = None):
+    def get_registered_maps_as_objects(self, where = None, order = None, dbif=None):
         """Return all registered maps as ordered object list
 
-           Each row includes all columns specified in the datatype specific view
+           @param where: The SQL where statement to select a subset of the registered maps without "WHERE"
+           @param order: The SQL order statement to be used to order the objects in the list without "ORDER BY"
+           @param dbif: The database interface to be used
 
            In case nothing found None is returned
         """
@@ -545,7 +604,7 @@ class abstract_space_time_dataset(abstract_dataset):
 
         obj_list = []
         
-        rows = self.get_registered_maps(dbif, where, order)
+        rows = self.get_registered_maps(where, order, dbif)
 
         if rows:
             for row in rows:
@@ -558,11 +617,15 @@ class abstract_space_time_dataset(abstract_dataset):
 
         return obj_list
 
-    def get_registered_maps(self, dbif=None, where = None, order = None):
+    def get_registered_maps(self, where = None, order = None, dbif=None):
         """Return sqlite rows of all registered maps.
         
            Each row includes all columns specified in the datatype specific view
-        
+
+           @param where: The SQL where statement to select a subset of the registered maps without "WHERE"
+           @param order: The SQL order statement to be used to order the objects in the list without "ORDER BY"
+           @param dbif: The database interface to be used
+
            In case nothing found None is returned
         """
 
@@ -604,7 +667,10 @@ class abstract_space_time_dataset(abstract_dataset):
         return rows
 
     def delete(self, dbif=None):
-        """Delete a space time dataset from the database"""
+        """Delete a space time dataset from the temporal database
+
+           @param dbif: The database interface to be used
+        """
         # First we need to check if maps are registered in this dataset and
         # unregister them
 
@@ -618,7 +684,7 @@ class abstract_space_time_dataset(abstract_dataset):
             connect = True
 
         if self.get_map_register():
-            rows = self.get_registered_maps(dbif)
+            rows = self.get_registered_maps(None, None, dbif)
             # Unregister each registered map in the table
             if rows:
                 for row in rows:
@@ -643,13 +709,15 @@ class abstract_space_time_dataset(abstract_dataset):
             dbif.close()
             
     def register_map(self, map, dbif=None):
-        """Register a map in the space time dataset.
+        """ Register a map in the space time dataset.
 
             This method takes care of the registration of a map
             in a space time dataset.
 
             In case the map is already registered this function will break with a warning
             and return False
+
+           @param dbif: The database interface to be used
         """
         connect = False
 
@@ -849,8 +917,11 @@ class abstract_space_time_dataset(abstract_dataset):
     def unregister_map(self, map, dbif = None):
         """Unregister a map from the space time dataset.
 
-            This method takes care of the unregistration of a map
-            from a space time dataset.
+           This method takes care of the unregistration of a map
+           from a space time dataset.
+
+           @param map: The map object to unregister
+           @param dbif: The database interface to be used
         """
         connect = False
 
@@ -912,12 +983,14 @@ class abstract_space_time_dataset(abstract_dataset):
 
            The update of the temporal extent checks if the end time is set correctly.
            In case the registered maps have no valid end time (None) the maximum start time
-           will be used. If the end time is smaller than the maximum start time, it will
+           will be used. If the end time is earlier than the maximum start time, it will
            be replaced by the maximum start time.
 
            An other solution to automate this is to use the diactivated trigger
            in the SQL files. But this will result in a huge performance issue
            in case many maps are registred (>1000).
+           
+           @param dbif: The database interface to be used
         """
         core.verbose(_("Update metadata, spatial and temporal extent from all registered maps of <%s>") % (self.get_id()))
 
@@ -1066,6 +1139,8 @@ class abstract_space_time_dataset(abstract_dataset):
             else:
                 self.relative_time.set_map_time(None)
             self.relative_time.update_all(dbif)
+
+        # TODO: Compute the granularity of the dataset and update the database entry
 
         if connect == True:
             dbif.close()
