@@ -926,6 +926,8 @@ class ModelFrame(wx.Frame):
         self.canvas.GetDiagram().DeleteAllShapes()
         self.model.Reset()
         self.canvas.Refresh()
+        self.itemPanel.Update()
+        self.variablePanel.Reset()
         
         # no model file loaded
         self.modelFile = None
@@ -3904,6 +3906,11 @@ class VariablePanel(wx.Panel):
     def Update(self):
         """!Reload list of variables"""
         self.list.OnReload(None)
+        
+    def Reset(self):
+        """!Remove all variables"""
+        self.list.DeleteAllItems()
+        self.parent.GetModel().SetVariables([])
         
 class VariableListCtrl(ModelListCtrl):
     def __init__(self, parent, columns, **kwargs):
