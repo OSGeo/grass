@@ -977,7 +977,7 @@ class MapLayersDialog(wx.Dialog):
                       flag = wx.ALIGN_CENTER_VERTICAL,
                       pos = (1,0))
         
-        self.mapset = gselect.MapsetSelect(parent = self)
+        self.mapset = gselect.MapsetSelect(parent = self, searchPath = True)
         self.mapset.SetStringSelection(grass.gisenv()['MAPSET'])
         bodySizer.Add(item = self.mapset,
                       pos = (1,1), span = (1, 2))

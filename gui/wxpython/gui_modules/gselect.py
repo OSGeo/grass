@@ -906,12 +906,14 @@ class LocationSelect(wx.ComboBox):
 class MapsetSelect(wx.ComboBox):
     """!Widget for selecting GRASS mapset"""
     def __init__(self, parent, id = wx.ID_ANY, size = globalvar.DIALOG_COMBOBOX_SIZE, 
-                 gisdbase = None, location = None, setItems = True, new = False, **kwargs):
+                 gisdbase = None, location = None, setItems = True,
+                 searchPath = False, new = False, **kwargs):
         style = 0
         if not new:
             style = wx.CB_READONLY
         super(MapsetSelect, self).__init__(parent, id, size = size, 
                                            style = style, **kwargs)
+        self.searchPath = searchPath
         
         self.SetName("MapsetSelect")
         if not gisdbase:
@@ -925,8 +927,8 @@ class MapsetSelect(wx.ComboBox):
             self.location = location
         
         if setItems:
-            self.SetItems(utils.GetListOfMapsets(self.gisdbase, self.location, selectable = False)) # selectable
-
+            self.SetItems(self._getMapsets())
+        
     def UpdateItems(self, location, dbase = None):
         """!Update list of mapsets for given location
 
@@ -937,10 +939,19 @@ class MapsetSelect(wx.ComboBox):
             self.gisdbase = dbase
         self.location = location
         if location:
-            self.SetItems(utils.GetListOfMapsets(self.gisdbase, self.location, selectable = False))
+            self.SetItems(self._getMapsets())
         else:
             self.SetItems([])
+     
+    def _getMapsets(self):
+        if self.searchPath:
+            return gcmd.RunCommand('g.mapsets',
+                                   read = True,
+                                   flags = 'p',
+                                   fs = 'newline').splitlines()
         
+        return utils.GetListOfMapsets(self.gisdbase, self.location, selectable = False)
+            
 class SubGroupSelect(wx.ComboBox):
     """!Widget for selecting subgroups"""
     def __init__(self, parent, id = wx.ID_ANY, size = globalvar.DIALOG_GSELECT_SIZE, 
