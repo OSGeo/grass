@@ -597,13 +597,13 @@ class Model(object):
                                        'idx' : idx }
             for name, values in self.variables.iteritems():
                 gtype = values.get('type', 'string')
-                if gtype in ('raster', 'vector'):
+                if gtype in ('raster', 'vector', 'mapset'):
                     gisprompt = True
                     prompt = gtype
                     if gtype == 'raster':
                         element = 'cell'
                     else:
-                        element = 'vector'
+                        element = gtype
                     ptype = 'string'
                 else:
                     gisprompt = False
@@ -611,12 +611,12 @@ class Model(object):
                     element = None
                     ptype = gtype
                 params.append({ 'gisprompt' : gisprompt,
-                                'multiple'  : 'no',
+                                'multiple'  : False,
                                 'description' : values.get('description', ''),
                                 'guidependency' : '',
                                 'default' : '',
                                 'age' : None,
-                                'required' : 'yes',
+                                'required' : True,
                                 'value' : values.get('value', ''),
                                 'label' : '',
                                 'guisection' : '',
@@ -3695,6 +3695,7 @@ class ModelParamDialog(wx.Dialog):
         for name in nameOrdered:
             params = self.params[name]
             panel = self._createPage(name, params)
+            
             self.notebook.AddPage(panel, text = name)
         
         return panel
@@ -3796,7 +3797,8 @@ class VariablePanel(wx.Panel):
                                          _("float"),
                                          _("string"),
                                          _("raster"),
-                                         _("vector")])
+                                         _("vector"),
+                                         _("mapset")])
         self.value = wx.TextCtrl(parent = self, id = wx.ID_ANY)
         self.desc = wx.TextCtrl(parent = self, id = wx.ID_ANY)
         
