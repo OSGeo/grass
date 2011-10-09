@@ -1,4 +1,4 @@
-"""!@package grass.script.tgis_space_time_dataset
+"""!@package grass.temporal
 
 @brief GRASS Python scripting module (temporal GIS functions)
 
@@ -383,13 +383,13 @@ def register_maps_in_space_time_dataset(type, name, maps, start=None, increment=
        It takes care of the correct update of the space time datasets from all
        registered maps.
 
-       @type The type of the maps raster, raster3d or vector
-       @name The name of the space time dataset
-       @maps A comma separated list of map names
-       @start The start date and time of the first raster map, in case the map has no date (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd", format relative 5.0)
-       @increment Time increment between maps for time stamp creation (format absolute: NNN seconds, minutes, hours, days, weeks, months, years; format relative: 1.0)
-       @dbif The database interface to use for sql queries
-       @interval If True, time intervals are created in case the start time and an increment is provided
+       @param type: The type of the maps raster, raster3d or vector
+       @param name: The name of the space time dataset
+       @param maps: A comma separated list of map names
+       @param start: The start date and time of the first raster map, in case the map has no date (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd", format relative 5.0)
+       @param increment: Time increment between maps for time stamp creation (format absolute: NNN seconds, minutes, hours, days, weeks, months, years; format relative: 1.0)
+       @param dbif: The database interface to be used
+       @param interval: If True, time intervals are created in case the start time and an increment is provided
     """
 
     # We may need the mapset
@@ -485,9 +485,10 @@ def unregister_maps_from_space_time_datasets(type, name, maps, dbif = None):
     """Unregister maps from a single space time dataset or, in case no dataset name is provided,
        unregister from all datasets within the maps are registered.
 
-       @type The type of the maps raster, vector or raster3d
-       @name Name of an existing space time raster dataset. If no name is provided the raster map(s) are unregistered from all space time datasets in which they are registered.
-       @maps Name(s) of existing map(s) to unregister
+       @param type: The type of the maps raster, vector or raster3d
+       @param name: Name of an existing space time raster dataset. If no name is provided the raster map(s) are unregistered from all space time datasets in which they are registered.
+       @param maps: A comma separated list of map names
+       @param dbif: The database interface to be used
     """
     mapset =  core.gisenv()["MAPSET"]
 
@@ -570,13 +571,13 @@ def assign_valid_time_to_maps(type, maps, ttype, start, end=None, increment=None
 
        Valid end time and increment are mutual exclusive.
 
-       @type The type of the maps raster, raster3d or vector
-       @maps A comma separated list of map names
-       @start The start date and time of the first raster map (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd", format relative 5.0)
-       @end The end date and time of the first raster map (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd", format relative 5.0)
-       @increment Time increment between maps for time stamp creation (format absolute: NNN seconds, minutes, hours, days, weeks, months, years; format relative: 1.0)
-       @dbif The database interface to use for sql queries
-       @interval If True, time intervals are created in case the start time and an increment is provided
+       @param type: The type of the maps raster, raster3d or vector
+       @param maps: A comma separated list of map names
+       @param start: The start date and time of the first raster map (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd", format relative 5.0)
+       @param end: The end date and time of the first raster map (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd", format relative 5.0)
+       @param increment: Time increment between maps for time stamp creation (format absolute: NNN seconds, minutes, hours, days, weeks, months, years; format relative: 1.0)
+       @param dbif: The database interface to be used
+       @param interval: If True, time intervals are created in case the start time and an increment is provided
     """
 
     if end and increment:
@@ -659,14 +660,14 @@ def assign_valid_time_to_maps(type, maps, ttype, start, end=None, increment=None
 def assign_valid_time_to_map(ttype, map, start, end, increment=None, mult=1, dbif = None, interval=False):
     """Assign the valid time to a map dataset
 
-       @ttype The temporal type which should be assigned and which the time format is of
-       @map A map dataset object derived from abstract_map_dataset
-       @start The start date and time of the first raster map (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd", format relative 5.0)
-       @end The end date and time of the first raster map (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd", format relative 5.0)
-       @increment Time increment between maps for time stamp creation (format absolute: NNN seconds, minutes, hours, days, weeks, months, years; format relative: 1.0)
-       @multi A multiplier for the increment
-       @dbif The database interface to use for sql queries
-       @interval If True, time intervals are created in case the start time and an increment is provided
+       @param ttype: The temporal type which should be assigned and which the time format is of
+       @param map: A map dataset object derived from abstract_map_dataset
+       @param start: The start date and time of the first raster map (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd", format relative 5.0)
+       @param end: The end date and time of the first raster map (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd", format relative 5.0)
+       @param increment: Time increment between maps for time stamp creation (format absolute: NNN seconds, minutes, hours, days, weeks, months, years; format relative: 1.0)
+       @param multi: A multiplier for the increment
+       @param dbif: The database interface to use for sql queries
+       @param interval: If True, time intervals are created in case the start time and an increment is provided
     """
     
     connect = False

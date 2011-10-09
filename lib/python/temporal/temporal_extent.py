@@ -1,4 +1,4 @@
-"""!@package grass.script.tgis_temporal_extent
+"""!@package grass.temporal
 
 @brief GRASS Python scripting module (temporal GIS functions)
 

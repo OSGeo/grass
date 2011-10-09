@@ -1,4 +1,4 @@
-"""!@package grass.script.tgis_metadata
+"""!@package grass.temporal
 
 @brief GRASS Python scripting module (temporal GIS functions)
 

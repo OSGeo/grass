@@ -1,4 +1,4 @@
-"""!@package grass.script.tgis_core
+"""!@package grass.temporal
 
 @brief GRASS Python scripting module (temporal GIS functions)
 
@@ -162,7 +162,10 @@ def increment_datetime(mydate, years=0, months=0, weeks=0, days=0, hours=0, minu
 
 def create_temporal_database():
     """This function creates the grass location database structure for raster, vector and raster3d maps
-    as well as for the space-time datasets strds, str3ds and stvds"""
+       as well as for the space-time datasets strds, str3ds and stvds
+
+       This functions must be called befor any spatio-temporal processing is started
+    """
     
     database = get_grass_location_db_path()
 
