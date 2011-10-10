@@ -7,6 +7,7 @@ SUBDIRS = \
 	t.remove \
 	t.time.abs \
 	t.time.rel \
+	tr.aggregate \
 	tr.register \
 	tr.series \
 	tr.extract \

@@ -4,7 +4,8 @@
 import grass.script as grass
 
 # Create the space time raster dataset with t.create
-dataset = "temp_mean_1995_2010_daily"
+#dataset = "temp_mean_1995_2010_daily"
+dataset = "temp_mean_1995_1996_daily"
 
 grass.run_command("t.create", type="strds", dataset=dataset, granularity="1 days", \
                   semantic="continuous", temporal="absolute", \
@@ -14,7 +15,8 @@ grass.run_command("t.create", type="strds", dataset=dataset, granularity="1 days
 
 name = "temp_mean."
 maps=""
-for i in range(5844):
+#for i in range(5844):
+for i in range(365):
     inc = i + 1
     map_name = name + str(inc)
     if i == 0:
