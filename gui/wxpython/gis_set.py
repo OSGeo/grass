@@ -224,9 +224,8 @@ class GRASSStartup(wx.Frame):
                                               force = True)
                 self.lblocations.EnsureVisible(self.listOfLocations.index(location))
             except ValueError:
-                print >> sys.stderr, _("ERROR: Location <%s> not found") % \
-                    (utils.UnicodeString(location))
-                
+                print >> sys.stderr, _("ERROR: Location <%s> not found") % location
+            
             # list of mapsets
             self.UpdateMapsets(os.path.join(self.gisdbase, location))
             mapset = self.GetRCValue("MAPSET")
@@ -237,9 +236,8 @@ class GRASSStartup(wx.Frame):
                     self.lbmapsets.EnsureVisible(self.listOfMapsets.index(mapset))
                 except ValueError:
                     self.lbmapsets.Clear()
-                    print >> sys.stderr, _("ERROR: Mapset <%s> not found") % \
-                        (utils.UnicodeString(mapset))
-            
+                    print >> sys.stderr, _("ERROR: Mapset <%s> not found") % mapset
+                    
     def _do_layout(self):
         label_style = wx.ADJUST_MINSIZE | wx.ALIGN_CENTER_HORIZONTAL
 
@@ -431,8 +429,8 @@ class GRASSStartup(wx.Frame):
     def RenameMapset(self):
         """!Rename selected mapset
         """
-        location = utils.UnicodeString(self.listOfLocations[self.lblocations.GetSelection()])
-        mapset   = utils.UnicodeString(self.listOfMapsets[self.lbmapsets.GetSelection()])
+        location = self.listOfLocations[self.lblocations.GetSelection()]
+        mapset   = self.listOfMapsets[self.lbmapsets.GetSelection()]
         if mapset ==  'PERMANENT':
             GMessage(parent = self,
                      message = _('Mapset <PERMANENT> is required for valid GRASS location.\n\n'
@@ -472,7 +470,7 @@ class GRASSStartup(wx.Frame):
     def RenameLocation(self):
         """!Rename selected location
         """
-        location = utils.UnicodeString(self.listOfLocations[self.lblocations.GetSelection()])
+        location = self.listOfLocations[self.lblocations.GetSelection()]
 
         dlg = wx.TextEntryDialog(parent = self,
                                  message = _('Current name: %s\n\nEnter new name:') % location,
