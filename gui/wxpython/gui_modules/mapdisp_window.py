@@ -174,7 +174,9 @@ class MapWindow(object):
         if self.parent.statusbarManager.GetMode() == 0: # Coordinates            
             updated = False
             if hasattr(self, "digit"):
-                updated = self._onMotion((e, n), precision)
+                precision = int(UserSettings.Get(group = 'projection', key = 'format',
+                                             subkey = 'precision'))
+                updated = self._onMotion(self.lastEN, precision)
 
             if not updated:
                 self.parent.CoordinatesChanged()

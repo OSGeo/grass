@@ -129,11 +129,7 @@ class MapFrameBase(wx.Frame):
         # Fancy gui
         #
         self._mgr = wx.aui.AuiManager(self)
-            
-    def IsAutoRendered(self):
-        """!Checks if auto-rendering is enabled"""
-        return True
-    
+	
     def SetProperty(self, name, value):
         """!Sets property"""
         self.statusbarManager.SetProperty(name, value)
@@ -223,7 +219,54 @@ class MapFrameBase(wx.Frame):
         
         return scale
         
-    
+    def GetProgressBar(self):
+        """!Returns progress bar
+        
+        Progress bar can be used by other classes.
+        """
+        return self.statusbarManager.GetProgressBar()
+	
+    def GetRender(self):
+        """!Returns current instance of render.Map()
+        
+        @todo make this method obsolate (name GetMap is better)
+        """
+        return self.Map
+
+    def GetMap(self):
+        """!Returns current Map instance
+        """
+        return self.Map
+
+    def GetWindow(self):
+        """!Get map window"""
+        return self.MapWindow
+	
+    def StatusbarUpdate(self):
+        """!Update statusbar content"""
+        self.statusbarManager.Update()
+	
+    def IsAutoRendered(self):
+        """!Check if auto-rendering is enabled"""
+        return self.GetProperty('render')
+            
+    def CoordinatesChanged(self):
+        """!Shows current coordinates on statusbar.
+        
+        Used in BufferedWindow to report change of map coordinates (under mouse cursor).
+        """
+        self.statusbarManager.ShowItem('coordinates')
+	
+    def StatusbarReposition(self):
+        """!Reposition items in statusbar"""
+        self.statusbarManager.Reposition()
+	
+    def StatusbarEnableLongHelp(self, enable = True):
+        """!Enable/disable toolbars long help"""
+        for toolbar in self.toolbars.itervalues():
+            if toolbar:
+                toolbar.EnableLongHelp(enable)
+		
 class MapFrame(MapFrameBase):
     """!Main frame for map display window. Drawing takes place in
     child double buffered drawing window.
@@ -581,7 +624,6 @@ class MapFrame(MapFrameBase):
             
         self.toolbars['map'].combo.SetValue(_("2D view"))
         self.toolbars['map'].Enable2D(True)
-        self.statusbarWin['toggle'].Enable(True)
         
         self._mgr.Update()
     
@@ -778,32 +820,7 @@ class MapFrame(MapFrameBase):
             self.Map.alignRegion = True
         else:
             self.Map.alignRegion = False
-        # event.Skip()
-
-    def IsAutoRendered(self):
-        """!Check if auto-rendering is enabled"""
-        return self.GetProperty('render')
-            
-    def CoordinatesChanged(self):
-        """!Shows current coordinates on statusbar.
-        
-        Used in BufferedWindow to report change of map coordinates (under mouse cursor).
-        """
-        self.statusbarManager.ShowItem('coordinates')
-        
-    def StatusbarUpdate(self):
-        """!Update statusbar content"""
-        self.statusbarManager.Update()
-
-    def StatusbarEnableLongHelp(self, enable = True):
-        """!Enable/disable toolbars long help"""
-        for toolbar in self.toolbars.itervalues():
-            if toolbar:
-                toolbar.EnableLongHelp(enable)
-                
-    def StatusbarReposition(self):
-        """!Reposition items in statusbar"""
-        self.statusbarManager.Reposition()
+        # event.Skip()        
         
     def SaveToFile(self, event):
         """!Save map to image
@@ -898,29 +915,7 @@ class MapFrame(MapFrameBase):
             pgnum = self.layerbook.GetPageIndex(self.page)
             if pgnum > -1:
                 self.layerbook.DeletePage(pgnum)
-        
-    def GetRender(self):
-        """!Returns current instance of render.Map()
-        
-        @todo make this method obsolate (name GetMap is better)
-        """
-        return self.Map
-
-    def GetMap(self):
-        """!Returns current Map instance
-        """
-        return self.Map
-
-    def GetWindow(self):
-        """!Get map window"""
-        return self.MapWindow
     
-    def GetProgressBar(self):
-        """!Returns progress bar
-        
-        Progress bar can be used by other classes.
-        """
-        return self.statusbarManager.GetProgressBar()
     
     def QueryMap(self, x, y):
         """!Query raster or vector map layers by r/v.what
