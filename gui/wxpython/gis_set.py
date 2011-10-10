@@ -146,8 +146,7 @@ class GRASSStartup(wx.Frame):
                                      style = wx.TE_PROCESS_ENTER)
 
         # Locations
-        self.lpanel = wx.Panel(parent = self.panel, id = wx.ID_ANY)
-        self.lblocations = GListBox(parent = self.lpanel,
+        self.lblocations = GListBox(parent = self.panel,
                                     id = wx.ID_ANY, size = (180, 200),
                                     choices = self.listOfLocations)
         
@@ -155,8 +154,7 @@ class GRASSStartup(wx.Frame):
 
         # TODO: sort; but keep PERMANENT on top of list
         # Mapsets
-        self.mpanel = wx.Panel(parent = self.panel, id = wx.ID_ANY)
-        self.lbmapsets = GListBox(parent = self.mpanel,
+        self.lbmapsets = GListBox(parent = self.panel,
                                   id = wx.ID_ANY, size = (180, 200),
                                   choices = self.listOfMapsets)
         
@@ -239,85 +237,72 @@ class GRASSStartup(wx.Frame):
                     print >> sys.stderr, _("ERROR: Mapset <%s> not found") % mapset
                     
     def _do_layout(self):
-        label_style = wx.ADJUST_MINSIZE | wx.ALIGN_CENTER_HORIZONTAL
-
         sizer           = wx.BoxSizer(wx.VERTICAL)
         dbase_sizer     = wx.BoxSizer(wx.HORIZONTAL)
-        location_sizer  = wx.FlexGridSizer(rows = 1, cols = 2, vgap = 4, hgap = 4)
+        location_sizer  = wx.BoxSizer(wx.HORIZONTAL)
         select_boxsizer = wx.StaticBoxSizer(self.select_box, wx.VERTICAL)
         select_sizer    = wx.FlexGridSizer(rows = 2, cols = 2, vgap = 4, hgap = 4)
-        manage_boxsizer = wx.StaticBoxSizer(self.manage_box, wx.VERTICAL)
-        manage_sizer    = wx.BoxSizer(wx.VERTICAL)
+        select_sizer.AddGrowableRow(1)
+        select_sizer.AddGrowableCol(0)
+        select_sizer.AddGrowableCol(1)
+        manage_sizer    = wx.StaticBoxSizer(self.manage_box, wx.VERTICAL)
         btns_sizer      = wx.BoxSizer(wx.HORIZONTAL)
-
+        
         # gis data directory
         dbase_sizer.Add(item = self.ldbase, proportion = 0,
                         flag = wx.ALIGN_CENTER_VERTICAL |
                         wx.ALIGN_CENTER_HORIZONTAL | wx.ALL,
                         border = 3)
-        dbase_sizer.Add(item = self.tgisdbase, proportion = 0,
-                        flag = wx.ALIGN_CENTER_VERTICAL |
-                        wx.ALIGN_CENTER_HORIZONTAL | wx.ALL,
+        dbase_sizer.Add(item = self.tgisdbase, proportion = 1,
+                        flag = wx.ALIGN_CENTER_VERTICAL | wx.ALL,
                         border = 3)
         dbase_sizer.Add(item = self.bbrowse, proportion = 0,
-                        flag = wx.ALIGN_CENTER_VERTICAL |
-                        wx.ALIGN_CENTER_HORIZONTAL | wx.ALL,
+                        flag = wx.ALIGN_CENTER_VERTICAL | wx.ALL,
                         border = 3)
-
+        
         # select sizer
         select_sizer.Add(item = self.llocation, proportion = 0,
-                         flag = label_style | wx.ALL,
+                         flag = wx.ALIGN_CENTER_HORIZONTAL | wx.ALL,
                          border = 3)
         select_sizer.Add(item = self.lmapset, proportion = 0,
-                         flag = label_style | wx.ALL,
+                         flag = wx.ALIGN_CENTER_HORIZONTAL | wx.ALL,
                          border = 3)
-        select_sizer.Add(item = self.lpanel, proportion = 0,
-                         flag = wx.ADJUST_MINSIZE |
-                         wx.ALIGN_CENTER_VERTICAL |
-                         wx.ALIGN_CENTER_HORIZONTAL)
-        select_sizer.Add(item = self.mpanel, proportion = 0,
-                         flag = wx.ADJUST_MINSIZE |
-                         wx.ALIGN_CENTER_VERTICAL |
-                         wx.ALIGN_CENTER_HORIZONTAL)
-
-        select_boxsizer.Add(item = select_sizer, proportion = 0)
-
+        select_sizer.Add(item = self.lblocations, proportion = 1,
+                         flag = wx.EXPAND)
+        select_sizer.Add(item = self.lbmapsets, proportion = 1,
+                         flag = wx.EXPAND)
+        
+        select_boxsizer.Add(item = select_sizer, proportion = 1,
+                            flag = wx.EXPAND)
+        
         # define new location and mapset
         manage_sizer.Add(item = self.ldefine, proportion = 0,
-                         flag = label_style | wx.ALL,
+                         flag = wx.ALIGN_CENTER_HORIZONTAL | wx.ALL,
                          border = 3)
         manage_sizer.Add(item = self.bwizard, proportion = 0,
-                         flag = label_style | wx.BOTTOM,
+                         flag = wx.ALIGN_CENTER_HORIZONTAL | wx.BOTTOM,
                          border = 5)
         manage_sizer.Add(item = self.lcreate, proportion = 0,
-                         flag = label_style | wx.ALL,
+                         flag = wx.ALIGN_CENTER_HORIZONTAL | wx.ALL,
                          border = 3)
         manage_sizer.Add(item = self.bmapset, proportion = 0,
-                         flag = label_style | wx.BOTTOM,
+                         flag = wx.ALIGN_CENTER_HORIZONTAL | wx.BOTTOM,
                          border = 5)
         manage_sizer.Add(item = self.lmanageloc, proportion = 0,
-                         flag = label_style | wx.ALL,
+                         flag = wx.ALIGN_CENTER_HORIZONTAL | wx.ALL,
                          border = 3)
         manage_sizer.Add(item = self.manageloc, proportion = 0,
-                         flag = label_style | wx.BOTTOM,
+                         flag = wx.ALIGN_CENTER_HORIZONTAL | wx.BOTTOM,
                          border = 5)
-
-        manage_boxsizer.Add(item = manage_sizer, proportion = 0)
-
+        
         # location sizer
-        location_sizer.Add(item = select_boxsizer, proportion = 0,
-                           flag = wx.ADJUST_MINSIZE |
-                           wx.ALIGN_CENTER_VERTICAL |
-                           wx.ALIGN_CENTER_HORIZONTAL |
-                           wx.RIGHT | wx.LEFT | wx.EXPAND,
-                           border = 3) # GISDBASE setting
-        location_sizer.Add(item = manage_boxsizer, proportion = 0,
-                           flag = wx.ADJUST_MINSIZE |
-                           wx.ALIGN_TOP |
-                           wx.ALIGN_CENTER_HORIZONTAL |
-                           wx.RIGHT | wx.EXPAND,
+        location_sizer.Add(item = select_boxsizer, proportion = 1,
+                           flag = wx.LEFT | wx.RIGHT | wx.EXPAND,
+                           border = 3) 
+        location_sizer.Add(item = manage_sizer, proportion = 0,
+                           flag = wx.RIGHT | wx.EXPAND,
                            border = 3)
-
+        
         # buttons
         btns_sizer.Add(item = self.bstart, proportion = 0,
                        flag = wx.ALIGN_CENTER_HORIZONTAL |
@@ -334,7 +319,7 @@ class GRASSStartup(wx.Frame):
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL,
                        border = 5)
-
+        
         # main sizer
         sizer.Add(item = self.hbitmap,
                   proportion = 0,
@@ -354,24 +339,22 @@ class GRASSStartup(wx.Frame):
                   wx.ALIGN_CENTER_HORIZONTAL)
         sizer.Add(item = dbase_sizer, proportion = 0,
                   flag = wx.ALIGN_CENTER_HORIZONTAL |
-                  wx.RIGHT | wx.LEFT,
-                  border = 1) # GISDBASE setting
+                  wx.RIGHT | wx.LEFT | wx.EXPAND,
+                  border = 20) # GISDBASE setting
         sizer.Add(item = location_sizer, proportion = 1,
-                  flag = wx.ALIGN_CENTER_VERTICAL |
-                  wx.ALIGN_CENTER_HORIZONTAL |
-                  wx.RIGHT | wx.LEFT,
+                  flag = wx.RIGHT | wx.LEFT | wx.EXPAND,
                   border = 1)
         sizer.Add(item = btns_sizer, proportion = 0,
                   flag = wx.ALIGN_CENTER_VERTICAL |
                   wx.ALIGN_CENTER_HORIZONTAL |
                   wx.RIGHT | wx.LEFT,
                   border = 1)
-
+        
         self.panel.SetAutoLayout(True)
         self.panel.SetSizer(sizer)
         sizer.Fit(self.panel)
         sizer.SetSizeHints(self)
-
+        
         self.Layout()
 
     def _readGisRC(self):
