@@ -117,14 +117,14 @@ def main():
 
     if sp.is_in_db(dbif) and grass.overwrite() == False:
         dbif.close()
-        grass.fatal("Space time " + sp.get_new_map_instance(None).get_type() + " dataset <" + name + "> is already in the database. Use the overwrite flag.")
+        grass.fatal(_("Space time %s dataset <%s> is already in the database. Use the overwrite flag.") % name)
 
     if sp.is_in_db(dbif) and grass.overwrite() == True:
-        grass.info("Overwrite space time " + sp.get_new_map_instance(None).get_type() + " dataset <" + name + "> and unregister all maps.")
+        grass.info(_("Overwrite space time %s dataset <%s> and unregister all maps.") % (sp.get_new_map_instance(None).get_type(), name))
         sp.delete(dbif)
         sp = sp.get_new_instance(id)
 
-    grass.info("Create space time " + sp.get_new_map_instance(None).get_type() + " dataset.")
+    grass.verbose(_("Create space time %s dataset.") % sp.get_new_map_instance(None).get_type())
 
     sp.set_initial_values(granularity=gran, temporal_type=temporaltype, semantic_type=semantic, title=title, description=descr)
     sp.insert(dbif)
