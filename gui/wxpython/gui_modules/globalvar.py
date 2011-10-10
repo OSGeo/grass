@@ -105,16 +105,6 @@ MAP_WINDOW_SIZE = (725, 600)
 HIST_WINDOW_SIZE = (500, 350)
 GM_WINDOW_SIZE = (500, 600)
 
-MAP_DISPLAY_STATUSBAR_MODE = [_("Coordinates"),
-                              _("Extent"),
-                              _("Comp. region"),
-                              _("Show comp. extent"),
-                              _("Display mode"),
-                              _("Display resolution"),
-                              _("Display geometry"),
-                              _("Map scale"),
-                              _("Go to"),
-                              _("Projection"),]
 
 """!File name extension binaries/scripts"""
 if sys.platform == 'win32':

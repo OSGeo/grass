@@ -758,7 +758,7 @@ class Settings:
         self.internalSettings['appearance']['gSelectPopupHeight']['max'] = 1000
         
         self.internalSettings['display']['driver']['choices'] = ['cairo', 'png']
-        self.internalSettings['display']['statusbarMode']['choices'] = globalvar.MAP_DISPLAY_STATUSBAR_MODE
+        self.internalSettings['display']['statusbarMode']['choices'] = None # set during MapFrame init
 
         self.internalSettings['nviz']['view'] = {}
         self.internalSettings['nviz']['view']['twist'] = {}

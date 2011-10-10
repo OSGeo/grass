@@ -811,7 +811,7 @@ class VDigitSettingsDialog(wx.Dialog):
         self.digit.UpdateSettings()
         
         # redraw map if auto-rendering is enabled
-        if self.parent.statusbarWin['render'].GetValue(): 
+        if self.parent.IsAutoRendered(): 
             self.parent.OnRender(None)
 
 class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
