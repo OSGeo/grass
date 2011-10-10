@@ -24,7 +24,7 @@ import os
 import copy
 from datetime import datetime, date, time, timedelta
 import grass.script.core as core
-
+# The import should be decided by grass environmental variables
 import sqlite3 as dbmi
 #import psycopg2 as dbmi
 # Needed for dictionary like cursors
@@ -46,117 +46,6 @@ def get_sql_template_path():
     base = os.getenv("GISBASE")
     base_etc  = os.path.join(base, "etc")
     return os.path.join(base_etc, "sql")
-
-###############################################################################
-
-def test_increment_datetime_by_string():
-
-    dt = datetime(2001, 9, 1, 0, 0, 0)
-    string = "60 seconds, 4 minutes, 12 hours, 10 days, 1 weeks, 5 months, 1 years"
-
-    dt1 = datetime(2003,2,18,12,5,0)
-    dt2 = increment_datetime_by_string(dt, string)
-
-    delta = dt1 -dt2
-
-    if delta.days != 0 or delta.seconds != 0:
-        core.fatal("increment computation is wrong")
-
-###############################################################################
-
-def increment_datetime_by_string(mydate, increment, mult = 1):
-    """Return a new datetime object incremented with the provided relative dates specified as string.
-       Additional a multiplier can be specified to multiply the increment bevor adding to the provided datetime object.
-
-       @param mydate A datetime object to incremented
-       @param increment A string providing increment information:
-                  The string may include comma separated values of type seconds, minutes, hours, days, weeks, months and years
-                  Example: Increment the datetime 2001-01-01 00:00:00 with "60 seconds, 4 minutes, 12 hours, 10 days, 1 weeks, 5 months, 1 years"
-                  will result in the datetime 2003-02-18 12:05:00
-       @param mult A multiplier, default is 1
-    """
-
-    if increment:
-
-        seconds = 0
-        minutes = 0
-        hours = 0
-        days = 0
-        weeks = 0
-        months = 0
-        years = 0
-
-        inclist = []
-        # Split the increment string
-        incparts = increment.split(",")
-        for incpart in incparts:
-            inclist.append(incpart.strip().split(" "))
-
-        for inc in inclist:
-            if inc[1].find("seconds") >= 0:
-                seconds = mult * int(inc[0])
-            elif inc[1].find("minutes") >= 0:
-                minutes = mult * int(inc[0])
-            elif inc[1].find("hours") >= 0:
-                hours = mult * int(inc[0])
-            elif inc[1].find("days") >= 0:
-                days = mult * int(inc[0])
-            elif inc[1].find("weeks") >= 0:
-                weeks = mult * int(inc[0])
-            elif inc[1].find("months") >= 0:
-                months = mult * int(inc[0])
-            elif inc[1].find("years") >= 0:
-                years = mult * int(inc[0])
-            else:
-                core.error(_("Wrong increment format: %s") % (increment))
-                return None
-
-        return increment_datetime(mydate, years, months, weeks, days, hours, minutes, seconds)
-    
-    return mydate
-
-###############################################################################
-
-def increment_datetime(mydate, years=0, months=0, weeks=0, days=0, hours=0, minutes=0, seconds=0):
-    """Return a new datetime object incremented with the provided relative dates and times"""
-
-    tdelta_seconds = timedelta(seconds=seconds)
-    tdelta_minutes = timedelta(minutes=minutes)
-    tdelta_hours = timedelta(hours=hours)
-    tdelta_days = timedelta(days=days)
-    tdelta_weeks = timedelta(weeks=weeks)
-    tdelta_months = timedelta(0)
-    tdelta_years = timedelta(0)
-
-    if months > 0:
-        # Compute the actual number of days in the month to add as timedelta
-        year = mydate.year
-        month = mydate.month
-
-        all_months = int(months + month)
-
-        years_to_add = int(all_months/12)
-        residual_months = all_months%12
-
-        # Make a deep copy of the datetime object
-        dt1 = copy.copy(mydate)
-
-        # Make sure the montha starts with a 1
-        if residual_months == 0:
-            residual_months = 1
-
-        dt1 = dt1.replace(year = year + years_to_add, month = residual_months)
-        tdelta_months = dt1 - mydate
-
-    if years > 0:
-        # Make a deep copy of the datetime object
-        dt1 = copy.copy(mydate)
-        # Compute the number of days
-        dt1 = dt1.replace(year=mydate.year + int(years))
-        tdelta_years = dt1 - mydate
-
-    return mydate + tdelta_seconds + tdelta_minutes + tdelta_hours + \
-                    tdelta_days + tdelta_weeks + tdelta_months + tdelta_years
 
 ###############################################################################
 
