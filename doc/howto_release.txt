@@ -126,7 +126,7 @@ Contents
       - grass$MAJOR$MINOR/main.inc
       - devel/grasshist.html
       - devel/grassreleases.html
-      - devel/svntags.inc (add tag)
+      - devel/svntags.inc (add tag): echo $RELEASETAG
 
      write announcement
       - store in trac: http://trac.osgeo.org/grass/wiki/Release/6.XX.YY-News
