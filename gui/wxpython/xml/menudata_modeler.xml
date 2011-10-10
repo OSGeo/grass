@@ -122,7 +122,6 @@
 	  <label>Validate model</label>
 	  <help>Validate entire model</help>
 	  <handler>OnValidateModel</handler>
-	  <shortcut>Ctrl+V</shortcut>
 	</menuitem>
       </items>
     </menu>
