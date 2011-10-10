@@ -50,8 +50,11 @@ class MapWindow(object):
     Superclass for BufferedWindow class (2D display mode), and GLWindow
     (3D display mode).
     
-    Subclasses have to define _bindMouseEvents() method which binds
-    MouseEvent handlers.
+    Subclasses have to define
+     - _bindMouseEvents method which binds MouseEvent handlers
+     - Pixel2Cell
+     - Cell2Pixel (if it is possible)
+    
     """
     def __init__(self, parent, id = wx.ID_ANY,
                  Map = None, tree = None, lmgr = None, **kwargs):
@@ -68,9 +71,11 @@ class MapWindow(object):
             'use'  : "pointer",
             'box'  : "point"
             }
+        # last east, north coordinates, changes on mouse motion
+        self.lastEN = None 
         
-        # stores overriden cursor
-        self._overridenCursor = None
+        # stores overridden cursor
+        self._overriddenCursor = None
 
     def RegisterMouseEventHandler(self, event, handler, cursor = None):
         """!Binds event handler
@@ -101,7 +106,7 @@ class MapWindow(object):
         @param handler function to handle event
         @param cursor cursor which temporary overrides current cursor
         
-        @return True if successfull
+        @return True if successful
         @return False if event cannot be bind
         """
         
@@ -115,7 +120,7 @@ class MapWindow(object):
         self.mouse['use'] = 'genericEvent'
         
         if cursor:
-            self._overridenCursor = self.GetCursor()
+            self._overriddenCursor = self.GetCursor()
             self.SetCursor(cursor)
         
         return True
@@ -129,13 +134,13 @@ class MapWindow(object):
         
         @param event event to unbind
         
-        @return True if successfull
+        @return True if successful
         @return False if event cannot be unbind
         """
         if hasattr(self, "digit"):
             return False
         
-        # it is not yet posible in wxPython to unbind exact event
+        # it is not yet possible in wxPython to unbind exact event
         ret = self.Unbind(event)
         
         # restore bind state
@@ -144,63 +149,45 @@ class MapWindow(object):
         # restore mouse use (previous state)
         self.mouse['use'] = self.mouse['useBeforeGenericEvent']
         
-        # restore overriden cursor
-        if self._overridenCursor:
-            self.SetCursor(self._overridenCursor)
+        # restore overridden cursor
+        if self._overriddenCursor:
+            self.SetCursor(self._overriddenCursor)
         
         return ret
-
+    
+    def Pixel2Cell(self, (x, y)):
+        raise NotImplementedError()
+    
+    def Cell2Pixel(self, (east, north)):
+        raise NotImplementedError()
 
     def OnMotion(self, event):
-        """!Track mouse motion and update statusbar
+        """!Tracks mouse motion and update statusbar
+        
+        @see GetLastEN
         """
-        if self.parent.statusbarWin['toggle'].GetSelection() == 0: # Coordinates
-            precision = int(UserSettings.Get(group = 'projection', key = 'format',
-                                             subkey = 'precision'))
-            format = UserSettings.Get(group = 'projection', key = 'format',
-                                      subkey = 'll')
-            try:
-                e, n = self.Pixel2Cell(event.GetPositionTuple())
-            except (TypeError, ValueError):
-                self.parent.statusbar.SetStatusText("", 0)
-                event.Skip()
-                return
-            
+        try:
+            self.lastEN = self.Pixel2Cell(event.GetPositionTuple())
+        except (ValueError):
+            self.lastEN = None
+        # FIXME: special case for vdigit and access to statusbarManager
+        if self.parent.statusbarManager.GetMode() == 0: # Coordinates            
             updated = False
             if hasattr(self, "digit"):
                 updated = self._onMotion((e, n), precision)
 
             if not updated:
-                if self.parent.statusbarWin['projection'].IsChecked():
-                    if not UserSettings.Get(group = 'projection', key = 'statusbar', subkey = 'proj4'):
-                        self.parent.statusbar.SetStatusText(_("Projection not defined (check the settings)"), 0)
-                    else:
-                        proj, coord  = utils.ReprojectCoordinates(coord = (e, n),
-                                                                  projOut = UserSettings.Get(group = 'projection',
-                                                                                             key = 'statusbar',
-                                                                                             subkey = 'proj4'),
-                                                                  flags = 'd')
-                    
-                        if coord:
-                            e, n = coord
-                            if proj in ('ll', 'latlong', 'longlat') and format == 'DMS':
-                                self.parent.statusbar.SetStatusText(utils.Deg2DMS(e, n, precision = precision),
-                                                                    0)
-                            else:
-                                self.parent.statusbar.SetStatusText("%.*f; %.*f" % \
-                                                                        (precision, e, precision, n), 0)
-                        else:
-                            self.parent.statusbar.SetStatusText(_("Error in projection (check the settings)"), 0)
-                else:
-                    if self.parent.Map.projinfo['proj'] == 'll' and format == 'DMS':
-                        self.parent.statusbar.SetStatusText(utils.Deg2DMS(e, n, precision = precision),
-                                                            0)
-                    else:
-                        self.parent.statusbar.SetStatusText("%.*f; %.*f" % \
-                                                                (precision, e, precision, n), 0)
+                self.parent.CoordinatesChanged()
         
         event.Skip()
 
+    def GetLastEN(self):
+        """!Returns last coordinates of mouse cursor.
+        
+        @see OnMotion
+        """
+        return self.lastEN
+    
     def GetLayerByName(self, name, mapType, dataType = 'layer'):
         """!Get layer from layer tree by nam
         
@@ -227,7 +214,7 @@ class MapWindow(object):
             return self.tree.GetPyData(item)[0]['nviz']
         
         return item
-    
+        
     def GetSelectedLayer(self, type = 'layer', multi = False):
         """!Get selected layer from layer tree
         
@@ -747,9 +734,9 @@ class BufferedWindow(MapWindow, wx.Window):
         # initialize process bar (only on 'render')
         #
         if render or renderVector:
-            self.parent.statusbarWin['progress'].Show()
-            if self.parent.statusbarWin['progress'].GetRange() > 0:
-                self.parent.statusbarWin['progress'].SetValue(1)
+            self.parent.GetProgressBar().Show()
+            if self.parent.GetProgressBar().GetRange() > 0:
+                self.parent.GetProgressBar().SetValue(1)
         
         #
         # render background image if needed
@@ -766,7 +753,7 @@ class BufferedWindow(MapWindow, wx.Window):
             if render:
                 # update display size
                 self.Map.ChangeMapSize(self.GetClientSize())
-                if self.parent.statusbarWin['resolution'].IsChecked():
+                if self.parent.GetProperty('resolution'):
                     # use computation region resolution for rendering
                     windres = True
                 else:
@@ -869,18 +856,13 @@ class BufferedWindow(MapWindow, wx.Window):
         #
         # hide process bar
         #
-        self.parent.statusbarWin['progress'].Hide()
+        self.parent.GetProgressBar().Hide()
 
         #
         # update statusbar 
         #
         ### self.Map.SetRegion()
         self.parent.StatusbarUpdate()
-        if grass.find_file(name = 'MASK', element = 'cell')['name']:
-            # mask found
-            self.parent.statusbarWin['mask'].SetLabel(_('MASK'))
-        else:
-            self.parent.statusbarWin['mask'].SetLabel('')
         
         
         Debug.msg (1, "BufferedWindow.UpdateMap(): render=%s, renderVector=%s -> time=%g" % \
@@ -1648,8 +1630,8 @@ class BufferedWindow(MapWindow, wx.Window):
             self.Map.region['center_northing'] = cn
             self.Map.region['ewres'] = (newreg['e'] - newreg['w']) / self.Map.width
             self.Map.region['nsres'] = (newreg['n'] - newreg['s']) / self.Map.height
-            if 'alignExtent' not in self.parent.statusbarWin or \
-                    self.parent.statusbarWin['alignExtent'].IsChecked():
+            if not self.parent.HasProperty('alignExtent') or \
+                    self.parent.GetProperty('alignExtent'):
                 self.Map.AlignExtentFromDisplay()
             else:
                 for k in ('n', 's', 'e', 'w'):
@@ -1810,7 +1792,27 @@ class BufferedWindow(MapWindow, wx.Window):
         self.UpdateMap()
         
         self.parent.StatusbarUpdate()
+    
+    
+    def GoTo(self, e, n):
+        region = self.Map.GetCurrentRegion()
+
+        region['center_easting'], region['center_northing'] = e, n
         
+        dn = (region['nsres'] * region['rows']) / 2.
+        region['n'] = region['center_northing'] + dn
+        region['s'] = region['center_northing'] - dn
+        de = (region['ewres'] * region['cols']) / 2.
+        region['e'] = region['center_easting'] + de
+        region['w'] = region['center_easting'] - de
+
+        self.Map.AdjustRegion()
+
+        # add to zoom history
+        self.ZoomHistory(region['n'], region['s'],
+                                   region['e'], region['w'])        
+        self.UpdateMap()
+    
     def DisplayToWind(self):
         """!Set computational region (WIND file) to match display
         extents

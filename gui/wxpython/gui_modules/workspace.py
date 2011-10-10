@@ -916,11 +916,11 @@ class WriteWorkspaceFile(object):
                        'dim="%d,%d,%d,%d" '
                        'extent="%f,%f,%f,%f" '
                        'viewMode="%s" >\n' % (' ' * self.indent,
-                                              int(mapTree.mapdisplay.statusbarWin['render'].IsChecked()),
-                                              mapTree.mapdisplay.statusbarWin['toggle'].GetSelection(),
-                                              int(mapTree.mapdisplay.statusbarWin['region'].IsChecked()),
-                                              int(mapTree.mapdisplay.statusbarWin['alignExtent'].IsChecked()),
-                                              int(mapTree.mapdisplay.statusbarWin['resolution'].IsChecked()),
+                                              int(mapTree.mapdisplay.GetProperty('render')),
+                                              mapTree.mapdisplay.statusbarManager.GetMode(),
+                                              int(mapTree.mapdisplay.GetProperty('region')),
+                                              int(mapTree.mapdisplay.GetProperty('alignExtent')),
+                                              int(mapTree.mapdisplay.GetProperty('resolution')),
                                               displayPos[0],
                                               displayPos[1],
                                               displaySize[0],
@@ -932,7 +932,7 @@ class WriteWorkspaceFile(object):
                                               viewmode
                                               ))
             # projection statusbar info
-            if mapTree.mapdisplay.statusbarWin['projection'].IsChecked() and \
+            if mapTree.mapdisplay.GetProperty('projection') and \
                     UserSettings.Get(group='display', key='projection', subkey='proj4'):
                 self.indent += 4
                 file.write('%s<projection' % (' ' * self.indent))

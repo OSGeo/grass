@@ -71,7 +71,7 @@ class VDigitWindow(BufferedWindow):
             distance_tot += self.Distance(self.polycoords[idx-1],
                                           self.polycoords[idx],
                                           screen = False)[0]
-        self.parent.statusbar.SetStatusText("%.*f, %.*f (seg: %.*f; tot: %.*f)" % \
+        self.parent.SetStatusText("%.*f, %.*f (seg: %.*f; tot: %.*f)" % \
                                                 (precision, e, precision, n,
                                                  precision, distance_seg,
                                                  precision, distance_tot), 0)

@@ -132,7 +132,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         os.environ['GRASS_REGION'] = self.Map.SetRegion(windres = True)
         
         self.nvizThread = NvizThread(logerr,
-                                     self.parent.statusbarWin['progress'],
+                                     self.parent.GetProgressBar(),
                                      logmsg)
         self.nvizThread.start()
         time.sleep(.1)
@@ -823,12 +823,12 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.resize = False
         
         if self.render['quick'] is False:
-            self.parent.statusbarWin['progress'].Show()
-            self.parent.statusbarWin['progress'].SetRange(2)
-            self.parent.statusbarWin['progress'].SetValue(0)
+            self.parent.GetProgressBar().Show()
+            self.parent.GetProgressBar().SetRange(2)
+            self.parent.GetProgressBar().SetValue(0)
         
         if self.render['quick'] is False:
-            self.parent.statusbarWin['progress'].SetValue(1)
+            self.parent.GetProgressBar().SetValue(1)
             self._display.Draw(False, -1)
             if self.saveHistory:
                 self.ViewHistory(view = self.view, iview = self.iview)
@@ -864,9 +864,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         stop = time.clock()
         
         if self.render['quick'] is False:
-            self.parent.statusbarWin['progress'].SetValue(2)
+            self.parent.GetProgressBar().SetValue(2)
             # hide process bar
-            self.parent.statusbarWin['progress'].Hide()
+            self.parent.GetProgressBar().Hide()
         
         Debug.msg(3, "GLWindow.UpdateMap(): quick = %d, -> time = %g" % \
                       (self.render['quick'], (stop-start)))

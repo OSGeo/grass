@@ -1982,7 +1982,7 @@ class NvizToolWindow(FN.FlatNotebook):
             checklist = self.FindWindowById(self.win['vector'][vtype]['surface'])
             checklist.Delete(checklist.FindString(name))
             
-        if self.mapDisplay.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
     
     def OnConstantSelection(self, event):
@@ -2016,7 +2016,7 @@ class NvizToolWindow(FN.FlatNotebook):
        # update properties
         event = wxUpdateProperties(data = data)
         wx.PostEvent(self.mapWindow, event) 
-        if self.mapDisplay.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
         
     def OnFringe(self, event):
@@ -2424,7 +2424,7 @@ class NvizToolWindow(FN.FlatNotebook):
         color = str(color[0]) + ':' + str(color[1]) + ':' + str(color[2])
         self._display.SetBgColor(str(color))
         
-        if self.mapDisplay.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
         
     def OnSetSurface(self, event):
@@ -2510,7 +2510,7 @@ class NvizToolWindow(FN.FlatNotebook):
 
                 
         self.mapWindow.render['quick'] = True
-        if self.mapDisplay.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
         
         event.Skip()
@@ -2584,7 +2584,7 @@ class NvizToolWindow(FN.FlatNotebook):
         event = wxUpdateProperties(data = data)
         wx.PostEvent(self.mapWindow, event)
         
-        if self.mapDisplay.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
             
     def OnLookFrom(self, event):
@@ -2689,7 +2689,7 @@ class NvizToolWindow(FN.FlatNotebook):
         event = wxUpdateProperties(data = data)
         wx.PostEvent(self.mapWindow, event)
         
-        if self.mapDisplay.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
  
     def EnablePage(self, name, enabled = True):
@@ -2802,14 +2802,14 @@ class NvizToolWindow(FN.FlatNotebook):
             event = wxUpdateProperties(data = data)
             wx.PostEvent(self.mapWindow, event)
             
-            if self.mapDisplay.statusbarWin['render'].IsChecked():
+            if self.mapDisplay.IsAutoRendered():
                 self.mapWindow.Refresh(False)
         
     def OnSurfaceResolution(self, event):
         """!Draw resolution changed"""
         self.SetSurfaceResolution()
         
-        if self.mapDisplay.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
     
 
@@ -2855,7 +2855,7 @@ class NvizToolWindow(FN.FlatNotebook):
         event = wxUpdateProperties(data = data)
         wx.PostEvent(self.mapWindow, event)
         
-        if self.mapDisplay.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
 
     def OnSurfaceModeAll(self, event):
@@ -2886,7 +2886,7 @@ class NvizToolWindow(FN.FlatNotebook):
             event = wxUpdateProperties(data = data)
             wx.PostEvent(self.mapWindow, event)
             
-        if self.mapDisplay.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
         
     def _getColorString(self, color):
@@ -2939,7 +2939,7 @@ class NvizToolWindow(FN.FlatNotebook):
         event = wxUpdateProperties(data = data)
         wx.PostEvent(self.mapWindow, event)
         
-        if self.mapDisplay.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
         
     def OnSurfaceAxis(self, event):
@@ -3008,7 +3008,7 @@ class NvizToolWindow(FN.FlatNotebook):
         wx.PostEvent(self.mapWindow, event)
         
         self.mapWindow.render['quick'] = True
-        if self.mapDisplay.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
         #        self.UpdatePage('surface')
         
@@ -3082,7 +3082,7 @@ class NvizToolWindow(FN.FlatNotebook):
                 event = wxUpdateProperties(data = data)
                 wx.PostEvent(self.mapWindow, event)
         
-        if self.mapDisplay.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
         
         event.Skip()
@@ -3148,7 +3148,7 @@ class NvizToolWindow(FN.FlatNotebook):
         event = wxUpdateProperties(data = data)
         wx.PostEvent(self.mapWindow, event)
                         
-        if self.mapDisplay.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
         
     def OnVectorHeight(self, event):
@@ -3223,7 +3223,7 @@ class NvizToolWindow(FN.FlatNotebook):
         event = wxUpdateProperties(data = data)
         wx.PostEvent(self.mapWindow, event)
         
-        if self.mapDisplay.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
             
         
@@ -3253,7 +3253,7 @@ class NvizToolWindow(FN.FlatNotebook):
         event = wxUpdateProperties(data = data)
         wx.PostEvent(self.mapWindow, event)
         
-        if self.mapDisplay.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
 
     def OnCheckThematic(self, event):
@@ -3296,7 +3296,7 @@ class NvizToolWindow(FN.FlatNotebook):
         event = wxUpdateProperties(data = data)
         wx.PostEvent(self.mapWindow, event)
         
-        if self.mapDisplay.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
             
     def OnSetThematic(self, event):
@@ -3400,7 +3400,7 @@ class NvizToolWindow(FN.FlatNotebook):
             data['draw']['shading']['slice']['desc'] = 'flat'
             data['draw']['shading']['slice']['value'] = mode
         
-        if self.mapDisplay.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
         
     def OnVolumeResolution(self, event):
@@ -3419,7 +3419,7 @@ class NvizToolWindow(FN.FlatNotebook):
             self._display.SetSliceRes(id, res)
             data['draw']['resolution']['slice']['value'] = res
         
-        if self.mapDisplay.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
     
     def OnInOutMode(self, event):
@@ -3432,7 +3432,7 @@ class NvizToolWindow(FN.FlatNotebook):
         if ret == 1:
             data['isosurface'][isosurfId]['inout'] = event.GetInt()
             
-        if self.mapDisplay.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
     
         
@@ -3481,7 +3481,7 @@ class NvizToolWindow(FN.FlatNotebook):
                 # disable -> make transparent
                 self._display.SetSliceTransp(vid, id, 255)
                 
-        if self.mapDisplay.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
         
     def OnVolumeSelect(self, event):
@@ -3586,7 +3586,7 @@ class NvizToolWindow(FN.FlatNotebook):
         else:
             self.UpdateVolumeSlicePage(sliceData)
         
-        if self.mapDisplay.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
         
         event.Skip()
@@ -3633,7 +3633,7 @@ class NvizToolWindow(FN.FlatNotebook):
                 self.UpdateVolumeSlicePage(None)
         self.UpdateIsosurfButtons(list)
         
-        if self.mapDisplay.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
         
         event.Skip()
@@ -3674,7 +3674,7 @@ class NvizToolWindow(FN.FlatNotebook):
         # update buttons
         self.UpdateIsosurfButtons(list)
         
-        if self.mapDisplay.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
         
         event.Skip()
@@ -3715,7 +3715,7 @@ class NvizToolWindow(FN.FlatNotebook):
         # update buttons
         self.UpdateIsosurfButtons(list)
         
-        if self.mapDisplay.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
         
         event.Skip()
@@ -3764,7 +3764,7 @@ class NvizToolWindow(FN.FlatNotebook):
         wx.PostEvent(self.mapWindow, event)
         
         self.mapWindow.render['quick'] = True
-        if self.mapDisplay.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
         
     def OnVolumeAxis(self, event):
@@ -3817,7 +3817,7 @@ class NvizToolWindow(FN.FlatNotebook):
         event = wxUpdateProperties(data = data)
         wx.PostEvent(self.mapWindow, event)
         
-        if self.mapDisplay.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
         
     def OnVolumeSliceAxes(self, event):
@@ -3840,7 +3840,7 @@ class NvizToolWindow(FN.FlatNotebook):
         event = wxUpdateProperties(data = data)
         wx.PostEvent(self.mapWindow, event) 
         
-        if self.mapDisplay.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
     
     def OnSliceTransparency(self, event):
@@ -3860,7 +3860,7 @@ class NvizToolWindow(FN.FlatNotebook):
         event = wxUpdateProperties(data = data)
         wx.PostEvent(self.mapWindow, event)
         
-        if self.mapDisplay.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
         
     def OnSliceReset(self, event):
@@ -3881,7 +3881,7 @@ class NvizToolWindow(FN.FlatNotebook):
         event = wxUpdateProperties(data = data)
         wx.PostEvent(self.mapWindow, event)
         
-        if self.mapDisplay.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
         
     def OnSlicePositionChange(self, event):
@@ -3905,13 +3905,13 @@ class NvizToolWindow(FN.FlatNotebook):
         event = wxUpdateProperties(data = data)
         wx.PostEvent(self.mapWindow, event) 
         
-        if self.mapDisplay.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
                
     def OnSlicePositionChanged(self, event):
         """!Slice position is changed"""
         self.mapWindow.render['quick'] = False
-        if self.mapDisplay.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
                 
     def OnCPlaneSelection(self, event):
@@ -3924,7 +3924,7 @@ class NvizToolWindow(FN.FlatNotebook):
             planeIndex = -1
             self.EnablePage("cplane", enabled = False)
         self.mapWindow.SelectCPlane(planeIndex)
-        if self.mapDisplay.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
         self.UpdateCPlanePage(planeIndex)
         
@@ -3948,13 +3948,13 @@ class NvizToolWindow(FN.FlatNotebook):
         event = wxUpdateCPlane(update = (action,), current = planeIndex)
         wx.PostEvent(self.mapWindow, event)
         
-        if self.mapDisplay.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
 
     def OnCPlaneChangeDone(self, event):
         """!Cutting plane change done"""
         self.mapWindow.render['quick'] = False
-        if self.mapDisplay.statusbarWin['render'].IsChecked():
+        if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
             
     def OnCPlaneChangeText(self, event):

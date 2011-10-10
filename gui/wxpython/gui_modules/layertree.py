@@ -232,7 +232,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 vector = True
             else:
                 vector = False
-            if self.mapdisplay.statusbarWin['render'].GetValue():
+            if self.mapdisplay.IsAutoRendered():
                 self.mapdisplay.MapWindow.UpdateMap(render = True, renderVector = vector)
                 if self.lmgr.IsPaneShown('toolbarNviz'): # nviz
                     self.mapdisplay.MapWindow3D.UpdateMap(render = True)
@@ -933,7 +933,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         
         # updated progress bar range (mapwindow statusbar)
         if checked:
-            self.mapdisplay.statusbarWin['progress'].SetRange(len(self.Map.GetListOfLayers(l_active = True)))
+            self.mapdisplay.GetProgressBar().SetRange(len(self.Map.GetListOfLayers(l_active = True)))
             
         return layer
 
@@ -1088,7 +1088,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.mapdisplay.toolbars['vdigit'].UpdateListOfLayers (updateTool = True)
 
         # update progress bar range (mapwindow statusbar)
-        self.mapdisplay.statusbarWin['progress'].SetRange(len(self.Map.GetListOfLayers(l_active = True)))
+        self.mapdisplay.GetProgressBar().SetRange(len(self.Map.GetListOfLayers(l_active = True)))
 
         #
         # nviz
@@ -1138,7 +1138,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         #
         # update progress bar range (mapwindow statusbar)
         #
-        self.mapdisplay.statusbarWin['progress'].SetRange(len(self.Map.GetListOfLayers(l_active = True)))
+        self.mapdisplay.GetProgressBar().SetRange(len(self.Map.GetListOfLayers(l_active = True)))
 
         #
         # nviz
@@ -1249,7 +1249,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                UserSettings.Get(group = 'display', key = 'autoZooming', subkey = 'enabled'):
             mapLayer = self.GetPyData(layer)[0]['maplayer']
             if mapLayer.GetType() in ('raster', 'vector'):
-                render = self.mapdisplay.statusbarWin['render'].IsChecked()
+                render = self.mapdisplay.IsAutoRendered()
                 self.mapdisplay.MapWindow.ZoomToMap(layers = [mapLayer,],
                                                     render = render)
         

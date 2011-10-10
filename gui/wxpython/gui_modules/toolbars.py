@@ -1075,9 +1075,9 @@ class VDigitToolbar(AbstractToolbar):
                 UserSettings.Set(group = 'vdigit', key = 'bgmap',
                                  subkey = 'value', value = '', internal = True)
             
-            self.parent.statusbar.SetStatusText(_("Please wait, "
-                                                  "opening vector map <%s> for editing...") % mapLayer.GetName(),
-                                                0)
+            self.parent.SetStatusText(_("Please wait, "
+                                        "opening vector map <%s> for editing...") % mapLayer.GetName(),
+                                        0)
         
         self.parent.MapWindow.pdcVector = wx.PseudoDC()
         self.digit = self.parent.MapWindow.digit = VDigit(mapwindow = self.parent.MapWindow)
@@ -1162,10 +1162,10 @@ class VDigitToolbar(AbstractToolbar):
                         self.digit.Undo(0)
                     dlg.Destroy()
             
-            self.parent.statusbar.SetStatusText(_("Please wait, "
-                                                  "closing and rebuilding topology of "
-                                                  "vector map <%s>...") % self.mapLayer.GetName(),
-                                                0)
+            self.parent.SetStatusText(_("Please wait, "
+                                        "closing and rebuilding topology of "
+                                        "vector map <%s>...") % self.mapLayer.GetName(),
+                                      0)
             self.digit.CloseMap()
             
             lmgr = self.parent.GetLayerManager()
