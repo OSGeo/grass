@@ -58,6 +58,9 @@ class SbManager:
     and call Update method to show particular widgets.
     User settings (group = 'display', key = 'statusbarMode', subkey = 'selection')
     are taken into account.
+    
+    @todo generalize access to UserSettings (specify group, etc.) 
+    @todo add GetMode method using name instead of index
     """
     def __init__(self, mapframe, statusbar):
         """!Connects manager to statusbar
@@ -69,7 +72,7 @@ class SbManager:
         
         self.choice = wx.Choice(self.statusbar, wx.ID_ANY)
         
-        self.statusbar.Bind(wx.EVT_CHOICE, self.OnToggleStatus)
+        self.choice.Bind(wx.EVT_CHOICE, self.OnToggleStatus)
         
         self.statusbarItems = dict()
         
@@ -550,7 +553,7 @@ class SbGoTo(SbItem):
         
         self.widget.Hide()
         
-        self.statusbar.Bind(wx.EVT_TEXT_ENTER, self.OnGoTo)
+        self.widget.Bind(wx.EVT_TEXT_ENTER, self.OnGoTo)
     
     def ReprojectENToMap(self, e, n, useDefinedProjection):
         """!Reproject east, north from user defined projection
@@ -958,3 +961,97 @@ class SbProgress(SbItem):
         """!Sets progress range."""
         self.widget.SetRange(range)
     
+
+class SbGoToGCP(SbItem):
+    """!SpinCtrl to select GCP to focus on
+    
+    Requires MapFrame.GetSrcWindow, MapFrame.GetTgtWindow, MapFrame.GetListCtrl,
+    MapFrame.GetMapCoordList.
+    """
+    
+    def __init__(self, mapframe, statusbar, position = 0):
+        SbItem.__init__(self, mapframe, statusbar, position)
+        self.name = 'gotoGCP'
+        self.label = _("Go to GCP No.")
+
+        self.widget = wx.SpinCtrl(parent = self.statusbar, id = wx.ID_ANY,
+                                                value = "", min = 0)
+        self.widget.Hide()
+        
+        self.widget.Bind(wx.EVT_TEXT_ENTER, self.OnGoToGCP)
+        self.widget.Bind(wx.EVT_SPINCTRL, self.OnGoToGCP)
+    
+    def OnGoToGCP(self, event):
+        """!Zooms to given GCP."""
+        GCPNo = self.GetValue()
+        mapCoords = self.mapFrame.GetMapCoordList()
+        
+        if GCPNo < 0 or GCPNo > len(mapCoords): # always false, spin checks it
+            gcmd.GMessage(parent=self,
+                          message="%s 1 - %s." % (_("Valid Range:"),
+                          len(mapCoords)))
+            return
+
+        if GCPNo == 0:
+            return
+            
+        listCtrl = self.mapFrame.GetListCtrl()
+        
+        listCtrl.selectedkey = GCPNo
+        listCtrl.selected = listCtrl.FindItemData(-1, GCPNo)
+        listCtrl.render = False
+        listCtrl.SetItemState(listCtrl.selected,
+                          wx.LIST_STATE_SELECTED,
+                          wx.LIST_STATE_SELECTED)
+        listCtrl.render = True
+        
+        srcWin = self.mapFrame.GetSrcWindow()
+        tgtWin = self.mapFrame.GetTgtWindow()
+        
+        # Source MapWindow:
+        begin = (mapCoords[GCPNo][1], mapCoords[GCPNo][2])
+        begin = srcWin.Cell2Pixel(begin)
+        end = begin
+        srcWin.Zoom(begin, end, 0)
+
+        # redraw map
+        srcWin.UpdateMap()
+
+        if self.mapFrame.GetShowTarget():
+            # Target MapWindow:
+            begin = (mapCoords[GCPNo][3], mapCoords[GCPNo][4])
+            begin = tgtWin.Cell2Pixel(begin)
+            end = begin
+            tgtWin.Zoom(begin, end, 0)
+
+            # redraw map
+            tgtWin.UpdateMap()
+
+        self.GetWidget().SetFocus()
+    
+    def Update(self):
+        self.statusbar.SetStatusText("")
+        max = self.mapFrame.GetListCtrl().GetItemCount()
+        if max < 1:
+            max = 1
+        self.widget.SetRange(0, max)
+        self.Show()
+                        
+        # disable long help
+        self.mapFrame.StatusbarEnableLongHelp(False)
+        
+class SbRMSError(SbTextItem):
+    """!Shows RMS error.
+    
+    Requires MapFrame.GetFwdError, MapFrame.GetBkwError.
+    """
+    def __init__(self, mapframe, statusbar, position = 0):
+        SbTextItem.__init__(self, mapframe, statusbar, position)
+        self.name = 'RMSError'
+        self.label = _("RMS error")
+        
+    def Show(self):
+        self.SetValue(_("Forward: %(forw)s, Backward: %(back)s") %
+                                   { 'forw' : self.mapFrame.GetFwdError(),
+                                     'back' : self.mapFrame.GetBkwError() })
+        SbTextItem.Show(self)
