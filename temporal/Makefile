@@ -9,6 +9,7 @@ SUBDIRS = \
 	t.time.rel \
 	tr.aggregate \
 	tr.register \
+	tr.list \
 	tr.series \
 	tr.extract \
 	tr3.register \

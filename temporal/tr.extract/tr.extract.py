@@ -117,7 +117,7 @@ def main():
     new_sp.set_initial_values(granularity, temporal_type, semantic_type, title, description)
     new_sp.insert(dbif)
 
-    rows = sp.get_registered_maps(where, "start_time", dbif)
+    rows = sp.get_registered_maps("id", where, "start_time", dbif)
 
     if rows:
 	num_rows = len(rows)
