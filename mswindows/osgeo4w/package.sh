@@ -93,7 +93,7 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 	fi
 
 	log remove old logs
-	rm mswindows/osgeo4w/package.log.[0-9][0-9][0-9]
+	rm -f mswindows/osgeo4w/package.log.[0-9][0-9][0-9]
 
 	log configure
 	./configure \
