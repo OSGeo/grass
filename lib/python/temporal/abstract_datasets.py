@@ -341,6 +341,7 @@ class abstract_map_dataset(abstract_dataset):
         self.set_relative_time(start_time, end_time)
         self.relative_time.update_all(dbif)
         self.base.update(dbif)
+        dbif.connection.commit()
 
         if connect == True:
             dbif.close()
@@ -375,7 +376,10 @@ class abstract_map_dataset(abstract_dataset):
             connect = True
 
         if self.is_in_db(dbif):
-            
+ 
+            # SELECT all needed informations from the database
+            self.select(dbif)
+           
             # First we unregister from all dependent space time datasets
             self.unregister(dbif)
 
@@ -394,6 +398,7 @@ class abstract_map_dataset(abstract_dataset):
             self.base.delete(dbif)
 
         self.reset(None)
+        dbif.connection.commit()
 
         if connect == True:
             dbif.close()
@@ -427,6 +432,8 @@ class abstract_map_dataset(abstract_dataset):
                 # Take care to update the space time dataset after
                 # the map has been unregistred
                 stds.update_from_registered_maps(dbif)
+
+        dbif.connection.commit()
 
         if connect == True:
             dbif.close()
@@ -604,7 +611,7 @@ class abstract_space_time_dataset(abstract_dataset):
 
         obj_list = []
         
-        rows = self.get_registered_maps(where, order, dbif)
+        rows = self.get_registered_maps("id", where, order, dbif)
 
         if rows:
             for row in rows:
@@ -617,11 +624,12 @@ class abstract_space_time_dataset(abstract_dataset):
 
         return obj_list
 
-    def get_registered_maps(self, where = None, order = None, dbif=None):
+    def get_registered_maps(self, columns=None, where = None, order = None, dbif=None):
         """Return sqlite rows of all registered maps.
         
            Each row includes all columns specified in the datatype specific view
 
+           @param columns: Columns to be selected as SQL compliant string
            @param where: The SQL where statement to select a subset of the registered maps without "WHERE"
            @param order: The SQL order statement to be used to order the objects in the list without "ORDER BY"
            @param dbif: The database interface to be used
@@ -645,7 +653,10 @@ class abstract_space_time_dataset(abstract_dataset):
             else:
                 map_view = self.get_new_map_instance(None).get_type() + "_view_rel_time"
 
-            sql = "SELECT * FROM %s  WHERE %s.id IN (SELECT id FROM %s)" % (map_view, map_view, self.get_map_register())
+            if columns:
+                sql = "SELECT %s FROM %s  WHERE %s.id IN (SELECT id FROM %s)" % (columns, map_view, map_view, self.get_map_register())
+            else:
+                sql = "SELECT * FROM %s  WHERE %s.id IN (SELECT id FROM %s)" % (map_view, map_view, self.get_map_register())
 
             if where:
                 sql += " AND %s" % (where)
@@ -669,6 +680,8 @@ class abstract_space_time_dataset(abstract_dataset):
     def delete(self, dbif=None):
         """Delete a space time dataset from the temporal database
 
+           This method removes the space time dataset from the temporal database and drops its map register table
+
            @param dbif: The database interface to be used
         """
         # First we need to check if maps are registered in this dataset and
@@ -683,8 +696,12 @@ class abstract_space_time_dataset(abstract_dataset):
             dbif.connect()
             connect = True
 
+        # SELECT all needed informations from the database
+        self.select(dbif)
+
+        core.verbose(_("Drop map register table: %s") %  (self.get_map_register()))
         if self.get_map_register():
-            rows = self.get_registered_maps(None, None, dbif)
+            rows = self.get_registered_maps("id", None, None, dbif)
             # Unregister each registered map in the table
             if rows:
                 for row in rows:
@@ -692,9 +709,10 @@ class abstract_space_time_dataset(abstract_dataset):
                     map = self.get_new_map_instance(row["id"])
                     self.unregister_map(map, dbif)
             try:
-                # Drop remove the map register table
+                # Drop the map register table
                 sql = "DROP TABLE " + self.get_map_register()
                 dbif.cursor.execute(sql)
+                dbif.connection.commit()
             except:
                 if connect == True:
                     dbif.close()
@@ -791,31 +809,18 @@ class abstract_space_time_dataset(abstract_dataset):
 		else:
 		    dbif.cursor.execute(sql)
             except:
-                try:
-                    # Drop stds register table
-                    sql = "DROP TABLE " + map_register_table
-                    dbif.cursor.execute(sql)
-                except:
-                    if connect == True:
-                        dbif.close()
-                    core.error(_("Unable to drop table <%s>" % (map_register_table)))
-                    raise
-                try:
-		    if dbmi.__name__ == "sqlite3":
-			dbif.cursor.executescript(sql_script)
-		    else:
-			dbif.cursor.execute(sql_script)
-                except:
-                    if connect == True:
-                        dbif.close()
-                    core.error(_("Unable to create the space time %s dataset register table for <%s>") % (map.get_type(), map.get_id()))
-                    raise
+                if connect == True:
+                    dbif.close()
+                core.error(_("Unable to create the space time %s dataset register table for <%s>") % \
+                            (map.get_type(), map.get_id()))
+                raise
 
             # Set the stds register table name and put it into the DB
             map.set_stds_register(map_register_table)
             map.metadata.update(dbif)
             
-            core.verbose(_("Created register table <%s> for %s map <%s>") % (map_register_table, map.get_type(), map.get_id()))
+            core.verbose(_("Created register table <%s> for %s map <%s>") % \
+                          (map_register_table, map.get_type(), map.get_id()))
 
         # We need to create the table and register it
         if stds_register_table == None:
@@ -839,49 +844,20 @@ class abstract_space_time_dataset(abstract_dataset):
 		    dbif.cursor.executescript(sql_script)
 		else:
 		    dbif.cursor.execute(sql_script)
+                dbif.connection.commit()
             except:
-                try:
-                    # Drop map register table
-                    sql = "DROP TABLE " + stds_register_table
-		    print sql
-                    dbif.cursor.execute(sql)
-                except:
-                    if connect == True:
-                        dbif.close()
-                    core.error(_("Unable to drop table <%s>" % (stds_register_table)))
-                    raise
-                try:
-		    if dbmi.__name__ == "sqlite3":
-			dbif.cursor.executescript(sql_script)
-		    else:
-			dbif.cursor.execute(sql_script)
-                except:
-                    if connect == True:
-                        dbif.close()
-                    core.error(_("Unable to create the space time %s dataset register table for <%s>") % (map.get_type(), map.get_id()))
-                    raise
-
-            # Trigger have been disabled due to peformance issues while registration
-            ## We need raster specific trigger
-            #sql = open(os.path.join(sql_path, "stds_" + map.get_type() + "_register_trigger_template.sql"), 'r').read()
-            #sql = sql.replace("GRASS_MAP", map.get_type())
-            #sql = sql.replace("SPACETIME_NAME", stds_name + "_" + stds_mapset )
-            #sql = sql.replace("SPACETIME_ID", self.base.get_id())
-            #sql = sql.replace("STDS", self.get_type())
-
-            #sql_script = ""
-            #sql_script += "BEGIN TRANSACTION;\n"
-            #sql_script += sql
-            #sql_script += "\n"
-            #sql_script += "END TRANSACTION;"
-
-            #dbif.cursor.executescript(sql_script)
+                if connect == True:
+                    dbif.close()
+                core.error(_("Unable to create the space time %s dataset register table for <%s>") % \
+                            (map.get_type(), map.get_id()))
+                raise
 
             # Set the map register table name and put it into the DB
             self.set_map_register(stds_register_table)
             self.metadata.update(dbif)
 
-            core.verbose(_("Created register table <%s> for space time %s  dataset <%s>") % (stds_register_table, map.get_type(), self.get_id()))
+            core.verbose(_("Created register table <%s> for space time %s  dataset <%s>") % \
+                          (stds_register_table, map.get_type(), self.get_id()))
 
         # Register the stds in the map stds register table
         # Check if the entry is already there

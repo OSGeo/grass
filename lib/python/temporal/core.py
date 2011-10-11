@@ -24,21 +24,47 @@ import os
 import copy
 from datetime import datetime, date, time, timedelta
 import grass.script.core as core
-# The import should be decided by grass environmental variables
-import sqlite3 as dbmi
-#import psycopg2 as dbmi
-# Needed for dictionary like cursors
-#import psycopg2.extras
 
 ###############################################################################
 
-def get_grass_location_db_path():
+def get_temporal_dbmi_default_path(grassenv):
+    dbpath = os.path.join(grassenv["GISDBASE"], grassenv["LOCATION_NAME"])
+    dbpath = os.path.join(dbpath, "PERMANENT")
+    return os.path.join(dbpath, "grass.db")
+
+
+# The chosen DBMI backend can be defined on runtime
+# Check the grass environment before import
+grassenv = core.gisenv()
+if grassenv.has_key("TDBMI"):
+    if grassenv["TDBMI"] == "sqlite3":
+        import sqlite3 as dbmi
+    elif grassenv["TDBMI"] == "psycopg2":
+        import psycopg2 as dbmi
+        # Needed for dictionary like cursors
+        import psycopg2.extras
+    else:
+        core.fatal(_("Unable to initialize the temporal DBMI interface: %s. \nPlease set g.gisenv set=\"TDBMI=sqlite3\" or g.gisenv set=\"TDBMI=psycopg2\"") % grassenv["TDBMI"])
+else:
+    # Use the default sqlite variable
+    import sqlite3 as dbmi
+    core.run_command("g.gisenv", set="TDBMI=sqlite3")
+    core.run_command("g.gisenv", set="TDBMI_INIT=%s" % get_temporal_dbmi_default_path(grassenv))
+
+###############################################################################
+
+def get_temporal_dbmi_init_string():
+    grassenv = core.gisenv()
     if dbmi.__name__ == "sqlite3":
-	grassenv = core.gisenv()
-	dbpath = os.path.join(grassenv["GISDBASE"], grassenv["LOCATION_NAME"])
-	return os.path.join(dbpath, "grass.db")
+        if grassenv.has_key("TDBMI_INIT"):
+            return grassenv["TDBMI_INIT"]
+        else:
+            return get_temporal_dbmi_default_path(grassenv)
     elif dbmi.__name__ == "psycopg2":
-	return "dbname=grass_test user=soeren password=abcdefgh"
+        if grassenv.has_key("TDBMI_INIT"):
+            return grassenv["TDBMI_INIT"]
+        else:
+	    return "dbname=grass_test user=soeren password=abcdefgh"
 
 ###############################################################################
 
@@ -56,7 +82,7 @@ def create_temporal_database():
        This functions must be called befor any spatio-temporal processing is started
     """
     
-    database = get_grass_location_db_path()
+    database = get_temporal_dbmi_init_string()
 
     db_exists = False
 
