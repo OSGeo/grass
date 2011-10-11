@@ -142,12 +142,12 @@ int main(int argc, char *argv[])
 	strcat(p, menu[i].name);
     }
     opt_measure = G_define_option();
-    opt_measure->key = "measure";
+    opt_measure->key = "method";
     opt_measure->type = TYPE_STRING;
     opt_measure->required = NO;
     opt_measure->multiple = YES;
     opt_measure->options = p;
-    opt_measure->description = _("Textural measurement");
+    opt_measure->description = _("Textural measurement method");
 
     flag_ind = G_define_flag();
     flag_ind->key = 's';
