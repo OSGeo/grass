@@ -199,7 +199,7 @@ class sql_database_interface(dict_sql_serializer):
 
         self.table = table # Name of the table, set in the subclass
         if database == None:
-            self.database = get_grass_location_db_path()
+            self.database = get_temporal_dbmi_init_string()
         else:
             self.database = database
         self.ident = ident
