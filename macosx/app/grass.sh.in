@@ -34,9 +34,9 @@ grass_ver=`cut -d . -f 1-2 "$GISBASE/etc/VERSIONNUMBER"`
 #override config dir.
 GRASS_CONFIG_DIR="Library/Preferences/GRASS/$grass_Ver"
 
-GISBASE_USER="$HOME/Library/Application Support/GRASS/$grass_ver"
+GISBASE_USER="$HOME/Library/GRASS/$grass_ver"
 export GISBASE_USER
-GISBASE_SYSTEM="/Library/Application Support/GRASS/$grass_ver"
+GISBASE_SYSTEM="/Library/GRASS/$grass_ver"
 export GISBASE_SYSTEM
 
 # for extra utils
