@@ -91,7 +91,7 @@ def main():
 
     sp.select()
 
-    rows = sp.get_registered_maps(where, sort, None)
+    rows = sp.get_registered_maps("id", where, sort, None)
 
     if rows:
         # Create the r.series input file

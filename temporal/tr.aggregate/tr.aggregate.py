@@ -82,7 +82,7 @@ def collect_map_names(sp, dbif, start, end):
 
     print where
     
-    rows = sp.get_registered_maps(where, "start_time", dbif)
+    rows = sp.get_registered_maps("id", where, "start_time", dbif)
 
     if not rows:
         return None
@@ -107,7 +107,10 @@ def main():
 
     # Make sure the temporal database exists
     tgis.create_temporal_database()
-    
+    # We need a database interface
+    dbif = tgis.sql_database_interface()
+    dbif.connect()
+   
     mapset =  grass.gisenv()["MAPSET"]
 
     if input.find("@") >= 0:
@@ -118,10 +121,8 @@ def main():
     sp = tgis.space_time_raster_dataset(id)
     
     if sp.is_in_db() == False:
+        dbif.close()
         grass.fatal(_("Dataset <%s> not found in temporal database") % (id))
-
-    dbif = tgis.sql_database_interface()
-    dbif.connect()
 
     sp.select(dbif)
 
@@ -132,20 +133,22 @@ def main():
 
     # The new space time raster dataset
     new_sp = tgis.space_time_raster_dataset(out_id)
-    if new_sp.is_in_db():
+    if new_sp.is_in_db(dbif):
         if grass.overwrite() == True:
             new_sp.delete(dbif)
             new_sp = tgis.space_time_raster_dataset(out_id)
         else:
+            dbif.close()
             grass.fatal(_("Space time raster dataset <%s> is already in database, use overwrite flag to overwrite") % out_id)
 
     granularity, temporal_type, semantic_type, title, description = sp.get_initial_values()
     new_sp.set_initial_values(gran, temporal_type, semantic_type, title, description)
     new_sp.insert(dbif)
 
-    rows = sp.get_registered_maps(where, "start_time", dbif)
+    rows = sp.get_registered_maps("id,start_time", where, "start_time", dbif)
 
     if not rows:
+            dbif.close()
             grass.fatal(_("Space time raster dataset <%s> is empty") % out_id)
 
     # Modify the start time to fit the granularity
@@ -222,8 +225,8 @@ def main():
 
             new_sp.register_map(new_map, dbif)
 
-        # Update the spatio-temporal extent and the raster metadata table entries
-        new_sp.update_from_registered_maps(dbif)
+    # Update the spatio-temporal extent and the raster metadata table entries
+    new_sp.update_from_registered_maps(dbif)
         
     dbif.close()
 

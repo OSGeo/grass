@@ -24,7 +24,7 @@
 #% key: dataset
 #% type: string
 #% description: Name of an existing space time or map dataset
-#% required: yes
+#% required: no
 #% multiple: no
 #%end
 
@@ -47,6 +47,12 @@
 #% description: Print temporal relation matrix for space time datasets
 #%end
 
+#%flag
+#% key: s
+#% description: Print information about the temporal DBMI interface and exit
+#%end
+
+
 import grass.script as grass
 import grass.temporal as tgis
 
@@ -59,11 +65,24 @@ def main():
     type = options["type"]
     shellstyle = flags['g']
     tmatrix = flags['t']
+    system = flags['s']
 
-  # Make sure the temporal database exists
+    # Make sure the temporal database exists
     tgis.create_temporal_database()
 
     #Get the current mapset to create the id of the space time dataset
+
+    if system:
+        #      0123456789012345678901234567890
+        print " +------------------- Temporal DBMI backend information ----------------------+"
+        print " | DBMI Python interface:...... " + str(tgis.dbmi.__name__)
+        print " | DBMI init string:........... " + str(tgis.get_temporal_dbmi_init_string())
+        print " | SQL template path:.......... " + str(tgis.get_sql_template_path())
+        print " +----------------------------------------------------------------------------+"
+        return
+
+    if not system and not name:
+        grass.fatal(_("Please specify %s=") % ("name"))
 
     if name.find("@") >= 0:
         id = name
