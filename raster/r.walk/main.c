@@ -103,7 +103,7 @@
 #include <fcntl.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
-#include <grass/site.h>
+#include <grass/vector.h>
 #include <grass/segment.h>
 #include <grass/glocale.h>
 #include "cost.h"
@@ -332,7 +332,7 @@ int main(int argc, char *argv[])
 	dir_out_file = G_tempfile();
 
     /* Get database window parameters */
-    G_get_window(&window);
+    Rast_get_window(&window);
 
     /* Find north-south, east_west and diagonal factors */
     EW_fac = window.ew_res;	/* Must be the physical distance */
@@ -711,26 +711,45 @@ int main(int argc, char *argv[])
 
     /* read vector with start points */
     if (opt7->answer) {
-	struct Map_info *fp;
+	struct Map_info In;
+	struct line_pnts *Points;
+	struct line_cats *Cats;
+	struct bound_box box;
 	struct start_pt *new_start_pt;
-	Site *site = NULL;	/* pointer to Site */
-	int got_one = 0;
-	int dims, strs, dbls;
-	RASTER_MAP_TYPE cat;
+	int type, got_one = 0;
 
-	fp = G_fopen_sites_old(opt7->answer, "");
+	G_message(_("Reading vector map <%s> with start points..."), opt7->answer);
 
-	if (G_site_describe(fp, &dims, &cat, &strs, &dbls))
-	    G_fatal_error(_("Failed to guess site file format"));
-	site = G_site_new_struct(cat, dims, strs, dbls);
+	Points = Vect_new_line_struct();
+	Cats = Vect_new_cats_struct();
 
-	for (; (G_site_get(fp, site) != EOF);) {
-	    if (!G_site_in_region(site, &window))
+	Vect_set_open_level(1); /* topology not required */
+
+	if (1 > Vect_open_old(&In, opt7->answer, ""))
+	    G_fatal_error(_("Unable to open vector map <%s>"), opt7->answer);
+
+	Vect_rewind(&In);
+
+	Vect_region_box(&window, &box);
+
+	while (1) {
+	    /* register line */
+	    type = Vect_read_next_line(&In, Points, Cats);
+
+	    /* Note: check for dead lines is not needed, because they are skipped by V1_read_next_line_nat() */
+	    if (type == -1) {
+		G_warning(_("Unable to read vector map"));
+		continue;
+	    }
+	    else if (type == -2) {
+		break;
+	    }
+	    if (!Vect_point_in_box(Points->x[0], Points->y[0], 0, &box))
 		continue;
 	    got_one = 1;
 
-	    col = (int)Rast_easting_to_col(site->east, &window);
-	    row = (int)Rast_northing_to_row(site->north, &window);
+	    col = (int)Rast_easting_to_col(Points->x[0], &window);
+	    row = (int)Rast_northing_to_row(Points->y[0], &window);
 
 	    new_start_pt =
 		(struct start_pt *)(G_malloc(sizeof(struct start_pt)));
@@ -750,8 +769,7 @@ int main(int argc, char *argv[])
 	    }
 	}
 
-	G_site_free_struct(site);
-	G_sites_close(fp);
+	Vect_close(&In);
 
 	if (!got_one)
 	    G_fatal_error(_("No start points found in vector <%s>"), opt7->answer);
@@ -759,25 +777,45 @@ int main(int argc, char *argv[])
 
     /* read vector with stop points */
     if (opt8->answer) {
-	struct Map_info *fp;
+	struct Map_info In;
+	struct line_pnts *Points;
+	struct line_cats *Cats;
+	struct bound_box box;
 	struct start_pt *new_start_pt;
-	Site *site = NULL;	/* pointer to Site */
-	int dims, strs, dbls;
-	RASTER_MAP_TYPE cat;
+	int type;
 
-	fp = G_fopen_sites_old(opt8->answer, "");
+	G_message(_("Reading vector map <%s> with stop points..."), opt8->answer);
 
-	if (G_site_describe(fp, &dims, &cat, &strs, &dbls))
-	    G_fatal_error("Failed to guess site file format\n");
-	site = G_site_new_struct(cat, dims, strs, dbls);
+	Points = Vect_new_line_struct();
+	Cats = Vect_new_cats_struct();
 
-	for (; (G_site_get(fp, site) != EOF);) {
-	    if (!G_site_in_region(site, &window))
+	Vect_set_open_level(1); /* topology not required */
+
+	if (1 > Vect_open_old(&In, opt8->answer, ""))
+	    G_fatal_error(_("Unable to open vector map <%s>"), opt8->answer);
+
+	Vect_rewind(&In);
+
+	Vect_region_box(&window, &box);
+
+	while (1) {
+	    /* register line */
+	    type = Vect_read_next_line(&In, Points, Cats);
+
+	    /* Note: check for dead lines is not needed, because they are skipped by V1_read_next_line_nat() */
+	    if (type == -1) {
+		G_warning(_("Unable to read vector map"));
+		continue;
+	    }
+	    else if (type == -2) {
+		break;
+	    }
+	    if (!Vect_point_in_box(Points->x[0], Points->y[0], 0, &box))
 		continue;
 	    have_stop_points = 1;
 
-	    col = (int)Rast_easting_to_col(site->east, &window);
-	    row = (int)Rast_northing_to_row(site->north, &window);
+	    col = (int)Rast_easting_to_col(Points->x[0], &window);
+	    row = (int)Rast_northing_to_row(Points->y[0], &window);
 
 	    new_start_pt =
 		(struct start_pt *)(G_malloc(sizeof(struct start_pt)));
@@ -797,11 +835,10 @@ int main(int argc, char *argv[])
 	    }
 	}
 
-	G_site_free_struct(site);
-	G_sites_close(fp);
+	Vect_close(&In);
 
 	if (!have_stop_points)
-	    G_fatal_error(_("No stop points found in vector <%s>"), opt7->answer);
+	    G_fatal_error(_("No stop points found in vector <%s>"), opt8->answer);
     }
 
     /* read raster with start points */
