@@ -174,7 +174,8 @@ if [ -n "$PACKAGE" ]; then
 	$SRC/mswindows/osgeo4w/grass.bat.tmpl >$OSGEO4W_ROOT_MSYS/bin/grass$MAJOR$MINOR.bat.tmpl
     sed -e "s#@VERSION@#$VERSION#g" -e "s#@OSGEO4W_ROOT_MSYS@#@OSGEO4W_ROOT@#g" -e "s#@POSTFIX@#$MAJOR$MINOR#g" \
 	$SRC/mswindows/osgeo4w/grass.tmpl >$OSGEO4W_ROOT_MSYS/bin/grass$MAJOR$MINOR.tmpl
-    
+
+    # grass package
     tar -cjf $PDIR/grass-$VERSION-$PACKAGE.tar.bz2 \
     apps/grass/grass-$VERSION \
     bin/grass$MAJOR$MINOR.bat.tmpl \
@@ -188,9 +189,21 @@ if [ -n "$PACKAGE" ]; then
     rm bin/grass$MAJOR$MINOR.tmpl
     rm bin/grass$MAJOR$MINOR.bat.tmpl
     
-    cd $PDIR/.. 
-    svn diff >/tmp/grass-$VERSION.diff
-    tar -C /tmp -cjf $PDIR/grass-$VERSION-$PACKAGE-src.tar.bz2 grass-$VERSION.diff
+    # grass-devel package
+    tar -cjf $PDIR/grass-devel-$VERSION-$PACKAGE.tar.bz2 \
+    apps/grass/grass-$VERSION/include
+    
+    # grass-devel-mingw package
+    tar -cjf $PDIR/grass-devel-mingw-$VERSION-$PACKAGE.tar.bz2 \
+    apps/grass/grass-$VERSION/lib/*.a
+    
+    # grass-devel-vc package
+    tar -cjf $PDIR/grass-devel-vc-$VERSION-$PACKAGE.tar.bz2 \
+    apps/grass/grass-$VERSION/lib/*.lib
+    
+    # grass-locale package
+    tar -cjf $PDIR/grass-locale-$VERSION-$PACKAGE.tar.bz2 \
+    apps/grass/grass-$VERSION/locale
 fi
 
 log 
