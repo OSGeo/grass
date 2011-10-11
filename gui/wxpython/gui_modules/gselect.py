@@ -405,7 +405,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                 item = self.FindItem(item, text, startLetters = startletters)
                 if wx.TreeItemId.IsOk(item):
                     return item
-            elif startletters and self.seltree.GetItemText(item).startswith(text.split('@')[0]):
+            elif startletters and self.seltree.GetItemText(item).startswith(text.split('@', 1)[0]):
                 return item
             item, cookie = self.seltree.GetNextChild(parentItem, cookie)
         return wx.TreeItemId()
@@ -471,8 +471,9 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                 self.value = [] 
             else:
                 mapsetItem = self.seltree.GetItemParent(item)
-                fullName = self.seltree.GetItemText(item) + '@' \
-                            + self.seltree.GetItemText(mapsetItem).split(' ', 1)[1]
+                fullName = self.seltree.GetItemText(item) + '@' + \
+                    self.seltree.GetItemText(mapsetItem).split(':', -1)[1].strip()
+                
                 if self.multiple is True:
                     # text item should be unique
                     self.value.append(fullName)
@@ -502,7 +503,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
             else:
                 mapsetItem = self.seltree.GetItemParent(item)
                 fullName = self.seltree.GetItemText(item) + '@' + \
-                    self.seltree.GetItemText(mapsetItem).split(' ', 1)[1]
+                    self.seltree.GetItemText(mapsetItem).split(':', -1)[1].strip()
                 
                 if self.multiple is True:
                     # text item should be unique
