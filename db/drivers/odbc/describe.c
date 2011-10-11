@@ -66,7 +66,8 @@ int describe_table(stmt, table)
      dbTable **table;
 {
     dbColumn *column;
-    int col, intval;
+    int col;
+    SQLLEN intval;
     SQLUSMALLINT ncols;
     SQLRETURN ret;
     SQLCHAR charval[100];
