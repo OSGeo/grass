@@ -8,7 +8,7 @@ PYDIR = $(ETC)/python
 GDIR = $(PYDIR)/grass
 DSTDIR = $(GDIR)/temporal
 
-MODULES = base core abstract_datasets space_time_datasets metadata spatial_extent temporal_extent datetime_math
+MODULES = base core abstract_dataset abstract_map_dataset abstract_space_time_dataset space_time_datasets space_time_datasets_tools metadata spatial_extent temporal_extent datetime_math
 
 PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
 PYCFILES := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__)
