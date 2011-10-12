@@ -629,7 +629,7 @@ def list_grouped(type, check_search_path = True):
     mapset_re = re.compile("<(.*)>")
     result = {}
     if check_search_path:
-        for mapset in mapsets(searchPath = True):
+        for mapset in mapsets(search_path = True):
             result[mapset] = []
     
     mapset = None
@@ -712,7 +712,7 @@ def mlist_grouped(type, pattern = None, check_search_path = True):
     """
     result = {}
     if check_search_path:
-        for mapset in mapsets(searchPath = True):
+        for mapset in mapsets(search_path = True):
             result[mapset] = []
     
     mapset = None
@@ -875,14 +875,14 @@ def float_or_dms(s):
 
 # interface to g.mapsets
 
-def mapsets(searchPath = False):
+def mapsets(search_path = False):
     """!List available mapsets
 
     @param searchPatch True to list mapsets only in search path
     
     @return list of mapsets
     """
-    if searchPath:
+    if search_path:
         flags = 'p'
     else:
         flags = 'l'
