@@ -82,26 +82,17 @@ class MapFrameBase(wx.Frame):
     """
     def __init__(self, parent = None, id = wx.ID_ANY, title = None,
                  style = wx.DEFAULT_FRAME_STYLE, toolbars = None,
-                 tree = None, notebook = None, lmgr = None, page = None,
                  Map = None, auimgr = None, name = None, **kwargs):
         """!
-        
         @param toolbars array of activated toolbars, e.g. ['map', 'digit']
-        @param tree reference to layer tree
-        @param notebook control book ID in Layer Manager
-        @param lmgr Layer Manager
-        @param page notebook page with layer tree
         @param Map instance of render.Map
         @param auimgs AUI manager
         @param name frame name
         @param kwargs wx.Frame attributes
         """
         
-        self._layerManager = lmgr   # Layer Manager object
+
         self.Map        = Map       # instance of render.Map
-        self.tree       = tree      # Layer Manager layer tree object
-        self.page       = page      # Notebook page holding the layer tree
-        self.layerbook  = notebook  # Layer Manager layer tree notebook
         self.parent     = parent
         
         wx.Frame.__init__(self, parent, id, title, style = style, name = name, **kwargs)
@@ -129,7 +120,21 @@ class MapFrameBase(wx.Frame):
         # Fancy gui
         #
         self._mgr = wx.aui.AuiManager(self)
-	
+        
+    def _initMap(self, map):
+        """!Initialize map display, set dimensions and map region
+        """
+        if not grass.find_program('g.region', ['--help']):
+            sys.exit(_("GRASS module '%s' not found. Unable to start map "
+                       "display window.") % 'g.region')
+        
+        self.width, self.height = self.GetClientSize()
+        
+        Debug.msg(2, "MapFrame._initMap():")
+        map.ChangeMapSize(self.GetClientSize())
+        map.region = map.GetRegion() # g.region -upgc
+        # self.Map.SetRegion() # adjust region to match display window
+        
     def SetProperty(self, name, value):
         """!Sets property"""
         self.statusbarManager.SetProperty(name, value)
@@ -225,7 +230,7 @@ class MapFrameBase(wx.Frame):
         Progress bar can be used by other classes.
         """
         return self.statusbarManager.GetProgressBar()
-	
+        
     def GetRender(self):
         """!Returns current instance of render.Map()
         
@@ -241,32 +246,40 @@ class MapFrameBase(wx.Frame):
     def GetWindow(self):
         """!Get map window"""
         return self.MapWindow
-	
+        
+    def GetMapToolbar(self):
+       """!Returns toolbar with zooming tools"""
+       raise NotImplementedError()
+       
     def StatusbarUpdate(self):
         """!Update statusbar content"""
         self.statusbarManager.Update()
-	
+        
     def IsAutoRendered(self):
         """!Check if auto-rendering is enabled"""
         return self.GetProperty('render')
-            
+        
     def CoordinatesChanged(self):
         """!Shows current coordinates on statusbar.
         
         Used in BufferedWindow to report change of map coordinates (under mouse cursor).
         """
         self.statusbarManager.ShowItem('coordinates')
-	
+        
     def StatusbarReposition(self):
         """!Reposition items in statusbar"""
         self.statusbarManager.Reposition()
-	
+        
     def StatusbarEnableLongHelp(self, enable = True):
         """!Enable/disable toolbars long help"""
         for toolbar in self.toolbars.itervalues():
             if toolbar:
                 toolbar.EnableLongHelp(enable)
-		
+        
+    def IsStandalone(self):
+        """!Check if Map display is standalone"""
+        raise NotImplementedError("IsStandalone")
+        
 class MapFrame(MapFrameBase):
     """!Main frame for map display window. Drawing takes place in
     child double buffered drawing window.
@@ -288,9 +301,12 @@ class MapFrame(MapFrameBase):
         @param kwargs wx.Frame attributes
         """
         MapFrameBase.__init__(self, parent = parent, title = title, toolbars = toolbars,
-                              tree = tree, notebook = notebook, lmgr = lmgr, page = page,
                               Map = Map, auimgr = auimgr, name = name, **kwargs)
         
+        self._layerManager = lmgr   # Layer Manager object
+        self.tree       = tree      # Layer Manager layer tree object
+        self.page       = page      # Notebook page holding the layer tree
+        self.layerbook  = notebook  # Layer Manager layer tree notebook
         #
         # Add toolbars
         #
@@ -354,7 +370,7 @@ class MapFrame(MapFrameBase):
         #
         # initialize region values
         #
-        self._initDisplay() 
+        self._initMap(map = self.Map) 
 
         #
         # Bind various events
@@ -632,20 +648,6 @@ class MapFrame(MapFrameBase):
         if self._mgr.GetPane(name).IsOk():
             return self._mgr.GetPane(name).IsShown()
         return False
-    
-    def _initDisplay(self):
-        """!Initialize map display, set dimensions and map region
-        """
-        if not grass.find_program('g.region', ['--help']):
-            sys.exit(_("GRASS module '%s' not found. Unable to start map "
-                       "display window.") % 'g.region')
-        
-        self.width, self.height = self.GetClientSize()
-        
-        Debug.msg(2, "MapFrame._initDisplay():")
-        self.Map.ChangeMapSize(self.GetClientSize())
-        self.Map.region = self.Map.GetRegion() # g.region -upgc
-        # self.Map.SetRegion() # adjust region to match display window
         
     def OnUpdateProgress(self, event):
         """!Update progress bar info
@@ -670,7 +672,6 @@ class MapFrame(MapFrameBase):
                 if pgnum > -1:
                     self.layerbook.SetSelection(pgnum)
                     self._layerManager.curr_page = self.layerbook.GetCurrentPage()
-                    self.layerbook
         
         event.Skip()
         
@@ -1683,6 +1684,10 @@ class MapFrame(MapFrameBase):
         @return None (if standalone)
         """
         return self._layerManager
+    
+    def GetMapToolbar(self):
+        """!Returns toolbar with zooming tools"""
+        return self.toolbars['map']
     
 class MapApp(wx.App):
     def OnInit(self):

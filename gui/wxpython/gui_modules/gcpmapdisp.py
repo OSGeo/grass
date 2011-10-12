@@ -86,9 +86,12 @@ class MapFrame(MapFrameBase):
         """
         
         MapFrameBase.__init__(self, parent = parent, title = title, toolbars = toolbars,
-                              tree = tree, notebook = notebook, lmgr = lmgr, page = page,
                               Map = Map, auimgr = auimgr, name = name, **kwargs)
         
+        self._layerManager = lmgr   # Layer Manager object
+        self.tree       = tree      # Layer Manager layer tree object
+        self.page       = page      # Notebook page holding the layer tree
+        self.layerbook  = notebook  # Layer Manager layer tree notebook
         #
         # Add toolbars
         #
@@ -158,7 +161,8 @@ class MapFrame(MapFrameBase):
         #
         # initialize region values
         #
-        self.__InitDisplay() 
+        self._initMap(map = self.SrcMap) 
+        self._initMap(map = self.TgtMap) 
 
         #
         # Bind various events
@@ -283,22 +287,6 @@ class MapFrame(MapFrameBase):
                               CloseButton(False).Layer(2))
             
         self._mgr.Update()
-
-    def __InitDisplay(self):
-        """
-        Initialize map display, set dimensions and map region
-        """
-        self.width, self.height = self.GetClientSize()
-
-        Debug.msg(2, "MapFrame.__InitDisplay():")
-        self.grwiz.SwitchEnv('source')
-        self.SrcMap.ChangeMapSize(self.GetClientSize())
-        self.SrcMap.region = self.SrcMap.GetRegion() # g.region -upgc
-        self.grwiz.SwitchEnv('target')
-        self.TgtMap.ChangeMapSize(self.GetClientSize())
-        self.TgtMap.region = self.TgtMap.GetRegion() # g.region -upgc
-        # self.SrcMap.SetRegion() # adjust region to match display window
-        # self.TgtMap.SetRegion() # adjust region to match display window
 
     def OnUpdateProgress(self, event):
         """
@@ -695,5 +683,9 @@ class MapFrame(MapFrameBase):
     
     def GetShowTarget(self):
         return self.show_target
+        
+    def GetMapToolbar(self):
+        """!Returns toolbar with zooming tools"""
+        return self.toolbars['gcpdisp']
         
 # end of class MapFrame
