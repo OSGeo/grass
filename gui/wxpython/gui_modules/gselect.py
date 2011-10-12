@@ -329,7 +329,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         
         # list of mapsets in current location
         if mapsets is None:
-            mapsets = grass.mapsets()
+            mapsets = grass.mapsets(searchPath = True)
         
         # current mapset first
         if curr_mapset in mapsets and mapsets[0] != curr_mapset:

@@ -122,7 +122,7 @@ def db_select(table, sql, file = False, **args):
         fatal(_("Fetching data from table <%s> failed") % table)
 
     ofile = open(fname)
-    result = ofile.readlines()
+    result = map(lambda x: x.rstrip(os.linesep), ofile.readlines())
     ofile.close()
     try_remove(fname)
         
