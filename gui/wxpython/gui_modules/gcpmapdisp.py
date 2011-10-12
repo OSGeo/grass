@@ -95,12 +95,6 @@ class MapFrame(MapFrameBase):
         #
         # Add toolbars
         #
-        self.toolbars = { 'map' : None,
-                          'vdigit' : None,
-                          'gcpdisp' : None, 
-                          'gcpman' : None, 
-                          'nviz' : None }
-
         for toolb in toolbars:
             self.AddToolbar(toolb)
 

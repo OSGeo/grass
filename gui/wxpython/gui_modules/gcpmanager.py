@@ -1787,7 +1787,7 @@ class GCP(MapFrame, ColumnSorterMixin):
     def UpdateActive(self, win):
 
         # optionally disable tool zoomback tool
-        self.toolbars['gcpdisp'].Enable('zoomback', enable = (len(self.MapWindow.zoomhistory) > 1))
+        self.GetMapToolbar().Enable('zoomback', enable = (len(self.MapWindow.zoomhistory) > 1))
 
         if self.activemap.GetSelection() != (win == self.TgtMapWindow):
             self.activemap.SetSelection(win == self.TgtMapWindow)
@@ -1883,7 +1883,7 @@ class GCP(MapFrame, ColumnSorterMixin):
     def OnDispResize(self, event):
         """!GCP Map Display resized, adjust Map Windows
         """
-        if self.toolbars['gcpdisp']:
+        if self.GetMapToolbar():
             srcwidth, srcheight = self.SrcMapWindow.GetSize()
             tgtwidth, tgtheight = self.TgtMapWindow.GetSize()
             srcwidth = (srcwidth + tgtwidth) / 2
@@ -2758,7 +2758,7 @@ class GrSettingsDialog(wx.Dialog):
                     self.parent.show_target = True
                     self.parent._mgr.GetPane("target").Show()
                     self.parent._mgr.Update()
-                    self.parent.toolbars['gcpdisp'].Enable('zoommenu', enable = True)
+                    self.parent.GetMapToolbar().Enable('zoommenu', enable = True)
                     self.parent.activemap.Enable()
                     self.parent.TgtMapWindow.ZoomToMap(layers = self.parent.TgtMap.GetListOfLayers())
             else: # tgt_map == ''
@@ -2768,7 +2768,7 @@ class GrSettingsDialog(wx.Dialog):
                     self.parent._mgr.Update()
                     self.parent.activemap.SetSelection(0)
                     self.parent.activemap.Enable(False)
-                    self.parent.toolbars['gcpdisp'].Enable('zoommenu', enable = False)
+                    self.parent.GetMapToolbar().Enable('zoommenu', enable = False)
 
         self.parent.UpdateColours(srcrender, srcrenderVector, tgtrender, tgtrenderVector)
 

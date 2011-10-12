@@ -1318,7 +1318,7 @@ class BufferedWindow(MapWindow, wx.Window):
                 not self.parent.IsStandalone() and \
                 self.parent.GetLayerManager().gcpmanagement:
             # -> GCP manager
-            if self.parent.toolbars['gcpdisp']:
+            if self.parent.GetToolbar('gcpdisp'):
                 coord = self.Pixel2Cell(self.mouse['end'])
                 if self.parent.MapWindow == self.parent.SrcMapWindow:
                     coordtype = 'source'
@@ -1444,7 +1444,7 @@ class BufferedWindow(MapWindow, wx.Window):
         """
         if not self.parent.IsStandalone() and \
                 self.parent.GetLayerManager().gcpmanagement:
-            if self.parent.toolbars['gcpdisp']:
+            if self.parent.GetToolbar('gcpdisp'):
                 if not self.parent.MapWindow == self:
                     self.parent.MapWindow = self
                     self.parent.Map = self.Map

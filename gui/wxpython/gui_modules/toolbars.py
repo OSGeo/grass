@@ -124,7 +124,7 @@ class AbstractToolbar(wx.ToolBar):
             return
         
         if hasattr(self.parent, 'toolbars'):
-            if self.parent.toolbars['vdigit']:
+            if self.parent.GetToolbar('vdigit'):
                 # update vdigit toolbar (unselect currently selected tool)
                 id = self.parent.toolbars['vdigit'].GetAction(type = 'id')
                 self.parent.toolbars['vdigit'].ToggleTool(id, False)
@@ -374,13 +374,13 @@ class MapToolbar(AbstractToolbar):
             self.parent.AddNviz()
             
         elif tool == self.toolId['vdigit'] and \
-                not self.parent.toolbars['vdigit']:
+                not self.parent.GetToolbar('vdigit'):
             self.ExitToolbars()
             self.parent.AddToolbar("vdigit")
             self.parent.MapWindow.SetFocus()
         
     def ExitToolbars(self):
-        if self.parent.toolbars['vdigit']:
+        if self.parent.GetToolbar('vdigit'):
             self.parent.toolbars['vdigit'].OnExit()
         if self.parent.GetLayerManager().IsPaneShown('toolbarNviz'):
             self.parent.RemoveNviz()
