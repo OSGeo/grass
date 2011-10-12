@@ -297,6 +297,100 @@ class MapFrameBase(wx.Frame):
         """
         raise NotImplementedError("OnRender")
         
+    def OnDraw(self, event):
+        """!Re-display current map composition
+        """
+        self.MapWindow.UpdateMap(render = False)
+        
+    def OnErase(self, event):
+        """!Erase the canvas
+        """
+        self.MapWindow.EraseMap()
+        
+    def OnZoomIn(self, event):
+        """!Zoom in the map.
+        Set mouse cursor, zoombox attributes, and zoom direction
+        """
+        toolbar = self.GetMapToolbar()
+        self._switchTool(toolbar, event)
+        
+        win = self.GetWindow()
+        self._prepareZoom(mapWindow = win, zoomType = 1)
+        
+    def OnZoomOut(self, event):
+        """!Zoom out the map.
+        Set mouse cursor, zoombox attributes, and zoom direction
+        """
+        toolbar = self.GetMapToolbar()
+        self._switchTool(toolbar, event)
+        
+        win = self.GetWindow()
+        self._prepareZoom(mapWindow = win, zoomType = -1)
+        
+    def _prepareZoom(self, mapWindow, zoomType):
+        """!Prepares MapWindow for zoom, toggles toolbar
+        
+        @param mapWindow MapWindow to prepare
+        @param zoomType 1 for zoom in, -1 for zoom out
+        """
+        mapWindow.mouse['use'] = "zoom"
+        mapWindow.mouse['box'] = "box"
+        mapWindow.zoomtype = zoomType
+        mapWindow.pen = wx.Pen(colour = 'Red', width = 2, style = wx.SHORT_DASH)
+        
+        # change the cursor
+        mapWindow.SetCursor(self.cursors["cross"])
+    
+    def _switchTool(self, toolbar, event):
+        """!Helper function to switch tools"""
+        if toolbar:
+            toolbar.OnTool(event)
+            toolbar.action['desc'] = ''
+            
+    def OnPan(self, event):
+        """!Panning, set mouse to drag
+        """
+        toolbar = self.GetMapToolbar()
+        self._switchTool(toolbar, event)
+        
+        win = self.GetWindow()
+        self._preparePan(mapWindow = win)
+    
+    def _preparePan(self, mapWindow):
+        """!Prepares MapWindow for pan, toggles toolbar
+        
+        @param mapWindow MapWindow to prepare
+        """
+        mapWindow.mouse['use'] = "pan"
+        mapWindow.mouse['box'] = "pan"
+        mapWindow.zoomtype = 0
+        
+        # change the cursor
+        mapWindow.SetCursor(self.cursors["hand"])
+        
+    def OnZoomBack(self, event):
+        """!Zoom last (previously stored position)
+        """
+        self.MapWindow.ZoomBack()
+        
+    def OnZoomToMap(self, event):
+        """!
+        Set display extents to match selected raster (including NULLs)
+        or vector map.
+        """
+        self.MapWindow.ZoomToMap(layers = self.Map.GetListOfLayers())
+    
+    def OnZoomToWind(self, event):
+        """!Set display geometry to match computational region
+        settings (set with g.region)
+        """
+        self.MapWindow.ZoomToWind()
+        
+    def OnZoomToDefault(self, event):
+        """!Set display geometry to match default region settings
+        """
+        self.MapWindow.ZoomToDefault()
+        
 class MapFrame(MapFrameBase):
     """!Main frame for map display window. Drawing takes place in
     child double buffered drawing window.
@@ -664,11 +758,6 @@ class MapFrame(MapFrameBase):
         
         event.Skip()
         
-    def OnDraw(self, event):
-        """!Re-display current map composition
-        """
-        self.MapWindow.UpdateMap(render = False)
-        
     def OnRender(self, event):
         """!Re-render map composition (each map layer)
         """
@@ -725,57 +814,6 @@ class MapFrame(MapFrameBase):
         else:
             self.MapWindow.SetCursor(self.cursors["default"])
 
-    def OnZoomIn(self, event):
-        """!Zoom in the map.
-        Set mouse cursor, zoombox attributes, and zoom direction
-        """
-        if self.GetMapToolbar():
-            self.toolbars['map'].OnTool(event)
-            self.toolbars['map'].action['desc'] = ''
-        
-        self.MapWindow.mouse['use'] = "zoom"
-        self.MapWindow.mouse['box'] = "box"
-        self.MapWindow.zoomtype = 1
-        self.MapWindow.pen = wx.Pen(colour = 'Red', width = 2, style = wx.SHORT_DASH)
-        
-        # change the cursor
-        self.MapWindow.SetCursor(self.cursors["cross"])
-
-    def OnZoomOut(self, event):
-        """!Zoom out the map.
-        Set mouse cursor, zoombox attributes, and zoom direction
-        """
-        if self.GetMapToolbar():
-            self.toolbars['map'].OnTool(event)
-            self.toolbars['map'].action['desc'] = ''
-        
-        self.MapWindow.mouse['use'] = "zoom"
-        self.MapWindow.mouse['box'] = "box"
-        self.MapWindow.zoomtype = -1
-        self.MapWindow.pen = wx.Pen(colour = 'Red', width = 2, style = wx.SHORT_DASH)
-        
-        # change the cursor
-        self.MapWindow.SetCursor(self.cursors["cross"])
-
-    def OnZoomBack(self, event):
-        """!Zoom last (previously stored position)
-        """
-        self.MapWindow.ZoomBack()
-
-    def OnPan(self, event):
-        """!Panning, set mouse to drag
-        """
-        if self.GetMapToolbar():
-            self.toolbars['map'].OnTool(event)
-            self.toolbars['map'].action['desc'] = ''
-        
-        self.MapWindow.mouse['use'] = "pan"
-        self.MapWindow.mouse['box'] = "pan"
-        self.MapWindow.zoomtype = 0
-        
-        # change the cursor
-        self.MapWindow.SetCursor(self.cursors["hand"])
-    
     def OnRotate(self, event):
         """!Rotate 3D view
         """
@@ -787,10 +825,6 @@ class MapFrame(MapFrameBase):
         
         # change the cursor
         self.MapWindow.SetCursor(self.cursors["hand"])
-    def OnErase(self, event):
-        """!Erase the canvas
-        """
-        self.MapWindow.EraseMap()
 
     def OnZoomRegion(self, event):
         """!Zoom to region
@@ -1584,17 +1618,6 @@ class MapFrame(MapFrameBase):
         """!Set display extents to match selected raster map (ignore NULLs)
         """
         self.MapWindow.ZoomToMap(ignoreNulls = True)
-
-    def OnZoomToWind(self, event):
-        """!Set display geometry to match computational region
-        settings (set with g.region)
-        """
-        self.MapWindow.ZoomToWind()
-        
-    def OnZoomToDefault(self, event):
-        """!Set display geometry to match default region settings
-        """
-        self.MapWindow.ZoomToDefault()
         
     def OnZoomToSaved(self, event):
         """!Set display geometry to match extents in
