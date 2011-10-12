@@ -399,12 +399,6 @@ class MapFrame(MapFrameBase):
         # change the cursor
         win.SetCursor(self.cursors["cross"])
 
-    def OnZoomBack(self, event):
-        """
-        Zoom last (previously stored position)
-        """
-        self.MapWindow.ZoomBack()
-
     def OnPan(self, event):
         """
         Panning, set mouse to drag
@@ -578,29 +572,11 @@ class MapFrame(MapFrameBase):
 
         return (outdist, outunits)
 
-    def OnZoomToMap(self, event):
-        """!
-        Set display extents to match selected raster (including NULLs)
-        or vector map.
-        """
-        self.MapWindow.ZoomToMap(layers = self.Map.GetListOfLayers())
-
     def OnZoomToRaster(self, event):
         """!
         Set display extents to match selected raster map (ignore NULLs)
         """
         self.MapWindow.ZoomToMap(ignoreNulls = True)
-
-    def OnZoomToWind(self, event):
-        """!Set display geometry to match computational region
-        settings (set with g.region)
-        """
-        self.MapWindow.ZoomToWind()
-        
-    def OnZoomToDefault(self, event):
-        """!Set display geometry to match default region settings
-        """
-        self.MapWindow.ZoomToDefault()
         
     def OnZoomToSaved(self, event):
         """!Set display geometry to match extents in
