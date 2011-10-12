@@ -255,7 +255,10 @@ class MapFrameBase(wx.Frame):
        raise NotImplementedError()
        
     def GetToolbar(self, name):
-        """!Returns toolbar if exists else None"""
+        """!Returns toolbar if exists else None.
+        
+        Toolbars dictionary contains currently used toolbars only.
+        """
         if name in self.toolbars:
             return self.toolbars[name]
         

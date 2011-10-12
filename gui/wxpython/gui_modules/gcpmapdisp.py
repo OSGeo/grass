@@ -344,7 +344,7 @@ class MapFrame(MapFrameBase):
         Zoom in the map.
         Set mouse cursor, zoombox attributes, and zoom direction
         """
-        if self.toolbars['map']:
+        if self.GetToolbar('map'):
             self.toolbars['map'].OnTool(event)
             self.toolbars['map'].action['desc'] = ''
         
@@ -374,7 +374,7 @@ class MapFrame(MapFrameBase):
         Zoom out the map.
         Set mouse cursor, zoombox attributes, and zoom direction
         """
-        if self.toolbars['map']:
+        if self.GetToolbar('map'):
             self.toolbars['map'].OnTool(event)
             self.toolbars['map'].action['desc'] = ''
         
@@ -409,7 +409,7 @@ class MapFrame(MapFrameBase):
         """
         Panning, set mouse to drag
         """
-        if self.toolbars['map']:
+        if self.GetToolbar('map'):
             self.toolbars['map'].OnTool(event)
             self.toolbars['map'].action['desc'] = ''
         
