@@ -500,6 +500,13 @@ class GMFrame(wx.Frame):
         """!Get widget for command output"""
         return self.goutput
     
+    def GetToolbar(self, name):
+        """!Returns toolbar if exists else None"""
+        if name in self.toolbars:
+            return self.toolbars[name]
+        
+        return None
+        
     def GetMenuCmd(self, event):
         """!Get GRASS command from menu item
 

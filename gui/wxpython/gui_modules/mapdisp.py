@@ -116,6 +116,9 @@ class MapFrameBase(wx.Frame):
 
         self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass_map.ico'), wx.BITMAP_TYPE_ICO))
         
+        # toolbars
+        self.toolbars = {}
+        
         #
         # Fancy gui
         #
@@ -251,6 +254,13 @@ class MapFrameBase(wx.Frame):
        """!Returns toolbar with zooming tools"""
        raise NotImplementedError()
        
+    def GetToolbar(self, name):
+        """!Returns toolbar if exists else None"""
+        if name in self.toolbars:
+            return self.toolbars[name]
+        
+        return None
+       
     def StatusbarUpdate(self):
         """!Update statusbar content"""
         self.statusbarManager.Update()
@@ -273,12 +283,16 @@ class MapFrameBase(wx.Frame):
     def StatusbarEnableLongHelp(self, enable = True):
         """!Enable/disable toolbars long help"""
         for toolbar in self.toolbars.itervalues():
-            if toolbar:
-                toolbar.EnableLongHelp(enable)
+            toolbar.EnableLongHelp(enable)
         
     def IsStandalone(self):
         """!Check if Map display is standalone"""
         raise NotImplementedError("IsStandalone")
+   
+    def OnRender(self, event):
+        """!Re-render map composition (each map layer)
+        """
+        raise NotImplementedError("OnRender")
         
 class MapFrame(MapFrameBase):
     """!Main frame for map display window. Drawing takes place in
@@ -310,12 +324,6 @@ class MapFrame(MapFrameBase):
         #
         # Add toolbars
         #
-        self.toolbars = { 'map' : None,
-                          'vdigit' : None,
-                          'gcpdisp' : None,
-                          'gcpman' : None,
-                          'nviz' : None }
-
         for toolb in toolbars:
             self.AddToolbar(toolb)
         
@@ -616,7 +624,7 @@ class MapFrame(MapFrameBase):
         
         self._mgr.DetachPane(self.toolbars[name])
         self.toolbars[name].Destroy()
-        self.toolbars[name] = None
+        self.toolbars.pop(name)
         
         if name == 'vdigit':
             self._mgr.GetPane('vdigit').Hide()
@@ -673,7 +681,7 @@ class MapFrame(MapFrameBase):
             self.MapWindow.ClearLines()
         
         # deselect features in vdigit
-        if self.toolbars['vdigit']:
+        if self.GetToolbar('vdigit'):
             self.MapWindow.digit.GetDisplay().SetSelected([])
             self.MapWindow.UpdateMap(render = True, renderVector = True)
         else:
@@ -685,7 +693,7 @@ class MapFrame(MapFrameBase):
     def OnPointer(self, event):
         """!Pointer button clicked
         """
-        if self.toolbars['map']:
+        if self.GetMapToolbar():
             if event:
                 self.toolbars['map'].OnTool(event)
             self.toolbars['map'].action['desc'] = ''
@@ -694,7 +702,7 @@ class MapFrame(MapFrameBase):
         self.MapWindow.mouse['box'] = "point"
 
         # change the cursor
-        if self.toolbars['vdigit']:
+        if self.GetToolbar('vdigit'):
             # digitization tool activated
             self.MapWindow.SetCursor(self.cursors["cross"])
 
@@ -718,7 +726,7 @@ class MapFrame(MapFrameBase):
         """!Zoom in the map.
         Set mouse cursor, zoombox attributes, and zoom direction
         """
-        if self.toolbars['map']:
+        if self.GetMapToolbar():
             self.toolbars['map'].OnTool(event)
             self.toolbars['map'].action['desc'] = ''
         
@@ -734,7 +742,7 @@ class MapFrame(MapFrameBase):
         """!Zoom out the map.
         Set mouse cursor, zoombox attributes, and zoom direction
         """
-        if self.toolbars['map']:
+        if self.GetMapToolbar():
             self.toolbars['map'].OnTool(event)
             self.toolbars['map'].action['desc'] = ''
         
@@ -754,7 +762,7 @@ class MapFrame(MapFrameBase):
     def OnPan(self, event):
         """!Panning, set mouse to drag
         """
-        if self.toolbars['map']:
+        if self.GetMapToolbar():
             self.toolbars['map'].OnTool(event)
             self.toolbars['map'].action['desc'] = ''
         
@@ -768,7 +776,7 @@ class MapFrame(MapFrameBase):
     def OnRotate(self, event):
         """!Rotate 3D view
         """
-        if self.toolbars['map']:
+        if self.GetMapToolbar():
             self.toolbars['map'].OnTool(event)
             self.toolbars['map'].action['desc'] = ''
         
@@ -878,7 +886,7 @@ class MapFrame(MapFrameBase):
         self.Map.Clean()
         
         # close edited map and 3D tools properly
-        if self.toolbars['vdigit']:
+        if self.GetToolbar('vdigit'):
             maplayer = self.toolbars['vdigit'].GetLayer()
             if maplayer:
                 self.toolbars['vdigit'].OnExit()
@@ -1088,7 +1096,7 @@ class MapFrame(MapFrameBase):
         
     def OnQuery(self, event):
         """!Query tools menu"""
-        if self.toolbars['map']:
+        if self.GetMapToolbar():
             self.toolbars['map'].OnTool(event)
             action = self.toolbars['map'].GetAction()
             

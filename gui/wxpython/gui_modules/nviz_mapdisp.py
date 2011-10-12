@@ -657,7 +657,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         # disable tool if stack is empty
         if len(self.viewhistory) < 2: # disable tool
-            toolbar = self.parent.toolbars['map']
+            toolbar = self.parent.GetMapToolbar()
             toolbar.Enable('zoomback', enable = False)
             
         # set view and update nviz view page
@@ -697,7 +697,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         else:
             enable = False
         
-        toolbar = self.parent.toolbars['map']
+        toolbar = self.parent.GetMapToolbar()
         toolbar.Enable('zoomback', enable)
         
         return removed     

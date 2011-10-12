@@ -228,7 +228,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         idle time instead of multiple times during layer changing.
         """
         if self.rerender:
-            if self.mapdisplay.toolbars['vdigit']:
+            if self.mapdisplay.GetToolbar('vdigit'):
                 vector = True
             else:
                 vector = False
@@ -335,7 +335,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             
             layer = self.GetPyData(self.layer_selected)[0]['maplayer']
             # enable editing only for vector map layers available in the current mapset
-            digitToolbar = self.mapdisplay.toolbars['vdigit']
+            digitToolbar = self.mapdisplay.GetToolbar('vdigit')
             if digitToolbar:
                 # background vector map
                 self.popupMenu.Append(self.popupID['bgmap'],
@@ -605,7 +605,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             dlg.Destroy()
             return
         
-        if not self.mapdisplay.toolbars['vdigit']: # enable tool
+        if not self.mapdisplay.GetToolbar('vdigit'): # enable tool
             self.mapdisplay.AddToolbar('vdigit')
         else: # tool already enabled
             pass
@@ -669,8 +669,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                              self._getLayerName(self.layer_selected))
             
             # vector layer currently edited
-            if self.mapdisplay.toolbars['vdigit'] and \
-                    self.mapdisplay.toolbars['vdigit'].GetLayer() == maplayer:   
+            if self.mapdisplay.GetToolbar('vdigit') and \
+                    self.mapdisplay.GetToolbar('vdigit').GetLayer() == maplayer:   
                 alpha = int(new_opacity * 255)
                 self.mapdisplay.GetWindow().digit.GetDisplay().UpdateSettings(alpha = alpha)
                 
@@ -1084,7 +1084,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.rerender = True
         self.reorder = True
         
-        if self.mapdisplay.toolbars['vdigit']:
+        if self.mapdisplay.GetToolbar('vdigit'):
             self.mapdisplay.toolbars['vdigit'].UpdateListOfLayers (updateTool = True)
 
         # update progress bar range (mapwindow statusbar)
@@ -1115,7 +1115,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         item    = event.GetItem()
         checked = item.IsChecked()
 
-        digitToolbar = self.mapdisplay.toolbars['vdigit']
+        digitToolbar = self.mapdisplay.GetToolbar('vdigit')
         if self.first == False:
             # change active parameter for item in layers list in render.Map
             if self.GetPyData(item)[0]['type'] == 'group':
@@ -1202,7 +1202,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             event.Veto()
             return
         
-        digitToolbar = self.mapdisplay.toolbars['vdigit']
+        digitToolbar = self.mapdisplay.GetToolbar('vdigit')
         if digitToolbar:
             mapLayer = self.GetPyData(layer)[0]['maplayer']
             bgmap = UserSettings.Get(group = 'vdigit', key = 'bgmap', subkey = 'value',
@@ -1566,8 +1566,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.GetPyData(item)[0]['maplayer'] = maplayer
         
         # if digitization tool enabled -> update list of available vector map layers
-        if self.mapdisplay.toolbars['vdigit']:
-            self.mapdisplay.toolbars['vdigit'].UpdateListOfLayers(updateTool = True)
+        if self.mapdisplay.GetToolbar('vdigit'):
+            self.mapdisplay.GetToolbar('vdigit').UpdateListOfLayers(updateTool = True)
         
         # redraw map if auto-rendering is enabled
         self.rerender = True
