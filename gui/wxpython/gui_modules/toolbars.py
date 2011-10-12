@@ -438,8 +438,8 @@ class GCPDisplayToolbar(AbstractToolbar):
         # add tool to toggle active map window
         self.togglemapid = wx.NewId()
         self.togglemap = wx.Choice(parent = self, id = self.togglemapid,
-						    choices = [_('source'), _('target')],
-						    style = wx.CB_READONLY)
+                                   choices = [_('source'), _('target')],
+                                   style = wx.CB_READONLY)
 
         self.InsertControl(10, self.togglemap)
 

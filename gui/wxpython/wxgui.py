@@ -112,7 +112,6 @@ class GMFrame(wx.Frame):
         self.curr_pagenum  = None         # currently selected page number for layer tree notebook
         self.workspaceFile = workspace    # workspace file
         self.workspaceChanged = False     # track changes in workspace
-        self.georectifying = None         # reference to GCP class or None
         self.gcpmanagement = None         # reference to GCP class or None
         
         # list of open dialogs

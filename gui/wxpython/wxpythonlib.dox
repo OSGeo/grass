@@ -160,6 +160,7 @@ available in GRASS 5 and GRASS 6.
  - gui_modules::mapdisp_command::Command
 
 - gui_modules/mapdisp.py
+ - gui_modules::mapdisp::MapFrameBase
  - gui_modules::mapdisp::MapFrame
  - gui_modules::mapdisp::MapApp
 
@@ -178,14 +179,19 @@ available in GRASS 5 and GRASS 6.
  - gui_modules::toolbars::MapToolbar
  - gui_modules::toolbars::GCPManToolbar
  - gui_modules::toolbars::GCPDisplayToolbar
- - gui_modules::toolbars::GRToolbar
- - gui_modules::toolbars::GCPToolbar
  - gui_modules::toolbars::VDigitToolbar
  - gui_modules::toolbars::ProfileToolbar
- - gui_modules::toolbars::NvizToolbar
+ - gui_modules::toolbars::LMNvizToolbar
  - gui_modules::toolbars::ModelToolbar
  - gui_modules::toolbars::HistogramToolbar
- - gui_modules::toolbars::LayerManagerToolbar
+ - gui_modules::toolbars::Histogram2Toolbar
+ - gui_modules::toolbars::ScatterplotToolbar
+ - gui_modules::toolbars::LMWorkspaceToolbar
+ - gui_modules::toolbars::LMDataToolbar
+ - gui_modules::toolbars::LMToolsToolbar
+ - gui_modules::toolbars::LMMiscToolbar
+ - gui_modules::toolbars::LMVectorToolbar
+ - gui_modules::toolbars::PsMapToolbar
 
 \subsection wscreen Welcome screen
 

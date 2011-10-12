@@ -312,7 +312,6 @@ class MapFrame(MapFrameBase):
         #
         self.toolbars = { 'map' : None,
                           'vdigit' : None,
-                          'georect' : None,
                           'gcpdisp' : None,
                           'gcpman' : None,
                           'nviz' : None }
@@ -586,7 +585,6 @@ class MapFrame(MapFrameBase):
          - 'map'     - basic map toolbar
          - 'vdigit'  - vector digitizer
          - 'gcpdisp' - GCP Manager Display
-         - 'georect' - georectifier
         """
         # default toolbar
         if name == "map":
@@ -604,19 +602,6 @@ class MapFrame(MapFrameBase):
         # vector digitizer
         elif name == "vdigit":
             self._addToolbarVDigit()
-        
-        # georectifier
-        elif name == "georect":
-            self.toolbars['georect'] = toolbars.GRToolbar(self, self.Map)
-            
-            self._mgr.AddPane(self.toolbars['georect'],
-                              wx.aui.AuiPaneInfo().
-                              Name("georecttoolbar").Caption(_("Georectification Toolbar")).
-                              ToolbarPane().Top().
-                              LeftDockable(False).RightDockable(False).
-                              BottomDockable(False).TopDockable(True).
-                              CloseButton(False).Layer(2).
-                              BestSize((self.toolbars['georect'].GetBestSize())))
         
         self._mgr.Update()
         
@@ -658,20 +643,13 @@ class MapFrame(MapFrameBase):
         
     def OnFocus(self, event):
         """!Change choicebook page to match display.
-        Or set display for georectifying
         """
-        if self._layerManager and \
-                self._layerManager.georectifying:
-            # in georectifying session; display used to get geographic
-            # coordinates for GCPs
-            self.OnPointer(event)
-        else:
-            # change bookcontrol page to page associated with display
-            if self.page:
-                pgnum = self.layerbook.GetPageIndex(self.page)
-                if pgnum > -1:
-                    self.layerbook.SetSelection(pgnum)
-                    self._layerManager.curr_page = self.layerbook.GetCurrentPage()
+        # change bookcontrol page to page associated with display
+        if self.page:
+            pgnum = self.layerbook.GetPageIndex(self.page)
+            if pgnum > -1:
+                self.layerbook.SetSelection(pgnum)
+                self._layerManager.curr_page = self.layerbook.GetCurrentPage()
         
         event.Skip()
         
@@ -732,9 +710,6 @@ class MapFrame(MapFrameBase):
                 self.MapWindow.mouse['box'] = 'point'
             else: # moveLine, deleteLine
                 self.MapWindow.mouse['box'] = 'box'
-        
-        elif self._layerManager and self._layerManager.georectifying:
-            self.MapWindow.SetCursor(self.cursors["cross"])
         
         else:
             self.MapWindow.SetCursor(self.cursors["default"])

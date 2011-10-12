@@ -521,12 +521,6 @@ class Settings:
                     'width' : 2,
                     },
                 },
-            'georect' : {
-                'symbol' : {
-                    'color' : (0, 0, 255, 255),
-                    'width' : 2,
-                    },
-                },
             'nviz' : {
                 'view' : {
                     'persp' : {

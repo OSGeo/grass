@@ -97,7 +97,6 @@ class MapFrame(MapFrameBase):
         #
         self.toolbars = { 'map' : None,
                           'vdigit' : None,
-                          'georect' : None, 
                           'gcpdisp' : None, 
                           'gcpman' : None, 
                           'nviz' : None }
@@ -245,7 +244,6 @@ class MapFrame(MapFrameBase):
          - 'vdigit'  - vector digitizer
          - 'gcpdisp' - GCP Manager, Display
          - 'gcpman'  - GCP Manager, points management
-         - 'georect' - georectifier
          - 'nviz'    - 3D view mode
         """
         # default toolbar

@@ -821,15 +821,6 @@ class BufferedWindow(MapWindow, wx.Window):
         #
         if len(self.polycoords) > 0:
             self.DrawLines(self.pdcTmp)
-        
-        if not self.parent.IsStandalone() and \
-                self.parent.GetLayerManager().georectifying:
-            # -> georectifier (redraw GCPs)
-            if self.parent.toolbars['georect']:
-                coordtype = 'gcpcoord'
-            else:
-                coordtype = 'mapcoord'
-            self.parent.GetLayerManager().georectifying.DrawGCP(coordtype)
             
         if not self.parent.IsStandalone() and \
                 self.parent.GetLayerManager().gcpmanagement:
@@ -1336,19 +1327,6 @@ class BufferedWindow(MapWindow, wx.Window):
                 
                 self.parent.GetLayerManager().gcpmanagement.SetGCPData(coordtype, coord, self, confirm = True)
                 self.UpdateMap(render = False, renderVector = False)
-        
-        elif self.mouse["use"] == "pointer" and \
-                not self.parent.IsStandalone() and \
-                self.parent.GetLayerManager().georectifying:
-            # -> georectifying
-            coord = self.Pixel2Cell(self.mouse['end'])
-            if self.parent.toolbars['georect']:
-                coordtype = 'gcpcoord'
-            else:
-                coordtype = 'mapcoord'
-            
-            self.parent.GetLayerManager().georectifying.SetGCPData(coordtype, coord, self)
-            self.UpdateMap(render = False, renderVector = False)
             
         elif self.mouse["use"] == "pointer" and \
                 hasattr(self, "digit"):
@@ -1660,13 +1638,7 @@ class BufferedWindow(MapWindow, wx.Window):
         
         # disable tool if stack is empty
         if len(self.zoomhistory) < 2: # disable tool
-            if self.parent.GetName() == 'MapWindow':
-                toolbar = self.parent.toolbars['map']
-            elif self.parent.GetName() == 'GRMapWindow':
-                toolbar = self.parent.toolbars['georect']
-            elif self.parent.GetName() == 'GCPMapWindow':
-                toolbar = self.parent.toolbars['gcpdisp']
-            
+            toolbar = self.parent.GetMapToolbar()
             toolbar.Enable('zoomback', enable = False)
         
         # zoom to selected region
