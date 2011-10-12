@@ -834,7 +834,7 @@ class BufferedWindow(MapWindow, wx.Window):
         if not self.parent.IsStandalone() and \
                 self.parent.GetLayerManager().gcpmanagement:
             # -> georectifier (redraw GCPs)
-            if self.parent.toolbars['gcpdisp']:
+            if self.parent.GetMapToolbar():
                 if self == self.parent.TgtMapWindow:
                     coordtype = 'target'
                 else:
@@ -1705,12 +1705,7 @@ class BufferedWindow(MapWindow, wx.Window):
         else:
             enable = False
         
-        if self.parent.GetName() == 'MapWindow':
-            toolbar = self.parent.toolbars['map']
-        elif self.parent.GetName() == 'GRMapWindow':
-            toolbar = self.parent.toolbars['georect']
-        elif self.parent.GetName() == 'GCPMapWindow':
-            toolbar = self.parent.toolbars['gcpdisp']
+        toolbar = self.parent.GetMapToolbar()
         
         toolbar.Enable('zoomback', enable)
         
