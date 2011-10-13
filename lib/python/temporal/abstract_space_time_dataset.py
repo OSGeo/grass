@@ -107,7 +107,7 @@ class abstract_space_time_dataset(abstract_dataset):
 
         return granularity, temporal_type, semantic_type, title, description
 
-    def print_temporal_relation_matrix(self, dbif=None):
+    def print_temporal_relation_matrix(self, maps):
         """Print the temporal relation matrix of all registered maps to stdout
 
            The temproal relation matrix includes the temporal relations between
@@ -115,17 +115,6 @@ class abstract_space_time_dataset(abstract_dataset):
            
            @param dbif: The database interface to be used
         """
-
-        connect = False
-
-        if dbif == None:
-            dbif = sql_database_interface()
-            dbif.connect()
-            connect = True
-
-        matrix = []
-
-        maps = self.get_registered_maps_as_objects(where=None, order="start_time", dbif=dbif)
 
         for map in maps:
             print map.get_id(),
@@ -136,11 +125,10 @@ class abstract_space_time_dataset(abstract_dataset):
                 print mapA.temporal_relation(mapB),
             print " "
 
-        if connect == True:
-            dbif.close()
-
-    def get_temporal_relation_matrix(self, dbif=None):
+    def get_temporal_relation_matrix(self, maps):
         """Return the temporal relation matrix of all registered maps as listof lists
+
+           The map list must be ordered by start time
 
            The temproal relation matrix includes the temporal relations between
            all registered maps. The relations are strings stored in a list of lists.
@@ -148,16 +136,7 @@ class abstract_space_time_dataset(abstract_dataset):
            @param dbif: The database interface to be used
         """
 
-        connect = False
-
-        if dbif == None:
-            dbif = sql_database_interface()
-            dbif.connect()
-            connect = True
-
         matrix = []
-
-        maps = self.get_registered_maps_as_objects(where=None, order="start_time", dbif=dbif)
 
         # Create the temporal relation matrix
         # Add the map names first
@@ -172,12 +151,86 @@ class abstract_space_time_dataset(abstract_dataset):
                 row.append(mapA.temporal_relation(mapB))
             matrix.append(row)
 
-        if connect == True:
-            dbif.close()
-
         return matrix
 
-    def get_registered_maps_as_objects(self, where = None, order = None, dbif=None):
+    def get_temporal_map_type_count(self, maps):
+        """Return the temporal type of the registered maps as dictionary
+
+           The map list must be ordered by start time
+
+           The temporal type can be:
+           * point    -> only the start time is present
+           * interval -> start and end time
+           * invalid  -> No valid time point or interval found
+           * holes    -> In case the maps are interval
+
+           @param dbif: The database interface to be used
+        """
+
+        time_invalid = 0
+        time_point = 0
+        time_interval = 0
+
+        tcount = {}
+        for i in range(len(maps)):
+            # Check for point and interval data
+            if maps[i].is_time_absolute():
+                start, end, tz = maps[i].get_absolute_time()
+            if maps[i].is_time_relative():
+                start, end = maps[i].get_relative_time()
+
+            if start and end:
+                time_interval += 1
+                # Check for holes
+                if i < len(maps) - 1:
+                    relation = maps[i + 1].temporal_relation(maps[i])
+                    if relation != "follows":
+                        holes += 1
+            elif start and not end:
+                time_point += 1
+            else:
+                time_invalid += 1
+
+        tcount["point"] = time_point
+        tcount["interval"] = time_interval
+        tcount["invalid"] = time_invalid
+
+        holes = 0
+
+        # Check for holes
+        if time_interval > 0 and time_point == 0 and time_invalid == 0:
+            for i in range(len(maps)):
+                if i < len(maps) - 1:
+                    relation = maps[i + 1].temporal_relation(maps[i])
+                    if relation != "follows":
+                        holes += 1
+
+        tcount["holes"] = holes
+
+        return tcount
+
+    def get_temporal_relations_count(self, maps):
+        """Count the temporal relations between the registered maps.
+
+           The map list must be ordered by start time
+
+           @param dbif: The database interface to be used
+        """
+
+        tcount = {}
+        for i in range(len(maps)):
+            # Check for point and interval data
+            for j in range(i + 1, len(maps)):
+                relation = maps[j].temporal_relation(maps[i])
+
+                if tcount.has_key(relation):
+                    tcount[relation] = tcount[relation] + 1
+                else:
+                    tcount[relation] = 1
+
+        return tcount
+
+    def get_registered_maps_as_objects(self, where=None, order="start_time", dbif=None):
         """Return all registered maps as ordered object list
 
            @param where: The SQL where statement to select a subset of the registered maps without "WHERE"
