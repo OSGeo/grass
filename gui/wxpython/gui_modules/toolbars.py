@@ -1515,8 +1515,6 @@ class LMWorkspaceToolbar(AbstractToolbar):
         icons = Icons['layerManager']
         return self._getToolbarData((('newdisplay', icons["newdisplay"],
                                       self.parent.OnNewDisplay),
-                                     ('newdisplay', icons["newdisplayWMS"],
-                                      self.parent.OnNewDisplayWMS),
                                      (None, ),
                                      ('workspaceNew', icons["workspaceNew"],
                                       self.parent.OnWorkspaceNew),

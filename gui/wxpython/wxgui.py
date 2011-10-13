@@ -1282,23 +1282,6 @@ class GMFrame(wx.Frame):
         # show ATM window
         dbmanager.Show()
         
-    def OnNewDisplayWMS(self, event = None):
-        """!Create new layer tree and map display instance"""
-        self.NewDisplayWMS()
-
-    def NewDisplayWMS(self, show = True):
-        Debug.msg(1, "GMFrame.NewDisplay(): idx=%d" % self.disp_idx)
-        try:
-            from gui_modules.wms.wmsmenu import DisplayWMSMenu
-        except:
-            gcmd.GError(parent = self.parent,
-                        message = _("Experimental WMS support for wxGUI not available. "
-                                    "You can install it by '%s'") % \
-                            "g.extension -s extension=wx.wms")
-            return
-        
-        DisplayWMSMenu()
-    
     def OnNewDisplay(self, event = None):
         """!Create new layer tree and map display instance"""
         self.NewDisplay()
