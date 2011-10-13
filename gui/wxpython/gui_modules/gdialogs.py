@@ -916,7 +916,7 @@ class MapLayersDialog(wx.Dialog):
         self.bodySizer = self._createDialogBody()
         # update list of layer to be loaded
         self.map_layers = [] # list of map layers (full list type/mapset)
-        self.LoadMapLayers(self.layerType.GetStringSelection()[:4],
+        self.LoadMapLayers(self.GetLayerType(cmd = True),
                            self.mapset.GetStringSelection())
         
         self.fullyQualified = wx.CheckBox(parent = self, id = wx.ID_ANY,
