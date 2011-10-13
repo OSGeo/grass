@@ -904,7 +904,7 @@ class TextLayerDialog(wx.Dialog):
                  'active' : self.chkbox.IsChecked() }
 
 class MapLayersDialog(wx.Dialog):
-    def __init__(self, parent, title,
+    def __init__(self, parent, title, modeler = False,
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
         """!Dialog for selecting map layers (raster, vector)"""
         wx.Dialog.__init__(self, parent = parent, id = wx.ID_ANY, title = title,
@@ -922,6 +922,12 @@ class MapLayersDialog(wx.Dialog):
         self.fullyQualified = wx.CheckBox(parent = self, id = wx.ID_ANY,
                                           label = _("Use fully-qualified map names"))
         self.fullyQualified.SetValue(True)
+
+        self.dseries = None
+        if modeler:
+            self.dseries = wx.CheckBox(parent = self, id = wx.ID_ANY,
+                                       label = _("Dynamic series (%s)") % 'g.mlist')
+            self.dseries.SetValue(False)
         
         # buttons
         btnCancel = wx.Button(parent = self, id = wx.ID_CANCEL)
@@ -939,6 +945,10 @@ class MapLayersDialog(wx.Dialog):
                       flag = wx.EXPAND | wx.ALL, border = 5)
         mainSizer.Add(item = self.fullyQualified, proportion = 0,
                       flag = wx.EXPAND | wx.LEFT | wx.RIGHT, border = 5)
+        if self.dseries:
+            mainSizer.Add(item = self.dseries, proportion = 0,
+                          flag = wx.EXPAND | wx.LEFT | wx.RIGHT, border = 5)
+        
         mainSizer.Add(item = btnSizer, proportion = 0,
                       flag = wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border = 5)
 
@@ -954,12 +964,12 @@ class MapLayersDialog(wx.Dialog):
         bodySizer.AddGrowableRow(3)
         
         # layer type
-        bodySizer.Add(item = wx.StaticText(parent = self, label = _("Map layer type:")),
+        bodySizer.Add(item = wx.StaticText(parent = self, label = _("Map type:")),
                       flag = wx.ALIGN_CENTER_VERTICAL,
                       pos = (0,0))
         
         self.layerType = wx.Choice(parent = self, id = wx.ID_ANY,
-                                   choices = ['raster', 'vector'], size = (100,-1))
+                                   choices = [_('raster'), _('3D raster'), _('vector')], size = (100,-1))
         self.layerType.SetSelection(0)
         bodySizer.Add(item = self.layerType,
                       pos = (0,1))
@@ -983,7 +993,7 @@ class MapLayersDialog(wx.Dialog):
                       pos = (1,1), span = (1, 2))
         
         # map name filter
-        bodySizer.Add(item = wx.StaticText(parent = self, label = _("Filter:")),
+        bodySizer.Add(item = wx.StaticText(parent = self, label = _("Pattern:")),
                       flag = wx.ALIGN_CENTER_VERTICAL,
                       pos = (2,0))
         
@@ -1030,7 +1040,7 @@ class MapLayersDialog(wx.Dialog):
     def OnChangeParams(self, event):
         """!Filter parameters changed by user"""
         # update list of layer to be loaded
-        self.LoadMapLayers(self.layerType.GetStringSelection()[:4],
+        self.LoadMapLayers(self.GetLayerType(cmd = True),
                            self.mapset.GetStringSelection())
         
         event.Skip()
@@ -1119,9 +1129,39 @@ class MapLayersDialog(wx.Dialog):
         
         return layerNames
     
-    def GetLayerType(self):
-        """!Get selected layer type"""
-        return self.layerType.GetStringSelection()
+    def GetLayerType(self, cmd = False):
+        """!Get selected layer type
+
+        @param cmd True for g.mlist
+        """
+        if not cmd:
+            return self.layerType.GetStringSelection()
+        
+        sel = self.layerType.GetSelection()
+        if sel == 0:
+            ltype = 'rast'
+        elif sel == 1:
+            ltype = 'rast3d'
+        else:
+            ltype = 'vect'
+        
+        return ltype
+
+    def GetDSeries(self):
+        """!Used by modeler only
+
+        @return g.mlist command
+        """
+        if not self.dseries or not self.dseries.IsChecked():
+            return ''
+        
+        cond = 'map in `g.mlist type=%s ' % self.GetLayerType(cmd = True)
+        patt = self.filter.GetValue()
+        if patt:
+            cond += 'pattern=%s ' % patt
+        cond += 'mapset=%s`' % self.mapset.GetStringSelection()
+        
+        return cond
     
 class ImportDialog(wx.Dialog):
     """!Dialog for bulk import of various data (base class)"""

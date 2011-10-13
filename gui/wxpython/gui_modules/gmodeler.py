@@ -4215,12 +4215,16 @@ class ModelLoopDialog(ModelItemDialog):
 
     def OnSeries(self, event):
         """!Define map series as condition"""
-        dialog = MapLayersDialog(parent = self, title = _("Define series of maps"))
+        dialog = MapLayersDialog(parent = self, title = _("Define series of maps"), modeler = True)
         if dialog.ShowModal() != wx.ID_OK:
             dialog.Destroy()
             return
         
-        self.condText.SetValue('map in %s' % map(lambda x: str(x), dialog.GetMapLayers()))
+        cond = dialog.GetDSeries()
+        if not cond:
+            cond = 'map in %s' % map(lambda x: str(x), dialog.GetMapLayers())
+        
+        self.condText.SetValue(cond)
                                
         dialog.Destroy()
 
