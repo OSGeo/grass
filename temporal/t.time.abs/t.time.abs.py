@@ -24,17 +24,17 @@
 #%end
 
 #%option
-#% key: maps
+#% key: input
 #% type: string
-#% description: Name(s) of existing raster map(s)
-#% required: yes
+#% description: Name(s) of existing raster, raster3d or vector map(s)
+#% required: no
 #% multiple: yes
 #%end
 
 #%option
 #% key: start
 #% type: string
-#% description: The valid start date and time of the first raster map. Time format is "yyyy-mm-dd HH:MM:SS" or only "yyyy-mm-dd"
+#% description: The valid start date and time of the first raster map. Time format is "yyyy-mm-dd HH:MM:SS" or only "yyyy-mm-dd", or file in case the start time is located in the input file
 #% required: no
 #% multiple: no
 #%end
@@ -42,7 +42,7 @@
 #%option
 #% key: end
 #% type: string
-#% description: The valid end date and time of the first raster map. Time format is "yyyy-mm-dd HH:MM:SS" or only "yyyy-mm-dd". End time and increment are mutual exclusive.
+#% description: The valid end date and time of the first raster map. Time format is "yyyy-mm-dd HH:MM:SS" or only "yyyy-mm-dd", or file in case the start time is located in the input file 
 #% required: no
 #% multiple: no
 #%end
@@ -53,6 +53,31 @@
 #% description: Time increment between maps for valid time interval creation. Interval format: NNN seconds, minutes, hours, days, weeks, months, years
 #% required: no
 #% multiple: no
+#%end
+
+#%option
+#% key: file
+#% type: string
+#% description: Input file with map names, one per line
+#% required: no
+#% multiple: no
+#%end
+
+#%option
+#% key: type
+#% type: string
+#% description: Input map type
+#% required: no
+#% options: rast, rast3d, vect
+#% answer: rast
+#%end
+
+#%option
+#% key: fs
+#% type: string
+#% description: The field separator character of the input file
+#% required: no
+#% answer: |
 #%end
 
 #%flag
@@ -68,18 +93,21 @@ import grass.temporal as tgis
 def main():
 
     # Get the options
-    maps = options["maps"]
+    maps = options["input"]
+    file = options["file"]
     start = options["start"]
     end = options["end"]
     increment = options["increment"]
+    fs = options["fs"]
+    type = options["type"]
     interval = flags["i"]
 
     # Make sure the temporal database exists
     tgis.create_temporal_database()
     # Set valid absolute time to maps
-    tgis.assign_valid_time_to_maps(type="raster", maps=maps, ttype="absolute", \
-                                   start=start, end=end, increment=increment, \
-                                   dbif=None, interval=interval)
+    tgis.assign_valid_time_to_maps(type=type, maps=maps, ttype="absolute", \
+                                   start=start, end=end, file=file, increment=increment, \
+                                   dbif=None, interval=interval, fs=fs)
     
 if __name__ == "__main__":
     options, flags = grass.parser()

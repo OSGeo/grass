@@ -21,7 +21,7 @@
 #%end
 
 #%option
-#% key: dataset
+#% key: input
 #% type: string
 #% description: Name of an existing space time or map dataset
 #% required: no
@@ -33,7 +33,7 @@
 #% type: string
 #% description: Type of the dataset, default is strds (space time raster dataset)
 #% required: no
-#% options: strds, str3ds, stvds, raster, raster3d, vector
+#% options: strds, str3ds, stvds, rast, rast3d, vect
 #% answer: strds
 #%end
 
@@ -61,7 +61,7 @@ import grass.temporal as tgis
 def main():
 
     # Get the options
-    name = options["dataset"]
+    name = options["input"]
     type = options["type"]
     shellstyle = flags['g']
     tmatrix = flags['t']
@@ -96,13 +96,13 @@ def main():
         sp = tgis.space_time_raster3d_dataset(id)
     if type == "stvds":
         sp = tgis.space_time_vector_dataset(id)
-    if type == "raster":
+    if type == "rast":
         sp = tgis.raster_dataset(id)
         tmatrix = False
-    if type == "raster3d":
+    if type == "rast3d":
         sp = tgis.raster3d_dataset(id)
         tmatrix = False
-    if type == "vector":
+    if type == "vect":
         sp = tgis.vector_dataset(id)
         tmatrix = False
 

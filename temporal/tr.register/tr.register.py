@@ -21,7 +21,7 @@
 #%end
 
 #%option
-#% key: dataset
+#% key: input
 #% type: string
 #% description: Name of an existing space time raster dataset
 #% required: yes
@@ -31,15 +31,31 @@
 #%option
 #% key: maps
 #% type: string
-#% description: Name(s) of existing raster map(s), multiple maps must be provided in temporal order in case datetime should be attached
-#% required: yes
+#% description: Name(s) of existing raster map(s)
+#% required: no
 #% multiple: yes
+#%end
+
+#%option
+#% key: file
+#% type: string
+#% description: Input file with raster map names, one per line. Additionally the start time and the end time can be specified per line
+#% required: no
+#% multiple: no
 #%end
 
 #%option
 #% key: start
 #% type: string
-#% description: The valid start date and time of the first raster map, in case the map has no valid time (format absolute: "yyyy-mm-dd HH:MM:SS", format relative 5.0)
+#% description: The valid start date and time of the first raster map, in case the map has no valid time (format absolute: "yyyy-mm-dd HH:MM:SS", format relative 5.0). Use "file" as identifier in case the start time is located in an input file
+#% required: no
+#% multiple: no
+#%end
+
+#%option
+#% key: end
+#% type: string
+#% description: The valid end date and time of the first raster map. Absolute time format is "yyyy-mm-dd HH:MM:SS" and "yyyy-mm-dd", relative time format id double. Use "file" as identifier in case the end time is located in the input file 
 #% required: no
 #% multiple: no
 #%end
@@ -47,9 +63,17 @@
 #%option
 #% key: increment
 #% type: string
-#% description: Time increment between maps for valid time interval creation (format absolute: NNN seconds, minutes, hours, days, weeks, months, years; format relative: 1.0)
+#% description: Time increment between maps for valid time interval creation (format absolute: NNN seconds, minutes, hours, days, weeks, months, years; format relative: 1.0), or "file" in case the increment is located in an input file
 #% required: no
 #% multiple: no
+#%end
+
+#%option
+#% key: fs
+#% type: string
+#% description: The field separator character of the input file
+#% required: no
+#% answer: |
 #%end
 
 #%flag
@@ -65,16 +89,20 @@ import grass.temporal as tgis
 def main():
 
     # Get the options
-    name = options["dataset"]
+    name = options["input"]
     maps = options["maps"]
+    file = options["file"]
+    fs = options["fs"]
     start = options["start"]
+    end = options["end"]
     increment = options["increment"]
     interval = flags["i"]
 
     # Make sure the temporal database exists
     tgis.create_temporal_database()
     # Register maps
-    tgis.register_maps_in_space_time_dataset("raster", name, maps, start, increment, None, interval)
+    tgis.register_maps_in_space_time_dataset(type="rast", name=name, maps=maps, file=file, start=start, end=end, \
+                                             increment=increment, dbif=None, interval=interval, fs=fs)
     
 if __name__ == "__main__":
     options, flags = grass.parser()

@@ -22,7 +22,7 @@
 #%end
 
 #%option
-#% key: dataset
+#% key: output
 #% type: string
 #% description: Name of the new space time dataset
 #% required: yes
@@ -89,7 +89,7 @@ import grass.script as grass
 def main():
 
     # Get the options
-    name = options["dataset"]
+    name = options["output"]
     type = options["type"]
     temporaltype = options["temporaltype"]
     title = options["title"]

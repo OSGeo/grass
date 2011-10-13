@@ -13,31 +13,31 @@ r.mapcalc --o expr="prec_4 = rand(0, 510)"
 r.mapcalc --o expr="prec_5 = rand(0, 300)"
 r.mapcalc --o expr="prec_6 = rand(0, 650)"
 
-t.create --v --o type=strds temporaltype=absolute dataset=precip_abs1 gran="1 months" title="A test" descr="A test"
-t.create --v --o type=strds temporaltype=absolute dataset=precip_abs2 gran="1 months" title="A test" descr="A test"
-t.create --v --o type=strds temporaltype=absolute dataset=precip_abs3 gran="1 months" title="A test" descr="A test"
+t.create --v --o type=strds temporaltype=absolute output=precip_abs1 gran="1 months" title="A test" descr="A test"
+t.create --v --o type=strds temporaltype=absolute output=precip_abs2 gran="1 months" title="A test" descr="A test"
+t.create --v --o type=strds temporaltype=absolute output=precip_abs3 gran="1 months" title="A test" descr="A test"
 
-t.time.abs --v maps=prec_1,prec_2,prec_3 start="2001-01-01" increment="1 months"
-t.info type=raster dataset=prec_1
-t.info type=raster dataset=prec_2
-t.info type=raster dataset=prec_3
+t.time.abs --v input=prec_1,prec_2,prec_3 start="2001-01-01" increment="1 months"
+t.info type=rast input=prec_1
+t.info type=rast input=prec_2
+t.info type=rast input=prec_3
 
-tr.register --v dataset=precip_abs1 maps=prec_1,prec_2,prec_3
-tr.register --v dataset=precip_abs2 maps=prec_1,prec_2,prec_3
-tr.register --v dataset=precip_abs3 maps=prec_1,prec_2,prec_3
-# Check if the space time datasets are updated correctly
-t.time.abs --v maps=prec_1,prec_2,prec_3 start="2011-01-01" increment="1 months"
-t.info type=strds dataset=precip_abs1
+tr.register --v input=precip_abs1 maps=prec_1,prec_2,prec_3
+tr.register --v input=precip_abs2 maps=prec_1,prec_2,prec_3
+tr.register --v input=precip_abs3 maps=prec_1,prec_2,prec_3
+# Check if the space time inputs are updated correctly
+t.time.abs --v input=prec_1,prec_2,prec_3 start="2011-01-01" increment="1 months"
+t.info type=strds input=precip_abs1
 
-# Check if the space time datasets are updated correctly
-t.time.abs --v -i maps=prec_1,prec_2,prec_3 start="2011-01-01" increment="1 months"
-t.info type=strds dataset=precip_abs1
+# Check if the space time inputs are updated correctly
+t.time.abs --v -i input=prec_1,prec_2,prec_3 start="2011-01-01" increment="1 months"
+t.info type=strds input=precip_abs1
 
-t.time.abs --v maps=prec_4,prec_5 start="2001-01-01" end="2002-01-01"
-t.info type=raster dataset=prec_4
-t.info type=raster dataset=prec_5
-t.time.abs --v maps=prec_6 start="2001-01-01 00:00:00" end="2001-01-01 12:00:00"
-t.info type=raster dataset=prec_6
+t.time.abs --v input=prec_4,prec_5 start="2001-01-01" end="2002-01-01"
+t.info type=rast input=prec_4
+t.info type=rast input=prec_5
+t.time.abs --v input=prec_6 start="2001-01-01 00:00:00" end="2001-01-01 12:00:00"
+t.info type=rast input=prec_6
 
-t.remove --v type=raster dataset=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
-t.remove --v type=strds dataset=precip_abs1,precip_abs2,precip_abs3
+t.remove --v type=rast input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+t.remove --v type=strds input=precip_abs1,precip_abs2,precip_abs3

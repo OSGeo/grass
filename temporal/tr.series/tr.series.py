@@ -25,7 +25,7 @@
 #% key: input
 #% type: string
 #% description: Name of an existing space time raster dataset
-#% required: yes
+#% required: no
 #% multiple: yes
 #%end
 

@@ -15,15 +15,23 @@
 #############################################################################
 
 #%module
-#% description: Unregister vector map(s) from a specific or from all space time vector datasets in which it is registered
+#% description: Unregister vector map(s) from a specific or from all space time vector dataset in which it is registered
 #% keywords: spacetime vector dataset
 #% keywords: vector
 #%end
 
 #%option
-#% key: dataset
+#% key: input
 #% type: string
 #% description: Name of an existing space time vector dataset. If no name is provided the vector map(s) are unregistered from all space time datasets in which they are registered.
+#% required: no
+#% multiple: no
+#%end
+
+#%option
+#% key: file
+#% type: string
+#% description: Input file with vector map names, one per line
 #% required: no
 #% multiple: no
 #%end
@@ -44,13 +52,14 @@ import grass.temporal as tgis
 def main():
 
     # Get the options
-    name = options["dataset"]
+    file = options["file"]
+    name = options["input"]
     maps = options["maps"]
 
     # Make sure the temporal database exists
     tgis.create_temporal_database()
     # Unregister maps
-    tgis.unregister_maps_from_space_time_datasets("vector", name, maps)
+    tgis.unregister_maps_from_space_time_datasets(type="vect", name=name, maps=maps, file=file, dbif=None)
 
 if __name__ == "__main__":
     options, flags = grass.parser()
