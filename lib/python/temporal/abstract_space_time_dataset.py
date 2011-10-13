@@ -107,6 +107,38 @@ class abstract_space_time_dataset(abstract_dataset):
 
         return granularity, temporal_type, semantic_type, title, description
 
+    def print_temporal_relation_matrix(self, dbif=None):
+        """Print the temporal relation matrix of all registered maps to stdout
+
+           The temproal relation matrix includes the temporal relations between
+           all registered maps. The relations are strings stored in a list of lists.
+           
+           @param dbif: The database interface to be used
+        """
+
+        connect = False
+
+        if dbif == None:
+            dbif = sql_database_interface()
+            dbif.connect()
+            connect = True
+
+        matrix = []
+
+        maps = self.get_registered_maps_as_objects(where=None, order="start_time", dbif=dbif)
+
+        for map in maps:
+            print map.get_id(),
+        print " "    
+
+        for mapA in maps:
+            for mapB in maps:
+                print mapA.temporal_relation(mapB),
+            print " "
+
+        if connect == True:
+            dbif.close()
+
     def get_temporal_relation_matrix(self, dbif=None):
         """Return the temporal relation matrix of all registered maps as listof lists
 
