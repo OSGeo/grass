@@ -106,11 +106,11 @@ def main():
         sp = tgis.space_time_raster3d_dataset(id)
     if type == "stvds":
         sp = tgis.space_time_vector_dataset(id)
-    if type == "raster":
+    if type == "rast":
         sp = tgis.raster_dataset(id)
-    if type == "raster3d":
+    if type == "rast3d":
         sp = tgis.raster3d_dataset(id)
-    if type == "vector":
+    if type == "vect":
         sp = tgis.vector_dataset(id)
 
     dbif = tgis.sql_database_interface()

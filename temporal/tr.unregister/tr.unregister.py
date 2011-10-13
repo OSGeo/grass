@@ -21,9 +21,17 @@
 #%end
 
 #%option
-#% key: dataset
+#% key: input
 #% type: string
 #% description: Name of an existing space time raster dataset. If no name is provided the raster map(s) are unregistered from all space time datasets in which they are registered.
+#% required: no
+#% multiple: no
+#%end
+
+#%option
+#% key: file
+#% type: string
+#% description: Input file with raster map names, one per line
 #% required: no
 #% multiple: no
 #%end
@@ -44,13 +52,14 @@ import grass.temporal as tgis
 def main():
 
     # Get the options
-    name = options["dataset"]
+    file = options["file"]
+    name = options["input"]
     maps = options["maps"]
 
     # Make sure the temporal database exists
     tgis.create_temporal_database()
     # Unregister maps
-    tgis.unregister_maps_from_space_time_datasets("raster", name, maps)
+    tgis.unregister_maps_from_space_time_datasets(type="rast", name=name, maps=maps, file=file, dbif=None)
 
 if __name__ == "__main__":
     options, flags = grass.parser()

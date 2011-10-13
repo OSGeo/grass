@@ -22,10 +22,18 @@
 #%end
 
 #%option
-#% key: dataset
+#% key: input
 #% type: string
 #% description: Name(s) of the space time or map dataset to be removed from the temporal database
-#% required: yes
+#% required: no
+#% multiple: yes
+#%end
+
+#%option
+#% key: file
+#% type: string
+#% description: Input file with raster map names, one per line
+#% required: no
 #% multiple: no
 #%end
 
@@ -34,7 +42,7 @@
 #% type: string
 #% description: Type of the space time dataset, default is strds
 #% required: no
-#% options: strds, str3ds, stvds, raster, raster3d, vector
+#% options: strds, str3ds, stvds, rast, rast3d, vect
 #% answer: strds
 #%end
 
@@ -46,18 +54,45 @@ import grass.temporal as tgis
 def main():
     
     # Get the options
-    names = options["dataset"]
+    maps = options["input"]
+    file = options["file"]
     type = options["type"]
+
+    if maps and file:
+        core.fata(_("%s= and %s= are mutually exclusive") % ("input","file"))
 
     # Make sure the temporal database exists
     tgis.create_temporal_database()
-    
-    mapset =  grass.gisenv()["MAPSET"]
 
     dbif = tgis.sql_database_interface()
     dbif.connect()
 
-    for name in names.split(","):
+    maplist = []
+
+    # Map names as comma separated string
+    if maps:
+        if maps.find(",") == -1:
+            maplist = (maps,)
+        else:
+            maplist = tuple(maps.split(","))
+
+    # Read the map list from file
+    if file:
+        fd = open(file, "r")
+
+        line = True
+        while True:
+            line = fd.readline()
+            if not line:
+                break
+
+            line_list = line.split("\n")
+            mapname = line_list[0]
+            maplist.append(mapname)
+    
+    mapset =  grass.gisenv()["MAPSET"]
+
+    for name in maplist:
         name = name.strip()
         # Check for the mapset in name
         if name.find("@") < 0:
@@ -71,19 +106,18 @@ def main():
             ds = tgis.space_time_raster3d_dataset(id)
         if type == "stvds":
             ds = tgis.space_time_vector_dataset(id)
-        if type == "raster":
+        if type == "rast":
             ds = tgis.raster_dataset(id)
-        if type == "raster3d":
+        if type == "rast3d":
             ds = tgis.raster3d_dataset(id)
-        if type == "vector":
+        if type == "vect":
             ds = tgis.vector_dataset(id)
 
         if ds.is_in_db(dbif) == False:
             dbif.close()
-            grass.fatal(ds.get_type() + " dataset <" + name + "> not found in temporal database")
+            grass.fatal(_("%s dataset <%s> not found in temporal database") % (ds.get_type(), name))
 
         # We need to read some data from the temporal database
-        ds.select(dbif)
         ds.delete(dbif)
 
     dbif.close()
