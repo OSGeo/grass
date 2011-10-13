@@ -2,6 +2,8 @@ MODULE_TOPDIR = ..
 
 SUBDIRS = \
 	t.create \
+	t.support \
+	t.topology \
 	t.list \
 	t.info \
 	t.remove \
