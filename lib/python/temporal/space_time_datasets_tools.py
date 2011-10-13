@@ -26,7 +26,7 @@ from space_time_datasets import *
 
 ###############################################################################
 
-def register_maps_in_space_time_dataset(type, name, maps, start=None, increment=None, dbif = None, interval=False):
+def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=None, end=None, increment=None, dbif = None, interval=False, fs="|"):
     """Use this method to register maps in space time datasets. This function is generic and
        can handle raster, vector and raster3d maps as well as there space time datasets.
 
@@ -39,11 +39,34 @@ def register_maps_in_space_time_dataset(type, name, maps, start=None, increment=
        @param type: The type of the maps raster, raster3d or vector
        @param name: The name of the space time dataset
        @param maps: A comma separated list of map names
+       @param file: Input file one map with optional start and end time, one per line
        @param start: The start date and time of the first raster map, in case the map has no date (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd", format relative 5.0)
        @param increment: Time increment between maps for time stamp creation (format absolute: NNN seconds, minutes, hours, days, weeks, months, years; format relative: 1.0)
        @param dbif: The database interface to be used
        @param interval: If True, time intervals are created in case the start time and an increment is provided
+       @param fs: Field separator used in input file
     """
+
+    start_time_in_file = False
+    end_time_in_file = False
+
+    if maps and file:
+        core.fata(_("%s= and %s= are mutually exclusive") % ("input","file"))
+
+    if end and increment:
+        core.fata(_("%s= and %s= are mutually exclusive") % ("end","increment"))
+
+    if end and not start:
+        core.fata(_("Please specify %s= and %s=") % ("start_time","end_time"))
+
+    if not maps and not file:
+        core.fata(_("Please specify %s= or %s=") % ("input","file"))
+
+    if start and start == "file":
+        start_time_in_file = True
+
+    if end and end == "file":
+        end_time_in_file = True
 
     # We may need the mapset
     mapset =  core.gisenv()["MAPSET"]
@@ -54,11 +77,11 @@ def register_maps_in_space_time_dataset(type, name, maps, start=None, increment=
     else:
         id = name
 
-    if type == "raster":
+    if type == "rast":
         sp = space_time_raster_dataset(id)
-    if type == "raster3d":
+    if type == "rast3d":
         sp = space_time_raster3d_dataset(id)
-    if type == "vector":
+    if type == "vect":
         sp = space_time_vector_dataset(id)
 
     connect = False
@@ -73,34 +96,77 @@ def register_maps_in_space_time_dataset(type, name, maps, start=None, increment=
 
     if sp.is_in_db(dbif) == False:
         dbif.close()
-        core.fatal("Space time " + sp.get_new_map_instance(None).get_type() + " dataset <" + name + "> not found")
+        core.fatal(_("Space time %s dataset <%s> no found") % (sp.get_new_map_instance(None).get_type(). name))
 
-    if maps.find(",") == -1:
-        maplist = (maps,)
-    else:
-        maplist = tuple(maps.split(","))
+    maplist = []
 
+    # Map names as comma separated string
+    if maps:
+        if maps.find(",") == -1:
+            maplist = (maps,)
+        else:
+            maplist = tuple(maps.split(","))
+
+    # Read the map list from file
+    if file:
+        fd = open(file, "r")
+
+        line = True
+        while True:
+            line = fd.readline()
+            if not line:
+                break
+
+            line_list = line.split(fs)
+
+            mapname = line_list[0].strip()
+
+            if mapname.find("@") < 0:
+                mapid = mapname + "@" + mapset
+            else:
+                mapid = mapname
+
+            row = {}
+            row["id"] = mapid
+
+            if start_time_in_file and  end_time_in_file:
+                row["start"] = line_list[1].strip()
+                row["end"] = line_list[2].strip()
+
+            if start_time_in_file and  not end_time_in_file:
+                row["start"] = line_list[1].strip()
+
+            maplist.append(row)
+    
     num_maps = len(maplist)
     count = 0
-    for mapname in maplist:
+    for entry in maplist:
 	core.percent(count, num_maps, 1)
-        mapname = mapname.strip()
-        # Check if the map name contains the mapset as well
-        if mapname.find("@") < 0:
-            mapid = mapname + "@" + mapset
-        else:
-            mapid = mapname
-        # Get a new instance of the space time dataset map type
-        map = sp.get_new_map_instance(mapid)
 
-        # In case the map is already registered print a message and continue to the next map
+        # Get a new instance of the space time dataset map type
+        if file:
+            map = sp.get_new_map_instance(entry["id"])
+        else:
+            if entry.find("@") < 0:
+                mapid = entry + "@" + mapset
+            else:
+                mapid = entry
+
+            map = sp.get_new_map_instance(mapid)
+
+        # Use the time data from file
+        if start_time_in_file:
+            start = entry["start"]
+        if end_time_in_file:
+            end = entry["end"]
 
         # Put the map into the database
         if map.is_in_db(dbif) == False:
             # Break in case no valid time is provided
             if start == "" or start == None:
                 dbif.close()
-                core.fatal("Unable to register " + map.get_type() + " map <" + map.get_id() + ">. The map has no valid time and the start time is not set.")
+                core.fatal(_("Unable to register %s map <%s>. The map has no valid time and the start time is not set.") % \
+                            (map.get_type(), map.get_id() ))
             # Load the data from the grass file database
             map.load()
 
@@ -114,11 +180,15 @@ def register_maps_in_space_time_dataset(type, name, maps, start=None, increment=
             map.select(dbif)
             if map.get_temporal_type() != sp.get_temporal_type():
                 dbif.close()
-                core.fatal("Unable to register " + map.get_type() + " map <" + map.get_id() + ">. The temporal types are different.")
+                core.fatal(_("Unable to register %s map <%s>. The temporal types are different.") %  (map.get_type(), map.get_id()))
+
+        # In case the time is in the input file we ignore the increment counter
+        if start_time_in_file:
+            count = 1
 
         # Set the valid time
         if start:
-            assign_valid_time_to_map(ttype=sp.get_temporal_type(), map=map, start=start, end=None, increment=increment, mult=count, dbif=dbif, interval=interval)
+            assign_valid_time_to_map(ttype=sp.get_temporal_type(), map=map, start=start, end=end, increment=increment, mult=count, dbif=dbif, interval=interval)
 
         # Finally Register map in the space time dataset
         sp.register_map(map, dbif)
@@ -134,7 +204,7 @@ def register_maps_in_space_time_dataset(type, name, maps, start=None, increment=
         
 ###############################################################################
 
-def unregister_maps_from_space_time_datasets(type, name, maps, dbif = None):
+def unregister_maps_from_space_time_datasets(type, name, maps, file=None, dbif = None):
     """Unregister maps from a single space time dataset or, in case no dataset name is provided,
        unregister from all datasets within the maps are registered.
 
@@ -143,6 +213,10 @@ def unregister_maps_from_space_time_datasets(type, name, maps, dbif = None):
        @param maps: A comma separated list of map names
        @param dbif: The database interface to be used
     """
+
+    if maps and file:
+        core.fata(_("%s= and %s= are mutually exclusive") % ("input","file"))
+
     mapset =  core.gisenv()["MAPSET"]
 
     if dbif == None:
@@ -158,23 +232,40 @@ def unregister_maps_from_space_time_datasets(type, name, maps, dbif = None):
         else:
             id = name
 
-        if type == "raster":
+        if type == "rast":
             sp = space_time_raster_dataset(id)
-        if type == "raster3d":
+        if type == "rast3d":
             sp = space_time_raster3d_dataset(id)
-        if type == "vector":
+        if type == "vect":
             sp = space_time_vector_dataset(id)
 
         if sp.is_in_db(dbif) == False:
             dbif.close()
             core.fatal("Space time " + sp.get_new_map_instance(None).get_type() + " dataset <" + name + "> not found")
 
-    # Build the list of maps
-    if maps.find(",") == -1:
-        maplist = (maps,)
-    else:
-        maplist = tuple(maps.split(","))
+    maplist = []
 
+    # Map names as comma separated string
+    if maps:
+        if maps.find(",") == -1:
+            maplist = (maps,)
+        else:
+            maplist = tuple(maps.split(","))
+
+    # Read the map list from file
+    if file:
+        fd = open(file, "r")
+
+        line = True
+        while True:
+            line = fd.readline()
+            if not line:
+                break
+
+            line_list = line.split(fs)
+            mapname = line_list[0].strip()
+            maplist.append(mapname)
+    
     num_maps = len(maplist)
     count = 0
     for mapname in maplist:
@@ -187,11 +278,11 @@ def unregister_maps_from_space_time_datasets(type, name, maps, dbif = None):
             mapid = mapname
             
         # Create a new instance with the map type
-        if type == "raster":
+        if type == "rast":
             map = raster_dataset(mapid)
-        if type == "raster3d":
+        if type == "rast3d":
             map = raster3d_dataset(mapid)
-        if type == "vector":
+        if type == "vect":
             map = vector_dataset(mapid)
 
         # Unregister map if in database
@@ -215,7 +306,7 @@ def unregister_maps_from_space_time_datasets(type, name, maps, dbif = None):
 
 ###############################################################################
 
-def assign_valid_time_to_maps(type, maps, ttype, start, end=None, increment=None, dbif = None, interval=False):
+def assign_valid_time_to_maps(type, maps, ttype, start, end=None, file=file, increment=None, dbif = None, interval=False, fs="|"):
     """Use this method to assign valid time (absolute or relative) to raster,
        raster3d and vector datasets.
 
@@ -229,9 +320,14 @@ def assign_valid_time_to_maps(type, maps, ttype, start, end=None, increment=None
        @param start: The start date and time of the first raster map (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd", format relative 5.0)
        @param end: The end date and time of the first raster map (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd", format relative 5.0)
        @param increment: Time increment between maps for time stamp creation (format absolute: NNN seconds, minutes, hours, days, weeks, months, years; format relative: 1.0)
+       @param file: Input file one map with optional start and end time, one per line
        @param dbif: The database interface to be used
        @param interval: If True, time intervals are created in case the start time and an increment is provided
+       @param fs: Field separator used in input file
     """
+
+    start_time_in_file = False
+    end_time_in_file = False
 
     if end and increment:
         if dbif:
@@ -241,37 +337,99 @@ def assign_valid_time_to_maps(type, maps, ttype, start, end=None, increment=None
     # List of space time datasets to be updated
     splist = {}
 
+    if maps and file:
+        core.fata(_("%s= and %s= are mutually exclusive") % ("input","file"))
+
+    if end and increment:
+        core.fata(_("%s= and %s= are mutually exclusive") % ("end","increment"))
+
+    if end and not start:
+        core.fata(_("Please specify %s= and %s=") % ("start_time","end_time"))
+
+    if not maps and not file:
+        core.fata(_("Please specify %s= or %s=") % ("input","file"))
+
+    if start and start == "file":
+        start_time_in_file = True
+
+    if end and end == "file":
+        end_time_in_file = True
+
     # We may need the mapset
     mapset =  core.gisenv()["MAPSET"]
+
+    connect = False
 
     if dbif == None:
         dbif = sql_database_interface()
         dbif.connect()
         connect = True
 
-    if maps.find(",") == -1:
-        maplist = (maps,)
-    else:
-        maplist = tuple(maps.split(","))
+    maplist = []
 
+    # Map names as comma separated string
+    if maps:
+        if maps.find(",") == -1:
+            maplist = (maps,)
+        else:
+            maplist = tuple(maps.split(","))
+
+    # Read the map list from file
+    if file:
+        fd = open(file, "r")
+
+        line = True
+        while True:
+            line = fd.readline()
+            if not line:
+                break
+
+            line_list = line.split(fs)
+
+            mapname = line_list[0].strip()
+
+            if mapname.find("@") < 0:
+                mapid = mapname + "@" + mapset
+            else:
+                mapid = mapname
+
+            row = {}
+            row["id"] = mapid
+
+            if start_time_in_file and  end_time_in_file:
+                row["start"] = line_list[1].strip()
+                row["end"] = line_list[2].strip()
+
+            if start_time_in_file and  not end_time_in_file:
+                row["start"] = line_list[1].strip()
+
+            maplist.append(row)
+    
     num_maps = len(maplist)
     count = 0
-    
-    for mapname in maplist:
+
+    for entry in maplist:
 	core.percent(count, num_maps, 1)
-        mapname = mapname.strip()
-        # Check if the map name contains the mapset as well
-        if mapname.find("@") < 0:
-            mapid = mapname + "@" + mapset
+        if file:
+            mapid = entry["id"]
         else:
-            mapid = mapname
-            
-        if type == "raster":
+            if entry.find("@") < 0:
+                mapid = entry + "@" + mapset
+            else:
+                mapid = entry
+
+        if type == "rast":
             map = raster_dataset(mapid)
-        if type == "raster3d":
+        if type == "rast3d":
             map = raster3d_dataset(mapid)
-        if type == "vector":
+        if type == "vect":
             map = vector_dataset(mapid)
+
+        # Use the time data from file
+        if start_time_in_file:
+            start = entry["start"]
+        if end_time_in_file:
+            end = entry["end"]
 
         if map.is_in_db(dbif) == False:
             # Load the data from the grass file database
@@ -291,6 +449,10 @@ def assign_valid_time_to_maps(type, maps, ttype, start, end=None, increment=None
                 for dataset in sprows:
                     splist[dataset["id"]] = True
             
+        # In case the time is in the input file we ignore the increment counter
+        if start_time_in_file:
+            count = 1
+
         # Set the valid time
         assign_valid_time_to_map(ttype=ttype, map=map, start=start, end=end, increment=increment, mult=count, dbif=dbif, interval=interval)
 
