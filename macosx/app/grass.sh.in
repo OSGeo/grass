@@ -47,9 +47,9 @@ export PATH
 # add some OS X style app support paths, and create user one if missing.
 mkdir -p "$GISBASE_USER/Modules/bin"
 if [ "$GRASS_ADDON_PATH" ] ; then
-	GRASS_ADDON_PATH="$GRASS_ADDON_PATH:$GISBASE_USER/Modules/bin:$GISBASE_SYSTEM/Modules/bin"
+	GRASS_ADDON_PATH="$GRASS_ADDON_PATH:$GISBASE_USER/Modules:$GISBASE_SYSTEM/Modules"
 else
-	GRASS_ADDON_PATH="$GISBASE_USER/Modules/bin:$GISBASE_SYSTEM/Modules/bin"
+	GRASS_ADDON_PATH="$GISBASE_USER/Modules/bin:$GISBASE_SYSTEM/Modules"
 fi
 export GRASS_ADDON_PATH
 
