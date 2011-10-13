@@ -1467,6 +1467,19 @@ class ModelFrame(wx.Frame):
         self.itemPanel.Update()
         self.SetStatusText('', 0)
         
+        # final updates
+        for action in self.model.GetItems(objType = ModelAction):
+            valid = True
+            params = action.GetParams()
+            for p in params['params']:
+                if p.get('required', False) and \
+                        p.get('value', '') == '' and \
+                        p.get('default', '') == '':
+                    valid = False
+                    break
+            action.SetValid(valid)
+            action.Update()
+        
         self.canvas.Refresh(True)
         
     def WriteModelFile(self, filename):
