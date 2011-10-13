@@ -1,11 +1,11 @@
 # This is a test to register and unregister raster3d maps in
-# space time raster3d input.
+# space time raster3d datasets
 # The raster3d maps will be registered in different space time raster3d
-# inputs
+# datasets
 
 # We need to set a specific region in the
 # @preprocess step of this test. We generate
-# 3d raster with r3.mapcalc and create two space time raster3d inputs
+# 3d raster with r3.mapcalc and create two space time raster3d datasets
 # with relative and absolute time
 # The region setting should work for UTM and LL test locations
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
@@ -18,7 +18,7 @@ r3.mapcalc --o expr="volume_5 = rand(0, 300)"
 r3.mapcalc --o expr="volume_6 = rand(0, 650)"
 
 # The first @test
-# We create the space time raster3d inputs and register the raster3d maps with absolute time interval
+# We create the space time raster3d dataset and register the raster3d maps with absolute time interval
 
 t.create --v --o type=str3ds temporaltype=absolute output=volume_abs1 gran="1 senconds" title="A test" descr="A test"
 t.create --v --o type=str3ds temporaltype=absolute output=volume_abs2 gran="1 minutes" title="A test" descr="A test"
