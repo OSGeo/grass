@@ -164,8 +164,9 @@ class abstract_temporal_extent(sql_database_interface):
 	   A   |-------|
 	   B  |---------|
 	"""
-        if  self.D["end_time"] == None and map.D["end_time"] == None :
-            return False
+        # Check single point of time in interval
+        if  map.D["end_time"] == None:
+                return False
 
         # Check single point of time in interval
         if  self.D["end_time"] == None:
@@ -184,8 +185,9 @@ class abstract_temporal_extent(sql_database_interface):
 	   A  |---------|
 	   B   |-------|
 	"""
-        if  self.D["end_time"] == None and map.D["end_time"] == None :
-            return False
+        # Check single point of time in interval
+        if  self.D["end_time"] == None:
+                return False
 
         # Check single point of time in interval
         if  map.D["end_time"] == None:
@@ -250,6 +252,20 @@ class abstract_temporal_extent(sql_database_interface):
 	"""Returns the temporal relation between temporal objects
 	   Temporal relationsships are implemented after [Allen and Ferguson 1994 Actions and Events in Interval Temporal Logic]
 	"""
+        
+        # First check for correct time
+        if not self.D.has_key("start_time"):
+            return None
+        if not self.D.has_key("end_time"):
+            return None
+        if not map.D.has_key("start_time"):
+            return None
+        if not map.D.has_key("end_time"):
+            return None
+
+        if self.D["start_time"] == None or map.D["start_time"] == None:
+            return None
+
 	if self.equivalent(map):
 	    return "equivalent"
 	if self.during(map):
