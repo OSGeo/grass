@@ -180,14 +180,15 @@ if [ -n "$PACKAGE" ]; then
 
     # grass package
     tar -cjf $PDIR/grass$PACKAGE_NAME-$VERSION-$PACKAGE.tar.bz2 \
-    apps/grass/grass-$VERSION \
-    bin/grass$MAJOR$MINOR.bat.tmpl \
-    bin/grass$MAJOR$MINOR.tmpl \
-    bin/libintl3.dll \
-    bin/libiconv2.dll \
-    bin/regex2.dll \
-    etc/postinstall/grass$MAJOR$MINOR.bat \
-    etc/preremove/grass$MAJOR$MINOR.bat
+	apps/grass/grass-$VERSION \
+	bin/grass$MAJOR$MINOR.py \
+	bin/grass$MAJOR$MINOR.bat.tmpl \
+	bin/grass$MAJOR$MINOR.tmpl \
+	bin/libintl3.dll \
+	bin/libiconv2.dll \
+	bin/regex2.dll \
+	etc/postinstall/grass$MAJOR$MINOR.bat \
+	etc/preremove/grass$MAJOR$MINOR.bat
     
     rm bin/grass$MAJOR$MINOR.tmpl
     rm bin/grass$MAJOR$MINOR.bat.tmpl
