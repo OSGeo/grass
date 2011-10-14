@@ -26,6 +26,17 @@ import copy
 
 ###############################################################################
 
+def datetime_delta_to_double(dt1, dt2):
+    """Compute the the dfference dt2 - dt1 and convert the time delta into a 
+       double value, representing days.
+    """
+
+    delta = dt2 - dt1
+
+    return float(delta.days) + float(delta.seconds/86400.0)
+
+###############################################################################
+
 def increment_datetime_by_string(mydate, increment, mult = 1):
     """Return a new datetime object incremented with the provided relative dates specified as string.
        Additional a multiplier can be specified to multiply the increment bevor adding to the provided datetime object.

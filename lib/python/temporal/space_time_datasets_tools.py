@@ -77,12 +77,7 @@ def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=
     else:
         id = name
 
-    if type == "rast":
-        sp = space_time_raster_dataset(id)
-    if type == "rast3d":
-        sp = space_time_raster3d_dataset(id)
-    if type == "vect":
-        sp = space_time_vector_dataset(id)
+    sp = dataset_factory(type, id)
 
     connect = False
 
@@ -232,12 +227,7 @@ def unregister_maps_from_space_time_datasets(type, name, maps, file=None, dbif =
         else:
             id = name
 
-        if type == "rast":
-            sp = space_time_raster_dataset(id)
-        if type == "rast3d":
-            sp = space_time_raster3d_dataset(id)
-        if type == "vect":
-            sp = space_time_vector_dataset(id)
+        sp = dataset_factory(type, id)
 
         if sp.is_in_db(dbif) == False:
             dbif.close()
@@ -418,12 +408,7 @@ def assign_valid_time_to_maps(type, maps, ttype, start, end=None, file=file, inc
             else:
                 mapid = entry
 
-        if type == "rast":
-            map = raster_dataset(mapid)
-        if type == "rast3d":
-            map = raster3d_dataset(mapid)
-        if type == "vect":
-            map = vector_dataset(mapid)
+        sp = dataset_factory(type, id)
 
         # Use the time data from file
         if start_time_in_file:
@@ -530,3 +515,31 @@ def assign_valid_time_to_map(ttype, map, start, end, increment=None, mult=1, dbi
 
     if connect == True:
         dbif.close()
+
+###############################################################################
+
+def dataset_factory(type, id):
+    """A factory functions to create space time or map datasets
+    
+       @param type: the dataset type: rast, rast3d, vect, strds, str3ds, stvds
+       @param id: The id of the dataset ("name@mapset")
+    """
+    print type, id
+    if type == "strds":
+        sp = space_time_raster_dataset(id)
+    elif type == "str3ds":
+        sp = space_time_raster3d_dataset(id)
+    elif type == "stvds":
+        sp = space_time_vector_dataset(id)
+    elif type == "rast":
+        sp = raster_dataset(id)
+    elif type == "rast3d":
+        sp = raster3d_dataset(id)
+    elif type == "vect":
+        sp = vector_dataset(id)
+    else:
+        core.error(_("Unknown dataset type: %s") % type)
+        return None
+
+    return sp
+

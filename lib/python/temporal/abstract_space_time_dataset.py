@@ -107,6 +107,19 @@ class abstract_space_time_dataset(abstract_dataset):
 
         return granularity, temporal_type, semantic_type, title, description
 
+    def get_map_time(self):
+        """Return the type of the map time, interval, point, maixed or invalid"""
+        
+        temporal_type = self.get_temporal_type()
+
+        if temporal_type == "absolute":
+            map_time   = self.absolute_time.get_map_time()
+        elif temporal_type == "relative":
+            map_time   = self.relative_time.get_map_time()
+
+        return map_time
+
+
     def print_temporal_relation_matrix(self, maps):
         """Print the temporal relation matrix of all registered maps to stdout
 
@@ -116,14 +129,28 @@ class abstract_space_time_dataset(abstract_dataset):
            @param dbif: The database interface to be used
         """
 
-        for map in maps:
-            print map.get_id(),
-        print " "    
+        for i in range(len(maps)):
+            reltations = ""
+            count = 0
+            for j in range(i + 1, len(maps)):
+                relation = maps[j].temporal_relation(maps[i])
 
-        for mapA in maps:
-            for mapB in maps:
-                print mapA.temporal_relation(mapB),
-            print " "
+                # print maps[j].base.get_name(), maps[i].base.get_name(), relation
+                if count == 0:
+                    relations = relation
+                else:
+                    relations += "," + relation
+                count += 1
+                # Break if the the next map follows
+                if relation == "follows":
+                    break
+                # Break if the the next map is after
+                if relation == "after":
+                    break
+            if i < len(maps) - 1:    
+                print maps[i].base.get_name(), relations    
+            else:
+                print maps[i].base.get_name()
 
     def get_temporal_relation_matrix(self, maps):
         """Return the temporal relation matrix of all registered maps as listof lists
@@ -133,7 +160,7 @@ class abstract_space_time_dataset(abstract_dataset):
            The temproal relation matrix includes the temporal relations between
            all registered maps. The relations are strings stored in a list of lists.
            
-           @param dbif: The database interface to be used
+           @param maps: a ordered by start_time list of map objects
         """
 
         matrix = []
@@ -153,7 +180,7 @@ class abstract_space_time_dataset(abstract_dataset):
 
         return matrix
 
-    def get_temporal_map_type_count(self, maps):
+    def count_temporal_types(self, maps):
         """Return the temporal type of the registered maps as dictionary
 
            The map list must be ordered by start time
@@ -162,9 +189,8 @@ class abstract_space_time_dataset(abstract_dataset):
            * point    -> only the start time is present
            * interval -> start and end time
            * invalid  -> No valid time point or interval found
-           * holes    -> In case the maps are interval
 
-           @param dbif: The database interface to be used
+           @param maps: A sorted (start_time) list of abstract_dataset objects
         """
 
         time_invalid = 0
@@ -181,11 +207,6 @@ class abstract_space_time_dataset(abstract_dataset):
 
             if start and end:
                 time_interval += 1
-                # Check for holes
-                if i < len(maps) - 1:
-                    relation = maps[i + 1].temporal_relation(maps[i])
-                    if relation != "follows":
-                        holes += 1
             elif start and not end:
                 time_point += 1
             else:
@@ -195,26 +216,37 @@ class abstract_space_time_dataset(abstract_dataset):
         tcount["interval"] = time_interval
         tcount["invalid"] = time_invalid
 
-        holes = 0
+        return tcount
 
-        # Check for holes
-        if time_interval > 0 and time_point == 0 and time_invalid == 0:
+    def count_gaps(self, maps, is_interval = False):
+        """Count the number of gaps between temporal neighbours. The maps must have intervals as valid time
+        
+           @param maps: A sorted (start_time) list of abstract_dataset objects
+           @param is_interval: Set true if the maps have vaild interval time (relative or absolute)
+           @return The numbers of gaps between temporal neighbours
+        """
+
+        gaps = 0
+
+        # Check for gaps
+        if is_interval:    
             for i in range(len(maps)):
                 if i < len(maps) - 1:
                     relation = maps[i + 1].temporal_relation(maps[i])
-                    if relation != "follows":
-                        holes += 1
+                    if relation == "after":
+                        gaps += 1
+        else:
+            gaps = None # Gaps only possible in temporal consistent datasets (only intervals)
 
-        tcount["holes"] = holes
+        return gaps
 
-        return tcount
-
-    def get_temporal_relations_count(self, maps):
+    def count_temporal_relations(self, maps):
         """Count the temporal relations between the registered maps.
 
            The map list must be ordered by start time
 
-           @param dbif: The database interface to be used
+           @param maps: A sorted (start_time) list of abstract_dataset objects
+           @return A dictionary with counted temporal relationships
         """
 
         tcount = {}
@@ -228,7 +260,76 @@ class abstract_space_time_dataset(abstract_dataset):
                 else:
                     tcount[relation] = 1
 
+                # Break if the the next map follows
+                if relation == "follows":
+                    break
+                # Break if the the next map is after
+                if relation == "after":
+                    break
+
         return tcount
+
+    def check_temporal_topology(self, maps=None, dbif=None):
+        """Check the temporal topology
+
+           Correct topology means, that time intervals are not overlap or
+           that intervals does not contain other intervals. Equal time intervals or
+           points of time are not allowed.
+
+           The map list must be ordered by start time
+
+           Allowed and not allowed temporal relationships for correct topology
+           after      -> allowed
+           before     -> allowed
+           follows    -> allowed
+           precedes   -> allowed
+
+           equivalent -> not allowed
+           during     -> not allowed
+           contains   -> not allowed
+           overlaps   -> not allowed
+           overlapped -> not allowed
+           starts     -> not allowed
+           finishes   -> not allowed
+           started    -> not allowed
+           finished   -> not allowed
+
+           @param maps: A sorted (start_time) list of abstract_dataset objects
+           @return True if topology is correct
+        """
+        if maps == None:
+            maps = get_registered_maps_as_objects(where=None, order="start_time", dbif=dbif)
+
+        relations = self.count_temporal_relations(maps)
+
+        map_time = self.get_map_time()
+
+        if map_time == "interval" or map_time == "mixed":
+            if relations.has_key("equivalent"):
+                return False
+            if relations.has_key("during"):
+                return False
+            if relations.has_key("contains"):
+                return False
+            if relations.has_key("overlaps"):
+                return False
+            if relations.has_key("overlapped"):
+                return False
+            if relations.has_key("starts"):
+                return False
+            if relations.has_key("finishes"):
+                return False
+            if relations.has_key("started"):
+                return False
+            if relations.has_key("finished"):
+                return False
+        elif map_time == "point":
+            if relations.has_key("equivalent"):
+                return False
+        else:
+            return False
+
+        return True
 
     def get_registered_maps_as_objects(self, where=None, order="start_time", dbif=None):
         """Return all registered maps as ordered object list
@@ -390,6 +491,10 @@ class abstract_space_time_dataset(abstract_dataset):
 
         # First select all data from the database
         map.select(dbif)
+
+        if not map.check_valid_time():
+            core.fatal(_("Map <%s> has invalid time") % map.get_id())
+
         map_id = map.base.get_id()
         map_name = map.base.get_name()
         map_mapset = map.base.get_mapset()
@@ -702,10 +807,7 @@ class abstract_space_time_dataset(abstract_dataset):
 		    max_start_time = row[0]
 
 		if end_time < max_start_time:
-                    map_time = "mixed"
 		    use_start_time = True
-                else:
-                    map_time = "interval"
 		    
         # Set the maximum start time as end time
         if use_start_time:
@@ -733,8 +835,17 @@ class abstract_space_time_dataset(abstract_dataset):
 	    else:
 		dbif.cursor.execute(sql)
 
-            if end_time == None:
-                map_time = "point"
+        # Count the temporal map types
+        tlist = self.count_temporal_types(self.get_registered_maps_as_objects(dbif=dbif))
+
+        if tlist["interval"] > 0 and tlist["point"] == 0 and tlist["invalid"] == 0:
+            map_time = "interval"
+        elif tlist["interval"] == 0 and tlist["point"] > 0 and tlist["invalid"] == 0:
+            map_time = "point"
+        elif tlist["interval"] > 0 and tlist["point"] > 0 and tlist["invalid"] == 0:
+            map_time = "mixed"
+        else:
+            map_time = "invalid"
 
         # Set the map time type
         if self.is_time_absolute():

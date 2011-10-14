@@ -56,24 +56,25 @@ class abstract_map_dataset(abstract_dataset):
            @param timezone: Thee timezone of the map
         
         """
-        if start_time != None and not isinstance(start_time, datetime) :
-            core.fatal(_("Start time must be of type datetime"))
+        if start_time and not isinstance(start_time, datetime) :
+            core.fatal(_("Start time must be of type datetime for %s map <%s>") % (self.get_type(), self.get_id()))
 
-        if end_time != None and not isinstance(end_time, datetime) :
-            core.fatal(_("End time must be of type datetime"))
+        if end_time and not isinstance(end_time, datetime) :
+            core.fatal(_("End time must be of type datetime for %s map <%s>") % (self.get_type(), self.get_id()))
 
-        if start_time != None and end_time != None:
-            if start_time >= end_time:
-                core.error(_("End time must be later than start time"))
-                return False
+        if start_time and end_time:
+            if start_time > end_time:
+                core.fatal(_("End time must be greater than start time for %s map <%s>") % (self.get_type(), self.get_id()))
+            else:
+                # Do not create an interval in case start and end time are equal
+                if start_time == end_time:
+                    end_time = None
 
         self.base.set_ttype("absolute")
         
         self.absolute_time.set_start_time(start_time)
         self.absolute_time.set_end_time(end_time)
         self.absolute_time.set_timezone(timezone)
-
-        return True
 
     def update_absolute_time(self, start_time, end_time=None, timezone=None, dbif = None):
         """Update the absolute time
@@ -103,10 +104,13 @@ class abstract_map_dataset(abstract_dataset):
            @param end_time: A double value in days
 
         """
-        if start_time != None and end_time != None:
-            if abs(float(start_time)) >= abs(float(end_time)):
-                core.error(_("End time must be greater than start time"))
-                return False
+        if start_time and end_time:
+            if abs(float(start_time)) > abs(float(end_time)):
+                core.fatal(_("End time must be greater than start time for %s map <%s>") % (self.get_type(), self.get_id()))
+            else:
+                # Do not create an interval in case start and end time are equal
+                if start_time == end_time:
+                    end_time = None
 
         self.base.set_ttype("relative")
         
@@ -115,8 +119,6 @@ class abstract_map_dataset(abstract_dataset):
             self.relative_time.set_end_time(float(end_time))
         else:
             self.relative_time.set_end_time(None)
-
-        return True
 
     def update_relative_time(self, start_time, end_time=None, dbif = None):
         """Update the relative time interval
@@ -152,6 +154,24 @@ class abstract_map_dataset(abstract_dataset):
         """
         self.spatial_extent.set_spatial_extent(north, south, east, west, top, bottom)
         
+    def check_valid_time(self):
+        """Check for correct valid time"""
+        if self.is_time_absolute():
+            start, end, tz = self.get_absolute_time()
+        else:
+            start, end = self.get_relative_time()
+
+        if start:
+            if end:
+                if start >= end:
+                    core.error(_("Map <%s> has incorrect time interval, start time is greater than end time") % (self.get_id()))
+                    return False
+        else:
+            core.error(_("Map <%s> has incorrect start time") % (self.get_id()))
+            return False
+
+        return True
+
     def delete(self, dbif=None):
 	"""Delete a map entry from database if it exists
         
@@ -197,7 +217,7 @@ class abstract_map_dataset(abstract_dataset):
         if connect == True:
             dbif.close()
 
-    def unregister(self, dbif=None):
+    def unregister(self, dbif=None, update=True):
 	""" Remove the map entry in each space time dataset in which this map is registered
 
            @param dbif: The database interface to be used
@@ -225,7 +245,8 @@ class abstract_map_dataset(abstract_dataset):
                 stds.unregister_map(self, dbif)
                 # Take care to update the space time dataset after
                 # the map has been unregistred
-                stds.update_from_registered_maps(dbif)
+                if update == True:
+                    stds.update_from_registered_maps(dbif)
 
         dbif.connection.commit()
 
