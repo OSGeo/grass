@@ -189,21 +189,21 @@ if [ -n "$PACKAGE" ]; then
     rm bin/grass$MAJOR$MINOR.tmpl
     rm bin/grass$MAJOR$MINOR.bat.tmpl
     
-    # grass-devel package
-    tar -cjf $PDIR/grass-devel-$VERSION-$PACKAGE.tar.bz2 \
-    apps/grass/grass-$VERSION/include
+    # grass-devel package (obsolete)
+    ###tar -cjf $PDIR/grass-devel-$VERSION-$PACKAGE.tar.bz2 \
+    ###apps/grass/grass-$VERSION/include
     
-    # grass-devel-mingw package
-    tar -cjf $PDIR/grass-devel-mingw-$VERSION-$PACKAGE.tar.bz2 \
-    apps/grass/grass-$VERSION/lib/*.a
+    # grass-devel-mingw package (obsolete)
+    ###tar -cjf $PDIR/grass-devel-mingw-$VERSION-$PACKAGE.tar.bz2 \
+    ###apps/grass/grass-$VERSION/lib/*.a
     
-    # grass-devel-vc package
-    tar -cjf $PDIR/grass-devel-vc-$VERSION-$PACKAGE.tar.bz2 \
-    apps/grass/grass-$VERSION/lib/*.lib
+    # grass-devel-vc package (obsolete)
+    ###tar -cjf $PDIR/grass-devel-vc-$VERSION-$PACKAGE.tar.bz2 \
+    ###apps/grass/grass-$VERSION/lib/*.lib
     
-    # grass-locale package
-    tar -cjf $PDIR/grass-locale-$VERSION-$PACKAGE.tar.bz2 \
-    apps/grass/grass-$VERSION/locale
+    # grass-locale package (obsolete)
+    ###tar -cjf $PDIR/grass-locale-$VERSION-$PACKAGE.tar.bz2 \
+    ###apps/grass/grass-$VERSION/locale
 fi
 
 log 
