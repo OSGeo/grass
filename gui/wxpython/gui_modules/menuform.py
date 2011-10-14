@@ -1143,7 +1143,9 @@ class cmdPanel(wx.Panel):
                         selection = gselect.Select(parent = which_panel, id = wx.ID_ANY,
                                                    size = globalvar.DIALOG_GSELECT_SIZE,
                                                    type = p.get('element', ''),
-                                                   multiple = multiple, mapsets = mapsets)
+                                                   multiple = multiple, mapsets = mapsets,
+                                                   fullyQualified = p.get('age', 'old') == 'old')
+                        
                         value = self._getValue(p)
                         if value:
                             selection.SetValue(value)

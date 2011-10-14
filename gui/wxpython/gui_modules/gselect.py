@@ -56,7 +56,8 @@ wxGdalSelect, EVT_GDALSELECT = NewEvent()
 class Select(wx.combo.ComboCtrl):
     def __init__(self, parent, id = wx.ID_ANY, size = globalvar.DIALOG_GSELECT_SIZE,
                  type = None, multiple = False, mapsets = None,
-                 updateOnPopup = True, onPopup = None):
+                 updateOnPopup = True, onPopup = None,
+                 fullyQualified = True):
         """!Custom control to create a ComboBox with a tree control to
         display and select GIS elements within acessible mapsets.
         Elements can be selected with mouse. Can allow multiple
@@ -68,6 +69,7 @@ class Select(wx.combo.ComboCtrl):
         @param mapsets force list of mapsets (otherwise search path)
         @param updateOnPopup True for updating list of elements on popup
         @param onPopup function to be called on Popup
+        @param fullyQualified True to provide fully qualified names (map@mapset)
         """
         wx.combo.ComboCtrl.__init__(self, parent=parent, id=id, size=size)
         self.GetChildren()[0].SetName("Select")
@@ -79,7 +81,8 @@ class Select(wx.combo.ComboCtrl):
         if type:
             self.tcp.SetData(type = type, mapsets = mapsets,
                              multiple = multiple,
-                             updateOnPopup = updateOnPopup, onPopup = onPopup)
+                             updateOnPopup = updateOnPopup, onPopup = onPopup,
+                             fullyQualified = fullyQualified)
         self.GetChildren()[0].Bind(wx.EVT_KEY_UP, self.OnKeyUp)
      
     def OnKeyUp(self, event):
@@ -150,6 +153,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         self.mapsets = None
         self.updateOnPopup = True
         self.onPopup = None
+        self.fullyQualified = True
         
         self.SetFilter(None)
         
@@ -471,8 +475,9 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                 self.value = [] 
             else:
                 mapsetItem = self.seltree.GetItemParent(item)
-                fullName = self.seltree.GetItemText(item) + '@' + \
-                    self.seltree.GetItemText(mapsetItem).split(':', -1)[1].strip()
+                fullName = self.seltree.GetItemText(item)
+                if self.fullyQualified:
+                    fullName += '@' + self.seltree.GetItemText(mapsetItem).split(':', -1)[1].strip()
                 
                 if self.multiple is True:
                     # text item should be unique
@@ -502,8 +507,9 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                 self.value = [] # cannot select mapset item
             else:
                 mapsetItem = self.seltree.GetItemParent(item)
-                fullName = self.seltree.GetItemText(item) + '@' + \
-                    self.seltree.GetItemText(mapsetItem).split(':', -1)[1].strip()
+                fullName = self.seltree.GetItemText(item)
+                if self.fullyQualified:
+                    fullName += '@' + self.seltree.GetItemText(mapsetItem).split(':', -1)[1].strip()
                 
                 if self.multiple is True:
                     # text item should be unique
@@ -527,7 +533,9 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
             self.updateOnPopup = kargs['updateOnPopup']
         if 'onPopup' in kargs:
             self.onPopup = kargs['onPopup']
-
+        if 'fullyQualified' in kargs:
+            self.fullyQualified = kargs['fullyQualified']
+        
     def GetType(self):
         """!Get element type
         """
