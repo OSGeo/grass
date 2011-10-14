@@ -17,7 +17,10 @@ if ! [ -d /tmp ]; then
     fi 
 fi 
 
-export PACKAGE=${1:-1} 
+export PACKAGE=${1:-1}
+# package name for osgeo4w
+# eg. 70-dev -> grass70-dev, empty for release
+export PACKAGE_NAME=$2
 export OSGEO4W_ROOT_MSYS="/c/OSGeo4W"
 export OSGEO4W_ROOT="C:\\\OSGeo4W"
 export PATH=.:/c/mingw/bin:/usr/local/bin:/bin:$OSGEO4W_ROOT_MSYS/bin:/c/WINDOWS/system32:/c/WINDOWS:/c/WINDOWS/System32/Wbem:/c/Subversion:$PWD/mswindows/osgeo4w
@@ -62,7 +65,7 @@ read MAJOR <&3
 read MINOR <&3 
 read PATCH <&3 
 
-export VERSION=$MAJOR.$MINOR.$PATCH 
+export VERSION=$MAJOR.$MINOR.$PATCH
 
 export GRASS_PYTHON="/c/OSGeo4W/bin/python.exe"
 export PYTHONHOME="/c/OSGeo4W/apps/Python25"
@@ -176,7 +179,7 @@ if [ -n "$PACKAGE" ]; then
 	$SRC/mswindows/osgeo4w/grass.tmpl >$OSGEO4W_ROOT_MSYS/bin/grass$MAJOR$MINOR.tmpl
 
     # grass package
-    tar -cjf $PDIR/grass-$VERSION-$PACKAGE.tar.bz2 \
+    tar -cjf $PDIR/grass$PACKAGE_NAME-$VERSION-$PACKAGE.tar.bz2 \
     apps/grass/grass-$VERSION \
     bin/grass$MAJOR$MINOR.bat.tmpl \
     bin/grass$MAJOR$MINOR.tmpl \
