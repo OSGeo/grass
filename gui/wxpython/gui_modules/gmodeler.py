@@ -404,7 +404,7 @@ class Model(object):
         errList = list()
         for action in self.GetItems(objType = ModelAction):
             task = menuform.GUI(show = None).ParseCommand(cmd = action.GetLog(string = False))
-            errList += task.getCmdError()
+            errList += task.get_cmdError()
         
         return errList
 
@@ -1791,7 +1791,7 @@ class ModelAction(ModelObject, ogl.RectangleShape):
     def SetId(self, id):
         """!Set id"""
         self.id = id
-        cmd = self.task.getCmd(ignoreErrors = True)
+        cmd = self.task.get_cmd(ignoreErrors = True)
         if cmd and len(cmd) > 0:
             self.ClearText()
             self.AddText('(%d) %s' % (self.id, cmd[0]))
@@ -1810,7 +1810,7 @@ class ModelAction(ModelObject, ogl.RectangleShape):
 
     def GetLog(self, string = True):
         """!Get logging info"""
-        cmd = self.task.getCmd(ignoreErrors = True, ignoreRequired = True)
+        cmd = self.task.get_cmd(ignoreErrors = True, ignoreRequired = True)
         
         # substitute variables
         variables = self.parent.GetVariables()
@@ -1850,7 +1850,7 @@ class ModelAction(ModelObject, ogl.RectangleShape):
     
     def GetName(self):
         """!Get name"""
-        cmd = self.task.getCmd(ignoreErrors = True)
+        cmd = self.task.get_cmd(ignoreErrors = True)
         if cmd and len(cmd) > 0:
             return cmd[0]
         
@@ -3731,7 +3731,7 @@ class ModelParamDialog(wx.Dialog):
         """!Check for errors, get list of messages"""
         errList = list()
         for task in self.tasks:
-            errList += task.getCmdError()
+            errList += task.get_cmd_error()
         
         return errList
     
