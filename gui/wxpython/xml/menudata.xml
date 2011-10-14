@@ -2635,6 +2635,7 @@
 	      <handler>OnMenuCmd</handler>
 	      <command>i.smap</command>
 	    </menuitem>
+	    <separator />
 	    <menuitem>
 	      <label>Input for supervised MLC</label>
 	      <help>Generates statistics for i.maxlik from raster map.</help>
