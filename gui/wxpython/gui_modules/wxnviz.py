@@ -1863,14 +1863,12 @@ class Nviz(object):
         
 class Texture(object):
     """!Class representing OpenGL texture"""
-    def __init__(self, filepath, overlayId, coords, cmd = None, textDict = None):
+    def __init__(self, filepath, overlayId, coords):
         """!Load image to texture
 
         @param filepath path to image file
         @param overlayId id of overlay (1 for legend, 101 and more for text)
         @param coords image coordinates
-        @param cmd d.legend command (or None)
-        @param textDict text info (or None)      
         """
         self.path = filepath
         self.image = wx.Image(filepath, wx.BITMAP_TYPE_ANY)
@@ -1879,8 +1877,7 @@ class Texture(object):
         self.id = overlayId
         self.coords = list(coords)
         self.bounds = wx.Rect()
-        self.cmd = cmd
-        self.textDict = textDict
+        self.active = True
         
         # alpha needs to be initialized
         if not self.image.HasAlpha():
@@ -1965,4 +1962,69 @@ class Texture(object):
         self.coords[0] += dx
         self.coords[1] += dy
         self.bounds.OffsetXY(dx, dy)
+    
+    def SetCoords(self, coords):
+        """!Set coordinates"""
+        dx = coords[0] - self.coords[0]
+        dy = coords[1] - self.coords[1]
+        self.MoveTexture(dx, dy)
         
+    def GetId(self):
+        """!Returns image id."""
+        return self.id
+    
+    def SetActive(self, active = True):
+        self.active = active
+        
+    def IsActive(self):
+        return self.active
+        
+class ImageTexture(Texture):
+    """!Class representing OpenGL texture as an overlay image"""
+    def __init__(self, filepath, overlayId, coords, cmd):
+        """!Load image to texture
+
+        @param filepath path to image file
+        @param overlayId id of overlay (1 for legend)
+        @param coords image coordinates
+        @param cmd d.legend command      
+        """
+        Texture.__init__(self, filepath = filepath, overlayId = overlayId, coords = coords)
+        
+        self.cmd = cmd
+        
+    def GetCmd(self):
+        """!Returns overlay command."""
+        return self.cmd
+        
+    def Corresponds(self, item):
+        return sorted(self.GetCmd()) == sorted(item.GetCmd())
+        
+class TextTexture(Texture):
+    """!Class representing OpenGL texture as a text label"""
+    def __init__(self, filepath, overlayId, coords, textDict):
+        """!Load image to texture
+
+        @param filepath path to image file
+        @param overlayId id of overlay (101 and more for text)
+        @param coords text coordinates
+        @param textDict text properties      
+        """
+        Texture.__init__(self, filepath = filepath, overlayId = overlayId, coords = coords)
+        
+        self.textDict = textDict
+        
+    def GetTextDict(self):
+        """!Returns text properties."""
+        return self.textDict
+        
+        
+    def Corresponds(self, item):
+        t = self.GetTextDict()
+        for prop in t.keys():
+            if prop in ('coords','bbox'): continue
+            if t[prop] != item[prop]:
+                return False
+                
+        return True
+    
