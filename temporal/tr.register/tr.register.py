@@ -101,7 +101,7 @@ def main():
     # Make sure the temporal database exists
     tgis.create_temporal_database()
     # Register maps
-    tgis.register_maps_in_space_time_dataset(type="rast", name=name, maps=maps, file=file, start=start, end=end, \
+    tgis.register_maps_in_space_time_dataset(type="strds", name=name, maps=maps, file=file, start=start, end=end, \
                                              increment=increment, dbif=None, interval=interval, fs=fs)
     
 if __name__ == "__main__":

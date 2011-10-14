@@ -26,7 +26,7 @@
 #% type: string
 #% description: Type of the space time dataset, default is strds
 #% required: no
-#% options: strds, str3ds, stvds, raster, raster3d, vector
+#% options: strds, str3ds, stvds, rast, rast3d, vect
 #% answer: strds
 #%end
 
@@ -99,19 +99,7 @@ def main():
     tgis.create_temporal_database()
 
     id = None
-
-    if type == "strds":
-        sp = tgis.space_time_raster_dataset(id)
-    if type == "str3ds":
-        sp = tgis.space_time_raster3d_dataset(id)
-    if type == "stvds":
-        sp = tgis.space_time_vector_dataset(id)
-    if type == "rast":
-        sp = tgis.raster_dataset(id)
-    if type == "rast3d":
-        sp = tgis.raster3d_dataset(id)
-    if type == "vect":
-        sp = tgis.vector_dataset(id)
+    sp = tgis.dataset_factory(type, id)
 
     dbif = tgis.sql_database_interface()
     dbif.connect()
