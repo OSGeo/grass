@@ -656,6 +656,12 @@ class MapFrame(MapFrameBase):
             self.MapWindow3D.ResetViewHistory()
             for page in ('view', 'light', 'fringe', 'constant', 'cplane'):
                 self._layerManager.nviz.UpdatePage(page)
+                
+        self.MapWindow3D.overlays = self.MapWindow2D.overlays
+        self.MapWindow3D.textdict = self.MapWindow2D.textdict
+        # update overlays needs to be called after because getClientSize
+        # is called during update and it must give reasonable values
+        wx.CallAfter(self.MapWindow3D.UpdateOverlays)
         
         self.SetStatusText("", 0)
         self._mgr.Update()
@@ -680,6 +686,8 @@ class MapFrame(MapFrameBase):
         # remove nviz notebook page
         self._layerManager.RemoveNvizTools()
         
+        self.MapWindow2D.overlays = self.MapWindow3D.overlays
+        self.MapWindow2D.textdict = self.MapWindow3D.textdict
         self.MapWindow.UpdateMap()
         self._mgr.Update()
         

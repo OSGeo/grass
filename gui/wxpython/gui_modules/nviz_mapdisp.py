@@ -251,7 +251,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
     def DrawImages(self):
         """!Draw overlay image"""
         for texture in self.imagelist:
-            texture.Draw()
+            if texture.IsActive():
+                texture.Draw()
             
     def GetLegendRect(self):
         """!Estimates legend size for dragging"""
@@ -264,6 +265,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         if size:
             wSize = self.GetClientSizeTuple()
             x, y = size[2]/100. * wSize[0], wSize[1] - (size[1]/100. * wSize[1])
+            x += self.overlays[1]['coords'][0]
+            y += self.overlays[1]['coords'][1]
             w = (size[3] - size[2])/100. * wSize[0]
             h = (size[1] - size[0])/100. * wSize[1]
             
@@ -307,39 +310,54 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.Map.RenderOverlays(force = True)
         
         # delete textures
-        overlays = self.Map.GetListOfLayers(l_type = "overlay", l_active = True)
         for texture in self.imagelist:
-            if texture.id not in [o.id for o in overlays] + self.textdict.keys():
-                self.imagelist.remove(texture)
-        # update images (legend)
-        for overlay in overlays:
-            if os.path.isfile(overlay.mapfile) and os.path.getsize(overlay.mapfile):
-                if overlay.id not in [t.id for t in self.imagelist]: # new
-                    self.CreateTexture(overlay)
+            # inactive overlays, remove text labels
+            if texture.GetId() < 100:
+                if not self.overlays[texture.GetId()]['layer'].IsActive():
+                    texture.SetActive(False)
                 else:
-                    for t in self.imagelist: # check if it is the same
-                        if t.id == overlay.id and sorted(t.cmd) != sorted(self.overlays[overlay.id]['cmd']):
+                    texture.SetActive(True)
+            else: # text label
+                if texture.GetId() not in self.textdict:
+                    self.imagelist.remove(texture)
+                    
+        # update images (only legend so far)
+        for oid, overlay in self.overlays.iteritems():
+            layer = overlay['layer']
+            if not layer.IsActive() or oid == 0: # 0 for barscale
+                continue
+            if oid not in [t.GetId() for t in self.imagelist]: # new
+                self.CreateTexture(overlay = layer)
+            else:
+                for t in self.imagelist:
+                    if t.GetId() == oid: # check if it is the same
+                        if not t.Corresponds(layer):
                             self.imagelist.remove(t)
-                            self.CreateTexture(overlay)
+                            t = self.CreateTexture(overlay = layer)
+                        # always set coordinates, needed for synchr. 2D and 3D modes
+                        t.SetCoords(overlay['coords'])
+
+                    
         # update text labels
         for textId in self.textdict.keys():
-            if textId not in [t.id for t in self.imagelist]:# new
+            if textId not in [t.GetId() for t in self.imagelist]:# new
                 self.CreateTexture(textId = textId)
             else:
-                for t in self.imagelist:# check if it is the same
-                    if not t.textDict:
-                        continue
-                    self.textdict[textId]['bbox'] = t.textDict['bbox'] # compare without bbox
-                    if t.id == textId and t.textDict and t.textDict != self.textdict[textId]:
-                        self.imagelist.remove(t)
-                        self.CreateTexture(textId = textId)
+                for t in self.imagelist:
+                    if t.GetId() == textId: # check if it is the same
+                        self.textdict[textId]['bbox'] = t.textDict['bbox']
+                        if not t.Corresponds(self.textdict[textId]):
+                            self.imagelist.remove(t)
+                            t = self.CreateTexture(textId = textId)
+                        # always set coordinates, needed for synchr. 2D and 3D modes
+                        t.SetCoords(self.textdict[textId]['coords'])
             
     def CreateTexture(self, overlay = None, textId = None):
         """!Create texture from overlay image or from textdict"""
         if overlay: # legend  
-            texture = wxnviz.Texture(filepath = overlay.mapfile, overlayId = overlay.id,
-                                     coords = list(self.overlays[overlay.id]['coords']),
-                                     cmd = self.overlays[overlay.id]['cmd'])
+            texture = wxnviz.ImageTexture(filepath = overlay.mapfile, overlayId = overlay.id,
+                                          coords = list(self.overlays[overlay.id]['coords']),
+                                          cmd = overlay.GetCmd())
             if overlay.id == 1: # legend
                 texture.SetBounds(self.GetLegendRect())
         else: # text
@@ -347,8 +365,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self.textdict[textId]['coords'] = coords
             self.textdict[textId]['bbox'] = bbox
             file = self.DrawTextImage(self.textdict[textId], relCoords)
-            texture = wxnviz.Texture(filepath = file, overlayId = textId,
-                                     coords = coords, textDict = self.textdict[textId])
+            texture = wxnviz.TextTexture(filepath = file, overlayId = textId,
+                                         coords = coords, textDict = self.textdict[textId])
             bbox.OffsetXY(*relCoords)
             texture.SetBounds(bbox)
             
@@ -356,8 +374,11 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             gcmd.GMessage(parent = self, message = 
                           _("Image is too large, your OpenGL implementation "
                             "supports maximum texture size %d px.") % texture.maxSize)
-            return
+            return texture
+            
         self.imagelist.append(texture)
+        
+        return texture
         
     def FindObjects(self, mouseX, mouseY, radius):
         """Find object which was clicked on"""
@@ -528,7 +549,15 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self.mouse['use'] = 'pointer'
             self.SetCursor(self.cursors['default'])
         elif self.mouse['use'] == 'pointer':
-            if self.dragid > 0:    
+            if self.dragid > 0:
+                dx = self.mouse['end'][0] - self.mouse['begin'][0]
+                dy = self.mouse['end'][1] - self.mouse['begin'][1]
+                if self.dragid < 99:
+                    coords = self.overlays[self.dragid]['coords']
+                    self.overlays[self.dragid]['coords'] = [coords[0] + dx, coords[1] + dy]
+                else: # text
+                    coords = self.textdict[self.dragid]['coords']
+                    self.textdict[self.dragid]['coords'] = [coords[0] + dx, coords[1] + dy]
                 self.dragid = -1
                 self.render['quick'] = False
                 self.Refresh(False)
@@ -641,6 +670,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         for texture in self.imagelist:
             if texture.id == id:
                 texture.MoveTexture(dx, dy)
+
 
         self.render['quick'] = True
         self.Refresh(False)
