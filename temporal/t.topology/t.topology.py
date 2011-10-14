@@ -38,6 +38,12 @@
 #%end
 
 #%flag
+#% key: c
+#% description: Check temporal topology
+#%end
+
+
+#%flag
 #% key: t
 #% description: Print temporal relation matrix and exit
 #%end
@@ -65,6 +71,7 @@ def main():
     tmatrix = flags['t']
     relation = flags['r']
     map_types = flags['m']
+    check_topo = flags['c']
 
     # Make sure the temporal database exists
     tgis.create_temporal_database()
@@ -76,12 +83,7 @@ def main():
         mapset =  grass.gisenv()["MAPSET"]
         id = name + "@" + mapset
 
-    if type == "strds":
-        sp = tgis.space_time_raster_dataset(id)
-    if type == "str3ds":
-        sp = tgis.space_time_raster3d_dataset(id)
-    if type == "stvds":
-        sp = tgis.space_time_vector_dataset(id)
+    sp = tgis.dataset_factory(type, id)
 
     if sp.is_in_db() == False:
         grass.fatal("Dataset <" + name + "> not found in temporal database")
@@ -91,27 +93,32 @@ def main():
 
     maps = sp.get_registered_maps_as_objects()
 
-    if tmatrix:
-        matrix = sp.get_temporal_relation_matrix(maps)
+    if check_topo:
+        check = sp.check_temporal_topology(maps)
+        if check:
+            print "Temporal topology is valid"
+        else:
+            print "Temporal topology is invalid"
 
-        for row in matrix:
-            for col in row:
-                print col,
-            print " "
-        print " "
-        return
+    if tmatrix:
+        matrix = sp.print_temporal_relation_matrix(maps)
 
     if relation:
-        dict = sp.get_temporal_relations_count(maps)
+        dict = sp.count_temporal_relations(maps)
 
         for key in dict.keys():
             print key, dict[key]
 
     if map_types:
-        dict = sp.get_temporal_map_type_count(maps)
+        dict = sp.count_temporal_types(maps)
         
         for key in dict.keys():
             print key, dict[key]
+
+        if dict["interval"] > 0 and dict["point"] == 0 and dict["invalid"] == 0:
+            print "Gaps", sp.count_gaps(maps, True)
+        else:
+            print "Gaps", sp.count_gaps(maps, False)
 
 if __name__ == "__main__":
     options, flags = grass.parser()

@@ -100,12 +100,7 @@ def main():
     mapset =  grass.gisenv()["MAPSET"]
     id = name + "@" + mapset
 
-    if type == "strds":
-        sp = tgis.space_time_raster_dataset(id)
-    if type == "str3ds":
-        sp = tgis.space_time_raster3d_dataset(id)
-    if type == "stvds":
-        sp = tgis.space_time_vector_dataset(id)
+    sp = tgis.dataset_factory(type, id)
 
     if sp.is_in_db() == False:
         grass.fatal(_("%s dataset <%s> not found in temporal database") % (ds.get_type(), name))

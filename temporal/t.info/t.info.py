@@ -55,7 +55,6 @@ import grass.temporal as tgis
 
 def main():
 
-    # Get the options
     name = options["input"]
     type = options["type"]
     shellstyle = flags['g']
@@ -63,8 +62,6 @@ def main():
 
     # Make sure the temporal database exists
     tgis.create_temporal_database()
-
-    #Get the current mapset to create the id of the space time dataset
 
     if system:
         #      0123456789012345678901234567890
@@ -84,26 +81,11 @@ def main():
         mapset =  grass.gisenv()["MAPSET"]
         id = name + "@" + mapset
 
-    if type == "strds":
-        sp = tgis.space_time_raster_dataset(id)
-    if type == "str3ds":
-        sp = tgis.space_time_raster3d_dataset(id)
-    if type == "stvds":
-        sp = tgis.space_time_vector_dataset(id)
-    if type == "rast":
-        sp = tgis.raster_dataset(id)
-        tmatrix = False
-    if type == "rast3d":
-        sp = tgis.raster3d_dataset(id)
-        tmatrix = False
-    if type == "vect":
-        sp = tgis.vector_dataset(id)
-        tmatrix = False
+    sp = tgis.dataset_factory(type, id)
 
     if sp.is_in_db() == False:
-        grass.fatal("Dataset <" + name + "> not found in temporal database")
+        grass.fatal(_("Dataset <%s> not found in temporal database") % name)
         
-    # Insert content from db
     sp.select()
 
     if shellstyle == True:
