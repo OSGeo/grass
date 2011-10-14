@@ -471,7 +471,7 @@ class mainFrame(wx.Frame):
         # status bar
         status_text = _("Enter parameters for '") + self.task.name + "'"
         try:
-            self.task.getCmd()
+            self.task.get_cmd()
             self.updateValuesHook()
         except ValueError:
             self.SetStatusText(status_text)
@@ -1814,7 +1814,7 @@ class cmdPanel(wx.Panel):
         for GRASS
         """
         try:
-            cmd = self.task.getCmd(ignoreErrors = ignoreErrors,
+            cmd = self.task.get_cmd(ignoreErrors = ignoreErrors,
                                    ignoreRequired = ignoreRequired)
         except ValueError, err:
             dlg = wx.MessageDialog(parent = self,
@@ -2138,7 +2138,7 @@ if __name__ ==  "__main__":
             task.get_flag('v')['value'] = True
             task.get_param('layer')['value'] = 1
             task.get_param('bcolor')['value'] = "red"
-            assert ' '.join(task.getCmd()) ==  "d.vect -v map = map_name layer = 1 bcolor = red"
+            assert ' '.join(task.get_cmd()) ==  "d.vect -v map = map_name layer = 1 bcolor = red"
         # Test interface building with handmade grassTask,
         # possibly outside of a GRASS session.
         task = gtask.grassTask()

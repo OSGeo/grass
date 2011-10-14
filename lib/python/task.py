@@ -169,8 +169,8 @@ class grassTask:
                 return f
         raise ValueError, _("Flag not found: %s") % aFlag
 
-    def getCmdError(self):
-        """!Get error string produced by getCmd(ignoreErrors = False)
+    def get_cmd_error(self):
+        """!Get error string produced by get_cmd(ignoreErrors = False)
         
         @return list of errors
         """
@@ -191,7 +191,7 @@ class grassTask:
         
         return errorList
     
-    def getCmd(self, ignoreErrors = False, ignoreRequired = False):
+    def get_cmd(self, ignoreErrors = False, ignoreRequired = False):
         """!Produce an array of command name and arguments for feeding
         into some execve-like command processor.
 
@@ -221,7 +221,7 @@ class grassTask:
                 # Output only values that have been set, and different from defaults
                 cmd +=  [ '%s=%s' % (p['name'], p['value']) ]
         
-        errList = self.getCmdError()
+        errList = self.get_cmd_error()
         if ignoreErrors is False and errList:
             raise ValueError, '\n'.join(errList)
         
