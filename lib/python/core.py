@@ -716,7 +716,7 @@ def mlist_grouped(type, pattern = None, check_search_path = True):
             result[mapset] = []
     
     mapset = None
-    for line in read_command("g.mlist", flags = "m",
+    for line in read_command("g.mlist", quiet = True, flags = "m",
                              type = type, pattern = pattern).splitlines():
         try:
             name, mapset = line.split('@')
