@@ -248,12 +248,19 @@ static void make_list(
     if (!list)
 	return;
 
+    if (count > 0) {
+	if (any)
+	    fprintf(stdout, "\n");
+	G_message(_("%s available in mapset <%s>:"),
+		  elem->text, mapset);
+    }
+    
     for (i = 0; i < count; i++) {
 	char *name = list[i];
 
-	if (any)
+	if (any && i != 0)
 	    fprintf(stdout, "%s", separator);
-
+	
 	if (add_type)
 	    fprintf(stdout, "%s/", alias);
 
@@ -267,6 +274,8 @@ static void make_list(
 	any++;
     }
 
+    fflush(stdout);
+    
     G_free(list);
 }
 
