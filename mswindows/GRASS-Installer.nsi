@@ -646,8 +646,8 @@ Section "GRASS" SecGRASS
 	;Create the Desktop Shortcut
 	SetShellVarContext current
 	
-	CreateShortCut "$DESKTOP\GRASS ${VERSION_NUMBER}.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-wxpython"\
-	"$INSTALL_DIR\icons\GRASS.ico" "" SW_SHOWMINIMIZED "" "Launch GRASS ${VERSION_NUMBER} with the new wxPython GUI"
+	CreateShortCut "$DESKTOP\GRASS ${VERSION_NUMBER}.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-wx"\
+	"$INSTALL_DIR\icons\GRASS.ico" "" SW_SHOWMINIMIZED "" "Launch GRASS ${VERSION_NUMBER} with wxGUI"
 
 	; not working after changing to start Grass7 by grass70.py
 	;CreateShortCut "$DESKTOP\GRASS ${VERSION_NUMBER} with MSYS.lnk" "$INSTALL_DIR\msys\msys.bat" "/grass/bin/${GRASS_COMMAND} -wxpython"\
@@ -662,11 +662,11 @@ Section "GRASS" SecGRASS
 	
 	CreateDirectory "$SMPROGRAMS\${GRASS_BASE}"
 	
-	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS ${VERSION_NUMBER}.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-wxpython"\
-	"$INSTALL_DIR\icons\GRASS.ico" "" SW_SHOWMINIMIZED "" "Launch GRASS ${VERSION_NUMBER} with the new wxPython GUI"
+	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS GUI.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-wxpython"\
+	"$INSTALL_DIR\icons\GRASS.ico" "" SW_SHOWMINIMIZED "" "Launch GRASS ${VERSION_NUMBER} with wxGUI"
 
 	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS Command Line.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-text"\
-	"$INSTALL_DIR\icons\GRASS_CMD.ico" "" SW_SHOWNORMAL "" "Launch GRASS in text mode"
+	"$INSTALL_DIR\icons\GRASS_CMD.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER} in text mode"
 	
 	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\MSYS UNIX Console.lnk" "$INSTALL_DIR\msys\msys.bat" ""\
 	"$INSTALL_DIR\icons\MSYS_Custom_Icon.ico" "" SW_SHOWNORMAL "" "Open a MSYS UNIX console"
@@ -674,11 +674,11 @@ Section "GRASS" SecGRASS
 	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS Web Site.lnk" "$INSTALL_DIR\GRASS-WebSite.url" ""\
 	"$INSTALL_DIR\icons\GRASS_Web.ico" "" SW_SHOWNORMAL "" "Visit the GRASS website"
 	
-	;CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS ${VERSION_NUMBER} with MSYS.lnk" "$INSTALL_DIR\msys\msys.bat" "/grass/bin/${GRASS_COMMAND} -wxpython"\
-	;"$INSTALL_DIR\icons\GRASS_MSys.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER} with the new wxPython GUI and a MSYS UNIX terminal"
+	;CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS GUI with MSYS.lnk" "$INSTALL_DIR\msys\msys.bat" "/grass/bin/${GRASS_COMMAND} -wxpython"\
+	;"$INSTALL_DIR\icons\GRASS_MSys.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER} with wxGUI and a MSYS UNIX terminal"
 
-	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS ${VERSION_NUMBER} with MSYS.lnk" "$INSTALL_DIR\set_shell_start_${GRASS_COMMAND}.bat" ""\
-	"$INSTALL_DIR\icons\GRASS_MSys.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER} with the new wxPython GUI and a MSYS-Windows-commandline"
+	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS GUI with MSYS.lnk" "$INSTALL_DIR\set_shell_start_${GRASS_COMMAND}.bat" ""\
+	"$INSTALL_DIR\icons\GRASS_MSys.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER} with wxGUI and a MSYS-Windows-commandline"
 	
 ; FIXME: ship the WinGrass release notes .html file instead of URL
 ; http://trac.osgeo.org/grass/browser/grass-web/trunk/grass70/binary/mswindows/native/README.html?format=raw
