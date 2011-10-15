@@ -115,11 +115,11 @@ int main(int argc, char *argv[])
     } flag;
     int i;
     int num_inputs;
-    struct input *inputs;
+    struct input *inputs = NULL;
     int num_outputs;
-    struct output *outputs;
+    struct output *outputs = NULL;
     struct History history;
-    DCELL *values, *values_tmp;
+    DCELL *values = NULL, *values_tmp = NULL;
     int nrows, ncols;
     int row, col;
     double lo, hi;
