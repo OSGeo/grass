@@ -12,8 +12,11 @@ htmldesc = $(call run_grass,$(1) --html-description < /dev/null | grep -v '</bod
 IMGSRC := $(wildcard *.png) $(wildcard *.jpg)
 IMGDST := $(patsubst %,$(HTMLDIR)/%,$(IMGSRC))
 
-$(HTMLDIR)/%.html: %.html %.tmp.html $(HTMLSRC) $(IMGDST) | $(HTMLDIR)
+$(HTMLDIR)/%.html: %.html %.tmp.html $(HTMLSRC) | $(HTMLDIR)
 	$(PYTHON) $(GISBASE)/tools/mkhtml.py $* $(GRASS_VERSION_DATE) > $@
+ifneq ($(strip $(IMGDST)),)
+	$(MAKE) $(IMGDST)
+endif
 
 $(HTMLDIR)/%.png: %.png | $(HTMLDIR)
 	$(INSTALL_DATA) $< $@
