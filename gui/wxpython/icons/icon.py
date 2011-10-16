@@ -300,17 +300,19 @@ Icons = {
                                       label = _('Undo'),
                                       desc = _('Undo previous changes')),
         },
-    'profile' : {
+    'plot' : {
         'draw'         : MetaIcon(img = iconSet.get('show', wx.ART_ERROR),
-                                  label = _('Draw/re-draw profile')),
+                                  label = _('Draw/re-draw plot')),
         'transect'     : MetaIcon(img = iconSet.get('layer-raster-profile', wx.ART_ERROR),
                                   label = _('Draw transect in map display window to profile')),
         'options'      : MetaIcon(img = iconSet.get('settings', wx.ART_ERROR),
-                                  label = _('Profile options')),
+                                  label = _('Plot options')),
+        'statistics'   : MetaIcon(img = iconSet.get('check', wx.ART_ERROR),
+                                  label = _('Plot statistics')),
         'save'         : MetaIcon(img = iconSet.get('save', wx.ART_ERROR),
                                   label = _('Save profile data to CSV file')),
         'quit'         : MetaIcon(img = iconSet.get('quit', wx.ART_ERROR),
-                                  label = _('Quit Profile Analysis Tool'))
+                                  label = _('Quit plot tool'))
         },
     'georectify' : {
         'gcpSet'    : MetaIcon(img = iconSet.get('gcp-create', wx.ART_ERROR),

@@ -722,7 +722,24 @@ class HistFrame(AbstractPlotFrame):
         self.SetGraphStyle()
         p = self.CreatePlotList()
         self.DrawPlot(p)
-        
+ 
+    def OnStats(self, event):
+        """!Displays regression information in messagebox
+        """
+        message = []
+        title = _('Statistics for Map(s) Histogrammed')
+
+        for r in self.rasterList:
+            rast = r.split('@')[0] 
+            ret = grass.read_command('r.univar', map = r, flags = 'e', quiet = True)
+            stats = _('Statistics for %s\n\n%s\n') % (rast, ret)
+            message.append(stats)
+            
+        stats = dialogs.PlotStatsFrame(self, id = wx.ID_ANY, message = message, 
+                                      title = title)
+
+        if stats.Show() == wx.ID_CLOSE:
+            stats.Destroy()       
         
 class ProfileFrame(AbstractPlotFrame):
     """!Mainframe for displaying profile of one or more raster maps. Uses wx.lib.plot.
@@ -808,8 +825,7 @@ class ProfileFrame(AbstractPlotFrame):
 
         #
         # create list of coordinate points for r.profile
-        #
-                
+        #                
         dist = 0
         cumdist = 0
         self.coordstr = ''
@@ -867,26 +883,26 @@ class ProfileFrame(AbstractPlotFrame):
                 pass
 
         #
-        # create datalist for each raster map
+        # create datalist of dist/value pairs and y labels for each raster map
         #    
-        for r in self.raster.iterkeys():
-            self.raster[r]['datalist'] = []  
-            self.raster[r]['datalist'] = self.CreateDatalist(r, self.coordstr)
-
-            # update title
-            self.ptitle += ' %s ,' % r.split('@')[0]
-
-        self.ptitle = self.ptitle.rstrip(',')
-
-        #
-        # set ylabel to match units if they exist
-        #
         self.ylabel = ''
         i = 0
-        for r in self.rasterList:
-            if self.raster[r]['units'] != '':
-                self.ylabel += '%s (%d),' % (r['units'], i)
-            i += 1
+
+        for r in self.raster.iterkeys():
+            self.raster[r]['datalist'] = []
+            datalist = self.CreateDatalist(r, self.coordstr)
+            if len(datalist) > 0:   
+                self.raster[r]['datalist'] = datalist
+
+                # update ylabel to match units if they exist           
+                if self.raster[r]['units'] != '':
+                    self.ylabel += '%s (%d),' % (r['units'], i)
+                i += 1
+
+                # update title
+                self.ptitle += ' %s ,' % r.split('@')[0]
+
+        self.ptitle = self.ptitle.rstrip(',')
             
         if self.ylabel == '':
             self.ylabel = _('Raster values')
@@ -921,8 +937,12 @@ class ProfileFrame(AbstractPlotFrame):
             
         for line in ret.splitlines():
             dist, elev = line.strip().split(' ')
-            if elev != 'nan':
-                datalist.append((dist,elev))
+            if dist == None or dist == '' or dist == 'nan' or \
+                elev == None or elev == '' or elev == 'nan':
+                continue
+            dist = float(dist)
+            elev = float(elev)
+            datalist.append((dist,elev))
 
         return datalist
 
@@ -1028,6 +1048,42 @@ class ProfileFrame(AbstractPlotFrame):
                 file.close()
 
         dlg.Destroy()
+        
+    def OnStats(self, event):
+        """!Displays regression information in messagebox
+        """
+        message = []
+        title = _('Statistics for Profile(s)')
+
+        for r in self.raster.iterkeys():
+            try:
+                rast = r.split('@')[0] 
+                statstr = 'Profile of %s\n\n' % rast
+
+                iterable = (i[1] for i in self.raster[r]['datalist'])            
+                a = numpy.fromiter(iterable, numpy.float)
+                
+                statstr += 'n: %f\n' % a.size
+                statstr += 'minimum: %f\n' % numpy.amin(a)
+                statstr += 'maximum: %f\n' % numpy.amax(a)
+                statstr += 'range: %f\n' % numpy.ptp(a)
+                statstr += 'mean: %f\n' % numpy.mean(a)
+                statstr += 'standard deviation: %f\n' % numpy.std(a)
+                statstr += 'variance: %f\n' % numpy.var(a)
+                cv = numpy.std(a)/numpy.mean(a)
+                statstr += 'coefficient of variation: %f\n' % cv
+                statstr += 'sum: %f\n' % numpy.sum(a)
+                statstr += 'median: %f\n' % numpy.median(a)
+                statstr += 'distance along transect: %f\n\n' % self.transect_length       
+                message.append(statstr)
+            except:
+                pass
+            
+        stats = dialogs.PlotStatsFrame(self, id = wx.ID_ANY, message = message, 
+                                      title = title)
+
+        if stats.Show() == wx.ID_CLOSE:
+            stats.Destroy()       
         
 class ScatterFrame(AbstractPlotFrame):
     """!Mainframe for displaying bivariate scatter plot of two raster maps. Uses wx.lib.plot.
@@ -1174,7 +1230,6 @@ class ScatterFrame(AbstractPlotFrame):
                                   quiet = True,
                                   read = True)
             
-            
             if not ret:
                 return datalist
             
@@ -1230,4 +1285,34 @@ class ScatterFrame(AbstractPlotFrame):
         self.SetGraphStyle()
         p = self.CreatePlotList()
         self.DrawPlot(p)
-        
+    
+    def OnRegression(self, event):
+        """!Displays regression information in messagebox
+        """
+        message = []
+        title = _('Regression Statistics for Scatterplot(s)')
+
+        for rpair in self.rasterList:
+            if isinstance(rpair, tuple) == False: continue
+            rast1, rast2 = rpair
+            rast1 = rast1.split('@')[0] 
+            rast2 = rast2.split('@')[0] 
+            ret = grass.parse_command('r.regression.line', 
+                                      map1 = rast1, 
+                                      map2 = rast2, 
+                                      flags = 'g', quiet = True,
+                                      parse = (grass.parse_key_val, { 'sep' : '=' }))
+            eqtitle = _('Regression equation for %s vs. %s:\n\n')  % (rast1, rast2)
+            eq = _('   %s = %s + %s(%s)\n\n') % (rast2, ret['a'], ret['b'], rast1)
+            num = _('N = %s\n') % ret['N']
+            rval = _('R = %s\n') % ret['R']
+            rsq = _('R-squared = %f\n') % pow(float(ret['R']), 2)
+            ftest = _('F = %s\n') % ret['F']
+            str = eqtitle + eq + num + rval + rsq + ftest
+            message.append(str)
+            
+        stats = dialogs.PlotStatsFrame(self, id = wx.ID_ANY, message = message, 
+                                      title = title)
+
+        if stats.Show() == wx.ID_CLOSE:
+            stats.Destroy()       

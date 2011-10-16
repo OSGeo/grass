@@ -1258,7 +1258,7 @@ class ProfileToolbar(AbstractToolbar):
         
     def _toolbarData(self):
         """!Toolbar data"""
-        icons = Icons['profile']
+        icons = Icons['plot']
         return self._getToolbarData((('addraster', Icons['layerManager']["addRast"],
                                       self.parent.OnSelectRaster),
                                      ('transect', icons["transect"],
@@ -1275,6 +1275,8 @@ class ProfileToolbar(AbstractToolbar):
                                      ('unzoom', Icons['displayWindow']['zoomBack'],
                                       self.parent.OnRedraw),
                                      (None, ),
+                                     ('statistics', icons['statistics'],
+                                      self.parent.OnStats),
                                      ('datasave', icons["save"],
                                       self.parent.SaveProfileToFile),
                                      ('image', Icons['displayWindow']["saveFile"],
@@ -1433,7 +1435,7 @@ class Histogram2Toolbar(AbstractToolbar):
         
     def _toolbarData(self):
         """!Toolbar data"""
-        icons = Icons['profile']
+        icons = Icons['plot']
         return self._getToolbarData((('addraster', Icons['layerManager']["addRast"],
                                       self.parent.OnSelectRaster),
                                      (None, ),
@@ -1448,6 +1450,8 @@ class Histogram2Toolbar(AbstractToolbar):
                                      ('unzoom', Icons['displayWindow']['zoomBack'],
                                       self.parent.OnRedraw),
                                      (None, ),
+                                     ('statistics', icons['statistics'],
+                                      self.parent.OnStats),
                                      ('image', Icons['displayWindow']["saveFile"],
                                       self.parent.SaveToFile),
                                      ('print', Icons['displayWindow']["print"],
@@ -1472,7 +1476,8 @@ class ScatterplotToolbar(AbstractToolbar):
         
     def _toolbarData(self):
         """!Toolbar data"""
-        icons = Icons['profile']
+        icons = Icons['plot']
+#        icons2 = Icons['modeler']
         return self._getToolbarData((('addraster', Icons['layerManager']["addRast"],
                                       self.parent.OnSelectRaster),
                                      (None, ),
@@ -1487,6 +1492,8 @@ class ScatterplotToolbar(AbstractToolbar):
                                      ('unzoom', Icons['displayWindow']['zoomBack'],
                                       self.parent.OnRedraw),
                                      (None, ),
+                                     ('statistics', icons['statistics'],
+                                      self.parent.OnRegression),
                                      ('image', Icons['displayWindow']["saveFile"],
                                       self.parent.SaveToFile),
                                      ('print', Icons['displayWindow']["print"],
