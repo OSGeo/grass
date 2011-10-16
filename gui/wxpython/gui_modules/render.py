@@ -842,7 +842,7 @@ class Map(object):
         if overlaysOnly:
             layers = self.overlays
         else:
-            self. self.layers + self.overlays
+            layers = self.layers + self.overlays
         for layer in layers:
             # skip non-active map layers
             if not layer or not layer.active:
@@ -884,6 +884,8 @@ class Map(object):
                 ltype = None
                 if cmd[0] == 'd.rast':
                     ltype = 'raster'
+                elif cmd[0] == 'd.vect':
+                    ltype = 'vector'
                 
                 name = utils.GetLayerNameFromCmd(cmd, fullyQualified = True,
                                                  layerType = ltype)[0]
