@@ -875,10 +875,9 @@ class ProfileFrame(AbstractPlotFrame):
                 lasteast = point[0]
                 lastnorth = point[1]
 
-            # delete first and last segment point
+            # delete extra first segment point
             try:
                 self.seglist.pop(0)
-                self.seglist.pop()
             except:
                 pass
 
