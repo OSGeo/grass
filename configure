@@ -15028,9 +15028,6 @@ echo "  C++ compiler:                ${CXX} ${CXXFLAGS}"
 echo "  Building shared libraries:   ${shared_ok}"
 
 
-echo "  64bit support:               ${do64bit}"
-
-
 echo "  OpenGL platform:             ${OPENGL_TYPE}"
 
 
