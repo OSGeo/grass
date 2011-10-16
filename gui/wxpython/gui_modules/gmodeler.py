@@ -479,6 +479,11 @@ class Model(object):
             if err:
                 GError(parent = self, message = unicode('\n'.join(err)))
                 return
+            
+            # get variable values
+            varValue = dict()
+            for var in params['variables']['params']:
+                varValue[var['name']] = var['value']
         
         log.cmdThread.SetId(-1)
         for item in self.GetItems():
@@ -495,7 +500,12 @@ class Model(object):
                 for variable in variables:
                     pattern = re.compile('%' + variable)
                     if pattern.search(cond):
-                        value = variables[variable].get('value', '')
+                        value = ''
+                        if variable in varValue:
+                            value = varValue[variable]
+                        if not value:
+                            value = variables[variable].get('value', '')
+                        
                         vtype = variables[variable].get('type', 'string')
                         if vtype == 'string':
                             value = '"' + value + '"'
@@ -592,9 +602,9 @@ class Model(object):
         idx = 0
         if self.variables:
             params = list()
-            result[_("Variables")] = { 'flags'  : list(),
-                                       'params' : params,
-                                       'idx' : idx }
+            result["variables"] = { 'flags'  : list(),
+                                    'params' : params,
+                                    'idx' : idx }
             for name, values in self.variables.iteritems():
                 gtype = values.get('type', 'string')
                 if gtype in ('raster', 'vector', 'mapset'):
@@ -3656,18 +3666,8 @@ class ModelParamDialog(wx.Dialog):
         
         wx.Dialog.__init__(self, parent = parent, id = id, title = title, style = style, **kwargs)
         
-        if globalvar.hasAgw:
-            self.notebook = FN.FlatNotebook(self, id = wx.ID_ANY,
-                                            agwStyle = FN.FNB_FANCY_TABS |
-                                            FN.FNB_BOTTOM |
-                                            FN.FNB_NO_NAV_BUTTONS |
-                                            FN.FNB_NO_X_BUTTON)
-        else:
-            self.notebook = FN.FlatNotebook(self, id = wx.ID_ANY,
-                                            style = FN.FNB_FANCY_TABS |
-                                            FN.FNB_BOTTOM |
-                                            FN.FNB_NO_NAV_BUTTONS |
-                                            FN.FNB_NO_X_BUTTON)
+        self.notebook = menuform.GNotebook(parent = self, 
+                                           style = globalvar.FNPageDStyle)
         
         panel = self._createPages()
         wx.CallAfter(self.notebook.SetSelection, 0)
@@ -3694,8 +3694,8 @@ class ModelParamDialog(wx.Dialog):
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         mainSizer.Add(item = self.notebook, proportion = 1,
                       flag = wx.EXPAND)
-        mainSizer.Add(item=btnSizer, proportion=0,
-                      flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
+        mainSizer.Add(item = btnSizer, proportion = 0,
+                      flag = wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border = 5)
         
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)
@@ -3708,8 +3708,9 @@ class ModelParamDialog(wx.Dialog):
         for name in nameOrdered:
             params = self.params[name]
             panel = self._createPage(name, params)
-            
-            self.notebook.AddPage(panel, text = name)
+            if name == 'variables':
+                name = _('Variables')
+            self.notebook.AddPage(page = panel, text = name)
         
         return panel
     
@@ -3931,7 +3932,9 @@ class VariableListCtrl(ModelListCtrl):
     def __init__(self, parent, columns, **kwargs):
         """!List of model variables"""
         ModelListCtrl.__init__(self, parent, columns, **kwargs)
-        
+
+        self.SetColumnWidth(2, 200) # default value
+
     def GetListCtrl(self):
         """!Used by ColumnSorterMixin"""
         return self
