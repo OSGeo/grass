@@ -540,22 +540,22 @@ class SavedRegion(wx.Dialog):
         self.wind = event.GetString()
     
 class DecorationDialog(wx.Dialog):
-    """
-    Controls setting options and displaying/hiding map overlay decorations
+    """!Controls setting options and displaying/hiding map overlay
+    decorations
     """
     def __init__(self, parent, ovlId, title, cmd, name = None,
                  pos = wx.DefaultPosition, size = wx.DefaultSize, style = wx.DEFAULT_DIALOG_STYLE,
                  checktxt = '', ctrltxt = ''):
-
+        
         wx.Dialog.__init__(self, parent, wx.ID_ANY, title, pos, size, style)
-
+        
         self.ovlId   = ovlId   # PseudoDC id
         self.cmd     = cmd
         self.name    = name    # overlay name
         self.parent  = parent  # MapFrame
-
+        
         sizer = wx.BoxSizer(wx.VERTICAL)
-
+        
         box = wx.BoxSizer(wx.HORIZONTAL)
         self.chkbox = wx.CheckBox(parent = self, id = wx.ID_ANY, label = checktxt)
         if self.parent.Map.GetOverlay(self.ovlId) is None:
@@ -629,7 +629,7 @@ class DecorationDialog(wx.Dialog):
         sizer.Fit(self)
 
         # create overlay if doesn't exist
-        self._CreateOverlay()
+        self._createOverlay()
         
         if len(self.parent.MapWindow.overlays[self.ovlId]['cmd']) > 1:
             if name == 'legend':
@@ -642,8 +642,9 @@ class DecorationDialog(wx.Dialog):
                                       mapName)
             
         
-    def _CreateOverlay(self):
-        if not self.parent.Map.GetOverlay(self.ovlId):
+    def _createOverlay(self):
+        """!Creates overlay"""
+        if not self.parent.GetMap().GetOverlay(self.ovlId):
             self.newOverlay = self.parent.Map.AddOverlay(id = self.ovlId, type = self.name,
                                                          command = self.cmd,
                                                          l_active = False, l_render = False, l_hidden = True)
@@ -660,15 +661,11 @@ class DecorationDialog(wx.Dialog):
         else:
             if self.parent.MapWindow.overlays[self.ovlId]['propwin'] == None:
                 return
-
+            
             self.parent.MapWindow.overlays[self.ovlId]['propwin'].get_dcmd = self.GetOptData
-
-
+        
     def OnOptions(self, event):
-        """        self.SetSizer(sizer)
-        sizer.Fit(self)
-
-        Sets option for decoration map overlays
+        """!Sets option for decoration map overlays
         """
         if self.parent.MapWindow.overlays[self.ovlId]['propwin'] is None:
             # build properties dialog
@@ -680,7 +677,7 @@ class DecorationDialog(wx.Dialog):
                 self.parent.MapWindow.overlays[self.ovlId]['propwin'].SetFocus()
             else:
                 self.parent.MapWindow.overlays[self.ovlId]['propwin'].Show()
-    
+        
     def OnResize(self, event):
         if self.FindWindowByName('resize').GetValue():
             self.parent.MapWindow.SetCursor(self.parent.cursors["cross"])
@@ -706,16 +703,16 @@ class DecorationDialog(wx.Dialog):
         """!Button 'OK' pressed"""
         # enable or disable overlay
         self.parent.Map.GetOverlay(self.ovlId).SetActive(self.chkbox.IsChecked())
-
+        
         # update map
         if self.parent.IsPaneShown('3d'):
             self.parent.MapWindow.UpdateOverlays()
         
         self.parent.MapWindow.UpdateMap()
-
+        
         # close dialog
         self.OnCancel(None)
-
+        
     def GetOptData(self, dcmd, layer, params, propwin):
         """!Process decoration layer data"""
         # update layer data

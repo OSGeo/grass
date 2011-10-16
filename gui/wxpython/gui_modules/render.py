@@ -833,13 +833,17 @@ class Map(object):
         
         return selected
 
-    def _renderLayers(self, force, mapWindow):
+    def _renderLayers(self, force = False, mapWindow = None, overlaysOnly = False):
         maps = list()
         masks = list()
         opacities = list()
         # render map layers
         ilayer = 1
-        for layer in self.layers + self.overlays:
+        if overlaysOnly:
+            layers = self.overlays
+        else:
+            self. self.layers + self.overlays
+        for layer in layers:
             # skip non-active map layers
             if not layer or not layer.active:
                 continue
@@ -866,6 +870,36 @@ class Map(object):
         
         return maps, masks, opacities
     
+    def GetLayersFromCmdFile(self):
+        """!Get list of map layers from cmdfile
+        """
+        if not self.cmdfile:
+            return
+        
+        nlayers = 0
+        try:
+            fd = open(self.cmdfile, 'r')
+            for line in fd.readlines():
+                cmd = utils.split(line.strip())
+                ltype = None
+                if cmd[0] == 'd.rast':
+                    ltype = 'raster'
+                
+                name = utils.GetLayerNameFromCmd(cmd, fullyQualified = True,
+                                                 layerType = ltype)[0]
+                
+                self.AddLayer(type = ltype, command = cmd, l_active = False, name = name)
+                nlayers += 1
+        except IOError, e:
+            grass.warning(_("Unable to read cmdfile '%(cmd)s'. Details: %(det)s") % \
+                              { 'cmd' : self.cmdfile, 'det' : e })
+            return
+        
+        fd.close()
+
+        Debug.msg(1, "Map.GetLayersFromCmdFile(): cmdfile=%s" % self.cmdfile)
+        Debug.msg(1, "                            nlayers=%d" % nlayers)
+                
     def _parseCmdFile(self):
         """!Parse cmd file for standalone application
         """
@@ -876,14 +910,13 @@ class Map(object):
             cmdLines = fd.readlines()
             gcmd.RunCommand('g.gisenv',
                             set = 'MONITOR_%s_CMDFILE=' % self.monitor)
-            
-            for cmd in cmdLines:
-                cmdStr = cmd.strip().split(' ')
-                cmd = utils.CmdToTuple(cmdStr)
 
+            for cmd in cmdLines:
+                cmdStr = utils.split(cmd.strip())
+                cmd = utils.CmdToTuple(cmdStr)
                 gcmd.RunCommand(cmd[0], **cmd[1])
                 nlayers += 1
-
+            
             gcmd.RunCommand('g.gisenv',
                             set = 'MONITOR_%s_CMDFILE=%s' % (self.monitor, self.cmdfile))
         except IOError, e:
@@ -895,7 +928,7 @@ class Map(object):
 
         Debug.msg(1, "Map.__parseCmdFile(): cmdfile=%s" % self.cmdfile)
         Debug.msg(1, "                      nlayers=%d" % nlayers)
-
+        
         return nlayers
 
     def _renderCmdFile(self, force, windres):
@@ -914,6 +947,18 @@ class Map(object):
         grass.try_remove(self.mapfileCmd) # GRASS_PNG_READ is TRUE
         
         nlayers = self._parseCmdFile()
+        if self.overlays:
+            gcmd.RunCommand('g.gisenv',
+                            unset = 'MONITOR') # GRASS_RENDER_IMMEDIATE doesn't like monitors
+            driver = UserSettings.Get(group = 'display', key = 'driver', subkey = 'type')
+            if driver == 'png':
+                os.environ["GRASS_RENDER_IMMEDIATE"] = "png"
+            else:
+                os.environ["GRASS_RENDER_IMMEDIATE"] = "cairo"
+            self._renderLayers(overlaysOnly = True)
+            del os.environ["GRASS_RENDER_IMMEDIATE"]
+            gcmd.RunCommand('g.gisenv',
+                            set = 'MONITOR=%s' % currMon)
         
         if currMon != self.monitor:
             gcmd.RunCommand('g.gisenv',
@@ -1053,6 +1098,15 @@ class Map(object):
 
         return layer
 
+    def DeleteAllLayers(self, overlay = False):
+        """!Delete all layers 
+
+        @param overlay True to delete also overlayes
+        """
+        self.layers = []
+        if overlay:
+            self.overlays = []
+        
     def DeleteLayer(self, layer, overlay = False):
         """!Removes layer from list of layers
         

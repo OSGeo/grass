@@ -648,8 +648,8 @@ class mainFrame(wx.Frame):
             return
         
         mapLayers = map(lambda x: x.GetName(),
-                        display.GetRender().GetListOfLayers(l_type = 'raster') +
-                        display.GetRender().GetListOfLayers(l_type = 'vector'))
+                        display.GetMap().GetListOfLayers(l_type = 'raster') +
+                        display.GetMap().GetListOfLayers(l_type = 'vector'))
         
         task = GUI(show = None).ParseCommand(cmd)
         for p in task.get_options()['params']:

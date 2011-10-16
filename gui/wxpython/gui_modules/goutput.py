@@ -788,8 +788,8 @@ class GMConsole(wx.SplitterWindow):
             if not display or not display.IsAutoRendered():
                 return
             mapLayers = map(lambda x: x.GetName(),
-                            display.GetRender().GetListOfLayers(l_type = 'raster') +
-                            display.GetRender().GetListOfLayers(l_type = 'vector'))
+                            display.GetMap().GetListOfLayers(l_type = 'raster') +
+                            display.GetMap().GetListOfLayers(l_type = 'vector'))
             
             try:
                 task = menuform.GUI(show = None).ParseCommand(event.cmd)

@@ -1912,3 +1912,7 @@ class BufferedWindow(MapWindow, wx.Window):
             dist = math.sqrt(math.pow((dEast), 2) + math.pow((dNorth), 2))
         
         return (dist, (dEast, dNorth))
+
+    def GetMap(self):
+        """!Get render.Map() instance"""
+        return self.Map
