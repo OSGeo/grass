@@ -35,12 +35,12 @@ DIRS = \
 	raster \
 	raster3d \
 	vector \
-	temporal \
 	misc \
 	imagery \
 	ps \
 	sites \
 	scripts \
+	temporal \
 	doc \
 	gui \
 	visualization \
