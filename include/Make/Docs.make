@@ -16,7 +16,7 @@ htmldocs-single:
 # generate programmer's manual as multiple HTML documents:
 docs_dirs = \
 	lib/db \
-	lib/g3d \
+	lib/raster3d \
 	lib/gis \
 	lib/gmath \
 	lib/gpde \
