@@ -55,7 +55,7 @@ vedit_INC       = $(VECT_INC) $(VECT_CFLAGS)
 SED = sed
 CTYPESGEN = ./ctypesgen.py
 CTYPESFLAGS = --cpp "$(CC) -E $(CPPFLAGS) $(LFS_CFLAGS) $(EXTRA_CFLAGS) $(NLS_CFLAGS) $(DEFS) $(EXTRA_INC) $(INC) -D__GLIBC_HAVE_LONG_LONG"
-EXTRA_CLEAN_FILES := $(foreach M,$(MODULES),$(M).py) $(wildcard ctypesgencore/*.pyc) $(wildcard ctypesgencore/*/*.pyc)
+EXTRA_CLEAN_FILES := $(wildcard ctypesgencore/*.pyc) $(wildcard ctypesgencore/*/*.pyc)
 
 ifneq ($(MINGW),)
 INTLLIB = -lintl3
@@ -69,7 +69,7 @@ DSTDIR = $(GDIR)/lib
 
 PYFILES  := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__ ctypes_preamble ctypes_loader)
 PYCFILES  := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__ ctypes_preamble ctypes_loader)
-LPYFILES := $(patsubst %,%.py,$(MODULES))
+LPYFILES := $(patsubst %,$(OBJDIR)/%.py,$(MODULES))
 
 ifneq ($(strip $(CTYPESGEN)),)
 default:
@@ -77,7 +77,10 @@ default:
 	$(MAKE) $(LPYFILES) $(PYFILES) $(PYCFILES)
 endif
 
-$(DSTDIR)/%.py: %.py | $(DSTDIR)
+$(DSTDIR)/__init__.py: __init__.py | $(DSTDIR)
+	$(INSTALL_DATA) $< $@
+
+$(DSTDIR)/%.py: $(OBJDIR)/%.py | $(DSTDIR)
 	$(SED) -f fix.sed $< > $@
 
 $(DSTDIR)/ctypes_%.py: %.py | $(DSTDIR)
@@ -85,7 +88,7 @@ $(DSTDIR)/ctypes_%.py: %.py | $(DSTDIR)
 
 define module_rule
 $(1)_DEPS = $$(patsubst %.h,$(ARCH_INCDIR)/%.h,$$($(1)_HDRS))
-$(1).py: $$($(1)_DEPS)
+$(OBJDIR)/$(1).py: $$($(1)_DEPS) | $(OBJDIR)
 	$$(call run_grass,$(CTYPESGEN) $(CTYPESFLAGS) $$($(1)_LIBS) $$($(1)_INC) $(EXTRA_LIBS) $$($(1)_DEPS) -o $$@)
 endef
 $(foreach module,$(MODULES),$(eval $(call module_rule,$(module))))
