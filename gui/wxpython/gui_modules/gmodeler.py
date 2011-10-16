@@ -404,7 +404,7 @@ class Model(object):
         errList = list()
         for action in self.GetItems(objType = ModelAction):
             task = menuform.GUI(show = None).ParseCommand(cmd = action.GetLog(string = False))
-            errList += task.get_cmdError()
+            errList += task.get_cmd_error()
         
         return errList
 
