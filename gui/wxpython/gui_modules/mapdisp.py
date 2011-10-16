@@ -234,13 +234,6 @@ class MapFrameBase(wx.Frame):
         """
         return self.statusbarManager.GetProgressBar()
         
-    def GetRender(self):
-        """!Returns current instance of render.Map()
-        
-        @todo make this method obsolate (name GetMap is better)
-        """
-        return self.Map
-
     def GetMap(self):
         """!Returns current Map instance
         """
@@ -1523,12 +1516,13 @@ class MapFrame(MapFrameBase):
             return
         
         id = 1 # index for overlay layer in render
-
+        
         cmd = ['d.legend', 'at=5,50,2,5']
-        if self.tree.layer_selected and \
+        
+        if self.tree and self.tree.layer_selected and \
                 self.tree.GetPyData(self.tree.layer_selected)[0]['type'] == 'raster':
             cmd.append('map=%s' % self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer'].name)
-
+        
         # Decoration overlay control dialog
         self.dialogs['legend'] = \
             gdialogs.DecorationDialog(parent = self, title = ('Legend'),
@@ -1539,13 +1533,13 @@ class MapFrame(MapFrameBase):
                                       name = 'legend',
                                       checktxt = _("Show/hide legend"),
                                       ctrltxt = _("legend object")) 
-
+    
         self.dialogs['legend'].CentreOnParent() 
         ### dialog cannot be show as modal - in the result d.legend is not selectable
         ### self.dialogs['legend'].ShowModal()
         self.dialogs['legend'].Show()
         self.MapWindow.mouse['use'] = 'pointer'
-
+        
     def OnAddText(self, event):
         """!Handler for text decoration menu selection.
         """
@@ -1620,7 +1614,11 @@ class MapFrame(MapFrameBase):
         """!Set display extents to match selected raster (including
         NULLs) or vector map.
         """
-        self.MapWindow.ZoomToMap()
+        layers = None
+        if self.IsStandalone():
+            layers = self.MapWindow.GetMap().GetListOfLayers(l_active = False)
+        
+        self.MapWindow.ZoomToMap(layers = layers)
 
     def OnZoomToRaster(self, event):
         """!Set display extents to match selected raster map (ignore NULLs)
@@ -1747,6 +1745,7 @@ class MapApp(wx.App):
             self.timer.Stop()
             self.cmdTimeStamp = os.path.getmtime(monFile['cmd'])
             self.mapFrm.OnDraw(None)
+            self.mapFrm.GetMap().GetLayersFromCmdFile()
             self.timer.Start(mtime)
         
 if __name__ == "__main__":
