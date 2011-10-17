@@ -691,17 +691,17 @@ msgstr "Rasterkarte %i Dateiname: %s existiert bereits. Sie wird überschrieben!"
 
 #: ../raster3d/r3.out.vtk/main.c:117
 msgid "Specify top and bottom map"
-msgstr "Sie müssen eine obere und eine untere Karte angegeben."
+msgstr "Sie müssen eine obere und eine untere Karte angeben"
 
 #: ../raster3d/r3.out.vtk/main.c:124
 #, c-format
 msgid "Top cell map <%s> not found"
-msgstr "Obere Rasterkarte <%s> nicht gefunden."
+msgstr "Obere Rasterkarte <%s> nicht gefunden"
 
 #: ../raster3d/r3.out.vtk/main.c:133
 #, c-format
 msgid "Bottom cell map <%s> not found"
-msgstr "Untere Rasterkarte <%s> nicht gefunden."
+msgstr "Untere Rasterkarte <%s> nicht gefunden"
 
 #: ../raster3d/r3.out.vtk/main.c:152
 #, fuzzy, c-format
@@ -710,7 +710,7 @@ msgstr "3D-Rasterkarte <%s> nicht gefunden."
 
 #: ../raster3d/r3.out.vtk/main.c:155
 msgid "Please provide three RGB 3D raster maps"
-msgstr "Bitte geben Sie drei RGB 3D Rasterkarten an."
+msgstr "Bitte geben Sie drei RGB 3D Rasterkarten an"
 
 #: ../raster3d/r3.out.vtk/main.c:165
 #, c-format
@@ -2114,7 +2114,7 @@ msgstr "GRASS Modul zum Erstellen einer Rasterkarte mit Werten einer Gauß'schen 
 
 #: ../raster/r.surf.gauss/main.c:48
 msgid "Name of the output random surface"
-msgstr "Name der Ausgabe-Rasterkarte mit zufälliger Oberfläche."
+msgstr "Name der Ausgabe-Rasterkarte mit zufälliger Oberfläche"
 
 #: ../raster/r.surf.gauss/main.c:52
 msgid "Distribution mean"
@@ -2414,7 +2414,7 @@ msgstr "Initialisiere die Ausgabe der Richtung "
 
 #: ../raster/r.walk/main.c:724 ../raster/r.drain/main.c:273
 msgid "Failed to guess site file format"
-msgstr "Das Erraten des Sites-Formates ist schief gegangen."
+msgstr "Das Erraten des Sites-Formates ist schief gegangen"
 
 #: ../raster/r.walk/main.c:757 ../raster/r.cost/main.c:594
 #, fuzzy, c-format
@@ -2564,7 +2564,7 @@ msgstr "Vorhandene GDAL-Treiber:"
 #: ../raster/r.in.gdal/main.c:238
 #, c-format
 msgid "Raster map <%s> already exists and will be overwritten"
-msgstr "Die Rasterkarte <%s> existiert bereits und wird überschrieben."
+msgstr "Die Rasterkarte <%s> existiert bereits und wird überschrieben"
 
 #: ../raster/r.in.gdal/main.c:241
 #, c-format
@@ -2880,7 +2880,7 @@ msgstr "Entweder -h oderr rows= and cols= müssen angegeben sein"
 
 #: ../raster/r.in.bin/main.c:428
 msgid "Either all or none of north=, south=, east= and west= must be given"
-msgstr "Entweder alle oder keine Angabe von north=, south=, east= and west= müssen angegeben sein"
+msgstr "Entweder alle oder keine Angabe von north=, south=, east= and west= müssen angegeben werden"
 
 #: ../raster/r.in.bin/main.c:435 ../display/d.grid/main.c:224
 #, c-format
@@ -3316,11 +3316,11 @@ msgstr "Zu viele Startpunkte."
 #: ../raster/r.drain/main.c:299
 #, c-format
 msgid "Starting vector map <%s> contains no points in the current region"
-msgstr "Start-Vektorkarte <%s> beinhaltet keine Punkte in der aktuellen Region."
+msgstr "Start-Vektorkarte <%s> beinhaltet keine Punkte in der aktuellen Region"
 
 #: ../raster/r.drain/main.c:305
 msgid "No start/stop point(s) specified"
-msgstr "Kein(e) Start/Stop-Punkt(e) angegeben."
+msgstr "Kein(e) Start/Stop-Punkt(e) angegeben"
 
 #: ../raster/r.drain/main.c:380
 msgid "Calculating flow directions..."
@@ -4738,24 +4738,24 @@ msgstr "Kann die Filter-Datei '%s' nicht öffnen."
 
 #: ../raster/r.mfilter/getfilt.c:47
 msgid "Illegal filter matrix size specified"
-msgstr "Ungültige Größe für die Filtermatrix angegeben."
+msgstr "Ungültige Größe für die Filtermatrix angegeben"
 
 #: ../raster/r.mfilter/getfilt.c:50
 msgid "Even filter matrix size specified"
-msgstr "Die Filtermatrix hat eine gerade Größe."
+msgstr "Die Filtermatrix hat eine gerade Größe"
 
 #: ../raster/r.mfilter/getfilt.c:72
 msgid "Illegal filter matrix"
-msgstr "Ungültige Filtermatrix."
+msgstr "Ungültige Filtermatrix"
 
 #: ../raster/r.mfilter/getfilt.c:80 ../raster/r.mfilter/getfilt.c:107
 #: ../raster/r.mfilter/getfilt.c:124
 msgid "Filter file format error"
-msgstr "Filter-Datei Formatfehler."
+msgstr "Filter-Datei Formatfehler"
 
 #: ../raster/r.mfilter/getfilt.c:83
 msgid "Duplicate filter divisor specified"
-msgstr "Doppelter Filter-Divisior angegebn."
+msgstr "Doppelter Filter-Divisior angegeben"
 
 #: ../raster/r.mfilter/getfilt.c:101
 msgid "Illegal divisor matrix"
@@ -4763,15 +4763,15 @@ msgstr "Ungültige Divisormatrix."
 
 #: ../raster/r.mfilter/getfilt.c:110
 msgid "Duplicate filter type specified"
-msgstr "Doppelter Filtertyp angegebn."
+msgstr "Doppelter Filtertyp angegeben"
 
 #: ../raster/r.mfilter/getfilt.c:117
 msgid "Illegal filter type specified"
-msgstr "Ungültiger Filtertyp angegeben."
+msgstr "Ungültiger Filtertyp angegeben"
 
 #: ../raster/r.mfilter/getfilt.c:127
 msgid "Duplicate filter start specified"
-msgstr "Doppelter Filter-Start angegeben."
+msgstr "Doppelter Filter-Start angegeben"
 
 #: ../raster/r.mfilter/getfilt.c:135
 #, c-format
@@ -7817,7 +7817,7 @@ msgstr "Prüfe Location <%s> Mapset <%s>."
 #: ../vector/v.edit/main.c:84
 #, c-format
 msgid "Required parameter <%s> not set"
-msgstr "Benötigter Parameter <%s> wurde nicht angegeben."
+msgstr "Benötigter Parameter <%s> wurde nicht angegeben"
 
 #: ../raster/r.proj/main.c:308
 #, c-format
@@ -21613,7 +21613,7 @@ msgstr "Bedenken Sie das 'Minimum Steiner Tree'-Problem ist NP-hart und in diese
 
 #: ../vector/v.net.steiner/main.c:371
 msgid "Node layer (used for terminals)"
-msgstr "Layer mit Knoten (verwendet für dir Stationen)."
+msgstr "Layer mit Knoten (verwendet für dir Stationen)"
 
 #: ../vector/v.net.steiner/main.c:377
 msgid "Arcs' cost column (for both directions)"
@@ -21621,7 +21621,7 @@ msgstr "Kostenspalte für dir Kanten (für beide Richtungen)."
 
 #: ../vector/v.net.steiner/main.c:383
 msgid "Categories of points on terminals (layer is specified by nlayer)"
-msgstr "Kategorien der Punkte auf den Stationen (Layer wird mit nlayer angegebn)"
+msgstr "Kategorien der Punkte auf den Stationen (Layer wird mit nlayer angegeben)"
 
 #: ../vector/v.net.steiner/main.c:391
 msgid "Number of steiner points (-1 for all possible)"
@@ -23621,7 +23621,7 @@ msgstr "Teile"
 
 #: ../vector/v.clean/main.c:218
 msgid "Remove duplicates"
-msgstr "Entferne Doppelte"
+msgstr "Entferne doppelte Vektoren"
 
 #: ../vector/v.clean/main.c:221
 msgid "Remove dangles"
@@ -23685,7 +23685,7 @@ msgstr "Werkzeug: Teile Linien an Überschneidungen"
 #: ../vector/v.clean/main.c:375 ../vector/v.clean/main.c:387
 #: ../vector/v.clean/main.c:414
 msgid "Tool: Remove duplicates"
-msgstr "Werkzeug: Entferne Doppelte"
+msgstr "Werkzeug: Entferne doppelte Vektoren"
 
 #: ../vector/v.clean/main.c:347
 msgid "Tool: Remove dangles"
@@ -32686,7 +32686,7 @@ msgstr "Zu selektierender Kanal"
 #~ msgstr "Name der Eingabe-Qulle nicht angegeben."
 
 #~ msgid "Name for output raster map not specified"
-#~ msgstr "Name der Ausgabe-Rasterkarte nicht angegeben."
+#~ msgstr "Name der Ausgabe-Rasterkarte nicht angegeben"
 
 #~ msgid "Requested g3d map <%s> not found"
 #~ msgstr "Angeforderte G3D Karte <%s> nicht gefunden."
@@ -32860,7 +32860,7 @@ msgstr "Zu selektierender Kanal"
 #~ msgstr "Zerlege Polygone:"
 
 #~ msgid "Remove duplicates:"
-#~ msgstr "Lösche Doppelte:"
+#~ msgstr "Lösche doppelte Vektoren:"
 
 #~ msgid "Break boundaries:"
 #~ msgstr "Zerlege Grenzen:"
@@ -33330,7 +33330,7 @@ msgstr "Zu selektierender Kanal"
 #~ msgstr "Kann keinen Speicher für Segment fbuff == NULL reservieren."
 
 #~ msgid "Raster output map <%s> not found (no start_points given)"
-#~ msgstr "Ausgabe-Rasterkarte <%s> nicht gefunden (keine Start-Punkte angegeben)."
+#~ msgstr "Ausgabe-Rasterkarte <%s> nicht gefunden (keine Start-Punkte angegeben)"
 
 #~ msgid "Memory allocation error on reading start points from raster map %s"
 #~ msgstr "Fehler beim allozieren von Speicher während des Lesens der Startpunktes der Rasterkarte %s."
@@ -33378,7 +33378,7 @@ msgstr "Zu selektierender Kanal"
 #~ msgstr "Eingabe-Rasterkarte mit Längengraden [in Dezimal-Grad]."
 
 #~ msgid "Horizon file no. %d <%s> not found"
-#~ msgstr "Horizont-datei Nr. %d <%s> nicht gefunden."
+#~ msgstr "Horizont-Datei Nr. %d <%s> nicht gefunden."
 
 #~ msgid "Import GDAL supported raster file into a binary raster map layer."
 #~ msgstr "Importiert Rasterdaten (aus Formaten die GDAL unterstützt) in eine GRASS Rasterkarte."
