@@ -116,7 +116,7 @@ static void write_data(int fd, int row, unsigned char *buf, int n)
     struct fileinfo *fcb = &R__.fileinfo[fd];
     ssize_t nwrite = fcb->nbytes * n;
 
-    if (write(fd, buf, nwrite) != nwrite)
+    if (write(fcb->data_fd, buf, nwrite) != nwrite)
 	G_fatal_error(_("Error writing uncompressed FP data for row %d of <%s>"),
 		      fcb->name, row);
 }
@@ -126,7 +126,7 @@ static void write_data_compressed(int fd, int row, unsigned char *buf, int n)
     struct fileinfo *fcb = &R__.fileinfo[fd];
     int nwrite = fcb->nbytes * n;
 
-    if (G_zlib_write(fd, buf, nwrite) < 0)
+    if (G_zlib_write(fcb->data_fd, buf, nwrite) < 0)
 	G_fatal_error(_("Error writing compressed FP data for row %d of <%s>"),
 		      fcb->name, row);
 }
@@ -135,7 +135,7 @@ static void set_file_pointer(int fd, int row)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
 
-    fcb->row_ptr[row] = lseek(fd, 0L, SEEK_CUR);
+    fcb->row_ptr[row] = lseek(fcb->data_fd, 0L, SEEK_CUR);
 }
 
 static void convert_float(XDR * xdrs, char *null_buf, const FCELL * rast,
@@ -393,13 +393,13 @@ static void put_data(int fd, char *null_buf, const CELL * cell,
 	if (nwrite > 0) {
 	    nwrite++;
 
-	    if (write(fd, compressed_buf, nwrite) != nwrite)
+	    if (write(fcb->data_fd, compressed_buf, nwrite) != nwrite)
 		G_fatal_error(_("Error writing compressed data for row %d of <%s>"),
 			      row, fcb->name);
 	}
 	else {
 	    nwrite = nbytes * n + 1;
-	    if (write(fd, work_buf, nwrite) != nwrite)
+	    if (write(fcb->data_fd, work_buf, nwrite) != nwrite)
 		G_fatal_error(_("Error writing compressed data for row %d of <%s>"),
 			      row, fcb->name);
 	}
@@ -409,7 +409,7 @@ static void put_data(int fd, char *null_buf, const CELL * cell,
     else {
 	nwrite = fcb->nbytes * n;
 
-	if (write(fd, work_buf, nwrite) != nwrite)
+	if (write(fcb->data_fd, work_buf, nwrite) != nwrite)
 	    G_fatal_error(_("Error writing uncompressed data for row %d of <%s>"),
 			  row, fcb->name);
     }

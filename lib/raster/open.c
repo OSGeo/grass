@@ -29,18 +29,23 @@
 #define FORMAT_FILE "f_format"
 #define NULL_FILE   "null"
 
-static struct fileinfo *new_fileinfo(int fd)
+static int new_fileinfo(void)
 {
     int oldsize = R__.fileinfo_count;
     int newsize = oldsize;
     int i;
 
-    if (fd < oldsize)
-	return &R__.fileinfo[fd];
+    for (i = 0; i < oldsize; i++)
+	if (R__.fileinfo[i].open_mode <= 0) {
+	    memset(&R__.fileinfo[i], 0, sizeof(struct fileinfo));
+	    R__.fileinfo[i].open_mode = -1;
+	    return i;
+	}
 
-    newsize *= 2;
-    if (newsize <= fd)
-	newsize = fd + 20;
+    if (newsize < 20)
+	newsize += 20;
+    else
+	newsize *= 2;
 
     R__.fileinfo = G_realloc(R__.fileinfo, newsize * sizeof(struct fileinfo));
 
@@ -52,7 +57,7 @@ static struct fileinfo *new_fileinfo(int fd)
 
     R__.fileinfo_count = newsize;
 
-    return &R__.fileinfo[fd];
+    return oldsize;
 }
 
 /*!
@@ -146,7 +151,7 @@ int Rast_open_old(const char *name, const char *mapset)
 int Rast__open_old(const char *name, const char *mapset)
 {
     struct fileinfo *fcb;
-    int fd;
+    int cell_fd, fd;
     char *cell_dir;
     const char *r_name;
     const char *r_mapset;
@@ -246,22 +251,23 @@ int Rast__open_old(const char *name, const char *mapset)
     gdal = Rast_get_gdal_link(r_name, r_mapset);
     if (gdal) {
 #ifdef HAVE_GDAL
-	/* dummy descriptor to reserve the fileinfo slot */
-	fd = open(G_DEV_NULL, O_RDONLY);
+	cell_fd = -1;
 #else
 	G_fatal_error(_("Raster map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"),
 		      r_name, r_mapset);
 #endif
     }
-    else
+    else {
 	/* now actually open file for reading */
-	fd = G_open_old(cell_dir, r_name, r_mapset);
+	cell_fd = G_open_old(cell_dir, r_name, r_mapset);
+	if (cell_fd < 0)
+	    G_fatal_error(_("Unable to open %s file for raster map <%s@%s>"),
+			  cell_dir, r_name, r_mapset);
+    }
 
-    if (fd < 0)
-	G_fatal_error(_("Unable to open %s file for raster map <%s@%s>"),
-		      cell_dir, r_name, r_mapset);
-
-    fcb = new_fileinfo(fd);
+    fd = new_fileinfo();
+    fcb = &R__.fileinfo[fd];
+    fcb->data_fd = cell_fd;
 
     fcb->map_type = MAP_TYPE;
 
@@ -291,7 +297,7 @@ int Rast__open_old(const char *name, const char *mapset)
     if (!gdal)
 	/* check for compressed data format, making initial reads if necessary */
 	if (Rast__check_format(fd) < 0) {
-	    close(fd);		/* warning issued by check_format() */
+	    close(cell_fd);	/* warning issued by check_format() */
 	    G_fatal_error(_("Error reading format for <%s@%s>"),
 			  r_name, r_mapset);
 	}
@@ -483,12 +489,9 @@ static int open_raster_new_gdal(char *map, char *mapset,
     int fd;
     struct fileinfo *fcb;
 
-    /* dummy descriptor to reserve the fileinfo slot */
-    fd = open(G_DEV_NULL, O_RDONLY);
-    if (fd < 0)
-	G_fatal_error(_("Unable to open null device"));
-
-    fcb = new_fileinfo(fd);
+    fd = new_fileinfo();
+    fcb = &R__.fileinfo[fd];
+    fcb->data_fd = -1;
 
     /* mark closed */
     fcb->map_type = map_type;
@@ -544,7 +547,7 @@ static int open_raster_new(const char *name, int open_mode,
 {
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
     struct fileinfo *fcb;
-    int fd;
+    int fd, cell_fd;
     char *tempname;
     char *map;
     char *mapset;
@@ -588,15 +591,18 @@ static int open_raster_new(const char *name, int open_mode,
 
     /* open a tempfile name */
     tempname = G_tempfile();
-    fd = creat(tempname, 0666);
-    if (fd < 0) {
+    cell_fd = creat(tempname, 0666);
+    if (cell_fd < 0) {
 	G_free(mapset);
 	G_free(tempname);
 	G_free(map);
 	G_fatal_error(_("No temp files available"));
     }
 
-    fcb = new_fileinfo(fd);
+    fd = new_fileinfo();
+    fcb = &R__.fileinfo[fd];
+    fcb->data_fd = cell_fd;
+
     /*
      * since we are bypassing the normal open logic
      * must create the cell element 
@@ -661,7 +667,7 @@ static int open_raster_new(const char *name, int open_mode,
 	G_free(fcb->name);
 	G_free(fcb->mapset);
 	G_free(fcb->temp_name);
-	close(fd);
+	close(cell_fd);
 	G_fatal_error(_("no temp files available"));
     }
 

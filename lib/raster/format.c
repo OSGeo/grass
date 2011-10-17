@@ -76,13 +76,13 @@ int Rast__check_format(int fd)
      */
 
     if (fcb->cellhd.compressed < 0) {
-	if (read(fd, compress, 3) != 3
+	if (read(fcb->data_fd, compress, 3) != 3
 	    || compress[0] != 251 || compress[1] != 255 || compress[2] != 251)
 	    fcb->cellhd.compressed = 0;
     }
 
     if (!fcb->cellhd.compressed)
-	return fd;
+	return 1;
 
     /* allocate space to hold the row address array */
     fcb->row_ptr = G_calloc(fcb->cellhd.rows + 1, sizeof(off_t));
@@ -107,7 +107,7 @@ int Rast__read_row_ptrs(int fd)
 
     if (fcb->cellhd.compressed < 0) {
 	n = (nrows + 1) * sizeof(off_t);
-	if (read(fd, fcb->row_ptr, n) != n)
+	if (read(fcb->data_fd, fcb->row_ptr, n) != n)
 	    goto badread;
 	return 1;
     }
@@ -119,14 +119,14 @@ int Rast__read_row_ptrs(int fd)
      *  actual values do not exceed the capability of the off_t)
      */
 
-    if (read(fd, &nbytes, 1) != 1)
+    if (read(fcb->data_fd, &nbytes, 1) != 1)
 	goto badread;
     if (nbytes == 0)
 	goto badread;
 
     n = (nrows + 1) * nbytes;
     buf = G_malloc(n);
-    if (read(fd, buf, n) != n)
+    if (read(fcb->data_fd, buf, n) != n)
 	goto badread;
 
     for (row = 0, b = buf; row <= nrows; row++) {
@@ -164,7 +164,7 @@ int Rast__write_row_ptrs(int fd)
     unsigned char *buf, *b;
     int len, row, result;
 
-    lseek(fd, 0L, SEEK_SET);
+    lseek(fcb->data_fd, 0L, SEEK_SET);
 
     len = (nrows + 1) * nbytes + 1;
     b = buf = G_malloc(len);
@@ -182,7 +182,7 @@ int Rast__write_row_ptrs(int fd)
 	b += nbytes;
     }
 
-    result = (write(fd, buf, len) == len);
+    result = (write(fcb->data_fd, buf, len) == len);
     G_free(buf);
 
     return result;

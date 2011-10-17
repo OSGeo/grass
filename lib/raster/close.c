@@ -170,7 +170,7 @@ static int close_old(int fd)
 	Rast_quant_free(&fcb->quant);
 	xdr_destroy(&fcb->xdrstream);
     }
-    close(fd);
+    close(fcb->data_fd);
 
     return 1;
 }
@@ -312,8 +312,6 @@ static int close_new_gdal(int fd, int ok)
 	Rast_close_gdal_link(fcb->gdal);
     }
 
-    /* NOW CLOSE THE FILE DESCRIPTOR */
-    close(fd);
     fcb->open_mode = -1;
 
     if (fcb->data != NULL)
@@ -387,7 +385,7 @@ static int close_new(int fd, int ok)
 	}			/* null_cur_row > 0 */
 
 	if (fcb->open_mode == OPEN_NEW_COMPRESSED) {	/* auto compression */
-	    fcb->row_ptr[fcb->cellhd.rows] = lseek(fd, 0L, SEEK_CUR);
+	    fcb->row_ptr[fcb->cellhd.rows] = lseek(fcb->data_fd, 0L, SEEK_CUR);
 	    Rast__write_row_ptrs(fd);
 	}
 
@@ -413,12 +411,12 @@ static int close_new(int fd, int ok)
 			      fcb->mapset);
 	    remove(path);
 	    CELL_DIR = "cell";
-	    close(fd);
+	    close(fcb->data_fd);
 	}
     }				/* ok */
     /* NOW CLOSE THE FILE DESCRIPTOR */
 
-    close(fd);
+    close(fcb->data_fd);
     fcb->open_mode = -1;
 
     if (fcb->data != NULL)
