@@ -1,6 +1,8 @@
 <h2>DESCRIPTION</h2>
 
-<em>i.modis.qc</em> Extracts Requested Quality Assessment flags from the following Modis products: MOD09A1, MOD09Q1, MOD11A1, MOD11A2, MOD13A2, MCD43B2. This does include MOD09A1 QA_state_500m layer (see Notes).
+<em>i.modis.qc</em> Extracts Requested Quality Assessment flags from the
+following MODIS products: MOD09A1, MOD09Q1, MOD11A1, MOD11A2, MOD13A2,
+MCD43B2. This does include MOD09A1 QA_state_500m layer (see Notes).
 
 <pre>
 <em>MOD09A1/Q1: MODLAND QA Bits. bits=[0-1]</em>
@@ -9,7 +11,8 @@
  <li>[00]= class 0: Corrected product produced at ideal quality -- all bands</li>
  <li>[01]= class 1: Corrected product produced at less than ideal quality -- some or all bands</li>
  <li>[10]= class 2: Corrected product NOT produced due to cloud effect -- all bands</li>
- <li>[11]= class 3: Corrected product NOT produced due to other reasons -- some or all bands maybe be fill value (Note that a value of [11] overrides a value of [01])</li>
+ <li>[11]= class 3: Corrected product NOT produced due to other reasons --
+ some or all bands maybe be fill value (Note that a value of [11] overrides a value of [01])</li>
 </ul>
 
 <pre>
@@ -391,30 +394,28 @@ bits[0-3][4-7][8-11][12-15][16-19][20-23][24-27]<br>
 
 
 <h2>NOTES</h2>
-In MOD09A1: It seems that cloud related info is not filled properly in the standard QC (MOD09A1 in this module) since version 3, State-QA 500m images (MOD09A1s in this module) should be used (see Vermote et al., 2008).<br>
+In MOD09A1: It seems that cloud related info is not filled properly in the
+standard QC (MOD09A1 in this module) since version 3, State-QA 500m images
+(MOD09A1s in this module) should be used (see Vermote et al., 2008).
 
 <h2>TODO</h2>
-Add one Day products.<br>
+Add one Day products.
 
 <h2>SEE ALSO</h2>
-<br>
-<a href="https://lpdaac.usgs.gov/lpdaac/products/modis_products_table">MODIS Products</A><br>
-<br>
-Vermote E.F., Kotchenova S.Y., Ray J.P.<br>
-MODIS Surface Reflectance User's Guide.<br>
-Version 1.2. June 2008.<br>
-MODIS Land Surface Reflectance Science Computing Facility.<br>
-<a href="http://modis-sr.ltdri.org">Homepage</A><br>
-
-
 <em>
-<a href="i.vi.html">i.vi</A><br>
+<a href="i.vi.html">i.vi</a>
 </em>
 
+<h2>REFERENCES</h2>
 
-<h2>AUTHORS</h2>
-Yann Chemin<br>
+<ul>
+<li> <a href="https://lpdaac.usgs.gov/lpdaac/products/modis_products_table">MODIS Products</a>
+<li> Vermote E.F., Kotchenova S.Y., Ray J.P. MODIS Surface Reflectance User's Guide. 
+ Version 1.2. June 2008. MODIS Land Surface Reflectance Science Computing Facility. <a href="http://modis-sr.ltdri.org">Homepage</a>
+</ul>
 
+<h2>AUTHOR</h2>
+Yann Chemin
 
 <p>
 <i>Last changed: $Date$</i>

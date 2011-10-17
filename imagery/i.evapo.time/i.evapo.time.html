@@ -1,58 +1,68 @@
 <h2>DESCRIPTION</h2>
 
-<em>i.evapo.time_integration</em> integrates ETa in time following a reference ET (typically) from a set of meteorological stations dataset.
+<em>i.evapo.time_integration</em> integrates ETa in time following a
+reference ET (typically) from a set of meteorological stations dataset.
 
 Inputs:
-- ETa images
-- ETa images DOY (Day of Year)
-- ETo images
-- ETo DOYmin as a single value 
+<ul>
+<li> ETa images
+<li> ETa images DOY (Day of Year)
+<li> ETo images
+<li> ETo DOYmin as a single value 
+</ul>
 
 Method:
-1 - each ETa pixel is divided by the same day ETo and become ETrF
-2 - each ETrF pixel is multiplied by the ETo sum for the representative days
-3 - Sum all n temporal [ETrF*ETo_sum] pixels to make a summed(ET) in [DOYmin;DOYmax]
+<ol>
+<li> each ETa pixel is divided by the same day ETo and become ETrF
+<li> each ETrF pixel is multiplied by the ETo sum for the representative days
+<li> Sum all n temporal [ETrF*ETo_sum] pixels to make a summed(ET) in [DOYmin;DOYmax]
+</ol>
 
 representative days calculation:
 let assume i belongs to range [DOYmin;DOYmax]
 
+<div class="code"><pre>
 DOYbeforeETa[i] = ( DOYofETa[i] - DOYofETa[i-1] ) / 2
 DOYafterETa[i] = ( DOYofETa[i+1] - DOYofETa[i] ) / 2
-
+</pre></div>
 
 <h2>NOTES</h2>
 
 ETo images preparation:
 If you only have one meteorological station data, the easiest way is:
 
+<div class="code"><pre>
 n=0
 for ETo_val in Eto[1] Eto[2] ...
 do
 	r.mapcalc "eto$n = $ETo_val" 
 	`expr n = n + 1'
 done
+</pre></div>
 
-with Eto[1], Eto[2], etc being a simple copy and paste from your data file of all ETo values separated by an empty space from each other.
+with Eto[1], Eto[2], etc being a simple copy and paste from your data file
+of all ETo values separated by an empty space from each other.
 
-If you have several meteorological stations data, then you need to grid them, Thiessen polygons or interpolation for each day.
+If you have several meteorological stations data, then you need to grid
+them, Thiessen polygons or interpolation for each day.
 
-For multi-year calculations, just continue incrementing DOY values above 366, it will continue working, up to maximum input of 400 satellite images.
-
-<h2>TODO</h2>
+For multi-year calculations, just continue incrementing DOY values above
+366, it will continue working, up to maximum input of 400 satellite images.
 
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="i.eb.eta.html">i.eb.eta</A><br>
-<a href="i.evapo.potrad.html">i.evapo.potrad</A><br>
-<a href="i.evapo.SENAY.html">i.evapo.SENAY</A><br>
-<a href="r.surf.idw.html">r.surf.idw</A><br>
-<a href="r.surf.idw2.html">r.surf.idw2</A><br>
-<a href="r.bilinear.html">r.bilinear</A><br>
+<a href="i.eb.eta.html">i.eb.eta</a>,
+<a href="i.evapo.potrad.html">i.evapo.potrad</a>,
+<a href="i.evapo.SENAY.html">i.evapo.SENAY</a>,
+<a href="r.surf.idw.html">r.surf.idw</a>,
+<a href="r.surf.idw2.html">r.surf.idw2</a>,
+<a href="r.bilinear.html">r.bilinear</a>
 </em>
 
 
 <h2>AUTHORS</h2>
-Yann Chemin, International Rice Research Institute, The Philippines<br>
+Yann Chemin, International Rice Research Institute, The Philippines
+
 <p>
 <i>Last changed: $Date$</i>
