@@ -68,6 +68,7 @@ struct fileinfo			/* Information for opened cell files */
     XDR xdrstream;		/* xdr stream for reading fp    */
     struct Quant quant;
     struct GDAL_link *gdal;
+    int data_fd;		/* Raster data fd               */
 };
 
 struct R__			/*  Structure of library globals */

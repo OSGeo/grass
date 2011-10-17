@@ -92,12 +92,12 @@ static void read_data_fp_compressed(int fd, int row, unsigned char *data_buf,
     size_t readamount = t2 - t1;
     size_t bufsize = fcb->cellhd.cols * fcb->nbytes;
 
-    if (lseek(fd, t1, SEEK_SET) < 0)
+    if (lseek(fcb->data_fd, t1, SEEK_SET) < 0)
 	G_fatal_error(_("Error reading raster data"));
 
     *nbytes = fcb->nbytes;
 
-    if ((size_t) G_zlib_read(fd, readamount, data_buf, bufsize) != bufsize)
+    if ((size_t) G_zlib_read(fcb->data_fd, readamount, data_buf, bufsize) != bufsize)
 	G_fatal_error(_("Error reading raster data"));
 }
 
@@ -130,12 +130,12 @@ static void read_data_compressed(int fd, int row, unsigned char *data_buf,
     unsigned char *cmp;
     int n;
 
-    if (lseek(fd, t1, SEEK_SET) < 0)
+    if (lseek(fcb->data_fd, t1, SEEK_SET) < 0)
 	G_fatal_error(_("Error reading raster data"));
 
     cmp = G__alloca(readamount);
 
-    if (read(fd, cmp, readamount) != readamount) {
+    if (read(fcb->data_fd, cmp, readamount) != readamount) {
 	G__freea(cmp);
 	G_fatal_error(_("Error reading raster data"));
     }
@@ -170,10 +170,10 @@ static void read_data_uncompressed(int fd, int row, unsigned char *data_buf,
 
     *nbytes = fcb->nbytes;
 
-    if (lseek(fd, (off_t) row * bufsize, SEEK_SET) == -1)
+    if (lseek(fcb->data_fd, (off_t) row * bufsize, SEEK_SET) == -1)
 	G_fatal_error(_("Error reading raster data"));
 
-    if (read(fd, data_buf, bufsize) != bufsize)
+    if (read(fcb->data_fd, data_buf, bufsize) != bufsize)
 	G_fatal_error(_("Error reading raster data"));
 }
 
