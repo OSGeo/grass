@@ -221,6 +221,8 @@ class abstract_map_dataset(abstract_dataset):
 	""" Remove the map entry in each space time dataset in which this map is registered
 
            @param dbif: The database interface to be used
+           @param update: Call for each unregister statement the update_from_registered_maps 
+                          of the space time dataset. This can slow down the unregistration process significantly.
         """
 
         core.verbose(_("Unregister %s dataset <%s> from space time datasets") % (self.get_type(), self.get_id()))
@@ -237,7 +239,11 @@ class abstract_map_dataset(abstract_dataset):
 
         # For each stds in which the map is registered
         if rows:
+            count = 0
+            num_sps = len(rows)
             for row in rows:
+                core.percent(count, num_sps, 1)
+                count += 1
                 # Create a space time dataset object to remove the map
                 # from its register
                 stds = self.get_new_stds_instance(row["id"])
@@ -248,6 +254,7 @@ class abstract_map_dataset(abstract_dataset):
                 if update == True:
                     stds.update_from_registered_maps(dbif)
 
+            core.percent(1, 1, 1)
         dbif.connection.commit()
 
         if connect == True:
