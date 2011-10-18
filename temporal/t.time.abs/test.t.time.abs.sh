@@ -13,9 +13,9 @@ r.mapcalc --o expr="prec_4 = rand(0, 510)"
 r.mapcalc --o expr="prec_5 = rand(0, 300)"
 r.mapcalc --o expr="prec_6 = rand(0, 650)"
 
-t.create --v --o type=strds temporaltype=absolute output=precip_abs1 gran="1 months" title="A test" descr="A test"
-t.create --v --o type=strds temporaltype=absolute output=precip_abs2 gran="1 months" title="A test" descr="A test"
-t.create --v --o type=strds temporaltype=absolute output=precip_abs3 gran="1 months" title="A test" descr="A test"
+t.create --v --o type=strds temporaltype=absolute output=precip_abs1 title="A test" descr="A test"
+t.create --v --o type=strds temporaltype=absolute output=precip_abs2 title="A test" descr="A test"
+t.create --v --o type=strds temporaltype=absolute output=precip_abs3 title="A test" descr="A test"
 
 t.time.abs --v input=prec_1,prec_2,prec_3 start="2001-01-01" increment="1 months"
 t.info type=rast input=prec_1

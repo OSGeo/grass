@@ -30,14 +30,6 @@
 #%end
 
 #%option
-#% key: granularity
-#% type: string
-#% description: The granularity of the new space time dataset (NNN day, NNN week, NNN month)
-#% required: yes
-#% multiple: no
-#%end
-
-#%option
 #% key: semantictype
 #% type: string
 #% description: The semantic type of the space time dataset
@@ -95,7 +87,6 @@ def main():
     title = options["title"]
     descr = options["description"]
     semantic = options["semantictype"]
-    gran = options["granularity"]
 
     # Make sure the temporal database exists
     tgis.create_temporal_database()
@@ -121,7 +112,7 @@ def main():
 
     grass.verbose(_("Create space time %s dataset.") % sp.get_new_map_instance(None).get_type())
 
-    sp.set_initial_values(granularity=gran, temporal_type=temporaltype, semantic_type=semantic, title=title, description=descr)
+    sp.set_initial_values(temporal_type=temporaltype, semantic_type=semantic, title=title, description=descr)
     sp.insert(dbif)
 
     dbif.close()

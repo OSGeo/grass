@@ -20,7 +20,7 @@ r.mapcalc --o expr="prec_6 = 600"
 # The first @test
 # We create the space time raster inputs and register the raster maps with absolute time interval
 
-t.create --v --o type=strds temporaltype=absolute output=precip_abs gran="1 months" title="A test" descr="A test"
+t.create --v --o type=strds temporaltype=absolute output=precip_abs title="A test" descr="A test"
 
 tr.register --v input=precip_abs maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="1 months"
 
