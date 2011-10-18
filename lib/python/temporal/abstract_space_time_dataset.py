@@ -233,25 +233,21 @@ class abstract_space_time_dataset(abstract_dataset):
 
         return tcount
 
-    def count_gaps(self, maps, is_interval = False):
-        """Count the number of gaps between temporal neighbours. The maps must have intervals as valid time
+    def count_gaps(self, maps):
+        """Count the number of gaps between temporal neighbours
         
            @param maps: A sorted (start_time) list of abstract_dataset objects
-           @param is_interval: Set true if the maps have vaild interval time (relative or absolute)
            @return The numbers of gaps between temporal neighbours
         """
 
         gaps = 0
 
         # Check for gaps
-        if is_interval:    
-            for i in range(len(maps)):
-                if i < len(maps) - 1:
-                    relation = maps[i + 1].temporal_relation(maps[i])
-                    if relation == "after":
-                        gaps += 1
-        else:
-            gaps = None # Gaps only possible in temporal consistent datasets (only intervals)
+        for i in range(len(maps)):
+            if i < len(maps) - 1:
+                relation = maps[i + 1].temporal_relation(maps[i])
+                if relation == "after":
+                    gaps += 1
 
         return gaps
 
