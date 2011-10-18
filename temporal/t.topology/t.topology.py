@@ -37,11 +37,18 @@
 #% answer: strds
 #%end
 
+#%option G_OPT_DB_WHERE
+#%end
+
 #%flag
 #% key: c
 #% description: Check temporal topology
 #%end
 
+#%flag
+#% key: g
+#% description: Compute granularity
+#%end
 
 #%flag
 #% key: t
@@ -68,10 +75,12 @@ def main():
     # Get the options
     name = options["input"]
     type = options["type"]
+    where = options["where"]
     tmatrix = flags['t']
     relation = flags['r']
     map_types = flags['m']
     check_topo = flags['c']
+    comp_gran = flags['g']
 
     # Make sure the temporal database exists
     tgis.create_temporal_database()
@@ -91,7 +100,8 @@ def main():
     # Insert content from db
     sp.select()
 
-    maps = sp.get_registered_maps_as_objects()
+    # Get ordered map list
+    maps = sp.get_registered_maps_as_objects(where=where, order="start_time", dbif=None)
 
     if check_topo:
         check = sp.check_temporal_topology(maps)
@@ -115,10 +125,14 @@ def main():
         for key in dict.keys():
             print key, dict[key]
 
-        if dict["interval"] > 0 and dict["point"] == 0 and dict["invalid"] == 0:
-            print "Gaps", sp.count_gaps(maps, True)
+        if dict["invalid"] == 0:
+            print "Gaps", sp.count_gaps(maps)
         else:
-            print "Gaps", sp.count_gaps(maps, False)
+            print "Gaps", None
+
+    if comp_gran:
+        gran = tgis.compute_absolute_time_granularity(maps)
+        print "Granularity", gran
 
 if __name__ == "__main__":
     options, flags = grass.parser()
