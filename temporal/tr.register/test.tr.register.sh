@@ -20,13 +20,13 @@ r.mapcalc --o expr="prec_6 = rand(0, 650)"
 # The first @test
 # We create the space time raster inputs and register the raster maps with absolute time interval
 
-t.create --o type=strds temporaltype=absolute output=precip_abs1 gran="1 senconds" title="A test" descr="A test"
-t.create --o type=strds temporaltype=absolute output=precip_abs2 gran="1 minutes" title="A test" descr="A test"
-t.create --o type=strds temporaltype=absolute output=precip_abs3 gran="1 hours" title="A test" descr="A test"
-t.create --o type=strds temporaltype=absolute output=precip_abs4 gran="1 days" title="A test" descr="A test"
-t.create --o type=strds temporaltype=absolute output=precip_abs5 gran="1 weeks" title="A test" descr="A test"
-t.create --o type=strds temporaltype=absolute output=precip_abs6 gran="1 months" title="A test" descr="A test"
-t.create --o type=strds temporaltype=absolute output=precip_abs7 gran="1 years" title="A test" descr="A test"
+t.create --o type=strds temporaltype=absolute output=precip_abs1 title="A test" descr="A test"
+t.create --o type=strds temporaltype=absolute output=precip_abs2 title="A test" descr="A test"
+t.create --o type=strds temporaltype=absolute output=precip_abs3 title="A test" descr="A test"
+t.create --o type=strds temporaltype=absolute output=precip_abs4 title="A test" descr="A test"
+t.create --o type=strds temporaltype=absolute output=precip_abs5 title="A test" descr="A test"
+t.create --o type=strds temporaltype=absolute output=precip_abs6 title="A test" descr="A test"
+t.create --o type=strds temporaltype=absolute output=precip_abs7 title="A test" descr="A test"
 
 tr.register -i input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="1 seconds"
 t.info type=strds input=precip_abs1
@@ -79,5 +79,5 @@ tr.list input=precip_abs7
 t.topology -t input=precip_abs7
 
 t.remove --v type=rast input=prec_1,prec_2,prec_3
-t.remove --v type=strds input=precip_abs1,precip_abs2,precip_abs3,precip_abs4,precip_abs5,precip_abs6,precip_abs7,precip_abs7
+t.remove --v type=strds input=precip_abs1,precip_abs2,precip_abs3,precip_abs4,precip_abs5,precip_abs6,precip_abs7
 t.remove --v type=rast input=prec_4,prec_5,prec_6

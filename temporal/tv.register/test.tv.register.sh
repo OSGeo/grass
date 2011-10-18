@@ -20,13 +20,13 @@ v.random --o -z output=lidar_abs_6 n=20 zmin=0 zmax=100 column=height
 # The first @test
 # We create the space time vector inputs and register the vector maps with absolute time interval
 
-t.create --v --o type=stvds temporaltype=absolute output=lidar_abs_ds1 gran="1 senconds" title="A test" descr="A test"
-t.create --v --o type=stvds temporaltype=absolute output=lidar_abs_ds2 gran="1 minutes" title="A test" descr="A test"
-t.create --v --o type=stvds temporaltype=absolute output=lidar_abs_ds3 gran="1 hours" title="A test" descr="A test"
-t.create --v --o type=stvds temporaltype=absolute output=lidar_abs_ds4 gran="1 days" title="A test" descr="A test"
-t.create --v --o type=stvds temporaltype=absolute output=lidar_abs_ds5 gran="1 weeks" title="A test" descr="A test"
-t.create --v --o type=stvds temporaltype=absolute output=lidar_abs_ds6 gran="1 months" title="A test" descr="A test"
-t.create --v --o type=stvds temporaltype=absolute output=lidar_abs_ds7 gran="1 years" title="A test" descr="A test"
+t.create --v --o type=stvds temporaltype=absolute output=lidar_abs_ds1 title="A test" descr="A test"
+t.create --v --o type=stvds temporaltype=absolute output=lidar_abs_ds2 title="A test" descr="A test"
+t.create --v --o type=stvds temporaltype=absolute output=lidar_abs_ds3 title="A test" descr="A test"
+t.create --v --o type=stvds temporaltype=absolute output=lidar_abs_ds4 title="A test" descr="A test"
+t.create --v --o type=stvds temporaltype=absolute output=lidar_abs_ds5 title="A test" descr="A test"
+t.create --v --o type=stvds temporaltype=absolute output=lidar_abs_ds6 title="A test" descr="A test"
+t.create --v --o type=stvds temporaltype=absolute output=lidar_abs_ds7 title="A test" descr="A test"
 
 tv.register --v -i input=lidar_abs_ds1 maps=lidar_abs_1,lidar_abs_2,lidar_abs_3,lidar_abs_4,lidar_abs_5,lidar_abs_6 start="2001-01-01" increment="1 seconds"
 t.info type=stvds input=lidar_abs_ds1

@@ -141,8 +141,8 @@ def main():
             dbif.close()
             grass.fatal(_("Space time raster dataset <%s> is already in database, use overwrite flag to overwrite") % out_id)
 
-    granularity, temporal_type, semantic_type, title, description = sp.get_initial_values()
-    new_sp.set_initial_values(gran, temporal_type, semantic_type, title, description)
+    temporal_type, semantic_type, title, description = sp.get_initial_values()
+    new_sp.set_initial_values(temporal_type, semantic_type, title, description)
     new_sp.insert(dbif)
 
     rows = sp.get_registered_maps("id,start_time", where, "start_time", dbif)

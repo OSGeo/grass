@@ -49,7 +49,7 @@ cat $n3
 
 # The first @test
 # We create the space time raster inputs and register the raster maps with absolute time interval
-t.create --o type=strds temporaltype=relative output=precip_rel gran=1 title="A test with input files" descr="A test with input files"
+t.create --o type=strds temporaltype=relative output=precip_rel title="A test with input files" descr="A test with input files"
 
 # Test with input files
 # File 1

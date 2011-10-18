@@ -20,13 +20,13 @@ r3.mapcalc --o expr="volume_6 = rand(0, 650)"
 # The first @test
 # We create the space time raster3d dataset and register the raster3d maps with absolute time interval
 
-t.create --v --o type=str3ds temporaltype=absolute output=volume_abs1 gran="1 senconds" title="A test" descr="A test"
-t.create --v --o type=str3ds temporaltype=absolute output=volume_abs2 gran="1 minutes" title="A test" descr="A test"
-t.create --v --o type=str3ds temporaltype=absolute output=volume_abs3 gran="1 hours" title="A test" descr="A test"
-t.create --v --o type=str3ds temporaltype=absolute output=volume_abs4 gran="1 days" title="A test" descr="A test"
-t.create --v --o type=str3ds temporaltype=absolute output=volume_abs5 gran="1 weeks" title="A test" descr="A test"
-t.create --v --o type=str3ds temporaltype=absolute output=volume_abs6 gran="1 months" title="A test" descr="A test"
-t.create --v --o type=str3ds temporaltype=absolute output=volume_abs7 gran="1 years" title="A test" descr="A test"
+t.create --v --o type=str3ds temporaltype=absolute output=volume_abs1 title="A test" descr="A test"
+t.create --v --o type=str3ds temporaltype=absolute output=volume_abs2 title="A test" descr="A test"
+t.create --v --o type=str3ds temporaltype=absolute output=volume_abs3 title="A test" descr="A test"
+t.create --v --o type=str3ds temporaltype=absolute output=volume_abs4 title="A test" descr="A test"
+t.create --v --o type=str3ds temporaltype=absolute output=volume_abs5 title="A test" descr="A test"
+t.create --v --o type=str3ds temporaltype=absolute output=volume_abs6 title="A test" descr="A test"
+t.create --v --o type=str3ds temporaltype=absolute output=volume_abs7 title="A test" descr="A test"
 
 tr3.register --v -i input=volume_abs1 maps=volume_1,volume_2,volume_3,volume_4,volume_5,volume_6 start="2001-01-01" increment="1 seconds"
 t.info type=str3ds input=volume_abs1
