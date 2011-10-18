@@ -49,6 +49,23 @@ class abstract_dataset(object):
     def get_id(self):
         return self.base.get_id()
 
+    def get_valid_time(self):
+        """Returns a tuple of the start, the end valid time, this can be either datetime or double values
+           @return A tuple of (start_time, end_time)
+        """
+
+        start = None
+        end = None
+               
+	if self.is_time_absolute():
+            start = self.absolute_time.get_start_time()
+            end = self.absolute_time.get_end_time()
+        if self.is_time_relative():
+            start = self.relative_time.get_start_time()
+            end = self.relative_time.get_end_time()
+        
+        return (start, end)
+ 
     def get_absolute_time(self):
         """Returns a tuple of the start, the end valid time and the timezone of the map
            @return A tuple of (start_time, end_time, timezone)

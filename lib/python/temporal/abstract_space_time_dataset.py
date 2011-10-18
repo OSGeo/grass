@@ -20,6 +20,7 @@ for details.
 @author Soeren Gebbert
 """
 from abstract_dataset import *
+from temporal_granularity import *
 
 ###############################################################################
 
@@ -65,13 +66,10 @@ class abstract_space_time_dataset(abstract_dataset):
         """
         raise IOError("This method must be implemented in the subclasses")
 
-    def set_initial_values(self, granularity, temporal_type, semantic_type, \
+    def set_initial_values(self, temporal_type, semantic_type, \
                            title=None, description=None):
         """Set the initial values of the space time dataset
 
-           @param granularity: The temporal granularity of this dataset. This value
-                               should be computed by the space time dataset itself,
-                               based on the granularity of the registered maps
            @param temporal_type: The temporal type of this space time dataset (absolute or relative)
            @param semantic_type: The semantic type of this dataset
            @param title: The title
@@ -80,10 +78,8 @@ class abstract_space_time_dataset(abstract_dataset):
 
         if temporal_type == "absolute":
             self.set_time_to_absolute()
-            self.absolute_time.set_granularity(granularity)
         elif temporal_type == "relative":
             self.set_time_to_relative()
-            self.relative_time.set_granularity(granularity)
         else:
             core.fatal(_("Unknown temporal type \"%s\"") % (temporal_type))
 
@@ -92,7 +88,17 @@ class abstract_space_time_dataset(abstract_dataset):
         self.metadata.set_description(description)
 
     def get_initial_values(self):
-        """Return the initial values: granularity, temporal_type, semantic_type, title, description"""
+        """Return the initial values: temporal_type, semantic_type, title, description"""
+        
+        temporal_type = self.get_temporal_type()
+        semantic_type = self.base.get_semantic_type()
+        title = self.metadata.get_title()
+        description = self.metadata.get_description()
+
+        return temporal_type, semantic_type, title, description
+
+    def get_granularity(self):
+        """Return the granularity"""
         
         temporal_type = self.get_temporal_type()
 
@@ -101,11 +107,20 @@ class abstract_space_time_dataset(abstract_dataset):
         elif temporal_type == "relative":
             granularity = self.relative_time.get_granularity()
 
-        semantic_type = self.base.get_semantic_type()
-        title = self.metadata.get_title()
-        description = self.metadata.get_description()
+        return granularity
 
-        return granularity, temporal_type, semantic_type, title, description
+    def set_granularity(self, granularity):
+
+        temporal_type = self.get_temporal_type()
+ 
+        if temporal_type == "absolute":
+            self.set_time_to_absolute()
+            self.absolute_time.set_granularity(granularity)
+        elif temporal_type == "relative":
+            self.set_time_to_relative()
+            self.relative_time.set_granularity(granularity)
+        else:
+            core.fatal(_("Unknown temporal type \"%s\"") % (temporal_type))
 
     def get_map_time(self):
         """Return the type of the map time, interval, point, maixed or invalid"""
@@ -443,10 +458,15 @@ class abstract_space_time_dataset(abstract_dataset):
             rows = self.get_registered_maps("id", None, None, dbif)
             # Unregister each registered map in the table
             if rows:
+                num_maps = len(rows)
+                count = 0
                 for row in rows:
+	            core.percent(count, num_maps, 1)
                     # Unregister map
                     map = self.get_new_map_instance(row["id"])
                     self.unregister_map(map, dbif)
+                    count += 1
+	        core.percent(1, 1, 1)
             try:
                 # Drop the map register table
                 sql = "DROP TABLE " + self.get_map_register()
@@ -836,7 +856,8 @@ class abstract_space_time_dataset(abstract_dataset):
 		dbif.cursor.execute(sql)
 
         # Count the temporal map types
-        tlist = self.count_temporal_types(self.get_registered_maps_as_objects(dbif=dbif))
+        maps = self.get_registered_maps_as_objects(dbif=dbif)
+        tlist = self.count_temporal_types(maps)
 
         if tlist["interval"] > 0 and tlist["point"] == 0 and tlist["invalid"] == 0:
             map_time = "interval"
@@ -847,25 +868,38 @@ class abstract_space_time_dataset(abstract_dataset):
         else:
             map_time = "invalid"
 
-        # Set the map time type
+        # Compute the granularity
+
+        if map_time != "invalid":
+            # Smallest supported temporal resolution
+            if self.is_time_absolute():
+                gran = compute_absolute_time_granularity(maps)
+            elif self.is_time_relative():
+                gran = compute_absolute_time_granularity(maps)
+        else:
+            gran = None
+
+        # Set the map time type and update the time objects
         if self.is_time_absolute():
             self.absolute_time.select(dbif)
             self.metadata.select(dbif)
             if self.metadata.get_number_of_maps() > 0:
                 self.absolute_time.set_map_time(map_time)
+                self.absolute_time.set_granularity(gran)
             else:
                 self.absolute_time.set_map_time(None)
+                self.absolute_time.set_granularity(None)
             self.absolute_time.update_all(dbif)
         else:
             self.relative_time.select(dbif)
             self.metadata.select(dbif)
             if self.metadata.get_number_of_maps() > 0:
                 self.relative_time.set_map_time(map_time)
+                self.relative_time.set_granularity(gran)
             else:
                 self.relative_time.set_map_time(None)
+                self.relative_time.set_granularity(None)
             self.relative_time.update_all(dbif)
-
-        # TODO: Compute the granularity of the dataset and update the database entry
 
         if connect == True:
             dbif.close()

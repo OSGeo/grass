@@ -219,6 +219,8 @@ class sql_database_interface(dict_sql_serializer):
 	    self.connection.row_factory = dbmi.Row
             self.connection.isolation_level = None
 	    self.cursor = self.connection.cursor()
+            self.cursor.execute("PRAGMA synchronous = OFF")
+            self.cursor.execute("PRAGMA journal_mode = MEMORY")
         elif dbmi.__name__ == "psycopg2":
 	    self.connection = dbmi.connect(self.database)
 	    self.connection.set_isolation_level(dbmi.extensions.ISOLATION_LEVEL_AUTOCOMMIT)

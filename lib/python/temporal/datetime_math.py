@@ -24,14 +24,27 @@ from datetime import datetime, date, time, timedelta
 import grass.script.core as core
 import copy
 
+
 ###############################################################################
 
-def datetime_delta_to_double(dt1, dt2):
-    """Compute the the dfference dt2 - dt1 and convert the time delta into a 
-       double value, representing days.
+def relative_time_to_time_delta(value):
+    """Convert the double value representing days
+       into a timedelta object.
     """
 
-    delta = dt2 - dt1
+
+    days = int(value)
+    seconds = value % 1
+    seconds = round(seconds * 86400)
+
+    return timedelta(days, seconds)
+
+###############################################################################
+
+def time_delta_to_relative_time(delta):
+    """Convert the time delta into a 
+       double value, representing days.
+    """
 
     return float(delta.days) + float(delta.seconds/86400.0)
 
@@ -90,74 +103,6 @@ def increment_datetime_by_string(mydate, increment, mult = 1):
 
 ###############################################################################
 
-def test_increment_datetime_by_string():
-
-    # First test
-    print "# Test 1"
-    dt = datetime(2001, 9, 1, 0, 0, 0)
-    string = "60 seconds, 4 minutes, 12 hours, 10 days, 1 weeks, 5 months, 1 years"
-
-    dt1 = datetime(2003,2,18,12,5,0)
-    dt2 = increment_datetime_by_string(dt, string)
-
-    print dt
-    print dt2
-
-    delta = dt1 -dt2
-
-    if delta.days != 0 or delta.seconds != 0:
-        core.error("increment computation is wrong %s" % (delta))
-
-    # Second test
-    print "# Test 2"
-    dt = datetime(2001, 11, 1, 0, 0, 0)
-    string = "1 months"
-
-    dt1 = datetime(2001,12,1)
-    dt2 = increment_datetime_by_string(dt, string)
-
-    print dt
-    print dt2
-
-    delta = dt1 -dt2
-
-    if delta.days != 0 or delta.seconds != 0:
-        core.error("increment computation is wrong %s" % (delta))
-
-    # Third test
-    print "# Test 3"
-    dt = datetime(2001, 11, 1, 0, 0, 0)
-    string = "13 months"
-
-    dt1 = datetime(2002,12,1)
-    dt2 = increment_datetime_by_string(dt, string)
-
-    print dt
-    print dt2
-
-    delta = dt1 -dt2
-
-    if delta.days != 0 or delta.seconds != 0:
-        core.error("increment computation is wrong %s" % (delta))
-
-    # 4. test
-    print "# Test 4"
-    dt = datetime(2001, 1, 1, 0, 0, 0)
-    string = "72 months"
-
-    dt1 = datetime(2007,1,1)
-    dt2 = increment_datetime_by_string(dt, string)
-
-    print dt
-    print dt2
-
-    delta = dt1 -dt2
-
-    if delta.days != 0 or delta.seconds != 0:
-        core.error("increment computation is wrong %s" % (delta))
-
-###############################################################################
-
 def increment_datetime(mydate, years=0, months=0, weeks=0, days=0, hours=0, minutes=0, seconds=0):
     """Return a new datetime object incremented with the provided relative dates and times"""
 
@@ -198,7 +143,6 @@ def increment_datetime(mydate, years=0, months=0, weeks=0, days=0, hours=0, minu
 
     return mydate + tdelta_seconds + tdelta_minutes + tdelta_hours + \
                     tdelta_days + tdelta_weeks + tdelta_months + tdelta_years
-
 
 ###############################################################################
 
@@ -282,126 +226,91 @@ def adjust_datetime_to_granularity(mydate, granularity):
 
         return result
 
+###############################################################################
 
-def test_adjust_datetime_to_granularity():
+def compute_datetime_delta(start, end):
+    """Return a dictionary with the accumulated delta in year, month, day, hour, minute and second
+    
+       @return A dictionary with year, month, day, hour, minute and second as keys()
+    """
+    comp = {}
 
-    # First test
-    print "Test 1"
-    dt = datetime(2001, 8, 8, 12,30,30)
-    result = adjust_datetime_to_granularity(dt, "5 seconds")
-    correct =  datetime(2001, 8, 8, 12,30,30)
+    day_diff = (end - start).days
 
-    delta = correct - result 
+    comp["max_days"] = day_diff
 
-    if delta.days != 0 or delta.seconds != 0:
-        core.error("Granularity adjustment computation is wrong %s" % (delta))
+    # Date
+    # Count full years
+    d = end.year - start.year
+    comp["year"] = d
 
-    # Second test
-    print "Test 2"
-    result = adjust_datetime_to_granularity(dt, "20 minutes")
-    correct =  datetime(2001, 8, 8, 12,30,00)
+    # Count full months
+    if start.month == 1 and end.month == 1:
+        comp["month"] = 0
+    elif   start.day == 1 and end.day == 1:
+        d = end.month - start.month
+        if d < 0:
+            d = d + 12 * comp["year"]
+        elif d == 0:
+            d = 12 * comp["year"]
+        comp["month"] = d
 
-    delta = correct - result 
+    # Count full days
+    if  start.day == 1 and end.day == 1:
+        comp["day"] = 0
+    else:
+        comp["day"] = day_diff
 
-    if delta.days != 0 or delta.seconds != 0:
-        core.error("Granularity adjustment computation is wrong %s" % (delta))
+    # Time
+    # Hours
+    if start.hour == 0 and end.hour == 0:
+        comp["hour"] = 0
+    else:
+        d = end.hour - start.hour
+        if d < 0:
+            d = d + 24  + 24 * day_diff
+        else:
+            d = d + 24 * day_diff
+        comp["hour"] = d
+    
+    # Minutes
+    if start.minute == 0 and end.minute == 0:
+        comp["minute"] = 0
+    else:
+        d = end.minute - start.minute
+        if d != 0:
+            if comp["hour"]:
+                d = d + 60 * comp["hour"]
+            else:
+                d = d + 24 * 60 * day_diff
+        elif d == 0:
+            if comp["hour"]:
+                d = 60* comp["hour"]
+            else:
+                d = 24 * 60 * day_diff
 
-    # Third test
-    print "Test 2"
-    result = adjust_datetime_to_granularity(dt, "20 minutes")
-    correct =  datetime(2001, 8, 8, 12,30,00)
+        comp["minute"] = d
 
-    delta = correct - result 
+    # Seconds
+    if start.second == 0 and end.second == 0:
+        comp["second"] = 0
+    else:
+        d = end.second - start.second
+        if d != 0:
+            if comp["minute"]:
+                d = d + 60* comp["minute"]
+            elif comp["hour"]:
+                d = d + 3600* comp["hour"]
+            else:
+                d = d + 24 * 60 * 60 * day_diff
+        elif d == 0:
+            if comp["minute"]:
+                d = 60* comp["minute"]
+            elif comp["hour"]:
+                d = 3600 * comp["hour"]
+            else:
+                d = 24 * 60 * 60 * day_diff
+        comp["second"] = d
 
-    if delta.days != 0 or delta.seconds != 0:
-        core.error("Granularity adjustment computation is wrong %s" % (delta))
-
-    # 4. test
-    print "Test 4"
-    result = adjust_datetime_to_granularity(dt, "3 hours")
-    correct =  datetime(2001, 8, 8, 12,00,00)
-
-    delta = correct - result 
-
-    if delta.days != 0 or delta.seconds != 0:
-        core.error("Granularity adjustment computation is wrong %s" % (delta))
-
-    # 5. test
-    print "Test 5"
-    result = adjust_datetime_to_granularity(dt, "5 days")
-    correct =  datetime(2001, 8, 8, 00,00,00)
-
-    delta = correct - result 
-
-    if delta.days != 0 or delta.seconds != 0:
-        core.error("Granularity adjustment computation is wrong %s" % (delta))
-
-    # 6. test
-    print "Test 6"
-    result = adjust_datetime_to_granularity(dt, "2 weeks")
-    correct =  datetime(2001, 8, 6, 00,00,00)
-
-    delta = correct - result 
-
-    if delta.days != 0 or delta.seconds != 0:
-        core.error("Granularity adjustment computation is wrong %s" % (delta))
-
-    # 7. test
-    print "Test 7"
-    result = adjust_datetime_to_granularity(dt, "6 months")
-    correct =  datetime(2001, 8, 1, 00,00,00)
-
-    delta = correct - result 
-
-    if delta.days != 0 or delta.seconds != 0:
-        core.error("Granularity adjustment computation is wrong %s" % (delta))
-
-    # 8. test
-    print "Test 8"
-    result = adjust_datetime_to_granularity(dt, "2 years")
-    correct =  datetime(2001, 1, 1, 00,00,00)
-
-    delta = correct - result 
-
-    if delta.days != 0 or delta.seconds != 0:
-        core.error("Granularity adjustment computation is wrong %s" % (delta))
-
-    # 9. test
-    print "Test 9"
-    result = adjust_datetime_to_granularity(dt, "2 years, 3 months, 5 days, 3 hours, 3 minutes, 2 seconds")
-    correct =  datetime(2001, 8, 8, 12,30,30)
-
-    delta = correct - result 
-
-    if delta.days != 0 or delta.seconds != 0:
-        core.error("Granularity adjustment computation is wrong %s" % (delta))
-
-    # 10. test
-    print "Test 10"
-    result = adjust_datetime_to_granularity(dt, "3 months, 5 days, 3 minutes")
-    correct =  datetime(2001, 8, 8, 12,30,00)
-
-    delta = correct - result 
-
-    if delta.days != 0 or delta.seconds != 0:
-        core.error("Granularity adjustment computation is wrong %s" % (delta))
-
-    # 11. test
-    print "Test 11"
-    result = adjust_datetime_to_granularity(dt, "3 weeks, 5 days")
-    correct =  datetime(2001, 8, 8, 00,00,00)
-
-    delta = correct - result 
-
-    if delta.days != 0 or delta.seconds != 0:
-        core.error("Granularity adjustment computation is wrong %s" % (delta))
-
-
-
-
-
-
-
-
-
+    return comp
 
