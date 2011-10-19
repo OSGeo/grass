@@ -663,12 +663,14 @@ class Settings:
                     }
                 },
             'modeler' : {
+                'disabled': {
+                    'color': (211, 211, 211, 255), # light grey
+                    },
                 'action' : {
                     'color' : {
                         'valid'   :  (180, 234, 154, 255), # light green
                         'invalid' :  (255, 255, 255, 255), # white
                         'running' :  (255, 0, 0, 255),     # red
-                        'disabled' : (211, 211, 211, 255), # light grey
                         },
                     'size' : {
                         'width'  : 100,
@@ -691,6 +693,9 @@ class Settings:
                         },
                     },
                 'loop' : {
+                    'color' : {
+                        'valid'   :  (234, 226, 154, 255), # light yellow
+                        },
                     'size' : {
                         'width' : 175,
                         'height' : 40,

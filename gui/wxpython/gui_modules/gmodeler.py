@@ -197,6 +197,12 @@ class Model(object):
                 else:
                     relList.append(rel.GetFrom())
         
+        elif isinstance(item, ModelLoop):
+            for rel in item.GetRelations():
+                relList.append(rel)
+            for action in self.GetItems():
+                action.UnSetBlock(item)
+        
         return relList, upList
     
     def FindAction(self, aId):
@@ -528,9 +534,10 @@ class Model(object):
                 
                 for var in vlist:
                     for action in item.GetItems():
-                        if not isinstance(action, ModelAction):
+                        if not isinstance(action, ModelAction) or \
+                                not action.IsEnabled():
                             continue
-                        
+
                         par = action.GetParams(dcopy = True)['params']
                         for idx in range(len(par)):
                             if not par[idx].get('value', None):
@@ -1631,7 +1638,7 @@ class ModelCanvas(ogl.ShapeCanvas):
             remList, upList = self.parent.GetModel().RemoveItem(shape)
             shape.Select(False)
             diagram.RemoveShape(shape)
-            del shape
+            shape.__del__()
             for item in remList:
                 diagram.RemoveShape(item)
                 item.__del__()
@@ -1774,8 +1781,8 @@ class ModelAction(ModelObject, ogl.RectangleShape):
             color = UserSettings.Get(group='modeler', key='action',
                                      subkey=('color', 'running'))
         elif not self.isEnabled:
-            color = UserSettings.Get(group='modeler', key='action',
-                                     subkey=('color', 'disabled'))
+            color = UserSettings.Get(group='modeler', key='disabled',
+                                     subkey='color')
         elif self.isValid:
             color = UserSettings.Get(group='modeler', key='action',
                                      subkey=('color', 'valid'))
@@ -2331,56 +2338,56 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         
     def OnRightClick(self, x, y, keys = 0, attachment = 0):
         """!Right click -> pop-up menu"""
-        if not hasattr (self, "popupID1"):
-            self.popupID1 = wx.NewId()
-            self.popupID2 = wx.NewId()
-            self.popupID3 = wx.NewId()
-            self.popupID4 = wx.NewId()
-
+        if not hasattr (self, "popupID"):
+            self.popupID = dict()
+            for key in ('remove', 'enable', 'addPoint',
+                        'delPoint', 'intermediate', 'props', 'id'):
+                self.popupID[key] = wx.NewId()
+        
         # record coordinates
         self.x = x
         self.y = y
         
         shape = self.GetShape()
         popupMenu = wx.Menu()
-        popupMenu.Append(self.popupID1, text=_('Remove'))
-        self.frame.Bind(wx.EVT_MENU, self.OnRemove, id = self.popupID1)
-        if isinstance(shape, ModelAction):
+        popupMenu.Append(self.popupID['remove'], text=_('Remove'))
+        self.frame.Bind(wx.EVT_MENU, self.OnRemove, id = self.popupID['remove'])
+        if isinstance(shape, ModelAction) or isinstance(shape, ModelLoop):
             if shape.IsEnabled():
-                popupMenu.Append(self.popupID3, text=_('Disable'))
-                self.frame.Bind(wx.EVT_MENU, self.OnDisable, id = self.popupID3)
+                popupMenu.Append(self.popupID['enable'], text=_('Disable'))
+                self.frame.Bind(wx.EVT_MENU, self.OnDisable, id = self.popupID['enable'])
             else:
-                popupMenu.Append(self.popupID3, text=_('Enable'))
-                self.frame.Bind(wx.EVT_MENU, self.OnEnable, id = self.popupID3)
+                popupMenu.Append(self.popupID['enable'], text=_('Enable'))
+                self.frame.Bind(wx.EVT_MENU, self.OnEnable, id = self.popupID['enable'])
         
         if isinstance(shape, ModelRelation):
             popupMenu.AppendSeparator()
-            popupMenu.Append(self.popupID2, text=_('Add control point'))
-            self.frame.Bind(wx.EVT_MENU, self.OnAddPoint, id = self.popupID2)
-            popupMenu.Append(self.popupID3, text=_('Remove control point'))
-            self.frame.Bind(wx.EVT_MENU, self.OnRemovePoint, id = self.popupID3)
+            popupMenu.Append(self.popupID['addPoint'], text=_('Add control point'))
+            self.frame.Bind(wx.EVT_MENU, self.OnAddPoint, id = self.popupID['addPoint'])
+            popupMenu.Append(self.popupID['delPoint'], text=_('Remove control point'))
+            self.frame.Bind(wx.EVT_MENU, self.OnRemovePoint, id = self.popupID['delPoint'])
             if len(shape.GetLineControlPoints()) == 2:
-                popupMenu.Enable(self.popupID3, False)
+                popupMenu.Enable(self.popupID['delPoint'], False)
         
         if isinstance(shape, ModelData) and '@' not in shape.GetValue():
             popupMenu.AppendSeparator()
-            popupMenu.Append(self.popupID3, text=_('Intermediate'),
+            popupMenu.Append(self.popupID['intermediate'], text=_('Intermediate'),
                              kind = wx.ITEM_CHECK)
             if self.GetShape().IsIntermediate():
-                popupMenu.Check(self.popupID3, True)
+                popupMenu.Check(self.popupID['intermediate'], True)
             
-            self.frame.Bind(wx.EVT_MENU, self.OnIntermediate, id = self.popupID3)
+            self.frame.Bind(wx.EVT_MENU, self.OnIntermediate, id = self.popupID['intermediate'])
             
         if isinstance(shape, ModelData) or \
                 isinstance(shape, ModelAction) or \
                 isinstance(shape, ModelLoop):
             popupMenu.AppendSeparator()
-            popupMenu.Append(self.popupID2, text=_('Properties'))
-            self.frame.Bind(wx.EVT_MENU, self.OnProperties, id = self.popupID2)
+            popupMenu.Append(self.popupID['props'], text=_('Properties'))
+            self.frame.Bind(wx.EVT_MENU, self.OnProperties, id = self.popupID['props'])
         
         if isinstance(shape, ModelAction):
-            popupMenu.Append(self.popupID4, text=_('Change ID'))
-            self.frame.Bind(wx.EVT_MENU, self.OnChangeId, id = self.popupID3)
+            popupMenu.Append(self.popupID['id'], text=_('Change ID'))
+            self.frame.Bind(wx.EVT_MENU, self.OnChangeId, id = self.popupID['id'])
         
         self.frame.PopupMenu(popupMenu)
         popupMenu.Destroy()
@@ -2391,15 +2398,15 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
     
     def OnDisable(self, event):
         """!Disable action"""
-        action = self.GetShape()
-        action.Enable(False)
-        self.frame.ModelChanged()
-        self.frame.canvas.Refresh()
-
+        self._onEnable(False)
+        
     def OnEnable(self, event):
         """!Disable action"""
-        action = self.GetShape()
-        action.Enable(True)
+        self._onEnable(True)
+        
+    def _onEnable(self, enable):
+        shape = self.GetShape()
+        shape.Enable(enable)
         self.frame.ModelChanged()
         self.frame.canvas.Refresh()
         
@@ -2575,9 +2582,11 @@ class ModelRelation(ogl.LineShape):
             ogl.LineShape.__init__(self)
     
     def __del__(self):
-        self.fromShape.rels.remove(self)
-        self.toShape.rels.remove(self)
-
+        if self in self.fromShape.rels:
+            self.fromShape.rels.remove(self)
+        if self in self.toShape.rels:
+            self.toShape.rels.remove(self)
+        
     def GetFrom(self):
         """!Get id of 'from' shape"""
         return self.fromShape
@@ -4153,6 +4162,32 @@ class ModelLoop(ModelItem, ogl.RectangleShape):
                 self.AddText('(' + str(self.id) + ') ' + text)
             else:
                 self.AddText('(' + str(self.id) + ')')
+        
+        self._setBrush()
+        
+    def _setBrush(self):
+        """!Set brush"""
+        if not self.isEnabled:
+            color = UserSettings.Get(group='modeler', key='disabled',
+                                     subkey='color')
+        else:
+            color = UserSettings.Get(group='modeler', key='loop',
+                                     subkey=('color', 'valid'))
+        
+        wxColor = wx.Color(color[0], color[1], color[2])
+        self.SetBrush(wx.Brush(wxColor))
+
+    def Enable(self, enabled = True):
+        """!Enable/disable action"""
+        for item in self.items:
+            if not isinstance(item, ModelAction):
+                continue
+            item.Enable(enabled)
+        
+        ModelObject.Enable(self, enabled)
+        
+    def Update(self):
+        self._setBrush()
         
     def GetName(self):
         """!Get name"""
