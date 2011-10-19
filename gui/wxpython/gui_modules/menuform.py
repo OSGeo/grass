@@ -2105,8 +2105,9 @@ class GNotebook(FN.FlatNotebook):
         
         @param page names, eg. 'layers', 'output', 'search', 'pyshell', 'nviz'
         """
-        if self.GetSelection() != self.GetPageIndexByName('output'):
-            self.SetSelection(self.GetPageIndexByName(page))
+        idx = self.GetPageIndexByName(page)
+        if self.GetSelection() != idx:
+            self.SetSelection(idx)
         
     def GetPageIndexByName(self, page):
         """!Get notebook page index
