@@ -3276,11 +3276,51 @@ class PreferencesDialog(PreferencesBaseDialog):
                                        settings = settings)
         
         # create notebook pages
+        self._createGeneralPage(self.notebook)
         self._createActionPage(self.notebook)
         self._createDataPage(self.notebook)
-                
+        self._createLoopPage(self.notebook)
+        
         self.SetMinSize(self.GetBestSize())
         self.SetSize(self.size)
+
+    def _createGeneralPage(self, notebook):
+        """!Create notebook page for action settings"""
+        panel = wx.Panel(parent = notebook, id = wx.ID_ANY)
+        notebook.AddPage(page = panel, text = _("General"))
+        
+        # colors
+        border = wx.BoxSizer(wx.VERTICAL)
+        box   = wx.StaticBox (parent = panel, id = wx.ID_ANY,
+                              label = " %s " % _("Item properties"))
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        
+        gridSizer = wx.GridBagSizer (hgap = 3, vgap = 3)
+        gridSizer.AddGrowableCol(0)
+        
+        row = 0
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                           label = _("Disabled:")),
+                      flag = wx.ALIGN_LEFT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos = (row, 0))
+        rColor = csel.ColourSelect(parent = panel, id = wx.ID_ANY,
+                                   colour = self.settings.Get(group='modeler', key='disabled', subkey='color'),
+                                   size = globalvar.DIALOG_COLOR_SIZE)
+        rColor.SetName('GetColour')
+        self.winId['modeler:disabled:color'] = rColor.GetId()
+        
+        gridSizer.Add(item = rColor,
+                      flag = wx.ALIGN_RIGHT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos = (row, 1))
+        
+        sizer.Add(item = gridSizer, proportion = 1, flag = wx.ALL | wx.EXPAND, border = 5)
+        border.Add(item = sizer, proportion = 0, flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 3)
+
+        panel.SetSizer(border)
+        
+        return panel
 
     def _createActionPage(self, notebook):
         """!Create notebook page for action settings"""
@@ -3290,7 +3330,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         # colors
         border = wx.BoxSizer(wx.VERTICAL)
         box   = wx.StaticBox (parent = panel, id = wx.ID_ANY,
-                              label = " %s " % _("Validity"))
+                              label = " %s " % _("Color"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         
         gridSizer = wx.GridBagSizer (hgap = 3, vgap = 3)
@@ -3346,24 +3386,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                       flag = wx.ALIGN_RIGHT |
                       wx.ALIGN_CENTER_VERTICAL,
                       pos = (row, 1))
-
-        row += 1
-        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                         label = _("Disabled:")),
-                      flag = wx.ALIGN_LEFT |
-                      wx.ALIGN_CENTER_VERTICAL,
-                      pos = (row, 0))
-        rColor = csel.ColourSelect(parent = panel, id = wx.ID_ANY,
-                                   colour = self.settings.Get(group='modeler', key='action', subkey=('color', 'disabled')),
-                                   size = globalvar.DIALOG_COLOR_SIZE)
-        rColor.SetName('GetColour')
-        self.winId['modeler:action:color:disabled'] = rColor.GetId()
         
-        gridSizer.Add(item = rColor,
-                      flag = wx.ALIGN_RIGHT |
-                      wx.ALIGN_CENTER_VERTICAL,
-                      pos = (row, 1))
-
         sizer.Add(item = gridSizer, proportion = 1, flag = wx.ALL | wx.EXPAND, border = 5)
         border.Add(item = sizer, proportion = 0, flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 3)
         
@@ -3533,6 +3556,91 @@ class PreferencesDialog(PreferencesBaseDialog):
         sizer.Add(item=gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
         border.Add(item=sizer, proportion=0, flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=3)
         
+        panel.SetSizer(border)
+        
+        return panel
+
+    def _createLoopPage(self, notebook):
+        """!Create notebook page for loop settings"""
+        panel = wx.Panel(parent = notebook, id = wx.ID_ANY)
+        notebook.AddPage(page = panel, text = _("Loop"))
+        
+        # colors
+        border = wx.BoxSizer(wx.VERTICAL)
+        box   = wx.StaticBox (parent = panel, id = wx.ID_ANY,
+                              label = " %s " % _("Color"))
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        
+        gridSizer = wx.GridBagSizer (hgap = 3, vgap = 3)
+        gridSizer.AddGrowableCol(0)
+        
+        row = 0
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("Valid:")),
+                      flag = wx.ALIGN_LEFT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos = (row, 0))
+        vColor = csel.ColourSelect(parent = panel, id = wx.ID_ANY,
+                                   colour = self.settings.Get(group='modeler', key='loop', subkey=('color', 'valid')),
+                                   size = globalvar.DIALOG_COLOR_SIZE)
+        vColor.SetName('GetColour')
+        self.winId['modeler:loop:color:valid'] = vColor.GetId()
+        
+        gridSizer.Add(item = vColor,
+                      flag = wx.ALIGN_RIGHT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos = (row, 1))
+        
+        sizer.Add(item = gridSizer, proportion = 1, flag = wx.ALL | wx.EXPAND, border = 5)
+        border.Add(item = sizer, proportion = 0, flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 3)
+        
+        # size
+        box   = wx.StaticBox (parent = panel, id = wx.ID_ANY,
+                              label = " %s " % _("Shape size"))
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        
+        gridSizer = wx.GridBagSizer (hgap=3, vgap=3)
+        gridSizer.AddGrowableCol(0)
+
+        row = 0
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("Width:")),
+                      flag = wx.ALIGN_LEFT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos = (row, 0))
+        
+        width = wx.SpinCtrl(parent = panel, id = wx.ID_ANY,
+                            min = 0, max = 500,
+                            initial = self.settings.Get(group='modeler', key='loop', subkey=('size', 'width')))
+        width.SetName('GetValue')
+        self.winId['modeler:loop:size:width'] = width.GetId()
+        
+        gridSizer.Add(item = width,
+                      flag = wx.ALIGN_RIGHT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos = (row, 1))
+
+        row += 1
+        gridSizer.Add(item = wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                         label=_("Height:")),
+                      flag = wx.ALIGN_LEFT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos=(row, 0))
+        
+        height = wx.SpinCtrl(parent = panel, id = wx.ID_ANY,
+                             min = 0, max = 500,
+                             initial = self.settings.Get(group='modeler', key='loop', subkey=('size', 'height')))
+        height.SetName('GetValue')
+        self.winId['modeler:loop:size:height'] = height.GetId()
+        
+        gridSizer.Add(item = height,
+                      flag = wx.ALIGN_RIGHT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos = (row, 1))
+        
+        sizer.Add(item=gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(item=sizer, proportion=0, flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=3)
+                
         panel.SetSizer(border)
         
         return panel
