@@ -794,7 +794,8 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         cmd = text.strip().split(' ')[0]
 
         if not self.cmdDesc or cmd != self.cmdDesc.get_name():
-            if cmd in ('r.mapcalc', 'r3.mapcalc'):
+            if cmd in ('r.mapcalc', 'r3.mapcalc') and \
+                    self.parent.parent.GetName() == 'LayerManager':
                 self.parent.parent.OnMapCalculator(event = None, cmd = [cmd])
                 # add command to history & clean prompt
                 self.UpdateCmdHistory([cmd])
