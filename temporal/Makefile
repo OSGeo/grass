@@ -13,6 +13,8 @@ SUBDIRS = \
 	tr.register \
 	tr.list \
 	tr.series \
+	tr.export \
+	tr.import \
 	tr.extract \
 	tr3.register \
 	tv.register \

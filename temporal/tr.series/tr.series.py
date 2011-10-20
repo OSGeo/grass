@@ -40,7 +40,7 @@
 #%end
 
 #%option
-#% key: sort
+#% key: order
 #% type: string
 #% description: Sort the maps by category.
 #% required: no
@@ -71,7 +71,7 @@ def main():
     input = options["input"]
     output = options["output"]
     method = options["method"]
-    sort = options["sort"]
+    order = options["order"]
     where = options["where"]
     add_time = flags["t"]
 
@@ -91,7 +91,7 @@ def main():
 
     sp.select()
 
-    rows = sp.get_registered_maps("id", where, sort, None)
+    rows = sp.get_registered_maps("id", where, order, None)
 
     if rows:
         # Create the r.series input file

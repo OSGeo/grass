@@ -31,7 +31,7 @@
 #%end
 
 #%option
-#% key: sort
+#% key: order
 #% type: string
 #% description: Sort the space time dataset by category. Columns number_of_maps and granularity only available fpr space time datasets
 #% required: no
@@ -90,7 +90,7 @@ def main():
     type = options["type"]
     temporaltype = options["temporaltype"]
     columns = options["columns"]
-    sort = options["sort"]
+    order = options["order"]
     where = options["where"]
     separator = options["fs"]
     colhead = flags['c']
@@ -116,8 +116,8 @@ def main():
     else:
         sql = "SELECT * FROM " + table
 
-    if sort:
-        sql += " ORDER BY " + sort
+    if order:
+        sql += " ORDER BY " + order
 
     if where:
         sql += " WHERE " + where

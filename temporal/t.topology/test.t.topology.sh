@@ -22,9 +22,6 @@ n2=`g.tempfile pid=2 -d`
 n3=`g.tempfile pid=3 -d`
 n4=`g.tempfile pid=4 -d`
 n5=`g.tempfile pid=5 -d`
-n6=`g.tempfile pid=6 -d`
-n7=`g.tempfile pid=7 -d`
-n8=`g.tempfile pid=8 -d`
 
 cat > $n1 << EOF
 prec_1
