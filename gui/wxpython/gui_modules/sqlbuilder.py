@@ -66,14 +66,50 @@ class SQLFrame(wx.Frame):
 
         # set dialog title
         self.SetTitle(_("GRASS SQL Builder (%(type)s): vector map <%(map)s>") % \
-                          { 'type' : qtype.upper(), 'map' : self.vectmap })
+                          { 'type' : self.qtype.upper(), 'map' : self.vectmap })
         
         self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
 
         # statusbar
         self.statusbar = self.CreateStatusBar(number=1)
         self.statusbar.SetStatusText(_("SQL statement not verified"), 0)
+       
+        self._doLayout()
 
+    def _doLayout(self):
+        """!Do dialog layout"""
+      
+        pagesizer = wx.BoxSizer(wx.VERTICAL)
+
+        
+        # dbInfo
+        databasebox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
+                                   label = " %s " % _("Database connection"))
+        databaseboxsizer = wx.StaticBoxSizer(databasebox, wx.VERTICAL)
+        databaseboxsizer.Add(item=dbm_base.createDbInfoDesc(self.panel, self.dbInfo, layer = self.layer),
+                             proportion=1,
+                             flag=wx.EXPAND | wx.ALL,
+                             border=3)
+
+        #
+        # text areas
+        #
+        # sql box
+        sqlbox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
+                              label = " %s " % _("Query"))
+        sqlboxsizer = wx.StaticBoxSizer(sqlbox, wx.VERTICAL)
+
+        self.text_sql = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY,
+                                    value = '', size = (-1, 50),
+                                    style=wx.TE_MULTILINE)
+        if self.qtype.lower() == "select":
+            self.text_sql.SetValue("SELECT * FROM %s" % self.tablename)
+        self.text_sql.SetInsertionPointEnd()
+        self.text_sql.SetToolTipString(_("Example: %s") % "SELECT * FROM roadsmajor WHERE MULTILANE = 'no' OR OBJECTID < 10")
+        wx.CallAfter(self.text_sql.SetFocus)
+
+        sqlboxsizer.Add(item = self.text_sql, flag = wx.EXPAND)
+        
         #
         # buttons
         #
@@ -86,12 +122,6 @@ class SQLFrame(wx.Frame):
         self.btn_apply.SetToolTipString(_("Apply SQL statement and close the dialog"))
         self.btn_close  = wx.Button(parent = self.panel, id = wx.ID_CLOSE)
         self.btn_close.SetToolTipString(_("Close the dialog"))
-        self.btn_unique = wx.Button(parent = self.panel, id = wx.ID_ANY,
-                                    label = _("Get all values"))
-        self.btn_unique.Enable(False)
-        self.btn_uniquesample = wx.Button(parent = self.panel, id = wx.ID_ANY,
-                                          label = _("Get sample"))
-        self.btn_uniquesample.Enable(False)
         
         self.btn_lv = { 'is'    : ['=', ],
                         'isnot' : ['!=', ],
@@ -111,79 +141,6 @@ class SQLFrame(wx.Frame):
                             label = value[0])
             self.btn_lv[key].append(btn.GetId())
         
-        #
-        # text areas
-        #
-        self.text_sql = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY,
-                                    value = '', size = (-1, 50),
-                                    style=wx.TE_MULTILINE)
-        if self.qtype.lower() == "select":
-            self.text_sql.SetValue("SELECT * FROM %s" % self.tablename)
-        self.text_sql.SetInsertionPointEnd()
-        self.text_sql.SetToolTipString(_("Example: %s") % "SELECT * FROM roadsmajor WHERE MULTILANE = 'no' OR OBJECTID < 10")
-        wx.CallAfter(self.text_sql.SetFocus)
-
-        #
-        # list boxes (columns, values)
-        #
-        self.list_columns = wx.ListBox(parent = self.panel, id = wx.ID_ANY,
-                                       choices = self.dbInfo.GetColumns(self.tablename),
-                                       style = wx.LB_MULTIPLE)
-        self.list_values = wx.ListBox(parent = self.panel, id = wx.ID_ANY,
-                                      choices = self.colvalues,
-                                      style = wx.LB_MULTIPLE)
-        
-        self.radio_cv = wx.RadioBox(parent = self.panel, id = wx.ID_ANY,
-                                    label = " %s " % _("Add on double-click"),
-                                    choices = [_("columns"), _("values")])
-        self.radio_cv.SetSelection(1) # default 'values'
-
-        self.close_onapply = wx.CheckBox(parent = self.panel, id = wx.ID_ANY,
-                                         label = _("Close dialog on apply"))
-        self.close_onapply.SetValue(True)
-        
-        #
-        # bindings
-        #
-        self.btn_unique.Bind(wx.EVT_BUTTON,       self.OnUniqueValues)
-        self.btn_uniquesample.Bind(wx.EVT_BUTTON, self.OnSampleValues)
-        
-        for key, value in self.btn_lv.iteritems():
-            self.FindWindowById(value[1]).Bind(wx.EVT_BUTTON, self.OnAddMark)
-        
-        self.btn_close.Bind(wx.EVT_BUTTON,       self.OnClose)
-        self.btn_clear.Bind(wx.EVT_BUTTON,       self.OnClear)
-        self.btn_verify.Bind(wx.EVT_BUTTON,      self.OnVerify)
-        self.btn_apply.Bind(wx.EVT_BUTTON,       self.OnApply)
-
-        self.list_columns.Bind(wx.EVT_LISTBOX,   self.OnAddColumn)
-        self.list_values.Bind(wx.EVT_LISTBOX,    self.OnAddValue)
-        
-        self.text_sql.Bind(wx.EVT_TEXT,          self.OnText)
-        
-        self._doLayout()
-
-    def _doLayout(self):
-        """!Do dialog layout"""
-      
-        # dbInfo
-        databasebox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
-                                   label = " %s " % _("Database connection"))
-        databaseboxsizer = wx.StaticBoxSizer(databasebox, wx.VERTICAL)
-        databaseboxsizer.Add(item=dbm_base.createDbInfoDesc(self.panel, self.dbInfo, layer = self.layer),
-                             proportion=1,
-                             flag=wx.EXPAND | wx.ALL,
-                             border=3)
-
-        # sql box
-        sqlbox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
-                              label = " %s " % _("Query"))
-        sqlboxsizer = wx.StaticBoxSizer(sqlbox, wx.VERTICAL)
-        sqlboxsizer.Add(item = self.text_sql, flag = wx.EXPAND)
-        
-        pagesizer = wx.BoxSizer(wx.VERTICAL)
-        
-        # buttons
         buttonsizer = wx.FlexGridSizer(cols = 4, hgap = 5, vgap = 5)
         buttonsizer.Add(item = self.btn_clear)
         buttonsizer.Add(item = self.btn_verify)
@@ -206,6 +163,49 @@ class SQLFrame(wx.Frame):
         buttonsizer2.Add(item = self.FindWindowById(self.btn_lv['brac'][1]), pos = (0, 3))
         buttonsizer2.Add(item = self.FindWindowById(self.btn_lv['prc'][1]), pos = (1, 3))
         buttonsizer2.Add(item = self.FindWindowById(self.btn_lv['and'][1]), pos = (2, 3))
+        
+        #
+        # list boxes (columns, values)
+        #
+        hsizer = wx.BoxSizer(wx.HORIZONTAL)
+        
+        columnsbox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
+                                  label = " %s " % _("Columns"))
+        columnsizer = wx.StaticBoxSizer(columnsbox, wx.VERTICAL)
+        self.list_columns = wx.ListBox(parent = self.panel, id = wx.ID_ANY,
+                                       choices = self.dbInfo.GetColumns(self.tablename),
+                                       style = wx.LB_MULTIPLE)
+        columnsizer.Add(item = self.list_columns, proportion = 1,
+                        flag = wx.EXPAND)
+
+        radiosizer = wx.BoxSizer(wx.HORIZONTAL)
+        self.radio_cv = wx.RadioBox(parent = self.panel, id = wx.ID_ANY,
+                                    label = " %s " % _("Add on double-click"),
+                                    choices = [_("columns"), _("values")])
+        self.radio_cv.SetSelection(1) # default 'values'
+        radiosizer.Add(item = self.radio_cv, proportion = 1,
+                       flag = wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND, border = 5)
+
+        columnsizer.Add(item = radiosizer, proportion = 0,
+                        flag = wx.TOP | wx.EXPAND, border = 5)
+        # self.list_columns.SetMinSize((-1,130))
+        # self.list_values.SetMinSize((-1,100))
+
+        valuesbox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
+                                 label = " %s " % _("Values"))
+        valuesizer = wx.StaticBoxSizer(valuesbox, wx.VERTICAL)
+        self.list_values = wx.ListBox(parent = self.panel, id = wx.ID_ANY,
+                                      choices = self.colvalues,
+                                      style = wx.LB_MULTIPLE)
+        valuesizer.Add(item = self.list_values, proportion = 1,
+                       flag = wx.EXPAND)
+        
+        self.btn_unique = wx.Button(parent = self.panel, id = wx.ID_ANY,
+                                    label = _("Get all values"))
+        self.btn_unique.Enable(False)
+        self.btn_uniquesample = wx.Button(parent = self.panel, id = wx.ID_ANY,
+                                          label = _("Get sample"))
+        self.btn_uniquesample.Enable(False)
 
         buttonsizer3 = wx.BoxSizer(wx.HORIZONTAL)
         buttonsizer3.Add(item = self.btn_uniquesample, proportion = 0,
@@ -213,34 +213,20 @@ class SQLFrame(wx.Frame):
         buttonsizer3.Add(item = self.btn_unique, proportion = 0,
                          flag = wx.ALIGN_CENTER_HORIZONTAL)
 
-        radiosizer = wx.BoxSizer(wx.HORIZONTAL)
-        radiosizer.Add(item = self.radio_cv, proportion = 1,
-                       flag = wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND, border = 5)
-        
-        hsizer = wx.BoxSizer(wx.HORIZONTAL)
-        
-        columnsbox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
-                                  label = " %s " % _("Columns"))
-        valuesbox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
-                                 label = " %s " % _("Values"))
-        # hsizer1.Add(wx.StaticText(self.panel,-1, "Unique values: "), border=0, proportion=1)
-        columnsizer = wx.StaticBoxSizer(columnsbox, wx.VERTICAL)
-        valuesizer = wx.StaticBoxSizer(valuesbox, wx.VERTICAL)
-        columnsizer.Add(item = self.list_columns, proportion = 1,
-                        flag = wx.EXPAND)
-        columnsizer.Add(item = radiosizer, proportion = 0,
-                        flag = wx.TOP | wx.EXPAND, border = 5)
-        valuesizer.Add(item = self.list_values, proportion = 1,
-                       flag = wx.EXPAND)
-        # self.list_columns.SetMinSize((-1,130))
-        # self.list_values.SetMinSize((-1,100))
         valuesizer.Add(item = buttonsizer3, proportion = 0,
                        flag = wx.TOP, border = 5)
+        
+        # hsizer1.Add(wx.StaticText(self.panel,-1, "Unique values: "), border=0, proportion=1)
+ 
         hsizer.Add(item = columnsizer, proportion = 1,
                    flag = wx.EXPAND)
         hsizer.Add(item = valuesizer, proportion = 1,
                    flag = wx.EXPAND)
         
+        self.close_onapply = wx.CheckBox(parent = self.panel, id = wx.ID_ANY,
+                                         label = _("Close dialog on apply"))
+        self.close_onapply.SetValue(True)
+ 
         pagesizer.Add(item = databaseboxsizer,
                       flag = wx.ALL | wx.EXPAND, border = 5)
         pagesizer.Add(item = hsizer, proportion = 1,
@@ -255,6 +241,25 @@ class SQLFrame(wx.Frame):
                       flag = wx.ALIGN_RIGHT | wx.ALL, border = 5)
         pagesizer.Add(item = self.close_onapply, proportion = 0,
                       flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 5)
+
+        #
+        # bindings
+        #
+        self.btn_unique.Bind(wx.EVT_BUTTON,       self.OnUniqueValues)
+        self.btn_uniquesample.Bind(wx.EVT_BUTTON, self.OnSampleValues)
+        
+        for key, value in self.btn_lv.iteritems():
+            self.FindWindowById(value[1]).Bind(wx.EVT_BUTTON, self.OnAddMark)
+        
+        self.btn_close.Bind(wx.EVT_BUTTON,       self.OnClose)
+        self.btn_clear.Bind(wx.EVT_BUTTON,       self.OnClear)
+        self.btn_verify.Bind(wx.EVT_BUTTON,      self.OnVerify)
+        self.btn_apply.Bind(wx.EVT_BUTTON,       self.OnApply)
+
+        self.list_columns.Bind(wx.EVT_LISTBOX,   self.OnAddColumn)
+        self.list_values.Bind(wx.EVT_LISTBOX,    self.OnAddValue)
+        
+        self.text_sql.Bind(wx.EVT_TEXT,          self.OnText)
         
         self.panel.SetAutoLayout(True)
         self.panel.SetSizer(pagesizer)
@@ -262,6 +267,8 @@ class SQLFrame(wx.Frame):
         
         self.Layout()
         self.SetMinSize((660, 525))
+        self.SetClientSize(self.panel.GetSize())
+        self.CenterOnParent()
         
     def OnUniqueValues(self, event, justsample = False):
         """!Get unique values"""
