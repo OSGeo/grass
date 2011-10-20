@@ -497,8 +497,9 @@ class Model(object):
             
             # get variable values
             varValue = dict()
-            for var in params['variables']['params']:
-                varValue[var['name']] = var['value']
+            if 'variables' in params:
+                for var in params['variables']['params']:
+                    varValue[var['name']] = var['value']
         
         log.cmdThread.SetId(-1)
         for item in self.GetItems():
@@ -558,8 +559,9 @@ class Model(object):
         
         # discard values
         if params:
-            for var in params['variables']['params']:
-                var['value'] = ''
+            for item in params.itervalues():
+                for p in item['params']:
+                    p['value'] = ''
         
         if params:
             dlg.Destroy()
@@ -3176,7 +3178,7 @@ class WriteModelFile:
                                           (' ' * self.indent, f.get('name', '')))
             else: # parameter
                 for p in val:
-                    if not p.get('value', ''):
+                    if not p.get('value', '') and not p.get('parameterized', False):
                         continue
                     self.fd.write('%s<parameter name="%s">\n' %
                                   (' ' * self.indent, p.get('name', '')))
