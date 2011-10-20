@@ -1858,7 +1858,7 @@ class ModelAction(ModelObject, ogl.RectangleShape):
         
             for variable in variables:
                 pattern= re.compile('%' + variable)
-                value = None
+                value = ''
                 if params:
                     for p in params:
                         if variable == p.get('name', ''):
@@ -1870,11 +1870,7 @@ class ModelAction(ModelObject, ogl.RectangleShape):
                 
                 for idx in range(len(cmd)):
                     if pattern.search(cmd[idx]):
-                        if value:
-                            cmd[idx] = pattern.sub(value, cmd[idx])
-                        else:
-                            cmd[idx] = pattern.sub('', cmd[idx])
-                            self.isValid = False
+                        cmd[idx] = pattern.sub(value, cmd[idx])
                         break
                     idx += 1
         
