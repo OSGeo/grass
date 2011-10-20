@@ -30,18 +30,10 @@
 #%end
 
 #%option
-#% key: granularity
-#% type: string
-#% description: The granularity of the space time dataset (NNN day, NNN week, NNN month)
-#% required: yes
-#% multiple: no
-#%end
-
-#%option
 #% key: semantictype
 #% type: string
 #% description: The semantic type of the space time dataset
-#% required: yes
+#% required: no
 #% multiple: no
 #% options: event, const, continuous
 #% answer: event
@@ -60,7 +52,7 @@
 #% key: title
 #% type: string
 #% description: Title of the space time dataset
-#% required: yes
+#% required: no
 #% multiple: no
 #%end
 
@@ -68,7 +60,7 @@
 #% key: description
 #% type: string
 #% description: Description of the space time dataset
-#% required: yes
+#% required: no
 #% multiple: no
 #%end
 
@@ -90,7 +82,6 @@ def main():
     title = options["title"]
     descr = options["description"]
     semantic = options["semantictype"]
-    gran = options["granularity"]
     update = flags["u"]
 
     # Make sure the temporal database exists
@@ -98,7 +89,11 @@ def main():
 
     #Get the current mapset to create the id of the space time dataset
     mapset =  grass.gisenv()["MAPSET"]
-    id = name + "@" + mapset
+
+    if name.find("@") >= 0:
+        id = name
+    else:
+        id = name + "@" + mapset
 
     sp = tgis.dataset_factory(type, id)
 
@@ -108,7 +103,7 @@ def main():
     sp.select()
     # Temporal type can not be changed
     ttype= sp.get_temporal_type()
-    sp.set_initial_values(granularity=gran, temporal_type=ttype, semantic_type=semantic, title=title, description=descr)
+    sp.set_initial_values(temporal_type=ttype, semantic_type=semantic, title=title, description=descr)
     # Update only non-null entries
     sp.update()
 

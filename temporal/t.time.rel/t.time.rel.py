@@ -68,7 +68,7 @@
 #% type: string
 #% description: Input map type
 #% required: no
-#% options: rast, rast3d, vect
+#% options: rast,rast3d,vect
 #% answer: rast
 #%end
 

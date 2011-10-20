@@ -5,7 +5,7 @@
 # MODULE:	tr.list
 # AUTHOR(S):	Soeren Gebbert
 #               
-# PURPOSE:	List registered maps of a spae time raster dataset 
+# PURPOSE:	List registered maps of a space time raster dataset 
 # COPYRIGHT:	(C) 2011 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: List registered maps of a spae time raster dataset 
+#% description: List registered maps of a space time raster dataset 
 #% keywords: dataset
 #% keywords: spacetime
 #% keywords: raster
@@ -31,22 +31,22 @@
 #%end
 
 #%option
-#% key: sort
+#% key: order
 #% type: string
-#% description: Sort the space time dataset by category. Columns number_of_maps and granularity only available fpr space time datasets
+#% description: Order the space time dataset by category. 
 #% required: no
 #% multiple: yes
-#% options: id, name, creator, mapset, temporal_type, creation_time, start_time, end_time, north, south, west, east, nsres, ewres, cols, rows, number_of_cells, min, max 
+#% options: id,name,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,nsres,ewres,cols,rows,number_of_cells,min,max 
 #% answer: start_time
 #%end
 
 #%option
 #% key: columns
 #% type: string
-#% description: Which columns should be printed to stdout. Columns number_of_maps and granularity only available fpr space time datasets
+#% description: Select columns to be printed to stdout 
 #% required: no
 #% multiple: yes
-#% options: id, name, creator, mapset, temporal_type, creation_time, start_time, end_time, north, south, west, east, nsres, ewres, cols, rows, number_of_cells, min, max 
+#% options: id,name,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,nsres,ewres,cols,rows,number_of_cells,min,max 
 #% answer: name,mapset,start_time,end_time
 #%end
 
@@ -59,6 +59,16 @@
 #%end
 
 #%option
+#% key: method
+#% type: string
+#% description: Which method should be used fot data listing
+#% required: no
+#% multiple: no
+#% options: cols,comma,delta,deltagaps
+#% answer: cols
+#%end
+
+#%option
 #% key: fs
 #% type: string
 #% description: The field separator character between the columns, default is tabular "\t"
@@ -66,13 +76,11 @@
 #%end
 
 #%flag
-#% key: c
-#% description: Print the column names as first row
-#%end
+#% key: h
+#% description: Print column names 
 
 import grass.script as grass
 import grass.temporal as tgis
-
 ############################################################################
 
 def main():
@@ -80,10 +88,11 @@ def main():
     # Get the options
     input = options["input"]
     columns = options["columns"]
-    sort = options["sort"]
+    order = options["order"]
     where = options["where"]
     separator = options["fs"]
-    colhead = flags['c']
+    method = options["method"]
+    header = flags["h"]
 
     # Make sure the temporal database exists
     tgis.create_temporal_database()
@@ -98,44 +107,101 @@ def main():
     sp = tgis.space_time_raster_dataset(id)
     
     if sp.is_in_db() == False:
-        dbif.close()
         grass.fatal(_("Dataset <%s> not found in temporal database") % (id))
 
     sp.select()
 
-    rows = sp.get_registered_maps(columns, where, sort, None)
+    if separator == None or separator == "":
+        separator = "\t"
+           
+    # This method expects a list of objects for gap detection
+    if method == "delta" or method == "deltagaps":
+        columns = "id,start_time,end_time"
+        if method == "deltagaps":
+            maps = sp.get_registered_maps_as_objects_with_gaps(where, None)
+        else:
+            maps = sp.get_registered_maps_as_objects(where, "start_time", None)
 
-    # Print the query result to stout
-    if rows:
-        if separator == None or separator == "":
-            separator = "\t"
+        if header:
+            string = ""
+            string += "%s%s" % ("id", separator)
+            string += "%s%s" % ("start_time", separator)
+            string += "%s%s" % ("end_time", separator)
+            string += "%s%s" % ("interval_length", separator)
+            string += "%s"   % ("distance_from_begin")
+            print string
 
-        # Print the column names if requested
-        if colhead == True:
-            output = ""
-            count = 0
+        if maps and len(maps) > 0:
 
-            collist = columns.split(",")
+            first_time, dummy = maps[0].get_valid_time()
 
-            for key in collist:
-                if count > 0:
-                    output += separator + str(key)
+            for map in maps:
+                start, end = map.get_valid_time()
+                if end:
+                    delta = end -start
                 else:
-                    output += str(key)
-                count += 1
-            print output
+                    delta = None
+                delta_first = start - first_time
 
-        for row in rows:
-            output = ""
-            count = 0
-            for col in row:
-                if count > 0:
-                    output += separator + str(col)
-                else:
-                    output += str(col)
-                count += 1
-                
-            print output
+                if map.is_time_absolute():
+                    if end:
+                        delta = tgis.time_delta_to_relative_time(delta)
+                    delta_first = tgis.time_delta_to_relative_time(delta_first)
+
+                string = ""
+                string += "%s%s" % (map.get_id(), separator)
+                string += "%s%s" % (start, separator)
+                string += "%s%s" % (end, separator)
+                string += "%s%s" % (delta, separator)
+                string += "%s"   % (delta_first)
+                print string
+
+    else:
+        # In comma separated mode only map ids are needed
+        if method == "comma":
+            columns = "id"
+
+        rows = sp.get_registered_maps(columns, where, order, None)
+
+        if rows:
+            if method == "comma":
+                string = ""
+                count = 0
+                for row in rows:
+                    if count == 0:
+                        string += row["id"]
+                    else:
+                        string += ",%s" % row["id"]
+                    count += 1
+                print string
+
+            elif method == "cols":
+                # Print the column names if requested
+                if header:
+                    output = ""
+                    count = 0
+
+                    collist = columns.split(",")
+
+                    for key in collist:
+                        if count > 0:
+                            output += separator + str(key)
+                        else:
+                            output += str(key)
+                        count += 1
+                    print output
+
+                for row in rows:
+                    output = ""
+                    count = 0
+                    for col in row:
+                        if count > 0:
+                            output += separator + str(col)
+                        else:
+                            output += str(col)
+                        count += 1
+                        
+                    print output
 
 if __name__ == "__main__":
     options, flags = grass.parser()
