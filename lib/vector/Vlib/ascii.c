@@ -24,6 +24,8 @@
 #define BUFFSIZE 128
 
 static int srch(const void *, const void *);
+static int check_cat(const struct line_cats *, const struct cat_list *,
+		     const int *, int);
 
 /*!
   \brief Read data in GRASS ASCII vector format
@@ -300,10 +302,10 @@ int Vect_write_ascii(FILE *ascii,
 		     int field, const struct cat_list *Clist, const char* where,
 		     const char **columns, int header)
 {
-    int type, ctype, i, cat, n_lines;
+    int type, ctype, i, cat, n_lines, line, left, right, found;
     double *xptr, *yptr, *zptr, x, y;
     static struct line_pnts *Points;
-    struct line_cats *Cats;
+    struct line_cats *Cats, *ACats;
     char *xstring, *ystring, *zstring;
     struct Cell_head window;
     struct ilist *fcats;
@@ -353,6 +355,7 @@ int Vect_write_ascii(FILE *ascii,
     
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
+    ACats = Vect_new_cats_struct();
     fcats = Vect_new_list();
 
     /* by default, read_next_line will NOT read Dead lines */
@@ -361,7 +364,9 @@ int Vect_write_ascii(FILE *ascii,
 
     Vect_rewind(Map);
 
+    line = 0;
     while (TRUE) {
+	line++;
 	type = Vect_read_next_line(Map, Points, Cats);
 	if (type == -1 ) {      /* failure */
 	    if (columns) {
@@ -383,26 +388,22 @@ int Vect_write_ascii(FILE *ascii,
 	if (format == GV_ASCII_FORMAT_POINT && !(type & GV_POINTS))
 	    continue;
 
-	/* check category */
-	if (Clist) {
-	    Vect_cat_get(Cats, Clist->field, &cat);
-	    if (!Vect_cat_in_cat_list(cat, Clist))
-		continue;
-	}
-	if (cats) {
-	    
-	    for (i = 0; i < Cats->n_cats; i++) {
-		if ((int *)bsearch((void *) &(Cats->cat[i]), cats, ncats, sizeof(int),
-				   srch)) {
-		    /* found */
-		    break;
-		}
+	found = FALSE;
+	if (type == GV_BOUNDARY && Vect_level(Map) > 1) {
+	    Vect_get_line_areas(Map, line, &left, &right);
+	    if (left > 0) {
+		Vect_get_area_cats(Map, left, ACats);
+		found = check_cat(ACats, Clist, cats, ncats);
 	    }
-	    
-	    if (i == Cats->n_cats) 
-		continue;
+	    if (!found && right > 0) {
+		Vect_get_area_cats(Map, right, ACats);
+		found = check_cat(ACats, Clist, cats, ncats);
+	    }
 	}
-
+	
+	if (!found && !check_cat(Cats, Clist, cats, ncats))
+	    continue;
+	
 	if (ver < 5) {
 	    Vect_cat_get(Cats, 1, &cat);
 	}
@@ -672,6 +673,7 @@ int Vect_write_ascii(FILE *ascii,
 
     Vect_destroy_line_struct(Points);
     Vect_destroy_cats_struct(Cats);
+    Vect_destroy_cats_struct(ACats);
     
     return n_lines;
 }
@@ -705,4 +707,31 @@ void Vect_write_ascii_head(FILE *dascii, struct Map_info *Map)
     fprintf(dascii, "OTHER INFO:   %s\n", Vect_get_comment(Map));
     fprintf(dascii, "ZONE:         %d\n", Vect_get_zone(Map));
     fprintf(dascii, "MAP THRESH:   %f\n", Vect_get_thresh(Map));
+}
+
+/* check category */
+int check_cat(const struct line_cats *Cats, const struct cat_list *Clist,
+	      const int *cats, int ncats)
+{
+    int i, cat;
+    
+    if (Clist) {
+	Vect_cat_get(Cats, Clist->field, &cat);
+	if (!Vect_cat_in_cat_list(cat, Clist))
+	    return FALSE;
+    }
+    if (cats) {
+	for (i = 0; i < Cats->n_cats; i++) {
+	    if ((int *)bsearch((void *) &(Cats->cat[i]), cats, ncats, sizeof(int),
+			       srch)) {
+		/* found */
+		break;
+	    }
+	}
+	
+	if (i == Cats->n_cats)
+	    return FALSE;
+    }
+    
+    return TRUE;
 }
