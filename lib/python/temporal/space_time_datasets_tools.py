@@ -227,7 +227,12 @@ def unregister_maps_from_space_time_datasets(type, name, maps, file=None, dbif =
         else:
             id = name
 
-        sp = dataset_factory(type, id)
+        if type == "rast":
+            sp = dataset_factory("strds", id)
+        if type == "rast3d":
+            sp = dataset_factory("str3ds", id)
+        if type == "vect":
+            sp = dataset_factory("stvds", id)
 
         if sp.is_in_db(dbif) == False:
             dbif.close()
@@ -267,13 +272,7 @@ def unregister_maps_from_space_time_datasets(type, name, maps, file=None, dbif =
         else:
             mapid = mapname
             
-        # Create a new instance with the map type
-        if type == "rast":
-            map = raster_dataset(mapid)
-        if type == "rast3d":
-            map = raster3d_dataset(mapid)
-        if type == "vect":
-            map = vector_dataset(mapid)
+        map = dataset_factory(type, mapid)
 
         # Unregister map if in database
         if map.is_in_db(dbif) == True:
