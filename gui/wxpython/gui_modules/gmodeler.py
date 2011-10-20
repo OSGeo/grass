@@ -409,8 +409,17 @@ class Model(object):
         error string"""
         errList = list()
         for action in self.GetItems(objType = ModelAction):
-            task = menuform.GUI(show = None).ParseCommand(cmd = action.GetLog(string = False))
-            errList += task.get_cmd_error()
+            cmd = action.GetLog(string = False, substitute = True)
+            
+            task = menuform.GUI(show = None).ParseCommand(cmd = cmd)
+            errList += map(lambda x: cmd[0] + ': ' + x, task.get_cmd_error())
+            # check also variables
+            for opt in cmd[1:]:
+                if '=' not in opt:
+                    continue
+                key, value = opt.split('=', 1)
+                if '%' in value:
+                    errList.append(_("%s: undefined variable '%s'") % (cmd[0], value.strip()))
         
         return errList
 
@@ -430,7 +439,7 @@ class Model(object):
         
         if statusbar:
             statusbar.SetStatusText(_('Running model...'), 0)
-        log.RunCmd(command = item.GetLog(string = False),
+        log.RunCmd(command = item.GetLog(string = False, substitute = True),
                    onDone = onDone)
         
         if name in params:
@@ -483,7 +492,7 @@ class Model(object):
             
             err = dlg.GetErrors()
             if err:
-                GError(parent = self, message = unicode('\n'.join(err)))
+                GError(parent = parent, message = unicode('\n'.join(err)))
                 return
             
             # get variable values
@@ -546,6 +555,11 @@ class Model(object):
                             if pattern.search(par[idx]['value']):
                                 par[idx]['value'] = pattern.sub(var, par[idx]['value'])
                         self.RunAction(action, { action.GetName(): {'params': par } }, log, onDone)
+        
+        # discard values
+        if params:
+            for var in params['variables']['params']:
+                var['value'] = ''
         
         if params:
             dlg.Destroy()
@@ -614,7 +628,7 @@ class Model(object):
                                     'idx' : idx }
             for name, values in self.variables.iteritems():
                 gtype = values.get('type', 'string')
-                if gtype in ('raster', 'vector', 'mapset'):
+                if gtype in ('raster', 'vector', 'mapset', 'file'):
                     gisprompt = True
                     prompt = gtype
                     if gtype == 'raster':
@@ -668,7 +682,7 @@ class Model(object):
                                          'idx'   : idx }
                     result[name]['params'].append(p)
             idx += 1
-
+        
         self.variablesParams = result # record parameters
         
         return result
@@ -1825,37 +1839,44 @@ class ModelAction(ModelObject, ogl.RectangleShape):
         """!Get properties dialog"""
         return self.propWin
 
-    def GetLog(self, string = True):
-        """!Get logging info"""
+    def GetLog(self, string = True, substitute = False):
+        """!Get logging info
+
+        @param string True to get cmd as a string otherwise a list
+        @param substitute True to substitute variables
+        """
         cmd = self.task.get_cmd(ignoreErrors = True, ignoreRequired = True)
         
         # substitute variables
-        variables = self.parent.GetVariables()
-        fparams = self.parent.GetVariables(params = True)
-        params = None
-        for values in fparams.itervalues():
-            params = values['params']
-            break
+        if substitute:
+            variables = self.parent.GetVariables()
+            fparams = self.parent.GetVariables(params = True)
+            params = None
+            for values in fparams.itervalues():
+                params = values['params']
+                break
         
-        for variable in variables:
-            pattern= re.compile('%' + variable)
-            value = None
-            if params:
-                for p in params:
-                    if variable == p.get('name', ''):
-                        value = p.get('value', '')
+            for variable in variables:
+                pattern= re.compile('%' + variable)
+                value = None
+                if params:
+                    for p in params:
+                        if variable == p.get('name', ''):
+                            value = p.get('value', '')
+                            break
+                        
+                if not value:
+                    value = variables[variable].get('value', '')
+                
+                for idx in range(len(cmd)):
+                    if pattern.search(cmd[idx]):
+                        if value:
+                            cmd[idx] = pattern.sub(value, cmd[idx])
+                        else:
+                            cmd[idx] = pattern.sub('', cmd[idx])
+                            self.isValid = False
                         break
-            if not value:
-                value = variables[variable].get('value', '')
-            
-            for idx in range(len(cmd)):
-                if pattern.search(cmd[idx]):
-                    if value:
-                        cmd[idx] = pattern.sub(value, cmd[idx])
-                    else:
-                        self.isValid = False
-                    break
-                idx += 1
+                    idx += 1
         
         if string:
             if cmd is None:
@@ -3929,7 +3950,8 @@ class VariablePanel(wx.Panel):
                                          _("string"),
                                          _("raster"),
                                          _("vector"),
-                                         _("mapset")])
+                                         _("mapset"),
+                                         _("file")])
         self.value = wx.TextCtrl(parent = self, id = wx.ID_ANY)
         self.desc = wx.TextCtrl(parent = self, id = wx.ID_ANY)
         
