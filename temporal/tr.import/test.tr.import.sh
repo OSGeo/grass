@@ -37,3 +37,7 @@ tr.import --o input=strds_export.tar.bz2 output=precip_abs1 extrdir=test -loe
 
 tr.import --o input=strds_export.tar.bz2 output=precip_abs1 extrdir=test 
 tr.import --o input=strds_export.tar.bz2 output=precip_abs1 extrdir=test -l
+
+t.remove type=rast input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+t.remove type=strds input=precip_abs1
+g.remove rast=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
