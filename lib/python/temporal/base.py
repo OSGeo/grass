@@ -188,20 +188,15 @@ class sql_database_interface(dict_sql_serializer):
        * Temporal extent
        * Metadata
     """
-    def __init__(self, table=None, ident=None, database=None):
+    def __init__(self, table=None, ident=None):
         """Constructor of this class
 
            @param table: The name of the table
            @param ident: The identifier (primary key) of this object in the database table
-           @param database: A specific string used in the dbmi connect method. This should be the path to the database , user name, ...
         """
         dict_sql_serializer.__init__(self)
 
         self.table = table # Name of the table, set in the subclass
-        if database == None:
-            self.database = get_temporal_dbmi_init_string()
-        else:
-            self.database = database
         self.ident = ident
 
     def get_table_name(self):
@@ -213,16 +208,17 @@ class sql_database_interface(dict_sql_serializer):
 
            Supported backends are sqlite3 and postgresql
         """
+        init = get_temporal_dbmi_init_string()
         #print "Connect to",  self.database
         if dbmi.__name__ == "sqlite3":
-	    self.connection = dbmi.connect(self.database, detect_types=dbmi.PARSE_DECLTYPES|dbmi.PARSE_COLNAMES)
+	    self.connection = dbmi.connect(init, detect_types=dbmi.PARSE_DECLTYPES|dbmi.PARSE_COLNAMES)
 	    self.connection.row_factory = dbmi.Row
             self.connection.isolation_level = None
 	    self.cursor = self.connection.cursor()
             self.cursor.execute("PRAGMA synchronous = OFF")
             self.cursor.execute("PRAGMA journal_mode = MEMORY")
         elif dbmi.__name__ == "psycopg2":
-	    self.connection = dbmi.connect(self.database)
+	    self.connection = dbmi.connect(init)
 	    self.connection.set_isolation_level(dbmi.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
 	    self.cursor = self.connection.cursor(cursor_factory=dbmi.extras.DictCursor)
 
@@ -391,6 +387,9 @@ class dataset_base(sql_database_interface):
 	sql_database_interface.__init__(self, table, ident)
 
 	self.set_id(ident)
+        if ident != None and name == None and mapset == None:
+            if ident.find("@") >= 0:
+                name, mapset = ident.split("@")
 	self.set_name(name)
 	self.set_mapset(mapset)
 	self.set_creator(creator)

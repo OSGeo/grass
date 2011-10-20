@@ -524,7 +524,6 @@ def dataset_factory(type, id):
        @param type: the dataset type: rast, rast3d, vect, strds, str3ds, stvds
        @param id: The id of the dataset ("name@mapset")
     """
-    print type, id
     if type == "strds":
         sp = space_time_raster_dataset(id)
     elif type == "str3ds":

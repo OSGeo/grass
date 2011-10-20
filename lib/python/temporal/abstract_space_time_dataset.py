@@ -87,6 +87,10 @@ class abstract_space_time_dataset(abstract_dataset):
         self.metadata.set_title(title)
         self.metadata.set_description(description)
 
+    def get_semantic_type(self):
+        """Return the semantic type of this dataset"""
+        return self.base.get_semantic_type()
+
     def get_initial_values(self):
         """Return the initial values: temporal_type, semantic_type, title, description"""
         
@@ -133,7 +137,6 @@ class abstract_space_time_dataset(abstract_dataset):
             map_time   = self.relative_time.get_map_time()
 
         return map_time
-
 
     def print_temporal_relation_matrix(self, maps):
         """Print the temporal relation matrix of all registered maps to stdout
@@ -342,8 +345,65 @@ class abstract_space_time_dataset(abstract_dataset):
 
         return True
 
+    def get_registered_maps_as_objects_with_gaps(self, where=None, dbif=None):
+        """Return all registered maps as ordered (by start_time) object list with 
+           "gap" map objects (id==None) for temporal topological operations
+
+           Gaps between maps are identified as maps with id==None
+
+           The objects are initialized with the id and the temporal extent (temporal type, start time, end time).
+           In case more map informations are needed, use the select() method for each listed object.
+
+           @param where: The SQL where statement to select a subset of the registered maps without "WHERE"
+           @param dbif: The database interface to be used
+
+           In case nothing found None is returned
+        """
+
+        connect = False
+
+        if dbif == None:
+            dbif = sql_database_interface()
+            dbif.connect()
+            connect = True
+
+        obj_list = []
+        
+        maps = self.get_registered_maps_as_objects(where, "start_time", dbif)
+
+        if maps and len(maps) > 0:
+            for i in range(len(maps)):
+                obj_list.append(maps[i])
+                # Detect and insert gaps
+                if i < len(maps) - 1:
+                    relation = maps[i + 1].temporal_relation(maps[i])
+                    if relation == "after":
+                        start1, end1 = maps[i].get_valid_time()
+                        start2, end2 = maps[i + 1].get_valid_time()
+                        end = start2
+                        if end1:
+                            start = end1
+                        else:
+                            start = start1
+
+                        map = self.get_new_map_instance(None)
+
+                        if self.is_time_absolute():
+                            map.set_absolute_time(start, end)
+                        elif self.is_time_relative():
+                            map.set_relative_time(start, end)
+                        obj_list.append(copy.copy(map))
+
+        if connect == True:
+            dbif.close()
+
+        return obj_list
+
     def get_registered_maps_as_objects(self, where=None, order="start_time", dbif=None):
-        """Return all registered maps as ordered object list
+        """Return all registered maps as ordered object list for temporal topological operations
+
+           The objects are initialized with the id and the temporal extent (temporal type, start time, end time).
+           In case more map informations are needed, use the select() method for each listed object.
 
            @param where: The SQL where statement to select a subset of the registered maps without "WHERE"
            @param order: The SQL order statement to be used to order the objects in the list without "ORDER BY"
@@ -361,13 +421,21 @@ class abstract_space_time_dataset(abstract_dataset):
 
         obj_list = []
         
-        rows = self.get_registered_maps("id", where, order, dbif)
+        rows = self.get_registered_maps("id,start_time,end_time", where, order, dbif)
 
+        count = 0
         if rows:
             for row in rows:
+                core.percent(count, len(rows), 1)
                 map = self.get_new_map_instance(row["id"])
-                map.select(dbif)
+                if self.is_time_absolute():
+                    map.set_absolute_time(row["start_time"], row["end_time"])
+                elif self.is_time_relative():
+                    map.set_relative_time(row["start_time"], row["end_time"])
                 obj_list.append(copy.copy(map))
+                count += 1
+
+        core.percent(1, 1, 1)
 
         if connect == True:
             dbif.close()
@@ -377,7 +445,7 @@ class abstract_space_time_dataset(abstract_dataset):
     def get_registered_maps(self, columns=None, where = None, order = None, dbif=None):
         """Return sqlite rows of all registered maps.
         
-           Each row includes all columns specified in the datatype specific view
+           In case columsn are not specified, each row includes all columns specified in the datatype specific view
 
            @param columns: Columns to be selected as SQL compliant string
            @param where: The SQL where statement to select a subset of the registered maps without "WHERE"
