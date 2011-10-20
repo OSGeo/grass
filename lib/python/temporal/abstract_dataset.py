@@ -103,6 +103,16 @@ class abstract_dataset(object):
         
     def select(self, dbif=None):
 	"""Select temporal dataset entry from database and fill up the internal structure"""
+
+        connect = False
+
+        if dbif == None:
+            dbif = sql_database_interface()
+            dbif.connect()
+            connect = True
+
+        dbif.cursor.execute("BEGIN TRANSACTION")
+
 	self.base.select(dbif)
 	if self.is_time_absolute():
 	    self.absolute_time.select(dbif)
@@ -110,6 +120,11 @@ class abstract_dataset(object):
 	    self.relative_time.select(dbif)
 	self.spatial_extent.select(dbif)
 	self.metadata.select(dbif)
+
+        dbif.cursor.execute("COMMIT TRANSACTION")
+
+        if connect:
+            dbif.close()
         
     def is_in_db(self, dbif=None):
 	"""Check if the temporal dataset entry is in the database"""
@@ -121,6 +136,17 @@ class abstract_dataset(object):
 
     def insert(self, dbif=None):
 	"""Insert temporal dataset entry into database from the internal structure"""
+
+        connect = False
+
+        if dbif == None:
+            dbif = sql_database_interface()
+            dbif.connect()
+            connect = True
+
+        dbif.cursor.execute("BEGIN TRANSACTION")
+
+
 	self.base.insert(dbif)
 	if self.is_time_absolute():
 	    self.absolute_time.insert(dbif)
@@ -129,10 +155,26 @@ class abstract_dataset(object):
 	self.spatial_extent.insert(dbif)
 	self.metadata.insert(dbif)
 
+        dbif.cursor.execute("COMMIT TRANSACTION")
+
+        if connect:
+            dbif.close()
+ 
     def update(self, dbif=None):
 	"""Update temporal dataset entry of database from the internal structure
 	   excluding None variables
 	"""
+
+        connect = False
+
+        if dbif == None:
+            dbif = sql_database_interface()
+            dbif.connect()
+            connect = True
+
+        dbif.cursor.execute("BEGIN TRANSACTION")
+
+
 	self.base.update(dbif)
 	if self.is_time_absolute():
 	    self.absolute_time.update(dbif)
@@ -141,12 +183,28 @@ class abstract_dataset(object):
 	self.spatial_extent.update(dbif)
 	self.metadata.update(dbif)
 
+        dbif.cursor.execute("COMMIT TRANSACTION")
+
+        if connect:
+            dbif.close()
+ 
     def update_all(self, dbif=None):
 	"""Update temporal dataset entry of database from the internal structure
 	   and include None varuables.
 
            @param dbif: The database interface to be used
 	"""
+
+        connect = False
+
+        if dbif == None:
+            dbif = sql_database_interface()
+            dbif.connect()
+            connect = True
+
+        dbif.cursor.execute("BEGIN TRANSACTION")
+
+
 	self.base.update_all(dbif)
 	if self.is_time_absolute():
 	    self.absolute_time.update_all(dbif)
@@ -155,6 +213,11 @@ class abstract_dataset(object):
 	self.spatial_extent.update_all(dbif)
 	self.metadata.update_all(dbif)
 
+        dbif.cursor.execute("COMMIT TRANSACTION")
+
+        if connect:
+            dbif.close()
+ 
     def print_self(self):
 	"""Print the content of the internal structure to stdout"""
 	self.base.print_self()
