@@ -69,18 +69,10 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("'output' must be given for old version"));
     }
 
-    if (format != GV_ASCII_FORMAT_WKT) {
-	Vect_set_open_level(1);	/* topology not needed */
-	if (Vect_open_old2(&Map, input, "", field_name) < 0)
-	    G_fatal_error(_("Unable to open vector map <%s>"),
-			  input);
-    }
-    else {
-	if (Vect_open_old2(&Map, input, "", field_name) < 2) /* topology required for polygons */
-	    G_warning(_("Unable to open vector map <%s> at topology level. "
-			"Only points, lines can be processed."),
-		      input);
-    }
+    if (Vect_open_old2(&Map, input, "", field_name) < 2) /* topology required for areas */
+	G_warning(_("Unable to open vector map <%s> at topology level. "
+		    "Areas will not be processed."),
+		  input);
     
     field = Vect_get_field_number(&Map, field_name);
     
