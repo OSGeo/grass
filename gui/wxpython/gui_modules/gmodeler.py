@@ -2402,17 +2402,9 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             popupMenu.Append(self.popupID['props'], text=_('Properties'))
             self.frame.Bind(wx.EVT_MENU, self.OnProperties, id = self.popupID['props'])
         
-        if isinstance(shape, ModelAction):
-            popupMenu.Append(self.popupID['id'], text=_('Change ID'))
-            self.frame.Bind(wx.EVT_MENU, self.OnChangeId, id = self.popupID['id'])
-        
         self.frame.PopupMenu(popupMenu)
         popupMenu.Destroy()
 
-    def OnChangeId(self, event):
-        """!Change action id"""
-        pass
-    
     def OnDisable(self, event):
         """!Disable action"""
         self._onEnable(False)
