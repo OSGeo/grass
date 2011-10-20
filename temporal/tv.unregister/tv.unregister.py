@@ -59,7 +59,7 @@ def main():
     # Make sure the temporal database exists
     tgis.create_temporal_database()
     # Unregister maps
-    tgis.unregister_maps_from_space_time_datasets(type="stvds", name=name, maps=maps, file=file, dbif=None)
+    tgis.unregister_maps_from_space_time_datasets(type="vect", name=name, maps=maps, file=file, dbif=None)
 
 if __name__ == "__main__":
     options, flags = grass.parser()
