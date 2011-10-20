@@ -67,14 +67,12 @@ class DisplayAttributesDialog(wx.Dialog):
             label = _("Database connection "
                       "is not defined in DB file.")
 
-            wx.MessageBox(parent = self.parent,
+            gcmd.GMessage(parent = self.parent,
                           message = _("No attribute table linked to "
-                                    "vector map <%(vector)s> found. %(msg)s"
-                                    "\nYou can disable this message from digitization settings. Or "
-                                    "you can create and link attribute table to the vector map "
-                                    "using Attribute Table Manager.") % 
-                          {'vector' : self.map, 'msg' : label},
-                          caption = _("Message"), style = wx.OK | wx.ICON_EXCLAMATION | wx.CENTRE)
+                                      "vector map <%(vector)s> found. %(msg)s\n\n"
+                                      "New attribute table can be created by "
+                                      "Attribute Table Manager.") % 
+                          {'vector' : self.map, 'msg' : label})
             self.mapDBInfo = None
 
         wx.Dialog.__init__(self, parent = self.parent, id = wx.ID_ANY,

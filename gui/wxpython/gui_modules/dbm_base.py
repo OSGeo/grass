@@ -97,7 +97,7 @@ class VectorDBInfo(gselect.VectorDBInfo):
                                  coord = (float(queryCoords[0]), float(queryCoords[1])),
                                  distance = float(qdist))
 
-        if len(data) < 1:
+        if len(data) < 1 or 'Table' not in data[0]:
             return None
         
         # process attributes
@@ -137,7 +137,7 @@ class VectorDBInfo(gselect.VectorDBInfo):
             sql = "SELECT %s FROM %s" % (cols, table)
         else:
             sql = "SELECT %s FROM %s WHERE %s" % (cols, table, where)
-
+        
         ret = gcmd.RunCommand('db.select',
                               parent = self,
                               read = True,
