@@ -435,7 +435,7 @@ int Vect_spatial_index_select(const struct spatial_index *, const struct bound_b
 int Vect_read_ascii(FILE *, struct Map_info *);
 int Vect_read_ascii_head(FILE *, struct Map_info *);
 int Vect_write_ascii(FILE *, FILE *, struct Map_info *, int,
-		     int, int, char *, int,
+		     int, int, char *, int, int,
 		     int, const struct cat_list *, const char*,
 		     const char **, int);
 void Vect_write_ascii_head(FILE *, struct Map_info *);

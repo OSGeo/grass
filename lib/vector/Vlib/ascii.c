@@ -287,6 +287,7 @@ int Vect_read_ascii_head(FILE *dascii, struct Map_info *Map)
   \param dp     number of significant digits
   \param fs     field separator
   \param region_flag check region
+  \param type   feature type filter
   \param field  field number
   \param Clist  list of categories to filter features or NULL
   \param where  SQL select where statement to filter features or NULL
@@ -298,11 +299,11 @@ int Vect_read_ascii_head(FILE *dascii, struct Map_info *Map)
 */
 int Vect_write_ascii(FILE *ascii,
 		     FILE *att, struct Map_info *Map, int ver,
-		     int format, int dp, char *fs, int region_flag,
+		     int format, int dp, char *fs, int region_flag, int type,
 		     int field, const struct cat_list *Clist, const char* where,
 		     const char **columns, int header)
 {
-    int type, ctype, i, cat, n_lines, line, left, right, found;
+    int ltype, ctype, i, cat, n_lines, line, left, right, found;
     double *xptr, *yptr, *zptr, x, y;
     static struct line_pnts *Points;
     struct line_cats *Cats, *ACats;
@@ -366,8 +367,8 @@ int Vect_write_ascii(FILE *ascii,
 
     line = 0;
     while (TRUE) {
-	type = Vect_read_next_line(Map, Points, Cats);
-	if (type == -1 ) {      /* failure */
+	ltype = Vect_read_next_line(Map, Points, Cats);
+	if (ltype == -1 ) {      /* failure */
 	    if (columns) {
 		db_close_database(driver);
 		db_shutdown_driver(driver);
@@ -376,7 +377,7 @@ int Vect_write_ascii(FILE *ascii,
 	    return -1;
 	}
 
-	if (type == -2)	{	/* EOF */
+	if (ltype == -2)	{	/* EOF */
 	    if (columns) {
 		db_close_database(driver);
 		db_shutdown_driver(driver);
@@ -386,12 +387,16 @@ int Vect_write_ascii(FILE *ascii,
 
 	line++;
 
-	if (format == GV_ASCII_FORMAT_POINT && !(type & GV_POINTS))
+	if (!(ltype & type))
+	    continue;
+
+	if (format == GV_ASCII_FORMAT_POINT && !(ltype & GV_POINTS))
 	    continue;
 
 	found = check_cat(Cats, Clist, cats, ncats);
 
-	if (!found && type == GV_BOUNDARY && Vect_level(Map) > 1) {
+	if (!found && ltype == GV_BOUNDARY &&
+	    type & GV_AREA && Vect_level(Map) > 1) {
 	    Vect_get_line_areas(Map, line, &left, &right);
 	    if (left < 0)
 		left = Vect_get_isle_area(Map, abs(left));
@@ -414,7 +419,7 @@ int Vect_write_ascii(FILE *ascii,
 	    Vect_cat_get(Cats, 1, &cat);
 	}
 
-	switch (type) {
+	switch (ltype) {
 	case GV_BOUNDARY:
 	    if (ver == 5)
 		ctype = 'B';
@@ -450,7 +455,7 @@ int Vect_write_ascii(FILE *ascii,
 	    break;
 	default:
 	    ctype = 'X';
-	    G_warning(_("Unknown feature type %d"), (int)type);
+	    G_warning(_("Unknown feature type %d"), (int)ltype);
 	    break;
 	}
 
@@ -605,7 +610,7 @@ int Vect_write_ascii(FILE *ascii,
 	    }
 	    else {
 		if (cat > 0) {
-		    if (type == GV_POINT) {
+		    if (ltype == GV_POINT) {
 			G_asprintf(&xstring, "%.*f", dp, Points->x[0]);
 			G_trim_decimal(xstring);
 			G_asprintf(&ystring, "%.*f", dp, Points->y[0]);
@@ -626,10 +631,10 @@ int Vect_write_ascii(FILE *ascii,
 	    }
 	}
 	else if (format == GV_ASCII_FORMAT_WKT) {
-	    if (type & (GV_BOUNDARY | GV_CENTROID | GV_FACE | GV_KERNEL))
+	    if (ltype & (GV_BOUNDARY | GV_CENTROID | GV_FACE | GV_KERNEL))
 		continue;
 	    /* Well-Known Text */
-	    Vect_sfa_line_astext(Points, type, Vect_is_3d(Map), dp, ascii);
+	    Vect_sfa_line_astext(Points, ltype, Vect_is_3d(Map), dp, ascii);
 	}
 	else {
 	    G_fatal_error(_("Unknown format"));
