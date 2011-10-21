@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# MODULE:	tr.list
+# MODULE:	tr3.list
 # AUTHOR(S):	Soeren Gebbert
 #               
-# PURPOSE:	List registered maps of a space time raster dataset 
+# PURPOSE:	List registered maps of a space time raster3d dataset 
 # COPYRIGHT:	(C) 2011 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
@@ -15,17 +15,17 @@
 #############################################################################
 
 #%module
-#% description: List registered maps of a space time raster dataset 
+#% description: List registered maps of a space time raster3d dataset 
 #% keywords: dataset
 #% keywords: spacetime
-#% keywords: raster
+#% keywords: raster3d
 #% keywords: list
 #%end
 
 #%option
 #% key: input
 #% type: string
-#% description: Name of a space time raster dataset
+#% description: Name of a space time raster3d dataset
 #% required: yes
 #% multiple: no
 #%end
@@ -36,7 +36,7 @@
 #% description: Order the space time dataset by category. 
 #% required: no
 #% multiple: yes
-#% options: id,name,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,nsres,ewres,cols,rows,number_of_cells,min,max 
+#% options: id,name,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,nsres,tbres,ewres,cols,rows,depths,number_of_cells,min,max 
 #% answer: start_time
 #%end
 
@@ -46,14 +46,14 @@
 #% description: Select columns to be printed to stdout 
 #% required: no
 #% multiple: yes
-#% options: id,name,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,nsres,ewres,cols,rows,number_of_cells,min,max 
+#% options: id,name,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,nsres,tbres,ewres,cols,rows,depths,number_of_cells,min,max 
 #% answer: name,mapset,start_time,end_time
 #%end
 
 #%option
 #% key: where
 #% type: string
-#% description: A where statement for selected listing without "WHERE" e.g: "start_time < '2001-01-01' AND end_time > '2001-01-01'"
+#% description: A where statement for selected listing e.g: "start_time < '2001-01-01' and end_time > '2001-01-01'"
 #% required: no
 #% multiple: no
 #%end
@@ -99,7 +99,7 @@ def main():
     # Make sure the temporal database exists
     tgis.create_temporal_database()
 
-    tgis.list_maps_of_stds("strds", input, columns, order, where, separator, method, header)
+    tgis.list_maps_of_stds("str3ds", input, columns, order, where, separator, method, header)
 
 if __name__ == "__main__":
     options, flags = grass.parser()

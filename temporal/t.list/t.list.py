@@ -53,7 +53,7 @@
 #%option
 #% key: where
 #% type: string
-#% description: A where statement for selected listing e.g: start_time < "2001-01-01" and end_time > "2001-01-01"
+#% description: A where statement for selected listing without "WHERE" e.g: "start_time < '2001-01-01' AND end_time > '2001-01-01'"
 #% required: no
 #% multiple: no
 #%end

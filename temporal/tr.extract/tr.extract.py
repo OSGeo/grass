@@ -29,7 +29,12 @@
 #% multiple: no
 #%end
 
-#%option G_OPT_DB_WHERE
+#%option
+#% key: where
+#% type: string
+#% description: A where statement for selected listing without "WHERE" e.g: "start_time < '2001-01-01' AND end_time > '2001-01-01'"
+#% required: no
+#% multiple: no
 #%end
 
 #%option
