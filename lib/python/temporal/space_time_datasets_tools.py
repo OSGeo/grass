@@ -91,7 +91,7 @@ def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=
 
     if sp.is_in_db(dbif) == False:
         dbif.close()
-        core.fatal(_("Space time %s dataset <%s> no found") % (sp.get_new_map_instance(None).get_type(). name))
+        core.fatal(_("Space time %s dataset <%s> no found") % (sp.get_new_map_instance(None).get_type(), name))
 
     maplist = []
 
@@ -540,4 +540,129 @@ def dataset_factory(type, id):
         return None
 
     return sp
+
+###############################################################################
+
+def list_maps_of_stds(type, input, columns, order, where, separator, method, header):
+    """ List the maps of a space time dataset using diffetent methods
+
+        @param type: The type of the maps raster, raster3d or vector
+        @param input: Name of a space time raster dataset
+        @param columns: A comma separated list of columns to be printed to stdout 
+        @param order: A comma seoarated list of columns to order the space time dataset by category 
+        @param where: A where statement for selected listing without "WHERE" e.g: start_time < "2001-01-01" and end_time > "2001-01-01"
+        @param separator: The field separator character between the columns
+        @param method: String identifier to select a method out of cols,comma,delta or deltagaps
+            * "cols": Print preselected columns specified by columns
+            * "comma": Print the map ids (name@mapset) as comma separated string
+            * "delta": Print the map ids (name@mapset) with start time, end time, relative length of intervals and the relative distance to the begin
+            * "deltagaps": Same as "delta" with addtitionakl listing of gaps. Gaps can be simply identified as the id is "None"
+        @param header: Set True to print column names 
+    """
+    mapset =  core.gisenv()["MAPSET"]
+
+    if input.find("@") >= 0:
+        id = input
+    else:
+        id = input + "@" + mapset
+
+    sp = dataset_factory(type, id)
+    
+    if sp.is_in_db() == False:
+        core.fatal(_("Dataset <%s> not found in temporal database") % (id))
+
+    sp.select()
+
+    if separator == None or separator == "":
+        separator = "\t"
+           
+    # This method expects a list of objects for gap detection
+    if method == "delta" or method == "deltagaps":
+        columns = "id,start_time,end_time"
+        if method == "deltagaps":
+            maps = sp.get_registered_maps_as_objects_with_gaps(where, None)
+        else:
+            maps = sp.get_registered_maps_as_objects(where, "start_time", None)
+
+        if header:
+            string = ""
+            string += "%s%s" % ("id", separator)
+            string += "%s%s" % ("start_time", separator)
+            string += "%s%s" % ("end_time", separator)
+            string += "%s%s" % ("interval_length", separator)
+            string += "%s"   % ("distance_from_begin")
+            print string
+
+        if maps and len(maps) > 0:
+
+            first_time, dummy = maps[0].get_valid_time()
+
+            for map in maps:
+                start, end = map.get_valid_time()
+                if end:
+                    delta = end -start
+                else:
+                    delta = None
+                delta_first = start - first_time
+
+                if map.is_time_absolute():
+                    if end:
+                        delta = time_delta_to_relative_time(delta)
+                    delta_first = time_delta_to_relative_time(delta_first)
+
+                string = ""
+                string += "%s%s" % (map.get_id(), separator)
+                string += "%s%s" % (start, separator)
+                string += "%s%s" % (end, separator)
+                string += "%s%s" % (delta, separator)
+                string += "%s"   % (delta_first)
+                print string
+
+    else:
+        # In comma separated mode only map ids are needed
+        if method == "comma":
+            columns = "id"
+
+        rows = sp.get_registered_maps(columns, where, order, None)
+
+        if rows:
+            if method == "comma":
+                string = ""
+                count = 0
+                for row in rows:
+                    if count == 0:
+                        string += row["id"]
+                    else:
+                        string += ",%s" % row["id"]
+                    count += 1
+                print string
+
+            elif method == "cols":
+                # Print the column names if requested
+                if header:
+                    output = ""
+                    count = 0
+
+                    collist = columns.split(",")
+
+                    for key in collist:
+                        if count > 0:
+                            output += separator + str(key)
+                        else:
+                            output += str(key)
+                        count += 1
+                    print output
+
+                for row in rows:
+                    output = ""
+                    count = 0
+                    for col in row:
+                        if count > 0:
+                            output += separator + str(col)
+                        else:
+                            output += str(col)
+                        count += 1
+                        
+                    print output
+
 
