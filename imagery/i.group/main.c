@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("imagery"));
     G_add_keyword(_("map management"));
     module->description =
-	_("Creates, edits, and lists groups and subgroups of imagery data.");
+	_("Creates, edits, and lists groups of imagery data.");
 
     /* Get Args */
     grp = G_define_standard_option(G_OPT_I_GROUP);
