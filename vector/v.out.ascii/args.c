@@ -10,16 +10,19 @@
 void parse_args(int argc, char **argv,
 		char **input, char**output, int *format, int *dp, char **delim,
 		char **field, char ***columns, char **where, int *region,
-		int *old_format, int *header, struct cat_list **clist)
+		int *old_format, int *header, struct cat_list **clist, int *type)
 {
     struct Option *input_opt, *output_opt, *format_opt, *dp_opt, *delim_opt,
-	*field_opt, *column_opt, *where_opt, *cats_opt;
+	*field_opt, *column_opt, *where_opt, *cats_opt, *type_opt;
     struct Flag *old_flag, *header_flag, *region_flag;
     
     input_opt = G_define_standard_option(G_OPT_V_INPUT);
 
     field_opt = G_define_standard_option(G_OPT_V_FIELD);
     field_opt->guisection = _("Selection");
+
+    type_opt = G_define_standard_option(G_OPT_V3_TYPE);
+    type_opt->guisection = _("Selection");
     
     output_opt = G_define_standard_option(G_OPT_F_OUTPUT);
     output_opt->label = _("Name for output ASCII file "
@@ -105,6 +108,11 @@ void parse_args(int argc, char **argv,
 	*delim = G_store(delim_opt->answer);
     
     *field = G_store(field_opt->answer);
+    *type = Vect_option_to_types(type_opt);
+    if (*type & GV_AREA) {
+	*type |= GV_BOUNDARY;
+	*type |= GV_CENTROID;
+    }
     *columns = NULL;
     if (column_opt->answer) {
 	int i, nopt;

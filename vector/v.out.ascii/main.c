@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 
     FILE *ascii, *att;
     char *input, *output, *delim, **columns, *where, *field_name;
-    int format, dp, field, ret, region, old_format, header;
+    int format, dp, field, ret, region, old_format, header, type;
     int ver, pnt;
 
     struct cat_list *clist;
@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
 
     parse_args(argc, argv, &input, &output, &format, &dp, &delim,
 	       &field_name, &columns, &where, &region, &old_format, &header,
-	       &clist);
+	       &clist, &type);
     
     if (format == GV_ASCII_FORMAT_STD && columns) {
 	G_warning(_("Parameter 'column' ignored in standard mode"));
@@ -123,7 +123,7 @@ int main(int argc, char *argv[])
     if (where || columns || clist)
 	G_message(_("Fetching data..."));
     ret = Vect_write_ascii(ascii, att, &Map, ver, format, dp, delim,
-			   region, field, clist, (const char *)where,
+			   region, type, field, clist, (const char *)where,
 			   (const char **)columns, header);
 
     if (ret < 1) {
