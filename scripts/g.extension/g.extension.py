@@ -92,6 +92,7 @@ import os
 import sys
 import re
 import atexit
+import shutil
 
 import urllib
 
@@ -438,10 +439,27 @@ def create_dir(path):
         grass.fatal(_("Unable to create '%s': %s") % (path, e))
     
     grass.debug("'%s' created" % path)
-    
+
+def check_style_files(fil):
+    #check the links to grassdocs.css/grass_logo.png to a correct manual page of addons
+    dist_file = os.path.join(os.getenv('GISBASE'),'docs','html',fil)
+    addons_file = os.path.join(options['prefix'],'docs','html',fil)
+    #check if file already exists in the grass addons docs html path
+    if os.path.isfile(addons_file):
+	return
+    #otherwise copy the file from $GISBASE/docs/html, it doesn't use link 
+    #because os.symlink it work only in Linux
+    else:
+	try:
+	    shutil.copyfile(dist_file,addons_file)
+	except OSError, e:
+	    grass.fatal(_("Unable to create '%s': %s") % (addons_file, e))
+
 def check_dirs():
     create_dir(os.path.join(options['prefix'], 'bin'))
     create_dir(os.path.join(options['prefix'], 'docs', 'html'))
+    check_style_files('grass_logo.png')
+    check_style_files('grassdocs.css')    
     create_dir(os.path.join(options['prefix'], 'man', 'man1'))
     create_dir(os.path.join(options['prefix'], 'scripts'))
 
