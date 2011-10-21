@@ -182,7 +182,7 @@ static int copy_file(const char *src, const char *dst)
     if ((fd = open(src, O_RDONLY)) < 0)
 	return 1;
 
-    /* if((fd2 = open(dst, O_CREAT|O_TRUNC|O_WRONLY)) < 0) */
+    /* if((fd2 = open(dst, O_CREAT|O_TRUNC|O_WRONLY)) < 0) { */
     if ((f2 = fopen(dst, "w")) == NULL) {
 	close(fd);
 	return 1;

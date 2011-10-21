@@ -366,7 +366,6 @@ int Vect_write_ascii(FILE *ascii,
 
     line = 0;
     while (TRUE) {
-	line++;
 	type = Vect_read_next_line(Map, Points, Cats);
 	if (type == -1 ) {      /* failure */
 	    if (columns) {
@@ -385,23 +384,30 @@ int Vect_write_ascii(FILE *ascii,
 	    break;
 	}
 
+	line++;
+
 	if (format == GV_ASCII_FORMAT_POINT && !(type & GV_POINTS))
 	    continue;
 
-	found = FALSE;
-	if (type == GV_BOUNDARY && Vect_level(Map) > 1) {
+	found = check_cat(ACats, Clist, cats, ncats);
+
+	if (!found && type == GV_BOUNDARY && Vect_level(Map) > 1) {
 	    Vect_get_line_areas(Map, line, &left, &right);
+	    if (left < 0)
+		left = Vect_get_isle_area(Map, abs(left));
 	    if (left > 0) {
 		Vect_get_area_cats(Map, left, ACats);
 		found = check_cat(ACats, Clist, cats, ncats);
 	    }
+	    if (right < 0)
+		right = Vect_get_isle_area(Map, abs(right));
 	    if (!found && right > 0) {
 		Vect_get_area_cats(Map, right, ACats);
 		found = check_cat(ACats, Clist, cats, ncats);
 	    }
 	}
 	
-	if (!found && !check_cat(Cats, Clist, cats, ncats))
+	if (!found)
 	    continue;
 	
 	if (ver < 5) {
