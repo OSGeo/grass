@@ -11,6 +11,7 @@ List of classes:
  - SavedRegion
  - DecorationDialog
  - TextLayerDialog 
+ - GroupDialog
  - MapLayersDialog
  - ImportDialog
  - GdalImportDialog
@@ -916,9 +917,7 @@ class GroupDialog(wx.Dialog):
         
         # buttons
         btnApply = wx.Button(parent = self, id = wx.ID_APPLY)
-        btnClose = wx.Button(parent = self, id = wx.ID_CANCEL)
-        # workaround, problem to place ID_CLOSE 
-        btnClose.SetLabel(_("&Close"))
+        btnClose = wx.Button(parent = self, id = wx.ID_CLOSE)
         
         btnApply.SetToolTipString(_("Apply changes to selected group."))
         btnClose.SetToolTipString(_("Close dialog, changes are not applied."))
@@ -926,21 +925,21 @@ class GroupDialog(wx.Dialog):
         btnApply.SetDefault()
         
         # sizers & do layout
-        btnSizer = wx.StdDialogButtonSizer()
-        btnSizer.AddButton(btnApply)
-        btnSizer.AddButton(btnClose)
-
-        btnSizer.Realize()
+        btnSizer = wx.BoxSizer(wx.HORIZONTAL)
+        btnSizer.Add(item = btnClose, proportion = 0,
+                     flag = wx.RIGHT | wx.ALIGN_RIGHT | wx.EXPAND, border = 5)
+        btnSizer.Add(item = btnApply, proportion = 0,
+                     flag = wx.LEFT, border = 5)
         
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         mainSizer.Add(item = self.bodySizer, proportion = 1,
-                      flag = wx.EXPAND | wx.ALL, border = 10)
+                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT, border = 10)
         mainSizer.Add(item = wx.StaticLine(parent = self, id = wx.ID_ANY,
                       style = wx.LI_HORIZONTAL), proportion = 0,
                       flag = wx.EXPAND | wx.LEFT | wx.RIGHT, border = 10) 
         
         mainSizer.Add(item = btnSizer, proportion = 0,
-                      flag = wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border = 10)
+                      flag = wx.ALL | wx.ALIGN_RIGHT, border = 10)
 
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)
@@ -958,41 +957,39 @@ class GroupDialog(wx.Dialog):
         bodySizer.Add(item = wx.StaticText(parent = self, id = wx.ID_ANY,
                                            label = _("Select the group you want to edit or "
                                                      "enter name of new group:")),
-                      flag = wx.ALIGN_CENTER_VERTICAL | wx.TOP, border = 5)
+                      flag = wx.ALIGN_CENTER_VERTICAL | wx.TOP, border = 10)
         self.groupSelect = gselect.Select(parent = self, type = 'group',
                                           mapsets = [grass.gisenv()['MAPSET']],
                                           size = globalvar.DIALOG_GSELECT_SIZE) # searchpath?
             
         bodySizer.Add(item = self.groupSelect, flag = wx.TOP | wx.EXPAND, border = 5)
         
-        bodySizer.AddSpacer(20)
+        bodySizer.AddSpacer(10)
         # layers in group
         bodySizer.Add(item = wx.StaticText(parent = self, label = _("Layers in selected group:")),
                       flag = wx.ALIGN_CENTER_VERTICAL | wx.BOTTOM, border = 5)
         
         gridSizer = wx.GridBagSizer(vgap = 5, hgap = 5)
         gridSizer.AddGrowableCol(0)
-        gridSizer.AddGrowableRow(1)
         
         self.layerBox = wx.ListBox(parent = self,  id = wx.ID_ANY, size = (-1, 150),
                                    style = wx.LB_MULTIPLE | wx.LB_NEEDED_SB)
         
-        gridSizer.Add(item = self.layerBox, pos = (0,0), span = (4, 1), flag = wx.EXPAND)
+        gridSizer.Add(item = self.layerBox, pos = (0, 0), span = (2, 1), flag = wx.EXPAND)
         
-        self.addLayer = wx.Button(self, id = wx.ID_ANY, label = _("Add..."))
+        self.addLayer = wx.Button(self, id = wx.ID_ADD)
         self.addLayer.SetToolTipString(_("Select map layers and add them to the list."))
-        gridSizer.Add(item = self.addLayer, pos = (0,1))
+        gridSizer.Add(item = self.addLayer, pos = (0, 1))
         
-        self.removeLayer = wx.Button(self, id = wx.ID_ANY, label = _("Remove"))
+        self.removeLayer = wx.Button(self, id = wx.ID_REMOVE)
         self.removeLayer.SetToolTipString(_("Remove selected layer(s) from list."))
-        gridSizer.Add(item = self.removeLayer, pos = (1,1))
+        gridSizer.Add(item = self.removeLayer, pos = (1, 1))
         
         bodySizer.Add(item = gridSizer, proportion = 1, flag = wx.EXPAND)
         
         self.infoLabel = wx.StaticText(parent = self, id = wx.ID_ANY)
         bodySizer.Add(item = self.infoLabel, 
                       flag = wx.ALIGN_CENTER_VERTICAL | wx.TOP | wx.BOTTOM, border = 5)
-        
         
         # bindings
         self.groupSelect.GetTextCtrl().Bind(wx.EVT_TEXT, self.OnGroupSelected)

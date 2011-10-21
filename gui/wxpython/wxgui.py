@@ -1091,7 +1091,7 @@ class GMFrame(wx.Frame):
         ctable.CentreOnScreen()
         ctable.Show()
         
-    def OnEditImageryGroups(self, event):
+    def OnEditImageryGroups(self, event, cmd = None):
         """!Show dialog for creating and editing groups.
         """
         dlg = gdialogs.GroupDialog(self)
