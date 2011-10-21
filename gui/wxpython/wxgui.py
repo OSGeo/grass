@@ -1091,6 +1091,13 @@ class GMFrame(wx.Frame):
         ctable.CentreOnScreen()
         ctable.Show()
         
+    def OnEditImageryGroups(self, event):
+        """!Show dialog for creating and editing groups.
+        """
+        dlg = gdialogs.GroupDialog(self)
+        dlg.CentreOnScreen()
+        dlg.Show()
+        
     def OnInstallExtension(self, event):
         """!Install extension from GRASS Addons SVN repository"""
         win = InstallExtensionWindow(self, size = (650, 550))

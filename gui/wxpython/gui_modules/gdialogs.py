@@ -900,14 +900,266 @@ class TextLayerDialog(wx.Dialog):
                  'coords' : self.currCoords,
                  'active' : self.chkbox.IsChecked() }
 
+class GroupDialog(wx.Dialog):
+    """!Dialog for creating/editing groups"""
+    def __init__(self, parent = None, defaultGroup = None, 
+                 title = _("Create or edit imagery groups"),
+                 style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
+                     
+        wx.Dialog.__init__(self, parent = parent, id = wx.ID_ANY, title = title,
+                            style = style, **kwargs)
+                            
+        self.parent = parent
+        self.defaultGroup = defaultGroup
+        
+        self.bodySizer = self._createDialogBody()
+        
+        # buttons
+        btnApply = wx.Button(parent = self, id = wx.ID_APPLY)
+        btnClose = wx.Button(parent = self, id = wx.ID_CANCEL)
+        # workaround, problem to place ID_CLOSE 
+        btnClose.SetLabel(_("&Close"))
+        
+        btnApply.SetToolTipString(_("Apply changes to selected group."))
+        btnClose.SetToolTipString(_("Close dialog, changes are not applied."))
+
+        btnApply.SetDefault()
+        
+        # sizers & do layout
+        btnSizer = wx.StdDialogButtonSizer()
+        btnSizer.AddButton(btnApply)
+        btnSizer.AddButton(btnClose)
+
+        btnSizer.Realize()
+        
+        mainSizer = wx.BoxSizer(wx.VERTICAL)
+        mainSizer.Add(item = self.bodySizer, proportion = 1,
+                      flag = wx.EXPAND | wx.ALL, border = 10)
+        mainSizer.Add(item = wx.StaticLine(parent = self, id = wx.ID_ANY,
+                      style = wx.LI_HORIZONTAL), proportion = 0,
+                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT, border = 10) 
+        
+        mainSizer.Add(item = btnSizer, proportion = 0,
+                      flag = wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border = 10)
+
+        self.SetSizer(mainSizer)
+        mainSizer.Fit(self)
+        
+        btnApply.Bind(wx.EVT_BUTTON, self.OnApply)
+        btnClose.Bind(wx.EVT_BUTTON, self.OnClose)
+
+        # set dialog min size
+        self.SetMinSize(self.GetSize())
+        
+    def _createDialogBody(self):
+        bodySizer = wx.BoxSizer(wx.VERTICAL)
+    
+        # group selection
+        bodySizer.Add(item = wx.StaticText(parent = self, id = wx.ID_ANY,
+                                           label = _("Select the group you want to edit or "
+                                                     "enter name of new group:")),
+                      flag = wx.ALIGN_CENTER_VERTICAL | wx.TOP, border = 5)
+        self.groupSelect = gselect.Select(parent = self, type = 'group',
+                                          mapsets = [grass.gisenv()['MAPSET']],
+                                          size = globalvar.DIALOG_GSELECT_SIZE) # searchpath?
+            
+        bodySizer.Add(item = self.groupSelect, flag = wx.TOP | wx.EXPAND, border = 5)
+        
+        bodySizer.AddSpacer(20)
+        # layers in group
+        bodySizer.Add(item = wx.StaticText(parent = self, label = _("Layers in selected group:")),
+                      flag = wx.ALIGN_CENTER_VERTICAL | wx.BOTTOM, border = 5)
+        
+        gridSizer = wx.GridBagSizer(vgap = 5, hgap = 5)
+        gridSizer.AddGrowableCol(0)
+        gridSizer.AddGrowableRow(1)
+        
+        self.layerBox = wx.ListBox(parent = self,  id = wx.ID_ANY, size = (-1, 150),
+                                   style = wx.LB_MULTIPLE | wx.LB_NEEDED_SB)
+        
+        gridSizer.Add(item = self.layerBox, pos = (0,0), span = (4, 1), flag = wx.EXPAND)
+        
+        self.addLayer = wx.Button(self, id = wx.ID_ANY, label = _("Add..."))
+        self.addLayer.SetToolTipString(_("Select map layers and add them to the list."))
+        gridSizer.Add(item = self.addLayer, pos = (0,1))
+        
+        self.removeLayer = wx.Button(self, id = wx.ID_ANY, label = _("Remove"))
+        self.removeLayer.SetToolTipString(_("Remove selected layer(s) from list."))
+        gridSizer.Add(item = self.removeLayer, pos = (1,1))
+        
+        bodySizer.Add(item = gridSizer, proportion = 1, flag = wx.EXPAND)
+        
+        self.infoLabel = wx.StaticText(parent = self, id = wx.ID_ANY)
+        bodySizer.Add(item = self.infoLabel, 
+                      flag = wx.ALIGN_CENTER_VERTICAL | wx.TOP | wx.BOTTOM, border = 5)
+        
+        
+        # bindings
+        self.groupSelect.GetTextCtrl().Bind(wx.EVT_TEXT, self.OnGroupSelected)
+        self.addLayer.Bind(wx.EVT_BUTTON, self.OnAddLayer)
+        self.removeLayer.Bind(wx.EVT_BUTTON, self.OnRemoveLayer)
+        
+        if self.defaultGroup:
+            self.groupSelect.SetValue(self.defaultGroup)
+        
+        return bodySizer
+        
+    def OnAddLayer(self, event):
+        """!Add new layer to listbox"""
+        dlg = MapLayersDialog(parent = self, title = _("Add selected map layers into group"),
+                              mapType = 'raster', selectAll = False,
+                              fullyQualified = True, showFullyQualified = False)
+        if dlg.ShowModal() != wx.ID_OK:
+            dlg.Destroy()
+            return
+        
+        layers = dlg.GetMapLayers()
+        for layer in layers:
+            if layer not in self.GetLayers():
+                self.layerBox.Append(layer)
+            
+    
+    def OnRemoveLayer(self, event):
+        """!Remove layer from listbox"""
+        while self.layerBox.GetSelections():
+            sel = self.layerBox.GetSelections()[0]
+            self.layerBox.Delete(sel)
+                
+    def GetLayers(self):
+        """!Get layers"""
+        return self.layerBox.GetItems()
+        
+    def OnGroupSelected(self, event):
+        """!Text changed in group selector"""
+        group = self.GetSelectedGroup()
+        
+        groups = self.GetExistGroups()
+        if group in groups:
+            self.ShowGroupLayers(self.GetGroupLayers(group))
+            
+    def ShowGroupLayers(self, mapList):
+        """!Show map layers in currently selected group"""
+        self.layerBox.Set(mapList)
+        
+        
+    def EditGroup(self, group):
+        """!Edit selected group"""
+        layersNew = self.GetLayers()
+        layersOld = self.GetGroupLayers(group)
+        
+        add = []
+        remove = []
+        for layerNew in layersNew:
+            if layerNew not in layersOld:
+                add.append(layerNew)
+                
+        for layerOld in layersOld:
+            if layerOld not in layersNew:
+                remove.append(layerOld)
+        
+        ret = None
+        if remove:
+            ret = gcmd.RunCommand('i.group',
+                                  parent = self,
+                                  group = group,
+                                  flags = 'r',
+                                  input = ','.join(remove))
+                        
+        if add:
+            ret = gcmd.RunCommand('i.group',
+                                  parent = self,
+                                  group = group,
+                                  input = ','.join(add))
+                            
+        self.ShowResult(group = group, returnCode = ret, create = False)
+        
+    def CreateNewGroup(self, group):
+        """!Create new group"""
+        layers = self.GetLayers()
+        ret = gcmd.RunCommand('i.group',
+                              parent = self,
+                              group = group,
+                              input = layers)
+                              
+        self.ShowResult(group = group, returnCode = ret, create = True)
+                        
+    def GetExistGroups(self):
+        """!Returns existing groups in current mapset"""
+        return grass.list_grouped('group')[grass.gisenv()['MAPSET']]
+        
+    def ShowResult(self, group, returnCode, create):
+        """!Show if operation was successfull."""
+        group += '@' + grass.gisenv()['MAPSET']
+        if returnCode is None:
+            label = _("No changes to apply in group <%s>.") % group
+        elif returnCode == 0:
+            if create:
+                label = _("Group <%s> was successfully created.") % group
+            else:
+                label = _("Group <%s> was successfully changed.") % group
+        else:
+            if create:
+                label = _("Creating of new group <%s> failed.") % group
+            else:
+                label = _("Changing of group <%s> failed.") % group
+                
+        self.infoLabel.SetLabel(label)
+        wx.FutureCall(4000, self.ClearNotification)
+        
+    def GetSelectedGroup(self):
+        """!Return currently selected group (without mapset)"""
+        return self.groupSelect.GetValue().split('@')[0]
+        
+    def GetGroupLayers(self, group):
+        """!Get layers in group"""
+        res = gcmd.RunCommand('i.group',
+                              parent = self,
+                              flags = 'g',
+                              group = group,
+                              read = True).strip()
+        return res.split('\n')
+        
+    def ClearNotification(self):
+        """!Clear notification string"""
+        self.infoLabel.SetLabel("")
+        
+    def OnApply(self, event):
+        """!Create or edit group"""
+        group = self.GetSelectedGroup()
+        if not group:
+            gcmd.GMessage(parent = self,
+                          message = _("No group selected."))
+            return
+        
+        groups = self.GetExistGroups()
+        if group in groups:
+            self.EditGroup(group)
+        else:
+            self.CreateNewGroup(group)
+        
+    def OnClose(self, event):
+        """!Close dialog"""
+        if not self.IsModal():
+            self.Destroy()
+        event.Skip()
+        
 class MapLayersDialog(wx.Dialog):
     def __init__(self, parent, title, modeler = False,
+                 mapType = None, selectAll = True, fullyQualified = True, showFullyQualified = True, 
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
-        """!Dialog for selecting map layers (raster, vector)"""
+        """!Dialog for selecting map layers (raster, vector)
+        
+        @param mapType type of map (if None: raster, vector, 3d raster, if one only: selects it and disables selection)
+        @param selectAll all/none maps should be selected by default
+        @param fullyQualified True if dialog should return full map names by default
+        @param showFullyQualified True to show 'fullyQualified' checkbox, otherwise hide it
+        """
         wx.Dialog.__init__(self, parent = parent, id = wx.ID_ANY, title = title,
                            style = style, **kwargs)
         
         self.parent = parent # GMFrame or ?
+        self.mapType = mapType
+        self.selectAll = selectAll
         
         # dialog body
         self.bodySizer = self._createDialogBody()
@@ -918,7 +1170,8 @@ class MapLayersDialog(wx.Dialog):
         
         self.fullyQualified = wx.CheckBox(parent = self, id = wx.ID_ANY,
                                           label = _("Use fully-qualified map names"))
-        self.fullyQualified.SetValue(True)
+        self.fullyQualified.SetValue(fullyQualified)
+        self.fullyQualified.Show(showFullyQualified)
 
         self.dseries = None
         if modeler:
@@ -967,14 +1220,20 @@ class MapLayersDialog(wx.Dialog):
         
         self.layerType = wx.Choice(parent = self, id = wx.ID_ANY,
                                    choices = [_('raster'), _('3D raster'), _('vector')], size = (100,-1))
-        self.layerType.SetSelection(0)
+        
+        if self.mapType:
+            self.layerType.SetStringSelection(self.mapType)
+            self.layerType.Disable()
+        else:
+            self.layerType.SetSelection(0)
+            
         bodySizer.Add(item = self.layerType,
                       pos = (0,1))
         
         # select toggle
         self.toggle = wx.CheckBox(parent = self, id = wx.ID_ANY,
                                   label = _("Select toggle"))
-        self.toggle.SetValue(True)
+        self.toggle.SetValue(self.selectAll)
         bodySizer.Add(item = self.toggle,
                       flag = wx.ALIGN_CENTER_VERTICAL,
                       pos = (0,2))
@@ -1032,7 +1291,8 @@ class MapLayersDialog(wx.Dialog):
         
         # check all items by default
         for item in range(self.layers.GetCount()):
-            self.layers.Check(item)
+            
+            self.layers.Check(item, check = self.selectAll)
         
     def OnChangeParams(self, event):
         """!Filter parameters changed by user"""

@@ -43,6 +43,7 @@ import render
 import toolbars
 import menuform
 import gselect
+import gdialogs
 import gcmd
 import utils
 from debug import Debug as Debug
@@ -499,8 +500,18 @@ class GroupPage(TitledPage):
         
     def OnMkGroup(self, event):
         """!Create new group in source location/mapset"""
-        menuform.GUI(parent = self.parent.parent, modal = True).ParseCommand(['i.group'],
-                                                                             completed = (self.GetOptData, None, ''))
+        dlg = gdialogs.GroupDialog(parent = self, defaultGroup = self.xygroup)
+
+        dlg.ShowModal()
+        gr = dlg.GetSelectedGroup()
+        if gr in dlg.GetExistGroups():
+            self.xygroup = gr
+        else:
+            gr = ''
+        dlg.Destroy()
+        
+        self.OnEnterPage()
+        self.Update()
         
     def OnVGroup(self, event):
         """!Add vector maps to group"""
@@ -516,15 +527,6 @@ class GroupPage(TitledPage):
 
         dlg.MakeVGroup()
         self.OnEnterPage()
-        
-    def GetOptData(self, dcmd, layer, params, propwin):
-        """!Process i.group"""
-        # update the page
-        if dcmd:
-            gcmd.Command(dcmd)
-
-        self.OnEnterPage()
-        self.Update()
         
     def OnExtension(self, event):
         self.extension = event.GetString()
@@ -581,10 +583,12 @@ class GroupPage(TitledPage):
         utils.ListSortLower(self.groupList)
         self.cb_group.SetItems(self.groupList)
         
-        if len(self.groupList) > 0 and \
-                self.xygroup == '':
-            self.cb_group.SetSelection(0)
-            self.xygroup = self.groupList[0]
+        if len(self.groupList) > 0:
+            if self.xygroup and self.xygroup in self.groupList:
+                self.cb_group.SetStringSelection(self.xygroup)
+            else:
+                self.cb_group.SetSelection(0)
+                self.xygroup = self.groupList[0]
         
         if self.xygroup == '' or \
                 self.extension == '':

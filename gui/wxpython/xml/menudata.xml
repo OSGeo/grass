@@ -2534,10 +2534,9 @@
 	  <items>
 	    <menuitem>
 	      <label>Create/edit group</label>
-	      <help>Creates, edits, and lists groups and subgroups of imagery files.</help>
+	      <help>Creates, edits, and lists groups of imagery files.</help>
 	      <keywords>imagery,map management</keywords>
-	      <handler>OnMenuCmd</handler>
-	      <command>i.group</command>
+	      <handler>OnEditImageryGroups</handler>
 	    </menuitem>
 	    <menuitem>
 	      <label>Target group</label>
