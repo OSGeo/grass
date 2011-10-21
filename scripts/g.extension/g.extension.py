@@ -338,7 +338,7 @@ def install_extension():
                'HTMLDIR=%s' % dirs['html'],
                'MANDIR=%s' % dirs['man1'],
                'SCRIPTDIR=%s' % dirs['scripts'],
-               'ETC=%s' % dirs['etc']
+               'ETC=%s' % os.path.join(dirs['etc'],options['extension'])
                ]
     
     installCmd = ['make',
