@@ -917,7 +917,7 @@ class GroupDialog(wx.Dialog):
         
         # buttons
         btnApply = wx.Button(parent = self, id = wx.ID_APPLY)
-        btnClose = wx.Button(parent = self, id = wx.ID_CLOSE)
+        btnClose = wx.Button(parent = self, id = wx.ID_CANCEL)
         
         btnApply.SetToolTipString(_("Apply changes to selected group."))
         btnClose.SetToolTipString(_("Close dialog, changes are not applied."))
@@ -925,11 +925,15 @@ class GroupDialog(wx.Dialog):
         btnApply.SetDefault()
         
         # sizers & do layout
-        btnSizer = wx.BoxSizer(wx.HORIZONTAL)
-        btnSizer.Add(item = btnClose, proportion = 0,
-                     flag = wx.RIGHT | wx.ALIGN_RIGHT | wx.EXPAND, border = 5)
-        btnSizer.Add(item = btnApply, proportion = 0,
-                     flag = wx.LEFT, border = 5)
+        # btnSizer = wx.BoxSizer(wx.HORIZONTAL)
+        # btnSizer.Add(item = btnClose, proportion = 0,
+        #              flag = wx.RIGHT | wx.ALIGN_RIGHT | wx.EXPAND, border = 5)
+        # btnSizer.Add(item = btnApply, proportion = 0,
+        #              flag = wx.LEFT, border = 5)
+        btnSizer = wx.StdDialogButtonSizer()
+        btnSizer.AddButton(btnApply)
+        btnSizer.AddButton(btnClose)
+        btnSizer.Realize()
         
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         mainSizer.Add(item = self.bodySizer, proportion = 1,
