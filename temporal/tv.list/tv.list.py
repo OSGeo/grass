@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# MODULE:	tr.list
+# MODULE:	tv.list
 # AUTHOR(S):	Soeren Gebbert
 #               
-# PURPOSE:	List registered maps of a space time raster dataset 
+# PURPOSE:	List registered maps of a space time vector dataset 
 # COPYRIGHT:	(C) 2011 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
@@ -15,17 +15,17 @@
 #############################################################################
 
 #%module
-#% description: List registered maps of a space time raster dataset 
+#% description: List registered maps of a space time vector dataset 
 #% keywords: dataset
 #% keywords: spacetime
-#% keywords: raster
+#% keywords: vector
 #% keywords: list
 #%end
 
 #%option
 #% key: input
 #% type: string
-#% description: Name of a space time raster dataset
+#% description: Name of a space time vector dataset
 #% required: yes
 #% multiple: no
 #%end
@@ -36,7 +36,7 @@
 #% description: Order the space time dataset by category. 
 #% required: no
 #% multiple: yes
-#% options: id,name,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,nsres,ewres,cols,rows,number_of_cells,min,max 
+#% options: id,name,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east
 #% answer: start_time
 #%end
 
@@ -46,7 +46,7 @@
 #% description: Select columns to be printed to stdout 
 #% required: no
 #% multiple: yes
-#% options: id,name,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,nsres,ewres,cols,rows,number_of_cells,min,max 
+#% options: id,name,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east
 #% answer: name,mapset,start_time,end_time
 #%end
 
@@ -99,7 +99,7 @@ def main():
     # Make sure the temporal database exists
     tgis.create_temporal_database()
 
-    tgis.list_maps_of_stds("strds", input, columns, order, where, separator, method, header)
+    tgis.list_maps_of_stds("stvds", input, columns, order, where, separator, method, header)
 
 if __name__ == "__main__":
     options, flags = grass.parser()

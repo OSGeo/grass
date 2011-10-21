@@ -8,16 +8,16 @@ import grass.script as grass
 # First import the ECA&D data into GRASS GIS 
 input = "tg_0.25deg_reg_1995-2010_v4.0.nc"
 output = "temp_mean"
-grass.run_command("r.in.gdal", flags="o", input=input, output=output, overwrite=True)
+grass.run_command("r.in.gdal", flags="e", input=input, output=output, overwrite=True)
 input = "tn_0.25deg_reg_1995-2010_v4.0.nc"
 output = "temp_min"
-grass.run_command("r.in.gdal", flags="o", input=input, output=output, overwrite=True)
+grass.run_command("r.in.gdal", flags="e", input=input, output=output, overwrite=True)
 input = "tx_0.25deg_reg_1995-2010_v4.0.nc"
 output = "temp_max"
-grass.run_command("r.in.gdal", flags="o", input=input, output=output, overwrite=True)
+grass.run_command("r.in.gdal", flags="e", input=input, output=output, overwrite=True)
 input = "rr_0.25deg_reg_1995-2010_v4.0.nc"
 output = "precip"
-grass.run_command("r.in.gdal", flags="o", input=input, output=output, overwrite=True)
+grass.run_command("r.in.gdal", flags="e", input=input, output=output, overwrite=True)
 
 
 # This should be the number of maps to register

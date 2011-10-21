@@ -10,8 +10,11 @@ SUBDIRS = \
 	t.time.abs \
 	t.time.rel \
 	tr.aggregate \
+	tr.aggregate.ds \
 	tr.register \
 	tr.list \
+	tv.list \
+	tr3.list \
 	tr.series \
 	tr.export \
 	tr.import \

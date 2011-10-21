@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# MODULE:	tr.aggregate
+# MODULE:	tr.aggregate.ds
 # AUTHOR(S):	Soeren Gebbert
 #
-# PURPOSE:	Create a new space time raster dataset from the aggregated data of an existing space time raster dataset
+# PURPOSE:	Aggregated data of an existing space time raster dataset using the temporal topology of a second space time dataset
 # COPYRIGHT:	(C) 2011 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Create a new space time raster dataset from the aggregated data of an existing space time raster dataset
+#% description: Aggregated data of an existing space time raster dataset using the temporal topology of a second space time dataset
 #% keywords: spacetime raster dataset
 #% keywords: raster
 #% keywords: aggregation
@@ -29,16 +29,22 @@
 #% multiple: no
 #%end
 
-#%option G_OPT_DB_WHERE
-#%end
-
 #%option
-#% key: granularity
+#% key: dataset
 #% type: string
-#% description: The aggregation granularity, format absolue time "x years, x months, x weeks, x days, x hours, x minutes, x seconds" or a double value for relative time
+#% description: The time intervals from this space time dataset (raster, vector or raster3d) are used for aggregation computation. 
 #% required: yes
 #% multiple: no
 #%end
+
+#%option
+#% key: type
+#% type: string
+#% description: Type of the aggregation space time dataset, default is strds
+#% required: no                                                 
+#% options: strds, str3ds, stvds
+#% answer: strds                                                
+#%end                                                           
 
 #%option
 #% key: output
@@ -81,11 +87,11 @@ def main():
     # Get the options
     input = options["input"]
     output = options["output"]
-    where = options["where"]
-    gran = options["granularity"]
+    sampler = options["dataset"]
     base = options["base"]
     register_null = flags["n"]
     method = options["method"]
+    type = options["type"]
 
     # Make sure the temporal database exists
     tgis.create_temporal_database()
@@ -108,6 +114,33 @@ def main():
 
     sp.select(dbif)
 
+    if sampler.find("@") >= 0:
+        sampler_id = sampler
+    else:
+        sampler_id = sampler + "@" + mapset
+
+    sampler_sp = tgis.dataset_factory(type, sampler_id)
+    
+    if sampler_sp.is_in_db() == False:
+        dbif.close()
+        grass.fatal(_("Dataset <%s> not found in temporal database") % (id))
+
+    sampler_sp.select(dbif)
+
+    if sampler_sp.get_temporal_type() != sp.get_temporal_type():
+        dbif.close()
+        grass.fatal(_("Input and aggregation dataset must have the same temporal type"))
+
+    # Check if intervals are present
+    if sampler_sp.get_temporal_type() == "absolute":
+        map_time = sampler_sp.absolute_time.get_map_time()
+    else:
+        map_time = sampler_sp.relative_time.get_map_time()
+    
+    if map_time != "interval":
+        dbif.close()
+        grass.fatal(_("All registered maps of the aggregation dataset must have time intervals"))
+
     if output.find("@") >= 0:
         out_id = output
     else:
@@ -127,32 +160,23 @@ def main():
     new_sp.set_initial_values(temporal_type, semantic_type, title, description)
     new_sp.insert(dbif)
 
-    rows = sp.get_registered_maps("id,start_time", where, "start_time", dbif)
+    rows = sampler_sp.get_registered_maps("id,start_time,end_time", None, "start_time", dbif)
 
     if not rows:
             dbif.close()
-            grass.fatal(_("Space time raster dataset <%s> is empty") % out_id)
-
-    # Modify the start time to fit the granularity
-    first_start_time = tgis.adjust_datetime_to_granularity( rows[0]["start_time"], gran)
-    last_start_time = rows[len(rows) - 1]["start_time"]
-    next_start_time = first_start_time
+            grass.fatal(_("Aggregation dataset <%s> is empty") % out_id)
 
     count = 0
-    while next_start_time <= last_start_time:
-        start = next_start_time
-        if sp.is_time_absolute():
-            end = tgis.increment_datetime_by_string(next_start_time, gran)
-        else:
-            end = next_start_time + gran
-        next_start_time = end
+    for row in rows:
+        count += 1
+        start = row["start_time"]
+        end = row["end_time"]
 
         input_map_names = tgis.collect_map_names(sp, dbif, start, end)
 
         if input_map_names:
             tgis.aggregate_raster_maps(new_sp, mapset, input_map_names, base, start, end, count, method, register_null, dbif)
-
-        count += 1
+        
 
     # Update the spatio-temporal extent and the raster metadata table entries
     new_sp.update_from_registered_maps(dbif)

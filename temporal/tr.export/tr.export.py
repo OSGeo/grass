@@ -144,7 +144,7 @@ def main():
             out_name = name + ".tif"
 
             # Export the raster map with r.out.gdal
-            ret = grass.run_command("r.out.gdal", input=name, output=out_name, format="GTiff")
+            ret = grass.run_command("r.out.gdal", flags="c", input=name, output=out_name, format="GTiff")
             if ret != 0:
                 shutil.rmtree(new_cwd)
                 tar.close()
