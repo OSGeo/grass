@@ -389,7 +389,7 @@ int Vect_write_ascii(FILE *ascii,
 	if (format == GV_ASCII_FORMAT_POINT && !(type & GV_POINTS))
 	    continue;
 
-	found = check_cat(ACats, Clist, cats, ncats);
+	found = check_cat(Cats, Clist, cats, ncats);
 
 	if (!found && type == GV_BOUNDARY && Vect_level(Map) > 1) {
 	    Vect_get_line_areas(Map, line, &left, &right);
