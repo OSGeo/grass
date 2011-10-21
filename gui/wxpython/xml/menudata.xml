@@ -787,7 +787,7 @@
 	    <menuitem>
 	      <label>User access</label>
 	      <help>Controls access to the current mapset for other users on the system.</help>
-	      <keywords>general,map management</keywords>
+	      <keywords>general,map management,permission</keywords>
               <handler>OnMenuCmd</handler>
 	      <command>g.access</command>
 	    </menuitem>
@@ -1832,7 +1832,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Sum area by raster map and category</label>
-	      <help>Reports statistics for raster map layers.</help>
+	      <help>Reports statistics for raster maps.</help>
 	      <keywords>raster,statistics</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.report</command>
@@ -1846,8 +1846,8 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Total corrected area</label>
-	      <help>Surface area estimation for rasters.</help>
-	      <keywords>raster,surface,statistics</keywords>
+	      <help>Prints estimation of surface area for raster map.</help>
+	      <keywords>raster,surface,statistics,area estimation</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.surf.area</command>
 	    </menuitem>
@@ -2537,6 +2537,7 @@
 	      <help>Creates, edits, and lists groups of imagery files.</help>
 	      <keywords>imagery,map management</keywords>
 	      <handler>OnEditImageryGroups</handler>
+	      <command>i.group</command>
 	    </menuitem>
 	    <menuitem>
 	      <label>Target group</label>
@@ -3082,8 +3083,8 @@
 	    <separator />
 	    <menuitem>
 	      <label>Drop table</label>
-	      <help>Removes a table from database.</help>
-	      <keywords>database,SQL</keywords>
+	      <help>Drops an attribute table.</help>
+	      <keywords>database,attribute table</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>db.droptable</command>
 	    </menuitem>
