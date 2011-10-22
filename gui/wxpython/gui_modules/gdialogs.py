@@ -913,17 +913,21 @@ class GroupDialog(wx.Dialog):
                             
         self.parent = parent
         self.defaultGroup = defaultGroup
+        self.currentGroup = self.defaultGroup
+        self.groupChanged = False
         
         self.bodySizer = self._createDialogBody()
         
         # buttons
+        btnOk = wx.Button(parent = self, id = wx.ID_OK)
         btnApply = wx.Button(parent = self, id = wx.ID_APPLY)
         btnClose = wx.Button(parent = self, id = wx.ID_CANCEL)
         
-        btnApply.SetToolTipString(_("Apply changes to selected group."))
-        btnClose.SetToolTipString(_("Close dialog, changes are not applied."))
+        btnOk.SetToolTipString(_("Apply changes to selected group and close dialog"))
+        btnApply.SetToolTipString(_("Apply changes to selected group"))
+        btnClose.SetToolTipString(_("Close dialog, changes are not applied"))
 
-        btnApply.SetDefault()
+        btnOk.SetDefault()
         
         # sizers & do layout
         # btnSizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -932,6 +936,7 @@ class GroupDialog(wx.Dialog):
         # btnSizer.Add(item = btnApply, proportion = 0,
         #              flag = wx.LEFT, border = 5)
         btnSizer = wx.StdDialogButtonSizer()
+        btnSizer.AddButton(btnOk)
         btnSizer.AddButton(btnApply)
         btnSizer.AddButton(btnClose)
         btnSizer.Realize()
@@ -949,6 +954,7 @@ class GroupDialog(wx.Dialog):
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)
         
+        btnOk.Bind(wx.EVT_BUTTON, self.OnOk)
         btnApply.Bind(wx.EVT_BUTTON, self.OnApply)
         btnClose.Bind(wx.EVT_BUTTON, self.OnClose)
 
@@ -1019,6 +1025,7 @@ class GroupDialog(wx.Dialog):
         for layer in layers:
             if layer not in self.GetLayers():
                 self.layerBox.Append(layer)
+                self.groupChanged = True
             
     
     def OnRemoveLayer(self, event):
@@ -1026,6 +1033,7 @@ class GroupDialog(wx.Dialog):
         while self.layerBox.GetSelections():
             sel = self.layerBox.GetSelections()[0]
             self.layerBox.Delete(sel)
+            self.groupChanged = True
                 
     def GetLayers(self):
         """!Get layers"""
@@ -1033,12 +1041,33 @@ class GroupDialog(wx.Dialog):
         
     def OnGroupSelected(self, event):
         """!Text changed in group selector"""
+        # callAfter must be called to close popup before other actions
+        wx.CallAfter(self.GroupSelected)
+        
+    def GroupSelected(self):
+        """!Group was selected, check if changes were apllied"""
         group = self.GetSelectedGroup()
+        if self.groupChanged:
+            dlg = wx.MessageDialog(self, message = _("Group <%s> was changed, "
+                                                     "do you want to apply changes?") % self.currentGroup,
+                                   caption = _("Unapplied changes"),
+                                   style = wx.YES_NO | wx.ICON_QUESTION | wx.YES_DEFAULT)
+            if dlg.ShowModal() == wx.ID_YES:
+                self.ApplyChanges(showResult = True)
+                
+            dlg.Destroy()
+            
+            
         
         groups = self.GetExistGroups()
         if group in groups:
             self.ShowGroupLayers(self.GetGroupLayers(group))
             
+        self.currentGroup = group
+        self.groupChanged = False
+        
+        self.ClearNotification()
+        
     def ShowGroupLayers(self, mapList):
         """!Show map layers in currently selected group"""
         self.layerBox.Set(mapList)
@@ -1073,7 +1102,7 @@ class GroupDialog(wx.Dialog):
                                   group = group,
                                   input = ','.join(add))
                             
-        self.ShowResult(group = group, returnCode = ret, create = False)
+        return ret
         
     def CreateNewGroup(self, group):
         """!Create new group"""
@@ -1082,8 +1111,8 @@ class GroupDialog(wx.Dialog):
                               parent = self,
                               group = group,
                               input = layers)
-                              
-        self.ShowResult(group = group, returnCode = ret, create = True)
+        return ret
+        
                         
     def GetExistGroups(self):
         """!Returns existing groups in current mapset"""
@@ -1119,15 +1148,17 @@ class GroupDialog(wx.Dialog):
                               flags = 'g',
                               group = group,
                               read = True).strip()
-        return res.split('\n')
+        if res.split('\n')[0]:
+            return res.split('\n')
+        return []
         
     def ClearNotification(self):
         """!Clear notification string"""
         self.infoLabel.SetLabel("")
-        
-    def OnApply(self, event):
+       
+    def ApplyChanges(self, showResult):
         """!Create or edit group"""
-        group = self.GetSelectedGroup()
+        group = self.currentGroup
         if not group:
             gcmd.GMessage(parent = self,
                           message = _("No group selected."))
@@ -1135,9 +1166,23 @@ class GroupDialog(wx.Dialog):
         
         groups = self.GetExistGroups()
         if group in groups:
-            self.EditGroup(group)
+            ret = self.EditGroup(group)
+            self.ShowResult(group = group, returnCode = ret, create = False)
+            
         else:
-            self.CreateNewGroup(group)
+            ret = self.CreateNewGroup(group)
+            self.ShowResult(group = group, returnCode = ret, create = True)
+            
+        self.groupChanged = False
+        
+    def OnApply(self, event):
+        """!Apply changes"""
+        self.ApplyChanges(showResult = True)
+        
+    def OnOk(self, event):
+        """!Apply changes and close dialog"""
+        self.ApplyChanges(showResult = False)
+        self.OnClose(event)
         
     def OnClose(self, event):
         """!Close dialog"""
