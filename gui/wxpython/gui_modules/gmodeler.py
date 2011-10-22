@@ -3111,9 +3111,11 @@ class WriteModelFile:
         if self.properties['name']:
             self.fd.write('%s<name>%s</name>\n' % (' ' * self.indent, self.properties['name']))
         if self.properties['description']:
-            self.fd.write('%s<description>%s</description>\n' % (' ' * self.indent, self.properties['description']))
+            self.fd.write('%s<description>%s</description>\n' % (' ' * self.indent,
+                                                                 utils.EncodeString(self.properties['description'])))
         if self.properties['author']:
-            self.fd.write('%s<author>%s</author>\n' % (' ' * self.indent, self.properties['author']))
+            self.fd.write('%s<author>%s</author>\n' % (' ' * self.indent,
+                                                       utils.EncodeString(self.properties['author'])))
         
         if 'overwrite' in self.properties and \
                 self.properties['overwrite']:
