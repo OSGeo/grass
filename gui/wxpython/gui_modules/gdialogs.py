@@ -1162,7 +1162,7 @@ class GroupDialog(wx.Dialog):
         if not group:
             gcmd.GMessage(parent = self,
                           message = _("No group selected."))
-            return
+            return False
         
         groups = self.GetExistGroups()
         if group in groups:
@@ -1175,14 +1175,16 @@ class GroupDialog(wx.Dialog):
             
         self.groupChanged = False
         
+        return True
+        
     def OnApply(self, event):
         """!Apply changes"""
         self.ApplyChanges(showResult = True)
         
     def OnOk(self, event):
         """!Apply changes and close dialog"""
-        self.ApplyChanges(showResult = False)
-        self.OnClose(event)
+        if self.ApplyChanges(showResult = False):
+            self.OnClose(event)
         
     def OnClose(self, event):
         """!Close dialog"""
