@@ -3,7 +3,10 @@
 <em>v.colors</em> allows the user to create and/or modify the color
 table for a vector map. The vector map (specified on the command line
 by <b>map</b>) must exist in the user's current mapset search path.
-
+<p>
+As input a vector map with a numeric data column is required which is
+used to apply the color rules. The color values are stored in a string
+column (default name "GRASSRGB") by saving the R:G:B values.
 <p>
 The <b>rast</b> option allows user to specify a raster map <i>name</i>
 from which to copy the color map.
