@@ -49,6 +49,7 @@ int main(int argc, char *argv[])
     lsat_data lsat;
     char band_in[GNAME_MAX], band_out[GNAME_MAX];
     int i, j, q, method, pixel, dn_dark[MAX_BANDS], dn_mode[MAX_BANDS];
+    int overwrite;
     double qcal, rad, ref, percent, ref_mode, sat_zenith, rayleigh;
     
     struct Colors colors;
@@ -67,7 +68,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("landsat"));
     G_add_keyword(_("top-of-atmosphere reflectance"));
     G_add_keyword(_("dos-type simple atmospheric correction"));
-
+    module->overwrite = TRUE;
+    
     /* It defines the different parameters */
     input_prefix = G_define_option();
     input_prefix->key = "input_prefix";
@@ -210,6 +212,8 @@ int main(int argc, char *argv[])
     inputname = input_prefix->answer;
     outputname = output_prefix->answer;
     sensorname = sensor -> answer ? sensor->answer: "";
+    
+    overwrite = G_check_overwrite(argc, argv);
     
     G_zero(&lsat, sizeof(lsat));
     
@@ -469,9 +473,20 @@ int main(int argc, char *argv[])
     for (i = 0; i < lsat.bands; i++) {
 	sprintf(band_in, "%s%d", inputname, lsat.band[i].code);
 	sprintf(band_out, "%s%d", outputname, lsat.band[i].code);
-
+	
 	if ((infd = Rast_open_old(band_in, "")) < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), band_in);
+	
+	if (G_find_raster2(band_out, "")) {
+	    if (overwrite) {
+		G_warning(_("Raster map <%s> already exists and will be overwritten"), band_out);
+	    }
+	    else {
+		G_warning(_("Raster map <%s> exists. Skipping."), band_out);
+		continue;
+	    }
+	}
+	
 	in_data_type = Rast_get_map_type(infd);
 	Rast_get_cellhd(band_in, "", &cellhd);
 
