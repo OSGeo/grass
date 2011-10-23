@@ -67,6 +67,13 @@ instead of creating color table.
 <div class="code"><pre>
 v.db.addcolumn map=soils_general column="GRASSRGB varchar(12)"
 v.colors map=soils_general layer=1 color=wave column=AREA rgb_column=GRASSRGB
+
+# See some GRASSRGB values:
+v.db.select map=soils_general | head -n 4
+cat|OBJECTID|AREA|PERIMETER|GSLNC250_|GSLNC250_I|GSL_NAME|GRASSRGB
+1|1|0|164616.125|2|1|NC113|212:42:127
+2|2|0|30785.529297|3|2|NC096|212:42:127
+3|3|0|87572.882812|4|3|NC097|212:42:127
 </pre></div>
 
 <h2>SEE ALSO</h2>
