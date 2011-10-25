@@ -296,6 +296,7 @@ class DisplayAttributesDialog(wx.Dialog):
                 sql = sql.encode(enc)
             
             gcmd.RunCommand('db.execute',
+                            parent = self,
                             quiet = True,
                             input = '-',
                             stdin = sql)
