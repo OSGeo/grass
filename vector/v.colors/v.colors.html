@@ -6,7 +6,9 @@ by <b>map</b>) must exist in the user's current mapset search path.
 <p>
 As input a vector map with a numeric data column is required which is
 used to apply the color rules. The color values are stored in a string
-column (default name "GRASSRGB") by saving the R:G:B values.
+column (default name "GRASSRGB", varchar(11)) by saving the RRR:GGG:BBB
+values suitable for use with '<tt>d.vect -a</tt>'. If this RGB column
+is not found in the attribute table, it is automatically created.
 <p>
 The <b>rast</b> option allows user to specify a raster map <i>name</i>
 from which to copy the color map.
