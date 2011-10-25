@@ -392,6 +392,8 @@ class Model(object):
         """!Validate model, return None if model is valid otherwise
         error string"""
         errList = list()
+
+        pattern = re.compile(r'(.*)(%.+\s?)(.*)')
         for action in self.GetItems(objType = ModelAction):
             cmd = action.GetLog(string = False, substitute = True)
             
@@ -402,8 +404,16 @@ class Model(object):
                 if '=' not in opt:
                     continue
                 key, value = opt.split('=', 1)
-                if '%' in value:
-                    errList.append(_("%s: undefined variable '%s'") % (cmd[0], value.strip()))
+                sval = pattern.search(value)
+                if sval:
+                    var = sval.group(2).strip()[1:] # ignore '%'
+                    report = True
+                    for item in filter(lambda x: isinstance(x, ModelLoop), action.GetBlock()):
+                        if var in item.GetText():
+                            report = False
+                            break
+                    if report:
+                        errList.append(_("%s: undefined variable '%s'") % (cmd[0], var))
         
         return errList
 
@@ -4862,7 +4872,7 @@ if __name__ == "__main__":
             variables = self.model.GetVariables()
             cond = item.GetText()
             for variable in variables:
-                pattern= re.compile('%' + variable)
+                pattern = re.compile('%' + variable)
                 if pattern.search(cond):
                     value = variables[variable].get('value', '')
                     if variables[variable].get('type', 'string') == 'string':
