@@ -88,13 +88,13 @@ int main(int argc, char *argv[])
     
     for (iopt = 0; iopt < 2; iopt++) {
 	itype[iopt] = Vect_option_to_types(parm.type[iopt]);
-	ifield[iopt] = atoi(parm.field[iopt]->answer);
 
 	Vect_check_input_output_name(parm.input[iopt]->answer, parm.output->answer,
 				     GV_FATAL_EXIT);
 
 	Vect_set_open_level(2);
-	Vect_open_old(&(In[iopt]), parm.input[iopt]->answer, "");
+	Vect_open_old2(&(In[iopt]), parm.input[iopt]->answer, "", parm.field[iopt]->answer);
+	ifield[iopt] = Vect_get_field_number(&(In[iopt]), parm.field[iopt]->answer);
     }
 
     /* Alloc space for input lines array */
