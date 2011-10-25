@@ -85,7 +85,8 @@ int main(int argc, char *argv[])
 
     module->description =
 	_("Converts a vector map to any of the supported OGR vector formats.");
-
+    module->overwrite = TRUE;
+    
     /* parse & read options */
     parse_args(argc, argv, &options, &flags);
 
