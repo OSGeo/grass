@@ -290,23 +290,7 @@ class Model(object):
             
             self.AddItem(actionItem)
             
-            task = actionItem.GetTask()
-            parameterized = False
-            valid = True
-            for f in task.get_options()['flags']:
-                if f.get('parameterized', False):
-                    parameterized = True
-                    break
-            for p in task.get_options()['params']:
-                if p.get('required', 'no') != 'no' and \
-                        p.get('value', '') == '' and \
-                        p.get('default', '') == '':
-                    valid = False
-                if p.get('parameterized', False):
-                    parameterized = True
-            
-            actionItem.SetValid(valid)
-            actionItem.SetParameterized(parameterized)
+            actionItem.SetValid(actionItem.GetTask().get_options())
             actionItem.GetLog() # substitute variables (-> valid/invalid)
         
         # load data & relations
@@ -1283,7 +1267,7 @@ class ModelFrame(wx.Frame):
         # show properties dialog
         win = action.GetPropDialog()
         if not win:
-            if len(action.GetLog(string = False)) > 1:
+            if action.IsValid():
                 self.GetOptData(dcmd = action.GetLog(string = False), layer = action,
                                 params = action.GetParams(), propwin = None)
             else:
@@ -1389,28 +1373,8 @@ class ModelFrame(wx.Frame):
                     self.AddLine(rel)
                     data.Update()
             
-            # valid ?
-            valid = True
-            for p in params['params']:
-                if p.get('required', False) and \
-                        p.get('value', '') == '' and \
-                        p.get('default', '') == '':
-                    valid = False
-                    break
-            layer.SetValid(valid)
-
-            # parameterized ?
-            parameterized = False
-            for f in params['flags']:
-                if f.get('parameterized', False):
-                    parameterized = True
-                    break
-            if not parameterized:
-                for p in params['params']:
-                    if p.get('parameterized', False):
-                        parameterized = True
-                        break
-            layer.SetParameterized(parameterized)
+            # valid / parameterized ?
+            layer.SetValid(params)
             
             self.canvas.Refresh()
         
@@ -1502,15 +1466,7 @@ class ModelFrame(wx.Frame):
         
         # final updates
         for action in self.model.GetItems(objType = ModelAction):
-            valid = True
-            params = action.GetParams()
-            for p in params['params']:
-                if p.get('required', False) and \
-                        p.get('value', '') == '' and \
-                        p.get('default', '') == '':
-                    valid = False
-                    break
-            action.SetValid(valid)
+            action.SetValid(action.GetParams())
             action.Update()
         
         self.canvas.Refresh(True)
@@ -1790,7 +1746,10 @@ class ModelAction(ModelObject, ogl.RectangleShape):
             self._setPen()
             self._setBrush()
             self.SetId(id)
-            
+        
+        if self.task:
+            self.SetValid(self.task.get_options())
+        
     def _setBrush(self, running = False):
         """!Set brush"""
         if running:
@@ -1919,17 +1878,35 @@ class ModelAction(ModelObject, ogl.RectangleShape):
                 self.task.set_param(p['name'],
                                     p.get('value', ''))
         
-    def SetValid(self, isvalid):
-        """!Set instance to be valid/invalid"""
-        self.isValid = isvalid
-        self._setBrush()
+    def SetValid(self, options):
+        """!Set validity for action
         
-    def SetParameterized(self, isparameterized):
-        """!Set action parameterized"""
-        self.isParameterized = isparameterized
-        if self.parent.GetCanvas():                
+        @param options dictionary with flags and params (gtask)
+        """
+        self.isValid = True
+        self.isParameterized = False
+        
+        for f in options['flags']:
+            if f.get('parameterized', False):
+                self.IsParameterized = True
+                break
+        
+        for p in options['params']:
+            if self.isValid and p.get('required', False) and \
+                    p.get('value', '') == '' and \
+                    p.get('default', '') == '':
+                self.isValid = False
+            if not self.isParameterized and p.get('parameterized', False):
+                self.isParameterized = True
+        
+        if self.parent.GetCanvas():
+            self._setBrush()
             self._setPen()
         
+    def IsValid(self):
+        """!Check validity (all required parameters set)"""
+        return self.isValid
+    
     def IsParameterized(self):
         """!Check if action is parameterized"""
         return self.isParameterized
@@ -1956,7 +1933,7 @@ class ModelAction(ModelObject, ogl.RectangleShape):
         self._setBrush()
         self._setPen()
         ogl.RectangleShape.OnDraw(self, dc)
-    
+
 class ModelData(ModelObject, ogl.EllipseShape):
     def __init__(self, parent, x, y, value = '', prompt = '', width = None, height = None):
         """Data item class
