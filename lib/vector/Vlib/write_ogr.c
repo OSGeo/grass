@@ -72,7 +72,7 @@ off_t V1_write_line_ogr(struct Map_info *Map, int type,
     }
 
     cat = -1; /* no attributes to be written */
-    if (cats->n_cats > 0) {
+    if (cats->n_cats > 0 && Map->dblnk->n_fields > 0) {
 	/* check for attributes */
 	Fi = Vect_get_dblink(Map, 0);
 	if (Fi) {
