@@ -244,7 +244,7 @@ class DisplayAttributesDialog(wx.Dialog):
                     sqlString = sqlString[:-1] # remove last comma
                     sqlString += ")"
                 else:
-                    sqlString += " WHERE cat=%s" % cat
+                    sqlString += " WHERE %s=%s" % (key, cat)
                 sqlCommands.append(sqlString)
             # for each category
         # for each layer END
@@ -288,18 +288,25 @@ class DisplayAttributesDialog(wx.Dialog):
 
     def OnSubmit(self, event):
         """!Submit records"""
+        layer = 1
         for sql in self.GetSQLString(updateValues = True):
             enc = UserSettings.Get(group = 'atm', key = 'encoding', subkey = 'value')
             if not enc and 'GRASS_DB_ENCODING' in os.environ:
                 enc = os.environ['GRASS_DB_ENCODING']
             if enc:
                 sql = sql.encode(enc)
-            
+
+            driver, database = self.mapDBInfo.GetDbSettings(layer)
+            Debug.msg(1, "SQL: %s" % sql)
             gcmd.RunCommand('db.execute',
                             parent = self,
                             quiet = True,
                             input = '-',
-                            stdin = sql)
+                            stdin = sql,
+                            driver = driver,
+                            database = database)
+            
+            layer += 1
         
         if self.closeDialog.IsChecked():
             self.OnCancel(event)
