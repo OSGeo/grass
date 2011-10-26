@@ -159,7 +159,7 @@ class VDigitWindow(BufferedWindow):
                 addRecordDlg = dbm_dialogs.DisplayAttributesDialog(parent = self, map = mapLayer,
                                                                    cats = cats,
                                                                    pos = posWindow,
-                                                                   action = "add")
+                                                                   action = "add", ignoreError = True)
                 
                 if self.toolbar.GetAction('type') == 'centroid':
                     for fid in fids:
@@ -350,7 +350,8 @@ class VDigitWindow(BufferedWindow):
                 # upgrade dialog
                 self.parent.dialogs['attributes'].UpdateDialog(cats = cats)
            
-            if self.parent.dialogs['attributes']:
+            if self.parent.dialogs['attributes'] and \
+                    self.parent.dialogs['attributes'].mapDBInfo:
                 if len(cats.keys()) > 0:
                     # highlight feature & re-draw map
                     if not self.parent.dialogs['attributes'].IsShown():
@@ -883,7 +884,7 @@ class VDigitWindow(BufferedWindow):
                     addRecordDlg = dbm_dialogs.DisplayAttributesDialog(parent = self, map = mapName,
                                                                        cats = cats,
                                                                        pos = posWindow,
-                                                                       action = "add")
+                                                                       action = "add", ignoreError = True)
                     
                     for fid in fids:
                         self._geomAttrb(fid, addRecordDlg, 'length')
