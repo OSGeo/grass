@@ -1,16 +1,13 @@
 <h2>DESCRIPTION</h2>
 
-
 <em>i.cluster</em>
 performs the first pass in the GRASS two-pass unsupervised 
 classification of imagery, while the GRASS program <em>
-<a href="i.maxlik.html">i.maxlik</A></em> executes 
+<a href="i.maxlik.html">i.maxlik</a></em> executes 
 the second pass. Both programs must be run to complete the unsupervised 
 classification.
 
-
 <p>
-
 <em>i.cluster</em> is a clustering algorithm that reads
 through the (raster) imagery data and builds pixel clusters
 based on the spectral reflectances of the pixels (see Figure).
@@ -49,7 +46,7 @@ and the row and column sampling intervals.
 The cluster spectral signatures that result are composed of
 cluster means and covariance matrices.  These cluster means
 and covariance matrices are used in the second pass 
-(<em><a href="i.maxlik.html">i.maxlik</A></em>) to
+(<em><a href="i.maxlik.html">i.maxlik</a></em>) to
 classify the image.  The clusters or spectral classes
 result can be related to land cover types on the ground.
 
@@ -62,7 +59,7 @@ that the user wishes to classify.  The <em>subgroup</em> is
 a subset of this group.  The user must create a group and
 subgroup by running the GRASS program
 
-<em><a href="i.group.html">i.group</A></em> 
+<em><a href="i.group.html">i.group</a></em> 
 
 before running <em>i.cluster</em>.  The subgroup should
 contain only the imagery band files that the user wishes to
@@ -72,7 +69,7 @@ collect map layers for classification or analysis. The
 <em>sigfile</em> is the file to contain result signatures
 which can be used as input for
 
-<em><a href="i.maxlik.html">i.maxlik</A></em>. 
+<em><a href="i.maxlik.html">i.maxlik</a></em>. 
 
 The classes value is the initial number of clusters to be
 discriminated; any parameter values left unspecified are
@@ -108,7 +105,7 @@ option, which must contain only imagery band files and more
 than one band file. The user must create a group and a
 subgroup by running the GRASS program 
 
-<em><a href="i.group.html">i.group</A></em> 
+<em><a href="i.group.html">i.group</a></em> 
 
 before
 running <em>i.cluster</em>.
@@ -118,7 +115,7 @@ running <em>i.cluster</em>.
 <dd>The name assigned to output signature file which
 contains signatures of classes and can be used as the input
 file for the GRASS program 
-<em><a href="i.maxlik.html">i.maxlik</A></em> 
+<em><a href="i.maxlik.html">i.maxlik</a></em> 
 for an unsupervised classification.
 
 <dt><b>classes=</b><em>value</em> 
@@ -137,7 +134,7 @@ from a previously run of <em>i.cluster</em> or from a
 supervised classification signature training site section
 (e.g., using the signature file output by
 
-<em><a href="i.class.html">i.class</A></em>). 
+<em><a href="i.class.html">i.class</a></em>). 
 
 The purpose of seed signatures is to optimize the cluster
 decision boundaries (means) for the number of clusters
@@ -157,7 +154,7 @@ predicted to achieve the optimum percent convergence. The
 default value is 30. If the number of iterations reaches
 the maximum designated by the user; the user may want to
 rerun <em>i.cluster</em> with a higher number of iterations
-(see <a href="#reportfile"><em>reportfile</em></A>).
+(see <a href="#reportfile"><em>reportfile</em></a>).
 
 <br>
 
@@ -183,7 +180,7 @@ number of iterations. If the maximum number of iterations
 is reached, it is probable that the desired percent
 convergence was not reached. The number of iterations is
 reported in the cluster statistics in the report file
-(see <a href="#reportfile"><em>reportfile</em></A>).
+(see <a href="#reportfile"><em>reportfile</em></a>).
 
 <br>
 
@@ -201,7 +198,7 @@ minimum class (or cluster) separation is increased, the
 maximum number of iterations should also be increased to
 achieve this separation with a high percentage of
 convergence
-(see <a href="#convergence"><em>convergence</em></A>).
+(see <a href="#convergence"><em>convergence</em></a>).
 
 <br>
 
@@ -218,7 +215,7 @@ calculated.
 
 Default: 17
 
-<A NAME="reportfile"></A>
+<A NAME="reportfile"></a>
 <dt><b>reportfile=</b><em>name</em>
 
 <dd>The reportfile is an optional parameter which contains
@@ -226,7 +223,6 @@ the result, i.e., the statistics for each cluster. Also
 included are the resulting percent convergence for the
 clusters, the number of iterations that was required to
 achieve the convergence, and the separability matrix.
-
 </dl>
 
 
@@ -240,16 +236,16 @@ existed.
 <h2>SEE ALSO</h2>
 
 The GRASS 4 <em>
-<a href="http://grass.itc.it/gdp/imagery/grass4_image_processing.pdf">Image
-Processing manual</A></em>
+<a href="http://grass.osgeo.org/gdp/imagery/grass4_image_processing.pdf">Image
+Processing manual</a></em>
 
 <p>
 
 <em>
-<a href="i.class.html">i.class</A><br>
-<a href="i.group.html">i.group</A><br>
-<a href="i.gensig.html">i.gensig</A><br>
-<a href="i.maxlik.html">i.maxlik</A>
+<a href="i.class.html">i.class</a>,
+<a href="i.group.html">i.group</a>,
+<a href="i.gensig.html">i.gensig</a>,
+<a href="i.maxlik.html">i.maxlik</a>
 </em>
 
 <h2>AUTHORS</h2>
@@ -259,7 +255,6 @@ U.S.Army Construction Engineering
 Research Laboratory
 
 <br>
-
 Tao Wen, 
 University of Illinois at 
 Urbana-Champaign, 
