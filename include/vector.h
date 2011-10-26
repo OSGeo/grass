@@ -103,6 +103,7 @@ int Vect_map_add_dblink(struct Map_info *, int, const char *,
 			const char *, const char *, const char *,
 			const char *);
 int Vect_map_del_dblink(struct Map_info *, int);
+void Vect_copy_map_dblinks(const struct Map_info *, struct Map_info *, int);
 int Vect_map_check_dblink(const struct Map_info *, int, const char *);
 int Vect_read_dblinks(struct Map_info *);
 int Vect_write_dblinks(struct Map_info *);
