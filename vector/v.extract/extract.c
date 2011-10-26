@@ -194,7 +194,7 @@ int extract_line(int num_index, int *num_array, struct Map_info *In,
 		 struct Map_info *Out, int new, int select_type, int dissolve,
 		 int field, int type_only, int reverse)
 {
-    int line, nlines, is_ogr;
+    int line, nlines, native;
     struct line_pnts *Points;
     struct line_cats *Line_Cats_Old, *CCats;
 
@@ -220,10 +220,10 @@ int extract_line(int num_index, int *num_array, struct Map_info *In,
     qsort(cats_array, ncats_array, sizeof(int), cmp);
 
     /* writting OGR layers directly */
-    is_ogr = Vect_maptype(Out) == GV_FORMAT_OGR_DIRECT;
-    if (is_ogr && Vect_level(In) < 2)
+    native = Vect_maptype(Out) == GV_FORMAT_NATIVE;
+    if (!native && Vect_level(In) < 2)
 	G_warning(_("Topology level required for extracting areas "
-		    "for OGR layers"));
+		    "for OGR layers. Areas will be not processed."));
     
     /* Cycle through all lines */
     nlines = Vect_get_num_lines(In);
@@ -243,7 +243,7 @@ int extract_line(int num_index, int *num_array, struct Map_info *In,
 	type = Vect_read_line(In, Points, Line_Cats_Old, line);
 	G_debug(3, "type = %d ncats = %d", type, Line_Cats_Old->n_cats);
 
-	if (is_ogr && type == GV_BOUNDARY)
+	if (!native && type == GV_BOUNDARY)
 	    /* OGR layers writes areas as polygons */
 	    continue;
 	    
@@ -388,7 +388,7 @@ int extract_line(int num_index, int *num_array, struct Map_info *In,
 	if (write) {
 	    extract_cats(Line_Cats_Old, type_only, field, new, reverse);
 
-	    if (is_ogr && type == GV_CENTROID && area > 0)
+	    if (!native && type == GV_CENTROID && area > 0)
 		extract_area(In, Out, area, Points, Line_Cats_Old, field);
 	    else
 		Vect_write_line(Out, type, Points, Line_Cats_Old);
