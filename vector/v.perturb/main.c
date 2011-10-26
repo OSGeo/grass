@@ -52,6 +52,7 @@ int main(int argc, char **argv)
     struct
     {
 	struct Option *in, *out, *dist, *pars, *min, *seed, *field;
+	struct Flag *no_topo;
     } parm;
 
     G_gisinit(argv[0]);
@@ -103,6 +104,11 @@ int main(int argc, char **argv)
     parm.seed->answer = "0";
     parm.seed->description = _("Seed for random number generation");
     
+    parm.no_topo = G_define_flag();
+    parm.no_topo->key = 'b';
+    parm.no_topo->description =
+	_("Do not build topology for output vector");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -137,7 +143,7 @@ int main(int argc, char **argv)
 
     /* Open input */
     Vect_set_open_level(2);
-    Vect_open_old2(&In, parm.in->answer, "", parm.field->answer);
+    Vect_open_old_head2(&In, parm.in->answer, "", parm.field->answer);
     
     field = Vect_get_field_number(&In, parm.field->answer);
     
@@ -157,16 +163,29 @@ int main(int argc, char **argv)
 
     nlines = Vect_get_num_lines(&In);
 
+    /* Close input, re-open on level 1 */
+    Vect_close(&In);
+    Vect_set_open_level(1);
+    Vect_open_old2(&In, parm.in->answer, "", parm.field->answer);
+
     i = 0;
-    for (line = 1; line <= nlines; line++) {
-	int type;
+    line = 0;
+    while (1) {
+	int type = Vect_read_next_line(&In, Points, Cats);
 
-	type = Vect_read_line(&In, Points, Cats, line);
-
-	if (field != -1 && !Vect_cat_get(Cats, field, NULL))
-	    continue;
+	/* Note: check for dead lines is not needed, because they are skipped by V1_read_next_line_nat() */
+	if (type == -1) {
+	    G_fatal_error(_("Unable to read vector map"));
+	}
+	else if (type == -2) {
+	    break;
+	}
+	G_percent(line++, nlines, 4);
 
 	if (type & GV_POINT) {
+	    if (field != -1 && !Vect_cat_get(Cats, field, NULL))
+		continue;
+
 	    if (i >= 800) {
 		/* Generate some more random numbers */
 		myrng(numbers, 1000, rng, p1 - min, p2);
@@ -177,7 +196,8 @@ int main(int argc, char **argv)
 	    G_debug(debuglevel, "x:      %f y:      %f", Points->x[0],
 		    Points->y[0]);
 
-	    /* perturb *//* TODO: tends to concentrate in box corners when min is used */
+	    /* perturb */
+	    /* TODO: tends to concentrate in box corners when min is used */
 	    if (numbers2[i] >= 0) {
 		if (numbers[i] >= 0) {
 		    G_debug(debuglevel, "deltax: %f", numbers[i] + min);
@@ -207,6 +227,7 @@ int main(int argc, char **argv)
 
 	Vect_write_line(&Out, type, Points, Cats);
     }
+    G_percent(1, 1, 1);
 
     /* Copy tables */
     n = Vect_get_num_dblinks(&In);
@@ -233,7 +254,8 @@ int main(int argc, char **argv)
 
     Vect_close(&In);
 
-    Vect_build(&Out);
+    if (!parm.no_topo->answer)
+	Vect_build(&Out);
     Vect_close(&Out);
 
     return (EXIT_SUCCESS);
