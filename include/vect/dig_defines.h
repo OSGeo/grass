@@ -117,27 +117,24 @@
 /*! \brief Vector map close code */
 #define VECT_CLOSED_CODE 0x22AA2255
 
-/*! \brief Vector level
-
-  - 1 without topology
-  - 2 topology
-  - 3 ?
-*/
+/*! \brief Vector level - without topology */
 #define LEVEL_1  1
+/*! \brief Vector level - with topology */
 #define LEVEL_2  2
+/*! \brief Vector level - ? */
 #define LEVEL_3  3
 
-/*! \brief Topology level details */
-/*! \brief Nothing to build */
+/*! \brief Topology levels - nothing to build */
 #define GV_BUILD_NONE         0
-/*! \brief Basic level */
+/*! \brief Topology levels - basic level (without areas and isles) */
 #define GV_BUILD_BASE         1
-/*! \brief Build areas */
+/*! \brief Topology levels - build areas */
 #define GV_BUILD_AREAS        2
-/*! \brief Attach islands to areas */
+/*! \brief Topology levels - attach islands to areas */
 #define GV_BUILD_ATTACH_ISLES 3
-/*! \brief Assign centroids to areas */
+/*! \brief Topology levels - assign centroids to areas */
 #define GV_BUILD_CENTROIDS    4
+/*! \brief Topology levels - build everything (currently same as GV_BUILD_CENTROIDS) */
 #define GV_BUILD_ALL          GV_BUILD_CENTROIDS
 
 /*! \brief Check if vector map is open */

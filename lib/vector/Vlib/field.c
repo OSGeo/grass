@@ -155,11 +155,41 @@ int Vect_map_del_dblink(struct Map_info *Map, int field)
 }
 
 /*!
+  \brief Copy DB links from input vector map to output vector map
+
+  \param In pointer to Map_info structure (input)
+  \param Out pointer to Map_info structure (output)
+  \param first_only copy only first link
+*/
+void Vect_copy_map_dblinks(const struct Map_info *In, struct Map_info *Out,
+			   int first_only)
+{
+    int i, ndblinks;
+    struct field_info *Fi;
+    
+    ndblinks = Vect_get_num_dblinks(In);
+    for (i = 0; i < ndblinks; i++) {
+	Fi = Vect_get_dblink(In, 0);
+	if (!Fi) {
+	    G_warning(_("Database connection not defined. Skipping."));
+	    continue;
+	}
+	Vect_map_add_dblink(Out, Fi->number, Fi->name, Fi->table, Fi->key,
+			    Fi->database, Fi->driver);
+	
+	if (first_only && ndblinks > 1)
+	    G_warning(_("More DB links defined for input vector map. "
+			"Using only first DB link for output."));
+    }
+}
+
+/*!
   \brief Check if DB connection exists in dblinks structure
 
   \param Map pointer to Map_info structure
   \param field layer number
-
+  \param name layer name
+  
   \return 1 dblink for field exists
   \return 0 dblink does not exist for field
  */
@@ -453,6 +483,9 @@ struct field_info *Vect_get_field_by_name(const struct Map_info *Map, const char
 /*!
   \brief Get information about link to database (by layer number or layer name)
   
+  Note: if <em>field</em> is -1 then the function returns the first
+  dblink or NULL
+  
   \param Map pointer to Map_info structure
   \param field layer number or name
   
@@ -474,8 +507,16 @@ struct field_info *Vect_get_field2(const struct Map_info *Map, const char *field
 	if (fi)
 	    return fi;
     }
+    else if (ifield == -1) {
+      if (Vect_get_num_dblinks(Map) > 0)
+	  return Vect_get_dblink(Map, 0); /* return first */
+      else
+	  return NULL;
+    }
+    else if (ifield == 0)
+	return Vect_get_field_by_name(Map, field);
 
-    return Vect_get_field_by_name(Map, field);
+    return NULL;
 }
 
 /*!
