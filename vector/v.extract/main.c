@@ -43,7 +43,7 @@ static void add_cat(int);
 
 int main(int argc, char **argv)
 {
-    int i, new_cat, type, ncats, *cats, c, is_ogr;
+    int i, new_cat, type, ncats, *cats, c, native;
     int field, dissolve, x, y, type_only;
     char buffr[1024], text[80];
     char *input, *output;
@@ -349,16 +349,10 @@ int main(int argc, char **argv)
     
     G_message(_("Extracting features..."));
     
-    is_ogr = Vect_maptype(&Out) == GV_FORMAT_OGR_DIRECT;
-    if (!flag.t->answer && is_ogr) {
+    native = Vect_maptype(&Out) == GV_FORMAT_NATIVE;
+    if (!flag.t->answer && !native) {
 	/* Copy attributes for OGR output */
-	if (!Fi)
-	    Fi = Vect_get_field(&In, field);
-	if (!Fi)
-	    G_fatal_error(_("Database connection not defined for layer <%s>"),
-			  opt.field->answer);
-	Vect_map_add_dblink(&Out, Fi->number, Fi->name, Fi->table, Fi->key,
-			    Fi->database, Fi->driver);
+	Vect_copy_map_dblinks(&In, &Out, TRUE);
     }
 
     extract_line(cat_count, cat_array, &In, &Out, new_cat, type, dissolve, field,
@@ -367,7 +361,7 @@ int main(int argc, char **argv)
     Vect_build(&Out);
 
     /* Copy tables */
-    if (!flag.t->answer && !is_ogr) {
+    if (!flag.t->answer && native) {
 	copy_tabs(&In, field, new_cat, &Out);
     }
     
