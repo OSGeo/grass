@@ -7,7 +7,7 @@
  * *
  * * PURPOSE:      Clean vector features
  * *               
- * * COPYRIGHT:    (C) 2001-2009 by the GRASS Development Team
+ * * COPYRIGHT:    (C) 2001-2009, 2011 by the GRASS Development Team
  * *
  * *               This program is free software under the 
  * *               GNU General Public License (>=v2). 
@@ -28,14 +28,17 @@
 int main(int argc, char *argv[])
 {
     struct Map_info In, Out, Err, *pErr;
-    int i, otype, with_z;
+    int i, otype, with_z, native;
     struct GModule *module;
-    struct Option *in_opt, *field_opt, *out_opt, *type_opt, *tool_opt, *thresh_opt,
-	*err_opt;
-    struct Flag *no_build_flag, *combine_flag;
+    struct {
+	struct Option *in, *field, *out, *type, *tool, *thresh,
+	    *err;
+    } opt;
+    struct {
+	struct Flag *no_build, *combine;
+    } flag;
     int *tools, ntools, atools;
     double *threshs;
-    int level;
     int count;
     double size;
     char *desc;
@@ -47,29 +50,31 @@ int main(int argc, char *argv[])
     G_add_keyword(_("topology"));
     module->description = _("Toolset for cleaning topology of vector map.");
 
-    in_opt = G_define_standard_option(G_OPT_V_INPUT);
-    field_opt = G_define_standard_option(G_OPT_V_FIELD_ALL);
-    field_opt->answer = "-1";
-    field_opt->guisection = _("Selection");
-    type_opt = G_define_standard_option(G_OPT_V3_TYPE);
-    type_opt->guisection = _("Selection");
+    opt.in = G_define_standard_option(G_OPT_V_INPUT);
 
-    out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
+    opt.field = G_define_standard_option(G_OPT_V_FIELD_ALL);
+    opt.field->answer = "-1";
+    opt.field->guisection = _("Selection");
 
-    err_opt = G_define_standard_option(G_OPT_V_OUTPUT);
-    err_opt->key = "error";
-    err_opt->description = _("Name of output map where errors are written");
-    err_opt->required = NO;
+    opt.type = G_define_standard_option(G_OPT_V3_TYPE);
+    opt.type->guisection = _("Selection");
 
-    tool_opt = G_define_option();
-    tool_opt->key = "tool";
-    tool_opt->type = TYPE_STRING;
-    tool_opt->required = YES;
-    tool_opt->multiple = YES;
-    tool_opt->options =
+    opt.out = G_define_standard_option(G_OPT_V_OUTPUT);
+
+    opt.err = G_define_standard_option(G_OPT_V_OUTPUT);
+    opt.err->key = "error";
+    opt.err->description = _("Name of output map where errors are written");
+    opt.err->required = NO;
+
+    opt.tool = G_define_option();
+    opt.tool->key = "tool";
+    opt.tool->type = TYPE_STRING;
+    opt.tool->required = YES;
+    opt.tool->multiple = YES;
+    opt.tool->options =
 	"break,snap,rmdangle,chdangle,rmbridge,chbridge,rmdupl,rmdac,bpol,prune,"
 	"rmarea,rmline,rmsa";
-    tool_opt->description = _("Cleaning tool");
+    opt.tool->description = _("Cleaning tool");
     desc = NULL;
     G_asprintf(&desc,
 	       "break;%s;"
@@ -104,35 +109,35 @@ int main(int argc, char *argv[])
 	       _("remove small areas, the longest boundary with adjacent area is removed"),
 	       _("remove all lines or boundaries of zero length, threshold is ignored"),
 	       _("remove small angles between lines at nodes"));
-    tool_opt->descriptions = desc;
+    opt.tool->descriptions = desc;
     
-    thresh_opt = G_define_option();
-    thresh_opt->key = "thresh";
-    thresh_opt->type = TYPE_DOUBLE;
-    thresh_opt->required = NO;
-    thresh_opt->multiple = YES;
-    thresh_opt->label = _("Threshold in map units, one value for each tool");
-    thresh_opt->description = _("Default: 0.0[,0.0,...])");
+    opt.thresh = G_define_option();
+    opt.thresh->key = "thresh";
+    opt.thresh->type = TYPE_DOUBLE;
+    opt.thresh->required = NO;
+    opt.thresh->multiple = YES;
+    opt.thresh->label = _("Threshold in map units, one value for each tool");
+    opt.thresh->description = _("Default: 0.0[,0.0,...])");
 
-    no_build_flag = G_define_flag();
-    no_build_flag->key = 'b';
-    no_build_flag->description =
+    flag.no_build = G_define_flag();
+    flag.no_build->key = 'b';
+    flag.no_build->description =
 	_("Don't build topology for the output vector");
 
-    combine_flag = G_define_flag();
-    combine_flag->key = 'c';
-    combine_flag->description =
+    flag.combine = G_define_flag();
+    flag.combine->key = 'c';
+    flag.combine->description =
 	_("Combine tools with recommended follow-up tools.");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    otype = Vect_option_to_types(type_opt);
+    otype = Vect_option_to_types(opt.type);
 
-    Vect_check_input_output_name(in_opt->answer, out_opt->answer,
+    Vect_check_input_output_name(opt.in->answer, opt.out->answer,
 				 GV_FATAL_EXIT);
-    if (err_opt->answer) {
-	Vect_check_input_output_name(in_opt->answer, err_opt->answer,
+    if (opt.err->answer) {
+	Vect_check_input_output_name(opt.in->answer, opt.err->answer,
 				     GV_FATAL_EXIT);
     }
 
@@ -142,40 +147,40 @@ int main(int argc, char *argv[])
     /* Read tools */
     ntools = 0;
     i = 0;
-    if (strlen(tool_opt->answer) < 1)
+    if (strlen(opt.tool->answer) < 1)
 	G_fatal_error(_("You must select at least one tool"));
-    while (tool_opt->answers[i]) {
+    while (opt.tool->answers[i]) {
 	if (i + 1 >= atools) {
 	    atools += 20;
 	    G_realloc(tools, atools * sizeof(int));
 	}
 
-	G_debug(1, "tool : %s", tool_opt->answers[i]);
-	if (strcmp(tool_opt->answers[i], "break") == 0)
+	G_debug(1, "tool : %s", opt.tool->answers[i]);
+	if (strcmp(opt.tool->answers[i], "break") == 0)
 	    tools[ntools] = TOOL_BREAK;
-	else if (strcmp(tool_opt->answers[i], "rmdupl") == 0)
+	else if (strcmp(opt.tool->answers[i], "rmdupl") == 0)
 	    tools[ntools] = TOOL_RMDUPL;
-	else if (strcmp(tool_opt->answers[i], "rmdangle") == 0)
+	else if (strcmp(opt.tool->answers[i], "rmdangle") == 0)
 	    tools[ntools] = TOOL_RMDANGLE;
-	else if (strcmp(tool_opt->answers[i], "chdangle") == 0)
+	else if (strcmp(opt.tool->answers[i], "chdangle") == 0)
 	    tools[ntools] = TOOL_CHDANGLE;
-	else if (strcmp(tool_opt->answers[i], "rmbridge") == 0)
+	else if (strcmp(opt.tool->answers[i], "rmbridge") == 0)
 	    tools[ntools] = TOOL_RMBRIDGE;
-	else if (strcmp(tool_opt->answers[i], "chbridge") == 0)
+	else if (strcmp(opt.tool->answers[i], "chbridge") == 0)
 	    tools[ntools] = TOOL_CHBRIDGE;
-	else if (strcmp(tool_opt->answers[i], "snap") == 0)
+	else if (strcmp(opt.tool->answers[i], "snap") == 0)
 	    tools[ntools] = TOOL_SNAP;
-	else if (strcmp(tool_opt->answers[i], "rmdac") == 0)
+	else if (strcmp(opt.tool->answers[i], "rmdac") == 0)
 	    tools[ntools] = TOOL_RMDAC;
-	else if (strcmp(tool_opt->answers[i], "bpol") == 0)
+	else if (strcmp(opt.tool->answers[i], "bpol") == 0)
 	    tools[ntools] = TOOL_BPOL;
-	else if (strcmp(tool_opt->answers[i], "prune") == 0)
+	else if (strcmp(opt.tool->answers[i], "prune") == 0)
 	    tools[ntools] = TOOL_PRUNE;
-	else if (strcmp(tool_opt->answers[i], "rmarea") == 0)
+	else if (strcmp(opt.tool->answers[i], "rmarea") == 0)
 	    tools[ntools] = TOOL_RMAREA;
-	else if (strcmp(tool_opt->answers[i], "rmsa") == 0)
+	else if (strcmp(opt.tool->answers[i], "rmsa") == 0)
 	    tools[ntools] = TOOL_RMSA;
-	else if (strcmp(tool_opt->answers[i], "rmline") == 0)
+	else if (strcmp(opt.tool->answers[i], "rmline") == 0)
 	    tools[ntools] = TOOL_RMLINE;
 	else
 	    G_fatal_error(_("Tool doesn't exist"));
@@ -191,9 +196,9 @@ int main(int argc, char *argv[])
     for (i = 0; i < ntools; i++)
 	threshs[i] = 0.0;
     i = 0;
-    while (thresh_opt->answers && thresh_opt->answers[i]) {
-	threshs[i] = atof(thresh_opt->answers[i]);
-	G_debug(1, "thresh : %s -> %f ", tool_opt->answers[i], threshs[i]);
+    while (opt.thresh->answers && opt.thresh->answers[i]) {
+	threshs[i] = atof(opt.thresh->answers[i]);
+	G_debug(1, "thresh : %s -> %f ", opt.tool->answers[i], threshs[i]);
 
 	if (threshs[i] != 0 && tools[i] != TOOL_SNAP &&
 	    tools[i] != TOOL_RMDANGLE && tools[i] != TOOL_CHDANGLE && 
@@ -265,20 +270,20 @@ int main(int argc, char *argv[])
      * virtual centroids (shapefile/OGR) and level 1 is better if input is too big 
      * and build in previous module (like v.in.ogr or other call to v.clean) would take 
      * a long time */
-    level = Vect_open_old2(&In, in_opt->answer, "", field_opt->answer);
+    Vect_open_old2(&In, opt.in->answer, "", opt.field->answer);
 
     with_z = Vect_is_3d(&In);
 
     Vect_set_fatal_error(GV_FATAL_PRINT);
-    if (0 > Vect_open_new(&Out, out_opt->answer, with_z)) {
+    if (0 > Vect_open_new(&Out, opt.out->answer, with_z)) {
 	Vect_close(&In);
 	exit(EXIT_FAILURE);
     }
 
-    if (err_opt->answer) {
+    if (opt.err->answer) {
 	Vect_set_fatal_error(GV_FATAL_PRINT);
 	Vect_set_open_level(2);
-	if (0 > Vect_open_new(&Err, err_opt->answer, with_z)) {
+	if (0 > Vect_open_new(&Err, opt.err->answer, with_z)) {
 	    Vect_close(&In);
 	    Vect_close(&Out);
 	    exit(EXIT_FAILURE);
@@ -295,11 +300,21 @@ int main(int argc, char *argv[])
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
 
-    /* This works for both level 1 and 2 */
-    Vect_copy_map_lines_field(&In, Vect_get_field_number(&In, field_opt->answer), &Out);
-    if (Vect_copy_tables(&In, &Out, 0))
-        G_warning(_("Failed to copy attribute table to output map"));
+    native = Vect_maptype(&Out) == GV_FORMAT_NATIVE;
 
+    if (!native) {
+	/* Copy attributes (OGR format) */
+	Vect_copy_map_dblinks(&In, &Out, TRUE);
+    }
+    
+    /* This works for both level 1 and 2 */
+    Vect_copy_map_lines_field(&In, Vect_get_field_number(&In, opt.field->answer), &Out);
+    
+    if (native) {
+	/* Copy attribute tables (native format only) */
+	if (Vect_copy_tables(&In, &Out, 0))
+	    G_warning(_("Failed to copy attribute table to output vector map"));
+    }
     Vect_set_release_support(&In);
     Vect_close(&In);
 
@@ -334,7 +349,7 @@ int main(int argc, char *argv[])
 	case TOOL_BREAK:
 	    G_message(_("Tool: Break lines at intersections"));
 	    Vect_break_lines(&Out, otype, pErr);
-	    if (combine_flag->answer) {
+	    if (flag.combine->answer) {
 		G_message(_("Tool: Remove duplicates"));
 		Vect_remove_duplicates(&Out, otype, pErr);
 	    }
@@ -366,7 +381,7 @@ int main(int argc, char *argv[])
 	case TOOL_SNAP:
 	    G_message(_("Tool: Snap line to vertex in threshold"));
 	    Vect_snap_lines(&Out, otype, threshs[i], pErr);
-	    if (combine_flag->answer) {
+	    if (flag.combine->answer) {
 		int nmod;
 
 		do {
@@ -383,7 +398,7 @@ int main(int argc, char *argv[])
 	case TOOL_BPOL:
 	    G_message(_("Tool: Break polygons"));
 	    Vect_break_polygons(&Out, otype, pErr);
-	    if (combine_flag->answer) {
+	    if (flag.combine->answer) {
 		G_message(_("Tool: Remove duplicates"));
 		Vect_remove_duplicates(&Out, otype, pErr);
 	    }
@@ -399,7 +414,7 @@ int main(int argc, char *argv[])
 	    break;
 	case TOOL_RMSA:
 	    G_message(_("Tool: Remove small angles at nodes"));
-	    if (!combine_flag->answer) {
+	    if (!flag.combine->answer) {
 		count =
 		    Vect_clean_small_angles_at_nodes(&Out, otype, pErr);
 	    }
@@ -426,7 +441,7 @@ int main(int argc, char *argv[])
 	G_message(SEP);
     }
 
-    if (!no_build_flag->answer) {
+    if (!flag.no_build->answer) {
 	G_important_message(_("Rebuilding topology for output vector map..."));
 	Vect_build_partial(&Out, GV_BUILD_NONE);
 	Vect_build(&Out);
