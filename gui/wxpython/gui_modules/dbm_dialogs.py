@@ -32,7 +32,7 @@ class DisplayAttributesDialog(wx.Dialog):
                  query = None, cats = None, line = None,
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
                  pos = wx.DefaultPosition,
-                 action = "add"):
+                 action = "add", ignoreError = False):
         """!Standard dialog used to add/update/display attributes linked
         to the vector map.
         
@@ -47,6 +47,7 @@ class DisplayAttributesDialog(wx.Dialog):
         @param style
         @param pos
         @param action (add, update, display)
+        @param ignoreError True to ignore errors
         """
         self.parent = parent # mapdisplay.BufferedWindow
         self.map    = map
@@ -64,17 +65,21 @@ class DisplayAttributesDialog(wx.Dialog):
 
         # check if db connection / layer exists
         if len(layers) <= 0:
-            label = _("Database connection "
-                      "is not defined in DB file.")
-
-            gcmd.GMessage(parent = self.parent,
-                          message = _("No attribute table linked to "
-                                      "vector map <%(vector)s> found. %(msg)s\n\n"
-                                      "New attribute table can be created by "
-                                      "Attribute Table Manager.") % 
-                          {'vector' : self.map, 'msg' : label})
+            if not ignoreError:
+                dlg = wx.MessageDialog(parent = self.parent,
+                                       message = _("No attribute table found.\n\n"
+                                                   "Do you want to create a new attribute table "
+                                                   "and defined a link to vector map <%s>?") % self.map,
+                                       caption = _("Create table?"),
+                                       style = wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION)
+                if dlg.ShowModal() == wx.ID_YES:
+                    lmgr = self.parent.lmgr
+                    lmgr.OnShowAttributeTable(event = None, selection = 'layers')
+                
+                dlg.Destroy()
+            
             self.mapDBInfo = None
-
+        
         wx.Dialog.__init__(self, parent = self.parent, id = wx.ID_ANY,
                            title = "", style = style, pos = pos)
 
