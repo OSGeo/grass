@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 {
     int iopt;
     int operator;
-    int nskipped, is_ogr;
+    int nskipped, native;
     int itype[2], ifield[2];
 
     int *ALines; /* List of lines: 0 do not output, 1 - write to output */
@@ -124,7 +124,7 @@ int main(int argc, char *argv[])
     finishGEOS();
 #endif
 
-    is_ogr = Vect_maptype(&Out) == GV_FORMAT_OGR_DIRECT;
+    native = Vect_maptype(&Out) == GV_FORMAT_NATIVE;
 
     nfields = Vect_cidx_get_num_fields(&(In[0]));
     cats = (int **)G_malloc(nfields * sizeof(int *));
@@ -132,20 +132,17 @@ int main(int argc, char *argv[])
     fields = (int *)G_malloc(nfields * sizeof(int));
 
     /* Write lines */
-    if (!flag.table->answer && is_ogr) {
+    if (!flag.table->answer && !native) {
 	/* Copy attributes for OGR output */
-	if (!IFi)
-	    G_fatal_error(_("Database connection not defined for layer <%s>"),
-			  parm.field[0]->answer);
-	Vect_map_add_dblink(&Out, IFi->number, IFi->name, IFi->table, IFi->key,
-			    IFi->database, IFi->driver);
+	Vect_copy_map_dblinks(&(In[0]), &Out, TRUE);
     }
+    
     write_lines(&(In[0]), IFi, ALines,
 		&Out, flag.table->answer ? 1 : 0, flag.reverse->answer ? 1 : 0,
 		nfields, fields, ncats, cats);
 
     /* Copy tables */
-    if (!flag.table->answer && !is_ogr) {
+    if (!flag.table->answer && native) {
 	copy_tabs(&(In[0]), &Out,
 		  nfields, fields, ncats, cats);
     }
