@@ -104,7 +104,7 @@ class abstract_map_dataset(abstract_dataset):
            @param end_time: A double value in days
 
         """
-        if start_time and end_time:
+        if start_time != None and end_time != None:
             if abs(float(start_time)) > abs(float(end_time)):
                 core.fatal(_("End time must be greater than start time for %s map <%s>") % (self.get_type(), self.get_id()))
             else:
@@ -161,8 +161,8 @@ class abstract_map_dataset(abstract_dataset):
         else:
             start, end = self.get_relative_time()
 
-        if start:
-            if end:
+        if start != None:
+            if end != None:
                 if start >= end:
                     core.error(_("Map <%s> has incorrect time interval, start time is greater than end time") % (self.get_id()))
                     return False

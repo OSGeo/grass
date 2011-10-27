@@ -288,8 +288,6 @@ class abstract_temporal_extent(sql_database_interface):
 	    return "started"
 	if self.finished(map):
 	    return "finished"
-	if self.equivalent(map):
-	    return "equivalent"
 	if self.follows(map):
 	    return "follows"
 	if self.precedes(map):
