@@ -28,10 +28,10 @@ import codecs
 import wx
 try:
     import wx.lib.agw.customtreectrl as CT
-#    import wx.lib.agw.hyperlink as hl
+    from wx.lib.agw.hyperlink import HyperLinkCtrl
 except ImportError:
     import wx.lib.customtreectrl as CT
-#    import wx.lib.hyperlink as hl
+    from wx.lib.hyperlink import HyperLinkCtrl
 import wx.lib.flatnotebook as FN
 import  wx.lib.scrolledpanel as scrolled
 
@@ -516,7 +516,7 @@ class AboutWindow(wx.Frame):
                           pos = (row, 0),
                           flag = wx.ALIGN_RIGHT)
 
-        infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
+        infoGridSizer.Add(item = HyperLinkCtrl(parent = infoTxt, id = wx.ID_ANY,
                                                label = 'http://grass.osgeo.org'),
                           pos = (row, 1),
                           flag = wx.ALIGN_LEFT)
