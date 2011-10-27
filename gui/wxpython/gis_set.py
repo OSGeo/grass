@@ -683,13 +683,32 @@ class GRASSStartup(wx.Frame):
         """!Create new mapset"""
         self.gisdbase = self.tgisdbase.GetValue()
         location = self.listOfLocations[self.lblocations.GetSelection()]
-
+        
         dlg = wx.TextEntryDialog(parent = self,
                                  message = _('Enter name for new mapset:'),
                                  caption = _('Create new mapset'))
-
+        
         if dlg.ShowModal() ==  wx.ID_OK:
             mapset = dlg.GetValue()
+            if mapset in self.listOfMapsets:
+                GMessage(parent = self,
+                         message = _("Mapset <%s> already exists.") % mapset)
+                return
+            
+            if mapset.lower() == 'ogr':
+                dlg1 = wx.MessageDialog(parent = self,
+                                        message = _("Mapset <%s> is reserved for direct "
+                                                    "read access to OGR layers. Please consider to use "
+                                                    "another name for your mapset.\n\n"
+                                                    "Are you really sure that you want to create this mapset?") % mapset,
+                                        caption = _("Reserved mapset name"),
+                                        style = wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION)
+                ret = dlg1.ShowModal()
+                dlg1.Destroy()
+                if ret == wx.ID_NO:
+                    dlg.Destroy()
+                    return
+            
             try:
                 os.mkdir(os.path.join(self.gisdbase, location, mapset))
                 # copy WIND file and its permissions from PERMANENT and set permissions to u+rw,go+r
@@ -699,12 +718,11 @@ class GRASSStartup(wx.Frame):
                 self.OnSelectLocation(None)
                 self.lbmapsets.SetSelection(self.listOfMapsets.index(mapset))
             except StandardError, e:
-                dlg = wx.MessageDialog(parent = self, message = _("Unable to create new mapset: %s") % e,
-                                       caption = _("Error"), style = wx.OK | wx.ICON_ERROR)
-                dlg.ShowModal()
-                dlg.Destroy()
+                GError(parent = self,
+                       message = _("Unable to create new mapset: %s") % e)
                 return False
         
+        dlg.Destroy()
         self.bstart.SetFocus()
         
         return True
