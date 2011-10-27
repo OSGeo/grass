@@ -74,29 +74,29 @@ EOF
 t.create --o type=strds temporaltype=absolute output=precip_abs title="A test with input files" descr="A test with input files"
 
 tr.register -i input=precip_abs file=$n1 start="2001-01-01" increment="1 months"
-t.info type=strds input=precip_abs
 cat $n1
-t.topology -gctmr input=precip_abs
+t.topology    input=precip_abs
+t.topology -m input=precip_abs
 
 tr.register -i input=precip_abs file=$n2 start=file
-t.info type=strds input=precip_abs
 cat $n2
-t.topology -gctmr input=precip_abs
+t.topology    input=precip_abs
+t.topology -m input=precip_abs
 
 tr.register -i input=precip_abs file=$n3 start=file end=file
-t.info type=strds input=precip_abs
 cat $n3
-t.topology -gctmr input=precip_abs
+t.topology    input=precip_abs
+t.topology -m input=precip_abs
 
 tr.register -i input=precip_abs file=$n4 start=file end=file
-t.info type=strds input=precip_abs
 cat $n4
-t.topology -gctmr input=precip_abs
+t.topology    input=precip_abs
+t.topology -m input=precip_abs
 
 tr.register -i input=precip_abs file=$n5 start=file end=file
-t.info type=strds input=precip_abs
 cat $n5
-t.topology -gctmr input=precip_abs
+t.topology    input=precip_abs
+t.topology -m input=precip_abs
 
 t.remove type=strds input=precip_abs
 t.remove type=rast file=$n1

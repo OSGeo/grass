@@ -17,6 +17,7 @@ SUBDIRS = \
 	tr3.list \
 	tr.series \
 	tr.export \
+	tr.out.vtk \
 	tr.import \
 	tr.extract \
 	tr3.register \
