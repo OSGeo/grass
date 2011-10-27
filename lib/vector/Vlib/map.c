@@ -47,6 +47,8 @@ int Vect_copy_map_lines(struct Map_info *In, struct Map_info *Out)
    \brief Copy all alive vector features from given layer of opened
    vector map to another opened vector map
 
+   Note: Try to copy on level 2 otherwise level 1 is used.
+   
    \param In input vector map
    \param field layer number (-1 for all layers)
    \param[out] Out output vector map
@@ -57,7 +59,7 @@ int Vect_copy_map_lines(struct Map_info *In, struct Map_info *Out)
 int Vect_copy_map_lines_field(struct Map_info *In, int field,
 			      struct Map_info *Out)
 {
-    int i, type, nlines, ret, left, rite, centroid;
+    int i, type, nlines, ret, left, rite, centroid, ogr;
     struct line_pnts *Points, *CPoints;
     struct line_cats *Cats, *CCats;
 
@@ -70,6 +72,7 @@ int Vect_copy_map_lines_field(struct Map_info *In, int field,
 	G_fatal_error("Vect_copy_map_lines(): %s",
 		      _("input vector map is not open"));
 
+    ogr = Vect_maptype(Out) == GV_FORMAT_OGR_DIRECT;
     ret = 0;
     /* Note: sometimes is important to copy on level 2 (pseudotopo centroids) 
      *       and sometimes on level 1 if build take too long time */
@@ -89,6 +92,11 @@ int Vect_copy_map_lines_field(struct Map_info *In, int field,
 	    if (type == 0)
 		continue;	/* dead line */
 
+	    if (ogr && (type == GV_CENTROID || type == GV_BOUNDARY))
+		/* OGR layers: centroids are stored in topo */
+		/*             polygon defined by areas (topo required) */
+		continue;
+	    
 	    /* don't skips boundaries if field != -1 */
 	    if (field != -1) {
 		if (type & GV_BOUNDARY) {
@@ -129,10 +137,30 @@ int Vect_copy_map_lines_field(struct Map_info *In, int field,
 
 	    Vect_write_line(Out, type, Points, Cats);
 	}
+
+	if (ogr) {
+	    int area, nareas;
+	    /* copy areas/polygons */
+	    nareas = Vect_get_num_areas(In);
+	    for (area = 1; area <= nareas; area++) {
+		G_debug(3, "area = %d", area);
+		Vect_get_area_points(In, area, Points);
+		centroid = Vect_get_area_centroid(In, area);
+		if (centroid > 0)
+		    Vect_read_line(In, NULL, CCats, centroid);
+		else
+		    Vect_reset_cats(CCats);
+		Vect_write_line(Out, GV_BOUNDARY, Points, CCats);
+	    }
+	}
     }
-    else {			/* Level 1 */
+    else {
+	/* Level 1 */
+	if (ogr)
+	    G_warning(_("Topology not available. Polygons will be skipped."));
+	
 	Vect_rewind(In);
-	while (1) {
+	while (TRUE) {
 	    type = Vect_read_next_line(In, Points, Cats);
 	    if (type == -1) {
 		G_warning(_("Unable to read vector map <%s>"),
