@@ -390,33 +390,37 @@ class ColorTable(wx.Frame):
         inputSizer = wx.StaticBoxSizer(inputBox, wx.VERTICAL)
         
         self.loadRules = filebrowse.FileBrowseButton(parent = parent, id = wx.ID_ANY, fileMask = '*',
-                                                size = globalvar.DIALOG_GSELECT_SIZE,
-                                                labelText = _('Load color table from file:'),
-                                                dialogTitle = _('Choose file to load color table'),
-                                                buttonText = _('Load'),
-                                                toolTip = _("Type filename or click to choose "
-                                                            "file and load color table"),
-                                                startDirectory = os.getcwd(), fileMode = wx.OPEN,
-                                                changeCallback = self.OnLoadRulesFile)
+                                                     size = globalvar.DIALOG_GSELECT_SIZE,
+                                                     labelText = _('Load color table from file:'),
+                                                     dialogTitle = _('Choose file to load color table'),
+                                                     buttonText = _('Load'),
+                                                     toolTip = _("Type filename or click to choose "
+                                                                 "file and load color table"),
+                                                     startDirectory = os.getcwd(), fileMode = wx.OPEN,
+                                                     changeCallback = self.OnLoadRulesFile)
         self.saveRules = filebrowse.FileBrowseButton(parent = parent, id = wx.ID_ANY, fileMask = '*',
-                                                size = globalvar.DIALOG_GSELECT_SIZE,
-                                                labelText = _('Save color table to file:'),
-                                                dialogTitle = _('Choose file to save color table'),
-                                                toolTip = _("Type filename or click to choose "
-                                                            "file and save color table"),
-                                                buttonText = _('Save'),
-                                                startDirectory = os.getcwd(), fileMode = wx.SAVE,
-                                                changeCallback = self.OnSaveRulesFile)
-                                
+                                                     size = globalvar.DIALOG_GSELECT_SIZE,
+                                                     labelText = _('Save color table to file:'),
+                                                     dialogTitle = _('Choose file to save color table'),
+                                                     toolTip = _("Type filename or click to choose "
+                                                                 "file and save color table"),
+                                                     buttonText = _('Save'),
+                                                     startDirectory = os.getcwd(), fileMode = wx.SAVE,
+                                                     changeCallback = self.OnSaveRulesFile)
+        
         default = wx.Button(parent = parent, id = wx.ID_ANY, label = _("Reload default table"))   
         # layout
         sizer = wx.BoxSizer(wx.HORIZONTAL)
-        sizer.Add(item = self.loadRules, flag = wx.RIGHT, border = 10)
+        sizer.Add(item = self.loadRules, proportion = 1,
+                  flag = wx.RIGHT | wx.EXPAND, border = 10)
         sizer.Add(item = default, flag = wx.ALIGN_CENTER_VERTICAL)
-        inputSizer.Add(item = sizer, flag = wx.TOP|wx.LEFT, border = 5)
+        inputSizer.Add(item = sizer,
+                       flag = wx.TOP | wx.LEFT | wx.RIGHT | wx.EXPAND, border = 5)
         sizer = wx.BoxSizer(wx.HORIZONTAL)
-        sizer.Add(item = self.saveRules, flag = wx.ALIGN_CENTER_VERTICAL)
-        inputSizer.Add(item = sizer, flag = wx.ALL, border = 5)
+        sizer.Add(item = self.saveRules, proportion = 1,
+                  flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
+        inputSizer.Add(item = sizer, proportion = 1,
+                       flag = wx.ALL | wx.EXPAND, border = 5)
         
         default.Bind(wx.EVT_BUTTON, self.OnLoadDefaultTable)
         
@@ -462,27 +466,29 @@ class ColorTable(wx.Frame):
     def _createBody(self, parent):
         """!Create dialog body consisting of rules and preview"""
         bodySizer =  wx.GridBagSizer(hgap = 5, vgap = 5)
+        bodySizer.AddGrowableRow(1)
+        bodySizer.AddGrowableCol(2)
+
         row = 0
-        
         # label with range
         self.cr_label = wx.StaticText(parent, id = wx.ID_ANY)
         bodySizer.Add(item = self.cr_label, pos = (row, 0), span = (1, 3),
                       flag = wx.ALL, border = 5)
+
         row += 1
-        
         # color table
         self.rulesPanel = RulesPanel(parent = parent, mapType = self.mapType,
-                                          attributeType = self.attributeType, properties = self.properties)
+                                     attributeType = self.attributeType, properties = self.properties)
         
-        bodySizer.Add(item = self.rulesPanel.mainPanel, pos = (row, 0), span = (1, 2),
-                      flag = wx.ALL, border = 5)
+        bodySizer.Add(item = self.rulesPanel.mainPanel, pos = (row, 0),
+                      span = (1, 2), flag = wx.EXPAND)
         # add two rules as default
         self.rulesPanel.AddRules(2)
         
         # preview window
         self._createPreview(parent = parent)
-        bodySizer.Add(item = self.preview, pos = (row, 2),
-                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT, border = 5)
+        bodySizer.Add(item = self.preview, pos = (row, 2), flag = wx.EXPAND)
+        
         row += 1
         # add ckeck all and clear all
         bodySizer.Add(item = self.rulesPanel.checkAll, flag = wx.ALIGN_CENTER_VERTICAL, 
@@ -497,6 +503,7 @@ class ColorTable(wx.Frame):
         self.btnPreview.Enable(False)
         self.btnPreview.SetToolTipString(_("Show preview of map "
                                            "(current Map Display extent is used)."))
+        
         row +=1
         # add rules button and spin to sizer
         bodySizer.Add(item = self.rulesPanel.numRules, pos = (row, 0),
@@ -931,7 +938,7 @@ class VectorColorTable(ColorTable):
         self.SetMinSize(self.GetSize()) 
         self.CentreOnScreen()
 
-        self.SetSize((-1, 735))
+        self.SetSize((-1, 760))
         self.Show()
     
     def _createVectorAttrb(self, parent):
@@ -1040,10 +1047,9 @@ class VectorColorTable(ColorTable):
         # body & preview
         #
         bodySizer = self._createBody(parent = scrollPanel)
-        sizer.Add(item = bodySizer, proportion = 0,
-                  flag = wx.ALL, border = 5)
-                
-                
+        sizer.Add(item = bodySizer, proportion = 1,
+                  flag = wx.ALL | wx.EXPAND, border = 5)
+        
         scrollPanel.SetSizer(sizer)
         scrollPanel.Fit()        
         
@@ -1097,7 +1103,6 @@ class VectorColorTable(ColorTable):
   
     def OnCheckColumn(self, event):
         """!Use color column instead of color table"""
-
         if self.useColumn.GetValue():
             self.properties['loadColumn'] = self.fromColumn.GetStringSelection()
             self.properties['storeColumn'] = self.toColumn.GetStringSelection()
