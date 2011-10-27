@@ -161,7 +161,7 @@ static int add_line(struct Map_info *Map, int type, struct line_pnts *Points,
 /*!
   \brief Recursively add geometry to topology
 */
-static int add_geometry(struct Map_info *Map, OGRGeometryH hGeom, int FID,
+static int add_geometry(struct Map_info *Map, OGRGeometryH hGeom, int FID, int build,
 			GEOM_PARTS * parts)
 {
     struct Plus_head *plus;
@@ -244,11 +244,14 @@ static int add_geometry(struct Map_info *Map, OGRGeometryH hGeom, int FID,
 	    line = add_line(Map, GV_BOUNDARY, Points[iPart], FID, parts);
 	    del_part(parts);
 
+	    if (build < GV_BUILD_AREAS)
+		continue;
+	    
 	    /* add area (each inner ring is also area) */
 	    dig_line_box(Points[iPart], &box);
 	    dig_find_area_poly(Points[iPart], &area_size);
 
-	    if (area_size > 0)	/* clockwise */
+	    if (area_size > 0)	        /* area clockwise */
 		lines[0] = line;
 	    else
 		lines[0] = -line;
@@ -260,6 +263,9 @@ static int add_geometry(struct Map_info *Map, OGRGeometryH hGeom, int FID,
 
 	    isle = dig_add_isle(plus, 1, lines, &box);
 
+	    if (build < GV_BUILD_ATTACH_ISLES)
+		continue;
+	    
 	    if (iPart == 0) {	/* outer ring */
 		outer_area = area;
 	    }
@@ -272,31 +278,33 @@ static int add_geometry(struct Map_info *Map, OGRGeometryH hGeom, int FID,
 		dig_area_add_isle(plus, outer_area, isle);
 	    }
 	}
-
-	/* create virtual centroid */
-	ret = Vect_get_point_in_poly_isl((const struct line_pnts *) Points[0],
-					 (const struct line_pnts **) Points + 1,
-					 nRings - 1, &x, &y);
-	if (ret < -1) {
-	    G_warning(_("Unable to calculate centroid for area %d"),
-		      outer_area);
-	}
-	else {
-	    struct P_area *Area;
-	    struct P_topo_c *topo;
-
-	    G_debug(4, "  Centroid: %f, %f", x, y);
-	    Vect_reset_line(Points[0]);
-	    Vect_append_point(Points[0], x, y, 0.0);
-	    line = add_line(Map, GV_CENTROID, Points[0], FID, parts);
-
-	    Line = plus->Line[line];
-	    topo = (struct P_topo_c *)Line->topo;
-	    topo->area = outer_area;
-
-	    /* register centroid to area */
-	    Area = plus->Area[outer_area];
-	    Area->centroid = line;
+	
+	if (build >= GV_BUILD_CENTROIDS) {
+	    /* create virtual centroid */
+	    ret = Vect_get_point_in_poly_isl((const struct line_pnts *) Points[0],
+					     (const struct line_pnts **) Points + 1,
+					     nRings - 1, &x, &y);
+	    if (ret < -1) {
+		G_warning(_("Unable to calculate centroid for area %d"),
+			  outer_area);
+	    }
+	    else {
+		struct P_area *Area;
+		struct P_topo_c *topo;
+		
+		G_debug(4, "  Centroid: %f, %f", x, y);
+		Vect_reset_line(Points[0]);
+		Vect_append_point(Points[0], x, y, 0.0);
+		line = add_line(Map, GV_CENTROID, Points[0], FID, parts);
+		
+		Line = plus->Line[line];
+		topo = (struct P_topo_c *)Line->topo;
+		topo->area = outer_area;
+		
+		/* register centroid to area */
+		Area = plus->Area[outer_area];
+		Area->centroid = line;
+	    }
 	}
 	break;
 
@@ -309,7 +317,7 @@ static int add_geometry(struct Map_info *Map, OGRGeometryH hGeom, int FID,
 	for (i = 0; i < nParts; i++) {
 	    add_part(parts, i);
 	    hGeom2 = OGR_G_GetGeometryRef(hGeom, i);
-	    add_geometry(Map, hGeom2, FID, parts);
+	    add_geometry(Map, hGeom2, FID, build, parts);
 	    del_part(parts);
 	}
 	break;
@@ -325,16 +333,24 @@ static int add_geometry(struct Map_info *Map, OGRGeometryH hGeom, int FID,
 /*!
    \brief Build pseudo-topology for OGR layer
 
+   Build levels:
+    - GV_BUILD_NONE
+    - GV_BUILD_BASE
+    - GV_BUILD_ATTACH_ISLES
+    - GV_BUILD_CENTROIDS
+    - GV_BUILD_ALL
+   
    \param Map pointer to Map_info structure
-   \param build build level (GV_BUILD_NONE and GV_BUILD_ALL currently supported)
+   \param build build level
 
    \return 1 on success
    \return 0 on error
  */
 int Vect_build_ogr(struct Map_info *Map, int build)
 {
-    int iFeature, count, FID;
+    int iFeature, FID, line;
     struct Plus_head *plus;
+    struct P_line *Line;
     
     GEOM_PARTS parts;
     OGRFeatureH hFeature;
@@ -343,21 +359,17 @@ int Vect_build_ogr(struct Map_info *Map, int build)
     G_debug(1, "Vect_build_ogr(): dsn=%s layer=%s, build=%d",
 	    Map->fInfo.ogr.dsn, Map->fInfo.ogr.layer_name, build);
     
-    if (build != GV_BUILD_ALL && build != GV_BUILD_NONE) {
-	G_warning(_("Partial build for OGR is not supported"));
-	return 0;
-    }
-
     plus = &(Map->plus);
     if (build == plus->built)
 	return 1;		/* do nothing */
     
     /* TODO move this init to better place (Vect_open_ ?), because in theory build may be reused on level2 */
-    G_free((void *) Map->fInfo.ogr.offset);
-    Map->fInfo.ogr.offset = NULL;
-    Map->fInfo.ogr.offset_num = 0;
-    Map->fInfo.ogr.offset_alloc = 0;
-    
+    if (build >= plus->built && build > GV_BUILD_BASE) {
+	G_free((void *) Map->fInfo.ogr.offset);
+	Map->fInfo.ogr.offset = NULL;
+	Map->fInfo.ogr.offset_num = 0;
+	Map->fInfo.ogr.offset_alloc = 0;
+    }
     if (!Map->fInfo.ogr.layer) {
 	G_warning(_("Empty OGR layer, nothing to build"));
 	return 0;
@@ -382,52 +394,87 @@ int Vect_build_ogr(struct Map_info *Map, int build)
 
     /* Check if upgrade or downgrade */
     if (build < plus->built) {	/* lower level request, currently only GV_BUILD_NONE */
-	dig_free_plus_areas(plus);
-	dig_spidx_free_areas(plus);
-	dig_free_plus_isles(plus);
-	dig_spidx_free_isles(plus);
+	if (plus->built >= GV_BUILD_CENTROIDS && build < GV_BUILD_CENTROIDS) {
+	    /* reset info about areas stored for centroids */
+	    int nlines = Vect_get_num_lines(Map);
+	    
+	    for (line = 1; line <= nlines; line++) {
+		Line = plus->Line[line];
+		if (Line && Line->type == GV_CENTROID) {
+		    struct P_topo_c *topo = (struct P_topo_c *)Line->topo;
+		    topo->area = 0;
+		}
+	    }
+	    dig_free_plus_areas(plus);
+	    dig_spidx_free_areas(plus);
+	    dig_free_plus_isles(plus);
+	    dig_spidx_free_isles(plus);
+	}
 	
-	dig_free_plus_nodes(plus);
-	dig_spidx_free_nodes(plus);
-	dig_free_plus_lines(plus);
-	dig_spidx_free_lines(plus);
+	if (plus->built >= GV_BUILD_AREAS && build < GV_BUILD_AREAS) {
+	    /* reset info about areas stored for lines */
+	    int nlines = Vect_get_num_lines(Map);
+
+	    for (line = 1; line <= nlines; line++) {
+		Line = plus->Line[line];
+		if (Line && Line->type == GV_BOUNDARY) {
+		    struct P_topo_b *topo = (struct P_topo_b *)Line->topo;
+		    topo->left = 0;
+		    topo->right = 0;
+		}
+	    }
+	    dig_free_plus_areas(plus);
+	    dig_spidx_free_areas(plus);
+	    dig_free_plus_isles(plus);
+	    dig_spidx_free_isles(plus);
+	}
+
+	if (plus->built >= GV_BUILD_BASE && build < GV_BUILD_BASE) {
+	    dig_free_plus_nodes(plus);
+	    dig_spidx_free_nodes(plus);
+	    dig_free_plus_lines(plus);
+	    dig_spidx_free_lines(plus);
+	}
     }
     else {
-	/* Note: Do not use OGR_L_GetFeatureCount (it may scan all features) */
-	OGR_L_ResetReading(Map->fInfo.ogr.layer);
-	count = iFeature = 0;
-	while ((hFeature = OGR_L_GetNextFeature(Map->fInfo.ogr.layer)) != NULL) {
-	    iFeature++;
-	    count++;
-	    
-	    G_debug(3, "   Feature %d", iFeature);
-	    
-	    hGeom = OGR_F_GetGeometryRef(hFeature);
-	    if (hGeom == NULL) {
-		G_warning(_("Feature %d without geometry ignored"), iFeature);
+	if (plus->built < GV_BUILD_BASE) {
+	    /* Note: Do not use OGR_L_GetFeatureCount (it may scan all features) */
+	    OGR_L_ResetReading(Map->fInfo.ogr.layer);
+	    iFeature = 0;
+	    while ((hFeature = OGR_L_GetNextFeature(Map->fInfo.ogr.layer)) != NULL) {
+		iFeature++;
+		
+		G_debug(3, "   Feature %d", iFeature);
+		
+		hGeom = OGR_F_GetGeometryRef(hFeature);
+		if (hGeom == NULL) {
+		    G_warning(_("Feature %d without geometry ignored"), iFeature);
+		    OGR_F_Destroy(hFeature);
+		    continue;
+		}
+		
+		FID = (int)OGR_F_GetFID(hFeature);
+		if (FID == OGRNullFID) {
+		    G_warning(_("OGR feature %d without ID ignored"), iFeature);
+		    OGR_F_Destroy(hFeature);
+		    continue;
+		}
+		G_debug(4, "    FID = %d", FID);
+		
+		reset_parts(&parts);
+		add_part(&parts, FID);
+		add_geometry(Map, hGeom, FID, build, &parts);
+		
 		OGR_F_Destroy(hFeature);
-		continue;
-	    }
+	    } /* while */
 	    
-	    FID = (int)OGR_F_GetFID(hFeature);
-	    if (FID == OGRNullFID) {
-		G_warning(_("OGR feature %d without ID ignored"), iFeature);
-		OGR_F_Destroy(hFeature);
-		continue;
-	    }
-	    G_debug(4, "    FID = %d", FID);
-	    
-	    reset_parts(&parts);
-	    add_part(&parts, FID);
-	    add_geometry(Map, hGeom, FID, &parts);
-	    
-	    OGR_F_Destroy(hFeature);
-	}				/* while */
+	    plus->built = GV_BUILD_BASE;
+	}
     }
 
     free_parts(&parts);
     
-    Map->plus.built = build;
+    plus->built = build;
     
     return 1;
 }
