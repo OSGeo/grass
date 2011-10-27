@@ -699,7 +699,7 @@ int dig_add_isle(struct Plus_head *plus, int n_lines, plus_t * lines,
 	}
 	else {
 	    if (topo->right != 0) {
-		G_warning(_("Line %d already has area/isle %d to left"), line,
+		G_warning(_("Line %d already has area/isle %d to right"), line,
 			  topo->right);
 		return -1;
 	    }
