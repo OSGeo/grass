@@ -20,6 +20,7 @@
 #include <grass/glocale.h>
 #include <grass/vector.h>
 
+#define SEP "-----------------------------------\n"
 
 #ifndef HAVE_OGR
 static int format()
@@ -70,25 +71,22 @@ int Vect_get_built(const struct Map_info *Map)
 
    Should only be used in special cases of vector processing.
 
-   This functions optionally builds only some parts of topology. Highest level is specified by build
-   parameter which may be:
-   - GV_BUILD_NONE - nothing is build;
-   - GV_BUILD_BASE - basic topology, nodes, spatial index;
-   - GV_BUILD_AREAS - build areas and islands, but islands are not attached to areas;
-   - GV_BUILD_ATTACH_ISLES - attach islands to areas;
-   - GV_BUILD_CENTROIDS - assign centroids to areas;
-   - GV_BUILD_ALL - top level, the same as GV_BUILD_CENTROIDS.
-
+   This functions optionally builds only some parts of
+   topology. Highest level is specified by build parameter which may
+   be:
+    - GV_BUILD_NONE - nothing is build
+    - GV_BUILD_BASE - basic topology, nodes, lines, spatial index;
+    - GV_BUILD_AREAS - build areas and islands, but islands are not attached to areas;
+    - GV_BUILD_ATTACH_ISLES - attach islands to areas;
+    - GV_BUILD_CENTROIDS - assign centroids to areas;
+    - GV_BUILD_ALL - top level, the same as GV_BUILD_CENTROIDS.
+    
    If functions is called with build lower than current value of the
    Map, the level is downgraded to requested value.
 
    All calls to Vect_write_line(), Vect_rewrite_line(),
    Vect_delete_line() respect the last value of build used in this
    function.
-
-   Values lower than GV_BUILD_ALL are supported only by
-   GV_FORMAT_NATIVE, other formats ignore build and build always
-   GV_BUILD_ALL
 
    Note that the functions has effect only if requested level is
    higher than current level, to rebuild part of topology, call first
@@ -298,12 +296,14 @@ int Vect_topo_dump(const struct Map_info *Map, FILE *out)
     plus = &(Map->plus);
     
     fprintf(out, "---------- TOPOLOGY DUMP ----------\n");
-
+    
     /* box */
     Vect_box_copy(&box, &(plus->box));
     fprintf(out, "N,S,E,W,T,B: %f, %f, %f, %f, %f, %f\n", box.N, box.S,
 	    box.E, box.W, box.T, box.B);
 
+    fprintf(out, SEP);
+    
     /* nodes */
     fprintf(out, "Nodes (%d nodes, alive + dead):\n", plus->n_nodes);
     for (i = 1; i <= plus->n_nodes; i++) {
@@ -321,6 +321,8 @@ int Vect_topo_dump(const struct Map_info *Map, FILE *out)
 	}
     }
 
+    fprintf(out, SEP);
+    
     /* lines */
     fprintf(out, "Lines (%d lines, alive + dead):\n", plus->n_lines);
     for (i = 1; i <= plus->n_lines; i++) {
@@ -369,6 +371,8 @@ int Vect_topo_dump(const struct Map_info *Map, FILE *out)
 	}
     }
 
+    fprintf(out, SEP);
+    
     /* areas */
     fprintf(out, "Areas (%d areas, alive + dead):\n", plus->n_areas);
     for (i = 1; i <= plus->n_areas; i++) {
@@ -391,6 +395,8 @@ int Vect_topo_dump(const struct Map_info *Map, FILE *out)
 	}
     }
 
+    fprintf(out, SEP);
+    
     /* isles */
     fprintf(out, "Islands (%d islands, alive + dead):\n", plus->n_isles);
     for (i = 1; i <= plus->n_isles; i++) {
@@ -436,19 +442,20 @@ int Vect_build_sidx(struct Map_info *Map)
 }
 
 /*!
-   \brief Create spatial index from topology if necessary
+   \brief Create spatial index from topology if necessary (not longer
+   supported)
 
    \param Map pointer to vector map
 
-   \return 0 OK
-   \return 1 error
+   \return 1
  */
 int Vect_build_sidx_from_topo(struct Map_info *Map)
 {
 
-    G_debug(3, "Vect_build_sidx_from_topo()");
+    G_debug(3, "Vect_build_sidx_from_topo(): name=%s",
+	    Vect_get_full_name(Map));
 
-    G_warning(_("Vect_build_sidx_from_topo() is no longer supported"));
+    G_warning(_("%s is no longer supported"), "Vect_build_sidx_from_topo()");
 
     return 1;
 }

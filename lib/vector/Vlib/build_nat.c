@@ -24,7 +24,7 @@
 /*!
    \brief Build area on given side of line (GV_LEFT or GV_RIGHT)
 
-   \param Map_info vector map
+   \param Map pointer to Map_info structure
    \param iline line id
    \param side side (GV_LEFT or GV_RIGHT)
 
