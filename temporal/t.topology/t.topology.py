@@ -41,28 +41,8 @@
 #%end
 
 #%flag
-#% key: c
-#% description: Check temporal topology
-#%end
-
-#%flag
-#% key: g
-#% description: Compute granularity
-#%end
-
-#%flag
-#% key: t
-#% description: Print temporal relation matrix and exit
-#%end
-
-#%flag
-#% key: r
-#% description: Print temporal relation count
-#%end
-
-#%flag
 #% key: m
-#% description: Print temporal map type count
+#% description: Print temporal relation matrix and exit
 #%end
 
 import grass.script as grass
@@ -76,11 +56,7 @@ def main():
     name = options["input"]
     type = options["type"]
     where = options["where"]
-    tmatrix = flags['t']
-    relation = flags['r']
-    map_types = flags['m']
-    check_topo = flags['c']
-    comp_gran = flags['g']
+    tmatrix = flags['m']
 
     # Make sure the temporal database exists
     tgis.create_temporal_database()
@@ -103,36 +79,79 @@ def main():
     # Get ordered map list
     maps = sp.get_registered_maps_as_objects(where=where, order="start_time", dbif=None)
 
-    if check_topo:
-        check = sp.check_temporal_topology(maps)
-        if check:
-            print "Temporal topology is valid"
-        else:
-            print "Temporal topology is invalid"
-
     if tmatrix:
         matrix = sp.print_temporal_relation_matrix(maps)
+        return
 
-    if relation:
-        dict = sp.count_temporal_relations(maps)
+    sp.base.print_info()
 
-        for key in dict.keys():
-            print key, dict[key]
+    #      0123456789012345678901234567890
+    print " +-------------------- Temporal topology -------------------------------------+"
+    if where:
+        print " | Is subset of dataset: ...... True"
+    else:
+        print " | Is subset of dataset: ...... False"
 
-    if map_types:
-        dict = sp.count_temporal_types(maps)
-        
-        for key in dict.keys():
-            print key, dict[key]
+    check = sp.check_temporal_topology(maps)
+    if check:
+        #      0123456789012345678901234567890
+        print " | Temporal topology is: ...... valid"                
+    else:
+        #      0123456789012345678901234567890
+        print " | Temporal topology is: ...... invalid"                
 
-        if dict["invalid"] == 0:
-            print "Gaps", sp.count_gaps(maps)
-        else:
-            print "Gaps", None
+    dict = sp.count_temporal_types(maps)
+ 
+    for key in dict.keys():
+        if key == "interval":
+            #      0123456789012345678901234567890
+            print " | Number of intervals: ....... %s" % (dict[key])
+        if key == "point":
+            print " | Number of points: .......... %s" % (dict[key])
+        if key == "invalid":
+            print " | Invalid time stamps: ....... %s" % (dict[key])
 
-    if comp_gran:
+    #      0123456789012345678901234567890
+    print " | Number of gaps: ............ %i" % sp.count_gaps(maps)                
+
+    if sp.is_time_absolute():
         gran = tgis.compute_absolute_time_granularity(maps)
-        print "Granularity", gran
+    else:
+        gran = tgis.compute_relative_time_granularity(maps)
+    print " | Granularity: ............... %s" % str(gran)
+
+    print " +-------------------- Topological relations ---------------------------------+"
+    dict = sp.count_temporal_relations(maps)
+
+    for key in dict.keys():
+        if key == "equivalent":
+            #      0123456789012345678901234567890
+            print " | Equivalent: ................ %s" % (dict[key])
+        if key == "during":
+            print " | During: .................... %s" % (dict[key])
+        if key == "contains":
+            print " | Contains: .................. %s" % (dict[key])
+        if key == "overlaps":
+            print " | Overlaps: .................. %s" % (dict[key])
+        if key == "overlapped":
+            print " | Overlapped: ................ %s" % (dict[key])
+        if key == "after":
+            print " | After: ..................... %s" % (dict[key])
+        if key == "before":
+            print " | Before: .................... %s" % (dict[key])
+        if key == "starts":
+            print " | Starts: .................... %s" % (dict[key])
+        if key == "finishes":
+            print " | Finishes: .................. %s" % (dict[key])
+        if key == "started":
+            print " | Started: ................... %s" % (dict[key])
+        if key == "finished":
+            print " | Finished: .................. %s" % (dict[key])
+        if key == "follows":
+            print " | Follows: ................... %s" % (dict[key])
+        if key == "precedes":
+            print " | Precedes: .................. %s" % (dict[key])
+    print " +----------------------------------------------------------------------------+"
 
 if __name__ == "__main__":
     options, flags = grass.parser()

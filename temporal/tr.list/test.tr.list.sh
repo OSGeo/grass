@@ -64,19 +64,29 @@ prec_5|2001-05-01|2001-05-01
 prec_6|2001-06-01|2001-07-01
 EOF
 
+t.create --o type=strds temporaltype=absolute output=precip_abs0 title="A test with input files" descr="A test with input files"
 t.create --o type=strds temporaltype=absolute output=precip_abs1 title="A test with input files" descr="A test with input files"
 t.create --o type=strds temporaltype=absolute output=precip_abs2 title="A test with input files" descr="A test with input files"
 t.create --o type=strds temporaltype=absolute output=precip_abs3 title="A test with input files" descr="A test with input files"
 t.create --o type=strds temporaltype=absolute output=precip_abs4 title="A test with input files" descr="A test with input files"
 t.create --o type=strds temporaltype=absolute output=precip_abs5 title="A test with input files" descr="A test with input files"
 
-# The first @test
+# The @test
+tr.register -i input=precip_abs0 file=$n1 start="2001-01-01" increment="1 months"
+tr.list    fs=" | " method=comma     input=precip_abs0
+tr.list -h input=precip_abs1
+tr.list -h fs=" | " method=cols      input=precip_abs0
+tr.list -h fs=" | " method=delta     input=precip_abs0
+tr.list -h fs=" | " method=deltagaps input=precip_abs0
+tr.list -h fs=" | " method=gran      input=precip_abs0
+
 tr.register    input=precip_abs1 file=$n1 start="2001-01-01" increment="1 months"
 tr.list    fs=" | " method=comma     input=precip_abs1
 tr.list -h input=precip_abs1
 tr.list -h fs=" | " method=cols      input=precip_abs1
 tr.list -h fs=" | " method=delta     input=precip_abs1
 tr.list -h fs=" | " method=deltagaps input=precip_abs1
+tr.list -h fs=" | " method=gran      input=precip_abs1
 
 tr.register -i input=precip_abs2 file=$n2 start=file
 tr.list    fs=" | " method=comma     input=precip_abs2
@@ -84,16 +94,19 @@ tr.list -h input=precip_abs2
 tr.list -h fs=" | " method=cols      input=precip_abs2
 tr.list -h fs=" | " method=delta     input=precip_abs2
 tr.list -h fs=" | " method=deltagaps input=precip_abs2
+tr.list -h fs=" | " method=gran      input=precip_abs2
 
 tr.register -i input=precip_abs3 file=$n3 start=file end=file
 tr.list    fs=" | " method=comma     input=precip_abs3
 tr.list -h fs=" | " method=delta     input=precip_abs3
 tr.list -h fs=" | " method=deltagaps input=precip_abs3
+tr.list -h fs=" | " method=gran      input=precip_abs3
 
 tr.register -i input=precip_abs4 file=$n4 start=file end=file
 tr.list    fs=" | " method=comma     input=precip_abs4
 tr.list -h fs=" | " method=delta     input=precip_abs4
 tr.list -h fs=" | " method=deltagaps input=precip_abs4
+tr.list -h fs=" | " method=gran      input=precip_abs4
 
 tr.register -i input=precip_abs5 file=$n5 start=file end=file
 tr.list    fs=" | " method=comma     input=precip_abs5
@@ -101,6 +114,7 @@ tr.list -h input=precip_abs5
 tr.list -h fs=" | " method=cols      input=precip_abs5
 tr.list -h fs=" | " method=delta     input=precip_abs5
 tr.list -h fs=" | " method=deltagaps input=precip_abs5
+tr.list -h fs=" | " method=gran      input=precip_abs5
 
 t.remove type=rast input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
-t.remove type=strds input=precip_abs1,precip_abs2,precip_abs3,precip_abs4,precip_abs5
+t.remove type=strds input=precip_abs0,precip_abs1,precip_abs2,precip_abs3,precip_abs4,precip_abs5

@@ -28,9 +28,13 @@ tr.register --v input=precip_rel3 maps=prec_1,prec_2,prec_3
 # Check if the space time inputs are updated correctly
 t.time.rel --v input=prec_1,prec_2,prec_3 start=0 increment=1000
 t.info type=strds input=precip_rel1
+t.topology type=strds input=precip_rel1
+t.topology -m type=strds input=precip_rel1
 
 t.time.rel --v -i input=prec_1,prec_2,prec_3 start=0 increment=1000 -i
 t.info type=strds input=precip_rel1
+t.topology type=strds input=precip_rel1
+t.topology -m type=strds input=precip_rel1
 
 t.time.rel --v input=prec_4,prec_5 start=5000 end=6000
 t.info type=rast input=prec_4

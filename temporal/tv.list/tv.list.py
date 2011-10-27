@@ -61,10 +61,10 @@
 #%option
 #% key: method
 #% type: string
-#% description: Which method should be used fot data listing
+#% description: Which method should be used for data listing
 #% required: no
 #% multiple: no
-#% options: cols,comma,delta,deltagaps
+#% options: cols,comma,delta,deltagaps,gran
 #% answer: cols
 #%end
 
