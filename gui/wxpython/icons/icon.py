@@ -342,6 +342,10 @@ Icons = {
         'rotate':   MetaIcon(img = iconSet.get('3d-rotate', wx.ART_ERROR),
                              label = _('Rotate 3D scene'),
                              desc = _('Drag with mouse to rotate 3D scene')), 
+        'flyThrough':   MetaIcon(img = iconSet.get('', wx.ART_MISSING_IMAGE),
+                             label = _('Fly-through mode'),
+                             desc = _('Drag with mouse, hold Ctrl down for different mode'
+                                      ' or Shift to accelerate')),
         'zoomIn':   MetaIcon(img = iconSet.get('zoom-in', wx.ART_ERROR),
                             label = _('Zoom in'),
                             desc = _('Click mouse to zoom')),

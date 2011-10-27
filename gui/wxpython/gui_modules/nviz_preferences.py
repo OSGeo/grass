@@ -36,6 +36,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
         
         # create notebook pages
         self._createViewPage(self.notebook)
+        self._createFlyPage(self.notebook)
         self._createLightPage(self.notebook)
         self._createSurfacePage(self.notebook)
         self._createVectorPage(self.notebook)
@@ -192,7 +193,55 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
         panel.SetSizer(pageSizer)
         
         return panel
-    
+        
+    def _createFlyPage(self, notebook):
+        """!Create notebook page for view settings"""
+        panel = wx.Panel(parent = notebook, id = wx.ID_ANY)
+        
+        notebook.AddPage(page = panel,
+                         text = " %s " % _("Fly-through"))
+        pageSizer = wx.BoxSizer(wx.VERTICAL)
+        # fly throuhg mode
+        box = wx.StaticBox(parent = panel, id = wx.ID_ANY,
+                           label = " %s " % (_("Fly-through mode")))
+        boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        gridSizer = wx.GridBagSizer(vgap = 3, hgap = 3)
+        gridSizer.AddGrowableCol(0)
+        
+        # move exag
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("Move exag:")),
+                      pos = (0, 0), flag = wx.ALIGN_CENTER_VERTICAL)
+        
+        moveExag = wx.SpinCtrl(panel, id = wx.ID_ANY, min = 1, max = 20, 
+                                  initial = UserSettings.Get(group = 'nviz', key = 'fly',
+                                                             subkey = ['exag', 'move']),
+                                  size = (65, -1))
+        self.winId['nviz:fly:exag:move'] = moveExag.GetId()
+        gridSizer.Add(item = moveExag, pos = (0, 1))
+        
+        # turn exag
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("Turn exag:")),
+                      pos = (1, 0), flag = wx.ALIGN_CENTER_VERTICAL)
+        
+        turnExag = wx.SpinCtrl(panel, id = wx.ID_ANY, min = 1, max = 20, 
+                                  initial = UserSettings.Get(group = 'nviz', key = 'fly',
+                                                             subkey = ['exag', 'turn']),
+                                  size = (65, -1))
+        self.winId['nviz:fly:exag:turn'] = turnExag.GetId()
+        gridSizer.Add(item = turnExag, pos = (1, 1))
+        
+        boxSizer.Add(item = gridSizer, proportion = 1,
+                  flag = wx.ALL | wx.EXPAND, border = 5)
+        pageSizer.Add(item = boxSizer, proportion = 0,
+                      flag = wx.EXPAND | wx.ALL,
+                      border = 5)
+        
+        panel.SetSizer(pageSizer)
+        
+        return panel
+        
     def _createLightPage(self, notebook):
         """!Create notebook page for light settings"""
         panel = wx.Panel(parent = notebook, id = wx.ID_ANY)

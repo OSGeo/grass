@@ -599,7 +599,9 @@ class MapFrame(MapFrameBase):
         self.toolbars['map'].Enable2D(False)
         # add rotate tool to map toolbar
         self.toolbars['map'].InsertTool((('rotate', Icons['nviz']['rotate'],
-                                          self.OnRotate, wx.ITEM_CHECK,7),)) # 7 is position
+                                          self.OnRotate, wx.ITEM_CHECK, 7),)) # 7 is position
+        self.toolbars['map'].InsertTool((('flyThrough', Icons['nviz']['flyThrough'],
+                                          self.OnFlyThrough, wx.ITEM_CHECK, 8),)) 
         self.toolbars['map'].ChangeToolsDesc(mode2d = False)
         # update status bar
         
@@ -662,6 +664,7 @@ class MapFrame(MapFrameBase):
     def RemoveNviz(self):
         """!Restore 2D view"""
         self.toolbars['map'].RemoveTool(self.toolbars['map'].rotate)
+        self.toolbars['map'].RemoveTool(self.toolbars['map'].flyThrough)
         # update status bar
         self.statusbarManager.ShowStatusbarChoiceItemsByClass(self.statusbarItemsHiddenInNviz)
         self.statusbarManager.SetMode(UserSettings.Get(group = 'display',
@@ -670,7 +673,7 @@ class MapFrame(MapFrameBase):
         self.SetStatusText(_("Please wait, unloading data..."), 0)
         self._layerManager.goutput.WriteCmdLog(_("Switching back to 2D view mode..."),
                                                switchPage = False)
-        self.MapWindow3D.UnloadDataLayers(force = True)
+        self.MapWindow3D.OnClose(event = None)
         # switch from MapWindowGL to MapWindow
         self._mgr.GetPane('2d').Show()
         self._mgr.GetPane('3d').Hide()
@@ -827,6 +830,19 @@ class MapFrame(MapFrameBase):
         # change the cursor
         self.MapWindow.SetCursor(self.cursors["hand"])
 
+    def OnFlyThrough(self, event):
+        """!Fly-through mode
+        """
+        if self.GetMapToolbar():
+            self.toolbars['map'].OnTool(event)
+            self.toolbars['map'].action['desc'] = ''
+        
+        self.MapWindow.mouse['use'] = "fly"
+        
+        # change the cursor
+        self.MapWindow.SetCursor(self.cursors["hand"])
+        self.MapWindow.SetFocus()
+        
     def OnZoomRegion(self, event):
         """!Zoom to region
         """
