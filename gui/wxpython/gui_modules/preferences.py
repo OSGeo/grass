@@ -543,6 +543,12 @@ class Settings:
                         'color' : (255, 255, 255, 255), # white
                         },
                     },
+                'fly' : {
+                    'exag' : {
+                        'move' : 1,
+                        'turn' : 1,
+                        }
+                    },
                 'surface' : {
                     'shine': {
                         'map' : False,

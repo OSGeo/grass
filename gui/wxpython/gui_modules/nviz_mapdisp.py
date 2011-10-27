@@ -154,6 +154,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.decoration = self.nvizDefault.SetDecorDefaultProp(type = 'arrow')
         self.decoration['scalebar'] = []
         self.decoration['arrow']['size'] = self._getDecorationSize()
+        self.fly = self.InitFly()
+        
+        # timer for flythrough
+        self.timerFly = wx.Timer(self, id = wx.NewId())
         
         self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
         self.Bind(wx.EVT_SIZE,             self.OnSize)
@@ -165,14 +169,107 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.Bind(EVT_UPDATE_LIGHT,  self.UpdateLight)
         self.Bind(EVT_UPDATE_CPLANE, self.UpdateCPlane)
         
+        self.Bind(wx.EVT_TIMER, self.OnTimerFly, self.timerFly)
+        self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
+        self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
+        
         self.Bind(wx.EVT_CLOSE, self.OnClose)
         
         # cplanes cannot be initialized now
         wx.CallAfter(self.InitCPlanes)
 
-    def __del__(self):
-        self.UnloadDataLayers(force = True)
+    def InitFly(self):
+        """!Initialize fly through dictionary"""
+        fly = {'interval' : 10,             # interval for timerFly
+               'value': [0, 0, 0],          # calculated values for navigation
+               'mode' : 0,                  # fly through mode (0, 1)
+               'exag' : {                   # sensitivity
+                    'move' : UserSettings.Get(group = 'nviz', key = 'fly', subkey = ['exag', 'move']),
+                    'turn' : UserSettings.Get(group = 'nviz', key = 'fly', subkey = ['exag', 'turn'])},
+               'exagMultiplier' : 3,        # speed up by Shift
+               'mouseControl' : None,       # if mouse or keys are used
+               'pos' : {'x' : 0, 'y' : 0},  # virtual mouse position when using arrows
+               'arrowStep' : 50,            # step in pixels (when using arrows)
+            }
+            
+        return fly
         
+    def OnTimerFly(self, event):
+        """!Fly event was emitted, move the scene"""
+        if self.mouse['use'] != 'fly':
+            return
+        
+        if self.fly['mouseControl']:
+            mx, my = self.ComputeMxMy(*self.mouse['tmp'])
+        else:
+            mx, my = self.ComputeMxMy(self.fly['pos']['x'], self.fly['pos']['y'])
+            
+        self.ComputeFlyValues(mx = mx, my = my)
+        self._display.FlyThrough(flyInfo = self.fly['value'], mode = self.fly['mode'],
+                                 exagInfo = self.fly['exag'])
+        self.render['quick'] = True
+        self.Refresh(False)
+        
+    def ComputeMxMy(self, x, y):
+        """!Compute values for flythrough navigation 
+        (ComputeFlyValues should follow). 
+        
+        Based on visualization/nviz/src/togl_flythrough.c.
+        @param x,y screen coordinates
+        """
+        sx, sy = self.GetClientSizeTuple()
+        dx = dy = 0.01
+        
+        mx = 2 * (float(x) / sx) - 1
+        my = 2 * (float(y) / sy) - 1
+    
+        if mx < - dx:
+            mx += dx
+        elif mx > dx:
+            mx -= dx
+        else:
+            mx = 0.0 # ?
+        if my < - dy:
+            my += dy
+        elif my > dy:
+            my -= dy
+        else:
+            my = 0.0
+    
+        mx = mx / (1.0 - dx)
+        my = my / (1.0 - dy)
+    
+        # Quadratic seems smoother 
+        mx *= abs(mx)
+        my *= abs(my)
+        
+        return mx, my
+        
+    def ComputeFlyValues(self, mx, my):
+        """!Compute parameters for fly-through navigation
+        
+        @params mx,my results from ComputeMxMy method
+        """
+        self.fly['value'] = [0, 0, 0]
+        
+        if self.fly['mode'] == 0:
+            self.fly['value'][0] = - my * 500.0 * self.fly['interval'] / 1000. # forward */
+            self.fly['value'][1] = mx * 0.1 *self.fly['interval'] / 1000.  # heading */
+        else:
+            self.fly['value'][0] = mx * 100.0 * self.fly['interval'] /1000.
+            self.fly['value'][2] = - my * 100.0 * self.fly['interval'] /1000.
+    
+    
+    def __del__(self):
+        """!Stop timers if running, unload data"""
+        self.StopTimer(self.timerFly)
+        self.UnloadDataLayers(force = True)
+    
+    def StopTimer(self, timer):
+        """!Stop timer if running"""
+        if timer.IsRunning():
+            timer.Stop()
+            
     def _bindMouseEvents(self):
         self.Bind(wx.EVT_MOUSE_EVENTS,     self.OnMouseAction)
         self.Bind(wx.EVT_MOTION,           self.OnMotion)
@@ -185,6 +282,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self.cplanes.append(cplane)
             
     def OnClose(self, event):
+        self.StopTimer(self.timerFly)
         # cleanup when window actually closes (on quit) and not just is hidden
         self.UnloadDataLayers(force = True)
         
@@ -201,6 +299,13 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self._display.ResizeWindow(size.width,
                                        size.height)
         self.size = size
+        
+        # reposition checkbox in statusbar
+        self.parent.StatusbarReposition()
+        
+        # update statusbar
+        self.parent.StatusbarUpdate()
+        
         event.Skip()
        
     def OnPaint(self, event):
@@ -386,8 +491,70 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             if texture.HitTest(mouseX, mouseY, radius):
                 return texture.id
         return -1
-                
-                    
+        
+    def OnKeyDown(self, event):
+        """!Key was pressed.
+        
+        Used for fly-through mode.
+        """
+        if not self.mouse['use'] == 'fly':
+            return
+            
+        key = event.GetKeyCode()
+        if key == wx.WXK_CONTROL: # Mac ?
+            self.fly['mode'] = 1
+            
+        elif key == wx.WXK_SHIFT: 
+            self.fly['exag']['move'] *= self.fly['exagMultiplier']
+            self.fly['exag']['turn'] *= self.fly['exagMultiplier']
+            
+        elif key == wx.WXK_ESCAPE and self.timerFly.IsRunning() and not self.fly['mouseControl']:
+            self.StopTimer(self.timerFly)
+            self.fly['mouseControl'] = None
+            self.render['quick'] = False
+            self.Refresh(False)
+            
+        elif key in (wx.WXK_UP, wx.WXK_DOWN, wx.WXK_LEFT, wx.WXK_RIGHT):
+            if not self.timerFly.IsRunning():
+                sx, sy = self.GetClientSizeTuple()
+                self.fly['pos']['x'] = sx / 2
+                self.fly['pos']['y'] = sy / 2
+                self.fly['mouseControl'] = False # controlled by keyboard
+                self.timerFly.Start(self.fly['interval'])
+
+            self.ProcessFlyByArrows(keyCode = key)
+        
+        event.Skip()
+        
+    def ProcessFlyByArrows(self, keyCode):
+        """!Process arrow key during fly-through"""
+        step = self.fly['arrowStep']
+        if keyCode == wx.WXK_UP:
+            self.fly['pos']['y'] -= step
+        elif keyCode == wx.WXK_DOWN:
+            self.fly['pos']['y'] += step
+        elif keyCode == wx.WXK_LEFT:
+            self.fly['pos']['x'] -= step
+        elif keyCode == wx.WXK_RIGHT:
+            self.fly['pos']['x'] += step
+            
+    def OnKeyUp(self, event):
+        """!Key was released.
+        
+        Used for fly-through mode.
+        """
+        if not self.mouse['use'] == 'fly':
+            return
+            
+        key = event.GetKeyCode()
+        if key == wx.WXK_CONTROL: # Mac ?
+            self.fly['mode'] = 0
+        elif key == wx.WXK_SHIFT: 
+            self.fly['exag']['move'] = math.floor(self.fly['exag']['move'] / self.fly['exagMultiplier'])
+            self.fly['exag']['turn'] = math.floor(self.fly['exag']['turn'] / self.fly['exagMultiplier'])
+        
+        event.Skip()
+        
     def OnMouseAction(self, event):
         """!Handle mouse events"""
         # zoom with mouse wheel
@@ -453,6 +620,11 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self.dragid = self.FindObjects(self.mouse['tmp'][0], self.mouse['tmp'][1],
                                           self.hitradius)   
                 
+        if self.mouse['use'] == 'fly':
+            if not self.timerFly.IsRunning():
+                self.timerFly.Start(self.fly['interval'])
+                self.fly['mouseControl'] = True
+            
         event.Skip()    
         
     def OnDragging(self, event):
@@ -463,7 +635,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             
         if self.mouse['use'] == 'rotate':    
             dx, dy = event.GetX() - self.mouse['tmp'][0], event.GetY() - self.mouse['tmp'][1]
-            self.mouse['tmp'] = event.GetPositionTuple()
+            
             angle, x, y, z = self._display.GetRotationParameters(dx, dy)
             self._display.Rotate(angle, x, y, z)
             
@@ -472,6 +644,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             
         if self.mouse['use'] == 'pan':
             self.FocusPanning(event)
+            
+        self.mouse['tmp'] = event.GetPositionTuple()
                 
         event.Skip()
             
@@ -568,10 +742,18 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self.saveHistory = True
             self.render['quick'] = False
             self.Refresh(False)
+            
         elif self.mouse['use'] == 'pan':
             self.saveHistory = True
             self.render['quick'] = False
             self.Refresh(False)
+            
+        elif self.mouse['use'] == 'fly':
+            if self.fly['mouseControl']:
+                self.StopTimer(self.timerFly)
+                self.fly['mouseControl'] = None
+                self.render['quick'] = False
+                self.Refresh(False)
             
         elif self.mouse['use'] == 'zoom':
             self.DoZoom(zoomtype = self.zoomtype, pos = self.mouse['end'])
@@ -1481,22 +1663,6 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             
         if remove and item in self.layers:
             self.layers.remove(item)
-        
-    def OnZoomToMap(self, event):
-        """!Set display extents to match selected raster or vector
-        map or volume.
-        
-        @todo vector, volume
-        """
-        layer = self.GetSelectedLayer()
-        
-        if layer is None:
-            return
-        
-        Debug.msg (3, "GLWindow.OnZoomToMap(): layer = %s, type = %s" % \
-                       (layer.name, layer.type))
-        
-        self._display.SetViewportDefault()
 
     def ResetView(self):
         """!Reset to default view"""
@@ -2251,8 +2417,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         """!Get display instance"""
         return self._display
         
-    def ZoomToMap(self):
+    def ZoomToMap(self, layers):
         """!Reset view
+        
+        @param layers so far unused
         """
         self.lmgr.nviz.OnResetView(None)
         

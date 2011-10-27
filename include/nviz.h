@@ -157,6 +157,7 @@ void Nviz_get_modelview(double *);
 void Nviz_set_rotation(double, double, double, double);
 void Nviz_unset_rotation(void);
 void Nviz_init_rotation(void);
+void Nviz_flythrough(nv_data *, float *, int *, int);
 
 /* cplanes_obj.c */
 int Nviz_new_cplane(nv_data *, int);

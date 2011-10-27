@@ -1860,6 +1860,20 @@ class Nviz(object):
     def Start2D(self):
         Nviz_set_2D(self.width, self.height)
         
+    def FlyThrough(self, flyInfo, mode, exagInfo):
+        """!Fly through the scene
+        
+        @param flyInfo fly parameters
+        @param mode 0 or 1 for different fly behaviour
+        @param exagInfo parameters changing fly speed
+        """
+        fly = (c_float * 3)()
+        for i, item in enumerate(flyInfo):
+            fly[i] = item
+        exag = (c_int * 2)()
+        exag[0] = int(exagInfo['move'])
+        exag[1] = int(exagInfo['turn'])
+        Nviz_flythrough(self.data, fly, exag, mode)
         
 class Texture(object):
     """!Class representing OpenGL texture"""

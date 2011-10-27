@@ -239,12 +239,15 @@ class NvizToolWindow(FN.FlatNotebook):
             self.mapWindow.light = kwargs['light']  
             self.FindWindowById(self.win['light']['position']).data = kwargs['light']  
             self.FindWindowById(self.win['light']['position']).PostDraw()
+        if 'fly' in kwargs:
+            self.mapWindow.fly['exag'] = kwargs['fly']['exag']
     
     def LoadSettings(self):
         """!Load Nviz settings and apply to current session"""
         view = copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'view')) # copy
         light = copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'light')) # copy
-        self.UpdateState(view = view, light = light)
+        fly = copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'fly')) # copy
+        self.UpdateState(view = view, light = light, fly = fly)
         self.PostViewEvent(zExag = True)
         self.PostLightEvent()
         self.UpdatePage('view')
