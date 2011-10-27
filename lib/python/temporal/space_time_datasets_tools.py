@@ -28,7 +28,6 @@ from space_time_datasets import *
 
 def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=None, end=None, increment=None, dbif = None, interval=False, fs="|"):
     """Use this method to register maps in space time datasets. This function is generic and
-       can handle raster, vector and raster3d maps as well as there space time datasets.
 
        Additionally a start time string and an increment string can be specified
        to assign a time interval automatically to the maps.
@@ -407,7 +406,7 @@ def assign_valid_time_to_maps(type, maps, ttype, start, end=None, file=file, inc
             else:
                 mapid = entry
 
-        sp = dataset_factory(type, id)
+        map = dataset_factory(type, mapid)
 
         # Use the time data from file
         if start_time_in_file:
@@ -557,6 +556,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
             * "comma": Print the map ids (name@mapset) as comma separated string
             * "delta": Print the map ids (name@mapset) with start time, end time, relative length of intervals and the relative distance to the begin
             * "deltagaps": Same as "delta" with addtitionakl listing of gaps. Gaps can be simply identified as the id is "None"
+            * "gran": List map using the granularity of the space time dataset, columns are identical to deltagaps 
         @param header: Set True to print column names 
     """
     mapset =  core.gisenv()["MAPSET"]
@@ -577,12 +577,14 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
         separator = "\t"
            
     # This method expects a list of objects for gap detection
-    if method == "delta" or method == "deltagaps":
+    if method == "delta" or method == "deltagaps" or method == "gran":
         columns = "id,start_time,end_time"
         if method == "deltagaps":
             maps = sp.get_registered_maps_as_objects_with_gaps(where, None)
-        else:
+        elif method == "delta":
             maps = sp.get_registered_maps_as_objects(where, "start_time", None)
+        elif method == "gran":
+            maps = sp.get_registered_maps_as_objects_by_granularity(None)
 
         if header:
             string = ""

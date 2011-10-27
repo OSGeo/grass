@@ -223,9 +223,9 @@ class abstract_space_time_dataset(abstract_dataset):
             if maps[i].is_time_relative():
                 start, end = maps[i].get_relative_time()
 
-            if start and end:
+            if start != None and end != None:
                 time_interval += 1
-            elif start and not end:
+            elif start != None and end == None:
                 time_point += 1
             else:
                 time_invalid += 1
@@ -344,6 +344,78 @@ class abstract_space_time_dataset(abstract_dataset):
             return False
 
         return True
+
+    def get_registered_maps_as_objects_by_granularity(self, gran=None, dbif=None):
+        """Return all registered maps as ordered (by start_time) object list with 
+           "gap" map objects (id==None) for temporal topological operations using the
+           granularity of the space time dataset as increment
+
+           A valid temporal topology (no overlapping or inclusion allowed) is needed to get correct results. 
+    
+           The dataset must have "interval" as temporal map type, so all maps have valid interval time.
+
+           Gaps between maps are identified as unregistered maps with id==None.
+
+           The objects are initialized with the id and the temporal extent (temporal type, start time, end time).
+           In case more map informations are needed, use the select() method for each listed object.
+
+           @param gran: The granularity to be used 
+           @param dbif: The database interface to be used
+
+           In case nothing found None is returned
+        """
+
+        connect = False
+
+        if dbif == None:
+            dbif = sql_database_interface()
+            dbif.connect()
+            connect = True
+
+        obj_list = []
+
+        if self.get_map_time() != "interval":
+            core.error(_("The temporal map type must be interval"))
+            #TODO: Check for valid topology too?
+            return None
+        
+        if gran == None:
+            gran = self.get_granularity()
+
+        start, end = self.get_valid_time()
+
+        while start < end:
+            if self.is_time_absolute():
+                next = increment_datetime_by_string(start, gran)
+            else:
+                next = start + gran
+
+            where = "(start_time <= '%s' and end_time >= '%s')" % (start, next)
+
+            rows = self.get_registered_maps("id", where, "start_time", dbif)
+
+            if rows:
+                if len(rows) > 1:
+                    core.error(_("More than one map found in a granule. Temporal granularity seems to be invalid or the chosen granularity is not a greatest common divider of all intervals and gaps in the dataset."))
+                # Take the first map    
+                map = self.get_new_map_instance(rows[0]["id"])
+            else:
+                # In case of a gap, create a dummy map with identifier None
+                map = self.get_new_map_instance(None)
+
+            if self.is_time_absolute():
+                map.set_absolute_time(start, next)
+            elif self.is_time_relative():
+                map.set_relative_time(start, next)
+
+            obj_list.append(copy.copy(map))
+
+            start = next
+
+        if connect == True:
+            dbif.close()
+
+        return obj_list
 
     def get_registered_maps_as_objects_with_gaps(self, where=None, dbif=None):
         """Return all registered maps as ordered (by start_time) object list with 
@@ -881,12 +953,15 @@ class abstract_space_time_dataset(abstract_dataset):
 		if dbmi.__name__ == "sqlite3":
 		    tstring = row[0]
 		    # Convert the unicode string into the datetime format
-		    if tstring.find(":") > 0:
-			time_format = "%Y-%m-%d %H:%M:%S"
-		    else:
-			time_format = "%Y-%m-%d"
+                    if self.is_time_absolute():
+                        if tstring.find(":") > 0:
+                            time_format = "%Y-%m-%d %H:%M:%S"
+                        else:
+                            time_format = "%Y-%m-%d"
 
-		    max_start_time = datetime.strptime(tstring, time_format)
+		        max_start_time = datetime.strptime(tstring, time_format)
+                    else:
+		        max_start_time = row[0]
 		else:
 		    max_start_time = row[0]
 
@@ -939,7 +1014,7 @@ class abstract_space_time_dataset(abstract_dataset):
             if self.is_time_absolute():
                 gran = compute_absolute_time_granularity(maps)
             elif self.is_time_relative():
-                gran = compute_absolute_time_granularity(maps)
+                gran = compute_relative_time_granularity(maps)
         else:
             gran = None
 
