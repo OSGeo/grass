@@ -39,7 +39,9 @@ int main(int argc, char *argv[])
     module->description = _("Creates topology for vector map.");
 
     map_opt = G_define_standard_option(G_OPT_V_MAP);
-
+    map_opt->label = NULL;
+    map_opt->description = _("Name of vector map");
+    
     err_opt = G_define_standard_option(G_OPT_V_OUTPUT);
     err_opt->key = "error";
     err_opt->description =
@@ -84,6 +86,11 @@ int main(int argc, char *argv[])
     /* build topology */
     if (build) {
 	if (G_name_is_fully_qualified(map_opt->answer, xname, xmapset)) {
+	    if (0 == G_strcasecmp(xmapset, "OGR")) {
+		G_fatal_error(_("Direct read access to OGR layers is not supported by this module. "
+				"Run %s to create a link as GRASS vector map in the current mapset."),
+			      "'v.external'");
+	    }
 	    if (0 != strcmp(xmapset, G_mapset())) {
 		G_fatal_error(_("Vector map <%s> is not in current mapset"),
 			      map_opt->answer);
