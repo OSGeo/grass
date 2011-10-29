@@ -11,28 +11,33 @@
 	      <help>Create new workspace</help>
 	      <handler>OnWorkspaceNew</handler>
 	      <shortcut>Ctrl+N</shortcut>
+	      <id>ID_NEW</id>
 	    </menuitem>
 	    <menuitem>
 	      <label>Open</label>
 	      <help>Load workspace from file</help>
 	      <handler>OnWorkspaceOpen</handler>
 	      <shortcut>Ctrl+O</shortcut>
+	      <id>ID_OPEN</id>
 	    </menuitem>
 	    <menuitem>
 	      <label>Save</label>
 	      <help>Save workspace</help>
 	      <handler>OnWorkspaceSave</handler>
 	      <shortcut>Ctrl+S</shortcut>
+	      <id>ID_SAVE</id>
 	    </menuitem>
 	    <menuitem>
 	      <label>Save as</label>
 	      <help>Save workspace to file</help>
 	      <handler>OnWorkspaceSaveAs</handler>
+	      <id>ID_SAVEAS</id>
 	    </menuitem>
 	    <menuitem>
 	      <label>Close</label>
 	      <help>Close workspace file</help>
 	      <handler>OnWorkspaceClose</handler>
+	      <id>ID_CLOSE</id>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
@@ -749,6 +754,7 @@
 	  <help>Quit wxGUI session</help>
 	  <handler>OnCloseWindow</handler>
 	  <shortcut>Ctrl+Q</shortcut>
+	  <id>ID_EXIT</id>
 	</menuitem>
       </items>
     </menu>
@@ -889,6 +895,7 @@
 	  <label>Preferences</label>
 	  <help>User GUI preferences (display font, commands, digitizer, etc.)</help>
 	  <handler>OnPreferences</handler>
+	  <id>ID_PREFERENCES</id>
 	</menuitem>
       </items>
     </menu>
@@ -3229,6 +3236,7 @@
 	  <keywords>general,manual,help</keywords>
 	  <handler>RunMenuCmd</handler>
 	  <command>g.manual -i</command>
+	  <id>ID_HELP</id>
 	</menuitem>
 	<menuitem>
 	  <label>GUI help</label>
@@ -3236,12 +3244,14 @@
 	  <keywords>general,manual,help</keywords>
 	  <handler>RunMenuCmd</handler>
 	  <command>g.manual entry=wxGUI</command>
+	  <id>ID_HELP</id>
 	</menuitem>
 	<separator />
 	<menuitem>
 	  <label>About GRASS GIS</label>
 	  <help>About GRASS GIS</help>
 	  <handler>OnAboutGRASS</handler>
+	  <id>ID_ABOUT</id>
 	</menuitem>
       </items>
     </menu>

@@ -56,7 +56,7 @@ class Menu(wx.MenuBar):
         return menu
 
     def _createMenuItem(self, menu, menustyle, label, help, handler, gcmd, keywords,
-                        shortcut = '', kind = wx.ITEM_NORMAL):
+                        shortcut = '', wxId = wx.ID_ANY, kind = wx.ITEM_NORMAL):
         """!Creates menu items
         There are three menu styles (menu item text styles).
         1 -- label only, 2 -- label and cmd name, 3 -- cmd name only
@@ -77,7 +77,7 @@ class Menu(wx.MenuBar):
         if shortcut:
             label += '\t' + shortcut
         
-        menuItem = menu.Append(wx.ID_ANY, label, helpString, kind)
+        menuItem = menu.Append(wxId, label, helpString, kind)
         
         self.menucmd[menuItem.GetId()] = gcmd
         
