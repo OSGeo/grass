@@ -1636,7 +1636,7 @@ class cmdPanel(wx.Panel):
                 
             f = open(filename, "w")
             try:
-                f.write(text)
+                f.write(text + os.linesep)
             finally:
                 f.close()
         else:
