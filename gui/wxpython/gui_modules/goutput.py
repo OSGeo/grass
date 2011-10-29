@@ -252,7 +252,7 @@ class GMConsole(wx.SplitterWindow):
         self.btnOutputSave  = wx.Button(parent = self.panelPrompt, id = wx.ID_SAVE)
         self.btnOutputSave.SetToolTipString(_("Save output window content to the file"))
         # abort
-        self.btnCmdAbort = wx.Button(parent = self.panelPrompt, id = wx.ID_ANY, label = _("&Abort"))
+        self.btnCmdAbort = wx.Button(parent = self.panelPrompt, id = wx.ID_STOP)
         self.btnCmdAbort.SetToolTipString(_("Abort running command"))
         self.btnCmdAbort.Enable(False)
         
