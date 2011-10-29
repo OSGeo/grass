@@ -852,9 +852,9 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
                             try:
                                 param = self.cmdDesc.get_param(paramName)
                             except (ValueError, AttributeError):
-                                return
+                                return None
                         else:
-                            return
+                            return None
                         
                         if param['values']:
                             toComplete['entity'] = 'param values'
@@ -946,7 +946,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             self.InsertText(pos, '=')
             self.CharRight()
             self.toComplete = self.EntityToComplete()
-            if self.toComplete:
+            if self.toComplete and 'entity' in self.toComplete:
                 if self.toComplete['entity'] == 'raster map':
                     self.autoCompList = self.mapList['raster']
                 elif self.toComplete['entity'] == 'vector map':
