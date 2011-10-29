@@ -489,6 +489,7 @@ class GPrompt(object):
                 self.moduleDesc = parent.parent.menubar.GetData().GetModules()
             self.moduleList = self._getListOfModules()
             self.mapList = self._getListOfMaps()
+            self.mapsetList = utils.ListOfMapsets()
         else:
             self.moduleDesc = self.moduleList = self.mapList = None
         
@@ -829,22 +830,22 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         except IndexError:
             return None
         
-        if len(entry.split(' ')) > 1:
+        if len(utils.split(str(entry))) > 1:
             if cmd in globalvar.grassCmd['all']:
                 toComplete['cmd'] = cmd
                 if entry[-1] == ' ':
                     words = entry.split(' ')
                     if any(word.startswith('-') for word in words):
                         toComplete['entity'] = 'params'
-                        return toComplete
                     else:
                         toComplete['entity'] = 'params+flags'
-                        return toComplete
-                    
                 else:
-                    #get word left from current position
+                    # get word left from current position
                     word = self.GetWordLeft(withDelimiter = True)
-                    if word[0] == '=':
+                    
+                    if word[0] == '=' and word[-1] == '@':
+                        toComplete['entity'] = 'mapsets'
+                    elif word[0] == '=':
                         # get name of parameter
                         paramName = self.GetWordLeft(withDelimiter = False, ignoredDelimiter = '=').strip('=')
                         if paramName:
@@ -854,29 +855,24 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
                                 return
                         else:
                             return
-
+                        
                         if param['values']:
                             toComplete['entity'] = 'param values'
-                            return toComplete
                         elif param['prompt'] == 'raster' and param['element'] == 'cell':
                             toComplete['entity'] = 'raster map'
-                            return toComplete
                         elif param['prompt'] == 'vector' and param['element'] == 'vector':
                             toComplete['entity'] = 'vector map'
-                            return toComplete
                     elif word[0] == '-':
                         toComplete['entity'] = 'flags'
-                        return toComplete
                     elif word[0] == ' ':
                         toComplete['entity'] = 'params'
-                        return toComplete
-                                       
             else:
                 return None
         else:
             toComplete['entity'] = 'command'
             toComplete['cmd'] = cmd
-            return toComplete
+        
+        return toComplete
     
     def GetWordLeft(self, withDelimiter = False, ignoredDelimiter = None):
         """!Get word left from current cursor position. The beginning
@@ -958,6 +954,17 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
                 elif self.toComplete['entity'] == 'param values':
                     param = self.GetWordLeft(withDelimiter = False, ignoredDelimiter='=').strip(' =')
                     self.autoCompList = self.cmdDesc.get_param(param)['values']
+            self.ShowList()
+        
+        # complete mapset ('@')
+        elif event.GetKeyCode() == 50 and event.ShiftDown():
+            self.autoCompList = list()
+            self.InsertText(pos, '@')
+            self.CharRight()
+            self.toComplete = self.EntityToComplete()
+            
+            if self.toComplete and self.toComplete['entity'] == 'mapsets':
+                self.autoCompList = self.mapsetList
             self.ShowList()
             
         # complete after pressing CTRL + Space          
