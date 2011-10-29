@@ -3997,6 +3997,7 @@ class VariablePanel(wx.Panel):
                                          _("vector"),
                                          _("mapset"),
                                          _("file")])
+        self.type.SetSelection(2) # string
         self.value = wx.TextCtrl(parent = self, id = wx.ID_ANY)
         self.desc = wx.TextCtrl(parent = self, id = wx.ID_ANY)
         
@@ -4084,7 +4085,7 @@ class VariablePanel(wx.Panel):
             GError(parent = self,
                    message = msg)
         else:
-            self.type.SetSelection(0)
+            self.type.SetSelection(2) # string
             self.value.SetValue('')
             self.desc.SetValue('')
             self.UpdateModelVariables()
