@@ -50,6 +50,7 @@ import textwrap
 import tempfile
 import copy
 import re
+import mimetypes
 
 try:
     import xml.etree.ElementTree as etree
@@ -433,11 +434,74 @@ class Model(object):
         
         if statusbar:
             statusbar.SetStatusText(_('Running model...'), 0)
+        
+        # collect ascii inputs
+        self.fileInput = dict()
+        for p in item.GetParams()['params']:
+            if p.get('element', '') == 'file' and \
+                    p.get('prompt', '') == 'input' and \
+                    p.get('age', '') == 'old':
+                filename = p.get('value', p.get('default', ''))
+                if filename and \
+                        mimetypes.guess_type(filename)[0] == 'text/plain':
+                    self.fileInput[filename] = None
+        
+        for finput in self.fileInput:
+            # read lines
+            fd = open(finput, "r")
+            try:
+                data = self.fileInput[finput] = fd.read()
+            finally:
+                fd.close()
+            
+            # substitute variables
+            write = False
+            variables = self.GetVariables()
+            for variable in variables:
+                pattern= re.compile('%' + variable)
+                value = ''
+                if params and 'variables' in params:
+                    for p in params['variables']['params']:
+                        if variable == p.get('name', ''):
+                            value = p.get('value', '')
+                            break
+                
+                if not value:
+                    value = variables[variable].get('value', '')
+                
+                data = pattern.sub(value, data)
+                write = True
+            
+            if write:
+                fd = open(finput, "w")
+                try:
+                    fd.write(data)
+                finally:
+                    fd.close()
+            else:
+                self.fileInput[finput] = None
+        
         log.RunCmd(command = item.GetLog(string = False, substitute = True),
                    onDone = onDone)
         
         if name in params:
             item.SetParams(paramsOrig)
+
+    def CleanUp(self):
+        """!Clean up model"""
+        if hasattr(self, "fileInput"):
+            # restore original files
+            for finput in self.fileInput:
+                data = self.fileInput[finput]
+                if not data:
+                    continue
+                
+                fd = open(finput, "w")
+                try:
+                    fd.write(data)
+                finally:
+                    fd.close()
+            del self.fileInput
         
     def Run(self, log, onDone, parent = None):
         """!Run model
@@ -1079,6 +1143,7 @@ class ModelFrame(wx.Frame):
     def OnDone(self, cmd, returncode):
         """!Computation finished"""
         self.SetStatusText('', 0)
+        self.model.CleanUp()
         
     def OnValidateModel(self, event, showMsg = True):
         """!Validate entire model"""
