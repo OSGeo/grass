@@ -191,7 +191,7 @@ class grassTask:
         
         return errorList
     
-    def get_cmd(self, ignoreErrors = False, ignoreRequired = False):
+    def get_cmd(self, ignoreErrors = False, ignoreRequired = False, ignoreDefault = True):
         """!Produce an array of command name and arguments for feeding
         into some execve-like command processor.
 
@@ -199,6 +199,7 @@ class grassTask:
         far, even though it would not be a correct command for GRASS
         @param ignoreRequired True to ignore required flags, otherwise
         '<required>' is shown
+        @param ignoreDefault True to ignore parameters with default values
         """
         cmd = [self.name]
         
@@ -212,12 +213,14 @@ class grassTask:
                 if flag['suppress_required']:
                     suppress_required = True
         for p in self.params:
-            if p.get('value','') ==  '' and p.get('required', False):
+            if p.get('value', '') ==  '' and p.get('required', False):
                 if p.get('default', '') !=  '':
                     cmd +=  [ '%s=%s' % (p['name'], p['default']) ]
                 elif ignoreErrors and not suppress_required and not ignoreRequired:
                     cmd +=  [ '%s=%s' % (p['name'], _('<required>')) ]
-            elif p.get('value','') !=  '' and p['value'] !=  p.get('default','') :
+            elif p.get('value', '') ==  '' and p.get('default', '') != '' and not ignoreDefault:
+                cmd +=  [ '%s=%s' % (p['name'], p['default']) ]
+            elif p.get('value', '') !=  '' and p['value'] !=  p.get('default','') :
                 # Output only values that have been set, and different from defaults
                 cmd +=  [ '%s=%s' % (p['name'], p['value']) ]
         

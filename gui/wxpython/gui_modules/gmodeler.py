@@ -1816,7 +1816,8 @@ class ModelAction(ModelObject, ogl.RectangleShape):
         @param string True to get cmd as a string otherwise a list
         @param substitute True to substitute variables
         """
-        cmd = self.task.get_cmd(ignoreErrors = True, ignoreRequired = True)
+        cmd = self.task.get_cmd(ignoreErrors = True, ignoreRequired = True,
+                                ignoreDefault = False)
         
         # substitute variables
         if substitute:
