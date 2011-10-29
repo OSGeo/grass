@@ -220,8 +220,9 @@ class grassTask:
                     cmd +=  [ '%s=%s' % (p['name'], _('<required>')) ]
             elif p.get('value', '') ==  '' and p.get('default', '') != '' and not ignoreDefault:
                 cmd +=  [ '%s=%s' % (p['name'], p['default']) ]
-            elif p.get('value', '') !=  '' and p['value'] !=  p.get('default','') :
-                # Output only values that have been set, and different from defaults
+            elif p.get('value', '') !=  '' and \
+                    (p['value'] !=  p.get('default', '') or not ignoreDefault):
+                # output only values that have been set, and different from defaults
                 cmd +=  [ '%s=%s' % (p['name'], p['value']) ]
         
         errList = self.get_cmd_error()
