@@ -101,7 +101,7 @@ int main(int argc, char *argv[])
     /* initialize module */
     module = G_define_module();
     module->description =
-	_("Landsat TM/ETM+ Automatic Cloud Cover Assessment (ACCA).");
+	_("Performs Landsat TM/ETM+ Automatic Cloud Cover Assessment (ACCA).");
     G_add_keyword(_("imagery"));
     G_add_keyword(_("landsat"));
     G_add_keyword(_("acca"));
