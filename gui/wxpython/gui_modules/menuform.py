@@ -502,8 +502,10 @@ class mainFrame(wx.Frame):
             self.btn_run = wx.Button(parent = self.panel, id = wx.ID_OK, label =  _("&Run"))
             self.btn_run.SetToolTipString(_("Run the command (Ctrl+R)"))
             self.btn_run.SetDefault()
+            self.btn_run.SetForegroundColour(wx.Colour(35, 142, 35))
+            
             # copy
-            self.btn_clipboard = wx.Button(parent = self.panel, id = wx.ID_COPY, label = _("C&opy"))
+            self.btn_clipboard = wx.Button(parent = self.panel, id = wx.ID_COPY)
             self.btn_clipboard.SetToolTipString(_("Copy the current command string to the clipboard (Ctrl+C)"))
             
             btnsizer.Add(item = self.btn_run, proportion = 0,
