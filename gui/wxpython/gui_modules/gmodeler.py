@@ -396,7 +396,7 @@ class Model(object):
 
         pattern = re.compile(r'(.*)(%.+\s?)(.*)')
         for action in self.GetItems(objType = ModelAction):
-            cmd = action.GetLog(string = False, substitute = True)
+            cmd = action.GetLog(string = False, substitute = self.GetVariables())
             
             task = menuform.GUI(show = None).ParseCommand(cmd = cmd)
             errList += map(lambda x: cmd[0] + ': ' + x, task.get_cmd_error())
@@ -481,7 +481,7 @@ class Model(object):
             else:
                 self.fileInput[finput] = None
         
-        log.RunCmd(command = item.GetLog(string = False, substitute = True),
+        log.RunCmd(command = item.GetLog(string = False, substitute = params),
                    onDone = onDone)
         
         if name in params:
@@ -552,12 +552,6 @@ class Model(object):
             if err:
                 GError(parent = parent, message = unicode('\n'.join(err)))
                 return
-            
-            # get variable values
-            varValue = dict()
-            if 'variables' in params:
-                for var in params['variables']['params']:
-                    varValue[var['name']] = var['value']
         
         log.cmdThread.SetId(-1)
         for item in self.GetItems():
@@ -575,10 +569,17 @@ class Model(object):
                     pattern = re.compile('%' + variable)
                     if pattern.search(cond):
                         value = ''
-                        if variable in varValue:
-                            value = varValue[variable]
+                        if params and 'variables' in params:
+                            for p in params['variables']['params']:
+                                if variable == p.get('name', ''):
+                                    value = p.get('value', '')
+                                    break
+                        
                         if not value:
                             value = variables[variable].get('value', '')
+                        
+                        if not value:
+                            continue
                         
                         vtype = variables[variable].get('type', 'string')
                         if vtype == 'string':
@@ -600,21 +601,23 @@ class Model(object):
                 else:
                     vlist = eval(condText)
                 
+                if 'variables' not in params:
+                    params['variables'] = { 'params' : [] }
+                varDict = { 'name' : condVar, 'value' : '' }
+                params['variables']['params'].append(varDict)
+                                
                 for var in vlist:
                     for action in item.GetItems():
                         if not isinstance(action, ModelAction) or \
                                 not action.IsEnabled():
                             continue
-
-                        par = action.GetParams(dcopy = True)['params']
-                        for idx in range(len(par)):
-                            if not par[idx].get('value', None):
-                                continue
-                            
-                            if pattern.search(par[idx]['value']):
-                                par[idx]['value'] = pattern.sub(var, par[idx]['value'])
-                        self.RunAction(action, { action.GetName(): {'params': par } }, log, onDone)
-        
+                        
+                        varDict['value'] = var
+                                                
+                        self.RunAction(item = action, params = params,
+                                       log = log, onDone = onDone)
+                params['variables']['params'].remove(varDict)
+                
         # discard values
         if params:
             for item in params.itervalues():
@@ -1876,35 +1879,37 @@ class ModelAction(ModelObject, ogl.RectangleShape):
         """!Get properties dialog"""
         return self.propWin
 
-    def GetLog(self, string = True, substitute = False):
+    def GetLog(self, string = True, substitute = None):
         """!Get logging info
 
         @param string True to get cmd as a string otherwise a list
-        @param substitute True to substitute variables
+        @param substitute dictionary of parameter to substitute or None
         """
         cmd = self.task.get_cmd(ignoreErrors = True, ignoreRequired = True,
                                 ignoreDefault = False)
         
         # substitute variables
         if substitute:
-            variables = self.parent.GetVariables()
-            fparams = self.parent.GetVariables(params = True)
-            params = None
-            for values in fparams.itervalues():
-                params = values['params']
-                break
-        
+            variables = []
+            if 'variables' in substitute:
+                for p in substitute['variables']['params']:
+                    variables.append(p.get('name', ''))
+            else:
+                variables = self.parent.GetVariables()
             for variable in variables:
                 pattern= re.compile('%' + variable)
                 value = ''
-                if params:
-                    for p in params:
+                if substitute and 'variables' in substitute:
+                    for p in substitute['variables']['params']:
                         if variable == p.get('name', ''):
                             value = p.get('value', '')
                             break
-                        
+                
                 if not value:
                     value = variables[variable].get('value', '')
+                
+                if not value:
+                    continue
                 
                 for idx in range(len(cmd)):
                     if pattern.search(cmd[idx]):
