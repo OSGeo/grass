@@ -685,7 +685,7 @@ class Model(object):
             params = list()
             result["variables"] = { 'flags'  : list(),
                                     'params' : params,
-                                    'idx' : idx }
+                                    'idx'    : idx }
             for name, values in self.variables.iteritems():
                 gtype = values.get('type', 'string')
                 if gtype in ('raster', 'vector', 'mapset', 'file'):
@@ -741,7 +741,8 @@ class Model(object):
                                          'params': list(),
                                          'idx'   : idx }
                     result[name]['params'].append(p)
-            idx += 1
+            if name in result:
+                idx += 1
         
         self.variablesParams = result # record parameters
         
@@ -3887,7 +3888,7 @@ class ModelParamDialog(wx.Dialog):
         """!Create for each parameterized module its own page"""
         nameOrdered = [''] * len(self.params.keys())
         for name, params in self.params.iteritems():
-            nameOrdered[params['idx']] =  name
+            nameOrdered[params['idx']] = name
         for name in nameOrdered:
             params = self.params[name]
             panel = self._createPage(name, params)
