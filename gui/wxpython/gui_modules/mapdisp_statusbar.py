@@ -142,13 +142,17 @@ class SbManager:
         @see ShowStatusbarChoiceItemsByClass
         @todo consider adding similar function which would take item names
         """
+        index = []
         for itemClass in itemClasses:
             for i in range(0, self.choice.GetCount() - 1):
                 item = self.choice.GetClientData(i)
                 if item.__class__ == itemClass:
-                    self.choice.Delete(i)
-                    self._hiddenItems[item] = i
-                
+                    index.append(i)
+                    self._hiddenItems[i] = item
+        # must be sorted in reverse order to be removed correctly
+        for i in sorted(index, reverse = True):
+            self.choice.Delete(i)
+        
     def ShowStatusbarChoiceItemsByClass(self, itemClasses):
         """!Shows items showed in choice
         
@@ -160,14 +164,12 @@ class SbManager:
         
         @see HideStatusbarChoiceItemsByClass
         """
-        for itemClass in itemClasses:
-            for item in self.statusbarItems.values():
-                if item.__class__ == itemClass:
-                    if self.choice.FindString(item.label) != wx.NOT_FOUND:
-                        return # item already in choice
-                    pos = self._hiddenItems[item]
-                    self.choice.Insert(item.label, pos, item)
-                    
+        # must be sorted to be inserted correctly
+        for pos in sorted(self._hiddenItems.keys()):
+            item = self._hiddenItems[pos]
+            if item.__class__ in itemClasses:
+                self.choice.Insert(item.label, pos, item)
+        
     def ShowItem(self, itemName):
         """!Invokes showing of particular item
         
