@@ -2602,24 +2602,31 @@ class RasterPanel(wx.Panel):
         
     def update(self):
         #draw raster
-        map = self.instruction.FindInstructionByType('map')
+        mapInstr = self.instruction.FindInstructionByType('map')
+        if not mapInstr: # no map frame
+            GMessage(message = _("Please, create map frame first."))
+            return
+            
         if self.rasterNoRadio.GetValue() or not self.rasterSelect.GetValue():
             self.rasterDict['isRaster'] = False
             self.rasterDict['raster'] = None
-            map['drawMap'] = False
+            mapInstr['drawMap'] = False
             if self.id in self.instruction:
                 del self.instruction[self.id]
 
         else:
             self.rasterDict['isRaster'] = True
             self.rasterDict['raster'] = self.rasterSelect.GetValue()
-            if self.rasterDict['raster'] != map['drawMap']:
-                map['drawMap'] = False
-            
-            if self.id not in self.instruction:
+            if self.rasterDict['raster'] != mapInstr['drawMap']:
+                mapInstr['drawMap'] = False
+
+            raster = self.instruction.FindInstructionByType('raster')
+            if not raster:
                 raster = Raster(self.id)
                 self.instruction.AddInstruction(raster)
-            self.instruction[self.id].SetInstruction(self.rasterDict)
+                self.instruction[self.id].SetInstruction(self.rasterDict)
+            else:
+                self.instruction[raster.id].SetInstruction(self.rasterDict)
             
         if 'map' in self.mainDialog.parent.openDialogs:
             self.mainDialog.parent.openDialogs['map'].updateDialog()
