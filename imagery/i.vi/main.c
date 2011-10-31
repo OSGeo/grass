@@ -4,21 +4,21 @@
  * MODULE:       i.vi
  * AUTHOR(S):    Baburao Kamble baburaokamble@gmail.com
  *		 Yann Chemin - yann.chemin@gmail.com
- * PURPOSE:      Calculates 14 vegetation indices 
- * 		 based on biophysical parameters. 
+ * PURPOSE:      Calculates 14 vegetation indices
+ * 		 based on biophysical parameters.
  *
  * COPYRIGHT:    (C) 2002-2008 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *   	    	 License (>=v2). Read the file COPYING that comes with GRASS
  *   	    	 for details.
- * 
- * Remark:              
- *		 These are generic indices that use red and nir for most of them. 
+ *
+ * Remark:
+ *		 These are generic indices that use red and nir for most of them.
  *               Those can be any use by standard satellite having V and IR.
- *		 However arvi uses red, nir and blue; 
+ *		 However arvi uses red, nir and blue;
  *		 GVI uses B,G,R,NIR, chan5 and chan 7 of landsat;
- *		 and GARI uses B,G,R and NIR.   
+ *		 and GARI uses B,G,R and NIR.
  *
  * Changelog:	 Added EVI on 20080718 (Yann)
  * 		 Added VARI on 20081014 (Yann)
@@ -50,7 +50,7 @@ double ga_ri(double redchan, double nirchan, double bluechan,
 	      double greenchan);
 double va_ri(double redchan, double greenchan, double bluechan);
 
-int main(int argc, char *argv[]) 
+int main(int argc, char *argv[])
 {
     int nrows, ncols;
     int row, col;
@@ -69,6 +69,10 @@ int main(int argc, char *argv[])
     DCELL *inrast_redchan, *inrast_nirchan, *inrast_greenchan;
     DCELL *inrast_bluechan, *inrast_chan5chan, *inrast_chan7chan;
     DCELL *outrast;
+    RASTER_MAP_TYPE data_type_redchan;
+    RASTER_MAP_TYPE data_type_nirchan, data_type_greenchan;
+    RASTER_MAP_TYPE data_type_bluechan;
+    RASTER_MAP_TYPE data_type_chan5chan, data_type_chan7chan;
     CELL val1, val2;
 
     G_gisinit(argv[0]);
@@ -81,8 +85,8 @@ int main(int argc, char *argv[])
 	_("Calculates different types of vegetation indices.");
     module->description = _("Uses red and nir bands mostly, "
 			    "and some indices require additional bands.");
-    
-    /* Define the different options */ 
+
+    /* Define the different options */
     input1 = G_define_option();
     input1->key = _("viname");
     input1->type = TYPE_STRING;
@@ -123,7 +127,7 @@ int main(int argc, char *argv[])
     input4->label =
 	_("Name of the green channel surface reflectance map");
     input4->description = _("Range: [0.0;1.0]");
-    
+
     input5 = G_define_standard_option(G_OPT_R_INPUT);
     input5->key = "blue";
     input5->required = NO;
@@ -141,7 +145,7 @@ int main(int argc, char *argv[])
     input7 = G_define_standard_option(G_OPT_R_INPUT);
     input7->key = "chan7";
     input7->required = NO;
-    input7->label = 
+    input7->label =
 	_("Name of the chan7 channel surface reflectance map");
     input7->description = _("Range: [0.0;1.0]");
 
@@ -189,24 +193,24 @@ int main(int argc, char *argv[])
     if (!strcmp(viflag, "gemi") && (!(input2->answer) || !(input3->answer)) )
 	G_fatal_error(_("gemi index requires red and nir maps"));
 
-    if (!strcmp(viflag, "arvi") && (!(input2->answer) || !(input3->answer) 
+    if (!strcmp(viflag, "arvi") && (!(input2->answer) || !(input3->answer)
                 || !(input5->answer)) )
 	G_fatal_error(_("arvi index requires blue, red and nir maps"));
 
-    if (!strcmp(viflag, "evi") && (!(input2->answer) || !(input3->answer) 
+    if (!strcmp(viflag, "evi") && (!(input2->answer) || !(input3->answer)
                 || !(input5->answer)) )
 	G_fatal_error(_("evi index requires blue, red and nir maps"));
 
-    if (!strcmp(viflag, "vari") && (!(input2->answer) || !(input4->answer) 
+    if (!strcmp(viflag, "vari") && (!(input2->answer) || !(input4->answer)
                 || !(input5->answer)) )
 	G_fatal_error(_("vari index requires blue, green and red maps"));
 
-    if (!strcmp(viflag, "gari") && (!(input2->answer) || !(input3->answer) 
+    if (!strcmp(viflag, "gari") && (!(input2->answer) || !(input3->answer)
                 || !(input4->answer) || !(input5->answer)) )
 	G_fatal_error(_("gari index requires blue, green, red and nir maps"));
 
-    if (!strcmp(viflag, "gvi") && (!(input2->answer) || !(input3->answer) 
-                || !(input4->answer) || !(input5->answer) 
+    if (!strcmp(viflag, "gvi") && (!(input2->answer) || !(input3->answer)
+                || !(input4->answer) || !(input5->answer)
                 || !(input6->answer) || !(input7->answer)) )
 	G_fatal_error(_("gvi index requires blue, green, red, nir, chan5 and chan7 maps"));
 
@@ -215,37 +219,42 @@ int main(int argc, char *argv[])
 
     if (nirchan) {
         infd_nirchan = Rast_open_old(nirchan, "");
-        inrast_nirchan = Rast_allocate_d_buf();
+        data_type_nirchan = Rast_map_type(nirchan, "");
+        inrast_nirchan = Rast_allocate_buf(data_type_nirchan);
     }
 
     if (greenchan) {
-	infd_greenchan = Rast_open_old(greenchan, "");
-	inrast_greenchan = Rast_allocate_d_buf();
+        infd_greenchan = Rast_open_old(greenchan, "");
+        data_type_greenchan = Rast_map_type(greenchan, "");
+        inrast_greenchan = Rast_allocate_buf(data_type_greenchan);
     }
 
     if (bluechan) {
-	infd_bluechan = Rast_open_old(bluechan, "");
-	inrast_bluechan = Rast_allocate_d_buf();
+        infd_bluechan = Rast_open_old(bluechan, "");
+        data_type_bluechan = Rast_map_type(bluechan, "");
+        inrast_bluechan = Rast_allocate_buf(data_type_bluechan);
     }
 
     if (chan5chan) {
-	infd_chan5chan = Rast_open_old(chan5chan, "");
-	inrast_chan5chan = Rast_allocate_d_buf();
+        infd_chan5chan = Rast_open_old(chan5chan, "");
+        data_type_chan5chan = Rast_map_type(chan5chan, "");
+        inrast_chan5chan = Rast_allocate_buf(data_type_chan5chan);
     }
 
     if (chan7chan) {
-	infd_chan7chan = Rast_open_old(chan7chan, "");
-	inrast_chan7chan = Rast_allocate_d_buf();
+        infd_chan7chan = Rast_open_old(chan7chan, "");
+        data_type_chan7chan = Rast_map_type(chan7chan, "");
+        inrast_chan7chan = Rast_allocate_buf(data_type_chan7chan);
     }
 
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
     outrast = Rast_allocate_d_buf();
 
-    /* Create New raster files */ 
+    /* Create New raster files */
     outfd = Rast_open_new(result, DCELL_TYPE);
 
-    /* Process pixels */ 
+    /* Process pixels */
     for (row = 0; row < nrows; row++)
     {
 	DCELL d_bluechan;
@@ -257,19 +266,84 @@ int main(int argc, char *argv[])
 
 	G_percent(row, nrows, 2);
 
-	Rast_get_d_row(infd_redchan, inrast_redchan, row);
-	if (nirchan)
-	    Rast_get_d_row(infd_nirchan, inrast_nirchan, row);
-	if (greenchan)
-	    Rast_get_d_row(infd_greenchan, inrast_greenchan, row);
-	if (bluechan)
-	    Rast_get_d_row(infd_bluechan, inrast_bluechan, row);
-	if (chan5chan)
-	    Rast_get_d_row(infd_chan5chan, inrast_chan5chan, row);
-	if (chan7chan)
-	    Rast_get_d_row(infd_chan7chan, inrast_chan7chan, row);
+	switch(data_type_redchan){
+		case CELL_TYPE:
+		    d_redchan   = (double) ((CELL *) inrast_redchan)[col];
+		    break;
+		case FCELL_TYPE:
+		    d_redchan   = (double) ((FCELL *) inrast_redchan)[col];
+		    break;
+		case DCELL_TYPE:
+		    d_redchan   = ((DCELL *) inrast_redchan)[col];
+		    break;
+        }
+        if (nirchan) {
+            switch(data_type_nirchan){
+                case CELL_TYPE:
+                    d_nirchan   = (double) ((CELL *) inrast_nirchan)[col];
+                    break;
+                case FCELL_TYPE:
+                    d_nirchan   = (double) ((FCELL *) inrast_nirchan)[col];
+                    break;
+                case DCELL_TYPE:
+                    d_nirchan   = ((DCELL *) inrast_nirchan)[col];
+                    break;
+            }
+	}
+	if (greenchan) {
+            switch(data_type_greenchan){
+                case CELL_TYPE:
+                    d_greenchan   = (double) ((CELL *) inrast_greenchan)[col];
+                    break;
+                case FCELL_TYPE:
+                    d_greenchan   = (double) ((FCELL *) inrast_greenchan)[col];
+                    break;
+                case DCELL_TYPE:
+                    d_greenchan   = ((DCELL *) inrast_greenchan)[col];
+                    break;
+            }
+	}
+	if (bluechan) {
+            switch(data_type_bluechan){
+                case CELL_TYPE:
+                    d_bluechan   = (double) ((CELL *) inrast_bluechan)[col];
+                    break;
+                case FCELL_TYPE:
+                    d_bluechan   = (double) ((FCELL *) inrast_bluechan)[col];
+                    break;
+                case DCELL_TYPE:
+                    d_bluechan   = ((DCELL *) inrast_bluechan)[col];
+                    break;
+            }
+	}
+	if (chan5chan) {
+            switch(data_type_chan5chan){
+                case CELL_TYPE:
+                    d_chan5chan   = (double) ((CELL *) inrast_chan5chan)[col];
+                    break;
+                case FCELL_TYPE:
+                    d_chan5chan   = (double) ((FCELL *) inrast_chan5chan)[col];
+                    break;
+                case DCELL_TYPE:
+                    d_chan5chan   = ((DCELL *) inrast_chan5chan)[col];
+                    break;
+            }
+	}
+	if (chan7chan) {
+            switch(data_type_chan7chan){
+                case CELL_TYPE:
+                    d_chan7chan   = (double) ((CELL *) inrast_chan7chan)[col];
+                    break;
+                case FCELL_TYPE:
+                    d_chan7chan   = (double) ((FCELL *) inrast_chan7chan)[col];
+                    break;
+                case DCELL_TYPE:
+                    d_chan7chan   = ((DCELL *) inrast_chan7chan)[col];
+                    break;
+            }
+	}
 
-	/* process the data */ 
+	/* process the data */
 	for (col = 0; col < ncols; col++)
 	{
 	    d_redchan   = inrast_redchan[col];
@@ -285,7 +359,7 @@ int main(int argc, char *argv[])
 	    d_chan7chan = inrast_chan7chan[col];
 
 	    if (Rast_is_d_null_value(&d_redchan) ||
-		((nirchan) && Rast_is_d_null_value(&d_nirchan)) || 
+		((nirchan) && Rast_is_d_null_value(&d_nirchan)) ||
 		((greenchan) && Rast_is_d_null_value(&d_greenchan)) ||
 		((bluechan) && Rast_is_d_null_value(&d_bluechan)) ||
 		((chan5chan) && Rast_is_d_null_value(&d_chan5chan)) ||
@@ -293,11 +367,11 @@ int main(int argc, char *argv[])
 		Rast_set_d_null_value(&outrast[col], 1);
 	    }
 	    else {
-		/* calculate simple_ratio        */ 
+		/* calculate simple_ratio        */
 		if (!strcmp(viflag, "sr"))
 		    outrast[col] = s_r(d_redchan, d_nirchan);
 
-		/* calculate ndvi                    */ 
+		/* calculate ndvi                    */
 		if (!strcmp(viflag, "ndvi")) {
 		    if (d_redchan + d_nirchan < 0.001)
 			Rast_set_d_null_value(&outrast[col], 1);
@@ -373,7 +447,7 @@ int main(int argc, char *argv[])
     G_free(outrast);
     Rast_close(outfd);
 
-    /* Color from -1.0 to +1.0 in grey */ 
+    /* Color from -1.0 to +1.0 in grey */
     Rast_init_colors(&colors);
     val1 = -1;
     val2 = 1;
@@ -381,7 +455,7 @@ int main(int argc, char *argv[])
     Rast_short_history(result, "raster", &history);
     Rast_command_history(&history);
     Rast_write_history(result, &history);
-    
+
     exit(EXIT_SUCCESS);
 }
 
