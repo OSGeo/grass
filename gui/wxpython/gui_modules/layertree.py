@@ -1114,9 +1114,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         
         item    = event.GetItem()
         checked = item.IsChecked()
-
+        
         digitToolbar = self.mapdisplay.GetToolbar('vdigit')
-        if self.first == False:
+        if not self.first:
             # change active parameter for item in layers list in render.Map
             if self.GetPyData(item)[0]['type'] == 'group':
                 child, cookie = self.GetFirstChild(item)
@@ -1134,15 +1134,13 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                        (digitToolbar and digitToolbar.GetLayer() != mapLayer):
                     # ignore when map layer is edited
                     self.Map.ChangeLayerActive(mapLayer, checked)
-
-        #
+        
+        self.Unselect()
+        
         # update progress bar range (mapwindow statusbar)
-        #
         self.mapdisplay.GetProgressBar().SetRange(len(self.Map.GetListOfLayers(l_active = True)))
-
-        #
+        
         # nviz
-        #
         if self.lmgr.IsPaneShown('toolbarNviz') and \
                 self.GetPyData(item) is not None:
             # nviz - load/unload data layer
@@ -1171,7 +1169,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     self.mapdisplay.MapWindow.UnloadVector(item)
             
             self.mapdisplay.SetStatusText("", 0)
-
+        
         # redraw map if auto-rendering is enabled
         self.rerender = True
         self.reorder = True
