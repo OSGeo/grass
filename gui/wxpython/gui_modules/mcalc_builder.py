@@ -126,9 +126,10 @@ class MapCalcFrame(wx.Frame):
         #
         # Buttons
         #
-        self.btn_clear = wx.Button(parent = self.panel, id = wx.ID_CLEAR, label = _("Cl&ear"))
+        self.btn_clear = wx.Button(parent = self.panel, id = wx.ID_CLEAR)
         self.btn_help = wx.Button(parent = self.panel, id = wx.ID_HELP)
         self.btn_run = wx.Button(parent = self.panel, id = wx.ID_ANY, label = _("&Run"))
+        self.btn_run.SetForegroundColour(wx.Colour(35, 142, 35))
         self.btn_run.SetDefault()
         self.btn_close = wx.Button(parent = self.panel, id = wx.ID_CLOSE)
         self.btn_cmd = wx.Button(parent = self.panel, id = wx.ID_ANY,
