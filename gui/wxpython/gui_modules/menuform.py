@@ -1389,7 +1389,9 @@ class cmdPanel(wx.Panel):
                         
                         ifbb.Bind(wx.EVT_TEXT, self.OnFileText)
                         
-                        btnSave = wx.Button(parent = which_panel, id = wx.ID_SAVE)
+                        btnLoad = wx.Button(parent = which_panel, id = wx.ID_ANY, label = _("&Load"))
+                        btnLoad.Bind(wx.EVT_BUTTON, self.OnFileLoad)
+                        btnSave = wx.Button(parent = which_panel, id = wx.ID_SAVEAS)
                         btnSave.Bind(wx.EVT_BUTTON, self.OnFileSave)
                         
                         which_sizer.Add(item = wx.StaticText(parent = which_panel, id = wx.ID_ANY,
@@ -1398,10 +1400,16 @@ class cmdPanel(wx.Panel):
                                         flag = wx.EXPAND | wx.RIGHT | wx.LEFT | wx.BOTTOM, border = 5)
                         which_sizer.Add(item = ifbb, proportion = 1,
                                         flag = wx.EXPAND | wx.RIGHT | wx.LEFT, border = 5)
-                        which_sizer.Add(item = btnSave, proportion = 0,
+                        btnSizer = wx.BoxSizer(wx.HORIZONTAL)
+                        btnSizer.Add(item = btnLoad, proportion = 0,
+                                     flag = wx.ALIGN_RIGHT | wx.RIGHT, border = 10)
+                        btnSizer.Add(item = btnSave, proportion = 0,
+                                     flag = wx.ALIGN_RIGHT)
+                        which_sizer.Add(item = btnSizer, proportion = 0,
                                         flag = wx.ALIGN_RIGHT | wx.RIGHT | wx.TOP, border = 5)
                         
                         p['wxId'].append(ifbb.GetId())
+                        p['wxId'].append(btnLoad.GetId())
                         p['wxId'].append(btnSave.GetId())
                 
                 # directory selector
@@ -1586,6 +1594,34 @@ class cmdPanel(wx.Panel):
             return p['value']
         return p.get('default', '')
         
+    def OnFileLoad(self, event):
+        """!Load file to interactive input"""
+        me = event.GetId()
+        win = dict()
+        for p in self.task.params:
+            if 'wxId' in p and me in p['wxId']:
+                win['file'] = self.FindWindowById(p['wxId'][0])
+                win['text'] = self.FindWindowById(p['wxId'][1])
+                break
+        
+        if not win:
+            return
+        
+        path = win['file'].GetValue()
+        if not path:
+            gcmd.GMessage(parent = self,
+                          message = _("Nothing to load."))
+            return
+        
+        data = ''
+        f = open(path, "r")
+        try:
+            data = f.read()
+        finally:
+            f.close()
+        
+        win['text'].SetValue(data)
+        
     def OnFileSave(self, event):
         """!Save interactive input to the file"""
         wId = event.GetId()
@@ -1638,7 +1674,9 @@ class cmdPanel(wx.Panel):
                 
             f = open(filename, "w")
             try:
-                f.write(text + os.linesep)
+                f.write(text)
+                if text[-1] != os.linesep:
+                    f.write(os.linesep)
             finally:
                 f.close()
         else:
