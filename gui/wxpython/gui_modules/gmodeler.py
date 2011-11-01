@@ -394,12 +394,14 @@ class Model(object):
         error string"""
         errList = list()
 
+        variables = self.GetVariables().keys()
         pattern = re.compile(r'(.*)(%.+\s?)(.*)')
         for action in self.GetItems(objType = ModelAction):
-            cmd = action.GetLog(string = False, substitute = self.GetVariables())
+            cmd = action.GetLog(string = False)
             
             task = menuform.GUI(show = None).ParseCommand(cmd = cmd)
             errList += map(lambda x: cmd[0] + ': ' + x, task.get_cmd_error())
+            
             # check also variables
             for opt in cmd[1:]:
                 if '=' not in opt:
@@ -408,16 +410,91 @@ class Model(object):
                 sval = pattern.search(value)
                 if sval:
                     var = sval.group(2).strip()[1:] # ignore '%'
-                    report = True
-                    for item in filter(lambda x: isinstance(x, ModelLoop), action.GetBlock()):
-                        if var in item.GetText():
-                            report = False
-                            break
-                    if report:
-                        errList.append(_("%s: undefined variable '%s'") % (cmd[0], var))
+                    if var not in variables:
+                        report = True
+                        for item in filter(lambda x: isinstance(x, ModelLoop), action.GetBlock()):
+                            if var in item.GetText():
+                                report = False
+                                break
+                        if report:
+                            errList.append(_("%s: undefined variable '%s'") % (cmd[0], var))
+        
+            errList += self._substituteFile(action, checkOnly = True)
         
         return errList
 
+    def _substituteFile(self, item, params = None, checkOnly = False):
+        """!Subsitute variables in command file inputs
+
+        @param checkOnly tuble - True to check variable, don't touch files
+        
+        @return list of undefined variables
+        """
+        errList = list()
+        
+        if not hasattr(self, "fileInput"):
+            self.fileInput = dict()
+
+        # collect ascii inputs
+        cmdFileInput = list()
+        for p in item.GetParams()['params']:
+            if p.get('element', '') == 'file' and \
+                    p.get('prompt', '') == 'input' and \
+                    p.get('age', '') == 'old':
+                filename = p.get('value', p.get('default', ''))
+                if filename and \
+                        mimetypes.guess_type(filename)[0] == 'text/plain':
+                    cmdFileInput.append(filename)
+        
+        for finput in cmdFileInput:
+            # read lines
+            fd = open(finput, "r")
+            try:
+                data = self.fileInput[finput] = fd.read()
+            finally:
+                fd.close()
+            
+            # substitute variables
+            write = False
+            variables = self.GetVariables()
+            for variable in variables:
+                pattern = re.compile('%' + variable)
+                value = ''
+                if params and 'variables' in params:
+                    for p in params['variables']['params']:
+                        if variable == p.get('name', ''):
+                            if p.get('type', 'string') == 'string':
+                                value = p.get('value', '')
+                            else:
+                                value = str(p.get('value', ''))
+                            break
+                
+                if not value:
+                    value = variables[variable].get('value', '')
+                
+                data = pattern.sub(value, data)
+                if not checkOnly:
+                    write = True
+            
+            pattern = re.compile(r'(.*)(%.+\s?)(.*)')
+            sval = pattern.search(data)
+            if sval:
+                var = sval.group(2).strip()[1:] # ignore '%'
+                cmd = item.GetLog(string = False)[0]
+                errList.append(_("%s: undefined variable '%s'") % (cmd, var))
+            
+            if not checkOnly:
+                if write:
+                    fd = open(finput, "w")
+                    try:
+                        fd.write(data)
+                    finally:
+                        fd.close()
+                else:
+                    self.fileInput[finput] = None
+            
+        return errList
+    
     def RunAction(self, item, params, log, onDone, statusbar = None):
         """!Run given action
 
@@ -435,51 +512,7 @@ class Model(object):
         if statusbar:
             statusbar.SetStatusText(_('Running model...'), 0)
         
-        # collect ascii inputs
-        self.fileInput = dict()
-        for p in item.GetParams()['params']:
-            if p.get('element', '') == 'file' and \
-                    p.get('prompt', '') == 'input' and \
-                    p.get('age', '') == 'old':
-                filename = p.get('value', p.get('default', ''))
-                if filename and \
-                        mimetypes.guess_type(filename)[0] == 'text/plain':
-                    self.fileInput[filename] = None
-        
-        for finput in self.fileInput:
-            # read lines
-            fd = open(finput, "r")
-            try:
-                data = self.fileInput[finput] = fd.read()
-            finally:
-                fd.close()
-            
-            # substitute variables
-            write = False
-            variables = self.GetVariables()
-            for variable in variables:
-                pattern= re.compile('%' + variable)
-                value = ''
-                if params and 'variables' in params:
-                    for p in params['variables']['params']:
-                        if variable == p.get('name', ''):
-                            value = p.get('value', '')
-                            break
-                
-                if not value:
-                    value = variables[variable].get('value', '')
-                
-                data = pattern.sub(value, data)
-                write = True
-            
-            if write:
-                fd = open(finput, "w")
-                try:
-                    fd.write(data)
-                finally:
-                    fd.close()
-            else:
-                self.fileInput[finput] = None
+        self._substituteFile(item, params)
         
         log.RunCmd(command = item.GetLog(string = False, substitute = params),
                    onDone = onDone)
