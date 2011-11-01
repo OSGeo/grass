@@ -736,6 +736,8 @@ static const char *papszDatumEquiv[] = {
     "European_Terrestrial_Reference_System_1989",
     "ETRS_1989",
     "European_Terrestrial_Reference_System_1989",
+    "ETRS89",
+    "European_Terrestrial_Reference_System_1989",
     "ETRF_1989",
     "European_Terrestrial_Reference_System_1989",
     "NZGD_2000",
