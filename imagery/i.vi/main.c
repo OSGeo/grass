@@ -215,7 +215,8 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("gvi index requires blue, green, red, nir, chan5 and chan7 maps"));
 
     infd_redchan = Rast_open_old(redchan, "");
-    inrast_redchan = Rast_allocate_d_buf();
+    data_type_redchan = Rast_map_type(redchan, "");
+    inrast_redchan = Rast_allocate_buf(data_type_redchan);
 
     if (nirchan) {
         infd_nirchan = Rast_open_old(nirchan, "");
@@ -249,10 +250,10 @@ int main(int argc, char *argv[])
 
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
-    outrast = Rast_allocate_d_buf();
 
     /* Create New raster files */
     outfd = Rast_open_new(result, DCELL_TYPE);
+    outrast = Rast_allocate_d_buf();
 
     /* Process pixels */
     for (row = 0; row < nrows; row++)
@@ -266,97 +267,102 @@ int main(int argc, char *argv[])
 
 	G_percent(row, nrows, 2);
 
-	switch(data_type_redchan){
-		case CELL_TYPE:
-		    d_redchan   = (double) ((CELL *) inrast_redchan)[col];
-		    break;
-		case FCELL_TYPE:
-		    d_redchan   = (double) ((FCELL *) inrast_redchan)[col];
-		    break;
-		case DCELL_TYPE:
-		    d_redchan   = ((DCELL *) inrast_redchan)[col];
-		    break;
-        }
-        if (nirchan) {
-            switch(data_type_nirchan){
-                case CELL_TYPE:
-                    d_nirchan   = (double) ((CELL *) inrast_nirchan)[col];
-                    break;
-                case FCELL_TYPE:
-                    d_nirchan   = (double) ((FCELL *) inrast_nirchan)[col];
-                    break;
-                case DCELL_TYPE:
-                    d_nirchan   = ((DCELL *) inrast_nirchan)[col];
-                    break;
-            }
-	}
-	if (greenchan) {
-            switch(data_type_greenchan){
-                case CELL_TYPE:
-                    d_greenchan   = (double) ((CELL *) inrast_greenchan)[col];
-                    break;
-                case FCELL_TYPE:
-                    d_greenchan   = (double) ((FCELL *) inrast_greenchan)[col];
-                    break;
-                case DCELL_TYPE:
-                    d_greenchan   = ((DCELL *) inrast_greenchan)[col];
-                    break;
-            }
+	/* read input maps */
+	Rast_get_row(infd_redchan,inrast_redchan,row,data_type_redchan);
+	if (nirchan) {
+	    Rast_get_row(infd_nirchan,inrast_nirchan,row,data_type_nirchan);
 	}
 	if (bluechan) {
-            switch(data_type_bluechan){
-                case CELL_TYPE:
-                    d_bluechan   = (double) ((CELL *) inrast_bluechan)[col];
-                    break;
-                case FCELL_TYPE:
-                    d_bluechan   = (double) ((FCELL *) inrast_bluechan)[col];
-                    break;
-                case DCELL_TYPE:
-                    d_bluechan   = ((DCELL *) inrast_bluechan)[col];
-                    break;
-            }
+	    Rast_get_row(infd_bluechan,inrast_bluechan,row,data_type_bluechan);
+	}
+	if (greenchan) {
+	    Rast_get_row(infd_greenchan,inrast_greenchan,row,data_type_greenchan);
 	}
 	if (chan5chan) {
-            switch(data_type_chan5chan){
-                case CELL_TYPE:
-                    d_chan5chan   = (double) ((CELL *) inrast_chan5chan)[col];
-                    break;
-                case FCELL_TYPE:
-                    d_chan5chan   = (double) ((FCELL *) inrast_chan5chan)[col];
-                    break;
-                case DCELL_TYPE:
-                    d_chan5chan   = ((DCELL *) inrast_chan5chan)[col];
-                    break;
-            }
+	    Rast_get_row(infd_chan5chan,inrast_chan5chan,row,data_type_chan5chan);
 	}
 	if (chan7chan) {
-            switch(data_type_chan7chan){
-                case CELL_TYPE:
-                    d_chan7chan   = (double) ((CELL *) inrast_chan7chan)[col];
-                    break;
-                case FCELL_TYPE:
-                    d_chan7chan   = (double) ((FCELL *) inrast_chan7chan)[col];
-                    break;
-                case DCELL_TYPE:
-                    d_chan7chan   = ((DCELL *) inrast_chan7chan)[col];
-                    break;
-            }
+	    Rast_get_row(infd_chan7chan,inrast_chan7chan,row,data_type_chan7chan);
 	}
-
 	/* process the data */
 	for (col = 0; col < ncols; col++)
 	{
-	    d_redchan   = inrast_redchan[col];
-            if(nirchan)
-	    d_nirchan   = inrast_nirchan[col];
-            if(greenchan)
-	    d_greenchan = inrast_greenchan[col];
-            if(bluechan)
-	    d_bluechan  = inrast_bluechan[col];
-            if(chan5chan)
-	    d_chan5chan = inrast_chan5chan[col];
-            if(chan7chan)
-	    d_chan7chan = inrast_chan7chan[col];
+	    switch(data_type_redchan){
+		    case CELL_TYPE:
+			d_redchan   = (double) ((CELL *) inrast_redchan)[col];
+			break;
+		    case FCELL_TYPE:
+			d_redchan   = (double) ((FCELL *) inrast_redchan)[col];
+			break;
+		    case DCELL_TYPE:
+			d_redchan   = ((DCELL *) inrast_redchan)[col];
+			break;
+	    }
+	    if (nirchan) {
+		switch(data_type_nirchan){
+		    case CELL_TYPE:
+			d_nirchan   = (double) ((CELL *) inrast_nirchan)[col];
+			break;
+		    case FCELL_TYPE:
+			d_nirchan   = (double) ((FCELL *) inrast_nirchan)[col];
+			break;
+		    case DCELL_TYPE:
+			d_nirchan   = ((DCELL *) inrast_nirchan)[col];
+			break;
+		}
+	    }
+	    if (greenchan) {
+		switch(data_type_greenchan){
+		    case CELL_TYPE:
+			d_greenchan   = (double) ((CELL *) inrast_greenchan)[col];
+			break;
+		    case FCELL_TYPE:
+			d_greenchan   = (double) ((FCELL *) inrast_greenchan)[col];
+			break;
+		    case DCELL_TYPE:
+			d_greenchan   = ((DCELL *) inrast_greenchan)[col];
+			break;
+		}
+	    }
+	    if (bluechan) {
+		switch(data_type_bluechan){
+		    case CELL_TYPE:
+			d_bluechan   = (double) ((CELL *) inrast_bluechan)[col];
+			break;
+		    case FCELL_TYPE:
+			d_bluechan   = (double) ((FCELL *) inrast_bluechan)[col];
+			break;
+		    case DCELL_TYPE:
+			d_bluechan   = ((DCELL *) inrast_bluechan)[col];
+			break;
+		}
+	    }
+	    if (chan5chan) {
+		switch(data_type_chan5chan){
+		    case CELL_TYPE:
+			d_chan5chan   = (double) ((CELL *) inrast_chan5chan)[col];
+			break;
+		    case FCELL_TYPE:
+			d_chan5chan   = (double) ((FCELL *) inrast_chan5chan)[col];
+			break;
+		    case DCELL_TYPE:
+			d_chan5chan   = ((DCELL *) inrast_chan5chan)[col];
+			break;
+		}
+	    }
+	    if (chan7chan) {
+		switch(data_type_chan7chan){
+		    case CELL_TYPE:
+			d_chan7chan   = (double) ((CELL *) inrast_chan7chan)[col];
+			break;
+		    case FCELL_TYPE:
+			d_chan7chan   = (double) ((FCELL *) inrast_chan7chan)[col];
+			break;
+		    case DCELL_TYPE:
+			d_chan7chan   = ((DCELL *) inrast_chan7chan)[col];
+			break;
+		}
+	    }
 
 	    if (Rast_is_d_null_value(&d_redchan) ||
 		((nirchan) && Rast_is_d_null_value(&d_nirchan)) ||
