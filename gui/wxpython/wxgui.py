@@ -1347,7 +1347,7 @@ class GMFrame(wx.Frame):
         if dialog.ShowModal() != wx.ID_OK:
             dialog.Destroy()
             return
-
+        
         # start new map display if no display is available
         if not self.curr_page:
             self.NewDisplay()
@@ -1358,16 +1358,19 @@ class GMFrame(wx.Frame):
             ltype = dialog.GetLayerType(cmd = True)
             if ltype == 'rast':
                 cmd = ['d.rast', 'map=%s' % layerName]
+                wxType = 'raster'
             elif ltype == 'rast3d':
                 cmd = ['d.rast3d', 'map=%s' % layerName]
+                wxType = '3d-raster'
             elif ltype == 'vect':
                 cmd = ['d.vect', 'map=%s' % layerName]
+                wxType = 'vector'
             else:
                 gcmd.GError(parent = self,
                             message = _("Unsupported map layer type <%s>.") % ltype)
                 return
             
-            newItem = maptree.AddLayer(ltype = dialog.GetLayerType(),
+            newItem = maptree.AddLayer(ltype = wxType,
                                        lname = layerName,
                                        lchecked = False,
                                        lopacity = 1.0,
