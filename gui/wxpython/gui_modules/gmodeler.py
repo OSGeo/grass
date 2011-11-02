@@ -432,11 +432,9 @@ class Model(object):
         """
         errList = list()
         
-        if not hasattr(self, "fileInput"):
-            self.fileInput = dict()
-
+        self.fileInput = dict()
+        
         # collect ascii inputs
-        cmdFileInput = list()
         for p in item.GetParams()['params']:
             if p.get('element', '') == 'file' and \
                     p.get('prompt', '') == 'input' and \
@@ -444,9 +442,9 @@ class Model(object):
                 filename = p.get('value', p.get('default', ''))
                 if filename and \
                         mimetypes.guess_type(filename)[0] == 'text/plain':
-                    cmdFileInput.append(filename)
+                    self.fileInput[filename] = None
         
-        for finput in cmdFileInput:
+        for finput in self.fileInput:
             # read lines
             fd = open(finput, "r")
             try:
@@ -492,16 +490,20 @@ class Model(object):
                         fd.close()
                 else:
                     self.fileInput[finput] = None
-            
+        
         return errList
     
-    def RunAction(self, item, params, log, onDone, statusbar = None):
+    def OnPrepare(self, item, params):
+        self._substituteFile(item, params, checkOnly = False)
+
+    def RunAction(self, item, params, log, onDone, onPrepare = None, statusbar = None):
         """!Run given action
 
         @param item action item
         @param params parameters dict
         @param log logging window
         @param onDone on-done method
+        @param onPrepare on-prepare method
         @param statusbar wx.StatusBar instance or None
         """
         name = item.GetName()
@@ -511,31 +513,15 @@ class Model(object):
         
         if statusbar:
             statusbar.SetStatusText(_('Running model...'), 0)
-        
-        self._substituteFile(item, params)
-        
+            
+        data = { 'item' : item,
+                 'params' : copy.deepcopy(params) }
         log.RunCmd(command = item.GetLog(string = False, substitute = params),
-                   onDone = onDone)
+                   onDone = onDone, onPrepare = self.OnPrepare, userData = data)
         
         if name in params:
             item.SetParams(paramsOrig)
 
-    def CleanUp(self):
-        """!Clean up model"""
-        if hasattr(self, "fileInput"):
-            # restore original files
-            for finput in self.fileInput:
-                data = self.fileInput[finput]
-                if not data:
-                    continue
-                
-                fd = open(finput, "w")
-                try:
-                    fd.write(data)
-                finally:
-                    fd.close()
-            del self.fileInput
-        
     def Run(self, log, onDone, parent = None):
         """!Run model
 
@@ -918,6 +904,11 @@ class ModelFrame(wx.Frame):
         except IndexError:
             pass
         
+    def OnCmdPrepare(self, event):
+        """!Prepare for running command"""
+        event.onPrepare(item = event.userData['item'],
+                        params = event.userData['params'])
+        
     def OnCmdDone(self, event):
         """!Command done (or aborted)"""
         try:
@@ -1180,7 +1171,19 @@ class ModelFrame(wx.Frame):
     def OnDone(self, cmd, returncode):
         """!Computation finished"""
         self.SetStatusText('', 0)
-        self.model.CleanUp()
+        # restore original files
+        if hasattr(self.model, "fileInput"):
+            for finput in self.model.fileInput:
+                data = self.model.fileInput[finput]
+                if not data:
+                    continue
+                
+                fd = open(finput, "w")
+                try:
+                    fd.write(data)
+                finally:
+                    fd.close()
+            del self.model.fileInput
         
     def OnValidateModel(self, event, showMsg = True):
         """!Validate entire model"""
@@ -1935,9 +1938,12 @@ class ModelAction(ModelObject, ogl.RectangleShape):
                 if substitute and 'variables' in substitute:
                     for p in substitute['variables']['params']:
                         if variable == p.get('name', ''):
-                            value = p.get('value', '')
+                            if p.get('type', 'string') == 'string':
+                                value = p.get('value', '')
+                            else:
+                                value = str(p.get('value', ''))
                             break
-                
+                    
                 if not value:
                     value = variables[variable].get('value', '')
                 
