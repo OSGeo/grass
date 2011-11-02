@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """!@package grass.temporal
 
 @brief GRASS Python scripting module (temporal GIS functions)
@@ -38,13 +39,6 @@ class abstract_space_time_dataset(abstract_dataset):
     """
     def __init__(self, ident):
 	self.reset(ident)
-
-    def get_new_instance(self, ident=None):
-        """Return a new instance with the type of this class
-
-           @param ident: The unique identifier of the new object
-        """
-        raise IOError("This method must be implemented in the subclasses")
 
     def get_new_map_instance(self, ident=None):
         """Return a new instance of a map dataset which is associated with the type of this class
@@ -345,10 +339,154 @@ class abstract_space_time_dataset(abstract_dataset):
 
         return True
 
+    def sample_by_dataset_topology_simple(self, stds, dbif=None):
+        """Sample this space time dataset with the temporal topology of a second space time dataset
+
+           Only the start time of the registered maps of the dataset is considered. So that maps with end time 
+           in a sample granule are not listed.
+        
+           Return all registered maps as ordered (by start_time) object list with 
+           "gap" map objects (id==None). Each list entry is a list of map objects
+           which are potentially located in each granule of the second space time dataset.
+
+           A valid temporal topology (no overlapping or inclusion allowed) is needed to get correct results. 
+    
+           The sample dataset must have "interval" as temporal map type, so all sample maps have valid interval time.
+
+           Gaps between maps are identified as unregistered maps with id==None.
+
+           The objects are initialized with the id and the temporal extent (temporal type, start time, end time).
+           In case more map informations are needed, use the select() method for each listed object.
+
+           @param stds: The space time dataset to be used for temporal sampling
+           @param dbif: The database interface to be used
+
+           In case nothing found None is returned
+        """
+
+        if self.get_temporal_type() != stds.get_temporal_type():
+            core.error(_("The space time datasets must be of the same temporal type"))
+            return None
+
+        if stds.get_map_time() != "interval":
+            core.error(_("The temporal map type of the sample dataset must be interval"))
+            return None
+
+
+        connect = False
+
+        if dbif == None:
+            dbif = sql_database_interface()
+            dbif.connect()
+            connect = True
+
+        obj_list = []
+        sample_maps = stds.get_registered_maps_as_objects_with_gaps(where=None, dbif=dbif)
+        
+
+        for sample in sample_maps:
+            start, end = sample.get_valid_time()
+
+            where = "((start_time >= '%s' and start_time < '%s'))" % (start, end)
+            rows = self.get_registered_maps("id", where, "start_time", dbif)
+
+            if rows:
+                maplist = []
+                for row in rows:
+                    map = self.get_new_map_instance(row["id"])
+
+                    if self.is_time_absolute():
+                        map.set_absolute_time(start, end)
+                    elif self.is_time_relative():
+                        map.set_relative_time(start, end)
+
+                    maplist.append(copy.copy(map))
+
+                obj_list.append(copy.copy(maplist))
+
+        if connect == True:
+            dbif.close()
+
+        return obj_list
+
+
+    def sample_by_dataset_topology(self, stds, dbif=None):
+        """Sample this space time dataset with the temporal topology of a second space time dataset
+
+           This dataset and the sample dataset must have "interval" as temporal map type, so all maps have valid interval time.
+        
+           Return all registered maps as ordered (by start_time) object list with 
+           "gap" map objects (id==None). Each list entry is a list of map objects
+           which are potentially located in each granule of the second space time dataset.
+
+           A valid temporal topology (no overlapping or inclusion allowed) is needed to get correct results. 
+    
+           Gaps between maps are identified as unregistered maps with id==None.
+
+           The objects are initialized with the id and the temporal extent (temporal type, start time, end time).
+           In case more map informations are needed, use the select() method for each listed object.
+
+           @param stds: The space time dataset to be used for temporal sampling
+           @param dbif: The database interface to be used
+
+           In case nothing found None is returned
+        """
+
+        if self.get_temporal_type() != stds.get_temporal_type():
+            core.error(_("The space time datasets must be of the same temporal type"))
+            return None
+
+        if self.get_map_time() != "interval":
+            core.error(_("The temporal map type of the dataset must be interval"))
+            return None
+
+        if stds.get_map_time() != "interval":
+            core.error(_("The temporal map type of the sample dataset must be interval"))
+            return None
+
+
+        connect = False
+
+        if dbif == None:
+            dbif = sql_database_interface()
+            dbif.connect()
+            connect = True
+
+        obj_list = []
+        sample_maps = stds.get_registered_maps_as_objects_with_gaps(where=None, dbif=dbif)
+        
+
+        for sample in sample_maps:
+            start, end = sample.get_valid_time()
+
+            where = "((start_time <= '%s' and end_time >= '%s') OR (start_time >= '%s' and end_time <= '%s') OR (start_time < '%s' and end_time >= '%s') OR (start_time <= '%s' and end_time > '%s'))" % (start, end, start, end, end, end, start, start)
+            rows = self.get_registered_maps("id", where, "start_time", dbif)
+
+            if rows:
+                maplist = []
+                for row in rows:
+                    map = self.get_new_map_instance(row["id"])
+
+                    if self.is_time_absolute():
+                        map.set_absolute_time(start, end)
+                    elif self.is_time_relative():
+                        map.set_relative_time(start, end)
+
+                    maplist.append(copy.copy(map))
+
+                obj_list.append(copy.copy(maplist))
+
+        if connect == True:
+            dbif.close()
+
+        return obj_list
+
+
     def get_registered_maps_as_objects_by_granularity(self, gran=None, dbif=None):
         """Return all registered maps as ordered (by start_time) object list with 
            "gap" map objects (id==None) for temporal topological operations using the
-           granularity of the space time dataset as increment
+           granularity of the space time dataset as increment. Each list entry is a list of map objects
+           which are potentially located in the actual granule.
 
            A valid temporal topology (no overlapping or inclusion allowed) is needed to get correct results. 
     
@@ -374,11 +512,6 @@ class abstract_space_time_dataset(abstract_dataset):
 
         obj_list = []
 
-        if self.get_map_time() != "interval":
-            core.error(_("The temporal map type must be interval"))
-            #TODO: Check for valid topology too?
-            return None
-        
         if gran == None:
             gran = self.get_granularity()
 
@@ -390,25 +523,27 @@ class abstract_space_time_dataset(abstract_dataset):
             else:
                 next = start + gran
 
-            where = "(start_time <= '%s' and end_time >= '%s')" % (start, next)
+            where = "((start_time <= '%s' and end_time >= '%s') OR (start_time >= '%s' and end_time <= '%s') OR (start_time < '%s' and end_time >= '%s') OR (start_time <= '%s' and end_time > '%s'))" % (start, end, start, end, end, end, start, start)
 
             rows = self.get_registered_maps("id", where, "start_time", dbif)
 
             if rows:
                 if len(rows) > 1:
-                    core.error(_("More than one map found in a granule. Temporal granularity seems to be invalid or the chosen granularity is not a greatest common divider of all intervals and gaps in the dataset."))
-                # Take the first map    
-                map = self.get_new_map_instance(rows[0]["id"])
-            else:
-                # In case of a gap, create a dummy map with identifier None
-                map = self.get_new_map_instance(None)
+                    core.warning(_("More than one map found in a granule. Temporal granularity seems to be invalid or the chosen granularity is not a greatest common divider of all intervals and gaps in the dataset."))
+ 
+                maplist = []
+                for row in rows:
+                   # Take the first map    
+                    map = self.get_new_map_instance(rows[0]["id"])
 
-            if self.is_time_absolute():
-                map.set_absolute_time(start, next)
-            elif self.is_time_relative():
-                map.set_relative_time(start, next)
+                    if self.is_time_absolute():
+                        map.set_absolute_time(start, next)
+                    elif self.is_time_relative():
+                        map.set_relative_time(start, next)
 
-            obj_list.append(copy.copy(map))
+                    maplist.append(copy.copy(map))
+
+            obj_list.append(copy.copy(maplist))
 
             start = next
 

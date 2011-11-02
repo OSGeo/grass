@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """!@package grass.temporal
 
 @brief GRASS Python scripting module (temporal GIS functions)
@@ -100,6 +101,11 @@ class abstract_dataset(object):
         bottom = self.spatial_extent.get_bottom()
         
         return (north, south, east, west, top, bottom)
+
+    def spatial_overlap(self, dataset):
+        """Return True if the spatial extents overlap"""
+        
+        north = self.spatial_extent.overlap(dataset.spatial_extent)
         
     def select(self, dbif=None):
 	"""Select temporal dataset entry from database and fill up the internal structure"""
