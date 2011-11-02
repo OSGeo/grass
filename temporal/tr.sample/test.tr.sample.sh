@@ -66,9 +66,11 @@ tr.sample input=precip_abs0 type=stvds sample=pnts_abs1 -h
 
 # Test with temporal point data
 tr.register    input=precip_abs0 file=$n1 start="2001-01-01" increment="1 months"
-tr.sample input=precip_abs0 type=strds sample=precip_abs0 -hs
+tr.sample input=precip_abs0 type=stvds sample=pnts_abs0 -h
+tr.sample input=precip_abs0 type=stvds sample=pnts_abs1 -h
 tr.sample input=precip_abs0 type=stvds sample=pnts_abs0 -hs
 tr.sample input=precip_abs0 type=stvds sample=pnts_abs1 -hs
+
 
 
 t.remove type=rast input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
