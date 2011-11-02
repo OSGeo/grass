@@ -572,6 +572,17 @@ class Model(object):
                 GError(parent = parent, message = unicode('\n'.join(err)))
                 return
         
+            err = list()
+            for key, item in params.iteritems():
+                for p in item['params']:
+                    if p.get('value', '') == '':
+                        err.append((key, p.get('name', ''), p.get('description', '')))
+            if err:
+                GError(parent = parent,
+                       message = _("Variables below not defined:") + \
+                           "\n\n" + unicode('\n'.join(map(lambda x: "%s: %s (%s)" % (x[0], x[1], x[2]), err))))
+                return
+        
         log.cmdThread.SetId(-1)
         for item in self.GetItems():
             if not item.IsEnabled():
