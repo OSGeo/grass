@@ -342,7 +342,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         
         first_mapset = None
         for mapset in mapsets:
-            mapset_node = self.AddItem(_('Mapset:') + ' ' + mapset)
+            mapset_node = self.AddItem(_('Mapset') + ': ' + mapset)
             if not first_mapset:
                 first_mapset = mapset_node
             
