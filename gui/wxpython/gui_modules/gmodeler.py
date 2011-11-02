@@ -418,8 +418,8 @@ class Model(object):
                                 break
                         if report:
                             errList.append(_("%s: undefined variable '%s'") % (cmd[0], var))
-        
-            errList += self._substituteFile(action, checkOnly = True)
+            ### TODO: check variables in file only optionally
+            ### errList += self._substituteFile(action, checkOnly = True)
         
         return errList
 
