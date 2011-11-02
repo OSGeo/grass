@@ -12,18 +12,18 @@
      *      which is set to minimize soil noise (0.08 in    
      *      original papers).                               
      */ 
-double msa_vi(double redchan, double nirchan) 
+double msa_vi(double redchan, double nirchan, double soil_line_slope, double soil_line_intercept, double soil_noise_reduction_factor ) 
 {
-    double result;
+    double result, a, s, X;
+    s = soil_line_slope;
+    a = soil_line_intercept;
+    X = soil_noise_reduction_factor;
 
     if ((nirchan + redchan) == 0.0) {
 	result = -1.0;
     }
     else {
-	result =
-	    (1 / 2) * (2 * (nirchan + 1) -
-		       sqrt((2 * nirchan + 1) * (2 * nirchan + 1)) -
-		       (8 * (nirchan - redchan)));
+	result = s*(nirchan-s*redchan-a)/(a*nirchan+redchan-a*s+X*(1+s+s));
     }
     return result;
 }

@@ -9,14 +9,13 @@ double msa_vi2(double redchan, double nirchan)
 {
     double result;
 
-    if ((nirchan + redchan) == 0.0) {
+    if ((nirchan + redchan) == 0.0 || (2*nirchan+1)*(2*nirchan+1) <= 0.0) 
+    {
 	result = -1.0;
     }
-    else {
-	result =
-	    (1 / 2) * (2 * (nirchan + 1) -
-		       sqrt((2 * nirchan + 1) * (2 * nirchan + 1)) -
-		       (8 * (nirchan - redchan)));
+    else 
+    {
+	result=0.5*(2*(nirchan+1)-sqrt((2*nirchan+1)*(2*nirchan+1)-8*(nirchan-redchan)));
     }
     return result;
 }

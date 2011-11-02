@@ -40,7 +40,7 @@ double e_vi(double bluechan, double redchan, double nirchan);
 double p_vi(double redchan, double nirchan);
 double wd_vi(double redchan, double nirchan);
 double sa_vi(double redchan, double nirchan);
-double msa_vi(double redchan, double nirchan);
+double msa_vi(double redchan, double nirchan, double soil_line_slope, double soil_line_intercept, double soil_noise_reduction_factor);
 double msa_vi2(double redchan, double nirchan);
 double ge_mi(double redchan, double nirchan);
 double ar_vi(double redchan, double nirchan, double bluechan);
@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
     char *viflag;		/*Switch for particular index */
     struct GModule *module;
     struct Option *input1, *input2, *input3, *input4, *input5, *input6,
-	*input7, *output;
+	*input7, *input8, *input9, *input10, *output;
     struct History history;	/*metadata */
     struct Colors colors;	/*Color rules */
 
@@ -73,6 +73,7 @@ int main(int argc, char *argv[])
     RASTER_MAP_TYPE data_type_nirchan, data_type_greenchan;
     RASTER_MAP_TYPE data_type_bluechan;
     RASTER_MAP_TYPE data_type_chan5chan, data_type_chan7chan;
+    DCELL msavip1, msavip2, msavip3;
     CELL val1, val2;
 
     G_gisinit(argv[0]);
@@ -149,6 +150,27 @@ int main(int argc, char *argv[])
 	_("Name of the chan7 channel surface reflectance map");
     input7->description = _("Range: [0.0;1.0]");
 
+    input8 = G_define_option();
+    input8->key = "soil_line_slope";
+    input8->type = TYPE_DOUBLE;
+    input8->required = NO;
+    input8->gisprompt = "value";
+    input8->description = _("MSAVI2: Value of the slope of the soil line");
+
+    input9 = G_define_option();
+    input9->key = "soil_line_intercept";
+    input9->type = TYPE_DOUBLE;
+    input9->required = NO;
+    input9->gisprompt = "value";
+    input9->description = _("MSAVI2: Value of the intercept of the soil line");
+
+    input10 = G_define_option();
+    input10->key = "soil_noise_reduction_factor";
+    input10->type = TYPE_DOUBLE;
+    input10->required = NO;
+    input10->gisprompt = "value";
+    input10->description = _("MSAVI2: Value of the factor of reduction of soil noise");
+
     output = G_define_standard_option(G_OPT_R_OUTPUT);
 
     if (G_parser(argc, argv))
@@ -161,6 +183,9 @@ int main(int argc, char *argv[])
     bluechan = input5->answer;
     chan5chan = input6->answer;
     chan7chan = input7->answer;
+    msavip1 = atof(input8->answer);
+    msavip2 = atof(input9->answer);
+    msavip3 = atof(input10->answer);
     result = output->answer;
 
     if (!strcasecmp(viflag, "sr") && (!(input2->answer) || !(input3->answer)) )
@@ -187,8 +212,8 @@ int main(int argc, char *argv[])
     if (!strcasecmp(viflag, "msavi") && (!(input2->answer) || !(input3->answer)) )
 	G_fatal_error(_("msavi index requires red and nir maps"));
 
-    if (!strcasecmp(viflag, "msavi2") && (!(input2->answer) || !(input3->answer)) )
-	G_fatal_error(_("msavi2 index requires red and nir maps"));
+    if (!strcasecmp(viflag, "msavi2") && (!(input2->answer) || !(input3->answer)||!(input8->answer) ||!(input9->answer)||!(input10->answer)) )
+	G_fatal_error(_("msavi2 index requires red and nir maps, and 3 parameters related to soil line"));
 
     if (!strcasecmp(viflag, "gemi") && (!(input2->answer) || !(input3->answer)) )
 	G_fatal_error(_("gemi index requires red and nir maps"));
@@ -404,7 +429,7 @@ int main(int argc, char *argv[])
 		    outrast[col] = sa_vi(d_redchan, d_nirchan);
 
 		if (!strcasecmp(viflag, "msavi"))
-		    outrast[col] = msa_vi(d_redchan, d_nirchan);
+		    outrast[col] = msa_vi(d_redchan, d_nirchan, msavip1, msavip2, msavip3);
 
 		if (!strcasecmp(viflag, "msavi2"))
 		    outrast[col] = msa_vi2(d_redchan, d_nirchan);
@@ -416,8 +441,7 @@ int main(int argc, char *argv[])
 		    outrast[col] = ar_vi(d_redchan, d_nirchan, d_bluechan);
 
 		if (!strcasecmp(viflag, "gvi"))
-		    outrast[col] = g_vi(d_bluechan, d_greenchan, d_redchan, d_nirchan,
-					d_chan5chan, d_chan7chan);
+		    outrast[col] = g_vi(d_bluechan, d_greenchan, d_redchan, d_nirchan, d_chan5chan, d_chan7chan);
 
 		if (!strcasecmp(viflag, "gari"))
 		    outrast[col] = ga_ri(d_redchan, d_nirchan, d_bluechan, d_greenchan);
