@@ -163,53 +163,53 @@ int main(int argc, char *argv[])
     chan7chan = input7->answer;
     result = output->answer;
 
-    if (!strcmp(viflag, "sr") && (!(input2->answer) || !(input3->answer)) )
+    if (!strcasecmp(viflag, "sr") && (!(input2->answer) || !(input3->answer)) )
 	G_fatal_error(_("sr index requires red and nir maps"));
 
-    if (!strcmp(viflag, "ndvi") && (!(input2->answer) || !(input3->answer)) )
+    if (!strcasecmp(viflag, "ndvi") && (!(input2->answer) || !(input3->answer)) )
 	G_fatal_error(_("ndvi index requires red and nir maps"));
 
-    if (!strcmp(viflag, "ipvi") && (!(input2->answer) || !(input3->answer)) )
+    if (!strcasecmp(viflag, "ipvi") && (!(input2->answer) || !(input3->answer)) )
 	G_fatal_error(_("ipvi index requires red and nir maps"));
 
-    if (!strcmp(viflag, "dvi") && (!(input2->answer) || !(input3->answer)) )
+    if (!strcasecmp(viflag, "dvi") && (!(input2->answer) || !(input3->answer)) )
 	G_fatal_error(_("dvi index requires red and nir maps"));
 
-    if (!strcmp(viflag, "pvi") && (!(input2->answer) || !(input3->answer)) )
+    if (!strcasecmp(viflag, "pvi") && (!(input2->answer) || !(input3->answer)) )
 	G_fatal_error(_("pvi index requires red and nir maps"));
 
-    if (!strcmp(viflag, "wdvi") && (!(input2->answer) || !(input3->answer)) )
+    if (!strcasecmp(viflag, "wdvi") && (!(input2->answer) || !(input3->answer)) )
 	G_fatal_error(_("wdvi index requires red and nir maps"));
 
-    if (!strcmp(viflag, "savi") && (!(input2->answer) || !(input3->answer)) )
+    if (!strcasecmp(viflag, "savi") && (!(input2->answer) || !(input3->answer)) )
 	G_fatal_error(_("savi index requires red and nir maps"));
 
-    if (!strcmp(viflag, "msavi") && (!(input2->answer) || !(input3->answer)) )
+    if (!strcasecmp(viflag, "msavi") && (!(input2->answer) || !(input3->answer)) )
 	G_fatal_error(_("msavi index requires red and nir maps"));
 
-    if (!strcmp(viflag, "msavi2") && (!(input2->answer) || !(input3->answer)) )
+    if (!strcasecmp(viflag, "msavi2") && (!(input2->answer) || !(input3->answer)) )
 	G_fatal_error(_("msavi2 index requires red and nir maps"));
 
-    if (!strcmp(viflag, "gemi") && (!(input2->answer) || !(input3->answer)) )
+    if (!strcasecmp(viflag, "gemi") && (!(input2->answer) || !(input3->answer)) )
 	G_fatal_error(_("gemi index requires red and nir maps"));
 
-    if (!strcmp(viflag, "arvi") && (!(input2->answer) || !(input3->answer)
+    if (!strcasecmp(viflag, "arvi") && (!(input2->answer) || !(input3->answer)
                 || !(input5->answer)) )
 	G_fatal_error(_("arvi index requires blue, red and nir maps"));
 
-    if (!strcmp(viflag, "evi") && (!(input2->answer) || !(input3->answer)
+    if (!strcasecmp(viflag, "evi") && (!(input2->answer) || !(input3->answer)
                 || !(input5->answer)) )
 	G_fatal_error(_("evi index requires blue, red and nir maps"));
 
-    if (!strcmp(viflag, "vari") && (!(input2->answer) || !(input4->answer)
+    if (!strcasecmp(viflag, "vari") && (!(input2->answer) || !(input4->answer)
                 || !(input5->answer)) )
 	G_fatal_error(_("vari index requires blue, green and red maps"));
 
-    if (!strcmp(viflag, "gari") && (!(input2->answer) || !(input3->answer)
+    if (!strcasecmp(viflag, "gari") && (!(input2->answer) || !(input3->answer)
                 || !(input4->answer) || !(input5->answer)) )
 	G_fatal_error(_("gari index requires blue, green, red and nir maps"));
 
-    if (!strcmp(viflag, "gvi") && (!(input2->answer) || !(input3->answer)
+    if (!strcasecmp(viflag, "gvi") && (!(input2->answer) || !(input3->answer)
                 || !(input4->answer) || !(input5->answer)
                 || !(input6->answer) || !(input7->answer)) )
 	G_fatal_error(_("gvi index requires blue, green, red, nir, chan5 and chan7 maps"));
@@ -374,55 +374,55 @@ int main(int argc, char *argv[])
 	    }
 	    else {
 		/* calculate simple_ratio        */
-		if (!strcmp(viflag, "sr"))
+		if (!strcasecmp(viflag, "sr"))
 		    outrast[col] = s_r(d_redchan, d_nirchan);
 
 		/* calculate ndvi                    */
-		if (!strcmp(viflag, "ndvi")) {
+		if (!strcasecmp(viflag, "ndvi")) {
 		    if (d_redchan + d_nirchan < 0.001)
 			Rast_set_d_null_value(&outrast[col], 1);
 		    else
 			outrast[col] = nd_vi(d_redchan, d_nirchan);
 		}
 
-		if (!strcmp(viflag, "ipvi"))
+		if (!strcasecmp(viflag, "ipvi"))
 		    outrast[col] = ip_vi(d_redchan, d_nirchan);
 
-		if (!strcmp(viflag, "dvi"))
+		if (!strcasecmp(viflag, "dvi"))
 		    outrast[col] = d_vi(d_redchan, d_nirchan);
 
-		if (!strcmp(viflag, "evi"))
+		if (!strcasecmp(viflag, "evi"))
 		    outrast[col] = e_vi(d_bluechan, d_redchan, d_nirchan);
 
-		if (!strcmp(viflag, "pvi"))
+		if (!strcasecmp(viflag, "pvi"))
 		    outrast[col] = p_vi(d_redchan, d_nirchan);
 
-		if (!strcmp(viflag, "wdvi"))
+		if (!strcasecmp(viflag, "wdvi"))
 		    outrast[col] = wd_vi(d_redchan, d_nirchan);
 
-		if (!strcmp(viflag, "savi"))
+		if (!strcasecmp(viflag, "savi"))
 		    outrast[col] = sa_vi(d_redchan, d_nirchan);
 
-		if (!strcmp(viflag, "msavi"))
+		if (!strcasecmp(viflag, "msavi"))
 		    outrast[col] = msa_vi(d_redchan, d_nirchan);
 
-		if (!strcmp(viflag, "msavi2"))
+		if (!strcasecmp(viflag, "msavi2"))
 		    outrast[col] = msa_vi2(d_redchan, d_nirchan);
 
-		if (!strcmp(viflag, "gemi"))
+		if (!strcasecmp(viflag, "gemi"))
 		    outrast[col] = ge_mi(d_redchan, d_nirchan);
 
-		if (!strcmp(viflag, "arvi"))
+		if (!strcasecmp(viflag, "arvi"))
 		    outrast[col] = ar_vi(d_redchan, d_nirchan, d_bluechan);
 
-		if (!strcmp(viflag, "gvi"))
+		if (!strcasecmp(viflag, "gvi"))
 		    outrast[col] = g_vi(d_bluechan, d_greenchan, d_redchan, d_nirchan,
 					d_chan5chan, d_chan7chan);
 
-		if (!strcmp(viflag, "gari"))
+		if (!strcasecmp(viflag, "gari"))
 		    outrast[col] = ga_ri(d_redchan, d_nirchan, d_bluechan, d_greenchan);
 
-		if (!strcmp(viflag, "vari"))
+		if (!strcasecmp(viflag, "vari"))
 		    outrast[col] = va_ri(d_redchan, d_greenchan, d_bluechan);
 	    }
 	}
