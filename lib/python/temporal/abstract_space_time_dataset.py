@@ -436,10 +436,6 @@ class abstract_space_time_dataset(abstract_dataset):
             core.error(_("The space time datasets must be of the same temporal type"))
             return None
 
-        if self.get_map_time() != "interval":
-            core.error(_("The temporal map type of the dataset must be interval"))
-            return None
-
         if stds.get_map_time() != "interval":
             core.error(_("The temporal map type of the sample dataset must be interval"))
             return None
@@ -459,7 +455,7 @@ class abstract_space_time_dataset(abstract_dataset):
         for sample in sample_maps:
             start, end = sample.get_valid_time()
 
-            where = "((start_time <= '%s' and end_time >= '%s') OR (start_time >= '%s' and end_time <= '%s') OR (start_time < '%s' and end_time >= '%s') OR (start_time <= '%s' and end_time > '%s'))" % (start, end, start, end, end, end, start, start)
+            where = "((start_time >= '%s' and start_time < '%s') OR (start_time <= '%s' and end_time >= '%s') OR (start_time >= '%s' and end_time <= '%s') OR (start_time < '%s' and end_time >= '%s') OR (start_time <= '%s' and end_time > '%s'))" % (start, end, start, end, start, end, end, end, start, start)
             rows = self.get_registered_maps("id", where, "start_time", dbif)
 
             if rows:
