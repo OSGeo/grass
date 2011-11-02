@@ -776,9 +776,17 @@ class GMConsole(wx.SplitterWindow):
         else:
             try:
                 # Process results here
-                self.WriteCmdLog('(%s) %s (%d sec)' % (str(time.ctime()),
-                                                       _('Command finished'),
-                                                       (time.time() - event.time)))
+                ctime = time.time() - event.time
+                if ctime < 60:
+                    stime = _("%d sec") % int(ctime)
+                else:
+                    mtime = int(ctime / 60)
+                    stime = _("%d min %d sec") % (mtime, 
+                                                  int(ctime - (mtime * 60)))
+                
+                self.WriteCmdLog('(%s) %s (%s)' % (str(time.ctime()),
+                                                   _('Command finished'),
+                                                   (stime)))
             except KeyError:
                 # stopped deamon
                 pass
