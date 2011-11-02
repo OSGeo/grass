@@ -326,7 +326,7 @@ class GMConsole(wx.SplitterWindow):
             self.SetMinimumPaneSize(self.btnCmdClear.GetSize()[1] + 85)
         else:
             self.SplitHorizontally(self.panelOutput, self.panelPrompt, -45)
-            self.SetMinimumPaneSize(self.btnCmdClear.GetSize()[1] +25)
+            self.SetMinimumPaneSize(self.btnCmdClear.GetSize()[1] + 25)
         
         self.SetSashGravity(1.0)
         
