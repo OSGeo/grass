@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """!@package grass.temporal
 
 @brief GRASS Python scripting module (temporal GIS functions)
@@ -48,6 +49,10 @@ class abstract_map_dataset(abstract_dataset):
         """
         raise IOError("This method must be implemented in the subclasses")
         
+    def load(self):
+        """Load the content of this object from map files"""
+        raise IOError("This method must be implemented in the subclasses")
+
     def set_absolute_time(self, start_time, end_time=None, timezone=None):
         """Set the absolute time interval with start time and end time
         

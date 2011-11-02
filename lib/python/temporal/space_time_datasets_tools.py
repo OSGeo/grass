@@ -597,9 +597,18 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
 
         if maps and len(maps) > 0:
 
-            first_time, dummy = maps[0].get_valid_time()
+            if isinstance(maps[0], list):
+                first_time, dummy = maps[0][0].get_valid_time()
+            else:
+                first_time, dummy = maps[0].get_valid_time()
 
-            for map in maps:
+            for mymap in maps:
+
+                if isinstance(mymap, list):
+                    map = mymap[0]
+                else:
+                    map = mymap
+
                 start, end = map.get_valid_time()
                 if end:
                     delta = end -start
@@ -668,3 +677,99 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
                     print output
 
 
+def sample_stds_by_stds_topology(intype, sampletype, input, sampler, header, separator, use_simple):
+    """ Sample the input space time dataset with a sample space time dataset and print the result to stdout
+
+        In case multiple maps are located in the current granule, the map names are separated by comma.
+
+        Attention: Do not use the comma as separator
+
+        @param input: Name of a space time dataset
+        @param sampler: Name of a space time dataset used for temporal sampling
+    """
+    mapset =  core.gisenv()["MAPSET"]
+
+    if input.find("@") >= 0:
+        id = input
+    else:
+        id = input + "@" + mapset
+
+    sp = dataset_factory(intype, id)
+
+    if sampler.find("@") >= 0:
+        sid = sampler
+    else:
+        sid = sampler + "@" + mapset
+
+    ssp = dataset_factory(sampletype, sid)
+
+    dbif = sql_database_interface()
+    dbif.connect()
+
+
+    if sp.is_in_db(dbif) == False:
+        core.fatal(_("Dataset <%s> not found in temporal database") % (id))
+
+    if ssp.is_in_db(dbif) == False:
+        core.fatal(_("Dataset <%s> not found in temporal database") % (sid))
+
+    sp.select(dbif)
+    ssp.select(dbif)
+
+    if separator == None or separator == "" or separator.find(",") >= 0:
+        separator = " | "
+       
+    if use_simple:
+        mapmatrix = sp.sample_by_dataset_topology_simple(ssp, dbif)
+    else:
+        mapmatrix = sp.sample_by_dataset_topology(ssp, dbif)
+    samplerlist = ssp.get_registered_maps_as_objects_with_gaps(dbif=dbif)
+
+    if mapmatrix and len(mapmatrix) > 0:
+
+        if header:
+            string = ""
+            string += "%s%s" % ("sample_id", separator)
+            string += "%s%s" % ("ids", separator)
+            string += "%s%s" % ("start_time", separator)
+            string += "%s%s" % ("end_time", separator)
+            string += "%s%s" % ("interval_length", separator)
+            string += "%s"   % ("distance_from_begin")
+            print string
+
+        first_time, dummy = mapmatrix[0][0].get_valid_time()
+
+        for i in range(len(mapmatrix)):
+            mapnames = ""
+            count = 0
+            for map in mapmatrix[i]:
+                if count == 0:
+                    mapnames += map.get_id()
+                else:
+                    mapnames += ",%s" % map.get_id()
+                count += 1
+            
+            map = mapmatrix[i][0]
+
+            start, end = map.get_valid_time()
+            if end:
+                delta = end - start
+            else:
+                delta = None
+            delta_first = start - first_time
+
+            if map.is_time_absolute():
+                if end:
+                    delta = time_delta_to_relative_time(delta)
+                delta_first = time_delta_to_relative_time(delta_first)
+
+            string = ""
+            string += "%s%s" % (samplerlist[i].get_id(), separator)
+            string += "%s%s" % (mapnames, separator)
+            string += "%s%s" % (start, separator)
+            string += "%s%s" % (end, separator)
+            string += "%s%s" % (delta, separator)
+            string += "%s"   % (delta_first)
+            print string
+
+    dbif.close()
