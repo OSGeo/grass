@@ -18,7 +18,7 @@ int display_area(struct Map_info *, struct cat_list *, const struct Cell_head *,
 		 dbCatValArray *, struct Colors *, dbCatValArray *, int);
 
 /* dir.c */
-int display_dir(struct Map_info *, int, struct cat_list *, int);
+int display_dir(struct Map_info *, int, struct cat_list *, int, int);
 
 /* labels.c */
 int display_label(struct Map_info *, int, struct cat_list *, LATTR *, int);

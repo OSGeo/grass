@@ -4,15 +4,15 @@
 #include <grass/glocale.h>
 #include "plot.h"
 
-int display_dir(struct Map_info *Map, int type, struct cat_list *Clist, int chcat)
+int display_dir(struct Map_info *Map, int type, struct cat_list *Clist,
+		int chcat, int dsize)
 {
-    int ltype, dsize;
+    int ltype;
     double len, x, y, angle, msize;
     struct line_pnts *Points;
     struct line_cats *Cats;
 
     G_debug(1, "display direction:");
-    dsize = 5;
     msize = dsize * (D_d_to_u_col(2.0) - D_d_to_u_col(1.0));	/* do it better */
 
     Points = Vect_new_line_struct();
