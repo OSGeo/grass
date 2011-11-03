@@ -898,6 +898,7 @@ class VectorColorTable(ColorTable):
         # in version 7 v.colors used, otherwise color column only
         self.version7 = int(grass.version()['version'].split('.')[0]) >= 7
         self.colorTable = False
+        self.updateColumn = True
         # vector properties
         self.properties = {
             # vector layer for attribute table to use for setting color
@@ -1416,6 +1417,7 @@ class VectorColorTable(ColorTable):
                 else:
                     busy.Destroy()
                     dlg.Destroy()
+                    self.updateColumn = False
                     return
             
         self.rulesPanel.AddRules(i, start = True)
@@ -1570,8 +1572,10 @@ class VectorColorTable(ColorTable):
         if self.colorTable:
             ret = ColorTable.CreateColorTable(self)
         else:
-            ret = self.UpdateColorColumn(tmp)
-            
+            if self.updateColumn:
+                ret = self.UpdateColorColumn(tmp)
+            else:
+                ret = True
         return ret
         
     def UpdateColorColumn(self, tmp):
@@ -1628,7 +1632,7 @@ class VectorColorTable(ColorTable):
         else:
             self.UseAttrColumn(True)
         
-        return ColorTable.OnApply()
+        return ColorTable.OnApply(self, event)
         
 class ThematicVectorTable(VectorColorTable):
     def __init__(self, parent, vectorType, **kwargs):
