@@ -309,7 +309,7 @@ int Gv_load_vect_thematic(geovect *gv, struct Colors *colors)
     struct Map_info Map;
     struct field_info *Fi;
     
-    int nvals, cat, nlines;
+    int nvals, cat, nlines, nskipped;
     int red, blu, grn;
     const char *str;
     const char *mapset;
@@ -332,18 +332,19 @@ int Gv_load_vect_thematic(geovect *gv, struct Colors *colors)
     }
     
     Fi = Vect_get_field(&Map, gv->tstyle->layer);
-    if (!Fi)
-	G_fatal_error(_("Database connection not defined for layer %d"),
-		      gv->tstyle->layer);
-    
-    driver = db_start_driver_open_database(Fi->driver, Fi->database);
-    if (!driver)
-	G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
-		      Fi->database, Fi->driver);
-    
+    if (!Fi) {
+	G_warning(_("Database connection not defined for layer %d"),
+		  gv->tstyle->layer);
+    }
+    else {
+      driver = db_start_driver_open_database(Fi->driver, Fi->database);
+      if (!driver)
+	  G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+			Fi->database, Fi->driver);
+    }
     G_message(_("Loading thematic vector layer <%s>..."),
 	      G_fully_qualified_name(gv->filename, mapset));
-    nlines = 0;
+    nlines = nskipped = 0;
     for(gvt = gv->lines; gvt; gvt = gvt->next) {
 	gvt->style = (gvstyle *) G_malloc(sizeof(gvstyle));
 	G_zero(gvt->style, sizeof(gvstyle));
@@ -353,11 +354,15 @@ int Gv_load_vect_thematic(geovect *gv, struct Colors *colors)
 	gvt->style->symbol = gv->style->symbol;
 	gvt->style->size   = gv->style->size;
 	gvt->style->width  = gv->style->width;
-	
-	Vect_cat_get(gvt->cats, gv->tstyle->layer, &cat);
-	if (cat < 0)
-	    continue;
 
+	cat = -1;
+	if (gvt->cats)
+	    Vect_cat_get(gvt->cats, gv->tstyle->layer, &cat);
+	if (cat < 0) {
+	    nskipped++;
+	    continue;
+	}
+	
 	/* color */
 	if (colors) {
 	    if (!Rast_get_c_color((const CELL *) &cat, &red, &grn, &blu, colors)) {
@@ -394,6 +399,11 @@ int Gv_load_vect_thematic(geovect *gv, struct Colors *colors)
 
 	nlines++;
     }
+
+    if (nskipped > 0)
+	G_warning(_("%d features without category. "
+		    "Unable to determine color rules for features without category."),
+		  nskipped);
     
     return nlines;
 }

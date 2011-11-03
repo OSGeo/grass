@@ -295,7 +295,7 @@ int GP_set_style(int id, int color, int width, float size, int symbol)
    Updates also style for each geopoint.
    
    \param id point set id
-   \param layer layer number for thematic mapping
+   \param layer layer number for thematic mapping (-1 for undefined)
    \param color icon color column name
    \param width icon line width column name
    \param size icon size column name
