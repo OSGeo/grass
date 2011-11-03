@@ -173,7 +173,7 @@ int Gp_load_sites_thematic(geosite *gp, struct Colors *colors)
     struct Map_info Map;
     struct field_info *Fi;
     
-    int nvals, cat, npts;
+    int nvals, cat, npts, nskipped;
     int red, blu, grn;
     const char *str;
     const char *mapset;
@@ -196,18 +196,19 @@ int Gp_load_sites_thematic(geosite *gp, struct Colors *colors)
     }
     
     Fi = Vect_get_field(&Map, gp->tstyle->layer);
-    if (!Fi)
-	G_fatal_error(_("Database connection not defined for layer %d"),
-		      gp->tstyle->layer);
-    
-    driver = db_start_driver_open_database(Fi->driver, Fi->database);
-    if (!driver)
-	G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
-		      Fi->database, Fi->driver);
-    
+    if (!Fi) {
+	G_warning(_("Database connection not defined for layer %d"),
+		  gp->tstyle->layer);
+    }
+    else {
+	driver = db_start_driver_open_database(Fi->driver, Fi->database);
+	if (!driver)
+	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+			  Fi->database, Fi->driver);
+    }
     G_message(_("Loading thematic points layer <%s>..."),
 	      G_fully_qualified_name(gp->filename, mapset));
-    npts = 0;
+    npts = nskipped = 0;
     for(gpt = gp->points; gpt; gpt = gpt->next) {
 	gpt->style = (gvstyle *) G_malloc(sizeof(gvstyle));
 	G_zero(gpt->style, sizeof(gvstyle));
@@ -218,9 +219,13 @@ int Gp_load_sites_thematic(geosite *gp, struct Colors *colors)
 	gpt->style->size   = gp->style->size;
 	gpt->style->width  = gp->style->width;
 	
-	Vect_cat_get(gpt->cats, gp->tstyle->layer, &cat);
-	if (cat < 0)
+	cat = -1;
+	if (gpt->cats)
+	    Vect_cat_get(gpt->cats, gp->tstyle->layer, &cat);
+	if (cat < 0) {
+	    nskipped++;
 	    continue;
+	}
 
 	/* color */
 	if (colors) {
@@ -275,5 +280,9 @@ int Gp_load_sites_thematic(geosite *gp, struct Colors *colors)
 	npts++;
     }
     
+    if (nskipped > 0)
+	G_warning(_("%d points without category. "
+		    "Unable to determine color rules for features without category."),
+		  nskipped);
     return npts;
 }

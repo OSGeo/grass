@@ -223,6 +223,8 @@ int check_thematic(const struct GParams *params, int vlines)
     dbDriver *driver;
     dbColumn *column;
     
+    Fi = NULL;
+    
     if (vlines) {
 	map    = params->vlines;
 	layer  = params->vline_layer;
@@ -244,9 +246,7 @@ int check_thematic(const struct GParams *params, int vlines)
 	    G_fatal_error(_("Unable to open vector map <%s>"), map->answers[i]);
 	Fi = Vect_get_field2(&Map, layer->answers[i]);
 	if (!Fi)
-	    G_fatal_error(_("Database connection not defined for layer %s"),
-			  layer->answers[i]);
-
+	    continue;
 	driver = db_start_driver_open_database(Fi->driver, Fi->database);
 	if (!driver)
 	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
@@ -293,5 +293,8 @@ int check_thematic(const struct GParams *params, int vlines)
 	}
     }
     
-    return Fi->number;
+    if (Fi) 
+	return Fi->number;
+    
+    return 1;
 }
