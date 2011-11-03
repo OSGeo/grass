@@ -48,6 +48,8 @@ import gselect
 import gcmd
 import colorrules
 from preferences import globalSettings as UserSettings
+from gselect import VectorDBInfo
+
 try:
     from nviz_mapdisp import wxUpdateView, wxUpdateLight, wxUpdateProperties,\
                             wxUpdateCPlane
@@ -3292,6 +3294,21 @@ class NvizToolWindow(FN.FlatNotebook):
             self.FindWindowById(button).Enable(checked)
             
             data = self.GetLayerData('vector')
+            
+            # decide if use GRASSRGB column
+            if attrType == 'color':
+                name = self.FindWindowById(self.win['vector']['map']).GetValue()
+                if not data['vector'][vtype]['thematic']['rgbcolumn']:
+                    try:
+                        id =  data['vector'][vtype]['object']['id']
+                    
+                        # if GRASSRGB exists and color table doesn't, use GRGB
+                        if self.HasGRASSRGB(name)  and \
+                            not self._display.CheckColorTable(id = id, type = vtype):
+                            data['vector'][vtype]['thematic']['rgbcolumn'] = 'GRASSRGB'
+                    except KeyError:
+                        pass
+                        
             data['vector'][vtype]['thematic']['use' + attrType] = checked
             data['vector'][vtype]['thematic']['update'] = None
         
@@ -3302,6 +3319,18 @@ class NvizToolWindow(FN.FlatNotebook):
         if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
             
+    def HasGRASSRGB(self, name):
+        """!Check if GRASSRGB column exist."""
+        column = False
+        
+        dbInfo = VectorDBInfo(name)
+        if len(dbInfo.layers):
+            table = dbInfo.layers[1]['table']
+            if 'GRASSRGB' in dbInfo.GetTableDesc(table):
+                column = True
+                
+        return column
+        
     def OnSetThematic(self, event):
         """!Set options for thematic points"""
         if event.GetId() in self.win['vector']['points']['thematic'].values():

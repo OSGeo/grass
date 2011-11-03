@@ -1957,7 +1957,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             if data['thematic']['usecolor'] or data['thematic']['usewidth']:
                 if data['thematic']['usecolor']:
                     color = data['thematic']['rgbcolumn']
-                    colorTable = True
+                    if self._display.CheckColorTable(id = id, type = 'lines'):
+                        colorTable = True
                 if data['thematic']['usewidth']:
                     width = data['thematic']['sizecolumn']
                 self._display.SetLinesStyleThematic(id = id, layer = data['thematic']['layer'],
@@ -2020,7 +2021,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             if data['thematic']['usecolor'] or data['thematic']['usesize']:
                 if data['thematic']['usecolor']:
                     color = data['thematic']['rgbcolumn']
-                    colorTable = True
+                    if self._display.CheckColorTable(id = id, type = 'points'):
+                        colorTable = True
                 if data['thematic']['usesize']:
                     size = data['thematic']['sizecolumn']
                 self._display.SetPointsStyleThematic(id = id, layer = data['thematic']['layer'],
