@@ -489,6 +489,7 @@ int G_stat(const char *, STRUCT_STAT *);
 /* percent.c */
 void G_percent(long, long, int);
 void G_percent_reset(void);
+void G_progress(long, int);
 void G_set_percent_routine(int (*) (int));
 void G_unset_percent_routine(void);
 
