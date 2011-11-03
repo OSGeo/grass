@@ -183,9 +183,12 @@ int main(int argc, char *argv[])
     bluechan = input5->answer;
     chan5chan = input6->answer;
     chan7chan = input7->answer;
-    msavip1 = atof(input8->answer);
-    msavip2 = atof(input9->answer);
-    msavip3 = atof(input10->answer);
+    if(input8->answer)
+        msavip1 = atof(input8->answer);
+    if(input9->answer)
+        msavip2 = atof(input9->answer);
+    if(input10->answer)
+        msavip3 = atof(input10->answer);
     result = output->answer;
 
     if (!strcasecmp(viflag, "sr") && (!(input2->answer) || !(input3->answer)) )
