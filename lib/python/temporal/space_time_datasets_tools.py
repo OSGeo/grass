@@ -677,15 +677,20 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
                     print output
 
 
-def sample_stds_by_stds_topology(intype, sampletype, input, sampler, header, separator, use_simple):
+def sample_stds_by_stds_topology(intype, sampletype, input, sampler, header, separator, method):
     """ Sample the input space time dataset with a sample space time dataset and print the result to stdout
 
         In case multiple maps are located in the current granule, the map names are separated by comma.
 
         Attention: Do not use the comma as separator
 
+        @param intype:  Type of the input space time dataset (strds, stvds or str3ds)
+        @param samtype: Type of the sample space time dataset (strds, stvds or str3ds)
         @param input: Name of a space time dataset
         @param sampler: Name of a space time dataset used for temporal sampling
+        @param header: Set True to print column names 
+        @param separator: The field separator character between the columns
+        @param method: The method to be used for sampling (start,during,contain,overlap,equal)
     """
     mapset =  core.gisenv()["MAPSET"]
 
@@ -706,7 +711,6 @@ def sample_stds_by_stds_topology(intype, sampletype, input, sampler, header, sep
     dbif = sql_database_interface()
     dbif.connect()
 
-
     if sp.is_in_db(dbif) == False:
         core.fatal(_("Dataset <%s> not found in temporal database") % (id))
 
@@ -719,11 +723,7 @@ def sample_stds_by_stds_topology(intype, sampletype, input, sampler, header, sep
     if separator == None or separator == "" or separator.find(",") >= 0:
         separator = " | "
        
-    if use_simple:
-        mapmatrix = sp.sample_by_dataset_topology_simple(ssp, dbif)
-    else:
-        mapmatrix = sp.sample_by_dataset_topology(ssp, dbif)
-    samplerlist = ssp.get_registered_maps_as_objects_with_gaps(dbif=dbif)
+    mapmatrix = sp.sample_by_dataset_topology(ssp, method, dbif)
 
     if mapmatrix and len(mapmatrix) > 0:
 
@@ -737,19 +737,19 @@ def sample_stds_by_stds_topology(intype, sampletype, input, sampler, header, sep
             string += "%s"   % ("distance_from_begin")
             print string
 
-        first_time, dummy = mapmatrix[0][0].get_valid_time()
+        first_time, dummy = mapmatrix[0]["granule"].get_valid_time()
 
-        for i in range(len(mapmatrix)):
+        for entry in mapmatrix:
             mapnames = ""
             count = 0
-            for map in mapmatrix[i]:
+            for sample in entry["samples"]:
                 if count == 0:
-                    mapnames += map.get_id()
+                    mapnames += str(sample.get_id())
                 else:
-                    mapnames += ",%s" % map.get_id()
+                    mapnames += ",%s" % str(sample.get_id())
                 count += 1
             
-            map = mapmatrix[i][0]
+            map = entry["granule"]
 
             start, end = map.get_valid_time()
             if end:
@@ -764,7 +764,7 @@ def sample_stds_by_stds_topology(intype, sampletype, input, sampler, header, sep
                 delta_first = time_delta_to_relative_time(delta_first)
 
             string = ""
-            string += "%s%s" % (samplerlist[i].get_id(), separator)
+            string += "%s%s" % (map.get_id(), separator)
             string += "%s%s" % (mapnames, separator)
             string += "%s%s" % (start, separator)
             string += "%s%s" % (end, separator)

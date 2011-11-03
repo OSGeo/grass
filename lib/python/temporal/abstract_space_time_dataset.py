@@ -339,98 +339,95 @@ class abstract_space_time_dataset(abstract_dataset):
 
         return True
 
-    def sample_by_dataset_topology_simple(self, stds, dbif=None):
+    def sample_by_dataset_topology(self, stds, method=None, dbif=None):
         """Sample this space time dataset with the temporal topology of a second space time dataset
 
-           Only the start time of the registered maps of the dataset is considered. So that maps with end time 
-           in a sample granule are not listed.
-        
-           Return all registered maps as ordered (by start_time) object list with 
-           "gap" map objects (id==None). Each list entry is a list of map objects
-           which are potentially located in each granule of the second space time dataset.
-
-           A valid temporal topology (no overlapping or inclusion allowed) is needed to get correct results. 
-    
            The sample dataset must have "interval" as temporal map type, so all sample maps have valid interval time.
-
-           Gaps between maps are identified as unregistered maps with id==None.
-
-           The objects are initialized with the id and the temporal extent (temporal type, start time, end time).
-           In case more map informations are needed, use the select() method for each listed object.
-
-           @param stds: The space time dataset to be used for temporal sampling
-           @param dbif: The database interface to be used
-
-           In case nothing found None is returned
-        """
-
-        if self.get_temporal_type() != stds.get_temporal_type():
-            core.error(_("The space time datasets must be of the same temporal type"))
-            return None
-
-        if stds.get_map_time() != "interval":
-            core.error(_("The temporal map type of the sample dataset must be interval"))
-            return None
-
-
-        connect = False
-
-        if dbif == None:
-            dbif = sql_database_interface()
-            dbif.connect()
-            connect = True
-
-        obj_list = []
-        sample_maps = stds.get_registered_maps_as_objects_with_gaps(where=None, dbif=dbif)
-        
-
-        for sample in sample_maps:
-            start, end = sample.get_valid_time()
-
-            where = "((start_time >= '%s' and start_time < '%s'))" % (start, end)
-            rows = self.get_registered_maps("id", where, "start_time", dbif)
-
-            if rows:
-                maplist = []
-                for row in rows:
-                    map = self.get_new_map_instance(row["id"])
-
-                    if self.is_time_absolute():
-                        map.set_absolute_time(start, end)
-                    elif self.is_time_relative():
-                        map.set_relative_time(start, end)
-
-                    maplist.append(copy.copy(map))
-
-                obj_list.append(copy.copy(maplist))
-
-        if connect == True:
-            dbif.close()
-
-        return obj_list
-
-
-    def sample_by_dataset_topology(self, stds, dbif=None):
-        """Sample this space time dataset with the temporal topology of a second space time dataset
-
-           This dataset and the sample dataset must have "interval" as temporal map type, so all maps have valid interval time.
         
            Return all registered maps as ordered (by start_time) object list with 
            "gap" map objects (id==None). Each list entry is a list of map objects
-           which are potentially located in each granule of the second space time dataset.
+           which are potentially located in temporal relation to the actual granule of the second space time dataset.
+
+           Each entry in the object list is a dict. The actual sampler map and its temporal enxtent (the actual granule) and
+           the list of samples are stored:
+
+           list = self.sample_by_dataset_topology(stds=sampler, method=["during","overlap","contain","equal"])    
+           for entry in list:
+               granule = entry["granule"]
+               maplist = entry["samples"]
+               for map in maplist:
+                   map.select()
+                   map.print_info()
 
            A valid temporal topology (no overlapping or inclusion allowed) is needed to get correct results. 
     
            Gaps between maps are identified as unregistered maps with id==None.
 
-           The objects are initialized with the id and the temporal extent (temporal type, start time, end time).
+           The map objects are initialized with the id and the temporal extent of the granule (temporal type, start time, end time).
            In case more map informations are needed, use the select() method for each listed object.
 
            @param stds: The space time dataset to be used for temporal sampling
+           @param method: This option specifies what sample method should be used. In case the registered maps are of temporal point type,
+                          only the start time is used for sampling. In case of mixed of interval data the user can chose between:
+                          * start: Select maps of which the start time is located in the selection granule
+                            map    :        s
+                            granule:  s-----------------e
+
+                            map    :        s--------------------e
+                            granule:  s-----------------e
+
+                            map    :        s--------e
+                            granule:  s-----------------e
+
+                          * during: Select maps which are temporal during the selection granule
+                            map    :     s-----------e
+                            granule:  s-----------------e
+
+                          * overlap: Select maps which temporal overlap the selection granule
+                            map    :     s-----------e
+                            granule:        s-----------------e
+
+                            map    :     s-----------e
+                            granule:  s----------e
+
+                          * contain: Select maps which temporally contain the selection granule
+                            map    :  s-----------------e
+                            granule:     s-----------e
+
+                          * equal: Select maps which temporally equal to the selection granule
+                            map    :  s-----------e
+                            granule:  s-----------e
+
+                          All these methods can be combined. Method must be of type tuple including the identification strings.
            @param dbif: The database interface to be used
 
            In case nothing found None is returned
         """
+
+        use_start = False
+        use_during = False
+        use_overlap = False
+        use_contain = False
+        use_equal = False
+
+        # Inititalize the methods
+        if method:
+            for name in method:
+                if name == "start":
+                    use_start = True
+                if name == "during":
+                    use_during = True
+                if name == "overlap":
+                    use_overlap = True
+                if name == "contain":
+                    use_contain = True
+                if name == "equal":
+                    use_equal = True
+        else:
+            use_during = True
+            use_overlap = True
+            use_contain = True
+            use_equal = True
 
         if self.get_temporal_type() != stds.get_temporal_type():
             core.error(_("The space time datasets must be of the same temporal type"))
@@ -440,6 +437,13 @@ class abstract_space_time_dataset(abstract_dataset):
             core.error(_("The temporal map type of the sample dataset must be interval"))
             return None
 
+        # In case points of time are available, disable the interval specific methods
+        if self.get_map_time() == "point":
+            use_start = True
+            use_during = False
+            use_overlap = False
+            use_contain = False
+            use_equal = False
 
         connect = False
 
@@ -451,12 +455,49 @@ class abstract_space_time_dataset(abstract_dataset):
         obj_list = []
         sample_maps = stds.get_registered_maps_as_objects_with_gaps(where=None, dbif=dbif)
         
+        for granule in sample_maps:
+            start, end = granule.get_valid_time()
 
-        for sample in sample_maps:
-            start, end = sample.get_valid_time()
+            where = "("
 
-            where = "((start_time >= '%s' and start_time < '%s') OR (start_time <= '%s' and end_time >= '%s') OR (start_time >= '%s' and end_time <= '%s') OR (start_time < '%s' and end_time >= '%s') OR (start_time <= '%s' and end_time > '%s'))" % (start, end, start, end, start, end, end, end, start, start)
+            if use_start:
+                where += "(start_time >= '%s' and start_time < '%s') " % (start, end)
+
+            if use_during:
+                if use_start:
+                    where += " OR "
+                where += "((start_time > '%s' and end_time < '%s') OR " % (start, end)
+                where += "(start_time >= '%s' and end_time < '%s') OR " % (start, end)
+                where += "(start_time > '%s' and end_time <= '%s'))" % (start, end)
+
+            if use_overlap:
+                if use_start or use_during:
+                    where += " OR "
+
+                where += "((start_time < '%s' and end_time > '%s' and end_time < '%s') OR " % (start, start, end)
+                where += "(start_time < '%s' and start_time > '%s' and end_time > '%s'))" % (end, start, end)
+
+            if use_contain:
+                if use_start or use_during or use_overlap:
+                    where += " OR "
+
+                where += "((start_time < '%s' and end_time > '%s') OR " % (start, end)
+                where += "(start_time <= '%s' and end_time > '%s') OR " % (start, end)
+                where += "(start_time < '%s' and end_time >= '%s'))" % (start, end)
+
+            if use_equal:
+                if use_start or use_during or use_overlap or use_contain:
+                    where += " OR "
+
+                where += "(start_time = '%s' and end_time = '%s')" % (start, end)
+
+            where += ")"
+
             rows = self.get_registered_maps("id", where, "start_time", dbif)
+
+            result = {}
+            result["granule"] = granule
+            maplist = None
 
             if rows:
                 maplist = []
@@ -469,8 +510,20 @@ class abstract_space_time_dataset(abstract_dataset):
                         map.set_relative_time(start, end)
 
                     maplist.append(copy.copy(map))
+                result["samples"] = maplist
+            else:
+                maplist = []
+                map = self.get_new_map_instance(None)
 
-                obj_list.append(copy.copy(maplist))
+                if self.is_time_absolute():
+                    map.set_absolute_time(start, end)
+                elif self.is_time_relative():
+                    map.set_relative_time(start, end)
+
+                maplist.append(copy.copy(map))
+                result["samples"] = maplist
+
+            obj_list.append(copy.copy(result))
 
         if connect == True:
             dbif.close()
@@ -519,7 +572,7 @@ class abstract_space_time_dataset(abstract_dataset):
             else:
                 next = start + gran
 
-            where = "((start_time <= '%s' and end_time >= '%s') OR (start_time >= '%s' and end_time <= '%s') OR (start_time < '%s' and end_time >= '%s') OR (start_time <= '%s' and end_time > '%s'))" % (start, end, start, end, end, end, start, start)
+            where += "(start_time >= '%s' and end_time <= '%s') OR " % (start, end)
 
             rows = self.get_registered_maps("id", where, "start_time", dbif)
 
