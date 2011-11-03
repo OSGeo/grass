@@ -42,6 +42,7 @@ void write_rgb_values(const struct Map_info *Map, int layer, const char *column_
     db_begin_transaction(driver);
     
     for (i = 0; i < nrec; i++) {
+	G_percent(i, nrec, 2);
 	if (Rast_get_c_color((const CELL *) &(pval[i]), &red, &grn, &blu,
 			     colors) == 0)
 	    G_warning(_("No color value defined for category %d"), pval[i]);
@@ -54,6 +55,7 @@ void write_rgb_values(const struct Map_info *Map, int layer, const char *column_
 	if (db_execute_immediate(driver, &stmt) != DB_OK)
 	    G_fatal_error(_("Unable to update RGB values"));
     }
+    G_percent(1, 1, 1);
     
     db_commit_transaction(driver);
     
