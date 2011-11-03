@@ -241,6 +241,8 @@ int Gp_load_sites_thematic(geosite *gp, struct Colors *colors)
 	    if (nvals < 1)
 		continue;
 	    str = db_get_value_string(&value);
+	    if (!str)
+		continue;
 	    if (G_str_to_color(str, &red, &grn, &blu) != 1) {
 		G_warning(_("Invalid color definition (%s)"),
 			  str);
