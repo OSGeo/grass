@@ -285,6 +285,7 @@ int main(int argc, char *argv[])
         colors = colors_tmp;
     }
 
+    G_important_message(_("Writing color rules..."));
     if (rgbcolumn)
 	write_rgb_values(&Map, layer, rgbcolumn, &colors);
     else

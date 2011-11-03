@@ -10,20 +10,23 @@ void scan_cats(const struct Map_info *Map, int field,
 	       const char *style, const char *rules,
 	       const struct FPRange *range, struct Colors *colors)
 {
-    int ltype, lmin, lmax, cmin, cmax;
+    int ltype, lmin, lmax, cmin, cmax, line;
     struct line_cats *Cats;
 
     cmin = cmax = -1;
     Cats = Vect_new_cats_struct();
 
     G_message(_("Reading features..."));
+    line = 0;
     while(TRUE) {
 	ltype = Vect_read_next_line(Map, NULL, Cats);
 	if (ltype == -1)
 	    G_fatal_error(_("Unable to read vector map"));
 	if (ltype == -2)
 	    break; /* EOF */
-
+	
+	G_progress(++line, 1e4);
+	
 	scan_layer(field, Cats, &lmin, &lmax);
 
 	if (cmin == -1 || lmin <= cmin)
@@ -31,7 +34,8 @@ void scan_cats(const struct Map_info *Map, int field,
 	if (cmax == -1 || lmax >= cmax)
 	    cmax = lmax;
     }
-
+    G_progress(1, 1);
+    
     if (range) {
 	if (range->min >= cmin && range->min <= cmax)
 	    cmin = range->min;
