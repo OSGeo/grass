@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
@@ -57,7 +58,7 @@ int main(int argc, char *argv[])
     char *viflag;		/*Switch for particular index */
     struct GModule *module;
     struct Option *input1, *input2, *input3, *input4, *input5, *input6,
-	*input7, *input8, *input9, *input10, *output;
+	*input7, *input8, *input9, *input10, *input11, *output;
     struct History history;	/*metadata */
     struct Colors colors;	/*Color rules */
 
@@ -73,7 +74,7 @@ int main(int argc, char *argv[])
     RASTER_MAP_TYPE data_type_nirchan, data_type_greenchan;
     RASTER_MAP_TYPE data_type_bluechan;
     RASTER_MAP_TYPE data_type_chan5chan, data_type_chan7chan;
-    DCELL msavip1, msavip2, msavip3;
+    DCELL msavip1, msavip2, msavip3, dnbits;
     CELL val1, val2;
 
     G_gisinit(argv[0]);
@@ -108,6 +109,8 @@ int main(int argc, char *argv[])
                             "sr;Simple Ratio;"
                             "vari;Visible Atmospherically Resistant Index;"
 			    "wdvi;Weighted Difference Vegetation Index;");
+    input1->options = "arvi,dvi,evi,gvi,gari,gemi,ipvi,msavi,msavi2,ndvi,pvi,savi,sr,vari,wdvi";
+    input1->answer = "ndvi";
 
     input2 = G_define_standard_option(G_OPT_R_INPUT);
     input2->key = "red";
@@ -171,6 +174,13 @@ int main(int argc, char *argv[])
     input10->gisprompt = "value";
     input10->description = _("MSAVI2: Value of the factor of reduction of soil noise");
 
+    input11 = G_define_option();
+    input11->key = "DN_storage_bit";
+    input11->type = TYPE_DOUBLE;
+    input11->required = NO;
+    input11->gisprompt = "value";
+    input11->description = _("If your data is in Digital Numbers (i.e. integer type), give the max bits (i.e. 8 for Landsat -> [0-255])");
+
     output = G_define_standard_option(G_OPT_R_OUTPUT);
 
     if (G_parser(argc, argv))
@@ -189,6 +199,8 @@ int main(int argc, char *argv[])
         msavip2 = atof(input9->answer);
     if(input10->answer)
         msavip3 = atof(input10->answer);
+    if(input11->answer)
+        dnbits = atof(input11->answer);
     result = output->answer;
 
     if (!strcasecmp(viflag, "sr") && (!(input2->answer) || !(input3->answer)) )
@@ -318,6 +330,8 @@ int main(int argc, char *argv[])
 	    switch(data_type_redchan){
 		    case CELL_TYPE:
 			d_redchan   = (double) ((CELL *) inrast_redchan)[col];
+			if(input11->answer)
+				d_redchan *= 1.0/(pow(2,dnbits)-1);	
 			break;
 		    case FCELL_TYPE:
 			d_redchan   = (double) ((FCELL *) inrast_redchan)[col];
@@ -330,6 +344,8 @@ int main(int argc, char *argv[])
 		switch(data_type_nirchan){
 		    case CELL_TYPE:
 			d_nirchan   = (double) ((CELL *) inrast_nirchan)[col];
+			if(input11->answer)
+				d_nirchan *= 1.0/(pow(2,dnbits)-1);	
 			break;
 		    case FCELL_TYPE:
 			d_nirchan   = (double) ((FCELL *) inrast_nirchan)[col];
@@ -343,6 +359,8 @@ int main(int argc, char *argv[])
 		switch(data_type_greenchan){
 		    case CELL_TYPE:
 			d_greenchan   = (double) ((CELL *) inrast_greenchan)[col];
+			if(input11->answer)
+				d_greenchan *= 1.0/(pow(2,dnbits)-1);	
 			break;
 		    case FCELL_TYPE:
 			d_greenchan   = (double) ((FCELL *) inrast_greenchan)[col];
@@ -356,6 +374,8 @@ int main(int argc, char *argv[])
 		switch(data_type_bluechan){
 		    case CELL_TYPE:
 			d_bluechan   = (double) ((CELL *) inrast_bluechan)[col];
+			if(input11->answer)
+				d_bluechan *= 1.0/(pow(2,dnbits)-1);	
 			break;
 		    case FCELL_TYPE:
 			d_bluechan   = (double) ((FCELL *) inrast_bluechan)[col];
@@ -369,6 +389,8 @@ int main(int argc, char *argv[])
 		switch(data_type_chan5chan){
 		    case CELL_TYPE:
 			d_chan5chan   = (double) ((CELL *) inrast_chan5chan)[col];
+			if(input11->answer)
+				d_chan5chan *= 1.0/(pow(2,dnbits)-1);	
 			break;
 		    case FCELL_TYPE:
 			d_chan5chan   = (double) ((FCELL *) inrast_chan5chan)[col];
@@ -382,6 +404,8 @@ int main(int argc, char *argv[])
 		switch(data_type_chan7chan){
 		    case CELL_TYPE:
 			d_chan7chan   = (double) ((CELL *) inrast_chan7chan)[col];
+			if(input11->answer)
+				d_chan7chan *= 1.0/(pow(2,dnbits)-1);	
 			break;
 		    case FCELL_TYPE:
 			d_chan7chan   = (double) ((FCELL *) inrast_chan7chan)[col];
