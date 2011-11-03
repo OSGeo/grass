@@ -537,7 +537,7 @@ int Vect_build_nat(struct Map_info *Map, int build)
 	G_message(_("Registering primitives..."));
 	i = 0;
 	npoints = 0;
-	while (1) {
+	while (TRUE) {
 	    /* register line */
 	    type = Vect_read_next_line(Map, Points, Cats);
 
@@ -550,6 +550,8 @@ int Vect_build_nat(struct Map_info *Map, int build)
 		break;
 	    }
 
+	    G_progress(++i, 1e4);
+	    
 	    npoints += Points->n_points;
 
 	    offset = Map->head.last_offset;
@@ -571,19 +573,8 @@ int Vect_build_nat(struct Map_info *Map, int build)
 		if (Cats->n_cats == 0)	/* add field 0, cat 0 */
 		    dig_cidx_add_cat(plus, 0, 0, line, type);
 	    }
-
-	    i++;
-	    if (i == 10000 && print_counter) {
-		if (format == G_INFO_FORMAT_PLAIN)
-		    fprintf(stderr, "%d..", plus->n_lines);
-		else
-		    fprintf(stderr, "%10d\b\b\b\b\b\b\b\b\b\b", plus->n_lines);
-		i = 0; 
-	    }
 	}
-
-	if ((print_counter) && format != G_INFO_FORMAT_PLAIN)
-	    fprintf(stderr, "\r");
+	G_progress(1, 1);
 
 	G_message(_("%d primitives registered"), plus->n_lines);
 	G_message(_("%d vertices registered"), npoints);
