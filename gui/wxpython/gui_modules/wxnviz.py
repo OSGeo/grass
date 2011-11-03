@@ -967,6 +967,29 @@ class Nviz(object):
         """
         return Vect_read_colors(name, mapset, self.color)
         
+    def CheckColorTable(self, id, type):
+        """!Check if color table exists.
+        
+        @param id vector set id
+        @param type vector set type (lines/points)
+        
+        @return 1 color table exists
+        @return 0 no color table found
+        @return -1 on error
+        @return -2 vector set not found
+        """
+        file = c_char_p()
+        
+        if type == 'points':
+            ret = GP_get_sitename(id, byref(file))
+        elif type == 'lines':
+            ret = GV_get_vectname(id, byref(file))
+            
+        if ret < 0:
+            return -2
+        
+        return self.ReadVectorColors(file, "")
+        
     def SetPointsStyleThematic(self, id, layer, color = None, colorTable = False, 
                                width = None, size = None, symbol = None):
         """!Set thematic style for vector points
