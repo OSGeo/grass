@@ -34,7 +34,7 @@
 /* function prototypes */
 static CELL round_c(double);
 static int set_output_scale(struct Option *, int *, int *, int *);
-static int calc_mu(int *, double *, int);
+static off_t calc_mu(int *, double *, int);
 static int calc_covariance(int *, double **, double *, int);
 static int write_pca(double **, int *, char *, int, int, int, int);
 
@@ -53,6 +53,7 @@ int main(int argc, char *argv[])
     double **eigmat;
     int *inp_fd;
     int scale, scale_max, scale_min;
+    off_t cells;
 
     struct GModule *module;
     struct Option *opt_in, *opt_out, *opt_scale;
@@ -128,7 +129,7 @@ int main(int argc, char *argv[])
     }
 
     G_verbose_message(_("Calculating covariance matrix..."));
-    calc_mu(inp_fd, mu, bands);
+    cells = calc_mu(inp_fd, mu, bands);
 
     calc_covariance(inp_fd, covar, mu, bands);
 
@@ -136,7 +137,7 @@ int main(int argc, char *argv[])
 	for (j = 0; j < bands; j++) {
 	    covar[i][j] =
 		covar[i][j] /
-		((double)((Rast_window_rows() * Rast_window_cols()) - 1));
+		(cells - 1);
 	    G_debug(3, "covar[%d][%d] = %f", i, j, covar[i][j]);
 	}
     }
@@ -230,17 +231,20 @@ set_output_scale(struct Option *scale_opt, int *scale, int *scale_min,
 }
 
 
-static int calc_mu(int *fds, double *mu, int bands)
+static off_t calc_mu(int *fds, double *mu, int bands)
 {
     int i;
     int rows = Rast_window_rows();
     int cols = Rast_window_cols();
+    off_t cells;
     void *rowbuf = NULL;
 
     for (i = 0; i < bands; i++) {
 	RASTER_MAP_TYPE maptype;
 	int row, col;
 	double sum = 0.;
+	
+	cells = 0;
 
 	maptype = Rast_get_map_type(fds[i]);
 
@@ -266,17 +270,18 @@ static int calc_mu(int *fds, double *mu, int bands)
 		}
 
 		sum += Rast_get_d_value(ptr, maptype);
+		cells++;
 		ptr = G_incr_void_ptr(ptr, Rast_cell_size(maptype));
 	    }
 	}
 
-	mu[i] = sum / (double)(rows * cols);
+	mu[i] = sum / cells;
     }
 
     if (rowbuf)
 	G_free(rowbuf);
 
-    return 0;
+    return cells;
 }
 
 
@@ -360,19 +365,19 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
     double new_range = 0.;
     int rows = Rast_window_rows();
     int cols = Rast_window_cols();
-    int cell_mapsiz = Rast_cell_size(CELL_TYPE);
-    int dcell_mapsiz = Rast_cell_size(DCELL_TYPE);
+    /* why CELL_TYPE when scaling output ? */
+    int outmap_type = (scale) ? CELL_TYPE : DCELL_TYPE;
+    int outcell_mapsiz = Rast_cell_size(outmap_type);
     DCELL *d_buf;
 
     /* 2 passes for rescale.  1 pass for no rescale */
     int PASSES = (scale) ? 2 : 1;
 
     /* temporary row storage */
-    d_buf = (DCELL *) G_malloc(cols * sizeof(double));
+    d_buf = Rast_allocate_d_buf();
 
     /* allocate memory for output row buffer */
-    outbuf = (scale) ? Rast_allocate_buf(CELL_TYPE) :
-	Rast_allocate_buf(DCELL_TYPE);
+    outbuf = Rast_allocate_buf(outmap_type);
 
     if (!outbuf)
 	G_fatal_error(_("Unable to allocate memory for raster row"));
@@ -387,12 +392,7 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
 	G_message(_("Transforming <%s>..."), name);
 
 	/* open a new file for output */
-	if (scale)
-	    out_fd = Rast_open_c_new(name);
-	else {
-	    out_fd = Rast_open_fp_new(name);
-	    Rast_set_fp_type(DCELL_TYPE);
-	}
+	out_fd = Rast_open_new(name, outmap_type);
 
 	for (pass = 1; pass <= PASSES; pass++) {
 	    void *rowbuf = NULL;
@@ -435,15 +435,9 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
 		    for (col = 0; col < cols; col++) {
 			/* handle null cells */
 			if (Rast_is_null_value(rowptr, maptype)) {
-			    if (scale) {
-				Rast_set_null_value(outptr, 1, CELL_TYPE);
-				outptr = G_incr_void_ptr(outptr, cell_mapsiz);
-			    }
-			    else {
-				Rast_set_null_value(outptr, 1, DCELL_TYPE);
-				outptr =
-				    G_incr_void_ptr(outptr, dcell_mapsiz);
-			    }
+			    Rast_set_null_value(outptr, 1, outmap_type);
+			    outptr =
+				G_incr_void_ptr(outptr, outcell_mapsiz);
 
 			    rowptr =
 				G_incr_void_ptr(rowptr,
@@ -483,19 +477,18 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
 						scale_min);
 
 				    Rast_set_c_value(outptr, tmpcell,
-							 CELL_TYPE);
+							 outmap_type);
 				}
 			    }
 			    else {	/* (!scale) */
 
 				Rast_set_d_value(outptr, d_buf[col],
-						     DCELL_TYPE);
+						     outmap_type);
 			    }
 			}
 
-			outptr = (scale) ?
-			    G_incr_void_ptr(outptr, cell_mapsiz) :
-			    G_incr_void_ptr(outptr, dcell_mapsiz);
+			outptr = 
+			    G_incr_void_ptr(outptr, outcell_mapsiz);
 
 			rowptr =
 			    G_incr_void_ptr(rowptr, Rast_cell_size(maptype));
@@ -503,14 +496,11 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
 		}		/* for j = 0 to bands */
 
 		if (pass == PASSES) {
-		    if (scale)
-			Rast_put_row(out_fd, outbuf, CELL_TYPE);
-		    else
-			Rast_put_row(out_fd, outbuf, DCELL_TYPE);
+		    Rast_put_row(out_fd, outbuf, outmap_type);
 		}
 	    }
 
-	    G_percent(row, rows, 2);
+	    G_percent(1, 1, 1);
 
 	    /* close output file */
 	    if (pass == PASSES)
