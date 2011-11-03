@@ -131,7 +131,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.root = self.AddRoot(_("Map Layers"))
         self.SetPyData(self.root, (None, None))
         
-        #create image list to use with layer tree
+        # create image list to use with layer tree
         il = wx.ImageList(16, 16, mask = False)
         
         trart = wx.ArtProvider.GetBitmap(wx.ART_FOLDER_OPEN, wx.ART_OTHER, (16, 16))
@@ -800,7 +800,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.CheckItem(layer, checked = checked)
         
         # add text and icons for each layer ltype
-        label =  _('(double click to set properties)') + ' ' * 35
+        label =  _('(double click to set properties)') + ' ' * 15
         if ltype == 'raster':
             self.SetItemImage(layer, self.rast_icon)
             self.SetItemText(layer, '%s %s' % (_('raster'), label))
