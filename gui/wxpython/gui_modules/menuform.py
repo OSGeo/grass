@@ -483,17 +483,11 @@ class mainFrame(wx.Frame):
         self.btn_cancel.SetToolTipString(_("Close this window without executing the command (Ctrl+Q)"))
         btnsizer.Add(item = self.btn_cancel, proportion = 0, flag = wx.ALL | wx.ALIGN_CENTER, border = 10)
         self.btn_cancel.Bind(wx.EVT_BUTTON, self.OnCancel)
-
-        self.btnOutputClear = wx.Button(parent = self.panel, id = wx.ID_CLEAR)
-        self.btnOutputClear.SetToolTipString(_("Clear output window content"))
-        btnsizer.Add(item = self.btnOutputClear, proportion = 0, flag = wx.ALL | wx.ALIGN_CENTER, border = 10)
-        self.btnOutputClear.Bind(wx.EVT_BUTTON, self.goutput.ClearHistory)
-
         if self.get_dcmd is not None: # A callback has been set up
             btn_apply = wx.Button(parent = self.panel, id = wx.ID_APPLY)
             btn_ok = wx.Button(parent = self.panel, id = wx.ID_OK)
             btn_ok.SetDefault()
-
+            
             btnsizer.Add(item = btn_apply, proportion = 0,
                          flag = wx.ALL | wx.ALIGN_CENTER,
                          border = 10)
@@ -844,8 +838,6 @@ class cmdPanel(wx.Panel):
         ### add 'command output' tab regardless standalone dialog
         if self.parent.GetName() ==  "MainFrame" and self.parent.get_dcmd is None:
             self.goutput = goutput.GMConsole(parent = self, margin = False)
-            self.goutput.Unsplit()
-            self.outputBox = self.goutput.outputBox
             self.outpage = self.notebook.AddPage(page = self.goutput, text = _("Command output"), name = 'output')
         else:
             self.goutput = None
