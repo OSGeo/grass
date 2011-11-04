@@ -67,7 +67,7 @@ static void write_history(int bands, char *outname, double **eigmat, double *eig
 
 	/* write eigen values to screen */
 	if(first_map)
-	    G_message("%s", tmpeigen);
+	    fprintf(stdout, "%s\n", tmpeigen);
     }
 
     Rast_command_history(&hist);
