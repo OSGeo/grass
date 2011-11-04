@@ -34,7 +34,7 @@
 /* function prototypes */
 static CELL round_c(double);
 static int set_output_scale(struct Option *, int *, int *, int *);
-static off_t calc_mu(int *, double *, double *, int);
+static int calc_mu(int *, double *, double *, int);
 static int calc_covariance(int *, double **, double *, double *, int);
 static int write_pca(double **, double *, double *, int *, char *, int,
                      int, int, int);
@@ -46,7 +46,7 @@ static int dump_eigen(int, double **, double *);
 
 int main(int argc, char *argv[])
 {
-    int i, j;			/* Loop control variables */
+    int i;			/* Loop control variables */
     int bands;			/* Number of image bands */
     double *mu;			/* Mean vector for image bands */
     double *stddev;		/* Stddev vector for image bands */
@@ -55,7 +55,6 @@ int main(int argc, char *argv[])
     double **eigmat;
     int *inp_fd;
     int scale, scale_max, scale_min;
-    off_t cells;
 
     struct GModule *module;
     struct Option *opt_in, *opt_out, *opt_scale;
@@ -141,18 +140,10 @@ int main(int argc, char *argv[])
     }
 
     G_verbose_message(_("Calculating covariance matrix..."));
-    cells = calc_mu(inp_fd, mu, stddev, bands);
+    if (!calc_mu(inp_fd, mu, stddev, bands))
+	G_fatal_error(_("No non-null values"));
 
     calc_covariance(inp_fd, covar, mu, stddev, bands);
-
-    for (i = 0; i < bands; i++) {
-	for (j = 0; j < bands; j++) {
-	    covar[i][j] =
-		covar[i][j] /
-		(cells - 1);
-	    G_debug(3, "covar[%d][%d] = %f", i, j, covar[i][j]);
-	}
-    }
 
     G_math_d_copy(covar[0], eigmat[0], bands*bands);
     G_debug(1, "Calculating eigenvalues and eigenvectors...");
@@ -243,141 +234,132 @@ set_output_scale(struct Option *scale_opt, int *scale, int *scale_min,
 }
 
 
-static off_t calc_mu(int *fds, double *mu, double *stddev, int bands)
+static int calc_mu(int *fds, double *mu, double *stddev, int bands)
 {
     int i;
+    int row, col;
     int rows = Rast_window_rows();
     int cols = Rast_window_cols();
-    off_t cells;
-    void *rowbuf = NULL;
+    off_t count = 0;
+    double *sumsq;
+    DCELL **rowbuf = (DCELL **) G_malloc(bands * sizeof(DCELL *));
 
     for (i = 0; i < bands; i++) {
-	RASTER_MAP_TYPE maptype;
-	int row, col;
-	double sum = 0.;
-	double sumsq = 0;
-	
-	cells = 0;
+	rowbuf[i] = Rast_allocate_d_buf();
+    }
 
-	maptype = Rast_get_map_type(fds[i]);
+    if (stddev) {
+	G_message(_("Computing means and standard deviations..."));
+	sumsq = (double *)G_calloc(bands, sizeof(double));
+    }
+    else {
+	G_message(_("Computing means..."));
+	sumsq = NULL;
+    }
 
-	/* don't assume each image is of the same type */
-	if (rowbuf)
-	    G_free(rowbuf);
-	if ((rowbuf = Rast_allocate_buf(maptype)) == NULL)
-	    G_fatal_error(_("Unable allocate memory for row buffer"));
+    for (row = 0; row < rows; row++) {
+	G_percent(row, rows, 2);
+	for (i = 0; i < bands; i++)
+	    Rast_get_d_row(fds[i], rowbuf[i], row);
 
-	G_message(_("Computing means for band %d..."), i + 1);
-	for (row = 0; row < rows; row++) {
-	    void *ptr = rowbuf;
-	    DCELL dval;
-
-	    G_percent(row, rows - 1, 2);
-
-	    Rast_get_row(fds[i], rowbuf, row, maptype);
-
-	    for (col = 0; col < cols; col++) {
-		/* skip null cells */
-		if (Rast_is_null_value(ptr, maptype)) {
-		    ptr = G_incr_void_ptr(ptr, Rast_cell_size(maptype));
-		    continue;
-		}
-
-		dval = Rast_get_d_value(ptr, maptype);
-		sum += dval;
+	for (col = 0; col < cols; col++) {
+	    /* ignore cells where any of the maps has null value */
+	    for (i = 0; i < bands; i++)
+		if (Rast_is_d_null_value(&rowbuf[i][col]))
+		    break;
+	    if (i != bands)
+		continue;
+	    count++;
+	    for (i = 0; i < bands; i++) {
+		mu[i] += rowbuf[i][col];
 		if (stddev)
-		    sumsq += dval * dval;
-		cells++;
-		ptr = G_incr_void_ptr(ptr, Rast_cell_size(maptype));
+		    sumsq[i] += rowbuf[i][col] * rowbuf[i][col];
 	    }
 	}
+    }
+    G_percent(1, 1, 1);
+    
+    if (count < 2)
+	return 0;
 
-	mu[i] = sum / cells;
+    for (i = 0; i < bands; i++) {
+	mu[i] = mu[i] / count;
 	if (stddev)
-	    stddev[i] = sqrt((cells / (cells - 1)) *
-	                     (sumsq / cells - mu[i] * mu[i]));
-	
+	    stddev[i] = sqrt((count / (count - 1)) *
+	                     (sumsq[i] / count - mu[i] * mu[i]));
+
+	G_free(rowbuf[i]);
     }
 
     if (rowbuf)
 	G_free(rowbuf);
+    if (sumsq)
+	G_free(sumsq);
 
-    return cells;
+    return 1;
 }
 
 
 static int calc_covariance(int *fds, double **covar, double *mu, 
                            double *stddev, int bands)
 {
-    int j, k;
+    int i, j;
+    int row, col;
     int rows = Rast_window_rows();
     int cols = Rast_window_cols();
-    int row, col;
+    off_t count = 0;
+    DCELL **rowbuf = (DCELL **) G_malloc(bands * sizeof(DCELL *));
 
-    for (j = 0; j < bands; j++) {
-	RASTER_MAP_TYPE maptype = Rast_get_map_type(fds[j]);
-	void *rowbuf1 = NULL;
-	void *rowbuf2 = NULL;
+    for (i = 0; i < bands; i++) {
+	rowbuf[i] = Rast_allocate_d_buf();
+    }
 
-	/* don't assume each image is of the same type */
-	if (rowbuf1)
-	    G_free(rowbuf1);
-	if ((rowbuf1 = Rast_allocate_buf(maptype)) == NULL)
-	    G_fatal_error(_("Unable allocate memory for row buffer"));
+    G_message(_("Computing covariance matrix..."));
 
-	G_message(_("Computing row %d (of %d) of covariance matrix..."),
-		  j + 1, bands);
-	for (row = 0; row < rows; row++) {
-	    void *ptr1, *ptr2;
+    for (row = 0; row < rows; row++) {
+	G_percent(row, rows, 2);
+	for (i = 0; i < bands; i++)
+	    Rast_get_d_row(fds[i], rowbuf[i], row);
 
-	    G_percent(row, rows - 1, 2);
+	for (col = 0; col < cols; col++) {
+	    /* ignore cells where any of the maps has null value */
+	    for (i = 0; i < bands; i++)
+		if (Rast_is_d_null_value(&rowbuf[i][col]))
+		    break;
+	    if (i != bands)
+		continue;
+	    count++;
+	    for (i = 0; i < bands; i++) {
+		DCELL dval1 = rowbuf[i][col];
 
-	    Rast_get_row(fds[j], rowbuf1, row, maptype);
+		for (j = i; j < bands; j++) {
+		    DCELL dval2 = rowbuf[j][col];
 
-	    for (k = j; k < bands; k++) {
-		RASTER_MAP_TYPE maptype2 = Rast_get_map_type(fds[k]);
-
-		/* don't assume each image is of the same type */
-		if (rowbuf2)
-		    G_free(rowbuf2);
-		if ((rowbuf2 = Rast_allocate_buf(maptype2)) == NULL)
-		    G_fatal_error(_("Unable to allocate memory for row buffer"));
-
-		Rast_get_row(fds[k], rowbuf2, row, maptype2);
-
-		ptr1 = rowbuf1;
-		ptr2 = rowbuf2;
-
-		for (col = 0; col < cols; col++) {
-		    DCELL dval1, dval2;
-
-		    /* skip null cells */
-		    if (Rast_is_null_value(ptr1, maptype) ||
-			Rast_is_null_value(ptr2, maptype2)) {
-			ptr1 = G_incr_void_ptr(ptr1, Rast_cell_size(maptype));
-			ptr2 = G_incr_void_ptr(ptr2, Rast_cell_size(maptype2));
-			continue;
-		    }
-
-		    dval1 = Rast_get_d_value(ptr1, maptype);
-		    dval2 = Rast_get_d_value(ptr2, maptype2);
-		    
 		    if (stddev) {
-			covar[j][k] += (dval1 - mu[j]) * (dval2 - mu[k]) /
-			               (stddev[j] * stddev[k]);
+			covar[i][j] += (dval1 - mu[i]) * (dval2 - mu[j]) /
+			               (stddev[i] * stddev[j]);
 		    }
 		    else {
-			covar[j][k] += (dval1 - mu[j]) * (dval2 - mu[k]);
+			covar[i][j] += (dval1 - mu[i]) * (dval2 - mu[j]);
 		    }
 
-		    ptr1 = G_incr_void_ptr(ptr1, Rast_cell_size(maptype));
-		    ptr2 = G_incr_void_ptr(ptr2, Rast_cell_size(maptype2));
 		}
-
-		covar[k][j] = covar[j][k];
 	    }
 	}
     }
+    G_percent(1, 1, 1);
+    
+    for (i = 0; i < bands; i++) {
+	for (j = i; j < bands; j++) {
+	    covar[i][j] = covar[i][j] / (count - 1);
+	    G_debug(3, "covar[%d][%d] = %f", i, j, covar[i][j]);
+	    if (j != i)
+		covar[j][i] = covar[i][j];
+	}
+
+	G_free(rowbuf[i]);
+    }
+    G_free(rowbuf);
 
     return 0;
 }
