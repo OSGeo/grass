@@ -157,29 +157,27 @@ int main(int argc, char *argv[])
     input8->key = "soil_line_slope";
     input8->type = TYPE_DOUBLE;
     input8->required = NO;
-    input8->gisprompt = "value";
     input8->description = _("MSAVI2: Value of the slope of the soil line");
 
     input9 = G_define_option();
     input9->key = "soil_line_intercept";
     input9->type = TYPE_DOUBLE;
     input9->required = NO;
-    input9->gisprompt = "value";
     input9->description = _("MSAVI2: Value of the intercept of the soil line");
 
     input10 = G_define_option();
     input10->key = "soil_noise_reduction_factor";
     input10->type = TYPE_DOUBLE;
     input10->required = NO;
-    input10->gisprompt = "value";
     input10->description = _("MSAVI2: Value of the factor of reduction of soil noise");
 
     input11 = G_define_option();
     input11->key = "DN_storage_bit";
-    input11->type = TYPE_DOUBLE;
+    input11->type = TYPE_INTEGER;
     input11->required = NO;
-    input11->gisprompt = "value";
     input11->description = _("If your data is in Digital Numbers (i.e. integer type), give the max bits (i.e. 8 for Landsat -> [0-255])");
+    input11->options = "7,8,10,16";
+    input11->answer = "8";
 
     output = G_define_standard_option(G_OPT_R_OUTPUT);
 
