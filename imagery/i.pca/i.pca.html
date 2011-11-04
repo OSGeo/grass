@@ -32,11 +32,22 @@ rescale=0,0,  no rescaling is performed on output files.
 
 <dd>If output is rescaled, the output raster will be of type CELL. If 
 the output is not rescaled, the output raster will be of type DCELL.
+
+<dt><b>-n</b> <em>normalize input raster maps</em> 
+<dd>By default, the values of the input raster maps are centered for each 
+map separately with <em>x - mean</em>. With <em>-n</em>, the input raster 
+maps are normalized for each map separately with <em>(x - mean) / stddev</em>. 
+Normalizing is highly recommended when the input raster maps have different
+units, e.g. represent different environmental parameters. 
 </dl>
 
 
 <h2>NOTES</h2>
 
+If some of the input raster maps have NULL values but others do not have 
+NULL values, a MASK should be created such that any NULL values are 
+MASK'ed out.
+<p>
 Richards (1986) gives a good example of the application of principal
 components analysis (pca) to a time series of LANDSAT images of a burned
 region in Australia.
@@ -54,9 +65,9 @@ i.pca in=spot.ms.1,spot.ms.2,spot.ms.3 out=spot_pca
 
 r.info -h spot_pca.1
    Eigen values, (vectors), and [percent importance]:
-   PC1   1170.12 ( -0.63 -0.65 -0.43 ) [ 88.07% ]
-   PC2    152.49 (  0.23  0.37 -0.90 ) [ 11.48% ]
-   PC3      6.01 (  0.75 -0.66 -0.08 ) [  0.45% ]
+   PC1   1159.75 ( 0.6237, 0.6503, 0.4337) [88.38%]
+   PC2    146.50 ( 0.2403, 0.3685,-0.8981) [11.16%]
+   PC3      5.97 (-0.7438, 0.6643, 0.0735) [ 0.45%]
 </pre></div>
 
 

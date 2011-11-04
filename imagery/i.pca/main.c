@@ -34,9 +34,10 @@
 /* function prototypes */
 static CELL round_c(double);
 static int set_output_scale(struct Option *, int *, int *, int *);
-static off_t calc_mu(int *, double *, int);
-static int calc_covariance(int *, double **, double *, int);
-static int write_pca(double **, int *, char *, int, int, int, int);
+static off_t calc_mu(int *, double *, double *, int);
+static int calc_covariance(int *, double **, double *, double *, int);
+static int write_pca(double **, double *, double *, int *, char *, int,
+                     int, int, int);
 
 #ifdef PCA_DEBUG
 static int dump_eigen(int, double **, double *);
@@ -48,6 +49,7 @@ int main(int argc, char *argv[])
     int i, j;			/* Loop control variables */
     int bands;			/* Number of image bands */
     double *mu;			/* Mean vector for image bands */
+    double *stddev;		/* Stddev vector for image bands */
     double **covar;		/* Covariance Matrix */
     double *eigval;
     double **eigmat;
@@ -57,6 +59,7 @@ int main(int argc, char *argv[])
 
     struct GModule *module;
     struct Option *opt_in, *opt_out, *opt_scale;
+    struct Flag *flag_norm;
 
     /* initialize GIS engine */
     G_gisinit(argv[0]);
@@ -93,6 +96,10 @@ int main(int argc, char *argv[])
 	_("For no rescaling use 0,0");
     opt_scale->guisection = _("Rescale");
     
+    flag_norm = G_define_flag();
+    flag_norm->key = 'n';
+    flag_norm->description = (_("Normalize (center and scale) input maps"));
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -117,6 +124,11 @@ int main(int argc, char *argv[])
     inp_fd = G_alloc_ivector(bands);
     eigmat = G_alloc_matrix(bands, bands);
     eigval = G_alloc_vector(bands);
+    
+    if (flag_norm->answer)
+	stddev = G_alloc_vector(bands);
+    else
+	stddev = NULL;
 
     /* open and check input/output files */
     for (i = 0; i < bands; i++) {
@@ -129,9 +141,9 @@ int main(int argc, char *argv[])
     }
 
     G_verbose_message(_("Calculating covariance matrix..."));
-    cells = calc_mu(inp_fd, mu, bands);
+    cells = calc_mu(inp_fd, mu, stddev, bands);
 
-    calc_covariance(inp_fd, covar, mu, bands);
+    calc_covariance(inp_fd, covar, mu, stddev, bands);
 
     for (i = 0; i < bands; i++) {
 	for (j = 0; j < bands; j++) {
@@ -158,8 +170,8 @@ int main(int argc, char *argv[])
     G_math_d_A_T(eigmat, bands);
 
     /* write output images */
-    write_pca(eigmat, inp_fd, opt_out->answer, bands, scale, scale_min,
-	      scale_max);
+    write_pca(eigmat, mu, stddev, inp_fd, opt_out->answer, bands,
+              scale, scale_min, scale_max);
 
     /* write colors and history to output */
     for (i = 0; i < bands; i++) {
@@ -231,7 +243,7 @@ set_output_scale(struct Option *scale_opt, int *scale, int *scale_min,
 }
 
 
-static off_t calc_mu(int *fds, double *mu, int bands)
+static off_t calc_mu(int *fds, double *mu, double *stddev, int bands)
 {
     int i;
     int rows = Rast_window_rows();
@@ -243,6 +255,7 @@ static off_t calc_mu(int *fds, double *mu, int bands)
 	RASTER_MAP_TYPE maptype;
 	int row, col;
 	double sum = 0.;
+	double sumsq = 0;
 	
 	cells = 0;
 
@@ -257,6 +270,7 @@ static off_t calc_mu(int *fds, double *mu, int bands)
 	G_message(_("Computing means for band %d..."), i + 1);
 	for (row = 0; row < rows; row++) {
 	    void *ptr = rowbuf;
+	    DCELL dval;
 
 	    G_percent(row, rows - 1, 2);
 
@@ -269,13 +283,20 @@ static off_t calc_mu(int *fds, double *mu, int bands)
 		    continue;
 		}
 
-		sum += Rast_get_d_value(ptr, maptype);
+		dval = Rast_get_d_value(ptr, maptype);
+		sum += dval;
+		if (stddev)
+		    sumsq += dval * dval;
 		cells++;
 		ptr = G_incr_void_ptr(ptr, Rast_cell_size(maptype));
 	    }
 	}
 
 	mu[i] = sum / cells;
+	if (stddev)
+	    stddev[i] = sqrt((cells / (cells - 1)) *
+	                     (sumsq / cells - mu[i] * mu[i]));
+	
     }
 
     if (rowbuf)
@@ -285,7 +306,8 @@ static off_t calc_mu(int *fds, double *mu, int bands)
 }
 
 
-static int calc_covariance(int *fds, double **covar, double *mu, int bands)
+static int calc_covariance(int *fds, double **covar, double *mu, 
+                           double *stddev, int bands)
 {
     int j, k;
     int rows = Rast_window_rows();
@@ -327,6 +349,8 @@ static int calc_covariance(int *fds, double **covar, double *mu, int bands)
 		ptr2 = rowbuf2;
 
 		for (col = 0; col < cols; col++) {
+		    DCELL dval1, dval2;
+
 		    /* skip null cells */
 		    if (Rast_is_null_value(ptr1, maptype) ||
 			Rast_is_null_value(ptr2, maptype2)) {
@@ -335,10 +359,16 @@ static int calc_covariance(int *fds, double **covar, double *mu, int bands)
 			continue;
 		    }
 
-		    covar[j][k] +=
-			((double)Rast_get_d_value(ptr1, maptype) -
-			 mu[j]) * ((double)Rast_get_d_value(ptr2,
-						   maptype2) - mu[k]);
+		    dval1 = Rast_get_d_value(ptr1, maptype);
+		    dval2 = Rast_get_d_value(ptr2, maptype2);
+		    
+		    if (stddev) {
+			covar[j][k] += (dval1 - mu[j]) * (dval2 - mu[k]) /
+			               (stddev[j] * stddev[k]);
+		    }
+		    else {
+			covar[j][k] += (dval1 - mu[j]) * (dval2 - mu[k]);
+		    }
 
 		    ptr1 = G_incr_void_ptr(ptr1, Rast_cell_size(maptype));
 		    ptr2 = G_incr_void_ptr(ptr2, Rast_cell_size(maptype2));
@@ -354,8 +384,9 @@ static int calc_covariance(int *fds, double **covar, double *mu, int bands)
 
 
 static int
-write_pca(double **eigmat, int *inp_fd, char *out_basename,
-	  int bands, int scale, int scale_min, int scale_max)
+write_pca(double **eigmat, double *mu, double *stddev,
+          int *inp_fd, char *out_basename, int bands, 
+	  int scale, int scale_min, int scale_max)
 {
     int i, j;
     void *outbuf, *outptr;
@@ -366,7 +397,7 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
     int rows = Rast_window_rows();
     int cols = Rast_window_cols();
     /* why CELL_TYPE when scaling output ? */
-    int outmap_type = (scale) ? CELL_TYPE : DCELL_TYPE;
+    int outmap_type = (scale) ? CELL_TYPE : FCELL_TYPE;
     int outcell_mapsiz = Rast_cell_size(outmap_type);
     DCELL *d_buf;
 
@@ -433,6 +464,8 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
 		    /* add into the output cell eigmat[i][j] * corresp cell 
 		     * of j-th band for current j */
 		    for (col = 0; col < cols; col++) {
+			DCELL dval;
+
 			/* handle null cells */
 			if (Rast_is_null_value(rowptr, maptype)) {
 			    Rast_set_null_value(outptr, 1, outmap_type);
@@ -446,9 +479,11 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
 			}
 
 			/* corresp. cell of j-th band */
-			d_buf[col] +=
-			    eigmat[i][j] * Rast_get_d_value(rowptr,
-								maptype);
+			dval = Rast_get_d_value(rowptr, maptype);
+			if (stddev)
+			    d_buf[col] += eigmat[i][j] * ((dval - mu[j]) / stddev[j]);
+			else
+			    d_buf[col] += eigmat[i][j] * (dval - mu[j]);
 
 			/* the cell entry is complete */
 			if (j == (bands - 1)) {
