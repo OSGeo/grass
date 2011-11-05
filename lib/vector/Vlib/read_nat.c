@@ -162,7 +162,7 @@ int V2_read_next_line_nat(struct Map_info *Map,
     if (Map->Constraint_region_flag)
 	Vect_get_constraint_box(Map, &mbox);
 
-    while (1) {
+    while (TRUE) {
 	line = Map->next_line;
 
 	if (line > Map->plus.n_lines)
@@ -190,8 +190,9 @@ int V2_read_next_line_nat(struct Map_info *Map,
 
 	return ret;
     }
-
-    /* NOTREACHED */ }
+    
+    /* NOTREACHED */
+}
 
 
 /*!  
