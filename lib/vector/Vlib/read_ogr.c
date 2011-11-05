@@ -144,6 +144,8 @@ int V1_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
     OGRFeatureH hFeature;
     OGRGeometryH hGeom;
 
+    struct Format_info_ogr *fInfo;
+
     G_debug(3, "V1_read_next_line_ogr()");
 
     if (line_p != NULL)
@@ -154,10 +156,11 @@ int V1_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
     if (Map->Constraint_region_flag)
 	Vect_get_constraint_box(Map, &mbox);
 
+    fInfo = &(Map->fInfo.ogr);
     while (TRUE) {
 	/* Read feature to cache if necessary */
-	while (Map->fInfo.ogr.lines_next == Map->fInfo.ogr.lines_num) {
-	    hFeature = OGR_L_GetNextFeature(Map->fInfo.ogr.layer);
+	while (fInfo->lines_next == fInfo->lines_num) {
+	    hFeature = OGR_L_GetNextFeature(fInfo->layer);
 
 	    if (hFeature == NULL) {
 		return -2;
@@ -169,54 +172,53 @@ int V1_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 		continue;
 	    }
 
-	    Map->fInfo.ogr.feature_cache_id = (int)OGR_F_GetFID(hFeature);
-	    if (Map->fInfo.ogr.feature_cache_id == OGRNullFID) {
+	    fInfo->feature_cache_id = (int)OGR_F_GetFID(hFeature);
+	    if (fInfo->feature_cache_id == OGRNullFID) {
 		G_warning(_("OGR feature without ID"));
 	    }
 
 	    /* Cache the feature */
-	    Map->fInfo.ogr.lines_num = 0;
+	    fInfo->lines_num = 0;
 	    cache_feature(Map, hGeom, -1);
-	    G_debug(4, "%d lines read to cache", Map->fInfo.ogr.lines_num);
+	    G_debug(4, "%d lines read to cache", fInfo->lines_num);
 	    OGR_F_Destroy(hFeature);
 
-	    Map->fInfo.ogr.lines_next = 0;	/* next to be read from cache */
+	    fInfo->lines_next = 0;	/* next to be read from cache */
 	}
 
 	/* Read next part of the feature */
-	G_debug(4, "read next cached line %d", Map->fInfo.ogr.lines_next);
-	itype = Map->fInfo.ogr.lines_types[Map->fInfo.ogr.lines_next];
+	G_debug(4, "read next cached line %d", fInfo->lines_next);
+	itype = fInfo->lines_types[fInfo->lines_next];
 
 	/* Constraint on Type of line 
 	 * Default is all of  Point, Line, Area and whatever else comes along
 	 */
 	if (Map->Constraint_type_flag) {
 	    if (!(itype & Map->Constraint_type)) {
-		Map->fInfo.ogr.lines_next++;
+		fInfo->lines_next++;
 		continue;
 	    }
 	}
 
 	/* Constraint on specified region */
 	if (Map->Constraint_region_flag) {
-	    Vect_line_box(Map->fInfo.ogr.lines[Map->fInfo.ogr.lines_next],
+	    Vect_line_box(fInfo->lines[fInfo->lines_next],
 			  &lbox);
 
 	    if (!Vect_box_overlap(&lbox, &mbox)) {
-		Map->fInfo.ogr.lines_next++;
+		fInfo->lines_next++;
 		continue;
 	    }
 	}
 
 	if (line_p != NULL)
 	    Vect_append_points(line_p,
-			       Map->fInfo.ogr.lines[Map->fInfo.ogr.
-						    lines_next], GV_FORWARD);
+			       fInfo->lines[fInfo->lines_next], GV_FORWARD);
 
-	if (line_c != NULL && Map->fInfo.ogr.feature_cache_id != OGRNullFID)
-	    Vect_cat_set(line_c, 1, Map->fInfo.ogr.feature_cache_id);
+	if (line_c != NULL && fInfo->feature_cache_id != OGRNullFID)
+	    Vect_cat_set(line_c, 1, fInfo->feature_cache_id);
 
-	Map->fInfo.ogr.lines_next++;
+	fInfo->lines_next++;
 	G_debug(4, "next line read, type = %d", itype);
 	
 	return itype;
@@ -240,12 +242,79 @@ int V1_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 int V2_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 			  struct line_cats *line_c)
 {
-    if (Map->next_line > Map->plus.n_lines)
-	return -2;
+    int line, ret;
+    struct P_line *Line;
+    struct bound_box lbox, mbox;
 
-    Map->next_line++;
+    G_debug(3, "V2_read_next_line_ogr()");
+    
+    if (Map->Constraint_region_flag)
+	Vect_get_constraint_box(Map, &mbox);
+    
+    while(TRUE) {
+	line = Map->next_line;
+	
+	if (Map->next_line > Map->plus.n_lines)
+	    return -2;
+	
+	Map->next_line++;
+	
+	Line = Map->plus.Line[line];
+	if (Line == NULL) {	/* Dead line */
+	    continue;
+	}
 
-    return V1_read_next_line_ogr(Map, line_p, line_c);
+	if ((Map->Constraint_type_flag &&
+	     !(Line->type & Map->Constraint_type))) {
+	    continue;
+	}
+
+	if (Line->type == GV_CENTROID) {
+	    G_debug(4, "Centroid");
+	    
+	    if (line_p != NULL) {
+		int i, found;
+		struct bound_box box;
+		struct boxlist list;
+		struct P_topo_c *topo = (struct P_topo_c *)Line->topo;
+		
+		/* get area bbox */
+		Vect_get_area_box(Map, topo->area, &box);
+		/* search in spatial index for centroid with area bbox */
+		dig_init_boxlist(&list, TRUE);
+		Vect_select_lines_by_box(Map, &box, Line->type, &list);
+		
+		found = 0;
+		for (i = 0; i < list.n_values; i++) {
+		    if (list.id[i] == line) {
+			found = i;
+			break;
+		    }
+		}
+		
+		Vect_reset_line(line_p);
+		Vect_append_point(line_p, list.box[found].E, list.box[found].N, 0.0);
+	    }
+	    if (line_c != NULL) {
+		/* cat = FID and offset = FID for centroid */
+		Vect_reset_cats(line_c);
+		Vect_cat_set(line_c, 1, (int) Line->offset);
+	    }
+	    
+	    return GV_CENTROID;
+	}
+	
+	ret = V1_read_next_line_ogr(Map, line_p, line_c);
+
+	if (Map->Constraint_region_flag) {
+	    Vect_line_box(line_p, &lbox);
+	    if (!Vect_box_overlap(&lbox, &mbox)) {
+		continue;
+	    }
+	}
+	
+	return ret;
+    }
 }
 
 /*!
