@@ -249,22 +249,22 @@ class GMConsole(wx.SplitterWindow):
         # thread
         self.cmdThread = CmdThread(self, self.requestQ, self.resultQ)
         
-        self.outputBox = wx.StaticBox(parent = self.panelPrompt, id = wx.ID_ANY,
+        self.outputBox = wx.StaticBox(parent = self.panelOutput, id = wx.ID_ANY,
                                       label = " %s " % _("Output window"))
-        self.cmdBox = wx.StaticBox(parent = self.panelPrompt, id = wx.ID_ANY,
+        self.cmdBox = wx.StaticBox(parent = self.panelOutput, id = wx.ID_ANY,
                                    label = " %s " % _("Command prompt"))
         
         # buttons
-        self.btnOutputClear = wx.Button(parent = self.panelPrompt, id = wx.ID_CLEAR)
+        self.btnOutputClear = wx.Button(parent = self.panelOutput, id = wx.ID_CLEAR)
         self.btnOutputClear.SetToolTipString(_("Clear output window content"))
-        self.btnCmdClear = wx.Button(parent = self.panelPrompt, id = wx.ID_CLEAR)
+        self.btnCmdClear = wx.Button(parent = self.panelOutput, id = wx.ID_CLEAR)
         self.btnCmdClear.SetToolTipString(_("Clear command prompt content"))
         if self.parent.GetName() != 'LayerManager':
             self.btnCmdClear.Hide()
-        self.btnOutputSave  = wx.Button(parent = self.panelPrompt, id = wx.ID_SAVE)
+        self.btnOutputSave  = wx.Button(parent = self.panelOutput, id = wx.ID_SAVE)
         self.btnOutputSave.SetToolTipString(_("Save output window content to the file"))
         # abort
-        self.btnCmdAbort = wx.Button(parent = self.panelPrompt, id = wx.ID_STOP)
+        self.btnCmdAbort = wx.Button(parent = self.panelOutput, id = wx.ID_STOP)
         self.btnCmdAbort.SetToolTipString(_("Abort running command"))
         self.btnCmdAbort.Enable(False)
         
@@ -283,6 +283,9 @@ class GMConsole(wx.SplitterWindow):
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
         outBtnSizer = wx.StaticBoxSizer(self.outputBox, wx.HORIZONTAL)
         cmdBtnSizer = wx.StaticBoxSizer(self.cmdBox, wx.HORIZONTAL)
+
+        promptSizer.Add(item = self.cmdPrompt, proportion = 1,
+                        flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, border = 3)
         
         if self.search and self.search.IsShown():
             outputSizer.Add(item = self.searchPane, proportion = 0,
@@ -291,14 +294,11 @@ class GMConsole(wx.SplitterWindow):
                         flag = wx.EXPAND | wx.ALL, border = 3)
         outputSizer.Add(item = self.progressbar, proportion = 0,
                         flag = wx.EXPAND | wx.LEFT | wx.RIGHT, border = 3)
-        
-        promptSizer.Add(item = self.cmdPrompt, proportion = 1,
-                        flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, border = 3)
-        
         outBtnSizer.Add(item = self.btnOutputClear, proportion = 1,
                         flag = wx.ALIGN_LEFT | wx.LEFT | wx.RIGHT, border = 5)
         outBtnSizer.Add(item = self.btnOutputSave, proportion = 1,
                         flag = wx.ALIGN_RIGHT | wx.RIGHT, border = 5)
+
         cmdBtnSizer.Add(item = self.btnCmdClear, proportion = 1,
                         flag = wx.ALIGN_CENTER | wx.LEFT | wx.RIGHT, border = 5)
         cmdBtnSizer.Add(item = self.btnCmdAbort, proportion = 1,
@@ -308,7 +308,7 @@ class GMConsole(wx.SplitterWindow):
                      flag = wx.ALL | wx.ALIGN_CENTER, border = 5)
         btnSizer.Add(item = cmdBtnSizer, proportion = 1,
                      flag = wx.ALIGN_CENTER | wx.TOP | wx.BOTTOM | wx.RIGHT, border = 5)
-        promptSizer.Add(item = btnSizer, proportion = 0,
+        outputSizer.Add(item = btnSizer, proportion = 0,
                         flag = wx.EXPAND)
         
         outputSizer.Fit(self)
@@ -323,7 +323,7 @@ class GMConsole(wx.SplitterWindow):
         # split window
         if self.parent.GetName() == 'LayerManager':
             self.SplitHorizontally(self.panelOutput, self.panelPrompt, -50)
-            self.SetMinimumPaneSize(self.btnCmdClear.GetSize()[1] + 85)
+            self.SetMinimumPaneSize(self.btnCmdClear.GetSize()[1] + 50)
         else:
             self.SplitHorizontally(self.panelOutput, self.panelPrompt, -45)
             self.SetMinimumPaneSize(self.btnCmdClear.GetSize()[1] + 25)

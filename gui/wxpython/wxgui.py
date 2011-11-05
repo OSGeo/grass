@@ -218,7 +218,7 @@ class GMFrame(wx.Frame):
         self.goutput.Redirect()
         
         # fix goutput's pane size (required for Mac OSX)
-        self.goutput.SetSashPosition(int(self.GetSize()[1] * .54))
+        self.goutput.SetSashPosition(int(self.GetSize()[1] * .80))
         
         self.workspaceChanged = False
         
