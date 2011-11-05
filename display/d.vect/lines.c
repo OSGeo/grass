@@ -165,50 +165,6 @@ int display_lines(struct Map_info *Map, int type, struct cat_list *Clist,
 		  &n_faces);
     }
     
-    if (Vect_maptype(Map) == GV_FORMAT_OGR) {
-	/* centroids are stored in topology for OGR layers */
-	if (Vect_level(Map) >= 2) {
-	    if (type & GV_CENTROID &&
-		Vect_get_num_primitives(Map, GV_CENTROID) > 0) {
-		int nlines;
-		struct bound_box box;
-		struct boxlist *list;
-
-		list = Vect_new_boxlist(FALSE); /* bboxes not needed */
-		Vect_get_constraint_box(Map, &box);
-		nlines = Vect_select_lines_by_box(Map, &box, GV_CENTROID, list);
-		G_debug(3, "ncentroids (ogr) = %d", nlines);
-			    
-		for (line = 0; line < nlines; line++) {
-		    ltype = Vect_read_line(Map, Points, Cats, list->id[line]);
-
-		    draw_line(type, ltype, line,
-			      Points, Cats,
-			      color, fcolor, chcat,
-			      symbol_name, size, sqrt_flag,
-			      id_flag, cats_color_flag,
-			      default_width, width_scale,
-			      zcolors,
-			      cvarr_rgb, colors,
-			      cvarr_width, nrec_width, 
-			      cvarr_size, nrec_size,
-			      cvarr_rot, nrec_rot,
-			      Clist, Symb,
-			      line_color, fill_color,
-			      primary_color,
-			      &n_points, &n_lines, &n_centroids, &n_boundaries,
-			      &n_faces);
-		}
-		Vect_destroy_boxlist(list);
-	    }
-	}
-	else {
-	    G_warning(_("Topology level required for drawing centroids "
-			"for OGR layers"));
-	}
-    }
-	
-    
     if (n_points > 0) 
 	G_verbose_message(_("%d points plotted"), n_points);
     if (n_lines > 0) 
