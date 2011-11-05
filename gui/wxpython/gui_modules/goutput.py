@@ -279,12 +279,13 @@ class GMConsole(wx.SplitterWindow):
     def _layout(self):
         """!Do layout"""
         outputSizer = wx.BoxSizer(wx.VERTICAL)
-        promptSizer = wx.BoxSizer(wx.VERTICAL)
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
         outBtnSizer = wx.StaticBoxSizer(self.outputBox, wx.HORIZONTAL)
         cmdBtnSizer = wx.StaticBoxSizer(self.cmdBox, wx.HORIZONTAL)
-
-        promptSizer.Add(item = self.cmdPrompt, proportion = 1,
+        
+        if self.cmdPrompt.IsShown():
+            promptSizer = wx.BoxSizer(wx.VERTICAL)
+            promptSizer.Add(item = self.cmdPrompt, proportion = 1,
                         flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, border = 3)
         
         if self.search and self.search.IsShown():
@@ -298,7 +299,7 @@ class GMConsole(wx.SplitterWindow):
                         flag = wx.ALIGN_LEFT | wx.LEFT | wx.RIGHT, border = 5)
         outBtnSizer.Add(item = self.btnOutputSave, proportion = 1,
                         flag = wx.ALIGN_RIGHT | wx.RIGHT, border = 5)
-
+        
         cmdBtnSizer.Add(item = self.btnCmdClear, proportion = 1,
                         flag = wx.ALIGN_CENTER | wx.LEFT | wx.RIGHT, border = 5)
         cmdBtnSizer.Add(item = self.btnCmdAbort, proportion = 1,
@@ -313,20 +314,20 @@ class GMConsole(wx.SplitterWindow):
         
         outputSizer.Fit(self)
         outputSizer.SetSizeHints(self)
-        
-        promptSizer.Fit(self)
-        promptSizer.SetSizeHints(self)
-        
         self.panelOutput.SetSizer(outputSizer)
-        self.panelPrompt.SetSizer(promptSizer)
+        
+        if self.cmdPrompt.IsShown():
+            promptSizer.Fit(self)
+            promptSizer.SetSizeHints(self)
+            self.panelPrompt.SetSizer(promptSizer)
         
         # split window
-        if self.parent.GetName() == 'LayerManager':
+        if self.cmdPrompt.IsShown():
             self.SplitHorizontally(self.panelOutput, self.panelPrompt, -50)
-            self.SetMinimumPaneSize(self.btnCmdClear.GetSize()[1] + 50)
         else:
             self.SplitHorizontally(self.panelOutput, self.panelPrompt, -45)
-            self.SetMinimumPaneSize(self.btnCmdClear.GetSize()[1] + 25)
+            self.Unsplit()
+        self.SetMinimumPaneSize(self.btnCmdClear.GetSize()[1] + 25)
         
         self.SetSashGravity(1.0)
         

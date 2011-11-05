@@ -839,8 +839,6 @@ class cmdPanel(wx.Panel):
         ### add 'command output' tab regardless standalone dialog
         if self.parent.GetName() ==  "MainFrame" and self.parent.get_dcmd is None:
             self.goutput = goutput.GMConsole(parent = self, margin = False)
-            self.goutput.Unsplit()
-            self.outputBox = self.goutput.outputBox
             self.outpage = self.notebook.AddPage(page = self.goutput, text = _("Command output"), name = 'output')
         else:
             self.goutput = None
