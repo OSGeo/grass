@@ -31,7 +31,7 @@ See code in:
 
 \section pythonScripting GRASS scripting tasks for Python provided by "grass.script"
 
-Statement
+The statement
 
 \code
 import grass.script as grass
@@ -45,7 +45,8 @@ To import only selected module
 from grass.script import core as grass
 \endcode
 
-Sample script
+Sample script (See the GRASS Wiki at 
+<a href="http://grass.osgeo.org/wiki/GRASS_and_Python">http://grass.osgeo.org/wiki/GRASS_and_Python</a> for more examples)
 
 \code
 #!/usr/bin/env python
