@@ -90,6 +90,8 @@ that if the new size of the line is the same as the old size it will
 be written in the same place in the coor file where the original line
 existed.
 
+* Note: see above
+
 Remove bounding box from support structures (?)
 -----------------------------------------------
 The vector structures (P_line, P_area, P_isle) store bounding box in
@@ -102,6 +104,7 @@ stored in the structure) which can be time consuming for example for
 areas or long lines.
 
 * See also http://trac.osgeo.org/grass/ticket/542
+* Update: implemented in r46898 (2011/07) by Markus Metz
 
 Switching to update mode
 ------------------------
@@ -138,7 +141,10 @@ display a shapefile or PostGIS layers directly:
   
   d.vect map=./shapefiles/@OGR layer=roads    # display shapefile ./shapefiles/roads.shp
   d.vect map=PG:dbname=test@OGR layer=roads   # display table roads from database test
-  
+
+* Update: in progess,
+  see http://trac.osgeo.org/grass/wiki/Grass7/VectorLib/OGRInterface#DirectOGRreadaccess
+
 Simple feature API and sequential reading
 -----------------------------------------
 Most GRASS modules are currently using random access to the data which
@@ -242,6 +248,11 @@ can lose precision and DBF has other limitations. It whould be
 probably better to use copy of 'coor' file and attributes written to
 SQLite database.
 
+Update: see
+	http://trac.osgeo.org/grass/browser/grass-addons/grass7/vector/v.pack
+	and
+	http://trac.osgeo.org/grass/browser/grass-addons/grass7/vector/v.unpack
+	by Luca Delucchi
 
 1/2009: Other suggestions moved to
  http://trac.osgeo.org/grass/
