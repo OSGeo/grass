@@ -496,10 +496,11 @@ class GCPDisplayToolbar(AbstractToolbar):
 class VDigitToolbar(AbstractToolbar):
     """!Toolbar for digitization
     """
-    def __init__(self, parent, mapcontent, layerTree = None, log = None):
+    def __init__(self, parent, mapcontent, tools = [], layerTree = None, log = None):
         self.mapcontent    = mapcontent # Map class instance
         self.layerTree     = layerTree  # reference to layer tree associated to map display
         self.log           = log        # log area
+        self.tools         = tools
         AbstractToolbar.__init__(self, parent)
         self.digit         = None
         
@@ -508,7 +509,8 @@ class VDigitToolbar(AbstractToolbar):
         # list of vector layers from Layer Manager (only in the current mapset)
         self.layers   = [] 
         
-        self.comboid    = None
+        self.comboid  = self.combo = None
+        self.undo     = -1
         
         # only one dialog can be open
         self.settingsDialog   = None
@@ -528,11 +530,13 @@ class VDigitToolbar(AbstractToolbar):
         # realize toolbar
         self.Realize()
         # workaround for Mac bug. May be fixed by 2.8.8, but not before then.
-        self.combo.Hide()
-        self.combo.Show()
+        if self.combo:
+            self.combo.Hide()
+            self.combo.Show()
         
         # disable undo/redo
-        self.EnableTool(self.undo, False)
+        if self.undo:
+            self.EnableTool(self.undo, False)
         
         # toogle to pointer by default
         self.OnTool(None)
@@ -544,57 +548,79 @@ class VDigitToolbar(AbstractToolbar):
         """
         data = []
         icons = Icons['vdigit']
-        return self._getToolbarData(((None, ),
-                                     ("addPoint", icons["addPoint"],
-                                      self.OnAddPoint,
-                                      wx.ITEM_CHECK),
-                                     ("addLine", icons["addLine"],
-                                      self.OnAddLine,
-                                      wx.ITEM_CHECK),
-                                     ("addBoundary", icons["addBoundary"],
-                                      self.OnAddBoundary,
-                                      wx.ITEM_CHECK),
-                                     ("addCentroid", icons["addCentroid"],
-                                      self.OnAddCentroid,
-                                      wx.ITEM_CHECK),
-                                     ("addArea", icons["addArea"],
-                                      self.OnAddArea,
-                                      wx.ITEM_CHECK),
-                                     ("moveVertex", icons["moveVertex"],
-                                      self.OnMoveVertex,
-                                      wx.ITEM_CHECK),
-                                     ("addVertex", icons["addVertex"],
-                                      self.OnAddVertex,
-                                      wx.ITEM_CHECK),
-                                     ("removeVertex", icons["removeVertex"],
-                                      self.OnRemoveVertex,
-                                      wx.ITEM_CHECK),
-                                     ("editLine", icons["editLine"],
-                                      self.OnEditLine,
-                                      wx.ITEM_CHECK),
-                                     ("moveLine", icons["moveLine"],
-                                      self.OnMoveLine,
-                                      wx.ITEM_CHECK),
-                                     ("deleteLine", icons["deleteLine"],
-                                      self.OnDeleteLine,
-                                      wx.ITEM_CHECK),
-                                     ("displayCats", icons["displayCats"],
-                                      self.OnDisplayCats,
-                                      wx.ITEM_CHECK),
-                                     ("displayAttr", icons["displayAttr"],
-                                      self.OnDisplayAttr,
-                                      wx.ITEM_CHECK),
-                                     ("additionalTools", icons["additionalTools"],
-                                      self.OnAdditionalToolMenu,
-                                      wx.ITEM_CHECK),                                      
-                                     (None, ),
-                                     ("undo", icons["undo"],
-                                      self.OnUndo),
-                                     ("settings", icons["settings"],
-                                      self.OnSettings),
-                                     ("quit", icons["quit"],
-                                      self.OnExit))
-                                    )
+        if not self.tools or 'selector' in self.tools:
+            data.append((None, ))
+        if not self.tools or 'addPoint' in self.tools:
+            data.append(("addPoint", icons["addPoint"],
+                         self.OnAddPoint,
+                         wx.ITEM_CHECK))
+        if not self.tools or 'addLine' in self.tools:
+            data.append(("addLine", icons["addLine"],
+                        self.OnAddLine,
+                        wx.ITEM_CHECK))
+        if not self.tools or 'addBoundary' in self.tools:
+            data.append(("addBoundary", icons["addBoundary"],
+                         self.OnAddBoundary,
+                         wx.ITEM_CHECK))
+        if not self.tools or 'addCentroid' in self.tools:
+            data.append(("addCentroid", icons["addCentroid"],
+                         self.OnAddCentroid,
+                         wx.ITEM_CHECK))
+        if not self.tools or 'addArea' in self.tools:
+            data.append(("addArea", icons["addArea"],
+                         self.OnAddArea,
+                         wx.ITEM_CHECK))
+        if not self.tools or 'moveVertex' in self.tools:            
+            data.append(("moveVertex", icons["moveVertex"],
+                         self.OnMoveVertex,
+                         wx.ITEM_CHECK))
+        if not self.tools or 'addVertex' in self.tools:
+            data.append(("addVertex", icons["addVertex"],
+                         self.OnAddVertex,
+                         wx.ITEM_CHECK))
+        if not self.tools or 'removeVertex' in self.tools:
+            data.append(("removeVertex", icons["removeVertex"],
+                         self.OnRemoveVertex,
+                         wx.ITEM_CHECK))
+        if not self.tools or 'editLine' in self.tools:            
+            data.append(("editLine", icons["editLine"],
+                         self.OnEditLine,
+                         wx.ITEM_CHECK))
+        if not self.tools or 'moveLine' in self.tools:
+            data.append(("moveLine", icons["moveLine"],
+                         self.OnMoveLine,
+                         wx.ITEM_CHECK))
+        if not self.tools or 'deleteLine' in self.tools:
+            data.append(("deleteLine", icons["deleteLine"],
+                         self.OnDeleteLine,
+                         wx.ITEM_CHECK))
+        if not self.tools or 'displayCats' in self.tools:
+            data.append(("displayCats", icons["displayCats"],
+                         self.OnDisplayCats,
+                         wx.ITEM_CHECK))
+        if not self.tools or 'displayAttr' in self.tools:
+            data.append(("displayAttr", icons["displayAttr"],
+                         self.OnDisplayAttr,
+                         wx.ITEM_CHECK))
+        if not self.tools or 'additionalSelf.Tools' in self.tools:
+            data.append(("additionalTools", icons["additionalTools"],
+                         self.OnAdditionalToolMenu,
+                         wx.ITEM_CHECK))
+        if not self.tools or 'undo' in self.tools or \
+                'settings' in self.tools or \
+                'quit' in self.tools:
+            data.append((None, ))
+        if not self.tools or 'undo' in self.tools:
+            data.append(("undo", icons["undo"],
+                         self.OnUndo))
+        if not self.tools or 'settings' in self.tools:
+            data.append(("settings", icons["settings"],
+                         self.OnSettings))
+        if not self.tools or 'quit' in self.tools:
+            data.append(("quit", icons["quit"],
+                         self.OnExit))
+        
+        return self._getToolbarData(data)
     
     def OnTool(self, event):
         """!Tool selected -> disable selected tool in map toolbar"""
@@ -1116,7 +1142,8 @@ class VDigitToolbar(AbstractToolbar):
             return False
         
         # update toolbar
-        self.combo.SetValue(mapLayer.GetName())
+        if self.combo:
+            self.combo.SetValue(mapLayer.GetName())
         self.parent.toolbars['map'].combo.SetValue (_('Digitize'))
         lmgr = self.parent.GetLayerManager()
         if lmgr:
@@ -1145,7 +1172,8 @@ class VDigitToolbar(AbstractToolbar):
         @return True on success
         @return False on failure
         """
-        self.combo.SetValue (_('Select vector map'))
+        if self.combo:
+            self.combo.SetValue (_('Select vector map'))
         
         # save changes
         if self.mapLayer:
@@ -1227,13 +1255,14 @@ class VDigitToolbar(AbstractToolbar):
                 value = _('Select vector map')
             else:
                 value = layerNameSelected
-
+            
             if not self.comboid:
-                self.combo = wx.ComboBox(self, id = wx.ID_ANY, value = value,
-                                         choices = [_('New vector map'), ] + layerNameList, size = (80, -1),
-                                         style = wx.CB_READONLY)
-                self.comboid = self.InsertControl(0, self.combo)
-                self.parent.Bind(wx.EVT_COMBOBOX, self.OnSelectMap, self.comboid)
+                if not self.tools or 'selector' in self.tools:
+                    self.combo = wx.ComboBox(self, id = wx.ID_ANY, value = value,
+                                             choices = [_('New vector map'), ] + layerNameList, size = (80, -1),
+                                             style = wx.CB_READONLY)
+                    self.comboid = self.InsertControl(0, self.combo)
+                    self.parent.Bind(wx.EVT_COMBOBOX, self.OnSelectMap, self.comboid)
             else:
                 self.combo.SetItems([_('New vector map'), ] + layerNameList)
             
