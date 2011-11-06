@@ -20,6 +20,13 @@
 #ifdef HAVE_OGR
 #include <ogr_api.h>
 
+static int cache_feature(struct Map_info *, OGRGeometryH, int);
+static int read_line(const struct Map_info *, OGRGeometryH, long,
+		     struct line_pnts *);
+static int get_line_type(const struct Map_info *, long);
+static int read_next_line_ogr(struct Map_info *, struct line_pnts *,
+			      struct line_cats *, int);
+
 /*!
   \brief Recursively read feature and add all elements to points_cache and types_cache.
   
@@ -32,7 +39,7 @@
   \return 0 on success
   \return 1 on error
 */
-static int cache_feature(struct Map_info *Map, OGRGeometryH hGeom, int ftype)
+int cache_feature(struct Map_info *Map, OGRGeometryH hGeom, int ftype)
 {
     int line, i, np, ng, tp;
     OGRwkbGeometryType type;
@@ -118,26 +125,8 @@ static int cache_feature(struct Map_info *Map, OGRGeometryH hGeom, int ftype)
     }
 }
 
-/*!
-  \brief Read next feature from OGR layer. Skip empty features (level 1)
-  
-  This function implements sequential access.
-  
-  The action of this routine can be modified by:
-   - Vect_read_constraint_region()
-   - Vect_read_constraint_type()
-   - Vect_remove_constraints()
-  
-  \param Map pointer to Map_info structure
-  \param[out] line_p container used to store line points within
-  \param[out] line_c container used to store line categories within
-  
-  \return feature type
-  \return -2 no more features (EOF)
-  \return -1 out of memory
-*/
-int V1_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
-			  struct line_cats *line_c)
+int read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
+		       struct line_cats *line_c, int ignore_constraint)
 {
     int itype;
     struct bound_box lbox, mbox;
@@ -153,7 +142,7 @@ int V1_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
     if (line_c != NULL)
 	Vect_reset_cats(line_c);
 
-    if (Map->Constraint_region_flag)
+    if (Map->Constraint_region_flag && !ignore_constraint)
 	Vect_get_constraint_box(Map, &mbox);
 
     fInfo = &(Map->fInfo.ogr);
@@ -161,7 +150,6 @@ int V1_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 	/* Read feature to cache if necessary */
 	while (fInfo->lines_next == fInfo->lines_num) {
 	    hFeature = OGR_L_GetNextFeature(fInfo->layer);
-
 	    if (hFeature == NULL) {
 		return -2;
 	    }			/* no more features */
@@ -193,7 +181,7 @@ int V1_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 	/* Constraint on Type of line 
 	 * Default is all of  Point, Line, Area and whatever else comes along
 	 */
-	if (Map->Constraint_type_flag) {
+	if (Map->Constraint_type_flag && !ignore_constraint) {
 	    if (!(itype & Map->Constraint_type)) {
 		fInfo->lines_next++;
 		continue;
@@ -201,7 +189,7 @@ int V1_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 	}
 
 	/* Constraint on specified region */
-	if (Map->Constraint_region_flag) {
+	if (Map->Constraint_region_flag && !ignore_constraint) {
 	    Vect_line_box(fInfo->lines[fInfo->lines_next],
 			  &lbox);
 
@@ -224,6 +212,30 @@ int V1_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 	return itype;
     }
     return -2;			/* not reached */
+}
+
+/*!
+  \brief Read next feature from OGR layer. Skip empty features (level 1)
+  
+  This function implements sequential access.
+  
+  The action of this routine can be modified by:
+   - Vect_read_constraint_region()
+   - Vect_read_constraint_type()
+   - Vect_remove_constraints()
+  
+  \param Map pointer to Map_info structure
+  \param[out] line_p container used to store line points within
+  \param[out] line_c container used to store line categories within
+  
+  \return feature type
+  \return -2 no more features (EOF)
+  \return -1 out of memory
+*/
+int V1_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
+			  struct line_cats *line_c)
+{
+    return read_next_line_ogr(Map, line_p, line_c, FALSE);
 }
 
 /*!
@@ -301,11 +313,12 @@ int V2_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 		Vect_cat_set(line_c, 1, (int) Line->offset);
 	    }
 	    
-	    return GV_CENTROID;
+	    ret = GV_CENTROID;
+	}
+	else {
+	    ret = read_next_line_ogr(Map, line_p, line_c, TRUE);
 	}
 	
-	ret = V1_read_next_line_ogr(Map, line_p, line_c);
-
 	if (Map->Constraint_region_flag) {
 	    Vect_line_box(line_p, &lbox);
 	    if (!Vect_box_overlap(&lbox, &mbox)) {
@@ -328,8 +341,8 @@ int V2_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
   \return feature type
   \return -1 on error
 */
-static int read_line(const struct Map_info *Map, OGRGeometryH hGeom, long offset,
-		     struct line_pnts *Points)
+int read_line(const struct Map_info *Map, OGRGeometryH hGeom, long offset,
+	      struct line_pnts *Points)
 {
     int i, nPoints;
     int eType, line;
@@ -401,7 +414,7 @@ static int read_line(const struct Map_info *Map, OGRGeometryH hGeom, long offset
   \return feature type
   \return -1 on error
 */
-static int get_line_type(const struct Map_info *Map, long FID)
+int get_line_type(const struct Map_info *Map, long FID)
 {
     int eType;
     OGRFeatureH hFeat;
