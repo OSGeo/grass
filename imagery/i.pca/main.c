@@ -5,10 +5,11 @@
  *
  * AUTHOR(S):    Original author Center for Space Research (Uni. of TX)
  *               Rewritten by Brad Douglas <rez touchofmadness com>
+ *               NULL value/MASK handling and speed up by Markus Metz
  *
  * PURPOSE:      Principal Component Analysis transform of raster data.
  *
- * COPYRIGHT:    (C) 2004-2008 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2004-2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -344,7 +345,6 @@ write_pca(double **eigmat, double *mu, double *stddev,
     int outcell_mapsiz = Rast_cell_size(outmap_type);
     int *out_fd = (int *) G_malloc(bands * sizeof(int));
     DCELL **inbuf = (DCELL **) G_malloc(bands * sizeof(DCELL *));
-    DCELL *d_buf = (DCELL *) G_malloc(bands * sizeof(DCELL));
 
     /* 2 passes for rescale.  1 pass for no rescale */
     int PASSES = (scale) ? 2 : 1;
@@ -402,28 +402,27 @@ write_pca(double **eigmat, double *mu, double *stddev,
 		}
 
 		for (i = 0; i < bands; i++) {
-		    d_buf[i] = 0.;
+		    DCELL dval = 0.;
 
 		    for (j = 0; j < bands; j++) {
 			/* corresp. cell of j-th band */
-			DCELL dval = inbuf[j][col];
-
 			if (stddev)
-			    d_buf[i] += eigmat[i][j] * ((dval - mu[j]) / stddev[j]);
+			    dval += eigmat[i][j] * 
+			            ((inbuf[j][col] - mu[j]) / stddev[j]);
 			else
-			    d_buf[i] += eigmat[i][j] * (dval - mu[j]);
+			    dval += eigmat[i][j] * (inbuf[j][col] - mu[j]);
 		    }
 
 
 		    /* the cell entry is complete */
 		    if (scale && (pass == 1)) {
 			if (first)
-			    min[i] = max[i] = d_buf[i];
-			if (d_buf[i] < min[i])
-			    min[i] = d_buf[i];
+			    min[i] = max[i] = dval;
+			if (dval < min[i])
+			    min[i] = dval;
 
-			if (d_buf[i] > max[i])
-			    max[i] = d_buf[i];
+			if (dval > max[i])
+			    max[i] = dval;
 		    }
 		    else if (scale) {
 
@@ -434,7 +433,7 @@ write_pca(double **eigmat, double *mu, double *stddev,
 			else {
 			    /* map data to 0, (new_range-1) and then adding new_min */
 			    CELL tmpcell =
-				round_c((new_range * (d_buf[i] - min[i]) /
+				round_c((new_range * (dval - min[i]) /
 				         old_range[i]) + scale_min);
 
 			    Rast_set_c_value(outptr[i], tmpcell,
@@ -443,7 +442,7 @@ write_pca(double **eigmat, double *mu, double *stddev,
 		    }
 		    else {	/* (!scale) */
 
-			Rast_set_d_value(outptr[i], d_buf[i],
+			Rast_set_d_value(outptr[i], dval,
 					     outmap_type);
 		    }
 		    outptr[i] = G_incr_void_ptr(outptr[i], outcell_mapsiz);
@@ -468,7 +467,6 @@ write_pca(double **eigmat, double *mu, double *stddev,
     }
 
     G_free(inbuf);
-    G_free(d_buf);
     G_free(outbuf);
     G_free(outptr);
     G_free(min);
