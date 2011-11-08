@@ -444,17 +444,19 @@ def get_interface_description(cmd):
     return cmdout.replace('grass-interface.dtd', os.path.join(os.getenv('GISBASE'), 'etc', 'grass-interface.dtd'))
 
 def parse_interface(name, parser = processTask, blackList = None):
-        """!Parse interface of given GRASS module
-        
-        @param name name of GRASS module to be parsed
-        """
-        # enc = locale.getdefaultlocale()[1]
-        # if enc and enc.lower() not in ("utf8", "utf-8"):
-        #     tree = etree.fromstring(getInterfaceDescription(cmd[0]).decode(enc).encode("utf-8"))
-        # else:
+    """!Parse interface of given GRASS module
+    
+    @param name name of GRASS module to be parsed
+    """
+    enc = locale.getdefaultlocale()[1]
+    if enc and enc.lower() == "cp932":
+        p = re.compile('encoding="' + enc + '"', re.IGNORECASE)
+        tree = etree.fromstring(p.sub('encoding="utf-8"',
+                                      get_interface_description(name).decode(enc).encode("utf-8")))
+    else:
         tree = etree.fromstring(get_interface_description(name))
-        
-        return parser(tree, blackList = blackList).get_task()
+    
+    return parser(tree, blackList = blackList).get_task()
 
 def command_info(cmd):
     """!Returns meta information for any GRASS command as dictionary
