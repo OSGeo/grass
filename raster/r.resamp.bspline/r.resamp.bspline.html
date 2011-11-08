@@ -5,28 +5,24 @@ temperature, precipitation etc. Output is a raster map. Optionally, only
 input NULL cells are interpolated, useful to fill NULL cells, an alternative
 to <a href="r.fillnulls.html">r.fillnulls</a>. Using the -n flag to only
 interpolate NULL cells will considerably speed up the module.
-<p>
-The input raster map is read at its native resolution, the output raster
+<p>The input raster map is read at its native resolution, the output raster
 map will be produced for the current computational region set with
 <a href="g.region.html">g.region</a>. Any MASK will be respected, masked
 values will be treated as NULL cells in both the input and the output map.
-<p>
-Spline step values <b><i>se</i></b> for the east-west direction and
+<p>Spline step values <b><i>se</i></b> for the east-west direction and
 <b><i>sn</i></b> for the north-south direction should not be smaller than
 the east-west and north-south resolutions of the input map. For a raster
 map without NULL cells, 1 * resolution can be used, but check for
 undershoots and overshoots. For very large areas with missing values
 (NULL cells), larger spline step values may be required, but most of the
 time the defaults (1.5 x resolution) should be fine.
-<p>
-The Tykhonov regularization parameter ("<b><i>lambda</i></b>") acts to
+<p>The Tykhonov regularization parameter ("<b><i>lambda</i></b>") acts to
 smooth the interpolation. With a small <b><i>lambda</i></b>, the
 interpolated surface closely follows observation points; a larger value
 will produce a smoother interpolation. Reasonable values are 0.0001,
 0.001, 0.005, 0.01, 0.02, 0.05, 0.1 (needs more testing). For seamless
 NULL cell interpolation, a small value is required and default is set to 0.005.
-<p>
-From a theoretical perspective, the interpolating procedure takes place in two
+<p>From a theoretical perspective, the interpolating procedure takes place in two
 parts: the first is an estimate of the linear coefficients of a spline function;
 these are derived from the observation points using a least squares regression; the
 second is the computation of the interpolated surface (or interpolated vector
@@ -41,8 +37,7 @@ The least squares regression predicts the the coefficients of these linear funct
 Regularization avoids the need to have one one observation and one coefficient
 for each spline (in order to avoid instability). 
 
-<p>
-A cross validation "leave-one-out" analysis is available to help to determine
+<p>A cross validation "leave-one-out" analysis is available to help to determine
 the optimal <b><i>lambda</i></b> value that produces an interpolation that
 best fits the original observation data. The more points used for
 cross-validation, the longer the time needed for computation. Empirical testing
@@ -108,17 +103,14 @@ Maria Antonia Brovelli, Massimiliano Cannata, Ulisse Longoni, Mirko Reguzzoni, R
 Brovelli M. A., Cannata M., and Longoni U.M., 2004, LIDAR Data
 Filtering and DTM Interpolation Within GRASS, Transactions in GIS,
 April 2004, vol. 8, iss. 2, pp. 155-174(20), Blackwell Publishing Ltd
-<p>
-Brovelli M. A. and Cannata M., 2004, Digital Terrain model
+<p>Brovelli M. A. and Cannata M., 2004, Digital Terrain model
 reconstruction in urban areas from airborne laser scanning data: the
 method and an example for Pavia (Northern Italy). Computers and
 Geosciences 30, pp.325-331
-<p>
-Brovelli M. A e Longoni U.M., 2003, Software per il filtraggio di
+<p>Brovelli M. A e Longoni U.M., 2003, Software per il filtraggio di
 dati LIDAR, Rivista dell'Agenzia del Territorio, n. 3-2003, pp. 11-22
 (ISSN 1593-2192)
-<p>
-Antolin R. and Brovelli M.A., 2007, LiDAR data Filtering with GRASS GIS for the 
+<p>Antolin R. and Brovelli M.A., 2007, LiDAR data Filtering with GRASS GIS for the 
 Determination of Digital Terrain Models. Proceedings of Jornadas de SIG Libre,
 Girona, Espa&ntilde;a. CD ISBN: 978-84-690-3886-9 <br>
 

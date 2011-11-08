@@ -22,20 +22,17 @@ Currently only areas are supported for the operators <em>or</em> and <em>xor</em
 
 The operator defines what kind of operation will be done. Features are written to output,
 if the result of an operation 'ainput operator binput' is true.
-<p>
-Attributes of the tables from ainput and binput are joined into a new table
+<p>Attributes of the tables from ainput and binput are joined into a new table
 linked to the output maps new cat-column. 
 
 <!-- This is outdated
-<p>
-<div class="code"><pre>
+<p><div class="code"><pre>
 v.db.connect map=outputmap table=ainput.dbf field=2
 v.db.connect map=outputmap table=binput.dbf field=3
 
 </pre></div>
 
-<p>
-<b>Attention:</b> Removing the output map will also delete all tables linked to
+<p><b>Attention:</b> Removing the output map will also delete all tables linked to
 it! Therefore it is advisable to copy tables from ainput and binput first and
 connect the copied tables to the output map.-->
 

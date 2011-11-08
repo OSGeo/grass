@@ -4,7 +4,6 @@ The GRASS program <em>r.compress</em> can be used to compress and decompress
 raster map layers.
 
 <p>
-
 During compression, this program reformats raster maps
 using a run-length-encoding (RLE) algorithm.  Raster map
 layers which contain very little information (such as
@@ -21,14 +20,12 @@ and regular (uncompressed) file formats.  This allows the use
 of whichever raster data format consumes less space.
 
 <p>
-
 As an example, the Spearfish data base raster map layer
 <em>owner</em> was originally a size of 26600 bytes.  After
 it was compressed, the raster map became only 1249 bytes
 (25351 bytes smaller).
 
 <p>
-
 Raster files may be decompressed to return them to their
 original format, using the <b>-u</b> flag of 
 <em>r.compress</em>. If <em>r.compress</em> is asked to
@@ -59,7 +56,6 @@ bytes, and category values in the range above 65535 require
 3 (or more) bytes per cell.
 
 <p>
-
 The <b>decompressed</b> raster map format matches the
 conceptual format.  For example, a raster map with 1 byte
 cells that is 100 rows with 200 cells per row, consists of
@@ -76,7 +72,6 @@ other syncing codes in the raster map.  A cell header file
 is broken up into rows of category values.
 
 <p>
-
 The <b>compressed</b> format is not so simple, but is quite
 elegant in its design. It not only requires less disk space
 to store the raster data, but often can result in faster
@@ -93,14 +88,12 @@ First 3 bytes (chars) - These are a special code that identifies
 the raster data as compressed. 
 
 <p>
-
 Address array (long) - array (size of the number of rows +
 1) of addresses pointing to the internal start of each row.
 Because each row may be a different size, this array is
 necessary to provide a mapping of the data.
 
 <p>
-
 Row by row, beginning at the northern edge of the data, a
 series of byte groups describes the data.  The number of
 bytes in each group is the number of bytes per cell plus
@@ -114,11 +107,9 @@ The 3 byte code is not used.
 Instead, a field in the cell header is used to indicate compressed format. 
 
 <p>
-
 The address array is the same. 
 
 <p>
-
 The RLE format is the same as the pre-3.0 RLE, except that
 each row of data is preceded by a single byte containing
 the number of bytes per cell for the row, and if
@@ -126,7 +117,6 @@ run-length-encoding the row would not require less space
 than non-run-length-encoding, then the row is not encoded.
 
 <p>
-
 These improvements give better compression than the pre-3.0
 format in 99% of the raster data layers.  The kinds of
 raster data layers which get bigger are those in which each

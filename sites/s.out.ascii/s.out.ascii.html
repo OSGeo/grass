@@ -6,7 +6,6 @@ locations and (optionally) their category labels, in a
 format suitable for input to other program). 
 
 <p>
-
 Each line of output consists of the easting, northing, and
 category label for a site listed in the named <b>vector points</b> (sites)
 file.  The <b>fs=</b><em>name</em> option (where
@@ -17,7 +16,6 @@ manipulated by other programs, like <em>awk</em> or
 <em>sed</em>.
 
 <p>
-
 The GRASS program <em>s.in.ascii</em> can be used to
 perform the reverse function, converting a UNIX file
 containing eastings, northings, and category labels
@@ -26,7 +24,7 @@ format.
 
 <h2>OPTIONS</h2>
 
-<H3>Flags:</H3>
+<h3>Flags:</h3>
 
 <dl>
 <dt><b>-a</b>
@@ -42,7 +40,7 @@ the current geographic region.
 
 </dl>
 
-<H3>Parameters:</H3>
+<h3>Parameters:</h3>
 
 <dl>
 
@@ -66,8 +64,7 @@ interactively.  The program will be run non-interactively
 if the user specifies the name of an existing site list
 file and (optionally) a value for <b>fs</b>, using the form
 
-<p>
-<dl>
+<p><dl>
 <dd>
 <b>s.out.ascii</b> 
 [<b>-adi</b>] 
@@ -85,21 +82,19 @@ output fields. The user can also the <b>-a</b> and
 output.
 
 <p>
-
 Alternately, the user can simply type <b>s.out.ascii</b> on
 the command line, without program arguments. In this case,
 the user will be prompted for parameter values using the
 standard GRASS 
 
-<a href="parser.html">parser</A>
+<a href="parser.html">parser</a>
 
 interface.
 
 <h2>NOTES</h2>
 
 To output GRASS data in x,y,z ASCII style, the s.out.ascii may be used:
-<p>
-<dl>
+<p><dl>
 <dd>
 <b>s.out.ascii -d input=</b>sitesmap
 </dl>
@@ -117,12 +112,10 @@ To export raster maps into this x,y,z format, the raster map can be
 converted to sites format using <em>r.to.sites</em> and <em>s.out.ascii</em>
 subsequently as described above.
 
-<p>
-The output from <em>s.out.ascii</em> may be placed into a
+<p>The output from <em>s.out.ascii</em> may be placed into a
 file by using the UNIX redirection mechanism; e.g.:
 
-<p>
-<dl>
+<p><dl>
 <dd>
 <b>s.out.ascii input=</b>archsites &gt; out.file
 </dl>
@@ -130,18 +123,17 @@ file by using the UNIX redirection mechanism; e.g.:
 <em>s.out.ascii</em> output may also be redirected into
 other programs; e.g.:
 
-<p>
-<dl>
+<p><dl>
 <dd>
 <b>s.out.ascii input=</b>archsites | d.points <b>color=</b>red <b>size=</b>10 <b>type=</b>diamond
 </dl>
 
 <h2>SEE ALSO</h2>
 
-<em><a href="d.points.html">d.points</A></em><br>
-<em><a href="d.vect.html">d.vect</A></em><br>
-<em><a href="s.in.ascii.html">s.in.ascii</A></em><br>
-<em><a href="r.to.vect.html">r.to.vect</A></em>
+<em><a href="d.points.html">d.points</a></em><br>
+<em><a href="d.vect.html">d.vect</a></em><br>
+<em><a href="s.in.ascii.html">s.in.ascii</a></em><br>
+<em><a href="r.to.vect.html">r.to.vect</a></em>
 
 <h2>AUTHOR</h2>
 

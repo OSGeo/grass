@@ -44,11 +44,9 @@ header, the value will be available in variable <b>GIS_OPT_INPUT</b>
 and the value of flag with key <b>f</b> will be available in variable
 <b>GIS_FLAG_F</b>.
 
-<p>
-For flags, the value will be "1" if the flag was given, and "0" otherwise.
+<p>For flags, the value will be "1" if the flag was given, and "0" otherwise.
 
-<p>
-If the <b>-s</b> switch is used, the options and flags are written to
+<p>If the <b>-s</b> switch is used, the options and flags are written to
 stdout in the form <em>opt_&lt;name&gt;=&lt;value&gt;</em> and
 <em>flag_&lt;name&gt;=&lt;value&gt;</em>, preceded by the string
 <b>@ARGS_PARSED@</b>. If this string doesn't appear as the first line
@@ -57,8 +55,7 @@ as <b>--html-description</b>. In this case, the data written by
 <em>g.parser</em> to stdout should be copied to the script's stdout
 verbatim.
 
-<p>
-Typical header definitions are as follows:
+<p>Typical header definitions are as follows:
 
 <div class="code"><pre>
 #%module
@@ -96,23 +93,20 @@ for opt in $GIS_OPT_INPUT ; do
 done
 </pre></div>
 
-<p>
-A "<tt>guisection</tt>" field may be added to each option and flag to specify
+<p>A "<tt>guisection</tt>" field may be added to each option and flag to specify
 that the options should appear in multiple tabs in the auto-generated GUI.
 Any options without a <tt>guisection</tt> field go into the "Options" tab.
 For example:
 <pre>#% guisection: tabname</pre>
 would put that option in a tab named <i>tabname</i>.
 
-<p>
-A "<tt>key_desc</tt>" field may be added to each option to specify the text that
+<p>A "<tt>key_desc</tt>" field may be added to each option to specify the text that
 appears in the module's usage help section. For example:
 <pre>#% key_desc: filename</pre>
 added to an <b>input</b> option would create the usage summary
 <tt>[input=filename]</tt>.
 
-<p>
-If a script is run with --o, G_parser() will
+<p>If a script is run with --o, G_parser() will
 set <tt>GRASS_OVERWRITE=1</tt>, which has the same effect as passing
 --o to every module which is run from the script. Similarly, passing
 --q or --v will set <tt>GRASS_VERBOSE</tt> to 0 or 3 respectively,
@@ -420,15 +414,13 @@ to the other examples above.
 </em>
 
 and the <tt>SUBMITTING_SCRIPTS</tt> file in the GRASS source code.
-<p>
-Related Wiki pages: 
+<p>Related Wiki pages: 
 <a href="http://grass.osgeo.org/wiki/Category:Linking_to_other_languages">Using GRASS with other programming languages</a>
 
 <h2>AUTHOR</h2>
 
 Glynn Clements
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>
 </body>
 </html>

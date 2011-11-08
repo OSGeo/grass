@@ -2,7 +2,7 @@
 
 <p><em>g.proj</em> provides a means of converting a co-ordinate system
 description (i.e. projection information) between various formats.
-If compiled without <a href="http://www.gdal.org/ogr/">OGR</A> present, the 
+If compiled without <a href="http://www.gdal.org/ogr/">OGR</a> present, the 
 functionality is limited to:
 <ul>
 <li>Reporting the projection information for the current location, 
@@ -105,31 +105,27 @@ Print the projection information for the current location:<br>
 g.proj -p
 </pre></div>
 
-<p>
-Create a '.prj' file in ESRI format corresponding to the current location:<br>
+<p>Create a '.prj' file in ESRI format corresponding to the current location:<br>
 
 <div class="code"><pre>
 g.proj -wef > irish_grid.prj
 </pre></div>
 
-<p>
-Read the projection information from a geotiff file and print it in PROJ.4
+<p>Read the projection information from a geotiff file and print it in PROJ.4
 format:<br>
 
 <div class="code"><pre>
 g.proj -jf georef=ASTER_DEM20020508161837.tif
 </pre></div>
 
-<p>
-Convert the PROJ.4 projection description contained in a text file to WKT
+<p>Convert the PROJ.4 projection description contained in a text file to WKT
 format:<br>
 
 <div class="code"><pre>
 cat proj4.description | g.proj -w proj4=-
 </pre></div>
 
-<p>
-Create a new location with the co-ordinate system referred to by EPSG code
+<p>Create a new location with the co-ordinate system referred to by EPSG code
 4326 (Latitude-Longitude/WGS84), without explicitly specifiying datum
 transformation parameters:<br>
 
@@ -137,47 +133,41 @@ transformation parameters:<br>
 g.proj -c epsg=4326 location=latlong
 </pre></div>
 
-<p>
-Create a new location with the co-ordinate system referred to by ESRI-EPSG code
+<p>Create a new location with the co-ordinate system referred to by ESRI-EPSG code
 900913 (<a href="http://spatialreference.org/ref/user/6/">Google Mercator Projection</a>)<br>
 
 <div class="code"><pre>
 g.proj -c epsg=900913 loc=google
 </pre></div>
 
-<p>
-Create a new location with the co-ordinate system referred to by EPSG code
+<p>Create a new location with the co-ordinate system referred to by EPSG code
 29900 (Irish Grid), selecting datum transformation parameter set no. 2:<br>
 
 <div class="code"><pre>
 g.proj -c epsg=29900 datumtrans=2 location=irish_grid
 </pre></div>
 
-<p>
-Create a new location with the same co-ordinate system as the current
+<p>Create a new location with the same co-ordinate system as the current
 location, but forcing a change to datum transformation parameter set no. 1:<br>
 
 <div class="code"><pre>
 g.proj -c location=newloc -t datumtrans=1
 </pre></div>
 
-<p>
-List the possible datum transformation parameters for the current location:<br>
+<p>List the possible datum transformation parameters for the current location:<br>
 
 <div class="code"><pre>
 g.proj -t datumtrans=-1
 </pre></div>
 
-<p>
-Create a new location with the co-ordinate system from a WKT definition
+<p>Create a new location with the co-ordinate system from a WKT definition
 stored in a text file:<br>
 
 <div class="code"><pre>
 g.proj -c wkt=irish_grid.prj location=irish_grid
 </pre></div>
 
-<p>
-Reproject external raster map to current GRASS projection (does not always make sense!)
+<p>Reproject external raster map to current GRASS projection (does not always make sense!)
 using the GDAL 'gdalwarp' tool. We recommend to use the ERDAS/Img format and not
 to use the ESRI style of WKT:<br>
 <div class="code"><pre>
@@ -185,8 +175,7 @@ to use the ESRI style of WKT:<br>
 gdalwarp -of HFA -tr 30 30 -t_srs "`g.proj -wf`" aster.img aster_tmerc.img
 </pre></div>
 
-<p>
-Reproject external vector map to current GRASS projection
+<p>Reproject external vector map to current GRASS projection
 using the OGR 'ogr2ogr' tool:<br>
 <div class="code"><pre>
 ogr2ogr -t_srs "`g.proj -wf`" polbnda_italy_GB_ovest.shp polbnda_italy_LL.shp
@@ -199,8 +188,7 @@ ogr2ogr -t_srs "`g.proj -wf`" polbnda_italy_GB_ovest.shp polbnda_italy_LL.shp
 <a href="http://www.gdal.org">GDAL raster library and toolset</a><br>
 <a href="http://www.gdal.org/ogr/">OGR vector library and toolset</a>
 
-<p>
-<b>Further reading</b>
+<p><b>Further reading</b>
 <ul>
 <li> <a href="http://www.asprs.org/resources/grids/">ASPRS Grids and Datum</a>
 <li> <a href="http://www.mapref.org">MapRef - The Collection of Map Projections and Reference Systems for Europe</a>

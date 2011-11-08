@@ -3,8 +3,7 @@
 <em>v.out.vtk</em> 
 converts a GRASS vector map in binary format to the VTK ASCII 
 output. 
-<p>
-If the <b>output</b> parameter is not given, the output will be send to stdout.
+<p>If the <b>output</b> parameter is not given, the output will be send to stdout.
 
 <h2>NOTES</h2>
 
@@ -49,23 +48,20 @@ The GRASS vector data is converted into the polydata format of VTK:
  <li><i>vtk lines</i> -- representing lines and boundaries </li> 
  <li><i>vtk polygons</i> -- representing areas and faces </li>
 </ul>
-<p>
-The VTK file can be visualized with
-<em><a href="http://www.vtk.org">VTK Toolkit</A></em>,
-<em><a href="http://www.paraview.org">Paraview</A></em> and
-<em><a href="http://mayavi.sourceforge.net">MayaVi</A></em>.
+<p>The VTK file can be visualized with
+<em><a href="http://www.vtk.org">VTK Toolkit</a></em>,
+<em><a href="http://www.paraview.org">Paraview</a></em> and
+<em><a href="http://mayavi.sourceforge.net">MayaVi</a></em>.
 
 <h3>Attention</h3>
-<p>
-If areas or faces are exported, the data have to be triangulated within Paraview or
+<p>If areas or faces are exported, the data have to be triangulated within Paraview or
 MayaVi.
 
 
 <h2>EXAMPLE</h2>
 
 Spearfish example:
-<p>
-Export the soils with cats in layer 1:
+<p>Export the soils with cats in layer 1:
 <div class="code"><pre>
 v.out.vtk input=soils type=area layer=1 output=/tmp/soils.vtk
 </pre></div>

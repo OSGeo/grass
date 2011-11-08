@@ -19,13 +19,11 @@ that was rasterized to create the <b>zones</b> input raster.
 As with most GRASS raster modules, <em>r.univar</em> operates on the cell
 array defined by the current region settings, not the original extent and
 resolution of the input map. See <em><a href="g.region.html">g.region</a></em>.
-<p>
-This module can use large amounts of system memory when the <b>-e</b>
+<p>This module can use large amounts of system memory when the <b>-e</b>
 extended statistics flag is used with a very large region setting. If the
 region is too large the module should exit gracefully with a memory allocation
 error. Basic statistics can be calculated using any size input region.
-<p>
-Without a <b>zones</b> input raster, the <em>r.quantile</em> module will
+<p>Without a <b>zones</b> input raster, the <em>r.quantile</em> module will
 be significantly more efficient for calculating percentiles with large maps.
 
 <h2>EXAMPLE</h2>
@@ -129,5 +127,4 @@ Hamish Bowman, Otago University, New Zealand<br>
 Extended statistics by Martin Landa<br>
 Zonal loop by Markus Metz
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

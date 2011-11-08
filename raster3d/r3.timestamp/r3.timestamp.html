@@ -14,20 +14,16 @@ date(s). See EXAMPLES below.
 	  there is a timestamp, one or two lines are printed,
 	  depending on if the timestamp for the map consists of a
 	  single date or two dates (ie start and end dates).
-<p>
-<b>r3.timestamp map=soils date='15 sep 1987'</b><br>
+<p><b>r3.timestamp map=soils date='15 sep 1987'</b><br>
 	  Sets the timestamp for "soils" to the single date<br>
 	  "15 sep 1987"
-<p>
-<b>r3.timestamp map=soils date='15 sep 1987/20 feb 1988'</b><br>
+<p><b>r3.timestamp map=soils date='15 sep 1987/20 feb 1988'</b><br>
 	  Sets the timestamp for "soils" to have the start date<br>
 	  "15 sep 1987" and the end date "20 feb 1988"
-<p>
-<b>r3.timestamp map=soils date='18 feb 2005 10:30:00/20 jul 2007 20:30:00'</b><br>
+<p><b>r3.timestamp map=soils date='18 feb 2005 10:30:00/20 jul 2007 20:30:00'</b><br>
 	  Sets the timestamp for "soils" to have the start date<br>
 	  "18 aug 2005 10:30:00" and the end date "20 jul 2007 20:30:00"
 <p>
-
 <b>r3.timestamp map=soils date=none</b><br>
 	  Removes the timestamp for the "soils" 3D raster map
 
@@ -36,14 +32,11 @@ date(s). See EXAMPLES below.
      GRASS datetime library.  The source tree for this library
      should have a description of the format. For convience, the
      formats as of Feb, 1996 are reproduced here:
-<p>
-     There are two types of datetime values: absolute and
+<p>     There are two types of datetime values: absolute and
      relative. Absolute values specify exact dates and/or times.
      Relative values specify a span of time. Some examples will
      help clarify:
-<p>
-<b>Absolute</b><p>
-	  The general format for absolute values is
+<p><b>Absolute</b><p>	  The general format for absolute values is
 <p><tt>
 	     day month year [bc] hour:minute:seconds timezone
 <br>
@@ -72,11 +65,9 @@ date(s). See EXAMPLES below.
 <p><tt>
 	     [-] # years # months<br>
 	     [-] # days # hours # minutes # seconds
-</tt><p>
-	  The words years, months, days, hours, minutes, seconds
+</tt><p>	  The words years, months, days, hours, minutes, seconds
 	  are literal words, and the # are the numeric values.<br>
-	  Examples:<p>
-<tt>
+	  Examples:<p><tt>
 	     2 years<br>
 	     5 months<br>
 	     2 years 5 months<br>
@@ -84,11 +75,9 @@ date(s). See EXAMPLES below.
 	     15 hours 25 minutes 35.34 seconds<br>
 	     100 days 25 minutes<br>
 	     1000 hours 35.34 seconds
-</tt><p>
-	  The following are <i>illegal</i> because it mixes year-month
+</tt><p>	  The following are <i>illegal</i> because it mixes year-month
 	  and day-second (because the number of days in a month
-	  or in a year vary):<p>
-<tt>
+	  or in a year vary):<p><tt>
 	     3 months 15 days<br>
 	     3 years 10 days
 </tt>

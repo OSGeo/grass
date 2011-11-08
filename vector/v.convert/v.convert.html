@@ -7,16 +7,13 @@
 Vector maps from 5.0/5.3/5.4 and 5.7/6.x do not interfere. They are stored in different 
 directories, so you can use the same names. Old vector maps can be listed with
 <em>g.list oldvect</em>.
-<p>
-If you need to convert back from 5.7/6.x into the 5.0/5.3/5.4 vector format,
+<p>If you need to convert back from 5.7/6.x into the 5.0/5.3/5.4 vector format,
 use <em>v.out.ogr</em> (to SHAPE format) and then <em>v.in.shape</em>
 in the old GRASS program.
 Alternatively use "<em>v.out.ascii -o</em>" and <em>v.in.ascii</em>.
-<p>
-As this GRASS version uses SQL for attribute management, there are
+<p>As this GRASS version uses SQL for attribute management, there are
 some <a href=sql.html>SQL restrictings concerning the file names</a>.
-<p>
-Missing centroids can be added with <em>v.category</em>.
+<p>Missing centroids can be added with <em>v.category</em>.
 
 <h2>EXAMPLE</h2>
 <div class="code"><pre>
@@ -25,12 +22,12 @@ v.convert in=vectormap_from_50 out=vectormap_60
 
 <h2>SEE ALSO</h2>
 
-<a href="g.list.html">g.list</A>,
-<a href="v.category.html">v.category</A>,
-<a href="v.convert.all.html">v.convert.all</A>,
-<a href="v.out.ascii.html">v.out.ascii</A>,
-<a href="v.in.ascii.html">v.in.ascii</A>,
-<a href="v.out.ogr.html">v.out.ogr</A>
+<a href="g.list.html">g.list</a>,
+<a href="v.category.html">v.category</a>,
+<a href="v.convert.all.html">v.convert.all</a>,
+<a href="v.out.ascii.html">v.out.ascii</a>,
+<a href="v.in.ascii.html">v.in.ascii</a>,
+<a href="v.out.ogr.html">v.out.ogr</a>
 
 
 <h2>AUTHOR</h2>

@@ -5,13 +5,11 @@ into a new raster map. The user may choose from a variety of statistical
 methods in creating the new raster. Gridded data provided as a stream of
 x,y,z points may also be imported.
 <p>
-
 <em>r.in.lidar</em> is designed for processing massive point cloud datasets,
 for example raw LIDAR or sidescan sonar swath data. It has been tested with
 datasets as large as tens of billion of points (705GB in a single file).
  <!-- Doug Newcomb, US Fish & Wildlife Service -->
 <p>
-
 Available statistics for populating the raster are:<br>
 <ul>
 <li>
@@ -79,7 +77,6 @@ for use with arbitrarily large input files<!-- without a small value for percent
  but for the aggregate fns it will also depend on the number of data points. (?) -->
 
 <p>
-
 The default map <b>type</b>=<tt>FCELL</tt> is intended as compromise between
 preserving data precision and limiting system resource consumption.
 
@@ -106,7 +103,6 @@ by the area covered. e.g.
 </pre></div>
 
 <p>
-
 If you only intend to interpolate the data with <em>r.to.vect</em> and
 <em>v.surf.rst</em>, then there is little point to setting the region
 resolution so fine that you only catch one data point per cell -- you might
@@ -119,26 +115,22 @@ Points falling outside the current region will be skipped. This includes
 points falling <em>exactly</em> on the southern region bound.
 (to capture those adjust the region with "<tt>g.region s=s-0.000001</tt>";
 see <em>g.region</em>)
-<p>
-Blank lines and comment lines starting with the hash symbol (<tt>#</tt>)
+<p>Blank lines and comment lines starting with the hash symbol (<tt>#</tt>)
 will be skipped.
 
 <p>
-
 The <b>zrange</b> parameter may be used for filtering the input data by
 vertical extent. Example uses might include preparing multiple raster
 sections to be combined into a 3D raster array with <em>r.to.rast3</em>, or
 for filtering outliers on relatively flat terrain.
 
 <p>
-
 In varied terrain the user may find that <em>min</em> maps make for a good
 noise filter as most LIDAR noise is from premature hits. The <em>min</em> map
 may also be useful to find the underlying topography in a forested or urban
 environment if the cells are over sampled.
 
 <p>
-
 The user can use a combination of <em>r.in.lidar</em> <b>output</b> maps to create
 custom filters. e.g. use <em>r.mapcalc</em> to create a <tt>mean-(2*stddev)</tt>
 map. [In this example the user may want to include a lower bound filter in
@@ -158,7 +150,6 @@ Run <em>r.univar</em> on your raster map to check the number of non-NULL cells
 and adjust bounds and/or resolution as needed before proceeding.
 
 <p>
-
 Typical commands to create a DEM using a regularized spline fit:
 <div class="code"><pre>
   r.univar lidar_min
@@ -176,8 +167,7 @@ Typical commands to create a DEM using bsplines:
 
 This example is analogous to the example used in the GRASS wiki page for
 <a href="http://grass.osgeo.org/wiki/LIDAR#Import_LAS_as_raster_DEM">importing LAS as raster DEM</a>.
-<p>
-The sample LAS data are in the file "Serpent Mound Model LAS Data.las", 
+<p>The sample LAS data are in the file "Serpent Mound Model LAS Data.las", 
 available at 
 <a href="http://www.appliedimagery.com/downloads/sampledata/Serpent%20Mound%20Model%20LAS%20Data.las">appliedimagery.com</a>
 
@@ -257,8 +247,7 @@ Development Team.
 <a href="v.outlier.html">v.outlier</a>,
 <a href="v.surf.bspline.html">v.surf.bspline</a>
 </i>
-<p>
-<i><a href="http://www.ivarch.com/programs/pv.shtml">pv</a></i>
+<p><i><a href="http://www.ivarch.com/programs/pv.shtml">pv</a></i>
  - The UNIX pipe viewer utility
 <br><br>
 
@@ -269,5 +258,4 @@ Markus Metz<br>
 based on r.in.xyz by Hamish Bowman and Volker Wichmann<br>
 
 <br>
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

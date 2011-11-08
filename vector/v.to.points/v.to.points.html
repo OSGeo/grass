@@ -13,8 +13,7 @@ distance. To place points with exact distance from the beginning
 of the vector line the user should use
 <a href="v.segment.html">v.segment</a>.
 
-<p>
-The <em>type</em> parameter is used to control which input vector
+<p>The <em>type</em> parameter is used to control which input vector
 geometry types to convert into points. 
 Some caveats to consider about this parameter:
 
@@ -46,18 +45,14 @@ the output vector for <em>type=area</em>.</li>
 
 The -v flag is used to digitize points that fall on the line's vertices <em>only</em>.
 <em>dmax</em> is ignored in this case. 
-<p>
-If the -i flag is used in conjunction with the -v flag,
+<p>If the -i flag is used in conjunction with the -v flag,
 <em>v.to.points</em> will digitize points on the line vertices, as
 well as interpolate points between line vertices using <em>dmax</em>
 as the maximum allowable spacing.
-<p>
-To get points created for the beginning, middle and end only, use
+<p>To get points created for the beginning, middle and end only, use
 the -i switch and set <em>dmax</em> so that:
-<p>
-&nbsp;&nbsp;&nbsp; (length of input line / 2) &lt;= <em>dmax</em> &lt;= length of input line
-<p>
-So if <em>dmax</em> is between 0.5x and 1.0x the line length, you
+<p>&nbsp;&nbsp;&nbsp; (length of input line / 2) &lt;= <em>dmax</em> &lt;= length of input line
+<p>So if <em>dmax</em> is between 0.5x and 1.0x the line length, you
 will always get points created at exactly the beginning, middle and
 end of the input line.
 

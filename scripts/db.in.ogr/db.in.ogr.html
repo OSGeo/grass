@@ -14,32 +14,25 @@ Import of a CSV table file:<br>
 Limited type recognition can be done for Integer, Real, String, Date, Time and DateTime
 columns through a descriptive file with same name as the CSV file, but .csvt extension
 (see details <a href="http://www.gdal.org/ogr/drv_csv.html">here</a>).
-<p>
-<div class="code"><pre>
+<p><div class="code"><pre>
 # NOTE: create koeppen_gridcode.csvt first for type recognition
 db.in.ogr dsn=koeppen_gridcode.csv output=koeppen_gridcode
 db.select koeppen_gridcode
 </pre></div>
 
-<p>
-Import of a DBF table with additional unique key column (e.g., needed for <em>v.in.db</em>):
-<p>
-<div class="code"><pre>
+<p>Import of a DBF table with additional unique key column (e.g., needed for <em>v.in.db</em>):
+<p><div class="code"><pre>
 db.in.ogr dsn=$HOME/mydata.dbf output=census_raleigh key=myid
 db.describe -c census_raleigh
 </pre></div>
 
-<p>
-Import of a SQLite table:
-<p>
-<div class="code"><pre>
+<p>Import of a SQLite table:
+<p><div class="code"><pre>
 db.in.ogr dsn=$HOME/sqlite/sqlite.db db_table=census_raleigh output=census_raleigh
 </pre></div>
 
-<p>
-Import of a PostgreSQL table:
-<p>
-<div class="code"><pre>
+<p>Import of a PostgreSQL table:
+<p><div class="code"><pre>
 db.in.ogr dsn="PG:host=localhost dbname=ecad user=neteler" \
           db_table=ecad_verona_tmean output=ecad_verona_tmean
 db.select ecad_verona_tmean

@@ -27,7 +27,6 @@ resolutions of its smallest units (rectangular units called
 "cells").
 
 <p>
-
 The region's boundaries are given as the northernmost,
 southernmost, easternmost, and westernmost points that
 define its extent (cell edges).  The north and south boundaries
@@ -35,7 +34,6 @@ are commonly called <em>northings</em>, while the east and west
 boundaries are called <em>eastings</em>.
 
 <p>
-
 The region's cell resolution defines the size of the
 smallest piece of data recognized (imported, analyzed,
 displayed, stored, etc.) by GRASS modules affected by the
@@ -43,8 +41,7 @@ current region settings. The north-south and east-west cell
 resolutions need not be the same, thus allowing non-square
 data cells to exist.
 
-<p>
-Typically all raster and display modules are affected by the current
+<p>Typically all raster and display modules are affected by the current
 region settings, but not vector modules.
 Some special modules diverge from this rule, for example raster import
 modules and <em>v.in.region</em>.
@@ -96,14 +93,12 @@ that the north/south distance is a multiple of the
 north/south resolution and that the east/west distance is a
 multiple of the east/west resolution.
 
-<p>
-With the <b>-a</b> flag all four boundaries are adjusted 
+<p>With the <b>-a</b> flag all four boundaries are adjusted 
 to be even multiples of the resolution, aligning the region to the
 resolution supplied by the user. The default is to
 align the region resolution to match the region boundaries.
 
-<p>
-The <b>-m</b> flag will report the region resolution in meters. The
+<p>The <b>-m</b> flag will report the region resolution in meters. The
 resolution is calculated by averaging the resolution at the region
 boundaries. This resolution is calculated by dividing the geodesic 
 distance in meters at the boundary by the number of rows or columns.
@@ -119,12 +114,10 @@ averaged, the results finally printed.
 -->
 
 
-<p>
-The <b>-p</b> (or <b>-g</b>) option is recognized
+<p>The <b>-p</b> (or <b>-g</b>) option is recognized
 last.  This means that all changes are applied to the
 region settings before printing occurs.
-<p>
-The <b>-g</b> flag prints the current region settings in shell script style.
+<p>The <b>-g</b> flag prints the current region settings in shell script style.
 This format can be given back to <em>g.region</em> on its command line.
 This may also be used to save region settings as shell environment variables
 with the UNIX eval command, "<tt>eval `g.region -g`</tt>".
@@ -145,8 +138,7 @@ encompassing all non-NULL data in the named raster map
 layer that fall inside the user's current region. In this
 way you can tightly zoom in on isolated clumps within a
 bigger map.
-<p>
-If the user also includes the <b>rast=</b><em>name</em>
+<p>If the user also includes the <b>rast=</b><em>name</em>
 option on the command line, <b>zoom=</b><em>name</em> will
 set the current region settings to the smallest region
 encompassing all non-NULL data in the named <b>zoom</b> map
@@ -179,7 +171,6 @@ region, but leave the south edge, west edge, and the region
 cell resolutions unchanged.
 
 <p>
-
 <dt><span class="code"><tt>
 g.region n=51:36:05N e=10:10:05E s=51:29:55N w=9:59:55E res=0:00:01
 </tt></span>
@@ -189,7 +180,6 @@ for the current region, here in DMS latitude-longitude style
 (decimal degrees and degrees with decimal minutes can also be used).
 
 <p>
-
 <dt><span class="code"><tt>
 g.region -dp s=698000
 </tt></span>
@@ -199,7 +189,6 @@ for the GRASS data base location, reset the south edge to
 698000, and then print the result.
 
 <p>
-
 <dt><span class="code"><tt>
 g.region n=n+1000 w=w-500
 </tt></span>
@@ -214,7 +203,6 @@ units and the current region's western boundary is
 decreased by 500 units.
 
 <p>
-
 <dt><span class="code"><tt>
 g.region n=s+1000 e=w+1000
 </tt></span>
@@ -228,7 +216,6 @@ larger than the western boundary's coordinate value.  The
 corresponding forms s=n-<em>value</em> and
 
 <p>
-
 w=e-<em>value</em> may be used to set the values of the
 region's southern and western boundaries, relative to the
 northern and eastern boundary values.
@@ -243,7 +230,6 @@ exactly the same as those given in the cell header file for
 the raster map layer <em>soils</em>.
 
 <p>
-
 
 <dt><span class="code"><tt>
 g.region rast=soils zoom=soils
@@ -261,7 +247,6 @@ settings.
 
 <p>
 
-
 <dt><span class="code"><tt>
 g.region -up rast=soils
 </tt></span>
@@ -273,7 +258,6 @@ the cell header file for the soils map layer is printed
 without changing the current region settings.
 
 <p>
-
 <dt><span class="code"><tt>
 g.region -up zoom=soils save=soils
 </tt></span>
@@ -286,7 +270,6 @@ user's current mapset.  The current region settings are not
 changed.
 <p>
 
-
 <dt><span class="code"><tt>
 g.region b=0 t=3000 tbres=200 res3=100
 g.region -p3
@@ -298,7 +281,6 @@ at horizontal resolution (100m) and vertical resolution (200m)
 is defined.
 
 <p>
-
 <dt><span class="code"><tt>
 g.region -p
 </tt></span>
@@ -321,7 +303,6 @@ cols:       950
 </pre></div>
 
 <p>
-
 <dt><span class="code"><tt>
 g.region -p3
 </tt></span>
@@ -353,7 +334,6 @@ depths:     1
 </pre></div>
 
 <p>
-
 <dt><span class="code"><tt>
 g.region -g
 </tt></span>
@@ -373,7 +353,6 @@ cols=950
 </pre></div>
 
 <p>
-
 <dt><span class="code"><tt>
 g.region -bg
 </tt></span>
@@ -398,7 +377,6 @@ LL_S=44.37302019
 </pre></div>
 
 <p>
-
 <dt><span class="code"><tt>
 g.region -l
 </tt></span>
@@ -418,7 +396,6 @@ Center latitude:  44:26:14.439781N [44.43734]
 </pre></div>
 
 <p>
-
 <dt><span class="code"><tt>
 g.region -pm
 </tt></span>
@@ -443,8 +420,7 @@ Note that the resolution is here reported in meters, not decimal degrees.
 
 </dl>
 
-<p>
-Usage example of <em>g.region</em> in a shell with external software:<br>
+<p>Usage example of <em>g.region</em> in a shell with external software:<br>
 <!-- why not 'v.in.ogr spatial=' ?? -->
 Extract spatial subset of external vector map 'soils.shp' to new external
 vector map 'soils_cut.shp' using the OGR 'ogr2ogr' tool:<br>
@@ -457,8 +433,7 @@ ogr2ogr -spat $w $s $e $n soils_cut.shp soils.shp
 This requires that the location/SHAPE file projection match.
 
 
-<p>
-Usage example of <em>g.proj</em> and <em>g.region</em> in a shell with external software:<br>
+<p>Usage example of <em>g.proj</em> and <em>g.region</em> in a shell with external software:<br>
 Extract spatial subset of external raster map 'p016r035_7t20020524_z17_nn30.tif'
 to new external raster map'p016r035_7t20020524_nc_spm_wake_nn30.tif using the GDAL
 'gdalwarp' tool:<br>
@@ -493,5 +468,4 @@ Michael Shapiro,
 U.S.Army Construction Engineering 
 Research Laboratory
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

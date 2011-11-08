@@ -41,7 +41,6 @@ bound.) Buffer distances can be specified using one of five units with the <em>
 units</em> parameter: <em>meters, kilometers, feet, miles</em>, and <em>nautmiles</em>
 (nautical miles).
 <p>
-
 <!-- ??? is this the real method used or some ancient option ??? -->
 Distances from cells containing the user-specified category values
 are calculated using the "fromcell" method. This method locates each
@@ -52,13 +51,11 @@ containing the category values of interest, but works
 slowly when there are numerous cells containing the
 category values of interest spread throughout the area.
 <p>
-
 <em>r.buffer</em> measures distances from center of cell to
 center of cell using Euclidean distance measure for
 planimetric locations (like UTM) and using ellipsoidal
 geodesic distance measure for latitude/longitude locations.
 <p>
-
 <em>r.buffer</em> calculates distance zones from all cells having non-NULL 
 category values in the <em>input</em> map. If the user wishes to calculate
 distances from only selected <em>input</em> map layer 
@@ -67,11 +64,9 @@ category values, the user should run (for example)
 <em>r.buffer</em>, to reclass all categories from which distance zones 
 are not desired to be calculated into category NULL. 
 <p>
-
 The <b>-z</b> flag can be used to ignore raster values of zero instead of NULL
 values in the input raster map.
 <p>
-
 <h2>EXAMPLE</h2>
 
 In the following example, the buffer zones would be (in the default units
@@ -113,5 +108,4 @@ Research Laboratory
 James Westervelt, U.S. Army Construction Engineering 
 Research Laboratory
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

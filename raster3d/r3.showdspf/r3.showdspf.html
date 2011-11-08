@@ -6,15 +6,13 @@ using <em>r3.mkdspf</em> and displays them according to commands given at the pr
 dspf file to draw isosurfaces and 3D raster map to draw planes and everything
 related (boxes, etc).
 
-<p>
-Upon initialization of the program, two graphics windows are
+<p>Upon initialization of the program, two graphics windows are
 opened, one for the color table and the other for data display. The
 display window initially contains a red bounding box. Command options
 are then printed to the terminal and user is prompted for drawing 
 instructions:
 
-<p>
-<pre>
+<p><pre>
 THE INTERACTIVE OPTIONS ARE:
 
 ?, (l #), L, (t #), (T # #), I, +, -
@@ -68,7 +66,6 @@ THE INTERACTIVE OPTIONS ARE:
 
 </pre>
 <p>
-
 <h3>Hints:</h3>
 <ul>
 <li>To navigate around the data, use the <em>r</em> command, then place
@@ -90,35 +87,29 @@ Use the <em>#</em> sign as the first character on a line to indicate a comment.
 After generating a "dspf" control file with <em>r3.mkdspf</em> start
 <em>r3.showdspf</em>. Display/add the layers using <em>+</em>.
 
-<p>
-List available thresholds with <em>?</em>. Use <em>l</em> to select isosurfaces (available
+<p>List available thresholds with <em>?</em>. Use <em>l</em> to select isosurfaces (available
 number can be adjusted with <em>r3.mkdspf</em>) and <em>L</em> to display:
 <br>
 <tt>l 1 2 3 4 5<br> L </tt> 
 
-<p>
-To select and display a single threshold (here: 2), use:<br>
+<p>To select and display a single threshold (here: 2), use:<br>
 <tt>t 2</tt>
 
-<p>
-To select and display a range of thresholds (here: 3-5), use:<br>
+<p>To select and display a range of thresholds (here: 3-5), use:<br>
 <tt>T 3 5<br>
 D</tt>
 
-<p>
-To draw a box, enter<br>
+<p>To draw a box, enter<br>
 <tt>p</tt><br>
 the p# to plot a selected wall (here top wall):<br>
 <tt>p1</tt>
 
-<p>
-Tp draw a cut-off box, define it's position<br>
+<p>Tp draw a cut-off box, define it's position<br>
 <tt>Ex20</tt><br>
 <tt>p</tt><br>
 Here Ex20 defines the x coordinate of the end of the box.
 
-<p>
-In general - <em>p</em> draws a side of a box, <em>E</em>, <em>B</em>, define where that box starts or
+<p>In general - <em>p</em> draws a side of a box, <em>E</em>, <em>B</em>, define where that box starts or
 ends, so to make a fence diagram, the user draws sides of a series of boxes
 which have their starting (or ending) side shifting by a given interval.
 (this way the user can draw even more complex fence diagrams which have
@@ -126,8 +117,7 @@ perpendicular fences, by using Ey or By). It is sufficient to use only <em>E</em
 <em>B</em> depending whether fence are drawn by using the end side or front side of a
 box).
 
-<p>
-To draw a fence, a sequence like this would be needed<br>
+<p>To draw a fence, a sequence like this would be needed<br>
 <tt>Ex10<br>
 p5<br>
 Ex15<br>
@@ -146,8 +136,7 @@ p6<br>
 Bx20<br>
 p6</tt> 
 
-<p>
-The <em>p</em> is needed for the fence diagram, solids and boxes.
+<p>The <em>p</em> is needed for the fence diagram, solids and boxes.
 
 <h2>SEE ALSO</h2>
 <em><a href="r3.mkdspf.html">r3.mkdspf</a></em>

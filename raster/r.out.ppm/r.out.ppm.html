@@ -3,26 +3,21 @@
 <em>r.out.ppm</em> converts a GRASS raster map into a PPM image 
 at the pixel resolution of the CURRENTLY DEFINED REGION. 
 To get the resolution and region settings of the raster map, run:<p>
-
 <div class="code"><pre>
 g.region -p rast=[mapname]
 </pre></div>
 
 <p>
-
 before running <em>r.out.ppm</em>.<p>
-
 By default the PPM file created is 24-bit color, rawbits storage.
 You can use the <b>-g</b> flag to force <em>r.out.ppm</em> to 
 output an 8-bit greyscale instead.
 The greyscale conversion uses the NTSC conversion:<p>
-
 <div class="code"><pre>
 Y = .30*Red + .59*Green + .11*Blue
 </pre></div>
 
-<p>
-One pixel is written for each cell value, so if <tt>ew_res</tt> and 
+<p>One pixel is written for each cell value, so if <tt>ew_res</tt> and 
 <tt>ns_res</tt> differ, the aspect ratio of the resulting image will be off.
 
 

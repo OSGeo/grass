@@ -4,11 +4,9 @@ unconfined groundwater flow in two dimensions based on
 raster maps and the current region settings.
 All initial and boundary conditions must be provided as 
 raster maps. The unit in the location must be meters.
-<p>
-This module is sensitive to mask settings. All cells which are outside the mask
+<p>This module is sensitive to mask settings. All cells which are outside the mask
 are ignored and handled as no flow boundaries.
-<p>
-<center>
+<p><center>
 <img src=r_gwflow_concept.png border=0><br>
 <table border=0 width=700>
 <tr><td><center>
@@ -17,7 +15,6 @@ are ignored and handled as no flow boundaries.
 </table>
 </center>
 <p>
-
 <em>r.gwflow</em> calculates the piezometric head and optionally 
 the water budget and the filter velocity field,
 based on the hydraulic conductivity and the piezometric head. 
@@ -42,12 +39,9 @@ finite volume discretization. The discretization results in a symmetric and posi
 linear equation system in form of <i>Ax = b</i>, which must be solved. The groundwater flow partial
 differential equation is of the following form:
 
-<p>
-(dh/dt)*S = div (K grad h) + q
-<p>
-In detail for 2 dimensions:
-<p>
-(dh/dt)*S = Kxx * (d^2h/dx^2) + Kyy * (d^2h/dy^2) + q
+<p>(dh/dt)*S = div (K grad h) + q
+<p>In detail for 2 dimensions:
+<p>(dh/dt)*S = Kxx * (d^2h/dx^2) + Kyy * (d^2h/dy^2) + q
 
 <ul>
 <li>h -- the piezometric head im [m]</li>
@@ -58,14 +52,11 @@ In detail for 2 dimensions:
 <li>q - inner source/sink in meter per second [1/s]</li>
 </ul>
 
-<p>
-Confined and unconfined groundwater flow is supported. Be aware that the storativity input parameter
+<p>Confined and unconfined groundwater flow is supported. Be aware that the storativity input parameter
 is handled differently in case of unconfined flow. Instead of the storativity, the effective porosity is expected.
-<p>
-To compute unconfined groundwater flow, a simple Picard based linearization scheme is used to
+<p>To compute unconfined groundwater flow, a simple Picard based linearization scheme is used to
 solve the resulting non-linear equation system.
-<p>
-Two different boundary conditions are implemented, 
+<p>Two different boundary conditions are implemented, 
 the Dirichlet and Neumann conditions. By default the calculation area is surrounded by homogeneous Neumann boundary conditions.
 The calculation and boundary status of single cells must be set with a status map, 
 the following states are supportet:
@@ -153,8 +144,7 @@ paraview --data=/tmp/gwdata_unconf2d.vtk &
 
 <h2>AUTHOR</h2>
 S&ouml;ren Gebbert
-<p>
-This work is based on the Diploma Thesis of S&ouml;ren Gebbert available
+<p>This work is based on the Diploma Thesis of S&ouml;ren Gebbert available
 <a href="http://www.hydrogeologie.tu-berlin.de/fileadmin/fg66/_hydro/Diplomarbeiten/2007_Diplomarbeit_Soeren_Gebbert.pdf">here</a>
 at Technical University Berlin in Germany.
 

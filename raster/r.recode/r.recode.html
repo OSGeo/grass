@@ -4,13 +4,11 @@
 raster map based on recode <b>rules</b>. A <b>title</b> for the output
 raster map may be (optionally) specified by the user.
 
-<p>
-The recode rules can be read from standard input (i.e., from the
+<p>The recode rules can be read from standard input (i.e., from the
 keyboard, redirected from a file, or piped through another program) by
 entering <b>rules=-</b>.
 
-<p>
-Rules are defined in one of these formats:
+<p>Rules are defined in one of these formats:
 
 <div class="code"><pre>
     old_low:old_high:new_low:new_high
@@ -19,16 +17,14 @@ Rules are defined in one of these formats:
     old_val:*:new_val         (interval [old_val, inf])
 </pre></div>
 
-<p>
-<em>r.recode</em> is loosely based
+<p><em>r.recode</em> is loosely based
 on <em><a href="r.reclass.html">r.reclass</a></em> and uses the GRASS
 Reclass Library to convert the rasters. It has routines for converting
 to every possible combination of raster (eg. CELL to DCELL, DCELL to
 FCELL, etc). Standard floating point raster precision is float
 (FCELL), with <b>-d</b> double precision (DCELL) will be written.
 
-<p>
-There are four basic routines that it accepts:
+<p>There are four basic routines that it accepts:
 
 <ol>
   <li>old-low to old-high is reclassed to new-low to new high , where the
@@ -81,5 +77,4 @@ EOF
 
 CERL
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

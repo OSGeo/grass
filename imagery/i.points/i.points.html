@@ -1,17 +1,16 @@
 <h2>DESCRIPTION</h2>
 
 <em>i.points</em> is an
-<a href="imagery.html">imagery</A> function that enables
+<a href="imagery.html">imagery</a> function that enables
 the user to mark points on a (raster) image to be rectified
 and then input the geographic coordinates of each point for
 calculation of a coordinate transformation matrix.
 <em>i.points</em> must be followed by use of the GRASS
-program <em><a href="i.rectify.html">i.rectify</A></em>, which
+program <em><a href="i.rectify.html">i.rectify</a></em>, which
 rectifies the image using the transformation matrix
 coefficients calculated by <em>i.points</em>.
 
 <p>
-
 <em>Rectification</em> is the mapping (transformation) of
 an image from one coordinate system to another.  The
 geometry of an image extracted into a GRASS LOCATION having
@@ -29,38 +28,33 @@ and standard) for the marked points.  A matrix containing
 transformation coefficients is the output file for
 <em>i.points</em>.
 
-<p>
-During the process of marking points and entering map
+<p>During the process of marking points and entering map
 coordinates, the user can compute the RMS (root mean
 square) error for each point entered.  <em>i.points</em>
 does this by calculating the transformation equation (the
 same one that is calculated in the GRASS program <em>
-<a href="i.rectify.html">i.rectify</A></em>), and then
+<a href="i.rectify.html">i.rectify</a></em>), and then
 plugging these results into an equation for RMS error.
 
-<p>
-<em>i.points</em> offers a zoom option to locate precisely
+<p><em>i.points</em> offers a zoom option to locate precisely
 the point to be marked on an image.  This program also
 offers the user the option of acquiring standard
 coordinates for a marked point from a map layer in the
 target data base.
 
-<p>
-<em><a href="i.target.html">i.target</A></em> must be
+<p><em><a href="i.target.html">i.target</a></em> must be
 run before running <em>i.points</em> to enable the PLOT
 RASTER option to be used and to identify a target data base
 LOCATION_NAME and MAPSET for the rectified image.  To run
 <em>i.points</em>, a graphics monitor is required.
 
-<p>
-The procedure for marking points, entering coordinates, and
+<p>The procedure for marking points, entering coordinates, and
 calculating RMS error is described below.
 
-<p>
-The first prompt in the program asks the user for the 
-<a href="i.group.html">imagery group</A> to be
+<p>The first prompt in the program asks the user for the 
+<a href="i.group.html">imagery group</a> to be
 registered.  Note that if 
-<em><a href="i.target.html">i.target</A></em> is not run
+<em><a href="i.target.html">i.target</a></em> is not run
 before <em>i.points</em>, the <em>i.points</em> program
 will display the following error message:
 
@@ -126,28 +120,27 @@ left half of the screen:
 
 Any single raster map layer in the 
 
-<a href="i.group.html">imagery group</A> may be used on
+<a href="i.group.html">imagery group</a> may be used on
 
 which to mark points, and the user can mark points on more
 than one raster map layer in the 
 
-<a href="i.group.html">imagery group</A> to accumulate the
+<a href="i.group.html">imagery group</a> to accumulate the
 
 suggested minimum number of 12 points.  Any raster map
-layer in the <a href="i.group.html">imagery group</A>
+layer in the <a href="i.group.html">imagery group</a>
 can be rectified (using 
 
-<em><a href="i.rectify.html">i.rectify</A></em>) based on the
+<em><a href="i.rectify.html">i.rectify</a></em>) based on the
 transformation matrix computed from these points.
 
 
 <p>
-
 The imagery file chosen by
 the user is displayed in the upper left quadrant of the
 screen.
 
-<H3>ZOOM</H3>
+<h3>ZOOM</h3>
 
 To magnify the displayed file, the user must
 place the mouse cross hairs on the word ZOOM.  The following menu
@@ -167,7 +160,7 @@ region.  The terminal screen will display a mouse button
 menu to guide the user in identifying the corner points of
 the region.
 
-<H3>MARKING POINTS</H3>
+<h3>MARKING POINTS</h3>
 
 To mark the points on the image that correspond to the
 points on a standard coordinate system map, the user must
@@ -199,7 +192,7 @@ wishes not to enter a coordinate, he or she may simply hit
 RETURN to return control to the mouse;  the marked point
 then disappears.
 
-<H3>PLOT RASTER</H3>
+<h3>PLOT RASTER</h3>
 
 In addition to acquiring reference points from a standard
 map, the user has the option of acquiring the reference
@@ -268,7 +261,6 @@ left button on the mouse.
 
 
 <p>
-
 If the user selects the SCREEN option, then points marked
 on the image will automatically be associated with the
 coordinates from the corresponding points on the target
@@ -304,7 +296,7 @@ coordinates for the target data base map layer are
 automatically saved as the coordinates corresponding to the
 marked point on the image.
 
-<H3>ANALYZE</H3>
+<h3>ANALYZE</h3>
 
 After a number of points have been marked (4 to 7), the
 user can check the RMS error of the points marked on the
@@ -351,9 +343,8 @@ screen in meters.  Points that create high RMS error are
 displayed in red on the graphics monitor (represented here
 in italics).
 
-<p>
-The location of the point marked on the 
-<a href="i.group.html">imagery group</A> file is given
+<p>The location of the point marked on the 
+<a href="i.group.html">imagery group</a> file is given
 under the heading "image" and the subheadings "east" and
 "north".  The location of the point in the target data base
 is given under the heading "target" and the subheadings
@@ -368,7 +359,7 @@ in the final transformation matrix.  However, it can be
 retrieved within <em>i.points</em> at any time by double
 clicking with the mouse as described above.
 
-<H3>QUIT</H3>
+<h3>QUIT</h3>
 
 To end the <em>i.points</em> program place the mouse cross
 hairs on the word QUIT;  the marked points (including
@@ -379,39 +370,35 @@ coordinates) will be saved.
 
 A good rule of thumb is to mark at least 12 to 15 points
 which are evenly distributed over the entire 
-<a href="i.group.html">imagery group</A> file in order to
+<a href="i.group.html">imagery group</a> file in order to
 obtain an accurate transformation equation for the
 rectification process.  The RMS error may increase with
 more points added, but the transformation equation will be
 more accurate.
 
-<p>
-An RMS error of less than or equal to approximately one
+<p>An RMS error of less than or equal to approximately one
 resolution unit (pixel or cell) for the image being
 rectified is generally considered acceptable.
 
-<p>
-In order to use a digitizer with <em>i.points</em>, at
+<p>In order to use a digitizer with <em>i.points</em>, at
 least one digitizer driver besides "none" (the on-screen
 digitizer) must be available in the digitcap file.
 
-<p>
-This program is interactive.
+<p>This program is interactive.
 
 
 <h2>SEE ALSO</h2>
 
 The GRASS 4 <em>
 <a href="http://grass.itc.it/gdp/imagery/grass4_image_processing.pdf">Image
-Processing manual</A></em>
+Processing manual</a></em>
 
-<p>
-<em>
-<a href="g.mapsets.html">g.mapsets</A><br>
-<a href="i.group.html">i.group</A><br>
-<a href="i.rectify.html">i.rectify</A><br>
-<a href="i.target.html">i.target</A><br>
-<a href="i.vpoints.html">i.vpoints</A>
+<p><em>
+<a href="g.mapsets.html">g.mapsets</a><br>
+<a href="i.group.html">i.group</a><br>
+<a href="i.rectify.html">i.rectify</a><br>
+<a href="i.target.html">i.target</a><br>
+<a href="i.vpoints.html">i.vpoints</a>
 </em><br>
 <em><a href="gm_georect.html">gis.m: GEORECTIFY TOOL</a></em>
 
@@ -420,5 +407,4 @@ Processing manual</A></em>
 
 Michael Shapiro,
 U.S.Army Construction Engineering Research Laboratory
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

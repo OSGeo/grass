@@ -6,8 +6,7 @@ entered by the user. If no output shademap name is given, the new shaded
 relief map is named <em>&lt;input_map&gt;.shade</em>.
 The map is assigned a grey-scale color table.
 
-<p>
-The module then prompts the user to enter values for:
+<p>The module then prompts the user to enter values for:
 <ol>
 <li>The <b>altitude</b> of the sun in degrees above the horizon
 (a value between 0 and 90 degrees), and
@@ -42,8 +41,7 @@ statement. Refer to the manual entry for <em>r.mapcalc</em> for an explanation
 of the filtering syntax shown in the above expression.
 See, for example, the section on "The Neighborhood Modifier".
 
-<p>
-<em>r.shaded.relief</em> then runs <em>r.colors</em>
+<p><em>r.shaded.relief</em> then runs <em>r.colors</em>
 to assign a grey-scale color table to the new shaded relief map.
 
 <h2>NOTES</h2>
@@ -63,8 +61,7 @@ g.region rast=elevation -p
 r.shaded.relief input=elevation output=elevation.shaded
 </pre></div>
 
-<p>
-In Latitude-Longitude locations (or other non-metric locations), the
+<p>In Latitude-Longitude locations (or other non-metric locations), the
 <em>scale</em> factor has to be used:
 
 <div class="code"><pre>
@@ -78,9 +75,8 @@ r.shaded.relief input=srtm output=srtm.shaded scale=111120
 and Jim Westervelt, U.S. Army Construction Engineering Research Laboratory
 (March/1991) (available from the GRASS web site).
 
-<p>
-<!-- RGB version not ported to GRASS 6:
-  <em><a href="shade.clr.sh.html">shade.clr.sh</A></em><br>
+<p><!-- RGB version not ported to GRASS 6:
+  <em><a href="shade.clr.sh.html">shade.clr.sh</a></em><br>
  -->
 <em>
 <a href="d.his.html">d.his</a>,

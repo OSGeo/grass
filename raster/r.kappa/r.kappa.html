@@ -1,13 +1,11 @@
 <h2>DESCRIPTION</h2>
 
-
 <em>r.kappa</em> tabulates the error matrix of classification result by
 crossing classified map layer with respect to reference map layer.  Both
 overall <em>kappa</em> (accompanied by its <em>variance</em>) and
 conditional <em>kappa</em> values are calculated.  This analysis program
 respects the current geographic region and mask settings.
-<p>
-<em>r.kappa</em> calculates the error matrix of the
+<p><em>r.kappa</em> calculates the error matrix of the
 two map layers and prepares the table from which the report
 is to be created.  <em>kappa</em> values for overall and
 each classes are computed along with their variances. Also
@@ -16,14 +14,12 @@ classified result by pixel counts, total area in pixel
 counts and percentage of overall correctly classified
 pixels are tabulated.
 
-<p>
-The report will be write to an output file which is in
+<p>The report will be write to an output file which is in
 plain text format and named by user at prompt of running
 the program.
 
 
-<p>
-The body of the report is arranged in panels.  The
+<p>The body of the report is arranged in panels.  The
 classified result map layer categories is arranged along
 the vertical axis of the table, while the reference map
 layer categories along the horizontal axis.  Each panel has
@@ -45,7 +41,6 @@ layer. Because <em>r.kappa</em> calculates and then reports
 information for each and every category.
 
 <p>
-
 <em>NA</em>'s in output file mean non-applicable in case
 <em>MASK</em> exists.
 

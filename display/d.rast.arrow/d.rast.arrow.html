@@ -10,15 +10,13 @@ to the name of the desired aspect map.
 This allows the arrows to be drawn over any other maps already displayed
 on the graphics monitor.
 <p>
-
 <em>d.rast.arrow</em> will draw an arrow over each displayed cell
 to indicate in which direction the cell slopes. If the aspect
 layer has a category value denoting locations of "unknown" aspect,
 <em>d.rast.arrow</em> draws a question mark over the displayed cells
 of that category.
 Cells containing null data will be marked with an "X".
-<p>
-If you specify the <em>magnitude_map</em> option, arrow lengths 
+<p>If you specify the <em>magnitude_map</em> option, arrow lengths 
 denoting magnitude will be extracted from the cell values of the specified 
 map. In this case the tail of the arrow will be centered on the source cell.
 You may adjust the overall scale using the <em>scale</em> option.
@@ -28,21 +26,18 @@ uses negative values for magnitude, you can use <em>r.mapcalc</em> to prepare
 the magnitude map to suit your needs (absolute value, inverted direction and 
 so on). 
 
-<p>
-<h2>NOTES</h2>
+<p><h2>NOTES</h2>
 By default, arrows are drawn at the size of a cell and cannot be seen if 
 the raster map is relatively close in scale. You can use the <em>skip</em> 
 option to draw arrows every n-th cell in both directions if you are working 
 with relatively high resolutions. It may be useful to disable the grid in
 this case, which is accomplished by setting its color to "<tt>none</tt>".
-<p>
-For GRASS and Compass type aspect maps, the cell values of the aspect map
+<p>For GRASS and Compass type aspect maps, the cell values of the aspect map
 will determine the corresponding direction in 360 degrees. ANSWERS type
 aspect maps will be plotted in multiples of 15 degrees, and AGNPS type
 aspect maps will be displayed in D8 representation, i.e. the eight multiples 
 of 45 degrees.
-<p>
-GRASS aspect maps are measured using Cartesian conventions, i.e. in degrees 
+<p>GRASS aspect maps are measured using Cartesian conventions, i.e. in degrees 
 counterclockwise from east. e.g.:
 
 <div class="code"><pre>
@@ -53,10 +48,8 @@ counterclockwise from east. e.g.:
 </pre></div>
 
 They can be created from a raster elevation map with <em>r.slope.aspect</em>.
-<p>
-Compass type aspect maps are measured in degrees clockwise from north.
-<p>
-This module uses oceanographic conventions, i.e. arrows point downslope or 
+<p>Compass type aspect maps are measured in degrees clockwise from north.
+<p>This module uses oceanographic conventions, i.e. arrows point downslope or 
 direction "to", as opposed to atmospheric conventions (direction "from").
 
 
@@ -73,12 +66,12 @@ d.rast.arrow map=direction type=grass magnitude_map=magnitude skip=3 grid=none
 
 <h2>SEE ALSO</h2>
 
-<em><a href="d.frame.html">d.frame</A></em><br>
-<em><a href="d.rast.html">d.rast</A></em><br>
-<em><a href="d.rast.edit.html">d.rast.edit</A></em><br>
-<em><a href="d.rast.num.html">d.rast.num</A></em><br>
-<em><a href="g.region.html">g.region</A></em><br>
-<em><a href="r.slope.aspect.html">r.slope.aspect</A></em><br>
+<em><a href="d.frame.html">d.frame</a></em><br>
+<em><a href="d.rast.html">d.rast</a></em><br>
+<em><a href="d.rast.edit.html">d.rast.edit</a></em><br>
+<em><a href="d.rast.num.html">d.rast.num</a></em><br>
+<em><a href="g.region.html">g.region</a></em><br>
+<em><a href="r.slope.aspect.html">r.slope.aspect</a></em><br>
 <br>
 
 <h2>AUTHORS</h2>

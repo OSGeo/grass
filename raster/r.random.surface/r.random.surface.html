@@ -13,16 +13,14 @@ weight based on the weight inputs.  The resulting random surface can have
 large map is 0.0 and a variance of 1.0. Description of the algorithm is in
 the <b>NOTES</b> section.
 
-<p>
-The random surface generated are composed of floating point numbers, and
+<p>The random surface generated are composed of floating point numbers, and
 saved in the category description files of the output map(s).  Cell values
 are uniformly or normally distributed between 1 and high values inclusive
 (determined by whether the <b>-u</b> flag is used). The category names
 indicate the average floating point value and the range of floating point
 values that each cell value represents.
 
-<p>
-<em>r.random.surface's</em> original goal is to generate random fields for
+<p><em>r.random.surface's</em> original goal is to generate random fields for
 spatial error modeling. A procedure to use <em>r.random.surface</em> in
 spatial error modeling is given in the <b>NOTES</b> section.
 
@@ -96,8 +94,7 @@ process ID number.</dd>
 While most literature uses the term random field instead of random surface,
 this algorithm always generates a surface. Thus, its use of random surface.
 
-<p>
-<em>r.random.surface</em> builds the random surface using a filter algorithm
+<p><em>r.random.surface</em> builds the random surface using a filter algorithm
 smoothing a map of independent random deviates. The size of the filter is
 determined by the largest distance of spatial dependence. The shape of the
 filter is determined by the distance decay exponent(s), and the various
@@ -107,16 +104,14 @@ extent of the filter. This will eliminate edge effects caused by the
 reduction of degrees of freedom. The map of independent random deviates will
 ignore the current mask for the same reason.
 
-<p>
-One of the most important uses for <em>r.random.surface</em> is to determine
+<p>One of the most important uses for <em>r.random.surface</em> is to determine
 how the error inherent in raster maps might effect the analyses done with
 those maps.
 
 <h2>REFERENCES</h2>
 Random Field Software for GRASS by Chuck Ehlschlaeger
 
-<p>
-  As part of my dissertation, I put together several programs that help
+<p>  As part of my dissertation, I put together several programs that help
 GRASS (4.1 and beyond) develop uncertainty models of spatial data. I hope
 you find it useful and dependable. The following papers might clarify their
 use:
@@ -159,5 +154,4 @@ Charles Ehlschlaeger, Michael Goodchild, and Chih-chang Lin; National Center
 for Geographic Information and Analysis, University of California, Santa
 Barbara.
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

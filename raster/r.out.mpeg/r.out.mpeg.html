@@ -8,8 +8,7 @@ The resulting output file may then be viewed using your favorite mpeg-format
 viewing program.
 MPEG-2 and MPEG-4 provide much better quality animations.
 
-<p>
-The user may define up to four "views", or sub-windows, to animate
+<p>The user may define up to four "views", or sub-windows, to animate
 simultaneously.  e.g., View 1 could be rainfall, View 2 flooded areas, View
 3 damage to bridges or levees, View 4 other economic damage, all animated as
 a time series. A black border 2 pixels wide is drawn around each view. There
@@ -18,8 +17,7 @@ Temporary files are created in the conversion process, so lack of adequate
 tmp space could also limit the number of frames you are able to convert.
 <!-- flag to keep these to feed into another more modern encoder? -->
 
-<p>
-The environment variable GMPEG_SIZE is checked for a value to use as the
+<p>The environment variable GMPEG_SIZE is checked for a value to use as the
 dimension, in pixels, of the longest dimension of the animation image.  If
 GMPEG_SIZE is not set, the animation size defaults to the rows &amp; columns
 in the current GRASS region, scaling if necessary to a default minimum size
@@ -29,8 +27,7 @@ maintained, independent of image size.  Playback programs have to decode the
 compressed data "on-the-fly", therefore smaller dimensioned animations will
 provide higher frame rates and smoother animations.
 
-<p>
-UNIX - style wild cards may be used with the command line version in place
+<p>UNIX - style wild cards may be used with the command line version in place
 of a raster map name, but wild cards must be quoted.
 
 <h2>Example:</h2>
@@ -38,20 +35,17 @@ of a raster map name, but wild cards must be quoted.
 r.out.mpeg view1="rain[1-9]","rain1[0-2]" view2="temp*"
 </pre></div>
 
-<p>
-If the number of files differs for each view, the view with the fewest files
+<p>If the number of files differs for each view, the view with the fewest files
 will determine the number of frames in the animation.
 
-<p>
-With <b>-c</b> flag the module converts "on the fly", uses less disk space
+<p>With <b>-c</b> flag the module converts "on the fly", uses less disk space
 by using <em>r.out.ppm</em> with stdout option to convert frames as needed
 instead of converting all frames to ppm before encoding.  Only use when
 encoding a single view.  Use of this option also overrides any size
 defaults, using the <b>CURRENTLY DEFINED GRASS REGION for the output size</b>.
 So be careful to set region to a reasonable size prior to encoding.
 
-<p>
-A quality value of <em>qual=1</em> will yield higher quality images, but
+<p>A quality value of <em>qual=1</em> will yield higher quality images, but
 with less compression (larger MPEG file size).  Compression ratios will vary
 depending on the number of frames in the animation, but an MPEG produced
 using <em>qual=5</em> will usually be about 60% the size of the MPEG
@@ -67,28 +61,23 @@ cause a "noisy" encoding.
 
 <h2>NOTES</h2>
 This program requires the program <em>mpeg_encode</em> (aka <em>ppmtompeg</em>):
-<p>
-MPEG-1 Video Software Encoder<br>
+<p>MPEG-1 Video Software Encoder<br>
 (Version 1.3; March 14, 1994)
-<p>
-Lawrence A. Rowe, Kevin Gong, Ketan Patel, and Dan Wallach Computer Science 
+<p>Lawrence A. Rowe, Kevin Gong, Ketan Patel, and Dan Wallach Computer Science 
 Division-EECS, Univ. of Calif. at Berkeley
-<p>
-Available from Berkeley: 
+<p>Available from Berkeley: 
 <a href="http://bmrc.berkeley.edu/frame/research/mpeg/mpeg_encode.html">http://bmrc.berkeley.edu/frame/research/mpeg/mpeg_encode.html</a>
 <br>or as part of the netpbm package (<em>ppmtompeg</em>):
 <a href="http://netpbm.sourceforge.net">http://netpbm.sourceforge.net</a>
 
-<p>
-Playback may be done with many viewers; <em>mpeg_encode</em>'s official companion 
+<p>Playback may be done with many viewers; <em>mpeg_encode</em>'s official companion 
 is <em>mpeg_play</em> available from Berkeley at 
 <a href="ftp://mm-ftp.cs.berkeley.edu/pub/multimedia/mpeg/play/">ftp://mm-ftp.cs.berkeley.edu/pub/multimedia/mpeg/play/</a>
 or a precompiled Debian package from 
 <a href="http://packages.debian.org/ucbmpeg-play">http://packages.debian.org/ucbmpeg-play</a>
 (includes maintained source code).
 
-<p>
-Use of the <em>-c</em> flag requires the <em>r.out.ppm</em> GRASS module 
+<p>Use of the <em>-c</em> flag requires the <em>r.out.ppm</em> GRASS module 
 with the <em>stdout</em> option.
 
 

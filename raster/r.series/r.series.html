@@ -1,6 +1,5 @@
 <h2>DESCRIPTION</h2>
 
-
 <em>r.series</em> makes each output cell value a function of the values
 assigned to the corresponding cells in the input raster map layers.
 Following methods are available:
@@ -29,19 +28,16 @@ Following methods are available:
 With <em>-n</em> flag, any cell for which any of the corresponding input cells are
 NULL is automatically set to NULL (NULL propagation). The aggregate function is not
 called, so all methods behave this way with respect to the <em>-n</em> flag.
-<p>
-Without <em>-n</em> flag, the complete list of inputs for each cell (including
+<p>Without <em>-n</em> flag, the complete list of inputs for each cell (including
 NULLs) is passed to the aggregate function. Individual aggregates can
 handle data as they choose. Mostly, they just compute the aggregate
 over the non-NULL values, producing a NULL result only if all inputs
 are NULL.
-<p>
-The <em>min_raster</em> and <em>max_raster</em> methods generate a map with the
+<p>The <em>min_raster</em> and <em>max_raster</em> methods generate a map with the
 number of the raster map that holds the minimum/maximum value of the
 time-series. The numbering starts at <em>0</em> up to <em>n</em> for the
 first and the last raster listed in <em>input=</em>, respectively. 
-<p>
-If the <em>range=</em> option is given, any values which fall outside
+<p>If the <em>range=</em> option is given, any values which fall outside
 that range will be treated as if they were NULL.
 The <em>range</em> parameter can be set to <em>low,high</em> thresholds:
 values outside of this range are treated as NULL (i.e., they will be
@@ -49,12 +45,10 @@ ignored by most aggregates, or will cause the result to be NULL if -n is given).
 The <em>low,high</em> thresholds are floating point, so use <em>-inf</em> or
 <em>inf</em> for a single threshold (e.g., <em>range=0,inf</em> to ignore
 negative values, or <em>range=-inf,-200.4</em> to ignore values above -200.4).
-<p>
-Linear regression (slope, offset, coefficient of determination) assumes equal time intervals.
+<p>Linear regression (slope, offset, coefficient of determination) assumes equal time intervals.
 If the data have irregular time intervals, NULL raster maps can be inserted into time series
 to make time intervals equal (see example).
-<p>
-Number of raster maps to be processed is given by the limit of the
+<p>Number of raster maps to be processed is given by the limit of the
 operating system. For example, both the hard and soft limits are
 typically 1024. The soft limit can be changed with e.g. <tt>ulimit -n
 1500</tt> (UNIX-based operating systems) but not higher than the hard
@@ -69,8 +63,7 @@ your_username  hard    nofile          1500
 This would raise the hard limit to 1500 file. Be warned that more
 files open need more RAM.
 
-<p>
-Use the <em>file</em> option to analyze large amount of raster maps without 
+<p>Use the <em>file</em> option to analyze large amount of raster maps without 
 hitting open files limit and the size limit of command line arguments. 
 The computation is slower than the <em>input</em> option method. 
 For every sinlge row in the output map(s) 
@@ -86,11 +79,9 @@ Using <em>r.series</em> with wildcards:
 r.series input="`g.mlist pattern='insitu_data.*' sep=,`" \
          output=insitu_data.stddev method=stddev
 </pre></div>
-<p>
-Note the <em>g.mlist</em> script also supports regular expressions for
+<p>Note the <em>g.mlist</em> script also supports regular expressions for
 selecting map names.
-<p>
-Using <em>r.series</em> with NULL raster maps:
+<p>Using <em>r.series</em> with NULL raster maps:
 <br>
 <div class="code"><pre>
 r.mapcalc "dummy = null()"
@@ -98,14 +89,12 @@ r.series in=map2001,map2002,dummy,dummy,map2005,map2006,dummy,map2008 \
          out=res_slope,res_offset,res_coeff meth=slope,offset,detcoeff
 </pre></div>
 
-<p>
-Example for multiple aggregates to be computed in one run (3 resulting aggregates from two input maps):
+<p>Example for multiple aggregates to be computed in one run (3 resulting aggregates from two input maps):
 <div class="code"><pre>
 r.series in=one,two out=result_avg,res_slope,result_count meth=sum,slope,count
 </pre></div>
 
-<p>
-Example to use the file option of r.series:
+<p>Example to use the file option of r.series:
 <div class="code"><pre>
 cat > input.txt << EOF
 map1

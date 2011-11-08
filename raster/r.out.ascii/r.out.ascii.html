@@ -6,19 +6,15 @@
 other computer systems.
 
 <p>
-
 The GRASS program <em><a href="r.in.ascii.html">r.in.ascii</a></em> can be
 used to perform the reverse function, converting an ASCII file in suitable
 format to GRASS raster map format.
-<p>
-<!--With <b>-s</b> flag SURFER .grd ASCII GRID instead of GRASS ASCII GRID is
+<p><!--With <b>-s</b> flag SURFER .grd ASCII GRID instead of GRASS ASCII GRID is
 written (with reverted row order, different header).
-<p>
-With <b>-m</b> flag MODFLOW (USGS) free-format array instead of GRASS ASCII
+<p>With <b>-m</b> flag MODFLOW (USGS) free-format array instead of GRASS ASCII
 GRID is written.-->
 
-<p>
-To write a SURFER .grd ASCII GRID file (with reverted row order and different
+<p>To write a SURFER .grd ASCII GRID file (with reverted row order and different
 header) use the <em>-s</em> flag:
 
 <div class="code"><pre>
@@ -39,8 +35,7 @@ r.out.ascii input=soils output=- &gt; out.file
 
 The output file out.file can then be printed or copied onto a CDROM
 or floppy disk for export purposes.
-<p>
-To export the raster values as x,y,z values of cell centers (one per line)
+<p>To export the raster values as x,y,z values of cell centers (one per line)
 use the <em><a href="r.out.xyz.html">r.out.xyz</a></em> module.
 
 <h2>SEE ALSO</h2>
@@ -56,8 +51,6 @@ use the <em><a href="r.out.xyz.html">r.out.xyz</a></em> module.
 <h2>AUTHOR</h2>
 Michael Shapiro,
 U.S. Army Construction Engineering Research Laboratory
-<p>
-Surfer support by Markus Neteler
+<p>Surfer support by Markus Neteler
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

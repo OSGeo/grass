@@ -4,11 +4,9 @@
 that need to search for mapset <em>elements</em>, including: raster,
 vector maps, region definitions
 and <em><a href="i.group.html">imagery</a></em> groups.
-<p>
-The list of <b>element</b> names to search for is not fixed; any
+<p>The list of <b>element</b> names to search for is not fixed; any
 subdirectory of the mapset directory is a valid <b>element</b> name.
-<p>
-However, the user can find the list of standard GRASS <b>element</b>
+<p>However, the user can find the list of standard GRASS <b>element</b>
 names in the file <tt>$GISBASE/etc/element_list</tt>. This is the file
 which <em><a href="g.remove.html">g.remove</a></em>, <em><a href="g.rename.html">g.rename</a></em>
 and <em><a href="g.copy.html">g.copy</a></em> use to determine which files
@@ -35,8 +33,7 @@ as follows:
 <div class="code"><pre>
 eval `g.findfile element=name mapset=name file=name`
 </pre></div>
-<p>
-For example (raster map):
+<p>For example (raster map):
 <div class="code"><pre>
 eval `g.findfile element=cell file=elevation`
 </pre></div>
@@ -84,5 +81,4 @@ grass.find_file('elevation', element = 'cell')
 Michael Shapiro,
 U.S.Army Construction Engineering Research Laboratory
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

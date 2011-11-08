@@ -16,13 +16,11 @@ important for surfaces with <tt>NULL</tt> values and highly irregular
 edges. The module does not [currently] attempt to correct for the
 error introduced by this <em>edge effect</em>.
 
-<p>
-This version actually calculates area twice for each triangle pair,
+<p>This version actually calculates area twice for each triangle pair,
 keeping a running minimum and maximum area depending on the direction
 of the diagonal used.
 
-<p>
-Reported totals are:
+<p>Reported totals are:
 <ol>
 <li>"Plan" area of <tt>NULL</tt> values within the current GRASS
 region</li>
@@ -35,8 +33,7 @@ cellarea</tt>)</li>
 <li>Scaling of calculated area to current region</li>
 </ol> 
 
-<p>
-<em>r.surf.area</em> works best when the surface being evaluated
+<p><em>r.surf.area</em> works best when the surface being evaluated
 extends to the edges of the current region and the cell resolution is
 small. Surfaces which are especially long and thin and have highly
 irregular boudaries will tend to have underestimated surface areas.
@@ -79,5 +76,4 @@ G. Miller (October 17, 2000)
 Updated for GRASS 7, and units option by Martin Landa, Czech Technical
 University in Prague, Czech Republic (October 2011)
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

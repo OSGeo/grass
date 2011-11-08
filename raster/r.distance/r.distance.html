@@ -6,7 +6,6 @@ number, and closest means having the shortest "straight-line" distance.
 The cell centers are considered for the distance calculation (two
 adjacent grid cells have the distance between their cell centers).
 <p>
-
 The output is an ascii list, one line per pair of objects, in the following form:
 <div class="code"><pre>
 cat1:cat2:distance:east1:north1:east2:north2
@@ -33,25 +32,20 @@ cat1:cat2:distance:east1:north1:east2:north2
 <b>-l</b> 
 The -l flag outputs the category labels of the matched raster objects at the 
 beginning of the line, if they exist.
-<p>
-<b>-o</b>
+<p><b>-o</b>
 The -o flag reports zero distance if the input rasters are overlapping.
 <p>
-
 <h2>NOTES</h2>
 The output format lends itself to filtering.  For example, to "see" lines
 connecting each of the category pairs in two maps, filter the output using
 awk and then into <em>d.graph</em>:
 <p>
-
 <div class="code"><pre>r.distance maps=map1,map2 | \
 awk -F: '{print "move",$4,$5,"\ndraw",$6,$7}' | d.graph -m</pre></div>
 
-<p>
-To create a vector map of all the "map1" coordinates, filter the output into
+<p>To create a vector map of all the "map1" coordinates, filter the output into
 awk and then into <em>v.in.ascii</em>:
 <p>
-
 <div class="code"><pre>r.distance maps=map1,map2 | \
 <br>awk -F: '{print $4,$5}' | v.in.ascii format=point output=name fs=space</pre></div>
 

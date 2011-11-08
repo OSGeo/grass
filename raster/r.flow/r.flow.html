@@ -12,12 +12,10 @@ simultaneously: a vector map <b>flowline</b> of flowlines, a raster map
 densities (which are equal upslope contributed areas per unit width, when
 multiplied by resolution).
 <p>
-
 Aspect used for input must follow the same rules as aspect computed
 in other GRASS programs (see <a href="v.surf.rst.html">v.surf.rst</a>
 or <a href="r.slope.aspect.html">r.slope.aspect</a>).
 <p>
-
 Flowline output is given in a vector map <b>flowline</b>, (flowlines generated
 downhill). The line segments of flowline vectors have endpoints on edges
 of a grid formed by drawing imaginary lines through the centers of the
@@ -31,7 +29,6 @@ The default <b>skip</b> is max(1,&nbsp;&lt;rows in elevation&gt;/50,&nbsp;&lt;co
 A high <b>skip</b> usually speeds up processing time and often improves
 the readability of a visualization of <b>flowline</b>.
 <p>
-
 Flowpath length output is given in a raster map <b>flowlength</b>. The value
 in each grid cell is the sum of the planar lengths of all segments of the
 flowline generated from that cell. If the flag <b>-3</b> is given, elevation
@@ -115,7 +112,6 @@ algorithm, i.e. all flow is transported to a single cell downslope.
 
 <h3><b>Differences between <em>r.flow</em> and <em>r.flowmd</em></b></h3>
 <p>
-
 <ol>
 
 <li> <em>r.flow</em> has an option to compute slope and aspect internally thus making

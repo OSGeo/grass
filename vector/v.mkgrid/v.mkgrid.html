@@ -8,8 +8,7 @@ Both point and area vector grids can be created.
 
 Grid points created with the <b>-p</b> flag will be placed at the
 <i>center</i> of each grid cell, not at the grid line nodes.
-<p>
-This is NOT to be used to generate a vector map of USGS quadrangles,
+<p>This is NOT to be used to generate a vector map of USGS quadrangles,
 because USGS quads are not exact rectangles.
 
 
@@ -21,8 +20,7 @@ v.mkgrid map=coro_grid grid=4,3 position=coor coor=2716500,6447000 box=20000,200
 </pre></div>
 <br>
 
-<p>
-Make a 10x12 lat/lon grid, cells 2 arc-min a side, with lower left corner
+<p>Make a 10x12 lat/lon grid, cells 2 arc-min a side, with lower left corner
 at 167deg 52min east, 47deg 6min south. For use with e.g. QGIS you can then
 pull this grid into a projected location with <em>v.proj</em> before
 exporting as a Shapefile with <em>v.out.ogr</em> (within GRASS you could
@@ -34,8 +32,8 @@ v.mkgrid map=p2min_grid grid=10,12 position=coor coor=167:52E,47:06S box=0:02,0:
 
 <h2>SEE ALSO</h2>
 
-<a href="v.patch.html">v.patch</A>,
-<a href="d.grid.html">d.grid</A>
+<a href="v.patch.html">v.patch</a>,
+<a href="d.grid.html">d.grid</a>
 
 
 <h2>AUTHOR</h2>
@@ -43,8 +41,6 @@ v.mkgrid map=p2min_grid grid=10,12 position=coor coor=167:52E,47:06S box=0:02,0:
 Michael Higgins,
 U.S.Army Construction Engineering 
 Research Laboratory
-<p>
-Update for new vectors Radim Blazek 10/2004 
+<p>Update for new vectors Radim Blazek 10/2004 
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

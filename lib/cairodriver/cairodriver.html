@@ -1,11 +1,11 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<HTML>
-<HEAD>
- <TITLE>Cairo driver</TITLE>
- <META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<html>
+<head>
+ <title>Cairo driver</title>
+ <meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
  <link rel="stylesheet" href="grassdocs.css" type="text/css">
-</HEAD>
-<BODY bgColor=white>
+</head>
+<body bgColor=white>
 
 <img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
 
@@ -131,19 +131,16 @@ The driver is still in development. Enable it by specifying
 requires a reasonably recent version of the Cairo libraries
 and a working <tt>pkg-config</tt>.
 
-<p>
-Antialiasing is enabled by default for bitmap formats. There is
+<p>Antialiasing is enabled by default for bitmap formats. There is
 currently no way of disabling this.
 
-<p>
-The resolution of the output images is defined by current region
+<p>The resolution of the output images is defined by current region
 extents. Use <tt>g.region -p</tt> to get the number of rows and cols
 and use the environment variables to set the image size. If you would
 like a larger image, multiply both rows and cols by the same whole
 number to preserve the aspect ratio.
 
-<p>
-Cairo supports true vector format output whenever possible. However,
+<p>Cairo supports true vector format output whenever possible. However,
 if the selected format doesn't support a necessary feature, Cairo may
 fall back on rendering a bitmap representation of the image wrapped in
 the selected vector format.

@@ -8,16 +8,13 @@ attribute table into the attribute table of <u>points</u> present in the
 
 The upload <b>column</b>, into which the query results are stored, must be
 present in the <b>vector</b> map. Use <em>v.db.addcolumn</em> to add one if needed.
-<p>
-Use dmax parameter to control query distance tolerance (how far points/centroids
+<p>Use dmax parameter to control query distance tolerance (how far points/centroids
 can be from <b>qvector</b> features). For more options, use
 <em>v.distance</em> instead.
-<p>
-In case of a multipoint input <b>vector</b> map, with several points having the
+<p>In case of a multipoint input <b>vector</b> map, with several points having the
 same category number, it can happen, that the query result is NULL, if the same
 category number falls into different <b>qvector</b> polygons.
-<p>
-When transferring attributes from a point map to a polygon map, usually <b>dmax</b>
+<p>When transferring attributes from a point map to a polygon map, usually <b>dmax</b>
 has to be larger than zero (determined by distance between query points and
 polygon centroids).
 
@@ -36,7 +33,6 @@ v.what.vect myhospitals qmap=urbanarea column=urb_name qcolumn=NAME
 v.db.select myhospitals
 </pre></div>
 <p>
-
 In this example, city names, population data and more from
 <a href="http://download.geonames.org/export/dump/">Geonames.org country files</a> are
 transferred to selected EU CORINE landuse/landcover classes
@@ -71,5 +67,4 @@ v.what.vect corine_code111_112_cities qmap=geonames_IT_cities column=gnameid \
 
 Markus Neteler
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

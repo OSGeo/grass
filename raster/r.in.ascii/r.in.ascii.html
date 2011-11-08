@@ -4,12 +4,10 @@
 layer from an ASCII raster input file with (optional) TITLE.
 
 <p>
-
 The GRASS ASCII <b>input</b> file has a header section which describes
 the location and size of the data, followed by the data itself.
 
 <p>
-
 The header has 6 lines: 
 
 <div class="code"><pre>
@@ -28,7 +26,6 @@ of the matrix of data to follow.
 The data which follows is <em>r</em> rows of <em>c</em> integers. 
 
 <p>
-
 Optionally the following parameters can be defined in the header section:
 
 <div class="code"><pre>
@@ -38,7 +35,6 @@ multiplier: 2.
 </pre></div>
 
 <p>
-
 "null" defines a string or number to be converted to NULL value (no
 data).<br>
 "type" defines the data type (int, float double) and is not required.<br>
@@ -55,25 +51,21 @@ The NW value occurs at the beginning of the first line of data, and the
 SW value occurs at the beginning of the last line of data.
 
 <p>
-
 The data (which follows the header section) must contain
 <tt>r</tt> <em>x</em> <tt>c</tt> values, but it is not necessary 
 that all the data for a row be on one line. A row may be 
 split over many lines. 
 
 <p>
-
 <em>r.in.ascii</em> may import <i>integer</i>, <i>floating point</i>, or <i>double</i> cell 
 types using the <b>-i</b>, <b>-f</b>, and <b>-d</b> flags, respectively. 
 
 <p>
-
 The header information in ESRI Raster ASCII files differs from GRASS.  
 To convert an Arc/Info (ArcView) ASCII grid file into GRASS, see 
 <em><a href="r.in.arc.html">r.in.arc</a></em>.
 
 <p>
-
 SURFER (Golden Software) ASCII files may be imported by passing the <b>-s</b> flag.
 
 <h2>EXAMPLE</h2>
@@ -118,5 +110,4 @@ null:                      -9999
 Michael Shapiro, U.S. Army Construction Engineering Research Laboratory<br>
 Surfer support by Roger Miller
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

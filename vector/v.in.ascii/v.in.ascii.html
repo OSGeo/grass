@@ -12,8 +12,7 @@ vector map in binary format. The module may import two formats:
   and category values.</li>
 </ul>
 
-<p>
-<em><a href="v.out.ascii.html">v.out.ascii</a></em> performs the
+<p><em><a href="v.out.ascii.html">v.out.ascii</a></em> performs the
 function of <em>v.in.ascii</em> in reverse; i.e., it converts vector
 maps in binary format to GRASS ASCII vector format. These two companion programs
 are useful both for importing and exporting vector maps between GRASS
@@ -24,23 +23,19 @@ and other software, and for transferring data between machines.
 The input is read from the file specified by the <b>input</b> option or
 from standard input.
 
-<p>
-The field separator may be a character, the word '<tt>tab</tt>'
+<p>The field separator may be a character, the word '<tt>tab</tt>'
 (or '<tt>\t</tt>') for tab, '<tt>space</tt>' (or '&nbsp;') for a blank,
 or '<tt>comma</tt>' (or ',') for a comma.
 
-<p>
-An attribute table is only created if it is needed, i.e. when at
+<p>An attribute table is only created if it is needed, i.e. when at
 least one attribute column is present in the input file besides
 geometry columns. The attribute column will be auto-scanned for type, but
 may be explicitly declared along with the geometry columns using the
 <b>columns</b> parameter.
 
-<p>
-Use the <b>-z</b> flag to convert ASCII data into a 3D vector map.
+<p>Use the <b>-z</b> flag to convert ASCII data into a 3D vector map.
 
-<p>
-In special cases of data import, such as the import of large LIDAR
+<p>In special cases of data import, such as the import of large LIDAR
 datasets (millions of data points), it may be necessary to disable
 topology support (vector level 1) due to memory constraints.  This is
 done with the <b>-b</b> flag. As only very few vector modules support
@@ -50,8 +45,7 @@ to import the data without creating a database (the <b>-t</b> flag) or
 within a subregion (the <b>-r</b> flag) before resorting the to
 disabling of topology.
 
-<p>
-If old version is requested, the <b>output</b> files
+<p>If old version is requested, the <b>output</b> files
 from <em><a href="v.out.ascii.html">v.out.ascii</a></em> is placed in
 the <tt>$LOCATION/$MAPSET/dig_ascii/</tt>
 and <tt>$LOCATION/$MAPSET/dig_att</tt> directory.
@@ -75,8 +69,7 @@ contains any header lines, such as column headings, the
 be written to the map's history file for later reference (read with
 <tt>v.info&nbsp;-h</tt>). The skip option only works in <b>points</b> mode.
 
-<p>
-Any line starting with the hash character ('<tt>#</tt>') will be treated as
+<p>Any line starting with the hash character ('<tt>#</tt>') will be treated as
 a comment and skipped completely if located in the main data file. If located
 in the header, as defined by the <b>skip</b> parameter, it will be treated as
 a header line and written to the history file.
@@ -111,8 +104,7 @@ cut -d&lt;the_field_separator_character&gt; -f&lt;comma-separated_list_of_column
 <h3>Example 1a) - standard format mode</h3>
 Sample ASCII polygon vector map for 'standard' format mode. 
 The two areas will be assigned categories 20 and 21. 
-<p>
-<div class="code"><pre>
+<p><div class="code"><pre>
 echo "ORGANIZATION: GRASS Development Team
 DIGIT DATE:   1/9/2005
 DIGIT NAME:   -
@@ -174,8 +166,7 @@ Generate a 2D points vector map 'coords.txt' as ASCII file:
 1663709|5102614
 </pre></div>
 
-<p>
-Import into GRASS:
+<p>Import into GRASS:
 <div class="code"><pre>
 v.in.ascii input=coords.txt output=mymap
 </pre></div>
@@ -193,15 +184,13 @@ Generate a 2D points vector map 'points.dat' as ASCII file:
 5|1663709|5102614|mineralni pramen
 </pre></div>
 
-<p>
-Import into GRASS:
+<p>Import into GRASS:
 <div class="code"><pre>
 cat points.dat | v.in.ascii out=mypoints x=2 y=3 cat=1 \
     columns='cat int, x double precision, y double precision, label varchar(20)'
 </pre></div>
 
-<p>
-The module is reading from standard input, using the default '|' (pipe) delimiter.
+<p>The module is reading from standard input, using the default '|' (pipe) delimiter.
 
 <h3>Example 4 - point format mode</h3>
 
@@ -226,8 +215,7 @@ Generate a 3D points vector map 'points3d.dat' with attributes as ASCII file:
 593549.3|4925500.7|442.6|mineralni pramen|mineral spring
 600375.7|4925235.6|342.2|kozi stezka|goat path
 </pre></div>
-<p>
-Import into GRASS:
+<p>Import into GRASS:
 <div class="code"><pre>
 #As the 'cat' option is set to 0 by default, an extra column 'cat'
 #containing the IDs will be auto-generated (no need to define that):
@@ -295,5 +283,4 @@ James Westervelt, U.S.Army Construction Engineering
 Research Laboratory<br>
 Radim Blazek, ITC-Irst, Trento, Italy
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

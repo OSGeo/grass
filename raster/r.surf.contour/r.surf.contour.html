@@ -1,6 +1,5 @@
 <h2>DESCRIPTION</h2>
 
-
 <em>r.surf.contour</em> creates a raster elevation map from a rasterized
 contour map.  Elevation values are determined using procedures similar
 to a manual methods.
@@ -10,7 +9,6 @@ might interpolate its value from those of the two nearest contour lines
 
 
 <p>
-
 <em>r.surf.contour</em> works in a similar way.  Initially, a vector map of
 the contour lines is made with the elevation of each line as an attribute.
 When the program <em><a href="v.to.rast.html">v.to.rast</a></em>
@@ -43,8 +41,7 @@ a smooth (e.g., elevation) surface generated from
 the known category values in the input raster map layer.
 </dl>
 
-<p>
-An existing MASK raster map is respected for both reading <em>input</em>
+<p>An existing MASK raster map is respected for both reading <em>input</em>
 and writing <em>output</em>.
 
 <h2>NOTES</h2>
@@ -61,8 +58,7 @@ the output map.  Run <em> <a href="r.slope.aspect.html">r.slope.aspect</a>
 </em> on <em>r.surf.contour</em> results to locate potential anomalies.
 
 
-<p>
-The running of <em>r.surf.contour</em> is very sensitive to the resolution of
+<p>The running of <em>r.surf.contour</em> is very sensitive to the resolution of
 rasterized vector map.  If multiple contour lines go through the same raster,
 slight anomalies may occur.  The speed of <em>r.surf.contour</em> is dependent
 on how far "apart" the contour lines are from each other (as measured in
@@ -86,5 +82,4 @@ time will grow exponentially with the distance between contour lines.
 
 Chuck Ehlschlaeger, U.S. Army Construction Engineering Research Laboratory
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

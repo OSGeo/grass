@@ -1,6 +1,5 @@
 <h2>DESCRIPTION</h2>
 
-
 <em>r.los</em> generates a raster output map in which the cells that are
 visible from a user-specified observer position are marked with the
 vertical angle (in degrees) required to see those cells (viewshed).
@@ -9,15 +8,13 @@ A value of 0 is directly below the specified viewing position,
 The angle to the cell containing the viewing position is undefined
 and set to 180.
 
-<p>
-To run <em>r.los</em>, the user must specify at least 
+<p>To run <em>r.los</em>, the user must specify at least 
 an <b>input</b> map name, <b>output</b> map name, and the geographic 
 <b>coordinate</b>s of the user's viewing location; 
 any remaining parameters whose values are unspecified 
 will be set to their default values (see below). 
 
-<p>
-The <b>patt_map</b> is the name of a binary (1/0) raster map layer in which
+<p>The <b>patt_map</b> is the name of a binary (1/0) raster map layer in which
 cells within the areas of interest are assigned the category value '1', and
 all other cells are assigned the category value '0' or NULL. If this parameter is
 omitted, the analysis will be performed for the whole area within a certain
@@ -26,11 +23,9 @@ distance of the viewing point inside the geographic region boundaries.
 Default: assign all cells that are within the <b>max_dist</b> and within
 the user's current geographic region boundaries a value of 1.
 
-<p>
-The <b>obs_elev</b> parameter defines the height of the observer (in
+<p>The <b>obs_elev</b> parameter defines the height of the observer (in
 meters) above the viewing point's elevation.
 <p>
-
 The <b>max_dist</b> parameter is the maximum distance (in meters) from the
 viewing point inside of which the line of sight analysis will be performed.
 The cells outside this distance range are assigned a NULL value.
@@ -42,18 +37,15 @@ For accurate results, the program must be run with the resolution of the
 geographic region set equal to the resolution of the data 
 (see <em><a href="g.region.html">g.region</a></em>).
 
-<p>
-The time to complete the calculation increases dramatically with the region size.
+<p>The time to complete the calculation increases dramatically with the region size.
 Try to keep the columns and rows under 1000.
 
-<p>
-It is advisable to use a 'pattern layer' which identifies
+<p>It is advisable to use a 'pattern layer' which identifies
 the areas of interest in which the line of sight analysis
 is required.  Such a measure will reduce the time taken by
 the program to run.
 
-<p>
-The curvature of the Earth is not taken into account for these calculations.
+<p>The curvature of the Earth is not taken into account for these calculations.
 However, for interest's sake, a handy calculation for distance to the true horizon
 is approximated by <i>d = sqrt(13*h)</i> where <i>h</i> is the height of the observer
 in meters (above sea level) and <i>d</i> is the distance to the horizon in km.
@@ -94,5 +86,4 @@ b) or fix r.viewshed in Addons
 
 Kewan Q. Khawaja, Intelligent Engineering Systems Laboratory, M.I.T.
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

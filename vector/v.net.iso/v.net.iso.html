@@ -3,8 +3,7 @@
 <em>v.net.iso</em> splits a network into bands between cost isolines 
 (distance from center). Center nodes must be opened (costs &gt;= 0). The 
 costs of center nodes are used in the calculation. 
-<p>
-Costs may be either line lengths, or attributes saved in a database 
+<p>Costs may be either line lengths, or attributes saved in a database 
 table. These attribute values are taken as costs of whole segments, not 
 as costs to traverse a length unit (e.g. meter) of the segment. 
 For example, if the speed limit is 100 km / h, the cost to traverse a 
@@ -13,15 +12,13 @@ length / speed = 10 km / (100 km/h) = 0.1 h.
 Supported are cost assignments for both arcs and nodes, 
 and also different costs for both directions of a vector line. 
 For areas, costs will be calculated along boundary lines.
-<p>
-The input vector needs to be prepared with <em>v.net operation=connect</em> 
+<p>The input vector needs to be prepared with <em>v.net operation=connect</em> 
 in order to connect points representing center nodes to the network.
 
 <h2>NOTES</h2>
 
 Nodes and arcs can be closed using cost = -1. 
-<p>
-Nodes must be on the isolines.
+<p>Nodes must be on the isolines.
 
 
 <h2>EXAMPLES</h2>
@@ -29,18 +26,13 @@ Nodes must be on the isolines.
 The map must contain at least one center (point) on the vector network 
 which can be patched into with <a href="v.net.html">v.net</a>.
 
-<p>
-Isonetwork using distance:
-<p>
-<img src="vnetiso.png" alt="v.net.iso example with distance" border="1">
+<p>Isonetwork using distance:
+<p><img src="vnetiso.png" alt="v.net.iso example with distance" border="1">
 
-<p>
-Isonetwork using time:
-<p>
-<img src="vnetisotime.png" alt="v.net.iso example with traveling time" border="1">
+<p>Isonetwork using time:
+<p><img src="vnetisotime.png" alt="v.net.iso example with traveling time" border="1">
 
-<p>
-<h4>Subdivision of a network using distance:</h4>
+<p><h4>Subdivision of a network using distance:</h4>
 
 <div class="code"><pre>
 # Spearfish

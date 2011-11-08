@@ -45,16 +45,14 @@ Earthquake points with color gradient:
 d.vect.thematic -l recent_earthquakes column=magnitude type=point
 </pre></div>
 
-<p>
-Earthquake points with different sizes:
+<p>Earthquake points with different sizes:
 
 <div class="code"><pre>
 d.vect.thematic -l recent_earthquakes column=magnitude type=point \
                 themetype=graduated_points maxsize=15
 </pre></div>
 
-<p>
-Spearfish: differences between 'elevation.10m' and 'elevation.dem':
+<p>Spearfish: differences between 'elevation.10m' and 'elevation.dem':
 
 <div class="code"><pre>
 # random sampling of elevation points:
@@ -74,8 +72,7 @@ d.mon wx0
 d.vect.thematic -l elev_sample column=diff type=point
 </pre></div>
 
-<p>
-North Carolina data set example:
+<p>North Carolina data set example:
 <div class="code"><pre>
 g.region vect=nc_state
 d.vect.thematic -l precip_30ynormals column=annual type=point

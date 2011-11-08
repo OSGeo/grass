@@ -15,7 +15,6 @@ then renamed to <em>new</em>.
 
 
 <p>
-
 Users can also simply type <em>g.rename -help</em> without
 arguments on the command line, to receive a menu of
 existing data base element types and files from which to
@@ -42,7 +41,6 @@ commonly the case with raster maps), these support files
 also are renamed.
 
 <p>
-
 If the user attempts to rename a file to itself by setting
 the <em>new</em> file name equal to the <em>old</em> file
 name (e.g., <b>g.rename rast=soils,soils</b>),
@@ -52,8 +50,7 @@ state that no rename is needed.  However, <em>g.rename</em>
 will allow the user to overwrite other existing files in
 the current mapset by making the <em>new</em> file name
 that of an already existing file.
-<p>
-For portability reasons, <em>g.rename</em> is ignoring case of
+<p>For portability reasons, <em>g.rename</em> is ignoring case of
 names. To change the case of a map name, first rename the map
 to a name which differs by more than case, then rename it to
 the intended name.

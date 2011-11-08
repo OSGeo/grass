@@ -7,8 +7,7 @@ specificed percentage of the first map.
 
 Blending the aspect map with the elevation map for a shaded map
 (North Carolina sample dataset):
-<p>
-<div class="code"><pre>
+<p><div class="code"><pre>
 g.region rast=aspect -p
 r.blend first=aspect second=elevation output_prefix=elev_shade_blend
 d.mon wx0
@@ -29,5 +28,4 @@ d.rgb blue=elev_shade_blend.b green=elev_shade_blend.g red=elev_shade_blend.r
 Unknown: probably CERL<br>
 Updated to GRASS 5.7 by Michael Barton, Arizona State University
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

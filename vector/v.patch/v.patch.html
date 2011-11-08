@@ -12,19 +12,16 @@ patched together (e.g., border lines) will have to be
 edited or removed after <em>v.patch</em> is run. Such
 editing can be done automatically using
 <em><a href="v.clean.html">v.clean</a></em>.
-<p>
-Lines may need to be
+<p>Lines may need to be
 snapped with <em><a href="v.clean.html">v.clean</a>
 tool=snap,break,rmdupl</em>.
-<p>
-Boundaries may need to be cleaned with
+<p>Boundaries may need to be cleaned with
 <em><a href="v.clean.html">v.clean</a> tool=break,rmdupl,rmsa</em>
 repeatedly until the <em>rmsa</em> tool (Remove small angles at nodes)
 no longer modifies any boundaries. If vector topology is still not
 clean, boundaries may also need to be snapped with
 <em><a href="v.clean.html">v.clean</a> tool=snap,break,rmdupl</em>.
-<p>
-When using the <em>-a</em> flag, the user has to make sure that the
+<p>When using the <em>-a</em> flag, the user has to make sure that the
 features in the different maps added to the output map do not have
 overlapping category numbers, unless identical category numbers
 reflect identical attributes, otherwise the attributes of the added
@@ -62,5 +59,4 @@ Research Laboratory
 <br>
 Radim Blazek, ITC-Irst, Trento, Italy
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

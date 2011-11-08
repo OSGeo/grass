@@ -18,13 +18,11 @@ to copy an existing vector map <em>roads</em> to a file
 called <em>rds.old</em>, the user could type:
 
 <p>
-
 <div class="code"><pre>
 g.copy rast=soils,soils.ph vect=roads,rds.old
 </pre></div>
 
 <p>
-
 Data files can also be specified by their mapsets.  For
 example, the below command copies the raster map named
 <em>soils</em> from the mapset <em>wilson</em> to a new
@@ -32,13 +30,11 @@ file called <em>soils</em> to be placed under the user's
 current mapset:
 
 <p>
-
 <div class="code"><pre>
 g.copy rast='soils@wilson',soils
 </pre></div>
 
 <p>
-
 If no mapset name is specified, <em>g.copy</em> searches
 for the named <em>from</em> map in each of the mapset
 directories listed in the user's current mapset search path
@@ -60,7 +56,6 @@ list of existing files, or hit RETURN to end the file
 listing.
 
 <p>
-
 If a file has support files (e.g., as do raster data
 files), these support files will also be copied.
 

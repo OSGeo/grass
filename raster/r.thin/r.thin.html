@@ -5,7 +5,6 @@ layer and thins non-zero cells that denote linear features
 into linear features having a single cell width.
 
 <p>
-
 <em>r.thin</em> will thin only the non-zero cells of the
 named <em>input</em> raster map layer within the current
 geographic region settings.  The cell width of the thinned
@@ -15,7 +14,6 @@ the thinned linear features will have the width of a single
 cell.
 
 <p>
-
 <em>r.thin</em> will create a new <em>output</em> raster
 data file containing the thinned linear features.
 <em>r.thin</em> assumes that linear features are encoded
@@ -29,14 +27,12 @@ with positive values on a background of 0's in the
 on the resultant raster map to create a vector 
 (<em><a href="wxGUI.Vector_Digitizing_Tool.html">wxGUI vector digitizer</a></em>) map layer.
 
-<p>
-<em>r.thin</em> may create small spurs or "dangling lines"
+<p><em>r.thin</em> may create small spurs or "dangling lines"
 during the thinning process.  These spurs may be removed
 (after creating a vector map layer) by
 <em><a href="v.clean.html">v.clean</a></em>.
 
 <p>
-
 <em>r.thin</em> creates a 0/1 output map.
 
 <h2>NOTE</h2>
@@ -51,8 +47,7 @@ definition Jang and Chin give of the thinning process is
 object while retaining any pixels whose removal would alter
 the connectivity or shorten the legs of the sceleton."
 
-<p>
-The sceleton is finally thinned when the thinning process
+<p>The sceleton is finally thinned when the thinning process
 converges; i.e., "no further pixels can be removed without
 altering the connectivity or shortening the sceleton legs"
 (p. 541).  The authors prove that the thinning process
@@ -77,8 +72,7 @@ converge in &lt;= iterations.
 
 Olga Waupotitsch, U.S.Army Construction Engineering Research Laboratory
 
-<p>
-The code for finding the bounding box as well as input/output code
+<p>The code for finding the bounding box as well as input/output code
 was written by Mike Baba (DBA Systems, 1990) and Jean Ezell (USACERL, 1988).
 
 <p><i>Last changed: $Date$</i>

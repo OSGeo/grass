@@ -4,15 +4,13 @@
 outputs the category value(s) associated with user-specified location(s) 
 in user-specified vector map layer(s). 
 
-<p>
-The program activates the mouse, and expects the user to indicate the 
+<p>The program activates the mouse, and expects the user to indicate the 
 location(s) to be queried by depressing a mouse button over desired location(s) 
 within the current geographic region in the active display frame on the 
 graphic monitor. Query results from map(s) are by default displayed in a new 
 monitor, where label values can be added or changed. Using parameter <b>-x</b> 
 informations will be displayed as plain text to terminal window.
-<p>
-This module always reports standard acres, even when the location uses
+<p>This module always reports standard acres, even when the location uses
 US Survey feet as the map unit.
 
 <h2>EXAMPLE</h2>
@@ -23,13 +21,9 @@ active display frame, it is helpful to have a map displayed there for
 reference. 
 
 <p>
-
-<b>d.vect map=</b><em>roads</em><p>
-Displays the <em>roads</em> vector map layer on the graphics monitor. 
+<b>d.vect map=</b><em>roads</em><p>Displays the <em>roads</em> vector map layer on the graphics monitor. 
 <p>
-
-<b>d.what.vect map=</b><em>roads,geology</em><p>
-After typing this, the user moves the mouse to a desired location 
+<b>d.what.vect map=</b><em>roads,geology</em><p>After typing this, the user moves the mouse to a desired location 
 on the displayed <em>roads</em> map layer, and presses the left mouse 
 button to query the category value of the <em>roads</em> and the
 <em>geology</em> vector map at this location. 
@@ -38,7 +32,6 @@ The program then outputs the category value of a line type corresponding
 to this user-selected map location, for the vector map queried by the user. 
 
 <p>
-
 The query may be repeated as often as desired using the left mouse button. The 
 middle mouse button toggles the flash color.
 The right button on the mouse is used to quit the <em>d.what.vect</em> session. 
@@ -61,5 +54,4 @@ Central Washington University<br>
 Upgrades by Dennis Finch, National Park Service
  and Radim Blazek, ITC-Irst, Trento, Italy
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

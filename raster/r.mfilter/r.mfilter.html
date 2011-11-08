@@ -1,6 +1,5 @@
 <h2>DESCRIPTION</h2>
 
-
 <em>r.mfilter.fp</em> filters the raster <em>input</em> to produce the
 raster <em>output</em> according to the matrix <em>filter</em> designed
 by the user (see <em>FILTERS</em> below).
@@ -15,13 +14,11 @@ intermediate raster map layer -- only null category values which result from
 the first filter will be changed.  In most cases this will NOT be the
 desired result. Hence -z should be used only with single step filters.
 <p>
-
 The <b>filter</b> parameter defines the name of an existing, user-created
 UNIX ASCII file whose contents is a matrix defining the way in which the
 <em>input</em> file will be filtered. The format of this file is described
 below, under FILTERS.
 <p>
-
 The <b>repeat</b> parameter defines the number of times the <em>filter</em>
 is to be applied to the <em>input</em> data.
 
@@ -68,20 +65,17 @@ If not specified, the default is S.
 
 
 <p>
-
 Sequential filtering happens in place.  As the filter is applied to the
 raster map layer, the category values that were changed in neighboring
 cells affect the resulting category value of the current
 cell being filtered.
 
 
-<p>
-Parallel filtering happens in such a way that the original raster
+<p>Parallel filtering happens in such a way that the original raster
 map layer category values are used to produce the new category value.
 
 
-<p>
-More than one filter may be specified in the filter file.
+<p>More than one filter may be specified in the filter file.
 The additional filter(s) are described just like the first.
 For example, the following describes two filters:
 
@@ -123,7 +117,6 @@ values where the corresponding input cell is non-null.)
 
 
 <p>
-
 If more than one filter step is specified, either because the
 repeat value was greater than one or because the filter file
 contained more than one matrix, these steps are performed
@@ -153,5 +146,4 @@ Glynn Clements.
 Based upon r.mfilter, by Michael Shapiro,
 U.S.Army Construction Engineering Research Laboratory
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

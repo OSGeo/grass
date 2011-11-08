@@ -10,26 +10,22 @@ map=vector_map</tt>. There are a large variety of optional parameters
 which allow the user to specify vector type, colors, data fields, SQL
 queries, label size and justification, etc.
 
-<p>
-By default <em>d.vect</em> fills in holes in polygons (islands). If
+<p>By default <em>d.vect</em> fills in holes in polygons (islands). If
 you only want to show active areas limit the features with, e.g.,
 <div class="code"><pre>
 d.vect map=vector_map cats=1-999999
 </pre></div>
 
-<p>
-In order to display attributes in the map, <tt>display=attr</tt> must be
+<p>In order to display attributes in the map, <tt>display=attr</tt> must be
 specified in addition to the column name (<b>attrcolumn</b> parameter).
 
-<p>
-Colors may be specified
+<p>Colors may be specified
 by <em><a href="v.colors.html">v.colors</a></em> as a color table or
 in an attribute table column named 'GRASSRGB' (which is
 a <tt>varchar(11)</tt> column containing <tt>RRR:GGG:BBB</tt> values),
 see the flag <b>-a</b>.
 
-<p>
-A table for a vector map might look like this:
+<p>A table for a vector map might look like this:
 
 <div class="code"><pre>
 db.select sql="select * from testisola"
@@ -42,29 +38,24 @@ cat|label|GRASSRGB
 190|TENNA|123:45:67
 </pre></div>
 
-<p>
-To add the GRASSRGB color column, use <em><a href="v.db.addcolumn.html">v.db.addcolumn</a></em>:
+<p>To add the GRASSRGB color column, use <em><a href="v.db.addcolumn.html">v.db.addcolumn</a></em>:
 <div class="code"><pre>
 v.db.addcolumn map=testisola columns="GRASSRGB varchar(11)"
 </pre></div>
 
-<p>
-To add/change a color, use <em><a href="v.db.update.html">v.db.update</a></em>:
+<p>To add/change a color, use <em><a href="v.db.update.html">v.db.update</a></em>:
 <div class="code"><pre>
 v.db.update map=testisola column=GRASSRGB value="123:45:237" where="cat=139"
 </pre></div>
 
-<p>
-A much simpler method of color coding is by using the <b>-c</b> flag
+<p>A much simpler method of color coding is by using the <b>-c</b> flag
 which displays vector elements of like category number with a random
 color.
 
-<p>
-This module can use FreeType/TrueType fonts if they have already been selected with
+<p>This module can use FreeType/TrueType fonts if they have already been selected with
 <em><a href="d.font.html">d.font</a></em>.
 
-<p>
-Parameter <b>width</b> is set by default to '0'. XDRIVER specifies the
+<p>Parameter <b>width</b> is set by default to '0'. XDRIVER specifies the
 precise behaviour for non-zero line width, but drivers have some
 freedom as to how zero-width lines are handled, so they can use the
 hardware's &quot;thin line&quot; drawing primitive, if it has one. A
@@ -87,8 +78,7 @@ d.vect -c map=soils display=attr attrcolumn=label
 d.vect -c map=soils where="label='VBF'" display=shape,attr attrcolumn=label
 </pre></div>
 
-<p>
-3D points, 3D lines and 3D polygons colorized according to z height:
+<p>3D points, 3D lines and 3D polygons colorized according to z height:
 <div class="code"><pre>
 g.region rast=elevation.10m
 r.random input=elevation.10m n=5000 vector=random3d -d
@@ -127,5 +117,4 @@ Radim Blazek, ITC-Irst, Trento, Italy<br>
 Support for color tables by Martin Landa, Czech Technical University in Prague (8/2011)<br>
 and many other GRASS developers
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

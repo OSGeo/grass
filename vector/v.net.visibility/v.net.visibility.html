@@ -15,8 +15,7 @@ the visibility graph and from it compute the shortest path using
 <b>IMPORTANT : the algorithm doesn't work well with intersecting lines
 (that includes overlapping)</b>
 
-<p>
-If you compute a shortest path after computing the visibility graph you
+<p>If you compute a shortest path after computing the visibility graph you
 will notice that this path might go through a vertix of a line. If this
 is not wanted you might to run the map through <em>v.buffer</em> first
 whith a small value. Example:
@@ -25,8 +24,7 @@ whith a small value. Example:
 v.buffer input=map output=bufferedmap buffer=1 type=point,line,area,boundary
 </pre></div>
 
-<p>
-The first argument is the input map. It supports lines, boudaries (so areas)
+<p>The first argument is the input map. It supports lines, boudaries (so areas)
 and points. For the algorithm to work lines and boundaries must not be
 intersecting (that includes overlapping).
 The result map containing the visibility graph is given in the output map.

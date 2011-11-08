@@ -24,15 +24,13 @@ In this example, the full path name of the user's current location
 user's current mapset (i.e., <tt>$MAPSET</tt>)
 is <tt>/opt/grassdata/spearfish/PERMANENT</tt>.
 
-<p>
-If the user specifies a <em>variable_name</em> on the command line
+<p>If the user specifies a <em>variable_name</em> on the command line
 (e.g., <tt>g.gisenv MAPSET</tt>), only the value for that particular
 GRASS variable is output to standard output. Possible variable names
 depend on the user's system, see <em><a href="variables.html">variables
 list</a></em> for details.
 
-<p>
-While other variables may be associated with each GRASS session (e.g.,
+<p>While other variables may be associated with each GRASS session (e.g.,
 GRASS_GUI, GIS_LOCK, and other variables), those stated below
 are essential.
 
@@ -84,8 +82,7 @@ single GRASS session, the user only has <em>write</em> access to data
 stored under the <em>current mapset</em> (specified by the
 variable <tt>$MAPSET</tt>).
 
-<p>
-Each &quot;mapset&quot; stores GRASS data base elements (i.e., the
+<p>Each &quot;mapset&quot; stores GRASS data base elements (i.e., the
 directories in which GRASS data files are stored).  Any maps created
 or modified by the user in the current GRASS session will be stored
 here. The <tt>$MAPSET</tt> directory <tt>PERMANENT</tt> is generally
@@ -104,8 +101,7 @@ session, the user may only <em>modify</em> the data in the
 <tt>$MAPSET</tt>), but may <em>use</em> data available under other
 mapsets under the same <tt>$LOCATION_NAME</tt>.
 
-<p>
-All of these names must be legal names on the user's current system.
+<p>All of these names must be legal names on the user's current system.
 <!--For UNIX users, names less than 14 characters and containing no
 non-printing or space codes are permissible.  Examples of permissible
 names include: <em>one</em>, <em>mymap</em>, <em>VeGe_map</em>, and
@@ -169,5 +165,4 @@ g.gisenv set="DEBUG=0"
 Michael Shapiro,
 U.S.Army Construction Engineering Research Laboratory
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

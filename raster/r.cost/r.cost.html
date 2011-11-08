@@ -23,8 +23,7 @@ represent the surface cost. The <b>output</b> <em>name</em> is the name of the
 resultant raster map of cumulative cost. The <b>outdir</b> <em>name</em> is the 
 name of the resultant raster map of movement directions (see <a href="#move">Movement Direction</a>).
 
-<p>
-<em>r.cost</em> can be run with three different methods of identifying the
+<p><em>r.cost</em> can be run with three different methods of identifying the
 starting point(s). One or more points (geographic coordinate pairs) can be
 provided as specified <b>coordinate</b>s on the command line, from a vector
 points file, or from a raster map.
@@ -35,8 +34,7 @@ point from which the transportation cost should be figured. As many points as
 desired can be entered by the user. These starting points can also be read
 from a vector points file through the <b>start_points</b> option or from a
 raster map through the <b>start_rast</b> option.
-<p>
-<em>r.cost</em> will stop cumulating costs when either <b>max_cost</b> is reached,
+<p><em>r.cost</em> will stop cumulating costs when either <b>max_cost</b> is reached,
 or one of the stop points given with <b>stop_coordinates</b> is reached.
 Alternatively, the stop points can be read from a vector points file with the
 <b>stop_points</b> option. During execution, once the cumulative cost to all 
@@ -46,8 +44,7 @@ Both sites read from a vector points file and those given on the command line
 will be processed.
 
 
-<p>
-The null cells in the <b>input</b> map can be assigned a (positive floating
+<p>The null cells in the <b>input</b> map can be assigned a (positive floating
 point) cost with the <b>null_cost</b> option.
 <br>
 When input map null cells are given a cost with the <b>null_cost</b>
@@ -55,12 +52,10 @@ option, the corresponding cells in the output map are no longer null
 cells. By using the <b>-n</b> flag, the null cells of the input map are
 retained as null cells in the output map.
 
-<p>
-As <em>r.cost</em> can run for a very long time, it can be useful to 
+<p>As <em>r.cost</em> can run for a very long time, it can be useful to 
 use the <b>-v</b> verbose flag to track progress.
 
-<p>
-The Knight's move (<b>-k</b> flag) may be used to improve the accuracy of
+<p>The Knight's move (<b>-k</b> flag) may be used to improve the accuracy of
 the output. In the diagram below, the center location (<tt>O</tt>) represents a
 grid cell from which cumulative distances are calculated. Those
 neighbors marked with an <tt>X</tt> are always considered for cumulative cost
@@ -98,8 +93,7 @@ Using the knight's move grows it outwards in 16 directions.</i>
 
 <p>By default null cells in the input raster map are excluded from
 the algorithm, and thus retained in the output map.
-<p>
-If one wants <b>r.cost</b> to transparently cross any region of null cells,
+<p>If one wants <b>r.cost</b> to transparently cross any region of null cells,
 the <b>null_cost</b>=<tt>0.0</tt> option should be used. Then null cells just
 propagate the adjacent costs. These cells can be retained as null cells in the
 output map by using the <b>-n</b> flag.
@@ -135,14 +129,12 @@ on the list and the originating cell is finalized. This process
 of selecting the lowest cumulative cost cell, computing costs to the
 neighbors, putting the neighbors on the list and removing the
 originating cell from the list continues until the list is empty.
-<p>
-The most time consuming aspect of this algorithm is the management of
+<p>The most time consuming aspect of this algorithm is the management of
 the list of cells for which cumulative costs have been at least
 initially computed. <em>r.cost</em> uses a binary tree with an linked list
 at each node in the tree for efficiently holding cells with identical
 cumulative costs.
-<p>
-<em>r.cost</em>, like most all GRASS raster programs, is also made to be run on
+<p><em>r.cost</em>, like most all GRASS raster programs, is also made to be run on
 maps larger that can fit in available computer memory. As the
 algorithm works through the dynamic list of cells it can move almost
 randomly around the entire area. <em>r.cost</em> divides the entire area
@@ -193,8 +185,7 @@ Output (using -k):                Output (not using -k):
  . . . . . . . . . . . . . . .     . . . . . . . . . . . . . . .
 </pre></div>
 
-<p>
-<!-- ??? are "starting" and "ending" swapped in the following text ??? -->
+<p><!-- ??? are "starting" and "ending" swapped in the following text ??? -->
 The user-provided ending location in the above example is the boxed <b>3</b>
 in the above input map. The costs in the output map represent the total
 cost of moving from each box (&quot;cell&quot;) to one or more (here,
@@ -233,8 +224,7 @@ used. The calculation is done with <em>r.cost</em> as follows
 
 <a name="move"></a>
 <h2>Movement Direction</h2>
-<p>
-The movement direction surface is created to record the sequence of
+<p>The movement direction surface is created to record the sequence of
 movements that created the cost accumulation surface. Without it 
 <em>r.drain</em> would not correctly create a path from an end point 
 back to the start point. The direction shown in each cell points <b>away</b> 
@@ -246,8 +236,7 @@ GRASS standard directions:<div class="code"><pre>
 202.5  225  270  315  337.5
        247.5     292.5
 </pre></div>
-<p>
-Once <em>r.cost</em> computes the cumulative cost map, <em>r.drain</em>
+<p>Once <em>r.cost</em> computes the cumulative cost map, <em>r.drain</em>
 can be used to find the minimum cost path. Make sure to use the <b>-d</b> flag
 and the movement direction raster map when running r.drain to ensure
 the path is computed according to the proper movement directions.

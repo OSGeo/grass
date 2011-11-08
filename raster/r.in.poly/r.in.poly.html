@@ -1,19 +1,16 @@
 <h2>DESCRIPTION</h2>
 
-
 <em>r.in.poly</em> allows the creation of GRASS binary
 raster maps from ASCII files in the current directory
 containing polygon, linear, and point features.
 
 <p>
-
 The <b>input</b> file is an ASCII text file containing the
 polygon, linear, and point feature definitions.
 The format of this file is described in the
 <a href="#format.html"><i>INPUT FORMAT</i></a> section below.
 
 <p>
-
 The number of raster <b>rows</b> to hold in memory is per default 4096.
 This parameter allows users with less memory (or more) on their
 system to control how much memory <em>r.in.poly</em> uses.
@@ -23,19 +20,16 @@ Usually the default value is fine.
 <h2>NOTES</h2>
 
 <p>
-
 The data will be imported using the current region settings to set the
 new raster map's bounds and resolution. Any features falling outside
 the current region will be cropped. The region settings are contolled
 with the <em>g.region</em> module.
 
 <p>
-
 The format is a simplified version of the standard GRASS vector ASCII
 format used by <em>v.in.ascii</em>.
 
 <p>
-
 Polygons are filled, i.e. they define an area.
 
 <A NAME="format.html"></a>
@@ -113,5 +107,4 @@ A
 
 Michael Shapiro, U.S.Army Construction Engineering Research Laboratory
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

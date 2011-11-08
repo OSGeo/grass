@@ -12,15 +12,13 @@ tiles, reprojects it, imports it, and patches it back together.
 By default data is downloaded to <tt>$GISDBASE/wms_download</tt>. This can be changed
 by setting the <b>folder</b> option when using <em>r.in.wms</em>.
 
-<p>
-To understand the data you are getting it is necessary to look at the
+<p>To understand the data you are getting it is necessary to look at the
 capabilities of the WMS server. This should be available via a capabilities
 request. This is an
 <a href="http://wms.jpl.nasa.gov/wms.cgi?request=GetCapabilities">example
 capabilities request to NASA's OnEarth server</a>.
 
-<p>
-<!--
+<p><!--
 Some brain-dead servers will only talk to certain web browsers. You can
 fool these by adding <tt>- -user-agent=MSIE5.5</tt> to <b>wgetoptions</b>
 or for curl adding <tt>-A "MSIE5.5"</tt> to <b>curloptions</b>.
@@ -136,5 +134,4 @@ region.
 Soeren Gebbert, Jachym Cepicky, and Cedric Shock<br>
 Updated for GRASS 7 by Martin Landa, CTU in Prague, Czech Republic (05/2009)
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

@@ -1,11 +1,11 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<HTML>
-<HEAD>
- <TITLE>HTML driver</TITLE>
- <META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<html>
+<head>
+ <title>HTML driver</title>
+ <meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
  <link rel="stylesheet" href="grassdocs.css" type="text/css">
-</HEAD>
-<BODY bgColor=white>
+</head>
+<body bgColor=white>
 
 <img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
 
@@ -21,21 +21,18 @@ provide unique URL targets for different portions of an image. The
 HTML driver can create both client-side image maps embedded into HTML
 files, or server-side image maps used by web server software.
 
-<p>
-Polygons can at most have 100 vertices (this limit imposed by HTML
+<p>Polygons can at most have 100 vertices (this limit imposed by HTML
 image map formats, see <b>GRASS_HTMLMAXPOINTS</b> below.) The driver
 will attempt to trim polygons that have more that 100 vertices by
 removing vertices with the least amount of angle to the next
 vertice. Also, any polygon that is entirely bounded by another polygon
 will be discarded.
 
-<p>
-Text written to the driver before polygons are used as the HREF tag
+<p>Text written to the driver before polygons are used as the HREF tag
 for all subsequent polygons written. All polygons that exist in a
 vector map will have the same HREF tag.
 
-<p>
-The only GRASS display commands that should be used with this driver
+<p>The only GRASS display commands that should be used with this driver
 are:
 <ul>
   <li><em><a href="d.text.html">d.text</a></em> - pass href
@@ -181,8 +178,7 @@ page, see
   </li>
 </ul>
 
-<p>
-If you create an HTML file with two or more images and image maps, you
+<p>If you create an HTML file with two or more images and image maps, you
 will need to edit the map names. The HTML driver creates its map
 with the name
 <tt>map</tt>. A small sed script can easily change the map name:
@@ -206,5 +202,4 @@ with the name
   <a href="d.redraw.html">d.redraw</a>
 </em>
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

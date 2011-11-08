@@ -21,8 +21,7 @@ to add the relevant lines to the table.
 
 The supported types of columns depend on the database backend. However, all
 backends should support VARCHAR, INT, DOUBLE PRECISION and DATE.
-<p>
-The existing database connection(s) can be verified with <em>v.db.connect</em>.
+<p>The existing database connection(s) can be verified with <em>v.db.connect</em>.
 
 <h2>EXAMPLE</h2>
 
@@ -34,8 +33,7 @@ v.db.connect -p myroads
 v.info -c myroads
 </pre></div>
 
-<p>
-Adding a new attribute table with two columns to layer 2:<br>
+<p>Adding a new attribute table with two columns to layer 2:<br>
 <div class="code"><pre>
 g.copy vect=roadsmajor,myroads
 v.db.addtable myroads columns="slope double precision, roadname varchar(15)" layer=2
@@ -63,5 +61,4 @@ v.info -c myroads layer=2
 
 Markus Neteler
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

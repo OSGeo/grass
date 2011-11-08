@@ -10,8 +10,7 @@ specified layer.
 
 The supported types of columns depend on the database backend. However, all
 backends should support VARCHAR, INT, DOUBLE PRECISION and DATE.
-<p>
-The existing database connection(s) can be verified with <em>v.db.connect</em>.
+<p>The existing database connection(s) can be verified with <em>v.db.connect</em>.
 
 <h2>EXAMPLES</h2>
 
@@ -22,8 +21,7 @@ v.db.addcolumn myroads columns="slope double precision"
 v.info -c myroads
 </pre></div>
 
-<p>
-Adding two columns:<br>
+<p>Adding two columns:<br>
 <div class="code"><pre>
 g.copy vect=roadsmajor,myroads
 v.db.addcolumn myroads columns="slope double precision,myname varchar(15)"

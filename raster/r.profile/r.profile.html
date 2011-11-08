@@ -9,22 +9,18 @@ argument or selected interactively from the GRASS monitor by setting the
 <b>-i</b> flag. The profile resolution, or distance between profile
 points, is obtained from the current region resolution, or can be manually
 set with the <b>res</b> argument.
-<p>
-The <b>-i</b> flag allows the user for selecting the profile from the GRASS
+<p>The <b>-i</b> flag allows the user for selecting the profile from the GRASS
 monitor by clicking the left mouse button along the profile; clicking the
 right mouse button ends the profile.
-<p>
-The <b>profile</b> parameter can be set to comma separated geographic
+<p>The <b>profile</b> parameter can be set to comma separated geographic
 coordinates for profile line endpoints. The interactive flag (<b>-i</b>)
 overrides this option. Alternatively the coordinate pairs can be piped
 from stdin, one comma separated pair per line.
-<p>
-The <b>res</b> parameter sets the distance between each profile point
+<p>The <b>res</b> parameter sets the distance between each profile point
 (resolution). The resolution must be provided in GRASS database units (i.e.
 decimal degrees for Lat Long databases and meters for UTM). By default
 <em>r.profile</em> uses the resolution of the current GRASS region.
-<p>
-The <b>null</b> parameter can optionally be set to change the character
+<p>The <b>null</b> parameter can optionally be set to change the character
 string representing null values.
 
 <h2>OUTPUT FORMAT</h2>
@@ -40,8 +36,7 @@ r.profile -ig input=elev.rast | v.in.ascii output=elev.profile fs=space
 </pre></div>
 
 The 2 column output is compatible with most plotting programs.
-<p>
-The optional RGB output provides the associated GRASS colour value for
+<p>The optional RGB output provides the associated GRASS colour value for
 each profile point.
 
 <h2>EXAMPLES</h2>
@@ -71,8 +66,7 @@ right mouse button to end the profile.
 
 <b>Example 3</b><br>
 Extract a profile with coordinates provided from standard input or an external file:
-<p>
-First create a points file with <em><a href="d.where.html">d.where</a></em>
+<p>First create a points file with <em><a href="d.where.html">d.where</a></em>
 
 <div class="code"><pre>
 d.where > saved.points
@@ -86,11 +80,9 @@ cat saved.points | r.profile input=elev.rast output=profile.pts
 
 The advantage of this method is that the same profile points can be piped into
 different GRASS rasters by changing the input parameter. 
-<p>
-With this method the coordinates must be given as space or tab separated easting
+<p>With this method the coordinates must be given as space or tab separated easting
 and northing. Labels after these values are ignored.
-<p>
-Another example using d.where:
+<p>Another example using d.where:
 
 <div class="code"><pre>
 d.where | r.profile elevation.dem
@@ -122,8 +114,7 @@ The profile resolution is measured exactly from the supplied end or
 exact multiple of the profile resolution and will therefore not always match
 the end point coordinates entered for the segmanet.
 
-<p>
-To extract the numbers in scripts, following parameters can be used:
+<p>To extract the numbers in scripts, following parameters can be used:
 <div class="code"><pre>
 r.profile input=dgm12.5 profile=3570631,5763556 2>/dev/null
 </pre></div>
@@ -142,5 +133,4 @@ This filters out the everything except the numbers.
 <h2>AUTHOR</h2>
 <a href="mailto:bcovill@tekmap.ns.ca">Bob Covill</a>
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>
