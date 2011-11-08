@@ -572,7 +572,7 @@ class abstract_space_time_dataset(abstract_dataset):
             else:
                 next = start + gran
 
-            where += "(start_time >= '%s' and end_time <= '%s') OR " % (start, end)
+            where = "(start_time <= '%s' and end_time >= '%s')" % (start, next)
 
             rows = self.get_registered_maps("id", where, "start_time", dbif)
 
@@ -592,7 +592,7 @@ class abstract_space_time_dataset(abstract_dataset):
 
                     maplist.append(copy.copy(map))
 
-            obj_list.append(copy.copy(maplist))
+            	obj_list.append(copy.copy(maplist))
 
             start = next
 
