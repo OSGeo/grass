@@ -7,11 +7,13 @@ SUBDIRS = \
 	t.list \
 	t.info \
 	t.remove \
+	t.sample \
 	t.time.abs \
 	t.time.rel \
 	tr.aggregate \
 	tr.aggregate.ds \
 	tr.register \
+	tr.to.rast3 \
 	tr.list \
 	tv.list \
 	tr3.list \
