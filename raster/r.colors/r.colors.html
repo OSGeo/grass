@@ -4,21 +4,17 @@
 table for a raster map. The raster map (specified on the command line
 by <b>map</b>) must exist in the user's current mapset search path.
 
-<p>
-The <b>rast</b> option allows user to specify a raster map <i>name</i>
+<p>The <b>rast</b> option allows user to specify a raster map <i>name</i>
 from which to copy the color map.
 
-<p>
-The <b>volume</b> option allows user to specify a volume (3d raster)
+<p>The <b>volume</b> option allows user to specify a volume (3d raster)
 map <i>name</i> from which to copy the color map.
 
-<p>
-All color tables are stored in <tt>$GISBASE/etc/colors/</tt>. Further
+<p>All color tables are stored in <tt>$GISBASE/etc/colors/</tt>. Further
 user-defined color tables can also be stored in this directory for
 access from the <em>color</em> parameter.
 
-<p>
-The <b>-e</b> flag equalizes the original raster's color table. It can
+<p>The <b>-e</b> flag equalizes the original raster's color table. It can
 preclude the need for <em>grey.eq</em> rule, when used as
 <b>-e color=</b><em>grey</em>. Note however, that this will not yield
 a color table identical to <em>color=grey.eq</em>,
@@ -29,8 +25,7 @@ is effectively scaling the fraction by 255. Different algorithms are
 used. <b>-e</b> is designed to work with any color table, both the
 floating point and the integer raster maps.
 
-<p>
-The <b>-g</b> flag divides the raster's grey value range into 100
+<p>The <b>-g</b> flag divides the raster's grey value range into 100
 logarithmically equal steps (where &quot;step&quot; is a rule with the
 same grey level for the start and end points). It can preclude the
 need for <em>grey.log</em> rule, when used as <b>-g
@@ -43,26 +38,22 @@ table. Logarithmic scaling doesn't work on negative values. In the
 case when the value range includes zero, there's no realistic
 solution.
 
-<p>
-The <b>-e</b> and <b>-g</b> flags are not mutually exclusive.
+<p>The <b>-e</b> and <b>-g</b> flags are not mutually exclusive.
 
-<p>
-If the user specifies the <b>-w</b> flag, the current color table file for
+<p>If the user specifies the <b>-w</b> flag, the current color table file for
 the input map will not be overwritten. This means that the color table is
 created only if the <i>map</i> does not already have a color table. If this
 option is not specified, the color table will be created if one does not
 exist, or modified if it does.
 
-<p>
-<p>Color table types <i>aspect, grey, grey.eq</i> (histogram-equalized
+<p><p>Color table types <i>aspect, grey, grey.eq</i> (histogram-equalized
 grey scale), <i>byg</i> (blue-yellow-green), <i>byr</i>
 (blue-yellow-red), <i>gyr</i> (green-yellow-red), <i>rainbow, ramp,
 ryg</i> (red-yellow-green), <i>random</i>, and <i>wave</i> are
 pre-defined color tables that <em>r.colors</em> knows how to create
 without any further input.
 
-<p>
-In general, tables which associate colors with percentages (aspect, bcyr, byg,
+<p>In general, tables which associate colors with percentages (aspect, bcyr, byg,
 byr, elevation, grey, gyr, rainbow, ramp, ryb, ryg and wave) can be applied to
 any data, while those which use absolute values (aspectcolr, curvature, etopo2,
 evi, ndvi, population, slope, srtm, and terrain) only make sense for data with
@@ -83,13 +74,11 @@ For example the <em>slope</em> rule is defined as:
 90 0:0:0
 </pre></div>
 
-<p>
-This is designed for the slope map generated
+<p>This is designed for the slope map generated
 by <em><a href="r.slope.aspect.html">r.slope.aspect</a></em>, where the
 value is a slope angle between 0 and 90 degrees.
 
-<p>
-Similarly, the <em>aspectcolr</em> rule:
+<p>Similarly, the <em>aspectcolr</em> rule:
 
 <div class="code"><pre>
 0 white
@@ -100,31 +89,26 @@ Similarly, the <em>aspectcolr</em> rule:
 360 yellow
 </pre></div>
 
-<p>
-is designed for the aspect maps produced
+<p>is designed for the aspect maps produced
 by <em><a href="r.slope.aspect.html">r.slope.aspect</a></em>, where the
 value is a heading between 0 and 360 degrees.
 
-<p>
-The <b>rules</b> color table type will cause <i>r.colors</i> to read
+<p>The <b>rules</b> color table type will cause <i>r.colors</i> to read
 color table specifications from standard input (stdin) and will build
 the color table accordingly.
 
-<p>
-Using color table type <b>rules</b>, there are <!--three-->two ways to
+<p>Using color table type <b>rules</b>, there are <!--three-->two ways to
 build a color table: <!--by color list,--> by category values and by
 &quot;percent&quot; values.
 
 <!-- HB: this causes an error in current code, maybe easy to enable functionality from old code??
-<p>
-Building a customized color table by color list is the simplest of the three
+<p>Building a customized color table by color list is the simplest of the three
 rules methods: just list the colors you wish to appear in the color table in the
 order that you wish them to appear. Use the standard GRASS color names: white,
 black, red, green, blue, yellow, magenta, cyan, aqua, grey, gray, orange, brown,
 purple, violet, and indigo.
 
-<p>
-For example, to create a color table for the raster map layer <i>elevation</i>
+<p>For example, to create a color table for the raster map layer <i>elevation</i>
 that assigns greens to low map category values, browns to the next larger
 map category values, and yellows to the still larger map category values,
 one would type:
@@ -137,8 +121,7 @@ yellow
 end
 </pre></div>
 -->
-<p>
-To build a color table by category values' indices, the user should
+<p>To build a color table by category values' indices, the user should
 determine the range of category values in the raster map with which
 the color table will be used. Specific category values will then be
 associated with specific colors. Note that a color does not have to be
@@ -155,14 +138,12 @@ category_value color_name
 end
 </pre></div>
 
-<p>
-Each category value must be valid for the raster map, category values
+<p>Each category value must be valid for the raster map, category values
 must be in ascending order and only use standard GRASS color names
 (aqua, black, blue, brown, cyan, gray, green, grey, indigo, magenta,
 orange, purple, red, violet, white, yellow).
 
-<p>
-Colors can also be specified by color numbers each in the range
+<p>Colors can also be specified by color numbers each in the range
 0-255. The format of a category value color table specification using
 color numbers instead of color names is as follows:
 
@@ -175,8 +156,7 @@ category_value red_number:green_number:blue_number
 end
 </pre></div>
 
-<p>
-Specifying a color table by &quot;percent&quot; values allows one to
+<p>Specifying a color table by &quot;percent&quot; values allows one to
 treat a color table as if it were numbered from 0 to 100. The format
 of a &quot;percent&quot; value color table specification is the same
 as for a category value color specification, except that the category
@@ -192,8 +172,7 @@ percent_value% color_name
 end
 </pre></div>
 
-<p>
-Using &quot;percent&quot; value color table specification rules,
+<p>Using &quot;percent&quot; value color table specification rules,
 colors can also be specified by color numbers each in the range
 0-255. The format of a percent value color table specification using
 color numbers instead of color names is as follows:
@@ -207,8 +186,7 @@ percent_value% red_number:green_number:blue_number
 end
 </pre></div>
 
-<p>
-Note that you can also mix these <!--three-->two methods of color
+<p>Note that you can also mix these <!--three-->two methods of color
 table specification; for example:
 
 <div class="code"><pre>
@@ -221,8 +199,7 @@ brown-->
 end
 </pre></div>
 
-<p>
-To set the NULL (no data) color, use the "nv" parameter:
+<p>To set the NULL (no data) color, use the "nv" parameter:
 
 <div class="code"><pre>
 0 black
@@ -231,8 +208,7 @@ nv white
 end
 </pre></div>
 
-<p>
-To set the color to used for undefined values (beyond the range of the
+<p>To set the color to used for undefined values (beyond the range of the
 color rules) use the "default" parameter:
 
 <div class="code"><pre>
@@ -258,8 +234,7 @@ name <i>rules.file</i>):
 end
 </pre></div>
 
-<p>
-The color table can then by assigned to map <i>threecats</i> by the
+<p>The color table can then by assigned to map <i>threecats</i> by the
 following GRASS commands (two ways are available):
 
 <div class="code"><pre>
@@ -270,8 +245,7 @@ cat rules.file | r.colors map=threecats rules=-
 r.colors map=threecats rules=rules.file
 </pre></div>
 
-<p>
-To create a natural looking lookup table (LUT) for true map layer
+<p>To create a natural looking lookup table (LUT) for true map layer
 <i>elevation</i>, use the following rules specification file. It will
 assign light green shades to the lower elevations (first 20% of the
 LUT), and then darker greens (next 15%, and next 20%) and light browns
@@ -289,8 +263,7 @@ of LUT).
 100% 255:255:100
 </pre></div>
 
-<p>
-To invert the current rules: 
+<p>To invert the current rules: 
 <div class="code"><pre>
 r.colors map=current_raster -n rast=current_raster
 </pre></div>
@@ -311,13 +284,11 @@ r.colors map=current_raster -n rast=current_raster
   <a href="r3.colors.out.html">r3.colors.out</a>
 </em>
 
-<p>
-See also wiki
+<p>See also wiki
 page <a href="http://grass.osgeo.org/wiki/Color_tables">Color
 tables</a> (from GRASS User Wiki)
 
-<p>
-<a href="http://colorbrewer.org">ColorBrewer</a> is an online tool designed to
+<p><a href="http://colorbrewer.org">ColorBrewer</a> is an online tool designed to
 help people select good color schemes for maps and other graphics.
 
 
@@ -325,5 +296,4 @@ help people select good color schemes for maps and other graphics.
 Michael Shapiro and David Johnson<br>
 Support for 3D rasters by Soeren Gebbert
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

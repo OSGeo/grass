@@ -7,7 +7,6 @@ saturation values from two or three user-specified raster
 map layers.
 
 <p>
-
 The human brain automatically interprets the vast amount of
 visual information available according to basic rules. 
 Color, or <em>hue</em>, is used to categorize objects. 
@@ -31,7 +30,6 @@ be displayed in the active display frame on the graphics
 monitor.
 
 <p>
-
 Alternately, the user can run the program interactively by
 typing <b>d.his</b> without naming parameter values on the
 command line.  In this case, the program will prompt the
@@ -39,7 +37,6 @@ user for parameter values using the standard GRASS
 GUI interface.
 
 <p>
-
 While any raster map layer can be used to represent the hue
 information, map layers with a few very distinct colors
 work best.  Only raster map layers representing
@@ -48,7 +45,6 @@ intensities, or amounts can suitably be used to provide
 intensity and saturation information.
 
 <p>
-
 For example, a visually pleasing image can be
 made by using a watershed map for the <em>hue</em> factor,
 an aspect map for the <em>intensity</em> factor, and an
@@ -58,8 +54,7 @@ Ideally, the resulting image should resemble the view from
 an aircraft looking at a terrain on a sunny day with a bit
 of haze in the valleys.
 
-<p>
-The <b>brighten</b> option does not truly represent a percentage,
+<p>The <b>brighten</b> option does not truly represent a percentage,
 but calling it that makes the option easy to understand, and it
 sounds better than <i>Normalized Scaling Factor</i>.
 
@@ -74,8 +69,8 @@ cell in the <em>INTENSITY</em> map layer.  This map layer
 should have an appropriate gray-scale color table
 associated with it. You can ensure this by using the color
 manipulation capabilities of
-<em><a href="d.colors.html">d.colors</A></em> or
-<em><a href="r.colors.html">r.colors</A></em>.
+<em><a href="d.colors.html">d.colors</a></em> or
+<em><a href="r.colors.html">r.colors</a></em>.
 
 Finally, the color is made somewhat gray-based on the
 <em>red</em> intensity of that cell in the
@@ -99,16 +94,14 @@ where
 </pre>
 
 <p>
-
 Either (but not both) of the intensity or the saturation
 map layers may be omitted. This means that it is possible
 to produce output images that represent combinations of
 <em>his, hi,</em> or <em>hs</em>.
 
-<p>
-Users wishing to store the result in new raster map layers
+<p>Users wishing to store the result in new raster map layers
 instead of displaying it on the monitor should use the
-program <em><a href="r.his.html">r.his</A></em>.
+program <em><a href="r.his.html">r.his</a></em>.
 
 
 <h2>EXAMPLE</h2>
@@ -125,19 +118,18 @@ program <em><a href="r.his.html">r.his</A></em>.
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="d.colors.html">d.colors</A>,
-<a href="d.colortable.html">d.colortable</A>,
-<a href="d.frame.html">d.frame</A>,
-<a href="d.rgb.html">d.rgb</A>,
-<a href="r.colors.html">r.colors</A>,
-<a href="r.his.html">r.his</A>,
-<a href="i.his.rgb.html">i.his.rgb</A>,
-<a href="i.rgb.his.html">i.rgb.his</A>
+<a href="d.colors.html">d.colors</a>,
+<a href="d.colortable.html">d.colortable</a>,
+<a href="d.frame.html">d.frame</a>,
+<a href="d.rgb.html">d.rgb</a>,
+<a href="r.colors.html">r.colors</a>,
+<a href="r.his.html">r.his</a>,
+<a href="i.his.rgb.html">i.his.rgb</a>,
+<a href="i.rgb.his.html">i.rgb.his</a>
 </em>
 
 <h2>AUTHOR</h2>
 
 James Westervelt, U.S. Army Construction Engineering Research Laboratory
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

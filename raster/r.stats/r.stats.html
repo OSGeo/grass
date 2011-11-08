@@ -13,8 +13,7 @@ is chosen, areas will be stated in number of cells.) If multiple raster map
 layers are specified on the command line, a cross-tabulation table of areas
 for each combination of categories in the map layers will be printed.
 
-<p>
-For example, if one raster map layer were specified, the output would look like:
+<p>For example, if one raster map layer were specified, the output would look like:
 <pre>
           1:1350000.00
           2:4940000.00
@@ -48,15 +47,12 @@ colons.
 <h2>NOTES</h2>
 <em>r.stats</em> works in the current geographic region with the current mask.
 
-<p>
-If a nicely formatted output is desired, pipe the output into a command
+<p>If a nicely formatted output is desired, pipe the output into a command
 which can create columnar output.  For example, the command:
 
-<p>
-    <b>r.stats input=</b>a,b,c | pr -3 | cat -s
+<p>    <b>r.stats input=</b>a,b,c | pr -3 | cat -s
 
-<p>
-will create a three-column output 
+<p>will create a three-column output 
 <pre>
 1:4:4:10000.00       2:1:5:290000.00      2:4:5:2090000.00
 1:4:5:1340000.00     2:2:5:350000.00      3:1:2:450000.00
@@ -66,8 +62,7 @@ will create a three-column output
 
 The output from <em>r.stats</em> on more than one map layer is sorted.
 
-<p>
-Note that the user has only the option of printing out cell statistics in
+<p>Note that the user has only the option of printing out cell statistics in
 terms of cell counts and/or area totals. Users wishing to use different
 units than are available here should use the GRASS program 
 <em><a href="r.report.html">r.report</a></em>.

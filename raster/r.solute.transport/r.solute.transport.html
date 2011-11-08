@@ -4,8 +4,7 @@ solute transport in porous media in the saturated zone of an aquifer. The comput
 raster maps and the current region settings. All initial- and boundary-conditions must be provided as
 raster maps. The unit in the location must be meters.
 <br>
-<p>
-This module is sensitive to mask settings. All cells which are outside the mask
+<p>This module is sensitive to mask settings. All cells which are outside the mask
 are ignored and handled as no flow boundaries.
 <br>
 This module calculates the concentration of the solution and optional the
@@ -15,7 +14,7 @@ The vector components can be visualized with paraview if they are exported
 with r.out.vtk.
 <br>
 <br>
-Use <a href="r.gwflow.html">r.gwflow</A> to compute the piezometric heights
+Use <a href="r.gwflow.html">r.gwflow</a> to compute the piezometric heights
 of the aquifer. The piezometric heights and the hydraulic conductivity
 are used to compute the flow direction and the mean velocity of the groundwater.
 This is the base of the solute transport computation.
@@ -39,8 +38,7 @@ The discretization results in an unsymmetric linear equation system in form of <
 which must be solved. The solute transport partial
 differential equation is of the following form:
 
-<p>
-(dc/dt)*R = div ( D grad c - uc) + cs -q/nf(c - c_in)
+<p>(dc/dt)*R = div ( D grad c - uc) + cs -q/nf(c - c_in)
 
 <ul>
 <li>c -- the concentration [kg/m^3]</li>
@@ -147,14 +145,13 @@ for dt in range(30):
 
 <h2>SEE ALSO</h2>
 
-<em><a href="r.gwflow.html">r.gwflow</A></em><br>
-<em><a href="r3.gwflow.html">r3.gwflow</A></em><br>
-<em><a href="r.out.vtk.html">r.out.vtk</A></em><br>
+<em><a href="r.gwflow.html">r.gwflow</a></em><br>
+<em><a href="r3.gwflow.html">r3.gwflow</a></em><br>
+<em><a href="r.out.vtk.html">r.out.vtk</a></em><br>
 
 <h2>AUTHOR</h2>
 S&ouml;ren Gebbert
-<p>
-This work is based on the Diploma Thesis of S&ouml;ren Gebbert available
+<p>This work is based on the Diploma Thesis of S&ouml;ren Gebbert available
 <a href="http://www.hydrogeologie.tu-berlin.de/fileadmin/fg66/_hydro/Diplomarbeiten/2007_Diplomarbeit_Soeren_Gebbert.pdf">here</a>
 at Technical University Berlin in Germany.
 

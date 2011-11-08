@@ -7,7 +7,6 @@ a geographic grid. The grid will overlay, not overwrite,
 the contents of the active display frame.
 
 <p>
-
 <em>d.grid</em> can be run non-interactively or
 interactively.  If the user specifies the grid
 <em>size</em> and (optionally) the grid <em>color</em> on
@@ -26,25 +25,21 @@ the active graphics display frame by previous invocations
 of <em>d.grid</em>; multiple invocations of <em>d.grid</em>
 will therefore result in the drawing of multiple grids
 inside the active graphics frame.  (A command like 
-<em><a href="d.erase.html">d.erase</A></em>, which erases the
+<em><a href="d.erase.html">d.erase</a></em>, which erases the
 entire contents of the active display frame, must be run to
 erase previously drawn grids from the display frame.)
 
-<p>
-If the user provides a 
+<p>If the user provides a 
 <em>-g</em> flag a geographic (projected) grid 
 will be drawn. With the <em>-g</em> flag the <em>size</em> 
 argument accepts both decimal degrees and colon separated 
 ddd:mm:ss coordinates (eg. <tt>00:30:00</tt> for half of a degree).
 
-<p>
-A geographic grid cannot be drawn for a <em>latitude/longitude</em> 
+<p>A geographic grid cannot be drawn for a <em>latitude/longitude</em> 
 or <em>XY</em> projection.
-<p>
-Colors may be standard named GRASS colors (red, green, aqua, etc.) or
+<p>Colors may be standard named GRASS colors (red, green, aqua, etc.) or
 a numerical R:G:B triplet, where component values range from 0-255.<br>
-<p>
-The grid drawing may be turned off by using the <em>-n</em> flag.<br>
+<p>The grid drawing may be turned off by using the <em>-n</em> flag.<br>
 The border drawing may be turned off by using the <em>-b</em> flag.<br>
 The coordinate text may be turned off by using the <em>-t</em> flag.<br>
 
@@ -67,13 +62,13 @@ To draw a blue standard rectangular grid at a 500 (meter) spacing run the follow
 
 <h2>SEE ALSO</h2>
 
-<em><a href="d.barscale.html">d.barscale</A></em><br>
-<em><a href="d.legend.html">d.legend</A></em><br>
-<em><a href="d.geodesic.html">d.geodesic</A></em><br>
-<em><a href="d.rhumbline.html">d.rhumbline</A></em><br>
-<em><a href="d.erase.html">d.erase</A></em><br>
-<em><a href="d.frame.html">d.frame</A></em><br>
-<em><a href="d.rast.html">d.rast</A></em><br>
+<em><a href="d.barscale.html">d.barscale</a></em><br>
+<em><a href="d.legend.html">d.legend</a></em><br>
+<em><a href="d.geodesic.html">d.geodesic</a></em><br>
+<em><a href="d.rhumbline.html">d.rhumbline</a></em><br>
+<em><a href="d.erase.html">d.erase</a></em><br>
+<em><a href="d.frame.html">d.frame</a></em><br>
+<em><a href="d.rast.html">d.rast</a></em><br>
 
 
 

@@ -4,12 +4,10 @@ Outputs 3D raster maps in ASCII format. The <em>map</em> parameter is
 a valid 3D raster map in the current mapset search path. The <em>output</em> 
 parameter is the name of an ASCII file which will be written in the 
 current working directory.
-<p>
-If <em>output</em> is not specified then standard output (stdout) is used.
+<p>If <em>output</em> is not specified then standard output (stdout) is used.
 The <em>-h</em> flag may be used to suppress header information. The
 module is sensitive to region settings (set with <em>g.region</em>).
-<p>
-The <em>-c</em> flag will create GRASS 6 <em>r3.in.ascii</em> compatible
+<p>The <em>-c</em> flag will create GRASS 6 <em>r3.in.ascii</em> compatible
 output.
 
 <h2>NOTES</h2>
@@ -18,8 +16,7 @@ by <em>r3.in.ascii</em>. In particular, files output by
 <em>r3.out.ascii</em> with header information may be converted back to
 3D raster maps with <em>r3.in.ascii</em>.
 
-<p>
-The format of the ASCII file is:
+<p>The format of the ASCII file is:
 <div class="code"><pre>
 version: <i>"grass7"</i>
 order:   <i>"nsbt" or "nstb" or "snbt" or "sntb"</i>
@@ -38,8 +35,7 @@ The <b>version</b> and <b>order</b> options have been introduced in GRASS 7 in J
 The <b>order</b> option describes the order of rows and depths in the output. 
 It is possible to create output of different row order using the <em>-r</em> flag 
 and output of different depths order using the  <em>-d</em> flag. The default order is:
-<p>
-<div class="code"><pre>
+<p><div class="code"><pre>
 west -&gt; east for columns
 north -&gt; south for rows
 bottom -&gt; top for depths
@@ -80,8 +76,7 @@ and so on.
 
 The data starts with the upper left corner (NW) at the bottom of the data set.
 
-<p>
-One level maps can be imported with <em>r.in.ascii</em> (2D raster) using
+<p>One level maps can be imported with <em>r.in.ascii</em> (2D raster) using
 the default <b>nsbt</b> order and removing the header lines "version",
 "order", "top", "bottom" and "levels".
 

@@ -5,8 +5,7 @@ locations in the input file by either cubic convolution
 interpolation, bilinear interpolation, or nearest neighbor
 sampling (default).
 
-<p>
-This program may be especially useful when sampling for
+<p>This program may be especially useful when sampling for
 cross validation of interpolations whose output is a raster
 map.
 
@@ -16,17 +15,14 @@ The output points will have the easting and northing of the input points.
 The input category value is used. The input attribute, raster value 
 and difference is written to output.
 
-<p>
-When NULL values are encountered for a cell, zero value is used
+<p>When NULL values are encountered for a cell, zero value is used
 instead.  In these cases, more acurrate results may be obtained
 by using the default nearest neighbor comparisons.
 
-<p>
-This program may not work properly with lat-long data when
+<p>This program may not work properly with lat-long data when
 the <b>-BC</b> flags are used.
 
-<p>
-When interpolation is done (i.e., the <b>-BC</b> flags are
+<p>When interpolation is done (i.e., the <b>-BC</b> flags are
 used), values are assumed to be located at the centroid of
 grid cells.  Therefore, current resolution settings are
 important.
@@ -76,8 +72,7 @@ at random places:
 <br>when he was at: 
 <a href="http://ABE.www.ecn.purdue.edu/ABE/">Agricultural Engineering</a>
 <a href="http://www.purdue.edu/">Purdue University</a>
-<p>
-Updated for GRASS 5.0 by Eric G. Miller
+<p>Updated for GRASS 5.0 by Eric G. Miller
 <br>
 Updated for GRASS 5.7 by Radim Blazek
 

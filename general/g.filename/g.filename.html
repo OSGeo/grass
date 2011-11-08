@@ -3,11 +3,9 @@
 <em>g.filename</em> is designed for Bourne shell scripts that need to know 
 the full file name, including it's path, for mapset elements, like raster,
 vector and site maps, region definitions and imagery groups.
-<p>
-The list of element names to search for is not fixed; any subdirectory of the
+<p>The list of element names to search for is not fixed; any subdirectory of the
 mapset directory is a valid element name.
-<p>
-However, the user can find the list of standard GRASS element names in
+<p>However, the user can find the list of standard GRASS element names in
 the file $GISBASE/etc/element_list. This is the file which
 g.remove/g.rename/g.copy use to determine which files need to be
 deleted/renamed/copied for a given entity type.
@@ -15,7 +13,7 @@ deleted/renamed/copied for a given entity type.
 <!-- unused
 <h2>OPTIONS</h2>
 
-<H3>Parameters:</H3>
+<h3>Parameters:</h3>
 
 <dl>
 <dt><b>element=</b><em>name</em> 
@@ -64,7 +62,6 @@ or element) exists or not. This feature allows shell scripts to create new data
 base files as well as use existing ones.
 
 <p>
-
 If the mapset is the current mapset, <em>g.filename</em>
 automatically creates the <em>element</em> specified if it
 doesn't already exist.  This makes it easy to add new files
@@ -73,17 +70,16 @@ existence of the required data base directories.  (This
 program will not create a new mapset, however, if that
 specified does not currently exist.)
 
-<p>
-The program exits with a 0 if everything is ok;  it exits
+<p>The program exits with a 0 if everything is ok;  it exits
 with a non-zero value if there is an error, in which case
 file=<em>'full_file_pathname'</em> is not output.
 
 <h2>SEE ALSO</h2>
 
-<em><a href="g.ask.html">g.ask</A></em><br>
-<em><a href="g.findfile.html">g.findfile</A></em><br>
-<em><a href="g.gisenv.html">g.gisenv</A></em><br>
-<em><a href="parser.html">parser</A></em>
+<em><a href="g.ask.html">g.ask</a></em><br>
+<em><a href="g.findfile.html">g.findfile</a></em><br>
+<em><a href="g.gisenv.html">g.gisenv</a></em><br>
+<em><a href="parser.html">parser</a></em>
 
 <h2>AUTHOR</h2>
 

@@ -22,15 +22,12 @@ parameters.
 </ul>
 
 <em>Warning to the new remote sensing users</em>
-<p>
-Vegetation Indices are often considered the entry point of remote sensing for Earth land monitoring. They are suffering from their success, in terms that often people tend to harvest satellite images from online sources and use them directly in this module.
+<p>Vegetation Indices are often considered the entry point of remote sensing for Earth land monitoring. They are suffering from their success, in terms that often people tend to harvest satellite images from online sources and use them directly in this module.
 
 <em>If you are in this situation please read the following</em>
-<p>
-Satellite imagery is often stored in Digital Number (DN) for storage purpose, Landsat is stored in 8bit values (ranging from 0 to 255), other satellites maybe stored in 10 or 16 bits. Get to know about your satellite data. Once you covered this knowledge and that you are sure the data is in DN, this implies that your imagery is not corrected. What this means is that the image is what the satellite sees at its position and altitude in space. This is not the ground reality yet. We call this data at the satellite. Encoded in the 8bits (or more) is the amount of energy sensed by the sensor inside the satellite platform. This energy is called radiance-at-sensor. Generally, satellites image providers encode the radiance-at-sensor into 8bit (or more) through an affine transform equation (y=ax+b). If you are using Landsat imagery, look at the i.landsat.toar for an easy way to transform DN to radiance-at-sensor. If you are using Aster data, try i.aster.toar module.
+<p>Satellite imagery is often stored in Digital Number (DN) for storage purpose, Landsat is stored in 8bit values (ranging from 0 to 255), other satellites maybe stored in 10 or 16 bits. Get to know about your satellite data. Once you covered this knowledge and that you are sure the data is in DN, this implies that your imagery is not corrected. What this means is that the image is what the satellite sees at its position and altitude in space. This is not the ground reality yet. We call this data at the satellite. Encoded in the 8bits (or more) is the amount of energy sensed by the sensor inside the satellite platform. This energy is called radiance-at-sensor. Generally, satellites image providers encode the radiance-at-sensor into 8bit (or more) through an affine transform equation (y=ax+b). If you are using Landsat imagery, look at the i.landsat.toar for an easy way to transform DN to radiance-at-sensor. If you are using Aster data, try i.aster.toar module.
 
-<p>
-Finally, once you have the radiance at sensor, you still have the atmosphere between the sensor and the surface vagetation. You need to correct the atmospheric interaction with the sun energy that the vegetation reflects back into space. This can be done in two ways for landsat. The simple way is within i.landsat.toar, look for DOS correction. The more accurate way is by using i.atcorr (which works for many satellite sensors). Get to know this last one if you intend to stay around remote sensing some time. Once you have completed the use of an atmospheric correction on the energy sensed by the satellite, you can call your data by the name of surface reflectance. Surface reflectance is ranging from 0.0 to 1.0 theoretically (and absolutely). This level of data correction is the proper level of correction to use with this Vegetation Index module. 
+<p>Finally, once you have the radiance at sensor, you still have the atmosphere between the sensor and the surface vagetation. You need to correct the atmospheric interaction with the sun energy that the vegetation reflects back into space. This can be done in two ways for landsat. The simple way is within i.landsat.toar, look for DOS correction. The more accurate way is by using i.atcorr (which works for many satellite sensors). Get to know this last one if you intend to stay around remote sensing some time. Once you have completed the use of an atmospheric correction on the energy sensed by the satellite, you can call your data by the name of surface reflectance. Surface reflectance is ranging from 0.0 to 1.0 theoretically (and absolutely). This level of data correction is the proper level of correction to use with this Vegetation Index module. 
 
 
 <div class="code"><pre>
@@ -174,12 +171,10 @@ wdvi( redchan, nirchan, soil_line_weight )
 <h2>NOTES</h2>
 
 Originally from kepler.gps.caltech.edu
-<p>
-A FAQ on Vegetation in Remote Sensing<br>
+<p>A FAQ on Vegetation in Remote Sensing<br>
 Written by Terrill W. Ray, Div. of Geological and Planetary Sciences,
 California Institute of Technology, email: terrill@mars1.gps.caltech.edu
-<p>
-Snail Mail:  Terrill Ray<br>
+<p>Snail Mail:  Terrill Ray<br>
 	     Division of Geological and Planetary Sciences<br>
 	     Caltech, Mail Code 170-25<br>
 	     Pasadena, CA  91125
@@ -198,5 +193,4 @@ Snail Mail:  Terrill Ray<br>
 Baburao Kamble, Asian Institute of Technology, Thailand<br>
 Yann Chemin, Asian Institute of Technology, Thailand
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

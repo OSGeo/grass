@@ -9,14 +9,11 @@ user does not need to enter the parameters each time.
 
 Values are stored in the mapset's <tt>VAR</tt> file;
 the connection is not tested for validity.
-<p>
-The <b>-p</b> flag will display the current connection parameters. 
-<p>
-The <b>-c</b> flag will silently check if the connection parameters have
+<p>The <b>-p</b> flag will display the current connection parameters. 
+<p>The <b>-c</b> flag will silently check if the connection parameters have
 been set, and if not will set them to use GRASS's default values.
 (useful in scripts before you attempt to create a new database table)
-<p>
-To connect a vector map to a database table, use <em>v.db.connect</em>
+<p>To connect a vector map to a database table, use <em>v.db.connect</em>
 or <em>v.db.addtable</em>.
 
 
@@ -42,8 +39,7 @@ db.connect driver=sqlite database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db'
 db.connect -p
 db.tables -p
 </pre></div>
-<p>
-The SQLite database is created automatically when used the first time.
+<p>The SQLite database is created automatically when used the first time.
 
 
 <h3>ODBC</h3>
@@ -122,5 +118,4 @@ db.tables -p
 
 Radim Blazek, ITC-Irst, Trento, Italy
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

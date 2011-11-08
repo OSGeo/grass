@@ -13,7 +13,6 @@ layer.
 
 
 <p>
-
 The program will be run non-interactively if the user
 specifies program arguments (see OPTIONS) on the command
 line.  Alternately, the user can simply type
@@ -28,15 +27,13 @@ be used for <b>input</b> and <b>output</b>, the
 <b>method</b> used to analyze neighborhood
 values (i.e., the neighborhood function or operation to be
 performed), and the <b>size</b> of the neighborhood.
-<p>
-The user can optionally
+<p>The user can optionally
 specify a <b>selection</b> map, to compute new values only where the raster
 cells of the selection map are not NULL. In case of a NULL cells,
 the values from the input map are copied into the output map.
 This may useful to smooth only parts of an elevation map (pits, peaks, ...).
 
-<p>
-<em>Example how to use a selection map with method=average:</em><br>
+<p><em>Example how to use a selection map with method=average:</em><br>
 input map:
 <pre>
 1 1  1 1 1
@@ -70,15 +67,13 @@ Without using the selection map, the output map would look like this:
 1 1 1 1 1
 </pre>
 
-<p>
-Optionally, the user can also specify the <b>TITLE</b> to
+<p>Optionally, the user can also specify the <b>TITLE</b> to
 be assigned to the raster map layer <b>output</b>, elect
 to not align the resolution of the output with that of the
 input (the <b>-a</b> option), and run <em><b>r.neighbors</b></em>
 with a custom matrix weights with the <em>weight</em> option.
 These options are described further below.
 <p>
-
 <em>Neighborhood Operation Methods:</em>
 The <b>neighborhood</b> operators determine what new 
 value a center cell in a neighborhood will have after examining
@@ -87,8 +82,7 @@ Each cell in a raster map layer becomes the center cell of a neighborhood
 as the neighborhood window moves from cell to cell throughout the map layer.
 <em><b>r.neighbors</b></em> can perform the following operations:
 
-<p>
-<dl>
+<p><dl>
 
 <dt><b>average</b> 
 
@@ -169,8 +163,7 @@ In the above example, the interspersion is:
 The result is rounded to the nearest integer (in this case 64).
 
 </dl>
-<p>
-<br>
+<p><br>
 
 <em>Neighborhood Size:</em>
 The neighborhood <b>size</b> specifies which cells surrounding any given
@@ -185,7 +178,6 @@ For example,
 
 </pre>
 <p>
-
 <em>Matrix weights:</em>
 A custom matrix can be used if none of the neighborhood operation
 methods are desirable by using the <b>weight</b>.  This option must
@@ -216,7 +208,6 @@ This corresponds to the following 3x3 matrix:
 </pre>
 
 <p>
-
 <h3>FLAGS</h3>
 <dl>
 <dt><b>-a</b> 
@@ -229,14 +220,12 @@ of the geographic region be the same as that of the raster map layer.
 By default, if unspecified,
 <em><b>r.neighbors</b></em> will align these geographic region settings.
 <p>
-
 <dt><b>-c</b>
 <dd>
 This flag will use a circular neighborhood for the moving analysis window,
 centered on the current cell. 
 
-<p>
-The exact masks for the first few neighborhood sizes are as follows:
+<p>The exact masks for the first few neighborhood sizes are as follows:
 <div class="code"><pre>
 3x3     . X .		5x5	. . X . .	7x7	. . . X . . . 
         X O X			. X X X .		. X X X X X .
@@ -271,11 +260,9 @@ these geographic region settings.  However, the user can select to keep
 original input and output resolutions which are not aligned by specifying
 this (e.g., using the <b>-a</b> option).
 <p>
-
 <em><b>r.neighbors</b></em> doesn't propagate NULLs, but computes the
 aggregate over the non-NULL cells in the neighborhood.
 <p>
-
 The <b>-c</b> flag and the <b>weights</b> parameter are mutually exclusive.  Any
 use of the two together will produce an error. Differently-shaped neighborhood
 analysis windows may be achieved by using the <b>weight=</b> parameter to
@@ -284,13 +271,11 @@ weights at the edge of the neighborhood according to the proportion of the cell
 that lies inside the neighborhood circle, effectively anti-aliasing the analysis
 mask.
 <p>
-
 For aggregates where a weighted calculation isn't meaningful
 (specifically: minimum, maximum, diversity and interspersion), the
 weights are used to create a binary mask, where zero causes the cell
 to be ignored and any non-zero value causes the cell to be used.
 <p>
-
 <em><b>r.neighbors</b></em> copies the GRASS <em>color</em> files associated with
 the input raster map layer for those output map layers that are based
 on the neighborhood average, median, mode, minimum, and maximum.
@@ -318,5 +303,4 @@ will be dependent on the input data values.)
 Michael Shapiro,
 U.S.Army Construction Engineering Research Laboratory 
 
-<p>
-<i>Last changed: $Date$</i>  
+<p><i>Last changed: $Date$</i>  

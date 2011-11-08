@@ -3,19 +3,15 @@
 The <em>r.out.xyz</em> module exports a raster map as a list of x,y,z
 values into an ASCII text file.
 <p>
-
 <h2>NOTES</h2>
 
 This module will not export x,y coordinates for raster cells containing
 a NULL value. This includes cells masked by a raster MASK.
-<p>
-This module, as all GRASS raster modules, will export cells based on the
+<p>This module, as all GRASS raster modules, will export cells based on the
 current region settings. See the <em>g.region</em> module for details.
-<p>
-The <em>r.out.ascii</em> module should be used to export an array (of
+<p>The <em>r.out.ascii</em> module should be used to export an array (of
 size row x column) containing z values.
-<p>
-<em>r.out.xyz</em> is simply a front-end to "<tt>r.stats -1gn</tt>".
+<p><em>r.out.xyz</em> is simply a front-end to "<tt>r.stats -1gn</tt>".
 
 <h2>EXAMPLE</h2>
 
@@ -47,5 +43,4 @@ M. Hamish Bowman<br>
 <i>Dept. Marine Science<br>
 Otago University, New Zealand</i>
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

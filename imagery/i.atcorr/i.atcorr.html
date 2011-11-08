@@ -7,30 +7,25 @@ available at the
 <a href="http://modis-sr.ltdri.org/">Land Surface
 Reflectance Science Computing Facility website</a>.
 
-<p>
-<em>Important note: Current region settings are ignored!</em> The region is adjusted
+<p><em>Important note: Current region settings are ignored!</em> The region is adjusted
 to cover the input raster map before the atmospheric correction is
 performed. The previous settings are restored afterwards.
 
-<p>
-Because using a <b>elevation</b> and/or <b>visibility</b>
+<p>Because using a <b>elevation</b> and/or <b>visibility</b>
 raster map makes execution time much longer, it is advised to use
 the optimization flag <b>-o</b>.
 This flag tells <em>i.atcorr</em> to try and speedup calculations. 
 However, this option will increase memory requirements.
 
-<p>
-If flag <b>-r</b> is used, the input raster data are treated as
+<p>If flag <b>-r</b> is used, the input raster data are treated as
 <em>reflectance</em>. Otherwise, the input raster data are treated
 as <em>radiance</em> values and are converted to reflectance at
 the <em>i.atcorr</em> runtime. The output data are always reflectance.
 
-<p>
-Note that the satellite overpass time has to be specified in Greenwich
+<p>Note that the satellite overpass time has to be specified in Greenwich
 Mean Time (GMT).
 
-<p>
-An example 6S parameters:
+<p>An example 6S parameters:
 
 <div class="code"><pre>
 8                            - geometrical conditions=Landsat ETM+
@@ -364,8 +359,7 @@ visibility and in a following line enter the aerosol optical depth at 550nm
 0.112                        - aerosol optical depth 550 nm
 </pre></div>
 
-<p>
-NOTE: if iaer is 0, enter -1 for visibility.
+<p>NOTE: if iaer is 0, enter -1 for visibility.
 
 <h3>E. Target altitude (xps), sensor platform (xpp)</h3>
 
@@ -375,8 +369,7 @@ Target altitude (xps, in negative [km]):
 in [km], given as negative value
 </blockquote>
 
-<p>
-Sensor platform (xpp, in negative [km] or -1000):
+<p>Sensor platform (xpp, in negative [km] or -1000):
 <blockquote>
 <br>xpp = -1000 means that the sensor is on board a satellite.
 <br>xpp = 0 means that the sensor is at the ground level.
@@ -384,8 +377,7 @@ Sensor platform (xpp, in negative [km] or -1000):
  this altitude is given <b>relative to the target</b> altitude as negative value.
 </blockquote>
 
-<p>
-For aircraft simulations only (xpp is neither equal to 0 nor equal to -1000):
+<p>For aircraft simulations only (xpp is neither equal to 0 nor equal to -1000):
 <blockquote>
 puw,po3 (water vapor content,ozone content between the aircraft and the surface)
 <br>taerp (the aerosol optical thickness at 550nm between the aircraft and the
@@ -436,8 +428,7 @@ micrometer.</td>
 </tr>
 </table>
 
-<p>
-Pre-defined satellite bands:
+<p>Pre-defined satellite bands:
 
 <table border="1">
 
@@ -590,7 +581,6 @@ r.info lsat7_2002_40
 
 In this case, we have: SUN_AZIMUTH = 120.8810347, SUN_ELEVATION = 64.7730999.
 <p>
-
 If the sun position metadata are unavailable, we can also calculate
 them from the overpass time as follows
 (<em><a href="r.sunmask.html">r.sunmask</a></em>
@@ -601,8 +591,7 @@ r.sunmask -s elev=elevation out=dummy year=2002 month=5 day=24 hour=10 min=42 se
 </pre></div>
 
 If the overpass time is unknown, use the <a href="http://www-air.larc.nasa.gov/tools/predict.htm">Satellite Overpass Predictor</a>.
-<p>
-Convert DN (digital number = pixel values) to Radiance at top-of-atmosphere (TOA), using the
+<p>Convert DN (digital number = pixel values) to Radiance at top-of-atmosphere (TOA), using the
 formula
 <div class="code"><pre>
    L&lambda; = ((LMAX&lambda; - LMIN&lambda;)/(QCALMAX-QCALMIN)) * (QCAL-QCALMIN) + LMIN&lambda;
@@ -625,8 +614,7 @@ images (see
 <a href="http://landsathandbook.gsfc.nasa.gov/handbook/handbook_htmls/chapter11/chapter11.html">Landsat handbook</a>),
 and the maximal DN value (QCALMAX) is 255. QCAL is the DN value for every
 separate pixel in the Landsat image.
-<p>
-We extract the coefficients and apply them in order to obtain the radiance map:
+<p>We extract the coefficients and apply them in order to obtain the radiance map:
 <div class="code"><pre>
 CHAN=4
 r.info lsat7_2002_${CHAN}0 -h | tr '\n' ' ' | sed 's+ ++g' | tr ':' '\n' | grep "LMIN_BAND${CHAN}\|LMAX_BAND${CHAN}"
@@ -676,8 +664,7 @@ Note that the altitude value from 'icnd_lsat4.txt' file is read at the beginning
 to compute the initial transform. It is necessary to give a value which could
 be the mean value of the elevation model. For the atmospheric correction then
 the raster elevation values are used from the map.
-<p>
-Note that the process is computationally intensive.<br>
+<p>Note that the process is computationally intensive.<br>
 Note also, that <em>i.atcorr</em> reports solar elevation angle above horizon rather than solar zenith angle.
 
 <h2><font color="red">REMAINING DOCUMENTATION ISSUES</font></h2>
@@ -689,8 +676,7 @@ optical depth at 550nm.
 
 GRASS Wiki page about 
   <a href="http://grass.osgeo.org/wiki/Atmospheric_correction">Atmospheric correction</a>
-<p>
-<em>
+<p><em>
 <a href="r.info.html">r.info</a>,
 <a href="r.mapcalc.html">r.mapcalc</a>,
 <a href="r.univar.html">r.univar</a>
@@ -738,6 +724,5 @@ overview., IEEE Trans. Geosc. and Remote Sens. 35(3):675-686.
 <p><em>VGT1 and VGT2 sensors addition from <a href="http://6s.ltdri.org/">6SV-1.1 sources</a>, addition 07/2011:</em>
 <br>Alfredo Alessandrini, Anne Ghisla
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>
 

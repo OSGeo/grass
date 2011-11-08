@@ -11,40 +11,37 @@ graphics monitor using a mouse cursor.
 program. Parts of it may be out of date or wrong.</I></b>
 
 
-<H3>Overview window</H3>
+<h3>Overview window</h3>
 
 An overview window shows the entire map with a box showing the current
 editing region. The edit window shows the cells within the selected area.
 Click on a new spot on the overview window to move the editing area.
 Moving the editing view can take a while.
 
-<H3>Mouse and menus</H3>
+<h3>Mouse and menus</h3>
 
 Cell editing is done using a mouse cursor to choose menu selections
 and indicate areas on the displayed raster map that are to be edited.
 
-<p>
-Selections available at the top of the edit window are <b>Save</b> and
+<p>Selections available at the top of the edit window are <b>Save</b> and
 <b>Exit</b>.
 <p>
-
 As the mouse travels over the cells in the edit window you are shown the
 current coordinates and current cell values under the cursor.
-<p>
-To change the value of a cell put the new value to use in the "New value"
+<p>To change the value of a cell put the new value to use in the "New value"
 box at the bottom left of the edit window under the coordinate information
 bar. A value of "*" indicates a NULL value should be used.
 
 
-<H3>Arrows</H3>
+<h3>Arrows</h3>
 
 This function is available for users editing aspect maps.  The
-<em><a href="d.rast.arrow.html">d.rast.arrow</A></em> program is
+<em><a href="d.rast.arrow.html">d.rast.arrow</a></em> program is
 called, which draws arrows over the displayed
 cells to indicate the downslope direction of the cell.
 You can set the aspect map to use on the command line.
 Aspect maps are expected to be in regular "GRASS" format, as produced by
-<em><a href="r.slope.aspect.html">r.slope.aspect</A></em>; i.e. degrees
+<em><a href="r.slope.aspect.html">r.slope.aspect</a></em>; i.e. degrees
 counter-clockwise from east.
 
 
@@ -52,18 +49,16 @@ counter-clockwise from east.
 
 There is no "undo" command or way to exit edit mode without saving
 changes.
-<p>
-Any MASK in place will be respected when writing the new raster map layer,
+<p>Any MASK in place will be respected when writing the new raster map layer,
 including any edits to the MASKed areas.
 
-<H3>Geographic Region Concerns</H3>
+<h3>Geographic Region Concerns</h3>
 
 <em>d.rast.edit</em> reads the region definition for the raster map layer
 being edited from its internal cell header file. The new, edited copy of
 the raster layer will be created with the same resolution and region
 dimensions.
-<p>
-The primary bane of the <em>d.rast.edit</em> program involves large map
+<p>The primary bane of the <em>d.rast.edit</em> program involves large map
 layers with lots of rows and columns) and/or slow computers,
 since the program must read and write raster map layers row by row for
 the full size of the map layer as dictated by its region size and resolution.
@@ -78,11 +73,10 @@ times during the editing session).
 <!-- not true, but it would be nice
 <em>d.rast.edit</em> will not create a new raster map layer if
 the user makes no cell edits while running the program.
-<p>
--->
+<p>-->
 
 It would be nice to incorporate a scrollable version of <em>
-<a href="d.legend.html">d.legend</A>
+<a href="d.legend.html">d.legend</a>
 </em>
 (such that one could see a label legend for files with many categories on
 a standard size sub-frame).  It would be even nicer to be able
@@ -90,15 +84,13 @@ to select the category values from a graphical legend when editing
 cell values (thereby saving a trip to the text frame to type in the
 new value).
 
-<p>
-Perhaps method(s) for multiple  or mass cell edits would be useful.
+<p>Perhaps method(s) for multiple  or mass cell edits would be useful.
 This could be done by providing modes in which the user may:<br>
 1) edit a block of cells to a given value by drawing a box;<br>
 2) be able to choose a given value which is automatically used as
 the new value on each cell chosen until a different value is desired.
 
-<p>
-There is no interrupt handling. <!-- ?? --> This could leave files in .tmp
+<p>There is no interrupt handling. <!-- ?? --> This could leave files in .tmp
 or (rarely) result in half-baked raster maps.  The original file
 would survive unscathed by an interrupt at most any point in execution.
 Beware of exiting the program
@@ -120,5 +112,4 @@ Replaces Xdriver version in C by Chris Rewerts,
 Agricultural Engineering,
 Purdue University
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

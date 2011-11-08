@@ -6,8 +6,7 @@ A vector map in GRASS native vector format may contain a mix of
 faces, and kernels. The GRASS ASCII vector format may contain also 
 a <i>header</i> with various metadata (see example below).
 
-<p>
-The header is similar as the head file of vector binary format but
+<p>The header is similar as the head file of vector binary format but
 contains bounding box also. Key words are:
 
 <div class="code"><pre>
@@ -26,8 +25,7 @@ NORTH EDGE
 MAP THRESH
 </pre></div>
 
-<p>
-The body begins with the row:
+<p>The body begins with the row:
 
 <div class="code"><pre>
 VERTI:
@@ -47,8 +45,7 @@ TYPE NUMBER_OF_COORDINATES [NUMBER_OF_CATEGORIES]
 
 Everything above in <tt>[&nbsp;]</tt> is optional. 
 
-<p>
-The primitive codes are as follows:
+<p>The primitive codes are as follows:
 <ul>
   <li>'P': point</li>
   <li>'L': line</li>
@@ -65,8 +62,7 @@ primitive code, the total number of coordinates in the series, and
 for multiple layers).  Below that 1 or several lines follow to
 indicate the layer number and the category number (ID).
 
-<p>
-The order of coordinates is
+<p>The order of coordinates is
 <div class="code"><pre>
 X Y [Z]
 </pre></div>
@@ -77,8 +73,7 @@ was different:
 Y X
 </pre></div>
 
-<p>
-Latitude/Longitude data may be given in a number of ways.
+<p>Latitude/Longitude data may be given in a number of ways.
 Decimal degrees must be positive or negative instead of using a hemisphere
 letter. Mixed coordinates must use a hemisphere letter. Whole minutes and
 seconds must always contain two digits (example: use <tt>167:03:04.567</tt>;

@@ -7,10 +7,8 @@ and functions.
 <h3>PROGRAM USE</h3>
 
 <em>r.mapcalc</em> expects its input to have the form:
-<p>
-<b>result =</b><em> expression</em>
-<p>
-where <em>result</em> is the name of a raster map layer
+<p><b>result =</b><em> expression</em>
+<p>where <em>result</em> is the name of a raster map layer
 to contain the result of the calculation and
 <em>expression</em> is any legal arithmetic expression involving existing
 raster map layers, integer or floating point constants,
@@ -18,7 +16,6 @@ and functions known to the calculator.
 Parentheses are allowed in the expression and may be nested to any depth.
 <em>result</em> will be created in the user's current mapset.
 <p>
-
 As <em>expression=</em> is the first option, it is the default. This
 means that passing an expression on the command line is possible
 as long as the expression is quoted and a space is included before the
@@ -66,16 +63,13 @@ foo = 1
 EOF
 </pre></div>
 
-<p>
-The formula entered to <em>r.mapcalc</em> by the user is recorded both in the
+<p>The formula entered to <em>r.mapcalc</em> by the user is recorded both in the
 <em>result</em> map title (which appears in the category file for <em>result</em>)
 and in the history file for <em>result</em>.
-<p>
-Some characters have special meaning to the command shell. If the user
+<p>Some characters have special meaning to the command shell. If the user
 is entering input to <em>r.mapcalc</em> on the command line, expressions
 should be enclosed within single quotes.  See NOTES, below.
 <p>
-
 
 <h3>OPERATORS AND ORDER OF PRECEDENCE</h3>
 The following operators are supported:
@@ -109,87 +103,65 @@ The following operators are supported:
      ?:         conditional                Logical      1
 </pre></div>
 (modulus is the remainder upon division)
-<p>
-[1] The &amp;&amp;&amp; and ||| operators handle null values differently to other
+<p>[1] The &amp;&amp;&amp; and ||| operators handle null values differently to other
 operators. See the section entitled <b>NULL support</b> below for more
 details.
-<p>
-The operators are applied from left to right, with those of higher precedence
+<p>The operators are applied from left to right, with those of higher precedence
 applied before those with lower precedence.
 Division by 0 and modulus by 0 are acceptable and give a NULL result.
 The logical operators give a 1 result if the comparison is true, 0 otherwise.
-<p>
-<p>
-
+<p><p>
 
 <h3>RASTER MAP LAYER NAMES</h3>
 Anything in the expression which is not a number, operator, or function name
 is taken to be a raster map layer name.
 Examples:
-<p>
-<div class="code"><pre>
+<p><div class="code"><pre>
 elevation
 x3
 3d.his
 </pre></div>
-<p>
-Most GRASS raster map layers meet this naming convention.
+<p>Most GRASS raster map layers meet this naming convention.
 However, if a raster map layer has a name which conflicts with the
 above rule, it should be quoted.  For example, the expression
-<p>
-<div class="code"><pre>
+<p><div class="code"><pre>
 x = a-b
 </pre></div>
-<p>
-would be interpreted as:  x equals a minus b, whereas
-<p>
-<div class="code"><pre>
+<p>would be interpreted as:  x equals a minus b, whereas
+<p><div class="code"><pre>
 x = "a-b"
 </pre></div>
-<p>
-would be interpreted as:  x equals the raster map layer named <em>a-b</em>
-<p>
-Also
-<p>
-<div class="code"><pre>
+<p>would be interpreted as:  x equals the raster map layer named <em>a-b</em>
+<p>Also
+<p><div class="code"><pre>
 x = 3107
 </pre></div>
-<p>
-would create <em>x</em> filled with the number 3107, while
-<p>
-<div class="code"><pre>
+<p>would create <em>x</em> filled with the number 3107, while
+<p><div class="code"><pre>
 x = "3107"
 </pre></div>
-<p>
-would copy the raster map layer <em>3107</em> to the raster map layer <em>x</em>.
+<p>would copy the raster map layer <em>3107</em> to the raster map layer <em>x</em>.
 
-<p>
-Quotes are not required unless the raster map layer names
+<p>Quotes are not required unless the raster map layer names
 look like numbers or contain operators, OR unless the program
 is run non-interactively.  Examples given here assume the
 program is run interactively.  See NOTES, below.
-<p>
-<em>r.mapcalc</em> will look for the raster map layers according to the
+<p><em>r.mapcalc</em> will look for the raster map layers according to the
 user's current mapset search path.
 It is possible to override the search path and specify the mapset
 from which to select the raster map layer.
 This is done by specifying the raster map layer name in the form:
-<p>
-<div class="code"><pre>
+<p><div class="code"><pre>
 name@mapset
 </pre></div>
-<p>
-For example, the following is a legal expression:
-<p>
-<div class="code"><pre>
+<p>For example, the following is a legal expression:
+<p><div class="code"><pre>
 result = x@PERMANENT / y@SOILS
 </pre></div>
-<p>
-The mapset specified does not have to be in the mapset search path.
+<p>The mapset specified does not have to be in the mapset search path.
 (This method of overriding the mapset search path is common to all
 GRASS commands, not just <em>r.mapcalc</em>.)
 <p>
-
 
 <h3>THE NEIGHBORHOOD MODIFIER</h3>
 Maps and images are data base files stored in raster format, i.e.,
@@ -205,18 +177,15 @@ This syntax permits the development of neighborhood-type filters within a single
 map or across multiple maps.
 <p>
 
-
 <h3>RASTER MAP LAYER VALUES FROM THE CATEGORY FILE</h3>
 Sometimes it is desirable to use a value associated with a category's
 <em>label</em> instead of the category value itself.  If a raster
 map layer name is preceded by the <b>@</b>
 operator, then the labels in the category file for the raster map layer
 are used in the expression instead of the category value.
-<p>
-For example, suppose that the raster map layer <em>soil.ph</em>
+<p>For example, suppose that the raster map layer <em>soil.ph</em>
 (representing soil pH values) has a category file with labels as follows:
-<p>
-<div class="code"><pre>
+<p><div class="code"><pre>
 cat     label
 ------------------
 0       no data
@@ -228,17 +197,13 @@ cat     label
 6       8.8
 7       9.4
 </pre></div>
-<p>
-Then the expression:
-<p>
-<div class="code"><pre>
+<p>Then the expression:
+<p><div class="code"><pre>
 result = @soils.ph
 </pre></div>
-<p>
-would produce a result with category values
+<p>would produce a result with category values
 0, 1.4, 2.4, 3.5, 5.8, 7.2, 8.8 and 9.4.
-<p>
-Note that this operator may only be applied to raster map layers
+<p>Note that this operator may only be applied to raster map layers
 and produces a floating point value in the expression.
 Therefore, the category label must start with a valid number.
 If the category label is integer, it will be represented by
@@ -253,49 +218,36 @@ This is particularly useful when the spectral properties of cells have meaning
 (as with imagery data), or when the map category values represent real
 quantities (as when category values reflect true elevation values).
 Map color manipulation can also aid visual recognition, and map printing.
-<p>
-The # operator can be used to either convert map category values to their
+<p>The # operator can be used to either convert map category values to their
 grey scale equivalents or to extract the red, green, or blue components
 of a raster map layer into separate raster map layers.
-<p>
-<div class="code"><pre>
+<p><div class="code"><pre>
 result = #map
 </pre></div>
-<p>
-converts each category value in <em>map</em> to a value in the range 0-255 which
+<p>converts each category value in <em>map</em> to a value in the range 0-255 which
 represents the grey scale level implied by the color for the category.
 If the map has a grey scale color table, then the grey level is what
 #map evaluates to.  Otherwise, it is computed as:
-<p>
-<div class="code"><pre>
+<p><div class="code"><pre>
  0.10 * red + 0.81 * green + 0.01 * blue
 </pre></div>
-<p>
-Alternatively, you can use:
-<p>
-<div class="code"><pre>
+<p>Alternatively, you can use:
+<p><div class="code"><pre>
 result = y#map
 </pre></div>
-<p>
-to use the NTSC weightings:
-<p>
-<div class="code"><pre>
+<p>to use the NTSC weightings:
+<p><div class="code"><pre>
  0.30 * red + 0.59 * green + 0.11 * blue
 </pre></div>
-<p>
-Or, you can use:
-<p>
-<div class="code"><pre>
+<p>Or, you can use:
+<p><div class="code"><pre>
 result = i#map
 </pre></div>
-<p>
-to use equal weightings:
-<p>
-<div class="code"><pre>
+<p>to use equal weightings:
+<p><div class="code"><pre>
  0.33 * red + 0.33 * green + 0.33 * blue
 </pre></div>
-<p>
-The # operator has three other forms:  r#map, g#map, b#map.
+<p>The # operator has three other forms:  r#map, g#map, b#map.
 These extract the red, green, or blue components in the named raster map,
 respectively.  The GRASS shell script <em><a href="r.blend.html">r.blend</a></em> extracts each of these
 components from two raster map layers, and combines them by a user-specified
@@ -304,28 +256,22 @@ These forms allow color separates to be made.  For example, to
 extract the red component from <em>map</em>
 and store it in the new 0-255 map layer <em>red</em>,
 the user could type:
-<p>
-<div class="code"><pre>
+<p><div class="code"><pre>
 red = r#map
 </pre></div>
-<p>
-To assign this map grey colors type:
-<p>
-<div class="code"><pre>
+<p>To assign this map grey colors type:
+<p><div class="code"><pre>
 <a href="r.colors.html">r.colors</a> map=red color=rules
 black
 white
 </pre></div>
-<p>
-To assign this map red colors type:
-<p>
-<div class="code"><pre>
+<p>To assign this map red colors type:
+<p><div class="code"><pre>
 <a href="r.colors.html">r.colors</a> map=red color=rules
 black
 red
 </pre></div>
 <p>
-
 
 <h3>FUNCTIONS</h3>
 The functions currently supported are listed in the table below.
@@ -337,8 +283,7 @@ means that the function gives an integer result, and
 <em>*</em>
 indicates that the result is float if any of the arguments to the function
 are floating point values and integer if all arguments are integer.
-<p>
-<div class="code"><pre>
+<p><div class="code"><pre>
 function                description                                     type
 ---------------------------------------------------------------------------
 abs(x)                  return absolute value of x                      *
@@ -401,12 +346,10 @@ This means, in particular that division of integers results in a
 (truncated) integer, while division of floats results in an accurate
 floating point value.  With functions of type * (see table above),
 the result is float if any argument is float, integer otherwise.
-<p>
-Note: If you calculate with integer numbers, the resulting map will
+<p>Note: If you calculate with integer numbers, the resulting map will
 be integer. If you want to get a float result, add the decimal point
 to integer number(s).
-<p>
-If you want floating point division, at least one of the arguments has
+<p>If you want floating point division, at least one of the arguments has
 to be a floating point value. Multiplying one of them by 1.0 will
 produce a floating-point result, as will using float():
 <div class="code"><pre>
@@ -453,42 +396,34 @@ sqrt(-2)
 pow(a,b) where a is negative and b is not an integer 
 </pre></div>
 </ul>
-<p>
-NULL support: Please note that any math performed with NULL cells always
+<p>NULL support: Please note that any math performed with NULL cells always
 results in a NULL value for these cells. If you want to replace a NULL cell
 on-the-fly, use the isnull() test function in a if-statement.
-<p>
-Example: The users wants the NULL-valued cells to be treated like zeros. To
+<p>Example: The users wants the NULL-valued cells to be treated like zeros. To
 add maps A and B (where B contains NULLs) to get a map C the user can use a
-construction like:<p>
-<div class="code"><pre>
+construction like:<p><div class="code"><pre>
 C = A + if(isnull(B),0,B)
 </pre></div>
-<p>
-<b>NULL and conditions:</b>
-<p>
-For the one argument form:
+<p><b>NULL and conditions:</b>
+<p>For the one argument form:
 <div class="code"><pre>
 if(x) = NULL		if x is NULL
 if(x) = 0		if x = 0
 if(x) = 1		otherwise (i.e. x is neither NULL nor 0).
 </pre></div>
-<p>
-For the two argument form:
+<p>For the two argument form:
 <div class="code"><pre>
 if(x,a) = NULL		if x is NULL
 if(x,a) = 0		if x = 0
 if(x,a) = a		otherwise (i.e. x is neither NULL nor 0).
 </pre></div>
-<p>
-For the three argument form:
+<p>For the three argument form:
 <div class="code"><pre>
 if(x,a,b) = NULL	if x is NULL
 if(x,a,b) = b		if x = 0
 if(x,a,b) = a		otherwise (i.e. x is neither NULL nor 0).
 </pre></div>
-<p>
-For the four argument form:
+<p>For the four argument form:
 <div class="code"><pre>
 if(x,a,b,c) = NULL	if x is NULL
 if(x,a,b,c) = a		if x > 0
@@ -503,8 +438,7 @@ The functions if(), isnull() and eval() are exceptions.
 The function isnull() returns 1 if its argument is NULL and 0 otherwise.
 If the user wants the opposite, the ! operator, e.g. "!isnull(x)" must be
 used.
-<p>
-All forms of if() return NULL if the first argument is NULL. The 2, 3
+<p>All forms of if() return NULL if the first argument is NULL. The 2, 3
 and 4 argument forms of if() return NULL if the "selected" argument is
 NULL, e.g.:
 <div class="code"><pre>
@@ -513,8 +447,7 @@ if(1,a,b) = a	regardless of whether b is NULL
 </pre></div>
 eval() always returns its last argument, so it only returns NULL if
 the last argument is NULL.
-<p>
-<b>Note</b>: The user cannot test for NULL using the == operator, as that
+<p><b>Note</b>: The user cannot test for NULL using the == operator, as that
 returns NULL if either or both arguments are NULL, i.e. if x and y are
 both NULL, then "x == y" and "x != y" are both NULL rather than 1 and
 0 respectively.
@@ -528,17 +461,14 @@ values, the user doesn't know whether or not they both have the same value.
 Extra care must be taken if the expression is given on the command line.
 Some characters have special meaning to the UNIX shell.
 These include, among others:
-<p>
-* ( ) &gt; &amp; |
-<p>
-It is advisable to put single quotes around the expression; e.g.:
+<p>* ( ) &gt; &amp; |
+<p>It is advisable to put single quotes around the expression; e.g.:
 <div class="code"><pre>
 'result = elevation * 2'
 </pre></div>
 Without the quotes, the *, which has special meaning to the UNIX shell,
 would be altered and <em>r.mapcalc</em> would see something other than the *.
 <p>
-
 In general, it's preferable to do as much as possible in each
 r.mapcalc command. E.g. rather than:
 <div class="code"><pre>
@@ -546,8 +476,7 @@ r.mapcalc command. E.g. rather than:
         r.mapcalc "$GIS_OPT_OUTPUT.g = g#$GIS_OPT_FIRST * .$GIS_OPT_PERCENT + (1.0 - .$GIS_OPT_PERCENT) * g#$GIS_OPT_SECOND"
         r.mapcalc "$GIS_OPT_OUTPUT.b = b#$GIS_OPT_FIRST * .$GIS_OPT_PERCENT + (1.0 - .$GIS_OPT_PERCENT) * b#$GIS_OPT_SECOND"
 </pre></div>
-<p>
-use:
+<p>use:
 <div class="code"><pre>
 	r.mapcalc &lt;&lt;EOF
         $GIS_OPT_OUTPUT.r = r#$GIS_OPT_FIRST * .$GIS_OPT_PERCENT + (1.0 - .$GIS_OPT_PERCENT) * r#$GIS_OPT_SECOND
@@ -555,26 +484,21 @@ use:
         $GIS_OPT_OUTPUT.b = b#$GIS_OPT_FIRST * .$GIS_OPT_PERCENT + (1.0 - .$GIS_OPT_PERCENT) * b#$GIS_OPT_SECOND
         EOF
 </pre></div>
-<p>
-as the latter will read each input map only once.
-<p>
-For formulas that the user enters from standard input
+<p>as the latter will read each input map only once.
+<p>For formulas that the user enters from standard input
 (rather than from the command line), a line continuation feature now exists.
 If the user adds a backslash to the end of an input line, <em>r.mapcalc</em> assumes that
 the formula being entered by the user continues on to the next input line.
 There is no limit to the possible number of input lines
 or to the length of a formula.
-<p>
-If the <em>r.mapcalc</em> formula entered by the user is very long,
+<p>If the <em>r.mapcalc</em> formula entered by the user is very long,
 the map title will contain only some of it, but most (if not all) of
 the formula will be placed into the history file for the <em>result</em> map.
-<p>
-When the user enters input to <em>r.mapcalc</em> non-interactively on
+<p>When the user enters input to <em>r.mapcalc</em> non-interactively on
 the command line, the program will not warn the user not to overwrite
 existing map layers.  Users should therefore take care to assign program
 outputs raster map names that do not yet exist in their current mapsets.
-<p>
-The environment variable GRASS_RND_SEED is read to initialise the
+<p>The environment variable GRASS_RND_SEED is read to initialise the
 random number generator.
 
 <h2>EXAMPLES</h2>
@@ -640,18 +564,15 @@ Continuation lines must end with a \ and have NO trailing white space
 continuation lines, the error messages produced by <em>r.mapcalc</em> will
 be meaningless and the equation will not work as the user intended.
 This is important for the eval() function.
-<p>
-<!-- STILL TRUE ??-->
+<p><!-- STILL TRUE ??-->
 Currently, there is no comment mechanism in <em>r.mapcalc</em>.
 Perhaps adding a capability that would cause the entire line to be
 ignored when the user inserted a # at the start of a line
 as if it were not present, would do the trick.
-<p>
-The function should require the user to type "end" or "exit" instead
+<p>The function should require the user to type "end" or "exit" instead
 of simply a blank line. This would make separation of multiple scripts
 separable by white space.
-<p>
-r.mapcalc does not print a warning in case of operations on NULL cells.
+<p>r.mapcalc does not print a warning in case of operations on NULL cells.
 It is left to the user to utilize the isnull() function.
 
 
@@ -664,12 +585,10 @@ Construction Engineering Research Laboratory (March/1991).
 r.mapcalc Program Tutorial</a></b>, by Marji Larson, Michael Shapiro and Scott
 Tweddale, U.S. Army Construction Engineering Research Laboratory (December
 1991)
-<p>
-Grey scale conversion is based on the C.I.E. x,y,z system where y represents
+<p>Grey scale conversion is based on the C.I.E. x,y,z system where y represents
 luminance.  See "Fundamentals of Digital Image Processing,"
 by Anil K. Jain (Prentice Hall, NJ, 1989; p 67).
-<p>
-<em>
+<p><em>
 <a href="g.region.html">g.region</a>,
 <a href="r.bitpattern.html">r.bitpattern</a>,
 <a href="r.blend.html">r.blend</a>,
@@ -681,8 +600,6 @@ by Anil K. Jain (Prentice Hall, NJ, 1989; p 67).
 <h2>AUTHORS</h2>
 Michael Shapiro, U.S.Army Construction Engineering 
 Research Laboratory
-<p>
-Glynn Clements
+<p>Glynn Clements
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

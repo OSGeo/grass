@@ -4,8 +4,7 @@
 and X,Y coordinates.  Only simple bearing/distance or coordinate
 pairs are handled. It assumes a cartesian coordinate system.
 
-<p>
-Input can be entered via standard input (default) or from the file
+<p>Input can be entered via standard input (default) or from the file
 <b>input=</b><em>name</em>. Specifying the input as "-" also
 specifies standard input, and is useful for using the program in
 a pipeline.  Output will be to standard output unless a file
@@ -13,16 +12,14 @@ name other than "-" is specified.  The input file must
 closely adhere to the following format, where up to a 10 character
 label is allowed but not required (see <b>-l</b> flag).
 
-<p>
-<b>Example COGO input:</b>
+<p><b>Example COGO input:</b>
 <div class="code"><pre>
    P23 N 23:14:12 W 340
    P24 S 04:18:56 E 230
    ...
 </pre></div>
 
-<p>
-The first column may contain a label and you must use the <b>-l</b>
+<p>The first column may contain a label and you must use the <b>-l</b>
 flag so the program knows.  This is followed by a space, and then
 either the character 'N' or 'S' to indicate whether the bearing is
 relative to the north or south directions.  After another space,
@@ -33,18 +30,15 @@ A space follows the angle, and is then followed by either the 'E' or 'W'
 characters. A space separates the bearing from the distance (which should
 be in appropriate linear units).
 
-<p>
-<b>Output of the above input:</b>
+<p><b>Output of the above input:</b>
 <div class="code"><pre>
    -134.140211 312.420236 P23
    -116.832837 83.072345 P24
    ...
 </pre></div>
-<p>
-Unless specified with the <b>coord</b> option, calculations begin from (0,0).
+<p>Unless specified with the <b>coord</b> option, calculations begin from (0,0).
 
-<p>
-For those unfamiliar with the notation for bearings: Picture yourself in the
+<p>For those unfamiliar with the notation for bearings: Picture yourself in the
 center of a circle.  The first hemispere notation tell you whether you should
 face north or south.  Then you read the angle and either turn that many
 degrees to the east or west, depending on the second hemisphere notation.  
@@ -60,7 +54,6 @@ parameters, <em>m.cogo</em> will prompt for each value
 using the familiar GRASS parser interface.
 
 <p>
-
 <h2>NOTES</h2>
 
 This program is very simplistic, and will not handle deviations
@@ -141,5 +134,4 @@ converted to areas with <em>v.centroids</em>.
 
 Eric G. Miller
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

@@ -1,6 +1,5 @@
 <h2>DESCRIPTION</h2>
 
-
 <em>r.surf.idw</em> fills a grid cell (raster) matrix with
 interpolated values generated from a set of input layer
 data points. It uses a numerical approximation technique
@@ -10,7 +9,6 @@ to determined the interpolated value of a cell can be
 specified by the user (default: 12 nearest data points).
 
 <p>
-
 If there is a current working mask, it applies to the output 
 raster map. Only those cells falling within the mask will be 
 assigned interpolated values. The search procedure for the 
@@ -20,8 +18,7 @@ input data, without regard to the mask.
 The <b>-e</b> flag is the error analysis option that interpolates values
 only for those cells of the input raster map which have non-zero values and
 outputs the difference (see <a href="#minuse.html">NOTES</a> below).
-<p>
-The <b>npoints</b> parameter defines the number of nearest data points used
+<p>The <b>npoints</b> parameter defines the number of nearest data points used
 to determine the interpolated value of an output raster cell.
 
 <A NAME="notes.html"></a>
@@ -39,7 +36,6 @@ distances are calculated from point to point along a
 geodesic.
 
 <p>
-
 Unlike <em><a href="r.surf.idw2.html">r.surf.idw2</a></em>, which processes
 all input data points in each interpolation cycle, <em>r.surf.idw</em>
 attempts to minimize the number of input data for which distances must be
@@ -47,7 +43,6 @@ calculated. Execution speed is therefore a function of the search effort,
 and does not increase appreciably with the number of input data points.
 
 <p>
-
 <em>r.surf.idw</em> will generally outperform 
 <em><a href="r.surf.idw2.html">r.surf.idw2</a></em> except when the input data
 layer contains few non-zero data, i.e. when the cost of the search exceeds
@@ -57,7 +52,6 @@ of these utilities will depend on the comparative speed of boolean, integer
 and floating point operations on a particular platform.
 
 <p>
-
 Worst case search performance by <em>r.surf.idw</em> occurs
 when the interpolated cell is located outside of the region
 in which input data are distributed. It therefore behooves
@@ -66,7 +60,6 @@ include large areas outside the general extent of the input
 data.
 
 <p>
-
 The degree of smoothing produced by the interpolation will
 increase relative to the number of nearest data points
 considered.  The utility may be used with regularly or
@@ -75,7 +68,6 @@ for the former may include unacceptable nonconformities in
 the surface pattern.
 
 <p>
-
 The <A NAME="minuse.html"><b>-e</b></a> flag option provides a standard
 surface-generation error analysis facility. It produces an output raster map
 of the difference of interpolated values minus input values for those cells
@@ -106,5 +98,4 @@ U.S. EPA Environmental Research Laboratory <br>
 200 S.W. 35th Street, JSB <br>
 Corvallis, OR 97333 
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

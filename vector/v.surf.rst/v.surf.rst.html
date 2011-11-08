@@ -16,8 +16,7 @@ instead of slope, aspect, profile, tangential and mean curvatures respectively.
 If the input data have time stamp, the program creates time stamp for all
 output files.
 
-<p>
-User can define a raster map named <em>maskmap</em>, which will be used
+<p>User can define a raster map named <em>maskmap</em>, which will be used
 as a mask. The approximation is skipped for cells which have zero or NULL
 value in mask. NULL values will be assigned to these cells in all output
 raster maps. Data points are checked for identical points and points that
@@ -31,7 +30,6 @@ elevations given in feet to meters, so that the proper values of slopes
 and curvatures can be computed).
 
 <p>
-
 Regularized spline with tension is used for the approximation. The
 <em>tension</em>
 parameter tunes the character of the resulting surface from thin plate
@@ -46,7 +44,6 @@ is used, it is also possible to output a vector point file <em>devi</em> contain
 of the resulting surface from the given data.
 
 <p>
-
 If the number of given points is greater than <em>segmax</em>, segmented
 processing is used . The region is split into quadtree-based rectangular segments, each
 having less than <em>segmax</em> points and approximation is performed on
@@ -60,7 +57,6 @@ which represent the quad tree used for segmentation and overlapping neighborhood
 from which additional points for approximation on each segment were taken.
 
 <p>
-
 Predictive error of surface approximation for given parameters can be computed using the 
 <b>-c</b> flag. A crossvalidation procedure is then performed using the data given in the vector map 
 <em>input</em> and the estimated predictive errors are stored in the vector point file  
@@ -73,7 +69,6 @@ the history file of raster map
 <b><em>elev</em></b>.
 
 <p>
-
 <h2>NOTES</h2>
 
 <em>v.surf.rst </em>uses regularized spline with tension for approximation
@@ -201,8 +196,7 @@ the output deviations option.
 Using the <em>where</em> parameter, the interpolation can be limited to use
 only a subset of the input vectors.
 
-<p>
-Spearfish example (we simulate randomly distributed elevation measures):
+<p>Spearfish example (we simulate randomly distributed elevation measures):
 
 <div class="code"><pre>
 g.region rast=elevation.10m -p
@@ -226,8 +220,7 @@ d.vect elevrand where="value > 1300"
 
 
 <h3>Cross validation procedure</h3>
-<p>
-The "optimal" approximation parameters for given data can be found using 
+<p>The "optimal" approximation parameters for given data can be found using 
 a cross-validation (CV) procedure (<b>-c </b>flag). 
 The CV procedure is based on removing one input data point at a time, 
 performing the approximation for the location of the removed point using 
@@ -302,47 +295,39 @@ Jaroslav Hofierka, University of Presov; Radim Blazek, ITC-irst
 
 
 <h2> REFERENCES</h2>
-<p>
-<a href="http://skagit.meas.ncsu.edu/~helena/gmslab/papers/IEEEGRSL2005.pdf">
+<p><a href="http://skagit.meas.ncsu.edu/~helena/gmslab/papers/IEEEGRSL2005.pdf">
 Mitasova, H., Mitas, L. and Harmon, R.S., 2005,</a> 
 Simultaneous spline approximation and topographic analysis for
 lidar elevation data in open source GIS, IEEE GRSL 2 (4), 375- 379.
-<p>
-Hofierka, J., 2005, Interpolation of Radioactivity Data Using Regularized Spline with Tension. Applied GIS, Vol. 1, No. 2, 
+<p>Hofierka, J., 2005, Interpolation of Radioactivity Data Using Regularized Spline with Tension. Applied GIS, Vol. 1, No. 2, 
 pp. 16-01 to 16-13. DOI: 10.2104/ag050016
 
-<p>
-<a href="http://skagit.meas.ncsu.edu/~helena/gmslab/papers/TGIS2002_Hofierka_et_al.pdf">
+<p><a href="http://skagit.meas.ncsu.edu/~helena/gmslab/papers/TGIS2002_Hofierka_et_al.pdf">
 Hofierka J., Parajka J.,  Mitasova H., Mitas L., 2002,</a>
 Multivariate Interpolation of Precipitation Using Regularized Spline with Tension.
 Transactions in GIS 6(2), pp. 135-150.
 
-<p>
-H. Mitasova, L. Mitas, B.M. Brown, D.P. Gerdes, I. Kosinovsky, 1995, Modeling
+<p>H. Mitasova, L. Mitas, B.M. Brown, D.P. Gerdes, I. Kosinovsky, 1995, Modeling
 spatially and temporally distributed phenomena: New methods and tools for
 GRASS GIS. International Journal of GIS, 9 (4), special issue on Integrating
 GIS and Environmental modeling, 433-446.
 
-<p>
-<a href="http://skagit.meas.ncsu.edu/~helena/gmslab/papers/MG-I-93.pdf">
+<p><a href="http://skagit.meas.ncsu.edu/~helena/gmslab/papers/MG-I-93.pdf">
 Mitasova, H. and Mitas, L., 1993</a>: 
 Interpolation by Regularized Spline with Tension: 
 I. Theory and Implementation, Mathematical Geology ,25, 641-655.
 
-<p>
-<a href="http://skagit.meas.ncsu.edu/~helena/gmslab/papers/MG-II-93.pdf">
+<p><a href="http://skagit.meas.ncsu.edu/~helena/gmslab/papers/MG-II-93.pdf">
 Mitasova, H. and Hofierka, J., 1993</a>: Interpolation
 by Regularized Spline with Tension: II. Application to Terrain Modeling
 and Surface Geometry Analysis, Mathematical Geology 25, 657-667.
 
-<p>
-<a href="http://skagit.meas.ncsu.edu/~helena/gmslab/papers/CMA1988.pdf">
+<p><a href="http://skagit.meas.ncsu.edu/~helena/gmslab/papers/CMA1988.pdf">
 Mitas, L., and Mitasova H., 1988, </a> General variational approach to the approximation
 problem, Computers and Mathematics with Applications, v.16, p. 983-992.
 
 
-<p>
-<a href="http://www.grassbook.org">
+<p><a href="http://www.grassbook.org">
 Neteler, M. and Mitasova, H., 2008, Open Source GIS: A GRASS GIS Approach, 3rd Edition, </a> 
 Springer, New York, 406 pages.
 

@@ -7,8 +7,7 @@ classification of imagery, while the GRASS program <em>
 the second pass. Both programs must be run to complete the unsupervised 
 classification.
 
-<p>
-<em>i.cluster</em> is a clustering algorithm that reads
+<p><em>i.cluster</em> is a clustering algorithm that reads
 through the (raster) imagery data and builds pixel clusters
 based on the spectral reflectances of the pixels (see Figure).
 The pixel clusters are imagery categories that can be related
@@ -18,8 +17,7 @@ spectral signatures) are influenced by six parameters set
 by the user.  The first parameter set by the user is the
 initial number of clusters to be discriminated.
 
-<p>
-<center>
+<p><center>
 <img src="landsat_cluster.png" border=1><br>
 <table border=0 width=590>
 <tr><td><center>
@@ -28,7 +26,6 @@ initial number of clusters to be discriminated.
 </table>
 </center>
 <p>
-
 <em>i.cluster</em> starts by generating spectral signatures
 for this number of clusters and "attempts" to end up with
 this number of clusters during the clustering process.  The
@@ -42,7 +39,6 @@ and the row and column sampling intervals.
 
 
 <p>
-
 The cluster spectral signatures that result are composed of
 cluster means and covariance matrices.  These cluster means
 and covariance matrices are used in the second pass 
@@ -75,7 +71,7 @@ The classes value is the initial number of clusters to be
 discriminated; any parameter values left unspecified are
 set to their default values.
 
-<H3>Flags:</H3>
+<h3>Flags:</h3>
 
 <dl>
 
@@ -88,7 +84,7 @@ messages are printed out.
 
 </dl>
 
-<H3>Parameters:</H3>
+<h3>Parameters:</h3>
 
 <dl>
 
@@ -240,7 +236,6 @@ The GRASS 4 <em>
 Processing manual</a></em>
 
 <p>
-
 <em>
 <a href="i.class.html">i.class</a>,
 <a href="i.group.html">i.group</a>,
@@ -259,5 +254,4 @@ Tao Wen,
 University of Illinois at 
 Urbana-Champaign, 
 Illinois
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

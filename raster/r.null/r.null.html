@@ -6,17 +6,14 @@ NULL-value bitmap file (i.e. to indicate if zero is valid value or is to be
 converted to NULL). The module does not work with reclassified maps.
 
 <p>
-
 The design is flexible. Ranges of values can be set to NULL and/or the NULL
 value can be eliminated and replace with a specified value.
 <p>
-
 The <b>setnull</b> parameter is used to specify values in the ranges to
 be set to NULL.  A range is either a single value (e.g., 5.3), or a pair of
 values (e.g., 4.76-34.56).  Existing NULL-values are left NULL, unless the
 null argument is requested.
 <p>
-
 The <b>null</b> parameter eliminates the NULL value and replaces it with
 value. This argument is applied only to existing NULL values, and not to the
 NULLs created by the setnull argument.
@@ -36,8 +33,7 @@ r.null map=fields null=99
 <h2>NOTES</h2>
 
 Note that value is restricted to integer if the map is an integer map. 
-<p>
-<em>r.null</em> and reclassified maps:<br>
+<p><em>r.null</em> and reclassified maps:<br>
 The problem is, if r.null was run on the reclass raster it would alter the
 original and any other reclass rasters of the original.  Therefore r.null 
 doesn't allow to recode reclassified maps (products of r.reclass).

@@ -5,23 +5,19 @@ into any GDAL supported raster map format. If a GRASS raster map is
 exported for a particular application, the application's native format
 would be preferrable. GeoTIFF is supported by a wide range of
 applications (see also <b>NOTES</b> on GeoTIFF below).
-<p>
-To specify multiple creation options use a comma separated list
+<p>To specify multiple creation options use a comma separated list
 (<em>createopt="TFW=YES,COMPRESS=DEFLATE"</em>).
-<p>
-For possible <em>createopt</em> and <em>metaopt</em> parameters please
+<p>For possible <em>createopt</em> and <em>metaopt</em> parameters please
 consult the individual
 <a href="http://www.gdal.org/formats_list.html">supported formats</a>
 pages on the GDAL website.
 The <em>createopt</em> parameter may be used to create TFW or World files
 ("TFW=YES","WORLDFILE=ON").
-<p>
-<em>r.out.gdal</em> also supports the export of multiband rasters as
+<p><em>r.out.gdal</em> also supports the export of multiband rasters as
 a group, when the imagery group's name is entered as input.
 (created imagery groups with the <em><a href="i.group.html">i.group</a></em>
 module)
-<p>
-As with most GRASS raster modules, the current region extents and region
+<p>As with most GRASS raster modules, the current region extents and region
 resolution are used, and a MASK is respected if present.
 Use <em><a href="g.region.html">g.region</a></em>'s "align=", or "rast="
 options if you need to realign the region settings to match the original
@@ -33,7 +29,6 @@ map's before export.
 The set of <a href="http://www.gdal.org/formats_list.html">supported
 raster formats</a> written by <em>r.out.gdal</em> depends on the
 local GDAL installation. Available may be (incomplete list):<p>
-
 <pre>
   AAIGrid: Arc/Info ASCII Grid
   BMP: MS Windows Device Independent Bitmap
@@ -63,8 +58,7 @@ local GDAL installation. Available may be (incomplete list):<p>
 
 <h2>NOTES</h2>
 
-<p>
-Out of the GDAL data types, the closest match for GRASS CELL, FCELL and
+<p>Out of the GDAL data types, the closest match for GRASS CELL, FCELL and
 DCELL rasters are respectively Int32, Float32 and Float64. These are not
 exact equivalents, but they will preserve the maximum possible data range
 and number of decimal places for each respective GRASS raster data type.
@@ -93,26 +87,22 @@ for details.
   Float64, CFloat64	     -1.79E308         1.79E308
 </pre>
 
-<p>
-If there is a need to keep file sizes small, use the simplest data type
+<p>If there is a need to keep file sizes small, use the simplest data type
 covering the data range of the raster(s) to be exported, e.g., if suitable
 use Byte rather than UInt16; use Int16 rather than Int32; or use Float32
 rather than Float64. In addition, the COMPRESS <b>createopt</b> used can
 have a very large impact on the size of the output file.
-<p>
-Some software may not recognize all of the compression methods
+<p>Some software may not recognize all of the compression methods
 available for a given file format, and certain compression methods may
 only be supported for certain data types (depends on vendor and version).
 <!-- e.g. data destined for ESRI software should use COMPRESS=LZW/PACKBITS/DEFLATE ??? -->
-<p>
-If the export settings are set such that data loss would occur in the output
+<p>If the export settings are set such that data loss would occur in the output
 file (i.e, due to the particular choice of data type and/or file type), the
 normal behaviour of <em>r.out.gdal</em> in this case would be to issue an error
 message describing the problem and exit without exporting. The <b>-f</b> flag
 allows raster export even if some of the data loss tests are not passed, and
 warnings are issued instead of errors.
-<p>
-<em>r.out.gdal</em> exports may appear all black or gray on initial
+<p><em>r.out.gdal</em> exports may appear all black or gray on initial
 display in other GIS software. This is not a bug of <em>r.out.gdal</em>,
 but often caused by the default color table assigned by that software.
 The default color table may be grayscale covering the whole range of
@@ -128,15 +118,13 @@ one or three bands. All other data types and numbers of bands can be
 properly read with GIS software only. Although GeoTIFF files usually
 have a .tif extension, these files are not necessarily images but
 first of all spatial raster datasets, e.g. SRTM DEM version 4.
-<p>
-When writing out multi-band GeoTIFF images for users of ESRI software or
+<p>When writing out multi-band GeoTIFF images for users of ESRI software or
 ImageMagick, the interleaving mode should be set to "pixel" using
 <em>createopt="INTERLEAVE=PIXEL"</em>. BAND interleaving is slightly more
 efficient, but not supported by some applications.
 <!-- GDAL switched default from BAND to PIXEL interleave on 08/01/07 (r11823) -->
 This issue only arises when writing out multi-band imagery groups.
 <p>
-
 <h3>Improving GeoTIFF compatibility</h3>
 
 To create a GeoTIFF that is highly compatible with various other GIS
@@ -145,8 +133,7 @@ as possible. You will have to experiment with which options your
 software is compatible with, as this varies widely between vendors and
 versions. Long term, the less metadata you have to remove the more
 self-documenting (and useful) the dataset will be.
-<p>
-Here are some things to try:
+<p>Here are some things to try:
 
 <ul>
 <li>Create a World file with <tt>createopt="TFW=YES"</tt>.
@@ -180,20 +167,17 @@ overviews.
 r.out.gdal input=roads output=roads.tif type=UInt16
 </pre></div>
 <p>
-
 <h3>Export a DCELL raster map in GeoTIFF format suitable for ESRI software:</h3>
 <div class="code"><pre>
 r.out.gdal in=elevation.10m out=ned_elev10m.tif type=Float64 createopt="PROFILE=GeoTIFF,TFW=YES"
 </pre></div>
 <p>
-
 <h3>Export R,G,B imagery bands in GeoTIFF format suitable for ESRI software:</h3>
 <div class="code"><pre>
 i.group group=nc_landsat_rgb input=lsat7_2002_30,lsat7_2002_20,lsat7_2002_10
 r.out.gdal in=nc_landsat_rgb out=nc_landsat_rgb.tif type=Byte createopt="PROFILE=GeoTIFF,INTERLEAVE=PIXEL,TFW=YES"
 </pre></div>
 <p>
-
 <h3>Export the floating point raster elevation map to ERDAS/IMG format:</h3>
 <div class="code"><pre>
 r.out.gdal input=elevation.10m output=elev_dem10.img format=HFA type=Float32
@@ -254,5 +238,4 @@ GDAL Pages: <a href="http://www.gdal.org">http://www.gdal.org</a>
 Vytautas Vebra (oliver4grass at gmail.com)<br>
 Markus Metz (improved nodata logic)
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

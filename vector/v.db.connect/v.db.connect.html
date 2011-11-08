@@ -10,13 +10,11 @@ If parameters for database connection are already set with
 <a href="db.connect.html">db.connect</a>, they are taken as default values and
 do not need to be spcified each time.
 
-<p>
-When printing database connection (<em>p</em> or <em>g</em> flag) the parameter
+<p>When printing database connection (<em>p</em> or <em>g</em> flag) the parameter
 <em>layer</em> is ignored, i.e. <b>all</b> connections are printed to the
 output.
 
-<p>
-<b>Attention:</b> Removing a vector map will also delete all tables
+<p><b>Attention:</b> Removing a vector map will also delete all tables
 linked to it! If you use <a href="db.connect.html">v.db.connect </a>to
 link further tables to your map, it is advisable to make a copy from
 those tables first and connect the copied tables to the vector map
@@ -32,8 +30,7 @@ Print all database connection parameters for vector map.
 v.db.connect -p map=roads
 </pre></div>
 
-<p>
-Print column types and names of table linked to vector map.
+<p>Print column types and names of table linked to vector map.
 
 <div class="code"><pre>
 v.db.connect -c map=roads
@@ -43,28 +40,24 @@ v.db.connect -c map=roads
 
 Connect vector map to DBF table without or with variables.<br>
 
-<p>
-Using default DB connection:
+<p>Using default DB connection:
 <div class="code"><pre>
 v.db.connect map=vectormap table=table
 </pre></div>
 
-<p>
-Using hardcoded path to DBF directory (not recommended):<br>
+<p>Using hardcoded path to DBF directory (not recommended):<br>
 <div class="code"><pre>
 v.db.connect map=vectormap table=table \
              database=/home/user/grassdata/spearfish60/PERMANENT/dbf
 </pre></div>
 
-<p>
-Using variable as DBF directory definition, single quotes must be used:<br>
+<p>Using variable as DBF directory definition, single quotes must be used:<br>
 <div class="code"><pre>
 v.db.connect map=vectormap table=table \
              database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/'
 </pre></div>
 
-<p>
-Connect vector map layer 2 and key ID to database with variables
+<p>Connect vector map layer 2 and key ID to database with variables
 (note: if needed, single quotes must be used for the <em>database</em>
 parameter):
 <div class="code"><pre>
@@ -112,7 +105,7 @@ v.db.connect map=vectormap table=table layer=1 key=oid driver=pg \
              table=mytable key=id
 </pre></div>
 
-<H3>Store geometry in GRASS but attributes in PostgreSQL</H3>
+<h3>Store geometry in GRASS but attributes in PostgreSQL</h3>
 
 This example illustrated a mixed data storage with possibility
 top update attributes in external PostgreSQL database:
@@ -152,7 +145,7 @@ table to the geometry. This will be faster if the original table
 is very large.
 
 
-<H3>Store geometry in GRASS but attributes in PostGIS</H3>
+<h3>Store geometry in GRASS but attributes in PostGIS</h3>
 
 This example illustrated a mixed data storage with possibility
 top update attributes in external PostGIS database:

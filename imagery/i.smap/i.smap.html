@@ -10,26 +10,24 @@ multispectral images based on simple spectral mean and
 covariance parameters.
 
 <p>
-
 <em>i.smap</em> has two modes of operation.  The first mode
 is the sequential maximum a posteriori (SMAP) mode
-[<a href="#ref1">1</A>,<a href="#ref2">2</A>].  The SMAP
+[<a href="#ref1">1</a>,<a href="#ref2">2</a>].  The SMAP
 segmentation algorithm attempts to improve segmentation
 accuracy by segmenting the image into regions rather than
 segmenting each pixel separately 
-(see <a href="#notes">NOTES</A>).
+(see <a href="#notes">NOTES</a>).
 
 
 <p>
-
 The second mode is the more conventional maximum likelihood (ML)
 classification which classifies each pixel separately,
 but requires somewhat less computation. This mode is selected with
-the <b>-m</b> flag (see <a href="#mflag.html">below</A>).
+the <b>-m</b> flag (see <a href="#mflag.html">below</a>).
 
 <h2>OPTIONS</h2>
 
-<H3>Flags:</H3>
+<h3>Flags:</h3>
 
 <dl>
 
@@ -37,7 +35,7 @@ the <b>-m</b> flag (see <a href="#mflag.html">below</A>).
 
 <dd>Use maximum likelihood estimation (instead of smap).
 Normal operation is to use SMAP estimation (see
-<a href="#notes">NOTES</A>).
+<a href="#notes">NOTES</a>).
 
 <dt><b>-q</b> 
 
@@ -48,7 +46,7 @@ stderr) as the program progresses.
 </dl>
 
 
-<H3>Parameters:</H3>
+<h3>Parameters:</h3>
 
 <dl>
 <dt><b>group=</b><em>name</em> 
@@ -69,8 +67,8 @@ to be classified.
 The signature file that contains the spectral signatures (i.e., the
 statistics) for the classes to be identified in the image.
 This signature file is produced by the program
-<em><a href="i.gensigset.html">i.gensigset</A></em>
-(see <a href="#notes">NOTES</A>).
+<em><a href="i.gensigset.html">i.gensigset</a></em>
+(see <a href="#notes">NOTES</a>).
 
 <dt><b>blocksize=</b><em>value</em> 
 
@@ -80,7 +78,6 @@ This option specifies the size of the "window" to be used when
 reading the image data. 
 
 <p>
-
 This program was written to be nice about memory usage
 without influencing the resultant classification. This
 option allows the user to control how much memory is used.
@@ -89,7 +86,6 @@ on how much real memory your machine has and how much
 virtual memory the program uses.
 
 <p>
-
 The size of the submatrix used in segmenting the image has
 a principle function of controlling memory usage; however,
 it also can have a subtle effect on the quality of the
@@ -103,7 +99,6 @@ parameters may be used for each distinctive region of the
 image.
 
 <p>
-
 The submatrix size has no effect on the performance of the
 ML segmentation method.
 
@@ -123,7 +118,7 @@ If none of the arguments are specified on the command line,
 <em>i.smap</em> will interactively prompt for the names of
 the maps and files.
 
-<A NAME="notes"></A><h2>NOTES</h2>
+<A NAME="notes"></a><h2>NOTES</h2>
 
 The SMAP algorithm exploits the fact that nearby pixels in
 an image are likely to have the same class.  It works by
@@ -135,7 +130,6 @@ segmentations with larger connected regions of a fixed
 class which may be useful in some applications.
 
 <p>
-
 The amount of smoothing that is performed in the
 segmentation is dependent of the behavior of the data in
 the image.  If the data suggests that the nearby pixels
@@ -144,12 +138,10 @@ reduce the amount of smoothing.  This ensures that
 excessively large regions are not formed.
 
 <p>
-
 The module i.smap does not support MASKed or NULL cells. Therefore 
 it might be necessary to create a copy of the classification results 
 using e.g. r.mapcalc. 
-<p>
-r.mapcalc  MASKed_map=classification results 
+<p>r.mapcalc  MASKed_map=classification results 
 
 <h2>REFERENCES</h2>
 
@@ -171,17 +163,15 @@ pp. III-565 - III-568, San Francisco, California, March 23-26, 1992.
 
 <h2>SEE ALSO</h2>
 
-<em><a href="i.group.html">i.group</A></em>
+<em><a href="i.group.html">i.group</a></em>
 for creating groups and subgroups
 
 <p>
-
-<em><a href="r.mapcalc.html">r.mapcalc</A></em>
+<em><a href="r.mapcalc.html">r.mapcalc</a></em>
 to copy classification result in order to cut out MASKed subareas
 
 <p>
-
-<em><a href="i.gensigset.html">i.gensigset</A></em>
+<em><a href="i.gensigset.html">i.gensigset</a></em>
 to generate the signature file required by this program
 
 <h2>AUTHORS</h2>

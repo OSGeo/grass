@@ -6,16 +6,14 @@ raster map layer. The user can change these map category color assignments
 raster map to the graphics monitor and then running the program
 <em>d.colors</em>.
 
-<p>
-Any color changes made using <em>d.colors</em> will not immediately be
+<p>Any color changes made using <em>d.colors</em> will not immediately be
 shown on the graphics display; however, any color changes saved will
 still alter the map's color table and will appear next time the raster
-map layer is redisplayed (see <em><a href="d.colortable.html">d.colortable</A></em>).
+map layer is redisplayed (see <em><a href="d.colortable.html">d.colortable</a></em>).
 
-<p>
-The user must first display the relevant raster map layer to the
+<p>The user must first display the relevant raster map layer to the
 active frame on the graphics monitor (e.g., using
-<em><a href="d.rast.html">d.rast</A></em>) before running
+<em><a href="d.rast.html">d.rast</a></em>) before running
 <em>d.colors</em>. The user can then either enter the name of the
 raster map layer whose color table is to be changed on the command
 line (e.g., by typing: <tt>d.colors map=soils</tt>), or type
@@ -24,11 +22,10 @@ line (e.g., by typing: <tt>d.colors map=soils</tt>), or type
 <em>d.colors</em> will ask the user to enter the name of an existing
 raster map layer using the standard GRASS interface.
 
-<p>
-In either case, the user is then presented with the <em>d.colors</em>
+<p>In either case, the user is then presented with the <em>d.colors</em>
 command menu, shown below.
 <!-- This menu is the same as the category and color
-changing portion of the <em><a href="d.display.html">d.display</A></em>
+changing portion of the <em><a href="d.display.html">d.display</a></em>
 menu. -->
 The <em>d.colors</em> commands are listed beneath the Category
 Pointer Movement, Color Modification, Replotting Screen, and Quitting
@@ -86,7 +83,6 @@ with an arrow, and is indicated on the graphics screen by a box around the
 current color. 
 
 <p>
-
 Changing colors - The color associated with the current category can be 
 changed with the 
 <b>"R, r, G, g, B,"</b>
@@ -107,7 +103,6 @@ be confusing. For starters, yellow is made by mixing red and green. The
 intensities are listed on the text screen in as percentages. 
 
 <p>
-
 Keys <b>I</b> and <b>i</b> increase and decrease the
 percentage change that each keystroke of one of the color
 keys (<em>R, r, G, g, B, b</em>) causes in its respective
@@ -116,7 +111,6 @@ Thus, pressing the <em>R</em> key would will increase the
 red component of the current category by 10%.
 
 <p>
-
 Highlight - The 
 <b>h</b>
 key toggles between the current category color and the current 
@@ -130,14 +124,12 @@ always left showing their actual colors. Only one category is highlighted
 at any one time. 
 
 <p>
-
 Saving the current color table - 
 Pressing the <b>c</b> key will save the current color table as you have 
 modified it. This table will then be used next time you 
 display or paint this raster map layer. 
 
 <p>
-
 Color table toggle - Different types of color tables are suitable for 
 different raster map layers. 
 The key 
@@ -146,7 +138,6 @@ flips between the following color tables: red, green, blue color ramp; gray
 scale; smooth changing color wave; random colors; and the saved color table. 
 
 <p>
-
 Color table shift - The entire table is shifted up and down using the 
 <b>+</b>
 and 
@@ -154,7 +145,6 @@ and
 keys. 
 
 <p>
-
 Quitting the <em>d.colors</em> program - Pressing the
 <b>Q</b> key will cause you to quit the <em>d.colors</em>
 program.  If colors have been modified but not saved,
@@ -172,7 +162,6 @@ If the user types <b>n</b>, the program will ask:
 <h2>NOTES</h2>
 
 <p>
-
 The map whose color table is to be altered with
 <em>d.colors</em> must already be on display in the active
 display frame on the graphics monitor before
@@ -180,8 +169,7 @@ display frame on the graphics monitor before
 command <em><a href="d.rast.html">d.rast</a> map=name</em> (where <em>name</em> is a raster map
 layer whose color table the user wishes to alter).
 
-<p>
-Some color monitors may not support the full range of colors required 
+<p>Some color monitors may not support the full range of colors required 
 to display all of the map's categories listed in the map's color table. 
 However, regardless of whether the user can see the color changes he is 
 effecting to a map's color table, any changes to a map's color table 
@@ -190,9 +178,9 @@ made with <em>d.colors</em> that are saved will appear in the map's color table.
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="d.colortable.html">d.colortable</A>,
-<a href="d.rast.html">d.rast</A>,
-<a href="r.colors.html">r.colors</A>
+<a href="d.colortable.html">d.colortable</a>,
+<a href="d.rast.html">d.rast</a>,
+<a href="r.colors.html">r.colors</a>
 </em>
 
 <h2>AUTHOR</h2>
@@ -200,6 +188,5 @@ made with <em>d.colors</em> that are saved will appear in the map's color table.
 James Westervelt, U.S. Army Construction Engineering 
 Research Laboratory
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>
 

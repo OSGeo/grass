@@ -5,8 +5,7 @@ It permits to insert missing nodes or arcs and to connect unconnected
 nodes to the network within a given distance threshold. 
 It can also report the current network graph status. 
 
-<p>
-In terms of network analysis, a network consists of nodes connected by 
+<p>In terms of network analysis, a network consists of nodes connected by 
 arcs. In a vector map prepared for network analysis, nodes are represented 
 by the grass-internal geometry type <em>node</em> and arcs by the geometry 
 type <em>line</em>. If a <em>line</em> consists of several vertices and 
@@ -15,8 +14,7 @@ regarded as network nodes. Further more, explicit starting and ending
 nodes for e.g. a least costly path search or subnetwork allocation are 
 represented by the geometry type point.
 
-<p>
-In general, network analysis will find the least costly (shortest or 
+<p>In general, network analysis will find the least costly (shortest or 
 fastest) path from point A to point B by follwing the existing lines. 
 This implies that these points must lie at the start or end point of a 
 line with is part of the network. If no line is starting or ending at a 
@@ -36,8 +34,7 @@ GRASS.
 
 <a href="http://www.grassbook.org/data_menu3rd.php">NC dataset</a> based examples.
 
-<p>
-Create nodes globally for all line ends and intersections:
+<p>Create nodes globally for all line ends and intersections:
 
 <div class="code"><pre>
 v.net input=streams output=streams_node operation=nodes
@@ -81,5 +78,4 @@ Radim Blazek, ITC-irst, Trento, Italy<br>
 Martin Landa, FBK-irst (formerly ITC-irst), Trento, Italy and CTU in
 Prague, Czech Republic (operation 'connect' and 'arcs')
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

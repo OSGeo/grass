@@ -14,7 +14,6 @@ in a new GRASS <em>vector</em> file.
 using <em><a href="r.thin.html">r.thin</a></em>.
 
 <p>
-
 <em>r.to.vect</em> extracts vectors (aka, "arcs") from a
 raster map.  These arcs may represent linear features
 (like roads or streams), or may represent area edge
@@ -22,7 +21,6 @@ features (like political boundaries, or soil mapping
 units).  
 
 <p>
-
 <em><a href="r.thin.html">r.thin</a></em> and <em>r.to.vect</em>
 may create excessive nodes at every junction, and may create small spurs
 or "dangling lines" during the thinning and vectorization process.
@@ -39,7 +37,6 @@ layer will be used to create attribute information for the
 resultant vector area edge data.
 
 <p>
-
 A true vector tracing of the area edges might appear
 blocky, since the vectors outline the edges of raster data
 that are stored in rectangular cells.  To produce a
@@ -57,7 +54,6 @@ region (and the original data) to estimate the possible
 error introduced by smoothing.
 
 <p>
-
 <em>r.to.vect</em> extracts only area edges from the named raster input file. 
 If the raster map contains other data (i.e., line edges, or point data) the
 output may be wrong. 
@@ -88,8 +84,7 @@ Jean Ezell and Andrew Heekin,
 U.S. Army Construction Engineering 
 Research Laboratory
 
-<p>
-<em>Modified</em> program for smoothed lines: 
+<p><em>Modified</em> program for smoothed lines: 
 <br>
 David Satnik, 
 Central Washington University

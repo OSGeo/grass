@@ -8,28 +8,23 @@ UNIX redirection mechanism. If invoked without command line arguments, the
 user is given the option of printing out each report and/or saving output to
 a file.
 
-<p>
-The report itself consists of two parts, a header section and the main body
+<p>The report itself consists of two parts, a header section and the main body
 of the report.
 
-<p>
-The header section of the report identifies the raster map layer(s) (by map
+<p>The header section of the report identifies the raster map layer(s) (by map
 layer name and TITLE), location, mapset, report date, and the region of
 interest. The area of interest is described in two parts: the user's current
 geographic region is presented, and the mask is presented (if any is used).
 
-<p>
-The main body of the report consists of from one to three tables which
+<p>The main body of the report consists of from one to three tables which
 present the statistics for each category and the totals for each unit
 column.
 
-<p>
-Note that, unlike <em><a href="r.stats.html">r.stats</a></em>,
+<p>Note that, unlike <em><a href="r.stats.html">r.stats</a></em>,
 <em>r.report</em> allows the user to select the specific units of measure in
 which statistics will be reported.
 
-<p>
-Following is the result of a <em>r.report</em> run on the raster map layer
+<p>Following is the result of a <em>r.report</em> run on the raster map layer
 <em>geology</em> (located in the Spearfish, SD sample data base), with the
 units expressed in square miles and acres. Here, <em>r.report</em> output is
 directed into the file <em>report.file</em>.
@@ -76,8 +71,7 @@ If the user runs <em>r.report</em> interactively and saves the report output
 in a file, this file will be placed into the user's current working
 directory.
 
-<p>
-If the user runs <em>r.report</em> non-interactively, report output can be
+<p>If the user runs <em>r.report</em> non-interactively, report output can be
 saved by redirecting it to a file or a printer using the UNIX redirection
 mechanism.
 

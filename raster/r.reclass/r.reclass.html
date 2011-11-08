@@ -8,13 +8,11 @@ be treated in much the same way that raster maps are
 treated.  A <em>TITLE</em> for the output map layer may be
 (optionally) specified by the user.
 
-<p>
-The reclass rules are read from standard input (i.e., from
+<p>The reclass rules are read from standard input (i.e., from
 the keyboard, redirected from a file, or piped through
 another program).
 
-<p>
-Before using <em>r.reclass</em> the user must know the following:
+<p>Before using <em>r.reclass</em> the user must know the following:
 
 <ol>
 <li>The new categories desired;  and, which old categories fit into 
@@ -31,14 +29,12 @@ original raster map layer each time the new (reclassed) map name
 is requested.  As far as the user (and programmer) is concerned, that
 raster map has been created.
 
-<p>
-<em>r.reclass</em> only works on an <i>integer</i> input raster map; if the
+<p><em>r.reclass</em> only works on an <i>integer</i> input raster map; if the
 input map is instead floating point data, you must multiply the input data by some
 factor to acheive whole number input data, otherwise <em>r.reclass</em> will round
 the raster values down to the next integer.
 
-<p>
-Also note that although the user can generate a <em>r.reclass</em> map
+<p>Also note that although the user can generate a <em>r.reclass</em> map
 which is based on another <em>r.reclass</em> map,
 the new <em>r.reclass</em> map map will be stored in GRASS as a reclass
 of the <em>original</em> raster map on which the first reclassed map was
@@ -48,15 +44,13 @@ map layer information which is based on an already reclassified map
 (i.e., <em>reclass table</em>) will ever be <em>stored</em>
 as a <em>r.reclass</em> of a <em>r.reclass</em>.
 
-<p>
-To convert a reclass map to a regular raster map layer, set your
+<p>To convert a reclass map to a regular raster map layer, set your
 geographic region settings to match the settings in the header for the
 reclass map (with "<tt>g.region&nbsp;rast=reclass_map</tt>", or
 viewable by running <em><a href="r.info.html">r.info</a></em>) 
 and then run <em><a href="r.resample.html">r.resample</a></em>.
 
-<p>
-<em><a href="r.mapcalc.html">r.mapcalc</a></em> can be used to convert
+<p><em><a href="r.mapcalc.html">r.mapcalc</a></em> can be used to convert
 a reclass map to a regular raster map layer as well:
 
 <div class="code"><pre>
@@ -64,25 +58,21 @@ a reclass map to a regular raster map layer as well:
 </pre></div>
 
 
-<p>
-where <em>raster_map</em> is the name to be given to the new raster map,
+<p>where <em>raster_map</em> is the name to be given to the new raster map,
 and <em>reclass_map</em> is an existing reclass map.
 
-<p>
-Because <em>r.reclass</em> generates a table referencing some original
+<p>Because <em>r.reclass</em> generates a table referencing some original
 raster map layer rather than creating a reclassed raster map layer,
 a <em>r.reclass</em> map layer will no longer be accessible if
 the original raster map layer upon which it was based is later removed.
 
-<p>
-A <em>r.reclass</em> map is not a true raster map layer.
+<p>A <em>r.reclass</em> map is not a true raster map layer.
 Rather, it is a table of reclassification values which reference the
 input raster map layer.  Therefore, users who wish to retain reclassified
 map layers must also save the original input raster map layers
 from which they were generated. Alternatively r.recode can be used.
 
-<p>
-Category values which are not explicitly reclassified to a new value
+<p>Category values which are not explicitly reclassified to a new value
 by the user will be reclassified to NULL.
 
 
@@ -94,8 +84,7 @@ Each line of input must have the following format:
 <dd><b>input_categories=</b><em>output_category  </em>[<em>label</em>]
 </dl>
 
-<p>
-where each line of input specifies the category values in the
+<p>where each line of input specifies the category values in the
 input raster map layer to be reclassified to the new
 <em>output_category</em> category value.  Specification of
 a <em>label</em> to be associated with the new output map
@@ -105,17 +94,14 @@ equal sign = is required.  The <em>input_category(ies)</em>
 may consist of single category values or a range of such
 values in the format "<em>low</em> thru <em>high</em>." The
 word "thru" must be present.
-<p>
-To include all (remaining) values the asterix "*" can be used. This
+<p>To include all (remaining) values the asterix "*" can be used. This
 rule has to be set as last rule. No further rules are accepted after
 setting this rule. The special rule "<tt>* = *</tt>" specifies
 that all categories not expicitly set by one of the above rules
 should be passed through unaltered instead of being set to NULL.
-<p>
-Categories to become no data are specified by setting the output
+<p>Categories to become no data are specified by setting the output
 category value to "<tt>NULL</tt>".
 <p>
-
 A line containing only the word <b>end</b> terminates the
 input.
 
@@ -123,8 +109,7 @@ input.
 <h2>EXAMPLES</h2>
 
 The following examples may help clarify the reclass rules.
-<p>
-<dl>
+<p><dl>
 <dt> 
 <dd>1. This example reclassifies categories 1, 2 and 3 in the input raster
 map layer "roads" to category 1 with category label "good quality" in the output map
@@ -137,8 +122,7 @@ category 2 with the label "poor quality" in the output map layer.
 </pre>
 
 
-<p>
-<dd>2. This example reclassifies categories 1, 3 and 5 in the input raster
+<p><dd>2. This example reclassifies categories 1, 3 and 5 in the input raster
 map layer to category 1 with category label "poor quality" in the output
 map layer, and reclassifies input raster map layer categories 2, 4, and 6
 to category 2 with the label "good quality" in the output map layer.
@@ -149,8 +133,7 @@ All other values are reclassified to NULL.
     *       = NULL
 </pre>
 
-<p>
-<dd>3. This example reclassifies input raster map layer categories 1 thru 10 to output 
+<p><dd>3. This example reclassifies input raster map layer categories 1 thru 10 to output 
 map layer category 1, input map layer categories 11 thru 20 to output map layer
 category 2, and input map layer categories 21 thru 30 to output map layer
 category 3, all without labels. The range from 30 to 40 is reclassified as
@@ -162,8 +145,7 @@ NULL.
     30 thru 40  = NULL
 </pre>
 
-<p>
-<dd>4. Subsequent rules override previous rules.  Therefore, the below example
+<p><dd>4. Subsequent rules override previous rules.  Therefore, the below example
 reclassifies input raster map layer categories 1 thru 19 and 51 thru 100
 to category 1 in the output map layer,
 input raster map layer categories 20 thru 24 and 26 thru 50 to
@@ -175,8 +157,7 @@ to the output category 3.
     25	        = 3    good quality
 </pre>
 
-<p>
-<dd>5. The previous example could also have been entered as:
+<p><dd>5. The previous example could also have been entered as:
 <pre>
      1 thru 19  51 thru 100	= 1    poor quality
     20 thru 24  26 thru 50	= 2    medium quality
@@ -193,7 +174,6 @@ or as:
 </dd>
 </dl>
 <p>
-
 The final example was given to show how the labels are handled.  If a new
 category value appears in more than one rule (as is the case with new 
 category values 1 and 2),
@@ -214,5 +194,4 @@ James Westervelt,<br>
 Michael Shapiro<br>
 U.S.Army Construction Engineering Research Laboratory
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

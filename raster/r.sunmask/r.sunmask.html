@@ -10,8 +10,7 @@ location and date/time parameters using the
 to specify date/time for sun position calculation by r.sunmask itself have
 to be used.
 
-<p>
-The module performs sunset/sunrise checks and refraction correction for sun
+<p>The module performs sunset/sunrise checks and refraction correction for sun
 position calculation. Local coordinate systems are internally transformed to
 latitude/longitude for the SOLPOS algorithm. The elevation is not considered
 in the sunset/sunrise calculations.
@@ -25,14 +24,12 @@ GMT, which the solpos Time Zone parameter.  If the user specifies clock time
 (different for winter and summer), he/she would have to change the Time Zone
 parameter seasonally in r.sunmask (timezone parameter).
 <p>
-
 Note: In latitude/longitude locations the position coordinates pair
 (east/west) has to be specified in decimal degree (not D:M:S). If
 not specified, the map center's coordinates will be used.
 Also <em>g.region -l</em> displays the map center's coordinates.
 
-<p>
-Note for module usage with <em>-g</em> flag and calculations
+<p>Note for module usage with <em>-g</em> flag and calculations
 close to sunset/sunrise:
 
 <pre>

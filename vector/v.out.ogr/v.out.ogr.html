@@ -17,7 +17,6 @@ install gdal to use <em>v.out.ogr</em>.
 <a href="http://www.gdal.org/ogr/drv_tiger.html">TIGER</a>
 
 <p>
-
 For further available drivers go 
 <a href="http://www.gdal.org/ogr/ogr_formats.html">here</a>.
 
@@ -26,8 +25,7 @@ For further available drivers go
 By default, islands will appear as holes inside surrounding areas.
 To export areas with holes into, e.g., a Shapefile, and make the 
 holes appear as filled areas, the flag <em>-c</em> has to be used.
-<p>
-The "-z" flag can be used to automatically export a 3D map to a 3D Shapefile, instead 
+<p>The "-z" flag can be used to automatically export a 3D map to a 3D Shapefile, instead 
 of setting the correct <em>lco=</em> option manually.
 
 <h2>EXAMPLES</h2>
@@ -38,29 +36,24 @@ Export lines from GRASS vector map to Shapefile format:
 <div class="code"><pre>
 v.out.ogr input=lines type=line dsn=lines.shp
 </pre></div>
-<p>
-Export areas from GRASS vector map to Shapefile format, converting
+<p>Export areas from GRASS vector map to Shapefile format, converting
 islands (holes) to filled areas (generates /tmp/testogr.shp and related files):
 <div class="code"><pre>
 v.out.ogr -c input=areas_islands type=area dsn=areas_islands.shp
 </pre></div>
-<p>
-Export 3D lines from GRASS vector map to Shapefile format:
+<p>Export 3D lines from GRASS vector map to Shapefile format:
 <div class="code"><pre>
 v.out.ogr input=lines_3d type=line dsn=lines_3d.shp lco="SHPT=ARCZ"
 </pre></div>
-<p>
-Export 3D points (e.g., Lidar points) from GRASS vector map to Shapefile format
+<p>Export 3D points (e.g., Lidar points) from GRASS vector map to Shapefile format
 <div class="code"><pre>
 v.out.ogr points_3d type=point dsn=points_3d.shp lco="SHPT=POINTZ"
 </pre></div>
-<p>
-Export 3D faces from GRASS vector map to Shapefile format:
+<p>Export 3D faces from GRASS vector map to Shapefile format:
 <div class="code"><pre>
 v.out.ogr input=objects_3d type=face dsn=faces_3d.shp lco="SHPT=POLYGONZ"
 </pre></div>
-<p>
-Export 3D faces from GRASS vector map to Shapefile format, automatic 3D setting:
+<p>Export 3D faces from GRASS vector map to Shapefile format, automatic 3D setting:
 <div class="code"><pre>
 v.out.ogr input=objects_3d type=face dsn=faces_3d.shp -z"
 </pre></div>
@@ -91,8 +84,7 @@ v.out.ogr input=buildings_3d dsn=buildings_3d.kml olayer=buildings_3d \
           format=KML type=face
 </pre></div>
 
-<p>
-<b>Example 2 (Latitude-Longitude location):</b><br>
+<p><b>Example 2 (Latitude-Longitude location):</b><br>
 Generate and export GRASS vector "asteroid" map (faces, 3D vectors) to
  KML format for Google Earth:
 <div class="code"><pre>
@@ -128,8 +120,8 @@ documentation
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="db.out.ogr.html">db.out.ogr</A>,
-<a href="v.external.html">v.external</A>,
+<a href="db.out.ogr.html">db.out.ogr</a>,
+<a href="v.external.html">v.external</a>,
 <a href="v.in.ogr.html">v.in.ogr</a>
 </em>
 
@@ -137,6 +129,5 @@ documentation
 
 Radim Blazek, ITC-Irst, Trento, Italy<br>
 Some contributions: Markus Neteler, Martin Landa
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>
 

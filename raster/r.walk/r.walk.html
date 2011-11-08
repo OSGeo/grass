@@ -12,15 +12,12 @@ This function is similar to <em>r.cost</em>, but in addiction to a
 friction map, it considers an anisotropic travel time due to the
 different walking speed associated with downhill and uphill movements.
 <p>
-
 The formula from Aitken 1977/Langmuir 1984 (based on Naismith's rule
 for walking times) has been used to estimate the cost parameters of
 specific slope intervals:
 
-<p>
-T= [(a)*(Delta S)] + [(b)*(Delta H uphill)] + [(c)*(Delta H moderate downhill)] + [(d)*(Delta H steep downhill)]
-<p>
-where:<br>
+<p>T= [(a)*(Delta S)] + [(b)*(Delta H uphill)] + [(c)*(Delta H moderate downhill)] + [(d)*(Delta H steep downhill)]
+<p>where:<br>
 T is time of movement in seconds,<br>
 Delta S is the distance covered in meters,<br>
 Delta H is the altitude difference in meter.
@@ -44,14 +41,12 @@ degrees: moderate downhill; &gt;12 degrees: steep downhill). The
 default values for a, b, c, d are those proposed by Langmuir (0.72, 6.0,
 1.9998, -1.9998), based on man walking effort in standard
 conditions.<p>
-
 The lambda parameter of the linear equation combining movement and
 friction costs:<br>
 
 total cost = movement time cost + (lambda) * friction costs<br>
 must be set in the option section of <em>r.walk</em>.
 <p>
-
 For a more accurate result, the "knight's move" option can be used
 (although it is more time consuming). In the diagram below, the center
 location (O) represents a grid cell from which cumulative distances
@@ -67,14 +62,12 @@ K x x x K
   K   K
 </pre></div>
 
-<p>
-The minimum cumulative costs are computed using Dijkstra's
+<p>The minimum cumulative costs are computed using Dijkstra's
 algorithm, that find an optimum solution (for more details see
 <em>r.cost</em>, that uses the same algorithm).
 <a name="move"></a>
 <h2>Movement Direction</h2>
-<p>
-The movement direction surface is created to record the sequence of
+<p>The movement direction surface is created to record the sequence of
 movements that created the cost accumulation surface. Without it 
 <em>r.drain</em> would not correctly create a path from an end point 
 back to the start point. The direction shown in each cell points <b>away</b> 
@@ -86,8 +79,7 @@ GRASS standard directions:<div class="code"><pre>
 202.5  225  270  315  337.5
        247.5     292.5
 </pre></div>
-<p>
-Once <em>r.walk</em> computes the cumulative cost map as a linear
+<p>Once <em>r.walk</em> computes the cumulative cost map as a linear
 combination of friction cost (from friction map) and the altitude and
 distance covered (from the digital elevation model), <em>r.drain</em>
 can be used to find the minimum cost path. Make sure to use the <b>-d</b> flag
@@ -120,8 +112,7 @@ the path is computed according to the proper movement directions.
 <h2>AUTHORS</h2>
 
 <b>Based on r.cost written by :</b>
-<p>
-Antony Awaida,<br>
+<p>Antony Awaida,<br>
 Intelligent Engineering<br>
 Systems Laboratory,<br>
 M.I.T.<br>
@@ -132,21 +123,15 @@ U.S.Army Construction Engineering Research Laboratory
 <p>Updated for Grass 5<br>
 Pierre de Mouveaux (pmx@audiovu.com)
 
-<p>
-<b>Initial version of r.walk:</b>
-<p>
-Steno Fontanari, 2002
+<p><b>Initial version of r.walk:</b>
+<p>Steno Fontanari, 2002
 
-<p>
-<b>Current version of r.walk:</b>
-<p>
-Franceschetti Simone, Sorrentino Diego, Mussi Fabiano and Pasolli Mattia<br>
+<p><b>Current version of r.walk:</b>
+<p>Franceschetti Simone, Sorrentino Diego, Mussi Fabiano and Pasolli Mattia<br>
 Correction by: Fontanari Steno, Napolitano Maurizio and  Flor Roberto<br>
 In collaboration with: Franchi Matteo, Vaglia Beatrice, Bartucca Luisa, Fava Valentina and Tolotti Mathias, 2004
 
-<p>
-<b>Updated for Grass 6.1</b>
-<p>
-Roberto Flor and Markus Neteler
+<p><b>Updated for Grass 6.1</b>
+<p>Roberto Flor and Markus Neteler
 
 <p><i>Last changed: $Date$</i>

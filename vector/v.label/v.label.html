@@ -12,7 +12,6 @@ is determined automatically <em>from the current display window</em>,
 otherwise the <em>space</em> option should be set roughly the same
 as the <em>size</em> option.
 <p>
-
 <br>
 A description of the labels file follows.<p> 
 The file is located in <tt>$MAPSET/paint/labels/</tt>.
@@ -20,8 +19,7 @@ The file is a plain-text ASCII file containing the following fields:
 <br>
 <h4>Caution: The following information may be incomplete, out of date, 
 and wrong!</h4>
-<p>
-The label information that must be provided in the <em>labels</em> file is:
+<p>The label information that must be provided in the <em>labels</em> file is:
 
 <dl>
 <dt><b>TEXT</b>:
@@ -78,22 +76,18 @@ may be specified as:
 <dt><b>FONT</b>:
 
 <dd>This specifies the font to use.
-<p>
-The following fonts are available for use with
+<p>The following fonts are available for use with
   <a href="d.labels.html"><i>d.labels</i></a>:
 <p><pre>
   cyrilc gothgbt gothgrt gothitt greekc greekcs greekp greeks
   italicc italiccs italict romanc romancs romand romans romant
   scriptc scripts
 </pre>
-<p>
-Alternatively the path to a FreeType (.ttf) font may be given.
+<p>Alternatively the path to a FreeType (.ttf) font may be given.
 (for <em>d.labels</em> only)
-<p>
-The word <em>standard</em> can be used to specify the default font 
+<p>The word <em>standard</em> can be used to specify the default font 
 (which is <em>romans</em>).
-<p>
-Note <a href="ps.map.html"><em>ps.map</em></a> can override this setting
+<p>Note <a href="ps.map.html"><em>ps.map</em></a> can override this setting
 to use other fonts. Its default font is Helvetica.
 
 
@@ -106,37 +100,37 @@ scale at which the map is drawn.
 Alternatively <em>fontsize</em> can set the font size in normal font points.
 
 
-<dt><A NAME="textcolor"><b>TEXT COLOR</b></A>:
+<dt><A NAME="textcolor"><b>TEXT COLOR</b></a>:
 
 <dd>This selects the text color.  If unspecified, the
 label's text is drawn in <em>black</em>, by default.  The
 text color can be specified in one of several ways:
 
-<OL>
-<LI>By color name:
+<ol>
+<li>By color name:
 
 <br>
 <tt>aqua black blue brown cyan gray green grey indigo
 magenta orange purple red violet white yellow</tt>
 
-<LI>As red, green, blue component values. (0-255)<br>
+<li>As red, green, blue component values. (0-255)<br>
 for example: <tt>128:100:200</tt>
 
 <!-- eh?
-<LI>As red, green, blue percentages.
+<li>As red, green, blue percentages.
 for example: .5 .4 .7
 <br>
 (This form is not supported by 
-<em><a href="d.labels.html">d.labels</A></em>.)
+<em><a href="d.labels.html">d.labels</a></em>.)
 
-<LI>By printer color number to get the exact printer color.
+<li>By printer color number to get the exact printer color.
 <br>
 (This form is not supported by 
-<em><a href="d.labels.html">d.labels</A></em>.)
+<em><a href="d.labels.html">d.labels</a></em>.)
 -->
 
-<LI>Specify "<tt>none</tt>" to suppress the lettering.
-</OL>
+<li>Specify "<tt>none</tt>" to suppress the lettering.
+</ol>
 
 
 <dt><b>WIDTH</b>:
@@ -153,7 +147,7 @@ text color at the regular line width.  No highlight color
 ("<tt>none</tt>") is used by default, if unspecified by the
 user.  To specify use of no highlight color, specify
 "<tt>none</tt>".
-(See <a href="#textcolor">TEXT COLOR</A>
+(See <a href="#textcolor">TEXT COLOR</a>
 above for a list of permissible color names.)
 
 
@@ -170,7 +164,7 @@ color).
 <dd>Text may be boxed in a solid color by specifying a background color.
 Specify "<tt>none</tt>" for no background.  The default background color
 setting, if unspecified by the user, is <em>white</em>.
-(See <a href="#textcolor">TEXT COLOR</A>
+(See <a href="#textcolor">TEXT COLOR</a>
 above for a list of permissible color names.)
 
 
@@ -179,7 +173,7 @@ above for a list of permissible color names.)
 <dd>Select a color for the border around the background.
 Specify "<tt>none</tt>" to suppress the border.
 The default border color used, if unspecified, is <em>black</em>.
-(See <a href="#textcolor">TEXT COLOR</A>
+(See <a href="#textcolor">TEXT COLOR</a>
 above for a list of permissible color names.)
 
 
@@ -221,8 +215,8 @@ cat file1 file2 file3 file4 > file_all
 
 <h2>SEE ALSO</h2>
 <em>
-<a href="d.labels.html">d.labels</A><br>
-<a href="ps.map.html">ps.map</A>
+<a href="d.labels.html">d.labels</a><br>
+<a href="ps.map.html">ps.map</a>
 </em>
 <br>
 
@@ -233,5 +227,4 @@ Philip Verhagen (original s.label)<br>
 Radim Blazek (GRASS 6 port)<br>
 Hamish Bowman (enhancements)<br>
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

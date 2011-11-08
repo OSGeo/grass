@@ -13,8 +13,7 @@ one or more rasters, with each point in a raster giving the horizon
 height in a specific direction. One raster is created for each direction.
 </ul>
 
-<p>
-The directions are given as azimuthal angles (in degrees), with
+<p>The directions are given as azimuthal angles (in degrees), with
 the angle starting with 0 towards East and moving counterclockwise
 (North is 90, etc.). The calculation takes into account the actual
 projection, so the angles are corrected for direction distortions
@@ -27,14 +26,14 @@ LOCATION with x,y coordinate system, where this correction is
 not applied. 
 
 
-<H3>Flags:</H3>
+<h3>Flags:</h3>
 <dl>
   <dt><b>-d</b>
   <dd>Output horizon height in degrees (the default is radians)</dd>
 </dl>
 
 
-<H3>Input parameters:</H3>
+<h3>Input parameters:</h3>
 <p>The <I>elevin</I> parameter is an input elevation raster map. If
 the buffer options are used (see below), this raster should extend
 over the area that accommodate the presently defined region plus
@@ -91,8 +90,7 @@ upwards from 0 to total number of directions. If you use <b>r.horizon</b>
 in the single point mode this option will be ignored. 
 
 
-<p>
-At the moment the elevation and maximum distance must be measured in meters, 
+<p>At the moment the elevation and maximum distance must be measured in meters, 
 even if you use geographical coordinates (longitude/latitude). If your 
 projection is based on distance (easting and northing), these too must 
 be in meters. The buffer parameters must be in the same units as the 
@@ -138,9 +136,9 @@ r.horizon elevin=DEM horizonstep=30 bufferzone=200 horizon=horangle \
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="r.sun.html">r.sun</A>,
-<a href="r.sunmask.html">r.sunmask</A>,
-<a href="r.los.html">r.los</A></em>
+<a href="r.sun.html">r.sun</a>,
+<a href="r.sunmask.html">r.sunmask</a>,
+<a href="r.los.html">r.los</a></em>
 
 
 <h2>REFERENCES</h2>
@@ -153,39 +151,34 @@ Radiation Tools for Environmental and Renewable Energy Applications,
 <a href="http://www.isess.org/papers.asp?year=2007">International Symposium on 
 Environmental Software Systems</a>, Prague, 2007
 <p>Neteler M., Mitasova H., 2004. Open Source GIS: A GRASS GIS
-Approach, <a href="http://www.springer.com/geography/gis+cartography/book/978-0-387-35767-6">Springer</A>, New York.
+Approach, <a href="http://www.springer.com/geography/gis+cartography/book/978-0-387-35767-6">Springer</a>, New York.
 ISBN: 1-4020-8064-6, 2nd Edition 2004 (reprinted 2005), 424 pages 
 
-<p>Project <a href="http://re.jrc.ec.europa.eu/pvgis/">PVGIS</A>, European 
+<p>Project <a href="http://re.jrc.ec.europa.eu/pvgis/">PVGIS</a>, European 
 Commission, DG Joint Research Centre 2001-2007
 <p>Suri M., Hofierka J., 2004.
 A New GIS-based Solar Radiation Model and Its Application for
 Photovoltaic Assessments. <a href="http://www.blackwellpublishing.com/toc.asp?ref=1361-1682">Transactions
-in GIS</A>, 8(2), 175-190
+in GIS</a>, 8(2), 175-190
 
 
 <h2>AUTHORS</h2>
-<p>
-Thomas Huld, Joint Research Centre of
+<p>Thomas Huld, Joint Research Centre of
 the European Commission, Ispra, Italy 
 <br>
-<p>
-Tomas Cebecauer, Joint Research Centre
+<p>Tomas Cebecauer, Joint Research Centre
 of the European Commission, Ispra, Italy 
 <br>
-<p>
-Jaroslav Hofierka, GeoModel s.r.o.,
+<p>Jaroslav Hofierka, GeoModel s.r.o.,
 Bratislava, Slovakia <br>Marcel Suri, Joint Research Centre of the
 European Commission, Ispra, Italy
-<p>
-&copy; 2007, Thomas Huld, Tomas Cebecauer, Jaroslav Hofierka, Marcel Suri 
+<p>&copy; 2007, Thomas Huld, Tomas Cebecauer, Jaroslav Hofierka, Marcel Suri 
 
 
-<ADDRESS STYLE="margin-bottom: 0.2in"><a href="mailto:Thomas.Huld@jrc.it">Thomas.Huld@jrc.it</A>
-<a href="mailto:Tomas.Cebecauer@jrc.it">Tomas.Cebecauer@jrc.it</A>
-<a href="mailto:hofi@geomodel.sk">hofierka@geomodel.sk</A>
-<a href="mailto:Marcel.Suri@jrc.it">Marcel.Suri@jrc.it</A> 
+<ADDRESS STYLE="margin-bottom: 0.2in"><a href="mailto:Thomas.Huld@jrc.it">Thomas.Huld@jrc.it</a>
+<a href="mailto:Tomas.Cebecauer@jrc.it">Tomas.Cebecauer@jrc.it</a>
+<a href="mailto:hofi@geomodel.sk">hofierka@geomodel.sk</a>
+<a href="mailto:Marcel.Suri@jrc.it">Marcel.Suri@jrc.it</a> 
 </ADDRESS>
 
-<p>
-<I>Last changed: $Date$</I> 
+<p><I>Last changed: $Date$</I> 

@@ -138,11 +138,9 @@ simultanuously computed.  The procedure for larger datasets may take a
 very long time, so it might be worth to use just a sample data
 representing the whole dataset.
 
-<p>
-<i>Example 
+<p><i>Example 
  (based on <a href="http://www.grassbook.org/data_menu2nd.phtml">Slovakia3d dataset</a>):</i>
-<p>
-<div class="code"><pre>
+<p><div class="code"><pre>
 v.info -c precip3d
 v.vol.rst -c input=precip3d wcolumn=precip zmult=50 segmax=700 cvdev=cvdevmap tension=10
 v.db.select cvdevmap
@@ -152,15 +150,13 @@ v.univar cvdevmap col=flt1 type=point
 Based on these results, the parameters will have to be optimized. It is
 recommended to plot the CV error as curve while modifying
 the parameters.
-<p>
-The best approach is to start with <b>tension</b>, <b>smooth</b>
+<p>The best approach is to start with <b>tension</b>, <b>smooth</b>
 and <b>zmult</b> with rough steps, or to set <b>zmult</b> to a
 constant somewhere between 30-60. This helps to find minimal RMSE
 values while then finer steps can be used in all parameters. The
 reasonable range is <b>tension</b>=10...100,
 <b>smooth</b>=0.1...1.0, <b>zmult</b>=10...100.
-<p>
-In <em>v.vol.rst</em> the tension parameter is much more sensitive to
+<p>In <em>v.vol.rst</em> the tension parameter is much more sensitive to
 changes than in <em>v.surf.rst</em>, 
 therefore the user should always check the
 result by visual inspection. Minimizing CV does not always provide the best

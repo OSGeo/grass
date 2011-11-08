@@ -1,10 +1,9 @@
 <h2>DESCRIPTION</h2>
 
-
 <em>i.gensigset</em>
 is a non-interactive method for generating input into
 
-<em><a href="i.smap.html">i.smap</A>.</em>
+<em><a href="i.smap.html">i.smap</a>.</em>
 
 It is used as the first pass in the a two-pass
 classification process.  It reads a raster map layer,
@@ -14,18 +13,17 @@ extract spectral signatures from an image based on the
 classification of the pixels in the training map and make
 these signatures available to
 
-<em><a href="i.smap.html">i.smap</A>.</em>
+<em><a href="i.smap.html">i.smap</a>.</em>
 
 
 <p>
-
 The user would then execute the GRASS program <em>
-<a href="i.smap.html">i.smap</A></em> to create the
+<a href="i.smap.html">i.smap</a></em> to create the
 final classified map.
 
 <h2>OPTIONS</h2>
 
-<H3>Parameters</H3>
+<h3>Parameters</h3>
 
 <dl>
 
@@ -35,7 +33,6 @@ final classified map.
 
 
 <p>
-
 This raster layer, supplied as input by the user, has some
 of its pixels already classified, and the rest (probably
 most) of the pixels unclassified.  Classified means that
@@ -43,25 +40,23 @@ the pixel has a non-zero value and unclassified means that
 the pixel has a zero value.
 
 <p>
-
 This map must be prepared by the user in advance.
 The user must use
 
-<em><a href="r.digit.html">r.digit</A></em>,
+<em><a href="r.digit.html">r.digit</a></em>,
 
 a combination of
-<em><a href="wxGUI.Vector_Digitizing_Tool.html">wxGUI vector digitizer</A></em>
+<em><a href="wxGUI.Vector_Digitizing_Tool.html">wxGUI vector digitizer</a></em>
 and 
-<em><a href="v.to.rast.html">v.to.rast</A></em>,
+<em><a href="v.to.rast.html">v.to.rast</a></em>,
 or some other import/developement process (e.g.,
-<em><a href="v.in.transects.html">v.in.transects</A>)</em>
+<em><a href="v.in.transects.html">v.in.transects</a>)</em>
 to define the areas
 representative
 of the classes in the image.
 
 
 <p>
-
 At present, there is no fully-interactive tool specifically
 designed for producing this layer.
 
@@ -70,28 +65,25 @@ designed for producing this layer.
 <dd>imagery group
 
 <p>
-
 This is the name of the group that contains the band files
 which comprise the image to be analyzed. The
 
-<em><a href="i.group.html">i.group</A></em>
+<em><a href="i.group.html">i.group</a></em>
 
 command is used to construct groups of raster layers which
 comprise an image.
 
 <p>
-
 <dt><b>subgroup=</b><em>name</em> 
 
 <dd>subgroup containing image files
 
 
 <p>
-
 This names the subgroup within the group that selects a
 subset of the bands to be analyzed. The
 
-<em><a href="i.group.html">i.group</A></em>
+<em><a href="i.group.html">i.group</a></em>
 
 command is also used to prepare this subgroup.  The
 subgroup mechanism allows the user to select a subset of
@@ -103,14 +95,12 @@ all the band files that form an image.
 <dd>resultant signature file
 
 <p>
-
 This is the resultant signature file (containing the means
 and covariance matrices) for each class in the training map
 that is associated with the band files in the subgroup
 selected.
 
 <p>
-
 
 <dt><b>maxsig=</b><em>value</em> 
 
@@ -121,9 +111,8 @@ selected.
 default: 10
 
 <p>
-
 The spectral signatures which are produced by this program
-are "mixed" signatures (see <a href="#notes">NOTES</A>).
+are "mixed" signatures (see <a href="#notes">NOTES</a>).
 Each signature contains one or more subsignatures
 (represeting subclasses).  The algorithm in this program
 starts with a maximum number of subclasses and reduces this
@@ -141,7 +130,6 @@ If none of the arguments are specified on the command line,
 names of these maps and files.
 
 <p>
-
 It should be noted that interactive mode here only means
 interactive prompting for maps and files.  It does not mean
 visualization of the signatures that result from the
@@ -149,8 +137,7 @@ process.
 
 <p>
 
-
-<A NAME="notes"></A><h2>NOTES</h2>
+<A NAME="notes"></a><h2>NOTES</h2>
 
 The algorithm in <em>i.gensigset</em> determines the
 parameters of a spectral class model known as a Gaussian
@@ -162,7 +149,6 @@ be used for subsequent segmentation (i.e., classification)
 of the multispectral image.
 
 <p>
-
 The Gaussian mixture class is a useful model because it can
 be used to describe the behavior of an information class
 which contains pixels with a variety of distinct spectral
@@ -176,7 +162,6 @@ with its own spectral behavior.
 
 
 <p>
-
 The objective of mixture classes is to improve segmentation
 performance by modeling each information class as a
 probabilistic mixture with a variety of subclasses.  The
@@ -190,61 +175,58 @@ training data.
 
 
 <p>
-
 This clustering algorithm estimates both the number of
 distinct subclasses in each class, and the spectral mean
 and covariance for each subclass.  The number of subclasses
 is estimated using Rissanen's minimum description length
 (MDL) criteria 
-[<a href="#rissanen83">1</A>].  
+[<a href="#rissanen83">1</a>].  
 This criteria attempts to determine
 the number of subclasses which "best" describe the data.
 The approximate maximum likelihood estimates of the mean
 and covariance of the subclasses are computed using the
 expectation maximization (EM) algorithm 
-[<a href="#dempster77">2</A>,<a href="#redner84">3</A>].  
+[<a href="#dempster77">2</a>,<a href="#redner84">3</a>].  
 
 
 <h2>REFERENCES</h2>
 
-<OL>
+<ol>
 
-<LI><A NAME="rissanen83">J. Rissanen,</A>
+<li><A NAME="rissanen83">J. Rissanen,</a>
 "A Universal Prior for Integers and Estimation by Minimum
 Description Length,"
 <em>Annals of Statistics,</em>
 vol. 11, no. 2, pp. 417-431, 1983.
 
 
-<LI><A NAME="dempster77">A. Dempster, N. Laird and D. Rubin,</A>
+<li><A NAME="dempster77">A. Dempster, N. Laird and D. Rubin,</a>
 "Maximum Likelihood from Incomplete Data via the EM Algorithm,"
 <em>J. Roy. Statist. Soc. B,</em>
 vol. 39, no. 1, pp. 1-38, 1977.
 
-<LI><A NAME="redner84">E. Redner and H. Walker,</A>
+<li><A NAME="redner84">E. Redner and H. Walker,</a>
 "Mixture Densities, Maximum Likelihood and the EM Algorithm,"
 <em>SIAM Review,</em>
 vol. 26, no. 2, April 1984.
 
-</OL>
+</ol>
 
 <h2>SEE ALSO</h2>
 
-<em><a href="i.group.html">i.group</A></em>
+<em><a href="i.group.html">i.group</a></em>
 for creating groups and subgroups
 
 
 <p>
-
-<em><a href="wxGUI.Vector_Digitizing_Tool.html">wxGUI vector digitizer</A></em>
+<em><a href="wxGUI.Vector_Digitizing_Tool.html">wxGUI vector digitizer</a></em>
 and
-<em><a href="r.digit.html">r.digit</A></em>
+<em><a href="r.digit.html">r.digit</a></em>
 for interactively creating the training map.
 
 
 <p>
-
-<em><a href="i.smap.html">i.smap</A></em>
+<em><a href="i.smap.html">i.smap</a></em>
 for creating a final classification layer from the signatures
 generated by <em>i.gensigset.</em>
 

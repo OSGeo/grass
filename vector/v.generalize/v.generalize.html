@@ -6,8 +6,7 @@ consists of algorithms for line simplification, line smoothing,
 network generalization and displacement (new methods may be added later).
 For more examples and nice pictures, see 
 <em><a href="http://users.ox.ac.uk/~orie1848/tutorial.html">tutorial</a><br></em> 
-<p>
-If <em>type=area</em> is selected, boundaries of selected areas will be 
+<p>If <em>type=area</em> is selected, boundaries of selected areas will be 
 generalized, and the options <em>cats</em>, <em>where</em>, and 
 <em>layer</em> will be used to select areas. 
 
@@ -17,15 +16,13 @@ features. The module transforms a line into another line consisting of
 fewer vertices, that still approximate the original line. Most of the 
 algorithms described below select a subset of points on the original line.
 
-<p>
-(Line) smoothing is a "reverse" process which takes as input a line and 
+<p>(Line) smoothing is a "reverse" process which takes as input a line and 
 produces a smoother approximate of the original. In some cases, this is 
 achieved by inserting new vertices into the original line, and can total 
 up to 4000% of the number of vertices in the original. In such an instance, 
 it is always a good idea to simplify the line after smoothing.
 
-<p>
-Smoothing and simplification algorithms implemented in this module work 
+<p>Smoothing and simplification algorithms implemented in this module work 
 line by line, i.e. simplification/smoothing of one line does not affect 
 the other lines; they are treated separately.  Also, the first and the 
 last point of each line is never translated and/or deleted. 
@@ -150,8 +147,7 @@ line, whereas the lines produced by the remaining algorithms never pass
 through these points. In some sense, this algorithm outputs a line which 
 "circumscribes" the input line.
 
-<p>
-On the other hand, <i>Chaiken's Algorithm</i> outputs a line which 
+<p>On the other hand, <i>Chaiken's Algorithm</i> outputs a line which 
 "inscribes" a given line. The output line always touches/intersects the 
 centre of the input line segment between two consecutive points. For 
 more iterations, the property above does not hold, but the computed 
@@ -161,19 +157,16 @@ However, <i>Hermite Interpolation</i> can be used as another
 simplification algorithm. To achieve this, it is necessary to set 
 <i>angle_thresh</i> to higher values (15 or so). 
 
-<p>
-One restriction on both McMasters' Algorithms is that <i>look_ahead</i> 
+<p>One restriction on both McMasters' Algorithms is that <i>look_ahead</i> 
 parameter must be odd. Also note that these algorithms have no effect if 
 <i>look_ahead = 1</i>. 
 
-<p>
-Note that <i>Boyle's</i>, <i>McMasters'</i> and <i>Snakes</i> algorithm 
+<p>Note that <i>Boyle's</i>, <i>McMasters'</i> and <i>Snakes</i> algorithm 
 are sometimes used in the signal processing to smooth the signals.
 More importantly, these algorithms never change the number of points on 
 the lines; they only translate the points, and do not insert any new points. 
 
-<p>
-<i>Snakes</i> Algorithm is (asymptotically) the slowest among the 
+<p><i>Snakes</i> Algorithm is (asymptotically) the slowest among the 
 algorithms presented above. Also, it requires quite a lot of memory. 
 This means that it is not very efficient for maps with the lines
 consisting of many segments.
@@ -185,13 +178,11 @@ other at the current level of detail. In general, displacement methods
 move the conflicting features apart so that they do not interact and can 
 be distinguished.   
 
-<p>
-This module implements an algorithm for displacement of linear features 
+<p>This module implements an algorithm for displacement of linear features 
 based on the <i>Snakes</i> approach. This method generally yields very 
 good results; however, it requires a lot of memory and is not very efficient.
 
-<p>
-Displacement is selected by <b>method=displacement</b>. It uses the 
+<p>Displacement is selected by <b>method=displacement</b>. It uses the 
 following parameters:
 
 <ul>
@@ -259,8 +250,7 @@ networks, these are highways, bypasses, main roads/streets, etc.
 All three parameters above can be presented at the same time. In that 
 case, the algorithm selects only the lines which meet each criterion. 
 
-<p>
-Also, the outputed network may not be connected if the value of 
+<p>Also, the outputed network may not be connected if the value of 
 <b>betweeness_thresh</b> is too large.
 
 <!-- TODO: example(s) -->
@@ -281,5 +271,4 @@ Wolf Bergenheim, Mentor
 
 <!-- TODO: references -->
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

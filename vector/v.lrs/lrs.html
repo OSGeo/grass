@@ -22,7 +22,6 @@ by a route ID and a measure. A route is a path on the network, usually
 composed from more features in the input map.  Events can be either
 points or lines (segments).
 <p>
-
 LRS is created from input lines and points in vector map. 
 Points - MP (mileposts) must have attached attributes specifying 
 line and distance. 
@@ -30,8 +29,7 @@ The distances from the beginning of the linear feature in real world
 are specified by MP+offset. 
 Typically, MP is in kilometers and offset in meters.
 
-<p>
-The implementation of LRS in GRASS has some particularities.
+<p>The implementation of LRS in GRASS has some particularities.
 
 <h3>Double referenced system</h3>
 This feature gives a possibility to continue to use most of 
@@ -94,20 +92,17 @@ end_off:   3000
 </pre></div>
 
 Because each MP can keep 2 values (start, end) it is called 'double' referenced LRS.
-<p>
-To avoid potential confusion, MP values are limited to integers only. 
+<p>To avoid potential confusion, MP values are limited to integers only. 
 It would be ambiguous to have for example segments 3.500 - 3.500+200 
 and 3.600 - 3.600+200. The position 3+650 would fall into 2 segments, 
 correct would be 3.600+50. 
 That means, that MP must be the beginning of antonomous segment 
 and all parts which becomes longer then before must be referenced 
 from the last not changed MP.
-<p>
-The MP <em>start_mp</em> and <em>end_mp</em> columns must be decimal, but 
+<p>The MP <em>start_mp</em> and <em>end_mp</em> columns must be decimal, but 
 <em>v.lrs.create</em> takes only the decimal part, and adds its value to
 offset and prints a warning.
-<p>
-It is highly recommended to work with polylines instead of segmented vector
+<p>It is highly recommended to work with polylines instead of segmented vector
 lines. The command <em>v.build.polylines</em> creates this map structure.
 
 <h3>LRS table structure</h3>
@@ -151,8 +146,7 @@ It can happen that one offset appears on 2 different lines:
 In this case, the module gives error because the position
 results in 2 points.
 
-<p>
-It can be also intended, for example a part of the road is shared
+<p>It can be also intended, for example a part of the road is shared
 with another one, but MP are used only for one:
 <div class="code"><pre>
  + road1/km15         + road1/km22
@@ -181,8 +175,7 @@ Explanations of selected options:
 
 <em>R. Blazek, 2004, <a href="http://gisws.media.osaka-cu.ac.jp/grass04/viewpaper.php?id=50">Introducing the Linear Reference System in GRASS</a>, Bangkok, GRASS User Conf. Proc.</em><br>
 <em>R. Blazek, 2005, <a href="http://www.j-geoinfo.net/Content/fulmar05/IJG_095-100.pdf">Introducing the Linear Reference System in GRASS</a>, International Journal of Geoinformatics, Vol. 1(3), pp. 95-100</em><br>
-<p>
-<em><a href="v.build.polylines.html">v.build.polylines</a></em>,
+<p><em><a href="v.build.polylines.html">v.build.polylines</a></em>,
 <em><a href="v.lrs.create.html">v.lrs.create</a></em>,
 <em><a href="v.lrs.segment.html">v.lrs.segment</a></em>,
 <em><a href="v.lrs.where.html">v.lrs.where</a></em>,

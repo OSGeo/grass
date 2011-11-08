@@ -7,10 +7,8 @@ and functions.
 <h2>PROGRAM USE</h2>
 
 <em>r3.mapcalc</em> expects its input to have the form:
-<p>
-<b>result =</b><em> expression</em>
-<p>
-where <em>result</em> is the name of a raster map layer
+<p><b>result =</b><em> expression</em>
+<p>where <em>result</em> is the name of a raster map layer
 to contain the result of the calculation and
 <em>expression</em> is any legal arithmetic expression involving existing
 raster map layers, integer or floating point constants,
@@ -18,7 +16,6 @@ and functions known to the calculator.
 Parentheses are allowed in the expression and may be nested to any depth.
 <em>result</em> will be created in the user's current mapset.
 <p>
-
 As <em>expression=</em> is the first option, it is the default. This
 means that passing an expression on the command line is possible
 as long as the expression is quoted and a space is included before the
@@ -66,16 +63,13 @@ foo = 1
 EOF
 </pre></div>
 
-<p>
-The formula entered to <em>r3.mapcalc</em> by the user is recorded both in the
+<p>The formula entered to <em>r3.mapcalc</em> by the user is recorded both in the
 <em>result</em> map title (which appears in the category file for <em>result</em>)
 and in the history file for <em>result</em>.
-<p>
-Some characters have special meaning to the command shell. If the user
+<p>Some characters have special meaning to the command shell. If the user
 is entering input to <em>r3.mapcalc</em> on the command line, expressions
 should be enclosed within single quotes.  See NOTES, below.
 <p>
-
 
 <h2>OPERATORS AND ORDER OF PRECEDENCE</h2>
 The following operators are supported:
@@ -109,84 +103,62 @@ The following operators are supported:
      ?:         conditional                Logical      1
 </pre></div>
 (modulus is the remainder upon division)
-<p>
-[1] The &amp;&amp;&amp; and ||| operators handle null values differently to other
+<p>[1] The &amp;&amp;&amp; and ||| operators handle null values differently to other
 operators. See the section entitled <b>NULL support</b> below for more
 details.
-<p>
-The operators are applied from left to right, with those of higher precedence
+<p>The operators are applied from left to right, with those of higher precedence
 applied before those with lower precedence.
 Division by 0 and modulus by 0 are acceptable and give a NULL result.
 The logical operators give a 1 result if the comparison is true, 0 otherwise.
-<p>
-<p>
-
+<p><p>
 
 <h2>3D GRID NAMES</h2>
 Anything in the expression which is not a number, operator, or function
 name is taken to be a 3D grid name. Examples:
-<p>
-<div class="code"><pre>
+<p><div class="code"><pre>
 volume
 x3
 3d.his
 </pre></div>
-<p>
-Most GRASS raster map layers and 3D grids meet this naming convention.
+<p>Most GRASS raster map layers and 3D grids meet this naming convention.
 However, if a 3D grid has a name which conflicts with the above rule, it
 should be quoted. For example, the expression
-<p>
-<div class="code"><pre>
+<p><div class="code"><pre>
 x = a-b
 </pre></div>
-<p>
-would be interpreted as:  x equals a minus b, whereas
-<p>
-<div class="code"><pre>
+<p>would be interpreted as:  x equals a minus b, whereas
+<p><div class="code"><pre>
 x = "a-b"
 </pre></div>
-<p>
-would be interpreted as: x equals the 3D grid named <em>a-b</em>
-<p>
-Also
-<p>
-<div class="code"><pre>
+<p>would be interpreted as: x equals the 3D grid named <em>a-b</em>
+<p>Also
+<p><div class="code"><pre>
 x = 3107
 </pre></div>
-<p>
-would create <em>x</em> filled with the number 3107, while
-<p>
-<div class="code"><pre>
+<p>would create <em>x</em> filled with the number 3107, while
+<p><div class="code"><pre>
 x = "3107"
 </pre></div>
-<p>
-would copy the 3D grid <em>3107</em> to the 3D grid <em>x</em>.
+<p>would copy the 3D grid <em>3107</em> to the 3D grid <em>x</em>.
 
-<p>
-Quotes are not required unless the 3D grid names look like numbers or
+<p>Quotes are not required unless the 3D grid names look like numbers or
 contain operators, OR unless the program is run non-interactively. Examples
 given here assume the program is run interactively. See NOTES, below.
-<p>
-<em>r3.mapcalc</em> will look for the 3D grids according to the user's
+<p><em>r3.mapcalc</em> will look for the 3D grids according to the user's
 current mapset search path. It is possible to override the search path
 and specify the mapset from which to select the 3D grid. This is done by
 specifying the 3D grid name in the form:
-<p>
-<div class="code"><pre>
+<p><div class="code"><pre>
 name@mapset
 </pre></div>
-<p>
-For example, the following is a legal expression:
-<p>
-<div class="code"><pre>
+<p>For example, the following is a legal expression:
+<p><div class="code"><pre>
 result = x@PERMANENT / y@SOILS
 </pre></div>
-<p>
-The mapset specified does not have to be in the mapset search path. (This
+<p>The mapset specified does not have to be in the mapset search path. (This
 method of overriding the mapset search path is common to all GRASS commands,
 not just <em>r3.mapcalc</em>.)
 <p>
-
 
 <h2>THE NEIGHBORHOOD MODIFIER</h2>
 3D grids are data base files stored in voxel format, i.e., three-dimensional
@@ -205,7 +177,6 @@ grid or across multiple 3D grids.
 
 <p>
 
-
 <h2>FUNCTIONS</h2>
 The functions currently supported are listed in the table below.
 The type of the result is indicated in the last column.
@@ -216,8 +187,7 @@ means that the function gives an integer result, and
 <em>*</em>
 indicates that the result is float if any of the arguments to the function
 are floating point values and integer if all arguments are integer.
-<p>
-<div class="code"><pre>
+<p><div class="code"><pre>
 function                description                                     type
 ---------------------------------------------------------------------------
 abs(x)                  return absolute value of x                      *
@@ -283,12 +253,10 @@ This means, in particular that division of integers results in a
 (truncated) integer, while division of floats results in an accurate
 floating point value.  With functions of type * (see table above),
 the result is float if any argument is float, integer otherwise.
-<p>
-Note: If you calculate with integer numbers, the resulting map will
+<p>Note: If you calculate with integer numbers, the resulting map will
 be integer. If you want to get a float result, add the decimal point
 to integer number(s).
-<p>
-If you want floating point division, at least one of the arguments has
+<p>If you want floating point division, at least one of the arguments has
 to be a floating point value. Multiplying one of them by 1.0 will
 produce a floating-point result, as will using float():
 <div class="code"><pre>
@@ -335,42 +303,34 @@ sqrt(-2)
 pow(a,b) where a is negative and b is not an integer 
 </pre></div>
 </ul>
-<p>
-NULL support: Please note that any math performed with NULL cells always
+<p>NULL support: Please note that any math performed with NULL cells always
 results in a NULL value for these cells. If you want to replace a NULL cell
 on-the-fly, use the isnull() test function in a if-statement.
-<p>
-Example: The users wants the NULL-valued cells to be treated like zeros. To
+<p>Example: The users wants the NULL-valued cells to be treated like zeros. To
 add maps A and B (where B contains NULLs) to get a map C the user can use a
-construction like:<p>
-<div class="code"><pre>
+construction like:<p><div class="code"><pre>
 C=A + if(isnull(B),0,B)
 </pre></div>
-<p>
-<b>NULL and conditions:</b>
-<p>
-For the one argument form:
+<p><b>NULL and conditions:</b>
+<p>For the one argument form:
 <div class="code"><pre>
 if(x) = NULL		if x is NULL
 if(x) = 0		if x = 0
 if(x) = 1		otherwise (i.e. x is neither NULL nor 0).
 </pre></div>
-<p>
-For the two argument form:
+<p>For the two argument form:
 <div class="code"><pre>
 if(x,a) = NULL		if x is NULL
 if(x,a) = 0		if x = 0
 if(x,a) = a		otherwise (i.e. x is neither NULL nor 0).
 </pre></div>
-<p>
-For the three argument form:
+<p>For the three argument form:
 <div class="code"><pre>
 if(x,a,b) = NULL	if x is NULL
 if(x,a,b) = b		if x = 0
 if(x,a,b) = a		otherwise (i.e. x is neither NULL nor 0).
 </pre></div>
-<p>
-For the four argument form:
+<p>For the four argument form:
 <div class="code"><pre>
 if(x,a,b,c) = NULL	if x is NULL
 if(x,a,b,c) = a		if x > 0
@@ -385,8 +345,7 @@ The functions if(), isnull() and eval() are exceptions.
 The function isnull() returns 1 if its argument is NULL and 0 otherwise.
 If the user wants the opposite, the ! operator, e.g. "!isnull(x)" must be
 used.
-<p>
-All forms of if() return NULL if the first argument is NULL. The 2, 3
+<p>All forms of if() return NULL if the first argument is NULL. The 2, 3
 and 4 argument forms of if() return NULL if the "selected" argument is
 NULL, e.g.:
 <div class="code"><pre>
@@ -395,8 +354,7 @@ if(1,a,b) = a	regardless of whether b is NULL
 </pre></div>
 eval() always returns its last argument, so it only returns NULL if
 the last argument is NULL.
-<p>
-<b>Note</b>: The user cannot test for NULL using the == operator, as that
+<p><b>Note</b>: The user cannot test for NULL using the == operator, as that
 returns NULL if either or both arguments are NULL, i.e. if x and y are
 both NULL, then "x == y" and "x != y" are both NULL rather than 1 and
 0 respectively.
@@ -465,28 +423,23 @@ X (map) values supplied and y (newmap) values returned:
 Extra care must be taken if the expression is given on the command line.
 Some characters have special meaning to the UNIX shell.
 These include, among others:
-<p>
-* ( ) &gt; &amp; |
-<p>
-It is advisable to put single quotes around the expression; e.g.:
+<p>* ( ) &gt; &amp; |
+<p>It is advisable to put single quotes around the expression; e.g.:
 <div class="code"><pre>
 'result = elevation * 2'
 </pre></div>
 Without the quotes, the *, which has special meaning to the UNIX shell,
 would be altered and <em>r3.mapcalc</em> would see something other than the *.
-<p>
-For formulas that the user enters from standard input (rather than from
+<p>For formulas that the user enters from standard input (rather than from
 the command line), a line continuation feature now exists. If the user
 adds \e to the end of an input line, <em>r3.mapcalc</em> assumes that the
 formula being entered by the user continues on to the next input line.
 There is no limit to the possible number of input lines or to the length
 of a formula.
-<p>
-If the <em>r3.mapcalc</em> formula entered by the user is very long, the
+<p>If the <em>r3.mapcalc</em> formula entered by the user is very long, the
 map title will contain only some of it, but most (if not all) of the formula
 will be placed into the history file for the <em>result</em> map.
-<p>
-The environment variable GRASS_RND_SEED is read to initialise the
+<p>The environment variable GRASS_RND_SEED is read to initialise the
 random number generator.
 
 
@@ -496,18 +449,15 @@ Continuation lines must end with a \ and have NO trailing white space
 continuation lines, the error messages produced by <em>r3.mapcalc</em> will
 be meaningless and the equation will not work as the user intended.
 This is important for the eval() function.
-<p>
-<!-- STILL TRUE ??-->
+<p><!-- STILL TRUE ??-->
 Currently, there is no comment mechanism in <em>r3.mapcalc</em>. Perhaps
 adding a capability that would cause the entire line to be ignored when
 the user inserted a # at the start of a line as if it were not present,
 would do the trick.
-<p>
-The function should require the user to type "end" or "exit" instead
+<p>The function should require the user to type "end" or "exit" instead
 of simply a blank line. This would make separation of multiple scripts
 separable by white space.
-<p>
-r3.mapcalc does not print a warning in case of operations on NULL cells.
+<p>r3.mapcalc does not print a warning in case of operations on NULL cells.
 It is left to the user to utilize the isnull() function.
 
 
@@ -520,8 +470,7 @@ Construction Engineering Research Laboratory (March/1991).
 r.mapcalc Program Tutorial</a></b>, by Marji Larson, Michael Shapiro and Scott
 Tweddale, U.S. Army Construction Engineering Research Laboratory (December
 1991)
-<p>
-<em><a href="r.mapcalc.html">r.mapcalc</a></em>
+<p><em><a href="r.mapcalc.html">r.mapcalc</a></em>
 
 
 <h2>AUTHORS</h2>
@@ -529,5 +478,4 @@ Tomas Paudits &amp; Jaro Hofierka, funded by GeoModel s.r.o., Slovakia
 <br><a href="mailto:tpaudits@mailbox.sk">tpaudits@mailbox.sk</a>,
 <a href="MAILTO:hofierka@geomodel.sk">hofierka@geomodel.sk</a>
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

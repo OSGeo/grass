@@ -5,8 +5,7 @@ the reclassification of an existing vector map. It also allows the user
 to change the <i>key column</i> away from the default of "<b>cat</b>" with
 the <b>column</b> option.
 
-<p>
-Rules file may contain on each row either pair:
+<p>Rules file may contain on each row either pair:
 <div class="code"><pre>
 keyword&nbsp;value
 </pre></div>
@@ -27,8 +26,7 @@ table is created containing the newly generated cat numbers and a single
 column containing the unique string column values, sorted in alphabetical
 order.
 
-<p>
-For dissolving common boundaries, see 
+<p>For dissolving common boundaries, see 
 <em><a href="v.dissolve.html">v.dissolve</a></em>.
 
 
@@ -36,7 +34,7 @@ For dissolving common boundaries, see
 <h2>EXAMPLES</h2>
 
 
-<H3>Example 1: Reclass by rules</H3>
+<h3>Example 1: Reclass by rules</h3>
 
 <div class="code"><pre>
 v.reclass input=land output=land_u type=boundary rules=land.rcl
@@ -64,7 +62,7 @@ values selected from database by SQL select statement:
 <tt>select id from tland where use = 'E14'</tt> changed to category 2.
 
 
-<H3>Example 2: Reclass by attribute column</H3>
+<h3>Example 2: Reclass by attribute column</h3>
 
 (North Carolina sample dataset)<br>
 
@@ -87,10 +85,9 @@ No table is created for reclassed layer if <b>rules</b> option is used.
 
 <em>
 <a href="v.dissolve.html">v.dissolve</a>,
-<a href="v.extract.html">v.extract</A>
+<a href="v.extract.html">v.extract</a>
 </em>
-<p>
-<em><a href="sql.html">GRASS SQL interface</a></em>
+<p><em><a href="sql.html">GRASS SQL interface</a></em>
 
 
 <h2>AUTHOR</h2>
@@ -99,5 +96,4 @@ R.L. Glenn, USDA, SCS, NHQ-CGIS<br>
 from v.reclass to v.db.reclass and later to v.reclass in 5.7 rewritten
 by Radim Blazek
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

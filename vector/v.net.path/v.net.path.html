@@ -3,8 +3,7 @@
 <em>v.net.path</em> determines least costly, e.g. shortest or fastest 
 path(s) on a vector network.
 
-<p>
-Costs may be either line lengths, or attributes saved in a database 
+<p>Costs may be either line lengths, or attributes saved in a database 
 table. These attribute values are taken as costs of whole segments, not 
 as costs to traverse a length unit (e.g. meter) of the segment. 
 For example, if the speed limit is 100 km / h, the cost to traverse a 
@@ -13,17 +12,13 @@ length / speed = 10 km / (100 km/h) = 0.1 h.
 Supported are cost assignments for both arcs and nodes, 
 and also different costs for both directions of a vector line. 
 For areas, costs will be calculated along boundary lines.
-<p>
-The input vector needs to be prepared with <em>v.net operation=connect</em> 
+<p>The input vector needs to be prepared with <em>v.net operation=connect</em> 
 in order to connect points representing center nodes to the network.
 
-<p>
-Nodes and arcs can be closed using cost = -1. 
-<p>
-Least cost paths are written to the output vector map with an 
+<p>Nodes and arcs can be closed using cost = -1. 
+<p>Least cost paths are written to the output vector map with an 
 attached attribute table.
-<p>
-Nodes can be piped into the program from file or from stdin. The
+<p>Nodes can be piped into the program from file or from stdin. The
 syntax is as follows:
 <div class="code"><pre>
 id start_point_category end_point_category
@@ -35,15 +30,12 @@ or
 id start_point_x start_point_y end_point_x end_point_y
 </pre></div>
 
-<p>
-Points specified by category must be exactly on network nodes, and the 
+<p>Points specified by category must be exactly on network nodes, and the 
 input vector map needs to be prepared with <em>v.net operation=connect</em>.
-<p>
-When specifying coordinates, the next network node to a given coordinate 
+<p>When specifying coordinates, the next network node to a given coordinate 
 pair is used.
 
-<p>
-The attribute table will contain the following attributes:
+<p>The attribute table will contain the following attributes:
 
 <ul>
     <li>cat  - path unique category assigned by module</li>
@@ -63,12 +55,10 @@ The attribute table will contain the following attributes:
 
 <h2>NOTES</h2>
 Nodes and arcs can be closed using cost = -1. 
-<p>
-If the cost columns 'afcol', 'abcol' and 'ncol' are not
+<p>If the cost columns 'afcol', 'abcol' and 'ncol' are not
 specified, the length of network segments is measured and 
 zero costs are assumed for nodes.
-<p>
-When using attributes, the length of segments is not used. To get
+<p>When using attributes, the length of segments is not used. To get
 accurate results, the line length must be taken into account when 
 assigning costs as attributes. For example, to get the <b>fastest path</b>, 
 the columns 'max_speed' and 'length' are required. The correct fastest 
@@ -80,11 +70,9 @@ by <em>v.to.db</em>.
 
 Shortest (red) and fastest (blue) path between two digitized nodes (Spearfish):
 
-<p>
-<img src="vnetpath.png" alt="v.net.path example" border="1">
+<p><img src="vnetpath.png" alt="v.net.path example" border="1">
 
-<p>
-<div class="code"><pre>
+<p><div class="code"><pre>
 # Spearfish
 
 echo "1|601955.1|4916944.9|start

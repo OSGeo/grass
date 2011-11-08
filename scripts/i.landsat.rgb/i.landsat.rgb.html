@@ -3,12 +3,10 @@
 <em>i.landsat.rgb</em> auto-balances and enhances the color channels of a
 LANDSAT RGB image to provide a more natural color mixture. Only the color
 table of each image band is modified, the base data remains untouched.
-<p>
-The module works by calculating a histogram for each color channel and 
+<p>The module works by calculating a histogram for each color channel and 
 removing an adjustable amount of outliers from either end before recalibrating
 the color scale with <em>r.colors</em>.
-<p>
-It will work with any 8-bit RGB imagery set and the script is easily modified
+<p>It will work with any 8-bit RGB imagery set and the script is easily modified
 to work with other datasets of greater band-depth.
 
 <h2>NOTES</h2>
@@ -17,13 +15,11 @@ Depending on the image, it may or may not be advantageous to use the <b>-p</b>
 flag to preserve the relative color scaling. You will have to experiment
 with the different options to find a setting that works best for your
 particular imagery.
-<p>
-The <b>strength</b> option should generally be set in the 90-99 range. The
+<p>The <b>strength</b> option should generally be set in the 90-99 range. The
 lower the number, the more saturated the image becomes. It represents the
 percentage cut-off for the top end of the color histogram curve. The lower
 end is fixed at 2% of the area under the curve.
-<p>
-For quicker execution of this module on large images you can achieve largely
+<p>For quicker execution of this module on large images you can achieve largely
 similar results by switching to a coarser resolution before the running of
 the module (using <em>g.region</em>) and then back to the original resolution
 afterwards.

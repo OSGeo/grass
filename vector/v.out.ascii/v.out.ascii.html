@@ -5,8 +5,7 @@ GRASS vector map in <a href="vectorascii.html">ASCII format</a>. Using
 flag <b>-o</b> <em>v.out.ascii</em> output will be in old (version 4)
 ASCII format.
 
-<p>
-If the <b>output</b> parameter is not given then the coordinates of any 
+<p>If the <b>output</b> parameter is not given then the coordinates of any 
 <em>point</em> data within the vector map is sent to stdout.
 
 <h2>NOTES</h2>
@@ -18,24 +17,20 @@ companion module are useful both for importing and exporting vector
 maps between GRASS and other software, and for transferring data
 between machines.
 
-<p>
-If old version is requested, the <b>output</b> files from <em>v.out.ascii</em> is placed 
+<p>If old version is requested, the <b>output</b> files from <em>v.out.ascii</em> is placed 
 in the <tt>$LOCATION/$MAPSET/dig_ascii/</tt> and <tt>$LOCATION/$MAPSET/dig_att</tt> directory.
 
-<p>
-Only features with a category number will be
+<p>Only features with a category number will be
 exported. Use <em><a href="v.category.html">v.category</a></em> to add
 them if needed.
 
-<p>
-<em>v.out.ascii</em> does not copy the <tt>dig_cats</tt> file
+<p><em>v.out.ascii</em> does not copy the <tt>dig_cats</tt> file
 associated with the binary vector <b>input</b> map to the
 new <b>output</b> file name. The user must copy the <tt>dig_cats</tt>
 file to the new <b>output</b> name if this is desired (e.g. using the
 UNIX <em>cp</em> command).
 
-<p>
-It is possible to output the coordinates of vertices in a non-points vector
+<p>It is possible to output the coordinates of vertices in a non-points vector
 feature by first converting the vector feature to a points map with 
 <em><a href="v.to.points.html">v.to.points</a></em> and then exporting
 with <em>v.out.ascii</em> in
@@ -45,8 +40,7 @@ with <em>v.out.ascii</em> in
 
 <h3>Standard mode</h3>
 
-<p>
-<div class="code"><pre>
+<p><div class="code"><pre>
 v.out.ascii input=quads format=standard
 
 ORGANIZATION: US Army Const. Eng. Rsch. Lab
@@ -139,5 +133,4 @@ Radim Blazek, ITC-Irst, Trento, Italy
 Attribute selection added by Martin Landa, Czech Technical University
 in Prague, Czech Republic (2008/12)
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

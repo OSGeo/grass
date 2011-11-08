@@ -14,8 +14,7 @@ map layers, for filling in "holes" in a raster map layer's data (e.g., in
 digital elevation data), or for updating an older map layer with more recent
 data. The current geographic region definition and mask settings are
 respected.
-<p>
-The first <em>name</em> listed in the string
+<p>The first <em>name</em> listed in the string
 <b>input=</b><em>name</em>,<em>name</em>,<em>name</em>, ... is the name of
 the first map whose data values will be used to fill in "no data" cells
 in the current region. The second through last input <em>name</em>
@@ -56,8 +55,7 @@ have been digitized separately.  The program
 <em><a href="v.mkgrid.html">v.mkgrid</a></em> can be used to make adjacent
 maps align neatly.
 
-<p>
-The user should check the current geographic region settings before running 
+<p>The user should check the current geographic region settings before running 
 <em>r.patch</em>, to ensure that the region boundaries encompass all 
 of the data desired to be included in the composite map and to ensure that the
 region resolution is the resolution of the desired data. To set the
@@ -69,7 +67,6 @@ g.region rast=map1[,map2[,...]]
 </pre></div>
 
 <p>
-
 Use of <em>r.patch</em> is generally followed by use of the GRASS programs 
 <em><a href="g.remove.html">g.remove</a></em> and 
 <em><a href="g.rename.html">g.rename</a></em>;
@@ -78,8 +75,7 @@ layers, while <em>g.rename</em> is used to then assign to the newly-created
 composite (patched) raster map layer the name of the original raster map
 layer.
 
-<p>
-<em>r.patch</em> creates support files for the patched, composite output map. 
+<p><em>r.patch</em> creates support files for the patched, composite output map. 
 
 
 <h2>EXAMPLE</h2>

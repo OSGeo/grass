@@ -10,29 +10,24 @@ object(s) to attribute records (from attribute table linked to vector map).
 Use <em><a href="v.to.db.html">v.to.db</a></em> to upload related categories
 to a linked attribute table.
 
-<p>
-The <b>type</b> parameter specifies the type of geometry objects to which
+<p>The <b>type</b> parameter specifies the type of geometry objects to which
 the category is added; it is similar to an input filter - only the
 geometry specified in 'type' is processed.
-<p>
-If the <b>type</b> parameter is set to <b>centroid</b> and
+<p>If the <b>type</b> parameter is set to <b>centroid</b> and
 the <b>option</b> parameter set to <b>add</b>, new categories will be
 added to existing centroids. Note however, that new centroids cannot
 be created this way.  To do so, they must be added manually
 using <em><a href="wxGUI.Vector_Digitizing_Tool.html">wxGUI vector
 digitizer</a></em> or by running <em>v.category</em> with the type
 parameter set to area.
-<p>
-Areas are a special case because it is impossible to attach a cat to
+<p>Areas are a special case because it is impossible to attach a cat to
 an area without a centroid; in this case, the module places new
 centroids in areas automatically.
 
-<p>
-The <b>cat</b> parameter is only used with <b>option</b>=<i>add</i> and
+<p>The <b>cat</b> parameter is only used with <b>option</b>=<i>add</i> and
 <b>option</b>=<i>sum</i>.
 
-<p>
-The <b>ids</b> parameter specifies the list of feature IDs to which the
+<p>The <b>ids</b> parameter specifies the list of feature IDs to which the
 operation is performed; by default, all vector feature ids are processed. 
 The <i>feature ID</i> is an internal (unique) geometry ID that all vector
 primitives possess, and is separate from any category the feature may
@@ -117,5 +112,4 @@ Radim Blazek, ITC-irst, Trento, Italy<br>
 Modified (the id parameter) by Martin Landa,
   FBK-irst (formerly ITC-irst), Trento, Italy, 2008/02
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>

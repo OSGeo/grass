@@ -1,12 +1,12 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
-<HTML>
-<HEAD>
- <META name="Author" content="Markus Neteler/GRASS Development Team">
- <META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
- <TITLE>GRASS Quickstart</TITLE>
+<html>
+<head>
+ <meta name="Author" content="Markus Neteler/GRASS Development Team">
+ <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+ <title>GRASS Quickstart</title>
  <link rel="stylesheet" href="grassdocs.css" type="text/css">
-</HEAD>
-<BODY bgcolor="#ffffff">
+</head>
+<body bgcolor="#ffffff">
 
 <img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
 
@@ -26,8 +26,7 @@ and environmental consulting companies.
 
 <h2>1. Startup of GRASS GIS</h2>
 
-<p>
-&nbsp;&nbsp;&nbsp;<IMG SRC="grass_start.png" ALT="[GRASS start screen]">
+<p>&nbsp;&nbsp;&nbsp;<IMG SRC="grass_start.png" ALT="[GRASS start screen]">
 
 <h3><IMG SRC="circle_1.png" ALT="[(1)]">&nbsp;Selecting the GIS Database directory</h3>
 
@@ -44,8 +43,7 @@ geographical boundaries. The subdirectories and files defining a
 LOCATION are created automatically when GRASS is started the first
 time with a new LOCATION. It is important to understand that each
 projection stays in its own LOCATION.
-<p>
-See <IMG SRC="circle_4.png" ALT="[(4)]">&nbsp; the "Location Wizard" to
+<p>See <IMG SRC="circle_4.png" ALT="[(4)]">&nbsp; the "Location Wizard" to
 easily create a new LOCATION from scratch from a geocoded file, by
 defining the parameters or by selecting the corresponding EPSG projection
 code.
@@ -74,12 +72,10 @@ menu system, map visualization tool, digitizer, and more.
 
 <h2>2. Background GRASS Location structure</h2>
 
-<p>
-&nbsp;&nbsp;&nbsp;<IMG SRC="help_loc_struct.png" ALT="[GRASS Location structure]">
+<p>&nbsp;&nbsp;&nbsp;<IMG SRC="help_loc_struct.png" ALT="[GRASS Location structure]">
 <br>
 <i>Fig. 1: GRASS Location structure</i>
 <p>
-
 A LOCATION is simply a set of directories which contains the GRASS
 data of a project. Within each LOCATION, a mandatory "PERMANENT"
 MAPSET exists which contains projection information and some
@@ -96,8 +92,7 @@ in a network file system (e.g. NFS). Besides access to his/her own
 MAPSET, each user can also read map layers in other users' MAPSETs,
 but s/he can modify or remove only the map layers in his/her own
 MAPSET.
-<p>
-You can learn more about mapsets and how to seamlessly access maps
+<p>You can learn more about mapsets and how to seamlessly access maps
 found in another MAPSET of the same LOCATION in the
 <a href="g.mapsets.html">g.mapsets</a> documentation.
 
@@ -123,21 +118,19 @@ have the option of switching back to the default region at any time.
 
 To create the GRASS database:
 
-<OL>
-<LI> Find a place on your disk where you have write access and that
+<ol>
+<li> Find a place on your disk where you have write access and that
     has enough diskspace to hold your spatial data.</LI>
-<LI> Create a subdirectory that will hold the general GRASS database
+<li> Create a subdirectory that will hold the general GRASS database
     (e.g. using a file manager or with <tt>mkdir /data/grassdata</tt> or 
     <tt>mkdir /home/yourlogin/grassdata</tt>).</LI>
-</OL>
+</ol>
 
-<p>
-Sample data such as the "Spearfish" or the "North Carolina" sample datasets
+<p>Sample data such as the "Spearfish" or the "North Carolina" sample datasets
 may be downloaded from 
-<a href="http://grass.osgeo.org/download/data.php">http://grass.osgeo.org/download/data.php</A>
+<a href="http://grass.osgeo.org/download/data.php">http://grass.osgeo.org/download/data.php</a>
 and placed in this new database directory.
 <p>
-
 
 <h3>A) Create New Location with wxGUI</h3>
 The <a href="wxGUI.html">wxGUI</a> graphical user interface provides a
@@ -154,65 +147,59 @@ text screen on which you can enter a new location name, and then
 continue by pressing "ESC"-"RETURN" - i.e. press (NOT hold) the ESC key,
 and then press the RETURN key on your keyboard.
 
-<p>
-Next you will need to assign parameters to the location such
+<p>Next you will need to assign parameters to the location such
 as the coordinate system and datum you want to use, the project area's
 boundary coordinates, and the default resolution for raster data:
 
 <UL>
-<LI> Start by chosing between, X,Y, Latitude-Longitude, UTM, or
+<li> Start by chosing between, X,Y, Latitude-Longitude, UTM, or
    "other" coordinate system. This choice depends on your data and the
    use you will make of it.</LI>
-<LI> You are then prompted for a single line of text describing the 
+<li> You are then prompted for a single line of text describing the 
    project area, for example "Topo Map of the Alps".</LI>
 </UL>
 
-<p>
-Next you are requested for some more information about the projection.
+<p>Next you are requested for some more information about the projection.
 Note that the prompts vary from projection to projection, an example follows:
 
 <UL>
-<LI> (if you chose "D - Other Projection") "specify projection name": 
+<li> (if you chose "D - Other Projection") "specify projection name": 
   "list" gives you the list of all available projections, examples are 
   "tmerc" for Transverse Mercator, "lcc" for Lambert Conformal Conic,
   "moll" for Mollweide, etc.
-<LI> specify datum name: again use "list" to get a list of available 
+<li> specify datum name: again use "list" to get a list of available 
   datums, examples are "wgs84", "nad27", "eur79",  etc.
-<LI> Enter Central Parallel: 0 if you want the Equator as the
+<li> Enter Central Parallel: 0 if you want the Equator as the
   central parallel
-<LI> Enter Central Meridian: 0 if you want the Greenwich meridian as
+<li> Enter Central Meridian: 0 if you want the Greenwich meridian as
   central meridian
-<LI> Enter Scale Factor at the Central Meridian
-<LI> Enter plural form of map units: for example, meters
+<li> Enter Scale Factor at the Central Meridian
+<li> Enter plural form of map units: for example, meters
 </UL>
 
-<p>
-The next step is the description of the project area's boundary coordinates
+<p>The next step is the description of the project area's boundary coordinates
 and the definition of the default raster resolution:
-<p>
-The default raster resolution (GRID RESOLUTION) has to be chosen
+<p>The default raster resolution (GRID RESOLUTION) has to be chosen
 according to your needs. Generally, it is advisable to work in steps of
 0.25 (0.25, 0.5, 1.75, 2.00, 12.25 etc.). This resolution does not
 concern vector and site data since these are stored with their exact
 coordinate values. Note that every raster map may have its own
 resolution. You can leave this screen with "ESC"-"RETURN" and then
 if everything is correct accept the list of parameters that appears.
-<p>
-You will then be back to the startup screen to enter the mapset's
+<p>You will then be back to the startup screen to enter the mapset's
 name (if not already entered). Another "ESC"-"RETURN" will finally
 let you leave this screen. This mapset is created within the new
 location by answering "yes" to the next question. The mapset will
 use the parameters of the location (such as the region and resolution
 definitions) as its default parameters.
-<p>
-Now the project area, i.e. the location including a mapset, has been
+<p>Now the project area, i.e. the location including a mapset, has been
 created. You have "arrived" in the GRASS system and can start working
 within this new location.
 
 <h2>Further Reading</h2>
 
 Please have a look at the GRASS web site for tutorials and books:
-<a href="http://grass.osgeo.org/gdp/index.php">http://grass.osgeo.org/gdp/index.php</A>.
+<a href="http://grass.osgeo.org/gdp/index.php">http://grass.osgeo.org/gdp/index.php</a>.
 
 <h2>See also</h2>
 <a href="index.html">GRASS 7 Reference Manual</a>

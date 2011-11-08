@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
- <TITLE>GRASS 7</TITLE>
+ <title>GRASS 7</title>
  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
  <link rel="stylesheet" href="grassdocs.css" type="text/css">
 </head>
@@ -25,8 +25,7 @@
 
 <h2>DESCRIPTION</h2>
 
-<p>
-This command is used to launch GRASS GIS. It will parse the command line
+<p>This command is used to launch GRASS GIS. It will parse the command line
 arguments and then initialize GRASS for the user. Since GRASS programs
 require a specific environment, this program must be called before any other
 GRASS program can run. The command line arguments are optional and provide
@@ -36,14 +35,12 @@ desired mapset to work on.
 
 <h2>FEATURES</h2>
 
-<p>
-The <em>grass70</em> startup program will remember both the desired user
+<p>The <em>grass70</em> startup program will remember both the desired user
 interface and mapset. Thus, the next time the user runs GRASS, typing
 <em>grass70</em> (without any options) will start GRASS with the previous
 settings for the user interface and mapset selected.
 
-<p>
-If you specify a graphical user interface (wxPython) the <em>grass70</em>
+<p>If you specify a graphical user interface (wxPython) the <em>grass70</em>
 program will try to verify that the system you specified exists and that you
 can access it successfully. If any of these checks fail then <em>grass70</em>
 will automatically switch back to the text user interface mode.
@@ -51,10 +48,9 @@ will automatically switch back to the text user interface mode.
 
 <h2>OPTIONS</h2>
 
-<p>
-All command line options are optional.
+<p>All command line options are optional.
 
-<H3>Flags:</H3>
+<h3>Flags:</h3>
 
 <dl>
 
@@ -75,7 +71,7 @@ All command line options are optional.
 
 </dl>
 
-<H3>Parameters:</H3>
+<h3>Parameters:</h3>
 
 <dl>
 <dt><b>GISDBASE</b>
@@ -106,8 +102,7 @@ A number of environment variables are available at GRASS startup to assist
 with automation and customization. Most users will not need to bother with
 these.
 
-<p>
-In addition to these shell environment variables GRASS maintains a number of
+<p>In addition to these shell environment variables GRASS maintains a number of
 GIS environment variables in the <tt>$HOME/.grass7/rc</tt> file. User changes
 to this file will be read during the next startup of GRASS. If this file
 becomes corrupted the user may edit it by hand or remove it to start afresh.
@@ -116,17 +111,15 @@ more information.
 The rest of this help page will only consider shell environment variables.
 
 
-<H3>User Interface Environment Variable</H3>
+<h3>User Interface Environment Variable</h3>
 
-<p>
-The <em>grass70</em> program will check for the existence of an environment
+<p>The <em>grass70</em> program will check for the existence of an environment
 variable called GRASS_GUI which indicates the type of user interface for
 GRASS to use. If this variable is not set when <em>grass70</em> is run, then
 it will be created and then saved in the <tt>$HOME/.grass7/rc</tt> file for
 the next time GRASS is run. It can be set to "text" or "wxpython".
 
-<p>
-There is an order of precedence in the way <em>grass70</em> determines the user
+<p>There is an order of precedence in the way <em>grass70</em> determines the user
 interface to use. The following is the hierarchy from highest precedence to
 lowest.
 
@@ -138,10 +131,9 @@ lowest.
      &bull; Default value - wxpython
 </dl>
 
-<H3>Python Environment Variables</H3>
+<h3>Python Environment Variables</h3>
 
-<p>
-If you choose to use the wxPython interface, then
+<p>If you choose to use the wxPython interface, then
 the following environment variables can be used to override your
 system default <tt>python</tt> command.
 
@@ -151,48 +143,43 @@ system default <tt>python</tt> command.
 </dl>
 
 
-<H4>Example Use of GRASS Python Environment Variable</H4>
+<h4>Example Use of GRASS Python Environment Variable</h4>
 
-<p>
-Suppose your system has Python 2.4 installed and you install a personal
+<p>Suppose your system has Python 2.4 installed and you install a personal
 version of the Python 2.5 binaries under <tt>$HOME/bin</tt>. You can use
 the above variables to have GRASS use the Python 2.5 binaries instead.
 
 
-<H4>Example Use of the GRASS Python Environment Variable</H4>
-<p>
-<pre>
+<h4>Example Use of the GRASS Python Environment Variable</h4>
+<p><pre>
    GRASS_PYTHON=python2.5
 </pre>
 
 
 
-<H3>Addon path to extra local GRASS modules</H3>
+<h3>Addon path to extra local GRASS modules</h3>
 
 This environment variable allows the user to extend the GRASS program search
 paths to include locally developed/installed addon modules which are not
 distributed with the standard GRASS release.
-<p>
-<pre>
+<p><pre>
    GRASS_ADDON_PATH=/usr/mytools
    GRASS_ADDON_PATH=/usr/mytools:/usr/local/othertools
 </pre>
 
-<p>
-In this example above path(s) would be added to the standard GRASS path
+<p>In this example above path(s) would be added to the standard GRASS path
 environment.
 
 
-<H3>HTML browser variable</H3>
+<h3>HTML browser variable</h3>
 
 The GRASS_HTML_BROWSER environment variable allows the user to set the HTML
 web browser to use for dispalying help pages.
 
 
-<H3>Location Environment Variables</H3>
+<h3>Location Environment Variables</h3>
 
-<p>
-The Synopsis and Options sections above describe options that can be used to
+<p>The Synopsis and Options sections above describe options that can be used to
 set the location and mapset that GRASS will use. These values can also be set
 with environment variables. However, specifying the location and mapset
 variables on the command line will override these environment variables. The
@@ -218,7 +205,7 @@ available variables are as follows:
 </dl>
 
 
-<H3>Running non-interactive batch jobs</H3>
+<h3>Running non-interactive batch jobs</h3>
 
 If the <tt>GRASS_BATCH_JOB</tt> environment variable is set to the <i>full</i>
 path and filename of a shell script then GRASS will be launched in a 
@@ -228,18 +215,16 @@ will automatically exit using the exit-success code given by the script.
 The script file must have its executable bit set.
 
 
-<H3>Note</H3>
+<h3>Note</h3>
 
-<p>
-Note that you will need to set these variables using the appropriate method
+<p>Note that you will need to set these variables using the appropriate method
 required for the UNIX shell that you use. (e.g. in a Bash shell you must
 "export" the variables for them to propogate)
 
 
 <h2>EXAMPLES</h2>
 
-<p>
-The following are some examples of how you could start GRASS
+<p>The following are some examples of how you could start GRASS
 
 <dl>
 
@@ -266,7 +251,7 @@ The following are some examples of how you could start GRASS
 </dl>
 
 
-<H3>Other examples</H3>
+<h3>Other examples</h3>
 
 There are a variety of ways in which the <i>location environment
 variables</i> (see above) can be used to specify the mapset to use.
@@ -362,8 +347,7 @@ installations do not create a <tt>python</tt> command. In these cases the system
 administrator must create an appropriate link to the actual <tt>python</tt>
 program.
 
-<p>
-Furthermore, if you have more than one version of Python installed, make sure
+<p>Furthermore, if you have more than one version of Python installed, make sure
 that the version you want to use with GRASS is the first version found in
 your <tt>$PATH</tt> variable. GRASS searches your <tt>$PATH</tt> variable
 until it finds the first version of <tt>python</tt>.
@@ -381,10 +365,8 @@ until it finds the first version of <tt>python</tt>.
 <h2>SEE ALSO</h2>
 
 List of <a href=variables.html>implemented GRASS environment variables</a>.
-<p>
-<a href="http://grass.osgeo.org">GRASS Web site</a>
-<p>
-<a href="http://download.osgeo.org/grass/grass7_progman/">GRASS 7 Programmer's Manual</a>
+<p><a href="http://grass.osgeo.org">GRASS Web site</a>
+<p><a href="http://download.osgeo.org/grass/grass7_progman/">GRASS 7 Programmer's Manual</a>
 
 <h2>AUTHORS (of this page)</h2>
 
@@ -392,11 +374,9 @@ Justin Hickey<br>
 Markus Neteler<br>
 Hamish Bowman
 
-<p>
-<i>Last changed: $Date$</i>
+<p><i>Last changed: $Date$</i>
 <HR>
-<p>
-<a href=index.html>Help Index</a>
+<p><a href=index.html>Help Index</a>
 
 </body>
 </html>
