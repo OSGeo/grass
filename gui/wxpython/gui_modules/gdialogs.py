@@ -416,8 +416,8 @@ def CreateNewVector(parent, cmd, title = _('Create new vector map'),
                                         parent = parent,
                                         read = True,
                                         flags = 'l',
-                                        dsn = vExternalOut['dsn'])
-        
+                                        dsn = vExternalOut['dsn']).splitlines()
+    
     overwrite = False
     if not UserSettings.Get(group = 'cmd', key = 'overwrite', subkey = 'enabled') and \
             outmap in listOfVectors:
