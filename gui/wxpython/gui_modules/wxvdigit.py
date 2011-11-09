@@ -36,6 +36,8 @@ from grass.lib.vector import *
 from grass.lib.vedit  import *
 from grass.lib.dbmi   import *
 
+import grass.script.core as grass
+
 class VDigitError:
     def __init__(self, parent):
         """!Class for managing error messages of vector digitizer
@@ -1397,8 +1399,11 @@ class IVDigit:
         @param map name of vector map to be set up
         """
         Debug.msg (3, "AbstractDigit.SetMapName map=%s" % name)
-        
-        name, mapset = name.split('@')
+
+        if '@' in name:
+            name, mapset = name.split('@')
+        else:
+            mapset = grass.gisenv()['MAPSET']
         
         self.poMapInfo = self._display.OpenMap(str(name), str(mapset), True)
         
