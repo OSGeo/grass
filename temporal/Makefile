@@ -14,6 +14,7 @@ SUBDIRS = \
 	tr.aggregate.ds \
 	tr.register \
 	tr.to.rast3 \
+	tr.univar \
 	tr.list \
 	tv.list \
 	tr3.list \
