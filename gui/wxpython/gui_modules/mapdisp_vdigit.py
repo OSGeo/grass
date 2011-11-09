@@ -108,12 +108,16 @@ class VDigitWindow(BufferedWindow):
         # self.pdcVector.Clear()
         self.pdcVector.RemoveAll()
         
-        try:
-            item = self.tree.FindItemByData('maplayer', self.toolbar.GetLayer())
-        except TypeError:
-            item = None
+        item = None
+        if self.tree:
+            try:
+                item = self.tree.FindItemByData('maplayer', self.toolbar.GetLayer())
+            except TypeError:
+                pass
         
-        if item and self.tree.IsItemChecked(item):
+        if not self.tree or \
+                (self.tree and item and \
+                     self.tree.IsItemChecked(item)):
             self.redrawAll = True
             self.digit.GetDisplay().DrawMap()
         
@@ -190,8 +194,12 @@ class VDigitWindow(BufferedWindow):
         """!Define geometry attributes
         """
         mapLayer = self.toolbar.GetLayer()
-        item = self.tree.FindItemByData('maplayer', mapLayer)
-        vdigit = self.tree.GetPyData(item)[0]['vdigit']
+        if self.tree:
+            item = self.tree.FindItemByData('maplayer', mapLayer)
+            vdigit = self.tree.GetPyData(item)[0]['vdigit']
+        else:
+            item = vdigit = None
+        
         if not vdigit or \
                 'geomAttr' not in vdigit or \
                 attrb not in vdigit['geomAttr']:
@@ -222,10 +230,13 @@ class VDigitWindow(BufferedWindow):
         """
         mapLayer = self.parent.toolbars['vdigit'].GetLayer()
         vectorName =  mapLayer.GetName()
-        item = self.tree.FindItemByData('maplayer', mapLayer)
-        vdigit = self.tree.GetPyData(item)[0]['vdigit']
+        if self.tree:
+            item = self.tree.FindItemByData('maplayer', mapLayer)
+            vdigit = self.tree.GetPyData(item)[0]['vdigit']
+        else:
+            item = vdigit = None
         
-        if vdigit is None or 'geomAttr' not in vdigit:
+        if not vdigit or 'geomAttr' not in vdigit:
             return
         
         dbInfo = gselect.VectorDBInfo(vectorName)

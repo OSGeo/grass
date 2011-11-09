@@ -558,7 +558,7 @@ class MapFrame(MapFrameBase):
         elif self._mgr.GetPane('3d').IsShown():
             self._mgr.GetPane('3d').Hide()
         self._mgr.GetPane('vdigit').Show()
-        self.toolbars['vdigit'] = toolbars.VDigitToolbar(parent = self, mapcontent = self.Map,
+        self.toolbars['vdigit'] = toolbars.VDigitToolbar(parent = self, MapWindow = self.MapWindow,
                                                          layerTree = self.tree,
                                                          log = log)
         self.MapWindowVDigit.SetToolbar(self.toolbars['vdigit'])

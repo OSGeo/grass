@@ -843,6 +843,7 @@ class Map(object):
             layers = self.overlays
         else:
             layers = self.layers + self.overlays
+        
         for layer in layers:
             # skip non-active map layers
             if not layer or not layer.active:
@@ -1000,7 +1001,7 @@ class Map(object):
             os.environ["GRASS_RENDER_IMMEDIATE"] = "png"
         else:
             os.environ["GRASS_RENDER_IMMEDIATE"] = "cairo"
-
+        
         if self.cmdfile:
             maps, masks, opacities = self._renderCmdFile(force, windres)
         else:
@@ -1080,8 +1081,10 @@ class Map(object):
         """
         wx.BeginBusyCursor()
         # l_opacity must be <0;1>
-        if l_opacity < 0: l_opacity = 0
-        elif l_opacity > 1: l_opacity = 1
+        if l_opacity < 0:
+            l_opacity = 0
+        elif l_opacity > 1:
+            l_opacity = 1
         layer = MapLayer(type = type, name = name, cmd = command,
                          active = l_active, hidden = l_hidden, opacity = l_opacity)
         
@@ -1097,7 +1100,7 @@ class Map(object):
                 raise gcmd.GException(_("Unable to render map layer <%s>.") % name)
         
         wx.EndBusyCursor()
-
+        
         return layer
 
     def DeleteAllLayers(self, overlay = False):

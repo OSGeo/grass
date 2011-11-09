@@ -496,8 +496,9 @@ class GCPDisplayToolbar(AbstractToolbar):
 class VDigitToolbar(AbstractToolbar):
     """!Toolbar for digitization
     """
-    def __init__(self, parent, mapcontent, tools = [], layerTree = None, log = None):
-        self.mapcontent    = mapcontent # Map class instance
+    def __init__(self, parent, MapWindow, tools = [], layerTree = None, log = None):
+        self.MapWindow     = MapWindow
+        self.Map           = MapWindow.GetMap() # Map class instance
         self.layerTree     = layerTree  # reference to layer tree associated to map display
         self.log           = log        # log area
         self.tools         = tools
@@ -624,16 +625,20 @@ class VDigitToolbar(AbstractToolbar):
     
     def OnTool(self, event):
         """!Tool selected -> disable selected tool in map toolbar"""
-        aId = self.parent.toolbars['map'].GetAction(type = 'id')
-        self.parent.toolbars['map'].ToggleTool(aId, False)
-        
+        if self.parent.GetName() == 'IClassWindow':
+            toolbarName = 'iClassMap'
+        else:
+            toolbarName = 'map'
+        aId = self.parent.toolbars[toolbarName].GetAction(type = 'id')
+        self.parent.toolbars[toolbarName].ToggleTool(aId, False)
+                
         # set cursor
         cursor = self.parent.cursors["cross"]
-        self.parent.MapWindow.SetCursor(cursor)
+        self.MapWindow.SetCursor(cursor)
         
         # pointer
         self.parent.OnPointer(None)
-        
+                
         if event:
             # deselect previously selected tool
             aId = self.action.get('id', -1)
@@ -652,14 +657,14 @@ class VDigitToolbar(AbstractToolbar):
         
         # clear tmp canvas
         if self.action['id'] != aId:
-            self.parent.MapWindow.ClearLines(pdc = self.parent.MapWindow.pdcTmp)
+            self.MapWindow.ClearLines(pdc = self.MapWindow.pdcTmp)
             if self.digit and \
-                    len(self.parent.MapWindow.digit.GetDisplay().GetSelected()) > 0:
+                    len(self.MapWindow.digit.GetDisplay().GetSelected()) > 0:
                 # cancel action
-                self.parent.MapWindow.OnMiddleDown(None)
+                self.MapWindow.OnMiddleDown(None)
         
         # set focus
-        self.parent.MapWindow.SetFocus()
+        self.MapWindow.SetFocus()
         
     def OnAddPoint(self, event):
         """!Add point to the vector map Laier"""
@@ -667,7 +672,7 @@ class VDigitToolbar(AbstractToolbar):
         self.action = { 'desc' : "addLine",
                         'type' : "point",
                         'id'   : self.addPoint }
-        self.parent.MapWindow.mouse['box'] = 'point'
+        self.MapWindow.mouse['box'] = 'point'
         
     def OnAddLine(self, event):
         """!Add line to the vector map layer"""
@@ -675,19 +680,19 @@ class VDigitToolbar(AbstractToolbar):
         self.action = { 'desc' : "addLine",
                         'type' : "line",
                         'id'   : self.addLine }
-        self.parent.MapWindow.mouse['box'] = 'line'
-        ### self.parent.MapWindow.polycoords = [] # reset temp line
+        self.MapWindow.mouse['box'] = 'line'
+        ### self.MapWindow.polycoords = [] # reset temp line
                 
     def OnAddBoundary(self, event):
         """!Add boundary to the vector map layer"""
         Debug.msg (2, "VDigitToolbar.OnAddBoundary()")
         if self.action['desc'] != 'addLine' or \
                 self.action['type'] != 'boundary':
-            self.parent.MapWindow.polycoords = [] # reset temp line
+            self.MapWindow.polycoords = [] # reset temp line
         self.action = { 'desc' : "addLine",
                         'type' : "boundary",
                         'id'   : self.addBoundary }
-        self.parent.MapWindow.mouse['box'] = 'line'
+        self.MapWindow.mouse['box'] = 'line'
         
     def OnAddCentroid(self, event):
         """!Add centroid to the vector map layer"""
@@ -695,7 +700,7 @@ class VDigitToolbar(AbstractToolbar):
         self.action = { 'desc' : "addLine",
                         'type' : "centroid",
                         'id'   : self.addCentroid }
-        self.parent.MapWindow.mouse['box'] = 'point'
+        self.MapWindow.mouse['box'] = 'point'
 
     def OnAddArea(self, event):
         """!Add area to the vector map layer"""
@@ -703,7 +708,7 @@ class VDigitToolbar(AbstractToolbar):
         self.action = { 'desc' : "addLine",
                         'type' : "area",
                         'id'   : self.addArea }
-        self.parent.MapWindow.mouse['box'] = 'line'
+        self.MapWindow.mouse['box'] = 'line'
 
     def OnExit (self, event=None):
         """!Quit digitization tool"""
@@ -716,9 +721,9 @@ class VDigitToolbar(AbstractToolbar):
             self.settingsDialog.OnCancel(None)
             
         # set default mouse settings
-        self.parent.MapWindow.mouse['use'] = "pointer"
-        self.parent.MapWindow.mouse['box'] = "point"
-        self.parent.MapWindow.polycoords = []
+        self.MapWindow.mouse['use'] = "pointer"
+        self.MapWindow.mouse['box'] = "point"
+        self.MapWindow.polycoords = []
         
         # disable the toolbar
         self.parent.RemoveToolbar("vdigit")
@@ -728,56 +733,56 @@ class VDigitToolbar(AbstractToolbar):
         Debug.msg(2, "Digittoolbar.OnMoveVertex():")
         self.action = { 'desc' : "moveVertex",
                         'id'   : self.moveVertex }
-        self.parent.MapWindow.mouse['box'] = 'point'
+        self.MapWindow.mouse['box'] = 'point'
 
     def OnAddVertex(self, event):
         """!Add line vertex"""
         Debug.msg(2, "Digittoolbar.OnAddVertex():")
         self.action = { 'desc' : "addVertex",
                         'id'   : self.addVertex }
-        self.parent.MapWindow.mouse['box'] = 'point'
+        self.MapWindow.mouse['box'] = 'point'
         
     def OnRemoveVertex(self, event):
         """!Remove line vertex"""
         Debug.msg(2, "Digittoolbar.OnRemoveVertex():")
         self.action = { 'desc' : "removeVertex",
                         'id'   : self.removeVertex }
-        self.parent.MapWindow.mouse['box'] = 'point'
+        self.MapWindow.mouse['box'] = 'point'
 
     def OnEditLine(self, event):
         """!Edit line"""
         Debug.msg(2, "Digittoolbar.OnEditLine():")
         self.action = { 'desc' : "editLine",
                         'id'   : self.editLine }
-        self.parent.MapWindow.mouse['box'] = 'line'
+        self.MapWindow.mouse['box'] = 'line'
 
     def OnMoveLine(self, event):
         """!Move line"""
         Debug.msg(2, "Digittoolbar.OnMoveLine():")
         self.action = { 'desc' : "moveLine",
                         'id'   : self.moveLine }
-        self.parent.MapWindow.mouse['box'] = 'box'
+        self.MapWindow.mouse['box'] = 'box'
 
     def OnDeleteLine(self, event):
         """!Delete line"""
         Debug.msg(2, "Digittoolbar.OnDeleteLine():")
         self.action = { 'desc' : "deleteLine",
                         'id'   : self.deleteLine }
-        self.parent.MapWindow.mouse['box'] = 'box'
+        self.MapWindow.mouse['box'] = 'box'
 
     def OnDisplayCats(self, event):
         """!Display/update categories"""
         Debug.msg(2, "Digittoolbar.OnDisplayCats():")
         self.action = { 'desc' : "displayCats",
                         'id'   : self.displayCats }
-        self.parent.MapWindow.mouse['box'] = 'point'
+        self.MapWindow.mouse['box'] = 'point'
 
     def OnDisplayAttr(self, event):
         """!Display/update attributes"""
         Debug.msg(2, "Digittoolbar.OnDisplayAttr():")
         self.action = { 'desc' : "displayAttrs",
                         'id'   : self.displayAttr }
-        self.parent.MapWindow.mouse['box'] = 'point'
+        self.MapWindow.mouse['box'] = 'point'
         
     def OnUndo(self, event):
         """!Undo previous changes"""
@@ -801,9 +806,9 @@ class VDigitToolbar(AbstractToolbar):
         """!Show settings dialog"""
         if self.digit is None:
             try:
-                self.digit = self.parent.MapWindow.digit = VDigit(mapwindow = self.parent.MapWindow)
+                self.digit = self.MapWindow.digit = VDigit(mapwindow = self.MapWindow)
             except SystemExit:
-                self.digit = self.parent.MapWindow.digit = None
+                self.digit = self.MapWindow.digit = None
         
         if not self.settingsDialog:
             self.settingsDialog = VDigitSettingsDialog(parent = self.parent, title = _("Digitization settings"),
@@ -845,13 +850,13 @@ class VDigitToolbar(AbstractToolbar):
                                text = label,
                                kind = itype)
             toolMenu.AppendItem(item)
-            self.parent.MapWindow.Bind(wx.EVT_MENU, handler, item)
+            self.MapWindow.Bind(wx.EVT_MENU, handler, item)
             if self.action['desc'] == desc:
                 item.Check(True)
         
         # Popup the menu.  If an item is selected then its handler
         # will be called before PopupMenu returns.
-        self.parent.MapWindow.PopupMenu(toolMenu)
+        self.MapWindow.PopupMenu(toolMenu)
         toolMenu.Destroy()
         
         if self.action['desc'] == 'addPoint':
@@ -868,7 +873,7 @@ class VDigitToolbar(AbstractToolbar):
         Debug.msg(2, "Digittoolbar.OnCopy():")
         self.action = { 'desc' : "copyLine",
                         'id'   : self.additionalTools }
-        self.parent.MapWindow.mouse['box'] = 'box'
+        self.MapWindow.mouse['box'] = 'box'
 
     def OnSplitLine(self, event):
         """!Split line"""
@@ -881,7 +886,7 @@ class VDigitToolbar(AbstractToolbar):
         Debug.msg(2, "Digittoolbar.OnSplitLine():")
         self.action = { 'desc' : "splitLine",
                         'id'   : self.additionalTools }
-        self.parent.MapWindow.mouse['box'] = 'point'
+        self.MapWindow.mouse['box'] = 'point'
 
 
     def OnCopyCats(self, event):
@@ -895,7 +900,7 @@ class VDigitToolbar(AbstractToolbar):
         Debug.msg(2, "Digittoolbar.OnCopyCats():")
         self.action = { 'desc' : "copyCats",
                         'id'   : self.additionalTools }
-        self.parent.MapWindow.mouse['box'] = 'point'
+        self.MapWindow.mouse['box'] = 'point'
 
     def OnCopyAttrb(self, event):
         """!Copy attributes"""
@@ -908,7 +913,7 @@ class VDigitToolbar(AbstractToolbar):
         Debug.msg(2, "Digittoolbar.OnCopyAttrb():")
         self.action = { 'desc' : "copyAttrs",
                         'id'   : self.additionalTools }
-        self.parent.MapWindow.mouse['box'] = 'point'
+        self.MapWindow.mouse['box'] = 'point'
         
 
     def OnFlip(self, event):
@@ -922,7 +927,7 @@ class VDigitToolbar(AbstractToolbar):
         Debug.msg(2, "Digittoolbar.OnFlip():")
         self.action = { 'desc' : "flipLine",
                         'id'   : self.additionalTools }
-        self.parent.MapWindow.mouse['box'] = 'box'
+        self.MapWindow.mouse['box'] = 'box'
 
     def OnMerge(self, event):
         """!Merge selected lines/boundaries"""
@@ -935,7 +940,7 @@ class VDigitToolbar(AbstractToolbar):
         Debug.msg(2, "Digittoolbar.OnMerge():")
         self.action = { 'desc' : "mergeLine",
                         'id'   : self.additionalTools }
-        self.parent.MapWindow.mouse['box'] = 'box'
+        self.MapWindow.mouse['box'] = 'box'
 
     def OnBreak(self, event):
         """!Break selected lines/boundaries"""
@@ -948,7 +953,7 @@ class VDigitToolbar(AbstractToolbar):
         Debug.msg(2, "Digittoolbar.OnBreak():")
         self.action = { 'desc' : "breakLine",
                         'id'   : self.additionalTools }
-        self.parent.MapWindow.mouse['box'] = 'box'
+        self.MapWindow.mouse['box'] = 'box'
 
     def OnSnap(self, event):
         """!Snap selected features"""
@@ -961,7 +966,7 @@ class VDigitToolbar(AbstractToolbar):
         Debug.msg(2, "Digittoolbar.OnSnap():")
         self.action = { 'desc' : "snapLine",
                         'id'   : self.additionalTools }
-        self.parent.MapWindow.mouse['box'] = 'box'
+        self.MapWindow.mouse['box'] = 'box'
 
     def OnConnect(self, event):
         """!Connect selected lines/boundaries"""
@@ -974,7 +979,7 @@ class VDigitToolbar(AbstractToolbar):
         Debug.msg(2, "Digittoolbar.OnConnect():")
         self.action = { 'desc' : "connectLine",
                         'id'   : self.additionalTools }
-        self.parent.MapWindow.mouse['box'] = 'box'
+        self.MapWindow.mouse['box'] = 'box'
 
     def OnQuery(self, event):
         """!Query selected lines/boundaries"""
@@ -988,7 +993,7 @@ class VDigitToolbar(AbstractToolbar):
                       UserSettings.Get(group = 'vdigit', key = 'query', subkey = 'selection'))
         self.action = { 'desc' : "queryLine",
                         'id'   : self.additionalTools }
-        self.parent.MapWindow.mouse['box'] = 'box'
+        self.MapWindow.mouse['box'] = 'box'
 
     def OnZBulk(self, event):
         """!Z bulk-labeling selected lines/boundaries"""
@@ -1006,7 +1011,7 @@ class VDigitToolbar(AbstractToolbar):
         Debug.msg(2, "Digittoolbar.OnZBulk():")
         self.action = { 'desc' : "zbulkLine",
                         'id'   : self.additionalTools }
-        self.parent.MapWindow.mouse['box'] = 'line'
+        self.MapWindow.mouse['box'] = 'line'
 
     def OnTypeConversion(self, event):
         """!Feature type conversion
@@ -1024,7 +1029,7 @@ class VDigitToolbar(AbstractToolbar):
         Debug.msg(2, "Digittoolbar.OnTypeConversion():")
         self.action = { 'desc' : "typeConv",
                         'id'   : self.additionalTools }
-        self.parent.MapWindow.mouse['box'] = 'box'
+        self.MapWindow.mouse['box'] = 'box'
 
     def OnSelectMap (self, event):
         """!Select vector map layer for editing
@@ -1089,10 +1094,10 @@ class VDigitToolbar(AbstractToolbar):
         @param mapLayer MapLayer to be edited
         """
         # deactive layer
-        self.mapcontent.ChangeLayerActive(mapLayer, False)
+        self.Map.ChangeLayerActive(mapLayer, False)
         
         # clean map canvas
-        self.parent.MapWindow.EraseMap()
+        self.MapWindow.EraseMap()
         
         # unset background map if needed
         if mapLayer:
@@ -1105,11 +1110,10 @@ class VDigitToolbar(AbstractToolbar):
                                         "opening vector map <%s> for editing...") % mapLayer.GetName(),
                                         0)
         
-        self.parent.MapWindow.pdcVector = wx.PseudoDC()
-        self.digit = self.parent.MapWindow.digit = VDigit(mapwindow = self.parent.MapWindow)
+        self.MapWindow.pdcVector = wx.PseudoDC()
+        self.digit = self.MapWindow.digit = VDigit(mapwindow = self.MapWindow)
         
         self.mapLayer = mapLayer
-        
         # open vector map
         if self.digit.OpenMap(mapLayer.GetName()) is None:
             self.mapLayer = None
@@ -1120,6 +1124,7 @@ class VDigitToolbar(AbstractToolbar):
         fType = self.digit.GetFeatureType()
         self.EnableAll()
         self.EnableUndo(False)
+        
         if fType == 'Point':
             for tool in (self.addLine, self.addBoundary, self.addCentroid,
                          self.addArea, self.moveVertex, self.addVertex,
@@ -1144,22 +1149,26 @@ class VDigitToolbar(AbstractToolbar):
         # update toolbar
         if self.combo:
             self.combo.SetValue(mapLayer.GetName())
-        self.parent.toolbars['map'].combo.SetValue (_('Digitize'))
-        lmgr = self.parent.GetLayerManager()
-        if lmgr:
-            lmgr.toolbars['tools'].Enable('vdigit', enable = False)
+        if 'map' in self.parent.toolbars:
+            self.parent.toolbars['map'].combo.SetValue (_('Digitize'))
+        
+        if self.parent.GetName() != "IClassWindow":
+            lmgr = self.parent.GetLayerManager()
+            if lmgr:
+                lmgr.toolbars['tools'].Enable('vdigit', enable = False)
         
         Debug.msg (4, "VDigitToolbar.StartEditing(): layer=%s" % mapLayer.GetName())
         
         # change cursor
-        if self.parent.MapWindow.mouse['use'] == 'pointer':
-            self.parent.MapWindow.SetCursor(self.parent.cursors["cross"])
+        if self.MapWindow.mouse['use'] == 'pointer':
+            self.MapWindow.SetCursor(self.parent.cursors["cross"])
         
-        if not self.parent.MapWindow.resize:
-            self.parent.MapWindow.UpdateMap(render = True)
+        if not self.MapWindow.resize:
+            self.MapWindow.UpdateMap(render = True)
         
         # respect opacity
         opacity = mapLayer.GetOpacity(float = True)
+        
         if opacity < 1.0:
             alpha = int(opacity * 255)
             self.digit.GetDisplay().UpdateSettings(alpha = alpha)
@@ -1206,11 +1215,11 @@ class VDigitToolbar(AbstractToolbar):
             # re-active layer 
             item = self.parent.tree.FindItemByData('maplayer', self.mapLayer)
             if item and self.parent.tree.IsItemChecked(item):
-                self.mapcontent.ChangeLayerActive(self.mapLayer, True)
+                self.Map.ChangeLayerActive(self.mapLayer, True)
         
         # change cursor
-        self.parent.MapWindow.SetCursor(self.parent.cursors["default"])
-        self.parent.MapWindow.pdcVector = None
+        self.MapWindow.SetCursor(self.parent.cursors["default"])
+        self.MapWindow.pdcVector = None
         
         # close dialogs
         for dialog in ('attributes', 'category'):
@@ -1219,11 +1228,11 @@ class VDigitToolbar(AbstractToolbar):
                 self.parent.dialogs[dialog] = None
         
         del self.digit
-        del self.parent.MapWindow.digit
+        del self.MapWindow.digit
         
         self.mapLayer = None
         
-        self.parent.MapWindow.redrawAll = True
+        self.MapWindow.redrawAll = True
         
         return True
     
@@ -1243,7 +1252,7 @@ class VDigitToolbar(AbstractToolbar):
         
         # select vector map layer in the current mapset
         layerNameList = []
-        self.layers = self.mapcontent.GetListOfLayers(l_type = "vector",
+        self.layers = self.Map.GetListOfLayers(l_type = "vector",
                                                       l_mapset = grass.gisenv()['MAPSET'])
         
         for layer in self.layers:
