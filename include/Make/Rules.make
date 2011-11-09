@@ -27,11 +27,14 @@ else
 mkpath = $(1):$(2)
 endif
 
+GRASS_PYTHONPATH := $(call mkpath,$(GISBASE)/etc/python,$$PYTHONPATH)
+GRASS_PYTHONPATH := $(call mkpath,$(ARCH_DISTDIR)/etc/python,$(GRASS_PYTHONPATH))
+
 run_grass = \
 	GISRC=$(RUN_GISRC) \
 	GISBASE=$(RUN_GISBASE) \
-	PATH="$(GISBASE)/bin:$$PATH" \
-	PYTHONPATH="$(call mkpath,$(GISBASE)/etc/python,$$PYTHONPATH)" \
+	PATH="$(ARCH_DISTDIR)/bin:$(GISBASE)/bin:$$PATH" \
+	PYTHONPATH="$(GRASS_PYTHONPATH)" \
 	$(LD_LIBRARY_PATH_VAR)="$(BIN):$(ARCH_LIBDIR):$(BASE_LIBDIR):$($(LD_LIBRARY_PATH_VAR))" \
 	LC_ALL=C \
 	$(1)
