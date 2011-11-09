@@ -62,15 +62,15 @@ def main():
 
     sp.select()
 
-    # Compute relative granularity and set bottom, top and resolution
+    maps = sp.get_registered_maps_as_objects_by_granularity()
+
+    # Compute relative granularity and set bottom, top and top-bottom resolution
     granularity = sp.get_granularity()
 
+    # We do not convert months or years into days, we simply use
+    # The digit of the string as topo-bottom resolution
     if sp.is_time_absolute():
-        start, end = sp.get_valid_time()
-        end = tgis.increment_datetime_by_string(start, granularity)
-        granularity = tgis.time_delta_to_relative_time(end - start)
-
-    maps = sp.get_registered_maps_as_objects_by_granularity()
+        granularity = int(granularity.split(" ")[0])
 
     num_maps = len(maps)
     bottom = 0
