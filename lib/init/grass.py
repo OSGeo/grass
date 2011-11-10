@@ -809,7 +809,7 @@ def bash_startup():
     
     f = open(bashrc, 'w')
     f.write("test -r ~/.alias && . ~/.alias\n")
-    f.write("PS1='GRASS %s (%s@%s):\w > '\n" % (grass_version, location_name, mapset))
+    f.write("PS1='GRASS %s (%s):\w > '\n" % (grass_version, location_name))
     f.write("PROMPT_COMMAND=\"'%s'\"\n" % os.path.join(gisbase, 'etc', 'prompt.py'))
     
     path = os.path.join(userhome, ".grass.bashrc")
