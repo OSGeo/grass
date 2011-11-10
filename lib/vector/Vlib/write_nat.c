@@ -226,11 +226,8 @@ static void V2__add_line_to_topo_nat(struct Map_info *Map, int line,
 	 * we need to build areas/isles just for our boundary */
 	for (s = 0; s < 2; s++) {
 	    side = (s == 0 ? GV_LEFT : GV_RIGHT);
-	    G_debug(3, "  build area/isle on side = %d", side);
-	    
-	    G_debug(3, "Build area for line = %d, side = %d", line, side);
 	    area = Vect_build_line_area(Map, line, side);
-	    G_debug(3, "Build area for line = %d, side = %d", line, side);
+	    
 	    if (area > 0) {	/* area */
 		Vect_get_area_box(Map, area, &box);
 		if (first) {
