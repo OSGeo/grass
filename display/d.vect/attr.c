@@ -47,12 +47,10 @@ int display_attr(struct Map_info *Map, int type, char *attrcol,
     Vect_rewind(Map);
     while (1) {
 	ltype = Vect_read_next_line(Map, Points, Cats);
-	switch (ltype) {
-	case -1:
+	if (ltype == -1)
 	    G_fatal_error(_("Unable to read vector map"));
-	case -2:		/* EOF */
-	    return 0;
-	}
+	else if (ltype == -2)		/* EOF */
+	    break;
 
 	if (!(type & ltype) && !((type & GV_AREA) && (ltype & GV_CENTROID)))
 	    continue;		/* used for both lines and labels */
