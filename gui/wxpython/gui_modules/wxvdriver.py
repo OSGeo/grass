@@ -29,8 +29,9 @@ from grass.lib.gis    import *
 from grass.lib.vector import *
 from grass.lib.vedit  import *
 
-log      = None
-progress = None
+log       = None
+progress  = None
+last_error = ''
 
 def print_error(msg, type):
     """!Redirect stderr"""
@@ -39,7 +40,9 @@ def print_error(msg, type):
         log.write(msg)
     else:
         print msg
-    
+    global last_error
+    last_error += ' ' + msg
+
     return 0
 
 def print_progress(value):
@@ -51,6 +54,16 @@ def print_progress(value):
         print value
     
     return 0
+
+def GetLastError():
+    global last_error
+    ret = last_error
+    if ret[-1] != '.':
+        ret += '.'
+    
+    last_error = '' # reset
+    
+    return ret
 
 errtype = CFUNCTYPE(UNCHECKED(c_int), String, c_int)
 errfunc = errtype(print_error)
@@ -76,6 +89,7 @@ class DisplayDriver:
         locale.setlocale(locale.LC_NUMERIC, 'C')
         G_set_error_routine(errfunc) 
         G_set_percent_routine(perfunc)
+        # G_set_fatal_error(FATAL_RETURN)
         
         self.mapInfo   = None     # open vector map (Map_Info structure)
         self.poMapInfo = None     # pointer to self.mapInfo
