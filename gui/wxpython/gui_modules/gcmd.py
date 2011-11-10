@@ -111,17 +111,11 @@ class GException(Exception):
 
 class Popen(subprocess.Popen):
     """!Subclass subprocess.Popen"""
-    def __init__(self, *args, **kwargs):
+    def __init__(self, args, **kwargs):
         if subprocess.mswindows:
-            try:
-                kwargs['args'] = map(utils.EncodeString, kwargs['args'])
-            except KeyError:
-                if len(args) > 0:
-                    targs = list(args)
-                    targs[0] = map(utils.EncodeString, args[0])
-                    args = tuple(targs)
+            args = map(utils.EncodeString, args)
         
-        subprocess.Popen.__init__(self, *args, **kwargs)
+        subprocess.Popen.__init__(self, args, **kwargs)
         
     def recv(self, maxsize = None):
         return self._recv('stdout', maxsize)
