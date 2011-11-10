@@ -29,7 +29,7 @@ from gcmd        import GError
 from debug       import Debug
 from preferences import globalSettings as UserSettings
 
-from wxvdriver   import DisplayDriver
+from wxvdriver   import DisplayDriver, GetLastError
 
 from grass.lib.gis    import *
 from grass.lib.vector import *
@@ -61,7 +61,8 @@ class VDigitError:
         """!Writing line failed
         """
         GError(message = _('Writing new feature failed. '
-                           'Operation cancelled.'),
+                           'Operation cancelled.\n\n'
+                           'Reason: %s') % GetLastError(),
                parent  = self.parent,
                caption = self.caption)
 
