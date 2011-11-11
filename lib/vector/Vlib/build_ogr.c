@@ -128,11 +128,13 @@ static int add_line(struct Map_info *Map, int type, struct line_pnts *Points,
     plus = &(Map->plus);
 
     if (type != GV_CENTROID) {
-	offset = Map->fInfo.ogr.offset_num;	/* beginning in the offset array */
+	/* beginning in the offset array */
+	offset = Map->fInfo.ogr.offset_num;
     }
     else {
 	/* TODO : could be used to statore category ? */
-	offset = FID;		/* because centroids are read from topology, not from layer */
+	/* because centroids are read from topology, not from layer */
+	offset = FID; 
     }
     G_debug(4, "Register line: FID = %d offset = %ld", FID, offset);
     dig_line_box(Points, &box);

@@ -354,7 +354,7 @@ int read_line(const struct Map_info *Map, OGRGeometryH hGeom, long offset,
 
     eType = wkbFlatten(OGR_G_GetGeometryType(hGeom));
     G_debug(4, "OGR geometry type: %d", eType);
-
+    
     switch (eType) {
     case wkbPoint:
 	G_debug(4, "\t->Point");
@@ -382,7 +382,7 @@ int read_line(const struct Map_info *Map, OGRGeometryH hGeom, long offset,
     case wkbMultiLineString:
     case wkbMultiPolygon:
     case wkbGeometryCollection:
-	G_debug(4, " \t->more geoms -> part %d", Map->fInfo.ogr.offset[offset]);
+	G_debug(4, "\t->more geoms -> part %d", Map->fInfo.ogr.offset[offset]);
 	hGeom2 = OGR_G_GetGeometryRef(hGeom, Map->fInfo.ogr.offset[offset]);
 	line = read_line(Map, hGeom2, offset + 1, Points);
 	if (eType == wkbPolygon || wkbMultiPolygon)
@@ -483,10 +483,13 @@ int V1_read_line_ogr(struct Map_info *Map,
     int type;
     OGRGeometryH hGeom;
 
+    struct Format_info_ogr *fInfo;
+    
+    fInfo = &(Map->fInfo.ogr);
     G_debug(4, "V1_read_line_ogr() offset = %lu offset_num = %lu",
-	    (long) offset, (long) Map->fInfo.ogr.offset_num);
+	    (long) offset, (long) fInfo->offset_num);
 
-    if (offset >= Map->fInfo.ogr.offset_num)
+    if (offset >= fInfo->offset_num)
 	return -2;
     
     if (line_p != NULL)
@@ -494,27 +497,27 @@ int V1_read_line_ogr(struct Map_info *Map,
     if (line_c != NULL)
 	Vect_reset_cats(line_c);
 
-    FID = Map->fInfo.ogr.offset[offset];
+    FID = fInfo->offset[offset];
     G_debug(4, "  FID = %ld", FID);
     
     /* coordinates */
     if (line_p != NULL) {
 	/* Read feature to cache if necessary */
-	if (Map->fInfo.ogr.feature_cache_id != FID) {
+	if (fInfo->feature_cache_id != FID) {
 	    G_debug(4, "Read feature (FID = %ld) to cache", FID);
-	    if (Map->fInfo.ogr.feature_cache) {
-		OGR_F_Destroy(Map->fInfo.ogr.feature_cache);
+	    if (fInfo->feature_cache) {
+		OGR_F_Destroy(fInfo->feature_cache);
 	    }
-	    Map->fInfo.ogr.feature_cache =
-		OGR_L_GetFeature(Map->fInfo.ogr.layer, FID);
-	    if (Map->fInfo.ogr.feature_cache == NULL) {
+	    fInfo->feature_cache =
+		OGR_L_GetFeature(fInfo->layer, FID);
+	    if (fInfo->feature_cache == NULL) {
 		G_fatal_error(_("Unable to get feature geometry, FID %ld"),
 			      FID);
 	    }
-	    Map->fInfo.ogr.feature_cache_id = FID;
+	    fInfo->feature_cache_id = FID;
 	}
 	
-	hGeom = OGR_F_GetGeometryRef(Map->fInfo.ogr.feature_cache);
+	hGeom = OGR_F_GetGeometryRef(fInfo->feature_cache);
 	if (hGeom == NULL) {
 	    G_fatal_error(_("Unable to get feature geometry, FID %ld"),
 			  FID);
@@ -560,30 +563,32 @@ int V2_read_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 	G_fatal_error(_("Attempt to read dead feature %d"), line);
 
     if (Line->type == GV_CENTROID) {
-	G_debug(4, "Centroid");
-	
 	if (line_p != NULL) {
 	    int i, found;
 	    struct bound_box box;
 	    struct boxlist list;
 	    struct P_topo_c *topo = (struct P_topo_c *)Line->topo;
-	    
-	    /* get area bbox */
-	    Vect_get_area_box(Map, topo->area, &box);
-	    /* search in spatial index for centroid with area bbox */
-	    dig_init_boxlist(&list, 1);
-	    Vect_select_lines_by_box(Map, &box, Line->type, &list);
-	    
-	    found = 0;
-	    for (i = 0; i < list.n_values; i++) {
-		if (list.id[i] == line) {
-		    found = i;
-		    break;
-		}
-	    }
 
+	    G_debug(4, "Centroid: area = %d", topo->area);
 	    Vect_reset_line(line_p);
-	    Vect_append_point(line_p, list.box[found].E, list.box[found].N, 0.0);
+	    
+	    if (topo->area > 0 && topo->area <= Map->plus.n_areas) {
+		/* get area bbox */
+		Vect_get_area_box(Map, topo->area, &box);
+		/* search in spatial index for centroid with area bbox */
+		dig_init_boxlist(&list, 1);
+		Vect_select_lines_by_box(Map, &box, Line->type, &list);
+		
+		found = 0;
+		for (i = 0; i < list.n_values; i++) {
+		    if (list.id[i] == line) {
+			found = i;
+			break;
+		    }
+		}
+		
+		Vect_append_point(line_p, list.box[found].E, list.box[found].N, 0.0);
+	    }
 	}
 
 	if (line_c != NULL) {

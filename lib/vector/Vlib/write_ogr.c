@@ -35,15 +35,83 @@ static void V2__add_line_to_topo_ogr(struct Map_info *Map, int line,
 				     const struct line_pnts *points,
 				     const struct line_cats *cats)
 {
-    /* recycle code from build_ogr */
-    G_warning("feature not yet implemented, coming soon...");
+    int first, s, i;
+    int type, area, side, new_area[2];
 
+    struct Plus_head *plus;
+    struct P_line *Line;
+    
+    struct bound_box box, abox;
+    
+    G_debug(3, "V2__add_line_to_topo_ogr(): line = %d", line);
+
+    plus = &(Map->plus);
+    Line = plus->Line[line];
+    type = Line->type;
+
+    if (plus->built >= GV_BUILD_AREAS &&
+	type == GV_BOUNDARY) {	
+	struct P_topo_b *topo = (struct P_topo_b *)Line->topo;
+	
+	if (topo->N1 != topo->N2) {
+	    G_warning(_("Boundary is not closed. Skipping."));
+	    return;
+	}
+	
+	/* Build new areas/isles */
+	for (s = 0; s < 2; s++) {
+	    side = (s == 0 ? GV_LEFT : GV_RIGHT);
+	    area = Vect_build_line_area(Map, line, side);
+	    if (area > 0) {	/* area */
+		Vect_get_area_box(Map, area, &box);
+		if (first) {
+		    Vect_box_copy(&abox, &box);
+		    first = FALSE;
+		}
+		else
+		    Vect_box_extend(&abox, &box);
+	    }
+	    else if (area < 0) {
+		/* isle -> must be attached -> add to abox */
+		Vect_get_isle_box(Map, -area, &box);
+		if (first) {
+		    Vect_box_copy(&abox, &box);
+		    first = FALSE;
+		}
+		else
+		    Vect_box_extend(&abox, &box);
+	    }
+	    new_area[s] = area;
+	    G_debug(4, "Vect_build_line_area(): -> area = %d", area);
+	}
+
+	/* Attach centroid/isle to the new area */
+	if (plus->built >= GV_BUILD_ATTACH_ISLES)
+	    Vect_attach_isles(Map, &abox);
+	if (plus->built >= GV_BUILD_CENTROIDS)
+	    Vect_attach_centroids(Map, &abox);
+    }
+    
+    /* Add category index */
+    for (i = 0; i < cats->n_cats; i++) {
+	dig_cidx_add_cat_sorted(plus, cats->field[i], cats->cat[i], line,
+				type);
+    }
+    
     return;
 }
 
 /*!
   \brief Writes feature on level 1 (OGR interface)
 
+  Note:
+   - centroids are not supported in OGR, pseudotopo holds virtual
+     centroids
+   - boundaries are not supported in OGR, pseudotopo treats polygons
+     as boundaries
+     
+  \todo How to deal with OGRNullFID ?
+  
   \param Map pointer to Map_info structure
   \param type feature type
   \param points pointer to line_pnts structure (feature geometry) 
@@ -61,12 +129,15 @@ off_t V1_write_line_ogr(struct Map_info *Map, int type,
     struct field_info *Fi;
     struct Format_info_ogr *fInfo;
     
+    off_t offset;
+    
     OGRGeometryH       Ogr_geometry;
     OGRFeatureH        Ogr_feature;
     OGRFeatureDefnH    Ogr_featuredefn;
     OGRwkbGeometryType Ogr_geom_type;
 
     if (!Map->fInfo.ogr.layer) {
+	/* create OGR layer if doesn't exist */
 	if (V2_open_new_ogr(Map, type) < 0)
 	    return -1;
     }
@@ -91,11 +162,6 @@ off_t V1_write_line_ogr(struct Map_info *Map, int type,
     Ogr_geom_type = OGR_FD_GetGeomType(Ogr_featuredefn);
     
     /* determine matching OGR feature geometry type */
-    /* NOTE: centroids are not supported in OGR,
-     *       pseudotopo holds virtual centroids */
-    /* NOTE: boundaries are not supported in OGR,
-     *       pseudotopo treats polygons as boundaries */
-    
     if (type & (GV_POINT | GV_KERNEL)) {
 	if (Ogr_geom_type != wkbPoint &&
 	    Ogr_geom_type != wkbPoint25D) {
@@ -183,9 +249,15 @@ off_t V1_write_line_ogr(struct Map_info *Map, int type,
 					  fInfo->offset_alloc *
 					  sizeof(int));
     }
-    /* how to deal with OGRNullFID ? */
-    fInfo->offset[fInfo->offset_num] = (int)OGR_F_GetFID(Ogr_feature);
+
+    offset = fInfo->offset_num;
     
+    fInfo->offset[fInfo->offset_num++] = (int) OGR_F_GetFID(Ogr_feature);
+    if (Ogr_geom_type == wkbPolygon || Ogr_geom_type == wkbPolygon25D) {
+	/* register exterior ring in offset array */
+	fInfo->offset[fInfo->offset_num++] = 0; 
+    }
+      
     /* destroy */
     OGR_G_DestroyGeometry(Ogr_geometry);
     OGR_F_Destroy(Ogr_feature);
@@ -193,7 +265,9 @@ off_t V1_write_line_ogr(struct Map_info *Map, int type,
     if (ret != OGRERR_NONE)
 	return -1;
     
-    return fInfo->offset_num++;
+    G_debug(3, "V1_write_line_ogr(): -> offset = %d", offset);
+
+    return offset;
 }
 
 /*!
@@ -216,6 +290,7 @@ off_t V2_write_line_ogr(struct Map_info *Map, int type,
     struct bound_box box;
 
     line = 0;
+    plus = &(Map->plus);
     
     G_debug(3, "V2_write_line_ogr()");
     
@@ -224,17 +299,45 @@ off_t V2_write_line_ogr(struct Map_info *Map, int type,
 	return -1;
     
     /* Update topology */
-    plus = &(Map->plus);
-    /* Add line */
     if (plus->built >= GV_BUILD_BASE) {
 	dig_line_box(points, &box);
 	line = dig_add_line(plus, type, points, &box, offset);
-	G_debug(3, "  line added to topo with id = %d", line);
+	G_debug(3, "\tline added to topo with line = %d", line);
 	if (line == 1)
 	    Vect_box_copy(&(plus->box), &box);
 	else
 	    Vect_box_extend(&(plus->box), &box);
 
+	if (type == GV_BOUNDARY) {
+	    int ret, cline, lines[1];
+	    long FID;
+	    double x, y, area_size;
+	    
+	    struct bound_box box;
+	    struct line_pnts *CPoints;
+
+	    /* add virtual centroid to pseudo-topology */
+	    ret = Vect_get_point_in_poly(points, &x, &y);
+	    if (ret == 0) {
+		CPoints = Vect_new_line_struct();
+		Vect_append_point(CPoints, x, y, 0.0);
+		
+		FID = Map->fInfo.ogr.offset[offset];
+
+		dig_line_box(CPoints, &box);
+		cline = dig_add_line(plus, GV_CENTROID,
+				     CPoints, &box, FID);
+		G_debug(4, "\tCentroid: x = %f, y = %f, cat = %d, line = %d",
+			x, y, FID, cline);	  
+		dig_cidx_add_cat(plus, 1, (int) FID,
+				 cline, GV_CENTROID);
+		
+		Vect_destroy_line_struct(CPoints);
+	    }
+	    else {
+		G_warning(_("Unable to calculate centroid for area"));
+	    }
+	}
 	V2__add_line_to_topo_ogr(Map, line, points, cats);
     }
 

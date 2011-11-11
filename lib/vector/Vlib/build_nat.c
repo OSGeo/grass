@@ -34,7 +34,7 @@
  */
 int Vect_build_line_area(struct Map_info *Map, int iline, int side)
 {
-    int j, area, isle, n_lines, line, type, direction;
+    int j, area, isle, n_lines, line, direction;
     static int first = 1;
     off_t offset;
     struct Plus_head *plus;
@@ -74,7 +74,7 @@ int Vect_build_line_area(struct Map_info *Map, int iline, int side)
 	offset = BLine->offset;
 	G_debug(3, "  line[%d] = %d, offset = %lu", j, line,
 		(unsigned long)offset);
-	type = Vect_read_line(Map, Points, NULL, line);
+	Vect_read_line(Map, Points, NULL, line);
 	if (lines[j] > 0)
 	    direction = GV_FORWARD;
 	else
@@ -132,7 +132,7 @@ int Vect_build_line_area(struct Map_info *Map, int iline, int side)
  */
 int Vect_isle_find_area(struct Map_info *Map, int isle)
 {
-    int j, line, sel_area, first, area, poly;
+    int j, line, sel_area, area, poly;
     static int first_call = 1;
     const struct Plus_head *plus;
     struct P_line *Line;
@@ -181,7 +181,6 @@ int Vect_isle_find_area(struct Map_info *Map, int isle)
 
     sel_area = 0;
     cur_size = -1;
-    first = 1;
     Vect_get_isle_box(Map, isle, &box);
     for (j = 0; j < List->n_values; j++) {
 	area = List->id[j];
@@ -275,20 +274,20 @@ int Vect_attach_isle(struct Map_info *Map, int isle)
     struct P_isle *Isle;
     struct Plus_head *plus;
 
-    /* Note!: If topology is not clean and areas overlap, one island may fall to more areas
-     *  (partially or fully). Before isle is attached to area it must be check if it is not attached yet */
-    G_debug(3, "Vect_attach_isle (): isle = %d", isle);
+    /* Note!: If topology is not clean and areas overlap, one island
+       may fall to more areas (partially or fully). Before isle is
+       attached to area it must be check if it is not attached yet */
+    G_debug(3, "Vect_attach_isle(): isle = %d", isle);
 
     plus = &(Map->plus);
 
     sel_area = Vect_isle_find_area(Map, isle);
-    G_debug(3, "      isle = %d -> area outside = %d", isle, sel_area);
+    G_debug(3, "\tisle = %d -> area outside = %d", isle, sel_area);
     if (sel_area > 0) {
 	Isle = plus->Isle[isle];
 	if (Isle->area > 0) {
-	    G_debug(3,
-		    "Attempt to attach isle %d to more areas (=>topology is not clean)",
-		    isle);
+	    G_debug(3, "Attempt to attach isle %d to more areas "
+		    "(=>topology is not clean)", isle);
 	}
 	else {
 	    Isle->area = sel_area;
@@ -306,20 +305,20 @@ int Vect_attach_isle(struct Map_info *Map, int isle)
 
    \return 0
  */
-int Vect_attach_isles(struct Map_info *Map, const struct bound_box * box)
+int Vect_attach_isles(struct Map_info *Map, const struct bound_box *box)
 {
     int i, isle;
-    static int first = 1;
+    static int first = TRUE;
     static struct boxlist *List;
     struct Plus_head *plus;
 
-    G_debug(3, "Vect_attach_isles ()");
-
+    G_debug(3, "Vect_attach_isles()");
+      
     plus = &(Map->plus);
 
     if (first) {
-	List = Vect_new_boxlist(0);
-	first = 0;
+	List = Vect_new_boxlist(FALSE);
+	first = FALSE;
     }
 
     Vect_select_isles_by_box(Map, box, List);
@@ -337,6 +336,34 @@ int Vect_attach_isles(struct Map_info *Map, const struct bound_box * box)
 /*!
    \brief (Re)Attach centroids to areas in given bounding box
 
+    Warning: If map is updated on level2, it may happen that
+    previously correct island becomes incorrect. In that case,
+    centroid of area forming the island is reattached to outer area,
+    because island polygon is not excluded.
+     
+    <pre>
+      +-----------+     +-----------+
+      |   1       |     |   1       |
+      | +---+---+ |     | +---+---+ |     
+      | | 2 | 3 | |     | | 2 |     |   
+      | | x |   | |  -> | | x |     |  
+      | |   |   | |     | |   |     | 
+      | +---+---+ |     | +---+---+ |
+      |           |     |           |
+      +-----------+     +-----------+
+      centroid is       centroid is
+      attached to 2     reattached to 1
+    </pre>
+
+    Because of this, when the centroid is reattached to another area,
+    it is always necessary to check if original area exist, unregister
+    centroid from previous area.  To simplify code, this is
+    implemented so that centroid is always firs unregistered and if
+    new area is found, it is registered again.
+      
+    This problem can be avoided altogether if properly attached
+    centroids are skipped MM 2009
+
    \param Map_info vector map
    \param box bounding box
 
@@ -353,7 +380,7 @@ int Vect_attach_centroids(struct Map_info *Map, const struct bound_box * box)
     struct P_topo_c *topo;
     struct Plus_head *plus;
 
-    G_debug(3, "Vect_attach_centroids ()");
+    G_debug(3, "Vect_attach_centroids()");
 
     plus = &(Map->plus);
 
@@ -363,34 +390,8 @@ int Vect_attach_centroids(struct Map_info *Map, const struct bound_box * box)
 	first = 0;
     }
 
-    /* Warning: If map is updated on level2, it may happen that previously correct island 
-     * becomes incorrect. In that case, centroid of area forming the island is reattached 
-     * to outer area, because island polygon is not excluded. 
-     *
-     * +-----------+     +-----------+
-     * |   1       |     |   1       |
-     * | +---+---+ |     | +---+---+ |     
-     * | | 2 | 3 | |     | | 2 |     |   
-     * | | x |   | |  -> | | x |     |  
-     * | |   |   | |     | |   |     | 
-     * | +---+---+ |     | +---+---+ |
-     * |           |     |           |
-     * +-----------+     +-----------+
-     * centroid is       centroid is
-     * attached to 2     reattached to 1
-     *
-     * Because of this, when the centroid is reattached to another area, it is always necessary
-     * to check if original area exist, unregister centroid from previous area.
-     * To simplify code, this is implemented so that centroid is always firs unregistered 
-     * and if new area is found, it is registered again.
-     *
-     * This problem can be avoided altogether if properly attached centroids
-     * are skipped
-     * MM 2009
-     */
-
     Vect_select_lines_by_box(Map, box, GV_CENTROID, List);
-    G_debug(3, "  number of centroids to reattach = %d", List->n_values);
+    G_debug(3, "\tnumber of centroids to reattach = %d", List->n_values);
     for (i = 0; i < List->n_values; i++) {
 	int orig_area;
 
@@ -409,12 +410,28 @@ int Vect_attach_centroids(struct Map_info *Map, const struct bound_box * box)
 	orig_area = topo->area;
 
 	Vect_read_line(Map, Points, NULL, centr);
+	if (Points->n_points < 1) {
+	    /* try to get centroid from spatial index (OGR layers) */
+	    int found;
+	    struct boxlist list;
+	    dig_init_boxlist(&list, TRUE);
+	    Vect_select_lines_by_box(Map, box, GV_CENTROID, &list);
+
+	    found = 0;
+	    for (i = 0; i < list.n_values; i++) {
+		if (list.id[i] == centr) {
+		    found = i;
+		    break;
+		}
+	    }
+	    Vect_append_point(Points, list.box[found].E, list.box[found].N, 0.0);
+	}
 	sel_area = Vect_find_area(Map, Points->x[0], Points->y[0]);
-	G_debug(3, "  centroid %d is in area %d", centr, sel_area);
+	G_debug(3, "\tcentroid %d is in area %d", centr, sel_area);
 	if (sel_area > 0) {
 	    Area = plus->Area[sel_area];
 	    if (Area->centroid == 0) {	/* first centroid */
-		G_debug(3, "  first centroid -> attach to area");
+		G_debug(3, "\tfirst centroid -> attach to area");
 		Area->centroid = centr;
 		topo->area = sel_area;
 
@@ -424,7 +441,7 @@ int Vect_attach_centroids(struct Map_info *Map, const struct bound_box * box)
 	    else if (Area->centroid != centr) {	/* duplicate centroid */
 		/* Note: it cannot happen that Area->centroid == centr, because the centroid
 		 * was not registered or a duplicate */
-		G_debug(3, "  duplicate centroid -> do not attach to area");
+		G_debug(3, "\tduplicate centroid -> do not attach to area");
 		topo->area = -sel_area;
 
 		if (-sel_area != orig_area && plus->do_uplist)
@@ -451,14 +468,12 @@ int Vect_build_nat(struct Map_info *Map, int build)
     int i, s, type, line;
     off_t offset;
     int side, area;
-    struct line_pnts *Points, *APoints;
+    struct line_pnts *Points;
     struct line_cats *Cats;
     struct P_line *Line;
     struct P_area *Area;
     struct bound_box box;
-    struct ilist *List;
-    int print_counter = G_verbose() > G_verbose_min();
-
+    
     G_debug(3, "Vect_build_nat() build = %d", build);
 
     plus = &(Map->plus);
@@ -517,14 +532,10 @@ int Vect_build_nat(struct Map_info *Map, int build)
     }
 
     Points = Vect_new_line_struct();
-    APoints = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
-    List = Vect_new_list();
-
+    
     if (plus->built < GV_BUILD_BASE) {
-	register int npoints, format, c;
-
-	format = G_info_format();
+	register int npoints, c;
 
 	/* 
 	 *  We shall go through all primitives in coor file and 
