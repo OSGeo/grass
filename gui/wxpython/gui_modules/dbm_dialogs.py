@@ -168,10 +168,6 @@ class DisplayAttributesDialog(wx.Dialog):
             Debug.msg(2, "DisplayAttributesDialog(): Nothing found!")
             ### self.mapDBInfo = None
         
-    def __SelectAttributes(self, layer):
-        """!Select attributes"""
-        pass
-
     def OnSQLStatement(self, event):
         """!Update SQL statement"""
         pass
@@ -182,7 +178,7 @@ class DisplayAttributesDialog(wx.Dialog):
         @return True on attributes found
         @return False attributes not found
         """
-        return bool(self.notebook.GetPageCount())
+        return bool(self.mapDBInfo and self.notebook.GetPageCount() > 0)
     
     def GetSQLString(self, updateValues = False):
         """!Create SQL statement string based on self.sqlStatement
