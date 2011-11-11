@@ -254,11 +254,14 @@ class NewVectorDialog(ElementDialog):
         if disableTable:
             self.table.Enable(False)
         
-        self.keycol = wx.TextCtrl(parent = self.panel, id =  wx.ID_ANY,
-                                  size = globalvar.DIALOG_SPIN_SIZE)
-        self.keycol.SetValue(UserSettings.Get(group = 'atm', key = 'keycolumn', subkey = 'value'))
-        if disableTable:
-            self.keycol.Enable(False)
+        if showType:
+            self.keycol = None
+        else:
+            self.keycol = wx.TextCtrl(parent = self.panel, id =  wx.ID_ANY,
+                                      size = globalvar.DIALOG_SPIN_SIZE)
+            self.keycol.SetValue(UserSettings.Get(group = 'atm', key = 'keycolumn', subkey = 'value'))
+            if disableTable:
+                self.keycol.Enable(False)
         
         self.addbox = wx.CheckBox(parent = self.panel,
                                   label = _('Add created map into layer tree'), style = wx.NO_BORDER)
@@ -280,7 +283,8 @@ class NewVectorDialog(ElementDialog):
         self.OnElement(event)
         
     def OnTable(self, event):
-        self.keycol.Enable(event.IsChecked())
+        if self.keycol:
+            self.keycol.Enable(event.IsChecked())
         
     def _layout(self):
         """!Do layout"""
@@ -293,17 +297,18 @@ class NewVectorDialog(ElementDialog):
         
         self.dataSizer.Add(item = self.table, proportion = 0,
                       flag = wx.EXPAND | wx.ALL, border = 1)
-
-        keySizer = wx.BoxSizer(wx.HORIZONTAL)
-        keySizer.Add(item = wx.StaticText(parent = self.panel, label = _("Key column:")),
-                     proportion = 0,
-                     flag = wx.ALIGN_CENTER_VERTICAL)
-        keySizer.AddSpacer(10)
-        keySizer.Add(item = self.keycol, proportion = 0,
-                     flag = wx.ALIGN_RIGHT)
-        self.dataSizer.Add(item = keySizer, proportion = 1,
-                           flag = wx.EXPAND | wx.ALL, border = 1)
-
+        
+        if self.keycol:
+            keySizer = wx.BoxSizer(wx.HORIZONTAL)
+            keySizer.Add(item = wx.StaticText(parent = self.panel, label = _("Key column:")),
+                         proportion = 0,
+                         flag = wx.ALIGN_CENTER_VERTICAL)
+            keySizer.AddSpacer(10)
+            keySizer.Add(item = self.keycol, proportion = 0,
+                         flag = wx.ALIGN_RIGHT)
+            self.dataSizer.Add(item = keySizer, proportion = 1,
+                               flag = wx.EXPAND | wx.ALL, border = 1)
+            
         self.dataSizer.AddSpacer(5)
         
         self.dataSizer.Add(item = self.addbox, proportion = 0,
@@ -328,7 +333,9 @@ class NewVectorDialog(ElementDialog):
 
     def GetKey(self):
         """!Get key column name"""
-        return self.keycol.GetValue()
+        if self.keycol:
+            return self.keycol.GetValue()
+        return UserSettings.Get(group = 'atm', key = 'keycolumn', subkey = 'value')
     
     def IsChecked(self, key):
         """!Get dialog properties

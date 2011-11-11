@@ -1046,7 +1046,7 @@ class VDigitToolbar(AbstractToolbar):
             dlg = CreateNewVector(self.parent,
                                   exceptMap = openVectorMap, log = self.log,
                                   cmd = (('v.edit',
-                                          { 'tool' : 'create' },
+                                          { 'flags' : 'b', 'tool' : 'create' },
                                           'map')),
                                   disableAdd = True)
             

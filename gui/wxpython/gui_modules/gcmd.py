@@ -32,6 +32,7 @@ import signal
 import locale
 import traceback
 import types
+import time
 
 import wx
 
@@ -591,11 +592,12 @@ def RunCommand(prog, flags = "", overwrite = False, quiet = False, verbose = Fal
     
     if stdin:
         kwargs['stdin'] = subprocess.PIPE
+
+    Debug.msg(2, "gcmd.RunCommand(): command started")
+    start = time.time()
     
     ps = grass.start_command(prog, flags, overwrite, quiet, verbose, **kwargs)
     
-    Debug.msg(2, "gcmd.RunCommand(): command started")
-
     if stdin:
         ps.stdin.write(stdin)
         ps.stdin.close()
@@ -605,8 +607,9 @@ def RunCommand(prog, flags = "", overwrite = False, quiet = False, verbose = Fal
     stdout, stderr = map(utils.DecodeString, ps.communicate())
     
     ret = ps.returncode
-    Debug.msg(1, "gcmd.RunCommand(): get return code %d" % ret)
-        
+    Debug.msg(1, "gcmd.RunCommand(): get return code %d (%.6f sec)" % \
+                  (ret, (time.time() - start)))
+    
     Debug.msg(3, "gcmd.RunCommand(): print error")
     if ret != 0 and parent:
         Debug.msg(2, "gcmd.RunCommand(): error %s" % stderr)

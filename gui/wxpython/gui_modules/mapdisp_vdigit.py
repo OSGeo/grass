@@ -170,7 +170,7 @@ class VDigitWindow(BufferedWindow):
                         self._geomAttrb(fid, addRecordDlg, 'area')
                         self._geomAttrb(fid, addRecordDlg, 'perimeter')
                 
-                if addRecordDlg.mapDBInfo and \
+                if addRecordDlg.IsFound() and \
                         addRecordDlg.ShowModal() == wx.ID_OK:
                     sqlfile = tempfile.NamedTemporaryFile(mode = "w")
                     for sql in addRecordDlg.GetSQLString():
