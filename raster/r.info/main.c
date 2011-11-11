@@ -68,8 +68,9 @@ int main(int argc, char **argv)
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("metadata"));
+    G_add_keyword(_("history"));
     module->description =
-	_("Output basic information about a raster map layer.");
+	_("Outputs basic information about a raster map.");
 
     opt1 = G_define_standard_option(G_OPT_R_MAP);
 
