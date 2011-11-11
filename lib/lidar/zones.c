@@ -142,7 +142,7 @@ int P_set_dim(struct Reg_dimens *dim, double pe, double pn, int *nsplx, int *nsp
     if (n_windows > 0) {
 	/* min size of the last overlap window = half of current overlap window */
 	/* max size of the last overlap window = elaboration - 3 * edge - overlap */
-	lastsplines_min = ceil((dim->ew_size / 2.0 - 2 * (dim->edge_v + dim->overlap)) / pe);
+	lastsplines_min = ceil((dim->ew_size / 2.0 - (dim->edge_v + dim->overlap)) / pe);
 	lastsplines_max = ceil((dim->ew_size - 3 * dim->edge_v - dim->overlap) / pe);
 	lastsplines = total_splines - edge_splines * n_windows;
 	while (lastsplines > lastsplines_max || lastsplines < lastsplines_min) {
@@ -164,7 +164,7 @@ int P_set_dim(struct Reg_dimens *dim, double pe, double pn, int *nsplx, int *nsp
     if (n_windows > 0) {
 	/* min size of the last overlap window = half of current overlap window */
 	/* max size of the last overlap window = elaboration - 3 * edge - overlap */
-	lastsplines_min = ceil((dim->sn_size / 2.0 - 2 * (dim->edge_h - dim->overlap)) / pn);
+	lastsplines_min = ceil((dim->sn_size / 2.0 - (dim->edge_h + dim->overlap)) / pn);
 	lastsplines_max = ceil((dim->sn_size - 3 * dim->edge_h - dim->overlap) / pn);
 	lastsplines = total_splines - edge_splines * n_windows;
 	while (lastsplines > lastsplines_max || lastsplines < lastsplines_min) {
