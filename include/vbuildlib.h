@@ -1,3 +1,6 @@
+#ifndef GRASS_VBUILDLIB_H
+#define GRASS_VBUILDLIB_H
+
 /* Prototypes from src/mapdev/v.build */
 /* area.c */
 int build_all_areas(struct Map_info *, struct Map_info *);
@@ -56,3 +59,5 @@ int write_lines_asc(struct Map_info *, FILE *, FILE *, struct Plus_head *);
 int write_areas_asc(struct Map_info *, FILE *, FILE *, struct Plus_head *);
 int write_atts_asc(struct Map_info *, FILE *, FILE *, struct Plus_head *);
 int write_isles_asc(struct Map_info *, FILE *, FILE *, struct Plus_head *);
+
+#endif

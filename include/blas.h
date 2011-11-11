@@ -1,5 +1,5 @@
-#ifndef BLAS_WRAP_
-#define BLAS_WRAP_
+#ifndef BLAS_WRAP_H
+#define BLAS_WRAP_H
 
 extern int caxpy_(integer * n, complex * ca, complex * cx, integer * incx,
 		  complex * cy, integer * incy);

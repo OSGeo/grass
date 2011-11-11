@@ -21,8 +21,7 @@
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
-#include <grass/ogsf_proto.h>
-#include <grass/gstypes.h>
+#include <grass/ogsf.h>
 
 /* FFMPEG stuff */
 #ifdef HAVE_FFMPEG

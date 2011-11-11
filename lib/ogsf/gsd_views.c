@@ -26,7 +26,7 @@
 #include <OpenGL/glu.h>
 #endif
 
-#include <grass/gstypes.h>
+#include <grass/ogsf.h>
 #include "math.h"
 
 /*!

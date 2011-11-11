@@ -30,7 +30,7 @@
 #endif
 
 #include <grass/gis.h>
-#include <grass/gstypes.h>
+#include <grass/ogsf.h>
 #include <grass/glocale.h>
 
 #define USE_GL_NORMALIZE

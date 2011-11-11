@@ -1,5 +1,5 @@
-#ifndef _GRASS_FREETYPECAP_H
-#define _GRASS_FREETYPECAP_H
+#ifndef GRASS_FONTCAP_H
+#define GRASS_FONTCAP_H
 
 struct GFONT_CAP
 {

@@ -16,7 +16,7 @@
    \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
  */
 
-#include <grass/gstypes.h>
+#include <grass/ogsf.h>
 
 void (*Cxl_func) ();
 void (*Swap_func) ();

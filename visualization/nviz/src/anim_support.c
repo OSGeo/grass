@@ -5,7 +5,6 @@
  */
 
 /* gsf includes */
-#include <grass/keyframe.h>
 
 /* Nvision includes */
 #include "interface.h"

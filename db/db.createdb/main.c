@@ -16,7 +16,6 @@
 #include <stdlib.h>
 #include <grass/dbmi.h>
 #include <grass/gis.h>
-#include <grass/codes.h>
 #include <grass/glocale.h>
 
 

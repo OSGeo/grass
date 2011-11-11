@@ -23,7 +23,6 @@
 #include <stdlib.h>
 #include <grass/gmath.h>
 #include <grass/gis.h>
-#include <grass/gisdefs.h>
 
 #define EPSILON 0.00000000000000001
 

@@ -23,7 +23,7 @@
 #include <grass/vector.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
-#include <grass/gstypes.h>
+#include <grass/ogsf.h>
 
 /*
    #define TRAK_MEM

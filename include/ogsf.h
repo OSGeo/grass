@@ -1,5 +1,5 @@
 /*!
-  \file include/gstypes.c
+  \file include/ogsf.c
 
   \brief OGSF header file (structures)
 
@@ -13,11 +13,10 @@
   (C) 2011 by the GRASS Development Team
 */
 
-#ifndef _GSTYPES_H
-#define _GSTYPES_H
+#ifndef GRASS_OGSF_H
+#define GRASS_OGSF_H
 
 #include <grass/config.h>
-#include <grass/gsurf.h>
 #include <grass/bitmap.h>
 #if defined(OPENGL_X11) || defined(OPENGL_WINDOWS)
 #include <GL/gl.h>
@@ -25,6 +24,112 @@
 #ifdef OPENGL_AQUA
 #include <OpenGL/gl.h>
 #endif
+
+#include <grass/gis.h>
+
+#define GS_UNIT_SIZE 1000.
+
+#define BETWEEN(x, a, b) (((x) > (a) && (x) < (b)) || ((x) > (b) && (x) < (a)))
+#define GS_NEAR_EQUAL(x, y, ratio) ((x) == (y) || ((x) == 0.0? \
+            GS_BETWEEN((x), (y)+(y)*(ratio), (y)-(y)*(ratio)):\
+            GS_BETWEEN((y), (x)+(x)*(ratio), (x)-(x)*(ratio))))
+
+/* current maximums */
+#define MAX_SURFS      12
+#define MAX_VECTS      50
+#define MAX_SITES      50
+#define MAX_VOLS       12	/* should match MAX_VOL_FILES below ? */
+#define MAX_DSP        12
+#define MAX_ATTS        7
+#define MAX_LIGHTS      3
+#define MAX_CPLANES     6
+#define MAX_ISOSURFS   12
+#define MAX_SLICES     12
+
+/* for gvl_file.c */
+#define MAX_VOL_SLICES         4
+#define MAX_VOL_FILES        100
+
+/* surface display modes */
+#define DM_GOURAUD   0x00000100
+#define DM_FLAT      0x00000200	/* defined for symmetry */
+
+#define DM_FRINGE    0x00000010
+
+#define DM_WIRE      0x00000001
+#define DM_COL_WIRE  0x00000002
+#define DM_POLY      0x00000004
+#define DM_WIRE_POLY 0x00000008
+
+#define DM_GRID_WIRE 0x00000400
+#define DM_GRID_SURF 0x00000800
+
+#define WC_COLOR_ATT 0xFF000000
+
+#define IFLAG unsigned int
+
+/* surface attribute ***descriptors***  */
+#define ATT_NORM      0		/* library use only */
+#define ATT_TOPO      1
+#define ATT_COLOR     2
+#define ATT_MASK      3
+#define ATT_TRANSP    4
+#define ATT_SHINE     5
+#define ATT_EMIT      6
+#define LEGAL_ATT(a) (a >= 0 && a < MAX_ATTS)
+
+/* surface attribute **sources**  */
+#define NOTSET_ATT   0
+#define MAP_ATT      1
+#define CONST_ATT    2
+#define FUNC_ATT     3
+#define LEGAL_SRC(s) (s==NOTSET_ATT||s==MAP_ATT||s==CONST_ATT||s==FUNC_ATT)
+
+/* site markers */
+#define ST_X          1
+#define ST_BOX        2
+#define ST_SPHERE     3
+#define ST_CUBE       4
+#define ST_DIAMOND    5
+#define ST_DEC_TREE   6
+#define ST_CON_TREE   7
+#define ST_ASTER      8
+#define ST_GYRO       9
+#define ST_HISTOGRAM  10
+
+/* Buffer modes */
+#define GSD_FRONT 1
+#define GSD_BACK  2
+#define GSD_BOTH  3
+
+/* fence colormodes */
+#define FC_OFF           0
+#define FC_ABOVE         1
+#define FC_BELOW         2
+#define FC_BLEND         3
+#define FC_GREY          4
+
+/* legend types */
+#define LT_DISCRETE      0x00000100
+#define LT_CONTINUOUS    0x00000200
+
+#define LT_LIST          0x00000010
+/* list automatically discrete */
+
+#define LT_RANGE_LOWSET  0x00000001
+#define LT_RANGE_HISET   0x00000002
+#define LT_RANGE_LOW_HI  0x00000003
+#define LT_INVERTED      0x00000008
+
+#define LT_SHOW_VALS     0x00001000
+#define LT_SHOW_LABELS   0x00002000
+
+/* types of volume files */
+#define VOL_FTYPE_RASTER3D        0
+
+/* types of volume values */
+#define VOL_DTYPE_FLOAT     0
+#define VOL_DTYPE_DOUBLE    1
 
 /*#define TRACE_FUNCS */
 /*#define DEBUG */
@@ -392,7 +497,59 @@ typedef struct
 extern void (*Cxl_func) ();
 extern void (*Swap_func) ();
 
-/* Bring all the function prototypes */
-#include "ogsf_proto.h"
+/* Key frames */
+/* these have to be 1 << KF_id_index */
 
-#endif /* _GSTYPES_H */
+#define KF_FROMX_MASK	0x00000001
+#define KF_FROMY_MASK	0x00000002
+#define KF_FROMZ_MASK	0x00000004
+#define KF_FROM_MASK	0x00000007
+
+#define KF_DIRX_MASK	0x00000008
+#define KF_DIRY_MASK	0x00000010
+#define KF_DIRZ_MASK	0x00000020
+#define KF_DIR_MASK	0x00000038
+
+#define KF_FOV_MASK	0x00000040
+#define KF_TWIST_MASK	0x00000080
+
+#define KF_ALL_MASK	0x000000FF
+
+#define KF_NUMFIELDS 8
+
+#define KF_LINEAR 111
+#define KF_SPLINE 222
+#define KF_LEGAL_MODE(m) (m == KF_LINEAR || m == KF_SPLINE)
+
+#define KF_FROMX 0
+#define KF_FROMY 1
+#define KF_FROMZ 2
+#define KF_DIRX 3
+#define KF_DIRY 4
+#define KF_DIRZ 5
+#define KF_FOV 6
+#define KF_TWIST 7
+
+#define FM_VECT 0x00000001
+#define FM_SITE 0x00000002
+#define FM_PATH 0x00000004
+#define FM_VOL  0x00000008
+#define FM_LABEL 0x00000010
+
+typedef struct view_node
+{
+    float fields[KF_NUMFIELDS];
+} Viewnode;
+
+typedef struct key_node
+{
+    float pos, fields[KF_NUMFIELDS];
+    int look_ahead;
+    unsigned long fieldmask;
+    struct key_node *next, *prior;
+} Keylist;
+
+/* Bring all the function prototypes */
+#include <grass/defs/ogsf.h>
+
+#endif /* GRASS_OGSF_H */

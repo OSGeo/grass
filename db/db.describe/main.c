@@ -19,7 +19,6 @@
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/dbmi.h>
-#include <grass/codes.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 

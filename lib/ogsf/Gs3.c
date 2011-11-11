@@ -24,8 +24,7 @@
 #include <grass/glocale.h>
 #include <grass/bitmap.h>
 
-#include <grass/gsurf.h>
-#include <grass/gstypes.h>
+#include <grass/ogsf.h>
 /* for geoview & geodisplay in 3dview stuff */
 #include "gsget.h"
 /* for update_attrange - might be able to move this func now */

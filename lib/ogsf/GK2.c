@@ -20,10 +20,7 @@
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
-#include <grass/gstypes.h>
-#include <grass/keyframe.h>
-#include <grass/kftypes.h>
-
+#include <grass/ogsf.h>
 
 static int _add_key(Keylist *, int, float);
 static void _remove_key(Keylist *);

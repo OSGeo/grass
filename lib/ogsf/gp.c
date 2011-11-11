@@ -15,7 +15,7 @@
 #include <stdlib.h>
 
 #include <grass/gis.h>
-#include <grass/gstypes.h>
+#include <grass/ogsf.h>
 
 #define FIRST_SITE_ID 21720
 

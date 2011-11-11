@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <grass/gstypes.h>
+#include <grass/ogsf.h>
 #include "gsget.h"
 
 #define FIRST_VECT_ID 20656

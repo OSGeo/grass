@@ -23,7 +23,7 @@
 #include <stdlib.h>
 
 #include <grass/gis.h>
-#include <grass/gstypes.h>
+#include <grass/ogsf.h>
 
 #include "rowcol.h"
 

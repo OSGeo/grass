@@ -44,7 +44,7 @@
 
 #include <grass/gis.h>
 #include <grass/raster.h>
-#include <grass/gstypes.h>
+#include <grass/ogsf.h>
 #include <grass/glocale.h>
 
 #include "gsget.h"
@@ -3350,7 +3350,6 @@ int GS_load_3dview(const char *vname, int surfid)
  */
 void GS_init_view(void)
 {
-    int i;
     static int first = 1;
 
     G_debug(3, "GS_init_view");
