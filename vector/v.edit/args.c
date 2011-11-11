@@ -192,7 +192,7 @@ int parser(int argc, char *argv[], struct GParams *params,
     params->header->guisection = _("Input");
 
     params->topo = G_define_flag();
-    params->topo->key = 't';
+    params->topo->key = 'b';
     params->topo->description = _("Do not build topology");
 
     params->move_first = G_define_flag();
