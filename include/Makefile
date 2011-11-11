@@ -3,7 +3,7 @@ MODULE_TOPDIR = ..
 include $(MODULE_TOPDIR)/include/Make/Vars.make
 include $(MODULE_TOPDIR)/include/Make/Rules.make
 
-SRCH := $(wildcard ../include/*.h ../include/vect/*.h ../include/iostream/*.h)
+SRCH := $(wildcard ../include/*.h ../include/defs/*.h ../include/vect/*.h ../include/iostream/*.h)
 DSTH := $(patsubst ../include/%.h,$(ARCH_INCDIR)/%.h,$(SRCH))
 DSTH_EXTRA = $(ARCH_INCDIR)/copying.h $(ARCH_INCDIR)/confparms.h
 
@@ -15,6 +15,9 @@ default: $(DSTH) $(DSTH_EXTRA) $(DSTMAKE)
 # cancel rule from Rules.make
 $(ARCH_INCDIR)/%.h: %.h
 
+$(ARCH_INCDIR)/defs/%.h: defs/%.h | $(ARCH_INCDIR)/defs
+	$(INSTALL_DATA) $< $@
+
 $(ARCH_INCDIR)/vect/%.h: vect/%.h | $(ARCH_INCDIR)/vect
 	$(INSTALL_DATA) $< $@
 
@@ -23,6 +26,9 @@ $(ARCH_INCDIR)/iostream/%.h: iostream/%.h | $(ARCH_INCDIR)/iostream
 
 $(ARCH_INCDIR)/%.h: %.h | $(ARCH_INCDIR)
 	$(INSTALL_DATA) $< $@
+
+$(ARCH_INCDIR)/defs: | $(ARCH_INCDIR)
+	$(MKDIR) $@
 
 $(ARCH_INCDIR)/vect: | $(ARCH_INCDIR)
 	$(MKDIR) $@

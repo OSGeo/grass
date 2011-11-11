@@ -25,6 +25,6 @@ typedef struct DateTime
 } DateTime;
 
 /* prototype of functions */
-#include <grass/P_datetime.h>
+#include <grass/defs/datetime.h>
 
 #endif

@@ -257,6 +257,6 @@ typedef int read_fn(int, void *, void *);
 
 /*============================== Prototypes ================================*/
 
-#include <grass/raster3ddefs.h>
+#include <grass/defs/raster3d.h>
 
 #endif /* #ifndef GRASS_RASTER3D_H */

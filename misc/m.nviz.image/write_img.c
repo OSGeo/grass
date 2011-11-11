@@ -16,8 +16,7 @@
 
 #include "local_proto.h"
 
-#include <grass/gsurf.h>
-#include <grass/gstypes.h>
+#include <grass/ogsf.h>
 
 /*!
   \brief Save current GL screen to an ppm file.

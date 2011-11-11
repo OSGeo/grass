@@ -23,7 +23,6 @@
 #include <errno.h>
 #include <grass/gis.h>
 #include <grass/dbmi.h>
-#include <grass/codes.h>
 #include <grass/glocale.h>
 
 struct

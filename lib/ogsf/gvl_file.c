@@ -20,8 +20,7 @@
 #include <stdlib.h>
 
 #include <grass/gis.h>
-#include <grass/gstypes.h>
-#include <grass/gsurf.h>
+#include <grass/ogsf.h>
 #include <grass/raster3d.h>
 #include <grass/glocale.h>
 

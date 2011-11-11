@@ -11,7 +11,7 @@ int box_fill(double, double, double, double, int);
 int box_draw(double, double, double, double);
 
 /* catval.c */
-#if defined GRASS_VECT_H && defined GRASS_DBMI_H
+#if defined GRASS_VECTOR_H && defined GRASS_DBMI_H
 int load_catval_array_rgb(struct Map_info *, int, dbCatValArray *);
 int load_catval_array_rot(struct Map_info *, int, dbCatValArray *);
 int load_catval_array_size(struct Map_info *, int, dbCatValArray *);
@@ -174,7 +174,7 @@ int ps_write_mask_row(register CELL *);
 /* ps_vlegend.c */
 int PS_vlegend(void);
 
-#ifdef GRASS_VECT_H
+#ifdef GRASS_VECTOR_H
 /* ps_vpoints.c */
 int PS_vpoints_plot(struct Map_info *, int, int);
 
@@ -282,7 +282,7 @@ int show_scale(void);
 /* symbol.c */
 int symbol_draw(char *, double, double, double, double, double);
 
-#ifdef GRASS_SYMB_H
+#ifdef GRASS_SYMBOL_H
 #ifdef PS_COLOR_H
 int symbol_save(SYMBOL *, PSCOLOR *, PSCOLOR *, char *);
 #endif

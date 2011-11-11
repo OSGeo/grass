@@ -1,6 +1,5 @@
-
-#ifndef GRASS_P_DATETIME_H
-#define GRASS_P_DATETIME_H
+#ifndef GRASS_DATETIMEDEFS_H
+#define GRASS_DATETIMEDEFS_H
 
 /* between.c */
 int datetime_is_between(int x, int a, int b);
@@ -104,4 +103,4 @@ int datetime_set_second(DateTime * dt, double second);
 int datetime_get_fracsec(const DateTime * dt, int *fracsec);
 int datetime_set_fracsec(DateTime * dt, int fracsec);
 
-#endif /* GRASS_P_DATETIME_H */
+#endif /* GRASS_DATETIMEDEFS_H */

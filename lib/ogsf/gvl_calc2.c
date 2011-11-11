@@ -22,7 +22,7 @@
 #include <float.h>
 
 #include <grass/gis.h>
-#include <grass/gstypes.h>
+#include <grass/ogsf.h>
 
 #include "mc33_table.h"
 

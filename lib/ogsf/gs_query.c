@@ -19,7 +19,7 @@
 #include <math.h>
 
 #include <grass/gis.h>
-#include <grass/gstypes.h>
+#include <grass/ogsf.h>
 
 /*!
    \brief Values needed for Ray-Convex Polyhedron Intersection Test below

@@ -109,6 +109,6 @@ struct SigSet
 #define GROUPFILE "CURGROUP"
 #define SUBGROUPFILE "CURSUBGROUP"
 
-#include <grass/imagedefs.h>
+#include <grass/defs/imagery.h>
 
 #endif

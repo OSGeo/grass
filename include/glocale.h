@@ -3,8 +3,7 @@
 
 #include <grass/config.h>
 
-extern void G_init_locale(void);
-extern char *G_gettext(const char *, const char *);
+#include <grass/defs/glocale.h>
 
 #if defined(HAVE_LIBINTL_H) && defined(USE_NLS)
 #include <libintl.h>

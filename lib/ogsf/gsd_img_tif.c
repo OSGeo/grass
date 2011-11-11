@@ -31,7 +31,7 @@
 #include <sys/types.h>
 
 #include <grass/gis.h>
-#include <grass/gstypes.h>
+#include <grass/ogsf.h>
 #include <grass/glocale.h>
 
 #include <tiffio.h>

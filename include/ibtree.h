@@ -1,3 +1,6 @@
+#ifndef GRASS_IBTREE_H
+#define GRASS_IBTREE_H
+
 typedef struct
 {
     int key;
@@ -16,12 +19,6 @@ typedef struct
     int (*cmp) ();		/* routine to compare keys */
 } IBTREE;
 
-int ibtree_create(IBTREE *, int (*)(), int);
-int ibtree_find(IBTREE *, int, int *);
-int ibtree_free(IBTREE *);
-int ibtree_next(IBTREE *, int *, int *);
-int ibtree_rewind(IBTREE *);
-int Btree_init();
-int Btree_add(int);
-int Btree_report();
-int ibtree_update(IBTREE *, int, int);
+#include <grass/defs/ibtree.h>
+
+#endif

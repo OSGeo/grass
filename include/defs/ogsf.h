@@ -1,37 +1,5 @@
-/*
- ****************************************************************************
- *
- * MODULE:       GRASS ogsf library
- * AUTHOR(S):    Justin Hickey - Bangkok Thailand - jhickey@hpcc.nectec.or.th
- * PURPOSE:      To list the prototypes for all accessible functions in this
- *               library. The prototypes are listed by the file in which their
- *               function definitions reside.
- * COPYRIGHT:    (C) 2000-2008 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
- *
- *****************************************************************************/
-
-#ifndef _OGSF_LOCAL_PROTO_H
-#define _OGSF_LOCAL_PROTO_H
-
-/*========================= Required Include Files =========================*/
-
-#include <grass/gis.h>
-#include <grass/gstypes.h>
-#include <grass/kftypes.h>
-
-/*===================== User Visible Constants/Defines =====================*/
-
-/* none */
-
-/*====================== Internal Types and Structures =====================*/
-
-/* none */
-
-/*========================== Function Prototypes ===========================*/
+#ifndef GRASS_OGSFDEFS_H
+#define GRASS_OGSFDEFS_H
 
 /* GK2.c */
 int GK_set_interpmode(int);
@@ -770,4 +738,4 @@ void gsd_bgn_legend_viewport(GLint, GLint, GLint, GLint);
 void gsd_end_legend_viewport(void);
 int gsd_make_nice_number(float *);
 
-#endif /* _OGSF_LOCAL_PROTO_H */
+#endif /* GRASS_OGSFDEFS_H */

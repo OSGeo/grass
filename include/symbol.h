@@ -1,5 +1,5 @@
-#ifndef GRASS_SYMB_H
-#define GRASS_SYMB_H
+#ifndef GRASS_SYMBOL_H
+#define GRASS_SYMBOL_H
 
 /* definitions and structures */
 
@@ -71,8 +71,6 @@ typedef struct
     SYMBPART **part;		/* objects ( parts ) */
 } SYMBOL;
 
-/* prototypes */
-SYMBOL *S_read(const char *sname);
-void S_stroke(SYMBOL * symb, double size, double rotation, int tolerance);
+#include <grass/defs/symbol.h>
 
 #endif

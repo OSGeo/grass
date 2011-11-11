@@ -49,7 +49,7 @@
 
 #include <stdlib.h>
 
-#include <grass/gstypes.h>
+#include <grass/ogsf.h>
 #include <grass/glocale.h>
 
 #include "gsget.h"

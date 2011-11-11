@@ -1,7 +1,7 @@
 #ifndef _GSGET_H
 #define _GSGET_H
 
-#include <grass/gsurf.h>
+#include <grass/ogsf.h>
 
 #define GET_MAPATT1(buff, offset, att) att=(buff->ib? (float)buff->ib[offset]: \
 				      buff->sb? (float)buff->sb[offset]: \

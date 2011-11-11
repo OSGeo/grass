@@ -235,6 +235,6 @@ typedef RGBA_Color RGB_Color;
 #define RGBA_COLOR_NONE         0
 
 /*** prototypes ***/
-#include <grass/rasterdefs.h>
+#include <grass/defs/raster.h>
 
 #endif /* GRASS_RASTER_H */

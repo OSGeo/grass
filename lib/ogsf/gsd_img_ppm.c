@@ -28,8 +28,7 @@
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
-#include <grass/ogsf_proto.h>
-#include <grass/gstypes.h>
+#include <grass/ogsf.h>
 
 /*!
    \brief Save current GL screen to ppm file

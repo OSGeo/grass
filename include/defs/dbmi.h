@@ -1,5 +1,5 @@
-#ifndef _PROTO_DBMI_H_
-#define _PROTO_DBMI_H_
+#ifndef GRASS_DBMIDEFS_H
+#define GRASS_DBMIDEFS_H
 
 void db_Cstring_to_lowercase(char *);
 void db_Cstring_to_uppercase(char *);

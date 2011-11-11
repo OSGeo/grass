@@ -18,7 +18,7 @@
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
-#include <grass/gstypes.h>
+#include <grass/ogsf.h>
 
 #include "rgbpack.h"
 

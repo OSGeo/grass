@@ -1,5 +1,6 @@
-#include <grass/btree.h>
 #include <stdlib.h>
+
+#include <grass/btree.h>
 
 int btree_free(BTREE * B)
 {

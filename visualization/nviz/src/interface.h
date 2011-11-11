@@ -20,8 +20,7 @@
 #endif
 
 #include <grass/gis.h>
-#include <grass/gsurf.h>
-#include <grass/gstypes.h>
+#include <grass/ogsf.h>
 
 /* extern int *GV_get_vect_list(int *);
    extern int *GS_get_surf_list(int *);

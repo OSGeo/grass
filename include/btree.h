@@ -1,3 +1,6 @@
+#ifndef GRASS_BTREE_H
+#define GRASS_BTREE_H
+
 typedef struct
 {
     void *key;
@@ -16,20 +19,6 @@ typedef struct
     int (*cmp) (const void *, const void *);	/* routine to compare keys */
 } BTREE;
 
-/* create.c */
-int btree_create(BTREE *, int (*)(const void *, const void *), int);
+#include <grass/defs/btree.h>
 
-/* find.c */
-int btree_find(const BTREE *, const void *, void **);
-
-/* free.c */
-int btree_free(BTREE *);
-
-/* next.c */
-int btree_next(BTREE *, void **, void **);
-
-/* rewind.c */
-int btree_rewind(BTREE *);
-
-/* update.c */
-int btree_update(BTREE *, const void *, int, const void *, int);
+#endif

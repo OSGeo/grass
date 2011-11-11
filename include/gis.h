@@ -470,6 +470,6 @@ struct Colors
 
 /* Since there are so many prototypes for the gis library they are stored */
 /* in the file gisdefs.h */
-#include <grass/gisdefs.h>
+#include <grass/defs/gis.h>
 
 #endif /* GRASS_GIS_H */

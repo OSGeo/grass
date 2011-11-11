@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include <grass/gstypes.h>
+#include <grass/ogsf.h>
 
 #include "rowcol.h"
 

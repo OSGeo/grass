@@ -19,7 +19,7 @@
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/raster3d.h>
-#include <grass/gstypes.h>
+#include <grass/ogsf.h>
 #include <grass/glocale.h>
 #include "gsget.h"
 
