@@ -1,31 +1,32 @@
 /*! \mainpage GRASS 7 Programmer's Manual
 <!-- * doxygenized from "GRASS 5 Programmer's Manual"
        by M. Neteler 2/2004
-     * updated 8/2005, 2006, 2007, 2008, 2010
+     * updated 8/2005, 2006-2008, 2010-2011
   -->
 
-<a href="http://grass.osgeo.org">GRASS GIS</a> (<b>Geographic
-Resources Analysis Support System</b>) is an open source, Free
-Software <em>Geographical Information System</em> (GIS) with raster,
+<a href="http://grass.osgeo.org">GRASS GIS</a> (<i>Geographic
+Resources Analysis Support System</i>) is an open source, free
+software <em>Geographical Information System</em> (GIS) with raster,
 topological %vector, image processing, and graphics production
 functionality that operates on various platforms through a graphical
 user interface (GUI) or command line interface (CLI). It is released
-under GNU General Public License (GPL).
+under <a href="http://www.fsf.org/copyleft/gpl.html">GNU General
+Public License</a> (GPL).
 
 This manual introduces the reader to the <i>Geographic Resources
 Analysis Support System</i> from the programming perspective. Design
 theory, system support libraries, system maintenance, and system
-enhancement are all presented. Standard GRASS 4.x conventions are
-still used in much of the code. This work is part of ongoing research
+enhancement are all presented. This work is part of ongoing research
 being performed by the <a
 href="http://grass.osgeo.org/community/team.php">GRASS Development
 Team</a>, an international team of programmers, GRASS module authors
 are cited within their module's source code and the contributed manual
 pages.
 
-&copy; 2000-2011 GRASS Development Team
+&copy; 2000-2011 by the GRASS Development Team
 
-Published under <a href="http://www.fsf.org/copyleft/fdl.html">GNU Free Documentation License</a> (GFDL)
+Published under <a href="http://www.fsf.org/copyleft/fdl.html">GNU
+Free Documentation License</a> (GFDL).
 
 
 This manual comes with ABSOLUTELY NO WARRANTY. The development of
@@ -33,8 +34,9 @@ GRASS software and this manual is kindly supported by the <a
 href="http://www.osgeo.org">Open Source Geospatial Foundation</a>, who
 provides the GRASS main infrastructure.
 
-Main web site: <a href="http://grass.osgeo.org">http://grass.osgeo.org</a>
-
+Main web site: <a
+href="http://grass.osgeo.org">http://grass.osgeo.org</a>
+<!--
 <b>Table of contents</b>
 
 - \subpage libsOverview
@@ -49,23 +51,24 @@ Main web site: <a href="http://grass.osgeo.org">http://grass.osgeo.org</a>
  - \subpage Multiple_Architecture_Conventions
 - \subpage vectmodules
  - \subpage vectmodules_oper
+-->
 
-<i>Missing entries below are either not yet uploaded to SVN (need to
-be migrated from GRASS 5 Programmer's manual) or are simply
+<i>Note: Missing entries below are either not yet uploaded to SVN
+(need to be migrated from GRASS 5 Programmer's manual) or are simply
 undocumented.</i>
+
+<i>Note: PLEASE UPDATE FOR GRASS 7</i>
 
 <!-- original:
   http://trac.osgeo.org/grass/browser/grass-web/trunk/images/grass7_arch.odp
 -->
 \image html "grass7_arch.png" "GRASS 7 Architecture"
 
-<b>PLEASE UPDATE FOR GRASS 7</b>
-
 \section libsOverview Libraries
 
 \section corelibs Core libraries
 
-(the name refers to the directory name in lib/ in the source code)
+(the name refers to the directory name in <tt>lib/</tt> in the source code)
 
  - gis: \ref gislib
  - raster: \ref rasterlib
@@ -73,7 +76,7 @@ undocumented.</i>
 
 \section libs Further libraries
 
-(the name refers to the directory name in lib/ in the source code)
+(the name refers to the directory name in <tt>lib/</tt> in the source code)
 
 \subsection displaylibs Display Libraries and Drivers
 
@@ -151,26 +154,27 @@ undocumented.</i>
 
 A GRASS <b>raster map</b> consists of several files in several subdirectories in a mapset,
 organized as follows:
-
- - <b>cellhd/</b>:
-  map header including projection code, coordinates representing
+<dl>
+ <dt><b>cellhd/</b></dt>
+ <dd>map header including projection code, coordinates representing
   the spatial extent of the raster map, number of rows and columns, resolution, 
-  and information about map compression;</li>
- - <b>cell/, fcell/ or grid3/</b>:
-  generic matrix of values in a compressed, portable
-  format which depends on the raster data type (integer, floating %point or 3D grid);</li>
- - <b>hist/</b>:
-  history file which contains metadata such as the data source,
+  and information about map compression;</dd>
+ <dt><b>cell/, fcell/ or grid3/</b></dt>
+ <dd>generic matrix of values in a compressed, portable
+  format which depends on the raster data type (integer, floating %point or 3D grid);</dd>
+ <dt><b>hist/</b></dt>
+ <dd>history file which contains metadata such as the data source,
   the command that was used to generate the raster map, or
-  other information provided by the user;</li>
- - <b>cats/</b>: 
-  optional category file which contains text or numeric labels assigned
-  to the raster map categories;</li>
- - <b>colr/</b>: 
-  optional color table;</li>
- - <b>cell_misc/</b>: 
-  optional timestamp, range of values, quantization rules (for floating %point maps)
-  and null (no-data) files; </li>
+  other information provided by the user;</dd>
+ <dt><b>cats/</b></dt>
+ <dd>optional category file which contains text or numeric labels assigned
+  to the raster map categories;</dd>
+ <dt><b>colr/</b></dt> 
+ <dd>optional color table;</dd>
+ <dt><b>cell_misc/</b></dt>
+ <dd>optional timestamp, range of values, quantization rules (for floating %point maps)
+  and null (no-data) files;</dd>
+</dl>
 
 A GRASS <b>%vector maps</b> are stored in several separate files in a
 single directory (see \ref vectorlib). While the
@@ -178,19 +182,27 @@ attributes are stored in either a DBF file, a SQLite file or in an
 external DBMS (PostgreSQL, MySQL, ODBC), the geometric data are saved
 as follows:
 
- - <b>head</b>: %vector map ASCII header with information about the map creation
-  (date and name), its scale and threshold;</li>
- - <b>coor</b>: binary geometry file which includes the coordinates of graphic
-  elements (primitives) that define the %vector feature;</li>
- - <b>topo</b>: binary topology file describes the spatial relationships between the
-  map's graphic elements;</li>
- - <b>hist</b>: history ASCII file with complete commands that were used to
+<dl>
+ <dt><b>head</b></dt>
+ <dd>%vector map ASCII header with information about the map creation
+  (date and name), its scale and threshold;</dd>
+ <dt><b>coor</b></dt>
+ <dd>binary geometry file which includes the coordinates of graphic
+  elements (primitives) that define the %vector feature;</dd>
+ <dt><b>topo</b></dt>
+ <dd>binary topology file describes the spatial relationships between the
+  map's graphic elements;</dd>
+ <dt><b>hist</b></dt>
+ <dd>history ASCII file with complete commands that were used to
   create the %vector map, as well as the name and date/time of the map
-  creation;</li>
- - <b>cidx</b>: binary category index file which is used to %link the %vector
-  object IDs to the attribute table rows;</li>
- - <b>dbln</b>: ASCII file which contains definition(s) of %link to attribute
-  storage in database (DBMS).</li>
+  creation;</dd>
+ <dt><b>cidx</b></dt>
+ <dd>binary category index file which is used to %link the %vector
+  object IDs to the attribute table rows;</dd>
+ <dt><b>dbln</b></dt>
+ <dd>ASCII file which contains definition(s) of %link to attribute
+  storage in database (DBMS).</dd>
+</dl>
 
 <!-- original: 
   http://trac.osgeo.org/grass/browser/grass-web/trunk/images/loc_struct.odg
