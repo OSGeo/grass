@@ -21,10 +21,10 @@
 /*!
   \brief Create standardised Option structure.
   
-  This function will create a standardised Option structure defined
-  by parameter opt. A list of valid parameters can be found in gis.h.
-  It allocates memory for the Option structure and returns a pointer
-  to this memory.
+  This function will create a standardised Option structure defined by
+  parameter <i>opt</i>. A list of valid parameters bellow. It
+  allocates memory for the Option structure and returns a pointer to
+  this memory.
   
   If an invalid parameter was specified a empty Option structure will
   be returned (not NULL).
@@ -583,4 +583,37 @@ struct Option *G_define_standard_option(int opt)
     }
 
     return Opt;
+}
+
+/*!
+  \brief Create standardised Flag structure.
+  
+  This function will create a standardised Flag structure defined by
+  parameter <i>flag</i>. A list of valid parameters bellow. It
+  allocates memory for the Flag structure and returns a pointer to
+  this memory.
+  
+  If an invalid parameter was specified a empty Flag structure will be
+  returned (not NULL).
+
+  - G_FLG_DB_TABLE
+
+  \param flag type of Flag struct to create
+  
+  \return pointer to an Flag struct
+*/
+struct Flag *G_define_standard_flag(int flag)
+{
+    struct Flag *Flg;
+
+    Flg = G_define_flag();
+
+    switch (flag) {
+    case G_FLG_DB_TABLE:
+	Flg->key = 't';
+	Flg->description = _("Do not create attribute table");
+	break;
+    }
+
+    return Flg;
 }
