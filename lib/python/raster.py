@@ -73,7 +73,7 @@ def raster_info(map):
         else:
             return float(s)
 
-    s = read_command('r.info', flags = 'g', map = map)
+    s = read_command('r.info', flags = 'rgstmpud', map = map)
     kv = parse_key_val(s)
     for k in ['min', 'max']:
 	kv[k] = float_or_null(kv[k])
