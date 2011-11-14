@@ -1595,19 +1595,20 @@ class ImportDialog(wx.Dialog):
         btnsizer = wx.BoxSizer(orient = wx.HORIZONTAL)
         
         btnsizer.Add(item = self.btn_cmd, proportion = 0,
-                     flag = wx.ALL | wx.ALIGN_CENTER,
-                     border = 10)
-        
-        btnsizer.Add(item = self.btn_run, proportion = 0,
-                     flag = wx.ALL | wx.ALIGN_CENTER,
+                     flag = wx.RIGHT | wx.ALIGN_CENTER,
                      border = 10)
         
         btnsizer.Add(item = self.btn_cancel, proportion = 0,
-                     flag = wx.ALL | wx.ALIGN_CENTER,
+                     flag = wx.LEFT | wx.RIGHT | wx.ALIGN_CENTER,
+                     border = 10)
+        
+        btnsizer.Add(item = self.btn_run, proportion = 0,
+                     flag = wx.RIGHT | wx.ALIGN_CENTER,
                      border = 10)
         
         dialogSizer.Add(item = btnsizer, proportion = 0,
-                        flag = wx.ALIGN_CENTER)
+                        flag = wx.ALIGN_CENTER_VERTICAL | wx.BOTTOM | wx.ALIGN_RIGHT,
+                        border = 10)
         
         # dialogSizer.SetSizeHints(self.panel)
         self.panel.SetAutoLayout(True)
@@ -1802,7 +1803,7 @@ class GdalImportDialog(ImportDialog):
     def OnCmdDialog(self, event):
         """!Show command dialog"""
         name = self._getCommand()
-        menuform.GUI(parent = self, modal = True).ParseCommand(cmd = [name])
+        menuform.GUI(parent = self, modal = False).ParseCommand(cmd = [name])
 
 class GdalOutputDialog(wx.Dialog):
     def __init__(self, parent, id = wx.ID_ANY, ogr = False,
@@ -1826,6 +1827,9 @@ class GdalOutputDialog(wx.Dialog):
         self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
 
         # buttons
+        self.btnCmd = wx.Button(parent = self.panel, id = wx.ID_ANY,
+                                label = _("Command dialog"))
+        self.btnCmd.Bind(wx.EVT_BUTTON, self.OnCmdDialog)
         self.btnCancel = wx.Button(parent = self.panel, id = wx.ID_CANCEL)
         self.btnCancel.SetToolTipString(_("Close dialog"))
         self.btnOk = wx.Button(parent = self.panel, id = wx.ID_OK)
@@ -1848,14 +1852,20 @@ class GdalOutputDialog(wx.Dialog):
         dialogSizer.Add(item = self.dsnInput, proportion = 0,
                         flag = wx.EXPAND)
 
-        btnSizer = wx.StdDialogButtonSizer()
-        btnSizer.AddButton(self.btnOk)
-        btnSizer.AddButton(self.btnCancel)
-        btnSizer.Realize()
+        btnSizer = wx.BoxSizer(orient = wx.HORIZONTAL)
+        btnSizer.Add(item = self.btnCmd, proportion = 0,
+                     flag = wx.RIGHT | wx.ALIGN_CENTER,
+                     border = 10)
+        btnSizer.Add(item = self.btnCancel, proportion = 0,
+                     flag = wx.LEFT | wx.RIGHT | wx.ALIGN_CENTER,
+                     border = 10)
+        btnSizer.Add(item = self.btnOk, proportion = 0,
+                     flag = wx.RIGHT | wx.ALIGN_CENTER,
+                     border = 10)
         
         dialogSizer.Add(item = btnSizer, proportion = 0,
-                        flag = wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
-                        border = 5)
+                        flag = wx.ALIGN_CENTER_VERTICAL | wx.BOTTOM | wx.TOP | wx.ALIGN_RIGHT,
+                        border = 10)
         
         self.panel.SetAutoLayout(True)
         self.panel.SetSizer(dialogSizer)
@@ -1866,6 +1876,9 @@ class GdalOutputDialog(wx.Dialog):
         self.SetSize((size.width, size.height))
         self.Layout()
         
+    def OnCmdDialog(self, event):
+        menuform.GUI(parent = self, modal = True).ParseCommand(cmd = ['v.external.out'])
+    
     def OnCancel(self, event):
         self.Destroy()
         

@@ -575,7 +575,7 @@
 	      <label>Output format for vector data</label>
 	      <help>Defines vector output format utilizing OGR library.</help>
 	      <keywords>vector,export,output,external</keywords>
-              <handler>OnMenuCmd</handler>
+              <handler>OnVectorOutputFormat</handler>
 	      <command>v.external.out</command>
 	    </menuitem>
 	  </items>
