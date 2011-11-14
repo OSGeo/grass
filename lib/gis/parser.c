@@ -1036,6 +1036,10 @@ static int check_int(const char *ans, const char **opts)
 {
     int d, i;
 
+    /* "-" is reserved for standard input */
+    if (strcmp(ans, "-") == 0)
+	return 0;
+
     if (sscanf(ans, "%d", &d) != 1)
 	return MISSING_VALUE;
 
@@ -1080,6 +1084,10 @@ static int check_double(const char *ans, const char **opts)
     double d;
     int i;
 
+    /* "-" is reserved for standard input */
+    if (strcmp(ans, "-") == 0)
+	return 0;
+    
     if (sscanf(ans, "%lf", &d) != 1)
 	return MISSING_VALUE;
 
@@ -1237,7 +1245,8 @@ static void check_multiple_opts(void)
     err = NULL;
     opt = &st->first_option;
     while (opt) {
-	if (opt->answer && opt->key_desc) {
+	/* "-" is reserved from standard input/output */
+	if (opt->answer && strcmp(opt->answer, "-") && opt->key_desc) {
 	    /* count commas */
 	    n_commas = 1;
 	    for (ptr = opt->key_desc; *ptr != '\0'; ptr++)
