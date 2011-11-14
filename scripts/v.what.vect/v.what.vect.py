@@ -5,7 +5,7 @@
 # MODULE:       v.what.vect
 # AUTHOR(S):    Markus Neteler, converted to Python by Glynn Clements
 # PURPOSE:      Uploads attributes at the location of vector points to the table.
-# COPYRIGHT:    (C) 2005, 2008 by the GRASS Development Team
+# COPYRIGHT:    (C) 2005, 2008, 2011 by the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
@@ -21,6 +21,7 @@
 #%end
 
 #%option G_OPT_V_MAP
+#% label: Name of vector points map for which to edit attributes
 #%end
 #%option G_OPT_V_FIELD
 #%end
@@ -30,7 +31,7 @@
 #%end
 #%option G_OPT_V_MAP
 #% key: qmap
-#% description: Name of vector map to be queried
+#% label: Name of vector map to be queried
 #% required : yes
 #%end
 #%option G_OPT_V_FIELD
@@ -53,17 +54,16 @@ import sys
 from grass.script import core as grass
 
 def main():
-    grass.exec_command(
-	"v.distance",
-	_from = options['map'],
-	to = options['qmap'],
-	column = options['column'],
-	to_column = options['qcolumn'],
-	upload = "to_attr",
-	dmax = options['dmax'],
-	from_layer = options['layer'],
-	to_layer = options['qlayer'])
-
+    grass.run_command("v.distance",
+                      _from = options['map'],
+                      to = options['qmap'],
+                      column = options['column'],
+                      to_column = options['qcolumn'],
+                      upload = "to_attr",
+                      dmax = options['dmax'],
+                      from_layer = options['layer'],
+                      to_layer = options['qlayer'])
+    
 if __name__ == "__main__":
     options, flags = grass.parser()
     main()
