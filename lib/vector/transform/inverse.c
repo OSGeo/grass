@@ -1,6 +1,6 @@
 /*  @(#)inverse.c       2.1  6/26/87  */
 #include <math.h>
-#include <grass/libtrans.h>
+#include <grass/transform.h>
 
 #define EPSILON 1.0e-16
 
