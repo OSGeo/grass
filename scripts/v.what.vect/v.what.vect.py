@@ -54,16 +54,16 @@ import sys
 from grass.script import core as grass
 
 def main():
-    grass.run_command("v.distance",
-                      _from = options['map'],
-                      to = options['qmap'],
-                      column = options['column'],
-                      to_column = options['qcolumn'],
-                      upload = "to_attr",
-                      dmax = options['dmax'],
-                      from_layer = options['layer'],
-                      to_layer = options['qlayer'])
+    return grass.run_command("v.distance",
+                             _from = options['map'],
+                             to = options['qmap'],
+                             column = options['column'],
+                             to_column = options['qcolumn'],
+                             upload = "to_attr",
+                             dmax = options['dmax'],
+                             from_layer = options['layer'],
+                             to_layer = options['qlayer'])
     
 if __name__ == "__main__":
     options, flags = grass.parser()
-    main()
+    sys.exit(main())
