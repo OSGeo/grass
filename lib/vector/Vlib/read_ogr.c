@@ -142,7 +142,7 @@ int read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
     if (line_c != NULL)
 	Vect_reset_cats(line_c);
 
-    if (Map->Constraint_region_flag && !ignore_constraint)
+    if (Map->constraint.region_flag && !ignore_constraint)
 	Vect_get_constraint_box(Map, &mbox);
 
     fInfo = &(Map->fInfo.ogr);
@@ -181,15 +181,15 @@ int read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 	/* Constraint on Type of line 
 	 * Default is all of  Point, Line, Area and whatever else comes along
 	 */
-	if (Map->Constraint_type_flag && !ignore_constraint) {
-	    if (!(itype & Map->Constraint_type)) {
+	if (Map->constraint.type_flag && !ignore_constraint) {
+	    if (!(itype & Map->constraint.type)) {
 		fInfo->lines_next++;
 		continue;
 	    }
 	}
 
 	/* Constraint on specified region */
-	if (Map->Constraint_region_flag && !ignore_constraint) {
+	if (Map->constraint.region_flag && !ignore_constraint) {
 	    Vect_line_box(fInfo->lines[fInfo->lines_next],
 			  &lbox);
 
@@ -260,7 +260,7 @@ int V2_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 
     G_debug(3, "V2_read_next_line_ogr()");
     
-    if (Map->Constraint_region_flag)
+    if (Map->constraint.region_flag)
 	Vect_get_constraint_box(Map, &mbox);
     
     while(TRUE) {
@@ -276,8 +276,8 @@ int V2_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 	    continue;
 	}
 
-	if ((Map->Constraint_type_flag &&
-	     !(Line->type & Map->Constraint_type))) {
+	if ((Map->constraint.type_flag &&
+	     !(Line->type & Map->constraint.type))) {
 	    continue;
 	}
 
@@ -319,7 +319,7 @@ int V2_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 	    ret = read_next_line_ogr(Map, line_p, line_c, TRUE);
 	}
 	
-	if (Map->Constraint_region_flag) {
+	if (Map->constraint.region_flag) {
 	    Vect_line_box(line_p, &lbox);
 	    if (!Vect_box_overlap(&lbox, &mbox)) {
 		continue;

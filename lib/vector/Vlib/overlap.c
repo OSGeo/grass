@@ -31,10 +31,10 @@ V__map_overlap(struct Map_info *Map, double n, double s, double e, double w)
     struct Cell_head W;
 
     /* updated for Lat lon support 21 Jun 91 */
-    W.north = Map->Constraint_box.N;
-    W.south = Map->Constraint_box.S;
-    W.east = Map->Constraint_box.E;
-    W.west = Map->Constraint_box.W;
+    W.north = Map->constraint.box.N;
+    W.south = Map->constraint.box.S;
+    W.east = Map->constraint.box.E;
+    W.west = Map->constraint.box.W;
     W.proj = Map->head.proj;
 
     return G_window_overlap(&W, n, s, e, w);

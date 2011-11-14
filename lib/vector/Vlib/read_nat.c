@@ -71,7 +71,7 @@ int V1_read_next_line_nat(struct Map_info *Map,
 
     G_debug(3, "V1_read_next_line_nat()");
 
-    if (Map->Constraint_region_flag)
+    if (Map->constraint.region_flag)
 	Vect_get_constraint_box(Map, &mbox);
 
     while (1) {
@@ -86,13 +86,13 @@ int V1_read_next_line_nat(struct Map_info *Map,
 	/* Constraint on Type of line 
 	 * Default is all of  Point, Line, Area and whatever else comes along
 	 */
-	if (Map->Constraint_type_flag) {
-	    if (!(itype & Map->Constraint_type))
+	if (Map->constraint.type_flag) {
+	    if (!(itype & Map->constraint.type))
 		continue;
 	}
 
 	/* Constraint on specified region */
-	if (Map->Constraint_region_flag) {
+	if (Map->constraint.region_flag) {
 	    Vect_line_box(line_p, &lbox);
 
 	    if (!Vect_box_overlap(&lbox, &mbox))
@@ -153,20 +153,20 @@ int V2_read_line_nat(struct Map_info *Map,
 int V2_read_next_line_nat(struct Map_info *Map,
 			  struct line_pnts *line_p, struct line_cats *line_c)
 {
-    register int line, ret;
-    register struct P_line *Line;
+    int line, ret, i;
+    struct P_line *Line;
     struct bound_box lbox, mbox;
 
     G_debug(3, "V2_read_next_line_nat()");
 
-    if (Map->Constraint_region_flag)
+    if (Map->constraint.region_flag)
 	Vect_get_constraint_box(Map, &mbox);
-
+    
     while (TRUE) {
 	line = Map->next_line;
 
 	if (line > Map->plus.n_lines)
-	    return (-2);
+	    return -2;
 
 	Line = Map->plus.Line[line];
 	if (Line == NULL) {	/* Dead line */
@@ -174,20 +174,29 @@ int V2_read_next_line_nat(struct Map_info *Map,
 	    continue;
 	}
 
-	if ((Map->Constraint_type_flag &&
-	     !(Line->type & Map->Constraint_type))) {
+	if ((Map->constraint.type_flag &&
+	     !(Line->type & Map->constraint.type))) {
 	    Map->next_line++;
 	    continue;
 	}
 
 	ret = V2_read_line_nat(Map, line_p, line_c, Map->next_line++);
-	if (Map->Constraint_region_flag) {
+
+	if (Map->constraint.region_flag) {
 	    Vect_line_box(line_p, &lbox);
 	    if (!Vect_box_overlap(&lbox, &mbox)) {
 		continue;
 	    }
 	}
 
+	if (line_c && Map->constraint.field_flag) {
+	    for (i = 0; i < line_c->n_cats; i++) {
+		if (line_c->field[i] == Map->constraint.field)
+		    break;
+	    }
+	    if (i == line_c->n_cats)
+		continue;
+	}
 	return ret;
     }
     
@@ -263,7 +272,7 @@ int read_line_nat(struct Map_info *Map,
 	    c->n_cats = n_cats;
 	    if (n_cats > 0) {
 		if (0 > dig_alloc_cats(c, (int)n_cats + 1))
-		    return (-1);
+		    return -1;
 
 		if (Map->head.Version_Minor == 1) {	/* coor format 5.1 */
 		    if (0 >=
