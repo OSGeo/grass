@@ -936,14 +936,15 @@ char *Vect_subst_var(const char *in, const struct Map_info *Map)
   \brief Rewrite 'dbln' file
   
   Should be used by GRASS modules which update database tables, so
-  that other applications know that tables were changed and can
-  reload data.
+  that other applications know that tables were changed and can reload
+  data.
   
   \param Map pointer to Map_info structure
 */
 void Vect_set_db_updated(struct Map_info *Map)
 {
-    if (strcmp(Map->mapset, G_mapset()) != 0) {
+    if (strcmp(Map->mapset, G_mapset()) != 0 &&
+	G_strcasecmp(Map->mapset, "ogr") != 0) {
 	G_fatal_error(_("Bug: attempt to update map which is not in current mapset"));
     }
 
