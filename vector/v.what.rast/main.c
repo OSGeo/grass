@@ -1,44 +1,30 @@
 /* ***************************************************************
- * *
- * * MODULE:       v.what.rast
- * * 
- * * AUTHOR(S):    Radim Blazek (using r.what)
- * *               Michael Shapiro, U.S. Army Construction Engineering Research Laboratory (r.what)
- * *               
- * * PURPOSE:      Query raster map
- * *               
- * * COPYRIGHT:    (C) 2001 by the GRASS Development Team
- * *
- * *               This program is free software under the 
- * *               GNU General Public License (>=v2). 
- * *               Read the file COPYING that comes with GRASS
- * *               for details.
- * *
+ *
+ * MODULE:       v.what.rast
+ *  
+ * AUTHOR(S):    Radim Blazek (using r.what)
+ *               Michael Shapiro, U.S. Army Construction Engineering Research Laboratory (r.what)
+ *                
+ *  PURPOSE:      Query raster map
+ *                
+ *  COPYRIGHT:    (C) 2001, 2011 by the GRASS Development Team
+ * 
+ *                This program is free software under the GNU General
+ *                Public License (>=v2).  Read the file COPYING that
+ *                comes with GRASS for details.
+ * 
  * * TODO: fix user notification if where= is used
  * **************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <grass/gis.h>
+
 #include <grass/raster.h>
 #include <grass/dbmi.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
-struct order
-{
-    int cat;			/* point category */
-    int count;			/* nuber of points with category 'cat' */
-    int row;
-    int col;
-    CELL value;
-    DCELL dvalue;		/* used for FCELL and DCELL */
-};
-
-static int by_row(const void *, const void *);
-static int by_cat(const void *, const void *);
-static int srch_cat(const void *, const void *);
-
+#include "local_proto.h"
 
 int main(int argc, char *argv[])
 {
@@ -52,7 +38,9 @@ int main(int argc, char *argv[])
     DCELL *dcell;
     double drow, dcol;
     char buf[2000];
-    struct Option *vect_opt, *rast_opt, *field_opt, *col_opt, *where_opt;
+    struct {
+	struct Option *vect, *rast, *field, *col, *where;
+    } opt;
     int Cache_size;
     struct order *cache;
     int cur_row;
@@ -85,31 +73,25 @@ int main(int argc, char *argv[])
     module->description =
 	_("Uploads raster values at positions of vector points to the table.");
 
-    vect_opt = G_define_standard_option(G_OPT_V_INPUT);
-    vect_opt->key = "vector";
-    vect_opt->description =
-	_("Name of input vector points map for which to edit attribute table");
+    opt.vect = G_define_standard_option(G_OPT_V_MAP);
+    opt.vect->label =
+	_("Name of vector points map for which to edit attributes");
 
-    rast_opt = G_define_standard_option(G_OPT_R_INPUT);
-    rast_opt->key = "raster";
-    rast_opt->description = _("Name of existing raster map to be queried");
+    opt.field = G_define_standard_option(G_OPT_V_FIELD);
 
-    field_opt = G_define_standard_option(G_OPT_V_FIELD);
+    opt.rast = G_define_standard_option(G_OPT_R_MAP);
+    opt.rast->key = "raster";
+    opt.rast->description = _("Name of existing raster map to be queried");
 
-    col_opt = G_define_option();
-    col_opt->key = "column";
-    col_opt->type = TYPE_STRING;
-    col_opt->required = YES;
-    col_opt->description =
-	_("Column name (will be updated by raster values)");
+    opt.col = G_define_standard_option(G_OPT_DB_COLUMN);
+    opt.col->required = YES;
+    opt.col->description =
+	_("Name of attribute column to be updated with the query result");
 
-    where_opt = G_define_standard_option(G_OPT_DB_WHERE);
+    opt.where = G_define_standard_option(G_OPT_DB_WHERE);
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
-
-
-    field = atoi(field_opt->answer);
 
     db_init_string(&stmt);
     Points = Vect_new_line_struct();
@@ -120,7 +102,9 @@ int main(int argc, char *argv[])
 
     /* Open vector */
     Vect_set_open_level(2);
-    Vect_open_old(&Map, vect_opt->answer, "");
+    Vect_open_old2(&Map, opt.vect->answer, "", opt.field->answer);
+
+    field = Vect_get_field_number(&Map, opt.field->answer);
 
     Fi = Vect_get_field(&Map, field);
     if (Fi == NULL)
@@ -135,7 +119,7 @@ int main(int argc, char *argv[])
     }
 
     /* Open raster */
-    fd = Rast_open_old(rast_opt->answer, "");
+    fd = Rast_open_old(opt.rast->answer, "");
 
     out_type = Rast_get_map_type(fd);
 
@@ -146,10 +130,10 @@ int main(int argc, char *argv[])
      */
 
     /* Check column type */
-    col_type = db_column_Ctype(driver, Fi->table, col_opt->answer);
+    col_type = db_column_Ctype(driver, Fi->table, opt.col->answer);
 
     if (col_type == -1)
-	G_fatal_error(_("Column <%s> not found"), col_opt->answer);
+	G_fatal_error(_("Column <%s> not found"), opt.col->answer);
 
     if (col_type != DB_C_TYPE_INT && col_type != DB_C_TYPE_DOUBLE)
 	G_fatal_error(_("Column type not supported"));
@@ -172,10 +156,13 @@ int main(int argc, char *argv[])
 
     G_debug(1, "Reading %d vector features fom map", nlines);
 
+    G_important_message(_("Reading features from vector map..."));
     for (i = 1; i <= nlines; i++) {
 	type = Vect_read_line(&Map, Points, Cats, i);
 	G_debug(4, "line = %d type = %d", i, type);
 
+	G_percent(i, nlines, 2);
+	
 	/* check type */
 	if (!(type & GV_POINT))
 	    continue;		/* Points only */
@@ -217,6 +204,7 @@ int main(int argc, char *argv[])
 
     Vect_set_db_updated(&Map);
     Vect_hist_command(&Map);
+    Vect_set_db_updated(&Map);
     Vect_close(&Map);
 
     G_debug(1, "Read %d vector points", point_cnt);
@@ -288,6 +276,7 @@ int main(int argc, char *argv[])
 
     norec_cnt = update_cnt = upderr_cnt = dupl_cnt = 0;
 
+    G_message("Update vector attributes...");
     for (point = 0; point < point_cnt; point++) {
 	if (cache[point].count > 1) {
 	    G_warning(_("More points (%d) of category %d, value set to 'NULL'"),
@@ -295,6 +284,8 @@ int main(int argc, char *argv[])
 	    dupl_cnt++;
 	}
 
+	G_percent(point, point_cnt, 2);
+	
 	/* category exist in DB ? */
 	cex =
 	    (int *)bsearch((void *)&(cache[point].cat), catexst, select,
@@ -306,7 +297,7 @@ int main(int argc, char *argv[])
 	    continue;
 	}
 
-	sprintf(buf, "update %s set %s = ", Fi->table, col_opt->answer);
+	sprintf(buf, "update %s set %s = ", Fi->table, opt.col->answer);
 
 	db_set_string(&stmt, buf);
 
@@ -333,8 +324,8 @@ int main(int argc, char *argv[])
 	sprintf(buf, " where %s = %d", Fi->key, cache[point].cat);
 	db_append_string(&stmt, buf);
 	/* user provides where condition: */
-	if (where_opt->answer) {
-	    sprintf(buf, " AND %s", where_opt->answer);
+	if (opt.where->answer) {
+	    sprintf(buf, " AND %s", opt.where->answer);
 	    db_append_string(&stmt, buf);
 	}
 	G_debug(3, db_get_string(&stmt));
@@ -347,50 +338,25 @@ int main(int argc, char *argv[])
 	    upderr_cnt++;
 	}
     }
-
+    G_percent(1, 1, 1);
+    
     G_debug(1, "Committing DB transaction");
     db_commit_transaction(driver);
+
     G_free(catexst);
     db_close_database_shutdown_driver(driver);
     db_free_string(&stmt);
 
     /* Report */
-    G_message(_("%d categories loaded from table"), select);
-    G_message(_("%d categories loaded from vector"), point_cnt);
-    G_message(_("%d categories from vector missing in table"), norec_cnt);
-    G_message(_("%d duplicate categories in vector"), dupl_cnt);
-    if (!where_opt->answer)
-	G_message(_("%d records updated"), update_cnt);
-    G_message(_("%d update errors"), upderr_cnt);
+    G_verbose_message(_("%d categories loaded from table"), select);
+    G_verbose_message(_("%d categories loaded from vector"), point_cnt);
+    G_verbose_message(_("%d categories from vector missing in table"), norec_cnt);
+    if (dupl_cnt > 0)
+	G_message(_("%d duplicate categories in vector"), dupl_cnt);
+    if (upderr_cnt > 0)
+	G_warning(_("%d update errors"), upderr_cnt);
 
+    G_done_msg(_("%d records updated."), update_cnt);
+        
     exit(EXIT_SUCCESS);
-}
-
-/* for qsort, order list by row */
-static int by_row(const void *ii, const void *jj)
-{
-    const struct order *i = ii, *j = jj;
-
-    return i->row - j->row;
-}
-
-/* for qsort, order list by cat */
-static int by_cat(const void *ii, const void *jj)
-{
-    const struct order *i = ii, *j = jj;
-
-    return i->cat - j->cat;
-}
-
-/* for bsearch, find cat */
-static int srch_cat(const void *pa, const void *pb)
-{
-    int *p1 = (int *)pa;
-    int *p2 = (int *)pb;
-
-    if (*p1 < *p2)
-	return -1;
-    if (*p1 > *p2)
-	return 1;
-    return 0;
 }
