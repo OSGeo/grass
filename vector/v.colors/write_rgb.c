@@ -88,5 +88,5 @@ void write_rgb_values(const struct Map_info *Map, int layer, const char *column_
     
     db_commit_transaction(driver);
     
-    db_close_database(driver);
+    db_close_database_shutdown_driver(driver);
 }
