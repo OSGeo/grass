@@ -11,7 +11,7 @@
  *               the interactive component to enable its use with the new 
  *               gis.m and future GUI.
  *
- * COPYRIGHT:    (C) 2006-2010 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2006-2010, 2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -29,16 +29,22 @@
 #include <grass/glocale.h>
 #include "what.h"
 
-char **vect;
-int nvects;
-struct Map_info *Map;
 
 int main(int argc, char **argv)
 {
-    struct Flag *printattributes, *topo_flag, *shell_flag;
-    struct Option *map_opt, *field_opt, *coords_opt, *maxdistance;
+    struct {
+	struct Flag *print, *topo, *shell;
+    } flag;
+    struct {
+	struct Option *map, *field, *coords, *maxdist;
+    } opt;
     struct Cell_head window;
     struct GModule *module;
+
+    char **vect;
+    int nvects;
+    struct Map_info *Map;
+
     char buf[2000];
     int i, level, ret;
     int *field;
@@ -56,52 +62,46 @@ int main(int argc, char **argv)
     G_add_keyword(_("querying"));
     module->description = _("Queries a vector map at given locations.");
 
-    map_opt = G_define_standard_option(G_OPT_V_MAPS);
+    opt.map = G_define_standard_option(G_OPT_V_MAPS);
 
-    field_opt = G_define_standard_option(G_OPT_V_FIELD_ALL);
+    opt.field = G_define_standard_option(G_OPT_V_FIELD_ALL);
+    opt.field->multiple = YES;
     
-    coords_opt = G_define_standard_option(G_OPT_M_EN);
-    coords_opt->label = _("Coordinates for query");
-    coords_opt->description = _("If not given read from standard input");
+    opt.coords = G_define_standard_option(G_OPT_M_EN);
+    opt.coords->required = YES;
+    opt.coords->label = _("Coordinates for query");
+    opt.coords->description = _("\"-\" to read from standard input");
 
-    maxdistance = G_define_option();
-    maxdistance->type = TYPE_DOUBLE;
-    maxdistance->key = "distance";
-    maxdistance->answer = "0";
-    maxdistance->multiple = NO;
-    maxdistance->description = _("Query threshold distance");
+    opt.maxdist = G_define_option();
+    opt.maxdist->type = TYPE_DOUBLE;
+    opt.maxdist->key = "distance";
+    opt.maxdist->answer = "0";
+    opt.maxdist->multiple = NO;
+    opt.maxdist->description = _("Query threshold distance");
+    opt.maxdist->guisection = _("Threshold");
+    
+    flag.topo = G_define_flag();
+    flag.topo->key = 'd';
+    flag.topo->description = _("Print topological information (debugging)");
+    flag.topo->guisection = _("Print");
 
-    topo_flag = G_define_flag();
-    topo_flag->key = 'd';
-    topo_flag->description = _("Print topological information (debugging)");
-    topo_flag->guisection = _("Print");
+    flag.print = G_define_flag();
+    flag.print->key = 'a';
+    flag.print->description = _("Print attribute information");
+    flag.print->guisection = _("Print");
 
-    printattributes = G_define_flag();
-    printattributes->key = 'a';
-    printattributes->description = _("Print attribute information");
-    printattributes->guisection = _("Print");
-
-    shell_flag = G_define_flag();
-    shell_flag->key = 'g';
-    shell_flag->description = _("Print the stats in shell script style");
-    shell_flag->guisection = _("Print");
+    flag.shell = G_define_flag();
+    flag.shell->key = 'g';
+    flag.shell->description = _("Print the stats in shell script style");
+    flag.shell->guisection = _("Print");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (map_opt->answers && map_opt->answers[0])
-	vect = map_opt->answers;
+    if (opt.map->answers && opt.map->answers[0])
+	vect = opt.map->answers;
 
-    maxd = atof(maxdistance->answer);
-
-    /*  
-     *  fprintf(stdout, maxdistance->answer);
-     *  fprintf(stdout, "Maxd is %f", maxd);
-     *  fprintf(stdout, xcoord->answer);
-     *  fprintf(stdout, "xval is %f", xval);
-     *  fprintf(stdout, ycoord->answer);
-     *  fprintf(stdout, "yval is %f", yval);
-     */
+    maxd = atof(opt.maxdist->answer);
 
     if (maxd == 0.0) {
 	G_get_window(&window);
@@ -129,12 +129,11 @@ int main(int argc, char **argv)
 
     /* Look at maps given on command line */
     if (vect) {
-
 	for (i = 0; vect[i]; i++)
 	    ;
 	nvects = i;
-
-	for (i = 0; field_opt->answers[i]; i++)
+	
+	for (i = 0; opt.field->answers[i]; i++)
 	    ;
 	
 	if (nvects != i)
@@ -145,23 +144,23 @@ int main(int argc, char **argv)
 	field = (int *) G_malloc(nvects * sizeof(int));
 	
 	for (i = 0; i < nvects; i++) {
-	    level = Vect_open_old2(&Map[i], vect[i], "", field_opt->answers[i]);
+	    level = Vect_open_old2(&Map[i], vect[i], "", opt.field->answers[i]);
 	    if (level < 2)
 		G_fatal_error(_("You must build topology on vector map <%s>"),
 			      vect[i]);
-	    field[i] = Vect_get_field_number(&Map[i], field_opt->answers[i]);
+	    field[i] = Vect_get_field_number(&Map[i], opt.field->answers[i]);
 	}
     }
 
-    if (!coords_opt->answer) {
+    if (strcmp(opt.coords->answer, "-") == 0) {
 	/* read them from stdin */
 	setvbuf(stdin, NULL, _IOLBF, 0);
 	setvbuf(stdout, NULL, _IOLBF, 0);
 	while (fgets(buf, sizeof(buf), stdin) != NULL) {
 	    ret = sscanf(buf, "%lf%c%lf", &xval, &ch, &yval);
 	    if (ret == 3 && (ch == ',' || ch == ' ' || ch == '\t')) {
-		what(xval, yval, maxd, topo_flag->answer,
-		     printattributes->answer, shell_flag->answer, field);
+		what(Map, nvects, vect, xval, yval, maxd, flag.topo->answer,
+		     flag.print->answer, flag.shell->answer, field);
 	    }
 	    else {
 		G_warning(_("Unknown input format, skipping: '%s'"), buf);
@@ -171,11 +170,11 @@ int main(int argc, char **argv)
     }
     else {
 	/* use coords given on command line */
-	for (i = 0; coords_opt->answers[i] != NULL; i += 2) {
-	    xval = atof(coords_opt->answers[i]);
-	    yval = atof(coords_opt->answers[i + 1]);
-	    what(xval, yval, maxd, topo_flag->answer,
-		 printattributes->answer, shell_flag->answer, field);
+	for (i = 0; opt.coords->answers[i] != NULL; i += 2) {
+	    xval = atof(opt.coords->answers[i]);
+	    yval = atof(opt.coords->answers[i + 1]);
+	    what(Map, nvects, vect, xval, yval, maxd, flag.topo->answer,
+		 flag.print->answer, flag.shell->answer, field);
 	}
     }
 

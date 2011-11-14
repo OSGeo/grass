@@ -1,6 +1,3 @@
 /* what.c */
-extern void what(double, double, double, int, int, int, int*);
-
-extern char **vect;
-extern int nvects;
-extern struct Map_info *Map;
+void what(struct Map_info *, int, char **,
+	  double, double, double, int, int, int, int*);
