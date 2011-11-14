@@ -80,7 +80,6 @@
 #include <grass/vector.h>
 #include <grass/linkm.h>
 #include <grass/bitmap.h>
-/* #include <grass/site.h> */
 #include <grass/glocale.h>
 #include <grass/gmath.h>
 
