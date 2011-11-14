@@ -1169,25 +1169,28 @@ struct Map_info
     /* constraints for reading in lines  (not polys yet) */
 
     /*!
-      \brief Constrainys for reading features (region)
+      \brief Constraints (region, type, field)
 
-      Non-zero code to enable this constraint
+      Note: Non-zero flag to enable given constraint.
     */
-    int Constraint_region_flag;
-    /*!
-      \brief Constraints for reading features (type)
-
-      Non-zero code to enable this constraint
-    */
-    int Constraint_type_flag;
-    /*!
-      \brief Constraints for reading features (bounding box)
-    */
-    struct bound_box Constraint_box;
-    /*!
-      \brief Constraints for reading features (type)
-    */
-    int Constraint_type;
+    struct {
+	/*!
+	  \brief Region constraint
+	*/
+	int region_flag;
+	struct bound_box box;
+	/*!
+	  \brief Type constraint
+	*/
+	int type_flag;
+	int type;
+	/*!
+	  \brief Field constraint
+	*/
+	int field_flag;
+	int field;
+    } constraint;
+    
     /*!
       \brief ???
     */

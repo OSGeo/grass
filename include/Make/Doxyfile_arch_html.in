@@ -456,10 +456,23 @@ EXCLUDE                = bin.@ARCH@ \
 			 dist.@ARCH@ \
 			 doc \
 			 general \
-		         gui/wxpython/vdigit \
-			 gui/wxpython/nviz \
+			 gui/scripts \
+		         gui/wxpython/compat \
+			 gui/wxpython/icons \
+			 gui/wxpython/scripts \
+			 gui/wxpython/tools \
 			 imagery \
+			 include/defs \
+			 lib/btree/test \
+			 lib/db/dbmi_base/test \
+			 lib/db/sqlp/test \
+			 lib/gmath/test \
+			 lib/gpde/test \
+			 lib/linkm/test \
+			 lib/raster3d/test \
                          lib/python/ctypes \
+			 lib/vector/dglib/examples \
+			 lib/vector/rtree/docs \
 			 locale \
 			 macosx \
 			 man \
@@ -471,6 +484,7 @@ EXCLUDE                = bin.@ARCH@ \
 			 rpm \
 			 scripts \
 			 sites \
+			 temporal \
 			 testsuite \
 			 tools \
 			 vector \
@@ -485,7 +499,7 @@ EXCLUDE_SYMLINKS       = NO
 # EXCLUDE_PATTERNS tag to specify one or more wildcard patterns to exclude 
 # certain files from those directories.
 
-EXCLUDE_PATTERNS       = *defs.h
+EXCLUDE_PATTERNS       = 
 
 # The EXAMPLE_PATH tag can be used to specify one or more files or 
 # directories that contain example code fragments that are included (see 
