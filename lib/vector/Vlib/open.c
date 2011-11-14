@@ -214,8 +214,12 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
 	/* try to find vector map (not for OGR mapset) */
 	fmapset = G_find_vector2(Map->name, Map->mapset);
 	if (fmapset == NULL) {
-	    sprintf(errmsg, _("Vector map <%s> not found"),
-		    Vect_get_full_name(Map));
+	    if (mapset && strcmp(mapset, G_mapset()) == 0)
+		sprintf(errmsg, _("Vector map <%s> not found in current mapset"),
+			Vect_get_name(Map));
+	    else
+		sprintf(errmsg, _("Vector map <%s> not found"),
+			Vect_get_full_name(Map));
 	    fatal_error(ferror, errmsg);
 	    return -1;
 	}
@@ -426,8 +430,6 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
 	Map->head_only = 0;
     }
 
-    Map->Constraint_region_flag = 0;
-    Map->Constraint_type_flag = 0;
     G_debug(1, "Vect_open_old(): vector opened on level %d", level);
 
     if (level == 1) {		/* without topology */
@@ -805,8 +807,6 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
     Map->support_updated = 0;
     Map->plus.built = GV_BUILD_NONE;
     Map->mode = GV_MODE_RW;
-    Map->Constraint_region_flag = 0;
-    Map->Constraint_type_flag = 0;
     Map->plus.do_uplist = 0;
 
     Vect_set_proj(Map, G_projection());
