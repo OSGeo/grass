@@ -30,19 +30,19 @@ void parse_args(int argc, char** argv,
 	_("Print types/names of table columns for specified layer instead of info and exit");
     col_flag->guisection = _("Print");
 
-    shell_flag = G_define_flag();
-    shell_flag->key = 'g';
-    shell_flag->description = _("Print basic info in shell script style");
-    shell_flag->guisection = _("Print");
-
     region_flag = G_define_flag();
-    region_flag->key = 'e';
-    region_flag->description = _("Print also region info in shell script style");
+    region_flag->key = 'g';
+    region_flag->description = _("Print region info in shell script style");
     region_flag->guisection = _("Print");
+
+    shell_flag = G_define_flag();
+    shell_flag->key = 'e';
+    shell_flag->description = _("Print extended metadata info in shell script style");
+    shell_flag->guisection = _("Print");
 
     topo_flag = G_define_flag();
     topo_flag->key = 't';
-    topo_flag->description = _("Print also topology info in shell script style");
+    topo_flag->description = _("Print topology info in shell script style");
     topo_flag->guisection = _("Print");
 
     if (G_parser(argc, argv))
