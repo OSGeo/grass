@@ -16,7 +16,7 @@ static void F_generate(const char *drvname, const char *dbname,
 		       const char *tblname, const char *key, int keyval,
 		       char **form)
 {
-    int col, ncols, ctype, sqltype, more;
+    int col, ncols, sqltype, more;
     char buf[5000];
     const char *colname;
     dbString sql, html, str;
@@ -78,7 +78,6 @@ static void F_generate(const char *drvname, const char *dbname,
 	for (col = 0; col < ncols; col++) {
 	    column = db_get_table_column(table, col);
 	    sqltype = db_get_column_sqltype(column);
-	    ctype = db_sqltype_to_Ctype(sqltype);
 	    value = db_get_column_value(column);
 	    db_convert_value_to_string(value, sqltype, &str);
 	    colname = db_get_column_name(column);
@@ -102,7 +101,7 @@ static void F_generate(const char *drvname, const char *dbname,
     db_free_string(&str);
 }
 
-void what(double east, double north, double maxdist, int topo, int showextra, int script, int *field)
+void what(struct Map_info *Map, int nvects, char **vect, double east, double north, double maxdist, int topo, int showextra, int script, int *field)
 {
     int type;
     char east_buf[40], north_buf[40];
