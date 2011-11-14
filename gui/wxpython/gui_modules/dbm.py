@@ -1248,7 +1248,9 @@ class AttributeManager(wx.Frame):
         list = self.FindWindowById(self.layerPage[self.layer]['data'])
         cats = map(int, list.GetSelectedItems())
 
-        digitToolbar = self.mapdisplay.toolbars['vdigit']
+        digitToolbar = None
+        if 'vdigit' in self.mapdisplay.toolbars:
+            digitToolbar = self.mapdisplay.toolbars['vdigit']
         if digitToolbar and digitToolbar.GetLayer() and \
                 digitToolbar.GetLayer().GetName() == self.vectorName:
 
