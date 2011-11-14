@@ -226,10 +226,6 @@ int main(int argc, char **argv)
     G_get_window(&window);
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
-    if (opt4->answer) {
-	Points = Vect_new_line_struct();
-	Cats = Vect_new_cats_struct();
-    }
 
     /* calculate true cell resolution */
     m = (struct metrics *)G_malloc(nrows * sizeof(struct metrics));
@@ -258,28 +254,43 @@ int main(int argc, char **argv)
 	    have_points = 1;
 	}
     }
-    if (vpointopt->answer) {
+    if (vpointopt->answers) {
 	for (i = 0; vpointopt->answers[i] != NULL; i++) {
-	    struct Map_info *fp;
+	    struct Map_info In;
+	    struct bound_box box;
+	    int type;
 
-	    /* struct start_pt  *new_start_pt; */
-	    Site *site = NULL;	/* pointer to Site */
-	    int dims, strs, dbls;
-	    RASTER_MAP_TYPE cat;
+	    G_message(_("Reading vector map <%s> with start points..."), vpointopt->answers[i]);
 
-	    fp = G_fopen_sites_old(vpointopt->answers[i], "");
+	    Points = Vect_new_line_struct();
+	    Cats = Vect_new_cats_struct();
 
-	    if (0 != G_site_describe(fp, &dims, &cat, &strs, &dbls))
-		G_fatal_error(_("Failed to guess site file format"));
+	    Vect_set_open_level(1); /* topology not required */
 
-	    site = G_site_new_struct(cat, dims, strs, dbls);
+	    if (1 > Vect_open_old(&In, vpointopt->answers[i], ""))
+		G_fatal_error(_("Unable to open vector map <%s>"), vpointopt->answers[i]);
 
-	    for (; (G_site_get(fp, site) != EOF);) {
-		if (!G_site_in_region(site, &window))
+	    Vect_rewind(&In);
+
+	    Vect_region_box(&window, &box);
+
+	    while (1) {
+		/* register line */
+		type = Vect_read_next_line(&In, Points, Cats);
+
+		/* Note: check for dead lines is not needed, because they are skipped by V1_read_next_line_nat() */
+		if (type == -1) {
+		    G_warning(_("Unable to read vector map"));
+		    continue;
+		}
+		else if (type == -2) {
+		    break;
+		}
+		if (!Vect_point_in_box(Points->x[0], Points->y[0], 0, &box))
 		    continue;
 
-		start_col = (int)Rast_easting_to_col(site->east, &window);
-		start_row = (int)Rast_northing_to_row(site->north, &window);
+		start_col = (int)Rast_easting_to_col(Points->x[0], &window);
+		start_row = (int)Rast_northing_to_row(Points->y[0], &window);
 
 		/* effectively just a duplicate check to G_site_in_region() ??? */
 		if (start_row < 0 || start_row > nrows || start_col < 0 ||
@@ -293,12 +304,15 @@ int main(int argc, char **argv)
 		    G_fatal_error(_("Too many start points"));
 		have_points = 1;
 	    }
+	    Vect_close(&In);
 
 	    /* only catches maps out of range until something is found, not after */
 	    if (!have_points) {
 		G_warning(_("Starting vector map <%s> contains no points in the current region"),
 			  vpointopt->answers[i]);
 	    }
+	    Vect_destroy_line_struct(Points);
+	    Vect_destroy_cats_struct(Cats);
 	}
     }
     if (have_points == 0)
@@ -377,14 +391,14 @@ int main(int argc, char **argv)
 
     /* only necessary for non-dir drain */
     if (costmode == 0) {
-    G_verbose_message(_("Calculating flow directions..."));
+	G_verbose_message(_("Calculating flow directions..."));
 
-    /* fill one-cell pits and take a first stab at flow directions */
-    filldir(fe, fd, nrows, &bnd, m);
+	/* fill one-cell pits and take a first stab at flow directions */
+	filldir(fe, fd, nrows, &bnd, m);
 
-    /* determine flow directions for more ambiguous cases */
-    resolve(fd, nrows, &bndC);
-}
+	/* determine flow directions for more ambiguous cases */
+	resolve(fd, nrows, &bndC);
+    }
 
     /* free the buffers already used */
     G_free(bndC.b[0]);
@@ -518,6 +532,8 @@ int main(int argc, char **argv)
 
     /* Output a vector path */
     if (opt4->answer) {
+	Points = Vect_new_line_struct();
+	Cats = Vect_new_cats_struct();
 	/* Need to modify for multiple paths */
 	thispoint = list;
 	i = 1;
