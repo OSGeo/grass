@@ -38,7 +38,6 @@ DIRS = \
 	misc \
 	imagery \
 	ps \
-	sites \
 	scripts \
 	temporal \
 	doc \
