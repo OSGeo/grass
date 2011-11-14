@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <grass/gis.h>
 #include <grass/vector.h>
+#include <grass/glocale.h>
 #include "sw_defs.h"
 #include "defs.h"
 
@@ -31,6 +32,7 @@ struct bound_box Box;
 struct Map_info In, Out;
 int Type;
 int All;
+int Field;
 
 /* sort sites on y, then x, coord */
 int scomp(const void *v1, const void *v2)
@@ -67,10 +69,8 @@ struct Site *nextone(void)
 void removeDuplicates()
 {
     int i, j;
-    int foundDupe;
 
     i = j = 1;
-    foundDupe = 0;
     while (i < nsites)
 	if (mode3d) {
 	    if (sites[i].coord.x == sites[i - 1].coord.x &&
@@ -106,25 +106,28 @@ void removeDuplicates()
 /* read all sites, sort, and compute xmin, xmax, ymin, ymax */
 int readsites(void)
 {
-    int nlines, line;
+    int nlines, ltype;
     struct line_pnts *Points;
-
+    struct line_cats *Cats;
+    
     Points = Vect_new_line_struct();
-
-    nlines = Vect_get_num_lines(&In);
+    Cats = Vect_new_cats_struct();
+    
+    nlines = Vect_get_num_primitives(&In, GV_POINTS);
 
     nsites = 0;
     sites = (struct Site *)G_malloc(nlines * sizeof(struct Site));
 
-    for (line = 1; line <= nlines; line++) {
-	int type;
+    Vect_set_constraint_type(&In, GV_POINTS);
+    Vect_set_constraint_field(&In, Field);
+    
+    while(TRUE) {
+	ltype = Vect_read_next_line(&In, Points, Cats);
+	if(ltype == -2)
+	    break;
 
-	G_percent(line, nlines, 2);
-
-	type = Vect_read_line(&In, Points, NULL, line);
-	if (!(type & GV_POINTS))
-	    continue;
-
+	G_percent(Vect_get_next_line_id(&In), nlines, 2);
+		
 	if (!All) {
 	    if (!Vect_point_in_box(Points->x[0], Points->y[0], 0.0, &Box))
 		continue;
@@ -156,6 +159,13 @@ int readsites(void)
 
 	nsites++;
     }
+
+    if(nsites < 1) {
+	const char *name = Vect_get_full_name(&In);
+	Vect_close(&In);
+	G_fatal_error(_("No points/centroids found in <%s>"), name);
+    }
+
     if (nsites < nlines)
 	sites =
 	    (struct Site *)G_realloc(sites,
@@ -173,6 +183,10 @@ int readsites(void)
 
     qsort(sites, nsites, sizeof(struct Site), scomp);
     removeDuplicates();
+
+    Vect_destroy_line_struct(Points);
+    Vect_destroy_cats_struct(Cats);
+
     return 0;
 }
 
