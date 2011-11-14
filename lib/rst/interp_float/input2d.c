@@ -20,7 +20,6 @@
 
 #include <grass/gis.h>
 #include <grass/raster.h>
-#include <grass/site.h>
 #include <grass/bitmap.h>
 #include <grass/linkm.h>
 #include <grass/interpf.h>
