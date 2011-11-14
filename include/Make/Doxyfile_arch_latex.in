@@ -17,13 +17,13 @@
 # The PROJECT_NAME tag is a single word (or a sequence of words surrounded 
 # by quotes) that should identify the project.
 
-PROJECT_NAME           = GRASS
+PROJECT_NAME           = "GRASS Programmer's Manual"
 
 # The PROJECT_NUMBER tag can be used to enter a project or revision number. 
 # This could be handy for archiving the generated documentation or 
 # if some version control system is used.
 
-PROJECT_NUMBER         = @GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@.@GRASS_VERSION_RELEASE@ (@GRASS_VERSION_DATE@)
+PROJECT_NUMBER         = @GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@.@GRASS_VERSION_RELEASE@ (@GRASS_VERSION_DATE@) - r@GRASS_VERSION_SVN@
 
 # The OUTPUT_DIRECTORY tag is used to specify the (relative or absolute) 
 # base path where the generated documentation will be put. 
@@ -434,7 +434,7 @@ INPUT                  = .
 
 FILE_PATTERNS          = *.h \
                          *.c \
-                         *.i \
+			 *.i \
                          *.py \
                          *.dox
 
@@ -456,11 +456,23 @@ EXCLUDE                = bin.@ARCH@ \
 			 dist.@ARCH@ \
 			 doc \
 			 general \
-		         gui/wxpython/vdigit \
-			 gui/wxpython/nviz \
+			 gui/scripts \
+		         gui/wxpython/compat \
+			 gui/wxpython/icons \
+			 gui/wxpython/scripts \
+			 gui/wxpython/tools \
 			 imagery \
-			 include \
+			 include/defs \
+			 lib/btree/test \
+			 lib/db/dbmi_base/test \
+			 lib/db/sqlp/test \
+			 lib/gmath/test \
+			 lib/gpde/test \
+			 lib/linkm/test \
+			 lib/raster3d/test \
                          lib/python/ctypes \
+			 lib/vector/dglib/examples \
+			 lib/vector/rtree/docs \
 			 locale \
 			 macosx \
 			 man \
@@ -472,6 +484,7 @@ EXCLUDE                = bin.@ARCH@ \
 			 rpm \
 			 scripts \
 			 sites \
+			 temporal \
 			 testsuite \
 			 tools \
 			 vector \
@@ -512,7 +525,7 @@ EXAMPLE_RECURSIVE      = NO
 # directories that contain image that are included in the documentation (see 
 # the \image command).
 
-IMAGE_PATH             = 
+IMAGE_PATH             = .
 
 # The INPUT_FILTER tag can be used to specify a program that doxygen should 
 # invoke to filter for each input file. Doxygen will invoke the filter program 
@@ -615,7 +628,7 @@ GENERATE_HTML          = YES
 # If a relative path is entered the value of OUTPUT_DIRECTORY will be 
 # put in front of it. If left blank `html' will be used as the default path.
 
-HTML_OUTPUT            =
+HTML_OUTPUT            = 
 
 # The HTML_FILE_EXTENSION tag can be used to specify the file extension for 
 # each generated HTML page (for example: .htm,.php,.asp). If it is left blank 

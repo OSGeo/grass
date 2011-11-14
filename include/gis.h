@@ -162,7 +162,7 @@ static const char *GRASS_copyright __attribute__ ((unused))
 #  define G_DEV_NULL "/dev/null"
 #endif
 
- /**/ typedef enum
+/**/ typedef enum
 {
     G_OPT_UNDEFINED,
     G_OPT_DB_WHERE,		/* SQL where conditions */
@@ -224,6 +224,12 @@ static const char *GRASS_copyright __attribute__ ((unused))
     G_OPT_M_COLR,               /* color rules */
     G_OPT_M_DIR,                /* directory input */    
 } STD_OPT;
+
+/**/ typedef enum
+{
+    G_FLG_UNDEFINED,
+    G_FLG_DB_TABLE,		/* do not create table */
+} STD_FLG;
 
 /* Message format */
 #define G_INFO_FORMAT_STANDARD 0	/* GRASS_MESSAGE_FORMAT=standard or not defined */

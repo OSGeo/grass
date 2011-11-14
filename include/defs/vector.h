@@ -230,14 +230,16 @@ int Vect_build(struct Map_info *);
 int Vect_get_built(const struct Map_info *);
 int Vect_build_partial(struct Map_info *, int);
 int Vect_set_constraint_region(struct Map_info *, double, double, double,
-			       double, double, double);
+				double, double, double);
 int Vect_set_constraint_type(struct Map_info *, int);
-int Vect_remove_constraints(struct Map_info *);
+int Vect_set_constraint_field(struct Map_info *, int);
+void  Vect_remove_constraints(struct Map_info *);
 int Vect_rewind(struct Map_info *);
 int Vect_close(struct Map_info *);
 
 /* Read/write lines, nodes, areas */
 /* Level 1 and 2 */
+int Vect_get_next_line_id(const struct Map_info *);
 int Vect_read_next_line(const struct Map_info *, struct line_pnts *,
 			struct line_cats *);
 off_t Vect_write_line(struct Map_info *, int, const struct line_pnts *,
