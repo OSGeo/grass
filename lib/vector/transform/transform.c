@@ -50,7 +50,7 @@ residuals_b_predicts_a (ax,ay,bx,by,use,n,residuals,rms)
 
 #include <stdio.h>
 #include <math.h>
-#include <grass/libtrans.h>
+#include <grass/transform.h>
 
 /* the coefficients */
 static double A0, A1, A2, A3, A4, A5;
