@@ -560,14 +560,11 @@ class VectorDBInfo:
     def _CheckDBConnection(self):
         """!Check DB connection"""
         nuldev = file(os.devnull, 'w+')
-        self.layers = grass.vector_db(map=self.map, stderr=nuldev)
+        self.layers = grass.vector_db(map = self.map, stderr = nuldev)
         nuldev.close()
         
-        if (len(self.layers.keys()) == 0):
-            return False
-
-        return True
-
+        return bool(len(self.layers.keys()) > 0)
+        
     def _DescribeTables(self):
         """!Describe linked tables"""
         for layer in self.layers.keys():
@@ -1484,13 +1481,6 @@ class GdalSelect(wx.Panel):
         win.SetValue('')
         win.Show()
         
-        if sel in (self.sourceMap['file'],
-                   self.sourceMap['dir']):
-            if not self.ogr:
-                self.OnSetFormat(event = None, format = 'GeoTIFF')
-            else:
-                self.OnSetFormat(event = None, format = 'ESRI Shapefile')
-        
         if sel == self.sourceMap['native']: # native
             win.Enable(False)
             self.format.Enable(False)
@@ -1505,6 +1495,13 @@ class GdalSelect(wx.Panel):
             self.format.SetItems(self.input[self.dsnType][2])
             if self.parent.GetName() == 'MultiImportDialog':
                 self.parent.list.DeleteAllItems()
+        
+        if sel in (self.sourceMap['file'],
+                   self.sourceMap['dir']):
+            if not self.ogr:
+                self.OnSetFormat(event = None, format = 'GeoTIFF')
+            else:
+                self.OnSetFormat(event = None, format = 'ESRI Shapefile')
         
         if sel == self.sourceMap['dir'] and not self.dest:
             if not self.extension.IsShown():

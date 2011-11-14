@@ -1993,7 +1993,7 @@ class LayersList(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin,
         if len(columns) == 3:
             width = (65, 200)
         else:
-            width = (65, 200, 90)
+            width = (65, 180, 110)
         
         for i in range(len(width)):
             self.SetColumnWidth(col = i, width = width[i])
@@ -2007,13 +2007,14 @@ class LayersList(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin,
             return
         
         self.DeleteAllItems()
-        
         for item in data:
             index = self.InsertStringItem(sys.maxint, str(item[0]))
             for i in range(1, len(item)):
                 self.SetStringItem(index, i, "%s" % str(item[i]))
-            # check by default
-            ### self.CheckItem(index, True)
+        
+        # check by default only on one item
+        if len(data) == 1:
+            self.CheckItem(index, True)
         
     def OnPopupMenu(self, event):
         """!Show popup menu"""
