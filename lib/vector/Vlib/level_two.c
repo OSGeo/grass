@@ -402,6 +402,12 @@ int Vect_get_centroid_area(const struct Map_info *Map, int centroid)
 	G_fatal_error(_("Vector map <%s> is not open on level >= 2"),
 		      Vect_get_full_name(Map));
 
+    if (Map->plus.Line[centroid]->type != GV_CENTROID)
+	return 0;
+    
     topo = (struct P_topo_c *)Map->plus.Line[centroid]->topo;
+    if(!topo)
+	G_fatal_error(_("Topology info not available for feature %d"), centroid);
+    
     return (topo->area);
 }
