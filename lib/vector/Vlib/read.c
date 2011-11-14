@@ -58,6 +58,27 @@ static int (*V2_read_line_array[]) () = {
 #endif
 };
 
+
+/*!
+  \brief Get line id for sequential reading.
+
+  This function returns id of feature which has been read by calling
+  Vect_read_next_line().
+
+  \param Map pointer to Map_info struct
+
+  \return feature id
+*/
+int Vect_get_next_line_id(const struct Map_info *Map)
+{
+    G_debug(3, "Vect_get_next_line()");
+
+    if (!VECT_OPEN(Map))
+	return -1;
+    
+    return Map->next_line - 1;
+}
+
 /*!
    \brief Read next vector feature (level 1 and 2)
 
