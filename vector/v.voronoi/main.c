@@ -9,7 +9,7 @@
  *               Glynn Clements <glynn gclements.plus.com>,  
  *               Markus Neteler <neteler itc.it>
  * PURPOSE:      produce a Voronoi diagram using vector points
- * COPYRIGHT:    (C) 1993-2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1993-2006, 2001 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -98,16 +98,18 @@ int main(int argc, char **argv)
 {
     int i;
     int **cats, *ncats, nfields, *fields;
-    struct Flag *line_flag;
-
-    /* struct Flag *all_flag; */
-    struct Option *in_opt, *out_opt;
-    struct Flag *table_flag;
+    struct {
+	struct Flag *line, *table;
+    } flag;
+    struct {
+	struct Option *in, *out, *field;
+    } opt;
     struct GModule *module;
     struct line_pnts *Points;
     struct line_cats *Cats;
     int node, nnodes;
     COOR *coor;
+    int verbose;
     int ncoor, acoor;
     int line, nlines, type, ctype, area, nareas;
     int err_boundaries, err_centr_out, err_centr_dupl, err_nocentr;
@@ -118,32 +120,27 @@ int main(int argc, char **argv)
     G_add_keyword(_("vector"));
     G_add_keyword(_("geometry"));
     G_add_keyword(_("triangulation"));
-    module->description = _("Creates a Voronoi diagram from an input vector "
-			    "map containing points or centroids.");
+    module->description = _("Creates a Voronoi diagram in current region from "
+			    "an input vector map containing points or centroids.");
 
-    in_opt = G_define_standard_option(G_OPT_V_INPUT);
-    out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
+    opt.in = G_define_standard_option(G_OPT_V_INPUT);
+    opt.in->label = _("Name of input vector point map");
+    
+    opt.field = G_define_standard_option(G_OPT_V_FIELD_ALL);
+    
+    opt.out = G_define_standard_option(G_OPT_V_OUTPUT);
 
-    /*
-       all_flag = G_define_flag ();
-       all_flag->key = 'a';
-       all_flag->description = _("Use all points (do not limit to current region)");
-     */
-
-    line_flag = G_define_flag();
-    line_flag->key = 'l';
-    line_flag->description =
+    flag.line = G_define_flag();
+    flag.line->key = 'l';
+    flag.line->description =
 	_("Output tessellation as a graph (lines), not areas");
 
-    table_flag = G_define_flag();
-    table_flag->key = 't';
-    table_flag->description = _("Do not create attribute table");
-
+    flag.table = G_define_standard_flag(G_FLG_DB_TABLE);
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
-
-
-    if (line_flag->answer)
+    
+    if (flag.line->answer)
 	Type = GV_LINE;
     else
 	Type = GV_BOUNDARY;
@@ -155,14 +152,10 @@ int main(int argc, char **argv)
 
     /* open files */
     Vect_set_open_level(2);
-    Vect_open_old(&In, in_opt->answer, "");
+    Vect_open_old2(&In, opt.in->answer, "", opt.field->answer);
 
-    if (Vect_open_new(&Out, out_opt->answer, 0) < 0)
-	G_fatal_error(_("Unable to create vector map <%s>"), out_opt->answer);
-
-    Vect_hist_copy(&In, &Out);
-    Vect_hist_command(&Out);
-
+    Field = Vect_get_field_number(&In, opt.field->answer);
+    
     /* initialize working region */
     G_get_window(&Window);
     Vect_region_box(&Window, &Box);
@@ -171,9 +164,14 @@ int main(int argc, char **argv)
 
     freeinit(&sfl, sizeof(struct Site));
 
-    G_message(_("Reading sites..."));
+    G_message(_("Reading features..."));
     readsites();
 
+    Vect_open_new(&Out, opt.out->answer, 0);
+
+    Vect_hist_copy(&In, &Out);
+    Vect_hist_command(&Out);
+    
     siteidx = 0;
     geominit();
 
@@ -181,12 +179,15 @@ int main(int argc, char **argv)
     plot = 0;
     debug = 0;
 
-    G_message(_("Voronoi triangulation..."));
+    G_message(_("Processing Voronoi triangulation..."));
     voronoi(triangulate, nextone);
 
     /* Close free ends by current region */
+    verbose = G_verbose();
+    G_set_verbose(0);
     Vect_build_partial(&Out, GV_BUILD_BASE);
-
+    G_set_verbose(verbose);
+    
     ncoor = 0;
     acoor = 100;
     coor = (COOR *) G_malloc(sizeof(COOR) * acoor);
@@ -256,14 +257,14 @@ int main(int argc, char **argv)
 	fields[i] = Vect_cidx_get_field_number(&In, i);
     }
 
-    if (line_flag->answer)
+    if (flag.line->answer)
 	ctype = GV_POINT;
     else
 	ctype = GV_CENTROID;
 
     nlines = Vect_get_num_lines(&In);
 
-    G_message(_("Writing sites to output..."));
+    G_important_message(_("Writing features..."));
 
     for (line = 1; line <= nlines; line++) {
 
@@ -291,13 +292,12 @@ int main(int argc, char **argv)
 	    }
 	    if (f > -1) {
 		cats[f][ncats[f]] = Cats->cat[i];
-		ncats[f]++;
-	    }
+		ncats[f]++;	    }
 	}
     }
 
     /* Copy tables */
-    if (!(table_flag->answer)) {
+    if (!(flag.table->answer)) {
 	int ttype, ntabs = 0;
 	struct field_info *IFi, *OFi;
 
@@ -325,13 +325,14 @@ int main(int argc, char **argv)
 	else
 	    ttype = GV_1TABLE;
 
+	G_message(_("Writing attributes..."));
 	for (i = 0; i < nfields; i++) {
 	    int ret;
 
 	    if (fields[i] == 0)
 		continue;
 
-	    G_message(_("Layer %d"), fields[i]);
+	    G_debug(1, "Layer %d", fields[i]);
 
 	    /* Make a list of categories */
 	    IFi = Vect_get_field(&In, fields[i]);
@@ -364,7 +365,9 @@ int main(int argc, char **argv)
     Vect_close(&In);
 
     /* cleaning part 1: count errors */
+    G_set_verbose(0);
     Vect_build_partial(&Out, GV_BUILD_CENTROIDS);
+    G_set_verbose(verbose);
     err_boundaries = err_centr_out = err_centr_dupl = err_nocentr = 0;
     nlines = Vect_get_num_lines(&Out);
     for (line = 1; line <= nlines; line++) {
