@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
 
     iflag = G_define_flag();
     iflag->key = 'i';
-    iflag->description = _("Print 3D raster tile number and size information nly");
+    iflag->description = _("Print 3D raster tile number and size information only");
     
     hflag = G_define_flag();
     hflag->key = 'h';
