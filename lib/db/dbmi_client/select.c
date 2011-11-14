@@ -267,7 +267,7 @@ int db_select_CatValArray(dbDriver * driver, const char *tab, const char *key,
 			  const char *col, const char *where,
 			  dbCatValArray * cvarr)
 {
-    int i, type, more, nrows;
+    int i, type, more, nrows, ncols;
     char buf[1024];
     dbString stmt;
     dbCursor cursor;
@@ -288,7 +288,14 @@ int db_select_CatValArray(dbDriver * driver, const char *tab, const char *key,
     }
     db_init_string(&stmt);
 
-    sprintf(buf, "SELECT %s, %s FROM %s", key, col, tab);
+    if (strcmp(key, col) == 0) {
+	ncols = 1;
+	sprintf(buf, "SELECT %s FROM %s", key, tab);
+    }
+    else {
+	ncols = 2;
+	sprintf(buf, "SELECT %s, %s FROM %s", key, col, tab);
+    }
     db_set_string(&stmt, buf);
 
     if (where != NULL && strlen(where) > 0) {
@@ -326,16 +333,17 @@ int db_select_CatValArray(dbDriver * driver, const char *tab, const char *key,
 	return -1;
     }
 
-    column = db_get_table_column(table, 1);
-    type = db_sqltype_to_Ctype(db_get_column_sqltype(column));
-    G_debug(3, "  col type = %d", type);
+    if (ncols == 2) {
+	column = db_get_table_column(table, 1);
+	type = db_sqltype_to_Ctype(db_get_column_sqltype(column));
+	G_debug(3, "  col type = %d", type);
 
-    /*
-       if ( type != DB_C_TYPE_INT && type != DB_C_TYPE_DOUBLE ) {
-       G_fatal_error ( "Column type not supported by db_select_to_array()" );
-       }
-     */
-
+	/*
+	  if ( type != DB_C_TYPE_INT && type != DB_C_TYPE_DOUBLE ) {
+	  G_fatal_error ( "Column type not supported by db_select_to_array()" );
+	  }
+	*/
+    }
     cvarr->ctype = type;
 
     /* fetch the data */
@@ -347,8 +355,10 @@ int db_select_CatValArray(dbDriver * driver, const char *tab, const char *key,
 	value = db_get_column_value(column);
 	cvarr->value[i].cat = db_get_value_int(value);
 
-	column = db_get_table_column(table, 1);
-	value = db_get_column_value(column);
+	if (ncols == 2) {
+	    column = db_get_table_column(table, 1);
+	    value = db_get_column_value(column);
+	}
 	cvarr->value[i].isNull = value->isNull;
 	switch (type) {
 	case (DB_C_TYPE_INT):
@@ -394,7 +404,7 @@ int db_select_CatValArray(dbDriver * driver, const char *tab, const char *key,
 
     db_CatValArray_sort(cvarr);
 
-    return (nrows);
+    return nrows;
 }
 
 /*!
