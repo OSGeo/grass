@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 {
     struct GModule *module;
     struct {
-	struct Flag *r, *w, *l, *g, *a, *n;
+	struct Flag *r, *w, *l, *g, *a, *n, *c;
     } flag; 
 
     struct {
@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
     } opt;
 
     int layer;
-    int overwrite, remove, is_from_stdin, stat, have_colors;
+    int overwrite, remove, is_from_stdin, stat, have_colors, convert;
     const char *mapset, *cmapset;
     const char *style, *rules, *cmap, *attrcolumn, *rgbcolumn;
     char *name;
@@ -133,6 +133,11 @@ int main(int argc, char *argv[])
     flag.a->description = _("Logarithmic-absolute scaling");
     flag.a->guisection = _("Define");
 
+    flag.c = G_define_flag();
+    flag.c->key = 'c';
+    flag.c->label = _("Convert color rules from RGB values to color table");
+    flag.c->description = _("Option 'rgb_column' with valid RGB values required");
+	
     /* TODO ?
     flag.e = G_define_flag();
     flag.e->key = 'e';
@@ -154,7 +159,8 @@ int main(int argc, char *argv[])
     rules = opt.rules->answer;
     attrcolumn = opt.attrcol->answer;
     rgbcolumn = opt.rgbcol->answer;
-        
+    convert = flag.c->answer;
+    
     if (!name)
         G_fatal_error(_("No vector map specified"));
 
@@ -168,11 +174,11 @@ int main(int argc, char *argv[])
     if (opt.volume->answer)
         cmap = opt.volume->answer;
     
-    if (!cmap && !style && !rules && !remove)
-        G_fatal_error(_("One of -%c or options <%s>, <%s> or <%s> "
-			"must be specified"), flag.r->key, opt.colr->key,
-			opt.rast->key, opt.rules->key);
-
+    if (!cmap && !style && !rules && !remove && !convert)
+        G_fatal_error(_("One of -%c, -%c or options <%s>, <%s> or <%s> "
+			"must be specified"), flag.r->key, flag.c->key, 
+		      opt.colr->key, opt.rast->key, opt.rules->key);
+    
     if (!!style + !!cmap + !!rules > 1)
         G_fatal_error(_("Options <%s>, <%s>, and <%s> are mutually "
 			"exclusive"), opt.colr->key, opt.rules->key,
@@ -181,6 +187,10 @@ int main(int argc, char *argv[])
     if (flag.g->answer && flag.a->answer)
         G_fatal_error(_("Flags -%c and -%c flags are mutually exclusive"),
 		      flag.g->key, flag.a->key);
+
+    if (flag.c->answer && !rgbcolumn) 
+	G_fatal_error(_("Option <%s> required for flag -%c"),
+		      opt.rgbcol->key, flag.c->key);
 
     is_from_stdin = rules && strcmp(rules, "-") == 0;
     if (is_from_stdin)
@@ -254,7 +264,7 @@ int main(int argc, char *argv[])
 
             if (Rast_read_colors(cmap, cmapset, &colors) < 0)
                 G_fatal_error(_("Unable to read color table for raster map <%s>"), cmap);
-        } else {
+        } else if (opt.volume->answer) {
             cmapset = G_find_raster3d(cmap, "");
             if (!cmapset)
                 G_fatal_error(_("3D raster map <%s> not found"), cmap);
@@ -286,16 +296,24 @@ int main(int argc, char *argv[])
     }
 
     G_important_message(_("Writing color rules..."));
-    if (rgbcolumn)
-	write_rgb_values(&Map, layer, rgbcolumn, &colors);
-    else
+    
+    if (style || rules || opt.rast->answer || opt.volume->answer) {
+	if (rgbcolumn)
+	    write_rgb_values(&Map, layer, rgbcolumn, &colors);
+	else
+	    Vect_write_colors(name, mapset, &colors);
+    }
+    
+    if (convert) {
+	/* convert RGB values to color tables */
+	rgb2colr(&Map, layer, rgbcolumn, &colors);
 	Vect_write_colors(name, mapset, &colors);
-
+    }
     Vect_close(&Map);
     
     G_message(_("Color table for vector map <%s> set to '%s'"), 
 	      G_fully_qualified_name(name, mapset), 
-              is_from_stdin ? "rules" : style ? style : rules ? rules :
+              is_from_stdin || convert ? "rules" : style ? style : rules ? rules :
               cmap);
     
     exit(EXIT_SUCCESS);

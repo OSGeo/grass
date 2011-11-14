@@ -63,7 +63,6 @@ Write color values to the attribute table (column <tt>GRASSRGB</tt>)
 instead of creating color table.
 
 <div class="code"><pre>
-v.db.addcolumn map=soils_general column="GRASSRGB varchar(12)"
 v.colors map=soils_general layer=1 color=wave column=AREA rgb_column=GRASSRGB
 
 # See some GRASSRGB values:
@@ -72,6 +71,41 @@ cat|OBJECTID|AREA|PERIMETER|GSLNC250_|GSLNC250_I|GSL_NAME|GRASSRGB
 1|1|0|164616.125|2|1|NC113|212:42:127
 2|2|0|30785.529297|3|2|NC096|212:42:127
 3|3|0|87572.882812|4|3|NC097|212:42:127
+</pre></div>
+
+Convert existing RGB values to color table rules.
+
+<div class="code"><pre>
+v.colors -c map=soils_general rgb_column=GRASSRGB
+</pre></div>
+
+Note that in this case the vector map has a proper color table
+assigned (check
+by <em><a href="v.colors.out.html">v.colors.out</a></em>) together
+with GRASSRGB attribute column. Also note that color table is prefered
+over RGB values stored in attribute table.
+
+<p>
+Existing color table can be removed by <b>-r</b> flag.
+
+<div class="code"><pre>
+v.colors -r map=soils_general
+</pre></div>
+
+Before removing color table you can store color rules to the file
+by <em><a href="v.colors.out.html">v.colors.out</a></em> and later to
+assign by <b>rules</b> option.
+
+<div class="code"><pre>
+v.colors.out map=soils_general > soils.colr
+v.colors map=soils_general rules=soils.colr
+</pre></div>
+
+To drop RGB column
+use <em><a href="v.db.dropcolumn.html">v.db.dropcolumn</a></em>.
+
+<div class="code"><pre>
+v.db.dropcolumn map=soils_general column=GRASSRGB
 </pre></div>
 
 <h2>SEE ALSO</h2>
