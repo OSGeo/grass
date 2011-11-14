@@ -8,7 +8,7 @@
  *               
  * PURPOSE:      Print vector attributes
  *               
- * COPYRIGHT:    (C) 2005-2009 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2005-2009, 2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -230,11 +230,13 @@ int main(int argc, char **argv)
 	    Vect_cidx_find_all(&Map, Vect_get_field_number(&Map, field_opt->answer), -1, cat, list_lines);
 	    for (i = 0; i < list_lines->n_values; i++) {
 		line = list_lines->value[i];
-		area = Vect_get_centroid_area(&Map, line);
-		if (area > 0) {
-		    if (!Vect_get_area_box(&Map, area, line_box))
-			G_fatal_error(_("Unable to get bounding box of area %d"),
-				      area);
+		if (Vect_get_line_type(&Map, line) == GV_CENTROID) {
+		    area = Vect_get_centroid_area(&Map, line);
+		    if (area > 0) {
+			if (!Vect_get_area_box(&Map, area, line_box))
+			    G_fatal_error(_("Unable to get bounding box of area %d"),
+					  area);
+		    }
 		}
 		else {
 		    if (!Vect_get_line_box(&Map, line, line_box))
