@@ -84,4 +84,4 @@ struct command_flags
     int usage;
 };
 
-#include <grass/libtrans.h>
+#include <grass/transform.h>

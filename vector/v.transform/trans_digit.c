@@ -1,5 +1,4 @@
 #include <math.h>
-#include <grass/libtrans.h>
 #include <grass/vector.h>
 #include <grass/gis.h>
 #include <grass/dbmi.h>
