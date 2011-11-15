@@ -99,7 +99,7 @@ import atexit
 import shutil
 import glob
 
-import urllib
+from urllib2 import urlopen, HTTPError
 
 from grass.script import core as grass
 
@@ -120,7 +120,7 @@ def expand_module_class_name(c):
              'ps'  : 'postscript',
              'p'   : 'paint',
              'r'   : 'raster',
-             'r3'  : 'raster3D',
+             'r3'  : 'raster3d',
              's'   : 'sites',
              'v'   : 'vector',
              'gui' : 'gui/wxpython' }
@@ -148,9 +148,10 @@ def list_available_modules():
         
         url = '%s/%s' % (options['svnurl'], modclass)
         grass.debug("url = %s" % url, debug = 2)
-        f = urllib.urlopen(url)
-        if not f:
-            grass.warning(_("Unable to fetch '%s'") % url)
+        try:
+            f = urlopen(url)
+        except HTTPError:
+            grass.debug(_("Unable to fetch '%s'") % url, debug = 1)
             continue
         
         for line in f.readlines():
@@ -178,7 +179,7 @@ def list_wxgui_extensions(print_module = True):
     
     url = '%s/%s' % (options['svnurl'], 'gui/wxpython')
     grass.debug("url = %s" % url, debug = 2)
-    f = urllib.urlopen(url)
+    f = urlopen(url)
     if not f:
         grass.warning(_("Unable to fetch '%s'") % url)
         return
@@ -221,7 +222,7 @@ def print_module_desc(name, url):
     
 def get_module_desc(url, script = True):
     grass.debug('url=%s' % url)
-    f = urllib.urlopen(url)
+    f = urlopen(url)
     if script:
         ret = get_module_script(f)
     else:
@@ -297,6 +298,31 @@ def cleanup():
         grass.message(_("Path to the source code:"))
         sys.stderr.write('%s\n' % os.path.join(tmpdir, options['extension']))
                         
+def install_extension_win():
+    ### TODO: do not use hardcoded url
+    url = "http://wingrass.fsv.cvut.cz/grass70/addons"
+    success = False
+    grass.message(_("Downloading precompiled GRASS Addons <%s>...") % options['extension'])
+    for comp, ext in [(('bin', ), 'exe'),
+                      (('docs', 'html'), 'html'),
+                      (('man', 'man1'), None),
+                      (('scripts', ), 'py')]:
+        name = options['extension']
+        if ext:
+            name += '.' + ext
+        try:
+            f = urlopen(url + '/' + '/'.join(comp) + '/' + name)
+            fo = open(os.path.join(options['prefix'], os.path.sep.join(comp), name), 'wb')
+            fo.write(f.read())
+            fo.close()
+            if comp[0] in ('bin', 'scripts'):
+                success = True
+        except HTTPError:
+            pass
+
+    if not success:
+        grass.fatal(_("GRASS Addons <%s> not found") % options['extension'])
+    
 def install_extension():
     gisbase = os.getenv('GISBASE')
     if not gisbase:
@@ -326,7 +352,7 @@ def install_extension():
     
     if grass.call(['svn', 'checkout',
                    url], stdout = outdev) != 0:
-        grass.fatal(_("GRASS Addons '%s' not found in repository") % options['extension'])
+        grass.fatal(_("GRASS Addons <%s> not found") % options['extension'])
     
     dirs = { 'bin' : os.path.join(tmpdir, options['extension'], 'bin'),
              'docs' : os.path.join(tmpdir, options['extension'], 'docs'),
@@ -483,7 +509,8 @@ def check_dirs():
 
 def main():
     # check dependecies
-    check()
+    if sys.platform != "win32":
+        check()
     
     # list available modules
     if flags['l'] or flags['c'] or flags['g']:
@@ -522,7 +549,10 @@ def main():
             remove_tmpdir = False
     
     if options['operation'] == 'add':
-        install_extension()
+        if sys.platform == "win32":
+            install_extension_win()
+        else:
+            install_extension()
     else: # remove
         remove_extension(flags)
     
