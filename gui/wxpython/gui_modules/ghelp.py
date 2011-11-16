@@ -810,7 +810,7 @@ class InstallExtensionWindow(wx.Frame):
         self.repo = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY)
         self.fullDesc = wx.CheckBox(parent = self.panel, id = wx.ID_ANY,
                                     label = _("Fetch full info including description and keywords (takes time)"))
-        self.fullDesc.SetValue(False)
+        self.fullDesc.SetValue(True)
         
         self.search = SearchModuleWindow(parent = self.panel)
         self.search.SetSelection(2) 
