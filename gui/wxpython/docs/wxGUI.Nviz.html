@@ -41,30 +41,9 @@ the 3D display mode.
 </center>
 
 <dl>
-  <dt><img src="icons/3d-view.png">&nbsp;
-    <em>Switch to view page</em></dt>
-  <dd>Switch 3D Layer Manager Toolbox's page to the <b>view</b>
-  control page.</dd>
-  <dt><img src="icons/3d-raster.png">&nbsp;
-    <em>Switch to surface page</em></dt>
-  <dd>Switch 3D Layer Manager Toolbox's page to the <b>surface</b>
-  control page (data properties).</dd>
-  <dt><img src="icons/3d-vector.png">&nbsp;
-    <em>Switch to vector page</em></dt>
-  <dd>Switch 3D Layer Manager Toolbox's page to the <b>vector</b>
-  control page (data properties).</dd>
-  <dt><img src="icons/3d-volume.png">&nbsp;
-    <em>Switch to volume page</em></dt>
-  <dd>Switch 3D Layer Manager Toolbox's page to the <b>volume</b>
-  control page (data properties).</dd>
-  <dt><img src="icons/3d-light.png">&nbsp;
-    <em>Switch to light page</em></dt>
-  <dd>Switch 3D Layer Manager Toolbox's page to the <b>light</b>
-  control page (appearance).</dd>
-  <dt><img src="icons/3d-fringe.png">&nbsp;
-    <em>Switch to fringe page</em></dt>
-  <dd>Switch 3D Layer Manager Toolbox's page to the <b>fringe</b>
-  control page (appearance).</dd>
+  <dt><img src="icons/script-save.png">&nbsp;
+    <em>Generate command for m.nviz.image</em></dt>
+  <dd>Generate command for m.nviz.image based on current state.</dd>
   <dt><img src="icons/settings.png">&nbsp;
     <em>Show 3D view mode settings</em></dt>
   <dd>Show dialog with settings for wxGUI 3D view mode. The user
@@ -72,10 +51,6 @@ the 3D display mode.
   <dt><img src="icons/help.png">&nbsp;
     <em>Show help</em></dt>
   <dd>Show this help.</dd>
-  <dt><img src="icons/quit.png">&nbsp;
-    <em>Quit</em></dt>
-  <dd>Quit 3D view mode and switch map display to the 2D view
-  mode.</dd>
 </dl>
 
 <h2>3D View Layer Manager Toolbox</h2>
@@ -88,6 +63,7 @@ has several tabs:
   <li><b>Data</b> for data properties,</li>
   <li><b>Appearance</b> for appearance settings (lighting, fringes, ...).</li>
   <li><b>Analysis</b> for various data analyses (only cutting planes so far).</li>
+  <li><b>Animation</b> for creating simple animations.</li>
 </ul>
 
 <h3>View</h3>
@@ -128,6 +104,17 @@ in feet, a vertical exaggeration of 0.305 would produce a true
 View parameters can be controlled by sliders or edited directly in text box.
 It's possible to enter values which are out of slider's range (and it will 
 adjust then).
+
+<h4>Fly-through mode</h4>
+View can be changed in fly-through mode (can be activated in Map Display toolbar),
+which enables to change the view smoothly and therefore it is suitable
+for creating animation (see below). To start flying, press left mouse button
+and hold it down to continue flying. Flight direction is controlled by mouse cursor
+position on screen. Flight speed can be increased/decreased stepwise by keys
+PageUp/PageDown, Home/End or Up/Down arrows.
+Speed is increased multiple times while Shift key is held down. Holding down
+Ctrl key switches flight mode in the way that position of viewpoint is
+changed (not the direction).
 
 <h3>Data properties</h3> 
 This tab allows to control parameters related to map layers. It consists
@@ -346,6 +333,17 @@ The <em>Decorations</em> panel enables to display north arrow and simple
 scale bar. North arrow and scale bar length is determined in map units. 
 You can display more than one scale bar.
 
+<h3>Animation</h3>
+Animation panel enables to create a simple animation as a sequence of images.
+Press 'Record' button and start changing the view. Views are
+recorded in given interval (FPS - Frames Per Second). After recording,
+the animation can be replayed. To save the animation, fill in the
+directory and file prefix, choose image format (PPM or TIF) and then
+press 'Save'. Now wait until the last image is generated.
+
+It is recommended to record animations using fly-through mode to achieve
+smooth motion.
+
 <h2>Settings</h2>
 
 This panel has controls which allows user to set default surface,
@@ -357,9 +355,7 @@ parameters, or to set the background color of the Map Display Window
 <h2>To be implement</h2>
 
 <ul>
-  <li>Improve intuitive navigation (mouse, fly mode)</li>
-  <li>Animation capabilities</li>
-  <li>Labels, decoration, etc.</li>
+  <li>Labels, decoration, etc. (Implemented, but not fully functional)</li>
   <li>Surface - mask by zero/elevation, more interactive positioning</li>
   <li>Vector points - implement display mode flat/surface for 2D points</li>
   <li>...</li>
