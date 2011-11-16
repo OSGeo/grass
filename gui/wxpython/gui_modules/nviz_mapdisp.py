@@ -42,6 +42,7 @@ from mapdisp_window import MapWindow
 from goutput        import wxCmdOutput
 from preferences    import globalSettings as UserSettings
 from workspace      import Nviz as NvizDefault
+from nviz_animation import Animation
 
 import wxnviz
 
@@ -119,6 +120,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.textdict = {}
         self.dragid = -1
         self.hitradius = 5
+        # layer manager toolwindow
+        self.toolWin = None        
     
         if self.lmgr:
             self.log = self.lmgr.goutput
@@ -158,6 +161,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         # timer for flythrough
         self.timerFly = wx.Timer(self, id = wx.NewId())
+        # timer for animations
+        self.timerAnim = wx.Timer(self, id = wx.NewId())
+        self.animation = Animation(mapWindow = self, timer = self.timerAnim)        
         
         self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
         self.Bind(wx.EVT_SIZE,             self.OnSize)
@@ -165,10 +171,11 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self._bindMouseEvents()
         
         self.Bind(EVT_UPDATE_PROP,   self.UpdateMapObjProperties)
-        self.Bind(EVT_UPDATE_VIEW,   self.UpdateView)
+        self.Bind(EVT_UPDATE_VIEW,   self.OnUpdateView)
         self.Bind(EVT_UPDATE_LIGHT,  self.UpdateLight)
         self.Bind(EVT_UPDATE_CPLANE, self.UpdateCPlane)
         
+        self.Bind(wx.EVT_TIMER, self.OnTimerAnim, self.timerAnim)
         self.Bind(wx.EVT_TIMER, self.OnTimerFly, self.timerFly)
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
         self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
@@ -207,6 +214,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.ComputeFlyValues(mx = mx, my = my)
         self._display.FlyThrough(flyInfo = self.fly['value'], mode = self.fly['mode'],
                                  exagInfo = self.fly['exag'])
+        self.ChangeInnerView()                                 
         self.render['quick'] = True
         self.Refresh(False)
         
@@ -262,6 +270,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
     
     def __del__(self):
         """!Stop timers if running, unload data"""
+        self.StopTimer(self.timerAnim)
         self.StopTimer(self.timerFly)
         self.UnloadDataLayers(force = True)
     
@@ -280,8 +289,17 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             cplane = copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'cplane'))
             cplane['on'] = False
             self.cplanes.append(cplane)
+        
+    def SetToolWin(self, toolWin):
+        """!Sets reference to nviz toolwindow in layer manager"""
+        self.toolWin = toolWin
+        
+    def GetToolWin(self):
+        """!Returns reference to nviz toolwindow in layer manager"""
+        return self.toolWin
             
     def OnClose(self, event):
+        self.StopTimer(self.timerAnim)
         self.StopTimer(self.timerFly)
         # cleanup when window actually closes (on quit) and not just is hidden
         self.UnloadDataLayers(force = True)
@@ -298,13 +316,14 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self.SetCurrent()
             self._display.ResizeWindow(size.width,
                                        size.height)
+        
+            # reposition checkbox in statusbar
+            self.parent.StatusbarReposition()
+            
+            # update statusbar
+            self.parent.StatusbarUpdate()
+            
         self.size = size
-        
-        # reposition checkbox in statusbar
-        self.parent.StatusbarReposition()
-        
-        # update statusbar
-        self.parent.StatusbarUpdate()
         
         event.Skip()
        
@@ -334,6 +353,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 self.lmgr.nviz.UpdatePage('light')
                 self.lmgr.nviz.UpdatePage('cplane')
                 self.lmgr.nviz.UpdatePage('decoration')
+                self.lmgr.nviz.UpdatePage('animation')
                 layer = self.GetSelectedLayer()
                 if layer:
                     if layer.type ==  'raster':
@@ -492,6 +512,12 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 return texture.id
         return -1
         
+    def OnTimerAnim(self, event):
+         self.animation.Update()
+         
+    def GetAnimation(self):
+         return self.animation
+         
     def OnKeyDown(self, event):
         """!Key was pressed.
         
@@ -752,6 +778,12 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             if self.fly['mouseControl']:
                 self.StopTimer(self.timerFly)
                 self.fly['mouseControl'] = None
+                #for key in self.iview['dir'].keys():
+                    #self.iview[''][key] = -1
+                # this causes sudden change, but it should be there
+                #if hasattr(self.lmgr, "nviz"):
+                    #self.lmgr.nviz.UpdateSettings()
+                    
                 self.render['quick'] = False
                 self.Refresh(False)
             
@@ -788,8 +820,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             focus['z'] -= dz
             
             #update properties
-            evt = wxUpdateView(zExag = False)
-            wx.PostEvent(self, evt)
+            self.PostViewEvent()
             
             self.mouse['tmp'] = event.GetPositionTuple()
             self.render['quick'] = True
@@ -928,8 +959,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         focus['x'], focus['y'] = e, n
         self.saveHistory = True
         #update properties
-        evt = wxUpdateView(zExag = False)
-        wx.PostEvent(self, evt)
+        self.PostViewEvent()
         
         self.render['quick'] = False
         self.Refresh(False)
@@ -982,37 +1012,62 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self.log.WriteLog(_("No point on surface"))
             self.log.WriteCmdLog('-' * 80)
     
+    def PostViewEvent(self, zExag = False):
+        """!Change view settings"""
+        event = wxUpdateView(zExag = zExag)
+        wx.PostEvent(self, event)
+        
     def OnQueryVector(self, event):
         """!Query vector on given position"""
         self.parent.QueryVector(*event.GetPosition())
+
+    def ChangeInnerView(self):
+        """!Get current viewdir and viewpoint and set view"""
+        view = self.view
+        iview = self.iview
+        (view['position']['x'], view['position']['y'],
+        iview['height']['value']) = self._display.GetViewpointPosition()
+        for key, val in zip(('x', 'y', 'z'), self._display.GetViewdir()):
+            iview['dir'][key] = val
         
-    def UpdateView(self, event):
+        iview['dir']['use'] = True
+        
+    def OnUpdateView(self, event):
         """!Change view settings"""
-        data = self.view
-        
-        ## multiple z-exag value from slider by original value computed in ogsf so it scales
-        ## correctly with maps of different height ranges        
-        if event and event.zExag and 'value' in data['z-exag']:
-            self._display.SetZExag(self.iview['z-exag']['original'] * data['z-exag']['value'])
-            
-        self._display.SetView(data['position']['x'], data['position']['y'],
-                              self.iview['height']['value'],
-                              data['persp']['value'],
-                              data['twist']['value'])
-        
-        if self.iview['focus']['x'] != -1:
-            self._display.SetFocus(self.iview['focus']['x'], self.iview['focus']['y'],
-                                   self.iview['focus']['z'])
-        if 'rotation' in self.iview:
-            if self.iview['rotation']:
-                self._display.SetRotationMatrix(self.iview['rotation'])
-            else:
-                self._display.ResetRotation()
-        
+        if event:
+                self.UpdateView(zexag = event.zExag)
+                
         self.saveHistory = True
         if event:
             event.Skip()
-
+            
+            
+    def UpdateView(self, zexag = False):
+        """!Change view settings"""
+        view = self.view
+        iview = self.iview
+        if zexag and 'value' in view['z-exag']:
+            self._display.SetZExag(self.iview['z-exag']['original'] * view['z-exag']['value'])
+        
+        
+        self._display.SetView(view['position']['x'], view['position']['y'],
+                              iview['height']['value'],
+                              view['persp']['value'],
+                              view['twist']['value'])
+        
+        if iview['dir']['use']:
+            self._display.SetViewdir(iview['dir']['x'], iview['dir']['y'], iview['dir']['z'])
+        
+        elif iview['focus']['x'] != -1:
+            self._display.SetFocus(self.iview['focus']['x'], self.iview['focus']['y'],
+                                   self.iview['focus']['z'])
+                                       
+        if 'rotation' in iview:
+            if iview['rotation']:
+                self._display.SetRotationMatrix(iview['rotation'])
+            else:
+                self._display.ResetRotation()
+        
     def UpdateLight(self, event):
         """!Change light settings"""
         data = self.light
@@ -1694,8 +1749,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         focus = self.iview['focus']
         focus['x'], focus['y'], focus['z'] = self._display.GetFocus()
         
-        event = wxUpdateView(zExag = False)
-        wx.PostEvent(self, event)
+        self.PostViewEvent()
         
     def UpdateMapObjProperties(self, event):
         """!Generic method to update data layer properties"""

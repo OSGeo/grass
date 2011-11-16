@@ -4,6 +4,11 @@
 @brief Nviz (3D view) tools window
 
 Classes:
+ - ScrolledPanel
+ - NTCValidator
+ - NumTextCtrl
+ - FloatSlider
+ - SymbolButton
  - NvizToolWindow
  - PositionWindow
  - ViewPositionWindow
@@ -27,8 +32,15 @@ import types
 import string
 
 import wx
-import wx.lib.colourselect as csel
+import wx.lib.colourselect  as csel
 import wx.lib.scrolledpanel as SP
+import wx.lib.filebrowsebutton as filebrowse
+
+try:
+    from wx.lib.buttons import ThemedGenBitmapTextButton as BitmapTextButton
+except ImportError: # not sure about TGBTButton version
+    from wx.lib.buttons import GenBitmapTextButton as BitmapTextButton
+    
 try:
     import wx.lib.agw.flatnotebook as FN
 except ImportError:
@@ -50,12 +62,14 @@ import colorrules
 from preferences import globalSettings as UserSettings
 from gselect import VectorDBInfo
 
+from nviz_animation import EVT_ANIM_FIN, EVT_ANIM_UPDATE_IDX
 try:
     from nviz_mapdisp import wxUpdateView, wxUpdateLight, wxUpdateProperties,\
                             wxUpdateCPlane
     import wxnviz
 except ImportError:
     pass
+
 from debug import Debug
 
 
@@ -154,11 +168,67 @@ class FloatSlider(wx.Slider):
         Debug.msg(4, "FloatSlider.GetValue(): value = %f" % (val/self.coef))
         return val/self.coef
         
+        
+class SymbolButton(BitmapTextButton):
+    """!Button with symbol and label."""
+    def __init__(self, parent, usage, label, **kwargs):
+        """!Constructor
+        
+        @param parent parent (usually wx.Panel)
+        @param usage determines usage and picture
+        @param label displayed label
+        """
+        BitmapTextButton.__init__(self, parent = parent, label = " " + label, **kwargs)
+        
+        size = (15, 15)
+        buffer = wx.EmptyBitmap(*size)
+        dc = wx.MemoryDC()
+        dc.SelectObject(buffer)
+        maskColor = wx.Color(255, 255, 255)
+        dc.SetBrush(wx.Brush(maskColor))
+        dc.Clear()
+        
+        if usage == 'record':
+            self.DrawRecord(dc, size)
+        elif usage == 'stop':
+            self.DrawStop(dc, size)
+        elif usage == 'play':
+            self.DrawPlay(dc, size)
+        elif usage == 'pause':
+            self.DrawPause(dc, size)
+
+        buffer.SetMaskColour(maskColor)
+        self.SetBitmapLabel(buffer)
+        dc.SelectObject(wx.NullBitmap)
+        
+    def DrawRecord(self, dc, size):
+        """!Draw record symbol"""
+        dc.SetBrush(wx.Brush(wx.Color(255, 0, 0)))
+        dc.DrawCircle(size[0]/2, size[1] / 2, size[0] / 2)
+        
+    def DrawStop(self, dc, size):
+        """!Draw stop symbol"""
+        dc.SetBrush(wx.Brush(wx.Color(50, 50, 50)))
+        dc.DrawRectangle(0, 0, size[0], size[1])
+        
+    def DrawPlay(self, dc, size):
+        """!Draw play symbol"""
+        dc.SetBrush(wx.Brush(wx.Color(0, 255, 0)))
+        points = (wx.Point(0, 0), wx.Point(0, size[1]), wx.Point(size[0], size[1] / 2))
+        dc.DrawPolygon(points)
+        
+    def DrawPause(self, dc, size):
+        """!Draw pause symbol"""
+        dc.SetBrush(wx.Brush(wx.Color(50, 50, 50)))
+        dc.DrawRectangle(0, 0, 2 * size[0] / 5, size[1])
+        dc.DrawRectangle(3 * size[0] / 5, 0, 2 * size[0] / 5, size[1])
+        
+        
 class NvizToolWindow(FN.FlatNotebook):
     """!Nviz (3D view) tools panel
     """
     def __init__(self, parent, display, id = wx.ID_ANY,
-                 style = globalvar.FNPageStyle|FN.FNB_NO_X_BUTTON|FN.FNB_NO_NAV_BUTTONS,
+                 style = globalvar.FNPageStyle|FN.FNB_NO_X_BUTTON,
                  **kwargs):
         Debug.msg(5, "NvizToolWindow.__init__()")
         self.parent     = parent # GMFrame
@@ -191,8 +261,14 @@ class NvizToolWindow(FN.FlatNotebook):
         # analysis page
         self.AddPage(page = self._createAnalysisPage(),
                      text = " %s " % _("Analysis"))
+        # view page
+        self.AddPage(page = self._createAnimationPage(),
+                     text = " %s " % _("Animation"))
         
         self.UpdateSettings()
+        
+        self.mapWindow.SetToolWin(self)
+        
         self.pageChanging = False
         self.vetoGSelectEvt = False #when setting map, event is invoked
         self.mapWindow.render['quick'] = False
@@ -201,6 +277,9 @@ class NvizToolWindow(FN.FlatNotebook):
         # bindings
         self.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
         self.Bind(wx.EVT_SIZE, self.OnSize)
+        
+        self.Bind(EVT_ANIM_FIN, self.OnAnimationFinished)
+        self.Bind(EVT_ANIM_UPDATE_IDX, self.OnAnimationUpdateIndex)
         
         Debug.msg(3, "NvizToolWindow.__init__()")
         
@@ -444,7 +523,154 @@ class NvizToolWindow(FN.FlatNotebook):
         panel.SetSizer(pageSizer)
         
         return panel
-
+        
+    def _createAnimationPage(self):
+        """!Create view settings page"""
+        panel = SP.ScrolledPanel(parent = self, id = wx.ID_ANY)
+        panel.SetupScrolling(scroll_x = False)
+        self.page['animation'] = { 'id' : 0,
+                                   'notebook' : self.GetId()}
+        
+        pageSizer = wx.BoxSizer(wx.VERTICAL)
+        box = wx.StaticBox (parent = panel, id = wx.ID_ANY,
+                            label = " %s " % (_("Animation")))
+        boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        hSizer = wx.BoxSizer(wx.HORIZONTAL)
+        
+        self.win['anim'] = {}
+        # animation help text
+        help = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                             label = _("Press 'Record' button and start changing the view. "
+                                       "It is recommended to use fly-through mode "
+                                       "(Map Display toolbar) to achieve smooth motion."))
+        self.win['anim']['help'] = help.GetId()
+        hSizer.Add(item = help, proportion = 0)
+        boxSizer.Add(item = hSizer, proportion = 1,
+                     flag = wx.ALL | wx.EXPAND, border = 5)
+                     
+        # animation controls
+        hSizer = wx.BoxSizer(wx.HORIZONTAL)
+        record = SymbolButton(parent = panel, id = wx.ID_ANY,
+                                    usage = "record", label = _("Record"))
+        play = SymbolButton(parent = panel, id = wx.ID_ANY,
+                                  usage = "play", label = _("Play"))
+        pause = SymbolButton(parent = panel, id = wx.ID_ANY,
+                                   usage = "pause", label = _("Pause"))
+        stop = SymbolButton(parent = panel, id = wx.ID_ANY,
+                                  usage = "stop", label = _("Stop"))
+        
+        self.win['anim']['record'] = record.GetId()
+        self.win['anim']['play'] = play.GetId()
+        self.win['anim']['pause'] = pause.GetId()
+        self.win['anim']['stop'] = stop.GetId()
+                            
+        self._createControl(panel, data = self.win['anim'], name = 'frameIndex',
+                            range = (0, 1), floatSlider = False,
+                            bind = (self.OnFrameIndex, None, self.OnFrameIndexText))
+        frameSlider = self.FindWindowById(self.win['anim']['frameIndex']['slider'])
+        frameText = self.FindWindowById(self.win['anim']['frameIndex']['text'])
+        infoLabel = wx.StaticText(parent = panel, id = wx.ID_ANY, label = _("Total number of frames :"))
+        info = wx.StaticText(parent = panel, id = wx.ID_ANY)
+        self.win['anim']['info'] = info.GetId()
+        
+        fpsLabel = wx.StaticText(parent = panel, id = wx.ID_ANY, label = _("Frame rate (FPS):"))
+        fps = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (65, -1),
+                           initial = UserSettings.Get(group = 'nviz', key = 'animation', subkey = 'fps'),
+                           min = 1,
+                           max = 50)
+        self.win['anim']['fps'] = fps.GetId()
+        fps.SetToolTipString(_("Frames are recorded with given frequency (FPS). "))
+                            
+        record.Bind(wx.EVT_BUTTON, self.OnRecord)
+        play.Bind(wx.EVT_BUTTON, self.OnPlay)
+        stop.Bind(wx.EVT_BUTTON, self.OnStop)
+        pause.Bind(wx.EVT_BUTTON, self.OnPause)
+        fps.Bind(wx.EVT_SPINCTRL, self.OnFPS)
+        
+        hSizer.Add(item = record, proportion = 0)
+        hSizer.Add(item = play, proportion = 0)
+        hSizer.Add(item = pause, proportion = 0)
+        hSizer.Add(item = stop, proportion = 0)
+        boxSizer.Add(item = hSizer, proportion = 0,
+                     flag = wx.ALL | wx.EXPAND, border = 3)
+        
+        sliderBox = wx.BoxSizer(wx.HORIZONTAL)
+        sliderBox.Add(item = frameSlider, proportion = 1, border = 5, flag = wx.EXPAND | wx.RIGHT)
+        sliderBox.Add(item = frameText, proportion = 0, border = 5, flag = wx.EXPAND| wx.RIGHT | wx.LEFT)
+        boxSizer.Add(item = sliderBox, proportion = 0, flag = wx.EXPAND)
+        
+        # total number of frames
+        hSizer = wx.BoxSizer(wx.HORIZONTAL)
+        hSizer.Add(item = infoLabel, proportion = 0, flag = wx.RIGHT, border = 5)
+        hSizer.Add(item = info, proportion = 0, flag = wx.LEFT, border = 5)
+        
+        boxSizer.Add(item = hSizer, proportion = 0,
+                     flag = wx.ALL | wx.EXPAND, border = 5)
+                     
+        # frames per second
+        hSizer = wx.BoxSizer(wx.HORIZONTAL)
+        hSizer.Add(item = fpsLabel, proportion = 0, flag = wx.RIGHT | wx.ALIGN_CENTER_VERTICAL, border = 5)
+        hSizer.Add(item = fps, proportion = 0, flag = wx.LEFT | wx.ALIGN_CENTER_VERTICAL, border = 5)
+        
+        boxSizer.Add(item = hSizer, proportion = 0,
+                     flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 5)
+        pageSizer.Add(item = boxSizer, proportion = 0,
+                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
+                      border = 3)
+                      
+        # save animation
+        self.win['anim']['save'] = {}
+        self.win['anim']['save']['image'] = {}
+        box = wx.StaticBox (parent = panel, id = wx.ID_ANY,
+                            label = " %s " % (_("Save image sequence")))
+        boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        vSizer = wx.BoxSizer(wx.VERTICAL)
+        gridSizer = wx.GridBagSizer(vgap = 5, hgap = 10)
+        
+        pwd = os.getcwd()
+        dir = filebrowse.DirBrowseButton(parent = panel, id = wx.ID_ANY,
+                                         labelText = _("Choose a directory:"),
+                                         dialogTitle = _("Choose a directory for images"),
+                                         buttonText = _('Browse'),
+                                         startDirectory = pwd)
+        dir.SetValue(pwd)
+        prefixLabel = wx.StaticText(parent = panel, id = wx.ID_ANY, label = _("File prefix:"))
+        prefixCtrl = wx.TextCtrl(parent = panel, id = wx.ID_ANY, size = (100, -1),
+                                 value = UserSettings.Get(group = 'nviz',
+                                                          key = 'animation', subkey = 'prefix'))
+        prefixCtrl.SetToolTipString(_("Generated files names will look like this: prefix_1.ppm, prefix_2.ppm, ..."))
+        fileTypeLabel = wx.StaticText(parent = panel, id = wx.ID_ANY, label = _("File format:"))
+        fileTypeCtrl = wx.Choice(parent = panel, id = wx.ID_ANY, choices = ["PPM", "TIF"])
+        
+        save = wx.Button(parent = panel, id = wx.ID_ANY,
+                         label = "Save")
+                         
+        self.win['anim']['save']['image']['dir'] = dir.GetId()
+        self.win['anim']['save']['image']['prefix'] = prefixCtrl.GetId()
+        self.win['anim']['save']['image']['format'] = fileTypeCtrl.GetId()
+        self.win['anim']['save']['image']['confirm'] = save.GetId()
+        
+        boxSizer.Add(item = dir, proportion = 0, flag = wx.ALL | wx.EXPAND, border = 3)
+        
+        gridSizer.Add(item = prefixLabel, pos = (0, 0), flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
+        gridSizer.Add(item = prefixCtrl, pos = (0, 1), flag = wx.EXPAND )
+        gridSizer.Add(item = fileTypeLabel, pos = (1, 0), flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT)
+        gridSizer.Add(item = fileTypeCtrl, pos = (1, 1), flag = wx.EXPAND )
+        
+        boxSizer.Add(item = gridSizer, proportion = 1,
+                     flag = wx.ALL | wx.EXPAND, border = 5)
+        boxSizer.Add(item = save, proportion = 0, flag = wx.ALL | wx.ALIGN_RIGHT, border = 5)
+        
+        save.Bind(wx.EVT_BUTTON, self.OnSaveAnimation)
+        
+        pageSizer.Add(item = boxSizer, proportion = 0,
+                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, 
+                      border = 3)
+        
+        panel.SetSizer(pageSizer)
+        
+        return panel
+        
     def _createDataPage(self):
         """!Create data (surface, vector, volume) settings page"""
 
@@ -1944,7 +2170,195 @@ class NvizToolWindow(FN.FlatNotebook):
             return self.mapWindow.GetLayerByName(name, mapType = '3d-raster', dataType = 'nviz')
         
         return None
-    
+        
+    def OnRecord(self, event):
+        """!Animation: start recording"""
+        anim = self.mapWindow.GetAnimation()
+        if not anim.IsPaused():
+            if anim.Exists() and not anim.IsSaved():
+                msg = _("Do you want to record new animation without saving the previous one?")
+                dlg = wx.MessageDialog(parent = self,
+                                       message = msg,
+                                       caption =_("Animation already axists"),
+                                       style = wx.YES_NO | wx.CENTRE)
+                if dlg.ShowModal() == wx.ID_NO:
+                    dlg.Destroy()
+                    return
+                
+        
+            anim.Clear()
+            self.UpdateFrameIndex(0)
+            self.UpdateFrameCount()
+            
+        anim.SetPause(False)
+        anim.SetMode(mode = 'record')
+        anim.Start()
+        
+        self.FindWindowById(self.win['anim']['play']).Disable()
+        self.FindWindowById(self.win['anim']['record']).Disable()
+        self.FindWindowById(self.win['anim']['pause']).Enable()
+        self.FindWindowById(self.win['anim']['stop']).Enable()
+        self.FindWindowById(self.win['anim']['frameIndex']['slider']).Disable()
+        self.FindWindowById(self.win['anim']['frameIndex']['text']).Disable()
+        
+    def OnPlay(self, event):
+        """!Animation: replay"""
+        anim = self.mapWindow.GetAnimation()
+        anim.SetPause(False)
+        anim.SetMode(mode = 'play')
+        anim.Start()
+        
+        self.FindWindowById(self.win['anim']['play']).Disable()
+        self.FindWindowById(self.win['anim']['record']).Disable()
+        self.FindWindowById(self.win['anim']['pause']).Enable()
+        self.FindWindowById(self.win['anim']['stop']).Enable()
+        self.FindWindowById(self.win['anim']['frameIndex']['slider']).Enable()
+        self.FindWindowById(self.win['anim']['frameIndex']['text']).Enable()
+        
+    def OnStop(self, event):
+        """!Animation: stop recording/replaying"""
+        anim = self.mapWindow.GetAnimation()
+        anim.SetPause(False)
+        if anim.GetMode() == 'save':
+            anim.StopSaving()
+        if anim.IsRunning():
+            anim.Stop()
+        
+        self.UpdateFrameIndex(0)
+        
+        self.FindWindowById(self.win['anim']['play']).Enable()
+        self.FindWindowById(self.win['anim']['record']).Enable()
+        self.FindWindowById(self.win['anim']['pause']).Disable()
+        self.FindWindowById(self.win['anim']['stop']).Disable()
+        self.FindWindowById(self.win['anim']['frameIndex']['slider']).Disable()
+        self.FindWindowById(self.win['anim']['frameIndex']['text']).Disable()
+        
+    def OnPause(self, event):
+        """!Pause animation"""
+        anim = self.mapWindow.GetAnimation()
+        
+        anim.SetPause(True)
+        mode = anim.GetMode()
+        if anim.IsRunning():
+            anim.Pause()
+            
+        if mode == "record":
+            self.FindWindowById(self.win['anim']['play']).Disable()
+            self.FindWindowById(self.win['anim']['record']).Enable()
+            self.FindWindowById(self.win['anim']['frameIndex']['slider']).Disable()
+            self.FindWindowById(self.win['anim']['frameIndex']['text']).Disable()
+        elif mode == 'play':
+            self.FindWindowById(self.win['anim']['record']).Disable()
+            self.FindWindowById(self.win['anim']['play']).Enable()
+            self.FindWindowById(self.win['anim']['frameIndex']['slider']).Enable()
+            self.FindWindowById(self.win['anim']['frameIndex']['text']).Enable()
+        
+        self.FindWindowById(self.win['anim']['pause']).Disable()
+        self.FindWindowById(self.win['anim']['stop']).Enable()
+
+        
+    def OnFrameIndex(self, event):
+        """!Frame index changed (by slider)"""
+        index = event.GetInt()
+        self.UpdateFrameIndex(index = index, sliderWidget = False)
+        
+    def OnFrameIndexText(self, event):
+        """!Frame index changed by (textCtrl)"""
+        index = event.GetValue()
+        self.UpdateFrameIndex(index = index, textWidget = False)
+        
+    def OnFPS(self, event):
+        """!Frames per second changed"""
+        anim = self.mapWindow.GetAnimation()
+        anim.SetFPS(event.GetInt())
+        
+    def UpdateFrameIndex(self, index, sliderWidget = True, textWidget = True, goToFrame = True):
+        """!Update frame index"""
+        anim = self.mapWindow.GetAnimation()
+        
+        # check index
+        frameCount = anim.GetFrameCount()
+        if index >= frameCount:
+            index = frameCount - 1
+        if index < 0:
+            index = 0
+            
+        if sliderWidget:
+            slider = self.FindWindowById(self.win['anim']['frameIndex']['slider'])
+            slider.SetValue(index)
+        if textWidget:
+            text = self.FindWindowById(self.win['anim']['frameIndex']['text'])
+            text.SetValue(int(index))
+        
+        # if called from tool window, update frame
+        if goToFrame:
+            anim.GoToFrame(int(index))
+            
+    def UpdateFrameCount(self):
+        """!Update frame count label"""
+        anim = self.mapWindow.GetAnimation()
+        count = anim.GetFrameCount()
+        self.FindWindowById(self.win['anim']['info']).SetLabel(str(count))
+        
+    def OnAnimationFinished(self, event):
+        """!Animation finished"""
+        anim = self.mapWindow.GetAnimation()
+        self.UpdateFrameIndex(index = 0)
+        
+        slider = self.FindWindowById(self.win['anim']['frameIndex']['slider'])
+        text = self.FindWindowById(self.win['anim']['frameIndex']['text'])
+        
+        if event.mode == 'record':
+            count = anim.GetFrameCount()
+            slider.SetMax(count)
+            self.UpdateFrameCount()
+            
+        self.FindWindowById(self.win['anim']['pause']).Disable()
+        self.FindWindowById(self.win['anim']['stop']).Disable()
+        self.FindWindowById(self.win['anim']['record']).Enable()
+        self.FindWindowById(self.win['anim']['play']).Enable()
+        self.FindWindowById(self.win['anim']['frameIndex']['slider']).Disable()
+        self.FindWindowById(self.win['anim']['frameIndex']['text']).Disable()
+        self.FindWindowById(self.win['anim']['save']['image']['confirm']).Enable()
+        
+        self.mapWindow.render['quick'] = False
+        self.mapWindow.Refresh(False)
+        
+    def OnAnimationUpdateIndex(self, event):
+        """!Animation: frame index changed"""
+        if event.mode == 'record':
+            self.UpdateFrameCount()
+        elif event.mode == 'play':
+            self.UpdateFrameIndex(index = event.index, goToFrame = False)
+        
+    def OnSaveAnimation(self, event):
+        """!Save animation as a sequence of images"""
+        anim = self.mapWindow.GetAnimation()
+        
+        prefix = self.FindWindowById(self.win['anim']['save']['image']['prefix']).GetValue()
+        format = self.FindWindowById(self.win['anim']['save']['image']['format']).GetSelection()
+        dir = self.FindWindowById(self.win['anim']['save']['image']['dir']).GetValue()
+        
+        if not prefix:
+            gcmd.GMessage(parent = self,
+                          message = _("No file prefix given."))
+            return
+        elif not os.path.exists(dir):
+            gcmd.GMessage(parent = self,
+                          message = _("Directory %s does not exist.") % dir)
+            return
+            
+        self.FindWindowById(self.win['anim']['pause']).Disable()
+        self.FindWindowById(self.win['anim']['stop']).Enable()
+        self.FindWindowById(self.win['anim']['record']).Disable()
+        self.FindWindowById(self.win['anim']['play']).Disable()
+        self.FindWindowById(self.win['anim']['frameIndex']['slider']).Disable()
+        self.FindWindowById(self.win['anim']['frameIndex']['text']).Disable()
+        
+        self.FindWindowById(self.win['anim']['save']['image']['confirm']).Disable()
+        
+        anim.SaveAnimationFile(path = dir, prefix = prefix, format = format)
+        
     def OnNewConstant(self, event):
         """!Create new surface with constant value"""
         #TODO settings
@@ -2336,6 +2750,8 @@ class NvizToolWindow(FN.FlatNotebook):
         sizer.Add(item = sw, pos = (2, 0), flag = wx.ALIGN_CENTER)
         sizer.Add(item = w, pos = (1, 0), flag = wx.ALIGN_CENTER)
         
+        
+        
     def __GetWindowName(self, data, id):
         for name in data.iterkeys():
             if type(data[name]) is type({}):
@@ -2513,7 +2929,7 @@ class NvizToolWindow(FN.FlatNotebook):
         for win in self.win['view'][winName].itervalues():
             self.FindWindowById(win).SetValue(value)
 
-                
+        self.mapWindow.iview['dir']['use'] = False
         self.mapWindow.render['quick'] = True
         if self.mapDisplay.IsAutoRendered():
             self.mapWindow.Refresh(False)
@@ -4191,9 +4607,32 @@ class NvizToolWindow(FN.FlatNotebook):
             self.FindWindowById(self.win['cplane']['position']['z']['text']).SetValue(zRange[0])
             self.OnCPlaneSelection(None)
             
+        elif pageId == 'animation':
+            self.UpdateAnimationPage()
             
         self.Update()
         self.pageChanging = False
+        
+    def UpdateAnimationPage(self):
+        """!Update animation page"""
+        # wrap help text according to tool window
+        help = self.FindWindowById(self.win['anim']['help'])
+        width = help.GetGrandParent().GetSizeTuple()[0]
+        help.Wrap(width - 15)
+        anim = self.mapWindow.GetAnimation()
+        if anim.Exists():
+            self.FindWindowById(self.win['anim']['play']).Enable()
+        else:
+            self.UpdateFrameIndex(index = 0)
+            
+        self.UpdateFrameCount()
+        
+        self.FindWindowById(self.win['anim']['play']).Disable()
+        self.FindWindowById(self.win['anim']['record']).Enable()
+        self.FindWindowById(self.win['anim']['pause']).Disable()
+        self.FindWindowById(self.win['anim']['stop']).Disable()
+        self.FindWindowById(self.win['anim']['frameIndex']['slider']).Disable()
+        self.FindWindowById(self.win['anim']['frameIndex']['text']).Disable()
         
     def UpdateCPlanePage(self, index):
         """!Update widgets according to selected clip plane"""
@@ -4209,14 +4648,7 @@ class NvizToolWindow(FN.FlatNotebook):
                 
     def UpdateSurfacePage(self, layer, data, updateName = True):
         """!Update surface page"""
-        ret = gcmd.RunCommand('r.info',
-                              read = True,
-                              flags = 'm',
-                              map = layer.name)
-        if ret:
-            desc = ret.split('=')[1].rstrip('\n')
-        else:
-            desc = None
+        desc = grass.raster_info(layer.name)['title']
         if updateName:
             self.FindWindowById(self.win['surface']['map']).SetValue(layer.name)
         self.FindWindowById(self.win['surface']['desc']).SetLabel(desc)
@@ -4730,6 +5162,7 @@ class ViewPositionWindow(PositionWindow):
         return x, y
         
     def OnMouse(self, event):
+        self.mapWindow.iview['dir']['use'] = False # use focus instead of viewdir
         PositionWindow.OnMouse(self, event)
         if event.LeftIsDown():
             self.mapWindow.render['quick'] = self.quick

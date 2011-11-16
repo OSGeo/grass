@@ -649,7 +649,7 @@ class MapFrame(MapFrameBase):
             # add Nviz notebookpage
             self._layerManager.AddNvizTools()
             self.MapWindow3D.ResetViewHistory()
-            for page in ('view', 'light', 'fringe', 'constant', 'cplane'):
+            for page in ('view', 'light', 'fringe', 'constant', 'cplane', 'animation'):
                 self._layerManager.nviz.UpdatePage(page)
                 
         self.MapWindow3D.overlays = self.MapWindow2D.overlays
