@@ -65,7 +65,7 @@
 #%end
 #%flag
 #% key: c
-#% description: List available modules in the GRASS Addons SVN repository including complete module description
+#% description: List available modules in the GRASS Addons SVN repository including module description
 #% guisection: Print
 #% suppress_required: yes
 #%end
@@ -86,10 +86,6 @@
 #%flag
 #% key: i
 #% description: Don't install new extension, just compile it
-#%end
-#%flag
-#% key: f
-#% description: Force removal (required for actual deletion of files)
 #%end
 
 import os
@@ -370,7 +366,7 @@ def install_extension():
         grass.fatal(_('$GISBASE not defined'))
     
     if grass.find_program(options['extension'], ['--help']):
-        grass.warning(_("Extension '%s' already installed. Will be updated...") % options['extension'])
+        grass.warning(_("Extension <%s> already installed. Will be updated...") % options['extension'])
     
     gui_list = list_wxgui_extensions(print_module = False)
 
@@ -483,37 +479,62 @@ def install_extension():
         grass.warning(_('This add-on module will not function until you set the '
                         'GRASS_ADDON_PATH environment variable (see "g.manual variables")'))
 
-def remove_extension(flags):
-    #is module available?
-    bin_dir = os.path.join(options['prefix'], 'bin')
-    scr_dir = os.path.join(options['prefix'], 'scripts')
-    #add glob because if install a module with several submodule like r.modis 
-    #or r.pi.* or r.stream.* it was not possible to remove all the module
-    #but the user has to remove the single command
-    if glob.glob1(bin_dir,options['extension'] + "*"):
-	modules = glob.glob1(bin_dir,options['extension'] + "*")
-    elif glob.glob1(scr_dir,options['extension'] + "*"):
-	modules = glob.glob1(scr_dir,options['extension'] + "*")
-    else:
-        grass.fatal(_("No module <%s> found") % options['extension'])
-        
-    #the user want really remove the scripts
-    if flags['f']:
-	#for each module remove script and documentation files
-	for mod in modules:
-	    for f in [os.path.join(bin_dir, mod), os.path.join(scr_dir, mod),
-		      os.path.join(options['prefix'], 'docs', 'html', mod + '.html'),
-		      os.path.join(options['prefix'], 'man', 'man1', mod + '.1')]:
-		grass.try_remove(f)
-	#add etc for the internal library of a module
-	grass.try_rmdir(os.path.join(options['prefix'], 'etc', options['extension']))
-	grass.message(_("Module <%s> successfully uninstalled") % options['extension'])
-    #print modules that you are going to remove with -f option
-    else:
-	for mod in modules:
-	    grass.message(mod)
-	grass.message(_("You must use the force flag (-%s) to actually remove them. Exiting") % "f")
+def remove_extension():
+    # try to download XML metadata file first
+    url = "http://grass.osgeo.org/addons/grass%s.xml" % grass.version()['version'].split('.')[0]
+    name = options['extension']
+    try:
+        f = urlopen(url)
+        tree = etree.fromstring(f.read())
+        flist = []
+        for task in tree.findall('task'):
+            if name == task.get('name', default = '') and \
+                    task.find('binary') is not None:
+                for f in task.find('binary').findall('file'):
+                    fname = f.text
+                    if fname:
+                        fpath = fname.split('/')
+                        if sys.platform == 'win32':
+                            if fpath[0] == 'bin':
+                                fpath[-1] += '.exe'
+                            if fpath[0] == 'scripts':
+                                fpath[-1] += '.py'
+                        
+                        flist.append(fpath)
+        if flist:
+            removed = False
+            err = list()
+            for f in flist:
+                fpath = os.path.join(options['prefix'], os.path.sep.join(f))
+                try:
+                    os.remove(fpath)
+                    removed = True
+                except OSError:
+                    err.append((_("Unable to remove file '%s'") % fpath))
+            if not removed:
+                grass.fatal(_("Extension <%s> not found") % options['extension'])
+            
+            if err:
+                for e in err:
+                    grass.error(e)
+        else:
+            remove_extension_std()
+    except HTTPError:
+        remove_extension_std()
 
+    grass.message(_("Extension <%s> successfully uninstalled.") % options['extension'])
+    
+def remove_extension_std():
+    # is module available?
+    if not os.path.exists(os.path.join(options['prefix'], 'bin', options['extension'])):
+        grass.fatal(_("Extension <%s> not found") % options['extension'])
+    
+    for file in [os.path.join(options['prefix'], 'bin', options['extension']),
+                 os.path.join(options['prefix'], 'scripts', options['extension']),
+                 os.path.join(options['prefix'], 'docs', 'html', options['extension'] + '.html')]:
+        if os.path.isfile(file):
+            os.remove(file)
+    
 def create_dir(path):
     if os.path.isdir(path):
         return
@@ -595,7 +616,7 @@ def main():
         else:
             install_extension()
     else: # remove
-        remove_extension(flags)
+        remove_extension()
     
     return 0
 
