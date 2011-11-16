@@ -5,7 +5,9 @@
 int Nviz_resize_window(int, int);
 int Nviz_update_ranges(nv_data *);
 int Nviz_set_viewpoint_position(double, double);
+void Nviz_get_viewpoint_position(double *, double *);
 int Nviz_set_viewpoint_height(double);
+void Nviz_get_viewpoint_height(double *);
 int Nviz_set_viewpoint_persp(int);
 int Nviz_set_viewpoint_twist(int);
 int Nviz_change_exag(nv_data *, double);
