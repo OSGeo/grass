@@ -832,7 +832,7 @@ class InstallExtensionWindow(wx.Frame):
             self.options[name] = wx.CheckBox(parent = self.panel, id = wx.ID_ANY,
                                              label = desc)
         self.repo.SetValue(task.get_param(value = 'svnurl').get('default',
-                                                                'https://svn.osgeo.org/grass/grass-addons'))
+                                                                'http://svn.osgeo.org/grass/grass-addons/grass7'))
         
         self.statusbar = self.CreateStatusBar(number = 1)
         
