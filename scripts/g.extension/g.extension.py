@@ -101,6 +101,11 @@ import glob
 
 from urllib2 import urlopen, HTTPError
 
+try:
+    import xml.etree.ElementTree as etree
+except ImportError:
+    import elementtree.ElementTree as etree # Python <= 2.4
+
 from grass.script import core as grass
 
 # temp dir
@@ -131,6 +136,37 @@ def expand_module_class_name(c):
     return c
 
 def list_available_modules():
+    mlist = list()
+
+    # try to download XML metadata file first
+    url = "http://grass.osgeo.org/addons/grass%s.xml" % grass.version()['version'].split('.')[0]
+    try:
+        f = urlopen(url)
+        tree = etree.fromstring(f.read())
+        for mnode in tree.findall('task'):
+            name = mnode.get('name')
+            if flags['c'] or flags['g']:
+                desc = mnode.find('description').text
+                if not desc:
+                    desc = ''
+                keyw = mnode.find('keywords').text
+                if not keyw:
+                    keyw = ''
+            
+            if flags['g']:
+                print 'name=' + name
+                print 'description=' + desc
+                print 'keywords=' + keyw
+            elif flags['c']:
+                print name + ' - ' + desc
+            else:
+                print name
+    except HTTPError:
+        return list_available_modules_svn()
+    
+    return mlist
+
+def list_available_modules_svn():
     mlist = list()
     grass.message(_('Fetching list of modules from GRASS-Addons SVN (be patient)...'))
     pattern = re.compile(r'(<li><a href=".+">)(.+)(</a></li>)', re.IGNORECASE)
@@ -211,7 +247,7 @@ def print_module_desc(name, url):
         desc = get_module_desc(url + '/' + name + '/main.c', script = False)
     if not desc:
         if not flags['g']:
-            print name + '-'
+            print name + ' - '
             return
     
     if flags['g']:
@@ -222,7 +258,11 @@ def print_module_desc(name, url):
     
 def get_module_desc(url, script = True):
     grass.debug('url=%s' % url)
-    f = urlopen(url)
+    try:
+        f = urlopen(url)
+    except HTTPError:
+        return {}
+    
     if script:
         ret = get_module_script(f)
     else:
@@ -300,7 +340,8 @@ def cleanup():
                         
 def install_extension_win():
     ### TODO: do not use hardcoded url
-    url = "http://wingrass.fsv.cvut.cz/grass70/addons"
+    version = grass.version()['version'].split('.')
+    url = "http://wingrass.fsv.cvut.cz/grass%s%s/addons" % (version[0], version[1])
     success = False
     grass.message(_("Downloading precompiled GRASS Addons <%s>...") % options['extension'])
     for comp, ext in [(('bin', ), 'exe'),
