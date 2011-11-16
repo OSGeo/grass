@@ -121,8 +121,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.dragid = -1
         self.hitradius = 5
         # layer manager toolwindow
-        self.toolWin = None        
-    
+        self.toolWin = None
+        
         if self.lmgr:
             self.log = self.lmgr.goutput
             logerr = self.lmgr.goutput.GetLog(err = True)
@@ -194,9 +194,11 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                     'move' : UserSettings.Get(group = 'nviz', key = 'fly', subkey = ['exag', 'move']),
                     'turn' : UserSettings.Get(group = 'nviz', key = 'fly', subkey = ['exag', 'turn'])},
                'exagMultiplier' : 3,        # speed up by Shift
+               'flySpeed' : 4,              # speed of flying
                'mouseControl' : None,       # if mouse or keys are used
                'pos' : {'x' : 0, 'y' : 0},  # virtual mouse position when using arrows
                'arrowStep' : 50,            # step in pixels (when using arrows)
+               'flySpeedStep' : 2,
             }
             
         return fly
@@ -261,13 +263,20 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.fly['value'] = [0, 0, 0]
         
         if self.fly['mode'] == 0:
-            self.fly['value'][0] = - my * 500.0 * self.fly['interval'] / 1000. # forward */
-            self.fly['value'][1] = mx * 0.1 *self.fly['interval'] / 1000.  # heading */
+            self.fly['value'][0] = self.fly['flySpeed'] * self.fly['interval'] / 1000. # forward */
+            self.fly['value'][1] = mx * 0.1 * self.fly['interval'] / 1000. # heading 
+            self.fly['value'][2] = my * 0.1 * self.fly['interval'] / 1000. # pitch 
         else:
             self.fly['value'][0] = mx * 100.0 * self.fly['interval'] /1000.
             self.fly['value'][2] = - my * 100.0 * self.fly['interval'] /1000.
     
-    
+    def ChangeFlySpeed(self, increase):
+        """!Increase/decrease flight spped"""
+        if increase:
+            self.fly['flySpeed'] += self.fly['flySpeedStep']
+        else:
+            self.fly['flySpeed'] -= self.fly['flySpeedStep']
+        
     def __del__(self):
         """!Stop timers if running, unload data"""
         self.StopTimer(self.timerAnim)
@@ -541,15 +550,28 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self.Refresh(False)
             
         elif key in (wx.WXK_UP, wx.WXK_DOWN, wx.WXK_LEFT, wx.WXK_RIGHT):
-            if not self.timerFly.IsRunning():
-                sx, sy = self.GetClientSizeTuple()
-                self.fly['pos']['x'] = sx / 2
-                self.fly['pos']['y'] = sy / 2
-                self.fly['mouseControl'] = False # controlled by keyboard
-                self.timerFly.Start(self.fly['interval'])
-
-            self.ProcessFlyByArrows(keyCode = key)
+            if not self.fly['mouseControl']:
+                if not self.timerFly.IsRunning():
+                    sx, sy = self.GetClientSizeTuple()
+                    self.fly['pos']['x'] = sx / 2
+                    self.fly['pos']['y'] = sy / 2
+                    self.fly['mouseControl'] = False # controlled by keyboard
+                    self.timerFly.Start(self.fly['interval'])
+    
+                self.ProcessFlyByArrows(keyCode = key)
+                
+            # change speed of flight when using mouse
+            else:
+                if key == wx.WXK_UP:
+                    self.ChangeFlySpeed(increase = True)
+                elif key == wx.WXK_DOWN:
+                    self.ChangeFlySpeed(increase = False)
         
+        elif key in (wx.WXK_HOME, wx.WXK_PAGEUP) and self.timerFly.IsRunning():
+            self.ChangeFlySpeed(increase = True)
+        elif key in (wx.WXK_END, wx.WXK_PAGEDOWN) and self.timerFly.IsRunning():
+            self.ChangeFlySpeed(increase = False)
+            
         event.Skip()
         
     def ProcessFlyByArrows(self, keyCode):
@@ -609,7 +631,13 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         """!Change perspective"""
         wheel = event.GetWheelRotation()
         Debug.msg (5, "GLWindow.OnMouseMotion(): wheel = %d" % wheel)
-        self.DoZoom(zoomtype = wheel, pos = event.GetPositionTuple())
+        if self.timerFly.IsRunning() and self.fly['mouseControl']:
+            if wheel > 0:
+                self.ChangeFlySpeed(increase = True)
+            else:
+                self.ChangeFlySpeed(increase = False)
+        else:
+            self.DoZoom(zoomtype = wheel, pos = event.GetPositionTuple())
             
         # update statusbar
         ### self.parent.StatusbarUpdate()
