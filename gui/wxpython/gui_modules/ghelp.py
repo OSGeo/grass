@@ -965,10 +965,18 @@ class InstallExtensionWindow(wx.Frame):
     def OnInstall(self, event):
         """!Install selected extension"""
         log = self.parent.GetLogWindow()
-        log.RunCmd(self._getCmd())
+        log.RunCmd(self._getCmd(), onDone = self.OnDone)
         
-        ### self.OnCloseWindow(None)
-                
+    def OnDone(self, cmd, returncode):
+        item = self.tree.GetSelected()
+        if not item or not item.IsOk() or \
+                returncode != 0 or \
+                not os.getenv('GRASS_ADDON_PATH'):
+            return
+        
+        name = self.tree.GetItemText(item)
+        globalvar.grassCmd['all'].append(name)
+        
     def OnItemSelected(self, event):
         """!Item selected"""
         item = event.GetItem()
