@@ -813,7 +813,7 @@ class InstallExtensionWindow(wx.Frame):
         self.fullDesc.SetValue(True)
         
         self.search = SearchModuleWindow(parent = self.panel)
-        self.search.SetSelection(2) 
+        self.search.SetSelection(0) 
         
         self.tree   = ExtensionTree(parent = self.panel, log = parent.GetLogWindow())
         
@@ -1010,7 +1010,7 @@ class ExtensionTree(ItemTree):
         for prefix in ('display', 'database',
                        'general', 'imagery',
                        'misc', 'postscript', 'paint',
-                       'raster', 'raster3D', 'sites', 'vector', 'wxGUI'):
+                       'raster', 'raster3D', 'sites', 'vector', 'wxGUI', 'other'):
             self.AppendItem(parentId = self.root,
                             text = prefix)
         self._loaded = False
@@ -1027,7 +1027,8 @@ class ExtensionTree(ItemTree):
                  'r3' : 'raster3D',
                  's'  : 'sites',
                  'v'  : 'vector',
-                 'wx' : 'wxGUI' }
+                 'wx' : 'wxGUI',
+                 'u'  : 'other' }
         
         if c in name:
             return name[c]
@@ -1066,7 +1067,11 @@ class ExtensionTree(ItemTree):
             if full:
                 key, value = line.split('=', 1)
                 if key == 'name':
-                    prefix, name = value.split('.', 1)
+                    try:
+                        prefix, name = value.split('.', 1)
+                    except ValueError:
+                        prefix = 'u'
+                        name = value
                     if prefix not in mdict:
                         mdict[prefix] = dict()
                     mdict[prefix][name] = dict()
