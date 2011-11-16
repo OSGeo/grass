@@ -549,6 +549,10 @@ class Settings:
                         'turn' : 1,
                         }
                     },
+                'animation' : {
+                    'fps' : 24,
+                    'prefix' : _("animation")
+                    },
                 'surface' : {
                     'shine': {
                         'map' : False,
@@ -781,6 +785,12 @@ class Settings:
         self.internalSettings['nviz']['view']['focus']['x'] = -1
         self.internalSettings['nviz']['view']['focus']['y'] = -1
         self.internalSettings['nviz']['view']['focus']['z'] = -1
+        self.internalSettings['nviz']['view']['dir'] = {}
+        self.internalSettings['nviz']['view']['dir']['x'] = -1
+        self.internalSettings['nviz']['view']['dir']['y'] = -1
+        self.internalSettings['nviz']['view']['dir']['z'] = -1
+        self.internalSettings['nviz']['view']['dir']['use'] = False
+        
         for decor in ('arrow', 'scalebar'):
             self.internalSettings['nviz'][decor] = {}
             self.internalSettings['nviz'][decor]['position'] = {}

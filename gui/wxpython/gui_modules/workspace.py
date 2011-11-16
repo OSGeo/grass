@@ -514,6 +514,19 @@ class ProcessWorkspaceFile:
         iview['focus']['x'] = self.__processLayerNvizNode(node_focus, 'x', int)
         iview['focus']['y'] = self.__processLayerNvizNode(node_focus, 'y', int)
         iview['focus']['z'] = self.__processLayerNvizNode(node_focus, 'z', int)
+        node_dir = node_view.find('dir')
+        if node_dir:
+            iview['dir'] = {}
+            iview['dir']['x'] = self.__processLayerNvizNode(node_dir, 'x', int)
+            iview['dir']['y'] = self.__processLayerNvizNode(node_dir, 'y', int)
+            iview['dir']['z'] = self.__processLayerNvizNode(node_dir, 'z', int)
+            iview['dir']['use'] = True
+        else:
+            iview['dir'] = {}
+            iview['dir']['x'] = -1
+            iview['dir']['y'] = -1
+            iview['dir']['z'] = -1
+            iview['dir']['use'] = False
         
         view['background'] = {}
         color = self.__processLayerNvizNode(node_view, 'background_color', str)

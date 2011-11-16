@@ -170,6 +170,15 @@ class Nviz(object):
         Debug.msg(3, "Nviz::SetView(): x=%f, y=%f, height=%f, persp=%f, twist=%f",
                   x, y, height, persp, twist)
                 
+    def GetViewpointPosition(self):
+        x = c_double()
+        y = c_double()
+        h = c_double()
+        Nviz_get_viewpoint_height(byref(h))
+        Nviz_get_viewpoint_position(byref(x), byref(y))
+        
+        return (x.value, y.value, h.value)
+        
     def LookHere(self, x, y):
         """!Look here feature 
         @param x,y screen coordinates
@@ -200,6 +209,22 @@ class Nviz(object):
         Debug.msg(3, "Nviz::SetFocus()")
         Nviz_set_focus(self.data, x, y, z)
         
+    def GetViewdir(self):
+        """!Get viewdir"""
+        Debug.msg(3, "Nviz::GetViewdir()")
+        dir = (c_float * 3)()
+        GS_get_viewdir(byref(dir))
+        
+        return dir[0], dir[1], dir[2]
+        
+    def SetViewdir(self, x, y, z):
+        """!Set viewdir"""
+        Debug.msg(3, "Nviz::SetViewdir(): x=%f, y=%f, z=%f" % (x, y, z))
+        dir = (c_float * 3)()
+        for i, coord in enumerate((x, y, z)):
+            dir[i] = coord
+        GS_set_viewdir(byref(dir))
+                
     def SetZExag(self, z_exag):
         """!Set z-exag value
         
