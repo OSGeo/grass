@@ -545,8 +545,8 @@ class Settings:
                     },
                 'fly' : {
                     'exag' : {
-                        'move' : 1,
-                        'turn' : 1,
+                        'move' : 5,
+                        'turn' : 5,
                         }
                     },
                 'animation' : {

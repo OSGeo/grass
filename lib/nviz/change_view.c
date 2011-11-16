@@ -127,6 +127,25 @@ int Nviz_set_viewpoint_position(double x_pos, double y_pos)
     return 1;
 }
 
+void Nviz_get_viewpoint_position(double *x_pos, double *y_pos)
+{
+    float from[3];
+    double xpos, ypos;
+
+    GS_get_from(from);
+    xpos = (from[X] + RANGE_OFFSET) / RANGE;
+    ypos = (from[Y] + RANGE_OFFSET) / RANGE;
+    *x_pos = xpos;
+    *x_pos = (*x_pos < 0) ? 0 : (*x_pos > 1.0) ? 1.0 : *x_pos;
+    *y_pos = 1.0 - ypos;
+    *y_pos = (*y_pos < 0) ? 0 : (*y_pos > 1.0) ? 1.0 : *y_pos;
+
+    if (xpos < 0.0 || xpos > 1.0 || ypos < 0.0 || ypos > 1.0) {
+	G_debug(3, "Invalid view position coordinates, using %f,%f",
+		  *x_pos, 1.0 - *y_pos);
+    }
+}
+
 /*!
    \brief Change viewpoint height
 
@@ -159,6 +178,16 @@ int Nviz_set_viewpoint_height(double height)
     return 1;
 }
 
+void Nviz_get_viewpoint_height(double *height)
+{
+    float from[3];
+
+    G_debug(1, "Nviz_get_viewpoint_height():");
+
+    GS_get_from_real(from);
+
+    *height = from[Z];
+}
 /*!
    \brief Change viewpoint perspective (field of view)
 
@@ -292,7 +321,7 @@ void Nviz_init_rotation(void)
 */
 void Nviz_flythrough(nv_data *data, float *fly_info, int *scale, int lateral)
 {
-    float dir[3], from[4], cur_from[4], cur_dir[4], cur[3];
+    float dir[3], from[4], cur_from[4], cur_dir[4];
     float speed, h, p, sh, ch, sp, cp;
     float diff_x, diff_y, diff_z;
     float quasi_zero;
@@ -308,8 +337,8 @@ void Nviz_flythrough(nv_data *data, float *fly_info, int *scale, int lateral)
     speed = scale[0] * fly_info[0];
 
     h += scale[1] * fly_info[1]; /* change heading */
-    //if (!lateral)   /* in case of "lateral" doesn't change pitch */
-        //p -= scale * fly_info[2];
+    if (!lateral)   /* in case of "lateral" doesn't change pitch */
+        p -= scale[1] * fly_info[2];
 
     h = fmod(h + M_PI, 2 * M_PI) - M_PI;
 
