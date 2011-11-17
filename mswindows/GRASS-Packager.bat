@@ -12,7 +12,7 @@ rem ----------------------------------------------------------------------------
 rem Set the script variables
 rem --------------------------------------------------------------------------------------------------------------------------
 
-set PACKAGE_DIR=.\GRASS-70-Devel-Package
+set PACKAGE_DIR=.\GRASS-70-Package
 
 set OSGEO4W_DIR=c:\osgeo4w
 
@@ -36,7 +36,7 @@ mkdir %PACKAGE_DIR%
 @echo -----------------------------------------------------------------------------------------------------------------------
 @echo.
 
-xcopy %GRASS_BIN_PREFIX%\grass70* %PACKAGE_DIR% /S/V/F
+rem xcopy %GRASS_BIN_PREFIX%\grass70.py %PACKAGE_DIR% /S/V/F
 xcopy %GRASS_PREFIX% %PACKAGE_DIR% /S/V/F
 
 @echo.

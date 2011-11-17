@@ -30,17 +30,17 @@ SetCompressorDictSize 64
 
 ;Version variables
 
-!define RELEASE_VERSION_NUMBER "7.0.0"
-!define RELEASE_SVN_REVISION "36599"
-!define RELEASE_BINARY_REVISION "1"
-!define RELEASE_GRASS_COMMAND "grass70"
-!define RELEASE_GRASS_BASE "GRASS 7.0"
-
-!define DEVEL_VERSION_NUMBER "7.0.SVN"
-!define DEVEL_SVN_REVISION "36599"
-!define DEVEL_BINARY_REVISION "1"
-!define DEVEL_GRASS_COMMAND "grass70svn"
-!define DEVEL_GRASS_BASE "GRASS 7.0.SVN"
+!define SVN_REVISION "36599"
+!define BINARY_REVISION "1"
+!if ${INSTALLER_TYPE} == "Release"
+	!define VERSION_NUMBER "7.0.0"
+	!define GRASS_COMMAND "grass70"
+	!define GRASS_BASE "GRASS 7.0"
+!else
+	!define VERSION_NUMBER "7.0.SVN"
+	!define GRASS_COMMAND "grass70svn"
+	!define GRASS_BASE "GRASS 7.0.SVN"
+!endif
 
 ;----------------------------------------------------------------------------------------------------------------------------
 
@@ -57,26 +57,15 @@ SetCompressorDictSize 64
 
 ;Set the installer variables, depending on the selected version to build
 
+!define PACKAGE_FOLDER ".\GRASS-70-Package"
 !if ${INSTALLER_TYPE} == "Release"
-	!define VERSION_NUMBER "${RELEASE_VERSION_NUMBER}"
-	!define SVN_REVISION "${RELEASE_SVN_REVISION}"
-	!define BINARY_REVISION "${RELEASE_BINARY_REVISION}"
-	!define GRASS_COMMAND "${RELEASE_GRASS_COMMAND}"
-	!define GRASS_BASE "${RELEASE_GRASS_BASE}"
 	!define INSTALLER_NAME "WinGRASS-${VERSION_NUMBER}-${BINARY_REVISION}-Setup.exe"
 	!define DISPLAYED_NAME "GRASS ${VERSION_NUMBER}-${BINARY_REVISION}"
-	!define CHECK_INSTALL_NAME "GRASS"
-	!define PACKAGE_FOLDER ".\GRASS-70-Release-Package"
-!else if ${INSTALLER_TYPE} == "Devel"
-	!define VERSION_NUMBER "${DEVEL_VERSION_NUMBER}"
-	!define SVN_REVISION "${DEVEL_SVN_REVISION}"
-	!define BINARY_REVISION "${DEVEL_BINARY_REVISION}"
-	!define GRASS_COMMAND "${DEVEL_GRASS_COMMAND}"
-	!define GRASS_BASE "${DEVEL_GRASS_BASE}"
+	!define CHECK_INSTALL_NAME "GRASS 70"
+!else
 	!define INSTALLER_NAME "WinGRASS-${VERSION_NUMBER}-r${SVN_REVISION}-${BINARY_REVISION}-Setup.exe"
 	!define DISPLAYED_NAME "GRASS ${VERSION_NUMBER}-r${SVN_REVISION}-${BINARY_REVISION}"
 	!define CHECK_INSTALL_NAME "GRASS 70 SVN"
-	!define PACKAGE_FOLDER ".\GRASS-70-Devel-Package"
 !endif
 
 ;----------------------------------------------------------------------------------------------------------------------------
@@ -617,7 +606,7 @@ Section "GRASS" SecGRASS
 	
 	;HKEY_LOCAL_MACHINE Install entries
 	;Set the Name, Version and Revision of GRASS + PublisherInfo + InstallPath	
-	WriteRegStr HKLM "Software\${GRASS_BASE}" "Name" "GRASS"
+	WriteRegStr HKLM "Software\${GRASS_BASE}" "Name" "GRASS 7.0"
 	WriteRegStr HKLM "Software\${GRASS_BASE}" "VersionNumber" "${VERSION_NUMBER}"
 	WriteRegStr HKLM "Software\${GRASS_BASE}" "SvnRevision" "${SVN_REVISION}"
 	WriteRegStr HKLM "Software\${GRASS_BASE}" "BinaryRevision" "${BINARY_REVISION}"
@@ -626,7 +615,7 @@ Section "GRASS" SecGRASS
 	WriteRegStr HKLM "Software\${GRASS_BASE}" "InstallPath" "$INSTALL_DIR"
 	
 	;HKEY_LOCAL_MACHINE Uninstall entries
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "DisplayName" "GRASS"
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "DisplayName" "GRASS 7.0"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "UninstallString" "$INSTALL_DIR\Uninstall-GRASS.exe"
 	
 	!if ${INSTALLER_TYPE} == "Release"
@@ -721,7 +710,7 @@ Section "GRASS" SecGRASS
 	FileWrite $0 '$\r$\n'
 	FileWrite $0 'cd "%USERPROFILE%"'
 	FileWrite $0 '$\r$\n'
-	FileWrite $0 '%GRASS_PYTHON% "%WINGISBASE%\grass70.py" %*'
+	FileWrite $0 '%GRASS_PYTHON% "%GISBASE%\etc\grass70.py" %*'
 	FileClose $0
 	done_create_grass_command.bat:
 	
@@ -858,7 +847,7 @@ Section "GRASS" SecGRASS
 	FileWrite $0 'GEOTIFF_CSV="$INSTALL_DIR\share\epsg_csv"$\r$\n'
 	FileWrite $0 'export GEOTIFF_CSV$\r$\n'
 	FileWrite $0 '$\r$\n'
-	FileWrite $0 '"$$GRASS_PYTHON $$GISBASE/grass70.py" "$$@"'
+	FileWrite $0 '"$$GRASS_PYTHON $$GISBASE/etc/grass70.py" "$$@"'
 	FileClose $0
 	done_create_grass_command:
 		
@@ -893,13 +882,13 @@ Section "GRASS" SecGRASS
 	done_create_grass7\rc:
 	
 	;replace gisbase = "/c/OSGeo4W/apps/grass/grass-7.0.svn" in grass70.py with $INSTDIR
-	Push "$INSTDIR\grass70.py" ; file to modify
+	Push "$INSTDIR\etc\grass70.py" ; file to modify
 	Push 'gisbase = "/c/OSGeo4W/apps/grass/grass-7.0.svn"' ; string that a line must begin with *WS Sensitive*
 	Push 'gisbase = "$INSTDIR"' ; string to replace whole line with
 	Call ReplaceLineStr
 	
 	;replace config_projshare = "/c/OSGeo4W/share/proj" i n grass70.py with $INSTDIR\proj
-	Push "$INSTDIR\grass70.py" ; file to modify
+	Push "$INSTDIR\etc\grass70.py" ; file to modify
 	Push 'config_projshare = "/c/OSGeo4W/share/proj"' ; string that a line must begin with *WS Sensitive*
 	Push 'config_projshare = "$INSTDIR\proj"' ; string to replace whole line with
 	Call ReplaceLineStr

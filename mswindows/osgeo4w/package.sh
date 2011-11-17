@@ -67,6 +67,12 @@ read PATCH <&3
 
 export VERSION=$MAJOR.$MINOR.$PATCH
 
+if [ "$PATCH" == "svn" ]; then
+    GRASS_EXECUTABLE=grass${MAJOR}${MINOR}svn
+else
+    GRASS_EXECUTABLE=grass${MAJOR}${MINOR}
+fi
+
 export GRASS_PYTHON="/c/OSGeo4W/bin/python.exe"
 export PYTHONHOME="/c/OSGeo4W/apps/Python25"
 
@@ -130,7 +136,7 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 fi
 
 log make 
-make -k || ( cat error.log >&3 && false ) 
+# make -k || ( cat error.log >&3 && false ) 
 
 log make install
 make install
@@ -141,15 +147,15 @@ mv $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/include/grass/config.h \
 cp mswindows/osgeo4w/config.h.switch $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/include/grass/config.h
 cp mswindows/osgeo4w/config.h.vc $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/include/grass
 sed -e "s#@VERSION@#$VERSION#g" -e "s#@OSGEO4W_ROOT@#$OSGEO4W_ROOT#g" -e "s#@POSTFIX@#$MAJOR$MINOR#g" \
-    mswindows/osgeo4w/grass.bat.tmpl >$OSGEO4W_ROOT_MSYS/bin/grass$MAJOR$MINOR.bat
+    mswindows/osgeo4w/grass.bat.tmpl >$OSGEO4W_ROOT_MSYS/bin/${GRASS_EXECUTABLE}.bat
 sed -e "s#@VERSION@#$VERSION#g" -e "s#@OSGEO4W_ROOT_MSYS@#$OSGEO4W_ROOT_MSYS#g" -e "s#@POSTFIX@#$MAJOR$MINOR#g" \
-    mswindows/osgeo4w/grass.tmpl >$OSGEO4W_ROOT_MSYS/bin/grass$MAJOR$MINOR
+    mswindows/osgeo4w/grass.tmpl >$OSGEO4W_ROOT_MSYS/bin/${GRASS_EXECUTABLE}
 sed -e "s#@VERSION@#$VERSION#g" -e "s#@OSGEO4W_ROOT_MSYS@#$OSGEO4W_ROOT#g" \
     mswindows/osgeo4w/env.bat.tmpl >$OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/etc/env.bat
-sed -e "s#@VERSION@#$VERSION#g" -e "s#@POSTFIX@#$MAJOR$MINOR#g" \
-    mswindows/osgeo4w/postinstall.bat >$OSGEO4W_ROOT_MSYS/etc/postinstall/grass$MAJOR$MINOR.bat 
-sed -e "s#@VERSION@#$VERSION#g" -e "s#@POSTFIX@#$MAJOR$MINOR#g" \
-    mswindows/osgeo4w/preremove.bat >$OSGEO4W_ROOT_MSYS/etc/preremove/grass$MAJOR$MINOR.bat 
+sed -e "s#@VERSION@#$VERSION#g" -e "s#@GRASS_EXECUTABLE@#$GRASS_EXECUTABLE#g" \
+    mswindows/osgeo4w/postinstall.bat >$OSGEO4W_ROOT_MSYS/etc/postinstall/${GRASS_EXECUTABLE}.bat 
+sed -e "s#@VERSION@#$VERSION#g" -e "s#@GRASS_EXECUTABLE@#$GRASS_EXECUTABLE#g" \
+    mswindows/osgeo4w/preremove.bat >$OSGEO4W_ROOT_MSYS/etc/preremove/${GRASS_EXECUTABLE}.bat 
 
 if [ -f /c/mingw/bin/libgnurx-0.dll ]; then
     cp /c/mingw/bin/libgnurx-0.dll $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/bin 
@@ -174,24 +180,23 @@ if [ -n "$PACKAGE" ]; then
     cd $OSGEO4W_ROOT_MSYS 
 
     sed -e "s#@VERSION@#$VERSION#g" -e "s#@POSTFIX@#$MAJOR$MINOR#g" \
-	$SRC/mswindows/osgeo4w/grass.bat.tmpl >$OSGEO4W_ROOT_MSYS/bin/grass$MAJOR$MINOR.bat.tmpl
+	$SRC/mswindows/osgeo4w/grass.bat.tmpl >$OSGEO4W_ROOT_MSYS/bin/${GRASS_EXECUTABLE}.bat.tmpl
     sed -e "s#@VERSION@#$VERSION#g" -e "s#@OSGEO4W_ROOT_MSYS@#@OSGEO4W_ROOT@#g" -e "s#@POSTFIX@#$MAJOR$MINOR#g" \
-	$SRC/mswindows/osgeo4w/grass.tmpl >$OSGEO4W_ROOT_MSYS/bin/grass$MAJOR$MINOR.tmpl
+	$SRC/mswindows/osgeo4w/grass.tmpl >$OSGEO4W_ROOT_MSYS/bin/${GRASS_EXECUTABLE}.tmpl
 
     # grass package
     tar -cjf $PDIR/grass$PACKAGE_NAME-$VERSION-$PACKAGE.tar.bz2 \
 	apps/grass/grass-$VERSION \
-	bin/grass$MAJOR$MINOR.py \
-	bin/grass$MAJOR$MINOR.bat.tmpl \
-	bin/grass$MAJOR$MINOR.tmpl \
+	bin/${GRASS_EXECUTABLE}.bat.tmpl \
+	bin/${GRASS_EXECUTABLE}.tmpl \
 	bin/libintl3.dll \
 	bin/libiconv2.dll \
 	bin/regex2.dll \
-	etc/postinstall/grass$MAJOR$MINOR.bat \
-	etc/preremove/grass$MAJOR$MINOR.bat
+	etc/postinstall/${GRASS_EXECUTABLE}.bat \
+	etc/preremove/${GRASS_EXECUTABLE}.bat
     
-    rm bin/grass$MAJOR$MINOR.tmpl
-    rm bin/grass$MAJOR$MINOR.bat.tmpl
+    rm bin/${GRASS_EXECUTABLE}.tmpl
+    rm bin/${GRASS_EXECUTABLE}.bat.tmpl
     
     # grass-devel package (obsolete)
     ###tar -cjf $PDIR/grass-devel-$VERSION-$PACKAGE.tar.bz2 \
