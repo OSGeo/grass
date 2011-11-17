@@ -83,7 +83,7 @@ install-check-prefix:
 	fi
 
 ifneq ($(strip $(MINGW)),)
-STARTUP = $(UNIX_BIN)/$(GRASS_NAME).py
+STARTUP = $(INST_DIR)/etc/$(GRASS_NAME).py
 else
 STARTUP = $(UNIX_BIN)/$(GRASS_NAME)
 endif
@@ -94,9 +94,9 @@ PLATMAKE = include/Make/Platform.make
 GRASSMAKE = include/Make/Grass.make
 
 real-install: | $(INST_DIR) $(UNIX_BIN)
-	$(MAKE) $(STARTUP)
 	-tar cBCf $(GISBASE) - . | tar xBCf $(INST_DIR) - 2>/dev/null
 	-rm $(INST_DIR)/$(GRASS_NAME).tmp
+	$(MAKE) $(STARTUP)
 
 	-rm $(INST_DIR)/$(FONTCAP)
 	$(MAKE) $(INST_DIR)/$(FONTCAP)
