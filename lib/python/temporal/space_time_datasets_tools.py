@@ -50,16 +50,16 @@ def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=
     end_time_in_file = False
 
     if maps and file:
-        core.fata(_("%s= and %s= are mutually exclusive") % ("input","file"))
+        core.fatal(_("%s= and %s= are mutually exclusive") % ("input","file"))
 
     if end and increment:
-        core.fata(_("%s= and %s= are mutually exclusive") % ("end","increment"))
+        core.fatal(_("%s= and %s= are mutually exclusive") % ("end","increment"))
 
     if end and not start:
-        core.fata(_("Please specify %s= and %s=") % ("start_time","end_time"))
+        core.fatal(_("Please specify %s= and %s=") % ("start_time","end_time"))
 
     if not maps and not file:
-        core.fata(_("Please specify %s= or %s=") % ("input","file"))
+        core.fatal(_("Please specify %s= or %s=") % ("input","file"))
 
     if start and start == "file":
         start_time_in_file = True
@@ -209,7 +209,7 @@ def unregister_maps_from_space_time_datasets(type, name, maps, file=None, dbif =
     """
 
     if maps and file:
-        core.fata(_("%s= and %s= are mutually exclusive") % ("input","file"))
+        core.fatal(_("%s= and %s= are mutually exclusive") % ("input","file"))
 
     mapset =  core.gisenv()["MAPSET"]
 
@@ -326,16 +326,16 @@ def assign_valid_time_to_maps(type, maps, ttype, start, end=None, file=file, inc
     splist = {}
 
     if maps and file:
-        core.fata(_("%s= and %s= are mutually exclusive") % ("input","file"))
+        core.fatal(_("%s= and %s= are mutually exclusive") % ("input","file"))
 
     if end and increment:
-        core.fata(_("%s= and %s= are mutually exclusive") % ("end","increment"))
+        core.fatal(_("%s= and %s= are mutually exclusive") % ("end","increment"))
 
     if end and not start:
-        core.fata(_("Please specify %s= and %s=") % ("start_time","end_time"))
+        core.fatal(_("Please specify %s= and %s=") % ("start_time","end_time"))
 
     if not maps and not file:
-        core.fata(_("Please specify %s= or %s=") % ("input","file"))
+        core.fatal(_("Please specify %s= or %s=") % ("input","file"))
 
     if start and start == "file":
         start_time_in_file = True
