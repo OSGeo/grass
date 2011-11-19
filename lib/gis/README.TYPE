@@ -108,7 +108,7 @@ long len;
 
 len = max - min + 1;
 if (len != (int)len)
-    error("To many categories");
+    error("Too many categories");
 table = malloc ((int)len);
 .DE
 .IP 2.
