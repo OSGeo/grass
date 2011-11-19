@@ -7,7 +7,7 @@
 *
 * PURPOSE:      Outputs basic information about a user-specified raster map layer.
 *
-* COPYRIGHT:    (C) 2005 by the GRASS Development Team
+* COPYRIGHT:    (C) 2005-2011 by the GRASS Development Team
 *
 *               This program is free software under the GNU General Public
 *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -60,8 +60,7 @@ int main(int argc, char **argv)
     struct Reclass reclass;
     struct GModule *module;
     struct Option *opt1;
-    struct Flag *rflag, *sflag, *tflag, *gflag, *hflag, *mflag;
-    struct Flag *uflag, *dflag, *timestampflag;
+    struct Flag *gflag, *rflag, *eflag, *hflag;
 
     /* Initialize GIS Engine */
     G_gisinit(argv[0]);
@@ -75,46 +74,25 @@ int main(int argc, char **argv)
 
     opt1 = G_define_standard_option(G_OPT_R_MAP);
 
+    gflag = G_define_flag();
+    gflag->key = 'g';
+    gflag->description = _("Print raster array information only");
+
     rflag = G_define_flag();
     rflag->key = 'r';
     rflag->description = _("Print range only");
 
-    sflag = G_define_flag();
-    sflag->key = 's';
-    sflag->description =
-	_("Print raster map resolution (NS-res, EW-res) only");
-
-    tflag = G_define_flag();
-    tflag->key = 't';
-    tflag->description = _("Print raster map type only");
-
-    gflag = G_define_flag();
-    gflag->key = 'g';
-    gflag->description = _("Print map region only");
+    eflag = G_define_flag();
+    eflag->key = 'e';
+    eflag->description = _("Print extended metadata information only");
 
     hflag = G_define_flag();
     hflag->key = 'h';
     hflag->description = _("Print raster history instead of info");
 
-    uflag = G_define_flag();
-    uflag->key = 'u';
-    uflag->description = _("Print raster map data units only");
-
-    dflag = G_define_flag();
-    dflag->key = 'd';
-    dflag->description = _("Print raster map vertical datum only");
-
-    mflag = G_define_flag();
-    mflag->key = 'm';
-    mflag->description = _("Print map title only");
-
-    timestampflag = G_define_flag();
-    timestampflag->key = 'p';
-    timestampflag->description =
-	_("Print raster map timestamp (day.month.year hour:minute:seconds) only");
-
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
 
     name = G_store(opt1->answer);
     if ((mapset = G_find_raster2(name, "")) == NULL)
@@ -146,9 +124,8 @@ int main(int argc, char **argv)
 
     out = stdout;
 
-    if (!rflag->answer && !sflag->answer && !tflag->answer &&
-	!gflag->answer && !hflag->answer && !timestampflag->answer &&
-	!mflag->answer && !uflag->answer && !dflag->answer) {
+    if (!gflag->answer && !rflag->answer &&
+	!eflag->answer && !hflag->answer) {
 	divider('+');
 
 	compose_line(out, "Layer:    %-29.29s  Date: %s", name,
@@ -321,7 +298,30 @@ int main(int argc, char **argv)
 
 	fprintf(out, "\n");
     }
-    else {	/* r,s,t,g,h, or m flag */
+    else {	/* g,r,e, or h flags */
+
+	if (gflag->answer) {
+	    G_format_northing(cellhd.north, tmp1, -1);
+	    G_format_northing(cellhd.south, tmp2, -1);
+	    fprintf(out, "north=%s\n", tmp1);
+	    fprintf(out, "south=%s\n", tmp2);
+
+	    G_format_easting(cellhd.east, tmp1, -1);
+	    G_format_easting(cellhd.west, tmp2, -1);
+	    fprintf(out, "east=%s\n", tmp1);
+	    fprintf(out, "west=%s\n", tmp2);
+
+	    G_format_resolution(cellhd.ns_res, tmp3, cellhd.proj);
+	    fprintf(out, "nsres=%s\n", tmp3);
+
+	    G_format_resolution(cellhd.ew_res, tmp3, cellhd.proj);
+	    fprintf(out, "ewres=%s\n", tmp3);
+
+	    fprintf(out, "datatype=%s\n",
+		    (data_type == CELL_TYPE ? "CELL" :
+		     (data_type == DCELL_TYPE ? "DCELL" :
+		      (data_type == FCELL_TYPE ? "FCELL" : "??"))));
+	}
 
 	if (rflag->answer) {
 	    if (data_type == CELL_TYPE) {
@@ -342,42 +342,15 @@ int main(int argc, char **argv)
 		fprintf(out, "min=%.15g\n", zmin);
 		fprintf(out, "max=%.15g\n", zmax);
 	    }
-
 	}
 
-	if (gflag->answer) {
-	    G_format_northing(cellhd.north, tmp1, -1);
-	    G_format_northing(cellhd.south, tmp2, -1);
-	    fprintf(out, "north=%s\n", tmp1);
-	    fprintf(out, "south=%s\n", tmp2);
-
-	    G_format_easting(cellhd.east, tmp1, -1);
-	    G_format_easting(cellhd.west, tmp2, -1);
-	    fprintf(out, "east=%s\n", tmp1);
-	    fprintf(out, "west=%s\n", tmp2);
-	}
-
-	if (sflag->answer) {
-	    G_format_resolution(cellhd.ns_res, tmp3, cellhd.proj);
-	    fprintf(out, "nsres=%s\n", tmp3);
-
-	    G_format_resolution(cellhd.ew_res, tmp3, cellhd.proj);
-	    fprintf(out, "ewres=%s\n", tmp3);
-	}
-
-	if (tflag->answer) {
-	    fprintf(out, "datatype=%s\n",
-		    (data_type == CELL_TYPE ? "CELL" :
-		     (data_type == DCELL_TYPE ? "DCELL" :
-		      (data_type == FCELL_TYPE ? "FCELL" : "??"))));
-	}
-
-	if (mflag->answer) {
+	if (eflag->answer) {
 	    fprintf(out, "title=%s (%s)\n", cats_ok ? cats.title :
 		    "??", hist_ok ? Rast_get_history(&hist, HIST_TITLE) : "??");
-	}
 
-	if (timestampflag->answer) {
+	    fprintf(out, "units=%s\n", units ? units : "\"none\"");
+	    fprintf(out, "vertical_datum=%s\n", vdatum ? vdatum : "\"none\"");
+
 	    if (time_ok && (first_time_ok || second_time_ok)) {
 
 		G_format_timestamp(&ts, timebuff);
@@ -390,11 +363,6 @@ int main(int argc, char **argv)
 		fprintf(out, "timestamp=\"none\"\n");
 	    }
 	}
-
-	if (uflag->answer)
-	    fprintf(out, "units=%s\n", units ? units : "(none)");
-	if (dflag->answer)
-	    fprintf(out, "vertical_datum=%s\n", vdatum ? vdatum : "(none)");
 
 	if (hflag->answer) {
 	    if (hist_ok) {
