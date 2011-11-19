@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: grasslibs_ja\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-05 23:30+0200\n"
-"PO-Revision-Date: 2010-09-08 17:33+0100\n"
-"Last-Translator: Akira Taniguchi <taniguti@apptec.co.jp>\n"
+"PO-Revision-Date: 2011-11-15 15:01+0900\n"
+"Last-Translator: ueda <nao@locapoint.com>\n"
 "Language-Team: Japanese <grass-translations@lists.osgeo.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -349,9 +349,7 @@ msgstr ""
 
 #: ../lib/raster/set_window.c:131
 #, fuzzy
-msgid ""
-"Rast_set_read_window(): projection/zone differs from that of currently open "
-"raster maps"
+msgid "Rast_set_read_window(): projection/zone differs from that of currently open raster maps"
 msgstr "G_set_window(): 投影法/領域は現在開いているラスターマップと異なります"
 
 #: ../lib/raster/set_window.c:158
@@ -624,21 +622,15 @@ msgid "Unable to create dependency file in <%s@%s>"
 msgstr "���"
 
 #: ../lib/raster/window.c:18
-msgid ""
-"Internal error: Rast_get_window() called with split window.Use "
-"Rast_get_input_window() or Rast_get_output_window() instead."
+msgid "Internal error: Rast_get_window() called with split window.Use Rast_get_input_window() or Rast_get_output_window() instead."
 msgstr ""
 
 #: ../lib/raster/window.c:77
-msgid ""
-"Internal error: Rast_window_rows() called with split window.Use "
-"Rast_input_window_rows() or Rast_output_window_rows() instead."
+msgid "Internal error: Rast_window_rows() called with split window.Use Rast_input_window_rows() or Rast_output_window_rows() instead."
 msgstr ""
 
 #: ../lib/raster/window.c:112
-msgid ""
-"Internal error: Rast_window_cols() called with split window.Use "
-"Rast_input_window_cols() or Rast_output_window_cols() instead."
+msgid "Internal error: Rast_window_cols() called with split window.Use Rast_input_window_cols() or Rast_output_window_cols() instead."
 msgstr ""
 
 #: ../lib/raster/gdal.c:88
@@ -672,9 +664,7 @@ msgstr "���"
 
 #: ../lib/raster/gdal.c:492
 #, c-format
-msgid ""
-"Driver <%s> does not support direct writing. Using MEM driver for "
-"intermediate dataset."
+msgid "Driver <%s> does not support direct writing. Using MEM driver for intermediate dataset."
 msgstr ""
 
 #: ../lib/raster/gdal.c:498
@@ -781,12 +771,8 @@ msgstr "ラスターマップ <%s> が見つかりません"
 
 #: ../lib/raster/open.c:185
 #, c-format
-msgid ""
-"Unable to open raster map <%s@%s> since it is a reclass of raster map <%s@%"
-"s> which does not exist"
-msgstr ""
-"ラスターマップが開けません <%s@%s> 存在しないラスターマップ<%s@%s> の再分類か"
-"ら"
+msgid "Unable to open raster map <%s@%s> since it is a reclass of raster map <%s@%s> which does not exist"
+msgstr "ラスターマップが開けません <%s@%s> 存在しないラスターマップ<%s@%s> の再分類から"
 
 #: ../lib/raster/open.c:190
 #, fuzzy, c-format
@@ -805,9 +791,7 @@ msgstr "ラスターマップ <%s@%s>: 無効なヘッダーファイルのフ�
 
 #: ../lib/raster/open.c:214
 #, c-format
-msgid ""
-"Raster map <%s> is in different projection than current region. Found <%s>, "
-"should be <%s>."
+msgid "Raster map <%s> is in different projection than current region. Found <%s>, should be <%s>."
 msgstr ""
 
 #: ../lib/raster/open.c:221
@@ -822,8 +806,7 @@ msgstr ""
 
 #: ../lib/raster/open.c:252
 #, c-format
-msgid ""
-"Raster map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"
+msgid "Raster map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"
 msgstr ""
 
 #: ../lib/raster/open.c:261
@@ -894,8 +877,7 @@ msgid "Raster map <%s> is not xdr: byte_order: %s"
 msgstr "ラスターマップ<%s>はxdrではありません: バイト順: %s"
 
 #: ../lib/raster/open.c:927
-msgid ""
-"Rast_set_quant_rules() can be called only for raster maps opened for reading"
+msgid "Rast_set_quant_rules() can be called only for raster maps opened for reading"
 msgstr ""
 
 #: ../lib/raster/put_title.c:28
@@ -989,9 +971,7 @@ msgstr "カラールールがロードできません <%s>"
 
 #: ../lib/raster/get_cellhd.c:66
 #, fuzzy, c-format
-msgid ""
-"Unable to read header file for raster map <%s@%s>.It is a reclass of raster "
-"map <%s@%s> %s"
+msgid "Unable to read header file for raster map <%s@%s>.It is a reclass of raster map <%s@%s> %s"
 msgstr "����� ���� ���\n"
 
 #: ../lib/raster/get_cellhd.c:70
@@ -1171,11 +1151,8 @@ msgstr "シンボルライン座標値を読み取れません: %s"
 
 #: ../lib/symbol/read.c:260
 #, c-format
-msgid ""
-"Incorrect symbol name: '%s' (should be: group/name or group/name@mapset)"
-msgstr ""
-"不適当なシンボル名です: '%s' (group/name または group/name@mapsetにしてくださ"
-"い)"
+msgid "Incorrect symbol name: '%s' (should be: group/name or group/name@mapset)"
+msgstr "不適当なシンボル名です: '%s' (group/name または group/name@mapsetにしてください)"
 
 #: ../lib/symbol/read.c:284
 #, c-format
@@ -1321,8 +1298,7 @@ msgstr ""
 
 #: ../lib/cairodriver/read_ppm.c:56
 #, c-format
-msgid ""
-"Cairo: input mask file has incorrect dimensions: expected: %dx%d got: %dx%d"
+msgid "Cairo: input mask file has incorrect dimensions: expected: %dx%d got: %dx%d"
 msgstr ""
 
 #: ../lib/proj/get_proj.c:148
@@ -1421,11 +1397,8 @@ msgstr "PROJ.4-styleパラメータの文字列が取得出来ません"
 
 #: ../lib/proj/convert.c:130
 #, c-format
-msgid ""
-"OGR can't parse PROJ.4-style parameter string: %s (OGR Error code was %d)"
-msgstr ""
-"OGR はPROJ.4-styleパラメータの文字列を解析できません: %s (OGR エラーコード %"
-"d)"
+msgid "OGR can't parse PROJ.4-style parameter string: %s (OGR Error code was %d)"
+msgstr "OGR はPROJ.4-styleパラメータの文字列を解析できません: %s (OGR エラーコード %d)"
 
 #: ../lib/proj/convert.c:137
 #, c-format
@@ -1439,26 +1412,17 @@ msgstr "投影法名がありません! 投影法パラメータは不明です�
 #: ../lib/proj/convert.c:433
 #, c-format
 msgid "Datum <%s> not recognised by GRASS and no parameters found"
-msgstr ""
-"データム <%s> はGRASSに認識されていません そしてパラメータが見つかりません"
+msgstr "データム <%s> はGRASSに認識されていません そしてパラメータが見つかりません"
 
 #: ../lib/proj/convert.c:449
 #, c-format
-msgid ""
-"Datum <%s> apparently recognised by GRASS but no parameters found. You may "
-"want to look into this."
-msgstr ""
-"データム <%s> はGRASSに認識されているようですが、 パラメータが見つかりませ"
-"ん。　調べてください。"
+msgid "Datum <%s> apparently recognised by GRASS but no parameters found. You may want to look into this."
+msgstr "データム <%s> はGRASSに認識されているようですが、 パラメータが見つかりません。　調べてください。"
 
 #: ../lib/proj/convert.c:453
 #, c-format
-msgid ""
-"Invalid transformation number %d; valid range is 1 to %d. Leaving datum "
-"transform parameters unspecified."
-msgstr ""
-"無効な変換数です %d; 有効な範囲は1から %dです。データム変換パラメータを詳細不"
-"明のままにしておいてください。"
+msgid "Invalid transformation number %d; valid range is 1 to %d. Leaving datum transform parameters unspecified."
+msgstr "無効な変換数です %d; 有効な範囲は1から %dです。データム変換パラメータを詳細不明のままにしておいてください。"
 
 #: ../lib/gis/find_file.c:80
 #, c-format
@@ -1492,11 +1456,8 @@ msgstr " 保存したウィンドウ \"%s\" は完全に現在のGRASSウィン�
 
 #: ../lib/gis/view.c:549
 #, c-format
-msgid ""
-" Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
-msgstr ""
-" ウィンドウの %d%% のみ保存できます \"%s\" 現在のGRASSウィンドウと重複してい"
-"ます"
+msgid " Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
+msgstr " ウィンドウの %d%% のみ保存できます \"%s\" 現在のGRASSウィンドウと重複しています"
 
 #: ../lib/gis/mapset_msc.c:61
 #, c-format
@@ -1821,8 +1782,7 @@ msgstr "データムテーブルファイルにエラーがあります, ライ�
 #: ../lib/gis/open_misc.c:45
 #, c-format
 msgid "G__open_misc(read): mapset <%s> doesn't match xmapset <%s>"
-msgstr ""
-"G__open_misc(読み取り): マップセット <%s>は xmapsetと一致していません <%s>"
+msgstr "G__open_misc(読み取り): マップセット <%s>は xmapsetと一致していません <%s>"
 
 #: ../lib/gis/open_misc.c:67
 #, c-format
@@ -1869,8 +1829,7 @@ msgid "Database schema"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:148
-msgid ""
-"Do not use this option if schemas are not supported by driver/database server"
+msgid "Do not use this option if schemas are not supported by driver/database server"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:157
@@ -1969,9 +1928,7 @@ msgid "Data type used in the output raster3d map"
 msgstr "出力ファイルに使用されるデータタイプ"
 
 #: ../lib/gis/parser_standard_options.c:335
-msgid ""
-"Number of digits used as mantissa in the internal map storage, 0 -23 for "
-"float, 0 - 52 for double, max or default"
+msgid "Number of digits used as mantissa in the internal map storage, 0 -23 for float, 0 - 52 for double, max or default"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:345
@@ -1981,9 +1938,7 @@ msgstr "出力ファイルに使用される圧縮法"
 
 #: ../lib/gis/parser_standard_options.c:355
 #, fuzzy
-msgid ""
-"The dimensions of the tiles used in the output raster3d map (XxYxZ or "
-"default: 16x16x8)"
+msgid "The dimensions of the tiles used in the output raster3d map (XxYxZ or default: 16x16x8)"
 msgstr "出力ファイルに使用されるタイルのディメンション"
 
 #: ../lib/gis/parser_standard_options.c:365
@@ -2029,12 +1984,8 @@ msgstr ""
 #: ../lib/gis/parser_standard_options.c:429
 #: ../lib/gis/parser_standard_options.c:441
 #, fuzzy
-msgid ""
-"A single vector map can be connected to multiple database tables. This "
-"number determines which table to use. Layer name for direct OGR access."
-msgstr ""
-"単独のベクトルマップは複数のデータベーステーブルと接続されます。この数は使用"
-"するテーブルによって決定します。"
+msgid "A single vector map can be connected to multiple database tables. This number determines which table to use. Layer name for direct OGR access."
+msgstr "単独のベクトルマップは複数のデータベーステーブルと接続されます。この数は使用するテーブルによって決定します。"
 
 #: ../lib/gis/parser_standard_options.c:439
 msgid "Layer number or name ('-1' for all layers)"
@@ -2062,12 +2013,10 @@ msgid "Feature ids"
 msgstr "フィーチャ ids"
 
 #: ../lib/gis/parser_standard_options.c:482
-#, fuzzy
 msgid "Name to input file"
 msgstr "入力するファイル名"
 
 #: ../lib/gis/parser_standard_options.c:490
-#, fuzzy
 msgid "Name for output file"
 msgstr "出力するファイル名"
 
@@ -2242,19 +2191,15 @@ msgstr "g3d ファイルを閉じれません"
 #: ../lib/gis/distance.c:154
 #, fuzzy, c-format
 msgid "%s: shouldn't happen: code=%d P=(%f,%f) S=(%f,%f)(%f,%f)"
-msgstr ""
-"G_distance_point_to_line_segment: 起こりえません: コード=%d P=(%f,%f) S=(%f,%"
-"f)(%f,%f)"
+msgstr "G_distance_point_to_line_segment: 起こりえません: コード=%d P=(%f,%f) S=(%f,%f)(%f,%f)"
 
 #: ../lib/gis/seek.c:52 ../lib/gis/seek.c:58
-#, fuzzy
 msgid "Unable to seek"
-msgstr "フォーカスを設置できません"
+msgstr "シークできません"
 
 #: ../lib/gis/seek.c:56
-#, fuzzy
 msgid "Seek offset out of range"
-msgstr "レイヤー索引は範囲外です"
+msgstr "シークするオフセット値が範囲外です"
 
 #: ../lib/gis/parser_help.c:79
 #, fuzzy
@@ -2631,12 +2576,8 @@ msgid "%s complete. %s"
 msgstr "%s 完了. %s"
 
 #: ../lib/gis/gisinit.c:50 ../lib/gis/gisinit.c:82
-msgid ""
-"Incompatible library version for module. You need to rebuild GRASS or "
-"untangle multiple installations."
-msgstr ""
-"互換性のないライブラリバージョンです。GRASSを復元するか、複合インストールを解"
-"決する必要があります。"
+msgid "Incompatible library version for module. You need to rebuild GRASS or untangle multiple installations."
+msgstr "互換性のないライブラリバージョンです。GRASSを復元するか、複合インストールを解決する必要があります。"
 
 #: ../lib/gis/gisinit.c:60
 #, c-format
@@ -2650,9 +2591,7 @@ msgstr "マップセット %s が見つかりません"
 
 #: ../lib/gis/gisinit.c:96
 msgid "System not initialized. Programmer forgot to call G_gisinit()."
-msgstr ""
-"システムが初期化されません。 プログラマーが G_gisinit()を呼び出すのを忘れてい"
-"ます。"
+msgstr "システムが初期化されません。 プログラマーが G_gisinit()を呼び出すのを忘れています。"
 
 #: ../lib/rowio/setup.c:61 ../lib/rowio/setup.c:67
 #: ../lib/vector/Vlib/ascii.c:199 ../lib/vector/Vlib/line.c:48
@@ -2677,8 +2616,7 @@ msgstr "メモリ不足"
 #: ../lib/driver/parse_ftcap.c:84
 #, c-format
 msgid "%s: Unable to read font definition file; use the default"
-msgstr ""
-"%s:フォントの定義ファイルが読み取れません;  デフォルト値を使用してください"
+msgstr "%s:フォントの定義ファイルが読み取れません;  デフォルト値を使用してください"
 
 #: ../lib/driver/parse_ftcap.c:90
 #, c-format
@@ -2717,28 +2655,22 @@ msgstr "一時ファイルが開けません"
 
 #: ../lib/vector/diglib/test.c:75
 #, c-format
-msgid ""
-"Error in read/write portable double, byte_order = %d Written: %.16e3E Read: "
-"%.16e3E"
+msgid "Error in read/write portable double, byte_order = %d Written: %.16e3E Read: %.16e3E"
 msgstr ""
 
 #: ../lib/vector/diglib/test.c:89
 #, c-format
-msgid ""
-"Error in read/write portable float, byte_order = %d Written: %.8e3E Read: "
-"%.8e3E"
+msgid "Error in read/write portable float, byte_order = %d Written: %.8e3E Read: %.8e3E"
 msgstr ""
 
 #: ../lib/vector/diglib/test.c:104
 #, c-format
-msgid ""
-"Error in read/write portable off_t, byte_order = %d Written: %lu Read: %lu"
+msgid "Error in read/write portable off_t, byte_order = %d Written: %lu Read: %lu"
 msgstr ""
 
 #: ../lib/vector/diglib/test.c:119
 #, c-format
-msgid ""
-"Error in read/write portable long, byte_order = %d Written: %lu Read: %lu"
+msgid "Error in read/write portable long, byte_order = %d Written: %lu Read: %lu"
 msgstr ""
 
 #: ../lib/vector/diglib/test.c:134
@@ -2748,8 +2680,7 @@ msgstr ""
 
 #: ../lib/vector/diglib/test.c:150
 #, c-format
-msgid ""
-"Error in read/write portable short, byte_order = %d Written: %d Read: %d"
+msgid "Error in read/write portable short, byte_order = %d Written: %d Read: %d"
 msgstr ""
 
 #: ../lib/vector/diglib/test.c:165
@@ -2759,12 +2690,8 @@ msgstr ""
 
 #: ../lib/vector/diglib/plus_node.c:217
 #, c-format
-msgid ""
-"Attempt to read line angle for the line which is not connected to the node: "
-"node %d, line %d"
-msgstr ""
-"ノードに接続されていないラインの線角を読み取ろうとしています: ノード %d, ライ"
-"ン %d"
+msgid "Attempt to read line angle for the line which is not connected to the node: node %d, line %d"
+msgstr "ノードに接続されていないラインの線角を読み取ろうとしています: ノード %d, ライン %d"
 
 #: ../lib/vector/diglib/plus.c:275
 msgid "Unable read topology for nodes"
@@ -2849,9 +2776,7 @@ msgstr "不必要なエリアを削除しようとしています"
 #: ../lib/vector/diglib/plus_area.c:400
 #, c-format
 msgid "Dead centroid %d registered for area (bug in the vector library)"
-msgstr ""
-"エリアに不必要なセントロイドが %d 個記録されました (ベクトルライブラリ内のバ"
-"グ)"
+msgstr "エリアに不必要なセントロイドが %d 個記録されました (ベクトルライブラリ内のバグ)"
 
 #: ../lib/vector/diglib/plus_area.c:425
 #, c-format
@@ -2865,30 +2790,18 @@ msgstr "不要なエリア %dから島%d 情報を削除しようとしていま
 
 #: ../lib/vector/diglib/plus_struct.c:520
 #, fuzzy, c-format
-msgid ""
-"Topology format version %d.%d is not supported by this release. Try to "
-"rebuild topology or upgrade GRASS."
-msgstr ""
-"フィーチャー索引フォーマットバージョン %d.　%d はこのリリースでサポートされて"
-"いません. トポロジーを再作成するかGRASSをアップデートしてください."
+msgid "Topology format version %d.%d is not supported by this release. Try to rebuild topology or upgrade GRASS."
+msgstr "フィーチャー索引フォーマットバージョン %d.　%d はこのリリースでサポートされていません. トポロジーを再作成するかGRASSをアップデートしてください."
 
 #: ../lib/vector/diglib/plus_struct.c:526
 #, fuzzy, c-format
-msgid ""
-"Your GRASS version does not fully support topology format %d.%d of the "
-"vector. Consider to rebuild topology or upgrade GRASS."
-msgstr ""
-"使用しているGRASS バージョンはベクトルの索引フォーマット %d.%d を十分にサポー"
-"トしていません. トポロジーを再作成するかGRASSをアップデートしてください."
+msgid "Your GRASS version does not fully support topology format %d.%d of the vector. Consider to rebuild topology or upgrade GRASS."
+msgstr "使用しているGRASS バージョンはベクトルの索引フォーマット %d.%d を十分にサポートしていません. トポロジーを再作成するかGRASSをアップデートしてください."
 
 #: ../lib/vector/diglib/plus_struct.c:536
 #, fuzzy, c-format
-msgid ""
-"Old topology format version %d.%d is not supported by this release. Try to "
-"rebuild topology."
-msgstr ""
-"フィーチャー索引フォーマットバージョン %d.　%d はこのリリースでサポートされて"
-"いません. トポロジーを再作成するかGRASSをアップデートしてください."
+msgid "Old topology format version %d.%d is not supported by this release. Try to rebuild topology."
+msgstr "フィーチャー索引フォーマットバージョン %d.　%d はこのリリースでサポートされていません. トポロジーを再作成するかGRASSをアップデートしてください."
 
 #: ../lib/vector/diglib/plus_struct.c:560 ../lib/vector/diglib/portable.c:210
 #: ../lib/vector/diglib/portable.c:243 ../lib/vector/diglib/portable.c:690
@@ -2905,28 +2818,21 @@ msgstr "メモリ用にファイルをロードできません, ファイルが�
 
 #: ../lib/vector/diglib/file.c:218
 msgid "Vector memory mode not supported, using 'AUTO'"
-msgstr ""
-"ベクトルメモリーモードはサポートされていません。, 'AUTO'を使用してください"
+msgstr "ベクトルメモリーモードはサポートされていません。, 'AUTO'を使用してください"
 
 #: ../lib/vector/diglib/spindex_rw.c:277
 #, c-format
-msgid ""
-"Spatial index format version %d.%d is not supported by this release. Try to "
-"rebuild topology or upgrade GRASS."
+msgid "Spatial index format version %d.%d is not supported by this release. Try to rebuild topology or upgrade GRASS."
 msgstr ""
 
 #: ../lib/vector/diglib/spindex_rw.c:284
 #, c-format
-msgid ""
-"Your GRASS version does not fully support spatial index format %d.%d of the "
-"vector. Consider to rebuild topology or upgrade GRASS."
+msgid "Your GRASS version does not fully support spatial index format %d.%d of the vector. Consider to rebuild topology or upgrade GRASS."
 msgstr ""
 
 #: ../lib/vector/diglib/spindex_rw.c:293
 #, c-format
-msgid ""
-"Spatial index format version %d.%d is not supported by this release. Please "
-"rebuild topology."
+msgid "Spatial index format version %d.%d is not supported by this release. Please rebuild topology."
 msgstr ""
 
 #: ../lib/vector/diglib/spindex_rw.c:824
@@ -2983,8 +2889,7 @@ msgstr "有効なフィーチャを修復しようとしています"
 #: ../lib/vector/Vlib/legal_vname.c:43
 #, c-format
 msgid "Illegal vector map name <%s>. May not contain '.' or 'NULL'."
-msgstr ""
-"無効なベクトルマップ名です<%s>.  '.' あるいは 'NULL'.が含まれていません。"
+msgstr "無効なベクトルマップ名です<%s>.  '.' あるいは 'NULL'.が含まれていません。"
 
 #: ../lib/vector/Vlib/legal_vname.c:50
 #, c-format
@@ -2998,11 +2903,8 @@ msgstr "無効なベクトルマップ名です <%s>. 文字 '%c' は使用で�
 
 #: ../lib/vector/Vlib/legal_vname.c:65
 #, c-format
-msgid ""
-"Illegal vector map name <%s>. SQL keyword cannot be used as vector map name."
-msgstr ""
-"無効なベクトルマップ名です <%s>. SQLキーワードはベクトルマップ名として使えま"
-"せん"
+msgid "Illegal vector map name <%s>. SQL keyword cannot be used as vector map name."
+msgstr "無効なベクトルマップ名です <%s>. SQLキーワードはベクトルマップ名として使えません"
 
 #: ../lib/vector/Vlib/legal_vname.c:97 ../lib/vector/Vlib/legal_vname.c:101
 #, c-format
@@ -3167,18 +3069,13 @@ msgid "vector map is not opened"
 msgstr "ベクトルマップは開かれていません"
 
 #: ../lib/vector/Vlib/geos.c:55
-#, fuzzy, c-format
-msgid ""
-"Vect_read_line_geos(): feature id %d is not reasonable (max features in "
-"vector map <%s>: %d)"
-msgstr ""
-"Vect_read_line(): フィーチャー id %d は適切ではありません (ベクトルマップ <%"
-"s> における最大のフィーチャ: %d)"
+#, c-format
+msgid "Vect_read_line_geos(): feature id %d is not reasonable (max features in vector map <%s>: %d)"
+msgstr "Vect_read_line(): フィーチャーID %d は適切ではありません (ベクトルマップ <%s> における最大のフィーチャ: %d)"
 
 #: ../lib/vector/Vlib/geos.c:60
-#, fuzzy
 msgid "only native format supported"
-msgstr "このフォーマット/レベルはサポートされていません"
+msgstr "ネイティブ形式のみサポートされています"
 
 #: ../lib/vector/Vlib/geos.c:65 ../lib/vector/Vlib/geos.c:255
 #: ../lib/vector/Vlib/read_nat.c:134
@@ -3188,27 +3085,27 @@ msgstr "不要なラインを読み込みます"
 #: ../lib/vector/Vlib/geos.c:90
 #, c-format
 msgid "Vect_read_area_geos(): unable to read area id %d"
-msgstr ""
+msgstr "Vect_read_area_geos(): エリア ID %d が読み込めません"
 
 #: ../lib/vector/Vlib/geos.c:104
 #, c-format
 msgid "Vect_read_area_geos(): unable to read isle id %d of area id %d"
-msgstr ""
+msgstr "Vect_read_area_geos(): isle ID %d エリア ID %d が読み込めません"
 
 #: ../lib/vector/Vlib/geos.c:202
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read line offset %ld"
-msgstr " ライン %d を読み込めません"
+msgstr "ラインオフセットを読み込めません %ld"
 
 #: ../lib/vector/Vlib/geos.c:409
-#, fuzzy, c-format
+#, c-format
 msgid "Attempt to read points of nonexistent area id %d"
-msgstr "存在しないエリアのポイントを読もうとしています"
+msgstr "存在しないエリアID %d を読み込もうとしています"
 
 #: ../lib/vector/Vlib/geos.c:469
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read feature id %d"
-msgstr "フィーチャー %d を書き込めません"
+msgstr "フィーチャーIDを読めません %d"
 
 #: ../lib/vector/Vlib/snap.c:133
 msgid "Snap vertices Pass 1: select points"
@@ -3361,9 +3258,7 @@ msgstr "topo ファイル書き込みのエラー"
 
 #: ../lib/vector/Vlib/build.c:429
 #, fuzzy
-msgid ""
-"Unable to build spatial index from topology, vector map is not opened at "
-"topology level 2"
+msgid "Unable to build spatial index from topology, vector map is not opened at topology level 2"
 msgstr "���"
 
 #: ../lib/vector/Vlib/build.c:451
@@ -3452,12 +3347,8 @@ msgid "Unable to open OGR DBMI driver"
 msgstr "OGR DBMI ドライバーを開けません"
 
 #: ../lib/vector/Vlib/field.c:639
-msgid ""
-"All FID tests failed. Neither 'FID' nor 'ogc_fid' nor 'ogr_fid' nor 'gid' "
-"available in OGR DB table"
-msgstr ""
-"全てのFIDテストは失敗しました. OGR DBテーブルには 'FID' も 'ogc_fid' も "
-"'ogr_fid' も 'gid' ありません "
+msgid "All FID tests failed. Neither 'FID' nor 'ogc_fid' nor 'ogr_fid' nor 'gid' available in OGR DB table"
+msgstr "全てのFIDテストは失敗しました. OGR DBテーブルには 'FID' も 'ogc_fid' も 'ogr_fid' も 'gid' ありません "
 
 #: ../lib/vector/Vlib/field.c:695
 #, c-format
@@ -3520,22 +3411,16 @@ msgstr "ベクトルヘッドにおける不明なキーワード %s"
 
 #: ../lib/vector/Vlib/read.c:111
 #, c-format
-msgid ""
-"Vect_read_line(): feature id %d is not reasonable (max features in vector "
-"map <%s>: %d)"
-msgstr ""
-"Vect_read_line(): フィーチャー id %d は適切ではありません (ベクトルマップ <%"
-"s> における最大のフィーチャ: %d)"
+msgid "Vect_read_line(): feature id %d is not reasonable (max features in vector map <%s>: %d)"
+msgstr "Vect_read_line(): フィーチャー id %d は適切ではありません (ベクトルマップ <%s> における最大のフィーチャ: %d)"
 
 #: ../lib/vector/Vlib/build_nat.c:100
 msgid "Unable to add area (map closed, topo saved)"
-msgstr ""
-"領域を追加できません (マップは閉じられています, topoは保存されています)"
+msgstr "領域を追加できません (マップは閉じられています, topoは保存されています)"
 
 #: ../lib/vector/Vlib/build_nat.c:109
 msgid "Unable to add isle (map closed, topo saved)"
-msgstr ""
-"アイルを追加できません (マップは閉じられています, topoは保存されています)"
+msgstr "アイルを追加できません (マップは閉じられています, topoは保存されています)"
 
 #: ../lib/vector/Vlib/build_nat.c:119
 msgid "Area of size = 0.0 ignored"
@@ -3588,12 +3473,12 @@ msgstr "セントロイドを接続しています..."
 #: ../lib/vector/Vlib/merge_lines.c:246
 #, c-format
 msgid "%d boundaries merged"
-msgstr ""
+msgstr "%d 個の境界を結合しました"
 
 #: ../lib/vector/Vlib/merge_lines.c:247
 #, c-format
 msgid "%d new boundaries"
-msgstr ""
+msgstr "%d 個の新しい境界"
 
 #: ../lib/vector/Vlib/buffer2.c:361
 msgid "Line is not looped"
@@ -3606,19 +3491,13 @@ msgstr ""
 
 #: ../lib/vector/Vlib/buffer2.c:589
 #, fuzzy
-msgid ""
-"Next edge was visited (right) but it is not the first one !!! breaking loop"
-msgstr ""
-"Next エッジ was visited but it is not the first one !!! ループを切断していま"
-"す"
+msgid "Next edge was visited (right) but it is not the first one !!! breaking loop"
+msgstr "Next エッジ was visited but it is not the first one !!! ループを切断しています"
 
 #: ../lib/vector/Vlib/buffer2.c:600
 #, fuzzy
-msgid ""
-"Next edge was visited (left) but it is not the first one !!! breaking loop"
-msgstr ""
-"Next エッジ was visited but it is not the first one !!! ループを切断していま"
-"す"
+msgid "Next edge was visited (left) but it is not the first one !!! breaking loop"
+msgstr "Next エッジ was visited but it is not the first one !!! ループを切断しています"
 
 #: ../lib/vector/Vlib/buffer2.c:648
 msgid "side != 0 feature not implemented"
@@ -3626,12 +3505,11 @@ msgstr "サイド!= 0フィーチャーがインプリメントされていま�
 
 #: ../lib/vector/Vlib/buffer2.c:890 ../lib/vector/Vlib/buffer2.c:937
 msgid "zero area size"
-msgstr ""
+msgstr "大きさが０のエリア"
 
 #: ../lib/vector/Vlib/buffer2.c:896 ../lib/vector/Vlib/buffer2.c:943
-#, fuzzy
 msgid "Line was not closed"
-msgstr "ラインはループされていません"
+msgstr "ラインが閉じていません"
 
 #: ../lib/vector/Vlib/buffer2.c:909 ../lib/vector/Vlib/buffer2.c:960
 msgid "Vect_get_point_in_poly() failed"
@@ -3743,17 +3621,13 @@ msgstr "���"
 
 #: ../lib/vector/Vlib/open_nat.c:152
 #, fuzzy, c-format
-msgid ""
-"Coor file of vector map <%s@%s> is larger than it should be (%ld bytes "
-"excess)"
+msgid "Coor file of vector map <%s@%s> is larger than it should be (%ld bytes excess)"
 msgstr "ベクトルマップ <%s@%s> の座標ファイルが大きすぎます(%ld バイト超過)"
 
 #: ../lib/vector/Vlib/open_nat.c:156
 #, fuzzy, c-format
-msgid ""
-"Coor file of vector <%s@%s> is shorter than it should be (%ld bytes missing)."
-msgstr ""
-"ベクトル <%s@%s> の座標ファイルが小さすぎます (%ld バイトが不足しています)."
+msgid "Coor file of vector <%s@%s> is shorter than it should be (%ld bytes missing)."
+msgstr "ベクトル <%s@%s> の座標ファイルが小さすぎます (%ld バイトが不足しています)."
 
 #: ../lib/vector/Vlib/dangles.c:148
 msgid "Changed"
@@ -3803,9 +3677,7 @@ msgstr "テーブル <%s> に列 <%s> が見つかりません"
 #: ../lib/vector/Vlib/net.c:362
 #, c-format
 msgid "Data type of column <%s> not supported (must be numeric)"
-msgstr ""
-"データ型 of 列 <%s> のデータタイプはサポートされていません (数字でなければな"
-"らない)"
+msgstr "データ型 of 列 <%s> のデータタイプはサポートされていません (数字でなければならない)"
 
 #: ../lib/vector/Vlib/net.c:221
 msgid "Registering arcs..."
@@ -3813,21 +3685,13 @@ msgstr "アークを登録しています..."
 
 #: ../lib/vector/Vlib/net.c:250
 #, c-format
-msgid ""
-"Database record for line %d (cat = %d, forward/both direction(s)) not found "
-"(forward/both direction(s) of line skipped)"
-msgstr ""
-"ライン %d (カタログ = %d, 前/後の両方向) のデータベース レコードは見つかりま"
-"せんでした (スキップされた前/後の両方向とも)"
+msgid "Database record for line %d (cat = %d, forward/both direction(s)) not found (forward/both direction(s) of line skipped)"
+msgstr "ライン %d (カタログ = %d, 前/後の両方向) のデータベース レコードは見つかりませんでした (スキップされた前/後の両方向とも)"
 
 #: ../lib/vector/Vlib/net.c:269
 #, c-format
-msgid ""
-"Database record for line %d (cat = %d, backword direction) not found"
-"(direction of line skipped)"
-msgstr ""
-"ライン %d (cat = %d, backword direction) のデータベースレコードは見つかりませ"
-"んでした(ラインの方向はスキップされました)"
+msgid "Database record for line %d (cat = %d, backword direction) not found(direction of line skipped)"
+msgstr "ライン %d (cat = %d, backword direction) のデータベースレコードは見つかりませんでした(ラインの方向はスキップされました)"
 
 #: ../lib/vector/Vlib/net.c:318
 msgid "Cannot add network arc"
@@ -3840,9 +3704,7 @@ msgstr "ノードコストをセットしています..."
 #: ../lib/vector/Vlib/net.c:398
 #, c-format
 msgid "Database record for node %d (cat = %d) not found (cost set to 0)"
-msgstr ""
-"ノード %d (cat = %d) のデータベースレコードは見つかりませんでした (コストは0"
-"にセットされています)"
+msgstr "ノード %d (cat = %d) のデータベースレコードは見つかりませんでした (コストは0にセットされています)"
 
 #: ../lib/vector/Vlib/net.c:425
 msgid "Flattening the graph..."
@@ -3862,13 +3724,11 @@ msgstr "不明な演算子"
 
 #: ../lib/vector/Vlib/overlay.c:120
 msgid "Overlay: line/boundary types not supported by AND operator"
-msgstr ""
-"オーバーレイ: ライン/境界タイプはAND演算子によってサポートされていません"
+msgstr "オーバーレイ: ライン/境界タイプはAND演算子によってサポートされていません"
 
 #: ../lib/vector/Vlib/overlay.c:123
 msgid "Overlay: area x area types not supported by AND operator"
-msgstr ""
-"オーバーレイ: 領域 x 領域タイプはAND演算子によってサポートされていません"
+msgstr "オーバーレイ: 領域 x 領域タイプはAND演算子によってサポートされていません"
 
 #: ../lib/vector/Vlib/poly.c:225
 msgid "Unable to find point in polygon"
@@ -3916,19 +3776,13 @@ msgstr "フィーチャー %d を書き込めません"
 
 #: ../lib/vector/Vlib/write.c:236
 #, c-format
-msgid ""
-"Unable to delete feature %d, vector map <%s> is not opened on topology level"
-msgstr ""
-"フィーチャー %d を削除できません, ベクトルマップ <%s> が位相幾何レベルで開か"
-"れていません"
+msgid "Unable to delete feature %d, vector map <%s> is not opened on topology level"
+msgstr "フィーチャー %d を削除できません, ベクトルマップ <%s> が位相幾何レベルで開かれていません"
 
 #: ../lib/vector/Vlib/write.c:242
 #, c-format
-msgid ""
-"Unable to delete feature %d, vector map <%s> is not opened in 'write' mode"
-msgstr ""
-"フィーチャー %d を削除できません, ベクトルマップ <%s> は'書き込み'モードで開"
-"かれていません"
+msgid "Unable to delete feature %d, vector map <%s> is not opened in 'write' mode"
+msgstr "フィーチャー %d を削除できません, ベクトルマップ <%s> は'書き込み'モードで開かれていません"
 
 #: ../lib/vector/Vlib/write.c:256
 #, fuzzy, c-format
@@ -3937,19 +3791,13 @@ msgstr "����� ���� ���\n"
 
 #: ../lib/vector/Vlib/write.c:282
 #, c-format
-msgid ""
-"Unable to restore feature %d, vector map <%s> is not opened on topology level"
-msgstr ""
-"フィーチャー %d を修復できません, ベクトルマップ <%s> が位相幾何学レベルで開"
-"かれていません"
+msgid "Unable to restore feature %d, vector map <%s> is not opened on topology level"
+msgstr "フィーチャー %d を修復できません, ベクトルマップ <%s> が位相幾何学レベルで開かれていません"
 
 #: ../lib/vector/Vlib/write.c:288
 #, c-format
-msgid ""
-"Unable to restore feature %d, vector map <%s> is not opened in 'write' mode"
-msgstr ""
-"フィーチャー %d を修復できません, ベクトルマップ <%s> が'書き込み' モードで開"
-"かれていません"
+msgid "Unable to restore feature %d, vector map <%s> is not opened in 'write' mode"
+msgstr "フィーチャー %d を修復できません, ベクトルマップ <%s> が'書き込み' モードで開かれていません"
 
 #: ../lib/vector/Vlib/write.c:302
 #, c-format
@@ -3972,8 +3820,7 @@ msgid "Programmer requested unknown access level %d"
 msgstr ""
 
 #: ../lib/vector/Vlib/open.c:229
-msgid ""
-"Vector map which is not in the current mapset cannot be opened for update"
+msgid "Vector map which is not in the current mapset cannot be opened for update"
 msgstr "現在のマップセットにないベクトルマップは更新できません"
 
 #: ../lib/vector/Vlib/open.c:256 ../lib/ogsf/Gv3.c:66 ../lib/ogsf/Gv3.c:330
@@ -3985,12 +3832,8 @@ msgstr "ベクトルマップ <%s> を開けません"
 #: ../lib/vector/Vlib/open.c:272 ../lib/vector/Vlib/open.c:362
 #: ../lib/vector/Vlib/open.c:383
 #, c-format
-msgid ""
-"Unable to open vector map <%s> on level %d. Try to rebuild vector topology "
-"by v.build."
-msgstr ""
-"ベクトルマップ <%s> をレベル %d で開けません.  v.build.でベクトルトポロジーを"
-"再作成してください"
+msgid "Unable to open vector map <%s> on level %d. Try to rebuild vector topology by v.build."
+msgstr "ベクトルマップ <%s> をレベル %d で開けません.  v.build.でベクトルトポロジーを再作成してください"
 
 #: ../lib/vector/Vlib/open.c:275
 #, fuzzy, c-format
@@ -4090,21 +3933,13 @@ msgstr "ベクトルマップ <%s@%s> のためにfidx ファイル を開くこ
 
 #: ../lib/vector/Vlib/open_ogr.c:168
 #, c-format
-msgid ""
-"Feature index format version %d.%d is not supported by this release. Try to "
-"rebuild topology or upgrade GRASS."
-msgstr ""
-"フィーチャー索引フォーマットバージョン %d.　%d はこのリリースでサポートされて"
-"いません. トポロジーを再作成するかGRASSをアップデートしてください."
+msgid "Feature index format version %d.%d is not supported by this release. Try to rebuild topology or upgrade GRASS."
+msgstr "フィーチャー索引フォーマットバージョン %d.　%d はこのリリースでサポートされていません. トポロジーを再作成するかGRASSをアップデートしてください."
 
 #: ../lib/vector/Vlib/open_ogr.c:173
 #, c-format
-msgid ""
-"Your GRASS version does not fully support feature index format %d.%d of the "
-"vector. Consider to rebuild topology or upgrade GRASS."
-msgstr ""
-"使用しているGRASS バージョンはベクトルの索引フォーマット %d.%d を十分にサポー"
-"トしていません. トポロジーを再作成するかGRASSをアップデートしてください."
+msgid "Your GRASS version does not fully support feature index format %d.%d of the vector. Consider to rebuild topology or upgrade GRASS."
+msgstr "使用しているGRASS バージョンはベクトルの索引フォーマット %d.%d を十分にサポートしていません. トポロジーを再作成するかGRASSをアップデートしてください."
 
 #: ../lib/vector/Vlib/open_ogr.c:240
 #, fuzzy, c-format
@@ -4292,9 +4127,7 @@ msgstr "不正なレイヤー索引（索引 >= レイヤーの数)"
 
 #: ../lib/vector/Vlib/cindex.c:109
 msgid "Invalid layer index (index < 0 or index >= number of layers)"
-msgstr ""
-"不正なレイヤーインデックス (インデックス < 0 または インデックス >= レイヤー"
-"の数)"
+msgstr "不正なレイヤーインデックス (インデックス < 0 または インデックス >= レイヤーの数)"
 
 #: ../lib/vector/Vlib/cindex.c:234
 msgid "Layer or category index out of range"
@@ -4328,8 +4161,7 @@ msgid "Empty OGR layer, nothing to build"
 msgstr ""
 
 #: ../lib/vector/Vlib/build_ogr.c:371
-msgid ""
-"Random read is not supported by OGR for this layer, unable to build topology"
+msgid "Random read is not supported by OGR for this layer, unable to build topology"
 msgstr ""
 
 #: ../lib/vector/Vlib/build_ogr.c:376
@@ -4413,9 +4245,7 @@ msgid "Unable to create field <%s>"
 msgstr "テーブル <%s> を作成できません"
 
 #: ../lib/vector/Vlib/dgraph.c:430
-msgid ""
-"Trying to add more edges to the planar_graph than the initial allocation "
-"size allows"
+msgid "Trying to add more edges to the planar_graph than the initial allocation size allows"
 msgstr ""
 
 #: ../lib/vector/Vlib/line.c:178 ../lib/vector/Vlib/line.c:211
@@ -4438,36 +4268,34 @@ msgstr "不明な問い合わせツール"
 
 #: ../lib/vector/neta/spanningtree.c:104
 msgid "Computing minimum spanning tree..."
-msgstr ""
+msgstr "最小スパンニングツリーの計算中..."
 
 #: ../lib/vector/neta/utils.c:222 ../lib/vector/neta/utils.c:235
 #, c-format
 msgid "'%s' must be > 0 for '%s'"
-msgstr ""
+msgstr "'%s' は >0でなければならない この '%s' の為に"
 
 #: ../lib/vector/neta/utils.c:224
 msgid "'where' and 'cats' parameters were supplied, cat will be ignored"
-msgstr ""
+msgstr "'where' と 'cats' のパラメーターが定義されましたので, cat は無視されました"
 
 #: ../lib/vector/neta/utils.c:228
-#, fuzzy
 msgid "Unable to load data from database"
-msgstr "データベース リンクを追加できません"
+msgstr "データベースからデータをロードできません"
 
 #: ../lib/vector/neta/utils.c:239
-#, fuzzy
 msgid "Problem loading category values"
-msgstr "ラスターマップの読み取りに問題があります"
+msgstr "ロードするカテゴリー値に問題があります"
 
 #: ../lib/vector/neta/allpairs.c:53
 msgid "Computing all pairs shortest paths..."
-msgstr ""
+msgstr "全ての最短経路を計算中..."
 
 #: ../lib/vector/neta/timetables.c:46 ../lib/vector/neta/timetables.c:203
 #: ../lib/vector/neta/timetables.c:244 ../lib/vector/neta/timetables.c:286
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open select cursor: %s"
-msgstr "選択カーソルを開けません: '%s'"
+msgstr "選択したカーソルを開けません: %s"
 
 #: ../lib/nviz/render.c:104
 msgid "Bad server connection"
@@ -4871,16 +4699,16 @@ msgstr ""
 #: ../lib/init/lock.c:38
 #, c-format
 msgid "Usage: %s file pid"
-msgstr ""
+msgstr "用例: %s ファイル pid"
 
 #: ../lib/init/lock.c:42
 msgid "Concurrent mapset locking is not supported on Windows"
-msgstr ""
+msgstr "マップセットの平行ロックはウィンドウズではサポートされていません。"
 
 #: ../lib/init/lock.c:60
 #, c-format
 msgid "Unable to write lockfile %s (disk full? Permissions?)"
-msgstr ""
+msgstr "ロックファイル %s  に書込みできません。(ディスクの空き容量？、権限？)"
 
 #: ../lib/init/grass.py:68
 #, fuzzy
@@ -5047,8 +4875,7 @@ msgstr ""
 
 #: ../lib/init/grass.py:566
 msgid ""
-"Error in GUI startup. If necessary, please report this error to the GRASS "
-"developers.\n"
+"Error in GUI startup. If necessary, please report this error to the GRASS developers.\n"
 "Switching to text mode now.\n"
 "\n"
 "Hit RETURN to continue..."
@@ -5084,9 +4911,7 @@ msgstr "%s: エリア %d は存在しません"
 
 #: ../lib/init/grass.py:613
 #, python-format
-msgid ""
-"%(user)s is currently running GRASS in selected mapset (file %(file)s "
-"found). Concurrent use not allowed."
+msgid "%(user)s is currently running GRASS in selected mapset (file %(file)s found). Concurrent use not allowed."
 msgstr ""
 
 #: ../lib/init/grass.py:617
@@ -5109,8 +4934,7 @@ msgstr "GISRC - 変数が設定されていません"
 #: ../lib/init/grass.py:670
 #, python-format
 msgid ""
-"Job file '%s' has been defined in the 'GRASS_BATCH_JOB' variable but not "
-"found. Exiting.\n"
+"Job file '%s' has been defined in the 'GRASS_BATCH_JOB' variable but not found. Exiting.\n"
 "\n"
 "Use 'unset GRASS_BATCH_JOB' to disable batch job processing."
 msgstr ""
@@ -5199,8 +5023,7 @@ msgid ""
 "Unable to start GRASS. You can:\n"
 " - Launch GRASS with '-gui' switch (`grass70 -gui`)\n"
 " - Create manually GISRC file (%s)\n"
-" - Launch GRASS with path to the location/mapset as an argument (`grass70 /"
-"path/to/location/mapset`)"
+" - Launch GRASS with path to the location/mapset as an argument (`grass70 /path/to/location/mapset`)"
 msgstr ""
 
 #: ../lib/init/grass.py:1049
@@ -5220,23 +5043,16 @@ msgstr ""
 #: ../lib/rst/interp_float/output2d.c:113
 #, c-format
 msgid "First change your cols number to nsizc %d %d"
-msgstr ""
+msgstr "最初にnsizcにカラムの番号を変更する %d %d"
 
 #: ../lib/rst/interp_float/segmen2d.c:111
-#, fuzzy
-msgid ""
-"Taking too long to find points for interpolation - please change the region "
-"to area where your points are. Continuing calculations..."
-msgstr ""
-"補間のポイントを見つけるのに時間がかかりすぎています--領域をポイントのあるエ"
-"リアに変更してください. 引き続き計算しています..."
+msgid "Taking too long to find points for interpolation - please change the region to area where your points are. Continuing calculations..."
+msgstr "補間のポイントを見つけるのに時間がかかりすぎています--領域をポイントのあるエリアに変更してください. 引き続き計算します..."
 
 #: ../lib/rst/interp_float/interp2d.c:214
 #, c-format
-msgid ""
-"Overshoot - increase in tension suggested. Overshoot occures at (%d,%d) "
-"cell. Z-value %f, zmin %f, zmax %f."
-msgstr ""
+msgid "Overshoot - increase in tension suggested. Overshoot occures at (%d,%d) cell. Z-value %f, zmin %f, zmax %f."
+msgstr "オーバーシュート - 張力が増加しています.オーバーシュートは次のところで起こっています (%d,%d) セル. Z-値 %f, z最小値 %f, z最大値 %f."
 
 #: ../lib/rst/interp_float/resout2d.c:77
 msgid "Temporarily changing the region to desired resolution..."
@@ -5270,9 +5086,9 @@ msgid "Bitmap mask created"
 msgstr "ビットマップ マスクは作成されました"
 
 #: ../lib/rst/interp_float/vinput2d.c:73
-#, fuzzy, c-format
+#, c-format
 msgid "Vector map <%s> is not 3D"
-msgstr "ベクトルマップ <%s> が見つかりません"
+msgstr "ベクトルマップ <%s> は３Dではありません"
 
 #: ../lib/rst/interp_float/vinput2d.c:76
 msgid "Loading data from attribute table ..."
@@ -5286,16 +5102,13 @@ msgstr "列 <%s> は見つかりませんでした"
 
 #: ../lib/rst/interp_float/vinput2d.c:97
 #: ../lib/rst/interp_float/vinput2d.c:110
-#, fuzzy, c-format
+#, c-format
 msgid "Data type of column <%s> must be numeric"
-msgstr ""
-"データ型 of 列 <%s> のデータタイプはサポートされていません (数字でなければな"
-"らない)"
+msgstr "カラム <%s> のデータタイプは数字でなければなりません"
 
 #: ../lib/rst/interp_float/vinput2d.c:121
-#, fuzzy
 msgid "Reading features from vector map ..."
-msgstr "ベクトルマップからラインを読み込んでいます ...  "
+msgstr "ベクトルマップからフィーチャーを読み込んでいます ...  "
 
 #: ../lib/rst/interp_float/vinput2d.c:153
 #, c-format
@@ -5304,80 +5117,68 @@ msgstr "cat %d のデータベースレコードは見つかりませんでし�
 
 #: ../lib/rst/interp_float/vinput2d.c:171
 msgid "Negative value of smoothing detected: sm must be >= 0"
-msgstr ""
+msgstr "負の値が定義されています: sm は >= 0 でなければなりません"
 
 #: ../lib/rst/interp_float/vinput2d.c:235
-#, fuzzy
 msgid "Strip exists with insufficient data"
-msgstr "stripは不十分なデータと存在します"
+msgstr "不十分なデータを分離します"
 
 #: ../lib/rst/interp_float/vinput2d.c:249
-#, fuzzy, c-format
+#, c-format
 msgid "There are points outside specified 2D/3D region - %d points ignored"
-msgstr "指定された2D/3D 領域外にポイントがあります--無視された %d ポイント"
+msgstr "指定された2D/3D 領域外にポイントがあります-- %d のポイント無視されました"
 
 #: ../lib/rst/interp_float/vinput2d.c:252
-#, fuzzy, c-format
+#, c-format
 msgid "Ignoring %d points (too dense)"
-msgstr "ポイント %d を無視しています -- 密集しすぎです"
+msgstr "%d 個の無視しました （密集しすぎです）"
 
 #: ../lib/rst/interp_float/vinput2d.c:256
 #, c-format
-msgid ""
-"%d points given for interpolation (after thinning) is less than given NPMIN=%"
-"d"
-msgstr ""
-"補間 に与えられた %d ポイント(菲薄化後) は 与えられたNPMIN=%d　より少ないです"
+msgid "%d points given for interpolation (after thinning) is less than given NPMIN=%d"
+msgstr "補間 に与えられた %d ポイント(菲薄化後) は 与えられたNPMIN=%d　より少ないです"
 
 #: ../lib/rst/interp_float/vinput2d.c:261
 msgid "Zero points in the given region"
-msgstr ""
+msgstr "リージョン内にポイントが有りません"
 
 #: ../lib/rst/interp_float/vinput2d.c:266
 #, c-format
-msgid ""
-"Segmentation parameters set to invalid values: npmin= %d, segmax= %d for "
-"smooth connection of segments, npmin > segmax (see manual)"
-msgstr ""
+msgid "Segmentation parameters set to invalid values: npmin= %d, segmax= %d for smooth connection of segments, npmin > segmax (see manual)"
+msgstr "セグメント化のパラメータに不正な値があります: npmin= %d, segmax= %d セグメントはスムーズに接続させなければなりません, npmin > segmax (マニュアルを参照してください)"
 
 #: ../lib/rst/interp_float/vinput2d.c:272
 #, c-format
-msgid ""
-"There are less than %d points for interpolation. No segmentation is "
-"necessary, to run the program faster set segmax=%d (see manual)"
-msgstr ""
-"補間のポイントは %d 以下です. より速いセットsegmax=%d (マニュアル参照)でのプ"
-"ログラム実行にセグメント化は必要ではありません"
+msgid "There are less than %d points for interpolation. No segmentation is necessary, to run the program faster set segmax=%d (see manual)"
+msgstr "補間のポイントは %d 以下です. より速いセットsegmax=%d (マニュアル参照)でのプログラム実行にセグメント化は必要ではありません"
 
 #: ../lib/rst/interp_float/vinput2d.c:276
-#, fuzzy, c-format
+#, c-format
 msgid "Number of points from vector map %d"
-msgstr "入力するベクトルマップ名"
+msgstr "ベクトルマップからの点数は %d です"
 
 #: ../lib/rst/interp_float/vinput2d.c:277
-#, fuzzy, c-format
+#, c-format
 msgid "Number of points outside of 2D/3D region %d"
-msgstr "領域外のセントロイドの数: %d"
+msgstr "2D/3Dの領域外の点数は %d です"
 
 #: ../lib/rst/interp_float/vinput2d.c:279
-#, fuzzy, c-format
+#, c-format
 msgid "Number of points being used %d"
-msgstr "ポイントの数: %d"
+msgstr "使用された点数は %d です"
 
 #: ../lib/rst/interp_float/vinput2d.c:312
-#, fuzzy
 msgid "Some points outside of region (ignored)"
-msgstr "いくつかのポイントは領域外です -- 無視します..."
+msgstr "いくつかのポイントは領域外です(無視します)"
 
 #: ../lib/rst/interp_float/vinput2d.c:318
-#, fuzzy
 msgid "Unable to allocate memory"
-msgstr "メモリを配分できません\n"
+msgstr "メモリを配分できません"
 
 #: ../lib/rst/interp_float/vinput2d.c:326
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to insert %f,%f,%f a = %d"
-msgstr "フィーチャー %d を書き込めません"
+msgstr "挿入できません %f,%f,%f a = %d"
 
 #: ../lib/rst/interp_float/write2d.c:40 ../lib/rst/interp_float/write2d.c:51
 #: ../lib/rst/interp_float/write2d.c:66 ../lib/rst/interp_float/write2d.c:75
@@ -5402,12 +5203,8 @@ msgstr "%s: 分類アルゴリズムにおけるエラー"
 
 #: ../lib/arraystats/class.c:221
 #, c-format
-msgid ""
-"There are classbreaks outside the range min-max. Number of classes reduced "
-"to %i, but using probabilities for %i classes."
-msgstr ""
-"min-max範囲外に分類区分があります. クラスの数は %i に減らされています 分類的"
-"にはとして%i が適しています"
+msgid "There are classbreaks outside the range min-max. Number of classes reduced to %i, but using probabilities for %i classes."
+msgstr "min-max範囲外に分類区分があります. クラスの数は %i に減らされています 分類的にはとして%i が適しています"
 
 #: ../lib/ogsf/GVL2.c:248
 #, c-format
@@ -5460,8 +5257,7 @@ msgstr "小さいフォントを使用してください!"
 
 #: ../lib/ogsf/gsd_surf.c:1742
 msgid "Cut-plane points mis-match between surfaces. Check resolution(s)."
-msgstr ""
-"カット平面のポイントはサーフェスの間で一致しません. 解決策を確認してください."
+msgstr "カット平面のポイントはサーフェスの間で一致しません. 解決策を確認してください."
 
 #: ../lib/ogsf/gvl_file.c:104
 msgid "Maximum number of datafiles exceeded"
@@ -5479,12 +5275,8 @@ msgstr "カラー素材: %d"
 
 #: ../lib/ogsf/gsd_prim.c:630
 #, c-format
-msgid ""
-"gsd_rot(): %c is an invalid axis specification. Rotation ignored. Please "
-"advise GRASS developers of this error"
-msgstr ""
-"gsd_rot(): 不正な軸%cが指定されています. ローテーションは無視されました. この"
-"エラーをGRASS開発者に報告してください"
+msgid "gsd_rot(): %c is an invalid axis specification. Rotation ignored. Please advise GRASS developers of this error"
+msgstr "gsd_rot(): 不正な軸%cが指定されています. ローテーションは無視されました. このエラーをGRASS開発者に報告してください"
 
 #: ../lib/ogsf/gsd_img_tif.c:64 ../lib/ogsf/gsd_img_ppm.c:53
 #: ../lib/ogsf/gsd_img_ppm.c:96 ../lib/ogsf/GK2.c:219
@@ -5514,8 +5306,7 @@ msgstr "ラスターマップ <%s> からカラーを転換しています..."
 
 #: ../lib/ogsf/Gs3.c:968
 msgid "View not saved by this program,there may be some inconsistancies"
-msgstr ""
-"このプログラムにビューは保存されていません,　不一致がある可能性があります"
+msgstr "このプログラムにビューは保存されていません,　不一致がある可能性があります"
 
 #: ../lib/ogsf/gsds.c:109
 msgid "Maximum number of datasets exceeded"
@@ -5557,12 +5348,12 @@ msgstr "ビットマップは不一致です "
 #: ../lib/ogsf/GS2.c:1212
 #, c-format
 msgid "no category info"
-msgstr ""
+msgstr "カテゴリ情報がありません"
 
 #: ../lib/ogsf/GS2.c:1231
 #, c-format
 msgid "no data"
-msgstr ""
+msgstr "データがありません"
 
 #: ../lib/ogsf/GS2.c:1656
 #, c-format
@@ -5810,13 +5601,11 @@ msgstr "���"
 
 #: ../lib/python/temporal/abstract_datasets.py:873
 #, python-format
-msgid ""
-"Update metadata, spatial and temporal extent from all registered maps of <%s>"
+msgid "Update metadata, spatial and temporal extent from all registered maps of <%s>"
 msgstr ""
 
 #: ../lib/python/temporal/spatial_extent.py:38
-msgid ""
-"Projections are different. Unable to compute overlap_2d for spatial extents"
+msgid "Projections are different. Unable to compute overlap_2d for spatial extents"
 msgstr ""
 
 #: ../lib/python/temporal/spatial_extent.py:161
@@ -5890,12 +5679,8 @@ msgstr "入力マップを閉じれません"
 
 #: ../lib/python/raster.py:46
 #, fuzzy, python-format
-msgid ""
-"Unable to write history for <%(map)s>. Raster map <%(map)s> not found in "
-"current mapset."
-msgstr ""
-"フィーチャー %d を修復できません, ベクトルマップ <%s> が'書き込み' モードで開"
-"かれていません"
+msgid "Unable to write history for <%(map)s>. Raster map <%(map)s> not found in current mapset."
+msgstr "フィーチャー %d を修復できません, ベクトルマップ <%s> が'書き込み' モードで開かれていません"
 
 #: ../lib/python/raster.py:101
 msgid "An error occurred while running r.mapcalc"
@@ -5926,8 +5711,7 @@ msgstr ""
 #: ../lib/db/dbmi_base/legal_dbname.c:38
 #, fuzzy, c-format
 msgid "Illegal table map name <%s>. May not contain '.' or 'NULL'."
-msgstr ""
-"不正なテーブル名 <%s>.　'.' または 'NULL'を含んでいない可能性があります.\n"
+msgstr "不正なテーブル名 <%s>.　'.' または 'NULL'を含んでいない可能性があります.\n"
 
 #: ../lib/db/dbmi_base/legal_dbname.c:45
 #, fuzzy, c-format
@@ -6141,12 +5925,8 @@ msgid "Memory error in allocating timestamp"
 msgstr "タイムスタンプ割り当てにおけるメモリエラー"
 
 #: ../lib/sites/sites.c:296 ../lib/sites/sites.c:426
-msgid ""
-"Dev note: Adapted sites library used for vector points. (module should be "
-"updated to GRASS 6 vector library)"
-msgstr ""
-"Dev note: ベクトルポイントに使用された適合されたサイトライブラリ. (モジュール"
-"をGRASS 6 ベクトルライブラリにアップデートする必要があります)"
+msgid "Dev note: Adapted sites library used for vector points. (module should be updated to GRASS 6 vector library)"
+msgstr "Dev note: ベクトルポイントに使用された適合されたサイトライブラリ. (モジュールをGRASS 6 ベクトルライブラリにアップデートする必要があります)"
 
 #: ../lib/sites/sites.c:345
 msgid "Cannot fetch row"
@@ -6452,8 +6232,7 @@ msgstr "作業マトリックスにスペースを割り当てられませんで
 
 #: ../lib/gmath/la.c:531
 msgid "Matrix (or submatrix is singular). Solution undetermined"
-msgstr ""
-"マトリックス (,またはサブマトリックスは単数です). 解決策は確定していません"
+msgstr "マトリックス (,またはサブマトリックスは単数です). 解決策は確定していません"
 
 #: ../lib/gmath/la.c:535
 msgid "Problem in LA routine."
@@ -6621,8 +6400,7 @@ msgstr "グループ [%s in %s] のファイル [%s] が見つかりません"
 #: ../lib/imagery/fopen.c:79
 #, c-format
 msgid "Unable to create file [%s] for subgroup [%s] of group [%s in %s]"
-msgstr ""
-"グループ [%s in %s] の サブグループ [%s] のファイル [%s] を作成できません"
+msgstr "グループ [%s in %s] の サブグループ [%s] のファイル [%s] を作成できません"
 
 #: ../lib/imagery/fopen.c:101 ../lib/imagery/fopen.c:127
 #, c-format
@@ -6632,8 +6410,7 @@ msgstr "グループ [%s in %s] の サブグループ [%s] のファイル [%s]
 #: ../lib/imagery/fopen.c:116
 #, c-format
 msgid "Unable to find file [%s] for subgroup [%s] of group [%s in %s]"
-msgstr ""
-"グループ [%s in %s] のサブグループ [%s] のファイル [%s] が見つかりません "
+msgstr "グループ [%s in %s] のサブグループ [%s] のファイル [%s] が見つかりません "
 
 #: ../lib/imagery/list_gp.c:34
 #, c-format
@@ -6659,1129 +6436,3 @@ msgstr "グループ <%s> のサブグループ <%s> は空です\n"
 #, c-format
 msgid "subgroup <%s> of group <%s> references the following raster maps\n"
 msgstr "グループ <%s> のサブグループ <%s> は次のラスターマップを参照します\n"
-
-#, fuzzy
-#~ msgid "None"
-#~ msgstr "無し"
-
-#, fuzzy
-#~ msgid "Unknown"
-#~ msgstr "不明"
-
-#~ msgid "projection field missing"
-#~ msgstr "投影フィールドが見つかりません"
-
-#~ msgid "north field missing"
-#~ msgstr "北フィールドが見つかりません"
-
-#~ msgid "south field missing"
-#~ msgstr "南フィールドが見つかりません"
-
-#~ msgid "west field missing"
-#~ msgstr "西フィールドが見つかりません"
-
-#~ msgid "east field missing"
-#~ msgstr "東フィールドが見つかりません"
-
-#~ msgid "cols field missing"
-#~ msgstr "列フィールドが見つかりません"
-
-#~ msgid "rows field missing"
-#~ msgstr "行フィールドが見つかりません"
-
-#~ msgid "ewres3 field missing"
-#~ msgstr "東西解像度3フィールドが見つかりません"
-
-#~ msgid "nsres3 field missing"
-#~ msgstr "北南解像度3フィールドが見つかりません"
-
-#~ msgid "cols3 field missing"
-#~ msgstr "列3 フィールドが見つかりません"
-
-#~ msgid "rows3 field missing"
-#~ msgstr "行3 フィールドが見つかりません"
-
-#~ msgid "Unable to open driver <%s>"
-#~ msgstr "ドライバー <%s> を開けません"
-
-#~ msgid "Requested g3d map <%s> not found"
-#~ msgstr "要求された3Dグリッドマップ <%s> は見つかりませんでした"
-
-#~ msgid "%s not set"
-#~ msgstr "%s 設定されていません"
-
-#~ msgid "BUG (Vect_build_sidx_from_topo): line does not exist"
-#~ msgstr "バグ (Vect_build_sidx_from_topo): ラインは存在しません"
-
-#~ msgid "BUG (Vect_build_sidx_from_topo): area does not exist"
-#~ msgstr "バグ (Vect_build_sidx_from_topo): エリアは存在しません"
-
-#~ msgid "BUG (Vect_build_sidx_from_topo): isle does not exist"
-#~ msgstr "バグ (Vect_build_sidx_from_topo): 島は存在しません"
-
-#, fuzzy
-#~ msgid "Reading nodes from vector map ..."
-#~ msgstr "ベクトルマップからノードを読み込んでいます ...  "
-
-#~ msgid "Precision used in the output file (default, max, or 0 to 52)"
-#~ msgstr ""
-#~ "出力ファイルに使用される精度 (デフォルト値, 最大値, または 0 から 52)"
-
-#~ msgid "Unable to allocate memory for a null buffer"
-#~ msgstr "null バッファのメモリを割り当てられません"
-
-#, fuzzy
-#~ msgid "       valid options: %s\n"
-#~ msgstr "  %*s   オプション: "
-
-#, fuzzy
-#~ msgid "Error writing floating point format file for map <%s>"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Unable to create a new process!"
-#~ msgstr "�������: ����� �����������n"
-
-#, fuzzy
-#~ msgid "Unable to set region"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Raster map <%s> - unable to write row %d"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Unable to write feature, OGR layer not defined"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Failed writing raster map"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Unable to write color file of raster map <%s>"
-#~ msgstr "����� ���� ���\n"
-
-#, fuzzy
-#~ msgid "Cannot open database %s"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Unable to query drawable"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Failed to initialize Xlib surface"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Cannot read topo for line [%d]"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Output name '%s' is not valid rast name."
-#~ msgstr "���."
-
-#, fuzzy
-#~ msgid "Cannot get field info"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Cannot open database"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Output name '%s' is not valid vector name."
-#~ msgstr "���."
-
-#, fuzzy
-#~ msgid "Cannot open existing vector map <%s>"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Cannot delete existing vector <%s>"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Cannot open new vector %s"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Cannot open history file for vector '%s'"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "Can't open directory %s"
-#~ msgstr "���"
-
-#, fuzzy
-#~ msgid "No such graphics monitor as <%s>.\n"
-#~ msgstr "����������<%s> � �����.\n"
-
-#, fuzzy
-#~ msgid "Please run \"d.mon\" to select a valid graphics monitor.\n"
-#~ msgstr "�����\"d.mon\" ����� �����������\n"
-
-#, fuzzy
-#~ msgid "Error - Monitor <%s> is in use.\n"
-#~ msgstr "��� - ����<%s> ���\n"
-
-#, fuzzy
-#~ msgid "Error - Could not complete locking process for monitor <%s>.\n"
-#~ msgstr "��� - � �� ����������(lock) ������<%s>.\n"
-
-#, fuzzy
-#~ msgid "Error - Can't set up pipe to graphics device.\n"
-#~ msgstr "��� - ����� (pipe) ������� �����.\n"
-
-#, fuzzy
-#~ msgid "Error - Graphics monitor <%s> not running!\n"
-#~ msgstr "��� - ����������<%s> � ����\n"
-
-#, fuzzy
-#~ msgid "Please start graphics monitor <%s>.\n"
-#~ msgstr "���� ����������<%s>.\n"
-
-#, fuzzy
-#~ msgid "Not connected...\n"
-#~ msgstr "�������...\n"
-
-#, fuzzy
-#~ msgid "Couldn't connect to monitor. Will try once more.\n"
-#~ msgstr "����� ����� ���� ���� ����\n"
-
-#, fuzzy
-#~ msgid "ERROR: GISBASE not set\n"
-#~ msgstr "���: GISBASE � �����\n"
-
-#, fuzzy
-#~ msgid "%s/%s' was found in more mapsets (also found in <%s>)"
-#~ msgstr "%s/%s' was found in more mapsets (also found in <%s>) "
-
-#~ msgid ""
-#~ "taking too long to find points for interpolation--please change the "
-#~ "region to area where your points are. Continuing calculations..."
-#~ msgstr ""
-#~ "補間のポイントを見つけるのに時間がかかりすぎています--領域をポイントのある"
-#~ "エリアに変更してください. 引き続き計算しています..."
-
-#~ msgid "Reading lines from vector map ... "
-#~ msgstr "ベクトルマップからラインを読み込んでいます ...  "
-
-#~ msgid "Reading nodes from vector map ... "
-#~ msgstr "ベクトルマップからノードを読み込んでいます ...  "
-
-#~ msgid "strip exists with insufficient data"
-#~ msgstr "stripは不十分なデータと存在します"
-
-#~ msgid "there are points outside specified 2D/3D region--ignored %d points"
-#~ msgstr "指定された2D/3D 領域外にポイントがあります--無視された %d ポイント"
-
-#~ msgid "ignoring %d points -- too dense"
-#~ msgstr "ポイント %d を無視しています -- 密集しすぎです"
-
-#~ msgid "some points outside of region -- will ignore..."
-#~ msgstr "いくつかのポイントは領域外です -- 無視します..."
-
-#~ msgid "       Presented as: %s\n"
-#~ msgstr "       存在します: %s\n"
-
-#~ msgid "       Legal range: %s\n"
-#~ msgstr "       有効な領域: %s\n"
-
-#~ msgid "       You provided %d items:\n"
-#~ msgstr "        %d アイテムを提供しました:\n"
-
-#~ msgid "Invalid view position coordinates, using %f,%f"
-#~ msgstr "不正な視点位置座標,用法は %f,%f"
-
-#~ msgid "Unknown Location"
-#~ msgstr "不明なロケーション"
-
-#~ msgid "quantization file [%s] in mapset [%s] %s"
-#~ msgstr "量子化ファイル [%s] マップセット内 [%s] %s"
-
-#~ msgid ""
-#~ "\n"
-#~ "Flags:\n"
-#~ msgstr ""
-#~ "\n"
-#~ "フラッグ:\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Parameters:\n"
-#~ msgstr ""
-#~ "\n"
-#~ "パラメータ:\n"
-
-#~ msgid "unable to write quant file!"
-#~ msgstr "量子化ファイルに書き込みできません!"
-
-#~ msgid "Error writing floating point format file for map %s"
-#~ msgstr " マップ%sに浮動小数点のフォーマットファイルを書き込みできません"
-
-#~ msgid "Unable to open '%s'"
-#~ msgstr "開けません '%s'"
-
-#~ msgid "Too many arguments"
-#~ msgstr "独立変数が多すぎます"
-
-#~ msgid "is not set"
-#~ msgstr "設定されていません"
-
-#~ msgid ""
-#~ "is invalid\n"
-#~ "%s"
-#~ msgstr ""
-#~ "無効\n"
-#~ "%s"
-
-#~ msgid "ERROR in reading <%s> file for location <%s>"
-#~ msgstr "読み取りエラー <%s> ファイルの場所 <%s>"
-
-#~ msgid "Unable to open file %s in <%s>"
-#~ msgstr "ファイルを開けません %s in <%s>"
-
-#~ msgid "line %d: <%s>"
-#~ msgstr "ライン %d: <%s>"
-
-#~ msgid ""
-#~ "\n"
-#~ "%s invalid; Try again > "
-#~ msgstr ""
-#~ "\n"
-#~ "%s 間違っています; 再実行 >  "
-
-#~ msgid "Unable to open raster map <%s>"
-#~ msgstr "ラスターマップ <%s> を開けません"
-
-#~ msgid "Unable to write raster row %i"
-#~ msgstr "ラスター行 %i を書き込めません"
-
-#~ msgid "Unable to open raster map <%s@%s>"
-#~ msgstr "ラスターマップが開けません <%s@%s>"
-
-#~ msgid "Unable to find <%s@%s>"
-#~ msgstr "見つかりません <%s@%s>"
-
-#~ msgid " It is a reclass of raster map <%s@%s> "
-#~ msgstr "再分類したラスターマップです <%s@%s>  "
-
-#~ msgid "Unable to realloc buffer"
-#~ msgstr "バッファーを再確保できません"
-
-#~ msgid "Feature: "
-#~ msgstr "フィーチャー:  "
-
-#~ msgid "Name of input raster3d map"
-#~ msgstr "入力する3Dラスターマップ名"
-
-#~ msgid "Name of input raster3d map(s)"
-#~ msgstr "入力する3Dラスターマップ名"
-
-#~ msgid "Name for output raster3d map"
-#~ msgstr "出力する3Dラスターマップ名"
-
-#~ msgid "Unable to open category index file for vector map <%s@%s>"
-#~ msgstr "ベクトルマップ <%s@%s> のカテゴリー索引ファイルを開けません"
-
-#~ msgid "Unable to read head file"
-#~ msgstr "ヘッドファイルを読み込めません"
-
-#~ msgid "Can not create a new process!"
-#~ msgstr "新しいプロセスを作成できません"
-
-#~ msgid "Can't read %s for [%s in %s]"
-#~ msgstr "読み取れません %s  [%s in %s]"
-
-#~ msgid "Unable to spawn the 'wish' program"
-#~ msgstr " 'wish'プログラムを作成できません"
-
-#~ msgid "ERROR %s from graphics driver.\n"
-#~ msgstr "エラー %s グラフィックドライバー\n"
-
-#~ msgid "ERROR - eof from graphics monitor.\n"
-#~ msgstr "エラー - 画像モニターからファイルの終了\n"
-
-#~ msgid "Warning - no response from graphics monitor <%s>.\n"
-#~ msgstr "警告 - 画像モニターから応答がありません <%s>.\n"
-
-#~ msgid "Check to see if the mouse is still active.\n"
-#~ msgstr "マウスが動くならチェックしてください.\n"
-
-#~ msgid "ERROR - no response from graphics monitor <%s>.\n"
-#~ msgstr "エラー - 画像モニターから応答がありません <%s>.\n"
-
-#~ msgid "No graphics monitor has been selected for output."
-#~ msgstr "出力に画像モニターが選択されていません"
-
-#~ msgid "Please run \"d.mon\" to select a graphics monitor."
-#~ msgstr "画像モニターの選択のために \"d.mon\" を実行してください"
-
-#~ msgid "Failed to get socket name for monitor <%s>."
-#~ msgstr "モニターのソケット名の入手に失敗しました <%s>."
-
-#~ msgid "No socket to connect to for monitor <%s>."
-#~ msgstr "モニターに接続するソケットがありません <%s>."
-
-#~ msgid "Socket is already in use or not accepting connections."
-#~ msgstr "ソケットは既に使用中あるいは接続できません"
-
-#~ msgid "Use d.mon to select a monitor"
-#~ msgstr "モニター選択にd.monを使用してください"
-
-#~ msgid "Trying to connect to something not a socket."
-#~ msgstr "ソケット以外のもので接続してください"
-
-#~ msgid "Probably an error with the server."
-#~ msgstr "サーバーにエラーがあります"
-
-#~ msgid "Connection failed."
-#~ msgstr "接続に失敗しました"
-
-#~ msgid "    5:  Aspect\n"
-#~ msgstr "    5:  方位\n"
-
-#~ msgid "Unable to open layer <%s>"
-#~ msgstr "レイヤー <%s> を開けません"
-
-#~ msgid "Unable to add database link, map is not opened in WRITE mode"
-#~ msgstr ""
-#~ "データベースリンクを追加できません, マップがWRITE モードで開かれていません"
-
-#~ msgid "Illegal filename. Character <%c> not allowed.\n"
-#~ msgstr "無効なファイル名 です。文字 <%c> は使えません.\n"
-
-#~ msgid "Unable to find '%s' in '%s'"
-#~ msgstr "見つかりません '%s' in '%s'"
-
-#~ msgid " The raster map %s@%s is empty"
-#~ msgstr "ラスターマップ %s@%s は空です"
-
-#~ msgid "category support for vector map [%s] in mapset [%s] %s"
-#~ msgstr "マップセット [%s] %s内のベクトルマップ [%s] のカテゴリーサポート"
-
-#~ msgid "Run quietly"
-#~ msgstr "実行"
-
-#~ msgid "Unable to allocate memory\n"
-#~ msgstr "メモリを配分できません\n"
-
-#~ msgid "Unable to read header file for raster map <%s@%s>."
-#~ msgstr "ラスターマップのためのヘッダーファイルが読み取れません <%s@%s>."
-
-#~ msgid "Unable to feature %d from vector map <%s>"
-#~ msgstr "Unable to feature %d from vector map <%s>"
-
-#~ msgid "Connect attempt timed out."
-#~ msgstr "接続のタイムアウト"
-
-#~ msgid "Hit RETURN to cancel request\n"
-#~ msgstr "要求をキャンセルするためにリターンを押す\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "Color table needed for file [%s] in mapset [%s].\n"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "ファイルにカラーテーブルが必要です [%s] マップセット [%s].\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Please identify the type desired:\n"
-#~ msgstr ""
-#~ "\n"
-#~ "要求されたタイプか確認してください:\n"
-
-#~ msgid "    1:  Random colors\n"
-#~ msgstr "    1:  ランダムカラー\n"
-
-#~ msgid "    2:  Red, green, and blue color ramps\n"
-#~ msgstr "    2:  赤、緑、青カラーランプ\n"
-
-#~ msgid "    3:  Color wave\n"
-#~ msgstr "    3:  カラーウエーブ\n"
-
-#~ msgid "    4:  Gray scale\n"
-#~ msgstr "    4:  グレースケール\n"
-
-#~ msgid "    6:  Rainbow colors\n"
-#~ msgstr "    6:  レインボーカラー\n"
-
-#~ msgid "    7:  Red through yellow to green\n"
-#~ msgstr "    7: 赤から黄を通過して緑\n"
-
-#~ msgid "    8:  Green through yellow to red\n"
-#~ msgstr "    8:  緑から黄を通過して赤\n"
-
-#~ msgid "RETURN  quit\n"
-#~ msgstr "戻る  終了\n"
-
-#~ msgid "Cannot write quant rules: map %s is integer"
-#~ msgstr "量子化ルールを書き込めません: マップ %s は整数です"
-
-#~ msgid "G_put_map_row: %s is not integer! Use G_put_[f/d]_raster_row()!"
-#~ msgstr ""
-#~ "G_put_map_row: %s は整数ではありません!  G_put_[f/d]_raster_row()を使用し"
-#~ "てください!"
-
-#~ msgid "%s: map [%s] not open for write - request ignored"
-#~ msgstr "%s: マップ [%s]は書き込み用に開けません - 無視しました"
-
-#~ msgid "%s: map [%s] not open for random write - request ignored"
-#~ msgstr ""
-#~ "%s: マップ [%s] はランダムの書き込み用に開くことができません -  無視しまし"
-#~ "た"
-
-#~ msgid "%s: map [%s] not open for sequential write - request ignored"
-#~ msgstr ""
-#~ "%s:マップ [%s] は順次の書き込み用に開くことができません -  無視しました"
-
-#~ msgid "%s: unopened file descriptor - request ignored"
-#~ msgstr "%s: ファイルディスクリプタが開けません -  無視しました"
-
-#~ msgid "map [%s] - unable to write row %d"
-#~ msgstr "マップ [%s] - 行に書き込めません %d"
-
-#~ msgid "unable to find a temporary null file %s"
-#~ msgstr "一時NULLファイルが見つかりません %s"
-
-#~ msgid "error writing null row %d"
-#~ msgstr "NULL行の書き込みエラー %d"
-
-#~ msgid "category support for [%s] in mapset [%s] %s"
-#~ msgstr "マップセット[%s] %s のカテゴリーサポート[%s]"
-
-#~ msgid "ERROR in reading %s"
-#~ msgstr "読み取りエラー %s"
-
-#~ msgid "Cannot open temp file"
-#~ msgstr "一時ファイルが開けません"
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "Please specify projection name\n"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "投影法を指定してください\n"
-
-#~ msgid "Enter 'list' for the list of available projections\n"
-#~ msgstr "利用できる投影法リストに'list'と入力\n"
-
-#~ msgid "EmbedGivenNulls: wrong data type!"
-#~ msgstr "EmbedGivenNulls: 間違っているデータタイプです!"
-
-#~ msgid "Null values have not been initialized. "
-#~ msgstr "NULL値が初期化されていません"
-
-#~ msgid "G_gisinit() must be called first. "
-#~ msgstr "G_gisinit() 最初に呼び出さなければなりません"
-
-#~ msgid "G_set_null_value: wrong data type!"
-#~ msgstr "G_set_null_value: 間違っているデータタイプです!"
-
-#~ msgid "Layer number"
-#~ msgstr "レイヤー数"
-
-#~ msgid "Allow overwrite"
-#~ msgstr "上書き"
-
-#~ msgid "Run with minimal output messages"
-#~ msgstr "最小限の出力メッセージで実行"
-
-#~ msgid ""
-#~ "\n"
-#~ "FLAG: Set the following flag?\n"
-#~ msgstr ""
-#~ "\n"
-#~ "フラッグ: 次のフラッグに設定する?\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "OPTION:   %s\n"
-#~ msgstr ""
-#~ "\n"
-#~ "オプション:   %s\n"
-
-#~ msgid "     key: %s\n"
-#~ msgstr "     キー: %s\n"
-
-#~ msgid " default: %s\n"
-#~ msgstr " デフォルト: %s\n"
-
-#~ msgid "multiple: %s\n"
-#~ msgstr "複数: %s\n"
-
-#~ msgid " options: %s\n"
-#~ msgstr " オプション: %s\n"
-
-#~ msgid "enter option > "
-#~ msgstr "オプションを開く >  "
-
-#~ msgid "   Try again? "
-#~ msgstr "   再試行?  "
-
-#~ msgid "Sorry, %s is not accepted.\n"
-#~ msgstr " %s は承認できません.\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "You have chosen:\n"
-#~ "  %s\n"
-#~ msgstr ""
-#~ "\n"
-#~ "選択しました:\n"
-#~ "  %s\n"
-
-#~ msgid "Is this correct? "
-#~ msgstr "これで間違いないですか?  "
-
-#~ msgid "color support for [%s] in mapset [%s] %s"
-#~ msgstr "マップセット [%s] %sのカラーサポート [%s] "
-
-#~ msgid "Can't create timestamp file for %s map %s in mapset %s"
-#~ msgstr ""
-#~ "タイムスタンプファイルが作成できません %s マップ %s マップセット内 %s"
-
-#~ msgid "Invalid timestamp specified for %s map %s in mapset %s"
-#~ msgstr "指定された無効なタイムスタンプ %s マップ %s マップセット内 %s"
-
-#~ msgid "Can't open timestamp file for %s map %s in mapset %s"
-#~ msgstr "タイムスタンプファイルが開けません %s マップ %s マップセット内 %s"
-
-#~ msgid "Invalid timestamp file for %s map %s in mapset %s"
-#~ msgstr "無効なタイムスタンプファイル %s マップ %s マップセット内 %s"
-
-#~ msgid "Error reading compressed map <%s@%s>, row %d"
-#~ msgstr "圧縮マップの読み取りエラー<%s@%s>, 行 %d"
-
-#~ msgid "Error reading map <%s@%s>, row %d"
-#~ msgstr "マップの読み取りエラー <%s@%s>, 行 %d"
-
-#~ msgid "unable to determine user's home directory"
-#~ msgstr "ユーザーのホームディレクトリを決定できません"
-
-#~ msgid "Unable to create header file for [%s]"
-#~ msgstr "ヘッダーファイルが作成できません [%s]"
-
-#~ msgid "Can't create %s metadata file for [%s in %s]"
-#~ msgstr "作成できません %s メタデータ ファイル [%s in %s]"
-
-#~ msgid ""
-#~ "\n"
-#~ "Please specify ellipsoid name\n"
-#~ msgstr ""
-#~ "\n"
-#~ "楕円体名を指定してください\n"
-
-#~ msgid "Enter 'list' for the list of available ellipsoids\n"
-#~ msgstr "利用できる楕円体のリストに'list' と入力\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "invalid ellipsoid\n"
-#~ msgstr ""
-#~ "\n"
-#~ "無効な楕円体\n"
-
-#~ msgid ""
-#~ "region for current mapset %s\n"
-#~ "run \"g.region\""
-#~ msgstr ""
-#~ "現在のマップセットの領域 %s\n"
-#~ "実行 \"g.region\""
-
-#~ msgid "default region %s"
-#~ msgstr "デフォルト領域%s"
-
-#~ msgid "can't create histogram for [%s in %s]"
-#~ msgstr "ヒストグラムを作成できません [%s in %s]"
-
-#~ msgid "to cancel request"
-#~ msgstr "要求をキャンセル"
-
-#~ msgid "Enter a new %s file name"
-#~ msgstr "入力 新しい%s ファイル名"
-
-#~ msgid "Enter the name of an existing %s file"
-#~ msgstr "既存の%s ファイルに名前を入力"
-
-#~ msgid "Enter %s file name"
-#~ msgstr "入力 %s ファイル名"
-
-#~ msgid "Enter 'list' for a list of existing %s files\n"
-#~ msgstr "存在するリスト %s ファイルに 'list'と入力 \n"
-
-#~ msgid "Enter 'list -f' for "
-#~ msgstr "'list -f'を入力  "
-
-#~ msgid "a list %s"
-#~ msgstr "リスト %s"
-
-#~ msgid "an extended list"
-#~ msgstr "拡張リスト"
-
-#~ msgid "Hit RETURN %s\n"
-#~ msgstr "リターンを押す %s\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "** %s - not found **\n"
-#~ msgstr ""
-#~ "\n"
-#~ "** %s - 見つかりません **\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "** %s exists. ok to overwrite? "
-#~ msgstr ""
-#~ "\n"
-#~ "** %s 既存のファイルに上書きしますか?  "
-
-#~ msgid ""
-#~ "\n"
-#~ "**<%s> illegal name **\n"
-#~ msgstr ""
-#~ "\n"
-#~ "**<%s> 無効な名前 **\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "** %s - illegal request **\n"
-#~ msgstr ""
-#~ "\n"
-#~ "** %s - 無効な要求 **\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "** %s - exists, select another name **\n"
-#~ msgstr ""
-#~ "\n"
-#~ "** %s - 存在します, 他の名前を選択 **\n"
-
-#~ msgid "ask: can't happen"
-#~ msgstr "質問: 起こりえません"
-
-#~ msgid "Illegal filename.  Cannot be '.' or 'NULL'\n"
-#~ msgstr "無効なファイル名です。  '.' あるいは 'NULL'は使えません\n"
-
-#~ msgid "Too many reclass categories for [%s in %s]"
-#~ msgstr "再分類したカテゴリーが多すぎます [%s in %s]"
-
-#~ msgid "Illegal reclass format in header file for [%s in %s]"
-#~ msgstr "ヘッダーファイル内の無効な再分類されたフォーマットです [%s in %s]"
-
-#~ msgid "Unable to create header file for [%s in %s]"
-#~ msgstr "[%s in %s]にヘッダーファイルが作成できません"
-
-#~ msgid "Unable to create dependency file in [%s in %s]"
-#~ msgstr "[%s in %s]に従属ファイルが作成できません"
-
-#~ msgid ""
-#~ "closecell: can't move %s\n"
-#~ "to null file %s"
-#~ msgstr ""
-#~ "closecell:  移動できません%s\n"
-#~ "null ファイル %s"
-
-#~ msgid ""
-#~ "closecell: can't move %s\n"
-#~ "to cell file %s"
-#~ msgstr ""
-#~ "closecell: 移動できません%s\n"
-#~ "セルファイル %s"
-
-#~ msgid "Unable to get GIS_LOCK enviroment variable value"
-#~ msgstr "GIS_LOCK環境変数値を取得出来ません"
-
-#~ msgid "G_malloc: unable to allocate %lu bytes at %s:%d"
-#~ msgstr "G_malloc: メモリが確保できません %lu バイト分 場所（ %s:%d ）"
-
-#~ msgid "G_calloc: unable to allocate %lu * %lu bytes at %s:%d"
-#~ msgstr ""
-#~ "G_calloc: メモリが確保できません %lu * %lu バイトバイト分 場所（ %s:%d ）"
-
-#~ msgid "G_realloc: unable to allocate %lu bytes at %s:%d"
-#~ msgstr "G_realloc: メモリが確保できません %lu バイト分（ %s:%d）"
-
-#~ msgid ""
-#~ "Raster map <%s@%s> is in different projection than current region. Found "
-#~ "raster map <%s@%s>, should be <%s>."
-#~ msgstr ""
-#~ "ラスターマップ <%s@%s> は現在の範囲ではなく違う投影法にあります。 見つかっ"
-#~ "たラスターマップ<%s@%s>は <%s>です。"
-
-#~ msgid ""
-#~ "Raster map <%s@%s> is in different zone (%d) than current region (%d)"
-#~ msgstr ""
-#~ "ラスターマップ <%s@%s> は現在の範囲(%d)ではなく、違うゾーンにあります (%"
-#~ "d) 。"
-
-#~ msgid "Raster map <%s@%s>: bytes per cell (%d) too large"
-#~ msgstr "ラスターマップ <%s@%s>: 各セルのバイト (%d) が大きすぎます"
-
-#~ msgid ""
-#~ "map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"
-#~ msgstr ""
-#~ "マップ <%s@%s> はGDAL リンク ですが、 GRASSはGDALのサポートなしでコンパイ"
-#~ "ルされました"
-
-#~ msgid "<%s>: bad mapset"
-#~ msgstr "<%s>: 不正のマップセット"
-
-#~ msgid "G__open_raster_new(): no temp files available"
-#~ msgstr "G__open_raster_new():一時ファイルが利用できません"
-
-#~ msgid ""
-#~ "Unable to write embedded null values for raster map open for random access"
-#~ msgstr ""
-#~ "ランダムアクセス用のラスターマップに、埋め込まれたNULL値を書き込めません"
-
-#~ msgid "G_set_fp_type(): can only be called with FCELL_TYPE or DCELL_TYPE"
-#~ msgstr "G_set_fp_type():  FCELL_型 あるいは DCELL_型のみ呼び出せます"
-
-#~ msgid ""
-#~ "G_set_quant_rules() can be called only for raster maps opened for reading"
-#~ msgstr ""
-#~ "G_set_quant_rules() 読み取り用に開かれたラスターマップのみ呼び出せます"
-
-#~ msgid ""
-#~ "\n"
-#~ "Please specify datum name\n"
-#~ msgstr ""
-#~ "\n"
-#~ "データム名を指定してください\n"
-
-#~ msgid "Enter 'list' for the list of available datums\n"
-#~ msgstr "利用できるデータムのリストに 'list' と入力\n"
-
-#~ msgid "or 'custom' if you wish to enter custom parameters\n"
-#~ msgstr "カスタムパラメータを入力する場合は 'custom' \n"
-
-#~ msgid ""
-#~ "\n"
-#~ "invalid datum\n"
-#~ msgstr ""
-#~ "\n"
-#~ "無効なデータム\n"
-
-#~ msgid "one moment...\n"
-#~ msgstr "しばらくお待ちください...\n"
-
-#~ msgid "can't read f_range file for [%s in %s]"
-#~ msgstr " [%s in %s] にf_range ファイルを読み込めません"
-
-#~ msgid "can't read range file for [%s in %s]"
-#~ msgstr " [%s in %s] に領域ファイルを読み込めません"
-
-#~ msgid "can't write range file for [%s in %s]"
-#~ msgstr " [%s in %s]に領域ファイルを書き込めません"
-
-#~ msgid "with titles"
-#~ msgstr "タイトル"
-
-#~ msgid "(no title)"
-#~ msgstr "(無題)"
-
-#~ msgid " It is a reclass of raster map <%s@%s> whose header file is invalid."
-#~ msgstr "再分類したラスターマップです <%s@%s> ヘッダーファイルは無効です。"
-
-#~ msgid " Invalid format."
-#~ msgstr "無効なフォーマット."
-
-#~ msgid "can't write history information for [%s]"
-#~ msgstr "[%s]に履歴を書き込めません"
-
-#~ msgid "Not enough room in history file to record command line."
-#~ msgstr "コマンドラインを記録する履歴ファイルに空きがありません"
-
-#~ msgid "Not enough room in history file for command line (truncated)."
-#~ msgstr "コマンドラインに履歴ファイルの空きがありません (切捨て)."
-
-#~ msgid "Graphics driver [%s] started"
-#~ msgstr "グラフィックドライバー [%s] のスタート"
-
-#~ msgid "Unknown command: %d last: %d"
-#~ msgstr "不明なコマンド: %d 最後: %d"
-
-#~ msgid "Monitor: get_command: Premature EOF"
-#~ msgstr "モニター: get_command: すぐにファイルを終了"
-
-#~ msgid ""
-#~ "Unable to build spatial index from topology, vector map is not opened at "
-#~ "topo level 2"
-#~ msgstr ""
-#~ "トポロジーから空間インデックスを作成できません, ベクトルマップがトポロジー"
-#~ "レベル 2で開かれていません"
-
-#~ msgid "%d errors in category string."
-#~ msgstr "カテゴリーストリングにおけるエラー %d"
-
-#~ msgid "Error in rule on row %d in %s"
-#~ msgstr "行 %d ルールのエラー %s"
-
-#~ msgid "Intersections: %5d"
-#~ msgstr "交差: %5d"
-
-#~ msgid "Programmer requested unknown open level %d"
-#~ msgstr "プログラマーは不明なオープンレベル %d を要求しました"
-
-#~ msgid "OGR format cannot be updated"
-#~ msgstr "OGRフォーマットは更新できません"
-
-#~ msgid ""
-#~ "Random read is not supported by OGR for this layer, cannot build support"
-#~ msgstr ""
-#~ "このレイヤーのランダムな読み込みはOGRにサポートされていません, サポート作"
-#~ "成不可"
-
-#~ msgid "OGR feature without ID ignored"
-#~ msgstr "IDが無視されていないOGRフィーチャー"
-
-#~ msgid "The gauss elimination solver does not work with sparse matrices"
-#~ msgstr "ガウス消去ソルバーはsparseマトリックスと一緒には機能しません"
-
-#~ msgid "The linear equation system is not quadratic"
-#~ msgstr "一次方程式システムは二次ではありません"
-
-#~ msgid "The lu solver does not work with sparse matrices"
-#~ msgstr "LUソルバーは疎行列と一緒には機能しません"
-
-#~ msgid "The cholesky solver does not work with sparse matrices"
-#~ msgstr "コレスキーソルバーは疎行列と一緒には機能しません"
-
-#~ msgid "Matrix is not symmetric!"
-#~ msgstr "マトリックスは対称ではありません!"
-
-#~ msgid ""
-#~ "The type of solver which should solve the symmetric linear equation system"
-#~ msgstr "対称線形方程式系を解決すべきソルバーのタイプ"
-
-#~ msgid "The type of solver which should solve the linear equation system"
-#~ msgstr "線形方程式系を解決すべきソルバーのタイプ"
-
-#~ msgid ""
-#~ "Maximum number of iteration used to solver the linear equation system"
-#~ msgstr "一次方程式システムに使用されたソルバーイテレーションの最大限度数"
-
-#~ msgid ""
-#~ "Error break criteria for iterative solvers (jacobi, sor, cg or bicgstab)"
-#~ msgstr ""
-#~ "反復解法 (ヤコビ法, SOR法, CG法 または BiCGStab法)のエラーブレーク条件"
-
-#~ msgid ""
-#~ "The relaxation parameter used by the jacobi and sor solver for speedup or "
-#~ "stabilizing"
-#~ msgstr ""
-#~ "高速化または安定化のためヤコビ法とSOR法によって使用された緩和パラメーター"
-
-#~ msgid "test, gpde"
-#~ msgstr "テスト, gpde"
-
-#~ msgid "Vector is not 3D"
-#~ msgstr "ベクトルは3Dではありません"
-
-#~ msgid "Cannot find z column <%s> (please verify name, e.g. with v.info)"
-#~ msgstr ""
-#~ "z 列 <%s> が見つかりません(名前を確認してください、 e.g. with v.info)"
-
-#~ msgid "Column type of z column is not supported (must be integer or double)"
-#~ msgstr "z列の列型はサポートされていません (整数型か倍でなければなりません)"
-
-#~ msgid "Cannot read column type of smooth column"
-#~ msgstr "スムース列のタイプを読み込めません"
-
-#~ msgid "Column type of smooth column (datetime) is not supported"
-#~ msgstr "スムース列 (日時) のタイプはサポートされていません"
-
-#~ msgid "Column type of s column is not supported (must be integer or double)"
-#~ msgstr ""
-#~ " s列の列タイプはサポートされていません (整数または倍数でなければなりませ"
-#~ "ん)"
-
-#~ msgid ""
-#~ "\n"
-#~ "%s invalid; Try again >"
-#~ msgstr ""
-#~ "\n"
-#~ "%s 無効; 再試行 >  "
-
-#~ msgid ""
-#~ "G_set_window(): projection/zone differs from that of currently open "
-#~ "raster maps"
-#~ msgstr ""
-#~ "G_set_window(): 投影法/ゾーンは現在開いているラスターマップと異なります"
-
-#~ msgid "The floating data range for %s@%s is empty"
-#~ msgstr " %s@%s の小数データの範囲は空です"
-
-#~ msgid "The integer data range for %s@%s is empty"
-#~ msgstr " %s@%sの整数データの範囲は空です"
-
-#~ msgid ""
-#~ "\n"
-#~ "Description:\n"
-#~ msgstr ""
-#~ "\n"
-#~ "説明:\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Keywords:\n"
-#~ msgstr ""
-#~ "\n"
-#~ "キーワード:\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "Usage:\n"
-#~ " "
-#~ msgstr ""
-#~ "\n"
-#~ "用例:\n"
-#~ " "
-
-#~ msgid "Probably program error."
-#~ msgstr "プログラムのエラー"
-
-#~ msgid "Unable to open temporary file"
-#~ msgstr "一時ファイルが開けません"
-
-#~ msgid "Problem reading raster map"
-#~ msgstr "ラスターマップの読み取りに問題があります"
-
-#~ msgid ""
-#~ "\n"
-#~ "invalid projection\n"
-#~ msgstr ""
-#~ "\n"
-#~ "無効な投影法\n"
-
-#~ msgid "Please advise GRASS developers of this error.\n"
-#~ msgstr "このエラーをGRASS開発者に報告してください.\n"
-
-#~ msgid "Name of elevation raster map"
-#~ msgstr "標高ラスターマップ名"
-
-#~ msgid "Name of elevation raster map(s)"
-#~ msgstr "標高ラスターマップ名"
-
-#~ msgid "to accept the default"
-#~ msgstr "デフォルトの許可"
-
-#~ msgid "hit RETURN to continue -->"
-#~ msgstr "続行のためにリターンを押す -->"
-
-#~ msgid "Unable to add database link"
-#~ msgstr "データベース リンクを追加できません"
-
-#~ msgid ""
-#~ "Coor files of vector map <%s@%s> is larger than it should be (%ld bytes "
-#~ "excess)"
-#~ msgstr "ベクトルマップ <%s@%s> の座標ファイルが大きすぎます(%ld バイト超過)"
-
-#~ msgid ""
-#~ "Coor files of vector <%s@%s> is shorter than it should be (%ld bytes "
-#~ "missing)."
-#~ msgstr ""
-#~ "ベクトル <%s@%s> の座標ファイルが小さすぎます (%ld バイトが不足していま"
-#~ "す)."
-
-#~ msgid ""
-#~ "A single vector map can be connected to multiple database tables. This "
-#~ "number determines which table to use."
-#~ msgstr ""
-#~ "単独のベクトルマップは複数のデータベーステーブルと接続されます。この数は使"
-#~ "用するテーブルによって決定します。"
-
-#~ msgid "Sorry <%s> is not a valid option\n"
-#~ msgstr "<%s> オプションは無効です\n"
-
-#~ msgid "Sorry, <%c> is not a valid flag\n"
-#~ msgstr "<%c> フラッグは無効です\n"
-
-#~ msgid "Sorry, <%s=> is ambiguous\n"
-#~ msgstr "<%s=>は不明瞭です\n"
-
-#~ msgid "Sorry, <%s> is not a valid parameter\n"
-#~ msgstr "<%s> パラメータは無効です\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "ERROR: illegal range syntax for parameter <%s>\n"
-#~ msgstr ""
-#~ "\n"
-#~ "エラー: パラメータの無効な範囲の構文 <%s>\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "ERROR: value <%s> out of range for parameter <%s>\n"
-#~ msgstr ""
-#~ "\n"
-#~ "エラー: 値<%s>はパラメーターの範囲外です<%s>\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "ERROR: Missing value for parameter <%s>\n"
-#~ msgstr ""
-#~ "\n"
-#~ "エラー: パラメータ値が見つかりません <%s>\n"
-
-#, fuzzy
-#~ msgid ""
-#~ "ERROR: Required parameter <%s> not set:\n"
-#~ "\t(%s)\n"
-#~ msgstr ""
-#~ "\n"
-#~ "エラー: 必要なパラメータ <%s> が設定されていません:\n"
-#~ "    (%s).\n"
-
-#~ msgid ""
-#~ "\n"
-#~ "ERROR: option <%s> must be provided in multiples of %d\n"
-#~ msgstr ""
-#~ "\n"
-#~ "エラー: オプション <%s> は%dの倍数でなければなりません\n"
-
-#~ msgid ""
-#~ "G_distance_point_to_line_segment: shouldn't happen: code=%d P=(%f,%f) S=(%"
-#~ "f,%f)(%f,%f)"
-#~ msgstr ""
-#~ "G_distance_point_to_line_segment: 起こりえません: コード=%d P=(%f,%f) S=(%"
-#~ "f,%f)(%f,%f)"
-
-#~ msgid "not implemented"
-#~ msgstr "実行されていません"
-
-#~ msgid "Unknown keyword %s in vector head"
-#~ msgstr "ベクトルヘッドにおける不明なキーワード %s"
-
-#~ msgid "Next edge was visited but it is not the first one !!! breaking loop"
-#~ msgstr ""
-#~ "Next エッジ was visited but it is not the first one !!! ループを切断してい"
-#~ "ます"
-
-#, fuzzy
-#~ msgid "Unable to delete feature %d from vector map <%s>"
-#~ msgstr "ベクトルマップからフィーチャー%d を修復できません <%s>"
-
-#~ msgid "Unable to close input map"
-#~ msgstr "入力マップを閉じれません"
-
-#~ msgid "Illegal table map name <%s>. May not contain '.' or 'NULL'.\n"
-#~ msgstr ""
-#~ "不正なテーブル名 <%s>.　'.' または 'NULL'を含んでいない可能性があります.\n"
-
-#~ msgid "Illegal table map name <%s>. Must start with a letter.\n"
-#~ msgstr "不正なテーブルマップ名 <%s>. 文字で始まらなければなりません.\n"
-
-#~ msgid "Illegal table map name <%s>. Character <%c> not allowed.\n"
-#~ msgstr "不正なテーブルマップ名 <%s>. 文字 <%c> は許可されていません.\n"
-
-#~ msgid "Table has no columns"
-#~ msgstr "テーブルには列がありません"
