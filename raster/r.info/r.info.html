@@ -77,19 +77,26 @@ Alternatively, the output from <em>r.info</em> may be confined to a more terse
 subset of the available information by passing various flags to the module:
 
 <div class="code"><pre> 
-r.info -rst slope
-min=0.000000
-max=52.520164
-nsres=30
-ewres=30
-datatype=FCELL
-
-r.info -g slope
+GRASS> r.info -g slope
 north=4928030
 south=4913690
 east=609000
 west=589980
+nsres=30
+ewres=30
+datatype=FCELL
+
+GRASS> r.info -r slope
+min=0.000000
+max=52.520164
+
+GRASS> r.info -e slope
+title=slope in degrees (slope)
+units="none"
+vertical_datum="none"
+timestamp="none"
 </pre></div>
+
 
 <h2>SEE ALSO</h2>
 
@@ -102,9 +109,11 @@ west=589980
 <em><a href="r.univar.html">r.univar</a>,</em>
 <em><a href="r.what.html">r.what</a></em>
 
+
 <h2>AUTHOR</h2>
 
 Michael O'Shea, 
 <a href="http://www.cecer.army.mil/">U.S. Army Construction Engineering Research Laboratory</a>
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
