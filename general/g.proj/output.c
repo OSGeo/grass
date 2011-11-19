@@ -15,7 +15,7 @@
  *****************************************************************************/
 
 #include <stdio.h>
-
+#include <unistd.h>
 #include <proj_api.h>
 
 #include <grass/gis.h>
@@ -30,6 +30,7 @@ static int check_xy(int shell);
 void print_projinfo(int shell)
 {
     int i;
+    char path[GPATH_MAX];
 
     if (check_xy(shell))
 	return;
@@ -43,7 +44,27 @@ void print_projinfo(int shell)
 	else
 	    fprintf(stdout, "%-11s: %s\n", projinfo->key[i], projinfo->value[i]);
     }
-    
+
+    /* EPSG code is preserved for historical metadata interest only:
+	the contents of this file are not used by pj_*() routines at all */
+    G_file_name(path, "", "PROJ_EPSG", "PERMANENT");
+    if (access(path, F_OK) == 0) {
+	struct Key_Value *in_epsg_key;
+	in_epsg_key = G_read_key_value_file(path);
+	if (!shell) {
+	    fprintf(stdout,
+		"-PROJ_EPSG-------------------------------------------------\n");
+	    fprintf(stdout, "%-11s: %s\n", in_epsg_key->key[0],
+		    in_epsg_key->value[0]);
+	}
+	else
+	    fprintf(stdout, "%s=%s\n", in_epsg_key->key[0],
+		    in_epsg_key->value[0]);
+
+	if (in_epsg_key != NULL)
+	    G_free_key_value(in_epsg_key);
+    }
+ 
     if (!shell)
 	fprintf(stdout,
 		"-PROJ_UNITS------------------------------------------------\n");
