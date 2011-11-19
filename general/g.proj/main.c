@@ -277,8 +277,25 @@ int main(int argc, char *argv[])
 		      printinfo->key, shellinfo->key, printproj4->key, printwkt->key);
     
 
-    /* Tidy Up */
+    if (create->answer && inepsg->answer) {
+	/* preserve epsg code for user records only (not used by grass's pj routines) */
+	FILE *fp;
+	char path[GPATH_MAX];
+	/* if inputs were not clean it should of failed by now */
+	if (location->answer) {
+            snprintf(path, sizeof(path), "%s/%s/%s/%s", G_gisdbase(),
+		     location->answer, "PERMANENT", "PROJ_EPSG");
+	    path[sizeof(path)-1] = '\0';
+	}
+	else
+	    G_file_name(path, "", "PROJ_EPSG", "PERMANENT");
+	fp = fopen(path, "w");
+	fprintf(fp, "epsg: %s\n", inepsg->answer);
+	fclose(fp);
+    }
 
+
+    /* Tidy Up */
     if (projinfo != NULL)
 	G_free_key_value(projinfo);
     if (projunits != NULL)
