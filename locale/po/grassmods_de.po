@@ -549,7 +549,7 @@ msgstr "Kann die 3D Maske nicht schließen."
 #: ../raster3d/r3.mask/main.c:118
 #, c-format
 msgid "Unable to close raster map <%s>"
-msgstr "Kann die Rasterkarte <%s@%s> nicht schließen."
+msgstr "Kann die Rasterkarte <%s> nicht schließen"
 
 #: ../raster3d/r3.mask/main.c:135
 msgid "Establishes the current working 3D raster mask."
