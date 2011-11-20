@@ -161,7 +161,7 @@ int init_vars(int argc, char *argv[])
 
     /* balance segment files */
     /* elevation + accumulation: * 2 */
-    memory_divisor =  seg_factor * 8 * 2;
+    memory_divisor =  seg_factor * sizeof(WAT_ALT) * 2;
     /* aspect: as is */
     memory_divisor += seg_factor;
     /* flags: * 4 */
