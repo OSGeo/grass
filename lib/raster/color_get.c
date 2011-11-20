@@ -22,7 +22,7 @@
  *
  * The <i>red, green</i>, and <i>blue</i> intensities for the color
  * associated with category <i>n</i> are extracted from the
- * <i>colors</i> structure. The intensities will be in the range 0 ­-
+ * <i>colors</i> structure. The intensities will be in the range 0 -
  * 255. Also works for null cells.
  *
  * \param rast raster cell value
