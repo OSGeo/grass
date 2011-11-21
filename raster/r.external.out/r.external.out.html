@@ -3,6 +3,15 @@
 <em>r.external.out</em> instructs GRASS to write raster maps as data
 files (e.g. GeoTIFF) using GDAL.
 
+<h2>NOTES</h2>
+
+A relative directory path (parameter <em>directory</em>) is interpreted
+relative to the current mapset directory, not the current directory where
+the command was launched. An unspecified or empty directory (which will
+occur if the user passes a simple filename for <em>output</em>) results
+in the output file being placed in the "gdal/" subdirectory of the 
+current mapset directory.
+
 
 <h2>EXAMPLE</h2>
 
@@ -14,11 +23,14 @@ while writing out the results directly in GeoTIFF:
 # register GeoTIFF file in GRASS database:
 r.external terra_lst1km20030314.LST_Day.tif out=modis_celsius
 
-# define output directory for GRASS calculation results:
+# define output directory for files resulting from GRASS calculation:
 r.external.out $HOME/gisoutput/
 
 # do something (here: extract pixels &gt; 20°C), write output directly as GeoTIFF:
 r.mapcalc "warm.tif = if(modis_celsius &gt; 20, modis_celsius, null() )"
+
+# cease GDAL output connection and turn back to write GRASS raster files:
+r.external.out -r
 
 # use the result elsewhere
 qgis $HOME/gisoutput/warm.tif
