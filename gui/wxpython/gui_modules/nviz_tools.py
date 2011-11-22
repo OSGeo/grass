@@ -178,10 +178,10 @@ class SymbolButton(BitmapTextButton):
         @param usage determines usage and picture
         @param label displayed label
         """
-        BitmapTextButton.__init__(self, parent = parent, label = " " + label, **kwargs)
-        
         size = (15, 15)
         buffer = wx.EmptyBitmap(*size)
+        BitmapTextButton.__init__(self, parent = parent, label = " " + label, bitmap = buffer, **kwargs)
+        
         dc = wx.MemoryDC()
         dc.SelectObject(buffer)
         maskColor = wx.Color(255, 255, 255)
