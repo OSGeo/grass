@@ -1689,8 +1689,8 @@ class PsMapToolbar(AbstractToolbar):
                                'bind' : self.parent.OnPointer }
         self.OnTool(None)
         
-        from psmap import haveImage
-        if not haveImage:
+        from psmap import havePILImage
+        if not havePILImage:
             self.EnableTool(self.preview, False)
         
     def _toolbarData(self):

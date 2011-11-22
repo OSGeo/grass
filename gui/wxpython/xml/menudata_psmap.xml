@@ -94,6 +94,18 @@
 	  <handler>OnAddText</handler>
 	  <shortcut>Ctrl+T</shortcut>
 	</menuitem>
+	<menuitem>
+	  <label>Image</label>
+	  <help>Add image</help>
+	  <handler>OnAddImage</handler>
+	  <shortcut></shortcut>
+	</menuitem>
+	<menuitem>
+	  <label>North Arrow</label>
+	  <help>Add north arrow</help>
+	  <handler>OnAddNorthArrow</handler>
+	  <shortcut></shortcut>
+	</menuitem>
 	<separator/>
 	<menuitem>
 	  <label>Delete</label>

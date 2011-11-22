@@ -15,6 +15,8 @@ Classes:
  - PageSetup
  - Mapinfo
  - Text
+ - Image
+ - NorthArrow
  - Scalebar
  - RasterLegend
  - VectorLegend
@@ -34,6 +36,8 @@ Classes:
  - MapinfoDialog
  - ScalebarDialog
  - TextDialog
+ - ImageDialog
+ - NorthArrowDialog
 
 (C) 2011 by Anna Kratochvilova, and the GRASS Development Team
 This program is free software under the GNU General Public License
@@ -47,9 +51,14 @@ This program is free software under the GNU General Public License
 import os
 import sys
 import string
-from math import ceil, floor
+from math import ceil, floor, sin, cos, pi
 from copy import deepcopy
 from time import strftime, localtime
+try:
+    import Image as PILImage
+    havePILImage = False
+except ImportError:
+    havePILImage = False
 
 import grass.script as grass
 if int(grass.version()['version'].split('.')[0]) > 6:
@@ -374,7 +383,7 @@ class Instruction:
                     kwargs = {}
                     if instruction == 'scalebar':
                         kwargs['scale'] = map['scale']
-                    elif instruction == 'text':
+                    elif instruction in ('text', 'eps'):
                         kwargs['mapInstruction'] = map
                     elif instruction in ('vpoints', 'vlines', 'vareas'):
                         kwargs['id'] = wx.NewId()
@@ -403,6 +412,8 @@ class Instruction:
                     buffer.append(line)
             
             elif line.startswith('scale '):
+                if isBuffer:
+                    continue
                 ok = self.SendToRead('scale', line, isRegionComment = isRegionComment)
                 if not ok: return False
             
@@ -427,6 +438,11 @@ class Instruction:
             
             elif line.startswith('text'):
                 instruction = 'text'
+                isBuffer = True
+                buffer.append(line)
+                
+            elif line.startswith('eps'):
+                instruction = 'eps'
                 isBuffer = True
                 buffer.append(line) 
             
@@ -538,6 +554,7 @@ class Instruction:
                               mapinfo = ['mapinfo'],
                               scalebar = ['scalebar'],
                               text = ['text'],
+                              eps = ['image', 'northArrow'],
                               vpoints = ['vector', 'vProperties'],
                               vlines = ['vector', 'vProperties'],
                               vareas = ['vector', 'vProperties'],
@@ -551,6 +568,8 @@ class Instruction:
                            mapinfo = Mapinfo,
                            scalebar = Scalebar,
                            text = Text,
+                           image = Image,
+                           northArrow = NorthArrow,
                            rasterLegend = RasterLegend,
                            vectorLegend = VectorLegend,
                            vector = Vector,
@@ -561,12 +580,21 @@ class Instruction:
         
         for i in myInstruction:
             instr = self.FindInstructionByType(i)
-            if i in ('text', 'vProperties') or not instr:
+            if i in ('text', 'vProperties', 'image', 'northArrow') or not instr:
                 
                 id = wx.NewId() #!vProperties expect subtype
                 if i == 'vProperties':
                     id = kwargs['id']
                     newInstr = myInstrDict[i](id, subType = instruction[1:])
+                elif i in ('image', 'northArrow'):
+                    commentFound = False
+                    for line in text:
+                        if line.find("# north arrow") >= 0:
+                            commentFound = True
+                    if i == 'image' and commentFound or \
+                       i == 'northArrow' and not commentFound:
+                        continue
+                    newInstr = myInstrDict[i](id, settings = self)
                 else:
                     newInstr = myInstrDict[i](id)
                 ok = newInstr.Read(instruction, text, **kwargs)
@@ -1026,7 +1054,149 @@ class Text(InstructionObject):
         N = region['s'] + (region['n'] - region['s']) / 100 * n
         E = region['w'] + (region['e'] - region['w']) / 100 * e
         return E, N
+        
+class Image(InstructionObject):
+    """!Class representing eps instruction - image"""
+    def __init__(self, id, settings):
+        InstructionObject.__init__(self, id = id)
+        self.settings = settings
+        self.type = 'image'
+        # default values
+        self.defaultInstruction = dict(epsfile = "", XY = True, where = (0,0), unit = 'inch',
+                                       east = None, north = None,
+                                       rotate = None, scale = 1)
+        # current values
+        self.instruction = dict(self.defaultInstruction)
+        
+    def __str__(self):
+        self.ChangeRefPoint(toCenter = True)
+        
+        instr = "eps %s %s\n" % (self.instruction['east'], self.instruction['north'])
+        instr += string.Template("    epsfile $epsfile\n").substitute(self.instruction)
+        if self.instruction["rotate"]:
+            instr += string.Template("    rotate $rotate\n").substitute(self.instruction)
+        if self.instruction["scale"]:
+            instr += string.Template("    scale $scale\n").substitute(self.instruction)
+        instr += "    end"
+        return instr
     
+    def Read(self, instruction, text, **kwargs):
+        """!Read instruction and save information"""
+        mapInstr = kwargs['mapInstruction']
+        instr = {}
+        for line in text:
+            try:
+                sub = line.split(None, 1)[0]
+                if sub == 'eps':
+                    e, n = line.split(None, 3)[1:3]
+                    if '%' in e and '%' in n:
+                        instr['XY'] = True
+                        instr['east'], instr['north'] = self.PercentToReal(e, n)
+                    else:
+                        instr['XY'] = False
+                        instr['east'], instr['north'] = float(e), float(n)
+                
+                elif sub == 'epsfile':
+                    instr['epsfile'] = line.split(None, 1)[1]
+                elif sub == 'rotate':
+                    instr['rotate'] = float(line.split(None, 1)[1])
+                elif sub == 'scale':
+                    instr['scale'] = float(line.split(None, 1)[1])
+                        
+            except(IndexError, ValueError):
+                GError(_("Failed to read instruction %s") % instruction)
+                return False
+        if not os.path.exists(instr['epsfile']):
+            GError(_("Failed to read instruction %s: file %s not found.") % instruction, instr['epsfile'])
+            return False
+        
+        instr['epsfile'] = os.path.abspath(instr['epsfile'])
+        instr['size'] = self.GetImageOrigSize(instr['epsfile'])
+        if 'rotate' in instr:
+            instr['size'] = BBoxAfterRotation(instr['size'][0], instr['size'][1], instr['rotate'])
+        self.instruction.update(instr)
+        self.ChangeRefPoint(toCenter = False)
+        instr['where'] = PaperMapCoordinates(map = mapInstr, x = self.instruction['east'],
+                                             y = self.instruction['north'], paperToMap = False)       
+        w = self.unitConv.convert(value = instr['size'][0], fromUnit = 'point', toUnit = 'inch')
+        h = self.unitConv.convert(value = instr['size'][1], fromUnit = 'point', toUnit = 'inch')
+        instr['rect'] = wx.Rect2D(x = float(instr['where'][0]), y = float(instr['where'][1]),
+                                  w = w * self.instruction['scale'], h = h * self.instruction['scale'])
+        self.instruction.update(instr)
+
+        return True 
+    
+    def PercentToReal(self, e, n):
+        """!Converts eps coordinates from percent of region to map coordinates"""
+        e, n = float(e.strip('%')), float(n.strip('%'))
+        region = grass.region()
+        N = region['s'] + (region['n'] - region['s']) / 100 * n
+        E = region['w'] + (region['e'] - region['w']) / 100 * e
+        return E, N
+        
+    def ChangeRefPoint(self, toCenter):
+        """!Change reference point (left top x center)"""
+        mapInstr = self.settings.FindInstructionByType('map')
+        if not mapInstr:
+            mapInstr = self.settings.FindInstructionByType('initMap')
+        mapId = mapInstr.id
+        if toCenter:
+            center = self.instruction['rect'].GetCentre()
+            ENCenter = PaperMapCoordinates(map = self.settings[mapId],
+                                           x = center[0], y = center[1], paperToMap = True)
+                                           
+            self.instruction['east'], self.instruction['north'] = ENCenter
+        else:
+            x, y = PaperMapCoordinates(map = self.settings[mapId], x = self.instruction['east'],
+                                       y = self.instruction['north'], paperToMap = False)
+            w = self.unitConv.convert(value = self.instruction['size'][0], fromUnit = 'point', toUnit = 'inch')
+            h = self.unitConv.convert(value = self.instruction['size'][1], fromUnit = 'point', toUnit = 'inch')
+            x -= w * self.instruction['scale'] / 2
+            y -= h * self.instruction['scale'] / 2
+            e, n = PaperMapCoordinates(map = self.settings[mapId], x = x, y = y, paperToMap = True)
+            self.instruction['east'], self.instruction['north'] = e, n
+
+    def GetImageOrigSize(self, imagePath):
+        """!Get image size.
+        
+        If eps, size is read from image header.
+        """
+        fileName = os.path.split(imagePath)[1]
+        # if eps, read info from header
+        if os.path.splitext(fileName)[1].lower() == '.eps':
+            bbInfo = "%%BoundingBox"
+            file = open(imagePath,"r")
+            w = h = 0
+            while file:
+                line = file.readline()
+                if line.find(bbInfo) == 0:
+                    w, h = line.split()[3:5]
+                    break
+            file.close()
+            return float(w), float(h)
+        else: # we can use wx.Image
+            img = wx.Image(fileName, type=wx.BITMAP_TYPE_ANY)
+            return img.GetWidth(), img.GetHeight()
+            
+class NorthArrow(Image):
+    """!Class representing eps instruction -- North Arrow"""
+    def __init__(self, id, settings):
+        Image.__init__(self, id = id, settings = settings)
+        self.type = 'northArrow'
+        
+    def __str__(self):
+        self.ChangeRefPoint(toCenter = True)
+        
+        instr = "eps %s %s\n" % (self.instruction['east'], self.instruction['north'])
+        instr += "# north arrow\n"
+        instr += string.Template("    epsfile $epsfile\n").substitute(self.instruction)
+        if self.instruction["rotate"]:
+            instr += string.Template("    rotate $rotate\n").substitute(self.instruction)
+        if self.instruction["scale"]:
+            instr += string.Template("    scale $scale\n").substitute(self.instruction)
+        instr += "    end"
+        return instr
+        
 class Scalebar(InstructionObject):
     """!Class representing scalebar instruction"""
     def __init__(self, id):
@@ -1641,7 +1811,7 @@ class PsmapDialog(wx.Dialog):
         self.instruction = settings
         self.objectType = None
         self.unitConv = UnitConversion(self)
-        self.spinCtrlSize = (50, -1)
+        self.spinCtrlSize = (65, -1)
         
         self.Bind(wx.EVT_CLOSE, self.OnClose)
         
@@ -1655,7 +1825,8 @@ class PsmapDialog(wx.Dialog):
         parent.units['unitsCtrl'].SetStringSelection(self.unitConv.findName(dialogDict['unit']))
           
     def AddPosition(self, parent, dialogDict):
-        parent.position = dict()
+        if not hasattr(parent, "position"):
+            parent.position = dict()
         parent.position['comment'] = wx.StaticText(parent, id = wx.ID_ANY,\
                     label = _("Position of the top left corner\nfrom the top left edge of the paper"))
         parent.position['xLabel'] = wx.StaticText(parent, id = wx.ID_ANY, label = _("X:"))
@@ -1667,6 +1838,63 @@ class PsmapDialog(wx.Dialog):
             y = self.unitConv.convert(value = dialogDict['where'][1], fromUnit = 'inch', toUnit = dialogDict['unit'])
             parent.position['xCtrl'].SetValue("%5.3f" % x)
             parent.position['yCtrl'].SetValue("%5.3f" % y)
+        
+    def AddExtendedPosition(self, panel, gridBagSizer, dialogDict):
+        """!Add widgets for setting position relative to paper and to map"""
+        panel.position = dict()
+        positionLabel = wx.StaticText(panel, id = wx.ID_ANY, label = _("Position is given:"))
+        panel.position['toPaper'] = wx.RadioButton(panel, id = wx.ID_ANY, label = _("relatively to paper"), style = wx.RB_GROUP)
+        panel.position['toMap'] = wx.RadioButton(panel, id = wx.ID_ANY, label = _("by map coordinates"))
+        panel.position['toPaper'].SetValue(dialogDict['XY'])
+        panel.position['toMap'].SetValue(not dialogDict['XY'])
+        
+        gridBagSizer.Add(positionLabel, pos = (0,0), span = (1,3), flag = wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_LEFT, border = 0)
+        gridBagSizer.Add(panel.position['toPaper'], pos = (1,0), flag = wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_LEFT, border = 0)
+        gridBagSizer.Add(panel.position['toMap'], pos = (1,1),flag = wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_LEFT, border = 0)
+        
+        # first box - paper coordinates
+        box1   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = "")
+        sizerP = wx.StaticBoxSizer(box1, wx.VERTICAL)
+        self.gridBagSizerP = wx.GridBagSizer (hgap = 5, vgap = 5)
+        self.gridBagSizerP.AddGrowableCol(1)
+        self.gridBagSizerP.AddGrowableRow(3)
+        
+        self.AddPosition(parent = panel, dialogDict = dialogDict)
+        panel.position['comment'].SetLabel(_("Position from the top left\nedge of the paper"))
+        self.AddUnits(parent = panel, dialogDict = dialogDict)
+        self.gridBagSizerP.Add(panel.units['unitsLabel'], pos = (0,0), flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
+        self.gridBagSizerP.Add(panel.units['unitsCtrl'], pos = (0,1), flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
+        self.gridBagSizerP.Add(panel.position['xLabel'], pos = (1,0), flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
+        self.gridBagSizerP.Add(panel.position['xCtrl'], pos = (1,1), flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
+        self.gridBagSizerP.Add(panel.position['yLabel'], pos = (2,0), flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
+        self.gridBagSizerP.Add(panel.position['yCtrl'], pos = (2,1), flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
+        self.gridBagSizerP.Add(panel.position['comment'], pos = (3,0), span = (1,2), flag = wx.ALIGN_BOTTOM, border = 0)
+        
+        sizerP.Add(self.gridBagSizerP, proportion = 1, flag = wx.EXPAND|wx.ALL, border = 5)
+        gridBagSizer.Add(sizerP, pos = (2,0),span = (1,1), flag = wx.ALIGN_CENTER_HORIZONTAL|wx.EXPAND, border = 0)
+        
+        # second box - map coordinates
+        box2   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = "")
+        sizerM = wx.StaticBoxSizer(box2, wx.VERTICAL)
+        self.gridBagSizerM = wx.GridBagSizer (hgap = 5, vgap = 5)
+        self.gridBagSizerM.AddGrowableCol(0)
+        self.gridBagSizerM.AddGrowableCol(1)
+        
+        eastingLabel  = wx.StaticText(panel, id = wx.ID_ANY, label = "E:")
+        northingLabel  = wx.StaticText(panel, id = wx.ID_ANY, label = "N:")
+        panel.position['eCtrl'] = wx.TextCtrl(panel, id = wx.ID_ANY, value = "")
+        panel.position['nCtrl'] = wx.TextCtrl(panel, id = wx.ID_ANY, value = "")
+        east, north = PaperMapCoordinates(map = self.instruction[self.mapId], x = dialogDict['where'][0], y = dialogDict['where'][1], paperToMap = True)
+        panel.position['eCtrl'].SetValue(str(east))
+        panel.position['nCtrl'].SetValue(str(north))
+        
+        self.gridBagSizerM.Add(eastingLabel, pos = (0,0), flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
+        self.gridBagSizerM.Add(northingLabel, pos = (1,0), flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
+        self.gridBagSizerM.Add(panel.position['eCtrl'], pos = (0,1), flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
+        self.gridBagSizerM.Add(panel.position['nCtrl'], pos = (1,1), flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
+        
+        sizerM.Add(self.gridBagSizerM, proportion = 1, flag = wx.EXPAND|wx.ALL, border = 5)
+        gridBagSizer.Add(sizerM, pos = (2,1), flag = wx.ALIGN_LEFT|wx.EXPAND, border = 0)
         
     def AddFont(self, parent, dialogDict, color = True):
         parent.font = dict()
@@ -5178,73 +5406,21 @@ class TextDialog(PsmapDialog):
         panel.Fit()
         
         return panel 
-    
+        
     def _positionPanel(self, notebook):
         panel = wx.Panel(parent = notebook, id = wx.ID_ANY, style = wx.TAB_TRAVERSAL)
         notebook.AddPage(page = panel, text = _("Position"))
 
         border = wx.BoxSizer(wx.VERTICAL) 
 
-        #Position
         box   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = " %s " % _("Position"))
         sizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
         gridBagSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
         gridBagSizer.AddGrowableCol(0)
         gridBagSizer.AddGrowableCol(1)
         
-        self.positionLabel = wx.StaticText(panel, id = wx.ID_ANY, label = _("Position is given:"))
-        self.paperPositionCtrl = wx.RadioButton(panel, id = wx.ID_ANY, label = _("relatively to paper"), style = wx.RB_GROUP)
-        self.mapPositionCtrl = wx.RadioButton(panel, id = wx.ID_ANY, label = _("by map coordinates"))
-        self.paperPositionCtrl.SetValue(self.textDict['XY'])
-        self.mapPositionCtrl.SetValue(not self.textDict['XY'])
-        
-        gridBagSizer.Add(self.positionLabel, pos = (0,0), span = (1,3), flag = wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_LEFT, border = 0)
-        gridBagSizer.Add(self.paperPositionCtrl, pos = (1,0), flag = wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_LEFT, border = 0)
-        gridBagSizer.Add(self.mapPositionCtrl, pos = (1,1),flag = wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_LEFT, border = 0)
-        
-        # first box - paper coordinates
-        box1   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = "")
-        sizerP = wx.StaticBoxSizer(box1, wx.VERTICAL)
-        self.gridBagSizerP = wx.GridBagSizer (hgap = 5, vgap = 5)
-        self.gridBagSizerP.AddGrowableCol(1)
-        self.gridBagSizerP.AddGrowableRow(3)
-        
-        self.AddPosition(parent = panel, dialogDict = self.textDict)
-        panel.position['comment'].SetLabel(_("Position from the top left\nedge of the paper"))
-        self.AddUnits(parent = panel, dialogDict = self.textDict)
-        self.gridBagSizerP.Add(panel.units['unitsLabel'], pos = (0,0), flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
-        self.gridBagSizerP.Add(panel.units['unitsCtrl'], pos = (0,1), flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
-        self.gridBagSizerP.Add(panel.position['xLabel'], pos = (1,0), flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
-        self.gridBagSizerP.Add(panel.position['xCtrl'], pos = (1,1), flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
-        self.gridBagSizerP.Add(panel.position['yLabel'], pos = (2,0), flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
-        self.gridBagSizerP.Add(panel.position['yCtrl'], pos = (2,1), flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
-        self.gridBagSizerP.Add(panel.position['comment'], pos = (3,0), span = (1,2), flag = wx.ALIGN_BOTTOM, border = 0)
-        
-        sizerP.Add(self.gridBagSizerP, proportion = 1, flag = wx.EXPAND|wx.ALL, border = 5)
-        gridBagSizer.Add(sizerP, pos = (2,0),span = (1,1), flag = wx.ALIGN_CENTER_HORIZONTAL|wx.EXPAND, border = 0)
-        
-        # second box - map coordinates
-        box2   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = "")
-        sizerM = wx.StaticBoxSizer(box2, wx.VERTICAL)
-        self.gridBagSizerM = wx.GridBagSizer (hgap = 5, vgap = 5)
-        self.gridBagSizerM.AddGrowableCol(0)
-        self.gridBagSizerM.AddGrowableCol(1)
-        
-        self.eastingLabel  = wx.StaticText(panel, id = wx.ID_ANY, label = "E:")
-        self.northingLabel  = wx.StaticText(panel, id = wx.ID_ANY, label = "N:")
-        self.eastingCtrl = wx.TextCtrl(panel, id = wx.ID_ANY, value = "")
-        self.northingCtrl = wx.TextCtrl(panel, id = wx.ID_ANY, value = "")
-        east, north = PaperMapCoordinates(map = self.instruction[self.mapId], x = self.textDict['where'][0], y = self.textDict['where'][1], paperToMap = True)
-        self.eastingCtrl.SetValue(str(east))
-        self.northingCtrl.SetValue(str(north))
-        
-        self.gridBagSizerM.Add(self.eastingLabel, pos = (0,0), flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
-        self.gridBagSizerM.Add(self.northingLabel, pos = (1,0), flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
-        self.gridBagSizerM.Add(self.eastingCtrl, pos = (0,1), flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
-        self.gridBagSizerM.Add(self.northingCtrl, pos = (1,1), flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
-        
-        sizerM.Add(self.gridBagSizerM, proportion = 1, flag = wx.EXPAND|wx.ALL, border = 5)
-        gridBagSizer.Add(sizerM, pos = (2,1), flag = wx.ALIGN_LEFT|wx.EXPAND, border = 0)
+        #Position
+        self.AddExtendedPosition(panel, gridBagSizer, self.textDict)
         
         #offset
         box3   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = " %s " %_("Offset"))
@@ -5309,8 +5485,8 @@ class TextDialog(PsmapDialog):
         panel.SetSizer(border)
         panel.Fit()
           
-        self.Bind(wx.EVT_RADIOBUTTON, self.OnPositionType, self.paperPositionCtrl) 
-        self.Bind(wx.EVT_RADIOBUTTON, self.OnPositionType, self.mapPositionCtrl)
+        self.Bind(wx.EVT_RADIOBUTTON, self.OnPositionType, panel.position['toPaper']) 
+        self.Bind(wx.EVT_RADIOBUTTON, self.OnPositionType, panel.position['toMap'])
         self.Bind(wx.EVT_CHECKBOX, self.OnRotation, self.rotCtrl)
         
         return panel
@@ -5325,7 +5501,7 @@ class TextDialog(PsmapDialog):
             self.rotValue.Disable()
             
     def OnPositionType(self, event):
-        if self.paperPositionCtrl.GetValue():
+        if self.positionPanel.position['toPaper'].GetValue():
             for widget in self.gridBagSizerP.GetChildren():
                 widget.GetWindow().Enable()
             for widget in self.gridBagSizerM.GetChildren():
@@ -5406,7 +5582,7 @@ class TextDialog(PsmapDialog):
         self.textDict['yoffset'] = self.yoffCtrl.GetValue()
 
         #position
-        if self.paperPositionCtrl.GetValue():
+        if self.positionPanel.position['toPaper'].GetValue():
             self.textDict['XY'] = True
             currUnit = self.unitConv.findUnit(self.positionPanel.units['unitsCtrl'].GetStringSelection())
             self.textDict['unit'] = currUnit
@@ -5426,13 +5602,13 @@ class TextDialog(PsmapDialog):
             self.textDict['east'], self.textDict['north'] = PaperMapCoordinates(self.instruction[self.mapId], x, y, paperToMap = True)
         else:
             self.textDict['XY'] = False
-            if self.eastingCtrl.GetValue():
-                self.textDict['east'] = self.eastingCtrl.GetValue() 
+            if self.positionPanel.position['eCtrl'].GetValue():
+                self.textDict['east'] = self.positionPanel.position['eCtrl'].GetValue() 
             else:
                 self.textDict['east'] = self.textDict['east']
 
-            if self.northingCtrl.GetValue():
-                self.textDict['north'] = self.northingCtrl.GetValue() 
+            if self.positionPanel.position['nCtrl'].GetValue():
+                self.textDict['north'] = self.positionPanel.position['nCtrl'].GetValue() 
             else:
                 self.textDict['north'] = self.textDict['north']
 
@@ -5471,8 +5647,470 @@ class TextDialog(PsmapDialog):
         self.positionPanel.position['yCtrl'].SetValue("%5.3f" % y)
         # EN coordinates
         e, n = self.textDict['east'], self.textDict['north']
-        self.eastingCtrl.SetValue(str(self.textDict['east']))
-        self.northingCtrl.SetValue(str(self.textDict['north']))
+        self.positionPanel.position['eCtrl'].SetValue(str(self.textDict['east']))
+        self.positionPanel.position['nCtrl'].SetValue(str(self.textDict['north']))
+        
+class ImageDialog(PsmapDialog):
+    """!Dialog for setting image properties.
+    
+    It's base dialog for North Arrow dialog.
+    """
+    def __init__(self, parent, id, settings, imagePanelName = _("Image")):
+        PsmapDialog.__init__(self, parent = parent, id = id, title = "Image settings",
+                             settings = settings)
+        
+        self.objectType = ('image',)
+        if self.id is not None:
+            self.imageObj = self.instruction[self.id]
+            self.imageDict = self.instruction[id].GetInstruction()
+        else:
+            self.id = wx.NewId()
+            self.imageObj = self._newObject()
+            self.imageDict = self.imageObj.GetInstruction()
+            page = self.instruction.FindInstructionByType('page').GetInstruction()
+            self.imageDict['where'] = page['Left'], page['Top'] 
+                
+        map = self.instruction.FindInstructionByType('map')
+        if not map:
+            map = self.instruction.FindInstructionByType('initMap')
+        self.mapId = map.id
+
+        self.imageDict['east'], self.imageDict['north'] = PaperMapCoordinates(map = map, x = self.imageDict['where'][0], y = self.imageDict['where'][1], paperToMap = True)
+        
+        notebook = wx.Notebook(parent = self, id = wx.ID_ANY, style = wx.BK_DEFAULT)
+        self.imagePanelName = imagePanelName
+        self.imagePanel = self._imagePanel(notebook)
+        self.positionPanel = self._positionPanel(notebook)
+        self.OnPositionType(None)
+        
+        if self.imageDict['epsfile']:
+            self.imagePanel.image['dir'].SetValue(os.path.dirname(self.imageDict['epsfile']))
+        else:
+            self.imagePanel.image['dir'].SetValue(self._getImageDirectory())
+        self.OnDirChanged(None)
+     
+        self._layout(notebook)
+        
+        
+    def _newObject(self):
+        """!Create corresponding instruction object"""
+        return Image(self.id, self.instruction)
+        
+    def _imagePanel(self, notebook):
+        panel = wx.Panel(parent = notebook, id = wx.ID_ANY, size = (-1, -1), style = wx.TAB_TRAVERSAL)
+        notebook.AddPage(page = panel, text = self.imagePanelName)
+        border = wx.BoxSizer(wx.VERTICAL)
+        #
+        # choose image
+        #
+        box   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = " %s " % _("Image"))
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        
+        # choose directory
+        panel.image = {}
+        if self.imageDict['epsfile']:
+            startDir = os.path.dirname(self.imageDict['epsfile'])
+        else:
+            startDir = self._getImageDirectory()
+        dir = filebrowse.DirBrowseButton(parent = panel, id = wx.ID_ANY,
+                                         labelText = _("Choose a directory:"),
+                                         dialogTitle = _("Choose a directory with images"),
+                                         buttonText = _('Browse'),
+                                         startDirectory = startDir,
+                                         changeCallback = self.OnDirChanged)
+        panel.image['dir'] = dir
+       
+        
+        sizer.Add(item = dir, proportion = 0, flag = wx.EXPAND, border = 0)
+        
+        # image list
+        hSizer = wx.BoxSizer(wx.HORIZONTAL)
+        
+        imageList = wx.ListBox(parent = panel, id = wx.ID_ANY)
+        panel.image['list'] = imageList
+        imageList.Bind(wx.EVT_LISTBOX, self.OnImageSelectionChanged)
+        
+        hSizer.Add(item = imageList, proportion = 1, flag = wx.EXPAND | wx.RIGHT, border = 10)
+        
+        # image preview
+        vSizer = wx.BoxSizer(wx.VERTICAL)
+        self.previewSize = (150, 150)
+        img = wx.EmptyImage(*self.previewSize)
+        panel.image['preview'] = wx.StaticBitmap(parent = panel, id = wx.ID_ANY,
+                                                bitmap = wx.BitmapFromImage(img))
+        vSizer.Add(item = panel.image['preview'], proportion = 0, flag = wx.EXPAND | wx.BOTTOM, border = 5)
+        panel.image['sizeInfo'] = wx.StaticText(parent = panel, id = wx.ID_ANY)
+        vSizer.Add(item = panel.image['sizeInfo'], proportion = 0, flag = wx.ALIGN_CENTER, border = 0)
+        
+        hSizer.Add(item = vSizer, proportion = 0, flag = wx.EXPAND, border = 0)
+        sizer.Add(item = hSizer, proportion = 1, flag = wx.EXPAND | wx.ALL, border = 3)
+        
+        epsInfo = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                label = _("Note: only EPS format supported"))
+        sizer.Add(item = epsInfo, proportion = 0, flag = wx.ALIGN_CENTER_VERTICAL | wx.ALL, border = 3)
+        
+        
+        border.Add(item = sizer, proportion = 0, flag = wx.ALL | wx.EXPAND, border = 5)
+        
+        #
+        # rotation
+        #
+        box   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = " %s " % _("Scale And Rotation"))
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        
+        gridSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
+        
+        scaleLabel = wx.StaticText(parent = panel, id = wx.ID_ANY, label = _("Scale:"))
+        if fs:
+            panel.image['scale'] = fs.FloatSpin(panel, id = wx.ID_ANY, min_val = 0, max_val = 50,
+                                          increment = 0.5, value = 1, style = fs.FS_RIGHT, size = self.spinCtrlSize)
+            panel.image['scale'].SetFormat("%f")
+            panel.image['scale'].SetDigits(1)
+        else:
+            panel.image['scale'] = wx.TextCtrl(panel, id = wx.ID_ANY, size = self.spinCtrlSize,
+                                                  validator = TCValidator(flag = 'DIGIT_ONLY'))
+        
+        if self.imageDict['scale']:
+            if fs:
+                value = float(self.imageDict['scale'])
+            else:
+                value = str(self.imageDict['scale'])
+        else:
+            if fs:
+                value = 0
+            else:
+                value = '0'
+        panel.image['scale'].SetValue(value)
+            
+        gridSizer.Add(item = scaleLabel, pos = (0, 0), flag = wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(item = panel.image['scale'], pos = (0, 1), flag = wx.ALIGN_CENTER_VERTICAL)
+        
+        
+        rotLabel = wx.StaticText(parent = panel, id = wx.ID_ANY, label = _("Rotation angle (deg):"))
+        if fs:
+            panel.image['rotate'] = fs.FloatSpin(panel, id = wx.ID_ANY, min_val = 0, max_val = 360,
+                                          increment = 0.5, value = 0, style = fs.FS_RIGHT, size = self.spinCtrlSize)
+            panel.image['rotate'].SetFormat("%f")
+            panel.image['rotate'].SetDigits(1)
+        else:
+            panel.image['rotate'] = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = self.spinCtrlSize,
+                                                min = 0, max = 359, initial = 0)
+        panel.image['rotate'].SetToolTipString(_("Counterclockwise rotation in degrees"))
+        if self.imageDict['rotate']:
+            panel.image['rotate'].SetValue(int(self.imageDict['rotate']))
+        else:
+            panel.image['rotate'].SetValue(0)
+            
+        gridSizer.Add(item = rotLabel, pos = (1, 0), flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
+        gridSizer.Add(item = panel.image['rotate'], pos = (1, 1), flag = wx.ALIGN_CENTER_VERTICAL)
+        
+        self._addConvergence(panel = panel, gridBagSizer = gridSizer)
+        sizer.Add(item = gridSizer, proportion = 0, flag = wx.EXPAND | wx.ALL, border = 5)
+        border.Add(item = sizer, proportion = 0, flag = wx.ALL | wx.EXPAND, border = 5)
+        
+        panel.SetSizer(border)
+        panel.Fit()
+        
+        return panel
+        
+    def _positionPanel(self, notebook):
+        panel = wx.Panel(parent = notebook, id = wx.ID_ANY, size = (-1, -1), style = wx.TAB_TRAVERSAL)
+        notebook.AddPage(page = panel, text = _("Position"))
+        border = wx.BoxSizer(wx.VERTICAL)
+        #
+        # set position
+        #
+        box   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = " %s " % _("Position"))
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        
+        gridBagSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
+        gridBagSizer.AddGrowableCol(0)
+        gridBagSizer.AddGrowableCol(1)
+        
+        self.AddExtendedPosition(panel, gridBagSizer, self.imageDict)
+        
+        self.Bind(wx.EVT_RADIOBUTTON, self.OnPositionType, panel.position['toPaper']) 
+        self.Bind(wx.EVT_RADIOBUTTON, self.OnPositionType, panel.position['toMap'])
+        
+        
+        sizer.Add(gridBagSizer, proportion = 1, flag = wx.ALIGN_CENTER_VERTICAL| wx.ALL, border = 5)
+        border.Add(item = sizer, proportion = 0, flag = wx.ALL | wx.EXPAND, border = 5)
+        
+        panel.SetSizer(border)
+        panel.Fit()
+        
+        return panel
+        
+    def OnDirChanged(self, event):
+        """!Image directory changed"""
+        path = self.imagePanel.image['dir'].GetValue()
+        try:
+            files = os.listdir(path)
+        except OSError: # no such directory
+            files = []
+        imageList = []
+        
+        # no setter for startDirectory?
+        try:
+            self.imagePanel.image['dir'].startDirectory = path
+        except AttributeError: # for sure
+            pass
+        for file in files:
+            if os.path.splitext(file)[1].lower() == '.eps':
+                imageList.append(file)
+        
+        imageList.sort()
+        self.imagePanel.image['list'].SetItems(imageList)
+        if self.imageDict['epsfile']:
+            file = os.path.basename(self.imageDict['epsfile'])
+            self.imagePanel.image['list'].SetStringSelection(file)
+        else:
+            self.imagePanel.image['list'].SetSelection(0)
+        self.OnImageSelectionChanged(None)
+        
+    def OnPositionType(self, event):
+        if self.positionPanel.position['toPaper'].GetValue():
+            for widget in self.gridBagSizerP.GetChildren():
+                widget.GetWindow().Enable()
+            for widget in self.gridBagSizerM.GetChildren():
+                widget.GetWindow().Disable()
+        else:
+            for widget in self.gridBagSizerM.GetChildren():
+                widget.GetWindow().Enable()
+            for widget in self.gridBagSizerP.GetChildren():
+                widget.GetWindow().Disable()
+                
+    def _getImageDirectory(self):
+        """!Default image directory"""
+        return os.getcwd()
+        
+    def _addConvergence(self, panel, gridBagSizer):
+        pass
+        
+    def OnImageSelectionChanged(self, event):
+        """!Image selected, show preview and size"""
+        if not self.imagePanel.image['dir']: # event is emitted when closing dialog an it causes error
+            return
+            
+        if not havePILImage:
+            self.DrawWarningText(_("PIL\nmissing"))
+            return
+        
+        imageName = self.imagePanel.image['list'].GetStringSelection()
+        if not imageName:
+            self.ClearPreview()
+            return
+        basePath = self.imagePanel.image['dir'].GetValue()
+        file = os.path.join(basePath, imageName)
+        if not os.path.exists(file):
+            return
+            
+        if os.path.splitext(file)[1].lower() == '.eps':
+            try:
+                pImg = PILImage.open(file)
+                img = PilImageToWxImage(pImg)
+            except IOError, e:
+                GError(message = _("Unable to read file %s") % file)
+                self.ClearPreview()
+                return
+            self.SetSizeInfoLabel(img)
+            img = self.ScaleToPreview(img)
+            bitmap = img.ConvertToBitmap()
+            self.DrawBitmap(bitmap)
+            
+        else:
+            # TODO: read other formats and convert by PIL to eps
+            pass
+    
+    def ScaleToPreview(self, img):
+        """!Scale image to preview size"""
+        w = img.GetWidth()
+        h = img.GetHeight()
+        if w <= self.previewSize[0] and h <= self.previewSize[1]:
+            return img
+        if w > h:
+            newW = self.previewSize[0]
+            newH = self.previewSize[0] * h / w
+        else:
+            newH = self.previewSize[0]
+            newW = self.previewSize[0] * w / h
+        return img.Scale(newW, newH, wx.IMAGE_QUALITY_HIGH)
+        
+    def DrawWarningText(self, warning):
+        """!Draw text on preview window"""
+        buffer = wx.EmptyBitmap(*self.previewSize)
+        dc = wx.MemoryDC()
+        dc.SelectObject(buffer)
+        dc.SetBrush(wx.Brush(wx.Color(250, 250, 250)))
+        dc.Clear()
+        extent = dc.GetTextExtent(warning)
+        posX = self.previewSize[0] / 2 - extent[0] / 2
+        posY = self.previewSize[1] / 2 - extent[1] / 2
+        dc.DrawText(warning, posX, posY)
+        self.imagePanel.image['preview'].SetBitmap(buffer)
+        dc.SelectObject(wx.NullBitmap)
+        
+    def DrawBitmap(self, bitmap):
+        """!Draw bitmap, center it if smaller than preview size"""
+        if bitmap.GetWidth() <= self.previewSize[0] and bitmap.GetHeight() <= self.previewSize[1]:
+            buffer = wx.EmptyBitmap(*self.previewSize)
+            dc = wx.MemoryDC()
+            dc.SelectObject(buffer)
+            dc.SetBrush(dc.GetBrush())
+            dc.Clear()
+            posX = self.previewSize[0] / 2 - bitmap.GetWidth() / 2
+            posY = self.previewSize[1] / 2 - bitmap.GetHeight() / 2
+            dc.DrawBitmap(bitmap, posX, posY)
+            self.imagePanel.image['preview'].SetBitmap(buffer)
+            dc.SelectObject(wx.NullBitmap)
+        else:
+            self.imagePanel.image['preview'].SetBitmap(bitmap)
+            
+    def SetSizeInfoLabel(self, image):
+        """!Update image size label"""
+        self.imagePanel.image['sizeInfo'].SetLabel(_("size: %s x %s pts") % (image.GetWidth(), image.GetHeight()))
+        self.imagePanel.image['sizeInfo'].GetContainingSizer().Layout()
+        
+    def ClearPreview(self):
+        """!Clear preview window"""
+        buffer = wx.EmptyBitmap(*self.previewSize)
+        dc = wx.MemoryDC()
+        dc.SelectObject(buffer)
+        dc.SetBrush(wx.WHITE_BRUSH)
+        dc.Clear()
+        mask = wx.Mask(buffer, wx.WHITE)
+        buffer.SetMask(mask)
+        self.imagePanel.image['preview'].SetBitmap(buffer)
+        dc.SelectObject(wx.NullBitmap)
+        
+    def update(self): 
+        # epsfile
+        selected = self.imagePanel.image['list'].GetStringSelection()
+        basePath = self.imagePanel.image['dir'].GetValue()
+        if not selected:
+            gcmd.GMessage(parent = self, message = _("No image selected."))
+            return False
+            
+        self.imageDict['epsfile'] = os.path.join(basePath, selected)
+        
+        #position
+        if self.positionPanel.position['toPaper'].GetValue():
+            self.imageDict['XY'] = True
+            currUnit = self.unitConv.findUnit(self.positionPanel.units['unitsCtrl'].GetStringSelection())
+            self.imageDict['unit'] = currUnit
+            if self.positionPanel.position['xCtrl'].GetValue():
+                x = self.positionPanel.position['xCtrl'].GetValue() 
+            else:
+                x = self.imageDict['where'][0]
+
+            if self.positionPanel.position['yCtrl'].GetValue():
+                y = self.positionPanel.position['yCtrl'].GetValue() 
+            else:
+                y = self.imageDict['where'][1]
+
+            x = self.unitConv.convert(value = float(x), fromUnit = currUnit, toUnit = 'inch')
+            y = self.unitConv.convert(value = float(y), fromUnit = currUnit, toUnit = 'inch')
+            self.imageDict['where'] = x, y
+            
+        else:
+            self.imageDict['XY'] = False
+            if self.positionPanel.position['eCtrl'].GetValue():
+                e = self.positionPanel.position['eCtrl'].GetValue() 
+            else:
+                self.imageDict['east'] = self.imageDict['east']
+
+            if self.positionPanel.position['nCtrl'].GetValue():
+                n = self.positionPanel.position['nCtrl'].GetValue() 
+            else:
+                self.imageDict['north'] = self.imageDict['north']
+
+            x, y = PaperMapCoordinates(map = self.instruction[self.mapId], x = float(self.imageDict['east']),
+                                       y = float(self.imageDict['north']), paperToMap = False)
+
+        #rotation
+        rot = self.imagePanel.image['rotate'].GetValue()
+        if rot == 0:
+            self.imageDict['rotate'] = None
+        else:
+            self.imageDict['rotate'] = rot
+        
+        #scale
+        self.imageDict['scale'] = self.imagePanel.image['scale'].GetValue()
+                
+        # scale
+        w, h = self.imageObj.GetImageOrigSize(self.imageDict['epsfile'])
+        if self.imageDict['rotate']:
+            self.imageDict['size'] = BBoxAfterRotation(w, h, self.imageDict['rotate'])
+        else:
+            self.imageDict['size'] = w, h
+            
+        w = self.unitConv.convert(value = self.imageDict['size'][0],
+                                  fromUnit = 'point', toUnit = 'inch')
+        h = self.unitConv.convert(value = self.imageDict['size'][1],
+                                  fromUnit = 'point', toUnit = 'inch')
+                                  
+    
+        self.imageDict['rect'] = wx.Rect2D(x = x, y = y,
+                                       w = w * self.imageDict['scale'],
+                                       h = h * self.imageDict['scale'])
+        
+        if self.id not in self.instruction:
+            image = self._newObject()
+            self.instruction.AddInstruction(image)
+        self.instruction[self.id].SetInstruction(self.imageDict)
+        
+        if self.id not in self.parent.objectId:
+            self.parent.objectId.append(self.id)
+
+        return True
+        
+    def updateDialog(self):
+        """!Update text coordinates, after moving"""
+        # XY coordinates
+        x, y = self.imageDict['where'][:2]
+        currUnit = self.unitConv.findUnit(self.positionPanel.units['unitsCtrl'].GetStringSelection())
+        x = self.unitConv.convert(value = x, fromUnit = 'inch', toUnit = currUnit)
+        y = self.unitConv.convert(value = y, fromUnit = 'inch', toUnit = currUnit)
+        self.positionPanel.position['xCtrl'].SetValue("%5.3f" % x)
+        self.positionPanel.position['yCtrl'].SetValue("%5.3f" % y)
+        # EN coordinates
+        e, n = self.imageDict['east'], self.imageDict['north']
+        self.positionPanel.position['eCtrl'].SetValue(str(self.imageDict['east']))
+        self.positionPanel.position['nCtrl'].SetValue(str(self.imageDict['north']))
+        
+        
+class NorthArrowDialog(ImageDialog):
+    def __init__(self, parent, id, settings):
+        ImageDialog.__init__(self, parent = parent, id = id, settings = settings,
+                             imagePanelName = _("North Arrow"))
+        
+        self.objectType = ('northArrow',)
+        self.SetTitle(_("North Arrow settings"))
+    
+    def _newObject(self):
+        return NorthArrow(self.id, self.instruction)
+        
+    def _getImageDirectory(self):
+        gisbase = os.getenv("GISBASE")
+        return os.path.join(gisbase, 'etc', 'paint', 'decorations')
+    
+    def _addConvergence(self, panel, gridBagSizer):
+        convergence = wx.Button(parent = panel, id = wx.ID_ANY,
+                                               label = _("Compute convergence"))
+        gridBagSizer.Add(item = convergence, pos = (1, 2),
+                      flag = wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
+        convergence.Bind(wx.EVT_BUTTON, self.OnConvergence)
+        panel.image['convergence'] = convergence
+        
+    def OnConvergence(self, event):
+        ret = RunCommand('g.region', read = True, flags = 'ng')
+        if ret:
+            convergence = float(ret.strip().split('=')[1])
+            if convergence < 0:
+                self.imagePanel.image['rotate'].SetValue(abs(convergence))
+            else:
+                self.imagePanel.image['rotate'].SetValue(360 - convergence)
+            
         
 def convertRGB(rgb):
     """!Converts wx.Colour(r,g,b,a) to string 'r:g:b' or named color,
@@ -5704,3 +6342,67 @@ def getRasterType(map):
     else:
         return None
    
+def PilImageToWxImage(pilImage, copyAlpha = True):
+    """!Convert PIL image to wx.Image
+    
+    Based on http://wiki.wxpython.org/WorkingWithImages
+    """
+    hasAlpha = pilImage.mode[-1] == 'A'
+    if copyAlpha and hasAlpha :  # Make sure there is an alpha layer copy.
+        wxImage = wx.EmptyImage( *pilImage.size )
+        pilImageCopyRGBA = pilImage.copy()
+        pilImageCopyRGB = pilImageCopyRGBA.convert('RGB')    # RGBA --> RGB
+        pilImageRgbData = pilImageCopyRGB.tostring()
+        wxImage.SetData(pilImageRgbData)
+        wxImage.SetAlphaData(pilImageCopyRGBA.tostring()[3::4])  # Create layer and insert alpha values.
+
+    else :    # The resulting image will not have alpha.
+        wxImage = wx.EmptyImage(*pilImage.size)
+        pilImageCopy = pilImage.copy()
+        pilImageCopyRGB = pilImageCopy.convert('RGB')    # Discard any alpha from the PIL image.
+        pilImageRgbData = pilImageCopyRGB.tostring()
+        wxImage.SetData(pilImageRgbData)
+
+    return wxImage
+
+def BBoxAfterRotation(w, h, angle):
+    """!Compute bounding box or rotated rectangle
+    
+    @param w rectangle width
+    @param h rectangle height
+    @param angle angle (0, 360) in degrees
+    """
+    angleRad = angle / 180. * pi
+    ct = cos(angleRad)
+    st = sin(angleRad)
+    
+    hct = h * ct
+    wct = w * ct
+    hst = h * st
+    wst = w * st
+    y = x = 0
+    
+    if 0 < angle <= 90:
+        y_min = y
+        y_max = y + hct + wst
+        x_min = x - hst
+        x_max = x + wct
+    elif 90 < angle <= 180:
+        y_min = y + hct
+        y_max = y + wst
+        x_min = x - hst + wct
+        x_max = x
+    elif 180 < angle <= 270:
+        y_min = y + wst + hct
+        y_max = y
+        x_min = x + wct
+        x_max = x - hst
+    elif 270 < angle <= 360:
+        y_min = y + wst
+        y_max = y + hct
+        x_min = x
+        x_max = x + wct - hst
+        
+    width = int(ceil(abs(x_max) + abs(x_min)))
+    height = int(ceil(abs(y_max) + abs(y_min)))
+    return width, height
