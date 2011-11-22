@@ -434,13 +434,15 @@ Icons = {
         'quit'       : MetaIcon(img = iconSet['quit'],
                                 label = _('Quit Cartographic Composer')),
         'addText'    : MetaIcon(img = iconSet['text-add'],
-                                label = _('Add text')),
+                                label = _('Text')),
         'addMapinfo' : MetaIcon(img = iconSet['map-info'],
-                                label = _('Add map info')),
+                                label = _('Map info')),
         'addLegend'  : MetaIcon(img = iconSet['legend-add'],
-                                label = _('Add legend')),
+                                label = _('Legend')),
         'addScalebar' : MetaIcon(img = iconSet['scalebar-add'],
-                                 label = _('Add scale bar')),
+                                 label = _('Scale bar')),
+        'addImage'   : MetaIcon(img = iconSet['image-add'],
+                                 label = _('Image')),
         }
     }
 
