@@ -56,7 +56,7 @@ from copy import deepcopy
 from time import strftime, localtime
 try:
     import Image as PILImage
-    havePILImage = False
+    havePILImage = True
 except ImportError:
     havePILImage = False
 

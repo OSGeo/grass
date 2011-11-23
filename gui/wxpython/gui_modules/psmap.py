@@ -21,8 +21,7 @@ import textwrap
 import Queue
 try:
     import Image as PILImage
-    #havePILImage = True
-    havePILImage = False
+    havePILImage = True
 except ImportError:
     havePILImage = False
 from math import sin, cos, pi
