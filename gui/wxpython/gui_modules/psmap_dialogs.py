@@ -5864,7 +5864,7 @@ class ImageDialog(PsmapDialog):
         if self.imageDict['epsfile']:
             file = os.path.basename(self.imageDict['epsfile'])
             self.imagePanel.image['list'].SetStringSelection(file)
-        else:
+        elif imageList:
             self.imagePanel.image['list'].SetSelection(0)
         self.OnImageSelectionChanged(None)
         
