@@ -14,7 +14,7 @@ This program is free software under the GNU General Public License
 import os
 import sys
 
-from gui_modules import globalvar
+from core import globalvar
 import wx
 
 def main():

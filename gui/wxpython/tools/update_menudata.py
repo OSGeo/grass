@@ -30,8 +30,7 @@ except ImportError:
 from grass.script import core as grass
 from grass.script import task as gtask
 
-sys.path.append('gui_modules')
-import menudata
+from core.menudata import ManagerData
 
 def parseModules():
     """!Parse modules' interface"""
@@ -149,7 +148,7 @@ def main(argv = None):
     modules = dict()
     modules = parseModules()
     grass.info("Step 3: reading menu data...")
-    data = menudata.ManagerData()
+    data = ManagerData()
     grass.info("Step 4: updating menu data...")
     updateData(data, modules)
     
