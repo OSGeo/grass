@@ -53,7 +53,7 @@ from gui_core.preferences  import MapsetAccess, PreferencesDialog, EVT_SETTINGS_
 from lmgr.layertree        import LayerTree
 from lmgr.menudata         import ManagerData
 from gui_core.widgets      import GNotebook
-from modules.histogram     import HistFrame
+from modules.histogram     import HistogramFrame
 from modules.mcalc_builder import MapCalcFrame
 from dbm.manager           import AttributeManager
 from core.workspace        import ProcessWorkspaceFile, ProcessGrcFile, WriteWorkspaceFile
@@ -69,7 +69,8 @@ from modules.vclean        import VectorCleaningFrame
 from nviz.tools            import NvizToolWindow
 from psmap.frame           import PsMapFrame
 from core.debug            import Debug
-from gui_core.ghelp        import MenuTreeWindow, AboutWindow, InstallExtensionWindow
+from gui_core.ghelp        import MenuTreeWindow, AboutWindow
+from modules.extensions    import InstallExtensionWindow
 from lmgr.toolbars         import LMWorkspaceToolbar, LMDataToolbar, LMToolsToolbar
 from lmgr.toolbars         import LMMiscToolbar, LMVectorToolbar, LMNvizToolbar
 from lmgr.pyshell          import PyShellWindow

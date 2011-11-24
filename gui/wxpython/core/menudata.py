@@ -35,7 +35,7 @@ try:
 except ImportError:
     import elementtree.ElementTree as etree # Python <= 2.4
 
-from wx import ID_ANY
+import wx
 
 if not os.getenv("GISBASE"):
     sys.exit("GRASS is not running. Exiting...")
@@ -75,7 +75,7 @@ class MenuData:
             if wxId != None:
                 wxId = eval('wx.' + wxId.text)
             else:
-                wxId = ID_ANY
+                wxId = wx.ID_ANY
 	    return (label, help, handler, gcmd, keywords, shortcut, wxId)
 	elif mi.tag == 'menu':
 	    return self._getMenu(mi)
@@ -212,11 +212,12 @@ if __name__ == "__main__":
             menu = arg
     
     sys.path.append(os.path.join(os.getenv("GISBASE"), "etc", "gui", "wxpython"))
+    
     if menu == 'manager':
-        from lmgr.menudata import ManagerData
+        from lmgr.menudata     import ManagerData
         data = ManagerData()
     else:
-        from gmodeler.frame import ModelerData
+        from gmodeler.menudata import ModelerData
         data = ModelerData()
     
     if action == 'strings':

@@ -4,7 +4,6 @@
 @brief wxGUI Graphical Modeler for creating, editing, and managing models
 
 Classes:
- - ModelerData
  - ModelToolbar
  - ModelFrame
  - ModelCanvas
@@ -56,15 +55,6 @@ from core.menudata        import MenuData
 from gui_core.toolbars    import BaseToolbar
 
 from grass.script import core as grass
-
-class ModelerData(MenuData):
-    def __init__(self, filename = None):
-        if not filename:
-            gisbase = os.getenv('GISBASE')
-            global etcwxdir
-	    filename = os.path.join(globalvar.ETCWXDIR, 'xml', 'menudata_modeler.xml')
-        
-        MenuData.__init__(self, filename)
 
 class ModelToolbar(BaseToolbar):
     """!Graphical modeler toolbaro (see gmodeler.py)

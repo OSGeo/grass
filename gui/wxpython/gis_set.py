@@ -22,7 +22,6 @@ This program is free software under the GNU General Public License
 
 import os
 import sys
-import glob
 import shutil
 import copy
 import platform
@@ -32,17 +31,13 @@ import codecs
 import gettext
 gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
 
-from gui_modules import globalvar
+from core import globalvar
 import wx
-import wx.html
-import wx.lib.rcsizer as rcs
-import wx.lib.filebrowsebutton as filebrowse
 import wx.lib.mixins.listctrl as listmix
 import wx.lib.scrolledpanel as scrolled
 
-from gui_modules import goutput
-from gui_modules.ghelp import HelpFrame
-from gui_modules.gcmd  import GMessage, GError
+from gui_core.ghelp import HelpFrame
+from core.gcmd      import GMessage, GError
 
 sys.stderr = codecs.getwriter('utf8')(sys.stderr)
 
@@ -369,7 +364,7 @@ class GRASSStartup(wx.Frame):
                 rc = open(gisrc, "r")
                 for line in rc.readlines():
                     key, val = line.split(":", 1)
-                    grassrc[key.strip()] = utils.DecodeString(val.strip())
+                    grassrc[key.strip()] = DecodeString(val.strip())
             finally:
                 rc.close()
         
@@ -385,9 +380,9 @@ class GRASSStartup(wx.Frame):
         
     def OnWizard(self, event):
         """!Location wizard started"""
-        from gui_modules import location_wizard
-        gWizard = location_wizard.LocationWizard(parent = self,
-                                                 grassdatabase = self.tgisdbase.GetValue())
+        from location_wizard.wizard import LocationWizard
+        gWizard = LocationWizard(parent = self,
+                                 grassdatabase = self.tgisdbase.GetValue())
         if gWizard.location !=  None:
             self.OnSetDatabase(event)
             self.UpdateMapsets(os.path.join(self.gisdbase, gWizard.location))
@@ -544,7 +539,7 @@ class GRASSStartup(wx.Frame):
     def UpdateLocations(self, dbase):
         """!Update list of locations"""
         try:
-            self.listOfLocations = utils.GetListOfLocations(dbase)
+            self.listOfLocations = GetListOfLocations(dbase)
         except UnicodeEncodeError:
             wx.MessageBox(parent = self, caption = _("Error"),
                           message = _("Unable to set GRASS database. "
@@ -566,29 +561,29 @@ class GRASSStartup(wx.Frame):
         self.FormerMapsetSelection = wx.NOT_FOUND # for non-selectable item
         
         self.listOfMapsetsSelectable = list()
-        self.listOfMapsets = utils.GetListOfMapsets(self.gisdbase, location)
+        self.listOfMapsets = GetListOfMapsets(self.gisdbase, location)
         
         self.lbmapsets.Clear()
         
         # disable mapset with denied permission
         locationName = os.path.basename(location)
         
-        ret = gcmd.RunCommand('g.mapset',
-                              read = True,
-                              flags = 'l',
-                              location = locationName,
-                              gisdbase = self.gisdbase)
+        ret = RunCommand('g.mapset',
+                         read = True,
+                         flags = 'l',
+                         location = locationName,
+                         gisdbase = self.gisdbase)
             
         if ret:
             for line in ret.splitlines():
                 self.listOfMapsetsSelectable += line.split(' ')
         else:
-            gcmd.RunCommand("g.gisenv",
-                            set = "GISDBASE=%s" % self.gisdbase)
-            gcmd.RunCommand("g.gisenv",
-                            set = "LOCATION_NAME=%s" % locationName)
-            gcmd.RunCommand("g.gisenv",
-                            set = "MAPSET=PERMANENT")
+            RunCommand("g.gisenv",
+                       set = "GISDBASE=%s" % self.gisdbase)
+            RunCommand("g.gisenv",
+                       set = "LOCATION_NAME=%s" % locationName)
+            RunCommand("g.gisenv",
+                       set = "MAPSET=PERMANENT")
             # first run only
             self.listOfMapsetsSelectable = copy.copy(self.listOfMapsets)
         
@@ -772,12 +767,12 @@ class GRASSStartup(wx.Frame):
             else:
                 return
         
-        gcmd.RunCommand("g.gisenv",
-                        set = "GISDBASE=%s" % dbase)
-        gcmd.RunCommand("g.gisenv",
-                        set = "LOCATION_NAME=%s" % location)
-        gcmd.RunCommand("g.gisenv",
-                        set = "MAPSET=%s" % mapset)
+        RunCommand("g.gisenv",
+                   set = "GISDBASE=%s" % dbase)
+        RunCommand("g.gisenv",
+                   set = "LOCATION_NAME=%s" % location)
+        RunCommand("g.gisenv",
+                   set = "MAPSET=%s" % mapset)
         
         self.Destroy()
         sys.exit(0)
@@ -885,8 +880,8 @@ if __name__ ==  "__main__":
         import gettext
         gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
 
-        import gui_modules.gcmd as gcmd
-        import gui_modules.utils as utils
+        from core.gcmd  import RunCommand, DecodeString
+        from core.utils import GetListOfMapsets, GetListOfLocations
 
         GRASSStartUp = StartUp(0)
         GRASSStartUp.MainLoop()

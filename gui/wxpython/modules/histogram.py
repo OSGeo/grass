@@ -22,7 +22,7 @@ import wx
 
 from core                 import globalvar
 from core.render          import Map
-from core.forms           import GUI
+from gui_core.task        import GUI
 from mapdisp.gprint       import PrintOptions
 from core.utils           import GetLayerNameFromCmd
 from gui_core.dialogs     import GetImageHandlers, ImageSizeDialog
@@ -258,7 +258,7 @@ class BufferedWindow(wx.Window):
         """
         self.Draw(self.pdc, pdctype = 'clear')
         
-class HistFrame(wx.Frame):
+class HistogramFrame(wx.Frame):
     """!Main frame for hisgram display window. Uses d.histogram
     rendered onto canvas
     """
