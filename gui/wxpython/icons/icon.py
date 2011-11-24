@@ -22,7 +22,7 @@ for details.
 import os
 import sys
 
-sys.path.append(os.path.join(os.getenv("GISBASE"), "etc", "gui", "wxpython", "gui_modules"))
+sys.path.append(os.path.join(os.getenv("GISBASE"), "etc", "gui", "wxpython"))
 
 import wx
 

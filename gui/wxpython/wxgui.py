@@ -312,11 +312,11 @@ class GMFrame(wx.Frame):
         
     def OnLocationWizard(self, event):
         """!Launch location wizard"""
-        from gui_modules import location_wizard
+        from location_wizard.wizard import LocationWizard
         
         gisdbase = grass.gisenv()['GISDBASE']
-        gWizard = location_wizard.LocationWizard(parent = self,
-                                                 grassdatabase = gisdbase)
+        gWizard = LocationWizard(parent = self,
+                                 grassdatabase = gisdbase)
         
         if gWizard.location !=  None:
             dlg = wx.MessageDialog(parent = self,
@@ -346,8 +346,8 @@ class GMFrame(wx.Frame):
     def OnGCPManager(self, event):
         """!Launch georectifier module
         """
-        from gui_modules import gcpmanager
-        gcpmanager.GCPWizard(self)
+        from gcp.manager import GCPWizard
+        GCPWizard(self)
 
     def OnGModeler(self, event):
         """!Launch Graphical Modeler"""
@@ -364,22 +364,6 @@ class GMFrame(wx.Frame):
         
         win.Show()
 
-    def OnRStream(self, event):
-        """!GSoC's r.stream.* interface for testing
-        """
-        try:
-            from gui_modules import rstream
-        except:
-            GError(parent = self.parent,
-                   message = _("RStream Utility is not available. You can install it by %s") % \
-                       'g.extension -s extension=wx.stream')
-            return
-        
-        win = rstream.RStreamFrame(parent = self)
-        win.CentreOnScreen()
-        
-        win.Show()
-        
     def OnDone(self, cmd, returncode):
         """Command execution finised"""
         if hasattr(self, "model"):
