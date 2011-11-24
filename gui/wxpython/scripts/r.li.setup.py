@@ -25,7 +25,7 @@ import platform
 GUIModulesPath = os.path.join(os.getenv("GISBASE"), "etc", "gui", "wxpython", "gui_modules")
 sys.path.append(GUIModulesPath)
 
-import globalvar
+from core import globalvar
 
 import wx
 import wx.lib.mixins.listctrl as listmix
@@ -33,8 +33,8 @@ import wx.wizard as wiz
 import wx.lib.scrolledpanel as scrolled
 import time
 
-import gcmd
-import utils
+from core import cmd as gcmd
+from core import utils
 from grass.script import core as grass
 
 #@TODO create wizard instead of progressively increasing window

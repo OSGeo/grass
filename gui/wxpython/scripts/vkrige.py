@@ -36,11 +36,11 @@ except ImportError:
 GUIModulesPath = os.path.join(os.getenv("GISBASE"), "etc", "gui", "wxpython", "gui_modules")
 sys.path.append(GUIModulesPath)
 
-import globalvar
-import gselect
-import goutput
+from core import globalvar
+import gui_core.gselect
+import gui_core.goutput
 import menuform
-from preferences import globalSettings as UserSettings
+from core.settings import UserSettings
 #import help
 
 import wx

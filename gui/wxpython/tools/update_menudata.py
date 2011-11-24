@@ -174,6 +174,6 @@ if __name__ == '__main__':
     sys.path.append(os.path.join(os.getenv("GISBASE"), 'etc', 'wxpython', 'gui_modules'))
     import menudata
     import menuform
-    import globalvar
+    from core import globalvar
     
     sys.exit(main())

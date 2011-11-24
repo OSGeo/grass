@@ -9,20 +9,29 @@ include $(MODULE_TOPDIR)/include/Make/Python.make
 
 ETCDIR = $(ETC)/gui/wxpython
 
-SRCFILES := $(wildcard scripts/* compat/* gui_modules/* icons/*.* xml/*) gis_set.py gis_set_error.py wxgui.py README
+SRCFILES := $(wildcard compat/* icons/*.* scripts/* xml/*) \
+	$(wildcard core/* dbm/* gcp/* gmodeler/* gui_core/* lmgr/* \
+	mapdisp/* modules/* nviz/* psmap/* vdigit/* wxplot/* ) \
+	gis_set.py gis_set_error.py wxgui.py README
 DSTFILES := $(patsubst %,$(ETCDIR)/%,$(SRCFILES)) $(patsubst %.py,$(ETCDIR)/%.pyc,$(filter %.py,$(SRCFILES)))
 
-DSTDIRS := $(patsubst %,$(ETCDIR)/%,compat gui_modules icons scripts xml)
+PYDSTDIRS := $(patsubst %,$(ETCDIR)/%,core dbm gcp gmodeler gui_core lmgr \
+	mapdisp modules nviz psmap vdigit wxplot)
+DSTDIRS := $(patsubst %,$(ETCDIR)/%,compat icons scripts xml)
 
 default: $(DSTFILES) menustrings.py
 	$(MAKE) parsubdirs
 
-$(ETCDIR)/%: % | $(DSTDIRS)
+$(ETCDIR)/%: % | $(PYDSTDIRS) $(DSTDIRS)
 	$(INSTALL_DATA) $< $@
 
-menustrings.py: gui_modules/menudata.py $(ETCDIR)/xml/menudata.xml $(ETCDIR)/xml/menudata_modeler.xml 
+menustrings.py: core/menudata.py $(ETCDIR)/xml/menudata.xml $(ETCDIR)/xml/menudata_modeler.xml 
 	$(call run_grass,$(PYTHON) $< > $@)
 	$(call run_grass,$(PYTHON) $< "modeler" >> $@)
+
+$(PYDSTDIRS): %: | $(ETCDIR)
+	$(MKDIR) $@
+	$(call run_grass,$(PYTHON) create__init__.py $@)
 
 $(DSTDIRS): %: | $(ETCDIR)
 	$(MKDIR) $@

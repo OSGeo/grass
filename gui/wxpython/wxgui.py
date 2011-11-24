@@ -1,18 +1,19 @@
 """!
-@package wxgui.py
+@package wxgui
 
-@brief Main Python app for GRASS wxPython GUI. Main menu, layer management
-toolbar, notebook control for display management and access to
-command console.
+@brief Main Python application for GRASS wxPython GUI
+
+Layer Manager - main menu, layer management toolbar, notebook control
+for display management and access to command console.
 
 Classes:
  - GMFrame
  - GMApp
+ - Usage
 
 (C) 2006-2011 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+This program is free software under the GNU General Public License
+(>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Michael Barton (Arizona State University)
 @author Jachym Cepicky (Mendel University of Agriculture)
@@ -22,67 +23,56 @@ for details.
 
 import sys
 import os
-import time
-import string
 import getopt
-import platform
-import signal
 import tempfile
 try:
     import xml.etree.ElementTree as etree
 except ImportError:
     import elementtree.ElementTree as etree # Python <= 2.4
 
-from gui_modules import globalvar
+from core import globalvar
 import wx
 import wx.aui
-import wx.combo
-import wx.html
-import wx.stc
 try:
-    import wx.lib.agw.customtreectrl as CT
     import wx.lib.agw.flatnotebook   as FN
 except ImportError:
-    import wx.lib.customtreectrl as CT
     import wx.lib.flatnotebook   as FN
-
 try:
     import wx.lib.agw.advancedsplash as SC
 except ImportError:
     SC = None
 
 sys.path.append(os.path.join(globalvar.ETCDIR, "python"))
-from grass.script import core as grass
+from grass.script          import core as grass
 
-from gui_modules import utils
-from gui_modules import preferences
-from gui_modules import layertree
-from gui_modules import mapdisp
-from gui_modules import menudata
-from gui_modules import menuform
-from gui_modules import histogram
-from gui_modules import mcalc_builder as mapcalculator
-from gui_modules import gcmd
-from gui_modules import dbm
-from gui_modules import workspace
-from gui_modules import goutput
-from gui_modules import gdialogs
-from gui_modules import colorrules
-from gui_modules import ogc_services
-from gui_modules import prompt
-from gui_modules import menu
-from gui_modules import gmodeler
-from gui_modules import vclean
-from gui_modules import nviz_tools
-from gui_modules import psmap
-from gui_modules.debug    import Debug
-from gui_modules.ghelp    import MenuTreeWindow, AboutWindow, InstallExtensionWindow
-from gui_modules.toolbars import LMWorkspaceToolbar, LMDataToolbar, LMToolsToolbar,\
-                                 LMMiscToolbar, LMVectorToolbar, LMNvizToolbar
-from gui_modules.gpyshell import PyShellWindow
-from icons.icon           import Icons
-
-UserSettings = preferences.globalSettings
+from core                  import utils
+from core.gcmd             import RunCommand, GError, GMessage
+from core.settings         import UserSettings
+from icons.icon            import Icons
+from gui_core.preferences  import MapsetAccess, PreferencesDialog, EVT_SETTINGS_CHANGED
+from lmgr.layertree        import LayerTree
+from lmgr.menudata         import ManagerData
+from gui_core.widgets      import GNotebook
+from modules.histogram     import HistFrame
+from modules.mcalc_builder import MapCalcFrame
+from dbm.manager           import AttributeManager
+from core.workspace        import ProcessWorkspaceFile, ProcessGrcFile, WriteWorkspaceFile
+from gui_core.goutput      import GMConsole
+from gui_core.dialogs      import GdalOutputDialog, DxfImportDialog, GdalImportDialog, MapLayersDialog
+from gui_core.dialogs      import LocationDialog, MapsetDialog, CreateNewVector, GroupDialog
+from modules.ogc_services  import WMSDialog
+from modules.colorrules    import RasterColorTable, VectorColorTable
+from gui_core.menu         import Menu
+from gmodeler.model        import Model
+from gmodeler.frame        import ModelFrame
+from modules.vclean        import VectorCleaningFrame
+from nviz.tools            import NvizToolWindow
+from psmap.frame           import PsMapFrame
+from core.debug            import Debug
+from gui_core.ghelp        import MenuTreeWindow, AboutWindow, InstallExtensionWindow
+from lmgr.toolbars         import LMWorkspaceToolbar, LMDataToolbar, LMToolsToolbar
+from lmgr.toolbars         import LMMiscToolbar, LMVectorToolbar, LMNvizToolbar
+from lmgr.pyshell          import PyShellWindow
 
 class GMFrame(wx.Frame):
     """!Layer Manager frame with notebook widget for controlling GRASS
@@ -229,7 +219,7 @@ class GMFrame(wx.Frame):
         
     def _createMenuBar(self):
         """!Creates menu bar"""
-        self.menubar = menu.Menu(parent = self, data = menudata.ManagerData())
+        self.menubar = Menu(parent = self, data = ManagerData())
         self.SetMenuBar(self.menubar)
         self.menucmd = self.menubar.GetCmd()
         
@@ -245,7 +235,7 @@ class GMFrame(wx.Frame):
     
     def _createNoteBook(self):
         """!Creates notebook widgets"""
-        self.notebook = menuform.GNotebook(parent = self, style = globalvar.FNPageDStyle)
+        self.notebook = GNotebook(parent = self, style = globalvar.FNPageDStyle)
         # create displays notebook widget and add it to main notebook page
         cbStyle = globalvar.FNPageStyle
         if globalvar.hasAgw:
@@ -256,7 +246,7 @@ class GMFrame(wx.Frame):
         self.notebook.AddPage(page = self.gm_cb, text = _("Map layers"), name = 'layers')
         
         # create 'command output' text area
-        self.goutput = goutput.GMConsole(self)
+        self.goutput = GMConsole(self)
         self.notebook.AddPage(page = self.goutput, text = _("Command console"), name = 'output')
         self._setCopyingOfSelectedText()
         
@@ -292,8 +282,8 @@ class GMFrame(wx.Frame):
         self._auimgr.Update()
         
         # create nviz tools tab
-        self.nviz = nviz_tools.NvizToolWindow(parent = self,
-                                              display = self.curr_page.maptree.GetMapDisplay())
+        self.nviz = NvizToolWindow(parent = self,
+                                   display = self.curr_page.maptree.GetMapDisplay())
         idx = self.notebook.GetPageIndexByName('layers')
         self.notebook.InsertPage(indx = idx + 1, page = self.nviz, text = _("3D view"), name = 'nviz')
         self.notebook.SetSelectionByName('nviz')
@@ -338,10 +328,10 @@ class GMFrame(wx.Frame):
             
             ret = dlg.ShowModal()
             if ret == wx.ID_YES:
-                gcmd.RunCommand("g.gisenv",
-                                set = "LOCATION_NAME=%s" % gWizard.location)
-                gcmd.RunCommand("g.gisenv",
-                                set = "MAPSET=PERMANENT")
+                RunCommand("g.gisenv",
+                           set = "LOCATION_NAME=%s" % gWizard.location)
+                RunCommand("g.gisenv",
+                           set = "MAPSET=PERMANENT")
             
             dlg.Destroy()
             
@@ -368,7 +358,7 @@ class GMFrame(wx.Frame):
     def OnPsMap(self, event):
         """!Launch Cartographic Composer
         """
-        win = psmap.PsMapFrame(parent = self)
+        win = PsMapFrame(parent = self)
         win.CentreOnScreen()
         
         win.Show()
@@ -379,9 +369,9 @@ class GMFrame(wx.Frame):
         try:
             from gui_modules import rstream
         except:
-            gcmd.GError(parent = self.parent,
-                        message = _("RStream Utility is not available. You can install it by %s") % \
-                            'g.extension -s extension=wx.stream')
+            GError(parent = self.parent,
+                   message = _("RStream Utility is not available. You can install it by %s") % \
+                       'g.extension -s extension=wx.stream')
             return
         
         win = rstream.RStreamFrame(parent = self)
@@ -418,14 +408,14 @@ class GMFrame(wx.Frame):
     def OnMapsets(self, event):
         """!Launch mapset access dialog
         """
-        dlg = preferences.MapsetAccess(parent = self, id = wx.ID_ANY)
+        dlg = MapsetAccess(parent = self, id = wx.ID_ANY)
         dlg.CenterOnScreen()
         
         if dlg.ShowModal() == wx.ID_OK:
             ms = dlg.GetMapsets()
-            gcmd.RunCommand('g.mapsets',
-                            parent = self,
-                            mapset = '%s' % ','.join(ms))
+            RunCommand('g.mapsets',
+                       parent = self,
+                       mapset = '%s' % ','.join(ms))
         
     def OnCBPageChanged(self, event):
         """!Page in notebook (display) changed"""
@@ -575,14 +565,14 @@ class GMFrame(wx.Frame):
             mapLayer = None
         
         if not mapLayer or mapLayer.GetType() != 'vector':
-            gcmd.GMessage(parent = self,
-                          message = _("Selected map layer is not vector."))
+            GMessage(parent = self,
+                     message = _("Selected map layer is not vector."))
             return
         
         if mapLayer.GetMapset() != grass.gisenv()['MAPSET']:
-            gcmd.GMessage(parent = self,
-                          message = _("Editing is allowed only for vector maps from the "
-                                      "current mapset."))
+            GMessage(parent = self,
+                     message = _("Editing is allowed only for vector maps from the "
+                                 "current mapset."))
             return
         
         if not tree.GetPyData(layer)[0]:
@@ -608,9 +598,9 @@ class GMFrame(wx.Frame):
             return False
 
         if not os.path.exists(filename):
-            gcmd.GError(parent = self,
-                        message = _("Script file '%s' doesn't exist. "
-                                    "Operation cancelled.") % filename)
+            GError(parent = self,
+                   message = _("Script file '%s' doesn't exist. "
+                               "Operation cancelled.") % filename)
             return
         
         self.goutput.WriteCmdLog(_("Launching script '%s'...") % filename)
@@ -618,14 +608,14 @@ class GMFrame(wx.Frame):
         
     def OnChangeLocation(self, event):
         """Change current location"""
-        dlg = gdialogs.LocationDialog(parent = self)
+        dlg = LocationDialog(parent = self)
         if dlg.ShowModal() == wx.ID_OK:
             location, mapset = dlg.GetValues()
             if location and mapset:
-                ret = gcmd.RunCommand("g.gisenv",
-                                      set = "LOCATION_NAME=%s" % location)
-                ret += gcmd.RunCommand("g.gisenv",
-                                       set = "MAPSET=%s" % mapset)
+                ret = RunCommand("g.gisenv",
+                                 set = "LOCATION_NAME=%s" % location)
+                ret += RunCommand("g.gisenv",
+                                  set = "MAPSET=%s" % mapset)
                 if ret > 0:
                     wx.MessageBox(parent = self,
                                   message = _("Unable to switch to location <%(loc)s> mapset <%(mapset)s>.") % \
@@ -650,43 +640,43 @@ class GMFrame(wx.Frame):
         if dlg.ShowModal() ==  wx.ID_OK:
             mapset = dlg.GetValue()
             if not mapset:
-                gcmd.GError(parent = self,
-                            message = _("No mapset provided. Operation canceled."))
+                GError(parent = self,
+                       message = _("No mapset provided. Operation canceled."))
                 return
             
-            ret = gcmd.RunCommand('g.mapset',
-                                  parent = self,
-                                  flags = 'c',
-                                  mapset = mapset)
+            ret = RunCommand('g.mapset',
+                             parent = self,
+                             flags = 'c',
+                             mapset = mapset)
             if ret == 0:
-                gcmd.GMessage(parent = self,
-                              message = _("Current mapset is <%s>.") % mapset)
-            
+                GMessage(parent = self,
+                         message = _("Current mapset is <%s>.") % mapset)
+                
     def OnChangeMapset(self, event):
         """Change current mapset"""
-        dlg = gdialogs.MapsetDialog(parent = self)
+        dlg = MapsetDialog(parent = self)
         
         if dlg.ShowModal() == wx.ID_OK:
             mapset = dlg.GetMapset()
             if not mapset:
-                gcmd.GError(parent = self,
-                            message = _("No mapset provided. Operation canceled."))
+                GError(parent = self,
+                       message = _("No mapset provided. Operation canceled."))
                 return
             
-            ret = gcmd.RunCommand('g.mapset',
-                                  parent = self,
-                                  mapset = mapset)
+            ret = RunCommand('g.mapset',
+                             parent = self,
+                             mapset = mapset)
             
             if ret == 0:
-                gcmd.GMessage(parent = self,
-                              message = _("Current mapset is <%s>.") % mapset)
+                GMessage(parent = self,
+                         message = _("Current mapset is <%s>.") % mapset)
         
     def OnNewVector(self, event):
         """!Create new vector map layer"""
-        dlg = gdialogs.CreateNewVector(self, log = self.goutput,
-                                       cmd = (('v.edit',
-                                               { 'tool' : 'create' },
-                                               'map')))
+        dlg = CreateNewVector(self, log = self.goutput,
+                              cmd = (('v.edit',
+                                      { 'tool' : 'create' },
+                                      'map')))
         
         if not dlg:
             return
@@ -814,11 +804,11 @@ class GMFrame(wx.Frame):
         
         # parse workspace file
         try:
-            gxwXml = workspace.ProcessWorkspaceFile(etree.parse(filename))
+            gxwXml = ProcessWorkspaceFile(etree.parse(filename))
         except Exception, e:
-            gcmd.GError(parent = self,
-                        message = _("Reading workspace file <%s> failed.\n"
-                                    "Invalid file, unable to parse XML document.") % filename)
+            GError(parent = self,
+                   message = _("Reading workspace file <%s> failed.\n"
+                               "Invalid file, unable to parse XML document.") % filename)
             return
         
         busy = wx.BusyInfo(message = _("Please wait, loading workspace..."),
@@ -958,7 +948,7 @@ class GMFrame(wx.Frame):
         wx.Yield()
 
         maptree = None
-        for layer in workspace.ProcessGrcFile(filename).read(self):
+        for layer in ProcessGrcFile(filename).read(self):
             maptree = self.gm_cb.GetPage(layer['display']).maptree
             newItem = maptree.AddLayer(ltype = layer['type'],
                                        lname = layer['name'],
@@ -1027,11 +1017,11 @@ class GMFrame(wx.Frame):
         """
         tmpfile = tempfile.TemporaryFile(mode = 'w+b')
         try:
-            workspace.WriteWorkspaceFile(lmgr = self, file = tmpfile)
+            WriteWorkspaceFile(lmgr = self, file = tmpfile)
         except StandardError, e:
-            gcmd.GError(parent = self,
-                        message = _("Writing current settings to workspace file "
-                                    "failed."))
+            GError(parent = self,
+                   message = _("Writing current settings to workspace file "
+                               "failed."))
             return False
         
         try:
@@ -1040,8 +1030,8 @@ class GMFrame(wx.Frame):
             for line in tmpfile.readlines():
                 mfile.write(line)
         except IOError:
-            gcmd.GError(parent = self,
-                        message = _("Unable to open file <%s> for writing.") % filename)
+            GError(parent = self,
+                   message = _("Unable to open file <%s> for writing.") % filename)
             return False
         
         mfile.close()
@@ -1094,7 +1084,7 @@ class GMFrame(wx.Frame):
     def OnEditImageryGroups(self, event, cmd = None):
         """!Show dialog for creating and editing groups.
         """
-        dlg = gdialogs.GroupDialog(self)
+        dlg = GroupDialog(self)
         dlg.CentreOnScreen()
         dlg.Show()
         
@@ -1108,11 +1098,11 @@ class GMFrame(wx.Frame):
         """!General GUI preferences/settings
         """
         if not self.dialogs['preferences']:
-            dlg = preferences.PreferencesDialog(parent = self)
+            dlg = PreferencesDialog(parent = self)
             self.dialogs['preferences'] = dlg
             self.dialogs['preferences'].CenterOnScreen()
             
-            dlg.Bind(preferences.EVT_SETTINGS_CHANGED, self.OnSettingsChanged)
+            dlg.Bind(EVT_SETTINGS_CHANGED, self.OnSettingsChanged)
         
         self.dialogs['preferences'].ShowModal()
         
@@ -1125,9 +1115,8 @@ class GMFrame(wx.Frame):
         """
         Init histogram display canvas and tools
         """
-        self.histogram = histogram.HistFrame(self,
-                                             id = wx.ID_ANY, pos = wx.DefaultPosition, size = (400,300),
-                                             style = wx.DEFAULT_FRAME_STYLE)
+        self.histogram = HistFrame(self, id = wx.ID_ANY, pos = wx.DefaultPosition, size = (400,300),
+                                   style = wx.DEFAULT_FRAME_STYLE)
 
         #show new display
         self.histogram.Show()
@@ -1154,8 +1143,8 @@ class GMFrame(wx.Frame):
             except KeyError:
                 cmd = ['r.mapcalc']
         
-        win = mapcalculator.MapCalcFrame(parent = self,
-                                         cmd = cmd[0])
+        win = MapCalcFrame(parent = self,
+                           cmd = cmd[0])
         win.CentreOnScreen()
         win.Show()
     
@@ -1166,7 +1155,7 @@ class GMFrame(wx.Frame):
         if event:
             cmd = self.GetMenuCmd(event)
 
-        win = vclean.VectorCleaningFrame(parent = self, cmd = cmd[0])
+        win = VectorCleaningFrame(parent = self, cmd = cmd[0])
         win.CentreOnScreen()
         win.Show()
 
@@ -1176,43 +1165,43 @@ class GMFrame(wx.Frame):
 
     def OnVectorOutputFormat(self, event):
         """!Set vector output format handler"""
-        dlg = gdialogs.GdalOutputDialog(parent = self, ogr = True)
+        dlg = GdalOutputDialog(parent = self, ogr = True)
         dlg.CentreOnScreen()
         dlg.Show()
     
     def OnImportDxfFile(self, event, cmd = None):
         """!Convert multiple DXF layers to GRASS vector map layers"""
-        dlg = gdialogs.DxfImportDialog(parent = self)
+        dlg = DxfImportDialog(parent = self)
         dlg.CentreOnScreen()
         dlg.Show()
 
     def OnImportGdalLayers(self, event, cmd = None):
         """!Convert multiple GDAL layers to GRASS raster map layers"""
-        dlg = gdialogs.GdalImportDialog(parent = self)
+        dlg = GdalImportDialog(parent = self)
         dlg.CentreOnScreen()
         dlg.Show()
 
     def OnLinkGdalLayers(self, event, cmd = None):
         """!Link multiple GDAL layers to GRASS raster map layers"""
-        dlg = gdialogs.GdalImportDialog(parent = self, link = True)
+        dlg = GdalImportDialog(parent = self, link = True)
         dlg.CentreOnScreen()
         dlg.Show()
         
     def OnImportOgrLayers(self, event, cmd = None):
         """!Convert multiple OGR layers to GRASS vector map layers"""
-        dlg = gdialogs.GdalImportDialog(parent = self, ogr = True)
+        dlg = GdalImportDialog(parent = self, ogr = True)
         dlg.CentreOnScreen()
         dlg.Show()
         
     def OnLinkOgrLayers(self, event, cmd = None):
         """!Links multiple OGR layers to GRASS vector map layers"""
-        dlg = gdialogs.GdalImportDialog(parent = self, ogr = True, link = True)
+        dlg = GdalImportDialog(parent = self, ogr = True, link = True)
         dlg.CentreOnScreen()
         dlg.Show()
         
     def OnImportWMS(self, event):
         """!Import data from OGC WMS server"""
-        dlg = ogc_services.WMSDialog(parent = self, service = 'wms')
+        dlg = WMSDialog(parent = self, service = 'wms')
         dlg.CenterOnScreen()
         
         if dlg.ShowModal() == wx.ID_OK: # -> import layers
@@ -1262,8 +1251,8 @@ class GMFrame(wx.Frame):
             maptype = None
         
         if not maptype or maptype != 'vector':
-            gcmd.GMessage(parent = self,
-                          message = _("Selected map layer is not vector."))
+            GMessage(parent = self,
+                     message = _("Selected map layer is not vector."))
             return
         
         if not tree.GetPyData(layer)[0]:
@@ -1276,10 +1265,10 @@ class GMFrame(wx.Frame):
                            parent = self)
         wx.Yield()
         
-        dbmanager = dbm.AttributeManager(parent = self, id = wx.ID_ANY,
-                                         size = wx.Size(500, 300),
-                                         item = layer, log = self.goutput,
-                                         selection = selection)
+        dbmanager = AttributeManager(parent = self, id = wx.ID_ANY,
+                                     size = wx.Size(500, 300),
+                                     item = layer, log = self.goutput,
+                                     selection = selection)
         
         busy.Destroy()
         
@@ -1309,12 +1298,12 @@ class GMFrame(wx.Frame):
         self.curr_page = self.gm_cb.GetCurrentPage()
         
         # create layer tree (tree control for managing GIS layers)  and put on new notebook page
-        self.curr_page.maptree = layertree.LayerTree(self.curr_page, id = wx.ID_ANY, pos = wx.DefaultPosition,
-                                                     size = wx.DefaultSize, style = wx.TR_HAS_BUTTONS |
-                                                     wx.TR_LINES_AT_ROOT| wx.TR_HIDE_ROOT |
-                                                     wx.TR_DEFAULT_STYLE| wx.NO_BORDER | wx.FULL_REPAINT_ON_RESIZE,
-                                                     idx = self.disp_idx, lmgr = self, notebook = self.gm_cb,
-                                                     auimgr = self._auimgr, showMapDisplay = show)
+        self.curr_page.maptree = LayerTree(self.curr_page, id = wx.ID_ANY, pos = wx.DefaultPosition,
+                                           size = wx.DefaultSize, style = wx.TR_HAS_BUTTONS |
+                                           wx.TR_LINES_AT_ROOT| wx.TR_HIDE_ROOT |
+                                           wx.TR_DEFAULT_STYLE| wx.NO_BORDER | wx.FULL_REPAINT_ON_RESIZE,
+                                           idx = self.disp_idx, lmgr = self, notebook = self.gm_cb,
+                                           auimgr = self._auimgr, showMapDisplay = show)
         
         # layout for controls
         cb_boxsizer = wx.BoxSizer(wx.VERTICAL)
@@ -1342,7 +1331,7 @@ class GMFrame(wx.Frame):
     
     def OnAddMaps(self, event = None):
         """!Add selected map layers into layer tree"""
-        dialog = gdialogs.MapLayersDialog(parent = self, title = _("Add selected map layers into layer tree"))
+        dialog = MapLayersDialog(parent = self, title = _("Add selected map layers into layer tree"))
         
         if dialog.ShowModal() != wx.ID_OK:
             dialog.Destroy()
@@ -1366,8 +1355,8 @@ class GMFrame(wx.Frame):
                 cmd = ['d.vect', 'map=%s' % layerName]
                 wxType = 'vector'
             else:
-                gcmd.GError(parent = self,
-                            message = _("Unsupported map layer type <%s>.") % ltype)
+                GError(parent = self,
+                       message = _("Unsupported map layer type <%s>.") % ltype)
                 return
             
             newItem = maptree.AddLayer(ltype = wxType,
@@ -1739,7 +1728,7 @@ def printHelp():
     print >> sys.stderr, " python wxgui.py [options]"
     print >> sys.stderr, "%sOptions:" % os.linesep
     print >> sys.stderr, " -w\t--workspace file\tWorkspace file to load"
-    sys.exit(0)
+    sys.exit(1)
 
 def process_opt(opts, args):
     """!Process command-line arguments"""
