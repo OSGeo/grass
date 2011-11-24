@@ -50,9 +50,9 @@ from core.debug         import Debug
 from icon               import Icons
 from core.settings      import UserSettings
 from gui_core.mapdisp   import MapFrameBase
-from mapdisp.window     import BufferedWindow
-from modules.histogram  import HistFrame
-from wxplot.histogram   import HistFrame as HistFramePyPlot
+from mapdisp.mapwindow  import BufferedWindow
+from modules.histogram  import HistogramFrame
+from wxplot.histogram   import Histogram2Frame
 from wxplot.profile     import ProfileFrame
 from wxplot.scatter     import ScatterFrame
 
@@ -1105,10 +1105,10 @@ class MapFrame(MapFrameBase):
                 continue
             raster.append(self.tree.GetPyData(layer)[0]['maplayer'].GetName())
 
-        self.histogramPyPlot = HistFramePyPlot(self, id = wx.ID_ANY, 
-                                                pos = wx.DefaultPosition, size = (700,300),
-                                                style = wx.DEFAULT_FRAME_STYLE, 
-                                                rasterList = raster)
+        self.histogramPyPlot = Histogram2Frame(self, id = wx.ID_ANY, 
+                                               pos = wx.DefaultPosition, size = (700,300),
+                                               style = wx.DEFAULT_FRAME_STYLE, 
+                                               rasterList = raster)
         self.histogramPyPlot.Show()
         # Open raster select dialog to make sure that a raster (and the desired raster)
         # is selected to be histogrammed

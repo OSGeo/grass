@@ -19,7 +19,7 @@ import os
 import time
 import re
 
-from gui_core.forms import GUI
+from gui_core.task  import GUI
 from core.gcmd      import GWarning, EncodeString
 
 class ProcessModelFile:

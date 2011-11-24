@@ -48,7 +48,7 @@ from grass.script import task as gtask
 from core             import globalvar
 from core.gcmd        import GError, RunCommand, GMessage
 from gui_core.gselect import ElementSelect, LocationSelect, MapsetSelect, Select, OgrTypeSelect, GdalSelect
-from core.forms       import GUI
+from gui_core.task    import GUI
 from core.utils       import GetListOfMapsets, GetLayerNameFromCmd, GetValidLayerName
 from core.settings    import UserSettings
 from core.debug       import Debug
@@ -2223,37 +2223,6 @@ def GetImageHandlers(image):
                        'ext'  : 'xpm' })
     
     return filetype, ltype
-
-class StaticWrapText(wx.StaticText):
-    """!A Static Text field that wraps its text to fit its width,
-    enlarging its height if necessary.
-    """
-    def __init__(self, parent, id = wx.ID_ANY, label = '', *args, **kwds):
-        self.parent        = parent
-        self.originalLabel = label
-        
-        wx.StaticText.__init__(self, parent, id, label = '', *args, **kwds)
-        
-        self.SetLabel(label)
-        self.Bind(wx.EVT_SIZE, self.OnResize)
-    
-    def SetLabel(self, label):
-        self.originalLabel = label
-        self.wrappedSize = None
-        self.OnResize(None)
-
-    def OnResize(self, event):
-        if not getattr(self, "resizing", False):
-            self.resizing = True
-            newSize = wx.Size(self.parent.GetSize().width - 50,
-                              self.GetSize().height)
-            if self.wrappedSize != newSize:
-                wx.StaticText.SetLabel(self, self.originalLabel)
-                self.Wrap(newSize.width)
-                self.wrappedSize = newSize
-                
-                self.SetSize(self.wrappedSize)
-            del self.resizing
 
 class ImageSizeDialog(wx.Dialog):
     """!Set size for saved graphic file"""

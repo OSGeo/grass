@@ -9,6 +9,9 @@ Classes:
  - NumTextCtrl
  - FloatSlider
  - SymbolButton
+ - StaticWrapText
+ - FloatValidator
+ - ItemTree
 
 (C) 2008-2011 by the GRASS Development Team
 This program is free software under the GNU General Public License
@@ -31,6 +34,10 @@ try:
     from wx.lib.buttons import ThemedGenBitmapTextButton as BitmapTextButton
 except ImportError: # not sure about TGBTButton version
     from wx.lib.buttons import GenBitmapTextButton as BitmapTextButton
+try:
+    import wx.lib.agw.customtreectrl as CT
+except ImportError:
+    import wx.lib.customtreectrl as CT
 
 from core import globalvar
 
@@ -229,3 +236,157 @@ class SymbolButton(BitmapTextButton):
         dc.SetBrush(wx.Brush(wx.Color(50, 50, 50)))
         dc.DrawRectangle(0, 0, 2 * size[0] / 5, size[1])
         dc.DrawRectangle(3 * size[0] / 5, 0, 2 * size[0] / 5, size[1])
+
+class StaticWrapText(wx.StaticText):
+    """!A Static Text field that wraps its text to fit its width,
+    enlarging its height if necessary.
+    """
+    def __init__(self, parent, id = wx.ID_ANY, label = '', *args, **kwds):
+        self.parent        = parent
+        self.originalLabel = label
+        
+        wx.StaticText.__init__(self, parent, id, label = '', *args, **kwds)
+        
+        self.SetLabel(label)
+        self.Bind(wx.EVT_SIZE, self.OnResize)
+    
+    def SetLabel(self, label):
+        self.originalLabel = label
+        self.wrappedSize = None
+        self.OnResize(None)
+
+    def OnResize(self, event):
+        if not getattr(self, "resizing", False):
+            self.resizing = True
+            newSize = wx.Size(self.parent.GetSize().width - 50,
+                              self.GetSize().height)
+            if self.wrappedSize != newSize:
+                wx.StaticText.SetLabel(self, self.originalLabel)
+                self.Wrap(newSize.width)
+                self.wrappedSize = newSize
+                
+                self.SetSize(self.wrappedSize)
+            del self.resizing
+
+class FloatValidator(wx.PyValidator):
+    """!Validator for floating-point input"""
+    def __init__(self):
+        wx.PyValidator.__init__(self)
+        
+        self.Bind(wx.EVT_TEXT, self.OnText) 
+        
+    def Clone(self):
+        """!Clone validator"""
+        return FloatValidator()
+
+    def Validate(self):
+        """Validate input"""
+        textCtrl = self.GetWindow()
+        text = textCtrl.GetValue()
+
+        if text:
+            try:
+                float(text)
+            except ValueError:
+                textCtrl.SetBackgroundColour("grey")
+                textCtrl.SetFocus()
+                textCtrl.Refresh()
+                return False
+        
+        sysColor = wx.SystemSettings_GetColour(wx.SYS_COLOUR_WINDOW)
+        textCtrl.SetBackgroundColour(sysColor)
+        
+        textCtrl.Refresh()
+        
+        return True
+
+    def OnText(self, event):
+        """!Do validation"""
+        self.Validate()
+        
+        event.Skip()
+        
+    def TransferToWindow(self):
+        return True # Prevent wxDialog from complaining.
+    
+    def TransferFromWindow(self):
+        return True # Prevent wxDialog from complaining.
+
+class ItemTree(CT.CustomTreeCtrl):
+    def __init__(self, parent, id = wx.ID_ANY,
+                 ctstyle = CT.TR_HIDE_ROOT | CT.TR_FULL_ROW_HIGHLIGHT | CT.TR_HAS_BUTTONS |
+                 CT.TR_LINES_AT_ROOT | CT.TR_SINGLE, **kwargs):
+        if globalvar.hasAgw:
+            super(ItemTree, self).__init__(parent, id, agwStyle = ctstyle, **kwargs)
+        else:
+            super(ItemTree, self).__init__(parent, id, style = ctstyle, **kwargs)
+        
+        self.root = self.AddRoot(_("Menu tree"))
+        self.itemsMarked = [] # list of marked items
+        self.itemSelected = None
+
+    def SearchItems(self, element, value):
+        """!Search item 
+
+        @param element element index (see self.searchBy)
+        @param value
+
+        @return list of found tree items
+        """
+        items = list()
+        if not value:
+            return items
+        
+        item = self.GetFirstChild(self.root)[0]
+        self._processItem(item, element, value, items)
+        
+        self.itemsMarked  = items
+        self.itemSelected = None
+        
+        return items
+    
+    def _processItem(self, item, element, value, listOfItems):
+        """!Search items (used by SearchItems)
+        
+        @param item reference item
+        @param listOfItems list of found items
+        """
+        while item and item.IsOk():
+            subItem = self.GetFirstChild(item)[0]
+            if subItem:
+                self._processItem(subItem, element, value, listOfItems)
+            data = self.GetPyData(item)
+            
+            if data and element in data and \
+                    value.lower() in data[element].lower():
+                listOfItems.append(item)
+            
+            item = self.GetNextSibling(item)
+            
+    def GetSelected(self):
+        """!Get selected item"""
+        return self.itemSelected
+
+    def OnShowItem(self, event):
+        """!Highlight first found item in menu tree"""
+        if len(self.itemsMarked) > 0:
+            if self.GetSelected():
+                self.ToggleItemSelection(self.GetSelected())
+                idx = self.itemsMarked.index(self.GetSelected()) + 1
+            else:
+                idx = 0
+            try:
+                self.ToggleItemSelection(self.itemsMarked[idx])
+                self.itemSelected = self.itemsMarked[idx]
+                self.EnsureVisible(self.itemsMarked[idx])
+            except IndexError:
+                self.ToggleItemSelection(self.itemsMarked[0]) # reselect first item
+                self.EnsureVisible(self.itemsMarked[0])
+                self.itemSelected = self.itemsMarked[0]
+        else:
+            for item in self.root.GetChildren():
+                self.Collapse(item)
+            itemSelected = self.GetSelection()
+            if itemSelected:
+                self.ToggleItemSelection(itemSelected)
+            self.itemSelected = None

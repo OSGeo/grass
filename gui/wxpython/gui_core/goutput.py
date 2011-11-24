@@ -39,7 +39,7 @@ from   grass.script import task as gtask
 from core            import globalvar
 from core            import utils
 from core.gcmd       import CommandThread, GMessage, GError, GException, EncodeString
-from gui_core.forms  import GUI
+from gui_core.task   import GUI
 from gui_core.prompt import GPromptSTC
 from core.debug      import Debug
 from core.settings   import UserSettings, Settings

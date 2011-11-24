@@ -30,7 +30,7 @@ from grass.script import core as grass
 
 from core                import globalvar
 from gui_core.dialogs    import SqlQueryFrame, SetOpacityDialog
-from core.forms          import GUI
+from gui_core.task       import GUI
 from mapdisp.frame       import MapFrame
 from core.render         import Map
 from modules.histogram   import HistogramFrame
