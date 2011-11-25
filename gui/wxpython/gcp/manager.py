@@ -39,11 +39,10 @@ from core              import globalvar
 from core              import utils
 from core.render       import Map
 from gui_core.gselect  import Select, LocationSelect, MapsetSelect
-from gui_core.gdialogs import GroupDialog
+from gui_core.dialogs  import GroupDialog
 from core.gcmd         import RunCommand, GMessage, GError, GWarning
 from core.settings     import UserSettings
-from gcp.mapdisp       import MapFrame
-from mapdisp.window    import BufferedWindow
+from gcp.mapdisplay    import MapFrame
 
 from location_wizard.wizard   import TitledPage as TitledPage
 

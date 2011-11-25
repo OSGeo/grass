@@ -30,7 +30,7 @@ class PsMapToolbar(BaseToolbar):
         
         @param parent parent window
         """
-        AbstractToolbar.__init__(self, parent)
+        BaseToolbar.__init__(self, parent)
         
         self.InitToolbar(self._toolbarData())
         
@@ -41,7 +41,7 @@ class PsMapToolbar(BaseToolbar):
                                'bind' : self.parent.OnPointer }
         self.OnTool(None)
         
-        from psmap import havePILImage
+        from psmap.frame import havePILImage
         if not havePILImage:
             self.EnableTool(self.preview, False)
         

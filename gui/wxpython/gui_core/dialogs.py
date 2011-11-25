@@ -1,5 +1,5 @@
 """!
-@package gui_core.gdialogs
+@package gui_core.dialogs
 
 @brief Various dialogs used in wxGUI.
 

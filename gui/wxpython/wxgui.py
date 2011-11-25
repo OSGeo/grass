@@ -351,7 +351,7 @@ class GMFrame(wx.Frame):
 
     def OnGModeler(self, event):
         """!Launch Graphical Modeler"""
-        win = gmodeler.ModelFrame(parent = self)
+        win = ModelFrame(parent = self)
         win.CentreOnScreen()
         
         win.Show()

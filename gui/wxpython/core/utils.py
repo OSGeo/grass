@@ -50,8 +50,6 @@ def GetTempfile(pref=None):
 
     @return Path to file name (string) or None
     """
-    from core import cmd as gcmd
-    
     ret = RunCommand('g.tempfile',
                      read = True,
                      pid = os.getpid())

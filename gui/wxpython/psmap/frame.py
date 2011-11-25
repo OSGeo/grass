@@ -42,6 +42,8 @@ from psmap.toolbars   import PsMapToolbar
 from icon             import Icons, MetaIcon, iconSet
 from core.gcmd        import RunCommand, GError, GMessage
 from gui_core.forms   import GUI
+from psmap.menudata   import PsMapData
+
 from psmap.dialogs    import *
 
 class PsMapFrame(wx.Frame):

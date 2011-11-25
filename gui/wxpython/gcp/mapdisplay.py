@@ -22,15 +22,15 @@ from core import globalvar
 import wx
 import wx.aui
 
-from core.render      import EVT_UPDATE_PRGBAR
-from mapdisp.toolbars import MapToolbar
-from gcp.toolbars     import GCPDisplayToolbar, GCPManToolbar
-from mapdisp.gprint   import PrintOptions
-from core.gcmd        import GMessage
-from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
-from gui_core.mapdisp import MapFrameBase
-from core.settings    import UserSettings
-from mapdisp.window   import BufferedWindow
+from core.render       import EVT_UPDATE_PRGBAR
+from mapdisp.toolbars  import MapToolbar
+from gcp.toolbars      import GCPDisplayToolbar, GCPManToolbar
+from mapdisp.gprint    import PrintOptions
+from core.gcmd         import GMessage
+from gui_core.dialogs  import GetImageHandlers, ImageSizeDialog
+from gui_core.mapdisp  import MapFrameBase
+from core.settings     import UserSettings
+from mapdisp.mapwindow import BufferedWindow
 
 import mapdisp.statusbar as sb
 
