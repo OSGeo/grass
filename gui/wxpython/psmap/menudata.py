@@ -1,39 +1,30 @@
 """!
-@package core.menudata
+@package ps.menudata
 
-@brief Complex list for menu entries for wxGUI
+@brief wxPsMap - menu entries
 
 Classes:
- - MenuData
+ - PsMapData
 
-Usage:
-@code
-python menudata.py [action] [manager|modeler]
-@endcode
-
-where <i>action</i>:
- - strings (default)
- - tree
- - commands
- - dump
-
-(C) 2007-2011 by the GRASS Development Team
+(C) 2011 by the GRASS Development Team
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
-@author Michael Barton (Arizona State University)
-@author Yann Chemin <yann.chemin gmail.com>
-@author Martin Landa <landa.martin gmail.com>
-@author Glynn Clements
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
 
 import os
-import sys
-import pprint
-try:
-    import xml.etree.ElementTree as etree
-except ImportError:
-    import elementtree.ElementTree as etree # Python <= 2.4
 
-import wx
+from core                 import globalvar
+from core.menudata        import MenuData
+
+class PsMapData(MenuData):
+    def __init__(self, path = None):
+        """!Menu for Cartographic Composer (psmap.py)
+        
+        @path path to XML to be read (None for menudata_psmap.xml)
+        """
+        if not path:
+            path = os.path.join(globalvar.ETCWXDIR, 'xml', 'menudata_psmap.xml')
+        
+        MenuData.__init__(self, path)

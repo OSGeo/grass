@@ -24,10 +24,12 @@ import os
 import wx
 
 from core                 import globalvar
+from core                 import utils
 from gui_core.widgets     import GNotebook
 from core.gcmd            import GError, EncodeString
 from gui_core.dialogs     import ElementDialog, MapLayersDialog
 from gui_core.ghelp       import SearchModuleWindow
+from gui_core.prompt      import GPromptSTC
 
 from grass.script import task as gtask
 
@@ -124,7 +126,7 @@ class ModelSearchDialog(wx.Dialog):
         self.cmdBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
                                    label=" %s " % _("Command"))
         
-        self.cmd_prompt = prompt.GPromptSTC(parent = self)
+        self.cmd_prompt = GPromptSTC(parent = self)
         self.search = SearchModuleWindow(parent = self.panel, cmdPrompt = self.cmd_prompt, showTip = True)
         wx.CallAfter(self.cmd_prompt.SetFocus)
         
