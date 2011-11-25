@@ -24,7 +24,7 @@ import grass.script as grass
 
 from core.gcmd        import GError, RunCommand
 from gui_core.gselect import Select
-from gui_core.task    import GUI
+from gui_core.forms   import GUI
 from core.settings    import UserSettings
 
 class MapCalcFrame(wx.Frame):

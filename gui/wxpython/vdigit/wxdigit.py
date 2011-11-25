@@ -27,7 +27,7 @@ This program is free software under the GNU General Public License
 
 import grass.script.core as grass
 
-from core.cmd         import GError
+from core.gcmd        import GError
 from core.debug       import Debug
 from core.settings    import UserSettings
 from vdigit.wxdisplay import DisplayDriver, GetLastError

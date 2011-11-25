@@ -39,7 +39,7 @@ from   grass.script import task as gtask
 from core            import globalvar
 from core            import utils
 from core.gcmd       import CommandThread, GMessage, GError, GException, EncodeString
-from gui_core.task   import GUI
+from gui_core.forms  import GUI
 from gui_core.prompt import GPromptSTC
 from core.debug      import Debug
 from core.settings   import UserSettings, Settings
@@ -1145,7 +1145,7 @@ class GMStc(wx.stc.StyledTextCtrl):
                 elif 'GRASS_DB_ENCODING' in os.environ:
                     txt = unicode(txt, os.environ['GRASS_DB_ENCODING'])
                 else:
-                    txt = utils.EncodeString(txt)
+                    txt = EncodeString(txt)
                 
                 self.AddText(txt)
         

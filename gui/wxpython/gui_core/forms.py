@@ -5,12 +5,9 @@
 description.
 
 Classes:
- - helpPanel
- - mainFrame
- - cmdPanel
+ - TaskFrame
+ - CmdPanel
  - GrassGUIApp
- - GUI
- - FloatValidator
 
 This program is just a coarse approach to automatically build a GUI
 from a xml-based GRASS user interface description.
@@ -53,6 +50,16 @@ import copy
 from threading import Thread
 import Queue
 
+gisbase = os.getenv("GISBASE")
+if gisbase is None:
+    print >>sys.stderr, "We don't seem to be properly installed, or we are being run outside GRASS. Expect glitches."
+    gisbase = os.path.join(os.path.dirname(sys.argv[0]), os.path.pardir)
+    wxbase = gisbase
+else:
+    wxbase = os.path.join(gisbase, 'etc', 'gui', 'wxpython')
+
+sys.path.append(wxbase)
+
 from core import globalvar
 import wx
 try:
@@ -64,16 +71,6 @@ import wx.lib.filebrowsebutton as filebrowse
 import wx.lib.scrolledpanel    as scrolled
 from wx.lib.newevent import NewEvent
 
-gisbase = os.getenv("GISBASE")
-if gisbase is None:
-    print >>sys.stderr, "We don't seem to be properly installed, or we are being run outside GRASS. Expect glitches."
-    gisbase = os.path.join(os.path.dirname(sys.argv[0]), os.path.pardir)
-    wxbase = gisbase
-else:
-    wxbase = os.path.join(globalvar.ETCWXDIR)
-
-sys.path.append(wxbase)
-
 from grass.script import core as grass
 from grass.script import task as gtask
 
@@ -82,10 +79,8 @@ from gui_core.ghelp   import HelpPanel
 from gui_core         import gselect
 from core             import gcmd
 from core             import utils
-from gui_core.goutput import GMConsole
 from core.settings    import UserSettings
-from gui_core.widgets import FloatValidator
-from gui_core.task    import GUI
+from gui_core.widgets import FloatValidator, GNotebook
 
 wxUpdateDialog, EVT_DIALOG_UPDATE = NewEvent()
 
@@ -361,7 +356,7 @@ class UpdateQThread(Thread):
                 event = wxUpdateDialog(data = self.request.data)
                 wx.PostEvent(self.parent, event)
 
-class mainFrame(wx.Frame):
+class TaskFrame(wx.Frame):
     """!This is the Frame containing the dialog for options input.
 
     The dialog is organized in a notebook according to the guisections
@@ -375,8 +370,9 @@ class mainFrame(wx.Frame):
     The command is checked and sent to the clipboard when clicking
     'Copy'.
     """
-    def __init__(self, parent, ID, task_description,
-                 get_dcmd = None, layer = None):
+    def __init__(self, parent, task_description, id = wx.ID_ANY,
+                 get_dcmd = None, layer = None,
+                 style = wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL, **kwargs):
         self.get_dcmd = get_dcmd
         self.layer    = layer
         self.task     = task_description
@@ -397,9 +393,8 @@ class mainFrame(wx.Frame):
         except ValueError:
             pass
         
-        wx.Frame.__init__(self, parent = parent, id = ID, title = title,
-                          pos = wx.DefaultPosition, style = wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL,
-                          name = "MainFrame")
+        wx.Frame.__init__(self, parent = parent, id = id, title = title,
+                          name = "MainFrame", **kwargs)
         
         self.locale = wx.Locale(language = wx.LANGUAGE_DEFAULT)
         
@@ -446,8 +441,8 @@ class mainFrame(wx.Frame):
         self.Layout()
         
         # notebooks
-        self.notebookpanel = cmdPanel(parent = self.panel, task = self.task,
-                                      mainFrame = self)
+        self.notebookpanel = CmdPanel(parent = self.panel, task = self.task,
+                                      frame = self)
         self.goutput = self.notebookpanel.goutput
         self.notebookpanel.OnUpdateValues = self.updateValuesHook
         guisizer.Add(item = self.notebookpanel, proportion = 1, flag = wx.EXPAND)
@@ -760,13 +755,13 @@ class mainFrame(wx.Frame):
         return self.notebookpanel.createCmd(ignoreErrors = ignoreErrors,
                                             ignoreRequired = ignoreRequired)
 
-class cmdPanel(wx.Panel):
+class CmdPanel(wx.Panel):
     """!A panel containing a notebook dividing in tabs the different
     guisections of the GRASS cmd.
     """
-    def __init__(self, parent, task, id = wx.ID_ANY, mainFrame = None, *args, **kwargs):
-        if mainFrame:
-            self.parent = mainFrame
+    def __init__(self, parent, task, id = wx.ID_ANY, frame = None, *args, **kwargs):
+        if frame:
+            self.parent = frame
         else:
             self.parent = parent
         self.task = task
@@ -822,6 +817,7 @@ class cmdPanel(wx.Panel):
         # are we running from command line?
         ### add 'command output' tab regardless standalone dialog
         if self.parent.GetName() ==  "MainFrame" and self.parent.get_dcmd is None:
+            from gui_core.goutput import GMConsole
             self.goutput = GMConsole(parent = self, margin = False)
             self.outpage = self.notebook.AddPage(page = self.goutput, text = _("Command output"), name = 'output')
         else:
@@ -1911,6 +1907,179 @@ class cmdPanel(wx.Panel):
             
         event.Skip()
         
+class GUI:
+    def __init__(self, parent = None, show = True, modal = False,
+                 centreOnParent = False, checkError = False):
+        """!Parses GRASS commands when module is imported and used from
+        Layer Manager.
+        """
+        self.parent = parent
+        self.show   = show
+        self.modal  = modal
+        self.centreOnParent = centreOnParent
+        self.checkError     = checkError
+        
+        self.grass_task = None
+        self.cmd = list()
+        
+        global _blackList
+        if self.parent:
+            _blackList['enabled'] = True
+        else:
+            _blackList['enabled'] = False
+        
+    def GetCmd(self):
+        """!Get validated command"""
+        return self.cmd
+    
+    def ParseCommand(self, cmd, gmpath = None, completed = None):
+        """!Parse command
+        
+        Note: cmd is given as list
+        
+        If command is given with options, return validated cmd list:
+         - add key name for first parameter if not given
+         - change mapname to mapname@mapset
+        """
+        start = time.time()
+        dcmd_params = {}
+        if completed == None:
+            get_dcmd = None
+            layer = None
+            dcmd_params = None
+        else:
+            get_dcmd = completed[0]
+            layer = completed[1]
+            if completed[2]:
+                dcmd_params.update(completed[2])
+        
+        # parse the interface decription
+        try:
+            global _blackList
+            self.grass_task = gtask.parse_interface(cmd[0],
+                                                    blackList = _blackList)
+        except ValueError, e: #grass.ScriptError, e:
+            GError(e.value)
+            return
+        
+        # if layer parameters previously set, re-insert them into dialog
+        if completed is not None:
+            if 'params' in dcmd_params:
+                self.grass_task.params = dcmd_params['params']
+            if 'flags' in dcmd_params:
+                self.grass_task.flags = dcmd_params['flags']
+        
+        err = list()
+        # update parameters if needed && validate command
+        if len(cmd) > 1:
+            i = 0
+            cmd_validated = [cmd[0]]
+            for option in cmd[1:]:
+                if option[0] ==  '-': # flag
+                    if option[1] ==  '-':
+                        self.grass_task.set_flag(option[2:], True)
+                    else:
+                        self.grass_task.set_flag(option[1], True)
+                    cmd_validated.append(option)
+                else: # parameter
+                    try:
+                        key, value = option.split('=', 1)
+                    except:
+                        if self.grass_task.firstParam:
+                            if i == 0: # add key name of first parameter if not given
+                                key = self.grass_task.firstParam
+                                value = option
+                            else:
+                                raise GException, _("Unable to parse command '%s'") % ' '.join(cmd)
+                        else:
+                            continue
+                    
+                    element = self.grass_task.get_param(key, raiseError = False)
+                    if not element:
+                        err.append(_("%(cmd)s: parameter '%(key)s' not available") % \
+                                       { 'cmd' : cmd[0],
+                                         'key' : key })
+                        continue
+                    element = element['element']
+                    
+                    if element in ['cell', 'vector']:
+                        # mapname -> mapname@mapset
+                        try:
+                            name, mapset = value.split('@')
+                        except ValueError:
+                            mapset = grass.find_file(value, element)['mapset']
+                            curr_mapset = grass.gisenv()['MAPSET']
+                            if mapset and mapset !=  curr_mapset:
+                                value = value + '@' + mapset
+                    
+                    self.grass_task.set_param(key, value)
+                    cmd_validated.append(key + '=' + value)
+                    i += 1
+            
+            # update original command list
+            cmd = cmd_validated
+        
+        if self.show is not None:
+            self.mf = TaskFrame(parent = self.parent,
+                                task_description = self.grass_task,
+                                get_dcmd = get_dcmd, layer = layer)
+        else:
+            self.mf = None
+        
+        if get_dcmd is not None:
+            # update only propwin reference
+            get_dcmd(dcmd = None, layer = layer, params = None,
+                     propwin = self.mf)
+        
+        if self.show is not None:
+            self.mf.notebookpanel.OnUpdateSelection(None)
+            if self.show is True:
+                if self.parent and self.centreOnParent:
+                    self.mf.CentreOnParent()
+                else:
+                    self.mf.CenterOnScreen()
+                self.mf.Show(self.show)
+                self.mf.MakeModal(self.modal)
+            else:
+                self.mf.OnApply(None)
+        
+        self.cmd = cmd
+        
+        if self.checkError:
+            return self.grass_task, err
+        else:
+            return self.grass_task
+    
+    def GetCommandInputMapParamKey(self, cmd):
+        """!Get parameter key for input raster/vector map
+        
+        @param cmd module name
+        
+        @return parameter key
+        @return None on failure
+        """
+        # parse the interface decription
+        if not self.grass_task:
+            enc = locale.getdefaultlocale()[1]
+            if enc and enc.lower() == "cp932":
+                p = re.compile('encoding="' + enc + '"', re.IGNORECASE)
+                tree = etree.fromstring(p.sub('encoding="utf-8"',
+                                              gtask.get_interface_description(cmd).decode(enc).encode('utf-8')))
+            else:
+                tree = etree.fromstring(gtask.get_interface_description(cmd))
+            self.grass_task = gtask.processTask(tree).get_task()
+            
+            for p in self.grass_task.params:
+                if p.get('name', '') in ('input', 'map'):
+                    age = p.get('age', '')
+                    prompt = p.get('prompt', '')
+                    element = p.get('element', '') 
+                    if age ==  'old' and \
+                            element in ('cell', 'grid3', 'vector') and \
+                            prompt in ('raster', '3d-raster', 'vector'):
+                        return p.get('name', None)
+        return None
+
 class GrassGUIApp(wx.App):
     """!Stand-alone GRASS command GUI
     """
@@ -1924,7 +2093,7 @@ class GrassGUIApp(wx.App):
             gcmd.GError(msg + '\n\nTry to set up GRASS_ADDON_PATH variable.')
             return True
         
-        self.mf = mainFrame(parent = None, ID = wx.ID_ANY, task_description = self.grass_task)
+        self.mf = TaskFrame(parent = None, task_description = self.grass_task)
         self.mf.CentreOnScreen()
         self.mf.Show(True)
         self.SetTopWindow(self.mf)
@@ -1941,7 +2110,7 @@ if __name__ ==  "__main__":
     if sys.argv[1] !=  'test':
         q = wx.LogNull()
         cmd = utils.split(sys.argv[1])
-        task = gtask.grassTask(cmd[0], blackList = _blackList)
+        task = gtask.grassTask(cmd[0])
         task.set_options(cmd[1:])
         app = GrassGUIApp(task)
         app.MainLoop()

@@ -21,7 +21,7 @@ errorMsg = ''
 
 try:
     from wx import glcanvas
-    import nviz.mapdisp
+    import nviz.mapwindow
     import nviz.tools
     import wxnviz
     haveNviz = True
@@ -30,7 +30,7 @@ except ImportError, err:
     errorMsg = err
 
 if haveNviz:
-    GLWindow       = nviz.mapdisp.GLWindow
+    GLWindow       = nviz.mapwindow.GLWindow
     NvizToolWindow = nviz.tools.NvizToolWindow
 else:
     GLWindow       = None
