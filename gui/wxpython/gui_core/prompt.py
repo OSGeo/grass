@@ -1094,8 +1094,8 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             try:
                 cmd = utils.split(str(line))
             except UnicodeError:
-                cmd = utils.split(utils.EncodeString((line)))
-            cmd = map(utils.DecodeString, cmd)
+                cmd = utils.split(EncodeString((line)))
+            cmd = map(DecodeString, cmd)
             
             #  send the command list to the processor 
             if cmd[0] in ('r.mapcalc', 'r3.mapcalc') and len(cmd) == 1:

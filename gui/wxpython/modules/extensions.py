@@ -28,7 +28,7 @@ from grass.script import task as gtask
 
 from core             import globalvar
 from core.gcmd        import GError, RunCommand
-from gui_core.task    import GUI
+from gui_core.forms   import GUI
 from gui_core.widgets import ItemTree
 
 class InstallExtensionWindow(wx.Frame):

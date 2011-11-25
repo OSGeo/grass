@@ -48,7 +48,7 @@ from grass.script import task as gtask
 from core             import globalvar
 from core.gcmd        import GError, RunCommand, GMessage
 from gui_core.gselect import ElementSelect, LocationSelect, MapsetSelect, Select, OgrTypeSelect, GdalSelect
-from gui_core.task    import GUI
+from gui_core.forms   import GUI
 from core.utils       import GetListOfMapsets, GetLayerNameFromCmd, GetValidLayerName
 from core.settings    import UserSettings
 from core.debug       import Debug

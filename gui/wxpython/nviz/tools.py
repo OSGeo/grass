@@ -52,7 +52,7 @@ from gui_core.widgets   import ScrolledPanel, NumTextCtrl, FloatSlider, SymbolBu
 from core.debug         import Debug
 try:
     from nviz.mapwindow import wxUpdateProperties
-    import nviz.main as wxnviz
+    import wxnviz
 except ImportError:
     pass
 

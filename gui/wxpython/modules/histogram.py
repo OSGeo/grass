@@ -22,7 +22,7 @@ import wx
 
 from core                 import globalvar
 from core.render          import Map
-from gui_core.task        import GUI
+from gui_core.forms       import GUI
 from mapdisp.gprint       import PrintOptions
 from core.utils           import GetLayerNameFromCmd
 from gui_core.dialogs     import GetImageHandlers, ImageSizeDialog

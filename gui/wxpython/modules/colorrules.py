@@ -38,7 +38,7 @@ from core             import utils
 from core.gcmd        import GMessage, RunCommand
 from gui_core.gselect import Select, LayerSelect, ColumnSelect, VectorDBInfo
 from core.render      import Map
-from gui_core.task    import GUI
+from gui_core.forms   import GUI
 from core.debug       import Debug as Debug
 from core.settings    import UserSettings
 from nviz.mapwindow   import wxUpdateProperties
