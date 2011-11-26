@@ -74,6 +74,7 @@ from modules.extensions    import InstallExtensionWindow
 from lmgr.toolbars         import LMWorkspaceToolbar, LMDataToolbar, LMToolsToolbar
 from lmgr.toolbars         import LMMiscToolbar, LMVectorToolbar, LMNvizToolbar
 from lmgr.pyshell          import PyShellWindow
+from gui_core.forms        import GUI
 
 class GMFrame(wx.Frame):
     """!Layer Manager frame with notebook widget for controlling GRASS
@@ -511,7 +512,7 @@ class GMFrame(wx.Frame):
         if layer and len(cmdlist) == 1: # only if no paramaters given
             if (type == 'raster' and cmdlist[0][0] == 'r' and cmdlist[0][1] != '3') or \
                     (type == 'vector' and cmdlist[0][0] == 'v'):
-                input = menuform.GUI().GetCommandInputMapParamKey(cmdlist[0])
+                input = GUI().GetCommandInputMapParamKey(cmdlist[0])
                 if input:
                     cmdlist.append("%s=%s" % (input, name))
         
@@ -527,7 +528,7 @@ class GMFrame(wx.Frame):
         """!Parse command selected from menu"""
         if event:
             cmd = self.GetMenuCmd(event)
-        menuform.GUI(parent = self).ParseCommand(cmd)
+        GUI(parent = self).ParseCommand(cmd)
         
     def OnVDigit(self, event):
         """!Start vector digitizer
