@@ -18,7 +18,7 @@ import copy
 from core.settings import UserSettings
 
 try:
-    import nviz.wxcore as wxnviz
+    import nviz.wxnviz as wxnviz
 except ImportError:
     wxnviz = None
 

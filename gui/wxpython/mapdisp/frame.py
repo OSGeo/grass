@@ -55,6 +55,8 @@ from modules.histogram  import HistogramFrame
 from wxplot.histogram   import Histogram2Frame
 from wxplot.profile     import ProfileFrame
 from wxplot.scatter     import ScatterFrame
+from nviz.main          import haveNviz
+from nviz.mapwindow     import GLWindow
 
 from mapdisp import statusbar as sb
 
@@ -269,7 +271,7 @@ class MapFrame(MapFrameBase):
         import nviz
         
         # check for GLCanvas and OpenGL
-        if not nviz.haveNviz:
+        if not haveNviz:
             self.toolbars['map'].combo.SetValue(_("2D view"))
             GError(parent = self,
                    message = _("Unable to switch to 3D display mode.\nThe Nviz python extension "
@@ -303,7 +305,7 @@ class MapFrame(MapFrameBase):
         
         # create GL window
         if not self.MapWindow3D:
-            self.MapWindow3D = nviz.GLWindow(self, id = wx.ID_ANY,
+            self.MapWindow3D = GLWindow(self, id = wx.ID_ANY,
                                              Map = self.Map, tree = self.tree, lmgr = self._layerManager)
             self.MapWindow = self.MapWindow3D
             self.MapWindow.SetCursor(self.cursors["default"])

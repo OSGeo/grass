@@ -49,9 +49,10 @@ from modules.colorrules import ThematicVectorTable
 from core.settings      import UserSettings
 from nviz.animation     import EVT_ANIM_FIN, EVT_ANIM_UPDATE_IDX
 from gui_core.widgets   import ScrolledPanel, NumTextCtrl, FloatSlider, SymbolButton
+from gui_core.gselect   import Select
 from core.debug         import Debug
 try:
-    from nviz.mapwindow import wxUpdateProperties
+    from nviz.mapwindow import wxUpdateProperties, wxUpdateView, wxUpdateLight
     import wxnviz
 except ImportError:
     pass

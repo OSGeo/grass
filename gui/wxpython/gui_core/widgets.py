@@ -40,6 +40,7 @@ except ImportError:
     import wx.lib.customtreectrl as CT
 
 from core import globalvar
+from core.debug         import Debug
 
 class GNotebook(FN.FlatNotebook):
     """!Generic notebook widget
