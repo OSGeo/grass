@@ -65,14 +65,13 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
 
-    if( type->answer && strcmp(type->answer, "text") == 0
-					&& !nolaunch->answer)
+    if (type->answer && strcmp(type->answer, "text") == 0 &&
+	!nolaunch->answer)
 	nolaunch->answer = TRUE;
-
-    if(nolaunch->answer && !update->answer)
+    
+    if (nolaunch->answer && !update->answer)
 	update->answer = TRUE;
-
-
+    
     gui_type_env = G__getenv("GUI");
 
     if (!type->answer) {
