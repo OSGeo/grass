@@ -36,13 +36,15 @@ except ImportError:
 
 from wxplot.base       import BasePlotFrame
 from gui_core.toolbars import BaseToolbar
+from icons.icon        import Icons
+from wxplot.dialogs    import ProfileRasterDialog, PlotStatsFrame
 
 class ProfileFrame(BasePlotFrame):
     """!Mainframe for displaying profile of one or more raster maps. Uses wx.lib.plot.
     """
-    def __init__(self, parent, id, pos, style, size, rasterList = []):
-
-        BasePlotFrame.__init__(self, parent)
+    def __init__(self, parent, id = wx.ID_ANY, style = wx.DEFAULT_FRAME_STYLE, 
+                 rasterList = [], **kwargs):
+        BasePlotFrame.__init__(self, parent, **kwargs)
 
         self.toolbar = ProfileToolbar(parent = self)
         self.SetToolBar(self.toolbar)
@@ -102,7 +104,7 @@ class ProfileFrame(BasePlotFrame):
     def OnSelectRaster(self, event):
         """!Select raster map(s) to profile
         """
-        dlg = dialogs.ProfileRasterDialog(parent = self)
+        dlg = ProfileRasterDialog(parent = self)
 
         if dlg.ShowModal() == wx.ID_OK:
             self.rasterList = dlg.rasterList
@@ -374,8 +376,8 @@ class ProfileFrame(BasePlotFrame):
             except:
                 pass
             
-        stats = dialogs.PlotStatsFrame(self, id = wx.ID_ANY, message = message, 
-                                      title = title)
+        stats = PlotStatsFrame(self, id = wx.ID_ANY, message = message, 
+                               title = title)
 
         if stats.Show() == wx.ID_CLOSE:
             stats.Destroy()       

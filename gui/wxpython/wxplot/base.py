@@ -23,6 +23,7 @@ import wx.lib.plot as plot
 from core.globalvar import ETCICONDIR
 from core.settings  import UserSettings
 from wxplot.dialogs import TextDialog, OptDialog
+from core.render    import Map
 
 import grass.script as grass
 
