@@ -12,11 +12,13 @@ This program is free software under the GNU General Public License
 
 @author Martin Landa <landa.martin gmail.com>
 """
+import wx
 
 from grass.script import core as grass
 
 from gui_core.toolbars  import BaseToolbar
 from gui_core.dialogs   import CreateNewVector
+from icons.icon         import Icons
 from vdigit.preferences import VDigitSettingsDialog
 from vdigit.main        import VDigit
 from core.debug         import Debug

@@ -199,7 +199,7 @@ class MapFrame(MapFrameBase):
     def _addToolbarVDigit(self):
         """!Add vector digitizer toolbar
         """
-        from vdigit import haveVDigit
+        from vdigit.main import haveVDigit
         
         if not haveVDigit:
             from vdigit import errorMsg
@@ -227,7 +227,7 @@ class MapFrame(MapFrameBase):
             log = None
         
         if not self.MapWindowVDigit:
-            from mapdisp_vdigit import VDigitWindow
+            from vdigit.mapwindow import VDigitWindow
             self.MapWindowVDigit = VDigitWindow(self, id = wx.ID_ANY,
                                                 Map = self.Map, tree = self.tree,
                                                 lmgr = self._layerManager)

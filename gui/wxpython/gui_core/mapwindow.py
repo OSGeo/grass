@@ -18,6 +18,8 @@ for details.
 
 import wx
 
+from core.settings import UserSettings
+
 class MapWindow(object):
     """!Abstract map display window class
     
