@@ -4,15 +4,16 @@
 @brief wxGUI Graphical Modeler - dialogs
 
 Classes:
- - ModelDataDialog
- - ModelSearchDialog
- - ModelRelationDialog
- - ModelParamDialog
- - ModelItemDialog
- - ModelLoopDialog
- - ModelConditionDialog
+ - dialogs::ModelDataDialog
+ - dialogs::ModelSearchDialog
+ - dialogs::ModelRelationDialog
+ - dialogs::ModelParamDialog
+ - dialogs::ModelItemDialog
+ - dialogs::ModelLoopDialog
+ - dialogs::ModelConditionDialog
 
 (C) 2010-2011 by the GRASS Development Team
+
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 

@@ -4,8 +4,8 @@
 @brief Scatter plotting using PyPlot
 
 Classes:
- - ScatterFrame
- - ScatterToolbar
+ - scatter::ScatterFrame
+ - scatter::ScatterToolbar
 
 (C) 2011 by the GRASS Development Team
 This program is free software under the GNU General Public License

@@ -4,8 +4,8 @@
 @brief Profiling using PyPlot
 
 Classes:
- - ProfileFrame
- - ProfileToolbar
+ - profile::ProfileFrame
+ - profile::ProfileToolbar
 
 (C) 2011 by the GRASS Development Team
 

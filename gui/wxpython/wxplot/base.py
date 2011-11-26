@@ -4,7 +4,7 @@
 @brief Base classes for iinteractive plotting using PyPlot
 
 Classes:
- - BasePlotFrame
+ - base::BasePlotFrame
 
 (C) 2011 by the GRASS Development Team
 

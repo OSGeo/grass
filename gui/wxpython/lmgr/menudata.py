@@ -4,7 +4,7 @@
 @brief Complex list for menu entries for wxGUI
 
 Classes:
- - MenuData
+ - menudata::MenuData
 
 Usage:
 @code
@@ -18,6 +18,7 @@ where <i>action</i>:
  - dump
 
 (C) 2007-2011 by the GRASS Development Team
+
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 

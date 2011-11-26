@@ -1,5 +1,5 @@
 """!
-@package gis_set.py
+@package gis_set
 
 GRASS start-up screen.
 
@@ -7,9 +7,9 @@ Initialization module for wxPython GRASS GUI.
 Location/mapset management (selection, creation, etc.).
 
 Classes:
- - GRASSStartup
- - GListBox
- - StartUp
+ - gis_set::GRASSStartup
+ - gis_set::GListBox
+ - gis_set::StartUp
 
 (C) 2006-2011 by the GRASS Development Team
 

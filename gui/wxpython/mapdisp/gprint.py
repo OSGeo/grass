@@ -5,13 +5,13 @@
 contents of map display window.
 
 Classes:
- - MapPrint
- - PrintOptions
+ - gprint::MapPrint
+ - gprint::PrintOptions
 
-(C) 2007 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+(C) 2007-2011 by the GRASS Development Team
+
+This program is free software under the GNU General Public License
+(>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Michael Barton (Arizona State University)
 """

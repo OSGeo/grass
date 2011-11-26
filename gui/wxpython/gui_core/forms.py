@@ -5,9 +5,9 @@
 description.
 
 Classes:
- - TaskFrame
- - CmdPanel
- - GrassGUIApp
+ - forms::TaskFrame
+ - forms::CmdPanel
+ - forms::GrassGUIApp
 
 This program is just a coarse approach to automatically build a GUI
 from a xml-based GRASS user interface description.
@@ -30,6 +30,7 @@ pythonw on a Mac.
  - verify option value types
 
 Copyright(C) 2000-2011 by the GRASS Development Team
+
 This program is free software under the GPL(>=v2) Read the file
 COPYING coming with GRASS for details.
 

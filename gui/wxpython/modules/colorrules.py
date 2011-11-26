@@ -5,14 +5,15 @@
 and color rules.
 
 Classes:
- - RulesPanel
- - ColorTable
- - RasterColorTable
- - VectorColorTable
- - ThematicVectorTable
- - BuferedWindow
+ - colorrules::RulesPanel
+ - colorrules::ColorTable
+ - colorrules::RasterColorTable
+ - colorrules::VectorColorTable
+ - colorrules::ThematicVectorTable
+ - colorrules::BufferedWindow
 
 (C) 2008, 2010-2011 by the GRASS Development Team
+
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 

@@ -4,16 +4,17 @@
 @brief Core GUI widgets
 
 Classes:
- - ScrolledPanel
- - NTCValidator
- - NumTextCtrl
- - FloatSlider
- - SymbolButton
- - StaticWrapText
- - FloatValidator
- - ItemTree
+ - widgets::ScrolledPanel
+ - widgets::NTCValidator
+ - widgets::NumTextCtrl
+ - widgets::FloatSlider
+ - widgets::SymbolButton
+ - widgets::StaticWrapText
+ - widgets::FloatValidator
+ - widgets::ItemTree
 
 (C) 2008-2011 by the GRASS Development Team
+
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 

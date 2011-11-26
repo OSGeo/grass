@@ -5,19 +5,19 @@
 from multiple methods.
 
 Classes:
- - TitledPage
- - DatabasePage
- - CoordinateSystemPage
- - ProjectionsPage
- - ItemList
- - ProjParamsPage
- - DatumPage
- - EllipsePage
- - GeoreferencedFilePage
- - EPSGPage
- - CustomPage
- - SummaryPage
- - LocationWizard
+ - wizard::TitledPage
+ - wizard::DatabasePage
+ - wizard::CoordinateSystemPage
+ - wizard::ProjectionsPage
+ - wizard::ItemList
+ - wizard::ProjParamsPage
+ - wizard::DatumPage
+ - wizard::EllipsePage
+ - wizard::GeoreferencedFilePage
+ - wizard::EPSGPage
+ - wizard::CustomPage
+ - wizard::SummaryPage
+ - wizard::LocationWizard
 
 (C) 2007-2011 by the GRASS Development Team
 

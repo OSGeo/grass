@@ -4,42 +4,43 @@
 @brief Map feature objects and dialogs for wxPsMap
 
 Classes:
- - UnitConversion
- - TCValidator
- - PenStyleComboBox
- - CheckListCtrl
- - Instruction
- - InstructionObject
- - InitMap
- - MapFrame
- - PageSetup
- - Mapinfo
- - Text
- - Image
- - NorthArrow
- - Scalebar
- - RasterLegend
- - VectorLegend
- - Raster
- - Vector
- - VProperties
- - PsmapDialog
- - PageSetupDialog
- - MapDialog
- - MapFramePanel
- - RasterPanel
- - VectorPanel
- - RasterDialog
- - MainVectorDialog
- - VPropertiesDialog
- - LegendDialog
- - MapinfoDialog
- - ScalebarDialog
- - TextDialog
- - ImageDialog
- - NorthArrowDialog
+ - dialogs::UnitConversion
+ - dialogs::TCValidator
+ - dialogs::PenStyleComboBox
+ - dialogs::CheckListCtrl
+ - dialogs::Instruction
+ - dialogs::InstructionObject
+ - dialogs::InitMap
+ - dialogs::MapFrame
+ - dialogs::PageSetup
+ - dialogs::Mapinfo
+ - dialogs::Text
+ - dialogs::Image
+ - dialogs::NorthArrow
+ - dialogs::Scalebar
+ - dialogs::RasterLegend
+ - dialogs::VectorLegend
+ - dialogs::Raster
+ - dialogs::Vector
+ - dialogs::VProperties
+ - dialogs::PsmapDialog
+ - dialogs::PageSetupDialog
+ - dialogs::MapDialog
+ - dialogs::MapFramePanel
+ - dialogs::RasterPanel
+ - dialogs::VectorPanel
+ - dialogs::RasterDialog
+ - dialogs::MainVectorDialog
+ - dialogs::VPropertiesDialog
+ - dialogs::LegendDialog
+ - dialogs::MapinfoDialog
+ - dialogs::ScalebarDialog
+ - dialogs::TextDialog
+ - dialogs::ImageDialog
+ - dialogs::NorthArrowDialog
 
 (C) 2011 by Anna Kratochvilova, and the GRASS Development Team
+
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 

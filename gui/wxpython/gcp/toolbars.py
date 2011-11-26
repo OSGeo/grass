@@ -4,8 +4,8 @@
 @brief Georectification module - toolbars
 
 Classes:
- - GCPMapToolbar
- - GCPDisplayToolbar
+ - toolbars::GCPMapToolbar
+ - toolbars::GCPDisplayToolbar
 
 (C) 2007-2011 by the GRASS Development Team
 This program is free software under the GNU General Public License

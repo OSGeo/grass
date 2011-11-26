@@ -1,21 +1,22 @@
 """!
-@package gmodeler.py
+@package gmodeler.frame
 
 @brief wxGUI Graphical Modeler for creating, editing, and managing models
 
 Classes:
- - ModelToolbar
- - ModelFrame
- - ModelCanvas
- - ModelEvtHandler
- - ModelListCtrl
- - VariablePanel
- - ValiableListCtrl
- - ItemPanel
- - ItemListCtrl
- - ItemCheckListCtrl
+ - frame::ModelToolbar
+ - frame::ModelFrame
+ - frame::ModelCanvas
+ - frame::ModelEvtHandler
+ - frame::ModelListCtrl
+ - frame::VariablePanel
+ - frame::ValiableListCtrl
+ - frame::ItemPanel
+ - frame::ItemListCtrl
+ - frame::ItemCheckListCtrl
 
 (C) 2010-2011 by the GRASS Development Team
+
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 

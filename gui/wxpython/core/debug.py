@@ -4,7 +4,7 @@
 @brief wxGUI debugging
 
 Classes:
- - DebugMsg
+ - debug::DebugMsg
 
 @code
 from core.debug import Debug
@@ -12,6 +12,7 @@ Debug.msg (3, 'debug message')
 @endcode
          
 (C) 2007-2009, 2011 by the GRASS Development Team
+
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
@@ -25,7 +26,7 @@ import grass.script as grass
 
 class DebugMsg:
     """!wxGUI debugging
-
+    
     @code
     g.gisenv set=WX_DEBUG=[0-5]
     @endcode

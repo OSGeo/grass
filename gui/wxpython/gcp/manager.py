@@ -5,17 +5,18 @@
 point management and interactive point and click GCP creation
 
 Classes:
- - GCPWizard
- - LocationPage
- - GroupPage
- - DispMapPage
- - GCP
- - GCPList
- - VectGroup
- - EditGCP
- - GrSettingsDialog
+ - manager::GCPWizard
+ - manager::LocationPage
+ - manager::GroupPage
+ - manager::DispMapPage
+ - manager::GCP
+ - manager::GCPList
+ - manager::VectGroup
+ - manager::EditGCP
+ - manager::GrSettingsDialog
 
 (C) 2006-2011 by the GRASS Development Team
+
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 

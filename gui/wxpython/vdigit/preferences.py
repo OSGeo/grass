@@ -4,9 +4,10 @@
 @brief wxGUI vector digitizer preferences dialogs
 
 Classes:
- - VDigitSettingsDialog
+ - preferences::VDigitSettingsDialog
 
 (C) 2007-2011 by the GRASS Development Team
+
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 

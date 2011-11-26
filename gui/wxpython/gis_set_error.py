@@ -1,5 +1,5 @@
 """!
-@package gis_set_error.py
+@package gis_set_error
 
 GRASS start-up screen error message.
 
