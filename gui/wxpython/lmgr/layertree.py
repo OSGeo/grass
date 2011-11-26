@@ -222,7 +222,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             else:
                 vector = False
             if self.mapdisplay.IsAutoRendered():
-                self.mapdisplay.MapWindow.UpdateMap(render = True, renderVector = vector)
+                self.mapdisplay.MapWindow2D.UpdateMap(render = True, renderVector = vector)
                 if self.lmgr.IsPaneShown('toolbarNviz'): # nviz
                     self.mapdisplay.MapWindow3D.UpdateMap(render = True)
             self.rerender = False
@@ -1480,7 +1480,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     mapWin.LoadVector(layer)
 
                 # reset view when first layer loaded
-                nlayers = len(mapWin.Map.GetListOfLayers(l_type = ('raster', 'vector'),
+                nlayers = len(mapWin.Map.GetListOfLayers(l_type = ('raster', '3d-raster', 'vector'),
                                                          l_active = True))
                 if nlayers < 2:
                     mapWin.ResetView()
