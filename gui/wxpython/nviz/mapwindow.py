@@ -1292,7 +1292,6 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             except GException, e:
                 GError(parent = self,
                        message = e.value)
-            self.init = False
         
         stop = time.time()
         
@@ -1470,7 +1469,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         @param layer item
         """
         return self._loadRaster(item)
-    
+        
     def _loadRaster(self, item):
         """!Load 2d/3d raster map and set its attributes
         
@@ -1980,7 +1979,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             sliceId += 1
                 
         # position
-        if 'update' in data['position']:
+        if 'update' in data['position'] and 'x' in data['position']:
             x = data['position']['x']
             y = data['position']['y']
             z = data['position']['z']

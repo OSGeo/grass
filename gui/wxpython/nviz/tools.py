@@ -4753,7 +4753,8 @@ class NvizToolWindow(FN.FlatNotebook):
                 level = iso['topo']['value']
                 isosurfaces.append("%s %s" % (_("Level"), level))
             box.Set(isosurfaces)
-            box.SetChecked(range(len(isosurfaces)))
+            for i in range(len(isosurfaces)):
+                box.Check(i)
             if data['isosurface']:
                 box.SetSelection(0)
                 self.UpdateVolumeIsosurfPage(data['isosurface'][0])
@@ -4765,7 +4766,8 @@ class NvizToolWindow(FN.FlatNotebook):
                 axis = ("X", "Y", "Z")[slice['position']['axis']]
                 slices.append("%s %s" % (_("Slice parallel to"), axis))
             box.Set(slices)
-            box.SetChecked(range(len(slices)))
+            for i in range(len(slices)):
+                box.Check(i)
             if data['slice']:
                 box.SetSelection(0)
                 self.UpdateVolumeSlicePage(data['slice'][0])
