@@ -965,7 +965,7 @@ class MapFrame(MapFrameBase):
         self.MapWindow.SetCursor(self.cursors["pencil"])
         
         # initiating output
-        style = self._layerManager.goutput.cmd_output.StyleWarning
+        style = self._layerManager.goutput.cmdOutput.StyleWarning
         self._layerManager.goutput.WriteLog(_('Click and drag with left mouse button '
                                               'to measure.%s'
                                               'Double click with left button to clear.') % \
@@ -1035,10 +1035,8 @@ class MapFrame(MapFrameBase):
                 self.tree.GetPyData(self.tree.layer_selected)[0]['type'] == 'raster':
             raster.append(self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer'].name)
 
-        self.profile = ProfileFrame(self,
-                                            id = wx.ID_ANY, pos = wx.DefaultPosition, size = (700,300),
-                                            style = wx.DEFAULT_FRAME_STYLE, 
-                                            rasterList = raster)
+        self.profile = ProfileFrame(self, size = wx.Size(700, 300),
+                                    rasterList = raster)
         self.profile.Show()
         # Open raster select dialog to make sure that a raster (and the desired raster)
         # is selected to be profiled
@@ -1136,8 +1134,8 @@ class MapFrame(MapFrameBase):
     def OnHistogram(self, event):
         """!Init histogram display canvas and tools
         """
-        self.histogram = HistFrame(parent = self, id = wx.ID_ANY, size = globalvar.HIST_WINDOW_SIZE,
-                                   style = wx.DEFAULT_FRAME_STYLE)
+        self.histogram = HistogramFrame(parent = self, id = wx.ID_ANY, size = globalvar.HIST_WINDOW_SIZE,
+                                        style = wx.DEFAULT_FRAME_STYLE)
         
         # show new display
         self.histogram.Show()

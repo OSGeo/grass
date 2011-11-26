@@ -23,6 +23,8 @@ import grass.script as grass
 
 from wxplot.base       import BasePlotFrame
 from gui_core.toolbars import BaseToolbar
+from icons.icon        import Icons
+from wxplot.dialogs    import ScatterRasterDialog, PlotStatsFrame
 
 class ScatterFrame(BasePlotFrame):
     """!Mainframe for displaying bivariate scatter plot of two raster maps. Uses wx.lib.plot.
@@ -74,7 +76,7 @@ class ScatterFrame(BasePlotFrame):
     def OnSelectRaster(self, event):
         """!Select raster map(s) to profile
         """
-        dlg = dialogs.ScatterRasterDialog(parent = self)
+        dlg = ScatterRasterDialog(parent = self)
 
         if dlg.ShowModal() == wx.ID_OK:
             rlist = dlg.rasterList
@@ -250,17 +252,17 @@ class ScatterFrame(BasePlotFrame):
             str = eqtitle + eq + num + rval + rsq + ftest
             message.append(str)
             
-        stats = dialogs.PlotStatsFrame(self, id = wx.ID_ANY, message = message, 
+        stats = PlotStatsFrame(self, id = wx.ID_ANY, message = message, 
                                       title = title)
 
         if stats.Show() == wx.ID_CLOSE:
             stats.Destroy()       
 
-class ScatterplotToolbar(BaseToolbar):
+class ScatterToolbar(BaseToolbar):
     """!Toolbar for bivariate scatterplots of raster map pairs
     """ 
     def __init__(self, parent):
-        AbstractToolbar.__init__(self, parent)
+        BaseToolbar.__init__(self, parent)
         
         self.InitToolbar(self._toolbarData())
         
@@ -270,7 +272,6 @@ class ScatterplotToolbar(BaseToolbar):
     def _toolbarData(self):
         """!Toolbar data"""
         icons = Icons['plot']
-#        icons2 = Icons['modeler']
         return self._getToolbarData((('addraster', Icons['layerManager']["addRast"],
                                       self.parent.OnSelectRaster),
                                      (None, ),

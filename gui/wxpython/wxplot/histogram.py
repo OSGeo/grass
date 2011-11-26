@@ -23,6 +23,8 @@ import grass.script as grass
 
 from gui_core.toolbars import BaseToolbar
 from wxplot.base       import BasePlotFrame
+from icons.icon        import Icons
+from wxplot.dialogs    import HistRasterDialog, PlotStatsFrame
 
 class Histogram2Frame(BasePlotFrame):
     def __init__(self, parent, id, pos, style, size, rasterList = []):
@@ -74,7 +76,7 @@ class Histogram2Frame(BasePlotFrame):
     def OnSelectRaster(self, event):
         """!Select raster map(s) to profile
         """
-        dlg = dialogs.HistRasterDialog(parent = self)
+        dlg = HistRasterDialog(parent = self)
 
         if dlg.ShowModal() == wx.ID_OK:
             self.rasterList = dlg.rasterList
@@ -211,8 +213,8 @@ class Histogram2Frame(BasePlotFrame):
             stats = _('Statistics for %s\n\n%s\n') % (rast, ret)
             message.append(stats)
             
-        stats = dialogs.PlotStatsFrame(self, id = wx.ID_ANY, message = message, 
-                                      title = title)
+        stats = PlotStatsFrame(self, id = wx.ID_ANY, message = message, 
+                               title = title)
 
         if stats.Show() == wx.ID_CLOSE:
             stats.Destroy()       
@@ -221,7 +223,7 @@ class Histogram2Toolbar(BaseToolbar):
     """!Toolbar for histogramming raster map
     """ 
     def __init__(self, parent):
-        AbstractToolbar.__init__(self, parent)
+        BaseToolbar.__init__(self, parent)
         
         self.InitToolbar(self._toolbarData())
         

@@ -545,8 +545,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.histogramFrame = self.mapdisplay.histogram
 
         if not self.histogramFrame:
-            self.histogramFrame = HistFrame(self, size = globalvar.HIST_WINDOW_SIZE,
-                                            style = wx.DEFAULT_FRAME_STYLE)
+            self.histogramFrame = HistogramFrame(self, size = globalvar.HIST_WINDOW_SIZE,
+                                                 style = wx.DEFAULT_FRAME_STYLE)
             self.histogramFrame.CentreOnScreen()
             # show new display
             self.histogramFrame.Show()

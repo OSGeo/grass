@@ -1060,9 +1060,9 @@ class GMFrame(wx.Frame):
         cmd = self.GetMenuCmd(event)
         
         if cmd[0] == 'r.colors':
-            ctable = colorrules.RasterColorTable(self)
+            ctable = RasterColorTable(self)
         else:
-            ctable = colorrules.VectorColorTable(self, attributeType = 'color')
+            ctable = VectorColorTable(self, attributeType = 'color')
         ctable.CentreOnScreen()
         ctable.Show()
         
