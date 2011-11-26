@@ -1008,6 +1008,10 @@ class GroupDialog(wx.Dialog):
         bodySizer.Add(item = self.infoLabel, 
                       flag = wx.ALIGN_CENTER_VERTICAL | wx.TOP | wx.BOTTOM, border = 5)
         
+        self.subGroup = wx.CheckBox(parent = self, id = wx.ID_ANY,
+                                    label = _("Define also sub-group (same name as group)"))
+        bodySizer.Add(item = self.subGroup, flag = wx.BOTTOM | wx.EXPAND, border = 5)
+
         # bindings
         self.groupSelect.GetTextCtrl().Bind(wx.EVT_TEXT, self.OnGroupSelected)
         self.addLayer.Bind(wx.EVT_BUTTON, self.OnAddLayer)
@@ -1093,6 +1097,10 @@ class GroupDialog(wx.Dialog):
         for layerOld in layersOld:
             if layerOld not in layersNew:
                 remove.append(layerOld)
+                
+        kwargs = {}
+        if self.subGroup.IsChecked():
+            kwargs['subgroup'] = group
         
         ret = None
         if remove:
@@ -1100,26 +1108,32 @@ class GroupDialog(wx.Dialog):
                              parent = self,
                              group = group,
                              flags = 'r',
-                             input = ','.join(remove))
+                             input = ','.join(remove),
+                             **kwargs)
                         
         if add:
             ret = RunCommand('i.group',
                              parent = self,
                              group = group,
-                             input = ','.join(add))
+                             input = ','.join(add),
+                             **kwargs)
                             
         return ret
         
     def CreateNewGroup(self, group):
         """!Create new group"""
         layers = self.GetLayers()
-        ret = RunCommand('i.group',
-                         parent = self,
-                         group = group,
-                         input = layers)
-        return ret
         
-                        
+        kwargs = {}
+        if self.subGroup.IsChecked():
+            kwargs['subgroup'] = group
+        
+        return RunCommand('i.group',
+                          parent = self,
+                          group = group,
+                          input = layers,
+                          **kwargs)
+    
     def GetExistGroups(self):
         """!Returns existing groups in current mapset"""
         return grass.list_grouped('group')[grass.gisenv()['MAPSET']]
