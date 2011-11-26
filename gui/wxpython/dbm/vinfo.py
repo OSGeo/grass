@@ -18,7 +18,7 @@ import types
 
 import wx
 
-from gui_core.gselect import VectorDBInfo
+from gui_core.gselect import VectorDBInfo as VectorDBInfoBase
 from core.gcmd        import RunCommand
 from core.settings    import UserSettings
 
@@ -66,11 +66,11 @@ def createDbInfoDesc(panel, mapDBInfo, layer):
     
     return infoFlexSizer
         
-class VectorDBInfo(VectorDBInfo):
+class VectorDBInfo(VectorDBInfoBase):
     """!Class providing information about attribute tables
     linked to the vector map"""
     def __init__(self, map):
-        VectorDBInfo.__init__(self, map)
+        VectorDBInfoBase.__init__(self, map)
         
     def GetColumns(self, table):
         """!Return list of columns names (based on their index)"""
