@@ -4,15 +4,15 @@
 @brief Rendering map layers and overlays into map composition image.
 
 Classes:
- - Layer
- - MapLayer
- - Overlay
- - Map
+ - render::Layer
+ - render::MapLayer
+ - render::Overlay
+ - render::Map
 
 (C) 2006-2011 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+
+This program is free software under the GNU General Public License
+(>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Michael Barton
 @author Jachym Cepicky

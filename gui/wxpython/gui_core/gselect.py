@@ -4,27 +4,28 @@
 @brief Custom control that selects elements
 
 Classes:
- - Select
- - VectorSelect
- - TreeCrtlComboPopup
- - VectorDBInfo
- - LayerSelect
- - DriverSelect
- - DatabaseSelect
- - ColumnSelect
- - DbaseSelect
- - LocationSelect
- - MapsetSelect
- - SubGroupSelect
- - FormatSelect
- - GdalSelect
- - ProjSelect
- - ElementSelect
- - OgrTypeSelect
+ - gselect::Select
+ - gselect::VectorSelect
+ - gselect::TreeCrtlComboPopup
+ - gselect::VectorDBInfo
+ - gselect::LayerSelect
+ - gselect::DriverSelect
+ - gselect::DatabaseSelect
+ - gselect::ColumnSelect
+ - gselect::DbaseSelect
+ - gselect::LocationSelect
+ - gselect::MapsetSelect
+ - gselect::SubGroupSelect
+ - gselect::FormatSelect
+ - gselect::GdalSelect
+ - gselect::ProjSelect
+ - gselect::ElementSelect
+ - gselect::OgrTypeSelect
 
-(C) 2007-2011 by the GRASS Development Team This program is free
-software under the GNU General Public License (>=v2). Read the file
-COPYING that comes with GRASS for details.
+(C) 2007-2011 by the GRASS Development Team 
+
+This program is free software under the GNU General Public License
+(>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Michael Barton
 @author Martin Landa <landa.martin gmail.com>

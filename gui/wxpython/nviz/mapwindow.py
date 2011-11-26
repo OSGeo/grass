@@ -6,14 +6,13 @@
 This module implements 3D visualization mode for map display.
 
 List of classes:
- - NvizThread
- - GLWindow
+ - mapwindow::NvizThread
+ - mapwindow::GLWindow
 
 (C) 2008-2011 by the GRASS Development Team
 
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+This program is free software under the GNU General Public License
+(>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Martin Landa <landa.martin gmail.com> (Google SoC 2008/2010)
 @author Anna Kratochvilova <kratochanna gmail.com> (Google SoC 2011)

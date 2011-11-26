@@ -4,11 +4,12 @@
 @brief wxGUI Graphical Modeler - model definition file
 
 Classes:
- - ProcessModelFile
- - WriteModelFile
- - WritePythonFile
+ - model_file::ProcessModelFile
+ - model_file::WriteModelFile
+ - model_file::WritePythonFile
 
 (C) 2010-2011 by the GRASS Development Team
+
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 

@@ -4,8 +4,8 @@
 @brief GUI for ps.map
 
 Classes:
- - PsMapFrame
- - PsMapBufferedWindow
+ - frame::PsMapFrame
+ - frame::PsMapBufferedWindow
 
 (C) 2011 by Anna Kratochvilova, and the GRASS Development Team
 This program is free software under the GNU General Public License

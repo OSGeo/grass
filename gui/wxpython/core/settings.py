@@ -4,7 +4,7 @@
 @brief Default GUI settings
 
 List of classes:
- - Settings
+ - settings::Settings
 
 Usage:
 @code

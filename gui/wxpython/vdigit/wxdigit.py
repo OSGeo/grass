@@ -7,8 +7,8 @@ Code based on wxVdigit C++ component from GRASS 6.4.0
 (gui/wxpython/vdigit). Converted to Python in 2010/12-2011/01.
 
 List of classes:
- - VDigitError
- - IVDigit
+ - wxdigit::VDigitError
+ - wxdigit::IVDigit
 
 @todo Read large amounts of data from Vlib into arrays, which could
 then be processed using NumPy and rendered using glDrawArrays or

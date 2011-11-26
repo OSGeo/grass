@@ -4,21 +4,21 @@
 @brief wxGUI command interface
 
 Classes:
- - GError
- - GWarning
- - GMessage
- - GException
- - Popen (from http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/440554)
- - Command
- - CommandThread
+ - gcmd::GError
+ - gcmd::GWarning
+ - gcmd::GMessage
+ - gcmd::GException
+ - gcmd::Popen (from http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/440554)
+ - gcmd::Command
+ - gcmd::CommandThread
 
 Functions:
  - RunCommand
 
 (C) 2007-2008, 2010-2011 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+
+This program is free software under the GNU General Public License
+(>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Jachym Cepicky
 @author Martin Landa <landa.martin gmail.com>

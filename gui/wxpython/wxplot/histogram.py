@@ -4,10 +4,11 @@
 @brief Histogramming using PyPlot
 
 Classes:
- - Histogram2Frame
- - Histogram2Toolbar
+ - histogram::Histogram2Frame
+ - histogram::Histogram2Toolbar
 
 (C) 2011 by the GRASS Development Team
+
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 

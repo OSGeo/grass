@@ -4,12 +4,12 @@
 @brief Dialogs for different plotting routines
 
 Classes:
- - ProfileRasterDialog
- - ScatterRasterDialog
- - PlotStatsFrame
- - HistRasterDialog
- - TextDialog
- - OptDialog
+ - dialogs::ProfileRasterDialog
+ - dialogs::ScatterRasterDialog
+ - dialogs::PlotStatsFrame
+ - dialogs::HistRasterDialog
+ - dialogs::TextDialog
+ - dialogs::OptDialog
 
 (C) 2011 by the GRASS Development Team
 

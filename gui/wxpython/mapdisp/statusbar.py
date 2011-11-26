@@ -4,28 +4,28 @@
 @brief Classes for statusbar management
 
 Classes:
- - SbException
- - SbManager
- - SbItem
- - SbRender
- - SbShowRegion
- - SbAlignExtent
- - SbResolution
- - SbMapScale
- - SbGoTo
- - SbProjection
- - SbMask
- - SbTextItem
- - SbDisplayGeometry
- - SbCoordinates
- - SbRegionExtent
- - SbCompRegionExtent
- - SbProgress
+ - statusbar::SbException
+ - statusbar::SbManager
+ - statusbar::SbItem
+ - statusbar::SbRender
+ - statusbar::SbShowRegion
+ - statusbar::SbAlignExtent
+ - statusbar::SbResolution
+ - statusbar::SbMapScale
+ - statusbar::SbGoTo
+ - statusbar::SbProjection
+ - statusbar::SbMask
+ - statusbar::SbTextItem
+ - statusbar::SbDisplayGeometry
+ - statusbar::SbCoordinates
+ - statusbar::SbRegionExtent
+ - statusbar::SbCompRegionExtent
+ - statusbar::SbProgress
 
 (C) 2006-2011 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+
+This program is free software under the GNU General Public License
+(>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Vaclav Petras <wenzeslaus gmail.com>
 @author Anna Kratochvilova <kratochanna gmail.com>

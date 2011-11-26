@@ -7,9 +7,9 @@ Layer Manager - main menu, layer management toolbar, notebook control
 for display management and access to command console.
 
 Classes:
- - GMFrame
- - GMApp
- - Usage
+ - wxgui::GMFrame
+ - wxgui::GMApp
+ - wxgui::Usage
 
 (C) 2006-2011 by the GRASS Development Team
 This program is free software under the GNU General Public License

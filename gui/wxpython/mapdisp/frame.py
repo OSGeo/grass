@@ -7,16 +7,16 @@ functions, and additional toolbars (vector digitizer, 3d view).
 Can be used either from Layer Manager or as d.mon backend.
 
 Classes:
- - MapFrame
- - MapApp
+ - mapdisp::MapFrame
+ - mapdisp::MapApp
 
 Usage:
 python mapdisp.py monitor-identifier /path/to/map/file /path/to/command/file /path/to/env/file
 
 (C) 2006-2011 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+
+This program is free software under the GNU General Public License
+(>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Michael Barton
 @author Jachym Cepicky

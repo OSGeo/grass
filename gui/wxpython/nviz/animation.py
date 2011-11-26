@@ -4,13 +4,12 @@
 @brief Nviz (3D view) animation
 
 Classes:
- - Animation
+ - animation::Animation
 
 (C) 2008-2011 by the GRASS Development Team
 
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+This program is free software under the GNU General Public License
+(>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Anna Kratochvilova <kratochanna gmail.com> 
 """

@@ -4,30 +4,29 @@
 @brief Various dialogs used in wxGUI.
 
 List of classes:
- - ElementDialog
- - LocationDialog
- - MapsetDialog
- - NewVectorDialog
- - SavedRegion
- - DecorationDialog
- - TextLayerDialog 
- - GroupDialog
- - MapLayersDialog
- - ImportDialog
- - GdalImportDialog
- - GdalOutputDialog
- - DxfImportDialog
- - LayersList (used by MultiImport) 
- - SetOpacityDialog
- - StaticWrapText
- - ImageSizeDialog
- - SqlQueryFrame
+ - dialogs::ElementDialog
+ - dialogs::LocationDialog
+ - dialogs::MapsetDialog
+ - dialogs::NewVectorDialog
+ - dialogs::SavedRegion
+ - dialogs::DecorationDialog
+ - dialogs::TextLayerDialog 
+ - dialogs::GroupDialog
+ - dialogs::MapLayersDialog
+ - dialogs::ImportDialog
+ - dialogs::GdalImportDialog
+ - dialogs::GdalOutputDialog
+ - dialogs::DxfImportDialog
+ - dialogs::LayersList (used by MultiImport) 
+ - dialogs::SetOpacityDialog
+ - dialogs::StaticWrapText
+ - dialogs::ImageSizeDialog
+ - dialogs::SqlQueryFrame
 
 (C) 2008-2011 by the GRASS Development Team
 
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+This program is free software under the GNU General Public License
+(>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Martin Landa <landa.martin gmail.com>
 @author Anna Kratochvilova <kratochanna gmail.com> (GroupDialog)

@@ -4,14 +4,15 @@
 @brief wxGUI Layer Manager - toolbars
 
 Classes:
- - LMWorkspaceToolbar
- - LMDataToolbar
- - LMToolsToolbar
- - LMMiscToolbar
- - LMVectorToolbar
- - LMNvizToolbar
+ - toolbars::LMWorkspaceToolbar
+ - toolbars::LMDataToolbar
+ - toolbars::LMToolsToolbar
+ - toolbars::LMMiscToolbar
+ - toolbars::LMVectorToolbar
+ - toolbars::LMNvizToolbar
 
 (C) 2007-2011 by the GRASS Development Team
+
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 

@@ -6,10 +6,11 @@
 Currently only implemeted WMS.
 
 List of classes:
- - WMSDialog
- - LayersList
+ - ogc_services::WMSDialog
+ - ogc_services::LayersList
 
-(C) 2009 by the GRASS Development Team
+(C) 2009-2011 by the GRASS Development Team
+
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 

@@ -4,11 +4,12 @@
 Plotting histogram based on d.histogram
 
 Classes:
- - BufferedWindow
- - HistogramFrame
- - HistogramToolbar
+ - histogram::BufferedWindow
+ - histogram::HistogramFrame
+ - histogram::HistogramToolbar
 
 (C) 2007, 2010-2011 by the GRASS Development Team
+
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 

@@ -7,9 +7,10 @@ Code based on wxVdigit C++ component from GRASS 6.4.0
 (gui/wxpython/vdigit). Converted to Python in 2010/12-2011/01.
 
 List of classes:
- - DisplayDriver
+ - wxdisplay::DisplayDriver
 
 (C) 2007-2011 by the GRASS Development Team
+
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 

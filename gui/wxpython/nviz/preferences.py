@@ -4,7 +4,7 @@
 @brief Nviz (3D view) preferences window
 
 Classes:
- - NvizPreferencesDialog
+ - preferences::NvizPreferencesDialog
 
 (C) 2008-2011 by the GRASS Development Team
 

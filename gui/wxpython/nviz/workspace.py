@@ -1,12 +1,13 @@
 """!
-@package nviz.settings
+@package nviz.workspace
 
-@brief wxNviz settings
+@brief wxNviz workspace settings
 
 Classes:
- - NvizSettings
+ - workspace::NvizSettings
 
 (C) 2007-2011 by the GRASS Development Team
+
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 

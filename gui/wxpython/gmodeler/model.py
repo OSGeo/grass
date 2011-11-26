@@ -4,16 +4,17 @@
 @brief wxGUI Graphical Modeler (base classes)
 
 Classes:
- - Model
- - ModelObject
- - ModelAction
- - ModelData
- - ModelRelation
- - ModelItem
- - ModelLoop
- - ModelCondition
+ - model::Model
+ - model::ModelObject
+ - model::ModelAction
+ - model::ModelData
+ - model::ModelRelation
+ - model::ModelItem
+ - model::ModelLoop
+ - model::ModelCondition
 
 (C) 2010-2011 by the GRASS Development Team
+
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
