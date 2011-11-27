@@ -20,8 +20,9 @@ import os
 
 import wx
 
-from core.utils    import normalize_whitespace
-from core.settings import UserSettings
+from core.utils     import normalize_whitespace
+from core.settings  import UserSettings
+from nviz.workspace import NvizSettings
 
 class ProcessWorkspaceFile:
     def __init__(self, tree):
@@ -55,7 +56,7 @@ class ProcessWorkspaceFile:
         
         self.__processFile()
         
-        self.nvizDefault = Nviz()
+        self.nvizDefault = NvizSettings()
         
     def __filterValue(self, value):
         """!Filter value
