@@ -31,6 +31,7 @@ from core             import globalvar
 from core.gcmd        import GError, RunCommand
 from gui_core.forms   import GUI
 from gui_core.widgets import ItemTree
+from gui_core.ghelp   import SearchModuleWindow
 
 class InstallExtensionWindow(wx.Frame):
     def __init__(self, parent, id = wx.ID_ANY,
