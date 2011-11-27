@@ -1553,6 +1553,9 @@ class IVDigit:
             left = cleft.value
             right = cright.value
             
+            Debug.msg(3, "IVDigit._addFeature(): area - left=%d right=%d",
+                      left, right)
+            
             # check if area exists and has no centroid inside
             if layer > 0 and (left > 0 or right > 0):
                 Vect_cat_set(self.poCats, layer, cat)
@@ -1579,7 +1582,7 @@ class IVDigit:
                     Vect_get_area_centroid(self.poMapInfo, right) == 0:
                 # if Vect_get_area_points(byref(self.poMapInfo), right, bpoints) > 0 and 
                 # Vect_find_poly_centroid(bpoints, byref(x), byref(y)) == 0:
-                if Vect_get_point_in_area(self.poMapInfo, left, byref(x), byref(y)) == 0:
+                if Vect_get_point_in_area(self.poMapInfo, right, byref(x), byref(y)) == 0:
                     Vect_reset_line(bpoints)
                     Vect_append_point(bpoints, x.value, y.value, 0.0)
                     newline =  Vect_write_line(self.poMapInfo, GV_CENTROID,
