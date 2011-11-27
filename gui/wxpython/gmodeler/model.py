@@ -511,6 +511,7 @@ class Model(object):
                                    style = wx.YES_NO | wx.NO_DEFAULT |
                                    wx.ICON_QUESTION | wx.CENTRE)
             ret = dlg.ShowModal()
+            dlg.Destroy()
             if ret != wx.ID_YES:
                 return
         
@@ -527,6 +528,7 @@ class Model(object):
                 return
             
             err = dlg.GetErrors()
+            dlg.Destroy()
             if err:
                 GError(parent = parent, message = unicode('\n'.join(err)))
                 return
@@ -612,9 +614,6 @@ class Model(object):
             for item in params.itervalues():
                 for p in item['params']:
                     p['value'] = ''
-        
-        if params:
-            dlg.Destroy()
         
     def DeleteIntermediateData(self, log):
         """!Detele intermediate data"""
