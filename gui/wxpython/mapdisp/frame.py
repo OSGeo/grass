@@ -326,7 +326,7 @@ class MapFrame(MapFrameBase):
             self.MapWindow3D.UpdateView(None)
         else:
             self.MapWindow = self.MapWindow3D
-            os.environ['GRASS_REGION'] = self.Map.SetRegion(windres = True)
+            os.environ['GRASS_REGION'] = self.Map.SetRegion(windres = True, windres3 = True)
             self.MapWindow3D.GetDisplay().Init()
             del os.environ['GRASS_REGION']
             

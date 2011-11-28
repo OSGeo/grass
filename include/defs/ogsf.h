@@ -231,6 +231,7 @@ void *GV_Get_ClientData(int);
 
 /* GVL2.c */
 void GVL_libinit(void);
+void GVL_init_region(void);
 int GVL_get_region(float *, float *, float *, float *, float *, float *);
 void *GVL_get_window();
 int GVL_vol_exists(int);
