@@ -124,7 +124,7 @@ def main():
     # Use this outline (raster border) for interpolating the fill data:
     vecttmp = "vecttmp_fillnulls_" + unique
     grass.message(_("Creating interpolation points..."))
-    if grass.run_command('r.to.vect', input = input, output = vecttmp, feature = 'point'):
+    if grass.run_command('r.to.vect', input = input, output = vecttmp, type = 'point'):
 	grass.fatal(_("abandoned. Removing temporary maps, restoring user mask if needed:"))
 
     # count number of points to control segmax parameter for interpolation:
