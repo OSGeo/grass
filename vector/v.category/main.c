@@ -28,6 +28,7 @@
 #define O_SUM  5
 #define O_CHFIELD 6
 #define O_TYPE_REP 7		/* report number of features for each type */
+#define O_TRANS 8
 
 #define FRTYPES 9		/* number of field report types */
 
@@ -59,7 +60,7 @@ int main(int argc, char *argv[])
     int i, j, ret, option, otype, type, with_z, step, id;
     int n_areas, centr, new_centr, nmodified;
     double x, y;
-    int cat, ocat, *fields, nfields, field;
+    int cat, ocat, scat, *fields, nfields, field;
     struct GModule *module;
     struct Option *in_opt, *out_opt, *option_opt, *type_opt;
     struct Option *cat_opt, *field_opt, *step_opt, *id_opt;
@@ -94,12 +95,13 @@ int main(int argc, char *argv[])
     option_opt->type = TYPE_STRING;
     option_opt->required = YES;
     option_opt->multiple = NO;
-    option_opt->options = "add,del,chlayer,sum,report,print";
+    option_opt->options = "add,del,chlayer,sum,report,print,transfer";
     option_opt->description = _("Action to be done");
     option_opt->descriptions = _("add;add a new category;"
 				 "del;delete category (-1 to delete all categories of given layer);"
 				 "chlayer;change layer number (e.g. layer=3,1 changes layer 3 to layer 1);"
 				 "sum;add the value specified by cat option to the current category value;"
+				 "transfer;copy values from one layer to another (e.g. layer=1,2 copies values from layer 1 to layer 2);"
 				 "report;print report (statistics), in shell style: layer type count min max;"
 				 "print;print category values, more cats in the same layer are separated by '/'");
     
@@ -140,6 +142,9 @@ int main(int argc, char *argv[])
     case ('s'):
 	option = O_SUM;
 	break;
+    case ('t'):
+        option = O_TRANS;
+        break;
     case ('r'):
 	option = O_REP;
 	break;
@@ -195,16 +200,41 @@ int main(int argc, char *argv[])
 	fields[i] = Vect_get_field_number(&In, field_opt->answers[i]);
 	i++;
     }
-    if (nfields > 1 && option != O_PRN && option != O_CHFIELD)
+    if (nfields > 1 && option != O_PRN && option != O_CHFIELD && option != O_TRANS)
 	G_fatal_error(_("Too many layers for this operation"));
     
     if (nfields != 2 && option == O_CHFIELD)
 	G_fatal_error(_("2 layers must be specified"));
 
+    if (option == O_TRANS) {
+	/* check if field[1] already exists */
+	if (nfields > 1) {
+	    if (Vect_cidx_get_field_index(&In, fields[1]) != -1)
+		G_warning(_("Categories already exist in layer %d"), fields[1]);
+	}
+	/* find next free layer number */
+	else if (nfields == 1) {
+	    int max = -1;
+	    
+	    for (i = 0; i < Vect_cidx_get_num_fields(&In); i++) {
+		if (max < Vect_cidx_get_field_number(&In, i))
+		    max = Vect_cidx_get_field_number(&In, i);
+	    }
+	    max++;
+
+	    nfields++;
+	    fields = (int *)G_realloc(fields, nfields * sizeof(int));
+	    fields[nfields - 1] = max;
+	}
+    }
+
+    if (otype & GV_AREA && option == O_TRANS && !(otype & GV_CENTROID))
+	otype |= GV_CENTROID;
+
     /* open output vector if needed */
     if (option == O_ADD || option == O_DEL || option == O_CHFIELD ||
-	option == O_SUM) {
-	with_z = In.head.with_z;
+	option == O_SUM || option == O_TRANS) {
+	with_z = Vect_is_3d(&In);
 
 	if (0 > Vect_open_new(&Out, out_opt->answer, with_z)) {
 	    Vect_close(&In);
@@ -221,7 +251,7 @@ int main(int argc, char *argv[])
     nmodified = 0;
 
     if (option == O_ADD || option == O_DEL || option == O_CHFIELD ||
-	option == O_SUM) {
+	option == O_SUM || option == O_TRANS) {
 	G_message(_("Processing features..."));
     }
 
@@ -271,6 +301,32 @@ int main(int argc, char *argv[])
 	}
 	break;
 
+    case (O_TRANS):
+	/* Lines */
+	while ((type = Vect_read_next_line(&In, Points, Cats)) > 0) {
+	    id++;
+	    if (type & otype && (!Clist ||
+				 (Clist &&
+				  Vect_cat_in_cat_list(id, Clist) == TRUE))) {
+		if ((Vect_cat_get(Cats, fields[1], &ocat)) == 0) {
+		    if (ocat < 0) {
+			int n = Cats->n_cats;
+			
+			for (i = 0; i < n; i++) {
+			    if (Cats->field[i] == fields[0]) {
+				scat = Cats->cat[i];
+				if (Vect_cat_set(Cats, fields[1], scat) > 0) {
+				    nmodified++;
+				}
+			    }
+			}
+		    }
+		}
+	    }
+	    Vect_write_line(&Out, type, Points, Cats);
+	}
+	break;
+
     case (O_DEL):
 	while ((type = Vect_read_next_line(&In, Points, Cats)) > 0) {
 	    id++;
@@ -292,12 +348,30 @@ int main(int argc, char *argv[])
 	    if (type & otype && (!Clist ||
 				 (Clist &&
 				  Vect_cat_in_cat_list(id, Clist) == TRUE))) {
-		for (i = 0; i < Cats->n_cats; i++) {
+		i = 0;
+		while (i < Cats->n_cats) {
 		    if (Cats->field[i] == fields[0]) {
-			Cats->field[i] = fields[1];
+			int found = -1;
+			
+			/* check if cat already exists in layer fields[1] */
+			for (j = 0; j < Cats->n_cats; j++) {
+			    if (Cats->field[j] == fields[1] &&
+				Cats->cat[j] == Cats->cat[i]) {
+				found = j;
+				break;
+			    }
+			}
+			/* does not exist, change layer */
+			if (found < 0) {
+			    Cats->field[i] = fields[1];
+			    i++;
+			}
+			/* exists already in fields[1], delete from fields[0] */
+			else
+			    Vect_field_cat_del(Cats, fields[0], Cats->cat[found]);
+			nmodified++;
 		    }
 		}
-		nmodified++;
 	    }
 	    Vect_write_line(&Out, type, Points, Cats);
 	}
@@ -543,13 +617,16 @@ int main(int argc, char *argv[])
     }
 
     if (option == O_ADD || option == O_DEL || option == O_CHFIELD ||
-	option == O_SUM) {
+	option == O_SUM || option == O_TRANS) {
 	G_message(_("Copying attribute table(s)..."));
         if (Vect_copy_tables(&In, &Out, 0))
             G_warning(_("Failed to copy attribute table to output map"));
 	Vect_build(&Out);
 	Vect_close(&Out);
 
+	if (option == O_TRANS && nmodified > 0)
+	    G_important_message(_("Categories copied from layer %d to layer %d"),
+				fields[0], fields[1]);
 	G_done_msg(_("%d features modified."), nmodified);
     }
     Vect_close(&In);
