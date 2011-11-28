@@ -48,7 +48,6 @@ int read_vareas(char *name, char *mapset)
     sprintf(fullname, "%s in %s", name, mapset);
 
     Vect_set_open_level(2);
-    Vect_set_fatal_error(GV_FATAL_PRINT);
     if (2 > Vect_open_old(&Map, name, mapset)) {
 	error(fullname, "", "can't open vector map");
 	gobble_input();

@@ -209,10 +209,6 @@ int V__map_overlap(struct Map_info *, double, double, double, double);
 void Vect_set_release_support(struct Map_info *);
 void Vect_set_category_index_update(struct Map_info *);
 
-/* Set/get fatal error behaviour */
-int Vect_set_fatal_error(int);
-int Vect_get_fatal_error();
-
 /* Open/close/rewind/set_constraints for map */
 int Vect_check_input_output_name(const char *, const char *, int);
 int Vect_legal_filename(const char *);

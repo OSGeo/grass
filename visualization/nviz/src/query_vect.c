@@ -36,7 +36,6 @@ char *query_vect(char *name, double x, double y)
     }
 
     Vect_set_open_level(2);
-    Vect_set_fatal_error(GV_FATAL_PRINT);
     level = Vect_open_old(&Map, name, mapset);
     if (level < 2) {
 	return ("Could not open map on level 2.\n");

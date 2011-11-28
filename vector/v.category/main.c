@@ -206,7 +206,6 @@ int main(int argc, char *argv[])
 	option == O_SUM) {
 	with_z = In.head.with_z;
 
-	Vect_set_fatal_error(GV_FATAL_PRINT);
 	if (0 > Vect_open_new(&Out, out_opt->answer, with_z)) {
 	    Vect_close(&In);
 	    exit(EXIT_FAILURE);

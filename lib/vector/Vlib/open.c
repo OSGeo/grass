@@ -82,20 +82,6 @@ static int (*Open_new_array[][2]) () = {
 #endif
 };
 
-static void fatal_error(int ferror, char *errmsg)
-{
-    switch (ferror) {
-    case GV_FATAL_EXIT:
-	G_fatal_error(errmsg);
-	break;
-    case GV_FATAL_PRINT:
-	G_warning(errmsg);
-	break;
-    case GV_FATAL_RETURN:
-	break;
-    }
-}
-
 /*!
  * \brief Predetermine level at which a vector map will be opened for
  * reading.
@@ -151,9 +137,9 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
 		   int update, int head_only)
 {
     char buf[GNAME_MAX + 10], buf2[GMAPSET_MAX + 10], xname[GNAME_MAX],
-	xmapset[GMAPSET_MAX], errmsg[2000];
+	xmapset[GMAPSET_MAX];
     FILE *fp;
-    int level, level_request, ferror;
+    int level, level_request;
     int format, ret;
     int ogr_mapset;
     const char *fmapset;
@@ -165,9 +151,6 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
     G_zero(Map, sizeof(struct Map_info));
 
     /* TODO: Open header for update ('dbln') */
-
-    ferror = Vect_get_fatal_error();
-    Vect_set_fatal_error(GV_FATAL_EXIT);
 
     level_request = Open_level;
     Open_level = 0;
@@ -215,12 +198,11 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
 	fmapset = G_find_vector2(Map->name, Map->mapset);
 	if (fmapset == NULL) {
 	    if (mapset && strcmp(mapset, G_mapset()) == 0)
-		sprintf(errmsg, _("Vector map <%s> not found in current mapset"),
-			Vect_get_name(Map));
+		G_fatal_error(_("Vector map <%s> not found in current mapset"),
+			      Vect_get_name(Map));
 	    else
-		sprintf(errmsg, _("Vector map <%s> not found"),
-			Vect_get_full_name(Map));
-	    fatal_error(ferror, errmsg);
+		G_fatal_error(_("Vector map <%s> not found"),
+			      Vect_get_full_name(Map));
 	    return -1;
 	}
 	Map->mapset = G_store(fmapset);
@@ -257,9 +239,8 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
 	    
 	    G_debug(1, "Vector format: %d (non-native)", format);
 	    if (format < 0) {
-		sprintf(errmsg, _("Unable to open vector map <%s>"),
-			Vect_get_full_name(Map));
-		fatal_error(ferror, errmsg);
+		G_fatal_error(_("Unable to open vector map <%s>"),
+			      Vect_get_full_name(Map));
 		return -1;
 	    }
 	}
@@ -272,12 +253,8 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
     
     /* read vector head (ignored for OGR mapset) */
     if (!ogr_mapset && Vect__read_head(Map) != 0) {
-	sprintf(errmsg,
-		_("Unable to open vector map <%s> on level %d. "
-		  "Try to rebuild vector topology by v.build."),
-		Vect_get_full_name(Map), level_request);
-	G_warning(_("Unable to read header file of vector map <%s>"),
-		  Vect_get_full_name(Map));
+	G_fatal_error(_("Unable to read header file of vector map <%s>"),
+		      Vect_get_full_name(Map));
     }
 
     /* projection is not written to head but zone ??? */
@@ -362,11 +339,9 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
 	if (level_request == 2 && level < 2) {
 	    if (!ogr_mapset) {
 		/* for direct OGR read access is built pseudo-topology on the fly */
-		sprintf(errmsg,
-			_("Unable to open vector map <%s> on level %d. "
-			  "Try to rebuild vector topology by v.build."),
-			Vect_get_full_name(Map), level_request);
-		fatal_error(ferror, errmsg);
+		G_warning(_("Unable to open vector map <%s> on level %d. "
+			    "Try to rebuild vector topology by v.build."),
+			  Vect_get_full_name(Map), level_request);
 		return -1;
 	    }
 	}
@@ -383,11 +358,9 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
 		dig_spidx_free(&(Map->plus));
 		dig_cidx_free(&(Map->plus));
 	    }
-	    sprintf(errmsg,
-		    _("Unable to open vector map <%s> on level %d. "
-		      "Try to rebuild vector topology by v.build."),
-		    Vect_get_full_name(Map), level_request);
-	    fatal_error(ferror, errmsg);
+	    G_warning(_("Unable to open vector map <%s> on level %d. "
+			"Try to rebuild vector topology by v.build."),
+		      Vect_get_full_name(Map), level_request);
 	    return -1;
 	}
 	if (ogr_mapset && !head_only && level_request != 1) {
@@ -450,11 +423,9 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
     if (update && !ogr_mapset) {		/* native only */
 	Map->hist_fp = G_fopen_modify(buf, GV_HIST_ELEMENT);
 	if (Map->hist_fp == NULL) {
-	    sprintf(errmsg,
-		    _("Unable to open history file for vector map <%s>"),
-		    Vect_get_full_name(Map));
-	    fatal_error(ferror, errmsg);
-	    return (-1);
+	    G_warning(_("Unable to open history file for vector map <%s>"),
+		      Vect_get_full_name(Map));
+	    return -1;
 	}
 	G_fseek(Map->hist_fp, (off_t) 0, SEEK_END);
 	Vect_hist_write(Map,
@@ -689,8 +660,8 @@ int Vect_open_update_head(struct Map_info *Map, const char *name,
  */
 int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
 {
-    int ret, ferror;
-    char errmsg[2000], buf[500];
+    int ret;
+    char buf[500];
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
     G_debug(2, "Vect_open_new(): name = %s", name);
@@ -700,23 +671,18 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
     /* init header */
     Vect__init_head(Map);
 
-    /* error handling */
-    ferror = Vect_get_fatal_error();
-    Vect_set_fatal_error(GV_FATAL_EXIT);
-
     if (G_name_is_fully_qualified(name, xname, xmapset)) {
 	if (strcmp(xmapset, G_mapset()) != 0) {
-	    sprintf(errmsg, _("%s is not in the current mapset (%s)"), name,
-		    G_mapset());
-	    fatal_error(ferror, errmsg);
+	    G_fatal_error(_("<%s> is not the current mapset (%s)"), name,
+			  G_mapset());
+	    return -1;
 	}
 	name = xname;
     }
 
     /* check for [A-Za-z][A-Za-z0-9_]* in name */
     if (Vect_legal_filename(name) < 0) {
-	sprintf(errmsg, _("Vector map name is not SQL compliant"));
-	fatal_error(ferror, errmsg);
+	G_fatal_error(_("Vector map name is not SQL compliant"));
 	return -1;
     }
 
@@ -732,8 +698,7 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
 	Map->format = GV_FORMAT_OGR_DIRECT;
 	fp = G_fopen_old("", "OGR", G_mapset());
 	if (!fp) {
-	    sprintf(errmsg, _("Unable to open OGR file"));
-	    fatal_error(ferror, errmsg);
+	    G_warning(_("Unable to open OGR file"));
 	}
 	key_val = G_fread_key_value(fp);
 	fclose(fp);
@@ -758,8 +723,7 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
 	    
 	    ret = Vect_delete(name);
 	    if (ret == -1) {
-		sprintf(errmsg, _("Unable to delete vector map <%s>"), name);
-		fatal_error(ferror, errmsg);
+		G_warning(_("Unable to delete vector map <%s>"), name);
 		return -1;
 	    }
 	}
@@ -774,9 +738,8 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
     Map->plus.spidx_with_z = Map->plus.with_z = Map->head.with_z = (with_z != 0);
 
     if ((*Open_new_array[Map->format][1]) (Map, name, with_z) < 0) {
-	sprintf(errmsg, _("Unable to create vector map <%s>"),
-		Vect_get_full_name(Map));
-	fatal_error(ferror, errmsg);
+	G_fatal_error(_("Unable to create vector map <%s>"),
+		      name);
 	return -1;
     }
 
@@ -785,9 +748,8 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
 	sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
 	Map->hist_fp = G_fopen_new(buf, GV_HIST_ELEMENT);
 	if (Map->hist_fp == NULL) {
-	    sprintf(errmsg, _("Unable to open history file of vector map <%s>"),
-		    Vect_get_full_name(Map));
-	    fatal_error(ferror, errmsg);
+	    G_warning(_("Unable to open history file of vector map <%s>"),
+		      name);
 	    return -1;
 	}
     }
