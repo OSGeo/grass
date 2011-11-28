@@ -264,7 +264,7 @@ int G_math_cholesky_decomposition(double **A, int rows, int bandwith)
 	}
 
     }
-    /*we need to copy the lower triangle matrix to the upper trianle */
+    /* we need to copy the lower triangle matrix to the upper triangle */
 #pragma omp parallel for schedule (static) private(i, k) shared(A, rows)
     for (k = 0; k < rows; k++) {
 	for (i = k + 1; i < rows; i++) {
