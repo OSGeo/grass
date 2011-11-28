@@ -24,20 +24,22 @@ void G_math_cholesky_sband_decomposition(double **A, double **T, int rows, int b
 
     for (i = 0; i < rows; i++) {
 	G_percent(i, rows, 2);
-	for (j = 0; j < bandwidth; j++) {
+        /* For j = 0 */
+	sum = A[i][0];
+	end = ((bandwidth - 0) < (i + 1) ? (bandwidth - 0) : (i + 1));
+	for (k = 1; k < end; k++)
+	    sum -= T[i - k][k] * T[i - k][0 + k];
+	if (sum <= 0.0)
+	    G_fatal_error(_("Decomposition failed at row %i and col %i"), i, 0);
+	T[i][0] = sqrt(sum);
+
+        #pragma omp parallel for schedule (static) private(j, k, end, sum) shared(A, T, i, bandwidth)
+	for (j = 1; j < bandwidth; j++) {
 	    sum = A[i][j];
-	    /* start = 1 */
-	    /* end = bandwidth - j or i + 1 */
 	    end = ((bandwidth - j) < (i + 1) ? (bandwidth - j) : (i + 1));
 	    for (k = 1; k < end; k++)
 		sum -= T[i - k][k] * T[i - k][j + k];
-	    if (j == 0) {
-		if (sum <= 0.0)
-		    G_fatal_error(_("Decomposition failed at row %i and col %i"), i, j);
-		T[i][0] = sqrt(sum);
-	    }
-	    else
-		T[i][j] = sum / T[i][0];
+       	    T[i][j] = sum / T[i][0];
 	}
     }
 
