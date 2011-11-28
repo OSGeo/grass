@@ -491,7 +491,8 @@ int gvld_slice(geovol * gvl, int ndx)
     float x, nextx, y, nexty, z, stepx, stepy, stepz;
     int cols, rows, c, r;
     float f_cols, f_rows, distxy, distz, modx, mody, modz, modxy;
-    int ptX, ptY, ptZ, resx, resy, resz;
+    int ptX, ptY, ptZ;
+    double resx, resy, resz;
 
     /* current slice */
     slice = gvl->slice[ndx];
@@ -664,7 +665,8 @@ int gvld_wire_slices(geovol * gvl)
 {
     float pt[3];
     int i;
-    int ptX, ptY, ptZ, resx, resy, resz;
+    int ptX, ptY, ptZ;
+    double resx, resy, resz;
 
     geovol_slice *slice;
 
