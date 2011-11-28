@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
 {
     int line, nlines, nlinks;
     double east, north, (*rng) (), max, myrand();
-    int i, j, n, nsites, np, *p, dcmp();
+    int i, j, nsites, np, *p, dcmp();
     int *pnt_part;
     struct Map_info In, Out;
     static struct line_pnts *Points;
@@ -132,7 +132,6 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("More partitions than points (%d)"), nsites);
     }
 
-    Vect_set_fatal_error(GV_FATAL_PRINT);
     Vect_open_new(&Out, out_opt->answer, Vect_is_3d(&In));
 
     Vect_copy_head_data(&In, &Out);
@@ -192,7 +191,7 @@ int main(int argc, char *argv[])
      * number of sites will not always be a multiple of the number of
      * partitions. make_histo() returns the maximum bin size.
      */
-    n = make_histo(&p, np, nsites);
+    make_histo(&p, np, nsites);
 
     nlines = Vect_get_num_lines(&In);
     pnt_part = (int *)G_calloc(nlines + 1, sizeof(int));

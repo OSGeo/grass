@@ -32,7 +32,6 @@ int old2new(char *in, char *out, int endian)
     }
 
     /* open new output file */
-    Vect_set_fatal_error(GV_FATAL_PRINT);
     if (Vect_open_new(&Mapout, out, WITHOUT_Z) < 0) {
 	fclose(Digin);
 	exit(EXIT_FAILURE);

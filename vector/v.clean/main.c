@@ -273,15 +273,13 @@ int main(int argc, char *argv[])
     Vect_open_old2(&In, opt.in->answer, "", opt.field->answer);
 
     with_z = Vect_is_3d(&In);
-
-    Vect_set_fatal_error(GV_FATAL_PRINT);
+    
     if (0 > Vect_open_new(&Out, opt.out->answer, with_z)) {
 	Vect_close(&In);
 	exit(EXIT_FAILURE);
     }
 
     if (opt.err->answer) {
-	Vect_set_fatal_error(GV_FATAL_PRINT);
 	Vect_set_open_level(2);
 	if (0 > Vect_open_new(&Err, opt.err->answer, with_z)) {
 	    Vect_close(&In);

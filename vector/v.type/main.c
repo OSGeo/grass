@@ -125,7 +125,6 @@ int main(int argc, char *argv[])
     Vect_open_old2(&In, in_opt->answer, "", field_opt->answer);
     field = Vect_get_field_number(&In, field_opt->answer);
     
-    Vect_set_fatal_error(GV_FATAL_PRINT);
     if (0 > Vect_open_new(&Out, out_opt->answer, Vect_is_3d(&In))) {
 	Vect_close(&In);
 	exit(EXIT_FAILURE);

@@ -34,7 +34,6 @@ int do_vectors(int after_masking)
 		  vector.layer[n].name, vector.layer[n].mapset);
 
 	Vect_set_open_level(2);
-	Vect_set_fatal_error(GV_FATAL_PRINT);
 	if (2 >
 	    Vect_open_old(&Map, vector.layer[n].name,
 			  vector.layer[n].mapset)) {
@@ -139,7 +138,6 @@ int do_vpoints(int after_masking)
 		  vector.layer[n].name, vector.layer[n].mapset);
 
 	Vect_set_open_level(2);
-	Vect_set_fatal_error(GV_FATAL_PRINT);
 	if (2 >
 	    Vect_open_old(&Map, vector.layer[n].name,
 			  vector.layer[n].mapset)) {
