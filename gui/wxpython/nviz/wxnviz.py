@@ -124,6 +124,7 @@ class Nviz(object):
         Rast__init_window()
         GS_libinit()
         GVL_libinit()
+        GVL_init_region()
     
     def ResizeWindow(self, width, height):
         """!GL canvas resized

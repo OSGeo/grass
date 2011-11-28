@@ -588,7 +588,7 @@ class Map(object):
         
     def GetRegion(self, rast = [], zoom = False, vect = [], regionName = None,
                   n = None, s = None, e = None, w = None, default = False,
-                  update = False):
+                  update = False, add3d = False):
         """!Get region settings (g.region -upgc)
         
         Optionally extent, raster or vector map layer can be given.
@@ -600,6 +600,7 @@ class Map(object):
         @param n,s,e,w force extent
         @param default force default region settings
         @param update if True update current display region settings
+        @param add3d add 3d region settings
         
         @return region settings as directory, e.g. {
         'n':'4928010', 's':'4913700', 'w':'589980',...}
@@ -624,6 +625,9 @@ class Map(object):
         if default:
             cmd['flags'] += 'd'
         
+        if add3d:
+            cmd['flags'] += '3'
+            
         if regionName:
             cmd['region'] = regionName
         
@@ -693,7 +697,7 @@ class Map(object):
         """
         return self.region
 
-    def SetRegion(self, windres = False):
+    def SetRegion(self, windres = False, windres3 = False):
         """!Render string for GRASS_REGION env. variable, so that the
         images will be rendered from desired zoom level.
         
@@ -706,10 +710,16 @@ class Map(object):
         grass_region = ""
         
         if windres:
-            compRegion = self.GetRegion()
+            compRegion = self.GetRegion(add3d = windres3)
             region = copy.copy(self.region)
             for key in ('nsres', 'ewres', 'cells'):
                 region[key] = compRegion[key]
+            if windres3:
+                for key in ('nsres3', 'ewres3', 'tbres', 'cells3',
+                            'cols3', 'rows3', 'depths'):
+                    if key in compRegion:
+                        region[key] = compRegion[key]
+                    
         else:
             # adjust region settings to match monitor
             region = self.AdjustRegion()
@@ -717,6 +727,7 @@ class Map(object):
         # read values from wind file
         try:
             for key in self.wind.keys():
+                
                 if key == 'north':
                     grass_region += "north: %s; " % \
                         (region['n'])
@@ -753,6 +764,24 @@ class Map(object):
                     grass_region += 'rows: %d; ' % \
                         region['rows']
                     continue
+                elif key == "n-s resol3" and windres3:
+                    grass_region += "n-s resol3: %f; " % \
+                        (region['nsres3'])
+                elif key == "e-w resol3" and windres3:
+                    grass_region += "e-w resol3: %f; " % \
+                        (region['ewres3'])
+                elif key == "t-b resol" and windres3:
+                    grass_region += "t-b resol: %f; " % \
+                        (region['tbres'])
+                elif key == "cols3" and windres3:
+                    grass_region += "cols3: %d; " % \
+                        (region['cols3'])
+                elif key == "rows3" and windres3:
+                    grass_region += "rows3: %d; " % \
+                        (region['rows3'])
+                elif key == "depths" and windres3:
+                    grass_region += "depths: %d; " % \
+                        (region['depths'])
                 else:
                     grass_region += key + ": "  + self.wind[key] + "; "
             

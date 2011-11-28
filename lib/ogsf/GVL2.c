@@ -50,6 +50,25 @@ void GVL_libinit(void)
 }
 
 /*!
+   \brief Initialize 3D region
+
+   Set region extent (N,S,W,E,T,B)
+ */
+void GVL_init_region(void)
+{
+    Rast3d_read_window(&wind3, NULL);
+
+    Region[0] = wind3.north;
+    Region[1] = wind3.south;
+    Region[2] = wind3.west;
+    Region[3] = wind3.east;
+    Region[4] = wind3.top;
+    Region[5] = wind3.bottom;
+
+    return;
+}
+
+/*!
    \brief Get region extent settings
 
    \param[out] n,s,w,e north, south, west, east
