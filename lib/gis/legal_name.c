@@ -57,7 +57,7 @@ int G_legal_filename(const char *s)
  *
  * \param input input map name
  * \param output output map name
- * \param error error type: GR_FATAL_EXIT, GR_FATAL_PRINT, GR_FATAL_RETURN
+ * \param error error type: G_FATAL_EXIT, G_FATAL_PRINT, G_FATAL_RETURN
  *
  * \return 0 OK
  * \return 1 error
@@ -70,16 +70,16 @@ int G_check_input_output_name(const char *input, const char *output,
     if (output == NULL)
 	return 0;		/* don't die on undefined parameters */
     if (G_legal_filename(output) == -1) {
-	if (error == GR_FATAL_EXIT) {
+	if (error == G_FATAL_EXIT) {
 	    G_fatal_error(_("Output raster map name <%s> is not valid map name"),
 			  output);
 	}
-	else if (error == GR_FATAL_PRINT) {
+	else if (error == G_FATAL_PRINT) {
 	    G_warning(_("Output raster map name <%s> is not valid map name"),
 		      output);
 	    return 1;
 	}
-	else {			/* GR_FATAL_RETURN */
+	else {			/* G_FATAL_RETURN */
 	    return 1;
 	}
     }
@@ -87,14 +87,14 @@ int G_check_input_output_name(const char *input, const char *output,
     mapset = G_find_raster2(input, "");
 
     if (mapset == NULL) {
-	if (error == GR_FATAL_EXIT) {
+	if (error == G_FATAL_EXIT) {
 	    G_fatal_error(_("Raster map <%s> not found"), input);
 	}
-	else if (error == GR_FATAL_PRINT) {
+	else if (error == G_FATAL_PRINT) {
 	    G_warning(_("Raster map <%s> not found"), input);
 	    return 1;
 	}
-	else {			/* GR_FATAL_RETURN */
+	else {			/* G_FATAL_RETURN */
 	    return 1;
 	}
     }
@@ -111,16 +111,16 @@ int G_check_input_output_name(const char *input, const char *output,
 	}
 
 	if (strcmp(in, output) == 0) {
-	    if (error == GR_FATAL_EXIT) {
+	    if (error == G_FATAL_EXIT) {
 		G_fatal_error(_("Output raster map <%s> is used as input"),
 			      output);
 	    }
-	    else if (error == GR_FATAL_PRINT) {
+	    else if (error == G_FATAL_PRINT) {
 		G_warning(_("Output raster map <%s> is used as input"),
 			  output);
 		return 1;
 	    }
-	    else {		/* GR_FATAL_RETURN */
+	    else {		/* G_FATAL_RETURN */
 		return 1;
 	    }
 	}

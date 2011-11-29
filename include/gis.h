@@ -246,10 +246,10 @@ static const char *GRASS_copyright __attribute__ ((unused))
 #define DEFAULT_FG_COLOR "black"
 #define DEFAULT_BG_COLOR "white"
 
-/* for raster maps */
-#define GR_FATAL_EXIT    0
-#define GR_FATAL_PRINT   1
-#define GR_FATAL_RETURN  2
+/* error codes */
+#define G_FATAL_EXIT    0
+#define G_FATAL_PRINT   1
+#define G_FATAL_RETURN  2
 
 /* for vector maps */
 /*!

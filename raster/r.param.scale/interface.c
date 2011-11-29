@@ -166,7 +166,7 @@ void interface(int argc, char **argv)
     }
 
     /* make sure input and output names are valid */
-    G_check_input_output_name(rast_in_name, rast_out_name, GR_FATAL_EXIT);
+    G_check_input_output_name(rast_in_name, rast_out_name, G_FATAL_EXIT);
 
     if ((wsize / 2 != (wsize - 1) / 2) || (wsize > MAX_WSIZE))
 	G_fatal_error(_("Inappropriate window size (too big or even)"));

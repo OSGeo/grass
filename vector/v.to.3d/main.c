@@ -65,7 +65,7 @@ int main(int argc, char **argv)
     }
 
     Vect_check_input_output_name(opt.input->answer, opt.output->answer,
-				 GV_FATAL_EXIT);
+				 G_FATAL_EXIT);
     
     /* open input vector, topology not needed */
     Vect_set_open_level(1);

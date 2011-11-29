@@ -179,7 +179,7 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Output vector wasn't entered"));
 
 	Vect_check_input_output_name(in_opt->answer, out_opt->answer,
-				     GV_FATAL_EXIT);
+				     G_FATAL_EXIT);
     }
 
     Points = Vect_new_line_struct();

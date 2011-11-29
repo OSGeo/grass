@@ -346,7 +346,7 @@ int main(int argc, char *argv[])
     Prev = Vect_new_line_struct();
 
     Vect_check_input_output_name(map_in->answer, map_out->answer,
-				 GV_FATAL_EXIT);
+				 G_FATAL_EXIT);
 
     Vect_set_open_level(2);
 

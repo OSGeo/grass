@@ -142,7 +142,7 @@ int main(int argc, char *argv[])
     centroid = 0;
 
     /* set input vector map name and mapset */
-    Vect_check_input_output_name(old->answer, new->answer, GV_FATAL_EXIT);
+    Vect_check_input_output_name(old->answer, new->answer, G_FATAL_EXIT);
 
     /* vector setup */
     Points = Vect_new_line_struct();

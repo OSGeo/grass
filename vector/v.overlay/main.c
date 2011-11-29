@@ -155,9 +155,9 @@ int main(int argc, char *argv[])
 		      operator_opt->answer);
 
     Vect_check_input_output_name(in_opt[0]->answer, out_opt->answer,
-				 GV_FATAL_EXIT);
+				 G_FATAL_EXIT);
     Vect_check_input_output_name(in_opt[1]->answer, out_opt->answer,
-				 GV_FATAL_EXIT);
+				 G_FATAL_EXIT);
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();

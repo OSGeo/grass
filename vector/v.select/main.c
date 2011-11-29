@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
 	itype[iopt] = Vect_option_to_types(parm.type[iopt]);
 
 	Vect_check_input_output_name(parm.input[iopt]->answer, parm.output->answer,
-				     GV_FATAL_EXIT);
+				     G_FATAL_EXIT);
 
 	Vect_set_open_level(2);
 	Vect_open_old2(&(In[iopt]), parm.input[iopt]->answer, "", parm.field[iopt]->answer);

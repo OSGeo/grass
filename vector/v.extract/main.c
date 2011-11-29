@@ -170,7 +170,7 @@ int main(int argc, char **argv)
     input = opt.input->answer;
     output = opt.output->answer;
     Vect_check_input_output_name(input, output,
-				 GV_FATAL_EXIT);
+				 G_FATAL_EXIT);
     
     if (flag.d->answer)
 	dissolve = TRUE;

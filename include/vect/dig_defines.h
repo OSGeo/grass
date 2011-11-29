@@ -4,14 +4,6 @@
   Defines for diglib (part of vector library)
 */
 
-/*! \brief Exit/print/return on error
-
-  \todo To be moved to gislib
-*/
-#define GV_FATAL_EXIT    0
-#define GV_FATAL_PRINT   1
-#define GV_FATAL_RETURN  2
-
 /*! \brief Name of vector directory */
 #define GV_DIRECTORY    "vector"	
 /*! \brief Format description, data location (OGR) */
