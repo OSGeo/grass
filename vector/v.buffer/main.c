@@ -298,12 +298,11 @@ int main(int argc, char *argv[])
 		    "option or clean manually with v.clean tool=break; "
 		    "v.category step=0; v.extract -d type=area"));
 
-    Vect_set_error_handler_io(&In, &Out);
-    
     Vect_check_input_output_name(in_opt->answer, out_opt->answer, G_FATAL_EXIT);
 
     Vect_set_open_level(2); /* topology required */
     Vect_open_old2(&In, in_opt->answer, "", field_opt->answer);
+    Vect_set_error_handler_io(&In, &Out);
 
     if (field_opt->answer)
 	field = Vect_get_field_number(&In, field_opt->answer);
