@@ -47,9 +47,12 @@ static void error_handler_io(void *p)
   This handler:
    - close input vector map on error
    - close and delete output vector map on error
-   
-   \param In  pointer in Map_info struct (input vector map) or NULL
-   \param Out pointer to Map_info struct (output vector map) or NULL
+  
+  Note: It's recommended to call this routine after Vect_open_old() or
+  Vect_open_old2().
+
+  \param In  pointer in Map_info struct (input vector map) or NULL
+  \param Out pointer to Map_info struct (output vector map) or NULL
 */
 void Vect_set_error_handler_io(struct Map_info *In, struct Map_info *Out)
 {
