@@ -347,7 +347,7 @@ int main(int argc, char *argv[])
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
     BCats = Vect_new_cats_struct();
-    G_fatal_error("x");
+    
     /* open tmp vector for buffers, needed for cleaning */
     sprintf(bufname, "%s_tmp_%d", out_opt->answer, getpid());
     if (0 > Vect_open_new(&Buf, bufname, 0)) {
