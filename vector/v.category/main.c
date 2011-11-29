@@ -308,17 +308,13 @@ int main(int argc, char *argv[])
 	    if (type & otype && (!Clist ||
 				 (Clist &&
 				  Vect_cat_in_cat_list(id, Clist) == TRUE))) {
-		if ((Vect_cat_get(Cats, fields[1], &ocat)) == 0) {
-		    if (ocat < 0) {
-			int n = Cats->n_cats;
-			
-			for (i = 0; i < n; i++) {
-			    if (Cats->field[i] == fields[0]) {
-				scat = Cats->cat[i];
-				if (Vect_cat_set(Cats, fields[1], scat) > 0) {
-				    nmodified++;
-				}
-			    }
+		int n = Cats->n_cats;
+		
+		for (i = 0; i < n; i++) {
+		    if (Cats->field[i] == fields[0]) {
+			scat = Cats->cat[i];
+			if (Vect_cat_set(Cats, fields[1], scat) > 0) {
+			    nmodified++;
 			}
 		    }
 		}
