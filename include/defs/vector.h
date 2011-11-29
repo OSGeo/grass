@@ -232,6 +232,7 @@ int Vect_set_constraint_field(struct Map_info *, int);
 void  Vect_remove_constraints(struct Map_info *);
 int Vect_rewind(struct Map_info *);
 int Vect_close(struct Map_info *);
+void Vect_set_error_handler_io(struct Map_info *, struct Map_info *);
 
 /* Read/write lines, nodes, areas */
 /* Level 1 and 2 */
