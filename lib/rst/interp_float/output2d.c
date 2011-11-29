@@ -59,7 +59,7 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
  */
 {
     FCELL *cell1;
-    int cf1 = 0, cf2 = 0, cf3 = 0, cf4 = 0, cf5 = 0, cf6 = 0;
+    int cf1 = -1, cf2 = -1, cf3 = -1, cf4 = -1, cf5 = -1, cf6 = -1;
     int nrows, ncols;
     int i, ii;
     double zstep;
@@ -84,22 +84,22 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
      * G_set_embedded_null_value_mode(1);
      */
     if (params->elev)
-	cf1 = Rast_open_fp_new(params->elev);
+	cf1 = Rast_open_new(params->elev, FCELL_TYPE);
 
     if (params->slope)
-	cf2 = Rast_open_fp_new(params->slope);
+	cf2 = Rast_open_new(params->slope, FCELL_TYPE);
 
     if (params->aspect)
-	cf3 = Rast_open_fp_new(params->aspect);
+	cf3 = Rast_open_new(params->aspect, FCELL_TYPE);
 
     if (params->pcurv)
-	cf4 = Rast_open_fp_new(params->pcurv);
+	cf4 = Rast_open_new(params->pcurv, FCELL_TYPE);
 
     if (params->tcurv)
-	cf5 = Rast_open_fp_new(params->tcurv);
+	cf5 = Rast_open_new(params->tcurv, FCELL_TYPE);
 
     if (params->mcurv)
-	cf6 = Rast_open_fp_new(params->mcurv);
+	cf6 = Rast_open_new(params->mcurv, FCELL_TYPE);
 
     nrows = cellhd->rows;
     if (nrows != params->nsizr) {
@@ -186,17 +186,17 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
 	}
     }
 
-    if (cf1)
+    if (cf1 >= 0)
 	Rast_close(cf1);
-    if (cf2)
+    if (cf2 >= 0)
 	Rast_close(cf2);
-    if (cf3)
+    if (cf3 >= 0)
 	Rast_close(cf3);
-    if (cf4)
+    if (cf4 >= 0)
 	Rast_close(cf4);
-    if (cf5)
+    if (cf5 >= 0)
 	Rast_close(cf5);
-    if (cf6)
+    if (cf6 >= 0)
 	Rast_close(cf6);
 
 
