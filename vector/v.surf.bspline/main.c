@@ -315,7 +315,7 @@ int main(int argc, char *argv[])
 			   "Try with a raster output or other driver."), dvr);
 
 	Vect_check_input_output_name(in_opt->answer, out_opt->answer,
-				     GV_FATAL_EXIT);
+				     G_FATAL_EXIT);
 	grid = FALSE;
 
 	if (0 > Vect_open_new(&Out, out_opt->answer, WITH_Z))

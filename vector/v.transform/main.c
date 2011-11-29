@@ -195,7 +195,7 @@ int main(int argc, char *argv[])
     strcpy(Current.name, vold->answer);
     strcpy(Trans.name, vnew->answer);
 
-    Vect_check_input_output_name(vold->answer, vnew->answer, GV_FATAL_EXIT);
+    Vect_check_input_output_name(vold->answer, vnew->answer, G_FATAL_EXIT);
 
     if (!table->answer && columns->answer) {
 	G_fatal_error(_("Table name is not defined. Please use '%s' parameter."),

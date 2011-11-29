@@ -135,10 +135,10 @@ int main(int argc, char *argv[])
     otype = Vect_option_to_types(opt.type);
 
     Vect_check_input_output_name(opt.in->answer, opt.out->answer,
-				 GV_FATAL_EXIT);
+				 G_FATAL_EXIT);
     if (opt.err->answer) {
 	Vect_check_input_output_name(opt.in->answer, opt.err->answer,
-				     GV_FATAL_EXIT);
+				     G_FATAL_EXIT);
     }
 
     atools = 20;

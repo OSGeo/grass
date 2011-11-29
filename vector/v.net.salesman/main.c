@@ -188,7 +188,7 @@ int main(int argc, char **argv)
     else
 	geo = 0;
 
-    Vect_check_input_output_name(map->answer, output->answer, GV_FATAL_EXIT);
+    Vect_check_input_output_name(map->answer, output->answer, G_FATAL_EXIT);
 
     Vect_set_open_level(2);
     Vect_open_old(&Map, map->answer, "");

@@ -299,15 +299,15 @@ int main(int argc, char *argv[])
     dyy_name = parm.dyy->answer;
     dxy_name = parm.dxy->answer;
 
-    G_check_input_output_name(elev_name, slope_name, GR_FATAL_EXIT);
-    G_check_input_output_name(elev_name, aspect_name, GR_FATAL_EXIT);
-    G_check_input_output_name(elev_name, pcurv_name, GR_FATAL_EXIT);
-    G_check_input_output_name(elev_name, tcurv_name, GR_FATAL_EXIT);
-    G_check_input_output_name(elev_name, dx_name, GR_FATAL_EXIT);
-    G_check_input_output_name(elev_name, dy_name, GR_FATAL_EXIT);
-    G_check_input_output_name(elev_name, dxx_name, GR_FATAL_EXIT);
-    G_check_input_output_name(elev_name, dyy_name, GR_FATAL_EXIT);
-    G_check_input_output_name(elev_name, dxy_name, GR_FATAL_EXIT);
+    G_check_input_output_name(elev_name, slope_name, G_FATAL_EXIT);
+    G_check_input_output_name(elev_name, aspect_name, G_FATAL_EXIT);
+    G_check_input_output_name(elev_name, pcurv_name, G_FATAL_EXIT);
+    G_check_input_output_name(elev_name, tcurv_name, G_FATAL_EXIT);
+    G_check_input_output_name(elev_name, dx_name, G_FATAL_EXIT);
+    G_check_input_output_name(elev_name, dy_name, G_FATAL_EXIT);
+    G_check_input_output_name(elev_name, dxx_name, G_FATAL_EXIT);
+    G_check_input_output_name(elev_name, dyy_name, G_FATAL_EXIT);
+    G_check_input_output_name(elev_name, dxy_name, G_FATAL_EXIT);
 
     if (sscanf(parm.zfactor->answer, "%lf", &zfactor) != 1 || zfactor <= 0.0) {
 	G_fatal_error(_("%s=%s - must be a positive number"),

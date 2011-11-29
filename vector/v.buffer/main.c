@@ -298,6 +298,13 @@ int main(int argc, char *argv[])
 		    "option or clean manually with v.clean tool=break; "
 		    "v.category step=0; v.extract -d type=area"));
 
+    Vect_set_error_handler_io(&In, &Out);
+    
+    Vect_check_input_output_name(in_opt->answer, out_opt->answer, G_FATAL_EXIT);
+
+    Vect_set_open_level(2); /* topology required */
+    Vect_open_old2(&In, in_opt->answer, "", field_opt->answer);
+
     if (field_opt->answer)
 	field = Vect_get_field_number(&In, field_opt->answer);
     else
@@ -335,23 +342,12 @@ int main(int argc, char *argv[])
 	G_verbose_message(_("The tolerance in map units = %g"), unit_tolerance);
     }
 
-    Vect_check_input_output_name(in_opt->answer, out_opt->answer,
-				 GV_FATAL_EXIT);
-
+    Vect_open_new(&Out, out_opt->answer, WITHOUT_Z);
+    
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
     BCats = Vect_new_cats_struct();
-
-    Vect_set_open_level(2); /* topology required */
-
-    if (1 > Vect_open_old2(&In, in_opt->answer, "", field_opt->answer))
-	G_fatal_error(_("Unable to open vector map <%s>"), in_opt->answer);
-
-    if (0 > Vect_open_new(&Out, out_opt->answer, WITHOUT_Z)) {
-	Vect_close(&In);
-	G_fatal_error(_("Unable to create vector map <%s>"), out_opt->answer);
-    }
-
+    G_fatal_error("x");
     /* open tmp vector for buffers, needed for cleaning */
     sprintf(bufname, "%s_tmp_%d", out_opt->answer, getpid());
     if (0 > Vect_open_new(&Buf, bufname, 0)) {

@@ -171,7 +171,7 @@ int main(int argc, char *argv[])
 
     /* Checking vector names */
     Vect_check_input_output_name(in_opt->answer, out_opt->answer,
-				 GV_FATAL_EXIT);
+				 G_FATAL_EXIT);
 
     /* Open input vector */
     if ((mapset = G_find_vector2(in_opt->answer, "")) == NULL)

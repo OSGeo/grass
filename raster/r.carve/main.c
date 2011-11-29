@@ -114,10 +114,10 @@ int main(int argc, char **argv)
 	exit(EXIT_FAILURE);
 
     G_check_input_output_name(parm.inrast->answer, parm.outrast->answer,
-			      GR_FATAL_EXIT);
+			      G_FATAL_EXIT);
     if (parm.outvect->answer)
-	Vect_check_input_output_name(parm.invect->answer,
-				     parm.outvect->answer, GR_FATAL_EXIT);
+      Vect_check_input_output_name(parm.invect->answer, parm.outvect->answer,
+				   G_FATAL_EXIT);
 
     /* setup lat/lon projection and distance calculations */
     init_projection(&win, &parm.wrap);

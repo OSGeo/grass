@@ -80,7 +80,7 @@ int Vect_legal_filename(const char *s)
 
    \param input input name
    \param output output name
-   \param error error type GV_FATAL_EXIT, GV_FATAL_PRINT, GV_FATAL_RETURN
+   \param error error type G_FATAL_EXIT, G_FATAL_PRINT, G_FATAL_RETURN
 
    \return 0 OK
    \return 1 error
@@ -93,11 +93,11 @@ int Vect_check_input_output_name(const char *input, const char *output,
     char nm[GNAME_MAX], ms[GMAPSET_MAX];
 
     if (Vect_legal_filename(output) == -1) {
-	if (error == GV_FATAL_EXIT) {
+	if (error == G_FATAL_EXIT) {
 	    G_fatal_error(_("Output vector map name <%s> is not valid map name"),
 			  output);
 	}
-	else if (error == GV_FATAL_PRINT) {
+	else if (error == G_FATAL_PRINT) {
 	    G_warning(_("Output vector map name <%s> is not valid map name"),
 		      output);
 	    return 1;
@@ -117,10 +117,10 @@ int Vect_check_input_output_name(const char *input, const char *output,
 	mapset = G_find_vector2(input, "");
 
     if (mapset == NULL) {
-	if (error == GV_FATAL_EXIT) {
+	if (error == G_FATAL_EXIT) {
 	    G_fatal_error(_("Vector map <%s> not found"), input);
 	}
-	else if (error == GV_FATAL_PRINT) {
+	else if (error == G_FATAL_PRINT) {
 	    G_warning(_("Vector map <%s> not found"), input);
 	    return 1;
 	}
@@ -140,11 +140,11 @@ int Vect_check_input_output_name(const char *input, const char *output,
 	}
 
 	if (strcmp(in, output) == 0) {
-	    if (error == GV_FATAL_EXIT) {
+	    if (error == G_FATAL_EXIT) {
 		G_fatal_error(_("Output vector map <%s> is used as input"),
 			      output);
 	    }
-	    else if (error == GV_FATAL_PRINT) {
+	    else if (error == G_FATAL_PRINT) {
 		G_warning(_("Output vector map <%s> is used as input"),
 			  output);
 		return 1;

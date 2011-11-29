@@ -214,7 +214,7 @@ int main(int argc, char *argv[])
     
     /* check input/output vector maps */
     Vect_check_input_output_name(in_opt->answer, out_opt->answer,
-				 GV_FATAL_EXIT);
+				 G_FATAL_EXIT);
     
     Vect_set_open_level(2);
     Vect_open_old2(&In, in_opt->answer, "", layer_opt->answer);

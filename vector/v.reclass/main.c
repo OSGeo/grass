@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
     }
 
     Vect_check_input_output_name(in_opt->answer, out_opt->answer,
-				 GV_FATAL_EXIT);
+				 G_FATAL_EXIT);
 
     Vect_set_open_level(2);
     Vect_open_old2(&In, in_opt->answer, "", field_opt->answer);

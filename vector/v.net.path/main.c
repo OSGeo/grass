@@ -124,7 +124,7 @@ int main(int argc, char **argv)
 	geo = 0;
 
     Vect_check_input_output_name(input_opt->answer, output_opt->answer,
-				 GV_FATAL_EXIT);
+				 G_FATAL_EXIT);
 
     Vect_set_open_level(2);
     Vect_open_old(&In, input_opt->answer, "");

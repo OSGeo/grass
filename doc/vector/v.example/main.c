@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
        3) if input was found in current mapset, check if input != output.
        lib/vector/Vlib/legal_vname.c
      */
-    Vect_check_input_output_name(old->answer, new->answer, GV_FATAL_EXIT);
+    Vect_check_input_output_name(old->answer, new->answer, G_FATAL_EXIT);
 
     if ((mapset = (char *)G_find_vector2(old->answer, "")) == NULL)
 	G_fatal_error(_("Vector map <%s> not found"), old->answer);

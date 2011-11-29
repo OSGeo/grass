@@ -134,7 +134,7 @@ int main(int argc, char *argv[])
 	char tmpbuf[128];
 
 	sprintf(tmpbuf, "%s.%d", opt_out->answer, i + 1);
-	G_check_input_output_name(opt_in->answers[i], tmpbuf, GR_FATAL_EXIT);
+	G_check_input_output_name(opt_in->answers[i], tmpbuf, G_FATAL_EXIT);
 
 	inp_fd[i] = Rast_open_old(opt_in->answers[i], "");
     }

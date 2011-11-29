@@ -110,7 +110,7 @@ int main(int argc, char *argv[])
     i = 0;
     while (old->answers[i]) {
 	in_name = old->answers[i++];
-	Vect_check_input_output_name(in_name, new->answer, GV_FATAL_EXIT);
+	Vect_check_input_output_name(in_name, new->answer, G_FATAL_EXIT);
 
 	Vect_set_open_level(2);
 	Vect_open_old_head(&InMap, in_name, "");

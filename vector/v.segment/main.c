@@ -79,7 +79,7 @@ int main(int argc, char **argv)
     PlPoints = Vect_new_line_struct();
 
     Vect_check_input_output_name(in_opt->answer, out_opt->answer,
-				 GV_FATAL_EXIT);
+				 G_FATAL_EXIT);
 
     if (strcmp(file_opt->answer, "-")) {
 	/* open input file */

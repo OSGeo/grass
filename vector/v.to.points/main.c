@@ -237,7 +237,7 @@ int main(int argc, char **argv)
 	vertex_type = 0;
 
     Vect_check_input_output_name(in_opt->answer, out_opt->answer,
-				 GV_FATAL_EXIT);
+				 G_FATAL_EXIT);
 
     /* Open input lines */
     Vect_set_open_level(2);

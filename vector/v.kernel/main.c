@@ -251,9 +251,9 @@ int main(int argc, char **argv)
 
     if (net_opt->answer) {
 	Vect_check_input_output_name(in_opt->answer, out_opt->answer,
-				     GV_FATAL_EXIT);
+				     G_FATAL_EXIT);
 	Vect_check_input_output_name(net_opt->answer, out_opt->answer,
-				     GV_FATAL_EXIT);
+				     G_FATAL_EXIT);
     }
 
     G_get_window(&window);

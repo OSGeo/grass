@@ -74,7 +74,7 @@ int main(int argc, char **argv)
 	if (act != TOOL_ARCS) {
 	    /* check input-output */
 	    Vect_check_input_output_name(opt.input->answer,
-					 opt.output->answer, GV_FATAL_EXIT);
+					 opt.output->answer, G_FATAL_EXIT);
 	}
 
 	if (act == TOOL_CONNECT || act == TOOL_ARCS) {

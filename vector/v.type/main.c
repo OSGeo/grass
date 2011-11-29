@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    Vect_check_input_output_name(in_opt->answer, out_opt->answer, GV_FATAL_EXIT);
+    Vect_check_input_output_name(in_opt->answer, out_opt->answer, G_FATAL_EXIT);
 			    
     switch (from_opt->answer[0]) {
     case 'p':
@@ -115,7 +115,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Incompatible types"));
 
     Vect_check_input_output_name(in_opt->answer, out_opt->answer,
-				 GV_FATAL_EXIT);
+				 G_FATAL_EXIT);
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
