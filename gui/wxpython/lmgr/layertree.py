@@ -342,7 +342,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             if layer and layer.GetType() == 'vector':
                 if 'info' not in self.GetPyData(self.layer_selected)[0]:
                     info = grass.parse_command('v.info',
-                                               flags = 'g',
+                                               flags = 'e',
                                                map = layer.GetName())
                     self.GetPyData(self.layer_selected)[0]['info'] = info
                 info = self.GetPyData(self.layer_selected)[0]['info']
