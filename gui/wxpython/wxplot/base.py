@@ -174,8 +174,8 @@ class BasePlotFrame(wx.Frame):
             if ret['units'] in ('(none)', '"none"', '', None):
                 rdict[r]['units'] = ''
             else:
-                self.raster[r]['units'] = ret['units']
-
+                rdict[r]['units'] = ret['units']
+            
             rdict[r]['plegend'] = r.split('@')[0]
             rdict[r]['datalist'] = [] # list of cell value,frequency pairs for plotting histogram
             rdict[r]['pline'] = None
@@ -190,8 +190,7 @@ class BasePlotFrame(wx.Frame):
                 b = randint(0, 255)
                 g = randint(0, 255)
                 rdict[r]['pcolor'] = ((r,g,b,255))
- 
-            
+        
         return rdict
             
     def InitRasterPairs(self, rasterList, plottype):
