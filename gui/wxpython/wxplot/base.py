@@ -217,12 +217,12 @@ class BasePlotFrame(wx.Frame):
             rdict[rpair][0] = {}
             rdict[rpair][1] = {}
 
-            if ret0['units'] == '(none)' or ret['units'] == '' or ret['units'] == None:
+            if ret0['units'] in ('(none)', '"none"', '', None):
                 rdict[rpair][0]['units'] = ''
             else:
                 self.raster[rpair][0]['units'] = ret0['units']
 
-            if ret1['units'] == '(none)' or ret['units'] == '' or ret['units'] == None:
+            if ret1['units'] in ('(none)', '"none"', '', None):
                 rdict[rpair][1]['units'] = ''
             else:
                 self.raster[rpair][1]['units'] = ret1['units']
