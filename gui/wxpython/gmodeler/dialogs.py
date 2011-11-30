@@ -31,6 +31,7 @@ from core.gcmd            import GError, EncodeString
 from gui_core.dialogs     import ElementDialog, MapLayersDialog
 from gui_core.ghelp       import SearchModuleWindow
 from gui_core.prompt      import GPromptSTC
+from gui_core.forms       import CmdPanel
 
 from grass.script import task as gtask
 
@@ -430,7 +431,7 @@ class ModelParamDialog(wx.Dialog):
         task.flags  = params['flags']
         task.params = params['params']
         
-        panel = menuform.cmdPanel(parent = self, id = wx.ID_ANY, task = task)
+        panel = CmdPanel(parent = self, id = wx.ID_ANY, task = task)
         self.tasks.append(task)
         
         return panel

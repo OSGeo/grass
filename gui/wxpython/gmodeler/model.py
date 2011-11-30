@@ -25,6 +25,7 @@ import os
 import getpass
 import copy
 import re
+import mimetypes
 try:
     import xml.etree.ElementTree as etree
 except ImportError:
@@ -33,9 +34,13 @@ except ImportError:
 import wx
 from wx.lib import ogl
 
-from core.globalvar   import ETCWXDIR
-from core.gcmd        import GMessage, GException, GError, RunCommand
-from gmodeler.dialogs import ModelParamDialog
+from core.globalvar      import ETCWXDIR
+from core.gcmd           import GMessage, GException, GError, RunCommand
+from gmodeler.dialogs    import ModelParamDialog
+from gmodeler.model_file import ProcessModelFile
+from core.utils          import CmdToTuple
+from core.settings       import UserSettings
+from gui_core.forms      import GUI
 
 from grass.script import core as grass
 from grass.script import task as gtask
@@ -358,7 +363,7 @@ class Model(object):
         for action in self.GetItems(objType = ModelAction):
             cmd = action.GetLog(string = False)
             
-            task = menuform.GUI(show = None).ParseCommand(cmd = cmd)
+            task = GUI(show = None).ParseCommand(cmd = cmd)
             errList += map(lambda x: cmd[0] + ': ' + x, task.get_cmd_error())
             
             # check also variables
@@ -581,9 +586,10 @@ class Model(object):
                 condVar, condText = map(lambda x: x.strip(), re.split('\s*in\s*', cond))
                 pattern = re.compile('%' + condVar)
                 ### for vars()[condVar] in eval(condText): ?
+                vlist = list()
                 if condText[0] == '`' and condText[-1] == '`':
                     # run command
-                    cmd, dcmd = utils.CmdToTuple(condText[1:-1].split(' '))
+                    cmd, dcmd = CmdToTuple(condText[1:-1].split(' '))
                     ret = RunCommand(cmd,
                                      read = True,
                                      **dcmd)

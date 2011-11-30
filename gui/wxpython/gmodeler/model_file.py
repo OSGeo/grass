@@ -20,6 +20,7 @@ import os
 import time
 import re
 
+from core           import utils
 from gui_core.forms import GUI
 from core.gcmd      import GWarning, EncodeString
 
