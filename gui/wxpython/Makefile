@@ -10,12 +10,12 @@ include $(MODULE_TOPDIR)/include/Make/Python.make
 ETCDIR = $(ETC)/gui/wxpython
 
 SRCFILES := $(wildcard compat/* icons/*.* scripts/* xml/*) \
-	$(wildcard core/* dbm/* gcp/* gmodeler/* gui_core/* lmgr/* location_wizard/* \
+	$(wildcard core/* dbmgr/* gcp/* gmodeler/* gui_core/* lmgr/* location_wizard/* \
 	mapdisp/* modules/* nviz/* psmap/* vdigit/* wxplot/* ) \
 	gis_set.py gis_set_error.py wxgui.py README
 DSTFILES := $(patsubst %,$(ETCDIR)/%,$(SRCFILES)) $(patsubst %.py,$(ETCDIR)/%.pyc,$(filter %.py,$(SRCFILES)))
 
-PYDSTDIRS := $(patsubst %,$(ETCDIR)/%,core dbm gcp gmodeler gui_core lmgr location_wizard \
+PYDSTDIRS := $(patsubst %,$(ETCDIR)/%,core dbmgr gcp gmodeler gui_core lmgr location_wizard \
 	mapdisp modules nviz psmap vdigit wxplot)
 DSTDIRS := $(patsubst %,$(ETCDIR)/%,compat icons scripts xml)
 

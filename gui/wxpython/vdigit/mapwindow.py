@@ -16,7 +16,7 @@ This program is free software under the GNU General Public License
 
 import wx
 
-from dbm.dialogs    import DisplayAttributesDialog
+from dbmgr.dialogs  import DisplayAttributesDialog
 from core.gcmd      import RunCommand, GMessage, GError
 from core.debug     import Debug
 from mapdisp.mapwindow import BufferedWindow
