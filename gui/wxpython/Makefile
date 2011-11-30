@@ -19,10 +19,8 @@ PYDSTDIRS := $(patsubst %,$(ETCDIR)/%,core dbmgr gcp gmodeler gui_core lmgr loca
 	mapdisp modules nviz psmap vdigit wxplot)
 DSTDIRS := $(patsubst %,$(ETCDIR)/%,compat icons scripts xml)
 
-ifneq ($(strip $(WXVERSION)),)
 default: $(DSTFILES) menustrings.py
 	$(MAKE) parsubdirs
-endif
 
 $(ETCDIR)/%: % | $(PYDSTDIRS) $(DSTDIRS)
 	$(INSTALL_DATA) $< $@
