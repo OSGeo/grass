@@ -55,7 +55,7 @@ from lmgr.menudata         import ManagerData
 from gui_core.widgets      import GNotebook
 from modules.histogram     import HistogramFrame
 from modules.mcalc_builder import MapCalcFrame
-from dbm.manager           import AttributeManager
+from dbmgr.manager         import AttributeManager
 from core.workspace        import ProcessWorkspaceFile, ProcessGrcFile, WriteWorkspaceFile
 from gui_core.goutput      import GMConsole
 from gui_core.dialogs      import GdalOutputDialog, DxfImportDialog, GdalImportDialog, MapLayersDialog
