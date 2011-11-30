@@ -167,11 +167,11 @@ class BasePlotFrame(wx.Frame):
             except:
                 continue
                 # if r.info cannot parse map, skip it
-                
+               
             self.raster[r] = UserSettings.Get(group = plottype, key = 'raster') # some default settings
             rdict[r] = {} # initialize sub-dictionaries for each raster in the list
-
-            if ret['units'] == '(none)' or ret['units'] == '' or ret['units'] == None:
+            
+            if ret['units'] in ('(none)', '"none"', '', None):
                 rdict[r]['units'] = ''
             else:
                 self.raster[r]['units'] = ret['units']
