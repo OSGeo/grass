@@ -26,6 +26,7 @@ from wxplot.base       import BasePlotFrame
 from gui_core.toolbars import BaseToolbar
 from icons.icon        import Icons
 from wxplot.dialogs    import ScatterRasterDialog, PlotStatsFrame
+from core.gcmd         import RunCommand, GException, GError
 
 class ScatterFrame(BasePlotFrame):
     """!Mainframe for displaying bivariate scatter plot of two raster maps. Uses wx.lib.plot.
@@ -163,14 +164,14 @@ class ScatterFrame(BasePlotFrame):
             freqflag = 'n'
                 
         try:
-            ret = gcmd.RunCommand("r.stats",
-                                  parent = self,
-                                  input = '%s,%s' % rpair,
-                                  flags = freqflag,
-                                  nsteps = self.bins,
-                                  fs = ',',
-                                  quiet = True,
-                                  read = True)
+            ret = RunCommand("r.stats",
+                             parent = self,
+                             input = '%s,%s' % rpair,
+                             flags = freqflag,
+                             nsteps = self.bins,
+                             fs = ',',
+                             quiet = True,
+                             read = True)
             
             if not ret:
                 return datalist
@@ -188,9 +189,9 @@ class ScatterFrame(BasePlotFrame):
                 datalist.append((rast1,rast2))
 
             return datalist
-        except gcmd.GException, e:
-            gcmd.GError(parent = self,
-                        message = e.value)
+        except GException, e:
+            GError(parent = self,
+                   message = e.value)
             return None
         
     def CreatePlotList(self):

@@ -26,6 +26,7 @@ from gui_core.toolbars import BaseToolbar
 from wxplot.base       import BasePlotFrame
 from icons.icon        import Icons
 from wxplot.dialogs    import HistRasterDialog, PlotStatsFrame
+from core.gcmd         import RunCommand, GException, GError
 
 class Histogram2Frame(BasePlotFrame):
     def __init__(self, parent, id, pos, style, size, rasterList = []):
@@ -141,14 +142,14 @@ class Histogram2Frame(BasePlotFrame):
         if self.histtype == 'area': freqflag = 'an'
                 
         try:
-            ret = gcmd.RunCommand("r.stats",
-                                  parent = self,
-                                  input = raster,
-                                  flags = freqflag,
-                                  nsteps = self.bins,
-                                  fs = ',',
-                                  quiet = True,
-                                  read = True)
+            ret = RunCommand("r.stats",
+                             parent = self,
+                             input = raster,
+                             flags = freqflag,
+                             nsteps = self.bins,
+                             fs = ',',
+                             quiet = True,
+                             read = True)
             
             if not ret:
                 return datalist
@@ -164,9 +165,9 @@ class Histogram2Frame(BasePlotFrame):
                 datalist.append((cellval,histval))
 
             return datalist
-        except gcmd.GException, e:
-            gcmd.GError(parent = self,
-                        message = e.value)
+        except GException, e:
+            GError(parent = self,
+                   message = e.value)
             return None
         
     def CreatePlotList(self):
