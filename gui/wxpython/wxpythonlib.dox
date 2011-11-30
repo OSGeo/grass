@@ -28,7 +28,7 @@ vector digitizer or georectification tool are also available.
  - \ref lmgr
  - \ref mapdisp
  - \ref wscreen
- - \ref dbm
+ - \ref dbmgr
  - \ref gpc
  - \ref gmodeler
  - \ref vdigit
@@ -228,21 +228,21 @@ available in GRASS 5 and GRASS 6.
  - gis_set::StartUp
  - gis_set::GListBox
 
-\subsection dbm Database Manager
+\subsection dbmgr Database Manager
 
-- dbm::dialogs
+- dbmgr::dialogs
  - dialogs::DisplayAttributesDialog
  - dialogs::ModifyTableRecord
-- dbm::manager
+- dbmgr::manager
  - manager::Log
  - manager::VirtualAttributeList
  - manager::AttributeManager
  - manager::TableListCtrl
  - manager::LayerListCtrl
  - manager::LayerBook
-- dbm::sqlbuilder
+- dbmgr::sqlbuilder
  - sqlbuilder::SQLFrame
-- dbm::vinfo
+- dbmgr::vinfo
  - vinfo::VectorDBInfo
 
 \subsection gpc Georectifier

@@ -1,5 +1,5 @@
 """
-@package dbm.vinfo
+@package dbmgr.vinfo
 
 @brief Support classes for Database Manager
 

@@ -1,5 +1,5 @@
 """!
-@package dbm.manager
+@package dbmgr.manager
 
 @brief GRASS Attribute Table Manager
 
@@ -44,13 +44,13 @@ import wx.lib.flatnotebook    as FN
 
 import grass.script as grass
 
-from dbm.sqlbuilder   import SQLFrame
+from dbmgr.sqlbuilder import SQLFrame
 from core.gcmd        import RunCommand, GException, GError
 from core.utils       import ListOfCatsToRange
 from gui_core.dialogs import CreateNewVector
-from dbm.vinfo        import VectorDBInfo, unicodeValue, createDbInfoDesc
+from dbmgr.vinfo      import VectorDBInfo, unicodeValue, createDbInfoDesc
 from core.debug       import Debug
-from dbm.dialogs      import ModifyTableRecord
+from dbmgr.dialogs    import ModifyTableRecord
 from core.settings    import UserSettings
 from gui_core.widgets import GNotebook
 

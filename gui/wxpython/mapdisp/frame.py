@@ -43,7 +43,7 @@ from vdigit.toolbars    import VDigitToolbar
 from mapdisp.toolbars   import MapToolbar
 from mapdisp.gprint     import PrintOptions
 from core.gcmd          import GError, GMessage, RunCommand
-from dbm.dialogs        import DisplayAttributesDialog
+from dbmgr.dialogs      import DisplayAttributesDialog
 from core.utils         import ListOfCatsToRange, GetLayerNameFromCmd
 from gui_core.dialogs   import GetImageHandlers, ImageSizeDialog, DecorationDialog, TextLayerDialog
 from core.debug         import Debug

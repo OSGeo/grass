@@ -1,5 +1,5 @@
 """!
-@package dbm.sqlbuilder
+@package dbmgr.sqlbuilder
 
 @brief GRASS SQL Builder
 
@@ -29,8 +29,8 @@ import wx
 
 import grass.script as grass
 
-from core.gcmd import RunCommand, GError
-from dbm.vinfo import createDbInfoDesc, VectorDBInfo
+from core.gcmd   import RunCommand, GError
+from dbmgr.vinfo import createDbInfoDesc, VectorDBInfo
 
 class SQLFrame(wx.Frame):
     """!SQL Frame class"""

@@ -1,5 +1,5 @@
 """!
-@package dbm.dialogs
+@package dbmgr.dialogs
 
 @brief DBM-related dialogs
 
@@ -24,7 +24,7 @@ import wx.lib.scrolledpanel as scrolled
 from core.gcmd     import RunCommand
 from core.debug    import Debug
 from core.settings import UserSettings
-from dbm.vinfo     import VectorDBInfo
+from dbmgr.vinfo   import VectorDBInfo
 
 class DisplayAttributesDialog(wx.Dialog):
     def __init__(self, parent, map,

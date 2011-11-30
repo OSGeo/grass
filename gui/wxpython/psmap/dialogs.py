@@ -73,7 +73,7 @@ except ImportError:
 import grass.script as grass
 
 from core             import globalvar
-from dbm.vinfo        import VectorDBInfo
+from dbmgr.vinfo      import VectorDBInfo
 from core.utils       import CmdToTuple, GetCmdString
 from gui_core.gselect import Select
 from core.gcmd        import RunCommand, GError, GMessage, GWarning
