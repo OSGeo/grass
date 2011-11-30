@@ -48,6 +48,7 @@ import textwrap
 import os
 import time
 import copy
+import locale
 from threading import Thread
 import Queue
 
