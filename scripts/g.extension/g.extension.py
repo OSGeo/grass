@@ -94,6 +94,8 @@ import re
 import atexit
 import shutil
 import glob
+import zipfile
+import tempfile
 
 from urllib2 import urlopen, HTTPError
 
@@ -337,27 +339,32 @@ def cleanup():
 def install_extension_win():
     ### TODO: do not use hardcoded url
     version = grass.version()['version'].split('.')
-    url = "http://wingrass.fsv.cvut.cz/grass%s%s/addons" % (version[0], version[1])
-    success = False
+    url = "http://wingrass.fsv.cvut.cz/grass%s%s/addons/" % (version[0], version[1])
     grass.message(_("Downloading precompiled GRASS Addons <%s>...") % options['extension'])
-    for comp, ext in [(('bin', ), 'exe'),
-                      (('docs', 'html'), 'html'),
-                      (('man', 'man1'), None),
-                      (('scripts', ), 'py')]:
-        name = options['extension']
-        if ext:
-            name += '.' + ext
-        try:
-            f = urlopen(url + '/' + '/'.join(comp) + '/' + name)
-            fo = open(os.path.join(options['prefix'], os.path.sep.join(comp), name), 'wb')
-            fo.write(f.read())
-            fo.close()
-            if comp[0] in ('bin', 'scripts'):
-                success = True
-        except HTTPError:
-            pass
-
-    if not success:
+    try:
+        f = urlopen(url + options['extension'] + '.zip')
+        
+        # create addons dir if not exists
+        if not os.path.exists(options['prefix']):
+            os.mkdir(options['prefix'])
+        
+        # download data
+        fo = tempfile.TemporaryFile()
+        fo.write(f.read())
+        zfobj = zipfile.ZipFile(fo)
+        for name in zfobj.namelist():
+            if name.endswith('/'):
+                d = os.path.join(options['prefix'], name)
+                if not os.path.exists(d):
+                    os.mkdir(d)
+            else:
+                outfile = open(os.path.join(options['prefix'], name), 'wb')
+                outfile.write(zfobj.read(name))
+                outfile.close()
+        
+        fo.close()
+        grass.try_remove(fo)
+    except HTTPError:
         grass.fatal(_("GRASS Addons <%s> not found") % options['extension'])
     
 def install_extension():
