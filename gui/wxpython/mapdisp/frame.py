@@ -8,10 +8,6 @@ Can be used either from Layer Manager or as d.mon backend.
 
 Classes:
  - mapdisp::MapFrame
- - mapdisp::MapApp
-
-Usage:
-python mapdisp.py monitor-identifier /path/to/map/file /path/to/command/file /path/to/env/file
 
 (C) 2006-2011 by the GRASS Development Team
 
@@ -61,14 +57,6 @@ from nviz.mapwindow     import GLWindow
 from mapdisp import statusbar as sb
 
 from grass.script import core as grass
-
-# for standalone app
-monFile = { 'cmd' : None,
-            'map' : None,
-            'env' : None,
-            }
-monName = None
-monSize = list(globalvar.MAP_WINDOW_SIZE)
 
 haveCtypes = False
 
@@ -155,7 +143,7 @@ class MapFrame(MapFrameBase):
         #
         # initialize region values
         #
-        self._initMap(map = self.Map) 
+        self._initMap(Map = self.Map) 
 
         #
         # Bind various events
@@ -1405,101 +1393,3 @@ class MapFrame(MapFrameBase):
     def GetMapToolbar(self):
         """!Returns toolbar with zooming tools"""
         return self.toolbars['map']
-    
-class MapApp(wx.App):
-    def OnInit(self):
-        wx.InitAllImageHandlers()
-        if __name__ == "__main__":
-            self.cmdTimeStamp = os.path.getmtime(monFile['cmd'])
-            Map = Map(cmdfile = monFile['cmd'], mapfile = monFile['map'],
-                      envfile = monFile['env'], monitor = monName)
-        else:
-            Map = None
-        
-        self.mapFrm = MapFrame(parent = None, id = wx.ID_ANY, Map = Map,
-                               size = monSize)
-        # self.SetTopWindow(Map)
-        self.mapFrm.Show()
-        
-        if __name__ == "__main__":
-            self.timer = wx.PyTimer(self.watcher)
-            #check each 0.5s
-            global mtime
-            mtime = 500
-            self.timer.Start(mtime)
-            
-        return True
-    
-    def OnExit(self):
-        if __name__ == "__main__":
-            # stop the timer
-            # self.timer.Stop()
-            # terminate thread
-            for f in monFile.itervalues():
-                grass.try_remove(f)
-            
-    def watcher(self):
-        """!Redraw, if new layer appears (check's timestamp of
-        cmdfile)
-        """
-        # todo: events
-        if os.path.getmtime(monFile['cmd']) > self.cmdTimeStamp:
-            self.timer.Stop()
-            self.cmdTimeStamp = os.path.getmtime(monFile['cmd'])
-            self.mapFrm.OnDraw(None)
-            self.mapFrm.GetMap().GetLayersFromCmdFile()
-            self.timer.Start(mtime)
-        
-if __name__ == "__main__":
-    # set command variable
-    if len(sys.argv) < 5:
-        print __doc__
-        sys.exit(1)
-    
-    monName = sys.argv[1]
-    monFile = { 'map' : sys.argv[2],
-                'cmd' : sys.argv[3],
-                'env' : sys.argv[4],
-                }
-    if len(sys.argv) >= 6:
-        try:
-            monSize[0] = int(sys.argv[5])
-        except ValueError:
-            pass
-    
-    if len(sys.argv) == 7:
-        try:
-            monSize[1] = int(sys.argv[6])
-        except ValueError:
-            pass
-    
-    import gettext
-    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
-    
-    grass.verbose(_("Starting map display <%s>...") % (monName))
-
-    RunCommand('g.gisenv',
-               set = 'MONITOR_%s_PID=%d' % (monName, os.getpid()))
-    
-    gm_map = MapApp(0)
-    # set title
-    gm_map.mapFrm.SetTitle(_("GRASS GIS Map Display: " +
-                             monName + 
-                             " - Location: " + grass.gisenv()["LOCATION_NAME"]))
-    
-    gm_map.MainLoop()
-    
-    grass.verbose(_("Stopping map display <%s>...") % (monName))
-
-    # clean up GRASS env variables
-    env = grass.gisenv()
-    env_name = 'MONITOR_%s' % monName
-    for key in env.keys():
-        if key.find(env_name) == 0:
-            RunCommand('g.gisenv',
-                       set = '%s=' % key)
-        if key == 'MONITOR' and env[key] == monName:
-            RunCommand('g.gisenv',
-                       set = '%s=' % key)
-    
-    sys.exit(0)

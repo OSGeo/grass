@@ -127,8 +127,8 @@ class MapFrame(MapFrameBase):
         #
         # initialize region values
         #
-        self._initMap(map = self.SrcMap) 
-        self._initMap(map = self.TgtMap) 
+        self._initMap(Map = self.SrcMap) 
+        self._initMap(Map = self.TgtMap) 
 
         #
         # Bind various events

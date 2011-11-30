@@ -76,7 +76,7 @@ class MapFrameBase(wx.Frame):
         #
         self._mgr = wx.aui.AuiManager(self)
         
-    def _initMap(self, map):
+    def _initMap(self, Map):
         """!Initialize map display, set dimensions and map region
         """
         if not grass.find_program('g.region', ['--help']):
@@ -86,8 +86,8 @@ class MapFrameBase(wx.Frame):
         self.width, self.height = self.GetClientSize()
         
         Debug.msg(2, "MapFrame._initMap():")
-        map.ChangeMapSize(self.GetClientSize())
-        map.region = map.GetRegion() # g.region -upgc
+        Map.ChangeMapSize(self.GetClientSize())
+        Map.region = Map.GetRegion() # g.region -upgc
         # self.Map.SetRegion() # adjust region to match display window
         
     def SetProperty(self, name, value):
