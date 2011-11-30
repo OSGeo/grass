@@ -363,7 +363,6 @@ def install_extension_win():
                 outfile.close()
         
         fo.close()
-        grass.try_remove(fo)
     except HTTPError:
         grass.fatal(_("GRASS Addons <%s> not found") % options['extension'])
     
