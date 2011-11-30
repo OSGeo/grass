@@ -38,6 +38,7 @@ from wxplot.base       import BasePlotFrame
 from gui_core.toolbars import BaseToolbar
 from icons.icon        import Icons
 from wxplot.dialogs    import ProfileRasterDialog, PlotStatsFrame
+from core.gcmd         import RunCommand
 
 class ProfileFrame(BasePlotFrame):
     """!Mainframe for displaying profile of one or more raster maps. Uses wx.lib.plot.
@@ -49,7 +50,7 @@ class ProfileFrame(BasePlotFrame):
         self.toolbar = ProfileToolbar(parent = self)
         self.SetToolBar(self.toolbar)
         self.SetLabel(_("GRASS Profile Analysis Tool"))
-
+        
         #
         # Init variables
         #
@@ -60,18 +61,17 @@ class ProfileFrame(BasePlotFrame):
         self.ppoints = ''               # segment endpoints data         
         self.transect_length = 0.0      # total transect length        
         self.ptitle = _('Profile of')   # title of window
-        self.raster = {}
-
-        self.colorList =  ["blue", "red", "green", "yellow", "magenta", "cyan", \
-                    "aqua", "black", "grey", "orange", "brown", "purple", "violet", \
-                    "indigo"]
-
+        self.colorList =  ["blue", "red", "green", "yellow", "magenta", "cyan",
+                           "aqua", "black", "grey", "orange", "brown", "purple", "violet",
+                           "indigo"]
+        
         if len(self.rasterList) > 0: # set raster name(s) from layer manager if a map is selected
-            self.InitRasterOpts(self.rasterList, self.plottype)
-            
+            self.raster = self.InitRasterOpts(self.rasterList, self.plottype)
+        else:
+            self.raster = {}
         
         self._initOpts()
-
+        
         # determine units (axis labels)
         if self.parent.Map.projinfo['units'] != '':
             self.xlabel = _('Distance (%s)') % self.parent.Map.projinfo['units']
@@ -150,11 +150,11 @@ class ProfileFrame(BasePlotFrame):
             self.seglist = []
             for point in self.mapwin.polycoords:
                 # get value of raster cell at coordinate point
-                ret = gcmd.RunCommand('r.what',
-                                      parent = self,
-                                      read = True,
-                                      input = self.rasterList[0],
-                                      east_north = '%d,%d' % (point[0],point[1]))
+                ret = RunCommand('r.what',
+                                 parent = self,
+                                 read = True,
+                                 input = self.rasterList[0],
+                                 east_north = '%d,%d' % (point[0],point[1]))
                 
                 val = ret.splitlines()[0].split('|')[3]
                 if val == None or val == '*': continue
@@ -184,7 +184,7 @@ class ProfileFrame(BasePlotFrame):
         #    
         self.ylabel = ''
         i = 0
-
+        
         for r in self.raster.iterkeys():
             self.raster[r]['datalist'] = []
             datalist = self.CreateDatalist(r, self.coordstr)
@@ -220,14 +220,14 @@ class ProfileFrame(BasePlotFrame):
             transect_res = self.transect_length / 500
         else: transect_res = curr_res
         
-        ret = gcmd.RunCommand("r.profile",
-                              parent = self,
-                              input = raster,
-                              profile = coords,
-                              res = transect_res,
-                              null = "nan",
-                              quiet = True,
-                              read = True)
+        ret = RunCommand("r.profile",
+                         parent = self,
+                         input = raster,
+                         profile = coords,
+                         res = transect_res,
+                         null = "nan",
+                         quiet = True,
+                         read = True)
         
         if not ret:
             return []
