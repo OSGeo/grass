@@ -39,7 +39,7 @@ void start_wx(const char *name, const char *tempfile,
     
     G_debug(3, "       mapfile = %s", map_value);
 
-    sprintf(progname, "%s/etc/gui/wxpython/gui_modules/mapdisp.py", G_gisbase());
+    sprintf(progname, "%s/etc/gui/wxpython/mapdisp/main.py", G_gisbase());
     G_spawn_ex(getenv("GRASS_PYTHON"), progname, progname,
 	       name, map_value, cmd_value, env_value, width ? width : "", height ? height : "", SF_BACKGROUND, NULL);
 }
