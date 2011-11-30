@@ -96,6 +96,7 @@ import shutil
 import glob
 import zipfile
 import tempfile
+import shutil
 
 from urllib2 import urlopen, HTTPError
 
@@ -373,7 +374,66 @@ def install_extension():
     
     if grass.find_program(options['extension'], ['--help']):
         grass.warning(_("Extension <%s> already installed. Will be updated...") % options['extension'])
+
+    if sys.platform == "win32":
+        install_extension_win()
+    else:
+        install_extension_other()
     
+    # manual page: fix href
+    if os.getenv('GRASS_ADDON_PATH'):
+        html_man = os.path.join(os.getenv('GRASS_ADDON_PATH'), 'docs', 'html', options['extension'] + '.html')
+        if os.path.exists(html_man):
+            fd = open(html_man)
+            html_str = '\n'.join(fd.readlines())
+            fd.close()
+            for rep in ('grassdocs.css', 'grass_logo.png'):
+                patt = re.compile(rep, re.IGNORECASE)
+                html_str = patt.sub(os.path.join(gisbase, 'docs', 'html', rep),
+                                    html_str)
+                
+            patt = re.compile(r'(<a href=")(d|db|g|i|m|p|ps|r|r3|s|v|wxGUI)(\.)(.+)(.html">)', re.IGNORECASE)
+            while True:
+                m = patt.search(html_str)
+                if not m:
+                    break
+                html_str = patt.sub(m.group(1) + os.path.join(gisbase, 'docs', 'html',
+                                                              m.group(2) + m.group(3) + m.group(4)) + m.group(5),
+                                    html_str, count = 1)
+            fd = open(html_man, "w")
+            fd.write(html_str)
+            fd.close()
+
+    # symlink for binaries needed, see http://trac.osgeo.org/grass/changeset/49124
+    src = None
+    if sys.platform == 'win32':
+        bin_ext = '.exe'
+        sct_ext  = '.py'
+    else:
+        bin_ext = sct_ext = ''
+    
+    if os.path.exists(os.path.join(options['prefix'], 'bin',
+                                   options['extension'] + bin_ext)):
+        src = os.path.join(options['prefix'], 'bin', options['extension']) + bin_ext
+        dst = os.path.join(options['prefix'], options['extension']) + bin_ext
+    elif os.path.exists(os.path.join(options['prefix'], 'scripts',
+                                     options['extension'] + sct_ext)):
+        src = os.path.join(options['prefix'], 'scripts', options['extension']) + sct_ext
+        dst = os.path.join(options['prefix'], options['extension']) + sct_ext
+    
+    if src and not os.path.exists(dst):
+        if sys.platform == 'win32':
+            shutil.copyfile(src, dst)
+        else:
+            os.symlink(src, dst)
+    
+    if not os.environ.has_key('GRASS_ADDON_PATH') or \
+            not os.environ['GRASS_ADDON_PATH']:
+        grass.warning(_('This add-on module will not function until you set the '
+                        'GRASS_ADDON_PATH environment variable (see "g.manual variables")'))
+
+def install_extension_other():
+    gisbase = os.getenv('GISBASE')
     gui_list = list_wxgui_extensions(print_module = False)
 
     if options['extension'] not in gui_list:
@@ -617,9 +677,6 @@ def main():
             remove_tmpdir = False
     
     if options['operation'] == 'add':
-        if sys.platform == "win32":
-            install_extension_win()
-        else:
             install_extension()
     else: # remove
         remove_extension()
