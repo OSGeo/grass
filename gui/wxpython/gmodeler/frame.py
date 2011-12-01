@@ -53,6 +53,7 @@ from gui_core.menu        import Menu
 from gmodeler.menudata    import ModelerData
 from icons.icon           import Icons
 from gui_core.forms       import GUI
+from gmodeler.preferences import PreferencesDialog
 
 from gmodeler.model       import *
 from gmodeler.dialogs     import *

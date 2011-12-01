@@ -65,7 +65,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         rColor.SetName('GetColour')
         self.winId['modeler:disabled:color'] = rColor.GetId()
         
-        gridSizer.Add(item = rCoxolor,
+        gridSizer.Add(item = rColor,
                       flag = wx.ALIGN_RIGHT |
                       wx.ALIGN_CENTER_VERTICAL,
                       pos = (row, 1))
