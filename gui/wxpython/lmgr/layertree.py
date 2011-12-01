@@ -562,9 +562,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     def OnUnivariateStats(self, event):
         """!Univariate raster statistics"""
         name = self.GetPyData(self.layer_selected)[0]['maplayer'].GetName()
-        GUI(parent = self).ParseCommand(['r.univar',
-                                         'map=%s' % name])
-
+        self.lmgr.goutput.RunCmd(['r.univar', 'map=%s' % name], switchPage = True)
+        
     def OnStartEditing(self, event):
         """!Start editing vector map layer requested by the user
         """
