@@ -60,7 +60,8 @@ int main(int argc, char **argv)
     flag_n = G_define_flag();
     flag_n->key = 'n';
     flag_n->description = _("Make null cells opaque");
-
+    flag_n->guisection = _("Null cells");
+    
     for (i = 0; i < 3; i++) {
 	char buff[80];
 
