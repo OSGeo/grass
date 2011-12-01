@@ -642,10 +642,12 @@ class AttributeManager(wx.Frame):
         self._createBrowsePage()
         self._createManageTablePage()
         self._createManageLayerPage()
-
+        
         if selection:
-            wx.CallAfter(self.notebook.SetSelectionByName, selection) # select browse tab
-
+            wx.CallAfter(self.notebook.SetSelectionByName, selection)
+        else:
+            wx.CallAfter(self.notebook.SetSelection, 0) # select browse tab
+        
         # buttons
         self.btnQuit   = wx.Button(parent=self.panel, id=wx.ID_EXIT)
         self.btnQuit.SetToolTipString(_("Close Attribute Table Manager"))
