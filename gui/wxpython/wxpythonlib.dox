@@ -286,10 +286,6 @@ available in GRASS 5 and GRASS 6.
  - frame::ItemCheckListCtrl
 - gmodeler::menudata
  - menudata::ModelerData
-- gmodeler::model_file
- - model_file::ProcessModelFile
- - model_file::WriteModelFile
- - model_file::WritePythonFile
 - gmodeler::model
  - model::Model
  - model::ModelObject
@@ -299,6 +295,9 @@ available in GRASS 5 and GRASS 6.
  - model::ModelItem
  - model::ModelLoop
  - model::ModelCondition
+ - model::ProcessModelFile
+ - model::WriteModelFile
+ - model::WritePythonFile
 - gmodeler::preferences
  - preferences::PreferencesDialog
  - preferences::PropertiesDialog
