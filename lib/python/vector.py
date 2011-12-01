@@ -197,11 +197,14 @@ def vector_info(map):
 	kv[k] = float(kv[k])
     for k in ['level', 'num_dblinks']:
 	kv[k] = int(kv[k])
-    for k in ['nodes', 'points', 'lines', 'boundaries', 'centroids', 'areas', 'islands', \
-              'faces', 'kernels', 'volumes', 'holes', 'primitives']:
+    for k in ['nodes', 'points', 'lines', 'boundaries', 'centroids', 'areas', 'islands', 'primitives']:
 	kv[k] = int(kv[k])
     if 'map3d' in kv:
-        kv['map3d'] = bool(kv['map3d'])
+        kv['map3d'] = bool(int(kv['map3d']))
+        if kv['map3d']:
+            for k in ['faces', 'kernels', 'volumes', 'holes']:
+                kv[k] = int(kv[k])
+
     return kv
 
 

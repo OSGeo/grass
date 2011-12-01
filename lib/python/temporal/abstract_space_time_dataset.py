@@ -530,7 +530,6 @@ class abstract_space_time_dataset(abstract_dataset):
 
         return obj_list
 
-
     def get_registered_maps_as_objects_by_granularity(self, gran=None, dbif=None):
         """Return all registered maps as ordered (by start_time) object list with 
            "gap" map objects (id==None) for temporal topological operations using the
