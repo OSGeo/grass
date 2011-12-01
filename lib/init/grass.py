@@ -307,7 +307,7 @@ def set_paths():
     if not addon_path:
         addon_path = os.path.join(grass_config_dir, 'addons')
         os.environ['GRASS_ADDON_PATH'] = addon_path
-        message(_("GRASS_ADDON_PATH undefined, using '%s'") % addon_path)
+        # message(_("GRASS_ADDON_PATH undefined, using '%s'") % addon_path)
     
     path_prepend(addon_path, 'PATH')
     path_prepend(os.path.join(addon_path, 'scripts'), 'PATH')
