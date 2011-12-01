@@ -869,11 +869,11 @@ Section "GRASS" SecGRASS
 	;replace \ with / in $GIS_DATABASE
 	${StrReplace} "$UNIX_LIKE_GIS_DATABASE_PATH" "\" "/" "$GIS_DATABASE"
   
-	;create $APPDATA\grass7\rc
+	;create $APPDATA\GRASS7\rc
 	SetShellVarContext current
 	ClearErrors
-	CreateDirectory	$APPDATA\grass7
-	FileOpen $0 $APPDATA\grass7\rc w
+	CreateDirectory	$APPDATA\GRASS7
+	FileOpen $0 $APPDATA\GRASS7\rc w
 	IfErrors done_create_grass7\rc
 	FileWrite $0 'GISDBASE: $UNIX_LIKE_GIS_DATABASE_PATH$\r$\n'
 	FileWrite $0 'LOCATION_NAME: demolocation$\r$\n'
@@ -999,9 +999,10 @@ Section "Uninstall"
 	SetShellVarContext all
 	RMDir /r "$SMPROGRAMS\${GRASS_BASE}"
 	
-	;remove the $APPDATA\grass7 folder
-	SetShellVarContext current
-	RMDir /r "$APPDATA\grass7"
+	;remove the $APPDATA\GRASS7 folder
+	;disabled, don't remove user settings
+	;SetShellVarContext current
+	;RMDir /r "$APPDATA\GRASS7"
 
 	;remove the Registry Entries
 	DeleteRegKey HKLM "Software\${GRASS_BASE}"
