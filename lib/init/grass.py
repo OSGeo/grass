@@ -44,8 +44,9 @@ if os.environ.has_key('GRASS_PROJSHARE'):
 else:
     config_projshare = "@CONFIG_PROJSHARE@"
 
+# configuration directory
 if sys.platform == 'win32':
-    grass_config_dirname = "grass7"
+    grass_config_dirname = "GRASS7"
     grass_config_dir = os.path.join(os.getenv('APPDATA'), grass_config_dirname)
 else:
     grass_config_dirname = ".grass7"
@@ -304,10 +305,7 @@ def path_append(dir, var):
 def set_paths():
     addon_path = os.getenv('GRASS_ADDON_PATH')
     if not addon_path:
-        if sys.platform == 'win32':
-            addon_path = os.path.join(os.getenv('APPDATA'), 'GRASS7', 'addons')
-        else:
-            addon_path = os.path.join(os.getenv('HOME'), '.grass7', 'addons')
+        addon_path = os.path.join(grass_config_dir, 'addons')
         os.environ['GRASS_ADDON_PATH'] = addon_path
         message(_("GRASS_ADDON_PATH undefined, using '%s'") % addon_path)
     
