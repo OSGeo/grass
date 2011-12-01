@@ -923,7 +923,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         
         return layer
 
-    def PropertiesDialog (self, layer, show = True):
+    def PropertiesDialog(self, layer, show = True):
         """!Launch the properties dialog"""
         if 'propwin' in self.GetPyData(layer)[0] and \
                 self.GetPyData(layer)[0]['propwin'] is not None:
@@ -944,7 +944,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 
         Debug.msg (3, "LayerTree.PropertiesDialog(): ltype=%s" % \
                    ltype)
-        
+
+        cmd = None
         if self.GetPyData(layer)[0]['cmd']:
             module = GUI(parent = self, show = show, centreOnParent = False)
             module.ParseCommand(self.GetPyData(layer)[0]['cmd'],
@@ -953,36 +954,28 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.GetPyData(layer)[0]['cmd'] = module.GetCmd()
         elif ltype == 'raster':
             cmd = ['d.rast']
-            
             if UserSettings.Get(group = 'cmd', key = 'rasterOpaque', subkey = 'enabled'):
                 cmd.append('-n')
-            GUI(parent = self, centreOnParent = False).ParseCommand(cmd,
-                                                                    completed = (self.GetOptData,layer,params))
                          
         elif ltype == '3d-raster':
             cmd = ['d.rast3d']
-            GUI(parent = self, centreOnParent = False).ParseCommand(cmd,
-                                                                    completed = (self.GetOptData,layer,params))
                                         
         elif ltype == 'rgb':
-            GUI(parent = self, centreOnParent = False).ParseCommand(['d.rgb'],
-                                                                    completed = (self.GetOptData,layer,params))
+            cmd = ['d.rgb']
+            if UserSettings.Get(group = 'cmd', key = 'rasterOpaque', subkey = 'enabled'):
+                cmd.append('-n')
             
         elif ltype == 'his':
-            GUI(parent = self, centreOnParent = False).ParseCommand(['d.his'],
-                                                                    completed = (self.GetOptData,layer,params))
+            cmd = ['d.his']
             
         elif ltype == 'shaded':
-            GUI(parent = self, centreOnParent = False).ParseCommand(['d.shadedmap'],
-                                                                    completed = (self.GetOptData,layer,params))
+            cmd = ['d.shadedmap']
             
         elif ltype == 'rastarrow':
-            GUI(parent = self, centreOnParent = False).ParseCommand(['d.rast.arrow'],
-                                                                    completed = (self.GetOptData,layer,params))
+            cmd = ['d.rast.arrow']
             
         elif ltype == 'rastnum':
-            GUI(parent = self, centreOnParent = False).ParseCommand(['d.rast.num'],
-                                                                    completed = (self.GetOptData,layer,params))
+            cmd = ['d.rast.num']
             
         elif ltype == 'vector':
             types = list()
@@ -990,39 +983,31 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 if UserSettings.Get(group = 'cmd', key = 'showType', subkey = [ftype, 'enabled']):
                     types.append(ftype)
             
-            GUI(parent = self, centreOnParent = False).ParseCommand(['d.vect', 'type=%s' % ','.join(types)],
-                                                                    completed = (self.GetOptData,layer,params))
+            cmd = ['d.vect', 'type=%s' % ','.join(types)]
             
         elif ltype == 'thememap':
             # -s flag requested, otherwise only first thematic category is displayed
             # should be fixed by C-based d.thematic.* modules
-            GUI(parent = self, centreOnParent = False).ParseCommand(['d.thematic.area'], 
-                                                                    completed = (self.GetOptData,layer,params))
+            cmd = ['d.thematic.area']
             
         elif ltype == 'themechart':
-            GUI(parent = self, centreOnParent = False).ParseCommand(['d.vect.chart'],
-                                                                    completed = (self.GetOptData,layer,params))
+            cmd = ['d.vect.chart']
             
         elif ltype == 'grid':
-            GUI(parent = self, centreOnParent = False).ParseCommand(['d.grid'],
-                                                                    completed = (self.GetOptData,layer,params))
+            cmd = ['d.grid']
             
         elif ltype == 'geodesic':
-            GUI(parent = self, centreOnParent = False).ParseCommand(['d.geodesic'],
-                                                                    completed = (self.GetOptData,layer,params))
+            cmd = ['d.geodesic']
             
         elif ltype == 'rhumb':
-            GUI(parent = self, centreOnParent = False).ParseCommand(['d.rhumbline'],
-                                                                    completed = (self.GetOptData,layer,params))
+            cmd = ['d.rhumbline']
             
         elif ltype == 'labels':
-            GUI(parent = self, centreOnParent = False).ParseCommand(['d.labels'],
+            cmd = ['d.labels']
+        
+        if cmd:
+            GUI(parent = self, centreOnParent = False).ParseCommand(cmd,
                                                                     completed = (self.GetOptData,layer,params))
-            
-        elif ltype == 'cmdlayer':
-            pass
-        elif ltype == 'group':
-            pass
         
     def OnActivateLayer(self, event):
         """!Double click on the layer item.
