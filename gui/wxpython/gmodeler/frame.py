@@ -37,6 +37,8 @@ from wx.lib import ogl
 import wx.lib.flatnotebook    as FN
 import wx.lib.mixins.listctrl as listmix
 
+if __name__ == "__main__":
+    sys.path.append(os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython'))
 from core                 import globalvar
 from gui_core.widgets     import GNotebook
 from gui_core.goutput     import GMConsole
