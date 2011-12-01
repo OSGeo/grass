@@ -1796,8 +1796,8 @@
 	  <items>
 	    <menuitem>
 	      <label>Basic raster metadata</label>
-	      <help>Output basic information about a raster map layer.</help>
-	      <keywords>raster,metadata</keywords>
+	      <help>Outputs basic information about a raster map.</help>
+	      <keywords>raster,metadata,history</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.info</command>
 	    </menuitem>
@@ -2363,7 +2363,7 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Voronoi diagram/Thiessen polygons</label>
-	      <help>Creates a Voronoi diagram from an input vector map containing points or centroids.</help>
+	      <help>Creates a Voronoi diagram in current region from an input vector map containing points or centroids.</help>
 	      <keywords>vector,geometry,triangulation</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.voronoi</command>
@@ -2732,7 +2732,7 @@
 	    <separator />
 	    <menuitem>
 	      <label>Landsat cloud cover assessment</label>
-	      <help>Landsat TM/ETM+ Automatic Cloud Cover Assessment (ACCA).</help>
+	      <help>Performs Landsat TM/ETM+ Automatic Cloud Cover Assessment (ACCA).</help>
 	      <keywords>imagery,landsat,acca</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>i.landsat.acca</command>
