@@ -170,10 +170,10 @@ class BasePlotFrame(wx.Frame):
                
             self.raster[r] = UserSettings.Get(group = plottype, key = 'raster') # some default settings
             rdict[r] = {} # initialize sub-dictionaries for each raster in the list
+
             
-            if ret['units'] in ('(none)', '"none"', '', None):
-                rdict[r]['units'] = ''
-            else:
+            rdict[r]['units'] = ''
+            if ret['units'] not in ('(none)', '"none"', '', None):
                 rdict[r]['units'] = ret['units']
             
             rdict[r]['plegend'] = r.split('@')[0]
@@ -202,6 +202,7 @@ class BasePlotFrame(wx.Frame):
 
         rdict = {} # initialize a dictionary
         for rpair in rasterList:
+            print 'rpair = ' + str(rpair)
             idx = rasterList.index(rpair)
             
             try:
@@ -216,17 +217,14 @@ class BasePlotFrame(wx.Frame):
             rdict[rpair] = {} # initialize sub-dictionaries for each raster in the list
             rdict[rpair][0] = {}
             rdict[rpair][1] = {}
+            rdict[rpair][0]['units'] = ''
+            rdict[rpair][1]['units'] = ''
 
-            if ret0['units'] in ('(none)', '"none"', '', None):
-                rdict[rpair][0]['units'] = ''
-            else:
-                self.raster[rpair][0]['units'] = ret0['units']
-
-            if ret1['units'] in ('(none)', '"none"', '', None):
-                rdict[rpair][1]['units'] = ''
-            else:
-                self.raster[rpair][1]['units'] = ret1['units']
-
+            if ret0['units'] not in ('(none)', '"none"', '', None):
+                rdict[rpair][0]['units'] = ret0['units']
+            if ret1['units'] not in ('(none)', '"none"', '', None):
+                rdict[rpair][1]['units'] = ret1['units']
+                
             rdict[rpair]['plegend'] = rpair[0].split('@')[0] + ' vs ' + rpair[1].split('@')[0]
             rdict[rpair]['datalist'] = [] # list of cell value,frequency pairs for plotting histogram
             rdict[rpair]['ptype'] = 'dot'
@@ -242,6 +240,8 @@ class BasePlotFrame(wx.Frame):
                 b = randint(0, 255)
                 g = randint(0, 255)
                 rdict[rpair]['pcolor'] = ((r,g,b,255))
+
+        print 'rdict =' + str(rdict)
             
         return rdict
 

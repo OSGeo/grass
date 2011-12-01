@@ -140,17 +140,18 @@ class ScatterFrame(BasePlotFrame):
         #
         # set xlabel & ylabel based on raster maps of first pair to be plotted
         #
+        self.xlabel = _('Raster cell values')
+        self.ylabel = _('Raster cell values') 
+        
         units = self.raster[self.rasterList[0]][0]['units']
-        if units != '' and units != '(none)' and units != None:
-            self.xlabel = _('Raster cell values %s') % units
-        else:
-            self.xlabel = _('Raster cell values') 
+        if units != '':
+            self.xlabel += _(': %s') % units
 
         units = self.raster[self.rasterList[0]][1]['units']
-        if units != '' and units != '(none)' and units != None:
-            self.ylabel = _('Raster cell values %s') % units
-        else:
-            self.ylabel = _('Raster cell values') 
+        if units != '':
+            self.ylabel += _(': %s') % units
+            
+        print 'axis labels = ' + ' x:' + self.xlabel + ' y:' + self.ylabel
 
     def CreateDatalist(self, rpair):
         """!Build a list of cell value, frequency pairs for histogram
@@ -179,9 +180,18 @@ class ScatterFrame(BasePlotFrame):
             for line in ret.splitlines():
                 rast1, rast2 = line.strip().split(',')
                 rast1 = rast1.strip()
-                if '-' in rast1: rast1 = rast1.split('-')[0]
+                if '-' in rast1:
+                    if rast1[0] == '-':
+                        rast1 = '-' + rast1.split('-')[1]
+                    else:
+                        rast1 = rast1.split('-')[0]
+
                 rast2 = rast2.strip()
-                if '-' in rast2: rast2 = rast2.split('-')[0]
+                if '-' in rast2:
+                    if rast2[0] == '-':
+                        rast2 = '-' + rast2.split('-')[1]
+                    else:
+                        rast2 = rast2.split('-')[0]
                 
                 rast1 = rast1.encode('ascii', 'ignore')
                 rast2 = rast2.encode('ascii', 'ignore')

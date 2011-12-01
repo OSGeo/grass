@@ -152,13 +152,18 @@ class Histogram2Frame(BasePlotFrame):
                              read = True)
             
             if not ret:
+                print 'in stats loop'
                 return datalist
             
             for line in ret.splitlines():
                 cellval, histval = line.strip().split(',')
                 histval = histval.strip()
                 if self.raster[raster]['datatype'] != 'CELL':
-                    cellval = cellval.split('-')[0]
+                    if cellval[0] == '-':
+                        cellval = '-' + cellval.split('-')[1]
+                    else:
+                        cellval = cellval.split('-')[0]
+                    
                 if self.histtype == 'percent':
                     histval = histval.rstrip('%')
                     
