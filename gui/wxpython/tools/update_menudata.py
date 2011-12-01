@@ -30,7 +30,10 @@ except ImportError:
 from grass.script import core as grass
 from grass.script import task as gtask
 
-from core.menudata import ManagerData
+if __name__ == "__main__":
+    sys.path.append(os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython'))
+from lmgr.menudata  import ManagerData
+from core.globalvar import grassCmd
 
 def parseModules():
     """!Parse modules' interface"""
@@ -42,9 +45,9 @@ def parseModules():
                 'g.parser',
                 'vcolors' ]
     
-    count = len(globalvar.grassCmd['all'])
+    count = len(grassCmd['all'])
     i = 0
-    for module in globalvar.grassCmd['all']:
+    for module in grassCmd['all']:
         i += 1
         if i % 10 == 0:
             grass.info('* %d/%d' % (i, count))
@@ -52,8 +55,8 @@ def parseModules():
             continue
         try:
             interface = gtask.parse_interface(module)
-        except IOError, e:
-            grass.error(e)
+        except StandardError, e:
+            grass.error(module + ': ' + str(e))
             continue
         modules[interface.name] = { 'label'   : interface.label,
                                     'desc'    : interface.description,
@@ -169,10 +172,5 @@ def main(argv = None):
 if __name__ == '__main__':
     if os.getenv("GISBASE") is None:
         sys.exit("You must be in GRASS GIS to run this program.")
-    
-    sys.path.append(os.path.join(os.getenv("GISBASE"), 'etc', 'wxpython', 'gui_modules'))
-    import menudata
-    import menuform
-    from core import globalvar
     
     sys.exit(main())

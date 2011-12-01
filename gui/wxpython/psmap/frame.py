@@ -26,6 +26,9 @@ try:
 except ImportError:
     havePILImage = False
 
+if __name__ == "__main__":
+    sys.path.append(os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython'))
+from core             import globalvar
 import wx
 
 try:
@@ -35,9 +38,6 @@ except ImportError:
 
 import grass.script as grass
 
-if __name__ == "__main__":
-    sys.path.append(os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython'))
-from core             import globalvar
 from gui_core.menu    import Menu
 from gui_core.goutput import CmdThread, EVT_CMD_DONE
 from psmap.toolbars   import PsMapToolbar

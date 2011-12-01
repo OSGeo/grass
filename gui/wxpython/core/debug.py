@@ -65,12 +65,3 @@ class DebugMsg:
 
 # Debug instance
 Debug = DebugMsg()
-
-# testing
-if __name__ == "__main__":
-    from core import cmd as gcmd
-    gcmd.RunCommand('g.gisenv',
-                    set = 'DEBUG=3')
-                
-    for level in range (4):
-        Debug.msg (level, "message level=%d" % level)

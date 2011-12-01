@@ -1429,24 +1429,3 @@ class Map(object):
         for layer in self.overlays:
             if force or layer.force_render:
                 layer.Render()
-                
-if __name__ == "__main__":
-    import gettext
-    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
-    
-    Map = Map()
-    Map.GetRegion(update = True)
-    
-    Map.AddLayer(type = "raster",
-                 name = "elevation",
-                 command = ["d.rast", "map=elevation@PERMANENT"],
-                 l_opacity = .7)
-    
-    Map.AddLayer(type = "vector",
-                 name = "roadsmajor",
-                 command = ["d.vect", "map=roadsmajor@PERMANENT", "color=red", "width=3", "type=line"])
-    
-    image = Map.Render(force = True)
-    
-    if image:
-        grass.call(["display", image])
