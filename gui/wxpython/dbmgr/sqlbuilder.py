@@ -24,13 +24,15 @@ This program is free software under the GNU General Public License
 import os
 import sys
 
+if __name__ == "__main__":
+    sys.path.append(os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython'))
 from core import globalvar
 import wx
 
-import grass.script as grass
-
 from core.gcmd   import RunCommand, GError
 from dbmgr.vinfo import createDbInfoDesc, VectorDBInfo
+
+import grass.script as grass
 
 class SQLFrame(wx.Frame):
     """!SQL Frame class"""

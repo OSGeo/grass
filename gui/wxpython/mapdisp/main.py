@@ -24,10 +24,11 @@ This program is free software under the GNU General Public License
 import os
 import sys
 
+if __name__ == "__main__":
+    sys.path.append(os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython'))
+from core          import globalvar
 import wx
 
-sys.path.append(os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython'))
-from core          import globalvar
 from core.gcmd     import RunCommand
 from core.render   import Map
 from mapdisp.frame import MapFrame

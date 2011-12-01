@@ -37,6 +37,8 @@ import tempfile
 import copy
 import types
 
+if __name__ == "__main__":
+    sys.path.append(os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython'))
 from core import globalvar
 import wx
 import wx.lib.mixins.listctrl as listmix
