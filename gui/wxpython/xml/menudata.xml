@@ -1831,13 +1831,6 @@
 	      <command>r.describe</command>
 	    </menuitem>
 	    <menuitem>
-	      <label>Sum category values</label>
-	      <help>Sums up the raster cell values.</help>
-	      <keywords>raster</keywords>
-	      <handler>OnMenuCmd</handler>
-	      <command>r.sum</command>
-	    </menuitem>
-	    <menuitem>
 	      <label>Sum area by raster map and category</label>
 	      <help>Reports statistics for raster maps.</help>
 	      <keywords>raster,statistics</keywords>
