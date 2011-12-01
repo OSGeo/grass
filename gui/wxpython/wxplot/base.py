@@ -202,7 +202,6 @@ class BasePlotFrame(wx.Frame):
 
         rdict = {} # initialize a dictionary
         for rpair in rasterList:
-            print 'rpair = ' + str(rpair)
             idx = rasterList.index(rpair)
             
             try:
@@ -240,8 +239,6 @@ class BasePlotFrame(wx.Frame):
                 b = randint(0, 255)
                 g = randint(0, 255)
                 rdict[rpair]['pcolor'] = ((r,g,b,255))
-
-        print 'rdict =' + str(rdict)
             
         return rdict
 

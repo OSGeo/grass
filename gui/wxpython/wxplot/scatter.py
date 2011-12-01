@@ -151,8 +151,6 @@ class ScatterFrame(BasePlotFrame):
         if units != '':
             self.ylabel += _(': %s') % units
             
-        print 'axis labels = ' + ' x:' + self.xlabel + ' y:' + self.ylabel
-
     def CreateDatalist(self, rpair):
         """!Build a list of cell value, frequency pairs for histogram
             frequency can be in cell counts, percents, or area

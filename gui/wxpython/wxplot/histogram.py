@@ -152,7 +152,6 @@ class Histogram2Frame(BasePlotFrame):
                              read = True)
             
             if not ret:
-                print 'in stats loop'
                 return datalist
             
             for line in ret.splitlines():
