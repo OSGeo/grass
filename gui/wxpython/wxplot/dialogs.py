@@ -469,8 +469,13 @@ class HistRasterDialog(wx.Dialog):
                                   group = '%s' % self.group, 
                                   quiet = True,
                                   flags = 'g').strip().split('\n')
-        if ret != None and ret != '':
+
+        if ret not in [None, '', ['']]:
             self.rasterList = ret
+        else:
+            wx.MessageBox(message = _("Selected group must be in current mapset"), 
+                          caption = _('Invalid input'), 
+                          style = wx.OK|wx.ICON_ERROR)
                                                                                             
     def OnSetBins(self, event):
         """!Bins for histogramming FP maps (=nsteps in r.stats)
