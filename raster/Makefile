@@ -118,6 +118,7 @@ SUBDIRS = \
 	r.univar \
 	r.uslek \
 	r.usler \
+	r.viewshed \
 	r.volume \
 	r.walk \
 	r.water.outlet \
