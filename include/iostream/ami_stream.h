@@ -420,8 +420,8 @@ off_t AMI_STREAM<T>::stream_len(void) {
   }
 
   //debug stream_len:
-  DEBUG_STREAM_LEN fprintf(stderr, "%s: length = %lld   sizeof(T)=%d\n",
-	  path, buf.st_size, sizeof(T));
+  DEBUG_STREAM_LEN fprintf(stderr, "%s: length = %lld   sizeof(T)=%lud\n",
+	  path, (long long int)buf.st_size, sizeof(T));
 
   return (buf.st_size / sizeof(T));
 #endif

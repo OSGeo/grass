@@ -165,6 +165,7 @@ ReplacementHeapBlock<T,Compare>
   mergeHeap = new BlockHeapElement<T>[arity];
   for (unsigned int i=0; i< arity; i++) {
     //pop a stream from the list  and add it to heap
+    str = NULL;
     runList->dequeue(&str);
     assert(str);
     addRun(str);
