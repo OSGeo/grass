@@ -34,7 +34,7 @@ class VectorCleaningFrame(wx.Frame):
         """!
         Dialog for interactively defining vector cleaning tools
         """
-        wx.Frame.__init__(self, parent, id, title, pos, size, style)
+        wx.Frame.__init__(self, parent, id, title, style =  style, **kwargs)
 
         self.parent = parent # GMFrame
         if self.parent:
