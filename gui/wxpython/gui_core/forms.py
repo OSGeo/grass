@@ -73,6 +73,11 @@ import wx.lib.filebrowsebutton as filebrowse
 import wx.lib.scrolledpanel    as scrolled
 from wx.lib.newevent import NewEvent
 
+try:
+    import xml.etree.ElementTree as etree
+except ImportError:
+    import elementtree.ElementTree as etree # Python <= 2.4
+
 from grass.script import core as grass
 from grass.script import task as gtask
 
