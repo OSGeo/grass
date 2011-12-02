@@ -39,9 +39,9 @@ import wx
 from wx.lib import ogl
 
 from core.globalvar      import ETCWXDIR
+from core                import utils
 from core.gcmd           import GMessage, GException, GError, RunCommand, EncodeString, GWarning
 from gmodeler.dialogs    import ModelParamDialog
-from core.utils          import CmdToTuple
 from core.settings       import UserSettings
 from gui_core.forms      import GUI
 
@@ -592,7 +592,7 @@ class Model(object):
                 vlist = list()
                 if condText[0] == '`' and condText[-1] == '`':
                     # run command
-                    cmd, dcmd = CmdToTuple(condText[1:-1].split(' '))
+                    cmd, dcmd = utils.CmdToTuple(condText[1:-1].split(' '))
                     ret = RunCommand(cmd,
                                      read = True,
                                      **dcmd)
