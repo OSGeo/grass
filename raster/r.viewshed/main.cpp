@@ -115,7 +115,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("viewshed"));
     G_add_keyword(_("line of sight"));
-    module->description = _("IO-efficient viewshed algorithm");
+    module->label = _("Computes the viewshed of a point on a raster terrain.");
+    module->description = _("Default format: NULL (invisible), vertical angle wrt viewpoint (visible).");
 
     struct Cell_head region;
 
@@ -437,17 +438,12 @@ parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
 
     inputOpt = G_define_standard_option(G_OPT_R_ELEV);
     inputOpt->key = "input";
-    inputOpt->guisection = _("Input_options");
 
     /* the output */
     struct Option *outputOpt;
 
     outputOpt = G_define_standard_option(G_OPT_R_OUTPUT);
-    outputOpt->label = _("Name of output viewshed raster map");
-    outputOpt->description =
-	_("default format: {NULL (invisible), vertical angle wrt viewpoint (visible)}");
-    outputOpt->guisection = _("Output_options");
-
+    
     /* curvature flag */
     struct Flag *curvature;
 
@@ -463,6 +459,7 @@ parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
     refractionFlag->key = 'r';
     refractionFlag->description =
 	_("Consider the effect of atmospheric refraction");
+    refractionFlag->guisection = _("Refraction");
 
     /* boolean output flag */
     struct Flag *booleanOutput;
@@ -471,6 +468,7 @@ parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
     booleanOutput->key = 'b';
     booleanOutput->description =
 	_("Output format is {0 (invisible) 1 (visible)}");
+    booleanOutput->guisection = _("Output format");
 
     /* output mode = elevation flag */
     struct Flag *elevationFlag;
@@ -479,18 +477,16 @@ parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
     elevationFlag->key = 'e';
     elevationFlag->description =
 	_("Output format is invisible = NULL, else current elev - viewpoint_elev");
-
+    elevationFlag->guisection = _("Output format");
 
     /* viewpoint coordinates */
     struct Option *viewLocOpt;
 
-    viewLocOpt = G_define_option();
+    viewLocOpt = G_define_standard_option(G_OPT_M_EN);
     viewLocOpt->key = "coordinate";
-    viewLocOpt->type = TYPE_STRING;
     viewLocOpt->required = YES;
-    viewLocOpt->key_desc = "east,north";
+    viewLocOpt->multiple = NO;
     viewLocOpt->description = _("Coordinates of viewing position");
-    viewLocOpt->guisection = _("Input_options");
 
     /* observer elevation */
     struct Option *obsElevOpt;
@@ -502,7 +498,7 @@ parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
     obsElevOpt->key_desc = "value";
     obsElevOpt->description = _("Viewing elevation above the ground");
     obsElevOpt->answer = "1.75";
-    obsElevOpt->guisection = _("Input_options");
+    obsElevOpt->guisection = _("Settings");
 
     /* target elevation offset */
     struct Option *tgtElevOpt;
@@ -514,7 +510,7 @@ parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
     tgtElevOpt->key_desc = "value";
     tgtElevOpt->description = _("Offset for target elevation above the ground");
     tgtElevOpt->answer = "0.0";
-    tgtElevOpt->guisection = _("Input_options");
+    tgtElevOpt->guisection = _("Settings");
 
     /* max distance */
     struct Option *maxDistOpt;
@@ -530,7 +526,7 @@ parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
 
     sprintf(infdist, "%d", INFINITY_DISTANCE);
     maxDistOpt->answer = infdist;
-    maxDistOpt->guisection = _("Input_options");
+    maxDistOpt->guisection = _("Settings");
 
     /* atmospheric refraction coeff. 1/7 for visual, 0.325 for radio waves, ... */
     /* in future we might calculate this based on the physics, for now we
@@ -558,7 +554,8 @@ parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
     refrCoeffOpt->required = NO;
     refrCoeffOpt->answer = "0.14286";
     refrCoeffOpt->options = "0.0-1.0";
-
+    refrCoeffOpt->guisection = _("Refraction");
+    
     /* memory size */
     struct Option *memAmountOpt;
 
