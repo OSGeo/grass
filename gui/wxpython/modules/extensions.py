@@ -305,7 +305,7 @@ class ExtensionTree(ItemTree):
             flags = 'g'
         else:
             flags = 'l'
-        ret = RunCommand('g.extension', read = True,
+        ret = RunCommand('g.extension', read = True, parent = self,
                          svnurl = url,
                          flags = flags, quiet = True)
         if not ret:
