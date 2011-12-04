@@ -51,7 +51,8 @@ from gui_core.widgets   import ScrolledPanel, NumTextCtrl, FloatSlider, SymbolBu
 from gui_core.gselect   import Select
 from core.debug         import Debug
 try:
-    from nviz.mapwindow import wxUpdateProperties, wxUpdateView, wxUpdateLight
+    from nviz.mapwindow import wxUpdateProperties, wxUpdateView,\
+                               wxUpdateLight, wxUpdateCPlane
     import wxnviz
 except ImportError:
     pass
