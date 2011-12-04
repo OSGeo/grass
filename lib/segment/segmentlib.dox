@@ -252,12 +252,13 @@ int buf[NCOLS];
 SEGMENT seg;
 
 fd = open (file, O_RDWR);
-segment_init (&seg, fd, nseg)
+segment_init (&seg, fd, nseg);
 
 for (row = 0; row < nrows; row++)
 {
- <code to get original matrix data for row into buf>
- segment_put_row (&seg, buf, row);
+    <code to get original matrix data for row into buf>
+
+    segment_put_row (&seg, buf, row);
 }
 \endverbatim
 
@@ -318,7 +319,6 @@ for (row = 0; row < nrows; row++)
     segment_get_row (&seg, buf, row);
 
     <code to put buf into a matrix data file for row>
-
 }
 \endverbatim
 
