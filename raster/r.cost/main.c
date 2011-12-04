@@ -168,13 +168,13 @@ int main(int argc, char *argv[])
     opt7 = G_define_standard_option(G_OPT_V_INPUT);
     opt7->key = "start_points";
     opt7->required = NO;
-    opt7->description = _("Name of starting vector points map");
+    opt7->label = _("Name of starting vector points map");
     opt7->guisection = _("Start");
 
     opt8 = G_define_standard_option(G_OPT_V_INPUT);
     opt8->key = "stop_points";
     opt8->required = NO;
-    opt8->description = _("Name of stop vector points map");
+    opt8->label = _("Name of stop vector points map");
     opt8->guisection = _("Stop");
 
     opt9 = G_define_standard_option(G_OPT_R_INPUT);
