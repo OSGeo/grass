@@ -454,7 +454,8 @@ class MapFrame(MapFrameBase):
         
         # deselect features in vdigit
         if self.GetToolbar('vdigit'):
-            self.MapWindow.digit.GetDisplay().SetSelected([])
+            if self.MapWindow.digit:
+                self.MapWindow.digit.GetDisplay().SetSelected([])
             self.MapWindow.UpdateMap(render = True, renderVector = True)
         else:
             self.MapWindow.UpdateMap(render = True)
