@@ -169,10 +169,13 @@ class ProcessWorkspaceFile:
                 
             elif item.tag == 'layer':
                 cmd, selected, vdigit, nviz = self.__processLayer(item)
+                lname = item.get('name', None)
+                if lname and '\\n' in lname:
+                    lname = lname.replace('\\n', os.linesep)
                 
                 self.layers.append( {
                         "type"     : item.get('type', None),
-                        "name"     : item.get('name', None),
+                        "name"     : lname,
                         "checked"  : bool(int(item.get('checked', "0"))),
                         "opacity"  : float(item.get('opacity', '1.0')),
                         "cmd"      : cmd,
@@ -669,8 +672,8 @@ class WriteWorkspaceFile(object):
                 self.indent -= 4
                 self.file.write('%s</group>\n' % (' ' * self.indent));
             else:
-                cmd = mapTree.GetPyData(item)[0]['maplayer'].GetCmd(string=False)
-                name = mapTree.GetItemText(item)
+                cmd = mapTree.GetPyData(item)[0]['maplayer'].GetCmd(string = False)
+                name = mapTree.GetItemText(item).replace(os.linesep, '\\n')
                 opacity = maplayer.GetOpacity(float = True)
                 # remove 'opacity' part
                 if opacity < 1:
