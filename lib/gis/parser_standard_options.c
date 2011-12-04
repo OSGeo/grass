@@ -354,7 +354,7 @@ struct Option *G_define_standard_option(int opt)
         Opt->description =
             _("The dimensions of the tiles used in the output raster3d map (XxYxZ or default: 16x16x8)");
 	break;
-        
+
 	/*vector maps */
     case G_OPT_V_INPUT:
 	Opt->key = "input";
@@ -363,7 +363,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->required = YES;
 	Opt->gisprompt = "old,vector,vector";
 	Opt->label = _("Name of input vector map");
-	Opt->description = _("Data source for direct OGR access");
+	Opt->description = _("Or data source for direct OGR access");
 	break;
     case G_OPT_V_INPUTS:
 	Opt->key = "input";
@@ -373,7 +373,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->multiple = YES;
 	Opt->gisprompt = "old,vector,vector";
 	Opt->label = _("Name of input vector map(s)");
-	Opt->description = _("Data source(s) for direct OGR access");
+	Opt->description = _("Or data source(s) for direct OGR access");
 	break;
     case G_OPT_V_OUTPUT:
 	Opt->key = "output";
@@ -390,7 +390,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->required = YES;
 	Opt->gisprompt = "old,vector,vector";
 	Opt->label = _("Name of vector map");
-	Opt->description = _("Data source for direct OGR access");
+	Opt->description = _("Or data source for direct OGR access");
 	break;
     case G_OPT_V_MAPS:
 	Opt->key = "map";
@@ -428,7 +428,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->description =
 	    _("A single vector map can be connected to multiple database "
 	      "tables. This number determines which table to use. "
-	      "Layer name for direct OGR access.");
+/* huh? */    "Layer name for direct OGR access.");
 	Opt->gisprompt = "old,layer,layer";
 	break;
     case G_OPT_V_FIELD_ALL:
@@ -440,7 +440,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->description =
 	    _("A single vector map can be connected to multiple database "
 	      "tables. This number determines which table to use. "
-	      "Layer name for direct OGR access.");
+/* huh? */    "Layer name for direct OGR access.");
 	Opt->gisprompt = "old,layer,layer_all";
 	break;
     case G_OPT_V_CAT:
