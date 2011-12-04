@@ -428,7 +428,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->description =
 	    _("A single vector map can be connected to multiple database "
 	      "tables. This number determines which table to use. "
-/* huh? */    "Layer name for direct OGR access.");
+	      "When used with direct OGR access this is the layer name.");
 	Opt->gisprompt = "old,layer,layer";
 	break;
     case G_OPT_V_FIELD_ALL:
@@ -440,7 +440,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->description =
 	    _("A single vector map can be connected to multiple database "
 	      "tables. This number determines which table to use. "
-/* huh? */    "Layer name for direct OGR access.");
+	      "When used with direct OGR access this is the layer name.");
 	Opt->gisprompt = "old,layer,layer_all";
 	break;
     case G_OPT_V_CAT:
