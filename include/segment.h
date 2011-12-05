@@ -37,6 +37,8 @@ typedef struct
     int slow_seek;      	/* toggles fast seek mode */
     int lenbits;        	/* data size bitshift */
     int sizebits;       	/* segment size bitshift */
+    int (*segment_address)();
+    int (*segment_seek)();
     
     int fd;			/* file descriptor to read/write segment */
     struct SEGMENT_SCB		/* control blocks */
