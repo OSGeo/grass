@@ -223,6 +223,7 @@ int Vect_open_update2(struct Map_info *, const char *, const char *, const char 
 int Vect_open_update_head(struct Map_info *, const char *, const char *);
 int Vect_copy_head_data(const struct Map_info *, struct Map_info *);
 int Vect_build(struct Map_info *);
+int Vect_topo_check(struct Map_info *, struct Map_info *);
 int Vect_get_built(const struct Map_info *);
 int Vect_build_partial(struct Map_info *, int);
 int Vect_set_constraint_region(struct Map_info *, double, double, double,
@@ -329,6 +330,9 @@ int Vect_point_in_poly(double, double, const struct line_pnts *);
 /* Cleaning */
 void Vect_break_lines(struct Map_info *, int, struct Map_info *);
 int Vect_break_lines_list(struct Map_info *, struct ilist *, struct ilist *,
+			  int, struct Map_info *);
+int Vect_check_line_breaks(struct Map_info *, int, struct Map_info *);
+int Vect_check_line_breaks_list(struct Map_info *, struct ilist *, struct ilist *,
 			  int, struct Map_info *);
 int Vect_merge_lines(struct Map_info *, int, int *, struct Map_info *);
 void Vect_break_polygons(struct Map_info *, int, struct Map_info *);
