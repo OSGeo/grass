@@ -132,6 +132,9 @@ int update_dbcolors(const char *rast_name, const char *vector_map, int field,
 	G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 		      Fi->database, Fi->driver);
 
+    if (!attr_column)
+	attr_column = Fi->key;
+    
     /* get number of records in attr_column */
     if ((nrec =
 	 db_select_CatValArray(Driver, Fi->table, Fi->key, attr_column, NULL,

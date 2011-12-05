@@ -177,6 +177,7 @@ int vect_to_rast(const char *vector_map, const char *raster_map, const char *fie
 	stat = output_raster(fd);
     } while (stat == 0);
 
+    G_suppress_warnings(0);
     /* stat: 0 == repeat; 1 == done; -1 == error; */
 
     Vect_destroy_line_struct(Points);
@@ -195,13 +196,14 @@ int vect_to_rast(const char *vector_map, const char *raster_map, const char *fie
 
     /* colors */
     if (rgbcolumn) {
-	if (use != USE_ATTR) {
+	if (use != USE_ATTR && use != USE_CAT) {
 	    G_warning(_("Color can be updated from database only if use=attr"));
 	    update_colors(raster_map);
 	}
-
-	update_dbcolors(raster_map, vector_map, field, rgbcolumn, is_fp,
-			column);
+	else {
+	  update_dbcolors(raster_map, vector_map, field, rgbcolumn, is_fp,
+			  column);
+	}
     }
     else if (use == USE_D)
 	update_fcolors(raster_map);
