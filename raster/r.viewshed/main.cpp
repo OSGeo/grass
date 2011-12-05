@@ -485,7 +485,6 @@ parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
     viewLocOpt = G_define_standard_option(G_OPT_M_EN);
     viewLocOpt->key = "coordinate";
     viewLocOpt->required = YES;
-    viewLocOpt->multiple = NO;
     viewLocOpt->description = _("Coordinates of viewing position");
 
     /* observer elevation */
