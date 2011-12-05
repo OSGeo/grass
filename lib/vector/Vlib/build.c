@@ -487,6 +487,158 @@ int Vect_build(struct Map_info *Map)
 }
 
 /*!
+   \brief Extensive tests for correct topology
+
+   \param Map vector map
+   \param[out] Err vector map where errors will be written
+
+   \return 1 on success
+   \return 0 on error
+ */
+int Vect_topo_check(struct Map_info *Map, struct Map_info *Err)
+{
+    int line, nlines;
+    int nerrors, n_zero_lines, n_zero_boundaries;
+    struct line_pnts *Points;
+    struct line_cats *Cats;
+
+    if (Vect_get_built(Map) != GV_BUILD_ALL) {
+	Vect_build_partial(Map, GV_BUILD_NONE);
+	Vect_build(Map);
+    }
+
+    G_message(_("Checking for topological errors..."));
+
+    Points = Vect_new_line_struct();
+    Cats = Vect_new_cats_struct();
+
+    /* boundaries of zero length */
+    n_zero_lines = n_zero_boundaries = 0;
+    nlines = Vect_get_num_lines(Map);
+    for (line = 1; line <= nlines; line++) {
+	int type;
+	
+	if (!Vect_line_alive(Map, line))
+	    continue;
+	    
+	type = Vect_get_line_type(Map, line);
+
+	if (type & GV_LINES) {
+	    double len;
+	    
+	    Vect_read_line(Map, Points, Cats, line);
+	    len = Vect_line_length(Points);
+	    
+	    if (len == 0) {
+		if (type & GV_LINE)
+		    n_zero_lines++;
+		else if (type & GV_BOUNDARY)
+		    n_zero_boundaries++;
+		    
+		if (Err)
+		    Vect_write_line(Err, type, Points, Cats);
+	    }
+	}
+    }
+    if (n_zero_lines)
+	G_warning(_("Number of lines of length zero: %d"), n_zero_lines);
+    if (n_zero_boundaries)
+	G_warning(_("Number of boundaries of length zero: %d"), n_zero_boundaries);
+
+    /* remaining checks are for areas only */
+    if (Vect_get_num_primitives(Map, GV_BOUNDARY) == 0)
+	return 1;
+
+    /* intersecting boundaries -> overlapping areas */
+    nerrors = Vect_check_line_breaks(Map, GV_BOUNDARY, Err);
+    if (nerrors)
+	G_warning(_("Number of boundary intersections: %d"), nerrors);
+
+    /* areas without centroids that are not holes
+     * only makes sense if all boundaries are correct */
+    nerrors = 0;
+    for (line = 1; line <= nlines; line++) {
+	int type;
+	
+	if (!Vect_line_alive(Map, line))
+	    continue;
+	    
+	type = Vect_get_line_type(Map, line);
+
+	if (type == GV_BOUNDARY) {
+	    struct P_topo_b *topo = (struct P_topo_b *)Map->plus.Line[line]->topo;
+
+	    if (topo->left == 0 || topo->right == 0) {
+		G_debug(3, "line = %d left = %d right = %d", line, 
+			topo->left, topo->right);
+		nerrors++;
+	    }
+	}
+    }
+    if (nerrors)
+	G_warning(_("Skipping further checks because of incorrect boundaries"));
+    else {
+	int i, area, left, right, neighbour;
+	int nareas = Vect_get_num_areas(Map);
+	struct ilist *List = Vect_new_list();
+
+	nerrors = 0;
+	for (area = 1; area <= nareas; area++) {
+	    if (!Vect_area_alive(Map, area))
+		continue;
+	    line = Vect_get_area_centroid(Map, area);
+	    if (line != 0)
+		continue;   /* has centroid */
+
+	    Vect_get_area_boundaries(Map, area, List);
+	    for (i = 0; i < List->n_values; i++) {
+		line = List->value[i];
+		Vect_get_line_areas(Map, abs(line), &left, &right);
+		if (line > 0)
+		    neighbour = left;
+		else
+		    neighbour = right;
+		    
+		if (neighbour < 0) {
+		    neighbour = Vect_get_isle_area(Map, abs(neighbour));
+		    if (!neighbour) {
+			/* borders outer void */
+			nerrors++;
+			if (Err) {
+			    Vect_read_line(Map, Points, Cats, abs(line));
+			    Vect_write_line(Err, GV_BOUNDARY, Points, Cats);
+			}
+		    }
+		    /* else neighbour is > 0, check below */
+		}
+		if (neighbour > 0) {
+		    if (Vect_get_area_centroid(Map, neighbour) == 0) {
+			/* neighbouring area does not have a centroid either */
+			nerrors++;
+			if (Err) {
+			    Vect_read_line(Map, Points, Cats, abs(line));
+			    Vect_write_line(Err, GV_BOUNDARY, Points, Cats);
+			}
+		    }
+		}
+	    }
+	}
+	Vect_destroy_list(List);
+
+	if (nerrors)
+	    G_warning(_("Number of redundant holes: %d"), 
+	              nerrors);
+    }
+
+    /* what else ? */
+
+    Vect_destroy_line_struct(Points);
+    Vect_destroy_cats_struct(Cats);
+
+    return 1;
+}
+
+/*!
    \brief Return current highest built level (part)
 
    \param Map vector map
@@ -642,19 +794,27 @@ int Vect_build_partial(struct Map_info *Map, int build)
 	G_message(_("Number of areas: %d"), plus->n_areas);
 	G_message(_("Number of isles: %d"), plus->n_isles);
 
+#if 0
+	/* not an error, message disabled to avoid confusion */
+	if (err_nocentr)
+	    G_message(_("Number of areas without centroid: %d"),
+		      err_nocentr);
+#endif
+
+	if (plus->n_clines > plus->n_areas)
+	    G_warning(_("Number of centroids exceeds number of areas: %d > %d"),
+		      plus->n_clines, plus->n_areas);
+
 	if (err_boundaries)
-	    G_message(_("Number of incorrect boundaries: %d"),
+	    G_warning(_("Number of incorrect boundaries: %d"),
 		      err_boundaries);
 
 	if (err_centr_out)
-	    G_message(_("Number of centroids outside area: %d"),
+	    G_warning(_("Number of centroids outside area: %d"),
 		      err_centr_out);
 
 	if (err_centr_dupl)
-	    G_message(_("Number of duplicate centroids: %d"), err_centr_dupl);
-
-	if (err_nocentr)
-	    G_message(_("Number of areas without centroid: %d"), err_nocentr);
+	    G_warning(_("Number of duplicate centroids: %d"), err_centr_dupl);
 
     }
     else if (build > GV_BUILD_NONE) {
