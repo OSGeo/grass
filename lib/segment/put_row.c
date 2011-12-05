@@ -57,8 +57,8 @@ int segment_put_row(const SEGMENT * SEG, const void *buf, int row)
     /*      printf("segment_put_row ncols: %d, scols %d, size: %d, col %d, row: %d,  SEG->fd: %d\n",ncols,scols,size,col,row, SEG->fd); */
 
     for (col = 0; col < ncols; col += scols) {
-	segment_address(SEG, row, col, &n, &index);
-	if (segment_seek(SEG, n, index) < 0) {
+	SEG->segment_address(SEG, row, col, &n, &index);
+	if (SEG->segment_seek(SEG, n, index) < 0) {
 	    G_warning
 		("Failed seek in segment file for index = %d n = %d at col:row %d:%d",
 		 index, n, col, row);
@@ -80,8 +80,8 @@ int segment_put_row(const SEGMENT * SEG, const void *buf, int row)
     }
 
     if ((size = SEG->spill * SEG->len)) {
-	segment_address(SEG, row, col, &n, &index);
-	if (segment_seek(SEG, n, index) < 0) {
+	SEG->segment_address(SEG, row, col, &n, &index);
+	if (SEG->segment_seek(SEG, n, index) < 0) {
 	    G_warning
 		("Failed seek in segment file for index = %d n = %d at col:row %d:%d",
 		 index, n, col, row);

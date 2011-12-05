@@ -52,8 +52,8 @@ int segment_get_row(const SEGMENT * SEG, void *buf, int row)
     size = scols * SEG->len;
 
     for (col = 0; col < ncols; col += scols) {
-	segment_address(SEG, row, col, &n, &index);
-	if (segment_seek(SEG, n, index) < 0)
+	SEG->segment_address(SEG, row, col, &n, &index);
+	if (SEG->segment_seek(SEG, n, index) < 0)
 	    return -1;
 
 	if (read(SEG->fd, buf, size) != size) {
@@ -69,8 +69,8 @@ int segment_get_row(const SEGMENT * SEG, void *buf, int row)
 	buf = ((char *)buf) + size;
     }
     if ((size = SEG->spill * SEG->len)) {
-	segment_address(SEG, row, col, &n, &index);
-	if (segment_seek(SEG, n, index) < 0)
+	SEG->segment_address(SEG, row, col, &n, &index);
+	if (SEG->segment_seek(SEG, n, index) < 0)
 	    return -1;
 
 	if (read(SEG->fd, buf, size) != size) {

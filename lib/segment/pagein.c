@@ -90,7 +90,7 @@ int segment_pagein(SEGMENT * SEG, int n)
     /* read in the segment */
     SEG->scb[cur].n = n;
     SEG->scb[cur].dirty = 0;
-    segment_seek(SEG, SEG->scb[cur].n, 0);
+    SEG->segment_seek(SEG, SEG->scb[cur].n, 0);
 
     read_result = read(SEG->fd, SEG->scb[cur].buf, SEG->size);
     if (read_result != SEG->size) {
