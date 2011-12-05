@@ -17,6 +17,10 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
+static int break_lines(struct Map_info *, struct ilist *, struct ilist *,
+		       int, struct Map_info *, int);
+
+
 /*!
    \brief Break lines in vector map at each intersection.
 
@@ -32,7 +36,7 @@
 void
 Vect_break_lines(struct Map_info *Map, int type, struct Map_info *Err)
 {
-    Vect_break_lines_list(Map, NULL, NULL, type, Err);
+    break_lines(Map, NULL, NULL, type, Err, 0);
 
     return;
 }
@@ -61,7 +65,60 @@ Vect_break_lines(struct Map_info *Map, int type, struct Map_info *Err)
 
 int
 Vect_break_lines_list(struct Map_info *Map, struct ilist *List_break,
-		      struct ilist *List_ref, int type, struct Map_info *Err)
+		      struct ilist *List_ref, int type,
+		      struct Map_info *Err)
+{
+    return break_lines(Map, List_break, List_ref, type, Err, 0);
+}
+
+/*!
+   \brief Check for and count intersecting lines, do not break.
+
+   For details see Vect_break_lines_list().
+
+   \param Map input vector map 
+   \param type feature type
+   \param[out] Err vector map where points at intersections will be written or NULL
+
+   \return
+ */
+
+int
+Vect_check_line_breaks(struct Map_info *Map, int type, struct Map_info *Err)
+{
+    return break_lines(Map, NULL, NULL, type, Err, 1);
+}
+
+/*!
+   \brief Check for and count intersecting lines, do not break.
+
+   If <i>List_break</i> is given, only lines in the list are checked for
+   intersections.
+
+   If reference lines are given (<i>List_ref</i>) break only lines
+   which intersect reference lines.
+
+   \param Map input vector map 
+   \param List_break list of lines (NULL for all lines in vector map)
+   \param List_ref list of reference lines or NULL
+   \param type feature type
+   \param[out] Err vector map where points at intersections will be written or NULL
+
+   \return number of intersections
+ */
+
+int
+Vect_check_line_breaks_list(struct Map_info *Map, struct ilist *List_break,
+		      struct ilist *List_ref, int type,
+		      struct Map_info *Err)
+{
+    return break_lines(Map, List_break, List_ref, type, Err, 1);
+}
+
+int
+break_lines(struct Map_info *Map, struct ilist *List_break,
+		      struct ilist *List_ref, int type,
+		      struct Map_info *Err, int check)
 {
     struct line_pnts *APoints, *BPoints, *Points;
     struct line_pnts **AXLines, **BXLines;
@@ -177,7 +234,7 @@ Vect_break_lines_list(struct Map_info *Map, struct ilist *List_break,
 
 	    btype = Vect_read_line(Map, BPoints, BCats, bline);
 
-	    /* Check if thouch by end node only */
+	    /* Check if touch by end node only */
 	    if (!is3d) {
 		Vect_get_line_nodes(Map, aline, &anode1, &anode2);
 		Vect_get_line_nodes(Map, bline, &bnode1, &bnode2);
@@ -267,13 +324,16 @@ Vect_break_lines_list(struct Map_info *Map, struct ilist *List_break,
 	    }
 	    nx = 0;		/* number of intersections to be written to Err */
 	    if (naxlines > 0) {	/* intersection -> write out */
-		Vect_delete_line(Map, aline);
+		if (!check)
+		    Vect_delete_line(Map, aline);
 		for (k = 0; k < naxlines; k++) {
 		    /* Write new line segments */
 		    /* line may collapse, don't write zero length lines */
 		    Vect_line_prune(AXLines[k]);
 		    if ((atype & GV_POINTS) || AXLines[k]->n_points > 1) {
-			ret = Vect_write_line(Map, atype, AXLines[k], ACats);
+			if (!check)
+			    ret = Vect_write_line(Map, atype, AXLines[k],
+			                          ACats);
 			if (List_ref) {
 			    Vect_list_append(List_ref, ret);
 			}
@@ -302,15 +362,17 @@ Vect_break_lines_list(struct Map_info *Map, struct ilist *List_break,
 
 	    if (nbxlines > 0) {
 		if (aline != bline) {	/* Self intersection, do not write twice, TODO: is it OK? */
-		    Vect_delete_line(Map, bline);
+		    if (!check)
+			Vect_delete_line(Map, bline);
 		    for (k = 0; k < nbxlines; k++) {
 			/* Write new line segments */
 			/* line may collapse, don't write zero length lines */
 			Vect_line_prune(BXLines[k]);
 			if ((btype & GV_POINTS) || BXLines[k]->n_points > 1) {
-			    ret =
-				Vect_write_line(Map, btype, BXLines[k],
-						BCats);
+			    if (!check)
+				ret =
+				    Vect_write_line(Map, btype, BXLines[k],
+						    BCats);
 			    G_debug(5, "Line %d written", ret);
 			    if (List_break) {
 				Vect_list_append(List_break, ret);
