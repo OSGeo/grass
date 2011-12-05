@@ -864,10 +864,10 @@ Section "GRASS" SecGRASS
 	done_create_fstab:
 	
 	;Set the Unix-Like GIS_DATABASE Path
-	Var /GLOBAL UNIX_LIKE_GIS_DATABASE_PATH
+ 	;Var /GLOBAL UNIX_LIKE_GIS_DATABASE_PATH
   
 	;replace \ with / in $GIS_DATABASE
-	${StrReplace} "$UNIX_LIKE_GIS_DATABASE_PATH" "\" "/" "$GIS_DATABASE"
+	;${StrReplace} "$UNIX_LIKE_GIS_DATABASE_PATH" "\" "/" "$GIS_DATABASE"
 
 	SetShellVarContext current  
 	${If} ${FileExists} "$APPDATA\GRASS7\rc"
@@ -878,7 +878,7 @@ Section "GRASS" SecGRASS
 	      CreateDirectory	$APPDATA\GRASS7
 	      FileOpen $0 $APPDATA\GRASS7\rc w
 	      IfErrors done_create_grass7_rc
-	      FileWrite $0 'GISDBASE: $UNIX_LIKE_GIS_DATABASE_PATH$\r$\n'
+	      FileWrite $0 'GISDBASE: $GIS_DATABASE$\r$\n'
 	      FileWrite $0 'LOCATION_NAME: demolocation$\r$\n'
 	      FileWrite $0 'MAPSET: PERMANENT$\r$\n'
 	      FileClose $0	
