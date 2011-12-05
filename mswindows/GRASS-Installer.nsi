@@ -1005,11 +1005,11 @@ Section "Uninstall"
 	
 	;remove the $APPDATA\GRASS7 folder
 	;disabled, don't remove user settings
-	SetShellVarContext current
+	; SetShellVarContext current
 	;RMDir /r "$APPDATA\GRASS7"	
-	${If} ${FileExists} "$APPDATA\GRASS7\addons\*.*"
-	      RMDir /r "$APPDATA\GRASS7\addons"
-	${EndIf}
+	;${If} ${FileExists} "$APPDATA\GRASS7\addons\*.*"
+	;      RMDir /r "$APPDATA\GRASS7\addons"
+	;${EndIf}
 	
 	;remove the Registry Entries
 	DeleteRegKey HKLM "Software\${GRASS_BASE}"
