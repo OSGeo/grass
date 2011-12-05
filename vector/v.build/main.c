@@ -26,6 +26,7 @@ int main(int argc, char *argv[])
 {
     struct GModule *module;
     struct Option *map_opt, *opt, *err_opt;
+    struct Flag *chk;
     struct Map_info Map;
     int i, build = 0, dump = 0, sdump = 0, cdump = 0;
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
@@ -61,6 +62,11 @@ int main(int argc, char *argv[])
 	_("build;build topology;" "dump;write topology to stdout;"
 	  "sdump;write spatial index to stdout;"
 	  "cdump;write category index to stdout");
+
+    chk = G_define_flag();
+    chk->key = 'e';
+    chk->label = _("Extensive checks for topological errors");
+    chk->description = _("Perform in-depth checks for topological errors when building topology");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -171,9 +177,14 @@ int main(int argc, char *argv[])
 	    }
 	}
 
+	if (chk->answer)
+	    Vect_topo_check(&Map, &Err);
+
 	Vect_build(&Err);
 	Vect_close(&Err);
     }
+    else if (chk->answer)
+	Vect_topo_check(&Map, NULL);
 
     if (build || dump || sdump || cdump) {
 	Vect_close(&Map);
