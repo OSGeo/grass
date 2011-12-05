@@ -1234,6 +1234,8 @@ int main(int argc, char *argv[])
     }
 
     Vect_build(&Map);
+    if (flag.no_clean->answer)
+	Vect_topo_check(&Map, NULL);
     Vect_close(&Map);
 
     /* -------------------------------------------------------------------- */
