@@ -32,6 +32,17 @@ DGN, GML, AVCBin, REC, Memory, OGDI, and PostgreSQL depend on the local
 installation (OGR library), for details see
 <a href="http://www.gdal.org/ogr/ogr_formats.html">OGR web site</a>.
 
+<h3>Overlapping polygons</h3>
+When importing overlapping polygons, the overlapping parts will become 
+new areas with multiple categories, one unique category for each original 
+polygon. An original polygon will thus be converted to multiple areas 
+with the same shared category. These multiple areas will therefore also 
+link to the same entry in the attribute table. A single category value 
+may thus refer to multiple non-overlapping areas which together represent 
+the original polygon overlapping with another polygon. The original 
+polygon can be recovered by using <em>v.extract</em> with the desired 
+category value or <em>where</em> statement and the <em>-d</em> flag to 
+dissolve common boundaries.
 
 <h2>Location Creation</h2>
 
@@ -207,6 +218,7 @@ it to another location with <em>v.proj</em>.
 <em>
 <a href="db.connect.html">db.connect</a>,
 <a href="v.clean.html">v.clean</a>,
+<a href="v.extract.html">v.extract</a>,
 <a href="v.build.polylines.html">v.build.polylines</a>,
 <a href="v.edit.html">v.edit</a>,
 <a href="v.external.html">v.external</a>,
