@@ -156,12 +156,14 @@ int main(int argc, char **argv)
     opt.dist = G_define_standard_option(G_OPT_R_OUTPUT);
     opt.dist->key = "distance";
     opt.dist->required = NO;
-    opt.dist->description = _("Name for distance output map");
+    opt.dist->description = _("Name for distance output raster map");
+    opt.dist->guisection = _("Output");
 
     opt.val = G_define_standard_option(G_OPT_R_OUTPUT);
     opt.val->key = "value";
     opt.val->required = NO;
-    opt.val->description = _("Name for value output map");
+    opt.val->description = _("Name for value output raster map");
+    opt.val->guisection = _("Output");
 
     opt.met = G_define_option();
     opt.met->key = "metric";
