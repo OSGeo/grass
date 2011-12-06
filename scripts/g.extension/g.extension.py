@@ -553,7 +553,7 @@ def check_style_files(fil):
 def check_dirs():
     check_style_files('grass_logo.png')
     check_style_files('grassdocs.css')    
-    
+
 def main():
     # check dependecies
     if sys.platform != "win32":
@@ -586,7 +586,8 @@ def main():
             options['prefix'] = path_list[0]
     
     # check dirs
-    check_dirs()
+    if options['operation'] == 'add':
+        check_dirs()
     
     if flags['d']:
         if options['operation'] != 'add':
