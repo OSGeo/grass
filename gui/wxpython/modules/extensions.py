@@ -40,6 +40,7 @@ class InstallExtensionWindow(wx.Frame):
         self.options = dict() # list of options
         
         wx.Frame.__init__(self, parent = parent, id = id, title = title, **kwargs)
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
         
         self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
 
