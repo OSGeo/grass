@@ -506,8 +506,20 @@ class CommandThread(Thread):
         Debug.msg(1, "gcmd.CommandThread(): %s" % ' '.join(self.cmd))
 
         self.startTime = time.time()
+
+        # TODO: replace ugly hack bellow
+        args = self.cmd
+        if sys.platform == 'win32':
+            ext = os.path.splitext(self.cmd[0])[1] == '.py'
+            if ext or self.cmd[0] in globalvar.grassCmd['script']:
+                os.chdir(os.path.join(os.getenv('GISBASE'), 'scripts'))
+                if not ext:
+                    args = [sys.executable, self.cmd[0] + '.py'] + self.cmd[1:]
+                else:
+                    args = [sys.executable, self.cmd[0]] + self.cmd[1:]
+        
         try:
-            self.module = Popen(self.cmd,
+            self.module = Popen(args,
                                 stdin = subprocess.PIPE,
                                 stdout = subprocess.PIPE,
                                 stderr = subprocess.PIPE,
@@ -623,6 +635,12 @@ def RunCommand(prog, flags = "", overwrite = False, quiet = False, verbose = Fal
 
     Debug.msg(2, "gcmd.RunCommand(): command started")
     start = time.time()
+    
+    if sys.platform == "win32":
+        if prog in globalvar.grassCmd['script']:
+            prog += globalvar.EXT_SCT
+        # else:
+        # prog += globalvar.EXT_BIN
     
     ps = grass.start_command(prog, flags, overwrite, quiet, verbose, **kwargs)
     

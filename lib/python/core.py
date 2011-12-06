@@ -165,7 +165,10 @@ def start_command(prog, flags = "", overwrite = False, quiet = False, verbose = 
 	else:
 	    options[opt] = val
     args = make_command(prog, flags, overwrite, quiet, verbose, **options)
-
+    if sys.platform == 'win32' and os.path.splitext(prog)[1] == '.py':
+        os.chdir(os.path.join(os.getenv('GISBASE'), 'scripts'))
+        args.insert(0, sys.executable)
+    
     global debug_level
     if debug_level > 0:
         sys.stderr.write("D1/%d: %s.start_command(): %s\n" % (debug_level, __name__, ' '.join(args)))
