@@ -278,7 +278,7 @@ class ExtensionTree(ItemTree):
                  's'  : 'sites',
                  'v'  : 'vector',
                  'wx' : 'wxGUI',
-                 'u'  : 'other' }
+                 ''   : 'other' }
         
         if c in name:
             return name[c]
@@ -320,7 +320,7 @@ class ExtensionTree(ItemTree):
                     try:
                         prefix, name = value.split('.', 1)
                     except ValueError:
-                        prefix = 'u'
+                        prefix = ''
                         name = value
                     if prefix not in mdict:
                         mdict[prefix] = dict()
@@ -331,11 +331,11 @@ class ExtensionTree(ItemTree):
                 try:
                     prefix, name = line.strip().split('.', 1)
                 except:
-                    prefix = 'unknown'
+                    prefix = ''
                     name = line.strip()
                 
                 if self._expandPrefix(prefix) == prefix:
-                    prefix = 'unknown'
+                    prefix = ''
                     
                 if prefix not in mdict:
                     mdict[prefix] = dict()
@@ -348,8 +348,12 @@ class ExtensionTree(ItemTree):
             names = mdict[prefix].keys()
             names.sort()
             for name in names:
+                if prefix:
+                    text = prefix + '.' + name
+                else:
+                    text = name
                 new = self.AppendItem(parentId = item,
-                                      text = prefix + '.' + name)
+                                      text = text)
                 data = dict()
                 for key in mdict[prefix][name].keys():
                     data[key] = mdict[prefix][name][key]
