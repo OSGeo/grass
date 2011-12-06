@@ -87,6 +87,10 @@
 #% key: i
 #% description: Don't install new extension, just compile it
 #%end
+#%flag
+#% key: f
+#% description: Force removal when uninstalling extension (operation=remove)
+#%end
 
 import os
 import sys
@@ -454,10 +458,15 @@ def install_extension_other():
                         'GRASS_ADDON_PATH environment variable (see "g.manual variables")'))
 
 # remove existing extension (reading XML file)
-def remove_extension():
+def remove_extension(force = False):
     # try to download XML metadata file first
     url = "http://grass.osgeo.org/addons/grass%s.xml" % grass.version()['version'].split('.')[0]
     name = options['extension']
+    if force:
+        grass.verbose(_("List of removed files:"))
+    else:
+        grass.info(_("Files to be removed (use flag 'f' to force removal):"))
+    
     try:
         f = urlopen(url)
         tree = etree.fromstring(f.read())
@@ -476,40 +485,54 @@ def remove_extension():
                                 fpath[-1] += '.py'
                         
                         flist.append(fpath)
+        
         if flist:
             removed = False
             err = list()
             for f in flist:
                 fpath = os.path.join(options['prefix'], os.path.sep.join(f))
                 try:
-                    os.remove(fpath)
-                    removed = True
+                    if force:
+                        grass.verbose(fpath)
+                        os.remove(fpath)
+                        removed = True
+                    else:
+                        print fpath
                 except OSError:
                     err.append((_("Unable to remove file '%s'") % fpath))
-            if not removed:
+            if force and not removed:
                 grass.fatal(_("Extension <%s> not found") % options['extension'])
             
             if err:
                 for e in err:
                     grass.error(e)
         else:
-            remove_extension_std()
+            remove_extension_std(force)
     except HTTPError:
-        remove_extension_std()
+        remove_extension_std(force)
 
-    grass.message(_("Extension <%s> successfully uninstalled.") % options['extension'])
+    if force:
+        grass.message(_("Extension <%s> successfully uninstalled.") % options['extension'])
+    else:
+        grass.warning(_("Extension <%s> not removed. "
+                        "Re-run '%s' with 'f' flag to force removal") % (options['extension'], 'g.extension'))
     
 # remove exising extension (using standard files layout)
-def remove_extension_std():
+def remove_extension_std(force = False):
     # is module available?
     if not os.path.exists(os.path.join(options['prefix'], 'bin', options['extension'])):
         grass.fatal(_("Extension <%s> not found") % options['extension'])
     
-    for file in [os.path.join(options['prefix'], 'bin', options['extension']),
-                 os.path.join(options['prefix'], 'scripts', options['extension']),
-                 os.path.join(options['prefix'], 'docs', 'html', options['extension'] + '.html')]:
-        if os.path.isfile(file):
-            os.remove(file)
+    for fpath in [os.path.join(options['prefix'], 'bin', options['extension']),
+                  os.path.join(options['prefix'], 'scripts', options['extension']),
+                  os.path.join(options['prefix'], 'docs', 'html', options['extension'] + '.html'),
+                  os.path.join(options['prefix'], 'man', 'man1', options['extension'] + '.1')]:
+        if os.path.isfile(fpath):
+            if force:
+                grass.verbose(fpath)
+                os.remove(fpath)
+            else:
+                print fpath
     
 # check links in CSS
 def check_style_files(fil):
@@ -575,7 +598,7 @@ def main():
     if options['operation'] == 'add':
             install_extension()
     else: # remove
-        remove_extension()
+        remove_extension(flags['f'])
     
     return 0
 
