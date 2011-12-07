@@ -524,8 +524,10 @@ class CommandThread(Thread):
                                 stdout = subprocess.PIPE,
                                 stderr = subprocess.PIPE,
                                 shell = sys.platform == "win32")
+            
         except OSError, e:
             self.error = str(e)
+            print >> sys.stderr, e
             return 1
         
         if self.stdin: # read stdin if requested ...
