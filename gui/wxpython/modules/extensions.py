@@ -69,7 +69,7 @@ class InstallExtensionWindow(wx.Frame):
                 desc = f.get('description', '')
             if not name and not desc:
                 continue
-            if name in ('l', 'c', 'g', 'quiet', 'verbose'):
+            if name in ('l', 'c', 'g', 'f', 'quiet', 'verbose'):
                 continue
             self.options[name] = wx.CheckBox(parent = self.panel, id = wx.ID_ANY,
                                              label = desc)
