@@ -4,6 +4,7 @@
 @brief Core GUI widgets
 
 Classes:
+ - widgets::GNotebook
  - widgets::ScrolledPanel
  - widgets::NTCValidator
  - widgets::NumTextCtrl
