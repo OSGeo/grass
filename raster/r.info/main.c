@@ -317,6 +317,12 @@ int main(int argc, char **argv)
 	    G_format_resolution(cellhd.ew_res, tmp3, cellhd.proj);
 	    fprintf(out, "ewres=%s\n", tmp3);
 
+            fprintf(out, "rows=%d\n", cellhd.rows);
+            fprintf(out, "cols=%d\n", cellhd.cols);
+            
+            fprintf(stdout, "cells=%lld\n",
+                    (long long)cellhd.rows * cellhd.cols);
+            
 	    fprintf(out, "datatype=%s\n",
 		    (data_type == CELL_TYPE ? "CELL" :
 		     (data_type == DCELL_TYPE ? "DCELL" :
