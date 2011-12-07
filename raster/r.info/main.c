@@ -320,7 +320,7 @@ int main(int argc, char **argv)
             fprintf(out, "rows=%d\n", cellhd.rows);
             fprintf(out, "cols=%d\n", cellhd.cols);
             
-            fprintf(stdout, "cells=%lld\n",
+            fprintf(out, "cells=%lld\n",
                     (long long)cellhd.rows * cellhd.cols);
             
 	    fprintf(out, "datatype=%s\n",
