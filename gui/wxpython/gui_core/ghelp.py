@@ -42,23 +42,6 @@ from lmgr.menudata    import ManagerData
 from core.gcmd        import GError, DecodeString
 from gui_core.widgets import GNotebook, StaticWrapText, ItemTree
 
-class HelpFrame(wx.Frame):
-    """!GRASS Quickstart help window"""
-    def __init__(self, parent, id, title, size, file):
-        wx.Frame.__init__(self, parent = parent, id = id, title = title, size = size)
-        
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        
-        # text
-        content = HelpPanel(parent = self)
-        content.LoadPage(file)
-        
-        sizer.Add(item = content, proportion = 1, flag = wx.EXPAND)
-        
-        self.SetAutoLayout(True)
-        self.SetSizer(sizer)
-        self.Layout()
-
 class SearchModuleWindow(wx.Panel):
     """!Search module window (used in MenuTreeWindow)"""
     def __init__(self, parent, id = wx.ID_ANY, cmdPrompt = None,
@@ -709,6 +692,23 @@ class AboutWindow(wx.Frame):
     def OnCloseWindow(self, event):
         """!Close window"""
         self.Close()
+
+class HelpFrame(wx.Frame):
+    """!GRASS Quickstart help window"""
+    def __init__(self, parent, id, title, size, file):
+        wx.Frame.__init__(self, parent = parent, id = id, title = title, size = size)
+        
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        
+        # text
+        content = HelpPanel(parent = self)
+        content.LoadPage(file)
+        
+        sizer.Add(item = content, proportion = 1, flag = wx.EXPAND)
+        
+        self.SetAutoLayout(True)
+        self.SetSizer(sizer)
+        self.Layout()
 
 class HelpWindow(HtmlWindow):
     """!This panel holds the text from GRASS docs.

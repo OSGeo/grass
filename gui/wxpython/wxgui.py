@@ -75,6 +75,7 @@ from lmgr.toolbars         import LMWorkspaceToolbar, LMDataToolbar, LMToolsTool
 from lmgr.toolbars         import LMMiscToolbar, LMVectorToolbar, LMNvizToolbar
 from lmgr.pyshell          import PyShellWindow
 from gui_core.forms        import GUI
+from gcp.manager           import GCPWizard
 
 class GMFrame(wx.Frame):
     """!Layer Manager frame with notebook widget for controlling GRASS
@@ -347,7 +348,6 @@ class GMFrame(wx.Frame):
     def OnGCPManager(self, event):
         """!Launch georectifier module
         """
-        from gcp.manager import GCPWizard
         GCPWizard(self)
 
     def OnGModeler(self, event):

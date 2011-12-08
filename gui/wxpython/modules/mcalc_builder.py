@@ -1,5 +1,5 @@
 """!
-@package modules mcalc_builder
+@package modules::mcalc_builder
 
 @brief Map calculator, GUI wrapper for r.mapcalc
 

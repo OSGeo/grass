@@ -11,6 +11,7 @@ Classes:
  - gselect::LayerSelect
  - gselect::DriverSelect
  - gselect::DatabaseSelect
+ - gselect::TableSelect
  - gselect::ColumnSelect
  - gselect::DbaseSelect
  - gselect::LocationSelect

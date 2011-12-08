@@ -6,9 +6,9 @@
 Classes:
  - goutput::CmdThread
  - goutput::GMConsole
- - goutput::GMStc
  - goutput::GMStdout
  - goutput::GMStderr
+ - goutput::GMStc
 
 (C) 2007-2011 by the GRASS Development Team
 
