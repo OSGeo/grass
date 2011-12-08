@@ -172,7 +172,6 @@ available in GRASS 5 and GRASS 6.
 \subsection lmgr Layer Manager
 
 - wxgui
- - wxgui::GMFrame
  - wxgui::GMApp
  - wxgui::Usage
 - lmgr::layertree
@@ -188,6 +187,8 @@ available in GRASS 5 and GRASS 6.
  - toolbars::LMMiscToolbar
  - toolbars::LMVectorToolbar
  - toolbars::LMNvizToolbar
+- lmgr::frame
+ - frame::GMFrame
 
 \subsection mapdisp Map Display Window
 
