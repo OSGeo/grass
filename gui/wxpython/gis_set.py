@@ -31,13 +31,16 @@ import codecs
 import gettext
 gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
 
+if __name__ == "__main__":
+    sys.path.append(os.path.join(os.getenv('GISBASE'), 'etc', 'gui', 'wxpython'))
 from core import globalvar
 import wx
 import wx.lib.mixins.listctrl as listmix
 import wx.lib.scrolledpanel as scrolled
 
 from gui_core.ghelp import HelpFrame
-from core.gcmd      import GMessage, GError
+from core.gcmd      import GMessage, GError, DecodeString, RunCommand
+from core.utils     import GetListOfLocations, GetListOfMapsets
 
 sys.stderr = codecs.getwriter('utf8')(sys.stderr)
 
@@ -873,15 +876,11 @@ class StartUp(wx.App):
         return 1
 
 if __name__ ==  "__main__":
-
     if os.getenv("GISBASE") is None:
-        print >> sys.stderr, "Failed to start GUI, GRASS GIS is not running."
-    else:
-        import gettext
-        gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
-
-        from core.gcmd  import RunCommand, DecodeString
-        from core.utils import GetListOfMapsets, GetListOfLocations
-
-        GRASSStartUp = StartUp(0)
-        GRASSStartUp.MainLoop()
+        sys.exit("Failed to start GUI, GRASS GIS is not running.")
+        
+    import gettext
+    gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode = True)
+    
+    GRASSStartUp = StartUp(0)
+    GRASSStartUp.MainLoop()

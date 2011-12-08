@@ -13,6 +13,7 @@ Classes:
  - preferences::PreferencesDialog
  - preferences::DefaultFontDialog
  - preferences::MapsetAccess
+ - preferences::CheckListMapset
 
 (C) 2007-2011 by the GRASS Development Team
 

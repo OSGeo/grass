@@ -14,6 +14,7 @@ Classes:
  - wizard::DatumPage
  - wizard::EllipsePage
  - wizard::GeoreferencedFilePage
+ - wizard::WKTPage
  - wizard::EPSGPage
  - wizard::CustomPage
  - wizard::SummaryPage

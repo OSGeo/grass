@@ -19,7 +19,6 @@ List of classes:
  - dialogs::DxfImportDialog
  - dialogs::LayersList (used by MultiImport) 
  - dialogs::SetOpacityDialog
- - dialogs::StaticWrapText
  - dialogs::ImageSizeDialog
  - dialogs::SqlQueryFrame
 

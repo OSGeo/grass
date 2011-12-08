@@ -36,7 +36,6 @@ import grass.script as grass
 from core.gcmd          import GMessage, GException, GError
 from core.debug         import Debug
 from gui_core.mapwindow import MapWindow
-from gui_core.goutput   import wxCmdOutput
 from core.settings      import UserSettings
 from nviz.workspace     import NvizSettings
 from nviz.animation     import Animation

@@ -5,8 +5,11 @@
 description.
 
 Classes:
+ - forms::UpdateThread
+ - forms::UpdateQThread
  - forms::TaskFrame
  - forms::CmdPanel
+ - forms::GUI
  - forms::GrassGUIApp
 
 This program is just a coarse approach to automatically build a GUI

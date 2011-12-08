@@ -6,8 +6,8 @@
 Classes:
  - pyshell::PyShellWindow
 
-@todo run pyshell and evaluate code in a separate instance of python
-& design the widget communicate back and forth with it
+@todo Run pyshell and evaluate code in a separate instance of python &
+design the widget communicate back and forth with it
 
 (C) 2011 by the GRASS Development Team
 

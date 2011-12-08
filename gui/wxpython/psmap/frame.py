@@ -41,7 +41,7 @@ import grass.script as grass
 from gui_core.menu    import Menu
 from gui_core.goutput import CmdThread, EVT_CMD_DONE
 from psmap.toolbars   import PsMapToolbar
-from icon             import Icons, MetaIcon, iconSet
+from icon             import Icons
 from core.gcmd        import RunCommand, GError, GMessage
 from gui_core.forms   import GUI
 from psmap.menudata   import PsMapData
