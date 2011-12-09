@@ -270,7 +270,7 @@ class GMFrame(wx.Frame):
         if not haveNviz:
             return
         
-        from nviz.tools import NvizToolWindow
+        from nviz.main import NvizToolWindow
         
         # show toolbar
         self._auimgr.GetPane('toolbarNviz').Show()

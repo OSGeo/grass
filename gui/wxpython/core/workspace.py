@@ -22,9 +22,7 @@ import wx
 
 from core.utils     import normalize_whitespace
 from core.settings  import UserSettings
-from nviz.main          import haveNviz
-if haveNviz:
-    from nviz.workspace import NvizSettings
+from nviz.main      import NvizSettings
 
 class ProcessWorkspaceFile:
     def __init__(self, tree):
@@ -58,7 +56,7 @@ class ProcessWorkspaceFile:
         
         self.__processFile()
 
-        if haveNviz:
+        if NvizSettings:
             self.nvizDefault = NvizSettings()
         else:
             self.nvizDefault = None

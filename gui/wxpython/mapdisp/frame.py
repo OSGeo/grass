@@ -51,9 +51,7 @@ from modules.histogram  import HistogramFrame
 from wxplot.histogram   import Histogram2Frame
 from wxplot.profile     import ProfileFrame
 from wxplot.scatter     import ScatterFrame
-from nviz.main          import haveNviz
-if haveNviz:
-    from nviz.mapwindow import GLWindow
+from nviz.main          import haveNviz, GLWindow
 
 from mapdisp import statusbar as sb
 
