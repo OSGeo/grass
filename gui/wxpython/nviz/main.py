@@ -25,7 +25,7 @@ try:
     import nviz.tools
     import wxnviz
     haveNviz = True
-except ImportError, err:
+except (ImportError, NameError), err:
     haveNviz = False
     errorMsg = err
 

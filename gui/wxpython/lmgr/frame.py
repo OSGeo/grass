@@ -56,7 +56,6 @@ from gui_core.menu         import Menu
 from gmodeler.model        import Model
 from gmodeler.frame        import ModelFrame
 from modules.vclean        import VectorCleaningFrame
-from nviz.tools            import NvizToolWindow
 from psmap.frame           import PsMapFrame
 from core.debug            import Debug
 from gui_core.ghelp        import MenuTreeWindow, AboutWindow
@@ -66,6 +65,7 @@ from lmgr.toolbars         import LMMiscToolbar, LMVectorToolbar, LMNvizToolbar
 from lmgr.pyshell          import PyShellWindow
 from gui_core.forms        import GUI
 from gcp.manager           import GCPWizard
+from nviz.main             import haveNviz
 
 class GMFrame(wx.Frame):
     """!Layer Manager frame with notebook widget for controlling GRASS
@@ -267,6 +267,11 @@ class GMFrame(wx.Frame):
     def AddNvizTools(self):
         """!Add nviz notebook page"""
         Debug.msg(5, "GMFrame.AddNvizTools()")
+        if not haveNviz:
+            return
+        
+        from nviz.tools import NvizToolWindow
+        
         # show toolbar
         self._auimgr.GetPane('toolbarNviz').Show()
         # reorder other toolbars
