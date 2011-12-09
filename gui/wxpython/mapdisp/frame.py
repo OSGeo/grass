@@ -51,7 +51,6 @@ from modules.histogram  import HistogramFrame
 from wxplot.histogram   import Histogram2Frame
 from wxplot.profile     import ProfileFrame
 from wxplot.scatter     import ScatterFrame
-from nviz.main          import haveNviz, GLWindow
 
 from mapdisp import statusbar as sb
 
@@ -255,7 +254,7 @@ class MapFrame(MapFrameBase):
     def AddNviz(self):
         """!Add 3D view mode window
         """
-        import nviz
+        from nviz.main import haveNviz, GLWindow
         
         # check for GLCanvas and OpenGL
         if not haveNviz:
