@@ -42,7 +42,7 @@ from core.render      import Map
 from gui_core.forms   import GUI
 from core.debug       import Debug as Debug
 from core.settings    import UserSettings
-from nviz.mapwindow   import wxUpdateProperties
+from nviz.main        import haveNviz
 
 class RulesPanel:
     def __init__(self, parent, mapType, attributeType, properties, panelWidth = 180):
@@ -1676,8 +1676,12 @@ class ThematicVectorTable(VectorColorTable):
         
         data['vector'][self.vectorType]['thematic']['update'] = None
         
-        event = wxUpdateProperties(data = data)
-        wx.PostEvent(self.parent.mapWindow, event)
+        if haveNviz:
+            from nviz.mapwindow   import wxUpdateProperties
+            
+            event = wxUpdateProperties(data = data)
+            wx.PostEvent(self.parent.mapWindow, event)
+        
         self.parent.mapWindow.Refresh(False)
         
         return ret
