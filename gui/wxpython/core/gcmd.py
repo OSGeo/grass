@@ -31,15 +31,7 @@ import errno
 import signal
 import locale
 import traceback
-
-import wx
-
-try:
-    import subprocess
-except:
-    compatPath = os.path.join(globalvar.ETCWXDIR, "compat")
-    sys.path.append(compatPath)
-    import subprocess
+import subprocess
 if subprocess.mswindows:
     from win32file import ReadFile, WriteFile
     from win32pipe import PeekNamedPipe
@@ -48,6 +40,8 @@ else:
     import select
     import fcntl
 from threading import Thread
+
+import wx
 
 from grass.script import core as grass
 
