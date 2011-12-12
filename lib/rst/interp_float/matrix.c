@@ -1,5 +1,4 @@
 /*
- *
  * Original program and various modifications:
  * Lubos Mitas 
  *
@@ -17,7 +16,6 @@
  *
  * modified by McCauley in August 1995
  * modified by Mitasova in August 1995, Nov. 1996
- *
  */
 
 #include <stdio.h>
@@ -27,7 +25,21 @@
 #include <grass/interpf.h>
 #include <grass/gmath.h>
 
-int IL_matrix_create(struct interp_params *params, struct triple *points,	/* points for interpolation */
+/*!
+ * \brief Creates system of linear equations from interpolated points
+ *
+ * Creates system of linear equations represented by matrix using given
+ * points and interpolating function interp()
+ *
+ * \param params struct interp_params *
+ * \param points struct triple * :  points for interpolation
+ * \param n_points int :  number of points
+ * \param matrix double **
+ *
+ * \return -1 on failure, 1 on success
+ */
+int IL_matrix_create(struct interp_params *params,
+		     struct triple *points,	/* points for interpolation */
 		     int n_points,	/* number of points */
 		     double **matrix,	/* matrix */
 		     int *indx)
@@ -47,7 +59,7 @@ int IL_matrix_create(struct interp_params *params, struct triple *points,	/* poi
     double xxr, yyr;
 
     if (params->theta) {
-	teta = params->theta / 57.295779;	/* deg to rad */
+	teta = params->theta * (M_PI / 180);	/* deg to rad */
 	rsin = sin(teta);
 	rcos = cos(teta);
     }
@@ -67,11 +79,8 @@ int IL_matrix_create(struct interp_params *params, struct triple *points,	/* poi
     }
 
     /*
-       C
        C      GENERATION OF MATRIX
-       C
        C      FIRST COLUMN
-       C
      */
     A[1] = 0.;
     for (k = 1; k <= n_points; k++) {
@@ -79,26 +88,24 @@ int IL_matrix_create(struct interp_params *params, struct triple *points,	/* poi
 	A[i1] = 1.;
     }
     /*
-       C
        C      OTHER COLUMNS
-       C
      */
     RO = -params->rsm;
-    /*    fprintf (stderr,"sm[%d]=%f,ro=%f\n",1,points[1].smooth,RO); */
+    /* fprintf (stderr, "sm[%d] = %f,  ro=%f\n", 1, points[1].smooth, RO); */
     for (k = 1; k <= n_points; k++) {
 	k1 = k * n1 + 1;
 	k2 = k + 1;
 	i1 = k1 + k;
 	if (params->rsm < 0.) {	/*indicates variable smoothing */
 	    A[i1] = -points[k - 1].sm;	/* added by Mitasova nov. 96 */
-	    /*           fprintf (stderr,"sm[%d]=%f,a=%f\n",k,points[k-1].sm,A[i1]); */
+	    /* G_debug(5, "sm[%d]=%f, a=%f", k, points[k-1].sm, A[i1]); */
 	}
 	else {
 	    A[i1] = RO;		/* constant smoothing */
 	}
-	/*        if (i1 == 100) fprintf (stderr,"A[%d]=%f\n",i1,A[i1]); */
+	/* if (i1 == 100) fprintf (stderr,i "A[%d] = %f\n", i1, A[i1]); */
 
-	/*      A[i1] = RO; */
+	/* A[i1] = RO; */
 	for (l = k2; l <= n_points; l++) {
 	    xx = points[k - 1].x - points[l - 1].x;
 	    yy = points[k - 1].y - points[l - 1].y;
@@ -118,8 +125,8 @@ int IL_matrix_create(struct interp_params *params, struct triple *points,	/* poi
 	    }
 
 	    if (rfsta2 == 0.) {
-		fprintf(stderr, "ident. points in segm.  \n");
-		fprintf(stderr, "x[%d]=%f,x[%d]=%f,y[%d]=%f,y[%d]=%f\n",
+		fprintf(stderr, "ident. points in segm.\n");
+		fprintf(stderr, "x[%d]=%f, x[%d]=%f, y[%d]=%f, y[%d]=%f\n",
 			k - 1, points[k - 1].x, l - 1, points[l - 1].x, k - 1,
 			points[k - 1].y, l - 1, points[l - 1].y);
 		return -1;
@@ -128,11 +135,8 @@ int IL_matrix_create(struct interp_params *params, struct triple *points,	/* poi
 	    A[i1] = params->interp(r, params->fi);
 	}
     }
-    /*
-       C
-       C       SYMMETRISATION
-       C
-     */
+
+    /* C       SYMMETRISATION */
     amaxa = 1.;
     for (k = 1; k <= n1; k++) {
 	k1 = (k - 1) * n1;
@@ -151,13 +155,13 @@ int IL_matrix_create(struct interp_params *params, struct triple *points,	/* poi
 	}
     }
 
-    if (G_ludcmp(matrix, n_points + 1, indx, &d) <= 0) {	/* find the inverse of the mat
-								   rix */
-	fprintf(stderr, "G_ludcmp() failed! n=%d\n", n_points);
+    G_debug(3, "calling G_ludcmp()  n=%d indx=%d", n_points, *indx);
+    if (G_ludcmp(matrix, n_points + 1, indx, &d) <= 0) {
+	/* find the inverse of the matrix */
+	fprintf(stderr, "G_ludcmp() failed! n=%d  d=%.2f\n", n_points, d);
 	return -1;
     }
-    /*
-       G_free_vector(A);
-     */
+
+    /* G_free_vector(A); */
     return 1;
 }
