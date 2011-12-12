@@ -15390,23 +15390,23 @@ echo "  OpenMP support:             `if test -n "${USE_OPENMP}" ; then echo yes 
 
 echo "  PNG support:                `if test -n "${USE_PNG}" ; then echo yes ; else echo no ; fi`"
 
+echo "  POSIX thread support:       `if test -n "${USE_PTHREAD}" ; then echo yes ; else echo no ; fi`"
+
 echo "  PostgreSQL support:         `if test -n "${USE_POSTGRES}" ; then echo yes ; else echo no ; fi`"
 
 echo "  Readline support:           `if test -n "${USE_READLINE}" ; then echo yes ; else echo no ; fi`"
 
+echo "  Regex support:              `if test -n "${USE_REGEX}" ; then echo yes ; else echo no ; fi`"
+
 echo "  SQLite support:             `if test -n "${USE_SQLITE}" ; then echo yes ; else echo no ; fi`"
+
+echo "  TIFF support:               `if test -n "${USE_TIFF}" ; then echo yes ; else echo no ; fi`"
 
 echo "  Tcl/Tk support:             `if test -n "${USE_TCLTK}" ; then echo yes ; else echo no ; fi`"
 
 echo "  wxWidgets support:          `if test -n "${USE_WXWIDGETS}" ; then echo yes ; else echo no ; fi`"
 
-echo "  TIFF support:               `if test -n "${USE_TIFF}" ; then echo yes ; else echo no ; fi`"
-
 echo "  X11 support:                `if test -n "${USE_X11}" ; then echo yes ; else echo no ; fi`"
-
-echo "  Regex support:              `if test -n "${USE_REGEX}" ; then echo yes ; else echo no ; fi`"
-
-echo "  POSIX thread support:       `if test -n "${USE_PTHREAD}" ; then echo yes ; else echo no ; fi`"
 
 echo ""
 
