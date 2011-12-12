@@ -16,12 +16,14 @@ This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Martin Landa <landa.martin gmail.com>
+@author Luca Delucchi <lucadeluge gmail.com> (language choice)
 """
 
 import os
 import sys
 import copy
 import types
+import locale
 
 from core       import globalvar
 from core.gcmd  import GException, GError
@@ -41,6 +43,17 @@ class Settings:
         except KeyError:
             projFile = ''
         
+        loc = list(locale.getdefaultlocale())
+        if loc[1] == 'UTF8':
+            loc[1] = 'UTF-8'
+        code_loc = "%s.%s" % (loc[0],loc[1])
+        self.locs = list(set(locale.locale_alias.values()))
+        self.locs.append('en_GB.UTF-8')
+        self.locs.sort()
+        try:
+            id_loc = locs.index(code_loc)
+        except:
+            id_loc = None
         #
         # default settings
         #
@@ -113,6 +126,14 @@ class Settings:
                     'type' : 'grass'
                     },
                 },
+            #
+            # language
+            #
+            'language': {
+                'locale': {
+                    'lc_all' : id_loc
+                }
+            },
             #
             # display
             #
@@ -724,6 +745,8 @@ class Settings:
              _("Collapse all except current"),
              _("Collapse all"),
              _("Expand all"))
+             
+        self.internalSettings['language']['locale']['choices'] = tuple(self.locs)
         self.internalSettings['atm']['leftDbClick']['choices'] = (_('Edit selected record'),
                                                                   _('Display selected'))
         
