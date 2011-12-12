@@ -5,26 +5,43 @@
 
 #define TINY 1.0e-20;
 
-
+/*!
+ * \brief LU decomposition
+ *
+ * \param a double **
+ * \param n int
+ * \param indx int *
+ * \param d double *
+ *
+ * \retrun 0 on singular matrix, 1 on success
+ */
 int G_ludcmp(double **a, int n, int *indx, double *d)
 {
     int i, imax = 0, j, k;
     double big, dum, sum, temp;
     double *vv;
+    int is_singular = FALSE;
 
     vv = G_alloc_vector(n);
     *d = 1.0;
+/* this pragma works, but doesn't really help speed things up */
+/* #pragma omp parallel for private(i, j, big, temp) shared(n, a, vv, is_singular) */
     for (i = 0; i < n; i++) {
 	big = 0.0;
 	for (j = 0; j < n; j++)
 	    if ((temp = fabs(a[i][j])) > big)
 		big = temp;
-	if (big == 0.0) {
-	    *d = 0.0;
-	    return 0;		/* Singular matrix  */
-	}
+
+	if (big == 0.0)
+	    is_singular = TRUE;
+
 	vv[i] = 1.0 / big;
     }
+    if (is_singular) {
+	*d = 0.0;
+	return 0;	/* Singular matrix  */
+    }
+
     for (j = 0; j < n; j++) {
 	for (i = 0; i < j; i++) {
 	    sum = a[i][j];
@@ -32,7 +49,10 @@ int G_ludcmp(double **a, int n, int *indx, double *d)
 		sum -= a[i][k] * a[k][j];
 	    a[i][j] = sum;
 	}
+
 	big = 0.0;
+/* not very efficent, but this pragma helps speed things up a bit */
+#pragma omp parallel for private(i, k, sum, dum) shared(j, n, a, vv, big, imax)
 	for (i = j; i < n; i++) {
 	    sum = a[i][j];
 	    for (k = 0; k < j; k++)
@@ -68,6 +88,17 @@ int G_ludcmp(double **a, int n, int *indx, double *d)
 
 #undef TINY
 
+
+/*!
+ * \brief LU backward substitution
+ *
+ * \param a double **
+ * \param n int
+ * \param indx int *
+ * \param b double []
+ *
+ * \retrun void
+ */
 void G_lubksb(double **a, int n, int *indx, double b[])
 {
     int i, ii, ip, j;
