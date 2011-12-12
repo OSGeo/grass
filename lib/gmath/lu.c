@@ -32,8 +32,10 @@ int G_ludcmp(double **a, int n, int *indx, double *d)
 	    if ((temp = fabs(a[i][j])) > big)
 		big = temp;
 
-	if (big == 0.0)
+	if (big == 0.0) {
 	    is_singular = TRUE;
+	    break;
+	}
 
 	vv[i] = 1.0 / big;
     }
