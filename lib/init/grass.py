@@ -240,6 +240,15 @@ def read_gisrc():
     f.close()
     return kv
 
+def read_bashrc():
+    kv = {}
+    f = open(os.path.join(grass_config_dir, "bashrc"), 'r')
+    for line in f:
+        k, v = line.split(':', 1)
+        kv[k.strip()] = v.strip()
+    f.close()
+    return kv
+
 def write_gisrc(kv):
     f = open(gisrc, 'w')
     for k, v in kv.iteritems():
@@ -280,11 +289,27 @@ def read_gui():
 def get_locale():
     global locale
     locale = None
-    for var in ['LC_ALL', 'LC_MESSAGES', 'LANG']:
-	loc = os.getenv(var)
-	if loc:
-	    locale = loc[0:2]
-	return
+    try:
+        kv = read_bashrc()
+    except:
+        kv = {}
+    if 'GRASS_LANG' in os.environ:
+        locale = os.environ['GRASS_LANG']
+        if locale[0:2] == 'en':
+          locale = None
+    elif 'GRASS_LANG' in kv:
+        locale = kv['GRASS_LANG']
+        if locale[0:2] == 'en':
+          locale = None
+    if locale:
+        for var in ['LC_ALL', 'LC_MESSAGES', 'LANG', 'LANGUAGE']:
+            os.environ[var] = locale
+
+    for var in ['LC_ALL', 'LC_MESSAGES', 'LANG', 'LANGUAGE']:
+        loc = os.getenv(var)
+        if loc:
+            locale = loc[0:2]
+    return
 
 def path_prepend(dir, var):
     path = os.getenv(var)
@@ -816,6 +841,11 @@ def bash_startup():
     
     f.write("export PATH=\"%s\"\n" % os.getenv('PATH'))
     f.write("export HOME=\"%s\"\n" % userhome) # restore user home path
+    
+    g7bashrc = os.path.join(grass_config_dir,'bashrc')
+    if not os.path.exists(g7bashrc):
+      fg7 = open(g7bashrc, 'w')
+      fg7.close()
     
     for env, value in os.environ.iteritems():
         if env.find('GRASS_') < 0:
