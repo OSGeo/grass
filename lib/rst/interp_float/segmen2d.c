@@ -13,6 +13,24 @@
 
 static double smallest_segment(struct multtree *, int);
 
+
+/*
+ *
+ *  Recursively processes each segment in a tree by:
+ *
+ *  a) finding points from neighbouring segments so that the total number of
+ *  points is between KMIN and KMAX2 by calling tree function MT_get_region().
+ *
+ *  b) creating and solving the system of linear equations using these points
+ *  and interp() by calling matrix_create() and G_ludcmp().
+ *
+ *  c) checking the interpolating function values at points by calling
+ *  check_points().
+ *
+ *  d) computing grid for this segment using points and interp() by calling
+ *  grid_calc().
+ *
+ */
 int IL_interp_segments_2d(struct interp_params *params, struct tree_info *info,	/* info for the quad tree */
 			  struct multtree *tree,	/* current leaf of the quad tree */
 			  struct BM *bitmask,	/* bitmask */
@@ -24,17 +42,6 @@ int IL_interp_segments_2d(struct interp_params *params, struct tree_info *info,	
 			  int totsegm,		/* total number of segments */
 			  off_t offset1,	/* offset for temp file writing */
 			  double dnorm)
-/*
-   Recursively processes each segment in a tree by
-   a) finding points from neighbouring segments so that the total number of
-   points is between KMIN and KMAX2 by calling tree function MT_get_region().
-   b) creating and solving the system of linear equations using these points
-   and interp() by calling matrix_create() and G_ludcmp().
-   c) checking the interpolating function values at points by calling
-   check_points().
-   d) computing grid for this segment using points and interp() by calling
-   grid_calc().
- */
 {
     double xmn, xmx, ymn, ymx, distx, disty, distxp, distyp, temp1, temp2;
     int i, npt, nptprev, MAXENC;
@@ -230,6 +237,8 @@ int IL_interp_segments_2d(struct interp_params *params, struct tree_info *info,	
 	skip_point.y = 0.;
 	skip_point.z = 0.;
 
+
+	/*** TODO: parallelize this loop instead of the LU solver! ***/
 	for (skip_index = 0; skip_index < m_skip; skip_index++) {
 	    if (params->cv) {
 		segtest = 0;
@@ -274,7 +283,7 @@ int IL_interp_segments_2d(struct interp_params *params, struct tree_info *info,	
 		    b[i + 1] = data->points[i].z;
 		b[0] = 0.;
 		G_lubksb(matrix, data->n_points + 1, indx, b);
-	/* put here condition to skip ertot if not needed */
+	/* put here condition to skip error if not needed */
 		params->check_points(params, data, b, ertot, zmin, dnorm,
 				     skip_point);
 	    }
