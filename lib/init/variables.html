@@ -267,6 +267,12 @@ PERMANENT
   <dt>GRASS_NO_GLX_PIXMAPS</dt>
   <dd>[nviz]<br>
     Set to any value to disable the use of GLX Pixmaps.</dd>
+
+  <dt>OMP_NUM_THREADS</dt>
+  <dd>[OpenMP]<br>
+    If OpenMP support is enabled this limits the number of threads.
+    The default is set to the number of CPUs on the system.
+    Setting to '1' effectively disables parallel processing.</dd>
 </dl>
 
 <a name="rendering"></a>
