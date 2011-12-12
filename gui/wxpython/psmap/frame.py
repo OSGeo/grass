@@ -610,9 +610,8 @@ class PsMapFrame(wx.Frame):
         decmenu.AppendItem(AddImage)
         self.Bind(wx.EVT_MENU, self.OnAddImage, AddImage) 
         # north arrow image
-        AddNorthArrow = wx.MenuItem(decmenu, wx.ID_ANY, _("North arrow"))
-        AddNorthArrow.SetBitmap(wx.ArtProvider.GetBitmap(id = wx.ART_MISSING_IMAGE,
-                                client = wx.ART_MENU, size = self.iconsize))
+        AddNorthArrow = wx.MenuItem(decmenu, wx.ID_ANY, Icons['psMap']["addNorthArrow"].GetLabel())
+        AddNorthArrow.SetBitmap(Icons['psMap']["addNorthArrow"].GetBitmap(self.iconsize))
         decmenu.AppendItem(AddNorthArrow)
         self.Bind(wx.EVT_MENU, self.OnAddNorthArrow, AddNorthArrow) 
         # Popup the menu.  If an item is selected then its handler
