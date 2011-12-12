@@ -183,6 +183,9 @@ Add a new point to the vector map (without header):
 echo "P 1 1
  640794 214874
  1 1" | v.edit -n tool=add map=vectmap input=-
+
+# insert new row for each category in attribute table if doesn't exist yet
+v.to.db map=vectmap option=cat
 </pre></div>
 
 The input must be in <a href="vectorascii.html">GRASS ASCII vector
