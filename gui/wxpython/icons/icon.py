@@ -146,6 +146,8 @@ Icons = {
                                 label = _('Add scalebar and north arrow')),
         'addLegend'  : MetaIcon(img = iconSet.get('legend-add', wx.ART_ERROR),
                                 label = _('Add legend')),
+        'addNorthArrow': MetaIcon(img = iconSet.get('north-arrow-add', wx.ART_ERROR),
+                                label = _('North Arrow')),
         'saveFile'   : MetaIcon(img = iconSet.get('map-export', wx.ART_ERROR),
                                 label = _('Save display to graphic file')),
         'print'      : MetaIcon(img = iconSet.get('print', wx.ART_ERROR),
@@ -441,8 +443,10 @@ Icons = {
                                 label = _('Legend')),
         'addScalebar' : MetaIcon(img = iconSet.get('scalebar-add', wx.ART_ERROR),
                                  label = _('Scale bar')),
-        'addImage'   : MetaIcon(img = iconSet['image-add'],
+        'addImage'   : MetaIcon(img = iconSet.get('image-add', wx.ART_ERROR),
                                  label = _('Image')),
+        'addNorthArrow': MetaIcon(img = iconSet.get('north-arrow-add', wx.ART_ERROR),
+                                 label = _('North Arrow')),
         }
     }
 

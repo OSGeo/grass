@@ -1146,8 +1146,8 @@ class MapFrame(MapFrameBase):
         # temporary
         if self.IsPaneShown('3d'):
             AddScale.Enable(False)
-            AddArrow = wx.MenuItem(decmenu, wx.ID_ANY, _("Add north arrow"))
-            AddArrow.SetBitmap(icons["addBarscale"].GetBitmap(self.iconsize))
+            AddArrow = wx.MenuItem(decmenu, wx.ID_ANY, icons['addNorthArrow'].GetLabel())
+            AddArrow.SetBitmap(icons['addNorthArrow'].GetBitmap(self.iconsize))
             decmenu.AppendItem(AddArrow)
             self.Bind(wx.EVT_MENU, self.OnAddArrow, AddArrow)
         
