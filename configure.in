@@ -261,6 +261,7 @@ LOC_ARG_WITH(readline, Readline, no)
 LOC_ARG_WITH(opendwg, openDWG, no)
 LOC_ARG_WITH(regex, regex)
 LOC_ARG_WITH(pthread, POSIX threads, no)
+LOC_ARG_WITH(openmp, OpenMP, no)
 
 AC_ARG_WITH(gdal,
 [  --with-gdal[=path/gdal-config]
@@ -358,6 +359,9 @@ LOC_ARG_WITH_LIB(regex, regex)
 
 LOC_ARG_WITH_INC(pthread, POSIX threads)
 LOC_ARG_WITH_LIB(pthread, POSIX threads)
+
+LOC_ARG_WITH_INC(openmp, OpenMP)
+LOC_ARG_WITH_LIB(openmp, OpenMP)
 
 # Put this early on so CPPFLAGS and LDFLAGS have any additional dirs
 
@@ -1780,6 +1784,67 @@ AC_SUBST(USE_PTHREAD)
 
 # Done checking pthread
 
+# Enable OpenMP option
+
+LOC_CHECK_USE(openmp,OpenMP,USE_OPENMP)
+
+OMPINCPATH=
+OMPLIBPATH=
+OMPLIB=
+OMPCFLAGS=
+
+if test -n "$USE_OPENMP"; then
+
+# With OpenMP includes directory
+
+LOC_CHECK_INC_PATH(openmp,OpenMP,OMPINCPATH)
+
+LOC_CHECK_INCLUDES(omp.h,OpenMP,$OMPINCPATH)
+
+# With OpenMP library directory
+# GCC et al.: -lgomp
+# Solaris cc: -lmtsk
+# AIX xlc: -lxlsmp
+# SGI IRIX 6.5 MIPSpro C/C++: -lmp
+
+LOC_CHECK_LIB_PATH(gomp,OpenMP,OMPLIBPATH)
+
+LOC_CHECK_FUNC(GOMP_parallel_start,OpenMP functions,OMPLIB,,,,,[
+LOC_CHECK_LIBS(gomp,GOMP_parallel_start,OpenMP,$OMPLIBPATH,OMPLIB,,,)
+])
+
+# compiler dependent
+#if test ${CC} = "gcc" ; then
+if test x$GCC = xyes ; then
+	# GNU C compiler (>= 4.2.1)
+	OMPCFLAGS=-fopenmp
+elif test ${CC} = "icc" ; then
+	# Intel compiler
+	OMPCFLAGS=-openmp
+elif test ${CC} = "opencc" ; then
+	# AMD's x86 Open64 compiler
+	OMPCFLAGS=-mp
+elif test ${CC} = "pgcc" ; then
+	# Portland Group's compiler
+	OMPCFLAGS=-mp
+# ... anybody else?
+fi
+
+# try to build a test program with "$CC $OMPCLFAGS" to confirm it works
+#...how?
+#echo "int main() {return 0;}" > test.c 
+#$CC $OMPCLFAGS test.c -o test
+
+fi # $USE_OPENMP
+
+AC_SUBST(OMPINCPATH)
+AC_SUBST(OMPLIBPATH)
+AC_SUBST(OMPLIB)
+AC_SUBST(OMPCFLAGS)
+AC_SUBST(USE_OPENMP)
+
+# Done checking OpenMP
+
 # Enable LFS (from cdr-tools)
 dnl Check for large file support
 dnl Do this last to make sure that no large file definition
@@ -1951,6 +2016,7 @@ LOC_MSG_USE(NLS support,USE_NLS)
 LOC_MSG_USE(ODBC support,USE_ODBC)
 LOC_MSG_USE(OGR support,USE_OGR)
 LOC_MSG_USE(OpenGL support,USE_OPENGL)
+LOC_MSG_USE(OpenMP support,USE_OPENMP)
 LOC_MSG_USE(PNG support,USE_PNG)
 LOC_MSG_USE(PostgreSQL support,USE_POSTGRES)
 LOC_MSG_USE(Readline support,USE_READLINE)
