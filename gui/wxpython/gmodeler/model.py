@@ -15,6 +15,7 @@ Classes:
  - model::ProcessModelFile
  - model::WriteModelFile
  - model::WritePythonFile
+ - model::ModelParamDialog
 
 (C) 2010-2011 by the GRASS Development Team
 
@@ -41,7 +42,6 @@ from wx.lib import ogl
 from core.globalvar      import ETCWXDIR
 from core                import utils
 from core.gcmd           import GMessage, GException, GError, RunCommand, EncodeString, GWarning
-from gmodeler.dialogs    import ModelParamDialog
 from core.settings       import UserSettings
 from gui_core.forms      import GUI
 
@@ -2134,3 +2134,84 @@ if __name__ == "__main__":
             ret += ")"
         
         return ret
+
+class ModelParamDialog(wx.Dialog):
+    def __init__(self, parent, params, id = wx.ID_ANY, title = _("Model parameters"),
+                 style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
+        """!Model parameters dialog
+        """
+        self.parent = parent
+        self.params = params
+        self.tasks  = list() # list of tasks/pages
+        
+        wx.Dialog.__init__(self, parent = parent, id = id, title = title, style = style, **kwargs)
+        
+        self.notebook = GNotebook(parent = self, 
+                                  style = globalvar.FNPageDStyle)
+        
+        panel = self._createPages()
+        wx.CallAfter(self.notebook.SetSelection, 0)
+        
+        self.btnCancel = wx.Button(parent = self, id = wx.ID_CANCEL)
+        self.btnRun    = wx.Button(parent = self, id = wx.ID_OK,
+                                   label = _("&Run"))
+        self.btnRun.SetDefault()
+        
+        self._layout()
+        
+        size = self.GetBestSize()
+        self.SetMinSize(size)
+        self.SetSize((size.width, size.height +
+                      panel.constrained_size[1] -
+                      panel.panelMinHeight))
+                
+    def _layout(self):
+        btnSizer = wx.StdDialogButtonSizer()
+        btnSizer.AddButton(self.btnCancel)
+        btnSizer.AddButton(self.btnRun)
+        btnSizer.Realize()
+        
+        mainSizer = wx.BoxSizer(wx.VERTICAL)
+        mainSizer.Add(item = self.notebook, proportion = 1,
+                      flag = wx.EXPAND)
+        mainSizer.Add(item = btnSizer, proportion = 0,
+                      flag = wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border = 5)
+        
+        self.SetSizer(mainSizer)
+        mainSizer.Fit(self)
+        
+    def _createPages(self):
+        """!Create for each parameterized module its own page"""
+        nameOrdered = [''] * len(self.params.keys())
+        for name, params in self.params.iteritems():
+            nameOrdered[params['idx']] = name
+        for name in nameOrdered:
+            params = self.params[name]
+            panel = self._createPage(name, params)
+            if name == 'variables':
+                name = _('Variables')
+            self.notebook.AddPage(page = panel, text = name)
+        
+        return panel
+    
+    def _createPage(self, name, params):
+        """!Define notebook page"""
+        if name in globalvar.grassCmd['all']:
+            task = gtask.grassTask(name)
+        else:
+            task = gtask.grassTask()
+        task.flags  = params['flags']
+        task.params = params['params']
+        
+        panel = CmdPanel(parent = self, id = wx.ID_ANY, task = task)
+        self.tasks.append(task)
+        
+        return panel
+
+    def GetErrors(self):
+        """!Check for errors, get list of messages"""
+        errList = list()
+        for task in self.tasks:
+            errList += task.get_cmd_error()
+        
+        return errList

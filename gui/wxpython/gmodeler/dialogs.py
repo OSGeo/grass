@@ -7,10 +7,13 @@ Classes:
  - dialogs::ModelDataDialog
  - dialogs::ModelSearchDialog
  - dialogs::ModelRelationDialog
- - dialogs::ModelParamDialog
  - dialogs::ModelItemDialog
  - dialogs::ModelLoopDialog
  - dialogs::ModelConditionDialog
+ - dialogs::ModelListCtrl
+ - dialogs::ValiableListCtrl
+ - dialogs::ItemListCtrl
+ - dialogs::ItemCheckListCtrl
 
 (C) 2010-2011 by the GRASS Development Team
 
@@ -21,8 +24,10 @@ This program is free software under the GNU General Public License
 """
 
 import os
+import sys
 
 import wx
+import wx.lib.mixins.listctrl as listmix
 
 from core                 import globalvar
 from core                 import utils
@@ -32,6 +37,8 @@ from gui_core.dialogs     import ElementDialog, MapLayersDialog
 from gui_core.ghelp       import SearchModuleWindow
 from gui_core.prompt      import GPromptSTC
 from gui_core.forms       import CmdPanel
+
+from gmodeler.model       import *
 
 from grass.script import task as gtask
 
@@ -363,87 +370,6 @@ class ModelRelationDialog(wx.Dialog):
         else:
             self.btnOk.Enable(False)
 
-class ModelParamDialog(wx.Dialog):
-    def __init__(self, parent, params, id = wx.ID_ANY, title = _("Model parameters"),
-                 style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
-        """!Model parameters dialog
-        """
-        self.parent = parent
-        self.params = params
-        self.tasks  = list() # list of tasks/pages
-        
-        wx.Dialog.__init__(self, parent = parent, id = id, title = title, style = style, **kwargs)
-        
-        self.notebook = GNotebook(parent = self, 
-                                  style = globalvar.FNPageDStyle)
-        
-        panel = self._createPages()
-        wx.CallAfter(self.notebook.SetSelection, 0)
-        
-        self.btnCancel = wx.Button(parent = self, id = wx.ID_CANCEL)
-        self.btnRun    = wx.Button(parent = self, id = wx.ID_OK,
-                                   label = _("&Run"))
-        self.btnRun.SetDefault()
-        
-        self._layout()
-        
-        size = self.GetBestSize()
-        self.SetMinSize(size)
-        self.SetSize((size.width, size.height +
-                      panel.constrained_size[1] -
-                      panel.panelMinHeight))
-                
-    def _layout(self):
-        btnSizer = wx.StdDialogButtonSizer()
-        btnSizer.AddButton(self.btnCancel)
-        btnSizer.AddButton(self.btnRun)
-        btnSizer.Realize()
-        
-        mainSizer = wx.BoxSizer(wx.VERTICAL)
-        mainSizer.Add(item = self.notebook, proportion = 1,
-                      flag = wx.EXPAND)
-        mainSizer.Add(item = btnSizer, proportion = 0,
-                      flag = wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border = 5)
-        
-        self.SetSizer(mainSizer)
-        mainSizer.Fit(self)
-        
-    def _createPages(self):
-        """!Create for each parameterized module its own page"""
-        nameOrdered = [''] * len(self.params.keys())
-        for name, params in self.params.iteritems():
-            nameOrdered[params['idx']] = name
-        for name in nameOrdered:
-            params = self.params[name]
-            panel = self._createPage(name, params)
-            if name == 'variables':
-                name = _('Variables')
-            self.notebook.AddPage(page = panel, text = name)
-        
-        return panel
-    
-    def _createPage(self, name, params):
-        """!Define notebook page"""
-        if name in globalvar.grassCmd['all']:
-            task = gtask.grassTask(name)
-        else:
-            task = gtask.grassTask()
-        task.flags  = params['flags']
-        task.params = params['params']
-        
-        panel = CmdPanel(parent = self, id = wx.ID_ANY, task = task)
-        self.tasks.append(task)
-        
-        return panel
-
-    def GetErrors(self):
-        """!Check for errors, get list of messages"""
-        errList = list()
-        for task in self.tasks:
-            errList += task.get_cmd_error()
-        
-        return errList
-
 class ModelItemDialog(wx.Dialog):
     """!Abstract item properties dialog"""
     def __init__(self, parent, shape, title, id = wx.ID_ANY,
@@ -630,3 +556,411 @@ class ModelConditionDialog(ModelItemDialog):
         """!Get items"""
         return { 'if'   : self.itemListIf.GetItems(),
                  'else' : self.itemListElse.GetItems() }
+
+class ModelListCtrl(wx.ListCtrl,
+                    listmix.ListCtrlAutoWidthMixin,
+                    listmix.TextEditMixin,
+                    listmix.ColumnSorterMixin):
+    def __init__(self, parent, columns, id = wx.ID_ANY,
+                 style = wx.LC_REPORT | wx.BORDER_NONE |
+                 wx.LC_SORT_ASCENDING |wx.LC_HRULES |
+                 wx.LC_VRULES, **kwargs):
+        """!List of model variables"""
+        self.parent = parent
+        self.columns = columns
+        self.shape = None
+        try:
+            self.frame  = parent.parent
+        except AttributeError:
+            self.frame = None
+        
+        wx.ListCtrl.__init__(self, parent, id = id, style = style, **kwargs)
+        listmix.ListCtrlAutoWidthMixin.__init__(self)
+        listmix.TextEditMixin.__init__(self)
+        listmix.ColumnSorterMixin.__init__(self, 4)
+        
+        i = 0
+        for col in columns:
+            self.InsertColumn(i, col)
+            self.SetColumnWidth(i, wx.LIST_AUTOSIZE_USEHEADER)
+            i += 1
+        
+        self.itemDataMap = {} # requested by sorter
+        self.itemCount   = 0
+        
+        self.Bind(wx.EVT_LIST_BEGIN_LABEL_EDIT, self.OnBeginEdit)
+        self.Bind(wx.EVT_LIST_END_LABEL_EDIT, self.OnEndEdit)
+        self.Bind(wx.EVT_LIST_COL_CLICK, self.OnColClick)
+        self.Bind(wx.EVT_COMMAND_RIGHT_CLICK, self.OnRightUp) #wxMSW
+        self.Bind(wx.EVT_RIGHT_UP, self.OnRightUp)            #wxGTK
+                
+    def OnBeginEdit(self, event):
+        """!Editing of item started"""
+        event.Allow()
+
+    def OnEndEdit(self, event):
+        """!Finish editing of item"""
+        pass
+    
+    def OnColClick(self, event):
+        """!Click on column header (order by)"""
+        event.Skip()
+
+class VariableListCtrl(ModelListCtrl):
+    def __init__(self, parent, columns, **kwargs):
+        """!List of model variables"""
+        ModelListCtrl.__init__(self, parent, columns, **kwargs)
+
+        self.SetColumnWidth(2, 200) # default value
+
+    def GetListCtrl(self):
+        """!Used by ColumnSorterMixin"""
+        return self
+    
+    def GetData(self):
+        """!Get list data"""
+        return self.itemDataMap
+    
+    def Populate(self, data):
+        """!Populate the list"""
+        self.itemDataMap = dict()
+        i = 0
+        for name, values in data.iteritems():
+            self.itemDataMap[i] = [name, values['type'],
+                                   values.get('value', ''),
+                                   values.get('description', '')]
+            i += 1
+        
+        self.itemCount = len(self.itemDataMap.keys())
+        self.DeleteAllItems()
+        i = 0
+        for name, vtype, value, desc in self.itemDataMap.itervalues():
+            index = self.InsertStringItem(sys.maxint, name)
+            self.SetStringItem(index, 0, name)
+            self.SetStringItem(index, 1, vtype)
+            self.SetStringItem(index, 2, value)
+            self.SetStringItem(index, 3, desc)
+            self.SetItemData(index, i)
+            i += 1
+        
+    def Append(self, name, vtype, value, desc):
+        """!Append new item to the list
+
+        @return None on success
+        @return error string
+        """
+        for iname, ivtype, ivalue, idesc in self.itemDataMap.itervalues():
+            if iname == name:
+                return _("Variable <%s> already exists in the model. "
+                         "Adding variable failed.") % name
+        
+        index = self.InsertStringItem(sys.maxint, name)
+        self.SetStringItem(index, 0, name)
+        self.SetStringItem(index, 1, vtype)
+        self.SetStringItem(index, 2, value)
+        self.SetStringItem(index, 3, desc)
+        self.SetItemData(index, self.itemCount)
+        
+        self.itemDataMap[self.itemCount] = [name, vtype, value, desc]
+        self.itemCount += 1
+        
+        return None
+
+    def OnRemove(self, event):
+        """!Remove selected variable(s) from the model"""
+        item = self.GetFirstSelected()
+        while item != -1:
+            self.DeleteItem(item)
+            del self.itemDataMap[item]
+            item = self.GetFirstSelected()
+        self.parent.UpdateModelVariables()
+        
+        event.Skip()
+        
+    def OnRemoveAll(self, event):
+        """!Remove all variable(s) from the model"""
+        dlg = wx.MessageBox(parent=self,
+                            message=_("Do you want to delete all variables from "
+                                      "the model?"),
+                            caption=_("Delete variables"),
+                            style=wx.YES_NO | wx.CENTRE)
+        if dlg != wx.YES:
+            return
+        
+        self.DeleteAllItems()
+        self.itemDataMap = dict()
+        
+        self.parent.UpdateModelVariables()
+        
+    def OnEndEdit(self, event):
+        """!Finish editing of item"""
+        itemIndex = event.GetIndex()
+        columnIndex = event.GetColumn()
+        nameOld = self.GetItem(itemIndex, 0).GetText()
+
+        if columnIndex == 0: # TODO
+            event.Veto()
+        
+        self.itemDataMap[itemIndex][columnIndex] = event.GetText()
+        
+        self.parent.UpdateModelVariables()
+
+    def OnReload(self, event):
+        """!Reload list of variables"""
+        self.Populate(self.parent.parent.GetModel().GetVariables())
+
+    def OnRightUp(self, event):
+        """!Mouse right button up"""
+        if not hasattr(self, "popupID1"):
+            self.popupID1 = wx.NewId()
+            self.popupID2 = wx.NewId()
+            self.popupID3 = wx.NewId()
+            self.Bind(wx.EVT_MENU, self.OnRemove,    id = self.popupID1)
+            self.Bind(wx.EVT_MENU, self.OnRemoveAll, id = self.popupID2)
+            self.Bind(wx.EVT_MENU, self.OnReload,    id = self.popupID3)
+        
+        # generate popup-menu
+        menu = wx.Menu()
+        menu.Append(self.popupID1, _("Delete selected"))
+        menu.Append(self.popupID2, _("Delete all"))
+        if self.GetFirstSelected() == -1:
+            menu.Enable(self.popupID1, False)
+            menu.Enable(self.popupID2, False)
+        
+        menu.AppendSeparator()
+        menu.Append(self.popupID3, _("Reload"))
+        
+        self.PopupMenu(menu)
+        menu.Destroy()
+
+class ItemListCtrl(ModelListCtrl):
+    def __init__(self, parent, columns, disablePopup = False, **kwargs):
+        """!List of model actions"""
+        self.disablePopup = disablePopup
+                
+        ModelListCtrl.__init__(self, parent, columns, **kwargs)
+        self.SetColumnWidth(1, 100)
+        self.SetColumnWidth(2, 65)
+        
+    def GetListCtrl(self):
+        """!Used by ColumnSorterMixin"""
+        return self
+    
+    def GetData(self):
+        """!Get list data"""
+        return self.itemDataMap
+    
+    def Populate(self, data):
+        """!Populate the list"""
+        self.itemDataMap = dict()
+        
+        if self.shape:
+            if isinstance(self.shape, ModelCondition):
+                if self.GetName() == 'ElseBlockList':
+                    shapeItems = map(lambda x: x.GetId(), self.shape.GetItems()['else'])
+                else:
+                    shapeItems = map(lambda x: x.GetId(), self.shape.GetItems()['if'])
+            else:
+                shapeItems = map(lambda x: x.GetId(), self.shape.GetItems())
+        else:
+            shapeItems = list()
+        
+        i = 0
+        if len(self.columns) == 3: # ItemCheckList
+            checked = list()
+        for action in data:
+            if isinstance(action, ModelData) or \
+                    action == self.shape:
+                continue
+            
+            if len(self.columns) == 3:
+                self.itemDataMap[i] = [str(action.GetId()),
+                                       action.GetName(),
+                                       action.GetLog()]
+                aId = action.GetBlockId()
+                if action.GetId() in shapeItems:
+                    checked.append(aId)
+                else:
+                    checked.append(None)
+            else:
+                bId = action.GetBlockId()
+                if not bId:
+                    bId = ''
+                self.itemDataMap[i] = [str(action.GetId()),
+                                       action.GetName(),
+                                       ','.join(map(str, bId)),
+                                       action.GetLog()]
+            
+            i += 1
+        
+        self.itemCount = len(self.itemDataMap.keys())
+        self.DeleteAllItems()
+        i = 0
+        if len(self.columns) == 3:
+            for aid, name, desc in self.itemDataMap.itervalues():
+                index = self.InsertStringItem(sys.maxint, aid)
+                self.SetStringItem(index, 0, aid)
+                self.SetStringItem(index, 1, name)
+                self.SetStringItem(index, 2, desc)
+                self.SetItemData(index, i)
+                if checked[i]:
+                    self.CheckItem(index, True)
+                i += 1
+        else:
+            for aid, name, inloop, desc in self.itemDataMap.itervalues():
+                index = self.InsertStringItem(sys.maxint, aid)
+                self.SetStringItem(index, 0, aid)
+                self.SetStringItem(index, 1, name)
+                self.SetStringItem(index, 2, inloop)
+                self.SetStringItem(index, 3, desc)
+                self.SetItemData(index, i)
+                i += 1
+                
+    def OnRemove(self, event):
+        """!Remove selected action(s) from the model"""
+        model = self.frame.GetModel()
+        canvas = self.frame.GetCanvas()
+        
+        item = self.GetFirstSelected()
+        while item != -1:
+            self.DeleteItem(item)
+            del self.itemDataMap[item]
+            
+            aId = self.GetItem(item, 0).GetText()
+            action = model.GetItem(int(aId))
+            if not action:
+                item = self.GetFirstSelected()
+                continue
+            
+            model.RemoveItem(action)
+            canvas.GetDiagram().RemoveShape(action)
+            self.frame.ModelChanged()
+            
+            item = self.GetFirstSelected()
+        
+        canvas.Refresh()
+        
+        event.Skip()
+    
+    def OnRemoveAll(self, event):
+        """!Remove all variable(s) from the model"""
+        deleteDialog = wx.MessageBox(parent=self,
+                                     message=_("Selected data records (%d) will permanently deleted "
+                                               "from table. Do you want to delete them?") % \
+                                         (len(self.listOfSQLStatements)),
+                                     caption=_("Delete records"),
+                                     style=wx.YES_NO | wx.CENTRE)
+        if deleteDialog != wx.YES:
+            return False
+        
+        self.DeleteAllItems()
+        self.itemDataMap = dict()
+
+        self.parent.UpdateModelVariables()
+
+    def OnEndEdit(self, event):
+        """!Finish editing of item"""
+        itemIndex = event.GetIndex()
+        columnIndex = event.GetColumn()
+        
+        self.itemDataMap[itemIndex][columnIndex] = event.GetText()
+        
+        aId = int(self.GetItem(itemIndex, 0).GetText())
+        action = self.frame.GetModel().GetItem(aId)
+        if not action:
+            event.Veto()
+        if columnIndex == 0:
+            action.SetId(int(event.GetText()))
+        
+        self.frame.ModelChanged()
+
+    def OnReload(self, event = None):
+        """!Reload list of actions"""
+        self.Populate(self.frame.GetModel().GetItems())
+
+    def OnRightUp(self, event):
+        """!Mouse right button up"""
+        if self.disablePopup:
+            return
+        
+        if not hasattr(self, "popupID1"):
+            self.popupID1 = wx.NewId()
+            self.popupID2 = wx.NewId()
+            self.popupID3 = wx.NewId()
+            self.popupID4 = wx.NewId()
+            self.Bind(wx.EVT_MENU, self.OnRemove,    id = self.popupID1)
+            self.Bind(wx.EVT_MENU, self.OnRemoveAll, id = self.popupID2)
+            self.Bind(wx.EVT_MENU, self.OnReload,    id = self.popupID3)
+            self.Bind(wx.EVT_MENU, self.OnNormalize, id = self.popupID4)
+
+        # generate popup-menu
+        menu = wx.Menu()
+        menu.Append(self.popupID1, _("Delete selected"))
+        menu.Append(self.popupID2, _("Delete all"))
+        if self.GetFirstSelected() == -1:
+            menu.Enable(self.popupID1, False)
+            menu.Enable(self.popupID2, False)
+        
+        menu.AppendSeparator()
+        menu.Append(self.popupID4, _("Normalize"))
+        menu.Append(self.popupID3, _("Reload"))
+        
+        self.PopupMenu(menu)
+        menu.Destroy()
+    
+    def OnNormalize(self, event):
+        """!Update id of actions"""
+        model = self.frame.GetModel()
+        
+        aId = 1
+        for item in model.GetItems():
+            item.SetId(aId)
+            aId += 1
+        
+        self.OnReload(None)
+        self.frame.GetCanvas().Refresh()
+        self.frame.ModelChanged()
+
+class ItemCheckListCtrl(ItemListCtrl, listmix.CheckListCtrlMixin):
+    def __init__(self, parent, shape, columns, window = None, **kwargs):
+        self.parent = parent
+        self.window = window
+        
+        ItemListCtrl.__init__(self, parent, columns, disablePopup = True, **kwargs)
+        listmix.CheckListCtrlMixin.__init__(self)
+        self.SetColumnWidth(0, 50)
+        
+        self.shape  = shape
+        
+    def OnBeginEdit(self, event):
+        """!Disable editing"""
+        event.Veto()
+        
+    def OnCheckItem(self, index, flag):
+        """!Item checked/unchecked"""
+        name = self.GetName()
+        if name == 'IfBlockList' and self.window:
+            self.window.OnCheckItemIf(index, flag)
+        elif name == 'ElseBlockList' and self.window:
+            self.window.OnCheckItemElse(index, flag)
+        
+    def GetItems(self):
+        """!Get list of selected actions"""
+        ids = { 'checked'   : list(),
+                'unchecked' : list() }
+        for i in range(self.GetItemCount()):
+            iId = int(self.GetItem(i, 0).GetText())
+            if self.IsChecked(i):
+                ids['checked'].append(iId)
+            else:
+                ids['unchecked'].append(iId)
+            
+        return ids
+
+    def CheckItemById(self, aId, flag):
+        """!Check/uncheck given item by id"""
+        for i in range(self.GetItemCount()):
+            iId = int(self.GetItem(i, 0).GetText())
+            if iId == aId:
+                self.CheckItem(i, flag)
+                break
