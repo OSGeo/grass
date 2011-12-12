@@ -13,7 +13,7 @@
  * \param indx int *
  * \param d double *
  *
- * \retrun 0 on singular matrix, 1 on success
+ * \return 0 on singular matrix, 1 on success
  */
 int G_ludcmp(double **a, int n, int *indx, double *d)
 {
@@ -97,7 +97,7 @@ int G_ludcmp(double **a, int n, int *indx, double *d)
  * \param indx int *
  * \param b double []
  *
- * \retrun void
+ * \return void
  */
 void G_lubksb(double **a, int n, int *indx, double b[])
 {
