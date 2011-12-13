@@ -277,6 +277,8 @@ def install_extension_win():
     except HTTPError:
         grass.fatal(_("GRASS Addons <%s> not found") % options['extension'])
     
+    return 0
+
 # install extension
 def install_extension():
     gisbase = os.getenv('GISBASE')
@@ -287,9 +289,14 @@ def install_extension():
         grass.warning(_("Extension <%s> already installed. Will be updated...") % options['extension'])
 
     if sys.platform == "win32":
-        install_extension_win()
+        ret = install_extension_win()
     else:
-        install_extension_other()
+        ret = install_extension_other()
+    
+    if ret != 0:
+        grass.warning(_('Installation failed, sorry. Please check above error messages.'))
+    else:
+        grass.message(_("Installation of <%s> successfully finished") % options['extension'])
     
     # manual page: fix href
     if os.getenv('GRASS_ADDON_PATH'):
@@ -397,43 +404,9 @@ def install_extension_other():
     
     grass.message(_("Installing <%s>...") % options['extension'])
     
-    ret = grass.call(installCmd,
-                     stdout = outdev)
+    return grass.call(installCmd,
+                      stdout = outdev)
     
-    if ret != 0:
-        grass.warning(_('Installation failed, sorry. Please check above error messages.'))
-    else:
-        grass.message(_("Installation of <%s> successfully finished.") % options['extension'])
-    
-    # manual page: fix href
-    if os.getenv('GRASS_ADDON_PATH'):
-        html_man = os.path.join(os.getenv('GRASS_ADDON_PATH'), 'docs', 'html', options['extension'] + '.html')
-        if os.path.exists(html_man):
-            fd = open(html_man)
-            html_str = '\n'.join(fd.readlines())
-            fd.close()
-            for rep in ('grassdocs.css', 'grass_logo.png'):
-                patt = re.compile(rep, re.IGNORECASE)
-                html_str = patt.sub(os.path.join(gisbase, 'docs', 'html', rep),
-                                    html_str)
-                
-            patt = re.compile(r'(<a href=")(d|db|g|i|m|p|ps|r|r3|s|v|wxGUI)(\.)(.+)(.html">)', re.IGNORECASE)
-            while True:
-                m = patt.search(html_str)
-                if not m:
-                    break
-                html_str = patt.sub(m.group(1) + os.path.join(gisbase, 'docs', 'html',
-                                                              m.group(2) + m.group(3) + m.group(4)) + m.group(5),
-                                    html_str, count = 1)
-            fd = open(html_man, "w")
-            fd.write(html_str)
-            fd.close()
-    
-    if not os.environ.has_key('GRASS_ADDON_PATH') or \
-            not os.environ['GRASS_ADDON_PATH']:
-        grass.warning(_('This add-on module will not function until you set the '
-                        'GRASS_ADDON_PATH environment variable (see "g.manual variables")'))
-
 # remove existing extension (reading XML file)
 def remove_extension(force = False):
     # try to download XML metadata file first
