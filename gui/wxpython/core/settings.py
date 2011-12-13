@@ -38,11 +38,22 @@ class Settings:
         # key/value separator
         self.sep = ';'
         
-        try:
-            projFile = PathJoin(os.environ["GRASS_PROJSHARE"], 'epsg')
-        except KeyError:
-            projFile = ''
+        # define default settings
+        self._defaultSettings()  # -> self.defaultSettings
         
+        # read settings from the file
+        self.userSettings = copy.deepcopy(self.defaultSettings)
+        try:
+            self.ReadSettingsFile()
+        except GException, e:
+            print >> sys.stderr, e.value
+        
+        # define internal settings
+        self._internalSettings() # -> self.internalSettings
+
+    def _generateLocale(self):
+        """!Generate locales
+        """
         loc = list(locale.getdefaultlocale())
         if loc[1] == 'UTF8':
             loc[1] = 'UTF-8'
@@ -51,12 +62,22 @@ class Settings:
         self.locs.append('en_GB.UTF-8')
         self.locs.sort()
         try:
-            id_loc = locs.index(code_loc)
+            return locs.index(code_loc)
         except:
-            id_loc = None
-        #
-        # default settings
-        #
+            pass
+        
+        return None
+        
+    def _defaultSettings(self):
+        """!Define default settings
+        """
+        try:
+            projFile = PathJoin(os.environ["GRASS_PROJSHARE"], 'epsg')
+        except KeyError:
+            projFile = ''
+        
+        id_loc = self._generateLocale()
+        
         self.defaultSettings = {
             #
             # general
@@ -719,19 +740,10 @@ class Settings:
         # TODO
         if sys.platform == 'darwin':
             self.defaultSettings['general']['defWindowPos']['enabled'] = False
-        
-        #
-        # user settings
-        #
-        self.userSettings = copy.deepcopy(self.defaultSettings)
-        try:
-            self.ReadSettingsFile()
-        except GException, e:
-            print >> sys.stderr, e.value
 
-        #
-        # internal settings (based on user settings)
-        #
+    def _internalSettings(self):
+        """!Define internal settings (based on user settings)
+        """
         self.internalSettings = {}
         for group in self.userSettings.keys():
             self.internalSettings[group] = {}
