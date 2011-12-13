@@ -59,19 +59,25 @@
 
 #%flag
 #% key: l
-#% description: List available modules in the GRASS Addons SVN repository
+#% description: List available extensions in the GRASS Addons SVN repository
 #% guisection: Print
 #% suppress_required: yes
 #%end
 #%flag
 #% key: c
-#% description: List available modules in the GRASS Addons SVN repository including module description
+#% description: List available extensions in the GRASS Addons SVN repository including module description
 #% guisection: Print
 #% suppress_required: yes
 #%end
 #%flag
 #% key: g
-#% description: List available modules in the GRASS Addons SVN repository (shell script style)
+#% description: List available extensions in the GRASS Addons SVN repository (shell script style)
+#% guisection: Print
+#% suppress_required: yes
+#%end
+#%flag
+#% key: a
+#% description: List locally installed extension
 #% guisection: Print
 #% suppress_required: yes
 #%end
@@ -140,10 +146,31 @@ def expand_module_class_name(c):
     
     return c
 
-# list modules (read XML file from grass.osgeo.org/addons)
-def list_available_modules():
-    mlist = list()
+# list installed extensions
+def get_installed_extensions(force = False):
+    fXML = os.path.join(options['prefix'], 'modules.xml')
+    if not os.path.exists(fXML):
+        if force:
+            write_xml_modules(fXML)
+        else:
+            grass.warning(_("No metadata file available"))
+        return []
+    
+    # read XML file
+    fo = open(fXML, 'r')
+    tree = etree.fromstring(fo.read())
+    fo.close()
+    
+    ret = list()
+    for tnode in tree.findall('task'):
+        ret.append(tnode.get('name'))
+    
+    return ret
 
+# list extensions (read XML file from grass.osgeo.org/addons)
+def list_available_extensions():
+    mlist = list()
+    
     # try to download XML metadata file first
     url = "http://grass.osgeo.org/addons/grass%s.xml" % grass.version()['version'].split('.')[0]
     try:
@@ -168,14 +195,14 @@ def list_available_modules():
             else:
                 print name
     except HTTPError:
-        return list_available_modules_svn()
+        return list_available_extensions_svn()
     
     return mlist
 
-# list modules (scan SVN repo)
-def list_available_modules_svn():
+# list extensions (scan SVN repo)
+def list_available_extensions_svn():
     mlist = list()
-    grass.message(_('Fetching list of modules from GRASS-Addons SVN (be patient)...'))
+    grass.message(_('Fetching list of extensions from GRASS-Addons SVN (be patient)...'))
     pattern = re.compile(r'(<li><a href=".+">)(.+)(</a></li>)', re.IGNORECASE)
 
     if flags['c']:
@@ -199,7 +226,7 @@ def list_available_modules_svn():
             continue
         
         for line in f.readlines():
-            # list modules
+            # list extensions
             sline = pattern.search(line)
             if not sline:
                 continue
@@ -227,7 +254,7 @@ def list_wxgui_extensions(print_module = True):
         return
         
     for line in f.readlines():
-        # list modules
+        # list extensions
         sline = pattern.search(line)
         if not sline:
             continue
@@ -246,6 +273,132 @@ def cleanup():
         grass.message(_("Path to the source code:"))
         sys.stderr.write('%s\n' % os.path.join(tmpdir, options['extension']))
 
+# write out meta-file
+def write_xml_modules(name, tree = None):
+    fo = open(name, 'w')
+    version = grass.version()['version'].split('.')[0]
+    fo.write('<?xml version="1.0" encoding="UTF-8"?>\n')
+    fo.write('<!DOCTYPE task SYSTEM "grass-addons.dtd">\n')
+    fo.write('<addons version="%s">\n' % version)
+    
+    if tree is not None:
+        for tnode in tree.findall('task'):
+            indent = 4
+            fo.write('%s<task name="%s">\n' % (' ' * indent, tnode.get('name')))
+            indent += 4
+            fo.write('%s<description>%s</description>\n' % \
+                         (' ' * indent, tnode.find('description').text))
+            fo.write('%s<keywords>%s</keywords>\n' % \
+                         (' ' * indent, tnode.find('keywords').text))
+            bnode = tnode.find('binary')
+            if bnode is not None:
+                fo.write('%s<binary>\n' % (' ' * indent))
+                indent += 4
+                for fnode in bnode.findall('file'):
+                    fo.write('%s<file>%s</file>\n' % \
+                                 (' ' * indent, fnode.text))
+                indent -= 4 
+                fo.write('%s</binary>\n' % (' ' * indent))
+            libgisRev = grass.version()['libgis_revision']
+            fo.write('%s<libgis revision="%s" />\n' % \
+                         (' ' * indent, libgisRev))
+            indent -= 4
+            fo.write('%s</task>\n' % (' ' * indent))
+    
+    fo.write('</addons>\n')
+    fo.close()
+    
+# update local meta-file when installing new extension
+def install_extension_xml():
+    # read metadata from remote server
+    url = "http://grass.osgeo.org/addons/grass%s.xml" % grass.version()['version'].split('.')[0]
+    data = None
+    try:
+        f = urlopen(url)
+        tree = etree.fromstring(f.read())
+        for mnode in tree.findall('task'):
+            name = mnode.get('name')
+            if name != options['extension']:
+                continue
+            
+            fList = list()
+            bnode = mnode.find('binary')
+            windows = sys.platform == 'win32'
+            if bnode is not None:
+                for fnode in bnode.findall('file'):
+                    path = fnode.text.split('/')
+                    if windows:
+                        if path[0] == 'bin':
+                            path[-1] += '.exe'
+                        if path[0] == 'scripts':
+                            path[-1] += '.py'
+                    fList.append(os.path.sep.join(path))
+            
+            data = { 'name'  : name,
+                     'desc'  : mnode.find('description').text,
+                     'keyw'  : mnode.find('keywords').text,
+                     'files' : fList,
+                     }
+    except HTTPError:
+        grass.error(_("Unable to read metadata file from the remote server"))
+    
+    if not data:
+        grass.warning(_("No metadata available"))
+        return
+
+    fXML = os.path.join(options['prefix'], 'modules.xml')
+    # create an empty file if not exists
+    if not os.path.exists(fXML):
+        write_xml_modules(fXML)
+    
+    # read XML file
+    fo = open(fXML, 'r')
+    tree = etree.fromstring(fo.read())
+    fo.close()
+    
+    # update tree
+    tnode = None
+    for node in tree.findall('task'):
+        if node.get('name') == options['extension']:
+            tnode = node
+            break
+    
+    if tnode is not None:
+        # update existing node
+        dnode = tnode.find('description')
+        if dnode is not None:
+            dnode.text = data['desc']
+        knode = tnode.find('keywords')
+        if knode is not None:
+            knode.text = data['keyw']
+        bnode = tnode.find('binary')
+        if bnode is not None:
+            tnode.remove(bnode)
+        bnode = etree.Element('binary')
+        for f in data['files']:
+            fnode = etree.Element('file')
+            fnode.text = f
+            bnode.append(fnode)
+        tnode.append(bnode)
+    else:
+        # create new node for task
+        tnode = etree.Element('task', attrib = { 'name' : data['name'] })
+        dnode = etree.Element('description')
+        dnode.text = data['desc']
+        tnode.append(dnode)
+        knode = etree.Element('keywords')
+        knode.text = data['keyw']
+        tnode.append(knode)
+        bnode = etree.Element('binary')
+        for f in data['files']:
+            fnode = etree.Element('file')
+            fnode.text = f
+            bnode.append(fnode)
+        tnode.append(bnode)
+        tree.append(tnode)
+    
+    write_xml_modules(fXML, tree)
+    
 # install extension on MS Windows
 def install_extension_win():
     ### TODO: do not use hardcoded url
@@ -285,8 +438,8 @@ def install_extension():
     if not gisbase:
         grass.fatal(_('$GISBASE not defined'))
     
-    if grass.find_program(options['extension'], ['--help']):
-        grass.warning(_("Extension <%s> already installed. Will be updated...") % options['extension'])
+    if options['extension'] in get_installed_extensions(force = True):
+        grass.warning(_("Extension <%s> already installed. Re-installing...") % options['extension'])
 
     if sys.platform == "win32":
         ret = install_extension_win()
@@ -296,6 +449,8 @@ def install_extension():
     if ret != 0:
         grass.warning(_('Installation failed, sorry. Please check above error messages.'))
     else:
+        grass.message(_("Updating metadata file..."))
+        install_extension_xml()
         grass.message(_("Installation of <%s> successfully finished") % options['extension'])
     
     if not os.environ.has_key('GRASS_ADDON_PATH') or \
@@ -383,40 +538,56 @@ def install_extension_other():
     return grass.call(installCmd,
                       stdout = outdev)
     
+# update local meta-file when removing existing extension
+def remove_extension_xml():
+    fXML = os.path.join(options['prefix'], 'modules.xml')
+    if not os.path.exists(fXML):
+        return
+    
+    # read XML file
+    fo = open(fXML, 'r')
+    tree = etree.fromstring(fo.read())
+    fo.close()
+
+    tnode = None
+    for node in tree.findall('task'):
+        if node.get('name') == options['extension']:
+            tnode = node
+            break
+
+    if tnode is not None:
+        tree.remove(tnode)
+        
+    write_xml_modules(fXML, tree)
+    
 # remove existing extension (reading XML file)
 def remove_extension(force = False):
-    # try to download XML metadata file first
-    url = "http://grass.osgeo.org/addons/grass%s.xml" % grass.version()['version'].split('.')[0]
+    # try to read XML metadata file first
+    fXML = os.path.join(options['prefix'], 'modules.xml')
     name = options['extension']
+    if name not in get_installed_extensions():
+        grass.warning(_("Extension <%s> not found") % name)
+    
     if force:
         grass.verbose(_("List of removed files:"))
     else:
         grass.info(_("Files to be removed (use flag 'f' to force removal):"))
     
-    try:
-        f = urlopen(url)
+    if os.path.exists(fXML):
+        f = open(fXML, 'r')
         tree = etree.fromstring(f.read())
         flist = []
         for task in tree.findall('task'):
             if name == task.get('name', default = '') and \
                     task.find('binary') is not None:
                 for f in task.find('binary').findall('file'):
-                    fname = f.text
-                    if fname:
-                        fpath = fname.split('/')
-                        if sys.platform == 'win32':
-                            if fpath[0] == 'bin':
-                                fpath[-1] += '.exe'
-                            if fpath[0] == 'scripts':
-                                fpath[-1] += '.py'
-                        
-                        flist.append(fpath)
+                    flist.append(f.text)
         
         if flist:
             removed = False
             err = list()
             for f in flist:
-                fpath = os.path.join(options['prefix'], os.path.sep.join(f))
+                fpath = os.path.join(options['prefix'], f)
                 try:
                     if force:
                         grass.verbose(fpath)
@@ -432,15 +603,15 @@ def remove_extension(force = False):
             if err:
                 for e in err:
                     grass.error(e)
-        else:
-            remove_extension_std(force)
-    except HTTPError:
+    else:
         remove_extension_std(force)
-
+    
     if force:
+        grass.message(_("Updating metadata file..."))
+        remove_extension_xml()
         grass.message(_("Extension <%s> successfully uninstalled.") % options['extension'])
     else:
-        grass.warning(_("Extension <%s> not removed. "
+        grass.warning(_("Extension <%s> not removed.\n"
                         "Re-run '%s' with 'f' flag to force removal") % (options['extension'], 'g.extension'))
     
 # remove exising extension (using standard files layout)
@@ -498,14 +669,6 @@ def main():
     if sys.platform != "win32":
         check_progs()
     
-    # list available modules
-    if flags['l'] or flags['c'] or flags['g']:
-        list_available_modules()
-        return 0
-    else:
-        if not options['extension']:
-            grass.fatal(_('You need to define an extension name or use -l'))
-    
     # define path
     if flags['s']:
         options['prefix'] = os.environ['GISBASE']
@@ -523,6 +686,18 @@ def main():
             if len(path_list) > 1:
                 grass.warning(_("GRASS_ADDON_PATH has more items, using first defined - '%s'") % path_list[0])
             options['prefix'] = path_list[0]
+                
+    # list available extensions
+    if flags['l'] or flags['c'] or flags['g']:
+        list_available_extensions()
+        return 0
+    elif flags['a']:
+        grass.message(_("List of installed extensions:"))
+        print os.linesep.join(get_installed_extensions())
+        return 0
+    else:
+        if not options['extension']:
+            grass.fatal(_('You need to define an extension name or use -l'))
     
     if flags['d']:
         if options['operation'] != 'add':
