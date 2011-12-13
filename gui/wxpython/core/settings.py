@@ -61,12 +61,10 @@ class Settings:
         self.locs = list(set(locale.locale_alias.values()))
         self.locs.append('en_GB.UTF-8')
         self.locs.sort()
-        try:
-            return locs.index(code_loc)
-        except:
-            pass
+        if code_loc in self.locs:
+            return code_loc
         
-        return None
+        return 'C'
         
     def _defaultSettings(self):
         """!Define default settings
