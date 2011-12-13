@@ -429,7 +429,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         #
         # languages
         #
-        box   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = " %s " % _("Set language)"))
+        box   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = " %s " % _("Language settings"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
         gridSizer = wx.GridBagSizer (hgap = 3, vgap = 3)
@@ -439,7 +439,7 @@ class PreferencesDialog(PreferencesBaseDialog):
 
         row = 0
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                         label = _("Choose language (requires to save and GRASS restart)::")),
+                                         label = _("Choose language (requires to save and GRASS restart):")),
                       flag = wx.ALIGN_LEFT |
                       wx.ALIGN_CENTER_VERTICAL,
                       pos = (row, 0))
