@@ -296,7 +296,7 @@ def write_xml_modules(name, tree = None):
                 indent += 4
                 for fnode in bnode.findall('file'):
                     fo.write('%s<file>%s</file>\n' % \
-                                 (' ' * indent, fnode.text))
+                                 (' ' * indent, os.path.join(options['prefix'], fnode.text)))
                 indent -= 4 
                 fo.write('%s</binary>\n' % (' ' * indent))
             libgisRev = grass.version()['libgis_revision']
@@ -586,8 +586,7 @@ def remove_extension(force = False):
         if flist:
             removed = False
             err = list()
-            for f in flist:
-                fpath = os.path.join(options['prefix'], f)
+            for fpath in flist:
                 try:
                     if force:
                         grass.verbose(fpath)
@@ -603,6 +602,8 @@ def remove_extension(force = False):
             if err:
                 for e in err:
                     grass.error(e)
+        else:
+            remove_extension_std(force)
     else:
         remove_extension_std(force)
     
