@@ -111,59 +111,64 @@ else:
     EXT_BIN = ''
     EXT_SCT = ''
 
-def GetGRASSCmds(bin = True, scripts = True, gui_scripts = True, addons = True):
+def GetGRASSCmds(scriptsOnly = False):
     """!Create list of available GRASS commands to use when parsing
     string from the command line
-
-    @param bin True to include executable into list
-    @param scripts True to include scripts into list
-    @param gui_scripts True to include GUI scripts into list
+    
+    @param scriptsOnly True to report only scripts
     """
     gisbase = os.environ['GISBASE']
     cmd = list()
     
-    if bin:
-        for executable in os.listdir(os.path.join(gisbase, 'bin')):
-            ext = os.path.splitext(executable)[1]
-            if not EXT_BIN or \
-                    ext in (EXT_BIN, EXT_SCT):
-                cmd.append(executable)
-        
-        # add special call for setting vector colors
-        cmd.append('vcolors')
+    # scan bin/
+    if not scriptsOnly:
+        for fname in os.listdir(os.path.join(gisbase, 'bin')):
+            name, ext = os.path.splitext(fname)
+            if not EXT_BIN:
+                cmd.append(fname)
+            elif ext == EXT_BIN:
+                cmd.append(name)
     
-    if scripts:
-        cmd += os.listdir(os.path.join(gisbase, 'scripts'))
+    # scan scripts/
+    for fname in os.listdir(os.path.join(gisbase, 'scripts')):
+        name, ext = os.path.splitext(fname)
+        if not EXT_SCT:
+            cmd.append(fname)
+        elif ext == EXT_SCT:
+            cmd.append(name)
     
-    if gui_scripts:
-        os.environ["PATH"] = os.getenv("PATH") + os.pathsep + os.path.join(gisbase, 'etc', 'gui', 'scripts')
-        cmd = cmd + os.listdir(os.path.join(gisbase, 'etc', 'gui', 'scripts'))
+    # scan gui/scripts/
+    os.environ["PATH"] = os.getenv("PATH") + os.pathsep + os.path.join(gisbase, 'etc', 'gui', 'scripts')
+    cmd = cmd + os.listdir(os.path.join(gisbase, 'etc', 'gui', 'scripts'))
     
-    if addons and os.getenv('GRASS_ADDON_PATH'):
+    # scan addons
+    if os.getenv('GRASS_ADDON_PATH'):
         path = os.getenv('GRASS_ADDON_PATH')
         bpath = os.path.join(path, 'bin')
         spath = os.path.join(path, 'scripts')
-        if os.path.exists(bpath) and os.path.isdir(bpath):
-            for executable in os.listdir(bpath):
-                ext = os.path.splitext(executable)[1]
-                if not EXT_BIN or \
-                        ext in (EXT_BIN, EXT_SCT):
-                    cmd.append(executable)
-        if os.path.exists(spath) and os.path.isdir(spath):
-            cmd += os.listdir(spath)
-    
-    if sys.platform == 'win32':
-        for idx in range(len(cmd)):
-            name, ext = os.path.splitext(cmd[idx])
-            if ext in (EXT_BIN, EXT_SCT):
-                cmd[idx] = name
+        if not scriptsOnly and os.path.exists(bpath) and \
+                os.path.isdir(bpath):
+            for fname in os.listdir(bpath):
+                name, ext = os.path.splitext(fname)
+                if not EXT_BIN:
+                    cmd.append(fname)
+                elif ext == EXT_BIN:
+                    cmd.append(name)
+            
+            if os.path.exists(spath) and os.path.isdir(spath):
+                for fname in os.listdir(spath):
+                    name, ext = os.path.splitext(fname)
+                    if not EXT_SCT:
+                        cmd.append(fname)
+                    elif ext == EXT_SCT:
+                        cmd.append(name)
     
     return cmd
 
 """@brief Collected GRASS-relared binaries/scripts"""
 grassCmd = {}
 grassCmd['all']    = GetGRASSCmds()
-grassCmd['script'] = GetGRASSCmds(bin = False, gui_scripts = False)
+grassCmd['script'] = GetGRASSCmds(scriptsOnly = True)
 
 """@Toolbar icon size"""
 toolbarSize = (24, 24)
