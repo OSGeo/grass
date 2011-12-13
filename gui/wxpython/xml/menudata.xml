@@ -885,9 +885,16 @@
 	<separator />
 	    <menuitem>
 	      <label>Install extension from add-ons</label>
-	      <help>Install new extension from GRASS AddOns SVN repository.</help>
+	      <help>Installs new extension from GRASS AddOns SVN repository.</help>
 	      <keywords>general,installation,extensions</keywords>
 	      <handler>OnInstallExtension</handler>
+	      <command>g.extension</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>Remove extension</label>
+	      <help>Removes installed GRASS AddOns extension.</help>
+	      <keywords>general,installation,extensions</keywords>
+	      <handler>OnUninstallExtension</handler>
 	      <command>g.extension</command>
 	    </menuitem>
 	<separator />

@@ -6,6 +6,8 @@
 Classes:
  - extensions::InstallExtensionWindow
  - extensions::ExtensionTree
+ - extensions::UninstallExtensionWindow
+ - extensions::CheckListExtension
 
 (C) 2008-2011 by the GRASS Development Team
 
@@ -19,6 +21,7 @@ import os
 import sys
 
 import wx
+import wx.lib.mixins.listctrl as listmix
 try:
     import wx.lib.agw.customtreectrl as CT
 except ImportError:
@@ -63,7 +66,7 @@ class InstallExtensionWindow(wx.Frame):
         self.optionBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
                                       label = " %s " % _("Options"))
         task = gtask.parse_interface('g.extension')
-        ignoreFlags = ['l', 'c', 'g', 'f', 'quiet', 'verbose']
+        ignoreFlags = ['l', 'c', 'g', 'a', 'f', 'quiet', 'verbose']
         if sys.platform == 'win32':
             ignoreFlags.append('d')
             ignoreFlags.append('i')
@@ -371,3 +374,128 @@ class ExtensionTree(ItemTree):
     def IsLoaded(self):
         """Check if items are loaded"""
         return self._loaded
+
+class UninstallExtensionWindow(wx.Frame):
+    def __init__(self, parent, id = wx.ID_ANY,
+                 title = _("Uninstall GRASS Addons extensions"), **kwargs):
+        self.parent = parent
+        
+        wx.Frame.__init__(self, parent = parent, id = id, title = title, **kwargs)
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
+        
+        self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
+
+        self.extBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
+                                   label = " %s " % _("List of installed extensions"))
+        
+        self.extList = CheckListExtension(parent = self.panel)
+
+        # buttons
+        self.btnUninstall = wx.Button(parent = self.panel, id = wx.ID_ANY,
+                                    label = _("&Uninstall"))
+        self.btnUninstall.SetToolTipString(_("Uninstall selected AddOns extensions"))
+        self.btnCmd = wx.Button(parent = self.panel, id = wx.ID_ANY,
+                                label = _("Command dialog"))
+        self.btnCmd.SetToolTipString(_('Open %s dialog') % 'g.extension')
+        self.btnClose = wx.Button(parent = self.panel, id = wx.ID_CLOSE)
+        
+        self.btnUninstall.Bind(wx.EVT_BUTTON, self.OnUninstall)
+        self.btnCmd.Bind(wx.EVT_BUTTON, self.OnCmdDialog)
+        self.btnClose.Bind(wx.EVT_BUTTON, self.OnCloseWindow)
+        
+        self._layout()
+        
+    def _layout(self):
+        """!Do layout"""
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        
+        extSizer = wx.StaticBoxSizer(self.extBox, wx.HORIZONTAL)
+        extSizer.Add(item = self.extList, proportion = 1,
+                     flag = wx.ALL | wx.EXPAND, border = 1)
+        
+        btnSizer = wx.BoxSizer(wx.HORIZONTAL)
+        btnSizer.Add(item = self.btnCmd, proportion = 0,
+                     flag = wx.RIGHT, border = 5)
+        btnSizer.AddSpacer(10)
+        btnSizer.Add(item = self.btnClose, proportion = 0,
+                     flag = wx.RIGHT, border = 5)
+        btnSizer.Add(item = self.btnUninstall, proportion = 0)
+        
+        sizer.Add(item = extSizer, proportion = 1,
+                  flag = wx.ALL | wx.EXPAND, border = 3)
+        sizer.Add(item = btnSizer, proportion = 0,
+                  flag = wx.ALIGN_RIGHT | wx.ALL, border = 5)
+        
+        self.panel.SetSizer(sizer)
+        sizer.Fit(self.panel)
+        
+        self.Layout()
+
+    def OnCloseWindow(self, event):
+        """!Close window"""
+        self.Destroy()
+
+    def OnUninstall(self, event):
+        """!Uninstall selected extensions"""
+        log = self.parent.GetLogWindow()
+        eList = self.extList.GetExtensions()
+        if not eList:
+            GError(_("No extension selected for removal. "
+                     "Operation canceled."),
+                   parent = self)
+            return
+        
+        for ext in eList:
+            files = RunCommand('g.extension', parent = self, read = True, quiet = True,
+                               extension = ext, operation = 'remove').splitlines()
+            dlg = wx.MessageDialog(parent = self,
+                                   message = _("List of files to be removed:\n%(files)s\n\n"
+                                               "Do you want really to remove <%(ext)s> extension?") % \
+                                       { 'files' : os.linesep.join(files), 'ext' : ext },
+                                   caption = _("Remove extension"),
+                                   style = wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION)
+            
+            if dlg.ShowModal() ==  wx.ID_YES:
+                RunCommand('g.extension', flags = 'f', parent = self, quiet = True,
+                           extension = ext, operation = 'remove')
+        
+        self.extList.LoadData()
+        
+    def OnCmdDialog(self, event):
+        """!Shows command dialog"""
+        GUI(parent = self).ParseCommand(cmd = ['g.extension'])
+
+class CheckListExtension(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.CheckListCtrlMixin):
+    """!List of mapset/owner/group"""
+    def __init__(self, parent):
+        self.parent = parent
+        
+        wx.ListCtrl.__init__(self, parent, id = wx.ID_ANY,
+                             style = wx.LC_REPORT)
+        listmix.CheckListCtrlMixin.__init__(self)
+        
+        # setup mixins
+        listmix.ListCtrlAutoWidthMixin.__init__(self)
+
+        self.InsertColumn(0, _('Extension'))
+        self.LoadData()
+        
+    def LoadData(self):
+        """!Load data into list"""
+        self.DeleteAllItems()
+        for ext in RunCommand('g.extension',
+                              quiet = True, parent = self, read = True,
+                              flags = 'a').splitlines():
+            self.InsertStringItem(sys.maxint, ext)
+
+    def GetExtensions(self):
+        """!Get extensions to be un-installed
+        """
+        extList = list()
+        for i in range(self.GetItemCount()):
+            if self.IsChecked(i):
+                name = self.GetItemText(i)
+                if name:
+                    extList.append(name)
+        
+        return extList
