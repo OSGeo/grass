@@ -77,7 +77,7 @@
 #%end
 #%flag
 #% key: a
-#% description: List locally installed extension
+#% description: List locally installed extensions
 #% guisection: Print
 #% suppress_required: yes
 #%end
