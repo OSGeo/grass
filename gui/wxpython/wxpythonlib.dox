@@ -270,21 +270,20 @@ available in GRASS 5 and GRASS 6.
  - dialogs::ModelDataDialog
  - dialogs::ModelSearchDialog
  - dialogs::ModelRelationDialog
- - dialogs::ModelParamDialog
  - dialogs::ModelItemDialog
  - dialogs::ModelLoopDialog
  - dialogs::ModelConditionDialog
+ - dialogs::ModelListCtrl
+ - dialogs::ValiableListCtrl
+ - dialogs::ItemListCtrl
+ - dialogs::ItemCheckListCtrl
 - gmodeler::frame
  - frame::ModelToolbar
  - frame::ModelFrame
  - frame::ModelCanvas
  - frame::ModelEvtHandler
- - frame::ModelListCtrl
  - frame::VariablePanel
- - frame::ValiableListCtrl
  - frame::ItemPanel
- - frame::ItemListCtrl
- - frame::ItemCheckListCtrl
 - gmodeler::menudata
  - menudata::ModelerData
 - gmodeler::model
@@ -299,6 +298,7 @@ available in GRASS 5 and GRASS 6.
  - model::ProcessModelFile
  - model::WriteModelFile
  - model::WritePythonFile
+ - model::ModelParamDialog
 - gmodeler::preferences
  - preferences::PreferencesDialog
  - preferences::PropertiesDialog
