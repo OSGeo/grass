@@ -45,7 +45,6 @@
 #% type: string
 #% key_desc: url
 #% description: SVN Addons repository URL
-#% required: yes
 #% answer: http://svn.osgeo.org/grass/grass-addons/grass7
 #%end
 #%option
@@ -84,18 +83,22 @@
 #%flag
 #% key: s
 #% description: Install system-wide (may need system administrator rights)
+#% guisection: Install
 #%end
 #%flag
 #% key: d
 #% description: Download source code and exit
+#% guisection: Install
 #%end
 #%flag
 #% key: i
 #% description: Don't install new extension, just compile it
+#% guisection: Install
 #%end
 #%flag
 #% key: f
 #% description: Force removal when uninstalling extension (operation=remove)
+#% guisection: Remove
 #%end
 
 import os
@@ -706,7 +709,9 @@ def main():
         return 0
     elif flags['a']:
         grass.message(_("List of installed extensions:"))
-        print os.linesep.join(get_installed_extensions())
+        elist = get_installed_extensions()
+        if elist:
+            print os.linesep.join(elist)
         return 0
     else:
         if not options['extension']:
