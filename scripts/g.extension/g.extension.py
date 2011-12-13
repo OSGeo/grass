@@ -158,7 +158,12 @@ def get_installed_extensions(force = False):
     
     # read XML file
     fo = open(fXML, 'r')
-    tree = etree.fromstring(fo.read())
+    try:
+        tree = etree.fromstring(fo.read())
+    except:
+        os.remove(fXML)
+        write_xml_modules(fXML)
+        return []
     fo.close()
     
     ret = list()
@@ -334,9 +339,16 @@ def install_extension_xml():
                             path[-1] += '.py'
                     fList.append(os.path.sep.join(path))
             
+            desc = mnode.find('description').text
+            if not desc:
+                desc = ''
+            keyw = mnode.find('keywords').text
+            if not keyw:
+                keyw = ''
+            
             data = { 'name'  : name,
-                     'desc'  : mnode.find('description').text,
-                     'keyw'  : mnode.find('keywords').text,
+                     'desc'  : desc,
+                     'keyw'  : keyw,
                      'files' : fList,
                      }
     except HTTPError:
