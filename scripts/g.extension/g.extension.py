@@ -298,30 +298,6 @@ def install_extension():
     else:
         grass.message(_("Installation of <%s> successfully finished") % options['extension'])
     
-    # manual page: fix href
-    if os.getenv('GRASS_ADDON_PATH'):
-        html_man = os.path.join(os.getenv('GRASS_ADDON_PATH'), 'docs', 'html', options['extension'] + '.html')
-        if os.path.exists(html_man):
-            fd = open(html_man)
-            html_str = '\n'.join(fd.readlines())
-            fd.close()
-            for rep in ('grassdocs.css', 'grass_logo.png'):
-                patt = re.compile(rep, re.IGNORECASE)
-                html_str = patt.sub(os.path.join(gisbase, 'docs', 'html', rep),
-                                    html_str)
-                
-            patt = re.compile(r'(<a href=")(d|db|g|i|m|p|ps|r|r3|s|v|wxGUI)(\.)(.+)(.html">)', re.IGNORECASE)
-            while True:
-                m = patt.search(html_str)
-                if not m:
-                    break
-                html_str = patt.sub(m.group(1) + os.path.join(gisbase, 'docs', 'html',
-                                                              m.group(2) + m.group(3) + m.group(4)) + m.group(5),
-                                    html_str, count = 1)
-            fd = open(html_man, "w")
-            fd.write(html_str)
-            fd.close()
-    
     if not os.environ.has_key('GRASS_ADDON_PATH') or \
             not os.environ['GRASS_ADDON_PATH']:
         grass.warning(_('This add-on module will not function until you set the '
@@ -486,20 +462,17 @@ def remove_extension_std(force = False):
     
 # check links in CSS
 def check_style_files(fil):
-    # check the links to grassdocs.css/grass_logo.png to a correct manual page of addons
-    dist_file = os.path.join(os.getenv('GISBASE'), 'docs', 'html', fil)
+    dist_file   = os.path.join(os.getenv('GISBASE'), 'docs', 'html', fil)
     addons_file = os.path.join(options['prefix'], 'docs', 'html', fil)
-    # check if file already exists in the grass addons docs html path
+
     if os.path.isfile(addons_file):
 	return
-    # otherwise copy the file from $GISBASE/docs/html, it doesn't use link 
-    # because os.symlink it work only in Linux
-    else:
-	try:
-	    shutil.copyfile(dist_file,addons_file)
-	except OSError, e:
-	    grass.fatal(_("Unable to create '%s': %s") % (addons_file, e))
 
+    try:
+        shutil.copyfile(dist_file,addons_file)
+    except OSError, e:
+        grass.fatal(_("Unable to create '%s': %s") % (addons_file, e))
+    
 def create_dir(path):  	
     if os.path.isdir(path):  	  	 
         return  	  	 
