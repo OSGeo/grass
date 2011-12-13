@@ -322,8 +322,8 @@ int PS_fcolortable(void)
 	}
 
 	text_box_path( xu, yu, label_xref, label_yref, units, fontsize, 0);
-	set_rgb_color(BLACK); 
 	fprintf(PS.fp, "TIB\n");
+	set_rgb_color(BLACK);
     }
 
     Rast_free_colors(&colors);
