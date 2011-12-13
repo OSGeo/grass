@@ -449,6 +449,8 @@ available in GRASS 5 and GRASS 6.
 - modules::extensions
  - extensions::InstallExtensionWindow
  - extensions::ExtensionTree
+ - extensions::UninstallExtensionWindow
+ - extensions::CheckListExtension
 - modules::histogram
  - histogram::BufferedWindow
  - histogram::HistogramFrame
