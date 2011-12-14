@@ -148,14 +148,14 @@ class LocationDialog(ElementDialog):
         
         self.element1 = MapsetSelect(parent = self.panel, id = wx.ID_ANY,
                                      size = globalvar.DIALOG_GSELECT_SIZE,
-                                     setItems = False)
+                                     setItems = False, skipCurrent = True)
         
         self.PostInit()
         
-        self.__Layout()
+        self._layout()
         self.SetMinSize(self.GetSize())
 
-    def __Layout(self):
+    def _layout(self):
         """!Do layout"""
         self.dataSizer.Add(self.element, proportion = 0,
                            flag = wx.EXPAND | wx.ALL, border = 1)
@@ -176,7 +176,7 @@ class LocationDialog(ElementDialog):
         
         if location:
             dbase = grass.gisenv()['GISDBASE']
-            self.element1.SetItems(GetListOfMapsets(dbase, location, selectable = True))
+            self.element1.UpdateItems(dbase = dbase, location = location)
             self.element1.SetSelection(0)
             mapset = self.element1.GetStringSelection()
         
@@ -199,7 +199,7 @@ class MapsetDialog(ElementDialog):
         else:
             self.SetTitle(self.GetTitle() + ' <%s>' % grass.gisenv()['LOCATION_NAME'])
         
-        self.element = MapsetSelect(parent = self.panel, id = wx.ID_ANY,
+        self.element = MapsetSelect(parent = self.panel, id = wx.ID_ANY, skipCurrent = True,
                                     size = globalvar.DIALOG_GSELECT_SIZE)
         
         self.PostInit()
