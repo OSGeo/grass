@@ -256,7 +256,7 @@ int main(int argc, char *argv[])
     flag.extend = G_define_flag();
     flag.extend->key = 'e';
     flag.extend->description =
-	_("Extend location extents based on new dataset");
+	_("Extend region extents based on new dataset");
 
     flag.tolower = G_define_flag();
     flag.tolower->key = 'w';
@@ -538,7 +538,7 @@ int main(int argc, char *argv[])
 
 	/* Does the projection of the current location match the dataset? */
 	/* G_get_window seems to be unreliable if the location has been changed */
-	G__get_window(&loc_wind, "", "DEFAULT_WIND", "PERMANENT");
+	G_get_default_window(&loc_wind);
 	/* fetch LOCATION PROJ info */
 	if (loc_wind.proj != PROJECTION_XY) {
 	    loc_proj_info = G_get_projinfo();
@@ -1242,22 +1242,22 @@ int main(int argc, char *argv[])
     /*      Extend current window based on dataset.                         */
     /* -------------------------------------------------------------------- */
     if (flag.extend->answer) {
-	G_get_default_window(&loc_wind);
+	G_get_set_window(&cur_wind);
 
-	loc_wind.north = MAX(loc_wind.north, cellhd.north);
-	loc_wind.south = MIN(loc_wind.south, cellhd.south);
-	loc_wind.west = MIN(loc_wind.west, cellhd.west);
-	loc_wind.east = MAX(loc_wind.east, cellhd.east);
+	cur_wind.north = MAX(cur_wind.north, cellhd.north);
+	cur_wind.south = MIN(cur_wind.south, cellhd.south);
+	cur_wind.west = MIN(cur_wind.west, cellhd.west);
+	cur_wind.east = MAX(cur_wind.east, cellhd.east);
 
-	loc_wind.rows = (int)ceil((loc_wind.north - loc_wind.south)
-				  / loc_wind.ns_res);
-	loc_wind.south = loc_wind.north - loc_wind.rows * loc_wind.ns_res;
+	cur_wind.rows = (int)ceil((cur_wind.north - cur_wind.south)
+				  / cur_wind.ns_res);
+	cur_wind.south = cur_wind.north - cur_wind.rows * cur_wind.ns_res;
 
-	loc_wind.cols = (int)ceil((loc_wind.east - loc_wind.west)
-				  / loc_wind.ew_res);
-	loc_wind.east = loc_wind.west + loc_wind.cols * loc_wind.ew_res;
+	cur_wind.cols = (int)ceil((cur_wind.east - cur_wind.west)
+				  / cur_wind.ew_res);
+	cur_wind.east = cur_wind.west + cur_wind.cols * cur_wind.ew_res;
 
-	G__put_window(&loc_wind, "../PERMANENT", "DEFAULT_WIND");
+	G_put_window(&cur_wind);
     }
 
     if (with_z && !flag.z->answer)

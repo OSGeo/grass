@@ -102,7 +102,7 @@ int main(int argc, char *argv[])
 
     flag.e = G_define_flag();
     flag.e->key = 'e';
-    flag.e->description = _("Extend location extents based on new dataset");
+    flag.e->description = _("Extend region extents based on new dataset");
 
     flag.r = G_define_flag();
     flag.r->key = 'r';
