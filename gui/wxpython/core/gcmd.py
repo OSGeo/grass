@@ -635,8 +635,6 @@ def RunCommand(prog, flags = "", overwrite = False, quiet = False, verbose = Fal
     if sys.platform == "win32":
         if prog in globalvar.grassCmd['script']:
             prog += globalvar.EXT_SCT
-        # else:
-        # prog += globalvar.EXT_BIN
     
     ps = grass.start_command(prog, flags, overwrite, quiet, verbose, **kwargs)
     
