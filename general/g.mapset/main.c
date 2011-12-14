@@ -155,16 +155,18 @@ int main(int argc, char *argv[])
     ret = G__mapset_permissions2(gisdbase_new, location_new, mapset_new);
     switch (ret) {
     case 0:
-	G_fatal_error(_("You don't have permission to use this mapset"));
+	G_fatal_error(_("You don't have permission to use the mapset <%s>"),
+	              mapset_new);
 	break;
     case -1:
 	if (flag.add->answer == TRUE) {
-	    G_debug(2, "Mapset %s doesn't exist, attempting to create it",
+	    G_debug(2, "Mapset <%s> doesn't exist, attempting to create it",
 		    mapset_new);
 	    G_make_mapset(gisdbase_new, location_new, mapset_new);
 	}
 	else
-	    G_fatal_error(_("The mapset does not exist. Use -c flag to create it."));
+	    G_fatal_error(_("Mapset <%s> does not exist. Use -c flag to create it."),
+	                  mapset_new);
 	break;
     default:
 	break;
@@ -179,17 +181,22 @@ int main(int argc, char *argv[])
 
     sprintf(path, "%s/.gislock", mapset_new_path);
     G_debug(2, path);
-
+    
     ret = G_spawn(lock_prog, lock_prog, path, gis_lock, NULL);
     G_debug(2, "lock result = %d", ret);
     G_free(lock_prog);
 
     /* Warning: the value returned by system() is not that returned by exit() in executed program
      *          e.g. exit(1) -> 256 (multiplied by 256) */
-    if (ret != 0)
-	G_fatal_error(_("<%s> is currently running GRASS in selected mapset "
-			"or lock file cannot be checked"),
-		      G_whoami());
+    if (ret != 0) {
+	/* .gislock does not exist */
+	if (access(path, F_OK) != 0)
+	    G_fatal_error(_("Lock file of mapset <%s> cannot be checked"),
+			   mapset_new);
+	else
+	    G_fatal_error(_("<%s> is currently running GRASS in selected mapset <%s>"),
+		      G_owner(path), mapset_new);
+    }
 
     /* Clean temporary directory */
     sprintf(path, "%s/etc/clean_temp", G_gisbase());
