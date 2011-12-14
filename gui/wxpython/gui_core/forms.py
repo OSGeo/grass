@@ -1966,6 +1966,8 @@ class GUI:
         # parse the interface decription
         try:
             global _blackList
+            if sys.platform == "win32" and cmd[0] in globalvar.grassCmd['script']:
+                cmd[0] += globalvar.EXT_SCT
             self.grass_task = gtask.parse_interface(cmd[0],
                                                     blackList = _blackList)
         except (grass.ScriptError, ValueError), e: 
