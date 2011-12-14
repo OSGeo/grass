@@ -143,7 +143,7 @@ int main(int argc, char *argv[])
     flag_e->key = 'e';
     flag_e->label = _("Extend region extents based on new dataset");
     flag_e->description =
-	_("Also updates the default region if in the PERMANENT mapset);
+	_("Also updates the default region if in the PERMANENT mapset");
 
     flag_f = G_define_flag();
     flag_f->key = 'f';
