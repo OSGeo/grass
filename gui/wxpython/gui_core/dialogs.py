@@ -45,7 +45,7 @@ from grass.script import task as gtask
 
 from core             import globalvar
 from core.gcmd        import GError, RunCommand, GMessage
-from gui_core.gselect import ElementSelect, LocationSelect, MapsetSelect, Select, OgrTypeSelect, GdalSelect
+from gui_core.gselect import ElementSelect, LocationSelect, MapsetSelect, Select, OgrTypeSelect, GdalSelect, MapsetSelect
 from gui_core.forms   import GUI
 from core.utils       import GetListOfMapsets, GetLayerNameFromCmd, GetValidLayerName
 from core.settings    import UserSettings
@@ -199,8 +199,8 @@ class MapsetDialog(ElementDialog):
         else:
             self.SetTitle(self.GetTitle() + ' <%s>' % grass.gisenv()['LOCATION_NAME'])
         
-        self.element = gselect.MapsetSelect(parent = self.panel, id = wx.ID_ANY,
-                                            size = globalvar.DIALOG_GSELECT_SIZE)
+        self.element = MapsetSelect(parent = self.panel, id = wx.ID_ANY,
+                                    size = globalvar.DIALOG_GSELECT_SIZE)
         
         self.PostInit()
         

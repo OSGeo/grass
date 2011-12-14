@@ -37,7 +37,7 @@ from gui_core.dialogs     import ElementDialog, MapLayersDialog
 from gui_core.ghelp       import SearchModuleWindow
 from gui_core.prompt      import GPromptSTC
 from gui_core.forms       import CmdPanel
-
+from gui_core.gselect     import Select
 from gmodeler.model       import *
 
 from grass.script import task as gtask
@@ -52,8 +52,8 @@ class ModelDataDialog(ElementDialog):
         label, etype = self._getLabel()
         ElementDialog.__init__(self, parent, title, label = label, etype = etype)
                 
-        self.element = gselect.Select(parent = self.panel,
-                                      type = prompt)
+        self.element = Select(parent = self.panel,
+                              type = prompt)
         self.element.SetValue(shape.GetValue())
         
         self.Bind(wx.EVT_BUTTON, self.OnOK,     self.btnOK)
