@@ -141,10 +141,9 @@ int main(int argc, char *argv[])
 
     flag_e = G_define_flag();
     flag_e->key = 'e';
-    flag_e->label = _("Extend location extents based on new dataset");
+    flag_e->label = _("Extend region extents based on new dataset");
     flag_e->description =
-	_("Updates default region if in the PERMANENT mapset, "
-	  "in other mapsets the current region will be extended");
+	_("Also updates the default region if in the PERMANENT mapset);
 
     flag_f = G_define_flag();
     flag_f->key = 'f';
@@ -631,7 +630,8 @@ int main(int argc, char *argv[])
 
 	if (strcmp(G_mapset(), "PERMANENT") == 0) {
 	    G__put_window(&cur_wind, "", "DEFAULT_WIND");
-	    G_message(_("Default region for this location updated"));
+	    G_put_window(&cur_wind);
+	    G_message(_("Default and working regions for this location updated"));
 	}
 	else {
 	    G_put_window(&cur_wind);
