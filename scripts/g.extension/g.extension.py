@@ -581,6 +581,8 @@ def remove_extension(force = False):
     fXML = os.path.join(options['prefix'], 'modules.xml')
     name = options['extension']
     if name not in get_installed_extensions():
+        # try even if module does not seem to be available,
+        # as the user may be trying to get rid of left over cruft
         grass.warning(_("Extension <%s> not found") % name)
     
     if force:
@@ -632,8 +634,6 @@ def remove_extension(force = False):
     
 # remove exising extension (using standard files layout)
 def remove_extension_std(force = False):
-    # try even if module does not seem to be available,
-    # as the user may be trying to get rid of left over cruft
     for fpath in [os.path.join(options['prefix'], 'bin', options['extension']),
                   os.path.join(options['prefix'], 'scripts', options['extension']),
                   os.path.join(options['prefix'], 'docs', 'html', options['extension'] + '.html'),
