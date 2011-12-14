@@ -706,10 +706,12 @@ def main():
         list_available_extensions()
         return 0
     elif flags['a']:
-        grass.message(_("List of installed extensions:"))
         elist = get_installed_extensions()
         if elist:
+            grass.message(_("List of installed extensions:"))
             print os.linesep.join(elist)
+        else:
+            grass.info(_("No extension installed"))
         return 0
     else:
         if not options['extension']:
