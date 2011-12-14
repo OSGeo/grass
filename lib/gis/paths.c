@@ -2,6 +2,13 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+
+#ifndef __MINGW32__
+#include <pwd.h>
+#else
+#include <windows.h>
+#endif
+
 #include <grass/gis.h>
 
 /**
@@ -140,4 +147,124 @@ int G_lstat(const char *file_name, STRUCT_STAT *buf)
 #else
     return lstat(file_name, buf);
 #endif
+}
+
+/**
+ * \brief Get owner name of path
+ *
+ * Returns information about the specified file.
+ *
+ * \param path path to check
+ *
+ * \return Return owner name or anonymous
+ **/
+
+const char *G_owner(const char *path)
+{
+    const char *name = NULL;
+
+#ifndef __MINGW32__
+    STRUCT_STAT info;
+    struct passwd *p;
+    
+    G_stat(path, &info);
+    p = getpwuid(info.st_uid);
+    if (p && p->pw_name && *p->pw_name)
+	name = G_store(p->pw_name);
+
+#else
+
+    /* this code is taken from the official example to 
+     * find the owner of a file object from
+     * http://msdn.microsoft.com/en-us/library/windows/desktop/aa446629%28v=vs.85%29.aspx */
+
+    DWORD dwRtnCode = 0;
+    PSID pSidOwner = NULL;
+    BOOL bRtnBool = TRUE;
+    LPTSTR AcctName = NULL;
+    LPTSTR DomainName = NULL;
+    DWORD dwAcctName = 1, dwDomainName = 1;
+    SID_NAME_USE eUse = SidTypeUnknown;
+    HANDLE hFile;
+    PSECURITY_DESCRIPTOR pSD = NULL;
+
+    /* Get the handle of the file object. */
+    hFile = CreateFile(
+                      TEXT(path),		/* lpFileName */
+		      GENERIC_READ,		/* dwDesiredAccess */
+		      FILE_SHARE_READ,		/* dwShareMode */
+		      NULL,			/* lpSecurityAttributes */
+		      OPEN_EXISTING,		/* dwCreationDisposition */
+		      FILE_ATTRIBUTE_NORMAL,	/* dwFlagsAndAttributes */
+		      NULL			/* hTemplateFile */
+		      );
+    
+    if (hFile == INVALID_HANDLE_VALUE) {
+	G_fatal_error(_("Unable to open file <%s> for reading"), path);
+    }
+    
+    /* Get the owner SID of the file. */
+    dwRtnCode = GetSecurityInfo(
+		      hFile,				/* handle */
+		      SE_FILE_OBJECT,			/* ObjectType */
+		      OWNER_SECURITY_INFORMATION,	/* SecurityInfo */
+		      &pSidOwner,			/* ppsidOwner */
+		      NULL,				/* ppsidGroup */
+		      NULL,				/* ppDacl */
+		      NULL,				/* ppSacl */
+		      &pSD				/* ppSecurityDescriptor */
+		      );
+    
+    if (dwRtnCode != ERROR_SUCCESS) {
+	G_fatal_error(_("Unable to fetch security info for <%s>"), path);
+    }
+    CloseHandle(hFile);
+    
+    /* First call to LookupAccountSid to get the buffer sizes. */
+    bRtnBool = LookupAccountSid(
+		      NULL,			/* lpSystemName */
+		      pSidOwner,		/* lpSid */
+		      AcctName,			/* lpName */
+		      (LPDWORD)&dwAcctName,	/* cchName */
+		      DomainName,		/* lpReferencedDomainName */
+		      (LPDWORD)&dwDomainName,	/* cchReferencedDomainName */
+		      &eUse			/* peUse */
+		      );
+    
+    if (bRtnBool == FALSE)
+	G_fatal_error(_("Unable to look up account id"));
+
+
+    /* Reallocate memory for the buffers. */
+    AcctName = (LPTSTR)GlobalAlloc(GMEM_FIXED, dwAcctName);
+
+    if (AcctName == NULL) {
+	G_fatal_error(_("Unable to allocate memory for account name"));
+    }
+    
+    DomainName = (LPTSTR)GlobalAlloc(GMEM_FIXED, dwDomainName);
+
+    if (DomainName == NULL) {
+	G_fatal_error(_("Unable to allocate memory for domain name"));
+    }
+    
+    /* Second call to LookupAccountSid to get the account name. */
+    bRtnBool = LookupAccountSid(
+		      NULL,			/* lpSystemName */
+		      pSidOwner,		/* lpSid */
+		      AcctName,			/* lpName */
+		      (LPDWORD)&dwAcctName,	/* cchName */
+		      DomainName,		/* lpReferencedDomainName */
+		      (LPDWORD)&dwDomainName,	/* cchReferencedDomainName */
+		      &eUse			/* peUse */
+		      );
+    
+    if (bRtnBool == TRUE)
+	name = G_store(AcctName);
+#endif
+
+    if (!name || !*name)
+	name = "anonymous";
+
+    return name;
 }
