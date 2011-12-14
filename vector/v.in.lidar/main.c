@@ -210,7 +210,7 @@ int main(int argc, char *argv[])
     extend_flag = G_define_flag();
     extend_flag->key = 'e';
     extend_flag->description =
-	_("Extend location extents based on new dataset");
+	_("Extend region extents based on new dataset");
 
     no_import_flag = G_define_flag();
     no_import_flag->key = 'i';
@@ -349,9 +349,13 @@ int main(int argc, char *argv[])
 
         /* If the i flag is set, clean up? and exit here */
         if(no_import_flag->answer)
-        {
             exit(EXIT_SUCCESS);
-        }
+
+	/*  TODO: */
+	G_warning("Import into new location not yet implemented");
+	/* at this point the module should be using G__create_alt_env()
+	    to change context to the newly created location; once done
+	    it should switch back with G__switch_env(). See r.in.gdal */
     }
     else {
 	int err = 0;
@@ -364,10 +368,7 @@ int main(int argc, char *argv[])
 
 	/* Does the projection of the current location match the dataset? */
 	/* G_get_window seems to be unreliable if the location has been changed */
-	if (outloc_opt->answer)
-	    G__get_window(&loc_wind, "", "DEFAULT_WIND", "PERMANENT");
-	else
-	    G_get_set_window(&loc_wind);
+	G_get_default_window(&loc_wind);
 	/* fetch LOCATION PROJ info */
 	if (loc_wind.proj != PROJECTION_XY) {
 	    loc_proj_info = G_get_projinfo();
@@ -460,8 +461,8 @@ int main(int argc, char *argv[])
 	    G_fatal_error(error_msg);
 	}
 	else {
-	    G_message(_("Projection of input dataset and current location "
-			"appear to match"));
+	    G_verbose_message(_("Projection of input dataset and current "
+				"location appear to match"));
 	}
     }
 
@@ -803,10 +804,7 @@ int main(int argc, char *argv[])
 				  / loc_wind.ew_res);
 	loc_wind.east = loc_wind.west + loc_wind.cols * loc_wind.ew_res;
 
-	if (outloc_opt->answer)
-	    G__put_window(&loc_wind, "../PERMANENT", "DEFAULT_WIND");
-	else
-	    G_put_window(&loc_wind);
+	G_put_window(&loc_wind);
     }
 
     exit(EXIT_SUCCESS);
