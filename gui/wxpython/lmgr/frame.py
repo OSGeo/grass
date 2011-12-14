@@ -592,26 +592,26 @@ class GMFrame(wx.Frame):
         dlg = LocationDialog(parent = self)
         if dlg.ShowModal() == wx.ID_OK:
             location, mapset = dlg.GetValues()
-            if location and mapset:
-                ret = RunCommand("g.gisenv",
-                                 set = "LOCATION_NAME=%s" % location)
-                ret += RunCommand("g.gisenv",
-                                  set = "MAPSET=%s" % mapset)
-                if ret > 0:
-                    wx.MessageBox(parent = self,
-                                  message = _("Unable to switch to location <%(loc)s> mapset <%(mapset)s>.") % \
-                                      { 'loc' : location, 'mapset' : mapset },
-                                  caption = _("Error"), style = wx.OK | wx.ICON_ERROR | wx.CENTRE)
-                else:
-                    # close workspace
-                    self.OnWorkspaceClose()
-                    self.OnWorkspaceNew()
-                    wx.MessageBox(parent = self,
-                                  message = _("Current location is <%(loc)s>.\n"
-                                              "Current mapset is <%(mapset)s>.") % \
-                                      { 'loc' : location, 'mapset' : mapset },
-                                  caption = _("Info"), style = wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
-                    
+            dlg.Destroy()
+            
+            if not location or not mapset:
+                GError(parent = self,
+                       message = _("No location/mapset provided. Operation canceled."))
+                return # this should not happen
+            
+            if RunCommand('g.mapset', parent = self,
+                          location = location,
+                          mapset = mapset) != 0:
+                return # error reported
+            
+            # close workspace
+            self.OnWorkspaceClose()
+            self.OnWorkspaceNew()
+            GMessage(parent = self,
+                     message = _("Current location is <%(loc)s>.\n"
+                                 "Current mapset is <%(mapset)s>.") % \
+                         { 'loc' : location, 'mapset' : mapset })
+        
     def OnCreateMapset(self, event):
         """!Create new mapset"""
         dlg = wx.TextEntryDialog(parent = self,
@@ -639,16 +639,16 @@ class GMFrame(wx.Frame):
         
         if dlg.ShowModal() == wx.ID_OK:
             mapset = dlg.GetMapset()
+            dlg.Destroy()
+            
             if not mapset:
                 GError(parent = self,
                        message = _("No mapset provided. Operation canceled."))
                 return
             
-            ret = RunCommand('g.mapset',
-                             parent = self,
-                             mapset = mapset)
-            
-            if ret == 0:
+            if RunCommand('g.mapset',
+                          parent = self,
+                          mapset = mapset) == 0:
                 GMessage(parent = self,
                          message = _("Current mapset is <%s>.") % mapset)
         

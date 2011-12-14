@@ -915,13 +915,15 @@ class MapsetSelect(wx.ComboBox):
     """!Widget for selecting GRASS mapset"""
     def __init__(self, parent, id = wx.ID_ANY, size = globalvar.DIALOG_COMBOBOX_SIZE, 
                  gisdbase = None, location = None, setItems = True,
-                 searchPath = False, new = False, **kwargs):
+                 searchPath = False, new = False, skipCurrent = False, **kwargs):
         style = 0
         if not new:
             style = wx.CB_READONLY
+        
         super(MapsetSelect, self).__init__(parent, id, size = size, 
                                            style = style, **kwargs)
-        self.searchPath = searchPath
+        self.searchPath  = searchPath
+        self.skipCurrent = skipCurrent
         
         self.SetName("MapsetSelect")
         if not gisdbase:
@@ -953,13 +955,21 @@ class MapsetSelect(wx.ComboBox):
      
     def _getMapsets(self):
         if self.searchPath:
-            return RunCommand('g.mapsets',
-                              read = True,
-                              flags = 'p',
-                              fs = 'newline').splitlines()
+            mlist = RunCommand('g.mapsets',
+                               read = True, flags = 'p',
+                               fs = 'newline').splitlines()
+        else:
+            mlist = GetListOfMapsets(self.gisdbase, self.location,
+                                     selectable = False)
         
-        return GetListOfMapsets(self.gisdbase, self.location, selectable = False)
-            
+        gisenv = grass.gisenv()
+        if self.skipCurrent and \
+                gisenv['LOCATION_NAME'] == self.location and \
+                gisenv['MAPSET'] in mlist:
+            mlist.remove(gisenv['MAPSET'])
+        
+        return mlist
+    
 class SubGroupSelect(wx.ComboBox):
     """!Widget for selecting subgroups"""
     def __init__(self, parent, id = wx.ID_ANY, size = globalvar.DIALOG_GSELECT_SIZE, 
