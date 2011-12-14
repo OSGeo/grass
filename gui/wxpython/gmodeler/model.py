@@ -39,11 +39,12 @@ except ImportError:
 import wx
 from wx.lib import ogl
 
-from core.globalvar      import ETCWXDIR
+from core                import globalvar
 from core                import utils
 from core.gcmd           import GMessage, GException, GError, RunCommand, EncodeString, GWarning
 from core.settings       import UserSettings
-from gui_core.forms      import GUI
+from gui_core.forms      import GUI, CmdPanel
+from gui_core.widgets    import GNotebook
 
 from grass.script import core as grass
 from grass.script import task as gtask
@@ -224,7 +225,7 @@ class Model(object):
         
         Raise exception on error.
         """
-        dtdFilename = os.path.join(ETCWXDIR, "xml", "grass-gxm.dtd")
+        dtdFilename = os.path.join(globalvar.ETCWXDIR, "xml", "grass-gxm.dtd")
         
         # parse workspace file
         try:
