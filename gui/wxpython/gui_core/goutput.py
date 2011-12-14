@@ -537,7 +537,10 @@ class GMConsole(wx.SplitterWindow):
                 # other GRASS commands (r|v|g|...)
                 if len(command) == 1 and command[0] != 'v.krige':
                     # no arguments given
-                    GUI(parent = self).ParseCommand(command)
+                    try:
+                        GUI(parent = self).ParseCommand(command)
+                    except GException, e:
+                        print >> sys.stderr, e
                     return 0
                 
                 task = GUI(show = None).ParseCommand(command)
@@ -818,7 +821,8 @@ class GMConsole(wx.SplitterWindow):
             
             try:
                 task = GUI(show = None).ParseCommand(event.cmd)
-            except GException:
+            except GException, e:
+                print >> sys.stderr, e
                 task = None
                 return
             
