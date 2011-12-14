@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
     char *input;
     char *output;
     char *title;
-    struct Cell_head cellhd, loc_wind, def_wind;
+    struct Cell_head cellhd, loc_wind, cur_wind;
     struct Key_Value *proj_info = NULL, *proj_units = NULL;
     struct Key_Value *loc_proj_info = NULL, *loc_proj_units = NULL;
     GDALDatasetH hDS;
@@ -141,7 +141,7 @@ int main(int argc, char *argv[])
 
     flag_e = G_define_flag();
     flag_e->key = 'e';
-    flag_e->description = _("Extend location extents based on new dataset");
+    flag_e->description = _("Extend region extents based on new dataset");
 
     flag_f = G_define_flag();
     flag_f->key = 'f';
@@ -358,7 +358,7 @@ int main(int argc, char *argv[])
 	    /*      Does the projection of the current location match the           */
 	    /*      dataset?                                                        */
 	    /* -------------------------------------------------------------------- */
-	    G_get_window(&loc_wind);
+	    G_get_default_window(&loc_wind);
 	    if (loc_wind.proj != PROJECTION_XY) {
 		loc_proj_info = G_get_projinfo();
 		loc_proj_units = G_get_projunits();
@@ -373,8 +373,7 @@ int main(int argc, char *argv[])
 		     || (projcomp_error = G_compare_projections(loc_proj_info,
 								loc_proj_units,
 								proj_info,
-								proj_units)) <
-		     0) {
+								proj_units)) < 0) {
 		int i_value;
 
 		strcpy(error_msg,
@@ -609,22 +608,22 @@ int main(int argc, char *argv[])
     /*      Extend current window based on dataset.                         */
     /* -------------------------------------------------------------------- */
     if (flag_e->answer) {
-	G_get_default_window(&def_wind);
+	G_get_set_window(&cur_wind);
 
-	def_wind.north = MAX(def_wind.north, cellhd.north);
-	def_wind.south = MIN(def_wind.south, cellhd.south);
-	def_wind.west = MIN(def_wind.west, cellhd.west);
-	def_wind.east = MAX(def_wind.east, cellhd.east);
+	cur_wind.north = MAX(cur_wind.north, cellhd.north);
+	cur_wind.south = MIN(cur_wind.south, cellhd.south);
+	cur_wind.west = MIN(cur_wind.west, cellhd.west);
+	cur_wind.east = MAX(cur_wind.east, cellhd.east);
 
-	def_wind.rows = (int)ceil((def_wind.north - def_wind.south)
-				  / def_wind.ns_res);
-	def_wind.south = def_wind.north - def_wind.rows * def_wind.ns_res;
+	cur_wind.rows = (int)ceil((cur_wind.north - cur_wind.south)
+				  / cur_wind.ns_res);
+	cur_wind.south = cur_wind.north - cur_wind.rows * cur_wind.ns_res;
 
-	def_wind.cols = (int)ceil((def_wind.east - def_wind.west)
-				  / def_wind.ew_res);
-	def_wind.east = def_wind.west + def_wind.cols * def_wind.ew_res;
+	cur_wind.cols = (int)ceil((cur_wind.east - cur_wind.west)
+				  / cur_wind.ew_res);
+	cur_wind.east = cur_wind.west + cur_wind.cols * cur_wind.ew_res;
 
-	G__put_window(&def_wind, "../PERMANENT", "DEFAULT_WIND");
+	G_put_window(&cur_wind);
     }
 
     exit(EXIT_SUCCESS);

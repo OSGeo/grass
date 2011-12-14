@@ -22,7 +22,7 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int override)
 	/*      Does the projection of the current location match the           */
 	/*      dataset?                                                        */
 	/* -------------------------------------------------------------------- */
-	G_get_window(&loc_wind);
+	G_get_default_window(&loc_wind);
 	if (loc_wind.proj != PROJECTION_XY) {
 	    loc_proj_info = G_get_projinfo();
 	    loc_proj_units = G_get_projunits();
