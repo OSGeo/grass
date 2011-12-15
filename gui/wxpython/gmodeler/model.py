@@ -541,7 +541,7 @@ class Model(object):
             if err:
                 GError(parent = parent, message = unicode('\n'.join(err)))
                 return
-        
+            
             err = list()
             for key, item in params.iteritems():
                 for p in item['params']:
@@ -618,7 +618,10 @@ class Model(object):
                         self.RunAction(item = action, params = params,
                                        log = log, onDone = onDone)
                 params['variables']['params'].remove(varDict)
-                
+        
+        if dlg.DeleteIntermediateData():
+            self.DeleteIntermediateData(log)
+        
         # discard values
         if params:
             for item in params.itervalues():
@@ -749,7 +752,7 @@ class Model(object):
         
         return result
 
-class ModelObject:
+class ModelObject(object):
     def __init__(self, id = -1):
         self.id   = id
         self.rels = list() # list of ModelRelations
@@ -1067,6 +1070,7 @@ class ModelAction(ModelObject, ogl.RectangleShape):
         """!Draw action in canvas"""
         self._setBrush()
         self._setPen()
+        ogl.RectangleShape.Recentre(self, dc) # re-center text
         ogl.RectangleShape.OnDraw(self, dc)
 
 class ModelData(ModelObject, ogl.EllipseShape):
@@ -2152,6 +2156,13 @@ class ModelParamDialog(wx.Dialog):
         
         panel = self._createPages()
         wx.CallAfter(self.notebook.SetSelection, 0)
+
+        # intermediate data?
+        self.interData = wx.CheckBox(parent = self, label = _("Delete intermediate data when finish"))
+        self.interData.SetValue(True)
+        rast, vect, rast3d, msg = self.parent.GetModel().GetIntermediateData()
+        if not rast and not vect and not rast3d:
+            self.interData.Hide()
         
         self.btnCancel = wx.Button(parent = self, id = wx.ID_CANCEL)
         self.btnRun    = wx.Button(parent = self, id = wx.ID_OK,
@@ -2175,6 +2186,15 @@ class ModelParamDialog(wx.Dialog):
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         mainSizer.Add(item = self.notebook, proportion = 1,
                       flag = wx.EXPAND)
+        if self.interData.IsShown():
+            mainSizer.Add(item = self.interData, proportion = 0,
+                          flag = wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border = 5)
+
+            mainSizer.Add(item = wx.StaticLine(parent = self, id = wx.ID_ANY,
+                                               style = wx.LI_HORIZONTAL),
+                          proportion = 0,
+                          flag = wx.EXPAND | wx.LEFT | wx.RIGHT, border = 5) 
+        
         mainSizer.Add(item = btnSizer, proportion = 0,
                       flag = wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border = 5)
         
@@ -2216,3 +2236,10 @@ class ModelParamDialog(wx.Dialog):
             errList += task.get_cmd_error()
         
         return errList
+
+    def DeleteIntermediateData(self):
+        """!Check if to detele intermediate data"""
+        if self.interData.IsShown() and self.interData.IsChecked():
+            return True
+        
+        return False
