@@ -121,7 +121,7 @@ def GetGRASSCmds(scriptsOnly = False):
     cmd = list()
     
     # scan bin/
-    if not scriptsOnly:
+    if not scriptsOnly and os.path.exists(os.path.join(gisbase, 'bin')):
         for fname in os.listdir(os.path.join(gisbase, 'bin')):
             name, ext = os.path.splitext(fname)
             if not EXT_BIN:
@@ -130,16 +130,18 @@ def GetGRASSCmds(scriptsOnly = False):
                 cmd.append(name)
     
     # scan scripts/
-    for fname in os.listdir(os.path.join(gisbase, 'scripts')):
-        name, ext = os.path.splitext(fname)
-        if not EXT_SCT:
-            cmd.append(fname)
-        elif ext == EXT_SCT:
-            cmd.append(name)
+    if os.path.exists(os.path.join(gisbase, 'scripts')):
+        for fname in os.listdir(os.path.join(gisbase, 'scripts')):
+            name, ext = os.path.splitext(fname)
+            if not EXT_SCT:
+                cmd.append(fname)
+            elif ext == EXT_SCT:
+                cmd.append(name)
     
     # scan gui/scripts/
-    os.environ["PATH"] = os.getenv("PATH") + os.pathsep + os.path.join(gisbase, 'etc', 'gui', 'scripts')
-    cmd = cmd + os.listdir(os.path.join(gisbase, 'etc', 'gui', 'scripts'))
+    if os.path.exists(os.path.join(gisbase, 'etc', 'gui', 'scripts')):
+        os.environ["PATH"] = os.getenv("PATH") + os.pathsep + os.path.join(gisbase, 'etc', 'gui', 'scripts')
+        cmd = cmd + os.listdir(os.path.join(gisbase, 'etc', 'gui', 'scripts'))
     
     # scan addons
     if os.getenv('GRASS_ADDON_PATH'):
