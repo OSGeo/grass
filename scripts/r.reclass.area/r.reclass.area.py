@@ -37,12 +37,14 @@
 #% key: lesser
 #% type: double
 #% description: Lesser value option that sets the <= area size limit [hectares]
+#% guisection: Area
 #%end
 
 #%option
 #% key: greater
 #% type: double
 #% description: Greater value option that sets the >= area size limit [hectares]
+#% guisection: Area
 #%end
 
 import sys
