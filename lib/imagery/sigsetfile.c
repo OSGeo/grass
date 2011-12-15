@@ -36,7 +36,7 @@ FILE *I_fopen_sigset_file_new(const char *group, const char *subgroup,
     char group_name[GNAME_MAX], mapset[GMAPSET_MAX];
     FILE *fd;
 
-    if (G__name_is_fully_qualified(group, group_name, mapset)) {
+    if (G_name_is_fully_qualified(group, group_name, mapset)) {
 	if (strcmp(mapset, G_mapset()) != 0)
 	    G_warning(_("Unable to create signature file <%s> for subgroup <%s> "
 			"of group <%s> - <%s> is not current mapset"),
