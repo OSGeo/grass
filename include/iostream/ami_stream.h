@@ -63,6 +63,7 @@ extern "C" {
 
 #define DEBUG_DELETE if(0)
 #define DEBUG_STREAM_LEN if(0)
+#define DEBUG_ASSERT if(0)
 
 // The name of the environment variable which keeps the name of the
 // directory where streams are stored
@@ -103,7 +104,7 @@ enum AMI_stream_type {
     AMI_WRITE_STREAM,		// Open for writing.  Create if non-existent
     AMI_APPEND_STREAM,		// Open for writing at end.  Create if needed.
     AMI_READ_WRITE_STREAM,	// Open to read and write.
-	AMI_APPEND_WRITE_STREAM // Open for writing at end (write only mode).
+    AMI_APPEND_WRITE_STREAM 	// Open for writing at end (write only mode).
 };
 
 
@@ -241,7 +242,8 @@ AMI_STREAM<T>::AMI_STREAM() {
   /* a stream is by default buffered with a buffer of size BUFSIZ=1K */
   buf = new char[STREAM_BUFFER_SIZE];
   if (setvbuf(fp, buf, _IOFBF, STREAM_BUFFER_SIZE) != 0) {
-    cerr << "setvbuf failed (stream " << path << ")" << endl;
+    cerr << "ERROR: setvbuf failed (stream " << path << ") with: "
+         << strerror(errno) << endl;
     exit(1);
   }
   
@@ -286,7 +288,8 @@ AMI_STREAM<T>::AMI_STREAM(const char *path_name,
   /* a stream is by default buffered with a buffer of size BUFSIZ=1K */
   buf = new char[STREAM_BUFFER_SIZE];
   if (setvbuf(fp, buf, _IOFBF, STREAM_BUFFER_SIZE) != 0) {
-    cerr << "setvbuf failed (stream " << path << ")" << endl;
+    cerr << "ERROR: setvbuf failed (stream " << path << ") with: "
+         << strerror(errno) << endl;
     exit(1);
   }
 
@@ -414,8 +417,7 @@ off_t AMI_STREAM<T>::stream_len(void) {
   STRUCT_STAT buf;
   if (stat(path, &buf) == -1) {
     perror("AMI_STREAM::stream_len(): fstat failed ");
-	perror(path);
-    assert(0);
+    DEBUG_ASSERT assert(0);
     exit(1);
   }
 
@@ -459,9 +461,9 @@ AMI_err AMI_STREAM<T>::seek(off_t offset) {
   if (substream_level) {    //substream
     if (offset  > (unsigned) (logical_eos - logical_bos)) {
       //offset out of range
-      cerr << "AMI_STREAM::seek bos=" << logical_bos << ", eos=" << logical_eos
-	   << ", offset " << offset << " out of range.\n";
-      assert(0);
+      cerr << "ERROR: AMI_STREAM::seek bos=" << logical_bos << ", eos="
+           << logical_eos << ", offset " << offset << " out of range.\n";
+      DEBUG_ASSERT assert(0);
       exit(1);
     } else {
       //offset in range 
@@ -520,9 +522,9 @@ AMI_STREAM<T>::~AMI_STREAM(void)  {
   // Get rid of the file if not persistent and if not substream.
   if ((per != PERSIST_PERSISTENT) && (substream_level == 0)) {
     if (unlink(path) == -1) {
-      cerr << "AMI_STREAM: failed to unlink " << path << endl;
-      perror("cannot unlink ");
-      assert(0);
+      cerr << "ERROR: AMI_STREAM: failed to unlink " << path << endl;
+      perror("cannot unlink: ");
+      DEBUG_ASSERT assert(0);
       exit(1);
     }
   }
@@ -550,7 +552,7 @@ AMI_err AMI_STREAM<T>::read_item(T **elt)  {
 	eof_reached = 1;
 	return AMI_ERROR_END_OF_STREAM;
       } else {
-	cerr << "file=" << path << ":";
+	cerr << "ERROR: file=" << path << ":";
 	perror("cannot read!");    
 	return AMI_ERROR_IO_ERROR;
       }
@@ -584,7 +586,7 @@ AMI_err AMI_STREAM<T>::read_array(T *data, off_t len, off_t *lenp=NULL) {
 	eof_reached = 1;
 	return AMI_ERROR_END_OF_STREAM;
       } else {
-	cerr << "file=" << path << ":";
+	cerr << "ERROR: file=" << path << ":";
 	perror("cannot read!");    
 	return AMI_ERROR_IO_ERROR;
       }
@@ -608,9 +610,12 @@ AMI_err AMI_STREAM<T>::write_item(const T &elt) {
   
   } else {
     if (fwrite((char*)(&elt), sizeof(T), 1,fp) < 1) {
-      cerr << "AMI_STREAM::write_item failed.\n";
-      perror(path);
-      assert(0);
+      cerr << "ERROR: AMI_STREAM::write_item failed.\n";
+      if (path && *path)
+	perror(path);
+      else
+	perror("AMI_STREAM::write_item: ");
+      DEBUG_ASSERT assert(0);
       exit(1);
     }
 
@@ -632,8 +637,12 @@ AMI_err AMI_STREAM<T>::write_array(const T *data, off_t len) {
   } else {
     nobj = fwrite(data, sizeof(T), len, fp);
     if (nobj  < len) {
-      cerr << "AMI_STREAM::write_item failed.\n";
-      assert(0);
+      cerr << "ERROR: AMI_STREAM::write_array failed.\n";
+      if (path && *path)
+	perror(path);
+      else
+	perror("AMI_STREAM::write_array: ");
+      DEBUG_ASSERT assert(0);
       exit(1);
     }
    return AMI_ERROR_NO_ERROR;
