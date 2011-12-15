@@ -697,7 +697,7 @@ class Settings:
                         'running' :  (255, 0, 0, 255),     # red
                         },
                     'size' : {
-                        'width'  : 100,
+                        'width'  : 125,
                         'height' : 50,
                         },
                     'width': {
