@@ -7,9 +7,11 @@
 #include <pwd.h>
 #else
 #include <windows.h>
+#include "aclapi.h"
 #endif
 
 #include <grass/gis.h>
+#include <grass/glocale.h>
 
 /**
  * \brief Creates a new directory
