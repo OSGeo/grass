@@ -574,11 +574,7 @@ parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
     streamdirOpt->key        = "stream_dir";
     streamdirOpt->type       = TYPE_STRING;
     streamdirOpt->required   = NO;
-#ifdef __MINGW32__
-    streamdirOpt->answer     = G_convert_dirseps_from_host(G_store(getenv("TEMP")));
-#else
-    streamdirOpt->answer     = "/var/tmp/";
-#endif
+    //streamdirOpt->answer     = "";
     streamdirOpt->description=
        _("Directory to hold temporary files (they can be large)");
 
@@ -590,8 +586,17 @@ parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
     /* store the parameters into a structure to be used along the way */
     strcpy(viewOptions->inputfname, inputOpt->answer);
     strcpy(viewOptions->outputfname, outputOpt->answer);
-    strcpy(viewOptions->streamdir,streamdirOpt->answer);
-
+    
+    if (!streamdirOpt->answer) {
+	const char *tmpdir = G_tempfile();
+	
+	if (G_mkdir(tmpdir) == -1)
+	    G_fatal_error(_("Unable to create temp dir"));
+	strcpy(viewOptions->streamdir, tmpdir);
+    }
+    else
+	strcpy(viewOptions->streamdir,streamdirOpt->answer);
+	
     viewOptions->obsElev = atof(obsElevOpt->answer);
     if(tgtElevOpt->answer)
 	viewOptions->tgtElev = atof(tgtElevOpt->answer);
