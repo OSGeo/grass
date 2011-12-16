@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: grasswxpy_it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-05 23:30+0200\n"
-"PO-Revision-Date: 2011-12-06 16:41+0100\n"
+"PO-Revision-Date: 2011-12-16 01:10+0100\n"
 "Last-Translator: Luca Delucchi <lucadeluge@gmail.com>\n"
 "Language-Team: Italian <grass-translations@lists.osgeo.org>\n"
 "Language: it\n"
@@ -393,11 +393,11 @@ msgstr "Trascina mouse per effetuare pan"
 
 #: ../gui/wxpython/icons/icon.py:133
 msgid "Query raster/vector map(s)"
-msgstr "Interroga mappe raster/vettoriale"
+msgstr "Interroga raster/vettoriale"
 
 #: ../gui/wxpython/icons/icon.py:134
 msgid "Query selected raster/vector map(s)"
-msgstr "Interroga mappe raster/vettoriale selezionate"
+msgstr "Interroga raster/vettoriale selezionate"
 
 #: ../gui/wxpython/icons/icon.py:136
 msgid "Return to previous zoom"
@@ -499,7 +499,7 @@ msgstr "Importa/connetti dati raster/vettoriali"
 #: ../gui/wxpython/icons/icon.py:181 ../gui/wxpython/menustrings.py:29
 #: ../gui/wxpython/gui_modules/gdialogs.py:1345
 msgid "Import raster data"
-msgstr "Importa mappe raster"
+msgstr "Importa raster"
 
 #: ../gui/wxpython/icons/icon.py:183 ../gui/wxpython/menustrings.py:154
 #: ../gui/wxpython/gui_modules/gdialogs.py:1343
@@ -1871,7 +1871,7 @@ msgstr "Converte un raster in un vettore"
 
 #: ../gui/wxpython/menustrings.py:178
 msgid "Raster series to volume"
-msgstr "Serie mappe Raster a volume"
+msgstr "Da serie di raster a volume"
 
 #: ../gui/wxpython/menustrings.py:179
 msgid "Converts 2D raster map slices to one 3D raster volume map."
@@ -2008,7 +2008,7 @@ msgstr "Imposta region"
 
 #: ../gui/wxpython/menustrings.py:216
 msgid "GRASS working environment"
-msgstr "GRASS ambiente di lavoro"
+msgstr "Ambiente di lavoro di GRASS"
 
 #: ../gui/wxpython/menustrings.py:217
 msgid "Mapset access"
@@ -2156,7 +2156,7 @@ msgstr "Imposta i confini per un raster"
 
 #: ../gui/wxpython/menustrings.py:254
 msgid "Manage NULL values"
-msgstr "Gestisci valori null"
+msgstr "Gestisci valori nulli"
 
 #: ../gui/wxpython/menustrings.py:255
 msgid "Manages NULL-values of given raster map."
@@ -2319,7 +2319,7 @@ msgstr "Combina raster rosso, verde e blu in un singolo raster"
 
 #: ../gui/wxpython/menustrings.py:293 ../gui/wxpython/menustrings.py:698
 msgid "RGB to HIS"
-msgstr "da RGB a HIS"
+msgstr "Da RGB a HIS"
 
 #: ../gui/wxpython/menustrings.py:294
 msgid "Generates red, green and blue raster map layers combining hue, intensity and saturation (HIS) values from user-specified input raster map layers."
@@ -2327,7 +2327,7 @@ msgstr "Genera un raster rosso, verde e blu combinando i valori di colore, inten
 
 #: ../gui/wxpython/menustrings.py:295
 msgid "Query raster maps"
-msgstr "Interroga mappe raster"
+msgstr "Interroga raster"
 
 #: ../gui/wxpython/menustrings.py:296
 msgid "Query values by coordinates"
@@ -3019,7 +3019,7 @@ msgstr "Genera superfici casuali con dipendenza spatiale."
 
 #: ../gui/wxpython/menustrings.py:467
 msgid "Generate contour lines"
-msgstr "Genera linee di contorno"
+msgstr "Genera curve di livello"
 
 #: ../gui/wxpython/menustrings.py:468
 msgid "Produces a vector map of specified contours from a raster map."
@@ -3879,7 +3879,7 @@ msgstr "&Immagini"
 
 #: ../gui/wxpython/menustrings.py:686
 msgid "Develop images and groups"
-msgstr "Lavora su images e gruppi"
+msgstr "Lavora su immagini e gruppi"
 
 #: ../gui/wxpython/menustrings.py:687
 msgid "Create/edit group"
@@ -3924,11 +3924,11 @@ msgstr "HIS a RGB"
 
 #: ../gui/wxpython/menustrings.py:697
 msgid "Transforms raster maps from HIS (Hue-Intensity-Saturation) color space to RGB (Red-Green-Blue) color space."
-msgstr "Trasforma mappe raster dallo spazio di colore HIS (Hue-Intensity-Saturation) allo spazio di colore RGB (Red-Green-Blue)"
+msgstr "Trasforma raster dallo spazio di colore HIS (Hue-Intensity-Saturation) allo spazio di colore RGB (Red-Green-Blue)"
 
 #: ../gui/wxpython/menustrings.py:699
 msgid "Transforms raster maps from RGB (Red-Green-Blue) color space to HIS (Hue-Intensity-Saturation) color space."
-msgstr "Trasforma mappe raster dallo spazio di colore RGB (Red-Green-Blue) allo spazio di colore HIS (Hue-Intensity-Saturation)"
+msgstr "Trasforma raster dallo spazio di colore RGB (Red-Green-Blue) allo spazio di colore HIS (Hue-Intensity-Saturation)"
 
 #: ../gui/wxpython/menustrings.py:700
 msgid "Rectify image or raster"
@@ -4533,7 +4533,7 @@ msgstr "Visualizza gli attributi del vettoriale"
 
 #: ../gui/wxpython/menustrings.py:846
 msgid "SQL statement"
-msgstr "istruzione SQL"
+msgstr "Istruzione SQL"
 
 #: ../gui/wxpython/menustrings.py:847
 msgid "Executes any SQL statement."
@@ -8891,7 +8891,7 @@ msgstr "Eseguire modello?"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:544
 msgid "Raster maps"
-msgstr "Mappe Raster"
+msgstr "Mappe raster"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:547
 msgid "3D raster maps"
@@ -12575,7 +12575,7 @@ msgstr ""
 #~ msgstr "Permette la visualizzazione di dati GIS in 3D."
 
 #~ msgid "Query with attributes"
-#~ msgstr "Interrogazione dai campi"
+#~ msgstr "Interrogazione dagli attributi"
 
 #~ msgid "Query with coordinate(s)"
 #~ msgstr "Interrogazione dalle coordinate"
@@ -12893,7 +12893,7 @@ msgstr ""
 #~ msgstr "Solo i vettori del mapset corrente possono essere modificati."
 
 #~ msgid "Query surface (raster map)"
-#~ msgstr "Interroga superficie (mappe raster)"
+#~ msgstr "Interroga superficie (raster)"
 
 #~ msgid "Query vector map"
 #~ msgstr "Interroga vettoriale"
@@ -13009,7 +13009,7 @@ msgstr ""
 #~ msgstr "Nota: per cambiare il tema delle icone devi salvare le impostazione e riavviare questa GUI"
 
 #~ msgid "Overlay raster maps"
-#~ msgstr "Overlay mappe raster"
+#~ msgstr "Overlay raster"
 
 #~ msgid "Load map layers into layer tree"
 #~ msgstr "Carica layer nel layer tree"
@@ -13766,7 +13766,7 @@ msgstr ""
 #~ msgstr "Passa alla pagina di controllo delle superfici (raster)"
 
 #~ msgid "Change surface (loaded raster maps) settings"
-#~ msgstr "Cambia le impostazione delle superfici (mappe raster caricate)"
+#~ msgstr "Cambia le impostazione delle superfici (raster caricati)"
 
 #~ msgid "Switch to vector (2D/3D) control page"
 #~ msgstr "Passa alla pagina di controllo dei vettoriali (2D/3D)"
@@ -13775,7 +13775,7 @@ msgstr ""
 #~ msgstr "Passa alla pagina di controllo dei volumi (raster 3D)"
 
 #~ msgid "Change volume (loaded 3D raster maps) settings"
-#~ msgstr "Cambia le impostazione dei volumi (mappe raster 3D caricate)"
+#~ msgstr "Cambia le impostazione dei volumi (raster 3D caricati)"
 
 #~ msgid "Switch to lighting control page"
 #~ msgstr "Passa alla pagina di controllo dell'illuminazione"
