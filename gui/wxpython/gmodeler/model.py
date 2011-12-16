@@ -526,6 +526,7 @@ class Model(object):
         
         # parametrization
         params = self.Parameterize()
+        delInterData = False
         if params:
             dlg = ModelParamDialog(parent = parent,
                                    params = params)
@@ -537,6 +538,7 @@ class Model(object):
                 return
             
             err = dlg.GetErrors()
+            delInterData = dlg.DeleteIntermediateData()
             dlg.Destroy()
             if err:
                 GError(parent = parent, message = unicode('\n'.join(err)))
@@ -619,7 +621,7 @@ class Model(object):
                                        log = log, onDone = onDone)
                 params['variables']['params'].remove(varDict)
         
-        if dlg.DeleteIntermediateData():
+        if delInterData:
             self.DeleteIntermediateData(log)
         
         # discard values
