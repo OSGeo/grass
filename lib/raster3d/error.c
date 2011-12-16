@@ -40,7 +40,7 @@ void Rast3d_skip_error(const char *msg)
 void Rast3d_print_error(const char *msg)
 {
     fprintf(stderr, "ERROR: ");
-    fprintf(stderr, msg);
+    fprintf(stderr, "%s", msg);
     fprintf(stderr, "\n");
 }
 

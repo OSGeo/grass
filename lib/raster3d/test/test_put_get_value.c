@@ -435,6 +435,8 @@ int test_put_get_value_resampling(void)
     
     sum += test_resampling_dcell(map, north, east, top, col, row, depth, 2);
     
+    sum += test_get_value_region(map, region.cols, region.rows, region.depths);
+    
     Rast3d_close(map);
     
     G_remove("grid3", "test_put_get_value_dcell");
@@ -498,15 +500,52 @@ int test_resampling_fcell(RASTER3D_Map *map, double north, double east, double t
         G_message("Error in Rast3d_get_region_value");
         sum++;
     }
-    if(value != col + row + depth) {
+    if(value_win != col + row + depth) {
         G_message("Error in Rast3d_get_window_value");
         sum++;
     }
-    if(value != col + row + depth) {
+    if(value_ref != col + row + depth) {
         G_message("Error in Rast3d_get_value");
         sum++;
     }
-    if(value != col + row + depth) {
+    if(value_reg != col + row + depth) {
+        G_message("Error in Rast3d_get_value_region");
+        sum++;
+    }
+    
+    return sum;
+}
+
+/* *************************************************************** */
+
+int test_get_value_region(RASTER3D_Map *map, int cols, int rows, int depths)
+{
+    int sum = 0;
+    FCELL fvalue1 = 0.0;
+    FCELL fvalue2 = 0.0;
+    DCELL dvalue1 = 0.0;
+    DCELL dvalue2 = 0.0;
+    
+    /* Test for correct Null value */
+    Rast3d_get_value_region(map, -1, -1, -1, &fvalue1, FCELL_TYPE);
+    Rast3d_get_value_region(map, cols, rows, depths, &fvalue2, FCELL_TYPE);
+    Rast3d_get_value_region(map, -1, -1, -1, &dvalue1, DCELL_TYPE);
+    Rast3d_get_value_region(map, cols, rows, depths, &dvalue2, DCELL_TYPE);
+    printf("Value %g == %g == %g == %g\n", fvalue1, fvalue2, dvalue1, dvalue2);
+    
+    if(!Rast_is_f_null_value(&fvalue1)) {
+        G_message("Error in Rast3d_get_value_region");
+        sum++;
+    }
+    if(!Rast_is_f_null_value(&fvalue2)) {
+        G_message("Error in Rast3d_get_value_region");
+        sum++;
+    }
+    if(!Rast_is_d_null_value(&dvalue1)) {
+        G_message("Error in Rast3d_get_value_region");
+        sum++;
+    }
+    if(!Rast_is_d_null_value(&dvalue2)) {
         G_message("Error in Rast3d_get_value_region");
         sum++;
     }
