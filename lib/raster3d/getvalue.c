@@ -166,21 +166,30 @@ float Rast3d_get_float_region(RASTER3D_Map * map, int x, int y, int z)
 {
     int tileIndex, offs;
     float *tile;
+    float value;
 
     if (map->typeIntern == DCELL_TYPE)
 	return (float)Rast3d_get_double_region(map, x, y, z);
+
+    /* In case of region coordinates out of bounds, return the Null value */
+    if(x < 0 || y < 0 || z < 0 || x >= map->region.cols ||
+       y >= map->region.rows || z >= map->region.depths) {
+         Rast3d_set_null_value(&value, 1, FCELL_TYPE);
+         return value;
+    }   
 
     Rast3d_coord2tile_index(map, x, y, z, &tileIndex, &offs);
     tile = (float *)Rast3d_get_tile_ptr(map, tileIndex);
 
     if (tile == NULL)
-	Rast3d_fatal_error("Rast3d_get_float_region: error in Rast3d_get_tile_ptr");
+	Rast3d_fatal_error("Rast3d_get_float_region: error in Rast3d_get_tile_ptr." 
+                           "Region coordinates x %i y %i z %i  tile index %i offset %i",
+                           x, y, z, tileIndex, offs);
 
     return tile[offs];
 }
 
 /*---------------------------------------------------------------------------*/
-
 
 /*!
  * \brief 
@@ -199,21 +208,30 @@ double Rast3d_get_double_region(RASTER3D_Map * map, int x, int y, int z)
 {
     int tileIndex, offs;
     double *tile;
+    double value;
 
     if (map->typeIntern == FCELL_TYPE)
 	return (double)Rast3d_get_float_region(map, x, y, z);
+
+    /* In case of region coordinates out of bounds, return the Null value */
+    if(x < 0 || y < 0 || z < 0 || x >= map->region.cols ||
+       y >= map->region.rows || z >= map->region.depths) {
+         Rast3d_set_null_value(&value, 1, DCELL_TYPE);
+         return value;
+    } 
 
     Rast3d_coord2tile_index(map, x, y, z, &tileIndex, &offs);
     tile = (double *)Rast3d_get_tile_ptr(map, tileIndex);
 
     if (tile == NULL)
-	Rast3d_fatal_error("Rast3d_get_double_region: error in Rast3d_get_tile_ptr");
+	Rast3d_fatal_error("Rast3d_get_double_region: error in Rast3d_get_tile_ptr." 
+                           "Region coordinates x %i y %i z %i  tile index %i offset %i",
+                           x, y, z, tileIndex, offs);
 
     return tile[offs];
 }
 
 /*---------------------------------------------------------------------------*/
-
 
 /*!
  * \brief 
@@ -222,6 +240,7 @@ double Rast3d_get_double_region(RASTER3D_Map * map, int x, int y, int z)
  * region-coordinate <em>(x, y, z)</em>.  The value returned is of <em>type</em>.
  * Here <em>region</em> means the coordinate in the cube of data in the file, i.e.
  * ignoring geographic coordinates.
+ * In case the region coordinates are out of bounds, the Null value will be returned.
  * This function invokes a fatal error if an error occurs.
  *
  *  \param map
