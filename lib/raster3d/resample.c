@@ -33,17 +33,9 @@ Rast3d_nearest_neighbor(RASTER3D_Map * map, int x, int y, int z, void *value,
 
     /* convert (north, east, top) into map region coordinates (row, col, depth) */
     Rast3d_location2coord(&(map->region), north, east, top, &col, &row, &depth);
-
-    /* if (row, col, depth) outside map region return NULL value */
-    if ((row < 0) || (row >= map->region.rows) ||
-	(col < 0) || (col >= map->region.cols) ||
-	(depth < 0) || (depth >= map->region.depths)) {
-	Rast3d_set_null_value(value, 1, type);
-	return;
-    }
     
     /* Get the value from the map in map-region resolution */
-	Rast3d_get_value_region(map, col, row, depth, value, type);
+    Rast3d_get_value_region(map, col, row, depth, value, type);
 }
 
 /*--------------------------------------------------------------------------*/
