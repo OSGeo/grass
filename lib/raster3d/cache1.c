@@ -90,6 +90,7 @@ void *Rast3d_cache_new(int nofElts, int sizeOfElts, int nofNames,
 		    int (*eltLoadFun) (), void *eltLoadFunData)
 {
     RASTER3D_cache *tmp;
+    int i;
 
     tmp = Rast3d_malloc(sizeof(RASTER3D_cache));
     if (tmp == NULL) {
@@ -114,7 +115,10 @@ void *Rast3d_cache_new(int nofElts, int sizeOfElts, int nofNames,
 	Rast3d_error("Rast3d_cache_new: error in Rast3d_malloc");
 	return (void *)NULL;
     }
-
+    /* Init the cache lock */
+    for(i = 0; i < tmp->nofElts; i++)
+        tmp->locks[i] = 0;
+        
     tmp->eltRemoveFun = eltRemoveFun;
     tmp->eltRemoveFunData = eltRemoveFunData;
     tmp->eltLoadFun = eltLoadFun;
@@ -196,7 +200,7 @@ static void cache_queue_enqueue(RASTER3D_cache * c, int left, int index)
 	return;
     }
 
-    if (IS_NOT_IN_QUEUE_ELT(left))
+    if (left >= 0 && IS_NOT_IN_QUEUE_ELT(left))
 	Rast3d_fatal_error("cache_queue_enqueue: position not in queue");
 
 
