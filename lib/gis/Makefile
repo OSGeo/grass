@@ -5,7 +5,7 @@ LIB = GIS
 EXTRA_INC = $(ZLIBINCPATH) $(PTHREADINCPATH) $(REGEXINCPATH)
 EXTRA_CFLAGS = -DGRASS_VERSION_DATE=\"'$(GRASS_VERSION_DATE)'\"
 
-DATASRC = ellipse.table datum.table datumtransform.table FIPS.code state27 state83 projections
+DATASRC = ellipse.table ellipse.table.solar.system datum.table datumtransform.table FIPS.code state27 state83 projections
 
 include $(MODULE_TOPDIR)/include/Make/Vars.make
 
