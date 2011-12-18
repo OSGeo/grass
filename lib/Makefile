@@ -23,12 +23,12 @@ SUBDIRS = \
 	fonts \
 	gtcltk \
 	form \
+	proj \
+	vector \
 	imagery \
 	cluster \
-	proj \
 	rowio \
 	segment \
-	vector \
 	sites \
 	rst \
 	lidar \
