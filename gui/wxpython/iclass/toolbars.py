@@ -112,14 +112,6 @@ class IClassMapToolbar(BaseToolbar):
                                       self.parent.OnZoomBack),
                                      ("zoomtomap", icons["zoomExtent"],
                                       self.parent.OnZoomToMap),
-                                     
-                                     #('settings', Icons["georectify"]["settings"],
-                                      #self.parent.OnSettings),
-                                     #('help', Icons["misc"]["help"],
-                                      #self.parent.OnHelp),
-                                     #(None, ),
-                                     #('quit', Icons["georectify"]["quit"],
-                                      #self.parent.OnQuit))
                                     ))
 class IClassToolbar(BaseToolbar):
     """!IClass toolbar
@@ -298,6 +290,7 @@ class IClassMiscToolbar(BaseToolbar):
         icons = BaseIcons
         return self._getToolbarData((("help", icons['help'],
                                       self.parent.OnHelp),
-                                     #("quit", icons['quit'],
-                                      #self.parent.OnCloseWindow),
-                                    ))
+                                     ("quit", icons['quit'],
+                                      self.parent.OnCloseWindow),
+                                     ))
+    

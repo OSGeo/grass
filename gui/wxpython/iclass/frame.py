@@ -68,7 +68,7 @@ class IClassMapFrame(DoubleMapFrame):
     It is wxGUI counterpart of old i.class module.
     """
     def __init__(self, parent = None, title = _("Supervised Classification Tool"),
-                 toolbars = ["iClassMap", "iClassMisc", "vdigit", "iClass"],
+                 toolbars = ["iClassMisc", "iClassMap", "vdigit", "iClass"],
                  size = (800, 600), name = 'IClassWindow', **kwargs):
         """!
         @param parent (no parent is expected)
@@ -262,7 +262,7 @@ class IClassMapFrame(DoubleMapFrame):
                               ToolbarPane().Top().
                               LeftDockable(False).RightDockable(False).
                               BottomDockable(False).TopDockable(True).
-                              CloseButton(False).Layer(2).Row(2).
+                              CloseButton(False).Layer(2).Row(1).
                               BestSize((self.toolbars[name].GetBestSize())))
 
         if name == "vdigit":
