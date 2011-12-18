@@ -2,6 +2,8 @@ MODULE_TOPDIR = ../..
 
 LIB = IMAGERY
 
+EXTRA_CFLAGS = $(VECT_CFLAGS)
+
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 
