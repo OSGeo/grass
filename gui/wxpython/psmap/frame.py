@@ -41,7 +41,6 @@ import grass.script as grass
 from gui_core.menu    import Menu
 from gui_core.goutput import CmdThread, EVT_CMD_DONE
 from psmap.toolbars   import PsMapToolbar
-from icon             import Icons
 from core.gcmd        import RunCommand, GError, GMessage
 from gui_core.forms   import GUI
 from psmap.menudata   import PsMapData
@@ -579,46 +578,7 @@ class PsMapFrame(wx.Frame):
                 dlg =  MainVectorDialog(self, id = id, settings = self.instruction)
                 self.openDialogs['vector'] = dlg
             self.openDialogs['vector'].Show()
-        
-    def OnDecoration(self, event):
-        """!Decorations overlay menu
-        """
-        decmenu = wx.Menu()
-        # legend
-        AddLegend = wx.MenuItem(decmenu, wx.ID_ANY, Icons['psMap']["addLegend"].GetLabel())
-        AddLegend.SetBitmap(Icons['psMap']["addLegend"].GetBitmap(self.iconsize))
-        decmenu.AppendItem(AddLegend)
-        self.Bind(wx.EVT_MENU, self.OnAddLegend, AddLegend)
-        # mapinfo
-        AddMapinfo = wx.MenuItem(decmenu, wx.ID_ANY, Icons['psMap']["addMapinfo"].GetLabel())
-        AddMapinfo.SetBitmap(Icons['psMap']["addMapinfo"].GetBitmap(self.iconsize))
-        decmenu.AppendItem(AddMapinfo)
-        self.Bind(wx.EVT_MENU, self.OnAddMapinfo, AddMapinfo) 
-        # scalebar
-        AddScalebar = wx.MenuItem(decmenu, wx.ID_ANY, Icons['psMap']["addScalebar"].GetLabel())
-        AddScalebar.SetBitmap(Icons['psMap']["addScalebar"].GetBitmap(self.iconsize))
-        decmenu.AppendItem(AddScalebar)
-        self.Bind(wx.EVT_MENU, self.OnAddScalebar, AddScalebar) 
-        # text
-        AddText = wx.MenuItem(decmenu, wx.ID_ANY, Icons['psMap']["addText"].GetLabel())
-        AddText.SetBitmap(Icons['psMap']["addText"].GetBitmap(self.iconsize))
-        decmenu.AppendItem(AddText)
-        self.Bind(wx.EVT_MENU, self.OnAddText, AddText) 
-        # eps image
-        AddImage = wx.MenuItem(decmenu, wx.ID_ANY, Icons['psMap']["addImage"].GetLabel())
-        AddImage.SetBitmap(Icons['psMap']["addImage"].GetBitmap(self.iconsize))
-        decmenu.AppendItem(AddImage)
-        self.Bind(wx.EVT_MENU, self.OnAddImage, AddImage) 
-        # north arrow image
-        AddNorthArrow = wx.MenuItem(decmenu, wx.ID_ANY, Icons['psMap']["addNorthArrow"].GetLabel())
-        AddNorthArrow.SetBitmap(Icons['psMap']["addNorthArrow"].GetBitmap(self.iconsize))
-        decmenu.AppendItem(AddNorthArrow)
-        self.Bind(wx.EVT_MENU, self.OnAddNorthArrow, AddNorthArrow) 
-        # Popup the menu.  If an item is selected then its handler
-        # will be called before PopupMenu returns.
-        self.PopupMenu(decmenu)
-        decmenu.Destroy()
-        
+       
     def OnAddScalebar(self, event):
         """!Add scalebar"""
         if projInfo()['proj'] == 'll':

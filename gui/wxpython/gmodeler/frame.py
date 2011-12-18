@@ -4,7 +4,6 @@
 @brief wxGUI Graphical Modeler for creating, editing, and managing models
 
 Classes:
- - frame::ModelToolbar
  - frame::ModelFrame
  - frame::ModelCanvas
  - frame::ModelEvtHandler
@@ -43,70 +42,16 @@ from gui_core.dialogs     import GetImageHandlers
 from gui_core.preferences import PreferencesBaseDialog
 from core.settings        import UserSettings
 from core.menudata        import MenuData
-from gui_core.toolbars    import BaseToolbar
 from gui_core.menu        import Menu
 from gmodeler.menudata    import ModelerData
-from icons.icon           import Icons
 from gui_core.forms       import GUI
 from gmodeler.preferences import PreferencesDialog, PropertiesDialog
+from gmodeler.toolbars    import ModelerToolbar
 
 from gmodeler.model       import *
 from gmodeler.dialogs     import *
 
 from grass.script import core as grass
-
-class ModelToolbar(BaseToolbar):
-    """!Graphical modeler toolbaro (see gmodeler.py)
-    """
-    def __init__(self, parent):
-        BaseToolbar.__init__(self, parent)
-        
-        self.InitToolbar(self._toolbarData())
-        
-        # realize the toolbar
-        self.Realize()
-        
-    def _toolbarData(self):
-        """!Toolbar data"""
-        icons = Icons['modeler']
-        return self._getToolbarData((('new', icons['new'],
-                                      self.parent.OnModelNew),
-                                     ('open', icons['open'],
-                                      self.parent.OnModelOpen),
-                                     ('save', icons['save'],
-                                      self.parent.OnModelSave),
-                                     ('image', icons['toImage'],
-                                      self.parent.OnExportImage),
-                                     ('python', icons['toPython'],
-                                      self.parent.OnExportPython),
-                                     (None, ),
-                                     ('action', icons['actionAdd'],
-                                      self.parent.OnAddAction),
-                                     ('data', icons['dataAdd'],
-                                      self.parent.OnAddData),
-                                     ('relation', icons['relation'],
-                                      self.parent.OnDefineRelation),
-                                     ('loop', icons['loop'],
-                                      self.parent.OnDefineLoop),
-                                     (None, ),
-                                     ('redraw', icons['redraw'],
-                                      self.parent.OnCanvasRefresh),
-                                     ('validate', icons['validate'],
-                                      self.parent.OnValidateModel),
-                                     ('run', icons['run'],
-                                      self.parent.OnRunModel),
-                                     (None, ),
-                                     ("variables", icons['variables'],
-                                      self.parent.OnVariables),
-                                     ("settings", icons['settings'],
-                                      self.parent.OnPreferences),
-                                     ("help", Icons['misc']['help'],
-                                      self.parent.OnHelp),
-                                     (None, ),
-                                     ('quit', icons['quit'],
-                                      self.parent.OnCloseWindow))
-                                    
-)
 
 class ModelFrame(wx.Frame):
     def __init__(self, parent, id = wx.ID_ANY,
@@ -138,7 +83,7 @@ class ModelFrame(wx.Frame):
         
         self.SetMenuBar(self.menubar)
         
-        self.toolbar = ModelToolbar(parent = self)
+        self.toolbar = ModelerToolbar(parent = self)
         self.SetToolBar(self.toolbar)
         
         self.statusbar = self.CreateStatusBar(number = 1)

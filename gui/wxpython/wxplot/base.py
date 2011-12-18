@@ -4,6 +4,7 @@
 @brief Base classes for iinteractive plotting using PyPlot
 
 Classes:
+ - base::PlotIcons
  - base::BasePlotFrame
 
 (C) 2011 by the GRASS Development Team
@@ -20,12 +21,28 @@ import sys
 import wx
 import wx.lib.plot as plot
 
-from core.globalvar import ETCICONDIR
-from core.settings  import UserSettings
-from wxplot.dialogs import TextDialog, OptDialog
-from core.render    import Map
+from core.globalvar    import ETCICONDIR
+from core.settings     import UserSettings
+from wxplot.dialogs    import TextDialog, OptDialog
+from core.render       import Map
+from icons.icon        import MetaIcon
+from gui_core.toolbars import BaseIcons
 
 import grass.script as grass
+
+PlotIcons = {
+    'draw'         : MetaIcon(img = 'show',
+                              label = _('Draw/re-draw plot')),
+    'transect'     : MetaIcon(img = 'layer-raster-profile',
+                              label = _('Draw transect in map display window to profile')),
+    'options'      : MetaIcon(img = 'settings',
+                              label = _('Plot options')),
+    'statistics'   : MetaIcon(img = 'check',
+                              label = _('Plot statistics')),
+    'save'         : MetaIcon(img = 'save',
+                              label = _('Save profile data to CSV file')),
+    'quit'         : BaseIcons['quit'].SetLabel(_('Quit plot tool')),
+    }
 
 class BasePlotFrame(wx.Frame):
     """!Abstract PyPlot display frame class"""

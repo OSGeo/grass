@@ -17,14 +17,14 @@ import wx
 
 from grass.script import core as grass
 
-from gui_core.toolbars  import BaseToolbar
+from gui_core.toolbars  import BaseToolbar, BaseIcons
 from gui_core.dialogs   import CreateNewVector
-from icons.icon         import Icons
 from vdigit.preferences import VDigitSettingsDialog
 from vdigit.main        import VDigit
 from core.debug         import Debug
 from core.settings      import UserSettings
 from core.gcmd          import GError
+from icons.icon         import MetaIcon
 
 class VDigitToolbar(BaseToolbar):
     """!Toolbar for digitization
@@ -81,7 +81,59 @@ class VDigitToolbar(BaseToolbar):
         """!Toolbar data
         """
         data = []
-        icons = Icons['vdigit']
+        
+        icons = {
+            'addPoint'        : MetaIcon(img = 'point-create',
+                                         label = _('Digitize new point'),
+                                         desc = _('Left: new point')),
+            'addLine'         : MetaIcon(img = 'line-create',
+                                         label = _('Digitize new line'),
+                                         desc = _('Left: new point; Ctrl+Left: undo last point; Right: close line')),
+            'addBoundary'     : MetaIcon(img = 'boundary-create',
+                                         label = _('Digitize new boundary'),
+                                         desc = _('Left: new point; Ctrl+Left: undo last point; Right: close line')),
+            'addCentroid'     : MetaIcon(img = 'centroid-create',
+                                         label = _('Digitize new centroid'),
+                                         desc = _('Left: new point')),
+            'addArea'         : MetaIcon(img = 'polygon-create',
+                                         label = _('Digitize new area (composition of boundaries without category and one centroid with category)'),
+                                         desc = _('Left: new point')),
+            'addVertex'       : MetaIcon(img = 'vertex-create',
+                                         label = _('Add new vertex'),
+                                         desc = _('Left: Select; Ctrl+Left: Unselect; Right: Confirm')),
+            'deleteLine'      : MetaIcon(img = 'line-delete',
+                                         label = _('Delete feature(s)'),
+                                         desc = _('Left: Select; Ctrl+Left: Unselect; Right: Confirm')),
+            'displayAttr'     : MetaIcon(img = 'attributes-display',
+                                         label = _('Display/update attributes'),
+                                         desc = _('Left: Select')),
+            'displayCats'     : MetaIcon(img = 'cats-display',
+                                         label = _('Display/update categories'),
+                                         desc = _('Left: Select')),
+            'editLine'        : MetaIcon(img = 'line-edit',
+                                         label = _('Edit line/boundary'),
+                                         desc = _('Left: new point; Ctrl+Left: undo last point; Right: close line')),
+            'moveLine'        : MetaIcon(img = 'line-move',
+                                         label = _('Move feature(s)'),
+                                         desc = _('Left: Select; Ctrl+Left: Unselect; Right: Confirm')),
+            'moveVertex'      : MetaIcon(img = 'vertex-move',
+                                         label = _('Move vertex'),
+                                         desc = _('Left: Select; Ctrl+Left: Unselect; Right: Confirm')),
+            'removeVertex'    : MetaIcon(img = 'vertex-delete',
+                                         label = _('Remove vertex'),
+                                         desc = _('Left: Select; Ctrl+Left: Unselect; Right: Confirm')),
+            'settings'        : BaseIcons['settings'].SetLabel(_('Digitization settings')),
+            'quit'            : BaseIcons['quit'].SetLabel(label = _('Quit digitizer'),
+                                                           desc = _('Quit digitizer and save changes')),
+            'additionalTools' : MetaIcon(img = 'tools',
+                                         label = _('Additional tools '
+                                                   '(copy, flip, connect, etc.)'),
+                                         desc = _('Left: Select; Ctrl+Left: Unselect; Right: Confirm')),
+            'undo'             : MetaIcon(img = 'undo',
+                                          label = _('Undo'),
+                                          desc = _('Undo previous changes')),
+            }
+        
         if not self.tools or 'selector' in self.tools:
             data.append((None, ))
         if not self.tools or 'addPoint' in self.tools:

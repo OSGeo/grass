@@ -8,6 +8,7 @@ Classes:
  - toolbars::GCPDisplayToolbar
 
 (C) 2007-2011 by the GRASS Development Team
+
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
@@ -20,10 +21,8 @@ import sys
 import wx
 
 from core              import globalvar
-from gui_core.toolbars import BaseToolbar
-
-sys.path.append(os.path.join(globalvar.ETCWXDIR, "icons"))
-from icon              import Icons
+from gui_core.toolbars import BaseToolbar, BaseIcons
+from icon              import MetaIcon
     
 class GCPManToolbar(BaseToolbar):
     """!Toolbar for managing ground control points
@@ -39,7 +38,23 @@ class GCPManToolbar(BaseToolbar):
         self.Realize()
 
     def _toolbarData(self):
-        icons = Icons['georectify']
+        icons = {
+            'gcpSave'    : MetaIcon(img = 'gcp-save',
+                                    label = _('Save GCPs to POINTS file')),
+            'gcpReload'  : MetaIcon(img = 'reload',
+                                    label = _('Reload GCPs from POINTS file')),
+            'gcpAdd'     : MetaIcon(img = 'gcp-add',
+                                    label = _('Add new GCP')),
+            'gcpDelete'  : MetaIcon(img = 'gcp-delete',
+                                    label = _('Delete selected GCP')),
+            'gcpClear'   : MetaIcon(img = 'gcp-remove',
+                                    label = _('Clear selected GCP')),
+            'gcpRms'     : MetaIcon(img = 'gcp-rms',
+                                    label = _('Recalculate RMS error')),
+            'georectify' : MetaIcon(img = 'georectify',
+                                    label = _('Georectify')),
+            }
+        
         return self._getToolbarData((('gcpSave', icons["gcpSave"],
                                       self.parent.SaveGCPs),
                                      ('gcpReload', icons["gcpReload"],
@@ -77,7 +92,7 @@ class GCPDisplayToolbar(BaseToolbar):
         self.InsertControl(10, self.togglemap)
 
         self.SetToolShortHelp(self.togglemapid, '%s %s %s' % (_('Set map canvas for '),
-                                                              Icons['displayWindow']["zoomBack"].GetLabel(),
+                                                              BaseIcons["zoomBack"].GetLabel(),
                                                               _(' / Zoom to map')))
 
         # realize the toolbar
@@ -93,35 +108,43 @@ class GCPDisplayToolbar(BaseToolbar):
         
     def _toolbarData(self):
         """!Toolbar data"""
-        icons = Icons['displayWindow']
-        return self._getToolbarData((("displaymap", icons["display"],
+        icons = {
+            'gcpSet'    : MetaIcon(img = 'gcp-create',
+                                   label = _('Set GCP'),
+                                   desc = _('Define GCP (Ground Control Points)')),
+            'quit'      : BaseIcons['quit'].SetLabel(_('Quit georectification tool')),
+            'settings'  : BaseIcons['settings'].SetLabel( _('Georectifier settings')),
+            'help'      : BaseIcons['help'].SetLabel(_('Georectifier manual')),
+            }
+        
+        return self._getToolbarData((("displaymap", BaseIcons["display"],
                                       self.parent.OnDraw),
-                                     ("rendermap", icons["render"],
+                                     ("rendermap", BaseIcons["render"],
                                       self.parent.OnRender),
-                                     ("erase", icons["erase"],
+                                     ("erase", BaseIcons["erase"],
                                       self.parent.OnErase),
                                      (None, ),
-                                     ("gcpset", Icons["georectify"]["gcpSet"],
+                                     ("gcpset", icons["gcpSet"],
                                       self.parent.OnPointer),
-                                     ("pan", icons["pan"],
+                                     ("pan", BaseIcons["pan"],
                                       self.parent.OnPan),
-                                     ("zoomin", icons["zoomIn"],
+                                     ("zoomin", BaseIcons["zoomIn"],
                                       self.parent.OnZoomIn),
-                                     ("zoomout", icons["zoomOut"],
+                                     ("zoomout", BaseIcons["zoomOut"],
                                       self.parent.OnZoomOut),
-                                     ("zoommenu", icons["zoomMenu"],
+                                     ("zoommenu", BaseIcons["zoomMenu"],
                                       self.parent.OnZoomMenuGCP),
                                      (None, ),
-                                     ("zoomback", icons["zoomBack"],
+                                     ("zoomback", BaseIcons["zoomBack"],
                                       self.parent.OnZoomBack),
-                                     ("zoomtomap", icons["zoomExtent"],
+                                     ("zoomtomap", BaseIcons["zoomExtent"],
                                       self.parent.OnZoomToMap),
                                      (None, ),
-                                     ('settings', Icons["georectify"]["settings"],
+                                     ('settings', icons["settings"],
                                       self.parent.OnSettings),
-                                     ('help', Icons["misc"]["help"],
+                                     ('help', icons["help"],
                                       self.parent.OnHelp),
                                      (None, ),
-                                     ('quit', Icons["georectify"]["quit"],
+                                     ('quit', icons["quit"],
                                       self.parent.OnQuit))
                                     )

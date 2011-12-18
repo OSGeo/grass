@@ -29,9 +29,8 @@ from core.utils           import GetLayerNameFromCmd
 from gui_core.dialogs     import GetImageHandlers, ImageSizeDialog
 from gui_core.preferences import DefaultFontDialog
 from core.debug           import Debug
-from icon                 import Icons
 from core.gcmd            import GError
-from gui_core.toolbars    import BaseToolbar
+from gui_core.toolbars    import BaseToolbar, BaseIcons
 
 class BufferedWindow(wx.Window):
     """!A Buffered window class.
@@ -474,21 +473,20 @@ class HistogramToolbar(BaseToolbar):
         
     def _toolbarData(self):
         """!Toolbar data"""
-        icons = Icons['displayWindow']
-        return self._getToolbarData((('histogram', icons["histogram"],
+        return self._getToolbarData((('histogram', BaseIcons["histogramD"],
                                       self.parent.OnOptions),
-                                     ('rendermao', icons["display"],
+                                     ('render', BaseIcons["display"],
                                       self.parent.OnRender),
-                                     ('erase', icons["erase"],
+                                     ('erase', BaseIcons["erase"],
                                       self.parent.OnErase),
-                                     ('font', Icons['misc']["font"],
+                                     ('font', BaseIcons["font"],
                                       self.parent.SetHistFont),
                                      (None, ),
-                                     ('save', icons["saveFile"],
+                                     ('save', BaseIcons["saveFile"],
                                       self.parent.SaveToFile),
-                                     ('hprint', icons["print"],
+                                     ('hprint', BaseIcons["print"],
                                       self.parent.PrintMenu),
                                      (None, ),
-                                     ('quit', Icons['misc']["quit"],
+                                     ('quit', BaseIcons["quit"],
                                       self.parent.OnQuit))
                                     )

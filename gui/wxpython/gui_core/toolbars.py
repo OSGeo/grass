@@ -24,7 +24,59 @@ import wx
 
 from core               import globalvar
 from core.debug         import Debug
+from icons.icon         import MetaIcon
 
+BaseIcons = {
+    'display'    : MetaIcon(img = 'show',
+                            label = _('Display map'),
+                            desc  =  _('Re-render modified map layers only')),
+    'render'     : MetaIcon(img = 'layer-redraw',
+                            label = _('Render map'),
+                            desc = _('Force re-rendering all map layers')),
+    'erase'      : MetaIcon(img = 'erase',
+                            label = _('Erase display'),
+                            desc = _('Erase display canvas with given background color')),
+    'pointer'    : MetaIcon(img = 'pointer',
+                            label = _('Pointer')),
+    'zoomIn'     : MetaIcon(img = 'zoom-in',
+                            label = _('Zoom in'),
+                            desc = _('Drag or click mouse to zoom')),
+    'zoomOut'    : MetaIcon(img = 'zoom-out',
+                            label = _('Zoom out'),
+                            desc = _('Drag or click mouse to unzoom')),
+    'zoomBack'   : MetaIcon(img = 'zoom-last',
+                            label = _('Return to previous zoom')),
+    'zoomMenu'   : MetaIcon(img = 'zoom-more',
+                            label = _('Various zoom options'),
+                            desc = _('Zoom to computational, default, saved region, ...')),
+    'zoomExtent' : MetaIcon(img = 'zoom-extent',
+                            label = _('Zoom to selected map layer(s)')),
+    'pan'        : MetaIcon(img = 'pan',
+                            label = _('Pan'),
+                            desc = _('Drag with mouse to pan')),
+    'saveFile'   : MetaIcon(img = 'map-export',
+                            label = _('Save display to graphic file')),
+    'print'      : MetaIcon(img = 'print',
+                            label = _('Print display')),
+    'font'       : MetaIcon(img = 'font',
+                            label = _('Select font')),
+    'help'       : MetaIcon(img = 'help',
+                            label = _('Show manual')),
+    'quit'       : MetaIcon(img = 'quit',
+                            label = _('Quit')),
+    'addRast'    : MetaIcon(img = 'layer-raster-add',
+                            label = _('Add raster map layer')),
+    'addVect'    : MetaIcon(img = 'layer-vector-add',
+                            label = _('Add vector map layer')),
+    'overlay'    : MetaIcon(img = 'overlay-add',
+                            label = _('Add map elements'),
+                            desc = _('Overlay elements like scale and legend onto map')),
+    'histogramD' : MetaIcon(img = 'layer-raster-histogram',
+                            label = _('Create histogram with d.histogram')),
+    'settings'   : MetaIcon(img = 'settings',
+                            label = _("Settings")),
+    }
+    
 class BaseToolbar(wx.ToolBar):
     """!Abstract toolbar class"""
     def __init__(self, parent):
@@ -176,3 +228,16 @@ class BaseToolbar(wx.ToolBar):
                     item, icon.GetLabel(), icon.GetDesc(),
                     handler, pos)
         return ("", "", "", "", "", "") # separator
+
+    def _onMenu(self, data):
+        """!Toolbar pop-up menu"""
+        menu = wx.Menu()
+        
+        for icon, handler in data:
+            item = wx.MenuItem(menu, wx.ID_ANY, icon.GetLabel())
+            item.SetBitmap(icon.GetBitmap(self.parent.iconsize))
+            menu.AppendItem(item)
+            self.Bind(wx.EVT_MENU, handler, item)
+        
+        self.PopupMenu(menu)
+        menu.Destroy()
