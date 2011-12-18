@@ -34,9 +34,8 @@ except ImportError:
             "binaries.")
     print >> sys.stderr, "wxplot.py: " + msg
 
-from wxplot.base       import BasePlotFrame
-from gui_core.toolbars import BaseToolbar
-from icons.icon        import Icons
+from wxplot.base       import BasePlotFrame, PlotIcons
+from gui_core.toolbars import BaseToolbar, BaseIcons
 from wxplot.dialogs    import ProfileRasterDialog, PlotStatsFrame
 from core.gcmd         import RunCommand
 
@@ -396,34 +395,33 @@ class ProfileToolbar(BaseToolbar):
         
     def _toolbarData(self):
         """!Toolbar data"""
-        icons = Icons['plot']
-        return self._getToolbarData((('addraster', Icons['layerManager']["addRast"],
+        return self._getToolbarData((('addraster', BaseIcons["addRast"],
                                       self.parent.OnSelectRaster),
-                                     ('transect', icons["transect"],
+                                     ('transect', PlotIcons["transect"],
                                       self.parent.OnDrawTransect),
                                      (None, ),
-                                     ('draw', icons["draw"],
+                                     ('draw', PlotIcons["draw"],
                                       self.parent.OnCreateProfile),
-                                     ('erase', Icons['displayWindow']["erase"],
+                                     ('erase', BaseIcons["erase"],
                                       self.parent.OnErase),
-                                     ('drag', Icons['displayWindow']['pan'],
+                                     ('drag', BaseIcons['pan'],
                                       self.parent.OnDrag),
-                                     ('zoom', Icons['displayWindow']['zoomIn'],
+                                     ('zoom', BaseIcons['zoomIn'],
                                       self.parent.OnZoom),
-                                     ('unzoom', Icons['displayWindow']['zoomBack'],
+                                     ('unzoom', BaseIcons['zoomBack'],
                                       self.parent.OnRedraw),
                                      (None, ),
-                                     ('statistics', icons['statistics'],
+                                     ('statistics', PlotIcons['statistics'],
                                       self.parent.OnStats),
-                                     ('datasave', icons["save"],
+                                     ('datasave', PlotIcons["save"],
                                       self.parent.SaveProfileToFile),
-                                     ('image', Icons['displayWindow']["saveFile"],
+                                     ('image', BaseIcons["saveFile"],
                                       self.parent.SaveToFile),
-                                     ('print', Icons['displayWindow']["print"],
+                                     ('print', BaseIcons["print"],
                                       self.parent.PrintMenu),
                                      (None, ),
-                                     ('settings', icons["options"],
+                                     ('settings', PlotIcons["options"],
                                       self.parent.PlotOptionsMenu),
-                                     ('quit', icons["quit"],
+                                     ('quit', PlotIcons["quit"],
                                       self.parent.OnQuit),
                                      ))

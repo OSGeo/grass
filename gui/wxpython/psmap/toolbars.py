@@ -20,10 +20,8 @@ import sys
 import wx
 
 from core              import globalvar
-from gui_core.toolbars import BaseToolbar
-
-sys.path.append(os.path.join(globalvar.ETCWXDIR, "icons"))
-from icon              import Icons
+from gui_core.toolbars import BaseToolbar, BaseIcons
+from icon              import MetaIcon
 
 class PsMapToolbar(BaseToolbar):
     def __init__(self, parent):
@@ -49,7 +47,44 @@ class PsMapToolbar(BaseToolbar):
     def _toolbarData(self):
         """!Toolbar data
         """
-        icons = Icons['psMap']
+        icons = {
+            'scriptSave' : MetaIcon(img = 'script-save',
+                                    label = _('Generate text file with mapping instructions')),
+            'scriptLoad' : MetaIcon(img = 'script-load',
+                                    label = _('Load text file with mapping instructions')),                           
+            'psExport'   : MetaIcon(img = 'ps-export',
+                                    label = _('Generate PostScript output')),
+            'pdfExport'  : MetaIcon(img = 'pdf-export',
+                                    label = _('Generate PDF output')),
+            'pageSetup'  : MetaIcon(img = 'page-settings',
+                                    label = _('Page setup'),
+                                    desc = _('Specify paper size, margins and orientation')),
+            'fullExtent' : MetaIcon(img = 'zoom-extent',
+                                    label = _("Full extent"),
+                                    desc = _("Zoom to full extent")),
+            'addMap'     : MetaIcon(img = 'layer-add',
+                                    label = _("Map frame"),
+                                    desc = _("Click and drag to place map frame")),
+            'deleteObj'  : MetaIcon(img = 'layer-remove',
+                                    label = _("Delete selected object")),
+            'preview'    : MetaIcon(img = 'execute',
+                                    label = _("Show preview")),
+            'quit'       : MetaIcon(img = 'quit',
+                                    label = _('Quit Cartographic Composer')),
+            'addText'    : MetaIcon(img = 'text-add',
+                                    label = _('Text')),
+            'addMapinfo' : MetaIcon(img = 'map-info',
+                                    label = _('Map info')),
+            'addLegend'  : MetaIcon(img = 'legend-add',
+                                    label = _('Legend')),
+            'addScalebar' : MetaIcon(img = 'scalebar-add',
+                                     label = _('Scale bar')),
+            'addImage'   : MetaIcon(img = 'image-add',
+                                    label = _('Image')),
+            'addNorthArrow': MetaIcon(img = 'north-arrow-add',
+                                      label = _('North Arrow')),
+            }
+        
         return self._getToolbarData((('loadFile', icons['scriptLoad'],
                                       self.parent.OnLoadFile),                                    
                                      ('instructionFile', icons['scriptSave'],
@@ -58,25 +93,25 @@ class PsMapToolbar(BaseToolbar):
                                      ('pagesetup', icons['pageSetup'],
                                       self.parent.OnPageSetup),
                                      (None, ),
-                                     ("pointer", Icons["displayWindow"]["pointer"],
+                                     ("pointer", BaseIcons["pointer"],
                                       self.parent.OnPointer, wx.ITEM_CHECK),
-                                     ('pan', Icons["displayWindow"]['pan'],
+                                     ('pan', BaseIcons['pan'],
                                       self.parent.OnPan, wx.ITEM_CHECK),
-                                     ("zoomin", Icons["displayWindow"]["zoomIn"],
+                                     ("zoomin", BaseIcons["zoomIn"],
                                       self.parent.OnZoomIn, wx.ITEM_CHECK),
-                                     ("zoomout", Icons["displayWindow"]["zoomOut"],
+                                     ("zoomout", BaseIcons["zoomOut"],
                                       self.parent.OnZoomOut, wx.ITEM_CHECK),
                                      ('zoomAll', icons['fullExtent'],
                                       self.parent.OnZoomAll),
                                      (None, ),
                                      ('addMap', icons['addMap'],
                                       self.parent.OnAddMap, wx.ITEM_CHECK),
-                                     ('addRaster', icons['addRast'],
+                                     ('addRaster', BaseIcons['addRast'],
                                       self.parent.OnAddRaster),
-                                     ('addVector', icons['addVect'],
+                                     ('addVector', BaseIcons['addVect'],
                                       self.parent.OnAddVect),
-                                     ("dec", Icons["displayWindow"]["overlay"],
-                                      self.parent.OnDecoration),
+                                     ("dec", BaseIcons["overlay"],
+                                      self.OnDecoration),
                                      ("delete", icons["deleteObj"],
                                       self.parent.OnDelete),
                                      (None, ),
@@ -87,8 +122,19 @@ class PsMapToolbar(BaseToolbar):
                                      ('generatePDF', icons['pdfExport'],
                                       self.parent.OnPDFFile),
                                      (None, ),
-                                     ("help", Icons['misc']['help'],
+                                     ("help", BaseIcons['help'],
                                       self.parent.OnHelp),
                                      ('quit', icons['quit'],
                                       self.parent.OnCloseWindow))
                                     )
+
+    def OnDecoration(self, event):
+        """!Decorations overlay menu
+        """
+        self._onMenu(((PsMapIcons["addLegend"],     self.parent.OnAddLegend),
+                      (PsMapIcons["addMapinfo"],    self.parent.OnAddMapinfo),
+                      (PsMapIcons["addScalebar"],   self.parent.OnAddScalebar),
+                      (PsMapIcons["addText"],       self.parent.OnAddText),
+                      (PsMapIcons["addImage"],      self.parent.OnAddImage),
+                      (PsMapIcons["addNorthArrow"], self.parent.OnAddNorthArrow)))
+        

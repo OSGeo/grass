@@ -28,10 +28,8 @@ import sys
 from core               import globalvar
 from core.gcmd          import RunCommand
 from nviz.preferences   import NvizPreferencesDialog
-from gui_core.toolbars  import BaseToolbar
-
-sys.path.append(os.path.join(globalvar.ETCWXDIR, "icons"))
-from icons.icon        import Icons
+from gui_core.toolbars  import BaseToolbar, BaseIcons
+from icons.icon         import MetaIcon
 
 class LMWorkspaceToolbar(BaseToolbar):
     """!Layer Manager `workspace` toolbar
@@ -47,7 +45,16 @@ class LMWorkspaceToolbar(BaseToolbar):
     def _toolbarData(self):
         """!Toolbar data
         """
-        icons = Icons['layerManager']
+        icons = {
+            'newdisplay'    : MetaIcon(img = 'monitor-create',
+                                       label = _('Start new map display')),
+            'workspaceNew'  : MetaIcon(img = 'create',
+                                       label = _('Create new workspace (Ctrl+N)')),
+            'workspaceOpen' : MetaIcon(img = 'open',
+                                       label = _('Open existing workspace file (Ctrl+O)')),
+            'workspaceSave' : MetaIcon(img = 'save',
+                                       label = _('Save current workspace to file (Ctrl+S)')),
+            }
         return self._getToolbarData((('newdisplay', icons["newdisplay"],
                                       self.parent.OnNewDisplay),
                                      (None, ),
@@ -73,7 +80,23 @@ class LMDataToolbar(BaseToolbar):
     def _toolbarData(self):
         """!Toolbar data
         """
-        icons = Icons['layerManager']
+        icons = {
+            'addMulti'   : MetaIcon(img = 'layer-open',
+                                    label = _('Add multiple raster or vector map layers (Ctrl+Shift+L)')),
+            'addRast'    : BaseIcons['addRast'].SetLabel(_("Add raster map layer (Ctrl+Shift+R)")),
+            'rastMisc'   : MetaIcon(img = 'layer-raster-more',
+                                    label = _('Add various raster map layers (RGB, HIS, shaded relief...)')),
+            'addVect'    : BaseIcons['addRast'].SetLabel(_("Add vector map layer (Ctrl+Shift+V)")),
+            'vectMisc'   : MetaIcon(img = 'layer-vector-more',
+                                    label = _('Add various vector map layers (thematic, chart...)')),
+            'addGroup'   : MetaIcon(img = 'layer-group-add',
+                                    label = _('Add group')),
+            'addOverlay' : MetaIcon(img = 'layer-more',
+                                    label = _('Add grid or vector labels overlay')),
+            'delCmd'     : MetaIcon(img = 'layer-remove',
+                                    label = _('Delete selected map layer')),
+            }
+        
         return self._getToolbarData((('addMulti', icons["addMulti"],
                                       self.parent.OnAddMaps),
                                      ('addrast', icons["addRast"],
@@ -106,17 +129,29 @@ class LMToolsToolbar(BaseToolbar):
     def _toolbarData(self):
         """!Toolbar data
         """
-        icons = Icons['layerManager']
+        icons = {
+            'import'  : MetaIcon(img = 'layer-import',
+                                 label = _('Import/link raster or vector data')),
+            'mapcalc' : MetaIcon(img = 'calculator',
+                                 label = _('Raster Map Calculator')),
+            'modeler' : MetaIcon(img = 'modeler-main',
+                                 label = _('Graphical Modeler')),
+            'georectify' : MetaIcon(img = 'georectify',
+                                 label = _('Georectifier')),
+            'composer': MetaIcon(img = 'print-compose',
+                                 label = _('Cartographic Composer')),
+            }
+        
         return self._getToolbarData((('importMap', icons["import"],
                                       self.parent.OnImportMenu),
                                      (None, ),
                                      ('mapCalc', icons["mapcalc"],
                                       self.parent.OnMapCalculator),
-                                     ('georect', Icons["georectify"]["georectify"],
+                                     ('georect', icons["georectify"],
                                       self.parent.OnGCPManager),
                                      ('modeler', icons["modeler"],
                                       self.parent.OnGModeler),
-                                     ('mapOutput', icons['mapOutput'],
+                                     ('mapOutput', icons['composer'],
                                       self.parent.OnPsMap)
                                      ))
 
@@ -134,10 +169,14 @@ class LMMiscToolbar(BaseToolbar):
     def _toolbarData(self):
         """!Toolbar data
         """
-        icons = Icons['layerManager']
+        icons = {
+            'settings'   : BaseIcons['settings'].SetLabel(_('GUI settings')),
+            'help'       : BaseIcons['help'].SetLabel(_('GRASS manual')),
+            }
+        
         return self._getToolbarData((('settings', icons["settings"],
                                       self.parent.OnPreferences),
-                                     ('help', Icons["misc"]["help"],
+                                     ('help', icons["help"],
                                       self.parent.OnHelp),
                                      ))
 
@@ -155,7 +194,13 @@ class LMVectorToolbar(BaseToolbar):
     def _toolbarData(self):
         """!Toolbar data
         """
-        icons = Icons['layerManager']
+        icons = {
+            'vdigit'     : MetaIcon(img = 'edit',
+                                    label = _('Edit vector maps')),
+            'attrTable'  : MetaIcon(img = 'table',
+                                    label = _('Show attribute table')),
+            }
+        
         return self._getToolbarData((('vdigit', icons["vdigit"],
                                       self.parent.OnVDigit),
                                      ('attribute', icons["attrTable"],
@@ -180,8 +225,18 @@ class LMNvizToolbar(BaseToolbar):
         
     def _toolbarData(self):
         """!Toolbar data"""
-        icons = Icons['nviz']
-        return self._getToolbarData((("nvizCmd", icons['nvizCmd'],
+        icons = {
+            'cmd'    : MetaIcon(img = 'script-save',
+                                label = _('Generate command for m.nviz.image'),
+                                desc = _('Generate command for m.nviz.image based on current state')),
+            'settings' : MetaIcon(img = '3d-settings',
+                                  label = _('3D view mode settings'),
+                                  desc = _('Show 3D view mode settings dialog')),
+            'help'   : MetaIcon(img = '3d-help',
+                                label = _('Show 3D view mode manual')),
+            }
+        
+        return self._getToolbarData((("nvizCmd", icons['cmd'],
                                       self.OnNvizCmd),
                                      (None, ),
                                      ("settings", icons["settings"],

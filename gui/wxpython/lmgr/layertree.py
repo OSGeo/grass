@@ -4,7 +4,7 @@
 @brief Utility classes for map layer management.
 
 Classes:
- - lmgr::LayerTree
+ - layertree::LayerTree
 
 (C) 2007-2011 by the GRASS Development Team
 
@@ -38,12 +38,59 @@ from modules.histogram   import HistogramFrame
 from core.utils          import GetLayerNameFromCmd
 from wxplot.profile      import ProfileFrame
 from core.debug          import Debug
-from icon                import Icons
 from core.settings       import UserSettings
 from vdigit.main         import haveVDigit
 from core.gcmd           import GWarning
+from gui_core.toolbars   import BaseIcons
+from icons.icon          import MetaIcon
 
 TREE_ITEM_HEIGHT = 25
+
+LMIcons = {
+    'rastImport' : MetaIcon(img = 'layer-import',
+                            label = _('Import raster data')),
+    'rastLink'   : MetaIcon(img = 'layer-import',
+                            label = _('Link external raster data')),
+    'rastOut'    : MetaIcon(img = 'layer-export',
+                            label = _('Set raster output format')),
+    'vectImport' : MetaIcon(img = 'layer-import',
+                            label = _('Import vector data')),
+    'vectLink'   : MetaIcon(img = 'layer-import',
+                                    label = _('Link external vector data')),
+    'vectOut'    : MetaIcon(img = 'layer-export',
+                            label = _('Set vector output format')),
+    'addCmd'     : MetaIcon(img = 'layer-command-add',
+                            label = _('Add command layer')),
+    'quit'       : MetaIcon(img = 'quit',
+                            label = _('Quit')),
+    'addRgb'     : MetaIcon(img = 'layer-rgb-add',
+                            label = _('Add RGB map layer')),
+    'addHis'     : MetaIcon(img = 'layer-his-add',
+                                    label = _('Add HIS map layer')),
+    'addShaded'  : MetaIcon(img = 'layer-shaded-relief-add',
+                            label = _('Add shaded relief map layer')),
+    'addRArrow'  : MetaIcon(img = 'layer-aspect-arrow-add',
+                            label = _('Add raster flow arrows')),
+    'addRNum'    : MetaIcon(img = 'layer-cell-cats-add',
+                            label = _('Add raster cell numbers')),
+    'addThematic': MetaIcon(img = 'layer-vector-thematic-add',
+                            label = _('Add thematic area (choropleth) map layer')),
+    'addChart'   : MetaIcon(img = 'layer-vector-chart-add',
+                            label = _('Add thematic chart layer')),
+    'addGrid'    : MetaIcon(img = 'layer-grid-add',
+                            label = _('Add grid layer')),
+    'addGeodesic': MetaIcon(img = 'shortest-distance',
+                            label = _('Add geodesic line layer')),
+    'addRhumb'   : MetaIcon(img = 'shortest-distance',
+                            label = _('Add rhumbline layer')),
+    'addLabels'  : MetaIcon(img = 'layer-label-add',
+                            label = _('Add labels')),
+    'addRast3d'  : MetaIcon(img = 'layer-raster3d-add',
+                            label = _('Add 3D raster map layer'),
+                            desc  =  _('Note that 3D raster data are rendered only in 3D view mode')),
+    'layerOptions'  : MetaIcon(img = 'options',
+                               label = _('Set options')),
+    }
 
 class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     """!Creates layer tree structure
@@ -127,50 +174,49 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.folder = il.Add(trart)
         
         bmpsize = (16, 16)
-        icons = Icons['layerManager']
-        trgif = icons["addRast"].GetBitmap(bmpsize)
+        trgif = BaseIcons["addRast"].GetBitmap(bmpsize)
         self.rast_icon = il.Add(trgif)
         
-        trgif = icons["addRast3d"].GetBitmap(bmpsize)
+        trgif = LMIcons["addRast3d"].GetBitmap(bmpsize)
         self.rast3d_icon = il.Add(trgif)
         
-        trgif = icons["addRgb"].GetBitmap(bmpsize)
+        trgif = LMIcons["addRgb"].GetBitmap(bmpsize)
         self.rgb_icon = il.Add(trgif)
         
-        trgif = icons["addHis"].GetBitmap(bmpsize)
+        trgif = LMIcons["addHis"].GetBitmap(bmpsize)
         self.his_icon = il.Add(trgif)
         
-        trgif = icons["addShaded"].GetBitmap(bmpsize)
+        trgif = LMIcons["addShaded"].GetBitmap(bmpsize)
         self.shaded_icon = il.Add(trgif)
         
-        trgif = icons["addRArrow"].GetBitmap(bmpsize)
+        trgif = LMIcons["addRArrow"].GetBitmap(bmpsize)
         self.rarrow_icon = il.Add(trgif)
         
-        trgif = icons["addRNum"].GetBitmap(bmpsize)
+        trgif = LMIcons["addRNum"].GetBitmap(bmpsize)
         self.rnum_icon = il.Add(trgif)
         
-        trgif = icons["addVect"].GetBitmap(bmpsize)
+        trgif = BaseIcons["addVect"].GetBitmap(bmpsize)
         self.vect_icon = il.Add(trgif)
         
-        trgif = icons["addThematic"].GetBitmap(bmpsize)
+        trgif = LMIcons["addThematic"].GetBitmap(bmpsize)
         self.theme_icon = il.Add(trgif)
         
-        trgif = icons["addChart"].GetBitmap(bmpsize)
+        trgif = LMIcons["addChart"].GetBitmap(bmpsize)
         self.chart_icon = il.Add(trgif)
         
-        trgif = icons["addGrid"].GetBitmap(bmpsize)
+        trgif = LMIcons["addGrid"].GetBitmap(bmpsize)
         self.grid_icon = il.Add(trgif)
         
-        trgif = icons["addGeodesic"].GetBitmap(bmpsize)
+        trgif = LMIcons["addGeodesic"].GetBitmap(bmpsize)
         self.geodesic_icon = il.Add(trgif)
         
-        trgif = icons["addRhumb"].GetBitmap(bmpsize)
+        trgif = LMIcons["addRhumb"].GetBitmap(bmpsize)
         self.rhumb_icon = il.Add(trgif)
         
-        trgif = icons["addLabels"].GetBitmap(bmpsize)
+        trgif = LMIcons["addLabels"].GetBitmap(bmpsize)
         self.labels_icon = il.Add(trgif)
         
-        trgif = icons["addCmd"].GetBitmap(bmpsize)
+        trgif = LMIcons["addCmd"].GetBitmap(bmpsize)
         self.cmd_icon = il.Add(trgif)
         
         self.AssignImageList(il)
@@ -741,7 +787,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             grouptext = _('Layer group:') + str(self.groupnode)
             self.groupnode += 1
         else:
-            btnbmp = Icons['layerManager']["layerOptions"].GetBitmap((16,16))
+            btnbmp = LMIcons["layerOptions"].GetBitmap((16,16))
             ctrl = buttons.GenBitmapButton(self, id = wx.ID_ANY, bitmap = btnbmp, size = (24,24))
             ctrl.SetToolTipString(_("Click to edit layer settings"))
             self.Bind(wx.EVT_BUTTON, self.OnLayerContextMenu, ctrl)
@@ -1311,7 +1357,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         text    = self.GetItemText(dragItem)
         if self.GetPyData(dragItem)[0]['ctrl']:
             # recreate data layer
-            btnbmp = Icons['layerManager']["layerOptions"].GetBitmap((16,16))
+            btnbmp = LMIcons["layerOptions"].GetBitmap((16,16))
             newctrl = buttons.GenBitmapButton(self, id = wx.ID_ANY, bitmap = btnbmp, size = (24, 24))
             newctrl.SetToolTipString(_("Click to edit layer settings"))
             self.Bind(wx.EVT_BUTTON, self.OnLayerContextMenu, newctrl)

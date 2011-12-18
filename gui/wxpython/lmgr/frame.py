@@ -39,9 +39,8 @@ from grass.script          import core as grass
 
 from core.gcmd             import RunCommand, GError, GMessage
 from core.settings         import UserSettings
-from icons.icon            import Icons
 from gui_core.preferences  import MapsetAccess, PreferencesDialog, EVT_SETTINGS_CHANGED
-from lmgr.layertree        import LayerTree
+from lmgr.layertree        import LayerTree, LMIcons
 from lmgr.menudata         import ManagerData
 from gui_core.widgets      import GNotebook
 from modules.mcalc_builder import MapCalcFrame
@@ -675,7 +674,7 @@ class GMFrame(wx.Frame):
         win = AboutWindow(self)
         win.CentreOnScreen()
         win.Show(True)  
-        
+
     def _popupMenu(self, data):
         """!Create popup menu
         """
@@ -686,8 +685,8 @@ class GMFrame(wx.Frame):
             if key is None:
                 menu.AppendSeparator()
                 continue
-            item = wx.MenuItem(menu, wx.ID_ANY, Icons['layerManager'][key].GetLabel())
-            item.SetBitmap(Icons['layerManager'][key].GetBitmap(self.iconsize))
+            item = wx.MenuItem(menu, wx.ID_ANY, LMIcons[key].GetLabel())
+            item.SetBitmap(LMIcons[key].GetBitmap(self.iconsize))
             menu.AppendItem(item)
             self.Bind(wx.EVT_MENU, handler, item)
         

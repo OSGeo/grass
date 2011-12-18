@@ -18,10 +18,47 @@ This program is free software under the GNU General Public License
 
 import wx
 
-from gui_core.toolbars import BaseToolbar
-from icons.icon        import Icons
+from gui_core.toolbars import BaseToolbar, BaseIcons
 from nviz.main         import haveNviz
 from vdigit.main       import haveVDigit
+from icons.icon        import MetaIcon
+
+MapIcons =  {
+    'query'      : MetaIcon(img = 'info',
+                            label = _('Query raster/vector map(s)'),
+                            desc = _('Query selected raster/vector map(s)')),
+    'addBarscale': MetaIcon(img = 'scalebar-add',
+                            label = _('Add scalebar and north arrow')),
+    'addLegend'  : MetaIcon(img = 'legend-add',
+                            label = _('Add legend')),
+    'addNorthArrow': MetaIcon(img = 'north-arrow-add',
+                              label = _('North Arrow')),
+    'analyze'    : MetaIcon(img = 'layer-raster-analyze',
+                            label = _('Analyze map'),
+                            desc = _('Measuring, profiling, histogramming, ...')),
+    'measure'    : MetaIcon(img = 'measure-length',
+                            label = _('Measure distance')),
+    'profile'    : MetaIcon(img = 'layer-raster-profile',
+                            label = _('Profile surface map')),
+    'scatter'    : MetaIcon(img = 'layer-raster-profile',
+                            label = _("Create bivariate scatterplot of raster maps")),
+    'addText'    : MetaIcon(img = 'text-add',
+                            label = _('Add text layer')),
+    'histogram'  : MetaIcon(img = 'layer-raster-histogram',
+                            label = _('Create histogram of raster map')),
+    }
+
+NvizIcons = {
+    'rotate'    : MetaIcon(img = '3d-rotate',
+                           label = _('Rotate 3D scene'),
+                           desc = _('Drag with mouse to rotate 3D scene')), 
+    'flyThrough': MetaIcon(img = 'flythrough',
+                           label = _('Fly-through mode'),
+                           desc = _('Drag with mouse, hold Ctrl down for different mode'
+                                    ' or Shift to accelerate')),
+    'zoomIn'    : BaseIcons['zoomIn'].SetLabel(desc = _('Click mouse to zoom')),
+    'zoomOut'   : BaseIcons['zoomOut'].SetLabel(desc = _('Click mouse to unzoom'))
+    }
 
 class MapToolbar(BaseToolbar):
     """!Map Display toolbar
@@ -95,51 +132,50 @@ class MapToolbar(BaseToolbar):
         
         self.OnTool(None)
         
-        self.EnableTool(self.zoomback, False)
+        self.EnableTool(self.zoomBack, False)
         
         self.FixSize(width = 90)
         
     def _toolbarData(self):
         """!Toolbar data"""
-        icons = Icons['displayWindow']
-        return self._getToolbarData((('displaymap', icons['display'],
+        return self._getToolbarData((('displayMap', BaseIcons['display'],
                                       self.parent.OnDraw),
-                                     ('rendermap', icons['render'],
+                                     ('renderMap', BaseIcons['render'],
                                       self.parent.OnRender),
-                                     ('erase', icons['erase'],
+                                     ('erase', BaseIcons['erase'],
                                       self.parent.OnErase),
                                      (None, ),
-                                     ('pointer', icons['pointer'],
+                                     ('pointer', BaseIcons['pointer'],
                                       self.parent.OnPointer,
                                       wx.ITEM_CHECK),
-                                     ('query', icons['query'],
+                                     ('query', MapIcons['query'],
                                       self.parent.OnQuery,
                                       wx.ITEM_CHECK),
-                                     ('pan', icons['pan'],
+                                     ('pan', BaseIcons['pan'],
                                       self.parent.OnPan,
                                       wx.ITEM_CHECK),
-                                     ('zoomin', icons['zoomIn'],
+                                     ('zoomIn', BaseIcons['zoomIn'],
                                       self.parent.OnZoomIn,
                                       wx.ITEM_CHECK),
-                                     ('zoomout', icons['zoomOut'],
+                                     ('zoomOut', BaseIcons['zoomOut'],
                                       self.parent.OnZoomOut,
                                       wx.ITEM_CHECK),
-                                     ('zoomextent', icons['zoomExtent'],
+                                     ('zoomExtent', BaseIcons['zoomExtent'],
                                       self.parent.OnZoomToMap),
-                                     ('zoomback', icons['zoomBack'],
+                                     ('zoomBack', BaseIcons['zoomBack'],
                                       self.parent.OnZoomBack),
-                                     ('zoommenu', icons['zoomMenu'],
+                                     ('zoomMenu', BaseIcons['zoomMenu'],
                                       self.parent.OnZoomMenu),
                                      (None, ),
-                                     ('analyze', icons['analyze'],
-                                      self.parent.OnAnalyze),
+                                     ('analyze', MapIcons['analyze'],
+                                      self.OnAnalyze),
                                      (None, ),
-                                     ('dec', icons['overlay'],
-                                      self.parent.OnDecoration),
+                                     ('overlay', BaseIcons['overlay'],
+                                      self.OnDecoration),
                                      (None, ),
-                                     ('savefile', icons['saveFile'],
+                                     ('saveFile', BaseIcons['saveFile'],
                                       self.parent.SaveToFile),
-                                     ('printmap', icons['print'],
+                                     ('printMap', BaseIcons['print'],
                                       self.parent.PrintMenu),
                                      (None, ))
                                     )
@@ -167,16 +203,16 @@ class MapToolbar(BaseToolbar):
     def ChangeToolsDesc(self, mode2d):
         """!Change description of zoom tools for 2D/3D view"""
         if mode2d:
-            set = 'displayWindow'
+            icons = BaseIcons
         else:
-            set = 'nviz'
+            icons = NvizIcons
         for i, data in enumerate(self._data):
-            for tool, toolname in (('zoomin', 'zoomIn'),('zoomout', 'zoomOut')):
+            for tool in (('zoomIn', 'zoomOut')):
                 if data[0] == tool:
                     tmp = list(data)
-                    tmp[4] = Icons[set][toolname].GetDesc()
+                    tmp[4] = icons[tool].GetDesc()
                     self._data[i] = tuple(tmp)
-                
+        
     def OnSelectTool(self, event):
         """!Select / enable tool available in tools list
         """
@@ -197,6 +233,27 @@ class MapToolbar(BaseToolbar):
             self.ExitToolbars()
             self.parent.AddToolbar("vdigit")
             self.parent.MapWindow.SetFocus()
+
+    def OnAnalyze(self, event):
+        """!Analysis tools menu
+        """
+        self._onMenu(((MapIcons["measure"],    self.parent.OnMeasure),
+                      (MapIcons["profile"],    self.parent.OnProfile),
+                      (MapIcons["scatter"],    self.parent.OnScatterplot),
+                      (MapIcons["histogram"],  self.parent.OnHistogramPyPlot),
+                      (BaseIcons["histogramD"], self.parent.OnHistogram)))
+        
+    def OnDecoration(self, event):
+        """!Decorations overlay menu
+        """
+        if self.parent.IsPaneShown('3d'):
+            self._onMenu(((MapIcons["addNorthArrow"], self.parent.OnAddArrow),
+                          (MapIcons["addLegend"],     self.parent.OnAddLegend),
+                          (MapIcons["addText"],       self.parent.OnAddText)))
+        else:
+            self._onMenu(((MapIcons["addBarscale"], self.parent.OnAddBarscale),
+                          (MapIcons["addLegend"],   self.parent.OnAddLegend),
+                          (MapIcons["addText"],     self.parent.OnAddText)))
         
     def ExitToolbars(self):
         if self.parent.GetToolbar('vdigit'):
@@ -206,7 +263,7 @@ class MapToolbar(BaseToolbar):
         
     def Enable2D(self, enabled):
         """!Enable/Disable 2D display mode specific tools"""
-        for tool in (self.zoommenu,
+        for tool in (self.zoomMenu,
                      self.analyze,
-                     self.printmap):
+                     self.printMap):
             self.EnableTool(tool, enabled)

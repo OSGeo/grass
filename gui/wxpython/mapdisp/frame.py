@@ -36,14 +36,13 @@ sys.path.append(os.path.join(globalvar.ETCDIR,   "python"))
 from core               import globalvar
 from core.render        import EVT_UPDATE_PRGBAR
 from vdigit.toolbars    import VDigitToolbar
-from mapdisp.toolbars   import MapToolbar
+from mapdisp.toolbars   import MapToolbar, NvizIcons
 from mapdisp.gprint     import PrintOptions
 from core.gcmd          import GError, GMessage, RunCommand
 from dbmgr.dialogs      import DisplayAttributesDialog
 from core.utils         import ListOfCatsToRange, GetLayerNameFromCmd
 from gui_core.dialogs   import GetImageHandlers, ImageSizeDialog, DecorationDialog, TextLayerDialog
 from core.debug         import Debug
-from icon               import Icons
 from core.settings      import UserSettings
 from gui_core.mapdisp   import MapFrameBase
 from mapdisp.mapwindow  import BufferedWindow
@@ -272,9 +271,9 @@ class MapFrame(MapFrameBase):
                     self._layerManager.gm_cb.GetPage(page).maptree.mapdisplay.toolbars['map'].combo.Delete(1)
         self.toolbars['map'].Enable2D(False)
         # add rotate tool to map toolbar
-        self.toolbars['map'].InsertTool((('rotate', Icons['nviz']['rotate'],
+        self.toolbars['map'].InsertTool((('rotate', NvizIcons['rotate'],
                                           self.OnRotate, wx.ITEM_CHECK, 7),)) # 7 is position
-        self.toolbars['map'].InsertTool((('flyThrough', Icons['nviz']['flyThrough'],
+        self.toolbars['map'].InsertTool((('flyThrough', NvizIcons['flyThrough'],
                                           self.OnFlyThrough, wx.ITEM_CHECK, 8),)) 
         self.toolbars['map'].ChangeToolsDesc(mode2d = False)
         # update status bar
@@ -896,44 +895,6 @@ class MapFrame(MapFrameBase):
         else:
             return cmd
 
-    def OnAnalyze(self, event):
-        """!Analysis tools menu
-        """
-        point = wx.GetMousePosition()
-        toolsmenu = wx.Menu()
-        icons = Icons['displayWindow']
-        
-        # Add items to the menu
-        measure = wx.MenuItem(toolsmenu, wx.ID_ANY, icons["measure"].GetLabel())
-        measure.SetBitmap(icons["measure"].GetBitmap(self.iconsize))
-        toolsmenu.AppendItem(measure)
-        self.Bind(wx.EVT_MENU, self.OnMeasure, measure)
-        
-        profile = wx.MenuItem(toolsmenu, wx.ID_ANY, icons["profile"].GetLabel())
-        profile.SetBitmap(icons["profile"].GetBitmap(self.iconsize))
-        toolsmenu.AppendItem(profile)
-        self.Bind(wx.EVT_MENU, self.OnProfile, profile)
-
-        scatterplot = wx.MenuItem(toolsmenu, wx.ID_ANY, _("Create bivariate scatterplot of raster maps"))
-        scatterplot.SetBitmap(icons["profile"].GetBitmap(self.iconsize))
-        toolsmenu.AppendItem(scatterplot)
-        self.Bind(wx.EVT_MENU, self.OnScatterplot, scatterplot)
-
-        histogram2 = wx.MenuItem(toolsmenu, wx.ID_ANY, icons["histogram"].GetLabel())
-        histogram2.SetBitmap(icons["histogram"].GetBitmap(self.iconsize))
-        toolsmenu.AppendItem(histogram2)
-        self.Bind(wx.EVT_MENU, self.OnHistogramPyPlot, histogram2)
-
-        histogram = wx.MenuItem(toolsmenu, wx.ID_ANY, _("Create histogram with d.histogram"))
-        histogram.SetBitmap(icons["histogram"].GetBitmap(self.iconsize))
-        toolsmenu.AppendItem(histogram)
-        self.Bind(wx.EVT_MENU, self.OnHistogram, histogram)
-
-        # Popup the menu.  If an item is selected then its handler
-        # will be called before PopupMenu returns.
-        self.PopupMenu(toolsmenu)
-        toolsmenu.Destroy()
-
     def OnMeasure(self, event):
         """!Init measurement routine that calculates map distance
         along transect drawn on map display
@@ -1131,41 +1092,6 @@ class MapFrame(MapFrameBase):
         self.histogram.Refresh()
         self.histogram.Update()
        
-    def OnDecoration(self, event):
-        """!Decorations overlay menu
-        """
-        point = wx.GetMousePosition()
-        decmenu = wx.Menu()
-        icons = Icons['displayWindow']
-        
-        # Add items to the menu
-        AddScale = wx.MenuItem(decmenu, wx.ID_ANY, icons["addBarscale"].GetLabel())
-        AddScale.SetBitmap(icons["addBarscale"].GetBitmap(self.iconsize))
-        decmenu.AppendItem(AddScale)
-        self.Bind(wx.EVT_MENU, self.OnAddBarscale, AddScale)
-        # temporary
-        if self.IsPaneShown('3d'):
-            AddScale.Enable(False)
-            AddArrow = wx.MenuItem(decmenu, wx.ID_ANY, icons['addNorthArrow'].GetLabel())
-            AddArrow.SetBitmap(icons['addNorthArrow'].GetBitmap(self.iconsize))
-            decmenu.AppendItem(AddArrow)
-            self.Bind(wx.EVT_MENU, self.OnAddArrow, AddArrow)
-        
-        AddLegend = wx.MenuItem(decmenu, wx.ID_ANY, icons["addLegend"].GetLabel())
-        AddLegend.SetBitmap(icons["addLegend"].GetBitmap(self.iconsize))
-        decmenu.AppendItem(AddLegend)
-        self.Bind(wx.EVT_MENU, self.OnAddLegend, AddLegend)
-        
-        AddText = wx.MenuItem(decmenu, wx.ID_ANY, icons["addText"].GetLabel())
-        AddText.SetBitmap(icons["addText"].GetBitmap(self.iconsize))
-        decmenu.AppendItem(AddText)
-        self.Bind(wx.EVT_MENU, self.OnAddText, AddText)
-        
-        # Popup the menu.  If an item is selected then its handler
-        # will be called before PopupMenu returns.
-        self.PopupMenu(decmenu)
-        decmenu.Destroy()
-        
     def OnAddBarscale(self, event):
         """!Handler for scale/arrow map decoration menu selection.
         """
