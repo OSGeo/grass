@@ -611,9 +611,11 @@ int main(int argc, char *argv[])
     /* -------------------------------------------------------------------- */
     if (flag_e->answer) {
 	if (strcmp(G_mapset(), "PERMANENT") == 0)
+	    /* fixme: expand WIND and DEFAULT_WIND independently. (currently
+		WIND gets forgotten and DEFAULT_WIND is expanded for both) */
 	    G_get_default_window(&cur_wind);
 	else
-	    G_get_set_window(&cur_wind);
+	    G_get_window(&cur_wind);
 
 	cur_wind.north = MAX(cur_wind.north, cellhd.north);
 	cur_wind.south = MIN(cur_wind.south, cellhd.south);
@@ -630,13 +632,10 @@ int main(int argc, char *argv[])
 
 	if (strcmp(G_mapset(), "PERMANENT") == 0) {
 	    G__put_window(&cur_wind, "", "DEFAULT_WIND");
-	    G_put_window(&cur_wind);
-	    G_message(_("Default and working regions for this location updated"));
+	    G_message(_("Default region for this location updated"));
 	}
-	else {
-	    G_put_window(&cur_wind);
-	    G_message(_("Region for the current mapset updated"));
-	}
+	G_put_window(&cur_wind);
+	G_message(_("Region for the current mapset updated"));
     }
 
     exit(EXIT_SUCCESS);
