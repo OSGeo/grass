@@ -50,6 +50,37 @@ int I_transfer_group_ref_file(const struct Ref *, int, struct Ref *);
 int I_init_group_ref(struct Ref *);
 int I_free_group_ref(struct Ref *);
 
+/* iclass.c */
+struct Map_info;
+int I_iclass_analysis(IClass_statistics *, struct Ref *, struct Map_info *, const char *, const char *, const char *);
+int I_iclass_init_group(const char *, struct Ref *);
+void I_iclass_create_raster(IClass_statistics *, struct Ref *, const char *);
+
+/* iclass_statistics.c */
+void I_iclass_statistics_get_nbands(IClass_statistics *, int *);
+void I_iclass_statistics_get_cat(IClass_statistics *, int *);
+void I_iclass_statistics_get_name(IClass_statistics *, const char **);
+void I_iclass_statistics_get_color(IClass_statistics *, const char **);
+void I_iclass_statistics_get_ncells(IClass_statistics *, int *);
+int I_iclass_statistics_get_max(IClass_statistics *, int, int *);
+int I_iclass_statistics_get_range_max(IClass_statistics *, int, int *);
+int I_iclass_statistics_get_min(IClass_statistics *, int, int *);
+int I_iclass_statistics_get_range_min(IClass_statistics *, int, int *);
+int I_iclass_statistics_get_sum(IClass_statistics *, int, float *);
+int I_iclass_statistics_get_mean(IClass_statistics *, int, float *);
+int I_iclass_statistics_get_stddev(IClass_statistics *, int, float *);
+void I_iclass_statistics_get_nstd(IClass_statistics *, float *);
+void I_iclass_statistics_set_nstd(IClass_statistics *, float);
+int I_iclass_statistics_get_histo(IClass_statistics *, int, int, int *);
+int I_iclass_statistics_get_product(IClass_statistics *, int, int, float *);
+void I_iclass_init_statistics(IClass_statistics *, int, const char *, const char *, float);
+void I_iclass_free_statistics(IClass_statistics *);
+
+/* iclass_signatures.c */
+int I_iclass_init_signatures(struct Signature *, struct Ref *);
+void I_iclass_add_signature(struct Signature *, IClass_statistics *);
+int I_iclass_write_signatures(struct Signature *, const char *, const char *, const char *);
+
 /* list_gp.c */
 int I_list_group(const char *, const struct Ref *, FILE *);
 int I_list_group_simple(const struct Ref *, FILE *);
