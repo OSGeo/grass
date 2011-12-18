@@ -246,6 +246,24 @@ class IVDigit:
         else:
             return NO_SNAP
     
+    def _getNewFeaturesLayer(self):
+        """!Returns layer of new feature (from settings)"""
+        if UserSettings.Get(group = 'vdigit', key = "categoryMode", subkey = 'selection') == 2:
+            layer = -1 # -> no category
+        else:
+            layer = UserSettings.Get(group = 'vdigit', key = "layer", subkey = 'value')
+        
+        return layer
+        
+    def _getNewFeaturesCat(self):
+        """!Returns category of new feature (from settings)"""
+        if UserSettings.Get(group = 'vdigit', key = "categoryMode", subkey = 'selection') == 2:
+            cat   = -1
+        else:
+            cat   = self.SetCategory()
+        
+        return cat
+        
     def _breakLineAtIntersection(self, line, pointsLine, changeset):
         """!Break given line at intersection
 
@@ -446,12 +464,9 @@ class IVDigit:
         
         @return tuple (number of added features, feature ids)
         """
-        if UserSettings.Get(group = 'vdigit', key = "categoryMode", subkey = 'selection') == 2:
-            layer = -1 # -> no category
-            cat   = -1
-        else:
-            layer = UserSettings.Get(group = 'vdigit', key = "layer", subkey = 'value')
-            cat   = self.SetCategory()
+        
+        layer = self._getNewFeaturesLayer()
+        cat = self._getNewFeaturesCat()
         
         if ftype == 'point':
             vtype = GV_POINT
@@ -498,7 +513,7 @@ class IVDigit:
                 if Vect_read_line(self.poMapInfo, None, poCats, i) < 0:
                     Vect_destroy_cats_struct(poCatsDel)
                     self._error.ReadLine(i)
-                    return -1
+                    
                 
                 cats = poCats.contents
                 for j in range(cats.n_cats):

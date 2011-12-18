@@ -875,9 +875,7 @@ class VDigitWindow(BufferedWindow):
                 self.Refresh()
                 
                 # add new record into atribute table
-                if UserSettings.Get(group = 'vdigit', key = "addRecord", subkey = 'enabled') and \
-                        (line is True or \
-                             (not line and nfeat > 0)):
+                if self._addRecord() and (line is True or (not line and nfeat > 0)):
                     posWindow = self.ClientToScreen((position[0] + self.dialogOffset,
                                                      position[1] + self.dialogOffset))
                         
@@ -1074,3 +1072,5 @@ class VDigitWindow(BufferedWindow):
         for id in self.moveInfo['id']:
             self.pdcTmp.RemoveId(id)
         
+    def _addRecord(self):
+        return UserSettings.Get(group = 'vdigit', key = "addRecord", subkey = 'enabled')
