@@ -142,6 +142,8 @@ available in GRASS 5 and GRASS 6.
  - gselect::OgrTypeSelect
 - gui_core::mapdisp
  - mapdisp::MapFrameBase
+ - mapdisp::SingleMapFrame
+ - mapdisp::DoubleMapFrame
 - gui_core::mapwindow
  - mapwindow::MapWindow
 - gui_core::menu
