@@ -346,12 +346,12 @@ int dig_del_area(struct Plus_head *plus, int area)
 {
     int i, line;
 
-    /* int    isle, area_out; */
     struct P_area *Area;
     struct P_line *Line;
     struct P_isle *Isle;
-    struct P_topo_b *topo;
-
+    struct P_topo_b *btopo;
+    struct P_topo_c *ctopo;
+    
     G_debug(3, "dig_del_area() area =  %d", area);
     Area = plus->Area[area];
 
@@ -367,16 +367,16 @@ int dig_del_area(struct Plus_head *plus, int area)
     for (i = 0; i < Area->n_lines; i++) {
 	line = Area->lines[i];	/* >0 = clockwise -> right, <0 = counterclockwise ->left */
 	Line = plus->Line[abs(line)];
-	topo = (struct P_topo_b *)Line->topo;
+	btopo = (struct P_topo_b *)Line->topo;
 	if (plus->do_uplist)
 	    dig_line_add_updated(plus, abs(line));
 	if (line > 0) {
 	    G_debug(3, "  Set line %d right side to 0", line);
-	    topo->right = 0;
+	    btopo->right = 0;
 	}
 	else {
 	    G_debug(3, "  Set line %d left side to 0", line);
-	    topo->left = 0;
+	    btopo->left = 0;
 	}
 
 	/* Find the isle this area is part of (used late below) */
@@ -401,8 +401,8 @@ int dig_del_area(struct Plus_head *plus, int area)
 		      line);
 	}
 	else {
-	    topo = (struct P_topo_b *)Line->topo;
-	    topo->left = 0;
+	    ctopo = (struct P_topo_c *)Line->topo;
+	    ctopo->area = 0;
 	    if (plus->do_uplist)
 		dig_line_add_updated(plus, line);
 	}

@@ -36,7 +36,7 @@ static void V2__add_line_to_topo_ogr(struct Map_info *Map, int line,
 				     const struct line_cats *cats)
 {
     int first, s, i;
-    int type, area, side, new_area[2];
+    int type, area, side;
 
     struct Plus_head *plus;
     struct P_line *Line;
@@ -81,7 +81,6 @@ static void V2__add_line_to_topo_ogr(struct Map_info *Map, int line,
 		else
 		    Vect_box_extend(&abox, &box);
 	    }
-	    new_area[s] = area;
 	    G_debug(4, "Vect_build_line_area(): -> area = %d", area);
 	}
 
@@ -265,7 +264,7 @@ off_t V1_write_line_ogr(struct Map_info *Map, int type,
     if (ret != OGRERR_NONE)
 	return -1;
     
-    G_debug(3, "V1_write_line_ogr(): -> offset = %d", offset);
+    G_debug(3, "V1_write_line_ogr(): -> offset = %lu", (unsigned long) offset);
 
     return offset;
 }
@@ -309,9 +308,9 @@ off_t V2_write_line_ogr(struct Map_info *Map, int type,
 	    Vect_box_extend(&(plus->box), &box);
 
 	if (type == GV_BOUNDARY) {
-	    int ret, cline, lines[1];
+	    int ret, cline;
 	    long FID;
-	    double x, y, area_size;
+	    double x, y;
 	    
 	    struct bound_box box;
 	    struct line_pnts *CPoints;
@@ -327,7 +326,7 @@ off_t V2_write_line_ogr(struct Map_info *Map, int type,
 		dig_line_box(CPoints, &box);
 		cline = dig_add_line(plus, GV_CENTROID,
 				     CPoints, &box, FID);
-		G_debug(4, "\tCentroid: x = %f, y = %f, cat = %d, line = %d",
+		G_debug(4, "\tCentroid: x = %f, y = %f, cat = %lu, line = %d",
 			x, y, FID, cline);	  
 		dig_cidx_add_cat(plus, 1, (int) FID,
 				 cline, GV_CENTROID);
@@ -443,7 +442,7 @@ int V1_delete_line_ogr(struct Map_info *Map, off_t offset)
   \return 0 on success
   \return -1 on error
 */
-int V2_delete_line_ogr(struct Map_info *Map, off_t line)
+int V2_delete_line_ogr(struct Map_info *Map, int line)
 {
     int ret, i, type, first;
     struct P_line *Line;
@@ -451,7 +450,7 @@ int V2_delete_line_ogr(struct Map_info *Map, off_t line)
     static struct line_cats *Cats = NULL;
     static struct line_pnts *Points = NULL;
 
-    G_debug(3, "V2_delete_line_ogr(), line = %d", (int) line);
+    G_debug(3, "V2_delete_line_ogr(), line = %d", line);
 
     type = first = 0;
     Line = NULL;
