@@ -1286,7 +1286,7 @@ class GMFrame(wx.Frame):
                                            wx.TR_LINES_AT_ROOT| wx.TR_HIDE_ROOT |
                                            wx.TR_DEFAULT_STYLE| wx.NO_BORDER | wx.FULL_REPAINT_ON_RESIZE,
                                            idx = self.disp_idx, lmgr = self, notebook = self.gm_cb,
-                                           auimgr = self._auimgr, showMapDisplay = show)
+                                           showMapDisplay = show)
         
         # layout for controls
         cb_boxsizer = wx.BoxSizer(wx.VERTICAL)
