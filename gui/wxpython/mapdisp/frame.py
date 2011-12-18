@@ -17,8 +17,8 @@ This program is free software under the GNU General Public License
 @author Michael Barton
 @author Jachym Cepicky
 @author Martin Landa <landa.martin gmail.com>
-@author Vaclav Petras <wenzeslaus gmail.com> (MapFrameBase)
-@author Anna Kratochvilova <kratochanna gmail.com> (MapFrameBase)
+@author Vaclav Petras <wenzeslaus gmail.com> (SingleMapFrame)
+@author Anna Kratochvilova <kratochanna gmail.com> (SingleMapFrame)
 """
 
 import os
@@ -44,7 +44,7 @@ from core.utils         import ListOfCatsToRange, GetLayerNameFromCmd
 from gui_core.dialogs   import GetImageHandlers, ImageSizeDialog, DecorationDialog, TextLayerDialog
 from core.debug         import Debug
 from core.settings      import UserSettings
-from gui_core.mapdisp   import MapFrameBase
+from gui_core.mapdisp   import SingleMapFrame
 from mapdisp.mapwindow  import BufferedWindow
 from modules.histogram  import HistogramFrame
 from wxplot.histogram   import Histogram2Frame
@@ -57,7 +57,7 @@ from grass.script import core as grass
 
 haveCtypes = False
 
-class MapFrame(MapFrameBase):
+class MapFrame(SingleMapFrame):
     """!Main frame for map display window. Drawing takes place in
     child double buffered drawing window.
     """
@@ -77,7 +77,7 @@ class MapFrame(MapFrameBase):
         @param name frame name
         @param kwargs wx.Frame attributes
         """
-        MapFrameBase.__init__(self, parent = parent, title = title, toolbars = toolbars,
+        SingleMapFrame.__init__(self, parent = parent, title = title,
                               Map = Map, auimgr = auimgr, name = name, **kwargs)
         
         self._layerManager = lmgr   # Layer Manager object

@@ -29,7 +29,7 @@ from gcp.toolbars      import GCPDisplayToolbar, GCPManToolbar
 from mapdisp.gprint    import PrintOptions
 from core.gcmd         import GMessage
 from gui_core.dialogs  import GetImageHandlers, ImageSizeDialog
-from gui_core.mapdisp  import MapFrameBase
+from gui_core.mapdisp  import SingleMapFrame
 from core.settings     import UserSettings
 from mapdisp.mapwindow import BufferedWindow
 
@@ -38,7 +38,7 @@ import mapdisp.statusbar as sb
 # for standalone app
 cmdfilename = None
 
-class MapFrame(MapFrameBase):
+class MapFrame(SingleMapFrame):
     """!Main frame for map display window. Drawing takes place in
     child double buffered drawing window.
     """
@@ -58,7 +58,7 @@ class MapFrame(MapFrameBase):
         @param kwargs wx.Frame attribures
         """
         
-        MapFrameBase.__init__(self, parent = parent, title = title, toolbars = toolbars,
+        SingleMapFrame.__init__(self, parent = parent, title = title,
                               Map = Map, auimgr = auimgr, name = name, **kwargs)
         
         self._layerManager = lmgr   # Layer Manager object
