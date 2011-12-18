@@ -63,8 +63,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         del kwargs['lmgr']
         self.notebook = kwargs['notebook']   # GIS Manager notebook for layer tree
         del kwargs['notebook']
-        self.auimgr = kwargs['auimgr']       # aui manager
-        del kwargs['auimgr']
         showMapDisplay = kwargs['showMapDisplay']
         del kwargs['showMapDisplay']
         self.treepg = parent                 # notebook page holding layer tree
@@ -104,7 +102,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                    style = wx.DEFAULT_FRAME_STYLE,
                                    tree = self, notebook = self.notebook,
                                    lmgr = self.lmgr, page = self.treepg,
-                                   Map = self.Map, auimgr = self.auimgr)
+                                   Map = self.Map)
         
         # title
         self.mapdisplay.SetTitle(_("GRASS GIS Map Display: %(id)d  - Location: %(loc)s") % \
