@@ -2664,6 +2664,13 @@
 	      <handler>OnMenuCmd</handler>
 	      <command>i.gensigset</command>
 	    </menuitem>
+	    <separator />
+	    <menuitem>
+	      <label>Interactive input for supervised classification</label>
+	      <help>Generates spectral signatures by allowing the user to outline training areas.</help>
+	      <keywords>imagery,classification,supervised</keywords>
+	      <handler>OnIClass</handler>
+	    </menuitem>
 	  </items>
 	</menu>
 	<menu>

@@ -21,6 +21,7 @@ from gui_core.toolbars  import BaseToolbar, BaseIcons
 from gui_core.dialogs   import CreateNewVector
 from vdigit.preferences import VDigitSettingsDialog
 from vdigit.main        import VDigit
+from iclass.digit       import IClassIVDigit
 from core.debug         import Debug
 from core.settings      import UserSettings
 from core.gcmd          import GError
@@ -210,12 +211,8 @@ class VDigitToolbar(BaseToolbar):
     
     def OnTool(self, event):
         """!Tool selected -> disable selected tool in map toolbar"""
-        if self.parent.GetName() == 'IClassWindow':
-            toolbarName = 'iClassMap'
-        else:
-            toolbarName = 'map'
-        aId = self.parent.toolbars[toolbarName].GetAction(type = 'id')
-        self.parent.toolbars[toolbarName].ToggleTool(aId, False)
+        aId = self.parent.GetMapToolbar().GetAction(type = 'id')
+        self.parent.GetMapToolbar().ToggleTool(aId, False)
                 
         # set cursor
         cursor = self.parent.cursors["cross"]
@@ -696,7 +693,10 @@ class VDigitToolbar(BaseToolbar):
                                         0)
         
         self.MapWindow.pdcVector = wx.PseudoDC()
-        self.digit = self.MapWindow.digit = VDigit(mapwindow = self.MapWindow)
+        if self.parent.GetName() == 'IClassWindow':
+            self.digit = self.MapWindow.digit = IClassIVDigit(mapwindow = self.MapWindow)
+        else:
+            self.digit = self.MapWindow.digit = VDigit(mapwindow = self.MapWindow)
         
         self.mapLayer = mapLayer
         # open vector map

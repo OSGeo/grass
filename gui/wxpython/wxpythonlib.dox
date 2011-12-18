@@ -439,6 +439,29 @@ available in GRASS 5 and GRASS 6.
  - scatter::ScatterFrame
  - scatter::ScatterToolbar
 
+\subsection wxIClass wxIClass
+- iclass::dialogs
+ - dialogs::IClassGroupDialog
+ - dialogs::IClassMapDialog
+ - dialogs::IClassCategoryManagerDialog
+ - dialogs::CategoryListCtrl
+- iclass::digit
+ - digit::IClassVDigit
+ - digit::IClassVDigitWindow
+- iclass::frame
+ - frame::IClassMapFrame
+ - frame::MapManager
+- iclass::plots
+ - plots::PlotPanel
+- iclass::statistics
+ - statistics::Statistics
+ - statistics::BandStatistics
+- iclass::toolbars
+ - toolbars::IClassMapToolbar
+ - toolbars::IClassToolbar
+ - toolbars::IClassMapManagerToolbar
+ - toolbars::IClassMiscToolbar
+ 
 \subsection other Other GUI modules
 
 - modules::colorrules
