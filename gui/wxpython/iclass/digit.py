@@ -60,6 +60,9 @@ class IClassVDigitWindow(VDigitWindow):
     def _addRecord(self):
         return False
         
+    def _updateATM(self):
+        pass
+        
     def GetCurrentCategory(self):
         """!Returns current category (class).
         
