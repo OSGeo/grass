@@ -255,8 +255,10 @@ int main(int argc, char *argv[])
 
     flag.extend = G_define_flag();
     flag.extend->key = 'e';
-    flag.extend->description =
+    flag.extend->label =
 	_("Extend region extents based on new dataset");
+    flag.extend->description =
+	_("Also updates the default region if in the PERMANENT mapset");
 
     flag.tolower = G_define_flag();
     flag.tolower->key = 'w';
@@ -778,29 +780,17 @@ int main(int argc, char *argv[])
 		}
 
 		/** Simple 32bit integer                     OFTInteger = 0        **/
-
 		/** List of 32bit integers                   OFTIntegerList = 1    **/
-
 		/** Double Precision floating point          OFTReal = 2           **/
-
 		/** List of doubles                          OFTRealList = 3       **/
-
 		/** String of ASCII chars                    OFTString = 4         **/
-
 		/** Array of strings                         OFTStringList = 5     **/
-
 		/** Double byte string (unsupported)         OFTWideString = 6     **/
-
 		/** List of wide strings (unsupported)       OFTWideStringList = 7 **/
-
 		/** Raw Binary data (unsupported)            OFTBinary = 8         **/
-
 		/**                                          OFTDate = 9           **/
-
 		/**                                          OFTTime = 10          **/
-
 		/**                                          OFTDateTime = 11      **/
-
 
 		if (Ogr_ftype == OFTInteger) {
 		    sprintf(buf, ", %s integer", Ogr_fieldname);
@@ -1242,7 +1232,12 @@ int main(int argc, char *argv[])
     /*      Extend current window based on dataset.                         */
     /* -------------------------------------------------------------------- */
     if (flag.extend->answer) {
-	G_get_set_window(&cur_wind);
+	if (strcmp(G_mapset(), "PERMANENT") == 0)
+	    /* fixme: expand WIND and DEFAULT_WIND independently. (currently 
+		WIND gets forgotten and DEFAULT_WIND is expanded for both) */
+	    G_get_default_window(&cur_wind);
+	else
+	    G_get_window(&cur_wind);
 
 	cur_wind.north = MAX(cur_wind.north, cellhd.north);
 	cur_wind.south = MIN(cur_wind.south, cellhd.south);
@@ -1257,7 +1252,12 @@ int main(int argc, char *argv[])
 				  / cur_wind.ew_res);
 	cur_wind.east = cur_wind.west + cur_wind.cols * cur_wind.ew_res;
 
+	if (strcmp(G_mapset(), "PERMANENT") == 0) {
+	    G__put_window(&cur_wind, "", "DEFAULT_WIND");
+	    G_message(_("Default region for this location updated"));
+	}
 	G_put_window(&cur_wind);
+	G_message(_("Region for the current mapset updated"));
     }
 
     if (with_z && !flag.z->answer)
