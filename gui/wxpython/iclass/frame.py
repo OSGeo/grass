@@ -528,7 +528,8 @@ class IClassMapFrame(DoubleMapFrame):
                 self.statisticsDict[stats.category] = stats
                 
                 #self.ConvertToNull(name = stats.rasterName)
-                self.previewMapManager.AddLayer(name = stats.rasterName, resultsLayer = True)
+                self.previewMapManager.AddLayer(name = stats.rasterName,
+                                                alias = stats.name, resultsLayer = True)
                 # write statistics
                 I_iclass_add_signature(self.signatures, statistics)
             else:
@@ -692,7 +693,7 @@ class MapManager:
     def SetToolbar(self, toolbar):
         self.toolbar = toolbar
         
-    def AddLayer(self, name, resultsLayer = False):
+    def AddLayer(self, name, alias = None, resultsLayer = False):
         """!Adds layer to Map and update toolbar 
         
         @param name layer (raster) name
@@ -708,8 +709,8 @@ class MapManager:
                           name = name, l_hidden = False, l_opacity = 1.0, l_render = True)
         self.frame.Render(self.mapWindow)
         
-        if resultsLayer:
-            alias = self._addSuffix(name.rsplit("_", 1)[0])
+        if alias is not None:
+            alias = self._addSuffix(alias)
             self.layerName[alias] = name
             name = alias
         else:
