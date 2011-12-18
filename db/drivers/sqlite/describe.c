@@ -420,7 +420,7 @@ static int parse_type(const char *declared, int *length)
     if (streq(buf, "character")
 	|| streq(buf, "char")
 	|| streq(buf, "varchar"))
-	return DB_SQL_TYPE_CHARACTER;
+	return DB_SQL_TYPE_TEXT;
 
     if (sscanf(buf, "%s %s", word[0], word[1]) == 2) {
 	if (streq(word[0], "double") && streq(word[1], "precision"))
