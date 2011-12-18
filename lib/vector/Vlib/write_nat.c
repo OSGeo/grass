@@ -654,7 +654,7 @@ int V1_delete_line_nat(struct Map_info *Map, off_t offset)
   \return 0 on success
   \return -1 on error
 */
-int V2_delete_line_nat(struct Map_info *Map, off_t line)
+int V2_delete_line_nat(struct Map_info *Map, int line)
 {
     int ret, i, side, type, first, next_line, area;
     struct P_line *Line;
@@ -665,7 +665,7 @@ int V2_delete_line_nat(struct Map_info *Map, off_t line)
     static struct line_cats *Cats = NULL;
     static struct line_pnts *Points = NULL;
 
-    G_debug(3, "V2_delete_line_nat(), line = %lu", (unsigned long) line);
+    G_debug(3, "V2_delete_line_nat(), line = %d", line);
 
     type = first = n_adjacent = 0;
     Line = NULL;
@@ -784,7 +784,10 @@ int V2_delete_line_nat(struct Map_info *Map, off_t line)
 		V2__delete_area_cats_from_cidx_nat(Map, topo->area);
 	    }
 	    Area = Map->plus.Area[topo->area];
-	    Area->centroid = 0;
+	    if (Area) 
+		Area->centroid = 0;
+	    else
+		G_warning(_("Attempt to access dead area (%d)"), topo->area);
 	}
     }
 

@@ -324,8 +324,11 @@ plus_t dig_line_get_area(struct Plus_head * plus, plus_t line, int side)
     struct P_topo_b *topo;
 
     Line = plus->Line[line];
+    if (!Line) /* dead */
+	return -1;
+    
     if (Line->type != GV_BOUNDARY)
-	return (-1);
+	return -1;
 
     topo = (struct P_topo_b *)Line->topo;
     if (side == GV_LEFT) {
