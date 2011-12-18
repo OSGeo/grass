@@ -86,7 +86,7 @@ class LMDataToolbar(BaseToolbar):
             'addRast'    : BaseIcons['addRast'].SetLabel(_("Add raster map layer (Ctrl+Shift+R)")),
             'rastMisc'   : MetaIcon(img = 'layer-raster-more',
                                     label = _('Add various raster map layers (RGB, HIS, shaded relief...)')),
-            'addVect'    : BaseIcons['addRast'].SetLabel(_("Add vector map layer (Ctrl+Shift+V)")),
+            'addVect'    : BaseIcons['addVect'].SetLabel(_("Add vector map layer (Ctrl+Shift+V)")),
             'vectMisc'   : MetaIcon(img = 'layer-vector-more',
                                     label = _('Add various vector map layers (thematic, chart...)')),
             'addGroup'   : MetaIcon(img = 'layer-group-add',
