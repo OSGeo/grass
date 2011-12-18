@@ -10,14 +10,16 @@ The resulting signature file can be used as input for
 <em><a href="i.maxlik.html">i.maxlik</a></em>
 or as a seed signature file for
 <em><a href="i.cluster.html">i.cluster</a></em>.
-The modeler can be launched
+<em>WxIClass</em> can be launched
 from the menu <tt>Imagery -> Classify image -> Interactive input for supervised classification</tt>.
 
 <p>
 <em>wxIClass</em> currently allows to:
 
 <ul>
-  <li>create training areas (using vector digitizer)</li>
+  <li>create training areas
+  (using <em><a href="wxGUI.Vector_Digitizer.html">vector
+  digitizer</a></em>)</li>
   <li>show histograms for each band and class (category)</li>
   <li>show coincidence plots for each band</li>
   <li>show raster cells that match training areas
@@ -29,7 +31,7 @@ from the menu <tt>Imagery -> Classify image -> Interactive input for supervised 
 
 <p>
 <em>wxIClass</em> performs the first pass in the GRASS two-pass supervised image
-classification process; the GRASS program 
+classification process; the GRASS module
 <em><a href="i.maxlik.html">i.maxlik</a></em> executes the second pass.
 Both programs must be run to generate a classified map in GRASS
 raster format.
@@ -81,7 +83,7 @@ and <a href="http://trac.osgeo.org/grass/wiki/wxGUIDevelopment/wxIClass">develop
 <h2>AUTHOR</h2>
 
 Anna Kratochvilova,
- <a href="http://www.cvut.cz">Czech Technical University in Prague</a>, Czech Republic
+ <a href="http://www.cvut.cz">Czech Technical University in Prague</a>, Czech Republic<br>
  
 Vaclav Petras,
  <a href="http://www.cvut.cz">Czech Technical University in Prague</a>, Czech Republic
