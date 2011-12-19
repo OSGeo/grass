@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: grassmodes_pl\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-05 23:30+0200\n"
-"PO-Revision-Date: 2011-12-09 23:15+0100\n"
+"PO-Revision-Date: 2011-12-18 22:42+0100\n"
 "Last-Translator: Milena Nowotarska <do.milenki * gmail.com>\n"
 "Language-Team: Polish <grass-translations@lists.osgeo.org>\n"
 "MIME-Version: 1.0\n"
@@ -1425,7 +1425,7 @@ msgstr ""
 
 #: ../raster/r.his/main.c:67
 msgid "Generates red, green and blue raster map layers combining hue, intensity and saturation (HIS) values from user-specified input raster map layers."
-msgstr "Tworzy 3 mapy rastrowe R, G, B (red - czerwień, green - zieleń, blue - niebieskość) z map rastrowych H, I, S (hue - barwa, intensity - intensywność, saturation - nasycenie)"
+msgstr "Tworzy 3 mapy rastrowe R, G, B (red - czerwień, green - zieleń, blue - niebieskość) z map rastrowych H, I, S (hue - barwa, intensity - intensywność, saturation - nasycenie)."
 
 #: ../raster/r.his/main.c:76 ../display/d.his/main.c:76
 msgid "Name of layer to be used for HUE"
@@ -8711,7 +8711,7 @@ msgstr "** formuła nie została dodana **\n"
 #: ../raster/r.colors/rules.c:134
 #, c-format
 msgid "bad rule (%s): [%s]"
-msgstr "błędna reguła (%s): %s"
+msgstr "niewłaściwa reguła (%s): [%s]"
 
 #: ../raster/r.colors/stats.c:84
 msgid "Unable to use logarithmic scaling if range includes zero"
@@ -9420,9 +9420,8 @@ msgid "null data"
 msgstr "wektor, metadane"
 
 #: ../raster/r.null/main.c:61
-#, fuzzy
 msgid "Manages NULL-values of given raster map."
-msgstr "Nazwa wejściowej mapy rastrowej"
+msgstr "Zarządzanie wartościami NULL na mapach rastrowych."
 
 #: ../raster/r.null/main.c:64
 #, fuzzy
@@ -10788,9 +10787,8 @@ msgid "Preparing report ..."
 msgstr "Tworzenie raportu..."
 
 #: ../raster/r.digit/main.c:46
-#, fuzzy
 msgid "Interactive tool used to draw and save vector features on a graphics monitor using a pointing device (mouse) and save to a raster map."
-msgstr "Interaktywne narzędzie do rysowania i zapisywania obiektów wektorowych na monitorze graficznym (przy użyciu myszki)."
+msgstr "Interaktywne narzędzie do rysowania i zapisywania obiektów wektorowych na monitorze graficznym (przy użyciu myszki) i zapisu do mapy rastrowej."
 
 #: ../raster/r.digit/main.c:55
 msgid "Display commands to be used for canvas backdrop (separated by ';')"
@@ -11521,9 +11519,9 @@ msgid "Unable to read fp range for raster map <%s>"
 msgstr "Nie można utworzyć mapy rastrowej <%s>"
 
 #: ../raster/r.report/stats.c:88
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open result file <%s>"
-msgstr "Nie mozna otworzyć pliku wejściowego <%s@%s>."
+msgstr "Nie można otworzyć pliku wynikowego <%s>"
 
 #: ../raster/r.composite/main.c:73
 #, fuzzy
@@ -11531,9 +11529,8 @@ msgid "composite"
 msgstr "ukończone"
 
 #: ../raster/r.composite/main.c:75
-#, fuzzy
 msgid "Combines red, green and blue raster maps into a single composite raster map."
-msgstr "Łączy warstwy red, green i blue mapy w jedną złożoną warstwę mapy. "
+msgstr "Łączy warstwy red, green i blue mapy w jedną rastrową kompozycję mapy."
 
 #: ../raster/r.composite/main.c:101
 msgid "Number of levels to be used for each component"
@@ -11939,11 +11936,11 @@ msgstr "Pozycja"
 
 #: ../raster/r.what/main.c:95
 msgid "Queries raster map layers on their category values and category labels."
-msgstr ""
+msgstr "Odpytuje wartości kategorii map rastrowych, wyświetla etykiety kategorii."
 
 #: ../raster/r.what/main.c:103
 msgid "Name of existing raster map(s) to query"
-msgstr ""
+msgstr "Nazwa istniejącej mapy rastrowej do odpytania"
 
 #: ../raster/r.what/main.c:110
 msgid "Size of point cache"
@@ -12375,7 +12372,7 @@ msgstr "wektor do usunięcia"
 #: ../raster/r.param.scale/interface.c:56
 #, fuzzy
 msgid "Extracts terrain parameters from a DEM."
-msgstr "Wpisz parametry dla"
+msgstr "Ekstrachuje parametry terenu z DEM."
 
 #: ../raster/r.param.scale/interface.c:57
 #, fuzzy
@@ -23198,9 +23195,8 @@ msgid "rasterization"
 msgstr "raster, wysokość"
 
 #: ../vector/v.to.rast/main.c:44
-#, fuzzy
 msgid "Converts (rasterize) a vector map into a raster map."
-msgstr "Konwertuje binarną mapę wektorową GRASS do mapy rastrowej GRASS."
+msgstr "Konwertje (rasteryzuje) mapę wektorową na mapę rastrową."
 
 #: ../vector/v.to.rast/main.c:63
 #, fuzzy
@@ -25613,7 +25609,7 @@ msgstr ""
 
 #: ../vector/v.what.rast/main.c:95
 msgid "Name of existing raster map to be queried"
-msgstr ""
+msgstr "Nazwa istniejącej mapy rastrowej do odpytania"
 
 #: ../vector/v.what.rast/main.c:104
 msgid "Column name (will be updated by raster values)"
@@ -26503,13 +26499,12 @@ msgid "A simple utility for converting bearing and distance measurements to coor
 msgstr ""
 
 #: ../misc/m.cogo/main.c:229
-#, fuzzy
 msgid "It assumes a cartesian coordinate system"
-msgstr "Przelicza kąty i odległości do współrzędnych i odwrotnie."
+msgstr "Przyjmuje założenie, że jest to układ kartezjański"
 
 #: ../misc/m.cogo/main.c:233
 msgid "Lines are labelled"
-msgstr ""
+msgstr "Linie są poetykietowane"
 
 #: ../misc/m.cogo/main.c:237
 msgid "Suppress warnings"
@@ -26517,12 +26512,11 @@ msgstr "Pomiń ostrzeżenia"
 
 #: ../misc/m.cogo/main.c:242
 msgid "Convert from coordinates to bearing and distance"
-msgstr ""
+msgstr "Konwertuj ze współrzędnych na kąt i odległość"
 
 #: ../misc/m.cogo/main.c:257
-#, fuzzy
 msgid "Starting coordinate pair"
-msgstr "Plik rastrowy punktów początkowych"
+msgstr "Pierwsza para punktów współrzędnych"
 
 #: ../misc/m.cogo/main.c:267
 #, c-format
@@ -26536,7 +26530,7 @@ msgstr "Nie można otworzyć pliku wyjściowego <%s>"
 
 #: ../misc/m.cogo/main.c:306 ../misc/m.cogo/main.c:309
 msgid "Converting starting coordinate pair"
-msgstr ""
+msgstr "Konwertuje pierwszą parę współrzędnych"
 
 #: ../misc/m.cogo/main.c:325
 #, c-format
@@ -32880,10 +32874,6 @@ msgstr "Nie można ulakować pamięci dla ciągu"
 #~ msgid "Sink layer number or name"
 #~ msgstr "Liczba warstw (z)"
 
-#, fuzzy
-#~ msgid "Name of Arc cost column"
-#~ msgstr "Liczba kolumn"
-
 #~ msgid "Key column name"
 #~ msgstr "Nazwa kolumny klucza"
 
@@ -34025,9 +34015,8 @@ msgstr "Nie można ulakować pamięci dla ciągu"
 #~ msgid "Use G3D mask (if exists) with input map"
 #~ msgstr "Użyj maski 3D (jeżeli istnieje) dla mapy wejściowej"
 
-#, fuzzy
 #~ msgid "Could not get raster row from input map"
-#~ msgstr "Nie można odczytać rzędu rastra."
+#~ msgstr "Nie można odczytać rzędu rastra mapy wejściowej"
 
 #, fuzzy
 #~ msgid "Could not get raster row from elev map"
@@ -34818,13 +34807,11 @@ msgstr "Nie można ulakować pamięci dla ciągu"
 #~ msgid "Unable to open file [%s] for reading"
 #~ msgstr "Nie mozna otworzyć pliku [%s] do odczytu"
 
-#, fuzzy
 #~ msgid "general, projection"
-#~ msgstr "Mapa ma inne odwzorowanie"
+#~ msgstr "ogólne, projekcja"
 
-#, fuzzy
 #~ msgid "Can also be used to create GRASS locations."
-#~ msgstr "Nie można utworzyć lokacji: %s"
+#~ msgstr "Może być również używane do tworzenia lokacji GRASS."
 
 #~ msgid "Print projection information (in conventional GRASS format)"
 #~ msgstr "Wyświetla informację o projekcji (w konwencjonalnym formacie GRASS-a)"
@@ -36449,19 +36436,14 @@ msgstr "Nie można ulakować pamięci dla ciągu"
 #~ msgid "DXF output file"
 #~ msgstr "Plik wejściowy DXF"
 
-#, fuzzy
-#~ msgid "vector, network, spanning tree"
-#~ msgstr "wektor do usunięcia"
-
 #~ msgid "miscellaneous, distance"
 #~ msgstr "różne, odległość"
 
 #~ msgid "Reading file [%s]..."
 #~ msgstr "Odczytywanie pliku [%s]..."
 
-#, fuzzy
 #~ msgid "Unable to determine raster cell type"
-#~ msgstr "Nie można utworzyć mapy rastrowej %s"
+#~ msgstr "Nie można ustalić typu komórki rastrowej"
 
 #~ msgid "Unable to read color file"
 #~ msgstr "Nie można odczytać pliku koloru"
@@ -37590,3 +37572,18 @@ msgstr "Nie można ulakować pamięci dla ciągu"
 #, fuzzy
 #~ msgid " 2. bilinear\n"
 #~ msgstr "_Dwuliniowy"
+
+#~ msgid "raster, raster3d, voxel, conversion"
+#~ msgstr "raster, raster3d, voxel, konwersja"
+
+#~ msgid "Name of existing raster map containing contours"
+#~ msgstr "Nazwa istniejącej mapy rastrowej zawierającej kontury"
+
+#~ msgid "Export a raster map to the Virtual Reality Modeling Language (VRML)"
+#~ msgstr "Eksportuje mape rastrową do Virtual Reality Modeling Language (VRML)"
+
+#~ msgid "raster, geomorphology"
+#~ msgstr "raster, geomorfologia"
+
+#~ msgid "Set color rules based on stddev from a map's mean value."
+#~ msgstr "Ustawia reguły kolorów bazując na odchyleniu standardowym średniej wartości mapy."
