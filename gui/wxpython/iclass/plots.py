@@ -47,16 +47,20 @@ class PlotPanel(scrolled.ScrolledPanel):
         self.Layout()
         
     def _createControlPanel(self):
-        self.graphSwitch = wx.Choice(self, id = wx.ID_ANY,
+        self.plotSwitch = wx.Choice(self, id = wx.ID_ANY,
                                      choices = [_("Histograms"),
                                                 _("Coincident plots")])
-        self.mainSizer.Add(self.graphSwitch, proportion = 0, flag = wx.EXPAND|wx.ALL, border = 5)
-        self.graphSwitch.Bind(wx.EVT_CHOICE, self.OnPlotTypeSelected)
+        self.mainSizer.Add(self.plotSwitch, proportion = 0, flag = wx.EXPAND|wx.ALL, border = 5)
+        self.plotSwitch.Bind(wx.EVT_CHOICE, self.OnPlotTypeSelected)
         
     def OnPlotTypeSelected(self, event):
-        """!Graph type selected"""
-        if self.graphSwitch.GetSelection() == 0:
+        """!Plot type selected"""
+        if self.currentCat is None:
+            return
+        
+        if self.plotSwitch.GetSelection() == 0:
             if not self.statDict[self.currentCat].IsReady():
+                self.ClearPlots()
                 return
             self.DrawHistograms(self.statDict[self.currentCat])
         else:
@@ -64,7 +68,7 @@ class PlotPanel(scrolled.ScrolledPanel):
             
     def StddevChanged(self):
         """!Standard deviation multiplier changed, redraw histograms"""
-        if self.graphSwitch.GetSelection() == 0:
+        if self.plotSwitch.GetSelection() == 0:
             self.UpdateRanges(self.statDict[self.currentCat])
         
     def EnableZoom(self, type, enable = True):
@@ -84,7 +88,11 @@ class PlotPanel(scrolled.ScrolledPanel):
             
         self.canvasList = []
             
-        
+    def ClearPlots(self):
+        """!Clears plot canvases"""
+        for bandIdx in range(len(self.bandList)):
+            self.canvasList[bandIdx].Clear()
+            
     def CreatePlotCanvases(self):
         """!Create plot canvases according to the number of bands"""
         for band in self.bandList:
@@ -112,7 +120,7 @@ class PlotPanel(scrolled.ScrolledPanel):
         self.currentCat = currentCat
         self.bandList = self.parent.GetGroupLayers(group)
         
-        graphType = self.graphSwitch.GetSelection()
+        graphType = self.plotSwitch.GetSelection()
         
         if not statDict[currentCat].IsReady() and graphType == 0:
             return
