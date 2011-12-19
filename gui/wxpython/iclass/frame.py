@@ -291,10 +291,10 @@ class IClassMapFrame(DoubleMapFrame):
             self._addPaneMapWindow(name = 'preview')
             self._addPaneToolbar(name = 'iClassPreviewMapManager')
         else:
-            self._addPaneMapWindow(name = 'preview')
             self._addPaneToolbar(name = 'iClassPreviewMapManager')
-            self._addPaneMapWindow(name = 'training')
+            self._addPaneMapWindow(name = 'preview')
             self._addPaneToolbar(name = 'iClassTrainingMapManager')
+            self._addPaneMapWindow(name = 'training')
         
         self._mgr.AddPane(self.plotPanel, wx.aui.AuiPaneInfo().
                   Name("plots").Caption(_("Plots")).
