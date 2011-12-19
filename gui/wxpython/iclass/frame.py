@@ -94,9 +94,11 @@ class IClassMapFrame(DoubleMapFrame):
         #
         
         toolbarsCopy = toolbars[:]
-        self.AddToolbar(toolbarsCopy.pop(0))
         if sys.platform == 'win32':
+            self.AddToolbar(toolbarsCopy.pop(1))
             toolbarsCopy.reverse()
+        else:
+            self.AddToolbar(toolbarsCopy.pop(0))
         for toolb in toolbarsCopy:
             self.AddToolbar(toolb)
         self.firstMapWindow.SetToolbar(self.toolbars['vdigit'])
@@ -349,8 +351,7 @@ class IClassMapFrame(DoubleMapFrame):
     def GetMapToolbar(self):
         """!Returns toolbar with zooming tools"""
         return self.toolbars['iClassMap']
-    
-        
+
     def OnZoomMenu(self, event):
         """!Popup Zoom menu """
         zoommenu = wx.Menu()
