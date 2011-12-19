@@ -1,0 +1,115 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.rectify</em> uses control points to calculate a 2D or 3D 
+transformation matrix based on a first, second, or third order 
+polynomial and then converts x,y(, z) coordinates to standard map 
+coordinates for each object in the vector map. The result is a vector 
+map with a transformed coordinate system (i.e., a different coordinate
+system than before it was rectified).
+
+<p>
+2D Ground Control Points can be identified in 
+<em><a href="i.points.html">i.points</a></em>
+or
+<em><a href="i.vpoints.html">i.vpoints</a></em>
+<p>
+3D Ground Control Points must be provided in a text file with the 
+<b>points</b> option. The 3D format is equivalent to the format for 2D 
+ground control points with an additional third coordinate:
+
+<div class="code"><pre>
+ x y z east north height status
+</pre></div>
+where x, y, z are source coordinates, east, north, height are target 
+coordinates and status (0 or 1) indicates whether a given point should 
+be used. 
+
+<p>
+If no <b>group</b> is given, the rectified vector will be written to 
+the current mapset. If a <b>group</b> is given and a target has been 
+set for this group with <em><a href="i.target.html">i.target</a></em>, 
+the rectified vector will be written to the target location and mapset.
+
+<h3>Coordinate transformation and RMSE</h3>
+<p>The desired order of transformation (1, 2, or 3) is selected with the
+<b>order</b> option.
+
+<em>v.rectify</em> will calculate the RMSE if the <b>-r</b> flag is 
+given and print out statistcs in tabular format. The last row gives a 
+summary with the first column holding the number of active points, 
+followed by average deviations for each dimension and both forward and 
+backward transformation and finally forward and backward overall RMSE.
+
+<h4>2D linear affine transformation (1st order transformation)</h4>
+
+<dl>
+	<dd> x' = a1 + b1 * x + c1 * y
+	<dd> y' = a2 + b2 * x + c2 * y
+</dl>
+
+<h4>3D linear affine transformation (1st order transformation)</h4>
+
+<dl>
+	<dd> x' = a1 + b1 * x + c1 * y + d1 * z
+	<dd> y' = a2 + b2 * x + c2 * y + d2 * z
+	<dd> z' = a3 + b3 * x + c3 * y + d3 * z
+</dl>
+
+The a,b,c,d coefficients are determined by least squares regression
+based on the control points entered.  This transformation
+applies scaling, translation and rotation. It is NOT a
+general purpose rubber-sheeting, nor is it ortho-photo
+rectification using a DEM, not second order polynomial,
+etc. It can be used if (1) you have geometrically correct
+data, and (2) the terrain or camera distortion effect can
+be ignored.
+
+<h4>Polynomial Transformation Matrix (2nd, 3d order transformation)</h4>
+
+<em>v.rectify</em> uses a first, second, or third order transformation
+matrix to calculate the registration coefficients. The number
+of control points required for a 2D transformation of the selected order
+(represented by n) is
+
+<dl>
+<dd>((n + 1) * (n + 2) / 2) 
+</dl>
+
+or 3, 6, and 10 respectively. For a 3D transformation of first, second, 
+or third order, the number of required control points is 4, 10, and 20 
+respectively. It is strongly recommended that one or more additional 
+points be identified to allow for an overly-determined transformation 
+calculation which will generate the Root Mean Square (RMS) error values 
+for each included point. The polynomial equations are determined using 
+a modified Gaussian elimination method.
+
+
+<h2>SEE ALSO</h2>
+
+The GRASS 4 <em>
+<a href="http://grass.osgeo.org/gdp/imagery/grass4_image_processing.pdf">Image
+Processing manual</a></em>
+
+<p><em>
+  <a href="m.transform.html">m.transform</a>,
+  <a href="i.rectify.html">i.rectify</a>,
+  <a href="r.proj.html">r.proj</a>,
+  <a href="v.proj.html">v.proj</a>,
+  <a href="i.group.html">i.group</a>,
+  <a href="i.points.html">i.points</a>,
+  <a href="i.vpoints.html">i.vpoints</a>,
+  <a href="i.target.html">i.target</a>
+  <br>
+  <a href="wxGUI.GCP_Manager.html">Manage Ground Control Points</a>
+</em>
+
+
+<h2>AUTHORS</h2>
+
+Markus Metz
+
+<p>
+based on <a href="i.rectify.html">i.rectify</a>
+
+
+<p><i>Last changed: $Date$</i>

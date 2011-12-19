@@ -70,6 +70,7 @@ SUBDIRS = \
 	v.qcount \
 	v.random \
 	v.reclass \
+	v.rectify \
 	v.sample \
 	v.segment \
 	v.select \
