@@ -445,6 +445,7 @@ available in GRASS 5 and GRASS 6.
  - dialogs::IClassMapDialog
  - dialogs::IClassCategoryManagerDialog
  - dialogs::CategoryListCtrl
+ - dialogs::IClassSignatureFileDialog
 - iclass::digit
  - digit::IClassVDigit
  - digit::IClassVDigitWindow
