@@ -2052,6 +2052,13 @@
 	      <command>v.transform</command>
 	    </menuitem>
 	    <menuitem>
+	      <label>Rectify vector map</label>
+	      <help>Rectifies a vector map by computing a coordinate transformation based on control points.</help>
+	      <keywords>vector,georectification,transformation</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>v.rectify</command>
+	    </menuitem>
+	    <menuitem>
 	      <label>Reproject vector map</label>
 	      <help>Re-projects a vector map from one location to the current location.</help>
 	      <keywords>vector,projection,transformation</keywords>
