@@ -446,6 +446,10 @@ class IClassMapFrame(DoubleMapFrame):
         """!Standard deviation multiplier changed, rerender map, histograms"""
         stat = self.statisticsDict[cat]
         stat.nstd = nstd
+        
+        if not stat.IsReady():
+            return
+            
         raster = stat.rasterName
         
         cstat = self.cStatisticsDict[cat]
