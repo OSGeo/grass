@@ -53,7 +53,7 @@ from iclass.toolbars    import IClassMapToolbar, IClassMiscToolbar,\
                                IClassToolbar, IClassMapManagerToolbar
 from iclass.statistics  import Statistics, BandStatistics
 from iclass.dialogs     import CategoryListCtrl, IClassCategoryManagerDialog,\
-                               IClassGroupDialog, IClassMapDialog
+                               IClassGroupDialog, IClassMapDialog, IClassSignatureFileDialog
 from iclass.plots       import PlotPanel
 
         
@@ -143,7 +143,8 @@ class IClassMapFrame(DoubleMapFrame):
                                             Map = self.GetSecondMap())
                                            
         self.InitStatistics()
-        #self.InitTestStatistics()
+        
+        self.changes = False
         
         # PyPlot init
         self.plotPanel = PlotPanel(self, statDict = self.statisticsDict,
@@ -445,6 +446,12 @@ class IClassMapFrame(DoubleMapFrame):
         stat.SetBandStatistics(cstat)
         self.plotPanel.StddevChanged()
         
+    def UpdateChangeState(self, changes):
+        """!Informs if any important changes happened
+        since last analysis computaiton.
+        """
+        self.changes = changes
+        
     def AddRasterMap(self, name, firstMap = True, secondMap = True):
         """!Add raster map to Map"""
         cmdlist = ['d.rast', 'map=%s' % name]
@@ -527,7 +534,7 @@ class IClassMapFrame(DoubleMapFrame):
                 stats.SetReady()
                 self.statisticsDict[stats.category] = stats
                 
-                #self.ConvertToNull(name = stats.rasterName)
+                self.ConvertToNull(name = stats.rasterName)
                 self.previewMapManager.AddLayer(name = stats.rasterName,
                                                 alias = stats.name, resultsLayer = True)
                 # write statistics
@@ -535,6 +542,7 @@ class IClassMapFrame(DoubleMapFrame):
             else:
                 I_iclass_free_statistics(statistics)
         
+        self.UpdateChangeState(changes = False)
         return True
         
     def OnSaveSigFile(self, event):
@@ -543,15 +551,35 @@ class IClassMapFrame(DoubleMapFrame):
             GMessage(parent = self, message = _("No imagery group selected."))
             return
             
-        dlg = wx.TextEntryDialog(self, message = _("Enter name of signature file:"),
-                                 caption = _("Save signature file"))
-
-        if self.sigFile:
-            dlg.SetValue(self.sigFile)
+        if self.changes:
+            qdlg = wx.MessageDialog(parent = self,
+                                    message = _("Due to recent changes in classes, "
+                                                "signatures can be outdated and should be recalculated. "
+                                                "Do you still want to continue?") ,
+                                   caption = _("Outdated signatures"),
+                                   style = wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.CENTRE)
+            if qdlg.ShowModal() == wx.ID_YES:
+                qdlg.Destroy()
+            else:
+                qdlg.Destroy()
+                return
+                    
+        dlg = IClassSignatureFileDialog(self, group = self.group, file = self.sigFile)
+        
         if dlg.ShowModal() == wx.ID_OK:
-            file = dlg.GetValue()
-            
-            self.WriteSignatures(self.signatures, self.group, file)
+            if os.path.exists(dlg.GetFileName(fullPath = True)):
+                qdlg = wx.MessageDialog(parent = self,
+                                        message = _("A signature file named %s already exists.\n"
+                                                    "Do you want to replace it?") % dlg.GetFileName(),
+                                        caption = _("File already exists"),
+                                        style = wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION | wx.CENTRE)
+                if qdlg.ShowModal() == wx.ID_YES:
+                    qdlg.Destroy()
+                else:
+                    qdlg.Destroy()
+                    return
+            self.sigFile = dlg.GetFileName()
+            self.WriteSignatures(self.signatures, self.group, self.sigFile)
             
         dlg.Destroy()
         

@@ -8,6 +8,7 @@ Classes:
  - dialogs::IClassMapDialog
  - dialogs::IClassCategoryManagerDialog
  - dialogs::CategoryListCtrl
+ - dialogs::IClassSignatureFileDialog
 
 (C) 2006-2011 by the GRASS Development Team
 This program is free software under the GNU General Public
@@ -17,10 +18,11 @@ for details.
 @author Vaclav Petras <wenzeslaus gmail.com>
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
-
+import os
 import wx
 
-import  wx.lib.mixins.listctrl as listmix
+import wx.lib.mixins.listctrl as listmix
+import wx.lib.scrolledpanel as scrolled
 
 from core               import globalvar
 from gui_core.dialogs   import ElementDialog, GroupDialog
@@ -242,6 +244,8 @@ class CategoryListCtrl(wx.ListCtrl,
         if attr == 'name':
             self.mapWindow.UpdateRasterName(text, toolbar.GetSelectedCategoryIdx())
             
+        self.mapWindow.UpdateChangeState(changes = True)
+        
     def Populate(self, columns):
         for i, col in enumerate(columns):
             self.InsertColumn(i, col[0])#wx.LIST_FORMAT_RIGHT
@@ -263,6 +267,7 @@ class CategoryListCtrl(wx.ListCtrl,
         self.SetItemCount(len(self.statisticsList))
         
         self.UpdateChoice()
+        self.mapWindow.UpdateChangeState(changes = True)
                 
     def DeleteCategory(self):
         indexList = sorted(self.GetSelectedIndices(), reverse = True)
@@ -276,6 +281,7 @@ class CategoryListCtrl(wx.ListCtrl,
         self.SetItemCount(len(self.statisticsList))
         
         self.UpdateChoice()
+        self.mapWindow.UpdateChangeState(changes = True)
         
         
         # delete vector items!
@@ -334,3 +340,111 @@ class CategoryListCtrl(wx.ListCtrl,
 
     def OnGetItemAttr(self, item):
         return None
+
+class IClassSignatureFileDialog(wx.Dialog):
+    def __init__(self, parent, group, file = None, title = _("Save signature file"), id = wx.ID_ANY,
+                 style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
+                 **kwargs):
+        """!Dialog for saving signature file
+        
+        @param parent window
+        @param group group name
+        @param file signature file name
+        @param title window title
+        """
+        wx.Dialog.__init__(self, parent, id, title, style = style, **kwargs)
+        
+        self.fileName = file
+        
+        env = grass.gisenv()
+        
+        # inconsistent group and subgroup name
+        # path: grassdata/nc_spm_08/landsat/group/test_group/subgroup/test_group@landsat/sig/sigFile
+        self.baseFilePath = os.path.join(env['GISDBASE'],
+                                         env['LOCATION_NAME'],
+                                         env['MAPSET'],
+                                         'group', group.split('@')[0], # !
+                                         'subgroup', group,
+                                         'sig')
+        self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
+        
+        self.btnCancel = wx.Button(parent = self.panel, id = wx.ID_CANCEL)
+        self.btnOK     = wx.Button(parent = self.panel, id = wx.ID_OK)
+        self.btnOK.SetDefault()
+        self.btnOK.Enable(False)
+        
+        self.__layout()
+        
+        self.fileNameCtrl.Bind(wx.EVT_TEXT, self.OnTextChanged)
+        self.OnTextChanged(None)
+        
+    def OnTextChanged(self, event):
+        """!Name for signature file given"""
+        file = self.fileNameCtrl.GetValue()
+        if len(file) > 0:
+            self.btnOK.Enable(True)
+        else:
+            self.btnOK.Enable(False)
+            
+        path = os.path.join(self.baseFilePath, file)
+        self.filePathText.SetLabel(path)
+        bestSize = self.pathPanel.GetBestVirtualSize() 
+        self.pathPanel.SetVirtualSize(bestSize)
+        self.pathPanel.Scroll(*bestSize)
+        
+    def __layout(self):
+        """!Do layout"""
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        
+        dataSizer = wx.BoxSizer(wx.VERTICAL)
+        
+        dataSizer.Add(item = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
+                                           label = _("Enter name of signature file:")),
+                      proportion = 0, flag = wx.ALL, border = 3)
+        self.fileNameCtrl = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY, size = (400, -1))
+        if self.fileName:
+            self.fileNameCtrl.SetValue(self.fileName)
+        dataSizer.Add(item = self.fileNameCtrl,
+                      proportion = 0, flag = wx.ALL | wx.EXPAND, border = 3)
+    
+        dataSizer.Add(item = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
+                                                label = _("Signature file path:")),
+                           proportion = 0, flag = wx.ALL, border = 3)
+        
+        self.pathPanel = scrolled.ScrolledPanel(self.panel, size = (-1, 40))
+        pathSizer = wx.BoxSizer()
+        self.filePathText = wx.StaticText(parent = self.pathPanel, id = wx.ID_ANY,
+                                                label = self.baseFilePath)
+        pathSizer.Add(self.filePathText, proportion = 1, flag = wx.ALL | wx.EXPAND, border = 1)
+        self.pathPanel.SetupScrolling(scroll_x = True, scroll_y = False)
+        self.pathPanel.SetSizer(pathSizer)
+
+        dataSizer.Add(item = self.pathPanel,
+                      proportion = 0, flag = wx.ALL | wx.EXPAND, border = 3)
+                      
+        # buttons
+        btnSizer = wx.StdDialogButtonSizer()
+        btnSizer.AddButton(self.btnCancel)
+        btnSizer.AddButton(self.btnOK)
+        btnSizer.Realize()
+        
+        sizer.Add(item = dataSizer, proportion = 1,
+                       flag = wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border = 5)
+        
+        sizer.Add(item = btnSizer, proportion = 0,
+                       flag = wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border = 5)
+        
+        self.panel.SetSizer(sizer)
+        sizer.Fit(self)
+        
+        self.SetMinSize(self.GetSize())
+        
+    def GetFileName(self, fullPath = False):
+        """!Returns signature file name
+        
+        @param fullPath return full path of sig. file
+        """
+        if fullPath:
+            return os.path.join(self.baseFilePath, self.fileNameCtrl.GetValue())
+            
+        return self.fileNameCtrl.GetValue()

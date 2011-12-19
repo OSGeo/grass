@@ -63,6 +63,10 @@ class IClassVDigitWindow(VDigitWindow):
     def _updateATM(self):
         pass
         
+    def _onRightUp(self, event):
+        super(IClassVDigitWindow, self)._onRightUp(event)
+        self.parent.UpdateChangeState(changes = True)
+        
     def GetCurrentCategory(self):
         """!Returns current category (class).
         
