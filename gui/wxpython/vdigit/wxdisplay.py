@@ -718,7 +718,7 @@ class DisplayDriver:
             self._drawSelected = False
         
         if layer > 0:
-            selected.field = layer
+            self.selected['field'] = layer
             self.selected['cats'] = ids
         else:
             field = -1
