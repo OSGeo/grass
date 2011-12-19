@@ -2636,20 +2636,11 @@
 	    </menuitem>
 	    <separator />
 	    <menuitem>
-	      <label>Maximum likelihood classification (MLC)</label>
-	      <help>Classifies the cell spectral reflectances in imagery data.</help>
-	      <keywords>imagery,classification,MLC</keywords>
-	      <handler>OnMenuCmd</handler>
-	      <command>i.maxlik</command>
+	      <label>Interactive input for supervised classification</label>
+	      <help>Generates spectral signatures by allowing the user to outline training areas.</help>
+	      <keywords>imagery,classification,supervised</keywords>
+	      <handler>OnIClass</handler>
 	    </menuitem>
-	    <menuitem>
-	      <label>Sequential maximum a posteriori classification (SMAP)</label>
-	      <help>Performs contextual image classification using sequential maximum a posteriori (SMAP) estimation.</help>
-	      <keywords>imagery,classification,supervised,SMAP</keywords>
-	      <handler>OnMenuCmd</handler>
-	      <command>i.smap</command>
-	    </menuitem>
-	    <separator />
 	    <menuitem>
 	      <label>Input for supervised MLC</label>
 	      <help>Generates statistics for i.maxlik from raster map.</help>
@@ -2666,10 +2657,18 @@
 	    </menuitem>
 	    <separator />
 	    <menuitem>
-	      <label>Interactive input for supervised classification</label>
-	      <help>Generates spectral signatures by allowing the user to outline training areas.</help>
-	      <keywords>imagery,classification,supervised</keywords>
-	      <handler>OnIClass</handler>
+	      <label>Maximum likelihood classification (MLC)</label>
+	      <help>Classifies the cell spectral reflectances in imagery data.</help>
+	      <keywords>imagery,classification,MLC</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>i.maxlik</command>
+	    </menuitem>
+	    <menuitem>
+	      <label>Sequential maximum a posteriori classification (SMAP)</label>
+	      <help>Performs contextual image classification using sequential maximum a posteriori (SMAP) estimation.</help>
+	      <keywords>imagery,classification,supervised,SMAP</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>i.smap</command>
 	    </menuitem>
 	  </items>
 	</menu>
