@@ -32,11 +32,12 @@ from core import globalvar
 try:
     from grass.lib.imagery import *
     from grass.lib.vector import *
+    haveIClass = True
+    errMsg = ''
 except ImportError, e:
-    sys.stderr.write(_("Loading imagery lib failed"))
+    haveIClass = False
+    errMsg = _("Loading imagery lib failed.\n%s") % e
 
-
-#sys.path.append(os.path.join(globalvar.ETCWXDIR, "icons"))
 import grass.script as grass
 
 from mapdisp            import statusbar as sb
@@ -55,7 +56,6 @@ from iclass.statistics  import Statistics, BandStatistics
 from iclass.dialogs     import CategoryListCtrl, IClassCategoryManagerDialog,\
                                IClassGroupDialog, IClassMapDialog, IClassSignatureFileDialog
 from iclass.plots       import PlotPanel
-
         
 class IClassMapFrame(DoubleMapFrame):
     """! wxIClass main frame
@@ -76,7 +76,6 @@ class IClassMapFrame(DoubleMapFrame):
         @param toolbars dictionary of active toolbars (defalult value represents all toolbars)
         @param size default size
         """
-        
         DoubleMapFrame.__init__(self, parent = parent, title = title,
                                 name = name,
                                 firstMap = Map(), secondMap = Map(),

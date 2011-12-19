@@ -65,7 +65,6 @@ from lmgr.pyshell          import PyShellWindow
 from gui_core.forms        import GUI
 from gcp.manager           import GCPWizard
 from nviz.main             import haveNviz
-from iclass.frame          import IClassMapFrame
 
 class GMFrame(wx.Frame):
     """!Layer Manager frame with notebook widget for controlling GRASS
@@ -1100,6 +1099,12 @@ class GMFrame(wx.Frame):
         
     def OnIClass(self, event):
         """!Start wxIClass tool"""
+        from iclass.frame import IClassMapFrame, haveIClass, errMsg
+        if not haveIClass:
+            GError(_('Unable to launch "Supervised Classification Tool".\n\n'
+                     'Reason: %s') % errMsg)
+            return
+        
         win = IClassMapFrame(parent = self)
         win.CentreOnScreen()
         
