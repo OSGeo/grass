@@ -285,37 +285,48 @@ class IClassMapFrame(DoubleMapFrame):
                               
     def _addPanes(self):
         """!Add mapwindows and toolbars to aui manager"""
-        name = 'iClassPreviewMapManager'
-        self.toolbars[name] = IClassMapManagerToolbar(self, self.previewMapManager)
+        if sys.platform == 'win32':
+            self._addPaneMapWindow(name = 'training')
+            self._addPaneToolbar(name = 'iClassTrainingMapManager')
+            self._addPaneMapWindow(name = 'preview')
+            self._addPaneToolbar(name = 'iClassPreviewMapManager')
+        else:
+            self._addPaneMapWindow(name = 'preview')
+            self._addPaneToolbar(name = 'iClassPreviewMapManager')
+            self._addPaneMapWindow(name = 'training')
+            self._addPaneToolbar(name = 'iClassTrainingMapManager')
+        
+        self._mgr.AddPane(self.plotPanel, wx.aui.AuiPaneInfo().
+                  Name("plots").Caption(_("Plots")).
+                  Dockable(False).Floatable(False).CloseButton(False).
+                  Left().Layer(1).BestSize((400, -1)))
+        
+    def _addPaneToolbar(self, name):
+        if name == 'iClassPreviewMapManager':
+            parent = self.previewMapManager
+        else:
+            parent = self.trainingMapManager
+        
+        self.toolbars[name] = IClassMapManagerToolbar(self, parent)
         self._mgr.AddPane(self.toolbars[name],
                           wx.aui.AuiPaneInfo().ToolbarPane().Movable().
                           Name(name).
                           CloseButton(False).Center().Layer(0).
                           BestSize((self.toolbars[name].GetBestSize())))
-                          
-        self._mgr.AddPane(self.GetSecondWindow(), wx.aui.AuiPaneInfo().
-                  Name("preview").Caption(_("Preview Display")).
-                  Dockable(False).Floatable(False).CloseButton(False).
-                  Center().Layer(0))
-                  
-        name = 'iClassTrainingMapManager'
-        self.toolbars[name] = IClassMapManagerToolbar(self, self.trainingMapManager)
-        self._mgr.AddPane(self.toolbars[name],
-                          wx.aui.AuiPaneInfo().ToolbarPane().
-                          Name(name).
-                          CloseButton(False).Center().Layer(0).
-                          BestSize((self.toolbars[name].GetBestSize())))
-                          
-        self._mgr.AddPane(self.GetFirstWindow(), wx.aui.AuiPaneInfo().
-                  Name("training").Caption(_("Training Areas Display")).
-                  Dockable(False).Floatable(False).CloseButton(False).
-                  Center().Layer(0))
-                  
-        self._mgr.AddPane(self.plotPanel, wx.aui.AuiPaneInfo().
-                  Name("plots").Caption(_("Plots")).
-                  Dockable(False).Floatable(False).CloseButton(False).
-                  Left().Layer(1).BestSize((400, -1)))
-                  
+        
+    def _addPaneMapWindow(self, name):
+        if name == 'preview':
+            window = self.GetSecondWindow()
+            caption = _("Preview Display")
+        else:
+            window = self.GetFirstWindow()
+            caption = _("Training Areas Display")
+        
+        self._mgr.AddPane(window, wx.aui.AuiPaneInfo().
+                          Name(name).Caption(caption).
+                          Dockable(False).Floatable(False).CloseButton(False).
+                          Center().Layer(0))
+        
     def IsStandalone(self):
         """!Check if Map display is standalone"""
         return True
