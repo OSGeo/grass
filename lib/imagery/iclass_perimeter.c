@@ -70,6 +70,8 @@ int vector2perimeters(struct Map_info *Map, const char *layer_name,
     nareas_cat = 0;
     /* find out, how many areas have given category */
     for (i = 1; i <= nareas; i++) {
+	if (!Vect_area_alive(Map, i))
+	    continue;
 	cat = Vect_get_area_cat(Map, i, layer);
 	if (cat < 0) {
 	    // no centroid, no category
@@ -88,7 +90,8 @@ int vector2perimeters(struct Map_info *Map, const char *layer_name,
 
     j = 0;			// area with cat
     for (i = 1; i <= nareas; i++) {
-
+	if (!Vect_area_alive(Map, i))
+	    continue;
 	cat = Vect_get_area_cat(Map, i, layer);
 	if (cat < 0) {
 	    // no centroid, no category
