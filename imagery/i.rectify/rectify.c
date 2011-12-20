@@ -5,7 +5,6 @@
 #include <grass/glocale.h>
 
 #include "global.h"
-#include "crs.h"		/* CRS HEADER FILE */
 
 /* Modified to support Grass 5.0 fp format 11 april 2000
  *
@@ -73,7 +72,7 @@ int rectify(char *name, char *mapset, char *result, int order, char *interp_meth
 	    e1 = target_window.west + (col + 0.5) * target_window.ew_res;
 
 	    /* backwards transformation of target cell center */
-	    CRS_georef(e1, n1, &ex, &nx, E21, N21, order);
+	    I_georef(e1, n1, &ex, &nx, E21, N21, order);
 
 	    /* convert to row/column indices of source raster */
 	    row_idx = (cellhd.north - nx) / cellhd.ns_res;
