@@ -31,9 +31,9 @@ FILE *I_fopen_subgroup_file_append(const char *, const char *, const char *);
 FILE *I_fopen_subgroup_file_old(const char *, const char *, const char *);
 
 /* georef.c */
-int I_compute_georef_equations(struct Control_Points *, double[3], double[3],
-			       double[3], double[3]);
-int I_georef(double, double, double *, double *, double[3], double[3]);
+int I_compute_georef_equations(struct Control_Points *, double *, double *,
+			       double *, double *, int);
+int I_georef(double, double, double *, double *, double *, double *, int);
 
 /* group.c */
 int I_get_group(char *);
