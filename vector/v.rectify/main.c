@@ -226,7 +226,7 @@ int main(int argc, char *argv[])
 			      &x, &y, &z, E12, N12, Z12, order);
 	    }
 	    else {
-		CRS_georef(Points->x[n], Points->y[n],
+		I_georef(Points->x[n], Points->y[n],
 			      &x, &y, E12, N12, order);
 		z = Points->z[n];
 	    }

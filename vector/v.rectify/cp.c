@@ -97,7 +97,7 @@ static void compute_rms(struct Control_Points *cp, struct Control_Points_3D *cp3
 	    update_stats(&fwd, n, fx, fy, &fz, fd, fd2);
 	}
 	else {
-	    CRS_georef(cp->e1[n], cp->n1[n], &e2, &n2, E12, N12, order);
+	    I_georef(cp->e1[n], cp->n1[n], &e2, &n2, E12, N12, order);
 
 	    fx = fabs(e2 - cp->e2[n]);
 	    fy = fabs(n2 - cp->n2[n]);
@@ -123,7 +123,7 @@ static void compute_rms(struct Control_Points *cp, struct Control_Points_3D *cp3
 	    update_stats(&rev, n, rx, ry, &rz, rd, rd2);
 	}
 	else {
-	    CRS_georef(cp->e2[n], cp->n2[n], &e1, &n1, E21, N21, order);
+	    I_georef(cp->e2[n], cp->n2[n], &e1, &n1, E21, N21, order);
 
 	    rx = fabs(e1 - cp->e1[n]);
 	    ry = fabs(n1 - cp->n1[n]);
@@ -317,7 +317,7 @@ int get_control_points(char *group, char *pfile, int order, int use3d, int rms, 
 	    return 0;
 	}
 
-	ret = CRS_compute_georef_equations(&cp, E12, N12, E21, N21, order);
+	ret = I_compute_georef_equations(&cp, E12, N12, E21, N21, order);
     }
     else {
 	/* read group control points */
@@ -327,7 +327,7 @@ int get_control_points(char *group, char *pfile, int order, int use3d, int rms, 
 	sprintf(msg, _("Control Point file for group <%s@%s> - "),
 		group, G_mapset());
 		
-	ret = CRS_compute_georef_equations(&cp, E12, N12, E21, N21, order);
+	ret = I_compute_georef_equations(&cp, E12, N12, E21, N21, order);
     }
 
     switch (ret) {
