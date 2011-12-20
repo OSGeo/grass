@@ -25,11 +25,6 @@
 #include <grass/imagery.h>
 #include <grass/glocale.h>
 
-extern int CRS_compute_georef_equations(struct Control_Points *, double *,
-					double *, double *, double *, int);
-extern int CRS_georef(double, double, double *, double *, double *, double *,
-		      int);
-
 struct Max
 {
     int idx;
@@ -91,7 +86,7 @@ static void compute_transformation(void)
     int n, i;
 
     equation_stat =
-	CRS_compute_georef_equations(&points, E12, N12, E21, N21, order);
+	I_compute_georef_equations(&points, E12, N12, E21, N21, order);
 
     if (equation_stat == 0)
 	G_fatal_error(_("Not enough points, %d are required"),
@@ -113,7 +108,7 @@ static void compute_transformation(void)
 	count++;
 
 	if (need_fwd) {
-	    CRS_georef(points.e1[n], points.n1[n], &e2, &n2, E12, N12, order);
+	    I_georef(points.e1[n], points.n1[n], &e2, &n2, E12, N12, order);
 
 	    fx = fabs(e2 - points.e2[n]);
 	    fy = fabs(n2 - points.n2[n]);
@@ -126,7 +121,7 @@ static void compute_transformation(void)
 	}
 
 	if (need_rev) {
-	    CRS_georef(points.e2[n], points.n2[n], &e1, &n1, E21, N21, order);
+	    I_georef(points.e2[n], points.n2[n], &e1, &n1, E21, N21, order);
 
 	    rx = fabs(e1 - points.e1[n]);
 	    ry = fabs(n1 - points.n1[n]);
@@ -260,9 +255,9 @@ static void xform_value(double east, double north)
     double xe, xn;
 
     if(forward)
-	CRS_georef(east, north, &xe, &xn, E12, N12, order);
+	I_georef(east, north, &xe, &xn, E12, N12, order);
     else
-	CRS_georef(east, north, &xe, &xn, E21, N21, order);
+	I_georef(east, north, &xe, &xn, E21, N21, order);
 
     fprintf(stdout, "%.15g %.15g\n", xe, xn);
 }
