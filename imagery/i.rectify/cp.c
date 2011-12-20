@@ -2,7 +2,7 @@
 #include <string.h>
 #include <grass/glocale.h>
 #include "global.h"
-#include "crs.h"		/* CRS HEADER FILE */
+
 int get_control_points(char *group, int order	/* THIS HAS BEEN ADDED WITH THE CRS MODIFICATIONS */
     )
 {
@@ -15,7 +15,7 @@ int get_control_points(char *group, int order	/* THIS HAS BEEN ADDED WITH THE CR
     sprintf(msg, _("Control Point file for group <%s@%s> - "),
 	    group, G_mapset());
 
-    switch (CRS_compute_georef_equations(&cp, E12, N12, E21, N21, order)) {
+    switch (I_compute_georef_equations(&cp, E12, N12, E21, N21, order)) {
     case 0:
 	sprintf(&msg[strlen(msg)],
 		_("Not enough active control points for current order, %d are required."),

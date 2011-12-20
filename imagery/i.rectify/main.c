@@ -30,7 +30,6 @@
 #include <grass/glocale.h>
 
 #include "global.h"
-#include "crs.h"
 
 char *seg_mb;
 
@@ -185,9 +184,9 @@ int main(int argc, char *argv[])
 	k++;
     }
 
-    if (order < 1 || order > MAXORDER)
+    if (order < 1 || order > 3)  /* MAXORDER in lib/imagery/georef.c */
 	G_fatal_error(_("Invalid order (%d); please enter 1 to %d"), order,
-		      MAXORDER);
+		      3);
 
     /* determine the number of files in this group */
     if (I_get_group_ref(group, &ref) <= 0) {

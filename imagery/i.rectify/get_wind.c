@@ -1,7 +1,6 @@
 #include <math.h>
 #include <grass/glocale.h>
 #include "global.h"
-#include "crs.h"		/* CRS HEADER FILE */
 
 int georef_window(struct Cell_head *w1, struct Cell_head *w2, int order, double res)
 {
@@ -11,13 +10,13 @@ int georef_window(struct Cell_head *w1, struct Cell_head *w2, int order, double 
     } nw, ne, se, sw;
 
     /* extends */
-    CRS_georef(w1->west, w1->north, &e, &n, E12, N12, order);
+    I_georef(w1->west, w1->north, &e, &n, E12, N12, order);
     w2->north = w2->south = n;
     w2->west = w2->east = e;
     nw.n = n;
     nw.e = e;
 
-    CRS_georef(w1->east, w1->north, &e, &n, E12, N12, order);
+    I_georef(w1->east, w1->north, &e, &n, E12, N12, order);
     ne.n = n;
     ne.e = e;
     if (n > w2->north)
@@ -29,7 +28,7 @@ int georef_window(struct Cell_head *w1, struct Cell_head *w2, int order, double 
     if (e < w2->west)
 	w2->west = e;
 
-    CRS_georef(w1->west, w1->south, &e, &n, E12, N12, order);
+    I_georef(w1->west, w1->south, &e, &n, E12, N12, order);
     sw.n = n;
     sw.e = e;
     if (n > w2->north)
@@ -41,7 +40,7 @@ int georef_window(struct Cell_head *w1, struct Cell_head *w2, int order, double 
     if (e < w2->west)
 	w2->west = e;
 
-    CRS_georef(w1->east, w1->south, &e, &n, E12, N12, order);
+    I_georef(w1->east, w1->south, &e, &n, E12, N12, order);
     se.n = n;
     se.e = e;
     if (n > w2->north)
