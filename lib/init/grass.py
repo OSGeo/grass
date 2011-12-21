@@ -103,6 +103,7 @@ def cleanup():
     tmpdir, lockfile, remove_lockfile
     # all exits after setting up $tmpdir should also tidy it up
     cleanup_dir(tmpdir)
+    try_rmdir(tmpdir)
     if lockfile and remove_lockfile:
 	try_remove(lockfile)
 
