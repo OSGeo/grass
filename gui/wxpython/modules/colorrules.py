@@ -75,7 +75,7 @@ class RulesPanel:
         self.clearAll = wx.Button(parent, id = wx.ID_ANY, label = _("Clear all"))
         #  determines how many rules should be added
         self.numRules = wx.SpinCtrl(parent, id = wx.ID_ANY,
-                                    min = 1, max = 1e6)
+                                    min = 1, max = 1e6, initial = 1)
         # add rules
         self.btnAdd = wx.Button(parent, id = wx.ID_ADD)
         
@@ -231,8 +231,11 @@ class RulesPanel:
         try:
             table = self.parent.colorTable
         except AttributeError:
-            # due to scrollpanel in vector dialog
-            table = self.parent.GetParent().colorTable
+            # due to panel/scrollpanel in vector dialog
+            if isinstance(self.parent.GetParent(), RasterColorTable):
+                table = self.parent.GetParent().colorTable
+            else:
+                table = self.parent.GetParent().GetParent().colorTable
         if table:
             self.SetRasterRule(num, val)
         else:
@@ -322,6 +325,8 @@ class ColorTable(wx.Frame):
         
         self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
         
+        self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
+        
         # instance of render.Map to be associated with display
         self.Map  = Map() 
         
@@ -372,12 +377,13 @@ class ColorTable(wx.Frame):
                                 label = " %s " % maplabel)
         inputSizer = wx.StaticBoxSizer(inputBox, wx.VERTICAL)
 
-        self.selectionInput = Select(parent, id = wx.ID_ANY,
+        self.selectionInput = Select(parent = parent, id = wx.ID_ANY,
                                      size = globalvar.DIALOG_GSELECT_SIZE,
                                      type = self.mapType)
         # layout
         inputSizer.Add(item = self.selectionInput,
                        flag = wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND, border = 5)
+        
         return inputSizer
     
     def _createFileSelection(self, parent):
@@ -435,12 +441,12 @@ class ColorTable(wx.Frame):
                                       Map = self.Map)
         self.preview.EraseMap()
         
-    def _createButtons(self):
+    def _createButtons(self, parent):
         """!Create buttons for leaving dialog"""
-        self.btnHelp = wx.Button(parent = self, id = wx.ID_HELP)
-        self.btnCancel = wx.Button(parent = self, id = wx.ID_CANCEL)
-        self.btnApply = wx.Button(parent = self, id = wx.ID_APPLY) 
-        self.btnOK = wx.Button(parent = self, id = wx.ID_OK)
+        self.btnHelp   = wx.Button(parent, id = wx.ID_HELP)
+        self.btnCancel = wx.Button(parent, id = wx.ID_CANCEL)
+        self.btnApply  = wx.Button(parent, id = wx.ID_APPLY) 
+        self.btnOK     = wx.Button(parent, id = wx.ID_OK)
         
         self.btnOK.SetDefault()
         self.btnOK.Enable(False)
@@ -484,7 +490,8 @@ class ColorTable(wx.Frame):
         
         # preview window
         self._createPreview(parent = parent)
-        bodySizer.Add(item = self.preview, pos = (row, 2), flag = wx.EXPAND)
+        bodySizer.Add(item = self.preview, pos = (row, 2),
+                      flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER)
         
         row += 1
         # add ckeck all and clear all
@@ -750,7 +757,9 @@ class RasterColorTable(ColorTable):
         
         self._initLayer()
         
-        self.SetMinSize(self.GetSize()) 
+        # self.SetMinSize(self.GetSize()) 
+        self.SetMinSize((650, 700))
+        
         self.CentreOnScreen()
         self.Show()
     
@@ -760,35 +769,35 @@ class RasterColorTable(ColorTable):
         #
         # map selection
         #
-        mapSelection = self._createMapSelection(parent = self)
+        mapSelection = self._createMapSelection(parent = self.panel)
         sizer.Add(item = mapSelection, proportion = 0,
                   flag = wx.ALL | wx.EXPAND, border = 5)
         #
         # manage extern tables
         #
-        fileSelection = self._createFileSelection(parent = self)
+        fileSelection = self._createFileSelection(parent = self.panel)
         sizer.Add(item = fileSelection, proportion = 0,
                   flag = wx.ALL | wx.EXPAND, border = 5)
         #
         # body & preview
         #
-        bodySizer = self._createBody(parent = self)
+        bodySizer = self._createBody(parent = self.panel)
         sizer.Add(item = bodySizer, proportion = 1,
                   flag = wx.ALL | wx.EXPAND, border = 5)
         #
         # buttons
         #
-        btnSizer = self._createButtons()
-        sizer.Add(item = wx.StaticLine(parent = self, id = wx.ID_ANY,
+        btnSizer = self._createButtons(parent = self.panel)
+        sizer.Add(item = wx.StaticLine(parent = self.panel, id = wx.ID_ANY,
                                        style = wx.LI_HORIZONTAL), proportion = 0,
                                        flag = wx.EXPAND | wx.ALL, border = 5) 
         
         sizer.Add(item = btnSizer, proportion = 0,
                   flag = wx.ALL | wx.ALIGN_RIGHT, border = 5)
         
-        self.SetSizer(sizer)
+        self.panel.SetSizer(sizer)
         sizer.Layout()
-        sizer.Fit(self)
+        sizer.Fit(self.panel)
         self.Layout()
     
     def OnSelectionInput(self, event):
@@ -884,9 +893,7 @@ class RasterColorTable(ColorTable):
         """!Show GRASS manual page"""
         cmd = 'r.colors'
         ColorTable.RunHelp(self, cmd = cmd)
-    
-
-                      
+                     
 class VectorColorTable(ColorTable):
     def __init__(self, parent, attributeType, **kwargs):
         """!Dialog for interactively entering color rules for vector maps"""
@@ -934,10 +941,11 @@ class VectorColorTable(ColorTable):
             self.cr_label.SetLabel(_("Enter vector attribute values or percents:"))
         else:
             self.cr_label.SetLabel(_("Enter vector attribute values:"))
-        self.SetMinSize(self.GetSize()) 
+        
+        #self.SetMinSize(self.GetSize()) 
+        self.SetMinSize((650, 700))
+        
         self.CentreOnScreen()
-
-        self.SetSize((-1, 760))
         self.Show()
     
     def _createVectorAttrb(self, parent):
@@ -1014,7 +1022,7 @@ class VectorColorTable(ColorTable):
        
     def _doLayout(self):
         """!Do main layout"""
-        scrollPanel = scrolled.ScrolledPanel(self, id = wx.ID_ANY, size = (650, 500),
+        scrollPanel = scrolled.ScrolledPanel(parent = self.panel, id = wx.ID_ANY,
                                              style = wx.TAB_TRAVERSAL)
         scrollPanel.SetupScrolling()
         sizer = wx.BoxSizer(wx.VERTICAL)
@@ -1055,20 +1063,21 @@ class VectorColorTable(ColorTable):
         #
         # buttons
         #
-        btnSizer = self._createButtons()
+        btnSizer = self._createButtons(self.panel)
         
         mainsizer = wx.BoxSizer(wx.VERTICAL)
         mainsizer.Add(scrollPanel, proportion = 1, flag = wx.EXPAND | wx.ALL, border = 5)
-        mainsizer.Add(item = wx.StaticLine(parent = self, id = wx.ID_ANY,
+        mainsizer.Add(item = wx.StaticLine(parent = self.panel, id = wx.ID_ANY,
                                        style = wx.LI_HORIZONTAL), proportion = 0,
                                        flag = wx.EXPAND | wx.ALL, border = 5) 
         mainsizer.Add(item = btnSizer, proportion = 0,
                   flag = wx.ALL | wx.ALIGN_RIGHT | wx.EXPAND, border = 5)
         
-        self.SetSizer(mainsizer)
+        self.panel.SetSizer(mainsizer)
         mainsizer.Layout()
-        mainsizer.Fit(self)     
-          
+        mainsizer.Fit(self.panel)     
+        self.Layout()
+        
     def OnPaneChanged(self, event = None):
         # redo the layout
         self.Layout()
@@ -1349,10 +1358,10 @@ class VectorColorTable(ColorTable):
         columns = self.properties['sourceColumn']
         if self.properties['loadColumn']:
             columns += ',' + self.properties['loadColumn']
-            
+        
+        sep = ';'            
         if self.inmap:
             outFile = tempfile.NamedTemporaryFile(mode = 'w+b')
-            sep = '|'
             ret = RunCommand('v.db.select',
                              quiet = True,
                              flags = 'c',
