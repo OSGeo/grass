@@ -622,17 +622,17 @@ Topology general characteristics:
 - the format is topological (areas build from boundaries)
 - currently only 2D topology is supported
 
-Topology is written for native format while pseudo-topology (boundaries
-constructed from polygons) is written for OGR sources, see
-<tt>v.external</tt> module.
+Topology is written for native GRASS vector format; in case of
+linked OGR sources (see <tt>v.external</tt> module), only
+pseudo-topology (boundaries constructed from polygons) is written.
 
 The following rules apply to the vector data:
 
 - Boundaries should not cross each other (i.e., boundaries which would
   cross must be split at their intersection to form distict boundaries).
-  Lines can cross each other, e.g. bridges over rivers.
+  On the contrary, lines can cross each other, e.g. bridges over rivers.
 - Lines and boundaries share nodes only if their endpoints are identical.
-  Lines or boundaries canbe forced to share a common node by snapping
+  Lines or boundaries can be forced to share a common node by snapping
   them together. This is particulary important since nodes
   are not represented in the coor file, but only implicitly as
   endpoints of lines and boundaries.
