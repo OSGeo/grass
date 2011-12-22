@@ -59,6 +59,54 @@ class abstract_space_time_dataset(abstract_dataset):
            @param name: The name of the register table
         """
         raise IOError("This method must be implemented in the subclasses")
+ 
+    def print_self(self):
+	"""Print the content of the internal structure to stdout"""
+	self.base.print_self()
+	if self.is_time_absolute():
+	    self.absolute_time.print_self()
+        if self.is_time_relative():
+	    self.relative_time.print_self()
+	self.spatial_extent.print_self()
+	self.metadata.print_self()
+
+    def print_info(self):
+        """Print information about this class in human readable style"""
+        
+        if self.get_type() == "strds":
+            #                1         2         3         4         5         6         7
+            #      0123456789012345678901234567890123456789012345678901234567890123456789012345678
+            print ""
+            print " +-------------------- Space Time Raster Dataset -----------------------------+"
+        if self.get_type() == "str3ds":
+            #                1         2         3         4         5         6         7
+            #      0123456789012345678901234567890123456789012345678901234567890123456789012345678
+            print ""
+            print " +-------------------- Space Time Raster3d Dataset ---------------------------+"
+        if self.get_type() == "stvds":
+            #                1         2         3         4         5         6         7
+            #      0123456789012345678901234567890123456789012345678901234567890123456789012345678
+            print ""
+            print " +-------------------- Space Time Vector Dataset -----------------------------+"
+        print " |                                                                            |"
+	self.base.print_info()
+	if self.is_time_absolute():
+	    self.absolute_time.print_info()
+        if self.is_time_relative():
+	    self.relative_time.print_info()
+	self.spatial_extent.print_info()
+	self.metadata.print_info()
+        print " +----------------------------------------------------------------------------+"
+
+    def print_shell_info(self):
+        """Print information about this class in shell style"""
+	self.base.print_shell_info()
+	if self.is_time_absolute():
+	    self.absolute_time.print_shell_info()
+        if self.is_time_relative():
+	    self.relative_time.print_shell_info()
+	self.spatial_extent.print_shell_info()
+	self.metadata.print_shell_info()
 
     def set_initial_values(self, temporal_type, semantic_type, \
                            title=None, description=None):
@@ -348,7 +396,7 @@ class abstract_space_time_dataset(abstract_dataset):
            "gap" map objects (id==None). Each list entry is a list of map objects
            which are potentially located in temporal relation to the actual granule of the second space time dataset.
 
-           Each entry in the object list is a dict. The actual sampler map and its temporal enxtent (the actual granule) and
+           Each entry in the object list is a dict. The actual sampler map and its temporal extent (the actual granule) and
            the list of samples are stored:
 
            list = self.sample_by_dataset_topology(stds=sampler, method=["during","overlap","contain","equal"])    
@@ -359,7 +407,8 @@ class abstract_space_time_dataset(abstract_dataset):
                    map.select()
                    map.print_info()
 
-           A valid temporal topology (no overlapping or inclusion allowed) is needed to get correct results. 
+           A valid temporal topology (no overlapping or inclusion allowed) is needed to get correct results in case of gaps
+           in the sample dataset. 
     
            Gaps between maps are identified as unregistered maps with id==None.
 
@@ -458,40 +507,8 @@ class abstract_space_time_dataset(abstract_dataset):
         for granule in sample_maps:
             start, end = granule.get_valid_time()
 
-            where = "("
-
-            if use_start:
-                where += "(start_time >= '%s' and start_time < '%s') " % (start, end)
-
-            if use_during:
-                if use_start:
-                    where += " OR "
-                where += "((start_time > '%s' and end_time < '%s') OR " % (start, end)
-                where += "(start_time >= '%s' and end_time < '%s') OR " % (start, end)
-                where += "(start_time > '%s' and end_time <= '%s'))" % (start, end)
-
-            if use_overlap:
-                if use_start or use_during:
-                    where += " OR "
-
-                where += "((start_time < '%s' and end_time > '%s' and end_time < '%s') OR " % (start, start, end)
-                where += "(start_time < '%s' and start_time > '%s' and end_time > '%s'))" % (end, start, end)
-
-            if use_contain:
-                if use_start or use_during or use_overlap:
-                    where += " OR "
-
-                where += "((start_time < '%s' and end_time > '%s') OR " % (start, end)
-                where += "(start_time <= '%s' and end_time > '%s') OR " % (start, end)
-                where += "(start_time < '%s' and end_time >= '%s'))" % (start, end)
-
-            if use_equal:
-                if use_start or use_during or use_overlap or use_contain:
-                    where += " OR "
-
-                where += "(start_time = '%s' and end_time = '%s')" % (start, end)
-
-            where += ")"
+            where = create_temporal_relation_sql_where_statement(start, end, use_start, \
+                    use_during, use_overlap, use_contain, use_equal)  
 
             rows = self.get_registered_maps("id", where, "start_time", dbif)
 
@@ -1225,3 +1242,80 @@ class abstract_space_time_dataset(abstract_dataset):
 
         if connect == True:
             dbif.close()
+
+###############################################################################
+
+def create_temporal_relation_sql_where_statement(start, end, use_start=True, use_during=False, 
+                                        use_overlap=False, use_contain=False, use_equal=False):
+    """ Create a SQL WHERE statement for temporal relation selection of maps in space time datastes
+
+        @param start: The start time
+        @param end: The end time
+        @param use_start: Select maps of which the start time is located in the selection granule
+                         map    :        s
+                         granule:  s-----------------e
+
+                         map    :        s--------------------e
+                         granule:  s-----------------e
+
+                         map    :        s--------e
+                         granule:  s-----------------e
+
+        @param use_during: during: Select maps which are temporal during the selection granule
+                         map    :     s-----------e
+                         granule:  s-----------------e
+
+        @param use_overlap: Select maps which temporal overlap the selection granule
+                         map    :     s-----------e
+                         granule:        s-----------------e
+
+                         map    :     s-----------e
+                         granule:  s----------e
+
+        @param use_contain: Select maps which temporally contain the selection granule
+                         map    :  s-----------------e
+                         granule:     s-----------e
+
+        @param use_equal: Select maps which temporally equal to the selection granule
+                         map    :  s-----------e
+                         granule:  s-----------e
+    """
+
+    where = "("
+
+    if use_start:
+        where += "(start_time >= '%s' and start_time < '%s') " % (start, end)
+
+    if use_during:
+        if use_start:
+            where += " OR "
+        where += "((start_time > '%s' and end_time < '%s') OR " % (start, end)
+        where += "(start_time >= '%s' and end_time < '%s') OR " % (start, end)
+        where += "(start_time > '%s' and end_time <= '%s'))" % (start, end)
+
+    if use_overlap:
+        if use_start or use_during:
+            where += " OR "
+
+        where += "((start_time < '%s' and end_time > '%s' and end_time < '%s') OR " % (start, start, end)
+        where += "(start_time < '%s' and start_time > '%s' and end_time > '%s'))" % (end, start, end)
+
+    if use_contain:
+        if use_start or use_during or use_overlap:
+            where += " OR "
+
+        where += "((start_time < '%s' and end_time > '%s') OR " % (start, end)
+        where += "(start_time <= '%s' and end_time > '%s') OR " % (start, end)
+        where += "(start_time < '%s' and end_time >= '%s'))" % (start, end)
+
+    if use_equal:
+        if use_start or use_during or use_overlap or use_contain:
+            where += " OR "
+
+        where += "(start_time = '%s' and end_time = '%s')" % (start, end)
+
+    where += ")"
+
+    return where
+
+

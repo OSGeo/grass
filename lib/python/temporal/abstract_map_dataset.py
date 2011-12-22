@@ -52,6 +52,66 @@ class abstract_map_dataset(abstract_dataset):
     def load(self):
         """Load the content of this object from map files"""
         raise IOError("This method must be implemented in the subclasses")
+ 
+    def print_info(self):
+        """Print information about this class in human readable style"""
+        
+        if self.get_type() == "raster":
+            #                1         2         3         4         5         6         7
+            #      0123456789012345678901234567890123456789012345678901234567890123456789012345678
+            print ""
+            print " +-------------------- Raster Dataset ----------------------------------------+"
+        if self.get_type() == "raster3d":
+            #                1         2         3         4         5         6         7
+            #      0123456789012345678901234567890123456789012345678901234567890123456789012345678
+            print ""
+            print " +-------------------- Raster3d Dataset --------------------------------------+"
+        if self.get_type() == "vector":
+            #                1         2         3         4         5         6         7
+            #      0123456789012345678901234567890123456789012345678901234567890123456789012345678
+            print ""
+            print " +-------------------- Vector Dataset ----------------------------------------+"
+        print " |                                                                            |"
+	self.base.print_info()
+	if self.is_time_absolute():
+	    self.absolute_time.print_info()
+        if self.is_time_relative():
+	    self.relative_time.print_info()
+	self.spatial_extent.print_info()
+	self.metadata.print_info()
+        datasets = self.get_registered_datasets()
+        count = 0
+        string = ""
+        for ds in datasets:
+            if count == 0:
+                string += ds["id"]
+            else:
+                string += ",%s" % ds["id"]
+            count += 1
+            if count > 2:
+                string += " | ............................ "
+        print " | Registered datasets ........ " + string
+        print " +----------------------------------------------------------------------------+"
+
+    def print_shell_info(self):
+        """Print information about this class in shell style"""
+	self.base.print_shell_info()
+	if self.is_time_absolute():
+	    self.absolute_time.print_shell_info()
+        if self.is_time_relative():
+	    self.relative_time.print_shell_info()
+	self.spatial_extent.print_shell_info()
+	self.metadata.print_shell_info()
+        datasets = self.get_registered_datasets()
+        count = 0
+        string = ""
+        for ds in datasets:
+            if count == 0:
+                string += ds["id"]
+            else:
+                string += ",%s" % ds["id"]
+            count += 1
+        print "registered_datasets=" + string
 
     def set_absolute_time(self, start_time, end_time=None, timezone=None):
         """Set the absolute time interval with start time and end time

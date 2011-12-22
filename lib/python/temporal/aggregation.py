@@ -24,12 +24,39 @@ for details.
 
 from space_time_datasets import *
 
-def collect_map_names(sp, dbif, start, end):
+def collect_map_names(sp, dbif, start, end, sampling):
     
-    where = " start_time >= \'%s\' and start_time < \'%s\'" % (start, end)
+    use_start = False
+    use_during = False
+    use_overlap = False
+    use_contain = False
+    use_equal = False
 
-    print where
-    
+    # Inititalize the methods
+    if sampling:
+        for name in sampling.split(","):
+            if name == "start":
+                use_start = True
+            if name == "during":
+                use_during = True
+            if name == "overlap":
+                use_overlap = True
+            if name == "contain":
+                use_contain = True
+            if name == "equal":
+                use_equal = True
+    else:
+        use_start = True
+
+    if sp.get_map_time() != "interval":
+        use_start = True
+        use_during = False
+        use_overlap = False
+        use_contain = False
+        use_equal = False
+
+    where = create_temporal_relation_sql_where_statement(start, end, use_start, use_during, use_overlap, use_contain, use_equal)
+   
     rows = sp.get_registered_maps("id", where, "start_time", dbif)
 
     if not rows:
@@ -40,7 +67,6 @@ def collect_map_names(sp, dbif, start, end):
         names.append(row["id"])
 
     return names    
-
 
 def aggregate_raster_maps(dataset, mapset, inputs, base, start, end, count, method, register_null, dbif):
 
