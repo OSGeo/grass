@@ -55,7 +55,7 @@
 #% required: no
 #% multiple: no
 #% options: no,gzip,bzip2
-#% answer: bzip
+#% answer: bzip2
 #%end
 
 #%option
