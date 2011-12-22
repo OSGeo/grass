@@ -645,12 +645,10 @@ The following rules apply to the vector data:
 - It is recommended that area features and linear features be placed
   in separate layers. However if area features and linear features
   must appear in one layer, common boundaries should be digitized only
-  once. A boundary that is also a line (e.g., a road which is also a
-  field boundary), should be digitized as a boundary to complete the
-  area. The area feature should be labeled by a centroid as an
-  area. Additionally, the common boundary itself (i.e., the boundary
-  which is also a line) should be labeled as a line by a distinct
-  category number.
+  once. For example, a boundary that is also a line (e.g., a road which
+  is also a field boundary), should be digitized as a boundary to 
+  complete the area(s), and a boundary which is functionally also a line
+  should be labeled as a line by a distinct category number.
 
 Vector map topology can be cleaned at user level by <tt>v.clean</tt>
 command.
