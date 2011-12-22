@@ -103,7 +103,7 @@ def main():
 
     if sp.is_in_db(dbif) and grass.overwrite() == False:
         dbif.close()
-        grass.fatal(_("Space time %s dataset <%s> is already in the database. Use the overwrite flag.") % name)
+        grass.fatal(_("Space time %s dataset <%s> is already in the database. Use the overwrite flag.") % (sp.get_new_map_instance(None).get_type(), name))
 
     if sp.is_in_db(dbif) and grass.overwrite() == True:
         grass.info(_("Overwrite space time %s dataset <%s> and unregister all maps.") % (sp.get_new_map_instance(None).get_type(), name))

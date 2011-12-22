@@ -29,14 +29,17 @@ EOF
 t.create --o type=strds temporaltype=absolute output=precip_abs1 title="A test with input files" descr="A test with input files"
 
 # The first @test
-tr.register -i input=precip_abs1 file=$n1 start="2001-01-01" increment="1 months"
+tr.register -i input=precip_abs1 file="$n1" start="2001-01-01" increment="1 months"
 tr.export input=precip_abs1 output=strds_export.tar.bz2 compression=bzip2 workdir=test
 
-tr.import --o input=strds_export.tar.bz2 output=precip_abs1 extrdir=test -oe
-tr.import --o input=strds_export.tar.bz2 output=precip_abs1 extrdir=test -loe
-
-tr.import --o input=strds_export.tar.bz2 output=precip_abs1 extrdir=test 
-tr.import --o input=strds_export.tar.bz2 output=precip_abs1 extrdir=test -l
+tr.import --o input=strds_export.tar.bz2 output=precip_abs1 extrdir=test\
+          -oe title="A test" description="Description of a test"
+tr.import --o input=strds_export.tar.bz2 output=precip_abs1 extrdir=test\
+          -loe title="A test" description="Description of a test"
+tr.import --o input=strds_export.tar.bz2 output=precip_abs1 extrdir=test\
+              title="A test" description="Description of a test"
+tr.import --o input=strds_export.tar.bz2 output=precip_abs1 extrdir=test\
+          -l  title="A test" description="Description of a test"
 
 t.remove type=rast input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 t.remove type=strds input=precip_abs1

@@ -55,9 +55,12 @@ t.create --o type=strds temporaltype=absolute output=precip_abs0 title="A test w
 t.create --o type=stvds temporaltype=absolute output=pnts_abs0 title="A test with vector input files" descr="A test with vector input files"
 t.create --o type=stvds temporaltype=absolute output=pnts_abs1 title="A test with vector input files" descr="A test with vector input files"
 
-tr.register -i input=precip_abs0 file=$n1 start="2001-01-01" increment="1 months"
-tv.register    input=pnts_abs0 file=$n2 start=file end=file
-tv.register    input=pnts_abs1 file=$n3 start=file end=file
+tr.register -i input=precip_abs0 file="$n1" start="2001-01-01" increment="1 months"
+tr.list precip_abs0 -h
+tv.register    input=pnts_abs0 file="$n2" start=file end=file
+tv.list pnts_abs0 -h
+tv.register    input=pnts_abs1 file="$n3" start=file end=file
+tv.list pnts_abs1 -h
 
 # The @test
 t.sample method=equal   input=precip_abs0 samtype=stvds sample=pnts_abs0 -h
@@ -68,7 +71,8 @@ t.sample input=precip_abs0 samtype=strds sample=precip_abs0 -h
 
 
 # Test with temporal point data
-tr.register    input=precip_abs0 file=$n1 start="2001-01-01" increment="1 months"
+tr.register    input=precip_abs0 file="$n1" start="2001-01-01" increment="1 months"
+tr.list precip_abs0 -h
 t.sample input=precip_abs0 samtype=stvds sample=pnts_abs0 -h
 t.sample input=precip_abs0 samtype=stvds sample=pnts_abs1 -h
 

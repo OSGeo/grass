@@ -24,7 +24,7 @@ t.create --o type=strds temporaltype=absolute output=precip_abs title="A test" d
 
 tr.register -i input=precip_abs maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="1 months"
 
-tr.to.rast3 --o input=precip_abs output=prec_sum
+tr.to.rast3 --o input=precip_abs output=preciptiation
 
 t.remove type=rast input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 t.remove type=strds input=precip_abs

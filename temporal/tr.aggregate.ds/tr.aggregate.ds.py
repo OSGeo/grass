@@ -30,7 +30,7 @@
 #%end
 
 #%option
-#% key: dataset
+#% key: sample
 #% type: string
 #% description: The time intervals from this space time dataset (raster, vector or raster3d) are used for aggregation computation. 
 #% required: yes
@@ -65,6 +65,16 @@
 #%end
 
 #%option
+#% key: sampling
+#% type: string
+#% description: The method to be used for sampling the input dataset
+#% required: no
+#% multiple: yes
+#% options: start,during,overlap,contain,equal
+#% answer: start
+#%end
+
+#%option
 #% key: base
 #% type: string
 #% description: Base name of the new created raster maps
@@ -87,11 +97,12 @@ def main():
     # Get the options
     input = options["input"]
     output = options["output"]
-    sampler = options["dataset"]
+    sampler = options["sample"]
     base = options["base"]
     register_null = flags["n"]
     method = options["method"]
     type = options["type"]
+    sampling = options["sampling"]
 
     # Make sure the temporal database exists
     tgis.create_temporal_database()
@@ -172,7 +183,7 @@ def main():
         start = row["start_time"]
         end = row["end_time"]
 
-        input_map_names = tgis.collect_map_names(sp, dbif, start, end)
+        input_map_names = tgis.collect_map_names(sp, dbif, start, end, sampling)
 
         if input_map_names:
             tgis.aggregate_raster_maps(new_sp, mapset, input_map_names, base, start, end, count, method, register_null, dbif)
