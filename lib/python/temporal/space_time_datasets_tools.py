@@ -676,6 +676,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator, method, hea
                         
                     print output
 
+###############################################################################
 
 def sample_stds_by_stds_topology(intype, sampletype, input, sampler, header, separator, method):
     """ Sample the input space time dataset with a sample space time dataset and print the result to stdout
@@ -773,3 +774,4 @@ def sample_stds_by_stds_topology(intype, sampletype, input, sampler, header, sep
             print string
 
     dbif.close()
+

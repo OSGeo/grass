@@ -199,12 +199,13 @@ class raster_metadata(raster_metadata_base):
         """Print information about this class in human readable style"""
         print " +-------------------- Metadata information ----------------------------------+"
         #      0123456789012345678901234567890
-        print " | STRDS register table ....... " + str(self.get_strds_register())
         raster_metadata_base.print_info(self)
+        print " | STRDS register table ....... " + str(self.get_strds_register())
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
         raster_metadata_base.print_shell_info(self)
+        print "strds_register=" + str(self.get_strds_register())
 
 ###############################################################################
 
@@ -258,17 +259,18 @@ class raster3d_metadata(raster_metadata_base):
         """Print information about this class in human readable style"""
         print " +-------------------- Metadata information ----------------------------------+"
         #      0123456789012345678901234567890
-        print " | STR3DS register table ...... " + str(self.get_str3ds_register())
         raster_metadata_base.print_info(self)
         #      0123456789012345678901234567890
         print " | Number of depths:........... " + str(self.get_depths())
         print " | Top-Bottom resolution:...... " + str(self.get_tbres())
+        print " | STR3DS register table ...... " + str(self.get_str3ds_register())
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
-        raster_metadata_base.print_shell_info(self)
+        print "str3ds_register=" + str(self.get_str3ds_register())
         print "depths=" + str(self.get_depths())
         print "tbres=" + str(self.get_tbres())
+        raster_metadata_base.print_shell_info(self)
         
 ###############################################################################
 
@@ -541,12 +543,13 @@ class strds_metadata(stds_raster_metadata_base):
         """Print information about this class in human readable style"""
         print " +-------------------- Metadata information ----------------------------------+"
         #      0123456789012345678901234567890
-        print " | Raster register table:...... " + str(self.get_raster_register())
         stds_raster_metadata_base.print_info(self)
+        print " | Raster register table:...... " + str(self.get_raster_register())
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
         stds_raster_metadata_base.print_shell_info(self)
+        print "raster_register=" + str(self.get_raster_register())
 
 ###############################################################################
 
@@ -594,17 +597,18 @@ class str3ds_metadata(stds_raster_metadata_base):
         """Print information about this class in human readable style"""
         print " +-------------------- Metadata information ----------------------------------+"
         #      0123456789012345678901234567890
-        print " | Raster3d register table:.... " + str(self.get_raster3d_register())
         stds_raster_metadata_base.print_info(self)
         #      0123456789012345678901234567890
         print " | Top-bottom resolution min:.. " + str(self.get_ewres_min())
         print " | Top-bottom resolution max:.. " + str(self.get_ewres_max())
+        print " | Raster3d register table:.... " + str(self.get_raster3d_register())
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
         stds_raster_metadata_base.print_shell_info(self)
         print "tbres_min=" + str(self.get_tbres_min())
         print "tbres_max=" + str(self.get_tbres_max())
+        print "raster3d_register=" + str(self.get_raster3d_register())
 
 ###############################################################################
 
@@ -632,9 +636,12 @@ class stvds_metadata(stds_metadata_base):
         """Print information about this class in human readable style"""
         print " +-------------------- Metadata information ----------------------------------+"
         #      0123456789012345678901234567890
-        print " | Vector register table:...... " + str(self.get_vector_register())
         stds_metadata_base.print_info(self)
+        print " | Vector register table:...... " + str(self.get_vector_register())
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
         stds_metadata_base.print_shell_info(self)
+        print "vector_register=" + str(self.get_vector_register())
+
+

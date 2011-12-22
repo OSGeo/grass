@@ -47,6 +47,24 @@ class abstract_dataset(object):
         """
         raise IOError("This method must be implemented in the subclasses")
 
+    def print_info(self):
+        """Print information about this class in human readable style"""
+	raise IOError("This method must be implemented in the subclasses")
+        
+    def print_shell_info(self):
+        """Print information about this class in shell style"""
+	raise IOError("This method must be implemented in the subclasses")
+ 
+    def print_self(self):
+	"""Print the content of the internal structure to stdout"""
+	self.base.print_self()
+	if self.is_time_absolute():
+	    self.absolute_time.print_self()
+        if self.is_time_relative():
+	    self.relative_time.print_self()
+	self.spatial_extent.print_self()
+	self.metadata.print_self()
+
     def get_id(self):
         return self.base.get_id()
 
@@ -223,69 +241,6 @@ class abstract_dataset(object):
 
         if connect:
             dbif.close()
- 
-    def print_self(self):
-	"""Print the content of the internal structure to stdout"""
-	self.base.print_self()
-	if self.is_time_absolute():
-	    self.absolute_time.print_self()
-        if self.is_time_relative():
-	    self.relative_time.print_self()
-	self.spatial_extent.print_self()
-	self.metadata.print_self()
-
-    def print_info(self):
-        """Print information about this class in human readable style"""
-        
-        if self.get_type() == "raster":
-            #                1         2         3         4         5         6         7
-            #      0123456789012345678901234567890123456789012345678901234567890123456789012345678
-            print ""
-            print " +-------------------- Raster Dataset ----------------------------------------+"
-        if self.get_type() == "raster3d":
-            #                1         2         3         4         5         6         7
-            #      0123456789012345678901234567890123456789012345678901234567890123456789012345678
-            print ""
-            print " +-------------------- Raster3d Dataset --------------------------------------+"
-        if self.get_type() == "vector":
-            #                1         2         3         4         5         6         7
-            #      0123456789012345678901234567890123456789012345678901234567890123456789012345678
-            print ""
-            print " +-------------------- Vector Dataset ----------------------------------------+"
-        if self.get_type() == "strds":
-            #                1         2         3         4         5         6         7
-            #      0123456789012345678901234567890123456789012345678901234567890123456789012345678
-            print ""
-            print " +-------------------- Space Time Raster Dataset -----------------------------+"
-        if self.get_type() == "str3ds":
-            #                1         2         3         4         5         6         7
-            #      0123456789012345678901234567890123456789012345678901234567890123456789012345678
-            print ""
-            print " +-------------------- Space Time Raster3d Dataset ---------------------------+"
-        if self.get_type() == "stvds":
-            #                1         2         3         4         5         6         7
-            #      0123456789012345678901234567890123456789012345678901234567890123456789012345678
-            print ""
-            print " +-------------------- Space Time Vector Dataset -----------------------------+"
-        print " |                                                                            |"
-	self.base.print_info()
-	if self.is_time_absolute():
-	    self.absolute_time.print_info()
-        if self.is_time_relative():
-	    self.relative_time.print_info()
-	self.spatial_extent.print_info()
-	self.metadata.print_info()
-        print " +----------------------------------------------------------------------------+"
-
-    def print_shell_info(self):
-        """Print information about this class in shell style"""
-	self.base.print_shell_info()
-	if self.is_time_absolute():
-	    self.absolute_time.print_shell_info()
-        if self.is_time_relative():
-	    self.relative_time.print_shell_info()
-	self.spatial_extent.print_shell_info()
-	self.metadata.print_shell_info()
 
     def set_time_to_absolute(self):
 	self.base.set_ttype("absolute")
