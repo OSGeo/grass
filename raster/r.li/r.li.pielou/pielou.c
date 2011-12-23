@@ -26,11 +26,11 @@
 #include "../r.li.daemon/avl.h"
 #include "../r.li.daemon/daemon.h"
 
-int calculate(int fd, area_des ad, double *result);
+int calculate(int fd, struct area_entry *ad, double *result);
 
-int calculateD(int fd, area_des ad, double *result);
+int calculateD(int fd, struct area_entry *ad, double *result);
 
-int calculateF(int fd, area_des ad, double *result);
+int calculateF(int fd, struct area_entry *ad, double *result);
 
 /*This function is used to sort the values in the moving window */
 static int cmp(const void *pa, const void *pb)
@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
 
 }
 
-int pielou(int fd, char **par, area_des ad, double *result)
+int pielou(int fd, char **par, struct area_entry *ad, double *result)
 {
 
     int ris = RLI_OK;
@@ -123,7 +123,7 @@ int pielou(int fd, char **par, area_des ad, double *result)
 }
 
 
-int calculate(int fd, area_des ad, double *result)
+int calculate(int fd, struct area_entry *ad, double *result)
 {
 
     CELL *buf;
@@ -148,7 +148,7 @@ int calculate(int fd, area_des ad, double *result)
     double t;
     double logaritmo;
 
-    /* add to compute the number of class */
+    /*add to compute the number of class */
     long *array_copy;
     int totNumClass = 1;
     double logTotNumClass;
@@ -356,7 +356,7 @@ int calculate(int fd, area_des ad, double *result)
 
 
 
-int calculateD(int fd, area_des ad, double *result)
+int calculateD(int fd, struct area_entry *ad, double *result)
 {
 
     DCELL *buf;
@@ -585,7 +585,7 @@ int calculateD(int fd, area_des ad, double *result)
 }
 
 
-int calculateF(int fd, area_des ad, double *result)
+int calculateF(int fd, struct area_entry *ad, double *result)
 {
 
     FCELL *buf;

@@ -26,11 +26,11 @@
 #include "../r.li.daemon/avl.h"
 #include "../r.li.daemon/daemon.h"
 
-double calculate(area_des ad, int fd, char **par, double *result);
+double calculate(struct area_entry *ad, int fd, char **par, double *result);
 
-double calculateD(area_des ad, int fd, char **par, double *result);
+double calculateD(struct area_entry *ad, int fd, char **par, double *result);
 
-double calculateF(area_des ad, int fd, char **par, double *result);
+double calculateF(struct area_entry *ad, int fd, char **par, double *result);
 
 int main(int argc, char *argv[])
 {
@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
 
 }
 
-int renyi(int fd, char **par, area_des ad, double *result)
+int renyi(int fd, char **par, struct area_entry *ad, double *result)
 {
 
     int ris = RLI_OK;
@@ -131,7 +131,7 @@ int renyi(int fd, char **par, area_des ad, double *result)
 
 
 
-double calculate(area_des ad, int fd, char **par, double *result)
+double calculate(struct area_entry *ad, int fd, char **par, double *result)
 {
 
     CELL *buf;
@@ -329,7 +329,7 @@ double calculate(area_des ad, int fd, char **par, double *result)
 }
 
 
-double calculateD(area_des ad, int fd, char **par, double *result)
+double calculateD(struct area_entry *ad, int fd, char **par, double *result)
 {
     DCELL *buf;
     DCELL corrCell;
@@ -526,7 +526,7 @@ double calculateD(area_des ad, int fd, char **par, double *result)
 
 
 
-double calculateF(area_des ad, int fd, char **par, double *result)
+double calculateF(struct area_entry *ad, int fd, char **par, double *result)
 {
     FCELL *buf;
     FCELL corrCell;

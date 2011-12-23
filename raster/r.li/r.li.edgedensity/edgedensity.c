@@ -22,9 +22,9 @@
 #include "../r.li.daemon/avl.h"
 #include "../r.li.daemon/daemon.h"
 
-int calculate(int fd, area_des ad, char **valore, double *result);
-int calculateD(int fd, area_des ad, char **valore, double *result);
-int calculateF(int fd, area_des ad, char **valore, double *result);
+int calculate(int fd, struct area_entry *ad, char **valore, double *result);
+int calculateD(int fd, struct area_entry *ad, char **valore, double *result);
+int calculateF(int fd, struct area_entry *ad, char **valore, double *result);
 
 int main(int argc, char *argv[])
 {
@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
 
 }
 
-int edgedensity(int fd, char **valore, area_des ad, double *result)
+int edgedensity(int fd, char **valore, struct area_entry *ad, double *result)
 {
     struct Cell_head hd;
     int ris = -1;
@@ -118,7 +118,7 @@ int edgedensity(int fd, char **valore, area_des ad, double *result)
 
 
 
-int calculate(int fd, area_des ad, char **valore, double *result)
+int calculate(int fd, struct area_entry *ad, char **valore, double *result)
 {
     double indice = 0;
     double e = 0;
@@ -380,7 +380,7 @@ int calculate(int fd, area_des ad, char **valore, double *result)
     return RLI_OK;
 }
 
-int calculateD(int fd, area_des ad, char **valore, double *result)
+int calculateD(int fd, struct area_entry *ad, char **valore, double *result)
 {
     double indice = 0;
     double e = 0;
@@ -646,7 +646,7 @@ int calculateD(int fd, area_des ad, char **valore, double *result)
     return RLI_OK;
 }
 
-int calculateF(int fd, area_des ad, char **valore, double *result)
+int calculateF(int fd, struct area_entry *ad, char **valore, double *result)
 {
     double indice = 0;
     double e = 0;

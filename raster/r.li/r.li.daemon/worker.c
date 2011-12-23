@@ -41,7 +41,7 @@
 static int fd, aid;
 static int erease_mask = 0, data_type = 0;
 static int cache_rows, used = 0;
-static area_des ad;
+static struct area_entry * ad;
 static double result;
 static struct Cell_head hd;
 static cell_manager cm;
@@ -49,9 +49,9 @@ static dcell_manager dm;
 static fcell_manager fm;
 static char *raster;
 static char **parameters;
-static int (*func) (int, char **, area_des, double *);
+static int (*func) (int, char **, struct area_entry *, double *);
 
-void worker_init(char *r, int f(int, char **, area_des, double *), char **p)
+void worker_init(char *r, int f(int, char **, struct area_entry *, double *), char **p)
 {
     cm = G_malloc(sizeof(struct cell_memory_entry));
     fm = G_malloc(sizeof(struct fcell_memory_entry));
@@ -246,7 +246,7 @@ char *mask_preprocessing(char *mask, char *raster, int rl, int cl)
     return G_store(tmp_file);
 }
 
-CELL *RLI_get_cell_raster_row(int fd, int row, area_des ad)
+CELL *RLI_get_cell_raster_row(int fd, int row, struct area_entry *ad)
 {
     int hash;
 
@@ -261,7 +261,7 @@ CELL *RLI_get_cell_raster_row(int fd, int row, area_des ad)
 
 }
 
-DCELL *RLI_get_dcell_raster_row(int fd, int row, area_des ad)
+DCELL *RLI_get_dcell_raster_row(int fd, int row, struct area_entry *ad)
 {
     int hash;
 
@@ -276,7 +276,7 @@ DCELL *RLI_get_dcell_raster_row(int fd, int row, area_des ad)
 
 }
 
-FCELL *RLI_get_fcell_raster_row(int fd, int row, area_des ad)
+FCELL *RLI_get_fcell_raster_row(int fd, int row, struct area_entry *ad)
 {
     int hash;
 
