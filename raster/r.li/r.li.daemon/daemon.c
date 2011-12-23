@@ -59,7 +59,11 @@ int calculateIndex(char *file, int f(int, char **, area_des, double *),
     /* int perc=0; */
 
     g = (g_areas) G_malloc(sizeof(struct generatore));
+    g->maskname = NULL;
     l = (list) G_malloc(sizeof(struct lista));
+    l->head = NULL;
+    l->tail = NULL;
+    l->size = 0;
 
     worker_init(raster, f, parameters);
 

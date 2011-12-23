@@ -29,7 +29,7 @@ void insertNode(list l, msg mess)
 {
     node new;
 
-    new = G_malloc(sizeof(node));
+    new = G_malloc(sizeof(struct nodoLista));
     new->m = G_malloc(sizeof(msg));
 
     if (new != NULL) {
