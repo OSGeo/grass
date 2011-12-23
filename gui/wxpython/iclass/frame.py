@@ -48,7 +48,7 @@ from core.gcmd          import RunCommand, GMessage
 from gui_core.dialogs   import SetOpacityDialog
 import grass.script as grass
 
-from iclass.digit       import IClassVDigitWindow, IClassIVDigit
+from iclass.digit       import IClassVDigitWindow, IClassVDigit
 from iclass.toolbars    import IClassMapToolbar, IClassMiscToolbar,\
                                IClassToolbar, IClassMapManagerToolbar
 from iclass.statistics  import Statistics, BandStatistics
@@ -268,7 +268,7 @@ class IClassMapFrame(DoubleMapFrame):
 
         if name == "vdigit":
             self.toolbars[name] = VDigitToolbar(self, MapWindow = self.GetFirstWindow(),
-                                                digitClass = IClassIVDigit,
+                                                digitClass = IClassVDigit,
                                                 tools = ['addArea', 'moveVertex', 'addVertex',
                                                          'removeVertex', 'editLine',
                                                          'moveLine', 'deleteLine'])
