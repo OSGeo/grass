@@ -175,7 +175,7 @@ def main():
 
     if not rows:
             dbif.close()
-            grass.fatal(_("Aggregation dataset <%s> is empty") % out_id)
+            grass.fatal(_("Aggregation dataset <%s> is empty") % id)
 
     count = 0
     for row in rows:

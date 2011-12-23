@@ -51,6 +51,10 @@ import grass.temporal as tgis
 
 ############################################################################
 
+#
+# TODO: Add recursive and physical removement of maps and datasets
+#
+
 def main():
     
     # Get the options
