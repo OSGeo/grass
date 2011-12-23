@@ -25,11 +25,11 @@
  * \param l list where to insert
  * \param mess the message to insert
  */
-void insertNode(list l, msg mess)
+void insertNode(struct list *l, msg mess)
 {
-    node new;
+    struct node *new;
 
-    new = G_malloc(sizeof(struct nodoLista));
+    new = G_malloc(sizeof(struct node));
     new->m = G_malloc(sizeof(msg));
 
     if (new != NULL) {
@@ -56,20 +56,20 @@ void insertNode(list l, msg mess)
  *\brief remove a node from list
  * \param list where to remove
  */
-void removeNode(list l)
+void removeNode(struct list *l)
 {
     if (l->head == NULL) {
 	return;
     }
     if (l->head->next == NULL) {
-	node tmp = l->head;
+	struct node *tmp = l->head;
 
 	l->head = NULL;
 	free(tmp);
 	l->size--;
     }
     else {
-	node tmp = l->head;
+	struct node *tmp = l->head;
 
 	l->head = l->head->next;
 	l->head->prev = NULL;
@@ -83,7 +83,7 @@ void removeNode(list l)
  * \param gen area generator to use
  * \param msg next area message
  */
-int next(g_areas gen, msg * toReturn)
+int next(struct g_area *gen, msg *toReturn)
 {
 
     if (gen->cl > gen->cols)

@@ -26,25 +26,25 @@
   * \brief calculate patch density index on selected area
   * the abstract function is patch_density= patch_number / area
   */
-int patch_density(int fd, char **par, area_des ad, double *result);
+int patch_density(int fd, char **par, struct area_entry *ad, double *result);
 
-int patch_number(int fd, char **par, area_des ad, double *result);
-int shape_index(int fd, char **par, area_des ad, double *result);
-int shannon(int fd, char **par, area_des ad, double *result);
+int patch_number(int fd, char **par, struct area_entry *ad, double *result);
+int shape_index(int fd, char **par, struct area_entry *ad, double *result);
+int shannon(int fd, char **par, struct area_entry *ad, double *result);
 
-int pielou(int fd, char **par, area_des ad, double *result);
-int renyi(int fd, char **par, area_des ad, double *result);
+int pielou(int fd, char **par, struct area_entry *ad, double *result);
+int renyi(int fd, char **par, struct area_entry *ad, double *result);
 
-int simpson(int fd, char **par, area_des ad, double *result);
-int meanPatchSize(int fd, char **par, area_des ad, double *result);
-int meanPixelAttribute(int fd, char **par, area_des ad, double *result);
-int contrastWeightedEdgeDensity(int fd, char **par, area_des ad,
+int simpson(int fd, char **par, struct area_entry *ad, double *result);
+int meanPatchSize(int fd, char **par, struct area_entry *ad, double *result);
+int meanPixelAttribute(int fd, char **par, struct area_entry *ad, double *result);
+int contrastWeightedEdgeDensity(int fd, char **par, struct area_entry *ad,
 				double *result);
-int edgedensity(int fd, char **valore, area_des ad, double *result);
-int patchAreaDistributionCV(int fd, char **par, area_des ad, double *result);
-int patchAreaDistributionMN(int fd, char **par, area_des ad, double *result);
-int patchAreaDistributionSD(int fd, char **par, area_des ad, double *result);
-int patchAreaDistributionRANGE(int fd, char **par, area_des ad,
+int edgedensity(int fd, char **valore, struct area_entry *ad, double *result);
+int patchAreaDistributionCV(int fd, char **par, struct area_entry *ad, double *result);
+int patchAreaDistributionMN(int fd, char **par, struct area_entry *ad, double *result);
+int patchAreaDistributionSD(int fd, char **par, struct area_entry *ad, double *result);
+int patchAreaDistributionRANGE(int fd, char **par, struct area_entry *ad,
 			       double *result);
-int dominance(int fd, char **par, area_des ad, double *result);
-int richness(int fd, char **par, area_des ad, double *result);
+int dominance(int fd, char **par, struct area_entry *ad, double *result);
+int richness(int fd, char **par, struct area_entry *ad, double *result);

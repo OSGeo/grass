@@ -26,11 +26,11 @@
 #define _PRES 1
 #define _ERR -1
 
-int calculate(int fd, area_des ad, Coppie * cc, long totCoppie,
+int calculate(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
 	      double *result);
-int calculateD(int fd, area_des ad, Coppie * cc, long totCoppie,
+int calculateD(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
 	       double *result);
-int calculateF(int fd, area_des ad, Coppie * cc, long totCoppie,
+int calculateF(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
 	       double *result);
 
 int main(int argc, char *argv[])
@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
 }
 
 
-int contrastWeightedEdgeDensity(int fd, char **par, area_des ad,
+int contrastWeightedEdgeDensity(int fd, char **par, struct area_entry *ad,
 				double *result)
 {
     double indice = 0;		/* the result */
@@ -294,7 +294,7 @@ int contrastWeightedEdgeDensity(int fd, char **par, area_des ad,
 
 
 
-int calculate(int fd, area_des ad, Coppie * cc, long totCoppie,
+int calculate(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
 	      double *result)
 {
 
@@ -436,7 +436,7 @@ int calculate(int fd, area_des ad, Coppie * cc, long totCoppie,
 }
 
 
-int calculateD(int fd, area_des ad, Coppie * cc, long totCoppie,
+int calculateD(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
 	       double *result)
 {
 
@@ -572,7 +572,7 @@ int calculateD(int fd, area_des ad, Coppie * cc, long totCoppie,
 
 
 
-int calculateF(int fd, area_des ad, Coppie * cc, long totCoppie,
+int calculateF(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
 	       double *result)
 {
 

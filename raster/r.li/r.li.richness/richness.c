@@ -23,9 +23,9 @@
 #include "../r.li.daemon/avl.h"
 #include "../r.li.daemon/daemon.h"
 
-double calculate(area_des ad, int fd, double *result);
-double calculateD(area_des ad, int fd, double *result);
-double calculateF(area_des ad, int fd, double *result);
+double calculate(struct area_entry *ad, int fd, double *result);
+double calculateD(struct area_entry *ad, int fd, double *result);
+double calculateF(struct area_entry *ad, int fd, double *result);
 
 int main(int argc, char *argv[])
 {
@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
 
 }
 
-int dominance(int fd, char **par, area_des ad, double *result)
+int dominance(int fd, char **par, struct area_entry *ad, double *result)
 {
     int ris = RLI_OK;
     double indice = 0;
@@ -104,7 +104,7 @@ int dominance(int fd, char **par, area_des ad, double *result)
 
 
 
-double calculate(area_des ad, int fd, double *result)
+double calculate(struct area_entry *ad, int fd, double *result)
 {
     CELL *buf;
     CELL corrCell;
@@ -263,7 +263,7 @@ double calculate(area_des ad, int fd, double *result)
 }
 
 
-double calculateD(area_des ad, int fd, double *result)
+double calculateD(struct area_entry *ad, int fd, double *result)
 {
     DCELL *buf;
     DCELL corrCell;
@@ -425,7 +425,7 @@ double calculateD(area_des ad, int fd, double *result)
 
 
 
-double calculateF(area_des ad, int fd, double *result)
+double calculateF(struct area_entry *ad, int fd, double *result)
 {
     FCELL *buf;
     FCELL corrCell;

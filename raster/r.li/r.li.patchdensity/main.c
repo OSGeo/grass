@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
 
     output = G_define_standard_option(G_OPT_R_OUTPUT);
 
-	/** add other options for index parameters here */
+	/**add other options for index parameters here */
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
 }
 
 
-int patch_density(int fd, char **par, area_des ad, double *result)
+int patch_density(int fd, char **par, struct area_entry *ad, double *result)
 {
     CELL *buf, *sup;
     int count = 0, i, j, connected = 0, complete_line = 1, other_above = 0;
@@ -195,7 +195,7 @@ int patch_density(int fd, char **par, area_des ad, double *result)
 
     area = (((EW_DIST1 + EW_DIST2) / 2) / hd.cols) *
 	(((NS_DIST1 + NS_DIST2) / 2) / hd.rows) *
-	(ad->rl * ad->cl - null_count);
+	(ad->rl *ad->cl - null_count);
 
     if (area != 0)
 	*result = (count / area) * 1000000;

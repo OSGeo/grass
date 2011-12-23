@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
 
 }
 
-int patch_number(int fd, char **par, area_des ad, double *result)
+int patch_number(int fd, char **par, struct area_entry *ad, double *result)
 {
     CELL *buf, *sup;
     int count = 0, i, j, connected = 0, complete_line = 1, other_above = 0;

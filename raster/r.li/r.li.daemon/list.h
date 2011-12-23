@@ -27,10 +27,10 @@
  * \member next the next item in list
  * \member m the content of list node
  */
-struct nodoLista
+struct node
 {
-    struct nodoLista *prev;
-    struct nodoLista *next;
+    struct node *prev;
+    struct node *next;
     msg *m;
 };
 
@@ -42,29 +42,26 @@ struct nodoLista
  * \member tail last item in list
  * \member size number of items in list
  */
-struct lista
+struct list
 {
-    struct nodoLista *head;
-    struct nodoLista *tail;
+    struct node *head;
+    struct node *tail;
     int size;
 };
 
-typedef struct nodoLista *node;
-
-typedef struct lista *list;
 
 /**
  * \brief insert a item in list
  * \param l list where to put items
  * \param mess the message to insert
  */
-void insertNode(list l, msg m);
+void insertNode(struct list *l, msg m);
 
 /**
  * \brief remove head item
  * \param l list where to remove
  */
-void removeNode(list l);
+void removeNode(struct list *l);
 
  /**
   * \brief struct for runtime area generation
@@ -80,7 +77,7 @@ void removeNode(list l);
   * \param sf_y y coordinate of sample frame
   * \param maskname name of mask for the area
   */
-struct generatore
+struct g_area
 {
     int dist;
     int add_row;
@@ -97,11 +94,9 @@ struct generatore
     char *maskname;
 };
 
-typedef struct generatore *g_areas;
-
 /**
  * \brief runtime area generation
  * \param gen area generator to use
  * \param msg next area message
  */
-int next(g_areas gen, msg * toReturn);
+int next(struct g_area *gen, msg *toReturn);

@@ -23,9 +23,9 @@
 #include "../r.li.daemon/daemon.h"
 
 
-int calculate(int fd, area_des ad, double *result);
-int calculateD(int fd, area_des ad, double *result);
-int calculateF(int fd, area_des ad, double *result);
+int calculate(int fd, struct area_entry *ad, double *result);
+int calculateD(int fd, struct area_entry *ad, double *result);
+int calculateF(int fd, struct area_entry *ad, double *result);
 
 int main(int argc, char *argv[])
 {
@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
 }
 
 
-int meanPixelAttribute(int fd, char **par, area_des ad, double *result)
+int meanPixelAttribute(int fd, char **par, struct area_entry *ad, double *result)
 {
     int ris = 0;
     double indice = 0;
@@ -106,7 +106,7 @@ int meanPixelAttribute(int fd, char **par, area_des ad, double *result)
 
 
 
-int calculate(int fd, area_des ad, double *result)
+int calculate(int fd, struct area_entry *ad, double *result)
 {
     CELL *buf;
 
@@ -170,7 +170,7 @@ int calculate(int fd, area_des ad, double *result)
     return RLI_OK;
 }
 
-int calculateD(int fd, area_des ad, double *result)
+int calculateD(int fd, struct area_entry *ad, double *result)
 {
     DCELL *buf;
 
@@ -235,7 +235,7 @@ int calculateD(int fd, area_des ad, double *result)
     return RLI_OK;
 }
 
-int calculateF(int fd, area_des ad, double *result)
+int calculateF(int fd, struct area_entry *ad, double *result)
 {
     FCELL *buf;
 
