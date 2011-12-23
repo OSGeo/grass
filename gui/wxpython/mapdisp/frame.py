@@ -186,7 +186,7 @@ class MapFrame(SingleMapFrame):
     def _addToolbarVDigit(self):
         """!Add vector digitizer toolbar
         """
-        from vdigit.main import haveVDigit
+        from vdigit.main import haveVDigit, VDigit
         
         if not haveVDigit:
             from vdigit import errorMsg
@@ -232,7 +232,7 @@ class MapFrame(SingleMapFrame):
             self._mgr.GetPane('3d').Hide()
         self._mgr.GetPane('vdigit').Show()
         self.toolbars['vdigit'] = VDigitToolbar(parent = self, MapWindow = self.MapWindow,
-                                                layerTree = self.tree,
+                                                digitClass = VDigit, layerTree = self.tree,
                                                 log = log)
         self.MapWindowVDigit.SetToolbar(self.toolbars['vdigit'])
         

@@ -20,8 +20,6 @@ from grass.script import core as grass
 from gui_core.toolbars  import BaseToolbar, BaseIcons
 from gui_core.dialogs   import CreateNewVector
 from vdigit.preferences import VDigitSettingsDialog
-from vdigit.main        import VDigit
-from iclass.digit       import IClassIVDigit
 from core.debug         import Debug
 from core.settings      import UserSettings
 from core.gcmd          import GError
@@ -30,12 +28,13 @@ from icons.icon         import MetaIcon
 class VDigitToolbar(BaseToolbar):
     """!Toolbar for digitization
     """
-    def __init__(self, parent, MapWindow, tools = [], layerTree = None, log = None):
+    def __init__(self, parent, MapWindow, digitClass, tools = [], layerTree = None, log = None):
         self.MapWindow     = MapWindow
         self.Map           = MapWindow.GetMap() # Map class instance
         self.layerTree     = layerTree  # reference to layer tree associated to map display
         self.log           = log        # log area
         self.tools         = tools
+        self.digitClass    = digitClass
         BaseToolbar.__init__(self, parent)
         self.digit         = None
         
@@ -388,7 +387,7 @@ class VDigitToolbar(BaseToolbar):
         """!Show settings dialog"""
         if self.digit is None:
             try:
-                self.digit = self.MapWindow.digit = VDigit(mapwindow = self.MapWindow)
+                self.digit = self.MapWindow.digit = self.digitClass(mapwindow = self.MapWindow)
             except SystemExit:
                 self.digit = self.MapWindow.digit = None
         
@@ -693,10 +692,7 @@ class VDigitToolbar(BaseToolbar):
                                         0)
         
         self.MapWindow.pdcVector = wx.PseudoDC()
-        if self.parent.GetName() == 'IClassWindow':
-            self.digit = self.MapWindow.digit = IClassIVDigit(mapwindow = self.MapWindow)
-        else:
-            self.digit = self.MapWindow.digit = VDigit(mapwindow = self.MapWindow)
+        self.digit = self.MapWindow.digit = self.digitClass(mapwindow = self.MapWindow)
         
         self.mapLayer = mapLayer
         # open vector map
@@ -737,7 +733,7 @@ class VDigitToolbar(BaseToolbar):
         if 'map' in self.parent.toolbars:
             self.parent.toolbars['map'].combo.SetValue (_('Digitize'))
         
-        if self.parent.GetName() != "IClassWindow":
+        if self.digitClass != "iclass.digit.IClassWindow":
             lmgr = self.parent.GetLayerManager()
             if lmgr:
                 lmgr.toolbars['tools'].Enable('vdigit', enable = False)
