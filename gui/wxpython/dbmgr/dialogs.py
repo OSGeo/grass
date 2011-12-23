@@ -550,17 +550,15 @@ class ModifyTableRecord(wx.Dialog):
         
         self.keyId = keyEditable[0]
         
-        self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
-        
-        box = wx.StaticBox(parent = self.panel, id = wx.ID_ANY)
+        box = wx.StaticBox(parent = self, id = wx.ID_ANY)
         box.Hide()
-        self.dataPanel = scrolled.ScrolledPanel(parent = self.panel, id = wx.ID_ANY,
+        self.dataPanel = scrolled.ScrolledPanel(parent = self, id = wx.ID_ANY,
                                                 style = wx.TAB_TRAVERSAL)
         self.dataPanel.SetupScrolling(scroll_x = False)
         
         # buttons
-        self.btnCancel = wx.Button(self.panel, wx.ID_CANCEL)
-        self.btnSubmit = wx.Button(self.panel, wx.ID_OK, _("&Submit"))
+        self.btnCancel = wx.Button(self, wx.ID_CANCEL)
+        self.btnSubmit = wx.Button(self, wx.ID_OK, _("&Submit"))
         self.btnSubmit.SetDefault()
         
         # data area
@@ -640,13 +638,11 @@ class ModifyTableRecord(wx.Dialog):
                   flag = wx.EXPAND | wx.ALL, border = 5)
         
         framewidth = self.GetSize()[0]
-        self.SetMinSize((framewidth,150))
-        self.SetMaxSize((framewidth,300))
+        self.SetMinSize((framewidth,250))
         
-        # sizer.SetSizeHints(self.panel)
-        self.panel.SetAutoLayout(True)
-        self.panel.SetSizer(sizer)
-        sizer.Fit(self.panel)
+        self.SetAutoLayout(True)
+        self.SetSizer(sizer)
+        sizer.Fit(self)
         
         self.Layout()
         
