@@ -19,16 +19,15 @@ for details.
 
 import os
 import sys
-
-#if __name__ == "__main__":
-sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
-
 import copy
+
+if __name__ == "__main__":
+    sys.path.append(os.path.join(os.environ['GISBASE'], "etc", "gui", "wxpython"))
+from core import globalvar
 import wx
 
 from ctypes import *
 
-from core import globalvar
 try:
     from grass.lib.imagery import *
     from grass.lib.vector import *
@@ -269,6 +268,7 @@ class IClassMapFrame(DoubleMapFrame):
 
         if name == "vdigit":
             self.toolbars[name] = VDigitToolbar(self, MapWindow = self.GetFirstWindow(),
+                                                digitClass = IClassIVDigit,
                                                 tools = ['addArea', 'moveVertex', 'addVertex',
                                                          'removeVertex', 'editLine',
                                                          'moveLine', 'deleteLine'])
