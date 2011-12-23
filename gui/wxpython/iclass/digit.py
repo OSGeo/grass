@@ -75,7 +75,7 @@ class IClassVDigitWindow(VDigitWindow):
         """
         return self.parent.GetToolbar("iClass").GetSelectedCategoryIdx()
         
-class IClassIVDigit(IVDigit):
+class IClassVDigit(IVDigit):
     """! Class similar to IVDigit but specialized for wxIClass."""
     def __init__(self, mapwindow):
         IVDigit.__init__(self, mapwindow)
