@@ -4,12 +4,15 @@
 extensions from GRASS Addons SVN repository into the local GRASS
 installation.
 
-<p>Re-running the script on an installed GRASS Addons re-installs
-the requested extension which may include updates.
+<p>Re-running <em>g.extension</em> on an installed GRASS Addons
+extension re-installs the requested extension which may include
+updates. All locally installed GRASS Addons extensions can be
+re-installed
+by <em><a href="g.extension.rebuild.all.html">g.extension.rebuild.all</a></em>.
 
 <h2>EXAMPLES</h2>
 
-Download and install <em>i.landsat.toar</em> into current GRASS installation:
+Download and install <em>i.points.auto</em> into current GRASS installation
 
 <div class="code"><pre>
 g.extension extension=i.points.auto
@@ -21,9 +24,17 @@ Remove locally installed extension
 g.extension extension=i.points.auto operation=remove
 </pre></div>
 
+<h2>SEE ALSO</h2>
+
+<em>
+  <a href="g.extension.rebuild.all.html">g.extension.rebuild.all</a>
+</em>
+
 <h2>AUTHOR</h2>
 
 Markus Neteler<br>
-Upgraded for GRASS 7 by Martin Landa, CTU in Prague, Czech Republic
+<a href="http://geo.fsv.cvut.cz/gwiki/Landa">Martin
+Landa</a>, <a href="http://www.cvut.cz">Czech Technical University in
+Prague</a>, Czech Republic
 
 <p><i>Last changed: $Date$</i>
