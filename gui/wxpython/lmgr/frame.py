@@ -54,7 +54,6 @@ from modules.colorrules    import RasterColorTable, VectorColorTable
 from gui_core.menu         import Menu
 from gmodeler.model        import Model
 from gmodeler.frame        import ModelFrame
-from modules.vclean        import VectorCleaningFrame
 from psmap.frame           import PsMapFrame
 from core.debug            import Debug
 from gui_core.ghelp        import MenuTreeWindow, AboutWindow
@@ -1154,6 +1153,7 @@ class GMFrame(wx.Frame):
     def OnVectorCleaning(self, event, cmd = ''):
         """!Init interactive vector cleaning
         """
+        from modules.vclean import VectorCleaningFrame
         win = VectorCleaningFrame(parent = self)
         win.CentreOnScreen()
         win.Show()
