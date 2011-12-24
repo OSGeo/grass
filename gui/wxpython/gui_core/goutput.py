@@ -535,18 +535,13 @@ class GMConsole(wx.SplitterWindow):
             
             else:
                 # other GRASS commands (r|v|g|...)
-                if len(command) == 1 and command[0] != 'v.krige':
-                    # no arguments given
-                    try:
-                        GUI(parent = self).ParseCommand(command)
-                    except GException, e:
-                        print >> sys.stderr, e
-                    return 0
-                
                 task = GUI(show = None).ParseCommand(command)
+                hasParams = False
                 if task:
+                    options = task.get_options()
+                    hasParams = options['params'] and options['flags']
                     # check for <input>=-
-                    for p in task.get_options()['params']:
+                    for p in options['params']:
                         if p.get('prompt', '') == 'input' and \
                                 p.get('element', '') == 'file' and \
                                 p.get('age', 'new') == 'old' and \
@@ -557,6 +552,15 @@ class GMConsole(wx.SplitterWindow):
                                                "supported by wxGUI") % { 'cmd': ' '.join(command),
                                                                          'opt': p.get('name', '') })
                             return 1
+                
+                if len(command) == 1 and hasParams and \
+                        command[0] != 'v.krige':
+                    # no arguments given
+                    try:
+                        GUI(parent = self).ParseCommand(command)
+                    except GException, e:
+                        print >> sys.stderr, e
+                    return 0
                 
                 # switch to 'Command output' if required
                 if switchPage:
