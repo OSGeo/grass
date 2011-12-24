@@ -14,6 +14,7 @@ SUBDIRS = \
 	db.out.ogr \
 	db.test \
 	g.extension \
+	g.extension.rebuild.all \
 	g.manual \
 	i.fusion.brovey \
 	i.image.mosaic \
