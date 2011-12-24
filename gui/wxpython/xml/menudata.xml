@@ -891,6 +891,13 @@
 	      <command>g.extension</command>
 	    </menuitem>
 	    <menuitem>
+	      <label>Update installed extensions</label>
+	      <help>Rebuilds all locally installed GRASS Addons extensions.</help>
+	      <keywords>general,installation,extensions</keywords>
+	      <handler>OnMenuCmd</handler>
+	      <command>g.extension.rebuild.all</command>
+	    </menuitem>
+	    <menuitem>
 	      <label>Remove extension</label>
 	      <help>Removes installed GRASS AddOns extension.</help>
 	      <keywords>general,installation,extensions</keywords>
@@ -1262,8 +1269,8 @@
 	    <separator />
 	    <menuitem>
 	      <label>Visibility</label>
-	      <help>Line-of-sight raster analysis program.</help>
-	      <keywords>raster,viewshed</keywords>
+	      <help>Computes the viewshed of a point on a raster terrain.</help>
+	      <keywords>raster,viewshed,line of sight</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>r.viewshed</command>
 	    </menuitem>
@@ -2053,8 +2060,8 @@
 	    </menuitem>
 	    <menuitem>
 	      <label>Rectify vector map</label>
-	      <help>Rectifies a vector map by computing a coordinate transformation based on control points.</help>
-	      <keywords>vector,georectification,transformation</keywords>
+	      <help>Rectifies a vector by computing a coordinate transformation for each object in the vector based on the control points.</help>
+	      <keywords>vector,rectify</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.rectify</command>
 	    </menuitem>
