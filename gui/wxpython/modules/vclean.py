@@ -169,15 +169,14 @@ class VectorCleaningFrame(wx.Frame):
         self.btn_remove.Bind(wx.EVT_BUTTON, self.OnClearTool)
         self.btn_moveup.Bind(wx.EVT_BUTTON, self.OnMoveToolUp)
         self.btn_movedown.Bind(wx.EVT_BUTTON, self.OnMoveToolDown)
-
+        
         # layout
         self._layout()
-
+        
         self.SetMinSize(self.GetBestSize())
         
         self.CentreOnScreen()
-        self.Show()
-        
+                
     def _layout(self):
         sizer = wx.BoxSizer(wx.VERTICAL)
         
