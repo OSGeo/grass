@@ -34,37 +34,36 @@ class VectorCleaningFrame(wx.Frame):
         """!
         Dialog for interactively defining vector cleaning tools
         """
-        wx.Frame.__init__(self, parent, id, title, style =  style, **kwargs)
-
+        wx.Frame.__init__(self, parent, id, title, style = style, **kwargs)
+        
         self.parent = parent # GMFrame
         if self.parent:
             self.log = self.parent.GetLogWindow()
         else:
             self.log = None
-  
+        
         # grass command
         self.cmd = 'v.clean'
         
         # statusbar
         self.CreateStatusBar()
-
+        
 	# icon
         self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
-
-	# self.panel not set as in colorrules
-        # self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
+        
+        self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
         
         # input map to clean
         self.inmap = ''
         
         # cleaned output map
         self.outmap = ''
-
+        
 	self.ftype = ''
-
+        
         # cleaning tools
         self.toolslines = {}
-
+        
         self.tool_desc_list = [
             _('break lines/boundaries'),
             _('remove duplicates'),
@@ -80,7 +79,7 @@ class VectorCleaningFrame(wx.Frame):
 	    _('remove lines/boundaries of zero length'),
 	    _('remove small angles at nodes')
 	    ]
-
+        
         self.tool_list = [
             'break',
             'rmdupl',
@@ -96,7 +95,7 @@ class VectorCleaningFrame(wx.Frame):
 	    'rmline',
 	    'rmsa'
 	    ]
-
+        
 	self.ftype = [
 	    'point',
 	    'line',
@@ -104,62 +103,61 @@ class VectorCleaningFrame(wx.Frame):
 	    'centroid',
 	    'area',
 	    'face']
-
-	self.n_ftypes = 6
+        
+	self.n_ftypes = len(self.ftype)
         
 	self.tools_string = ''
 	self.thresh_string = ''
 	self.ftype_string = ''
-
-	self.SetTitle(_('Set up vector cleaning tools'))
+        
 	self.SetStatusText(_("Set up vector cleaning tools"))
 	self.elem = 'vector'
 	self.ctlabel = _('Choose cleaning tools and set thresholds')
-
+        
         # top controls
-        self.inmaplabel = wx.StaticText(parent = self, id = wx.ID_ANY,
+        self.inmaplabel = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
                                          label= _('Select input vector map:'))
-        self.selectionInput = Select(parent=self, id=wx.ID_ANY,
-                                     size=globalvar.DIALOG_GSELECT_SIZE,
-                                     type='vector')
+        self.selectionInput = Select(parent = self.panel, id = wx.ID_ANY,
+                                     size = globalvar.DIALOG_GSELECT_SIZE,
+                                     type = 'vector')
 	self.ftype_check = {}
-        ftypeBox = wx.StaticBox(parent=self, id=wx.ID_ANY,
-                                label=_(' Feature type: '))
+        ftypeBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
+                                label = _(' Feature type: '))
         self.ftypeSizer = wx.StaticBoxSizer(ftypeBox, wx.HORIZONTAL)
 
-        self.outmaplabel = wx.StaticText(parent = self, id = wx.ID_ANY,
-                                         label= _('Select output vector map:'))
-        self.selectionOutput = Select(parent=self, id=wx.ID_ANY,
-                                      size=globalvar.DIALOG_GSELECT_SIZE,
-                                      type='vector')
+        self.outmaplabel = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
+                                         label =  _('Select output vector map:'))
+        self.selectionOutput = Select(parent = self.panel, id = wx.ID_ANY,
+                                      size = globalvar.DIALOG_GSELECT_SIZE,
+                                      type = 'vector')
         
-        self.overwrite = wx.CheckBox(parent=self, id=wx.ID_ANY,
-                                       label=_('Allow output files to overwrite existing files'))
-        self.overwrite.SetValue(UserSettings.Get(group='cmd', key='overwrite', subkey='enabled'))
+        self.overwrite = wx.CheckBox(parent = self.panel, id = wx.ID_ANY,
+                                       label = _('Allow output files to overwrite existing files'))
+        self.overwrite.SetValue(UserSettings.Get(group = 'cmd', key = 'overwrite', subkey = 'enabled'))
 
         # cleaning tools
-        self.ct_label = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                      label=self.ctlabel)
+        self.ct_label = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
+                                      label = self.ctlabel)
 
-        self.ct_panel = self.__toolsPanel()
+        self.ct_panel = self._toolsPanel()
 
 	# buttons to manage cleaning tools
-        self.btn_add = wx.Button(parent=self, id=wx.ID_ADD)
-        self.btn_remove = wx.Button(parent=self, id=wx.ID_REMOVE)
-        self.btn_moveup = wx.Button(parent=self, id=wx.ID_UP)
-        self.btn_movedown = wx.Button(parent=self, id=wx.ID_DOWN)
+        self.btn_add = wx.Button(parent = self.panel, id = wx.ID_ADD)
+        self.btn_remove = wx.Button(parent = self.panel, id = wx.ID_REMOVE)
+        self.btn_moveup = wx.Button(parent = self.panel, id = wx.ID_UP)
+        self.btn_movedown = wx.Button(parent = self.panel, id = wx.ID_DOWN)
 
         # add one tool as default
         self.AddTool()
 	self.selected = -1
         
         # Buttons
-        self.btn_close = wx.Button(parent = self, id = wx.ID_CLOSE)
-        self.btn_run = wx.Button(parent = self, id = wx.ID_ANY, label = _("&Run"))
+        self.btn_close = wx.Button(parent = self.panel, id = wx.ID_CLOSE)
+        self.btn_run = wx.Button(parent = self.panel, id = wx.ID_ANY, label = _("&Run"))
         self.btn_run.SetDefault()
-	self.btn_clipboard = wx.Button(parent=self, id=wx.ID_COPY)
+	self.btn_clipboard = wx.Button(parent = self.panel, id = wx.ID_COPY)
 	self.btn_clipboard.SetToolTipString(_("Copy the current command string to the clipboard (Ctrl+C)"))
-        self.btn_help = wx.Button(parent = self, id = wx.ID_HELP)
+        self.btn_help = wx.Button(parent = self.panel, id = wx.ID_HELP)
         
         # bindings
         self.btn_close.Bind(wx.EVT_BUTTON, self.OnClose)
@@ -172,11 +170,11 @@ class VectorCleaningFrame(wx.Frame):
         self.btn_moveup.Bind(wx.EVT_BUTTON, self.OnMoveToolUp)
         self.btn_movedown.Bind(wx.EVT_BUTTON, self.OnMoveToolDown)
 
-        self.SetMinSize(self.GetBestSize())
-
         # layout
         self._layout()
 
+        self.SetMinSize(self.GetBestSize())
+        
         self.CentreOnScreen()
         self.Show()
         
@@ -186,62 +184,62 @@ class VectorCleaningFrame(wx.Frame):
         #
         # input output
         #
-	inSizer = wx.GridBagSizer(hgap=5, vgap=5)
+	inSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
 
-        inSizer.Add(item=self.inmaplabel, pos=(0, 0),
-                       flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND, border=1)
-        inSizer.Add(item=self.selectionInput, pos=(1, 0),
-                       flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND, border=1)
+        inSizer.Add(item = self.inmaplabel, pos = (0, 0),
+                       flag = wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND, border = 1)
+        inSizer.Add(item = self.selectionInput, pos = (1, 0),
+                       flag = wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND, border = 1)
 
 	self.ftype_check = [
-	    wx.CheckBox(parent=self, id=wx.ID_ANY, label=_('point')),
-	    wx.CheckBox(parent=self, id=wx.ID_ANY, label=_('line')),
-	    wx.CheckBox(parent=self, id=wx.ID_ANY, label=_('boundary')),
-	    wx.CheckBox(parent=self, id=wx.ID_ANY, label=_('centroid')),
-	    wx.CheckBox(parent=self, id=wx.ID_ANY, label=_('area')),
-	    wx.CheckBox(parent=self, id=wx.ID_ANY, label=_('face'))
+	    wx.CheckBox(parent = self.panel, id = wx.ID_ANY, label = _('point')),
+	    wx.CheckBox(parent = self.panel, id = wx.ID_ANY, label = _('line')),
+	    wx.CheckBox(parent = self.panel, id = wx.ID_ANY, label = _('boundary')),
+	    wx.CheckBox(parent = self.panel, id = wx.ID_ANY, label = _('centroid')),
+	    wx.CheckBox(parent = self.panel, id = wx.ID_ANY, label = _('area')),
+	    wx.CheckBox(parent = self.panel, id = wx.ID_ANY, label = _('face'))
 	    ]
 
 	typeoptSizer = wx.BoxSizer(wx.HORIZONTAL)
 	for num in range(0, self.n_ftypes):
 	    type_box = self.ftype_check[num]
-	    typeoptSizer.Add(item=type_box, flag=wx.ALIGN_LEFT, border=1)
+	    typeoptSizer.Add(item = type_box, flag = wx.ALIGN_LEFT, border = 1)
 
 	self.ftypeSizer.Add(item = typeoptSizer,
-	           flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=2)
+	           flag = wx.ALIGN_CENTER_VERTICAL | wx.ALL, border = 2)
 
-	outSizer = wx.GridBagSizer(hgap=5, vgap=5)
+	outSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
 
-        outSizer.Add(item=self.outmaplabel, pos=(0, 0),
-                       flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND, border=1)
-        outSizer.Add(item=self.selectionOutput, pos=(1, 0),
-                       flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND, border=1)
+        outSizer.Add(item = self.outmaplabel, pos = (0, 0),
+                       flag = wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND, border = 1)
+        outSizer.Add(item = self.selectionOutput, pos = (1, 0),
+                       flag = wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND, border = 1)
         replaceSizer = wx.BoxSizer(wx.HORIZONTAL)
-        replaceSizer.Add(item=self.overwrite, proportion=1,
-                         flag=wx.ALL | wx.EXPAND, border=1)
+        replaceSizer.Add(item = self.overwrite, proportion = 1,
+                         flag = wx.ALL | wx.EXPAND, border = 1)
 
-        outSizer.Add(item=replaceSizer, pos=(2, 0),
-                       flag=wx.ALL | wx.EXPAND, border=1)
+        outSizer.Add(item = replaceSizer, pos = (2, 0),
+                     flag = wx.ALL | wx.EXPAND, border = 1)
 
         #
         # tools selection
         #
-        bodySizer = wx.GridBagSizer(hgap=5, vgap=5)
+        bodySizer = wx.GridBagSizer(hgap = 5, vgap = 5)
 
-        bodySizer.Add(item=self.ct_label, pos=(0, 0), span=(1, 2),
-                      flag=wx.ALL, border=5)
+        bodySizer.Add(item = self.ct_label, pos = (0, 0), span = (1, 2),
+                      flag = wx.ALL, border = 5)
 
-        bodySizer.Add(item=self.ct_panel, pos=(1, 0), span=(1, 2))
+        bodySizer.Add(item = self.ct_panel, pos = (1, 0), span = (1, 2))
 
-	manageBoxSizer = wx.GridBagSizer(hgap=10, vgap=1)
+	manageBoxSizer = wx.GridBagSizer(hgap = 10, vgap = 1)
 	# start with row 1 for nicer layout
-        manageBoxSizer.Add(item=self.btn_add, pos=(1, 0), border=2, flag=wx.ALL | wx.EXPAND)
-        manageBoxSizer.Add(item=self.btn_remove, pos=(2, 0), border=2, flag=wx.ALL | wx.EXPAND)
-        manageBoxSizer.Add(item=self.btn_moveup, pos=(3, 0), border=2, flag=wx.ALL | wx.EXPAND)
-        manageBoxSizer.Add(item=self.btn_movedown, pos=(4, 0), border=2, flag=wx.ALL | wx.EXPAND)
+        manageBoxSizer.Add(item = self.btn_add, pos = (1, 0), border = 2, flag = wx.ALL | wx.EXPAND)
+        manageBoxSizer.Add(item = self.btn_remove, pos = (2, 0), border = 2, flag = wx.ALL | wx.EXPAND)
+        manageBoxSizer.Add(item = self.btn_moveup, pos = (3, 0), border = 2, flag = wx.ALL | wx.EXPAND)
+        manageBoxSizer.Add(item = self.btn_movedown, pos = (4, 0), border = 2, flag = wx.ALL | wx.EXPAND)
 
-        bodySizer.Add(item=manageBoxSizer, pos=(1, 2),
-                      flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=5)
+        bodySizer.Add(item = manageBoxSizer, pos = (1, 2),
+                      flag = wx.EXPAND | wx.LEFT | wx.RIGHT, border = 5)
 
         bodySizer.AddGrowableCol(2)
         
@@ -250,50 +248,52 @@ class VectorCleaningFrame(wx.Frame):
         #
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
         btnSizer.Add(self.btn_close,
-                     flag=wx.LEFT | wx.RIGHT, border=5)
+                     flag = wx.LEFT | wx.RIGHT, border = 5)
         btnSizer.Add(self.btn_run,
-                     flag=wx.LEFT | wx.RIGHT, border=5)
+                     flag = wx.LEFT | wx.RIGHT, border = 5)
         btnSizer.Add(self.btn_clipboard,
-                     flag=wx.LEFT | wx.RIGHT, border=5)
+                     flag = wx.LEFT | wx.RIGHT, border = 5)
         btnSizer.Add(self.btn_help,
-                     flag=wx.LEFT | wx.RIGHT, border=5)
+                     flag = wx.LEFT | wx.RIGHT, border = 5)
         
         #
         # put it all together
         #
-        sizer.Add(item=inSizer, proportion=0,
-                  flag=wx.ALL | wx.EXPAND, border=5)
+        sizer.Add(item = inSizer, proportion = 0,
+                  flag = wx.ALL | wx.EXPAND, border = 5)
         
-        sizer.Add(item=self.ftypeSizer, proportion=0,
-                  flag=wx.ALL | wx.EXPAND, border=5)
+        sizer.Add(item = self.ftypeSizer, proportion = 0,
+                  flag = wx.ALL | wx.EXPAND, border = 5)
 
-        sizer.Add(item=outSizer, proportion=0,
-                  flag=wx.ALL | wx.EXPAND, border=5)
+        sizer.Add(item = outSizer, proportion = 0,
+                  flag = wx.ALL | wx.EXPAND, border = 5)
 
-        sizer.Add(item=wx.StaticLine(parent=self, id=wx.ID_ANY,
-                  style=wx.LI_HORIZONTAL), proportion=0,
-                  flag=wx.EXPAND | wx.ALL, border=5) 
+        sizer.Add(item = wx.StaticLine(parent = self, id = wx.ID_ANY,
+                  style = wx.LI_HORIZONTAL), proportion = 0,
+                  flag = wx.EXPAND | wx.ALL, border = 5) 
         
-        sizer.Add(item=bodySizer, proportion=1,
-                  flag=wx.ALL | wx.EXPAND, border=5)
+        sizer.Add(item = bodySizer, proportion = 1,
+                  flag = wx.ALL | wx.EXPAND, border = 5)
 
-        sizer.Add(item=wx.StaticLine(parent=self, id=wx.ID_ANY,
-                  style=wx.LI_HORIZONTAL), proportion=0,
-                  flag=wx.EXPAND | wx.ALL, border=5) 
+        sizer.Add(item = wx.StaticLine(parent = self, id = wx.ID_ANY,
+                  style = wx.LI_HORIZONTAL), proportion = 0,
+                  flag = wx.EXPAND | wx.ALL, border = 5) 
         
-        sizer.Add(item=btnSizer, proportion=0,
-                  flag=wx.ALL | wx.ALIGN_RIGHT, border=5)
+        sizer.Add(item = btnSizer, proportion = 0,
+                  flag = wx.ALL | wx.ALIGN_RIGHT, border = 5)
         
-        self.SetSizer(sizer)
-        sizer.Fit(self)
+        self.panel.SetAutoLayout(True)
+        self.panel.SetSizer(sizer)
+        sizer.Fit(self.panel)
+        
         self.Layout()
         
-    def __toolsPanel(self):
-        ct_panel = scrolled.ScrolledPanel(parent=self, id=wx.ID_ANY,
-	                                  size=(500, 240),
-                                          style=wx.SUNKEN_BORDER)
+    def _toolsPanel(self):
+        ct_panel = scrolled.ScrolledPanel(parent = self.panel, id = wx.ID_ANY,
+	                                  size = (500, 240),
+                                          style = wx.SUNKEN_BORDER)
 
-        self.ct_sizer = wx.GridBagSizer(vgap=2, hgap=4)
+        self.ct_sizer = wx.GridBagSizer(vgap = 2, hgap = 4)
         
         ct_panel.SetSizer(self.ct_sizer)
         ct_panel.SetAutoLayout(True)
@@ -309,33 +309,33 @@ class VectorCleaningFrame(wx.Frame):
 	num = snum + 1
 	# tool number
 	tool_no = wx.StaticText(parent = self.ct_panel, id = 3000+num,
-                                         label= str(num)+'.')
+                                         label =  str(num)+'.')
 	# tool
-	tool_cbox = wx.ComboBox(parent = self.ct_panel, id=1000+num, 
+	tool_cbox = wx.ComboBox(parent = self.ct_panel, id = 1000+num, 
 				size = (300, -1), choices = self.tool_desc_list,
 				style = wx.CB_DROPDOWN |
 				wx.CB_READONLY | wx.TE_PROCESS_ENTER)
 	self.Bind(wx.EVT_COMBOBOX, self.OnSetTool, tool_cbox)
 	# threshold
-	txt_ctrl = wx.TextCtrl(parent=self.ct_panel, id=2000+num, value='0.00',
-			       size=(100,-1),
-			       style=wx.TE_NOHIDESEL)
+	txt_ctrl = wx.TextCtrl(parent = self.ct_panel, id = 2000+num, value = '0.00',
+			       size = (100,-1),
+			       style = wx.TE_NOHIDESEL)
 	self.Bind(wx.EVT_TEXT, self.OnThreshValue, txt_ctrl)
 
 	# select
-	select = wx.CheckBox(parent=self.ct_panel, id=num)
+	select = wx.CheckBox(parent = self.ct_panel, id = num)
 	select.SetValue(False)
 	self.Bind(wx.EVT_CHECKBOX, self.OnSelect, select)
 
 	# start with row 1 and col 1 for nicer layout
-	self.ct_sizer.Add(item=tool_no, pos=(num, 1),
-			  flag=wx.ALIGN_CENTER_VERTICAL, border=5)
-	self.ct_sizer.Add(item=tool_cbox, pos=(num, 2),
-			  flag=wx.ALIGN_CENTER | wx.RIGHT, border=5)
-	self.ct_sizer.Add(item=txt_ctrl, pos=(num, 3),
-			  flag=wx.ALIGN_CENTER | wx.RIGHT, border=5)
-	self.ct_sizer.Add(item=select, pos=(num, 4),
-			  flag=wx.ALIGN_CENTER | wx.RIGHT)
+	self.ct_sizer.Add(item = tool_no, pos = (num, 1),
+			  flag = wx.ALIGN_CENTER_VERTICAL, border = 5)
+	self.ct_sizer.Add(item = tool_cbox, pos = (num, 2),
+			  flag = wx.ALIGN_CENTER | wx.RIGHT, border = 5)
+	self.ct_sizer.Add(item = txt_ctrl, pos = (num, 3),
+			  flag = wx.ALIGN_CENTER | wx.RIGHT, border = 5)
+	self.ct_sizer.Add(item = select, pos = (num, 4),
+			  flag = wx.ALIGN_CENTER | wx.RIGHT)
 
 	self.toolslines[num] = {
 	    'tool_desc' : '' ,
