@@ -128,38 +128,36 @@ int calculateIndex(char *file, int f(int, char **, struct area_entry *, double *
     /*#######################################################
        ------------------analysis loop----------------------
        ####################################################### */
-    /*first job scheduling */
-    if (next_Area(parsed, l, g, &m) != 0)
 
-	/*body */
-	while (next_Area(parsed, l, g, &m) != 0) {
-	    worker_process(&doneJob, &m);
+    /*body */
+    while (next_Area(parsed, l, g, &m) != 0) {
+	worker_process(&doneJob, &m);
 
-	    /*perc++; */
-	    /*G_percent (perc, WORKERS, 1); */
-	    if (doneJob.type == DONE) {
-		double result;
+	/*perc++; */
+	/*G_percent (perc, WORKERS, 1); */
+	if (doneJob.type == DONE) {
+	    double result;
 
-		result = doneJob.f.f_d.res;
-		/*output */
-		if (parsed != MVWIN) {
-		    print_Output(res, doneJob);
-		}
-		else {
-		    /*raster output */
-		    raster_Output(random_access, doneJob.f.f_d.aid, g,
-				  doneJob.f.f_d.res);
-		}
+	    result = doneJob.f.f_d.res;
+	    /*output */
+	    if (parsed != MVWIN) {
+		print_Output(res, doneJob);
 	    }
 	    else {
-		if (parsed != MVWIN) {
-		    error_Output(res, doneJob);
-		}
-		else {
-		    /*printf("todo ");fflush(stdout); *//* TODO scrivere su raster NULL ??? */
-		}
+		/*raster output */
+		raster_Output(random_access, doneJob.f.f_d.aid, g,
+			      doneJob.f.f_d.res);
 	    }
 	}
+	else {
+	    if (parsed != MVWIN) {
+		error_Output(res, doneJob);
+	    }
+	    else {
+		/*printf("todo ");fflush(stdout); *//* TODO scrivere su raster NULL ??? */
+	    }
+	}
+    }
 
     worker_end();
 
