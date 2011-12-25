@@ -28,9 +28,6 @@ FILES = \
 	$(ETC)/welcome \
 	$(ETC)/VERSIONNUMBER \
 	$(ETC)/prompt.py \
-	$(HTMLDIR)/variables.html \
-	$(HTMLDIR)/grass7.html \
-	$(HTMLDIR)/helptext.html \
 	$(HTMLDIR)/help_loc_struct.png \
 	$(HTMLDIR)/circle_1.png \
 	$(HTMLDIR)/circle_2.png \
@@ -50,7 +47,9 @@ ifneq ($(strip $(MINGW)),)
 		$(ETC)/winlocale$(EXE)
 endif
 
-default: $(FILES)
+HTMLFILES := $(wildcard *.html)
+
+default: $(FILES) $(patsubst %,$(HTMLDIR)/%,$(HTMLFILES))
 
 ifneq ($(strip $(MINGW)),)
 $(ARCH_BINDIR)/$(START_UP): grass.sh
@@ -110,9 +109,6 @@ $(ETC)/grass_intro $(ETC)/license $(ETC)/welcome: $(ETC)/%: %.txt version.sed
 	rm -f $@
 	sh ./version.sed "$(GRASS_VERSION_NUMBER)" "$(GRASS_VERSION_DATE)" "$(GRASS_VERSION_UPDATE_PKG)" $< > $@
 	chmod +r $@
-
-$(HTMLDIR)/%: %
-	$(INSTALL_DATA) $< $@
 
 $(ETC)/%: %
 	$(INSTALL) $< $@
