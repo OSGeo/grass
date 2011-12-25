@@ -628,6 +628,15 @@ def load_gisrc():
     
     location = os.path.join(gisdbase, location_name, mapset)
 
+    # convert selected gisenv variables to environmental variables
+    if kv.get('ADDON_PATH'):
+        addon_path = kv.get('ADDON_PATH')
+        if os.getenv('GRASS_ADDON_PATH'):
+            os.environ['GRASS_ADDON_PATH'] += os.pathsep + addon_path
+        else:
+            os.environ['GRASS_ADDON_PATH'] = addon_path
+        path_prepend(addon_path, 'PATH')
+    
 def check_lock():
     global lockfile
     if not os.path.exists(location):
