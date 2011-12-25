@@ -100,8 +100,16 @@ PERMANENT
   
   <dt>GRASS_ADDON_PATH</dt>
   <dd>[grass startup script]<br> allows to specify additional paths to
-    local GRASS modules extra to standard distribution. The default on
-    GNU/Linux is <tt>$HOME/.grass7/addons</tt>.</dd>
+    local GRASS modules or user scripts extra to standard GRASS
+    distribution.</dd>
+
+  <dt>GRASS_ADDON_BASE</dt>
+  <dd>[grass startup script]<br> allows to specify additional GISBASE
+    for local GRASS modules (normally installed as GRASS Addons
+    by <tt>g.extension</tt> module) extra to standard
+    distribution. The default on GNU/Linux
+    is <tt>$HOME/.grass7/addons</tt>, on MS
+    Windows <tt>$APPDATA\GRASS7\addons</tt>.</dd>
   
   <dt>GRASS_ADDON_ETC</dt>
   <dd>[libgis, g.findetc]<br>

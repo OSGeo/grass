@@ -167,6 +167,7 @@ help_text = r"""
   GRASS_WISH                     %s
   GRASS_HTML_BROWSER             %s
   GRASS_ADDON_PATH               %s
+  GRASS_ADDON_BASE               %s
   GRASS_BATCH_JOB                %s
   GRASS_PYTHON                   %s
 """ % (_("Usage"),
@@ -189,7 +190,8 @@ help_text = r"""
        _("select GUI (text, gui)"),
        _("set wish shell name to override 'wish'"),
        _("set html web browser for help pages"),
-       _("set additional path(s) to local GRASS modules"),
+       _("set additional path(s) to local GRASS modules or user scripts"),
+       _("set additional GISBASE for locally installed GRASS Addons"),
        _("shell script to be processed as batch job"),
        _("set python shell name to override 'python'"))
 
@@ -284,7 +286,7 @@ def read_gui():
     
     # FIXME oldtcltk, gis.m, d.m no longer exist
     if grass_gui in ['d.m', 'gis.m', 'oldtcltk', 'tcltk']:
-        warning(_("GUI '%s' not supported in this version") % grass_gui)
+        warning(_("GUI <%s> not supported in this version") % grass_gui)
 	grass_gui = default_gui
     
 def get_locale():
@@ -329,16 +331,22 @@ def path_append(dir, var):
     os.environ[var] = path
 
 def set_paths():
+    # addons (path)
     addon_path = os.getenv('GRASS_ADDON_PATH')
-    if not addon_path:
-        addon_path = os.path.join(grass_config_dir, 'addons')
-        os.environ['GRASS_ADDON_PATH'] = addon_path
-        # message(_("GRASS_ADDON_PATH undefined, using '%s'") % addon_path)
+    if addon_path:
+        for path in addons_path.split(os.pathsep):
+            path_prepend(addon_path, 'PATH')
     
-    path_prepend(addon_path, 'PATH')
-    path_prepend(os.path.join(addon_path, 'scripts'), 'PATH')
-    path_prepend(os.path.join(addon_path, 'bin'), 'PATH')
+    # addons (base)
+    addon_base = os.getenv('GRASS_ADDON_BASE')
+    if not addon_base:
+        addon_base = os.path.join(grass_config_dir, 'addons')
+        os.environ['GRASS_ADDON_BASE'] = addon_base
+    for path in addon_base.split(os.pathsep):
+        path_prepend(os.path.join(path, 'scripts'), 'PATH')
+        path_prepend(os.path.join(path, 'bin'), 'PATH')
     
+    # standard installation
     path_prepend(gfile('scripts'), 'PATH')
     path_prepend(gfile('bin'), 'PATH')
     
@@ -708,7 +716,7 @@ def check_batch_job():
 def start_gui():
     # Start the chosen GUI but ignore text
     if grass_debug:
-	message(_("GRASS GUI should be '%s'") % grass_gui)
+	message(_("GRASS GUI should be <%s>") % grass_gui)
     
     # Check for gui interface
     if grass_gui == "wxpython":
@@ -1132,7 +1140,7 @@ else:
     say_hello()
     show_info()
     if grass_gui == "wxpython":
-        message(_("Launching '%s' GUI in the background, please wait...") % grass_gui)
+        message(_("Launching <%s> GUI in the background, please wait...") % grass_gui)
 
 if sh in ['csh', 'tcsh']:
     csh_startup()

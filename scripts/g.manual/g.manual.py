@@ -45,8 +45,11 @@ def start_browser(entry):
         grass.fatal(_("Browser <%s> not found") % browser)
     
     path = os.path.join(gisbase, 'docs', 'html', entry + '.html')
-    if not os.path.exists(path) and os.getenv('GRASS_ADDON_PATH'):
-        path = os.path.join(os.getenv('GRASS_ADDON_PATH'), 'docs', 'html', entry + '.html')
+    if not os.path.exists(path) and os.getenv('GRASS_ADDON_BASE'):
+        for apath in os.getenv('GRASS_ADDON_BASE').split(os.pathsep):
+            path = os.path.join(apath, 'docs', 'html', entry + '.html')
+            if os.path.exists(path):
+                break
     
     if not os.path.exists(path):
         grass.fatal(_("No HTML manual page entry for <%s>") % entry)

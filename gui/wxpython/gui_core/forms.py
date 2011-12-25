@@ -2101,7 +2101,8 @@ class GrassGUIApp(wx.App):
     def OnInit(self):
         msg = self.grass_task.get_error_msg()
         if msg:
-            gcmd.GError(msg + '\n\nTry to set up GRASS_ADDON_PATH variable.')
+            gcmd.GError(msg + '\n\n' +
+                        _('Try to set up GRASS_ADDON_PATH or GRASS_ADDON_BASE variable.'))
             return True
         
         self.mf = TaskFrame(parent = None, task_description = self.grass_task)

@@ -143,20 +143,20 @@ def GetGRASSCmds(scriptsOnly = False):
         os.environ["PATH"] = os.getenv("PATH") + os.pathsep + os.path.join(gisbase, 'etc', 'gui', 'scripts')
         cmd = cmd + os.listdir(os.path.join(gisbase, 'etc', 'gui', 'scripts'))
     
-    # scan addons
-    if os.getenv('GRASS_ADDON_PATH'):
-        path = os.getenv('GRASS_ADDON_PATH')
-        bpath = os.path.join(path, 'bin')
-        spath = os.path.join(path, 'scripts')
-        if not scriptsOnly and os.path.exists(bpath) and \
-                os.path.isdir(bpath):
-            for fname in os.listdir(bpath):
-                name, ext = os.path.splitext(fname)
-                if not EXT_BIN:
-                    cmd.append(fname)
-                elif ext == EXT_BIN:
-                    cmd.append(name)
+    # scan addons (base)
+    if os.getenv('GRASS_ADDON_BASE'):
+        for path in os.getenv('GRASS_ADDON_BASE').split(os.pathsep):
+            bpath = os.path.join(path, 'bin')
+            if not scriptsOnly and os.path.exists(bpath) and \
+                    os.path.isdir(bpath):
+                for fname in os.listdir(bpath):
+                    name, ext = os.path.splitext(fname)
+                    if not EXT_BIN:
+                        cmd.append(fname)
+                    elif ext == EXT_BIN:
+                        cmd.append(name)
             
+            spath = os.path.join(path, 'scripts')            
             if os.path.exists(spath) and os.path.isdir(spath):
                 for fname in os.listdir(spath):
                     name, ext = os.path.splitext(fname)
@@ -164,6 +164,16 @@ def GetGRASSCmds(scriptsOnly = False):
                         cmd.append(fname)
                     elif ext == EXT_SCT:
                         cmd.append(name)
+
+    # scan addons (path)
+    if os.getenv('GRASS_ADDON_PATH'):
+        for path in os.getenv('GRASS_ADDON_PATH').split(os.pathsep):
+            for fname in os.listdir(path):
+                name, ext = os.path.splitext(fname)
+                if ext in [EXT_BIN, EXT_SCT]:
+                    cmd.append(name)
+                else:
+                    cmd.append(fname)
     
     return cmd
 
