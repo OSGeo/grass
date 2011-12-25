@@ -156,36 +156,6 @@ class PreferencesBaseDialog(wx.Dialog):
         """!Button 'Cancel' pressed"""
         self.Close()
     
-    def _saveEnv(self, lang):
-        """!Save environmental variables
-
-        @param lang locale code (eg. 'C')
-        """
-        envFile = os.path.join(GetSettingsPath(), 'bashrc')
-        
-        # read variables
-        if os.path.exists(envFile):
-            rcfile = open(os.path.join(GetSettingsPath(), 'bashrc'), "r")
-            rclines = rcfile.readlines()
-            rcfile.close()
-        else:
-            rclines = []
-        
-        rcfile = open(envFile, "w")
-        
-        # save language settings
-        grasslang = False
-        for line in rclines:
-            if 'GRASS_LANG' in line:
-                rcfile.write('GRASS_LANG: %s\n' % lang)
-                grasslang = True
-            else:
-                rcfile.write(line)
-        if not grasslang:
-            rcfile.write('GRASS_LANG: %s\n' % lang)
-        
-        rcfile.close()
-        
     def OnSave(self, event):
         """!Button 'Save' pressed
         Posts event EVT_SETTINGS_CHANGED.
@@ -193,11 +163,9 @@ class PreferencesBaseDialog(wx.Dialog):
         if self._updateSettings():
             self.settings.SaveToFile()
             self.parent.goutput.WriteLog(_('Settings saved to file \'%s\'.') % self.settings.filePath)
-            fileSettings = {}
-            self.settings.ReadSettingsFile(settings = fileSettings)
-            
-            self._saveEnv(lang = fileSettings['language']['locale']['lc_all'])
-            
+            lang = UserSettings.Get(group = 'language', key = 'locale', subkey = 'lc_all')
+            if lang:
+                RunCommand('g.gisenv', set = 'LANG=%s' % lang)
             event = wxSettingsChanged()
             wx.PostEvent(self, event)
             self.Close()
