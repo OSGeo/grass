@@ -10,7 +10,6 @@ DSTFILES := \
 	$(HTMLDIR)/grass_icon.png \
 	$(HTMLDIR)/nviz/grassdocs.css \
 	$(HTMLDIR)/nviz/grass_logo.png \
-	$(GEM_DST)
 
 categories = \
 	d:display \

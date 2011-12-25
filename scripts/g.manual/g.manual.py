@@ -60,7 +60,7 @@ def start_browser(entry):
     grass.fatal(_("Error starting browser <%s> for HTML file <%s>") % (browser, entry))
     
 def start_man(entry):
-    path = os.path.join(gisbase, 'man', 'man1', entry + '.1')
+    path = os.path.join(gisbase, 'docs', 'man', 'man1', entry + '.1')
     if not os.path.exists(path) and os.getenv('GRASS_ADDON_PATH'):
         path = os.path.join(os.getenv('GRASS_ADDON_PATH'), 'man', 'man1', entry + '.1')
     
