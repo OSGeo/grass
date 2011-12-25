@@ -146,6 +146,8 @@ def GetGRASSCmds(scriptsOnly = False):
     # scan addons (base)
     if os.getenv('GRASS_ADDON_BASE'):
         for path in os.getenv('GRASS_ADDON_BASE').split(os.pathsep):
+            if not os.path.exists(path) or not os.path.isdir(path):
+                continue
             bpath = os.path.join(path, 'bin')
             if not scriptsOnly and os.path.exists(bpath) and \
                     os.path.isdir(bpath):
@@ -168,6 +170,8 @@ def GetGRASSCmds(scriptsOnly = False):
     # scan addons (path)
     if os.getenv('GRASS_ADDON_PATH'):
         for path in os.getenv('GRASS_ADDON_PATH').split(os.pathsep):
+            if not os.path.exists(path) or not os.path.isdir(path):
+                continue
             for fname in os.listdir(path):
                 name, ext = os.path.splitext(fname)
                 if ext in [EXT_BIN, EXT_SCT]:
