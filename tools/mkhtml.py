@@ -75,6 +75,9 @@ def read_file(name):
 
 src_data = read_file(src_file)
 
+name = re.search('(<!-- meta page name:)(.*)(-->)', src_data, re.IGNORECASE)
+if name:
+    pgm = name.group(2).strip().split('-', 1)[0].strip()
 desc = re.search('(<!-- meta page description:)(.*)(-->)', src_data, re.IGNORECASE)
 if desc:
     pgm = desc.group(2).strip()

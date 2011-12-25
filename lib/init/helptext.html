@@ -1,20 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
-<html>
-<head>
- <meta name="Author" content="Markus Neteler/GRASS Development Team">
- <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
- <title>GRASS Quickstart</title>
- <link rel="stylesheet" href="grassdocs.css" type="text/css">
-</head>
-<body bgcolor="#ffffff">
-
-<img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
-
-<!-- stored in SVN in: lib/init/helptext.html -->
-
 <!-- meta page description: GRASS Quickstart -->
-<H1>GRASS Quickstart</H1>
-
 <h2>Geographic Resources Analysis Support System</h2>
 
 Commonly referred to as GRASS, this is a Geographic Information System
@@ -26,9 +10,11 @@ and environmental consulting companies.
 
 <h2>1. Startup of GRASS GIS</h2>
 
-<p>&nbsp;&nbsp;&nbsp;<IMG SRC="grass_start.png" ALT="[GRASS start screen]">
+<center>
+  <img src="grass_start.png" alt="[GRASS start screen]">
+</center>
 
-<h3><IMG SRC="circle_1.png" ALT="[(1)]">&nbsp;Selecting the GIS Database directory</h3>
+<h3><img src="circle_1.png" alt="[(1)]">&nbsp;Selecting the GIS Database directory</h3>
 
 GRASS data are stored in a directory referred to as DATABASE
 (also called "GISDBASE").  This directory has to be created
@@ -36,25 +22,25 @@ with a file manager or the <tt>mkdir</tt> command, before starting to work
 with GRASS.  Within this DATABASE, the projects are organized
 by project areas stored in subdirectories called LOCATIONs.
 
-<h3><IMG SRC="circle_2.png" ALT="[(2)]">&nbsp;Selecting the LOCATION (a project)</h3>
+<h3><img src="circle_2.png" alt="[(2)]">&nbsp;Selecting the LOCATION (a project)</h3>
 
 A LOCATION is defined by its coordinate system, map projection and
 geographical boundaries. The subdirectories and files defining a
 LOCATION are created automatically when GRASS is started the first
 time with a new LOCATION. It is important to understand that each
 projection stays in its own LOCATION.
-<p>See <IMG SRC="circle_4.png" ALT="[(4)]">&nbsp; the "Location Wizard" to
+<p>See <img src="circle_4.png" alt="[(4)]">&nbsp; the "Location Wizard" to
 easily create a new LOCATION from scratch from a geocoded file, by
 defining the parameters or by selecting the corresponding EPSG projection
 code.
 
-<h3><IMG SRC="circle_3.png" ALT="[(3)]">&nbsp;Selecting the MAPSET (a subproject)</h3>
+<h3><img src="circle_3.png" alt="[(3)]">&nbsp;Selecting the MAPSET (a subproject)</h3>
 
 Each LOCATION can have many MAPSETs. Each MAPSET is a LOCATION's
 subdirectory. New MAPSET can be added at GRASS startup (see related
 button).
 
-<h3><IMG SRC="circle_4.png" ALT="[(4)]">&nbsp;Location Wizard</h3>
+<h3><img src="circle_4.png" alt="[(4)]">&nbsp;Location Wizard</h3>
 
 The "Location Wizard" let's you easily create a new LOCATION. You
 will be guided through a series of dialogues to browse and select
@@ -62,7 +48,7 @@ predefined projections (also via EPSG code) or to define individual
 projections. Find below some rules to define the default raster
 resolution for a new LOCATION.
 
-<h3><IMG SRC="circle_5.png" ALT="[(5)]">&nbsp;Start GRASS</h3>
+<h3><img src="circle_5.png" alt="[(5)]">&nbsp;Start GRASS</h3>
 
 Once you have selected an existing LOCATION/MAPSET or defined a new
 one, you can enter GRASS. The graphical user interface 
@@ -72,15 +58,17 @@ menu system, map visualization tool, digitizer, and more.
 
 <h2>2. Background GRASS Location structure</h2>
 
-<p>&nbsp;&nbsp;&nbsp;<IMG SRC="help_loc_struct.png" ALT="[GRASS Location structure]">
-<br>
-<i>Fig. 1: GRASS Location structure</i>
+<center>
+  <img src="help_loc_struct.png" alt="[GRASS Location structure]"><br>
+  <i>Fig. 1: GRASS Location structure</i>
+</center>
+
 <p>
 A LOCATION is simply a set of directories which contains the GRASS
 data of a project. Within each LOCATION, a mandatory "PERMANENT"
-MAPSET exists which contains projection information and some
-more definitions. It can be used to store the base cartography
-in it as "PERMANENT" is visible to all users accessing a LOCATION.
+MAPSET exists which contains projection information and some more
+definitions. It can be used to store the base cartography in it as
+"PERMANENT" is visible to all users accessing a LOCATION.
 
 <h3>Creating and maintaining MAPSETs</h3>
 One motivation to maintain different MAPSETs is to store maps
@@ -202,13 +190,10 @@ Please have a look at the GRASS web site for tutorials and books:
 <a href="http://grass.osgeo.org/gdp/index.php">http://grass.osgeo.org/gdp/index.php</a>.
 
 <h2>See also</h2>
-<a href="index.html">GRASS 7 Reference Manual</a>
-<br>
-<a href="grass7.html">Manual page of GRASS 7 launch program</a>
 
-<p><i>Last changed: $Date$</i>
-<HR>
-<p><a href=index.html>Help Index</a>
-<p>&copy; 2005-2010 <a href="http://grass.osgeo.org">GRASS Development Team</a>
-</BODY>
-</HTML>
+<em>
+  <a href="grass7.html">GRASS startup program</a>
+</em>
+
+<p>
+<i>Last changed: $Date$</i>
