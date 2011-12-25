@@ -222,7 +222,7 @@ class InstallExtensionWindow(wx.Frame):
         item = self.tree.GetSelected()
         if not item or not item.IsOk() or \
                 returncode != 0 or \
-                not os.getenv('GRASS_ADDON_PATH'):
+                not os.getenv('GRASS_ADDON_BASE'):
             return
         
         name = self.tree.GetItemText(item)

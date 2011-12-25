@@ -52,7 +52,7 @@
 #% type: string
 #% key_desc: path
 #% description: Prefix where to install extension (ignored when flag -s is given)
-#% answer: $GRASS_ADDON_PATH
+#% answer: $GRASS_ADDON_BASE
 #% required: no
 #%end
 
@@ -468,10 +468,9 @@ def install_extension():
         install_extension_xml()
         grass.message(_("Installation of <%s> successfully finished") % options['extension'])
     
-    if not os.environ.has_key('GRASS_ADDON_PATH') or \
-            not os.environ['GRASS_ADDON_PATH']:
+    if not os.getenv('GRASS_ADDON_BASE'):
         grass.warning(_('This add-on module will not function until you set the '
-                        'GRASS_ADDON_PATH environment variable (see "g.manual variables")'))
+                        'GRASS_ADDON_BASE environment variable (see "g.manual variables")'))
 
 # install extension on other plaforms
 def install_extension_other():
@@ -686,19 +685,18 @@ def main():
     # define path
     if flags['s']:
         options['prefix'] = os.environ['GISBASE']
-    if options['prefix'] == '$GRASS_ADDON_PATH':
-        if not os.environ.has_key('GRASS_ADDON_PATH') or \
-                not os.environ['GRASS_ADDON_PATH']:
+    if options['prefix'] == '$GRASS_ADDON_BASE':
+        if not os.getenv('GRASS_ADDON_BASE'):
             major_version = int(grass.version()['version'].split('.', 1)[0])
-            grass.warning(_("GRASS_ADDON_PATH is not defined, "
-                            "installing to ~/.grass%d/addons/") % major_version)
+            grass.warning(_("GRASS_ADDON_BASE is not defined, "
+                            "installing to ~/.grass%d/addons") % major_version)
             options['prefix'] = os.path.join(os.environ['HOME'], '.grass%d' % major_version, 'addons')
         else:
-            path_list = os.environ['GRASS_ADDON_PATH'].split(os.pathsep)
+            path_list = os.environ['GRASS_ADDON_BASE'].split(os.pathsep)
             if len(path_list) < 1:
-                grass.fatal(_("Invalid GRASS_ADDON_PATH value - '%s'") % os.environ['GRASS_ADDON_PATH'])
+                grass.fatal(_("Invalid GRASS_ADDON_BASE value - '%s'") % os.environ['GRASS_ADDON_BASE'])
             if len(path_list) > 1:
-                grass.warning(_("GRASS_ADDON_PATH has more items, using first defined - '%s'") % path_list[0])
+                grass.warning(_("GRASS_ADDON_BASE has more items, using first defined - '%s'") % path_list[0])
             options['prefix'] = path_list[0]
                 
     # list available extensions
