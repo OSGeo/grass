@@ -479,13 +479,6 @@ class GMConsole(wx.SplitterWindow):
             finally:
                 fileHistory.close()
         
-        # update history items
-        if self.parent.GetName() == 'LayerManager':
-            try:
-                self.parent.cmdinput.SetHistoryItems()
-            except AttributeError:
-                pass
-        
         if command[0] in globalvar.grassCmd['all']:
             # send GRASS command without arguments to GUI command interface
             # except display commands (they are handled differently)
