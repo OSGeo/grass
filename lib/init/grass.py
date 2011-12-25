@@ -236,16 +236,21 @@ def create_gisrc():
     
 def read_gisrc():
     kv = {}
-    f = open(gisrc, 'r')
+    try:
+        f = open(gisrc, 'r')
+    except IOError:
+        return kv
+    
     for line in f:
 	k, v = line.split(':', 1)
 	kv[k.strip()] = v.strip()
     f.close()
+    
     return kv
 
-def read_bashrc():
+def read_env_file(path):
     kv = {}
-    f = open(os.path.join(grass_config_dir, "bashrc"), 'r')
+    f = open(path, 'r')
     for line in f:
         k, v = line.split(':', 1)
         kv[k.strip()] = v.strip()
@@ -292,27 +297,11 @@ def read_gui():
 def get_locale():
     global locale
     locale = None
-    try:
-        kv = read_bashrc()
-    except:
-        kv = {}
-    if 'GRASS_LANG' in os.environ:
-        locale = os.environ['GRASS_LANG']
-        if locale[0:2] == 'en':
-          locale = None
-    elif 'GRASS_LANG' in kv:
-        locale = kv['GRASS_LANG']
-        if locale[0:2] == 'en':
-          locale = None
-    if locale:
-        for var in ['LC_ALL', 'LC_MESSAGES', 'LANG', 'LANGUAGE']:
-            os.environ[var] = locale
-
-    for var in ['LC_ALL', 'LC_MESSAGES', 'LANG', 'LANGUAGE']:
-        loc = os.getenv(var)
-        if loc:
-            locale = loc[0:2]
-    return
+    for var in ['LC_ALL', 'LC_MESSAGES', 'LANG', 'LANGUAGE']: 
+        loc = os.getenv(var) 
+        if loc: 
+            locale = loc[0:2] 
+        return 
 
 def path_prepend(dir, var):
     path = os.getenv(var)
@@ -334,7 +323,7 @@ def set_paths():
     # addons (path)
     addon_path = os.getenv('GRASS_ADDON_PATH')
     if addon_path:
-        for path in addons_path.split(os.pathsep):
+        for path in addon_path.split(os.pathsep):
             path_prepend(addon_path, 'PATH')
     
     # addons (base)
@@ -628,14 +617,20 @@ def load_gisrc():
     
     location = os.path.join(gisdbase, location_name, mapset)
 
-    # convert selected gisenv variables to environmental variables
+def set_env_from_gisrc():
+    kv = read_gisrc()
+    
+    ### addons
     if kv.get('ADDON_PATH'):
         addon_path = kv.get('ADDON_PATH')
         if os.getenv('GRASS_ADDON_PATH'):
             os.environ['GRASS_ADDON_PATH'] += os.pathsep + addon_path
         else:
             os.environ['GRASS_ADDON_PATH'] = addon_path
-        path_prepend(addon_path, 'PATH')
+    
+    ### language
+    if kv.get('LANG'):
+        os.environ['LANGUAGE'] = kv.get('LANG')
     
 def check_lock():
     global lockfile
@@ -860,11 +855,6 @@ def bash_startup():
     f.write("export PATH=\"%s\"\n" % os.getenv('PATH'))
     f.write("export HOME=\"%s\"\n" % userhome) # restore user home path
     
-    g7bashrc = os.path.join(grass_config_dir,'bashrc')
-    if not os.path.exists(g7bashrc):
-      fg7 = open(g7bashrc, 'w')
-      fg7.close()
-    
     for env, value in os.environ.iteritems():
         if env.find('GRASS_') < 0:
             continue
@@ -1058,6 +1048,9 @@ create_gisrc()
 
 # Ensure GUI is set
 read_gui()
+
+# Get environmental variables from gisenv variables
+set_env_from_gisrc()
 
 # Get Locale name
 get_locale()
