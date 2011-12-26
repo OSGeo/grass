@@ -1816,7 +1816,7 @@ class LocationWizard(wx.Object):
                                           "Details: %(err)s") % \
                            { 'loc' : self.startpage.location,
                              'err' : msg })
-        else: # -> cancelled
+        else: # -> canceled
             self.wizard.Destroy()
             GMessage(parent = self.parent,
                      message = _("Location wizard canceled. "

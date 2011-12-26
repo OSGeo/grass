@@ -633,7 +633,7 @@ class IClassMapFrame(DoubleMapFrame):
         if not group:
             GMessage(parent = self,
                      message = _("No imagery group selected. "
-                                 "Operation cancelled."))
+                                 "Operation canceled."))
             return False
             
         groupLayers = self.GetGroupLayers(group)
@@ -642,7 +642,7 @@ class IClassMapFrame(DoubleMapFrame):
         if nLayers <= 1:
             GMessage(parent = self,
                      message = _("Group <%s> does not have enough files "
-                                 "(it has %d files). Operation cancelled.") % (group, nLayers))
+                                 "(it has %d files). Operation canceled.") % (group, nLayers))
             return False
         
         #check if vector has any areas
@@ -652,7 +652,7 @@ class IClassMapFrame(DoubleMapFrame):
         if numAreas <= 0:
             GMessage(parent = self,
             message = _("No areas given. "
-                        "Operation cancelled."))
+                        "Operation canceled."))
             return False
             
         # check if vector is inside raster
@@ -664,7 +664,7 @@ class IClassMapFrame(DoubleMapFrame):
            vectorInfo['west'] < rasterInfo['west']:
            GMessage(parent = self,
                     message = _("Vector features are outside raster layers. "
-                                "Operation cancelled."))
+                                "Operation canceled."))
            return False
             
         return True

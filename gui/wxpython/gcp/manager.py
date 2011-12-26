@@ -947,7 +947,7 @@ class GCP(MapFrame, ColumnSorterMixin):
 
         if self.list.GetItemCount() <= minNumOfItems:
             GMessage(parent = self,
-                     message=_("At least %d GCPs required. Operation cancelled.") % minNumOfItems)
+                     message=_("At least %d GCPs required. Operation canceled.") % minNumOfItems)
             return
 
         key = self.list.DeleteGCPItem()
@@ -2071,7 +2071,7 @@ class GCPList(wx.ListCtrl,
             
             if len(values) == 0:
                 GError(parent = self,
-                       message=_("Invalid coordinate value. Operation cancelled."))
+                       message=_("Invalid coordinate value. Operation canceled."))
             else:
                 for i in range(len(values)):
                     if values[i] != coords[i]:
