@@ -260,7 +260,7 @@ int main(int argc, char *argv[])
     }
 
     /* Build command line */
-    sprintf(command, "%s/etc/r.watershed.%s",
+    sprintf(command, "%s/etc/r.watershed/%s",
 	    G_gisbase(),
 	    flag_seg->answer ? "seg" : "ram");
     new_argv[new_argc++] = command;
