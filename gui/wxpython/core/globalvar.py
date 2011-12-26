@@ -147,28 +147,27 @@ def GetGRASSCmds(scriptsOnly = False):
     addons_base = os.getenv('GRASS_ADDON_BASE')
     if addons_base:
         if not os.path.exists(addons_base) or not os.path.isdir(addons_base):
-            sys.stderr.write(_("%s (%s) is not valid\n") % \
-                                 ("GRASS_ADDON_BASE", addons_base))
-        else:
-            bpath = os.path.join(addons_base, 'bin')
-            if not scriptsOnly and os.path.exists(bpath) and \
-                    os.path.isdir(bpath):
-                for fname in os.listdir(bpath):
-                    name, ext = os.path.splitext(fname)
-                    if not EXT_BIN:
-                        cmd.append(fname)
-                    elif ext == EXT_BIN:
-                        cmd.append(name)
-            
-            spath = os.path.join(addons_base, 'scripts')            
-            if os.path.exists(spath) and os.path.isdir(spath):
-                for fname in os.listdir(spath):
-                    name, ext = os.path.splitext(fname)
-                    if not EXT_SCT:
-                        cmd.append(fname)
-                    elif ext == EXT_SCT:
-                        cmd.append(name)
-
+            continue
+        
+        bpath = os.path.join(addons_base, 'bin')
+        if not scriptsOnly and os.path.exists(bpath) and \
+                os.path.isdir(bpath):
+            for fname in os.listdir(bpath):
+                name, ext = os.path.splitext(fname)
+                if not EXT_BIN:
+                    cmd.append(fname)
+                elif ext == EXT_BIN:
+                    cmd.append(name)
+        
+        spath = os.path.join(addons_base, 'scripts')            
+        if os.path.exists(spath) and os.path.isdir(spath):
+            for fname in os.listdir(spath):
+                name, ext = os.path.splitext(fname)
+                if not EXT_SCT:
+                    cmd.append(fname)
+                elif ext == EXT_SCT:
+                    cmd.append(name)
+    
     # scan addons (path)
     if os.getenv('GRASS_ADDON_PATH'):
         for path in os.getenv('GRASS_ADDON_PATH').split(os.pathsep):
