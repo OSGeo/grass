@@ -18,7 +18,7 @@
 #############################################################################
 
 #%module
-#% label: Tool to maintain the extensions in local GRASS installation.
+#% label: Maintains GRASS Addons extensions in local GRASS installation.
 #% description: Downloads, installs extensions from GRASS Addons SVN repository into local GRASS installation or removes installed extensions.
 #% keywords: general
 #% keywords: installation

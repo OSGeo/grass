@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 
 <em>g.extension</em> downloads and installs, removes or updates
-extensions from GRASS Addons SVN repository into the local GRASS
+extensions from <a href="http://svn.osgeo.org/grass/grass-addons/grass7/">GRASS Addons SVN repository</a> into the local GRASS
 installation.
 
 <p>Re-running <em>g.extension</em> on an installed GRASS Addons
@@ -24,11 +24,26 @@ Remove locally installed extension
 g.extension extension=i.points.auto operation=remove
 </pre></div>
 
+List all available extensions from GRASS Addons SVN repository
+
+<div class="code"><pre>
+g.extension -l
+</pre></div>
+
+List all locally installed extensions
+
+<div class="code"><pre>
+g.extension -a
+</pre></div>
+
 <h2>SEE ALSO</h2>
 
 <em>
   <a href="g.extension.rebuild.all.html">g.extension.rebuild.all</a>
 </em>
+
+<p>
+See also <a href="http://grass.osgeo.org/wiki/GRASS_AddOns">GRASS Addons</a> wiki page.
 
 <h2>AUTHOR</h2>
 
