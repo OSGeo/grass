@@ -11,10 +11,10 @@ msgstr ""
 "PO-Revision-Date: 2011-12-18 22:42+0100\n"
 "Last-Translator: Milena Nowotarska <do.milenki * gmail.com>\n"
 "Language-Team: Polish <grass-translations@lists.osgeo.org>\n"
+"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: pl\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Lokalize 1.0\n"
 "X-Poedit-Language: Polish\n"
@@ -2554,7 +2554,7 @@ msgstr "Parametry terenu"
 
 #: ../gui/wxpython/menustrings.py:341
 msgid "Extracts terrain parameters from a DEM."
-msgstr "Ekstrachuje parametry terenu z DEM."
+msgstr "Ekstrahuje parametry terenu z DEM."
 
 #: ../gui/wxpython/menustrings.py:342
 msgid "Textural features"
@@ -2562,7 +2562,7 @@ msgstr "Obiekty teksturalne"
 
 #: ../gui/wxpython/menustrings.py:343
 msgid "Generate images with textural features from a raster map."
-msgstr "Edytuj interaktywnie wartości komórek na mapie rastrwej."
+msgstr "Generuje obrazy z obiektami teksturalnymi z mapy rastrowej."
 
 #: ../gui/wxpython/menustrings.py:344
 msgid "Visibility"
@@ -2570,7 +2570,7 @@ msgstr "Widoczność"
 
 #: ../gui/wxpython/menustrings.py:345
 msgid "Line-of-sight raster analysis program."
-msgstr "Program rastrowy do wyznaczania linii maksymalnego widoku."
+msgstr "Program rastrowy do wyznaczania linii widoczności."
 
 #: ../gui/wxpython/menustrings.py:346
 msgid "Distance to features"
@@ -2676,7 +2676,7 @@ msgstr "Modelowanie erozji sedymentów, transportu i depozycji (SIMWE)"
 
 #: ../gui/wxpython/menustrings.py:371
 msgid "Sediment transport and erosion/deposition simulation using path sampling method (SIMWE)."
-msgstr ""
+msgstr "Symuluje erozję, transport i depozycę sedymentów metodą SIMWE."
 
 #: ../gui/wxpython/menustrings.py:372
 msgid "Topographic index map"
@@ -2685,7 +2685,7 @@ msgstr "Mapa wskaźnika topograficznego"
 #: ../gui/wxpython/menustrings.py:373
 #, fuzzy
 msgid "Creates topographic index map from elevation raster map."
-msgstr "Tworzy mapę cieniowanego reliefu z mapy wysokości (DEM)."
+msgstr "Tworzy mapę wskaźnika topograficznego z mapy wysokości (DEM)."
 
 #: ../gui/wxpython/menustrings.py:374
 msgid "TOPMODEL simulation"
@@ -2790,7 +2790,7 @@ msgstr "Ustawienia próbkowania i ram analizy"
 
 #: ../gui/wxpython/menustrings.py:400
 msgid "Configuration editor for r.li.'index'"
-msgstr ""
+msgstr "Edytor konfiguracji dla r.li. 'index'"
 
 #: ../gui/wxpython/menustrings.py:401
 msgid "Edge density"
@@ -2805,6 +2805,7 @@ msgid "Contrast weighted edge density"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:404
+#, fuzzy
 msgid "Calculates contrast weighted edge density index on a raster map"
 msgstr "Oblicza shape index z mapy rastrowej GRASS"
 
@@ -2813,6 +2814,7 @@ msgid "Patch area mean"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:406
+#, fuzzy
 msgid "Calculates mean patch size index on a raster map, using a 4 neighbour algorithm"
 msgstr "Oblicza shape index z mapy rastrowej GRASS"
 
@@ -2821,6 +2823,7 @@ msgid "Patch area range"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:408
+#, fuzzy
 msgid "Calculates range of patch area size on a raster map"
 msgstr "Oblicza shape index z mapy rastrowej GRASS"
 
@@ -2829,6 +2832,7 @@ msgid "Patch area Std Dev"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:410
+#, fuzzy
 msgid "Calculates standard deviation of patch area a raster map"
 msgstr "Oblicza shape index z mapy rastrowej GRASS"
 
@@ -2837,6 +2841,7 @@ msgid "Patch area Coeff Var"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:412
+#, fuzzy
 msgid "Calculates coefficient of variation of patch area on a raster map"
 msgstr "Oblicza shape index z mapy rastrowej GRASS"
 
@@ -2849,6 +2854,7 @@ msgid "Calculates patch density index on a raster map, using a 4 neighbour algor
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:415
+#, fuzzy
 msgid "Patch number"
 msgstr "Numer kategorii"
 
@@ -2857,9 +2863,8 @@ msgid "Calculates patch number index on a raster map, using a 4 neighbour algori
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:417
-#, fuzzy
 msgid "Dominance's diversity"
-msgstr "Dominanceova diverzita"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:418 ../gui/wxpython/menustrings.py:424
 msgid "Calculates dominance's diversity index on a raster map"
@@ -3491,7 +3496,7 @@ msgstr "Popraw i przeklasyfikuj obiekty"
 
 #: ../gui/wxpython/menustrings.py:578
 msgid "Correction of the v.lidar.growing output. It is the last of the three algorithms for LIDAR filtering."
-msgstr ""
+msgstr "Koryguje rezultat modułu v.lidar.growing. Ostatni z trzech algorytmów filtracji danych LiDAR."
 
 #: ../gui/wxpython/menustrings.py:579
 msgid "Linear referencing"
@@ -3572,11 +3577,11 @@ msgstr "Najkrótsza trasa"
 
 #: ../gui/wxpython/menustrings.py:598
 msgid "Finds shortest path on vector network."
-msgstr ""
+msgstr "Znajduje najkrótszą trasę w sieci wektorowej."
 
 #: ../gui/wxpython/menustrings.py:599
 msgid "Shortest path for sets of features"
-msgstr ""
+msgstr "Najkrótsza droga dla obiektów"
 
 #: ../gui/wxpython/menustrings.py:600
 msgid "Computes shortest distance via the network between the given sets of features."
@@ -3588,7 +3593,7 @@ msgstr "Najkrótsza trasa za pomocą rozkładów"
 
 #: ../gui/wxpython/menustrings.py:602
 msgid "Finds shortest path using timetables."
-msgstr ""
+msgstr "Znajduje najkrótszą trasę przy użyciu rozkładów jazdy."
 
 #: ../gui/wxpython/menustrings.py:603
 msgid "Shortest path for all pairs"
@@ -3596,7 +3601,7 @@ msgstr "Najkrótsza trasa dla wszystkich par"
 
 #: ../gui/wxpython/menustrings.py:604
 msgid "Computes the shortest path between all pairs of nodes in the network."
-msgstr ""
+msgstr "Oblicza najkrótszą trasę pomiędzy wszstkimi parami punktów w sieci."
 
 #: ../gui/wxpython/menustrings.py:605
 msgid "Visibility network"
@@ -3616,7 +3621,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:609
 msgid "Maximum flow"
-msgstr ""
+msgstr "Maksymalny przepływ"
 
 #: ../gui/wxpython/menustrings.py:610
 msgid "Computes the maximum flow between two sets of nodes in the network."
@@ -3759,7 +3764,7 @@ msgstr "z bazy danych"
 
 #: ../gui/wxpython/menustrings.py:646
 msgid "Creates new vector (points) map from database table containing coordinates."
-msgstr ""
+msgstr "Tworzy nową punktową mapę wektorową z tabeli bazy danych zawierającej współrzędne."
 
 #: ../gui/wxpython/menustrings.py:647
 msgid "Generate points along lines"
@@ -13205,3 +13210,6 @@ msgstr "Konwertuje mapę rastrową 3D GRASS-a do formatu VTK-Ascii."
 
 #~ msgid "Set color rules based on stddev from a map's mean value."
 #~ msgstr "Ustawia reguły kolorów bazując na odchyleniu standardowym średniej wartości mapy."
+
+#~ msgid "Creates a buffer around features of given type (areas must contain centroid)."
+#~ msgstr "Tworzy bufory wokół obiektów danego typu (obszary muszą zawierać centroid)."
