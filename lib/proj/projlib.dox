@@ -47,7 +47,7 @@ and grid).
 
 If a warning appears that a certain datum is not recognised by GRASS and
 no parameters found, the datum transformation parameters have to be
-added to $GISBASE/etc/datum.table (and also $GISBASE/etc/datumtransform.table
+added to $GISBASE/etc/proj/datum.table (and also $GISBASE/etc/proj/datumtransform.table
 if you have 7-parameter transformation parameters). No need to re-compile
 though. When adding to SVN, currently these files are still in lib/gis/. 
 

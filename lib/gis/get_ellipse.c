@@ -256,7 +256,7 @@ int G_read_ellipsoid_table(int fatal)
     if (G_is_initialized(&table.initialized))
 	return 1;
 
-    sprintf(file, "%s/etc/ellipse.table", G_gisbase());
+    sprintf(file, "%s/etc/proj/ellipse.table", G_gisbase());
     fd = fopen(file, "r");
 
     if (fd == NULL) {

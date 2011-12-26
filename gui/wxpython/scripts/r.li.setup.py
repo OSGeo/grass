@@ -251,10 +251,10 @@ class LocationWizard(wx.Object):
 #                                caption=_("Location wizard"))
     
     def __readData(self):
-        """!Get georeferencing information from tables in $GISBASE/etc"""
+        """!Get georeferencing information from tables in $GISBASE/etc/proj"""
 
         # read projection and parameters
-        f = open(os.path.join(globalvar.ETCDIR, "proj-parms.table"), "r")
+        f = open(os.path.join(globalvar.ETCDIR, "proj", "parms.table"), "r")
         self.projections = {}
         self.projdesc = {}
         for line in f.readlines():
@@ -276,7 +276,7 @@ class LocationWizard(wx.Object):
         f.close()
 
         # read datum definitions
-        f = open(os.path.join(globalvar.ETCDIR, "datum.table"), "r")
+        f = open(os.path.join(globalvar.ETCDIR, "proj", "datum.table"), "r")
         self.datums = {}
         paramslist = []
         for line in f.readlines():
@@ -294,7 +294,7 @@ class LocationWizard(wx.Object):
         f.close()
 
         # read ellipsiod definitions
-        f = open(os.path.join(globalvar.ETCDIR, "ellipse.table"), "r")
+        f = open(os.path.join(globalvar.ETCDIR, "proj", "ellipse.table"), "r")
         self.ellipsoids = {}
         for line in f.readlines():
             line = line.expandtabs(1)
@@ -310,7 +310,7 @@ class LocationWizard(wx.Object):
         f.close()
         
         # read projection parameter description and parsing table
-        f = open(os.path.join(globalvar.ETCDIR, "proj-desc.table"), "r")
+        f = open(os.path.join(globalvar.ETCDIR, "proj", "desc.table"), "r")
         self.paramdesc = {}
         for line in f.readlines():
             line = line.strip()

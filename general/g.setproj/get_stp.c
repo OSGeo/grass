@@ -89,7 +89,7 @@ int get_stp_num(void)
     int record, icode, reccnt, special_case;
     char STabbr[50], COname[50];
 
-    sprintf(FIPSfile, "%s/etc/FIPS.code", G_gisbase());
+    sprintf(FIPSfile, "%s/etc/proj/FIPS.code", G_gisbase());
 
 
     for (;;) {

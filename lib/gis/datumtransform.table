@@ -19,7 +19,7 @@
 # ellipsoid.
 #
 # Any supplementary files needed by the PROJ.4 library (e.g. gridshift tables) 
-# should be placed in the directory $GISBASE/etc/nad/.
+# should be placed in the directory $GISBASE/etc/proj/nad/.
 #
 # http://www.osni.gov.uk/downloads/Making%20maps%20GPS%20compatible.pdf
 ire65	"towgs84=482.530,-130.596,564.557,-1.042,-0.214,-0.631,8.15" "Ireland (North & South)"	"OSi/OSNI Helmert Transformation, Accuracy 0.4m"

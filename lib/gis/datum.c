@@ -14,7 +14,7 @@
  *
  *****************************************************************************/
 
-#define DATUMTABLE "/etc/datum.table"
+#define DATUMTABLE "/etc/proj/datum.table"
 
 #include <unistd.h>
 #include <string.h>

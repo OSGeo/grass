@@ -43,8 +43,8 @@ than as a directly-supplied command-line parameter.</dd>
 co-ordinate system in the <a href="http://www.epsg.org/CurrentDB.html">EPSG 
 database</a>. EPSG code support is based upon a local copy of the GDAL CSV 
 co-ordinate system and datum information files, stored in the directory 
-${GISBASE}/etc/ogr_csv. These can be updated if necessary to support future
-revisions of the EPSG database.</dd>
+<tt>$GISBASE/etc/proj/ogr_csv</tt>. These can be updated if necessary
+to support future revisions of the EPSG database.</dd>
 </dl>
 
 <p>The -p, -j, -w, etc. flags are all functional when importing projection
@@ -70,8 +70,8 @@ this.
 <p>If the input co-ordinate system contains a datum name but no
 transformation parameters, and there is more than one suitable parameter set
 available (according to the files datum.table and datumtransform.table in
-${GISBASE}/etc), g.proj will check the value of the <em>datumtrans</em>
-option and act according to the following:<br>
+<tt>$GISBASE/etc/proj</tt>), <em>g.proj</em> will check the value of
+the <em>datumtrans</em> option and act according to the following:<br>
 <strong>-1:</strong> List available parameter sets in a GUI-parsable (but also
 human-readable) format and exit.<br>
 <strong>0 (default):</strong> Continue without specifying parameters - if 
