@@ -218,7 +218,7 @@ class GDALWarp:
         # import it into a temporary map
         grass.info(_('Importing raster map...'))
         if grass.run_command('r.in.gdal',
-                             quiet = True,
+                             quiet = True, overwrite = True,
                              flags = self.gdal_flags,
                              input = warpfile,
                              output = tmpmapname) != 0:
@@ -230,7 +230,7 @@ class GDALWarp:
         pattern = tmpmapname + '*'
         grass.debug('Pattern: %s' % pattern)
         mapset = grass.gisenv()['MAPSET']
-        channel_list = grass.mlist_grouped(type = 'rast', pattern = pattern, mapset = mapset)[mapset]
+        channel_list = grass.mlist_grouped(type = 'rast', pattern = pattern)[mapset]
         grass.debug('Channel list: %s' % ','.join(channel_list))
         
         if len(channel_list) < 2: # test for single band data
@@ -319,7 +319,7 @@ class GDALWarp:
     def nowarp_import(self, file, map):
         """Import raster file into GRASS"""
         if grass.run_command('r.in.gdal',
-                             quiet = True,
+                             quiet = True, overwrite = True,
                              flags = 'o' + self.gdal_flags,
                              input = file,
                              output = map) != 0:
