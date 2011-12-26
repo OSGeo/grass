@@ -418,22 +418,27 @@ def set_browser():
     os.environ['GRASS_HTML_BROWSER'] = browser
 
 def grass_intro():
-    if locale:
-	path = gfile("locale", locale, "etc", "grass_intro")
-	if not os.access(path, os.R_OK):
-	    path = gfile("etc", "grass_intro")
-    else:
-	path = gfile("etc", "grass_intro")
-    f = open(path, 'r')
-    for line in f:
-	sys.stderr.write(line)
-    f.close()
+    intro = r"""
+WELCOME TO GRASS %s
+
+   1) Have at your side all available GRASS tutorials
+
+   2) When working on your location, the following materials
+      are extremely useful:
+      - A topo map of your area
+      - Current catalog of available computer maps
+
+   3) Check the GRASS webpages for feedback mailinglists and more:
+      http://grass.osgeo.org
+      http://www.grass-gis.org
+""" % grass_version
+    sys.stderr.write(intro)
     
     sys.stderr.write("\n")
     sys.stderr.write(_("Hit RETURN to continue"))
     sys.stdin.readline()
     
-    #for convenience, define pwd as GISDBASE:
+    # for convenience, define pwd as GISDBASE:
     s = r"""GISDBASE: %s
 LOCATION_NAME: <UNKNOWN>
 MAPSET: <UNKNOWN>
@@ -747,14 +752,7 @@ def show_banner():
 
 
 def say_hello():
-    if locale:
-	path = gfile("locale", locale, "etc", "welcome")
-	if not os.access(path, os.R_OK):
-	    path = gfile("etc", "welcome")
-    else:
-	path = gfile("etc", "welcome")
-    s = readfile(path)
-    sys.stderr.write(s)
+    sys.stderr.write(_("Welcome to GRASS %s") % grass_version)
 
 def show_info():
     sys.stderr.write(

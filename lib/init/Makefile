@@ -23,9 +23,7 @@ FILES = \
 	$(ETC)/lock$(EXE) \
 	$(ETC)/run$(EXE) \
 	$(ETC)/echo$(EXE) \
-	$(ETC)/grass_intro \
 	$(ETC)/license \
-	$(ETC)/welcome \
 	$(ETC)/VERSIONNUMBER \
 	$(ETC)/prompt.py \
 	$(HTMLDIR)/help_loc_struct.png \
@@ -105,7 +103,7 @@ $(ETC)/VERSIONNUMBER:
 	fi
 	chmod +r $@
 
-$(ETC)/grass_intro $(ETC)/license $(ETC)/welcome: $(ETC)/%: %.txt version.sed 
+$(ETC)/license: $(ETC)/%: %.txt version.sed
 	rm -f $@
 	sh ./version.sed "$(GRASS_VERSION_NUMBER)" "$(GRASS_VERSION_DATE)" "$(GRASS_VERSION_UPDATE_PKG)" $< > $@
 	chmod +r $@
