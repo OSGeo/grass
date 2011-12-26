@@ -461,7 +461,7 @@ class VectorCleaningFrame(wx.Frame):
                 err.append(_("'%s' not defined") % name)
         if err:
             GError(_("Some parameters not defined. Operation "
-                     "cancelled.\n\n%s") % '\n'.join(err),
+                     "canceled.\n\n%s") % '\n'.join(err),
                    parent = self)
             return
         

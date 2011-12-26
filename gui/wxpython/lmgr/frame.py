@@ -21,6 +21,7 @@ This program is free software under the GNU General Public License
 import sys
 import os
 import tempfile
+import stat
 try:
     import xml.etree.ElementTree as etree
 except ImportError:
@@ -579,12 +580,49 @@ class GMFrame(wx.Frame):
         
         if not filename:
             return False
-
+        
         if not os.path.exists(filename):
             GError(parent = self,
                    message = _("Script file '%s' doesn't exist. "
-                               "Operation cancelled.") % filename)
+                               "Operation canceled.") % filename)
             return
+
+        # check permission
+        if not os.access(filename, os.X_OK):
+            dlg = wx.MessageDialog(self,
+                                   message = _("Script <%s> is not executable. "
+                                               "Do you want to set the permissions "
+                                               "that allows you to run this script "
+                                               "(note that you must be the owner of the file)?" % \
+                                                   os.path.basename(filename)),
+                                   caption = _("Set permission?"),
+                                   style = wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
+            if dlg.ShowModal() != wx.ID_YES:
+                return
+            dlg.Destroy()
+            try:
+                mode = stat.S_IMODE(os.lstat(filename)[stat.ST_MODE])
+                os.chmod(filename, mode | stat.S_IXUSR)
+            except OSError:
+                GError(_("Unable to set permission. Operation canceled."), parent = self)
+                return
+        
+        # check GRASS_ADDON_PATH
+        addonPath = os.getenv('GRASS_ADDON_PATH', [])
+        if addonPath:
+            addonPath = addonPath.split(os.pathsep)
+        dirName = os.path.dirname(filename)
+        if dirName not in addonPath:
+            addonPath.append(dirName)
+            dlg = wx.MessageDialog(self,
+                                   message = _("Directory '%s' is not defined in GRASS_ADDON_PATH. "
+                                               "Do you want add this directory to GRASS_ADDON_PATH?") % \
+                                       dirName,
+                                   caption = _("Update Addons path?"),
+                                   style = wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
+            if dlg.ShowModal() == wx.ID_YES:
+                os.environ['GRASS_ADDON_PATH'] = os.pathsep.join(addonPath)
+                RunCommand('g.gisenv', set = 'ADDON_PATH=%s' % os.environ['GRASS_ADDON_PATH'])
         
         self.goutput.WriteCmdLog(_("Launching script '%s'...") % filename)
         self.goutput.RunCmd([filename], switchPage = True)
@@ -1645,6 +1683,6 @@ class GMFrame(wx.Frame):
     def MsgNoLayerSelected(self):
         """!Show dialog message 'No layer selected'"""
         wx.MessageBox(parent = self,
-                      message = _("No map layer selected. Operation cancelled."),
+                      message = _("No map layer selected. Operation canceled."),
                       caption = _("Message"),
                       style = wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
