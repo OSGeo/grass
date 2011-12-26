@@ -410,8 +410,9 @@ class DisplayDriver:
             # select by id
             if line in self.selected['ids']:
                 return True
-        else: 
+        else:
             # select by cat
+            Vect_read_line(self.poMapInfo, None, self.poCats, line)
             cats = self.poCats.contents
             for i in range(cats.n_cats):
                 if cats.field[i] == self.selected['field'] and \
@@ -716,13 +717,34 @@ class DisplayDriver:
             self._drawSelected = True
         else:
             self._drawSelected = False
-        
+
+        self.selected['field'] = layer        
         if layer > 0:
-            self.selected['field'] = layer
-            self.selected['cats'] = ids
+            self.selected['cats']  = ids
+            self.selected['ids']   = list()
+            ### cidx is not up-to-date
+            # Vect_cidx_find_all(self.poMapInfo, layer, GV_POINTS | GV_LINES, lid, ilist)
+            nlines = Vect_get_num_lines(self.poMapInfo)
+            for line in range(1, nlines + 1):
+                if not Vect_line_alive(self.poMapInfo, line):
+                    continue
+                
+                ltype = Vect_read_line (self.poMapInfo, None, self.poCats, line)
+                if not (ltype & (GV_POINTS | GV_LINES)):
+                    continue
+                
+                found = False
+                cats = self.poCats.contents
+                for i in range(0, cats.n_cats):
+                    for cat in self.selected['cats']:
+                        if cats.cat[i] == cat:
+                            found = True
+                            break
+                if found:
+                    self.selected['ids'].append(line)
         else:
-            field = -1
-            self.selected['ids'] = ids
+            self.selected['ids']   = ids
+            self.selected['cats']  = []
         
     def GetSelectedVertex(self, pos):
         """!Get PseudoDC vertex id of selected line
@@ -789,6 +811,34 @@ class DisplayDriver:
             returnId.append(DCid + 2)
         
         return returnId
+
+    def GetRegionSelected(self):
+        """!Get minimal region extent of selected features
+	
+        @return n,s,w,e
+        """
+        regionBox = bound_box()
+        lineBox = bound_box()
+        setRegion = True
+        
+        nareas = Vect_get_num_areas(self.poMapInfo)
+        for line in self.selected['ids']:
+            area = Vect_get_centroid_area(self.poMapInfo, line)
+            
+            if area > 0 and area <= nareas:
+                if not Vect_get_area_box(self.poMapInfo, area, byref(lineBox)):
+                    continue
+            else:
+                if not Vect_get_line_box(self.poMapInfo, line, byref(lineBox)):
+                    continue
+                
+            if setRegion:
+                Vect_box_copy(byref(regionBox), byref(lineBox))
+                setRegion = False
+            else:
+                Vect_box_extend(byref(regionBox), byref(lineBox))
+        
+        return regionBox.N, regionBox.S, regionBox.W, regionBox.E
 
     def DrawSelected(self, flag):
         """!Draw selected features

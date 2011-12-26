@@ -40,6 +40,11 @@ class VDigitWindow(BufferedWindow):
         
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
         
+    def GetDisplay(self):
+        if self.digit:
+            return self.digit.GetDisplay()
+        return None
+
     def SetToolbar(self, toolbar):
         """!Set up related toolbar
         """
