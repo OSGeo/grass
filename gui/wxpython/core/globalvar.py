@@ -181,7 +181,7 @@ def GetGRASSCmds(scriptsOnly = False):
                 else:
                     cmd.append(fname)
     
-    return cmd
+    return set(cmd)
 
 """@brief Collected GRASS-relared binaries/scripts"""
 grassCmd = {}
