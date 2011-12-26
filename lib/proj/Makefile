@@ -18,18 +18,19 @@ NT_TABLES = ntv1_can.dat nzgd2kgrid0005.gsb
 
 CSV_FILES := $(wildcard *.csv)
 
-NAD_DIR = $(ETC)/nad
-CSV_DIR = $(ETC)/ogr_csv
+PROJ_DIR = $(ETC)/proj
+NAD_DIR  = $(ETC)/proj/nad
+CSV_DIR  = $(ETC)/proj/ogr_csv
 
 NAD_DSTFILES := $(patsubst %.lla,$(NAD_DIR)/%,$(NAD_TABLES))
 NT_DSTFILES  := $(patsubst %,$(NAD_DIR)/%,$(NT_TABLES))
 CSV_DSTFILES := $(patsubst %,$(CSV_DIR)/%,$(CSV_FILES))
 
-NAD_SRCDIR = $(ETC)/nad/src
+NAD_SRCDIR = $(ETC)/proj/nad/src
 NAD_SRCFILES := $(patsubst %.lla,$(NAD_SRCDIR)/%.lla,$(NAD_TABLES))
 
-PROJ_TABLES := proj-desc.table proj-parms.table proj-units.table
-PROJ_DSTFILES := $(patsubst %,$(ETC)/%,$(PROJ_TABLES))
+PROJ_TABLES := desc.table parms.table units.table
+PROJ_DSTFILES := $(patsubst %,$(PROJ_DIR)/%,$(PROJ_TABLES))
 
 default: lib $(FTOL_OBJ)
 	$(MAKE) $(NAD_DSTFILES) $(CSV_DSTFILES) $(PROJ_DSTFILES) $(NAD_SRCFILES)
@@ -51,16 +52,19 @@ $(CSV_DSTFILES): $(CSV_DIR)/%.csv: %.csv | $(CSV_DIR)
 $(NAD_SRCFILES): $(NAD_SRCDIR)/%.lla: %.lla | $(NAD_SRCDIR)
 	$(INSTALL_DATA) $< $@
 
-$(ETC)/proj-%.table: proj-%.table
+$(PROJ_DSTFILES): $(PROJ_DIR)/%: % | $(PROJ_DIR)
 	$(INSTALL_DATA) $< $@
 
-$(NAD_DIR):
+$(PROJ_DIR):
 	$(MKDIR) $@
 
-$(CSV_DIR):
+$(NAD_DIR): | $(PROJ_DIR)
 	$(MKDIR) $@
 
-$(NAD_SRCDIR):
+$(CSV_DIR): | $(PROJ_DIR)
+	$(MKDIR) $@
+
+$(NAD_SRCDIR): | $(PROJ_DIR)
 	$(MKDIR) $@
 
 # Note for future improvement:

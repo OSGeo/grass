@@ -24,11 +24,11 @@
 #endif
 
 /* Data Files */
-#define ELLIPSOIDTABLE "/etc/ellipse.table"
-#define DATUMTABLE "/etc/datum.table"
-#define DATUMTRANSFORMTABLE "/etc/datumtransform.table"
+#define ELLIPSOIDTABLE "/etc/proj/ellipse.table"
+#define DATUMTABLE "/etc/proj/datum.table"
+#define DATUMTRANSFORMTABLE "/etc/proj/datumtransform.table"
 /* GRASS relative location of datum conversion lookup tables */
-#define GRIDDIR "/etc/nad"
+#define GRIDDIR "/etc/proj/nad"
 
 struct pj_info
 {

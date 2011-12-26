@@ -27,7 +27,7 @@
 #include "local_proto.h"
 
 /* GRASS relative location of OGR co-ordinate system lookup tables */
-#define CSVDIR "/etc/ogr_csv"
+#define CSVDIR "/etc/proj/ogr_csv"
 
 static void DatumNameMassage(char **);
 
@@ -384,7 +384,7 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 	char path[4095];
 	char name[80];
 
-	sprintf(path, "%s/etc/projections", G_gisbase());
+	sprintf(path, "%s/etc/proj/projections", G_gisbase());
 	if (G_lookup_key_value_from_file(path, pszProj, name, sizeof(name)) >
 	    0)
 	    G_set_key_value("name", name, *projinfo);

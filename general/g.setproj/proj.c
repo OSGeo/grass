@@ -13,7 +13,7 @@ struct proj_unit *get_proj_unit(const char *arg)
     struct proj_unit *unit;
     FILE *fp;
 
-    sprintf(buf, "%s/etc/proj-units.table", G_gisbase());
+    sprintf(buf, "%s/etc/proj/units.table", G_gisbase());
 
     fp = fopen(buf, "r");
     if (!fp)
@@ -51,7 +51,7 @@ struct proj_desc *get_proj_desc(const char *arg)
     struct proj_desc *res;
     FILE *fp;
 
-    sprintf(buf, "%s/etc/proj-desc.table", G_gisbase());
+    sprintf(buf, "%s/etc/proj/desc.table", G_gisbase());
 
     fp = fopen(buf, "r");
     if (!fp)
@@ -93,7 +93,7 @@ struct proj_parm *get_proj_parms(const char *arg)
     int done;
     FILE *fp;
 
-    sprintf(buf, "%s/etc/proj-parms.table", G_gisbase());
+    sprintf(buf, "%s/etc/proj/parms.table", G_gisbase());
 
     fp = fopen(buf, "r");
     if (!fp)
@@ -165,7 +165,7 @@ struct proj_parm *get_proj_parms(const char *arg)
 	    parm->ask = 0;
 	else {
 	    parm->ask = 1;
-	    G_warning(_("Unrecognized 'ask' value in proj-parms.table: %s"),
+	    G_warning(_("Unrecognized 'ask' value in parms.table: %s"),
 		      ask);
 	}
 
@@ -175,7 +175,7 @@ struct proj_parm *get_proj_parms(const char *arg)
 	    parm->def_exists = 1;
 	else {
 	    parm->def_exists = 0;
-	    G_warning(_("Unrecognized default value in proj-parms.table: %s"),
+	    G_warning(_("Unrecognized default value in parms.table: %s"),
 		      dfl);
 	}
     }

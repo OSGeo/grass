@@ -5,8 +5,8 @@
 #define SP_UNKOWN    3
 
 /* $GISBASE-relative locations of parameter files */
-#define STP1927PARAMS "/etc/state27"
-#define STP1983PARAMS "/etc/state83"
+#define STP1927PARAMS "/etc/proj/state27"
+#define STP1983PARAMS "/etc/proj/state83"
 
 #define RADIUS_DEF 6370997.
 
