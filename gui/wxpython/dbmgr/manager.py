@@ -1260,12 +1260,12 @@ class AttributeManager(wx.Frame):
             digitToolbar = self.mapdisplay.toolbars['vdigit']
         if digitToolbar and digitToolbar.GetLayer() and \
                 digitToolbar.GetLayer().GetName() == self.vectorName:
-
-            self.mapdisplay.digit.driver.SetSelected(cats, field=self.layer)
+            display = self.mapdisplay.GetMapWindow().GetDisplay()
+            display.SetSelected(cats, layer = self.layer)
             if zoom:
-                n, s, w, e = self.mapdisplay.digit.driver.GetRegionSelected()
-                self.mapdisplay.Map.GetRegion(n=n, s=s, w=w, e=e,
-                                              update=True)
+                n, s, w, e = display.GetRegionSelected()
+                self.mapdisplay.Map.GetRegion(n = n, s = s, w = w, e = e,
+                                              update = True)
         else:
             # add map layer with higlighted vector features
             self.AddQueryMapLayer() # -> self.qlayer
@@ -2101,13 +2101,19 @@ class AttributeManager(wx.Frame):
             wx.MessageBox(parent=self,
                           message=_('Nothing to delete.'),
                           caption=_('Message'), style=wx.CENTRE)
-        
-        if self.OnDataItemDelete(None):
+
+        display = None
+        if 'vdigit' in self.mapdisplay.toolbars:
             digitToolbar = self.mapdisplay.toolbars['vdigit']
             if digitToolbar and digitToolbar.GetLayer() and \
                     digitToolbar.GetLayer().GetName() == self.vectorName:
-                self.mapdisplay.digit.driver.SetSelected(map(int, cats), field=self.layer)
-                self.mapdisplay.digit.DeleteSelectedLines()
+                display = self.mapdisplay.GetMapWindow().GetDisplay()
+                display.SetSelected(map(int, cats), layer = self.layer)
+                self.mapdisplay.MapWindow.UpdateMap(render=True, renderVector=True)
+        
+        if self.OnDataItemDelete(None):
+            if display:
+                self.mapdisplay.GetMapWindow().digit.DeleteSelectedLines()
             else:
                 RunCommand('v.edit',
                            parent = self,
@@ -2115,7 +2121,7 @@ class AttributeManager(wx.Frame):
                            map = self.vectorName,
                            tool = 'delete',
                            cats = ListOfCatsToRange(cats))
-                
+            
             self.mapdisplay.MapWindow.UpdateMap(render=True, renderVector=True)
         
     def AddQueryMapLayer(self):

@@ -507,25 +507,21 @@ class IVDigit:
         
         # collect categories for delete if requested
         if deleteRec:
-            poCats    = Vect_new_cats_struct()
             poCatsDel = Vect_new_cats_struct()
             for i in self._display.selected['ids']:
-                if Vect_read_line(self.poMapInfo, None, poCats, i) < 0:
+                if Vect_read_line(self.poMapInfo, None, self.poCats, i) < 0:
                     Vect_destroy_cats_struct(poCatsDel)
                     self._error.ReadLine(i)
-                    
                 
-                cats = poCats.contents
+                cats = self.poCats.contents
                 for j in range(cats.n_cats):
                     Vect_cat_set(poCatsDel, cats.field[j], cats.cat[j])
-            
-            Vect_destroy_cats_struct(poCats)
         
         # register changeset
         changeset = self._addActionsBefore()
-        
         poList = self._display.GetSelectedIList()
         nlines = Vedit_delete_lines(self.poMapInfo, poList)
+        
         Vect_destroy_list(poList)
         self._display.selected['ids'] = list()
         
