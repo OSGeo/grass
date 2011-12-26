@@ -9,10 +9,17 @@ locally installed extensions can be printed by <tt>g.extension
 
 <h2>EXAMPLES</h2>
 
-Re-install all locally installed extensions
+Rebuild locally installed extensions which were built against
+different GIS Library (see <tt>g.version -r</tt>)
 
 <div class="code"><pre>
 g.extension.rebuild.all
+</pre></div>
+
+Force to rebuild all locally installed extensions
+
+<div class="code"><pre>
+g.extension.rebuild.all -f
 </pre></div>
 
 <h2>SEE ALSO</h2>
@@ -20,6 +27,9 @@ g.extension.rebuild.all
 <em>
   <a href="g.extension.html">g.extension</a>
 </em>
+
+<p>
+See also <a href="http://grass.osgeo.org/wiki/GRASS_AddOns">GRASS Addons</a> wiki page.
 
 <h2>AUTHOR</h2>
 
