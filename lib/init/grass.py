@@ -331,9 +331,8 @@ def set_paths():
     if not addon_base:
         addon_base = os.path.join(grass_config_dir, 'addons')
         os.environ['GRASS_ADDON_BASE'] = addon_base
-    for path in addon_base.split(os.pathsep):
-        path_prepend(os.path.join(path, 'scripts'), 'PATH')
-        path_prepend(os.path.join(path, 'bin'), 'PATH')
+    path_prepend(os.path.join(addon_base, 'scripts'), 'PATH')
+    path_prepend(os.path.join(addon_base, 'bin'), 'PATH')
     
     # standard installation
     path_prepend(gfile('scripts'), 'PATH')

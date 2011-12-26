@@ -692,13 +692,8 @@ def main():
                             "installing to ~/.grass%d/addons") % major_version)
             options['prefix'] = os.path.join(os.environ['HOME'], '.grass%d' % major_version, 'addons')
         else:
-            path_list = os.environ['GRASS_ADDON_BASE'].split(os.pathsep)
-            if len(path_list) < 1:
-                grass.fatal(_("Invalid GRASS_ADDON_BASE value - '%s'") % os.environ['GRASS_ADDON_BASE'])
-            if len(path_list) > 1:
-                grass.warning(_("GRASS_ADDON_BASE has more items, using first defined - '%s'") % path_list[0])
-            options['prefix'] = path_list[0]
-                
+            options['prefix'] = os.environ['GRASS_ADDON_BASE']
+    
     # list available extensions
     if flags['l'] or flags['c'] or flags['g']:
         list_available_extensions()
