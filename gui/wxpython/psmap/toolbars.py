@@ -84,6 +84,7 @@ class PsMapToolbar(BaseToolbar):
             'addNorthArrow': MetaIcon(img = 'north-arrow-add',
                                       label = _('North Arrow')),
             }
+        self.icons = icons
         
         return self._getToolbarData((('loadFile', icons['scriptLoad'],
                                       self.parent.OnLoadFile),                                    
@@ -131,10 +132,10 @@ class PsMapToolbar(BaseToolbar):
     def OnDecoration(self, event):
         """!Decorations overlay menu
         """
-        self._onMenu(((PsMapIcons["addLegend"],     self.parent.OnAddLegend),
-                      (PsMapIcons["addMapinfo"],    self.parent.OnAddMapinfo),
-                      (PsMapIcons["addScalebar"],   self.parent.OnAddScalebar),
-                      (PsMapIcons["addText"],       self.parent.OnAddText),
-                      (PsMapIcons["addImage"],      self.parent.OnAddImage),
-                      (PsMapIcons["addNorthArrow"], self.parent.OnAddNorthArrow)))
+        self._onMenu(((self.icons["addLegend"],     self.parent.OnAddLegend),
+                      (self.icons["addMapinfo"],    self.parent.OnAddMapinfo),
+                      (self.icons["addScalebar"],   self.parent.OnAddScalebar),
+                      (self.icons["addText"],       self.parent.OnAddText),
+                      (self.icons["addImage"],      self.parent.OnAddImage),
+                      (self.icons["addNorthArrow"], self.parent.OnAddNorthArrow)))
         
