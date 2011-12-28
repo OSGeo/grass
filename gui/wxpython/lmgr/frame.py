@@ -215,6 +215,18 @@ class GMFrame(wx.Frame):
         self.SetMenuBar(self.menubar)
         self.menucmd = self.menubar.GetCmd()
         
+    def _createTabMenu(self):
+        """!Creates context menu for display tabs.
+        
+        Used to rename display.
+        """
+        menu = wx.Menu()
+        item = wx.MenuItem(menu, id = wx.ID_ANY, text = _("Rename Map Display"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnRenameDisplay, item)
+        
+        return menu
+        
     def _setCopyingOfSelectedText(self):
         copy = UserSettings.Get(group = 'manager', key = 'copySelectedTextToClipboard', subkey = 'enabled')
         self.goutput.SetCopyingOfSelectedText(copy)
@@ -235,6 +247,8 @@ class GMFrame(wx.Frame):
         else:
             self.gm_cb = FN.FlatNotebook(self, id = wx.ID_ANY, style = cbStyle)
         self.gm_cb.SetTabAreaColour(globalvar.FNPageColor)
+        menu = self._createTabMenu()
+        self.gm_cb.SetRightClickMenu(menu)
         self.notebook.AddPage(page = self.gm_cb, text = _("Map layers"), name = 'layers')
         
         # create 'command output' text area
@@ -403,9 +417,6 @@ class GMFrame(wx.Frame):
         
     def OnCBPageChanged(self, event):
         """!Page in notebook (display) changed"""
-        old_pgnum = event.GetOldSelection()
-        new_pgnum = event.GetSelection()
-        
         self.curr_page   = self.gm_cb.GetCurrentPage()
         self.curr_pagenum = self.gm_cb.GetSelection()
         try:
@@ -442,9 +453,10 @@ class GMFrame(wx.Frame):
             
             # ask user to save current settings
             if maptree.GetCount() > 0:
+                name = self.gm_cb.GetPageText(self.curr_pagenum)
                 dlg = wx.MessageDialog(self,
                                        message = message,
-                                       caption = _("Close Map Display %d") % (self.curr_pagenum + 1),
+                                       caption = _("Close Map Display %s") % name,
                                        style = wx.YES_NO | wx.YES_DEFAULT |
                                        wx.CANCEL | wx.ICON_QUESTION | wx.CENTRE)
                 ret = dlg.ShowModal()
@@ -1088,6 +1100,20 @@ class GMFrame(wx.Frame):
         
         for display in displays:
             display.OnCloseWindow(event)
+        
+    def OnRenameDisplay(self, event):
+        """!Change Map Display name"""
+        name = self.gm_cb.GetPageText(self.curr_pagenum)
+        dlg = wx.TextEntryDialog(self, message = _("Enter new name:"),
+                                 caption = _("Rename Map Display"), defaultValue = name)
+        if dlg.ShowModal() == wx.ID_OK:
+            name = dlg.GetValue()
+            self.gm_cb.SetPageText(page = self.curr_pagenum, text = name)
+            mapdisplay = self.curr_page.maptree.mapdisplay
+            mapdisplay.SetTitle(_("GRASS GIS Map Display: %(name)s  - Location: %(loc)s") % \
+                                     { 'name' : name,
+                                       'loc' : grass.gisenv()["LOCATION_NAME"] })
+        dlg.Destroy()
         
     def RulesCmd(self, event):
         """!Launches dialog for commands that need rules input and
