@@ -11,6 +11,5 @@ import dbmi
 import raster3d
 import arraystats
 import cluster
-import trans
 import vedit
 
