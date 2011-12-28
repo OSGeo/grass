@@ -59,6 +59,7 @@ struct input
     const char *name;
     int fd;
     DCELL *buf;
+    DCELL weight;
 };
 
 struct output
@@ -107,7 +108,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct
     {
-	struct Option *input, *file, *output, *method, *quantile, *range;
+	struct Option *input, *file, *output, *method, *weights, *quantile, *range;
     } parm;
     struct
     {
@@ -115,6 +116,7 @@ int main(int argc, char *argv[])
     } flag;
     int i;
     int num_inputs;
+    int num_weights;
     struct input *inputs = NULL;
     int num_outputs;
     struct output *outputs = NULL;
@@ -139,7 +141,7 @@ int main(int argc, char *argv[])
 
     parm.file = G_define_standard_option(G_OPT_F_INPUT);
     parm.file->key = "file";
-    parm.file->description = _("Input file with raster map names, one per line");
+    parm.file->description = _("Input file with raster map names and optional weights per line, field separator between name and weight is |");
     parm.file->required = NO;
 
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
@@ -161,6 +163,13 @@ int main(int argc, char *argv[])
     parm.quantile->options = "0.0-1.0";
     parm.quantile->multiple = YES;
 
+    parm.weights = G_define_option();
+    parm.weights->key = "weights";
+    parm.weights->type = TYPE_DOUBLE;
+    parm.weights->required = NO;
+    parm.weights->description = _("Weighting factor for each input map, default value is 1.0 for each input map");
+    parm.weights->multiple = YES;
+    
     parm.range = G_define_option();
     parm.range->key = "range";
     parm.range->type = TYPE_DOUBLE;
@@ -203,14 +212,27 @@ int main(int argc, char *argv[])
 	max_inputs = 0;
 
 	for (;;) {
-	    char buf[GNAME_MAX];
+	    char buf[GNAME_MAX + 50]; /* Name and weight*/
+            char tok_buf[GNAME_MAX + 50];
 	    char *name;
+            int ntokens;
+            char **tokens;
 	    struct input *p;
+            double weight = 1.0;
 
 	    if (!G_getl2(buf, sizeof(buf), in))
 		break;
 
-	    name = G_chop(buf);
+            strcpy(tok_buf, buf);
+            tokens = G_tokenize(tok_buf, "|");
+            ntokens = G_number_of_tokens(tokens);
+
+            if(ntokens > 1) {
+	        name = G_chop(tokens[0]);
+	        weight = atof(G_chop(tokens[1]));
+            } else {
+	        name = G_chop(buf);
+            }
 
 	    /* Ignore empty lines */
 	    if (!*name)
@@ -223,7 +245,8 @@ int main(int argc, char *argv[])
 	    p = &inputs[num_inputs++];
 
 	    p->name = G_store(name);
-	    G_verbose_message(_("Reading raster map <%s>..."), p->name);
+            p->weight = weight;
+	    G_verbose_message(_("Reading raster map <%s> using weight %f..."), p->name, p->weight);
 	    p->buf = Rast_allocate_d_buf();
 	    if (!flag.lazy->answer)
 		p->fd = Rast_open_old(p->name, "");
@@ -231,7 +254,7 @@ int main(int argc, char *argv[])
 
 	if (num_inputs < 1)
 	    G_fatal_error(_("No raster map name found in input file"));
-
+        
 	fclose(in);
     }
     else {
@@ -242,13 +265,31 @@ int main(int argc, char *argv[])
     	if (num_inputs < 1)
 	    G_fatal_error(_("Raster map not found"));
 
+        /* count weights */
+        if(parm.weights->answers) {
+            for (i = 0; parm.weights->answers[i]; i++)
+                    ;
+            num_weights = i;
+        } else {
+            num_weights = 0;
+        }
+    
+        if (num_weights && num_weights != num_inputs)
+                G_fatal_error(_("input= and weights= must have the same number of values"));
+        
     	inputs = G_malloc(num_inputs * sizeof(struct input));
 
     	for (i = 0; i < num_inputs; i++) {
 	    struct input *p = &inputs[i];
 
 	    p->name = parm.input->answers[i];
-	    G_verbose_message(_("Reading raster map <%s>..."), p->name);
+
+            if(num_weights)
+                p->weight = (DCELL)atof(parm.weights->answers[i]);
+            else
+                p->weight = 1.0;
+
+	    G_verbose_message(_("Reading raster map <%s> using weight %f..."), p->name, p->weight);
 	    p->buf = Rast_allocate_d_buf();
 	    if (!flag.lazy->answer)
 		p->fd = Rast_open_old(p->name, "");
@@ -321,8 +362,7 @@ int main(int argc, char *argv[])
 		    Rast_set_d_null_value(&v, 1);
 		    null = 1;
 		}
-
-		values[i] = v;
+		values[i] = v * inputs[i].weight;
 	    }
 
 	    for (i = 0; i < num_outputs; i++) {
