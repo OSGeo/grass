@@ -73,7 +73,6 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
 	    /* Check if this line overlaps any feature in B */
 	    /* x Lines in B */
 	    if (btype & (GV_POINTS | GV_LINES)) {
-		int i;
 		int found = 0;
 		
 		/* Lines */
@@ -119,7 +118,6 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
 	    
 	    /* x Areas in B. */
 	    if (btype & GV_AREA) {
-		int i;
 		
 		Vect_select_areas_by_box(bIn, &abox, List);
 		for (i = 0; i < List->n_values; i++) {
@@ -187,7 +185,7 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
 #endif
 		if (!AGeom)
 		    G_fatal_error(_("Unable to read area id %d from vector map <%s>"),
-				  aline, Vect_get_full_name(aIn));
+				  aarea, Vect_get_full_name(aIn));
 	    }
 
 	    /* x Lines in B */
@@ -254,7 +252,7 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
 		Vect_select_areas_by_box(bIn, &abox, TmpList);
 
 		for (i = 0; i < LList->n_values; i++) {
-		    int j, aline;
+		    int j;
 
 		    aline = abs(LList->value[i]);
 
@@ -271,8 +269,15 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
 
 			/* Check if any centroid of area B is in area A.
 			 * This test is important in if area B is completely within area A */
-			bcentroid = Vect_get_area_centroid(bIn, barea);
-			Vect_read_line(bIn, BPoints, NULL, bcentroid);
+			if ((bcentroid = Vect_get_area_centroid(bIn, barea)) > 0)
+			    Vect_read_line(bIn, BPoints, NULL, bcentroid);
+			else {
+			    double x, y;
+
+			    Vect_get_point_in_area(bIn, barea, &x, &y);
+			    Vect_reset_line(BPoints);
+			    Vect_append_point(BPoints, x, y, 0.0);
+			}
 
 			if (operator != OP_OVERLAP) {
 #ifdef HAVE_GEOS
