@@ -6,7 +6,6 @@ SUBDIRS = rtree \
 	dglib \
 	diglib \
 	Vlib \
-	transform \
 	vedit \
 	neta
 
