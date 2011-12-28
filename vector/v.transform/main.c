@@ -39,26 +39,13 @@
 #include "trans.h"
 #include "local_proto.h"
 
-double ax[MAX_COOR];	/*  current map   */
-double ay[MAX_COOR];
-
-double bx[MAX_COOR];	/*  map we are going to   */
-double by[MAX_COOR];
-
-int use[MAX_COOR];	/*  where the coordinate came from */
-double residuals[MAX_COOR];
-double rms;
-
-/*  this may be used in the future  */
-int reg_cnt;		/*  count of registered points */
-
 int main(int argc, char *argv[])
 {
-    struct file_info Current, Trans, Coord;
+    struct file_info Current, Trans;
 
     struct GModule *module;
 
-    struct Option *vold, *vnew, *pointsfile, *xshift, *yshift, *zshift,
+    struct Option *vold, *vnew, *xshift, *yshift, *zshift,
 	*xscale, *yscale, *zscale, *zrot, *columns, *table, *field;
     struct Flag *tozero_flag, *print_mat_flag, *swap_flag;
 
@@ -68,7 +55,7 @@ int main(int argc, char *argv[])
     struct bound_box box;
 
     double ztozero;
-    double trans_params[7];	// xshift, ..., xscale, ..., zrot
+    double trans_params[7];	/* xshift, ..., xscale, ..., zrot */
 
     /* columns */
     unsigned int i;
@@ -105,13 +92,6 @@ int main(int argc, char *argv[])
     field->guisection = _("Custom");
 
     vnew = G_define_standard_option(G_OPT_V_OUTPUT);
-
-    pointsfile = G_define_standard_option(G_OPT_F_INPUT);
-    pointsfile->key = "pointsfile";
-    pointsfile->required = NO;
-    pointsfile->label = _("ASCII file holding transform coordinates");
-    pointsfile->description = _("If not given, transformation parameters "
-				"(xshift, yshift, zshift, xscale, yscale, zscale, zrot) are used instead");
 
     xshift = G_define_option();
     xshift->key = "xshift";
@@ -207,20 +187,6 @@ int main(int argc, char *argv[])
 		       "Otherwise the table is overwritten."));
     }
 
-    if (pointsfile->answer != NULL) {
-	strcpy(Coord.name, pointsfile->answer);
-    }
-    else {
-	Coord.name[0] = '\0';
-    }
-
-    /* open coord file */
-    if (Coord.name[0] != '\0') {
-	if ((Coord.fp = fopen(Coord.name, "r")) == NULL)
-	    G_fatal_error(_("Unable to open file with coordinates <%s>"),
-			  Coord.name);
-    }
-
     /* open vector maps */
     Vect_open_old2(&Old, vold->answer, "", field->answer);
     Vect_open_new(&New, vnew->answer, Vect_is_3d(&Old) || tozero_flag->answer ||
@@ -246,14 +212,6 @@ int main(int argc, char *argv[])
     Vect_set_scale(&New, 1);
     Vect_set_zone(&New, 0);
     Vect_set_thresh(&New, 0.0);
-
-    /* points file */
-    if (Coord.name[0]) {
-	create_transform_from_file(&Coord);
-
-	if (Coord.name[0] != '\0')
-	    fclose(Coord.fp);
-    }
 
     Vect_get_map_box(&Old, &box);
 
@@ -312,7 +270,7 @@ int main(int argc, char *argv[])
     trans_params[IDX_ZROT] = atof(zrot->answer);
 
     G_important_message(_("Tranforming features..."));
-    transform_digit_file(&Old, &New, Coord.name[0] ? 1 : 0,
+    transform_digit_file(&Old, &New,
 			 ztozero, swap_flag->answer, trans_params,
 			 table->answer, columns_name, Vect_get_field_number(&Old, field->answer));
 
@@ -328,11 +286,7 @@ int main(int argc, char *argv[])
     G_verbose_message(_(" N: %-10.3f    S: %-10.3f"), box.N, box.S);
     G_verbose_message(_(" E: %-10.3f    W: %-10.3f"), box.E, box.W);
     G_verbose_message(_(" B: %6.3f    T: %6.3f"), box.B, box.T);
-    
-    /* print the transformation matrix if requested */
-    if (print_mat_flag->answer)
-      print_transform_matrix();
-    
+
     Vect_close(&New);
 
     G_done_msg(" ");

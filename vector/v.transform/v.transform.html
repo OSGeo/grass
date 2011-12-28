@@ -8,33 +8,16 @@ unreferenced vector maps or to modify existing geocoded maps.
 
 <h2>NOTES</h2>
 
-When using an ASCII table containing source and target coordinate pairs,
-in each row four coordinate values separated by white space have to be specified.
-Comments are permitted and have to be indicated by a '#' character.
-<p>Example for a points file of a linear transformation from XY to UTM coordinates
-(L: left, R: right, U: upper, L: lower, N, S, W, E):
-
-<div class="code"><pre>
-# Linear transformation from XY to UTM coordinates:
-# 4 maps corners defined
-# UL NW
-# UR NE
-# LR SW
-# LL SE
--584  585  598000 4920770
- 580  585  598020 4920770
- 580 -600  598020 4920750
--584 -600  598000 4920750
-</pre></div>
-
-<p>The ground control points may be also (ir)regularly distributed
-and can be more than four points.
+Coordinate transformation based on Ground Control Points (GCPs) is done 
+by <em><a href="v.rectify.html">v.rectify</a></em> and not supported by
+<em>v.transform</em>.
 
 <p>Transformation parameters (i.e. <em>xshift</em>, <em>yshift</em>,
 etc.) can be fetched from attribute table connected to the vector
 map. In this case vector objects can be transformed with different
 parameters based on their category number. If the parameter cannot be
 fetched from the table, default value is used instead.<p>
+
 <h3>Affine Transformation Matrix</h3>
 The affine transfomation matrix can optionally be printed with the '-m'
 flag. The format of the matrix is:
@@ -52,11 +35,12 @@ output of a similar operation performed in R.
 <h3>DXF/DWG drawings</h3>
 
 <p>Most DXF/DWG drawings are done within XY coordinate space. To transform 
-them to a national grid, we can use 'v.transform' with a 4 point 
-transformation.
+them to a national grid, we can use <em>v.transform</em> together with 
+<em>v.rectify</em> and a first-order 4 point transformation.
 
 <div class="code"><pre>
-v.transform -t in=watertowerXY out=watertowerUTM points=wt.points zscale=0.04 zshift=1320
+v.transform -t in=watertowerXY out=watertower_z zscale=0.04 zshift=1320
+v.rectify in=watertower_z out=watertowerUTM points=wt.points order=1
 </pre></div>
 
 <h3>Extrude 2D vector points to 3D based on attribute column values</h3>
@@ -103,6 +87,7 @@ The resulting map is a 3D vector map.
 
 <h2>SEE ALSO</h2>
 
+<em><a href="v.rectify.html">v.rectify</a></em>, 
 <em><a href="v.in.ogr.html">v.in.ogr</a></em>
 
 <h2>AUTHOR</h2>
