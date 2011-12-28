@@ -59,6 +59,7 @@ int main(int argc, char *argv[])
     struct cat_list *Clist;
     int i, j, ret, option, otype, type, with_z, step, id;
     int n_areas, centr, new_centr, nmodified;
+    int open_level;
     double x, y;
     int cat, ocat, scat, *fields, nfields, field;
     struct GModule *module;
@@ -185,9 +186,30 @@ int main(int argc, char *argv[])
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
+    /* do we need topology ? */
+    if ((option == O_ADD && (otype & GV_AREA)) ||
+	(option == O_REP && (otype & GV_AREA)) ||
+        (option == O_TRANS)) /* topo for cidx check */
+	open_level = 2;
+    else
+	open_level = 1;
+
     /* open input vector */
-    Vect_set_open_level(2);
-    Vect_open_old2(&In, in_opt->answer, "", field_opt->answer);
+    if (open_level > 1) {
+	Vect_set_open_level(open_level);
+	if (Vect_open_old2(&In, in_opt->answer, "", field_opt->answer) < open_level) {
+	    G_warning(_("Can not open vector <%s> on level %d"),
+			  Vect_get_full_name(&In), open_level);
+	    open_level = 1;
+	}
+    }
+    if (open_level == 1) {
+	Vect_set_open_level(open_level);
+	if (Vect_open_old2(&In, in_opt->answer, "", field_opt->answer) < open_level) {
+	    G_fatal_error(_("Can not open vector <%s> on level %d"),
+			  Vect_get_full_name(&In), open_level);
+	}
+    }
 
     /* read fields */
     i = nfields = 0;
@@ -206,7 +228,11 @@ int main(int argc, char *argv[])
     if (nfields != 2 && option == O_CHFIELD)
 	G_fatal_error(_("2 layers must be specified"));
 
-    if (option == O_TRANS) {
+    if (option == O_TRANS && open_level == 1 && nfields < 2) {
+	G_fatal_error(_("2 layers must be specified"));
+    }
+
+    if (option == O_TRANS && open_level > 1) {
 	/* check if field[1] already exists */
 	if (nfields > 1) {
 	    if (Vect_cidx_get_field_index(&In, fields[1]) != -1)
@@ -275,7 +301,7 @@ int main(int argc, char *argv[])
 	    Vect_write_line(&Out, type, Points, Cats);
 	}
 	/* Areas */
-	if (otype & GV_AREA) {
+	if ((otype & GV_AREA) && open_level > 1) {
 	    n_areas = Vect_get_num_areas(&In);
 	    new_centr = 0;
 	    for (i = 1; i <= n_areas; i++) {
@@ -472,6 +498,62 @@ int main(int argc, char *argv[])
 		if ((freps[fld]->max[FR_ALL] == 0) ||
 		    freps[fld]->max[FR_ALL] < cat)
 		    freps[fld]->max[FR_ALL] = cat;
+	    }
+	}
+	/* Areas */
+	if ((otype & GV_AREA) && open_level > 1 && !Clist) {
+	    n_areas = Vect_get_num_areas(&In);
+	    for (i = 1; i <= n_areas; i++) {
+		int k;
+
+		centr = Vect_get_area_centroid(&In, i);
+		if (centr <= 0)
+		    continue;	/* Area without centroid */
+		    
+		Vect_read_line(&In, NULL, Cats, centr);
+		for (j = 0; j < Cats->n_cats; j++) {
+		    field = Cats->field[j];
+		    cat = Cats->cat[j];
+
+
+		    ret = FALSE;
+		    for (k = 0; k < nfreps; k++) {
+			if (freps[k]->field == field) {
+			    fld = k;
+			    ret = TRUE;
+			    break;
+			}
+		    }
+		    if (!ret) {	/* field report doesn't exist */
+			nfreps++;
+			freps =
+			    (FREPORT **) G_realloc(freps,
+						   nfreps * sizeof(FREPORT *));
+			fld = nfreps - 1;
+			freps[fld] = (FREPORT *) G_calloc(1, sizeof(FREPORT));
+			freps[fld]->field = field;
+			for (j = 0; j < FRTYPES; j++) {
+			    /* cat '0' is valid category number */
+			    freps[fld]->min[k] = -1;
+			}
+			if ((Fi = Vect_get_field(&In, field)) != NULL) {
+			    freps[fld]->table = G_store(Fi->table);
+			}
+			else {
+			    freps[fld]->table = '\0';
+			}
+		    }
+
+		    freps[fld]->count[FR_AREA]++;
+
+		    if (freps[fld]->min[FR_AREA] == -1 ||
+			freps[fld]->min[FR_AREA] > cat)
+			freps[fld]->min[FR_AREA] = cat;
+
+		    if ((freps[fld]->max[FR_AREA] == 0) ||
+			freps[fld]->max[FR_AREA] < cat)
+			freps[fld]->max[FR_AREA] = cat;
+		}
 	    }
 	}
 	for (i = 0; i < nfreps; i++) {
