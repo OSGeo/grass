@@ -171,7 +171,7 @@ def get_installed_extensions(force = False):
     
     ret = list()
     for tnode in tree.findall('task'):
-        ret.append(tnode.get('name'))
+        ret.append(tnode.get('name').strip())
     
     return ret
 
@@ -416,12 +416,16 @@ def install_extension_xml():
     
 # install extension on MS Windows
 def install_extension_win():
-    ### TODO: do not use hardcoded url
+    ### TODO: do not use hardcoded url - http://wingrass.fsv.cvut.cz/grassXX/addonsX.X.X
     version = grass.version()['version'].split('.')
-    url = "http://wingrass.fsv.cvut.cz/grass%s%s/addons/" % (version[0], version[1])
     grass.message(_("Downloading precompiled GRASS Addons <%s>...") % options['extension'])
+    url = "http://wingrass.fsv.cvut.cz/grass%s%s/addons" % (version[0], version[1])
+    if version[2][1:] != 'svn':
+        url += '%s.%s.%s' % (version[0], version[1], version[2])
+    grass.debug("url=%s" % url, 1)
+    
     try:
-        f = urlopen(url + options['extension'] + '.zip')
+        f = urlopen(url + '/' + options['extension'] + '.zip')
         
         # create addons dir if not exists
         if not os.path.exists(options['prefix']):
@@ -702,7 +706,8 @@ def main():
         elist = get_installed_extensions()
         if elist:
             grass.message(_("List of installed extensions:"))
-            print os.linesep.join(elist)
+            sys.stdout.write('\n'.join(elist))
+            sys.stdout.write('\n')
         else:
             grass.info(_("No extension installed"))
         return 0
