@@ -1,6 +1,6 @@
-north: 80N
+north: 80
 south: 0
-east: 120E
+east: 120
 west: 0
 rows: 8
 cols: 12
