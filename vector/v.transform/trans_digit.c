@@ -8,7 +8,7 @@
 #define PI M_PI
 
 int transform_digit_file(struct Map_info *Old, struct Map_info *New,
-			 int shift_file, double ztozero, int swap, double *trans_params_def,
+			 double ztozero, int swap, double *trans_params_def,
 			 char *table, char **columns, int field)
 {
     int i, type, cat, line;
@@ -124,28 +124,22 @@ int transform_digit_file(struct Map_info *Old, struct Map_info *New,
 
 	/* transform points */
 	for (i = 0; i < Points->n_points; i++) {
-	    if (shift_file) {
-		transform_a_into_b(Points->x[i], Points->y[i],
-				   &(Points->x[i]), &(Points->y[i]));
-	    }
-	    else {
-		G_debug(3, "idx=%d, cat=%d, xshift=%g, yshift=%g, zshift=%g, "
-			"xscale=%g, yscale=%g, zscale=%g, zrot=%g",
-			i, cat, trans_params[IDX_XSHIFT],
-			trans_params[IDX_YSHIFT], trans_params[IDX_ZSHIFT],
-			trans_params[IDX_XSCALE], trans_params[IDX_YSCALE],
-			trans_params[IDX_ZSCALE], trans_params[IDX_ZROT]);
+	    G_debug(3, "idx=%d, cat=%d, xshift=%g, yshift=%g, zshift=%g, "
+		    "xscale=%g, yscale=%g, zscale=%g, zrot=%g",
+		    i, cat, trans_params[IDX_XSHIFT],
+		    trans_params[IDX_YSHIFT], trans_params[IDX_ZSHIFT],
+		    trans_params[IDX_XSCALE], trans_params[IDX_YSCALE],
+		    trans_params[IDX_ZSCALE], trans_params[IDX_ZROT]);
 
-		/* transform point */
-		x = trans_params[IDX_XSHIFT] +
-		    trans_params[IDX_XSCALE] * Points->x[i] * cos(ang)
-		    - trans_params[IDX_YSCALE] * Points->y[i] * sin(ang);
-		y = trans_params[IDX_YSHIFT] +
-		    trans_params[IDX_XSCALE] * Points->x[i] * sin(ang)
-		    + trans_params[IDX_YSCALE] * Points->y[i] * cos(ang);
-		Points->x[i] = x;
-		Points->y[i] = y;
-	    }
+	    /* transform point */
+	    x = trans_params[IDX_XSHIFT] +
+		trans_params[IDX_XSCALE] * Points->x[i] * cos(ang)
+		- trans_params[IDX_YSCALE] * Points->y[i] * sin(ang);
+	    y = trans_params[IDX_YSHIFT] +
+		trans_params[IDX_XSCALE] * Points->x[i] * sin(ang)
+		+ trans_params[IDX_YSCALE] * Points->y[i] * cos(ang);
+	    Points->x[i] = x;
+	    Points->y[i] = y;
 
 	    /* ztozero shifts oldmap z to zero, zshift shifts rescaled object
 	     * to target elevation: */
