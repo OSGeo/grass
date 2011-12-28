@@ -292,7 +292,7 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
 			    
 			    /* Check intersectin of lines from List with area B */
 			    if (line_overlap_area(aIn, aline,
-						  bIn, barea, List->box[j])) {
+						  bIn, barea, TmpList->box[j])) {
 				found = 1;
 				break;
 			    }
