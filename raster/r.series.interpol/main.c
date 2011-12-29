@@ -47,12 +47,12 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct
     {
-	struct Option *input, *file, *output, *sampoint, *method;
+	struct Option *input, *file, *output, *sampoints, *method;
     } parm;
     int i;
     int num_outputs;
     int num_inputs;
-    int num_sampoint;
+    int num_sampoints;
     struct map_store *inputs = NULL;
     struct map_store *outputs = NULL;
     int interpol_method = LINEAR_INTERPOLATION;
@@ -73,13 +73,13 @@ int main(int argc, char *argv[])
     parm.output->multiple = YES;
     parm.output->required = NO;
 
-    parm.sampoint = G_define_option();
-    parm.sampoint->key = "sampoint";
-    parm.sampoint->type = TYPE_DOUBLE;
-    parm.sampoint->required = NO;
-    parm.sampoint->description = _("Sampling point for each input map,"
+    parm.sampoints = G_define_option();
+    parm.sampoints->key = "sampoints";
+    parm.sampoints->type = TYPE_DOUBLE;
+    parm.sampoints->required = NO;
+    parm.sampoints->description = _("Sampling point for each input map,"
                                    " the point must in between the interval (0;1)");
-    parm.sampoint->multiple = YES;
+    parm.sampoints->multiple = YES;
 
     parm.file = G_define_standard_option(G_OPT_F_INPUT);
     parm.file->key = "file";
@@ -100,13 +100,17 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
     if (parm.output->answer && parm.file->answer)
-        G_fatal_error(_("input= and file= are mutually exclusive"));
+        G_fatal_error(_("output= and file= are mutually exclusive"));
  
-    if (!parm.input->answer && !parm.file->answer)
-        G_fatal_error(_("Please specify input= or file="));
+    if (parm.sampoints->answer && parm.file->answer)
+        G_fatal_error(_("sampoints= and file= are mutually exclusive"));
  
-    if (parm.output->answer && !parm.sampoint->answer)
-        G_fatal_error(_("Please specify input= and sampoint="));
+
+    if (!parm.output->answer && !parm.file->answer)
+        G_fatal_error(_("Please specify output= or file="));
+ 
+    if (parm.output->answer && !parm.sampoints->answer)
+        G_fatal_error(_("Please specify output= and sampoints="));
 
     if(G_strncasecmp(parm.method->answer, "linear", 6))
         interpol_method = LINEAR_INTERPOLATION;
@@ -192,7 +196,7 @@ int main(int argc, char *argv[])
                 if(pos < left || pos > right)
 	            G_fatal_error(_("Wrong sampling point for output map <%s> in file <%s> "
                                     "near line %i, sampling point must be in between (%g:%g) not: %g"), 
-                                     name, parm.file->answer, num_outputs, left, right, pos);
+                                     name, parm.file->answer, num_outputs + 1, left, right, pos);
             } else {
 	        name = G_chop(buf);
             }
@@ -232,12 +236,12 @@ int main(int argc, char *argv[])
     	if (num_outputs < 1)
 	    G_fatal_error(_("No output raster map not found"));
 
-        for (i = 0; parm.sampoint->answers[i]; i++)
+        for (i = 0; parm.sampoints->answers[i]; i++)
 	    ;
-        num_sampoint = i;
+        num_sampoints = i;
     
-        if (num_sampoint != num_outputs)
-                G_fatal_error(_("input= and sampoint= must have the same number of values"));
+        if (num_sampoints != num_outputs)
+                G_fatal_error(_("input= and sampoints= must have the same number of values"));
         
     	outputs = G_malloc(num_outputs * sizeof(struct map_store));
 
@@ -245,7 +249,7 @@ int main(int argc, char *argv[])
 	    struct map_store *p = &outputs[i];
 
 	    p->name = parm.output->answers[i];
-            p->pos = (DCELL)atof(parm.sampoint->answers[i]);
+            p->pos = (DCELL)atof(parm.sampoints->answers[i]);
             p->fd = -1;
             p->buf = NULL;
         }
