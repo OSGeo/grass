@@ -1,0 +1,60 @@
+<h2>DESCRIPTION</h2>
+
+<em>r.series.interpol</em> 
+interpolates raster maps which are located temporal or spatial in between existing input raster maps. 
+The interpolation is performed at specific sampling positions. The sampling position for each output map must be specified.
+Sampling positions are always located in the normalized intervall (0;1).
+The following interpolation methods are supported.
+<ul> 
+ <li>linear: Linear interpolation. Two input maps are required. The first input map is located at position 0.0, the second input map at position 1.0.
+ </ul> 
+
+<h2>EXAMPLES</h2>
+<p>Interpolate linear three new maps at 3 sampling positions in between the interval (0;1) 
+
+First prepare the input maps:
+<br>
+<div class="code"><pre>
+g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
+
+r.mapcalc --o expr="prec_1 = 100"
+r.mapcalc --o expr="prec_5 = 500"
+</pre></div>
+
+<p>Interpolate
+
+<div class="code"><pre>
+r.series.interpol --o --v input=prec_1,prec_5 output=prec_2,prec_3,prec_4 sampoint=0.25,0.5,0.75 method=linear
+</pre></div>
+
+<p>Interpolate using the file option: 
+First prepare the input file:
+<br>
+<div class="code"><pre>
+TMP_FILE=`g.tempfile pid=1`
+cat > "${TMP_FILE}" << EOF
+prec_2|0.25
+prec_3|0.5
+prec_4|0.75
+EOF
+</pre></div>
+
+<p>Interpolate
+
+<div class="code"><pre>
+r.series.interpol --o --v input=prec_1,prec_5 file="${TMP_FILE}" method=linear
+</pre></div>
+
+The created maps will have the values 200, 300 and 400.
+
+
+<h2>SEE ALSO</h2>
+
+<em><a href="r.series.html">r.series</a></em>
+<em><a href="g.region.html">g.region</a></em>
+
+<h2>AUTHOR</h2>
+
+S&ouml;ren Gebbert
+
+<p><i>Last changed: $Date: 2011-12-28 15:26:22 +0100 (Mi, 28 Dez 2011) $</i>
