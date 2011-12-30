@@ -665,7 +665,7 @@ class AttributeManager(wx.Frame):
         self._layout()
 
         # self.SetMinSize(self.GetBestSize())
-        self.SetSize((680, 550)) # FIXME hard-coded size
+        self.SetSize((700, 550)) # FIXME hard-coded size
         self.SetMinSize(self.GetSize())
 
     def _createBrowsePage(self, onlyLayer = -1):
@@ -736,9 +736,14 @@ class AttributeManager(wx.Frame):
             sqlSimple.Bind(wx.EVT_RADIOBUTTON,   self.OnChangeSql)
             sqlAdvanced.Bind(wx.EVT_RADIOBUTTON, self.OnChangeSql)
 
-            sqlWhereColumn = wx.Choice(parent = panel, id = wx.ID_ANY,
-                                       size = (100,-1),
-                                       choices = self.mapDBInfo.GetColumns(self.mapDBInfo.layers[layer]['table']))
+            sqlWhereColumn = wx.ComboBox(parent = panel, id = wx.ID_ANY,
+                                         size = (100,-1),
+                                         style = wx.CB_SIMPLE | wx.CB_READONLY,
+                                         choices = self.mapDBInfo.GetColumns(self.mapDBInfo.layers[layer]['table']))
+            sqlWhereColumn.SetSelection(0)
+            sqlWhereCond = wx.Choice(parent = panel, id = wx.ID_ANY,
+                                     size = (55,-1),
+                                     choices = ['=', '!=', '<', '<=', '>', '>='])
             sqlWhereValue = wx.TextCtrl(parent = panel, id = wx.ID_ANY, value = "",
                                         style = wx.TE_PROCESS_ENTER)
             sqlWhereValue.SetToolTipString(_("Example: %s") % "MULTILANE = 'no' AND OBJECTID < 10")
@@ -767,6 +772,9 @@ class AttributeManager(wx.Frame):
                                flag = wx.ALIGN_CENTER_VERTICAL)
             sqlSimpleSizer.Add(item = sqlWhereColumn,
                                flag = wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
+            sqlSimpleSizer.Add(item = sqlWhereCond,
+                               flag = wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
+                               border = 3)
             sqlSimpleSizer.Add(item = sqlWhereValue, proportion = 1,
                                flag = wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
             sqlFlexSizer.Add(item = sqlSimpleSizer,
@@ -800,6 +808,7 @@ class AttributeManager(wx.Frame):
             self.layerPage[layer]['simple']    = sqlSimple.GetId()
             self.layerPage[layer]['advanced']  = sqlAdvanced.GetId()
             self.layerPage[layer]['whereColumn'] = sqlWhereColumn.GetId()
+            self.layerPage[layer]['whereOperator'] = sqlWhereCond.GetId()
             self.layerPage[layer]['where']     = sqlWhereValue.GetId()
             self.layerPage[layer]['builder']   = btnSqlBuilder.GetId()
             self.layerPage[layer]['statement'] = sqlStatement.GetId()
@@ -1913,10 +1922,11 @@ class AttributeManager(wx.Frame):
         if self.FindWindowById(self.layerPage[self.layer]['simple']).GetValue():
             # simple sql statement
             whereCol = self.FindWindowById(self.layerPage[self.layer]['whereColumn']).GetStringSelection()
+            whereOpe = self.FindWindowById(self.layerPage[self.layer]['whereOperator']).GetStringSelection()
             whereVal = self.FindWindowById(self.layerPage[self.layer]['where']).GetValue().strip()
             try:
                 if len(whereVal) > 0:
-                    keyColumn = listWin.LoadData(self.layer, where = whereCol + whereVal)
+                    keyColumn = listWin.LoadData(self.layer, where = whereCol + whereOpe + whereVal)
                 else:
                     keyColumn = listWin.LoadData(self.layer)
             except GException, e:
