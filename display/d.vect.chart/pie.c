@@ -33,7 +33,10 @@ pie(double cx, double cy, int size, double *val, int ncols, COLOR * ocolor,
     ang = 0;
     for (i = 0; i < ncols; i++) {
 	sum += val[i];
-	end_ang = 2 * PI * sum / tot_sum;
+	if (tot_sum > 0.0)
+           end_ang = 2 * PI * sum / tot_sum;
+        else
+           end_ang = 0;
 	Vect_reset_line(Points);
 
 	if (val[0] != tot_sum)	/* all in one slice, don't draw line to center */
