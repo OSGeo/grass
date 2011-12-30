@@ -237,7 +237,7 @@ int main(int argc, char *argv[])
 
 	    Vect_get_area_points(&In, areanum, Points);
 
-	    G_debug(3, "height: %f\n", objheight);
+	    G_debug(3, "height: %f", objheight);
 
 	    extrude(&In, &Out, Cats, Points,
 		    fdrast, trace, objheight, voffset, window, GV_AREA,
