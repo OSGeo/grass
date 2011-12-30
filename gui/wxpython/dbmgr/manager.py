@@ -863,124 +863,116 @@ class AttributeManager(wx.Frame):
             list.Bind(wx.EVT_RIGHT_UP,            self.OnTableRightUp) #wxGTK
             self.layerPage[layer]['tableData'] = list.GetId()
             
-            #
-            # add column
-            #
-            columnBox = wx.StaticBox(parent=panel, id=wx.ID_ANY,
-                                     label=" %s " % _("Manage columns"))
+            # manage columns (add)
+            addBox = wx.StaticBox(parent = panel, id = wx.ID_ANY,
+                                  label = " %s " % _("Add column"))
+            addSizer = wx.StaticBoxSizer(addBox, wx.HORIZONTAL)
             
-            columnSizer = wx.StaticBoxSizer(columnBox, wx.VERTICAL)
-            
-            addSizer = wx.FlexGridSizer (cols=5, hgap=3, vgap=3)
-            addSizer.AddGrowableCol(3)
-            
-            label  = wx.StaticText(parent=panel, id=wx.ID_ANY, label=_("Column name"))
-            column = wx.TextCtrl(parent=panel, id=wx.ID_ANY, value='',
-                                 size=(150, -1), style=wx.TE_PROCESS_ENTER)
+            column = wx.TextCtrl(parent = panel, id = wx.ID_ANY, value = '',
+                                 size=(150, -1), style = wx.TE_PROCESS_ENTER)
             column.Bind(wx.EVT_TEXT,       self.OnTableAddColumnName)
             column.Bind(wx.EVT_TEXT_ENTER, self.OnTableItemAdd)
             self.layerPage[layer]['addColName'] = column.GetId()
-            addSizer.Add(item=label,
-                         flag=wx.ALIGN_CENTER_VERTICAL)
-            addSizer.Add(item=column,
-                         flag=wx.ALIGN_CENTER_VERTICAL)
-            # data type
-            label  = wx.StaticText(parent=panel, id=wx.ID_ANY, label=_("Data type"))
-            addSizer.Add(item=label,
-                         flag=wx.ALIGN_CENTER_VERTICAL)
+            addSizer.Add(item= wx.StaticText(parent = panel, id = wx.ID_ANY, label=_("Column")),
+                         flag = wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
+                         border = 5)
+            addSizer.Add(item = column, proportion = 1,
+                         flag = wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
+                         border = 5)
             
-            subSizer = wx.BoxSizer(wx.HORIZONTAL)
-            type = wx.Choice (parent=panel, id=wx.ID_ANY,
-                              choices = ["integer",
-                                         "double",
-                                         "varchar",
-                                         "date"]) # FIXME
-            type.SetSelection(0)
-            type.Bind(wx.EVT_CHOICE, self.OnTableChangeType)
-            self.layerPage[layer]['addColType'] = type.GetId()
-            subSizer.Add(item=type,
+            ctype = wx.Choice (parent=panel, id=wx.ID_ANY,
+                               choices = ["integer",
+                                          "double",
+                                          "varchar",
+                                          "date"]) # FIXME
+            ctype.SetSelection(0)
+            ctype.Bind(wx.EVT_CHOICE, self.OnTableChangeType)
+            self.layerPage[layer]['addColType'] = ctype.GetId()
+            addSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY, label=_("Type")), 
+                         flag = wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
+                         border = 5)
+            addSizer.Add(item = ctype,
                          flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
-                         border=3)
-            # length
-            label  = wx.StaticText(parent=panel, id=wx.ID_ANY, label=_("Data length"))
-            length = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
-                                 initial=250,
-                                 min=1, max=1e6)
+                         border = 5)
+            
+            length = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (65, -1),
+                                 initial = 250,
+                                 min = 1, max = 1e6)
             length.Enable(False)
             self.layerPage[layer]['addColLength'] = length.GetId()
-            subSizer.Add(item=label,
-                         flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
-                         border=3)
-            subSizer.Add(item=length,
-                         flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
-                         border=3)
+            addSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY, label = _("Length")),
+                         flag = wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
+                         border = 5)
+            addSizer.Add(item = length,
+                         flag = wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
+                         border = 5)
             
-            addSizer.Add(item=subSizer,
-                         flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
-                         border=3)
-            
-            btnAddCol = wx.Button(parent=panel, id=wx.ID_ANY, label=_("Add"))
+            btnAddCol = wx.Button(parent = panel, id = wx.ID_ADD)
             btnAddCol.Bind(wx.EVT_BUTTON, self.OnTableItemAdd)
             btnAddCol.Enable(False)
             self.layerPage[layer]['addColButton'] = btnAddCol.GetId()
-            addSizer.Add(item=btnAddCol,
-                         proportion=0,
-                         flag=wx.EXPAND | wx.ALIGN_RIGHT | wx.FIXED_MINSIZE |
-                         wx.ALIGN_CENTER_VERTICAL )
+            addSizer.Add(item = btnAddCol, flag = wx.ALL | wx.ALIGN_RIGHT | wx.EXPAND,
+                         border = 3)
             
-            # rename col
-            label  = wx.StaticText(parent=panel, id=wx.ID_ANY, label=_("Rename column"))
-            column = wx.ComboBox(parent=panel, id=wx.ID_ANY, size=(150, -1),
-                                 style=wx.CB_SIMPLE | wx.CB_READONLY,
-                                 choices=self.mapDBInfo.GetColumns(table))
+            # manage columns (rename)
+            renameBox = wx.StaticBox(parent = panel, id = wx.ID_ANY,
+                                     label = " %s " % _("Rename column"))
+            renameSizer = wx.StaticBoxSizer(renameBox, wx.HORIZONTAL)
+            
+            column = wx.ComboBox(parent = panel, id = wx.ID_ANY, size = (150, -1),
+                                 style = wx.CB_SIMPLE | wx.CB_READONLY,
+                                 choices = self.mapDBInfo.GetColumns(table))
             column.SetSelection(0)
             self.layerPage[layer]['renameCol'] = column.GetId()
-            addSizer.Add(item=label,
-                         flag=wx.ALIGN_CENTER_VERTICAL)
-            addSizer.Add(item=column,
-                         flag=wx.ALIGN_CENTER_VERTICAL)
-            label  = wx.StaticText(parent=panel, id=wx.ID_ANY, label=_("To"))
-            columnTo = wx.TextCtrl(parent=panel, id=wx.ID_ANY, value='',
-                                   size=(150, -1), style=wx.TE_PROCESS_ENTER)
+            renameSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY, label = _("Column")),
+                            flag = wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
+                            border = 5)
+            renameSizer.Add(item = column, proportion = 1,
+                            flag = wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
+                            border = 5)
+            
+            columnTo = wx.TextCtrl(parent = panel, id = wx.ID_ANY, value = '',
+                                   size = (150, -1), style = wx.TE_PROCESS_ENTER)
             columnTo.Bind(wx.EVT_TEXT,       self.OnTableRenameColumnName)
             columnTo.Bind(wx.EVT_TEXT_ENTER, self.OnTableItemChange)
             self.layerPage[layer]['renameColTo'] = columnTo.GetId()
-            addSizer.Add(item=label,
-                         flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER)
-            addSizer.Add(item=columnTo,
-                         flag=wx.ALIGN_CENTER_VERTICAL)
-            btnRenameCol = wx.Button(parent=panel, id=wx.ID_ANY, label=_("&Rename"))
+            renameSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY, label = _("To")),
+                            flag = wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
+                            border = 5)
+            renameSizer.Add(item = columnTo, proportion = 1,
+                            flag = wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
+                            border = 5)
+            
+            btnRenameCol = wx.Button(parent = panel, id = wx.ID_ANY, label = _("&Rename"))
             btnRenameCol.Bind(wx.EVT_BUTTON, self.OnTableItemChange)
             btnRenameCol.Enable(False)
             self.layerPage[layer]['renameColButton'] = btnRenameCol.GetId()
+            renameSizer.Add(item = btnRenameCol, flag = wx.ALL | wx.ALIGN_RIGHT | wx.EXPAND,
+                            border = 3)
             
-            addSizer.Add(item=btnRenameCol,
-                         proportion=0,
-                         flag=wx.EXPAND | wx.ALIGN_RIGHT | wx.FIXED_MINSIZE |
-                         wx.ALIGN_CENTER_VERTICAL)
-
-            columnSizer.Add(item=addSizer, proportion=1,
-                            flag=wx.ALL | wx.EXPAND, border=3)
-            
-            tableSizer.Add(item=list,
-                           flag=wx.ALL | wx.EXPAND,
-                           proportion=1,
-                           border=3)
+            tableSizer.Add(item = list,
+                           flag = wx.ALL | wx.EXPAND,
+                           proportion = 1,
+                           border = 3)
             
             pageSizer.Add(item=dbSizer,
-                          flag=wx.ALL | wx.EXPAND,
-                          proportion=0,
-                          border=3)
+                          flag = wx.ALL | wx.EXPAND,
+                          proportion = 0,
+                          border = 3)
             
-            pageSizer.Add(item=tableSizer,
-                          flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND,
-                          proportion=1,
-                          border=3)
- 
-            pageSizer.Add(item=columnSizer,
-                          flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND,
-                          proportion=0,
-                          border=3)
+            pageSizer.Add(item = tableSizer,
+                          flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND,
+                          proportion = 1,
+                          border = 3)
+            
+            pageSizer.Add(item = addSizer,
+                          flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND,
+                          proportion = 0,
+                          border = 3)
+            pageSizer.Add(item = renameSizer,
+                          flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND,
+                          proportion = 0,
+                          border = 3)
             
             panel.SetSizer(pageSizer)
         
