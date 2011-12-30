@@ -302,13 +302,13 @@ class VirtualAttributeList(wx.ListCtrl,
                     cat = self.columns[columns[j]]['ctype'] (value)
                 except ValueError, e:
                     cat = -1
-                    gGError(parent = self,
-                            message = _("Error loading attribute data. "
-                                      "Record number: %(rec)d. Unable to convert value '%(val)s' in "
-                                      "key column (%(key)s) to integer.\n\n"
-                                      "Details: %(detail)s") % \
-                                { 'rec' : i + 1, 'val' : value,
-                                  'key' : keyColumn, 'detail' : e})
+                    GError(parent = self,
+                           message = _("Error loading attribute data. "
+                                       "Record number: %(rec)d. Unable to convert value '%(val)s' in "
+                                       "key column (%(key)s) to integer.\n\n"
+                                       "Details: %(detail)s") % \
+                               { 'rec' : i + 1, 'val' : value,
+                                 'key' : keyColumn, 'detail' : e})
             j += 1
         
         self.itemIndexMap.append(i)
