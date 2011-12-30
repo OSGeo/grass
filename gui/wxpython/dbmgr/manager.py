@@ -863,10 +863,10 @@ class AttributeManager(wx.Frame):
             
             tableSizer = wx.StaticBoxSizer(tableBox, wx.VERTICAL)
             
-            list = self._createTableDesc(panel, table)
-            list.Bind(wx.EVT_COMMAND_RIGHT_CLICK, self.OnTableRightUp) #wxMSW
-            list.Bind(wx.EVT_RIGHT_UP,            self.OnTableRightUp) #wxGTK
-            self.layerPage[layer]['tableData'] = list.GetId()
+            tlist = self._createTableDesc(panel, table)
+            tlist.Bind(wx.EVT_COMMAND_RIGHT_CLICK, self.OnTableRightUp) #wxMSW
+            tlist.Bind(wx.EVT_RIGHT_UP,            self.OnTableRightUp) #wxGTK
+            self.layerPage[layer]['tableData'] = tlist.GetId()
             
             # manage columns (add)
             addBox = wx.StaticBox(parent = panel, id = wx.ID_ANY,
@@ -955,7 +955,7 @@ class AttributeManager(wx.Frame):
             renameSizer.Add(item = btnRenameCol, flag = wx.ALL | wx.ALIGN_RIGHT | wx.EXPAND,
                             border = 3)
             
-            tableSizer.Add(item = list,
+            tableSizer.Add(item = tlist,
                            flag = wx.ALL | wx.EXPAND,
                            proportion = 1,
                            border = 3)
@@ -989,15 +989,15 @@ class AttributeManager(wx.Frame):
         
     def _createTableDesc(self, parent, table):
         """!Create list with table description"""
-        list = TableListCtrl(parent = parent, id = wx.ID_ANY,
+        tlist = TableListCtrl(parent = parent, id = wx.ID_ANY,
                              table = self.mapDBInfo.tables[table],
                              columns = self.mapDBInfo.GetColumns(table))
-        list.Populate()
+        tlist.Populate()
         # sorter
         # itemDataMap = list.Populate()
         # listmix.ColumnSorterMixin.__init__(self, 2)
 
-        return list
+        return tlist
 
     def _createManageLayerPage(self):
         """!Create manage page"""
@@ -1057,15 +1057,15 @@ class AttributeManager(wx.Frame):
 
     def _createLayerDesc(self, parent):
         """!Create list of linked layers"""
-        list = LayerListCtrl(parent = parent, id = wx.ID_ANY,
+        tlist = LayerListCtrl(parent = parent, id = wx.ID_ANY,
                              layers = self.mapDBInfo.layers)
         
-        list.Populate()
+        tlist.Populate()
         # sorter
         # itemDataMap = list.Populate()
         # listmix.ColumnSorterMixin.__init__(self, 2)
 
-        return list
+        return tlist
 
     def _layout(self):
         """!Do layout"""
@@ -1114,12 +1114,12 @@ class AttributeManager(wx.Frame):
             self.Bind(wx.EVT_MENU, self.OnDeleteSelected,     id = self.popupDataID11)
             self.Bind(wx.EVT_MENU, self.OnDataReload,         id = self.popupDataID10)
 
-        list = self.FindWindowById(self.layerPage[self.layer]['data'])
+        tlist = self.FindWindowById(self.layerPage[self.layer]['data'])
         # generate popup-menu
         menu = wx.Menu()
         menu.Append(self.popupDataID1, _("Edit selected record"))
-        selected = list.GetFirstSelected()
-        if not self.editable or selected == -1 or list.GetNextSelected(selected) != -1:
+        selected = tlist.GetFirstSelected()
+        if not self.editable or selected == -1 or tlist.GetNextSelected(selected) != -1:
             menu.Enable(self.popupDataID1, False)
         menu.Append(self.popupDataID2, _("Insert new record"))
         menu.Append(self.popupDataID3, _("Delete selected record(s)"))
@@ -1134,14 +1134,14 @@ class AttributeManager(wx.Frame):
         menu.AppendSeparator()
         menu.Append(self.popupDataID7, _("Highlight selected features"))
         menu.Append(self.popupDataID8, _("Highlight selected features and zoom"))
-        if not self.map or len(list.GetSelectedItems()) == 0:
+        if not self.map or len(tlist.GetSelectedItems()) == 0:
             menu.Enable(self.popupDataID7, False)
             menu.Enable(self.popupDataID8, False)
         menu.Append(self.popupDataID9, _("Extract selected features"))
         menu.Append(self.popupDataID11, _("Delete selected features"))
         if not self.editable:
             menu.Enable(self.popupDataID11, False)
-        if list.GetFirstSelected() == -1:
+        if tlist.GetFirstSelected() == -1:
             menu.Enable(self.popupDataID3, False)
             menu.Enable(self.popupDataID9, False)
             menu.Enable(self.popupDataID11, False)
@@ -1153,10 +1153,10 @@ class AttributeManager(wx.Frame):
 
         # update statusbar
         self.log.write(_("Number of loaded records: %d") % \
-                           list.GetItemCount())
+                           tlist.GetItemCount())
 
     def OnDataItemDelete(self, event):
-        """!Delete selected item(s) from the list (layer/category pair)"""
+        """!Delete selected item(s) from the tlist (layer/category pair)"""
         dlist = self.FindWindowById(self.layerPage[self.layer]['data'])
         item = dlist.GetFirstSelected()
         
@@ -1249,8 +1249,8 @@ class AttributeManager(wx.Frame):
         if not self.map or not self.mapdisplay:
             return
         
-        list = self.FindWindowById(self.layerPage[self.layer]['data'])
-        cats = map(int, list.GetSelectedItems())
+        tlist = self.FindWindowById(self.layerPage[self.layer]['data'])
+        cats = map(int, tlist.GetSelectedItems())
 
         digitToolbar = None
         if 'vdigit' in self.mapdisplay.toolbars:
@@ -1322,7 +1322,7 @@ class AttributeManager(wx.Frame):
         
     def OnDataItemAdd(self, event):
         """!Add new record to the attribute table"""
-        list      = self.FindWindowById(self.layerPage[self.layer]['data'])
+        tlist      = self.FindWindowById(self.layerPage[self.layer]['data'])
         table     = self.mapDBInfo.layers[self.layer]['table']
         keyColumn = self.mapDBInfo.layers[self.layer]['key']
         
@@ -1331,12 +1331,12 @@ class AttributeManager(wx.Frame):
 
         # collect names of all visible columns
         columnName = []
-        for i in range(list.GetColumnCount()): 
-            columnName.append(list.GetColumn(i).GetText())
+        for i in range(tlist.GetColumnCount()): 
+            columnName.append(tlist.GetColumn(i).GetText())
 
         # maximal category number
-        if len(list.itemCatsMap.values()) > 0:
-            maxCat = max(list.itemCatsMap.values())
+        if len(tlist.itemCatsMap.values()) > 0:
+            maxCat = max(tlist.itemCatsMap.values())
         else:
             maxCat = 0 # starting category '1'
         
@@ -1373,7 +1373,7 @@ class AttributeManager(wx.Frame):
                 cat = -1
 
             try:
-                if cat in list.itemCatsMap.values():
+                if cat in tlist.itemCatsMap.values():
                     raise ValueError(_("Record with category number %d "
                                        "already exists in the table.") % cat)
 
@@ -1390,19 +1390,19 @@ class AttributeManager(wx.Frame):
                             continue
 
                     try:
-                        if list.columns[columnName[i]]['ctype'] == int:
+                        if tlist.columns[columnName[i]]['ctype'] == int:
                             # values[i] is stored as text. 
                             value = float(values[i])
                         else:
                             value = values[i]
-                        values[i] = list.columns[columnName[i]]['ctype'] (value)
+                        values[i] = tlist.columns[columnName[i]]['ctype'] (value)
 
                     except:
                         raise ValueError(_("Value '%(value)s' needs to be entered as %(type)s.") % 
                                          {'value' : str(values[i]),
-                                          'type' : list.columns[columnName[i]]['type']})
+                                          'type' : tlist.columns[columnName[i]]['type']})
                     columnsString += '%s,' % columnName[i]
-                    if list.columns[columnName[i]]['ctype'] == str:
+                    if tlist.columns[columnName[i]]['ctype'] == str:
                         valuesString += "'%s'," % values[i]
                     else:
                         valuesString += "%s," % values[i]
@@ -1417,16 +1417,16 @@ class AttributeManager(wx.Frame):
             if missingKey is True:
                 del values[0]
                 
-            # add new item to the list
-            if len(list.itemIndexMap) > 0:
-                index = max(list.itemIndexMap) + 1
+            # add new item to the tlist
+            if len(tlist.itemIndexMap) > 0:
+                index = max(tlist.itemIndexMap) + 1
             else:
                 index = 0
             
-            list.itemIndexMap.append(index)
-            list.itemDataMap[index] = values
-            list.itemCatsMap[index] = cat
-            list.SetItemCount(list.GetItemCount() + 1)
+            tlist.itemIndexMap.append(index)
+            tlist.itemDataMap[index] = values
+            tlist.itemCatsMap[index] = cat
+            tlist.SetItemCount(tlist.GetItemCount() + 1)
 
             self.listOfSQLStatements.append('INSERT INTO %s (%s) VALUES(%s)' % \
                                                 (table,
@@ -1436,22 +1436,22 @@ class AttributeManager(wx.Frame):
             
     def OnDataItemEdit(self, event):
         """!Edit selected record of the attribute table"""
-        list      = self.FindWindowById(self.layerPage[self.layer]['data'])
-        item      = list.GetFirstSelected()
+        tlist      = self.FindWindowById(self.layerPage[self.layer]['data'])
+        item      = tlist.GetFirstSelected()
         if item == -1:
             return
 
         table     = self.mapDBInfo.layers[self.layer]['table']
         keyColumn = self.mapDBInfo.layers[self.layer]['key']
-        cat       = list.itemCatsMap[list.itemIndexMap[item]]
+        cat       = tlist.itemCatsMap[tlist.itemIndexMap[item]]
 
         # (column name, value)
         data = []
 
         # collect names of all visible columns
         columnName = []
-        for i in range(list.GetColumnCount()): 
-            columnName.append(list.GetColumn(i).GetText())
+        for i in range(tlist.GetColumnCount()): 
+            columnName.append(tlist.GetColumn(i).GetText())
 
 
         # key column must be always presented
@@ -1472,9 +1472,9 @@ class AttributeManager(wx.Frame):
                     keyId = i
             else:
                 if missingKey is True:
-                    value = list.GetItem(item, i-1).GetText()
+                    value = tlist.GetItem(item, i-1).GetText()
                 else:
-                    value = list.GetItem(item, i).GetText()
+                    value = tlist.GetItem(item, i).GetText()
                 data.append((columnName[i], ctype, value))
 
         dlg = ModifyTableRecord(parent = self, 
@@ -1488,28 +1488,28 @@ class AttributeManager(wx.Frame):
                 for i in range(len(values)): 
                     if i == keyId: # skip key column
                         continue
-                    if list.GetItem(item, i).GetText() != values[i]:
+                    if tlist.GetItem(item, i).GetText() != values[i]:
                         if len(values[i]) > 0:
                             try:
                                 if missingKey is True:
                                     idx = i - 1
                                 else:
                                     idx = i
-                                if list.columns[columnName[i]]['ctype'] != type(''):
-                                    if list.columns[columnName[i]]['ctype'] == int:
+                                if tlist.columns[columnName[i]]['ctype'] != type(''):
+                                    if tlist.columns[columnName[i]]['ctype'] == int:
                                         value = float(values[i])
                                     else:
                                         value = values[i]
-                                    list.itemDataMap[item][idx] = \
-                                        list.columns[columnName[i]]['ctype'] (value)
+                                    tlist.itemDataMap[item][idx] = \
+                                        tlist.columns[columnName[i]]['ctype'] (value)
                                 else:
-                                    list.itemDataMap[item][idx] = values[i]
+                                    tlist.itemDataMap[item][idx] = values[i]
                             except:
                                 raise ValueError(_("Value '%(value)s' needs to be entered as %(type)s.") % \
                                                      {'value' : str(values[i]),
-                                                      'type' : list.columns[columnName[i]]['type']})
+                                                      'type' : tlist.columns[columnName[i]]['type']})
 
-                            if list.columns[columnName[i]]['ctype'] == str:
+                            if tlist.columns[columnName[i]]['ctype'] == str:
                                 updateString += "%s='%s'," % (columnName[i], values[i])
                             else:
                                 updateString += "%s=%s," % (columnName[i], values[i])
@@ -1528,36 +1528,36 @@ class AttributeManager(wx.Frame):
                                                      keyColumn, cat))
                 self.ApplyCommands()
 
-            list.Update(self.mapDBInfo)
+            tlist.Update(self.mapDBInfo)
                         
     def OnDataReload(self, event):
-        """!Reload list of records"""
+        """!Reload tlist of records"""
         self.OnApplySqlStatement(None)
         self.listOfSQLStatements = []
 
     def OnDataSelectAll(self, event):
         """!Select all items"""
-        list = self.FindWindowById(self.layerPage[self.layer]['data'])
+        tlist = self.FindWindowById(self.layerPage[self.layer]['data'])
         item = -1
 
         while True:
-            item = list.GetNextItem(item)
+            item = tlist.GetNextItem(item)
             if item == -1:
                 break
-            list.SetItemState(item, wx.LIST_STATE_SELECTED, wx.LIST_STATE_SELECTED)
+            tlist.SetItemState(item, wx.LIST_STATE_SELECTED, wx.LIST_STATE_SELECTED)
 
         event.Skip()
 
     def OnDataSelectNone(self, event):
         """!Deselect items"""
-        list = self.FindWindowById(self.layerPage[self.layer]['data'])
+        tlist = self.FindWindowById(self.layerPage[self.layer]['data'])
         item = -1
 
         while True:
-            item = list.GetNextItem(item, wx.LIST_STATE_SELECTED)
+            item = tlist.GetNextItem(item, wx.LIST_STATE_SELECTED)
             if item == -1:
                 break
-            list.SetItemState(item, 0, wx.LIST_STATE_SELECTED | wx.LIST_STATE_FOCUSED)
+            tlist.SetItemState(item, 0, wx.LIST_STATE_SELECTED | wx.LIST_STATE_FOCUSED)
 
         event.Skip()
 
@@ -1595,7 +1595,7 @@ class AttributeManager(wx.Frame):
 
     def OnTableItemChange(self, event):
         """!Rename column in the table"""
-        list   = self.FindWindowById(self.layerPage[self.layer]['tableData'])
+        tlist   = self.FindWindowById(self.layerPage[self.layer]['tableData'])
         name   = self.FindWindowById(self.layerPage[self.layer]['renameCol']).GetValue()
         nameTo = self.FindWindowById(self.layerPage[self.layer]['renameColTo']).GetValue()
 
@@ -1607,9 +1607,9 @@ class AttributeManager(wx.Frame):
                                "No column name defined."))
             return
         else:
-            item = list.FindItem(start = -1, str = name)
+            item = tlist.FindItem(start = -1, str = name)
             if item > -1:
-                if list.FindItem(start = -1, str = nameTo) > -1:
+                if tlist.FindItem(start = -1, str = nameTo) > -1:
                     GError(parent = self,
                            message = _("Unable to rename column <%(column)s> to "
                                        "<%(columnTo)s>. Column already exists "
@@ -1618,7 +1618,7 @@ class AttributeManager(wx.Frame):
                                 'table' : table})
                     return
                 else:
-                    list.SetItemText(item, nameTo)
+                    tlist.SetItemText(item, nameTo)
 
                     self.listOfCommands.append(('v.db.renamecolumn',
                                                 { 'map'    : self.vectorName,
@@ -1666,15 +1666,15 @@ class AttributeManager(wx.Frame):
 
     def OnTableItemDelete(self, event):
         """!Delete selected item(s) from the list"""
-        list = self.FindWindowById(self.layerPage[self.layer]['tableData'])
+        tlist = self.FindWindowById(self.layerPage[self.layer]['tableData'])
         
-        item = list.GetFirstSelected()
+        item = tlist.GetFirstSelected()
         
         if UserSettings.Get(group = 'atm', key = 'askOnDeleteRec', subkey = 'enabled'):
             deleteDialog = wx.MessageBox(parent = self,
                                          message = _("Selected column '%s' will PERMANENTLY removed "
                                                    "from table. Do you want to drop the column?") % \
-                                             (list.GetItemText(item)),
+                                             (tlist.GetItemText(item)),
                                          caption = _("Drop column(s)"),
                                          style = wx.YES_NO | wx.CENTRE)
             if deleteDialog != wx.YES:
@@ -1684,10 +1684,10 @@ class AttributeManager(wx.Frame):
             self.listOfCommands.append(('v.db.dropcolumn',
                                         { 'map' : self.vectorName,
                                           'layer' : self.layer,
-                                          'column' : list.GetItemText(item) }
+                                          'column' : tlist.GetItemText(item) }
                                         ))
-            list.DeleteItem(item)
-            item = list.GetFirstSelected()
+            tlist.DeleteItem(item)
+            item = tlist.GetFirstSelected()
         
         # apply changes
         self.ApplyCommands()
@@ -1871,14 +1871,14 @@ class AttributeManager(wx.Frame):
             table = self.mapDBInfo.layers[self.layer]['table']
 
             # update table description
-            list = self.FindWindowById(self.layerPage[self.layer]['tableData'])
-            list.Update(table = self.mapDBInfo.tables[table],
+            tlist = self.FindWindowById(self.layerPage[self.layer]['tableData'])
+            tlist.Update(table = self.mapDBInfo.tables[table],
                         columns = self.mapDBInfo.GetColumns(table))
             self.OnTableReload(None)
 
-            # update data list
-            list = self.FindWindowById(self.layerPage[self.layer]['data'])
-            list.Update(self.mapDBInfo)
+            # update data tlist
+            tlist = self.FindWindowById(self.layerPage[self.layer]['data'])
+            tlist.Update(self.mapDBInfo)
 
             # reset list of commands
             self.listOfCommands = []
@@ -2060,9 +2060,9 @@ class AttributeManager(wx.Frame):
         """!Extract vector objects selected in attribute browse window
         to new vector map
         """
-        list = self.FindWindowById(self.layerPage[self.layer]['data'])
-        # cats = list.selectedCats[:]
-        cats = list.GetSelectedItems()
+        tlist = self.FindWindowById(self.layerPage[self.layer]['data'])
+        # cats = tlist.selectedCats[:]
+        cats = tlist.GetSelectedItems()
         if len(cats) == 0:
             GMessage(parent = self,
                      message = _('Nothing to extract.'))
@@ -2091,8 +2091,8 @@ class AttributeManager(wx.Frame):
         """!Delete vector objects selected in attribute browse window
         (attribures and geometry)
         """
-        list = self.FindWindowById(self.layerPage[self.layer]['data'])
-        cats = list.GetSelectedItems()
+        tlist = self.FindWindowById(self.layerPage[self.layer]['data'])
+        cats = tlist.GetSelectedItems()
         if len(cats) == 0:
             GMessage(parent = self,
                      message = _('Nothing to delete.'))
@@ -2124,9 +2124,9 @@ class AttributeManager(wx.Frame):
 
         Return True if map has been redrawn, False if no map is given
         """
-        list = self.FindWindowById(self.layerPage[self.layer]['data'])
+        tlist = self.FindWindowById(self.layerPage[self.layer]['data'])
         cats = { 
-            self.layer : list.GetSelectedItems()
+            self.layer : tlist.GetSelectedItems()
             }
         
         if self.mapdisplay.Map.GetLayerIndex(self.qlayer) < 0:
