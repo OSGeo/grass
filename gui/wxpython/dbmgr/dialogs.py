@@ -567,7 +567,8 @@ class ModifyTableRecord(wx.Dialog):
         self.usebox = False
         self.cat = None
         winFocus = False
-        for column, value in data:
+        
+        for column, ctype, value in data:
             if self.keyId == cId:
                 self.cat = int(value)
                 if not keyEditable[1]:
@@ -588,9 +589,10 @@ class ModifyTableRecord(wx.Dialog):
                     winFocus = True
             
             label = wx.StaticText(parent = self.dataPanel, id = wx.ID_ANY,
-                                  label = column + ":")
-            
-            self.widgets.append((label.GetId(), valueWin.GetId()))
+                                  label = column)
+            ctype = wx.StaticText(parent = self.dataPanel, id = wx.ID_ANY,
+                                  label = "[%s]:" % ctype)
+            self.widgets.append((label.GetId(), ctype.GetId(), valueWin.GetId()))
             
             cId += 1
         
@@ -601,15 +603,18 @@ class ModifyTableRecord(wx.Dialog):
         sizer = wx.BoxSizer(wx.VERTICAL)
         
         # data area
-        dataSizer = wx.FlexGridSizer (cols = 2, hgap = 3, vgap = 3)
-        dataSizer.AddGrowableCol(1)
+        dataSizer = wx.FlexGridSizer(cols = 3, hgap = 3, vgap = 3)
+        dataSizer.AddGrowableCol(2)
         
-        for labelId, valueId in self.widgets:
+        for labelId, ctypeId, valueId in self.widgets:
             label = self.FindWindowById(labelId)
+            ctype = self.FindWindowById(ctypeId)
             value = self.FindWindowById(valueId)
             
             dataSizer.Add(label, proportion = 0,
                           flag = wx.ALIGN_CENTER_VERTICAL)
+            dataSizer.Add(ctype, proportion = 0,
+                          flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
             dataSizer.Add(value, proportion = 0,
                           flag = wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
         
@@ -637,9 +642,9 @@ class ModifyTableRecord(wx.Dialog):
         sizer.Add(item = btnSizer, proportion = 0,
                   flag = wx.EXPAND | wx.ALL, border = 5)
         
-        framewidth = self.GetSize()[0]
-        self.SetMinSize((framewidth,250))
-        
+        framewidth = self.GetBestSize()[0] + 25
+        self.SetMinSize((framewidth, 250))
+
         self.SetAutoLayout(True)
         self.SetSizer(sizer)
         sizer.Fit(self)
@@ -652,7 +657,7 @@ class ModifyTableRecord(wx.Dialog):
         If columns is given (list), return only values of given columns.
         """
         valueList = []
-        for labelId, valueId in self.widgets:
+        for labelId, ctypeId, valueId in self.widgets:
             column = self.FindWindowById(labelId).GetLabel().replace(':', '')
             if columns is None or column in columns:
                 value = str(self.FindWindowById(valueId).GetValue())
