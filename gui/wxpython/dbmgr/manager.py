@@ -1916,10 +1916,12 @@ class AttributeManager(wx.Frame):
         keyColumn = -1 # index of key column
         listWin = self.FindWindowById(self.layerPage[self.layer]['data'])
         sql = None
+        win = self.FindWindowById(self.layerPage[self.layer]['simple'])
+        if not win:
+            return
         
         wx.BeginBusyCursor()
-        
-        if self.FindWindowById(self.layerPage[self.layer]['simple']).GetValue():
+        if win.GetValue():
             # simple sql statement
             whereCol = self.FindWindowById(self.layerPage[self.layer]['whereColumn']).GetStringSelection()
             whereOpe = self.FindWindowById(self.layerPage[self.layer]['whereOperator']).GetStringSelection()
