@@ -1352,12 +1352,14 @@ class AttributeManager(wx.Frame):
         colIdx = 0
         keyId = -1
         for col in columnName:
+            ctype = self.mapDBInfo.tables[table][col]['type']
             if col == keyColumn: # key 
                 if missingKey is False: 
-                    data.append((col, str(maxCat + 1)))
+                    data.append((col, ctype, str(maxCat + 1)))
                     keyId = colIdx
             else:
-                data.append((col, ''))
+                data.append((col, ctype, ''))
+            
             colIdx += 1
                 
         dlg = ModifyTableRecord(parent = self,
@@ -1463,16 +1465,17 @@ class AttributeManager(wx.Frame):
             
         # add other visible columns
         for i in range(len(columnName)):
+            ctype = self.mapDBInfo.tables[table][columnName[i]]['type']
             if columnName[i] == keyColumn: # key 
                 if missingKey is False: 
-                    data.append((columnName[i], str(cat)))
+                    data.append((columnName[i], ctype, str(cat)))
                     keyId = i
             else:
                 if missingKey is True:
                     value = list.GetItem(item, i-1).GetText()
                 else:
                     value = list.GetItem(item, i).GetText()
-                data.append((columnName[i], value))
+                data.append((columnName[i], ctype, value))
 
         dlg = ModifyTableRecord(parent = self, 
                                 title = _("Update existing record"),
