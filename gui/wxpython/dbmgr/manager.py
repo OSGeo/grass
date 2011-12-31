@@ -499,7 +499,7 @@ class VirtualAttributeList(wx.ListCtrl,
             item1 = self.itemDataMap[key1][self._col]
             item2 = self.itemDataMap[key2][self._col]
 
-        if type(item1) == type('') or type(item2) == type(''):
+        if type(item1) == types.StringType or type(item2) == types.StringTypes:
             cmpVal = locale.strcoll(str(item1), str(item2))
         else:
             cmpVal = cmp(item1, item2)
@@ -1352,13 +1352,14 @@ class AttributeManager(wx.Frame):
         colIdx = 0
         keyId = -1
         for col in columnName:
-            ctype = self.mapDBInfo.tables[table][col]['type']
+            ctype = self.mapDBInfo.tables[table][col]['ctype']
+            ctypeStr = self.mapDBInfo.tables[table][col]['type']
             if col == keyColumn: # key 
                 if missingKey is False: 
-                    data.append((col, ctype, str(maxCat + 1)))
+                    data.append((col, ctype, ctypeStr, str(maxCat + 1)))
                     keyId = colIdx
             else:
-                data.append((col, ctype, ''))
+                data.append((col, ctype, ctypeStr, ''))
             
             colIdx += 1
                 
@@ -1409,10 +1410,11 @@ class AttributeManager(wx.Frame):
 
             except ValueError, err:
                 GError(parent = self,
-                       message = "%s%s%s" % (_("Unable to insert new record."),
-                                             os.linesep, err))
+                       message = _("Unable to insert new record.\n%s") % err,
+                       showTraceback = False)
+                self.OnDataItemAdd(event)
                 return
-
+            
             # remove category if need 
             if missingKey is True:
                 del values[0]
@@ -1465,17 +1467,18 @@ class AttributeManager(wx.Frame):
             
         # add other visible columns
         for i in range(len(columnName)):
-            ctype = self.mapDBInfo.tables[table][columnName[i]]['type']
+            ctype = self.mapDBInfo.tables[table][columnName[i]]['ctype']
+            ctypeStr = self.mapDBInfo.tables[table][columnName[i]]['type']
             if columnName[i] == keyColumn: # key 
                 if missingKey is False: 
-                    data.append((columnName[i], ctype, str(cat)))
+                    data.append((columnName[i], ctype, ctypeStr, str(cat)))
                     keyId = i
             else:
                 if missingKey is True:
                     value = tlist.GetItem(item, i-1).GetText()
                 else:
                     value = tlist.GetItem(item, i).GetText()
-                data.append((columnName[i], ctype, value))
+                data.append((columnName[i], ctype, ctypeStr, value))
 
         dlg = ModifyTableRecord(parent = self, 
                                 title = _("Update existing record"),
@@ -1495,7 +1498,7 @@ class AttributeManager(wx.Frame):
                                     idx = i - 1
                                 else:
                                     idx = i
-                                if tlist.columns[columnName[i]]['ctype'] != type(''):
+                                if tlist.columns[columnName[i]]['ctype'] != types.StringType:
                                     if tlist.columns[columnName[i]]['ctype'] == int:
                                         value = float(values[i])
                                     else:
@@ -1518,8 +1521,9 @@ class AttributeManager(wx.Frame):
                             
             except ValueError, err:
                 GError(parent = self,
-                       message = "%s%s%s" % (_("Unable to update existing record."),
-                                             os.linesep, err))
+                       message = _("Unable to update existing record.\n%s") % err,
+                       showTraceback = False)
+                self.OnDataItemEdit(event)
                 return
             
             if len(updateString) > 0:
