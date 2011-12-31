@@ -2573,6 +2573,7 @@ class LayerBook(wx.Notebook):
                       flag = wx.TOP | wx.BOTTOM | wx.RIGHT | wx.EXPAND,
                       border = 3)
         
+        layerSizer.SetVirtualSizeHints(self.addPanel)
         self.addPanel.SetAutoLayout(True)
         self.addPanel.SetSizer(pageSizer)
         pageSizer.Fit(self.addPanel)
