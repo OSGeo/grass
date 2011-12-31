@@ -382,7 +382,7 @@ class AboutWindow(wx.Frame):
     """
     def __init__(self, parent, size = (750, 400), 
                  title = _('About GRASS GIS'), **kwargs):
-        wx.Frame.__init__(self, parent = parent, id = wx.ID_ANY, size = size, **kwargs)
+        wx.Frame.__init__(self, parent = parent, id = wx.ID_ANY, title = title, size = size, **kwargs)
         
         panel = wx.Panel(parent = self, id = wx.ID_ANY)
         
