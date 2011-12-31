@@ -32,7 +32,6 @@ except ImportError:
     import wx.lib.customtreectrl as CT
     from wx.lib.hyperlink import HyperLinkCtrl
 import wx.lib.flatnotebook as FN
-import wx.lib.scrolledpanel as scrolled
 
 import grass.script as grass
 
@@ -40,7 +39,7 @@ from core             import globalvar
 from core             import utils
 from lmgr.menudata    import ManagerData
 from core.gcmd        import GError, DecodeString
-from gui_core.widgets import GNotebook, StaticWrapText, ItemTree
+from gui_core.widgets import GNotebook, StaticWrapText, ItemTree, ScrolledPanel
 
 class SearchModuleWindow(wx.Panel):
     """!Search module window (used in MenuTreeWindow)"""
@@ -495,9 +494,8 @@ class AboutWindow(wx.Frame):
             copytext = _('%s file missing') % 'COPYING'
         
         # put text into a scrolling panel
-        copyrightwin = scrolled.ScrolledPanel(self, id = wx.ID_ANY, 
-                                              size = wx.DefaultSize,
-                                              style = wx.TAB_TRAVERSAL | wx.SUNKEN_BORDER)
+        copyrightwin = ScrolledPanel(self)
+                                     
         copyrighttxt = wx.StaticText(copyrightwin, id = wx.ID_ANY, label = copytext)
         copyrightwin.SetAutoLayout(True)
         copyrightwin.sizer = wx.BoxSizer(wx.VERTICAL)
@@ -519,8 +517,7 @@ class AboutWindow(wx.Frame):
         else:
             license = _('%s file missing') % 'GPL.TXT'
         # put text into a scrolling panel
-        licensewin = scrolled.ScrolledPanel(self, id = wx.ID_ANY, 
-                                            style = wx.TAB_TRAVERSAL | wx.SUNKEN_BORDER)
+        licensewin = ScrolledPanel(self)
         licensetxt = wx.StaticText(licensewin, id = wx.ID_ANY, label = license)
         licensewin.SetAutoLayout(True)
         licensewin.sizer = wx.BoxSizer(wx.VERTICAL)
@@ -542,8 +539,7 @@ class AboutWindow(wx.Frame):
             authorsFile.close()
         else:
             authors = _('%s file missing') % 'AUTHORS'
-        authorwin = scrolled.ScrolledPanel(self, id = wx.ID_ANY, 
-                                           style  =  wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER)
+        authorwin = ScrolledPanel(self)
         authortxt = wx.StaticText(authorwin, id = wx.ID_ANY, label = authors)
         authorwin.SetAutoLayout(1)
         authorwin.SetupScrolling()
@@ -590,8 +586,7 @@ class AboutWindow(wx.Frame):
         else:
             contribs = None
         
-        contribwin = scrolled.ScrolledPanel(self, id = wx.ID_ANY, 
-                                           style = wx.TAB_TRAVERSAL | wx.SUNKEN_BORDER)
+        contribwin = ScrolledPanel(self)
         contribwin.SetAutoLayout(True)
         contribwin.SetupScrolling()
         contribwin.sizer = wx.BoxSizer(wx.VERTICAL)
@@ -650,9 +645,8 @@ class AboutWindow(wx.Frame):
         else:
             translators = None
         
-        translatorswin = scrolled.ScrolledPanel(self, id = wx.ID_ANY, 
-                                           style = wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER)
-        translatorswin.SetAutoLayout(1)
+        translatorswin = ScrolledPanel(self)
+        translatorswin.SetAutoLayout(True)
         translatorswin.SetupScrolling()
         translatorswin.sizer = wx.BoxSizer(wx.VERTICAL)
         
