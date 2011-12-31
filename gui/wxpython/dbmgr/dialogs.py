@@ -16,15 +16,17 @@ This program is free software under the GNU General Public License
 """
 
 import os
+import types
 
 from core import globalvar
 import wx
 import wx.lib.scrolledpanel as scrolled
 
-from core.gcmd     import RunCommand
-from core.debug    import Debug
-from core.settings import UserSettings
-from dbmgr.vinfo   import VectorDBInfo
+from core.gcmd        import RunCommand, GError
+from core.debug       import Debug
+from core.settings    import UserSettings
+from dbmgr.vinfo      import VectorDBInfo
+from gui_core.widgets import IntegerValidator, FloatValidator
 
 class DisplayAttributesDialog(wx.Dialog):
     def __init__(self, parent, map,
@@ -158,11 +160,12 @@ class DisplayAttributesDialog(wx.Dialog):
 
         # set min size for dialog
         w, h = self.GetBestSize()
+        w += 50
         if h < 200:
             self.SetMinSize((w, 200))
         else:
-            self.SetMinSize(self.GetBestSize())
-
+            self.SetMinSize((w, h))
+        
         if self.notebook.GetPageCount() == 0:
             Debug.msg(2, "DisplayAttributesDialog(): Nothing found!")
             ### self.mapDBInfo = None
@@ -182,6 +185,8 @@ class DisplayAttributesDialog(wx.Dialog):
     def GetSQLString(self, updateValues = False):
         """!Create SQL statement string based on self.sqlStatement
 
+        Show error message when invalid values are entered.
+        
         If updateValues is True, update dataFrame according to values
         in textfields.
         """
@@ -198,26 +203,38 @@ class DisplayAttributesDialog(wx.Dialog):
                     if name == key:
                         cat = columns[name]['values'][idx]
                         continue
-                    type  = columns[name]['type']
+                    ctype  = columns[name]['ctype']
                     value = columns[name]['values'][idx]
                     id    = columns[name]['ids'][idx]
                     try:
                         newvalue = self.FindWindowById(id).GetValue()
                     except:
                         newvalue = self.FindWindowById(id).GetLabel()
-
-                    if newvalue == '':
-                        newvalue = None
+                    
+                    try:
+                        if ctype == int:
+                            newvalue = int(newvalue)
+                        elif ctype == float:
+                            newvalue = float(newvalue)
+                    except ValueError:
+                        GError(parent = self,
+                               message = _("Column <%(col)s>: Value '%(value)s' needs to be entered as %(type)s.") % \
+                                   {'col' : name,
+                                    'value' : str(newvalue),
+                                    'type' : columns[name]['type'].lower()},
+                               showTraceback = False)
+                        sqlCommands.append(None)
+                        continue
                     
                     if newvalue != value:
                         updatedColumns.append(name)
                         if newvalue is None:
                             updatedValues.append('NULL')
                         else:
-                            if type != 'character':
-                                updatedValues.append(newvalue)
+                            if ctype != str:
+                                updatedValues.append(str(newvalue))
                             else:
-                                updatedValues.append("'" + newvalue + "'")
+                                updatedValues.append("'" + str(newvalue) + "'")
                         columns[name]['values'][idx] = newvalue
 
                 if self.action != "add" and len(updatedValues) == 0:
@@ -289,13 +306,18 @@ class DisplayAttributesDialog(wx.Dialog):
     def OnSubmit(self, event):
         """!Submit records"""
         layer = 1
+        close = True
+        enc = UserSettings.Get(group = 'atm', key = 'encoding', subkey = 'value')
+        if not enc and 'GRASS_DB_ENCODING' in os.environ:
+            enc = os.environ['GRASS_DB_ENCODING']
+        
         for sql in self.GetSQLString(updateValues = True):
-            enc = UserSettings.Get(group = 'atm', key = 'encoding', subkey = 'value')
-            if not enc and 'GRASS_DB_ENCODING' in os.environ:
-                enc = os.environ['GRASS_DB_ENCODING']
+            if not sql:
+                close = False
+                continue
             if enc:
                 sql = sql.encode(enc)
-
+            
             driver, database = self.mapDBInfo.GetDbSettings(layer)
             Debug.msg(1, "SQL: %s" % sql)
             RunCommand('db.execute',
@@ -308,7 +330,7 @@ class DisplayAttributesDialog(wx.Dialog):
             
             layer += 1
         
-        if self.closeDialog.IsChecked():
+        if close and self.closeDialog.IsChecked():
             self.OnCancel(event)
 
     def OnFeature(self, event):
@@ -462,8 +484,8 @@ class DisplayAttributesDialog(wx.Dialog):
                 # notebook body
                 border = wx.BoxSizer(wx.VERTICAL)
                 
-                flexSizer = wx.FlexGridSizer (cols = 4, hgap = 3, vgap = 3)
-                flexSizer.AddGrowableCol(3)
+                flexSizer = wx.FlexGridSizer (cols = 3, hgap = 3, vgap = 3)
+                flexSizer.AddGrowableCol(2)
                 # columns (sorted by index)
                 names = [''] * len(columns.keys())
                 for name in columns.keys():
@@ -473,10 +495,11 @@ class DisplayAttributesDialog(wx.Dialog):
                     if name == key: # skip key column (category)
                         continue
                     
-                    vtype  = columns[name]['type']
+                    vtype  = columns[name]['type'].lower()
+                    ctype  = columns[name]['ctype']
                     
                     if columns[name]['values'][idx] is not None:
-                        if columns[name]['ctype'] != type(''):
+                        if columns[name]['ctype'] != types.StringType:
                             value = str(columns[name]['values'][idx])
                         else:
                             value = columns[name]['values'][idx]
@@ -486,21 +509,22 @@ class DisplayAttributesDialog(wx.Dialog):
                     colName = wx.StaticText(parent = panel, id = wx.ID_ANY,
                                             label = name)
                     colType = wx.StaticText(parent = panel, id = wx.ID_ANY,
-                                            label = "[" + vtype.lower() + "]")
-                    delimiter = wx.StaticText(parent = panel, id = wx.ID_ANY, label = ":")
-                    
+                                            label = "[%s]:" % vtype)
                     colValue = wx.TextCtrl(parent = panel, id = wx.ID_ANY, value = value)
                     colValue.SetName(name)
+                    if ctype == int:
+                        colValue.SetValidator(IntegerValidator())
+                    elif ctype == float:
+                        colValue.SetValidator(FloatValidator())
+                    
                     self.Bind(wx.EVT_TEXT, self.OnSQLStatement, colValue)
                     if self.action == 'display':
                         colValue.SetWindowStyle(wx.TE_READONLY)
                     
                     flexSizer.Add(colName, proportion = 0,
-                                  flag = wx.FIXED_MINSIZE | wx.ALIGN_CENTER_VERTICAL)
+                                  flag = wx.ALIGN_CENTER_VERTICAL)
                     flexSizer.Add(colType, proportion = 0,
-                                  flag = wx.FIXED_MINSIZE | wx.ALIGN_CENTER_VERTICAL)
-                    flexSizer.Add(delimiter, proportion = 0,
-                                  flag = wx.FIXED_MINSIZE | wx.ALIGN_CENTER_VERTICAL)
+                                  flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
                     flexSizer.Add(colValue, proportion = 1,
                                   flag = wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
                     # add widget reference to self.columns
@@ -568,7 +592,7 @@ class ModifyTableRecord(wx.Dialog):
         self.cat = None
         winFocus = False
         
-        for column, ctype, value in data:
+        for column, ctype, ctypeStr, value in data:
             if self.keyId == cId:
                 self.cat = int(value)
                 if not keyEditable[1]:
@@ -584,6 +608,10 @@ class ModifyTableRecord(wx.Dialog):
             else:
                 valueWin = wx.TextCtrl(parent = self.dataPanel, id = wx.ID_ANY,
                                        value = value, size = (250, -1))
+                if ctype == int:
+                    valueWin.SetValidator(IntegerValidator())
+                elif ctype == float:
+                    valueWin.SetValidator(FloatValidator())
                 if not winFocus:
                     wx.CallAfter(valueWin.SetFocus)
                     winFocus = True
@@ -591,7 +619,7 @@ class ModifyTableRecord(wx.Dialog):
             label = wx.StaticText(parent = self.dataPanel, id = wx.ID_ANY,
                                   label = column)
             ctype = wx.StaticText(parent = self.dataPanel, id = wx.ID_ANY,
-                                  label = "[%s]:" % ctype)
+                                  label = "[%s]:" % ctypeStr.lower())
             self.widgets.append((label.GetId(), ctype.GetId(), valueWin.GetId()))
             
             cId += 1

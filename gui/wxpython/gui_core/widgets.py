@@ -6,11 +6,12 @@
 Classes:
  - widgets::GNotebook
  - widgets::ScrolledPanel
- - widgets::NTCValidator
  - widgets::NumTextCtrl
  - widgets::FloatSlider
  - widgets::SymbolButton
  - widgets::StaticWrapText
+ - widgets::BaseValidator
+ - widgets::IntegerValidator
  - widgets::FloatValidator
  - widgets::ItemTree
 
@@ -97,31 +98,6 @@ class ScrolledPanel(SP.ScrolledPanel):
     def OnChildFocus(self, event):
         pass
         
-        
-class NTCValidator(wx.PyValidator):
-    """!validates input in textctrls, taken from wxpython demo"""
-    def __init__(self, flag = None):
-        wx.PyValidator.__init__(self)
-        self.flag = flag
-        self.Bind(wx.EVT_CHAR, self.OnChar)
-
-    def Clone(self):
-        return NTCValidator(self.flag)
-
-    def OnChar(self, event):
-        key = event.GetKeyCode()
-        if key < wx.WXK_SPACE or key == wx.WXK_DELETE or key > 255:
-            event.Skip()
-            return
-        if self.flag == 'DIGIT_ONLY' and chr(key) in string.digits + '.-':
-            event.Skip()
-            return
-        if not wx.Validator_IsSilent():
-            wx.Bell()
-        # Returning without calling even.Skip eats the event before it
-        # gets to the text control
-        return  
-    
 class NumTextCtrl(wx.TextCtrl):
     """!Class derived from wx.TextCtrl for numerical values only"""
     def __init__(self, parent,  **kwargs):
@@ -271,17 +247,18 @@ class StaticWrapText(wx.StaticText):
                 self.SetSize(self.wrappedSize)
             del self.resizing
 
-class FloatValidator(wx.PyValidator):
-    """!Validator for floating-point input"""
+class BaseValidator(wx.PyValidator):
     def __init__(self):
         wx.PyValidator.__init__(self)
         
         self.Bind(wx.EVT_TEXT, self.OnText) 
-        
-    def Clone(self):
-        """!Clone validator"""
-        return FloatValidator()
 
+    def OnText(self, event):
+        """!Do validation"""
+        self.Validate()
+        
+        event.Skip()
+        
     def Validate(self):
         """Validate input"""
         textCtrl = self.GetWindow()
@@ -289,7 +266,7 @@ class FloatValidator(wx.PyValidator):
 
         if text:
             try:
-                float(text)
+                self.type(text)
             except ValueError:
                 textCtrl.SetBackgroundColour("grey")
                 textCtrl.SetFocus()
@@ -303,18 +280,56 @@ class FloatValidator(wx.PyValidator):
         
         return True
 
-    def OnText(self, event):
-        """!Do validation"""
-        self.Validate()
-        
-        event.Skip()
-        
     def TransferToWindow(self):
         return True # Prevent wxDialog from complaining.
     
     def TransferFromWindow(self):
         return True # Prevent wxDialog from complaining.
 
+class IntegerValidator(BaseValidator):
+    """!Validator for floating-point input"""
+    def __init__(self):
+        BaseValidator.__init__(self)
+        self.type = int
+        
+    def Clone(self):
+        """!Clone validator"""
+        return IntegerValidator()
+
+class FloatValidator(BaseValidator):
+    """!Validator for floating-point input"""
+    def __init__(self):
+        BaseValidator.__init__(self)
+        self.type = float
+        
+    def Clone(self):
+        """!Clone validator"""
+        return FloatValidator()
+
+class NTCValidator(wx.PyValidator):
+    """!validates input in textctrls, taken from wxpython demo"""
+    def __init__(self, flag = None):
+        wx.PyValidator.__init__(self)
+        self.flag = flag
+        self.Bind(wx.EVT_CHAR, self.OnChar)
+
+    def Clone(self):
+        return NTCValidator(self.flag)
+
+    def OnChar(self, event):
+        key = event.GetKeyCode()
+        if key < wx.WXK_SPACE or key == wx.WXK_DELETE or key > 255:
+            event.Skip()
+            return
+        if self.flag == 'DIGIT_ONLY' and chr(key) in string.digits + '.-':
+            event.Skip()
+            return
+        if not wx.Validator_IsSilent():
+            wx.Bell()
+        # Returning without calling even.Skip eats the event before it
+        # gets to the text control
+        return  
+    
 class ItemTree(CT.CustomTreeCtrl):
     def __init__(self, parent, id = wx.ID_ANY,
                  ctstyle = CT.TR_HIDE_ROOT | CT.TR_FULL_ROW_HIGHLIGHT | CT.TR_HAS_BUTTONS |

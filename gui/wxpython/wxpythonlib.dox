@@ -168,7 +168,10 @@ available in GRASS 5 and GRASS 6.
  - widgets::FloatSlider
  - widgets::SymbolButton
  - widgets::StaticWrapText
+ - widgets::BaseValidator
+ - widgets::IntegerValidator
  - widgets::FloatValidator
+ - widgets::NTCValidator
  - widgets::ItemTree
 
 \subsection lmgr Layer Manager
