@@ -9,7 +9,7 @@
  * COPYRIGHT:    (C) 2011-2012 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               License (>=v2). Read the infile COPYING that comes with GRASS
  *               for details.
  *
  *****************************************************************************/
@@ -24,8 +24,7 @@
 #include <grass/stats.h>
 
 #define LINEAR_INTERPOLATION 1
-#define QUADRATIC_INTERPOLATION 2
-#define CUBIC_INTERPOLATION 3
+#define SPLINE_INTERPOLATION 2
 
 struct map_store
 {
@@ -33,26 +32,28 @@ struct map_store
     double pos;
     DCELL *buf;
     int fd;
+    int has_run;
 };
 
-double linear_position[2] = {0.0, 1.0};
-double quadratic_position[3] = {0.0, 0.5, 1.0};
-double cubic_position[4] = {0.0, 1.0/3.0, 2.0/3.0, 1.0};
+void selection_sort(struct map_store **array, int num); 
+static struct map_store *get_parameter_input(const char *type, char **map_names, char **positions, char *file, int *number_of_maps); 
+static void linear_interpolation(struct map_store **inp, int num_inputs, struct map_store **outp, int num_outputs);
+static void interpolate_row_linear(struct map_store *left, struct map_store *right, struct map_store *out, int ncols);
+static void start_interpolation(struct map_store *inputs, int num_inputs, struct map_store *outputs, int num_outputs, int interpol_method); 
 
-static void linear_interpolation(struct map_store *inputs, struct map_store *out, int ncols);
-static int start_interpolation(struct map_store *inputs, int num_inputs, int interpolation_method, struct map_store *out); 
+/* *************************************************************** */
+/* *************************************************************** */
+/* *************************************************************** */
 
 int main(int argc, char *argv[])
 {
     struct GModule *module;
     struct
     {
-	struct Option *input, *file, *output, *sampoints, *method;
+	struct Option *input, *datapos, *infile, *output, *samplingpos, *outfile, *method;
     } parm;
-    int i;
     int num_outputs;
     int num_inputs;
-    int num_sampoints;
     struct map_store *inputs = NULL;
     struct map_store *outputs = NULL;
     int interpol_method = LINEAR_INTERPOLATION;
@@ -68,24 +69,36 @@ int main(int argc, char *argv[])
           "in between input raster maps at specific sampling positions.");
 
     parm.input = G_define_standard_option(G_OPT_R_INPUTS);
+    parm.input->required = NO;
+ 
+    parm.datapos = G_define_option();
+    parm.datapos->key = "datapos";
+    parm.datapos->type = TYPE_DOUBLE;
+    parm.datapos->required = NO;
+    parm.datapos->description = _("Data point position for each input map");
+    parm.datapos->multiple = YES;
+
+    parm.infile = G_define_standard_option(G_OPT_F_INPUT);
+    parm.infile->key = "infile";
+    parm.infile->description = _("Input file with an input raster map name and data point position per line,"
+                               " field separator between name and sample point is |");
+    parm.infile->required = NO;
 
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.output->multiple = YES;
     parm.output->required = NO;
 
-    parm.sampoints = G_define_option();
-    parm.sampoints->key = "sampoints";
-    parm.sampoints->type = TYPE_DOUBLE;
-    parm.sampoints->required = NO;
-    parm.sampoints->description = _("Sampling point for each input map,"
-                                   " the point must in between the interval (0;1)");
-    parm.sampoints->multiple = YES;
+    parm.samplingpos = G_define_option();
+    parm.samplingpos->key = "samplingpos";
+    parm.samplingpos->type = TYPE_DOUBLE;
+    parm.samplingpos->required = NO;
+    parm.samplingpos->description = _("Sampling point position for each output map");
 
-    parm.file = G_define_standard_option(G_OPT_F_INPUT);
-    parm.file->key = "file";
-    parm.file->description = _("Input file with output a raster map name and sample point per line,"
-                               " field separator between name and sample point is |");
-    parm.file->required = NO;
+    parm.outfile = G_define_standard_option(G_OPT_F_INPUT);
+    parm.outfile->key = "outfile";
+    parm.outfile->description = _("Input infile with an output raster map name and sample point position per line,"
+                             " field separator between name and sample point is |");
+    parm.outfile->required = NO;
 
     parm.method = G_define_option();
     parm.method->key = "method";
@@ -99,80 +112,65 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (parm.output->answer && parm.file->answer)
-        G_fatal_error(_("output= and file= are mutually exclusive"));
+    if (parm.output->answer && parm.outfile->answer)
+        G_fatal_error(_("output= and outfile= are mutually exclusive"));
  
-    if (parm.sampoints->answer && parm.file->answer)
-        G_fatal_error(_("sampoints= and file= are mutually exclusive"));
+    if (parm.samplingpos->answer && parm.outfile->answer)
+        G_fatal_error(_("samplingpos= and outfile= are mutually exclusive"));
  
+    if (!parm.output->answer && !parm.outfile->answer)
+        G_fatal_error(_("Please specify output= or outfile="));
+ 
+    if (parm.output->answer && !parm.samplingpos->answer)
+        G_fatal_error(_("Please specify output= and samplingpos="));
 
-    if (!parm.output->answer && !parm.file->answer)
-        G_fatal_error(_("Please specify output= or file="));
+    if (parm.input->answer && parm.infile->answer)
+        G_fatal_error(_("input= and infile= are mutually exclusive"));
  
-    if (parm.output->answer && !parm.sampoints->answer)
-        G_fatal_error(_("Please specify output= and sampoints="));
+    if (parm.datapos->answer && parm.infile->answer)
+        G_fatal_error(_("datapos= and infile= are mutually exclusive"));
+ 
+    if (!parm.input->answer && !parm.infile->answer)
+        G_fatal_error(_("Please specify input= or infile="));
+ 
+    if (parm.input->answer && !parm.datapos->answer)
+        G_fatal_error(_("Please specify input= and datapos="));
 
-    if(G_strncasecmp(parm.method->answer, "linear", 6))
+    if(G_strncasecmp(parm.method->answer, "linear", 6) == 0)
         interpol_method = LINEAR_INTERPOLATION;
 
-    /* process the input maps */
-    for (i = 0; parm.input->answers[i]; i++)
-	;
-    num_inputs = i;
+    if(G_strncasecmp(parm.method->answer, "spline", 6) == 0)
+        interpol_method = SPLINE_INTERPOLATION;
 
-    if (num_inputs < 1)
-	G_fatal_error(_("No input raster map not found"));
+    inputs = get_parameter_input("input", parm.input->answers, parm.datapos->answers, parm.infile->answer, &num_inputs);
+    outputs = get_parameter_input("output", parm.output->answers, parm.samplingpos->answers, parm.outfile->answer, &num_outputs);
 
-    if(interpol_method == LINEAR_INTERPOLATION)
-        if (num_inputs != 2)
-	    G_fatal_error(_("You need to specify two input maps for linear interpolation"));
+    start_interpolation(inputs, num_inputs, outputs, num_outputs, interpol_method);
 
-    if(interpol_method == QUADRATIC_INTERPOLATION)
-        if (num_inputs != 3)
-	    G_fatal_error(_("You need to specify three input maps for quadratic interpolation"));
+    exit(EXIT_SUCCESS);
+}
 
-    if(interpol_method == CUBIC_INTERPOLATION)
-        if (num_inputs != 4)
-	    G_fatal_error(_("You need to specify 4 input maps for linear interpolation"));
+/* *************************************************************** */
+/* *************************************************************** */
+/* *************************************************************** */
 
+struct map_store *get_parameter_input(const char *type, char **map_names, char **positions, char *file, int *number_of_maps) 
+{
+    struct map_store *maps = NULL;
+    int max_maps;
+    int num_maps;
+    int num_points;
 
-    inputs = G_calloc(num_inputs, sizeof(struct map_store));
-
-    for (i = 0; i < num_inputs; i++) {
-	struct map_store *in = &inputs[i];
-
-	in->name = parm.input->answers[i];	
-        
-        if(interpol_method == LINEAR_INTERPOLATION)
-            in->pos = linear_position[i];
-        if(interpol_method == QUADRATIC_INTERPOLATION)
-            in->pos = quadratic_position[i];
-        if(interpol_method == CUBIC_INTERPOLATION)
-            in->pos = cubic_position[i];
-
-	in->buf = Rast_allocate_d_buf();
-	in->fd = Rast_open_old(in->name, "");
-        G_verbose_message(_("Reading input raster map <%s> at sample point %g..."), in->name, in->pos);
-    }
-
-    /* process the output maps from the file */
-    if (parm.file->answer) {
+    /* process the output maps from the infile */
+    if (file) {
 	FILE *in;
-	int max_outputs;
-        double left = 0.0;
-        double right = 1.0;
     
-        if(interpol_method == LINEAR_INTERPOLATION) {
-            left = linear_position[0];
-            right = linear_position[1];
-        }
-
-	in = fopen(parm.file->answer, "r");
+	in = fopen(file, "r");
 	if (!in)
-	    G_fatal_error(_("Unable to open input file <%s>"), parm.file->answer);
+	    G_fatal_error(_("Unable to open %s file <%s>"), type, file);
     
-	num_outputs = 0;
-	max_outputs = 0;
+	num_maps = 0;
+	max_maps = 0;
 
 	for (;;) {
 	    char buf[GNAME_MAX + 50]; /* Name and position */
@@ -193,10 +191,6 @@ int main(int argc, char *argv[])
             if(ntokens > 1) {
 	        name = G_chop(tokens[0]);
 	        pos = atof(G_chop(tokens[1]));
-                if(pos < left || pos > right)
-	            G_fatal_error(_("Wrong sampling point for output map <%s> in file <%s> "
-                                    "near line %i, sampling point must be in between (%g:%g) not: %g"), 
-                                     name, parm.file->answer, num_outputs + 1, left, right, pos);
             } else {
 	        name = G_chop(buf);
             }
@@ -206,117 +200,177 @@ int main(int argc, char *argv[])
 		continue;
         
             if(pos == -1)
-	        G_fatal_error(_("Missing sampling point for output map <%s>"
+	        G_fatal_error(_("Missing point position for %s map <%s>"
                                 " in file <%s> near line %i"), 
-                                name, parm.file->answer, num_outputs);
-            
+                                type, name, file, num_maps);
 
-	    if (num_outputs >= max_outputs) {
-		max_outputs += 100;
-		outputs = G_realloc(outputs, max_outputs * sizeof(struct map_store));
+	    if (num_maps >= max_maps) {
+		max_maps += 100;
+		maps = G_realloc(maps, max_maps * sizeof(struct map_store));
 	    }
-	    p = &outputs[num_outputs++];
+	    p = &maps[num_maps++];
 
 	    p->name = G_store(name);
             p->pos = pos;
             p->fd = -1;
             p->buf = NULL;
+            p->has_run = 0;
+            G_verbose_message(_("Preparing %s map <%s> at position %g"), type, p->name, p->pos);
 	}
 
-        if (num_outputs < 1)
-            G_fatal_error(_("No raster map name found in file <%s>"), parm.file->answer);
+        if (num_maps < 1)
+            G_fatal_error(_("No raster map name found in %s file <%s>"), type, file);
      
 	fclose(in);
     }
     else {
-    	for (i = 0; parm.output->answers[i]; i++)
+        int i;
+    	for (i = 0; map_names[i]; i++)
 	    ;
-    	num_outputs = i;
+    	num_maps = i;
 
-    	if (num_outputs < 1)
-	    G_fatal_error(_("No output raster map not found"));
+    	if (num_maps < 1)
+	    G_fatal_error(_("No %s raster map not found"), type);
 
-        for (i = 0; parm.sampoints->answers[i]; i++)
+        for (i = 0; positions[i]; i++)
 	    ;
-        num_sampoints = i;
+        num_points = i;
     
-        if (num_sampoints != num_outputs)
-                G_fatal_error(_("input= and sampoints= must have the same number of values"));
+        if (num_points != num_maps)
+            G_fatal_error(_("The number of %s maps and %s point positions must be equal"), type, type);
         
-    	outputs = G_malloc(num_outputs * sizeof(struct map_store));
+    	maps = G_malloc(num_maps * sizeof(struct map_store));
 
-    	for (i = 0; i < num_outputs; i++) {
-	    struct map_store *p = &outputs[i];
+    	for (i = 0; i < num_maps; i++) {
+	    struct map_store *p = &maps[i];
 
-	    p->name = parm.output->answers[i];
-            p->pos = (DCELL)atof(parm.sampoints->answers[i]);
+	    p->name = map_names[i];
+            p->pos = (DCELL)atof(positions[i]);
             p->fd = -1;
             p->buf = NULL;
+            p->has_run = 0;
+            G_verbose_message(_("Preparing %s map <%s> at position %g"), type, p->name, p->pos);
         }
     }
-  
-    /* Start the interpolation for each output map */
-    for (i = 0; i < num_outputs; i++) {
-            G_verbose_message(_("Processing output raster map <%s> at sample point %g..."), outputs[i].name, outputs[i].pos);
-            start_interpolation(inputs, num_inputs, interpol_method, &outputs[i]);
-    }
-
-    /* Close input maps */
-   for (i = 0; i < num_inputs; i++)
-        Rast_close(inputs[i].fd);
-
-    exit(EXIT_SUCCESS);
+    *number_of_maps = num_maps;
+    return maps;
 }
 
-int start_interpolation(struct map_store *inputs, int num_inputs, int interpol_method, struct map_store *out) { 
+/* *************************************************************** */
+/* *************************************************************** */
+/* *************************************************************** */
 
-    struct History history;
-    int row, i;
-    int nrows = Rast_window_rows();
-    int ncols = Rast_window_cols();
+void start_interpolation(struct map_store *inputs, int num_inputs, struct map_store *outputs, int num_outputs, int interpol_method) 
+{ 
+    int i;
+    struct map_store **inp = (struct map_store**) G_malloc(num_inputs * sizeof(struct map_store*));
+    struct map_store **outp = (struct map_store**) G_malloc(num_outputs * sizeof(struct map_store*));
 
-    out->fd = Rast_open_new(out->name, DCELL_TYPE);
-    out->buf = Rast_allocate_d_buf();
+    G_verbose_message(_("Start interpolation run with %i input maps and %i output maps"), 
+                      num_inputs, num_outputs);
 
-    /* process the data */
-    G_verbose_message(_("Percent complete..."));
+    for(i = 0; i < num_inputs; i++) 
+        inp[i] = &inputs[i];
+    for(i = 0; i < num_outputs; i++)
+        outp[i] = &outputs[i];
 
-    for (row = 0; row < nrows; row++) {
-	G_percent(row, nrows, 2);
+    /* Sort input and output pointer by their point position 
+     * using brute force. :) 
+     */
 
-        for (i = 0; i < num_inputs; i++)
-            Rast_get_d_row(inputs[i].fd, inputs[i].buf, row);
+    selection_sort(inp, num_inputs);
+    selection_sort(outp, num_outputs);
 
-        if(interpol_method == LINEAR_INTERPOLATION)
-            linear_interpolation(inputs, out, ncols);
-        /* Add new interpolation methods here */
+    if(interpol_method == LINEAR_INTERPOLATION) 
+        linear_interpolation(inp, num_inputs, outp, num_outputs);
 
-	Rast_put_d_row(out->fd, out->buf);
-    }
-
-    G_percent(row, nrows, 2);
-
-    Rast_close(out->fd);
-
-    Rast_short_history(out->name, "raster", &history);
-    Rast_command_history(&history);
-    Rast_write_history(out->name, &history);
-
-    G_free(out->buf);
-
-    return 1;
+   for(i = 0; i < num_outputs; i++) {
+       if(outp[i]->has_run == 0) 
+           G_warning(_("map <%s> at position %g was not interpolated. Check the interpolation interval."), outp[i]->name, outp[i]->pos);
+   }
 }
 
+/* *************************************************************** */
+/* *************************************************************** */
+/* *************************************************************** */
+
+void linear_interpolation(struct map_store **inp, int num_inputs, 
+                          struct map_store **outp, int num_outputs)
+{
+   struct map_store *left;
+   struct map_store *right;
+   struct History history;
+   int interval, l, row;
+   int nrows = Rast_window_rows();
+   int ncols = Rast_window_cols();
+   int start = 0;
+
+   if(num_inputs < 2)
+       G_fatal_error(_("At least 2 input maps are required for linear interpolation")); 
+
+   /* Interpolate for each interval */
+   for(interval = 0; interval < num_inputs - 1; interval++) {
+
+       left = inp[interval];
+       right = inp[interval + 1];
+       left->fd = Rast_open_old(left->name, "");
+       right->fd = Rast_open_old(right->name, "");
+       left->buf = Rast_allocate_d_buf();
+       right->buf = Rast_allocate_d_buf();
+
+       for(l = start; l < num_outputs; l++) {
+           /* Check if the map is in the interval and process it */
+           if(outp[l]->pos >= left->pos && outp[l]->pos <= right->pos) {
+               outp[l]->fd = Rast_open_new(outp[l]->name, DCELL_TYPE);
+               outp[l]->buf = Rast_allocate_d_buf();
+
+               G_verbose_message(_("Interpolate map <%s> at position %g in interval (%g;%g)"), 
+                                outp[l]->name, outp[l]->pos, left->pos, right->pos);
+               G_verbose_message(_("Percent complete..."));
+
+               for (row = 0; row < nrows; row++) {
+                   G_percent(row, nrows, 2);
+
+                   Rast_get_d_row(left->fd, left->buf, row);
+                   Rast_get_d_row(right->fd, right->buf, row);
+
+                   interpolate_row_linear(left, right, outp[l], ncols);
+                   Rast_put_d_row(outp[l]->fd, outp[l]->buf);
+               }
+
+               G_percent(row, nrows, 2);
+
+               Rast_close(outp[l]->fd);
+               Rast_short_history(outp[l]->name, "raster", &history);
+               Rast_command_history(&history);
+               Rast_write_history(outp[l]->name, &history);
+
+               G_free(outp[l]->buf);
+               outp[l]->has_run = 1;
+           
+               start = l;
+           }
+       }
+       Rast_close(left->fd);
+       G_free(left->buf);
+       Rast_close(right->fd);
+       G_free(right->buf);
+   }
+}
+
+/* *************************************************************** */
+/* *************************************************************** */
+/* *************************************************************** */
 /* linear function v = (1 - pos/dist) * u1 + pos/dist * u2
  *
  * v    -> The value of the output map
- * pos  -> The normalized position of the output map (0;1)
+ * pos  -> The normalized position of the output map
  * u1   -> The value of the left input map
  * u2   -> The value of the right input map
  * dist -> The distance between the position of u1 and u2
  *
  * */
-void linear_interpolation(struct map_store *inputs, struct map_store *out, int ncols)
+void interpolate_row_linear(struct map_store *left, struct map_store *right, struct map_store *out, int ncols)
 {
     DCELL v;
     DCELL u1;
@@ -325,17 +379,41 @@ void linear_interpolation(struct map_store *inputs, struct map_store *out, int n
     int col;
 
     for (col = 0; col < ncols; col++) {
-        u1 = inputs[0].buf[col];
-        u2 = inputs[1].buf[col];
-        dist =  fabs(inputs[1].pos -  inputs[0].pos);
-
+        u1 = left->buf[col];
+        u2 = right->buf[col];
+        dist =  fabs(right->pos -  left->pos);
 
         if(Rast_is_d_null_value(&u1) || Rast_is_d_null_value(&u2)) {
             Rast_set_d_null_value(&v, 1);
         } else {
-            v = (1 - (out->pos/dist)) * u1 + (out->pos/dist) * u2;
+            v = (1 - ((out->pos - left->pos)/dist)) * u1 + ((out->pos - left->pos)/dist) * u2;
         }
         out->buf[col] = v;
     }
     return;
 }
+
+/* *************************************************************** */
+/* *************************************************************** */
+/* *************************************************************** */
+
+void selection_sort(struct map_store **array, int num) 
+{
+    int i, j, b;
+    struct map_store *min;
+
+    for (i = 0; i < num - 1; i++) {
+        b = i;
+        min = array[b];
+
+        for (j = i + 1; j < num; j++) {
+            if (array[j]->pos < min->pos) {
+                b = j;
+                min = array[b];
+            }
+        }
+    array[b] = array[i];
+    array[i] = min;
+    }
+}
+
