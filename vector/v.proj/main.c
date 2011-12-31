@@ -51,10 +51,13 @@ int main(int argc, char *argv[])
     struct line_cats *Cats;
     struct Map_info Map;
     struct Map_info Out_Map;
+    struct bound_box src_box, tgt_box;
+    int wrap360 = 0, recommend_wrap = 0;
     struct
     {
 	struct Flag *list;	/* list files in source location */
 	struct Flag *transformz;	/* treat z as ellipsoidal height */
+	struct Flag *wrap;		/* latlon output: wrap to 0,360 */
     } flag;
 
     G_gisinit(argv[0]);
@@ -114,6 +117,13 @@ int main(int argc, char *argv[])
 	  "transform if possible");
     flag.transformz->guisection = _("Target");
 
+    flag.wrap = G_define_flag();
+    flag.wrap->key = 'w';
+    flag.wrap->description = _("Latlon output only, default is -180,180");
+    flag.wrap->label =
+	_("Wrap to 0,360 for latlon output");
+    flag.transformz->guisection = _("Target");
+
     /* The parser checks if the map already exists in current mapset,
        we switch out the check and do it
        in the module after the parser */
@@ -149,6 +159,10 @@ int main(int argc, char *argv[])
 
     if (!ibaseopt->answer && strcmp(iloc_name, G_location()) == 0)
 	G_fatal_error(_("Input and output locations can not be the same"));
+
+    Out_proj = G_projection();
+    if (Out_proj == PROJECTION_LL && flag.wrap->answer)
+	wrap360 = 1;
 
     /* Change the location here and then come back */
 
@@ -221,7 +235,6 @@ int main(int argc, char *argv[])
     select_current_env();
 
     /****** get the output projection parameters ******/
-    Out_proj = G_projection();
     out_proj_keys = G_get_projinfo();
     if (out_proj_keys == NULL)
 	exit(EXIT_FAILURE);
@@ -240,6 +253,108 @@ int main(int argc, char *argv[])
 
     if (G_verbose() == G_verbose_max()) {
 	pj_print_proj_params(&info_in, &info_out);
+    }
+
+    /* Initialize the Point / Cat structure */
+    Points = Vect_new_line_struct();
+    Cats = Vect_new_cats_struct();
+
+    /* test if latlon wrapping to 0,360 would be needed */
+    if (Out_proj == PROJECTION_LL && wrap360 == 0) {
+	int first = 1, counter = 0;
+	double x, y;
+	
+	/* Cycle through all lines */
+	Vect_rewind(&Map);
+	while (1) {
+	    type = Vect_read_next_line(&Map, Points, Cats);	/* read line */
+	    if (type == 0)
+		continue;		/* Dead */
+
+	    if (type == -1)
+		G_fatal_error(_("Reading input vector map"));
+	    if (type == -2)
+		break;
+		
+	    if (first && Points->n_points > 0) {
+		first = 0;
+		src_box.E = src_box.W = Points->x[0];
+		src_box.N = src_box.S = Points->y[0];
+		src_box.T = src_box.B = Points->z[0];
+	    }
+	    for (i = 0; i < Points->n_points; i++) {
+		if (src_box.E < Points->x[i])
+		    src_box.E = Points->x[i];
+		if (src_box.W > Points->x[i])
+		    src_box.W = Points->x[i];
+		if (src_box.N < Points->y[i])
+		    src_box.N = Points->y[i];
+		if (src_box.S > Points->y[i])
+		    src_box.S = Points->y[i];
+	    }
+	    counter++;
+	}
+	if (counter == 0) {
+	    G_warning(_("Input vector map <%s> is empty"), omap_name);
+	    exit(EXIT_SUCCESS);
+	}
+	/* NW corner */
+	x = src_box.W;
+	y = src_box.N;
+	if (pj_do_transform(1, &x, &y, NULL,
+			    &info_in, &info_out) < 0) {
+	    G_fatal_error(_("Error in pj_do_transform"));
+	}
+	tgt_box.E = x;
+	tgt_box.W = x;
+	tgt_box.N = y;
+	tgt_box.S = y;
+	/* SW corner */
+	x = src_box.W;
+	y = src_box.S;
+	if (pj_do_transform(1, &x, &y, NULL,
+			    &info_in, &info_out) < 0) {
+	    G_fatal_error(_("Error in pj_do_transform"));
+	}
+	if (tgt_box.W > x)
+	    tgt_box.W = x;
+	if (tgt_box.E < x)
+	    tgt_box.E = x;
+	if (tgt_box.N < y)
+	    tgt_box.N = y;
+	if (tgt_box.S > y)
+	    tgt_box.S = y;
+	/* NE corner */
+	x = src_box.E;
+	y = src_box.N;
+	if (pj_do_transform(1, &x, &y, NULL,
+			    &info_in, &info_out) < 0) {
+	    G_fatal_error(_("Error in pj_do_transform"));
+	}
+	if (tgt_box.W > x) {
+	    tgt_box.E = x + 360;
+	    recommend_wrap = 1;
+	}
+	if (tgt_box.N < y)
+	    tgt_box.N = y;
+	if (tgt_box.S > y)
+	    tgt_box.S = y;
+	/* SE corner */
+	x = src_box.E;
+	y = src_box.S;
+	if (pj_do_transform(1, &x, &y, NULL,
+			    &info_in, &info_out) < 0) {
+	    G_fatal_error(_("Error in pj_do_transform"));
+	}
+	if (tgt_box.W > x) {
+	    if (tgt_box.E < x + 360)
+		tgt_box.E = x + 360;
+	    recommend_wrap = 1;
+	}
+	if (tgt_box.N < y)
+	    tgt_box.N = y;
+	if (tgt_box.S > y)
+	    tgt_box.S = y;
     }
 
     G_debug(1, "Open new: location: %s mapset : %s", G__location_path(),
@@ -263,10 +378,6 @@ int main(int argc, char *argv[])
     sprintf(date, "%s %d %d", mon, day, yr);
     Vect_set_date(&Out_Map, date);
 
-    /* Initialize the Point / Cat structure */
-    Points = Vect_new_line_struct();
-    Cats = Vect_new_cats_struct();
-
     /* Cycle through all lines */
     Vect_rewind(&Map);
     i = 0;
@@ -289,6 +400,16 @@ int main(int argc, char *argv[])
 			    &info_in, &info_out) < 0) {
 	    G_fatal_error(_("Error in pj_do_transform"));
 	}
+	
+	if (wrap360) {
+	    int j;
+
+	    for (j = 0; j < Points->n_points; j++) {
+		/* use tgt_box.W instead of 0 ? */
+		if (Points->x[j] < 0)
+		    Points->x[j] += 360.;
+	    }
+	}
 
 	Vect_write_line(&Out_Map, type, Points, Cats);	/* write line */
     }				/* end lines section */
@@ -302,6 +423,9 @@ int main(int argc, char *argv[])
 
     Vect_build(&Out_Map);
     Vect_close(&Out_Map);
+
+    if (recommend_wrap)
+	G_important_message(_("Wrapping to 0,360 recommended."));
 
     exit(EXIT_SUCCESS);
 }
