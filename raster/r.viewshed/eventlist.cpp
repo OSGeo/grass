@@ -522,13 +522,28 @@ double
 get_square_distance_from_viewpoint(const AEvent & a, const Viewpoint & vp)
 {
 
-    double eventy, eventx;
+    double eventy, eventx, dist;
 
     calculate_event_position(a, vp.row, vp.col, &eventy, &eventx);
 
-    double dist = (eventx - vp.col) * (eventx - vp.col) +
-	(eventy - vp.row) * (eventy - vp.row);
-    /*don't take sqrt, it is expensive; suffices for comparison */
+    if (G_projection() == PROJECTION_LL) {
+	struct Cell_head window;
+	
+	Rast_get_window(&window);
+	
+	dist = G_distance(Rast_col_to_easting(vp.col + 0.5, &window),
+			  Rast_row_to_northing(vp.row + 0.5, &window),
+			  Rast_col_to_easting(eventx + 0.5, &window),
+			  Rast_row_to_northing(eventy + 0.5, &window));
+
+	dist = dist * dist;
+    }
+    else {
+	/*don't take sqrt, it is expensive; suffices for comparison */
+	dist = (eventx - vp.col) * (eventx - vp.col) +
+	    (eventy - vp.row) * (eventy - vp.row);
+    }
+
     return dist;
 }
 
@@ -539,12 +554,27 @@ get_square_distance_from_viewpoint_with_print(const AEvent & a,
 					      const Viewpoint & vp)
 {
 
-    double eventy, eventx;
+    double eventy, eventx, dist;
 
     calculate_event_position(a, vp.row, vp.col, &eventy, &eventx);
-    double dist = (eventx - vp.col) * (eventx - vp.col) +
-	(eventy - vp.row) * (eventy - vp.row);
-    /*don't take sqrt, it is expensive; suffices for comparison */
+
+    if (G_projection() == PROJECTION_LL) {
+	struct Cell_head window;
+	
+	Rast_get_window(&window);
+	
+	dist = G_distance(Rast_col_to_easting(vp.col + 0.5, &window),
+			  Rast_row_to_northing(vp.row + 0.5, &window),
+			  Rast_col_to_easting(eventx + 0.5, &window),
+			  Rast_row_to_northing(eventy + 0.5, &window));
+
+	dist = dist * dist;
+    }
+    else {
+	/*don't take sqrt, it is expensive; suffices for comparison */
+	dist = (eventx - vp.col) * (eventx - vp.col) +
+	    (eventy - vp.row) * (eventy - vp.row);
+    }
 
     print_event(a, 2);
     G_debug(2, " pos= (%.3f. %.3f) sqdist=%.3f", eventx, eventy, dist);
@@ -578,7 +608,7 @@ int is_point_outside_max_dist(Viewpoint vp, GridHeader hd,
 
 
 /* ------------------------------------------------------------ 
-   //note: this is expensive because distance is not storedin the event
+   //note: this is expensive because distance is not stored in the event
    //and must be computed on the fly */
 int DistanceCompare::compare(const AEvent & a, const AEvent & b)
 {
@@ -594,11 +624,43 @@ int DistanceCompare::compare(const AEvent & a, const AEvent & b)
     double eventy, eventx;
 
     calculate_event_position(a, globalVP.row, globalVP.col, &eventy, &eventx);
-    da = (eventx - globalVP.col) * (eventx - globalVP.col) +
-	(eventy - globalVP.row) * (eventy - globalVP.row);
+    if (G_projection() == PROJECTION_LL) {
+	struct Cell_head window;
+	
+	Rast_get_window(&window);
+	
+	da = G_distance(Rast_col_to_easting(globalVP.col + 0.5, &window),
+			  Rast_row_to_northing(globalVP.row + 0.5, &window),
+			  Rast_col_to_easting(eventx + 0.5, &window),
+			  Rast_row_to_northing(eventy + 0.5, &window));
+
+	da = da * da;
+    }
+    else {
+	/*don't take sqrt, it is expensive; suffices for comparison */
+	da = (eventx - globalVP.col) * (eventx - globalVP.col) +
+	    (eventy - globalVP.row) * (eventy - globalVP.row);
+    }
+
+
     calculate_event_position(b, globalVP.row, globalVP.col, &eventy, &eventx);
-    db = (eventx - globalVP.col) * (eventx - globalVP.col) +
-	(eventy - globalVP.row) * (eventy - globalVP.row);
+    if (G_projection() == PROJECTION_LL) {
+	struct Cell_head window;
+	
+	Rast_get_window(&window);
+	
+	db = G_distance(Rast_col_to_easting(globalVP.col + 0.5, &window),
+			  Rast_row_to_northing(globalVP.row + 0.5, &window),
+			  Rast_col_to_easting(eventx + 0.5, &window),
+			  Rast_row_to_northing(eventy + 0.5, &window));
+
+	db = db * db;
+    }
+    else {
+	/*don't take sqrt, it is expensive; suffices for comparison */
+	db = (eventx - globalVP.col) * (eventx - globalVP.col) +
+	    (eventy - globalVP.row) * (eventy - globalVP.row);
+    }
 
     if (da > db) {
 	return 1;

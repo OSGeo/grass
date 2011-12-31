@@ -116,10 +116,21 @@ void calculate_dist_n_gradient(StatusNode * sn, double elev,
        //sn->gradient = (sn->elev  - vp->elev)/(sn->dist2vp); */
        
     double diffElev = elev - vp->elev;
-    double dx = ((double)sn->col - vp->col) * hd.ew_res;
-    double dy = ((double)sn->row - vp->row) * hd.ns_res;
     
-    sn->dist2vp = (dx * dx) + (dy * dy);
+    if (G_projection() == PROJECTION_LL) {
+	double dist = G_distance(Rast_col_to_easting(sn->col + 0.5, &(hd.window)),
+				 Rast_row_to_northing(sn->row + 0.5, &(hd.window)),
+				 Rast_col_to_easting(vp->col + 0.5, &(hd.window)),
+				 Rast_row_to_northing(vp->row + 0.5, &(hd.window)));
+
+	sn->dist2vp = dist * dist;
+    }
+    else {
+	double dx = ((double)sn->col - vp->col) * hd.ew_res;
+	double dy = ((double)sn->row - vp->row) * hd.ns_res;
+	
+	sn->dist2vp = (dx * dx) + (dy * dy);
+    }
 
     if (diffElev == 0) {
 	sn->gradient[1] = 0;
@@ -162,10 +173,22 @@ void calculate_event_gradient(StatusNode * sn, int e_idx,
        //sn->gradient = (sn->elev  - vp->elev)/(sn->dist2vp); */
        
     double diffElev = elev - vp->elev;
-    double dx = (col - vp->col) * hd.ew_res;
-    double dy = (row - vp->row) * hd.ns_res;
-    double dist2vp = (dx * dx) + (dy * dy);
+    double dist2vp;
 
+    if (G_projection() == PROJECTION_LL) {
+	double dist = G_distance(Rast_col_to_easting(col + 0.5, &(hd.window)),
+				 Rast_row_to_northing(row + 0.5, &(hd.window)),
+				 Rast_col_to_easting(vp->col + 0.5, &(hd.window)),
+				 Rast_row_to_northing(vp->row + 0.5, &(hd.window)));
+
+	dist2vp = dist * dist;
+    }
+    else {
+	double dx = (col - vp->col) * hd.ew_res;
+	double dy = (row - vp->row) * hd.ns_res;
+	
+	dist2vp = (dx * dx) + (dy * dy);
+    }
 
     /* PI / 2 above, - PI / 2 below */
     sn->gradient[e_idx] = atan(diffElev / sqrt(dist2vp));
