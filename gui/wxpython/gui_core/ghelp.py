@@ -569,14 +569,14 @@ class AboutWindow(wx.Frame):
                 line = line.rstrip('\n')
                 try:
                     if extra:
-                        name, email, rfc2_agreed = line.split(',')
+                        name, email, country, rfc2_agreed = line.split(',')
                     else:
                         cvs_id, name, email, country, osgeo_id, rfc2_agreed = line.split(',')
                 except ValueError:
                     errLines.append(line)
                     continue
                 if extra:
-                    contribs.append((name, email))
+                    contribs.append((name, email, country))
                 else:
                     contribs.append((name, email, country, osgeo_id))
             
@@ -603,7 +603,7 @@ class AboutWindow(wx.Frame):
                                  flag = wx.EXPAND | wx.ALL, border = 3)
         else:
             if extra:
-                items = (_('Name'), _('E-mail'))
+                items = (_('Name'), _('E-mail'), _('Country'))
             else:
                 items = (_('Name'), _('E-mail'), _('Country'), _('OSGeo_ID'))
             contribBox = wx.FlexGridSizer(cols = len(items), vgap = 5, hgap = 5)

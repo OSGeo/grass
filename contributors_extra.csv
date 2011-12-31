@@ -1,40 +1,40 @@
-name,email,rfc2_agreed
-Alfonso Vitti,<alfonso vitti ing.unitn.it>,-
-Andrea Aime,<aaime openplans.org>,-
-Angus Carr,<apcarr flash lakeheadu.ca>,-
-Antonio Galea,<ant9000 netwise.it>,-
-Ari Jolma,<ari jolma tkk fi>,-
-Bill Hughes,<bhughes grasshoppernet.com>,-
-Brook Milligan,<brook trillium nmsu.edu>,-
-Bruce Byars,<Bruce_Byars baylor.edu>,-
-Carl Anderson,<candrsn mindspring.com>,-
-Charles Ehlschlaeger,<cre111 wiu.edu>,-
-Christoph Simon,<ciccio kiosknet.com.br>,-
-Duccio Rocchini,<ducciorocchini gmail.com>,-
-Dylan Beaudette,<dylan.beaudette gmail.com>,yes
-Eric Mitchell,<emitchell altaira.com>,-
-Francesco Pirotti,<francesco.pirotti unipd.it>,-
-Jacques Bouchard,<bouchard onera.fr>,-
-Jaro Hofierka,<hofierka geomodel.sk>,-
-Jeshua Lacock,<jeshua OpenOSX.com>,-
-Job Spijker,<spijker geo.uu.nl>,-
-Lars Ahlzen,<lars ahlzen.com>,-
-Lorenzo Moretti,<lorenzo moretti bologna.enea.it>,-
-Lubos Mitas,<lmitas ncsa uiuc.edu>,-
-Luca Delucchi,<lucadeluge gmail.com>,-
-Malcolm Blue,<mblue nb sympatico.ca>,-
-Maria Brovelli,<maria.brovelli polimi.it>,-
-Michael Perdue,<michael_perdue yahoo.ca>,-
-Michel Wurtz,<mw teledetection.fr>,-
-Otto Dassau,<otto.dassau gmx de>,yes
-Philip Warner,<pjw rhyme com.au>,-
-Phisan Santitamnont,<fsvpss eng.chula.ac.th>,-
-Pierre de Mouveaux,<pierre polaris-technologies.com>,-
-Ralf Gerlich,<ralf gerlich at bsse.biz>,-
-Roberto Flor,<flor fbk.eu>,-
-Roger Bivand,<Roger Bivand nhh.no>,-
-Roger Miller,<rgrmill rt66.com>,-
-Tomas Paudits,<tpaudits mailbox.sk>,-
-Trevor Wiens,<twiens interbaun.com>,-
-Václav Petráš,<wenzeslaus gmail.com>,-
-William Brown,<brown gis.uiuc.edu>,-
+name,email,country,rfc2_agreed
+Alfonso Vitti,<alfonso vitti ing.unitn.it>,Italy,-
+Andrea Aime,<aaime openplans.org>,Italy,-
+Angus Carr,<apcarr flash lakeheadu.ca>,-,-
+Antonio Galea,<ant9000 netwise.it>,Italy,-
+Ari Jolma,<ari jolma tkk fi>,Finland,-
+Bill Hughes,<bhughes grasshoppernet.com>,-,-
+Brook Milligan,<brook trillium nmsu.edu>,-,-
+Bruce Byars,<Bruce_Byars baylor.edu>,-,-
+Carl Anderson,<candrsn mindspring.com>,-,-
+Charles Ehlschlaeger,<cre111 wiu.edu>,-,-
+Christoph Simon,<ciccio kiosknet.com.br>,-,-
+Duccio Rocchini,<ducciorocchini gmail.com>,Italy,-
+Dylan Beaudette,<dylan.beaudette gmail.com>,-,yes
+Eric Mitchell,<emitchell altaira.com>,-,-
+Francesco Pirotti,<francesco.pirotti unipd.it>,-,-
+Jacques Bouchard,<bouchard onera.fr>,-,-
+Jaro Hofierka,<hofierka geomodel.sk>,Slovakia,-
+Jeshua Lacock,<jeshua OpenOSX.com>,-,-
+Job Spijker,<spijker geo.uu.nl>,-,-
+Lars Ahlzen,<lars ahlzen.com>,-,-
+Lorenzo Moretti,<lorenzo moretti bologna.enea.it>,Italy,-
+Lubos Mitas,<lmitas ncsa uiuc.edu>,-,-
+Luca Delucchi,<lucadeluge gmail.com>,Italy,-
+Malcolm Blue,<mblue nb sympatico.ca>,Canada,-
+Maria Brovelli,<maria.brovelli polimi.it>,Italy,-
+Michael Perdue,<michael_perdue yahoo.ca>,-,-
+Michel Wurtz,<mw teledetection.fr>,France,-
+Otto Dassau,<otto.dassau gmx de>,Germany,yes
+Philip Warner,<pjw rhyme com.au>,-,-
+Phisan Santitamnont,<fsvpss eng.chula.ac.th>,-,-
+Pierre de Mouveaux,<pierre polaris-technologies.com>,-,-
+Ralf Gerlich,<ralf gerlich at bsse.biz>,-,-
+Roberto Flor,<flor fbk.eu>,Italy,-
+Roger Bivand,<Roger Bivand nhh.no>,-,-
+Roger Miller,<rgrmill rt66.com>,-,-
+Tomas Paudits,<tpaudits mailbox.sk>,Slovakia,-
+Trevor Wiens,<twiens interbaun.com>,-,-
+Václav Petráš,<wenzeslaus gmail.com>,Czech Republic,-
+William Brown,<brown gis.uiuc.edu>,-,-
