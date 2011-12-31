@@ -541,7 +541,7 @@ class AboutWindow(wx.Frame):
             authors = _('%s file missing') % 'AUTHORS'
         authorwin = ScrolledPanel(self)
         authortxt = wx.StaticText(authorwin, id = wx.ID_ANY, label = authors)
-        authorwin.SetAutoLayout(1)
+        authorwin.SetAutoLayout(True)
         authorwin.SetupScrolling()
         authorwin.sizer = wx.BoxSizer(wx.VERTICAL)
         authorwin.sizer.Add(item = authortxt, proportion = 1,
