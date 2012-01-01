@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
     struct Map_info Map;
     struct Map_info Out_Map;
     struct bound_box src_box, tgt_box;
-    int wrap360 = 0, recommend_wrap = 0;
+    int nowrap = 0, recommend_nowrap = 0;
     struct
     {
 	struct Flag *list;	/* list files in source location */
@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
     flag.wrap->key = 'w';
     flag.wrap->description = _("Latlon output only, default is -180,180");
     flag.wrap->label =
-	_("Wrap to 0,360 for latlon output");
+	_("Disable wrapping to -180,180 for latlon output");
     flag.transformz->guisection = _("Target");
 
     /* The parser checks if the map already exists in current mapset,
@@ -162,7 +162,7 @@ int main(int argc, char *argv[])
 
     Out_proj = G_projection();
     if (Out_proj == PROJECTION_LL && flag.wrap->answer)
-	wrap360 = 1;
+	nowrap = 1;
 
     /* Change the location here and then come back */
 
@@ -208,6 +208,11 @@ int main(int argc, char *argv[])
 	in_proj_keys = G_get_projinfo();
 	if (in_proj_keys == NULL)
 	    exit(EXIT_FAILURE);
+
+	/* apparently the +over switch must be set in the input projection,
+	 * not the output latlon projection */
+	if (Out_proj == PROJECTION_LL && nowrap == 1)
+	    G_set_key_value("+over", "defined", in_proj_keys);
 
 	in_unit_keys = G_get_projunits();
 	if (in_unit_keys == NULL)
@@ -259,8 +264,8 @@ int main(int argc, char *argv[])
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
-    /* test if latlon wrapping to 0,360 would be needed */
-    if (Out_proj == PROJECTION_LL && wrap360 == 0) {
+    /* test if latlon wrapping to -180,180 should be disabled */
+    if (Out_proj == PROJECTION_LL && nowrap == 0) {
 	int first = 1, counter = 0;
 	double x, y;
 	
@@ -333,7 +338,7 @@ int main(int argc, char *argv[])
 	}
 	if (tgt_box.W > x) {
 	    tgt_box.E = x + 360;
-	    recommend_wrap = 1;
+	    recommend_nowrap = 1;
 	}
 	if (tgt_box.N < y)
 	    tgt_box.N = y;
@@ -349,7 +354,7 @@ int main(int argc, char *argv[])
 	if (tgt_box.W > x) {
 	    if (tgt_box.E < x + 360)
 		tgt_box.E = x + 360;
-	    recommend_wrap = 1;
+	    recommend_nowrap = 1;
 	}
 	if (tgt_box.N < y)
 	    tgt_box.N = y;
@@ -400,16 +405,6 @@ int main(int argc, char *argv[])
 			    &info_in, &info_out) < 0) {
 	    G_fatal_error(_("Error in pj_do_transform"));
 	}
-	
-	if (wrap360) {
-	    int j;
-
-	    for (j = 0; j < Points->n_points; j++) {
-		/* use tgt_box.W instead of 0 ? */
-		if (Points->x[j] < 0)
-		    Points->x[j] += 360.;
-	    }
-	}
 
 	Vect_write_line(&Out_Map, type, Points, Cats);	/* write line */
     }				/* end lines section */
@@ -424,8 +419,8 @@ int main(int argc, char *argv[])
     Vect_build(&Out_Map);
     Vect_close(&Out_Map);
 
-    if (recommend_wrap)
-	G_important_message(_("Wrapping to 0,360 recommended."));
+    if (recommend_nowrap)
+	G_important_message(_("Try to disable wrapping to -180,180 if topological errors occurred."));
 
     exit(EXIT_SUCCESS);
 }

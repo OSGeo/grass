@@ -26,9 +26,8 @@ If <b>set</b> is not specified, its name is assumed to be the same as the curren
 <p>When projecting into a latlon location, east coordinates are wrapped 
 by the proj4 library to fit into the range -180,180. This is in most cases 
 appropriate, but can cause errors the input vector crosses the datum line 
-at 180E/W. In this case the east coordinates need to be wrapped to the 
-range 0,360 after transformation. Wrapping of eastings to the range 0,360 
-is activated with the <b>-w</b> flag.
+at 180E/W. In this case wrapping of east coordinates to -180,180 needs 
+to be disabled with the <b>-w</b> flag.
 
 <h2>EXAMPLES</h2>
 
