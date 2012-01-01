@@ -64,7 +64,7 @@ def main():
     if not grass.find_file(input)['file'] and not remove:
         grass.fatal(_("<%s> does not exist.") % input)
 
-    if maskcats and not remove:
+    if maskcats != '*' and not remove:
         if grass.raster_info(input)['datatype'] != "CELL":
             grass.fatal(_("Raster map %s must be integer for maskcats parameter") % input)
 
