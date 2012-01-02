@@ -74,19 +74,19 @@ struct Option *N_define_standard_option(int opt)
 	Opt->key = "maxit";
 	Opt->type = TYPE_INTEGER;
 	Opt->required = NO;
-	Opt->answer = "100000";
+	Opt->answer = "10000";
         Opt->guisection = "Solver";
 	Opt->description =
-	    ("Maximum number of iteration used to solver the linear equation system");
+	    ("Maximum number of iteration used to solve the linear equation system");
 	break;
     case N_OPT_ITERATION_ERROR:
 	Opt->key = "error";
 	Opt->type = TYPE_DOUBLE;
 	Opt->required = NO;
-	Opt->answer = "0.0000000001";
+	Opt->answer = "0.000001";
         Opt->guisection = "Solver";
 	Opt->description =
-	    ("Error break criteria for iterative solvers (jacobi, sor, cg or bicgstab)");
+	    ("Error break criteria for iterative solver");
 	break;
     case N_OPT_SOR_VALUE:
 	Opt->key = "relax";
