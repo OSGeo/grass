@@ -243,11 +243,14 @@ class DisplayDriver:
         brush = None
         if self._isSelected(robj.fid):
             pdc = self.dcTmp
-            if self.settings['highlightDupl']['enabled'] and self._isDuplicated(robj.fid):
-                pen = wx.Pen(self.settings['highlightDupl']['color'], self.settings['lineWidth'], wx.SOLID)
-            else:            
-                pen = wx.Pen(self.settings['highlight'], self.settings['lineWidth'], wx.SOLID)
-            
+            if robj.type == TYPE_AREA:
+                return 1
+            else:
+                if self.settings['highlightDupl']['enabled'] and self._isDuplicated(robj.fid):
+                    pen = wx.Pen(self.settings['highlightDupl']['color'], self.settings['lineWidth'], wx.SOLID)
+                else:            
+                    pen = wx.Pen(self.settings['highlight'], self.settings['lineWidth'], wx.SOLID)
+                    
             dcId = 1
             self.topology['highlight'] += 1
             if not self._drawSelected:
