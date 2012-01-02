@@ -679,7 +679,7 @@ int main(int argc, char *argv[])
 
 		G_debug(4, "  dist = %f", dist);
 
-		if (curr_step < n_max_steps) {
+		if (!all && curr_step < n_max_steps) {
 		    /* enlarging the search box is possible */
 		    if (tline > 0 && dist > box_edge) {
 			/* line found but distance > search edge:
@@ -871,7 +871,7 @@ int main(int argc, char *argv[])
 		    }
 		}
 
-		if (curr_step < n_max_steps) {
+		if (!all && curr_step < n_max_steps) {
 		    /* enlarging the search box is possible */
 		    if (tarea > 0 && dist > box_edge) {
 			/* area found but distance > search edge:
