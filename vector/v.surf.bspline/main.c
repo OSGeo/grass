@@ -26,6 +26,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include "bspline.h"
+#include <grass/N_pde.h>
 
 #define SEGSIZE 64
 
@@ -68,7 +69,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *in_opt, *in_ext_opt, *out_opt, *out_map_opt, *stepE_opt,
 	*stepN_opt, *lambda_f_opt, *type_opt, *dfield_opt, *col_opt, *mask_opt,
-	*memory_opt;
+	*memory_opt, *solver, *error, *iter;
     struct Flag *cross_corr_flag, *spline_step_flag, *withz_flag;
 
     struct Reg_dimens dims;
@@ -176,6 +177,14 @@ int main(int argc, char *argv[])
     col_opt->description =
 	_("Name of attribute column with values to approximate");
     col_opt->guisection = _("Settings");
+
+    solver = N_define_standard_option(N_OPT_SOLVER_SYMM);
+    solver->options = "cholesky,cg";
+    solver->answer = "cholesky";
+
+    iter = N_define_standard_option(N_OPT_MAX_ITERATIONS);
+
+    error = N_define_standard_option(N_OPT_ITERATION_ERROR);
 
     memory_opt = G_define_option();
     memory_opt->key = "memory";
@@ -747,7 +756,11 @@ int main(int argc, char *argv[])
 		    nCorrectGrad(N, lambda, nsplx, nsply, stepE, stepN);
 		}
 
-		G_math_solver_cholesky_sband(N, parVect, TN, nparameters, BW);
+                if(G_strncasecmp(solver->answer, "cg", 2) == 0)
+                    G_math_solver_cg_sband(N, parVect, TN, nparameters, BW, atoi(iter->answer), atof(error->answer));
+		else
+		    G_math_solver_cholesky_sband(N, parVect, TN, nparameters, BW);
+
 
 		G_free_matrix(N);
 		G_free_vector(TN);
