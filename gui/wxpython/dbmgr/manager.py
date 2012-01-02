@@ -1305,9 +1305,9 @@ class AttributeManager(wx.Frame):
                                               update = True)
         
         if zoom:
-            self.mapdisplay.Map.AdjustRegion() # adjust resolution
+            self.mapdisplay.Map.AdjustRegion()           # adjust resolution
             self.mapdisplay.Map.AlignExtentFromDisplay() # adjust extent
-            self.mapdisplay.MapWindow.UpdateMap(render = True, renderVector = True)
+            self.mapdisplay.MapWindow.UpdateMap(render = True,  renderVector = True)
         else:
             self.mapdisplay.MapWindow.UpdateMap(render = False, renderVector = True)
         
