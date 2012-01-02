@@ -210,25 +210,29 @@ class DisplayAttributesDialog(wx.Dialog):
                         newvalue = self.FindWindowById(id).GetValue()
                     except:
                         newvalue = self.FindWindowById(id).GetLabel()
-                    
-                    try:
-                        if ctype == int:
-                            newvalue = int(newvalue)
-                        elif ctype == float:
-                            newvalue = float(newvalue)
-                    except ValueError:
-                        GError(parent = self,
-                               message = _("Column <%(col)s>: Value '%(value)s' needs to be entered as %(type)s.") % \
-                                   {'col' : name,
-                                    'value' : str(newvalue),
-                                    'type' : columns[name]['type'].lower()},
-                               showTraceback = False)
-                        sqlCommands.append(None)
-                        continue
+                  
+                    if newvalue:
+                        try:
+                            if ctype == int:
+                                newvalue = int(newvalue)
+                            elif ctype == float:
+                                newvalue = float(newvalue)
+                        except ValueError:
+                            GError(parent = self,
+                                   message = _("Column <%(col)s>: Value '%(value)s' needs to be entered as %(type)s.") % \
+                                       {'col' : name,
+                                        'value' : str(newvalue),
+                                        'type' : columns[name]['type'].lower()},
+                                   showTraceback = False)
+                            sqlCommands.append(None)
+                            continue
+                    else:
+                        if self.action == 'add':
+                            continue
                     
                     if newvalue != value:
                         updatedColumns.append(name)
-                        if newvalue is None:
+                        if not newvalue:
                             updatedValues.append('NULL')
                         else:
                             if ctype != str:
