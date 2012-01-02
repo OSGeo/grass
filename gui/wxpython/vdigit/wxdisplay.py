@@ -239,7 +239,7 @@ class DisplayDriver:
         if not self.dc or not self.dcTmp:
             return -1
         
-        Debug.msg(3, "_drawObject(): type=%d npoints=%d", robj.type, robj.npoints)
+        Debug.msg(3, "_drawObject(): line=%d type=%d npoints=%d", robj.fid, robj.type, robj.npoints)
         brush = None
         if self._isSelected(robj.fid):
             pdc = self.dcTmp
@@ -406,21 +406,8 @@ class DisplayDriver:
         @return True if vector object is selected
         @return False if vector object is not selected
         """
-        if len(self.selected['cats']) < 1 or force:
-            # select by id
-            if line in self.selected['ids']:
-                return True
-        else:
-            # select by cat
-            Vect_read_line(self.poMapInfo, None, self.poCats, line)
-            cats = self.poCats.contents
-            for i in range(cats.n_cats):
-                if cats.field[i] == self.selected['field'] and \
-                        cats.cat[i] in self.selected['cats']:
-                    # remember id
-                    # -> after drawing all features selected.cats is reseted */
-                    self.selected['ids'].append(line)
-                    return True
+        if line in self.selected['ids']:
+            return True
         
         return False
 
@@ -462,13 +449,10 @@ class DisplayDriver:
         if not self.poMapInfo or not self.dc or not self.dcTmp:
             return -1
         
-        try:
-            rlist = Vedit_render_map(self.poMapInfo, byref(self._getRegionBox()), self._getDrawFlag(),
-                                     self.region['center_easting'], self.region['center_northing'],
-                                     self.mapObj.width, self.mapObj.height,
-                                     max(self.region['nsres'], self.region['ewres'])).contents
-        except SystemExit:
-            pass
+        rlist = Vedit_render_map(self.poMapInfo, byref(self._getRegionBox()), self._getDrawFlag(),
+                                 self.region['center_easting'], self.region['center_northing'],
+                                 self.mapObj.width, self.mapObj.height,
+                                 max(self.region['nsres'], self.region['ewres'])).contents
         
         self._resetTopology()
         
