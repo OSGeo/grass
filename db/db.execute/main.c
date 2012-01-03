@@ -82,9 +82,12 @@ int main(int argc, char **argv)
 			      db_get_string(&stmt));
 		    error++;
 		}
-		else
+		else {
+		    db_close_database(driver);
+		    db_shutdown_driver(driver);
 		    G_fatal_error(_("Error while executing: '%s'"),
 				  db_get_string(&stmt));
+		}
 	    }
 	}
     }
