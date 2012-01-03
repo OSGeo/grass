@@ -849,7 +849,9 @@ class ColumnSelect(wx.ComboBox):
         self.SetValue(self.defaultValue)
         
         if self.param:
-            self.param['value'] = ''
+            value = self.param.get('value', '')
+            if value != '' and value in columns:
+                self.SetValue(value)
         
     def InsertTableColumns(self, table, driver=None, database=None):
         """!Insert table columns
@@ -873,7 +875,9 @@ class ColumnSelect(wx.ComboBox):
         self.SetValue(self.defaultValue)
         
         if self.param:
-            self.param['value'] = ''
+            value = self.param.get('value', '')
+            if value != '' and value in columns:
+                self.SetValue(value)
 
 class DbaseSelect(wx.lib.filebrowsebutton.DirBrowseButton):
     """!Widget for selecting GRASS Database"""
