@@ -1412,7 +1412,7 @@ class BufferedWindow(MapWindow, wx.Window):
         # disable tool if stack is empty
         if len(self.zoomhistory) < 2: # disable tool
             toolbar = self.parent.GetMapToolbar()
-            toolbar.Enable('zoomback', enable = False)
+            toolbar.Enable('zoomBack', enable = False)
         
         # zoom to selected region
         self.Map.GetRegion(n = zoom[0], s = zoom[1],
