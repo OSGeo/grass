@@ -1452,7 +1452,7 @@ class BufferedWindow(MapWindow, wx.Window):
         
         toolbar = self.parent.GetMapToolbar()
         
-        toolbar.Enable('zoomback', enable)
+        toolbar.Enable('zoomBack', enable)
         
         return removed
 
