@@ -169,9 +169,9 @@ def main():
     os.mkdir(tmpdir)
 
     if is_zip:
-	shutil.copyfile(zipfile, os.path.join(tmpdir, zipfile))
+	shutil.copyfile(zipfile, os.path.join(tmpdir, tile + ".hgt.zip"))
     else:
-	shutil.copyfile(hgtfile, os.path.join(tmpdir, hgtfile))
+	shutil.copyfile(hgtfile, os.path.join(tmpdir, tile + ".hgt"))
 
     #change to temporary directory
     os.chdir(tmpdir)
