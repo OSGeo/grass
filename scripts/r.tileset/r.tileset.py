@@ -242,8 +242,12 @@ def main():
                                  flags = 'j')
         if not ret:
             grass.fatal(_('g.proj failed'))
-        
-        dest_scale = ret['+to_meter'].strip()
+
+        if '+to_meter' in ret:
+            dest_scale = ret['+to_meter'].strip()
+        else:
+            grass.warning(_("Scale (%s) not found, assuming '1'") % '+to_meter')
+            dest_scale = '1'
     else:
         dest_scale = options['destscale']
     grass.debug('Getting destination projection scale -> %s' % dest_scale)
