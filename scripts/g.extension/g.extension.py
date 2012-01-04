@@ -270,7 +270,7 @@ def get_toolbox_modules(name):
 
 def list_available_modules(mlist = None):
     # try to download XML metadata file first
-    url = "http://grass.osgeo.org/addons/grass%s.xml" % version[0]
+    url = "http://grass.osgeo.org/addons/grass%s/modules.xml" % version[0]
     try:
         f = urlopen(url)
         tree = etree.fromstring(f.read())
@@ -643,7 +643,7 @@ def install_extension_xml(mlist):
     write_xml_modules(fXML, tree)
     
 # install extension on MS Windows
-def install_extension_win():
+def install_extension_win(name):
     ### TODO: do not use hardcoded url - http://wingrass.fsv.cvut.cz/grassXX/addonsX.X.X
     grass.message(_("Downloading precompiled GRASS Addons <%s>...") % options['extension'])
     url = "http://wingrass.fsv.cvut.cz/grass%s%s/addons" % (version[0], version[1])
@@ -652,7 +652,7 @@ def install_extension_win():
     grass.debug("url=%s" % url, 1)
     
     try:
-        f = urlopen(url + '/' + options['extension'] + '.zip')
+        f = urlopen(url + '/' + name + '.zip')
         
         # create addons dir if not exists
         if not os.path.exists(options['prefix']):
@@ -674,7 +674,7 @@ def install_extension_win():
         
         fo.close()
     except HTTPError:
-        grass.fatal(_("GRASS Addons <%s> not found") % options['extension'])
+        grass.fatal(_("GRASS Addons <%s> not found") % name)
     
     return 0
 
