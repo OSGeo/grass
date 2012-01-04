@@ -65,7 +65,10 @@ class InstallExtensionWindow(wx.Frame):
         
         self.optionBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
                                       label = " %s " % _("Options"))
-        task = gtask.parse_interface('g.extension')
+        if sys.platform == 'win32':
+            task = gtask.parse_interface('g.extension.py')
+        else:
+            task = gtask.parse_interface('g.extension.py')
         ignoreFlags = ['l', 'c', 'g', 'a', 'f', 'quiet', 'verbose']
         if sys.platform == 'win32':
             ignoreFlags.append('d')
@@ -226,7 +229,7 @@ class InstallExtensionWindow(wx.Frame):
             return
         
         name = self.tree.GetItemText(item)
-        globalvar.grassCmd['all'].append(name)
+        globalvar.grassCmd['all'].add(name)
         
     def OnItemSelected(self, event):
         """!Item selected"""
@@ -324,7 +327,10 @@ class ExtensionTree(ItemTree):
         mdict = dict()
         for line in ret.splitlines():
             if full:
-                key, value = line.split('=', 1)
+                try:
+                    key, value = line.split('=', 1)
+                except ValueError:
+                    continue
                 if key == 'name':
                     try:
                         prefix, name = value.split('.', 1)
