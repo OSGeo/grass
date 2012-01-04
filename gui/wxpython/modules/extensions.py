@@ -55,7 +55,7 @@ class InstallExtensionWindow(wx.Frame):
         
         self.repo = wx.TextCtrl(parent = self.panel, id = wx.ID_ANY)
         self.fullDesc = wx.CheckBox(parent = self.panel, id = wx.ID_ANY,
-                                    label = _("Fetch full info including description and keywords (takes time)"))
+                                    label = _("Fetch full info including description and keywords"))
         self.fullDesc.SetValue(True)
         
         self.search = SearchModuleWindow(parent = self.panel)
@@ -68,8 +68,8 @@ class InstallExtensionWindow(wx.Frame):
         if sys.platform == 'win32':
             task = gtask.parse_interface('g.extension.py')
         else:
-            task = gtask.parse_interface('g.extension.py')
-        ignoreFlags = ['l', 'c', 'g', 'a', 'f', 'quiet', 'verbose']
+            task = gtask.parse_interface('g.extension')
+        ignoreFlags = ['l', 'c', 'g', 'a', 'f', 't', 'quiet', 'verbose']
         if sys.platform == 'win32':
             ignoreFlags.append('d')
             ignoreFlags.append('i')
@@ -236,7 +236,7 @@ class InstallExtensionWindow(wx.Frame):
         item = event.GetItem()
         self.tree.itemSelected = item
         data = self.tree.GetPyData(item)
-        if not data:
+        if data is None:
             self.SetStatusText('', 0)
             self.btnInstall.Enable(False)
         else:
@@ -330,7 +330,9 @@ class ExtensionTree(ItemTree):
                 try:
                     key, value = line.split('=', 1)
                 except ValueError:
-                    continue
+                    key = 'name'
+                    value = line
+                
                 if key == 'name':
                     try:
                         prefix, name = value.split('.', 1)
