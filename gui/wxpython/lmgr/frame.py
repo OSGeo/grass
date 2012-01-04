@@ -851,7 +851,7 @@ class GMFrame(wx.Frame):
         #
         # load layer manager window properties
         #
-        if UserSettings.Get(group = 'workspace', key = 'posManager', subkey = 'enabled') is False:
+        if UserSettings.Get(group = 'general', key = 'workspace', subkey = ['posManager', 'enabled']) is False:
             if gxwXml.layerManager['pos']:
                 self.SetPosition(gxwXml.layerManager['pos'])
             if gxwXml.layerManager['size']:
@@ -884,7 +884,7 @@ class GMFrame(wx.Frame):
                                          value = display['projection']['proj'])
             
             # set position and size of map display
-            if UserSettings.Get(group = 'workspace', key = 'posDisplay', subkey = 'enabled') is False:
+            if not UserSettings.Get(group = 'general', key = 'workspace', subkey = ['posDisplay', 'enabled']):
                 if display['pos']:
                     mapdisp.SetPosition(display['pos'])
                 if display['size']:
