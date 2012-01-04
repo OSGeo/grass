@@ -863,7 +863,7 @@ class GMFrame(wx.Frame):
         displayId = 0
         mapdisplay = list()
         for display in gxwXml.displays:
-            mapdisp = self.NewDisplay(show = False)
+            mapdisp = self.NewDisplay(name = display['name'], show = False)
             mapdisplay.append(mapdisp)
             maptree = self.gm_cb.GetPage(displayId).maptree
             
@@ -1345,10 +1345,11 @@ class GMFrame(wx.Frame):
         """!Create new layer tree and map display instance"""
         self.NewDisplay()
 
-    def NewDisplay(self, show = True):
+    def NewDisplay(self, name = None, show = True):
         """!Create new layer tree, which will
         create an associated map display frame
 
+        @param name name of new map display
         @param show show map display window if True
 
         @return reference to mapdisplay intance
@@ -1357,7 +1358,11 @@ class GMFrame(wx.Frame):
         
         # make a new page in the bookcontrol for the layer tree (on page 0 of the notebook)
         self.pg_panel = wx.Panel(self.gm_cb, id = wx.ID_ANY, style = wx.EXPAND)
-        self.gm_cb.AddPage(self.pg_panel, text = "Display "+ str(self.disp_idx + 1), select = True)
+        if name:
+            dispName = name
+        else:
+            dispName = "Display " + str(self.disp_idx + 1)
+        self.gm_cb.AddPage(self.pg_panel, text = dispName, select = True)
         self.curr_page = self.gm_cb.GetCurrentPage()
         
         # create layer tree (tree control for managing GIS layers)  and put on new notebook page

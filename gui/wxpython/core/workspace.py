@@ -132,6 +132,7 @@ class ProcessWorkspaceFile:
                 projection = { 'enabled' : False }
             
             self.displays.append( {
+                    "name"           : display.get('name'),
                     "render"         : bool(int(display.get('render', "0"))),
                     "mode"           : int(display.get('mode', 0)),
                     "showCompExtent" : bool(int(display.get('showCompExtent', "0"))),
@@ -579,6 +580,7 @@ class WriteWorkspaceFile(object):
         
         # list of displays
         for page in range(0, self.lmgr.gm_cb.GetPageCount()):
+            dispName = self.lmgr.gm_cb.GetPageText(page)
             mapTree = self.lmgr.gm_cb.GetPage(page).maptree
             region = mapTree.Map.region
             
@@ -589,13 +591,15 @@ class WriteWorkspaceFile(object):
             else:
                 viewmode = '2d'
             
-            file.write('%s<display render="%d" '
+            file.write('%s<display '
+                       'name="%s" render="%d" '
                        'mode="%d" showCompExtent="%d" '
                        'alignExtent="%d" '
                        'constrainRes="%d" '
                        'dim="%d,%d,%d,%d" '
                        'extent="%f,%f,%f,%f" '
                        'viewMode="%s" >\n' % (' ' * self.indent,
+                                              dispName.encode('utf8'),
                                               int(mapTree.mapdisplay.GetProperty('render')),
                                               mapTree.mapdisplay.statusbarManager.GetMode(),
                                               int(mapTree.mapdisplay.GetProperty('region')),
