@@ -55,8 +55,9 @@ global tgt_map
 global maptype
 
 src_map = ''
-tgt_map = ''
-maptype = 'cell'
+tgt_map = { 'raster' : '',
+            'vector' : '' }
+maptype = 'raster'
 
 def getSmallUpArrowImage():
     stream = open(os.path.join(globalvar.ETCIMGDIR, 'small_up_arrow.png'), 'rb')
@@ -115,9 +116,9 @@ class GCPWizard(object):
         global src_map
         global tgt_map
 
-        src_map = ''
-        tgt_map = ''
-        maptype = 'cell'
+        #src_map = ''
+        #tgt_map = ''
+        maptype = 'raster'
 
         # GISRC file for source location/mapset of map(s) to georectify
         self.source_gisrc = ''
@@ -180,7 +181,7 @@ class GCPWizard(object):
             #
             # add layer to source map
             #
-            if maptype == 'cell':
+            if maptype == 'raster':
                 rendertype = 'raster'
                 cmdlist = ['d.rast', 'map=%s' % src_map]
             else: # -> vector layer
@@ -192,18 +193,25 @@ class GCPWizard(object):
             self.SrcMap.AddLayer(type=rendertype, command=cmdlist, l_active=True,
                                  name=name, l_hidden=False, l_opacity=1.0, l_render=False)
 
-            if tgt_map:
+            self.SwitchEnv('target')
+            if tgt_map['raster']:
                 #
-                # add layer to target map
+                # add raster layer to target map
                 #
-                if maptype == 'cell':
-                    rendertype = 'raster'
-                    cmdlist = ['d.rast', 'map=%s' % tgt_map]
-                else: # -> vector layer
-                    rendertype = 'vector'
-                    cmdlist = ['d.vect', 'map=%s' % tgt_map]
+                rendertype = 'raster'
+                cmdlist = ['d.rast', 'map=%s' % tgt_map['raster']]
                 
-                self.SwitchEnv('target')
+                name, found = utils.GetLayerNameFromCmd(cmdlist)
+                self.TgtMap.AddLayer(type=rendertype, command=cmdlist, l_active=True,
+                                     name=name, l_hidden=False, l_opacity=1.0, l_render=False)
+            
+            if tgt_map['vector']:
+                #
+                # add raster layer to target map
+                #
+                rendertype = 'vector'
+                cmdlist = ['d.vect', 'map=%s' % tgt_map['vector']]
+                
                 name, found = utils.GetLayerNameFromCmd(cmdlist)
                 self.TgtMap.AddLayer(type=rendertype, command=cmdlist, l_active=True,
                                      name=name, l_hidden=False, l_opacity=1.0, l_render=False)
@@ -351,7 +359,7 @@ class LocationPage(TitledPage):
         global maptype
 
         if event.GetInt() == 0:
-            maptype = 'cell'
+            maptype = 'raster'
         else:
             maptype = 'vector'
         
@@ -424,7 +432,7 @@ class GroupPage(TitledPage):
         self.xygroup = ''
 
         # default extension
-        self.extension = '.georect' + str(os.getpid())
+        self.extension = '_georect' + str(os.getpid())
 
         #
         # layout
@@ -556,7 +564,7 @@ class GroupPage(TitledPage):
                                               item)):
                     self.groupList.append(item)
         
-        if maptype == 'cell':
+        if maptype == 'raster':
             self.btn_vgroup.Hide()
             self.Bind(wx.EVT_BUTTON, self.OnMkGroup, self.btn_mkgroup)
 
@@ -610,22 +618,34 @@ class DispMapPage(TitledPage):
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5,
                        pos=(1, 2))
 
-        self.sizer.Add(item=wx.StaticText(parent=self, id=wx.ID_ANY, label=_('Select target map to display:')),
+        self.sizer.Add(item=wx.StaticText(parent=self, id=wx.ID_ANY, label=_('Select target raster map to display:')),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5,
                        pos=(2, 1))
 
-        self.tgtselection = Select(self, id=wx.ID_ANY,
-                                   size=globalvar.DIALOG_GSELECT_SIZE, type=maptype, updateOnPopup = False)
-        
-        self.sizer.Add(item=self.tgtselection,
+        self.tgtrastselection = Select(self, id=wx.ID_ANY,
+                                   size=globalvar.DIALOG_GSELECT_SIZE, type='raster', updateOnPopup = False)
+
+        self.sizer.Add(item=self.tgtrastselection,
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5,
                        pos=(2, 2))
+
+        self.sizer.Add(item=wx.StaticText(parent=self, id=wx.ID_ANY, label=_('Select target vector map to display:')),
+                       flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5,
+                       pos=(3, 1))
+
+        self.tgtvectselection = Select(self, id=wx.ID_ANY,
+                                   size=globalvar.DIALOG_GSELECT_SIZE, type='vector', updateOnPopup = False)
+        
+        self.sizer.Add(item=self.tgtvectselection,
+                       flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5,
+                       pos=(3, 2))
 
         #
         # bindings
         #
         self.srcselection.Bind(wx.EVT_TEXT, self.OnSrcSelection)
-        self.tgtselection.Bind(wx.EVT_TEXT, self.OnTgtSelection)
+        self.tgtrastselection.Bind(wx.EVT_TEXT, self.OnTgtRastSelection)
+        self.tgtvectselection.Bind(wx.EVT_TEXT, self.OnTgtVectSelection)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
         self.Bind(wx.EVT_CLOSE, self.parent.Cleanup)
@@ -644,7 +664,7 @@ class DispMapPage(TitledPage):
 
         try:
         # set computational region to match selected map and zoom display to region
-            if maptype == 'cell':
+            if maptype == 'raster':
                 p = RunCommand('g.region', 'rast=src_map')
             elif maptype == 'vector':
                 p = RunCommand('g.region', 'vect=src_map')
@@ -655,11 +675,17 @@ class DispMapPage(TitledPage):
         except:
             pass
 
-    def OnTgtSelection(self,event):
+    def OnTgtRastSelection(self,event):
         """!Source map to display selected"""
         global tgt_map
 
-        tgt_map = event.GetString()
+        tgt_map['raster'] = event.GetString()
+
+    def OnTgtVectSelection(self,event):
+        """!Source map to display selected"""
+        global tgt_map
+
+        tgt_map['vector'] = event.GetString()
 
     def OnPageChanging(self, event=None):
         global src_map
@@ -680,20 +706,52 @@ class DispMapPage(TitledPage):
         global tgt_map
 
         self.srcselection.SetElementList(maptype)
-        ret = RunCommand('i.group',
-                         parent = self,
-                         read = True,
-                         group = self.parent.grouppage.xygroup,
-                         flags = 'g')            
 
-        if ret:
-            self.parent.src_maps = ret.splitlines()
-        else:
-            GError(parent = self,
-                   message = _('No maps in selected group <%s>.\n'
-                               'Please edit group or select another group.') %
-                   self.parent.grouppage.xygroup)
-            return
+        if maptype == 'raster':
+            ret = RunCommand('i.group',
+                             parent = self,
+                             read = True,
+                             group = self.parent.grouppage.xygroup,
+                             flags = 'g')            
+
+            if ret:
+                self.parent.src_maps = ret.splitlines()
+            else:
+                GError(parent = self,
+                       message = _('No maps in selected group <%s>.\n'
+                                   'Please edit group or select another group.') %
+                       self.parent.grouppage.xygroup)
+                return
+
+        elif maptype == 'vector':
+            grassdatabase = self.parent.grassdatabase
+            xylocation = self.parent.gisrc_dict['LOCATION_NAME']
+            xymapset = self.parent.gisrc_dict['MAPSET']
+            # make list of vectors to georectify from VREF
+
+            vgrpfile = os.path.join(grassdatabase,
+                                     xylocation,
+                                     xymapset,
+                                     'group',
+                                     self.parent.grouppage.xygroup,
+                                     'VREF')
+
+            f = open(vgrpfile)
+            try:
+                for vect in f.readlines():
+                    vect = vect.strip('\n')
+                    if len(vect) < 1:
+                        continue
+                    self.parent.src_maps.append(vect)
+            finally:
+                f.close()
+                
+            if len(self.parent.src_maps) < 1:
+                GError(parent = self,
+                       message = _('No maps in selected group <%s>.\n'
+                                   'Please edit group or select another group.') %
+                       self.parent.grouppage.xygroup)
+                return
 
         # filter out all maps not in group
         self.srcselection.tcp.GetElementList(elements = self.parent.src_maps)
@@ -701,8 +759,10 @@ class DispMapPage(TitledPage):
         self.srcselection.SetValue(src_map)
 
         self.parent.SwitchEnv('target')
-        self.tgtselection.SetElementList(maptype)
-        self.tgtselection.GetElementList()
+        self.tgtrastselection.SetElementList('raster')
+        self.tgtrastselection.GetElementList()
+        self.tgtvectselection.SetElementList('vector')
+        self.tgtvectselection.GetElementList()
         self.parent.SwitchEnv('source')
 
         if src_map == '':
@@ -712,8 +772,8 @@ class DispMapPage(TitledPage):
 
 class GCP(MapFrame, ColumnSorterMixin):
     """!
-    Manages ground control points for georectifying. Calculates RMS statics.
-    Calls i.rectify or v.transform to georectify map.
+    Manages ground control points for georectifying. Calculates RMS statistics.
+    Calls i.rectify or v.rectify to georectify map.
     """
     def __init__(self, parent, grwiz = None, id = wx.ID_ANY,
                  title = _("Manage Ground Control Points"),
@@ -721,7 +781,7 @@ class GCP(MapFrame, ColumnSorterMixin):
 
         self.grwiz = grwiz # GR Wizard
 
-        if tgt_map == '':
+        if tgt_map['raster'] == '' and tgt_map['vector'] == '':
             self.show_target = False
         else:
             self.show_target = True
@@ -1321,7 +1381,7 @@ class GCP(MapFrame, ColumnSorterMixin):
         if self.CheckGCPcount(msg=True) == False:
             return
 
-        if maptype == 'cell':
+        if maptype == 'raster':
             self.grwiz.SwitchEnv('source')
 
             if self.clip_to_region:
@@ -1350,19 +1410,7 @@ class GCP(MapFrame, ColumnSorterMixin):
                 print >> sys.stderr, msg
                 
         elif maptype == 'vector':
-            outmsg = ''
             # loop through all vectors in VREF
-            # and move resulting vector to target location
-            
-            # make sure current mapset has a vector folder
-            if not os.path.isdir(os.path.join(self.grassdatabase,
-                                              self.currentlocation,
-                                              self.currentmapset,
-                                              'vector')):
-                os.mkdir(os.path.join(self.grassdatabase,
-                                      self.currentlocation,
-                                      self.currentmapset,
-                                      'vector'))
 
             self.grwiz.SwitchEnv('source')
             
@@ -1378,89 +1426,39 @@ class GCP(MapFrame, ColumnSorterMixin):
             finally:
                 f.close()
                                
-            # georectify each vector in VREF using v.transform
+            # georectify each vector in VREF using v.rectify
             for vect in vectlist:
-                self.outname = vect + '_' + self.extension
+                self.outname = str(vect.split('@')[0]) + self.extension
+                print self.outname
                 self.parent.goutput.WriteLog(text = _('Transforming <%s>...') % vect,
                                              switchPage = True)
-                msg = err = ''
+                ret = msg = ''
                 
-                ret, out, err = RunCommand('v.transform',
-                                           overwrite = True,
-                                           input = vect,
-                                           output = self.outname,
-                                           pointsfile = self.file['points'],
-                                           getErrorMsg = True, read = True) 
-                
-                if ret == 0:
-                    self.VectGRList.append(self.outname)
-                    # note: WriteLog doesn't handle GRASS_INFO_PERCENT well, so using a print here
-                    # self.parent.goutput.WriteLog(text = _(err), switchPage = True)
-                    self.parent.goutput.WriteLog(text = out, switchPage = True)
-                else:
-                    self.parent.goutput.WriteError(_('Georectification of vector map <%s> failed') %
-                                                   self.outname)
-                    self.parent.goutput.WriteError(err)
-                
-                # FIXME
-                # Copying database information not working. 
-                # Does not copy from xy location to current location
-                # TODO: replace $GISDBASE etc with real paths
-                #                xyLayer = []
-                #                for layer in grass.vector_db(map = vect).itervalues():
-                #                    xyLayer.append((layer['driver'],
-                #                                    layer['database'],
-                #                                    layer['table']))
-                    
-                    
-                    #                dbConnect = grass.db_connection()
-                    #                print 'db connection =', dbConnect
-                    #                for layer in xyLayer:     
-                    #                    self.parent.goutput.RunCmd(['db.copy',
-                    #                                                '--q',
-                    #                                                '--o',
-                    #                                                'from_driver=%s' % layer[0],
-                    #                                                'from_database=%s' % layer[1],
-                    #                                                'from_table=%s' % layer[2],
-                    #                                                'to_driver=%s' % dbConnect['driver'],
-                    #                                                'to_database=%s' % dbConnect['database'],
-                    #                                                'to_table=%s' % layer[2] + '_' + self.extension])
+                busy = wx.BusyInfo(message=_("Rectifying vector map <%s>, please wait...") % vect,
+                                   parent=self)
+                wx.Yield()
 
-            # copy all georectified vectors from source location to current location
-            for name in self.VectGRList:
-                xyvpath = os.path.join(self.grassdatabase,
-                                       self.xylocation,
-                                       self.xymapset,
-                                       'vector',
-                                       name)
-                vpath = os.path.join(self.grassdatabase,
-                                     self.currentlocation,
-                                     self.currentmapset,
-                                     'vector',
-                                     name)
-                                    
-                if os.path.isdir(vpath):
-                    self.parent.goutput.WriteWarning(_('Vector map <%s> already exists. '
-                                                       'Change extension name and '
-                                                       'georectify again.') % self.outname)
-                    break
-                else:
-                    # use shutil.copytree() because shutil.move() deletes src dir
-                    shutil.copytree(xyvpath, vpath)
+                ret, msg = RunCommand('v.rectify',
+                                      parent = self,
+                                      getErrorMsg = True,
+                                      quiet = True,
+                                      input = vect,
+                                      output = self.outname,
+                                      group = self.xygroup,
+                                      order = self.gr_order)
 
-                # TODO: connect vectors to copied tables with v.db.connect
+                busy.Destroy()
+
+                # provide feedback on failure
+                if ret != 0:
+                    print >> sys.stderr, msg
                                                    
-            GMessage(_('For all vector maps georectified successfully,') + '\n' +
-                     _('you will need to copy any attribute tables') + '\n' +
-                     _('and reconnect them to the georectified vectors'),
-                     parent = self)
-        
         self.grwiz.SwitchEnv('target')
 
     def OnGeorectDone(self, **kargs):
         """!Print final message"""
         global maptype
-        if maptype == 'cell':
+        if maptype == 'raster':
             return
         
         returncode = kargs['returncode']
@@ -2219,7 +2217,7 @@ class VectGroup(wx.Dialog):
         for item in range(self.listMap.GetCount()):
             if not self.listMap.IsChecked(item):
                 continue
-            vgrouplist.append(self.listMap.GetString(item))
+            vgrouplist.append(self.listMap.GetString(item) + '@' + self.xymapset)
         
         f = open(self.vgrpfile, mode='w')
         try:
@@ -2339,7 +2337,8 @@ class GrSettingsDialog(wx.Dialog):
         #
         self.parent = parent
         self.new_src_map = src_map
-        self.new_tgt_map = tgt_map
+        self.new_tgt_map = { 'raster' : tgt_map['raster'],
+                             'vector' : tgt_map['vector'] }
         self.sdfactor = 0
 
         self.symbol = {}
@@ -2542,35 +2541,46 @@ class GrSettingsDialog(wx.Dialog):
         #
         # source map to display
         self.srcselection = Select(panel, id=wx.ID_ANY,
-                                   size=globalvar.DIALOG_GSELECT_SIZE, type='cell', updateOnPopup = False)
+                                   size=globalvar.DIALOG_GSELECT_SIZE, type='maptype', updateOnPopup = False)
         self.parent.grwiz.SwitchEnv('source')
         self.srcselection.SetElementList(maptype)
         # filter out all maps not in group
         self.srcselection.tcp.GetElementList(elements = self.parent.src_maps)
 
-        # target map to display
-        self.tgtselection = Select(panel, id=wx.ID_ANY,
-                                   size=globalvar.DIALOG_GSELECT_SIZE, type='cell', updateOnPopup = False)
+        # target map(s) to display
         self.parent.grwiz.SwitchEnv('target')
-        self.tgtselection.SetElementList(maptype)
-        self.tgtselection.GetElementList()
+        self.tgtrastselection = Select(panel, id=wx.ID_ANY,
+                                   size=globalvar.DIALOG_GSELECT_SIZE, type='raster', updateOnPopup = False)
+        self.tgtrastselection.SetElementList('cell')
+        self.tgtrastselection.GetElementList()
+
+        self.tgtvectselection = Select(panel, id=wx.ID_ANY,
+                                   size=globalvar.DIALOG_GSELECT_SIZE, type='vector', updateOnPopup = False)
+        self.tgtvectselection.SetElementList('vector')
+        self.tgtvectselection.GetElementList()
 
         sizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY, label=_('Select source map to display:')),
                        proportion=0, flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
         sizer.Add(item=self.srcselection, proportion=0, 
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
         self.srcselection.SetValue(src_map)
-        sizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY, label=_('Select target map to display:')),
+        sizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY, label=_('Select target raster map to display:')),
                        proportion=0, flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
-        sizer.Add(item=self.tgtselection, proportion=0, 
+        sizer.Add(item=self.tgtrastselection, proportion=0, 
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
-        self.tgtselection.SetValue(tgt_map)
+        self.tgtrastselection.SetValue(tgt_map['raster'])
+        sizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY, label=_('Select target vector map to display:')),
+                       proportion=0, flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
+        sizer.Add(item=self.tgtvectselection, proportion=0, 
+                       flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
+        self.tgtvectselection.SetValue(tgt_map['vector'])
 
         # bindings
         self.highlighthighest.Bind(wx.EVT_CHECKBOX, self.OnHighlight)
         self.rmsWin.Bind(wx.EVT_TEXT, self.OnSDFactor)
         self.srcselection.Bind(wx.EVT_TEXT, self.OnSrcSelection)
-        self.tgtselection.Bind(wx.EVT_TEXT, self.OnTgtSelection)
+        self.tgtrastselection.Bind(wx.EVT_TEXT, self.OnTgtRastSelection)
+        self.tgtvectselection.Bind(wx.EVT_TEXT, self.OnTgtVectSelection)
 
         panel.SetSizer(sizer)
         
@@ -2657,18 +2667,25 @@ class GrSettingsDialog(wx.Dialog):
         global src_map
 
         tmp_map = event.GetString()
-
+        
         if not tmp_map == '' and not tmp_map == src_map:
             self.new_src_map = tmp_map
 
-    def OnTgtSelection(self,event):
+    def OnTgtRastSelection(self,event):
         """!Target map to display selected"""
         global tgt_map
 
-        tmp_map = event.GetString()
+        self.new_tgt_map['raster'] = event.GetString()
+        if self.new_tgt_map['raster'] is None:
+            self.new_tgt_map['raster'] = ''
 
-        if not tmp_map == tgt_map:
-            self.new_tgt_map = tmp_map
+    def OnTgtVectSelection(self,event):
+        """!Target map to display selected"""
+        global tgt_map
+
+        self.new_tgt_map['vector'] = event.GetString()
+        if self.new_tgt_map['vector'] is None:
+            self.new_tgt_map['vector'] = ''
 
     def OnMethod(self, event):
         self.parent.gr_method = self.methods[event.GetSelection()]
@@ -2682,6 +2699,7 @@ class GrSettingsDialog(wx.Dialog):
     def UpdateSettings(self):
         global src_map
         global tgt_map
+        global maptype
 
         layers = None
 
@@ -2714,51 +2732,73 @@ class GrSettingsDialog(wx.Dialog):
         srcrenderVector = False
         tgtrender = False
         tgtrenderVector = False
+        reload_target = False
         if self.new_src_map != src_map:
             # remove old layer
             layers = self.parent.grwiz.SrcMap.GetListOfLayers()
             self.parent.grwiz.SrcMap.DeleteLayer(layers[0])
             
             src_map = self.new_src_map
-            cmdlist = ['d.rast', 'map=%s' % src_map]
+            if maptype == 'raster':
+                cmdlist = ['d.rast', 'map=%s' % src_map]
+                srcrender = True
+            else:
+                cmdlist = ['d.vect', 'map=%s' % src_map]
+                srcrenderVector = True
             self.parent.grwiz.SwitchEnv('source')
-            name, found = utils.GetLayerNameFromCmd(cmdlist),
-            self.parent.grwiz.SrcMap.AddLayer(type='raster', command=cmdlist, l_active=True,
+            name, found = utils.GetLayerNameFromCmd(cmdlist)
+            self.parent.grwiz.SrcMap.AddLayer(type=maptype, command=cmdlist, l_active=True,
                               name=name, l_hidden=False, l_opacity=1.0, l_render=False)
 
             self.parent.grwiz.SwitchEnv('target')
-            srcrender = True
 
-        if self.new_tgt_map != tgt_map:
-            # remove old layer
+        if self.new_tgt_map['raster'] != tgt_map['raster'] or \
+           self.new_tgt_map['vector'] != tgt_map['vector']:
+            # remove all layers
             layers = self.parent.grwiz.TgtMap.GetListOfLayers()
-            if layers:
+            while layers:
                 self.parent.grwiz.TgtMap.DeleteLayer(layers[0])
-            tgt_map = self.new_tgt_map
+                del layers[0]
+                layers = self.parent.grwiz.TgtMap.GetListOfLayers()
+            #self.parent.grwiz.TgtMap.DeleteAllLayers()
+            reload_target = True
+            tgt_map['raster'] = self.new_tgt_map['raster']
+            tgt_map['vector'] = self.new_tgt_map['vector']
 
-            if tgt_map != '':
-                cmdlist = ['d.rast', 'map=%s' % tgt_map]
+            if tgt_map['raster'] != '':
+                cmdlist = ['d.rast', 'map=%s' % tgt_map['raster']]
                 name, found = utils.GetLayerNameFromCmd(cmdlist)
                 self.parent.grwiz.TgtMap.AddLayer(type='raster', command=cmdlist, l_active=True,
                                   name=name, l_hidden=False, l_opacity=1.0, l_render=False)
 
                 tgtrender = True
-                if self.parent.show_target == False:
-                    self.parent.show_target = True
-                    self.parent._mgr.GetPane("target").Show()
-                    self.parent._mgr.Update()
-                    self.parent.GetMapToolbar().Enable('zoommenu', enable = True)
-                    self.parent.activemap.Enable()
-                    self.parent.TgtMapWindow.ZoomToMap(layers = self.parent.TgtMap.GetListOfLayers())
-            else: # tgt_map == ''
-                if self.parent.show_target == True:
-                    self.parent.show_target = False
-                    self.parent._mgr.GetPane("target").Hide()
-                    self.parent._mgr.Update()
-                    self.parent.activemap.SetSelection(0)
-                    self.parent.activemap.Enable(False)
-                    self.parent.GetMapToolbar().Enable('zoommenu', enable = False)
 
+            if tgt_map['vector'] != '':
+                cmdlist = ['d.vect', 'map=%s' % tgt_map['vector']]
+                name, found = utils.GetLayerNameFromCmd(cmdlist)
+                self.parent.grwiz.TgtMap.AddLayer(type='vector', command=cmdlist, l_active=True,
+                                  name=name, l_hidden=False, l_opacity=1.0, l_render=False)
+
+                tgtrenderVector = True
+
+        if tgt_map['raster'] == '' and tgt_map['vector'] == '':
+            if self.parent.show_target == True:
+                self.parent.show_target = False
+                self.parent._mgr.GetPane("target").Hide()
+                self.parent._mgr.Update()
+                self.parent.activemap.SetSelection(0)
+                self.parent.activemap.Enable(False)
+                self.parent.GetMapToolbar().Enable('zoommenu', enable = False)
+        else:
+            if self.parent.show_target == False:
+                self.parent.show_target = True
+                self.parent._mgr.GetPane("target").Show()
+                self.parent._mgr.Update()
+                self.parent.activemap.SetSelection(0)
+                self.parent.activemap.Enable(True)
+                self.parent.GetMapToolbar().Enable('zoommenu', enable = True)
+                self.parent.TgtMapWindow.ZoomToMap(layers = self.parent.TgtMap.GetListOfLayers())
+        
         self.parent.UpdateColours(srcrender, srcrenderVector, tgtrender, tgtrenderVector)
 
     def OnSave(self, event):
