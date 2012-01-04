@@ -146,8 +146,7 @@ In the first mode it calculates solar incidence angle and solar irradiance
 raster maps using the set local time. In the second mode daily sums of solar
 irradiation [Wh.m-2.day-1] are computed for a specified day. 
 
-<h2>
-NOTES</h2>
+<h2>NOTES</h2>
 
 Solar energy is an important input parameter in different models concerning 
 energy industry, landscape, vegetation, evapotranspiration, snowmelt or remote
@@ -181,6 +180,31 @@ in the northern hemisphere (see reference literature for your study area):
 
 <p>Planned improvements include the use of the SOLPOS algorithm for solar 
 geometry calculations and internal computation of aspect and slope.
+
+<h3>Solar time</h3>
+
+By default r.sun calculates times as true solar time, whereby solar noon is
+always exactly 12 o'clock everywhere in the current region. Depending on where 
+the zone of interest is located in the related time zone, this may cause
+differences of up to an hour, in some cases (like Western Spain) even more.
+On top of this, the offset varies during the year according to the Equation
+of Time.
+<p>
+To overcome this problem, the user can use the option <em>civiltime=&lt;timezone_offset&gt;</em>
+in r.sun to make it use real-world (wall clock) time. For example, for Central 
+Europe the timezone offset is +1, +2 when daylight saving time is in effect.
+<p>
+<!-- WE DON'T KNOW, check source code:
+If the user use the <em>civiltime</em> parameter, also the longitude needs to
+be supplied as a raster map with the <em>longin</em> parameter. Within a
+latlon location, such a map can be easily made with:
+
+<div class="code"><pre>
+r.mapcalc lon_raster='x()'
+</pre></div>
+ 
+END OF WE DON'T KNOW 
+-->
 
 <h3>Shadow maps</h3>
 A map of shadows can be extracted from the solar incidence angle map
