@@ -598,7 +598,7 @@ class BufferedWindow(MapWindow, wx.Window):
         if not self.parent.IsStandalone() and \
                 self.parent.GetLayerManager().gcpmanagement:
             # -> georectifier (redraw GCPs)
-            if self.parent.GetMapToolbar():
+            if 'gcpdisp' in self.parent.toolbars.keys():
                 if self == self.parent.TgtMapWindow:
                     coordtype = 'target'
                 else:
