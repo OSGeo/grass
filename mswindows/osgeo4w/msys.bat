@@ -88,15 +88,15 @@ if NOT EXIST "%WD%rxvt.exe" goto startsh
 rem Setup the default colors for rxvt.
 if "x%MSYSBGCOLOR%" == "x" set MSYSBGCOLOR=White
 if "x%MSYSFGCOLOR%" == "x" set MSYSFGCOLOR=Black
-if "x%MINGW32BGCOLOR%" == "x" set MINGW32BGCOLOR=LightYellow
-if "x%MINGW32FGCOLOR%" == "x" set MINGW32FGCOLOR=Navy
+if "x%MINGW32BGCOLOR%" == "x" set MINGW32BGCOLOR=Black
+if "x%MINGW32FGCOLOR%" == "x" set MINGW32FGCOLOR=White
 if "%MSYSTEM%" == "MSYS" set BGCOLOR=%MSYSBGCOLOR%
 if "%MSYSTEM%" == "MSYS" set FGCOLOR=%MSYSFGCOLOR%
 if "%MSYSTEM%" == "MINGW32" set BGCOLOR=%MINGW32BGCOLOR%
 if "%MSYSTEM%" == "MINGW32" set FGCOLOR=%MINGW32FGCOLOR%
 
-if "x%*" == "x" start "MSYS 1.0" "%WD%rxvt" -backspacekey  -sl 2500 -fg %FGCOLOR% -bg %BGCOLOR% -sr -fn Courier-12 -tn msys -geometry 80x25 -e /bin/sh --login -i
-if NOT "x%*" == "x" start "MSYS 1.0" "%WD%rxvt" -backspacekey  -sl 2500 -fg %FGCOLOR% -bg %BGCOLOR% -sr -fn Courier-12 -tn msys -geometry 80x25 -e /bin/sh --login -c "%*"
+if "x%*" == "x" start "MSYS 1.0" "%WD%rxvt" -backspacekey  -sl 2500 -fg %FGCOLOR% -bg %BGCOLOR% -sr -fn Courier-16 -tn msys -geometry 80x25 -e /bin/sh --login -i
+if NOT "x%*" == "x" start "MSYS 1.0" "%WD%rxvt" -backspacekey  -sl 2500 -fg %FGCOLOR% -bg %BGCOLOR% -sr -fn Courier-16 -tn msys -geometry 80x25 -e /bin/sh --login -c "%*"
 exit
 
 :startsh
