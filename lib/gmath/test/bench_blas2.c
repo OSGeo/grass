@@ -71,35 +71,35 @@ void bench_blas_level_2_double(int rows)
     G_math_Ax_sparse(sples->Asp, x, z, rows);
 }
     gettimeofday(&tend, NULL);
-    G_important_message("Computation time G_math_Ax_sparse: %g\n", compute_time_difference(tstart, tend));
+    printf("Computation time G_math_Ax_sparse: %g\n", compute_time_difference(tstart, tend));
     gettimeofday(&tstart, NULL);
 #pragma omp parallel default(shared)
 {
     G_math_Ax_sband(bles->A, x, z, rows, rows);
 }
     gettimeofday(&tend, NULL);
-    G_important_message("Computation time G_math_Ax_sband: %g\n", compute_time_difference(tstart, tend));
+    printf("Computation time G_math_Ax_sband: %g\n", compute_time_difference(tstart, tend));
     gettimeofday(&tstart, NULL);
 #pragma omp parallel default(shared)
 {
     G_math_d_Ax(les->A, x, z, rows, rows);
 }
     gettimeofday(&tend, NULL);
-    G_important_message("Computation time G_math_d_Ax: %g\n", compute_time_difference(tstart, tend));
+    printf("Computation time G_math_d_Ax: %g\n", compute_time_difference(tstart, tend));
     gettimeofday(&tstart, NULL);
 #pragma omp parallel default(shared)
 {
     G_math_d_aAx_by(les->A, x, y, 3.0, 4.0, z, rows, rows);
 }
     gettimeofday(&tend, NULL);
-    G_important_message("Computation time G_math_d_Ax_by: %g\n", compute_time_difference(tstart, tend));
+    printf("Computation time G_math_d_Ax_by: %g\n", compute_time_difference(tstart, tend));
     gettimeofday(&tstart, NULL);
 #pragma omp parallel default(shared)
 {
     G_math_d_x_dyad_y(x, x, A, rows, rows);
 }
     gettimeofday(&tend, NULL);
-    G_important_message("Computation time G_math_d_x_dyad: %g\n", compute_time_difference(tstart, tend));
+    printf("Computation time G_math_d_x_dyad: %g\n", compute_time_difference(tstart, tend));
     gettimeofday(&tstart, NULL);
 
 

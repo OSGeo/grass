@@ -57,13 +57,13 @@ int bench_solvers(int rows) {
     gettimeofday(&tstart, NULL);
     G_math_solver_pcg(les->A, les->x, les->b, les->rows, 250, 0.1e-9, 1);
     gettimeofday(&tend, NULL);
-    G_important_message("Computation time pcg normal matrix: %g\n", compute_time_difference(tstart, tend));
+    printf("Computation time pcg normal matrix: %g\n", compute_time_difference(tstart, tend));
 
     gettimeofday(&tstart, NULL);
     G_math_solver_sparse_pcg(sples->Asp, sples->x, sples->b, les->rows, 250,
             0.1e-9, 1);
     gettimeofday(&tend, NULL);
-    G_important_message("Computation time pcg sparse matrix: %g\n", compute_time_difference(tstart, tend));
+    printf("Computation time pcg sparse matrix: %g\n", compute_time_difference(tstart, tend));
 
     G_math_free_les(les);
     G_math_free_les(sples);
@@ -76,13 +76,13 @@ int bench_solvers(int rows) {
     gettimeofday(&tstart, NULL);
     G_math_solver_cg(les->A, les->x, les->b, les->rows, 250, 0.1e-9);
     gettimeofday(&tend, NULL);
-    G_important_message("Computation time cg normal matrix: %g\n", compute_time_difference(tstart, tend));
+    printf("Computation time cg normal matrix: %g\n", compute_time_difference(tstart, tend));
     
     gettimeofday(&tstart, NULL);
     G_math_solver_sparse_cg(sples->Asp, sples->x, sples->b, les->rows, 250,
             0.1e-9);
     gettimeofday(&tend, NULL);
-    G_important_message("Computation time cg sparse matrix: %g\n", compute_time_difference(tstart, tend));
+    printf("Computation time cg sparse matrix: %g\n", compute_time_difference(tstart, tend));
     
     G_math_free_les(les);
     G_math_free_les(sples);
@@ -94,7 +94,7 @@ int bench_solvers(int rows) {
     gettimeofday(&tstart, NULL);
     G_math_solver_cg_sband(les->A, les->x, les->b, les->rows, les->rows, 250, 0.1e-9);
     gettimeofday(&tend, NULL);
-    G_important_message("Computation time cg symmetric band matrix: %g\n", compute_time_difference(tstart, tend));
+    printf("Computation time cg symmetric band matrix: %g\n", compute_time_difference(tstart, tend));
     
     G_math_free_les(les);
 
@@ -106,13 +106,13 @@ int bench_solvers(int rows) {
     gettimeofday(&tstart, NULL);
     G_math_solver_bicgstab(les->A, les->x, les->b, les->rows, 250, 0.1e-9);
     gettimeofday(&tend, NULL);
-    G_important_message("Computation time bicgstab normal matrix: %g\n", compute_time_difference(tstart, tend));
+    printf("Computation time bicgstab normal matrix: %g\n", compute_time_difference(tstart, tend));
     
     gettimeofday(&tstart, NULL);
     G_math_solver_sparse_bicgstab(sples->Asp, sples->x, sples->b, les->rows,
             250, 0.1e-9);
     gettimeofday(&tend, NULL);
-    G_important_message("Computation time bicgstab sparse matrix: %g\n", compute_time_difference(tstart, tend));
+    printf("Computation time bicgstab sparse matrix: %g\n", compute_time_difference(tstart, tend));
 
     G_math_free_les(les);
     G_math_free_les(sples);
