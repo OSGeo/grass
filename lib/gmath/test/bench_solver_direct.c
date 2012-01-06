@@ -54,7 +54,7 @@ int bench_solvers(int rows) {
     gettimeofday(&tstart, NULL);
     G_math_solver_lu(les->A, les->x, les->b, les->rows);
     gettimeofday(&tend, NULL);
-    G_important_message("Computation time gmath lu decomposition: %g\n", compute_time_difference(tstart, tend));
+    printf("Computation time gmath lu decomposition: %g\n", compute_time_difference(tstart, tend));
     G_math_free_les(les);
 
     G_message("\t * benchmarking lu ccmath decomposition solver with unsymmetric matrix\n");
@@ -63,7 +63,7 @@ int bench_solvers(int rows) {
     gettimeofday(&tstart, NULL);
     G_math_solv(les->A, les->b, les->rows);
     gettimeofday(&tend, NULL);
-    G_important_message("Computation time ccmath lu decomposition: %g\n", compute_time_difference(tstart, tend));
+    printf("Computation time ccmath lu decomposition: %g\n", compute_time_difference(tstart, tend));
     G_math_free_les(les);
 
 
@@ -73,7 +73,7 @@ int bench_solvers(int rows) {
     gettimeofday(&tstart, NULL);
     G_math_solver_gauss(les->A, les->x, les->b, les->rows);
     gettimeofday(&tend, NULL);
-    G_important_message("Computation time gauss elimination: %g\n", compute_time_difference(tstart, tend));
+    printf("Computation time gauss elimination: %g\n", compute_time_difference(tstart, tend));
     G_math_free_les(les);
 
     G_message("\t * benchmarking gmath cholesky decomposition solver with symmetric matrix\n");
@@ -82,7 +82,7 @@ int bench_solvers(int rows) {
     gettimeofday(&tstart, NULL);
     G_math_solver_cholesky(les->A, les->x, les->b, les->rows, les->rows);
     gettimeofday(&tend, NULL);
-    G_important_message("Computation time gmath cholesky decomposition: %g\n", compute_time_difference(tstart, tend));
+    printf("Computation time gmath cholesky decomposition: %g\n", compute_time_difference(tstart, tend));
     G_math_free_les(les);
 
     G_message("\t * benchmarking ccmath cholesky decomposition solver with symmetric matrix\n");
@@ -91,7 +91,7 @@ int bench_solvers(int rows) {
     gettimeofday(&tstart, NULL);
     G_math_solvps(les->A, les->b, les->rows);
     gettimeofday(&tend, NULL);
-    G_important_message("Computation time ccmath cholesky decomposition: %g\n", compute_time_difference(tstart, tend));
+    printf("Computation time ccmath cholesky decomposition: %g\n", compute_time_difference(tstart, tend));
     G_math_free_les(les);
 
     G_message("\t * benchmarking gmath cholesky band matrix decomposition solver with symmetric band matrix\n");
@@ -100,7 +100,7 @@ int bench_solvers(int rows) {
     gettimeofday(&tstart, NULL);
     G_math_solver_cholesky_sband(les->A, les->x, les->b, les->rows, les->rows);
     gettimeofday(&tend, NULL);
-    G_important_message("Computation time cholesky band matrix decomposition: %g\n", compute_time_difference(tstart, tend));
+    printf("Computation time cholesky band matrix decomposition: %g\n", compute_time_difference(tstart, tend));
     G_math_free_les(les);
 
 

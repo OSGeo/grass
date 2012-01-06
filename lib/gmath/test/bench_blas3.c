@@ -67,14 +67,14 @@ void bench_blas_level_3_double(int rows)
     G_math_d_aA_B(A, B, 4.0 , C, rows , rows);
 }
     gettimeofday(&tend, NULL);
-    G_important_message("Computation time G_math_d_aA_B: %g\n", compute_time_difference(tstart, tend));
+    printf("Computation time G_math_d_aA_B: %g\n", compute_time_difference(tstart, tend));
     gettimeofday(&tstart, NULL);
 #pragma omp parallel default(shared)
 {
     G_math_d_AB(A, B, C, rows , rows , rows);
 }
     gettimeofday(&tend, NULL);
-    G_important_message("Computation time G_math_d_AB: %g\n", compute_time_difference(tstart, tend));
+    printf("Computation time G_math_d_AB: %g\n", compute_time_difference(tstart, tend));
 
 
     if(x)
