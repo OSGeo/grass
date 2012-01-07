@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
     struct cat_list *Clist;
 
     int field;
-    int i, only_type, cat, ctype, fdrast = 0, areanum = 0;
+    int i, only_type, cat, ctype, fdrast = -1, areanum = 0;
     int nelements;
     int line, type;
     int area, trace, centroid;
@@ -133,7 +133,7 @@ int main(int argc, char *argv[])
     area = (only_type & GV_AREA) ? 1 : 0;
     if (area) {
 	if (only_type & GV_BOUNDARY) {
-	    /* do not wrire wall twice -> disable boundary type */
+	    /* do not write wall twice -> disable boundary type */
 	    only_type &= ~GV_BOUNDARY;
 	}
 	only_type &= ~GV_AREA;
@@ -398,7 +398,7 @@ static int extrude(struct Map_info *In, struct Map_info *Out,
 
     voffset_dem = 0.0;
     /* do not trace -> calculate minumum dem offset */
-    if (fdrast && !trace) {
+    if (fdrast >= 0 && !trace) {
 	for (k = 0; k < Points->n_points; k++) {
 	    voffset_curr = Rast_get_sample(fdrast, &window, NULL,
 					       Points->y[k], Points->x[k], 0,
@@ -422,7 +422,7 @@ static int extrude(struct Map_info *In, struct Map_info *Out,
 	voffset_curr = voffset_next = 0.0;
 
 	/* trace */
-	if (fdrast && trace) {
+	if (fdrast >= 0 && trace) {
 	    voffset_curr = Rast_get_sample(fdrast, &window, NULL,
 					       Points->y[k], Points->x[k], 0,
 					       NEAREST);
