@@ -535,7 +535,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # print output to command log area
         if len(cmd) > 1:
             cmd.append('-p')
-            self.lmgr.goutput.RunCmd(cmd)
+            self.lmgr.goutput.RunCmd(cmd, compReg = False)
         
     def OnProfile(self, event):
         """!Plot profile of given raster map layer"""
