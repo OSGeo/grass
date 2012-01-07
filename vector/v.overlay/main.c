@@ -326,6 +326,9 @@ int main(int argc, char *argv[])
 		    sprintf(buf, "varchar(%d)", db_get_column_length(Column));
 		    db_append_string(&col_defs, buf);
 		    break;
+		case DB_SQL_TYPE_TEXT:
+		    db_append_string(&col_defs, "varchar(250)");
+		    break;
 		case DB_SQL_TYPE_SMALLINT:
 		case DB_SQL_TYPE_INTEGER:
 		    db_append_string(&col_defs, "integer");
@@ -347,8 +350,8 @@ int main(int argc, char *argv[])
 		    db_append_string(&col_defs, "datetime");
 		    break;
 		default:
-		    G_warning(_("Unknown column type '%s'"),
-			      db_get_column_name(Column));
+		    G_warning(_("Unknown column type '%s' of column '%s'"),
+			      db_sqltype_name(sqltype), db_get_column_name(Column));
 		    sprintf(buf, "varchar(250)");
 		}
 	    }
@@ -412,8 +415,8 @@ int main(int argc, char *argv[])
 			}
 			break;
 		    default:
-			G_warning(_("Unknown column type '%s' values lost"),
-				  db_get_column_name(Column));
+			G_warning(_("Unknown column type '%s' of culumn '%s', values lost"),
+			      db_sqltype_name(sqltype), db_get_column_name(Column));
 			db_append_string(&sql, "null");
 		    }
 		}
