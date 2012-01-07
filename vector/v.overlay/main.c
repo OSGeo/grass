@@ -415,7 +415,7 @@ int main(int argc, char *argv[])
 			}
 			break;
 		    default:
-			G_warning(_("Unknown column type '%s' of culumn '%s', values lost"),
+			G_warning(_("Unknown column type '%s' of column '%s', values lost"),
 			      db_sqltype_name(sqltype), db_get_column_name(Column));
 			db_append_string(&sql, "null");
 		    }
