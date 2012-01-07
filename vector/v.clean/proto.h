@@ -20,3 +20,4 @@ void remove_bridges(struct Map_info *Map, struct Map_info *Err);
 int prune(struct Map_info *Out, int otype, double thresh,
 	  struct Map_info *Err);
 int remove_zero_line(struct Map_info *Map, int type, struct Map_info *Err);
+int split_lines(struct Map_info *Map, int otype, struct Map_info *Err);
