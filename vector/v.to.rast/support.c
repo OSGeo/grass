@@ -240,7 +240,6 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 		  const char *attr_column)
 {
     int i;
-    int fd;
 
     /* Map */
     struct Map_info Map;
@@ -265,13 +264,12 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
     /* init raster categories */
     Rast_init_cats("Categories", &rast_cats);
 
-    fd = Rast_open_old(rast_name, G_mapset());
-
     switch (use) {
     case USE_ATTR:
 	{
-	    Rast_set_cats_title("Labels", &rast_cats);
 	    int is_fp = Rast_map_is_fp(rast_name, G_mapset());
+
+	    Rast_set_cats_title("Labels", &rast_cats);
 
 	    /* open vector map and database driver */
 	    Vect_open_old(&Map, vector_map, G_find_vector2(vector_map, ""));
@@ -414,7 +412,7 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 	break;
     case USE_CAT:
 	{
-	    int row, rows;
+	    int row, rows, fd;
 	    void *rowbuf;
 	    struct Cell_stats stats;
 	    CELL n;
@@ -446,6 +444,7 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 		Rast_set_cat(&n, &n, msg, &rast_cats, map_type);
 	    }
 
+	    Rast_close(fd);
 	    G_free(rowbuf);
 	}
 	break;
@@ -486,7 +485,6 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 	break;
     }
 
-    Rast_close(fd);
     Rast_write_cats(rast_name, &rast_cats);
     Rast_free_cats(&rast_cats);
 
