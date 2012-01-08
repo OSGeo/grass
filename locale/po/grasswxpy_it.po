@@ -6125,7 +6125,7 @@ msgstr "Zoom alla region computazionale (impostata con g.region)"
 #: ../gui/wxpython/gui_modules/mapdisp.py:1974
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:1061
 msgid "Zoom to default region"
-msgstr "Zoom alla region di defult"
+msgstr "Zoom alla region di default"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1978
 #: ../gui/wxpython/gui_modules/gcpmapdisp.py:1065
