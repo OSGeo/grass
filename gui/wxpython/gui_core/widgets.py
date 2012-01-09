@@ -25,6 +25,7 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com> (Google SoC 2011)
 """
 
+import os
 import string
 
 import wx
@@ -44,6 +45,8 @@ except ImportError:
 
 from core        import globalvar
 from core.debug  import Debug
+from   wx.lib.newevent import NewEvent
+wxSymbolSelectionChanged, EVT_SYMBOL_SELECTION_CHANGED  = NewEvent()
 
 class GNotebook(FN.FlatNotebook):
     """!Generic notebook widget
@@ -409,3 +412,53 @@ class ItemTree(CT.CustomTreeCtrl):
             if itemSelected:
                 self.ToggleItemSelection(itemSelected)
             self.itemSelected = None
+
+class SingleSymbolPanel(wx.Panel):
+    """!Panel for displaying one symbol.
+    
+    Changes background when selected. Assumes that parent will catch
+    events emitted on mouse click. Used in gui_core::dialog::SymbolDialog.
+    """
+    def __init__(self, parent, symbolPath):
+        """!Panel constructor
+        
+        @param parent parent (gui_core::dialog::SymbolDialog)
+        @param symbolPath absolute path to symbol
+        """
+        wx.Panel.__init__(self, parent, id = wx.ID_ANY, style = wx.BORDER_RAISED)
+        self.SetName(os.path.splitext(os.path.basename(symbolPath))[0])
+        self.sBmp = wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap(symbolPath))
+
+        self.selected = False
+        self.selectionColor = wx.Colour(255, 252, 120)
+        
+        sizer = wx.BoxSizer()
+        sizer.Add(item = self.sBmp, proportion = 0, flag = wx.ALL, border = 0)
+        self.SetBackgroundStyle(wx.BG_STYLE_SYSTEM)
+        self.SetMinSize(self.GetBestSize())
+        self.SetSizerAndFit(sizer)
+        
+        # binding to both (staticBitmap, Panel) necessary
+        self.sBmp.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
+        self.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
+        self.Bind(wx.EVT_LEFT_DCLICK, self.OnDoubleClick)
+        self.sBmp.Bind(wx.EVT_LEFT_DCLICK, self.OnDoubleClick)
+        
+    def OnLeftDown(self, event):
+        """!Panel selected, background changes"""
+        self.selected = True
+        self.SetBackgroundColour(self.selectionColor)
+        event.Skip()
+        
+        event = wxSymbolSelectionChanged(name = self.GetName(), doubleClick = False)
+        wx.PostEvent(self.GetParent(), event)
+        
+    def OnDoubleClick(self, event):
+        event = wxSymbolSelectionChanged(name = self.GetName(), doubleClick = True)
+        wx.PostEvent(self.GetParent(), event)
+        
+    def Deselect(self):
+        """!Panel deselected, background changes back to default"""
+        self.SetBackgroundColour(wx.NullColor)
+        self.selected = False
+        

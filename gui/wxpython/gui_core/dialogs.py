@@ -39,6 +39,10 @@ from bisect import bisect
 import wx
 import wx.lib.filebrowsebutton as filebrowse
 import wx.lib.mixins.listctrl as listmix
+try:
+    from wx.lib.buttons import ThemedGenBitmapToggleButton as BTButton
+except ImportError: # not sure about TGBTButton version
+    from wx.lib.buttons import GenBitmapToggleButton as BTButton
 
 from grass.script import core as grass
 from grass.script import task as gtask
@@ -47,6 +51,7 @@ from core             import globalvar
 from core.gcmd        import GError, RunCommand, GMessage
 from gui_core.gselect import ElementSelect, LocationSelect, MapsetSelect, Select, OgrTypeSelect, GdalSelect, MapsetSelect
 from gui_core.forms   import GUI
+from gui_core.widgets import SingleSymbolPanel, EVT_SYMBOL_SELECTION_CHANGED
 from core.utils       import GetListOfMapsets, GetLayerNameFromCmd, GetValidLayerName
 from core.settings    import UserSettings
 from core.debug       import Debug
@@ -2382,3 +2387,160 @@ class SqlQueryFrame(wx.Frame):
         """!Close window
         """
         self.Close()
+
+class SymbolDialog(wx.Dialog):
+    """!Dialog for GRASS symbols selection.
+    
+    Dialog is called in gui_core::forms module.
+    """
+    def __init__(self, parent, symbolPath, currentSymbol = None, title = _("Symbols")):
+        """!Dialog constructor.
+        
+        It is assumed that symbolPath contains folders with symbols.
+        
+        @param parent dialog parent
+        @param symbolPath absolute path to symbols
+        @param currentSymbol currently selected symbol (e.g. 'basic/x')
+        @param title dialog title
+        """
+        wx.Dialog.__init__(self, parent = parent, title = title, id = wx.ID_ANY)
+        
+        self.symbolPath = symbolPath
+        self.currentSymbol = currentSymbol # default basic/x
+        self.selected = None
+        
+        self._layout()
+        
+    def _layout(self):
+        mainPanel = wx.Panel(self, id = wx.ID_ANY)
+        mainSizer = wx.BoxSizer(wx.VERTICAL)
+        staticBox = wx.StaticBox(parent = mainPanel, id = wx.ID_ANY,
+                                 label = " %s " % _("Symbol selection"))
+        self.staticSizer = wx.StaticBoxSizer(staticBox, wx.VERTICAL)
+        
+        hSizer = wx.BoxSizer(wx.HORIZONTAL)
+        self.folderChoice = wx.Choice(mainPanel, id = wx.ID_ANY, choices = os.listdir(self.symbolPath))
+        self.folderChoice.Bind(wx.EVT_CHOICE, self.OnFolderSelect)
+        
+        self.staticSizer.Add(self.folderChoice, proportion = 0, 
+                             flag = wx.ALL, border = 5)
+        
+        self.panels = self._createSymbolPanels(mainPanel)
+        for panel in self.panels:
+            self.staticSizer.Add(panel, proportion = 0, flag = wx.ALL | wx.EXPAND, border = 5)
+            panel.Bind(EVT_SYMBOL_SELECTION_CHANGED, self.SelectionChanged)
+        
+        self.infoLabel = wx.StaticText(mainPanel, id = wx.ID_ANY)
+        self.staticSizer.Add(self.infoLabel, proportion = 0, 
+                             flag = wx.ALL | wx.ALIGN_CENTRE_VERTICAL, border = 5)
+                             
+        mainSizer.Add(self.staticSizer, proportion = 1, flag = wx.ALL| wx.EXPAND, border = 5)
+        self.btnCancel = wx.Button(parent = mainPanel, id = wx.ID_CANCEL)
+        self.btnOK     = wx.Button(parent = mainPanel, id = wx.ID_OK)
+        self.btnOK.SetDefault()
+        self.btnOK.Enable(False)
+        
+        
+        # buttons
+        btnSizer = wx.StdDialogButtonSizer()
+        btnSizer.AddButton(self.btnCancel)
+        btnSizer.AddButton(self.btnOK)
+        btnSizer.Realize()
+        mainSizer.Add(item = btnSizer, proportion = 0,
+                      flag = wx.EXPAND | wx.ALL, border = 5)
+                      
+        
+        # show panel with the largest number of images and fit size
+        count = []
+        for folder in os.listdir(self.symbolPath):
+            count.append(len(os.listdir(os.path.join(self.symbolPath, folder))))
+            
+        index = count.index(max(count))
+        self.folderChoice.SetSelection(index)
+        self.OnFolderSelect(None)
+        
+        mainPanel.SetSizerAndFit(mainSizer)
+        self.SetSize(self.GetBestSize())
+        
+        # show currently selected symbol
+        if self.currentSymbol:
+            selected = os.path.split(self.currentSymbol)[0]
+            self.folderChoice.SetStringSelection(selected)
+        else:
+            self.folderChoice.SetSelection(0)
+            
+        self.OnFolderSelect(None)
+        
+    def _createSymbolPanels(self, parent):
+        """!Creates multiple panels with symbols.
+        
+        Panels are shown/hidden according to selected folder."""
+        folders = os.listdir(self.symbolPath)
+        
+        self.panels = []
+        self.symbolPanels = []
+        maxImages = 0
+        for folder in folders:
+            panel = wx.Panel(parent)
+            sizer = wx.GridSizer(cols = 6, vgap = 3, hgap = 3)
+            images = self._getSymbols(path = os.path.join(self.symbolPath, folder))
+        
+            symbolPanels = []
+            for img in images:
+                btn = BTButton(parent = panel, id = wx.ID_ANY, bitmap = wx.Bitmap(img), name = img)
+                
+                #iP = SingleSymbolPanel(parent = panel, symbolPath = img)
+                sizer.Add(item = btn, proportion = 0, flag = wx.ALL, border = 0)
+                symbolPanels.append(btn)
+            
+            panel.SetSizerAndFit(sizer)
+            panel.Hide()
+            self.panels.append(panel)
+            self.symbolPanels.append(symbolPanels)
+        return self.panels
+        
+    def _getSymbols(self, path):
+        # we assume that images are in subfolders (1 level only)
+        imageList = []
+        for image in os.listdir(path):
+            imageList.append(os.path.join(path, image))
+                
+        return sorted(imageList)
+            
+    def OnFolderSelect(self, event):
+        """!Selected folder with symbols changed."""
+        idx = self.folderChoice.GetSelection()
+        for i in range(len(self.panels)):
+            sizer = self.panels[i].GetContainingSizer()
+            sizer.Show(self.panels[i], i == idx, recursive = True)
+            sizer.Layout()
+        
+        self.infoLabel.SetLabel('')
+        self.btnOK.Disable()
+        
+    def SelectionChanged(self, event):
+        """!Selected symbol changed."""
+        if event.doubleClick:
+            self.EndModal(wx.ID_OK)
+        # deselect all
+        for i in range(len(self.panels)):
+            for panel in self.symbolPanels[i]:
+                if panel.GetName() != event.name:
+                    panel.Deselect()
+                
+        self.btnOK.Enable()
+        
+        self.selected = os.path.join(self.folderChoice.GetStringSelection(), event.name)
+        
+        self.infoLabel.SetLabel(event.name)
+        
+    def GetSelectedSymbol(self, fullPath = False):
+        """!Returns currently selected symbol.
+        
+        @param fullPath true to return absolute path to symbol,
+        otherwise returns e.g. 'basic/x'
+        """
+        if fullPath:
+            return os.path.join(self.symbolPath, self.selected)
+            
+        return self.selected
