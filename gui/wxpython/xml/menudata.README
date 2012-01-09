@@ -1,5 +1,5 @@
 menudata.xml is in part maintained by this script:
-  gui/wxpython/support/update_menudata.py
+  gui/wxpython/tools/update_menudata.py
 
 which updates the description and keywords (based on module's
 module->label or module->description, module->keywords), and is in
