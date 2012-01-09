@@ -1336,7 +1336,7 @@ class DefaultFontDialog(wx.Dialog):
                       
             self.spin = wx.SpinCtrl(parent = panel, id = wx.ID_ANY)
             if self.fontsize:
-                self.spin.SetValue(self.fontsize)
+                self.spin.SetValue(int(self.fontsize))
             self.spin.Bind(wx.EVT_SPINCTRL, self.OnSizeSpin)
             self.spin.Bind(wx.EVT_TEXT, self.OnSizeSpin)
             gridSizer.Add(item = self.spin,
