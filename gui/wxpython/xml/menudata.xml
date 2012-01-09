@@ -2468,6 +2468,13 @@
 	  <handler>OnMenuCmd</handler>
 	  <command>v.what.vect</command>
 	</menuitem>
+	<menuitem>
+	  <label>Update database values from vector</label>
+	  <help>Populates database values from vector features.</help>
+	  <keywords>vector,database,attribute table</keywords>
+	  <handler>OnMenuCmd</handler>
+	  <command>v.to.db</command>
+	</menuitem>
 	<menu>
 	  <label>Update point attributes from raster</label>
 	  <items>
@@ -2512,13 +2519,6 @@
 	      <keywords>vector,geometry,statistics</keywords>
 	      <handler>OnMenuCmd</handler>
 	      <command>v.report</command>
-	    </menuitem>
-	    <menuitem>
-	      <label>Report or upload vector features to DB</label>
-	      <help>Populates database values from vector features.</help>
-	      <keywords>vector,database,attribute table</keywords>
-	      <handler>OnMenuCmd</handler>
-	      <command>v.to.db</command>
 	    </menuitem>
 	    <separator />
 	    <menuitem>
