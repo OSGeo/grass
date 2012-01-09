@@ -12,7 +12,7 @@ int init_vars(int argc, char *argv[])
     int r, c;
     int ele_fd, fd, wat_fd;
     int seg_rows, seg_cols, num_cseg_total, num_open_segs, num_open_array_segs;
-    double memory_divisor, heap_mem, seg_factor;
+    double memory_divisor, heap_mem, seg_factor, disk_space;
 
     /* int page_block, num_cseg; */
     int max_bytes;
@@ -161,37 +161,51 @@ int init_vars(int argc, char *argv[])
 
     /* balance segment files */
     /* elevation + accumulation: * 2 */
-    memory_divisor =  seg_factor * sizeof(WAT_ALT) * 2;
+    memory_divisor = sizeof(WAT_ALT) * 2;
+    disk_space = sizeof(WAT_ALT);
     /* aspect: as is */
-    memory_divisor += seg_factor;
+    memory_divisor += 1;
+    disk_space += 1;
     /* flags: * 4 */
-    memory_divisor += seg_factor * 4;
+    memory_divisor += 4;
+    disk_space += 1;
     /* astar_points: / 16 */
     /* ideally only a few but large segments */
-    memory_divisor += seg_factor * sizeof(POINT) / 16.;
-    /* heap points: / 5 */
-    memory_divisor += seg_factor * sizeof(HEAP_PNT) / 5.;
+    memory_divisor += sizeof(POINT) / 16.;
+    disk_space += sizeof(POINT);
+    /* heap points: / 4 */
+    memory_divisor += sizeof(HEAP_PNT) / 4.;
+    disk_space += sizeof(HEAP_PNT);
     /* RUSLE */
     if (er_flag) {
 	/* r_h */
-	memory_divisor += seg_factor * 4.;
+	memory_divisor += 4;
+	disk_space += 4;
 	/* s_l */
-	memory_divisor += seg_factor * 8.;
+	memory_divisor += 8;
+	disk_space += 8;
 	/* s_g */
-	if (sg_flag)
-	    memory_divisor += seg_factor * 8.;
+	if (sg_flag) {
+	    memory_divisor += 8;
+	    disk_space += 8;
+	}
 	/* l_s */
-	if (ls_flag)
-	    memory_divisor += seg_factor * 8.;
+	if (ls_flag) {
+	    memory_divisor += 8;
+	    disk_space += 8;
+	}
 	/* ril */
-	if (ril_flag)
-	    memory_divisor += seg_factor * 8.;
+	if (ril_flag) {
+	    memory_divisor += 8;
+	    disk_space += 8;
+	}
     }
     
     /* KB -> MB */
-    memory_divisor /= 1024.;
+    memory_divisor = memory_divisor * seg_factor / 1024.;
+    disk_space = disk_space * seg_factor / 1024.;
     num_open_segs = segs_mb / memory_divisor;
-    heap_mem = num_open_segs * seg_factor * sizeof(HEAP_PNT) / (5. * 1024.);
+    heap_mem = num_open_segs * seg_factor * sizeof(HEAP_PNT) / (4. * 1024.);
 
     G_debug(1, "segs MB: %.0f", segs_mb);
     G_debug(1, "region rows: %d", nrows);
@@ -214,11 +228,12 @@ int init_vars(int argc, char *argv[])
 	num_open_segs = num_cseg_total;
     G_debug(1, "  open segments after adjusting:\t%d", num_open_segs);
 
-    if (num_cseg_total * memory_divisor < 1024.0)
-	G_verbose_message(_("Will need up to %.2f MB of disk space"), num_cseg_total * memory_divisor);
+    disk_space *= num_cseg_total;
+    if (disk_space < 1024.0)
+	G_verbose_message(_("Will need up to %.2f MB of disk space"), disk_space);
     else
 	G_verbose_message(_("Will need up to %.2f GB (%.0f MB) of disk space"),
-	           (num_cseg_total * memory_divisor) / 1024.0, num_cseg_total * memory_divisor);
+	           disk_space / 1024.0, disk_space);
 
     if (er_flag) {
 	cseg_open(&r_h, seg_rows, seg_cols, num_open_segs);
@@ -416,7 +431,7 @@ int init_vars(int argc, char *argv[])
     if (do_points % seg_cols > 0)
 	num_cseg_total++;
     /* no need to have more segments open than exist */
-    num_open_array_segs = (2 << 20) * heap_mem / (seg_cols * sizeof(HEAP_PNT));
+    num_open_array_segs = (1 << 20) * heap_mem / (seg_cols * sizeof(HEAP_PNT));
     if (num_open_array_segs > num_cseg_total)
 	num_open_array_segs = num_cseg_total;
     if (num_open_array_segs < 2)
