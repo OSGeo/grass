@@ -92,7 +92,6 @@ from core             import utils
 from core.settings    import UserSettings
 from gui_core.widgets import FloatValidator, GNotebook
 
-
 wxUpdateDialog, EVT_DIALOG_UPDATE = NewEvent()
 
 # From lib/gis/col_str.c, except purple which is mentioned
@@ -153,10 +152,6 @@ def escape_ampersand(text):
     """!Escapes ampersands with additional ampersand for GUI"""
     return string.replace(text, "&", "&&")
 
-def symbolPath():
-    """!Returnes absolute path to symbols"""
-    return "/home/anna/Desktop/symbols"
-    
 class UpdateThread(Thread):
     """!Update dialog widgets in the thread"""
     def __init__(self, parent, event, eventId, task):
@@ -1039,38 +1034,19 @@ class CmdPanel(wx.Panel):
                         p['wxId'] = [ txt2.GetId(), ]
                         txt2.Bind(wx.EVT_TEXT, self.OnSetValue)
                     else:
-                        
+                        # list of values (combo)
                         title_txt.SetLabel(title + ':')
+                        cb = wx.ComboBox(parent = which_panel, id = wx.ID_ANY, value = p.get('default',''),
+                                         size = globalvar.DIALOG_COMBOBOX_SIZE,
+                                         choices = valuelist, style = wx.CB_DROPDOWN)
                         value = self._getValue(p)
-                        
-                        if p['name'] == 'icon': # symbols
-                            bitmap = wx.Bitmap(os.path.join(symbolPath(), value) + '.png')
-                            bb = wx.BitmapButton(parent = which_panel, id = wx.ID_ANY,
-                                                 bitmap = bitmap)
-                            iconLabel = wx.StaticText(parent = which_panel, id = wx.ID_ANY)
-                            iconLabel.SetLabel(value)
-                            p['value'] = value
-                            p['wxId'] = [bb.GetId(),iconLabel.GetId()]
-                            bb.Bind(wx.EVT_BUTTON, self.OnSetSymbol)
-                            this_sizer = wx.BoxSizer(wx.HORIZONTAL)
-                            this_sizer.Add(item = bb, proportion = 0,
-                                            flag = wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT, border = 5)
-                            this_sizer.Add(item = iconLabel, proportion = 0,
-                                            flag = wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.ALIGN_CENTER_VERTICAL, border = 5)
-                            which_sizer.Add(item = this_sizer, proportion = 0,
-                                            flag = wx.ADJUST_MINSIZE, border = 0)
-                        else:
-                            # list of values (combo)
-                            cb = wx.ComboBox(parent = which_panel, id = wx.ID_ANY, value = p.get('default',''),
-                                             size = globalvar.DIALOG_COMBOBOX_SIZE,
-                                             choices = valuelist, style = wx.CB_DROPDOWN)
-                            if value:
-                                cb.SetValue(value) # parameter previously set
-                            which_sizer.Add(item = cb, proportion = 0,
-                                            flag = wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT, border = 5)
-                            p['wxId'] = [cb.GetId(),]
-                            cb.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
-                            cb.Bind(wx.EVT_TEXT, self.OnSetValue)
+                        if value:
+                            cb.SetValue(value) # parameter previously set
+                        which_sizer.Add(item = cb, proportion = 0,
+                                        flag = wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT, border = 5)
+                        p['wxId'] = [cb.GetId(),]
+                        cb.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
+                        cb.Bind(wx.EVT_TEXT, self.OnSetValue)
             
             # text entry
             if (p.get('type','string') in ('string','integer','float')
@@ -1886,26 +1862,6 @@ class CmdPanel(wx.Panel):
         self.OnUpdateValues(event)
         
         event.Skip()
-        
-    def OnSetSymbol(self, event):
-        """!Shows dialog for symbol selection"""
-        myId = event.GetId()
-        
-        for p in self.task.params:
-            if 'wxId' in p and myId in p['wxId']:
-                from gui_core.dialogs import SymbolDialog
-                dlg = SymbolDialog(self, symbolPath = symbolPath(), currentSymbol = p['value'])
-                if dlg.ShowModal() == wx.ID_OK:
-                    img = dlg.GetSelectedSymbol(fullPath = True)
-                    bitmapButton = wx.FindWindowById(p['wxId'][0])
-                    label = wx.FindWindowById(p['wxId'][1])
-                    bitmapButton.SetBitmapLabel(wx.Bitmap(img + '.png'))
-                    p['value'] = dlg.GetSelectedSymbol(fullPath = False)
-                    label.SetLabel(p['value'])
-                    
-                    self.OnUpdateValues(event)
-                    
-                dlg.Destroy()
         
     def OnUpdateSelection(self, event):
         """!Update dialog (layers, tables, columns, etc.)

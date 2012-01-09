@@ -2925,11 +2925,9 @@ class VectorPanel(wx.Panel):
         self.select = Select(self, id = wx.ID_ANY,# size = globalvar.DIALOG_GSELECT_SIZE,
                              type = 'vector', multiple = False,
                              updateOnPopup = True, onPopup = None)
-        topologyTypeTr = [_("points"), _("lines"), _("areas")]
-        self.topologyTypeList = ["points", "lines", "areas"]
-        self.vectorType = wx.RadioBox(self, id = wx.ID_ANY, label = " %s " % _("Data Type"), choices = topologyTypeTr,
-                                      majorDimension = 3, style = wx.RA_SPECIFY_COLS)
-            
+        topologyType = [_("points"), _("lines"), _("areas")]
+        self.vectorType = wx.RadioBox(self, id = wx.ID_ANY, label = " %s " % _("Data Type"), choices = topologyType,
+                                        majorDimension = 3, style = wx.RA_SPECIFY_COLS)
         self.AddVector = wx.Button(self, id = wx.ID_ANY, label = _("Add"))
         
         gridBagSizer.Add(text, pos = (0,0), flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
@@ -3010,17 +3008,16 @@ class VectorPanel(wx.Panel):
                 mapset = '(' + vmap.split('@')[1] + ')'
             except IndexError:
                 mapset = ''
-            idx = self.vectorType.GetSelection()
-            ttype = self.topologyTypeList[idx]
-            record = "%s - %s" % (vmap, ttype)
+            type = self.vectorType.GetStringSelection()
+            record = "%s - %s" % (vmap,type)
             id = wx.NewId()
             lpos = 1
             label = mapname + mapset 
-            self.vectorList.insert(0, [vmap, ttype, id, lpos, label])
+            self.vectorList.insert(0, [vmap, type, id, lpos, label])
             self.reposition()
             self.listbox.InsertItems([record], 0)
             
-            vector = VProperties(id, ttype)
+            vector = VProperties(id, type)
             self.tmpDialogDict[id] = vector.GetInstruction()
             self.tmpDialogDict[id]['name'] = vmap
 
@@ -3227,7 +3224,7 @@ class VPropertiesDialog(PsmapDialog):
             if id == item[2]:
                 self.vectorName = item[0]
                 self.type = item[1]
-        self.SetTitle(_("%s properties") % self.vectorName)
+        self.SetTitle(self.vectorName + " "+ _("properties"))
         
         #vector map info
         self.connection = True
