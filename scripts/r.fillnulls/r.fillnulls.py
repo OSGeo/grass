@@ -3,15 +3,16 @@
 ############################################################################
 #
 # MODULE:	r.fillnulls
-# AUTHOR(S):	Markus Neteler <neteler itc it>
+# AUTHOR(S):	Markus Neteler
 #               Updated to GRASS 5.7 by Michael Barton
 #               Updated to GRASS 6.0 by Markus Neteler
 #               Ring improvements by Hamish Bowman
 #               Converted to Python by Glynn Clements
+#               Add support to v.surf.bspline by Luca Delucchi
 # PURPOSE:	fills NULL (no data areas) in raster maps
 #               The script respects a user mask (MASK) if present.
 #
-# COPYRIGHT:	(C) 2001,2004-2005,2008 by the GRASS Development Team
+# COPYRIGHT:	(C) 2001-2012 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
 #		License (>=v2). Read the file COPYING that comes with GRASS
@@ -21,7 +22,7 @@
 
 
 #%module
-#% description: Fills no-data areas in raster maps using splines interpolation.
+#% description: Fills no-data areas in raster maps using spline interpolation.
 #% keywords: raster
 #% keywords: elevation
 #% keywords: interpolation
@@ -43,6 +44,14 @@
 #% description: Spline smoothing parameter
 #% required : no
 #% answer : 0.1
+#%end
+#%option
+#% key: method
+#% type: string
+#% description: Interpolation method
+#% required : yes
+#% options : bilinear,bicubic,rst
+#% answer : rst
 #%end
 
 import sys
@@ -75,6 +84,7 @@ def main():
     output = options['output']
     tension = options['tension']
     smooth = options['smooth']
+    method = options['method']
 
     mapset = grass.gisenv()['MAPSET']
     unique = str(os.getpid())
@@ -140,29 +150,43 @@ def main():
     # remove internal MASK first -- WHY???? MN 10/2005
     grass.run_command('g.remove', quiet = True, rast = 'MASK')
 
+    # print message is a usermask it was present
     if grass.find_file(usermask, mapset = mapset)['file']:
 	grass.message(_("Using user mask while interpolating"))
 	maskmap = usermask
     else:
 	maskmap = None
 
-    segmax = 600
-    if pointsnumber > segmax:
-	grass.message(_("Using segmentation for interpolation..."))
-	segmax = None
-    else:
-	grass.message(_("Using no segmentation for interpolation as not needed..."))
+    #check if method is rst to use v.surf.rst
+    if method == 'rst':
+        # set the max number before segmantation
+        segmax = 600
+        if pointsnumber > segmax:
+            grass.message(_("Using segmentation for interpolation..."))
+            segmax = None
+        else:
+            grass.message(_("Using no segmentation for interpolation as not needed..."))
+        # launch v.surf.rst    
+	grass.message(_("Using RST interpolation..."))
+	grass.run_command('v.surf.rst', input = vecttmp, elev = tmp1 + '_filled',
+			zcol = 'value', tension = tension, smooth = smooth,
+			maskmap = maskmap, segmax = segmax)
 
-    grass.run_command('v.surf.rst', input = vecttmp, elev = tmp1 + '_filled',
-		      zcol = 'value', tension = tension, smooth = smooth,
-		      maskmap = maskmap, segmax = segmax)
-
-    grass.message(_("Note: Above warnings may be ignored."))
+	grass.message(_("Note: Above warnings may be ignored."))
 
     # restoring user's mask, if present:
     if grass.find_file(usermask, mapset = mapset)['file']:
 	grass.message(_("Restoring user mask (MASK)..."))
 	grass.run_command('g.rename', quiet = True, rast = (usermask, 'MASK'))
+
+    #check if method is different from rst to use v.surf.bspline
+    if method != 'rst':
+	grass.message(_("Using %s (v.surf.bspline) interpolation") % method)
+	reg = grass.region()
+	# launch v.surf.bspline
+	grass.run_command('v.surf.bspline', input = vecttmp, layer = 1,
+			raster = tmp1 + '_filled', method = method, column = 'value',
+			sie = reg['ewres'], sin = reg['nsres'])
 
     # patch orig and fill map
     grass.message(_("Patching fill data into NULL areas..."))
