@@ -13093,7 +13093,7 @@ msgstr "Konwertuje mapę rastrową 3D GRASS-a do formatu VTK-Ascii."
 #~ msgid "Creates cross section 2D raster map from 3d raster map based on 2D elevation map"
 #~ msgstr "Tworzy mapę rastrową przekroju (2D) mapy rastrowej 3D i mapy rastrowej wysokości (2D)"
 
-#~ msgid "Interpolates point data to a G3D grid volume using regularized spline with tension (RST) algorithm."
+#~ msgid "Interpolates point data to a 3D raster map using regularized spline with tension (RST) algorithm."
 #~ msgstr "Interpoluje dane punktowe do G3D za pomocą algorytmu RST."
 
 #~ msgid "Generates volume statistics for raster3d maps."

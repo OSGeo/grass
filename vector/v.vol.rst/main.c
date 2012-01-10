@@ -242,7 +242,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("interpolation"));
     G_add_keyword(_("RST"));
     module->description =
-	_("Interpolates point data to a RASTER3D grid volume using "
+	_("Interpolates point data to a 3D raster map using "
 	  "regularized spline with tension (RST) algorithm.");
 
     parm.input = G_define_option();

@@ -13140,7 +13140,7 @@ msgstr "ワークスペースのロード"
 #~ msgid "Creates cross section 2D raster map from 3d raster map based on 2D elevation map"
 #~ msgstr "2D標高マップに基づいた3Dラスターから2Dのラスター断面マップを作成"
 
-#~ msgid "Interpolates point data to a G3D grid volume using regularized spline with tension (RST) algorithm."
+#~ msgid "Interpolates point data to a 3D raster map using regularized spline with tension (RST) algorithm."
 #~ msgstr "テンション（ＲＳＴ）アルゴリズムによる正規化スプライン曲線を使用して3Dグリッドのポイントを補間する"
 
 #~ msgid "Generates volume statistics for raster3d maps."
