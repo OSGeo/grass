@@ -16424,7 +16424,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid ""
-#~ "Interpolates point data to a G3D grid volume using regularized spline "
+#~ "Interpolates point data to a 3D raster map using regularized spline "
 #~ "with tension (RST) algorithm."
 #~ msgstr "Interpola datos de puntos a volumen de cuadrícula G3D usando"
 

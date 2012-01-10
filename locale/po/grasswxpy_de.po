@@ -13890,7 +13890,7 @@ msgstr "Konvertiert eine 3D-Rasterkarte (RASTER3D) in das VTK-ASCII-Format."
 #~ msgid "Creates cross section 2D raster map from 3d raster map based on 2D elevation map"
 #~ msgstr "Erzeugt einen Querschnitt in Form einer 2D-Rasterkarte aus einer 3D-Rasterkarte basierend auf 2D-Höhenkarte."
 
-#~ msgid "Interpolates point data to a G3D grid volume using regularized spline with tension (RST) algorithm."
+#~ msgid "Interpolates point data to a 3D raster map using regularized spline with tension (RST) algorithm."
 #~ msgstr "Interpoliert Punkte zu einem G3D Grid Volumen unter Verwendung des regularized spline with tension (RST) Algorithmus."
 
 #~ msgid "Generates volume statistics for raster3d maps."

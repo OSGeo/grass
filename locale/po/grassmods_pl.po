@@ -37394,7 +37394,7 @@ msgstr "Nie można ulakować pamięci dla ciągu"
 #~ msgstr "Jednoznakowy separator, newline, comma, space, or tab"
 
 #, fuzzy
-#~ msgid "Interpolates point data to a G3D grid volume using regularized spline with tension (RST) algorithm."
+#~ msgid "Interpolates point data to a 3D raster map using regularized spline with tension (RST) algorithm."
 #~ msgstr "Interpoluje dane punktowe do G3D za pomocą algorytmu RST."
 
 #, fuzzy

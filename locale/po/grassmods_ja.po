@@ -36083,7 +36083,7 @@ msgstr "auxiliarマトリックスにメモリーを割り当てられません.
 #~ msgid "Convex hull calculation requires at least three points. Exiting."
 #~ msgstr "凸包演算には3点以上が必要です。終了"
 
-#~ msgid "Interpolates point data to a G3D grid volume using regularized spline with tension (RST) algorithm."
+#~ msgid "Interpolates point data to a 3D raster map using regularized spline with tension (RST) algorithm."
 #~ msgstr "テンション (RST) アルゴリズムの正規化スプライン曲線を使って，ポイントデータを3Dグリッドボリュームへ挿入"
 
 #~ msgid "Cannot open %s"
