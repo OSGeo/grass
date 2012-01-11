@@ -128,10 +128,10 @@ public:
   void print();
 
   friend class mm_register_init;
-  friend void * operator new(size_t);
-  friend void * operator new[](size_t);
-  friend void operator delete(void *);
-  friend void operator delete[](void *);
+  friend void * operator new(size_t) throw(std::bad_alloc);
+  friend void * operator new[](size_t) throw(std::bad_alloc);
+  friend void operator delete(void *) throw();
+  friend void operator delete[](void *) throw();
 };
 
 
