@@ -182,6 +182,10 @@ class Settings:
                 'bgcolor': {
                     'color' : (255, 255, 255, 255),
                     },
+                'mouseWheelZoom' : {
+                    'enabled' : True,
+                    'selection' : 0,
+                    },
                 },
             #
             # projection
@@ -775,6 +779,8 @@ class Settings:
         
         self.internalSettings['display']['driver']['choices'] = ['cairo', 'png']
         self.internalSettings['display']['statusbarMode']['choices'] = None # set during MapFrame init
+        self.internalSettings['display']['mouseWheelZoom']['choices'] = (_('Scroll forward to zoom in'),
+                                                                         _('Scroll back to zoom in'))
 
         self.internalSettings['nviz']['view'] = {}
         self.internalSettings['nviz']['view']['twist'] = {}

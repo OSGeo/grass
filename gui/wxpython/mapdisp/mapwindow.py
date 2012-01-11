@@ -912,6 +912,12 @@ class BufferedWindow(MapWindow, wx.Window):
     def OnMouseWheel(self, event):
         """!Mouse wheel moved
         """
+        if not UserSettings.Get(group = 'display',
+                                key = 'mouseWheelZoom',
+                                subkey = 'enabled'):
+            event.Skip()
+            return
+            
         self.processMouse = False
         current  = event.GetPositionTuple()[:]
         wheel = event.GetWheelRotation()
@@ -927,6 +933,11 @@ class BufferedWindow(MapWindow, wx.Window):
         else:
             zoomtype = -1
         
+        if UserSettings.Get(group = 'display',
+                            key = 'mouseWheelZoom',
+                            subkey = 'selection'):
+            zoomtype *= -1
+            
         # zoom
         self.Zoom(begin, end, zoomtype)
         

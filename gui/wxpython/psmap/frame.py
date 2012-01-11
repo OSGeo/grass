@@ -42,6 +42,7 @@ from gui_core.menu    import Menu
 from gui_core.goutput import CmdThread, EVT_CMD_DONE
 from psmap.toolbars   import PsMapToolbar
 from core.gcmd        import RunCommand, GError, GMessage
+from core.settings    import UserSettings
 from gui_core.forms   import GUI
 from psmap.menudata   import PsMapData
 
@@ -1132,10 +1133,18 @@ class PsMapBufferedWindow(wx.Window):
         
     def OnMouse(self, event):
 
-        if event.GetWheelRotation():
+        if event.GetWheelRotation() and UserSettings.Get(group = 'display',
+                                                         key = 'mouseWheelZoom',
+                                                         subkey = 'enabled'):
             zoom = event.GetWheelRotation()
             use = self.mouse['use']
             self.mouse['begin'] = event.GetPosition()
+            
+            if UserSettings.Get(group = 'display',
+                                key = 'mouseWheelZoom',
+                                subkey = 'selection'):
+                zoom *= -1
+                
             if zoom > 0:
                 self.mouse['use'] = 'zoomin'
             else:
