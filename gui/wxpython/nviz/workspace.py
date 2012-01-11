@@ -25,9 +25,7 @@ except ImportError:
 
 class NvizSettings(object):
     def __init__(self):
-        """Default 3D settings"""
-        UserSettings.Reset('nviz')
-        UserSettings.ReadSettingsFile()
+        pass
         
     def SetConstantDefaultProp(self):
         """Set default constant data properties"""

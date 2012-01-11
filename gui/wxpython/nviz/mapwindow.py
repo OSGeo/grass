@@ -624,6 +624,12 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
 
     def OnMouseWheel(self, event):
         """!Change perspective"""
+        if not UserSettings.Get(group = 'display',
+                                key = 'mouseWheelZoom',
+                                subkey = 'enabled'):
+            event.Skip()
+            return
+            
         wheel = event.GetWheelRotation()
         Debug.msg (5, "GLWindow.OnMouseMotion(): wheel = %d" % wheel)
         if self.timerFly.IsRunning() and self.fly['mouseControl']:
@@ -632,6 +638,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             else:
                 self.ChangeFlySpeed(increase = False)
         else:
+            if UserSettings.Get(group = 'display',
+                                key = 'mouseWheelZoom',
+                                subkey = 'selection'):
+                wheel *= -1
             self.DoZoom(zoomtype = wheel, pos = event.GetPositionTuple())
             
         # update statusbar

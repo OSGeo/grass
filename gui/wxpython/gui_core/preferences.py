@@ -706,6 +706,31 @@ class PreferencesDialog(PreferencesBaseDialog):
 
         gridSizer.Add(item = autoZooming,
                       pos = (row, 0), span = (1, 2))
+        
+        #
+        # mouse wheel zoom
+        #
+        row += 1
+        wheelZooming = wx.CheckBox(parent = panel, id = wx.ID_ANY,
+                                  label = _("Enable zooming by mouse wheel"),
+                                  name = "IsChecked")
+        wheelZooming.SetValue(self.settings.Get(group = 'display', key = 'mouseWheelZoom',
+                                                subkey = 'enabled'))
+        self.winId['display:mouseWheelZoom:enabled'] = wheelZooming.GetId()
+
+        gridSizer.Add(item = wheelZooming,
+                      pos = (row, 0), flag = wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL)
+                      
+        listOfModes = self.settings.Get(group = 'display', key = 'mouseWheelZoom', subkey = 'choices', internal = True)
+        zoomMode = wx.Choice(parent = panel, id = wx.ID_ANY, size = (200, -1),
+                             choices = listOfModes,
+                             name = "GetSelection")
+        zoomMode.SetSelection(self.settings.Get(group = 'display', key = 'mouseWheelZoom', subkey = 'selection'))
+        self.winId['display:mouseWheelZoom:selection'] = zoomMode.GetId()
+
+        gridSizer.Add(item = zoomMode,
+                      flag = wx.ALIGN_RIGHT,
+                      pos = (row, 1))
 
         sizer.Add(item = gridSizer, proportion = 1, flag = wx.ALL | wx.EXPAND, border = 5)
         border.Add(item = sizer, proportion = 0, flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 3)
@@ -714,6 +739,10 @@ class PreferencesDialog(PreferencesBaseDialog):
                 
         # bindings
         fontButton.Bind(wx.EVT_BUTTON, self.OnSetFont)
+        wheelZooming.Bind(wx.EVT_CHECKBOX, self.OnEnableWheelZoom)
+        
+        # enable/disable controls according to settings
+        self.OnEnableWheelZoom(None)
         
         return panel
 
@@ -787,7 +816,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         self.winId['cmd:verbosity:selection'] = verbosity.GetId()
         
         gridSizer.Add(item = verbosity,
-                      pos = (row, 1))
+                      pos = (row, 1), flag = wx.ALIGN_RIGHT)
         
         sizer.Add(item = gridSizer, proportion = 1, flag = wx.ALL | wx.EXPAND, border = 5)
         border.Add(item = sizer, proportion = 0, flag = wx.ALL | wx.EXPAND, border = 3)
@@ -1259,6 +1288,13 @@ class PreferencesDialog(PreferencesBaseDialog):
 
         event.Skip()
 
+    def OnEnableWheelZoom(self, event):
+        """!Enable/disable wheel zoom mode control"""
+        checkId = self.winId['display:mouseWheelZoom:enabled']
+        choiceId = self.winId['display:mouseWheelZoom:selection']
+        enable = self.FindWindowById(checkId).IsChecked()
+        self.FindWindowById(choiceId).Enable(enable)
+        
 class DefaultFontDialog(wx.Dialog):
     """
     Opens a file selection dialog to select default font
