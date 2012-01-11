@@ -100,7 +100,8 @@ r.in.wms layers=global_mosaic mapserver=http://wms.jpl.nasa.gov/wms.cgi \
          output=wms_global_mosaic
 
 # export the data to VTK
-r.out.vtk rgbmaps=wms_global_mosaic.red,wms_global_mosaic.green,wms_global_mosaic.blue elevation=elevation.10m output=/tmp/out.vtk
+r.out.vtk rgbmaps=wms_global_mosaic.red,wms_global_mosaic.green,wms_global_mosaic.blue \
+          elevation=elevation.10m output=/tmp/out.vtk
 
 # visualize in Paraview or other VTK viewer:
 paraview --data=/tmp/out.vtk
