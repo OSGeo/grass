@@ -1,7 +1,7 @@
 
 /****************************************************************************
  *
- * MODULE:       r.series.interpol
+ * MODULE:       r.series.interp
  * AUTHOR(S):    Soeren Gebbert <soerengebbert googlemail.com>
  *               Code is based on r.series from Glynn Clements <glynn gclements.plus.com> 
  *
