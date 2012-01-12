@@ -12,13 +12,13 @@ msgstr ""
 "Project-Id-Version: grasswxpy_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-05 23:30+0200\n"
-"PO-Revision-Date: 2011-10-10 21:50+0200\n"
-"Last-Translator: Robert Nuske <robert.nuske nw-fva.de>\n"
+"PO-Revision-Date: 2012-01-12 12:03+0100\n"
+"Last-Translator: Markus Neteler <neteler osgeo.org>\n"
 "Language-Team: Deutsch <grass-translations@lists.osgeo.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-15\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../gui/wxpython/wxgui.py:92
@@ -1782,14 +1782,12 @@ msgid "Vis5D export"
 msgstr "Vis5D Export"
 
 #: ../gui/wxpython/menustrings.py:147
-#, fuzzy
 msgid "Exports GRASS 3D raster map to 3-dimensional Vis5D file."
-msgstr "Exportiert eine GRASS 3D Rasterkarte in eine 3-dimensionale Vis5D Datei"
+msgstr "Exportiert eine GRASS 3D Rasterkarte in eine 3-dimensionale Vis5D Datei."
 
 #: ../gui/wxpython/menustrings.py:149
-#, fuzzy
 msgid "Converts 3D raster maps into the VTK-ASCII format."
-msgstr "Konvertiert eine 3D-Rasterkarte (RASTER3D) in das VTK-ASCII-Format."
+msgstr "Konvertiert eine 3D Rasterkarte in das VTK-ASCII-Format."
 
 #: ../gui/wxpython/menustrings.py:150
 msgid "Export database table"
@@ -1851,18 +1849,16 @@ msgid "List"
 msgstr "Auflisten"
 
 #: ../gui/wxpython/menustrings.py:166
-#, fuzzy
 msgid "Lists available GRASS data base files of the user-specified data type."
-msgstr "Listet alle verfügbaren GRASS Datenbankdateien im spezifiezierten Typ im Standard Output auf"
+msgstr "Listet alle verfügbaren GRASS Datenbankdateien im spezifizierten Typ auf."
 
 #: ../gui/wxpython/menustrings.py:167
 msgid "List filtered"
 msgstr "Gefilterte Liste"
 
 #: ../gui/wxpython/menustrings.py:168
-#, fuzzy
 msgid "Lists available GRASS data base files of the user-specified data type optionally using the search pattern."
-msgstr "Listet alle verfügbaren GRASS Datenbankdateien im spezifiezierten Typ im Standard Output auf"
+msgstr "Listet alle verfügbaren GRASS Datenbankdateien im spezifizierten Typ mit optionalem Suchmuster auf."
 
 #: ../gui/wxpython/menustrings.py:169
 #: ../gui/wxpython/gui_modules/layertree.py:281
@@ -1988,9 +1984,8 @@ msgid "nviz - Visualization and animation tool for GRASS data."
 msgstr "nviz - Visualisierungs- und Animationswerkzeug für GRASS Daten."
 
 #: ../gui/wxpython/menustrings.py:200
-#, fuzzy
 msgid "3D image rendering"
-msgstr "Auto-Rendering einschalten"
+msgstr "3D Rendering einschalten"
 
 #: ../gui/wxpython/menustrings.py:201
 msgid "Creates a 3D rendering of GIS data."
@@ -4122,9 +4117,8 @@ msgid "Inverse Fast Fourier Transform (IFFT) for image processing."
 msgstr "Inverse Fast Fourier Transformation (IFFT) für die Bildverarbeitung."
 
 #: ../gui/wxpython/menustrings.py:733
-#, fuzzy
 msgid "Satellite images tools"
-msgstr "Flï¿½chengrï¿½ï¿½e"
+msgstr "Wergzeuge zur Satellitenbildverarbeitung"
 
 #: ../gui/wxpython/menustrings.py:734
 msgid "Aster DN to radiance/reflectance"
@@ -4187,9 +4181,8 @@ msgid "Creates a sunshine hours map."
 msgstr "Erzeugt Topologie fï¿½r GRASS Vektorkarten."
 
 #: ../gui/wxpython/menustrings.py:748
-#, fuzzy
 msgid "Satellite images products"
-msgstr "Flï¿½chengrï¿½ï¿½e"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:749
 #, fuzzy
@@ -4434,7 +4427,6 @@ msgid "Voxel statistics"
 msgstr "Voxel-Statistik"
 
 #: ../gui/wxpython/menustrings.py:809
-#, fuzzy
 msgid "Generates volume statistics for 3D raster maps."
 msgstr "Erzeugt Volumenstatistik für 3D-Rasterkarten."
 
@@ -5008,7 +5000,6 @@ msgid "Use color column instead of color table:"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/colorrules.py:969
-#, fuzzy
 msgid "Add column"
 msgstr "Spalte hinzufügen"
 
@@ -6088,14 +6079,13 @@ msgid "No raster or vector map layer selected for querying."
 msgstr "Es wurde keine Raster- oder Vektorkarte für die Abfrage ausgewählt."
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1319
-#, fuzzy, python-format
+#, python-format
 msgid "Vector map <%s> opened for editing - skipped."
-msgstr "Keine Vektorkarte für Bearbeitung geöffnet."
+msgstr "Vektorkarte <%s> für Bearbeitung geöffnet - übersprungen."
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1324
-#, fuzzy
 msgid "Nothing to query."
-msgstr "Nichts zu speichern."
+msgstr "Nichts abzufragen."
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1375
 msgid "No map layer selected for querying."
@@ -6129,7 +6119,7 @@ msgid "Measuring distance:"
 msgstr "Messe Strecke:"
 
 #: ../gui/wxpython/gui_modules/mapdisp.py:1598
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Geodesic distance is not yet supported by this tool.\n"
 "Reason: %s"
@@ -6227,7 +6217,6 @@ msgid "Unable to open vector map <%s>."
 msgstr "Kann die Vektorkarte <%s> nicht öffnen."
 
 #: ../gui/wxpython/gui_modules/wxvdigit.py:53
-#, fuzzy
 msgid "No vector map open for editing."
 msgstr "Keine Vektorkarte für Bearbeitung geöffnet."
 
@@ -6270,7 +6259,7 @@ msgid "Feature id %d is marked as dead. Operation cancelled."
 msgstr "Objekt-ID %d als tot markiert. Operation abgebrochen."
 
 #: ../gui/wxpython/gui_modules/wxvdigit.py:117
-#, fuzzy, python-format
+#, python-format
 msgid "Unsupported feature type %d. Operation cancelled."
 msgstr "Nicht unterstützter Objekttyp %d. Operation abgebrochen."
 
@@ -6427,9 +6416,8 @@ msgid "Language"
 msgstr "Sprache"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:797
-#, fuzzy
 msgid "Fetch & install extension from GRASS Addons"
-msgstr "Abruf und Installation neuer Erweiterungen der GRASS Addons"
+msgstr "Abruf und Installation einer neuen Erweiterung aus den GRASS Addons"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:806
 msgid "Repository"
@@ -6449,7 +6437,6 @@ msgid "Options"
 msgstr "Optionen"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:840
-#, fuzzy
 msgid "&Fetch"
 msgstr "&Abrufen"
 
@@ -6466,9 +6453,8 @@ msgid "Install selected add-ons GRASS module"
 msgstr "Installiere ausgewählte Add-on-GRASS-Module"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:918
-#, fuzzy
 msgid "Extension not defined"
-msgstr "Bedingung: nicht definiert"
+msgstr "Erweiterung nicht definiert"
 
 #: ../gui/wxpython/gui_modules/ghelp.py:933
 msgid "Fetch list of available extensions by clicking on 'Fetch' button"
@@ -6931,9 +6917,8 @@ msgid "Set up vector cleaning tools"
 msgstr "Einstellen der Vektor-Cleaning-Tools"
 
 #: ../gui/wxpython/gui_modules/vclean.py:124
-#, fuzzy
 msgid "Choose cleaning tools and set thresholds"
-msgstr "Wähle Cleaning-Werkzeuge und bestimme Schwellenwerte"
+msgstr "Wähle Cleaning-Werkzeuge und setze Schwellenwerte"
 
 #: ../gui/wxpython/gui_modules/vclean.py:128
 msgid "Select input vector map:"
@@ -6979,7 +6964,7 @@ msgid "face"
 msgstr "Face"
 
 #: ../gui/wxpython/gui_modules/vclean.py:363
-#, fuzzy, python-format
+#, python-format
 msgid "%s. cleaning tool removed, will be ignored"
 msgstr "%s. Cleaning Werkzeug entfernt, wird ignoriert"
 
@@ -6993,28 +6978,25 @@ msgid "%s. cleaning tool moved up"
 msgstr "%s. Vektor-Cleaning-Tool nach oben gereiht"
 
 #: ../gui/wxpython/gui_modules/vclean.py:388
-#, fuzzy
 msgid "1. cleaning tool can not be moved up "
-msgstr "1. Cleaning Werkzeug kann nicht nach oben bewegt werden"
+msgstr "1. Cleaning Werkzeug kann nicht nach oben verschoben werden"
 
 #: ../gui/wxpython/gui_modules/vclean.py:390
 msgid "Please select a cleaning tool to move up"
 msgstr "Wählen sie ein Vektor-Cleaning-Tool aus, um es weiter nach oben zu reihen"
 
 #: ../gui/wxpython/gui_modules/vclean.py:413
-#, fuzzy, python-format
+#, python-format
 msgid "%s. cleaning tool moved down"
-msgstr "%s. Cleaning-Werkzeug abwärts bewegt"
+msgstr "%s. Cleaning-Werkzeug abwärts verschoben"
 
 #: ../gui/wxpython/gui_modules/vclean.py:415
-#, fuzzy
 msgid "Last cleaning tool can not be moved down "
 msgstr "Letztes Cleaning-Werkzeug kann nicht nach unten verschoben werden"
 
 #: ../gui/wxpython/gui_modules/vclean.py:417
-#, fuzzy
 msgid "Please select a cleaning tool to move down"
-msgstr "Bitte wählen sie ein Cleaning-Werkzeug aus, um es nach unten zu verschieben"
+msgstr "Bitte wählen Sie ein Cleaning-Werkzeug aus, um es nach unten zu verschieben"
 
 #: ../gui/wxpython/gui_modules/vclean.py:428
 #, python-format
@@ -7027,7 +7009,6 @@ msgid "Threshold for %(num)s. tool '%(tool)s': %(thresh)s"
 msgstr "Schwellenwert für %(num)s. Werkzeug '%(tool)s': %(thresh)s"
 
 #: ../gui/wxpython/gui_modules/vclean.py:457
-#, fuzzy
 msgid "Executing selected cleaning operations..."
 msgstr "Führe ausgewählte Cleaning-Bearbeitungen aus..."
 
@@ -8789,12 +8770,9 @@ msgstr ""
 " %s"
 
 #: ../gui/wxpython/gui_modules/psmap.py:321
-#, fuzzy, python-format
+#, python-format
 msgid "Unable to generate preview. %s"
-msgstr ""
-"Kann das Mapset nicht umbenennen,\n"
-"\n"
-"%s"
+msgstr "Kann Vorschau nicht erzeugen. %s"
 
 #: ../gui/wxpython/gui_modules/psmap.py:330
 msgid "Preview generated"
@@ -8805,9 +8783,9 @@ msgid "Save file as"
 msgstr "Speichere Datei als..."
 
 #: ../gui/wxpython/gui_modules/psmap.py:396
-#, fuzzy, python-format
+#, python-format
 msgid "Failed to read file %s."
-msgstr "Kann EPSG Datei nicht lesen: '%s'"
+msgstr "Kann Datei %s nicht lesen."
 
 #: ../gui/wxpython/gui_modules/psmap.py:545
 #: ../gui/wxpython/gui_modules/psmap.py:568
@@ -8820,9 +8798,8 @@ msgid "Scalebar is not appropriate for this projection"
 msgstr "Geben Sie Parameter an für die %s Projektion "
 
 #: ../gui/wxpython/gui_modules/psmap.py:912
-#, fuzzy
 msgid "wxGUI Cartographic Composer"
-msgstr "wxGUI Graphical Modeler"
+msgstr "wxGUI Cartographic Composer"
 
 #: ../gui/wxpython/gui_modules/psmap.py:914
 msgid ""
@@ -8834,9 +8811,8 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/psmap.py:915
 #: ../gui/wxpython/gui_modules/gmodeler.py:1282
-#, fuzzy
 msgid "This program is free software under the GNU General Public License(>=v2). Read the file COPYING that comes with GRASS for details."
-msgstr "Dieses Programm ist freie Software unter der GNU General Public License(>=v2). Lesen sie für Details die Datei COPYING, die mit GRASS ausgeliefert wird."
+msgstr "Dieses Programm ist freie Software unter der GNU General Public License(>=v2). Lesen Sie für Details die Datei COPYING, die mit GRASS ausgeliefert wird."
 
 #: ../gui/wxpython/gui_modules/psmap.py:1146
 msgid "Click and drag to resize object"
@@ -9953,9 +9929,8 @@ msgid "list of categories (e.g. 1,3,5-7)"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3115
-#, fuzzy
 msgid "Use current mask"
-msgstr "Aktuelles einklappen "
+msgstr "Nutze aktuelle Maske"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3132
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3231
@@ -9991,9 +9966,8 @@ msgstr "Füllfarbe"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3188
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3291
-#, fuzzy
 msgid "choose color:"
-msgstr "Wählen Sie das Verzeichnis:"
+msgstr "Wählen Sie die Farbe:"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3200
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3304
@@ -10005,9 +9979,8 @@ msgid "No effect for fill color from table column"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3289
-#, fuzzy
 msgid "Color of lines:"
-msgstr "Farbregeln"
+msgstr "Linienfarbe:"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3334
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3458
@@ -10056,9 +10029,8 @@ msgid "from map table column:"
 msgstr "Lösche alle Spalten"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3467
-#, fuzzy
 msgid "Set width (pts):"
-msgstr "Liniebreite (in Pixel):"
+msgstr "Setze breite (in Punkt):"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3476
 #, fuzzy
@@ -10076,23 +10048,20 @@ msgid "Choose linecap:"
 msgstr "Wählen die Datei"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3532
-#, fuzzy
 msgid "Pattern"
-msgstr "Stern"
+msgstr "Muster"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3537
 msgid "use pattern:"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3538
-#, fuzzy
 msgid "Choose pattern file:"
-msgstr "Wählen Sie die Eingabe-Datei"
+msgstr "Wählen Sie die Muster-Datei:"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3542
-#, fuzzy
 msgid "pattern line width (pts):"
-msgstr "Liniebreite (in Pixel):"
+msgstr "Liniebreite (in Punkt):"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3544
 msgid "pattern scale factor:"
@@ -10107,14 +10076,12 @@ msgid "Show raster legend"
 msgstr "Zeige Rasterlegende"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3853
-#, fuzzy
 msgid "Source raster"
-msgstr "Name der Quelle"
+msgstr "Eingaberasterkarte"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3858
-#, fuzzy
 msgid "current raster"
-msgstr "Vektor zu Raster"
+msgstr "aktuelle Rasterkarte"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3859
 msgid "select raster"
@@ -10127,9 +10094,8 @@ msgid "%(rast)s: type %(type)s"
 msgstr "%(rast)s: Typ %(type)s"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3885
-#, fuzzy
 msgid "Type of legend"
-msgstr "Legende anzeigen"
+msgstr "Legendentyp"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3889
 msgid "discrete legend (categorical maps)"
@@ -10140,9 +10106,8 @@ msgid "continuous color gradient legend (floating point map)"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3902
-#, fuzzy
 msgid "Advanced legend settings"
-msgstr "Fortgeschrittene Einstellungen"
+msgstr "Fortgeschrittene Legendeneinstellungen"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3906
 msgid "draw \"no data\" box"
@@ -10161,9 +10126,8 @@ msgid "Show vector legend"
 msgstr "Zeige Vektorlegende"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3970
-#, fuzzy
 msgid "Source vector maps"
-msgstr "Vektorkarten abfragen"
+msgstr "Eingangsvektorkarten"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3976
 msgid "Choose vector maps and their order in legend"
@@ -10202,9 +10166,8 @@ msgid "Columns:"
 msgstr "Spalten:"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:4122
-#, fuzzy
 msgid "column span:"
-msgstr "Spalten"
+msgstr "Spaltenbreite:"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:4124
 msgid ""
@@ -10217,9 +10180,8 @@ msgid "Edit legend label:"
 msgstr ""
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:4347
-#, fuzzy
 msgid "No raster map selected!"
-msgstr "Keine Rasterkarte selektiert!"
+msgstr "Keine Rasterkarte ausgewählt!"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:4348
 msgid "No raster"
@@ -10230,14 +10192,12 @@ msgid "Color settings"
 msgstr "Farb Einstellungen"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:4651
-#, fuzzy
 msgid "use border color:"
-msgstr "verwende| X Koordinate"
+msgstr "verwende Randfarbe"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:4652
-#, fuzzy
 msgid "use background color:"
-msgstr "Hintergrundfarbe: "
+msgstr "verwende Hintergrundfarbe:"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:4792
 msgid ""
@@ -10300,7 +10260,6 @@ msgid "Enter text:"
 msgstr "Geben Sie Text ein:"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:5101
-#, fuzzy
 msgid "Text effects"
 msgstr "Texteinstellungen"
 
@@ -10313,14 +10272,12 @@ msgid "highlight"
 msgstr "hervorheben"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:5114
-#, fuzzy
 msgid "text border"
-msgstr "1. Ordnung"
+msgstr "Textrand"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:5188
-#, fuzzy
 msgid "Position is given:"
-msgstr "Position:"
+msgstr "Position ist angegeben:"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:5189
 msgid "relatively to paper"
@@ -10350,9 +10307,8 @@ msgid "vertical (pts):"
 msgstr "vertikal (pts):"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:5260
-#, fuzzy
 msgid " Reference point"
-msgstr "Links: neuer Punkt"
+msgstr " Referenzpunkt"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:5286
 msgid "Text rotation"
@@ -10540,9 +10496,9 @@ msgid "Command finished"
 msgstr "Befehl ausgeführt"
 
 #: ../gui/wxpython/gui_modules/wxnviz.py:41
-#, fuzzy, python-format
+#, python-format
 msgid "3D view mode: %s\n"
-msgstr "3D Ansicht-Werkszeugsleiste"
+msgstr "3D Ansichtsmodus: %s\n"
 
 #: ../gui/wxpython/gui_modules/wxnviz.py:376
 #, python-format
@@ -10743,9 +10699,8 @@ msgid "Unable to zoom to vector map <%s>."
 msgstr "Kann nicht auf die Vektorkarte <%s> zoomen."
 
 #: ../gui/wxpython/gui_modules/render.py:661
-#, fuzzy
 msgid "Unable to get current geographic extent. Force quiting wxGUI. Please manually run g.region to fix the problem."
-msgstr "Kann die aktuelle geographische Ausdehnung nicht ermitteln. Erzwinge das Schließen von wxGUI. Bitte, führen Sie g.region manuell aus um das Problem zu beheben."
+msgstr "Kann die aktuelle geographische Ausdehnung nicht ermitteln. Erzwinge das Schließen von wxGUI. Führen Sie bitte g.region manuell aus, um das Problem zu beheben."
 
 #: ../gui/wxpython/gui_modules/render.py:885
 #, fuzzy, python-format
@@ -12648,6 +12603,33 @@ msgstr "Konvertieren aller alten GRASS < Ver5.7 Vektorkarten des aktuellen Mapse
 msgid "Converts 3D raster maps (RASTER3D) into the VTK-Ascii format"
 msgstr "Konvertiert eine 3D-Rasterkarte (RASTER3D) in das VTK-ASCII-Format."
 
+msgid "Manage add-ons extensions"
+msgstr "Verwalte Add-ons-Erweiterungen"
+
+msgid "Convert a 3D ASCII raster text file into a (binary) 3D raster map layer"
+msgstr "Konvertiert eine 3D ASCII-Raster Textdatei in eine (binäre) 3D-Rasterkarte. "
+
+msgid "import of 3-dimensional Vis5D files (i.e. the v5d file with 1 variable and 1 time step)"
+msgstr "Importiere 3-dimensionale Vis5D Daten (z.B. die v5d-Daten mit einer Variablen und einem Zeitstempel)"
+
+msgid "Converts a 3D raster map layer into an ASCII text file"
+msgstr "Exportiert eine 3D-Rasterkarte in eine ASCII-Textdatei."
+
+msgid "Calculates linear regression from two raster maps: y = a + b*x"
+msgstr "Berechnet lineare Regression zweier Rasterkarten: y = a + b*x."
+
+msgid "Export of GRASS 3D raster map to 3-dimensional Vis5D file."
+msgstr "Exportiert eine GRASS 3D Rasterkarte in eine 3-dimensionale Vis5D Datei"
+
+msgid "Lists available GRASS data base files of the user-specified data type to standard output."
+msgstr "Listet alle verfügbaren GRASS Datenbankdateien im spezifiezierten Typ im Standard Output auf"
+
+msgid "Creates cross section 2D raster map from 3d raster map based on 2D elevation map"
+msgstr "Erzeugt einen Querschnitt in Form einer 2D-Rasterkarte aus einer 3D-Rasterkarte basierend auf 2D-Höhenkarte."
+
+msgid "Generates volume statistics for raster3d maps."
+msgstr "Erzeugt Volumenstatistik für 3D-Rasterkarten."
+
 #~ msgid "Unable to switch to mapset <%s>."
 #~ msgstr "Kann nicht in Mapset <%s> wechseln."
 
@@ -12801,9 +12783,6 @@ msgstr "Konvertiert eine 3D-Rasterkarte (RASTER3D) in das VTK-ASCII-Format."
 #, fuzzy
 #~ msgid "Produces hardcopy PostScript map output."
 #~ msgstr "Werkzeug zur Erstellung von Ausgabekarten im PostScript-Format."
-
-#~ msgid "Manage add-ons extensions"
-#~ msgstr "Verwalte Add-ons-Erweiterungen"
 
 #~ msgid "Network maintenance"
 #~ msgstr "Netzwerkwartung"
@@ -13063,12 +13042,6 @@ msgstr "Konvertiert eine 3D-Rasterkarte (RASTER3D) in das VTK-ASCII-Format."
 #~ msgid "Import waypoints, routes, and tracks from a GPS receiver or GPS download file into a vector map."
 #~ msgstr "Lade Wegpunkte, Routen und Tracks von einem Garmin GPS Empfänger oder direkt GPS Daten in eine Verktorkarte."
 
-#~ msgid "Convert a 3D ASCII raster text file into a (binary) 3D raster map layer"
-#~ msgstr "Konvertiert eine 3D ASCII-Raster Textdatei in eine (binäre) 3D-Rasterkarte. "
-
-#~ msgid "import of 3-dimensional Vis5D files (i.e. the v5d file with 1 variable and 1 time step)"
-#~ msgstr "Importiere 3-dimensionale Vis5D Daten (z.B. die v5d-Daten mit einer Variablen und einem Zeitstempel)"
-
 #~ msgid "Converts a raster map layer into an ASCII text file."
 #~ msgstr "Exportiert eine Rasterkarte in eine ASCII-Textdatei."
 
@@ -13113,9 +13086,6 @@ msgstr "Konvertiert eine 3D-Rasterkarte (RASTER3D) in das VTK-ASCII-Format."
 
 #~ msgid "Converts a GRASS binary vector map to VTK ASCII output."
 #~ msgstr "Konvertiert eine binäre GRASS Vektorkarte nach VTK ASCII"
-
-#~ msgid "Converts a 3D raster map layer into an ASCII text file"
-#~ msgstr "Exportiert eine 3D-Rasterkarte in eine ASCII-Textdatei."
 
 #~ msgid "Multiple export formats using OGR"
 #~ msgstr "Vektorexport über OGR"
@@ -13809,9 +13779,6 @@ msgstr "Konvertiert eine 3D-Rasterkarte (RASTER3D) in das VTK-ASCII-Format."
 #~ msgid "Construction of slope curves (flowlines), flowpath lengths, and flowline densities (upslope areas) from a raster digital elevation model (DEM)."
 #~ msgstr "Berechnung von Abflusslinien, Länge der Fliesswege und Flussdichte aus einem digitalen Höhenmodell."
 
-#~ msgid "Calculates linear regression from two raster maps: y = a + b*x"
-#~ msgstr "Berechnet lineare Regression zweier Rasterkarten: y = a + b*x."
-
 #~ msgid "Drops an attribute table."
 #~ msgstr "Löscht eine Attributtabelle."
 
@@ -13857,14 +13824,8 @@ msgstr "Konvertiert eine 3D-Rasterkarte (RASTER3D) in das VTK-ASCII-Format."
 #~ msgid "Exports a vector map to a GPS receiver or file format supported by GpsBabel."
 #~ msgstr "Exportiert eine Vektorkarte in ein GPS-Gerät oder als von GPSBabel unterstütztes Datenformat."
 
-#~ msgid "Export of GRASS 3D raster map to 3-dimensional Vis5D file."
-#~ msgstr "Exportiert eine GRASS 3D Rasterkarte in eine 3-dimensionale Vis5D Datei"
-
 #~ msgid "Converts 3D raster maps (G3D) into the VTK-Ascii format"
 #~ msgstr "Konvertiert eine 3D-Rasterkarte (G3D) in das VTK-ASCII-Format."
-
-#~ msgid "Lists available GRASS data base files of the user-specified data type to standard output."
-#~ msgstr "Listet alle verfügbaren GRASS Datenbankdateien im spezifiezierten Typ im Standard Output auf"
 
 #~ msgid "Changes current mapset."
 #~ msgstr "Wechsle aktuelles Mapset."
@@ -13887,14 +13848,8 @@ msgstr "Konvertiert eine 3D-Rasterkarte (RASTER3D) in das VTK-ASCII-Format."
 #~ msgid "Tasseled Cap (Kauth Thomas) transformation for LANDSAT-TM data"
 #~ msgstr "Tasseled Cap (Kauth Thomas) Transformation für LANDSAT-TM Daten."
 
-#~ msgid "Creates cross section 2D raster map from 3d raster map based on 2D elevation map"
-#~ msgstr "Erzeugt einen Querschnitt in Form einer 2D-Rasterkarte aus einer 3D-Rasterkarte basierend auf 2D-Höhenkarte."
-
 #~ msgid "Interpolates point data to a 3D raster map using regularized spline with tension (RST) algorithm."
 #~ msgstr "Interpoliert Punkte zu einem G3D Grid Volumen unter Verwendung des regularized spline with tension (RST) Algorithmus."
-
-#~ msgid "Generates volume statistics for raster3d maps."
-#~ msgstr "Erzeugt Volumenstatistik für 3D-Rasterkarten."
 
 #~ msgid "Create new color table for vector map"
 #~ msgstr "Erstelle eine neue Farbtabelle für Vektorkarten"
@@ -13937,9 +13892,8 @@ msgstr "Konvertiert eine 3D-Rasterkarte (RASTER3D) in das VTK-ASCII-Format."
 #~ msgid "Settings named '%s' not found"
 #~ msgstr "Einstellungen <%s> nicht gefunden"
 
-#, fuzzy
 #~ msgid "GRASS GIS Cartographic Composer (experimental prototype)"
-#~ msgstr "GRASS GIS Graphical Modeler"
+#~ msgstr "GRASS GIS Cartographic Composer (experimenteller Prototyp)"
 
 #, fuzzy
 #~ msgid "GRASS GIS Graphical Modeler (experimental prototype)"
@@ -13993,3 +13947,73 @@ msgstr "Konvertiert eine 3D-Rasterkarte (RASTER3D) in das VTK-ASCII-Format."
 
 #~ msgid "(step):"
 #~ msgstr "(Schrittweite):"
+
+#, fuzzy
+#~ msgid ""
+#~ "No attribute table linked to vector map <%(vector)s> found. %(msg)s\n"
+#~ "\n"
+#~ "New attribute table can be created by Attribute Table Manager."
+#~ msgstr ""
+#~ "Es ist keine Attributtabelle mit der Vektorkarte <%(vector)s> verlinkt. %(msg)s\n"
+#~ " Sie können diese Meldung in den Digitalisierungseinstellungen ausschalten. Oder Sie können mit dem Attributtabellenmanager eine Attributtabelle erzeugen und mit der Vektorkarte verknüpfen "
+
+#, fuzzy
+#~ msgid "Item properties"
+#~ msgstr "Dateneigenschaften"
+
+#~ msgid "Fetch full info including description and keywords"
+#~ msgstr "Abruf der gesamten Information inklusive Beschreibung und Schlüsselworte"
+
+#~ msgid "Uninstall GRASS Addons extensions"
+#~ msgstr "Entferne Add-ons-Erweiterungen"
+
+#~ msgid "List of installed extensions"
+#~ msgstr "Liste der installierten Erweiterungen"
+
+#~ msgid "&Uninstall"
+#~ msgstr "&Deinstalliere"
+
+#~ msgid "Uninstall selected AddOns extensions"
+#~ msgstr "Deinstalliere ausgewählte Add-ons-Erweiterungen"
+
+#~ msgid "No extension selected for removal. Operation canceled."
+#~ msgstr "Keine Erweiterung zum Entfernen ausgewählt. Breche die Operation ab."
+
+#~ msgid "Remove extension"
+#~ msgstr "Entferne Erweiterung"
+
+#~ msgid "Extension"
+#~ msgstr "Erweiterung"
+
+#~ msgid "Column"
+#~ msgstr "Spalte"
+
+#~ msgid "Length"
+#~ msgstr "Länge"
+
+#~ msgid "Converts a 3D ASCII raster text file into a (binary) 3D raster map layer."
+#~ msgstr "Konvertiert eine 3D ASCII-Raster Textdatei in eine (binäre) 3D-Rasterkarte."
+
+#~ msgid "Imports 3-dimensional Vis5D files (i.e. the V5D file with 1 variable and 1 time step)."
+#~ msgstr "Importiere 3-dimensionale Vis5D Daten (z.B. die v5d-Daten mit einer Variablen und einem Zeitstempel)."
+
+#~ msgid "Converts a 3D raster map layer into an ASCII text file."
+#~ msgstr "Exportiert eine 3D-Rasterkarte in eine ASCII-Textdatei."
+
+#~ msgid "Installs new extension from GRASS AddOns SVN repository."
+#~ msgstr "Installiert neue Erweiterungen aus dem GRASS AddOns SVN-Archiv."
+
+#~ msgid "Update installed extensions"
+#~ msgstr "Aktualisiert installierte Erweiterungen"
+
+#~ msgid "Update database values from vector"
+#~ msgstr "Füllt Datenbank basierend auf Vektorfeatures"
+
+#~ msgid "Topographic correction"
+#~ msgstr "Topographische Korrektur"
+
+#~ msgid "Creates cross section 2D raster map from 3D raster map based on 2D elevation map."
+#~ msgstr "Erzeugt einen Querschnitt in Form einer 2D-Rasterkarte aus einer 3D-Rasterkarte basierend auf 2D-Höhenkarte."
+
+#~ msgid "Calculates numerically transient, confined groundwater flow in three dimensions."
+#~ msgstr "Programm zur numerischen Berechnung des transienten, beschränkten Grundwasserflusses in drei Dimensionen."
