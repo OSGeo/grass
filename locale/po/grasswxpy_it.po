@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: grasswxpy_it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-05 23:30+0200\n"
-"PO-Revision-Date: 2012-01-10 09:23+0100\n"
+"PO-Revision-Date: 2012-01-10 14:56+0100\n"
 "Last-Translator: Luca Delucchi <lucadeluge@gmail.com>\n"
 "Language-Team: Italian <grass-translations@lists.osgeo.org>\n"
 "Language: it\n"
@@ -628,7 +628,7 @@ msgstr "Mostra impostazioni della GUI"
 
 #: ../gui/wxpython/icons/icon.py:242
 msgid "Graphical Modeler"
-msgstr "Modeler Grafico"
+msgstr "Modellizzatore Grafico"
 
 #: ../gui/wxpython/icons/icon.py:244
 #: ../gui/wxpython/gui_modules/gdialogs.py:571
@@ -641,7 +641,7 @@ msgstr "Compositore Cartografico"
 
 #: ../gui/wxpython/icons/icon.py:248
 msgid "Raster Map Calculator"
-msgstr "Map calculator per raster"
+msgstr "Calcolatore per raster map algebra"
 
 #: ../gui/wxpython/icons/icon.py:252
 msgid "Digitize new point"
@@ -897,7 +897,7 @@ msgstr "Valida modello"
 
 #: ../gui/wxpython/icons/icon.py:380
 msgid "Show modeler settings"
-msgstr "Visualizza impostazione del modeler"
+msgstr "Visualizza impostazione del Modellizzatore"
 
 #: ../gui/wxpython/icons/icon.py:382
 msgid "Show model properties"
@@ -914,7 +914,7 @@ msgstr "Ridisegna l'area del modello"
 #: ../gui/wxpython/icons/icon.py:388
 #: ../gui/wxpython/gui_modules/gmodeler.py:793
 msgid "Quit Graphical Modeler"
-msgstr "Esci dal Modeler Grafico"
+msgstr "Esci dal Modellizzatore Grafico"
 
 #: ../gui/wxpython/icons/icon.py:392
 msgid "Select font"
@@ -1928,15 +1928,15 @@ msgstr "Gestione dei Punti di controllo sul terreno per la georettifica"
 
 #: ../gui/wxpython/menustrings.py:194
 msgid "Graphical modeler"
-msgstr "Modeler Grafico"
+msgstr "Modellizzatore Grafico"
 
 #: ../gui/wxpython/menustrings.py:195
 msgid "Launch Graphical modeler"
-msgstr "Avvia Modeler Grafico"
+msgstr "Avvia Modellizzatore Grafico"
 
 #: ../gui/wxpython/menustrings.py:197
 msgid "Run model prepared by Graphical modeler"
-msgstr "Avvia modello preparato dal Modeler Grafico"
+msgstr "Avvia modello preparato dal Modellizzatore Grafico"
 
 #: ../gui/wxpython/menustrings.py:198
 msgid "NVIZ (requires Tcl/Tk)"
@@ -2371,7 +2371,7 @@ msgstr "Crea una maschera per limitare le operazioni sui raster."
 
 #: ../gui/wxpython/menustrings.py:306
 msgid "Raster map calculator"
-msgstr "Map calculator per raster"
+msgstr "Calcolatore per raster map algebra"
 
 #: ../gui/wxpython/menustrings.py:307 ../gui/wxpython/menustrings.py:798
 #, fuzzy
@@ -2501,7 +2501,7 @@ msgstr "Crea mappa dell'ombreggiatura dei rilievi da una mappa dell'elevatione (
 
 #: ../gui/wxpython/menustrings.py:338
 msgid "Slope and aspect"
-msgstr "Pendio e esposizione"
+msgstr "Pendenza e esposizione"
 
 #: ../gui/wxpython/menustrings.py:339
 msgid "Generates raster maps of slope, aspect, curvatures and partial derivatives from a elevation raster map."
@@ -3206,11 +3206,11 @@ msgstr "Calcola la regressione lineare per due raster: y = a + b*x."
 
 #: ../gui/wxpython/menustrings.py:515
 msgid "Mutual category occurrences"
-msgstr ""
+msgstr "Presenza reciproca"
 
 #: ../gui/wxpython/menustrings.py:516
 msgid "Tabulates the mutual occurrence (coincidence) of categories for two raster map layers."
-msgstr ""
+msgstr "Cataloga il verificarsi reciproca (coincidenza) di categorie per due strati raster."
 
 #: ../gui/wxpython/menustrings.py:517
 msgid "&Vector"
@@ -3787,7 +3787,7 @@ msgstr "Aggiorna gli attributi del punto da raster"
 
 #: ../gui/wxpython/menustrings.py:664
 msgid "Sample raster maps at point locations"
-msgstr ""
+msgstr "Campioni raster alle posizioni dei punti"
 
 #: ../gui/wxpython/menustrings.py:665
 msgid "Uploads raster values at positions of vector points to the table."
@@ -3799,7 +3799,7 @@ msgstr "Raster campioni vicine attorno ai punti"
 
 #: ../gui/wxpython/menustrings.py:667
 msgid "Samples a raster map at vector point locations."
-msgstr ""
+msgstr "Campioni raster alle posizioni dei punti vettoriali."
 
 #: ../gui/wxpython/menustrings.py:668
 msgid "Reports and statistics"
@@ -3961,7 +3961,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:708
 msgid "Classify image"
-msgstr "Classifica image"
+msgstr "Classifica immagine"
 
 #: ../gui/wxpython/menustrings.py:709
 msgid "Clustering input for unsupervised classification"
@@ -4005,7 +4005,7 @@ msgstr "Genera statistiche per i.smap per il raster."
 
 #: ../gui/wxpython/menustrings.py:719
 msgid "Filter image"
-msgstr "Filtra image"
+msgstr "Filtra immagine"
 
 #: ../gui/wxpython/menustrings.py:720
 msgid "Edge detection"
@@ -4017,7 +4017,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:722
 msgid "Matrix/convolving filter"
-msgstr ""
+msgstr "Filtro matrice/convolving"
 
 #: ../gui/wxpython/menustrings.py:723
 msgid "Performs raster map matrix filter."
@@ -4025,7 +4025,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:724
 msgid "Transform image"
-msgstr "Trasforma image"
+msgstr "Trasforma immagine"
 
 #: ../gui/wxpython/menustrings.py:725
 msgid "Canonical correlation"
@@ -4346,7 +4346,7 @@ msgstr ""
 
 #: ../gui/wxpython/menustrings.py:803
 msgid "Interpolate volume from points"
-msgstr "Interpolate volume da punti"
+msgstr "Interpolazione volume da punti"
 
 #: ../gui/wxpython/menustrings.py:804
 msgid "Interpolates point data to a RASTER3D grid volume using regularized spline with tension (RST) algorithm."
@@ -4666,16 +4666,16 @@ msgstr "Esporta a Python"
 
 #: ../gui/wxpython/menustrings.py:893
 msgid "Quit modeler"
-msgstr "Esci dal Modeler"
+msgstr "Esci dal Modellizzatore"
 
 #: ../gui/wxpython/menustrings.py:894
 msgid "Close modeler window"
-msgstr "Chiudi la finestra del Modeler"
+msgstr "Chiudi la finestra del Modellizzatore"
 
 #: ../gui/wxpython/menustrings.py:897
 #: ../gui/wxpython/gui_modules/gmodeler.py:3216
 msgid "Modeler settings"
-msgstr "Impostazione del Modeler"
+msgstr "Impostazione del Modellizzatore"
 
 #: ../gui/wxpython/menustrings.py:898
 msgid "&Model"
@@ -4748,15 +4748,15 @@ msgstr "Aiuto"
 
 #: ../gui/wxpython/menustrings.py:921
 msgid "Display the HTML man pages of Graphical modeler"
-msgstr "Visualizza le pagine HTML del manuale del Modeler Grafico"
+msgstr "Visualizza le pagine HTML del manuale del Modellizzatore Grafico"
 
 #: ../gui/wxpython/menustrings.py:922
 msgid "About Graphical Modeler"
-msgstr "Informazione sul Modeler Grafico"
+msgstr "Informazione sul Modellizzatore Grafico"
 
 #: ../gui/wxpython/menustrings.py:923
 msgid "Display information about Graphical Modeler"
-msgstr "Visualizza informazioni sul Modeler Grafico"
+msgstr "Visualizza informazioni sul Modellizzatore Grafico"
 
 #: ../gui/wxpython/gui_modules/colorrules.py:75
 #, fuzzy
@@ -5053,11 +5053,11 @@ msgstr "Anteprima di stampa"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:55
 msgid "GRASS GIS Raster Map Calculator"
-msgstr "GRASS GIS Raster Map Calculator"
+msgstr "GRASS GIS Calcolatore per Raster Map Algebra"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:58
 msgid "GRASS GIS 3D Raster Map Calculator"
-msgstr "GRASS GIS RASTER 3D Map Calculator"
+msgstr "GRASS GIS Calcolatore per Raster 3D Map Algebra"
 
 #: ../gui/wxpython/gui_modules/mcalc_builder.py:69
 msgid "mapcalc statement"
@@ -8434,7 +8434,7 @@ msgstr "dangle"
 
 #: ../gui/wxpython/gui_modules/vdigit.py:345
 msgid "Select dangles"
-msgstr "Seleziona dangle"
+msgstr "Seleziona sporgenze"
 
 #: ../gui/wxpython/gui_modules/vdigit.py:377
 #: ../gui/wxpython/gui_modules/preferences.py:1842
@@ -8851,7 +8851,7 @@ msgstr "modello"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:90
 msgid "Script generated by wxGUI Graphical Modeler."
-msgstr "Script generato dal Modeler Grafico wxGUI"
+msgstr "Script generato dal Modellizzatore Grafico wxGUI"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:426
 msgid "Running model..."
@@ -9025,7 +9025,7 @@ msgstr "Salva file"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:1278
 msgid "wxGUI Graphical Modeler"
-msgstr "Modeler Grafico wxGUI"
+msgstr "Modellizzatore Grafico wxGUI"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:1281
 #, python-format
@@ -10752,7 +10752,7 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/dbm.py:561
 #: ../gui/wxpython/gui_modules/dbm.py:3080
 msgid "GRASS GIS Attribute Table Manager"
-msgstr "GRASS GIS Gestore della Tabella degli Attributi"
+msgstr "GRASS GIS Gestore Tabella degli Attributi"
 
 #: ../gui/wxpython/gui_modules/dbm.py:591
 #, python-format
@@ -10761,7 +10761,7 @@ msgstr "La connessione al databse per la mappa vettoriale <%s> non è definito n
 
 #: ../gui/wxpython/gui_modules/dbm.py:595
 msgid "Attribute Table Manager"
-msgstr "Gestore della Tabella degli Attributi"
+msgstr "Gestore Tabella degli Attributi"
 
 #: ../gui/wxpython/gui_modules/dbm.py:619
 msgid "Browse data"
@@ -10777,7 +10777,7 @@ msgstr "Gestione dei layer"
 
 #: ../gui/wxpython/gui_modules/dbm.py:648
 msgid "Close Attribute Table Manager"
-msgstr "Chiude Gestore della Tabella degli Attributi"
+msgstr "Chiude Gestore Tabella degli Attributi"
 
 #: ../gui/wxpython/gui_modules/dbm.py:650
 msgid "Reload attribute data (selected layer only)"
@@ -13847,7 +13847,7 @@ msgstr "Genera statistiche volumetriche per raster 3D."
 #~ msgstr "Barra degli strumenti di visualizzazione 3D"
 
 #~ msgid "GRASS GIS Graphical Modeler (experimental prototype)"
-#~ msgstr "GRASS GIS Modellatore grafico (prototipo esperimentale)"
+#~ msgstr "GRASS GIS Modellizzatore grafico (prototipo esperimentale)"
 
 #~ msgid "ERROR: Rendering failed"
 #~ msgstr "ERRORE: Rendering fallito"
@@ -14030,3 +14030,14 @@ msgstr "Genera statistiche volumetriche per raster 3D."
 
 #~ msgid "Creates cross section 2D raster map from 3D raster map based on 2D elevation map."
 #~ msgstr "Crea una sezione trasversale  2D da un raster 3D e una mappa dell'elevazione 2D."
+
+#~ msgid ""
+#~ "List of files to be removed:\n"
+#~ "%(files)s\n"
+#~ "\n"
+#~ "Do you want really to remove <%(ext)s> extension?"
+#~ msgstr ""
+#~ "Lista dei file da rimuovere:\n"
+#~ "%(files)s\n"
+#~ "\n"
+#~ "Si vuole realmente rimuove l'estensione <%(ext)s>?"
