@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ../..
 
-PGM = r.series.interpol
+PGM = r.series.interp
 
 LIBES = $(STATSLIB) $(RASTERLIB) $(GISLIB)
 DEPENDENCIES = $(STATSDEP) $(RASTERDEP) $(GISDEP)

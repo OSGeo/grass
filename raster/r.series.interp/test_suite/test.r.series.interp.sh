@@ -1,4 +1,4 @@
-# Test r.series.interpol 
+# Test r.series.interp 
 # We need to set a specific region in the
 # @preprocess step of this test. We generate
 # raster maps with r.mapcalc 
@@ -18,15 +18,15 @@ r.mapcalc --o expr="map_40 = 40"
 # valid raster maps and positions listed in the files.
 
 # The first @test with map input and @precision=3
-r.series.interpol --o --v input=prec_1,prec_5 datapos=0.0,1.0 output=prec_2,prec_3,prec_4 samplingpos=0.25,0.5,0.75 method=linear
+r.series.interp --o --v input=prec_1,prec_5 datapos=0.0,1.0 output=prec_2,prec_3,prec_4 samplingpos=0.25,0.5,0.75 method=linear
 
 #r.out.ascii --o input=prec_2 output=test_1_prec_2.ref dp=3
 #r.out.ascii --o input=prec_3 output=test_1_prec_3.ref dp=3
 #r.out.ascii --o input=prec_4 output=test_1_prec_4.ref dp=3
 
 # The second @test with file input and @precision=3
-r.series.interpol --o --v input=prec_1,prec_5 datapos=0.0,1.0 outfile=outfile_1.txt method=linear
-r.series.interpol --o --v infile=infile_2.txt outfile=outfile_2.txt method=linear
+r.series.interp --o --v input=prec_1,prec_5 datapos=0.0,1.0 outfile=outfile_1.txt method=linear
+r.series.interp --o --v infile=infile_2.txt outfile=outfile_2.txt method=linear
 
 #r.out.ascii --o input=prec_2 output=test_2_prec_2.ref dp=3
 #r.out.ascii --o input=prec_3 output=test_2_prec_3.ref dp=3
@@ -41,16 +41,16 @@ r.series.interpol --o --v infile=infile_2.txt outfile=outfile_2.txt method=linea
 # We need @tests to check the @failure handling, as outputs, file and sampling points
 # are not handled by the grass parser
 # No outputs
-r.series.interpol --o --v input=prec_1,prec_5 datapos=0.0,1.0 samplingpos=0.25,0.5,0.75
+r.series.interp --o --v input=prec_1,prec_5 datapos=0.0,1.0 samplingpos=0.25,0.5,0.75
 # No sampling points
-r.series.interpol --o --v input=prec_1,prec_5 datapos=0.0,1.0 output=prec_2,prec_3,prec_4 
+r.series.interp --o --v input=prec_1,prec_5 datapos=0.0,1.0 output=prec_2,prec_3,prec_4 
 # Output and file at once
-r.series.interpol --o --v  input=prec_1,prec_5 datapos=0.0,1.0 outfile=outfile_1.txt \
+r.series.interp --o --v  input=prec_1,prec_5 datapos=0.0,1.0 outfile=outfile_1.txt \
                   output=prec_2,prec_3,prec_4 samplingpos=0.25,0.5,0.75 method=linear
 # Sampling points and file at once 
-r.series.interpol --o --v  input=prec_1,prec_5 datapos=0.0,1.0 outfile=outfile_1.txt samplingpos=0.25,0.5,0.75 method=linear
+r.series.interp --o --v  input=prec_1,prec_5 datapos=0.0,1.0 outfile=outfile_1.txt samplingpos=0.25,0.5,0.75 method=linear
 # Wrong input file
-r.series.interpol --o --v input=prec_1,prec_5 datapos=0.0,1.0 outfile=no_file_there method=linear
+r.series.interp --o --v input=prec_1,prec_5 datapos=0.0,1.0 outfile=no_file_there method=linear
 # Corrupt input file
-r.series.interpol --o --v  input=prec_1,prec_5 datapos=0.0,1.0 outfile=outfile_corrupt.txt method=linear
+r.series.interp --o --v  input=prec_1,prec_5 datapos=0.0,1.0 outfile=outfile_corrupt.txt method=linear
 
