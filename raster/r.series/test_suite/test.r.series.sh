@@ -1,7 +1,7 @@
 # Test r.series basic aggregation functions with map and file inputs
 # We need to set a specific region in the
 # @preprocess step of this test. We generate
-# raster with r.mapcalc 
+# raster maps with r.mapcalc 
 # The region setting should work for UTM and LL test locations
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 
@@ -32,7 +32,7 @@ prec_6
 
 EOF
 
-# The second file includes weights. The deafult weight pf 1.0 
+# The second file includes weights. The deafult weight of 1.0 
 # must not be specified
 cat > "${TMP_FILE_WEIGHTS}" << EOF
 prec_1|3
