@@ -704,6 +704,18 @@ class GMFrame(wx.Frame):
                 GMessage(parent = self,
                          message = _("Current mapset is <%s>.") % mapset)
         
+    def OnChangeCWD(self, event):
+        """!Change current working directory
+        """
+        dlg = wx.DirDialog(parent = self, message = _("Choose a working directory"),
+                            defaultPath = os.getcwd(), style = wx.DD_CHANGE_DIR)
+
+        cwd_path = ''
+        if dlg.ShowModal() == wx.ID_OK:
+            cwd_path = dlg.GetPath()
+
+        # save path to somewhere ?
+
     def OnNewVector(self, event):
         """!Create new vector map layer"""
         dlg = CreateNewVector(self, log = self.goutput,
