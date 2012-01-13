@@ -15,10 +15,8 @@ int invert(
     double d;
 
     if (G_ludcmp(a, n, indx, &d)) {
-	for (j = 0; j < n; j++)
-	    d *= a[j][j];
-	*det = d;
 	for (j = 0; j < n; j++) {
+	    d *= a[j][j];
 	    for (i = 0; i < n; i++)
 		col[i] = 0.0;
 	    col[j] = 1.0;
@@ -26,10 +24,12 @@ int invert(
 	    for (i = 0; i < n; i++)
 		y[i][j] = col[i];
 	}
+	*det = d;
 
 	for (i = 0; i < n; i++)
 	    for (j = 0; j < n; j++)
 		a[i][j] = y[i][j];
+
 	return (1);
     }
     else {

@@ -98,7 +98,10 @@ subcluster(struct SigSet *S, int Class_Index, int *Max_num, int maxsubclasses)
     G_debug(1, "Subclasses = %d Rissanen = %f", Sig->nsubclasses,
 	      min_riss);
     copy_ClassSig(Sig, min_Sig, nbands);
+
+    G_debug(1, "combine classes");
     while (Sig->nsubclasses > 1) {
+	min_i = min_j = 0;
 	reduce_order(Sig, nbands, &min_i, &min_j);
 	G_verbose_message(_("Combining subclasses (%d,%d)..."), min_i + 1,
 			  min_j + 1);
@@ -121,6 +124,8 @@ static void seed(struct ClassSig *Sig, int nbands)
     int i, b1, b2;
     double period;
     double *mean, **R;
+
+    G_debug(1, "seed()");
 
     /* Compute the mean of variance for each band */
     mean = G_alloc_vector(nbands);
@@ -172,12 +177,12 @@ static void seed(struct ClassSig *Sig, int nbands)
 	    else
 		Sig->SubSig[i].means[b1] =
 		    Sig->ClassData.x[(int)(i * period)][b1];
-	}
 
-	for (b1 = 0; b1 < nbands; b1++)
 	    for (b2 = 0; b2 < nbands; b2++) {
 		Sig->SubSig[i].R[b1][b2] = R[b1][b2];
 	    }
+	}
+
 	Sig->SubSig[i].pi = 1.0 / Sig->nsubclasses;
     }
 
@@ -203,6 +208,8 @@ static double refine_clusters(
     double rissanen_const;
     double change, ll_new, ll_old;
     double epsilon;
+
+    G_debug(1, "refine_clusters()");
 
     /* compute number of parameters per cluster */
     nparams_clust = 1 + nbands + 0.5 * (nbands + 1) * nbands;
@@ -262,23 +269,22 @@ static int reestimate(struct ClassSig *Sig, int nbands)
     double diff1, diff2;
     struct ClassData *Data;
 
+    G_debug(2, "reestimate()");
+
     /* set data pointer */
     Data = &(Sig->ClassData);
 
-    /* Compute N */
+    pi_sum = 0;
     for (i = 0; i < Sig->nsubclasses; i++) {
+	/* Compute N */
 	Sig->SubSig[i].N = 0;
 	for (s = 0; s < Data->npixels; s++)
 	    Sig->SubSig[i].N += Data->p[s][i];
 	Sig->SubSig[i].pi = Sig->SubSig[i].N;
-    }
 
+	/* Compute means and variances for each subcluster, */
+	/* and remove small clusters.                       */
 
-
-
-    /* Compute means and variances for each subcluster, */
-    /* and remove small clusters.                       */
-    for (i = 0; i < Sig->nsubclasses; i++) {
 	/* For large subclusters */
 	if (Sig->SubSig[i].N > SMALLEST_SUBCLUST) {
 	    /* Compute mean */
@@ -289,11 +295,9 @@ static int reestimate(struct ClassSig *Sig, int nbands)
 			Sig->SubSig[i].means[b1] +=
 			    Data->p[s][i] * Data->x[s][b1];
 		Sig->SubSig[i].means[b1] /= (Sig->SubSig[i].N);
-	    }
 
-	    /* Compute R */
-	    for (b1 = 0; b1 < nbands; b1++)
-		for (b2 = b1; b2 < nbands; b2++) {
+		/* Compute R */
+		for (b2 = 0; b2 <= b1; b2++) {
 		    Sig->SubSig[i].R[b1][b2] = 0;
 		    for (s = 0; s < Data->npixels; s++) {
 			if (!Rast_is_d_null_value(&Data->x[s][b1])
@@ -307,28 +311,27 @@ static int reestimate(struct ClassSig *Sig, int nbands)
 		    Sig->SubSig[i].R[b1][b2] /= (Sig->SubSig[i].N);
 		    Sig->SubSig[i].R[b2][b1] = Sig->SubSig[i].R[b1][b2];
 		}
+	    }
 	}
 	/* For small subclusters */
 	else {
-	    G_warning(_("Subsignature %d only contains %f pixels"),
+	    G_warning(_("Subsignature %d only contains %.0f pixels"),
 		      i, Sig->SubSig[i].N);
 	    
 	    Sig->SubSig[i].pi = 0;
 
-	    for (b1 = 0; b1 < nbands; b1++)
+	    for (b1 = 0; b1 < nbands; b1++) {
 		Sig->SubSig[i].means[b1] = 0;
 
-	    for (b1 = 0; b1 < nbands; b1++)
 		for (b2 = 0; b2 < nbands; b2++)
 		    Sig->SubSig[i].R[b1][b2] = 0;
+	    }
 	}
+	pi_sum += Sig->SubSig[i].pi;
     }
 
 
     /* Normalize probabilities for subclusters */
-    pi_sum = 0;
-    for (i = 0; i < Sig->nsubclasses; i++)
-	pi_sum += Sig->SubSig[i].pi;
     if (pi_sum > 0) {
 	for (i = 0; i < Sig->nsubclasses; i++)
 	    Sig->SubSig[i].pi /= pi_sum;
@@ -532,6 +535,7 @@ static int compute_constants(
 	first = 0;
     }
 
+    G_debug(2, "compute_constants()");
     /* invert matrix and compute constant for each subclass */
     i = 0;
     singular = 0;
@@ -591,14 +595,13 @@ static void add_SubSigs(
     wt1 = SubSig1->N / (SubSig1->N + SubSig2->N);
     wt2 = 1 - wt1;
 
-    /* compute means */
-    for (b1 = 0; b1 < nbands; b1++)
+    for (b1 = 0; b1 < nbands; b1++) {
+	/* compute means */
 	SubSig3->means[b1] =
 	    wt1 * SubSig1->means[b1] + wt2 * SubSig2->means[b1];
 
-    /* compute covariance */
-    for (b1 = 0; b1 < nbands; b1++)
-	for (b2 = b1; b2 < nbands; b2++) {
+	/* compute covariance */
+	for (b2 = 0; b2 <= b1; b2++) {
 	    tmp = (SubSig3->means[b1] - SubSig1->means[b1])
 		* (SubSig3->means[b2] - SubSig1->means[b2]);
 	    SubSig3->R[b1][b2] = wt1 * (SubSig1->R[b1][b2] + tmp);
@@ -607,6 +610,7 @@ static void add_SubSigs(
 	    SubSig3->R[b1][b2] += wt2 * (SubSig2->R[b1][b2] + tmp);
 	    SubSig3->R[b2][b1] = SubSig3->R[b1][b2];
 	}
+    }
 
     /* compute pi and N */
     SubSig3->pi = SubSig1->pi + SubSig2->pi;
@@ -642,13 +646,12 @@ static void copy_SubSig(
     SubSig2->cnst = SubSig1->cnst;
     SubSig2->used = SubSig1->used;
 
-    for (b1 = 0; b1 < nbands; b1++)
+    for (b1 = 0; b1 < nbands; b1++) {
 	SubSig2->means[b1] = SubSig1->means[b1];
-
-    for (b1 = 0; b1 < nbands; b1++)
 	for (b2 = 0; b2 < nbands; b2++) {
 	    SubSig2->R[b1][b2] = SubSig1->R[b1][b2];
 	    SubSig2->Rinv[b1][b2] = SubSig1->Rinv[b1][b2];
 	}
+    }
 }
 
