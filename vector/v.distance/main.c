@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
     struct line_pnts *FPoints, *TPoints;
     struct line_cats *FCats, *TCats;
     NEAR *Near, *near;
-    int anear;			/* allocated space, used only for all */
+    int anear;			/* allocated space, used only for do_all */
     UPLOAD *Upload;		/* zero terminated */
     int ftype, fcat, tcat, count;
     int nfrom, nto, nfcats, fline, tline, tseg, tarea, area, isle, nisles;
