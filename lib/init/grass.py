@@ -852,11 +852,6 @@ def bash_startup():
     f.write("export PATH=\"%s\"\n" % os.getenv('PATH'))
     f.write("export HOME=\"%s\"\n" % userhome) # restore user home path
     
-    for env, value in os.environ.iteritems():
-        if env.find('GRASS_') < 0:
-            continue
-        f.write("export %s=\"%s\"\n" % (env, value))
-    
     f.close()
     
     exit_val = call([gfile("etc", "run"), os.getenv('SHELL')])
