@@ -35,8 +35,8 @@
 int main(int argc, char *argv[])
 {
     int i, j, k;
-    int print_as_matrix;	/* only for all */
-    int all;			/* calculate from each to each within the threshold */
+    int print_as_matrix;	/* only for do_all=TRUE */
+    int do_all;			/* calculate from each to each within the threshold */
     struct GModule *module;
     struct {
 	struct Option *from, *to, *from_type, *to_type,
@@ -73,8 +73,8 @@ int main(int argc, char *argv[])
     dbCatValArray cvarr;
     dbColumn *column;
 
-    all = 0;
-    print_as_matrix = 0;
+    do_all = FALSE;
+    print_as_matrix = FALSE;
     column = NULL;
 
     G_gisinit(argv[0]);
@@ -182,7 +182,7 @@ int main(int argc, char *argv[])
     opt.table = G_define_standard_option(G_OPT_DB_TABLE);
     opt.table->gisprompt = "new_dbtable,dbtable,dbtable";
     opt.table->description =
-	_("Name of table created for output when the distance to all flag is used");
+	_("Name of table created when the 'distance to all' flag is used");
 
     flag.print = G_define_flag();
     flag.print->key = 'p';
@@ -195,9 +195,9 @@ int main(int argc, char *argv[])
     flag.all->key = 'a';
     flag.all->label =
 	_("Calculate distances to all features within the threshold");
-    flag.all->description = _("The output is written to stdout but may be uploaded "
-                              "to a new table created by this module. "
-			      "From categories are may be multiple.");	/* huh? */
+    flag.all->description =
+	_("Output is written to stdout but may be uploaded to a new table "
+	  "created by this module; multiple 'upload' options may be used.");
 
     /* GUI dependency */
     opt.from->guidependency = G_store(opt.from_field->key);
@@ -215,7 +215,7 @@ int main(int argc, char *argv[])
     min = atof(opt.min->answer);
 
     if (flag.all->answer)
-	all = 1;
+	do_all = TRUE;
 
     /* Read upload and column options */
     /* count */
@@ -223,8 +223,8 @@ int main(int argc, char *argv[])
     while (opt.upload->answers[i])
 	i++;
     if (strcmp(opt.from->answer, opt.to->answer) == 0 &&
-	all && !opt.table->answer && i == 1)
-	print_as_matrix = 1;
+	do_all && !opt.table->answer && i == 1)
+	print_as_matrix = TRUE;
 
     /* alloc */
     Upload = (UPLOAD *) G_calloc(i + 1, sizeof(UPLOAD));
@@ -382,7 +382,7 @@ int main(int argc, char *argv[])
     driver = NULL;
     if (!flag.print->answer) {
 
-	if (!all) {
+	if (!do_all) {
 	    Fi = Vect_get_field(&From, from_field);
 	    if (Fi == NULL)
 		G_fatal_error(_("Database connection not defined for layer <%s>"),
@@ -441,7 +441,7 @@ int main(int argc, char *argv[])
 	}
 
 	/* Check column types */
-	if (!flag.print->answer && !all) {
+	if (!flag.print->answer && !do_all) {
 	    char *fcname = NULL;
 	    int fctype, tctype;
 
@@ -483,8 +483,8 @@ int main(int argc, char *argv[])
     /* Allocate space ( may be more than needed (duplicate cats and elements without cats) ) */
     nfrom = Vect_get_num_lines(&From);
     nto = Vect_get_num_lines(&To);
-    if (all) {
-	/* Attention with space for all, it can easily run out of memory */
+    if (do_all) {
+	/* Be careful with do_all, it can easily run out of memory */
 	anear = 2 * nfrom;
 	Near = (NEAR *) G_calloc(anear, sizeof(NEAR));
     }
@@ -493,7 +493,7 @@ int main(int argc, char *argv[])
     }
 
     /* Read all cats from 'from' */
-    if (!all) {
+    if (!do_all) {
 	nfcats = 0;
 	for (i = 1; i <= nfrom; i++) {
 	    ftype = Vect_read_line(&From, NULL, FCats, i);
@@ -530,7 +530,7 @@ int main(int argc, char *argv[])
     /* Go through all lines in 'from' and find nearest in 'to' for each */
     /* Note: as from_type is restricted to GV_POINTS (for now) everything is simple */
 
-    count = 0;			/* count of distances in 'all' mode */
+    count = 0;			/* count of distances in 'do_all' mode */
     /* Find nearest lines */
     if (to_type & (GV_POINTS | GV_LINES)) {
 	struct line_pnts *LLPoints;
@@ -547,7 +547,7 @@ int main(int argc, char *argv[])
 	    double tmp_tangle, tangle;
 	    double tmp_min = (min < 0 ? 0 : min);
 	    double box_edge = 0;
-	    int done = 0;
+	    int done = FALSE;
 
 	    curr_step = 0;
 
@@ -558,13 +558,13 @@ int main(int argc, char *argv[])
 		continue;
 
 	    Vect_cat_get(FCats, from_field, &fcat);
-	    if (fcat < 0 && !all)
+	    if (fcat < 0 && !do_all)
 		continue;
 
 	    while (!done) {
-		done = 1;
+		done = TRUE;
 
-		if (!all) {
+		if (!do_all) {
 		    /* enlarge search box until we get a hit */
 		    /* the objective is to enlarge the search box
 		     * in the first iterations just a little bit
@@ -642,7 +642,7 @@ int main(int argc, char *argv[])
 		    G_debug(4, "  tmp_dist = %f tmp_tcat = %d", tmp_dist,
 			    tmp_tcat);
 
-		    if (all) {
+		    if (do_all) {
 			if (anear <= count) {
 			    anear += 10 + nfrom / 10;
 			    Near = (NEAR *) G_realloc(Near, anear * sizeof(NEAR));
@@ -680,19 +680,19 @@ int main(int argc, char *argv[])
 
 		G_debug(4, "  dist = %f", dist);
 
-		if (!all && curr_step < n_max_steps) {
+		if (!do_all && curr_step < n_max_steps) {
 		    /* enlarging the search box is possible */
 		    if (tline > 0 && dist > box_edge) {
 			/* line found but distance > search edge:
 			 * line bbox overlaps with search box, line itself is outside search box */
-			done = 0;
+			done = FALSE;
 		    }
 		    else if (tline == 0) {
 			/* no line within max dist, but search box can still be enlarged */
-			done = 0;
+			done = FALSE;
 		    }
 		}
-		if (done && !all && tline > 0) {
+		if (done && !do_all && tline > 0) {
 		    /* find near by cat */
 		    near =
 			(NEAR *) bsearch((void *)&fcat, Near, nfcats,
@@ -729,7 +729,7 @@ int main(int argc, char *argv[])
 	for (fline = 1; fline <= nfrom; fline++) {
 	    double tmp_min = (min < 0 ? 0 : min);
 	    double box_edge = 0;
-	    int done = 0;
+	    int done = FALSE;
 	    
 	    curr_step = 0;
 
@@ -740,13 +740,13 @@ int main(int argc, char *argv[])
 		continue;
 
 	    Vect_cat_get(FCats, from_field, &fcat);
-	    if (fcat < 0 && !all)
+	    if (fcat < 0 && !do_all)
 		continue;
 
 	    while (!done) {
-		done = 1;
+		done = TRUE;
 
-		if (!all) {
+		if (!do_all) {
 		    /* enlarge search box until we get a hit */
 		    /* the objective is to enlarge the search box
 		     * in the first iterations just a little bit
@@ -843,7 +843,7 @@ int main(int argc, char *argv[])
 		    G_debug(4, "  tmp_dist = %f tmp_tcat = %d", tmp_dist,
 			    tmp_tcat);
 
-		    if (all) {
+		    if (do_all) {
 			if (anear <= count) {
 			    anear += 10 + nfrom / 10;
 			    Near = (NEAR *) G_realloc(Near, anear * sizeof(NEAR));
@@ -872,19 +872,19 @@ int main(int argc, char *argv[])
 		    }
 		}
 
-		if (!all && curr_step < n_max_steps) {
+		if (!do_all && curr_step < n_max_steps) {
 		    /* enlarging the search box is possible */
 		    if (tarea > 0 && dist > box_edge) {
 			/* area found but distance > search edge:
 			 * area bbox overlaps with search box, area itself is outside search box */
-			done = 0;
+			done = FALSE;
 		    }
 		    else if (tarea == 0) {
 			/* no area within max dist, but search box can still be enlarged */
-			done = 0;
+			done = FALSE;
 		    }
 		}
-		if (done && !all && tarea > 0) {
+		if (done && !do_all && tarea > 0) {
 		    /* find near by cat */
 		    near =
 			(NEAR *) bsearch((void *)&fcat, Near, nfcats,
@@ -922,7 +922,7 @@ int main(int argc, char *argv[])
 	}
 	fprintf(stdout, "\n");
     }
-    else if (all && opt.table->answer) {	/* create new table */
+    else if (do_all && opt.table->answer) {	/* create new table */
 	db_set_string(&stmt, "create table ");
 	db_append_string(&stmt, opt.table->answer);
 	db_append_string(&stmt, " (from_cat integer");
@@ -961,7 +961,7 @@ int main(int argc, char *argv[])
 			  opt.table->answer);
 
     }
-    else if (!all) {		/* read existing cats from table */
+    else if (!do_all) {		/* read existing cats from table */
 	ncatexist =
 	    db_select_int(driver, Fi->table, Fi->key, NULL, &catexist);
 	G_debug(1, "%d cats selected from the table", ncatexist);
@@ -969,7 +969,7 @@ int main(int argc, char *argv[])
     update_ok = update_err = update_exist = update_notexist = update_dupl =
 	update_notfound = 0;
 
-    if (!all) {
+    if (!do_all) {
 	count = nfcats;
     }
     else if (print_as_matrix) {
@@ -994,13 +994,13 @@ int main(int argc, char *argv[])
 	db_close_database_shutdown_driver(to_driver);
     }
 
-    if (!(flag.print->answer || (all && !opt.table->answer))) /* no printing */
+    if (!(flag.print->answer || (do_all && !opt.table->answer))) /* no printing */
 	G_message("Update vector attributes...");
 
     for (i = 0; i < count; i++) {
 	dbCatVal *catval = 0;
 
-	if (!(flag.print->answer || (all && !opt.table->answer))) /* no printing */
+	if (!(flag.print->answer || (do_all && !opt.table->answer))) /* no printing */
 	    G_percent(i, count, 1);
 
 	/* Write line connecting nearest points */
@@ -1029,7 +1029,7 @@ int main(int argc, char *argv[])
 	    db_CatValArray_get_value(&cvarr, Near[i].to_cat, &catval);
 	}
 
-	if (flag.print->answer || (all && !opt.table->answer)) {	/* print only */
+	if (flag.print->answer || (do_all && !opt.table->answer)) {	/* print only */
 	    /*
 	       input and output is the same &&
 	       calculate distances &&
@@ -1059,7 +1059,7 @@ int main(int argc, char *argv[])
 		fprintf(stdout, "\n");
 	    }
 	}
-	else if (all) {		/* insert new record */
+	else if (do_all) {		/* insert new record */
 	    sprintf(buf1, "insert into %s values ( %d ", opt.table->answer,
 		    Near[i].from_cat);
 	    db_set_string(&stmt, buf1);
@@ -1256,13 +1256,13 @@ int main(int argc, char *argv[])
 	db_free_string(&stmt);
 
 	/* print stats */
-	if (all && opt.table->answer) {
+	if (do_all && opt.table->answer) {
 	    G_message(_("%d distances calculated"), count);
 	    G_message(_("%d records inserted"), update_ok);
 	    if (update_err > 0)
 		G_message(_("%d insert errors"), update_err);
 	}
-	else if (!all) {
+	else if (!do_all) {
 	    if (nfcats > 0)
 		G_verbose_message(_("%d categories read from the map"), nfcats);
 	    if (ncatexist > 0)
