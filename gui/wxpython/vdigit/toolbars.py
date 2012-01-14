@@ -24,6 +24,7 @@ from core.debug         import Debug
 from core.settings      import UserSettings
 from core.gcmd          import GError
 from icons.icon         import MetaIcon
+from iclass.digit       import IClassVDigit
 
 class VDigitToolbar(BaseToolbar):
     """!Toolbar for digitization
@@ -376,6 +377,10 @@ class VDigitToolbar(BaseToolbar):
         
         @param enable False for disable
         """
+        # iclass has no undo, we need to check it
+        if self.FindById(self.undo) is None:
+            return
+        
         if enable:
             if self.GetToolEnabled(self.undo) is False:
                 self.EnableTool(self.undo, True)
@@ -733,7 +738,7 @@ class VDigitToolbar(BaseToolbar):
         if 'map' in self.parent.toolbars:
             self.parent.toolbars['map'].combo.SetValue (_('Digitize'))
         
-        if self.digitClass != "iclass.digit.IClassWindow":
+        if self.digitClass != IClassVDigit:
             lmgr = self.parent.GetLayerManager()
             if lmgr:
                 lmgr.toolbars['tools'].Enable('vdigit', enable = False)
