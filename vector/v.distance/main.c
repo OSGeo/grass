@@ -25,11 +25,9 @@
 #include <string.h>
 #include <unistd.h>
 #include <math.h>
-
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include <grass/vector.h>
-
 #include "local_proto.h"
 
 /* TODO: support all types (lines, boundaries, areas for 'from' (from_type) */
@@ -153,17 +151,20 @@ int main(int argc, char *argv[])
     opt.upload->descriptions =
 	_("cat;category of the nearest feature;"
 	  "dist;minimum distance to nearest feature;"
-	  "to_x;x coordinate of the nearest point on 'to' feature;"
-	  "to_y;y coordinate of the nearest point on 'to' feature;"
-	  "to_along;distance between points/centroids in 'from' map and the linear feature's "
-	  "start point in 'to' map, along this linear feature;"
-	  "to_angle;angle between the linear feature in 'to' map and the positive x axis, at "
-	  "the location of point/centroid in 'from' map, counterclockwise, in radians, which "
-	  "is between -PI and PI inclusive;"
+	  "to_x;x coordinate of the nearest point on the 'to' feature;"
+	  "to_y;y coordinate of the nearest point on the 'to' feature;"
+	  "to_along;distance to the nearest point on the 'to' feature along "
+	     "that linear feature;"
+	  "to_angle;angle along the nearest linear feature in the 'to' map, "
+	     "measured CCW from the +x axis, in radians, between -Pi and Pi "
+	     "inclusive;"
 	  "to_attr;attribute of nearest feature given by to_column option");
     /*  "from_x - x coordinate of the nearest point on 'from' feature;" */
     /*  "from_y - y coordinate of the nearest point on 'from' feature;" */
     /* "from_along - distance to the nearest point on 'from' feature along linear feature;" */
+    /* "from_angle - angle between the linear feature in 'to' map and the +x "
+	"axis, at the location of point/centroid in 'from' map, CCW, in "
+	"radians, between -Pi and Pi inclusive;" */
 
     opt.column = G_define_standard_option(G_OPT_DB_COLUMN);
     opt.column->required = YES;
