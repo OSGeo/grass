@@ -293,7 +293,7 @@ void wrentity(PAD_ENT_HDR adenhd, PAD_ENT aden, int level, AD_VMADDR entlist,
     PAD_ENT_HDR adenhd2;
     PAD_ENT aden2;
     OdaLong il;
-    double tempdouble[2], tempbulge, tempwidth[2];
+    double tempdouble[3], tempbulge, tempwidth[3];
     double x, y, z, ang;
     PAD_BLKH adblkh;
     int layer_found = 1;
