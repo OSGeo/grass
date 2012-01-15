@@ -61,7 +61,7 @@ public:
   }
 
   static char *printLabel(const nodataType &p) {
-	static char buf[3];
+	static char buf[8];
 	sprintf(buf, CCLABEL_FMT, p.label);
 	return buf;
   }

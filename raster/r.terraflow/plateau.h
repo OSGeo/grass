@@ -46,7 +46,7 @@ public:
   void invalidate() { valid = false; }
   
   static char *printLabel(const plateauType &p) {
-    static char buf[3];
+    static char buf[8];
     sprintf(buf, CCLABEL_FMT, p.cclabel);
     return buf;
   }
