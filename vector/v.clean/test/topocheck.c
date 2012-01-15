@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     struct line_cats *Cats;
     int i, atype, with_z;
     int nlines, n;
-    char *mapset, errmsg[200];
+    char *mapset;
     struct GModule *module;
     struct Option *in_opt, *out_opt;
     struct Flag *poly_f;
@@ -59,10 +59,8 @@ int main(int argc, char *argv[])
     G_begin_cell_area_calculations();
 
     /* open input vector */
-    if ((mapset = G_find_vector2(in_opt->answer, "")) == NULL) {
-	sprintf(errmsg, "Could not find input map <%s>\n", in_opt->answer);
-	G_fatal_error(errmsg);
-    }
+    if ((mapset = G_find_vector2(in_opt->answer, "")) == NULL)
+	G_fatal_error(_("Vector map <%s> not found"), in_opt->answer);
 
     Vect_set_open_level(2);
     Vect_open_old(&In, in_opt->answer, mapset);
