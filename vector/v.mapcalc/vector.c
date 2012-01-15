@@ -124,7 +124,7 @@ void init_vec(void)
     sym->v.p = &pnt_k;
 
     /* initialize NaN */
-    nanval = sqrt(-1);
+    nanval = 0.0 / 0.0;
 }
 
 void printvec(SYMBOL * sym)

@@ -37,7 +37,7 @@ some dozens of builtin functions from the math library. Points and
 point lists are meant in the mathematical sense: A point is a set of
 two or three numbers, representing the coordinate. All points have
 three components, but the third, if missing has the value of
-sqrt(-1). An expression will yield a 3D result if all arguments a
+0.0/0.0 (NaN). An expression will yield a 3D result if all arguments a
 3D. There is a set of basic builtin operations like dot and cross
 product. Point lists are meant for polygons, lines, areas, etc. Points
 and point lists have no categories or attributes. And finally, of
@@ -192,7 +192,7 @@ catch illegal operations:
          2 * (3.1 + 0.9);
 
 Next are points. Note that 2D and 3D are dealt with identically; in
-case of 2D, the z-value is sqrt(-1) (NaN, "Not a Number"). This should
+case of 2D, the z-value is 0.0/0.0 (NaN, "Not a Number"). This should
 be pretty portable. Generally, if at least one point is 2D, the result
 of a point operation will be 2D even if 3D points are involved too,
 ignoring the third dimension. I've defined some infix operations a bit
