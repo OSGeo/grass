@@ -122,8 +122,9 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
     name = G_store(opt1->answer);
+    mapset = G_find_raster3d(name, "");
 
-    if ((mapset = G_find_raster3d(name, "")) == NULL)
+    if (mapset == NULL)
 	G_fatal_error(_("3D Raster map <%s> not found"), name);
 
     /*We need to open the map */
@@ -343,8 +344,15 @@ int main(int argc, char *argv[])
 		G_fatal_error(_("Unable to read range of 3D raster map <%s>"), name);
 
 	    Rast3d_range_min_max(g3map, &dmin, &dmax);
-	    format_double(dmin, tmp1);
-	    format_double(dmax, tmp2);
+            
+            if(dmin != dmin)
+                sprintf(tmp1, "%s", "NULL");
+            else
+	        format_double(dmin, tmp1);
+            if(dmax != dmax)
+                sprintf(tmp2, "%s", "NULL");
+            else
+	        format_double(dmax, tmp2);
 
 	    if (G_asprintf
 		(&line, "  Range of data:   min = %10s max = %10s", tmp1,
@@ -405,8 +413,14 @@ int main(int argc, char *argv[])
 		G_fatal_error(_("Unable to read range of 3D raster map <%s>"), name);
 
 	    Rast3d_range_min_max(g3map, &dmin, &dmax);
-	    fprintf(out, "min=%f\n", dmin);
-	    fprintf(out, "max=%f\n", dmax);
+            if(dmin != dmin)
+	        fprintf(out, "min=NULL\n");
+            else
+	        fprintf(out, "min=%f\n", dmin);
+            if(dmax != dmax)
+	        fprintf(out, "max=NULL\n");
+            else
+	        fprintf(out, "max=%f\n", dmax);
 
 	}			/*Region */
 	if (gflag->answer) {
