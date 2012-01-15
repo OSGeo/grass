@@ -62,6 +62,7 @@ Rast3d_read_range(const char *name, const char *mapset, struct FPRange *drange)
  /* adapted from Rast_read_fp_range */
 {
     int fd;
+    int bytes_read;
     char xdr_buf[100];
     DCELL dcell1, dcell2;
     XDR xdr_str;
@@ -76,7 +77,16 @@ Rast3d_read_range(const char *name, const char *mapset, struct FPRange *drange)
 	return -1;
     }
 
-    if (read(fd, xdr_buf, 2 * RASTER3D_XDR_DOUBLE_LENGTH) != 2 * RASTER3D_XDR_DOUBLE_LENGTH) {
+    bytes_read = read(fd, xdr_buf, 2 * RASTER3D_XDR_DOUBLE_LENGTH);
+
+    /* if the f_range file exists, but empty the range is NULL -> a NULL map */
+    if (bytes_read == 0) {
+	close(fd);
+        return 1;
+    }
+
+
+    if (bytes_read != 2 * RASTER3D_XDR_DOUBLE_LENGTH) {
 	close(fd);
 	G_warning(_("Error reading range file for [%s in %s]"), name, mapset);
 	return 2;
@@ -85,7 +95,6 @@ Rast3d_read_range(const char *name, const char *mapset, struct FPRange *drange)
     xdrmem_create(&xdr_str, xdr_buf, (u_int) RASTER3D_XDR_DOUBLE_LENGTH * 2,
 		  XDR_DECODE);
 
-    /* if the f_range file exists, but empty */
     if (!xdr_double(&xdr_str, &dcell1) || !xdr_double(&xdr_str, &dcell2)) {
 	close(fd);
 	G_warning(_("Error reading range file for [%s in %s]"), name, mapset);
