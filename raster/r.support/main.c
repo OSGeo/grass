@@ -152,7 +152,7 @@ int main(int argc, char *argv[])
 
     if (title_opt->answer) {
 	strncpy(title, title_opt->answer, MAX_TITLE_LEN);
-	title[MAX_TITLE_LEN] = '\0';	/* strncpy doesn't null terminate oversized input */
+	title[MAX_TITLE_LEN - 1] = '\0';	/* strncpy doesn't null terminate oversized input */
 	G_strip(title);
 	G_debug(3, "map title= [%s]  (%d chars)", title, strlen(title));
 	Rast_put_cell_title(raster->answer, title);
