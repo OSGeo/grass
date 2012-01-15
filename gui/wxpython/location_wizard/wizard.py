@@ -217,7 +217,7 @@ class CoordinateSystemPage(TitledPage):
                                      label = _("Specify projection and datum terms using custom "
                                              "PROJ.4 parameters"))
         self.radio6 = wx.RadioButton(parent = self, id = wx.ID_ANY,
-                                     label = _("Create an arbitrary non-earth coordinate system (XY)"))
+                                     label = _("Create a generic Cartesian coordinate system (XY)"))
         
         # layout
         self.sizer.AddGrowableCol(1)
