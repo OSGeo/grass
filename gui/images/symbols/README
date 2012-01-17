@@ -6,26 +6,29 @@ How to create new symbol image:
 ----------------------------------
 You can use following script (requires Inkscape), run script in symbol group
 directory (e.g. ./lib/symbol/symbol/basic) within a GRASS session.
+Optipng will try to make the file as small as possible.
 
 #!/bin/sh
-DIR=$(basename $PWD)
+DIR="$(basename $PWD)"
 PSMAP_FILE=tmp.psmap
 PS_FILE=tmp.ps
 PNG_OUT=png_out
 
-rm -r $PNG_OUT
-mkdir $PNG_OUT
+rm -r "$PNG_OUT"
+mkdir "$PNG_OUT"
 for SYMBOL in *
 do
-    if [ -f $SYMBOL ]
+    if [ -f "$SYMBOL" ]
     then
-        echo "border none\npoint 50% 50%\n  symbol $DIR/$SYMBOL\n  end\nend" > $PSMAP_FILE
-        ps.map input=$PSMAP_FILE output=$PS_FILE
-        inkscape -f $PS_FILE --export-png=$PNG_OUT/$SYMBOL.png -D -h=30
+        echo -e "border none\npoint 50% 50%\n  symbol $DIR/$SYMBOL\n  end\nend" > "$PSMAP_FILE"
+        ps.map input="$PSMAP_FILE" output="$PS_FILE"
+        inkscape -f "$PS_FILE" --export-png="$PNG_OUT/$SYMBOL.png" -D -h=30
         
-        rm $PSMAP_FILE $PS_FILE
+        rm "$PSMAP_FILE" "$PS_FILE"
+
+        #optipng -o5 "$PNG_OUT/$SYMBOL.png"
     else
-        echo $SYMBOL is not regular file
+        echo "$SYMBOL is not regular file"
     fi
 done
 
