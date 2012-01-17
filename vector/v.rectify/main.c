@@ -84,7 +84,9 @@ int main(int argc, char *argv[])
     val = G_define_option();
     val->key = "order";
     val->type = TYPE_INTEGER;
-    val->required = YES;
+    val->required = NO;
+    val->options = "1-3";
+    val->answer = "1";
     val->description = _("Rectification polynom order (1-3)");
     
     sep = G_define_standard_option(G_OPT_F_SEP);
