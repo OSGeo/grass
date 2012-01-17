@@ -16,6 +16,7 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <KratochAnna seznam.cz> (Google SoC 2011)
 """
 
+import os
 import copy
 
 import wx
@@ -31,6 +32,8 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
                  settings = UserSettings):
         PreferencesBaseDialog.__init__(self, parent = parent, title = title,
                                        settings = settings)
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass_nviz.ico'), wx.BITMAP_TYPE_ICO))
+
         self.toolWin = self.parent.nviz
         
         # create notebook pages
