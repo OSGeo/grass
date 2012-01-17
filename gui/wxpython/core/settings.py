@@ -330,7 +330,7 @@ class Settings:
                         'color' : (255, 20, 147, 255)
                         }, # deep pink
                     'area' : {
-                        'enabled' : False,
+                        'enabled' : True,
                         'color' : (217, 255, 217, 255)
                         }, # green
                     'direction' : {
