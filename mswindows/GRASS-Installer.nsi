@@ -518,14 +518,6 @@ Section "GRASS" SecGRASS
 	CreateDirectory "$GIS_DATABASE"
 
 	;add Installer files
-	SetOutPath "$INSTALL_DIR\icons"
-	File .\Installer-Files\GRASS.ico
-	File .\Installer-Files\GRASS_Web.ico
-	File .\Installer-Files\GRASS_tcltk.ico
-	File .\Installer-Files\GRASS_MSys.ico
-	File .\Installer-Files\GRASS_CMD.ico
-	File .\Installer-Files\MSYS_Custom_Icon.ico
-	File .\Installer-Files\WinGRASS.ico	
 	SetOutPath "$INSTALL_DIR"
 	File .\Installer-Files\GRASS-WebSite.url
 	File .\Installer-Files\WinGRASS-README.url
@@ -626,7 +618,7 @@ Section "GRASS" SecGRASS
 		"DisplayVersion" "${VERSION_NUMBER}-r${SVN_REVISION}-${BINARY_REVISION}"
 	!endif
 	
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "DisplayIcon" "$INSTALL_DIR\icons\GRASS.ico"
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "DisplayIcon" "$INSTALL_DIR\etc\gui\icons\grass.ico"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "EstimatedSize" 1
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "HelpLink" "${WIKI_PAGE}"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "URLInfoAbout" "${WEB_SITE}"
@@ -636,7 +628,7 @@ Section "GRASS" SecGRASS
 	SetShellVarContext current
 	
 	CreateShortCut "$DESKTOP\GRASS ${VERSION_NUMBER}.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-wx"\
-	"$INSTALL_DIR\icons\GRASS.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER} with wxGUI and CMD terminal"
+	"$INSTALL_DIR\etc\gui\icons\grass.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER} with wxGUI and CMD terminal"
 	
 	;Create the Windows Start Menu Shortcuts
 	SetShellVarContext all
@@ -644,26 +636,26 @@ Section "GRASS" SecGRASS
 	CreateDirectory "$SMPROGRAMS\${GRASS_BASE}"
 	
 	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS GUI.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-wx"\
-	"$INSTALL_DIR\icons\GRASS.ico" "" SW_SHOWMINIMIZED "" "Launch GRASS ${VERSION_NUMBER} with wxGUI and CMD console"
+	"$INSTALL_DIR\etc\gui\icons\grass.ico" "" SW_SHOWMINIMIZED "" "Launch GRASS ${VERSION_NUMBER} with wxGUI and CMD console"
 
 	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS GUI with MSYS.lnk" "$INSTALL_DIR\${GRASS_COMMAND}_msys.bat" "-wx"\
-	"$INSTALL_DIR\icons\GRASS_MSys.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER} with wxGUI and MSYS UNIX console"
+	"$INSTALL_DIR\etc\gui\icons\grass_msys.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER} with wxGUI and MSYS UNIX console"
 
 	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS Command Line.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-text"\
-	"$INSTALL_DIR\icons\GRASS_CMD.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER} in text mode"
+	"$INSTALL_DIR\etc\gui\icons\grass_cmd.ico" "" SW_SHOWNORMAL "" "Launch GRASS ${VERSION_NUMBER} in text mode"
 
 	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\MSYS UNIX Console.lnk" "$INSTALL_DIR\msys\msys.bat" ""\
-	"$INSTALL_DIR\icons\MSYS_Custom_Icon.ico" "" SW_SHOWNORMAL "" "Open a MSYS UNIX console"
+	"$INSTALL_DIR\etc\gui\icons\msys.ico" "" SW_SHOWNORMAL "" "Open a MSYS UNIX console"
 	
 	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\GRASS Web Site.lnk" "$INSTALL_DIR\GRASS-WebSite.url" ""\
-	"$INSTALL_DIR\icons\GRASS_Web.ico" "" SW_SHOWNORMAL "" "Visit the GRASS website"
+	"$INSTALL_DIR\etc\gui\icons\grass_web.ico" "" SW_SHOWNORMAL "" "Visit the GRASS website"
 	
 ; FIXME: ship the WinGrass release notes .html file instead of URL
 ; http://trac.osgeo.org/grass/browser/grass-web/trunk/grass70/binary/mswindows/native/README.html?format=raw
 ; probably ship with devel versions too? ie Release Notes, not the Release Announcement press release.
 	!if ${INSTALLER_TYPE} == "Release"
 		CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\Release Notes.lnk" "$INSTALL_DIR\WinGRASS-README.url" ""\
-		"$INSTALL_DIR\icons\WinGRASS.ico" "" SW_SHOWNORMAL "" "Visit the WinGRASS Project Web Page"
+		"$INSTALL_DIR\etc\gui\icons\wingrass.ico" "" SW_SHOWNORMAL "" "Visit the WinGRASS Project Web Page"
 	!endif
 	
 	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\Uninstall GRASS.lnk" "$INSTALL_DIR\Uninstall-GRASS.exe" ""\
