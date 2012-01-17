@@ -21,7 +21,7 @@ import wx
 
 from core              import globalvar
 from gui_core.toolbars import BaseToolbar, BaseIcons
-from icon              import MetaIcon
+from icons.icon        import MetaIcon
 
 class PsMapToolbar(BaseToolbar):
     def __init__(self, parent):
