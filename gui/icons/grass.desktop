@@ -5,5 +5,5 @@ Name=GRASS GIS
 Comment=Geographic Information System
 Categories=Education;Science;Geoscience;Geography;
 Exec=grass7
-Icon=/usr/share/icons/grass.png
+Icon=/usr/share/icons/grass-48x48.png
 Terminal=true
