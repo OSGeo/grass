@@ -817,6 +817,11 @@
 	      <keywords>general,mapset,current</keywords>
               <handler>OnChangeMapset</handler>
 	    </menuitem>
+            <menuitem>
+              <label>Change working directory</label>
+              <help>Change working directory</help>
+              <handler>OnChangeCWD</handler>
+            </menuitem>
 	    <separator />
 	    <menuitem>
 	      <label>Show settings</label>
@@ -911,11 +916,6 @@
 	  <handler>OnPreferences</handler>
 	  <id>ID_PREFERENCES</id>
 	</menuitem>
-        <menuitem>
-          <label>Change working directory</label>
-          <help>Change working directory</help>
-          <handler>OnChangeCWD</handler>
-        </menuitem>
       </items>
     </menu>
     <menu>
