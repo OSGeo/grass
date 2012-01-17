@@ -113,6 +113,8 @@ int main(int argc, char *argv[])
     val = G_define_option();
     val->key = "order";
     val->type = TYPE_INTEGER;
+    val->options = "1-3";
+    val->answer = "1";
     val->required = YES;
     val->description = _("Rectification polynom order (1-3)");
 
