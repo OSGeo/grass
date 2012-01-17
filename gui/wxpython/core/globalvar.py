@@ -23,6 +23,7 @@ ETCDIR = os.path.join(os.getenv("GISBASE"), "etc")
 ETCICONDIR = os.path.join(os.getenv("GISBASE"), "etc", "gui", "icons")
 ETCWXDIR = os.path.join(ETCDIR, "gui", "wxpython")
 ETCIMGDIR = os.path.join(ETCDIR, "gui", "images")
+ETCSYMBOLDIR = os.path.join(ETCDIR, "gui", "images", "symbols")
 
 sys.path.append(os.path.join(ETCDIR, "python"))
 import grass.script as grass

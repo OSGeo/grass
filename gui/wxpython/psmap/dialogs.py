@@ -77,6 +77,7 @@ from dbmgr.vinfo      import VectorDBInfo
 from core.utils       import CmdToTuple, GetCmdString
 from gui_core.gselect import Select
 from core.gcmd        import RunCommand, GError, GMessage, GWarning
+from gui_core.dialogs import SymbolDialog
 
 # grass.set_raise_on_error(True)
 
@@ -1651,7 +1652,7 @@ class VProperties(InstructionObject):
         
         # size and style
         if self.subType == 'points':
-            if dic['symbol']:
+            if not dic['eps']:
                 vInstruction += string.Template("    symbol $symbol\n").substitute(dic)
             else: #eps
                 vInstruction += string.Template("    eps $eps\n").substitute(dic)
@@ -3270,6 +3271,7 @@ class VPropertiesDialog(PsmapDialog):
         if self.type == 'points':
             self.OnSize(None)
             self.OnRotation(None)
+            self.OnSymbology(None)
         if self.type == 'areas':
             self.OnPattern(None)
         
@@ -3598,8 +3600,11 @@ class VPropertiesDialog(PsmapDialog):
         self.symbolRadio = wx.RadioButton(panel, id = wx.ID_ANY, label = _("symbol:"), style = wx.RB_GROUP)
         self.symbolRadio.SetValue(bool(self.vPropertiesDict['symbol']))
             
-         
-        self.symbolChoice = wx.Choice(panel, id = wx.ID_ANY, choices = self.symbols)
+        self.symbolName = wx.StaticText(panel, id = wx.ID_ANY)
+        self.symbolName.SetLabel(self.vPropertiesDict['symbol'])
+        bitmap = wx.Bitmap(os.path.join(globalvar.ETCSYMBOLDIR,
+                                        self.vPropertiesDict['symbol']) + '.png')
+        self.symbolButton = wx.BitmapButton(panel, id = wx.ID_ANY, bitmap = bitmap)
             
         self.epsRadio = wx.RadioButton(panel, id = wx.ID_ANY, label = _("eps file:"))
         self.epsRadio.SetValue(bool(self.vPropertiesDict['eps']))
@@ -3608,24 +3613,28 @@ class VPropertiesDialog(PsmapDialog):
                                 buttonText =  _("Browse"), toolTip = _("Type filename or click browse to choose file"), 
                                 dialogTitle = _("Choose a file"), startDirectory = '', initialValue = '',
                                 fileMask = "Encapsulated PostScript (*.eps)|*.eps|All files (*.*)|*.*", fileMode = wx.OPEN)
-        if self.vPropertiesDict['symbol']:
-            self.symbolChoice.SetStringSelection(self.vPropertiesDict['symbol'])
+        if not self.vPropertiesDict['eps']:
             self.epsFileCtrl.SetValue('')
         else: #eps chosen
             self.epsFileCtrl.SetValue(self.vPropertiesDict['eps'])
-            self.symbolChoice.SetSelection(0)
             
+        gridBagSizer.AddGrowableCol(2)
         gridBagSizer.Add(self.symbolRadio, pos = (0, 0), flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
-        gridBagSizer.Add(self.symbolChoice, pos = (0, 1), flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
+        gridBagSizer.Add(self.symbolName, pos = (0, 1), flag = wx.ALIGN_CENTER_VERTICAL | wx.LEFT, border = 10)
+        gridBagSizer.Add(self.symbolButton, pos = (0, 2), flag = wx.ALIGN_RIGHT , border = 0)
         gridBagSizer.Add(self.epsRadio, pos = (1, 0), flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
-        gridBagSizer.Add(self.epsFileCtrl, pos = (1, 1), flag = wx.ALIGN_CENTER_VERTICAL|wx.EXPAND, border = 0)
+        gridBagSizer.Add(self.epsFileCtrl, pos = (1, 1), span = (1, 2), flag = wx.ALIGN_CENTER_VERTICAL|wx.EXPAND, border = 0)
         
         sizer.Add(gridBagSizer, proportion = 1, flag = wx.EXPAND|wx.ALL, border = 5)
         border.Add(item = sizer, proportion = 0, flag = wx.ALL | wx.EXPAND, border = 5)
         
+        self.Bind(wx.EVT_BUTTON, self.OnSymbolSelection, self.symbolButton)
+        self.Bind(wx.EVT_RADIOBUTTON, self.OnSymbology, self.symbolRadio)
+        self.Bind(wx.EVT_RADIOBUTTON, self.OnSymbology, self.epsRadio)
+        
         #size
         
-        box   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = " %s " % _("Size"))        
+        box   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = " %s " % _("Size"))
         sizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
         gridBagSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
         gridBagSizer.AddGrowableCol(0)
@@ -3882,6 +3891,24 @@ class VPropertiesDialog(PsmapDialog):
         for each in (self.patFileCtrl, self.patWidthText, self.patWidthSpin, self.patScaleText, self.patScaleSpin):
             each.Enable(self.patternCheck.GetValue())
             
+    def OnSymbology(self, event):
+        useSymbol = self.symbolRadio.GetValue()
+        
+        self.symbolButton.Enable(useSymbol)
+        self.symbolName.Enable(useSymbol)
+        self.epsFileCtrl.Enable(not useSymbol)
+            
+    def OnSymbolSelection(self, event):
+        dlg = SymbolDialog(self, symbolPath = globalvar.ETCSYMBOLDIR,
+                           currentSymbol = self.symbolName.GetLabel())
+        if dlg.ShowModal() == wx.ID_OK:
+            img = dlg.GetSelectedSymbol(fullPath = True)
+            name = dlg.GetSelectedSymbol(fullPath = False)
+            self.symbolButton.SetBitmapLabel(wx.Bitmap(img + '.png'))
+            self.symbolName.SetLabel(name)
+            
+        dlg.Destroy()
+                
     def EnableLayerSelection(self, enable = True):
         for widget in self.gridBagSizerL.GetChildren():
             if widget.GetWindow() != self.warning:
@@ -3965,11 +3992,10 @@ class VPropertiesDialog(PsmapDialog):
         if self.type == 'points':
             #symbols
             if self.symbolRadio.GetValue():
-                self.vPropertiesDict['symbol'] = self.symbolChoice.GetStringSelection()
+                self.vPropertiesDict['symbol'] = self.symbolName.GetLabel()
                 self.vPropertiesDict['eps'] = None
             else:
                 self.vPropertiesDict['eps'] = self.epsFileCtrl.GetValue()
-                self.vPropertiesDict['symbol'] = None
             #size
             if self.sizeRadio.GetValue():
                 self.vPropertiesDict['size'] = self.sizeSpin.GetValue()
