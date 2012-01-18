@@ -3232,7 +3232,7 @@ msgstr "Crea un nuovo vettore vuoto"
 
 #: ../gui/wxpython/menustrings.py:521
 msgid "Edit vector map (non-interactively)"
-msgstr "Modifica vettore"
+msgstr "Modifica vettore (in maniera non interattiva)"
 
 #: ../gui/wxpython/menustrings.py:522
 msgid "Edits a vector map, allows adding, deleting and modifying selected vector features."
@@ -12818,7 +12818,7 @@ msgstr "Genera statistiche volumetriche per raster 3D."
 #~ msgstr "Comando per la generazione di superfice da contorni rasterizzati"
 
 #~ msgid "Digitize vector map using Tcl/Tk digitizer"
-#~ msgstr "DIgitalizza vettoriale usando il digitalizzatore Tcl/Tk"
+#~ msgstr "Digitalizza vettoriale usando il digitalizzatore Tcl/Tk"
 
 #~ msgid "Interactive editing and digitization of vector maps."
 #~ msgstr "Modifica e digitalizzazione interattiva di vettori."
