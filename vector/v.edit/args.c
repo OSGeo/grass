@@ -13,6 +13,8 @@
 int parser(int argc, char *argv[], struct GParams *params,
 	   enum mode *action_mode)
 {
+    char *desc;
+    
     /* parameters */
     params->map = G_define_standard_option(G_OPT_V_MAP);
     params->map->label = _("Name of vector map to edit");
@@ -32,45 +34,48 @@ int parser(int argc, char *argv[], struct GParams *params,
     params->tool->required = YES;
     params->tool->multiple = NO;
     params->tool->description = _("Tool");
-    params->tool->descriptions = _("create;"
-				   "Create new (empty) vector map;"
-				   "add;"
-				   "Add new features to existing vector map;"
-				   "delete;"
-				   "Delete selected features from vector map;"
-				   "move;"
-				   "Move selected features in vector map;"
-				   "vertexmove;"
-				   "Move vertex of selected vector lines;"
-				   "vertexdel;"
-				   "Remove vertex from selected vector lines;"
-				   "vertexadd;"
-				   "Add new vertex to selected vector lines;"
-				   "merge;"
-				   "Merge selected vector lines;"
-				   "break;"
-				   "Break/split vector lines;"
-				   "select;"
-				   "Select lines and print their ID's;"
-				   "catadd;"
-				   "Set new categories to selected vector features "
-				   "for defined layer;"
-				   "catdel;"
-				   "Delete categories from selected vector features "
-				   "for defined layer;"
-				   "copy;"
-				   "Copy selected features;"
-				   "snap;"
-				   "Snap vector features in given threshold;"
-				   "flip;"
-				   "Flip direction of selected vector lines;"
-				   "connect;"
-				   "Connect two lines;"
-				   "zbulk;"
-				   "Z bulk-labeling (automated assignment of z coordinate to "
-				   "vector lines);"
-				   "chtype;"
-				   "Change feature type (point<->centroid, line<->boundary)");
+    desc = NULL;
+    G_asprintf(&desc,
+	       "create;%s;"
+	       "add;%s;"
+	       "delete;%s;"
+	       "move;%s;"
+	       "vertexmove;%s;"
+	       "vertexdel;%s;"
+	       "vertexadd;%s;"
+	       "merge;%s;"
+	       "break;%s;"
+	       "select;%s;"
+	       "catadd;%s;"
+	       "catdel;%s;"
+	       "copy;%s;"
+	       "snap;%s;"
+	       "flip;%s;"
+	       "connect;%s;"
+	       "zbulk;%s;"
+	       "chtype;%s",
+	       _("Create new (empty) vector map"),
+	       _("Add new features to existing vector map"),
+	       _("Delete selected features from vector map"),
+	       _("Move selected features in vector map"),
+	       _("Move vertex of selected vector lines"),
+	       _("Remove vertex from selected vector lines"),
+	       _("Add new vertex to selected vector lines"),
+	       _("Merge selected vector lines"),
+	       _("Break/split vector lines"),
+	       _("Select lines and print their ID's"),
+	       _("Set new categories to selected vector features "
+		 "for defined layer"),
+	       _("Delete categories from selected vector features "
+		 "for defined layer"),
+	       _("Copy selected features"),
+	       _("Snap vector features in given threshold"),
+	       _("Flip direction of selected vector lines"),
+	       _("Connect two lines"),
+	       _("Z bulk-labeling (automated assignment of z coordinate to "
+		 "vector lines)"),
+	       _("Change feature type (point<->centroid, line<->boundary)"));
+    params->tool->descriptions = desc;
     params->tool->options = "create,add,delete,copy,move,flip,catadd,catdel,"
 	"merge,break,snap,connect,chtype,"
 	"vertexadd,vertexdel,vertexmove,zbulk,select";
