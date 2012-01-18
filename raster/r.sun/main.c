@@ -346,7 +346,7 @@ int main(int argc, char *argv[])
     parm.coefbh->required = NO;
     parm.coefbh->gisprompt = "old,cell,raster";
     parm.coefbh->description =
-	_("Name of real-sky beam radiation coefficient input raster map [-]");
+	_("Name of real-sky beam radiation coefficient (thick cloud) input raster map [0-1]");
     parm.coefbh->guisection = _("Input_options");
 
     parm.coefdh = G_define_option();
@@ -355,7 +355,7 @@ int main(int argc, char *argv[])
     parm.coefdh->required = NO;
     parm.coefdh->gisprompt = "old,cell,raster";
     parm.coefdh->description =
-	_("Name of real-sky diffuse radiation coefficient input raster map [-]");
+	_("Name of real-sky diffuse radiation coefficient (haze) input raster map [0-1]");
     parm.coefdh->guisection = _("Input_options");
 
     parm.horizon = G_define_option();
