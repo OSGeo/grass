@@ -1165,6 +1165,9 @@ class PsMapBufferedWindow(wx.Window):
                     self.parent.SetStatusText('', 0)
                     self.SetCursor(self.cursors["default"])
                     
+        elif event.MiddleDown():
+            self.mouse['begin'] = event.GetPosition()
+            
         elif event.LeftDown():
             self.mouse['begin'] = event.GetPosition()
             self.begin = self.mouse['begin']
@@ -1200,7 +1203,11 @@ class PsMapBufferedWindow(wx.Window):
                     self.pdcTmp.RemoveId(self.idResizeBoxTmp)
                     self.Refresh()           
                     
-                    
+        elif event.Dragging() and event.MiddleIsDown():
+            self.mouse['end'] = event.GetPosition()
+            self.Pan(begin = self.mouse['begin'], end = self.mouse['end'])
+            self.mouse['begin'] = event.GetPosition()
+            
         elif event.Dragging() and event.LeftIsDown():
             #draw box when zooming, creating map 
             if self.mouse['use'] in ('zoomin', 'zoomout', 'addMap'):
@@ -1211,12 +1218,10 @@ class PsMapBufferedWindow(wx.Window):
                 self.Draw(pen = self.pen['box'], brush = self.brush['box'], pdc = self.pdcTmp, drawid = self.idZoomBoxTmp,
                           pdctype = 'rect', bb = r)
                 
-            # panning                
+            # panning
             if self.mouse["use"] == 'pan':
                 self.mouse['end'] = event.GetPosition()
-                view = self.mouse['begin'][0] - self.mouse['end'][0], self.mouse['begin'][1] - self.mouse['end'][1]
-                zoomFactor = 1
-                self.Zoom(zoomFactor, view)
+                self.Pan(begin = self.mouse['begin'], end = self.mouse['end'])
                 self.mouse['begin'] = event.GetPosition()
                 
             #move object
@@ -1363,8 +1368,15 @@ class PsMapBufferedWindow(wx.Window):
                 type = self.instruction[self.dragId].type
                 itemCall[type](**itemArg[type])
 
-                
-                
+    def Pan(self, begin, end):
+        """!Move canvas while dragging.
+        
+        @param begin x,y coordinates of first point
+        @param end x,y coordinates of second point
+        """
+        view = begin[0] - end[0], begin[1] - end[1]
+        zoomFactor = 1
+        self.Zoom(zoomFactor, view)
                 
     def RecalculatePosition(self, ids):
         for id in ids:
