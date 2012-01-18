@@ -1654,11 +1654,10 @@ class ImportDialog(wx.Dialog):
     
     def AddLayers(self, returncode, cmd = None):
         """!Add imported/linked layers into layer tree"""
-        self.commandId += 1
-        
         if not self.add.IsChecked() or returncode != 0:
             return
         
+        self.commandId += 1
         maptree = self.parent.curr_page.maptree
         
         layer, output = self.list.GetLayers()[self.commandId]
@@ -1745,10 +1744,8 @@ class GdalImportDialog(ImportDialog):
 
     def OnRun(self, event):
         """!Import/Link data (each layes as separate vector map)"""
+        self.commandId = -1
         data = self.list.GetLayers()
-        
-        # hide dialog
-        self.Hide()
         
         dsn = self.dsnInput.GetDsn()
         ext = self.dsnInput.GetFormatExt()
@@ -1796,8 +1793,6 @@ class GdalImportDialog(ImportDialog):
             self.parent.goutput.RunCmd(cmd, switchPage = True,
                                        onDone = self.AddLayers)
         
-        self.OnCancel()
-
     def _getCommand(self):
         """!Get command"""
         if self.link:
