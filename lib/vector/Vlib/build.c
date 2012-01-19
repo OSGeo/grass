@@ -455,7 +455,7 @@ int Vect_attach_centroids(struct Map_info *Map, const struct bound_box * box)
 		Area->centroid = centr;
 		topo->area = sel_area;
 
-		if (sel_area != orig_area && plus->do_uplist)
+		if (sel_area != orig_area && plus->uplist.do_uplist)
 		    dig_line_add_updated(plus, centr);
 	    }
 	    else if (Area->centroid != centr) {	/* duplicate centroid */
@@ -464,7 +464,7 @@ int Vect_attach_centroids(struct Map_info *Map, const struct bound_box * box)
 		G_debug(3, "\tduplicate centroid -> do not attach to area");
 		topo->area = -sel_area;
 
-		if (-sel_area != orig_area && plus->do_uplist)
+		if (-sel_area != orig_area && plus->uplist.do_uplist)
 		    dig_line_add_updated(plus, centr);
 	    }
 	}

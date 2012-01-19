@@ -209,7 +209,7 @@ int dig_add_area(struct Plus_head *plus, int n_lines, plus_t * lines,
 	Area->lines[i] = line;
 	Line = plus->Line[abs(line)];
 	topo = (struct P_topo_b *)Line->topo;
-	if (plus->do_uplist)
+	if (plus->uplist.do_uplist)
 	    dig_line_add_updated(plus, abs(line));
 	if (line < 0) {		/* revers direction -> area on left */
 	    if (topo->left != 0) {
@@ -368,7 +368,7 @@ int dig_del_area(struct Plus_head *plus, int area)
 	line = Area->lines[i];	/* >0 = clockwise -> right, <0 = counterclockwise ->left */
 	Line = plus->Line[abs(line)];
 	btopo = (struct P_topo_b *)Line->topo;
-	if (plus->do_uplist)
+	if (plus->uplist.do_uplist)
 	    dig_line_add_updated(plus, abs(line));
 	if (line > 0) {
 	    G_debug(3, "  Set line %d right side to 0", line);
@@ -403,7 +403,7 @@ int dig_del_area(struct Plus_head *plus, int area)
 	else {
 	    ctopo = (struct P_topo_c *)Line->topo;
 	    ctopo->area = 0;
-	    if (plus->do_uplist)
+	    if (plus->uplist.do_uplist)
 		dig_line_add_updated(plus, line);
 	}
     }
@@ -687,7 +687,7 @@ int dig_add_isle(struct Plus_head *plus, int n_lines, plus_t * lines,
 	Isle->lines[i] = line;
 	Line = plus->Line[abs(line)];
 	topo = (struct P_topo_b *)Line->topo;
-	if (plus->do_uplist)
+	if (plus->uplist.do_uplist)
 	    dig_line_add_updated(plus, abs(line));
 	if (line < 0) {		/* revers direction -> isle on left */
 	    if (topo->left != 0) {
@@ -747,7 +747,7 @@ int dig_del_isle(struct Plus_head *plus, int isle)
 	line = Isle->lines[i];	/* >0 = clockwise -> right, <0 = counterclockwise ->left */
 	Line = plus->Line[abs(line)];
 	topo = (struct P_topo_b *)Line->topo;
-	if (plus->do_uplist)
+	if (plus->uplist.do_uplist)
 	    dig_line_add_updated(plus, abs(line));
 	if (line > 0)
 	    topo->right = 0;

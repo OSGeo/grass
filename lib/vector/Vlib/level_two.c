@@ -3,23 +3,31 @@
 
    \brief Vector library - topology level functions
 
-   (C) 2001-2009, 2011 by the GRASS Development Team
+   (C) 2001-2009, 2011-2012 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
+   (>=v2). Read the file COPYING that comes with GRASS for details.
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
    \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
+   \author Update to GRASS 7 by Martin Landa <landa.martin gmail.com>
  */
 
 #include <stdlib.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
+static void check_level(const struct Map_info *Map)
+{
+    if (Map->level < 2)
+	G_fatal_error(_("Vector map <%s> is not open at topological level"),
+		      Vect_get_full_name(Map));
+}
+
 /*!
    \brief Get number of nodes in vector map
 
-   \param Map vector map
+   \param Map pointer to Map_info struct
 
    \return number of nodes
  */
@@ -31,7 +39,7 @@ plus_t Vect_get_num_nodes(const struct Map_info *Map)
 /*!
    \brief Get number of primitives in vector map
 
-   \param map vector map
+   \param map pointer to Map_info struct
    \patam type feature type
 
    \return number of primitives
@@ -59,7 +67,7 @@ plus_t Vect_get_num_primitives(const struct Map_info *Map, int type)
 /*!
    \brief Fetch number of features (points, lines, boundaries, centroids) in vector map
 
-   \param map vector map
+   \param map pointer to Map_info struct
 
    \return number of features
  */
@@ -71,7 +79,7 @@ plus_t Vect_get_num_lines(const struct Map_info *Map)
 /*!
    \brief Get number of areas in vector map
 
-   \param map vector map
+   \param map pointer to Map_info struct
 
    \return number of areas
  */
@@ -83,7 +91,7 @@ plus_t Vect_get_num_areas(const struct Map_info *Map)
 /*!
    \brief Fetch number of kernels in vector map
 
-   \param map vector map
+   \param map pointer to Map_info struct
 
    \return number of kernels
  */
@@ -96,7 +104,7 @@ plus_t Vect_get_num_kernels(const struct Map_info *Map)
 /*!
    \brief Get number of faces in vector map
 
-   \param map vector map
+   \param map pointer to Map_info struct
 
    \return number of faces
  */
@@ -109,7 +117,7 @@ plus_t Vect_get_num_faces(const struct Map_info *Map)
 /*!
    \brief Fetch number of volumes in vector map
 
-   \param map vector map
+   \param map pointer to Map_info struct
 
    \return number of volumes
  */
@@ -122,7 +130,7 @@ plus_t Vect_get_num_volumes(const struct Map_info *Map)
 /*!
    \brief Get number of islands in vector map
 
-   \param map vector map
+   \param map pointer to Map_info struct
 
    \return number of islands
  */
@@ -135,7 +143,7 @@ plus_t Vect_get_num_islands(const struct Map_info *Map)
 /*!
    \brief Fetch number of holes in vector map
 
-   \param map vector map
+   \param map pointer to Map_info struct
 
    \return number of holes
  */
@@ -148,7 +156,7 @@ plus_t Vect_get_num_holes(const struct Map_info *Map)
 /*!
    \brief Get number of defined dblinks
 
-   \param map vector map
+   \param map pointer to Map_info struct
 
    \return number of dblinks
  */
@@ -161,68 +169,90 @@ int Vect_get_num_dblinks(const struct Map_info *Map)
 /*!
    \brief Get number of updated features
 
-   \param map vector map
+   Note: Vect_set_updated() must be called to maintain list of updated
+   features
+
+   \param map pointer to Map_info struct
 
    \return number of updated features
  */
 int Vect_get_num_updated_lines(const struct Map_info *Map)
 {
-    return (Map->plus.n_uplines);
+    return (Map->plus.uplist.n_uplines);
 }
 
 /*!
    \brief Get updated line by index
 
-   \param map vector map
+   Note: Vect_set_updated() must be called to maintain list of updated
+   features
+
+   \param map pointer to Map_info struct
    \param idx index
 
    \return updated line
  */
 int Vect_get_updated_line(const struct Map_info *Map, int idx)
 {
-    return (Map->plus.uplines[idx]);
+    return (Map->plus.uplist.uplines[idx]);
+}
+
+/*!
+   \brief Get updated line offset by index
+
+   Note: Vect_set_updated() must be called to maintain list of updated
+   features
+
+   \param map pointer to Map_info struct
+   \param idx index
+
+   \return updated line
+ */
+off_t Vect_get_updated_line_offset(const struct Map_info *Map, int idx)
+{
+    return (Map->plus.uplist.uplines_offset[idx]);
 }
 
 /*!
    \brief Get number of updated nodes
 
-   \param map vector map
+   \param map pointer to Map_info struct
 
    \return number of updated nodes
  */
 int Vect_get_num_updated_nodes(const struct Map_info *Map)
 {
-    return (Map->plus.n_upnodes);
+    return (Map->plus.uplist.n_upnodes);
 }
 
 /*!
    \brief Get updated node by index
 
-   \param map vector map
+   Note: Vect_set_updated() must be called to maintain list of updated
+   features
+
+   \param map pointer to Map_info struct
    \param idx index
 
    \return updated node
  */
 int Vect_get_updated_node(const struct Map_info *Map, int idx)
 {
-    return (Map->plus.upnodes[idx]);
+    return (Map->plus.uplist.upnodes[idx]);
 }
 
 /*!
    \brief Get line type
 
-   \param map vector map
+   \param map pointer to Map_info struct
    \param line line id
 
    \return line type
  */
-int
-Vect_get_line_type(const struct Map_info *Map, int line)
+int Vect_get_line_type(const struct Map_info *Map, int line)
 {
-    if (Map->level < 2)
-	G_fatal_error(_("Vector map <%s> is not open on level >= 2"),
-		      Vect_get_full_name(Map));
-
+    check_level(Map);
+    
     if (!Vect_line_alive(Map, line))
 	return 0;
 	
@@ -232,7 +262,7 @@ Vect_get_line_type(const struct Map_info *Map, int line)
 /*!
    \brief Get node coordinates
 
-   \param map vector map
+   \param map pointer to Map_info struct
    \param num node id
    \param x,y,z coordinates values (for 2D coordinates z is NULL)
 
@@ -257,7 +287,7 @@ Vect_get_node_coor(const struct Map_info *Map, int num, double *x, double *y,
 /*!
    \brief Get line nodes
 
-   \param Map vector map
+   \param Map pointer to Map_info struct
    \param line line id
    \param n1, n2 ids of line nodes (or NULL)
 
@@ -267,9 +297,7 @@ int Vect_get_line_nodes(const struct Map_info *Map, int line, int *n1, int *n2)
 {
     char type;
 
-    if (Map->level < 2)
-	G_fatal_error(_("Vector map <%s> is not open on level >= 2"),
-		      Vect_get_full_name(Map));
+    check_level(Map);
 
     type = Vect_get_line_type(Map, line);
 
@@ -299,7 +327,7 @@ int Vect_get_line_nodes(const struct Map_info *Map, int line, int *n1, int *n2)
 /*!
    \brief Get area/isle ids on the left and right
 
-   \param Map vector map
+   \param Map pointer to Map_info struct
    \param line line id
    \param[out] left,right area/isle id on the left and right
 
@@ -309,10 +337,8 @@ int Vect_get_line_areas(const struct Map_info *Map, int line, int *left, int *ri
 {
     struct P_topo_b *topo;
 
-    if (Map->level < 2)
-	G_fatal_error(_("Vector map <%s> is not open on level >= 2"),
-		      Vect_get_full_name(Map));
-
+    check_level(Map);
+    
     if (!Map->plus.Line[line]->topo)
 	G_fatal_error(_("Areas not available for line %d"), line);
 
@@ -332,18 +358,15 @@ int Vect_get_line_areas(const struct Map_info *Map, int line, int *left, int *ri
 /*!
    \brief Get number of lines for node
 
-   \param Map vector map
+   \param Map pointer to Map_info struct
    \param node node id
 
    \return numbers of lines
  */
 int Vect_get_node_n_lines(const struct Map_info *Map, int node)
 {
-
-    if (Map->level < 2)
-	G_fatal_error(_("Vector map <%s> is not open on level >= 2"),
-		      Vect_get_full_name(Map));
-
+    check_level(Map);
+    
     return (Map->plus.Node[node]->n_lines);
 
 }
@@ -351,7 +374,7 @@ int Vect_get_node_n_lines(const struct Map_info *Map, int node)
 /*!
    \brief Get line id for node line index
 
-   \param Map vector map
+   \param Map pointer to Map_info struct
    \param node node id
    \param line line index (range: 0 - Vect_get_node_n_lines())
 
@@ -359,17 +382,15 @@ int Vect_get_node_n_lines(const struct Map_info *Map, int node)
  */
 int Vect_get_node_line(const struct Map_info *Map, int node, int line)
 {
-    if (Map->level < 2)
-	G_fatal_error(_("Vector map <%s> is not open on level >= 2"),
-		      Vect_get_full_name(Map));
-
+    check_level(Map);
+    
     return (Map->plus.Node[node]->lines[line]);
 }
 
 /*!
    \brief Angle of segment of the line connected to the node
 
-   \param Map vector map
+   \param Map pointer to Map_info struct
    \param node node number
    \param line line index (range: 0 - Vect_get_node_n_lines())
 
@@ -377,9 +398,7 @@ int Vect_get_node_line(const struct Map_info *Map, int node, int line)
  */
 float Vect_get_node_line_angle(const struct Map_info *Map, int node, int line)
 {
-    if (Map->level < 2)
-	G_fatal_error(_("Vector map <%s> is not open on level >= 2"),
-		      Vect_get_full_name(Map));
+    check_level(Map);
 
     return (Map->plus.Node[node]->angles[line]);
 }
@@ -387,7 +406,7 @@ float Vect_get_node_line_angle(const struct Map_info *Map, int node, int line)
 /*!
    \brief Get area id the centroid is within
 
-   \param Map vector map
+   \param Map pointer to Map_info struct
    \param centroid centroid id
 
    \return area id the centroid is within
@@ -398,10 +417,8 @@ int Vect_get_centroid_area(const struct Map_info *Map, int centroid)
 {
     struct P_topo_c *topo;
 
-    if (Map->level < 2)
-	G_fatal_error(_("Vector map <%s> is not open on level >= 2"),
-		      Vect_get_full_name(Map));
-
+    check_level(Map);
+    
     if (Map->plus.Line[centroid]->type != GV_CENTROID)
 	return 0;
     
@@ -410,4 +427,35 @@ int Vect_get_centroid_area(const struct Map_info *Map, int centroid)
 	G_fatal_error(_("Topology info not available for feature %d"), centroid);
     
     return (topo->area);
+}
+
+/*!
+  \brief Enable/disable maintanance of list of updated lines/nodes
+
+  See Plus_head.uplist for details.
+  
+  \param Map pointer to Map_info struct
+  \param enable TRUE/FALSE to enable/disable
+*/
+void Vect_set_updated(struct Map_info *Map, int enable)
+{
+    check_level(Map);
+    
+    Map->plus.uplist.do_uplist = enable != 0 ? TRUE : FALSE;
+}
+
+/*!
+  \brief Reset list of updated lines/nodes
+
+  \param Map pointer to Map_info struct
+*/
+void Vect_reset_updated(struct Map_info *Map)
+{
+    struct Plus_head *Plus;
+
+    check_level(Map);
+    
+    Plus = &(Map->plus);
+    dig_line_reset_updated(Plus);
+    dig_node_reset_updated(Plus);
 }

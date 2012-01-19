@@ -31,9 +31,11 @@ static int add_line(struct Plus_head *plus, int lineid, int type, const struct l
     line->offset = offset;
 
     dig_spidx_add_line(plus, lineid, box);
-    if (plus->do_uplist)
+    if (plus->uplist.do_uplist) {
 	dig_line_add_updated(plus, lineid);
-
+	plus->uplist.uplines_offset[plus->uplist.n_uplines - 1] = line->offset;
+    }
+    
     if (type & GV_POINT) {
 	line->topo = NULL;
 	return (lineid);
@@ -77,7 +79,7 @@ static int add_line(struct Plus_head *plus, int lineid, int type, const struct l
     }
 
     dig_node_add_line(plus, node, lineid, Points, type);
-    if (plus->do_uplist)
+    if (plus->uplist.do_uplist)
 	dig_node_add_updated(plus, node);
 
     lp = Points->n_points - 1;
@@ -105,7 +107,7 @@ static int add_line(struct Plus_head *plus, int lineid, int type, const struct l
     }
 
     dig_node_add_line(plus, node, -lineid, Points, type);
-    if (plus->do_uplist)
+    if (plus->uplist.do_uplist)
 	dig_node_add_updated(plus, node);
 
     return (lineid);
@@ -216,6 +218,11 @@ int dig_del_line(struct Plus_head *plus, int line, double x, double y, double z)
     Line = plus->Line[line];
     dig_spidx_del_line(plus, line, x, y, z);
 
+    if (plus->uplist.do_uplist) {
+	dig_line_add_updated(plus, line);
+	plus->uplist.uplines_offset[plus->uplist.n_uplines - 1] = -1 * Line->offset;
+    }
+    
     if (!(Line->type & GV_LINES)) {
 	/* Delete line */
 	dig_free_line(Line);
@@ -252,7 +259,6 @@ int dig_del_line(struct Plus_head *plus, int line, double x, double y, double z)
     Node->n_lines--;
 
     if (Node->n_lines == 0) {
-
 	G_debug(3, "    node %d has 0 lines -> delete", N1);
 	dig_spidx_del_node(plus, N1);
 	/* free structures */
@@ -260,7 +266,7 @@ int dig_del_line(struct Plus_head *plus, int line, double x, double y, double z)
 	plus->Node[N1] = NULL;
     }
     else {
-	if (plus->do_uplist)
+	if (plus->uplist.do_uplist)
 	    dig_node_add_updated(plus, N1);
     }
 
@@ -296,7 +302,7 @@ int dig_del_line(struct Plus_head *plus, int line, double x, double y, double z)
 	plus->Node[N2] = NULL;
     }
     else {
-	if (plus->do_uplist)
+	if (plus->uplist.do_uplist)
 	    dig_node_add_updated(plus, N2);
     }
 

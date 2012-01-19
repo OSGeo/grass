@@ -5,7 +5,7 @@
  *
  * Higher level functions for reading/writing/manipulating vectors.
  *
- * (C) 2001-2009 by the GRASS Development Team
+ * (C) 2001-2009, 2012 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2).  Read the file COPYING that comes with GRASS for details.
@@ -119,8 +119,6 @@ int Vect_set_open_level(int level)
 
 /*! 
  * \brief Open existing vector map for reading (internal use only)
- *
- * In case of error, the functions respect fatal error settings.
  *
  * \param[out] Map pointer to Map_info structure
  * \param name name of vector map to open
@@ -412,7 +410,7 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
 	Map->plus.built = GV_BUILD_ALL;	/* highest level of topology for level 2 */
     }
 
-    Map->plus.do_uplist = 0;
+    Map->plus.uplist.do_uplist = FALSE;
 
     /* read db links */
     Map->dblnk = Vect_new_dblinks_struct();
@@ -476,8 +474,6 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
  * This function is replaced by Vect_open_old2() to handle also direct
  * OGR support.
  * 
- * In case of error, the functions respect fatal error settings.
- *
  * \param[out] Map pointer to Map_info structure
  * \param name name of vector map to open
  * \param mapset mapset name
@@ -492,8 +488,6 @@ int Vect_open_old(struct Map_info *Map, const char *name, const char *mapset)
 
 /*!
  * \brief Open existing vector map for reading (native and OGR format)
- *
- * In case of error, the functions respect fatal error settings.
  *
  * \param[out] Map pointer to Map_info structure
  * \param name name of vector map to open
@@ -515,7 +509,8 @@ int Vect_open_old2(struct Map_info *Map, const char *name, const char *mapset, c
  * This function is replaced by Vect_open_update2() to handle also
  * direct OGR support.
  *
- * In case of error, the functions respect fatal error settings.
+ * By default list of updated features is not maintained, see
+ * Vect_set_updated() for details.
  *
  * \param[out] Map pointer to Map_info structure
  * \param name name of vector map to update
@@ -526,32 +521,15 @@ int Vect_open_old2(struct Map_info *Map, const char *name, const char *mapset, c
  */
 int Vect_open_update(struct Map_info *Map, const char *name, const char *mapset)
 {
-    int ret;
-    
-    ret = Vect__open_old(Map, name, mapset, NULL, 1, 0);
-    
-    /* the update lists are unused, a waste of time and memory */
-    /*
-    if (ret > 0) {
-	Map->plus.do_uplist = 1;
-
-	Map->plus.uplines = NULL;
-	Map->plus.n_uplines = 0;
-	Map->plus.alloc_uplines = 0;
-	Map->plus.upnodes = NULL;
-	Map->plus.n_upnodes = 0;
-	Map->plus.alloc_upnodes = 0;
-    }
-    */
-
-    return ret;
+    return Vect__open_old(Map, name, mapset, NULL, 1, 0);
 }
 
 /*!
  * \brief Open existing vector map for reading/writing (native or OGR
  * format)
  *
- * In case of error, the functions respect fatal error settings.
+ * By default list of updated features is not maintained, see
+ * Vect_set_updated() for details.
  *
  * \param[out] Map pointer to Map_info structure
  * \param name name of vector map to update
@@ -563,11 +541,7 @@ int Vect_open_update(struct Map_info *Map, const char *name, const char *mapset)
  */
 int Vect_open_update2(struct Map_info *Map, const char *name, const char *mapset, const char *layer)
 {
-    int ret;
-    
-    ret = Vect__open_old(Map, name, mapset, layer, 1, 0);
-    
-    return ret;
+    return Vect__open_old(Map, name, mapset, layer, 1, 0);
 }
 
 /*! 
@@ -578,8 +552,6 @@ int Vect_open_update2(struct Map_info *Map, const char *name, const char *mapset
  * This function is replaced by Vect_open_old_head2() to handle also
  * direct OGR support.
  *
- * In case of error, the functions respect fatal error settings.
- * 
  * \param[out] Map pointer to Map_info structure
  * \param name name of vector map to read (dsn for OGR)
  * \param mapset mapset name ("" for search path)
@@ -596,8 +568,6 @@ int Vect_open_old_head(struct Map_info *Map, const char *name, const char *mapse
  * \brief Reads only info about vector map from headers of 'head',
  * 'dbln', 'topo' and 'cidx' file (native or OGR format)
  *
- * In case of error, the functions respect fatal error settings.
- * 
  * \param[out] Map pointer to Map_info structure
  * \param name name of vector map to read (dsn for OGR)
  * \param mapset mapset name ("" for search path)
@@ -615,8 +585,6 @@ int Vect_open_old_head2(struct Map_info *Map, const char *name, const char *maps
  * \brief Open header file of existing vector map for updating (mostly
  * for database link updates)
  *
- * In case of error, the functions respect fatal error settings.
- *
  * \param[out] Map pointer to Map_info structure
  * \param name name of vector map to update
  * \param mapset mapset name
@@ -630,26 +598,15 @@ int Vect_open_update_head(struct Map_info *Map, const char *name,
     int ret;
 
     ret = Vect__open_old(Map, name, mapset, NULL, 1, 1);
-
-    /* the update lists are unused, a waste of time and memory */
-    /*
-    if (ret > 0) {
-	Map->plus.do_uplist = 1;
-
-	Map->plus.uplines = NULL;
-	Map->plus.n_uplines = 0;
-	Map->plus.alloc_uplines = 0;
-	Map->plus.upnodes = NULL;
-	Map->plus.n_upnodes = 0;
-	Map->plus.alloc_upnodes = 0;
-    }
-    */
-
+    
     return ret;
 }
 
 /*!
  * \brief Create new vector map for reading/writing
+ *
+ * By default list of updated features is not maintained, see
+ * Vect_set_updated() for details.
  *
  * \param[in,out] Map pointer to Map_info structure
  * \param name name of vector map
@@ -769,7 +726,7 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
     Map->support_updated = 0;
     Map->plus.built = GV_BUILD_NONE;
     Map->mode = GV_MODE_RW;
-    Map->plus.do_uplist = 0;
+    Map->plus.uplist.do_uplist = FALSE;
 
     Vect_set_proj(Map, G_projection());
     Vect_set_zone(Map, G_zone());

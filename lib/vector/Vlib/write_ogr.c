@@ -341,8 +341,8 @@ off_t V2_write_line_ogr(struct Map_info *Map, int type,
     }
 
 
-    G_debug(3, "updated lines : %d , updated nodes : %d", plus->n_uplines,
-	    plus->n_upnodes);
+    G_debug(3, "updated lines : %d , updated nodes : %d", plus->uplist.n_uplines,
+	    plus->uplist.n_upnodes);
 
     /* returns int line, but is defined as off_t for compatibility with
      * Write_line_array in write.c */

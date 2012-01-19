@@ -1008,39 +1008,52 @@ struct Plus_head
 
     /*** level 2 ***/
     /*!
-      \brief Used internaly in diglib to know if list is maintained
-    */
-    int do_uplist;
+      \brief List of updated lines/nodes
 
-    /*!
-      \brief Array of updated lines
+      Note: Vect_set_updated() must be called to maintain this list
+    */
+    struct {
+	/*!
+	  \brief Used internaly in diglib to know if list is maintained
+	*/
+	int do_uplist;
+	
+	/*!
+	  \brief Array of updated lines
+	  
+	  List of lines and nodes updated (topo info for the line was
+	  changed) by last write/rewrite/delete operation.
+	  Lines/nodes in the list may be deleted (e.g. delete
+	  boundary: first added for delete area and then delete
+	*/
+	int *uplines;
+	/*!
+	  \brief Array of updated lines - offset
 
-      List of lines and nodes updated (topo info for the line was
-      changed) by last write/rewrite/delete operation.  Lines/nodes in
-      the list may be deleted (e.g. delete boundary: first added for
-      delete area and then delete
-    */
-    int *uplines;
-    /*!
-      \brief Allocated array (level 2)
-    */
-    int alloc_uplines;
-    /*!
-      \brief Number of updated lines (level 2)
-    */
-    int n_uplines;
-    /*!
-      \brief Array of updated nodes (level 2)
-    */
-    int *upnodes;
-    /*!
-      \brief Allocated array (level 2)
-    */
-    int alloc_upnodes;
-    /*!
-      \brief number of updated nodes (level 2)
-    */
-    int n_upnodes;
+	  Negative value for dead (deleted) lines - used by Vect_restore_line()
+	*/
+	off_t *uplines_offset;
+	/*!
+	  \brief Allocated array of lines
+	*/
+	int alloc_uplines;
+	/*!
+	  \brief Number of updated lines
+	*/
+	int n_uplines;
+	/*!
+	  \brief Array of updated nodes 
+	*/
+	int *upnodes;
+	/*!
+	  \brief Allocated array of nodes
+	*/
+	int alloc_upnodes;
+	/*!
+	  \brief number of updated nodes
+	*/
+	int n_upnodes;
+    } uplist;
 };
 
 /*! \brief

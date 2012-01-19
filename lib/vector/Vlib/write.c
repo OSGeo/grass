@@ -149,8 +149,6 @@ off_t Vect_write_line(struct Map_info *Map, int type,
     if (!VECT_OPEN(Map))
 	G_fatal_error(_("Unable to write feature, vector map is not opened"));
 
-    dig_line_reset_updated(&(Map->plus));
-    dig_node_reset_updated(&(Map->plus));
     if (!(Map->plus.update_cidx)) {
 	Map->plus.cidx_up_to_date = 0;
     }
@@ -195,8 +193,6 @@ off_t Vect_rewrite_line(struct Map_info *Map, int line, int type,
     if (!VECT_OPEN(Map))
 	G_fatal_error(_("Unable to rewrite feature, vector map is not opened"));
 
-    dig_line_reset_updated(&(Map->plus));
-    dig_node_reset_updated(&(Map->plus));
     if (!(Map->plus.update_cidx)) {
 	Map->plus.cidx_up_to_date = 0;
     }
@@ -244,8 +240,6 @@ int Vect_delete_line(struct Map_info *Map, int line)
 		      line, Map->name);
     }
 
-    dig_line_reset_updated(&(Map->plus));
-    dig_node_reset_updated(&(Map->plus));
     if (!(Map->plus.update_cidx)) {
 	Map->plus.cidx_up_to_date = 0;
     }
@@ -290,8 +284,6 @@ int Vect_restore_line(struct Map_info *Map, int line, off_t offset)
 		      line, Map->name);
     }
 
-    dig_line_reset_updated(&(Map->plus));
-    dig_node_reset_updated(&(Map->plus));
     if (!(Map->plus.update_cidx)) {
 	Map->plus.cidx_up_to_date = 0;
     }
