@@ -18,7 +18,7 @@ A) Reading values from raster map at position of vector points, writing these va
    into column of vector map:
 <br>
 <div class="code"><pre>
-v.what.rast vect=pnts rast=elevation col=heights
+v.what.rast map=pnts raster=elevation column=heights
 </pre></div>
 
 <p>B) In case of a vector map without attached attribute table, first add
@@ -30,16 +30,16 @@ v.db.connect -p vectpoints
 # .. no table yet.
 
 # add new table, link to map:
-v.db.addtable vectpoints col="cat integer, myvalue integer, otherval double precision"
+v.db.addtable vectpoints column="cat integer, myvalue integer, otherval double precision"
 
 # query raster map and upload values to vector table into specified column:
-v.what.rast vect=vectpoints rast=rastmap col=myvalue
+v.what.rast map=vectpoints raster=rastmap column=myvalue
 
 # verify new attribute table:
 v.db.select vectpoints
 
 # verify statistics of uploaded values:
-v.univar map=vectpoints col=myvalue type=point
+v.univar map=vectpoints column=myvalue type=point
 </pre></div>
 
 <h2>SEE ALSO</h2>
