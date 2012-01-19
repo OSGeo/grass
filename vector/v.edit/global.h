@@ -43,6 +43,7 @@ enum mode
     MODE_ZBULK,
     /* change feature type (point<->centroid, line<->boundary) */
     MODE_CHTYPE,
+    MODE_AREA_DEL,              /* delete area */
 };
 
 struct GParams
