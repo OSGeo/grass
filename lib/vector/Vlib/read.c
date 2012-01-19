@@ -215,7 +215,7 @@ int Vect_isle_alive(const struct Map_info *Map, int isle)
   \return feature offset
   \return -1 on error
 */
-off_t Vect_get_line_offset(const const struct Map_info *Map, int line)
+off_t Vect_get_line_offset(const struct Map_info *Map, int line)
 {
     if (line < 1 || line > Map->plus.n_lines)
 	return -1;

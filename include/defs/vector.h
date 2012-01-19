@@ -282,8 +282,11 @@ int Vect_get_centroid_area(const struct Map_info *, int);
 /* Level 2 update only */
 int Vect_get_num_updated_lines(const struct Map_info *);
 int Vect_get_updated_line(const struct Map_info *, int);
+off_t Vect_get_updated_line_offset(const struct Map_info *, int);
 int Vect_get_num_updated_nodes(const struct Map_info *);
 int Vect_get_updated_node(const struct Map_info *, int);
+void Vect_set_updated(struct Map_info *, int);
+void Vect_reset_updated(struct Map_info *);
 
 /* History */
 int Vect_hist_command(struct Map_info *);

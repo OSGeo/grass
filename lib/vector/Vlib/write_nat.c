@@ -375,8 +375,8 @@ off_t V2_write_line_nat(struct Map_info *Map, int type,
 
     V2__add_line_to_topo_nat(Map, line, points, cats);
 
-    G_debug(3, "updated lines : %d , updated nodes : %d", plus->n_uplines,
-	    plus->n_upnodes);
+    G_debug(3, "updated lines : %d , updated nodes : %d", plus->uplist.n_uplines,
+	    plus->uplist.n_upnodes);
 
     /* returns int line, but is defined as off_t for compatibility with
      * Vect_write_line_array in write.c */
@@ -496,8 +496,8 @@ off_t V2_rewrite_line_nat(struct Map_info *Map, int line, int type, off_t old_of
 
     V2__add_line_to_topo_nat(Map, line, points, cats);
 
-    G_debug(3, "updated lines : %d , updated nodes : %d", plus->n_uplines,
-	    plus->n_upnodes);
+    G_debug(3, "updated lines : %d , updated nodes : %d", plus->uplist.n_uplines,
+	    plus->uplist.n_upnodes);
 
     /* returns int line, but is defined as off_t for compatibility with
      * Vect_rewrite_line_array in write.c */
@@ -690,7 +690,6 @@ int V2_delete_line_nat(struct Map_info *Map, int line)
 
     /* Update category index */
     if (plus->update_cidx) {
-
 	for (i = 0; i < Cats->n_cats; i++) {
 	    dig_cidx_del_cat(plus, Cats->field[i], Cats->cat[i], line, type);
 	}
@@ -848,8 +847,9 @@ int V2_delete_line_nat(struct Map_info *Map, int line)
 	}
     }
 
-    G_debug(3, "updated lines : %d , updated nodes : %d", plus->n_uplines,
-	    plus->n_upnodes);
+    G_debug(3, "updated lines : %d , updated nodes : %d", plus->uplist.n_uplines,
+	    plus->uplist.n_upnodes);
+    
     return ret;
 }
 
@@ -968,8 +968,8 @@ int V2_restore_line_nat(struct Map_info *Map, int line, off_t offset)
     V2__add_line_to_topo_nat(Map,
 		     line, points, cats);
 
-    G_debug(3, "updated lines : %d , updated nodes : %d", plus->n_uplines,
-	    plus->n_upnodes);
+    G_debug(3, "updated lines : %d , updated nodes : %d", plus->uplist.n_uplines,
+	    plus->uplist.n_upnodes);
 
     return ret;
 }
