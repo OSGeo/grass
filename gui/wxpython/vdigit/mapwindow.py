@@ -458,12 +458,12 @@ class VDigitWindow(BufferedWindow):
                 
             self.UpdateMap(render = False, renderVector = False)
             
-        elif action in ["deleteLine", "moveLine", "splitLine",
+        elif action in ["deleteLine", "deleteArea", "moveLine", "splitLine",
                         "addVertex", "removeVertex", "moveVertex",
                         "copyCats", "flipLine", "mergeLine",
                         "snapLine", "connectLine", "copyLine",
                         "queryLine", "breakLine", "typeConv"]:
-            # varios tools -> unselected selected features
+            # various tools -> unselected selected features
             self.digit.GetDisplay().SetSelected([])
             if action in ["moveLine", "moveVertex", "editLine"] and \
                     hasattr(self, "moveInfo"):
@@ -789,6 +789,7 @@ class VDigitWindow(BufferedWindow):
         
         action = self.toolbar.GetAction()
         if action in ("deleteLine",
+                      "deleteArea",
                       "moveLine",
                       "moveVertex",
                       "copyCats",
@@ -919,6 +920,11 @@ class VDigitWindow(BufferedWindow):
         elif action == "deleteLine":
             # -> delete selected vector features
             if self.digit.DeleteSelectedLines() < 0:
+                return
+            self._updateATM()
+        elif action == "deleteArea":
+            # -> delete selected vector areas
+            if self.digit.DeleteSelectedAreas() < 0:
                 return
             self._updateATM()
         elif action == "splitLine":

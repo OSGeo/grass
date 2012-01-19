@@ -105,6 +105,9 @@ class VDigitToolbar(BaseToolbar):
             'deleteLine'      : MetaIcon(img = 'line-delete',
                                          label = _('Delete feature(s)'),
                                          desc = _('Left: Select; Ctrl+Left: Unselect; Right: Confirm')),
+            'deleteArea'      : MetaIcon(img = 'polygon-delete',
+                                         label = _('Delete area(s)'),
+                                         desc = _('Left: Select; Ctrl+Left: Unselect; Right: Confirm')),
             'displayAttr'     : MetaIcon(img = 'attributes-display',
                                          label = _('Display/update attributes'),
                                          desc = _('Left: Select')),
@@ -180,6 +183,10 @@ class VDigitToolbar(BaseToolbar):
         if not self.tools or 'deleteLine' in self.tools:
             data.append(("deleteLine", icons["deleteLine"],
                          self.OnDeleteLine,
+                         wx.ITEM_CHECK))
+        if not self.tools or 'deleteArea' in self.tools:
+            data.append(("deleteArea", icons["deleteArea"],
+                         self.OnDeleteArea,
                          wx.ITEM_CHECK))
         if not self.tools or 'displayCats' in self.tools:
             data.append(("displayCats", icons["displayCats"],
@@ -350,6 +357,13 @@ class VDigitToolbar(BaseToolbar):
         Debug.msg(2, "Digittoolbar.OnDeleteLine():")
         self.action = { 'desc' : "deleteLine",
                         'id'   : self.deleteLine }
+        self.MapWindow.mouse['box'] = 'box'
+
+    def OnDeleteArea(self, event):
+        """!Delete Area"""
+        Debug.msg(2, "Digittoolbar.OnDeleteArea():")
+        self.action = { 'desc' : "deleteArea",
+                        'id'   : self.deleteArea }
         self.MapWindow.mouse['box'] = 'box'
 
     def OnDisplayCats(self, event):

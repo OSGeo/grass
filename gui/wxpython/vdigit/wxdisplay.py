@@ -871,6 +871,7 @@ class DisplayDriver:
         # open existing map
         if update:
             ret = Vect_open_update(self.poMapInfo, name, mapset)
+            Vect_set_updated(self.poMapInfo, True) # track updated lines
         else:
             ret = Vect_open_old(self.poMapInfo, name, mapset)
         self.is3D = Vect_is_3d(self.poMapInfo)
