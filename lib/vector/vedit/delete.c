@@ -89,7 +89,7 @@ int Vedit_delete_area_centroid(struct Map_info *Map, int centroid)
 */
 int Vedit_delete_area(struct Map_info *Map, int area)
 {
-    int i, centroid, left, right;
+    int i, line, centroid, left, right;
     struct ilist *list;
 
     list   = Vect_new_list();
@@ -106,12 +106,13 @@ int Vedit_delete_area(struct Map_info *Map, int area)
     Vect_get_area_boundaries(Map, area, list);
     if (list->n_values > 0) {
 	for (i = 0; i < list->n_values; i++) {
-	    Vect_get_line_areas(Map, abs(list->value[i]), &left, &right);
+	    line = abs(list->value[i]);
+	    Vect_get_line_areas(Map, line, &left, &right);
 	    if (left > 0 && right > 0)
 		/* do not delete common boundaries */
 		continue;
 	    
-	    Vect_delete_line(Map, list->value[i]);
+	    Vect_delete_line(Map, line);
 	}
     }
     else {
