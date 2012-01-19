@@ -1,17 +1,13 @@
 MODULE_TOPDIR = ../..
 
-include $(MODULE_TOPDIR)/include/Make/Other.make
+include $(MODULE_TOPDIR)/include/Make/Vars.make
 
-SQLDIR = $(ETC)/sql
+#order is relevant:
+SUBDIRS = \
+	SQL \
+	src
 
-SQLFILES:= $(wildcard *.sql)
+include $(MODULE_TOPDIR)/include/Make/Dir.make
 
-DSTFILES := $(patsubst %.sql,$(SQLDIR)/%.sql,$(SQLFILES))
+default: subdirs
 
-default: $(DSTFILES)
-
-$(SQLDIR):  
-	$(MKDIR) $@
-
-$(SQLDIR)/%.sql: %.sql | $(SQLDIR)
-	$(INSTALL_DATA) $< $@
