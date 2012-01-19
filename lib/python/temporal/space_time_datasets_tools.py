@@ -476,17 +476,17 @@ def assign_valid_time_to_map(ttype, map, start, end, increment=None, mult=1, dbi
         connect = True
 
     if ttype == "absolute":
-        # Create the start time object
-        if start.find(":") > 0:
-            time_format = "%Y-%m-%d %H:%M:%S"
-        else:
-            time_format = "%Y-%m-%d"
-
-        start_time = datetime.strptime(start, time_format)
+        start_time = string_to_datetime(start)
+        if start_time == None:
+            dbif.close()
+            core.fatal_error(_("Unable to convert string \"%s\"into a datetime object")%(start))
         end_time = None
         
         if end:
-            end_time = datetime.strptime(end, time_format)
+            end_time = string_to_datetime(end)
+            if end_time == None:
+                dbif.close()
+                core.fatal_error(_("Unable to convert string \"%s\"into a datetime object")%(end))
 
         # Add the increment
         if increment:

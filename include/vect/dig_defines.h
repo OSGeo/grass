@@ -28,6 +28,8 @@
 #define GV_COLR_ELEMENT "colr"
 /*! \brief Name of directory for alternative color tables */
 #define GV_COLR2_DIRECTORY "vcolr2"
+/*! \brief Name of the timestamp file */
+#define GV_TIMESTAMP_ELEMENT "timestamp"
 
 /*! \brief Endian check
 

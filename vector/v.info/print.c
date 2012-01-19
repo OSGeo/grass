@@ -229,9 +229,21 @@ void print_info(const struct Map_info *Map)
     int i;
     char line[100];
     char tmp1[100], tmp2[100];
-
+    char timebuff[256];
+    struct TimeStamp ts;
+    int time_ok = 0, first_time_ok = 0, second_time_ok = 0;
     struct bound_box box;
-    
+   
+    /*Check the Timestamp */
+    time_ok = G_read_vector_timestamp(Vect_get_name(Map), "", &ts);
+    /*Check for valid entries, show none if no timestamp available */
+    if (time_ok == 1) {
+	if (ts.count > 0)
+	    first_time_ok = 1;
+	if (ts.count > 1)
+	    second_time_ok = 1;
+    }
+
     divider('+');
     if (Vect_maptype(Map) & (GV_FORMAT_OGR | GV_FORMAT_OGR_DIRECT)) {
 	/* for OGR format print also datasource and layer */
@@ -284,6 +296,17 @@ void print_info(const struct Map_info *Map)
 	    Vect_get_map_date(Map));
     printline(line);
     
+    /*This shows the TimeStamp */
+    if (time_ok  == 1 && (first_time_ok || second_time_ok)) {
+        G_format_timestamp(&ts, timebuff);
+        sprintf(line, "%-17s%s", _("Timestamp: "), timebuff);
+    }
+    else {
+        sprintf(line, "%-17s%s", _("Timestamp: none"), timebuff);
+    }
+    printline(line);
+
+
     divider('|');
     
     sprintf(line, "  %s: %s (%s: %i)",
