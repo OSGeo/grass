@@ -76,11 +76,12 @@
  */
 
 #include <string.h>
+#include <unistd.h>    
 #include <grass/gis.h>
+#include <grass/vect/dig_defines.h>
 #include <grass/glocale.h>
 
 #define RAST_MISC "cell_misc"
-#define VECT_MISC "dig_misc"
 #define GRID3	  "grid3"
 
 /*!
@@ -376,25 +377,51 @@ int G_remove_raster_timestamp(const char *name)
 /*!
   \brief Read timestamp from vector map
   
-  Is this used anymore with the new GRASS 6 vector engine???
-  
   \param name map name
   \param mapset mapset name
   \param[out] ts TimeStamp struct to populate
 
   \return 1 on success
-  \return 0 or negative on error
+  \return 0 no timestamp present
+  \return -1 Unable to open file 
+  \return -2 invalid time stamp
 */
 int G_read_vector_timestamp(const char *name, const char *mapset,
 			    struct TimeStamp *ts)
 {
-    return read_timestamp("vector", VECT_MISC, name, mapset, ts);
+    FILE *fd;
+    int stat;
+    char dir[GPATH_MAX];
+    char path[GPATH_MAX + GNAME_MAX];
+
+    G_snprintf(dir, GPATH_MAX, "%s/%s", GV_DIRECTORY, name);
+    G_file_name(path, dir, GV_TIMESTAMP_ELEMENT, mapset);
+
+    G_debug(1, "Reading vector timestamp file: %s", path);
+
+    /* In case no timestamp file is present return 0 */
+    if (access(path, R_OK) != 0)
+	return 0;
+
+    fd = G_fopen_old(dir, GV_TIMESTAMP_ELEMENT, mapset);
+    
+    if (fd == NULL) {
+	G_warning(_("Unable to open timestamp file for vector map <%s@%s>"),
+		  name, G_mapset());
+	return -1;
+    }
+
+    stat = G__read_timestamp(fd, ts);
+    fclose(fd);
+    if (stat == 0)
+	return 1;
+    G_warning(_("Invalid timestamp file for vector map <%s@%s>"),
+	        name, mapset);
+    return -2;
 }
 
 /*!
   \brief Remove timestamp from vector map
-  
-  Is this used anymore with the new GRASS 6 vector engine???
   
   Only timestamp files in current mapset can be removed.
 
@@ -406,7 +433,10 @@ int G_read_vector_timestamp(const char *name, const char *mapset,
 */
 int G_remove_vector_timestamp(const char *name)
 {
-    return G_remove_misc(VECT_MISC, "timestamp", name);
+    char dir[GPATH_MAX];
+
+    G_snprintf(dir, GPATH_MAX, "%s/%s", GV_DIRECTORY, name);
+    return G_remove(dir, GV_TIMESTAMP_ELEMENT);
 }
 
 /*!
@@ -470,7 +500,27 @@ int G_write_raster_timestamp(const char *name, const struct TimeStamp *ts)
  */
 int G_write_vector_timestamp(const char *name, const struct TimeStamp *ts)
 {
-    return write_timestamp("vector", VECT_MISC, name, ts);
+    FILE *fd;
+    int stat;
+    char dir[GPATH_MAX];
+
+    G_snprintf(dir, GPATH_MAX, "%s/%s", GV_DIRECTORY, name);
+
+    fd = G_fopen_new(dir, GV_TIMESTAMP_ELEMENT);
+    
+    if (fd == NULL) {
+	G_warning(_("Unable to create timestamp file for vector map <%s@%s>"),
+		  name, G_mapset());
+	return -1;
+    }
+
+    stat = G__write_timestamp(fd, ts);
+    fclose(fd);
+    if (stat == 0)
+	return 1;
+    G_warning(_("Invalid timestamp specified for vector map <%s@%s>"),
+	      name, G_mapset());
+    return -2;
 }
 
 /*!

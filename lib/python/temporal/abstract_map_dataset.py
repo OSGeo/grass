@@ -21,6 +21,7 @@ for details.
 @author Soeren Gebbert
 """
 from abstract_dataset import *
+from datetime_math import *
 
 ###############################################################################
 
@@ -39,7 +40,7 @@ class abstract_map_dataset(abstract_dataset):
     def get_stds_register(self):
         """Return the space time dataset register table name in which stds are listed in which this map is registered"""
         raise IOError("This method must be implemented in the subclasses")
-        
+
     def set_stds_register(self, name):
         """Set the space time dataset register table name.
         
@@ -48,7 +49,11 @@ class abstract_map_dataset(abstract_dataset):
            @param ident: The name of the register table
         """
         raise IOError("This method must be implemented in the subclasses")
-        
+      
+    def get_timestamp_module_name(self):
+        """Return the name of the C-module to set the time stamp in the file system"""
+        raise IOError("This method must be implemented in the subclasses")
+   
     def load(self):
         """Load the content of this object from map files"""
         raise IOError("This method must be implemented in the subclasses")
@@ -162,6 +167,14 @@ class abstract_map_dataset(abstract_dataset):
         if connect == True:
             dbif.close()
 
+        # Start the grass C-module to set the time in the file system
+        start = datetime_to_grass_datetime_string(start_time)
+        if end_time:
+            end = datetime_to_grass_datetime_string(end_time)
+            start += " / %s"%(end)
+
+        core.run_command(self.get_timestamp_module_name(), map=self.get_id(), date=start)
+
     def set_relative_time(self, start_time, end_time=None):
         """Set the relative time interval 
         
@@ -188,8 +201,8 @@ class abstract_map_dataset(abstract_dataset):
     def update_relative_time(self, start_time, end_time=None, dbif = None):
         """Update the relative time interval
 
-           @param start_time: A double value in days
-           @param end_time: A double value in days
+           @param start_time: A double value 
+           @param end_time: A double value 
            @param dbif: The database interface to be used
         """
         connect = False
@@ -275,6 +288,9 @@ class abstract_map_dataset(abstract_dataset):
 
             # Delete yourself from the database, trigger functions will take care of dependencies
             self.base.delete(dbif)
+
+        # Remove the timestamp from the file system
+        core.run_command(self.get_timestamp_module_name(), map=self.get_id(), date="none")
 
         self.reset(None)
         dbif.connection.commit()

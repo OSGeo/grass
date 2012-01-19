@@ -23,6 +23,7 @@ for details.
 from datetime import datetime, date, time, timedelta
 import grass.script.core as core
 import copy
+from dateutil import parser
 
 
 ###############################################################################
@@ -314,3 +315,35 @@ def compute_datetime_delta(start, end):
 
     return comp
 
+###############################################################################
+
+def string_to_datetime(time_string):
+    """Convert a string into a datetime object using the dateutil parser. Return None in case of failure"""
+
+    # BC is not suported
+    if time_string.find("bc") > 0:
+        core.error("Dates Before Christ are not supported in the temporal database")
+        return None
+
+    try:
+        dt = parser.parse(time_string)
+        return dt
+    except:
+        return None
+
+###############################################################################
+
+def datetime_to_grass_datetime_string(dt):
+    """Convert a python datetime object into a GRASS datetime string"""
+
+    # GRASS datetime month names
+    month_names  = ["", "jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"]
+
+    # Check for time zone infor in the datetime object
+    if dt.tzinfo != None:
+        string = "%.2i %s %.2i %.2i:%.2i:%.2i %+.4i"%(dt.day, month_names[dt.month], dt.year, \
+                 dt.hour, dt.minute, dt.second, dt.tzinfo._offset.seconds/3600*100)
+    else:
+        string = "%.2i %s %.4i %.2i:%.2i:%.2i"%(dt.day, month_names[dt.month], dt.year, dt.hour, dt.minute, dt.second)
+
+    return string

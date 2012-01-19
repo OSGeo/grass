@@ -59,6 +59,10 @@ class raster_dataset(abstract_map_dataset):
     def set_stds_register(self, name):
         """Set the space time dataset register table name in which stds are listed in which this map is registered"""
         self.metadata.set_strds_register(name)
+ 
+    def get_timestamp_module_name(self):
+        """Return the name of the C-module to set the time stamp in the file system"""
+        return "r.timestamp"
 
     def reset(self, ident):
 	"""Reset the internal structure and set the identifier"""
@@ -133,6 +137,10 @@ class raster3d_dataset(abstract_map_dataset):
     def set_stds_register(self, name):
         """Set the space time dataset register table name in which stds are listed in which this map is registered"""
         self.metadata.set_str3ds_register(name)
+ 
+    def get_timestamp_module_name(self):
+        """Return the name of the C-module to set the time stamp in the file system"""
+        return "r3.timestamp"
 
     def reset(self, ident):
 	"""Reset the internal structure and set the identifier"""
@@ -211,6 +219,10 @@ class vector_dataset(abstract_map_dataset):
     def set_stds_register(self, name):
         """Set the space time dataset register table name in which stds are listed in which this map is registered"""
         self.metadata.set_stvds_register(name)
+ 
+    def get_timestamp_module_name(self):
+        """Return the name of the C-module to set the time stamp in the file system"""
+        return "v.timestamp"
 
     def reset(self, ident):
 	"""Reset the internal structure and set the identifier"""
