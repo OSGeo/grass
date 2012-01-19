@@ -433,7 +433,7 @@ int main(int argc, char *argv[])
     /* read and compute the scale factor */
     sscanf(param.elevscale->answer, "%lf", &scale);
     /*if LL projection, convert the elevation values to degrees */
-    if (region.proj == PROJECTION_LL) {
+    if (param.scalell->answer && region.proj == PROJECTION_LL) {
         llscale = M_PI / (180) * 6378137;
         scale /= llscale;
     }

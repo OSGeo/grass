@@ -19,17 +19,21 @@
 /*!
  * \brief 
  *
- *  This function
+ * This function
  * returns a pointer to a tile which contains the data for the tile with index
  * <em>tileIndex</em>.  The type of the data stored in the tile depends on the type
  * specified at the initialization time of <em>map</em>.  The functionality is
  * different depending on whether <em>map</em> is old or new and depending on the
  * cache-mode of <em>map</em>.<br>
+ * 
  * If <em>map</em> is old and the cache is not used the tile with <em>tileIndex</em>
  * is read from file and stored in the buffer provided by the map structure.
  * The pointer to this buffer is returned. If the buffer already contains the
  * tile with <em>tileIndex</em> reading is skipped. Data which was stored in
- * earlier calls to <tt>Rast3d_get_tile_ptr</tt> is destroyed.  If the tile with <em>tileIndex</em> is not stored on the file corresponding to <em>map</em>, and <em>tileIndex</em> is a valid index the buffer is filled with NULL-values.<br>
+ * earlier calls to <tt>Rast3d_get_tile_ptr</tt> is destroyed.  
+ * If the tile with <em>tileIndex</em> is not stored on the file corresponding 
+ * to <em>map</em>, and <em>tileIndex</em> is a valid index the buffer is filled with NULL-values.<br>
+ * 
  * If <em>map</em> is old and the cache is used the tile with <em>tileIndex</em> is
  * read from file and stored in one of the cache buffers.  The pointer to buffer
  * is returned.  If no free cache buffer is available an unlocked cache-buffer
@@ -38,6 +42,7 @@
  * index the buffer is filled with NULL-values.  If one
  * of the cache buffers already contains the tile with <em>tileIndex</em> reading
  * is skipped and the pointer to this buffer is returned.<br>
+ * 
  * If <em>map</em> is new and the cache is not used the functionality is the same
  * as if <em>map</em> is old and the cache is not used.  If the tile with <em>tileIndex</em> 
  * is already stored on file, it is read into the buffer, if not,
@@ -46,6 +51,7 @@
  * values already stored in the buffer.  Use <tt>Rast3d_flush_tile</tt> to write the buffer
  * to the file before reusing it for a different index.  The use of this buffer
  * as write buffer is discouraged.<br>
+ * 
  * If <em>map</em> is new and the cache is used the functionality is the same as if
  * <em>map</em> is old and the cache is used with the following exception.  If <em>tileIndex</em> 
  * is a valid index and the tile with this index is not found in
@@ -56,6 +62,7 @@
  * destroyed. If a cache buffer needs to be freed up, and the tile stored in the
  * buffer has not been written to the file corresponding to <em>map</em> yet, the
  * tile is copied into the file-cache.<br>
+ * 
  * Care has to be taken if this function is used in non-cache mode since it is
  * implicitly invoked every time a read or write request is issued.  The only
  * I/O-functions for which it is safe to assume that they do not invoke
@@ -64,7 +71,7 @@
  *
  *  \param map
  *  \param tileIndex
- *  \return char * a pointer to a buffer ... if successful,
+ *  \return void * a pointer to a buffer ... if successful,
  *                 NULL ... otherwise.
  */
 

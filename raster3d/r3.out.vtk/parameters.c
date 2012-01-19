@@ -91,7 +91,6 @@ void set_params()
     param.vectormaps->description =
 	_("Three (x,y,z) 3D raster maps to create vector values [xmap,ymap,zmap]");
 
-
     param.elevscale = G_define_option();
     param.elevscale->key = "elevscale";
     param.elevscale->type = TYPE_DOUBLE;
@@ -126,6 +125,13 @@ void set_params()
     param.coorcorr->guisection = "Advanced options";
     param.coorcorr->description =
 	_("Correct the coordinates to fit the VTK-OpenGL precision");
+
+    param.scalell = G_define_flag();
+    param.scalell->key = 'l';
+    param.scalell->guisection = "Advanced options";
+    param.scalell->description =
+	_("Do not convert the top-bottom resolution in case of lat long projection to meters");
+
 
     /* Maybe needed in the future
      * param.xml = G_define_flag ();

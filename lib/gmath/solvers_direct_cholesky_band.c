@@ -9,7 +9,7 @@
  * \brief Cholesky decomposition of a symmetric band matrix
  *
  * \param A (double**) the input symmetric band matrix
- * \param T (double**) the resulting lower tringular sband matrix
+ * \param T (double**) the resulting lower tringular symmetric band matrix
  * \param rows (int) number of rows
  * \param bandwidth (int) the bandwidth of the symmetric band matrix
  *
