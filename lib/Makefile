@@ -42,9 +42,9 @@ SUBDIRS = \
 	arraystats \
 	ogsf \
 	nviz \
+	temporal \
 	python \
 	iostream \
-	temporal \
 	manage
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
