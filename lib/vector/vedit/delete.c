@@ -142,6 +142,8 @@ int Vedit_delete_areas_cat(struct Map_info *Map, int field, int cat)
     nareas = Vect_get_num_areas(Map);
     nremoved = 0;
     for (area = 1; area <= nareas; area++) {
+	if (!Vect_area_alive(Map, area))
+	    continue;
 	if (Vect_get_area_cat(Map, area, field) != cat)
 	    continue;
 	
