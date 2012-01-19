@@ -27,53 +27,43 @@ import grass.script.core as core
 
 ###############################################################################
 
-def get_temporal_sqlite3_default_path(grassenv):
-    dbpath = os.path.join(grassenv["GISDBASE"], grassenv["LOCATION_NAME"])
-    dbpath = os.path.join(dbpath, "PERMANENT")
-    return dbpath
-
-def get_temporal_sqlite3_default_dbname(grassenv):
-    return "tgis.db"
-
 # The chosen DBMI backend can be defined on runtime
 # Check the grass environment before import
-grassenv = core.gisenv()
-if grassenv.has_key("TDBMI"):
-    if grassenv["TDBMI"] == "sqlite3":
+core.run_command("t.connect", flags="c")
+kv = core.parse_command("t.connect", flags="pg")
+if kv.has_key("driver"):
+    if kv["driver"] == "sqlite":
         import sqlite3 as dbmi
-    elif grassenv["TDBMI"] == "psycopg2":
+    elif kv["driver"] == "pg":
         import psycopg2 as dbmi
         # Needed for dictionary like cursors
         import psycopg2.extras
     else:
-        core.fatal(_("Unable to initialize the temporal DBMI interface: %s. \nPlease set g.gisenv set=\"TDBMI=sqlite3\" or g.gisenv set=\"TDBMI=psycopg2\"") % grassenv["TDBMI"])
+        core.fatal(_("Unable to initialize the temporal DBMI interface. Use t.connect to specify the driver and the database string"))
 else:
     # Use the default sqlite variable
+    core.run_command("t.connect", flags="d")
     import sqlite3 as dbmi
-    # We do not set the path due to issues with the grass build system
-    #core.run_command("g.gisenv", set="TDBMI=sqlite3")
-    #core.run_command("g.gisenv", set="TDBMI_INIT=%s" % get_temporal_sqlite3_default_dbname(grassenv))
 
 ###############################################################################
 
 def get_temporal_dbmi_init_string():
+    kv = core.parse_command("t.connect", flags="pg")
     grassenv = core.gisenv()
     if dbmi.__name__ == "sqlite3":
-        if grassenv.has_key("TDBMI_INIT"):
-
-            string =  grassenv["TDBMI_INIT"]
-
-            # In case no path is present in the sqlite3 database string, we attach the default path
-            if string.find("/") < 0 or string.find("\\") < 0:
-                return os.path.join(get_temporal_sqlite3_default_path(grassenv), string)
-            
-            return grassenv["TDBMI_INIT"]
+        if kv.has_key("database"):
+            string =  kv["database"]
+            string = string.replace("$GISDBASE", grassenv["GISDBASE"])
+            string = string.replace("$LOCATION_NAME", grassenv["LOCATION_NAME"])
+            return string
         else:
-            return os.path.join(get_temporal_sqlite3_default_path(grassenv), get_temporal_sqlite3_default_dbname(grassenv))
+            core.fatal(_("Unable to initialize the temporal GIS DBMI interface. Use t.connect to specify the driver and the database string"))
     elif dbmi.__name__ == "psycopg2":
-        if grassenv.has_key("TDBMI_INIT"):
-            return grassenv["TDBMI_INIT"]
+        if kv.has_key("database"):
+            string =  kv["database"]
+            return string
         else:
+            core.fatal(_("Unable to initialize the temporal GIS DBMI interface. Use t.connect to specify the driver and the database string"))
 	    return "dbname=grass_test user=soeren password=abcdefgh"
 
 ###############################################################################
