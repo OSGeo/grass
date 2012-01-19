@@ -1,0 +1,44 @@
+<h2>DESCRIPTION</h2>
+
+<em>t.connect</em> allows the user to set the temporal GIS database connection.
+
+<h2>NOTES</h2>
+
+Values are stored in the mapset's <tt>VAR</tt> file;
+the connection is not tested for validity.
+<p>The <b>-d</b> flag will set the default TGIS connection parameters. 
+A sqlite3 database "tgis.db" will be created in the PERMANET directory of the current location.
+<p>The <b>-p</b> flag will display the current TGIS connection parameters. 
+<p>The <b>-pg</b> flag will display the current TGIS connection parameters using shell style. 
+<p>The <b>-c</b> flag will silently check if the TGIS connection parameters have
+been set, and if not will set them to use GRASS's default values.
+
+<h2>Note</h2>
+The default TGIS database of type sqlite3 is located in the PERMANENT mapset directory.
+Temporal GIS content from all created mapsets will be stored here. In case
+you have thousends of maps to register in the temporal database or you need concurrent read 
+and write access in the TGIS database, consider to use a postgresql database instead.
+
+<h3>SQLite</h3>
+
+<div class="code"><pre>
+t.connect driver=sqlite database='$GISDBASE/$LOCATION_NAME/PERMANENT/tgis.db'
+t.connect -p
+t.info -s
+</pre></div>
+<p>The SQLite database is created automatically when used the first time.
+
+<h3>PostgreSQL</h3>
+In case you use a postgresql database, you will need to specify the TGIS database connection 
+for each mapset.
+<div class="code"><pre>
+t.connect driver=pg database="dbname=grass_test user=soeren password=abcdefgh"
+t.connect -p
+t.info -s
+</pre></div>
+
+<h2>AUTHOR</h2>
+
+Soeren Gebbert, vTI/AK Braunschweig
+
+<p><i>Last changed: $Date: 2011-11-08 22:24:20 +0100 (Di, 08. Nov 2011) $</i>
