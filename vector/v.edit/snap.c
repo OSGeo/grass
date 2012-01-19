@@ -58,7 +58,7 @@ int snap_line2(struct Map_info *Map, int line1, int line2, double thresh)
 {
     struct line_pnts *Points1, *Points2;
     struct line_cats *Cats2;
-    int type1, type2;
+    int type2;
     int newline;
     double mindist;
     int mindistidx;
@@ -67,7 +67,7 @@ int snap_line2(struct Map_info *Map, int line1, int line2, double thresh)
     Points2 = Vect_new_line_struct();
     Cats2 = Vect_new_cats_struct();
 
-    type1 = Vect_read_line(Map, Points1, NULL, line1);
+    Vect_read_line(Map, Points1, NULL, line1);
     type2 = Vect_read_line(Map, Points2, Cats2, line2);
 
     /* find mininal distance and its indexes */

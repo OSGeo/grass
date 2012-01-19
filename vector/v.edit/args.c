@@ -53,7 +53,8 @@ int parser(int argc, char *argv[], struct GParams *params,
 	       "flip;%s;"
 	       "connect;%s;"
 	       "zbulk;%s;"
-	       "chtype;%s",
+	       "chtype;%s;"
+	       "areadel;%s",
 	       _("Create new (empty) vector map"),
 	       _("Add new features to existing vector map"),
 	       _("Delete selected features from vector map"),
@@ -74,11 +75,12 @@ int parser(int argc, char *argv[], struct GParams *params,
 	       _("Connect two lines"),
 	       _("Z bulk-labeling (automated assignment of z coordinate to "
 		 "vector lines)"),
-	       _("Change feature type (point<->centroid, line<->boundary)"));
+	       _("Change feature type (point<->centroid, line<->boundary)"),
+	       _("Delete selected areas from vector map (based on selected centroids)"));
     params->tool->descriptions = desc;
     params->tool->options = "create,add,delete,copy,move,flip,catadd,catdel,"
 	"merge,break,snap,connect,chtype,"
-	"vertexadd,vertexdel,vertexmove,zbulk,select";
+	"vertexadd,vertexdel,vertexmove,areadel,zbulk,select";
 
     params->in = G_define_standard_option(G_OPT_F_INPUT);
     params->in->required = NO;
@@ -221,59 +223,62 @@ int parser(int argc, char *argv[], struct GParams *params,
     /*
        check that the given arguments makes sense together
      */
-    if (G_strcasecmp(params->tool->answer, "create") == 0) {
+    if (strcmp(params->tool->answer, "create") == 0) {
 	*action_mode = MODE_CREATE;
     }
-    else if (G_strcasecmp(params->tool->answer, "add") == 0) {
+    else if (strcmp(params->tool->answer, "add") == 0) {
 	*action_mode = MODE_ADD;
     }
-    else if (G_strcasecmp(params->tool->answer, "delete") == 0) {
+    else if (strcmp(params->tool->answer, "delete") == 0) {
 	*action_mode = MODE_DEL;
     }
-    else if (G_strcasecmp(params->tool->answer, "move") == 0) {
+    else if (strcmp(params->tool->answer, "move") == 0) {
 	*action_mode = MODE_MOVE;
     }
-    else if (G_strcasecmp(params->tool->answer, "merge") == 0) {
+    else if (strcmp(params->tool->answer, "merge") == 0) {
 	*action_mode = MODE_MERGE;
     }
-    else if (G_strcasecmp(params->tool->answer, "break") == 0) {
+    else if (strcmp(params->tool->answer, "break") == 0) {
 	*action_mode = MODE_BREAK;
     }
-    else if (G_strcasecmp(params->tool->answer, "connect") == 0) {
+    else if (strcmp(params->tool->answer, "connect") == 0) {
 	*action_mode = MODE_CONNECT;
     }
-    else if (G_strcasecmp(params->tool->answer, "vertexadd") == 0) {
+    else if (strcmp(params->tool->answer, "vertexadd") == 0) {
 	*action_mode = MODE_VERTEX_ADD;
     }
-    else if (G_strcasecmp(params->tool->answer, "vertexdel") == 0) {
+    else if (strcmp(params->tool->answer, "vertexdel") == 0) {
 	*action_mode = MODE_VERTEX_DELETE;
     }
-    else if (G_strcasecmp(params->tool->answer, "vertexmove") == 0) {
+    else if (strcmp(params->tool->answer, "vertexmove") == 0) {
 	*action_mode = MODE_VERTEX_MOVE;
     }
-    else if (G_strcasecmp(params->tool->answer, "select") == 0) {
+    else if (strcmp(params->tool->answer, "select") == 0) {
 	*action_mode = MODE_SELECT;
     }
-    else if (G_strcasecmp(params->tool->answer, "catadd") == 0) {
+    else if (strcmp(params->tool->answer, "catadd") == 0) {
 	*action_mode = MODE_CATADD;
     }
-    else if (G_strcasecmp(params->tool->answer, "catdel") == 0) {
+    else if (strcmp(params->tool->answer, "catdel") == 0) {
 	*action_mode = MODE_CATDEL;
     }
-    else if (G_strcasecmp(params->tool->answer, "copy") == 0) {
+    else if (strcmp(params->tool->answer, "copy") == 0) {
 	*action_mode = MODE_COPY;
     }
-    else if (G_strcasecmp(params->tool->answer, "snap") == 0) {
+    else if (strcmp(params->tool->answer, "snap") == 0) {
 	*action_mode = MODE_SNAP;
     }
-    else if (G_strcasecmp(params->tool->answer, "flip") == 0) {
+    else if (strcmp(params->tool->answer, "flip") == 0) {
 	*action_mode = MODE_FLIP;
     }
-    else if (G_strcasecmp(params->tool->answer, "zbulk") == 0) {
+    else if (strcmp(params->tool->answer, "zbulk") == 0) {
 	*action_mode = MODE_ZBULK;
     }
-    else if (G_strcasecmp(params->tool->answer, "chtype") == 0) {
+    else if (strcmp(params->tool->answer, "chtype") == 0) {
 	*action_mode = MODE_CHTYPE;
+    }
+    else if (strcmp(params->tool->answer, "areadel") == 0) {
+	*action_mode = MODE_AREA_DEL;
     }
     else {
 	G_fatal_error(_("Operation '%s' not implemented"),

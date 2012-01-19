@@ -121,14 +121,14 @@ int main(int argc, char *argv[])
 	    ret = Vect_open_update2(&Map, params.map->answer, G_mapset(), params.fld->answer);
 	else			/* read-only -- select features */
 	    ret = Vect_open_old2(&Map, params.map->answer, G_mapset(), params.fld->answer);
-
+	
 	if (ret < 2)
 	    G_fatal_error(_("Unable to open vector map <%s> at topological level %d"),
 			  params.map->answer, 2);
     }
 
     G_debug(1, "Map opened");
-
+    
     /* open backgroud maps */
     if (params.bmaps->answer) {
 	i = 0;
@@ -365,35 +365,48 @@ int main(int argc, char *argv[])
 	break;
     case MODE_NONE:
 	break;
-    case MODE_ZBULK:{
-	    double start, step;
-	    double x1, y1, x2, y2;
-
-	    start = atof(params.zbulk->answers[0]);
-	    step = atof(params.zbulk->answers[1]);
-
-	    x1 = atof(params.bbox->answers[0]);
-	    y1 = atof(params.bbox->answers[1]);
-	    x2 = atof(params.bbox->answers[2]);
-	    y2 = atof(params.bbox->answers[3]);
-
-	    ret = Vedit_bulk_labeling(&Map, List,
-				      x1, y1, x2, y2, start, step);
-
-	    G_message(_("%d lines labeled"), ret);
-	    break;
+    case MODE_ZBULK: {
+	double start, step;
+	double x1, y1, x2, y2;
+	
+	start = atof(params.zbulk->answers[0]);
+	step = atof(params.zbulk->answers[1]);
+	
+	x1 = atof(params.bbox->answers[0]);
+	y1 = atof(params.bbox->answers[1]);
+	x2 = atof(params.bbox->answers[2]);
+	y2 = atof(params.bbox->answers[3]);
+	
+	ret = Vedit_bulk_labeling(&Map, List,
+				  x1, y1, x2, y2, start, step);
+	
+	G_message(_("%d lines labeled"), ret);
+	break;
+    }
+    case MODE_CHTYPE:
+	ret = Vedit_chtype_lines(&Map, List);
+	
+	if (ret > 0) {
+	    G_message(_("%d features converted"), ret);
 	}
-    case MODE_CHTYPE:{
-	    ret = Vedit_chtype_lines(&Map, List);
-
-	    if (ret > 0) {
-		G_message(_("%d features converted"), ret);
-	    }
-	    else {
-		G_message(_("No feature modified"));
-	    }
-	    break;
+	else {
+	    G_message(_("No feature modified"));
 	}
+	break;
+    case MODE_AREA_DEL: {
+	ret = 0;
+	for (i = 0; i < List->n_values; i++) {
+	    if (Vect_get_line_type(&Map, List->value[i]) != GV_CENTROID) {
+		G_warning(_("Select feature %d is not centroid, ignoring..."),
+			  List->value[i]);
+		continue;
+	    }
+	    
+	    ret += Vedit_delete_area_centroid(&Map, List->value[i]);
+	}
+	G_message(_("%d areas removed"), ret);
+	break;
+    }
     default:
 	G_warning(_("Operation not implemented"));
 	ret = -1;
