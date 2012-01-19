@@ -17,8 +17,10 @@ int Vedit_copy_lines(struct Map_info *, struct Map_info *, struct ilist *);
 int Vedit_chtype_lines(struct Map_info *, struct ilist *);
 
 /* delete.c */
-
 int Vedit_delete_lines(struct Map_info *, struct ilist *);
+int Vedit_delete_area_centroid(struct Map_info *, int);
+int Vedit_delete_area(struct Map_info *, int);
+int Vedit_delete_areas_cat(struct Map_info *, int, int);
 
 /* distance.c */
 double Vedit_get_min_distance(struct line_pnts *, struct line_pnts *,

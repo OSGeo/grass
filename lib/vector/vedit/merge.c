@@ -52,11 +52,11 @@ int Vedit_merge_lines(struct Map_info *Map, struct ilist *List)
     struct line_cats *Cats1, *Cats2;
 
     int line_i, i, j;
-    int line, line1, type1, line2, type2;
+    int line, line1, type1, line2;
     int do_merge;
 
     /* number of lines (original, selected, merged) */
-    int nlines, nlines_selected, nlines_merged;
+    int nlines, nlines_merged;
 
     nlines_merged = 0;
 
@@ -73,8 +73,7 @@ int Vedit_merge_lines(struct Map_info *Map, struct ilist *List)
     List_in_box = Vect_new_list();
 
     nlines = Vect_get_num_lines(Map);
-    nlines_selected = List->n_values;
-
+    
     /* merge lines */
     for (line_i = 0; line_i < List->n_values; line_i++) {
 	line1 = List->value[line_i];
@@ -136,7 +135,7 @@ int Vedit_merge_lines(struct Map_info *Map, struct ilist *List)
 		if (!do_merge || line2 < 0)
 		    continue;
 
-		type2 = Vect_read_line(Map, Points2, Cats2, line2);
+		Vect_read_line(Map, Points2, Cats2, line2);
 
 		merge_lines(Points1, Cats1, Points2, Cats2, -1.0, &Points);	/* do not use threshold value */
 
