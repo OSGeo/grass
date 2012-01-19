@@ -316,7 +316,7 @@ Rast3d_compute_clipped_tile_dimensions(RASTER3D_Map * map, int tileIndex, int *r
  *
  * This function computes tile sizes with an optimal ratio between tile dimensions and
  * minimized border tile overlapping.
- * Large dimensions will be reduced mor often than small dimensions to
+ * Large dimensions (in most cases x and y) will be reduced more often than small dimensions to
  * fit the maxSize criteria.
  *
  *  \param region The region of the map
@@ -360,8 +360,8 @@ Rast3d_compute_optimal_tile_dimension(RASTER3D_Region *region, int type, int *ti
        /* Compute weighted tile sizes. Take care that the tile size is computed based on
           the dimension ratio and reduce the border tile overlapping. 
           In case one dimension is much larger than the other, reduce 
-          the large dimension by a factor till the maxSize is reached or the 
-          the other dimensions are only factor 2 smaller.*/
+          the large dimension by a factor till the maxSize is reached or till the 
+          the other dimensions are only by factor 2 smaller.*/
        if((y / x) <= 2 && (z / x) <= 2) {
            if(region->cols % divx != 0)
                x = region->cols / divx + 1;
@@ -384,6 +384,7 @@ Rast3d_compute_optimal_tile_dimension(RASTER3D_Region *region, int type, int *ti
            divz += 1;
        }
 
+       /* Avoid infinite loop */
        i++;
        if(i > 10000)
          break;
