@@ -171,7 +171,6 @@ class IVDigit:
         # undo/redo
         self.changesets = list()
         self.changesetCurrent = -1 # first changeset to apply
-        self.changesetEnd     = -1 # last changeset to be applied
         
         if self.poMapInfo:
             self.InitCats()
@@ -351,17 +350,12 @@ class IVDigit:
         if changeset < 0 or changeset >= len(self.changesets):
             return -1
         
-        if self.changesetEnd < 0:
-            self.changesetEnd = changeset
-        
         ret = 0
         actions = self.changesets[changeset]
         
-        for action in actions: 
-            add = bool(action['offset'] > 0)
+        for action in actions:
             line = action['line']
-            if (undo and add) or \
-                    (not undo and not add):
+            if action['offset'] > 0:
                 if Vect_line_alive(self.poMapInfo, line):
                     Debug.msg(3, "IVDigit._applyChangeset(): changeset=%d, action=add, line=%d -> deleted",
                               changeset, line)
@@ -1216,13 +1210,11 @@ class IVDigit:
         if changesetLast < 0:
             return changesetLast
         
-        if self.changesetCurrent == -2: # value uninitialized 
-            self.changesetCurrent = changesetLast
-        
         if level > 0 and self.changesetCurrent < 0:
             self.changesetCurrent = 0
-        
-        if level == 0:
+        elif level < 0 and self.changesetCurrent > changesetLast:
+            self.changesetCurrent = changesetLast
+        elif level == 0:
             # 0 -> undo all
             level = -1 * changesetLast + 1
         
@@ -1241,18 +1233,21 @@ class IVDigit:
                 self._applyChangeset(changeset, undo = False)
         
         self.changesetCurrent += level
-
-        Debug.msg(2, "Digit.Undo(): changeset_current=%d, changeset_last=%d, changeset_end=%d",
-                  self.changesetCurrent, changesetLast, self.changesetEnd)
         
-        if self.changesetCurrent == self.changesetEnd:
-            self.changesetEnd = changesetLast
-            return -1
+        Debug.msg(2, "Digit.Undo(): changeset_current=%d, changeset_last=%d",
+                  self.changesetCurrent, changesetLast)
         
         self.mapWindow.UpdateMap(render = False)
         
         if self.changesetCurrent < 0: # disable undo tool
             self.toolbar.EnableUndo(False)
+        else:
+            self.toolbar.EnableUndo(True)
+        
+        if self.changesetCurrent <= changesetLast:
+            self.toolbar.EnableRedo(True)
+        else:
+            self.toolbar.EnableRedo(False)
         
     def ZBulkLines(self, pos1, pos2, start, step):
         """!Z-bulk labeling

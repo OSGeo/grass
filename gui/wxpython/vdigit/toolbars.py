@@ -46,6 +46,7 @@ class VDigitToolbar(BaseToolbar):
         
         self.comboid  = self.combo = None
         self.undo     = -1
+        self.redo     = -1
         
         # only one dialog can be open
         self.settingsDialog   = None
@@ -70,14 +71,16 @@ class VDigitToolbar(BaseToolbar):
             self.combo.Show()
         
         # disable undo/redo
-        if self.undo:
+        if self.undo > 0:
             self.EnableTool(self.undo, False)
+        if self.redo > 0:
+            self.EnableTool(self.redo, False)
         
         # toogle to pointer by default
         self.OnTool(None)
         
         self.FixSize(width = 105)
-        
+                
     def _toolbarData(self):
         """!Toolbar data
         """
@@ -133,9 +136,12 @@ class VDigitToolbar(BaseToolbar):
                                          label = _('Additional tools '
                                                    '(copy, flip, connect, etc.)'),
                                          desc = _('Left: Select; Ctrl+Left: Unselect; Right: Confirm')),
-            'undo'             : MetaIcon(img = 'undo',
-                                          label = _('Undo'),
-                                          desc = _('Undo previous changes')),
+            'undo'            : MetaIcon(img = 'undo',
+                                         label = _('Undo'),
+                                         desc = _('Undo previous changes')),
+            'redo'            : MetaIcon(img = 'redo',
+                                         label = _('Redo'),
+                                         desc = _('Redo previous changes')),
             }
         
         if not self.tools or 'selector' in self.tools:
@@ -207,6 +213,9 @@ class VDigitToolbar(BaseToolbar):
         if not self.tools or 'undo' in self.tools:
             data.append(("undo", icons["undo"],
                          self.OnUndo))
+        if not self.tools or 'redo' in self.tools:
+            data.append(("redo", icons["redo"],
+                         self.OnRedo))
         if not self.tools or 'settings' in self.tools:
             data.append(("settings", icons["settings"],
                          self.OnSettings))
@@ -386,21 +395,36 @@ class VDigitToolbar(BaseToolbar):
         
         event.Skip()
 
+    def OnRedo(self, event):
+        """!Undo previous changes"""
+        self.digit.Undo(level = 1)
+        
+        event.Skip()
+        
     def EnableUndo(self, enable = True):
         """!Enable 'Undo' in toolbar
         
         @param enable False for disable
         """
-        # iclass has no undo, we need to check it
-        if self.FindById(self.undo) is None:
+        self._enableTool(self.undo, enable)
+
+    def EnableRedo(self, enable = True):
+        """!Enable 'Redo' in toolbar
+        
+        @param enable False for disable
+        """
+        self._enableTool(self.redo, enable)
+        
+    def _enableTool(self, tool, enable):
+        if not self.FindById(tool):
             return
         
         if enable:
-            if self.GetToolEnabled(self.undo) is False:
-                self.EnableTool(self.undo, True)
+            if self.GetToolEnabled(tool) is False:
+                self.EnableTool(tool, True)
         else:
-            if self.GetToolEnabled(self.undo) is True:
-                self.EnableTool(self.undo, False)
+            if self.GetToolEnabled(tool) is True:
+                self.EnableTool(tool, False)
         
     def OnSettings(self, event):
         """!Show settings dialog"""
@@ -724,6 +748,7 @@ class VDigitToolbar(BaseToolbar):
         fType = self.digit.GetFeatureType()
         self.EnableAll()
         self.EnableUndo(False)
+        self.EnableRedo(False)
         
         if fType == 'Point':
             for tool in (self.addLine, self.addBoundary, self.addCentroid,
