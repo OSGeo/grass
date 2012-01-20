@@ -35,7 +35,7 @@ class Histogram2Frame(BasePlotFrame):
         
         self.toolbar = Histogram2Toolbar(parent = self)
         self.SetToolBar(self.toolbar)
-        self.SetLabel(_("GRASS Histogramming Tool"))
+        self.SetTitle(_("GRASS Histogramming Tool"))
 
         #
         # Init variables

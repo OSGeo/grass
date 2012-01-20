@@ -48,7 +48,7 @@ class ProfileFrame(BasePlotFrame):
 
         self.toolbar = ProfileToolbar(parent = self)
         self.SetToolBar(self.toolbar)
-        self.SetLabel(_("GRASS Profile Analysis Tool"))
+        self.SetTitle(_("GRASS Profile Analysis Tool"))
         
         #
         # Init variables

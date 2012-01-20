@@ -36,7 +36,7 @@ class ScatterFrame(BasePlotFrame):
         
         self.toolbar = ScatterToolbar(parent = self)
         self.SetToolBar(self.toolbar)
-        self.SetLabel(_("GRASS Bivariate Scatterplot Tool"))
+        self.SetTitle(_("GRASS Bivariate Scatterplot Tool"))
 
         #
         # Init variables
