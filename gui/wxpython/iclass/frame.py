@@ -271,7 +271,7 @@ class IClassMapFrame(DoubleMapFrame):
                                                 digitClass = IClassVDigit,
                                                 tools = ['addArea', 'moveVertex', 'addVertex',
                                                          'removeVertex', 'editLine',
-                                                         'moveLine', 'deleteLine'])
+                                                         'moveLine', 'deleteArea', 'undo', 'redo'])
             
             self._mgr.AddPane(self.toolbars[name],
                               wx.aui.AuiPaneInfo().
@@ -437,6 +437,28 @@ class IClassMapFrame(DoubleMapFrame):
         if name:
             self.previewMapManager.SelectLayer(name)
         
+    def DeleteAreas(self, cats):
+        """!Removes all training areas of given categories
+        
+        @param cats list of categories to be deleted
+        """
+        self.firstMapWindow.digit.DeleteAreasByCat(cats)
+        self.firstMapWindow.UpdateMap(render=False, renderVector=True)
+        
+    def HighlightCategory(self, cats):
+        """!Highlight araes given by category"""
+        self.firstMapWindow.digit.GetDisplay().SetSelected(cats, layer = 1)
+        self.firstMapWindow.UpdateMap(render=False, renderVector=True)
+        
+    def ZoomToAreasByCat(self, cat):
+        """!Zoom to areas given by category"""
+        n, s, w, e = self.GetFirstWindow().digit.GetDisplay().GetRegionSelected()
+        self.GetFirstMap().GetRegion(n = n, s = s, w = w, e = e, update = True)
+        self.GetFirstMap().AdjustRegion()
+        self.GetFirstMap().AlignExtentFromDisplay()
+        
+        self.GetFirstWindow().UpdateMap(render = True, renderVector = True)
+        
     def UpdateRasterName(self, newName, cat):
         """!Update alias of raster map when category name is changed"""
         origName = self.statisticsDict[cat].rasterName
@@ -555,6 +577,8 @@ class IClassMapFrame(DoubleMapFrame):
                 # write statistics
                 I_iclass_add_signature(self.signatures, statistics)
             else:
+                GMessage(parent = self, message = _("Analysis failed. "
+                                                    "Check training areas and their categories."))
                 I_iclass_free_statistics(statistics)
         
         self.UpdateChangeState(changes = False)

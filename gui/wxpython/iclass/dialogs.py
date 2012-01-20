@@ -190,6 +190,8 @@ class IClassCategoryManagerDialog(wx.Dialog):
         self.catList.DeleteCategory()
         
     def OnClose(self, event):
+        self.catList.DeselectAll()
+        
         self.catList.UpdateChoice()
         if not isinstance(event, wx.CloseEvent):
             self.Destroy()
@@ -227,11 +229,17 @@ class CategoryListCtrl(wx.ListCtrl,
         self.statisticsList = statisticsList
         self.SetItemCount(len(statisticsList))
         
+        self.rightClickedItemIdx = wx.NOT_FOUND
+        
         listmix.ListCtrlAutoWidthMixin.__init__(self)
 
         listmix.TextEditMixin.__init__(self)
         
         self.Bind(wx.EVT_LIST_BEGIN_LABEL_EDIT, self.OnEdit)
+        self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnCategorySelected)
+        
+        self.Bind(wx.EVT_COMMAND_RIGHT_CLICK, self.OnClassRightUp) #wxMSW
+        self.Bind(wx.EVT_RIGHT_UP,            self.OnClassRightUp) #wxGTK
         
     def SetVirtualData(self, row, column, text):
         attr = self.columns[column][1]
@@ -240,6 +248,7 @@ class CategoryListCtrl(wx.ListCtrl,
         self.UpdateChoice()
         toolbar = self.mapWindow.toolbars['iClass']
         toolbar.choice.SetSelection(row)
+        self.Select(row)
         
         if attr == 'name':
             self.mapWindow.UpdateRasterName(text, toolbar.GetSelectedCategoryIdx())
@@ -271,20 +280,22 @@ class CategoryListCtrl(wx.ListCtrl,
                 
     def DeleteCategory(self):
         indexList = sorted(self.GetSelectedIndices(), reverse = True)
+        cats = []
         for i in indexList:
             # remove temporary raster
             name = self.statisticsDict[self.statisticsList[i]].rasterName
             self.mapWindow.RemoveTempRaster(name)
             
+            cats.append(self.statisticsList[i])
             del self.statisticsDict[self.statisticsList[i]]
             del self.statisticsList[i]
+            
         self.SetItemCount(len(self.statisticsList))
         
         self.UpdateChoice()
         self.mapWindow.UpdateChangeState(changes = True)
         
-        
-        # delete vector items!
+        self.mapWindow.DeleteAreas(cats = cats)
     
     def UpdateChoice(self):
         toolbar = self.mapWindow.toolbars['iClass']
@@ -330,6 +341,48 @@ class CategoryListCtrl(wx.ListCtrl,
             dlg.Destroy()
             
         event.Skip()
+        
+    def OnCategorySelected(self, event):
+        """!Highlight selected areas"""
+        indexList = self.GetSelectedIndices()
+        cats = []
+        for i in indexList:
+            cats.append(self.statisticsList[i])
+        
+        self.mapWindow.HighlightCategory(cats)
+        if event:
+            event.Skip()
+        
+    def OnClassRightUp(self, event):
+        """!Show context menu on right click"""
+        item, flags = self.HitTest((event.GetX(), event.GetY()))
+        if item != wx.NOT_FOUND and flags & wx.LIST_HITTEST_ONITEM:
+            self.rightClickedItemIdx = item
+            
+        self.popupZoomtoAreas = wx.NewId()
+
+        self.Bind(wx.EVT_MENU, self.OnZoomToAreasByCat, id = self.popupZoomtoAreas)
+
+        # generate popup-menu
+        menu = wx.Menu()
+        menu.Append(self.popupZoomtoAreas, _("Zoom to training areas of selected class"))
+        
+        self.PopupMenu(menu)
+        menu.Destroy()
+    
+    def OnZoomToAreasByCat(self, event):
+        """!Zoom to areas of given category"""
+        cat = self.statisticsList[self.rightClickedItemIdx]
+        self.mapWindow.ZoomToAreasByCat(cat)
+        
+    def DeselectAll(self):
+        """!Deselect all items"""
+        indexList = self.GetSelectedIndices()
+        for i in indexList:
+            self.Select(i, on = 0)
+         
+        # no highlight
+        self.OnCategorySelected(None)
         
     def OnGetItemText(self, item, col):
         cat = self.statisticsList[item]
