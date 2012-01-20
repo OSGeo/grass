@@ -681,7 +681,7 @@ class IClassMapFrame(DoubleMapFrame):
             
         # check if vector is inside raster
         rasterInfo = grass.raster_info(groupLayers[0])
-        print vectorInfo
+        
         if vectorInfo['north'] > rasterInfo['north'] or \
            vectorInfo['south'] < rasterInfo['south'] or \
            vectorInfo['east'] > rasterInfo['east'] or \
