@@ -9514,7 +9514,7 @@ msgstr "Применить изменения и закрыть диалог"
 msgid ""
 "Unable to add new layer/category <%(layer)s/%(category)s>.\n"
 "Layer and category number must be integer.\n"
-"Layer number must be greater then zero."
+"Layer number must be greater than zero."
 msgstr ""
 "Невозможно добавить новый слой/категорию <%(layer)s/%(category)s>.\n"
 "Номер слоя и категории должны быть целыми числами.\n"
@@ -10325,7 +10325,7 @@ msgstr "Настройки диалога команды"
 #: ../gui/wxpython/gui_modules/dbm.py:1177
 #, python-format
 msgid ""
-"Selected data records (%d) will permanently deleted from table. Do you want "
+"Selected data records (%d) will be permanently deleted from table. Do you want "
 "to delete them?"
 msgstr ""
 "Выбранные записи (%d) будут навсегда удалены из таблицы. Вы хотите их "
@@ -11752,12 +11752,12 @@ msgstr "Невозможно перерисовать слой <%s>."
 
 #: ../gui/wxpython/gui_modules/render.py:1238
 #, python-format
-msgid "Unable render overlay <%s>."
+msgid "Unable to render overlay <%s>."
 msgstr "Невозможно перерисовать оверлей <%s>."
 
 #: ../gui/wxpython/gui_modules/render.py:1277
 #, python-format
-msgid "Unable render overlay <%s>"
+msgid "Unable to render overlay <%s>"
 msgstr "Невозможно перерисовать оверлей <%s>"
 
 #: ../gui/wxpython/gui_modules/dbm.py:140
@@ -12024,7 +12024,7 @@ msgstr "Удалить выбранный слой"
 #: ../gui/wxpython/gui_modules/dbm.py:1223
 #, python-format
 msgid ""
-"All data records (%d) will permanently deleted from table. Do you want to "
+"All data records (%d) will be permanently deleted from table. Do you want to "
 "delete them?"
 msgstr ""
 "Все записи (%d) будут навсегда удалены из таблицы. Вы хотите их удалить?"

@@ -9379,7 +9379,7 @@ msgstr "Aplicar los cambios y cerrar el cuadro de diálogo."
 msgid ""
 "Unable to add new layer/category <%(layer)s/%(category)s>.\n"
 "Layer and category number must be integer.\n"
-"Layer number must be greater then zero."
+"Layer number must be greater than zero."
 msgstr ""
 "No ha sido posible añadir una nueva capa / categoría <%(layer)s/%(category)"
 "s>.\n"
@@ -10168,7 +10168,7 @@ msgstr "Comando / Condición"
 #: ../gui/wxpython/gui_modules/dbm.py:1177
 #, python-format
 msgid ""
-"Selected data records (%d) will permanently deleted from table. Do you want "
+"Selected data records (%d) will be permanently deleted from table. Do you want "
 "to delete them?"
 msgstr ""
 "Los registros seleccionados (%d) serán borrados permanentemente de la tabla. "
@@ -11516,12 +11516,12 @@ msgstr "No se ha podido realizar la presentación de la capa de mapa <%s>."
 
 #: ../gui/wxpython/gui_modules/render.py:1238
 #, python-format
-msgid "Unable render overlay <%s>."
+msgid "Unable to render overlay <%s>."
 msgstr "No se ha podido realizar la presentación de la superposicion <%s>."
 
 #: ../gui/wxpython/gui_modules/render.py:1277
 #, python-format
-msgid "Unable render overlay <%s>"
+msgid "Unable to render overlay <%s>"
 msgstr "No se ha podido realizar la presentación de la superposicion <%s>."
 
 #: ../gui/wxpython/gui_modules/dbm.py:140
@@ -11785,7 +11785,7 @@ msgstr "Borrar el(los) objeto(s) espacial(es) seleccionados."
 #: ../gui/wxpython/gui_modules/dbm.py:1223
 #, python-format
 msgid ""
-"All data records (%d) will permanently deleted from table. Do you want to "
+"All data records (%d) will be permanently deleted from table. Do you want to "
 "delete them?"
 msgstr ""
 "Todos los registros (%d) serán borrados de la tabla permanentemente. ¿Desea "

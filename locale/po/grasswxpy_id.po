@@ -9588,7 +9588,7 @@ msgstr "Terapkan perubahan untuk sesi ini"
 msgid ""
 "Unable to add new layer/category <%(layer)s/%(category)s>.\n"
 "Layer and category number must be integer.\n"
-"Layer number must be greater then zero."
+"Layer number must be greater than zero."
 msgstr ""
 "Tidak mampu menambahkan layer/kategori baru <%(layer)s/%(category)s>.\n"
 "Layer dan kategori harus integer.\n"
@@ -10408,7 +10408,7 @@ msgstr "Pengaturan dialog perintah"
 #: ../gui/wxpython/gui_modules/dbm.py:1177
 #, python-format
 msgid ""
-"Selected data records (%d) will permanently deleted from table. Do you want "
+"Selected data records (%d) will be permanently deleted from table. Do you want "
 "to delete them?"
 msgstr ""
 "Rekaman data terpilih (%d) akan dihapus secara permanen dari tabel. Anda "
@@ -11833,12 +11833,12 @@ msgstr "Tidak dapat melakukan render layer peta <%s>."
 
 #: ../gui/wxpython/gui_modules/render.py:1238
 #, python-format
-msgid "Unable render overlay <%s>."
+msgid "Unable to render overlay <%s>."
 msgstr "Tidak dapat merender overlay <%s>."
 
 #: ../gui/wxpython/gui_modules/render.py:1277
 #, python-format
-msgid "Unable render overlay <%s>"
+msgid "Unable to render overlay <%s>"
 msgstr "Tidak dapat merender overlay <%s>"
 
 #: ../gui/wxpython/gui_modules/dbm.py:140
@@ -12104,7 +12104,7 @@ msgstr "Hapus layer terpilih"
 #: ../gui/wxpython/gui_modules/dbm.py:1223
 #, python-format
 msgid ""
-"All data records (%d) will permanently deleted from table. Do you want to "
+"All data records (%d) will be permanently deleted from table. Do you want to "
 "delete them?"
 msgstr ""
 "Semua rekaman data (%d) akan dihapus secara permanen dari tabel. Apakah Anda "

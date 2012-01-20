@@ -9483,7 +9483,7 @@ msgstr "Áp dụng thay đổi và đóng hộp thoại"
 msgid ""
 "Unable to add new layer/category <%(layer)s/%(category)s>.\n"
 "Layer and category number must be integer.\n"
-"Layer number must be greater then zero."
+"Layer number must be greater than zero."
 msgstr ""
 "Không thể thêm lớp/phạm trù mới <%(layer)s/%(category)s>.\n"
 " Số lớp và số phạm trù phải là số nguyên.\n"
@@ -10315,7 +10315,7 @@ msgstr "Thiết lập cho hộp thoại lệnh"
 #: ../gui/wxpython/gui_modules/dbm.py:1177
 #, python-format
 msgid ""
-"Selected data records (%d) will permanently deleted from table. Do you want "
+"Selected data records (%d) will be permanently deleted from table. Do you want "
 "to delete them?"
 msgstr ""
 "Các bản ghi dữ liệu đã được chọn (%d) sẽ bị xóa bỏ hoàn toàn khỏi bảng. Bạn "
@@ -11731,12 +11731,12 @@ msgstr "Không thể vẽ lớp bản đồ <%s>."
 
 #: ../gui/wxpython/gui_modules/render.py:1238
 #, python-format
-msgid "Unable render overlay <%s>."
+msgid "Unable to render overlay <%s>."
 msgstr "Không thể vẽ chồng <%s>."
 
 #: ../gui/wxpython/gui_modules/render.py:1277
 #, python-format
-msgid "Unable render overlay <%s>"
+msgid "Unable to render overlay <%s>"
 msgstr "Không thể vẽ chồng <%s>"
 
 #: ../gui/wxpython/gui_modules/dbm.py:140
@@ -11996,7 +11996,7 @@ msgstr "Xóa các đối tượng đã chọn"
 #: ../gui/wxpython/gui_modules/dbm.py:1223
 #, python-format
 msgid ""
-"All data records (%d) will permanently deleted from table. Do you want to "
+"All data records (%d) will be permanently deleted from table. Do you want to "
 "delete them?"
 msgstr ""
 "Tất cả các bản ghi dữ liệu (%d) sẽ bị xóa bỏ hoàn toàn khỏi bảng. Bạn có "
