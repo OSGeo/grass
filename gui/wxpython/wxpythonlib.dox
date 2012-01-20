@@ -104,6 +104,7 @@ available in GRASS 5 and GRASS 6.
  - dialogs::StaticWrapText
  - dialogs::ImageSizeDialog
  - dialogs::SqlQueryFrame
+ - dialogs::SymbolDialog
 - gui_core::forms
  - forms::TaskFrame
  - forms::CmdPanel

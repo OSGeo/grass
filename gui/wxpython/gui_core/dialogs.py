@@ -21,6 +21,7 @@ List of classes:
  - dialogs::SetOpacityDialog
  - dialogs::ImageSizeDialog
  - dialogs::SqlQueryFrame
+ - dialogs::SymbolDialog
 
 (C) 2008-2011 by the GRASS Development Team
 
@@ -28,7 +29,7 @@ This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Martin Landa <landa.martin gmail.com>
-@author Anna Kratochvilova <kratochanna gmail.com> (GroupDialog)
+@author Anna Kratochvilova <kratochanna gmail.com> (GroupDialog, SymbolDialog)
 """
 
 import os
