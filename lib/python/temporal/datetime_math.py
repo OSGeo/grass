@@ -33,7 +33,6 @@ def relative_time_to_time_delta(value):
        into a timedelta object.
     """
 
-
     days = int(value)
     seconds = value % 1
     seconds = round(seconds * 86400)

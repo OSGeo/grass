@@ -72,7 +72,8 @@
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author Michael Shapiro & Bill Brown, CERL
- * \author grid3 functions by Michael Pelizzari, LMCO
+ * \author raster3d functions by Michael Pelizzari, LMCO
+ * \author Soeren Gebbert, vector timestamp implementation update
  */
 
 #include <string.h>
@@ -268,7 +269,6 @@ void G_get_timestamps(const struct TimeStamp *ts,
     }
 }
 
-
 /*!
   \brief Write timestamp file
 
@@ -343,6 +343,23 @@ static int read_timestamp(const char *maptype, const char *dir,
 }
 
 /*!
+  \brief Check if timestamp for raster map exists
+  
+  \param name map name
+  \param mapset mapset name
+
+  \return 1 on success
+  \return 0 no timestamp present
+*/
+int G_has_raster_timestamp(const char *name, const char *mapset)
+{
+    if (!G_find_file2_misc(RAST_MISC, "timestamp", name, mapset))
+	return 0;
+
+    return 1;
+}
+
+/*!
   \brief Read timestamp from raster map
   
   \param name map name
@@ -359,6 +376,22 @@ int G_read_raster_timestamp(const char *name, const char *mapset,
 }
 
 /*!
+  \brief Write timestamp of raster map
+
+  \param name map name
+  \param[out] ts TimeStamp struct to populate
+  
+  \return 1 on success
+  \return -1 error - can't create timestamp file
+  \return -2 error - invalid datetime in ts
+
+ */
+int G_write_raster_timestamp(const char *name, const struct TimeStamp *ts)
+{
+    return write_timestamp("raster", RAST_MISC, name, ts);
+}
+
+/*!
   \brief Remove timestamp from raster map
   
   Only timestamp files in current mapset can be removed.
@@ -372,6 +405,29 @@ int G_read_raster_timestamp(const char *name, const char *mapset,
 int G_remove_raster_timestamp(const char *name)
 {
     return G_remove_misc(RAST_MISC, "timestamp", name);
+}
+
+/*!
+  \brief Check if timestamp for vector map exists
+  
+  \param name map name
+  \param mapset mapset name
+
+  \return 1 on success
+  \return 0 no timestamp present
+*/
+int G_has_vector_timestamp(const char *name, const char *mapset)
+{
+    char dir[GPATH_MAX];
+    char path[GPATH_MAX + GNAME_MAX];
+
+    G_snprintf(dir, GPATH_MAX, "%s/%s", GV_DIRECTORY, name);
+    G_file_name(path, dir, GV_TIMESTAMP_ELEMENT, mapset);
+
+    if (access(path, R_OK) != 0)
+	return 0;
+
+    return 1;
 }
 
 /*!
@@ -392,17 +448,12 @@ int G_read_vector_timestamp(const char *name, const char *mapset,
     FILE *fd;
     int stat;
     char dir[GPATH_MAX];
-    char path[GPATH_MAX + GNAME_MAX];
-
-    G_snprintf(dir, GPATH_MAX, "%s/%s", GV_DIRECTORY, name);
-    G_file_name(path, dir, GV_TIMESTAMP_ELEMENT, mapset);
-
-    G_debug(1, "Reading vector timestamp file: %s", path);
 
     /* In case no timestamp file is present return 0 */
-    if (access(path, R_OK) != 0)
+    if (G_has_vector_timestamp(name, mapset) != 1)
 	return 0;
 
+    G_snprintf(dir, GPATH_MAX, "%s/%s", GV_DIRECTORY, name);
     fd = G_fopen_old(dir, GV_TIMESTAMP_ELEMENT, mapset);
     
     if (fd == NULL) {
@@ -418,73 +469,6 @@ int G_read_vector_timestamp(const char *name, const char *mapset,
     G_warning(_("Invalid timestamp file for vector map <%s@%s>"),
 	        name, mapset);
     return -2;
-}
-
-/*!
-  \brief Remove timestamp from vector map
-  
-  Only timestamp files in current mapset can be removed.
-
-  \param name map name
-
-  \return 0 if no file
-  \return 1 on success
-  \return -1 on failure
-*/
-int G_remove_vector_timestamp(const char *name)
-{
-    char dir[GPATH_MAX];
-
-    G_snprintf(dir, GPATH_MAX, "%s/%s", GV_DIRECTORY, name);
-    return G_remove(dir, GV_TIMESTAMP_ELEMENT);
-}
-
-/*!
-  \brief Read timestamp from 3D raster map
-  
-  \param name map name
-  \param mapset mapset name
-  \param[out] ts TimeStamp struct to populate
-
-  \return 1 on success
-  \return 0 or negative on error
-*/
-int G_read_grid3_timestamp(const char *name, const char *mapset,
-			   struct TimeStamp *ts)
-{
-    return read_timestamp("grid3", GRID3, name, mapset, ts);
-}
-
-/*!
-  \brief Remove timestamp from 3D raster map
-  
-  Only timestamp files in current mapset can be removed.
-
-  \param name map name
-
-  \return 0 if no file
-  \return 1 on success
-  \return -1 on failure
-*/
-int G_remove_grid3_timestamp(const char *name)
-{
-    return G_remove_misc(GRID3, "timestamp", name);
-}
-
-/*!
-  \brief Write timestamp of raster map
-
-  \param name map name
-  \param[out] ts TimeStamp struct to populate
-  
-  \return 1 on success
-  \return -1 error - can't create timestamp file
-  \return -2 error - invalid datetime in ts
-
- */
-int G_write_raster_timestamp(const char *name, const struct TimeStamp *ts)
-{
-    return write_timestamp("raster", RAST_MISC, name, ts);
 }
 
 /*!
@@ -524,6 +508,58 @@ int G_write_vector_timestamp(const char *name, const struct TimeStamp *ts)
 }
 
 /*!
+  \brief Remove timestamp from vector map
+  
+  Only timestamp files in current mapset can be removed.
+
+  \param name map name
+
+  \return 0 if no file
+  \return 1 on success
+  \return -1 on failure
+*/
+int G_remove_vector_timestamp(const char *name)
+{
+    char dir[GPATH_MAX];
+
+    G_snprintf(dir, GPATH_MAX, "%s/%s", GV_DIRECTORY, name);
+    return G_remove(dir, GV_TIMESTAMP_ELEMENT);
+}
+
+/*!
+  \brief Check if timestamp for 3D raster map exists
+  
+  \param name map name
+  \param mapset mapset name
+
+  \return 1 on success
+  \return 0 no timestamp present
+*/
+int G_has_raster3d_timestamp(const char *name, const char *mapset)
+{
+    if (!G_find_file2_misc(GRID3, "timestamp", name, mapset))
+	return 0;
+
+    return 1;
+}
+
+/*!
+  \brief Read timestamp from 3D raster map
+  
+  \param name map name
+  \param mapset mapset name
+  \param[out] ts TimeStamp struct to populate
+
+  \return 1 on success
+  \return 0 or negative on error
+*/
+int G_read_raster3d_timestamp(const char *name, const char *mapset,
+			   struct TimeStamp *ts)
+{
+    return read_timestamp("raster3d", GRID3, name, mapset, ts);
+}
+
+/*!
   \brief Write timestamp of 3D raster map
 
   \param name map name
@@ -534,7 +570,24 @@ int G_write_vector_timestamp(const char *name, const struct TimeStamp *ts)
   \return -2 error - invalid datetime in ts
 
  */
-int G_write_grid3_timestamp(const char *name, const struct TimeStamp *ts)
+int G_write_raster3d_timestamp(const char *name, const struct TimeStamp *ts)
 {
-    return write_timestamp("grid3", GRID3, name, ts);
+    return write_timestamp("raster3d", GRID3, name, ts);
 }
+
+/*!
+  \brief Remove timestamp from 3D raster map
+  
+  Only timestamp files in current mapset can be removed.
+
+  \param name map name
+
+  \return 0 if no file
+  \return 1 on success
+  \return -1 on failure
+*/
+int G_remove_raster3d_timestamp(const char *name)
+{
+    return G_remove_misc(GRID3, "timestamp", name);
+}
+

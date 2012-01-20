@@ -614,17 +614,20 @@ void G_set_timestamp_range(struct TimeStamp *, const struct DateTime *,
 int G__read_timestamp(FILE *, struct TimeStamp *);
 int G__write_timestamp(FILE *, const struct TimeStamp *);
 void G_get_timestamps(const struct TimeStamp *, struct DateTime *, struct DateTime *, int *);
-int G_read_raster_timestamp(const char *, const char *, struct TimeStamp *);
-int G_read_vector_timestamp(const char *, const char *, struct TimeStamp *);
-int G_write_raster_timestamp(const char *, const struct TimeStamp *);
-int G_write_vector_timestamp(const char *, const struct TimeStamp *);
 int G_format_timestamp(const struct TimeStamp *, char *);
 int G_scan_timestamp(struct TimeStamp *, const char *);
+int G_has_raster_timestamp(const char *, const char *);
+int G_read_raster_timestamp(const char *, const char *, struct TimeStamp *);
+int G_write_raster_timestamp(const char *, const struct TimeStamp *);
 int G_remove_raster_timestamp(const char *);
+int G_has_vector_timestamp(const char *, const char *);
+int G_read_vector_timestamp(const char *, const char *, struct TimeStamp *);
+int G_write_vector_timestamp(const char *, const struct TimeStamp *);
 int G_remove_vector_timestamp(const char *);
-int G_read_grid3_timestamp(const char *, const char *, struct TimeStamp *);
-int G_remove_grid3_timestamp(const char *);
-int G_write_grid3_timestamp(const char *, const struct TimeStamp *);
+int G_has_raster3d_timestamp(const char *, const char *);
+int G_read_raster3d_timestamp(const char *, const char *, struct TimeStamp *);
+int G_remove_raster3d_timestamp(const char *);
+int G_write_raster3d_timestamp(const char *, const struct TimeStamp *);
 
 /* token.c */
 char **G_tokenize(const char *, const char *);

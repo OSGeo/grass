@@ -27,6 +27,7 @@ int main(int argc, char *argv[])
     struct Option *map, *date;
     struct TimeStamp ts;
     char *name;
+    const char *mapset;
     int modify;
 
     G_gisinit(argv[0]);
@@ -55,6 +56,17 @@ int main(int argc, char *argv[])
 
     modify = date->answer != NULL;
 
+    if (modify)
+	mapset = G_find_vector(name, G_mapset());
+    else
+	mapset = G_find_vector(name, "");
+
+    if (mapset == NULL) {
+	G_fatal_error(_("Vector map <%s> not found %s"), name,
+		      modify ? "in current mapset" : "");
+	exit(EXIT_FAILURE);
+    }
+
     if (!modify) {
 	if (G_read_vector_timestamp(name, "", &ts) == 1) {
 	    G__write_timestamp(stdout, &ts);
@@ -68,12 +80,10 @@ int main(int argc, char *argv[])
 	exit(EXIT_SUCCESS);
     }
 
-    if (1 == G_scan_timestamp(&ts, date->answer)) {
-	G_write_vector_timestamp(name, &ts);
-	exit(EXIT_SUCCESS);
-    }
-    else
-	G_fatal_error(_("Invalid timestamp"));
+    if(G_scan_timestamp(&ts, date->answer) != 1)
+        G_fatal_error("Timestamp format is invalid");
+
+    G_write_vector_timestamp(name, &ts);
 
     exit(EXIT_SUCCESS);
 }
