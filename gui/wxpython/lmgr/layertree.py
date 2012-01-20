@@ -572,36 +572,23 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                                                  'map=%s' % name])
         
     def OnHistogram(self, event):
-        """
-        Plot histogram for given raster map layer
+        """!Plot histogram for given raster map layer
         """
         mapLayer = self.GetPyData(self.layer_selected)[0]['maplayer']
         if not mapLayer.GetName():
-            wx.MessageBox(parent = self,
-                          message = _("Unable to display histogram of "
-                                    "raster map."),
-                          caption = _("Error"), style = wx.OK | wx.ICON_ERROR | wx.CENTRE)
-            return False
-
-        if not hasattr (self, "histogramFrame"):
-            self.histogramFrame = None
-
-        if hasattr (self.mapdisplay, "histogram") and self.mapdisplay.histogram:
-            self.histogramFrame = self.mapdisplay.histogram
-
-        if not self.histogramFrame:
-            self.histogramFrame = HistogramFrame(self, size = globalvar.HIST_WINDOW_SIZE,
-                                                 style = wx.DEFAULT_FRAME_STYLE)
-            self.histogramFrame.CentreOnScreen()
-            # show new display
-            self.histogramFrame.Show()
-
-        self.histogramFrame.SetHistLayer(mapLayer.GetName())
-        self.histogramFrame.HistWindow.UpdateHist()
-        self.histogramFrame.Refresh()
-        self.histogramFrame.Update()
-
-        return True
+            GError(parent = self,
+                   message = _("Unable to display histogram of "
+                               "raster map. No map name defined."))
+            return
+        
+        win = HistogramFrame(parent = self)
+        
+        win.CentreOnScreen()
+        win.Show()
+        win.SetHistLayer(mapLayer.GetName())
+        win.HistWindow.UpdateHist()
+        win.Refresh()
+        win.Update()
 
     def OnUnivariateStats(self, event):
         """!Univariate raster statistics"""
