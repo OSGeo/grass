@@ -45,7 +45,7 @@ static char *name;
 /**************************************************************************/
 int main(int argc, char *argv[])
 {
-    char *mapset;
+    const char *mapset;
     char *line = NULL;
     char tmp1[TMP_LENGTH], tmp2[TMP_LENGTH], tmp3[TMP_LENGTH];
     char timebuff[256];
@@ -140,7 +140,7 @@ int main(int argc, char *argv[])
     hist_ok = Rast3d_read_history(name, mapset, &hist) >= 0;
     cats_ok = Rast3d_read_cats(name, mapset, &cats) >= 0;
     /*Check the Timestamp */
-    time_ok = G_read_grid3_timestamp(name, mapset, &ts) > 0;
+    time_ok = G_read_raster3d_timestamp(name, mapset, &ts) > 0;
 
     /*Check for valid entries, show none if no entire available! */
     if (time_ok) {
