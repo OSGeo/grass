@@ -672,7 +672,6 @@ class IClassMapFrame(DoubleMapFrame):
         #check if vector has any areas
         vectorInfo = grass.vector_info(vector)
         numAreas = Vect_get_num_areas(self.poMapInfo)
-        print numAreas
         
         if numAreas <= 0:
             GMessage(parent = self,
