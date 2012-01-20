@@ -46,7 +46,7 @@ PlotIcons = {
 
 class BasePlotFrame(wx.Frame):
     """!Abstract PyPlot display frame class"""
-    def __init__(self, parent = None, id = wx.ID_ANY, size = (700, 300),
+    def __init__(self, parent = None, id = wx.ID_ANY, size = wx.Size(700, 400),
                  style = wx.DEFAULT_FRAME_STYLE, rasterList = [],  **kwargs):
 
         wx.Frame.__init__(self, parent, id, size = size, style = style, **kwargs)

@@ -1189,28 +1189,25 @@ class GMFrame(wx.Frame):
         
         win.Show()
         
-    def DispHistogram(self, event):
+    def OnHistogram(self, event):
+        """!Init histogram display canvas and tools
         """
-        Init histogram display canvas and tools
+        win = HistogramFrame(self)
+        
+        win.CentreOnParent()
+        win.Show()
+        win.Refresh()
+        win.Update()
+        
+    def OnProfile(self, event):
+        """!Launch profile tool
         """
-        self.histogram = HistFrame(self, id = wx.ID_ANY, pos = wx.DefaultPosition, size = (400,300),
-                                   style = wx.DEFAULT_FRAME_STYLE)
-
-        #show new display
-        self.histogram.Show()
-        self.histogram.Refresh()
-        self.histogram.Update()
-
-    def DispProfile(self, event):
-        """
-        Init profile canvas and tools
-        """
-        self.profile = profile.ProfileFrame(self,
-                                           id = wx.ID_ANY, pos = wx.DefaultPosition, size = (400,300),
-                                           style = wx.DEFAULT_FRAME_STYLE)
-        self.profile.Show()
-        self.profile.Refresh()
-        self.profile.Update()
+        win = profile.ProfileFrame(parent = self)
+        
+        win.CentreOnParent()
+        win.Show()
+        win.Refresh()
+        win.Update()
         
     def OnMapCalculator(self, event, cmd = ''):
         """!Init map calculator for interactive creation of mapcalc statements
