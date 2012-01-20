@@ -980,19 +980,20 @@ class MapFrame(SingleMapFrame):
         return dist
 
     def OnProfile(self, event):
-        """!Init profile canvas and tools
+        """!Launch profile tool
         """
         raster = []
         if self.tree.layer_selected and \
                 self.tree.GetPyData(self.tree.layer_selected)[0]['type'] == 'raster':
             raster.append(self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer'].name)
 
-        self.profile = ProfileFrame(self, size = wx.Size(700, 300),
-                                    rasterList = raster)
-        self.profile.Show()
-        # Open raster select dialog to make sure that a raster (and the desired raster)
-        # is selected to be profiled
-        self.profile.OnSelectRaster(None)
+        win = ProfileFrame(parent = self, rasterList = raster)
+        
+        win.CentreOnParent()
+        win.Show()
+        # Open raster select dialog to make sure that a raster (and
+        # the desired raster) is selected to be profiled
+        win.OnSelectRaster(None)
 
     def FormatDist(self, dist):
         """!Format length numbers and units in a nice way,
@@ -1055,14 +1056,12 @@ class MapFrame(SingleMapFrame):
                 continue
             raster.append(self.tree.GetPyData(layer)[0]['maplayer'].GetName())
 
-        self.histogramPyPlot = Histogram2Frame(self, id = wx.ID_ANY, 
-                                               pos = wx.DefaultPosition, size = (700,300),
-                                               style = wx.DEFAULT_FRAME_STYLE, 
-                                               rasterList = raster)
-        self.histogramPyPlot.Show()
+        win = Histogram2Frame(parent = self, rasterList = raster)
+        win.CentreOnParent
+        win.Show()
         # Open raster select dialog to make sure that a raster (and the desired raster)
         # is selected to be histogrammed
-        self.histogramPyPlot.OnSelectRaster(None)
+        win.OnSelectRaster(None)
         
     def OnScatterplot(self, event):
         """!Init PyPlot scatterplot display canvas and tools
@@ -1073,26 +1072,24 @@ class MapFrame(SingleMapFrame):
             if self.tree.GetPyData(layer)[0]['maplayer'].GetType() != 'raster':
                 continue
             raster.append(self.tree.GetPyData(layer)[0]['maplayer'].GetName())
-
-        self.scatterplot = ScatterFrame(self, id = wx.ID_ANY, 
-                                                pos = wx.DefaultPosition, size = (700,300),
-                                                style = wx.DEFAULT_FRAME_STYLE, 
-                                                rasterList = raster)
-        self.scatterplot.Show()
+            
+        win = ScatterFrame(parent = self, rasterList = raster)
+        
+        win.CentreOnParent()
+        win.Show()
         # Open raster select dialog to make sure that at least 2 rasters (and the desired rasters)
         # are selected to be plotted
-        self.scatterplot.OnSelectRaster(None)
+        win.OnSelectRaster(None)
 
     def OnHistogram(self, event):
         """!Init histogram display canvas and tools
         """
-        self.histogram = HistogramFrame(parent = self, id = wx.ID_ANY, size = globalvar.HIST_WINDOW_SIZE,
-                                        style = wx.DEFAULT_FRAME_STYLE)
+        win = HistogramFrame(self)
         
-        # show new display
-        self.histogram.Show()
-        self.histogram.Refresh()
-        self.histogram.Update()
+        win.CentreOnParent()
+        win.Show()
+        win.Refresh()
+        win.Update()
        
     def OnAddBarscale(self, event):
         """!Handler for scale/arrow map decoration menu selection.

@@ -30,9 +30,10 @@ from core.gcmd         import RunCommand, GException, GError
 class ScatterFrame(BasePlotFrame):
     """!Mainframe for displaying bivariate scatter plot of two raster maps. Uses wx.lib.plot.
     """
-    def __init__(self, parent, id, pos, style, size, rasterList = []):
-
-        BasePlotFrame.__init__(self, parent)
+    def __init__(self, parent, id = wx.ID_ANY, style = wx.DEFAULT_FRAME_STYLE, 
+                 size = wx.Size(700, 400),
+                 rasterList = [], **kwargs):
+        BasePlotFrame.__init__(self, parent, size = size, **kwargs)
         
         self.toolbar = ScatterToolbar(parent = self)
         self.SetToolBar(self.toolbar)

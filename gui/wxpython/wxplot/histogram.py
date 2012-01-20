@@ -28,10 +28,12 @@ from wxplot.dialogs    import HistRasterDialog, PlotStatsFrame
 from core.gcmd         import RunCommand, GException, GError
 
 class Histogram2Frame(BasePlotFrame):
-    def __init__(self, parent, id, pos, style, size, rasterList = []):
-        """!Mainframe for displaying histogram of raster map. Uses wx.lib.plot.
-        """
-        BasePlotFrame.__init__(self, parent)
+    """!Mainframe for displaying histogram of raster map. Uses wx.lib.plot.
+    """
+    def __init__(self, parent, id = wx.ID_ANY, style = wx.DEFAULT_FRAME_STYLE, 
+                 size = wx.Size(700, 400),
+                 rasterList = [], **kwargs):
+        BasePlotFrame.__init__(self, parent, size = size, **kwargs)
         
         self.toolbar = Histogram2Toolbar(parent = self)
         self.SetToolBar(self.toolbar)
