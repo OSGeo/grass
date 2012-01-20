@@ -4,7 +4,7 @@
  * MODULE:       d.info
  * AUTHOR(S):    Glynn Clements
  * PURPOSE:      Display information about the active display monitor
- * COPYRIGHT:    (C) 2004 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2004, 2012 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -29,9 +29,11 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("display"));
-    G_add_keyword(_("metadata"));
+    G_add_keyword(_("monitors"));
+    module->label =
+	_("Displays information about the active display monitor.");
     module->description =
-	_("Display information about the active display monitor");
+	_("Display monitors are maintained by d.mon.");
 
     rflag = G_define_flag();
     rflag->key = 'r';
@@ -60,8 +62,7 @@ int main(int argc, char *argv[])
 
     if (!rflag->answer && !dflag->answer &&
 	!fflag->answer && !bflag->answer && !gflag->answer) {
-	G_usage();
-	exit(EXIT_FAILURE);
+	G_fatal_error(_("No flag given"));
     }
 
     if (D_open_driver() != 0)
@@ -112,5 +113,5 @@ int main(int argc, char *argv[])
     
     D_close_driver();
 
-    return EXIT_SUCCESS;
+    exit(EXIT_SUCCESS);
 }
