@@ -5,10 +5,10 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2009, 2011 by the GRASS Development Team
+   (C) 2001-2009, 2011-2012 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
+   (>=v2). Read the file COPYING that comes with GRASS for details.
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
    \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
@@ -82,16 +82,15 @@ int Vect_get_area_points(const struct Map_info *Map,
 /*!
    \brief Returns polygon array of points for given isle
 
-   \param Map vector map
+   \param Map pointer to Map_info structure
    \param isle island id
    \param[out] BPoints points array
 
    \return number of points
    \return -1 on error
  */
-int
-Vect_get_isle_points(const struct Map_info *Map,
-		     int isle, struct line_pnts *BPoints)
+int Vect_get_isle_points(const struct Map_info *Map,
+			 int isle, struct line_pnts *BPoints)
 {
     int i, line, aline, dir;
     const struct Plus_head *Plus;
@@ -139,7 +138,7 @@ Vect_get_isle_points(const struct Map_info *Map,
 /*!
    \brief Returns centroid id for given area
 
-   \param Map vector map
+   \param Map pointer to Map_info structure
    \param area area id
 
    \return centroid id of area
@@ -164,14 +163,17 @@ int Vect_get_area_centroid(const struct Map_info *Map, int area)
 /*!
    \brief Creates list of boundaries for given area
 
-   \param Map vector map
+   Note that ids in <b>List</b> can be negative. The sign indicates in
+   which direction the boundary should be read (negative for
+   backward).
+   
+   \param Map pointer to Map_info structure
    \param area area id
    \param[out] List pointer to list of boundaries
 
    \return number of boundaries
- */
-int
-Vect_get_area_boundaries(const struct Map_info *Map, int area, struct ilist *List)
+*/
+int Vect_get_area_boundaries(const struct Map_info *Map, int area, struct ilist *List)
 {
     int i, line;
     const struct Plus_head *Plus;
@@ -198,14 +200,16 @@ Vect_get_area_boundaries(const struct Map_info *Map, int area, struct ilist *Lis
 /*!
    \brief Creates list of boundaries for given isle
 
-   \param Map vector map
+   Note that ids in <b>List</b> can be negative. The sign indicates in
+   which direction the boundary should be read (negative for forward).
+
+   \param Map pointer to Map_info structur
    \param isle island number
    \param[out] List pointer to list where boundaries are stored
 
    \return number of boundaries
  */
-int
-Vect_get_isle_boundaries(const struct Map_info *Map, int isle, struct ilist *List)
+int Vect_get_isle_boundaries(const struct Map_info *Map, int isle, struct ilist *List)
 {
     int i, line;
     const struct Plus_head *Plus;
@@ -232,7 +236,7 @@ Vect_get_isle_boundaries(const struct Map_info *Map, int isle, struct ilist *Lis
 /*!
    \brief Returns number of isles for given area
 
-   \param Map vector map
+   \param Map pointer to Map_info structure
    \param area area id
 
    \return number of isles for area
@@ -260,7 +264,7 @@ int Vect_get_area_num_isles(const struct Map_info *Map, int area)
 /*!
    \brief Returns isle id for area
 
-   \param Map vector map
+   \param Map pointer to Map_info structure
    \param area area id
    \param isle isle index (0 .. nisles - 1)
 
@@ -330,7 +334,7 @@ double Vect_area_perimeter(const struct line_pnts *Points)
    \brief Check if point is in area
 
    \param x,y point coordinates
-   \param Map vector map
+   \param Map pointer to Map_info structure
    \param area area id
    \param box area bounding box
 
@@ -370,7 +374,7 @@ int Vect_point_in_area(double x, double y, const struct Map_info *Map,
 /*!
    \brief Returns area of area without areas of isles
 
-   \param Map vector map
+   \param Map pointer to Map_info structure
    \param area area id
 
    \return area of area without areas of isles
@@ -414,7 +418,7 @@ double Vect_get_area_area(const struct Map_info *Map, int area)
 /*!
    \brief Get area categories
 
-   \param Map vector map
+   \param Map pointer to Map_info structure
    \param area area id
    \param[out] Cats list of categories
 
@@ -442,7 +446,7 @@ int Vect_get_area_cats(const struct Map_info *Map, int area, struct line_cats *C
 /*!
    \brief Find FIRST category of given field and area
 
-   \param Map vector map
+   \param Map pointer to Map_info structure
    \param area area id
    \param field layer number
 
