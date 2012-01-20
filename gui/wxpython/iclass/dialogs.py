@@ -358,10 +358,10 @@ class CategoryListCtrl(wx.ListCtrl,
         item, flags = self.HitTest((event.GetX(), event.GetY()))
         if item != wx.NOT_FOUND and flags & wx.LIST_HITTEST_ONITEM:
             self.rightClickedItemIdx = item
-            
-        self.popupZoomtoAreas = wx.NewId()
-
-        self.Bind(wx.EVT_MENU, self.OnZoomToAreasByCat, id = self.popupZoomtoAreas)
+           
+        if not hasattr(self, "popupZoomtoAreas"):
+            self.popupZoomtoAreas = wx.NewId()
+            self.Bind(wx.EVT_MENU, self.OnZoomToAreasByCat, id = self.popupZoomtoAreas)
 
         # generate popup-menu
         menu = wx.Menu()
