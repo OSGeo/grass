@@ -61,7 +61,7 @@ vector map" button in the "Additional Tools" menu on the Digitzer Toolbar.
   <dd>Add new line to vector map and optionally define its
     attributes.</dd>
 
-  <dt><img src="icons/polygon-create.png">&nbsp;
+  <dt><img src="icons/boundary-create.png">&nbsp;
     <em>Digitize new boundary</em></dt>
   <dd>Add new boundary to vector map and optionally define its
     attributes.</dd>
@@ -70,6 +70,11 @@ vector map" button in the "Additional Tools" menu on the Digitzer Toolbar.
     <em>Digitize new centroid</em></dt>
   <dd>Add new centroid to vector map and optionally define its
     attributes.</dd>
+
+  <dt><img src="icons/polygon-create.png">&nbsp;
+    <em>Digitize new area</em></dt>
+  <dd>Add new area (closed boundary and one centroid inside) to vector
+    map and optionally define its attributes.</dd>
   
   <dt><img src="icons/vertex-move.png">&nbsp;
     <em>Move vertex</em></dt>
@@ -85,12 +90,7 @@ vector map" button in the "Additional Tools" menu on the Digitzer Toolbar.
     <em>Remove vertex</em></dt>
   <dd>Remove selected vertex from linear feature. Thus shape of selected
   feature can be changed.</dd>
-
-  <dt><img src="icons/line-split.png">&nbsp;
-    <em>Split line/boundary</em></dt>
-  <dd>Split selected linear feature on given position to separate
-  vector features.</dd>
-
+  
   <dt><img src="icons/line-edit.png">&nbsp;
     <em>Edit line/boundary</em></dt>
   <dd>Edit selected linear feature, add new segments or remove
@@ -103,7 +103,12 @@ vector map" button in the "Additional Tools" menu on the Digitzer Toolbar.
 
   <dt><img src="icons/line-delete.png">&nbsp;
     <em>Delete feature(s)</em></dt>
-  <dd>Delete selected vector features. Selection can be done by mouse
+  <dd>Delete selected vector features (point, line, centroid, or
+  boundary). Selection can be done by mouse or by query.</dd>
+
+  <dt><img src="icons/polygon-delete.png">&nbsp;
+    <em>Delete areas(s)</em></dt>
+  <dd>Delete selected vector areas. Selection can be done by mouse
   or by query.</dd>
 
   <dt><img src="icons/cats-display.png">&nbsp;
@@ -111,23 +116,6 @@ vector map" button in the "Additional Tools" menu on the Digitzer Toolbar.
   <dd>Display categories of selected vector feature. Category settings
   can be modified, new layer/category pairs added or already defined pairs
   removed.</dd>
-
-  <dt><img src="icons/cats-copy.png">&nbsp;
-    <em>Copy categories / Duplicate attributes</em></dt>
-  <dd><ul>
-      <li>Copy category settings of selected vector feature to other
-	vector features. Layer/category pairs of source vector features are
-	appended to the target feature category settings. Existing
-	layer/category pairs are not removed from category settings of the
-	target features.</li>
-      <li>Duplicate attributes settings of selected vector feature to
-	other vector features. New category(ies) is appended to the
-	target feature category settings and attributes duplicated
-	based on category settings of source vector features. Existing
-	layer/category pairs are not removed from category settings of
-	the target features.</li>
-    </ul>
-  </dd>
 
   <dt><img src="icons/attributes-display.png">&nbsp;
     <em>Display/update attributes</em></dt>
@@ -140,47 +128,79 @@ vector map" button in the "Additional Tools" menu on the Digitzer Toolbar.
     <em>Additional tools</em></dt>
   <dd>
     <ul>
-      <li>Copy features from (background) map<br> Make identical copy of
+      <li><em>Break selected lines/boundaries at intersection</em><br> Split
+	given vector line or boundary into two lines on given position
+	(based on <em><a href="v.clean.html">v.clean</a></em>,
+	<tt>tool=break</tt>).</li>
+
+      <li><em>Connect two selected lines/boundaries</em><br> Connect selected
+	lines or boundaries, the first given line is connected to the
+	second one. The second line is broken if necessary on each intersection.
+	The lines are connected only if distance between them is not greater
+	than snapping threshold value.</li>
+
+      <li><em>Copy categories</em><br>Copy category settings of
+	selected vector feature to other vector
+	features. Layer/category pairs of source vector features are
+	appended to the target feature category settings. Existing
+	layer/category pairs are not removed from category settings of
+	the target features.</li>
+
+      <li><em>Copy features from (background) map</em><br> Make identical copy of
 	selected vector features. If a background vector map has been 
 	selected from the Layer Manager, copy features from background 
 	vector map, not from the currently modified vector map.</li>
-      <li>Flip selected lines/boundaries<br> Flip direction of
+
+      <li><em>Copy attributes</em><br>Duplicate attributes settings of
+	selected vector feature to other vector features. New
+	category(ies) is appended to the target feature category
+	settings and attributes duplicated based on category settings
+	of source vector features. Existing layer/category pairs are
+	not removed from category settings of the target
+	features.</li>
+
+      <li><em>Feature type conversion</em><br> Change feature type of selected
+	geometry features. Points are converted to centroids,
+	centroids to points, lines to boundaries and boundaries to
+	lines.</li>
+
+      <li><em>Flip selected lines/boundaries</em><br> Flip direction of
 	selected linear features (lines or boundaries).</li>
-      <li>Merge selected lines/boundaries<br> Merge (at least two)
+
+      <li><em>Merge selected lines/boundaries</em><br> Merge (at least two)
 	selected vector lines or boundaries. The geometry of the
 	merged vector lines can be changed. If the second line from
 	two selected lines is in opposite direction to the first, it
 	will be flipped. See also
 	module <em><a href="v.build.polylines.html">v.build.polylines</a></em>.</li>
-      <li>Break selected lines/boundaries at intersection<br> Split
-	given vector line or boundary into two lines on given position
-	(based on <em><a href="v.clean.html">v.clean</a></em>,
-	tool=break).</li>
-      <li>Snap selected lines/boundaries (only to nodes)<br> Snap
+
+      <li><em>Snap selected lines/boundaries (only to nodes)</em><br> Snap
 	vector features in given threshold. See also
 	module <em><a href="v.clean.html">v.clean</a></em>. Note that
 	this tool supports only snapping to nodes. Snapping to vector
 	features from background vector map is not currently
 	supported.</li>
-      <li>Connect two selected lines/boundaries<br> Connect selected
-	lines or boundaries, the first given line is connected to the
-	second one. The second line is broken if necessary on each intersection.
-	The lines are connected only if distance between them is not greater
-	than snapping threshold value.</li>
-      <li>Query tool<br>Select vector features by defining a threshold for
+
+      <li><em>Split line/boundary</em><br>Split selected line or boundary on
+      given position.</li>
+
+      <li><em>Query tool</em><br>Select vector features by defining a threshold for
         min/max length value (linear features or dangles).</li>
-      <li>Z-bulk labeling of 3D lines<br> Assign z coordinate values to 3D
+
+      <li><em>Z-bulk labeling of 3D lines</em><br> Assign z coordinate values to 3D
 	vector lines in bounding box. This is useful for labeling contour lines.</li>
-      <li>Feature type conversion<br> Change feature type of selected
-	geometry features. Points are converted to centroids,
-	centroids to points, lines to boundaries and boundaries to
-	lines.</li>
+    </ul>
+  </dd>
     </ul>
   </dd>
 
   <dt><img src="icons/undo.png">&nbsp;
     <em>Undo</em></dt>
   <dd>Undo previous operations.</dd>
+
+  <dt><img src="icons/redo.png">&nbsp;
+    <em>Redo</em></dt>
+  <dd>Redo previous operations.</dd>
 
   <dt><img src="icons/settings.png">&nbsp;
     <em>Settings</em></dt>
@@ -234,7 +254,7 @@ the <em><a href="v.build.html">v.build</a></em> module.
 
 <p>
 See also <a href="http://grass.osgeo.org/wiki/WxGUI_Vector_Digitizer">wxGUI digitizer wiki</a> page
-and <a href="http://grass.osgeo.org/wiki/Category:Vector">Vector related wiki page</a>.
+and <a href="http://grass.osgeo.org/wiki/Category:Vector">Vector related wiki</a> page.
 
 <h2>AUTHORS</h2>
 
