@@ -21,6 +21,11 @@ import wx
 from vdigit.mapwindow import VDigitWindow
 from vdigit.wxdigit import IVDigit
 
+try:
+    from grass.lib.vedit  import *
+except ImportError:
+    pass
+
 class IClassVDigitWindow(VDigitWindow):
     """! Class similar to VDigitWindow but specialized for wxIClass."""
     def __init__(self, parent, map):
@@ -86,3 +91,13 @@ class IClassVDigit(IVDigit):
     def _getNewFeaturesCat(self):
         cat = self.mapWindow.GetCurrentCategory()
         return cat
+        
+    def DeleteAreasByCat(self, cats):
+        """!Delete areas (centroid+boundaries) by categories
+
+        @param cats list of categories
+        """
+        
+        for cat in cats:
+            Vedit_delete_areas_cat(self.poMapInfo, 1, cat)
+        
