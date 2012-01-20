@@ -263,7 +263,7 @@ class HistogramFrame(wx.Frame):
     rendered onto canvas
     """
     def __init__(self, parent = None, id = wx.ID_ANY,
-                 title = _("GRASS GIS Histogram of raster map"),
+                 title = _("GRASS GIS Histogramming Tool (d.histogram)"),
                  style = wx.DEFAULT_FRAME_STYLE, **kwargs):
         wx.Frame.__init__(self, parent, id, title, style = style, **kwargs)
         self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
