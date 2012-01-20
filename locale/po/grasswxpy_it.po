@@ -8591,7 +8591,7 @@ msgstr "Applica cambiamenti e chiudi dialogo"
 msgid ""
 "Unable to add new layer/category <%(layer)s/%(category)s>.\n"
 "Layer and category number must be integer.\n"
-"Layer number must be greater then zero."
+"Layer number must be greater than zero."
 msgstr ""
 "Impossibile aggiungere nuovo layer/categoria <%(layer)s/%(category)s>.\n"
 "Numero di layer e categoria dev'essere intero.\n"
@@ -9355,7 +9355,7 @@ msgstr "Comando / Condizione"
 #: ../gui/wxpython/gui_modules/gmodeler.py:4309
 #: ../gui/wxpython/gui_modules/dbm.py:1177
 #, python-format
-msgid "Selected data records (%d) will permanently deleted from table. Do you want to delete them?"
+msgid "Selected data records (%d) will be permanently deleted from table. Do you want to delete them?"
 msgstr "I record (%d) selezionati saranno permanentemente eliminati della tabella. Vuoi eliminarli?"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:4312
@@ -10646,12 +10646,12 @@ msgstr "Impossibile visualizzare layer <%s>."
 
 #: ../gui/wxpython/gui_modules/render.py:1238
 #, python-format
-msgid "Unable render overlay <%s>."
+msgid "Unable to render overlay <%s>."
 msgstr "Impossibile visualizzare <%s> sovrapposto"
 
 #: ../gui/wxpython/gui_modules/render.py:1277
 #, python-format
-msgid "Unable render overlay <%s>"
+msgid "Unable to render overlay <%s>"
 msgstr "Impossibile visualizzare <%s> sovrapposto"
 
 #: ../gui/wxpython/gui_modules/dbm.py:140
@@ -10897,7 +10897,7 @@ msgstr "Elimina features selezionate"
 
 #: ../gui/wxpython/gui_modules/dbm.py:1223
 #, python-format
-msgid "All data records (%d) will permanently deleted from table. Do you want to delete them?"
+msgid "All data records (%d) will be permanently deleted from table. Do you want to delete them?"
 msgstr "Tutti i record (%d) saranno permanentemente eliminati della tabella. Vuoi eliminarli?"
 
 #: ../gui/wxpython/gui_modules/dbm.py:1369

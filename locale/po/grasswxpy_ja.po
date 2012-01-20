@@ -8658,7 +8658,7 @@ msgstr "変更してダイアログを閉じる "
 msgid ""
 "Unable to add new layer/category <%(layer)s/%(category)s>.\n"
 "Layer and category number must be integer.\n"
-"Layer number must be greater then zero."
+"Layer number must be greater than zero."
 msgstr ""
 "レイヤー/カテゴリーを新しく追加出来ません <%(layer)s/%(category)s>.\n"
 "レイヤー、カテゴリー番号は整数で無ければなりません.\n"
@@ -9408,7 +9408,7 @@ msgstr "コマンド/条件"
 #: ../gui/wxpython/gui_modules/gmodeler.py:4309
 #: ../gui/wxpython/gui_modules/dbm.py:1177
 #, python-format
-msgid "Selected data records (%d) will permanently deleted from table. Do you want to delete them?"
+msgid "Selected data records (%d) will be permanently deleted from table. Do you want to delete them?"
 msgstr "選択したレコード (%d) は、テーブルから完全に消去されます  削除してよろしいですか?"
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:4312
@@ -10674,12 +10674,12 @@ msgstr "マップレイヤー <%s> をレンダリング出来ません"
 
 #: ../gui/wxpython/gui_modules/render.py:1238
 #, python-format
-msgid "Unable render overlay <%s>."
+msgid "Unable to render overlay <%s>."
 msgstr "<%s> をレンダーオーバーレイできません"
 
 #: ../gui/wxpython/gui_modules/render.py:1277
 #, python-format
-msgid "Unable render overlay <%s>"
+msgid "Unable to render overlay <%s>"
 msgstr "<%s> をレンダーオーバーレイできません"
 
 #: ../gui/wxpython/gui_modules/dbm.py:140
@@ -10925,7 +10925,7 @@ msgstr "選択されたフィーチャを削除 "
 
 #: ../gui/wxpython/gui_modules/dbm.py:1223
 #, python-format
-msgid "All data records (%d) will permanently deleted from table. Do you want to delete them?"
+msgid "All data records (%d) will be permanently deleted from table. Do you want to delete them?"
 msgstr "全てのレコード (%d) は、テーブルから完全に消去されます  削除してよろしいですか?"
 
 #: ../gui/wxpython/gui_modules/dbm.py:1369
