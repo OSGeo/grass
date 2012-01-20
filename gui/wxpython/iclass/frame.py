@@ -672,6 +672,7 @@ class IClassMapFrame(DoubleMapFrame):
         #check if vector has any areas
         vectorInfo = grass.vector_info(vector)
         numAreas = Vect_get_num_areas(self.poMapInfo)
+        print numAreas
         
         if numAreas <= 0:
             GMessage(parent = self,
@@ -681,7 +682,7 @@ class IClassMapFrame(DoubleMapFrame):
             
         # check if vector is inside raster
         rasterInfo = grass.raster_info(groupLayers[0])
-        
+        print vectorInfo
         if vectorInfo['north'] > rasterInfo['north'] or \
            vectorInfo['south'] < rasterInfo['south'] or \
            vectorInfo['east'] > rasterInfo['east'] or \
