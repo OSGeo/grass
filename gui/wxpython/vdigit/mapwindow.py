@@ -507,7 +507,12 @@ class VDigitWindow(BufferedWindow):
             return
         
         action = self.toolbar.GetAction()
+        
         if not action:
+            GMessage(parent = self,
+                     message = _("Nothing to do. "
+                                 "Choose appropriate tool from digitizer toolbar."))
+            event.Skip()
             return
         
         if action not in ("moveVertex",
