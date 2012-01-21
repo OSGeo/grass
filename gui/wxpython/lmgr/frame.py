@@ -1192,9 +1192,10 @@ class GMFrame(wx.Frame):
     def OnHistogram(self, event):
         """!Init histogram display canvas and tools
         """
+        from modules.histogram import HistogramFrame
         win = HistogramFrame(self)
         
-        win.CentreOnParent()
+        win.CentreOnScreen()
         win.Show()
         win.Refresh()
         win.Update()
