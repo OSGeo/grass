@@ -213,10 +213,10 @@ void print_shell(const struct Map_info *Map)
     }
 
     fprintf(stdout, "projection=%s\n",
-	    Vect_get_proj_name(Map));
+	    G_database_projection_name());
     if (G_projection() == PROJECTION_UTM) {
 	fprintf(stdout, "zone=%d\n",
-		Vect_get_zone(Map));
+		G_zone());
     }
     fprintf(stdout, "digitization_threshold=%f\n",
 	    Vect_get_thresh(Map));
@@ -366,17 +366,15 @@ void print_info(const struct Map_info *Map)
     }
     
     printline("");
-    /* this differs from r.info in that proj info IS taken from the map here, not the location settings */
-    /* Vect_get_proj_name() and _zone() are typically unset?! */
     if (G_projection() == PROJECTION_UTM)
 	sprintf(line, "  %s: %s (%s %d)",
 		_("Projection:"),
-		Vect_get_proj_name(Map),
-		_("zone"), Vect_get_zone(Map));
+		G_database_projection_name(),
+		_("zone"), G_zone());
     else
 	sprintf(line, "  %s: %s",
 		_("Projection"),
-		Vect_get_proj_name(Map));
+		G_database_projection_name());
     
     printline(line);
     printline("");
