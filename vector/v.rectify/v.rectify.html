@@ -20,9 +20,10 @@ ground control points with an additional third coordinate:
 <div class="code"><pre>
  x y z east north height status
 </pre></div>
-where x, y, z are source coordinates, east, north, height are target 
-coordinates and status (0 or 1) indicates whether a given point should 
-be used. 
+where <em>x, y, z</em> are source coordinates, <em>east, north, height</em> 
+are target coordinates and status (0 or 1) indicates whether a given 
+point should be used. Numbers must be separated by space and must use a 
+point (.) as decimal separator.
 
 <p>
 If no <b>group</b> is given, the rectified vector will be written to 
@@ -67,7 +68,7 @@ be ignored.
 <h4>Polynomial Transformation Matrix (2nd, 3d order transformation)</h4>
 
 <em>v.rectify</em> uses a first, second, or third order transformation
-matrix to calculate the registration coefficients. The number
+matrix to calculate the registration coefficients. The minimum number
 of control points required for a 2D transformation of the selected order
 (represented by n) is
 
@@ -76,12 +77,12 @@ of control points required for a 2D transformation of the selected order
 </dl>
 
 or 3, 6, and 10 respectively. For a 3D transformation of first, second, 
-or third order, the number of required control points is 4, 10, and 20 
-respectively. It is strongly recommended that one or more additional 
-points be identified to allow for an overly-determined transformation 
-calculation which will generate the Root Mean Square (RMS) error values 
-for each included point. The polynomial equations are determined using 
-a modified Gaussian elimination method.
+or third order, the minimum number of required control points is 4, 10, 
+and 20, respectively. It is strongly recommended that more than the 
+minimum number of points be identified to allow for an overly-determined 
+transformation calculation which will generate the Root Mean Square (RMS) 
+error values for each included point. The polynomial equations are 
+determined using a modified Gaussian elimination method.
 
 
 <h2>SEE ALSO</h2>
@@ -91,6 +92,7 @@ The GRASS 4 <em>
 Processing manual</a></em>
 
 <p><em>
+  <a href="v.transform.html">v.transform</a>,
   <a href="m.transform.html">m.transform</a>,
   <a href="i.rectify.html">i.rectify</a>,
   <a href="r.proj.html">r.proj</a>,
