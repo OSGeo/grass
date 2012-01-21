@@ -33,24 +33,34 @@
 
 #%option
 #% key: start
-#% type: string
-#% description: The valid start value in [days] for all maps, or file in case the start time is located in the input file 
+#% type: integer
+#% description: The valid integer start value for all maps, or file in case the start time is located in the input file 
 #% required: no
 #% multiple: no
 #%end
 
 #%option
 #% key: end
-#% type: string
-#% description: The valid end value in [days] for all maps, or file in case the start time is located in the input file 
+#% type: integer
+#% description: The valid integer end value for all maps, or file in case the start time is located in the input file 
 #% required: no
 #% multiple: no
 #%end
 
 #%option
-#% key: increment
+#% key: unit
 #% type: string
-#% description: Increment between maps for valid time interval creation in [days] e.g. 1.5
+#% description: The unit of the relative time
+#% required: no
+#% multiple: no
+#% options: years,months,days,hours,minutes,seconds
+#% answer: days
+#%end
+
+#%option
+#% key: increment
+#% type: integer
+#% description: Increment between maps for valid time interval creation 
 #% required: no
 #% multiple: no
 #%end
@@ -100,13 +110,14 @@ def main():
     increment = options["increment"]
     fs = options["fs"]
     type = options["type"]
+    unit = options["unit"]
     interval = flags["i"]
 
     # Make sure the temporal database exists
     tgis.create_temporal_database()
     # Set valid absolute time to maps
     tgis.assign_valid_time_to_maps(type=type, maps=maps, ttype="relative", \
-                                   start=start, end=end, file=file, increment=increment, \
+                                   start=start, end=end, unit=unit, file=file, increment=increment, \
                                    dbif=None, interval=interval, fs=fs)
     
 if __name__ == "__main__":

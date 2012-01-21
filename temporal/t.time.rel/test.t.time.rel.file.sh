@@ -17,7 +17,7 @@ n1=`g.tempfile pid=1 -d` # Only map names
 n2=`g.tempfile pid=2 -d` # Map names and start time
 n3=`g.tempfile pid=3 -d` # Map names start time and increment
 
-cat > $n1 << EOF
+cat > "${n1}" << EOF
 prec_1
 prec_2
 prec_3
@@ -25,9 +25,9 @@ prec_4
 prec_5
 prec_6
 EOF
-cat $n1
+cat "${n1}"
 
-cat > $n2 << EOF
+cat > "${n2}" << EOF
 prec_1|1
 prec_2|2
 prec_3|3
@@ -35,9 +35,9 @@ prec_4|4
 prec_5|5
 prec_6|6
 EOF
-cat $n2
+cat "${n2}"
 
-cat > $n3 << EOF
+cat > "${n3}" << EOF
 prec_1|1|4
 prec_2|4|7
 prec_3|7|10
@@ -45,7 +45,7 @@ prec_4|10|11
 prec_5|11|14
 prec_6|14|17
 EOF
-cat $n3
+cat "${n3}"
 
 # The first @test
 # We create the space time raster inputs and register the raster maps with absolute time interval
@@ -53,28 +53,28 @@ t.create --o type=strds temporaltype=relative output=precip_rel title="A test wi
 
 # Test with input files
 # File 1
-t.time.rel -i file=$n1 start=20 increment=5
+t.time.rel -i file="${n1}" start=20 increment=5 unit=months
 
-tr.register input=precip_rel file=$n1
+tr.register input=precip_rel file="${n1}"
 t.info type=strds input=precip_rel
 tr.list input=precip_rel
 
 # File 1
-t.time.rel file=$n1 start=20
+t.time.rel file="${n1}" start=20 unit=months
 t.info type=strds input=precip_rel
 tr.list input=precip_rel
 # File 2
-t.time.rel file=$n2 start=file
+t.time.rel file="${n2}" start=file unit=months
 t.info type=strds input=precip_rel
 tr.list input=precip_rel
 # File 2
-t.time.rel -i file=$n2 start=file increment=5
+t.time.rel -i file="${n2}" start=file increment=5 unit=months
 t.info type=strds input=precip_rel
 tr.list input=precip_rel
 # File 3
-t.time.rel file=$n3 start=file end=file
+t.time.rel file="${n3}" start=file end=file unit=months
 t.info type=strds input=precip_rel
 tr.list input=precip_rel
 
 t.remove --v type=strds input=precip_rel
-t.remove --v type=rast file=$n1
+t.remove --v type=rast file="${n1}"

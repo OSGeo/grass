@@ -145,7 +145,12 @@ def main():
             grass.fatal(_("Space time raster dataset <%s> is empty") % out_id)
 
     # Modify the start time to fit the granularity
-    first_start_time = tgis.adjust_datetime_to_granularity( rows[0]["start_time"], gran)
+
+    if sp.is_time_absolute():
+        first_start_time = tgis.adjust_datetime_to_granularity( rows[0]["start_time"], gran)
+    else:
+        first_start_time = rows[0]["start_time"]
+
     last_start_time = rows[len(rows) - 1]["start_time"]
     next_start_time = first_start_time
 
@@ -155,13 +160,13 @@ def main():
         if sp.is_time_absolute():
             end = tgis.increment_datetime_by_string(next_start_time, gran)
         else:
-            end = next_start_time + gran
+            end = next_start_time + int(gran)
         next_start_time = end
 
         input_map_names = tgis.collect_map_names(sp, dbif, start, end, sampling)
 
         if input_map_names:
-            tgis.aggregate_raster_maps(new_sp, mapset, input_map_names, base, start, end, count, method, register_null, dbif)
+            tgis.aggregate_raster_maps(sp, new_sp, mapset, input_map_names, base, start, end, count, method, register_null, dbif)
 
         count += 1
 

@@ -35,6 +35,12 @@ t.info type=str3ds input=volume_abs1
 
 tr3.register --v -i input=volume_abs2 maps=volume_1,volume_2,volume_3,volume_4,volume_5,volume_6 start="2001-01-01" increment="20 seconds, 5 minutes"
 t.info type=str3ds input=volume_abs2
+r3.info volume_1
+r3.info volume_2
+r3.info volume_3
+r3.info volume_4
+r3.info volume_5
+r3.info volume_6
 
 tr3.register --v -i input=volume_abs3 maps=volume_1,volume_2,volume_3,volume_4,volume_5,volume_6 start="2001-01-01" increment="8 hours"
 t.info type=str3ds input=volume_abs3

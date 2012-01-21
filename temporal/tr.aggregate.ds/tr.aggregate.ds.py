@@ -186,8 +186,7 @@ def main():
         input_map_names = tgis.collect_map_names(sp, dbif, start, end, sampling)
 
         if input_map_names:
-            tgis.aggregate_raster_maps(new_sp, mapset, input_map_names, base, start, end, count, method, register_null, dbif)
-        
+            tgis.aggregate_raster_maps(sp, new_sp, mapset, input_map_names, base, start, end, count, method, register_null, dbif)
 
     # Update the spatio-temporal extent and the raster metadata table entries
     new_sp.update_from_registered_maps(dbif)

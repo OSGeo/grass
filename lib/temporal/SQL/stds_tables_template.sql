@@ -15,7 +15,7 @@ CREATE TABLE  STDS_base (
   mapset VARCHAR NOT NULL,             -- mapset of the space-time dataset
   creator VARCHAR NOT NULL,            -- Name of the creator
   temporal_type VARCHAR NOT NULL,      -- The temporal type of the dataset "absolute" or "relative" 
-  semantic_type VARCHAR NOT NULL,      -- The semantic data description used for aggregation/decomposition algorithm selection
+  semantic_type VARCHAR NOT NULL,      -- The semantic data description used for aggregation/decomposition algorithm selection: min, max, mean or sum
   creation_time TIMESTAMP NOT NULL,    -- The time of creation of the space-time dataset
 -- Uncommented due to performance issues
 --  modification_time TIMESTAMP NOT NULL,  -- The time of the last modification of the grass map
@@ -25,9 +25,10 @@ CREATE TABLE  STDS_base (
 
 CREATE TABLE  STDS_relative_time (
   id VARCHAR NOT NULL,            -- Id of the space-time dataset, this is the primary foreign key
-  start_time DOUBLE PRECISION,    -- The relative valid start time in [days]
-  end_time DOUBLE PRECISION,      -- The relative valid end time in [days]
-  granularity DOUBLE PRECISION,   -- The granularity in [days]
+  start_time INTEGER,             -- The relative valid start time 
+  end_time INTEGER,               -- The relative valid end time 
+  granularity INTEGER,            -- The granularity 
+  unit VARCHAR,                   -- The relative time unit, available are "years, months, days, minutes, seconds"
   map_time VARCHAR,               -- The temporal type of the registered maps, may be interval, point or mixed
   PRIMARY KEY (id),  
   FOREIGN KEY (id) REFERENCES  STDS_base (id) ON DELETE CASCADE
@@ -37,8 +38,8 @@ CREATE TABLE  STDS_absolute_time (
   id VARCHAR NOT NULL,            -- Id of the space-time dataset, this is the primary foreign key
   start_time TIMESTAMP,           -- Start of the valid time, can be NULL if no map is registered
   end_time TIMESTAMP,             -- End of the valid time, can be NULL if no map is registered
-  granularity VARCHAR,            -- The granularity "NNN seconds, NNN minutes, NNN hours, NNN days, NNN weeks, NNN months, NNN years"
-  timezone SMALLINT,              -- The time zone number
+  granularity VARCHAR,            -- The granularity "NNN seconds, NNN minutes, NNN hours, NNN days, NNN months, NNN years"
+  timezone VARCHAR,      -- The timezone of the valid time stored as string. This is currently not in use. Instead the timezone is set in the datetime strings 
   map_time VARCHAR,               -- The temporal type of the registered maps, may be interval, point or mixed
   PRIMARY KEY (id),  
   FOREIGN KEY (id) REFERENCES  STDS_base (id) ON DELETE CASCADE

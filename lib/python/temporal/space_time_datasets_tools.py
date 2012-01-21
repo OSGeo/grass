@@ -26,7 +26,7 @@ from space_time_datasets import *
 
 ###############################################################################
 
-def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=None, end=None, increment=None, dbif = None, interval=False, fs="|"):
+def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=None, end=None, unit=None, increment=None, dbif = None, interval=False, fs="|"):
     """Use this method to register maps in space time datasets. This function is generic and
 
        Additionally a start time string and an increment string can be specified
@@ -39,7 +39,9 @@ def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=
        @param name: The name of the space time dataset
        @param maps: A comma separated list of map names
        @param file: Input file one map with optional start and end time, one per line
-       @param start: The start date and time of the first raster map, in case the map has no date (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd", format relative 5.0)
+       @param start: The start date and time of the first raster map (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd", format relative is integer 5)
+       @param end: The end date and time of the first raster map (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd", format relative is integer 5)
+       @param unit: The unit of the relative time: years, months, days, hours, minutes, seconds
        @param increment: Time increment between maps for time stamp creation (format absolute: NNN seconds, minutes, hours, days, weeks, months, years; format relative: 1.0)
        @param dbif: The database interface to be used
        @param interval: If True, time intervals are created in case the start time and an increment is provided
@@ -182,7 +184,7 @@ def register_maps_in_space_time_dataset(type, name, maps=None, file=None, start=
 
         # Set the valid time
         if start:
-            assign_valid_time_to_map(ttype=sp.get_temporal_type(), map=map, start=start, end=end, increment=increment, mult=count, dbif=dbif, interval=interval)
+            assign_valid_time_to_map(ttype=sp.get_temporal_type(), map=map, start=start, end=end, unit=unit, increment=increment, mult=count, dbif=dbif, interval=interval)
 
         # Finally Register map in the space time dataset
         sp.register_map(map, dbif)
@@ -294,7 +296,7 @@ def unregister_maps_from_space_time_datasets(type, name, maps, file=None, dbif =
 
 ###############################################################################
 
-def assign_valid_time_to_maps(type, maps, ttype, start, end=None, file=file, increment=None, dbif = None, interval=False, fs="|"):
+def assign_valid_time_to_maps(type, maps, ttype, start, end=None, unit=None, file=file, increment=None, dbif = None, interval=False, fs="|"):
     """Use this method to assign valid time (absolute or relative) to raster,
        raster3d and vector datasets.
 
@@ -305,8 +307,9 @@ def assign_valid_time_to_maps(type, maps, ttype, start, end=None, file=file, inc
 
        @param type: The type of the maps raster, raster3d or vector
        @param maps: A comma separated list of map names
-       @param start: The start date and time of the first raster map (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd", format relative 5.0)
-       @param end: The end date and time of the first raster map (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd", format relative 5.0)
+       @param start: The start date and time of the first raster map (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd", format relative is integer 5)
+       @param end: The end date and time of the first raster map (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd", format relative is integer 5)
+       @param unit: The unit of the relative time: years, months, days, hours, minutes, seconds
        @param increment: Time increment between maps for time stamp creation (format absolute: NNN seconds, minutes, hours, days, weeks, months, years; format relative: 1.0)
        @param file: Input file one map with optional start and end time, one per line
        @param dbif: The database interface to be used
@@ -437,7 +440,7 @@ def assign_valid_time_to_maps(type, maps, ttype, start, end=None, file=file, inc
             count = 1
 
         # Set the valid time
-        assign_valid_time_to_map(ttype=ttype, map=map, start=start, end=end, increment=increment, mult=count, dbif=dbif, interval=interval)
+        assign_valid_time_to_map(ttype=ttype, map=map, start=start, end=end, unit=unit, increment=increment, mult=count, dbif=dbif, interval=interval)
 
         count += 1
 
@@ -455,14 +458,15 @@ def assign_valid_time_to_maps(type, maps, ttype, start, end=None, file=file, inc
 
 ###############################################################################
 
-def assign_valid_time_to_map(ttype, map, start, end, increment=None, mult=1, dbif = None, interval=False):
+def assign_valid_time_to_map(ttype, map, start, end, unit, increment=None, mult=1, dbif = None, interval=False):
     """Assign the valid time to a map dataset
 
        @param ttype: The temporal type which should be assigned and which the time format is of
        @param map: A map dataset object derived from abstract_map_dataset
-       @param start: The start date and time of the first raster map (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd", format relative 5.0)
-       @param end: The end date and time of the first raster map (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd", format relative 5.0)
-       @param increment: Time increment between maps for time stamp creation (format absolute: NNN seconds, minutes, hours, days, weeks, months, years; format relative: 1.0)
+       @param start: The start date and time of the first raster map (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd", format relative is integer 5)
+       @param end: The end date and time of the first raster map (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd", format relative is integer 5)
+       @param unit: The unit of the relative time: years, months, days, hours, minutes, seconds
+       @param increment: Time increment between maps for time stamp creation (format absolute: NNN seconds, minutes, hours, days, weeks, months, years; format relative is integer 1)
        @param multi: A multiplier for the increment
        @param dbif: The database interface to use for sql queries
        @param interval: If True, time intervals are created in case the start time and an increment is provided
@@ -479,14 +483,14 @@ def assign_valid_time_to_map(ttype, map, start, end, increment=None, mult=1, dbi
         start_time = string_to_datetime(start)
         if start_time == None:
             dbif.close()
-            core.fatal_error(_("Unable to convert string \"%s\"into a datetime object")%(start))
+            core.fatal(_("Unable to convert string \"%s\"into a datetime object")%(start))
         end_time = None
         
         if end:
             end_time = string_to_datetime(end)
             if end_time == None:
                 dbif.close()
-                core.fatal_error(_("Unable to convert string \"%s\"into a datetime object")%(end))
+                core.fatal(_("Unable to convert string \"%s\"into a datetime object")%(end))
 
         # Add the increment
         if increment:
@@ -497,19 +501,19 @@ def assign_valid_time_to_map(ttype, map, start, end, increment=None, mult=1, dbi
         core.verbose(_("Set absolute valid time for map <%s> to %s - %s") % (map.get_id(), str(start_time), str(end_time)))
         map.update_absolute_time(start_time, end_time, None, dbif)
     else:
-        start_time = float(start)
+        start_time = int(start)
         end_time = None
 
         if end:
-            end_time = float(end)
+            end_time = int(end)
 
         if increment:
-            start_time = start_time + mult * float(increment)
+            start_time = start_time + mult * int(increment)
             if interval:
-                end_time = start_time + float(increment)
+                end_time = start_time + int(increment)
 
-        core.verbose(_("Set relative valid time for map <%s> to %f - %s") % (map.get_id(), start_time,  str(end_time)))
-        map.update_relative_time(start_time, end_time, dbif)
+        core.verbose(_("Set relative valid time for map <%s> to %i - %s with unit %s") % (map.get_id(), start_time,  str(end_time), unit))
+        map.update_relative_time(start_time, end_time, unit, dbif)
 
     if connect == True:
         dbif.close()

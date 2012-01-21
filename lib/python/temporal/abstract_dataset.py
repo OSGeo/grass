@@ -97,13 +97,32 @@ class abstract_dataset(object):
         return (start, end, tz)
     
     def get_relative_time(self):
-        """Returns the relative time interval (start_time, end_time) or None if not present"""
+        """Returns the relative time interval (start_time, end_time, unit) or None if not present"""
 
         start = self.relative_time.get_start_time()
         end = self.relative_time.get_end_time()
+        unit = self.relative_time.get_unit()
 
-        return (start, end)
+        return (start, end, unit)
+ 
+    def get_relative_time_unit(self):
+        """Returns the relative time unit or None if not present"""
 
+        unit = self.relative_time.get_unit()
+
+        return unit
+
+    def check_relative_time_unit(self, unit):
+        """Check if unit is of type  years, months, days, hours, minutes or seconds
+        
+           Return True if success or False otherwise 
+        """
+        # Check unit
+        units = ["years","months","days","hours","minutes","seconds"]
+        if unit not in units:
+            return False
+        return True
+ 
     def get_temporal_type(self):
         """Return the temporal type of this dataset"""
         return self.base.get_ttype()

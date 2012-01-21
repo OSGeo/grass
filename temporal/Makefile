@@ -23,11 +23,13 @@ SUBDIRS = \
 	tr.out.vtk \
 	tr.import \
 	tr.extract \
+	tr3.extract \
 	tr3.register \
 	tv.register \
 	tr.unregister \
 	tr3.unregister \
 	tv.unregister \
+	tv.what.rast 
 
 PGM = tgisintro
 

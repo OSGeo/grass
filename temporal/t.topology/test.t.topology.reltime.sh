@@ -23,7 +23,7 @@ n3=`g.tempfile pid=3 -d`
 n4=`g.tempfile pid=4 -d`
 n5=`g.tempfile pid=5 -d`
 
-cat > $n1 << EOF
+cat > "${n1}" << EOF
 prec_1
 prec_2
 prec_3
@@ -32,7 +32,7 @@ prec_5
 prec_6
 EOF
 
-cat > $n2 << EOF
+cat > "${n2}" << EOF
 prec_1|1
 prec_2|2
 prec_3|3
@@ -41,7 +41,7 @@ prec_5|5
 prec_6|6
 EOF
 
-cat > $n3 << EOF
+cat > "${n3}" << EOF
 prec_1|1|4
 prec_2|5|7
 prec_3|8|10
@@ -50,7 +50,7 @@ prec_5|13|14
 prec_6|15|25
 EOF
 
-cat > $n4 << EOF
+cat > "${n4}" << EOF
 prec_1|2001|2007
 prec_2|2002|2004
 prec_3|2003|2004
@@ -59,7 +59,7 @@ prec_5|2005|2006
 prec_6|2006|2007
 EOF
 
-cat > $n5 << EOF
+cat > "${n5}" << EOF
 prec_1|2001|2003
 prec_2|2002|2004
 prec_3|2003|2006
@@ -71,32 +71,34 @@ EOF
 
 # The first @test
 # We create the space time raster inputs and register the raster maps with relolute time interval
-t.create --o type=strds temporaltype=relative output=precip_rel title="A test with input files" descr="A test with input files"
+t.create --o type=strds temporaltype=relative output=precip_rel_d title="A test with input files of unti days" descr="A test with input files"
+t.create --o type=strds temporaltype=relative output=precip_rel_y title="A test with input files of unit years" descr="A test with input files"
 
-tr.register -i --v input=precip_rel file=$n1 start=0 increment=1
-cat $n1
-t.topology    input=precip_rel
-t.topology -m input=precip_rel
+tr.register -i --v input=precip_rel_d file="${n1}" start=0 increment=1 unit=days
+cat "${n1}"
+t.topology    input=precip_rel_d
+t.topology -m input=precip_rel_d
 
-tr.register -i input=precip_rel file=$n2 start=file
-cat $n2
-t.topology    input=precip_rel
-t.topology -m input=precip_rel
+tr.register -i input=precip_rel_d file="${n2}" start=file unit=days
+cat "${n2}"
+t.topology    input=precip_rel_d
+t.topology -m input=precip_rel_d
 
-tr.register -i input=precip_rel file=$n3 start=file end=file
-cat $n3
-t.topology    input=precip_rel
-t.topology -m input=precip_rel
+tr.register -i input=precip_rel_d file="${n3}" start=file end=file unit=days
+cat "${n3}"
+t.topology    input=precip_rel_d
+t.topology -m input=precip_rel_d
 
-tr.register -i input=precip_rel file=$n4 start=file end=file
-cat $n4
-t.topology    input=precip_rel
-t.topology -m input=precip_rel
+tr.register -i input=precip_rel_y file="${n4}" start=file end=file unit=years
+cat "${n4}"
+t.topology    input=precip_rel_y
+t.topology -m input=precip_rel_y
 
-tr.register -i input=precip_rel file=$n5 start=file end=file
-cat $n5
-t.topology    input=precip_rel
-t.topology -m input=precip_rel
+tr.register -i input=precip_rel_y file="${n5}" start=file end=file unit=years
+cat "${n5}"
+t.topology    input=precip_rel_y
+t.topology -m input=precip_rel_y
 
-t.remove type=strds input=precip_rel
-t.remove type=rast file=$n1
+t.remove type=strds input=precip_rel_d
+t.remove type=strds input=precip_rel_y
+t.remove type=rast file="${n1}"

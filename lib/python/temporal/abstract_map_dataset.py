@@ -87,14 +87,15 @@ class abstract_map_dataset(abstract_dataset):
         datasets = self.get_registered_datasets()
         count = 0
         string = ""
-        for ds in datasets:
-            if count == 0:
-                string += ds["id"]
-            else:
-                string += ",%s" % ds["id"]
-            count += 1
-            if count > 2:
-                string += " | ............................ "
+        if datasets:
+            for ds in datasets:
+                if count == 0:
+                    string += ds["id"]
+                else:
+                    string += ",%s" % ds["id"]
+                count += 1
+                if count > 2:
+                    string += " | ............................ "
         print " | Registered datasets ........ " + string
         print " +----------------------------------------------------------------------------+"
 
@@ -149,6 +150,9 @@ class abstract_map_dataset(abstract_dataset):
     def update_absolute_time(self, start_time, end_time=None, timezone=None, dbif = None):
         """Update the absolute time
 
+           This method should always be used to set the absolute time. Do not use insert() or update()
+           to the the time. This update functions assures that the *.timestamp commands are invoked.
+
            @param start_time: a datetime object specifying the start time of the map
            @param end_time: a datetime object specifying the end time of the map
            @param timezone: Thee timezone of the map
@@ -167,7 +171,12 @@ class abstract_map_dataset(abstract_dataset):
         if connect == True:
             dbif.close()
 
-        # Start the grass C-module to set the time in the file system
+        self.write_absolute_time_to_file()
+
+    def write_absolute_time_to_file(self):
+        """Start the grass timestamp module to set the time in the file system"""
+
+        start_time, end_time, unit = self.get_absolute_time()
         start = datetime_to_grass_datetime_string(start_time)
         if end_time:
             end = datetime_to_grass_datetime_string(end_time)
@@ -175,16 +184,26 @@ class abstract_map_dataset(abstract_dataset):
 
         core.run_command(self.get_timestamp_module_name(), map=self.get_id(), date=start)
 
-    def set_relative_time(self, start_time, end_time=None):
+    def set_relative_time(self, start_time, end_time, unit):
         """Set the relative time interval 
         
-           @param start_time: A double value in days
-           @param end_time: A double value in days
+           @param start_time: A double value 
+           @param end_time: A double value 
+           @param unit: The unit of the relative time. Supported uits: years, months, days, hours, minutes, seconds
+
+           Return True for success and False otherwise
 
         """
+
+        if not self.check_relative_time_unit(unit):
+            core.error(_("Unsupported relative time unit type for %s map <%s>: %s") % (self.get_type(), self.get_id(), unit))
+            return False
+        
+
         if start_time != None and end_time != None:
-            if abs(float(start_time)) > abs(float(end_time)):
-                core.fatal(_("End time must be greater than start time for %s map <%s>") % (self.get_type(), self.get_id()))
+            if int(start_time) > int(end_time):
+                core.error(_("End time must be greater than start time for %s map <%s>") % (self.get_type(), self.get_id()))
+                return False
             else:
                 # Do not create an interval in case start and end time are equal
                 if start_time == end_time:
@@ -192,14 +211,20 @@ class abstract_map_dataset(abstract_dataset):
 
         self.base.set_ttype("relative")
         
-        self.relative_time.set_start_time(float(start_time))
+        self.relative_time.set_unit(unit)
+        self.relative_time.set_start_time(int(start_time))
         if end_time != None:
-            self.relative_time.set_end_time(float(end_time))
+            self.relative_time.set_end_time(int(end_time))
         else:
             self.relative_time.set_end_time(None)
 
-    def update_relative_time(self, start_time, end_time=None, dbif = None):
+        return True
+
+    def update_relative_time(self, start_time, end_time, unit, dbif = None):
         """Update the relative time interval
+
+           This method should always be used to set the absolute time. Do not use insert() or update()
+           to the the time. This update functions assures that the *.timestamp commands are invoked.
 
            @param start_time: A double value 
            @param end_time: A double value 
@@ -212,13 +237,25 @@ class abstract_map_dataset(abstract_dataset):
             dbif.connect()
             connect = True
 
-        self.set_relative_time(start_time, end_time)
-        self.relative_time.update_all(dbif)
-        self.base.update(dbif)
-        dbif.connection.commit()
+        if self.set_relative_time(start_time, end_time, unit):
+            self.relative_time.update_all(dbif)
+            self.base.update(dbif)
+            dbif.connection.commit()
 
         if connect == True:
             dbif.close()
+
+        self.write_relative_time_to_file()
+
+    def write_relative_time_to_file(self):
+        """Start the grass timestamp module to set the time in the file system"""
+
+        start_time, end_time, unit = self.get_relative_time()
+        start = "%i %s"%(int(start_time), unit)
+        if end_time:
+            end = "%i %s"%(int(end_time), unit)
+            start += " / %s"%(end)
+        core.run_command(self.get_timestamp_module_name(), map=self.get_id(), date=start)
 
     def set_spatial_extent(self, north, south, east, west, top=0, bottom=0):
         """Set the spatial extent of the map
@@ -237,7 +274,7 @@ class abstract_map_dataset(abstract_dataset):
         if self.is_time_absolute():
             start, end, tz = self.get_absolute_time()
         else:
-            start, end = self.get_relative_time()
+            start, end, unit = self.get_relative_time()
 
         if start != None:
             if end != None:
