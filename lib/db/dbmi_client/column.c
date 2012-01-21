@@ -124,7 +124,7 @@ int db_column_Ctype(dbDriver * driver, const char *tab, const char *col)
 int db_get_column(dbDriver * Driver, const char *tname, const char *cname,
 		  dbColumn ** Column)
 {
-    int i, ncols;
+    int i, ncols, ret;
     dbTable *Table;
     dbColumn *Col;
     dbString tabname;
@@ -138,6 +138,7 @@ int db_get_column(dbDriver * Driver, const char *tname, const char *cname,
     }
 
     *Column = NULL;
+    ret = DB_FAILED;
 
     ncols = db_get_table_number_of_columns(Table);
     G_debug(3, "ncol = %d", ncols);
@@ -146,8 +147,11 @@ int db_get_column(dbDriver * Driver, const char *tname, const char *cname,
 	Col = db_get_table_column(Table, i);
 	if (G_strcasecmp(db_get_column_name(Col), cname) == 0) {
 	    *Column = db_copy_column(NULL, Col);
-	    return DB_OK;
+	    ret = DB_OK;
+	    break;
 	}
     }
-    return DB_OK;
+    db_free_table(Table);
+
+    return ret;
 }
