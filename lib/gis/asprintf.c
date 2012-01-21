@@ -75,3 +75,55 @@ int G_asprintf(char **out, const char *fmt, ...)
 }
 
 #endif /* G_asprintf */
+
+/**
+ * \brief Safe replacement for <i>asprintf()</i>.
+ *
+ * (Re-)Allocate a string large enough to hold the new output, including the 
+ * terminating NULL, and returns a pointer to the first parameter. The 
+ * pointer should be passed to <i>G_free()</i> to release the allocated 
+ * storage when it is no longer needed.
+ *
+ * \param[out] out
+ * \param[out] size
+ * \param[in] fmt
+ * \return number of bytes written
+ */
+
+int G_vasprintf2(char **out, size_t *size, const char *fmt, va_list ap)
+{
+    char *buf = *out;
+    int count;
+    size_t s = *size;
+    
+    if (s < strlen(fmt) + 50) {
+	s = strlen(fmt) + 50;
+	buf = G_realloc(buf, s);
+    }
+
+    for (;;) {
+	count = vsnprintf(buf, s, fmt, ap);
+	if (count >= 0 && count < s)
+	    break;
+	s *= 2;
+	buf = G_realloc(buf, s);
+    }
+
+    buf = G_realloc(buf, count + 1);
+    *out = buf;
+    *size = s;
+
+    return count;
+}
+
+int G_asprintf2(char **out, size_t *size, const char *fmt, ...)
+{
+    va_list ap;
+    int count;
+
+    va_start(ap, fmt);
+    count = G_vasprintf2(out, size, fmt, ap);
+    va_end(ap);
+
+    return count;
+}
