@@ -54,6 +54,8 @@ int db_column_sqltype(dbDriver * driver, const char *tab, const char *col)
     dbString table_name;
     dbColumn *column;
     int ncol, cl, type;
+    
+    type = -1;
 
     db_init_string(&table_name);
     db_set_string(&table_name, tab);
@@ -67,11 +69,13 @@ int db_column_sqltype(dbDriver * driver, const char *tab, const char *col)
 	column = db_get_table_column(table, cl);
 	if (strcmp(db_get_column_name(column), col) == 0) {
 	    type = db_get_column_sqltype(column);
-	    return type;
+	    break;
 	}
     }
+    
+    db_free_table(table);
 
-    return -1;
+    return type;
 }
 
 /*!
