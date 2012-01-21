@@ -132,7 +132,7 @@ int db_select_int(dbDriver * driver, const char *tab, const char *col,
     G_debug(3, "  SQL: %s", buf);
 
     db_init_string(&stmt);
-    db_append_string(&stmt, buf);
+    db_set_string(&stmt, buf);
 
     if (db_open_select_cursor(driver, &stmt, &cursor, DB_SEQUENTIAL) != DB_OK)
 	return (-1);
@@ -224,7 +224,7 @@ int db_select_value(dbDriver * driver, const char *tab, const char *key,
     G_zero(val, sizeof(dbValue));
     sprintf(buf, "SELECT %s FROM %s WHERE %s = %d\n", col, tab, key, id);
     db_init_string(&stmt);
-    db_append_string(&stmt, buf);
+    db_set_string(&stmt, buf);
 
     if (db_open_select_cursor(driver, &stmt, &cursor, DB_SEQUENTIAL) != DB_OK)
 	return (-1);
