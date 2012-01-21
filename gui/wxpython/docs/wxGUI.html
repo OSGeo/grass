@@ -1,7 +1,9 @@
 <!-- meta page description: wxGUI -->
 <h2>DESCRIPTION</h2>
 
-<b>wxGUI</b> is native Graphical User Interface (GUI) for GRASS GIS.
+<b>wxGUI</b> is native <em>Graphical User Interface</em> (GUI) for
+GRASS GIS written in <a href="http://www.python.org">Python</a>
+using <a href="http://www.wxpython.org">wxPython</a> library.
 
 <p>
 If the wxGUI is not the default user interface, it can defined as default by
@@ -11,14 +13,15 @@ typing at the GRASS command line prompt:
 g.gui -u wxpython
 </pre></div>
 
-Alternatively it may be defined in the settings file
-<tt>$HOME/.grass7/rc</tt> with the 'GUI' variable:
+Alternatively it may be defined in GISRC file
+(<tt>$HOME/.grass7/rc</tt> on GNU/Linux, <tt>$APPDATA\GRASS7\rc</tt>
+on MS Windows) by <tt>GUI</tt> variable
 
 <div class="code"><pre>
 GUI: wxpython
 </pre></div>
 
-or it can be set with the shell environmental variable <tt>GRASS_GUI</tt>.
+or by the environmental variable <tt>GRASS_GUI</tt>.
 <p>
 The GUI can be quit by selecting the 'File -&gt; Exit' menu item. The GUI
 can be restarted from the GRASS command line prompt by typing
@@ -27,7 +30,7 @@ can be restarted from the GRASS command line prompt by typing
 g.gui wxpython
 </pre></div>
 
-or, to restart with previously saved workspace type:
+To restart with previously saved workspace file:
 
 <div class="code"><pre>
 g.gui wxpython workspace=file.gxw
@@ -35,7 +38,7 @@ g.gui wxpython workspace=file.gxw
 
 <p>
 The user can also start GRASS from the shell command line with the wxGUI
-specifying the <tt>-gui</tt> (or, <tt>-wxpython</tt>) switch:
+specifying the <tt>-gui</tt> (or <tt>-wxpython</tt>) switch:
 
 <div class="code"><pre>
 grass70 -gui
