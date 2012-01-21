@@ -24,7 +24,7 @@
  */
 void db_init_string(dbString * x)
 {
-    x->string = "";
+    x->string = NULL;
     x->nalloc = 0;
 }
 
@@ -79,7 +79,8 @@ unsigned int db_sizeof_string(const dbString * x)
  */
 void db_zero_string(dbString * x)
 {
-    db_zero((void *)db_get_string(x), db_sizeof_string(x));
+    if (db_get_string(x) && x->nalloc > 0)
+	db_zero((void *)db_get_string(x), x->nalloc);
 }
 
 static int set_string(dbString * x, char *s, int copy)
@@ -103,7 +104,7 @@ static int set_string(dbString * x, char *s, int copy)
     else {
 	db_free_string(x);
 	x->string = s;
-	x->nalloc = -1;
+	x->nalloc = -1; /* fixme */
     }
     return DB_OK;
 }
@@ -119,9 +120,14 @@ static int set_string(dbString * x, char *s, int copy)
  */
 int db_enlarge_string(dbString * x, int len)
 {
-    if (x->nalloc < len) {
-	if (x->nalloc <= 0)
-	    x->string = db_store("");
+    if (x->nalloc <= 0) {
+	x->string = db_malloc(len * sizeof(char));
+	if (x->string == NULL)
+	    return DB_MEMORY_ERR;
+	x->nalloc = len;
+	strcpy(x->string, "");
+    }
+    else if (x->nalloc < len) {
 	x->string = db_realloc((void *)x->string, len);
 	if (x->string == NULL)
 	    return DB_MEMORY_ERR;
@@ -149,7 +155,7 @@ char *db_get_string(const dbString * x)
 */
 void db_free_string(dbString * x)
 {
-    if (x->nalloc > 0)
+    if (x->nalloc != 0)
 	db_free(x->string);
     db_init_string(x);
 }
@@ -207,7 +213,10 @@ int db_append_string(dbString * x, const char *s)
     int len;
     int stat;
 
-    len = strlen(db_get_string(x)) + strlen(s) + 1;
+    if (db_get_string(x))
+	len = strlen(db_get_string(x)) + strlen(s) + 1;
+    else
+	len = strlen(s) + 1;
     stat = db_enlarge_string(x, len);
     if (stat != DB_OK)
 	return stat;
