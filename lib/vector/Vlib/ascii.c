@@ -308,17 +308,28 @@ int Vect_write_ascii(FILE *ascii,
     static struct line_pnts *Points;
     struct line_cats *Cats, *ACats;
     char *xstring, *ystring, *zstring;
+    size_t xsize, ysize, zsize;
     struct Cell_head window;
     struct ilist *fcats;
     int count;
 
-    /* where */
+    /* where || columns */
     struct field_info *Fi;
     dbDriver *driver;
     dbValue value = {0};
     dbHandle handle;
     int *cats, ncats;
+    int *coltypes = NULL;
     
+    /* TODO: free memory allocated by G_asprintf(),
+     * this is a bad memory leak */
+    xstring = NULL;
+    ystring = NULL;
+    zstring = NULL;
+    xsize = 0;
+    ysize = 0;
+    zsize = 0;
+
     /* get the region */
     G_get_window(&window);
 
@@ -351,6 +362,19 @@ int Vect_write_ascii(FILE *ascii,
 	if (!columns) {
 	    db_close_database(driver);
 	    db_shutdown_driver(driver);
+	}
+	else {
+	    i = 0;
+	    while (columns[i++]);
+	    
+	    coltypes = G_malloc(i * sizeof(int));
+
+	    i = 0;
+	    while (columns[i]) {
+		/* get column types */
+		coltypes[i] = db_column_Ctype(driver, Fi->table, columns[i]);
+		i++;
+	    }
 	}
     }
     
@@ -430,9 +454,9 @@ int Vect_write_ascii(FILE *ascii,
 	    if (ver < 5) {
 		if (att != NULL) {
 		    if (cat > 0) {
-			G_asprintf(&xstring, "%.*f", dp, Points->x[0]);
+			G_asprintf2(&xstring, &xsize, "%.*f", dp, Points->x[0]);
 			G_trim_decimal(xstring);
-			G_asprintf(&ystring, "%.*f", dp, Points->y[0]);
+			G_asprintf2(&ystring, &ysize, "%.*f", dp, Points->y[0]);
 			G_trim_decimal(ystring);
 			fprintf(att, "A %s %s %d\n", xstring, ystring, cat);
 		    }
@@ -465,7 +489,7 @@ int Vect_write_ascii(FILE *ascii,
 		    (window.west > Points->x[0]))
 		    continue;
 	    }
-	    G_asprintf(&xstring, "%.*f", dp, Points->x[0]);
+	    G_asprintf2(&xstring, &xsize, "%.*f", dp, Points->x[0]);
 	    G_trim_decimal(xstring);
 
 	    if (region_flag) {
@@ -473,7 +497,7 @@ int Vect_write_ascii(FILE *ascii,
 		    (window.south > Points->y[0]))
 		    continue;
 	    }
-	    G_asprintf(&ystring, "%.*f", dp, Points->y[0]);
+	    G_asprintf2(&ystring, &ysize, "%.*f", dp, Points->y[0]);
 	    G_trim_decimal(ystring);
 
 	    Vect_field_cat_get(Cats, field, fcats);
@@ -495,7 +519,7 @@ int Vect_write_ascii(FILE *ascii,
 			if (columns[i])
 			    fprintf(ascii, "%s%s", fs, columns[i]);
 			else
-			    fprintf(ascii, "%s", columns[i]);
+			    fprintf(ascii, "%s", columns[i]); /* can not happen */
 		    }
 		}
 		fprintf(ascii, "\n");
@@ -508,7 +532,7 @@ int Vect_write_ascii(FILE *ascii,
 			(window.bottom > Points->z[0]))
 			continue;
 		}
-		G_asprintf(&zstring, "%.*f", dp, Points->z[0]);
+		G_asprintf2(&zstring, &zsize, "%.*f", dp, Points->z[0]);
 		G_trim_decimal(zstring);
 		fprintf(ascii, "%s%s%s%s%s", xstring, fs, ystring, fs,
 			zstring);
@@ -537,7 +561,7 @@ int Vect_write_ascii(FILE *ascii,
 			    fprintf(ascii, "%s", fs);
 			}
 			else {
-			    switch(db_column_Ctype(driver, Fi->table, columns[i]))
+			    switch(coltypes[i])
 			    {
 			    case DB_C_TYPE_INT: {
 				fprintf(ascii, "%s%d", fs, db_get_value_int(&value));
@@ -581,14 +605,14 @@ int Vect_write_ascii(FILE *ascii,
 
 	    while (Points->n_points--) {
 
-		G_asprintf(&xstring, "%.*f", dp, *xptr++);
+		G_asprintf2(&xstring, &xsize, "%.*f", dp, *xptr++);
 		G_trim_decimal(xstring);
-		G_asprintf(&ystring, "%.*f", dp, *yptr++);
+		G_asprintf2(&ystring, &ysize, "%.*f", dp, *yptr++);
 		G_trim_decimal(ystring);
 
 		if (ver == 5) {
 		    if (Map->head.with_z) {
-			G_asprintf(&zstring, "%.*f", dp, *zptr++);
+			G_asprintf2(&zstring, &zsize, "%.*f", dp, *zptr++);
 			G_trim_decimal(zstring);
 			fprintf(ascii, " %-12s %-12s %-12s\n", xstring,
 				ystring, zstring);
@@ -611,9 +635,9 @@ int Vect_write_ascii(FILE *ascii,
 	    else {
 		if (cat > 0) {
 		    if (ltype == GV_POINT) {
-			G_asprintf(&xstring, "%.*f", dp, Points->x[0]);
+			G_asprintf2(&xstring, &xsize, "%.*f", dp, Points->x[0]);
 			G_trim_decimal(xstring);
-			G_asprintf(&ystring, "%.*f", dp, Points->y[0]);
+			G_asprintf2(&ystring, &ysize, "%.*f", dp, Points->y[0]);
 			G_trim_decimal(ystring);
 			fprintf(att, "P %s %s %d\n", xstring, ystring, cat);
 		    }
@@ -621,9 +645,9 @@ int Vect_write_ascii(FILE *ascii,
 			x = (Points->x[1] + Points->x[0]) / 2;
 			y = (Points->y[1] + Points->y[0]) / 2;
 
-			G_asprintf(&xstring, "%.*f", dp, x);
+			G_asprintf2(&xstring, &xsize, "%.*f", dp, x);
 			G_trim_decimal(xstring);
-			G_asprintf(&ystring, "%.*f", dp, y);
+			G_asprintf2(&ystring, &ysize, "%.*f", dp, y);
 			G_trim_decimal(ystring);
 			fprintf(att, "L %s %s %d\n", xstring, ystring, cat);
 		    }
