@@ -173,7 +173,6 @@ Vect_find_line_list(struct Map_info *map,
     int i, line;
     static struct line_pnts *Points;
     static int first_time = 1;
-    const struct Plus_head *Plus;
     struct bound_box box;
     struct boxlist *List;
 
@@ -185,7 +184,6 @@ Vect_find_line_list(struct Map_info *map,
 	first_time = 0;
     }
 
-    Plus = &(map->plus);
     gotone = 0;
     choice = 0;
     cur_dist = HUGE_VAL;

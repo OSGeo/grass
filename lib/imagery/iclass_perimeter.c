@@ -25,6 +25,8 @@
    \author Vaclav Petras <wenzeslaus gmail.com> (rewriting for wx.iclass)
  */
 
+#include <stdlib.h>
+
 #include <grass/vector.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>

@@ -11,6 +11,8 @@
   \author Martin Landa <landa.martin gmail.com>
 */
 
+#include <string.h>
+
 #include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/raster.h>

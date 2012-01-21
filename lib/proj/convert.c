@@ -1,21 +1,20 @@
 
-/**
-   \file convert.c
+/*!
+   \file lib/proj/convert.c
 
-   \brief GProj library - Functions for manipulating co-ordinate system representations
+   \brief GProj Library - Functions for manipulating co-ordinate
+   system representations
+
+   (C) 2003-2008, 2012 by the GRASS Development Team
+ 
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
 
    \author Paul Kelly, Frank Warmerdam 
-
-   (C) 2003-2008 by the GRASS Development Team
- 
-   This program is free software under the GNU General Public
-   License (>=v2). Read the file COPYING that comes with GRASS
-   for details.
-**/
+*/
 
 #include <grass/config.h>
 
-#ifdef HAVE_OGR
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -23,6 +22,8 @@
 #include <grass/gis.h>
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
+
+#ifdef HAVE_OGR
 #include <cpl_csv.h>
 #include "local_proto.h"
 
@@ -30,13 +31,15 @@
 #define CSVDIR "/etc/proj/ogr_csv"
 
 static void DatumNameMassage(char **);
+#endif
 
-/**
+/*!
  * \brief Converts a GRASS co-ordinate system representation to WKT style.
  * 
- * Takes a GRASS co-ordinate system as specified by two sets of key/value
- * pairs derived from the PROJ_INFO and PROJ_UNITS files, and converts it
- * to the 'Well Known Text' format popularised by proprietary GIS
+ * Takes a GRASS co-ordinate system as specified by two sets of
+ * key/value pairs derived from the PROJ_INFO and PROJ_UNITS files,
+ * and converts it to the 'Well Known Text' format popularised by
+ * proprietary GIS
  * 
  * \param proj_info Set of GRASS PROJ_INFO key/value pairs
  * \param proj_units Set of GRASS PROJ_UNIT key/value pairs
@@ -45,14 +48,15 @@ static void DatumNameMassage(char **);
  * \param prettify boolean Use linebreaks and indents to 'prettify' output
  *                 WKT string (Use OSRExportToPrettyWkt() function in OGR)
  *
- * \return Pointer to a string containing the co-ordinate system in WKT
- *         format
- **/
-
+ * \return Pointer to a string containing the co-ordinate system in
+ *         WKT format
+ * \return NULL on error
+ */
 char *GPJ_grass_to_wkt(struct Key_Value *proj_info,
 		       struct Key_Value *proj_units,
 		       int esri_style, int prettify)
 {
+#ifdef HAVE_OGR
     OGRSpatialReferenceH hSRS;
     char *wkt, *local_wkt;
 
@@ -72,10 +76,16 @@ char *GPJ_grass_to_wkt(struct Key_Value *proj_info,
     local_wkt = G_store(wkt);
     CPLFree(wkt);
     OSRDestroySpatialReference(hSRS);
+
     return local_wkt;
+#else
+    G_warning(_("GRASS is not compiled with OGR support"));
+    return NULL;
+#endif
 }
 
-/**
+#ifdef HAVE_OGR
+/*!
  * \brief Converts a GRASS co-ordinate system to an OGRSpatialReferenceH object.
  * 
  * \param proj_info Set of GRASS PROJ_INFO key/value pairs
@@ -83,8 +93,7 @@ char *GPJ_grass_to_wkt(struct Key_Value *proj_info,
  * 
  * \return OGRSpatialReferenceH object representing the co-ordinate system
  *         defined by proj_info and proj_units or NULL if it fails
- **/
-
+ */
 OGRSpatialReferenceH GPJ_grass_to_osr(struct Key_Value * proj_info,
 				      struct Key_Value * proj_units)
 {
@@ -243,7 +252,7 @@ OGRSpatialReferenceH GPJ_grass_to_osr(struct Key_Value * proj_info,
     return hSRS2;
 }
 
-/**
+/*!
  * \brief Converts an OGRSpatialReferenceH object to a GRASS co-ordinate system.
  * 
  * \param cellhd      Pointer to a GRASS Cell_head structure that will have its
@@ -258,10 +267,10 @@ OGRSpatialReferenceH GPJ_grass_to_osr(struct Key_Value * proj_info,
  *                    unspecifed
  * 
  * \return            2 if a projected or lat/long co-ordinate system has been
- *                    defined; 1 if an unreferenced XY co-ordinate system has
+ *                    defined
+ * \return            1 if an unreferenced XY co-ordinate system has
  *                    been defined
- **/
-
+ */
 int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 		     struct Key_Value **projunits, OGRSpatialReferenceH hSRS,
 		     int datumtrans)
@@ -647,9 +656,9 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 
     return 1;
 }
+#endif
 
-
-/**
+/*!
  * \brief Converts a WKT projection description to a GRASS co-ordinate system.
  * 
  * \param cellhd      Pointer to a GRASS Cell_head structure that will have its
@@ -664,14 +673,16 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
  *                    unspecifed
  * 
  * \return            2 if a projected or lat/long co-ordinate system has been
- *                    defined; 1 if an unreferenced XY co-ordinate system has
+ *                    defined
+ * \return            1 if an unreferenced XY co-ordinate system has
  *                    been defined
- **/
-
+ * \return            -1 on error
+ */
 int GPJ_wkt_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 		     struct Key_Value **projunits, const char *wkt,
 		     int datumtrans)
 {
+#ifdef HAVE_OGR
     int retval;
 
     if (wkt == NULL)
@@ -690,9 +701,12 @@ int GPJ_wkt_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
     }
 
     return retval;
+#else
+    return -1;
+#endif
 }
 
-
+#ifdef HAVE_OGR
 /* GPJ_set_csv_loc()
  * 'finder function' for use with OGR SetCSVFilenameHook() function */
 

@@ -198,7 +198,7 @@ off_t Vect_rewrite_line(struct Map_info *Map, int line, int type,
     }
 
     offset = Map->plus.Line[line]->offset;
-    G_debug(3, "   offset=%lu", Map->plus.Line[line]->offset);
+    G_debug(3, "   offset=%llu", Map->plus.Line[line]->offset);
     ret =
 	(*Vect_rewrite_line_array[Map->format][Map->level]) (Map, line, type, offset,
 							     points, cats);

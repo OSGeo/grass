@@ -331,6 +331,7 @@ static int add_geometry(struct Map_info *Map, OGRGeometryH hGeom, int FID, int b
 
     return 0;
 }
+#endif
 
 /*!
    \brief Build pseudo-topology for OGR layer
@@ -350,6 +351,7 @@ static int add_geometry(struct Map_info *Map, OGRGeometryH hGeom, int FID, int b
  */
 int Vect_build_ogr(struct Map_info *Map, int build)
 {
+#ifdef HAVE_OGR
     int iFeature, FID, line;
     struct Plus_head *plus;
     struct P_line *Line;
@@ -479,5 +481,8 @@ int Vect_build_ogr(struct Map_info *Map, int build)
     plus->built = build;
     
     return 1;
-}
+#else
+    G_fatal_error(_("GRASS is not compiled with OGR support"));
+    return -1;
 #endif
+}

@@ -31,6 +31,7 @@
 
 static int sqltype_to_ogrtype(int);
 static dbDriver *create_table(OGRLayerH, const struct field_info *);
+#endif
 
 /*!
    \brief Open existing OGR layer (level 1 - without feature index file)
@@ -46,6 +47,7 @@ static dbDriver *create_table(OGRLayerH, const struct field_info *);
 */
 int V1_open_old_ogr(struct Map_info *Map, int update)
 {
+#ifdef HAVE_OGR
     int i, layer, nLayers;
     OGRDataSourceH Ogr_ds;
     OGRLayerH Ogr_layer;
@@ -123,6 +125,10 @@ int V1_open_old_ogr(struct Map_info *Map, int update)
     Map->fInfo.ogr.feature_cache_id = -1;	/* FID >= 0 */
     
     return 0;
+#else
+    G_fatal_error(_("GRASS is not compiled with OGR support"));
+    return -1;
+#endif
 }
 
 /*!
@@ -135,6 +141,7 @@ int V1_open_old_ogr(struct Map_info *Map, int update)
 */
 int V2_open_old_ogr(struct Map_info *Map)
 {
+#ifdef HAVE_OGR
     char elem[GPATH_MAX];
     char buf[5];		/* used for format version */
     long length;
@@ -207,6 +214,10 @@ int V2_open_old_ogr(struct Map_info *Map)
     Map->fInfo.ogr.next_line = 1;
 
     return 0;
+#else
+    G_fatal_error(_("GRASS is not compiled with OGR support"));
+    return -1;
+#endif
 }
 
 /*!
@@ -223,18 +234,17 @@ int V2_open_old_ogr(struct Map_info *Map)
 */
 int V1_open_new_ogr(struct Map_info *Map, const char *name, int with_z)
 {
+#ifdef HAVE_OGR
     OGRSFDriverH    Ogr_driver;
     OGRDataSourceH  Ogr_ds;
     OGRLayerH       Ogr_layer;
     OGRFeatureDefnH Ogr_featuredefn;
     
     int            i, nlayers;
-    char         **Ogr_layer_options;
      
-    Ogr_layer_options = NULL;
-    
     OGRRegisterAll();
-	    
+    
+    G_debug(1, "V1_open_new_ogr(): name = %s with_z = %d", name, with_z);
     Ogr_driver = OGRGetDriverByName(Map->fInfo.ogr.driver_name);
     if (!Ogr_driver) {
 	G_warning(_("Unable to get OGR driver <%s>"), Map->fInfo.ogr.driver_name);
@@ -276,6 +286,10 @@ int V1_open_new_ogr(struct Map_info *Map, const char *name, int with_z)
     }
     
     return 0;
+#else
+    G_fatal_error(_("GRASS is not compiled with OGR support"));
+    return -1;
+#endif
 }
 
 /*!
@@ -295,6 +309,7 @@ int V1_open_new_ogr(struct Map_info *Map, const char *name, int with_z)
 */
 int V2_open_new_ogr(struct Map_info *Map, int type)
 {
+#ifdef HAVE_OGR
     int ndblinks;
     OGRLayerH            Ogr_layer;
     OGRSpatialReferenceH Ogr_spatial_ref;
@@ -373,8 +388,13 @@ int V2_open_new_ogr(struct Map_info *Map, int type)
 	OGR_L_StartTransaction(Map->fInfo.ogr.layer);
 
     return 0;
+#else
+    G_fatal_error(_("GRASS is not compiled with OGR support"));
+    return -1;
+#endif
 }
 
+#ifdef HAVE_OGR
 dbDriver *create_table(OGRLayerH hLayer, const struct field_info *Fi)
 {
     int col, ncols;
@@ -481,5 +501,4 @@ int sqltype_to_ogrtype(int sqltype)
     
     return ogrtype;
 }
-
 #endif

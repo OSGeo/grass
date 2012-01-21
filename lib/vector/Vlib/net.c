@@ -1067,8 +1067,6 @@ Vect_net_shortest_path_coor2(struct Map_info *Map,
     G_debug(3, "reachable = %d shortcut = %d cur_cst = %f", reachable,
 	    shortcut, cur_cst);
     if (reachable) {
-	int ret;
-
 	if (shortcut) {
 	    if (Points)
 		Vect_append_points(Points, SPoints, GV_FORWARD);
@@ -1094,9 +1092,8 @@ Vect_net_shortest_path_coor2(struct Map_info *Map,
                 /* add starting net SP search node */
                 Vect_list_append(NodesList, fnode[fn]);
             }
-	    ret =
-		Vect_net_shortest_path(Map, fnode[fn], tnode[tn], LList,
-				       NULL);
+	    Vect_net_shortest_path(Map, fnode[fn], tnode[tn], LList,
+				   NULL);
 	    G_debug(3, "Number of lines %d", LList->n_values);
 
 	    if (Points)

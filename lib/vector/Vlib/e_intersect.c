@@ -693,8 +693,6 @@ int segment_intersection_2d(double ax1, double ay1, double ax2, double ay2,
 {
     const int DLEVEL = 4;
 
-    double t;
-
     int vertical;
 
     int f11, f12, f21, f22;

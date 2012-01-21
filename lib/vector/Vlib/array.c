@@ -249,7 +249,7 @@ int
 Vect_set_varray_from_db(const struct Map_info *Map, int field, const char *where,
 			int type, int value, struct varray * varray)
 {
-    int i, n, c, centr, cat, *cats;
+    int i, n, c, centr, *cats;
     int ncats;
     int ni = 0;			/* number of items set */
     int ltype;			/* line type */
@@ -315,7 +315,6 @@ Vect_set_varray_from_db(const struct Map_info *Map, int field, const char *where
 	    for (c = 0; c < Cats->n_cats; c++) {
 		if (Cats->field[c] == field &&
 		    in_array(cats, ncats, Cats->cat[c])) {
-		    cat = Cats->cat[c];
 		    varray->c[i] = value;
 		    ni++;
 		    break;
@@ -348,7 +347,6 @@ Vect_set_varray_from_db(const struct Map_info *Map, int field, const char *where
 	    for (c = 0; c < Cats->n_cats; c++) {
 		if (Cats->field[c] == field &&
 		    in_array(cats, ncats, Cats->cat[c])) {
-		    cat = Cats->cat[c];
 		    varray->c[i] = value;
 		    ni++;
 		    break;

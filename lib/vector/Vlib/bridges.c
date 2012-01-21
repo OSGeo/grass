@@ -84,7 +84,6 @@ remove_bridges(struct Map_info *Map, int chtype, struct Map_info *Err)
     int left, right, node1, node2, current_line, next_line;
     int bridges_removed = 0;	/* number of removed bridges */
     int lines_removed = 0;	/* number of lines removed */
-    char *lmsg;
     struct Plus_head *Plus;
     struct line_pnts *Points;
     struct line_cats *Cats;
@@ -92,11 +91,6 @@ remove_bridges(struct Map_info *Map, int chtype, struct Map_info *Err)
     struct ilist *BridgeList;
 
     int dangle, other_side;
-
-    if (chtype)
-	lmsg = "changed lines";
-    else
-	lmsg = "removed lines";
 
     Plus = &(Map->plus);
 

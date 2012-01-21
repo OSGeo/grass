@@ -20,6 +20,7 @@
 
 #ifdef HAVE_OGR
 #include <ogr_api.h>
+#endif
 
 /*!
   \brief Close vector map (OGR dsn & layer)
@@ -31,6 +32,7 @@
 */
 int V1_close_ogr(struct Map_info *Map)
 {
+#ifdef HAVE_OGR
     int i;
 
     struct Format_info_ogr *fInfo;
@@ -64,6 +66,10 @@ int V1_close_ogr(struct Map_info *Map)
     G_free(fInfo->layer_name);
 
     return 0;
+#else
+    G_fatal_error(_("GRASS is not compiled with OGR support"));
+    return -1;
+#endif
 }
 
 /*!
@@ -76,6 +82,7 @@ int V1_close_ogr(struct Map_info *Map)
 */
 int V2_close_ogr(struct Map_info *Map)
 {
+#ifdef HAVE_OGR
     char fname[1000], elem[1000];
     char buf[5];
     long length = 9;
@@ -133,5 +140,8 @@ int V2_close_ogr(struct Map_info *Map)
     G_free(Map->fInfo.ogr.offset);
 
     return 0;
-}
+#else
+    G_fatal_error(_("GRASS is not compiled with OGR support"));
+    return -1;
 #endif
+}

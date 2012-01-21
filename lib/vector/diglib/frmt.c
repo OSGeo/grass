@@ -52,9 +52,11 @@ int dig_read_frmt_ascii(FILE * dascii, struct Format_info *finfo)
 	    ptr++;
 
 	if (strcmp(buf1, "FORMAT") == 0) {
+#ifdef HAVE_OGR
 	    if (G_strcasecmp(ptr, "ogr") == 0) {
 		frmt = GV_FORMAT_OGR;
 	    }
+#endif
 	}
     }
     if (frmt == -1) {

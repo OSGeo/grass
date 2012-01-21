@@ -14,15 +14,15 @@ const char *set_proj_lib(const char *);
 int pj_print_proj_params(struct pj_info *, struct pj_info *);
 
 /* convert.c */
-#ifdef HAVE_OGR
 char *GPJ_grass_to_wkt(struct Key_Value *, struct Key_Value *, int, int);
+#ifdef HAVE_OGR
 OGRSpatialReferenceH GPJ_grass_to_osr(struct Key_Value *, struct Key_Value *);
-int GPJ_wkt_to_grass(struct Cell_head *, struct Key_Value **,
-		     struct Key_Value **, const char *, int);
+const char *GPJ_set_csv_loc(const char *);
 int GPJ_osr_to_grass(struct Cell_head *, struct Key_Value **,
 		     struct Key_Value **, OGRSpatialReferenceH, int);
-const char *GPJ_set_csv_loc(const char *);
 #endif
+int GPJ_wkt_to_grass(struct Cell_head *, struct Key_Value **,
+		     struct Key_Value **, const char *, int);
 
 /* datum.c */
 int GPJ_get_datum_by_name(const char *, struct gpj_datum *);

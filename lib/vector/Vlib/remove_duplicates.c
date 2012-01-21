@@ -31,11 +31,10 @@
 
    \return void
  */
-void
-Vect_remove_duplicates(struct Map_info *Map, int type, struct Map_info *Err)
+void Vect_remove_duplicates(struct Map_info *Map, int type, struct Map_info *Err)
 {
     struct line_pnts *APoints, *BPoints;
-    struct line_cats *ACats, *BCats, *Cats;
+    struct line_cats *ACats, *BCats;
     int i, j, c, atype, btype, bline;
     int nlines, nbcats_orig;
     struct bound_box ABox;
@@ -47,7 +46,6 @@ Vect_remove_duplicates(struct Map_info *Map, int type, struct Map_info *Err)
     BPoints = Vect_new_line_struct();
     ACats = Vect_new_cats_struct();
     BCats = Vect_new_cats_struct();
-    Cats = Vect_new_cats_struct();
     List = Vect_new_boxlist(0);
 
     nlines = Vect_get_num_lines(Map);

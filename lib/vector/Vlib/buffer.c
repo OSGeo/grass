@@ -52,7 +52,7 @@ static void vect(double x1, double y1, double x2, double y2, double *x,
 static int find_cross(struct line_pnts *Points, int s1, int s2, int s3,
 		      int s4, int *s5, int *s6)
 {
-    int i, j, np, ret;
+    int i, j, ret;
     double *x, *y;
 
     G_debug(5,
@@ -61,8 +61,7 @@ static int find_cross(struct line_pnts *Points, int s1, int s2, int s3,
 
     x = Points->x;
     y = Points->y;
-    np = Points->n_points;
-
+    
     for (i = s1; i <= s2; i++) {
 	for (j = s3; j <= s4; j++) {
 	    if (j == i) {
