@@ -580,9 +580,8 @@ int Vect_read_dblinks(struct Map_info *Map)
     G_debug(3, "Searching for FID column in OGR DB");
     if (Map->format & (GV_FORMAT_OGR | GV_FORMAT_OGR_DIRECT)) {
 
-#ifndef HAVE_GDAL
-	G_fatal_error(_("The support for OGR vector maps wasn't"
-			" compiled in"));
+#ifndef HAVE_OGR
+	G_warning(_("GRASS is not compiled with OGR support"));
 #else
 #if GDAL_VERSION_NUM > 1320 && HAVE_OGR /* seems to be fixed after 1320 release */
 	int nLayers;

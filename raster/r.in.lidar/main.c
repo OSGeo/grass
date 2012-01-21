@@ -272,7 +272,7 @@ int main(int argc, char *argv[])
     proj_units = NULL;
     projstr = LASSRS_GetWKT_CompoundOK(LAS_srs);
 
-    if (1) {
+    if (TRUE) {
 	int err = 0;
 	char error_msg[8192];
 
@@ -281,7 +281,7 @@ int main(int argc, char *argv[])
 			     &proj_units, projstr, 0) < 0)
 	    G_warning(_("Unable to convert input map projection information to "
 		       "GRASS format for checking"));
-
+	
 	/* Does the projection of the current location match the dataset? */
 	/* G_get_window seems to be unreliable if the location has been changed */
 	G_get_set_window(&loc_wind);

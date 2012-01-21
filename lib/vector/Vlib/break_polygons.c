@@ -104,15 +104,14 @@ static int compare_xpnts(const void *Xpnta, const void *Xpntb)
 }
 
 /* break polygons using a file-based search index */
-void
-Vect_break_polygons_file(struct Map_info *Map, int type, struct Map_info *Err)
+void Vect_break_polygons_file(struct Map_info *Map, int type, struct Map_info *Err)
 {
     struct line_pnts *BPoints, *Points;
     struct line_cats *Cats, *ErrCats;
     int i, j, k, ret, ltype, broken, last, nlines;
     int nbreaks;
     struct RTree *RTree;
-    int apoints, npoints, nallpoints, nmarks;
+    int npoints, nallpoints, nmarks;
     XPNT2 XPnt;
     struct RTree_Rect rect;
     double dx, dy, a1 = 0, a2 = 0;
@@ -143,7 +142,6 @@ Vect_break_polygons_file(struct Map_info *Map, int type, struct Map_info *Err)
     /* Go through all lines in vector, and add each point to structure of points,
      * if such point already exists check angles of segments and if differ mark for break */
 
-    apoints = 0;
     nmarks = 0;
     npoints = 1;		/* index starts from 1 ! */
     nallpoints = 0;
@@ -396,15 +394,14 @@ Vect_break_polygons_file(struct Map_info *Map, int type, struct Map_info *Err)
 
 
 /* break polygons using a memory-based search index */
-void
-Vect_break_polygons_mem(struct Map_info *Map, int type, struct Map_info *Err)
+void Vect_break_polygons_mem(struct Map_info *Map, int type, struct Map_info *Err)
 {
     struct line_pnts *BPoints, *Points;
     struct line_cats *Cats, *ErrCats;
     int i, j, k, ret, ltype, broken, last, nlines;
     int nbreaks;
     struct RB_TREE *RBTree;
-    int apoints, npoints, nallpoints, nmarks;
+    int npoints, nallpoints, nmarks;
     XPNT *XPnt_found, XPnt_search;
     double dx, dy, a1 = 0, a2 = 0;
     int closed, last_point, cross;
@@ -424,7 +421,6 @@ Vect_break_polygons_mem(struct Map_info *Map, int type, struct Map_info *Err)
     /* Go through all lines in vector, and add each point to structure of points,
      * if such point already exists check angles of segments and if differ mark for break */
 
-    apoints = 0;
     nmarks = 0;
     npoints = 0;
     nallpoints = 0;

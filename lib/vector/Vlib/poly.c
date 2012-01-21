@@ -697,7 +697,6 @@ Vect_point_in_area_outer_ring(double X, double Y, const struct Map_info *Map,
     static struct line_pnts *Points;
     struct bound_box lbox;
     const struct Plus_head *Plus;
-    struct P_line *Line;
     struct P_area *Area;
 
     G_debug(3, "Vect_point_in_area_outer_ring(): x = %f y = %f area = %d", X,
@@ -720,8 +719,6 @@ Vect_point_in_area_outer_ring(double X, double Y, const struct Map_info *Map,
     for (i = 0; i < Area->n_lines; i++) {
 	line = abs(Area->lines[i]);
 	G_debug(3, "  line[%d] = %d", i, line);
-
-	Line = Plus->Line[line];
 
 	/* this is slow, but the fastest of all alternatives */
 	Vect_get_line_box(Map, line, &lbox);

@@ -604,7 +604,7 @@ Vect_line_intersection(struct line_pnts *APoints,
 {
     int i, j, k, l, last_seg, seg, last;
     int n_alive_cross;
-    double dist, curdist, last_dist, last_x, last_y, last_z;
+    double dist, curdist, last_x, last_y, last_z;
     double x, y, rethresh;
     struct line_pnts **XLines, *Points;
     struct RTree *MyRTree;
@@ -996,7 +996,6 @@ Vect_line_intersection(struct line_pnts *APoints,
 	    cross[n_cross].segment[current] = Points->n_points - 2;
 
 	    last_seg = 0;
-	    last_dist = 0;
 	    last_x = Points->x[0];
 	    last_y = Points->y[0];
 	    last_z = Points->z[0];

@@ -272,12 +272,21 @@ int main(int argc, char *argv[])
     else if (create->answer)
 	modify_projinfo();
     else
+#ifdef HAVE_OGR
 	G_fatal_error(_("No output format specified, define one "
 			"of flags -%c, -%c, -%c, or -%c"),
 		      printinfo->key, shellinfo->key, printproj4->key, printwkt->key);
-    
+#else
+	G_fatal_error(_("No output format specified, define one "
+			"of flags -%c, -%c, or -%c"),
+		      printinfo->key, shellinfo->key, printproj4->key);
+#endif
 
+#ifdef HAVE_OGR
     if (create->answer && inepsg->answer) {
+#else
+    if (create->answer){ 
+#endif
 	/* preserve epsg code for user records only (not used by grass's pj routines) */
 	FILE *fp;
 	char path[GPATH_MAX];
@@ -290,7 +299,9 @@ int main(int argc, char *argv[])
 	else
 	    G_file_name(path, "", "PROJ_EPSG", "PERMANENT");
 	fp = fopen(path, "w");
+#ifdef HAVE_OGR
 	fprintf(fp, "epsg: %s\n", inepsg->answer);
+#endif
 	fclose(fp);
     }
 

@@ -100,6 +100,8 @@ static void V2__add_line_to_topo_ogr(struct Map_info *Map, int line,
     return;
 }
 
+#endif
+
 /*!
   \brief Writes feature on level 1 (OGR interface)
 
@@ -123,6 +125,7 @@ off_t V1_write_line_ogr(struct Map_info *Map, int type,
 			const struct line_pnts *points,
 			const struct line_cats *cats)
 {
+#ifdef HAVE_OGR
     int i, cat, ret;
 
     struct field_info *Fi;
@@ -267,6 +270,10 @@ off_t V1_write_line_ogr(struct Map_info *Map, int type,
     G_debug(3, "V1_write_line_ogr(): -> offset = %lu", (unsigned long) offset);
 
     return offset;
+#else
+    G_fatal_error(_("GRASS is not compiled with OGR support"));
+    return -1;
+#endif
 }
 
 /*!
@@ -283,6 +290,7 @@ off_t V1_write_line_ogr(struct Map_info *Map, int type,
 off_t V2_write_line_ogr(struct Map_info *Map, int type,
 			const struct line_pnts *points, const struct line_cats *cats)
 {
+#ifdef HAVE_OGR
     int line;
     off_t offset;
     struct Plus_head *plus;
@@ -348,7 +356,10 @@ off_t V2_write_line_ogr(struct Map_info *Map, int type,
      * Write_line_array in write.c */
     
     return line;
-
+#else
+    G_fatal_error(_("GRASS is not compiled with OGR support"));
+    return -1;
+#endif
 }
 
 /*!
@@ -369,6 +380,7 @@ off_t V1_rewrite_line_ogr(struct Map_info *Map,
 			  off_t offset,
 			  const struct line_pnts *points, const struct line_cats *cats)
 {
+#ifdef HAVE_OGR
     if (type != V1_read_line_ogr(Map, NULL, NULL, offset)) {
 	G_warning(_("Unable to rewrite feature (incompatible feature types)"));
 	return -1;
@@ -378,6 +390,10 @@ off_t V1_rewrite_line_ogr(struct Map_info *Map,
     V1_delete_line_ogr(Map, offset);
 
     return V1_write_line_ogr(Map, type, points, cats);
+#else
+    G_fatal_error(_("GRASS is not compiled with OGR support"));
+    return -1;
+#endif
 }
 
 /*!
@@ -396,6 +412,7 @@ off_t V1_rewrite_line_ogr(struct Map_info *Map,
 off_t V2_rewrite_line_ogr(struct Map_info *Map, int line, int type, off_t offset,
 			  const struct line_pnts *points, const struct line_cats *cats)
 {
+#ifdef HAVE_OGR
     if (type != V2_read_line_ogr(Map, NULL, NULL, line)) {
 	G_warning(_("Unable to rewrite feature (incompatible feature types)"));
 	return -1;
@@ -404,6 +421,10 @@ off_t V2_rewrite_line_ogr(struct Map_info *Map, int line, int type, off_t offset
     V2_delete_line_ogr(Map, line);
 
     return V2_write_line_ogr(Map, type, points, cats);
+#else
+    G_fatal_error(_("GRASS is not compiled with OGR support"));
+    return -1;
+#endif
 }
 
 /*!
@@ -417,6 +438,7 @@ off_t V2_rewrite_line_ogr(struct Map_info *Map, int line, int type, off_t offset
 */
 int V1_delete_line_ogr(struct Map_info *Map, off_t offset)
 {
+#ifdef HAVE_OGR
     G_debug(3, "V1_delete_line_ogr(), offset = %lu", (unsigned long) offset);
 
     if (!Map->fInfo.ogr.layer) {
@@ -431,6 +453,10 @@ int V1_delete_line_ogr(struct Map_info *Map, off_t offset)
 	return -1;
     
     return 0;
+#else
+    G_fatal_error(_("GRASS is not compiled with OGR support"));
+    return -1;
+#endif
 }
 
 /*!
@@ -444,6 +470,7 @@ int V1_delete_line_ogr(struct Map_info *Map, off_t offset)
 */
 int V2_delete_line_ogr(struct Map_info *Map, int line)
 {
+#ifdef HAVE_OGR
     int ret, i, type, first;
     struct P_line *Line;
     struct Plus_head *plus;
@@ -507,8 +534,13 @@ int V2_delete_line_ogr(struct Map_info *Map, int line)
 	/* maybe not needed VERIFY */
     }
     return ret;
+#else
+    G_fatal_error(_("GRASS is not compiled with OGR support"));
+    return -1;
+#endif
 }
 
+#ifdef HAVE_OGR
 int write_attributes(dbDriver *driver, int cat, const struct field_info *Fi,
 		     OGRLayerH Ogr_layer, OGRFeatureH Ogr_feature)
 {

@@ -213,6 +213,7 @@ int read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
     }
     return -2;			/* not reached */
 }
+#endif
 
 /*!
   \brief Read next feature from OGR layer. Skip empty features (level 1)
@@ -235,7 +236,12 @@ int read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 int V1_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 			  struct line_cats *line_c)
 {
+#ifdef HAVE_OGR
     return read_next_line_ogr(Map, line_p, line_c, FALSE);
+#else
+    G_fatal_error(_("GRASS is not compiled with OGR support"));
+    return -1;
+#endif
 }
 
 /*!
@@ -254,6 +260,7 @@ int V1_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 int V2_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 			  struct line_cats *line_c)
 {
+#ifdef HAVE_OGR
     int line, ret;
     struct P_line *Line;
     struct bound_box lbox, mbox;
@@ -328,8 +335,13 @@ int V2_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 	
 	return ret;
     }
+#else
+    G_fatal_error(_("GRASS is not compiled with OGR support"));
+    return -1;
+#endif
 }
 
+#ifdef HAVE_OGR
 /*!
   \brief Recursively descend to feature and read the part
   
@@ -460,6 +472,7 @@ int get_line_type(const struct Map_info *Map, long FID)
 
     return -1;
 }
+#endif
 
 /*!
   \brief Read feature from OGR layer at given offset (level 1)
@@ -479,6 +492,7 @@ int get_line_type(const struct Map_info *Map, long FID)
 int V1_read_line_ogr(struct Map_info *Map,
 		     struct line_pnts *line_p, struct line_cats *line_c, off_t offset)
 {
+#ifdef HAVE_OGR
     long FID;
     int type;
     OGRGeometryH hGeom;
@@ -535,6 +549,10 @@ int V1_read_line_ogr(struct Map_info *Map,
     }
 
     return type;
+#else
+    G_fatal_error(_("GRASS is not compiled with OGR support"));
+    return -1;
+#endif
 }
 
 /*!
@@ -554,6 +572,7 @@ int V1_read_line_ogr(struct Map_info *Map,
 int V2_read_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 		     struct line_cats *line_c, int line)
 {
+#ifdef HAVE_OGR
     struct P_line *Line;
     G_debug(4, "V2_read_line_ogr() line = %d", line);
     
@@ -601,6 +620,8 @@ int V2_read_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
     }
     
     return V1_read_line_ogr(Map, line_p, line_c, Line->offset);
-}
-
+#else
+    G_fatal_error(_("GRASS is not compiled with OGR support"));
+    return -1;
 #endif
+}
