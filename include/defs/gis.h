@@ -116,6 +116,10 @@ int G_vasprintf(char **, const char *, va_list);
 int G_asprintf(char **, const char *, ...)
     __attribute__ ((format(printf, 2, 3)));
 
+int G_vasprintf2(char **, size_t *,const char *, va_list);
+int G_asprintf2(char **, size_t *,const char *, ...)
+    __attribute__ ((format(printf, 3, 4)));
+
 /* basename.c */
 char *G_basename(char *, const char *);
 
