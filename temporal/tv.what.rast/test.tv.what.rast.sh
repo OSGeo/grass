@@ -17,14 +17,14 @@ v.random --o -z output=soil_3 n=5 zmin=0 zmax=100 column=height seed=3
 
 n1=`g.tempfile pid=1 -d` 
 
-cat > $n1 << EOF
+cat > "${n1}" << EOF
 soil_1|2001-01-01|2001-04-01
 soil_2|2001-05-01|2001-07-01
 soil_3|2001-08-01|2001-12-01
 EOF
 
 t.create --o type=stvds temporaltype=absolute output=soil_abs1 title="A test" descr="A test"
-tv.register input=soil_abs1 file="$n1" start=file end=file
+tv.register input=soil_abs1 file="${n1}" start=file end=file
 
 t.create --o type=strds temporaltype=absolute output=precip_abs1 title="A test" descr="A test"
 tr.register -i input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-03-01 00:00:00" increment="1 months"

@@ -21,7 +21,7 @@ n1=`g.tempfile pid=1 -d` # Only map names
 n2=`g.tempfile pid=2 -d` # Map names and start time
 n3=`g.tempfile pid=3 -d` # Map names start time and increment
 
-cat > $n1 << EOF
+cat > "${n1}" << EOF
 prec_1
 prec_2
 prec_3
@@ -29,9 +29,9 @@ prec_4
 prec_5
 prec_6
 EOF
-cat $n1
+cat "${n1}"
 
-cat > $n2 << EOF
+cat > "${n2}" << EOF
 prec_1|2001-01-01
 prec_2|2001-02-01
 prec_3|2001-03-01
@@ -39,9 +39,9 @@ prec_4|2001-04-01
 prec_5|2001-05-01
 prec_6|2001-06-01
 EOF
-cat $n2
+cat "${n2}"
 
-cat > $n3 << EOF
+cat > "${n3}" << EOF
 prec_1|2001-01-01|2001-04-01
 prec_2|2001-04-01|2001-07-01
 prec_3|2001-07-01|2001-10-01
@@ -49,7 +49,7 @@ prec_4|2001-10-01|2002-01-01
 prec_5|2002-01-01|2002-04-01
 prec_6|2002-04-01|2002-07-01
 EOF
-cat $n3
+cat "${n3}"
 
 # The first @test
 # We create the space time raster inputs and register the raster maps with absolute time interval
@@ -57,25 +57,25 @@ t.create --o type=strds temporaltype=absolute output=precip_abs8 title="A test w
 
 # Test with input files
 # File 1
-tr.register -i input=precip_abs8 file=$n1 start="2001-01-01" increment="1 months"
+tr.register -i input=precip_abs8 file="${n1}" start="2001-01-01" increment="1 months"
 t.info type=strds input=precip_abs8
 tr.list input=precip_abs8
 # File 1
-tr.register input=precip_abs8 file=$n1 start="2001-01-01" 
+tr.register input=precip_abs8 file="${n1}" start="2001-01-01" 
 t.info type=strds input=precip_abs8
 tr.list input=precip_abs8
 # File 2
-tr.register input=precip_abs8 file=$n2 start=file
+tr.register input=precip_abs8 file="${n2}" start=file
 t.info type=strds input=precip_abs8
 tr.list input=precip_abs8
 # File 2
-tr.register input=precip_abs8 file=$n2 start=file increment="1 months"
+tr.register input=precip_abs8 file="${n2}" start=file increment="1 months"
 t.info type=strds input=precip_abs8
 tr.list input=precip_abs8
 # File 3
-tr.register -i input=precip_abs8 file=$n3 start=file end=file
+tr.register -i input=precip_abs8 file="${n3}" start=file end=file
 t.info type=strds input=precip_abs8
 tr.list input=precip_abs8
 
 t.remove --v type=strds input=precip_abs8
-t.remove --v type=rast file=$n1
+t.remove --v type=rast file="${n1}"

@@ -357,11 +357,14 @@ class absolute_temporal_extent(abstract_temporal_extent):
 	self.set_timezone(timezone)
 
     def set_timezone(self, timezone):
-	"""Set the timezone of the map, integer from 1 - 24"""
+	"""Set the timezone of the map, the timezone is of type string.
+           Timezones are not supported yet, instead the timezone is set in the datetime string as offset in minutes.
+        """
 	self.D["timezone"] = timezone
 
     def get_timezone(self):
 	"""Get the timezone of the map
+           Timezones are not supported yet, instead the timezone is set in the datetime string as offset in minutes.
 	   @return None if not found"""
 	if self.D.has_key("timezone"):
 	    return self.D["timezone"]
@@ -474,17 +477,60 @@ class stvds_absolute_time(stds_absolute_time):
 class relative_temporal_extent(abstract_temporal_extent):
     """This is the relative time class for all maps and spacetime datasets
 
-       start_time and end_time must be of type datetime
+       start_time and end_time must be of type integer
     """
-    def __init__(self, table=None, ident=None, start_time=None, end_time=None):
+    def __init__(self, table=None, ident=None, start_time=None, end_time=None, unit=None):
 
 	abstract_temporal_extent.__init__(self, table, ident, start_time, end_time)
+	self.D["unit"] = unit
+
+    def set_unit(self, unit):
+        """Set the unit of the relative time. Valid units are:
+           * years
+           * months
+           * days
+           * hours
+           * minutes
+           * seconds
+        """
+	self.D["unit"] = unit
+
+    def get_unit(self):
+	"""Get the unit of the relative time
+	   @return None if not found"""
+	if self.D.has_key("unit"):
+	    return self.D["unit"]
+        else:
+	    return None
+
+    def temporal_relation(self, map):
+	"""Returns the temporal relation between temporal objects
+	   Temporal relationsships are implemented after [Allen and Ferguson 1994 Actions and Events in Interval Temporal Logic]
+	"""
+        
+        # Check units for relative time
+        if not self.D.has_key("unit"):
+            return None
+        if not map.D.has_key("unit"):
+            return None
+
+        # Units must be equal
+        if self.D["unit"] != map.D["unit"]:
+            return None
+
+	return abstract_temporal_extent.temporal_relation(self, map)
 
     def print_info(self):
         """Print information about this class in human readable style"""
         #      0123456789012345678901234567890
-        print " +-------------------- Reltive time ------------------------------------------+"
+        print " +-------------------- Relative time -----------------------------------------+"
         abstract_temporal_extent.print_info(self)
+        print " | Relative time unit:......... " + str(self.get_unit())
+
+    def print_shell_info(self):
+        """Print information about this class in shell style"""
+        abstract_temporal_extent.print_shell_info(self)
+        print "unit=" + str(self.get_unit())
 
 ###############################################################################
 

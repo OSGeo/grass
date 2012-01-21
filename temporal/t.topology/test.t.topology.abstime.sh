@@ -23,7 +23,7 @@ n3=`g.tempfile pid=3 -d`
 n4=`g.tempfile pid=4 -d`
 n5=`g.tempfile pid=5 -d`
 
-cat > $n1 << EOF
+cat > "${n1}" << EOF
 prec_1
 prec_2
 prec_3
@@ -32,7 +32,7 @@ prec_5
 prec_6
 EOF
 
-cat > $n2 << EOF
+cat > "${n2}" << EOF
 prec_1|2001-01-01
 prec_2|2001-02-01
 prec_3|2001-03-01
@@ -41,7 +41,7 @@ prec_5|2001-05-01
 prec_6|2001-06-01
 EOF
 
-cat > $n3 << EOF
+cat > "${n3}" << EOF
 prec_1|2001-01-01|2001-04-01
 prec_2|2001-05-01|2001-07-01
 prec_3|2001-08-01|2001-10-01
@@ -50,7 +50,7 @@ prec_5|2002-02-01|2002-04-01
 prec_6|2002-05-01|2002-07-01
 EOF
 
-cat > $n4 << EOF
+cat > "${n4}" << EOF
 prec_1|2001-01-01|2001-07-01
 prec_2|2001-02-01|2001-04-01
 prec_3|2001-03-01|2001-04-01
@@ -59,7 +59,7 @@ prec_5|2001-05-01|2001-06-01
 prec_6|2001-06-01|2001-07-01
 EOF
 
-cat > $n5 << EOF
+cat > "${n5}" << EOF
 prec_1|2001-01-01|2001-03-11
 prec_2|2001-02-01|2001-04-01
 prec_3|2001-03-01|2001-06-02
@@ -73,30 +73,30 @@ EOF
 # We create the space time raster inputs and register the raster maps with absolute time interval
 t.create --o type=strds temporaltype=absolute output=precip_abs title="A test with input files" descr="A test with input files"
 
-tr.register -i input=precip_abs file=$n1 start="2001-01-01" increment="1 months"
-cat $n1
+tr.register -i input=precip_abs file="${n1}" start="2001-01-01" increment="1 months"
+cat "${n1}"
 t.topology    input=precip_abs
 t.topology -m input=precip_abs
 
-tr.register -i input=precip_abs file=$n2 start=file
-cat $n2
+tr.register -i input=precip_abs file="${n2}" start=file
+cat "${n2}"
 t.topology    input=precip_abs
 t.topology -m input=precip_abs
 
-tr.register -i input=precip_abs file=$n3 start=file end=file
-cat $n3
+tr.register -i input=precip_abs file="${n3}" start=file end=file
+cat "${n3}"
 t.topology    input=precip_abs
 t.topology -m input=precip_abs
 
-tr.register -i input=precip_abs file=$n4 start=file end=file
-cat $n4
+tr.register -i input=precip_abs file="${n4}" start=file end=file
+cat "${n4}"
 t.topology    input=precip_abs
 t.topology -m input=precip_abs
 
-tr.register -i input=precip_abs file=$n5 start=file end=file
-cat $n5
+tr.register -i input=precip_abs file="${n5}" start=file end=file
+cat "${n5}"
 t.topology    input=precip_abs
 t.topology -m input=precip_abs
 
 t.remove type=strds input=precip_abs
-t.remove type=rast file=$n1
+t.remove type=rast file="${n1}"

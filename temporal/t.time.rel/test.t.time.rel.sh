@@ -13,33 +13,36 @@ r.mapcalc --o expr="prec_4 = rand(0, 510)"
 r.mapcalc --o expr="prec_5 = rand(0, 300)"
 r.mapcalc --o expr="prec_6 = rand(0, 650)"
 
-t.create --v --o type=strds temporaltype=relative output=precip_rel1 title="A test" descr="A test"
+t.create --v --o type=strds temporaltype=relative output=precip_rel1 title="A test" descr="A test" 
 t.create --v --o type=strds temporaltype=relative output=precip_rel2 title="A test" descr="A test"
 t.create --v --o type=strds temporaltype=relative output=precip_rel3 title="A test" descr="A test"
 
-t.time.rel --v input=prec_1,prec_2,prec_3 start=5 increment=2
+t.time.rel --v input=prec_1,prec_2,prec_3 start=5 increment=2 unit=days
 t.info type=rast input=prec_1
+r.info map=prec_1
 t.info type=rast input=prec_2
+r.info map=prec_2
 t.info type=rast input=prec_3
+r.info map=prec_3
 
-tr.register --v input=precip_rel1 maps=prec_1,prec_2,prec_3
-tr.register --v input=precip_rel2 maps=prec_1,prec_2,prec_3
-tr.register --v input=precip_rel3 maps=prec_1,prec_2,prec_3
+tr.register --v input=precip_rel1 maps=prec_1,prec_2,prec_3 unit=days
+tr.register --v input=precip_rel2 maps=prec_1,prec_2,prec_3 unit=days
+tr.register --v input=precip_rel3 maps=prec_1,prec_2,prec_3 unit=days
 # Check if the space time inputs are updated correctly
-t.time.rel --v input=prec_1,prec_2,prec_3 start=0 increment=1000
+t.time.rel --v input=prec_1,prec_2,prec_3 start=0 increment=1000 unit=days
 t.info type=strds input=precip_rel1
 t.topology type=strds input=precip_rel1
 t.topology -m type=strds input=precip_rel1
 
-t.time.rel --v -i input=prec_1,prec_2,prec_3 start=0 increment=1000 -i
+t.time.rel --v -i input=prec_1,prec_2,prec_3 start=0 increment=1000 unit=days
 t.info type=strds input=precip_rel1
 t.topology type=strds input=precip_rel1
 t.topology -m type=strds input=precip_rel1
 
-t.time.rel --v input=prec_4,prec_5 start=5000 end=6000
+t.time.rel --v input=prec_4,prec_5 start=5000 end=6000 unit=days
 t.info type=rast input=prec_4
 t.info type=rast input=prec_5
-t.time.rel --v input=prec_6 start=6000
+t.time.rel --v input=prec_6 start=6000 unit=days
 t.info type=rast input=prec_6
 
 t.remove --v type=rast input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6

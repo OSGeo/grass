@@ -26,6 +26,9 @@ from datetime_math import *
 ###############################################################################
 
 def compute_relative_time_granularity(maps):            
+    """ Compute the relative granularity"""
+
+    # The intervaltime must be scaled to days resoltuion
     granularity = None
 
     delta = []
@@ -33,9 +36,8 @@ def compute_relative_time_granularity(maps):
     for map in maps:
         start, end = map.get_valid_time()
         if start and end:
-            t =  relative_time_to_time_delta(abs(end - start))
-            full_seconds = t.days * 86400 + t.seconds
-            delta.append(full_seconds)
+            t =  abs(end - start)
+            delta.append(int(t))
 
     # Compute the timedelta of the gaps
     for i in range(len(maps)):
@@ -46,23 +48,23 @@ def compute_relative_time_granularity(maps):
                 start2, end2 = maps[i + 1].get_valid_time()
                 # Gaps are between intervals, intervals and points, points and points
                 if end1 and start2:
-                    t =  relative_time_to_time_delta(abs(end1 - start2))
-                    full_seconds = t.days * 86400 + t.seconds
-                    delta.append(full_seconds)
+                    t =  abs(end1 - start2)
+                    delta.append(int(t))
                 if  not end1 and start2:
-                    t =  relative_time_to_time_delta(abs(start1 - start2))
-                    full_seconds = t.days * 86400 + t.seconds
-                    delta.append(full_seconds)
+                    t =  abs(start1 - start2)
+                    delta.append(int(t))
 
     delta.sort()
     ulist = list(set(delta))
     if len(ulist) > 1:
         # Find greatest common divisor
         granularity = gcd_list(ulist)
-    else:
+    elif len(ulist) == 1:
         granularity = ulist[0]
+    else:
+        granularity = 0
 
-    return float(granularity / 86400.0)
+    return granularity
 
 ###############################################################################
 

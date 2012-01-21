@@ -120,12 +120,14 @@ def main():
                 id = output + "@" + mapset
 
             map = sp.get_new_map_instance(id)
-
             map.load()
+
             if sp.is_time_absolute():
                 map.set_absolute_time(start_time, end_time, tz)
+                map.write_absolute_time_to_file()
             else:
                 map.set_relative_time(start_time, end_time)
+                map.write_relative_time_to_file()
 
             # Register the map in the temporal database
             if map.is_in_db():

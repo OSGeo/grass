@@ -39,6 +39,7 @@ class abstract_space_time_dataset(abstract_dataset):
     """
     def __init__(self, ident):
 	self.reset(ident)
+        self.map_counter = 0
 
     def get_new_map_instance(self, ident=None):
         """Return a new instance of a map dataset which is associated with the type of this class
@@ -168,6 +169,19 @@ class abstract_space_time_dataset(abstract_dataset):
         else:
             core.fatal(_("Unknown temporal type \"%s\"") % (temporal_type))
 
+    def set_relative_time_unit(self, unit):
+        """Set the relative time unit which may be of type: years, months, days, hours, minutes or seconds
+        
+           All maps registered in a (relative time) space time dataset must have the same unit
+        """
+
+        temporal_type = self.get_temporal_type()
+ 
+        if temporal_type == "relative":
+            if not self.check_relative_time_unit(unit):
+                core.fatal(_("Unsupported temporal unit: %s") % (unit))
+            self.relative_time.set_unit(unit)
+
     def get_map_time(self):
         """Return the type of the map time, interval, point, maixed or invalid"""
         
@@ -199,7 +213,7 @@ class abstract_space_time_dataset(abstract_dataset):
                 if count == 0:
                     relations = relation
                 else:
-                    relations += "," + relation
+                    relations += "," + str(relation)
                 count += 1
                 # Break if the the next map follows
                 if relation == "follows":
@@ -263,7 +277,7 @@ class abstract_space_time_dataset(abstract_dataset):
             if maps[i].is_time_absolute():
                 start, end, tz = maps[i].get_absolute_time()
             if maps[i].is_time_relative():
-                start, end = maps[i].get_relative_time()
+                start, end, unit = maps[i].get_relative_time()
 
             if start != None and end != None:
                 time_interval += 1
@@ -703,7 +717,7 @@ class abstract_space_time_dataset(abstract_dataset):
                 if self.is_time_absolute():
                     map.set_absolute_time(row["start_time"], row["end_time"])
                 elif self.is_time_relative():
-                    map.set_relative_time(row["start_time"], row["end_time"])
+                    map.set_relative_time(row["start_time"], row["end_time"], self.get_relative_time_unit())
                 obj_list.append(copy.copy(map))
                 count += 1
 
@@ -855,6 +869,8 @@ class abstract_space_time_dataset(abstract_dataset):
         map_name = map.base.get_name()
         map_mapset = map.base.get_mapset()
         map_register_table = map.get_stds_register()
+        map_rel_time_unit = map.get_relative_time_unit()
+        map_ttype = map.get_temporal_type()
 
         #print "Map register table", map_register_table
 
@@ -862,6 +878,23 @@ class abstract_space_time_dataset(abstract_dataset):
         stds_name = self.base.get_name()
         stds_mapset = self.base.get_mapset()
         stds_register_table = self.get_map_register()
+        stds_ttype = self.get_temporal_type()
+
+        # Check temporal types
+        if stds_ttype != map_ttype:
+            core.fatal(_("Temporal type of space time dataset <%s> and map <%s> are different") % (self.get_id(), map.get_id()))
+
+        # In case no map has been registered yet, set the relative time unit from the first map
+        if self.metadata.get_number_of_maps() == None and self.map_counter == 0 and self.is_time_relative():
+            self.set_relative_time_unit(map_rel_time_unit)
+            self.relative_time.update()
+            core.verbose(_("Set temporal unit for space time %s dataset <%s> to %s") %  (map.get_type(), self.get_id(), map_rel_time_unit))
+
+        stds_rel_time_unit = self.get_relative_time_unit()
+
+        # Check the relative time unit
+        if self.is_time_relative() and (stds_rel_time_unit != map_rel_time_unit):
+            core.fatal(_("Relative time units of space time dataset <%s> and map <%s> are different") % (self.get_id(), map.get_id()))
 
         #print "STDS register table", stds_register_table
 
@@ -887,7 +920,7 @@ class abstract_space_time_dataset(abstract_dataset):
         # Create tables
         sql_path = get_sql_template_path()
 
-        # We need to create the stmap raster register table bevor we can register the map
+        # We need to create the map raster register table bevor we can register the map
         if map_register_table == None:
             # Create a unique id
             uuid_rand = "map_" + str(uuid.uuid4()).replace("-", "")
@@ -987,6 +1020,9 @@ class abstract_space_time_dataset(abstract_dataset):
         if connect == True:
             dbif.close()
             
+        # increase the counter
+        self.map_counter += 1
+
         return True
 
     def unregister_map(self, map, dbif = None):
@@ -1050,6 +1086,9 @@ class abstract_space_time_dataset(abstract_dataset):
 
         if connect == True:
             dbif.close()
+
+        # decrease the counter
+        self.map_counter -= 1
             
     def update_from_registered_maps(self, dbif = None):
         """This methods updates the spatial and temporal extent as well as
@@ -1127,7 +1166,7 @@ class abstract_space_time_dataset(abstract_dataset):
         if self.is_time_absolute():
             start_time, end_time, tz = self.get_absolute_time()
         else:
-            start_time, end_time = self.get_relative_time()
+            start_time, end_time, unit = self.get_relative_time()
 
         # In case no end time is set, use the maximum start time of all registered maps as end time
         if end_time == None:

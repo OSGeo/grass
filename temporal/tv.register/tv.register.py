@@ -61,9 +61,19 @@
 #%end
 
 #%option
+#% key: unit
+#% type: string
+#% description: The unit of the relative time
+#% required: no
+#% multiple: no
+#% options: years,months,days,hours,minutes,seconds
+#% answer: days
+#%end
+
+#%option
 #% key: increment
 #% type: string
-#% description: Time increment between maps for valid time interval creation (format absolute: NNN seconds, minutes, hours, days, weeks, months, years; format relative: 1.0), or "file" in case the increment is located in an input file
+#% description: Time increment between maps for valid time interval creation (format absolute: NNN seconds, minutes, hours, days, weeks, months, years; format relative is integer: 5), or "file" in case the increment is located in an input file
 #% required: no
 #% multiple: no
 #%end
@@ -95,6 +105,7 @@ def main():
     fs = options["fs"]
     start = options["start"]
     end = options["end"]
+    unit = options["unit"]
     increment = options["increment"]
     interval = flags["i"]
 
@@ -102,7 +113,7 @@ def main():
     tgis.create_temporal_database()
     # Register maps
     tgis.register_maps_in_space_time_dataset(type="stvds", name=name, maps=maps, file=file, start=start, end=end, \
-                                             increment=increment, dbif=None, interval=interval, fs=fs)
+                                             unit=unit, increment=increment, dbif=None, interval=interval, fs=fs)
     
 if __name__ == "__main__":
     options, flags = grass.parser()

@@ -6,16 +6,16 @@ import grass.script as grass
 # You need to download the european climate date from the ECA&D server http://eca.knmi.nl/ as netCDF time series
 # We only use the data from 1995 - 2010
 # First import the ECA&D data into GRASS GIS 
-input = "tg_0.25deg_reg_1995-2010_v4.0.nc"
+input = "tg_0.25deg_reg_1995-2011_v5.0.nc"
 output = "temp_mean"
 grass.run_command("r.in.gdal", flags="e", input=input, output=output, overwrite=True)
-input = "tn_0.25deg_reg_1995-2010_v4.0.nc"
+input = "tn_0.25deg_reg_1995-2011_v5.0.nc"
 output = "temp_min"
 grass.run_command("r.in.gdal", flags="e", input=input, output=output, overwrite=True)
-input = "tx_0.25deg_reg_1995-2010_v4.0.nc"
+input = "tx_0.25deg_reg_1995-2011_v5.0.nc"
 output = "temp_max"
 grass.run_command("r.in.gdal", flags="e", input=input, output=output, overwrite=True)
-input = "rr_0.25deg_reg_1995-2010_v4.0.nc"
+input = "rr_0.25deg_reg_1995-2011_v5.0.nc"
 output = "precip"
 grass.run_command("r.in.gdal", flags="e", input=input, output=output, overwrite=True)
 
@@ -25,12 +25,12 @@ num_maps = 5844
 
 # Daily mean temperatue
 
-dataset = "temp_mean_1995_2010_daily"
+dataset = "temp_mean_1995_2011_daily"
 
 grass.run_command("t.create", type="strds", output=dataset,\
                   semantic="continuous", temporal="absolute", \
-		  title="European mean temperature 1995-2010", \
-		  description="The european daily mean temperature 1995 - 2010 from ECA&D ", \
+		  title="European mean temperature 1995-2011", \
+		  description="The european daily mean temperature 1995 - 2011 from ECA&D ", \
 		  overwrite=True)
 
 name = "temp_mean."

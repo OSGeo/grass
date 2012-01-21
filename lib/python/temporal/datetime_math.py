@@ -25,7 +25,6 @@ import grass.script.core as core
 import copy
 from dateutil import parser
 
-
 ###############################################################################
 
 def relative_time_to_time_delta(value):
@@ -42,7 +41,7 @@ def relative_time_to_time_delta(value):
 ###############################################################################
 
 def time_delta_to_relative_time(delta):
-    """Convert the time delta into a 
+    """Convert the time delta into a
        double value, representing days.
     """
 
@@ -207,7 +206,10 @@ def adjust_datetime_to_granularity(mydate, granularity):
             seconds = 0
             minutes = 0
             hours = 0
-            days = days - weekday
+            if days > weekday:
+                days = days - weekday # this needs to be fixed
+            else:
+                days = days + weekday # this needs to be fixed
         elif has_months: # Start at the first day of the month at 00:00:00
             seconds = 0
             minutes = 0
@@ -341,7 +343,7 @@ def datetime_to_grass_datetime_string(dt):
     # Check for time zone infor in the datetime object
     if dt.tzinfo != None:
         string = "%.2i %s %.2i %.2i:%.2i:%.2i %+.4i"%(dt.day, month_names[dt.month], dt.year, \
-                 dt.hour, dt.minute, dt.second, dt.tzinfo._offset.seconds/3600*100)
+                 dt.hour, dt.minute, dt.second, dt.tzinfo._offset.seconds/60)
     else:
         string = "%.2i %s %.4i %.2i:%.2i:%.2i"%(dt.day, month_names[dt.month], dt.year, dt.hour, dt.minute, dt.second)
 

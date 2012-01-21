@@ -68,7 +68,7 @@ def collect_map_names(sp, dbif, start, end, sampling):
 
     return names    
 
-def aggregate_raster_maps(dataset, mapset, inputs, base, start, end, count, method, register_null, dbif):
+def aggregate_raster_maps(orig_ds, dataset, mapset, inputs, base, start, end, count, method, register_null, dbif):
 
     core.verbose(_("Aggregate %s raster maps") %(len(inputs)))
     output = "%s_%i" % (base, count)
@@ -118,7 +118,7 @@ def aggregate_raster_maps(dataset, mapset, inputs, base, start, end, count, meth
     if dataset.is_time_absolute():
         new_map.set_absolute_time(start, end, None)
     else:
-        new_map.set_relative_time(start, end)
+        new_map.set_relative_time(start, end, orig_ds.get_relative_time_unit())
 
     # Insert map in temporal database
     new_map.insert(dbif)

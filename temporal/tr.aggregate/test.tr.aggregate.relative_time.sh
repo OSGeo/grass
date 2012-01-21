@@ -4,7 +4,7 @@
 # @preprocess step of this test. 
 # The region setting should work for UTM and LL test locations
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
-# Generate data
+# Data generation
 r.mapcalc --o expr="prec_1 = rand(0, 550)"
 r.mapcalc --o expr="prec_2 = rand(0, 450)"
 r.mapcalc --o expr="prec_3 = rand(0, 320)"
@@ -12,18 +12,18 @@ r.mapcalc --o expr="prec_4 = rand(0, 510)"
 r.mapcalc --o expr="prec_5 = rand(0, 300)"
 r.mapcalc --o expr="prec_6 = rand(0, 650)"
 
-t.create --o type=strds temporaltype=absolute output=precip_abs1 title="A test" descr="A test"
-tr.register -i input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-15 12:05:45" increment="14 days"
+t.create --o type=strds temporaltype=relative output=precip_abs1 title="A test" descr="A test"
+tr.register -i input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start=0 unit=days increment=3
 
 # The first @test
 
-tr.aggregate --o --v input=precip_abs1 output=precip_abs2 base=prec_sum granularity="2 days" method=average sampling=start,during
+tr.aggregate --o --v input=precip_abs1 output=precip_abs2 base=prec_sum granularity=6 method=average sampling=start,during
 t.info type=strds input=precip_abs2
-tr.aggregate --o --v input=precip_abs1 output=precip_abs2 base=prec_sum granularity="1 months" method=maximum sampling=start,during
+tr.aggregate --o --v input=precip_abs1 output=precip_abs2 base=prec_sum granularity=9 method=maximum sampling=start,during
 t.info type=strds input=precip_abs2
-tr.aggregate --o --v input=precip_abs1 output=precip_abs2 base=prec_sum granularity="2 months" method=minimum sampling=start,during
+tr.aggregate --o --v input=precip_abs1 output=precip_abs2 base=prec_sum granularity=4 method=minimum sampling=start,during
 t.info type=strds input=precip_abs2
-tr.aggregate --o --v input=precip_abs1 output=precip_abs2 base=prec_sum granularity="3 months" method=sum sampling=start,during
+tr.aggregate --o --v input=precip_abs1 output=precip_abs2 base=prec_sum granularity=5 method=sum sampling=start,during
 t.info type=strds input=precip_abs2
 
 t.remove type=rast input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
