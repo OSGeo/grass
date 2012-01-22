@@ -19,12 +19,25 @@ tr.register -i input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 
 
 tr.aggregate --o --v input=precip_abs1 output=precip_abs2 base=prec_sum granularity=6 method=average sampling=start,during
 t.info type=strds input=precip_abs2
+r.info prec_sum_0
+r.info prec_sum_1
+r.info prec_sum_2
 tr.aggregate --o --v input=precip_abs1 output=precip_abs2 base=prec_sum granularity=9 method=maximum sampling=start,during
 t.info type=strds input=precip_abs2
+r.info prec_sum_0
+r.info prec_sum_1
 tr.aggregate --o --v input=precip_abs1 output=precip_abs2 base=prec_sum granularity=4 method=minimum sampling=start,during
 t.info type=strds input=precip_abs2
+r.info prec_sum_0
+r.info prec_sum_1
+r.info prec_sum_2
+r.info prec_sum_3
 tr.aggregate --o --v input=precip_abs1 output=precip_abs2 base=prec_sum granularity=5 method=sum sampling=start,during
 t.info type=strds input=precip_abs2
+r.info prec_sum_0
+r.info prec_sum_1
+r.info prec_sum_2
+r.info prec_sum_3
 
 t.remove type=rast input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 t.remove type=strds input=precip_abs1,precip_abs2
