@@ -1,6 +1,17 @@
+/*!
+  \file db/driver/postgres/listdb.c
+  
+  \brief DBMI - Low Level PostgreSQL database driver - list tables
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Radim Blazek
+ */
 #include <stdlib.h>
 #include <string.h>
 #include <grass/dbmi.h>
+#include <grass/glocale.h>
 #include "globals.h"
 #include "proto.h"
 
@@ -23,7 +34,7 @@ int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
 	       "select * from pg_tables where tablename !~ 'pg_*' order by tablename");
 
     if (!rest || PQresultStatus(rest) != PGRES_TUPLES_OK) {
-	append_error("Cannot select table names\n");
+	append_error(_("Unable to select table names\n"));
 	append_error(PQerrorMessage(pg_conn));
 	report_error();
 	PQclear(rest);
@@ -48,7 +59,7 @@ int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
 	       "SELECT * FROM pg_views WHERE schemaname NOT IN ('pg_catalog','information_schema') AND viewname !~ '^pg_'");
 
     if (!resv || PQresultStatus(resv) != PGRES_TUPLES_OK) {
-	append_error("Cannot select view names\n");
+	append_error(_("Unable to select view names\n"));
 	append_error(PQerrorMessage(pg_conn));
 	report_error();
 	PQclear(resv);
@@ -75,7 +86,7 @@ int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
     list = db_alloc_string_array(nrows);
 
     if (list == NULL) {
-	append_error("Cannot db_alloc_string_array()");
+	append_error(_("db_alloc_string_array() failed"));
 	report_error();
 	return DB_FAILED;
     }

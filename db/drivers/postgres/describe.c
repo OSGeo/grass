@@ -1,8 +1,18 @@
+/*!
+  \file db/driver/postgres/cursor.c
+  
+  \brief DBMI - Low Level PostgreSQL database driver - describe table
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Radim Blazek
+ */
 #include <grass/dbmi.h>
 #include <grass/datetime.h>
+#include <grass/glocale.h>
 #include "globals.h"
 #include "proto.h"
-#include <grass/glocale.h>
 
 int db__driver_describe_table(dbString * table_name, dbTable ** table)
 {
@@ -27,7 +37,7 @@ int db__driver_describe_table(dbString * table_name, dbTable ** table)
     }
 
     if (describe_table(res, table, NULL) == DB_FAILED) {
-	append_error("Cannot describe table\n");
+	append_error(_("Unable to describe table\n"));
 	report_error();
 	PQclear(res);
 	return DB_FAILED;

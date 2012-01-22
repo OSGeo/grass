@@ -1,6 +1,17 @@
+/*!
+  \file db/driver/postgres/cursor.c
+  
+  \brief DBMI - Low Level PostgreSQL database driver - cursor manipulation
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Radim Blazek
+ */
 #include <stdio.h>
 #include <grass/gis.h>
 #include <grass/dbmi.h>
+#include <grass/glocale.h>
 #include "globals.h"
 #include "proto.h"
 
@@ -29,7 +40,7 @@ cursor *alloc_cursor(void)
     /* allocate the cursor */
     c = (cursor *) db_malloc(sizeof(cursor));
     if (c == NULL) {
-	append_error("Cannot allocate cursor.");
+	append_error(_("Unable allocate cursor."));
 	return NULL;
     }
 
@@ -38,7 +49,7 @@ cursor *alloc_cursor(void)
     /* tokenize it */
     c->token = db_new_token(c);
     if (c->token < 0) {
-	append_error("Cannot ad new token.");
+	append_error(_("Unable to add new token."));
 	return NULL;
     }
 

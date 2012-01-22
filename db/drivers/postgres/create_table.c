@@ -1,4 +1,16 @@
+/*!
+  \file db/driver/postgres/create_table.c
+  
+  \brief DBMI - Low Level PostgreSQL database driver - create table
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Radim Blazek
+ */
+
 #include <grass/dbmi.h>
+#include <grass/glocale.h>
 #include "globals.h"
 #include "proto.h"
 
@@ -77,7 +89,7 @@ int db__driver_create_table(dbTable * table)
 	    break;
 
 	default:
-	    G_warning("Unknown column type (%s)", colname);
+	    G_warning(_("Unknown column type (%s)"), colname);
 	    return DB_FAILED;
 	}
     }
@@ -89,7 +101,7 @@ int db__driver_create_table(dbTable * table)
     res = PQexec(pg_conn, db_get_string(&sql));
 
     if (!res || PQresultStatus(res) != PGRES_COMMAND_OK) {
-	append_error("Cannot create table:\n");
+	append_error(_("Unable to create table:\n"));
 	append_error(db_get_string(&sql));
 	append_error("\n");
 	append_error(PQerrorMessage(pg_conn));
@@ -118,7 +130,7 @@ int db__driver_create_table(dbTable * table)
     res = PQexec(pg_conn, db_get_string(&sql));
 
     if (!res || PQresultStatus(res) != PGRES_COMMAND_OK) {
-	append_error("Cannot grant select on table:\n");
+	append_error(_("Unable to grant select on table:\n"));
 	append_error(db_get_string(&sql));
 	append_error("\n");
 	append_error(PQerrorMessage(pg_conn));

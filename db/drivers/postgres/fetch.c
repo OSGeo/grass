@@ -1,11 +1,22 @@
-/* TODO: implement time zone handling */
+/*!
+  \file db/driver/postgres/fetch.c
+  
+  \brief DBMI - Low Level PostgreSQL database driver - fetch data
+
+  \todo implement time zone handling
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Radim Blazek
+ */
 
 #include <stdlib.h>
 #include <string.h>
 #include <grass/dbmi.h>
+#include <grass/glocale.h>
 #include "globals.h"
 #include "proto.h"
-#include <grass/glocale.h>
 
 int db__driver_fetch(dbCursor * cn, int position, int *more)
 {
@@ -19,7 +30,7 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
 
     /* get the cursor by its token */
     if (!(c = (cursor *) db_find_token(token))) {
-	append_error("Cursor not found");
+	append_error(_("Cursor not found"));
 	report_error();
 	return DB_FAILED;
     }
@@ -114,7 +125,7 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
 			&(value->t.year), &(value->t.month), &(value->t.day));
 
 	    if (ns != 3) {
-		append_error("Cannot scan date:");
+		append_error(_("Unable to scan date:"));
 		append_error(PQgetvalue(c->res, c->row, col));
 		report_error();
 		return DB_FAILED;
@@ -131,7 +142,7 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
 			&(value->t.seconds));
 
 	    if (ns != 3) {
-		append_error("Cannot scan time:");
+		append_error(_("Unable to scan time:"));
 		append_error(PQgetvalue(c->res, c->row, col));
 		report_error();
 		return DB_FAILED;
@@ -149,14 +160,13 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
 			&(value->t.minute), &(value->t.seconds), &tz);
 
 	    if (ns == 7) {
-		append_error
-		    ("Cannot scan timestamp (no idea how to process time zone):");
+		append_error(_("Unable to scan timestamp (no idea how to process time zone):"));
 		append_error(PQgetvalue(c->res, c->row, col));
 		report_error();
 		return DB_FAILED;
 	    }
 	    else if (ns < 6) {
-		append_error("Cannot scan timestamp (not enough arguments):");
+		append_error(_("Unable to scan timestamp (not enough arguments):"));
 		append_error(PQgetvalue(c->res, c->row, col));
 		report_error();
 		return DB_FAILED;
@@ -169,7 +179,7 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
 	    else if (strcmp(PQgetvalue(c->res, c->row, col), "f") == 0)
 		db_set_string(&(value->s), "0");
 	    else
-		G_warning(_("Cannot recognize boolean value"));
+		G_warning(_("Unable to recognize boolean value"));
 	    break;
 	}
     }
@@ -187,7 +197,7 @@ int db__driver_get_num_rows(dbCursor * cn)
 
     /* get the cursor by its token */
     if (!(c = (cursor *) db_find_token(token))) {
-	append_error("Cursor not found");
+	append_error(_("Taken not found"));
 	report_error();
 	return DB_FAILED;
     }
