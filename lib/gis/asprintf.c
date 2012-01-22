@@ -29,9 +29,10 @@
  * \brief Safe replacement for <i>asprintf()</i>.
  *
  * Allocate a string large enough to hold the new output, including the 
- * terminating NULL, and returns a pointer to the first parameter. The 
- * pointer should be passed to <i>G_free()</i> to release the allocated 
- * storage when it is no longer needed.
+ * terminating NULL, and return the number of characters printed. The 
+ * pointer out is set to the output string and should be passed to 
+ * <i>G_free()</i> to release the allocated storage when it is no longer 
+ * needed.
  *
  * \param[out] out
  * \param[in] fmt
@@ -77,12 +78,14 @@ int G_asprintf(char **out, const char *fmt, ...)
 #endif /* G_asprintf */
 
 /**
- * \brief Safe replacement for <i>asprintf()</i>.
+ * \brief Reallocating version of <i>asprintf()</i>.
  *
- * (Re-)Allocate a string large enough to hold the new output, including the 
- * terminating NULL, and returns a pointer to the first parameter. The 
- * pointer should be passed to <i>G_free()</i> to release the allocated 
- * storage when it is no longer needed.
+ * Reallocate a string large enough to hold the output, including the 
+ * terminating NULL, and return the number of characters printed.  
+ * Contrary to <i>G_asprintf()</i>, any existing buffer pointed to by 
+ * out of size osize is used to hold the output and enlarged if 
+ * necessary. This is usefull when <i>G_rasprintf</i> is called many 
+ * times in a loop.
  *
  * \param[out] out
  * \param[out] size
@@ -90,39 +93,39 @@ int G_asprintf(char **out, const char *fmt, ...)
  * \return number of bytes written
  */
 
-int G_vasprintf2(char **out, size_t *size, const char *fmt, va_list ap)
+int G_vsnprintf(char **out, size_t *osize, const char *fmt, va_list ap)
 {
     char *buf = *out;
     int count;
-    size_t s = *size;
+    size_t size = *osize;
     
-    if (s < strlen(fmt) + 50) {
-	s = strlen(fmt) + 50;
-	buf = G_realloc(buf, s);
+    if (size < strlen(fmt) + 50) {
+	size = strlen(fmt) + 50;
+	buf = G_realloc(buf, size);
     }
 
     for (;;) {
-	count = vsnprintf(buf, s, fmt, ap);
-	if (count >= 0 && count < s)
+	count = vsnprintf(buf, size, fmt, ap);
+	if (count >= 0 && count < size)
 	    break;
-	s *= 2;
-	buf = G_realloc(buf, s);
+	size *= 2;
+	buf = G_realloc(buf, size);
     }
 
     buf = G_realloc(buf, count + 1);
     *out = buf;
-    *size = s;
+    *osize = size;
 
     return count;
 }
 
-int G_asprintf2(char **out, size_t *size, const char *fmt, ...)
+int G_rasprintf(char **out, size_t *size, const char *fmt, ...)
 {
     va_list ap;
     int count;
 
     va_start(ap, fmt);
-    count = G_vasprintf2(out, size, fmt, ap);
+    count = G_vsnprintf(out, size, fmt, ap);
     va_end(ap);
 
     return count;
