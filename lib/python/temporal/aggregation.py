@@ -24,7 +24,17 @@ for details.
 
 from space_time_datasets import *
 
+###############################################################################
+
 def collect_map_names(sp, dbif, start, end, sampling):
+    """Gather all maps from dataset using a specific sample method
+
+       @param sp: The space time raster dataset to select aps from
+       @param dbif: The temporal database interface to use
+       @param start: The start time of the sample interval, may be relative or absolute
+       @param end: The end time of the sample interval, may be relative or absolute
+       @param sampling: The sampling methods to use
+    """
     
     use_start = False
     use_during = False
@@ -68,7 +78,23 @@ def collect_map_names(sp, dbif, start, end, sampling):
 
     return names    
 
+###############################################################################
+
 def aggregate_raster_maps(orig_ds, dataset, mapset, inputs, base, start, end, count, method, register_null, dbif):
+    """Aggregate a list of raster input maps with r.series
+       
+       @param orig_ds: Original space time raster dataset from which the maps are selected
+       @param dataset: The new space time raster dataset to insert the aggregated map
+       @param mapset: The current mapset
+       @param inputs: The names of the raster maps to be aggregated
+       @param base: The basename of the new created raster maps
+       @param start: The start time of the sample interval, may be relative or absolute
+       @param end: The end time of the sample interval, may be relative or absolute
+       @param count: The number to be attached to the basename of the new created raster map
+       @param method: The aggreation method to be used by r.series
+       @param register_null: If true null maps will be registered in the space time raster dataset, if false not
+       @param dbif: The temporal database interface to use
+    """
 
     core.verbose(_("Aggregate %s raster maps") %(len(inputs)))
     output = "%s_%i" % (base, count)
@@ -114,11 +140,13 @@ def aggregate_raster_maps(orig_ds, dataset, mapset, inputs, base, start, end, co
             core.run_command("g.remove", rast=output)
             return
 
-    # Set the time stamp
+    # Set the time stamp and write it to the raster map
     if dataset.is_time_absolute():
         new_map.set_absolute_time(start, end, None)
+    	new_map.write_absolute_time_to_file()
     else:
         new_map.set_relative_time(start, end, orig_ds.get_relative_time_unit())
+    	new_map.write_relative_time_to_file()
 
     # Insert map in temporal database
     new_map.insert(dbif)
