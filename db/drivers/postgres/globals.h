@@ -48,7 +48,7 @@ typedef enum
 
     PG_TYPE_BOOL,		/* bool, boolean */
 
-    PG_TYPE_POSTGIS_GEOM	/* Geometry column of PostGIS, GRASS internal type */
+    PG_TYPE_POSTGIS_GEOM	/* geometry column of PostGIS, GRASS internal type */
 } PG_TYPES;
 
 

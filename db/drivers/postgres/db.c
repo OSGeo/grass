@@ -1,7 +1,20 @@
+/*!
+  \file db/driver/postgres/db.c
+  
+  \brief DBMI - Low Level PostgreSQL database driver - open/close database.
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Radim Blazek
+ */
+
 #include <stdlib.h>
 #include <string.h>
 #include <grass/dbmi.h>
 #include <grass/gis.h>
+#include <grass/glocale.h>
+
 #include "globals.h"
 #include "proto.h"
 
@@ -23,7 +36,7 @@ int db__driver_open_database(dbHandle * handle)
 	name = connection.databaseName;
 
     G_debug(3,
-	    "db_driver_open_database() driver=pg database definition = '%s'",
+	    "db_driver_open_database(): driver=pg database definition = '%s'",
 	    name);
 
     if (parse_conn(name, &pgconn) == DB_FAILED) {
@@ -32,19 +45,19 @@ int db__driver_open_database(dbHandle * handle)
     }
 
     G_debug(3,
-	    "host = %s, port = %s, options = %s, tty = %s, dbname = %s, user = %s, password = %s, "
+	    "db_driver_open_database(): host = %s, port = %s, options = %s, tty = %s, "
+	    "dbname = %s, user = %s, password = %s, "
 	    "schema = %s", pgconn.host, pgconn.port, pgconn.options,
 	    pgconn.tty, pgconn.dbname, pgconn.user, pgconn.password,
 	    pgconn.schema);
 
     db_get_login("pg", name, &user, &password);
 
-    pg_conn =
-	PQsetdbLogin(pgconn.host, pgconn.port, pgconn.options, pgconn.tty,
-		     pgconn.dbname, user, password);
-
+    pg_conn = PQsetdbLogin(pgconn.host, pgconn.port, pgconn.options, pgconn.tty,
+			   pgconn.dbname, user, password);
+    
     if (PQstatus(pg_conn) == CONNECTION_BAD) {
-	append_error("Cannot connect to Postgres: ");
+	append_error(_("Unable to connect to Postgres: "));
 	append_error(PQerrorMessage(pg_conn));
 	report_error();
 	PQfinish(pg_conn);
@@ -58,18 +71,19 @@ int db__driver_open_database(dbHandle * handle)
     /*
        if ( schema ) 
        schema = connection.schemaName;
-     */
+    */
 
     if (pgconn.schema) {
 	schema = pgconn.schema;
     }
 
+    /* set path to the schema */
     if (schema && strlen(schema) > 0) {
 	sprintf(buf, "set search_path to %s", schema);
 	res = PQexec(pg_conn, buf);
 
 	if (!res || PQresultStatus(res) != PGRES_COMMAND_OK) {
-	    append_error("Cannot set schema: ");
+	    append_error(_("Unable to set schema: "));
 	    append_error(schema);
 	    report_error();
 	    PQclear(res);
@@ -78,17 +92,16 @@ int db__driver_open_database(dbHandle * handle)
     }
 
     /* Read internal codes */
-    res =
-	PQexec(pg_conn,
-	       "select oid, typname from pg_type where typname in ( "
-	       "'bit', 'int2', 'int4', 'int8', 'serial', 'oid', "
-	       "'float4', 'float8', 'numeric', "
-	       "'char', 'bpchar', 'varchar', 'text', "
-	       "'time', 'date', 'timestamp', "
-	       "'bool', 'geometry' ) order by oid");
-
+    res = PQexec(pg_conn,
+		 "select oid, typname from pg_type where typname in ( "
+		 "'bit', 'int2', 'int4', 'int8', 'serial', 'oid', "
+		 "'float4', 'float8', 'numeric', "
+		 "'char', 'bpchar', 'varchar', 'text', "
+		 "'time', 'date', 'timestamp', "
+		 "'bool', 'geometry' ) order by oid");
+    
     if (!res || PQresultStatus(res) != PGRES_TUPLES_OK) {
-	append_error("Cannot select data types");
+	append_error(_("Unable to select data types"));
 	report_error();
 	PQclear(res);
 	return DB_FAILED;
@@ -143,7 +156,7 @@ int db__driver_open_database(dbHandle * handle)
 	else
 	    type = PG_TYPE_UNKNOWN;
 
-	G_debug(3, "pgtype = %d, \tname = %s -> \ttype = %d", pgtype,
+	G_debug(3, "db_driver_open_database(): pgtype = %d, name = %s -> type = %d", pgtype,
 		PQgetvalue(res, row, 1), type);
 	pg_types[row][1] = type;
     }

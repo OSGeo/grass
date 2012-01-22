@@ -1,4 +1,19 @@
+/*!
+  \file db/driver/postgres/index.c
+  
+  \brief DBMI - Low Level PostgreSQL database driver - index management
+
+  \todo implement time zone handling
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Radim Blazek
+ */
+
 #include <grass/dbmi.h>
+#include <grass/glocale.h>
+
 #include "globals.h"
 #include "proto.h"
 
@@ -41,7 +56,7 @@ int db__driver_create_index(dbIndex * index)
     res = PQexec(pg_conn, db_get_string(&sql));
 
     if (!res || PQresultStatus(res) != PGRES_COMMAND_OK) {
-	append_error("Cannot create index:\n");
+	append_error(_("Unable to create index:\n"));
 	append_error(db_get_string(&sql));
 	append_error("\n");
 	append_error(PQerrorMessage(pg_conn));

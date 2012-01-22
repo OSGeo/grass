@@ -1,3 +1,14 @@
+/*!
+  \file db/driver/postgres/parse.c
+  
+  \brief DBMI - Low Level PostgreSQL database driver - parse connection string
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Radim Blazek
+*/
+
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
@@ -7,31 +18,24 @@
 #include <grass/glocale.h>
 
 /*
- * \brief Parse connection string in form:
- *    1) 'database_name'
- *    2) 'host=xx,port=xx,dbname=xx'
- *  
- *  returns:  DB_OK     - OK
- *            DB_FAILED - error
- */
+  \brief Parse connection string in form:
+  1) 'database_name'
+  2) 'host=xx,port=xx,dbname=xx'
+  
+  \returns DB_OK on success
+  \return DB_FAILED on failure
+*/
 int parse_conn(const char *str, PGCONN * pgconn)
 {
     int i;
     char **tokens, delm[2];
 
     /* reset */
-    pgconn->host = NULL;
-    pgconn->port = NULL;
-    pgconn->options = NULL;
-    pgconn->tty = NULL;
-    pgconn->dbname = NULL;
-    pgconn->user = NULL;
-    pgconn->password = NULL;
-    pgconn->schema = NULL;
+    G_zero(pgconn, sizeof(PGCONN));
 
-    G_debug(3, "parse_conn : %s", str);
+    G_debug(3, "parse_conn: '%s'", str);
 
-    if (strchr(str, '=') == NULL) {	/*db name only */
+    if (strchr(str, '=') == NULL) {	/* db name only */
 	pgconn->dbname = G_store(str);
     }
     else {
