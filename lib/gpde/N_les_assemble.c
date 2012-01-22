@@ -571,7 +571,7 @@ N_les *N_assemble_les_2d_param(int les_type, N_geom_data * geom,
     G_debug(2,
 	    "N_assemble_les_2d: starting to assemble the linear equation system");
 
-    /* At first count the number of valid cells and save the 
+    /* At first count the number of valid cells and save 
      * each number in a new 2d array. Those numbers are used 
      * to create the linear equation system.
      * */
@@ -820,7 +820,7 @@ int N_les_integrate_dirichlet_2d(N_les * les, N_geom_data * geom,
 
 #pragma omp parallel default(shared)
     {
-	/*performe the matrix vector product and */
+	/*perform the matrix vector product and */
 	if (les->type == N_SPARSE_LES)
 	    G_math_Ax_sparse(les->Asp, dvect1, dvect2, les->rows);
 	else
@@ -1277,7 +1277,7 @@ int N_les_integrate_dirichlet_3d(N_les * les, N_geom_data * geom,
 
 #pragma omp parallel default(shared)
     {
-	/*performe the matrix vector product and */
+	/*perform the matrix vector product and */
 	if (les->type == N_SPARSE_LES)
 	    G_math_Ax_sparse(les->Asp, dvect1, dvect2, les->rows);
 	else

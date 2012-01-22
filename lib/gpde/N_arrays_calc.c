@@ -275,7 +275,7 @@ void N_calc_array_2d_stats(N_array_2d * a, double *min, double *max,
 
 
 /*!
- * \brief Performe calculations with two input arrays, 
+ * \brief Perform calculations with two input arrays, 
  * the result is written to a third array.
  *
  * All arrays must have equal sizes and offsets.
@@ -703,7 +703,7 @@ void N_calc_array_3d_stats(N_array_3d * a, double *min, double *max,
 }
 
 /*!
- * \brief Performe calculations with two input arrays, 
+ * \brief Perform calculations with two input arrays, 
  * the result is written to a third array.
  *
  * All arrays must have equal sizes and offsets.
