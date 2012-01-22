@@ -70,6 +70,7 @@ void db_free_table(dbTable * table)
     int i;
 
     db_free_string(&table->tableName);
+    db_free_string(&table->description);
     for (i = 0; i < table->numColumns; i++)
 	db_free_column(&table->columns[i]);
     if (table->columns)
