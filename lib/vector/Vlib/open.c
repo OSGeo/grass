@@ -245,10 +245,6 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
     }
     Map->format = format;
 
-    /* projection info */
-    Vect_set_proj(Map, G_projection());
-    Vect_set_zone(Map, G_zone());
-    
     /* read vector head (ignored for OGR mapset) */
     if (!ogr_mapset && Vect__read_head(Map) != 0) {
 	G_fatal_error(_("Unable to read header file of vector map <%s>"),
@@ -256,8 +252,6 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset, c
     }
 
     /* projection is not written to head but zone ??? */
-    
-    /* zone not set */
     if (Vect_get_zone(Map) == -1)
 	Vect_set_zone(Map, G_zone());
     Vect_set_proj(Map, G_projection());
