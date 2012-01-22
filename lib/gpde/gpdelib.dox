@@ -209,7 +209,7 @@ void #N_print_array_2d (N_array_2d * data);
 Compute the norm of two arrays<br>
 double #N_norm_array_2d (N_array_2d * array1, N_array_2d * array2, int type);
 <p>
-Performe some basic mathematical operations with two arrays<br>
+Perform some basic mathematical operations with two arrays<br>
 N_array_2d * #N_math_array_2d (N_array_2d * array1, N_array_2d * array2, N_array_2d * result, int type);
 <p>
 Convert all null values to zero<br>
@@ -279,7 +279,7 @@ void #N_print_array_3d (N_array_3d * data);
 Compute the norm of two arrays<br>
 double #N_norm_array_3d (N_array_3d * array1, N_array_3d * array2, int type);
 <p>
-Performe some basic mathematical operations with two arrays<br>
+Perform some basic mathematical operations with two arrays<br>
 N_array_3d * #N_math_array_3d (N_array_3d * array1, N_array_3d * array2, N_array_3d * result, int type);
 <p>
 Convert all null values to zero<br>
@@ -592,7 +592,7 @@ double #N_exp_upwinding(double vector, double distance, double D)
 
 To compute and manage gradient and vector field data, specific data structures with access and management functions
 are implemented. Gradient and vector field data is often needed in transport calculation like solute/heat transport
-or navier stokes equations. The following  structures and functions provide a concient way to performe 
+or navier stokes equations. The following  structures and functions provide a concient way to perform
 gradient and vector field calculations.
 <p>
 
