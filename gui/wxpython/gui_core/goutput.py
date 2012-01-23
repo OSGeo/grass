@@ -479,7 +479,7 @@ class GMConsole(wx.SplitterWindow):
             finally:
                 fileHistory.close()
         
-        if command[0] in globalvar.grassCmd['all']:
+        if command[0] in globalvar.grassCmd:
             # send GRASS command without arguments to GUI command interface
             # except display commands (they are handled differently)
             if self.parent.GetName() == "LayerManager" and \
@@ -529,6 +529,7 @@ class GMConsole(wx.SplitterWindow):
             else:
                 # other GRASS commands (r|v|g|...)
                 task = GUI(show = None).ParseCommand(command)
+                
                 hasParams = False
                 if task:
                     options = task.get_options()
@@ -805,7 +806,7 @@ class GMConsole(wx.SplitterWindow):
         
         if self.parent.GetName() == "LayerManager":
             self.btnCmdAbort.Enable(False)
-            if event.cmd[0] not in globalvar.grassCmd['all'] or \
+            if event.cmd[0] not in globalvar.grassCmd or \
                     event.cmd[0] == 'r.mapcalc':
                 return
             

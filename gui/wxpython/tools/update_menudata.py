@@ -45,9 +45,9 @@ def parseModules():
                 'g.parser',
                 'vcolors' ]
     
-    count = len(grassCmd['all'])
+    count = len(grassCmd)
     i = 0
-    for module in grassCmd['all']:
+    for module in grassCmd:
         i += 1
         if i % 10 == 0:
             grass.info('* %d/%d' % (i, count))

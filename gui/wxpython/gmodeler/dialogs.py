@@ -206,7 +206,7 @@ class ModelSearchDialog(wx.Dialog):
                                "Unable to add new action to the model."))
             return
         
-        if cmd[0] not in globalvar.grassCmd['all']:
+        if cmd[0] not in globalvar.grassCmd:
             GError(parent = self,
                    message = _("'%s' is not a GRASS module.\n\n"
                                "Unable to add new action to the model.") % cmd[0])

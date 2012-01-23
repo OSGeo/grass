@@ -87,7 +87,7 @@ class Menu(wx.MenuBar):
                 cmd = utils.split(str(gcmd)) 
             except UnicodeError: 
                 cmd = utils.split(EncodeString((gcmd))) 
-            if cmd and cmd[0] not in globalvar.grassCmd['all']: 
+            if cmd and cmd[0] not in globalvar.grassCmd: 
                 menuItem.Enable(False)
         
         rhandler = eval('self.parent.' + handler)
