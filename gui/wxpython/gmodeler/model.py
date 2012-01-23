@@ -2219,7 +2219,7 @@ class ModelParamDialog(wx.Dialog):
     
     def _createPage(self, name, params):
         """!Define notebook page"""
-        if name in globalvar.grassCmd['all']:
+        if name in globalvar.grassCmd:
             task = gtask.grassTask(name)
         else:
             task = gtask.grassTask()
