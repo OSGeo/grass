@@ -5,7 +5,7 @@ set GRASS_PYTHON=python
 set GRASS_PROJSHARE=%GISBASE%\proj
 set GRASS_HTML_BROWSER=explorer
 
-set PYTHONHOME=%GISBASE%\Python25
+set PYTHONHOME=%GISBASE%\Python27
 set GDAL_DATA=%GISBASE%\share\gdal
 set PROJ_LIB=%GISBASE%\proj
 set GEOTIFF_CSV=%GISBASE%\share\epsg_csv

@@ -197,19 +197,19 @@ del %PACKAGE_DIR%\msys\msys.bat
 
 @echo.
 @echo -----------------------------------------------------------------------------------------------------------------------
-@echo Copy Python content to PACKAGE_DIR\Python25
+@echo Copy Python content to PACKAGE_DIR\Python27
 @echo -----------------------------------------------------------------------------------------------------------------------
 @echo.
 
-mkdir %PACKAGE_DIR%\Python25
+mkdir %PACKAGE_DIR%\Python27
 
-copy %OSGEO4W_DIR%\apps\Python25\* %PACKAGE_DIR%\Python25
+copy %OSGEO4W_DIR%\apps\Python27\* %PACKAGE_DIR%\Python27
 
-xcopy %OSGEO4W_DIR%\apps\Python25\DLLs %PACKAGE_DIR%\Python25\DLLs /S/V/F/I
-xcopy %OSGEO4W_DIR%\apps\Python25\include %PACKAGE_DIR%\Python25\include /S/V/F/I
-xcopy %OSGEO4W_DIR%\apps\Python25\Lib %PACKAGE_DIR%\Python25\Lib /S/V/F/I
-xcopy %OSGEO4W_DIR%\apps\Python25\libs %PACKAGE_DIR%\Python25\libs /S/V/F/I
-xcopy %OSGEO4W_DIR%\apps\Python25\Scripts %PACKAGE_DIR%\Python25\Scripts /S/V/F/I
+xcopy %OSGEO4W_DIR%\apps\Python27\DLLs %PACKAGE_DIR%\Python27\DLLs /S/V/F/I
+xcopy %OSGEO4W_DIR%\apps\Python27\include %PACKAGE_DIR%\Python27\include /S/V/F/I
+xcopy %OSGEO4W_DIR%\apps\Python27\Lib %PACKAGE_DIR%\Python27\Lib /S/V/F/I
+xcopy %OSGEO4W_DIR%\apps\Python27\libs %PACKAGE_DIR%\Python27\libs /S/V/F/I
+xcopy %OSGEO4W_DIR%\apps\Python27\Scripts %PACKAGE_DIR%\Python27\Scripts /S/V/F/I
 
 @echo.
 @echo -----------------------------------------------------------------------------------------------------------------------
