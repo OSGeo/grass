@@ -21,6 +21,7 @@ This program is free software under the GNU General Public License
 """
 
 import os
+import sys
 import codecs
 
 import wx
@@ -380,7 +381,7 @@ class AboutWindow(wx.Frame):
 
     @todo improve styling
     """
-    def __init__(self, parent, size = (750, 400), 
+    def __init__(self, parent, size = (750, 450), 
                  title = _('About GRASS GIS'), **kwargs):
         wx.Frame.__init__(self, parent = parent, id = wx.ID_ANY, title = title, size = size, **kwargs)
         
@@ -408,8 +409,8 @@ class AboutWindow(wx.Frame):
                              label = 'GRASS GIS ' + vInfo['version'] + '\n\n')
         info.SetFont(wx.Font(13, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
         infoSizer.Add(item = info, proportion = 0,
-                          flag = wx.BOTTOM | wx.ALIGN_CENTER, border = 15)
-
+                      flag = wx.BOTTOM | wx.ALIGN_CENTER, border = 15)
+        
         row = 0
         infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
                                                label = _('Official GRASS site:')),
@@ -444,10 +445,31 @@ class AboutWindow(wx.Frame):
                           pos = (row, 1),
                           flag = wx.ALIGN_LEFT)
 
+        row += 2
+        infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
+                                               label = _('Python:')),
+                          pos = (row, 0),
+                          flag = wx.ALIGN_RIGHT)
+        
+        infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
+                                               label = sys.version),
+                          pos = (row, 1),
+                          flag = wx.ALIGN_LEFT)
+
+        row += 1
+        infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
+                                               label = _('wxPython:')),
+                          pos = (row, 0),
+                          flag = wx.ALIGN_RIGHT)
+        
+        infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
+                                               label = wx.version()),
+                          pos = (row, 1),
+                          flag = wx.ALIGN_LEFT)
+        
         infoSizer.Add(item = infoGridSizer,
                       proportion = 1,
-                      flag = wx.EXPAND | wx.ALL | wx.ALIGN_CENTER | wx.ALIGN_CENTER_VERTICAL,
-                      border = 25)
+                      flag = wx.EXPAND | wx.ALIGN_CENTER | wx.ALIGN_CENTER_VERTICAL)
         
         # create a flat notebook for displaying information about GRASS
         aboutNotebook = GNotebook(panel, style = globalvar.FNPageStyle | FN.FNB_NO_X_BUTTON) 
