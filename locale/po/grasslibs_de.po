@@ -7,21 +7,22 @@
 # Stephan Holl <stephan.holl intevation.de>, 2007.
 # Markus Neteler <neteler osgeo.org>, 2008.
 # Robert Nuske <rnuske gwdg.de>, 2009, 2010.
-# Robert Nuske <robert.nuske nw-fva.de>, 2011.
+# Robert Nuske <robert.nuske nw-fva.de>, 2011, 2012.
 # Helmut Kudrnovsky <hellik web.de>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-05 23:30+0200\n"
-"PO-Revision-Date: 2011-10-08 19:11+0200\n"
-"Last-Translator: Robert Nuske <robert.nuske nw-fva.de>\n"
-"Language-Team: Deutsch <grass-translations@lists.osgeo.org>\n"
+"PO-Revision-Date: 2012-01-24 21:54+0100\n"
+"Last-Translator: Robert Nuske <robert.nuske@nw-fva.de>\n"
+"Language-Team: German <grass-translations@lists.osgeo.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-15\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 1.2\n"
 
 #: ../lib/pngdriver/Graph_set.c:84
 #, c-format
@@ -7573,3 +7574,12 @@ msgstr "Unbekannter Spaltentyp (Spalte <%s>)"
 
 #~ msgid "Unable to create raster map <%s>"
 #~ msgstr "Kann die Rasterkarte <%s> nicht erzeugen."
+
+#~ msgid "Unable to create signature file <%s> for subgroup <%s> of group <%s> - <%s> is not current mapset"
+#~ msgstr "Kann die Signatur-Datei <%s> für die Untergruppe <%s> der Gruppe <%s> - <%s> nicht erstellen, da es nicht im aktuellen Mapset ist."
+
+#~ msgid "Unable to create signature file <%s> for subgroup <%s> of group <%s>"
+#~ msgstr "Kann die Signatur-Datei <%s> für die Untergruppe <%s> der Gruppe <%s> nicht erstellen."
+
+#~ msgid "Unable to open signature file <%s> for subgroup <%s> of group <%s@%s>"
+#~ msgstr "Kann die Signatur-Datei <%s> für die Untergruppe <%s> der Gruppe <%s> nicht öffnen."
