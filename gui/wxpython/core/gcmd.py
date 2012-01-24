@@ -47,6 +47,7 @@ from grass.script import core as grass
 
 from core       import globalvar
 from core.debug import Debug
+from core.utils import GetRealCmd
 
 def DecodeString(string):
     """!Decode string using system encoding
@@ -505,7 +506,7 @@ class CommandThread(Thread):
         args = self.cmd
         if sys.platform == 'win32':
             ext = os.path.splitext(self.cmd[0])[1] == '.py'
-            if ext or self.cmd[0] in globalvar.grassCmd['script']:
+            if ext or self.cmd[0] in globalvar.grassScripts['.py']:
                 os.chdir(os.path.join(os.getenv('GISBASE'), 'scripts'))
                 if not ext:
                     args = [sys.executable, self.cmd[0] + '.py'] + self.cmd[1:]
@@ -632,11 +633,7 @@ def RunCommand(prog, flags = "", overwrite = False, quiet = False, verbose = Fal
     Debug.msg(2, "gcmd.RunCommand(): command started")
     start = time.time()
     
-    if sys.platform == "win32":
-        if prog in globalvar.grassCmd['script']:
-            prog += globalvar.EXT_SCT
-    
-    ps = grass.start_command(prog, flags, overwrite, quiet, verbose, **kwargs)
+    ps = grass.start_command(GetRealCmd(prog), flags, overwrite, quiet, verbose, **kwargs)
     
     if stdin:
         ps.stdin.write(stdin)
