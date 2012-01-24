@@ -6,20 +6,21 @@
 # Georg Lösel <georg*de-schorsch.de>, 2008.
 # Markus Neteler <neteler osgeo.org>, 2008, 2009, 2010.
 # Robert Nuske <rnuske gwdg.de>, 2009, 2010.
-# Robert Nuske <robert.nuske nw-fva.de>, 2011.
+# Robert Nuske <robert.nuske nw-fva.de>, 2011, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-05 23:30+0200\n"
-"PO-Revision-Date: 2012-01-19 19:24+0100\n"
-"Last-Translator: Markus Neteler <neteler osgeo.org>\n"
-"Language-Team: Deutsch <grass-translations@lists.osgeo.org>\n"
+"PO-Revision-Date: 2012-01-24 20:05+0100\n"
+"Last-Translator: Robert Nuske <robert.nuske@nw-fva.de>\n"
+"Language-Team: German <grass-translations@lists.osgeo.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-15\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 1.2\n"
 
 #: ../gui/wxpython/wxgui.py:92
 msgid "GRASS GIS Layer Manager"
@@ -2201,7 +2202,7 @@ msgstr "Quantisierung"
 
 #: ../gui/wxpython/menustrings.py:257
 msgid "Produces the quantization file for a floating-point map."
-msgstr "Produziert eine Quantisierungsdatei für eine Fliesskomma-Karte."
+msgstr "Produziert eine Quantisierungsdatei für eine Fließkomma-Karte."
 
 #: ../gui/wxpython/menustrings.py:258
 msgid "Timestamp"
@@ -6273,9 +6274,9 @@ msgid "Not enough points for line"
 msgstr "Nicht genügend Punkte für Linie"
 
 #: ../gui/wxpython/gui_modules/wxvdriver.py:830
-#, fuzzy, python-format
+#, python-format
 msgid "Topology for vector map <%s> is not available. Topology is required by digitizer. Do you want to rebuild topology (takes some time) and open the vector map for editing?"
-msgstr "Topologie for Vektorkarte <%s> ist nicht vorhanden. Topologie ist für den Digitizer erforderlich. Wollen sie die Topologie erneuern (benötigt einige Zeit) und die Vektorkarte für die Bearbeitung öffnen?"
+msgstr "Die Topologie der Vektorkarte <%s> ist nicht vorhanden. Topologie ist für den Digitizer erforderlich. Wollen Sie die Topologie erneuern (benötigt einige Zeit) und die Vektorkarte dann zum Bearbeiten öffnen?"
 
 #: ../gui/wxpython/gui_modules/wxvdriver.py:834
 msgid "Topology missing"
@@ -6740,9 +6741,9 @@ msgid "Location wizard canceled. Location not created."
 msgstr "Location-Assistent wurde abgebrochen. Die Location wurde nicht erzeugt."
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:1984
-#, fuzzy, python-format
+#, python-format
 msgid "Location <%(loc)s> will be created in GIS data directory <%(dir)s>. You will need to change the default GIS data directory in the GRASS startup screen."
-msgstr "Die Location <%(loc)s> wird im GIS-Verzeichnis <%(dir)s> angelegt. Sie müssen das Standard GIS-Verzeichnis auf dem GRASS Startbildschrim ändern."
+msgstr "Die Location <%(loc)s> wird im GIS-Verzeichnis <%(dir)s> angelegt. Sie müssen das Standard GIS-Verzeichnis auf dem GRASS Startbildschirm anpassen."
 
 #: ../gui/wxpython/gui_modules/location_wizard.py:2024
 #: ../gui/wxpython/gui_modules/location_wizard.py:2033
@@ -7098,7 +7099,6 @@ msgstr "Zurücksetzen auf Standardansicht"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:414
 #: ../gui/wxpython/gui_modules/nviz_preferences.py:168
-#, fuzzy
 msgid "Image Appearance"
 msgstr "Erscheinungsbild"
 
@@ -8730,6 +8730,8 @@ msgid ""
 "Python Imaging Library is not available.\n"
 "'Preview' functionality won't work."
 msgstr ""
+"Die \"Python Imaging Library\" ist nicht vorhanden.\n"
+"Die \"Vorschau\"-Funktion wird nicht funktionieren."
 
 #: ../gui/wxpython/gui_modules/psmap.py:227
 msgid "Program ps2pdf is not available. Please install it first to create PDF."
@@ -8750,12 +8752,12 @@ msgstr "Erzeuge Vorschau..."
 #: ../gui/wxpython/gui_modules/psmap.py:285
 #, python-format
 msgid "Ps.map exited with return code %s"
-msgstr ""
+msgstr "Ps.map beendet mit Rückgabewert %s"
 
 #: ../gui/wxpython/gui_modules/psmap.py:300
 #, python-format
 msgid "ps2pdf exited with return code %s"
-msgstr ""
+msgstr "ps2pdf beendet mit Rückgabewert %s"
 
 #: ../gui/wxpython/gui_modules/psmap.py:304
 #, python-format
@@ -8788,9 +8790,8 @@ msgstr "Kann Datei %s nicht lesen."
 
 #: ../gui/wxpython/gui_modules/psmap.py:545
 #: ../gui/wxpython/gui_modules/psmap.py:568
-#, fuzzy
 msgid "Please, create map frame first."
-msgstr "Digitalisiere Ebene (Selektiere die Ebene zuerst)"
+msgstr "Bitte, erzeugen Sie zunächst ein Kartenausschnitt"
 
 #: ../gui/wxpython/gui_modules/psmap.py:613
 msgid "Scalebar is not appropriate for this projection"
@@ -9244,6 +9245,8 @@ msgid ""
 "Relation doesn't start with data item.\n"
 "Unable to add relation."
 msgstr ""
+"Relation beginnt nicht mit einem Daten-Dings.\n"
+"Kann Relation nicht hinzufügen."
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:2684
 msgid ""
@@ -9254,14 +9257,12 @@ msgstr ""
 "Kann die Relation nicht hinzufügen."
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:2697
-#, fuzzy
 msgid ""
 "No relevant option found.\n"
 "Unable to add relation."
 msgstr ""
-"Befehl nicht definiert.\n"
-"\n"
-"Hinzufügen einer neuen Aktion zu Modell nicht möglich."
+"Keine relevante Option gefunden.\n"
+"Kann Relation nicht hinzufügen."
 
 #: ../gui/wxpython/gui_modules/gmodeler.py:3231
 msgid "Action"
@@ -9533,14 +9534,16 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:615
 #, python-format
 msgid "Instruction file will be loaded with following region: %s\n"
-msgstr ""
+msgstr "Datei mit Anweisungen wird mit folgender Region geladen: %s\n"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:620
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Region cannot be set\n"
 "%s"
-msgstr "Aktuelle Region kann nicht gesetzt werden."
+msgstr ""
+"Region kann nicht gesetzt werden\n"
+"%s"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:751
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:901
@@ -9549,9 +9552,9 @@ msgstr "Aktuelle Region kann nicht gesetzt werden."
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:1192
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:1317
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:1368
-#, fuzzy, python-format
+#, python-format
 msgid "Failed to read instruction %s"
-msgstr "Kann Datei %s nicht lesen."
+msgstr "Kann Anweisungen nicht lesen %s"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:765
 #, python-format
@@ -9559,6 +9562,8 @@ msgid ""
 "Scale has changed, old value: %(old)s\n"
 "new value: %(new)s"
 msgstr ""
+"Maßstab hat sich geändert, alter Wert: %(old)s\n"
+"neuer Wert: %(new)s"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:768
 #, python-format
@@ -9566,6 +9571,8 @@ msgid ""
 "Failed to read instruction %s.\n"
 "Use 1:25000 notation."
 msgstr ""
+"Lesen der Anweisungen fehlgeschlagen %s.\n"
+"Verwende 1:25000 Notation."
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:776
 #, python-format
@@ -9573,6 +9580,8 @@ msgid ""
 "Map frame position changed, old value: %(old1)s %(old2)s\n"
 "new value: %(new1)s %(new2)s"
 msgstr ""
+"Position des Kartenausschnitts hat sich geändert, alter Wert: %(old1)s %(old2)s\n"
+"neuer Wert: %(new1)s %(new2)s"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:784
 #, python-format
@@ -9580,27 +9589,31 @@ msgid ""
 "Map frame size changed, old value: %(old1)s %(old2)s\n"
 "new value: %(new1)s %(new2)s"
 msgstr ""
+"Größe des Kartenausschnitts hat sich geändert, alter Wert: %(old1)s %(old2)s\n"
+"neuer Wert: %(new1)s %(new2)s"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:831
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Failed to read instruction %(file)s.\n"
 "Unknown format %(for)s"
-msgstr "Kann die Liste nicht lesen: %s"
+msgstr ""
+"Lesen der Anweisungen fehlgeschlagen  %(file)s.\n"
+"Unbekanntes Format %(for)s"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:844
-#, fuzzy, python-format
+#, python-format
 msgid "Failed to read instruction %s."
-msgstr "Kann Datei %s nicht lesen."
+msgstr "Lesen der Anweisungen fehlgeschlagen %s."
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:939
 #, python-format
 msgid "Characters on position %s are not supported by ISO-8859-1 (Latin 1) encoding which is required by module ps.map."
-msgstr ""
+msgstr "Zeichen in der Position %s werden nicht von der Zeichenkodierung ISO-8859-1 (Latin 1), welche vom Modul benötigt wird, unterstützt."
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:943
 msgid "Not all characters are supported by ISO-8859-1 (Latin 1) encoding which is required by module ps.map."
-msgstr ""
+msgstr "Nicht alle Zeichen werden von der Zeichenkodierung ISO-8859-1 (Latin 1), welche von dem Modul ps.map benötigt wird."
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:1652
 msgid "Units:"
@@ -9611,6 +9624,8 @@ msgid ""
 "Position of the top left corner\n"
 "from the top left edge of the paper"
 msgstr ""
+"Position der oberen linken Ecke\n"
+"von der oberen linken Kante des Papiers."
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:1661
 msgid "X:"
@@ -9631,7 +9646,6 @@ msgid "Font size:"
 msgstr "Schriftgröße:"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:1701
-#, fuzzy
 msgid "Choose color:"
 msgstr "Wählen Sie die Farbe:"
 
@@ -9669,9 +9683,8 @@ msgid "Right"
 msgstr "Rechts"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:1836
-#, fuzzy
 msgid "Literal is not allowed!"
-msgstr "Diese Schrittgröße ist nicht erlaubt."
+msgstr "Buchstaben sind nicht erlaubt!"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:1836
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:2431
@@ -9710,22 +9723,20 @@ msgid "Map frame options:"
 msgstr "Kartenrahmenoptionen:"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:2077
-#, fuzzy
 msgid "fit frame to match selected map"
-msgstr "Auf die selektierten Karten zoomen"
+msgstr "Passe Ausschnitt auf die selektierte Karte an"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:2078
-#, fuzzy
 msgid "fit frame to match saved region"
-msgstr "Auf die gespeicherte Region zoomen"
+msgstr "Passe Ausschnitt auf gespeichert Region an"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:2079
 msgid "fit frame to match current computational region"
-msgstr ""
+msgstr "Passe Ausschnitt auf aktuelle Region an"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:2080
 msgid "fixed scale and map center"
-msgstr ""
+msgstr "fester Maßstab und Kartenmittelpunkt"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:2088
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:2256
@@ -9766,9 +9777,8 @@ msgid "1 :"
 msgstr "1 :"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:2146
-#, fuzzy
 msgid "Map max resolution (dpi):"
-msgstr "[%s]: Karte hat die falsche Auflösung."
+msgstr "Max. Kartenauflösung (dpi):"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:2159
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:4015
@@ -9777,22 +9787,23 @@ msgstr "Rand"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:2163
 msgid "draw border around map frame"
-msgstr ""
+msgstr "Zeichne einen Rahmen um den Kartenausschnitt"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:2169
 msgid "border color:"
 msgstr "Randfarbe:"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:2170
-#, fuzzy
 msgid "border width (pts):"
-msgstr "Setze breite (in Punkt):"
+msgstr "Randbreite (in Punkt):"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:2264
 msgid ""
 "Region is set to match this map,\n"
 "raster or vector map must be added later"
 msgstr ""
+"Region wurde so gesetzt, dass sie zu dieser Karte passt.\n"
+"Raster- oder Vektorkarten müssen später hinzugefügt werden."
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:2271
 msgid "Region selection"
@@ -9808,7 +9819,7 @@ msgstr "Keine Region ausgewählt!"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:2502
 msgid "Invalid scale or map center!"
-msgstr ""
+msgstr "Ungültiger Maßstab oder Kartenmitte"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:2562
 msgid "Choose raster map"
@@ -9855,7 +9866,7 @@ msgstr "Vektorkarten verwalten"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:2700
 msgid "The topmost vector map overlaps the others"
-msgstr ""
+msgstr "Die oberste Vektorkarte überlagert die anderen"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:2702
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3998
@@ -9872,9 +9883,8 @@ msgid "Properties..."
 msgstr "Eigenschaften..."
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:2904
-#, fuzzy
 msgid "Raster map settings"
-msgstr "Kartenrahmeneinstellungen"
+msgstr "Rasterkarteneinstellungen"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:2941
 msgid "Vector maps settings"
@@ -9960,7 +9970,7 @@ msgstr "Farbwert aus Vektorkartentabellen-Spalte:"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3247
 msgid "No effect for fill color from table column"
-msgstr ""
+msgstr "Kein Effekt durch Füllfarbe aus der Tabellenspalte"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3289
 msgid "Color of lines:"
@@ -9979,7 +9989,7 @@ msgstr "EPS-Datei:"
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3354
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3539
 msgid "Type filename or click browse to choose file"
-msgstr ""
+msgstr "Geben Sie den Dateinamen ein oder verwenden Sie den Dateibrowser"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3355
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3540
@@ -10015,9 +10025,8 @@ msgid "Set width (pts):"
 msgstr "Setze breite (in Punkt):"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3476
-#, fuzzy
 msgid "multiply width by category value"
-msgstr "Interaktive Bearbeitung der Kategoriewerte"
+msgstr "Multipliziere Breite mit Kategoriewert"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3497
 msgid "Choose line style:"
@@ -10078,26 +10087,24 @@ msgid "Type of legend"
 msgstr "Legendentyp"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3889
-#, fuzzy
 msgid "discrete legend (categorical maps)"
-msgstr "Kodiert kategorische Rasterkarten um."
+msgstr "diskrete Legende (kategorische Karten)"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3891
 msgid "continuous color gradient legend (floating point map)"
-msgstr ""
+msgstr "Farbgradienten-Legende (Fließkomma-Karte)"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3902
 msgid "Advanced legend settings"
 msgstr "Fortgeschrittene Legendeneinstellungen"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3906
-#, fuzzy
 msgid "draw \"no data\" box"
-msgstr "Keine Eingabekarte angegeben."
+msgstr "Zeichne \"no data\" box"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3912
 msgid "draw ticks across color table"
-msgstr ""
+msgstr "Zeichne Ticks über die Farbtabelle"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3960
 msgid "Vector legend"
@@ -10113,7 +10120,7 @@ msgstr "Eingangsvektorkarten"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3976
 msgid "Choose vector maps and their order in legend"
-msgstr ""
+msgstr "Wähle Vektorkarten und ihre Reihenfolge in der Legende"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:3981
 msgid "Label"
@@ -10126,7 +10133,7 @@ msgstr "Label editieren"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:4019
 msgid "draw border around legend"
-msgstr ""
+msgstr "Zeichne einen Rahmen um die Legende"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:4056
 msgid "Size and position"
@@ -10134,13 +10141,15 @@ msgstr "Größe und Position"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:4090
 msgid "Leave the edit field empty, to use default values."
-msgstr ""
+msgstr "Lassen Sie das Feld leer, um Standardwerte zu verwenden"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:4112
 msgid ""
 "Width of the color symbol (for lines)\n"
 "in front of the legend text"
 msgstr ""
+"Breite der Farbprobe (für Linien)\n"
+"vor dem Legendentext"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:4118
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:4223
@@ -10156,6 +10165,8 @@ msgid ""
 "Column separation distance between the left edges\n"
 "of two columns in a multicolumn legend"
 msgstr ""
+"Spaltenabstand zwischen den linken Rändern\n"
+"zweier Spalten einer mehrspaltigen Legende"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:4306
 msgid "Edit legend label:"
@@ -10186,6 +10197,8 @@ msgid ""
 "Units of current projection are not supported,\n"
 " meters will be used!"
 msgstr ""
+"Einheiten der aktuellen Projektion werden nicht unterstützt.\n"
+"Es wird stattdessen Meter verwendet!"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:4793
 msgid "Unsupported units"
@@ -10197,11 +10210,11 @@ msgstr "Länge:"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:4842
 msgid "Scalebar length is given in map units"
-msgstr ""
+msgstr "Länge des Maßstabsbalken in Karteneinheiten"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:4845
 msgid "Scalebar height is real height on paper"
-msgstr ""
+msgstr "Höhe des Maßstabsbalken in realer Höhe auf dem Papier"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:4847
 msgid "default"
@@ -10266,15 +10279,16 @@ msgid "relatively to paper"
 msgstr "in Bezug auf Papier"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:5190
-#, fuzzy
 msgid "by map coordinates"
-msgstr "Ost Koordinaten des Austrittspunkts"
+msgstr "in Kartenkoordinaten"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:5206
 msgid ""
 "Position from the top left\n"
 "edge of the paper"
 msgstr ""
+"Position von der oberen linken\n"
+"Ecke des Papiers"
 
 #: ../gui/wxpython/gui_modules/psmap_dialogs.py:5243
 msgid "Offset"
@@ -10460,6 +10474,10 @@ msgid ""
 "\n"
 "Option <%(opt)s>: read from standard input is not supported by wxGUI"
 msgstr ""
+"Kann den Befehl nicht ausführen:\n"
+"%(cmd)s\n"
+"\n"
+"Option <%(opt)s>: Das Lesen von der Standardeingabe wird vom wxGUI nicht unterstützt"
 
 #: ../gui/wxpython/gui_modules/goutput.py:623
 msgid "Save file as..."
@@ -10521,9 +10539,8 @@ msgid "Note that the wxGUI's vector digitizer is currently disabled (hopefully t
 msgstr "Beachten Sie, dass der Vektordigitalisierer derzeit unter MS Windows nicht funktioniert (dieses wird hoffentlich bald behoben sein). Bitte achten Sie auf aktualisierte Versionen von GRASS. In der Zwischenzeit können Sie \"v.digit\" aus dem Menü \"Vektor\" - \"Vektorkarten pflegen\" verwenden."
 
 #: ../gui/wxpython/gui_modules/toolbars.py:446
-#, fuzzy
 msgid "Set map canvas for "
-msgstr "2. Bild für das Mosaik."
+msgstr "Bestimme Kartenfenster für "
 
 #: ../gui/wxpython/gui_modules/toolbars.py:448
 msgid " / Zoom to map"
@@ -10634,7 +10651,7 @@ msgstr "Öffnen von '%s' nicht erfolgreich"
 #: ../gui/wxpython/gui_modules/utils.py:772
 #, python-format
 msgid "ERROR: Unable to determine GRASS version. Details: %s"
-msgstr ""
+msgstr "FEHLER: Kann die GRASS-Version nicht bestimmen. Einzelheiten: %s"
 
 #: ../gui/wxpython/gui_modules/render.py:128
 #, python-format
@@ -11215,11 +11232,13 @@ msgid "Unable to create vector map <%s>."
 msgstr "Kann die Vektorkarte <%s> nicht erstellen."
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:395
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Invalid or empty key column.\n"
 "Unable to create vector map <%s>."
-msgstr "Kann die Vektorkarte <%s> nicht erstellen."
+msgstr ""
+"Ungültige oder leere Schlüsselspalte.\n"
+"Kann die Vektorkarte <%s> nicht erstellen."
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:422
 #, python-format
@@ -11842,17 +11861,16 @@ msgid "Display selected"
 msgstr "Ausgewählte anzeigen"
 
 #: ../gui/wxpython/gui_modules/preferences.py:753
-#, fuzzy
 msgid "Classic (labels only)"
-msgstr "Gebe nur Wertespanne aus."
+msgstr "Klassisch (nur Beschriftung)"
 
 #: ../gui/wxpython/gui_modules/preferences.py:754
 msgid "Combined (labels and module names)"
-msgstr ""
+msgstr "Kombiniert (Beschriftungen und Modulnamen)"
 
 #: ../gui/wxpython/gui_modules/preferences.py:755
 msgid "Professional (module names only)"
-msgstr ""
+msgstr "Professionell (nur Modulnamen)"
 
 #: ../gui/wxpython/gui_modules/preferences.py:788
 msgid "box"
@@ -11896,15 +11914,15 @@ msgid "Unable to read settings file <%s>\n"
 msgstr "Kann die Einstellungsdatei <%s> nicht lesen\n"
 
 #: ../gui/wxpython/gui_modules/preferences.py:854
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Error: Reading settings from file <%(file)s> failed.\n"
 "\t\tDetails: %(detail)s\n"
 "\t\tLine: '%(line)s'\n"
 msgstr ""
-"Fehler: Das Lesen der Einstellungen aus der Datei <%(file)s> ist fehlgeschlagen.\n"
-"           Einzelheiten: %(detail)s\n"
-"           Zeile: '%(line)s'"
+"Fehler: Das Lesen der Einstellungen aus Datei <%(file)s> ist fehlgeschlagen.\n"
+"\t\tEinzelheiten: %(detail)s\n"
+"\t\tZeile: '%(line)s'\n"
 
 #: ../gui/wxpython/gui_modules/preferences.py:873
 msgid "Unable to create settings directory"
@@ -11974,13 +11992,13 @@ msgstr "Frage vor dem Schließen des wxGUIs oder eines Fensters."
 
 #: ../gui/wxpython/gui_modules/preferences.py:1291
 #: ../gui/wxpython/gui_modules/preferences.py:1301
-#, fuzzy, python-format
+#, python-format
 msgid "Hide '%s' tab (requires GUI restart)"
-msgstr "Menü-Stil (benötigt GUI-Neustart):"
+msgstr "Verstecke Reiter '%s' (benötigt GUI-Neustart)"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1314
 msgid "Automatically copy selected text to clipboard (in Command console)"
-msgstr ""
+msgstr "Kopiere selektierten Text automatisch in die Zwischenablage (in der Kommandozeile)"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1328
 msgid "Workspace settings"
@@ -12020,7 +12038,7 @@ msgstr "Menü-Stil (benötigt GUI-Neustart):"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1474
 msgid "Height of map selection popup window (in pixels):"
-msgstr ""
+msgstr "Höhe des Kartenauswahl-Popup-Fensters (In Pixel):"
 
 #: ../gui/wxpython/gui_modules/preferences.py:1498
 msgid "Icon theme (requires GUI restart):"
@@ -12455,6 +12473,12 @@ msgid ""
 "\n"
 "Do you want to try to remove .gislock (note that you need permission for this operation) and continue?"
 msgstr ""
+"GRASS läuft bereits in dem gewählten Mapset <%(mapset)s>\n"
+"(datei %(lock)s gefunden).\n"
+"\n"
+"Gleichzeitiger Betrieb ist nicht erlaubt..\n"
+"\n"
+"Wollen Sie versuchen .gislock zu löschen (Sie brauchen entsprechende Rechte für diese Operation) und Fortzufahren?"
 
 #: ../gui/wxpython/gis_set.py:746 ../gui/wxpython/gis_set.py:758
 msgid "Lock file found"
@@ -12890,9 +12914,8 @@ msgstr "Erzeugt Volumenstatistik für 3D-Rasterkarten."
 #~ msgid "symbol"
 #~ msgstr "Symbol"
 
-#, fuzzy
 #~ msgid "Follow source viewpoint"
-#~ msgstr "Quelle der Rasterwerte"
+#~ msgstr "Folge Quell-Blickposition"
 
 #~ msgid "Nviz settings saved to file <%s>."
 #~ msgstr "Nviz-Einstellungen in der Datei <%s> gespeichert."
@@ -13932,14 +13955,14 @@ msgstr "Erzeugt Volumenstatistik für 3D-Rasterkarten."
 #~ msgid "(step):"
 #~ msgstr "(Schrittweite):"
 
-#, fuzzy
 #~ msgid ""
 #~ "No attribute table linked to vector map <%(vector)s> found. %(msg)s\n"
 #~ "\n"
 #~ "New attribute table can be created by Attribute Table Manager."
 #~ msgstr ""
 #~ "Es ist keine Attributtabelle mit der Vektorkarte <%(vector)s> verlinkt. %(msg)s\n"
-#~ " Sie können diese Meldung in den Digitalisierungseinstellungen ausschalten. Oder Sie können mit dem Attributtabellenmanager eine Attributtabelle erzeugen und mit der Vektorkarte verknüpfen "
+#~ "\n"
+#~ "Eine neue Attributtabelle kann mit dem Attributtabellenmanager erzeugt werden."
 
 #~ msgid "Item properties"
 #~ msgstr "Eintragseigenschaften"
@@ -14006,3 +14029,23 @@ msgstr "Erzeugt Volumenstatistik für 3D-Rasterkarten."
 
 #~ msgid "Removes installed GRASS AddOns extension."
 #~ msgstr "Entfernen einer installierten Erweiterung aus den GRASS Addons."
+
+#~ msgid "'%(cmd)s' failed. Details: %(det)s"
+#~ msgstr "'%(cmd)s' fehlgeschlagen. Einzelheiten: %(det)s"
+
+#~ msgid ""
+#~ "List of files to be removed:\n"
+#~ "%(files)s\n"
+#~ "\n"
+#~ "Do you want really to remove <%(ext)s> extension?"
+#~ msgstr ""
+#~ "Liste der zu löschenden Dateien:\n"
+#~ "%(files)s\n"
+#~ "\n"
+#~ "Wollen Sie wirklich die <%(ext)s> Erweiterung löschen?"
+
+#~ msgid "Rebuilds all locally installed GRASS Addons extensions."
+#~ msgstr "Baut alle lokal installierten GRASS Addons erneut."
+
+#~ msgid "Computes topographic correction of reflectance."
+#~ msgstr "Berechnet topografische Korrektur."
