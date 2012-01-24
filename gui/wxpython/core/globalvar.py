@@ -130,10 +130,16 @@ def GetGRASSCommands():
             else:
                 cmd.append(fname)
     
-    # scan scripts/ (not on MS Windows)
-    if not scripts and os.path.exists(os.path.join(gisbase, 'scripts')):
+    # scan scripts/
+    if os.path.exists(os.path.join(gisbase, 'scripts')):
         for fname in os.listdir(os.path.join(gisbase, 'scripts')):
-            cmd.append(fname)
+            if scripts: # win32
+                name, ext = os.path.splitext(fname)
+                if ext in scripts.keys():
+                    scripts[ext].append(name)
+                cmd.append(name)
+            else:
+                cmd.append(fname)
     
     # scan gui/scripts/
     if os.path.exists(os.path.join(gisbase, 'etc', 'gui', 'scripts')):
