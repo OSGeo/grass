@@ -408,6 +408,7 @@ class AboutWindow(wx.Frame):
         info = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
                              label = 'GRASS GIS ' + vInfo['version'] + '\n\n')
         info.SetFont(wx.Font(13, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
+        info.SetForegroundColour(wx.Colour(35, 142, 35))
         infoSizer.Add(item = info, proportion = 0,
                       flag = wx.BOTTOM | wx.ALIGN_CENTER, border = 15)
         
@@ -452,7 +453,7 @@ class AboutWindow(wx.Frame):
                           flag = wx.ALIGN_RIGHT)
         
         infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
-                                               label = sys.version),
+                                               label = sys.version.replace(os.linesep, '')),
                           pos = (row, 1),
                           flag = wx.ALIGN_LEFT)
 
