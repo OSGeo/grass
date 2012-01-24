@@ -791,8 +791,6 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         self.SetCurrentPos(pos)
         
         cmd = text.strip().split(' ')[0]
-        if sys.platform == "win32" and cmd in globalvar.grassCmd['script']:
-            cmd += globalvar.EXT_SCT
         
         if not self.cmdDesc or cmd != self.cmdDesc.get_name():
             if cmd in ('r.mapcalc', 'r3.mapcalc') and \
