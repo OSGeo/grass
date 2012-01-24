@@ -47,7 +47,16 @@ from grass.script import core as grass
 
 from core       import globalvar
 from core.debug import Debug
-from core.utils import GetRealCmd
+
+def GetRealCmd(cmd):
+    """!Return real command name - only for MS Windows
+    """
+    if sys.platform == 'win32':
+        for ext in globalvar.grassScripts.keys():
+            if cmd in globalvar.grassScripts[ext]:
+                return cmd + ext
+    
+    return cmd
 
 def DecodeString(string):
     """!Decode string using system encoding
