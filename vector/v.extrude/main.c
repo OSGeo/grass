@@ -222,11 +222,9 @@ int main(int argc, char *argv[])
 		    continue;
 
 		value = db_get_column_value(column);
-
-		objheight = db_get_value_as_double(value,
-						   db_get_column_host_type
-						   (column));
-
+		G_debug(3, "column_host_type: %d", db_get_column_host_type(column));
+		objheight = db_get_value_as_double(value, DB_C_TYPE_DOUBLE);
+		G_debug(3, "height from DB: %f", objheight);
 		/* only draw if hcolumn was defined */
 		if (objheight != 0) {
 		    G_debug(3, "area centroid %d: object height: %f",
