@@ -674,6 +674,8 @@ Misc:
 
  - db_d_add_column()
 
+ - db_d_append_error()
+ 
  - db_d_begin_transaction()
 
  - db_d_bind_update()
@@ -714,6 +716,8 @@ Misc:
 
  - db_d_grant_on_table()
 
+ - db_d_init_error()
+ 
  - db_d_insert()
 
  - db_d_list_databases()
@@ -729,7 +733,8 @@ Misc:
  - db_d_open_select_cursor()
 
  - db_d_open_update_cursor()
- - db_d_update()
+
+ - db_d_report_error()
 
  - db_d_update()
  
