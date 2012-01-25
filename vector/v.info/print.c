@@ -235,7 +235,7 @@ void print_info(const struct Map_info *Map)
     struct bound_box box;
    
     /*Check the Timestamp */
-    time_ok = G_read_vector_timestamp(Vect_get_name(Map), "", &ts);
+    time_ok = G_read_vector_timestamp(Vect_get_name(Map), NULL, "", &ts);
     /*Check for valid entries, show none if no timestamp available */
     if (time_ok == 1) {
 	if (ts.count > 0)
@@ -299,10 +299,10 @@ void print_info(const struct Map_info *Map)
     /*This shows the TimeStamp */
     if (time_ok  == 1 && (first_time_ok || second_time_ok)) {
         G_format_timestamp(&ts, timebuff);
-        sprintf(line, "%-17s%s", _("Timestamp: "), timebuff);
+        sprintf(line, "%-17s%s", _("Timestamp first layer: "), timebuff);
     }
     else {
-        sprintf(line, "%-17s%s", _("Timestamp: none"), timebuff);
+        sprintf(line, "%-17s%s", _("Timestamp first layer: none"), timebuff);
     }
     printline(line);
 
