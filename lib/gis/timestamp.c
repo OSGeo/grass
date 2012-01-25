@@ -411,18 +411,27 @@ int G_remove_raster_timestamp(const char *name)
   \brief Check if timestamp for vector map exists
   
   \param name map name
+  \param layer The layer names, in case of NULL, layer one is assumed
   \param mapset mapset name
 
   \return 1 on success
   \return 0 no timestamp present
 */
-int G_has_vector_timestamp(const char *name, const char *mapset)
+int G_has_vector_timestamp(const char *name, const char *layer, const char *mapset)
 {
     char dir[GPATH_MAX];
     char path[GPATH_MAX + GNAME_MAX];
+    char ele[GNAME_MAX];
+
+    if(layer != NULL)
+        G_snprintf(ele, GNAME_MAX, "%s_%s", GV_TIMESTAMP_ELEMENT, layer);
+    else
+        G_snprintf(ele, GNAME_MAX, "%s_1", GV_TIMESTAMP_ELEMENT);
 
     G_snprintf(dir, GPATH_MAX, "%s/%s", GV_DIRECTORY, name);
-    G_file_name(path, dir, GV_TIMESTAMP_ELEMENT, mapset);
+    G_file_name(path, dir, ele, mapset);
+
+    G_debug(1, "Check for timestamp <%s>", path);
 
     if (access(path, R_OK) != 0)
 	return 0;
@@ -434,6 +443,7 @@ int G_has_vector_timestamp(const char *name, const char *mapset)
   \brief Read timestamp from vector map
   
   \param name map name
+  \param layer The layer names, in case of NULL, layer one is assumed
   \param mapset mapset name
   \param[out] ts TimeStamp struct to populate
 
@@ -442,19 +452,28 @@ int G_has_vector_timestamp(const char *name, const char *mapset)
   \return -1 Unable to open file 
   \return -2 invalid time stamp
 */
-int G_read_vector_timestamp(const char *name, const char *mapset,
-			    struct TimeStamp *ts)
+int G_read_vector_timestamp(const char *name, const char *layer, 
+                            const char *mapset, struct TimeStamp *ts)
 {
     FILE *fd;
     int stat;
     char dir[GPATH_MAX];
+    char ele[GNAME_MAX];
 
     /* In case no timestamp file is present return 0 */
-    if (G_has_vector_timestamp(name, mapset) != 1)
+    if (G_has_vector_timestamp(name, layer, mapset) != 1)
 	return 0;
 
+    if(layer != NULL)
+        G_snprintf(ele, GNAME_MAX, "%s_%s", GV_TIMESTAMP_ELEMENT, layer);
+    else
+        G_snprintf(ele, GNAME_MAX, "%s_1", GV_TIMESTAMP_ELEMENT);
+
     G_snprintf(dir, GPATH_MAX, "%s/%s", GV_DIRECTORY, name);
-    fd = G_fopen_old(dir, GV_TIMESTAMP_ELEMENT, mapset);
+
+    G_debug(1, "Read timestamp <%s/%s>", dir, ele);
+
+    fd = G_fopen_old(dir, ele, mapset);
     
     if (fd == NULL) {
 	G_warning(_("Unable to open timestamp file for vector map <%s@%s>"),
@@ -475,6 +494,7 @@ int G_read_vector_timestamp(const char *name, const char *mapset,
   \brief Write timestamp of vector map
 
   \param name map name
+  \param layer The layer names, in case of NULL, layer one is assumed
   \param[out] ts TimeStamp struct to populate
   
   \return 1 on success
@@ -482,15 +502,23 @@ int G_read_vector_timestamp(const char *name, const char *mapset,
   \return -2 error - invalid datetime in ts
 
  */
-int G_write_vector_timestamp(const char *name, const struct TimeStamp *ts)
+int G_write_vector_timestamp(const char *name, const char *layer, const struct TimeStamp *ts)
 {
     FILE *fd;
     int stat;
     char dir[GPATH_MAX];
+    char ele[GNAME_MAX];
+
+    if(layer != NULL)
+        G_snprintf(ele, GNAME_MAX, "%s_%s", GV_TIMESTAMP_ELEMENT, layer);
+    else
+        G_snprintf(ele, GNAME_MAX, "%s_1", GV_TIMESTAMP_ELEMENT);
 
     G_snprintf(dir, GPATH_MAX, "%s/%s", GV_DIRECTORY, name);
 
-    fd = G_fopen_new(dir, GV_TIMESTAMP_ELEMENT);
+    G_debug(1, "Write timestamp <%s/%s>", dir, ele);
+
+    fd = G_fopen_new(dir, ele);
     
     if (fd == NULL) {
 	G_warning(_("Unable to create timestamp file for vector map <%s@%s>"),
@@ -513,17 +541,24 @@ int G_write_vector_timestamp(const char *name, const struct TimeStamp *ts)
   Only timestamp files in current mapset can be removed.
 
   \param name map name
+  \param layer The layer names, in case of NULL, layer one is assumed
 
   \return 0 if no file
   \return 1 on success
   \return -1 on failure
 */
-int G_remove_vector_timestamp(const char *name)
+int G_remove_vector_timestamp(const char *name, const char *layer)
 {
     char dir[GPATH_MAX];
+    char ele[GNAME_MAX];
+
+    if(layer)
+        G_snprintf(ele, GNAME_MAX, "%s_%s", GV_TIMESTAMP_ELEMENT, layer);
+    else
+        G_snprintf(ele, GNAME_MAX, "%s_1", GV_TIMESTAMP_ELEMENT);
 
     G_snprintf(dir, GPATH_MAX, "%s/%s", GV_DIRECTORY, name);
-    return G_remove(dir, GV_TIMESTAMP_ELEMENT);
+    return G_remove(dir, ele);
 }
 
 /*!

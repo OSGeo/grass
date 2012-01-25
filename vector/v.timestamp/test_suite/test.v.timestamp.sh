@@ -12,24 +12,30 @@ v.random --o seed=1 n=20 output=map
 # The first @test uses several different absolute datum formats
 v.timestamp map=map date=none
 v.timestamp map=map 
-v.timestamp map=map date="2003"
-v.timestamp map=map 
-v.timestamp map=map date="Jul 2003"
-v.timestamp map=map 
+v.timestamp map=map layer=1 date="2003"
+v.timestamp map=map layer=1
+v.timestamp map=map layer=2 date="Jul 2003"
+v.timestamp map=map layer=2
 v.timestamp map=map date="14 Jul 2003"
 v.timestamp map=map 
 v.timestamp map=map date="14 Jul 2003 10"
 v.timestamp map=map 
-v.timestamp map=map date="14 Jul 2003 10:30 +0700"
-v.timestamp map=map 
-v.timestamp map=map date="14 Jul 2003 10:30:25"
-v.timestamp map=map 
+v.timestamp map=map layer=3 date="14 Jul 2003 10:30 +0700"
+v.timestamp map=map layer=3
+v.timestamp map=map layer=4 date="14 Jul 2003 10:30:25"
+v.timestamp map=map layer=4
 v.timestamp map=map date="14 Jul 2003 10:30:25 +0700 / 15 Jul 2003 11:35:12 +0700"
 v.timestamp map=map 
 v.timestamp map=map date="14 Jul 2003 10:30:25 +0700 / 15 Jul 2003"
 v.timestamp map=map 
 v.timestamp map=map date=none
+v.timestamp map=map layer=2 date=none
+v.timestamp map=map layer=3 date=none
+v.timestamp map=map layer=4 date=none
 v.timestamp map=map 
+v.timestamp map=map layer=2
+v.timestamp map=map layer=3
+v.timestamp map=map layer=4
 
 # The second @test uses several different relative datum formats
 v.timestamp map=map date=none
@@ -38,15 +44,19 @@ v.timestamp map=map date="2 years"
 v.timestamp map=map 
 v.timestamp map=map date="2 years 3 months"
 v.timestamp map=map 
-v.timestamp map=map date="5 days"
-v.timestamp map=map 
-v.timestamp map=map date="3 hours"
-v.timestamp map=map 
+v.timestamp map=map layer=1 date="5 days"
+v.timestamp map=map layer=1
+v.timestamp map=map layer=2 date="3 hours"
+v.timestamp map=map layer=2
 v.timestamp map=map date="5 minutes 30 seconds"
 v.timestamp map=map 
 v.timestamp map=map date="2 years 2 months / 5 years 8 months"
-v.timestamp map=map 
 v.timestamp map=map date=none
+v.timestamp map=map layer=2 date=none
+v.timestamp map=map layer=3 date=none
+v.timestamp map=map 
+v.timestamp map=map layer=2
+v.timestamp map=map layer=3
 
 # The third @test to check @failure with wrong time stamps
 v.timestamp map=map date="2 years 3 months 8 days"

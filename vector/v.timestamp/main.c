@@ -24,7 +24,7 @@
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct Option *map, *date;
+    struct Option *map, *layer, *date;
     struct TimeStamp ts;
     char *name;
     const char *mapset;
@@ -40,6 +40,7 @@ int main(int argc, char *argv[])
     module->description = _("Print/add/remove a timestamp for a vector map.");
 
     map = G_define_standard_option(G_OPT_V_MAP);
+    layer = G_define_standard_option(G_OPT_V_FIELD);
 
     date = G_define_option();
     date->key = "date";
@@ -68,7 +69,7 @@ int main(int argc, char *argv[])
     }
 
     if (!modify) {
-	if (G_read_vector_timestamp(name, "", &ts) == 1) {
+	if (G_read_vector_timestamp(name, layer->answer, "", &ts) == 1) {
 	    G__write_timestamp(stdout, &ts);
 	    exit(EXIT_SUCCESS);
 	}
@@ -76,14 +77,14 @@ int main(int argc, char *argv[])
 	    exit(EXIT_FAILURE);
     }
     if (strcmp(date->answer, "none") == 0) {
-	G_remove_vector_timestamp(name);
+	G_remove_vector_timestamp(name, layer->answer);
 	exit(EXIT_SUCCESS);
     }
 
     if(G_scan_timestamp(&ts, date->answer) != 1)
         G_fatal_error("Timestamp format is invalid");
 
-    G_write_vector_timestamp(name, &ts);
+    G_write_vector_timestamp(name, layer->answer, &ts);
 
     exit(EXIT_SUCCESS);
 }
