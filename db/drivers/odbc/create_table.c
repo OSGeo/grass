@@ -28,9 +28,9 @@ int db__driver_create_table(dbTable * table)
     if ((ret != SQL_SUCCESS) && (ret != SQL_SUCCESS_WITH_INFO)) {
 	SQLGetDiagRec(SQL_HANDLE_STMT, c->stmt, 1, NULL, &err, msg,
 		      sizeof(msg), NULL);
-	G_asprintf(&emsg, "SQLExecDirect():\n%s\n%s (%d)\n",
-		   db_get_string(&sql), msg, (int)err);
-	report_error(emsg);
+	db_d_append_error("SQLExecDirect():\n%s\n%s (%d)\n",
+			  db_get_string(&sql), msg, (int)err);
+	db_d_report_error();
 	G_free(emsg);
 
 	return DB_FAILED;

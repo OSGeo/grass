@@ -33,7 +33,8 @@ int db__driver_list_tables(tlist, tcount, system)
     ret = SQLTables(c->stmt, NULL, 0, NULL, 0, NULL, 0, ttype, sizeof(ttype));
 
     if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO) {
-	report_error("SQLTables()");
+	db_d_append_error("SQLTables()");
+	db_d_report_error();
 	return DB_FAILED;
     }
 

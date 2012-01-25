@@ -56,11 +56,11 @@ int db__driver_describe_table(dbString * table_name, dbTable ** table)
 	ret = sqlite3_prepare(sqlite, db_get_string(&sql), -1, &statement, &rest);
 
 	if (ret != SQLITE_OK) {
-	    append_error("Error in sqlite3_prepare():");
-	    append_error(db_get_string(&sql));
-	    append_error("\n");
-	    append_error((char *)sqlite3_errmsg(sqlite));
-	    report_error();
+	    db_d_append_error("%s %s\n%s",
+			      _("Error in sqlite3_prepare():"),
+			      db_get_string(&sql),
+			      (char *)sqlite3_errmsg(sqlite));
+	    db_d_report_error();
 	    db_free_string(&sql);
 	    return DB_FAILED;
 	}
@@ -74,9 +74,10 @@ int db__driver_describe_table(dbString * table_name, dbTable ** table)
 	    /* try again */
 	}
 	else if (ret != SQLITE_OK) {
-	    append_error("Error in sqlite3_step():\n");
-	    append_error((char *)sqlite3_errmsg(sqlite));
-	    report_error();
+	    db_d_append_error("%s\n%s",
+			      _("Error in sqlite3_step():"),
+			      (char *)sqlite3_errmsg(sqlite));
+	    db_d_report_error();
 	    sqlite3_finalize(statement);
 	    return DB_FAILED;
 	}
@@ -87,9 +88,10 @@ int db__driver_describe_table(dbString * table_name, dbTable ** table)
     db_free_string(&sql);
 
     if (describe_table(statement, table, NULL) == DB_FAILED) {
-	append_error("Cannot describe table:\n");
-	append_error((char *)sqlite3_errmsg(sqlite));
-	report_error();
+	db_d_append_error("%s\n%s",
+			  _("Unable to describe table:"),
+			  (char *)sqlite3_errmsg(sqlite));
+	db_d_report_error();
 	sqlite3_finalize(statement);
 	return DB_FAILED;
     }
@@ -126,9 +128,10 @@ int describe_table(sqlite3_stmt * statement, dbTable ** table, cursor * c)
     if (ret != SQLITE_DONE && ret != SQLITE_ROW) {
 	/* get real result code */
 	ret = sqlite3_reset(statement);
-	append_error("Error in sqlite3_step():\n");
-	append_error((char *)sqlite3_errmsg(sqlite));
-	report_error();
+	db_d_append_error("%s\n%s",
+			  _("Error in sqlite3_step():"),
+			  (char *)sqlite3_errmsg(sqlite));
+	db_d_report_error();
 	return DB_FAILED;
     }
 

@@ -36,7 +36,6 @@ int db__driver_open_database(dbHandle * handle)
     const char *name;
     dbConnection connection;
 
-    init_error();
     db_get_connection(&connection);
     name = db_get_handle_dbname(handle);
 
@@ -51,8 +50,8 @@ int db__driver_open_database(dbHandle * handle)
     hDs = OGROpen(name, TRUE, NULL);
 
     if (hDs == NULL) {
-	append_error(_("Unable to open OGR data source"));
-	report_error();
+	db_d_append_error(_("Unable to open OGR data source"));
+	db_d_report_error();
 	return DB_FAILED;
     }
 
@@ -71,7 +70,6 @@ int db__driver_close_database()
 {
     G_debug(3, "db_driver_close_database()");
 
-    init_error();
     OGR_DS_Destroy(hDs);
 
     G_debug(3, "Database closed");

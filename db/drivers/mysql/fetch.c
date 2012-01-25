@@ -31,8 +31,8 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
 
     /* get the cursor by its token */
     if (!(c = (cursor *) db_find_token(token))) {
-	append_error(_("Cursor not found"));
-	report_error();
+	db_d_append_error(_("Cursor not found"));
+	db_d_report_error();
 	return DB_FAILED;
     }
 
@@ -49,9 +49,9 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
     case DB_FIRST:
     case DB_LAST:
     default:
-	append_error(_("Cursor position is not supported "
-		       "by MySQL driver"));
-	report_error();
+	db_d_append_error(_("Cursor position is not supported "
+			    "by MySQL driver"));
+	db_d_report_error();
 	return DB_FAILED;
     }
 
@@ -187,17 +187,19 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
 				&(value->t.minute), &(value->t.seconds));
 
 		    if (ns != 6) {
-			append_error(_("Cannot scan timestamp: "));
-			append_error(val);
-			report_error();
+			db_d_append_error("%s %s",
+					  _("Unable to scan timestamp: "),
+					  val);
+			db_d_report_error();
 			return DB_FAILED;
 		    }
 		    break;
 
 		default:
-		    append_error(_("Unknown timestamp format: "));
-		    append_error(val);
-		    report_error();
+		    db_d_append_error("%s %s",
+				      _("Unknown timestamp format: "),
+				      val);
+		    db_d_report_error();
 		    return DB_FAILED;
 		}
 	    }
@@ -209,9 +211,10 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
 			&(value->t.month), &(value->t.day));
 
 	    if (ns != 3) {
-		append_error(_("Cannot scan date: "));
-		append_error(val);
-		report_error();
+		db_d_append_error("%s %s",
+				  _("Unable to scan date: "),
+				  val);
+		db_d_report_error();
 		return DB_FAILED;
 	    }
 	    break;
@@ -222,9 +225,10 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
 			&(value->t.minute), &(value->t.seconds));
 
 	    if (ns != 3) {
-		append_error(_("Cannot scan time: "));
-		append_error(val);
-		report_error();
+		db_d_append_error("%s %s",
+				  _("Unable to scan time: "),
+				  val);
+		db_d_report_error();
 		return DB_FAILED;
 	    }
 	    break;
@@ -237,9 +241,10 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
 			&(value->t.minute), &(value->t.seconds));
 
 	    if (ns != 6) {
-		append_error(_("Cannot scan datetime: "));
-		append_error(val);
-		report_error();
+		db_d_append_error("%s %s",
+				  _("Unable to scan datetime:"),
+				  val);
+		db_d_report_error();
 		return DB_FAILED;
 	    }
 	    break;
@@ -268,8 +273,8 @@ int db__driver_get_num_rows(cn)
 
     /* get the cursor by its token */
     if (!(c = (cursor *) db_find_token(token))) {
-	append_error("Cursor not found");
-	report_error();
+	db_d_append_error(_("Cursor not found"));
+	db_d_report_error();
 	return DB_FAILED;
     }
 

@@ -30,8 +30,8 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
 
     /* get the cursor by its token */
     if (!(c = (cursor *) db_find_token(token))) {
-	append_error(_("Cursor not found"));
-	report_error();
+	db_d_append_error(_("Cursor not found"));
+	db_d_report_error();
 	return DB_FAILED;
     }
 
@@ -125,9 +125,10 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
 			&(value->t.year), &(value->t.month), &(value->t.day));
 
 	    if (ns != 3) {
-		append_error(_("Unable to scan date:"));
-		append_error(PQgetvalue(c->res, c->row, col));
-		report_error();
+		db_d_append_error("%s %s",
+				  _("Unable to scan date:"),
+				  PQgetvalue(c->res, c->row, col));
+		db_d_report_error();
 		return DB_FAILED;
 	    }
 	    value->t.hour = 0;
@@ -142,9 +143,10 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
 			&(value->t.seconds));
 
 	    if (ns != 3) {
-		append_error(_("Unable to scan time:"));
-		append_error(PQgetvalue(c->res, c->row, col));
-		report_error();
+		db_d_append_error("%s %s",
+				  _("Unable to scan time:"),
+				  PQgetvalue(c->res, c->row, col));
+		db_d_report_error();
 		return DB_FAILED;
 	    }
 	    value->t.year = 0;
@@ -160,15 +162,19 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
 			&(value->t.minute), &(value->t.seconds), &tz);
 
 	    if (ns == 7) {
-		append_error(_("Unable to scan timestamp (no idea how to process time zone):"));
-		append_error(PQgetvalue(c->res, c->row, col));
-		report_error();
+		db_d_append_error("%s %s",
+				  _("Unable to scan timestamp "
+				    "(no idea how to process time zone):"),
+				  PQgetvalue(c->res, c->row, col));
+		db_d_report_error();
 		return DB_FAILED;
 	    }
 	    else if (ns < 6) {
-		append_error(_("Unable to scan timestamp (not enough arguments):"));
-		append_error(PQgetvalue(c->res, c->row, col));
-		report_error();
+		db_d_append_error("%s %s",
+				  _("Unable to scan timestamp "
+				    "(not enough arguments):"),
+				  PQgetvalue(c->res, c->row, col));
+		db_d_report_error();
 		return DB_FAILED;
 	    }
 	    break;
@@ -197,8 +203,8 @@ int db__driver_get_num_rows(dbCursor * cn)
 
     /* get the cursor by its token */
     if (!(c = (cursor *) db_find_token(token))) {
-	append_error(_("Taken not found"));
-	report_error();
+	db_d_append_error(_("Taken not found"));
+	db_d_report_error();
 	return DB_FAILED;
     }
 

@@ -28,17 +28,17 @@ int db__driver_describe_table(dbString * table_name, dbTable ** table)
     res = PQexec(pg_conn, db_get_string(&sql));
 
     if (!res || PQresultStatus(res) != PGRES_TUPLES_OK) {
-	append_error(db_get_string(&sql));
-	append_error("\n");
-	append_error(PQerrorMessage(pg_conn));
-	report_error();
+	db_d_append_error("%s\n%s",
+			  db_get_string(&sql),
+			  PQerrorMessage(pg_conn));
+	db_d_report_error();
 	PQclear(res);
 	return DB_FAILED;
     }
 
     if (describe_table(res, table, NULL) == DB_FAILED) {
-	append_error(_("Unable to describe table\n"));
-	report_error();
+	db_d_append_error(_("Unable to describe table."));
+	db_d_report_error();
 	PQclear(res);
 	return DB_FAILED;
     }

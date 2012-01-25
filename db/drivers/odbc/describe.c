@@ -17,7 +17,6 @@ int db__driver_describe_table(table_name, table)
     cursor *c;
     char s[100];
     char msg[OD_MSG];
-    char *emsg;
 
     /* allocate cursor */
     c = alloc_cursor();
@@ -34,9 +33,9 @@ int db__driver_describe_table(table_name, table)
     if ((ret != SQL_SUCCESS) && (ret != SQL_SUCCESS_WITH_INFO)) {
 	SQLGetDiagRec(SQL_HANDLE_STMT, c->stmt, 1, NULL, &err, msg,
 		      sizeof(msg), NULL);
-	G_asprintf(&emsg, "SQLExecDirect():\n%s\n%s (%d)\n", s, msg,
-		   (int)err);
-	report_error(emsg);
+	db_d_append_error("SQLExecDirect():\n%s\n%s (%d)\n", s, msg,
+			  (int)err);
+	db_d_report_error();
 	return DB_FAILED;
     }
 
@@ -75,7 +74,8 @@ int describe_table(stmt, table)
     /* get the number of colummns */
     ret = SQLNumResultCols(stmt, &ncols);
     if ((ret != SQL_SUCCESS) && (ret != SQL_SUCCESS_WITH_INFO)) {
-	report_error("SQLNumResultCols()");
+	db_d_append_error("SQLNumResultCols()");
+	db_d_report_error();
 	return DB_FAILED;
     }
 

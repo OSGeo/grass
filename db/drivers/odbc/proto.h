@@ -1,5 +1,5 @@
 /* error.c */
-void report_error(char *err);
+void init_error();
 
 /* connect.c */
 int open_connection();

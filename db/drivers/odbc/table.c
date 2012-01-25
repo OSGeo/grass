@@ -17,6 +17,7 @@
 #include <string.h>
 #include <grass/dbmi.h>
 #include <grass/gis.h>
+#include <grass/glocale.h>
 #include "odbc.h"
 #include "globals.h"
 #include "proto.h"
@@ -127,7 +128,6 @@ int db__driver_drop_table(dbString * name)
     cursor *c;
     SQLRETURN ret;
     char msg[OD_MSG];
-    char *emsg = NULL;
     SQLINTEGER err;
     SQLCHAR ttype[50], *tname;
     SQLINTEGER nrow = 0;
@@ -142,21 +142,23 @@ int db__driver_drop_table(dbString * name)
 
     ret = SQLTables(c->stmt, NULL, 0, NULL, 0, tname, sizeof(tname), NULL, 0);
     if ((ret != SQL_SUCCESS) && (ret != SQL_SUCCESS_WITH_INFO)) {
-	report_error("SQLTables()");
+	db_d_append_error("SQLTables()");
+	db_d_report_error();
 	return DB_FAILED;
     }
 
     /* Get number of rows */
     ret = SQLRowCount(c->stmt, &nrow);
     if ((ret != SQL_SUCCESS) && (ret != SQL_SUCCESS_WITH_INFO)) {
-	report_error("SQLRowCount()");
+	db_d_append_error("SQLRowCount()");
+	db_d_report_error();
 	return DB_FAILED;
     }
 
     if (nrow == 0) {
-	G_asprintf(&emsg, "Table %s doesn't exist\n", tname);
-	report_error(emsg);
-	G_free(emsg);
+	db_d_append_error(_("Table %s doesn't exist"), tname);
+	db_d_report_error();
+	
 
 	return DB_FAILED;
     }
@@ -171,11 +173,10 @@ int db__driver_drop_table(dbString * name)
 	sprintf(cmd, "DROP VIEW %s", tname);
     }
     else {
-	G_asprintf(&emsg, "Table %s isn't 'TABLE' or 'VIEW' but %s\n", tname,
-		   ttype);
-	report_error(emsg);
-	G_free(emsg);
-
+	db_d_append_error(_("Table %s isn't 'TABLE' or 'VIEW' but %s"),
+			  tname, ttype);
+	db_d_report_error();
+	
 	return DB_FAILED;
     }
 
@@ -185,11 +186,10 @@ int db__driver_drop_table(dbString * name)
     if ((ret != SQL_SUCCESS) && (ret != SQL_SUCCESS_WITH_INFO)) {
 	SQLGetDiagRec(SQL_HANDLE_STMT, c->stmt, 1, NULL, &err, msg,
 		      sizeof(msg), NULL);
-	G_asprintf(&emsg, "SQLExecDirect():\n%s\n%s (%d)\n", cmd, msg,
-		   (int)err);
-	report_error(emsg);
-	G_free(emsg);
-
+	db_d_append_error("SQLExecDirect():\n%s\n%s (%d)", cmd, msg,
+			  (int)err);
+	db_d_report_error();
+	
 	return DB_FAILED;
     }
 

@@ -64,8 +64,10 @@ int parse_conn(const char *str, PGCONN * pgconn)
 	    else if (strncmp(tokens[i], "schema", 6) == 0)
 		pgconn->schema = G_store(tokens[i] + 7);
 	    else {
-		append_error(_("Unknown option in database definition for PostgreSQL: "));
-		append_error(tokens[i]);
+		db_d_append_error("%s %s",
+				  _("Unknown option in database definition "
+				    "for PostgreSQL: "),
+				  tokens[i]);
 		return DB_FAILED;
 	    }
 	    i++;

@@ -28,26 +28,27 @@ int db__driver_describe_table(dbString * table_name, dbTable ** table)
     db_append_string(&sql, " where 1 = 0");
 
     if (mysql_query(connection, db_get_string(&sql)) != 0) {
-	append_error(db_get_string(&sql));
-	append_error("\n");
-	append_error(mysql_error(connection));
-	report_error();
+	db_d_append_error("%s\n%s\n%s",
+			  _("Unable to describe table:"),
+			  db_get_string(&sql),
+			  mysql_error(connection));
+	db_d_report_error();
 	return DB_FAILED;
     }
 
     res = mysql_store_result(connection);
 
     if (res == NULL) {
-	append_error(db_get_string(&sql));
-	append_error("\n");
-	append_error(mysql_error(connection));
-	report_error();
+	db_d_append_error("%s\n%s",
+			  db_get_string(&sql),
+			  mysql_error(connection));
+	db_d_report_error();
 	return DB_FAILED;
     }
 
     if (describe_table(res, table, NULL) == DB_FAILED) {
-	append_error("Cannot describe table\n");
-	report_error();
+	db_d_append_error(_("Unable to describe table"));
+	db_d_report_error();
 	mysql_free_result(res);
 	return DB_FAILED;
     }

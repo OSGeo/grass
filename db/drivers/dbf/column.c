@@ -20,6 +20,7 @@
 #include <dirent.h>
 #include <grass/dbmi.h>
 #include <grass/gis.h>
+#include <grass/glocale.h>
 #include "globals.h"
 #include "proto.h"
 
@@ -45,8 +46,9 @@ int add_column(int tab, int type, char *name, int width, int decimals)
     /* Check if the column exists */
     for (c = 0; c < db.tables[tab].ncols; c++) {
 	if (G_strcasecmp(db.tables[tab].cols[c].name, name) == 0) {
-	    append_error("Column '%s' already exists (duplicate name)\n",
-			 name);
+	    db_d_append_error(_("Column '%s' already exists (duplicate name)"),
+			      name);
+	    db_d_report_error();
 	    return DB_FAILED;
 	}
     }
@@ -94,7 +96,8 @@ int drop_column(int tab, char *name)
     /* Check if the column exists */
     c = find_column(tab, name);
     if (c == -1) {
-	append_error("Column '%s' does not exist\n", name);
+	db_d_append_error(_("Column '%s' does not exist"), name);
+	db_d_report_error();
 	return DB_FAILED;
     }
 

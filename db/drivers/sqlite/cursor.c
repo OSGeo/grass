@@ -15,14 +15,13 @@
 #include <stdio.h>
 #include <grass/gis.h>
 #include <grass/dbmi.h>
+#include <grass/glocale.h>
 #include "globals.h"
 #include "proto.h"
 
 int db__driver_close_cursor(dbCursor * dbc)
 {
     cursor *c;
-
-    init_error();
 
     /* get my cursor via the dbc token */
     c = (cursor *) db_find_token(db_get_cursor_token(dbc));
@@ -45,7 +44,7 @@ cursor *alloc_cursor()
     /* allocate the cursor */
     c = (cursor *) db_malloc(sizeof(cursor));
     if (c == NULL) {
-	append_error("Cannot allocate cursor.");
+	db_d_append_error(_("Unable to allocate cursor."));
 	return NULL;
     }
 
@@ -54,7 +53,7 @@ cursor *alloc_cursor()
     /* tokenize it */
     c->token = db_new_token(c);
     if (c->token < 0) {
-	append_error("Cannot ad new token.");
+	db_d_append_error(_("Unable to add new token."));
 	return NULL;
     }
 

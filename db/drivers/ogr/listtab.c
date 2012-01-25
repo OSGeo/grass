@@ -37,7 +37,6 @@ int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
     OGRLayerH hLayer;
     OGRFeatureDefnH hFeatureDefn;
 
-    init_error();
     *tlist = NULL;
     *tcount = 0;
 
@@ -47,8 +46,8 @@ int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
     list = db_alloc_string_array(nlayers);
 
     if (list == NULL) {
-	append_error(_("Unable to db_alloc_string_array()"));
-	report_error();
+	db_d_append_error(_("Unable to db_alloc_string_array()"));
+	db_d_report_error();
 	return DB_FAILED;
     }
 

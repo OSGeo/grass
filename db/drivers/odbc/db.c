@@ -10,7 +10,6 @@ int db__driver_open_database(dbHandle * handle)
 {
     char msg[OD_MSG];
     const char *name;
-    char *emsg = NULL;
     SQLRETURN ret;
     SQLINTEGER err;
     dbConnection connection;
@@ -34,10 +33,9 @@ int db__driver_open_database(dbHandle * handle)
     if ((ret != SQL_SUCCESS) && (ret != SQL_SUCCESS_WITH_INFO)) {
 	SQLGetDiagRec(SQL_HANDLE_DBC, ODconn, 1, NULL, &err, msg, sizeof(msg),
 		      NULL);
-	G_asprintf(&emsg, "SQLConnect():\n%s (%d)\n", msg, (int)err);
-	report_error(emsg);
-	G_free(emsg);
-
+	db_d_append_error("SQLConnect():\n%s (%d)\n", msg, (int)err);
+	db_d_report_error();
+	
 	return DB_FAILED;
     }
 

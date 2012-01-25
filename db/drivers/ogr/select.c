@@ -35,8 +35,6 @@ int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
     cursor *c;
     dbTable *table;
 
-    init_error();
-
     /* allocate cursor */
     c = alloc_cursor();
     if (c == NULL)
@@ -49,16 +47,16 @@ int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
     c->hLayer = OGR_DS_ExecuteSQL(hDs, db_get_string(sel), NULL, NULL);
 
     if (c->hLayer == NULL) {
-	append_error(_("Unable to select: \n"));
-	append_error(db_get_string(sel));
-	append_error("\n");
-	report_error();
+	db_d_append_error(_("Unable to select: \n"));
+	db_d_append_error(db_get_string(sel));
+	db_d_append_error("\n");
+	db_d_report_error();
 	return DB_FAILED;
     }
 
     if (describe_table(c->hLayer, &table, c) == DB_FAILED) {
-	append_error(_("Unable to describe table\n"));
-	report_error();
+	db_d_append_error(_("Unable to describe table\n"));
+	db_d_report_error();
 	OGR_DS_ReleaseResultSet(hDs, c->hLayer);
 	return DB_FAILED;
     }

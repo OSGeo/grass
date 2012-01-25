@@ -22,20 +22,18 @@ int db__driver_list_databases(dbString * dbpath, int npaths,
     int rec_num = 0;
     dbHandle *list;
 
-    init_error();
     *dblist = NULL;
     *dbcount = 0;
 
     /* TODO: the solution below is not good as user usually does not have permissions for "template1" */
-    append_error
-	(_("db_driver_list_databases() is not implemented in pg driver"));
-    report_error();
+    db_d_append_error(_("db_driver_list_databases() is not implemented"));
+    db_d_report_error();
     return DB_FAILED;
 
     if (npaths > 0) {
 	G_debug(3, "location: %s", db_get_string(dbpath));
 	if (parse_conn(db_get_string(dbpath), &pgconn) == DB_FAILED) {
-	    report_error();
+	    db_d_report_error();
 	    return DB_FAILED;
 	}
     }
@@ -48,9 +46,10 @@ int db__driver_list_databases(dbString * dbpath, int npaths,
 		"template1");
 
     if (PQstatus(pg_conn) == CONNECTION_BAD) {
-	append_error(_("Unable to connect to Postgres:\n"));
-	append_error(PQerrorMessage(pg_conn));
-	report_error();
+	db_d_append_error("%s\n%s",
+			  _("Unable to connect to Postgres:"),
+			  PQerrorMessage(pg_conn));
+	db_d_report_error();
 	PQfinish(pg_conn);
 	return DB_FAILED;
     }
@@ -58,9 +57,10 @@ int db__driver_list_databases(dbString * dbpath, int npaths,
     res = PQexec(pg_conn, "select datname from pg_database");
 
     if (!res || PQresultStatus(res) != PGRES_TUPLES_OK) {
-	append_error(_("Unable to select from Postgres:\n"));
-	append_error(PQerrorMessage(pg_conn));
-	report_error();
+	db_d_append_error("%s\n%s",
+			  _("Unable to select from Postgres:"),
+			  PQerrorMessage(pg_conn));
+	db_d_report_error();
 	PQclear(res);
 	PQfinish(pg_conn);
 	return DB_FAILED;
@@ -70,16 +70,16 @@ int db__driver_list_databases(dbString * dbpath, int npaths,
 
     list = db_alloc_handle_array(rec_num);
     if (list == NULL) {
-	append_error(_("Out of memory"));
-	report_error();
+	db_d_append_error(_("Out of memory"));
+	db_d_report_error();
 	return DB_FAILED;
     }
 
     for (i = 0; i < rec_num; i++) {
 	db_init_handle(&list[i]);
 	if (db_set_handle(&list[i], PQgetvalue(res, i, 0), NULL) != DB_OK) {
-	    append_error("db_set_handle()");
-	    report_error();
+	    db_d_append_error(_("Unable to set handle"));
+	    db_d_report_error();
 	    db_free_handle_array(list, rec_num);
 	    return DB_FAILED;
 	}

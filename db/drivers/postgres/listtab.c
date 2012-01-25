@@ -23,7 +23,6 @@ int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
     PGresult *rest, *resv;
     char buf[1000];
 
-    init_error();
     *tlist = NULL;
     *tcount = 0;
 
@@ -34,9 +33,10 @@ int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
 	       "select * from pg_tables where tablename !~ 'pg_*' order by tablename");
 
     if (!rest || PQresultStatus(rest) != PGRES_TUPLES_OK) {
-	append_error(_("Unable to select table names\n"));
-	append_error(PQerrorMessage(pg_conn));
-	report_error();
+	db_d_append_error("%s\n%s",
+			  _("Unable to select table names."),
+			  PQerrorMessage(pg_conn));
+	db_d_report_error();
 	PQclear(rest);
 	return DB_FAILED;
     }
@@ -59,9 +59,10 @@ int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
 	       "SELECT * FROM pg_views WHERE schemaname NOT IN ('pg_catalog','information_schema') AND viewname !~ '^pg_'");
 
     if (!resv || PQresultStatus(resv) != PGRES_TUPLES_OK) {
-	append_error(_("Unable to select view names\n"));
-	append_error(PQerrorMessage(pg_conn));
-	report_error();
+	db_d_append_error("%s\n%s",
+			  _("Unable to select view names."),
+			  PQerrorMessage(pg_conn));
+	db_d_report_error();
 	PQclear(resv);
 	return DB_FAILED;
     }
@@ -86,8 +87,8 @@ int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
     list = db_alloc_string_array(nrows);
 
     if (list == NULL) {
-	append_error(_("db_alloc_string_array() failed"));
-	report_error();
+	db_d_append_error(_("Out of memory"));
+	db_d_report_error();
 	return DB_FAILED;
     }
 

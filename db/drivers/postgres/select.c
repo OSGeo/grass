@@ -24,14 +24,12 @@ int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
     dbTable *table;
     char *str;
 
-    init_error();
-
     /* Set datetime style */
     res = PQexec(pg_conn, "SET DATESTYLE TO ISO");
 
     if (!res || PQresultStatus(res) != PGRES_COMMAND_OK) {
-	append_error(_("Unable set DATESTYLE"));
-	report_error();
+	db_d_append_error(_("Unable set DATESTYLE"));
+	db_d_report_error();
 	PQclear(res);
 	return DB_FAILED;
     }
@@ -53,11 +51,11 @@ int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
     c->res = PQexec(pg_conn, str);
 
     if (!c->res || PQresultStatus(c->res) != PGRES_TUPLES_OK) {
-	append_error(_("Unable to select:\n'"));
-	append_error(db_get_string(sel));
-	append_error("'");
-	append_error(PQerrorMessage(pg_conn));
-	report_error();
+	db_d_append_error("%s\n%s\n%s",
+			  _("Unable to select:"),
+			  db_get_string(sel),
+			  PQerrorMessage(pg_conn));
+	db_d_report_error();
 	PQclear(c->res);
 	if (str)
 	    G_free(str);
@@ -68,8 +66,8 @@ int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
 	G_free(str);
 
     if (describe_table(c->res, &table, c) == DB_FAILED) {
-	append_error(_("Unable to describe table"));
-	report_error();
+	db_d_append_error(_("Unable to describe table"));
+	db_d_report_error();
 	PQclear(res);
 	return DB_FAILED;
     }

@@ -18,6 +18,7 @@
 #include <grass/dbmi.h>
 #include <grass/datetime.h>
 #include <grass/shapefil.h>
+#include <grass/glocale.h>
 #include "globals.h"
 #include "proto.h"
 
@@ -30,8 +31,9 @@ int db__driver_describe_table(dbString * table_name, dbTable ** table)
 
     tab = find_table(name);
     if (tab == -1) {
-	append_error("Table '%s' doesn't exist", db_get_string(table_name));
-	report_error();
+	db_d_append_error(_("Table '%s' doesn't exist"),
+			  db_get_string(table_name));
+	db_d_report_error();
 	return DB_FAILED;
     }
     describe_table(tab, NULL, 0, table);

@@ -22,6 +22,7 @@
 #include <grass/dbmi.h>
 #include <grass/shapefil.h>
 #include <grass/gis.h>
+#include <grass/glocale.h>
 #include "globals.h"
 #include "proto.h"
 
@@ -67,8 +68,11 @@ int execute(char *sql, cursor * c)
 
     if (yyparse() != 0) {
 	G_free(tmpsql);
-	append_error("SQL parser error: %s\n", st->errmsg);
-	append_error("in statement:\n%s\n", sql);
+	db_d_append_error("%s (%s) %s\n%s\n",
+			  _("SQL parser error"),
+			  st->errmsg,
+			  _("in statement:"),
+			  sql);
 	sqpFreeStmt(st);
 	return DB_FAILED;
     }
@@ -81,7 +85,7 @@ int execute(char *sql, cursor * c)
     /* find table */
     tab = find_table(st->table);
     if (tab < 0 && st->command != SQLP_CREATE) {
-	append_error("Table '%s' doesn't exist.\n", st->table);
+	db_d_append_error(_("Table '%s' doesn't exist."), st->table);
 	return DB_FAILED;
     }
 
@@ -89,7 +93,7 @@ int execute(char *sql, cursor * c)
     if ((st->command != SQLP_CREATE)) {
 	ret = load_table_head(tab);
 	if (ret == DB_FAILED) {
-	    append_error("Cannot load table head.\n");
+	    db_d_append_error(_("Unable to load table head."));
 	    return DB_FAILED;
 	}
     }
@@ -99,8 +103,8 @@ int execute(char *sql, cursor * c)
 	(st->command == SQLP_ADD_COLUMN) || (st->command == SQLP_DROP_COLUMN)
 	) {
 	if (db.tables[tab].write == FALSE) {
-	    append_error
-		("Cannot modify table, don't have write permission for DBF file.\n");
+	    db_d_append_error(_("Unable to modify table, "
+				"don't have write permission for DBF file."));
 	    return DB_FAILED;
 	}
     }
@@ -114,7 +118,7 @@ int execute(char *sql, cursor * c)
 	    for (i = 0; i < ncols; i++) {
 		cols[i] = find_column(tab, st->Col[i].s);
 		if (cols[i] == -1) {
-		    append_error("Column '%s' not found\n", st->Col[i].s);
+		    db_d_append_error(_("Column '%s' not found"), st->Col[i].s);
 		    return DB_FAILED;
 		}
 	    }
@@ -138,7 +142,7 @@ int execute(char *sql, cursor * c)
 		if ((dtype == DBF_INT && stype != SQLP_I)
 		    || (dtype == DBF_DOUBLE && stype == SQLP_S)
 		    || (dtype == DBF_CHAR && stype != SQLP_S)) {
-		    append_error("Incompatible value type.\n");
+		    db_d_append_error(_("Incompatible value type."));
 		    return DB_FAILED;
 		}
 	    }
@@ -154,7 +158,7 @@ int execute(char *sql, cursor * c)
 	get_col_def(st, 0, &dtype, &width, &decimals);
 	ret = add_column(tab, dtype, st->Col[0].s, width, decimals);
 	if (ret == DB_FAILED) {
-	    append_error("Cannot add column.\n");
+	    db_d_append_error(_("Unable to add column."));
 	    return DB_FAILED;
 	}
 	/* Add column to each row */
@@ -176,7 +180,7 @@ int execute(char *sql, cursor * c)
     case (SQLP_DROP_COLUMN):
 	load_table(tab);
 	if (drop_column(tab, st->Col[0].s) != DB_OK) {
-	    append_error("Cannot delete column.\n");
+	    db_d_append_error(_("Unable to delete column."));
 	    return DB_FAILED;
 	}
 	db.tables[tab].updated = TRUE;
@@ -184,7 +188,8 @@ int execute(char *sql, cursor * c)
 
     case (SQLP_CREATE):
 	if (tab >= 0) {
-	    append_error("Table %s already exists\n", st->table);
+	    db_d_append_error(_("Table %s already exists"), st->table);
+	    
 	    return DB_FAILED;
 	}
 	sprintf(name, "%s.dbf", st->table);
@@ -198,7 +203,7 @@ int execute(char *sql, cursor * c)
 	    get_col_def(st, i, &dtype, &width, &decimals);
 	    ret = add_column(tab, dtype, st->Col[i].s, width, decimals);
 	    if (ret == DB_FAILED) {
-		append_error("Cannot create table.\n");
+		db_d_append_error(_("Unable to create table."));
 		db.tables[tab].alive = FALSE;
 		return DB_FAILED;
 	    }
@@ -255,7 +260,7 @@ int execute(char *sql, cursor * c)
 	c->ncols = ncols;
 	c->nrows = sel(st, tab, &(c->set));
 	if (c->nrows < 0) {
-	    append_error("Error in selecting rows\n");
+	    db_d_append_error(_("Error in selecting rows"));
 	    return DB_FAILED;
 	}
 	c->cur = -1;
@@ -265,7 +270,7 @@ int execute(char *sql, cursor * c)
     case (SQLP_UPDATE):
 	nrows = sel(st, tab, &selset);
 	if (nrows < 0) {
-	    append_error("Error in selecting rows\n");
+	    db_d_append_error(_("Error in selecting rows"));
 	    return DB_FAILED;
 	}
 	dbrows = db.tables[tab].rows;
@@ -295,7 +300,7 @@ int execute(char *sql, cursor * c)
     case (SQLP_DELETE):
 	nrows = sel(st, tab, &selset);
 	if (nrows < 0) {
-	    append_error("Error in selecting rows\n");
+	    db_d_append_error(_("Error in selecting rows"));
 	    return DB_FAILED;
 	}
 	dbrows = db.tables[tab].rows;
@@ -544,7 +549,7 @@ int sel(SQLPSTMT * st, int tab, int **selset)
 
     ret = load_table(tab);
     if (ret == DB_FAILED) {
-	append_error("Cannot load table.\n");
+	db_d_append_error(_("Cannot load table."));
 	return -1;
     }
 
@@ -559,12 +564,12 @@ int sel(SQLPSTMT * st, int tab, int **selset)
 	G_debug(4, "node result type = %d", node_type);
 
 	if (node_type == -1) {
-	    append_error("Incompatible types in WHERE condition.\n");
+	    db_d_append_error(_("Incompatible types in WHERE condition."));
 	    return -1;
 	}
 	else if (node_type == SQLP_S || node_type == SQLP_I ||
 		 node_type == SQLP_D) {
-	    append_error("Result of WHERE condition is not of type BOOL.\n");
+	    db_d_append_error(_("Result of WHERE condition is not of type BOOL."));
 	    return -1;
 	}
 	else if (node_type == SQLP_NULL) {
@@ -580,8 +585,8 @@ int sel(SQLPSTMT * st, int tab, int **selset)
 		G_debug(4, "condition = %d", condition);
 
 		if (condition == NODE_ERROR) {	/* e.g. division by 0 */
-		    append_error("Error in evaluation of WHERE condition.\n");
-		    return (-1);
+		    db_d_append_error(_("Error in evaluation of WHERE condition."));
+		    return -1;
 		}
 		else if (condition == NODE_TRUE) {	/* true */
 		    if (nset == aset) {
@@ -592,15 +597,14 @@ int sel(SQLPSTMT * st, int tab, int **selset)
 		    nset++;
 		}
 		else if (condition != NODE_FALSE && condition != NODE_NULL) {	/* Should not happen */
-		    append_error("Unknown result (%d) of WHERE evaluation.\n",
-				 condition);
+		    db_d_append_error(_("Unknown result (%d) of WHERE evaluation"),
+				      condition);
 		    return -1;
 		}
 	    }
 	}
 	else {			/* Should not happen */
-	    append_error
-		("Unknown WHERE condition type (bug in DBF driver).\n");
+	    db_d_append_error(_("Unknown WHERE condition type (bug in DBF driver)."));
 	    return -1;
 	}
     }
@@ -626,7 +630,7 @@ int sel(SQLPSTMT * st, int tab, int **selset)
 	    }
 	}
 	if (cur_cmp_ocol < 0) {
-	    append_error("Cannot find order column '%s'\n", st->orderCol);
+	    db_d_append_error(_("Unable to find order column '%s'"), st->orderCol);
 	    return -1;
 	}
 
@@ -771,7 +775,7 @@ double eval_node(SQLPNODE * nptr, int tab, int row, SQLPVALUE * value)
 		    dval = left_dval / right_dval;
 		}
 		else {
-		    append_error("Division by zero\n");
+		    db_d_append_error(_("Division by zero"));
 		    return NODE_ERROR;
 		}
 		break;
@@ -910,7 +914,7 @@ double eval_node(SQLPNODE * nptr, int tab, int row, SQLPVALUE * value)
 		return NODE_TRUE;
 	    }
 	    else if (left == NODE_VALUE || right == NODE_VALUE) {	/* Should not happen */
-		append_error("Value operand for AND\n");
+		db_d_append_error(_("Value operand for AND"));
 		return NODE_ERROR;
 	    }
 	    else {
@@ -924,7 +928,7 @@ double eval_node(SQLPNODE * nptr, int tab, int row, SQLPVALUE * value)
 		return NODE_TRUE;
 	    }
 	    else if (left == NODE_VALUE || right == NODE_VALUE) {	/* Should not happen */
-		append_error("Value operand for OR\n");
+		db_d_append_error(_("Value operand for OR"));
 		return NODE_ERROR;
 	    }
 	    else {
@@ -939,7 +943,7 @@ double eval_node(SQLPNODE * nptr, int tab, int row, SQLPVALUE * value)
 		return NODE_FALSE;
 	    }
 	    else if (right == NODE_VALUE) {	/* Should not happen */
-		append_error("Value operand for NOT\n");
+		db_d_append_error(_("Value operand for NOT"));
 		return NODE_ERROR;
 	    }
 	    else {
@@ -947,7 +951,7 @@ double eval_node(SQLPNODE * nptr, int tab, int row, SQLPVALUE * value)
 	    }
 
 	default:
-	    append_error("Unknown operator %d\n", nptr->oper);
+	    db_d_append_error(_("Unknown operator %d"), nptr->oper);
 	    return NODE_FALSE;
 	}
     }
@@ -1016,8 +1020,8 @@ int eval_node_type(SQLPNODE * nptr, int tab)
     case SQLP_NODE_COLUMN:
 	ccol = find_column(tab, nptr->column_name);
 	if (ccol == -1) {
-	    append_error("Column '%s' not found\n", nptr->column_name);
-	    return (-1);
+	    db_d_append_error(_("Column '%s' not found"), nptr->column_name);
+	    return -1;
 	}
 	col = &(db.tables[tab].cols[ccol]);
 	switch (col->type) {
@@ -1054,8 +1058,7 @@ int eval_node_type(SQLPNODE * nptr, int tab)
 	case SQLP_MLTP:
 	case SQLP_DIV:
 	    if (left == SQLP_S || right == SQLP_S) {
-		append_error
-		    ("Arithmetical operation with strings is not allowed\n");
+		db_d_append_error(_("Arithmetical operation with strings is not allowed"));
 		return -1;
 	    }
 	    else if (left == SQLP_NULL || right == SQLP_NULL) {
@@ -1077,8 +1080,7 @@ int eval_node_type(SQLPNODE * nptr, int tab)
 	case SQLP_NE:
 	    if ((left == SQLP_S && (right == SQLP_I || right == SQLP_D)) ||
 		(right == SQLP_S && (left == SQLP_I || left == SQLP_D))) {
-		append_error
-		    ("Comparison between string and number is not allowed\n");
+		db_d_append_error(_("Comparison between string and number is not allowed"));
 		return -1;
 	    }
 	    else if (left == SQLP_NULL || right == SQLP_NULL) {
@@ -1093,8 +1095,8 @@ int eval_node_type(SQLPNODE * nptr, int tab)
 	case SQLP_GT:
 	case SQLP_GE:
 	    if (left == SQLP_S || right == SQLP_S) {
-		append_error("Comparison '%s' between strings not allowed\n",
-			     sqpOperatorName(nptr->oper));
+		db_d_append_error(_("Comparison '%s' between strings not allowed"),
+				  sqpOperatorName(nptr->oper));
 		return -1;
 	    }
 	    else if (left == SQLP_NULL || right == SQLP_NULL) {
@@ -1107,7 +1109,7 @@ int eval_node_type(SQLPNODE * nptr, int tab)
 	case SQLP_MTCH:
 	    if (left == SQLP_I || left == SQLP_D || right == SQLP_I ||
 		right == SQLP_D) {
-		append_error("Match (~) between numbers not allowed\n");
+		db_d_append_error(_("Match (~) between numbers not allowed"));
 		return -1;
 	    }
 	    else if (left == SQLP_NULL || right == SQLP_NULL) {
@@ -1146,7 +1148,7 @@ int eval_node_type(SQLPNODE * nptr, int tab)
 	    }
 
 	default:
-	    append_error("Unknown operator %d\n", nptr->oper);
+	    db_d_append_error(_("Unknown operator %d"), nptr->oper);
 	    return -1;
 	}
     }

@@ -18,20 +18,8 @@
 #include "odbc.h"
 #include "globals.h"
 
-
-/**
- * \fn void report_error (char *err)
- *
- * \brief Reports database driver error.
- *
- * \param[in] err error message
- */
-
-void report_error(char *err)
+/* init error message */
+void init_error(void)
 {
-    char *msg = NULL;
-
-    G_asprintf(&msg, "DBMI-ODBC driver error: %s", err);
-    db_error(msg);
-    G_free(msg);
+    db_d_init_error("ODBC");
 }

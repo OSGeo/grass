@@ -24,8 +24,6 @@ int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
     dbTable *table;
     char *str;
 
-    init_error();
-
     /* allocate cursor */
     c = alloc_cursor();
     if (c == NULL)
@@ -40,13 +38,13 @@ int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
     G_debug(3, "Escaped SQL: %s", str);
 
     if (mysql_query(connection, str) != 0) {
-	append_error(_("Cannot select data: \n"));
-	append_error(db_get_string(sel));
-	append_error("\n");
-	append_error(mysql_error(connection));
+	db_d_append_error("%s\n%s\n%s",
+			  _("Unable to select data:"),
+			  db_get_string(sel),
+			  mysql_error(connection));
 	if (str)
 	    G_free(str);
-	report_error();
+	db_d_report_error();
 	return DB_FAILED;
     }
 
@@ -55,16 +53,16 @@ int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
     c->res = mysql_store_result(connection);
 
     if (c->res == NULL) {
-	append_error(db_get_string(sel));
-	append_error("\n");
-	append_error(mysql_error(connection));
-	report_error();
+	db_d_append_error("%s\n%s",
+			  db_get_string(sel),
+			  mysql_error(connection));
+	db_d_report_error();
 	return DB_FAILED;
     }
 
     if (describe_table(c->res, &table, c) == DB_FAILED) {
-	append_error("Cannot describe table\n");
-	report_error();
+	db_d_append_error(_("Unable to describe table."));
+	db_d_report_error();
 	mysql_free_result(c->res);
 	return DB_FAILED;
     }

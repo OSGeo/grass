@@ -14,6 +14,7 @@
  */
 
 #include <grass/dbmi.h>
+#include <grass/glocale.h>
 #include "globals.h"
 #include "proto.h"
 
@@ -38,7 +39,6 @@ int db__driver_create_index(dbIndex * index)
     G_debug(3, "db__create_index()");
 
     db_init_string(&sql);
-    init_error();
 
     ncols = db_get_index_number_of_columns(index);
 
@@ -72,11 +72,11 @@ int db__driver_create_index(dbIndex * index)
 	ret = sqlite3_prepare(sqlite, db_get_string(&sql), -1, &statement, &rest);
 
 	if (ret != SQLITE_OK) {
-	    append_error("Cannot create index:\n");
-	    append_error(db_get_string(&sql));
-	    append_error("\n");
-	    append_error((char *)sqlite3_errmsg(sqlite));
-	    report_error();
+	    db_d_append_error("%s\n%s\n%s",
+			      _("Unable to create index:"),
+			      db_get_string(&sql),
+			      (char *)sqlite3_errmsg(sqlite));
+	    db_d_report_error();
 	    sqlite3_finalize(statement);
 	    db_free_string(&sql);
 	    return DB_FAILED;
@@ -91,9 +91,10 @@ int db__driver_create_index(dbIndex * index)
 	    /* try again */
 	}
 	else if (ret != SQLITE_OK) {
-	    append_error("Error in sqlite3_step():\n");
-	    append_error((char *)sqlite3_errmsg(sqlite));
-	    report_error();
+	    db_d_append_error("%s\n%s",
+			      _("Error in sqlite3_step():"),
+			      (char *)sqlite3_errmsg(sqlite));
+	    db_d_report_error();
 	    sqlite3_finalize(statement);
 	    db_free_string(&sql);
 	    return DB_FAILED;
