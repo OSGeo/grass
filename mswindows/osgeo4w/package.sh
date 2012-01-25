@@ -67,7 +67,7 @@ read PATCH <&3
 
 export VERSION=$MAJOR.$MINOR.$PATCH
 
-if [ "$PATCH" == "svn" ]; then
+if [[ "$PATCH" == *svn* ]] ; then
     GRASS_EXECUTABLE=grass${MAJOR}${MINOR}svn
 else
     GRASS_EXECUTABLE=grass${MAJOR}${MINOR}
