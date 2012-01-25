@@ -141,8 +141,10 @@ int main(int argc, char *argv[])
 
     if (vect_to_rast(input->answer, output->answer, field_opt->answer,
 		     col->answer, nrows, use, value, value_type,
-		     rgbcol_opt->answer, label_opt->answer, type))
-      exit(EXIT_FAILURE);
-   
+		     rgbcol_opt->answer, label_opt->answer, type)) {
+	exit(EXIT_FAILURE);
+    }
+
+    G_done_msg("");
     exit(EXIT_SUCCESS);
 }
