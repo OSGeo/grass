@@ -48,8 +48,8 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
 
     /* get the cursor by its token */
     if (!(c = (cursor *) db_find_token(token))) {
-	append_error("Cursor not found");
-	report_error();
+	db_d_append_error(("Cursor not found"));
+	db_d_report_error();
 	return DB_FAILED;
     }
 
@@ -68,9 +68,10 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
 	    /* get real result code */
 	    ret = sqlite3_reset(c->statement);
 	    if (ret != SQLITE_OK) {
-		append_error("Cannot fetch:\n");
-		append_error((char *)sqlite3_errmsg(sqlite));
-		report_error();
+		db_d_append_error("%s\n%s",
+				  _("Unable to fetch:"),
+				  (char *)sqlite3_errmsg(sqlite));
+		db_d_report_error();
 		return DB_FAILED;
 	    }
 	    *more = 0;
@@ -83,14 +84,14 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
 	break;
 
     case DB_PREVIOUS:
-	append_error("DB_PREVIOUS is not supported");
-	report_error();
+	db_d_append_error(_("DB_PREVIOUS is not supported"));
+	db_d_report_error();
 	return DB_FAILED;
 	break;
 
     case DB_LAST:
-	append_error("DB_LAST is not supported");
-	report_error();
+	db_d_append_error(_("DB_LAST is not supported"));
+	db_d_report_error();
 	return DB_FAILED;
 	break;
     };
@@ -166,9 +167,10 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
 	    G_debug(3, "sqlite fetched date: %s", text);
 	    ns = sscanf(text, "%4d-%2d-%2d", &dt->year, &dt->month, &dt->day);
 	    if (ns != 3) {
-		append_error("Cannot scan date:");
-		append_error(text);
-		report_error();
+		db_d_append_error("%s %s",
+				  _("Unable to scan date:"),
+				  text);
+		db_d_report_error();
 		return DB_FAILED;
 	    }
 	    break;
@@ -182,9 +184,10 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
 	    ns = sscanf(text, "%2d:%2d:%lf",
 			&dt->hour, &dt->minute, &dt->seconds);
 	    if (ns != 3) {
-		append_error("Cannot scan time:");
-		append_error(text);
-		report_error();
+		db_d_append_error("%s %s",
+				  _("Unable to scan time:"),
+				  text);
+		db_d_report_error();
 		return DB_FAILED;
 	    }
 	    break;
@@ -196,9 +199,10 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
 			&dt->year, &dt->month, &dt->day,
 			&dt->hour, &dt->minute, &dt->seconds);
 	    if (ns != 6) {
-		append_error("Cannot scan timestamp:");
-		append_error(text);
-		report_error();
+		db_d_append_error("%s %s",
+				  _("Unable to scan timestamp:"),
+				  text);
+		db_d_report_error();
 		return DB_FAILED;
 	    }
 	    break;
@@ -211,13 +215,14 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
 	    dt->hour = 0;
 	    dt->minute = 0;
 	    G_debug(3, "sqlite fetched interval: %s", text);
-	    G_warning
-		("SQLite driver: parsing of interval values not implemented; assuming seconds");
+	    G_warning(_("SQLite driver: parsing of interval values "
+			"not implemented; assuming seconds"));
 	    ns = sscanf(text, "%lf", &dt->seconds);
 	    if (ns != 1) {
-		append_error("Cannot scan interval:");
-		append_error(text);
-		report_error();
+		db_d_append_error("%s %s",
+				  _("Unable to scan interval:"),
+				  text);
+		db_d_report_error();
 		return DB_FAILED;
 	    }
 	    break;
@@ -257,8 +262,8 @@ int db__driver_get_num_rows(dbCursor * cn)
 
     /* get the cursor by its token */
     if (!(c = (cursor *) db_find_token(token))) {
-	append_error("Cursor not found");
-	report_error();
+	db_d_append_error(_("Cursor not found"));
+	db_d_report_error();
 	return DB_FAILED;
     }
 
@@ -277,9 +282,10 @@ int db__driver_get_num_rows(dbCursor * cn)
     ret = sqlite3_reset(c->statement);
 
     if (ret != SQLITE_OK) {
-	append_error("Cannot get number of rows\n");
-	append_error((char *)sqlite3_errmsg(sqlite));
-	report_error();
+	db_d_append_error("%s\n%s",
+			  _("Unable to get number of rows:"),
+			  (char *)sqlite3_errmsg(sqlite));
+	db_d_report_error();
 	return DB_FAILED;
     }
 

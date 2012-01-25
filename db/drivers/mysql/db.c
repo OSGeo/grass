@@ -25,7 +25,6 @@ int db__driver_open_database(dbHandle * handle)
     dbConnection default_connection;
     MYSQL *res;
 
-    init_error();
     db_get_connection(&default_connection);
     name = db_get_handle_dbname(handle);
 
@@ -42,7 +41,7 @@ int db__driver_open_database(dbHandle * handle)
 	CONNPAR connpar;
 
 	if (parse_conn(name, &connpar) == DB_FAILED) {
-	    report_error();
+	    db_d_report_error();
 	    return DB_FAILED;
 	}
 
@@ -58,9 +57,10 @@ int db__driver_open_database(dbHandle * handle)
 				 connpar.dbname, connpar.port, NULL, 0);
 
 	if (res == NULL) {
-	    append_error(_("Cannot connect to MySQL: "));
-	    append_error(mysql_error(connection));
-	    report_error();
+	    db_d_append_error("%s\n%s",
+			      _("Connection failed."),
+			      mysql_error(connection));
+	    db_d_report_error();
 	    return DB_FAILED;
 	}
     }
@@ -70,7 +70,6 @@ int db__driver_open_database(dbHandle * handle)
 
 int db__driver_close_database(void)
 {
-    init_error();
     mysql_close(connection);	/* this will also release connection */
 
     return DB_OK;

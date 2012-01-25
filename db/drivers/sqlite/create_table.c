@@ -14,6 +14,7 @@
  */
 
 #include <grass/dbmi.h>
+#include <grass/glocale.h>
 #include "globals.h"
 #include "proto.h"
 
@@ -36,9 +37,7 @@ int db__driver_create_table(dbTable * table)
     int ret;
 
     G_debug(3, "db__driver_create_table()");
-
-    init_error();
-
+    
     db_init_string(&sql);
 
     /* db_table_to_sql ( table, &sql ); */
@@ -119,11 +118,11 @@ int db__driver_create_table(dbTable * table)
 	ret = sqlite3_prepare(sqlite, db_get_string(&sql), -1, &statement, &rest);
 
 	if (ret != SQLITE_OK) {
-	    append_error("Cannot create table:\n");
-	    append_error(db_get_string(&sql));
-	    append_error("\n");
-	    append_error((char *)sqlite3_errmsg(sqlite));
-	    report_error();
+	    db_d_append_error("%s\n%s\n%s",
+			      _("Unable to create table:"),
+			      db_get_string(&sql),
+			      (char *)sqlite3_errmsg(sqlite));
+	    db_d_report_error();
 	    sqlite3_finalize(statement);
 	    db_free_string(&sql);
 	    return DB_FAILED;
@@ -138,9 +137,10 @@ int db__driver_create_table(dbTable * table)
 	    /* try again */
 	}
 	else if (ret != SQLITE_OK) {
-	    append_error("Error in sqlite3_step():\n");
-	    append_error((char *)sqlite3_errmsg(sqlite));
-	    report_error();
+	    db_d_append_error("%s\n%s",
+			      _("Error in sqlite3_step():"),
+			      (char *)sqlite3_errmsg(sqlite));
+	    db_d_report_error();
 	    sqlite3_finalize(statement);
 	    return DB_FAILED;
 	}

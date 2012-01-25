@@ -1,7 +1,5 @@
 /* error.c */
 void init_error(void);
-void append_error(const char *fmt, ...);
-void report_error(void);
 
 int save_string(VALUE *, char *);
 

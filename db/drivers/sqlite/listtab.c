@@ -16,6 +16,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/dbmi.h>
+#include <grass/glocale.h>
 #include "globals.h"
 #include "proto.h"
 
@@ -39,16 +40,16 @@ int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
     const char *rest;
     int ret;
 
-    init_error();
-
+    G_debug(3, "db__driver_list_tables(): system = %d", system);
     ret = sqlite3_prepare(sqlite,
 			  "select name from sqlite_master where type = 'table' or type = 'view'",
 			  -1, &statement, &rest);
 
     if (ret != SQLITE_OK) {
-	append_error("Cannot list tables\n");
-	append_error((char *)sqlite3_errmsg(sqlite));
-	report_error();
+	db_d_append_error("%s\n%s",
+			  _("Unable to list tables:"),
+			  (char *)sqlite3_errmsg(sqlite));
+	db_d_report_error();
 	sqlite3_finalize(statement);
 	return DB_FAILED;
     }
@@ -61,9 +62,10 @@ int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
     ret = sqlite3_reset(statement);
     
     if (ret != SQLITE_OK) {
-	append_error("Cannot list tables\n");
-	append_error((char *)sqlite3_errmsg(sqlite));
-	report_error();
+	db_d_append_error("%s\n%s",
+			  _("Unable to list tables:"),
+			  (char *)sqlite3_errmsg(sqlite));
+	db_d_report_error();
 	sqlite3_finalize(statement);
 	return DB_FAILED;
     }
@@ -73,8 +75,8 @@ int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
     list = db_alloc_string_array(nrows);
 
     if (list == NULL) {
-	append_error("Cannot db_alloc_string_array()");
-	report_error();
+	db_d_append_error(_("Unable to db_alloc_string_array()"));
+	db_d_report_error();
 	sqlite3_finalize(statement);
 	return DB_FAILED;
     }

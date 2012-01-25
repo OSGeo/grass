@@ -1,7 +1,5 @@
 /* error.c */
 void init_error(void);
-void append_error(const char *);
-void report_error(void);
 
 /* cursor.c */
 cursor *alloc_cursor(void);

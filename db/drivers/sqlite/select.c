@@ -16,6 +16,7 @@
 #include <stdlib.h>
 #include <grass/dbmi.h>
 #include <grass/gis.h>
+#include <grass/glocale.h>
 #include "globals.h"
 #include "proto.h"
 
@@ -39,8 +40,6 @@ int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
     const char *rest;
     int ret;
 
-    init_error();
-
     /* allocate cursor */
     c = alloc_cursor();
     if (c == NULL)
@@ -60,11 +59,11 @@ int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
 	ret = sqlite3_prepare(sqlite, str, -1, &(c->statement), &rest);
 
 	if (ret != SQLITE_OK) {
-	    append_error("Error in sqlite3_prepare():");
-	    append_error(db_get_string(sel));
-	    append_error("\n");
-	    append_error((char *)sqlite3_errmsg(sqlite));
-	    report_error();
+	    db_d_append_error("%s\n%s\n%s",
+			      _("Error in sqlite3_prepare():"),
+			      db_get_string(sel),
+			      (char *)sqlite3_errmsg(sqlite));
+	    db_d_report_error();
 	    return DB_FAILED;
 	}
 
@@ -77,9 +76,10 @@ int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
 	    /* try again */
 	}
 	else if (ret != SQLITE_OK) {
-	    append_error("Error in sqlite3_step():\n");
-	    append_error((char *)sqlite3_errmsg(sqlite));
-	    report_error();
+	    db_d_append_error("%s\n%s",
+			      _("Error in sqlite3_step():"),
+			      (char *)sqlite3_errmsg(sqlite));
+	    db_d_report_error();
 	    sqlite3_finalize(c->statement);
 	    return DB_FAILED;
 	}
@@ -91,9 +91,10 @@ int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
 	G_free(str);
 
     if (describe_table(c->statement, &table, c) == DB_FAILED) {
-	append_error("Cannot describe table\n");
-	append_error((char *)sqlite3_errmsg(sqlite));
-	report_error();
+	db_d_append_error("%s\n%s",
+			  _("Unable to describe table:"),
+			  (char *)sqlite3_errmsg(sqlite));
+	db_d_report_error();
 	return DB_FAILED;
     }
 

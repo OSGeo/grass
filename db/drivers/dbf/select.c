@@ -17,6 +17,7 @@
 
 #include <grass/dbmi.h>
 #include <grass/shapefil.h>
+#include <grass/glocale.h>
 #include "globals.h"
 #include "proto.h"
 
@@ -40,8 +41,8 @@ int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
     ret = execute(sql, c);
 
     if (ret == DB_FAILED) {
-	append_error("Error in db_open_select_cursor()");
-	report_error();
+	db_d_append_error(_("Unable to open cursor."));
+	db_d_report_error();
 	return DB_FAILED;
     }
 

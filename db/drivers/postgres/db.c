@@ -27,7 +27,6 @@ int db__driver_open_database(dbHandle * handle)
     PGresult *res;
     int row;
 
-    init_error();
     db_get_connection(&connection);
     name = db_get_handle_dbname(handle);
 
@@ -40,7 +39,7 @@ int db__driver_open_database(dbHandle * handle)
 	    name);
 
     if (parse_conn(name, &pgconn) == DB_FAILED) {
-	report_error();
+	db_d_report_error();
 	return DB_FAILED;
     }
 
@@ -57,9 +56,10 @@ int db__driver_open_database(dbHandle * handle)
 			   pgconn.dbname, user, password);
     
     if (PQstatus(pg_conn) == CONNECTION_BAD) {
-	append_error(_("Unable to connect to Postgres: "));
-	append_error(PQerrorMessage(pg_conn));
-	report_error();
+	db_d_append_error("%s\n%s",
+			  _("Connection failed."),
+			  PQerrorMessage(pg_conn));
+	db_d_report_error();
 	PQfinish(pg_conn);
 	return DB_FAILED;
     }
@@ -83,9 +83,10 @@ int db__driver_open_database(dbHandle * handle)
 	res = PQexec(pg_conn, buf);
 
 	if (!res || PQresultStatus(res) != PGRES_COMMAND_OK) {
-	    append_error(_("Unable to set schema: "));
-	    append_error(schema);
-	    report_error();
+	    db_d_append_error("%s %s",
+			      _("Unable to set schema:"),
+			      schema);
+	    db_d_report_error();
 	    PQclear(res);
 	    return DB_FAILED;
 	}
@@ -101,8 +102,8 @@ int db__driver_open_database(dbHandle * handle)
 		 "'bool', 'geometry' ) order by oid");
     
     if (!res || PQresultStatus(res) != PGRES_TUPLES_OK) {
-	append_error(_("Unable to select data types"));
-	report_error();
+	db_d_append_error(_("Unable to select data types"));
+	db_d_report_error();
 	PQclear(res);
 	return DB_FAILED;
     }
@@ -168,7 +169,6 @@ int db__driver_open_database(dbHandle * handle)
 
 int db__driver_close_database()
 {
-    init_error();
     PQfinish(pg_conn);
     return DB_OK;
 }

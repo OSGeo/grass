@@ -36,8 +36,6 @@ int db__driver_close_cursor(dbCursor * dbc)
 
     G_debug(3, "db_driver_close_cursor()");
     
-    init_error();
-
     /* get my cursor via the dbc token */
     c = (cursor *) db_find_token(db_get_cursor_token(dbc));
     if (c == NULL)
@@ -64,7 +62,7 @@ cursor *alloc_cursor()
     /* allocate the cursor */
     c = (cursor *) db_malloc(sizeof(cursor));
     if (c == NULL) {
-	append_error(_("Unable to allocate cursor"));
+	db_d_append_error(_("Unable to allocate cursor"));
 	return NULL;
     }
 
@@ -73,7 +71,7 @@ cursor *alloc_cursor()
     /* tokenize it */
     c->token = db_new_token(c);
     if (c->token < 0) {
-	append_error(_("Unable to add new token"));
+	db_d_append_error(_("Unable to add new token"));
 	return NULL;
     }
     return c;

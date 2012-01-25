@@ -25,5 +25,3 @@ int describe_table(OGRLayerH, dbTable **, cursor *);
 
 /* error.c */
 void init_error(void);
-void append_error(const char *, ...);
-void report_error(void);

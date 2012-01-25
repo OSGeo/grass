@@ -52,8 +52,8 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
 
     /* get the cursor by its token */
     if (!(c = (cursor *) db_find_token(token))) {
-	append_error(_("Cursor not found"));
-	report_error();
+	db_d_append_error(_("Cursor not found"));
+	db_d_report_error();
 	return DB_FAILED;
     }
 
@@ -68,8 +68,8 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
     case DB_CURRENT:
 	break;
     case DB_PREVIOUS:
-	append_error(_("DB_PREVIOUS not supported"));
-	report_error();
+	db_d_append_error(_("DB_PREVIOUS not supported"));
+	db_d_report_error();
 	return DB_FAILED;
 	break;
     case DB_FIRST:
@@ -79,8 +79,8 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
 	c->hFeature = OGR_L_GetNextFeature(c->hLayer);
 	break;
     case DB_LAST:
-	append_error(_("DB_LAST not supported"));
-	report_error();
+	db_d_append_error(_("DB_LAST not supported"));
+	db_d_report_error();
 	return DB_FAILED;
 	break;
     };
@@ -185,8 +185,8 @@ int db__driver_get_num_rows(dbCursor * cn)
 
     /* get the cursor by its token */
     if (!(c = (cursor *) db_find_token(token))) {
-	append_error(_("Cursor not found"));
-	report_error();
+	db_d_append_error(_("Cursor not found"));
+	db_d_report_error();
 	return DB_FAILED;
     }
 

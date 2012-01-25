@@ -27,8 +27,6 @@ int db__driver_create_table(dbTable * table)
 
     G_debug(3, "db__driver_create_table()");
 
-    init_error();
-
     db_init_string(&sql);
 
     /* db_table_to_sql ( table, &sql ); */
@@ -101,11 +99,11 @@ int db__driver_create_table(dbTable * table)
     res = PQexec(pg_conn, db_get_string(&sql));
 
     if (!res || PQresultStatus(res) != PGRES_COMMAND_OK) {
-	append_error(_("Unable to create table:\n"));
-	append_error(db_get_string(&sql));
-	append_error("\n");
-	append_error(PQerrorMessage(pg_conn));
-	report_error();
+	db_d_append_error("%s\n%s\n%s",
+			  _("Unable to create table:"),
+			  db_get_string(&sql),
+			  PQerrorMessage(pg_conn));
+	db_d_report_error();
 	PQclear(res);
 	db_free_string(&sql);
 	return DB_FAILED;
@@ -130,11 +128,11 @@ int db__driver_create_table(dbTable * table)
     res = PQexec(pg_conn, db_get_string(&sql));
 
     if (!res || PQresultStatus(res) != PGRES_COMMAND_OK) {
-	append_error(_("Unable to grant select on table:\n"));
-	append_error(db_get_string(&sql));
-	append_error("\n");
-	append_error(PQerrorMessage(pg_conn));
-	report_error();
+	db_d_append_error("%s\n%s\%s",
+			  _("Unable to grant select on table:"),
+			  db_get_string(&sql),
+			  PQerrorMessage(pg_conn));
+	db_d_report_error();
 	PQclear(res);
 	db_free_string(&sql);
 	return DB_FAILED;

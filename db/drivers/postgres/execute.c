@@ -23,8 +23,6 @@ int db__driver_execute_immediate(dbString * sql)
     PGresult *res;
     char *str;
 
-    init_error();
-
     /* Postgres supports in addition to standard escape character '
      * (apostrophe) also \ (basckslash) as this is not SQL standard,
      * GRASS modules cannot work escape all \ in the text because
@@ -40,11 +38,11 @@ int db__driver_execute_immediate(dbString * sql)
     res = PQexec(pg_conn, str);
 
     if (!res || PQresultStatus(res) != PGRES_COMMAND_OK) {
-	append_error(_("Unable to execute:\n"));
-	append_error(str);
-	append_error("\n");
-	append_error(PQerrorMessage(pg_conn));
-	report_error();
+	db_d_append_error("%s\n%s\n%s",
+			  _("Unable to execute:"),
+			  str,
+			  PQerrorMessage(pg_conn));
+	db_d_report_error();
 	PQclear(res);
 	if (str)
 	    G_free(str);
@@ -64,12 +62,11 @@ int db__driver_begin_transaction(void)
 
     G_debug(2, "pg : BEGIN");
 
-    init_error();
     res = PQexec(pg_conn, "BEGIN");
 
     if (!res || PQresultStatus(res) != PGRES_COMMAND_OK) {
-	append_error(_("Unable to 'BEGIN' transaction"));
-	report_error();
+	db_d_append_error(_("Unable to 'BEGIN' transaction"));
+	db_d_report_error();
 	PQclear(res);
 	return DB_FAILED;
     }
@@ -85,12 +82,11 @@ int db__driver_commit_transaction(void)
 
     G_debug(2, "pg : COMMIT");
 
-    init_error();
     res = PQexec(pg_conn, "COMMIT");
 
     if (!res || PQresultStatus(res) != PGRES_COMMAND_OK) {
-	append_error(_("Unable to 'COMMIT' transaction"));
-	report_error();
+	db_d_append_error(_("Unable to 'COMMIT' transaction"));
+	db_d_report_error();
 	PQclear(res);
 	return DB_FAILED;
     }

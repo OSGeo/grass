@@ -1,10 +1,11 @@
 #include <grass/dbmi.h>
 #include "odbc.h"
 #include "globals.h"
+#include "proto.h"
 
-int db__driver_init(argc, argv)
-     char *argv[];
+int db__driver_init(int argc, char **argv)
 {
+    init_error();
     return DB_OK;
 }
 

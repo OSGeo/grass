@@ -52,16 +52,16 @@ int db__driver_describe_table(dbString * table_name, dbTable ** table)
     }
 
     if (hLayer == NULL) {
-	append_error(_("OGR layer <%s> does not exist\n"),
-		     db_get_string(table_name));
-	report_error();
+	db_d_append_error(_("OGR layer <%s> does not exist\n"),
+			  db_get_string(table_name));
+	db_d_report_error();
 	return DB_FAILED;
     }
 
     G_debug(3, "->>");
     if (describe_table(hLayer, table, NULL) == DB_FAILED) {
-	append_error(_("Unable to describe table\n"));
-	report_error();
+	db_d_append_error(_("Unable to describe table\n"));
+	db_d_report_error();
 	return DB_FAILED;
     }
 

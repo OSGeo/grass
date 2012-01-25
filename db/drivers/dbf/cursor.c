@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <grass/dbmi.h>
 #include <grass/gis.h>
+#include <grass/glocale.h>
 #include "globals.h"
 #include "proto.h"
 
@@ -43,7 +44,8 @@ cursor *alloc_cursor()
     /* allocate the cursor */
     c = (cursor *) db_malloc(sizeof(cursor));
     if (c == NULL) {
-	append_error("cannot alloc new cursor");
+	db_d_append_error(_("Unable to allocate new cursor"));
+	db_d_report_error();
 	return c;
     }
 
@@ -54,7 +56,8 @@ cursor *alloc_cursor()
     if (c->token < 0) {
 	free_cursor(c);
 	c = NULL;
-	append_error("cannot tokenize new cursor\n");
+	db_d_append_error(_("Unable to tokenize new cursor"));
+	db_d_report_error();
     }
 
     return c;

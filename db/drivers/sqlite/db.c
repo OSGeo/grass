@@ -36,7 +36,6 @@ int db__driver_open_database(dbHandle * handle)
 
     G_debug(3, "\ndb_driver_open_database()");
 
-    init_error();
     name = db_get_handle_dbname(handle);
 
     /* if name is empty use connection.databaseName */
@@ -82,9 +81,10 @@ int db__driver_open_database(dbHandle * handle)
     G_debug(2, "name2 = '%s'", name2);
 
     if (sqlite3_open(name2, &sqlite) != SQLITE_OK) {
-	append_error(_("Unable to open database: "));
-	append_error((char *)sqlite3_errmsg(sqlite));
-	report_error();
+	db_d_append_error("%s %s",
+			  _("Unable to open database: "),
+			  (char *)sqlite3_errmsg(sqlite));
+	db_d_report_error();
 	return DB_FAILED;
     }
 
@@ -105,7 +105,6 @@ int db__driver_close_database(void)
 {
     G_debug(3, "db_close_database()");
 
-    init_error();
     if (sqlite3_close(sqlite) == SQLITE_BUSY)
 	G_fatal_error(_("SQLite database connection is still busy"));
 

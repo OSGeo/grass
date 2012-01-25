@@ -37,8 +37,6 @@ int db__driver_execute_immediate(dbString * sql)
     
     G_debug(1, "db__driver_execute_immediate():");
     
-    init_error();
-    
     G_debug(3, "\tSQL: '%s'", db_get_string(sql));
     
     /* try RDBMS SQL */
@@ -55,8 +53,8 @@ int db__driver_execute_immediate(dbString * sql)
     /* get OGR layer */
     hLayer = OGR_DS_GetLayerByName(hDs, table);
     if (!hLayer) {
-	append_error(_("OGR layer <%s> not found"), table);
-	report_error();
+	db_d_append_error(_("OGR layer <%s> not found"), table);
+	db_d_report_error();
 	return DB_FAILED;
     }
     
@@ -68,9 +66,9 @@ int db__driver_execute_immediate(dbString * sql)
     for (i = 0; i < ncols; i++) {
 	cols[i].index = OGR_FD_GetFieldIndex(hFeatureDefn, cols[i].name);
 	if (cols[i].index < 0) {
-	    append_error(_("Column <%s> not found in table <%s>"),
-			 cols[i].name, table);
-	    report_error();
+	    db_d_append_error(_("Column <%s> not found in table <%s>"),
+			      cols[i].name, table);
+	    db_d_report_error();
 	    return DB_FAILED;
 	}
 	cols[i].qindex = OGR_FD_GetFieldIndex(hFeatureDefn, cols[i].value);
