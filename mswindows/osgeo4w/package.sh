@@ -146,7 +146,7 @@ mv $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/include/grass/config.h \
     $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/include/grass/config.h.mingw
 cp mswindows/osgeo4w/config.h.switch $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/include/grass/config.h
 cp mswindows/osgeo4w/config.h.vc $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/include/grass
-mkdir -p $OSGEO4W_ROOT_MSYS/etc/preremove
+mkdir -p $OSGEO4W_ROOT_MSYS/etc/preremove $OSGEO4W_ROOT_MSYS/etc/postinstall
 sed -e "s#@VERSION@#$VERSION#g" -e "s#@OSGEO4W_ROOT@#$OSGEO4W_ROOT#g" -e "s#@POSTFIX@#$MAJOR$MINOR#g" \
     mswindows/osgeo4w/grass.bat.tmpl >$OSGEO4W_ROOT_MSYS/bin/${GRASS_EXECUTABLE}.bat
 sed -e "s#@VERSION@#$VERSION#g" -e "s#@OSGEO4W_ROOT_MSYS@#$OSGEO4W_ROOT_MSYS#g" -e "s#@POSTFIX@#$MAJOR$MINOR#g" \
@@ -184,9 +184,9 @@ if [ -n "$PACKAGE" ]; then
 	apps/grass/grass-$VERSION \
 	bin/${GRASS_EXECUTABLE}.bat.tmpl \
 	bin/${GRASS_EXECUTABLE}.tmpl \
-	apps/msys/bin/libintl3.dll \
-	apps/msys/bin/libiconv2.dll \
-	apps/msys/bin/regex2.dll \
+	bin/libintl3.dll \
+	bin/libiconv2.dll \
+	bin/regex2.dll \
 	etc/postinstall/${GRASS_EXECUTABLE}.bat \
 	etc/preremove/${GRASS_EXECUTABLE}.bat
     
