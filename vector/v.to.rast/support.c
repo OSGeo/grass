@@ -304,7 +304,7 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 
 	    /* get column type */
 	    if (!label_column) {
-		G_warning(_("Label column was not specified, no labels will be written"));
+		G_verbose_message(_("Label column was not specified, no labels will be written"));
 		break;
 	    }
 	    else {
