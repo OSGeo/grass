@@ -89,7 +89,7 @@ class UnitConversion:
     def __init__(self, parent = None):
         self.parent = parent
         if self.parent:
-            ppi = wx.PaintDC(self.parent).GetPPI()
+            ppi = wx.ClientDC(self.parent).GetPPI()
         else: 
             ppi = (72, 72)
         self._unitsPage = { 'inch'          : {'val': 1.0, 'tr' : _("inch")},
@@ -2339,7 +2339,7 @@ class MapFramePanel(wx.Panel):
         self.drawMap = wx.CheckBox(self, id = wx.ID_ANY, label = "add selected map")
         
         self.mapOrRegionText = [_("Map:"), _("Region:")] 
-        dc = wx.PaintDC(self)# determine size of labels
+        dc = wx.ClientDC(self)# determine size of labels
         width = max(dc.GetTextExtent(self.mapOrRegionText[0])[0], dc.GetTextExtent(self.mapOrRegionText[1])[0])
         self.mapText = wx.StaticText(self, id = wx.ID_ANY, label = self.mapOrRegionText[0], size = (width, -1))
         self.select = Select(self, id = wx.ID_ANY, size = globalvar.DIALOG_GSELECT_SIZE,
@@ -4757,7 +4757,7 @@ class LegendDialog(PsmapDialog):
                 # font 
                 self.vLegendDict['font'] = self.panelVector.font['fontCtrl'].GetStringSelection()
                 self.vLegendDict['fontsize'] = self.panelVector.font['fontSizeCtrl'].GetValue()
-                dc = wx.PaintDC(self)
+                dc = wx.ClientDC(self)
                 font = dc.GetFont()
                 dc.SetFont(wx.Font(pointSize = self.vLegendDict['fontsize'], family = font.GetFamily(),
                                    style = font.GetStyle(), weight = wx.FONTWEIGHT_NORMAL))
