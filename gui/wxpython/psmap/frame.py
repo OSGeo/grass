@@ -1439,7 +1439,10 @@ class PsMapBufferedWindow(wx.Window):
 
         else:   #dragging    
             rW, rH = float(rect.GetWidth()), float(rect.GetHeight())
-            zoomFactor = 1/max(rW/cW, rH/cH)
+            try:
+                zoomFactor = 1/max(rW/cW, rH/cH)
+            except ZeroDivisionError:
+                zoomFactor = 1
             # when zooming to full extent, in some cases, there was zoom 1.01..., which causes problem
             if abs(zoomFactor - 1) > 0.01:
                 zoomFactor = zoomFactor 
