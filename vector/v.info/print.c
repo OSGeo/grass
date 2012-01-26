@@ -213,10 +213,10 @@ void print_shell(const struct Map_info *Map)
     }
 
     fprintf(stdout, "projection=%s\n",
-	    G_database_projection_name());
+	    Vect_get_proj_name(Map));
     if (G_projection() == PROJECTION_UTM) {
 	fprintf(stdout, "zone=%d\n",
-		G_zone());
+		Vect_get_zone(Map));
     }
     fprintf(stdout, "digitization_threshold=%f\n",
 	    Vect_get_thresh(Map));
@@ -233,10 +233,12 @@ void print_info(const struct Map_info *Map)
     struct TimeStamp ts;
     int time_ok = 0, first_time_ok = 0, second_time_ok = 0;
     struct bound_box box;
+    int utm_zone = -1;
    
-    /*Check the Timestamp */
+    /* Check the Timestamp */
     time_ok = G_read_vector_timestamp(Vect_get_name(Map), NULL, "", &ts);
-    /*Check for valid entries, show none if no timestamp available */
+
+    /* Check for valid entries, show none if no timestamp available */
     if (time_ok == 1) {
 	if (ts.count > 0)
 	    first_time_ok = 1;
@@ -354,7 +356,7 @@ void print_info(const struct Map_info *Map)
 	    printline(line);
 	}
 	printline("");
-	
+
 	sprintf(line, "  %-24s%s",
 		_("Map is 3D:"),
 		Vect_is_3d(Map) ? _("Yes") : _("No"));
@@ -364,23 +366,32 @@ void print_info(const struct Map_info *Map)
 		Vect_get_num_dblinks(Map));
 	printline(line);
     }
-    
+
     printline("");
-    if (G_projection() == PROJECTION_UTM)
-	sprintf(line, "  %s: %s (%s %d)",
-		_("Projection:"),
-		G_database_projection_name(),
-		_("zone"), G_zone());
+    /* this differs from r.info in that proj info IS taken from the map here, not the location settings */
+    /* Vect_get_proj_name() and _zone() are typically unset?! */
+    if (G_projection() == PROJECTION_UTM) {
+	utm_zone = Vect_get_zone(Map);
+	if (utm_zone < 0 || utm_zone > 60)
+	    strcpy(tmp1, _("invalid"));
+	else if (utm_zone == 0)
+	    strcpy(tmp1, _("unspecified"));
+	else
+	    sprintf(tmp1, "%d", utm_zone);
+
+	sprintf(line, "  %s: %s (%s %s)",
+		_("Projection"), Vect_get_proj_name(Map),
+		_("zone"), tmp1);
+    }
     else
 	sprintf(line, "  %s: %s",
-		_("Projection"),
-		G_database_projection_name());
-    
+		_("Projection"), Vect_get_proj_name(Map));
+
     printline(line);
     printline("");
-    
+
     Vect_get_map_box(Map, &box);
-    
+
     G_format_northing(box.N, tmp1, G_projection());
     G_format_northing(box.S, tmp2, G_projection());
     sprintf(line, "              %c: %17s    %c: %17s",
