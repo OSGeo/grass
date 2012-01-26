@@ -16,7 +16,7 @@ r.mapcalc --o expr="elevation = sin(row() + col()) * 10"
 
 n1=`g.tempfile pid=1 -d` 
 
-cat > $n1 << EOF
+cat > "${n1}" << EOF
 prec_1|2001-01-01|2001-02-01
 prec_2|2001-02-01|2001-03-01
 prec_3|2001-03-01|2001-04-01
@@ -31,17 +31,17 @@ t.create --o type=strds temporaltype=absolute output=precip_abs3 title="A test w
 
 # The first @test
 mkdir /tmp/test1
-tr.register -i input=precip_abs1 file=$n1 start=file end=file
+tr.register -i input=precip_abs1 file="${n1}" start=file end=file
 tr.out.vtk input=precip_abs1 expdir=/tmp/test1 
 ls -al /tmp/test1 
 
 mkdir /tmp/test2
-tr.register -i input=precip_abs2 file=$n1 
+tr.register -i input=precip_abs2 file="${n1}" 
 tr.out.vtk input=precip_abs2 expdir=/tmp/test2 elevation=elevation
 ls -al /tmp/test2 
 
 mkdir /tmp/test3
-tr.register -i input=precip_abs3 file=$n1
+tr.register -i input=precip_abs3 file="${n1}"
 tr.out.vtk -g input=precip_abs3 expdir=/tmp/test3 elevation=elevation
 ls -al /tmp/test3 
 

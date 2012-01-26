@@ -19,7 +19,7 @@ n3=`g.tempfile pid=3 -d`
 n4=`g.tempfile pid=4 -d`
 n5=`g.tempfile pid=5 -d`
 
-cat > $n1 << EOF
+cat > "${n1}" << EOF
 vol_1
 vol_2
 vol_3
@@ -28,7 +28,7 @@ vol_5
 vol_6
 EOF
 
-cat > $n2 << EOF
+cat > "${n2}" << EOF
 vol_1|2001-01-01
 vol_2|2001-02-01
 vol_3|2001-03-01
@@ -37,7 +37,7 @@ vol_5|2001-05-01
 vol_6|2001-06-01
 EOF
 
-cat > $n3 << EOF
+cat > "${n3}" << EOF
 vol_1|2001-01-01|2001-04-01
 vol_2|2001-05-01|2001-07-01
 vol_3|2001-08-01|2001-10-01
@@ -46,7 +46,7 @@ vol_5|2002-02-01|2002-04-01
 vol_6|2002-05-01|2002-07-01
 EOF
 
-cat > $n4 << EOF
+cat > "${n4}" << EOF
 vol_1|2001-01-01|2001-07-01
 vol_2|2001-02-01|2001-04-01
 vol_3|2001-03-01|2001-04-01
@@ -55,7 +55,7 @@ vol_5|2001-05-01|2001-06-01
 vol_6|2001-06-01|2001-07-01
 EOF
 
-cat > $n5 << EOF
+cat > "${n5}" << EOF
 vol_1|2001-01-01|2001-03-11
 vol_2|2001-02-01|2001-04-01
 vol_3|2001-03-01|2001-06-02
@@ -71,31 +71,31 @@ t.create --o type=str3ds temporaltype=absolute output=volume_abs4 title="A test 
 t.create --o type=str3ds temporaltype=absolute output=volume_abs5 title="A test with input files" descr="A test with input files"
 
 # The first @test
-tr3.register    input=volume_abs1 file=$n1 start="2001-01-01" increment="1 months"
+tr3.register    input=volume_abs1 file="${n1}" start="2001-01-01" increment="1 months"
 tr3.list    fs=" | " method=comma     input=volume_abs1
 tr3.list -h input=volume_abs1
 tr3.list -h fs=" | " method=cols      input=volume_abs1
 tr3.list -h fs=" | " method=delta     input=volume_abs1
 tr3.list -h fs=" | " method=deltagaps input=volume_abs1
 
-tr3.register -i input=volume_abs2 file=$n2 start=file
+tr3.register -i input=volume_abs2 file="${n2}" start=file
 tr3.list    fs=" | " method=comma     input=volume_abs2
 tr3.list -h input=volume_abs2
 tr3.list -h fs=" | " method=cols      input=volume_abs2
 tr3.list -h fs=" | " method=delta     input=volume_abs2
 tr3.list -h fs=" | " method=deltagaps input=volume_abs2
 
-tr3.register -i input=volume_abs3 file=$n3 start=file end=file
+tr3.register -i input=volume_abs3 file="${n3}" start=file end=file
 tr3.list    fs=" | " method=comma     input=volume_abs3
 tr3.list -h fs=" | " method=delta     input=volume_abs3
 tr3.list -h fs=" | " method=deltagaps input=volume_abs3
 
-tr3.register -i input=volume_abs4 file=$n4 start=file end=file
+tr3.register -i input=volume_abs4 file="${n4}" start=file end=file
 tr3.list    fs=" | " method=comma     input=volume_abs4
 tr3.list -h fs=" | " method=delta     input=volume_abs4
 tr3.list -h fs=" | " method=deltagaps input=volume_abs4
 
-tr3.register -i input=volume_abs5 file=$n5 start=file end=file
+tr3.register -i input=volume_abs5 file="${n5}" start=file end=file
 tr3.list    fs=" | " method=comma     input=volume_abs5
 tr3.list -h input=volume_abs5
 tr3.list -h fs=" | " method=cols      input=volume_abs5

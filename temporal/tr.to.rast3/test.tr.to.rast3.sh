@@ -29,5 +29,5 @@ tr.to.rast3 --o input=precip_abs output=preciptiation
 t.remove type=rast input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 t.remove type=strds input=precip_abs
 
-r3.info prec_sum
+r3.info preciptiation
 g.region s=0 n=80 w=0 e=120 b=0 t=1 res=10 res3=1

@@ -122,6 +122,7 @@ def main():
     sp.select()
 
     if use_granularity:
+	# Attention: A list of lists of maps will be returned
         maps = sp.get_registered_maps_as_objects_by_granularity()
         # Create a NULL map in case of granularity support
         null_map = "temporary_null_map_%i" % os.getpid()
@@ -135,7 +136,10 @@ def main():
     count = 0
     if maps:
         for map in maps:
-            id = map.get_id()
+	    if use_granularity:
+		id = map[0].get_map_id()
+	    else:
+		id = map.get_map_id()
             # None ids will be replaced by NULL maps
             if id == None:
                 id = null_map
