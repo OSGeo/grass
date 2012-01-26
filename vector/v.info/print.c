@@ -231,7 +231,7 @@ void print_info(const struct Map_info *Map)
     char tmp1[100], tmp2[100];
     char timebuff[256];
     struct TimeStamp ts;
-    int time_ok = 0, first_time_ok = 0, second_time_ok = 0;
+    int time_ok = FALSE, first_time_ok = FALSE, second_time_ok = FALSE;
     struct bound_box box;
     int utm_zone = -1;
    
@@ -239,11 +239,11 @@ void print_info(const struct Map_info *Map)
     time_ok = G_read_vector_timestamp(Vect_get_name(Map), NULL, "", &ts);
 
     /* Check for valid entries, show none if no timestamp available */
-    if (time_ok == 1) {
+    if (time_ok == TRUE) {
 	if (ts.count > 0)
-	    first_time_ok = 1;
+	    first_time_ok = TRUE;
 	if (ts.count > 1)
-	    second_time_ok = 1;
+	    second_time_ok = TRUE;
     }
 
     divider('+');
@@ -277,7 +277,7 @@ void print_info(const struct Map_info *Map)
     sprintf(line, "%-17s1:%d", _("Map scale:"),
 	    Vect_get_scale(Map));
     printline(line);
-    
+
     if (Vect_maptype(Map) & (GV_FORMAT_OGR | GV_FORMAT_OGR_DIRECT)) {
 	sprintf(line, "%-17s%s (%s)", _("Map format:"),
 		Vect_maptype_info(Map), Vect_get_ogr_format_info(Map));
@@ -286,7 +286,7 @@ void print_info(const struct Map_info *Map)
 	sprintf(line, "%-17s%s", _("Map format:"),
 		Vect_maptype_info(Map));
     }
-    
+
     printline(line);
     sprintf(line, "%-17s%s", _("Name of creator:"),
 	    Vect_get_person(Map));
@@ -297,17 +297,17 @@ void print_info(const struct Map_info *Map)
     sprintf(line, "%-17s%s", _("Source date:"),
 	    Vect_get_map_date(Map));
     printline(line);
-    
-    /*This shows the TimeStamp */
-    if (time_ok  == 1 && (first_time_ok || second_time_ok)) {
-        G_format_timestamp(&ts, timebuff);
-        sprintf(line, "%-17s%s", _("Timestamp first layer: "), timebuff);
-    }
-    else {
-        sprintf(line, "%-17s%s", _("Timestamp first layer: none"), timebuff);
-    }
-    printline(line);
 
+
+    /* This shows the TimeStamp (if present) */
+    if (time_ok  == TRUE && (first_time_ok || second_time_ok)) {
+	G_format_timestamp(&ts, timebuff);
+	sprintf(line, "%-17s%s", _("Timestamp (first layer): "), timebuff);
+	printline(line);
+    }
+/*    else
+	strcpy(line, _("Timestamp (first layer): none"));
+    printline(line); */
 
     divider('|');
     
