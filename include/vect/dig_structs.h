@@ -1169,7 +1169,7 @@ struct Map_info
       \brief Mapset name
     */
     char *mapset;
-    /* location and gisdbase is usefull if changed (v.proj or external apps) */
+    /* location and gisdbase is useful if changed (v.proj or external apps) */
     /*!
       \brief Location name
     */
