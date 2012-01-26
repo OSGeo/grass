@@ -17,7 +17,7 @@ r.mapcalc --o expr="prec_6 = rand(0, 650)"
 
 n1=`g.tempfile pid=1 -d` 
 
-cat > $n1 << EOF
+cat > "${n1}" << EOF
 prec_1|2001-01-01|2001-07-01
 prec_2|2001-02-01|2001-04-01
 prec_3|2001-03-01|2001-04-01
@@ -29,7 +29,7 @@ EOF
 t.create --o type=strds temporaltype=absolute output=precip_abs1 title="A test with input files" descr="A test with input files"
 
 # The first @test
-tr.register -i input=precip_abs1 file="$n1" start="2001-01-01" increment="1 months"
+tr.register -i input=precip_abs1 file="${n1}" start="2001-01-01" increment="1 months"
 tr.export input=precip_abs1 output=strds_export.tar.bz2 compression=bzip2 workdir=test
 
 tr.import --o input=strds_export.tar.bz2 output=precip_abs1 extrdir=test\

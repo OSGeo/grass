@@ -27,7 +27,7 @@ n1=`g.tempfile pid=1 -d`
 n2=`g.tempfile pid=2 -d`
 n3=`g.tempfile pid=3 -d`
 
-cat > $n1 << EOF
+cat > "${n1}" << EOF
 prec_1
 prec_2
 prec_3
@@ -36,12 +36,12 @@ prec_5
 prec_6
 EOF
 
-cat > $n2 << EOF
+cat > "${n2}" << EOF
 pnts1|2001-01-01|2001-03-01
 pnts2|2001-05-01|2001-07-01
 EOF
 
-cat > $n3 << EOF
+cat > "${n3}" << EOF
 pnts3|2001-01-01|2001-01-05
 pnts4|2001-01-05|2001-01-10
 pnts5|2001-01-10|2001-01-15
@@ -55,11 +55,11 @@ t.create --o type=strds temporaltype=absolute output=precip_abs0 title="A test w
 t.create --o type=stvds temporaltype=absolute output=pnts_abs0 title="A test with vector input files" descr="A test with vector input files"
 t.create --o type=stvds temporaltype=absolute output=pnts_abs1 title="A test with vector input files" descr="A test with vector input files"
 
-tr.register -i input=precip_abs0 file="$n1" start="2001-01-01" increment="1 months"
+tr.register -i input=precip_abs0 file="${n1}" start="2001-01-01" increment="1 months"
 tr.list precip_abs0 -h
-tv.register    input=pnts_abs0 file="$n2" start=file end=file
+tv.register    input=pnts_abs0 file="${n2}" start=file end=file
 tv.list pnts_abs0 -h
-tv.register    input=pnts_abs1 file="$n3" start=file end=file
+tv.register    input=pnts_abs1 file="${n3}" start=file end=file
 tv.list pnts_abs1 -h
 
 # The @test
@@ -71,7 +71,7 @@ t.sample input=precip_abs0 samtype=strds sample=precip_abs0 -h
 
 
 # Test with temporal point data
-tr.register    input=precip_abs0 file="$n1" start="2001-01-01" increment="1 months"
+tr.register    input=precip_abs0 file="${n1}" start="2001-01-01" increment="1 months"
 tr.list precip_abs0 -h
 t.sample input=precip_abs0 samtype=stvds sample=pnts_abs0 -h
 t.sample input=precip_abs0 samtype=stvds sample=pnts_abs1 -h
