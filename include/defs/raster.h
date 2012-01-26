@@ -421,7 +421,7 @@ int Rast_is_c_null_value(const CELL *);
 #ifndef Rast_is_f_null_value
 int Rast_is_f_null_value(const FCELL *);
 #endif
-#ifndef Rast_is_f_null_value
+#ifndef Rast_is_d_null_value
 int Rast_is_d_null_value(const DCELL *);
 #endif
 void Rast_insert_null_values(void *, char *, int, RASTER_MAP_TYPE);
